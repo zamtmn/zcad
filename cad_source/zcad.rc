@@ -1,0 +1,26 @@
+1 VERSIONINFO
+FILEVERSION 0,0,0,34
+PRODUCTVERSION 1,0,0,0
+{
+ BLOCK "StringFileInfo"
+ {
+  BLOCK "04090000"
+  {
+   VALUE "Comments", "\000"
+   VALUE "CompanyName", "\000"
+   VALUE "FileDescription", "\000"
+   VALUE "FileVersion", "0.0.0.34\000"
+   VALUE "InternalName", "\000"
+   VALUE "LegalCopyright", "\000"
+   VALUE "LegalTrademarks", "\000"
+   VALUE "OriginalFilename", "\000"
+   VALUE "ProductName", "\000"
+   VALUE "ProductVersion", "1.0.0.0\000"
+  }
+ }
+ BLOCK "VarFileInfo"
+ {
+  VALUE "Translation", 0x0409, 0x0000
+ }
+}
+

@@ -1,0 +1,277 @@
+Panel DOWNPANEL 894,68,30,525;
+  {
+    space
+    variable DWG_DrawGrid,#Сетка,Показывать сетку??
+    variable DWG_EditInSubEntry,#SUB-выделение,Отдельный выбор частей динамических объектов
+    variable DWG_DrawMode,#Вес,Показывать вес линий
+    variable DWG_OSMode,#Привязки,Привязка курсора к характерным точкам примитивов
+    variable DWG_PolarMode,#Полярн.слеж.,Полярное слежение
+    variable DWG_HelpGeometryDraw,#HG,Вспомогательная графика (подключение, направление и т.п.)
+    variable DWG_SystmGeometryDraw,#SG,Системная графика (габариты, связи и т.п. для отладки)
+  }
+Panel UPPANEL 994,68,30,525;
+  {
+    button NewDWG,new.bmp,Создать новый чертеж
+    button Load,load.bmp,Загрузить файл
+    button Save,save.bmp,Сохранить файл
+    space
+    layercombobox 200,Выбор слоя
+    linewcombobox 100,Выбор веса линий
+  }
+Panel RIGHTPANEL 994,68,30,525;
+  {
+    button Load(QS),#QL,Загрузка автосохранения
+    button QSave(QS),#QS,Автосохранение
+    button ProjectTree,#tree,Показать окно дерева проекта
+    space
+    button BEdit,#bed,Редактор блоков
+    space
+    button Line,line.bmp,Чертить линию
+    button 3DPoly,pline.bmp,Чертить полилинию (3dpoly)
+    button PolyED,polyed.bmp,Редактор вершин поли обьектов
+    button Circle,circle.bmp,Чертить окружность
+    button Insert,insert.bmp,Вставить блок
+    space
+    button Copy,copy.bmp,Копировать
+    button Move,move.bmp,Перенести
+    button Rotate,rotate.bmp,Повернуть
+    button Scale,scale.bmp,Масштабировать
+    space
+    button El_Cable,el_cable.bmp,Чертить кабель
+    button EL_Wire,El_Wire.bmp,Цепь\Трасса
+    button El_Leader,el_leader.bmp,Обозначение трасс на плане
+    button El_Cable_Join,#к+к,Объеденить 2 кабеля
+    button El_Cable_Select,#csel,Выбрать подключеное к кабелю оборудование
+    button El_Cable_Invert,#инв,Инвертировать направление кабеля
+    button El_Cable_Legend,#кж,Экспорт кабельного журнала
+    button El_Material_Legend,#вм,Экспорт "ведомости" материалов
+    space
+    button PlaceSmokeDetectorOrto,ps.bmp,Авторасстановка пож. извещателей
+    button OrtoDevPlace,array.bmp,Расстановка блоков (устройств) массивом
+    button El_Find,find.bmp,Найти оборудование
+    space
+    button ObjVarMan,#VM,Менеджер переменных объекта
+    space
+    button AddToOwner,addtoowner.bmp,(НЕ РАБОТАЕТ)добавить к владельцу
+    button InsertTestTable,spec.bmp,*DEBUG*Вставить таблицу
+    space
+    button SetObjInsp(CURRENT),#FIX,*DEBUG*Фиксировать выделенный объект в инспекторе
+
+  }
+MainMenuItem Файл;
+  {
+    Command Создать,NewDWG,CTRL+N,none
+    Command Загрузить,Load,CTRL+O,none
+    Command Сохранить,QSave,CTRL+S,none
+    Command Сохранить как,SaveAs,CTRL+S,none
+    Command Сохранить(autosave),QSave(QS),CTRL+S,none
+    Command Выход,Quit,none,none
+  }
+MainMenuItem Правка;
+  {
+    Command Копировать,CopyClip,none,none
+    Command Копировать с базовой точкой,CopyBase,none,none
+    Command Вставить,PasteClip,none,none
+    Command Стереть,Erase,Del,none
+  }
+MainMenuItem Вид;
+  {
+    Command Камера в начало (Вид сверху),Cam_reset,none,none
+    Command Перспективная/Ортогональная проекция,ChangeProjType,CTRL+P,PMenuProjType
+    Command Регенерировать,Regen,CTRL+P,PMenuProjType
+    MenuItem Инспектор;
+      {
+        Command Параметры,SetObjInsp(VARS),none,none
+        Command Камера,SetObjInsp(CAMERA),none,none
+        Command Привязки,SetObjInsp(OSMODE),none,none
+      }
+   Command Дерево проекта,ProjectTree,none,none
+  }
+MainMenuItem Формат;
+  {
+    Command Слои,SetObjInsp(LAYERS),none,none
+    Command Стили текста,SetObjInsp(TSTYLES),none,none
+    Command Стили таблиц,SetObjInsp(TABLESTYLES),none,none
+    Command Нумераторы,SetObjInsp(NUMERATORS),none,none
+    Command Стили размеров (пока нет),fuckoff,none,none
+    Command Листы (пока нет),fuckoff,none,none
+  }
+MainMenuItem Черчение;
+  {
+    Command Блок,Insert,none,none
+    Command Линия,Line,none,none
+    Command ПолиЛиния,3dpoly,none,none
+    Command Окружность,Circle,none,none
+  }
+MainMenuItem Изменить;
+  {
+    Command Менеджер переменных объекта,ObjVarMan,none,none
+    Command Редактор полилиний,PolyED,none,none
+    MenuItem Блок;
+      {
+        Command Редактор блоков,BEdit,none,none
+      }
+  }
+MainMenuItem Схема;
+  {
+    MenuItem Электрическая принципиальная;
+      {
+        Command Цепь,EL_Wire,none,none
+        Command Контакт НО1,Insert(DEVICE_NOC),none,none
+        Command Контакт НО2,Insert(DEVICE_NOC2),none,none
+      }
+    MenuItem Электрическая подключений;
+      {
+       Command Расстановка маркеров кабелей,Insert(DEVICE_CABLE_MARK),none,none
+       Command Обновить маркеры кабелей,KIP_Cable_Mark,none,none
+      }
+  }
+MainMenuItem План;
+  {
+    MenuItem Кабель/Трасса;
+      {
+        Command Прокладка трассы,EL_Wire,none,none
+        Command Прокладка кабеля,EL_Cable,none,none
+        Command Сменить направление кабеля,El_Cable_Invert,none,none
+        Command Объеденить 2 кабеля,El_Cable_Join,none,none
+        Command Уходит вверх,Insert(DEVICE_EL_CABLE_UP),none,none
+        Command Уходит вниз,Insert(DEVICE_EL_CABLE_DOWN),none,none
+        Command Приходит сверху,Insert(DEVICE_EL_CABLE_FROMUP),none,none
+        Command Приходит снизу,Insert(DEVICE_EL_CABLE_FROMDOWN),none,none
+      }
+    MenuItem КИПиА;
+      {
+       MenuItem Расстоновка оборудования;
+       {
+        Command Датчик,Insert(DEVICE_KIP_SENSOR),none,none
+        Command Соединительная коробка,Insert(DEVICE_KIP_CONNECTION_BOX),none,none
+        Command Щит автоматики,Insert(DEVICE_KIP_AUTOMATION_BOX),none,none
+        Command Привод клапана,Insert(DEVICE_KIP_ACTUATOR),none,none
+        Command Соленоид,Insert(DEVICE_KIP_SOLENOID),none,none
+        Command Кнопочный пост,Insert(DEVICE_KIP_KNOPKA),none,none
+        Command Ответвительная коробка,Insert(DEVICE_KIP_UKP),none,none
+       }
+      }
+    MenuItem ОПС;
+      {
+       MenuItem Расстоновка оборудования;
+       {
+        MenuItem ПС;
+        {
+         Command Авто расстановка извещателей,PLACESMOKEDETECTORORTO,none,none
+         Command Дымовой извещатель,Insert(DEVICE_PS_DAT_SMOKE),none,none
+         Command Тепловой извещатель,Insert(DEVICE_PS_DAT_TERMO),none,none
+         Command Ручной извещатель,Insert(DEVICE_PS_DAT_HAND),none,none
+        }
+        MenuItem ОС;
+        {
+         Command Магнитоконтактный извещатель,Insert(DEVICE_OS_DAT_BGB),none,none
+         Command Звуковой извещатель,Insert(DEVICE_OS_DAT_BGT),none,none
+         Command Оптоэлектронный извещатель,Insert(DEVICE_OS_DAT_BGL),none,none
+        }
+        Command Прибор ОПС,Insert(DEVICE_PS_ARK_DEVICE),none,none
+        Command Блок питания,Insert(DEVICE_PS_GB),none,none
+        Command Коробка распределительная,Insert(DEVICE_OPS_DISTRIBUTION_BOX),none,none
+        Command Оповещатель светозвуковой,Insert(DEVICE_PS_BIASL),none,none
+        Command Оповещатель световой,Insert(DEVICE_PS_BIAL),none,none
+        Command Оповещатель звуковой,Insert(DEVICE_PS_BIAS),none,none
+       }
+       Command Автонумерация извещателей,OPS_Sensor_Mark,none,none
+      }
+    MenuItem ЭМ;
+      {
+       MenuItem Расстоновка оборудования;
+       {
+        Command Двигатель,Insert(DEVICE_EL_MOTOR),none,none
+        Command Распредустройство,Insert(DEVICE_EL_SR),none,none
+       }
+      }
+    MenuItem ЭО;
+      {
+       MenuItem Расстоновка оборудования;
+       {
+        Command Светильник 1,Insert(DEVICE_EL_LIGHT_FBULB),none,none
+        Command Светильник 2,Insert(DEVICE_EL_LIGHT_LBULB),none,none
+        Command Светильник 3,Insert(DEVICE_EL_LIGHT_LBULB2),none,none
+        Command Выключатель,Insert(DEVICE_EL_LIGHT_SWITH),none,none
+       }
+      }
+    MenuItem Видеонаблюдение;
+      {
+       MenuItem Расстоновка оборудования;
+       {
+        Command Видеокамера,Insert(DEVICE_SS_VCAM),none,none
+        Command Видеокамера в кожухе,Insert(DEVICE_SS_VCAMTC),none,none
+       }
+      }
+    MenuItem Связь;
+      {
+       MenuItem Расстоновка оборудования;
+       {
+        Command АТС,Insert(DEVICE_SS_ATS),none,none
+        Command Стойка 19,Insert(DEVICE_SS_19),none,none
+        Command Микрофон,Insert(DEVICE_SS_MIC),none,none
+        Command Розетка телефонная,Insert(DEVICE_SS_RT),none,none
+        Command Громкоговоритель,Insert(DEVICE_SS_BIAS),none,none
+        Command Первичные часы,Insert(DEVICE_SS_PRICLOCK),none,none
+        Command Вторичные часы,Insert(DEVICE_SS_SECCLOCK),none,none
+       }
+      }
+   Command Расстоновка блоков массивом,OrtoDevPlace,none,none
+  }
+MainMenuItem Модель;
+  {
+    Command Менеджер кабелей,EL_CableMan,none,none
+    MenuItem ОПС;
+      {
+       Command Создание схемы подключения извещателей,OPS_SPBuild,none,none
+      }
+    MenuItem ЭМ;
+      {
+       Command Создание расчетной схемы распределительной сети,EM_SRBuild,none,none
+       Command Создание схемы электрической принципиальной распределительной сети,EM_SEPBuild,none,none
+      }
+    Command Найти оборудование,EL_Find,none,none
+    Command Проверка,EL_Сheck,none,none
+    Command Создать кабельный журнал,El_Cable_Legend,none,none
+    Command Создать "ведомость" оборудования,El_Material_Legend,none,none
+  }
+MainMenuItem Настройка;
+  {
+    Command Параметры,Options,CTRL+O,none
+    Command Сохранить параметры,SaveOptions,CTRL+O,none
+  }
+MainMenuItem Справка;
+  {
+    Command Помощь,Help,none,none
+    Command О программе,about,none,none
+  }
+MainMenuItem ***Debug***;
+  {
+    MenuItem Файлы с ошибками (текущая отладка);
+    {
+     Command 1,Load(c:/zcad/errors/1.dxf),none,none
+     Command 2,Load(c:/zcad/errors/2.dxf),none,none
+     Command 3,Load(c:/zcad/errors/3.dxf),none,none
+     Command 4,Load(c:/zcad/errors/4.dxf),none,none
+    }
+    Command Загрузить пример ЭМ,Load(*sample/test_dxf/em.dxf),none,none
+    Command Загрузить пример ОПС,Load(*sample/test_dxf/ops.dxf),none,none
+    Command Загрузить схему??,Load(*sample/test_dxf/shema_Poly_Line_Text_Circle_Arc.dxf),none,none
+    Command Загрузить чайник,Load(*sample/test_dxf/teapot.dxf),none,none
+    Command Вставить все определенные блоки,PlaceAllBlocks,none,none
+    Command Пошарить в Clipboard,DebClip,none,none
+    Command Отчет по выделениям памяти,MemSummary,none,none
+    MenuItem Инспектор;
+      {
+        Command Зафиксировать текущий объект (отладка),SetObjInsp(CURRENT),none,none
+        Command GDB (отладка),SetObjInsp(GDBDescriptor),none,none
+        Command OGLWND (отладка),SetObjInsp(OGLWND_DEBUG),none,none
+        Command Реле? (отладка),SetObjInsp(RELE_DEBUG),none,none
+      }
+  }
+MainMenuItem ??БД Чертежа;
+  {
+    Command ??Добавить в базу,DBaseAdd,none,none
+    Command ??Связать с объектом,DBaseLink,none,none
+  }

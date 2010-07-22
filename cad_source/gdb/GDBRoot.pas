@@ -1,0 +1,191 @@
+{
+*****************************************************************************
+*                                                                           *
+*  This file is part of the ZCAD                                            *
+*                                                                           *
+*  See the file COPYING.modifiedLGPL.txt, included in this distribution,    *
+*  for details about the copyright.                                         *
+*                                                                           *
+*  This program is distributed in the hope that it will be useful,          *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     *
+*                                                                           *
+*****************************************************************************
+}
+{
+@author(Andrey Zubarev <zamtmn@yandex.ru>) 
+}
+
+unit GDBRoot;
+{$INCLUDE def.inc}
+
+interface
+Uses
+gl,
+devices,gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry,uunitmanager{,shared};
+type
+{Export+}
+PGDBObjRoot=^GDBObjRoot;
+GDBObjRoot=object(GDBObjGenericSubEntry)
+                 constructor initnul;
+                 destructor done;virtual;
+                 //function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
+                 procedure FormatAfterEdit;virtual;
+                 function AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):integer;virtual;
+                 function getowner:PGDBObjSubordinated;virtual;
+                 procedure getoutbound;virtual;
+                 function FindVariable(varname:GDBString):pvardesk;virtual;
+                 function GetHandle:GDBLongword;virtual;
+                 function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
+
+                 function GetMatrix:PDMatrix4D;virtual;
+                 procedure DrawWithAttrib;virtual;
+                 function CalcInFrustum(frustum:ClipArray):GDBBoolean;virtual;
+                 procedure calcbb;virtual;
+                 function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
+           end;
+
+{Export-}
+implementation
+uses
+    log;
+function GDBObjRoot.FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;
+begin
+     result:=nil;
+end;
+procedure GDBObjRoot.calcbb;
+begin
+     inherited;
+     vp.BoundingBox.LBN:=VectorTransform3D(vp.BoundingBox.LBN,ObjMatrix);
+     vp.BoundingBox.RTF:=VectorTransform3D(vp.BoundingBox.RTF,ObjMatrix);
+end;
+function GDBObjRoot.CalcInFrustum;
+var
+   myfrustum:ClipArray;
+   m1:DMatrix4D;
+   //tp:PGDBVertex4D;
+   //t1,t2:gdbvertex;
+begin
+     m1:=ObjMatrix;
+     //MatrixInvert(m1);
+     MatrixTranspose(m1);
+     PGDBVertex4D(@myfrustum[0])^:=VectorTransform(PGDBVertex4D(@frustum[0])^,m1);
+     PGDBVertex4D(@myfrustum[1])^:=VectorTransform(PGDBVertex4D(@frustum[1])^,m1);
+     PGDBVertex4D(@myfrustum[2])^:=VectorTransform(PGDBVertex4D(@frustum[2])^,m1);
+     PGDBVertex4D(@myfrustum[3])^:=VectorTransform(PGDBVertex4D(@frustum[3])^,m1);
+     PGDBVertex4D(@myfrustum[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,m1);
+     PGDBVertex4D(@myfrustum[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,m1);
+
+     //myfrustum:=frustum;
+
+
+     inherited CalcInFrustum(myfrustum);
+     //t1:=PointOf3PlaneIntersect(myfrustum[0],myfrustum[2],myfrustum[4]);
+     //t2:=PointOf3PlaneIntersect(myfrustum[1],myfrustum[3],myfrustum[5]);
+     ///vp.BoundingBox.LBN:=Vertexmorph(t1,t2,0.1);
+     //vp.BoundingBox.rtf:=Vertexmorph(t2,t1,0.1);
+
+     //vp.BoundingBox.LBN:=VectorTransform3D(vp.BoundingBox.LBN,ObjMatrix);
+     //vp.BoundingBox.RTF:=VectorTransform3D(vp.BoundingBox.RTF,ObjMatrix);
+
+     //vp.BoundingBox.LBN:=t1;
+     //vp.BoundingBox.rtf:=t2;
+     //VisibleOBJBoundingBox.LBN:=VectorTransform3D(VisibleOBJBoundingBox.LBN,ObjMatrix);
+     //VisibleOBJBoundingBox.RTF:=VectorTransform3D(VisibleOBJBoundingBox.RTF,ObjMatrix);
+     //result:=ObjArray.calcvisible(frustum);
+     //self.VisibleOBJBoundingBox:=ObjArray.calcvisbb;
+end;
+procedure GDBObjRoot.DrawWithAttrib;
+begin
+     glpushmatrix;
+     glmultmatrixd(@objmatrix);
+     inherited;//self.ObjArray.DrawWithattrib;
+     glpopmatrix;
+
+end;
+function GDBObjRoot.GetMatrix;
+begin
+     result:=@OneMatrix;
+end;
+function GDBObjRoot.EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;
+var p:PGDBObjConnected;
+    ir:itrec;
+begin
+     inherited EraseMi(pobj,pobjinarray);
+     p:=self.ObjToConnectedArray.beginiterate(ir);
+     if p<>nil then
+     repeat
+           //if p=pobj then
+                         //ppointer(ir.itp)^:=nil;
+
+           p:=self.ObjToConnectedArray.iterate(ir);
+     until p=nil;
+end;
+function GDBObjRoot.GetHandle:GDBLongword;
+begin
+     result:=H_Root;
+end;
+function GDBObjRoot.FindVariable;
+begin
+     result:=ou.FindVariable(varname);
+end;
+procedure GDBObjRoot.getoutbound;
+begin
+     vp.BoundingBox.LBN:=geometry.NulVertex;
+     vp.BoundingBox.RTF:=geometry.NulVertex;
+     inherited;
+end;
+function GDBObjRoot.getowner;
+begin
+     result:=nil;
+end;
+function GDBObjRoot.AfterDeSerialize;
+begin
+     inherited AfterDeSerialize(SaveFlag,membuf);
+     correctobjects(nil,-1);
+     format;
+end;
+destructor GDBObjRoot.done;
+begin
+     ObjArray.FreeAndDone;
+     self.ObjCasheArray.FreeAndDone;
+     self.
+     ObjToConnectedArray.FreeAndDone;
+     inherited done;
+end;
+constructor GDBObjRoot.initnul;
+begin
+     inherited initnul(nil);
+     bp.owner:=nil;
+     //bp.PSelfInOwnerArray:=nil;
+     bp.PSelfInOwnerArray:=-1;
+     ObjToConnectedArray.init({$IFDEF DEBUGBUILD}'{0AD3CD18-E887-4038-BADA-7616D9F52963}',{$ENDIF}100);
+     ou.copyfrom(units.findunit('objroot'));
+     //uunitmanager.units.loadunit(expandpath('*blocks\objroot.pas'),@ou);
+end;
+procedure GDBObjRoot.formatafteredit;
+var pobj:PGDBObjConnected;
+    ir:itrec;
+begin
+
+     //inherited formatafteredit;
+       ObjCasheArray.Formatafteredit;
+       ObjCasheArray.clear;
+       calcbb;
+     pobj:=self.ObjToConnectedArray.beginiterate(ir);
+     if pobj<>nil then
+     repeat
+           pobj^.connectedtogdb;
+
+           pobj:=self.ObjToConnectedArray.iterate(ir);
+     until pobj=nil;
+     self.ObjToConnectedArray.clear;
+  {ObjCasheArray.Format;
+  ObjCasheArray.clear;
+  vp.BoundingBox:=objarray.calcbb;
+  restructure;}
+end;
+begin
+  {$IFDEF DEBUGINITSECTION}LogOut('GDBRoot.initialization');{$ENDIF}
+end.
+

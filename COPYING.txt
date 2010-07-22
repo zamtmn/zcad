@@ -1,0 +1,7 @@
+This is the file COPYING, it gives an overview of the licenses used in the
+ZCAD sources.
+
+The ZCAD sources consists of several parts and each part has its own
+license. In general, each file contains a header, describing the license of
+the file.
+

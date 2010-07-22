@@ -1,0 +1,387 @@
+{
+*****************************************************************************
+*                                                                           *
+*  This file is part of the ZCAD                                            *
+*                                                                           *
+*  See the file COPYING.modifiedLGPL.txt, included in this distribution,    *
+*  for details about the copyright.                                         *
+*                                                                           *
+*  This program is distributed in the hope that it will be useful,          *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     *
+*                                                                           *
+*****************************************************************************
+}
+{
+@author(Andrey Zubarev <zamtmn@yandex.ru>) 
+}
+
+unit UGDBGraf;
+{$INCLUDE def.inc}
+interface
+uses UGDBPoint3DArray,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,UGDBVisibleOpenArray,geometry,gdbEntity,UGDBOpenArrayOfPV;
+type
+{EXPORT+}
+pgrafelement=^grafelement;
+grafelement=object(GDBaseObject)
+                  linkcount:GDBInteger;
+                  point:gdbvertex;
+                  link:GDBObjOpenArrayOfPV;
+                  connected:GDBInteger;
+                  step:GDBInteger;
+                  pathlength:GDBDouble;
+
+                  constructor initnul;
+                  constructor init(v:gdbvertex);
+                  function addline(pv:pgdbobjEntity):GDBInteger;
+                  function IsConnectedTo(node:pgrafelement):GDBBoolean;
+            end;
+GDBGraf=object(GDBOpenArrayOfData)(*OpenArrayOfData=grafelement*)
+                constructor init(m:GDBInteger);
+                function addge(v:gdbvertex):pgrafelement;
+                procedure clear;virtual;
+                function minimalize:GDBBoolean;
+                function divide:GDBBoolean;
+                destructor done;virtual;
+                procedure freeelement(p:GDBPointer);virtual;
+
+                procedure BeginFindPath;
+                procedure FindPath(point1,point2:gdbvertex;l1,l2:pgdbobjEntity;var pa:GDBPoint3dArray);
+             end;
+{EXPORT-}
+implementation
+uses GDBLine,math,log;
+procedure GDBGraf.FindPath;
+var
+  pgfe,pgfe2,pgfe3: pgrafelement;
+  ir,ir2,ir3:itrec;
+  step,oldstep:gdbinteger;
+  isend:gdbboolean;
+  pl:pgdbobjEntity;
+  npath,npathmin:gdbdouble;
+begin
+
+     BeginFindPath;
+
+  step:=1;
+  pgfe:=beginiterate(ir);
+  if pgfe<>nil then
+  repeat
+        if pgfe^.link.IsObjExist(l1) then
+        begin
+             pgfe^.step:=step;
+             pgfe^.pathlength:=Vertexlength(point1,pgfe^.point);
+        end;
+        pgfe:=iterate(ir);
+  until pgfe=nil;
+
+  repeat
+  isend:=true;
+  oldstep:=step;
+  inc(step);
+  pgfe:=beginiterate(ir);
+  if pgfe<>nil then
+  repeat
+        if pgfe^.step=oldstep then
+        begin
+              pl:=pgfe^.link.beginiterate(ir2);
+              if pl<>nil then
+              repeat
+
+                    pgfe2:=beginiterate(ir3);
+                    if pgfe2<>nil then
+                    repeat
+                          if (pgfe<>pgfe2)and(pgfe2^.link.IsObjExist(pl)) then
+                          begin
+                          npath:=pgfe^.pathlength+Vertexlength(pgfe^.point,pgfe2^.point);
+                          if {(pgfe2.step=0)or}(pgfe2.pathlength>npath) then
+                                              begin
+                                                   pgfe2^.step:=step;
+                                                   pgfe2^.pathlength:=npath;
+                                                   isend:=false;
+                                              end;
+                          end;
+                          pgfe2:=iterate(ir3);
+                    until pgfe2=nil;
+
+                    pl:=pgfe^.link.iterate(ir2);
+              until pl=nil;
+        end;
+        pgfe:=iterate(ir);
+  until pgfe=nil;
+  until isend;
+
+  npathmin:=Infinity;
+  pgfe:=beginiterate(ir);
+  if pgfe<>nil then
+  repeat
+        if pgfe^.link.IsObjExist(l2) then
+        begin
+             npath:=pgfe^.pathlength+Vertexlength(pgfe^.point,point2);
+             if npath<npathmin then
+             begin
+                  pgfe2:=pgfe;
+                  step:=pgfe^.step;
+                  npathmin:=npath;
+             end;
+        end;
+        pgfe:=iterate(ir);
+  until pgfe=nil;
+  pa.Add(@pgfe2.point);
+  dec(step);
+  pgfe3:=pgfe2;
+  while step>0 do
+  begin
+        //npathmin:=Infinity;
+        pgfe:=beginiterate(ir);
+        if pgfe<>nil then
+        repeat
+        if pgfe^.step=step then
+        begin
+             if pgfe^.IsConnectedTo(pgfe2) then
+             begin
+             npath:=pgfe^.pathlength+Vertexlength(pgfe2^.point,pgfe^.point);
+             if {npathmin>npath}abs(npath-pgfe2^.pathlength)<eps then
+             begin
+                  //npathmin:=pgfe^.pathlength;
+                  pgfe3:=pgfe;
+             end;
+             end;
+        end;
+        pgfe:=iterate(ir);
+        until pgfe=nil;
+        dec(step);
+        pgfe2:=pgfe3;
+        pa.Add(@pgfe2.point);
+  end;
+
+  pa.Invert;
+
+
+end;
+procedure GDBGraf.BeginFindPath;
+var
+  pgfe: pgrafelement;
+  ir:itrec;
+begin
+  pgfe:=beginiterate(ir);
+  if pgfe<>nil then
+  repeat
+        pgfe^.step:=0;
+        pgfe^.pathlength:=+infinity;
+
+        pgfe:=iterate(ir);
+  until pgfe=nil;
+end;
+function grafelement.IsConnectedTo;
+var
+  line: pgdbobjEntity;
+  ir:itrec;
+begin
+  line:=link.beginiterate(ir);
+  if line<>nil then
+  repeat
+        if node^.link.IsObjExist(line)then
+                                          begin
+                                               result:=true;
+                                               exit;
+                                          end;
+        line:=link.iterate(ir);
+  until line=nil;
+  result:=false;
+end;
+function grafelement.addline;
+begin
+     inc(linkcount);
+     link.add(addr(pv));
+end;
+constructor grafelement.initnul;
+begin
+     point:=nulvertex;
+     link.init({$IFDEF DEBUGBUILD}'{9C4A4FB4-31B7-45A0-BDF4-52233F18BBF8}',{$ENDIF}100);
+     linkcount:=0;
+     connected:=0;
+end;
+constructor grafelement.init(v:gdbvertex);
+begin
+     point:=v;
+     link.init({$IFDEF DEBUGBUILD}'{4BCEE078-467B-4360-918C-A2E3D1D8860C}',{$ENDIF}100);
+     link.CreateArray;
+     linkcount:=0;
+     connected:=0;
+end;
+procedure GDBGraf.freeelement;
+begin
+  pgrafelement(p).link.Clear;
+  pgrafelement(p).link.done;
+  //pgrafelement(p).
+  //GDBFreeMem(PGDBFontRecord(p).Pfont);
+end;
+constructor GDBGraf.init;
+begin
+  inherited init({$IFDEF DEBUGBUILD}'{C0D04628-FDC7-4EC4-A3F7-F03C05C15CCE}',{$ENDIF}m,sizeof(grafelement));
+end;
+function GDBGraf.minimalize;
+var
+  i{,j}: GDBInteger;
+  tgf: pgrafelement;
+  l1,l2:pgdbobjline;
+begin
+  result:=false;
+  if count = 0 then exit;
+  for i := 0 to count - 1 do
+  begin
+       tgf:=pgrafelement(self.getelement(i));
+       if tgf^.linkcount=2 then
+       begin
+              //j:=0;
+              //repeat
+              l1:=tgf^.link.getelement({j}0);
+              if l1<>nil then
+                             l1:=pgdbobjline(ppointer(l1)^);
+              //inc(j);
+              //until l1<>nil;
+              //repeat
+              l2:=tgf^.link.getelement({j}1);
+              if l2<>nil then
+                             l2:=pgdbobjline(ppointer(l2)^);
+              //inc(j);
+              //until l2<>nil;
+
+              if (l1<>nil)and(l2<>nil) then
+              result:=l1^.jointoline(l2);
+              if result then system.break;
+       end;
+  end;
+end;
+destructor GDBGraf.done;
+begin
+     //clear;
+     inherited done;
+end;
+function GDBGraf.divide;
+function marknearelement(pgf:pgrafelement):GDBBoolean;
+var i,j,k: GDBInteger;
+    tgf: pgrafelement;
+    l1,l2:pgdbobjline;
+    l1addr,l2addr:pGDBPointer;
+begin
+  result:=false;
+  for i := 0 to count - 1 do
+  begin
+       tgf:=pgrafelement(self.getelement(i));
+       if tgf<>pgf then
+       begin
+            for j:=0 to pgf^.link.Count-1 do
+            begin
+                 l1addr:=pgf^.link.getelement(j);
+                 l1:=pgdbobjline(l1addr^);
+                 if l1<>nil then
+                 for k:=0 to tgf^.link.Count-1 do
+                 begin
+                      l2addr:=tgf^.link.getelement(k);
+                      l2:=pgdbobjline(l2addr^);
+                      if l2<>nil then
+                      if l1=l2 then
+                      begin
+                           inc(pgf^.connected);
+                           inc(tgf^.connected);
+                           l1addr^:=nil;
+                           l2addr^:=nil;
+                           result:=true;
+                      end;
+                 end;
+            end;
+       end;
+  end;
+end;
+var
+  i{,j}: GDBInteger;
+  tgf: pgrafelement;
+//  l1,l2:pgdbobjline;
+  q:GDBBoolean;
+  ir:itrec;
+begin
+  result:=false;
+  if count = 0 then exit;
+  tgf:=pgrafelement(self.getelement(0));
+  marknearelement(tgf);
+  repeat
+  q:=false;
+  tgf:=beginiterate(ir);
+  //for i := 0 to count - 1 do
+  if tgf<>nil then
+  //begin
+  repeat
+       //tgf:=pgrafelement(self.getelement(i));
+       if (tgf^.connected>0)and(tgf^.connected<tgf^.linkcount) then
+       q:=q or marknearelement(tgf);
+       tgf:=iterate(ir);
+  until tgf=nil;
+  //end;
+  until not q;
+  //q:=false;
+  for i := 0 to count - 1 do
+  begin
+       tgf:=pgrafelement(self.getelement(i));
+       if tgf^.connected=0 then
+       begin
+            result:=true;
+            exit;
+       end;
+  end;
+end;
+function GDBGraf.addge;
+var
+  i: GDBInteger;
+  tgf: pgrafelement;
+begin
+  if count = 0 then
+  begin
+    createarray;
+    pgrafelement(Parray)^.init(v);
+    inc(count);
+    result:=parray;
+  end
+  else
+  begin
+    for i := 0 to count - 1 do
+    begin
+      tgf:=pgrafelement(self.getelement(i));
+      if vertexeq(tgf^.point,v) then
+        begin
+             result:=tgf;
+             system.exit;
+        end;
+    end;
+    //if i = count then
+    begin
+      inc(count);
+      tgf:=pgrafelement(self.getelement(count-1));
+      tgf^.init(v);
+      result:=tgf;
+
+    end;
+  end;
+end;
+procedure GDBGraf.clear;
+//var
+//  i: GDBInteger;
+//  tgf: pgrafelement;
+begin
+  {if count = 0 then exit;
+  begin
+    for i := 0 to count - 1 do
+    begin
+      tgf:=pgrafelement(self.getelement(i));
+      tgf^.point:=nulvertex;
+      tgf^.link.Count:=0;
+      tgf^.linkcount:=0;
+      tgf^.connected:=0;
+    end;
+  end;}
+  count:=0;
+end;
+begin
+  {$IFDEF DEBUGINITSECTION}LogOut('UGDBGraf.initialization');{$ENDIF}
+end.

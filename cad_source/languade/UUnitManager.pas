@@ -660,6 +660,7 @@ end;
 initialization;
 begin
      {$IFDEF DEBUGINITSECTION}LogOut('uunitmanager.initialization');{$ENDIF}
+     programlog.logoutstr('UUnitManager.startup',lp_IncPos);
      units.init;
           units.loadunit(expandpath('*rtl/system.pas'),nil);
 
@@ -772,6 +773,7 @@ begin
 
 
   PRecordDescriptor(sysunit.TypeName2PTD('CommandRTEdObject'))^.FindField('commanddata')^.Collapsed:=false;
+  programlog.logoutstr('UUnitManager.startup',lp_DecPos);
 
   //evaluate('abba',sysunit);
 

@@ -60,9 +60,14 @@ var
 procedure LogOut(s:GDBString);
 var
    FileHandle:cardinal;
+   logname:string;
 begin
+     logname:=filelog+'hard';
      FileHandle:=0;
-     FileHandle := FileOpen(filelog, fmOpenWrite);
+     if not fileexists(logname) then
+                                   FileHandle:=FileCreate(logname)
+                                else
+                                    FileHandle := FileOpen(logname, fmOpenWrite);
      FileSeek(FileHandle, 0, 2);
 
         s:=s+#13#10;
@@ -127,8 +132,8 @@ begin
 end;
 procedure tlog.CreateLog;
 begin
-  //FileHandle:=FileCreate(logfilename,fmOpenWrite);
-  //CloseLog;
+  FileHandle:=FileCreate(logfilename,fmOpenWrite);
+  CloseLog;
 end;
 {procedure tlog.logout;
 begin
@@ -172,7 +177,7 @@ else if IncIndent>0 then
 end;
 procedure tlog.logoutstr;
 begin
-     if incindent>0 then
+     if (incindent>0)and(Indent=0) then
                     if assigned(SplashWindow) then
                                    SplashWindow.TXTOut(str);
      processstr(str,IncIndent,true);

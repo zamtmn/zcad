@@ -70,7 +70,7 @@ end;
 procedure createsplash;
 begin
      SplashWindow:=TSplashWnd.Create(nil);
-     SplashWindow.show;
+     //SplashWindow.show;
 end;
 procedure removesplash;
 begin

@@ -473,7 +473,7 @@ begin
                                                                         LineWbox.align:=alTop;}
                            AddToBar(ppanel,LineWBox);
                      end;
-                     if uppercase(line)='SPACE' then
+                     if uppercase(line)='SEPARATOR' then
                                          begin
                                          buttonpos:=buttonpos+3;
                                          TToolButton(b):=TToolButton.Create(ppanel);
@@ -556,6 +556,20 @@ begin
                                                            ppopupmenu.Add(pmenuitem);
                                                            line := f.readstring(',','');
                                                            line := f.readstring(#$A' ',#$D);
+                                                           line := f.readstring(#$A' ',#$D);
+                                                           line:=readspace(line);
+                                                      end
+                else     if uppercase(line)='SEPARATOR' then
+                                                      begin
+                                                           ppopupmenu.AddSeparator;
+                                                           (*line2 := f.readstring(',','');
+                                                           //GDBGetMem({$IFDEF DEBUGBUILD}'{19CBFAC7-4671-4F40-A34F-3F69CE37DA65}',{$ENDIF}GDBPointer(pmenuitem),sizeof(zmenuitem));
+                                                           //pmenuitem.init(line);
+                                                           //pmenuitem.addto(ppopupmenu);
+                                                           line := f.readstring(',','');
+                                                           //pmenuitem.command:=line;
+                                                           pmenuitem:=TmyMenuItem.Create(ppopupmenu,line2,line);
+                                                           ppopupmenu.Add(pmenuitem);*)
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);
                                                       end
@@ -933,7 +947,7 @@ begin
           if pos>oldlongprocess then
           begin
                ProcessBar.position:=current;
-               oldlongprocess:=pos+10;
+               oldlongprocess:=pos+20;
                ProcessBar.repaint;
                //application.ProcessMessages;
           end;

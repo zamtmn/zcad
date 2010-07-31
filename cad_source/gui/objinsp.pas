@@ -38,7 +38,7 @@ type
   end;
   arrayarrindop=array[0..10] of arrindop;
   parrayarrindop=^arrayarrindop;
-  TGDBobjinsp=class(TPanel)
+  TGDBobjinsp=class({TPanel}TScrollBox)
     public
     GDBobj:GDBBoolean;
     ppropcurrentedit:PPropertyDeskriptor;
@@ -109,6 +109,8 @@ begin
      onresize:=_onresize;
      onpaint:=mypaint;
      self.DoubleBuffered:=true;
+     self.BorderStyle:=bsnone;
+     self.BorderWidth:=1;
 end;
 
 procedure TGDBobjinsp.SetCurrentObjDefault;
@@ -198,11 +200,13 @@ var
 //  r,rr:trect;
 //  colorn,coloro:tCOLORREF;
       ir:itrec;
+      last:boolean;
 begin
   if ppa^.Count=0 then exit;
   ppd:=ppa^.beginiterate(ir);
   if ppd<>nil then
     repeat
+      last:=false;
       if (ppd^.IsVisible) then
       begin
         if ppd^.SubNode<>nil
@@ -210,7 +214,11 @@ begin
         begin
           y:=y++rowh;
           if not ppd^.Collapsed^ then
+            begin
             calctreeh(GDBPointer(ppd.SubNode),y);
+            y:=y+rowh;
+            last:=true;
+            end;
         end
         else
         begin
@@ -219,6 +227,8 @@ begin
       end;
       ppd:=ppa^.iterate(ir);
     until ppd=nil;
+  if last then
+              y:=y-rowh;
 end;
 
 procedure TGDBobjinsp.drawprop(PPA:PTPropertyDeskriptorArray; var y,sub:GDBInteger);
@@ -371,7 +381,7 @@ begin
 //              dc:=0;
 ARect := GetClientRect;
 InflateRect(ARect, -BorderWidth, -BorderWidth);
-InflateRect(ARect, -BevelWidth, -BevelWidth);
+//----------------------------------------------InflateRect(ARect, -BevelWidth, -BevelWidth);
 canvas.FillRect(ARect);
 //FillRect(DC, ARect, HBRUSH(Brush.Reference.Handle));
 y:=startdrawy;
@@ -472,6 +482,14 @@ end;
 procedure TGDBobjinsp.createscrollbars;
 //var si:scrollinfo;
 begin
+     self.VertScrollBar.Range:=contentheigth;
+     self.VertScrollBar.page:={clientheight}height;
+     {$IFNDEF LINUX}self.VertScrollBar.Tracking:=true;{$ENDIF}
+     self.VertScrollBar.Smooth:=true;
+
+     //if contentheigth>clientheight
+     //                             then application.MessageBox('1','2',1);
+
 {  if contentheigth>self.clientheight then
                                     begin
                                          if (style and ws_vscroll)=0 then
@@ -503,6 +521,7 @@ var
   tp:pointer;
   tempstr:gdbstring;
 begin
+  y:=y+self.VertScrollBar.Position;
   //application.HintPause:=1;
   //application.HintShortPause:=10;
   my:=startdrawy;
@@ -592,6 +611,7 @@ var
   ir:itrec;
 
 begin
+  y:=y+self.VertScrollBar.Position;
   //if proptreeptr=nil then exit;
   my:=startdrawy;
   pp:=mousetoprop(@pda,x,y,my);

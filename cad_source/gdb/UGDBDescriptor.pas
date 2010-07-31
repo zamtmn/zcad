@@ -686,8 +686,8 @@ begin
   FontManager.addFonf('normal.shx');
   FontManager.addFonf('gothice.shx');
   FontManager.addFonf('romant.shx');
-  pbasefont:=FontManager.FindFonf('romant.shx');
-  //pbasefont:=FontManager.FindFonf('normal.shx');
+  //pbasefont:=FontManager.FindFonf('romant.shx');
+  pbasefont:=FontManager.FindFonf('gothice.shx');
   gdb.init;
   BlockBaseDWG:=gdb.CreateDWG;
   ClipboardDWG:=gdb.CreateDWG;
@@ -706,5 +706,7 @@ begin
   GDBTrash.done;
 end;
 begin
+  programlog.logoutstr('UGDBDescriptor.startup',lp_IncPos);
   {$IFDEF DEBUGINITSECTION}LogOut('GDBDescriptor.initialization');{$ENDIF}
+  programlog.logoutstr('UGDBDescriptor.startup',lp_DecPos);
 end.

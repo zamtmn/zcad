@@ -90,7 +90,6 @@ begin
   ReportMemoryLeaksOnShutdown:=DebugHook <> 0;
 {$ENDIF}
 {$ENDIF}
-  //log.startup(sysparam.programpath+filelog);
   programlog.logoutstr('ZCAD log v'+sysparam.ver.versionstring+' started',0);
 {$IFDEF VER150}programlog.logoutstr('Program compiled on Borland DELPHI7                    ',0); {$ENDIF}
 {$IFDEF VER170}programlog.logoutstr('Program compiled on Borland DELPHI2005                 ',0); {$ENDIF}
@@ -102,8 +101,9 @@ begin
 {$IFDEF BREACKPOINTSONERRORS}programlog.logoutstr('Program compiled with {$DEFINE BREACKPOINTSONERRORS}',0); {$ENDIF}
 
   //{перемещен в splashwnd}Application.Initialize;
-  SplashWindow.TXTOut('ugdbdescriptor.startup;');
-                                                 ugdbdescriptor.startup;
+
+  ugdbdescriptor.startup;
+
   Application.CreateForm(TMainFormN, MainFormN);
 
   MainFormN.show;
@@ -112,7 +112,7 @@ begin
   if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
                                                   sysvar.SYS.SYS_IsHistoryLineCreated^:=true;
 
-  SplashWindow.SetFocus;
+  //SplashWindow.SetFocus;
 
   {инициализация не OS модулей}
   //SplashWindow.TXTOut('GDBCommandsElectrical.startup;');GDBCommandsElectrical.startup;

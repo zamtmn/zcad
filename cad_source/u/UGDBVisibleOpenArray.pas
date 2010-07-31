@@ -63,3 +63,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBVisibleOpenArray.initialization');{$ENDIF}
 end.
+

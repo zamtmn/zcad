@@ -117,7 +117,7 @@ type
     procedure SetMouseMode(smode:GDBByte);
 
     procedure _onresize(sender:tobject);virtual;
-    destructor done;virtual;
+    procedure free;
 
 
     procedure delmyscrbuf;
@@ -1837,6 +1837,7 @@ procedure showcursor;
   end;
   const msec=1;
 begin
+  if not assigned(gdb.GetCurrentDWG) then exit;
 LPTime:=now();
 
 //param.firstdraw:=true;
@@ -2682,9 +2683,9 @@ end;
 
 procedure TOGLWnd._onresize;
 begin
-  if  (param.height<>clientheight)
+  {if  (param.height<>clientheight)
     or(param.width<>clientwidth)
-  then
+  then}
   begin
 
   delmyscrbuf;
@@ -2707,7 +2708,7 @@ begin
 
   end;
 end;
-destructor TOGLwnd.done;
+procedure TOGLwnd.free;
 var
    i:integer;
 begin
@@ -2724,6 +2725,7 @@ begin
                                               param.ontrackarray.otrackarray[i].arraydispaxis.done;
                                               end;
      {переделать}//inherited done;
+     inherited;
 end;
 procedure TOGLWnd.BeforeInit;
 var i: GDBInteger;

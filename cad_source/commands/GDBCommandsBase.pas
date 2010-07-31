@@ -405,6 +405,43 @@ begin
      historyout('   Вот и всё бля...............');
      result:=cmd_ok;
 end;
+function CloseDWG_com(Operands:pansichar):GDBInteger;
+var
+   poglwnd:toglwnd;
+   CurrentDWG:PTDrawing;
+begin
+  application.ProcessMessages;
+  CurrentDWG:=gdb.GetCurrentDWG;
+  if CurrentDWG<>nil then
+  begin
+       if CurrentDWG.Changed then
+                                 begin
+                                      if application.MessageBox('Чертеж имеет изменения. Закрыть?','Внимание!',MB_YESNO)<>IDYES then exit;
+                                 end;
+       poglwnd:=CurrentDWG.OGLwindow1;
+       //mainform.PageControl.delpage(mainform.PageControl.onmouse);
+       gdb.eraseobj(CurrentDWG);
+       gdb.pack;
+       poglwnd.PDWG:=nil;
+       gdb.CurrentDWG:=nil;
+
+       poglwnd.free;
+
+       mainformn.PageControl.ActivePage.Free;
+       tobject(poglwnd):=mainformn.PageControl.ActivePage;
+
+       if poglwnd<>nil then
+       begin
+            tobject(poglwnd):=FindControlByType(poglwnd,TOGLWnd);
+            //pointer(poglwnd):=poglwnd^.FindKidsByType(typeof(TOGLWnd));
+            gdb.CurrentDWG:=poglwnd.PDWG;
+            poglwnd.GDBActivate;
+       end;
+       shared.SBTextOut('Закрыто');
+       sharedgdb.updatevisible;
+  end;
+end;
+
 function CloseDWGOnMouse_com(Operands:pansichar):GDBInteger;
 var
    poglwnd:Ptoglwnd;
@@ -487,8 +524,8 @@ begin
      MainFormN.PageControl.ActivePage:=myts;
      redrawoglwnd;
      result:=cmd_ok;
-
      application.ProcessMessages;
+     oglwnd._onresize(nil);
 end;
 
 function SelectAll_com(Operands:pansichar):GDBInteger;
@@ -1273,6 +1310,7 @@ begin
   CreateCommandFastObjectPlugin(@quit_com,'Quit',0,0);
   CreateCommandFastObjectPlugin(@newdwg_com,'NewDWG',0,0);
   CreateCommandFastObjectPlugin(@CloseDWGOnMouse_com,'CloseDWGOnMouse',CADWG,0);
+  CreateCommandFastObjectPlugin(@CloseDWG_com,'CloseDWG',CADWG,0);
   selall:=CreateCommandFastObjectPlugin(@SelectAll_com,'SelectAll',CADWG,0);
   selall^.overlay:=true;
   selall.CEndActionAttr:=0;

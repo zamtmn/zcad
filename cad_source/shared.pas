@@ -80,7 +80,7 @@ begin
           historychanged:=true;
           //HistoryLine.SelLength:=0;
           //{CLine}HistoryLine.append(s);
-          {CLine}//HistoryLine.update;
+          {CLine}HistoryLine.repaint;
           //a:=CLine.HistoryLine.Lines[CLine.HistoryLine.Lines.Count];
      //SendMessageA(cline.HistoryLine.Handle, WM_vSCROLL, SB_PAGEDOWN	, 0);
      end;

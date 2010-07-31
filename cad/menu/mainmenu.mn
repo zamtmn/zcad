@@ -1,6 +1,6 @@
 Panel DOWNPANEL 894,68,30,525;
   {
-    space
+    Separator
     variable DWG_DrawGrid,#Сетка,Показывать сетку??
     variable DWG_EditInSubEntry,#SUB-выделение,Отдельный выбор частей динамических объектов
     variable DWG_DrawMode,#Вес,Показывать вес линий
@@ -14,7 +14,7 @@ Panel UPPANEL 994,68,30,525;
     button NewDWG,new.bmp,Создать новый чертеж
     button Load,load.bmp,Загрузить файл
     button Save,save.bmp,Сохранить файл
-    space
+    Separator
     layercombobox 200,Выбор слоя
     linewcombobox 100,Выбор веса линий
   }
@@ -23,20 +23,20 @@ Panel RIGHTPANEL 994,68,30,525;
     button Load(QS),#QL,Загрузка автосохранения
     button QSave(QS),#QS,Автосохранение
     button ProjectTree,#tree,Показать окно дерева проекта
-    space
+    Separator
     button BEdit,#bed,Редактор блоков
-    space
+    Separator
     button Line,line.bmp,Чертить линию
     button 3DPoly,pline.bmp,Чертить полилинию (3dpoly)
     button PolyED,polyed.bmp,Редактор вершин поли обьектов
     button Circle,circle.bmp,Чертить окружность
     button Insert,insert.bmp,Вставить блок
-    space
+    Separator
     button Copy,copy.bmp,Копировать
     button Move,move.bmp,Перенести
     button Rotate,rotate.bmp,Повернуть
     button Scale,scale.bmp,Масштабировать
-    space
+    Separator
     button El_Cable,el_cable.bmp,Чертить кабель
     button EL_Wire,El_Wire.bmp,Цепь\Трасса
     button El_Leader,el_leader.bmp,Обозначение трасс на плане
@@ -45,16 +45,16 @@ Panel RIGHTPANEL 994,68,30,525;
     button El_Cable_Invert,#инв,Инвертировать направление кабеля
     button El_Cable_Legend,#кж,Экспорт кабельного журнала
     button El_Material_Legend,#вм,Экспорт "ведомости" материалов
-    space
+    Separator
     button PlaceSmokeDetectorOrto,ps.bmp,Авторасстановка пож. извещателей
     button OrtoDevPlace,array.bmp,Расстановка блоков (устройств) массивом
     button El_Find,find.bmp,Найти оборудование
-    space
+    Separator
     button ObjVarMan,#VM,Менеджер переменных объекта
-    space
+    Separator
     button AddToOwner,addtoowner.bmp,(НЕ РАБОТАЕТ)добавить к владельцу
     button InsertTestTable,spec.bmp,*DEBUG*Вставить таблицу
-    space
+    Separator
     button SetObjInsp(CURRENT),#FIX,*DEBUG*Фиксировать выделенный объект в инспекторе
 
   }
@@ -62,9 +62,13 @@ MainMenuItem Файл;
   {
     Command Создать,NewDWG,CTRL+N,none
     Command Загрузить,Load,CTRL+O,none
+	Separator
     Command Сохранить,QSave,CTRL+S,none
     Command Сохранить как,SaveAs,CTRL+S,none
     Command Сохранить(autosave),QSave(QS),CTRL+S,none
+	Separator
+	Command Закрыть вкладку,CloseDWG,none,none
+	Separator
     Command Выход,Quit,none,none
   }
 MainMenuItem Правка;

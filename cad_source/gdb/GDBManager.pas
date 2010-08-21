@@ -193,7 +193,7 @@ end;
 procedure setdefaultproperty(pvo:pgdbobjEntity);
 begin
   pvo^.selected := false;
-  pvo^.Visible:=true;
+  pvo^.Visible:=gdb.GetCurrentDWG.pcamera.VISCOUNT;
   pvo^.vp.layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
   pvo^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
 end;

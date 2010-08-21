@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -43,7 +43,7 @@ uses
   gdbobjectsconstdef,
   gdbEntity,
  shared,
- sharedgdb,
+ sharedgdb,UGDBEntTree,
   {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator;
 type
@@ -594,6 +594,7 @@ begin
      end
         else
         shared.ShowError('GDBCommandsBase.MERGE: Не могу открыть файл: '+s);
+     gdb.GetCurrentDWG^.pObjRoot.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjTree,0)^;
 end;
 function Load_com(Operands:pansichar):GDBInteger;
 var
@@ -849,10 +850,10 @@ begin
       pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
       if pv<>nil then
       repeat
-            if pv^.Visible then
-            if pv^.infrustum then
+            if pv^.Visible=gdb.GetCurrentDWG.pcamera.VISCOUNT then
+            if pv^.infrustum=gdb.GetCurrentDWG.pcamera.POSCOUNT then
             begin
-                 r:=pv^.CalcTrueInFrustum(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.BigMouseFrustum);
+                 r:=pv^.CalcTrueInFrustum(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.BigMouseFrustum,gdb.GetCurrentDWG.pcamera.VISCOUNT);
 
                  if GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameInverse
                     then
@@ -1286,6 +1287,47 @@ begin
      memcount.FreeAndDone;
     result:=cmd_ok;
 end;
+procedure PrintTreeNode(pnode:PTEntTreeNode);
+var
+   s:gdbstring;
+begin
+     s:='';
+     if pnode^.nul.Count<>0 then
+     begin
+          s:='В ноде примитивов: '+inttostr(pnode^.nul.Count);
+     end;
+     s:=s+'(далее в +): '+inttostr(pnode.pluscount);
+     s:=s+' (далее в -): '+inttostr(pnode.minuscount);
+
+     shared.HistoryOutStr(dupestring('  ',pnode.nodecount)+s);
+
+     if assigned(pnode.pplusnode) then
+                       PrintTreeNode(pnode.pplusnode);
+     if assigned(pnode.pminusnode) then
+                       PrintTreeNode(pnode.pminusnode);
+end;
+
+function CTest:GDBInteger;
+var //i: GDBInteger;
+    pv:pGDBObjEntity;
+    ir:itrec;
+begin
+  MainFormN.StartLongProcess(gdb.GetCurrentROOT.ObjArray.count);
+  gdb.GetCurrentDWG^.pObjRoot.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjTree,0)^;
+  MainFormN.EndLongProcess;
+
+  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
+  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
+  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
+  objinsp.GDBobjinsp.ReturnToDefault;
+  clearcp;
+  redrawoglwnd;
+
+  shared.HistoryOutStr('Всего примитивов: '+inttostr(GDB.GetCurrentROOT.ObjArray.count));
+  PrintTreeNode(@gdb.GetCurrentDWG^.pObjRoot.ObjTree);
+
+  result:=cmd_ok;
+end;
 
 procedure finalize;
 begin
@@ -1337,6 +1379,7 @@ begin
   selframecommand:=CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,@FrameEdit_com_Command_End,nil,nil,@FrameEdit_com_BeforeClick,@FrameEdit_com_AfterClick,nil,'SelectFrame',0,0);
   selframecommand^.overlay:=true;
   selframecommand.CEndActionAttr:=0;
+  CreateCommandFastObjectPlugin(@CTest,'CTest',CADWG,0);
 
   //Optionswindow.initxywh('',@mainformn,500,300,400,100,false);
   //Aboutwindow:=TAboutWnd.create(Application);{.initxywh('',@mainform,500,200,200,180,false);}

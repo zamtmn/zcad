@@ -35,12 +35,12 @@ GDBObjPoint=object(GDBObj3d)
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;
                  procedure Format;virtual;
 
-                 procedure DrawGeometry(lw:GDBInteger);virtual;
-                 function calcinfrustum(frustum:ClipArray):GDBBoolean;virtual;
+                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                  procedure RenderFeedback;virtual;
                  function getsnap(var osp:os_record):GDBBoolean;virtual;
                  function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
-                 function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
+                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);virtual;

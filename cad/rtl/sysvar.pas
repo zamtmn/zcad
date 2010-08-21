@@ -40,6 +40,7 @@ var
   RD_BackGroundColor:RGB;
   RD_Restore_Mode:TRestoreMode;
   RD_LastRenderTime:GDBInteger;
+  RD_MaxRenderTime:GDBInteger;
   SAVE_Auto_Interval:GDBInteger;
   SAVE_Auto_Current_Interval:GDBInteger;
   SAVE_Auto_FileName:GDBString;
@@ -98,6 +99,7 @@ begin
   RD_BackGroundColor.a:=255;
   RD_Restore_Mode:=WND_Texture;
   RD_LastRenderTime:=0;
+  RD_MaxRenderTime:=200;
   SAVE_Auto_Interval:=300;
   SAVE_Auto_Current_Interval:=274;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';
@@ -110,7 +112,7 @@ begin
   PATH_Device_Library:='*programdb|c:/zcad/userdb';
   PATH_Program_Run:='C:\zcad\CAD\';
   PATH_Support_Path:='*rtl|*rtl/objdefunits|*rtl/objdefunits/include|*components|*blocks/el/general';
-  ShowHiddenFieldInObjInsp:=False;
+  ShowHiddenFieldInObjInsp:=True;
   testGDBBoolean:=False;
   pi:=3.14159265359;
 end.

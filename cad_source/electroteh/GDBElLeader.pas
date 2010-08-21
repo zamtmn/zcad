@@ -23,11 +23,11 @@ GDBObjElLeader=object(GDBObjComplex)
             size:GDBInteger;
 
 
-            procedure DrawGeometry(lw:GDBInteger);virtual;
-            procedure DrawOnlyGeometry(lw:GDBInteger);virtual;
+            procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+            procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
             procedure getoutbound;virtual;
-            function CalcInFrustum(frustum:ClipArray):GDBBoolean;virtual;
-            function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
+            function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
+            function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
             function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
             procedure RenderFeedback;virtual;
             procedure addcontrolpoints(tdesc:GDBPointer);virtual;
@@ -52,10 +52,18 @@ GDBObjElLeader=object(GDBObjComplex)
 
             procedure transform(t_matrix:PDMatrix4D);virtual;
             procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+            procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
             end;
 {EXPORT-}
 implementation
 uses GDBBlockDef{,shared},log;
+procedure GDBObjElLeader.SetInFrustumFromTree;
+begin
+     inherited;
+                 MainLine.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+            MarkLine.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+            Tbl.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+end;
 procedure GDBObjElLeader.TransformAt;
 begin
   MainLine.CoordInOCS.lbegin:=geometry.VectorTransform3D(PGDBObjElLeader(p)^.mainline .CoordInOCS.lBegin,t_matrix^);
@@ -431,11 +439,11 @@ function GDBObjElLeader.CalcInFrustum;
 var a:boolean;
 begin
      result:=false;
-     a:=(inherited CalcInFrustum(frustum));
+     a:=(inherited CalcInFrustum(frustum,infrustumactualy,visibleactualy));
      result:=result or a;
-     a:=(MainLine.CalcInFrustum(frustum));
+     a:=(MainLine.CalcInFrustum(frustum,infrustumactualy,visibleactualy));
      result:=result or a;
-     a:=(tbl.CalcInFrustum(frustum));
+     a:=(tbl.CalcInFrustum(frustum,infrustumactualy,visibleactualy));
      result:=result or a;
 end;
 function GDBObjElLeader.CalcTrueInFrustum;
@@ -444,23 +452,23 @@ var
 begin
       if ConstObjArray.Count<>0 then
       begin
-      result:=inherited CalcTrueInFrustum(frustum);
+      result:=inherited CalcTrueInFrustum(frustum,visibleactualy);
       if result=IRPartially then
                                 exit;
       end;
-      q1:=MainLine.CalcTrueInFrustum(frustum);
+      q1:=MainLine.CalcTrueInFrustum(frustum,visibleactualy);
       if q1=IRPartially then
                            begin
                                 result:=IRPartially;
                                 exit;
                            end;
-      q2:=tbl.CalcTrueInFrustum(frustum);
+      q2:=tbl.CalcTrueInFrustum(frustum,visibleactualy);
       if q2=IRPartially then
                            begin
                                 result:=IRPartially;
                                 exit;
                            end;
-      q3:=MarkLine.CalcTrueInFrustum(frustum);
+      q3:=MarkLine.CalcTrueInFrustum(frustum,visibleactualy);
       if q3=IRPartially then
                            begin
                                 result:=IRPartially;
@@ -498,24 +506,26 @@ procedure GDBObjElLeader.getoutbound;
 begin
      inherited;
      concatbb(vp.BoundingBox,mainline.vp.BoundingBox);
-     vp.BoundingBox:=ConstObjArray.calcbb;
+     concatbb(vp.BoundingBox,MarkLine.vp.BoundingBox);
+     concatbb(vp.BoundingBox,tbl.vp.BoundingBox);
+     //vp.BoundingBox:=ConstObjArray.calcbb;
 end;
 procedure GDBObjElLeader.DrawGeometry;
 begin
   inherited;
   inc(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
-  MainLine.DrawGeometry(lw);
-  MarkLine.DrawGeometry(lw);
-  tbl.DrawGeometry(lw);
+  MainLine.DrawGeometry(lw,infrustumactualy);
+  MarkLine.DrawGeometry(lw,infrustumactualy);
+  tbl.DrawGeometry(lw,infrustumactualy);
   dec(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
 end;
 procedure GDBObjElLeader.DrawOnlyGeometry;
 begin
   inherited;
   inc(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
-  MainLine.DrawOnlyGeometry(lw);
-  MarkLine.DrawOnlyGeometry(lw);
-  tbl.DrawOnlyGeometry(lw);
+  MainLine.DrawOnlyGeometry(lw,infrustumactualy);
+  MarkLine.DrawOnlyGeometry(lw,infrustumactualy);
+  tbl.DrawOnlyGeometry(lw,infrustumactualy);
   dec(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
 end;
 function GDBObjElLeader.Clone;

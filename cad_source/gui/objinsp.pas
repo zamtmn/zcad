@@ -97,7 +97,7 @@ var
 
 implementation
 
-uses {oglwindow,}mainwindow,{ZPanelsWithSplit,}messages,gdbentity,UGDBStringArray,log;
+uses {oglwindow,}mainwindow,{ZPanelsWithSplit,}gdbentity,UGDBStringArray,log;
 
 
 procedure TGDBobjinsp.EraseBackground(DC: HDC);
@@ -382,6 +382,7 @@ begin
 ARect := GetClientRect;
 InflateRect(ARect, -BorderWidth, -BorderWidth);
 //----------------------------------------------InflateRect(ARect, -BevelWidth, -BevelWidth);
+canvas.Brush.Color := clBtnFace;
 canvas.FillRect(ARect);
 //FillRect(DC, ARect, HBRUSH(Brush.Reference.Handle));
 y:=startdrawy;
@@ -480,7 +481,8 @@ begin
      }
 end;
 procedure TGDBobjinsp.createscrollbars;
-//var si:scrollinfo;
+var //si:scrollinfo;
+    a:integer;
 begin
      self.VertScrollBar.Range:=contentheigth;
      self.VertScrollBar.page:={clientheight}height;
@@ -709,13 +711,13 @@ begin
     tp:=pcurrobj;
     GDBobjinsp.buildproplist(currobjgdbtype,property_build,tp);
     contentheigth:=gettreeh;
-    if currobjgdbtype^.OIP.ci=contentheigth then
+    if currobjgdbtype^.OIP.ci=self.Height then
                                                 begin
-                                                     startdrawy:=currobjgdbtype^.OIP.barpos;
+                                                     VertScrollBar.Position:=currobjgdbtype^.OIP.barpos;
                                                 end
                                              else
                                                  begin
-                                                      startdrawy:=0;
+                                                      VertScrollBar.Position:=0;
                                                  end;
 
     createscrollbars;
@@ -733,8 +735,8 @@ begin
     end;
     if assigned(currobjgdbtype) then
     begin
-    currobjgdbtype^.OIP.ci:=contentheigth;
-    currobjgdbtype^.OIP.barpos:=startdrawy;
+    currobjgdbtype^.OIP.ci:=self.Height;
+    currobjgdbtype^.OIP.barpos:=VertScrollBar.Position;
     end;
     pda.cleareraseobj;
     currobjgdbtype:=exttype;
@@ -745,16 +747,16 @@ begin
       GDBobj:=false;
     GDBobjinsp.buildproplist(exttype,property_build,addr);
     contentheigth:=gettreeh;
-    if currobjgdbtype^.OIP.ci=contentheigth then
+    createscrollbars;
+    if currobjgdbtype^.OIP.ci=self.Height then
                                                 begin
-                                                     startdrawy:=currobjgdbtype^.OIP.barpos;
+                                                     VertScrollBar.Position:=currobjgdbtype^.OIP.barpos;
                                                 end
                                              else
                                                  begin
-                                                      startdrawy:=0;
+                                                      VertScrollBar.Position:=0;
                                                  end;
 
-    createscrollbars;
   end
   else
   begin

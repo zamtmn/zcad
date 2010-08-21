@@ -48,10 +48,12 @@ uses shared,log;
 procedure GDBObjCamera.NextPosition;
 begin
      Inc(POSCOUNT);
+     inc(VISCOUNT);
 end;
 constructor GDBObjCamera.initnul;
 begin
      POSCOUNT:=1;
+     VISCOUNT:=1;
 end;
 function GDBObjCamera.GetObjTypeName;
 begin

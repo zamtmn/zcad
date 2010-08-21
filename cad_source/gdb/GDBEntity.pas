@@ -19,7 +19,7 @@
 unit GDBEntity;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
+uses UGDBEntTree,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
      {UGDBPolyPoint2DArray,}varman,varmandef,
      gl,
      GDBase,gdbobjectsconstdef,
@@ -42,13 +42,13 @@ GDBObjVisualProp=record
                       LineWeight:GDBSmallint;(*'Вес линий'*)(*saved_to_shd*)
                       ID:GDBWord;(*'ТипОбъекта'*)(*oi_readonly*)
                       BoundingBox:GDBBoundingBbox;(*'Габарит'*)(*oi_readonly*)(*hidden_in_objinsp*)
-                      LastCameraPos:GDBInteger;(*oi_readonly*)
+                      LastCameraPos:TActulity;(*oi_readonly*)
                  end;
 GDBObjEntity=object(GDBObjSubordinated)
                     vp:GDBObjVisualProp;(*'Общее'*)(*saved_to_shd*)
                     Selected:GDBBoolean;(*'Выбран'*)(*hidden_in_objinsp*)
-                    Visible:GDBBoolean;(*'Видимый'*)(*oi_readonly*)(*hidden_in_objinsp*)
-                    infrustum:GDBBoolean;(*'В камере'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                    Visible:TActulity;(*'Видимый'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                    infrustum:TActulity;(*'В камере'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     PExtAttrib:PTExtAttrib;(*hidden_in_objinsp*)
                     destructor done;virtual;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
@@ -71,14 +71,14 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure Format;virtual;
                     procedure FormatAfterEdit;virtual;
 
-                    procedure DrawWithAttrib;virtual;
-                    procedure DrawWithOutAttrib;virtual;
+                    procedure DrawWithAttrib(visibleactualy:TActulity);virtual;
+                    procedure DrawWithOutAttrib(visibleactualy:TActulity);virtual;
 
-                    procedure DrawGeometry(lw:GDBInteger);virtual;
-                    procedure DrawOnlyGeometry(lw:GDBInteger);virtual;
+                    procedure DrawGeometry(lw:GDBInteger;visibleactualy:TActulity);virtual;
+                    procedure DrawOnlyGeometry(lw:GDBInteger;visibleactualy:TActulity);virtual;
 
-                    procedure Draw(lw:GDBInteger);virtual;
-                    procedure DrawG(lw:GDBInteger);virtual;
+                    procedure Draw(lw:GDBInteger;visibleactualy:TActulity);virtual;
+                    procedure DrawG(lw:GDBInteger;visibleactualy:TActulity);virtual;
 
                     procedure RenderFeedback;virtual;
                     procedure RenderFeedbackIFNeed;virtual;
@@ -97,7 +97,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure correctbb;virtual;
                     procedure calcbb;virtual;
                     procedure DrawBB;
-                    function calcvisible(frustum:ClipArray):GDBBoolean;virtual;
+                    function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                     function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
                     function isonmouse(popa:GDBPointer):GDBBoolean;virtual;
                     procedure startsnap(var osp:os_record);virtual;
@@ -127,10 +127,11 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function IsSelected:GDBBoolean;virtual;
                     function GetLayer:PGDBLayerProp;virtual;
                     function GetCenterPoint:GDBVertex;virtual;
-                    function SetInFrustum:GDBBoolean;virtual;
-                    function SetNotInFrustum:GDBBoolean;virtual;
-                    function CalcInFrustum(frustum:ClipArray):GDBBoolean;virtual;
-                    function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
+                    procedure SetInFrustum(infrustumactualy:TActulity);virtual;
+                    procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
+                    procedure SetNotInFrustum(infrustumactualy:TActulity);virtual;
+                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
+                    function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                     function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                     procedure BuildGeometry;virtual;
                     procedure AddOnTrackAxis(posr:pos_record);virtual;
@@ -139,6 +140,16 @@ GDBObjEntity=object(GDBObjSubordinated)
 var onlygetsnapcount:GDBInteger;
 implementation
 uses GDBGenericSubEntry,UGDBDescriptor,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+procedure GDBObjEntity.SetInFrustumFromTree;
+begin
+     infrustum:=infrustumactualy;
+     if (self.vp.Layer._on) then
+     begin
+          visible:=visibleactualy;
+     end
+      else
+          visible:=0;
+end;
 procedure GDBObjEntity.AddOnTrackAxis(posr:pos_record);
 begin
 
@@ -166,16 +177,16 @@ begin
 end;
 procedure GDBObjEntity.Draw;
 begin
-  if visible then
+  if visible=visibleactualy then
   begin
-       DrawGeometry(lw);
+       DrawGeometry(lw,visibleactualy);
   end;
 end;
 procedure GDBObjEntity.Drawg;
 begin
-  if visible then
+  if visible=visibleactualy then
   begin
-       DrawOnlyGeometry(lw);
+       DrawOnlyGeometry(lw,visibleactualy);
   end;
 end;
 
@@ -183,7 +194,7 @@ procedure GDBObjEntity.createfield;
 begin
      inherited;
      Selected := false;
-     self.Visible:=true;
+     self.Visible:=0;
      vp.lineweight:=-1;
      if gdb.GetCurrentDWG<>nil then
                                    vp.layer:=gdb.GetCurrentDWG.LayerTable.GetSystemLayer
@@ -204,28 +215,7 @@ begin
   if (sysvar.DWG.DWG_SystmGeometryDraw^){and(GDB.GetCurrentDWG.OGLwindow1.param.subrender=0)} then
   begin
   glcolor3ubv(@palette[sysvar.SYS.SYS_SystmGeometryColor^]);
-  myglbegin(GL_LINE_LOOP);
-     myglVertex(vp.BoundingBox.LBN.x,vp.BoundingBox.LBN.y,vp.BoundingBox.LBN.Z);
-     myglVertex(vp.BoundingBox.RTF.x,vp.BoundingBox.LBN.y,vp.BoundingBox.LBN.Z);
-     myglVertex(vp.BoundingBox.RTF.x,vp.BoundingBox.RTF.y,vp.BoundingBox.LBN.Z);
-     myglVertex(vp.BoundingBox.LBN.x,vp.BoundingBox.RTF.y,vp.BoundingBox.LBN.Z);
-  myglend();
-  myglbegin(GL_LINE_LOOP);
-     myglVertex(vp.BoundingBox.LBN.x,vp.BoundingBox.LBN.y,vp.BoundingBox.RTF.Z);
-     myglVertex(vp.BoundingBox.RTF.x,vp.BoundingBox.LBN.y,vp.BoundingBox.RTF.Z);
-     myglVertex(vp.BoundingBox.RTF.x,vp.BoundingBox.RTF.y,vp.BoundingBox.RTF.Z);
-     myglVertex(vp.BoundingBox.LBN.x,vp.BoundingBox.RTF.y,vp.BoundingBox.RTF.Z);
-  myglend();
-  myglbegin(GL_LINES);
-     myglVertex(vp.BoundingBox.LBN.x,vp.BoundingBox.LBN.y,vp.BoundingBox.LBN.Z);
-     myglVertex(vp.BoundingBox.LBN.x,vp.BoundingBox.LBN.y,vp.BoundingBox.RTF.Z);
-     myglVertex(vp.BoundingBox.RTF.x,vp.BoundingBox.LBN.y,vp.BoundingBox.LBN.Z);
-     myglVertex(vp.BoundingBox.RTF.x,vp.BoundingBox.LBN.y,vp.BoundingBox.RTF.Z);
-     myglVertex(vp.BoundingBox.RTF.x,vp.BoundingBox.RTF.y,vp.BoundingBox.LBN.Z);
-     myglVertex(vp.BoundingBox.RTF.x,vp.BoundingBox.RTF.y,vp.BoundingBox.RTF.Z);
-     myglVertex(vp.BoundingBox.LBN.x,vp.BoundingBox.RTF.y,vp.BoundingBox.LBN.Z);
-     myglVertex(vp.BoundingBox.LBN.x,vp.BoundingBox.RTF.y,vp.BoundingBox.RTF.Z);
-  myglend();
+  DrawAABB(vp.BoundingBox);
   end;
 end;
 function GDBObjEntity.GetCenterPoint;
@@ -305,7 +295,7 @@ begin
 end;
 function GDBObjEntity.ObjToGDBString(prefix,sufix:GDBString):GDBString;
 begin
-     result:=prefix+'#'+inttohex(longint(@self),10)+sufix;
+     result:=prefix+'#'+inttohex(GDBPlatformint(@self),10)+sufix;
 end;
 function GDBObjEntity.getowner;
 begin
@@ -325,7 +315,7 @@ begin
 end;
 procedure GDBObjEntity.DrawOnlyGeometry;
 begin
-     DrawGeometry(lw);
+     DrawGeometry(lw,visibleactualy);
 end;
 function GDBObjEntity.CalculateLineWeight;
 var lw: GDBInteger;
@@ -374,7 +364,7 @@ var lw: GDBInteger;
 //  sel: GDBBoolean;
 begin
   lw := CalculateLineWeight;
-  Drawg(lw);
+  Drawg(lw,visibleactualy);
   if lw > 1 then
   begin
     gldisable(GL_LINE_SMOOTH);
@@ -443,7 +433,7 @@ begin
 
 
 
-  Draw(lw);
+  Draw(lw,visibleactualy);
 
   if lw > 1 then
   begin
@@ -480,17 +470,17 @@ end;
 procedure GDBObjEntity.higlight;
 begin
 end;
-function GDBObjEntity.SetInFrustum;
+procedure GDBObjEntity.SetInFrustum;
 begin
-     result:=infrustum;
-     infrustum:=true;
+     //result:=infrustum;
+     infrustum:=infrustumactualy;
      inc(gdb.GetCurrentDWG.pcamera^.totalobj);
      inc(gdb.GetCurrentDWG.pcamera^.infrustum);
 end;
-function GDBObjEntity.SetNotInFrustum;
+procedure GDBObjEntity.SetNotInFrustum;
 begin
-     result:=infrustum;
-     infrustum:=false;
+     //result:=infrustum;
+     //infrustum:=false;
      inc(gdb.GetCurrentDWG.pcamera^.totalobj);
 end;
 procedure GDBObjEntity.DXFOut;
@@ -563,7 +553,7 @@ begin
                                            repeat
                                                  str:='$'+inttostr(i)+'='+pvd^.name+'|'+pfd^.FieldName+'|'+pfd^.PFT^.GetValueAsString(tp);
                                                  dxfGDBStringout(handle,1000,str);
-                                                 cardinal(tp):=cardinal(tp)+pfd^.PFT^.SizeInGDBBytes; { TODO : сделать на оффсете }
+                                                 GDBPlatformint(tp):=GDBPlatformint(tp)+pfd^.PFT^.SizeInGDBBytes; { TODO : сделать на оффсете }
                                                  inc(i);
                                                  pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.iterate(ir2);
                                            until pfd=nil;
@@ -592,27 +582,32 @@ function GDBObjEntity.CalcTrueInFrustum;
 begin
      result:=IREmpty;
 end;
+{function GDBObjEntity.CalcVisibleByTree;
+begin
+
+end;}
+
 function GDBObjEntity.calcvisible;
 //var i:GDBInteger;
 //    tv,tv1:gdbvertex4d;
 //    m:DMatrix4D;
 begin
-      visible:=true;
+      visible:=visibleactualy;
       result:=true;
       //inc(gdb.GetCurrentDWG.pcamera^.totalobj);
-      if CalcInFrustum(frustum) then
+      if CalcInFrustum(frustum,infrustumactualy,visibleactualy) then
                            begin
-                                setinfrustum;
+                                setinfrustum(infrustumactualy);
                            end
                        else
                            begin
-                                setnotinfrustum;
-                                visible:=false;
+                                setnotinfrustum(infrustumactualy);
+                                visible:=0;
                                 result:=false;
                            end;
       if not(self.vp.Layer._on) then
                            begin
-                                visible:=false;
+                                visible:=0;
                                 result:=false;
                            end;
 

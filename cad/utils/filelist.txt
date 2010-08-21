@@ -46,7 +46,7 @@ C:\zcad\CAD_SOURCE\gdb\GDBComplex.pas
 C:\zcad\CAD_SOURCE\gdb\GDBBlockInsert.pas
 C:\zcad\CAD_SOURCE\gdb\GDBDevice.pas
 C:\zcad\CAD_SOURCE\gdb\GDBconnected.pas
-C:\zcad\CAD_SOURCE\gdb\GDBNet.pas
+C:\zcad\CAD_SOURCE\electroteh\GDBNet.pas
 C:\zcad\CAD_SOURCE\gdb\GDBLine.pas
 C:\zcad\CAD_SOURCE\gdb\GDBLWPolyLine.pas
 C:\zcad\CAD_SOURCE\gdb\GDBtext.pas
@@ -54,11 +54,11 @@ C:\zcad\CAD_SOURCE\gdb\GDBMText.pas
 C:\zcad\CAD_SOURCE\gdb\GDBpoint.pas
 C:\zcad\CAD_SOURCE\gdb\GDBCurve.pas
 C:\zcad\CAD_SOURCE\gdb\GDBPolyLine.pas
-C:\zcad\CAD_SOURCE\gdb\GDBCable.pas
+C:\zcad\CAD_SOURCE\electroteh\GDBCable.pas
 C:\zcad\CAD_SOURCE\gdb\GDBRoot.pas
 C:\zcad\CAD_SOURCE\gdb\GDBCamera.pas
 C:\zcad\CAD_SOURCE\gdb\GDBTable.pas
-C:\zcad\CAD_SOURCE\gdb\GDBElLeader.pas
+C:\zcad\CAD_SOURCE\electroteh\GDBElLeader.pas
 C:\zcad\CAD_SOURCE\u\UGDBOpenArrayOfTObjLinkRecord.pas
 C:\zcad\CAD_SOURCE\DeviceBase\DeviceBase.pas
 C:\zcad\CAD_SOURCE\commands\commandlinedef.pas
@@ -71,6 +71,6 @@ C:\zcad\CAD_SOURCE\u\UGDBNumerator.pas
 C:\zcad\CAD_SOURCE\gdb\UGDBDrawingdef.pas
 C:\zcad\CAD_SOURCE\gdb\UGDBDescriptor.pas
 C:\zcad\CAD_SOURCE\commands\GDBCommandsBase.pas
-C:\zcad\CAD_SOURCE\commands\GDBCommandsOPS.pas
-C:\zcad\CAD_SOURCE\commands\GDBCommandsElectrical.pas
+C:\zcad\CAD_SOURCE\electroteh\GDBCommandsOPS.pas
+C:\zcad\CAD_SOURCE\electroteh\GDBCommandsElectrical.pas
 C:\zcad\CAD_SOURCE\u\UCableManager.pas

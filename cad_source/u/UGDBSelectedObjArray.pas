@@ -38,15 +38,15 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           procedure clearallobjects;virtual;
                           procedure remappoints;virtual;
                           procedure drawpoint;virtual;
-                          procedure drawobject;virtual;
+                          procedure drawobject(infrustumactualy:TActulity);virtual;
                           function getnearesttomouse:tcontrolpointdist;virtual;
                           procedure selectcurrentcontrolpoint(key:GDBByte);virtual;
                           procedure RenderFeedBack;virtual;
                           //destructor done;virtual;
                           procedure modifyobj(dist,wc:gdbvertex;save:GDBBoolean;pconobj:pgdbobjEntity);virtual;
-                          procedure drawobj;virtual;
+                          procedure drawobj(infrustumactualy:TActulity);virtual;
                           procedure freeelement(p:GDBPointer);virtual;
-                          function calcvisible(frustum:cliparray):GDBBoolean;virtual;
+                          function calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                           procedure resprojparam;
                     end;
 {EXPORT-}
@@ -188,7 +188,7 @@ begin
        begin
             if tdesc^.objaddr<>nil then
             begin
-                 tdesc^.objaddr^.DrawWithOutAttrib; //DrawGeometry(tdesc^.objaddr^.CalculateLineWeight);
+                 tdesc^.objaddr^.DrawWithOutAttrib(infrustumactualy); //DrawGeometry(tdesc^.objaddr^.CalculateLineWeight);
             end;
             inc(tdesc);
        end;
@@ -276,7 +276,7 @@ begin
     for i := 0 to count - 1 do
     begin
       if tdesc^.ptempobj<>nil then
-                                  tdesc^.ptempobj^.calcvisible(frustum);
+                                  tdesc^.ptempobj^.calcvisible(frustum,infrustumactualy,visibleactualy);
       inc(tdesc);
     end;
   end;
@@ -294,7 +294,7 @@ begin
     for i := 0 to count - 1 do
     begin
       if tdesc^.ptempobj<>nil then
-                                  tdesc^.ptempobj^.DrawWithAttrib;
+                                  tdesc^.ptempobj^.DrawWithAttrib(infrustumactualy);
       inc(tdesc);
     end;
   end;

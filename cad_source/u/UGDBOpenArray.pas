@@ -48,11 +48,24 @@ GDBOpenArray=object(OpenArray)
                       procedure freeelement(p:GDBPointer);virtual;abstract;
                       function CreateArray:GDBPointer;virtual;
                       function SetCount(index:GDBInteger):GDBPointer;virtual;
+                      function copyto(source:PGDBOpenArray):GDBInteger;virtual;
              end;
 {Export-}
 implementation
 uses
     log;
+function GDBOpenArray.copyto;
+var p:GDBPointer;
+    ir:itrec;
+begin
+  p:=beginiterate(ir);
+  if p<>nil then
+  repeat
+        source.add(@p);  //-----------------//-----------
+        p:=iterate(ir);
+  until p=nil;
+  result:=count;
+end;
 procedure GDBOpenArray.freewithproc;
 var p:GDBPointer;
     ir:itrec;
@@ -87,13 +100,13 @@ begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{D9D91D43-BD6A-450A-B07E-E964425E7C99}',{$ENDIF}tp, size);
   if p<>nil then
   repeat
-        if cardinal(pl)<=cardinal(p) then
+        if GDBPlatformint(pl)<=GDBPlatformint(p) then
                                          break;
         Move(p^,tp^,size);
         Move(pl^,p^,size);
         Move(tp^,pl^,size);
-        dec(cardinal(pl),size);
-        inc(cardinal(p),size);
+        dec(GDBPlatformint(pl),size);
+        inc(GDBPlatformint(p),size);
         //p:=iterate(ir);
   until {p=nil}false;
   GDBFreeMem(tp);
@@ -126,7 +139,7 @@ begin
                     result:=nil
                 else
                     begin
-                          ir.itp:=pointer(cardinal(parray)-size);
+                          ir.itp:=pointer(GDBPlatformint(parray)-size);
                           ir.itc:=-1;
                           result:=iterate(ir);
                     end;
@@ -180,7 +193,7 @@ begin
 end;
 
 function GDBOpenArray.add;
-var addr: cardinal;
+var addr: GDBPlatformint;
 begin
   if parray=nil then
                      CreateArray;

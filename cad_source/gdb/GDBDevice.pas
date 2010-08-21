@@ -33,11 +33,11 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                    constructor initnul;
                    destructor done;virtual;
-                   function CalcInFrustum(frustum:ClipArray):GDBBoolean;virtual;
+                   function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                    procedure Format;virtual;
-                   procedure DrawGeometry(lw:GDBInteger);virtual;
-                   procedure DrawOnlyGeometry(lw:GDBInteger);virtual;
-                   procedure RenderFeedback;virtual;
+                   procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+                   procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+                   procedure renderfeedbac(infrustumactualy:TActulity);virtual;
                    function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
                    function ReturnLastOnMouse:PGDBObjEntity;virtual;
                    function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
@@ -55,10 +55,16 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    procedure SaveToDXFObjXData(outhandle: GDBInteger);virtual;
                    function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
                    //procedure select;virtual;
+                   procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
              end;
 {EXPORT-}
 implementation
 uses GDBBlockDef,dxflow,log;
+procedure GDBObjDevice.SetInFrustumFromTree;
+begin
+     inherited SetInFrustumFromTree(infrustumactualy,visibleactualy);
+     VarObjArray.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+end;
 function GDBObjDevice.AddMi;
 begin
      //pobj^.bp.PSelfInOwnerArray:=ObjArray.getelement(ObjArray.add(pobj));
@@ -138,8 +144,8 @@ end;}
 function GDBObjDevice.CalcInFrustum;
 var a:boolean;
 begin
-     result:=inherited CalcInFrustum(frustum);
-     a:=VarObjArray.calcvisible(frustum);
+     result:=inherited CalcInFrustum(frustum,infrustumactualy,visibleactualy);
+     a:=VarObjArray.calcvisible(frustum,infrustumactualy,visibleactualy);
      result:=result or a;
 end;
 procedure GDBObjDevice.getoutbound;
@@ -227,14 +233,14 @@ begin
   until p=nil;
   if not result then lstonmouse:=nil;
 end;
-procedure GDBObjDevice.RenderFeedback;
+procedure GDBObjDevice.renderfeedbac(infrustumactualy:TActulity);
 //var pblockdef:PGDBObjBlockdef;
     //pvisible:PGDBObjEntity;
     //i:GDBInteger;
 begin
   //if POGLWnd=nil then exit;
   inherited;
-  VarObjArray.RenderFeedbac;
+  VarObjArray.RenderFeedbac(infrustumactualy);
 end;
 procedure GDBObjDevice.DrawOnlyGeometry;
 var p:pgdbobjEntity;
@@ -242,7 +248,7 @@ var p:pgdbobjEntity;
          ir:itrec;
 begin
   GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender + 1;
-  VarObjArray.DrawOnlyGeometry(CalculateLineWeight);
+  VarObjArray.DrawOnlyGeometry(CalculateLineWeight,infrustumactualy);
   GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender - 1;
   p:=VarObjArray.beginiterate(ir);
   glcolor3ubv(@palette[sysvar.SYS.SYS_SystmGeometryColor^]);
@@ -267,7 +273,7 @@ var p:pgdbobjEntity;
          ir:itrec;
 begin
   GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender + 1;
-  VarObjArray.DrawWithattrib{DrawGeometry(CalculateLineWeight)};
+  VarObjArray.DrawWithattrib(infrustumactualy){DrawGeometry(CalculateLineWeight)};
   GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender - 1;
   p:=VarObjArray.beginiterate(ir);
   glcolor3ubv(@palette[sysvar.SYS.SYS_SystmGeometryColor^]);

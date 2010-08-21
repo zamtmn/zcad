@@ -113,7 +113,7 @@ begin
 end;
 function GDBNamedObjectsArray.GetIndexByPointer(p:PGDBNamedObject):GDBInteger;
 begin
-     result:=(integer(p)-integer(parray))div size
+     result:=(GDBPlatformint(p)-GDBPlatformint(parray))div size
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBNamedObjectArray.initialization');{$ENDIF}

@@ -19,7 +19,7 @@ unit GDBAbstractText;
 {$INCLUDE def.inc}
 
 interface
-uses strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},UGDBPolyPoint3DArray{,varman},varmandef,
+uses GDBEntity,strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},UGDBPolyPoint3DArray{,varman},varmandef,
 gl,
 GDBase,UGDBDescriptor,gdbobjectsconstdef{,oglwindowdef},geometry{,dxflow,strmy},math{,GDBPlain},OGLSpecFunc{,GDBGenericSubEntry};
 type
@@ -51,10 +51,10 @@ GDBObjAbstractText=object(GDBObjPlainWithOX)
                          DrawMatrix:DMatrix4D;
                          Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;
                          procedure CalcObjMatrix;virtual;
-                         procedure DrawGeometry(lw:GDBInteger);virtual;
+                         procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                          procedure RenderFeedback;virtual;
-                         function CalcInFrustum(frustum:ClipArray):GDBBoolean;virtual;
-                         function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
+                         function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
+                         function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                          function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
                          function InRect:TInRect;virtual;
                          procedure addcontrolpoints(tdesc:GDBPointer);virtual;

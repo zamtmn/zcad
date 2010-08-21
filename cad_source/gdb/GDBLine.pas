@@ -48,7 +48,7 @@ GDBObjLine=object(GDBObj3d)
 
                  procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;
                  procedure Format;virtual;
-                 procedure DrawGeometry(lw:GDBInteger);virtual;
+                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  procedure RenderFeedback;virtual;
                   function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
@@ -71,8 +71,8 @@ GDBObjLine=object(GDBObj3d)
                   function GetObjTypeName:GDBString;virtual;
                   function GetCenterPoint:GDBVertex;virtual;
                   procedure getoutbound;virtual;
-                  function CalcInFrustum(frustum:ClipArray):GDBBoolean;virtual;
-                  function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
+                  function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
+                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
 
                   function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                   procedure AddOnTrackAxis(posr:pos_record);virtual;

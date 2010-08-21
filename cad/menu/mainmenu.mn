@@ -56,6 +56,7 @@ Panel RIGHTPANEL 994,68,30,525;
     button InsertTestTable,spec.bmp,*DEBUG*Вставить таблицу
     Separator
     button SetObjInsp(CURRENT),#FIX,*DEBUG*Фиксировать выделенный объект в инспекторе
+    button CTest,#test,*DEBUG*Текущий тест
 
   }
 MainMenuItem Файл;

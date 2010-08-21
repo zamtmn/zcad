@@ -45,13 +45,13 @@ GDBObjCircle=object(GDBObjWithLocalCS)
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;
 
                  procedure CalcObjMatrix;virtual;
-                 function calcinfrustum(frustum:ClipArray):GDBBoolean;virtual;
-                 function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
+                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
+                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                  procedure RenderFeedback;virtual;
                  procedure getoutbound;virtual;
                  procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;
                  procedure Format;virtual;
-                 procedure DrawGeometry(lw:GDBInteger);virtual;
+                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;

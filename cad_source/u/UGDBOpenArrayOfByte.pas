@@ -72,7 +72,7 @@ begin
 end;
 function GDBOpenArrayOfByte.GetChar;
 begin
-     result:=pansichar(cardinal(parray)+rp)^;
+     result:=pansichar(GDBPlatformint(parray)+rp)^;
 end;
 function GDBOpenArrayOfByte.readtoparser;
 var
@@ -181,15 +181,15 @@ end;
 function GDBOpenArrayOfByte.Jump;
 begin
      readpos:=readpos+offset;
-     result:=pointer(cardinal(parray)+readpos);
+     result:=pointer(GDBPlatformint(parray)+readpos);
 end;
 function GDBOpenArrayOfByte.GetCurrentReadAddres;
 begin
-     result:=pointer(cardinal(parray)+readpos);
+     result:=pointer(GDBPlatformint(parray)+readpos);
 end;
 function GDBOpenArrayOfByte.readbyte;
 begin
-     result:=pbyte(cardinal(parray)+readpos)^;
+     result:=pbyte(GDBPlatformint(parray)+readpos)^;
      inc(readpos);
 end;
 function GDBOpenArrayOfByte.readword;
@@ -206,7 +206,7 @@ begin
   s := '';
   lastbreak:=false;
   //i:=1;
-  addr:=pointer(cardinal(parray)+readpos);
+  addr:=pointer(GDBPlatformint(parray)+readpos);
     while ReadPos <> count do
     begin
       if (pos(addr[0], break) = 0)or((s='')and(addr[0]=' ')) then
@@ -286,7 +286,7 @@ begin
   inherited initnul;
 end;
 function GDBOpenArrayOfByte.AddData;
-var addr:cardinal;
+var addr:GDBPlatformint;
 begin
   if parray=nil then
                     createarray;
@@ -312,12 +312,12 @@ begin
                     createarray;
   if count+sdata>max then
                          Grow;
-  result:=pointer(integer(parray)+count);
+  result:=pointer(GDBPlatformint(parray)+count);
   fillchar(result^,sdata,0);
   inc(count,SData);
 end;
 function GDBOpenArrayOfByte.ReadData;
-var addr:cardinal;
+var addr:GDBPlatformint;
 begin
   {if count = max then
                      begin
@@ -334,7 +334,7 @@ begin
   end;
 end;
 function GDBOpenArrayOfByte.PopData;
-var addr:cardinal;
+var addr:GDBPlatformint;
 begin
   begin
        {$IFDEF TOTALYLOG}programlog.logoutstr('Read '+inttostr(SData)+' bytes, offset '+inttostr(ReadPos),0);{$ENDIF}

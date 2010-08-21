@@ -19,24 +19,37 @@
 unit UGDBVisibleOpenArray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes{,math},UGDBOpenArrayOfPV,GDBEntity{,UGDBOpenArray,oglwindowdef},sysutils,gdbase, geometry,
+uses gdbasetypes{,math},UGDBOpenArrayOfPV,{,UGDBOpenArray,oglwindowdef}sysutils,gdbase, geometry,
      gl,
      {varmandef,gdbobjectsconstdef,}memman;
 type
-objvizarray = array[0..0] of PGDBObjEntity;
-pobjvizarray = ^objvizarray;
-PGDBObjEntityArray=^GDBObjEntityArray;
-GDBObjEntityArray=array [0..0] of PGDBObjEntity;
 {Export+}
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
 GDBObjEntityOpenArray=object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
                       function add(p:GDBPointer):GDBInteger;virtual;
                       function deliteminarray(p:GDBInteger):GDBInteger;virtual;
                       function cloneentityto(PEA:PGDBObjEntityOpenArray;own:GDBPointer):GDBInteger;virtual;
+                      procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
                 end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}GDBManager,log;
+uses {UGDBDescriptor,}GDBManager,log,GDBEntity;
+type
+objvizarray = array[0..0] of PGDBObjEntity;
+pobjvizarray = ^objvizarray;
+PGDBObjEntityArray=^GDBObjEntityArray;
+GDBObjEntityArray=array [0..0] of PGDBObjEntity;
+procedure GDBObjEntityOpenArray.SetInFrustumFromTree;
+var pobj:PGDBObjEntity;
+    ir:itrec;
+begin
+     pobj:=beginiterate(ir);
+     if pobj<>nil then
+     repeat
+           pobj^.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+           pobj:=iterate(ir);
+     until pobj=nil;
+end;
 
 function GDBObjEntityOpenArray.CloneEntityTo(PEA:PGDBObjEntityOpenArray;own:GDBPointer):GDBInteger;
 var pobj,pcobj:PGDBObjEntity;

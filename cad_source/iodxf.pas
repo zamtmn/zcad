@@ -42,7 +42,7 @@ const
      );
 type
   dxfhandlerec = record
-    old, nev: GDBLongword;
+    old, nev: GDBPlatformint;
   end;
   dxfhandlerecarray = array[0..300] of dxfhandlerec;
   pdxfhandlerecopenarray = ^dxfhandlerecopenarray;
@@ -72,14 +72,14 @@ begin
   result := temp;
 end;
 
-procedure pushhandle(p: pdxfhandlerecopenarray; old, nev: GDBLongword);
+procedure pushhandle(p: pdxfhandlerecopenarray; old, nev: GDBPlatformint);
 begin
   p^.arr[p^.count].old := old;
   p^.arr[p^.count].nev := nev;
   inc(p^.count);
 end;
 
-function getnevhandle(p: pdxfhandlerecopenarray; old: GDBLongword): GDBLongword;
+function getnevhandle(p: pdxfhandlerecopenarray; old: GDBPlatformint): GDBPlatformint;
 var
   i: GDBInteger;
 begin
@@ -172,7 +172,7 @@ begin
                                 if PGDBObjEntity(pobj).PExtAttrib<>nil then
                                 begin
                                      if PGDBObjEntity(pobj).PExtAttrib.Handle>200 then
-                                                                                      pushhandle(phandlearray,PGDBObjEntity(pobj).PExtAttrib.Handle,GDBLongword(pobj));
+                                                                                      pushhandle(phandlearray,PGDBObjEntity(pobj).PExtAttrib.Handle,GDBPlatformint(pobj));
                                      if PGDBObjEntity(pobj).PExtAttrib.OwnerHandle>200 then
                                                                                       newowner:=pointer(getnevhandle(phandlearray,PGDBObjEntity(pobj).PExtAttrib.OwnerHandle));
                                      if PGDBObjEntity(pobj).PExtAttrib.OwnerHandle=h_trash then
@@ -224,7 +224,7 @@ begin
                                 if PGDBObjEntity(pobj).PExtAttrib<>nil then
                                 begin
                                      if PGDBObjEntity(pobj).PExtAttrib.Handle>200 then
-                                                                                      pushhandle(phandlearray,PGDBObjEntity(pobj).PExtAttrib.Handle,GDBLongword(postobj));
+                                                                                      pushhandle(phandlearray,PGDBObjEntity(pobj).PExtAttrib.Handle,GDBPlatformint(postobj));
                                 end;
                                 if newowner<>owner then
                                 begin

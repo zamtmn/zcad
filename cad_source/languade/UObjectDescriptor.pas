@@ -23,6 +23,7 @@ uses UGDBOpenArrayOfObjects,log,ugdbopenarray,URecordDescriptor,UGDBOpenArrayOfB
      UBaseTypeDescriptor,gdbobjectsconstdef,UGDBOpenArrayOfTObjLinkRecord,TypeDescriptors,
      UGDBOpenArrayOfPointer,UGDBOpenArrayOfData,gdbasetypes,varmandef,gdbase{,UGDBStringArray},memman;
 type
+simpleproc=procedure of object;
 PObjectDescriptor=^ObjectDescriptor;
 ObjectDescriptor=object(RecordDescriptor)
                        PVMT:GDBPointer;
@@ -221,7 +222,7 @@ begin
                                                             if uppercase(mn)='FORMAT' then
                                                                                            mn:=mn;
                                                             pcmd.init(mn,dt,pointer(vmtcurrentoffset),attr,punit);
-                                                            inc(vmtcurrentoffset,4);
+                                                            inc(vmtcurrentoffset,{4 cpu64}sizeof(pointer));
                                                        end;
                          //SimpleMenods.add(@pcmd);
                          //GDBPointer(pcmd.MetodName):=nil;
@@ -300,6 +301,7 @@ var pmd:pMetodDescriptor;
 //    ppp2:pointer;
 //    ps:gdbstring;
 begin
+
       {$IFDEF fpc}
       ppp:=@self;
       p:=pvmt;
@@ -308,17 +310,17 @@ begin
       tm.Data:=obj;
       if (pmd^.Attributes and m_virtual)<>0 then
                                              begin
-                                                  tm.Code:=ppointer(integer(self.PVMT)+integer(pmd^.MetodAddr))^;
+                                                  tm.Code:=ppointer(GDBPlatformint(self.PVMT)+GDBPlatformint(pmd^.MetodAddr))^;
                                              end
                                          else
                                              begin
                                                   tm.Code:=pmd^.MetodAddr;
                                              end;
 
-      {case pmd^.Attributes of
+      case pmd^.Attributes of
       m_procedure:SimpleProcOfObj(tm);
       m_function:SimpleProcOfObj(tm);
-      m_constructor:}
+      m_constructor:
                                                         begin
                                                              {$IFDEF DELPHI}
                                                              begin
@@ -331,6 +333,7 @@ begin
                                                              end;
                                                              {$ENDIF}
                                                              {$IFDEF fpc}
+                                                             {$ifdef CPU32}
                                                              begin
                                                              asm
                                                                 mov eax,[ppp]
@@ -338,10 +341,33 @@ begin
                                                                 mov eax,[obj]
                                                                 call tm.Code
                                                              end;
+                                                             //simpleproc(tm);
+                                                              end;
+                                                            {$endif CPU32}
+                                                            {$ifdef CPU64}
+                                                             begin
+                                                             asm
+                                                                {mov rax,[ppp]
+                                                                mov rdx,[p]
+                                                                mov rax,[obj]}
+                                                                {mov rsi,[obj]
+                                                                mov rdi,[p]}
+
+                                                                mov rdi,[obj]
+                                                                mov rsi,[p]
+
+                                                                {mov rax,[ppp]
+                                                                mov rdx,[p]
+                                                                mov rax,[obj]}
+                                                                call tm.Code
                                                              end;
-                                                             {$ENDIF}
+                                                             //simpleproc(tm);
+                                                             //self.initnul;
+                                                              end;
+                                                            {$endif CPU64}
+                                                            {$ENDIF}
                                                         end;
-                  //end;
+                  end;
         //if parent<>nil then PobjectDescriptor(parent)^.RunMetod(mn,obj);
 end;
 procedure ObjectDescriptor.CopyTo(RD:PTUserTypeDescriptor);

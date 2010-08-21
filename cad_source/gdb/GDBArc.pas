@@ -42,7 +42,7 @@ GDBObjArc=object(GDBObjPlain)
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;
 
                  procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;
-                 procedure DrawGeometry(lw:GDBInteger);virtual;
+                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure CalcObjMatrix;virtual;
@@ -59,8 +59,8 @@ GDBObjArc=object(GDBObjPlain)
                  procedure rtsave(refp:GDBPointer);virtual;
                  destructor done;virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 function calcinfrustum(frustum:ClipArray):GDBBoolean;virtual;
-                 function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
+                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
+                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
            end;
 {EXPORT-}
 implementation

@@ -38,7 +38,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;
 
                  procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;
-                 procedure DrawGeometry(lw:GDBInteger);virtual;
+                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  procedure Format;virtual;
                  procedure createpoint;virtual;
                  procedure CalcWidthSegment;virtual;
@@ -52,7 +52,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
                  procedure getoutbound;virtual;
-                 function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
+                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                  //function InRect:TInRect;virtual;
            end;
 {Export-}

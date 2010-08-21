@@ -48,6 +48,7 @@ var units:TUnitManager;
 implementation
 uses
     log,memman;
+var s:gdbstring;
 const
      {GDBGDBPointerType:gdbtypedesk=
                                 (
@@ -73,12 +74,12 @@ var //p:GDBPointer;
     i:integer;
     punit:pgdbaseobject;
 begin
-  cardinal(punit):=cardinal(parray)+size*(count-1);
+  GDBPlatformint(punit):=GDBPlatformint(parray)+size*(count-1);
   for i := count-1 downto 0 do
   begin
        punit^.Done;
        AfterObjectDone(punit);
-       dec(cardinal(punit),size);
+       dec(GDBPlatformint(punit),size);
   end;
 
   {p:=beginiterate(ir);
@@ -320,7 +321,7 @@ begin
                                                   PGDBPointerDescriptor(etd)^.init(pGDBString(parseresult^.getelement(1))^,typename,currentunit);
                                                   //GDBStringtypearray := chr(TGDBPointer)+pGDBString(parseresult^.getelement(1))^;
                                                   GDBStringtypearray:='';
-                                                  fieldoffset := 4;
+                                                  fieldoffset := sizeof(pointer);
                                              end;
                                  recordtype:begin
                                                   typename:=parseresult^.getGDBString(0);
@@ -717,6 +718,7 @@ begin
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxWidth,'RD_MaxWidth');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_BackGroundColor,'RD_BackGroundColor');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_LastRenderTime,'RD_LastRenderTime');
+  SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxRenderTime,'RD_MaxRenderTime');
 
   SysVarUnit.AssignToSymbol(SysVar.SAVE.SAVE_Auto_Current_Interval,'SAVE_Auto_Current_Interval');
   SysVarUnit.AssignToSymbol(SysVar.SAVE.SAVE_Auto_Interval,'SAVE_Auto_Interval');
@@ -733,8 +735,11 @@ begin
   SysVar.SYS.SYS_IsHistoryLineCreated^:=FALSE;
 
   SysVarUnit.AssignToSymbol(SysVar.PATH.device_library,'PATH_Device_Library');
+  s:=SysVar.PATH.device_library^;
   SysVarUnit.AssignToSymbol(SysVar.PATH.Program_Run,'PATH_Program_Run');
+  s:=SysVar.PATH.Program_Run^;
   SysVarUnit.AssignToSymbol(SysVar.PATH.Support_Path,'PATH_Support_Path');
+  s:=SysVar.PATH.Support_Path^;
 
   sysvar.RD.RD_LastRenderTime^:=0;
   sysvar.PATH.Program_Run^:=sysparam.programpath;

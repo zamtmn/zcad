@@ -28,8 +28,16 @@ const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       lp_IncPos=1;
       lp_DecPos=-lp_IncPos;
       lp_OldPos=0;
+
+      tsc2ms=2000;
 type
-PTDateTime=^TDateTime;
+PTMyTimeStamp=^TMyTimeStamp;
+TMyTimeStamp=record
+                   time:TDateTime;
+                   rdtsc:int64;
+end;
+
+//PTDateTime=^TDateTime;
 {EXPORT+}
 ptlog=^tlog;
 tlog=object
@@ -41,7 +49,7 @@ tlog=object
            procedure ProcessStr(str:GDBString;IncIndent:GDBInteger;todisk:boolean);virtual;
            procedure LogOutStr(str:GDBString;IncIndent:GDBInteger);virtual;
            procedure LogOutStrFast(str:GDBString;IncIndent:GDBInteger);virtual;
-           procedure WriteToLog(s:GDBString;todisk:boolean;t,dt:TDateTime;IncIndent:GDBInteger);virtual;
+           procedure WriteToLog(s:GDBString;todisk:boolean;t,dt:TDateTime;tick,dtick:int64;IncIndent:GDBInteger);virtual;
            procedure OpenLog;
            procedure CloseLog;
            procedure CreateLog;
@@ -104,10 +112,12 @@ procedure tlog.WriteToLog;
 var ts:gdbstring;
 begin
   ts:=TimeToStr(Time)+{'|'+}DupeString(' ',Indent*2);
-  ts := ts +s;
-  ts:=ts+DupeString(' ',80-length(ts));
+  if todisk then ts :='!!!! '+ts +s
+            else ts :=IntToHex(PerfomaneBuf.Count,4)+' '+ts +s;
+  ts:=ts+DupeString('-',80-length(ts));
   //decodetime(t,Hour,Minute,Second,MilliSecond);
-  ts := ts +' t:=' + {inttostr(round(t*10e7))}MyTimeToStr(t) + ', dt:=' + {inttostr(round(dt*10e7))}MyTimeToStr(dt) +#13+#10;
+  ts := ts +' t:=' + {inttostr(round(t*10e7))}MyTimeToStr(t) + ', dt:=' + {inttostr(round(dt*10e7))}MyTimeToStr(dt) {+#13+#10};
+  ts := ts +' tick:=' + inttostr(tick div tsc2ms) + ', dtick:=' + inttostr(dtick div tsc2ms)+#13+#10;
   if (Indent=1)and(IncIndent<0) then ts:=ts+#13+#10;
   PerfomaneBuf.TXTAddGDBString(ts);
   //FileWrite(FileHandle,ts[1],length(ts));
@@ -139,30 +149,48 @@ end;
 begin
      logoutstr(str,IncIndent);
 end;}
+function mynow:TMyTimeStamp;
+var a:int64;
+begin
+     result.time:=now();
+     asm
+        rdtsc
+        mov [a],eax
+        mov [a+4],edx
+     end;
+     result.rdtsc:=a;
+end;
+
 procedure tlog.processstr;
 var
-   CurrentTime,DeltaTime,FromStartTime:TDateTime;
+   CurrentTime:TMyTimeStamp;
+   DeltaTime,FromStartTime:TDateTime;
+   tick,dtick:int64;
 
 begin
-     CurrentTime:=now();
+     CurrentTime:=mynow();
 
      if timebuf.Count>0 then
                             begin
-                                 FromStartTime:=CurrentTime-PTDateTime(TimeBuf.getelement(0))^;
-                                 DeltaTime:=CurrentTime-PTDateTime(TimeBuf.getelement(timebuf.Count-1))^;
+                                 FromStartTime:=CurrentTime.time-PTMyTimeStamp(TimeBuf.getelement(0))^.time;
+                                 DeltaTime:=CurrentTime.time-PTMyTimeStamp(TimeBuf.getelement(timebuf.Count-1))^.time;
+                                 tick:=CurrentTime.rdtsc-PTMyTimeStamp(TimeBuf.getelement(0))^.rdtsc;
+                                 dtick:=CurrentTime.rdtsc-PTMyTimeStamp(TimeBuf.getelement(timebuf.Count-1))^.rdtsc;
                             end
                         else
                             begin
                                   FromStartTime:=0;
                                   DeltaTime:=0;
+                                  tick:=0;
+                                  dtick:=0;
                             end;
      if IncIndent=0 then
                       begin
-                           WriteToLog(str,todisk,FromStartTime,DeltaTime,IncIndent);
+                           WriteToLog(str,todisk,FromStartTime,DeltaTime,tick,dtick,IncIndent);
                       end
 else if IncIndent>0 then
                       begin
-                           WriteToLog(str,todisk,FromStartTime,DeltaTime,IncIndent);
+                           WriteToLog(str,todisk,FromStartTime,DeltaTime,tick,dtick,IncIndent);
                            inc(Indent,IncIndent);
 
                            timebuf.Add(@CurrentTime);
@@ -170,7 +198,7 @@ else if IncIndent>0 then
                   else
                       begin
                            inc(Indent,IncIndent);
-                           WriteToLog(str,todisk,FromStartTime,DeltaTime,IncIndent);
+                           WriteToLog(str,todisk,FromStartTime,DeltaTime,tick,dtick,IncIndent);
 
                            dec(timebuf.Count);
                       end;
@@ -184,27 +212,32 @@ begin
 end;
 procedure tlog.LogOutStrFast;
 begin
-     processstr(str,IncIndent,false);
+     //if (str='TOGLWnd.Pre_MouseMove----{end}')and(Indent=3) then
+     //               indent:=3;
+     if PerfomaneBuf.Count<1024 then
+                                    processstr(str,IncIndent,false)
+                                else
+                                    processstr(str,IncIndent,true);
 end;
 constructor tlog.init;
 var
-   CurrentTime:TDateTime;
+   CurrentTime:TMyTimeStamp;
 begin
-     CurrentTime:=now();
+     CurrentTime:=mynow();
      logfilename:=fn;
      PerfomaneBuf.init({$IFDEF DEBUGBUILD}'{39063C66-9D18-4707-8AD3-97DFBCB23185}',{$ENDIF}5*1024);
-     TimeBuf.init({$IFDEF DEBUGBUILD}'{6EE1BC6B-1177-40B0-B4A5-793D66BF8BC8}',{$ENDIF}50,sizeof(TDateTime));
+     TimeBuf.init({$IFDEF DEBUGBUILD}'{6EE1BC6B-1177-40B0-B4A5-793D66BF8BC8}',{$ENDIF}50,sizeof({TDateTime}TMyTimeStamp));
      Indent:=1;
      CreateLog;
-     WriteToLog('------------------------Log started------------------------',false,CurrentTime,0,0);
+     WriteToLog('------------------------Log started------------------------',false,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
      timebuf.Add(@CurrentTime);
 end;
 destructor tlog.done;
 var
-   CurrentTime:TDateTime;
+   CurrentTime:TMyTimeStamp;
 begin
-     CurrentTime:=now();
-     WriteToLog('-------------------------Log ended-------------------------',true,CurrentTime,0,0);
+     CurrentTime:=mynow();
+     WriteToLog('-------------------------Log ended-------------------------',true,CurrentTime.time,0,CurrentTime.rdtsc,0,0);
      PerfomaneBuf.done;
      TimeBuf.done;
 end;

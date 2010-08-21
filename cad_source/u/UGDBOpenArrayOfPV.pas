@@ -19,27 +19,27 @@
 unit UGDBOpenArrayOfPV;
 {$INCLUDE def.inc}
 interface
-uses log,gdbasetypes{,math},UGDBOpenArrayOfPObjects,GDBEntity{,UGDBOpenArray, oglwindowdef},sysutils,
-     gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman;
+uses log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
+     gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman,GDBSubordinated;
 type
+{PGDBObjEntityArray=^GDBObjEntityArray;
 objvizarray = array[0..0] of PGDBObjEntity;
 pobjvizarray = ^objvizarray;
-PGDBObjEntityArray=^GDBObjEntityArray;
-GDBObjEntityArray=array [0..0] of PGDBObjEntity;
+GDBObjEntityArray=array [0..0] of PGDBObjEntity;}
 {Export+}
 PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
 GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
-                      procedure DrawWithattrib;virtual;
-                      procedure DrawGeometry(lw:GDBInteger);virtual;
-                      procedure DrawOnlyGeometry(lw:GDBInteger);virtual;
-                      procedure renderfeedbac;virtual;
-                      function calcvisible(frustum:ClipArray):GDBBoolean;virtual;
-                      function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
+                      procedure DrawWithattrib(infrustumactualy:TActulity);virtual;
+                      procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+                      procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+                      procedure renderfeedbac(infrustumactualy:TActulity);virtual;
+                      function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
+                      function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                       function DeSelect:GDBInteger;virtual;
-                      function CreateObj(t: GDBByte;owner:GDBPointer):PGDBObjEntity;virtual;
-                      function CreateInitObj(t: GDBByte;owner:GDBPointer):PGDBObjEntity;virtual;
+                      function CreateObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;virtual;
+                      function CreateInitObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;virtual;
                       function calcbb:GDBBoundingBbox;
-                      function calcvisbb:GDBBoundingBbox;
+                      function calcvisbb(infrustumactualy:TActulity):GDBBoundingBbox;
                       function getoutbound:GDBBoundingBbox;
                       function getonlyoutbound:GDBBoundingBbox;
                       procedure Format;virtual;
@@ -48,7 +48,7 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
                 end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}GDBManager;
+uses {UGDBDescriptor,}GDBManager,GDBEntity;
 function GDBObjOpenArrayOfPV.inrect;
 var pobj:pGDBObjEntity;
     ir:itrec;
@@ -97,7 +97,7 @@ begin
                        until pobj=nil;
                   end;
 end;
-function GDBObjOpenArrayOfPV.calcvisbb:GDBBoundingBbox;
+function GDBObjOpenArrayOfPV.calcvisbb(infrustumactualy:TActulity):GDBBoundingBbox;
 var pobj:pGDBObjEntity;
     ir:itrec;
 begin
@@ -107,13 +107,13 @@ begin
      pobj:=beginiterate(ir);
      if pobj<>nil then
      repeat
-           if pobj^.infrustum then
+           if pobj^.infrustum=infrustumactualy then
            begin
                 result:=pobj^.vp.BoundingBox;
                        pobj:=iterate(ir);
                        if pobj<>nil then
                        repeat
-                             if pobj^.infrustum then
+                             if pobj^.infrustum=infrustumactualy then
                              begin
                                   concatbb(result,pobj^.vp.BoundingBox);
                              end;
@@ -174,7 +174,7 @@ begin
                        until pobj=nil;
                   end;
 end;
-function GDBObjOpenArrayOfPV.CreateObj(t: GDBByte;owner:GDBPointer): PGDBObjEntity;
+function GDBObjOpenArrayOfPV.CreateObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;
 var temp: PGDBObjEntity;
 begin
   temp := nil;
@@ -188,7 +188,7 @@ begin
   end;
   result := temp;
 end;
-function GDBObjOpenArrayOfPV.CreateInitObj(t: GDBByte;owner:GDBPointer): PGDBObjEntity;
+function GDBObjOpenArrayOfPV.CreateInitObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;
 var temp: PGDBObjEntity;
 begin
   temp := nil;
@@ -235,7 +235,7 @@ begin
        p:=iterate(ir);
   until p=nil;
 end;
-procedure GDBObjOpenArrayOfPV.renderfeedbac;
+procedure GDBObjOpenArrayOfPV.renderfeedbac(infrustumactualy:TActulity);
 var
   p:pGDBObjEntity;
       ir:itrec;
@@ -250,7 +250,7 @@ begin
 
   {if p^.vp.ID=0 then
                          p^.vp.ID:=p^.vp.ID;}
-       if (p^.infrustum)or(p^.Selected) then
+       if (p^.infrustum=infrustumactualy)or(p^.Selected) then
                                             begin
                                                  {$IFDEF TOTALYLOG}programlog.logoutstr(p^.GetObjTypeName+'.renderfeedback',0);{$ENDIF}
                                                  p^.renderfeedback;
@@ -270,8 +270,8 @@ begin
   repeat
        if p^.vp.ID<>0 then
                          //p^.vp.ID:=p^.vp.ID;
-       if p^.infrustum then
-                           p^.DrawWithAttrib;
+       if p^.infrustum=infrustumactualy then
+                           p^.DrawWithAttrib(infrustumactualy);
        p:=iterate(ir);
   until p=nil;
 end;
@@ -287,8 +287,8 @@ begin
   repeat
        if p^.vp.ID<>0 then
                          //p^.vp.ID:=p^.vp.ID;
-       if p^.infrustum then
-                           p^.DrawGeometry(lw);
+       if p^.infrustum=infrustumactualy then
+                           p^.DrawGeometry(lw,infrustumactualy);
        p:=iterate(ir);
   until p=nil;
 end;
@@ -304,8 +304,8 @@ begin
   repeat
        if p^.vp.ID<>0 then
                          //p^.vp.ID:=p^.vp.ID;
-       if p^.infrustum then
-                           p^.DrawOnlyGeometry(lw);
+       if p^.infrustum=infrustumactualy then
+                           p^.DrawOnlyGeometry(lw,infrustumactualy);
        p:=iterate(ir);
   until p=nil;
 end;
@@ -319,7 +319,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       q:=p^.calcvisible(frustum);
+       q:=p^.calcvisible(frustum,infrustumactualy,visibleactualy);
        result:=result or q;
        p:=iterate(ir);
   until p=nil;
@@ -338,10 +338,10 @@ begin
   if p<>nil then
   begin
   repeat
-        if p^.Visible then
+        if p^.Visible=visibleactualy then
         begin
              inc(objcount);
-             q:=p^.CalcTrueInFrustum(frustum);
+             q:=p^.CalcTrueInFrustum(frustum,visibleactualy);
 
     if q=IREmpty then
                             begin

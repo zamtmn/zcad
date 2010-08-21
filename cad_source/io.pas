@@ -58,7 +58,7 @@ var
   ff:GDBInteger;
   onlyver:GDBInteger;
 begin
-            pf^.symbolinfo[symbol].addr:=longint(pdata)-longint(pf);
+            pf^.symbolinfo[symbol].addr:=GDBPlatformint(pdata)-GDBPlatformint(pf);
             onlyver:=0;
             sizeshx:=0;
             draw:=true;
@@ -133,7 +133,7 @@ begin
                                           subsymbol:=pshxdata^;
                                           inc(pshxdata);
                                      end;
-                      psubsymbol:=GDBPointer(longint(pf)+pf^.symbolinfo[subsymbol].addr);
+                      psubsymbol:=GDBPointer(GDBPlatformint(pf)+pf^.symbolinfo[subsymbol].addr);
                       xb:=x;
                       yb:=y;
                       if psubsymbol<>nil then
@@ -690,7 +690,7 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
 
   {psinfo:=}memorybuf.GetCurrentReadAddres;
   end;
-  pf^.compiledsize:=cardinal(pdata)-cardinal(pf);
+  pf^.compiledsize:=GDBPlatformint(pdata)-GDBPlatformint(pf);
   result:=remapmememblock({$IFDEF DEBUGBUILD}'Compiled fonts',{$ENDIF}pf,pf^.compiledsize);
   memorybuf.done;
   //halt(0);
@@ -768,7 +768,7 @@ begin
                               symbol:=symbol;
 
         //PGDBfont(pfont)^.symbolinfo[symbol].addr := pdata;
-            PGDBfont(pfont)^.symbolinfo[symbol].addr:=longint(pdata)-longint(pfont);
+            PGDBfont(pfont)^.symbolinfo[symbol].addr:=GDBPlatformint(pdata)-GDBPlatformint(pfont);
             onlyver:=0;
             sizeshx:=0;
             draw:=true;
@@ -847,7 +847,7 @@ begin
                       if line[1]='0' then
                         line:='$'+line;
                       subsymbol:=strtoint(line);
-                      psubsymbol:=GDBPointer(longint(pfont)+PGDBfont(pfont)^.symbolinfo[subsymbol].addr);
+                      psubsymbol:=GDBPointer(GDBPlatformint(pfont)+PGDBfont(pfont)^.symbolinfo[subsymbol].addr);
                       xb:=x;
                       yb:=y;
                       if psubsymbol<>nil then
@@ -1265,7 +1265,7 @@ begin
     end;
   //f.close;
   f.done;
-  PGDBfont(pfont)^.compiledsize:=longint(pdata)-longint(pfont);
+  PGDBfont(pfont)^.compiledsize:=GDBPlatformint(pdata)-GDBPlatformint(pfont);
   {ff:=filecreate('C:\file.my');
   FileWrite(ff, Pfont^,PGDBfont(pfont)^.compiledsize);
   fileclose(ff);}

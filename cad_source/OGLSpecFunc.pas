@@ -47,8 +47,12 @@ procedure MyglMakeCurrent(oglc:TOGLContextDesk);
 procedure MySwapBuffers(oglc:TOGLContextDesk);
 procedure MywglDeleteContext(oglc:TOGLContextDesk);
 procedure MywglCreateContext(var oglc:TOGLContextDesk);
+
+Procedure DrawAABB(const BoundingBox:GDBBoundingBbox);
 var
    bcount:integer;
+   primcount,pointcount:GDBInteger;
+   middlepoint:GDBVertex;
 implementation
 uses
     ugdbdescriptor,geometry;
@@ -71,23 +75,32 @@ procedure MyglMakeCurrent(oglc:TOGLContextDesk);
 begin
     //wglMakeCurrent(oglc.DC, oglc.hrc);
 end;
+procedure processpoint(const point:gdbvertex);
+begin
+     inc(pointcount);
+     middlepoint:=geometry.VertexAdd(middlepoint,point);
+end;
 
 procedure myglVertex3dV;
 var t:gdbvertex;
 begin
+     processpoint(v^);
      t:=vertexadd(v^,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
      glVertex3dV(@t);
 end;
 procedure myglVertex3d;
 var t:gdbvertex;
 begin
+     processpoint(v);
      t:=vertexadd(v,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
      glVertex3dv(@t);
 end;
 procedure myglVertex;
-var t:gdbvertex;
+var t,t1:gdbvertex;
 begin
-     t:=vertexadd(createvertex(x,y,z),gdb.GetCurrentDWG.pcamera^.CamCSOffset);
+     t1:=createvertex(x,y,z);
+     processpoint(t1);
+     t:=vertexadd(t1,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
      glVertex3dv(@t);
 end;
 function CalcDisplaySubFrustum(x,y,w,h:gdbdouble;const mm,pm:DMatrix4D):ClipArray;
@@ -118,6 +131,7 @@ begin
 end;
 procedure myglbegin(mode:GLenum);
 begin
+     inc(primcount);
      inc(bcount);
      if bcount>1 then
                      asm
@@ -171,6 +185,31 @@ begin
              begin
                   programlog.logoutstr(pansichar('SetPixelFormat error - '+inttostr(getlasterror)),lp_DecPos);
              end;}
+end;
+Procedure DrawAABB(const BoundingBox:GDBBoundingBbox);
+begin
+myglbegin(GL_LINE_LOOP);
+   myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
+   myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
+   myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
+   myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
+myglend();
+myglbegin(GL_LINE_LOOP);
+   myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
+   myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
+   myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
+   myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
+myglend();
+myglbegin(GL_LINES);
+   myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
+   myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
+   myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
+   myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
+   myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
+   myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
+   myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
+   myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
+myglend();
 end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('oglspecfunc.initialization');{$ENDIF}

@@ -19,7 +19,7 @@
 unit UGDBStringArray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,UGDBOpenArrayOfData,strproc,sysutils;
+uses gdbasetypes,UGDBOpenArrayOfData,strproc,sysutils,UGDBOpenArray;
 type
 {EXPORT+}
     PGDBGDBStringArray=^GDBGDBStringArray;
@@ -33,6 +33,7 @@ type
                           function GetLengthWithEOL:GDBInteger;
                           function GetTextWithEOL:GDBString;
                           function addnodouble(p:GDBPointer):GDBInteger;
+                          function copyto(source:PGDBOpenArray):GDBInteger;virtual;
                           //destructor done;virtual;
                           //function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;
                     end;
@@ -50,6 +51,18 @@ begin
   until p=nil;
   inherited;
 end;}
+function GDBGDBStringArray.copyto;
+var p:GDBPointer;
+    ir:itrec;
+begin
+  p:=beginiterate(ir);
+  if p<>nil then
+  repeat
+        source.add(p);  //-----------------//-----------
+        p:=iterate(ir);
+  until p=nil;
+  result:=count;
+end;
 procedure GDBGDBStringArray.sort;
 var
    isEnd:boolean;

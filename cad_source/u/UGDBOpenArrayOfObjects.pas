@@ -53,7 +53,7 @@ begin
   count:=0;
 end;
 function GDBOpenArrayOfObjects.CreateObject;
-var addr: cardinal;
+var addr: GDBPlatformint;
 begin
   if parray=nil then
                     createarray;

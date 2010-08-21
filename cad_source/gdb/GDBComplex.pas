@@ -29,17 +29,17 @@ type
 PGDBObjComplex=^GDBObjComplex;
 GDBObjComplex=object(GDBObjWithLocalCS)
                     ConstObjArray:GDBObjEntityOpenArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                    procedure DrawGeometry(lw:GDBInteger);virtual;
-                    procedure DrawOnlyGeometry(lw:GDBInteger);virtual;
+                    procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+                    procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                     procedure getoutbound;virtual;
                     procedure getonlyoutbound;virtual;
                     destructor done;virtual;
                     constructor initnul;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
-                    function CalcInFrustum(frustum:ClipArray):GDBBoolean;virtual;
-                    function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
+                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
+                    function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                     function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
-                    procedure RenderFeedback;virtual;
+                    procedure renderfeedbac(infrustumactualy:TActulity);virtual;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                     procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
@@ -48,6 +48,7 @@ GDBObjComplex=object(GDBObjWithLocalCS)
                     //procedure feedbackinrect;virtual;
                     function InRect:TInRect;virtual;
                     //procedure Draw(lw:GDBInteger);virtual;
+                    procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
               end;
 {EXPORT-}
 implementation
@@ -60,6 +61,11 @@ begin
        self.DrawWithAttrib; //DrawGeometry(lw);
   end;
 end;}
+procedure GDBObjComplex.SetInFrustumFromTree;
+begin
+     inherited;
+     ConstObjArray.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+end;
 function GDBObjComplex.InRect;
 begin
      result:=ConstObjArray.InRect;
@@ -109,14 +115,14 @@ end;
 procedure GDBObjComplex.DrawOnlyGeometry;
 begin
   inc(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
-  ConstObjArray.{DrawWithattrib}DrawOnlyGeometry(CalculateLineWeight);
+  ConstObjArray.{DrawWithattrib}DrawOnlyGeometry(CalculateLineWeight,infrustumactualy);
   dec(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
   //inherited;
 end;
 procedure GDBObjComplex.DrawGeometry;
 begin
   inc(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
-  ConstObjArray.DrawWithattrib{DrawGeometry(CalculateLineWeight)};
+  ConstObjArray.DrawWithattrib(infrustumactualy){DrawGeometry(CalculateLineWeight)};
   dec(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
   inherited;
 end;
@@ -146,11 +152,11 @@ begin
 end;
 function GDBObjComplex.CalcInFrustum;
 begin
-     result:=ConstObjArray.calcvisible(frustum);
+     result:=ConstObjArray.calcvisible(frustum,infrustumactualy,visibleactualy);
 end;
 function GDBObjComplex.CalcTrueInFrustum;
 begin
-      result:=ConstObjArray.CalcTrueInFrustum(frustum);
+      result:=ConstObjArray.CalcTrueInFrustum(frustum,visibleactualy);
 end;
 
 function GDBObjComplex.onmouse;
@@ -209,7 +215,7 @@ begin
               end;
      end;
 end;}
-procedure GDBObjComplex.RenderFeedback;
+procedure GDBObjComplex.renderfeedbac(infrustumactualy:TActulity);
 //var pblockdef:PGDBObjBlockdef;
     //pvisible:PGDBObjEntity;
     //i:GDBInteger;
@@ -218,7 +224,7 @@ begin
   gdb.GetCurrentDWG^.myGluProject2(P_insert_in_WCS,ProjP_insert);
   //pdx:=PProjPoint[1].x-PProjPoint[0].x;
   //pdy:=PProjPoint[1].y-PProjPoint[0].y;
-     ConstObjArray.RenderFeedbac;
+     ConstObjArray.RenderFeedbac(infrustumactualy);
 end;
 procedure GDBObjComplex.format;
 {var pblockdef:PGDBObjBlockdef;

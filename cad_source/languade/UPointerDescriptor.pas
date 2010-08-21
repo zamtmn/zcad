@@ -112,7 +112,7 @@ begin
     typename:=tname;
     ReferType:=ptype;
     TypeOf:=nil;
-    self.SizeInGDBBytes:=4;
+    self.SizeInGDBBytes:={4 cpu64}sizeof(pointer);
     punit:=pu;
     format;
 end;

@@ -122,8 +122,13 @@ UserTypeDescriptor=object(GDBaseObject)
                 GetMemCount,FreeMemCount:PGDBInteger;
                 TotalAllocMb,CurrentAllocMB:PGDBInteger;
           end;
+  trenderdeb=record
+                   primcount,pointcount:GDBInteger;
+                   middlepoint:GDBVertex;
+             end;
   tdebug=record
                memdeb:tmemdeb;
+               renderdeb:trenderdeb;
                memi2:GDBInteger;(*'MemMan::I2'*)
                int1:GDBInteger;
         end;
@@ -175,6 +180,7 @@ UserTypeDescriptor=object(GDBaseObject)
             RD_BackGroundColor:PRGB;(*'Фоновый цвет'*)
             RD_Restore_Mode:ptrestoremode;(*'Восстановление изображения'*)
             RD_LastRenderTime:pGDBInteger;(*'Время последнего рендера'*)(*oi_readonly*)
+            RD_MaxRenderTime:pGDBInteger;(*'Максимальное время прохода рендера'*)
             RD_PanObjectDegradation:PGDBBoolean;(*'Деградация при перетаскивании'*)
             RD_LineSmooth:PGDBBoolean;(*'Сглаживание линий'*)
       end;

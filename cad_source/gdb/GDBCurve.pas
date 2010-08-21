@@ -35,7 +35,7 @@ GDBObjCurve=object(GDBObj3d)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure Format;virtual;
-                 procedure DrawGeometry(lw:GDBInteger);virtual;
+                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
                  procedure AddControlpoint(pcp:popenarrayobjcontrolpoint_GDBWordwm;objnum:GDBInteger);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
@@ -58,7 +58,7 @@ GDBObjCurve=object(GDBObj3d)
                  procedure transform(t_matrix:PDMatrix4D);virtual;
                  procedure feedbackinrect;virtual;
 
-                 function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
+                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                  procedure AddOnTrackAxis(posr:pos_record);virtual;
            end;
 {Export-}

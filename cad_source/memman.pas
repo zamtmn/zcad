@@ -53,7 +53,9 @@ var
   {$ENDIF}
 
 implementation
+{$IFNDEF DEBUGBUILD}
 uses log;
+{$ENDIF}
 {$IFDEF DEBUGBUILD}
 uses UGDBOpenArrayOfByte,log;
 var

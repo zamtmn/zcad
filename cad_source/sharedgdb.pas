@@ -35,8 +35,8 @@ begin
   gdb.GetCurrentDWG.OGLwindow1.CalcOptimalMatrix;
   gdb.GetCurrentDWG.pcamera^.totalobj:=0;
   gdb.GetCurrentDWG.pcamera^.infrustum:=0;
-  gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
-  gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
+  gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
+  gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
   gdb.GetCurrentDWG.OGLwindow1.draw;
   //gdb.GetCurrentDWG.OGLwindow1.repaint;
 end;

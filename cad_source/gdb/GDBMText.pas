@@ -182,6 +182,8 @@ begin
       end;
     inc(currsymbol);
   until currsymbol > length(content);
+  if linewidth=0 then
+                     linewidth:=1;
   currline := copy(content, lastbreak, currsymbol - lastbreak);
   {GDBPointer(ptext.GDBStringarray[ptext.count].str) := nil;
   ptext.GDBStringarray[ptext.count].str := currline;
@@ -653,7 +655,7 @@ begin
     else
     begin
     //matr:=matrixmultiply(matr,objmatrix);
-    psymbol := GDBPointer(longint(pbasefont)+pgdbfont(pbasefont).symbolinfo[GDBByte(pswp^.str[i])].addr);
+    psymbol := GDBPointer(GDBPlatformint(pbasefont)+pgdbfont(pbasefont).symbolinfo[GDBByte(pswp^.str[i])].addr);
     if pgdbfont(pbasefont)^.symbolinfo[GDBByte(pswp^.str[i])].size <> 0 then
       for j := 1 to pgdbfont(pbasefont)^.symbolinfo[GDBByte(pswp^.str[i])].size do
       begin

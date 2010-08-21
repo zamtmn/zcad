@@ -25,7 +25,7 @@ GDBObjNet=object(GDBObjConnected)
                  procedure restructure;virtual;
                  function DeSelect:GDBInteger;virtual;
                  function BuildGraf:GDBInteger;virtual;
-                 procedure DrawGeometry(lw:GDBInteger);virtual;
+                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  function EraseMi(pobj:pgdbobjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
                  function CalcNewName(Net1,Net2:PGDBObjNet):GDBInteger;
                  procedure connectedtogdb;virtual;
@@ -206,7 +206,7 @@ begin
      pobj^.done;
      format;
 end;
-procedure GDBObjNet.DrawGeometry(lw:GDBInteger);
+procedure GDBObjNet.DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);
 var i{,j}:GDBInteger;
     tgf: pgrafelement;
     wcoord:gdbvertex;
@@ -247,7 +247,7 @@ begin
      end;
      gldisable(GL_POINT_SMOOTH);
      glpointsize(1);
-     inherited DrawGeometry(lw);
+     inherited DrawGeometry(lw,infrustumactualy);
 end;
 function GDBObjNet.DeSelect;
 begin
@@ -450,14 +450,14 @@ begin
      if graf.divide then
      begin
           GDBGetMem({$IFDEF DEBUGBUILD}'{4BB9158C-D16F-4310-9770-3BC2F2AF82C9}',{$ENDIF}GDBPointer(TempNet),sizeof(GDBObjNet));
-          if integer(tempnet)=$229FEF0 then
+          if GDBPlatformint(tempnet)=$229FEF0 then
                                   tempnet:=tempnet;
           TempNet^.initnul(nil);
           ou.CopyTo(@tempnet.ou);
           //TempNet^.name:=name;
           gdb.GetCurrentROOT.ObjArray.add(@TempNet);
           //gdb.GetCurrentDWG.ObjRoot.ObjCasheArray.addnodouble(@TempNet);
-          ti.init({$IFDEF DEBUGBUILD}'{B106F951-AEAB-43B9-B0B9-B18827EACFE5}',{$ENDIF}100);
+          ti.init({$IFDEF DEBUGBUILD}'{B106F951-AEAB-43B9-B0B9-B18827EACFE5}',{$ENDIF}100){%H-};
           for i:=0 to self.graf.Count-1 do
           begin
                tgf:=pgrafelement(graf.getelement(i));

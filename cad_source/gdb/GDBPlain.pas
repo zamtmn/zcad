@@ -22,13 +22,13 @@ unit GDBPlain;
 interface
 uses
 gl,
- {GDBEntity,}GDBWithLocalCS,gdbase,gdbasetypes,varmandef,OGLSpecFunc;
+ {GDBEntity,}GDBWithLocalCS,gdbase,gdbasetypes,varmandef,OGLSpecFunc,GDBEntity;
 type
 {EXPORT+}
 GDBObjPlain=object(GDBObjWithLocalCS)
                   Outbound:OutBound4V;
 
-                  procedure DrawGeometry(lw:GDBInteger);virtual;
+                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
             end;
 {EXPORT-}
 implementation

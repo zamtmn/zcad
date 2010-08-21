@@ -279,7 +279,7 @@ begin
 end;
 constructor GDBBooleanDescriptor.init;
 begin
-     inherited init(1,'GDBBoolean',nil);
+     inherited init(sizeof(GDBBoolean),'GDBBoolean',nil);
 end;
 function GDBBooleanDescriptor.GetValueAsString;
 begin
@@ -324,7 +324,7 @@ end;
 
 constructor GDBLongwordDescriptor.init;
 begin
-     inherited init(4,'GDBLongword',nil);
+     inherited init(sizeof(GDBLongword),'GDBLongword',nil);
 end;
 function GDBLongwordDescriptor.GetValueAsString;
 var
@@ -344,7 +344,7 @@ begin
 end;
 constructor GDBFloatDescriptor.init;
 begin
-     inherited init(4,'GDBFloat',nil);
+     inherited init(sizeof(GDBFloat),'GDBFloat',nil);
 end;
 function GDBFloatDescriptor.GetValueAsString;
 var
@@ -366,7 +366,7 @@ begin
 end;
 constructor GDBDoubleDescriptor.init;
 begin
-     inherited init(8,'GDBDouble',nil);
+     inherited init(sizeof(GDBDouble),'GDBDouble',nil);
 end;
 function GDBDoubleDescriptor.GetValueAsString;
 var
@@ -394,7 +394,7 @@ begin
 end;
 constructor GDBWordDescriptor.init;
 begin
-     inherited init(2,'GDBWord',nil);
+     inherited init(sizeof(GDBWord),'GDBWord',nil);
 end;
 function GDBWordDescriptor.GetValueAsString;
 var
@@ -414,7 +414,7 @@ begin
 end;
 constructor GDBIntegerDescriptor.init;
 begin
-     inherited init(4,'GDBInteger',nil);
+     inherited init(sizeof(GDBInteger),'GDBInteger',nil);
 end;
 function GDBIntegerDescriptor.GetValueAsString;
 var
@@ -434,7 +434,7 @@ begin
 end;
 constructor GDBShortintDescriptor.init;
 begin
-     inherited init(1,'GDBShortint',nil);
+     inherited init(sizeof(GDBshortint),'GDBShortint',nil);
 end;
 function GDBShortintDescriptor.GetValueAsString;
 var
@@ -454,7 +454,7 @@ begin
 end;
 constructor GDBByteDescriptor.init;
 begin
-     inherited init(1,'GDBByte',nil);
+     inherited init(sizeof(GDBByte),'GDBByte',nil);
 end;
 function GDBByteDescriptor.GetValueAsString;
 var
@@ -474,7 +474,7 @@ begin
 end;
 constructor GDBSmallintDescriptor.init;
 begin
-     inherited init(2,'GDBSmallint',nil);
+     inherited init(sizeof(GDBSmallint),'GDBSmallint',nil);
 end;
 function GDBSmallintDescriptor.GetValueAsString;
 var
@@ -509,7 +509,7 @@ begin
 end;
 constructor GDBStringDescriptor.init;
 begin
-     inherited init(4,'GDBString',nil);
+     inherited init(sizeof(GDBString),'GDBString',nil);
 end;
 function GDBStringDescriptor.GetValueAsString;
 var
@@ -520,7 +520,7 @@ begin
 end;
 constructor GDBPointerDescriptor.init;
 begin
-     inherited init(4,'GDBPointer',nil);
+     inherited init(sizeof(GDBPointer),'GDBPointer',nil);
 end;
 function GDBPointerDescriptor.GetValueAsString;
 var
@@ -530,7 +530,7 @@ begin
     uGDBPointer := pGDBPointer(pinstance)^;
                 if uGDBPointer<>nil then
                                              begin
-                                                  uGDBInteger := integer(uGDBPointer);
+                                                  uGDBInteger := GDBPlatformint(uGDBPointer);
                                                   result := '$' + inttohex(int64(uGDBInteger), 8);
                                              end
                                          else result := 'nil';

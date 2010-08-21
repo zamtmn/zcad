@@ -38,7 +38,7 @@ uses
   UGDBVisibleOpenArray,
   UGDBPoint3DArray,
   {GDBCamera,UGDBOpenArrayOfPV,}OGLSpecFunc{,zoglforms,ZEditsWithProcedure,ZComboBoxsWithProc,ZStaticSText}{,zbasicvisible},memman,
-  log{,zguisct}{,TypeDescriptors,UGDBOpenArrayOfByte,ZTabControlsGeneric};
+  log{,zguisct}{,TypeDescriptors,UGDBOpenArrayOfByte,ZTabControlsGeneric},UGDBEntTree;
 const
 
   ontracdist=10;
@@ -77,7 +77,10 @@ type
     procedure beforeinit;virtual;
     procedure initogl;
     procedure AddOntrackpoint;
+
     procedure render(const Root:GDBObjGenericSubEntry);
+    function treerender(var Node:TEntTreeNode;StartTime:TDateTime):GDBBoolean;
+
     procedure getosnappoint(pva: PGDBObjEntityOpenArray;radius: GDBFloat);
     procedure set3dmouse;
     procedure DISP_ZoomFactor(x: double{; MousePos: TPoint});
@@ -107,6 +110,12 @@ type
     procedure SetObjInsp;
 
     procedure draw;virtual;
+    procedure finishdraw;virtual;
+    procedure SaveBuffers;virtual;
+    procedure RestoreBuffers;virtual;
+    procedure showcursor;
+    procedure startrender;
+    procedure endrender;
     procedure mypaint(sender:tobject);
     procedure mypaint2(sender:tobject;var f:boolean);
 
@@ -179,6 +188,21 @@ begin
             gridarray[i,j].y:=j*stepgrid-(maxgrid+1)*stepgrid/2;
        end;
 end;
+procedure TOGLWnd.startrender;
+begin
+     middlepoint:=nulvertex;
+     pointcount:=0;
+     primcount:=0;
+end;
+procedure TOGLWnd.endrender;
+begin
+    //sysvar.debug.renderdeb.middlepoint:=middlepoint;
+    sysvar.debug.renderdeb.pointcount:=pointcount;
+    sysvar.debug.renderdeb.primcount:=primcount;
+     if pointcount<>0 then
+                          sysvar.debug.renderdeb.middlepoint:=geometry.VertexMulOnSc(middlepoint,1/pointcount);
+end;
+
 procedure TOGLWnd.EraseBackground(DC: HDC);
 begin
      dc:=0;
@@ -419,9 +443,12 @@ begin
   ProjectPoint2(gdb.GetCurrentROOT.VisibleOBJBoundingBox.LBN.x,gdb.GetCurrentROOT.VisibleOBJBoundingBox.RTF.y,gdb.GetCurrentROOT.VisibleOBJBoundingBox.RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);}
 
   tbb:=gdb.GetCurrentROOT.vp.BoundingBox;
+  if gdb.CurrentDWG.ConstructObjRoot.ObjArray.Count>0 then
+                       begin
   gdb.CurrentDWG.ConstructObjRoot.calcbb;
   tbb2:=gdb.CurrentDWG.ConstructObjRoot.vp.BoundingBox;
   ConcatBB(tbb,tbb2);
+  end;
 
   LBN:=tbb.LBN;
   RTF:=tbb.RTF;
@@ -711,6 +738,7 @@ var
 //  msg : TMsg;
 
 begin
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DoMouseWheel',lp_incPos);{$ENDIF}
   smallwheel:=1+(varmandef.sysvar.DISP.DISP_ZoomFactor^-1)/10;
   //mpoint := point(mousepos.x - clientorigin.X, mousepos.y - clientorigin.y);
   if {mousein(mpoint)}true then
@@ -766,8 +794,9 @@ begin
   //param.scrollmode:=true;
   gdb.GetCurrentDWG.pcamera^.NextPosition;
   param.firstdraw:=true;
-  gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
-  gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
+  gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjTree);
+  //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
+  gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
   gdb.GetCurrentDWG.SelObjArray.RenderFeedBack;
 
   calcmousefrustum;
@@ -791,6 +820,7 @@ begin
 
   inherited;
   result:=true;
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DoMouseWheel----{end}',lp_decPos);{$ENDIF}
 end;
 {var
   mpoint: tpoint;
@@ -899,8 +929,10 @@ begin
       gdb.GetCurrentDWG.pcamera^.NextPosition;
       CalcOptimalMatrix;
       //-------------------CalcOptimalMatrix;
-      gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
-      gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
+
+      gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjTree);
+      //gdb.GetCurrentROOT.calcalcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT);
+      gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
     end
     else
       if ssMiddle in shift then     {MK_Control}
@@ -918,8 +950,10 @@ begin
            gdb.GetCurrentDWG.pcamera^.NextPosition;
            CalcOptimalMatrix;
            //-------------CalcOptimalMatrix;
-           gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
-           gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
+
+           gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjTree);
+           //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT);
+           gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
       end;
 end;
 
@@ -1059,11 +1093,11 @@ end;
      //GDBobjinsp23.reread;
   //CalcOptimalMatrix;
   CalcOptimalMatrix;
-  gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
+  gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
 
   //gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.OGLwindow1.param.mousefrustum);
 
-  gdb.GetCurrentDWG.SelObjArray.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
+  gdb.GetCurrentDWG.SelObjArray.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
   Set3dmouse;
 
 
@@ -1102,7 +1136,7 @@ begin
   i := 1;
   while i <= length(s) do
   begin
-    psymbol := GDBPointer(longint(pbasefont)+pgdbfont(pbasefont).symbolinfo[GDBByte(s[i])].addr);
+    psymbol := GDBPointer(GDBPlatformint(pbasefont)+pgdbfont(pbasefont).symbolinfo[GDBByte(s[i])].addr);
     if pgdbfont(pbasefont)^.symbolinfo[GDBByte(s[i])].size <> 0 then
       for j := 1 to pgdbfont(pbasefont)^.symbolinfo[GDBByte(s[i])].size do
       begin
@@ -1406,6 +1440,7 @@ var
   glx1, gly1: GDBDouble;
 //  fv1: GDBVertex;
 begin
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DISP_ZoomFactor',lp_incPos);{$ENDIF}
   CalcOptimalMatrix;
   glx1 := param.md.mouseray.lbegin.x;
   gly1 := param.md.mouseray.lbegin.y;
@@ -1428,6 +1463,7 @@ begin
   gdb.GetCurrentDWG.pcamera^.point.x := gdb.GetCurrentDWG.pcamera^.point.x - (glx1 - param.md.mouseray.lbegin.x);
   gdb.GetCurrentDWG.pcamera^.point.y := gdb.GetCurrentDWG.pcamera^.point.y - (gly1 - param.md.mouseray.lbegin.y);
   end;
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DISP_ZoomFactor----{end}',lp_decPos);{$ENDIF}
 end;
 procedure TOGLWnd.MouseUp(Button: TMouseButton; Shift:TShiftState;X, Y: Integer);
 //procedure TOGLWnd.Pre_MouseUp;
@@ -1445,18 +1481,7 @@ procedure drawtick(uID, msg: UINT; dwUse, dw1, dw2: DWord); stdcall;
 begin
      inc(tick);
 end;
-procedure TOGLWnd.draw;
-var
-  //ps: TPaintStruct;
-//  pg:PGDBvertex2S;
-  {i,}a: GDBInteger;
-//  fpss:GDBString;
-  scrx,scry,texture{,e}:integer;
-//  t:gdbdouble;
-  scrollmode:GDBBOOlean;
-  LPTime:Tdatetime;
-
-procedure showcursor;
+procedure TOGLWnd.showcursor;
   var
     i, j: GDBInteger;
     pt:ptraceprop;
@@ -1464,6 +1489,10 @@ procedure showcursor;
 //  ptp:ptraceprop;
   tv1,tv2,tv3,tv4,sv1{,sv2,sv3,sv4},d1{,d2,d3,d4}:gdbvertex;
   Tempplane,plx,ply,plz:DVector4D;
+    a: GDBInteger;
+    scrx,scry,texture{,e}:integer;
+    scrollmode:GDBBOOlean;
+    LPTime:Tdatetime;
 
   begin
     CalcOptimalMatrix;
@@ -1835,10 +1864,108 @@ procedure showcursor;
     end;
     end;
   end;
+procedure TOGLWnd.SaveBuffers;
+  var
+    scrx,scry,texture{,e}:integer;
+begin
+  glEnable(GL_TEXTURE_2D);
+
+   scrx:=0;
+   scry:=0;
+   texture:=0;
+   repeat
+         repeat
+               glbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
+               isOpenGLError;
+               glCopyTexSubImage2D(GL_TEXTURE_2D,0,0,0,scrx,scry,texturesize,texturesize);
+               isOpenGLError;
+               scrx:=scrx+texturesize;
+               inc(texture);
+         until scrx>clientwidth;
+   scrx:=0;
+   scry:=scry+texturesize;
+   until scry>clientheight;
+
+
+  glDisable(GL_TEXTURE_2D);
+end;
+procedure TOGLWnd.RestoreBuffers;
+  var
+    scrx,scry,texture{,e}:integer;
+begin
+  glEnable(GL_TEXTURE_2D);
+  glDisable(GL_DEPTH_TEST);
+       glMatrixMode(GL_PROJECTION);
+       glPushMatrix;
+       glLoadIdentity;
+       glOrtho(0.0, ClientWidth, 0.0, ClientHeight, -10.0, 10.0);
+       glMatrixMode(GL_MODELVIEW);
+       glPushMatrix;
+       glLoadIdentity;
+  begin
+   scrx:=0;
+   scry:=0;
+   texture:=0;
+   repeat
+   repeat
+         glbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
+         isOpenGLError;
+         glColor3f(1, 1, 1);
+         myglbegin(GL_quads);
+                 glTexCoord2d(0,0);
+                 glVertex3d(scrx,scry,0);
+                 glTexCoord2d(1,0);
+                 glVertex3d(scrx+texturesize,scry,0);
+                 glTexCoord2d(1,1);
+                 glVertex3d(scrx+texturesize,scry+texturesize,0);
+                 glTexCoord2d(0,1);
+                 glVertex3d(scrx,scry+texturesize,0);
+         myglend;
+         isOpenGLError;
+         scrx:=scrx+texturesize;
+         inc(texture);
+   until scrx>clientwidth;
+   scrx:=0;
+   scry:=scry+texturesize;
+   until scry>clientheight;
+  end;
+  glDisable(GL_TEXTURE_2D);
+       glPopMatrix;
+       glMatrixMode(GL_PROJECTION);
+       glPopMatrix;
+       glMatrixMode(GL_MODELVIEW);
+end;
+procedure TOGLWnd.finishdraw;
+  var
+    LPTime:Tdatetime;
+begin
+     inc(sysvar.debug.int1);
+     CalcOptimalMatrix;
+     self.RestoreBuffers;
+     LPTime:=now();
+     gdb.GetCurrentDWG.pcamera.DRAWNOTEND:=treerender(gdb.GetCurrentROOT^.ObjTree,lptime);
+     self.SaveBuffers;
+     self.showcursor;
+     self.SwapBuffers;
+end;
+
+procedure TOGLWnd.draw;
+var
+  //ps: TPaintStruct;
+//  pg:PGDBvertex2S;
+  {i,}a: GDBInteger;
+//  fpss:GDBString;
+  scrx,scry,texture{,e}:integer;
+//  t:gdbdouble;
+  scrollmode:GDBBOOlean;
+  LPTime:Tdatetime;
+
   const msec=1;
 begin
   if not assigned(gdb.GetCurrentDWG) then exit;
 LPTime:=now();
+if param.firstdraw then
+                 inc(gdb.GetCurrentDWG.pcamera^.DRAWCOUNT);
 
 //param.firstdraw:=true;
 {$IFDEF TOTALYLOG}programlog.logoutstr('TOGLWnd.draw',0);{$ENDIF}
@@ -1893,7 +2020,7 @@ if (clientwidth=0)or(clientheight=0) then
     inc(param.subrender);
     render(gdb.GetCurrentDWG.ConstructObjRoot);
     gdb.GetCurrentDWG.SelObjArray.remappoints;
-    gdb.GetCurrentDWG.SelObjArray.drawobj;
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
     dec(param.subrender);
     showcursor;
     //param.firstdraw := false;
@@ -1904,7 +2031,7 @@ if (clientwidth=0)or(clientheight=0) then
     glaccum(GL_return,1);
     inc(param.subrender);
     render(gdb.GetCurrentDWG.ConstructObjRoot);
-    gdb.GetCurrentDWG.SelObjArray.drawobj;
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
     dec(param.subrender);
     showcursor;
     CalcOptimalMatrix;
@@ -1928,7 +2055,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_AuxBuffer then
     inc(param.subrender);
     render(gdb.GetCurrentDWG.ConstructObjRoot);
     gdb.GetCurrentDWG.SelObjArray.remappoints;
-    gdb.GetCurrentDWG.SelObjArray.drawobj;
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
     dec(param.subrender);
     showcursor;
     //param.firstdraw := false;
@@ -1943,7 +2070,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_AuxBuffer then
     end;
     inc(param.subrender);
     render(gdb.GetCurrentDWG.ConstructObjRoot);
-    gdb.GetCurrentDWG.SelObjArray.drawobj;
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
     showcursor;
     CalcOptimalMatrix;
     dec(param.subrender);
@@ -1963,7 +2090,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_DrawPixels then
     inc(param.subrender);
     render(gdb.GetCurrentDWG.ConstructObjRoot);
     gdb.GetCurrentDWG.SelObjArray.remappoints;
-    gdb.GetCurrentDWG.SelObjArray.drawobj;
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
     dec(param.subrender);
     showcursor;
     //param.firstdraw := false;
@@ -1991,7 +2118,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_DrawPixels then
     end;
     inc(param.subrender);
     render(gdb.GetCurrentDWG.ConstructObjRoot);
-    gdb.GetCurrentDWG.SelObjArray.drawobj;
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
     dec(param.subrender);
     showcursor;
     CalcOptimalMatrix;
@@ -2010,7 +2137,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_NewDraw then
     dec(param.subrender);
     inc(param.subrender);
     gdb.GetCurrentDWG.SelObjArray.remappoints;
-    gdb.GetCurrentDWG.SelObjArray.drawobj;
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
     dec(param.subrender);
     showcursor;
     //param.firstdraw := false;
@@ -2028,7 +2155,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     CalcOptimalMatrix;
     glStencilFunc(GL_NEVER, 1, 0); // значение mask не используется
     glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
-    gdb.GetCurrentDWG.SelObjArray.drawobject;
+    gdb.GetCurrentDWG.SelObjArray.drawobject(gdb.GetCurrentDWG.pcamera.POSCOUNT);
     //gldisable(GL_LINE_SMOOTH);
     gllinewidth(1);
     glpointsize(1);
@@ -2037,89 +2164,43 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     glStencilFunc(GL_EQUAL,0,1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
+    if (sysvar.DWG.DWG_SystmGeometryDraw^) then
+                                               gdb.GetCurrentROOT^.ObjTree.draw;
+                                           //else
+                                              begin
+                                              startrender;
+                                              gdb.GetCurrentDWG.pcamera.DRAWNOTEND:=treerender(gdb.GetCurrentROOT^.ObjTree,lptime);
+                                              //render(gdb.GetCurrentROOT^);
+                                              endrender;
+                                              end;
 
-    render(gdb.GetCurrentROOT^);
+
+
     gdb.GetCurrentROOT.DrawBB;
 
-    glEnable(GL_TEXTURE_2D);
-
-     scrx:=0;
-     scry:=0;
-     texture:=0;
-     repeat
-           repeat
-                 glbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
-                 isOpenGLError;
-                 glCopyTexSubImage2D(GL_TEXTURE_2D,0,0,0,scrx,scry,texturesize,texturesize);
-                 isOpenGLError;
-                 scrx:=scrx+texturesize;
-                 inc(texture);
-           until scrx>clientwidth;
-     scrx:=0;
-     scry:=scry+texturesize;
-     until scry>clientheight;
-
+    self.SaveBuffers;
 
     glDisable(GL_DEPTH_TEST);
-    glDisable(GL_TEXTURE_2D);
     inc(param.subrender);
     if commandmanager.pcommandrunning<>nil then
                                                commandmanager.pcommandrunning^.DrawHeplGeometry;
+
     scrollmode:=GDB.GetCurrentDWG.OGLwindow1.param.scrollmode;
     GDB.GetCurrentDWG.OGLwindow1.param.scrollmode:=true;
+
     render(gdb.GetCurrentDWG.ConstructObjRoot);
     GDB.GetCurrentDWG.OGLwindow1.param.scrollmode:=scrollmode;
     gdb.GetCurrentDWG.ConstructObjRoot.DrawBB;
 
     gdb.GetCurrentDWG.SelObjArray.remappoints;
-    gdb.GetCurrentDWG.SelObjArray.drawobj;
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
     dec(param.subrender);
     showcursor;
     //param.firstdraw := false;
   end
   else
   begin
-    glEnable(GL_TEXTURE_2D);
-    glDisable(GL_DEPTH_TEST);
-         glMatrixMode(GL_PROJECTION);
-         glPushMatrix;
-         glLoadIdentity;
-         glOrtho(0.0, ClientWidth, 0.0, ClientHeight, -10.0, 10.0);
-         glMatrixMode(GL_MODELVIEW);
-         glPushMatrix;
-         glLoadIdentity;
-    begin
-     scrx:=0;
-     scry:=0;
-     texture:=0;
-     repeat
-     repeat
-           glbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
-           isOpenGLError;
-           glColor3f(1, 1, 1);
-           myglbegin(GL_quads);
-                   glTexCoord2d(0,0);
-                   glVertex3d(scrx,scry,0);
-                   glTexCoord2d(1,0);
-                   glVertex3d(scrx+texturesize,scry,0);
-                   glTexCoord2d(1,1);
-                   glVertex3d(scrx+texturesize,scry+texturesize,0);
-                   glTexCoord2d(0,1);
-                   glVertex3d(scrx,scry+texturesize,0);
-           myglend;
-           isOpenGLError;
-           scrx:=scrx+texturesize;
-           inc(texture);
-     until scrx>clientwidth;
-     scrx:=0;
-     scry:=scry+texturesize;
-     until scry>clientheight;
-    end;
-    glDisable(GL_TEXTURE_2D);
-         glPopMatrix;
-         glMatrixMode(GL_PROJECTION);
-         glPopMatrix;
-         glMatrixMode(GL_MODELVIEW);
+       self.RestoreBuffers;
     inc(param.subrender);
     if gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count>0 then
                                                     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count:=gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count;
@@ -2131,7 +2212,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     GDB.GetCurrentDWG.OGLwindow1.param.scrollmode:=scrollmode;
     gdb.GetCurrentDWG.ConstructObjRoot.DrawBB;
 
-    gdb.GetCurrentDWG.SelObjArray.drawobj;
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
     showcursor;
     dec(param.subrender);
     glEnable(GL_DEPTH_TEST);
@@ -2181,8 +2262,55 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
   {$ENDIF}
   //title:=title+fpss;
   param.firstdraw := false;
-  inc(gdb.GetCurrentDWG.pcamera^.DRAWCOUNT);
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.draw---{end}',lp_DecPos);{$ENDIF}
+end;
+
+
+function TOGLWnd.treerender(var Node:TEntTreeNode;StartTime:TDateTime):GDBboolean;
+var
+   currtime:TDateTime;
+   Hour,Minute,Second,MilliSecond:word;
+   q1,q2:gdbboolean;
+begin
+     currtime:=now;
+     decodetime(currtime-StartTime,Hour,Minute,Second,MilliSecond);
+     if assigned(sysvar.RD.RD_MaxRenderTime) then
+     if (sysvar.RD.RD_MaxRenderTime^-MilliSecond)<0 then
+                            begin
+                                  result:=true;
+                                  exit;
+                            end;
+     q1:=false;
+     q2:=false;
+
+  if Node.infrustum=gdb.GetCurrentDWG.pcamera.POSCOUNT then
+  begin
+       if assigned(node.pminusnode)then
+                                       if node.minusdrawpos<>gdb.GetCurrentDWG.pcamera.DRAWCOUNT then
+                                       begin
+                                       if not treerender(node.pminusnode^,StartTime) then
+                                           node.minusdrawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT
+                                                                                     else
+                                                                                         q1:=true;
+                                       end;
+       if assigned(node.pplusnode)then
+                                      if node.plusdrawpos<>gdb.GetCurrentDWG.pcamera.DRAWCOUNT then
+                                      begin
+                                       if not treerender(node.pplusnode^,StartTime) then
+                                           node.plusdrawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT
+                                                                                    else
+                                                                                        q2:=true;
+                                      end;
+       if node.nuldrawpos<>gdb.GetCurrentDWG.pcamera.DRAWCOUNT then
+       begin
+        Node.nul.DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT);
+        node.nuldrawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;
+       end;
+  end;
+  result:=(q1) or (q2);
+  //Node.drawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;
+
+  //root.DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT);
 end;
 
 procedure TOGLWnd.render;
@@ -2205,7 +2333,7 @@ begin
   //pva^.DeSelect;
   //if pva^.Count>0 then
   //                       pva^.Count:=pva^.Count;
-  root.{ObjArray.}DrawWithattrib;
+  root.{ObjArray.}DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT);
 end;
 function TOGLWnd.findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger): GDBInteger;
 var
@@ -2214,16 +2342,17 @@ var
   _total,_visible,_isonmouse:integer;
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.findonmobj',lp_IncPos);{$ENDIF}
+  if not param.scrollmode then
+  begin
   _total:=0;
   _visible:=0;
   _isonmouse:=0;
   param.SelDesc.OnMouseObject := nil;
-  if param.scrollmode then exit;
   pp:=pva^.beginiterate(ir);
   if pp<>nil then
   repeat
        inc(_total);
-       if pp^.visible then
+       if pp^.visible=gdb.GetCurrentDWG.pcamera.VISCOUNT then
        begin
        inc(_visible);
        if pp^.isonmouse(@gdb.GetCurrentDWG.OnMouseObj)
@@ -2239,6 +2368,8 @@ begin
   pp:=pva^.iterate(ir);
   until pp=nil;
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('Total:='+inttostr(_total)+'; Visible:='+inttostr(_visible)+'; IsOnMouse:='+inttostr(_isonmouse),0);{$ENDIF}
+  end
+  else {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('param.scrollmode=true. exit',0);{$ENDIF}
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.findonmobj-----{end}',lp_DecPos);{$ENDIF}
 end;
 

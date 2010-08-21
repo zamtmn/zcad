@@ -493,7 +493,7 @@ begin
     pb^.BuildGeometry;
     pb^.BuildVarGeometry;
     pb^.Format;
-    pb^.Visible:=true;
+    pb^.Visible:=0;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     pb^.RenderFeedback;
     pb:=nil;
@@ -1442,7 +1442,7 @@ begin
     BLINSERT^.BuildGeometry;
     BLINSERT^.BuildVarGeometry;
     BLINSERT^.Format;
-    BLINSERT^.Visible:=true;
+    BLINSERT^.Visible:=0;
     BLINSERT^.RenderFeedback;
     //BLINSERT:=nil;
     //commandmanager.executecommandend;

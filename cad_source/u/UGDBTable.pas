@@ -19,7 +19,7 @@
 unit UGDBTable;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfData,gdbasetypes,gdbase{,UGDBOpenArrayOfData,UGDBOpenArrayOfByte},sysutils,UGDBOpenArrayOfObjects,UGDBStringArray;
+uses UGDBOpenArray,UGDBOpenArrayOfData,gdbasetypes,gdbase{,UGDBOpenArrayOfData,UGDBOpenArrayOfByte},sysutils,UGDBOpenArrayOfObjects,UGDBStringArray;
 type
 {EXPORT+}
 PGDBTableArray=^GDBTableArray;
@@ -28,13 +28,13 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}c,r:GDBInteger);
                     destructor done;virtual;
                     procedure cleareraseobj;virtual;
-                    function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;
+                    function copyto(source:PGDBOpenArray):GDBInteger;virtual;
               end;
 {EXPORT-}
 implementation
 uses
     log;
-function GDBTableArray.copyto(source:PGDBOpenArrayOfData):GDBInteger;
+function GDBTableArray.copyto(source:PGDBOpenArray):GDBInteger; //PGDBOpenArrayOfData
 var
   p,np:PGDBGDBStringArray;
   ir:itrec;

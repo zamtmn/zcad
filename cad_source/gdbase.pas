@@ -153,8 +153,10 @@ GDBBaseCamera=object(GDBaseObject)
                 frustum:ClipArray;
                 infrustum:GDBInteger;
                 obj_zmax,obj_zmin:GDBDouble;
+                DRAWNOTEND:GDBBoolean;
                 DRAWCOUNT:GDBInteger;
                 POSCOUNT:GDBInteger;
+                VISCOUNT:GDBInteger;
                 CamCSOffset:GDBvertex;
                 procedure NextPosition;virtual; abstract;
           end;
@@ -236,6 +238,7 @@ GDBfont=record
                          major,minor,release,build,revision:GDBInteger;
                          versionstring:GDBstring;
                      end;
+  TActulity=GDBInteger;
 FreeElProc=procedure (p:GDBPointer);
 {EXPORT-}
 const

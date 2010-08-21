@@ -50,12 +50,12 @@ GDBObjBlockdef=object(GDBObjGenericSubEntry)
                      function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit):GDBBoolean;virtual;
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;
-                     function GetHandle:GDBLongword;virtual;
+                     function GetHandle:GDBPlatformint;virtual;
                end;
 {Export-}
 implementation
 uses iodxf{,UGDBDescriptor},UUnitManager,shared,log;
-function GDBObjBlockdef.GetHandle:GDBLongword;
+function GDBObjBlockdef.GetHandle:GDBPlatformint;
 begin
      result:=H_Root;
 end;

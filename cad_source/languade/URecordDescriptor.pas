@@ -68,7 +68,7 @@ begin
                           end;
                           if offset>0 then
                                          begin
-                                              pf:=pointer(offset+integer(PInstance));
+                                              pf:=pointer(offset+GDBPlatformint(PInstance));
                                               //ps:=copy(ps,1,i-1)+ varman.valuetoGDBString(pv^.pvalue,pv.ptd) +copy(ps,i2+1,length(ps)-i2)
                                               ps:=copy(ps,1,i-1)+tc^.GetUserValueAsString(pf)+copy(ps,i2+1,length(ps)-i2)
                                          end
@@ -91,7 +91,7 @@ begin
         if pd<>nil then
         repeat
               begin
-                   cardinal(p):=cardinal(PInstance)+pd^.Offset;
+                   GDBPlatformint(p):=GDBPlatformint(PInstance)+pd^.Offset;
                    pd^.PFT^.MagicFreeInstance(p);
               end;
               pd:=Fields.iterate(ir);
@@ -213,7 +213,7 @@ begin
                               PLinkData:=linkbuf.FindByTempAddres(membuf.ReadPos);
                               if PLinkData<>nil then
                                                     begin
-                                                         PLinkData^.NewAddr:=gdblongword(pinstance);
+                                                         PLinkData^.NewAddr:=GDBPlatformint(pinstance);
                                                     end;
 
                          end;
@@ -321,7 +321,7 @@ begin
         if pd<>nil then
         repeat
               if pd^.FieldName<>'#' then
-                                        pd.PFT.SavePasToMem(membuf,pointer(integer(PInstance)+pd^.Offset),prefix+'.'+pd^.FieldName);
+                                        pd.PFT.SavePasToMem(membuf,pointer(GDBPlatformint(PInstance)+pd^.Offset),prefix+'.'+pd^.FieldName);
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;
@@ -433,7 +433,7 @@ begin
                                                    pvd:=PTObjectUnit(addr)^.InterfaceVariables.vardescarray.iterate(ir2);
                                              until pvd=nil;
                                         end;
-                                        inc(integer(addr),sizeof(TObjectUnit));
+                                        inc(GDBPlatformint(addr),sizeof(TObjectUnit));
                                         end
                                         else
 
@@ -497,14 +497,14 @@ begin
                                                                                                       if assigned(ppointer(pobj)^) then
                                                                                                                                        begin
                                                                                                                                        {$IFDEF TOTALYLOG}
-                                                                                                                                       programlog.logoutstr(inttohex(cardinal(pobj),10),0);
-                                                                                                                                       programlog.logoutstr(inttohex(cardinal(gdb.GetCurrentDWG.pcamera),10),0);
+                                                                                                                                       programlog.logoutstr(inttohex(GDBPlatformint(pobj),10),0);
+                                                                                                                                       //programlog.logoutstr(inttohex(GDBPlatformint(gdb.GetCurrentDWG.pcamera),10),0);
                                                                                                                                        {$ENDIF}
                                                                                                                                        ppd^.value:=pobj^.GetObjTypeName;
                                                                                                                                        //pobj^.whoisit;
                                                                                                                                        //pobj^.GetObjTypeName;
                                                                                                                                        end;
-                                                                                Inc(integer(addr),sizeof(gdbpointer));
+                                                                                Inc(GDBPlatformint(addr),sizeof(gdbpointer));
                                            end
                    else
                    begin
@@ -513,7 +513,7 @@ begin
                                                                tb:=PTTypedData(addr)^.Instance;
                                                                ta:=PTTypedData(addr)^.ptd;
                                                                PTUserTypeDescriptor(ta)^.CreateProperties(PPDA,{PTTypedData(addr)^.ptd^.TypeName}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.Attributes or ownerattrib,bmode,tb,'','');
-                                                               inc(integer(addr),sizeof(TTypedData));
+                                                               inc(GDBPlatformint(addr),sizeof(TTypedData));
                                                           end
                                                        else
                                                            begin
@@ -543,7 +543,7 @@ begin
         if pd<>nil then
         repeat
               if pd^.FieldName<>'#' then
-                                        pd.PFT.MagicAfterCopyInstance(pointer(integer(PInstance)+pd^.Offset));
+                                        pd.PFT.MagicAfterCopyInstance(pointer(GDBPlatformint(PInstance)+pd^.Offset));
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;

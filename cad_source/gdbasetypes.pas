@@ -55,10 +55,11 @@ PGDBPointer=^GDBPointer;
 {-}GDBPointer=pointer;{//}
 
 itrec=record
-            itp:{-}pGDBPointer{/GDBPointer/};
+            itp:{-}PGDBPointer{/GDBPointer/};
             itc:GDBInteger;
       end;
 {EXPORT-}
+GDBPlatformint=PtrInt;
 //GDBchar=Char;
 implementation
 end.

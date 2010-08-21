@@ -65,9 +65,9 @@ begin
            if pnew^<>nil then
                             begin
                                  inc(nc);
-                                 inc(integer(pnew),4);
+                                 inc(GDBPlatformint(pnew),{4 cpu64}sizeof(pointer));
                             end;
-           inc(integer(pold),4);
+           inc(GDBPlatformint(pold),{4 cpu64}sizeof(pointer));
            inc(c);
      until c=count;
      count:=nc;

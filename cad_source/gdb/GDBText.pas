@@ -394,7 +394,7 @@ begin
     end
     else
     begin
-    psymbol := GDBPointer(longint(pbasefont)+ pgdbfont(pbasefont).symbolinfo[GDBByte(content[i])].addr);
+    psymbol := GDBPointer(GDBPlatformint(pbasefont)+ pgdbfont(pbasefont).symbolinfo[GDBByte(content[i])].addr);
     if pgdbfont(pbasefont)^.symbolinfo[GDBByte(content[i])].size <> 0 then
       for j := 1 to pgdbfont(pbasefont)^.symbolinfo[GDBByte(content[i])].size do
       begin

@@ -22,7 +22,7 @@ unit GDBGenericSubEntry;
 interface
 uses UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
 gl,
-geometry{,GDB3d},UGDBVisibleOpenArray,gdbEntity,gdbobjectsconstdef,varmandef,memman;
+geometry{,GDB3d},UGDBVisibleOpenArray,gdbEntity,gdbobjectsconstdef,varmandef,memman,UGDBEntTree;
 type
 //GDBObjGenericSubEntry=object(GDBObjWithLocalCS)
 //GDBObjGenericSubEntry=object(GDBObj3d)
@@ -38,14 +38,15 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             ObjToConnectedArray:GDBObjOpenArrayOfPV;
                             lstonmouse:PGDBObjEntity;
                             VisibleOBJBoundingBox:GDBBoundingBbox;
+                            ObjTree:TEntTreeNode;
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                            procedure DrawGeometry(lw:GDBInteger);virtual;
-                            function CalcInFrustum(frustum:ClipArray):GDBBoolean;virtual;
+                            procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+                            function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                             function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
                             procedure Format;virtual;
                             procedure FormatAfterEdit;virtual;
                             procedure restructure;virtual;
-                            procedure RenderFeedback;virtual;
+                            procedure renderfeedbac(infrustumactualy:TActulity);virtual;
                             procedure select;virtual;
                             function getowner:PGDBObjSubordinated;virtual;
                             function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
@@ -64,10 +65,16 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             procedure DrawBB;
 
                             procedure RemoveInArray(pobjinarray:GDBInteger);virtual;
-                            procedure DrawWithAttrib;virtual;
+                            procedure DrawWithAttrib(infrustumactualy:TActulity);virtual;
 
                             function CreatePreCalcData:PTDrawingPreCalcData;virtual;
                             procedure DestroyPreCalcData(PreCalcData:PTDrawingPreCalcData);virtual;
+
+                            procedure ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInRect);
+                            //function CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;const enttree:TEntTreeNode):GDBBoolean;virtual;
+                              function CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;virtual;
+                              function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;virtual;
+                              procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
                       end;
 {Export-}
 implementation
@@ -78,6 +85,105 @@ begin
      ObjArray.add(pobj);
      pGDBObjEntity(ppointer(pobj)^).bp.Owner:=@self;
 end;}
+procedure GDBObjGenericSubEntry.SetInFrustumFromTree;
+begin
+     inherited;
+     ObjArray.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+end;
+function GDBObjGenericSubEntry.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;
+begin
+     ProcessTree(frustum,infrustumactualy,visibleactualy,enttree,IRPartially)
+end;
+function GDBObjGenericSubEntry.CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;
+begin
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('GDBObjGenericSubEntry.CalcVisibleByTree',lp_incPos);{$ENDIF}
+  visible:=visibleactualy;
+     result:=true;
+     //inc(gdb.GetCurrentDWG.pcamera^.totalobj);
+     {if }CalcInFrustumByTree(frustum,infrustumactualy,visibleactualy,enttree);{ then}
+             {             begin
+                               setinfrustum(infrustumactualy);
+                          end
+                      else
+                          begin
+                               setnotinfrustum(infrustumactualy);
+                               visible:=false;
+                               result:=false;
+                          end;}
+     if not(self.vp.Layer._on) then
+                          begin
+                               visible:=0;
+                               result:=false;
+                          end;
+     {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('GDBObjGenericSubEntry.CalcVisibleByTree----{end}',lp_decPos);{$ENDIF}
+end;
+procedure GDBObjGenericSubEntry.ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInRect);
+var
+     ImInFrustum:TInRect;
+     pobj:PGDBObjEntity;
+     ir:itrec;
+begin
+     case OwnerInFrustum of
+     IREmpty:begin
+                   OwnerInFrustum:=OwnerInFrustum;
+             end;
+     IRFully:begin
+                   enttree.infrustum:=infrustumactualy;
+                   pobj:=enttree.nul.beginiterate(ir);
+                   if pobj<>nil then
+                   repeat
+                         pobj^.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+                         //pobj^.infrustum:=infrustumactualy;
+                         pobj:=enttree.nul.iterate(ir);
+                   until pobj=nil;
+                   if assigned(enttree.pminusnode) then
+                                                       ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pminusnode^,IRFully);
+                   if assigned(enttree.pplusnode) then
+                                                       ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pplusnode^,IRFully);
+             end;
+ IRPartially:begin
+                  ImInFrustum:=CalcAABBInFrustum(enttree.BoundingBox,frustum);
+                  case ImInFrustum of
+                       IREmpty:begin
+                                     OwnerInFrustum:=OwnerInFrustum;
+                               end;
+                       IRFully,IRPartially:begin
+                                     enttree.infrustum:=infrustumactualy;
+                                     pobj:=enttree.nul.beginiterate(ir);
+                                     if pobj<>nil then
+                                     repeat
+                                           pobj^.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+                                           //pobj^.infrustum:=infrustumactualy;
+                                           pobj:=enttree.nul.iterate(ir);
+                                     until pobj=nil;
+                                     if assigned(enttree.pminusnode) then
+                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pminusnode^,ImInFrustum);
+                                     if assigned(enttree.pplusnode) then
+                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pplusnode^,ImInFrustum);
+
+                              end;
+                  {IRPartially:begin
+                                     enttree.infrustum:=infrustumactualy;
+                                     pobj:=enttree.nul.beginiterate(ir);
+                                     if pobj<>nil then
+                                     repeat
+                                           if pobj^.CalcInFrustum(frustum,infrustumactualy,visibleactualy) then
+                                           begin
+                                                pobj^.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+                                           end;
+                                           pobj:=enttree.nul.iterate(ir);
+                                     until pobj=nil;
+                                     if assigned(enttree.pminusnode) then
+                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pminusnode^,IRPartially);
+                                     if assigned(enttree.pplusnode) then
+                                                                         ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pplusnode^,IRPartially);
+
+                              end;}
+                  end;
+
+             end;
+     end;
+end;
 function GDBObjGenericSubEntry.CreatePreCalcData:PTDrawingPreCalcData;
 begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{1F00FCF0-E9C6-4A6B-8B98-FFCC5D163190}',{$ENDIF}GDBPointer(result),sizeof(TDrawingPreCalcData));
@@ -90,7 +196,7 @@ begin
 end;
 procedure GDBObjGenericSubEntry.DrawWithAttrib;
 begin
-     self.ObjArray.DrawWithattrib;
+     self.ObjArray.DrawWithattrib(infrustumactualy);
 end;
 procedure GDBObjGenericSubEntry.DrawBB;
 begin
@@ -202,6 +308,7 @@ destructor GDBObjGenericSubEntry.done;
 begin
      ObjArray.FreeAndDone;
      ObjCasheArray.FreeAndDone;
+     self.ObjTree.done;
      inherited done;
 end;
 constructor GDBObjGenericSubEntry.initnul;
@@ -209,16 +316,17 @@ begin
      inherited initnul(owner);
      ObjArray.init({$IFDEF DEBUGBUILD}'{3EB0D466-D2B3-4F03-802A-8C995283688A}',{$ENDIF}10);
      ObjCasheArray.init({$IFDEF DEBUGBUILD}'{A6F0EFFD-8EBB-4DED-9051-D28BF8F9A93C}',{$ENDIF}10);
+     self.ObjTree.initnul;
 end;
 procedure GDBObjGenericSubEntry.DrawGeometry;
 begin
-  ObjArray.DrawGeometry(CalculateLineWeight);
+  ObjArray.DrawGeometry(CalculateLineWeight,infrustumactualy);
   DrawBB;
 end;
 function GDBObjGenericSubEntry.CalcInFrustum;
 begin
-     result:=ObjArray.calcvisible(frustum);
-     self.VisibleOBJBoundingBox:=ObjArray.calcvisbb;
+     result:=ObjArray.calcvisible(frustum,infrustumactualy,visibleactualy);
+     self.VisibleOBJBoundingBox:=ObjArray.calcvisbb({gdb.GetCurrentDWG.pcamera^.POSCOUNT}visibleactualy);
      {ObjArray.calcvisible;
      visible:=true;}
 end;
@@ -247,9 +355,9 @@ end;
 procedure GDBObjGenericSubEntry.restructure;
 begin
 end;
-procedure GDBObjGenericSubEntry.renderfeedback;
+procedure GDBObjGenericSubEntry.renderfeedbac(infrustumactualy:TActulity);
 begin
-  ObjArray.renderfeedbac;
+  ObjArray.renderfeedbac(infrustumactualy);
 end;
 
 function GDBObjGenericSubEntry.onmouse;

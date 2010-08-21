@@ -82,7 +82,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-        if p^.OldAddr=gdblongword(pobj) then
+        if p^.OldAddr=GDBPlatformint(pobj) then
                                             begin
                                                  result:=p;
                                             end;
@@ -116,7 +116,7 @@ begin
                       OBT,OFT:
                               begin
                                    fillchar(linkdata,sizeof(linkdata),0);
-                                   linkdata.OldAddr:=gdblongword(PObj);
+                                   linkdata.OldAddr:=GDBPlatformint(PObj);
                                    linkdata.TempAddr:=filepos;
                                    add(@linkdata);
                               end;
@@ -129,7 +129,7 @@ begin
                                          else
                                              begin
                                                   fillchar(linkdata,sizeof(linkdata),0);
-                                                  linkdata.OldAddr:=gdblongword(PObj);
+                                                  linkdata.OldAddr:=GDBPlatformint(PObj);
                                                   linkdata.TempAddr:={filepos}0;
                                                   add(@linkdata);
                                              end;

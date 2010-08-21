@@ -40,7 +40,7 @@ GDBObjGenericWithSubordinated=object(GDBaseObject)
                                                              function GetMatrix:PDMatrix4D;virtual;abstract;
                          function GetLineWeight:GDBSmallint;virtual;abstract;
                          function GetLayer:PGDBLayerProp;virtual;abstract;
-                         function GetHandle:GDBLongword;virtual;
+                         function GetHandle:GDBPlatformint;virtual;
                          function IsSelected:GDBBoolean;virtual;abstract;
                                     procedure FormatAfterDXFLoad;virtual;
 
@@ -123,9 +123,9 @@ procedure GDBObjSubordinated.SaveToDXFObjXData(outhandle: GDBInteger);
 begin
      dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(bp.owner.GetHandle,10));
 end;
-function GDBObjGenericWithSubordinated.GetHandle:GDBLongword;
+function GDBObjGenericWithSubordinated.GetHandle:GDBPlatformint;
 begin
-     result:=GDBLongword(@self);
+     result:=GDBPlatformint(@self);
 end;
 destructor GDBObjGenericWithSubordinated.done;
 begin
@@ -285,7 +285,7 @@ begin
                              begin
                                   extractvarfromdxfstring2(_Value,vn,svn,vv);
                                   pvd:=ou.InterfaceVariables.findvardesc(vn);
-                                  offset:=cardinal(pvd.data.Instance);
+                                  offset:=GDBPlatformint(pvd.data.Instance);
                                   if pvd<>nil then
                                   begin
                                        PRecordDescriptor(pvd^.data.PTD)^.ApplyOperator('.',svn,offset,tc);

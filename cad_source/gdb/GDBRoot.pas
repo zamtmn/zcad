@@ -21,7 +21,7 @@ unit GDBRoot;
 
 interface
 Uses
-gl,
+gl,UGDBEntTree,
 devices,gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry,uunitmanager{,shared};
 type
 {Export+}
@@ -35,12 +35,13 @@ GDBObjRoot=object(GDBObjGenericSubEntry)
                  function getowner:PGDBObjSubordinated;virtual;
                  procedure getoutbound;virtual;
                  function FindVariable(varname:GDBString):pvardesk;virtual;
-                 function GetHandle:GDBLongword;virtual;
+                 function GetHandle:GDBPlatformint;virtual;
                  function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
 
                  function GetMatrix:PDMatrix4D;virtual;
-                 procedure DrawWithAttrib;virtual;
-                 function CalcInFrustum(frustum:ClipArray):GDBBoolean;virtual;
+                 procedure DrawWithAttrib(infrustumactualy:TActulity);virtual;
+                 function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
+                 function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;virtual;
                  procedure calcbb;virtual;
                  function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
            end;
@@ -59,6 +60,23 @@ begin
      vp.BoundingBox.LBN:=VectorTransform3D(vp.BoundingBox.LBN,ObjMatrix);
      vp.BoundingBox.RTF:=VectorTransform3D(vp.BoundingBox.RTF,ObjMatrix);
 end;
+
+function GDBObjRoot.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;
+var
+   myfrustum:ClipArray;
+   m1:DMatrix4D;
+begin
+     m1:=ObjMatrix;
+     MatrixTranspose(m1);
+     PGDBVertex4D(@myfrustum[0])^:=VectorTransform(PGDBVertex4D(@frustum[0])^,m1);
+     PGDBVertex4D(@myfrustum[1])^:=VectorTransform(PGDBVertex4D(@frustum[1])^,m1);
+     PGDBVertex4D(@myfrustum[2])^:=VectorTransform(PGDBVertex4D(@frustum[2])^,m1);
+     PGDBVertex4D(@myfrustum[3])^:=VectorTransform(PGDBVertex4D(@frustum[3])^,m1);
+     PGDBVertex4D(@myfrustum[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,m1);
+     PGDBVertex4D(@myfrustum[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,m1);
+
+     ProcessTree(myfrustum,infrustumactualy,visibleactualy,enttree,IRPartially)
+end;
 function GDBObjRoot.CalcInFrustum;
 var
    myfrustum:ClipArray;
@@ -76,24 +94,7 @@ begin
      PGDBVertex4D(@myfrustum[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,m1);
      PGDBVertex4D(@myfrustum[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,m1);
 
-     //myfrustum:=frustum;
-
-
-     inherited CalcInFrustum(myfrustum);
-     //t1:=PointOf3PlaneIntersect(myfrustum[0],myfrustum[2],myfrustum[4]);
-     //t2:=PointOf3PlaneIntersect(myfrustum[1],myfrustum[3],myfrustum[5]);
-     ///vp.BoundingBox.LBN:=Vertexmorph(t1,t2,0.1);
-     //vp.BoundingBox.rtf:=Vertexmorph(t2,t1,0.1);
-
-     //vp.BoundingBox.LBN:=VectorTransform3D(vp.BoundingBox.LBN,ObjMatrix);
-     //vp.BoundingBox.RTF:=VectorTransform3D(vp.BoundingBox.RTF,ObjMatrix);
-
-     //vp.BoundingBox.LBN:=t1;
-     //vp.BoundingBox.rtf:=t2;
-     //VisibleOBJBoundingBox.LBN:=VectorTransform3D(VisibleOBJBoundingBox.LBN,ObjMatrix);
-     //VisibleOBJBoundingBox.RTF:=VectorTransform3D(VisibleOBJBoundingBox.RTF,ObjMatrix);
-     //result:=ObjArray.calcvisible(frustum);
-     //self.VisibleOBJBoundingBox:=ObjArray.calcvisbb;
+     inherited CalcInFrustum(myfrustum,infrustumactualy,visibleactualy);
 end;
 procedure GDBObjRoot.DrawWithAttrib;
 begin
@@ -121,7 +122,7 @@ begin
            p:=self.ObjToConnectedArray.iterate(ir);
      until p=nil;
 end;
-function GDBObjRoot.GetHandle:GDBLongword;
+function GDBObjRoot.GetHandle:GDBPlatformint;
 begin
      result:=H_Root;
 end;

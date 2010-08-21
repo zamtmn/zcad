@@ -1346,7 +1346,7 @@ begin
                                                     exit;
                                               end;
           ps:=VarCategory.iterate(ir);
-          inc(cardinal(result));
+          inc(GDBPlatformint(result));
      until ps=nil;
      result:=@CategoryUnknownCOllapsed;
      catname:=category;

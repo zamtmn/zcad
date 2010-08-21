@@ -33,13 +33,13 @@ GDBOpenArrayOfData=object(GDBOpenArray)
                     function deleteelement(index:GDBInteger):GDBPointer;
                     function DeleteElementByP(pel:GDBPointer):GDBPointer;
                     function InsertElement(index,dir:GDBInteger;p:GDBPointer):GDBPointer;
-                    function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;
+                    //function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;
               end;
 {Export-}
 implementation
 uses
     log;
-function GDBOpenArrayOfData.copyto;
+{function GDBOpenArrayOfData.copyto;
 var p:GDBPointer;
     ir:itrec;
 begin
@@ -50,7 +50,7 @@ begin
         p:=iterate(ir);
   until p=nil;
   result:=count;
-end;
+end;}
 function GDBOpenArrayOfData.InsertElement;
 var
    del,afterdel:pointer;
@@ -62,7 +62,7 @@ begin
 begin
   del := PArray;
   inc(pGDBByte(del),size*index);
-  cardinal(afterdel):=cardinal(del)+size;
+  GDBPlatformint(afterdel):=GDBPlatformint(del)+size;
   s:=(count-index-1)*size;
   Move(del^,afterdel^,s);
   Move(p^,del^,size);
@@ -77,7 +77,7 @@ var
 begin
   del := PArray;
   inc(pGDBByte(del),size*index);
-  cardinal(afterdel):=cardinal(del)+size;
+  GDBPlatformint(afterdel):=GDBPlatformint(del)+size;
   s:=(count-index-1)*size;
   Move(afterdel^,del^,s);
   dec(count);
@@ -88,8 +88,8 @@ var
    afterdel:pointer;
    s:integer;
 begin
-  cardinal(afterdel):=cardinal(pel)+size;
-  s:=cardinal(parray)+count*size-cardinal(pel);
+  GDBPlatformint(afterdel):=GDBPlatformint(pel)+size;
+  s:=GDBPlatformint(parray)+count*size-GDBPlatformint(pel);
   //s:=(count-index-1)*size;
   Move(afterdel^,pel^,s);
   dec(count);

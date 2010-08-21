@@ -47,6 +47,7 @@ const
       MinusInfinityVertex:GDBVertex=(x:-Infinity;y:-Infinity;z:-Infinity);
       InfinityVertex:GDBVertex=(x:Infinity;y:Infinity;z:Infinity);
       NulVertex4D:GDBVertex4d=(x:0;y:0;z:0;w:1);
+      NulVector4D:DVector4D=(0,0,0,0);
       NulVertex:GDBVertex=(x:0;y:0;z:0);
       XWCS:GDBVertex=(x:1;y:0;z:0);
       YWCS:GDBVertex=(x:0;y:1;z:0);
@@ -141,6 +142,7 @@ procedure concatBBandPoint(var fistbb:GDBBoundingBbox;point:GDBvertex);
 
 function CalcTrueInFrustum (const lbegin,lend:GDBvertex; const frustum:ClipArray):TINRect;
 function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:ClipArray):TINRect;
+function CalcAABBInFrustum (const AABB:GDBBoundingBbox; const frustum:ClipArray):TINRect;
 
 var WorldMatrix{,CurrentCS}:DMatrix4D;
     wx:PGDBVertex;
@@ -329,6 +331,61 @@ begin
       end;
 
       //bit:=bit*2;
+end;
+function CalcAABBInFrustum (const AABB:GDBBoundingBbox; const frustum:ClipArray):TINRect;
+var i,count:GDBInteger;
+    p1,p2,p3,p4,p5,p6,p7,p8:Gdbvertex;
+    d1,d2,d3,d4,d5,d6,d7,d8:gdbdouble;
+begin
+     //result:=irfully;
+     //system.exit;
+
+     p1:=AABB.LBN;
+     p2:=CreateVertex(AABB.RTF.x,AABB.LBN.y,AABB.LBN.Z);
+     p3:=CreateVertex(AABB.RTF.x,AABB.RTF.y,AABB.LBN.Z);
+     p4:=CreateVertex(AABB.LBN.x,AABB.RTF.y,AABB.LBN.Z);
+     p5:=CreateVertex(AABB.LBN.x,AABB.LBN.y,AABB.RTF.Z);
+     p6:=CreateVertex(AABB.RTF.x,AABB.LBN.y,AABB.RTF.Z);
+     p7:=AABB.RTF;
+     p8:=CreateVertex(AABB.LBN.x,AABB.RTF.y,AABB.RTF.Z);
+
+      count:=0;
+      for i:=0 to 5 do
+      begin
+          d1:=frustum[i][0] * p1.x + frustum[i][1] * p1.y + frustum[i][2] * p1.z + frustum[i][3];
+          d2:=frustum[i][0] * p2.x + frustum[i][1] * p2.y + frustum[i][2] * p2.z + frustum[i][3];
+          d3:=frustum[i][0] * p3.x + frustum[i][1] * p3.y + frustum[i][2] * p3.z + frustum[i][3];
+          d4:=frustum[i][0] * p4.x + frustum[i][1] * p4.y + frustum[i][2] * p4.z + frustum[i][3];
+          d5:=frustum[i][0] * p5.x + frustum[i][1] * p5.y + frustum[i][2] * p5.z + frustum[i][3];
+          d6:=frustum[i][0] * p6.x + frustum[i][1] * p6.y + frustum[i][2] * p6.z + frustum[i][3];
+          d7:=frustum[i][0] * p7.x + frustum[i][1] * p7.y + frustum[i][2] * p7.z + frustum[i][3];
+          d8:=frustum[i][0] * p8.x + frustum[i][1] * p8.y + frustum[i][2] * p8.z + frustum[i][3];
+
+          if (d1<0)and(d2<0)and(d3<0)and(d4<0)and(d5<0)and(d6<0)and(d7<0)and(d8<0)
+          then
+              begin
+
+                   d1:=d2;
+                   if d1>d2 then halt(0);
+                   result:=irempty;
+                   system.exit;
+              end;
+          if d1>=0 then inc(count);
+          if d2>=0 then inc(count);
+          if d3>=0 then inc(count);
+          if d4>=0 then inc(count);
+          if d5>=0 then inc(count);
+          if d6>=0 then inc(count);
+          if d7>=0 then inc(count);
+          if d8>=0 then inc(count);
+      end;
+      if count=48 then
+                      begin
+                          result:=irfully;
+                          exit;
+                      end;
+
+      result:=IRPartially;
 end;
 function PointOf3PlaneIntersect(P1,P2,P3:DVector4D):GDBVertex;
 var

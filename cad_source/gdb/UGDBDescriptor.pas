@@ -65,7 +65,7 @@ const ls = $AAAA;
 type
 {EXPORT+}
 GDBObjTrash=object(GDBObjEntity)
-                 function GetHandle:GDBLongword;virtual;
+                 function GetHandle:GDBPlatformint;virtual;
                  function GetMatrix:PDMatrix4D;virtual;
                  constructor initnul;
                  destructor done;virtual;
@@ -686,8 +686,8 @@ begin
   FontManager.addFonf('normal.shx');
   FontManager.addFonf('gothice.shx');
   FontManager.addFonf('romant.shx');
-  //pbasefont:=FontManager.FindFonf('romant.shx');
-  pbasefont:=FontManager.FindFonf('gothice.shx');
+  pbasefont:=FontManager.FindFonf('romant.shx');
+  //pbasefont:=FontManager.FindFonf('gothice.shx');
   gdb.init;
   BlockBaseDWG:=gdb.CreateDWG;
   ClipboardDWG:=gdb.CreateDWG;

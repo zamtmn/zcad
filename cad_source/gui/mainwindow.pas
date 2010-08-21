@@ -649,6 +649,7 @@ procedure TMainFormN.idle;
 var
    pdwg:PTDrawing;
 begin
+     done:=false;
      pdwg:=gdb.GetCurrentDWG;
      if pdwg<>nil then
      begin
@@ -656,7 +657,10 @@ begin
           begin
                pdwg.OGLwindow1._onMouseMove(nil,pdwg.OGLwindow1.Fastmmshift,pdwg.OGLwindow1.Fastmmx,pdwg.OGLwindow1.Fastmmy);
                pdwg.OGLwindow1.Fastmmx:=-1;
-          end;
+          end
+          else
+              if  pdwg.pcamera.DRAWNOTEND then
+                                              pdwg.OGLwindow1.finishdraw;
      end;
      SysVar.debug.memi2:=memman.i2;
      if (SysVar.SAVE.SAVE_Auto_Current_Interval^<1)and(commandmanager.pcommandrunning=nil) then

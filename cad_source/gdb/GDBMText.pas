@@ -565,7 +565,7 @@ var
   pv3:GDBPolyVertex3D;
   minx,miny,maxx,maxy:GDBDouble;
 
-  lp:gdbvertex;
+  lp,tv:gdbvertex;
   plp,plp2:pgdbvertex;
   pswp:pGDBStrWithPoint;
       ir:itrec;
@@ -655,7 +655,10 @@ begin
     else
     begin
     //matr:=matrixmultiply(matr,objmatrix);
-    psymbol := GDBPointer(GDBPlatformint(pbasefont)+pgdbfont(pbasefont).symbolinfo[GDBByte(pswp^.str[i])].addr);
+
+      CreateSymbol(pswp^.str[i],matr,minx,miny,maxx,maxy);
+
+    (*psymbol := GDBPointer(GDBPlatformint(pbasefont)+pgdbfont(pbasefont).symbolinfo[GDBByte(pswp^.str[i])].addr);
     if pgdbfont(pbasefont)^.symbolinfo[GDBByte(pswp^.str[i])].size <> 0 then
       for j := 1 to pgdbfont(pbasefont)^.symbolinfo[GDBByte(pswp^.str[i])].size do
       begin
@@ -682,6 +685,10 @@ begin
 
               pv3.coord:=PGDBvertex(@v)^;
               pv3.count:=0;
+
+              tv:=pv3.coord;
+              pv3.len:=0;
+
               Vertex3D_in_WCS_Array.add(@pv3);
 
               //inc(psymbol, 2 * sizeof(GDBDouble));
@@ -704,6 +711,9 @@ begin
 
               pv3.coord:=PGDBvertex(@v)^;
               pv3.count:=0;
+
+              pv3.len:=round(SqrVertexlength(pv3.coord,tv));
+
               Vertex3D_in_WCS_Array.add(@pv3);
 
               //inc(psymbol, 2 * sizeof(GDBDouble));
@@ -733,6 +743,10 @@ begin
 
               pv3.coord:=PGDBvertex(@v)^;
               pv3.count:=len;
+
+              tv:=pv3.coord;
+              pv3.len:=0;
+
               Vertex3D_in_WCS_Array.add(@pv3);
 
               //inc(psymbol, 2 * sizeof(GDBDouble));
@@ -759,6 +773,8 @@ begin
 
               pv3.coord:=PGDBvertex(@v)^;
               pv3.count:=-1;
+              pv3.len:=2*round(SqrVertexlength(pv3.coord,tv));
+              tv:=pv3.coord;
               Vertex3D_in_WCS_Array.add(@pv3);
 
 
@@ -767,7 +783,7 @@ begin
               end;
             end;
         end;
-      end;
+      end;*)
       matr:=m1;
       FillChar(m1, sizeof(DMatrix4D), 0);
   m1[0, 0] := 1;

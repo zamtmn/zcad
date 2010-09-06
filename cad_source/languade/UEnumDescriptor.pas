@@ -30,7 +30,7 @@ EnumDescriptor=object(TUserTypeDescriptor)
                      constructor init(size:GDBInteger;tname:string;pu:pointer);
                      procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
                      function CreateProperties(PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
-                     function CreateEditor(owner:TObject;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):GDBPointer;virtual;
+                     function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
                      function GetNumberInArrays(addr:GDBPointer;var number:GDBLongword):GDBBoolean;virtual;
                      function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                      function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;

@@ -32,6 +32,9 @@ type
                           hrc: {HGLRC}thandle;
                           dc:HDC;
                     end;
+var
+   CurrentCamCSOffset:GDBvertex;
+   notuseLCS:GDBBOOLEAN;
 
 procedure SetDCPixelFormat(oglc:TOGLContextDesk);
 function isOpenGLError:GLenum;
@@ -78,30 +81,45 @@ end;
 procedure processpoint(const point:gdbvertex);
 begin
      inc(pointcount);
-     middlepoint:=geometry.VertexAdd(middlepoint,point);
+     //middlepoint:=geometry.VertexAdd(middlepoint,point);
 end;
 
 procedure myglVertex3dV;
 var t:gdbvertex;
 begin
-     processpoint(v^);
-     t:=vertexadd(v^,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
-     glVertex3dV(@t);
+     {$IFDEF DEBUGCOUNTGEOMETRY}processpoint(v^);{$ENDIF}
+     if notuseLCS then
+                      glVertex3dV(pointer(v))
+                  else
+                      begin
+                           t:=vertexadd(v^,CurrentCamCSOffset);
+                           glVertex3dV(@t);
+                      end;
 end;
 procedure myglVertex3d;
 var t:gdbvertex;
 begin
-     processpoint(v);
-     t:=vertexadd(v,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
-     glVertex3dv(@t);
+     {$IFDEF DEBUGCOUNTGEOMETRY}processpoint(v);{$ENDIF}
+     if notuseLCS then
+                      glVertex3dV(@v)
+                  else
+                      begin
+                           t:=vertexadd(v,CurrentCamCSOffset);
+                           glVertex3dv(@t);
+                      end;
 end;
 procedure myglVertex;
 var t,t1:gdbvertex;
 begin
      t1:=createvertex(x,y,z);
-     processpoint(t1);
-     t:=vertexadd(t1,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
-     glVertex3dv(@t);
+     {$IFDEF DEBUGCOUNTGEOMETRY}processpoint(t1);{$ENDIF}
+     if notuseLCS then
+                      glVertex3dV(@t1)
+                  else
+                      begin
+                           t:=vertexadd(t1,CurrentCamCSOffset);
+                           glVertex3dv(@t);
+                      end;
 end;
 function CalcDisplaySubFrustum(x,y,w,h:gdbdouble;const mm,pm:DMatrix4D):ClipArray;
 var
@@ -131,7 +149,7 @@ begin
 end;
 procedure myglbegin(mode:GLenum);
 begin
-     inc(primcount);
+     {$IFDEF DEBUGCOUNTGEOMETRY}inc(primcount);{$ENDIF}
      inc(bcount);
      if bcount>1 then
                      asm

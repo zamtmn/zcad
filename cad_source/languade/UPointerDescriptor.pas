@@ -32,7 +32,7 @@ GDBPointerDescriptor=object(TUserTypeDescriptor)
                      function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      procedure Format;virtual;
                      function GetTypeAttributes:TTypeAttr;virtual;
-                     function CreateEditor(owner:TObject;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):GDBPointer;virtual;
+                     function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
                      destructor Done;virtual;
                end;
 const PAssigned:gdbpointer=nil;
@@ -50,7 +50,7 @@ function GDBPointerDescriptor.CreateEditor;
 begin
      if assigned(TypeOf)and assigned(pointer(pinstance^)) then
 
-     result:=TypeOf^.CreateEditor(owner,x,y,w,h,pointer(pinstance^),nil)
+     result:=TypeOf^.CreateEditor(theowner,x,y,w,h,pointer(pinstance^),nil)
 end;
 function GDBPointerDescriptor.Serialize;
 var //pd:PFieldDescriptor;

@@ -25,7 +25,7 @@ uses
   strproc,umytreenode,types,graphics,
   StdCtrls,ExtCtrls,ComCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype{$ENDIF},fileutil,
 
-  gdbasetypes,SysUtils,shared,
+  gdbasetypes,SysUtils,shared,sharedgdb,
   gdbase,{OGLtypes,} io{,UGDBOpenArrayOfByte,varman},varmandef,UGDBDescriptor{,UGDBOpenArrayOfPV},
   {zforms,ZComboBoxsWithProc,ZEditsWithProcedure,log,gdbcircle,}memman{,zbasicvisible,zguisct},TypeDescriptors{,commctrl};
 const
@@ -48,7 +48,7 @@ type
     //so,br,tbr:thandle;
     pcurrobj,pdefaultobj:GDBPointer;
     currobjgdbtype,defaultobjgdbtype:PUserTypeDescriptor;
-    PEditor:Tobject;
+    PEditor:TPropEditor;
     PDA:TPropertyDeskriptorArray;
     namecol:GDBInteger;
     contentheigth,startdrawy:GDBInteger;
@@ -73,13 +73,16 @@ type
     procedure setptr(exttype:PUserTypeDescriptor; addr:GDBPointer);
     procedure updateINSP;
     procedure rebuild;
-    procedure Notify(Sender:TObject; msg:integer); virtual;
+    procedure Notify(Sender: TObject;Command:TMyNotifyCommand); virtual;
     procedure createpda;
     destructor done; virtual;
     procedure createscrollbars;virtual;
     procedure scroll;virtual;
     procedure AfterConstruction; override;
     procedure EraseBackground(DC: HDC); override;
+
+    procedure freeeditor;
+    procedure asyncfreeeditor(Data: PtrInt);
 
     {LCL}
   //procedure Pre_MouseMove(fwkeys:longint; x,y:GDBSmallInt; var r:HandledMsg); virtual;
@@ -437,27 +440,34 @@ begin
     curr := curr.next;
   until (curr = nil);}
 end;
+procedure TGDBobjinsp.freeeditor;
+begin
+     freeandnil(peditor);
+end;
+
+procedure TGDBobjinsp.asyncfreeeditor;
+begin
+     freeandnil(peditor);
+end;
 
 procedure TGDBobjinsp.Notify;
 var
    pld:GDBPointer;
 begin
-  (*
   if sender=peditor then
   begin
-    pld:=peditor^.GetLincedData;
+    //pld:=peditor^.GetLincedData;
     if GDBobj then
       //PGDBaseObject(pcurrobj)^.format;
       PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(pld,{self.pcurrobj,}self.currobjgdbtype);
 
+    Application.QueueAsyncCall(asyncfreeeditor, 0);
+
     redrawoglwnd;
     self.updateinsp;
-    //setptr(currobjgdbtype,pcurrobj);
-
-    shared.updatevisible;
+    updatevisible;
     //MainForm.ReloadLayer(@gdb.GetCurrentDWG.LayerTable);
   end;
-  *)
 end;
 procedure TGDBobjinsp.scroll;
 //var si:scrollinfo;
@@ -623,6 +633,7 @@ begin
   begin
     if peditor<>nil then
                         begin
+                          freeandnil(peditor);
                         //-----------------------------------------------------------------peditor^.done;
                         //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
                         end;
@@ -642,6 +653,8 @@ begin
     begin
       tp:=pcurrobj;
       GDBobjinsp.buildproplist(currobjgdbtype,property_correct,tp);
+
+      freeandnil(peditor);
       //-----------------------------------------------------------------peditor^.done;
       //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
       ppropcurrentedit:=pp;
@@ -668,10 +681,11 @@ begin
          until pobj=nil;
          vsa.sort;
     end;
-    PEditor:=pp^.PTypeManager^.CreateEditor(@self,{namecol-6}pp^.x1,{my}pp^.y1,{clientwidth-namecol+3}pp^.x2-pp^.x1,{rowh}pp^.y2-pp^.y1,pp^.valueAddres,@vsa);
+    PEditor:=pp^.PTypeManager^.CreateEditor(self,{namecol-6}pp^.x1,{my}pp^.y1,{clientwidth-namecol+3}pp^.x2-pp^.x1,{rowh}pp^.y2-pp^.y1,pp^.valueAddres,@vsa);
     vsa.done;
-    if PEditor<>nil then
+    if assigned(PEditor){<>nil} then
     begin
+         peditor.OwnerNotify:=self.Notify;
       //-----------------------------------------------------------------PEditor^.SetFocus;
       //-----------------------------------------------------------------PEditor^.show;
       //-----------------------------------------------------------------PEditor^.SetFocus;

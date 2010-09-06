@@ -99,7 +99,7 @@ begin
   RD_BackGroundColor.a:=255;
   RD_Restore_Mode:=WND_Texture;
   RD_LastRenderTime:=0;
-  RD_MaxRenderTime:=200;
+  RD_MaxRenderTime:=0;
   SAVE_Auto_Interval:=300;
   SAVE_Auto_Current_Interval:=274;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';

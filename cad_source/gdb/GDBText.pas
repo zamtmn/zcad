@@ -40,6 +40,7 @@ GDBObjText=object(GDBObjAbstractText)
                  procedure getoutbound;virtual;
                  procedure Format;virtual;
                  procedure createpoint;virtual;
+                 procedure CreateSymbol(_symbol:char;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble);
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  destructor done;virtual;
@@ -343,6 +344,154 @@ begin
        PProjoutbound^.init({$IFDEF DEBUGBUILD}'{AB29B448-057C-4018-BC57-E8C67A3765AF}',{$ENDIF}4);
   end;
 end;
+procedure GDBObjText.CreateSymbol(_symbol:char;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble);
+var
+  psymbol: GDBPointer;
+  i, j, k: GDBInteger;
+  len: GDBWord;
+  //matr,m1: DMatrix4D;
+  v:GDBvertex4D;
+  pv:GDBPolyVertex2D;
+  pv3:GDBPolyVertex3D;
+
+  plp,plp2:pgdbvertex;
+  lp,tv:gdbvertex;
+  pl:GDBPoint3DArray;
+  ispl:gdbboolean;
+  ir:itrec;
+begin
+  psymbol := GDBPointer(GDBPlatformint(pbasefont)+ pgdbfont(pbasefont).symbolinfo[GDBByte(_symbol)].addr);
+  if pgdbfont(pbasefont)^.symbolinfo[GDBByte(_symbol)].size <> 0 then
+    for j := 1 to pgdbfont(pbasefont)^.symbolinfo[GDBByte(_symbol)].size do
+    begin
+      case GDBByte(psymbol^) of
+        2:
+          begin
+            inc(pGDBByte(psymbol), sizeof(GDBLineID));
+            PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
+            inc(pfontfloat(psymbol));
+            PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
+            inc(pfontfloat(psymbol));
+            v.z:=0;
+            v.w:=1;
+            v:=VectorTransform(v,matr);
+            pv.coord:=PGDBvertex2D(@v)^;
+            pv.count:=0;
+
+            if v.x<minx then minx:=v.x;
+            if v.y<miny then miny:=v.y;
+            if v.x>maxx then maxx:=v.x;
+            if v.y>maxy then maxy:=v.y;
+
+            v:=VectorTransform(v,objmatrix);
+
+            pv3.coord:=PGDBvertex(@v)^;
+
+            tv:=pv3.coord;
+            pv3.len:=0;
+
+            pv3.count:=0;
+            Vertex3D_in_WCS_Array.add(@pv3);
+
+            //inc(pGDBByte(psymbol), 2 * sizeof(GDBDouble));
+            PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
+            inc(pfontfloat(psymbol));
+            PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
+            inc(pfontfloat(psymbol));
+            v.z:=0;
+            v.w:=1;
+            v:=VectorTransform(v,matr);
+
+            if v.x<minx then minx:=v.x;
+            if v.y<miny then miny:=v.y;
+            if v.x>maxx then maxx:=v.x;
+            if v.y>maxy then maxy:=v.y;
+
+
+            v:=VectorTransform(v,objmatrix);
+            pv3.coord:=PGDBvertex(@v)^;
+            pv3.count:=0;
+
+            pv3.len:=round(SqrVertexlength(pv3.coord,tv));
+
+            Vertex3D_in_WCS_Array.add(@pv3);
+
+
+            pv.coord:=PGDBvertex2D(@v)^;
+            pv.count:=0;
+            //inc(pGDBByte(psymbol), 2 * sizeof(GDBDouble));
+          end;
+        4:
+          begin
+            inc(pGDBByte(psymbol), sizeof(GDBPolylineID));
+            len := GDBWord(psymbol^);
+            inc(pGDBByte(psymbol), sizeof(GDBWord));
+            PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
+            inc(pfontfloat(psymbol));
+            PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
+            inc(pfontfloat(psymbol));
+            v.z:=0;
+            v.w:=1;
+            v:=VectorTransform(v,matr);
+            pv.coord:=PGDBvertex2D(@v)^;
+            pv.count:=len;
+
+            if v.x<minx then minx:=v.x;
+            if v.y<miny then miny:=v.y;
+            if v.x>maxx then maxx:=v.x;
+            if v.y>maxy then maxy:=v.y;
+
+
+            v:=VectorTransform(v,objmatrix);
+            pv3.coord:=PGDBvertex(@v)^;
+            pv3.count:=len;
+
+            tv:=pv3.coord;
+            pv3.len:=0;
+
+            Vertex3D_in_WCS_Array.add(@pv3);
+
+
+            //inc(pGDBByte(psymbol), 2 * sizeof(GDBDouble));
+            k := 1;
+            while k < len do //for k:=1 to len-1 do
+            begin
+            PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
+            inc(pfontfloat(psymbol));
+            PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
+            inc(pfontfloat(psymbol));
+            v.z:=0;
+            v.w:=1;
+
+            v:=VectorTransform(v,matr);
+
+            if v.x<minx then minx:=v.x;
+            if v.y<miny then miny:=v.y;
+            if v.x>maxx then maxx:=v.x;
+            if v.y>maxy then maxy:=v.y;
+
+
+            v:=VectorTransform(v,objmatrix);
+            pv.coord:=PGDBvertex2D(@v)^;
+            pv.count:=-1;
+
+            pv3.coord:=PGDBvertex(@v)^;
+            pv3.count:={-1}k-len+1;
+
+            pv3.len:=2*round(SqrVertexlength(pv3.coord,tv));
+            tv:=pv3.coord;
+
+            Vertex3D_in_WCS_Array.add(@pv3);
+
+
+            //inc(pGDBByte(psymbol), 2 * sizeof(GDBDouble));
+            inc(k);
+            end;
+          end;
+      end;
+    end;
+  end;
+
 procedure GDBObjText.createpoint;
 var
   psymbol: GDBPointer;
@@ -356,7 +505,7 @@ var
   minx,miny,maxx,maxy:GDBDouble;
 
   plp,plp2:pgdbvertex;
-  lp:gdbvertex;
+  lp,tv:gdbvertex;
   pl:GDBPoint3DArray;
   ispl:gdbboolean;
   ir:itrec;  
@@ -365,7 +514,7 @@ begin
   pl.init({$IFDEF DEBUGBUILD}'{AC324582-5E55-4290-8017-44B8C675198A}',{$ENDIF}10);
   Vertex3D_in_WCS_Array.clear;
 
-    minx:=+infinity;
+  minx:=+infinity;
   miny:=+infinity;
   maxx:=-infinity;
   maxy:=-infinity;
@@ -394,7 +543,8 @@ begin
     end
     else
     begin
-    psymbol := GDBPointer(GDBPlatformint(pbasefont)+ pgdbfont(pbasefont).symbolinfo[GDBByte(content[i])].addr);
+      CreateSymbol(content[i],matr,minx,miny,maxx,maxy);
+(*    psymbol := GDBPointer(GDBPlatformint(pbasefont)+ pgdbfont(pbasefont).symbolinfo[GDBByte(content[i])].addr);
     if pgdbfont(pbasefont)^.symbolinfo[GDBByte(content[i])].size <> 0 then
       for j := 1 to pgdbfont(pbasefont)^.symbolinfo[GDBByte(content[i])].size do
       begin
@@ -420,6 +570,10 @@ begin
               v:=VectorTransform(v,objmatrix);
 
               pv3.coord:=PGDBvertex(@v)^;
+
+              tv:=pv3.coord;
+              pv3.len:=0;
+
               pv3.count:=0;
               Vertex3D_in_WCS_Array.add(@pv3);
 
@@ -441,6 +595,8 @@ begin
               v:=VectorTransform(v,objmatrix);
               pv3.coord:=PGDBvertex(@v)^;
               pv3.count:=0;
+
+              pv3.len:=round(SqrVertexlength(pv3.coord,tv));
 
               Vertex3D_in_WCS_Array.add(@pv3);
 
@@ -474,6 +630,9 @@ begin
               pv3.coord:=PGDBvertex(@v)^;
               pv3.count:=len;
 
+              tv:=pv3.coord;
+              pv3.len:=0;
+
               Vertex3D_in_WCS_Array.add(@pv3);
 
 
@@ -502,6 +661,10 @@ begin
 
               pv3.coord:=PGDBvertex(@v)^;
               pv3.count:=-1;
+
+              pv3.len:=2*round(SqrVertexlength(pv3.coord,tv));
+              tv:=pv3.coord;
+
               Vertex3D_in_WCS_Array.add(@pv3);
 
 
@@ -510,7 +673,7 @@ begin
               end;
             end;
         end;
-      end;
+      end;*)
     end;
       FillChar(m1, sizeof(DMatrix4D), 0);
   m1[0, 0] := 1;

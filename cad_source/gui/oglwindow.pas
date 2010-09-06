@@ -22,6 +22,13 @@ unit oglwindow;
 interface
 
 uses
+
+
+  {$IFDEF LCLGTK2}
+  x,xlib,{x11,}xutil,
+  gtk2,gdk2,gdk2x,
+  {$ENDIF}
+
   LCLType,InterfaceBase,
   umytreenode,menus,Classes,{ SysUtils,} FileUtil,{ LResources,}LMessages, Forms,
   stdctrls, ExtCtrls, ComCtrls,Toolwin, Controls, {Graphics, Dialogs,}
@@ -43,7 +50,7 @@ const
 
   ontracdist=10;
   ontracignoredist=25;
-  texturesize=256;
+  texturesize=128;
   maxmybufer=99;
 type
   tmyscrbuf = array [0..maxmybufer] of GLuint;
@@ -57,6 +64,7 @@ type
     procedure CalcMouseFrustum;
   public
     OTTimer:TTimer;
+    //OMMTimer:TTimer;
     PolarAxis:GDBPoint3dArray;
     param: OGLWndtype;
 
@@ -91,6 +99,7 @@ type
     procedure SetOTrackTimer(Sender: TObject);
     procedure KillOTrackTimer(Sender: TObject);
     procedure ProcOTrackTimer(Sender:TObject);
+    //procedure runonmousemove(Sender:TObject);
     procedure projectaxis;
     procedure project0axis;
     procedure reprojectaxis;
@@ -110,6 +119,7 @@ type
     procedure SetObjInsp;
 
     procedure draw;virtual;
+    procedure drawdebuggeometry;
     procedure finishdraw;virtual;
     procedure SaveBuffers;virtual;
     procedure RestoreBuffers;virtual;
@@ -233,6 +243,10 @@ begin
      beforeinit;
      self.Cursor:=crNone;
      OTTimer:=TTimer.create(self);
+     {OMMTimer:=TTimer.create(self);
+     OMMTimer.Interval:=10;
+     OMMTimer.OnTimer:=runonmousemove;
+     OMMTimer.Enabled:=true;}
 end;
 procedure TOGLWnd.SetMouseMode(smode:GDBByte);
 begin
@@ -614,7 +628,8 @@ begin
 
 
   SetOGLMatrix;
-
+  OGLSpecFunc.CurrentCamCSOffset:=gdb.GetCurrentDWG.pcamera^.CamCSOffset;
+  OGLSpecFunc.notuseLCS:=gdb.GetCurrentDWG.pcamera^.notuseLCS;
     {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.CalcOptimalMatrix----{end}',lp_DecPos);{$ENDIF}
   //gdb.GetCurrentDWG.pcamera.getfrustum(@gdb.GetCurrentDWG.pcamera^.modelMatrixLCS,@gdb.GetCurrentDWG.pcamera^.projMatrixLCS,gdb.GetCurrentDWG.pcamera^.clipLCS,gdb.GetCurrentDWG.pcamera^.frustumLCS);
 end;
@@ -878,11 +893,51 @@ begin
   end
 end;
 procedure TOGLWnd._onFastMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
+var dx,dy:integer;
+  {$IFDEF LCLGTK2}Widget: PGtkWidget;{$ENDIF}
 begin
-     FastMMShift:=shift;
+     (*if FastMMX>0 then
+                      begin
+                           dx:=x-FastMMX;
+                           dy:=y-FastMMY;
+                           dx:=dx*dx+dy*dy;
+                           if dx>16 then
+                                      begin
+                                      _onMouseMove(nil,FastMMShift,FastMMX,FastMMY);
+                                      {FastMMX:=-1;
+                                      FastMMY:=-1;
+                                      exit;}
+                                      end;
+                      end;*)
+
+(*
+  {$IFDEF LCLGTK2}
+  Widget:=PGtkWidget(PtrUInt(Handle));
+  FastMMX:=XPending(GDK_WINDOW_XDISPLAY(PGtkWidget(Widget)^.window));
+  if sysvar.debug.memi2<fastmmx then
+                                    sysvar.debug.memi2:=fastmmx;
+  if FastMMX=0 then{$ENDIF}
+*)
+
+     _onMouseMove(nil,shift,X,Y);
+
+     FastMMX:=-1;
+
+
+     {FastMMShift:=shift;
      FastMMX:=X;
-     FastMMY:=Y;
+     FastMMY:=Y;}
+
 end;
+{procedure  TOGLWnd.runonmousemove(Sender:TObject);
+begin
+     if FastMMX>0 then
+     begin
+     _onMouseMove(nil,FastMMShift,FastMMX,FastMMY);
+     FastMMX:=-1;
+
+     end;
+end;}
 
 procedure TOGLWnd._onMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
 //procedure TOGLWnd.Pre_MouseMove;
@@ -1110,7 +1165,8 @@ end;
 
 
   SBTextOut(htext);
-  {repaint;}draw;//paint;
+  //param.firstdraw:=true;
+  {repaint;//}draw;//paint;
   inc(sysvar.debug.int1);
   //debugvar(Variables,1);
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove----{end}',lp_decPos);{$ENDIF}
@@ -1868,6 +1924,7 @@ procedure TOGLWnd.SaveBuffers;
   var
     scrx,scry,texture{,e}:integer;
 begin
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SaveBuffers',lp_incPos);{$ENDIF};
   glEnable(GL_TEXTURE_2D);
 
    scrx:=0;
@@ -1888,11 +1945,13 @@ begin
 
 
   glDisable(GL_TEXTURE_2D);
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SaveBuffers----{end}',lp_decPos);{$ENDIF}
 end;
 procedure TOGLWnd.RestoreBuffers;
   var
     scrx,scry,texture{,e}:integer;
 begin
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers',lp_incPos);{$ENDIF};
   glEnable(GL_TEXTURE_2D);
   glDisable(GL_DEPTH_TEST);
        glMatrixMode(GL_PROJECTION);
@@ -1934,6 +1993,7 @@ begin
        glMatrixMode(GL_PROJECTION);
        glPopMatrix;
        glMatrixMode(GL_MODELVIEW);
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers----{end}',lp_decPos);{$ENDIF}
 end;
 procedure TOGLWnd.finishdraw;
   var
@@ -1947,6 +2007,12 @@ begin
      self.SaveBuffers;
      self.showcursor;
      self.SwapBuffers;
+end;
+procedure TOGLWnd.drawdebuggeometry;
+begin
+
+
+
 end;
 
 procedure TOGLWnd.draw;
@@ -2164,6 +2230,8 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     glStencilFunc(GL_EQUAL,0,1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
+    drawdebuggeometry;
+
     if (sysvar.DWG.DWG_SystmGeometryDraw^) then
                                                gdb.GetCurrentROOT^.ObjTree.draw;
                                            //else
@@ -2200,7 +2268,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
   end
   else
   begin
-       self.RestoreBuffers;
+    self.RestoreBuffers;
     inc(param.subrender);
     if gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count>0 then
                                                     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count:=gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count;
@@ -2228,7 +2296,8 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
 
   //------------------------------------------------------------------MySwapBuffers(OGLContext);//SwapBuffers(DC);
 
-  //glFinish;
+  {glFlush;
+  glFinish;}
   self.SwapBuffers;
 
 
@@ -2275,6 +2344,7 @@ begin
      currtime:=now;
      decodetime(currtime-StartTime,Hour,Minute,Second,MilliSecond);
      if assigned(sysvar.RD.RD_MaxRenderTime) then
+     if (sysvar.RD.RD_MaxRenderTime^<>0) then
      if (sysvar.RD.RD_MaxRenderTime^-MilliSecond)<0 then
                             begin
                                   result:=true;
@@ -2972,8 +3042,23 @@ begin
 end;
 
 procedure TOGLWnd.initogl;
+{$IFDEF LCLGTK2}var Widget: PGtkWidget;{$ENDIF}
 begin
   programlog.logoutstr('TOGLWnd.InitOGL',lp_IncPos);
+
+  {$IFDEF LCLGTK2}
+  Widget:=PGtkWidget(PtrUInt(Handle));
+  gtk_widget_add_events (Widget,GDK_POINTER_MOTION_HINT_MASK);
+
+
+  {FastMMX:=XPending(GDK_WINDOW_XDISPLAY(PGtkWidget(Widget)^.window));
+  if sysvar.debug.memi2<fastmmx then
+                                    sysvar.debug.memi2:=fastmmx;
+  if FastMMX=0 then}{$ENDIF}
+
+
+
+
   //------------------------------------------------------------------------releaseDC(dc,self.Handle{handle}{thdc});
   MywglDeleteContext(OGLContext);//wglDeleteContext(hrc);
 

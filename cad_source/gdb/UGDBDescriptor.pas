@@ -686,6 +686,7 @@ begin
   FontManager.addFonf('normal.shx');
   FontManager.addFonf('gothice.shx');
   FontManager.addFonf('romant.shx');
+  //pbasefont:=FontManager.FindFonf('normal.shx');
   pbasefont:=FontManager.FindFonf('romant.shx');
   //pbasefont:=FontManager.FindFonf('gothice.shx');
   gdb.init;

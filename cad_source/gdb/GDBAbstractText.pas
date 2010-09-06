@@ -407,16 +407,35 @@ begin
   DrawMatrix:=MatrixMultiply(DrawMatrix,m2);
 end;
 procedure GDBObjAbstractText.DrawGeometry;
+var
+   _lod:integer;
 begin
+  //exit;
   glpointsize(1);
   GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender + 1;
-  if (((not GDB.GetCurrentDWG.OGLwindow1.param.scrollmode)or(not sysvar.RD.RD_PanObjectDegradation^)) and (lod=0))
+  if true//(((not GDB.GetCurrentDWG.OGLwindow1.param.scrollmode)or(not sysvar.RD.RD_PanObjectDegradation^)) {and (lod=0)})
   then
       begin
-           Vertex3D_in_WCS_Array.drawgeometry;
-           myglbegin(gl_points);
+           _lod:=round({self.textprop.size/}10*GDB.GetCurrentDWG.OGLwindow1.param.zoom*GDB.GetCurrentDWG.OGLwindow1.param.zoom+1);
+           if ((self.textprop.size/GDB.GetCurrentDWG.OGLwindow1.param.zoom)>2) then
+                                                                                   //Vertex3D_in_WCS_Array.simpledrawgeometry({_lod}3)
+                                                                                   //Vertex3D_in_WCS_Array.drawgeometry
+                                                                                   Vertex3D_in_WCS_Array.drawgeometry
+                                                                               else
+                                                                                   Vertex3D_in_WCS_Array.drawgeometry;
+                                                                                   //Vertex3D_in_WCS_Array.simpledrawgeometry(_lod);
+                                                                                   //Vertex3D_in_WCS_Array.simpledrawgeometry(4);
+                                                                                     {begin
+                                                                                           myglbegin(gl_line_loop);
+                                                                                           myglvertex3dv(@outbound[0]);
+                                                                                           myglvertex3dv(@outbound[1]);
+                                                                                           myglvertex3dv(@outbound[2]);
+                                                                                           myglvertex3dv(@outbound[3]);
+                                                                                           myglend;
+                                                                                      end;}
+           {myglbegin(gl_points);
            Vertex3D_in_WCS_Array.iterategl(@myglvertex3dv);
-           myglend;
+           myglend;}
       end
   else
   begin

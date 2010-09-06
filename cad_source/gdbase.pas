@@ -104,6 +104,7 @@ PGDBPolyVertex3D=^GDBPolyVertex3D;
 GDBPolyVertex3D=record
                       coord:GDBvertex;
                       count:GDBInteger;
+                      len:GDBInteger;
                 end;
 PGDBvertex2S=^GDBvertex2S;
 GDBvertex2S=record

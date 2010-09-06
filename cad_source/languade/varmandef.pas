@@ -22,7 +22,8 @@ unit varmandef;
 interface
 uses SysUtils,UGDBTree,UGDBStringArray,gdbobjectsconstdef,strutils,gdbasetypes,log,
   UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,gdbase,UGDBOpenArrayOfData,
-  memman,UGDBOpenArrayOfPObjects;
+  memman,UGDBOpenArrayOfPObjects,
+  Classes,Controls,StdCtrls;
 const
   {Ttypenothing=-1;
   Ttypecustom=1;
@@ -88,6 +89,19 @@ TOIProps=record
                ci,barpos:GDBInteger;
          end;
 pvardesk = ^vardesk;
+TMyNotifyCommand=(TMNC_EditingDone);
+TMyNotifyProc=procedure (Sender: TObject;Command:TMyNotifyCommand) of object;
+TPropEditor=class(TComponent)
+                 public
+                 PInstance:GDBPointer;
+                 PTD:PUserTypeDescriptor;
+                 OwnerNotify:TMyNotifyProc;
+                 constructor Create(AOwner:TComponent;_PInstance:GDBPointer;_PTD:PUserTypeDescriptor);
+                 procedure EditingDone(Sender: TObject);
+            end;
+
+TPropEditorOwner=TWinControl;
+
 UserTypeDescriptor=object(GDBaseObject)
                          SizeInGDBBytes:GDBInteger;
                          TypeName:String;
@@ -95,7 +109,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          OIP:TOIProps;
                          Collapsed:GDBBoolean;
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
-                         function CreateEditor(owner:TObject;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):GDBPointer;virtual;
+                         function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
                          procedure ApplyOperator(oper,path:GDBString;var offset:GDBLongword;var tc:PUserTypeDescriptor);virtual;abstract;
                          function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
                          function SerializePreProcess(Value:GDBString;sub:integer):GDBString;virtual;
@@ -289,6 +303,21 @@ var
   date:TDateTime;
 implementation
 //uses ugdbdescriptor;
+
+constructor TPropEditor.Create(AOwner:TComponent;_PInstance:GDBPointer;_PTD:PUserTypeDescriptor);
+begin
+     inherited create(AOwner);
+     PInstance:=_PInstance;
+     PTD:=_PTD;
+end;
+procedure TPropEditor.EditingDone(Sender: TObject);
+begin
+     ptd.SetValueFromString(PInstance,tedit(sender).text);
+
+     if assigned(OwnerNotify) then
+                                  OwnerNotify(self,TMNC_EditingDone);
+end;
+
 procedure UserTypeDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);
 begin
      membuf.TXTAddGDBStringEOL(prefix+':='+{pvd.data.PTD.}GetValueAsString(PInstance)+';');

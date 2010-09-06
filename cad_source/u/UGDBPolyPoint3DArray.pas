@@ -28,6 +28,7 @@ PGDBPolyPoint3DArray=^GDBPolyPoint3DArray;
 GDBPolyPoint3DArray=object(GDBOpenArrayOfData)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       procedure DrawGeometry;virtual;
+                      procedure SimpleDrawGeometry(const num:integer);virtual;
                       function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
                 end;
 {Export-}
@@ -254,15 +255,133 @@ var p:PGDBPolyVertex3D;
     counter,lines,points:GDBInteger;
     i:GDBInteger;
     v1,v2:gdbvertex;
+    ir:itrec;
     //emptycount:GDBInteger;
     //d:GDBDouble;
     //ptpv0,ptpv1:PGDBPolyVertex3D;
     //subresult:TInRect;
 begin
+
+  if count>1 then
+  begin
+  myglbegin(GL_LINES);
+  p:=parray;
+  for i:=0 to count-1 do
+  begin
+          {if p^.count>=0 then} myglvertex3dv(pointer(p));
+          if p^.count<0 then
+                            myglvertex3dv(pointer(p));
+     inc(p);
+  end;
+  myglend;
+
+  end;
+
+  (*p:=beginiterate(ir);
+  if p<>nil then
+  begin
+        myglbegin(GL_LINES);
+        repeat
+          {if p^.count>=0 then} myglvertex3dv(pointer(p));
+          if p^.count<0 then
+                            myglvertex3dv(pointer(p));
+          p:=iterate(ir);
+        until p=nil;
+        myglend;
+  end;*)
+  {myglbegin(GL_LINEs);
   if count<2 then exit;
   p:=parray;
   counter:=0;
   points:=-1;
+  for i:=0 to count-1 do
+  begin
+     if counter<=0
+     then
+         begin
+              if p^.count=0 then
+                                begin
+                                     if counter=0 then
+                                                      begin
+                                                      points:=0;
+                                                      lines:=1;
+                                                      end;
+                                end
+                              else
+                                  begin
+                                       points:=0;
+                                       lines:=0;
+                                       counter:=p^.count;
+                                  end;
+         end;
+     if points<>-1 then
+     begin
+     v1:=v2;
+     v2:=p^.coord;
+     inc(points);
+     end;
+     if points>=2 then
+     begin
+     begin
+     myglvertex3dv(@v1);
+     myglvertex3dv(@v2);
+     end;
+     if lines=1 then
+                    points:=0;
+     end;
+
+
+
+     inc(p);
+     dec(counter);
+     if (counter=0)then
+                       begin
+                            points:=-1;
+                       end;
+  end;
+  myglend;}
+end;
+procedure GDBPolyPoint3DArray.simpledrawgeometry(const num:integer);
+var p:PGDBPolyVertex3D;
+    totalcounter,counter,lines,points:GDBInteger;
+    i:GDBInteger;
+    v1,v2:gdbvertex;
+    ir:itrec;
+    //emptycount:GDBInteger;
+    //d:GDBDouble;
+    //ptpv0,ptpv1:PGDBPolyVertex3D;
+    //subresult:TInRect;
+begin
+
+  myglbegin(GL_LINE_strip);
+  myglvertex3dv(self.PArray);
+  myglvertex3dv(self.getelement(self.Count-1));
+  myglend;
+
+  {
+  myglbegin(GL_LINE_strip);
+  if count<num then exit;
+  p:=parray;
+  counter:=0;
+  points:=-1;
+  totalcounter:=0;
+  for i:=0 to count-1 do
+  begin
+     if (totalcounter mod num)=1 then
+     myglvertex3dv(@p^.coord);
+     inc(p);
+     inc(totalcounter);
+  end;
+  myglend;
+  }
+
+
+  {myglbegin(GL_LINEs);
+  if count<2 then exit;
+  p:=parray;
+  counter:=0;
+  points:=-1;
+  totalcounter:=0;
   for i:=0 to count-1 do
   begin
      if counter<=0
@@ -292,10 +411,17 @@ begin
      end;
      if points>=2 then
      begin
-     myglbegin(GL_LINEs);
-     myglvertex3dv(@v1);
-     myglvertex3dv(@v2);
-     myglend;
+     //myglbegin(GL_LINEs);
+     if 2<p^.len then
+     begin
+     //if (totalcounter mod num)=1 then
+     begin
+          myglvertex3dv(@v1);
+          myglvertex3dv(@v2);
+     end;
+     inc(totalcounter);
+     end;
+     //myglend;
      if lines=1 then
                     points:=0;
      end;
@@ -309,6 +435,7 @@ begin
                             points:=-1;
                        end;
   end;
+  myglend;}
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBPolyPoint3DArray.initialization');{$ENDIF}

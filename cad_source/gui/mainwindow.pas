@@ -69,7 +69,8 @@ type
                     rt:GDBInteger;
                     //hToolTip: HWND;
 
-                    procedure KeyPress(var Key: char);override;
+                    //procedure KeyPress(var Key: char);override;
+                    procedure myKeyPress(Sender: TObject; var Key: Word; Shift: TShiftState);
 
                     procedure ChangeCLayer(Sender:Tobject);
                     procedure ChangeCLineW(Sender:Tobject);
@@ -116,7 +117,9 @@ begin
      inherited;
 
      WindowState:=wsMaximized;
+     onkeydown:=mykeypress;
      KeyPreview:=true;
+
 
      ToolBarD:={TStatusBar}TToolBar.Create(self);
      ToolBarD.Height:=18;
@@ -607,35 +610,42 @@ begin
      GDBFreeMem(pointer(pmenu));
 end;}
 
-procedure TMainFormN.KeyPress(var Key: char);
+procedure TMainFormN.myKeyPress{(var Key: char)}(Sender: TObject; var Key: Word; Shift: TShiftState);
 //procedure TMainForm.Pre_Char;
 var
    ccg,tempkey:char;
 begin
+     //shared.HistoryOutStr(inttostr(key));
+     if (ActiveControl)<>cmdedit then
+     if (ActiveControl is tedit)
+     or (ActiveControl is tmemo)   then
+                                       exit;
+     tempkey:=chr(key);
+
      if assigned(gdb.GetCurrentDWG) then
      if assigned(gdb.GetCurrentDWG.OGLwindow1)then
-                    gdb.GetCurrentDWG.OGLwindow1.KeyPress(key);
-     if key<>#00 then
+                    gdb.GetCurrentDWG.OGLwindow1.KeyPress(tempkey);
+     if tempkey<>#00 then
      begin
-     tempkey:=key;
+     tempkey:=chr(key);
      if cmdedit.text='' then
      begin
-     if (commandmanager.pcommandrunning=nil)and(not(Key in ['A'..'Z']))and(ord(Key)>31) then
+     if (commandmanager.pcommandrunning=nil)and(not(chr(key) in ['a'..'Z']))and({ord}(Key)>31) then
      begin
-          ccg:=UPPERCASE(Key)[1];
-          key:=#00;
+          ccg:=UPPERCASE(chr(key))[1];
+          key:=00;
           case  ccg of
                       'C':commandmanager.executecommand('Copy');
                       'M':commandmanager.executecommand('Move');
                       'L':commandmanager.executecommand('Line');
                       else
-                          key:=tempkey;
+                          key:=ord(tempkey);
           end;
      end
-else if Key=#22 then
+else if (Key=86)and(shift=[ssctrl]) then
                    begin
                         commandmanager.executecommand('PasteClip');
-                        key:=#00;
+                        key:=00;
                    end
      end;
      end;
@@ -649,20 +659,23 @@ procedure TMainFormN.idle;
 var
    pdwg:PTDrawing;
 begin
-     done:=false;
+     done:=true;
      pdwg:=gdb.GetCurrentDWG;
      if pdwg<>nil then
      begin
           if pdwg.OGLwindow1.Fastmmx>=0 then
           begin
-               pdwg.OGLwindow1._onMouseMove(nil,pdwg.OGLwindow1.Fastmmshift,pdwg.OGLwindow1.Fastmmx,pdwg.OGLwindow1.Fastmmy);
-               pdwg.OGLwindow1.Fastmmx:=-1;
+               //pdwg.OGLwindow1._onMouseMove(nil,pdwg.OGLwindow1.Fastmmshift,pdwg.OGLwindow1.Fastmmx,pdwg.OGLwindow1.Fastmmy);
+               //pdwg.OGLwindow1.Fastmmx:=-1;
           end
           else
               if  pdwg.pcamera.DRAWNOTEND then
+                                              begin
                                               pdwg.OGLwindow1.finishdraw;
+                                              done:=false;
+                                              end;
      end;
-     SysVar.debug.memi2:=memman.i2;
+     //SysVar.debug.memi2:=memman.i2;
      if (SysVar.SAVE.SAVE_Auto_Current_Interval^<1)and(commandmanager.pcommandrunning=nil) then
      if (gdb.GetCurrentDWG)<>nil then
      if (gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount=0) then

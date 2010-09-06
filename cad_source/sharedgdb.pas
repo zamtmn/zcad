@@ -30,14 +30,20 @@ uses strproc,umytreenode,FileUtil,LCLclasses, LCLtype, LCLproc,forms,GDBBlockDef
      log,UGDBDescriptor,varmandef,sysinfo,cmdline,strutils,SysUtils{,zbasicvisible,ZGUIArrays},oglwindow{,ZTabControlsGeneric};
 
 procedure redrawoglwnd; export;
+var
+   pdwg:PTDrawing;
 begin
-  gdb.GetCurrentDWG.OGLwindow1.param.firstdraw := TRUE;
-  gdb.GetCurrentDWG.OGLwindow1.CalcOptimalMatrix;
-  gdb.GetCurrentDWG.pcamera^.totalobj:=0;
-  gdb.GetCurrentDWG.pcamera^.infrustum:=0;
+  pdwg:=gdb.GetCurrentDWG;
+  if pdwg<>nil then
+  begin
+  pdwg.OGLwindow1.param.firstdraw := TRUE;
+  pdwg.OGLwindow1.CalcOptimalMatrix;
+  pdwg.pcamera^.totalobj:=0;
+  pdwg.pcamera^.infrustum:=0;
   gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
-  gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
-  gdb.GetCurrentDWG.OGLwindow1.draw;
+  pdwg.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
+  pdwg.OGLwindow1.draw;
+  end;
   //gdb.GetCurrentDWG.OGLwindow1.repaint;
 end;
 procedure updatevisible; export;

@@ -126,7 +126,7 @@ begin
      result.BoundingBox:=aabb;
      result.pluscount:=0;
      result.minuscount:=0;
-     if (entitys.Count<=2000)or(nodecount>16) then
+     if (entitys.Count<=500)or(nodecount>30) then
                                                 begin
                                                      result.selected:=false;
                                                      if entitys.beginiterate(ir)<>nil then

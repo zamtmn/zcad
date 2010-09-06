@@ -80,6 +80,8 @@ uses
 //exports GDBGetMem,GDBFreeMem; {memman}
 //exports GetPZWinManager; {ZWinMan}
 
+{R *.res}
+
 {$R *.res}
 
 begin
@@ -147,3 +149,6 @@ begin
   programlog.done;
 
 end.
+
+
+

@@ -20,21 +20,23 @@ unit UBaseTypeDescriptor;
 {$INCLUDE def.inc}
 interface
 uses  strproc,log,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
-      varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,UGDBOpenArrayOfPointer,math;
+      varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,UGDBOpenArrayOfPointer,math,
+
+      StdCtrls;
 type
 PBaseTypeDescriptor=^BaseTypeDescriptor;
 BaseTypeDescriptor=object(TUserTypeDescriptor)
                          function CreateProperties(PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                          function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                          function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
-                         function CreateEditor(owner:TObject;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):GDBPointer;virtual;
+                         function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
                          procedure EditorChange(Sender:TObject);
                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
                    end;
 GDBBooleanDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
-                          function CreateEditor(owner:TObject;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):GDBPointer;virtual;
+                          function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
                           procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
                     end;
 GDBShortintDescriptor=object(BaseTypeDescriptor)
@@ -95,7 +97,7 @@ GDBPointerDescriptor=object(BaseTypeDescriptor)
 TEnumDataDescriptor=object(BaseTypeDescriptor)
                      constructor init;
                      procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
-                     function CreateEditor(owner:TObject;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):GDBPointer;virtual;
+                     function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
                      function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                      function CreateProperties(PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
@@ -230,22 +232,32 @@ var //num:cardinal;
    ps{,pspred}:pgdbstring;
 //   s:gdbstring;
    ir:itrec;
+   propeditor:TPropEditor;
+   edit:TEdit;
 begin
      result:=nil;
-     (*
      if psa^.count=0 then
                          begin
-                               gdbgetmem({$IFDEF DEBUGBUILD}'{926E1599-2B34-43FF-B9D5-885F4E37F2B3}',{$ENDIF}result,sizeof(ZEditWithProcedure));
+                               propeditor:=TPropEditor.Create(theowner,PInstance,@self);
+
+                               edit:=TEdit.Create(propeditor);
+                               edit.SetBounds(x,y,w,h);
+                               edit.Text:=GetValueAsString(pinstance);
+                               edit.OnEditingDone:=propeditor.EditingDone;
+                               edit.Parent:=theowner;
+
+                               result:=propeditor;
+                               (*gdbgetmem({$IFDEF DEBUGBUILD}'{926E1599-2B34-43FF-B9D5-885F4E37F2B3}',{$ENDIF}result,sizeof(ZEditWithProcedure));
                                PZEditWithProcedure(result).initxywh('',owner,x,y,w,h,true);
                                PZEditWithProcedure(result).LincedData:=pinstance;
                                PZEditWithProcedure(result)^.onenter:=EditorChange;
                                selectobject(PZComboBoxWithProc(result)^.DC, GetStockObject(ANSI_VAR_FONT));
                                PZEditWithProcedure(result).settext(GetValueAsString(pinstance));
-                               PZEditWithProcedure(result).changed:=false;
+                               PZEditWithProcedure(result).changed:=false;*)
                          end
                      else
                          begin
-                               gdbgetmem({$IFDEF DEBUGBUILD}'{926E1599-2B34-43FF-B9D5-885F4E37F2B3}',{$ENDIF}result,sizeof(ZEditWithProcedure));
+                              (* gdbgetmem({$IFDEF DEBUGBUILD}'{926E1599-2B34-43FF-B9D5-885F4E37F2B3}',{$ENDIF}result,sizeof(ZEditWithProcedure));
                                PZComboEdBoxWithProc(result).initxywh('',owner,x,y,w,h+500,true);
 
                                //PZComboEdBoxWithProc(result).setstyle(0,CBS_DROPDOWNLIST);
@@ -267,8 +279,8 @@ begin
                                //selectobject(PZComboBoxWithProc(result)^.DC, GetStockObject(ANSI_VAR_FONT));
                                PZComboEdBoxWithProc(result).settext(GetValueAsString(pinstance));
                                PZComboEdBoxWithProc(result).changed:=false;
+                               *)
                          end;
-      *)
 end;
 procedure BaseTypeDescriptor.EditorChange(Sender:Tobject);
 begin

@@ -2,11 +2,14 @@ del /S /F /Q *.~*;*.dcu;*.identcache;*.local;*.or;*.s;*.o;*.ppu;*.bak;*.tgs;*.tg
 del /S /F /Q cad\*.ppu;cad\*.o;cad\*.or;cad\*.a;cad\*.res;
 del /S /F /Q cad_source\dcu\*.res;cad_source\dcu\*.compiled;
 del /S /F /Q cad\log\*.log;
+del /S /F /Q cad\log\*.loghard;
 del /S /F /Q cad\autosave\*.dxf;
+del /S /F /Q cad\autosave\*.dbpas;
 del /S /F /Q cad\autosave\*.pas;
 rd cad_source\__history
 rd /S /Q cad_source\dcu\*.sl
 rd cad_source\backup
+rd cad_source\electroteh\backup\
 rd cad_source\devicebase\backup
 rd cad_source\utils\backup
 rd cad\rtl\backup

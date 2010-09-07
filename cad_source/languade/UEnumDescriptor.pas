@@ -20,7 +20,8 @@ unit UEnumDescriptor;
 {$INCLUDE def.inc}
 interface
 uses sysutils,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,TypeDescriptors,gdbasetypes,varmandef,gdbase,
-  UGDBOpenArrayOfData,UGDBStringArray,memman{,UGDBOpenArrayOfPointer};
+  UGDBOpenArrayOfData,UGDBStringArray,memman,
+  StdCtrls;
 type
 PEnumDescriptor=^EnumDescriptor;
 EnumDescriptor=object(TUserTypeDescriptor)
@@ -134,24 +135,27 @@ begin
 end;
 procedure EnumDescriptor.SetValueFromString(PInstance:GDBPointer;_Value:GDBstring);
 var //currval:GDBLongword;
-    p,pp:GDBPointer;
+    p,p2,pp:GDBPointer;
 //    found:GDBBoolean;
 //    i:GDBInteger;
-        ir,irr:itrec;
+        ir,ir2,irr:itrec;
 begin
      _value:=uppercase(_value);
      case SizeInGDBBytes of
                       1:begin
                              p:=SourceValue.beginiterate(ir);
+                             p2:=UserValue.beginiterate(ir2);
                              pp:=Value.beginiterate(irr);
                              if p<>nil then
                              repeat
-                             if _value=uppercase(pstring(p)^) then
+                             if (_value=uppercase(pstring(p)^))
+                             or (_value=uppercase(pstring(p2)^))then
                              begin
                                   pGDBByte(pinstance)^:=pbyte(pp)^;
                                   exit;
                              end;
                                    p:=SourceValue.iterate(ir);
+                                   p2:=UserValue.iterate(ir2);
                                    pp:=Value.iterate(irr);
                              until p=nil;
                       end;
@@ -189,10 +193,35 @@ begin
      *)
 end;
 function EnumDescriptor.CreateEditor;
-var num:cardinal;
-//    p:EnumDescriptor;
+var
+    cbedit:TComboBox;
+    propeditor:TPropEditor;
+    ir:itrec;
+    number:longword;
+    p:pgdbstring;
 begin
-     result:=nil
+     propeditor:=TPropEditor.Create(theowner,PInstance,@self);
+     cbedit:=TComboBox.Create(propeditor);
+     cbedit.SetBounds(x,y,w,h);
+     cbedit.Text:=GetValueAsString(pinstance);
+     //cbedit.OnEditingDone:=propeditor.EditingDone;
+     //cbedit.OnKeyPress:=propeditor.keyPress;
+     cbedit.OnChange:=propeditor.EditingProcess;
+     cbedit.ReadOnly:=true;
+
+                             p:=UserValue.beginiterate(ir);
+                             if p<>nil then
+                             repeat
+                                   cbedit.Items.Add(p^);
+                                   p:=UserValue.iterate(ir);
+                             until p=nil;
+
+     GetNumberInArrays(PInstance,number);
+     cbedit.ItemIndex:=number;
+
+     cbedit.Parent:=theowner;
+     cbedit.DroppedDown:=true;
+     result:=propeditor;
      (*
      gdbgetmem({$IFDEF DEBUGBUILD}'{926E1599-2B34-43FF-B9D5-885F4E37F2B3}',{$ENDIF}result,sizeof(ZComboBoxWithProc));
      PZComboBoxWithProc(result).initxywh('',owner,x,y,w,h+100,true);

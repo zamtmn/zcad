@@ -89,7 +89,7 @@ TOIProps=record
                ci,barpos:GDBInteger;
          end;
 pvardesk = ^vardesk;
-TMyNotifyCommand=(TMNC_EditingDone);
+TMyNotifyCommand=(TMNC_EditingDone,TMNC_EditingProcess);
 TMyNotifyProc=procedure (Sender: TObject;Command:TMyNotifyCommand) of object;
 TPropEditor=class(TComponent)
                  public
@@ -98,6 +98,9 @@ TPropEditor=class(TComponent)
                  OwnerNotify:TMyNotifyProc;
                  constructor Create(AOwner:TComponent;_PInstance:GDBPointer;_PTD:PUserTypeDescriptor);
                  procedure EditingDone(Sender: TObject);
+                 procedure EditingProcess(Sender: TObject);
+                 procedure keyPress(Sender: TObject; var Key: char);
+                 function geteditor:TWinControl;
             end;
 
 TPropEditorOwner=TWinControl;
@@ -310,6 +313,21 @@ begin
      PInstance:=_PInstance;
      PTD:=_PTD;
 end;
+function TPropEditor.geteditor:TWinControl;
+begin
+     tobject(result):=(self.Components[0]);
+end;
+
+procedure TPropEditor.keyPress(Sender: TObject; var Key: char);
+begin
+     if key=#13 then
+                    if assigned(OwnerNotify) then
+                                                 begin
+                                                      ptd.SetValueFromString(PInstance,tedit(sender).text);
+                                                      OwnerNotify(self,TMNC_EditingDone);
+                                                 end;
+end;
+
 procedure TPropEditor.EditingDone(Sender: TObject);
 begin
      ptd.SetValueFromString(PInstance,tedit(sender).text);
@@ -317,6 +335,15 @@ begin
      if assigned(OwnerNotify) then
                                   OwnerNotify(self,TMNC_EditingDone);
 end;
+procedure TPropEditor.EditingProcess(Sender: TObject);
+begin
+     if assigned(OwnerNotify) then
+                                  begin
+                                        ptd.SetValueFromString(PInstance,tedit(sender).text);
+                                        OwnerNotify(self,TMNC_EditingProcess);
+                                  end;
+end;
+
 
 procedure UserTypeDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);
 begin

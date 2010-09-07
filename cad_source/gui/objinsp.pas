@@ -458,10 +458,9 @@ begin
   begin
     //pld:=peditor^.GetLincedData;
     if GDBobj then
-      //PGDBaseObject(pcurrobj)^.format;
-      PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(pld,{self.pcurrobj,}self.currobjgdbtype);
-
-    Application.QueueAsyncCall(asyncfreeeditor, 0);
+                  PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(pld,{self.pcurrobj,}self.currobjgdbtype);
+    if Command=TMNC_EditingDone then
+                                    Application.QueueAsyncCall(asyncfreeeditor, 0);
 
     redrawoglwnd;
     self.updateinsp;
@@ -686,6 +685,7 @@ begin
     if assigned(PEditor){<>nil} then
     begin
          peditor.OwnerNotify:=self.Notify;
+         peditor.geteditor.setfocus;
       //-----------------------------------------------------------------PEditor^.SetFocus;
       //-----------------------------------------------------------------PEditor^.show;
       //-----------------------------------------------------------------PEditor^.SetFocus;

@@ -22,7 +22,7 @@ interface
 uses  strproc,log,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
       varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,UGDBOpenArrayOfPointer,math,
 
-      StdCtrls;
+      StdCtrls,shared;
 type
 PBaseTypeDescriptor=^BaseTypeDescriptor;
 BaseTypeDescriptor=object(TUserTypeDescriptor)
@@ -36,6 +36,7 @@ BaseTypeDescriptor=object(TUserTypeDescriptor)
 GDBBooleanDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
                           function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
                           procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
                     end;
@@ -99,6 +100,7 @@ TEnumDataDescriptor=object(BaseTypeDescriptor)
                      procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
                      function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
                      function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                     procedure SetValueFromString(PInstance:GDBPointer;_Value:GDBstring);virtual;
                      function CreateProperties(PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
                end;
@@ -234,6 +236,7 @@ var //num:cardinal;
    ir:itrec;
    propeditor:TPropEditor;
    edit:TEdit;
+   cbedit:TComboBox;
 begin
      result:=nil;
      if psa^.count=0 then
@@ -243,7 +246,8 @@ begin
                                edit:=TEdit.Create(propeditor);
                                edit.SetBounds(x,y,w,h);
                                edit.Text:=GetValueAsString(pinstance);
-                               edit.OnEditingDone:=propeditor.EditingDone;
+                               //edit.OnEditingDone:=propeditor.EditingDone;
+                               edit.OnKeyPress:=propeditor.keyPress;
                                edit.Parent:=theowner;
 
                                result:=propeditor;
@@ -257,12 +261,23 @@ begin
                          end
                      else
                          begin
-                              (* gdbgetmem({$IFDEF DEBUGBUILD}'{926E1599-2B34-43FF-B9D5-885F4E37F2B3}',{$ENDIF}result,sizeof(ZEditWithProcedure));
+                              propeditor:=TPropEditor.Create(theowner,PInstance,@self);
+                              cbedit:=TComboBox.Create(propeditor);
+                              cbedit.SetBounds(x,y,w,h);
+                              cbedit.Text:=GetValueAsString(pinstance);
+                              //cbedit.OnEditingDone:=propeditor.EditingDone;
+                              cbedit.OnKeyPress:=propeditor.keyPress;
+                              cbedit.OnChange:=propeditor.EditingProcess;
+
+                              cbedit.Parent:=theowner;
+                              result:=propeditor;
+                              (*
+                               gdbgetmem({$IFDEF DEBUGBUILD}'{926E1599-2B34-43FF-B9D5-885F4E37F2B3}',{$ENDIF}result,sizeof(ZEditWithProcedure));
                                PZComboEdBoxWithProc(result).initxywh('',owner,x,y,w,h+500,true);
 
                                //PZComboEdBoxWithProc(result).setstyle(0,CBS_DROPDOWNLIST);
                               //PZComboEdBoxWithProc(result).setstyle(CBS_SIMPLE,0);
-
+                              *)
                                     ps:=psa^.beginiterate(ir);
                                      if (ps<>nil) then
                                      repeat
@@ -270,9 +285,13 @@ begin
                                                              begin
                                                                   exit;
                                                              end;}
-                                          PZComboEdBoxWithProc(result).AddLine(pansichar(ps^));
+                                          cbedit.Items.Add(ps^);
+                                          //PZComboEdBoxWithProc(result).AddLine(pansichar(ps^));
                                           ps:=psa^.iterate(ir);
                                      until ps=nil;
+                               cbedit.AutoSelect:=true;
+                               cbedit.DroppedDown:=true;
+                               (*
                                //PZComboEdBoxWithProc(result).setitem(0);
                                PZComboEdBoxWithProc(result).LincedData:=pinstance;
                                PZComboEdBoxWithProc(result)^.onenter:=EditorChange;
@@ -293,6 +312,15 @@ constructor GDBBooleanDescriptor.init;
 begin
      inherited init(sizeof(GDBBoolean),'GDBBoolean',nil);
 end;
+procedure GDBBooleanDescriptor.SetValueFromString(PInstance:GDBPointer;Value:GDBstring);
+begin
+     if uppercase(value)='TRUE' then
+                                    PGDBboolean(pinstance)^:=true
+else if uppercase(value)='FALSE' then
+                                     PGDBboolean(pinstance)^:=false
+else
+    ShowError('GDBBooleanDescriptor.SetValueFromString('+value+') {not false\true}');
+end;
 function GDBBooleanDescriptor.GetValueAsString;
 begin
      if PGDBboolean(pinstance)^ then
@@ -301,10 +329,42 @@ begin
      result := 'False';
 end;
 function GDBBooleanDescriptor.CreateEditor;
-//var num:cardinal;
+var num:cardinal;
+    cbedit:TComboBox;
+    propeditor:TPropEditor;
     //p:EnumDescriptor;
 begin
      result:=nil;
+
+
+     propeditor:=TPropEditor.Create(theowner,PInstance,@self);
+     cbedit:=TComboBox.Create(propeditor);
+     cbedit.SetBounds(x,y,w,h);
+     cbedit.Text:=GetValueAsString(pinstance);
+     //cbedit.OnEditingDone:=propeditor.EditingDone;
+     //cbedit.OnKeyPress:=propeditor.keyPress;
+     cbedit.OnChange:=propeditor.EditingProcess;
+     cbedit.ReadOnly:=true;
+
+     cbedit.Items.Add('True');
+     cbedit.Items.Add('False');
+
+     if pgdbboolean(pinstance)^ then
+                                    cbedit.ItemIndex:=0
+                                else
+                                    cbedit.ItemIndex:=1;
+     cbedit.Parent:=theowner;
+     cbedit.DroppedDown:=true;
+     result:=propeditor;
+
+
+
+
+
+
+
+
+
      (*
      gdbgetmem({$IFDEF DEBUGBUILD}'{926E1599-2B34-43FF-B9D5-885F4E37F2B3}',{$ENDIF}result,sizeof(ZComboBoxWithProc));
      PZComboBoxWithProc(result).initxywh('',owner,x,y,w,h+100,true);
@@ -602,6 +662,23 @@ constructor TEnumDataDescriptor.init;
 begin
      inherited init(sizeof(TEnumData),'TEnumDataDescriptor',nil);
 end;
+procedure TEnumDataDescriptor.SetValueFromString(PInstance:GDBPointer;_Value:GDBstring);
+var
+    p:pgdbstring;
+    ir:itrec;
+begin
+     _value:=uppercase(_value);
+                             p:=PTEnumData(Pinstance)^.Enums.beginiterate(ir);
+                             if p<>nil then
+                             repeat
+                             if _value=uppercase(p^)then
+                             begin
+                                  PTEnumData(Pinstance)^.Selected:=ir.itc;
+                                  exit;
+                             end;
+                                   p:=PTEnumData(Pinstance)^.Enums.iterate(ir);
+                             until p=nil;
+end;
 function TEnumDataDescriptor.GetValueAsString;
 {var currval:GDBLongword;
     p:GDBPointer;
@@ -621,10 +698,34 @@ begin
      //PGDBInteger(Sender^.LincedData)^:=NewValue;
 end;
 function TEnumDataDescriptor.CreateEditor;
-//var num:cardinal;
-    //p:EnumDescriptor;
+var
+    cbedit:TComboBox;
+    propeditor:TPropEditor;
+    ir:itrec;
+    number:longword;
+    p:pgdbstring;
 begin
-     result:=nil;
+     propeditor:=TPropEditor.Create(theowner,PInstance,@self);
+     cbedit:=TComboBox.Create(propeditor);
+     cbedit.SetBounds(x,y,w,h);
+     cbedit.Text:=GetValueAsString(pinstance);
+     //cbedit.OnEditingDone:=propeditor.EditingDone;
+     //cbedit.OnKeyPress:=propeditor.keyPress;
+     cbedit.OnChange:=propeditor.EditingProcess;
+     cbedit.ReadOnly:=true;
+
+                             p:=PTEnumData(Pinstance)^.Enums.beginiterate(ir);
+                             if p<>nil then
+                             repeat
+                                   cbedit.Items.Add(p^);
+                                   p:=PTEnumData(Pinstance)^.Enums.iterate(ir);
+                             until p=nil;
+
+     cbedit.ItemIndex:=PTEnumData(Pinstance)^.Selected;
+
+     cbedit.Parent:=theowner;
+     cbedit.DroppedDown:=true;
+     result:=propeditor;
      (*
     gdbgetmem({$IFDEF DEBUGBUILD}'{926E1599-2B34-43FF-B9D5-885F4E37F2B3}',{$ENDIF}result,sizeof(ZComboBoxWithProc));
     PZComboBoxWithProc(result).initxywh('',owner,x,y,w,h+100,true);

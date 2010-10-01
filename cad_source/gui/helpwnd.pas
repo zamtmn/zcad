@@ -37,13 +37,13 @@ procedure THelpWnd.AfterConstruction;
 begin
   inherited;
   self.Position:=poScreenCenter;
-  caption:=sys2interf('Help');
+  caption:=('Help');
   self.borderstyle:=bsSizeToolWin;
   memo:=tmemo.create(self);
   memo.scrollbars:=ssAutoBoth;
   memo.align:=alclient;
 
-  memo.text:=sys2interf('Управление:'+#13#10+
+  memo.text:=('Управление:'+#13#10+
                    #9+'Средняя кнопка мыши'+#9+'-таскать чертеж'+#13#10+
                    'CTRL+'+#9+'Средняя кнопка мыши'+#9+'-крутить чертеж'+#13#10+
                    #9+'Колесо мыши'+#9+#9+'-масштаб'+#13#10+

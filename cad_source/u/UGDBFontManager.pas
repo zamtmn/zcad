@@ -19,38 +19,41 @@
 unit UGDBFontManager;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,SysInfo,memman,UGDBOpenArrayOfData, oglwindowdef,sysutils,gdbase, geometry,
-     gl;
+uses UGDBSHXFont,gdbasetypes,SysInfo,memman,UGDBOpenArrayOfData, oglwindowdef,sysutils,gdbase, geometry,
+     gl,
+     UGDBNamedObjectsArray;
 type
+{Export+}
   PGDBFontRecord=^GDBFontRecord;
   GDBFontRecord = record
     Name: GDBString;
     Pfont: GDBPointer;
   end;
 PGDBFontManager=^GDBFontManager;
-GDBFontManager=object(GDBOpenArrayOfData)
+GDBFontManager=object({GDBOpenArrayOfData}GDBNamedObjectsArray)(*OpenArrayOfData=GDBfont*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 
-                    function addFonf(FontName:GDBString):GDBInteger;
-                    function FindFonf(FontName:GDBString):GDBPointer;
-                    procedure freeelement(p:GDBPointer);virtual;
+                    function addFonf(FontPathName:GDBString):PGDBfont;
+                    //function FindFonf(FontName:GDBString):GDBPointer;
+                    {procedure freeelement(p:GDBPointer);virtual;}
               end;
+{Export-}
 implementation
 uses io,log;
 constructor GDBFontManager.init;
 begin
   //Size := sizeof(GDBFontManager);
-  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBFontRecord));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof({GDBFontRecord}GDBfont));
   //addlayer('0',cgdbwhile,lwgdbdefault);
 end;
-procedure GDBFontManager.freeelement;
+{procedure GDBFontManager.freeelement;
 begin
   PGDBFontRecord(p).Name:='';
   PGDBfont(PGDBFontRecord(p).Pfont)^.fontfile:='';
   PGDBfont(PGDBFontRecord(p).Pfont)^.name:='';
   GDBFreeMem(PGDBFontRecord(p).Pfont);
-end;
-function GDBFontManager.addFonf(FontName:GDBString):GDBInteger;
+end;}
+(*function GDBFontManager.addFonf(FontName:GDBString):GDBInteger;
 var
   fr:GDBFontRecord;
   ft:string;
@@ -59,13 +62,46 @@ begin
   begin
   fr.Name:=FontName;
   ft:=uppercase(ExtractFileExt(fontname));
-  if ft='.SHP' then fr.Pfont:=createnewfontfromshp(sysparam.programpath+'fonts/'+FontName);
+  //if ft='.SHP' then fr.Pfont:=createnewfontfromshp(sysparam.programpath+'fonts/'+FontName);
   if ft='.SHX' then fr.Pfont:=createnewfontfromshx(sysparam.programpath+'fonts/'+FontName);
   add(@fr);
   GDBPointer(fr.Name):=nil;
   end;
+end;*)
+function GDBFontManager.addFonf(FontPathName:GDBString):PGDBfont;
+var
+  p:PGDBfont;
+  FontName:GDBString;
+      //ir:itrec;
+begin
+     FontName:=ExtractFileName(FontPathName);
+     case AddItem(FontName,pointer(p)) of
+             IsFounded:
+                       begin
+                       end;
+             IsCreated:
+                       begin
+                            programlog.logoutstr('Loading font '+FontPathName,lp_IncPos);
+                            if (FontPathName<>'')and(createnewfontfromshx(FontPathName,p)) then
+                            begin
+                                 programlog.logoutstr('OK',lp_DecPos)
+                            end
+                            else
+                            begin
+                                 programlog.logoutstr('unknown format',lp_DecPos);
+                                 dec(self.Count);
+                                 //p^.Name:='ERROR ON LOAD';
+                                 p:=nil;
+                            end;
+                            //p^.init(FontPathName,Color,LW,oo,ll,pp);
+                       end;
+             IsError:
+                       begin
+                       end;
+     end;
+     result:=p;
 end;
-function GDBFontManager.FindFonf;
+{function GDBFontManager.FindFonf;
 var
   pfr:pGDBFontRecord;
   i:GDBInteger;
@@ -81,7 +117,7 @@ begin
                                   end;
        inc(pfr);
   end;
-end;
+end;}
 
 {function GDBLayerArray.CalcCopactMemSize2;
 var i:GDBInteger;

@@ -50,7 +50,7 @@ var
    fileext:GDBString;
 begin
      sd:=TSaveDialog.Create(nil);
-     sd.Title:=sys2interf(Title);
+     sd.Title:=Title;
      sd.InitialDir:=(InitialDir);
      sd.Filter:=Filter;
      sd.DefaultExt :=DefExt;
@@ -108,7 +108,7 @@ var
 *)
 begin
      od:=TOpenDialog.Create(nil);
-     od.Title:=sys2interf('Open file...');
+     od.Title:='Open file...';
      od.InitialDir:=szCurrentDir;
      od.Filter:=ProjectFileFilter[1];
      od.DefaultExt :='dxf';

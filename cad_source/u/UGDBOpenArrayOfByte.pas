@@ -33,6 +33,10 @@ GDBOpenArrayOfByte=object(GDBOpenArray)
                       constructor initnul;
                       constructor InitFromFile(FileName:string);
                       function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
+                      function AddByte(PData:GDBPointer):GDBInteger;virtual;
+                      function AddByteByVal(Data:GDBByte):GDBInteger;virtual;
+                      function AddWord(PData:GDBPointer):GDBInteger;virtual;
+                      function AddFontFloat(PData:GDBPointer):GDBInteger;virtual;
                       procedure TXTAddGDBStringEOL(s:GDBString);virtual;
                       procedure TXTAddGDBString(s:GDBString);virtual;
                       function AllocData(SData:GDBword):GDBPointer;virtual;
@@ -194,7 +198,8 @@ begin
 end;
 function GDBOpenArrayOfByte.readword;
 begin
-     result:=readbyte+256*readbyte;
+     result:=readbyte;
+     result:=result+256*readbyte;
 end;
 function GDBOpenArrayOfByte.readstring(break, ignore: GDBString): shortString;
 var
@@ -285,6 +290,26 @@ begin
   size:=1;
   inherited initnul;
 end;
+function GDBOpenArrayOfByte.AddByteByVal(Data:GDBByte):GDBInteger;
+begin
+     result:=adddata(@data,sizeof(GDBByte));
+end;
+
+function GDBOpenArrayOfByte.AddByte(PData:GDBPointer):GDBInteger;
+var addr:GDBPlatformint;
+begin
+     result:=adddata(pdata,sizeof(GDBByte));
+end;
+function GDBOpenArrayOfByte.AddFontFloat(PData:GDBPointer):GDBInteger;
+var addr:GDBPlatformint;
+begin
+     result:=adddata(pdata,sizeof(fontfloat));
+end;
+function GDBOpenArrayOfByte.AddWord(PData:GDBPointer):GDBInteger;
+begin
+     result:=adddata(pdata,sizeof(GDBWord));
+end;
+
 function GDBOpenArrayOfByte.AddData;
 var addr:GDBPlatformint;
 begin

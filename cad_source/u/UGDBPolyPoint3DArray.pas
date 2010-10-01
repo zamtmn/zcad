@@ -268,9 +268,11 @@ begin
   p:=parray;
   for i:=0 to count-1 do
   begin
-          {if p^.count>=0 then} myglvertex3dv(pointer(p));
+          myglvertex3dv(pointer(p));
+     //myglVertex(p.coord.x+random(5)/10,p.coord.y+random(5)/10,p.coord.z+random(5)/10);
           if p^.count<0 then
                             myglvertex3dv(pointer(p));
+                            //myglVertex(p.coord.x+random(5)/10,p.coord.y+random(5)/10,p.coord.z+random(5)/10);
      inc(p);
   end;
   myglend;
@@ -342,8 +344,8 @@ begin
   myglend;}
 end;
 procedure GDBPolyPoint3DArray.simpledrawgeometry(const num:integer);
-var p:PGDBPolyVertex3D;
-    totalcounter,counter,lines,points:GDBInteger;
+var p,pp:PGDBPolyVertex3D;
+    totalcounter,counter,lines,points,linenumber:GDBInteger;
     i:GDBInteger;
     v1,v2:gdbvertex;
     ir:itrec;
@@ -352,11 +354,42 @@ var p:PGDBPolyVertex3D;
     //ptpv0,ptpv1:PGDBPolyVertex3D;
     //subresult:TInRect;
 begin
-
-  myglbegin(GL_LINE_strip);
-  myglvertex3dv(self.PArray);
-  myglvertex3dv(self.getelement(self.Count-1));
-  myglend;
+  if self.Count>10 then
+  if self.PArray<>nil then
+  begin
+        case num of
+        1:
+          begin
+                myglbegin(GL_LINES);
+                myglvertex3dv(self.PArray);
+                myglvertex3dv(self.getelement(self.Count-1));
+                myglend;
+          end;
+        2:
+          begin
+                myglbegin(GL_LINES);
+                if count<num then exit;
+                p:=parray;
+                pp:=nil;
+                linenumber:=0;
+                for i:=0 to count-1 do
+                begin
+                   if linenumber<>p^.LineNumber then
+                   begin
+                        if pp<>nil then
+                                       myglvertex3dv(@pp^.coord);
+                        myglvertex3dv(@p^.coord);
+                        linenumber:=p^.LineNumber;
+                   end;
+                   pp:=p;
+                   inc(p);
+                   inc(totalcounter);
+                end;
+                myglvertex3dv(@pp^.coord);
+                myglend;
+          end;
+        end;
+  end;
 
   {
   myglbegin(GL_LINE_strip);

@@ -52,6 +52,7 @@ GDBObjAbstractText=object(GDBObjPlainWithOX)
                          Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;
                          procedure CalcObjMatrix;virtual;
                          procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+                         procedure SimpleDrawGeometry;virtual;
                          procedure RenderFeedback;virtual;
                          function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                          function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
@@ -406,6 +407,11 @@ begin
   DrawMatrix:=MatrixMultiply(m3,m1);
   DrawMatrix:=MatrixMultiply(DrawMatrix,m2);
 end;
+procedure GDBObjAbstractText.SimpleDrawGeometry;
+begin
+     Vertex3D_in_WCS_Array.simpledrawgeometry(1);
+end;
+
 procedure GDBObjAbstractText.DrawGeometry;
 var
    _lod:integer;
@@ -413,18 +419,18 @@ begin
   //exit;
   glpointsize(1);
   GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender + 1;
-  if true//(((not GDB.GetCurrentDWG.OGLwindow1.param.scrollmode)or(not sysvar.RD.RD_PanObjectDegradation^)) {and (lod=0)})
+  if {true//}(((not GDB.GetCurrentDWG.OGLwindow1.param.scrollmode)or(not sysvar.RD.RD_PanObjectDegradation^)) {and (lod=0)})
   then
       begin
            _lod:=round({self.textprop.size/}10*GDB.GetCurrentDWG.OGLwindow1.param.zoom*GDB.GetCurrentDWG.OGLwindow1.param.zoom+1);
-           if ((self.textprop.size/GDB.GetCurrentDWG.OGLwindow1.param.zoom)>2) then
+           if ((self.textprop.size/GDB.GetCurrentDWG.OGLwindow1.param.zoom)>1) then
                                                                                    //Vertex3D_in_WCS_Array.simpledrawgeometry({_lod}3)
-                                                                                   //Vertex3D_in_WCS_Array.drawgeometry
+                                                                                   //simpledrawgeometry
                                                                                    Vertex3D_in_WCS_Array.drawgeometry
                                                                                else
-                                                                                   Vertex3D_in_WCS_Array.drawgeometry;
+                                                                                   //Vertex3D_in_WCS_Array.drawgeometry;
                                                                                    //Vertex3D_in_WCS_Array.simpledrawgeometry(_lod);
-                                                                                   //Vertex3D_in_WCS_Array.simpledrawgeometry(4);
+                                                                                   simpledrawgeometry;
                                                                                      {begin
                                                                                            myglbegin(gl_line_loop);
                                                                                            myglvertex3dv(@outbound[0]);
@@ -451,4 +457,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBAbstractText.initialization');{$ENDIF}
-end.
+end.

@@ -153,6 +153,7 @@ TSimpleUnit=object(GDBaseobject)
                   destructor done;virtual;
                   procedure CreateVariable(varname,vartype:GDBString);virtual;
                   function FindVariable(varname:GDBString):pvardesk;virtual;
+                  function FindValue(varname:GDBString):GDBPointer;virtual;
                   function TypeName2PTD(n: GDBString):PUserTypeDescriptor;virtual;
                   function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
                   function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
@@ -184,7 +185,7 @@ TUnit=object(TSimpleUnit)
 {EXPORT-}
 procedure vardeskclear(p:GDBPointer);
 var
-  SysUnit,SysVarUnit,DBUnit,DWGDBUnit:PTUnit;
+  SysUnit,SavedUnit,SysVarUnit,DBUnit,DWGDBUnit:PTUnit;
   BaseTypesEndIndex:GDBInteger;
   OldTypesCount:GDBInteger;
   VarCategory,BlockCategory,EqCategory:GDBGDBStringArray;
@@ -526,6 +527,7 @@ var
 //  i: GDBInteger;
   tp:PUserTypeDescriptor;
       ir:itrec;
+  S:GDBString;
 begin
   result:=nil;
   tp:=exttype.beginiterate(ir);
@@ -533,7 +535,8 @@ begin
   repeat
     if tp<>nil then
     //programlog.logoutstr(tp^.typename,0);
-    if uppercase(name) = uppercase(tp^.typename) then
+    s:=uppercase(tp^.typename);
+    if uppercase(name) = s then
     begin
       result:=tp;
       system.Exit;
@@ -562,6 +565,7 @@ begin
      exttype.addref(GDBLongwordDescriptorObj);
      exttype.addref(GDBDoubleDescriptorObj);
      exttype.addref(GDBStringDescriptorObj);
+     exttype.addref(GDBAnsiStringDescriptorObj);
      exttype.addref(GDBFloatDescriptorObj);
      exttype.addref(GDBEnumDataDescriptorObj);
      BaseTypesEndIndex:=exttype.Count;
@@ -1127,6 +1131,17 @@ begin
      InterfaceUses.done;
      name:='';
 end;
+function tsimpleunit.FindValue(varname:GDBString):GDBPointer;
+var
+  temp:pvardesk;
+begin
+     temp:=findvariable(varname);
+     if assigned(temp)then
+                          result:=temp^.data.Instance
+                      else
+                          result:=nil;
+end;
+
 function tsimpleunit.findvariable;
 var p:ptunit;
     ir:itrec;

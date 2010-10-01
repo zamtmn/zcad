@@ -25,7 +25,7 @@ uses
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Toolwin, Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
   gdbase, languade,geometry,
-  varmandef, varman, GDBManager, {odbase, odbasedef, iodxf,} UGDBOpenArrayOfByte, plugins,
+  varmandef, varman, UUnitManager, GDBManager, {odbase, odbasedef, iodxf,} UGDBOpenArrayOfByte, plugins,
   {math, }UGDBDescriptor,cmdline,
   {gdbobjectsconstdef,}UGDBLayerArray,{deveditor,}
   {ZEditsWithProcedure,}{zforms,}{ZButtonsWithCommand,}{ZComboBoxsWithProc,}{ZButtonsWithVariable,}{zmenus,}
@@ -35,6 +35,7 @@ uses
 graphics;
 
 type
+  TFileHistory=Array [0..9] of TmyMenuItem;
   TMainFormN = class(TFreedForm)
                     ToolBarU,ToolBarR:TToolBar;
                     ToolBarD: TToolBar;
@@ -64,9 +65,11 @@ type
                     procedure EndLongProcess;
                     procedure Say(word:gdbstring);
 
-
+                    private
+                    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
                     public
                     rt:GDBInteger;
+                    FileHistory:TFileHistory;
                     //hToolTip: HWND;
 
                     //procedure KeyPress(var Key: char);override;
@@ -79,6 +82,10 @@ type
                     procedure ReloadLayer(plt:PGDBNamedObjectsArray);
 
                     procedure GeneralTick(Sender: TObject);//(uID, msg: UINT; dwUse, dw1, dw2: DWord); stdcall;
+
+                    procedure asynccloseapp(Data: PtrInt);
+
+                    procedure processfilehistory(filename:GDBString);
 
                end;
 function getoglwndparam: GDBPointer; export;
@@ -105,6 +112,53 @@ implementation
 
 uses Objinsp{,optionswnd, Tedit_form, MTedit_form};
 
+procedure TMainFormN.processfilehistory(filename:GDBString);
+var i,j,k:integer;
+    pstr,pstrnext:PGDBString;
+    //pvarfirst:pvardesk;
+begin
+     k:=8;
+     for i:=0 to 9 do
+     begin
+          if FileHistory[i].Caption=filename then
+          begin
+               k:=i-1;
+               system.break;
+          end;
+     end;
+     if k<0 then exit;
+      for i:=k downto 0 do
+      begin
+           j:=i+1;
+           pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
+           pstrnext:=SavedUnit.FindValue('PATH_File'+inttostr(j));
+           if (assigned(pstr))and(assigned(pstrnext))then
+                                                         pstrnext^:=pstr^;
+           if (assigned(FileHistory[j]))and(assigned(FileHistory[i]))then
+           FileHistory[j].SetCommand(FileHistory[i].caption,FileHistory[i].FCommand);
+      end;
+      pstr:=SavedUnit.FindValue('PATH_File0');
+      if (assigned(pstr))then
+                              pstr^:=filename;
+
+      if FileName<>''then
+                           FileHistory[0].SetCommand(FileName,'Load('+FileName+')')
+                       else
+                           FileHistory[0].SetCommand('Пусто','');
+
+end;
+
+procedure TMainFormN.asynccloseapp(Data: PtrInt);
+begin
+     commandmanager.executecommand('Quit');
+end;
+
+procedure TMainFormN.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+     CloseAction:=caNone;
+     Application.QueueAsyncCall(asynccloseapp, 0);
+end;
+
 procedure TMainFormN.draw;
 begin
      update;
@@ -113,8 +167,11 @@ end;
 procedure TMainFormN.AfterConstruction;
 var
   i:integer;
+  pint:PGDBInteger;
 begin
      inherited;
+
+     self.onclose:=self.FormClose;
 
      WindowState:=wsMaximized;
      onkeydown:=mykeypress;
@@ -193,28 +250,64 @@ LineWbox.Parent:=ToolBarU;
      MainPanel.BevelOuter:=bvnone;
 
 
-       CLine:=TCLine.create(MainPanel);
-       CLine.Parent:=MainPanel;
-       CLine.Align:=alClient;
+(*   CLine:=TCLine.create(MainPanel);
+     CLine.Parent:=MainPanel;
+     CLine.Align:=alClient;
 
-       PageControl:=TmyPageControl.Create(MainPanel);
-       PageControl.Constraints.MinHeight:=32;
-       PageControl.Parent:=MainPanel;
-       PageControl.Align:=alTop;
-       PageControl.OnPageChanged:=ChangedDWGTabCtrl;
-       PageControl.Height:=800;
-       //if PageControl.Height>sysinfo.sysparam.screeny;
-       //PageControl.BorderStyle:=BSsingle;
-       PageControl.BorderWidth:=0;
-       //tobject(PageControl):=mainpanel;
-       //PageControl.BevelOuter:=bvnone;
+     PageControl:=TmyPageControl.Create(MainPanel);
+     PageControl.Constraints.MinHeight:=32;
+     PageControl.Parent:=MainPanel;
+     PageControl.Align:=alTop;
+     PageControl.OnPageChanged:=ChangedDWGTabCtrl;
+     PageControl.Height:=800;
+     //if PageControl.Height>sysinfo.sysparam.screeny;
+     //PageControl.BorderStyle:=BSsingle;
+     PageControl.BorderWidth:=0;
+     //tobject(PageControl):=mainpanel;
+     //PageControl.BevelOuter:=bvnone;
+
+     SplitterH:=TSplitter.Create(MainPanel);
+     SplitterH.Parent:=MainPanel;
+     SplitterH.Align:=alTop;
+     SplitterH.top:=800;*)
+
 
        SplitterH:=TSplitter.Create(MainPanel);
        SplitterH.Parent:=MainPanel;
        SplitterH.Align:=alTop;
-       SplitterH.top:=800;
+       //SplitterH.top:=800;
+       //application.ProcessMessages;
 
-     SplitterV:=TSplitter.Create(self);
+
+       CLine:=TCLine.create(MainPanel);
+       CLine.Parent:=MainPanel;
+       CLine.Align:=alBottom;
+       pint:=SavedUnit.FindValue('VIEW_CommandLineH');
+       if assigned(pint)then
+                            Cline.Height:=pint^;
+       application.ProcessMessages;
+
+       SplitterH.Align:=alBottom;
+       //application.ProcessMessages;
+
+
+
+       PageControl:=TmyPageControl.Create(MainPanel);
+       PageControl.Constraints.MinHeight:=32;
+       PageControl.Parent:=MainPanel;
+       PageControl.Align:=alClient;
+       PageControl.OnPageChanged:=ChangedDWGTabCtrl;
+       //PageControl.Height:=800;
+       PageControl.BorderWidth:=0;
+
+
+
+
+
+
+
+
+       SplitterV:=TSplitter.Create(self);
      SplitterV.Align:=alLeft;
 
      MainPanel.Parent:=self;
@@ -225,6 +318,15 @@ LineWbox.Parent:=ToolBarU;
      GDBobjinsp.setptr(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
      GDBobjinsp.SetCurrentObjDefault;
      //GDBobjinsp.ReturnToDefault;
+
+     pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+     if assigned(pint)then
+                          GDBobjinsp.Width:=pint^;
+     GDBobjinsp.namecol:=GDBobjinsp.Width div 2;
+     pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
+     if assigned(pint)then
+                          GDBobjinsp.namecol:=pint^;
+
      GDBObjInsp.Parent:=self;
 
      SplitterV.left:=GDBobjinsp.Width;
@@ -278,7 +380,7 @@ begin
                               end
                           else
                               begin
-                              b.caption:=sys2interf(system.copy(img,2,length(img)-1));
+                              b.caption:=(system.copy(img,2,length(img)-1));
                               if autosize then
                                if length(img)>3 then
                                                     b.Font.size:=11-length(img);
@@ -370,7 +472,7 @@ begin
                           TmyCommandToolButton(b).FCommand:=bc;
                           if ts<>''then
                           begin
-                          b.hint:=sys2interf(ts);
+                          b.hint:=(ts);
                           b.ShowHint:=true;
                           end;
                           SetImage(ppanel,b,line,true);
@@ -399,7 +501,7 @@ begin
                           TmyVariableToolButton(b).AssignToVar(bc);
                           if ts<>''then
                           begin
-                          b.hint:=sys2interf(ts);
+                          b.hint:=(ts);
                           b.ShowHint:=true;
                           end;
                           SetImage(ppanel,b,line,false);
@@ -425,7 +527,7 @@ begin
                                         LayerBox.Width:=w;
                           if ts<>''then
                           begin
-                               LayerBox.hint:=sys2interf(ts);
+                               LayerBox.hint:=(ts);
                                LayerBox.ShowHint:=true;
                           end;
                           LayerBox.OnChange:=ChangeCLayer;
@@ -452,20 +554,20 @@ begin
                                         LineWBox.Width:=w;
                           if ts<>''then
                           begin
-                               LineWBox.hint:=sys2interf(ts);
+                               LineWBox.hint:=(ts);
                                LineWBox.ShowHint:=true;
                           end;
                           LineWbox.Clear;
                           LineWbox.readonly:=true;
-                          LineWbox.items.Add(sys2interf('Обычный'));
-                          LineWbox.items.Add(sys2interf('По блоку'));
-                          LineWbox.items.Add(sys2interf('По слою'));
+                          LineWbox.items.Add(('Обычный'));
+                          LineWbox.items.Add(('По блоку'));
+                          LineWbox.items.Add(('По слою'));
                           for i := 0 to 20 do
                           begin
                           s:=floattostr(i / 10) + ' мм';
-                               LineWbox.items.Add(sys2interf(s));
+                               LineWbox.items.Add((s));
                           end;
-                          LineWbox.items.Add(sys2interf('Разный'));
+                          LineWbox.items.Add(('Разный'));
                           LineWbox.OnChange:=ChangeCLineW;
                           LineWbox.AutoSize:=false;
 
@@ -521,7 +623,7 @@ begin
 
 
            line := f.readstring(';','');
-           line:=sys2interf(line);
+           line:=(line);
 
 
            ppopupmenu:=TMenuItem.Create(pm);
@@ -536,6 +638,8 @@ var
     pmenuitem:TmyMenuItem;
     ppopupmenu,submenu:TMenuItem;
     line2:GDBString;
+    i:integer;
+    pstr:PGDBString;
 begin
            while line<>'{' do
                              begin
@@ -555,10 +659,30 @@ begin
                                                            //pmenuitem.addto(ppopupmenu);
                                                            line := f.readstring(',','');
                                                            //pmenuitem.command:=line;
+
                                                            pmenuitem:=TmyMenuItem.Create(ppopupmenu,line2,line);
                                                            ppopupmenu.Add(pmenuitem);
                                                            line := f.readstring(',','');
                                                            line := f.readstring(#$A' ',#$D);
+                                                           line := f.readstring(#$A' ',#$D);
+                                                           line:=readspace(line);
+                                                      end
+                else if uppercase(line)='FILEHISTORY' then
+                                                      begin
+
+                                                           for i:=0 to 9 do
+                                                           begin
+                                                                pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
+                                                                if assigned(pstr)then
+                                                                                     line:=pstr^
+                                                                                 else
+                                                                                     line:='';
+                                                                if line<>''then
+                                                                                     FileHistory[i]:=TmyMenuItem.Create(ppopupmenu,line,'Load('+line+')')
+                                                                                 else
+                                                                                     FileHistory[i]:=TmyMenuItem.Create(ppopupmenu,'Пусто','');
+                                                                ppopupmenu.Add(FileHistory[i]);
+                                                           end;
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);
                                                       end
@@ -581,7 +705,7 @@ begin
 
                                                            line := f.readstring(';','');
                                                            submenu:=TMenuItem.Create(ppopupmenu);
-                                                           submenu.Caption:=sys2interf(line);
+                                                           submenu.Caption:=(line);
                                                            ppopupmenu.{items.}Add(submenu);
 
                                                            loadsubmenu(f,{ppopupmenu}submenu,line);
@@ -660,8 +784,10 @@ var
    pdwg:PTDrawing;
 begin
      done:=true;
+     //exit;
      pdwg:=gdb.GetCurrentDWG;
      if pdwg<>nil then
+     if pdwg.OGLwindow1<>nil then
      begin
           if pdwg.OGLwindow1.Fastmmx>=0 then
           begin
@@ -695,7 +821,9 @@ begin
 
                         end;}
      if rt<>SysVar.SYS.SYS_RunTime^ then
-                                        GDBobjinsp.updateinsp;
+                                        begin
+                                             GDBobjinsp.updateinsp;
+                                        end;
      rt:=SysVar.SYS.SYS_RunTime^;
      if historychanged then
                            begin
@@ -950,6 +1078,8 @@ begin
   ProcessBar.min:=0;
   ProcessBar.position:=0;
   HintText.Hide;
+  //ProcessBar.BarShowText:=true;
+  //ProcessBar.Caption:='qwerty';
   ProcessBar.Show;
   oldlongprocess:=0;
      end;
@@ -996,7 +1126,7 @@ begin
     application.ProcessMessages;
     time:=(now-LPTime)*10e4;
     str(time:3:2,ts);
-    say(sys2interf('Выполнено за  '+ts+'сек'));
+    say(('Выполнено за  '+ts+'сек'));
 end;
 (*
 procedure TMainForm.beforeinit;
@@ -1299,10 +1429,10 @@ begin
   if plp<>nil then
   repeat
        s:=plp^.GetFullName;
-       layerbox.Items.Add(Sys2Interf(s));
+       layerbox.Items.Add(s);
        plp:=plt^.iterate(ir);
   until plp=nil;
-  layerbox.Items.Add(Sys2Interf('_Разный_'));
+  layerbox.Items.Add(('_Разный_'));
   layerbox.ItemIndex:=(SysVar.dwg.DWG_CLayer^);
 end;
 {procedure TMainForm.keypress(Sender: TObject; var Key: GDBWord;

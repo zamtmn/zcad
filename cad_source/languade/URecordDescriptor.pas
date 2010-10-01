@@ -384,7 +384,7 @@ begin
                                                   if pvd^.name='BTY_TreeCoord' then
                                                                                    pvd^.name:=pvd^.name;
 
-                                                  programlog.logoutstr('process prop:'+pvd^.name,0);
+                                                  {$IFDEF TOTALYLOG}programlog.logoutstr('process prop:'+pvd^.name,0);{$ENDIF}
                                                   i:=pos('_',pvd^.name);
                                                   tname:=pvd^.username;
                                                   if tname='' then

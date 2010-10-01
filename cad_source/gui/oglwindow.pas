@@ -25,11 +25,11 @@ uses
 
 
   {$IFDEF LCLGTK2}
-  x,xlib,{x11,}xutil,
-  gtk2,gdk2,gdk2x,
+  x,xlib,{x11,}{xutil,}
+  gtk2,gdk2,{gdk2x,}
   {$ENDIF}
 
-  LCLType,InterfaceBase,
+  UGDBSHXFont,LCLType,InterfaceBase,
   umytreenode,menus,Classes,{ SysUtils,} FileUtil,{ LResources,}LMessages, Forms,
   stdctrls, ExtCtrls, ComCtrls,Toolwin, Controls, {Graphics, Dialogs,}
   GDBGenericSubEntry,gdbasetypes,{Windows,}sysutils,
@@ -1178,6 +1178,7 @@ var
   len: GDBWord;
   matr: array[0..3, 0..3] of GDBDouble;
 begin
+  //exit;
   FillChar(matr, sizeof(GDBDouble) * 16, 0);
   matr[0, 0] := 1;
   matr[1, 1] := 1;
@@ -1400,7 +1401,7 @@ begin
   if (ssCtrl in shift) then key := key or MZW_CONTROL;
   if (ssMiddle in shift) then
   begin
-    //cursor := crHandPoint;
+    cursor := crHandPoint;
     param.scrollmode:=true;
     param.lastonmouseobject := nil;
   end;
@@ -1525,9 +1526,9 @@ procedure TOGLWnd.MouseUp(Button: TMouseButton; Shift:TShiftState;X, Y: Integer)
 //procedure TOGLWnd.Pre_MouseUp;
 begin
   inherited;
-  //if button = mbMiddle then
+  if button = mbMiddle then
   begin
-    //cursor := crnone;
+    cursor := crnone;
     param.scrollmode:=false;
     param.firstdraw:=true;
     paint;
@@ -1551,6 +1552,8 @@ procedure TOGLWnd.showcursor;
     LPTime:Tdatetime;
 
   begin
+    if param.scrollmode then
+                            exit;
     CalcOptimalMatrix;
     if gdb.GetCurrentDWG.SelObjArray.Count<>0 then gdb.GetCurrentDWG.SelObjArray.drawpoint;
     glColor3f(255, 255, 255);

@@ -21,9 +21,9 @@ unit UGDBDescriptor;
 interface
 uses
 strproc,GDBBlockDef,UGDBDrawingdef,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
-UGDBNumerator, gdbase{,varmandef},varman{, oglwindowdef, math, UGDBOpenArrayOfByte},
+UGDBNumerator, gdbase,varmandef,varman{, oglwindowdef, math, UGDBOpenArrayOfByte},
 sysutils, memman, geometry, gdbobjectsconstdef{, strmy,dxflow},
-{UOpenArray,}gdbasetypes,
+{UOpenArray,}gdbasetypes,sysinfo,
 GDBGenericSubEntry,
 //UGDBOpenArray,
 //UGDBOutbound2DIArray,
@@ -40,7 +40,7 @@ UGDBTextStyleArray,
 UGDBFontManager,
 GDBCamera,
 UGDBOpenArrayOfPV,
-GDBRoot,
+GDBRoot,UGDBSHXFont,
 {GDBNet,}OGLWindow,UGDBOpenArrayOfPObjects;
 const ls = $AAAA;
       ps:array [0..31] of LONGWORD=(
@@ -131,7 +131,7 @@ var GDB: GDBDescriptor;
     ClipboardDWG:PTDrawing;
     GDBTrash:GDBObjTrash;
     FontManager:GDBFontManager;
-    pbasefont: GDBPointer;
+    pbasefont: PGDBfont;
     palette: gdbpalette;
 procedure CalcZ(z:GDBDouble);
 procedure startup;
@@ -217,9 +217,11 @@ begin
   tp.size:=2.5;
   tp.oblique:=0;
   //TextStyleTable.addstyle('Standart','normal.shp',tp);
-  TextStyleTable.addstyle('R2_5','romant.shx',tp);
 
-  BlockDefArray.init({$IFDEF DEBUGBUILD}'{E5CE9274-01D8-4D19-AF2E-D1AB116B5737}',{$ENDIF}1000);
+  //TextStyleTable.addstyle('R2_5','romant.shx',tp);
+  //TextStyleTable.addstyle('standart','txt.shx',tp);
+
+  BlockDefArray.init({$IFDEF DEBUGBUILD}'{E5CE9274-01D8-4D19-AF2E-D1AB116B5737}',{$ENDIF}10000);
   Numerator.init(10);
 
   TableStyleTable.init({$IFDEF DEBUGBUILD}'{E5CE9274-01D8-4D19-AF2E-D1AB116B5737}',{$ENDIF}10);
@@ -679,16 +681,34 @@ begin
 
      _dest.format;
 end;
+procedure addf(fn:gdbstring);
+begin
+     FontManager.addFonf(fn);
+end;
+
 procedure startup;
 begin
-  FontManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}2);
-  //FontManager.addFonf('normal.shp');
-  FontManager.addFonf('normal.shx');
-  FontManager.addFonf('gothice.shx');
-  FontManager.addFonf('romant.shx');
-  //pbasefont:=FontManager.FindFonf('normal.shx');
-  pbasefont:=FontManager.FindFonf('romant.shx');
-  //pbasefont:=FontManager.FindFonf('gothice.shx');
+  FontManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
+
+  //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\times.shx');
+  //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\GENISO.SHX');
+  //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\amgdt.shx');
+
+  //FromDirIterator({sysparam.programpath+'fonts/'}'C:\Program Files\AutoCAD 2010\Fonts\','*.shx','',addf,nil);
+
+  FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,sysvar.SYS.SYS_AlternateFont^));
+  pbasefont:=FontManager.getAddres(sysvar.SYS.SYS_AlternateFont^);
+  if pbasefont=nil then
+                       shared.FatalError('Альтернативный шрифт "'+sysvar.SYS.SYS_AlternateFont^+
+                                         '" не найден в "'+ sysvar.PATH.Fonts_Path^+'"');
+
+  //FontManager.addFonf(sysparam.programpath+'fonts/gewind.shx');
+  //FontManager.addFonf('gothice.shx');
+  //FontManager.addFonf('romant.shx');
+
+  //pbasefont:=FontManager.getAddres('gewind.shx');
+  //pbasefont:=FontManager.{FindFonf}getAddres('amgdt.shx');
+  //pbasefont:=FontManager.getAddres('gothice.shx');
   gdb.init;
   BlockBaseDWG:=gdb.CreateDWG;
   ClipboardDWG:=gdb.CreateDWG;

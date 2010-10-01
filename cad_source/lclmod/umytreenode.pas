@@ -40,9 +40,11 @@ type
                   end;
     {**Modified TMenuItem}
     TmyMenuItem = class (TMenuItem)
-                       public constructor create(TheOwner: TComponent;_Caption,_Command:TTranslateString);
-                       protected
+                       public
                        FCommand:String;{**<Command to manager commands}
+                       constructor create(TheOwner: TComponent;_Caption,_Command:TTranslateString);
+                       procedure SetCommand(_Caption,_Command:TTranslateString);
+                       protected
                        procedure Click; override;
                   end;
     TCreatedNode = class of TTreeNode;
@@ -206,11 +208,20 @@ begin
      commandmanager.executecommand(@Fcommand[1]);
      inherited;
 end;
+procedure TmyMenuItem.SetCommand(_Caption,_Command:TTranslateString);
+begin
+     FCommand:=_Command;
+     caption:=(_Caption);
+     if _Command=''then
+                       self.Enabled:=false
+                   else
+                       self.Enabled:=true;
+end;
+
 constructor TmyMenuItem.create(TheOwner: TComponent;_Caption,_Command:TTranslateString);
 begin
      inherited create(TheOwner);
-     FCommand:=_Command;
-     caption:=sys2interf(_Caption);
+     SetCommand(_Caption,_Command);
 end;
 
 

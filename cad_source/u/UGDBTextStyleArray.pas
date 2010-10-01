@@ -20,7 +20,7 @@ unit UGDBTextStyleArray;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes,SysInfo,UGDBOpenArrayOfData, oglwindowdef,sysutils,gdbase, geometry,
-     gl;
+     gl,strproc,varmandef,shared,UGDBSHXFont;
 type
   //ptextstyle = ^textstyle;
 {EXPORT+}
@@ -28,11 +28,13 @@ PGDBTextStyleProp=^GDBTextStyleProp;
   GDBTextStyleProp=record
                     size:GDBDouble;(*saved_to_shd*)
                     oblique:GDBDouble;(*saved_to_shd*)
+                    wfactor:GDBDouble;(*saved_to_shd*)
               end;
   PGDBTextStyle=^GDBTextStyle;
   GDBTextStyle = record
-    name: GDBString;(*saved_to_shd*)
-    pfont: GDBPointer;
+    name: GDBAnsiString;(*saved_to_shd*)
+    dxfname: GDBAnsiString;(*saved_to_shd*)
+    pfont: PGDBfont;
     prop:GDBTextStyleProp;(*saved_to_shd*)
   end;
 GDBTextStyleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
@@ -91,13 +93,29 @@ begin
 end;}
 function GDBTextStyleArray.addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp):GDBInteger;
 var ts:GDBTextStyle;
+    ff:gdbstring;
     //p:GDBPointer;
 begin
   ts.name:=stylename;
-  ts.pfont:=FontManager.FindFonf(FontFile);
-  if ts.pfont=nil then ts.pfont:=FontManager.FindFonf('normal.shx');
+  ts.dxfname:=FontFile;
+
+  if pos('.',FontFile)=0 then
+                             FontFile:=FontFile+'.shx';
+
+  ts.pfont:=FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,FontFile));
+  if not assigned(ts.pfont) then
+                                begin
+                                     shared.LogError('Для стиля "'+Tria_AnsiToUtf8(stylename)+'" не найден шрифт "'+FontFile+'", заменен на альтернативный');
+                                     ts.pfont:=pbasefont;
+                                end;
+
+  //ts.pfont:=FontManager.addFonf(FontFile);
+  //ts.pfont:=FontManager.{FindFonf}getAddres(FontFile);
+  //if ts.pfont=nil then ts.pfont:=FontManager.getAddres('normal.shx');
   ts.prop:=tp;
   add(@ts);
+  pointer(ts.name):=nil;
+  pointer(ts.dxfname):=nil;
 end;
 function GDBTextStyleArray.FindStyle;
 var
@@ -113,6 +131,7 @@ begin
                                        result:=i;
                                        exit;
                                   end;
+       inc(pts);
   end;
 end;
 

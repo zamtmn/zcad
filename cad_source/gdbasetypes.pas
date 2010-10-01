@@ -30,6 +30,9 @@ PGDBFloat=^GDBFloat;
 PGDBString=^GDBString;
 {-}GDBString=ansistring;{//}
 
+PGDBAnsiString=^GDBAnsiString;
+{-}GDBAnsiString=ansistring;{//}
+
 PGDBBoolean=^GDBBoolean;
 {-}GDBBoolean=boolean;{//}
 

@@ -43,10 +43,11 @@ begin
                                  begin
                                       sysparam.temppath:=sysutils.GetEnvironmentVariable('TMP');
                                       if sysparam.temppath='' then
-                                                                  sysparam.temppath:=sysparam.programpath+'autosave/';
+                                                                  sysparam.temppath:=sysparam.programpath+'autosave'+PathDelim;
                                  end;
-     if sysparam.temppath[length(sysparam.temppath)]<>'/' then
-                                                              sysparam.temppath:=sysparam.temppath+'/';
+     if (sysparam.temppath[length(sysparam.temppath)]<>{'/'}PathDelim)
+     {or (sysparam.temppath[length(sysparam.temppath)]<>'\')} then
+                                                              sysparam.temppath:=sysparam.temppath+PathDelim;
 
 
      {sysparam.screenx:=800;

@@ -58,7 +58,9 @@ end;
 function GDBObjBlockdefArray.create;
 begin
   if parray=nil then createarray;
-  if count = max then exit;
+  if count = max then
+                     //exit;
+                     grow;
   result := @PBlockdefArray(parray)[count];
   result.init(name);
   inc(count);

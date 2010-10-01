@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
+uses UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
      UGDBObjBlockdefArray{,URecordDescriptor},UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,gdbEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
   entnamindex=record
@@ -333,6 +333,8 @@ var
   tp: PGDBObjBlockdef;
   oo,ll,pp:GDBBoolean;
   blockload:boolean;
+
+  tstyle:GDBTextStyle;
 begin
   blockload:=false;
   {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF2000',lp_IncPos);{$ENDIF}
@@ -438,8 +440,58 @@ begin
                   end
                   else
                     if s = 'STYLE' then
-                    begin
+                    {begin
                       gotodxf(f, 0, 'ENDTAB');
+                    end}
+                    begin
+                      {$IFDEF TOTALYLOG}programlog.logoutstr('Found style table',lp_IncPos);{$ENDIF}
+                      gotodxf(f, 0, 'STYLE');
+
+                      while s = 'STYLE' do
+                      begin
+                        tstyle.name:='';
+                        tstyle.pfont:=nil;
+                        tstyle.prop.oblique:=0;
+                        tstyle.prop.size:=1;
+
+                        byt := 2;
+
+                        while byt <> 0 do
+                        begin
+                          s := f.readGDBString;
+                          byt := strtoint(s);
+                          s := f.readGDBString;
+                          case byt of
+                            2:
+                              begin
+                                tstyle.name := s;
+                              end;
+                            40:
+                              begin
+                                tstyle.prop.size:=strtofloat(s);
+                              end;
+                            41:
+                              begin
+                                tstyle.prop.wfactor:=strtofloat(s);
+                              end;
+                            50:
+                              begin
+                                tstyle.prop.oblique:=strtofloat(s);
+                              end;
+                            3:
+                              begin
+                                   lname:=s;
+                                   //FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,s));
+                                   //tstyle.pfont:=FontManager.getAddres(s);
+                                   //if tstyle.pfont:=;
+                               end;
+                          end;
+                        end;
+                        gdb.GetCurrentDWG.TextStyleTable.addstyle(tstyle.Name,lname,tstyle.prop);
+                        {$IFDEF TOTALYLOG}programlog.logoutstr('Found style '+tstyle.Name,0);{$ENDIF}
+                      end;
+                      {$IFDEF TOTALYLOG}programlog.logoutstr('end; {style table}',lp_DecPos);{$ENDIF}
+              //gotodxf(f, 0, 'ENDTAB');
                     end
                     else
                       if s = 'UCS' then
@@ -494,10 +546,11 @@ begin
                                     s := f.readGDBString;
                                end
               else begin
+                   if s='*D1054' then
+                                  s:=s;
+
                 tp := gdb.GetCurrentDWG.BlockDefArray.create(s);
                 programlog.logoutstr('Found block '+s+';',lp_IncPos);
-                if s='Break' then
-                               s:=s;
                    //addfromdxf12(f, GDBPointer(GDB.pgdbblock^.blockarray[GDB.pgdbblock^.count].ppa),@tp^.Entities, 'ENDBLK');
                 while (s <> ' 30') and (s <> '30') do
                 begin
@@ -623,6 +676,8 @@ var
   phandlea: pdxfhandlerecopenarray;
   inlayertable, inblocksec, inblocktable: GDBBoolean;
   handlepos:integer;
+  ignoredsource:boolean;
+  instyletable:boolean;
 begin
   if FileExists(name) then
                          begin
@@ -640,6 +695,8 @@ begin
   inlayertable := false;
   inblocksec := false;
   inblocktable := false;
+  instyletable := false;
+  ignoredsource:=false;
   while templatefile.notEOF do
   begin
     if  (templatefile.count-templatefile.ReadPos)<10
@@ -781,9 +838,10 @@ begin
               if (inlayertable) and ((groupi = 0) and (values = 'ENDTAB')) then
               begin
                 inlayertable := false;
+                ignoredsource:=false;
                 for i := 0 to gdb.GetCurrentDWG.layertable.count - 1 do
                 begin
-                  if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name <> '0' then
+                  //if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name <> '0' then
                   begin
                     WriteString_EOL(outhandle, '0');
                     WriteString_EOL(outhandle, 'LAYER');
@@ -821,6 +879,59 @@ begin
                 WriteString_EOL(outhandle, groups);
                 WriteString_EOL(outhandle, values);
               end
+
+
+            else
+              if (instyletable) and ((groupi = 0) and (values = 'ENDTAB')) then
+              begin
+                instyletable := false;
+                ignoredsource:=false;
+                for i := 0 to gdb.GetCurrentDWG.TextStyleTable.count - 1 do
+                begin
+                  //if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name <> '0' then
+                  begin
+                    WriteString_EOL(outhandle, '0');
+                    WriteString_EOL(outhandle, 'STYLE');
+                    WriteString_EOL(outhandle, '5');
+                    WriteString_EOL(outhandle, inttohex(handle, 0));
+                    inc(handle);
+                    WriteString_EOL(outhandle, '100');
+                    WriteString_EOL(outhandle, 'AcDbSymbolTableRecord');
+                    WriteString_EOL(outhandle, '100');
+                    WriteString_EOL(outhandle, 'AcDbTextStyleTableRecord');
+                    WriteString_EOL(outhandle, '2');
+                    WriteString_EOL(outhandle, PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.name);
+                    WriteString_EOL(outhandle, '70');
+                    WriteString_EOL(outhandle, '0');
+
+                    WriteString_EOL(outhandle, '40');
+                    WriteString_EOL(outhandle, floattostr(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.prop.size));
+
+                    WriteString_EOL(outhandle, '41');
+                    WriteString_EOL(outhandle, floattostr(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.prop.wfactor));
+
+                    WriteString_EOL(outhandle, '50');
+                    WriteString_EOL(outhandle, floattostr(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.prop.oblique));
+
+                    WriteString_EOL(outhandle, '71');
+                    WriteString_EOL(outhandle, '0');
+
+                    WriteString_EOL(outhandle, '42');
+                    WriteString_EOL(outhandle, '2.5');
+
+                    WriteString_EOL(outhandle, '3');
+                    WriteString_EOL(outhandle, PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.dxfname);
+
+                    WriteString_EOL(outhandle, '4');
+                    WriteString_EOL(outhandle, '');
+
+                  end;
+                end;
+                WriteString_EOL(outhandle, groups);
+                WriteString_EOL(outhandle, values);
+              end
+
+
               else
                 if (groupi = 0) and (values = 'TABLE') then
                 begin
@@ -838,12 +949,29 @@ begin
                   else if (groupi = 2) and (values = 'BLOCK_RECORD') then
                   begin
                     inblocktable := true;
+                  end
+                  else if (groupi = 2) and (values = 'STYLE') then
+                  begin
+                    instyletable := true;
                   end;
+
                 end
+
+              else if (groupi = 0) and (values = 'LAYER')and inlayertable then
+                  begin
+                    IgnoredSource := true;
+                  end
+              else if (groupi = 0) and (values = 'STYLE')and instyletable then
+                  begin
+                    IgnoredSource := true;
+                  end
                 else
                 begin
+                  if not ignoredsource then
+                  begin
                   WriteString_EOL(outhandle, groups);
                   WriteString_EOL(outhandle, values);
+                  end;
                   //val('$' + values, i, cod);
                 end;
     //s := readspace(s);

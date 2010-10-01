@@ -19,7 +19,11 @@
 unit shared;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,lclproc;
+uses gdbasetypes,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,lclproc,Masks;
+
+type
+TFromDirIterator=procedure (filename:GDBString);
+TFromDirIteratorObj=procedure (filename:GDBString) of object;
 
 procedure HistoryOut(s: pansichar); export;
 procedure HistoryOutStr(s:GDBString);
@@ -28,6 +32,7 @@ procedure FatalError(errstr:GDBString);
 procedure LogError(errstr:GDBString); export;
 procedure ShowError(errstr:GDBString); export;
 procedure OldVersTextReplace(var vv:GDBString);
+procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIterator);
 
 var
     ProcessBar:TProgressBar;
@@ -45,6 +50,7 @@ implementation
 uses strproc,{umytreenode,}{FileUtil,LCLclasses,} LCLtype,
      //mainwindow,
      log,{UGDBDescriptor,}varmandef,sysinfo,{cmdline,}strutils{,oglwindow};
+
 procedure OldVersTextReplace(var vv:GDBString);
 begin
      vv:=AnsiReplaceStr(vv,'@@[Name]','@@[NMO_Name]');
@@ -68,7 +74,7 @@ begin
      if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
      if sysvar.SYS.SYS_IsHistoryLineCreated^ then
      begin
-          a:=sys2interf(s);
+          a:=(s);
                if HistoryLine.Lines.Count=0 then
                                             utflen:=utflen+{UTF8}Length(a)
                                         else
@@ -100,7 +106,7 @@ var s:GDBString;
 begin
      s:='FATALERROR: '+errstr;
      programlog.logoutstr(s,0);
-     s:=sys2interf(s);
+     s:=(s);
      Application.MessageBox(@s[1],0,MB_OK);
      halt(0);
 end;
@@ -120,8 +126,49 @@ var
    ts:GDBString;
 begin
      LogError(errstr);
-     ts:=sys2interf(errstr);
+     ts:=(errstr);
      Application.MessageBox(@ts[1],0,MB_ICONERROR);
+end;
+procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIterator);
+var sr: TSearchRec;
+    s:gdbstring;
+procedure processfile(s:gdbstring);
+var
+   fn:gdbstring;
+begin
+     fn:=path+s;
+     {$IFDEF TOTALYLOG}programlog.logoutstr('Process file '+fn,0);{$ENDIF}
+     if @method<>nil then
+                         method(fn);
+     if @proc<>nil then
+                         proc(fn);
+
+end;
+begin
+  {$IFDEF TOTALYLOG}programlog.logoutstr('FromDirIterator start',lp_IncPos);{$ENDIF}
+  if firstloadfilename<>'' then
+  if fileexists(path+firstloadfilename) then
+                                            processfile(firstloadfilename);
+  if FindFirst(path + '*', faDirectory, sr) = 0 then
+  begin
+    repeat
+      if (sr.Name <> '.') and (sr.Name <> '..') then
+      begin
+        if DirectoryExists(path + sr.Name) then FromDirIterator(path + sr.Name + '/',mask,firstloadfilename,proc,method)
+        else
+        begin
+          s:=lowercase(sr.Name);
+          if s<>firstloadfilename then
+          if MatchesMask(s,mask) then
+                                        begin
+                                             processfile(sr.Name);
+                                        end;
+        end;
+      end;
+    until FindNext(sr) <> 0;
+    FindClose(sr);
+  end;
+  {$IFDEF TOTALYLOG}programlog.logoutstr('FromDirIterator....{end}',lp_DecPos);{$ENDIF}
 end;
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('shared.initialization');{$ENDIF}

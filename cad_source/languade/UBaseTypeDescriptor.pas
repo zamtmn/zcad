@@ -77,14 +77,19 @@ GDBDoubleDescriptor=object(BaseTypeDescriptor)
                     end;
 GDBStringDescriptor=object(BaseTypeDescriptor)
                           constructor init;
-                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                           function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure CopyInstanceTo(source,dest:pointer);virtual;
                           procedure MagicFreeInstance(PInstance:GDBPointer);virtual;
                           procedure MagicAfterCopyInstance(PInstance:GDBPointer);virtual;
                           procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
+                    end;
+GDBAnsiStringDescriptor=object(GDBStringDescriptor)
+                          constructor init;
+                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                     end;
 GDBFloatDescriptor=object(BaseTypeDescriptor)
                           constructor init;
@@ -107,6 +112,7 @@ TEnumDataDescriptor=object(BaseTypeDescriptor)
 var
 GDBDoubleDescriptorObj:GDBDoubleDescriptor;
 GDBStringDescriptorObj:GDBStringDescriptor;
+GDBAnsiStringDescriptorObj:GDBAnsiStringDescriptor;
 GDBWordDescriptorObj:GDBWordDescriptor;
 GDBIntegerDescriptorObj:GDBIntegerDescriptor;
 GDBByteDescriptorObj:GDBByteDescriptor;
@@ -583,38 +589,9 @@ constructor GDBStringDescriptor.init;
 begin
      inherited init(sizeof(GDBString),'GDBString',nil);
 end;
-function GDBStringDescriptor.GetValueAsString;
-var
-     uGDBString:GDBString;
-begin
-    uGDBString := pGDBString(pinstance)^;
-    result := uGDBString;
-end;
 constructor GDBPointerDescriptor.init;
 begin
      inherited init(sizeof(GDBPointer),'GDBPointer',nil);
-end;
-function GDBPointerDescriptor.GetValueAsString;
-var
-     uGDBPointer:GDBPointer;
-     uGDBInteger: GDBLongword;
-begin
-    uGDBPointer := pGDBPointer(pinstance)^;
-                if uGDBPointer<>nil then
-                                             begin
-                                                  uGDBInteger := GDBPlatformint(uGDBPointer);
-                                                  result := '$' + inttohex(int64(uGDBInteger), 8);
-                                             end
-                                         else result := 'nil';
-end;
-procedure GDBStringDescriptor.SetValueFromString;
-//var
-//     vGDBLongword:gdbWord;
-//     error:integer;
-begin
-     //val(value,vGDBLongword,error);
-     //if error=0 then
-                    pGDBString(pinstance)^:=value;//vGDBLongword;
 end;
 function GDBStringDescriptor.Serialize;
 var l:gdbword;
@@ -650,6 +627,55 @@ begin
      membuf.ReadData(@L,sizeof(gdbword));
      setlength(pstring(PInstance)^,l);
      membuf.ReadData(@pstring(PInstance)^[1],l)
+end;
+function GDBPointerDescriptor.GetValueAsString;
+var
+     uGDBPointer:GDBPointer;
+     uGDBInteger: GDBLongword;
+begin
+    uGDBPointer := pGDBPointer(pinstance)^;
+                if uGDBPointer<>nil then
+                                             begin
+                                                  uGDBInteger := GDBPlatformint(uGDBPointer);
+                                                  result := '$' + inttohex(int64(uGDBInteger), 8);
+                                             end
+                                         else result := 'nil';
+end;
+function GDBStringDescriptor.GetValueAsString;
+var
+     uGDBString:GDBString;
+begin
+    uGDBString := pGDBString(pinstance)^;
+    result := uni2cp(uGDBString);
+end;
+procedure GDBStringDescriptor.SetValueFromString;
+//var
+//     vGDBLongword:gdbWord;
+//     error:integer;
+begin
+     //val(value,vGDBLongword,error);
+     //if error=0 then
+                    pGDBString(pinstance)^:=cp2uni(value);//vGDBLongword;
+end;
+constructor GDBAnsiStringDescriptor.init;
+begin
+     _init(sizeof(GDBString),'GDBAnsiString',nil);
+end;
+procedure GDBAnsiStringDescriptor.SetValueFromString(PInstance:GDBPointer;Value:GDBstring);
+//var
+//     vGDBLongword:gdbWord;
+//     error:integer;
+begin
+     //val(value,vGDBLongword,error);
+     //if error=0 then
+                    pGDBString(pinstance)^:=cp2ansi(value);//vGDBLongword;
+end;
+function GDBAnsiStringDescriptor.GetValueAsString(pinstance:GDBPointer):GDBString;
+var
+     uGDBString:GDBString;
+begin
+    uGDBString := pGDBString(pinstance)^;
+    result := ansi2cp(uGDBString);
 end;
 destructor TEnumDataDescriptor.done;
 begin
@@ -748,6 +774,7 @@ begin
      GDBDoubleDescriptorObj.init;
      //gdbgetmem({$IFDEF DEBUGBUILD}'{2A687C81-843D-4451-8663-384A625BFEBA}',{$ENDIF}pointer(GDBStringDescriptorObj),sizeof(GDBStringDescriptor));
      GDBStringDescriptorObj.init;
+     GDBAnsiStringDescriptorObj.init;
      //gdbgetmem({$IFDEF DEBUGBUILD}'{2A687C81-843D-4451-8663-384A625BFEBA}',{$ENDIF}pointer(GDBWordDescriptorObj),sizeof(GDBWordDescriptor));
      GDBWordDescriptorObj.init;
      //gdbgetmem({$IFDEF DEBUGBUILD}'{2A687C81-843D-4451-8663-384A625BFEBA}',{$ENDIF}pointer(GDBIntegerDescriptorObj),sizeof(GDBIntegerDescriptor));

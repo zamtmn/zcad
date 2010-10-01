@@ -62,7 +62,7 @@ var
    l,ll:integer;
    ss:string;
 begin
-     ss:=sys2interf(s);
+     ss:=(s);
      if HistoryLine.Lines.Count=0 then
                                             utflen:=utflen+UTF8Length(ss)
                                         else
@@ -90,7 +90,7 @@ begin
      case m of
      CLCOMMANDREDY:
      begin
-           prompt.Caption:=sys2interf(defaultpromot);
+           prompt.Caption:=(defaultpromot);
      end;
      CLCOMMANDRUN:
      begin
@@ -104,7 +104,7 @@ begin
      self.Constraints.MinHeight:=36;
      utfpresent:=false;
      UTFLen:=0;
-     height:=200;
+     //height:=100;
      //self.DoubleBuffered:=true;
 
      panel:=TPanel.create(self);

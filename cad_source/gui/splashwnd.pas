@@ -41,8 +41,9 @@ implementation
 uses log;
 procedure TSplashWnd.TXTOut;
 begin
-     self.txt.Caption:=sys2interf(vinfotext+'Инициализация:'#13#10+s);
+     self.txt.Caption:=vinfotext+'Инициализация:'#13#10+s;
      self.txt.repaint;
+     //application.ProcessMessages;
 end;
 procedure TSplashWnd.AfterConstruction;
 begin
@@ -70,7 +71,8 @@ end;
 procedure createsplash;
 begin
      SplashWindow:=TSplashWnd.Create(nil);
-     //SplashWindow.show;
+     SplashWindow.show;
+     application.ProcessMessages;
 end;
 procedure removesplash;
 begin

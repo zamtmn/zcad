@@ -21,7 +21,7 @@ unit UGDBLayerArray;
 interface
 uses gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
      gl,
-     varmandef,gdbobjectsconstdef,UGDBNamedObjectsArray{,StrUtils};
+     varmandef,gdbobjectsconstdef,UGDBNamedObjectsArray,StrProc;
 type
 {EXPORT+}
 PGDBLayerProp=^GDBLayerProp;
@@ -75,7 +75,7 @@ function GDBLayerProp.GetFullName;
      ls=24;}
 var ss:gdbstring;
 begin
-     result:=getname;
+     result:=ansi2cp(getname);
        {if length(result)<ls then
                          result:=result+dupestring(' ',ls-length(result));}
        if _on then

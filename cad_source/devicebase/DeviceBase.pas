@@ -136,30 +136,17 @@ begin
                                  end;
      until s='';
 end;
+procedure loaddev(fn:gdbstring);
+begin
+     units.loadunit(fn,nil);
+end;
 procedure DeviceManager.loadfromdir(path: GDBString);
 var sr: TSearchRec;
     s:gdbstring;
 begin
-  if fileexists(path+firstfilename) then
-                                        units.loadunit(path+firstfilename,nil);
-  if FindFirst(path + '*', faDirectory, sr) = 0 then
-  begin
-    repeat
-      if (sr.Name <> '.') and (sr.Name <> '..') then
-      begin
-        if DirectoryExists(path + sr.Name) then loadfromdir(path + sr.Name + '/')
-        else
-        begin
-          s:=lowercase(sr.Name);
-          if s<>firstfilename then
-          if ExtractFileExt(s)='.pas'
-                                    then
-                                       units.loadunit(path+sr.Name,nil);
-        end;
-      end;
-    until FindNext(sr) <> 0;
-    FindClose(sr);
-  end;
+
+  FromDirIterator(path,'*.pas',firstfilename,loaddev,nil);
+
 end;
 procedure startup;
 var pt:PObjectDescriptor;

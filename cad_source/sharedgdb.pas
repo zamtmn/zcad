@@ -61,7 +61,7 @@ begin
   begin
                                       begin
                                            gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
-                                           mainformn.Caption:=sys2interf(('ZCad v'+sysvar.SYS.SYS_Version^+' - ['+gdb.GetCurrentDWG.FileName+']'));
+                                           mainformn.Caption:=(('ZCad v'+sysvar.SYS.SYS_Version^+' - ['+gdb.GetCurrentDWG.FileName+']'));
   reloadlayer;
   mainwindow.LayerBox.enabled:=true;
   mainwindow.LineWBox.enabled:=true;
@@ -102,8 +102,10 @@ begin
   end
   else
       begin
-           mainformn.Caption:=sys2interf('ZCad v'+sysvar.SYS.SYS_Version^);
+           mainformn.Caption:=('ZCad v'+sysvar.SYS.SYS_Version^);
+           if assigned(mainwindow.LayerBox)then
            mainwindow.LayerBox.enabled:=false;
+           if assigned(mainwindow.LineWBox)then
            mainwindow.LineWBox.enabled:=false;
       end;
 end;
@@ -113,4 +115,4 @@ begin
 end;
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('shared.initialization');{$ENDIF}
-end.
+end.

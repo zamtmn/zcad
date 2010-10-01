@@ -63,13 +63,15 @@ MainMenuItem Файл;
   {
     Command Создать,NewDWG,CTRL+N,none
     Command Загрузить,Load,CTRL+O,none
-	Separator
+    Separator
     Command Сохранить,QSave,CTRL+S,none
     Command Сохранить как,SaveAs,CTRL+S,none
     Command Сохранить(autosave),QSave(QS),CTRL+S,none
-	Separator
-	Command Закрыть вкладку,CloseDWG,none,none
-	Separator
+    Separator
+    Command Закрыть вкладку,CloseDWG,none,none
+    Separator
+    FileHistory
+    Separator
     Command Выход,Quit,none,none
   }
 MainMenuItem Правка;
@@ -95,7 +97,11 @@ MainMenuItem Вид;
 MainMenuItem Формат;
   {
     Command Слои,SetObjInsp(LAYERS),none,none
-    Command Стили текста,SetObjInsp(TSTYLES),none,none
+    MenuItem Текст;
+      {
+        Command Стили,SetObjInsp(TSTYLES),none,none
+		Command Шрифты,SetObjInsp(FONTS),none,none
+      }
     Command Стили таблиц,SetObjInsp(TABLESTYLES),none,none
     Command Нумераторы,SetObjInsp(NUMERATORS),none,none
     Command Стили размеров (пока нет),fuckoff,none,none

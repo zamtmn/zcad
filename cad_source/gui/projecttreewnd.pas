@@ -154,7 +154,7 @@ begin
                                  CurrNode:=CurrFindNode
                              else
                                  begin
-                                      CurrNode:=TmyTreeNode(TmyTreeView(CurrNode.TreeView).Items.addchild(CurrNode,sys2interf(Cat2UserNameCat(category,catalog))));
+                                      CurrNode:=TmyTreeNode(TmyTreeView(CurrNode.TreeView).Items.addchild(CurrNode,(Cat2UserNameCat(category,catalog))));
                                       TmyTreeNode(CurrNode).fcategory:=category;
                                  end;
 
@@ -210,7 +210,7 @@ begin
          TmyTreeView(CurrNode.TreeView).NodeType:=TEqTreeNode;
          if treepos='UNCAT' then
                                 begin
-                                     eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,sys2interf(treepos)));
+                                     eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,(treepos)));
                                      eqnode.fBlockName:=pvdeq^.name;
                                      eqnode.FPopupMenu:=pcm;
                                      eqnode.ptd.PTD:=pvdeq^.data.PTD;
@@ -220,7 +220,7 @@ begin
                                 end
                              else
                                  begin
-                                      eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,sys2interf(treepos)));
+                                      eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,(treepos)));
                                       eqnode.fBlockName:=pvdeq^.name;
                                       eqnode.FPopupMenu:=pcm;
                                       eqnode.ptd.PTD:=pvdeq^.data.PTD;
@@ -250,7 +250,7 @@ var
 begin
   inherited;
   self.Position:=poScreenCenter;
-  caption:=sys2interf('Дерево проекта');
+  caption:=('Дерево проекта');
   self.borderstyle:=bsSizeToolWin;
 
   PT_PageControl:=TmyPageControl.create(self);
@@ -258,15 +258,15 @@ begin
   PT_PageControl.OnChange:=self.ChangePage;
 
   PT_P_ProgramDB:=TTabSheet.create(PT_PageControl);
-  PT_P_ProgramDB.Caption:=sys2interf('БД программы');
+  PT_P_ProgramDB.Caption:=('БД программы');
   T_ProgramDB:=TmyTreeView.create(PT_P_ProgramDB);
-  BlockNodeN:=TmyTreeNode(T_ProgramDB.Items.add(nil,sys2interf('Блоки')));
-  BlockNodeUnCatN:=TmyTreeNode(T_ProgramDB.Items.addchild(BlockNodeN,sys2interf('Без категории')));
+  BlockNodeN:=TmyTreeNode(T_ProgramDB.Items.add(nil,('Блоки')));
+  BlockNodeUnCatN:=TmyTreeNode(T_ProgramDB.Items.addchild(BlockNodeN,('Без категории')));
   BlockNodeUnCatN.fcategory:='UNCAT';
-  DeviceNodeN:=TmyTreeNode(T_ProgramDB.Items.add(nil,sys2interf('Устройства')));
-  DeviceNodeUnCatN:=TmyTreeNode(T_ProgramDB.Items.addchild(DeviceNodeN,sys2interf('Без категории')));
+  DeviceNodeN:=TmyTreeNode(T_ProgramDB.Items.add(nil,('Устройства')));
+  DeviceNodeUnCatN:=TmyTreeNode(T_ProgramDB.Items.addchild(DeviceNodeN,('Без категории')));
   DeviceNodeUnCatN.fcategory:='UNCAT';
-  ProgramEquipmentN:=TmyTreeNode(T_ProgramDB.Items.add(nil,sys2interf('Оборудование')));
+  ProgramEquipmentN:=TmyTreeNode(T_ProgramDB.Items.add(nil,('Оборудование')));
 
 
 
@@ -277,9 +277,9 @@ begin
   PT_P_ProgramDB.Parent:=PT_PageControl;
 
   PT_P_ProjectDB:=TTabSheet.create(PT_PageControl);
-  PT_P_ProjectDB.Caption:=sys2interf('БД чертежа');
+  PT_P_ProjectDB.Caption:=('БД чертежа');
   T_ProjectDB:=TmyTreeView.create(PT_P_ProjectDB);
-  ProjectEquipmentN :=TmyTreeNode(T_ProjectDB.Items.add(nil,sys2interf('Оборудование')));
+  ProjectEquipmentN :=TmyTreeNode(T_ProjectDB.Items.add(nil,('Оборудование')));
   T_ProjectDB.align:=alClient;
   T_ProjectDB.scrollbars:=ssAutoBoth;
   T_ProjectDB.Parent:=PT_P_ProjectDB;
@@ -313,7 +313,7 @@ begin
         BuildBranchN(TmyTreeNode(CurrNode),treepos,BlockCategory);
 
         TmyTreeView(CurrNode.TreeView).NodeType:=TBlockTreeNode;
-        BlockNode:=TBlockTreeNode(T_ProgramDB.Items.addchild(CurrNode,sys2interf(treepos)));
+        BlockNode:=TBlockTreeNode(T_ProgramDB.Items.addchild(CurrNode,(treepos)));
         BlockNode.fBlockName:=pb^.name;
         BlockNode.FPopupMenu:=ProgramDEVContextMenuN;
 

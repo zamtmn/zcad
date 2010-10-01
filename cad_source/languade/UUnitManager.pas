@@ -337,7 +337,7 @@ begin
                                  objecttype:begin
                                                   {FPVMT}
                                                   typename:=parseresult^.getGDBString(0);
-                                                  if (typename) = 'TUnitManager'
+                                                  if (typename) = 'GDBfont'
                                                   then
                                                        typename:=typename;
                                                   gdbgetmem({$IFDEF DEBUGBUILD}'{792FCD4D-5B31-441D-82DC-F62FE270D4DB}',{$ENDIF}GDBPointer(etd),sizeof(ObjectDescriptor));
@@ -671,9 +671,11 @@ begin
   {URegisterObjects.startup;}
 
   units.loadunit(expandpath('*rtl/sysvar.pas'),nil);
+  units.loadunit(expandpath('*rtl/savedvar.pas'),nil);
   units.loadunit(expandpath('*rtl/devicebase.pas'),nil);
 
   SysVarUnit:=units.findunit('sysvar');
+  SavedUnit:=units.findunit('savedvar');
   DBUnit:=units.findunit('devicebase');
 
   SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_DrawMode,'DWG_DrawMode');
@@ -733,6 +735,7 @@ begin
   SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_SystmGeometryColor,'SYS_SystmGeometryColor');
   SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_IsHistoryLineCreated,'SYS_IsHistoryLineCreated');
   SysVar.SYS.SYS_IsHistoryLineCreated^:=FALSE;
+  SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_AlternateFont,'SYS_AlternateFont');
 
   SysVarUnit.AssignToSymbol(SysVar.PATH.device_library,'PATH_Device_Library');
   s:=SysVar.PATH.device_library^;
@@ -740,6 +743,8 @@ begin
   s:=SysVar.PATH.Program_Run^;
   SysVarUnit.AssignToSymbol(SysVar.PATH.Support_Path,'PATH_Support_Path');
   s:=SysVar.PATH.Support_Path^;
+
+  SysVarUnit.AssignToSymbol(SysVar.PATH.Fonts_Path,'PATH_Fonts');
 
   sysvar.RD.RD_LastRenderTime^:=0;
   sysvar.PATH.Program_Run^:=sysparam.programpath;

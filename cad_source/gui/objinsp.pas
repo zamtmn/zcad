@@ -22,6 +22,11 @@ unit Objinsp;
 interface
 
 uses
+
+  {$IFDEF LCLGTK2}
+  x,xlib,{x11,}{xutil,}
+  gtk2,gdk2,{gdk2x,}
+  {$ENDIF}
   strproc,umytreenode,types,graphics,
   StdCtrls,ExtCtrls,ComCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype{$ENDIF},fileutil,
 
@@ -50,11 +55,13 @@ type
     currobjgdbtype,defaultobjgdbtype:PUserTypeDescriptor;
     PEditor:TPropEditor;
     PDA:TPropertyDeskriptorArray;
-    namecol:GDBInteger;
+    namecol{,mmnamecol}:GDBInteger;
     contentheigth,startdrawy:GDBInteger;
 
     //TI: TOOLINFO;
     OLDPP:PPropertyDeskriptor;
+
+    MResplit:boolean;
 
 
     procedure draw; virtual;
@@ -66,6 +73,7 @@ type
     //procedure FormResize;
     procedure BeforeInit; virtual;
     procedure _onresize(sender:tobject);virtual;
+    procedure updateeditor;virtual;
     //procedure BuildPDA(ExtType:GDBWord; var addr:GDBPointer);
     procedure buildproplist(exttype:PUserTypeDescriptor; bmode:GDBInteger; var addr:GDBPointer);
     procedure SetCurrentObjDefault;
@@ -83,6 +91,7 @@ type
 
     procedure freeeditor;
     procedure asyncfreeeditor(Data: PtrInt);
+    function IsMouseOnSpliter(pp:PPropertyDeskriptor; X:Integer):GDBBoolean;
 
     {LCL}
   //procedure Pre_MouseMove(fwkeys:longint; x,y:GDBSmallInt; var r:HandledMsg); virtual;
@@ -90,6 +99,7 @@ type
 
   //procedure Pre_MouseDown(fwkeys:longint; x,y:GDBInteger; var r:HandledMsg); virtual;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);override;
+    procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);override;
   end;
 
 var
@@ -114,6 +124,16 @@ begin
      self.DoubleBuffered:=true;
      self.BorderStyle:=bsnone;
      self.BorderWidth:=1;
+
+     pcurrobj:=nil;
+  peditor:=nil;
+  ppropcurrentedit:=nil;
+  startdrawy:=0;
+
+  MResplit:=false;
+  namecol:=clientwidth div 2;
+  //mmnamecol:=namecol;
+
 end;
 
 procedure TGDBobjinsp.SetCurrentObjDefault;
@@ -253,7 +273,7 @@ begin
       begin
         r.Left:=2+8*sub;
         r.Top:=y{ * rowh};
-        r.Right:=namecol-5;
+        r.Right:=namecol{-5};  //--------------------------------------------------
         r.Bottom:=y{ * rowh}+rowh+1;
         {ppd.x1:=r.Left;
         ppd.y1:=r.Top;
@@ -274,8 +294,8 @@ begin
           //selectobject({cdc}dc,GetStockObject(LTGRAY_BRUSH));
           //Rectangle({cdc}dc,r.Left,r.Top,r.Right,r.Bottom);
 
-          canvas.Brush.Color := {clBtnShadow}{clinActiveCaption}clBtnFace;
-          canvas.Brush.Style := bsSolid;
+          //canvas.Brush.Style := bsSolid;
+          canvas.Brush.Color := clBtnFace;
           canvas.Rectangle(r);
           //canvas.Frame3d(r,1,{bvRaised}bvSpace);
 
@@ -287,7 +307,7 @@ begin
 
             tempcolor:=canvas.Font.Color;
             canvas.Font.Color:=clGrayText;
-            canvas.TextRect(r,r.Left,r.Top,sys2interf(s));
+            canvas.TextRect(r,r.Left,r.Top,(s));
             //drawtextA({cdc}dc,GDBPointer(s),length(s),r,DT_left);
             canvas.Font.Color:=tempcolor;
             //SetTextColor({cdc}dc,coloro);
@@ -296,7 +316,7 @@ begin
               begin
               //drawtextA({cdc}dc,GDBPointer(s),length(s),r,DT_left);
               //canvas.Font.Color:=clYellow;    dfg
-              canvas.TextRect(r,r.Left,r.Top,sys2interf(s));
+              canvas.TextRect(r,r.Left,r.Top,(s));
               end;
           inc(sub);
           y:=y+rowh;
@@ -318,7 +338,7 @@ begin
           begin
             tempcolor:=canvas.Font.Color;
             canvas.Font.Color:=clGrayText;
-            canvas.TextRect(r,r.Left,r.Top,sys2interf(ppd^.Name));
+            canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
             canvas.Font.Color:=tempcolor;
 
           //  coloro:=SetTextColor({cdc}dc,colorn);
@@ -326,7 +346,7 @@ begin
           //  SetTextColor({cdc}dc,coloro);
           end
           else
-              canvas.TextRect(r,r.Left,r.Top,sys2interf(ppd^.Name));
+              canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
               //drawtextA({cdc}dc,GDBPointer(ppd^.Name),length(ppd^.Name),r,DT_left);
           r.Top:=r.Top-3;
           r.Left:=r.Right-1;
@@ -343,7 +363,7 @@ begin
           begin
             tempcolor:=canvas.Font.Color;
             canvas.Font.Color:=clGrayText;
-            canvas.TextRect(r,r.Left,r.Top,sys2interf(ppd^.value));
+            canvas.TextRect(r,r.Left,r.Top,(ppd^.value));
             canvas.Font.Color:=tempcolor;
 
 //            coloro:=SetTextColor({cdc}dc,colorn);
@@ -352,7 +372,7 @@ begin
           end
           else
             //drawtextA({cdc}dc,GDBPointer(ppd^.value),length(ppd^.value),r,DT_left);
-            canvas.TextRect(r,r.Left,r.Top,sys2interf(ppd^.value));
+            canvas.TextRect(r,r.Left,r.Top,(ppd^.value));
                                  //TextOut(cdc, namecol, y * rowh, GDBPointer(ppd^.value), length(ppd^.value));
           y:=y++rowh;
         end;
@@ -522,6 +542,15 @@ begin
                                     end;
                                     }
 end;
+function TGDBobjinsp.IsMouseOnSpliter(pp:PPropertyDeskriptor; X:Integer):GDBBoolean;
+begin
+  result:=false;
+  if (pp<>nil) then
+  if (pp^.SubNode=nil) then
+  if (abs(x-namecol)<2) then
+                          result:=true;
+end;
+
 procedure TGDBobjinsp.MouseMove(Shift: TShiftState; X, Y: Integer);
 //procedure TGDBobjinsp.Pre_MouseMove(fwkeys:longint; x,y:GDBSmallInt; var r:HandledMsg);
 var
@@ -532,11 +561,24 @@ var
   tp:pointer;
   tempstr:gdbstring;
 begin
+    if mresplit then
+                  begin
+                       //mmnamecol:=x;
+                       namecol:=x;
+                       repaint;
+                       exit;
+                  end;
+
   y:=y+self.VertScrollBar.Position;
   //application.HintPause:=1;
   //application.HintShortPause:=10;
   my:=startdrawy;
   pp:=mousetoprop(@pda,x,y,my);
+
+  if IsMouseOnSpliter(pp,X) then
+                                self.Cursor:=crHSplit
+                            else
+                                self.Cursor:=crDefault;
 
   if (pp=nil)or(ppropcurrentedit=pp) then
   begin
@@ -577,7 +619,7 @@ begin
                          tempstr:=tempstr+'   '+pp^.ValKey+':'+pp^.ValType;
     if pp^.Value<>'' then
                          tempstr:=tempstr+':='+pp^.Value;
-    tempstr:=sys2interf(tempstr);
+    tempstr:=(tempstr);
   self.Hint:=tempstr;
   self.ShowHint:=true;
 
@@ -607,6 +649,16 @@ begin
   end;
 end;
 //procedure TGDBobjinsp.pre_mousedown;
+procedure TGDBobjinsp.MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);
+begin
+     inherited;
+     if (button=mbLeft)
+    and (mresplit=true) then
+                                    begin
+                                    mresplit:=false;
+                                    exit;
+                                    end;
+end;
 procedure TGDBobjinsp.MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);
 var
   my:GDBInteger;
@@ -622,10 +674,18 @@ var
   ir:itrec;
 
 begin
+  inherited;
   y:=y+self.VertScrollBar.Position;
   //if proptreeptr=nil then exit;
   my:=startdrawy;
   pp:=mousetoprop(@pda,x,y,my);
+
+    if (button=mbLeft)
+   and (IsMouseOnSpliter(pp,X)) then
+                                    begin
+                                    mresplit:=true;
+                                    exit;
+                                    end;
   if pp=nil then
     exit;
   if pp^.SubNode<>nil then
@@ -701,6 +761,7 @@ end;
 
 procedure TGDBobjinsp.updateinsp;
 begin
+  //exit;
   setptr(currobjgdbtype,pcurrobj);
 end;
 
@@ -791,6 +852,8 @@ begin
   ppropcurrentedit:=nil;
   startdrawy:=0;
 
+  MResplit:=false;
+  namecol:=50;
   //---------------TI.cbSize := SizeOf(TOOLINFO);
   //---------------TI.uFlags := TTF_SUBCLASS;
   //---------------TI.uId := 0;
@@ -800,17 +863,26 @@ begin
 
   //----------------SendMessage(MainFormN.hToolTip, TTM_ADDTOOL, 0, LPARAM(@ti));
 end;
+procedure TGDBobjinsp.updateeditor;
+begin
+  //peditor.geteditor.SetBounds(peditor.wndx-(xn-namecol),peditor.wndy,peditor.wndw-(x-width)+(xn-namecol),peditor.wndh);
+end;
 procedure TGDBobjinsp._onresize(sender:tobject);
 var x,xn:integer;
+{$IFDEF LCLGTK2}Widget: PGtkWidget;{$ENDIF}
 begin
-  x:=width;
+  {$IFDEF LCLGTK2}
+  Widget:=PGtkWidget(PtrUInt(Handle));
+  gtk_widget_add_events (Widget,GDK_POINTER_MOTION_HINT_MASK);
+  {$ENDIF}
+  createscrollbars;
+  {x:=width;
   xn:=namecol;
   inherited;
-  createscrollbars;
   namecol:=self.clientwidth div 2;
   if namecol<50 then namecol:=50;
   if namecol>155 then
-    namecol:=155;
+    namecol:=155;}
   if peditor<>nil then
                          begin
                               //-----------------------------------------------------------------peditor^.setxywh(peditor.wndx-(xn-namecol),peditor.wndy,peditor.wndw-(x-width)+(xn-namecol),peditor.wndh);

@@ -50,9 +50,11 @@ var
   SYS_ActiveMouse:GDBBoolean;
   SYS_SystmGeometryColor:GDBInteger;
   SYS_IsHistoryLineCreated:GDBBoolean;
+  SYS_AlternateFont:GDBString;
   PATH_Device_Library:GDBString;
   PATH_Program_Run:GDBString;
   PATH_Support_Path:GDBString;
+  PATH_Fonts:GDBString;
   ShowHiddenFieldInObjInsp:GDBBoolean;
   testGDBBoolean:GDBBoolean;
   pi:GDBDouble;
@@ -85,7 +87,7 @@ begin
   DISP_OSSize:=10.0;
   DISP_DrawZAxis:=False;
   DISP_ColorAxis:=False;
-  RD_PanObjectDegradation:=True;
+  RD_PanObjectDegradation:=False;
   RD_LineSmooth:=False;
   RD_MaxLineWidth:=10.0;
   RD_MaxPointSize:=63.375;
@@ -101,18 +103,20 @@ begin
   RD_LastRenderTime:=0;
   RD_MaxRenderTime:=0;
   SAVE_Auto_Interval:=300;
-  SAVE_Auto_Current_Interval:=274;
+  SAVE_Auto_Current_Interval:=285;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';
   SAVE_Auto_On:=True;
-  SYS_RunTime:=26;
-  SYS_Version:='0.9.6.61';
+  SYS_RunTime:=15;
+  SYS_Version:='0.9.7 SVN:8';
   SYS_ActiveMouse:=True;
   SYS_SystmGeometryColor:=250;
   SYS_IsHistoryLineCreated:=True;
+  SYS_AlternateFont:='GEWIND.SHX';
   PATH_Device_Library:='*programdb|c:/zcad/userdb';
-  PATH_Program_Run:='C:\zcad\CAD\';
+  PATH_Program_Run:='C:\zcad\cad\';
   PATH_Support_Path:='*rtl|*rtl/objdefunits|*rtl/objdefunits/include|*components|*blocks/el/general';
-  ShowHiddenFieldInObjInsp:=True;
+  PATH_Fonts:='*fonts/|C:/Program Files/AutoCAD 2010/Fonts/';
+  ShowHiddenFieldInObjInsp:=False;
   testGDBBoolean:=False;
   pi:=3.14159265359;
 end.

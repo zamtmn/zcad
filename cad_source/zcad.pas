@@ -20,9 +20,9 @@ program zcad;
 {$INCLUDE def.inc}
 {$IFNDEF LINUX}
   {$APPTYPE GUI}
-
 {$ENDIF}
 uses
+  {$IFDEF REPORTMMEMORYLEAKS}heaptrc,{$ENDIF}
   Interfaces,
   forms,
   splashwnd,
@@ -57,6 +57,7 @@ uses
   sysutils,
 
 
+
   commandline,
 
   GDBCommandsBase,
@@ -86,13 +87,20 @@ uses
 
 begin
 
-{$IFDEF FPC}{SetHeapTraceOutput('log/memory-heaptrace.txt')};{$ENDIF}
+{$IFDEF REPORTMMEMORYLEAKS}
+       SetHeapTraceOutput('log/memory-heaptrace.txt');
+       keepreleased:=true;
+
+
+{$ENDIF}
+
 {$IFDEF DEBUGBUILD}
 {$IFDEF VER180}
   ReportMemoryLeaksOnShutdown:=DebugHook <> 0;
 {$ENDIF}
 {$ENDIF}
-  programlog.logoutstr('ZCAD log v'+sysparam.ver.versionstring+' started',0);
+
+programlog.logoutstr('ZCAD log v'+sysparam.ver.versionstring+' started',0);
 {$IFDEF VER150}programlog.logoutstr('Program compiled on Borland DELPHI7                    ',0); {$ENDIF}
 {$IFDEF VER170}programlog.logoutstr('Program compiled on Borland DELPHI2005                 ',0); {$ENDIF}
 {$IFDEF VER180}programlog.logoutstr('Program compiled on Borland Developer Studio DELPHI2006',0); {$ENDIF}
@@ -107,7 +115,7 @@ begin
   ugdbdescriptor.startup;
 
   Application.CreateForm(TMainFormN, MainFormN);
-
+  //sleep(1000);
   MainFormN.show;
   MainFormN.Repaint;
 
@@ -126,7 +134,7 @@ begin
   historyoutstr('Run file ''*components\autorun.cmd''');
   SplashWindow.TXTOut('Выполнение *components\autorun.cmd');commandmanager.executefile('*components/autorun.cmd');
 
-  //updatevisible;
+//updatevisible;
 
 //  SplashWindow.TXTOut('Построение дерева блоков');
 //                                                  ProjectTreeWindow:=TProjectTreeWnd.create(application.mainform);

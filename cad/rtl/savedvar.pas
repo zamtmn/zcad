@@ -1,0 +1,33 @@
+unit savedvar;
+interface
+uses System;
+var
+  VIEW_CommandLineH:GDBInteger;
+  VIEW_ObjInspV:GDBInteger;
+  VIEW_ObjInspSubV:GDBInteger;
+  PATH_File0:GDBString;
+  PATH_File1:GDBString;
+  PATH_File2:GDBString;
+  PATH_File3:GDBString;
+  PATH_File4:GDBString;
+  PATH_File5:GDBString;
+  PATH_File6:GDBString;
+  PATH_File7:GDBString;
+  PATH_File8:GDBString;
+  PATH_File9:GDBString;
+implementation
+begin
+  VIEW_CommandLineH:=138;
+  VIEW_ObjInspV:=184;
+  VIEW_ObjInspSubV:=100;
+  PATH_File0:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File1:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File2:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
+  PATH_File3:='';
+  PATH_File4:='';
+  PATH_File5:='';
+  PATH_File6:='';
+  PATH_File7:='';
+  PATH_File8:='';
+  PATH_File9:='';
+end.

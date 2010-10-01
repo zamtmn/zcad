@@ -112,6 +112,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          OIP:TOIProps;
                          Collapsed:GDBBoolean;
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
+                         procedure _init(size:GDBInteger;tname:string;pu:pointer);
                          function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
                          procedure ApplyOperator(oper,path:GDBString;var offset:GDBLongword;var tc:PUserTypeDescriptor);virtual;abstract;
                          function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
@@ -152,6 +153,7 @@ UserTypeDescriptor=object(GDBaseObject)
   tpath=record
              Device_Library:PGDBString;(*'К библиотекам'*)
              Support_Path:PGDBString;(*'К дополнительным файлам'*)
+             Fonts_Path:PGDBString;(*'К шрафтам'*)
              Program_Run:PGDBString;(*'К программе'*)(*oi_readonly*)
              Temp_files:PGDBString;(*'К временным файлам'*)(*oi_readonly*)
         end;
@@ -209,10 +211,11 @@ UserTypeDescriptor=object(GDBaseObject)
         end;
   tsys=record
              SYS_Version:PGDBString;(*'Версия программы'*)(*oi_readonly*)
-             SYS_ActiveMouse:PGDBBoolean;(*'Активная мышь'*)
+             SYS_ActiveMouse:PGDBBoolean;(*'??Активная мышь'*)
              SYS_RunTime:PGDBInteger;(*'Время работы программы'*)(*oi_readonly*)
              SYS_SystmGeometryColor:PGDBInteger;(*'Вспомогательный цвет'*)
              SYS_IsHistoryLineCreated:PGDBBoolean;(*'Окно истории создано'*)(*oi_readonly*)
+             SYS_AlternateFont:PGDBString;(*'Альтернативный шрафт'*)
        end;
   tdwg=record
              DWG_DrawMode:PGDBInteger;(*'Режим рисования?'*)
@@ -369,7 +372,7 @@ function UserTypeDescriptor.SerializePreProcess;
 begin
      result:=DupeString(' ',sub)+value;
 end;
-constructor UserTypeDescriptor.init;
+procedure UserTypeDescriptor._init;
 begin
      SizeInGDBBytes:=size;
      pointer(typename):=nil;
@@ -378,6 +381,11 @@ begin
      oip.ci:=0;
      oip.barpos:=0;
      collapsed:=true;
+end;
+
+constructor UserTypeDescriptor.init;
+begin
+     _init(size,tname,pu);
 end;
 destructor UserTypeDescriptor.done;
 begin

@@ -45,7 +45,7 @@ uses
  shared,
  sharedgdb,UGDBEntTree,
   {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}
- {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator;
+ {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline;
 type
 {Export+}
   TMSType=(
@@ -382,6 +382,10 @@ else if Operands='TSTYLES' then
                             begin
                                  GDBobjinsp.setptr(dbunit.TypeName2PTD('GDBTextStyleArray'),@gdb.GetCurrentDWG.TextStyleTable);
                             end
+else if Operands='FONTS' then
+                            begin
+                                 GDBobjinsp.setptr(dbunit.TypeName2PTD('GDBFontManager'),@FontManager);
+                            end
 else if Operands='OSMODE' then
                             begin
                                  OSModeEditor.GetState;
@@ -399,8 +403,26 @@ else if Operands='TABLESTYLES' then
      GDBobjinsp.SetCurrentObjDefault;
 end;
 function quit_com(Operands:pansichar):GDBInteger;
+var
+   pint:PGDBInteger;
+   mem:GDBOpenArrayOfByte;
 begin
-     //destroywindow(MainForm.handle);
+     pint:=SavedUnit.FindValue('VIEW_CommandLineH');
+     if assigned(pint)then
+                          pint^:=Cline.Height;
+     pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+     if assigned(pint)then
+                          pint^:=GDBobjinsp.Width;
+     pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
+     if assigned(pint)then
+                          pint^:=GDBobjinsp.namecol;
+
+     mem.init({$IFDEF DEBUGBUILD}'{71D987B4-8C57-4C62-8C12-CFC24A0A9C9A}',{$ENDIF}1024);
+     SavedUnit^.SavePasToMem(mem);
+     mem.SaveToFile(sysparam.programpath+'rtl'+PathDelim+'savedvar.pas');
+     mem.done;
+
+
      application.terminate;
      historyout('   Вот и всё бля...............');
      result:=cmd_ok;
@@ -488,7 +510,7 @@ begin
 
      myts:=nil;
      myts:=TTabSheet.create(MainFormN.PageControl);
-     myts.Caption:=sys2interf(Operands);
+     myts.Caption:=(Operands);
      myts.Parent:=MainFormN.PageControl;
 
      //tf.align:=al_client;
@@ -522,6 +544,7 @@ begin
      //addfromdxf(sysvar.path.Program_Run^+'blocks\el\general\_nok.dxf',@gdb.GetCurrentDWG.ObjRoot);
 
      MainFormN.PageControl.ActivePage:=myts;
+     sharedgdb.updatevisible;
      redrawoglwnd;
      result:=cmd_ok;
      application.ProcessMessages;
@@ -634,6 +657,7 @@ begin
      begin
           newdwg_com(@s[1]);
           Merge_com(@s[1]);
+          MainFormN.processfilehistory(s);
      end
                else
         shared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
@@ -668,6 +692,7 @@ begin
      filename:=ExtractFileName(s);
      mem.SaveToFile(s+'.dbpas');
      mem.done;
+     MainFormN.processfilehistory(s);
 end;
 function QSave_com(Operands:pansichar):GDBInteger;
 var s,s1:GDBString;
@@ -948,7 +973,7 @@ end;
 function Options_com(Operands:pansichar):GDBInteger;
 begin
   GDBobjinsp.setptr(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
-  historyout('А опций нету временно..........:)');
+  historyout('Все настройки доступны в инспекторе объектов');
   //Optionswindow.Show;
   result:=cmd_ok;
 end;
@@ -1016,12 +1041,12 @@ else if length(Operands)>3 then
 
            setlength(astring,mem.Count);
            StrLCopy(@astring[1],mem.PArray,mem.Count);
-           u8s:=sys2interf(astring);
+           u8s:=(astring);
 
            InfoForm:=TInfoForm.create(application.MainForm);
            InfoForm.DialogPanel.HelpButton.Hide;
            InfoForm.DialogPanel.CancelButton.Hide;
-           InfoForm.caption:=sys2interf('ОСТОРОЖНО! Проверки синтаксиса пока нет. При нажатии "ОК" объект обновится. При ошибке - ВЫЛЕТ!');
+           InfoForm.caption:=('ОСТОРОЖНО! Проверки синтаксиса пока нет. При нажатии "ОК" объект обновится. При ошибке - ВЫЛЕТ!');
 
            InfoForm.memo.text:=u8s;
            modalresult:=InfoForm.ShowModal;
@@ -1207,7 +1232,7 @@ begin
      InfoForm.DialogPanel.HelpButton.Hide;
      InfoForm.DialogPanel.CancelButton.Hide;
      InfoForm.DialogPanel.CloseButton.Hide;
-     InfoForm.caption:=sys2interf('а в клипбоарде валяется...');
+     InfoForm.caption:=('а в клипбоарде валяется...');
 
      memsubstr:=TMemoryStream.Create;
      ts:=Clipboard.AsText;
@@ -1258,7 +1283,7 @@ begin
      InfoForm.DialogPanel.HelpButton.Hide;
      InfoForm.DialogPanel.CancelButton.Hide;
      InfoForm.DialogPanel.CloseButton.Hide;
-     InfoForm.caption:=sys2interf('Память мы расходуем...');
+     InfoForm.caption:=('Память мы расходуем...');
 
      memsubstr:=TMemoryStream.Create;
      memcount.init(100);

@@ -25,19 +25,32 @@ function GetPredStr(var s: GDBString; substr: GDBString): GDBString;
 function ExpandPath(path:GDBString):GDBString;
 function readspace(expr: GDBString): GDBString;
 
-function sys2interf(s:GDBString):GDBString;
+//function sys2interf(s:GDBString):GDBString;
 function Tria_Utf8ToAnsi(const s:string):string;
 function Tria_AnsiToUtf8(const s:string):string;
+
+function Ansi2CP(astr:GDBAnsiString):GDBString;
+function Uni2CP(astr:GDBAnsiString):GDBString;
+function CP2Ansi(astr:GDBAnsiString):GDBString;
+function CP2Uni(astr:GDBAnsiString):GDBString;
+
 function uch2ach(uch:word):byte;
+function ach2uch(ach:byte):word;
 
 function CompareNUMSTR(str1,str2:GDBString):GDBBoolean;
 
 function GetPartOfPath(var part,path:GDBString):GDBString;
 function FindInSupportPath(FileName:GDBString):GDBString;
+function FindInPaths(Paths,FileName:GDBString):GDBString;
+
+type
+  TCodePage=(CP_utf8,CP_win);
 
 const
     syn_breacer=[#13,#10,' '];
     lineend:string=#13#10;
+var
+  CodePage:TCodePage;
 implementation
 uses
     varmandef;
@@ -73,6 +86,38 @@ begin
      until s='';
      result:='';
 end;
+function FindInPaths(Paths,FileName:GDBString):GDBString;
+var
+   s,ts:gdbstring;
+begin
+     FileName:=ExpandPath(FileName);
+     if FileExists(FileName) then
+                                 begin
+                                      result:=FileName;
+                                      exit;
+                                 end;
+     {if gdb.GetCurrentDWG<>nil then
+     begin
+                                   s:=ExtractFilePath(gdb.GetCurrentDWG.FileName)+filename;
+     if FileExists(s) then
+                                 begin
+                                      result:=s;
+                                      exit;
+                                 end;
+     end;}
+
+     s:=Paths;
+     repeat
+           GetPartOfPath(ts,s);
+           ts:=ExpandPath(ts)+FileName;
+            if FileExists(ts) then
+                                 begin
+                                      result:=ts;
+                                      exit;
+                                 end;
+     until s='';
+     result:='';
+end;
 function GetPartOfPath(var part,path:GDBString):GDBString;
 var
    i:GDBInteger;
@@ -93,14 +138,46 @@ end;
 function uch2ach(uch:word):byte;
 var s:gdbstring;
 begin
+     if uch=$412 then
+                     uch:=uch;
+     if uch=44064 then
+                     uch:=uch;
      s:=UnicodeToUtf8(uch);
+     if s='В' then
+                  s:=s;
      s:={UTF8toANSI}Tria_Utf8ToAnsi(s);
-     result:=ord(s[1]);
+     //if length(s)=1 then
+                        result:=ord(s[1]);
+     //               else
+     //                   result:=0;
      //WideCharToMultiByte(CP_ACP,0,@uch, 1, @result, 1, nil, nil);
-     if result=$44 then
+     if result=194 then
                      uch:=uch;
 {$IFDEF TOTALYLOG}programlog.logoutstr(inttohex(uch,4)+'='+inttostr(result),0);{$ENDIF}
 
+end;
+function ach2uch(ach:byte):word;
+var s:gdbstring;
+    tstr:UTF16String;
+    CharLen: integer;
+begin
+     {if ach<127 then
+                    begin
+                    result:=ach;
+                    exit;
+                    end;}
+     //s:=char(ach);
+     s:=Tria_AnsiToUtf8(char(ach));
+     tstr:=UTF8ToUTF16(s);
+     result:=UTF16CharacterToUnicode(@tstr[1],CharLen);
+
+     //if length(s)=1 then
+     //                   result:=ord(s[1]);
+     //               else
+     //                   result:=0;
+     //WideCharToMultiByte(CP_ACP,0,@uch, 1, @result, 1, nil, nil);
+     //if result=194 then
+     //                uch:=uch;
 end;
 function GetDigitCount(str1:GDBString):GDBInteger;
 begin
@@ -182,10 +259,45 @@ begin
 else if path[1]='*' then
                     result:=sysparam.programpath+copy(path,2,length(path)-1)
 else result:=path;
+result:=StringReplace(result,'/', PathDelim,[rfReplaceAll, rfIgnoreCase]);
 if DirectoryExists(result) then
-  if result[length(result)]<>'/' then
-                                     result:=result+'/';
+  if (result[length(result)]<>{'/'}PathDelim)
+  //or (result[length(result)]<>'\')
+  then
+                                     result:=result+PathDelim;
 end;
+function Ansi2CP(astr:GDBAnsiString):GDBString;
+begin
+     case CodePage of
+                     CP_utf8:result:=
+                                     Tria_AnsiToUtf8(astr);
+                     CP_win:result:=astr;
+     end;
+end;
+function Uni2CP(astr:GDBAnsiString):GDBString;
+begin
+     case CodePage of
+                     CP_utf8:result:=astr;
+                     CP_win:result:=Tria_Utf8ToAnsi(astr);
+     end;
+end;
+function CP2Ansi(astr:GDBAnsiString):GDBString;
+begin
+case CodePage of
+                CP_utf8:result:=
+                                Tria_Utf8ToAnsi(astr);
+                CP_win:result:=astr;
+end;
+end;
+
+function CP2Uni(astr:GDBAnsiString):GDBString;
+begin
+case CodePage of
+                CP_utf8:result:=astr;
+                CP_win:result:=Tria_AnsiToUtf8(astr);
+end;
+end;
+
 function Tria_Utf8ToAnsi(const s:string):string;
 var i,n,j, Len:integer;
 begin
@@ -389,11 +501,12 @@ begin
 
 SetLength(Result,j-1);
 end;
-function sys2interf(s:GDBString):GDBString;
+(*function sys2interf(s:GDBString):GDBString;
 begin
      result:=s//{systoutf8}{WinToK8R}Tria_AnsiToUtf8(s);
-end;
+end;*)
 
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('strproc.initialization');{$ENDIF}
+CodePage:=CP_utf8;
 end.

@@ -20,9 +20,9 @@ unit GDBMText;
 {$INCLUDE def.inc}
 
 interface
-uses GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,gdbasetypes,gdbEntity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses strproc,UGDBSHXFont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,gdbasetypes,gdbEntity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
-GDBase,UGDBDescriptor,GDBText,gdbobjectsconstdef,geometry,dxflow,strmy,math,memman,GDBSubordinated;
+GDBase,UGDBDescriptor,GDBText,gdbobjectsconstdef,geometry,dxflow,strmy,math,memman,GDBSubordinated,UGDBTextStyleArray;
 const maxdxfmtextlen=250;
 type
 //procedure CalcObjMatrix;virtual;
@@ -45,11 +45,20 @@ GDBObjMText=object(GDBObjText)
                  function GetObjTypeName:GDBString;virtual;
                  destructor done;virtual;
 
+                 procedure SimpleDrawGeometry;virtual;
+
                  //procedure CalcObjMatrix;virtual;
             end;
 {Export-}
 implementation
 uses io,shared,log;
+procedure GDBObjMText.SimpleDrawGeometry;
+begin
+     if self.text.count=1 then
+                              Vertex3D_in_WCS_Array.simpledrawgeometry(1)
+                          else
+                              Vertex3D_in_WCS_Array.simpledrawgeometry(2);
+end;
 function GDBObjMText.GetObjTypeName;
 begin
      result:=ObjN_GDBObjMText;
@@ -94,6 +103,7 @@ var
   swp:GDBStrWithPoint;
   pswp:pGDBStrWithPoint;
       ir:itrec;
+  psyminfo:PGDBsymdolinfo;
 begin
   if template='' then
                       template:=content;
@@ -114,6 +124,7 @@ begin
 
   canbreak := false;
   currsymbol := 1;
+  psyminfo:=pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
   lastbreak := 1;
   lastcanbreak := 1;
   linewidth := 0;
@@ -126,7 +137,7 @@ begin
       lastcanbreak := currsymbol;
       canbreak := true;
       lastlinewidth := linewidth;
-      linewidth := linewidth + pgdbfont(pbasefont)^.symbolinfo[GDBByte(content[currsymbol])].dx
+      linewidth := linewidth + {pgdbfont(pbasefont)^.symbo linfo[GDBByte(content[currsymbol])]}psyminfo.dx
     end
     else
       if {content[currsymbol] = '\'}copy(content,currsymbol,2)='\P' then          {\P}
@@ -134,6 +145,7 @@ begin
         currline := copy(content, lastbreak, currsymbol - lastbreak);
         lastbreak := currsymbol + 2;
         currsymbol := currsymbol + 1;
+        psyminfo:=pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
         canbreak := false;
 
         {GDBPointer(ptext.GDBStringarray[ptext.count].str) := nil;
@@ -145,7 +157,7 @@ begin
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
         begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pbasefont)^.symbolinfo[GDBByte(' ')].dx;
+             swp.w := swp.w - {pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')]}pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(' '))).dx;
         end;
         self.text.add(@swp);
 
@@ -154,7 +166,7 @@ begin
       end
       else
       begin
-        linewidth := linewidth + pgdbfont(pbasefont)^.symbolinfo[GDBByte(content[currsymbol])].dx
+        linewidth := linewidth + psyminfo.dx//pgdbfont(pbasefont)^.symbo linfo[GDBByte(content[currsymbol])].dx
       end;
     if canbreak then
       if maxlinewidth <= linewidth then
@@ -163,6 +175,7 @@ begin
         linewidth := 0;
         lastbreak := lastcanbreak + 1;
         currsymbol := lastcanbreak;
+        psyminfo:=pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
 
         canbreak := false;
 
@@ -175,12 +188,13 @@ begin
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
         begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pbasefont)^.symbolinfo[GDBByte(' ')].dx;
+             swp.w := swp.w - pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(' '))).dx;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
         end;
         self.text.add(@swp);
 
       end;
     inc(currsymbol);
+    psyminfo:=pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
   until currsymbol > length(content);
   if linewidth=0 then
                      linewidth:=1;
@@ -194,7 +208,7 @@ begin
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
         begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pbasefont)^.symbolinfo[GDBByte(' ')].dx;
+             swp.w := swp.w - pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(' '))).dx;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
         end;
         self.text.add(@swp);
   //w := width;
@@ -571,7 +585,11 @@ var
       ir:itrec;
   pl:GDBPoint3DArray;
   ispl:gdbboolean;
+  pfont:pgdbfont;
+  ln:GDBInteger;
 begin
+  ln:=0;
+  pfont:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont;
   pl.init({$IFDEF DEBUGBUILD}'{E44FB0DD-3556-4279-8845-5EA005F302DB}',{$ENDIF}10);
   ispl:=false;
   Vertex3D_in_WCS_Array.clear;
@@ -592,6 +610,7 @@ begin
   //objmatrix:=onematrix;
         if pswp<>nil then
   repeat
+  inc(ln);
   matr:=DrawMatrix;
   //matr:=matrixmultiply(DrawMatrix,objmatrix);
   m1:=onematrix;
@@ -656,141 +675,15 @@ begin
     begin
     //matr:=matrixmultiply(matr,objmatrix);
 
-      CreateSymbol(pswp^.str[i],matr,minx,miny,maxx,maxy);
+      CreateSymbol(ord(pswp^.str[i]),matr,minx,miny,maxx,maxy,pfont,ln);
 
-    (*psymbol := GDBPointer(GDBPlatformint(pbasefont)+pgdbfont(pbasefont).symbolinfo[GDBByte(pswp^.str[i])].addr);
-    if pgdbfont(pbasefont)^.symbolinfo[GDBByte(pswp^.str[i])].size <> 0 then
-      for j := 1 to pgdbfont(pbasefont)^.symbolinfo[GDBByte(pswp^.str[i])].size do
-      begin
-        case GDBByte(psymbol^) of
-          2:
-            begin
-              inc(psymbol, sizeof(GDBLineID));
-              PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
-              inc(pfontfloat(psymbol));
-              PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
-              inc(pfontfloat(psymbol));
-              v.z:=0;
-              v.w:=1;
-              v:=VectorTransform(v,matr);
-              pv.coord:=PGDBvertex2D(@v)^;
-              pv.count:=0;
-
-              if v.x<minx then minx:=v.x;
-              if v.y<miny then miny:=v.y;
-              if v.x>maxx then maxx:=v.x;
-              if v.y>maxy then maxy:=v.y;
-
-              v:=VectorTransform(v,objmatrix);
-
-              pv3.coord:=PGDBvertex(@v)^;
-              pv3.count:=0;
-
-              tv:=pv3.coord;
-              pv3.len:=0;
-
-              Vertex3D_in_WCS_Array.add(@pv3);
-
-              //inc(psymbol, 2 * sizeof(GDBDouble));
-              PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
-              inc(pfontfloat(psymbol));
-              PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
-              inc(pfontfloat(psymbol));
-              v.z:=0;
-              v.w:=1;
-              v:=VectorTransform(v,matr);
-              pv.coord:=PGDBvertex2D(@v)^;
-              pv.count:=0;
-
-              if v.x<minx then minx:=v.x;
-              if v.y<miny then miny:=v.y;
-              if v.x>maxx then maxx:=v.x;
-              if v.y>maxy then maxy:=v.y;
-
-              v:=VectorTransform(v,objmatrix);
-
-              pv3.coord:=PGDBvertex(@v)^;
-              pv3.count:=0;
-
-              pv3.len:=round(SqrVertexlength(pv3.coord,tv));
-
-              Vertex3D_in_WCS_Array.add(@pv3);
-
-              //inc(psymbol, 2 * sizeof(GDBDouble));
-            end;
-          4:
-            begin
-              inc(psymbol, sizeof(GDBPolylineID));
-              len := GDBWord(psymbol^);
-              inc(psymbol, sizeof(GDBWord));
-              PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
-              inc(pfontfloat(psymbol));
-              PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
-              inc(pfontfloat(psymbol));
-              v.z:=0;
-              v.w:=1;
-              v:=VectorTransform(v,matr);
-              pv.coord:=PGDBvertex2D(@v)^;
-              pv.count:=len;
-
-              if v.x<minx then minx:=v.x;
-              if v.y<miny then miny:=v.y;
-              if v.x>maxx then maxx:=v.x;
-              if v.y>maxy then maxy:=v.y;
-
-
-              v:=VectorTransform(v,objmatrix);
-
-              pv3.coord:=PGDBvertex(@v)^;
-              pv3.count:=len;
-
-              tv:=pv3.coord;
-              pv3.len:=0;
-
-              Vertex3D_in_WCS_Array.add(@pv3);
-
-              //inc(psymbol, 2 * sizeof(GDBDouble));
-              k := 1;
-              while k < len do //for k:=1 to len-1 do
-              begin
-              PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
-              inc(pfontfloat(psymbol));
-              PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
-              inc(pfontfloat(psymbol));
-              v.z:=0;
-              v.w:=1;
-              v:=VectorTransform(v,matr);
-              pv.coord:=PGDBvertex2D(@v)^;
-              pv.count:=-1;
-
-              if v.x<minx then minx:=v.x;
-              if v.y<miny then miny:=v.y;
-              if v.x>maxx then maxx:=v.x;
-              if v.y>maxy then maxy:=v.y;
-
-
-              v:=VectorTransform(v,objmatrix);
-
-              pv3.coord:=PGDBvertex(@v)^;
-              pv3.count:=-1;
-              pv3.len:=2*round(SqrVertexlength(pv3.coord,tv));
-              tv:=pv3.coord;
-              Vertex3D_in_WCS_Array.add(@pv3);
-
-
-              //inc(psymbol, 2 * sizeof(GDBDouble));
-              inc(k);
-              end;
-            end;
-        end;
-      end;*)
       matr:=m1;
       FillChar(m1, sizeof(DMatrix4D), 0);
   m1[0, 0] := 1;
   m1[1, 1] := 1;
   m1[2, 2] := 1;
   m1[3, 3] := 1;
-  m1[3, 0] := pgdbfont(pbasefont).symbolinfo[GDBByte(pswp^.str[i])].dx;
+  m1[3, 0] := pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(byte(pswp^.str[i]))).dx;//pgdbfont(pbasefont).symbo linfo[GDBByte(pswp^.str[i])].dx;
   m1[3, 1] := 0;
   matr:=MatrixMultiply(m1,matr);
   end;
@@ -920,6 +813,7 @@ var s{, layername}: GDBString;
   ux: gdbvertex;
   angleload: GDBBoolean;
   j:GDBInteger;
+  style:GDBString;
 begin
   //initnul;
   angleload := false;
@@ -940,6 +834,13 @@ begin
     if not dxfGDBStringload(f,1,byt,template)then
     if not dxfGDBStringload(f,3,byt,template)then
     if dxfGDBDoubleload(f,50,byt,textprop.angle) then angleload := true
+
+    else if     dxfGDBStringload(f,7,byt,style)then
+                                                 begin
+                                                      TXTStyleIndex :=gdb.GetCurrentDWG.TextStyleTable.FindStyle(Style);
+                                                      if TXTStyleIndex=-1 then
+                                                                          TXTStyleIndex:=0;
+                                                 end
     else s := f.readgdbstring;
     byt:=readmystrtoint(f);
   end;

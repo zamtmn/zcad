@@ -104,7 +104,7 @@ PGDBPolyVertex3D=^GDBPolyVertex3D;
 GDBPolyVertex3D=record
                       coord:GDBvertex;
                       count:GDBInteger;
-                      len:GDBInteger;
+                      LineNumber:GDBInteger;
                 end;
 PGDBvertex2S=^GDBvertex2S;
 GDBvertex2S=record
@@ -211,19 +211,6 @@ GDBOpenArrayGLlwwidth_GDBWord=record
   end;
 PGDBArrayVertex=^GDBArrayVertex;
 GDBArrayVertex=array[0..0] of GDBvertex;
-GDBsymdolinfo=record
-    addr: GDBInteger;
-    size: GDBWord;
-    dx, dy,_dy, w, h: GDBDouble;
-  end;
-PGDBfont=^GDBfont;
-GDBfont=record
-    fontfile:GDBString;
-    name:GDBString;
-    compiledsize:GDBInteger;
-    h,u:GDBByte;
-    symbolinfo:array[0..255] of GDBsymdolinfo;
-  end;
   pcontrolpointdesc=^controlpointdesc;
   controlpointdesc=record
                          pointtype:GDBInteger;
@@ -240,6 +227,11 @@ GDBfont=record
                          versionstring:GDBstring;
                      end;
   TActulity=GDBInteger;
+  TArrayIndex=GDBInteger;
+
+  fontfloat=GDBFloat;
+  pfontfloat=^fontfloat;
+
 FreeElProc=procedure (p:GDBPointer);
 {EXPORT-}
 const

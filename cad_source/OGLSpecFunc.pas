@@ -35,6 +35,7 @@ type
 var
    CurrentCamCSOffset:GDBvertex;
    notuseLCS:GDBBOOLEAN;
+   currentmode,lastmode:GLenum;
 
 procedure SetDCPixelFormat(oglc:TOGLContextDesk);
 function isOpenGLError:GLenum;
@@ -151,11 +152,12 @@ procedure myglbegin(mode:GLenum);
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}inc(primcount);{$ENDIF}
      inc(bcount);
+     currentmode:=mode;
      if bcount>1 then
                      asm
                               {int(3);}
                      end;
-     glbegin(mode);
+     glbegin(mode)
 end;
 procedure myglend;
 begin
@@ -164,7 +166,9 @@ begin
                               {int(3);}
                      end;
      dec(bcount);
+
      glend;
+
 end;
 
 procedure SetDCPixelFormat(oglc:TOGLContextDesk);

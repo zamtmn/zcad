@@ -9,6 +9,8 @@ PGDBFloat=^GDBFloat;
 
 PGDBString=^GDBString;
 
+PGDBAnsiString=^GDBAnsiString;
+
 PGDBBoolean=^GDBBoolean;
 
 PGDBInteger=^GDBInteger;
@@ -111,6 +113,7 @@ PGDBPolyVertex3D=^GDBPolyVertex3D;
 GDBPolyVertex3D=record
                       coord:GDBvertex;
                       count:GDBInteger;
+                      len:GDBInteger;
                 end;
 PGDBvertex2S=^GDBvertex2S;
 GDBvertex2S=record
@@ -217,19 +220,6 @@ GDBOpenArrayGLlwwidth_GDBWord=record
   end;
 PGDBArrayVertex=^GDBArrayVertex;
 GDBArrayVertex=array[0..0] of GDBvertex;
-GDBsymdolinfo=record
-    addr: GDBInteger;
-    size: GDBWord;
-    dx, dy,_dy, w, h: GDBDouble;
-  end;
-PGDBfont=^GDBfont;
-GDBfont=record
-    fontfile:GDBString;
-    name:GDBString;
-    compiledsize:GDBInteger;
-    h,u:GDBByte;
-    symbolinfo:array[0..255] of GDBsymdolinfo;
-  end;
   pcontrolpointdesc=^controlpointdesc;
   controlpointdesc=record
                          pointtype:GDBInteger;
@@ -246,6 +236,9 @@ GDBfont=record
                          versionstring:GDBstring;
                      end;
   TActulity=GDBInteger;
+  TArrayIndex=GDBInteger;
+  fontfloat=GDBFloat;
+  pfontfloat=^fontfloat;
 FreeElProc=procedure (p:GDBPointer);
 //Generate on C:\zcad\CAD_SOURCE\u\UOpenArray.pas
 POpenArray=^OpenArray;
@@ -269,15 +262,15 @@ GDBOpenArray=object(OpenArray)
                       destructor done;virtual;abstract;
                       destructor ClearAndDone;virtual;abstract;
                       procedure Clear;virtual;abstract;
-                      function Add(p:GDBPointer):GDBInteger;virtual;abstract;
-                      function AddRef(var obj):GDBInteger;virtual;abstract;
+                      function Add(p:GDBPointer):TArrayIndex;virtual;abstract;
+                      function AddRef(var obj):TArrayIndex;virtual;abstract;
                       procedure Shrink;virtual;abstract;
                       procedure Grow;virtual;abstract;
                       procedure setsize(nsize:GDBLongword);
                       procedure iterategl(proc:GDBITERATEPROC);
-                      function getelement(index:GDBInteger):GDBPointer;
+                      function getelement(index:TArrayIndex):GDBPointer;
                       procedure Invert;
-                      function getGDBString(index:GDBInteger):GDBString;
+                      function getGDBString(index:TArrayIndex):GDBString;
                       function AfterDeSerialize(SaveFlag:GDBWord;membuf:GDBPointer):integer;virtual;abstract;
                       procedure free;virtual;abstract;
                       procedure freewithproc(freeproc:freeelproc);virtual;abstract;
@@ -415,6 +408,7 @@ PGDBPolyPoint3DArray=^GDBPolyPoint3DArray;
 GDBPolyPoint3DArray=object(GDBOpenArrayOfData)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       procedure DrawGeometry;virtual;abstract;
+                      procedure SimpleDrawGeometry(const num:integer);virtual;abstract;
                       function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;abstract;
                 end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBSelectedObjArray.pas
@@ -458,16 +452,78 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           //destructor done;virtual;abstract;
                           //function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;abstract;
                     end;
+//Generate on C:\zcad\CAD_SOURCE\u\UGDBOpenArrayOfByte.pas
+PGDBOpenArrayOfByte=^GDBOpenArrayOfByte;
+GDBOpenArrayOfByte=object(GDBOpenArray)
+                      ReadPos:GDBInteger;
+                      name:GDBString;
+                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                      constructor initnul;
+                      constructor InitFromFile(FileName:string);
+                      function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
+                      function AddByte(PData:GDBPointer):GDBInteger;virtual;abstract;
+                      function AddByteByVal(Data:GDBByte):GDBInteger;virtual;abstract;
+                      function AddWord(PData:GDBPointer):GDBInteger;virtual;abstract;
+                      function AddFontFloat(PData:GDBPointer):GDBInteger;virtual;abstract;
+                      procedure TXTAddGDBStringEOL(s:GDBString);virtual;abstract;
+                      procedure TXTAddGDBString(s:GDBString);virtual;abstract;
+                      function AllocData(SData:GDBword):GDBPointer;virtual;abstract;
+                      function ReadData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
+                      function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
+                      function ReadString(break, ignore: GDBString): shortString;
+                      function ReadGDBString: shortString;
+                      function ReadString2:GDBString;
+                      function GetCurrentReadAddres:GDBPointer;virtual;abstract;
+                      function Jump(offset:GDBInteger):GDBPointer;virtual;abstract;
+                      function SaveToFile(FileName:string):GDBInteger;
+                      function ReadByte: GDBByte;
+                      function ReadWord: GDBWord;
+                      function GetChar(rp:integer): Ansichar;
+                      function Seek(pos:GDBInteger):integer;
+                      function notEOF:GDBBoolean;
+                      function readtoparser(break:GDBString): GDBString;
+                   end;
+//Generate on C:\zcad\CAD_SOURCE\u\UGDBSHXFont.pas
+PGDBsymdolinfo=^GDBsymdolinfo;
+GDBsymdolinfo=record
+    addr: GDBInteger;
+    size: GDBWord;
+    dx, dy,_dy, w, h: GDBDouble;
+  end;
+PGDBUNISymbolInfo=^GDBUNISymbolInfo;
+GDBUNISymbolInfo=record
+    symbol:GDBInteger;
+    symbolinfo:GDBsymdolinfo;
+  end;
+TSymbolInfoArray=array [0..255] of GDBsymdolinfo;
+PGDBfont=^GDBfont;
+GDBfont=object(GDBNamedObject)
+    fontfile:GDBString;
+    Internalname:GDBString;
+    compiledsize:GDBInteger;
+    h,u:GDBByte;
+    unicode:GDBBoolean;
+    symbolinfo:TSymbolInfoArray;
+    SHXdata:GDBOpenArrayOfByte;
+    unisymbolinfo:GDBOpenArrayOfData;
+    constructor initnul;
+    constructor init(n:GDBString);
+    function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
+    function GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
+    function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
+  end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBTextStyleArray.pas
 PGDBTextStyleProp=^GDBTextStyleProp;
   GDBTextStyleProp=record
                     size:GDBDouble;(*saved_to_shd*)
                     oblique:GDBDouble;(*saved_to_shd*)
+                    wfactor:GDBDouble;(*saved_to_shd*)
               end;
   PGDBTextStyle=^GDBTextStyle;
   GDBTextStyle = record
-    name: GDBString;(*saved_to_shd*)
-    pfont: GDBPointer;
+    name: GDBAnsiString;(*saved_to_shd*)
+    dxfname: GDBAnsiString;(*saved_to_shd*)
+    pfont: PGDBfont;
     prop:GDBTextStyleProp;(*saved_to_shd*)
   end;
 GDBTextStyleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
@@ -525,33 +581,6 @@ GDBLineWidthArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GLLWWidth*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
              end;
-//Generate on C:\zcad\CAD_SOURCE\u\UGDBOpenArrayOfByte.pas
-PGDBOpenArrayOfByte=^GDBOpenArrayOfByte;
-GDBOpenArrayOfByte=object(GDBOpenArray)
-                      ReadPos:GDBInteger;
-                      name:GDBString;
-                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                      constructor initnul;
-                      constructor InitFromFile(FileName:string);
-                      function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
-                      procedure TXTAddGDBStringEOL(s:GDBString);virtual;abstract;
-                      procedure TXTAddGDBString(s:GDBString);virtual;abstract;
-                      function AllocData(SData:GDBword):GDBPointer;virtual;abstract;
-                      function ReadData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
-                      function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
-                      function ReadString(break, ignore: GDBString): shortString;
-                      function ReadGDBString: shortString;
-                      function ReadString2:GDBString;
-                      function GetCurrentReadAddres:GDBPointer;virtual;abstract;
-                      function Jump(offset:GDBInteger):GDBPointer;virtual;abstract;
-                      function SaveToFile(FileName:string):GDBInteger;
-                      function ReadByte: GDBByte;
-                      function ReadWord: GDBWord;
-                      function GetChar(rp:integer): Ansichar;
-                      function Seek(pos:GDBInteger):integer;
-                      function notEOF:GDBBoolean;
-                      function readtoparser(break:GDBString): GDBString;
-                   end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBNamedObjectsArray.pas
 TForCResult=(IsFounded(*'Найден'*)=1,
              IsCreated(*'Создан'*)=2,
@@ -636,6 +665,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
   tpath=record
              Device_Library:PGDBString;(*'К библиотекам'*)
              Support_Path:PGDBString;(*'К дополнительным файлам'*)
+             Fonts_Path:PGDBString;(*'К шрафтам'*)
              Program_Run:PGDBString;(*'К программе'*)(*oi_readonly*)
              Temp_files:PGDBString;(*'К временным файлам'*)(*oi_readonly*)
         end;
@@ -693,10 +723,11 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
         end;
   tsys=record
              SYS_Version:PGDBString;(*'Версия программы'*)(*oi_readonly*)
-             SYS_ActiveMouse:PGDBBoolean;(*'Активная мышь'*)
+             SYS_ActiveMouse:PGDBBoolean;(*'??Активная мышь'*)
              SYS_RunTime:PGDBInteger;(*'Время работы программы'*)(*oi_readonly*)
              SYS_SystmGeometryColor:PGDBInteger;(*'Вспомогательный цвет'*)
              SYS_IsHistoryLineCreated:PGDBBoolean;(*'Окно истории создано'*)(*oi_readonly*)
+             SYS_AlternateFont:PGDBString;(*'Альтернативный шрафт'*)
        end;
   tdwg=record
              DWG_DrawMode:PGDBInteger;(*'Режим рисования?'*)
@@ -861,14 +892,16 @@ GDBObjGenericWithSubordinated=object(GDBaseObject)
                                                              function GetMatrix:PDMatrix4D;virtual;abstract;
                          function GetLineWeight:GDBSmallint;virtual;abstract;
                          function GetLayer:PGDBLayerProp;virtual;abstract;
-                         function GetHandle:GDBLongword;virtual;abstract;
+                         function GetHandle:GDBPlatformint;virtual;abstract;
                          function IsSelected:GDBBoolean;virtual;abstract;
                                     procedure FormatAfterDXFLoad;virtual;abstract;
                                     procedure Build;virtual;abstract;
 end;
 GDBObjBaseProp=record
                       Owner:PGDBObjGenericWithSubordinated;(*'Владелец'*)
-                      PSelfInOwnerArray:GDBInteger;(*'Индекс у владельца'*)
+                      PSelfInOwnerArray:TArrayIndex;(*'Индекс у владельца'*)
+                      Node:GDBPointer;(*'Узел'*)
+                      PSelfInNodeArray:GDBInteger;(*'Индекс в узле'*)
                  end;
 GDBObjSubordinated=object(GDBObjGenericWithSubordinated)
                          bp:GDBObjBaseProp;(*'Владелец'*)(*oi_readonly*)(*hidden_in_objinsp*)
@@ -1258,7 +1291,7 @@ GDBObjBlockdef=object(GDBObjGenericSubEntry)
                      function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit):GDBBoolean;virtual;abstract;
                      destructor done;virtual;abstract;
                      function GetMatrix:PDMatrix4D;virtual;abstract;
-                     function GetHandle:GDBLongword;virtual;abstract;
+                     function GetHandle:GDBPlatformint;virtual;abstract;
                end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBObjBlockdefArray.pas
 PGDBObjBlockdefArray=^GDBObjBlockdefArray;
@@ -1467,9 +1500,9 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBtext.pas
 PGDBObjText=^GDBObjText;
 GDBObjText=object(GDBObjAbstractText)
-                 Content:GDBString;
-                 Template:GDBString;(*saved_to_shd*)
-                 textstyle:GDBInteger;(*saved_to_shd*)
+                 Content:GDBAnsiString;
+                 Template:GDBAnsiString;(*saved_to_shd*)
+                 TXTStyleIndex:TArrayIndex;(*saved_to_shd*)
                  CoordMin,CoordMax:GDBvertex;
                  obj_height,obj_width,obj_y:GDBDouble;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte);
@@ -1480,6 +1513,7 @@ GDBObjText=object(GDBObjAbstractText)
                  procedure getoutbound;virtual;abstract;
                  procedure Format;virtual;abstract;
                  procedure createpoint;virtual;abstract;
+                 procedure CreateSymbol(_symbol:GDBInteger;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont);
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  function GetObjTypeName:GDBString;virtual;abstract;
                  destructor done;virtual;abstract;
@@ -1620,7 +1654,7 @@ GDBObjRoot=object(GDBObjGenericSubEntry)
                  function getowner:PGDBObjSubordinated;virtual;abstract;
                  procedure getoutbound;virtual;abstract;
                  function FindVariable(varname:GDBString):pvardesk;virtual;abstract;
-                 function GetHandle:GDBLongword;virtual;abstract;
+                 function GetHandle:GDBPlatformint;virtual;abstract;
                  function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;abstract;
                  function GetMatrix:PDMatrix4D;virtual;abstract;
                  procedure DrawWithAttrib(infrustumactualy:TActulity);virtual;abstract;
@@ -2072,7 +2106,7 @@ TAbstractDrawing=object(GDBaseobject)
                  end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\UGDBDescriptor.pas
 GDBObjTrash=object(GDBObjEntity)
-                 function GetHandle:GDBLongword;virtual;abstract;
+                 function GetHandle:GDBPlatformint;virtual;abstract;
                  function GetMatrix:PDMatrix4D;virtual;abstract;
                  constructor initnul;
                  destructor done;virtual;abstract;
@@ -2242,6 +2276,19 @@ TBasicFinter=record
                        function FindOrCreate(sname:gdbstring):PTCableDesctiptor;virtual;abstract;
                        function Find(sname:gdbstring):PTCableDesctiptor;virtual;abstract;
                  end;
+//Generate on C:\zcad\CAD_SOURCE\u\UGDBFontManager.pas
+  PGDBFontRecord=^GDBFontRecord;
+  GDBFontRecord = record
+    Name: GDBString;
+    Pfont: GDBPointer;
+  end;
+PGDBFontManager=^GDBFontManager;
+GDBFontManager=object({GDBOpenArrayOfData}GDBNamedObjectsArray)(*OpenArrayOfData=GDBfont*)
+                    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                    function addFonf(FontPathName:GDBString):PGDBfont;
+                    //function FindFonf(FontName:GDBString):GDBPointer;
+                    {procedure freeelement(p:GDBPointer);virtual;}abstract;
+              end;
 implementation
 begin
 end.

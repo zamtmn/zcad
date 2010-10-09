@@ -455,7 +455,7 @@ begin
           TempNet^.initnul(nil);
           ou.CopyTo(@tempnet.ou);
           //TempNet^.name:=name;
-          gdb.GetCurrentROOT.ObjArray.add(@TempNet);
+          gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@TempNet);
           //gdb.GetCurrentDWG.ObjRoot.ObjCasheArray.addnodouble(@TempNet);
           ti.init({$IFDEF DEBUGBUILD}'{B106F951-AEAB-43B9-B0B9-B18827EACFE5}',{$ENDIF}100){%H-};
           for i:=0 to self.graf.Count-1 do

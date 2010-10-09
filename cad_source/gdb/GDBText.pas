@@ -751,8 +751,6 @@ else if dxfGDBDoubleload(f,51,byt,textprop.oblique) then
                                                         textprop.oblique:=textprop.oblique
 else if     dxfGDBStringload(f,7,byt,style)then
                                              begin
-                                                  if style<>'R2_5' then
-                                                                          style:=style;
                                                   TXTStyleIndex :=gdb.GetCurrentDWG.TextStyleTable.FindStyle(Style);
                                                   if TXTStyleIndex=-1 then
                                                                       TXTStyleIndex:=0;

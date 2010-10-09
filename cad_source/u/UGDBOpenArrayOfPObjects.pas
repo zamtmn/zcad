@@ -56,6 +56,8 @@ var
 pnew,pold:ppointer;
 nc,c:integer;
 begin
+     if assigned(parray)then
+     begin
      nc:=0;
      c:=0;
      pnew:=PArray;
@@ -65,12 +67,13 @@ begin
            if pnew^<>nil then
                             begin
                                  inc(nc);
-                                 inc(GDBPlatformint(pnew),{4 cpu64}sizeof(pointer));
+                                 inc(GDBPlatformint(pnew),size{sizeof(pointer)});
                             end;
-           inc(GDBPlatformint(pold),{4 cpu64}sizeof(pointer));
+           inc(GDBPlatformint(pold),size{sizeof(pointer)});
            inc(c);
      until c=count;
      count:=nc;
+     end;
 end;
 procedure GDBOpenArrayOfPObjects.cleareraseobj;
 var

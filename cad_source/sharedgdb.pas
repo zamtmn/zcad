@@ -40,7 +40,8 @@ begin
   pdwg.OGLwindow1.CalcOptimalMatrix;
   pdwg.pcamera^.totalobj:=0;
   pdwg.pcamera^.infrustum:=0;
-  gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
+  gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjTree);
+  //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
   pdwg.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
   pdwg.OGLwindow1.draw;
   end;
@@ -63,7 +64,9 @@ begin
                                            gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
                                            mainformn.Caption:=(('ZCad v'+sysvar.SYS.SYS_Version^+' - ['+gdb.GetCurrentDWG.FileName+']'));
   reloadlayer;
+  if assigned(mainwindow.LayerBox) then
   mainwindow.LayerBox.enabled:=true;
+  if assigned(mainwindow.LineWBox) then
   mainwindow.LineWBox.enabled:=true;
   for i:=0 to MainFormN.PageControl.PageCount-1 do
     begin
@@ -111,8 +114,9 @@ begin
 end;
 procedure reloadlayer; export;
 begin
+     if assigned(layerbox) then
      mainformN.ReloadLayer(@gdb.GetCurrentDWG.LayerTable);
 end;
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('shared.initialization');{$ENDIF}
-end.
+end.

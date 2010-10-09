@@ -131,7 +131,6 @@ type
 
     //procedure Pre_KeyDown(ch:char; var r:HandledMsg);virtual;
     //procedure Pre_LBMouseDblClk(fwkeys:longint;x,y:GDBInteger; var r:HandledMsg);virtual;
-    //procedure Pre_MBMouseDblClk(fwkeys:longint;x,y:GDBInteger; var r:HandledMsg);virtual;
 
     procedure SetMouseMode(smode:GDBByte);
 
@@ -146,6 +145,9 @@ type
 
     procedure _onMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
     procedure _onFastMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
+    procedure asynczoomall(Data: PtrInt);
+    procedure ZoomAll;
+    procedure myKeyPress(var Key: Word; Shift: TShiftState);
 
     {LCL}
     protected
@@ -158,8 +160,6 @@ type
     //procedure Pre_MouseWheel(fwkeys:longint;wheeldelta,x,y:GDBSmallint; var r:HandledMsg);virtual;
     function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint): Boolean;override;
     procedure EraseBackground(DC: HDC);override;
-
-    public procedure KeyPress(var Key: char);override;
 
   end;
 const maxgrid=99;
@@ -954,8 +954,8 @@ var
   key: GDBByte;
 begin
   //if random<0.8 then exit;
-  if   (param.md.mouse.y=y)and(param.md.mouse.x=x)then
-                                                      exit;
+  //if   (param.md.mouse.y=y)and(param.md.mouse.x=x)then
+  //                                                    exit;
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove',lp_IncPos);{$ENDIF}
 
 
@@ -1374,13 +1374,124 @@ begin
                                  end;
   updatevisible;
 end;
+procedure TOGLWnd.ZoomAll;
+const
+     steps=5;
+var
+  tpz,tzoom: GDBDouble;
+  fv1,tp,wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex;
+  camerapos,target:GDBVertex;
+  i:integer;
+begin
+  if param.projtype = PROJPerspective then
+                                          begin
+                                               historyout('MBMouseDblClk: Пока только для паралельной проекции!');
+                                          end;
+  historyout('MBMouseDblClk: Пока корректно только при виде сверху!');
+
+
+  CalcOptimalMatrix;
+
+
+  dcsLBN:=InfinityVertex;
+  dcsRTF:=MinusInfinityVertex;
+  wcsLBN:=InfinityVertex;
+  wcsRTF:=MinusInfinityVertex;
+  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.LBN.x,gdb.GetCurrentROOT.vp.BoundingBox.LBN.y,gdb.GetCurrentROOT.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.RTF.x,gdb.GetCurrentROOT.vp.BoundingBox.LBN.y,gdb.GetCurrentROOT.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.RTF.x,gdb.GetCurrentROOT.vp.BoundingBox.RTF.y,gdb.GetCurrentROOT.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.LBN.x,gdb.GetCurrentROOT.vp.BoundingBox.RTF.y,gdb.GetCurrentROOT.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.LBN.x,gdb.GetCurrentROOT.vp.BoundingBox.LBN.y,gdb.GetCurrentROOT.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.RTF.x,gdb.GetCurrentROOT.vp.BoundingBox.LBN.y,gdb.GetCurrentROOT.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.RTF.x,gdb.GetCurrentROOT.vp.BoundingBox.RTF.y,gdb.GetCurrentROOT.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.LBN.x,gdb.GetCurrentROOT.vp.BoundingBox.RTF.y,gdb.GetCurrentROOT.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+
+  if (abs(wcsRTF.x-wcsLBN.x)<eps)and(abs(wcsRTF.y-wcsLBN.y)<eps) then
+                                                                    begin
+                                                                         historyout('MBMouseDblClk: Пустой чертеж?');
+                                                                         exit;
+                                                                    end;
+
+  target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),gdb.GetCurrentDWG.pcamera^.point.z);
+  camerapos:=gdb.GetCurrentDWG.pcamera^.point;
+  target:=vertexsub(target,camerapos);
+
+  tzoom:=(wcsRTF.x-wcsLBN.x)/clientwidth;
+  tpz:=(wcsRTF.y-wcsLBN.y)/clientheight;
+
+  if tpz>tzoom then tzoom:=tpz;
+
+  tzoom:=tzoom-param.zoom;
+
+  for i:=1 to steps do
+  begin
+  gdb.GetCurrentDWG.pcamera^.point:=vertexadd(camerapos,geometry.VertexMulOnSc(target,i/steps));
+  //gdb.GetCurrentDWG.pcamera^.point.x:=-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2);
+  //gdb.GetCurrentDWG.pcamera^.point.y:=-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2);
+
+
+  {param.zoom:=(wcsRTF.x-wcsLBN.x)/clientwidth;
+  tpz:=(wcsRTF.y-wcsLBN.y)/clientheight;
+  if tpz>param.zoom then param.zoom:=tpz;}
+
+  param.zoom:=param.zoom+tzoom{*i}/steps;
+
+  CalcOptimalMatrix;
+  mouseunproject(param.md.mouse.x,param.md.mouse.y);
+  reprojectaxis;
+  param.firstdraw := true;
+  //gdb.GetCurrentDWG.pcamera^.getfrustum(@gdb.GetCurrentDWG.pcamera^.modelMatrix,@gdb.GetCurrentDWG.pcamera^.projMatrix,gdb.GetCurrentDWG.pcamera^.clipLCS,gdb.GetCurrentDWG.pcamera^.frustum);
+  //gdb.GetCurrentROOT.Format;
+
+  gdb.GetCurrentDWG.pcamera^.NextPosition;
+//  param.firstdraw:=true;
+  gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjTree);
+  //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
+
+  gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
+
+  _onMouseMove(nil,[],param.md.mouse.x,param.md.mouse.y);
+
+  if i=steps then
+    begin
+
+  if param.seldesc.MouseFrameON then
+  begin
+    gdb.GetCurrentDWG^.myGluProject2(param.seldesc.Frame13d,
+               fv1);
+    param.seldesc.Frame1.x := round(fv1.x);
+    param.seldesc.Frame1.y := clientheight - round(fv1.y);
+    if param.seldesc.Frame1.x < 0 then param.seldesc.Frame1.x := 0
+    else if param.seldesc.Frame1.x > (clientwidth - 1) then param.seldesc.Frame1.x := clientwidth - 1;
+    if param.seldesc.Frame1.y < 0 then param.seldesc.Frame1.y := 1
+    else if param.seldesc.Frame1.y > (clientheight - 1) then param.seldesc.Frame1.y := clientheight - 1;
+  end;
+  end;
+  //paint;
+  draw;
+
+  end;
+end;
+procedure TOGLWnd.asynczoomall(Data: PtrInt);
+begin
+     ZoomAll();
+end;
 
 procedure TOGLWnd.MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);
-//procedure TOGLWnd.Pre_MouseDown;
 var key: GDBByte;
-//    pobj:pgdbobjentity;
-//    ir:itrec;
 begin
+  if ssDouble in shift then
+                           begin
+                                if mbMiddle=button then
+                                  begin
+                                       Application.QueueAsyncCall(asynczoomall, 0);
+                                       //Pre_MBMouseDblClk(Button,Shift,X, Y);
+                                       {exclude(shift,ssdouble);
+                                       exclude(shift,ssMiddle);}
+                                       inherited;
+                                       exit;
+                                  end;
+                           end;
   if PDWG<>gdb.GetCurrentDWG then
                                  begin
                                       //r.handled:=true;
@@ -1491,6 +1602,7 @@ begin
     end;
     GDBobjinsp.updateinsp//SetObjInsp;
   end;
+  inherited;
 end;
 procedure TOGLWnd.DISP_ZoomFactor;
 var
@@ -2310,27 +2422,25 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
   tick:=round(lptime*10e7);
   //tick:=FrameDiffTimeInMSecs;
   //sysvar.RD.RD_LastRenderTime^:=tick;
-  if tick<>0 then begin
+  {if tick<>0 then begin
                        if param.firstdraw then
                                         sysvar.RD.RD_LastRenderTime^:=tick*msec;
-                       {fps:=1000/(tick*msec);
-                       str(fps:3:3,fpss);}
                   end
               else begin
                        if param.firstdraw then
                                               sysvar.RD.RD_LastRenderTime^:=0
                                           else
                                               sysvar.RD.RD_LastRenderTime^:=-abs(sysvar.RD.RD_LastRenderTime^);
-                       //fps:=1000/(tick*msec);
-                       {str(fps:3:3,fpss);
-                       fpss:=fpss+'_Inf';}
-                  end;
-  sysvar.RD.RD_LastRenderTime^:=tick*msec;
+                  end;}
+  if param.firstdraw then
+                         sysvar.RD.RD_LastRenderTime^:=tick*msec
+                     else
+                         sysvar.RD.RD_LastUpdateTime^:=tick*msec;
   {$IFDEF PERFOMANCELOG}
                        if param.firstdraw then
                                               log.programlog.LogOutStrFast('Draw time='+inttostr(sysvar.RD.RD_LastRenderTime^),0)
                                           else
-                                              log.programlog.LogOutStrFast('ReDraw time='+inttostr(sysvar.RD.RD_LastRenderTime^),0);
+                                              log.programlog.LogOutStrFast('ReDraw time='+inttostr(sysvar.RD.RD_LastUpdateTime^),0);
   {$ENDIF}
   //title:=title+fpss;
   param.firstdraw := false;
@@ -3072,8 +3182,9 @@ begin
   SetDCPixelFormat(OGLContext);//SetDCPixelFormat(dc);
   MywglCreateContext(OGLContext);//hrc := wglCreateContext(DC);
   MyglMakeCurrent(OGLContext);//wglMakeCurrent(DC, hrc);
+  self.MakeCurrent();
   setdeicevariable;
-  CalcOptimalMatrix;
+  //CalcOptimalMatrix;
   programlog.logoutstr('end;',lp_DecPos)
 end;
 {function TOGLWnd.mousein;
@@ -3099,8 +3210,10 @@ begin
   if param.seldesc.Selectedobjcount=0
   then
       begin
+           if assigned(LinewBox) then
            if sysvar.dwg.DWG_CLinew^<0 then LineWbox.ItemIndex:=(sysvar.dwg.DWG_CLinew^+3)
-                               else LinewBox.ItemIndex:=((sysvar.dwg.DWG_CLinew^ div 10)+3);
+                                       else LinewBox.ItemIndex:=((sysvar.dwg.DWG_CLinew^ div 10)+3);
+           if assigned(LayerBox) then
            LayerBox.ItemIndex:=(sysvar.dwg.DWG_CLayer^);
       end
   else
@@ -3125,6 +3238,7 @@ begin
            end;
            pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
            until pv=nil;
+           if assigned(LinewBox)then
            if lw=different then
                                LinewBox.ItemIndex:=(LinewBox.Items.Count-1)
                            else
@@ -3132,6 +3246,7 @@ begin
                                     if lw<0 then LinewBox.ItemIndex:=(lw+3)
                                             else LinewBox.ItemIndex:=((lw div 10)+3)
                                end;
+           if assigned(LayerBox)then
            if layer=ldifferent then
                                   LayerBox.ItemIndex:=(LayerBox.Items.Count-1)
                            else
@@ -3170,63 +3285,52 @@ if ch = #46 then
     r.handled:=true;
   end
 end;}
-procedure TOGLWnd.KeyPress(var Key: char);
-//procedure TOGLWnd.Pre_Char;
-//var
-//  i: GDBInteger;
+procedure TOGLWnd.myKeyPress(var Key: Word; Shift: TShiftState);
 begin
-  if Key=#27 then
-  begin
-    ClearOntrackpoint;
-    if commandmanager.pcommandrunning=nil then
-    begin
-    gdb.GetCurrentROOT.ObjArray.DeSelect;
-    param.SelDesc.LastSelectedObject := nil;
-    param.SelDesc.OnMouseObject := nil;
-    param.seldesc.Selectedobjcount:=0;
-    param.firstdraw := TRUE;
-    gdb.GetCurrentDWG.SelObjArray.clearallobjects;
-    CalcOptimalMatrix;
-    paint;
-    setvisualprop;
-    setobjinsp;
-    end
-    else
-    begin
-         commandmanager.pcommandrunning.CommandCancel;
-         commandmanager.executecommandend;
-    end;
-    Key:=#00;
-  end
-  {else if Key = '`' then begin
-                             pcommandline^.draw;
-                        end}
-  else if Key = #17 then begin end
-  else if Key = #16 then begin end
-  else if (Key = #1) {and (ssCtrl in (shift))} then
-  begin
-    commandmanager.ExecuteCommand('SelectAll');
-    Key:=#00;
-  end
-  else  if Key = #13 then
-                        begin
-                             if cmdedit.text='' then
-                                                          commandmanager.executelastcommad
-                                                      else
-                                                          {CLine.keypressmy(@self)};
-                        end
-//  else
-//      r.handled:=false;
-{переделать}  {if not r.handled then
-                       inherited Pre_Char(ch,r)}
+      if Key=VK_ESCAPE then
+      begin
+        ClearOntrackpoint;
+        if commandmanager.pcommandrunning=nil then
+          begin
+          gdb.GetCurrentROOT.ObjArray.DeSelect;
+          param.SelDesc.LastSelectedObject := nil;
+          param.SelDesc.OnMouseObject := nil;
+          param.seldesc.Selectedobjcount:=0;
+          param.firstdraw := TRUE;
+          gdb.GetCurrentDWG.SelObjArray.clearallobjects;
+          CalcOptimalMatrix;
+          paint;
+          setvisualprop;
+          setobjinsp;
+          end
+        else
+          begin
+               commandmanager.pcommandrunning.CommandCancel;
+               commandmanager.executecommandend;
+          end;
+        Key:=0;
+      end
+ else if (Key = VK_A) and (shift=[ssCtrl]) then
+      begin
+        commandmanager.ExecuteCommand('SelectAll');
+        Key:=00;
+      end
+ else if (Key = VK_DELETE) then
+      begin
+        commandmanager.ExecuteCommand('Erase');
+        Key:=00;
+      end
+ else if Key = VK_RETURN then
+      begin
+           commandmanager.executelastcommad;
+           Key:=00;
+      end
+ else if (Key=VK_V)and(shift=[ssctrl]) then
+                    begin
+                         commandmanager.executecommand('PasteClip');
+                         key:=00;
+                    end
 end;
-{procedure TOGLWnd.dock(Sender: TObject; Source: TDragDockObject; X,
-  Y: GDBInteger; State: TDragState; var Accept: GDBBoolean);
-begin
-     //self.BorderStyle:=bsSizeToolWin;
-     //Source.DragTargetPos.X:=Source.DragTargetPos.y;
-     //Source.DragTargetPos.y:=10;
-end;}
 function ProjectPoint(pntx,pnty,pntz:gdbdouble;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;
 begin
      gdb.GetCurrentDWG^.myGluProject2(CreateVertex(pntx,pnty,pntz),
@@ -3264,71 +3368,6 @@ begin
                                    wcsRTF.z:=pntz;
                               end;
 end;
-(*procedure TOGLWnd.Pre_MBMouseDblClk(fwkeys:longint;x,y:GDBInteger; var r:HandledMsg);
-var
-  tpz{, glx1, gly1}: GDBDouble;
-  fv1,tp,wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex;
-begin
-  if param.projtype = PROJPerspective then
-                                          begin
-                                               historyout('MBMouseDblClk: Пока только для паралельной проекции!');
-                                          end;
-  historyout('MBMouseDblClk: Пока корректно только при виде сверху!');
-
-
-  CalcOptimalMatrix;
-
-
-  dcsLBN:=InfinityVertex;
-  dcsRTF:=MinusInfinityVertex;
-  wcsLBN:=InfinityVertex;
-  wcsRTF:=MinusInfinityVertex;
-  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.LBN.x,gdb.GetCurrentROOT.vp.BoundingBox.LBN.y,gdb.GetCurrentROOT.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.RTF.x,gdb.GetCurrentROOT.vp.BoundingBox.LBN.y,gdb.GetCurrentROOT.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.RTF.x,gdb.GetCurrentROOT.vp.BoundingBox.RTF.y,gdb.GetCurrentROOT.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.LBN.x,gdb.GetCurrentROOT.vp.BoundingBox.RTF.y,gdb.GetCurrentROOT.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.LBN.x,gdb.GetCurrentROOT.vp.BoundingBox.LBN.y,gdb.GetCurrentROOT.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.RTF.x,gdb.GetCurrentROOT.vp.BoundingBox.LBN.y,gdb.GetCurrentROOT.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.RTF.x,gdb.GetCurrentROOT.vp.BoundingBox.RTF.y,gdb.GetCurrentROOT.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(gdb.GetCurrentROOT.vp.BoundingBox.LBN.x,gdb.GetCurrentROOT.vp.BoundingBox.RTF.y,gdb.GetCurrentROOT.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-
-  if (abs(wcsRTF.x-wcsLBN.x)<eps)and(abs(wcsRTF.y-wcsLBN.y)<eps) then
-                                                                    begin
-                                                                         historyout('MBMouseDblClk: Пустой чертеж?');
-                                                                         exit;
-                                                                    end;
-
-  gdb.GetCurrentDWG.pcamera^.point.x:=-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2);
-  gdb.GetCurrentDWG.pcamera^.point.y:=-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2);
-
-
-  param.zoom:=(wcsRTF.x-wcsLBN.x)/clientwidth;
-  tpz:=(wcsRTF.y-wcsLBN.y)/clientheight;
-
-  if tpz>param.zoom then param.zoom:=tpz;
-
-  CalcOptimalMatrix;
-  mouseunproject(param.md.mouse.x, param.md.mouse.y);
-  reprojectaxis;
-  param.firstdraw := true;
-  //gdb.GetCurrentDWG.pcamera^.getfrustum(@gdb.GetCurrentDWG.pcamera^.modelMatrix,@gdb.GetCurrentDWG.pcamera^.projMatrix,gdb.GetCurrentDWG.pcamera^.clipLCS,gdb.GetCurrentDWG.pcamera^.frustum);
-  //gdb.GetCurrentROOT.Format;
-  gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
-  gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
-  if param.seldesc.MouseFrameON then
-  begin
-    gdb.GetCurrentDWG^.myGluProject2(param.seldesc.Frame13d,
-               fv1);
-    param.seldesc.Frame1.x := round(fv1.x);
-    param.seldesc.Frame1.y := clientheight - round(fv1.y);
-    if param.seldesc.Frame1.x < 0 then param.seldesc.Frame1.x := 0
-    else if param.seldesc.Frame1.x > (clientwidth - 1) then param.seldesc.Frame1.x := clientwidth - 1;
-    if param.seldesc.Frame1.y < 0 then param.seldesc.Frame1.y := 1
-    else if param.seldesc.Frame1.y > (clientheight - 1) then param.seldesc.Frame1.y := clientheight - 1;
-  end;
-  //paint;
-  draw;
-end;*)
 (*procedure TOGLWnd.Pre_LBMouseDblClk;
 //var s:GDBString;
 begin

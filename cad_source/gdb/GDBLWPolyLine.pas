@@ -451,6 +451,8 @@ begin
   end;
   Vertex2D_in_OCS_Array.Shrink;
   Width2D_in_OCS_Array.Shrink;
+  //Vertex3D_in_WCS_Array.Shrink;
+  //Width3D_in_WCS_Array.Shrink;
   //format;
 end;
 

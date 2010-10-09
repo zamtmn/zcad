@@ -45,6 +45,8 @@ var units:TUnitManager;
     //SysUnit,SysVarUnit:PTUnit;
 //procedure startup;
 //procedure finalize;
+const
+     nOGLc='контекст OpenGL не создан';
 implementation
 uses
     log,memman;
@@ -713,13 +715,20 @@ begin
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_LineSmooth,'RD_LineSmooth');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_Restore_Mode,'RD_Restore_Mode');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxLineWidth,'RD_MaxLineWidth');
+  SysVar.RD.RD_MaxLineWidth^:=-1;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxPointSize,'RD_MaxPointSize');
+  SysVar.RD.RD_MaxPointSize^:=-1;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_Vendor,'RD_Vendor');
+  SysVar.RD.RD_Vendor^:=nOGLc;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_Renderer,'RD_Renderer');
+  SysVar.RD.RD_Renderer^:=nOGLc;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_Version,'RD_Version');
+  SysVar.RD.RD_Version^:=nOGLc;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxWidth,'RD_MaxWidth');
+  SysVar.RD.RD_MaxWidth^:=-1;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_BackGroundColor,'RD_BackGroundColor');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_LastRenderTime,'RD_LastRenderTime');
+  SysVarUnit.AssignToSymbol(SysVar.RD.RD_LastUpdateTime,'RD_LastUpdateTime');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxRenderTime,'RD_MaxRenderTime');
 
   SysVarUnit.AssignToSymbol(SysVar.SAVE.SAVE_Auto_Current_Interval,'SAVE_Auto_Current_Interval');
@@ -731,7 +740,7 @@ begin
   SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_Version,'SYS_Version');
   SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_RunTime,'SYS_RunTime');
   SysVar.SYS.SYS_RunTime^:=0;
-  SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_ActiveMouse,'SYS_ActiveMouse');
+  //SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_ActiveMouse,'SYS_ActiveMouse');
   SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_SystmGeometryColor,'SYS_SystmGeometryColor');
   SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_IsHistoryLineCreated,'SYS_IsHistoryLineCreated');
   SysVar.SYS.SYS_IsHistoryLineCreated^:=FALSE;

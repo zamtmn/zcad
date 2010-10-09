@@ -19,7 +19,7 @@
 unit UGDBVisibleOpenArray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes{,math},UGDBOpenArrayOfPV,{,UGDBOpenArray,oglwindowdef}sysutils,gdbase, geometry,
+uses {UGDBOpenArray,}gdbasetypes{,math},UGDBOpenArrayOfPV,{,UGDBOpenArray,oglwindowdef}sysutils,gdbase, geometry,
      gl,
      {varmandef,gdbobjectsconstdef,}memman;
 type
@@ -27,9 +27,12 @@ type
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
 GDBObjEntityOpenArray=object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
                       function add(p:GDBPointer):GDBInteger;virtual;
+                      function addwithoutcorrect(p:GDBPointer):GDBInteger;virtual;
+                      function copytowithoutcorrect(source:PGDBObjEntityOpenArray):GDBInteger;virtual;
                       function deliteminarray(p:GDBInteger):GDBInteger;virtual;
                       function cloneentityto(PEA:PGDBObjEntityOpenArray;own:GDBPointer):GDBInteger;virtual;
                       procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
+
                 end;
 {Export-}
 implementation
@@ -67,6 +70,22 @@ function GDBObjEntityOpenArray.add;
 begin
   result:=inherited add(p);
   pGDBObjEntity(p^).bp.PSelfInOwnerArray:={addr(PGDBObjEntityArray(parray)^[}result{])};
+end;
+function GDBObjEntityOpenArray.addwithoutcorrect;
+begin
+  result:=inherited add(p);
+end;
+function GDBObjEntityOpenArray.copytowithoutcorrect;
+var p:GDBPointer;
+    ir:itrec;
+begin
+  p:=beginiterate(ir);
+  if p<>nil then
+  repeat
+        source.addwithoutcorrect(@p);  //-----------------//-----------
+        p:=iterate(ir);
+  until p=nil;
+  result:=count;
 end;
 function GDBObjEntityOpenArray.deliteminarray;
 begin

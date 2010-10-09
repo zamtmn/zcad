@@ -1069,7 +1069,7 @@ begin
                  New_line^.bp.Owner:=TempNet;
                  TempNet^.ObjArray.add(addr(New_line));
                  TempNet^.Format;
-                 gdb.GetCurrentROOT.ObjArray.add(@TempNet);
+                 gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@TempNet);
                  firstowner:=TempNet;
                  mode:=-1;
             end;
@@ -1517,7 +1517,7 @@ begin
   pv:=cman.iterate(ir);
   until pv=nil;
 
-  gdb.GetCurrentROOT.ObjArray.add(@pt);
+  gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@pt);
   pt^.Build;
   pt^.Format;
   end;
@@ -1686,7 +1686,7 @@ begin
         currentgroup:=MainSpecContentFormat.iterate(ir_inscf);
   until currentgroup=nil;
 
-  gdb.GetCurrentROOT.ObjArray.add(@pt);
+  gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@pt);
   pt^.Build;
   pt^.Format;
 
@@ -2034,7 +2034,7 @@ begin
   pleader.MainLine.CoordInOCS.lBegin:=PCreatedGDBLine^.CoordInOCS.lBegin;
   pleader.MainLine.CoordInOCS.lEnd:=PCreatedGDBLine^.CoordInOCS.lEnd;
 
-  gdb.GetCurrentROOT.ObjArray.add(@pleader);
+  gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@pleader);
   pleader^.Format;
 
     end;

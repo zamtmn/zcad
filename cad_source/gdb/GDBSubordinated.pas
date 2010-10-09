@@ -48,11 +48,14 @@ GDBObjGenericWithSubordinated=object(GDBaseObject)
 
 
 end;
+TEntityAdress=record
+                          Owner:GDBPointer;
+                          SelfIndex:TArrayIndex;
+                    end;
 GDBObjBaseProp=record
                       Owner:PGDBObjGenericWithSubordinated;(*'Владелец'*)
                       PSelfInOwnerArray:TArrayIndex;(*'Индекс у владельца'*)
-                      Node:GDBPointer;(*'Узел'*)
-                      PSelfInNodeArray:GDBInteger;(*'Индекс в узле'*)
+                      TreePos:TEntityAdress;
                  end;
 GDBObjSubordinated=object(GDBObjGenericWithSubordinated)
                          bp:GDBObjBaseProp;(*'Владелец'*)(*oi_readonly*)(*hidden_in_objinsp*)

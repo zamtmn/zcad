@@ -39,6 +39,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             lstonmouse:PGDBObjEntity;
                             VisibleOBJBoundingBox:GDBBoundingBbox;
                             ObjTree:TEntTreeNode;
+                            function AddObjectToObjArray(p:GDBPointer):GDBInteger;virtual;
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
                             procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
@@ -85,6 +86,12 @@ begin
      ObjArray.add(pobj);
      pGDBObjEntity(ppointer(pobj)^).bp.Owner:=@self;
 end;}
+function GDBObjGenericSubEntry.AddObjectToObjArray(p:GDBPointer):GDBInteger;
+begin
+     result:=ObjArray.add(p);
+     ObjTree.addtonul(PGDBObjEntity(p^));
+     geometry.ConcatBB(ObjTree.BoundingBox,PGDBObjEntity(p)^.vp.BoundingBox);
+end;
 procedure GDBObjGenericSubEntry.SetInFrustumFromTree;
 begin
      inherited;
@@ -252,12 +259,21 @@ begin
      until pobj=nil;
 end;
 function GDBObjGenericSubEntry.EraseMi;
+var
+p:PGDBObjEntity;
 begin
+     if pobj^.bp.TreePos.Owner<>nil then
+     begin
+          PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.deliteminarray(pobj^.bp.TreePos.SelfIndex);
+     end;
+
+     pointer(p):=ObjArray.GetObject(pobjinarray);
      ObjArray.deliteminarray(pobjinarray);
-     //if pobjinarray<>nil then     pobjinarray^:=nil;
+
+     //p^.done;
+     //memman.GDBFreeMem(GDBPointer(p))
      pobj^.done;
      memman.GDBFreeMem(GDBPointer(pobj));
-     //format;
 end;
 function GDBObjGenericSubEntry.ImEdited;
 begin

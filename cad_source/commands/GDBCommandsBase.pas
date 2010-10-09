@@ -545,7 +545,7 @@ begin
 
      MainFormN.PageControl.ActivePage:=myts;
      sharedgdb.updatevisible;
-     redrawoglwnd;
+     //redrawoglwnd;
      result:=cmd_ok;
      application.ProcessMessages;
      oglwnd._onresize(nil);
@@ -611,13 +611,16 @@ begin
      gdb.GetCurrentROOT.format;
      updatevisible;
      if gdb.currentdwg<>BlockBaseDWG then
+                                         begin
+                                         gdb.GetCurrentDWG^.pObjRoot.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjTree,0,nil,TND_Root)^;
                                          redrawoglwnd;
+
+                                         end;
      result:=cmd_ok;
 
      end
         else
         shared.ShowError('GDBCommandsBase.MERGE: Не могу открыть файл: '+s);
-     gdb.GetCurrentDWG^.pObjRoot.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjTree,0)^;
 end;
 function Load_com(Operands:pansichar):GDBInteger;
 var
@@ -1312,7 +1315,7 @@ begin
      memcount.FreeAndDone;
     result:=cmd_ok;
 end;
-procedure PrintTreeNode(pnode:PTEntTreeNode);
+procedure PrintTreeNode(pnode:PTEntTreeNode;var depth:integer);
 var
    s:gdbstring;
 begin
@@ -1324,21 +1327,25 @@ begin
      s:=s+'(далее в +): '+inttostr(pnode.pluscount);
      s:=s+' (далее в -): '+inttostr(pnode.minuscount);
 
-     shared.HistoryOutStr(dupestring('  ',pnode.nodecount)+s);
+     shared.HistoryOutStr(dupestring('  ',pnode.nodedepth)+s);
+
+     if pnode.nodedepth>depth then
+                                  depth:=pnode.nodedepth;
 
      if assigned(pnode.pplusnode) then
-                       PrintTreeNode(pnode.pplusnode);
+                       PrintTreeNode(pnode.pplusnode,depth);
      if assigned(pnode.pminusnode) then
-                       PrintTreeNode(pnode.pminusnode);
+                       PrintTreeNode(pnode.pminusnode,depth);
 end;
 
 function CTest:GDBInteger;
 var //i: GDBInteger;
     pv:pGDBObjEntity;
     ir:itrec;
+    depth:integer;
 begin
   MainFormN.StartLongProcess(gdb.GetCurrentROOT.ObjArray.count);
-  gdb.GetCurrentDWG^.pObjRoot.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjTree,0)^;
+  gdb.GetCurrentDWG^.pObjRoot.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjTree,0,nil,TND_Root)^;
   MainFormN.EndLongProcess;
 
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
@@ -1347,9 +1354,10 @@ begin
   objinsp.GDBobjinsp.ReturnToDefault;
   clearcp;
   redrawoglwnd;
-
+  depth:=0;
+  PrintTreeNode(@gdb.GetCurrentDWG^.pObjRoot.ObjTree,depth);
   shared.HistoryOutStr('Всего примитивов: '+inttostr(GDB.GetCurrentROOT.ObjArray.count));
-  PrintTreeNode(@gdb.GetCurrentDWG^.pObjRoot.ObjTree);
+  shared.HistoryOutStr('Глубина дерева  : '+inttostr(depth));
 
   result:=cmd_ok;
 end;

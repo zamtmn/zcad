@@ -28,7 +28,7 @@ begin
      camera.zmin:=1.0;
      camera.zmax:=100000.0;
      camera.fovy:=35.0;
-     camera.notuseLCS:=True;
+     camera.notuseLCS:=False;
 
      DWGProps.Name:='Схема электрическая принципиальная';
      DWGProps.Number:=100;

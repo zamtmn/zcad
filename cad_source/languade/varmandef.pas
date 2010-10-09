@@ -199,7 +199,8 @@ UserTypeDescriptor=object(GDBaseObject)
             RD_BackGroundColor:PRGB;(*'Фоновый цвет'*)
             RD_Restore_Mode:ptrestoremode;(*'Восстановление изображения'*)
             RD_LastRenderTime:pGDBInteger;(*'Время последнего рендера'*)(*oi_readonly*)
-            RD_MaxRenderTime:pGDBInteger;(*'Максимальное время прохода рендера'*)
+            RD_LastUpdateTime:pGDBInteger;(*'Время последнего обновления'*)(*oi_readonly*)
+            RD_MaxRenderTime:pGDBInteger;(*'Максимальное время одного прохода рендера'*)
             RD_PanObjectDegradation:PGDBBoolean;(*'Деградация при перетаскивании'*)
             RD_LineSmooth:PGDBBoolean;(*'Сглаживание линий'*)
       end;
@@ -211,7 +212,6 @@ UserTypeDescriptor=object(GDBaseObject)
         end;
   tsys=record
              SYS_Version:PGDBString;(*'Версия программы'*)(*oi_readonly*)
-             SYS_ActiveMouse:PGDBBoolean;(*'??Активная мышь'*)
              SYS_RunTime:PGDBInteger;(*'Время работы программы'*)(*oi_readonly*)
              SYS_SystmGeometryColor:PGDBInteger;(*'Вспомогательный цвет'*)
              SYS_IsHistoryLineCreated:PGDBBoolean;(*'Окно истории создано'*)(*oi_readonly*)

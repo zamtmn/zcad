@@ -19,7 +19,7 @@
 unit GDBEntity;
 {$INCLUDE def.inc}
 interface
-uses UGDBEntTree,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
+uses gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
      {UGDBPolyPoint2DArray,}varman,varmandef,
      gl,
      GDBase,gdbobjectsconstdef,
@@ -139,7 +139,7 @@ GDBObjEntity=object(GDBObjSubordinated)
 {Export-}
 var onlygetsnapcount:GDBInteger;
 implementation
-uses GDBGenericSubEntry,UGDBDescriptor,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+uses UGDBEntTree,GDBGenericSubEntry,UGDBDescriptor,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
 procedure GDBObjEntity.SetInFrustumFromTree;
 begin
      infrustum:=infrustumactualy;
@@ -390,6 +390,9 @@ begin
 
                                                                       glPolygonStipple(@ps);
                                                                       glEnable(GL_POLYGON_STIPPLE);
+
+                                                                      {if bp.TreePos.Owner<>nil then
+                                                                                          PTEntTreeNode(bp.TreePos.Owner).draw;}
                                                                     end
                                                                 else
                                                                     begin

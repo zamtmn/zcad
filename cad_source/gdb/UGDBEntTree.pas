@@ -20,25 +20,33 @@ unit UGDBEntTree;
 {$INCLUDE def.inc}
 interface
 uses
-    math,gl,geometry,UGDBVisibleOpenArray,gdbase,gdbasetypes,log,memman,OGLSpecFunc;
+    math,gl,geometry,UGDBVisibleOpenArray,GDBEntity,gdbase,gdbasetypes,log,memman,OGLSpecFunc;
 type
 {EXPORT+}
+         TNodeDir=(TND_Plus,TND_Minus,TND_Root);
          PTEntTreeNode=^TEntTreeNode;
          TEntTreeNode=object(GDBaseObject)
-                            nodecount,pluscount,minuscount:integer;
+                            nodedepth:integer;
+                            pluscount,minuscount:integer;
                             point:GDBVertex;
                             plane:DVector4D;
                             BoundingBox:GDBBoundingBbox;
                             nul:GDBObjEntityOpenArray;
                             pplusnode,pminusnode:PTEntTreeNode;
 
-                            selected:boolean;
+                            NodeDir:TNodeDir;
+                            Root:PTEntTreeNode;
+
+                            //selected:boolean;
                             infrustum:TActulity;
                             nuldrawpos,minusdrawpos,plusdrawpos:TActulity;
                             constructor initnul;
                             destructor done;
                             procedure draw;
+                            procedure drawonlyself;
                             procedure ClearSub;
+                            procedure updateenttreeadress;
+                            procedure addtonul(p:PGDBObjEntity);
                       end;
          TTestTreeNode=Object
                              plane:DVector4D;
@@ -48,26 +56,32 @@ type
                        end;
          TTestTreeArray=array [0..2] of TTestTreeNode;
 {EXPORT-}
-function createtree(entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodecount:GDBInteger):PTEntTreeNode;
+function createtree(entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 implementation
-uses GDBEntity;
+procedure TEntTreeNode.drawonlyself;
+begin
+     DrawAABB(BoundingBox);
+end;
+
 procedure TEntTreeNode.draw;
 begin
      if assigned(pplusnode) then
                        pplusnode^.draw;
      if assigned(pminusnode) then
                        pminusnode^.draw;
-     if selected then glColor3ub(255, 0, 0)
-                 else glColor3ub(100, 100, 100);
+
+     {if selected then glColor3ub(255, 0, 0)
+                 else glColor3ub(100, 100, 100);}
+
      {myglbegin(GL_lines);
-     myglVertex3d(vertexadd(point,createvertex(-1000/nodecount,0,0)));
-     myglVertex3d(vertexadd(point,createvertex(1000/nodecount,0,0)));
-     myglVertex3d(vertexadd(point,createvertex(0,-1000/nodecount,0)));
-     myglVertex3d(vertexadd(point,createvertex(0,1000/nodecount,0)));
-     myglVertex3d(vertexadd(point,createvertex(0,0,-1000/nodecount)));
-     myglVertex3d(vertexadd(point,createvertex(0,0,1000/nodecount)));
+     myglVertex3d(vertexadd(point,createvertex(-1000/nodedepth,0,0)));
+     myglVertex3d(vertexadd(point,createvertex(1000/nodedepth,0,0)));
+     myglVertex3d(vertexadd(point,createvertex(0,-1000/nodedepth,0)));
+     myglVertex3d(vertexadd(point,createvertex(0,1000/nodedepth,0)));
+     myglVertex3d(vertexadd(point,createvertex(0,0,-1000/nodedepth)));
+     myglVertex3d(vertexadd(point,createvertex(0,0,1000/nodedepth)));
      myglend;}
-     {if selected then }DrawAABB(BoundingBox);
+     {if selected then }drawonlyself;
 end;
 
 constructor TEntTreeNode.initnul;
@@ -88,7 +102,25 @@ begin
                                      gdbfreemem(pminusnode);
                                 end;
 end;
+procedure TEntTreeNode.addtonul(p:PGDBObjEntity);
+begin
+     p^.bp.TreePos.Owner:=@self;
+     p^.bp.TreePos.SelfIndex:=nul.add(@p);
+end;
 
+procedure TEntTreeNode.updateenttreeadress;
+var pobj:PGDBObjEntity;
+    ir:itrec;
+begin
+     pobj:=nul.beginiterate(ir);
+     if pobj<>nil then
+     repeat
+           pobj^.bp.TreePos.Owner:=@self;
+           pobj^.bp.TreePos.SelfIndex:=ir.itc;
+
+           pobj:=nul.iterate(ir);
+     until pobj=nil;
+end;
 destructor TEntTreeNode.done;
 begin
      ClearSub;
@@ -105,7 +137,7 @@ begin
 
 end;
 
-function createtree(entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodecount:GDBInteger):PTEntTreeNode;
+function createtree(entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 var pobj:PGDBObjEntity;
     ir:itrec;
     midlepoint:gdbvertex;
@@ -115,7 +147,7 @@ var pobj:PGDBObjEntity;
     plusaabb,minusaabb:GDBBoundingBbox;
     tv:gdbvertex;
 begin
-     inc(nodecount);
+     inc(nodedepth);
      if PRootNode<>nil then
                            begin
                            result:=PRootNode;
@@ -126,12 +158,14 @@ begin
      result.BoundingBox:=aabb;
      result.pluscount:=0;
      result.minuscount:=0;
-     if (entitys.Count<=500)or(nodecount>30) then
+     result.Root:=_root;
+     result.NodeDir:=dir;
+     if (entitys.Count<=100)or(nodedepth>30) then
                                                 begin
-                                                     result.selected:=false;
-                                                     if entitys.beginiterate(ir)<>nil then
+                                                     //result.selected:=false;
+                                                     {if entitys.beginiterate(ir)<>nil then
                                                                        if PGDBObjEntity(entitys.beginiterate(ir))^.Selected then
-                                                                           result.selected:=true;
+                                                                           result.selected:=true;}
 
                                                      result.plane:=geometry.NulVector4D;
                                                      result.pminusnode:=nil;
@@ -139,13 +173,14 @@ begin
                                                      if prootnode<>nil then
                                                                            begin
                                                                                 //nul.init({$IFDEF DEBUGBUILD}'{A1E9743F-63CF-4C8F-8C40-57CCDC24F8CF}',{$ENDIF}entitys.Count);
-                                                                                entitys.copyto(@result.nul);
+                                                                                entitys.copytowithoutcorrect(@result.nul);
                                                                            end
                                                                        else
                                                                            begin
                                                                                 result.nul:=entitys;
                                                                                 //entitys.FreeAndDone;
                                                                            end;
+                                                     result.updateenttreeadress;
                                                      exit;
                                                 end;
      midlepoint:=nulvertex;
@@ -196,24 +231,25 @@ begin
            if d=0 then
                       begin
                            if (d1=0)and(d2=0) then
-                                                  ta[i].nul.AddRef(pobj^)
+                                                  //ta[i].nul.AddRef(pobj^)
+                                                  ta[i].nul.addwithoutcorrect(@pobj)
                       else if (d1>0)or(d2>0)  then
-                                                  ta[i].plus.AddRef(pobj^)
+                                                  ta[i].plus.addwithoutcorrect(@pobj)
                                               else
-                                                  ta[i].minus.AddRef(pobj^);
+                                                  ta[i].minus.addwithoutcorrect(@pobj);
                       end
       else if d<0 then
-                      ta[i].nul.AddRef(pobj^)
+                      ta[i].nul.addwithoutcorrect(@pobj)
       else if (d1>0)or(d2>0)  then
-                                  ta[i].plus.AddRef(pobj^)
+                                  ta[i].plus.addwithoutcorrect(@pobj)
                               else
-                                  ta[i].minus.AddRef(pobj^);
+                                  ta[i].minus.addwithoutcorrect(@pobj);
            pobj:=entitys.iterate(ir);
      until pobj=nil;
      end;
      entcount:=ta[0].nul.Count;
      dentcount:=abs(ta[0].plus.Count-ta[0].minus.Count);
-     imin:=0;
+     imin:=-1;
      for i:=1 to 2 do
      begin
           if ta[i].nul.Count<entcount then
@@ -233,6 +269,9 @@ begin
                                        end;
      end;
 
+     if imin=-1 then
+     begin
+
      tv:=vertexsub(aabb.RTF,aabb.LBN);
      if (tv.x>=tv.y)and(tv.x>=tv.z) then
                                         imin:=0
@@ -240,6 +279,7 @@ else if (tv.y>=tv.x)and(tv.y>=tv.z) then
                                         imin:=1
 else if (tv.z>=tv.x)and(tv.z>=tv.y) then
                                         imin:=2;
+     end;
 
 
 
@@ -267,9 +307,10 @@ else if (tv.z>=tv.x)and(tv.z>=tv.y) then
      result.plane:=ta[imin].plane;
      result.point:=midlepoint;
      result.nul:=ta[imin].nul;
-     result.nodecount:=nodecount;
-     result.pminusnode:=createtree(ta[imin].minus,minusaabb,nil,nodecount);
-     result.pplusnode:=createtree(ta[imin].plus,plusaabb,nil,nodecount);
+     result^.updateenttreeadress;
+     result.nodedepth:=nodedepth;
+     result.pminusnode:=createtree(ta[imin].minus,minusaabb,nil,nodedepth,result,TND_Minus);
+     result.pplusnode:=createtree(ta[imin].plus,plusaabb,nil,nodedepth,result,TND_Plus);
      result.pluscount:=ta[imin].plus.Count;
      result.minuscount:=ta[imin].minus.Count;
 end;

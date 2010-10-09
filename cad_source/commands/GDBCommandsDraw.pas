@@ -487,7 +487,7 @@ begin
                          gdbfreemem(pointer(pb));
                          pb:=pointer(tb);
     end;
-    gdb.GetCurrentROOT.ObjArray.add(addr(pb));
+    gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(pb));
     PGDBObjEntity(pb)^.FromDXFPostProcessAfterAdd;
     pb^.CalcObjMatrix;
     pb^.BuildGeometry;
@@ -680,7 +680,7 @@ begin
   pc^.RenderFeedback;
   if button = 1 then
   begin
-    gdb.GetCurrentROOT.ObjArray.add(addr(pc));
+    gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(pc));
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     //commandend;
     commandmanager.executecommandend;
@@ -750,7 +750,7 @@ begin
     begin
     PCreatedGDBLine^.bp.Owner:=gdb.GetCurrentROOT;
     //gdb.ObjRoot.ObjArray.add(addr(pl));
-    gdb.GetCurrentROOT.ObjArray.add(addr(PCreatedGDBLine));
+    gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(PCreatedGDBLine));
     end;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
@@ -924,7 +924,7 @@ begin
                             pcopyofcopyobj^.TransformAt(pcd.obj,@dispmatr);
                             pcopyofcopyobj^.format;
 
-                            gdb.GetCurrentROOT.ObjArray.add(addr(pcopyofcopyobj));
+                            gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(pcopyofcopyobj));
                           end;
 
         pcd:=pcoa^.iterate(ir);
@@ -1436,7 +1436,7 @@ begin
                          gdbfreemem(pointer(BLINSERT));
                          BLINSERT:=pointer(tb);
     end;
-    gdb.GetCurrentROOT.ObjArray.add(addr(BLINSERT));
+    gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(BLINSERT));
     PGDBObjEntity(BLINSERT)^.FromDXFPostProcessAfterAdd;
     BLINSERT^.CalcObjMatrix;
     BLINSERT^.BuildGeometry;

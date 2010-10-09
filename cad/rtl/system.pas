@@ -113,7 +113,7 @@ PGDBPolyVertex3D=^GDBPolyVertex3D;
 GDBPolyVertex3D=record
                       coord:GDBvertex;
                       count:GDBInteger;
-                      len:GDBInteger;
+                      LineNumber:GDBInteger;
                 end;
 PGDBvertex2S=^GDBvertex2S;
 GDBvertex2S=record
@@ -347,6 +347,8 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
 GDBObjEntityOpenArray=object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
                       function add(p:GDBPointer):GDBInteger;virtual;abstract;
+                      function addwithoutcorrect(p:GDBPointer):GDBInteger;virtual;abstract;
+                      function copytowithoutcorrect(source:PGDBObjEntityOpenArray):GDBInteger;virtual;abstract;
                       function deliteminarray(p:GDBInteger):GDBInteger;virtual;abstract;
                       function cloneentityto(PEA:PGDBObjEntityOpenArray;own:GDBPointer):GDBInteger;virtual;abstract;
                       procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;abstract;
@@ -711,7 +713,8 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
             RD_BackGroundColor:PRGB;(*'Фоновый цвет'*)
             RD_Restore_Mode:ptrestoremode;(*'Восстановление изображения'*)
             RD_LastRenderTime:pGDBInteger;(*'Время последнего рендера'*)(*oi_readonly*)
-            RD_MaxRenderTime:pGDBInteger;(*'Максимальное время прохода рендера'*)
+            RD_LastUpdateTime:pGDBInteger;(*'Время последнего обновления'*)(*oi_readonly*)
+            RD_MaxRenderTime:pGDBInteger;(*'Максимальное время одного прохода рендера'*)
             RD_PanObjectDegradation:PGDBBoolean;(*'Деградация при перетаскивании'*)
             RD_LineSmooth:PGDBBoolean;(*'Сглаживание линий'*)
       end;
@@ -723,7 +726,6 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
         end;
   tsys=record
              SYS_Version:PGDBString;(*'Версия программы'*)(*oi_readonly*)
-             SYS_ActiveMouse:PGDBBoolean;(*'??Активная мышь'*)
              SYS_RunTime:PGDBInteger;(*'Время работы программы'*)(*oi_readonly*)
              SYS_SystmGeometryColor:PGDBInteger;(*'Вспомогательный цвет'*)
              SYS_IsHistoryLineCreated:PGDBBoolean;(*'Окно истории создано'*)(*oi_readonly*)
@@ -847,6 +849,7 @@ TSimpleUnit=object(GDBaseobject)
                   destructor done;virtual;abstract;
                   procedure CreateVariable(varname,vartype:GDBString);virtual;abstract;
                   function FindVariable(varname:GDBString):pvardesk;virtual;abstract;
+                  function FindValue(varname:GDBString):GDBPointer;virtual;abstract;
                   function TypeName2PTD(n: GDBString):PUserTypeDescriptor;virtual;abstract;
                   function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
                   function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
@@ -897,11 +900,14 @@ GDBObjGenericWithSubordinated=object(GDBaseObject)
                                     procedure FormatAfterDXFLoad;virtual;abstract;
                                     procedure Build;virtual;abstract;
 end;
+TEntityAdress=record
+                          Owner:GDBPointer;
+                          SelfIndex:TArrayIndex;
+                    end;
 GDBObjBaseProp=record
                       Owner:PGDBObjGenericWithSubordinated;(*'Владелец'*)
                       PSelfInOwnerArray:TArrayIndex;(*'Индекс у владельца'*)
-                      Node:GDBPointer;(*'Узел'*)
-                      PSelfInNodeArray:GDBInteger;(*'Индекс в узле'*)
+                      TreePos:TEntityAdress;
                  end;
 GDBObjSubordinated=object(GDBObjGenericWithSubordinated)
                          bp:GDBObjBaseProp;(*'Владелец'*)(*oi_readonly*)(*hidden_in_objinsp*)
@@ -1126,6 +1132,7 @@ GDBObjAbstractText=object(GDBObjPlainWithOX)
                          Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;
                          procedure CalcObjMatrix;virtual;abstract;
                          procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
+                         procedure SimpleDrawGeometry;virtual;abstract;
                          procedure RenderFeedback;virtual;abstract;
                          function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
                          function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
@@ -1231,6 +1238,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             lstonmouse:PGDBObjEntity;
                             VisibleOBJBoundingBox:GDBBoundingBbox;
                             ObjTree:TEntTreeNode;
+                            function AddObjectToObjArray(p:GDBPointer):GDBInteger;virtual;abstract;
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
                             procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
@@ -1513,7 +1521,7 @@ GDBObjText=object(GDBObjAbstractText)
                  procedure getoutbound;virtual;abstract;
                  procedure Format;virtual;abstract;
                  procedure createpoint;virtual;abstract;
-                 procedure CreateSymbol(_symbol:GDBInteger;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont);
+                 procedure CreateSymbol(_symbol:GDBInteger;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:GDBInteger);
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  function GetObjTypeName:GDBString;virtual;abstract;
                  destructor done;virtual;abstract;
@@ -1542,6 +1550,7 @@ GDBObjMText=object(GDBObjText)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  function GetObjTypeName:GDBString;virtual;abstract;
                  destructor done;virtual;abstract;
+                 procedure SimpleDrawGeometry;virtual;abstract;
                  //procedure CalcObjMatrix;virtual;abstract;
             end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBpoint.pas

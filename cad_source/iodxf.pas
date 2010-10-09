@@ -519,6 +519,8 @@ begin
         {$IFDEF TOTALYLOG}programlog.logoutstr('Found entities section',lp_IncPos);{$ENDIF}
         //inc(foc);
         {addfromdxf12}addentitiesfromdxf(f, 'ENDSEC',owner);
+        owner.ObjArray.pack;
+        owner.correctobjects(nil,0)
         //inc(foc);
         {$IFDEF TOTALYLOG}programlog.logoutstr('end {entities section}',lp_DecPos);{$ENDIF}
       end

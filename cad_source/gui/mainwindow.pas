@@ -120,6 +120,7 @@ begin
      k:=8;
      for i:=0 to 9 do
      begin
+          if assigned(FileHistory[i]) then
           if FileHistory[i].Caption=filename then
           begin
                k:=i-1;
@@ -140,7 +141,7 @@ begin
       pstr:=SavedUnit.FindValue('PATH_File0');
       if (assigned(pstr))then
                               pstr^:=filename;
-
+      if assigned(FileHistory[0]) then
       if FileName<>''then
                            FileHistory[0].SetCommand(FileName,'Load('+FileName+')')
                        else
@@ -660,8 +661,8 @@ begin
                                                            line := f.readstring(',','');
                                                            //pmenuitem.command:=line;
 
-                                                           pmenuitem:=TmyMenuItem.Create(ppopupmenu,line2,line);
-                                                           ppopupmenu.Add(pmenuitem);
+                                                           pmenuitem:=TmyMenuItem.Create(pm,line2,line);
+                                                           {ppopupmenu}pm.Add(pmenuitem);
                                                            line := f.readstring(',','');
                                                            line := f.readstring(#$A' ',#$D);
                                                            line := f.readstring(#$A' ',#$D);
@@ -678,25 +679,17 @@ begin
                                                                                  else
                                                                                      line:='';
                                                                 if line<>''then
-                                                                                     FileHistory[i]:=TmyMenuItem.Create(ppopupmenu,line,'Load('+line+')')
+                                                                                     FileHistory[i]:=TmyMenuItem.Create(pm,line,'Load('+line+')')
                                                                                  else
-                                                                                     FileHistory[i]:=TmyMenuItem.Create(ppopupmenu,'Пусто','');
-                                                                ppopupmenu.Add(FileHistory[i]);
+                                                                                     FileHistory[i]:=TmyMenuItem.Create(pm,'Пусто','');
+                                                                {ppopupmenu}pm.Add(FileHistory[i]);
                                                            end;
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);
                                                       end
                 else     if uppercase(line)='SEPARATOR' then
                                                       begin
-                                                           ppopupmenu.AddSeparator;
-                                                           (*line2 := f.readstring(',','');
-                                                           //GDBGetMem({$IFDEF DEBUGBUILD}'{19CBFAC7-4671-4F40-A34F-3F69CE37DA65}',{$ENDIF}GDBPointer(pmenuitem),sizeof(zmenuitem));
-                                                           //pmenuitem.init(line);
-                                                           //pmenuitem.addto(ppopupmenu);
-                                                           line := f.readstring(',','');
-                                                           //pmenuitem.command:=line;
-                                                           pmenuitem:=TmyMenuItem.Create(ppopupmenu,line2,line);
-                                                           ppopupmenu.Add(pmenuitem);*)
+                                                           {ppopupmenu}pm.AddSeparator;
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);
                                                       end
@@ -704,9 +697,9 @@ begin
                                                       begin
 
                                                            line := f.readstring(';','');
-                                                           submenu:=TMenuItem.Create(ppopupmenu);
+                                                           submenu:=TMenuItem.Create(pm);
                                                            submenu.Caption:=(line);
-                                                           ppopupmenu.{items.}Add(submenu);
+                                                           {ppopupmenu}pm.{items.}Add(submenu);
 
                                                            loadsubmenu(f,{ppopupmenu}submenu,line);
                                                            line := f.readstring(#$A' ',#$D);
@@ -737,42 +730,41 @@ end;}
 procedure TMainFormN.myKeyPress{(var Key: char)}(Sender: TObject; var Key: Word; Shift: TShiftState);
 //procedure TMainForm.Pre_Char;
 var
-   ccg,tempkey:char;
+   ccg:char;
+   tempkey:word;
 begin
      //shared.HistoryOutStr(inttostr(key));
      if (ActiveControl)<>cmdedit then
      if (ActiveControl is tedit)
      or (ActiveControl is tmemo)   then
                                        exit;
-     tempkey:=chr(key);
+     tempkey:=key;
 
+     if cmdedit.text='' then
      if assigned(gdb.GetCurrentDWG) then
      if assigned(gdb.GetCurrentDWG.OGLwindow1)then
-                    gdb.GetCurrentDWG.OGLwindow1.KeyPress(tempkey);
-     if tempkey<>#00 then
+                    gdb.GetCurrentDWG.OGLwindow1.myKeyPress(tempkey,shift);
+     if tempkey<>0 then
      begin
-     tempkey:=chr(key);
-     if cmdedit.text='' then
-     begin
-     if (commandmanager.pcommandrunning=nil)and(not(chr(key) in ['a'..'Z']))and({ord}(Key)>31) then
-     begin
-          ccg:=UPPERCASE(chr(key))[1];
-          key:=00;
-          case  ccg of
-                      'C':commandmanager.executecommand('Copy');
-                      'M':commandmanager.executecommand('Move');
-                      'L':commandmanager.executecommand('Line');
-                      else
-                          key:=ord(tempkey);
-          end;
-     end
-else if (Key=86)and(shift=[ssctrl]) then
-                   begin
-                        commandmanager.executecommand('PasteClip');
-                        key:=00;
-                   end
+         tempkey:=key;
+         if cmdedit.text='' then
+         begin
+             {if (commandmanager.pcommandrunning=nil)and() then
+             begin
+                  ccg:=UPPERCASE(chr(key))[1];
+                  key:=00;
+                  case  ccg of
+                              'C':commandmanager.executecommand('Copy');
+                              'M':commandmanager.executecommand('Move');
+                              'L':commandmanager.executecommand('Line');
+                              else
+                                  key:=ord(tempkey);
+                  end;
+             end}
+         end;
      end;
-     end;
+     if tempkey=0 then
+                      key:=0;
 end;
 {procedure TMainForm.close;
 begin
@@ -803,8 +795,8 @@ begin
      end;
      //SysVar.debug.memi2:=memman.i2;
      if (SysVar.SAVE.SAVE_Auto_Current_Interval^<1)and(commandmanager.pcommandrunning=nil) then
-     if (gdb.GetCurrentDWG)<>nil then
-     if (gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount=0) then
+     if (pdwg)<>nil then
+     if (pdwg.OGLwindow1.param.SelDesc.Selectedobjcount=0) then
      begin
           commandmanager.executecommandsilent('QSave(QS)');
           SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;

@@ -21,7 +21,7 @@ unit mainwindow;
 
 interface
 uses
-  strproc,log,
+  LCLType,strproc,log,
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Toolwin, Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
   gdbase, languade,geometry,
@@ -314,6 +314,8 @@ LineWbox.Parent:=ToolBarU;
      MainPanel.Parent:=self;
 
      GDBObjInsp:=TGDBObjInsp.create(self);
+     //GDBObjInsp.BorderStyle:=bsSingle;
+
      GDBObjInsp.Align:=alLeft;
      GDBobjinsp.createpda;
      GDBobjinsp.setptr(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
@@ -733,7 +735,17 @@ var
    ccg:char;
    tempkey:word;
 begin
-     //shared.HistoryOutStr(inttostr(key));
+     if assigned(GDBobjinsp) then
+     if assigned(GDBobjinsp.PEditor) then
+     //if (ActiveControl)=GDBobjinsp.PEditor.Components[0] then
+      begin
+           if key=VK_ESCAPE then
+                                begin
+                                     GDBobjinsp.freeeditor;
+                                     key:=0;
+                                     exit;
+                                end;
+      end;
      if (ActiveControl)<>cmdedit then
      if (ActiveControl is tedit)
      or (ActiveControl is tmemo)   then
@@ -779,6 +791,7 @@ begin
      //exit;
      pdwg:=gdb.GetCurrentDWG;
      if pdwg<>nil then
+     begin
      if pdwg.OGLwindow1<>nil then
      begin
           if pdwg.OGLwindow1.Fastmmx>=0 then
@@ -792,7 +805,10 @@ begin
                                               pdwg.OGLwindow1.finishdraw;
                                               done:=false;
                                               end;
-     end;
+     end
+     end
+     else
+         SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
      //SysVar.debug.memi2:=memman.i2;
      if (SysVar.SAVE.SAVE_Auto_Current_Interval^<1)and(commandmanager.pcommandrunning=nil) then
      if (pdwg)<>nil then

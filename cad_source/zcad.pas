@@ -67,7 +67,8 @@ uses
   GDBCommandsElectrical,
   GDBCommandsOPS,
   cmdline,
-  plugins;
+  plugins,
+  layerwnd;
   //RegCnownTypes,URegisterObjects;
 
 //exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {shared}
@@ -81,28 +82,17 @@ uses
 //exports GDBGetMem,GDBFreeMem; {memman}
 //exports GetPZWinManager; {ZWinMan}
 
+{R *.res}
+
 {$R *.res}
 
 begin
-
 {$IFDEF REPORTMMEMORYLEAKS}
        SetHeapTraceOutput('log/memory-heaptrace.txt');
        keepreleased:=true;
-
-
 {$ENDIF}
-
-{$IFDEF DEBUGBUILD}
-{$IFDEF VER180}
-  ReportMemoryLeaksOnShutdown:=DebugHook <> 0;
-{$ENDIF}
-{$ENDIF}
-
 programlog.logoutstr('ZCAD log v'+sysparam.ver.versionstring+' started',0);
-{$IFDEF VER150}programlog.logoutstr('Program compiled on Borland DELPHI7                    ',0); {$ENDIF}
-{$IFDEF VER170}programlog.logoutstr('Program compiled on Borland DELPHI2005                 ',0); {$ENDIF}
-{$IFDEF VER180}programlog.logoutstr('Program compiled on Borland Developer Studio DELPHI2006',0); {$ENDIF}
-{$IFDEF FPC}   programlog.logoutstr('Program compiled on Free Pascal Compiler v2.2.0        ',0); {$ENDIF}
+{$IFDEF FPC}   programlog.logoutstr('Program compiled on Free Pascal Compiler',0); {$ENDIF}
 {$IFDEF DEBUGBUILD}programlog.LogOutStr('Program compiled with {$DEFINE DEBUGDUILD}',0); {$ENDIF}
 {$IFDEF TOTALYLOG}programlog.logoutstr('Program compiled with {$DEFINE TOTALYLOG}',0); {$ENDIF}
 {$IFDEF PERFOMANCELOG}programlog.logoutstr('Program compiled with {$DEFINE PERFOMANCELOG}',0); {$ENDIF}
@@ -110,21 +100,16 @@ programlog.logoutstr('ZCAD log v'+sysparam.ver.versionstring+' started',0);
 
   //{перемещен в splashwnd}Application.Initialize;
 
+  //инициализация GDB
   ugdbdescriptor.startup;
 
+  //создание окна программы
   Application.CreateForm(TMainFormN, MainFormN);
-  //sleep(1000);
   MainFormN.show;
-  MainFormN.Repaint;
+  //MainFormN.Repaint;
 
   if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
                                                   sysvar.SYS.SYS_IsHistoryLineCreated^:=true;
-
-  //SplashWindow.SetFocus;
-
-  {инициализация не OS модулей}
-  //SplashWindow.TXTOut('GDBCommandsElectrical.startup;');GDBCommandsElectrical.startup;
-  //SplashWindow.TXTOut('GDBCommandsOPS.startup;');GDBCommandsOPS.startup;
 
   historyoutstr('ZCAD v'+sysvar.SYS.SYS_Version^+' started');
   gdbplugins.loadplugins(sysparam.programpath+'PLUGINS\');
@@ -155,6 +140,5 @@ programlog.logoutstr('ZCAD log v'+sysparam.ver.versionstring+' started',0);
   programlog.done;
 
 end.
-
 
 

@@ -56,6 +56,9 @@ type
                        end;
          TTestTreeArray=array [0..2] of TTestTreeNode;
 {EXPORT-}
+const
+  _InNodeCount=500;
+  _NodeDepth=15;
 function createtree(entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 implementation
 procedure TEntTreeNode.drawonlyself;
@@ -160,7 +163,7 @@ begin
      result.minuscount:=0;
      result.Root:=_root;
      result.NodeDir:=dir;
-     if (entitys.Count<=100)or(nodedepth>30) then
+     if (entitys.Count<=_InNodeCount)or(nodedepth>_NodeDepth) then
                                                 begin
                                                      //result.selected:=false;
                                                      {if entitys.beginiterate(ir)<>nil then

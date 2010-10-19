@@ -73,7 +73,7 @@ type
     //procedure FormResize;
     procedure BeforeInit; virtual;
     procedure _onresize(sender:tobject);virtual;
-    procedure updateeditor;virtual;
+    procedure updateeditorBounds;virtual;
     //procedure BuildPDA(ExtType:GDBWord; var addr:GDBPointer);
     procedure buildproplist(exttype:PUserTypeDescriptor; bmode:GDBInteger; var addr:GDBPointer);
     procedure SetCurrentObjDefault;
@@ -407,6 +407,8 @@ InflateRect(ARect, -BorderWidth, -BorderWidth);
 //----------------------------------------------InflateRect(ARect, -BevelWidth, -BevelWidth);
 canvas.Brush.Color := clBtnFace;
 canvas.FillRect(ARect);
+//canvas.Frame3d(arect,5,bvRaised);
+//canvas.Line(clientwidth-1,0,clientwidth-1,clientheight);
 //FillRect(DC, ARect, HBRUSH(Brush.Reference.Handle));
 y:=startdrawy;
 sub:=0;
@@ -463,11 +465,13 @@ end;
 procedure TGDBobjinsp.freeeditor;
 begin
      freeandnil(peditor);
+     if assigned(shared.cmdedit) then
+                                     shared.cmdedit.SetFocus;
 end;
 
 procedure TGDBobjinsp.asyncfreeeditor;
 begin
-     freeandnil(peditor);
+     freeeditor;
 end;
 
 procedure TGDBobjinsp.Notify;
@@ -716,7 +720,7 @@ begin
       freeandnil(peditor);
       //-----------------------------------------------------------------peditor^.done;
       //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
-      ppropcurrentedit:=pp;
+      //ppropcurrentedit:=pp;
     end;
     vsa.init(50);
     if pp^.valkey<>'' then
@@ -744,6 +748,7 @@ begin
     vsa.done;
     if assigned(PEditor){<>nil} then
     begin
+         ppropcurrentedit:=pp;
          peditor.OwnerNotify:=self.Notify;
          peditor.geteditor.setfocus;
       //-----------------------------------------------------------------PEditor^.SetFocus;
@@ -804,9 +809,7 @@ begin
   begin
     if peditor<>nil then
     begin
-      //-----------------------------------------------------------------peditor^.done;
-      //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
-      //-----------------------------------------------------------------peditor:=nil;
+         self.freeeditor;
     end;
     if assigned(currobjgdbtype) then
     begin
@@ -863,9 +866,10 @@ begin
 
   //----------------SendMessage(MainFormN.hToolTip, TTM_ADDTOOL, 0, LPARAM(@ti));
 end;
-procedure TGDBobjinsp.updateeditor;
+procedure TGDBobjinsp.updateeditorBounds;
 begin
-  //peditor.geteditor.SetBounds(peditor.wndx-(xn-namecol),peditor.wndy,peditor.wndw-(x-width)+(xn-namecol),peditor.wndh);
+  if peditor<>nil then
+  peditor.geteditor.SetBounds(namecol-1,ppropcurrentedit.y1,clientwidth-namecol-2,ppropcurrentedit.y2);
 end;
 procedure TGDBobjinsp._onresize(sender:tobject);
 var x,xn:integer;
@@ -876,6 +880,7 @@ begin
   gtk_widget_add_events (Widget,GDK_POINTER_MOTION_HINT_MASK);
   {$ENDIF}
   createscrollbars;
+  updateeditorBounds;
   {x:=width;
   xn:=namecol;
   inherited;
@@ -883,11 +888,6 @@ begin
   if namecol<50 then namecol:=50;
   if namecol>155 then
     namecol:=155;}
-  if peditor<>nil then
-                         begin
-                              //-----------------------------------------------------------------peditor^.setxywh(peditor.wndx-(xn-namecol),peditor.wndy,peditor.wndw-(x-width)+(xn-namecol),peditor.wndh);
-                              //peditor^.draw;
-                         end;
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('objinsp.initialization');{$ENDIF}

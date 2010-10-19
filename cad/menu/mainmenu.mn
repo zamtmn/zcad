@@ -13,8 +13,9 @@ Panel UPPANEL 994,68,30,525;
   {
     button NewDWG,new.bmp,Создать новый чертеж
     button Load,load.bmp,Загрузить файл
-    button Save,save.bmp,Сохранить файл
+    button QSave,save.bmp,Сохранить файл
     Separator
+    button Layer,layer.bmp,Настройка слоев
     layercombobox 200,Выбор слоя
     linewcombobox 100,Выбор веса линий
   }

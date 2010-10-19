@@ -95,6 +95,8 @@ type
     //function mousein(MousePos: TPoint): GDBBoolean;
     procedure mouseunproject(X, Y: glint);
     procedure getonmouseobject(pva: PGDBObjEntityOpenArray);
+    procedure getonmouseobjectbytree(Node:TEntTreeNode);
+    procedure processmousenode(Node:TEntTreeNode;var i:integer);
     function findonmobj(pva: PGDBObjEntityOpenArray;var i: GDBInteger): GDBInteger;
     procedure SetOTrackTimer(Sender: TObject);
     procedure KillOTrackTimer(Sender: TObject);
@@ -1086,13 +1088,13 @@ end;
 
 
   if (param.md.mode and MGetSelectObject) <> 0 then
-                                                     getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
+                                                     getonmouseobjectbytree(gdb.GetCurrentROOT.ObjTree);
   if (param.md.mode and MGet3DPointWoOP) <> 0 then param.ospoint.ostype := os_none;
   if (param.md.mode and MGet3DPoint) <> 0 then
   begin
 
       if (param.md.mode and MGetSelectObject) = 0 then
-                                                      getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
+                                                      getonmouseobjectbytree(gdb.GetCurrentROOT.ObjTree);
       getosnappoint(@gdb.GetCurrentROOT.ObjArray, 0);
       project0axis;
     if sysvar.dwg.DWG_OSMode^ <> 0 then
@@ -1543,7 +1545,8 @@ begin
 
         else
         begin
-          getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
+          getonmouseobjectbytree(gdb.GetCurrentROOT.ObjTree);
+          //getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
           param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
 
           {//Выделение всех объектов под мышью
@@ -2554,6 +2557,56 @@ begin
   end
   else {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('param.scrollmode=true. exit',0);{$ENDIF}
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.findonmobj-----{end}',lp_DecPos);{$ENDIF}
+end;
+procedure TOGLWnd.processmousenode(Node:TEntTreeNode;var i:integer);
+var
+  pp:PGDBObjEntity;
+  ir:itrec;
+  inr:TINRect;
+begin
+     if CalcAABBInFrustum (Node.BoundingBox,param.mousefrustum)<>IREmpty then
+     begin
+          findonmobj(@node.nul, i);
+          if assigned(node.pminusnode) then
+                                           processmousenode(node.pminusnode^,i);
+          if assigned(node.pplusnode) then
+                                           processmousenode(node.pplusnode^,i);
+     end;
+end;
+
+procedure TOGLWnd.getonmouseobjectbytree(Node:TEntTreeNode);
+var
+  i: GDBInteger;
+  pp:PGDBObjEntity;
+  ir:itrec;
+  inr:TINRect;
+begin
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobjectbytree',lp_IncPos);{$ENDIF}
+  i := 0;
+  gdb.GetCurrentDWG.OnMouseObj.clear;
+  param.SelDesc.OnMouseObject := nil;
+
+
+  processmousenode(Node,i);
+
+  pp:=gdb.GetCurrentDWG.OnMouseObj.beginiterate(ir);
+  if pp<>nil then
+                 begin
+                      param.lastonmouseobject:=pp;
+                      repeat
+                            if pp^.vp.LastCameraPos<>gdb.GetCurrentDWG.pcamera^.POSCOUNT then
+                            pp^.RenderFeedback;
+
+
+                            pp:=gdb.GetCurrentDWG.OnMouseObj.iterate(ir);
+                      until pp=nil;
+                 end;
+
+  {gdb.GetCurrentDWG.OnMouseObj.clear;
+  param.SelDesc.OnMouseObject := nil;
+  param.lastonmouseobject:=nil;}
+
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobjectbytree------{end}',lp_DecPos);{$ENDIF}
 end;
 
 procedure TOGLWnd.getonmouseobject;

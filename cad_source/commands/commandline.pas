@@ -25,8 +25,10 @@ type
   GDBcommandmanager=object(GDBcommandmanagerDef)
                           CommandsStack:GDBOpenArrayOfGDBPointer;
                           ContextCommandParams:GDBPointer;
+                          busy:GDBBoolean;
 
                           constructor init(m:GDBInteger);
+                          function execute(comm:pansichar;silent:GDBBoolean): GDBInteger;virtual;
                           function executecommand(comm:pansichar): GDBInteger;virtual;
                           function executecommandsilent(comm:pansichar): GDBInteger;virtual;
                           procedure executecommandend;virtual;
@@ -51,7 +53,7 @@ function getcommandmanager:GDBPointer;export;
 procedure finalize;}
 implementation
 uses Objinsp,ugdbstringarray,cmdline,UGDBDescriptor;
-function getcommandmanager;
+function getcommandmanager:GDBPointer;
 begin
      result:=@commandmanager;
 end;
@@ -94,6 +96,9 @@ var
    ir:itrec;
    oldlastcomm:GDBString;
 begin
+     busy:=true;
+     shared.cmdedit.Enabled:=false;
+
      oldlastcomm:=lastcommand;
      sa.init(200);
      sa.loadfromfile(ExpandPath(fn));
@@ -101,11 +106,15 @@ begin
   p:=sa.beginiterate(ir);
   if p<>nil then
   repeat
-        executecommand(pointer(pGDBString(p)^));
+        execute(pointer(pGDBString(p)^),false);
         p:=sa.iterate(ir);
   until p=nil;
   sa.FreeAndDone;
   lastcommand:=oldlastcomm;
+
+     shared.cmdedit.Enabled:=true;
+     shared.cmdedit.SetFocus;
+     busy:=false;
 end;
 procedure GDBcommandmanager.sendpoint2command;
 begin
@@ -150,7 +159,7 @@ begin
   operands:=copy(comm,p1+1,p2-p1-1);
   command:=uppercase(Command);
 end;
-function GDBcommandmanager.FindCommand;
+function GDBcommandmanager.FindCommand(command:GDBString):PCommandObjectDef;
 var
    p:PCommandObjectDef;
    ir:itrec;
@@ -188,7 +197,7 @@ begin
           pcommandrunning := pointer(pc);
           pcommandrunning^.CommandStart(pansichar(operands));
 end;
-function GDBcommandmanager.executecommand;
+function GDBcommandmanager.execute(comm:pansichar;silent:GDBBoolean): GDBInteger;
 var i,p1,p2: GDBInteger;
     command,operands:GDBString;
     cc:TCStartAttr;
@@ -208,12 +217,12 @@ begin
           begin
 
           lastcommand := command;
-          historyoutstr('Запущена команда('+pfoundcommand^.CommandName+');');
+          if silent then
+                        programlog.logoutstr('GDBCommandManager.ExecuteCommandSilent('+pfoundcommand^.CommandName+');',0)
+                    else
+                        historyoutstr('Запущена команда('+pfoundcommand^.CommandName+');');
 
           run(pfoundcommand,operands);
-//          if pcommandrunning<>nil then self.executecommandend;
-  //        pcommandrunning := pointer(pfoundcommand);
-    //      pcommandrunning^.CommandStart(pansichar(operands));
           if pcommandrunning<>nil then
                                       CLine.SetMode(CLCOMMANDRUN);
           end
@@ -226,33 +235,17 @@ begin
   else historyout(GDBPointer('Неизвестная команда: "'+command+'"'));
   end;
 end;
-function GDBcommandmanager.executecommandsilent;
-var i,p1,p2: GDBInteger;
-    command,operands:GDBString;
-    pfoundcommand:PCommandObjectDef;
+function GDBcommandmanager.executecommand(comm:pansichar): GDBInteger;
 begin
-  //if pcommandrunning<>nil then self.executecommandend;
-  if length(comm)>0 then
-  if comm[0]<>';' then
-  begin
-        ParseCommand(comm,command,operands);
-        pfoundcommand:=FindCommand(command);
-        if pfoundcommand<>nil then
-        begin
-          begin
-            programlog.logoutstr('GDBCommandManager.ExecuteCommandSilent('+pfoundcommand^.CommandName+');',0);
-
-            run(pfoundcommand,operands);
-//            pcommandrunning := pointer(pfoundcommand);
-//            pcommandrunning^.CommandStart(pansichar(operands));
-
-            if pcommandrunning<>nil then
-                                        CLine.SetMode(CLCOMMANDRUN);
-          end;
-        end
-        else
-            historyout(GDBPointer('Неизвестная команда: "'+command+'"'));
-  end;
+     if not busy then
+                     result:=execute(comm,false)
+                 else
+                     shared.ShowError('Клманда не может быть выполнена. Идет выполнение сценария');
+end;
+function GDBcommandmanager.executecommandsilent(comm:pansichar): GDBInteger;
+begin
+     if not busy then
+     result:=execute(comm,true);
 end;
 procedure GDBcommandmanager.executecommandend;
 var

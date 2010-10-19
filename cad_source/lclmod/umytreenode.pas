@@ -21,7 +21,7 @@ unit umytreenode;
 interface
 
 uses
-  ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype{$ENDIF},fileutil,ButtonPanel,
+  ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype{$ENDIF},fileutil,ButtonPanel,Buttons,
   strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo;
 type
     TmyPopupMenu = class (TPopupMenu)
@@ -94,6 +94,7 @@ PIterateCmpareFunc=function(node:TmyTreeNode;PExpr:Pointer):Boolean;
 function IterateFind(Node:TmyTreeNode; CompareFunc:PIterateCmpareFunc;PExpr:Pointer;SubFind:Boolean):TmyTreeNode;
 function IterateFindCategoryN (node:TmyTreeNode;PExpr:Pointer):Boolean;
 function FindControlByType(_parent:TWinControl;_class:TClass):TControl;
+procedure SetHeightControl(_parent:TWinControl;h:integer);
 implementation
 uses commandline,log,sharedgdb;
 function FindControlByType(_parent:TWinControl;_class:TClass):TControl;
@@ -107,6 +108,16 @@ begin
                                    exit;
                               end;
      result:=nil;
+end;
+procedure SetHeightControl(_parent:TWinControl;h:integer);
+var
+    i:integer;
+begin
+     for i := 0 to _parent.ControlCount - 1 do
+      if typeof(_parent.Controls[i]) = TBitBtn then
+                              begin
+                                   _parent.Controls[i].Height:=h;
+                              end;
 end;
 procedure TDialogForm.AfterConstruction;
 begin

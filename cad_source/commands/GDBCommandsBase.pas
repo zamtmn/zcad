@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ layerwnd,strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -1362,6 +1362,15 @@ begin
   result:=cmd_ok;
 end;
 
+function layer_cmd:GDBInteger;
+begin
+  form2:=TForm2.Create(nil);
+  SetHeightControl(form2,22);
+  form2.ShowModal;
+  Freeandnil(form2);
+  result:=cmd_ok;
+end;
+
 procedure finalize;
 begin
      //Optionswindow.done;
@@ -1413,6 +1422,7 @@ begin
   selframecommand^.overlay:=true;
   selframecommand.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@CTest,'CTest',CADWG,0);
+  CreateCommandFastObjectPlugin(@layer_cmd,'layer',CADWG,0);
 
   //Optionswindow.initxywh('',@mainformn,500,300,400,100,false);
   //Aboutwindow:=TAboutWnd.create(Application);{.initxywh('',@mainform,500,200,200,180,false);}

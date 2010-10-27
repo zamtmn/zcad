@@ -19,7 +19,7 @@
 unit SysInfo;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,Forms,gdbase;
+uses gdbasetypes,Forms,gdbase,fileutil;
 {$INCLUDE revision.inc}
 type tsysparam=record
                      programpath: GDBString;
@@ -33,7 +33,7 @@ implementation
 uses {shared,varmandef,} sysutils,WindowsSpecific,log;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('sysinfo.initialization');{$ENDIF}
-     sysparam.programpath := ExtractFilePath(paramstr(0));
+     sysparam.programpath:=(ExtractFilePath(paramstr(0)));
      sysparam.screenx:={GetSystemMetrics(SM_CXSCREEN)}Screen.Width;
      sysparam.screeny:={GetSystemMetrics(SM_CYSCREEN)}Screen.Height;
      //sysparam.temppath:=GetEnvironmentVariable('TEMP');
@@ -54,4 +54,4 @@ begin
                  sysparam.ver:=GetVersion('ZCAD.exe');
      {$ENDIF}
      //sysparam.verstr:=Format('%d.%d.%d.%d SVN: %s',[sysparam.ver.major,sysparam.ver.minor,sysparam.ver.release,sysparam.ver.build,RevisionStr]);
-end.
+end.

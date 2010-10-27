@@ -1052,14 +1052,14 @@ begin
   begin
     if p3dpl=nil then
     begin
+
     p3dpl := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateInitObj(GDBPolylineID,gdb.GetCurrentROOT));
-    //p3dpl^.init(@gdb.GetCurrentDWG.ObjRoot,gdb.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^,false);
-    //p3dpl^.bp.Owner:=@gdb.GetCurrentDWG.ObjRoot;
-    //gdb.GetCurrentDWG.ObjRoot.ObjArray.add(addr(p3dpl));
     p3dpl^.AddVertex(wc);
-    end;
     p3dpl^.Format;
+    gdb.GetCurrentROOT.AddObjectToNodeTree(p3dpl);
     GDBobjinsp.setptr(SysUnit.TypeName2PTD('GDBObjPolyline'),p3dpl);
+    end;
+
   end
 end;
 
@@ -1074,7 +1074,9 @@ begin
   if button = 1 then
   begin
     p3dpl^.AddVertex(wc);
+    p3dpl^.Format;
     p3dpl^.RenderFeedback;
+    gdb.GetCurrentROOT.CorrectNodeTreeBB(p3dpl);
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
     redrawoglwnd;

@@ -91,11 +91,11 @@ begin
        SetHeapTraceOutput('log/memory-heaptrace.txt');
        keepreleased:=true;
 {$ENDIF}
-programlog.logoutstr('ZCAD log v'+sysparam.ver.versionstring+' started',0);
-{$IFDEF FPC}   programlog.logoutstr('Program compiled on Free Pascal Compiler',0); {$ENDIF}
-{$IFDEF DEBUGBUILD}programlog.LogOutStr('Program compiled with {$DEFINE DEBUGDUILD}',0); {$ENDIF}
-{$IFDEF TOTALYLOG}programlog.logoutstr('Program compiled with {$DEFINE TOTALYLOG}',0); {$ENDIF}
-{$IFDEF PERFOMANCELOG}programlog.logoutstr('Program compiled with {$DEFINE PERFOMANCELOG}',0); {$ENDIF}
+                             programlog.logoutstr('ZCAD log v'+sysparam.ver.versionstring+' started',0);
+{$IFDEF FPC}                 programlog.logoutstr('Program compiled on Free Pascal Compiler',0); {$ENDIF}
+{$IFDEF DEBUGBUILD}          programlog.LogOutStr('Program compiled with {$DEFINE DEBUGDUILD}',0); {$ENDIF}
+{$IFDEF TOTALYLOG}           programlog.logoutstr('Program compiled with {$DEFINE TOTALYLOG}',0); {$ENDIF}
+{$IFDEF PERFOMANCELOG}       programlog.logoutstr('Program compiled with {$DEFINE PERFOMANCELOG}',0); {$ENDIF}
 {$IFDEF BREACKPOINTSONERRORS}programlog.logoutstr('Program compiled with {$DEFINE BREACKPOINTSONERRORS}',0); {$ENDIF}
 
   //{перемещен в splashwnd}Application.Initialize;

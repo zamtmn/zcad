@@ -26,12 +26,18 @@ uses
 type
     TmyPopupMenu = class (TPopupMenu)
                    end;
-    TmyCommandToolButton=class(TToolButton)
+    TmyToolButton=class(TToolButton)
+                  protected
+                                 procedure CalculatePreferredSize(
+                                                  var PreferredWidth, PreferredHeight: integer;
+                                                  WithThemeSpace: Boolean); override;
+                  end;
+    TmyCommandToolButton=class(TmyToolButton)
                   public
                   FCommand:String;{**<Command to manager commands}
                   protected procedure Click; override;
                   end;
-    TmyVariableToolButton=class(TToolButton)
+    TmyVariableToolButton=class(TmyToolButton)
                   public
                   FVariable:String;{**<Command to manager commands}
                   FBufer:DWord;
@@ -148,6 +154,36 @@ begin
      inherited;
      ChangePage(ActivePageIndex);
 end;}
+procedure TmyToolButton.CalculatePreferredSize(
+                 var PreferredWidth, PreferredHeight: integer;
+                 WithThemeSpace: Boolean);
+var
+    temp:integer;
+begin
+  if assigned(parent)then
+  if parent is TToolbar then
+                            begin
+                                 if (style=tbsSeparator)
+                                 or (style=tbsDivider) then
+                                 if TToolbar(parent).Height>TToolbar(parent).Width then
+                                 temp:=-14;
+
+                            end;
+     inherited;
+     if assigned(parent)then
+     if parent is TToolbar then
+                               begin
+                                    if (style=tbsSeparator)
+                                    or (style=tbsDivider) then
+                                    if TToolbar(parent).Height>TToolbar(parent).Width then
+                                    begin
+                                         temp:=PreferredWidth;
+                                         PreferredWidth:=PreferredHeight;
+                                         PreferredHeight:=temp;
+                                    end;
+                               end;
+end;
+
 procedure TmyVariableToolButton.AssignToVar(varname:string);
 var
    pvd:pvardesk;

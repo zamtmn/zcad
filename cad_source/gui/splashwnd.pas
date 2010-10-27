@@ -21,7 +21,7 @@ unit splashwnd;
 interface
 uses
  strproc,Forms, stdctrls, Controls, Graphics,ExtCtrls,
- gdbasetypes,SysInfo;
+ gdbasetypes,SysInfo,fileutil;
 const
      vinfotext='Переходная версия. WINAPI->LCL'#13#10;
 type
@@ -51,7 +51,7 @@ begin
   self.DoubleBuffered:=true;
   Logo:=TImage.create(self);
   Logo.Align:=alclient;
-  Logo.Picture.LoadFromFile(sysparam.programpath+'components/logo.png');
+  Logo.Picture.LoadFromFile(SysToUTF8(sysparam.programpath)+'components/logo.png');
   Logo.Parent:=self;
   self.BorderStyle:=bsNone;
   self.Color:=clNone;

@@ -876,8 +876,8 @@ var x,xn:integer;
 {$IFDEF LCLGTK2}Widget: PGtkWidget;{$ENDIF}
 begin
   {$IFDEF LCLGTK2}
-  Widget:=PGtkWidget(PtrUInt(Handle));
-  gtk_widget_add_events (Widget,GDK_POINTER_MOTION_HINT_MASK);
+  //Widget:=PGtkWidget(PtrUInt(Handle));
+  //gtk_widget_add_events (Widget,GDK_POINTER_MOTION_HINT_MASK);
   {$ENDIF}
   createscrollbars;
   updateeditorBounds;

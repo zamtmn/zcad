@@ -370,7 +370,7 @@ begin
      begin
           if img[1]<>'#' then
                               begin
-                              img:=sysparam.programpath+'menu/BMP/'+img;
+                              img:=SysToUTF8(sysparam.programpath)+'menu/BMP/'+img;
                               bmp:=TBitmap.create;
                               bmp.LoadFromFile(img);
                               bmp.Transparent:=true;
@@ -584,7 +584,7 @@ begin
                      if uppercase(line)='SEPARATOR' then
                                          begin
                                          buttonpos:=buttonpos+3;
-                                         TToolButton(b):=TToolButton.Create(ppanel);
+                                         TToolButton(b):=TmyToolButton.Create(ppanel);
                                          b.Style:=
                                          //tbsSeparator;
                                          tbsDivider;
@@ -596,6 +596,9 @@ begin
                                                                     else
                                                                         b.align:=alTop;}
                                           AddToBar(ppanel,b);
+                                          TToolButton(b).AutoSize:=false;
+                                          //TToolButton(b).width:=200;
+                                          //TToolButton(b).height:=200;
                                          end;
                      //application.ProcessMessages;
                 end;

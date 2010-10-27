@@ -40,6 +40,8 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             VisibleOBJBoundingBox:GDBBoundingBbox;
                             ObjTree:TEntTreeNode;
                             function AddObjectToObjArray(p:GDBPointer):GDBInteger;virtual;
+                            function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;virtual;
+                            function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;virtual;
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
                             procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
@@ -86,11 +88,23 @@ begin
      ObjArray.add(pobj);
      pGDBObjEntity(ppointer(pobj)^).bp.Owner:=@self;
 end;}
+function GDBObjGenericSubEntry.CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;
+begin
+     ConcatBB(ObjTree.BoundingBox,pobj^.vp.BoundingBox);
+end;
+
+function GDBObjGenericSubEntry.AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;
+begin
+    ObjTree.addtonul(pobj);
+    CorrectNodeTreeBB(pobj);
+    //ConcatBB(ObjTree.BoundingBox,pobj^.vp.BoundingBox);
+end;
 function GDBObjGenericSubEntry.AddObjectToObjArray(p:GDBPointer):GDBInteger;
 begin
      result:=ObjArray.add(p);
-     ObjTree.addtonul(PGDBObjEntity(p^));
-     geometry.ConcatBB(ObjTree.BoundingBox,PGDBObjEntity(p)^.vp.BoundingBox);
+     AddObjectToNodeTree(PGDBObjEntity(p^));
+     //ObjTree.addtonul(PGDBObjEntity(p^));
+     //geometry.ConcatBB(ObjTree.BoundingBox,PGDBObjEntity(p^)^.vp.BoundingBox);
 end;
 procedure GDBObjGenericSubEntry.SetInFrustumFromTree;
 begin

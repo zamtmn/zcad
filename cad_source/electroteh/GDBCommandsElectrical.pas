@@ -1231,6 +1231,7 @@ begin
     //GDBobjinsp.setptr(SysUnit.TypeName2PTD('GDBObjCable'),p3dpl);
     p3dpl^.AddVertex(wc);
     p3dpl^.Format;
+    gdb.GetCurrentROOT.AddObjectToNodeTree(p3dpl);
 
     cabcomparam.Pcable:=p3dpl;
     //GDBobjinsp.setptr(SysUnit.TypeName2PTD('GDBObjCable'),p3dpl);
@@ -1254,8 +1255,9 @@ begin
     if cabcomparam.PTrace=nil then
     begin
           p3dpl^.AddVertex(wc);
-          p3dpl^.RenderFeedback;
           p3dpl^.Format;
+          p3dpl^.RenderFeedback;
+          gdb.GetCurrentROOT.CorrectNodeTreeBB(p3dpl);
     end
 else begin
           plastw:=p3dpl^.VertexArrayInWCS.getelement(p3dpl^.VertexArrayInWCS.Count-1);
@@ -1289,8 +1291,9 @@ else begin
                                                            p3dpl^.AddVertex(wc);
                             pa.done;
                        end;
-        p3dpl^.RenderFeedback;
         p3dpl^.Format;
+        p3dpl^.RenderFeedback;
+        gdb.GetCurrentROOT.CorrectNodeTreeBB(p3dpl);
      end;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;

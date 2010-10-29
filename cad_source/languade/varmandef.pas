@@ -154,6 +154,8 @@ UserTypeDescriptor=object(GDBaseObject)
              Device_Library:PGDBString;(*'К библиотекам'*)
              Support_Path:PGDBString;(*'К дополнительным файлам'*)
              Fonts_Path:PGDBString;(*'К шрафтам'*)
+             Template_Path:PGDBString;(*'К шаблонам'*)
+             Template_File:PGDBString;(*'Шаблон по умолчанию'*)
              Program_Run:PGDBString;(*'К программе'*)(*oi_readonly*)
              Temp_files:PGDBString;(*'К временным файлам'*)(*oi_readonly*)
         end;

@@ -753,6 +753,11 @@ begin
   SysVarUnit.AssignToSymbol(SysVar.PATH.Support_Path,'PATH_Support_Path');
   s:=SysVar.PATH.Support_Path^;
 
+  SysVarUnit.AssignToSymbol(SysVar.PATH.Template_Path,'PATH_Template_Path');
+  s:=SysVar.PATH.Template_Path^;
+  SysVarUnit.AssignToSymbol(SysVar.PATH.Template_File,'PATH_Template_File');
+  s:=SysVar.PATH.Template_File^;
+
   SysVarUnit.AssignToSymbol(SysVar.PATH.Fonts_Path,'PATH_Fonts');
 
   sysvar.RD.RD_LastRenderTime^:=0;

@@ -488,12 +488,65 @@ begin
           shared.updatevisible;
      end;}
 end;
+function Merge_com(Operands:pansichar):GDBInteger;
+var
+   s: GDBString;
+   fileext:GDBString;
+   isload:boolean;
+   mem:GDBOpenArrayOfByte;
+   pu:ptunit;
+begin
+     if gdb.currentdwg<>BlockBaseDWG then
+     if gdb.GetCurrentROOT.ObjArray.Count>0 then
+                                                     begin
+                                                          if Application.messagebox('Чертеж уже содержит данные. Осуществить подгрузку?','QLOAD',MB_YESNO)=IDNO then
+                                                          exit;
+                                                     end;
+     s:=operands;
+     isload:=FileExists(s);
+     if isload then
+     begin
+          fileext:=uppercase(ExtractFileEXT(s));
+          if fileext='.ZCP' then LoadZCP(s, @GDB)
+     else if fileext='.DXF' then
+                                begin
+                                     //if operands<>'QS' then
+                                     //                      gdb.GetCurrentDWG.FileName:=s;
+                                     addfromdxf(s,@gdb.GetCurrentDWG^.pObjRoot^);
+                                     if FileExists(s+'.dbpas') then
+                                     begin
+                                           pu:=gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase');
+                                           mem.InitFromFile(s+'.dbpas');
+                                           pu^.free;
+                                           units.parseunit(mem,PTSimpleUnit(pu));
+                                           mem.done;
+                                     end;
+                                end;
+     if gdb.currentdwg<>BlockBaseDWG then
+                                         ReloadLayer;
+     gdb.GetCurrentROOT.calcbb;
+     //gdb.GetCurrentDWG.ObjRoot.format;//FormatAfterEdit;
+     gdb.GetCurrentROOT.format;
+     updatevisible;
+     if gdb.currentdwg<>BlockBaseDWG then
+                                         begin
+                                         gdb.GetCurrentDWG^.pObjRoot.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjTree,0,nil,TND_Root)^;
+                                         redrawoglwnd;
+
+                                         end;
+     result:=cmd_ok;
+
+     end
+        else
+        shared.ShowError('GDBCommandsBase.MERGE: Не могу открыть файл: '+s);
+end;
 function newdwg_com(Operands:pansichar):GDBInteger;
 var
    ptd:PTDrawing;
    //tf:PZbasic;
    myts:TTabSheet;
    oglwnd:TOGLWND;
+   tn:GDBString;
 begin
      ptd:=gdb.CreateDWG;
 
@@ -502,7 +555,7 @@ begin
      gdb.SetCurrentDWG(ptd);
 
      if length(operands)=0 then
-                        operands:=UnnamedWindowTitle;
+                               operands:=UnnamedWindowTitle;
 
      {tf:=mainform.PageControl.addpage(Operands);
      mainform.PageControl.selpage(mainform.PageControl.lastcreated);
@@ -545,6 +598,11 @@ begin
 
      MainFormN.PageControl.ActivePage:=myts;
      sharedgdb.updatevisible;
+     tn:=expandpath(sysvar.PATH.Template_Path^)+sysvar.PATH.Template_File^;
+     if fileExists(tn) then
+                           merge_com(@tn[1])
+                       else
+                           shared.ShowError('Не найден файл шаблона "'+tn+'"');
      //redrawoglwnd;
      result:=cmd_ok;
      application.ProcessMessages;
@@ -569,58 +627,6 @@ begin
   redrawoglwnd;
   updatevisible;
   result:=cmd_ok;
-end;
-function Merge_com(Operands:pansichar):GDBInteger;
-var
-   s: GDBString;
-   fileext:GDBString;
-   isload:boolean;
-   mem:GDBOpenArrayOfByte;
-   pu:ptunit;
-begin
-     if gdb.currentdwg<>BlockBaseDWG then
-     if gdb.GetCurrentROOT.ObjArray.Count>0 then
-                                                     begin
-                                                          if Application.messagebox('Чертеж уже содержит данные. Осуществить подгрузку?','QLOAD',MB_YESNO)=IDNO then
-                                                          exit;
-                                                     end;
-     s:=operands;
-     isload:=FileExists(s);
-     if isload then
-     begin
-          fileext:=uppercase(ExtractFileEXT(s));
-          if fileext='.ZCP' then LoadZCP(s, @GDB)
-     else if fileext='.DXF' then
-                                begin
-                                     if operands<>'QS' then
-                                                           gdb.GetCurrentDWG.FileName:=s;
-                                     addfromdxf(s,@gdb.GetCurrentDWG^.pObjRoot^);
-                                     if FileExists(s+'.dbpas') then
-                                     begin
-                                           pu:=gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase');
-                                           mem.InitFromFile(s+'.dbpas');
-                                           pu^.free;
-                                           units.parseunit(mem,PTSimpleUnit(pu));
-                                           mem.done;
-                                     end;
-                                end;
-     if gdb.currentdwg<>BlockBaseDWG then
-                                         ReloadLayer;
-     gdb.GetCurrentROOT.calcbb;
-     //gdb.GetCurrentDWG.ObjRoot.format;//FormatAfterEdit;
-     gdb.GetCurrentROOT.format;
-     updatevisible;
-     if gdb.currentdwg<>BlockBaseDWG then
-                                         begin
-                                         gdb.GetCurrentDWG^.pObjRoot.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjTree,0,nil,TND_Root)^;
-                                         redrawoglwnd;
-
-                                         end;
-     result:=cmd_ok;
-
-     end
-        else
-        shared.ShowError('GDBCommandsBase.MERGE: Не могу открыть файл: '+s);
 end;
 function Load_com(Operands:pansichar):GDBInteger;
 var
@@ -659,6 +665,8 @@ begin
      if isload then
      begin
           newdwg_com(@s[1]);
+          //if operands<>'QS' then
+                                gdb.GetCurrentDWG.FileName:=s;
           Merge_com(@s[1]);
           MainFormN.processfilehistory(s);
      end

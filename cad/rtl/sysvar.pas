@@ -52,6 +52,8 @@ var
   SYS_IsHistoryLineCreated:GDBBoolean;
   SYS_AlternateFont:GDBString;
   PATH_Device_Library:GDBString;
+  PATH_Template_Path:GDBString;
+  PATH_Template_File:GDBString;
   PATH_Program_Run:GDBString;
   PATH_Support_Path:GDBString;
   PATH_Fonts:GDBString;
@@ -116,6 +118,8 @@ begin
   PATH_Program_Run:='C:\zcad\cad\';
   PATH_Support_Path:='*rtl|*rtl/objdefunits|*rtl/objdefunits/include|*components|*blocks/el/general';
   PATH_Fonts:='*fonts/|C:/Program Files/AutoCAD 2010/Fonts/';
+  PATH_Template_Path:='*template';
+  PATH_Template_File:='default.dxf';
   ShowHiddenFieldInObjInsp:=True;
   testGDBBoolean:=False;
   pi:=3.14159265359;

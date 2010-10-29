@@ -668,6 +668,8 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
              Device_Library:PGDBString;(*'К библиотекам'*)
              Support_Path:PGDBString;(*'К дополнительным файлам'*)
              Fonts_Path:PGDBString;(*'К шрафтам'*)
+             Template_Path:PGDBString;(*'К шаблонам'*)
+             Template_File:PGDBString;(*'Шаблон по умолчанию'*)
              Program_Run:PGDBString;(*'К программе'*)(*oi_readonly*)
              Temp_files:PGDBString;(*'К временным файлам'*)(*oi_readonly*)
         end;
@@ -1239,6 +1241,8 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             VisibleOBJBoundingBox:GDBBoundingBbox;
                             ObjTree:TEntTreeNode;
                             function AddObjectToObjArray(p:GDBPointer):GDBInteger;virtual;abstract;
+                            function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;virtual;abstract;
+                            function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;virtual;abstract;
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
                             procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;

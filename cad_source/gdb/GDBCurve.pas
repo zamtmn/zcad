@@ -20,7 +20,7 @@ unit GDBCurve;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBLayerArray,gdbasetypes{,GDBGenericSubEntry},UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBPolyLine2DArray,UGDBPoint3DArray{,UGDBOpenArrayOfByte,varman},varmandef,
+uses UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes{,GDBGenericSubEntry},UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBPolyLine2DArray,UGDBPoint3DArray{,UGDBOpenArrayOfByte,varman},varmandef,
 gl,
 GDBase,geometry,UGDBDescriptor,gdbobjectsconstdef,oglwindowdef,math,dxflow,sysutils,memman{,OGLSpecFunc},GDBSubordinated;
 type
@@ -53,7 +53,7 @@ GDBObjCurve=object(GDBObj3d)
                  procedure getoutbound;virtual;
 
                  procedure AddVertex(Vertex:GDBVertex);virtual;
-                 procedure SaveToDXFfollow(var handle:longint; outhandle: GDBInteger);virtual;
+                 procedure SaveToDXFfollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(t_matrix:PDMatrix4D);virtual;
                  procedure feedbackinrect;virtual;

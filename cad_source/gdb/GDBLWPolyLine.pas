@@ -37,7 +37,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  constructor initnul;
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;
 
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  procedure Format;virtual;
                  procedure createpoint;virtual;
@@ -462,13 +462,21 @@ var j: GDBInteger;
     m:DMatrix4D;
 begin
   SaveToDXFObjPrefix(handle,outhandle,'LWPOLYLINE','AcDbPolyline');
-  WriteString_EOL(outhandle, '90');
-  WriteString_EOL(outhandle, inttostr(Vertex2D_in_OCS_Array.Count));
-  WriteString_EOL(outhandle, '70');
-  if closed then WriteString_EOL(outhandle, '1')
-            else WriteString_EOL(outhandle, '0');
-  WriteString_EOL(outhandle, '38');
-  WriteString_EOL(outhandle, floattostr(local.p_insert.z));
+  dxfGDBStringout(outhandle,90,inttostr(Vertex2D_in_OCS_Array.Count));
+  //WriteString_EOL(outhandle, '90');
+  //WriteString_EOL(outhandle, inttostr(Vertex2D_in_OCS_Array.Count));
+
+
+  //WriteString_EOL(outhandle, '70');
+  if closed then //WriteString_EOL(outhandle, '1')
+                 dxfGDBStringout(outhandle,70,'1')
+            else //WriteString_EOL(outhandle, '0');
+                 dxfGDBStringout(outhandle,70,'0');
+
+
+  dxfGDBDoubleout(outhandle,38,local.p_insert.z);
+  //WriteString_EOL(outhandle, '38');
+  //WriteString_EOL(outhandle, floattostr(local.p_insert.z));
 
   m:=CalcObjMatrixWithoutOwner;
   //MatrixTranspose(m);

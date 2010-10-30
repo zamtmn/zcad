@@ -52,7 +52,7 @@ function getcommandmanager:GDBPointer;export;
 {procedure startup;
 procedure finalize;}
 implementation
-uses Objinsp,ugdbstringarray,cmdline,UGDBDescriptor;
+uses Objinsp,UGDBStringArray,cmdline,UGDBDescriptor;
 function getcommandmanager:GDBPointer;
 begin
      result:=@commandmanager;
@@ -98,6 +98,7 @@ var
 begin
      busy:=true;
      shared.cmdedit.Enabled:=false;
+     shared.HintText.Enabled:=false;
 
      oldlastcomm:=lastcommand;
      sa.init(200);
@@ -113,6 +114,7 @@ begin
   lastcommand:=oldlastcomm;
 
      shared.cmdedit.Enabled:=true;
+     shared.HintText.Enabled:=true;
      shared.cmdedit.SetFocus;
      busy:=false;
 end;

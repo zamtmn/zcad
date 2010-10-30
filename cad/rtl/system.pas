@@ -19,6 +19,8 @@ PGDBByte=^GDBByte;
 
 PGDBLongword=^GDBLongword;
 
+PGDBQWord=^GDBQWord;
+
 PGDBWord=^GDBWord;
 
 PGDBSmallint=^GDBSmallint;
@@ -916,15 +918,15 @@ GDBObjSubordinated=object(GDBObjGenericWithSubordinated)
                          function GetOwner:PGDBObjSubordinated;virtual;abstract;
                          procedure createfield;virtual;abstract;
                          function FindVariable(varname:GDBString):pvardesk;virtual;abstract;
-                         procedure SaveToDXFObjXData(outhandle: GDBInteger);virtual;abstract;
+                         procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                          function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;abstract;
          end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBEntity.pas
 PTExtAttrib=^TExtAttrib;
 TExtAttrib=record
                  FreeObject:GDBBoolean;
-                 OwnerHandle:GDBLongword;
-                 Handle:GDBLongword;
+                 OwnerHandle:GDBQWord;
+                 Handle:GDBQWord;
                  Upgrade:GDBLongword;
                  ExtAttrib2:GDBBoolean;
            end;
@@ -946,7 +948,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     destructor done;virtual;abstract;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                    procedure SaveToDXFObjPrefix(var handle:longint; outhandle: GDBInteger;entname,dbname:GDBString);
+                    procedure SaveToDXFObjPrefix(var handle:longint;var  outhandle:{GDBInteger}GDBOpenArrayOfByte;entname,dbname:GDBString);
                     function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit):GDBBoolean;
                     function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;abstract;
                     procedure FromDXFPostProcessAfterAdd;virtual;abstract;
@@ -955,10 +957,10 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function AddExtAttrib:PTExtAttrib;
                     function CopyExtAttrib:PTExtAttrib;
                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
-                    procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;abstract;
-                    procedure DXFOut(var handle:longint; outhandle: GDBInteger);virtual;abstract;
-                    procedure SaveToDXFfollow(var handle:longint; outhandle: GDBInteger);virtual;abstract;
-                    procedure SaveToDXFPostProcess(var handle:longint);
+                    procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
+                    procedure DXFOut(var handle:longint; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
+                    procedure SaveToDXFfollow(var handle:longint; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
+                    procedure SaveToDXFPostProcess(var handle:{GDBInteger}GDBOpenArrayOfByte);
                     procedure Format;virtual;abstract;
                     procedure FormatAfterEdit;virtual;abstract;
                     procedure DrawWithAttrib(visibleactualy:TActulity);virtual;abstract;
@@ -1037,7 +1039,7 @@ GDBObj3DFace=object(GDBObj3d)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;abstract;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  procedure Format;virtual;abstract;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
@@ -1082,7 +1084,7 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;abstract;
-               procedure SaveToDXFObjPostfix(outhandle: GDBInteger);
+               procedure SaveToDXFObjPostfix(outhandle:{GDBInteger}GDBOpenArrayOfByte);
                function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit):GDBBoolean;
                procedure Format;virtual;abstract;
                procedure CalcObjMatrix;virtual;abstract;
@@ -1161,7 +1163,7 @@ GDBObjArc=object(GDBObjPlain)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;RR,S,E:GDBDouble);
                  constructor initnul;
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;abstract;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
@@ -1205,7 +1207,7 @@ GDBObjCircle=object(GDBObjWithLocalCS)
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
                  procedure RenderFeedback;virtual;abstract;
                  procedure getoutbound;virtual;abstract;
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;abstract;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  procedure Format;virtual;abstract;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
@@ -1357,7 +1359,7 @@ GDBObjBlockInsert=object(GDBObjComplex)
                      constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                      procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
                      function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;abstract;
-                     procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;abstract;
+                     procedure SaveToDXF(var handle:longint; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                      procedure CalcObjMatrix;virtual;abstract;
                      function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;abstract;
                      function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
@@ -1397,8 +1399,8 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    function GetObjTypeName:GDBString;virtual;abstract;
                    procedure BuildGeometry;virtual;abstract;
                    procedure BuildVarGeometry;virtual;abstract;
-                   procedure SaveToDXFFollow(var handle:longint; outhandle: GDBInteger);virtual;abstract;
-                   procedure SaveToDXFObjXData(outhandle: GDBInteger);virtual;abstract;
+                   procedure SaveToDXFFollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
+                   procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                    function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;abstract;
                    //procedure select;virtual;abstract;
                    procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;abstract;
@@ -1431,9 +1433,9 @@ GDBObjNet=object(GDBObjConnected)
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
                  procedure transform(t_matrix:PDMatrix4D);virtual;abstract;
                  function GetNearestLine(const point:GDBVertex):PGDBObjEntity;
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;abstract;
-                 procedure SaveToDXFObjXData(outhandle: GDBInteger);virtual;abstract;
-                 procedure SaveToDXFfollow(var handle:longint; outhandle: GDBInteger);virtual;abstract;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
+                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
+                 procedure SaveToDXFfollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  destructor done;virtual;abstract;
                  procedure FormatAfterDXFLoad;virtual;abstract;
            end;
@@ -1449,7 +1451,7 @@ GDBObjLine=object(GDBObj3d)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;abstract;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  procedure Format;virtual;abstract;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
                  procedure RenderFeedback;virtual;abstract;
@@ -1491,7 +1493,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul;
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;abstract;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
                  procedure Format;virtual;abstract;
                  procedure createpoint;virtual;abstract;
@@ -1520,7 +1522,7 @@ GDBObjText=object(GDBObjAbstractText)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;abstract;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  procedure CalcGabarit;virtual;abstract;
                  procedure getoutbound;virtual;abstract;
                  procedure Format;virtual;abstract;
@@ -1533,7 +1535,7 @@ GDBObjText=object(GDBObjAbstractText)
                  procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);virtual;abstract;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;abstract;
                  function IsHaveObjXData:GDBBoolean;virtual;abstract;
-                 procedure SaveToDXFObjXData(outhandle: GDBInteger);virtual;abstract;
+                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit):GDBBoolean;virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBMText.pas
@@ -1546,7 +1548,7 @@ GDBObjMText=object(GDBObjText)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte;wi,l:GDBDouble);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;abstract;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  procedure CalcGabarit;virtual;abstract;
                  //procedure getoutbound;virtual;abstract;
                  procedure Format;virtual;abstract;
@@ -1609,7 +1611,7 @@ GDBObjCurve=object(GDBObj3d)
                  function GetObjTypeName:GDBString;virtual;abstract;
                  procedure getoutbound;virtual;abstract;
                  procedure AddVertex(Vertex:GDBVertex);virtual;abstract;
-                 procedure SaveToDXFfollow(var handle:longint; outhandle: GDBInteger);virtual;abstract;
+                 procedure SaveToDXFfollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
                  procedure transform(t_matrix:PDMatrix4D);virtual;abstract;
                  procedure feedbackinrect;virtual;abstract;
@@ -1623,7 +1625,7 @@ GDBObjPolyline=object(GDBObjCurve)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;abstract;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  function GetObjTypeName:GDBString;virtual;abstract;
@@ -1649,9 +1651,9 @@ GDBObjCable=object(GDBObjCurve)
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
                  function GetObjTypeName:GDBString;virtual;abstract;
                  procedure Format;virtual;abstract;
-                 procedure SaveToDXFObjXData(outhandle: GDBInteger);virtual;abstract;
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;abstract;
-                 procedure SaveToDXFfollow(var handle:longint; outhandle: GDBInteger);virtual;abstract;
+                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
+                 procedure SaveToDXFfollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  destructor done;virtual;abstract;
                  //function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
@@ -1710,7 +1712,7 @@ GDBObjTable=object(GDBObjComplex)
             destructor done;virtual;abstract;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
             procedure Build;virtual;abstract;
-            procedure SaveToDXFFollow(var handle:longint; outhandle: GDBInteger);virtual;abstract;
+            procedure SaveToDXFFollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
             end;
 //Generate on C:\zcad\CAD_SOURCE\electroteh\GDBElLeader.pas
 PGDBObjElLeader=^GDBObjElLeader;
@@ -1734,13 +1736,13 @@ GDBObjElLeader=object(GDBObjComplex)
             function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;abstract;
             constructor initnul;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
-            procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;abstract;
-            procedure DXFOut(var handle:longint; outhandle: GDBInteger);virtual;abstract;
+            procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
+            procedure DXFOut(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
             function GetObjTypeName:GDBString;virtual;abstract;
             function ReturnLastOnMouse:PGDBObjEntity;virtual;abstract;
             function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;abstract;
             function DeSelect:GDBInteger;virtual;abstract;
-            procedure SaveToDXFFollow(var handle:longint; outhandle: GDBInteger);virtual;abstract;
+            procedure SaveToDXFFollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
             function InRect:TInRect;virtual;abstract;
             destructor done;virtual;abstract;
             procedure transform(t_matrix:PDMatrix4D);virtual;abstract;

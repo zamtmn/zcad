@@ -41,7 +41,7 @@ uses
   //cmdline,
   //UGDBVisibleOpenArray,
   gdbobjectsconstdef,
-  gdbEntity,
+  GDBEntity,
  shared,
  sharedgdb,UGDBEntTree,
   {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}

@@ -30,8 +30,8 @@ type
 PTExtAttrib=^TExtAttrib;
 TExtAttrib=record
                  FreeObject:GDBBoolean;
-                 OwnerHandle:GDBLongword;
-                 Handle:GDBLongword;
+                 OwnerHandle:GDBQWord;
+                 Handle:GDBQWord;
                  Upgrade:GDBLongword;
                  ExtAttrib2:GDBBoolean;
            end;
@@ -53,7 +53,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     destructor done;virtual;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                    procedure SaveToDXFObjPrefix(var handle:longint; outhandle: GDBInteger;entname,dbname:GDBString);
+                    procedure SaveToDXFObjPrefix(var handle:longint;var  outhandle:{GDBInteger}GDBOpenArrayOfByte;entname,dbname:GDBString);
                     function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit):GDBBoolean;
                     function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
@@ -64,10 +64,10 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function AddExtAttrib:PTExtAttrib;
                     function CopyExtAttrib:PTExtAttrib;
                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
-                    procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;
-                    procedure DXFOut(var handle:longint; outhandle: GDBInteger);virtual;
-                    procedure SaveToDXFfollow(var handle:longint; outhandle: GDBInteger);virtual;
-                    procedure SaveToDXFPostProcess(var handle:longint);
+                    procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                    procedure DXFOut(var handle:longint; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                    procedure SaveToDXFfollow(var handle:longint; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                    procedure SaveToDXFPostProcess(var handle:{GDBInteger}GDBOpenArrayOfByte);
                     procedure Format;virtual;
                     procedure FormatAfterEdit;virtual;
 
@@ -938,11 +938,21 @@ begin
                                                                                  end;}
                                                          if Name='_OWNERHANDLE' then
                                                                                  begin
-                                                                                      self.AddExtAttrib^.OwnerHandle:=StrToInt('$'+value);
+                                                                                      if not TryStrToQWord('$'+value,self.AddExtAttrib^.OwnerHandle)then
+                                                                                      begin
+                                                                                           //нужно залупиться
+                                                                                      end;
+
+                                                                                      //self.AddExtAttrib^.OwnerHandle:=StrToInt('$'+value);
                                                                                  end;
                                                          if Name='_HANDLE' then
                                                                                begin
-                                                                                    self.AddExtAttrib^.Handle:=strtoint('$'+value);
+
+                                                                                    if not TryStrToQWord('$'+value,self.AddExtAttrib^.Handle)then
+                                                                                    begin
+                                                                                         //нужно залупиться
+                                                                                    end;
+                                                                                    //self.AddExtAttrib^.Handle:=strtoint('$'+value);
                                                                                end;
                                                          if Name='_UPGRADE' then
                                                                                begin

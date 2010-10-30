@@ -20,7 +20,7 @@ unit iodxf;
 {$INCLUDE def.inc}
 interface
 uses UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
-     UGDBObjBlockdefArray{,URecordDescriptor},UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,gdbEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
+     UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
   entnamindex=record
                     entname:GDBString;
@@ -652,7 +652,7 @@ begin
   f.done;
   programlog.logoutstr('end; {AddFromDXF}',lp_DecPos);
 end;
-procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; outhandle: GDBInteger; var handle: GDBInteger);
+procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outhandle:{GDBInteger}GDBOpenArrayOfByte; var handle: GDBInteger);
 var
 //  i:GDBInteger;
   pv:pgdbobjEntity;
@@ -671,7 +671,7 @@ end;
 procedure savedxf2000;
 var
   templatefile: GDBOpenArrayOfByte;
-  outhandle: GDBInteger;
+  outstream: {GDBInteger}GDBOpenArrayOfByte;
   groups, values: GDBString;
   groupi, valuei, intable: GDBInteger;
   handle,plottablefansdle,i{,cod}: GDBInteger;
@@ -681,14 +681,9 @@ var
   ignoredsource:boolean;
   instyletable:boolean;
 begin
-  if FileExists(name) then
-                         begin
-                              deletefile(name+'.bak');
-                              renamefile(name,name+'.bak');
-                         end;
-
-  outhandle := FileCreate(name);
-  if outhandle>0 then
+  //--------------------------outstream := FileCreate(name);
+  outstream.init(10*1024*1024);
+  //--------------------------if outstream>0 then
   begin
   MainFormN.StartLongProcess(pdrawing^.pObjRoot^.ObjArray.Count);
   phandlea := dxfhandlearraycreate(10000);
@@ -709,11 +704,16 @@ begin
     groupi := strtoint(groups);
     if (groupi = 9) and (values = '$HANDSEED') then
     begin
-      WriteString_EOL(outhandle, groups);
-      WriteString_EOL(outhandle, '$HANDSEED');
-      WriteString_EOL(outhandle, '5');
-      handlepos:=FileSeek(outhandle,0,1);
-      WriteString_EOL(outhandle, 'FUCK OFF');
+      outstream.TXTAddGDBStringEOL(groups);
+      //WriteString_EOL(outstream, groups);
+      outstream.TXTAddGDBStringEOL('$HANDSEED');
+      //WriteString_EOL(outstream, '$HANDSEED');
+      outstream.TXTAddGDBStringEOL('5');
+      //WriteString_EOL(outstream, '5');
+      handlepos:=outstream.Count;
+      //handlepos:=FileSeek(outstream,0,1);
+      outstream.TXTAddGDBStringEOL('FUCK OFF');
+      //WriteString_EOL(outstream, 'FUCK OFF');
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
       handle := strtoint('$' + values);
@@ -727,14 +727,18 @@ begin
         intable := {getnevhandle(phandlea, valuei)}valuei;
         if {intable <> 0}true then
         begin
-          WriteString_EOL(outhandle, groups);
-          WriteString_EOL(outhandle, inttohex(intable, 0));
+          outstream.TXTAddGDBStringEOL(groups);
+          //WriteString_EOL(outstream, groups);
+          outstream.TXTAddGDBStringEOL(inttohex(intable, 0));
+          //WriteString_EOL(outstream, inttohex(intable, 0));
         end
         else
         begin
           pushhandle(phandlea, valuei, handle);
-          WriteString_EOL(outhandle, groups);
-          WriteString_EOL(outhandle, inttohex(handle, 0));
+          outstream.TXTAddGDBStringEOL(groups);
+          //WriteString_EOL(outstream, groups);
+          outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
+          //WriteString_EOL(outstream, inttohex(handle, 0));
           inc(handle);
         end;
         if inlayertable and (groupi=390) then
@@ -743,16 +747,20 @@ begin
       else
         if (groupi = 2) and (values = 'ENTITIES') then
         begin
-          WriteString_EOL(outhandle, groups);
-          WriteString_EOL(outhandle, values);
+          outstream.TXTAddGDBStringEOL(groups);
+          //WriteString_EOL(outstream, groups);
+          outstream.TXTAddGDBStringEOL(values);
+          //WriteString_EOL(outstream, values);
           //historyoutstr('Entities start here_______________________________________________________');
-          saveentitiesdxf2000(@pdrawing^.pObjRoot^.ObjArray, outhandle, handle);
+          saveentitiesdxf2000(@pdrawing^.pObjRoot^.ObjArray, outstream, handle);
         end
         else
           if (groupi = 2) and (values = 'BLOCKS') then
           begin
-            WriteString_EOL(outhandle, groups);
-            WriteString_EOL(outhandle, values);
+            outstream.TXTAddGDBStringEOL(groups);
+            outstream.TXTAddGDBStringEOL(values);
+            //WriteString_EOL(outstream, groups);
+            //WriteString_EOL(outstream, values);
             inblocksec := true;
           end
           else
@@ -762,52 +770,52 @@ begin
               if pdrawing^.BlockDefArray.count>0 then
               for i := 0 to pdrawing^.BlockDefArray.count - 1 do
               begin
-                WriteString_EOL(outhandle, '0');
-                WriteString_EOL(outhandle, 'BLOCK');
-                WriteString_EOL(outhandle, '5');
-                WriteString_EOL(outhandle, inttohex(handle, 0));
+                outstream.TXTAddGDBStringEOL('0');
+                outstream.TXTAddGDBStringEOL('BLOCK');
+                outstream.TXTAddGDBStringEOL('5');
+                outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                 inc(handle);
-                WriteString_EOL(outhandle, '100');
-                WriteString_EOL(outhandle, 'AcDbEntity');
-                WriteString_EOL(outhandle, '8');
-                WriteString_EOL(outhandle, '0');
-                WriteString_EOL(outhandle, '100');
-                WriteString_EOL(outhandle, 'AcDbBlockBegin');
-                WriteString_EOL(outhandle, '2');
-                WriteString_EOL(outhandle, PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].name);
-                WriteString_EOL(outhandle, '70');
-                WriteString_EOL(outhandle, '2');
-                WriteString_EOL(outhandle, '10');
-                WriteString_EOL(outhandle, floattostr(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].base.x));
-                WriteString_EOL(outhandle, '20');
-                WriteString_EOL(outhandle, floattostr(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].base.y));
-                WriteString_EOL(outhandle, '30');
-                WriteString_EOL(outhandle, floattostr(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].base.z));
-                WriteString_EOL(outhandle, '3');
-                WriteString_EOL(outhandle, PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].name);
-                WriteString_EOL(outhandle, '1');
-                WriteString_EOL(outhandle, '');
+                outstream.TXTAddGDBStringEOL('100');
+                outstream.TXTAddGDBStringEOL('AcDbEntity');
+                outstream.TXTAddGDBStringEOL('8');
+                outstream.TXTAddGDBStringEOL('0');
+                outstream.TXTAddGDBStringEOL('100');
+                outstream.TXTAddGDBStringEOL('AcDbBlockBegin');
+                outstream.TXTAddGDBStringEOL('2');
+                outstream.TXTAddGDBStringEOL(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].name);
+                outstream.TXTAddGDBStringEOL('70');
+                outstream.TXTAddGDBStringEOL('2');
+                outstream.TXTAddGDBStringEOL('10');
+                outstream.TXTAddGDBStringEOL(floattostr(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].base.x));
+                outstream.TXTAddGDBStringEOL('20');
+                outstream.TXTAddGDBStringEOL(floattostr(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].base.y));
+                outstream.TXTAddGDBStringEOL('30');
+                outstream.TXTAddGDBStringEOL(floattostr(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].base.z));
+                outstream.TXTAddGDBStringEOL('3');
+                outstream.TXTAddGDBStringEOL(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].name);
+                outstream.TXTAddGDBStringEOL('1');
+                outstream.TXTAddGDBStringEOL('');
 
-                saveentitiesdxf2000(@PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].ObjArray, outhandle, handle);
+                saveentitiesdxf2000(@PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].ObjArray, outstream, handle);
 
-                WriteString_EOL(outhandle, '0');
-                WriteString_EOL(outhandle, 'ENDBLK');
-                WriteString_EOL(outhandle, '5');
-                WriteString_EOL(outhandle, inttohex(handle, 0));
+                outstream.TXTAddGDBStringEOL('0');
+                outstream.TXTAddGDBStringEOL('ENDBLK');
+                outstream.TXTAddGDBStringEOL('5');
+                outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                 inc(handle);
-                WriteString_EOL(outhandle, '100');
-                WriteString_EOL(outhandle, 'AcDbEntity');
-                WriteString_EOL(outhandle, '8');
-                WriteString_EOL(outhandle, '0');
-                WriteString_EOL(outhandle, '100');
-                WriteString_EOL(outhandle, 'AcDbBlockEnd');
+                outstream.TXTAddGDBStringEOL('100');
+                outstream.TXTAddGDBStringEOL('AcDbEntity');
+                outstream.TXTAddGDBStringEOL('8');
+                outstream.TXTAddGDBStringEOL('0');
+                outstream.TXTAddGDBStringEOL('100');
+                outstream.TXTAddGDBStringEOL('AcDbBlockEnd');
 
-                //PBlockdefArray(gdb^.BlockDefArray.parray)^[i].SaveToDXFPostProcess(outhandle); asdasd
+                //PBlockdefArray(gdb^.BlockDefArray.parray)^[i].SaveToDXFPostProcess(outstream); asdasd
 
               end;
 
-              WriteString_EOL(outhandle, '0');
-              WriteString_EOL(outhandle, 'ENDSEC');
+              outstream.TXTAddGDBStringEOL('0');
+              outstream.TXTAddGDBStringEOL('ENDSEC');
 
 
               inblocksec := false;
@@ -819,21 +827,21 @@ begin
 
               for i := 0 to pdrawing^.BlockDefArray.count - 1 do
               begin
-                WriteString_EOL(outhandle, '0');
-                WriteString_EOL(outhandle, 'BLOCK_RECORD');
-                WriteString_EOL(outhandle, '5');
-                WriteString_EOL(outhandle, inttohex(handle, 0));
+                outstream.TXTAddGDBStringEOL('0');
+                outstream.TXTAddGDBStringEOL('BLOCK_RECORD');
+                outstream.TXTAddGDBStringEOL('5');
+                outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                 inc(handle);
-                WriteString_EOL(outhandle, '100');
-                WriteString_EOL(outhandle, 'AcDbSymbolTableRecord');
-                WriteString_EOL(outhandle, '100');
-                WriteString_EOL(outhandle, 'AcDbBlockTableRecord');
-                WriteString_EOL(outhandle, '2');
-                WriteString_EOL(outhandle, PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].name);
+                outstream.TXTAddGDBStringEOL('100');
+                outstream.TXTAddGDBStringEOL('AcDbSymbolTableRecord');
+                outstream.TXTAddGDBStringEOL('100');
+                outstream.TXTAddGDBStringEOL('AcDbBlockTableRecord');
+                outstream.TXTAddGDBStringEOL('2');
+                outstream.TXTAddGDBStringEOL(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].name);
 
               end;
-              WriteString_EOL(outhandle, '0');
-              WriteString_EOL(outhandle, 'ENDTAB');
+              outstream.TXTAddGDBStringEOL('0');
+              outstream.TXTAddGDBStringEOL('ENDTAB');
             end
 
             else
@@ -845,41 +853,41 @@ begin
                 begin
                   //if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name <> '0' then
                   begin
-                    WriteString_EOL(outhandle, '0');
-                    WriteString_EOL(outhandle, 'LAYER');
-                    WriteString_EOL(outhandle, '5');
-                    WriteString_EOL(outhandle, inttohex(handle, 0));
+                    outstream.TXTAddGDBStringEOL('0');
+                    outstream.TXTAddGDBStringEOL('LAYER');
+                    outstream.TXTAddGDBStringEOL('5');
+                    outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                     inc(handle);
-                    WriteString_EOL(outhandle, '100');
-                    WriteString_EOL(outhandle, 'AcDbSymbolTableRecord');
-                    WriteString_EOL(outhandle, '100');
-                    WriteString_EOL(outhandle, 'AcDbLayerTableRecord');
-                    WriteString_EOL(outhandle, '2');
-                    WriteString_EOL(outhandle, PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name);
-                    WriteString_EOL(outhandle, '70');
-                    WriteString_EOL(outhandle, '0');
-                    WriteString_EOL(outhandle, '62');
+                    outstream.TXTAddGDBStringEOL('100');
+                    outstream.TXTAddGDBStringEOL('AcDbSymbolTableRecord');
+                    outstream.TXTAddGDBStringEOL('100');
+                    outstream.TXTAddGDBStringEOL('AcDbLayerTableRecord');
+                    outstream.TXTAddGDBStringEOL('2');
+                    outstream.TXTAddGDBStringEOL(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name);
+                    outstream.TXTAddGDBStringEOL('70');
+                    outstream.TXTAddGDBStringEOL('0');
+                    outstream.TXTAddGDBStringEOL('62');
                     if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i]._on
                      then
-                         WriteString_EOL(outhandle, inttostr(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].color))
+                         outstream.TXTAddGDBStringEOL(inttostr(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].color))
                      else
-                         WriteString_EOL(outhandle, inttostr(-PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].color));
-                    WriteString_EOL(outhandle, '6');
-                    WriteString_EOL(outhandle, 'Continuous');
-                    WriteString_EOL(outhandle, '290');
+                         outstream.TXTAddGDBStringEOL(inttostr(-PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].color));
+                    outstream.TXTAddGDBStringEOL('6');
+                    outstream.TXTAddGDBStringEOL('Continuous');
+                    outstream.TXTAddGDBStringEOL('290');
                     if uppercase(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name) <> 'DEFPOINTS' then
-                      WriteString_EOL(outhandle, '1')
+                      outstream.TXTAddGDBStringEOL('1')
                     else
-                      WriteString_EOL(outhandle, '0');
-                    WriteString_EOL(outhandle, '370');
-                    WriteString_EOL(outhandle,inttostr(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].lineweight));
-                    //WriteString_EOL(outhandle, '-3');
-                    WriteString_EOL(outhandle, '390');
-                    WriteString_EOL(outhandle, inttohex(plottablefansdle,0));
+                      outstream.TXTAddGDBStringEOL('0');
+                    outstream.TXTAddGDBStringEOL('370');
+                    outstream.TXTAddGDBStringEOL(inttostr(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].lineweight));
+                    //WriteString_EOL(outstream, '-3');
+                    outstream.TXTAddGDBStringEOL('390');
+                    outstream.TXTAddGDBStringEOL(inttohex(plottablefansdle,0));
                   end;
                 end;
-                WriteString_EOL(outhandle, groups);
-                WriteString_EOL(outhandle, values);
+                outstream.TXTAddGDBStringEOL(groups);
+                outstream.TXTAddGDBStringEOL(values);
               end
 
 
@@ -892,58 +900,58 @@ begin
                 begin
                   //if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name <> '0' then
                   begin
-                    WriteString_EOL(outhandle, '0');
-                    WriteString_EOL(outhandle, 'STYLE');
-                    WriteString_EOL(outhandle, '5');
-                    WriteString_EOL(outhandle, inttohex(handle, 0));
+                    outstream.TXTAddGDBStringEOL('0');
+                    outstream.TXTAddGDBStringEOL('STYLE');
+                    outstream.TXTAddGDBStringEOL('5');
+                    outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                     inc(handle);
-                    WriteString_EOL(outhandle, '100');
-                    WriteString_EOL(outhandle, 'AcDbSymbolTableRecord');
-                    WriteString_EOL(outhandle, '100');
-                    WriteString_EOL(outhandle, 'AcDbTextStyleTableRecord');
-                    WriteString_EOL(outhandle, '2');
-                    WriteString_EOL(outhandle, PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.name);
-                    WriteString_EOL(outhandle, '70');
-                    WriteString_EOL(outhandle, '0');
+                    outstream.TXTAddGDBStringEOL('100');
+                    outstream.TXTAddGDBStringEOL('AcDbSymbolTableRecord');
+                    outstream.TXTAddGDBStringEOL('100');
+                    outstream.TXTAddGDBStringEOL('AcDbTextStyleTableRecord');
+                    outstream.TXTAddGDBStringEOL('2');
+                    outstream.TXTAddGDBStringEOL(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.name);
+                    outstream.TXTAddGDBStringEOL('70');
+                    outstream.TXTAddGDBStringEOL('0');
 
-                    WriteString_EOL(outhandle, '40');
-                    WriteString_EOL(outhandle, floattostr(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.prop.size));
+                    outstream.TXTAddGDBStringEOL('40');
+                    outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.prop.size));
 
-                    WriteString_EOL(outhandle, '41');
-                    WriteString_EOL(outhandle, floattostr(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.prop.wfactor));
+                    outstream.TXTAddGDBStringEOL('41');
+                    outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.prop.wfactor));
 
-                    WriteString_EOL(outhandle, '50');
-                    WriteString_EOL(outhandle, floattostr(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.prop.oblique));
+                    outstream.TXTAddGDBStringEOL('50');
+                    outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.prop.oblique));
 
-                    WriteString_EOL(outhandle, '71');
-                    WriteString_EOL(outhandle, '0');
+                    outstream.TXTAddGDBStringEOL('71');
+                    outstream.TXTAddGDBStringEOL('0');
 
-                    WriteString_EOL(outhandle, '42');
-                    WriteString_EOL(outhandle, '2.5');
+                    outstream.TXTAddGDBStringEOL('42');
+                    outstream.TXTAddGDBStringEOL('2.5');
 
-                    WriteString_EOL(outhandle, '3');
-                    WriteString_EOL(outhandle, PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.dxfname);
+                    outstream.TXTAddGDBStringEOL('3');
+                    outstream.TXTAddGDBStringEOL(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.dxfname);
 
-                    WriteString_EOL(outhandle, '4');
-                    WriteString_EOL(outhandle, '');
+                    outstream.TXTAddGDBStringEOL('4');
+                    outstream.TXTAddGDBStringEOL('');
 
                   end;
                 end;
-                WriteString_EOL(outhandle, groups);
-                WriteString_EOL(outhandle, values);
+                outstream.TXTAddGDBStringEOL(groups);
+                outstream.TXTAddGDBStringEOL(values);
               end
 
 
               else
                 if (groupi = 0) and (values = 'TABLE') then
                 begin
-                  WriteString_EOL(outhandle, groups);
-                  WriteString_EOL(outhandle, values);
+                  outstream.TXTAddGDBStringEOL(groups);
+                  outstream.TXTAddGDBStringEOL(values);
                   groups := templatefile.readGDBString;
                   values := templatefile.readGDBString;
                   groupi := strtoint(groups);
-                  WriteString_EOL(outhandle, groups);
-                  WriteString_EOL(outhandle, values);
+                  outstream.TXTAddGDBStringEOL(groups);
+                  outstream.TXTAddGDBStringEOL(values);
                   if (groupi = 2) and (values = 'LAYER') then
                   begin
                     inlayertable := true;
@@ -971,23 +979,40 @@ begin
                 begin
                   if not ignoredsource then
                   begin
-                  WriteString_EOL(outhandle, groups);
-                  WriteString_EOL(outhandle, values);
+                  outstream.TXTAddGDBStringEOL(groups);
+                  outstream.TXTAddGDBStringEOL(values);
                   end;
                   //val('$' + values, i, cod);
                 end;
     //s := readspace(s);
   end;
   //templatefileclose;
-  FileSeek(outhandle,handlepos,0);
-  WriteString_EOL(outhandle,inttohex(handle+1,8));
-  fileclose(outhandle);
+
+  i:=outstream.Count;
+  outstream.Count:=handlepos;
+  outstream.TXTAddGDBStringEOL(inttohex(handle+1,8));
+  outstream.Count:=i;
+
+  //-------------FileSeek(outstream,handlepos,0);
+  //-------------WriteString_EOL(outstream,inttohex(handle+1,8));
+  //-------------fileclose(outstream);
+
+
   GDBFreeMem(GDBPointer(phandlea));
   templatefile.done;
+
+  if FileExists(name) then
+                           begin
+                                deletefile(name+'.bak');
+                                renamefile(name,name+'.bak');
+                           end;
+
+  if outstream.SaveToFile(name)<=0 then
+                                       shared.ShowError('Не могу открыть для записи файл: '+name);
   MainFormN.EndLongProcess;
-  end
-     else
-         shared.ShowError('Не могу открыть файл: '+name);
+
+  end;
+  outstream.done;
 end;
 procedure SaveZCP(name: GDBString; gdb: PGDBDescriptor);
 var

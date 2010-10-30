@@ -8,7 +8,7 @@ unit GDBCable;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBLayerArray{,UGDBObjBlockdefArray},UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,varman},varmandef,
+uses UGDBOpenArrayOfByte,UGDBLayerArray{,UGDBObjBlockdefArray},UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,varman},varmandef,
 gl,
 GDBase{,GDBLINE},GDBHelpObj,UGDBDescriptor,gdbobjectsconstdef{,oglwindowdef},dxflow,sysutils,memman,OGLSpecFunc, GDBSubordinated,GDBDEvICE;
 type
@@ -40,9 +40,9 @@ GDBObjCable=object(GDBObjCurve)
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  function GetObjTypeName:GDBString;virtual;
                  procedure Format;virtual;
-                 procedure SaveToDXFObjXData(outhandle: GDBInteger);virtual;
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;
-                 procedure SaveToDXFfollow(var handle:longint; outhandle: GDBInteger);virtual;
+                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                 procedure SaveToDXFfollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
 
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
 
@@ -102,7 +102,7 @@ begin
   until ptn1=nil;
   end;
 end;
-procedure GDBObjCable.SaveToDXFObjXData(outhandle: GDBInteger);
+procedure GDBObjCable.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
 //var
    //s:gdbstring;
 begin

@@ -3061,8 +3061,11 @@ begin
 
   CreateScrbuf(clientwidth,clientheight);
 
+  {param.md.glmouse.y := clientheight-param.md.mouse.y;
+  CalcOptimalMatrix;
+  mouseunproject(param.md.GLmouse.x, param.md.GLmouse.y);
+  CalcMouseFrustum;}
 
-  mouseunproject(param.md.mouse.x, param.md.mouse.y);
   if param.pglscreen <> nil then
   GDBFreeMem(param.pglscreen);
   GDBGetMem({$IFDEF DEBUGBUILD}'ScreenBuf',{$ENDIF}param.pglscreen, clientwidth * clientheight * 4);

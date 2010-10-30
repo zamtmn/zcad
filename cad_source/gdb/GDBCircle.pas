@@ -49,7 +49,7 @@ GDBObjCircle=object(GDBObjWithLocalCS)
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                  procedure RenderFeedback;virtual;
                  procedure getoutbound;virtual;
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure Format;virtual;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;

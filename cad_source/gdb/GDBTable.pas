@@ -20,7 +20,7 @@ unit GDBTable;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBTableStyleArray,GDBLine{,math},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils,UGDBTable,UGDBStringArray,GDBMTEXT{,UGDBOpenArrayOfData},
+uses UGDBOpenArrayOfByte,UGDBTableStyleArray,GDBLine{,math},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils,UGDBTable,UGDBStringArray,GDBMTEXT{,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,UGDBSelectedObjArray,UGDBVisibleOpenArray,}gdbEntity{,varman,varmandef},
 gl,
 GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef{,oglwindowdef},geometry,dxflow,memman{,GDBSubordinated,UGDBOpenArrayOfByte};
@@ -43,7 +43,7 @@ GDBObjTable=object(GDBObjComplex)
             destructor done;virtual;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;
             procedure Build;virtual;
-            procedure SaveToDXFFollow(var handle:longint; outhandle: GDBInteger);virtual;
+            procedure SaveToDXFFollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
             end;
 {EXPORT-}
 implementation

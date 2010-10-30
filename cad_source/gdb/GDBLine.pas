@@ -46,7 +46,7 @@ GDBObjLine=object(GDBObj3d)
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;
 
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure Format;virtual;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  procedure RenderFeedback;virtual;

@@ -45,6 +45,9 @@ PGDBByte=^GDBByte;
 PGDBLongword=^GDBLongword;
 {-}GDBLongword=longword;{//}
 
+PGDBQWord=^GDBQWord;
+{-}GDBQWord=QWord;{//}
+
 PGDBWord=^GDBWord;
 {-}GDBWord=word;{//}
 

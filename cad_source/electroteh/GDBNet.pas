@@ -8,7 +8,7 @@ unit GDBNet;
 {$INCLUDE def.inc}
 
 interface
-Uses gdbasetypes,GDBEntity,GDBGenericSubEntry,UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
+Uses UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,GDBGenericSubEntry,UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
 gl,
 memman,GDBSubordinated,OGLSpecFunc,uunitmanager,shared,sysutils;
 const
@@ -38,9 +38,9 @@ GDBObjNet=object(GDBObjConnected)
 
                  function GetNearestLine(const point:GDBVertex):PGDBObjEntity;
 
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;
-                 procedure SaveToDXFObjXData(outhandle: GDBInteger);virtual;
-                 procedure SaveToDXFfollow(var handle:longint; outhandle: GDBInteger);virtual;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                 procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                 procedure SaveToDXFfollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
 
                  destructor done;virtual;
                  procedure FormatAfterDXFLoad;virtual;
@@ -163,7 +163,7 @@ begin
           pobj^.vp:=tvp;
      end;
 end;
-procedure GDBObjNet.SaveToDXFObjXData(outhandle: GDBInteger);
+procedure GDBObjNet.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
 var
    s:gdbstring;
 begin
@@ -173,7 +173,7 @@ begin
      dxfGDBStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
      dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToNet));
 end;
-procedure GDBObjNet.SaveToDXFfollow(var handle:longint; outhandle: GDBInteger);
+procedure GDBObjNet.SaveToDXFfollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);
 var pobj:PGDBObjEntity;
     ir:itrec;
 begin

@@ -32,7 +32,7 @@ GDBObjPolyline=object(GDBObjCurve)
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;
 
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;

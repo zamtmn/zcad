@@ -563,6 +563,7 @@ begin
      exttype.addref(GDBWordDescriptorObj);
      exttype.addref(GDBIntegerDescriptorObj);
      exttype.addref(GDBLongwordDescriptorObj);
+     exttype.addref(GDBQWordDescriptorObj);
      exttype.addref(GDBDoubleDescriptorObj);
      exttype.addref(GDBStringDescriptorObj);
      exttype.addref(GDBAnsiStringDescriptorObj);

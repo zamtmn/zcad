@@ -20,7 +20,7 @@ unit GDBDevice;
 {$INCLUDE def.inc}
 
 interface
-uses sysutils,devices,
+uses sysutils,devices,UGDBOpenArrayOfByte,
 gl,OGLSpecFunc,uunitmanager{,shared},
 memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,UGDBOpenArrayOfPV,gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray,UGDBDescriptor{,UGDBLayerArray,oglwindowdef};
 
@@ -51,8 +51,8 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    procedure BuildGeometry;virtual;
                    procedure BuildVarGeometry;virtual;
 
-                   procedure SaveToDXFFollow(var handle:longint; outhandle: GDBInteger);virtual;
-                   procedure SaveToDXFObjXData(outhandle: GDBInteger);virtual;
+                   procedure SaveToDXFFollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                   procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                    function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
                    //procedure select;virtual;
                    procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
@@ -117,7 +117,7 @@ begin
      //historyout('Device DXFOut end');
      //self.CalcObjMatrix;
 end;
-procedure GDBObjDevice.SaveToDXFObjXData(outhandle: GDBInteger);
+procedure GDBObjDevice.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
 var
    s:gdbstring;
 begin

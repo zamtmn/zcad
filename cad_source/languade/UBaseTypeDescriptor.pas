@@ -70,6 +70,11 @@ GDBLongwordDescriptor=object(BaseTypeDescriptor)
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
                     end;
+GDBQWordDescriptor=object(BaseTypeDescriptor)
+                          constructor init;
+                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                    end;
 GDBDoubleDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
@@ -118,6 +123,7 @@ GDBIntegerDescriptorObj:GDBIntegerDescriptor;
 GDBByteDescriptorObj:GDBByteDescriptor;
 GDBSmallintDescriptorObj:GDBSmallintDescriptor;
 GDBLongwordDescriptorObj:GDBLongwordDescriptor;
+GDBQWordDescriptorObj:GDBQWordDescriptor;
 GDBFloatDescriptorObj:GDBFloatDescriptor;
 GDBShortintDescriptorObj:GDBShortintDescriptor;
 GDBBooleanDescriptorOdj:GDBBooleanDescriptor;
@@ -420,6 +426,27 @@ begin
      if error=0 then
                     pGDBLongword(pinstance)^:=vGDBLongword;
 end;
+
+constructor GDBQWordDescriptor.init;
+begin
+     inherited init(sizeof(GDBQWord),'GDBQWord',nil);
+end;
+function GDBQWordDescriptor.GetValueAsString;
+var
+     qw:GDBQWord;
+begin
+    qw := PGDBQWord(pinstance)^;
+    result := inttostr(qw);
+end;
+procedure GDBQWordDescriptor.SetValueFromString;
+var
+     qw:GDBQWord;
+     error:integer;
+begin
+     if TryStrToQWord(value,qw) then
+                    PGDBQWord(pinstance)^:=qw;
+end;
+
 constructor GDBFloatDescriptor.init;
 begin
      inherited init(sizeof(GDBFloat),'GDBFloat',nil);
@@ -785,6 +812,7 @@ begin
      GDBSmallintDescriptorObj.init;
      //gdbgetmem({$IFDEF DEBUGBUILD}'{2A687C81-843D-4451-8663-384A625BFEBA}',{$ENDIF}pointer(GDBLongwordDescriptorObj),sizeof(GDBLongwordDescriptor));
      GDBLongwordDescriptorObj.init;
+     GDBQWordDescriptorObj.init;
      //gdbgetmem({$IFDEF DEBUGBUILD}'{2A687C81-843D-4451-8663-384A625BFEBA}',{$ENDIF}pointer(GDBFloatDescriptorObj),sizeof(GDBFloatDescriptor));
      GDBFloatDescriptorObj.init;
      //gdbgetmem({$IFDEF DEBUGBUILD}'{2A687C81-843D-4451-8663-384A625BFEBA}',{$ENDIF}pointer(GDBShortintDescriptorObj),sizeof(GDBShortintDescriptor));

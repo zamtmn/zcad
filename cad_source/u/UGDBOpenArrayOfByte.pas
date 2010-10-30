@@ -275,9 +275,14 @@ function GDBOpenArrayOfByte.SaveToFile;
 var infile:GDBInteger;
 begin
      infile:=filecreate(ExpandPath(FileName));
-     FileWrite(InFile,parray^,count);
-     fileclose(infile);
-     result:=count;
+     if infile>0 then
+                     begin
+                           FileWrite(InFile,parray^,count);
+                           fileclose(infile);
+                           result:=count;
+                     end
+                 else
+                     result:=infile;
 end;
 constructor GDBOpenArrayOfByte.init;
 begin

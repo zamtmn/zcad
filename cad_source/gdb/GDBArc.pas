@@ -41,7 +41,7 @@ GDBObjArc=object(GDBObjPlain)
                  constructor initnul;
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;
 
-                 procedure SaveToDXF(var handle:longint; outhandle: GDBInteger);virtual;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
@@ -135,8 +135,10 @@ begin
   dxfvertexout(outhandle,10,Local.p_insert);
   dxfGDBDoubleout(outhandle,40,r);
     SaveToDXFObjPostfix(outhandle);
-  WriteString_EOL(outhandle, '100');
-  WriteString_EOL(outhandle, 'AcDbArc');
+
+  dxfGDBStringout(outhandle,100,'AcDbArc');
+  //WriteString_EOL(outhandle, '100');
+  //WriteString_EOL(outhandle, 'AcDbArc');
   dxfGDBDoubleout(outhandle,50,startangle * 180 / pi);
   dxfGDBDoubleout(outhandle,51,endangle * 180 / pi);
 end;

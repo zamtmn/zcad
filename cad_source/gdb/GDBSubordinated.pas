@@ -20,7 +20,7 @@ unit GDBSubordinated;
 {$INCLUDE def.inc}
 
 interface
-uses devices,gdbase,gdbasetypes,varman,varmandef{,UGDBOpenArrayOfByte},dxflow,UBaseTypeDescriptor,sysutils,UGDBLayerArray{,strutils};
+uses UGDBOpenArrayOfByte,devices,gdbase,gdbasetypes,varman,varmandef{,UGDBOpenArrayOfByte},dxflow,UBaseTypeDescriptor,sysutils,UGDBLayerArray{,strutils};
 type
 {EXPORT+}
 PGDBObjSubordinated=^GDBObjSubordinated;
@@ -62,7 +62,7 @@ GDBObjSubordinated=object(GDBObjGenericWithSubordinated)
                          function GetOwner:PGDBObjSubordinated;virtual;abstract;
                          procedure createfield;virtual;
                          function FindVariable(varname:GDBString):pvardesk;virtual;
-                         procedure SaveToDXFObjXData(outhandle: GDBInteger);virtual;
+                         procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                          function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
 
          end;
@@ -124,7 +124,7 @@ begin
                                            result:=pstring(pvn^.data.Instance)^;
                                       end;
 end;
-procedure GDBObjSubordinated.SaveToDXFObjXData(outhandle: GDBInteger);
+procedure GDBObjSubordinated.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
 begin
      dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(bp.owner.GetHandle,10));
 end;

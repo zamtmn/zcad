@@ -8,7 +8,7 @@ unit GDBElLeader;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
+uses strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 gl,
 GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef{,oglwindowdef},dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
@@ -200,7 +200,10 @@ var
    ptn:PTNodeProp;
    ptext:PGDBObjText;
    width:gdbinteger;
+   TCP:TCodePage;
 begin
+     TCP:=CodePage;
+     CodePage:=CP_win;
      pdev:=nil;
      sta.init(10);
      mainline.format;
@@ -216,7 +219,8 @@ begin
                           pvn:=pobj^.ou.FindVariable('NMO_Name');
                           if pvn<>nil then
                           begin
-                               s:=pstring(pvn^.data.Instance)^;
+                               s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
+                               //s:=pstring(pvn^.data.Instance)^;
                                sta.add(@s);
                                S:='';
                           end;
@@ -259,7 +263,8 @@ begin
                                   pvn:=pobj^.ou.FindVariable('NMO_Name');
                                   if pvn<>nil then
                                   begin
-                                       s:=pstring(pvn^.data.Instance)^;
+                                       s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
+                                       //s:=pstring(pvn^.data.Instance)^;
                                        sta.add(@s);
                                   end;
                                   system.break;
@@ -337,12 +342,13 @@ begin
           pvn:=pdev^.ou.FindVariable('NMO_Name');
           if pvn<>nil then
           begin
-               s:=pstring(pvn^.data.Instance)^;
+               s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);
+               //s:=pstring(pvn^.data.Instance)^;
           end;
           pvn:=pdev^.ou.FindVariable('Text');
           if pvn<>nil then
           begin
-               s:=s+pstring(pvn^.data.Instance)^;
+               s:=s+{pstring(pvn^.data.Instance)^}pvn^.data.PTD.GetValueAsString(pvn^.data.Instance);;
           end;
           if s<>'' then
           begin
@@ -377,6 +383,8 @@ begin
 
      end;
      inherited;
+
+     CodePage:=TCP;
 end;
 procedure GDBObjElLeader.select;
 var tdesc:pselectedobjdesc;

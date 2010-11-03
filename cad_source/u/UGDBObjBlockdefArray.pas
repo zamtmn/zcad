@@ -112,7 +112,7 @@ begin
   inc(count);
   PBlockdefArray(parray)[bc].init(extractfilename(bname));
   //PBlockdefArray(parray)[bc].ObjArray.init({$IFDEF DEBUGBUILD}'{05A3A2D5-15BD-416E-B7D3-B42D53A3C6DE}',{$ENDIF}1000);
-  addfromdxf(filename,@PBlockdefArray(parray)[bc]);
+  addfromdxf(filename,@PBlockdefArray(parray)[bc],tlomerge);
   //GDBPointer(PBlockdefArray(parray)[bc].name) := nil;
   //PBlockdefArray(parray)[bc].name :=extractfilename(bname);
   //GDB.pgdbblock^.blockarray[bc].ppa := remapmememblock(GDB.pgdbblock^.blockarray[bc].ppa, GDB.pgdbblock^.blockarray[bc].ppa^.count * sizeof(GDBproperty) + sizeof(GDBWord));end;

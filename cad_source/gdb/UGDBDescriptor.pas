@@ -41,7 +41,7 @@ UGDBFontManager,
 GDBCamera,
 UGDBOpenArrayOfPV,
 GDBRoot,UGDBSHXFont,
-{GDBNet,}OGLWindow,UGDBOpenArrayOfPObjects;
+{GDBNet,}OGLWindow,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray;
 const ls = $AAAA;
       ps:array [0..31] of LONGWORD=(
                                    $33333333,$33333333,
@@ -134,10 +134,11 @@ var GDB: GDBDescriptor;
     pbasefont: PGDBfont;
     palette: gdbpalette;
 procedure CalcZ(z:GDBDouble);
+procedure RemapAll(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
 procedure startup;
 procedure finalize;
 implementation
- uses GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared{,mainwindow},commandline,log;
+ uses GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared{,mainwindow},commandline,log;
 
 function TDrawing.myGluProject2;
 begin
@@ -561,6 +562,33 @@ begin
           CopyBlock(BlockBaseDWG,_to,td);
      end;
 end;
+procedure createtstyleifneed(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
+var
+   {_dest,}td:PGDBObjBlockdef;
+   oldti,newti:TArrayIndex;
+   tsname:gdbstring;
+   poldstyle,pnevstyle:PGDBTextStyle;
+   ir:itrec;
+   {pvisible,}pvisible2:PGDBObjEntity;
+   //pl:PGDBLayerProp;
+begin
+               if (_source^.vp.ID=GDBTextID)
+               or (_source^.vp.ID=GDBMtextID) then
+               begin
+                    oldti:=PGDBObjText(_source)^.TXTStyleIndex;
+                    poldstyle:=PGDBTextStyle(_from.TextStyleTable.getelement(oldti));
+                    tsname:=poldstyle^.name;
+                    newti:=_to.TextStyleTable.FindStyle(tsname);
+                    if newti<0 then
+                                   begin
+                                        newti:=_to.TextStyleTable.addstyle(poldstyle.name,poldstyle.pfont.Name,poldstyle.prop);
+                                        pnevstyle:=PGDBTextStyle(_to.TextStyleTable.getelement(newti));
+                                        pnevstyle^:=poldstyle^;
+                                   end
+               end;
+      oldti:=_to.TextStyleTable.FindStyle(tsname);
+      PGDBObjText(_dest)^.TXTStyleIndex:=newti;
+end;
 procedure createblockifneed(_from,_to:PTDrawing;_source:PGDBObjEntity);
 var
    {_dest,}td:PGDBObjBlockdef;
@@ -618,25 +646,60 @@ begin
                                         _source._print);
            end;
 end;
+procedure RemapLayer(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
+begin
+           _dest.vp.Layer:=createlayerifneed(_from,_to,_source.vp.Layer);
+end;
+procedure RemapEntArray(_from,_to:PTDrawing;const _source,_dest:GDBObjEntityOpenArray);
+var
+   irs,ird:itrec;
+   s,d:PGDBObjEntity;
+begin
+  s:=_source.beginiterate(irs);
+  d:=_dest.beginiterate(ird);
+  if (d<>nil)and(s<>nil) then
+  repeat
+         remapall(_from,_to,s,d);
+       s:=_source.iterate(irs);
+       d:=_dest.iterate(ird);
+  until (s=nil)or(d=nil);
+end;
+
+procedure RemapAll(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
+begin
+  RemapLayer(_from,_to,_source,_dest);
+  case _source.vp.ID of
+                        GDBTextID,GDBMtextID:begin
+                                             createtstyleifneed(_from,_to,_source,_dest);
+                                             end;
+                        GDBDeviceID:begin
+                                         RemapEntArray(_from,_to,PGDBObjDevice(_source).VarObjArray,PGDBObjDevice(_dest).VarObjArray);
+                                         RemapEntArray(_from,_to,PGDBObjDevice(_source).ConstObjArray,PGDBObjDevice(_dest).ConstObjArray);
+                                    end;
+                        GDBBlockInsertID:begin
+                                         RemapEntArray(_from,_to,PGDBObjBlockInsert(_source).ConstObjArray,PGDBObjBlockInsert(_dest).ConstObjArray);
+                                    end;
+                    end;
+end;
 function GDBDescriptor.CopyEnt(_from,_to:PTDrawing;_source:PGDBObjEntity):PGDBObjEntity;
 var
    tv: pGDBObjEntity;
 begin
-                createblockifneed(_from,_to,_source);
-                tv := _source^.Clone(_to.pObjRoot);
-                if tv<>nil then
-                begin
-                    _to.pObjRoot.ObjArray.add(addr(tv));
-                    tv.vp.layer:=createlayerifneed(_from,_to,_source.vp.layer);
-                end;
-                result:=tv;
+    createblockifneed(_from,_to,_source);
+    tv := _source^.Clone(_to.pObjRoot);
+    if tv<>nil then
+    begin
+        _to.pObjRoot.ObjArray.add(addr(tv));
+        RemapAll(_from,_to,_source,tv);
+    end;
+    result:=tv;
 end;
 procedure GDBDescriptor.CopyBlock(_from,_to:PTDrawing;_source:PGDBObjBlockdef);
 var
    _dest{,td}:PGDBObjBlockdef;
    //tn:gdbstring;
    ir:itrec;
-   pvisible,pvisible2:PGDBObjEntity;
+   pvisible,pvisible2,pv:PGDBObjEntity;
    pl:PGDBLayerProp;
 
 begin
@@ -653,26 +716,19 @@ begin
      pvisible:=_source.ObjArray.beginiterate(ir);
      if pvisible<>nil then
      repeat
-           pl:=createlayerifneed(_from,_to,pvisible.vp.layer);
+           //pl:=createlayerifneed(_from,_to,pvisible.vp.layer);
 
            createblockifneed(_from,_to,pvisible);
 
-               pvisible:=pvisible^.Clone(_dest);
-               pvisible.vp.Layer:=pl;
-               //pvisible2:=pgdbobjEntity(pvisible.FromDXFPostProcessBeforeAdd(nil));
-               pvisible2:=nil;
-               if pvisible2=nil then
-                                     begin
-                                          pvisible^.correctobjects(_dest,ir.itc);
-                                          pvisible^.format;
-                                          pvisible.BuildGeometry;
-                                          _dest.ObjArray.add(@pvisible);
-                                     end
-                                 else
-                                     begin
+               //pvisible:=CopyEnt(_from,_to,pvisible);
+               pv:=pvisible;
+               pvisible2:=pvisible^.Clone(_dest);
+               RemapAll(_from,_to,pvisible,pvisible2);
+               //pvisible2:=nil;
+                                      begin
                                           pvisible2^.correctobjects(_dest,ir.itc);
                                           pvisible2^.format;
-                                          pvisible.BuildGeometry;
+                                          pvisible2.BuildGeometry;
                                           _dest.ObjArray.add(@pvisible2);
                                      end;
           pvisible:=_source.ObjArray.iterate(ir);

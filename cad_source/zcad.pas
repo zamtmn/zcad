@@ -17,21 +17,20 @@
 }
 
 program zcad;
+//файл с объявлениями директив компилятора - должен быть подключен во все файлы проекта
 {$INCLUDE def.inc}
+
 {$IFNDEF LINUX}
   {$APPTYPE GUI}
 {$ENDIF}
 uses
   {$IFDEF REPORTMMEMORYLEAKS}heaptrc,{$ENDIF}
-  Interfaces,
-  forms,
+  Interfaces,forms,
+
   splashwnd,
 
 
-  memman,
-
-  sysinfo,
-  log,
+  memman,log,sysinfo,
 
   varmandef,
   varman,
@@ -98,7 +97,8 @@ begin
 {$IFDEF PERFOMANCELOG}       programlog.logoutstr('Program compiled with {$DEFINE PERFOMANCELOG}',0); {$ENDIF}
 {$IFDEF BREACKPOINTSONERRORS}programlog.logoutstr('Program compiled with {$DEFINE BREACKPOINTSONERRORS}',0); {$ENDIF}
 
-  //{перемещен в splashwnd}Application.Initialize;
+  //Application_Initialize перемещен в инициализацию splashwnd чтоб показать сплэш пораньше
+  //Application.Initialize;
 
   //инициализация GDB
   ugdbdescriptor.startup;
@@ -106,23 +106,14 @@ begin
   //создание окна программы
   Application.CreateForm(TMainFormN, MainFormN);
   MainFormN.show;
-  //MainFormN.Repaint;
-
   if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
                                                   sysvar.SYS.SYS_IsHistoryLineCreated^:=true;
-
   historyoutstr('ZCAD v'+sysvar.SYS.SYS_Version^+' started');
   gdbplugins.loadplugins(sysparam.programpath+'PLUGINS\');
 
-  historyoutstr('Run file ''*components\autorun.cmd''');
   SplashWindow.TXTOut('Выполнение *components\autorun.cmd');commandmanager.executefile('*components/autorun.cmd');
-
-//updatevisible;
-
-//  SplashWindow.TXTOut('Построение дерева блоков');
-//                                                  ProjectTreeWindow:=TProjectTreeWnd.create(application.mainform);
-
-  removesplash;//SplashWindow.TXTOut('SplashWnd^.done;');SplashWindow.Free;
+  //убираем срлэш
+  removesplash;
 
 
   Application.run;
@@ -138,7 +129,6 @@ begin
 
   programlog.logoutstr('END.',0);
   programlog.done;
-
 end.
 
 

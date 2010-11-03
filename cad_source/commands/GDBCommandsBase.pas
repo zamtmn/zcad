@@ -488,7 +488,7 @@ begin
           shared.updatevisible;
      end;}
 end;
-function Merge_com(Operands:pansichar):GDBInteger;
+function Load_Merge(Operands:pansichar;LoadMode:TLoadOpt):GDBInteger;
 var
    s: GDBString;
    fileext:GDBString;
@@ -512,7 +512,7 @@ begin
                                 begin
                                      //if operands<>'QS' then
                                      //                      gdb.GetCurrentDWG.FileName:=s;
-                                     addfromdxf(s,@gdb.GetCurrentDWG^.pObjRoot^);
+                                     addfromdxf(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode);
                                      if FileExists(s+'.dbpas') then
                                      begin
                                            pu:=gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase');
@@ -539,6 +539,16 @@ begin
      end
         else
         shared.ShowError('GDBCommandsBase.MERGE: Не могу открыть файл: '+s);
+end;
+function Merge_com(Operands:pansichar):GDBInteger;
+var
+   s: GDBString;
+   fileext:GDBString;
+   isload:boolean;
+   mem:GDBOpenArrayOfByte;
+   pu:ptunit;
+begin
+     result:=Load_merge(operands,TLOMerge);
 end;
 function newdwg_com(Operands:pansichar):GDBInteger;
 var
@@ -667,7 +677,7 @@ begin
           newdwg_com(@s[1]);
           //if operands<>'QS' then
                                 gdb.GetCurrentDWG.FileName:=s;
-          Merge_com(@s[1]);
+          load_merge(@s[1],tloload);
           MainFormN.processfilehistory(s);
      end
                else

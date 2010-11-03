@@ -273,7 +273,7 @@ begin
                          if fileexists(s) then
               //if messagebox(mainform.handle,'В данной версии возможна двойная загрузка файлов, ПРИВОДЯЩАЯ К ДУБЛИРОВАНИЮ ОБЪЕКТОВ НА ЧЕРТЕЖЕ Осуществить вставку?','QLOAD',MB_YESNO)=IDYES then
               begin
-                    addfromdxf(s,@gdb.GetCurrentDWG^.ConstructObjRoot);
+                    addfromdxf(s,@gdb.GetCurrentDWG^.ConstructObjRoot,tloload);
                     {ReloadLayer;
                     gdb.GetCurrentROOT.calcbb;
                     gdb.GetCurrentROOT.format;

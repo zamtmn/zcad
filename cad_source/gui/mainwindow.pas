@@ -749,9 +749,11 @@ begin
                                      exit;
                                 end;
       end;
-     if (ActiveControl)<>cmdedit then
+     if ((ActiveControl<>cmdedit)
+     and(ActiveControl<>HistoryLine)) then
      if (ActiveControl is tedit)
-     or (ActiveControl is tmemo)   then
+     or (ActiveControl is tmemo)
+     or (ActiveControl is tcombobox)then
                                        exit;
      tempkey:=key;
 

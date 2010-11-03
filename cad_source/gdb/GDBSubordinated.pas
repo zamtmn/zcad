@@ -20,7 +20,7 @@ unit GDBSubordinated;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBOpenArrayOfByte,devices,gdbase,gdbasetypes,varman,varmandef{,UGDBOpenArrayOfByte},dxflow,UBaseTypeDescriptor,sysutils,UGDBLayerArray{,strutils};
+uses strproc,LCLProc,UGDBOpenArrayOfByte,devices,gdbase,gdbasetypes,varman,varmandef{,UGDBOpenArrayOfByte},dxflow,UBaseTypeDescriptor,sysutils,UGDBLayerArray{,strutils};
 type
 {EXPORT+}
 PGDBObjSubordinated=^GDBObjSubordinated;
@@ -163,10 +163,26 @@ begin
     vt:=copy(_value,1,i-1);
     vun:=copy(_value,i+1,length(_value)-i);
 end;
+function ansitoutf8ifneed(var s:GDBString):boolean;
+begin
+     if FindInvalidUTF8Character(@s[1],length(s),false)<>-1
+        then
+            begin
+             s:=Tria_AnsiToUtf8(s);
+             //HistoryOutStr('ANSI->UTF8 '+s);
+             result:=true;
+            end
+        else
+            result:=false;
+end;
 procedure OldVersVarRename(var vn,vt,vv,vun:GDBString);
 var
    nevname{,nvv}:GDBString;
 begin
+     {ansitoutf8ifneed(vn);
+     ansitoutf8ifneed(vt);}
+     ansitoutf8ifneed(vv);
+     ansitoutf8ifneed(vun);
      nevname:='';
      if vn='Name' then
                       begin

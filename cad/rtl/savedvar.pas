@@ -17,17 +17,17 @@ var
   PATH_File9:GDBString;
 implementation
 begin
-  VIEW_CommandLineH:=160;
-  VIEW_ObjInspV:=202;
-  VIEW_ObjInspSubV:=78;
-  PATH_File0:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File1:='C:\zcad\cad\autosave\lin.dxf';
-  PATH_File2:='/mnt/win_c/zcad/cad/autosave/autosave.dxf';
-  PATH_File3:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File4:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
-  PATH_File5:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File6:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File7:='E:\test2.dxf';
-  PATH_File8:='Z:\mnt\win_c\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File9:='/mnt/win_z/проверка/zcad/cad/sample/test_dxf/ops.dxf';
+  VIEW_CommandLineH:=117;
+  VIEW_ObjInspV:=361;
+  VIEW_ObjInspSubV:=168;
+  PATH_File0:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File1:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File2:='E:\CAD_XDXF\test2000\atlant3d.dxf';
+  PATH_File3:='E:\CAD_XDXF\test2000\atlantis.shd';
+  PATH_File4:='E:\CAD_XDXF\test2000\ATX.dxf';
+  PATH_File5:='E:\CAD_XDXF\test2000\proj.dxf';
+  PATH_File6:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File7:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File8:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
+  PATH_File9:='\\WORKSTATION\zcad\cad\sample\test_dxf\ops.dxf';
 end.

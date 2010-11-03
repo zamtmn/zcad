@@ -50,6 +50,7 @@ type
     count: GDBInteger;
     arr: dxfhandlerecarray;
   end;
+  TLoadOpt=(TLOLoad,TLOMerge);
 const
   eol: GDBString = #13 + #10;
 {$IFDEF DEBUGBUILD}
@@ -57,7 +58,7 @@ var i2:GDBInteger;
 {$ENDIF}
 var FOC:GDBInteger;
     phandlearray: pdxfhandlerecopenarray;
-procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry);
+procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
 procedure savedxf2000(name: GDBString; PDrawing:PTDrawing);
 procedure saveZCP(name: GDBString; gdb: PGDBDescriptor);
 procedure LoadZCP(name: GDBString; gdb: PGDBDescriptor);
@@ -251,7 +252,7 @@ begin
   end;
   additionalunit.done;
 end;
-procedure addfromdxf12(var f:GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjSubordinated);
+procedure addfromdxf12(var f:GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjSubordinated;LoadMode:TLoadOpt);
 var
   {byt,}LayerColor: GDBInteger;
   s, sname{, sx1, sy1, sz1},scode,LayerName: GDBString;
@@ -325,7 +326,7 @@ begin
   end;
   {$IFDEF TOTALYLOG}programlog.logoutstr('end; {AddFromDXF12}',lp_decPos);{$ENDIF}
 end;
-procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry);
+procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
 var
   byt: GDBInteger;
   error: GDBInteger;
@@ -599,7 +600,7 @@ begin
   {$IFDEF TOTALYLOG}programlog.logoutstr('end; {AddFromDXF2000}',lp_decPos);{$ENDIF}
 end;
 
-procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry);
+procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
 var
   f: GDBOpenArrayOfByte;
   s: GDBString;
@@ -626,14 +627,14 @@ begin
           shared.HistoryOutStr('DXF12 fileformat;');
           //programlog.logout('DXF12 fileformat;',lp_OldPos);
           gotodxf(f, 0, 'ENDSEC');
-          addfromdxf12(f,'EOF',owner);
+          addfromdxf12(f,'EOF',owner,loadmode);
         end
         else if s = 'AC1015' then
         begin
           shared.HistoryOutStr('DXF2000 fileformat;');
           //programlog.logout('DXF2000 fileformat;',lp_OldPos);
           gotodxf(f, 0, 'ENDSEC');
-          addfromdxf2000(f,'EOF',owner);
+          addfromdxf2000(f,'EOF',owner,loadmode);
         end
         else
         begin

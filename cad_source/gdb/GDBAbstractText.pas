@@ -71,7 +71,6 @@ var i,i2:GDBInteger;
     ps,varname:GDBString;
     pv:pvardesk;
     num,code:integer;
-
 begin
      ps:=s;
      repeat

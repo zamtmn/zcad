@@ -111,10 +111,15 @@ begin
   //format;
 end;
 procedure GDBObjText.format;
+var
+      TCP:TCodePage;
 begin
-  if template='' then
+  TCP:=CodePage;
+CodePage:=CP_win;
+     if template='' then
                       template:=content;
   content:=textformat(template,@self);
+       CodePage:=TCP;
   if content='' then content:=str_empty;
   lod:=0;
   P_drawInOCS:=NulVertex;

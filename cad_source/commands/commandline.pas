@@ -95,14 +95,17 @@ var
    p:pstring;
    ir:itrec;
    oldlastcomm:GDBString;
+   s:gdbstring;
 begin
+     s:=(ExpandPath(fn));
+     historyoutstr('Запущен скрипт "'+s+'";');
      busy:=true;
      shared.cmdedit.Enabled:=false;
      shared.HintText.Enabled:=false;
 
      oldlastcomm:=lastcommand;
      sa.init(200);
-     sa.loadfromfile(ExpandPath(fn));
+     sa.loadfromfile(s);
      //sa.getGDBString(1);
   p:=sa.beginiterate(ir);
   if p<>nil then

@@ -283,6 +283,7 @@ begin
   pb^.BuildGeometry;
   pb^.BuildVarGeometry;
   pb^.format;
+  //own.AddObjectToObjArray(addr(pb));
   result:=pb;
   {for i := 0 to GDB.BlockDefArray.count - 1 do
   begin

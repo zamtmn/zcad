@@ -811,7 +811,7 @@ begin
   //param.scrollmode:=true;
   gdb.GetCurrentDWG.pcamera^.NextPosition;
   param.firstdraw:=true;
-  gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjTree);
+  gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjArray.ObjTree);
   //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
   gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
   gdb.GetCurrentDWG.SelObjArray.RenderFeedBack;
@@ -987,7 +987,7 @@ begin
       CalcOptimalMatrix;
       //-------------------CalcOptimalMatrix;
 
-      gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjTree);
+      gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjArray.ObjTree);
       //gdb.GetCurrentROOT.calcalcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT);
       gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
     end
@@ -1008,7 +1008,7 @@ begin
            CalcOptimalMatrix;
            //-------------CalcOptimalMatrix;
 
-           gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjTree);
+           gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjArray.ObjTree);
            //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT);
            gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
       end;
@@ -1088,13 +1088,13 @@ end;
 
 
   if (param.md.mode and MGetSelectObject) <> 0 then
-                                                     getonmouseobjectbytree(gdb.GetCurrentROOT.ObjTree);
+                                                     getonmouseobjectbytree(gdb.GetCurrentROOT.ObjArray.ObjTree);
   if (param.md.mode and MGet3DPointWoOP) <> 0 then param.ospoint.ostype := os_none;
   if (param.md.mode and MGet3DPoint) <> 0 then
   begin
 
       if (param.md.mode and MGetSelectObject) = 0 then
-                                                      getonmouseobjectbytree(gdb.GetCurrentROOT.ObjTree);
+                                                      getonmouseobjectbytree(gdb.GetCurrentROOT.ObjArray.ObjTree);
       getosnappoint(@gdb.GetCurrentROOT.ObjArray, 0);
       project0axis;
     if sysvar.dwg.DWG_OSMode^ <> 0 then
@@ -1447,7 +1447,7 @@ begin
 
   gdb.GetCurrentDWG.pcamera^.NextPosition;
 //  param.firstdraw:=true;
-  gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjTree);
+  gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjArray.ObjTree);
   //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
 
   gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
@@ -1545,7 +1545,7 @@ begin
 
         else
         begin
-          getonmouseobjectbytree(gdb.GetCurrentROOT.ObjTree);
+          getonmouseobjectbytree(gdb.GetCurrentROOT.ObjArray.ObjTree);
           //getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
           param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
 
@@ -2121,7 +2121,7 @@ begin
      CalcOptimalMatrix;
      self.RestoreBuffers;
      LPTime:=now();
-     gdb.GetCurrentDWG.pcamera.DRAWNOTEND:=treerender(gdb.GetCurrentROOT^.ObjTree,lptime);
+     gdb.GetCurrentDWG.pcamera.DRAWNOTEND:=treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,lptime);
      self.SaveBuffers;
      self.showcursor;
      self.SwapBuffers;
@@ -2351,11 +2351,11 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     drawdebuggeometry;
 
     if (sysvar.DWG.DWG_SystmGeometryDraw^) then
-                                               gdb.GetCurrentROOT^.ObjTree.draw;
+                                               gdb.GetCurrentROOT^.ObjArray.ObjTree.draw;
                                            //else
                                               begin
                                               startrender;
-                                              gdb.GetCurrentDWG.pcamera.DRAWNOTEND:=treerender(gdb.GetCurrentROOT^.ObjTree,lptime);
+                                              gdb.GetCurrentDWG.pcamera.DRAWNOTEND:=treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,lptime);
                                               //render(gdb.GetCurrentROOT^);
                                               endrender;
                                               end;

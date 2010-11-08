@@ -47,6 +47,8 @@ type
                             procedure ClearSub;
                             procedure updateenttreeadress;
                             procedure addtonul(p:PGDBObjEntity);
+                            function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;
+                            function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;
                       end;
          TTestTreeNode=Object
                              plane:DVector4D;
@@ -61,6 +63,16 @@ const
   _NodeDepth=15;
 function createtree(entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 implementation
+function TEntTreeNode.CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;
+begin
+     ConcatBB(BoundingBox,pobj^.vp.BoundingBox);
+end;
+function TEntTreeNode.AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;
+begin
+    addtonul(pobj);
+    CorrectNodeTreeBB(pobj);
+    //ConcatBB(ObjTree.BoundingBox,pobj^.vp.BoundingBox);
+end;
 procedure TEntTreeNode.drawonlyself;
 begin
      DrawAABB(BoundingBox);

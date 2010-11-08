@@ -1056,7 +1056,7 @@ begin
     p3dpl := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateInitObj(GDBPolylineID,gdb.GetCurrentROOT));
     p3dpl^.AddVertex(wc);
     p3dpl^.Format;
-    gdb.GetCurrentROOT.AddObjectToNodeTree(p3dpl);
+    gdb.GetCurrentROOT.ObjArray.ObjTree.AddObjectToNodeTree(p3dpl);
     GDBobjinsp.setptr(SysUnit.TypeName2PTD('GDBObjPolyline'),p3dpl);
     end;
 
@@ -1076,7 +1076,7 @@ begin
     p3dpl^.AddVertex(wc);
     p3dpl^.Format;
     p3dpl^.RenderFeedback;
-    gdb.GetCurrentROOT.CorrectNodeTreeBB(p3dpl);
+    gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
     redrawoglwnd;

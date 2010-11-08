@@ -184,6 +184,7 @@ begin
      ToolBarD.ButtonHeight:=16;
      ToolBarD.ShowCaptions:=true;
      ToolBarD.Align:=alBottom;
+     ToolBarD.AutoSize:=true;
 
      ProcessBar:=TProgressBar.create(ToolBarD);//.initxywh('?',@Pdownpanel,0,0,400,statusbarclientheight,false);
      ProcessBar.Hide;
@@ -210,6 +211,7 @@ begin
 
      ToolBarU:=TToolBar.Create(self);
      ToolBarU.Align:=alTop;
+     ToolBarU.AutoSize:=true;
      ToolBarU.ShowCaptions:=true;
      ToolBarU.Parent:=self;
 
@@ -242,6 +244,9 @@ LineWbox.Parent:=ToolBarU;
      ToolBarR.Width:=ToolBarU.Height;
      ToolBarR.EdgeBorders:=[ebRight];
      ToolBarR.ShowCaptions:=true;
+     //ToolBarR.Constraints.MaxWidth:=ToolBarR.Width;
+     //ToolBarR.AutoSize:=true;
+     ToolBarR.Wrapable:=true;
      ToolBarR.Parent:=self;
 
      MainPanel:=TPanel.create(self);
@@ -487,6 +492,7 @@ begin
                                                                     else
                                                                         b.align:=alTop;}
                           AddToBar(ppanel,b);
+                          //b.Align:=albottom;
                      end;
                      if uppercase(line)='VARIABLE' then
                      begin

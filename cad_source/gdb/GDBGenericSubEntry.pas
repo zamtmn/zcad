@@ -20,7 +20,7 @@ unit GDBGenericSubEntry;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
+uses UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
 gl,
 geometry{,GDB3d},UGDBVisibleOpenArray,gdbEntity,gdbobjectsconstdef,varmandef,memman,UGDBEntTree;
 type
@@ -33,15 +33,15 @@ TDrawingPreCalcData=record
                     end;
 PGDBObjGenericSubEntry=^GDBObjGenericSubEntry;
 GDBObjGenericSubEntry=object(GDBObjWithMatrix)
-                            ObjArray:GDBObjEntityOpenArray;(*saved_to_shd*)
+                            ObjArray:GDBObjEntityTreeArray;(*saved_to_shd*)
                             ObjCasheArray:GDBObjOpenArrayOfPV;
                             ObjToConnectedArray:GDBObjOpenArrayOfPV;
                             lstonmouse:PGDBObjEntity;
                             VisibleOBJBoundingBox:GDBBoundingBbox;
-                            ObjTree:TEntTreeNode;
+                            //ObjTree:TEntTreeNode;
                             function AddObjectToObjArray(p:GDBPointer):GDBInteger;virtual;
-                            function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;virtual;
-                            function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;virtual;
+                            {function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;virtual;
+                            function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;virtual;}
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
                             procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
@@ -88,7 +88,7 @@ begin
      ObjArray.add(pobj);
      pGDBObjEntity(ppointer(pobj)^).bp.Owner:=@self;
 end;}
-function GDBObjGenericSubEntry.CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;
+{function GDBObjGenericSubEntry.CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;
 begin
      ConcatBB(ObjTree.BoundingBox,pobj^.vp.BoundingBox);
 end;
@@ -97,14 +97,11 @@ function GDBObjGenericSubEntry.AddObjectToNodeTree(pobj:PGDBObjEntity):GDBIntege
 begin
     ObjTree.addtonul(pobj);
     CorrectNodeTreeBB(pobj);
-    //ConcatBB(ObjTree.BoundingBox,pobj^.vp.BoundingBox);
-end;
+end;}
 function GDBObjGenericSubEntry.AddObjectToObjArray(p:GDBPointer):GDBInteger;
 begin
      result:=ObjArray.add(p);
-     AddObjectToNodeTree(PGDBObjEntity(p^));
-     //ObjTree.addtonul(PGDBObjEntity(p^));
-     //geometry.ConcatBB(ObjTree.BoundingBox,PGDBObjEntity(p^)^.vp.BoundingBox);
+     //ObjArray.ObjTree.AddObjectToNodeTree(PGDBObjEntity(p^));
 end;
 procedure GDBObjGenericSubEntry.SetInFrustumFromTree;
 begin
@@ -338,7 +335,7 @@ destructor GDBObjGenericSubEntry.done;
 begin
      ObjArray.FreeAndDone;
      ObjCasheArray.FreeAndDone;
-     self.ObjTree.done;
+     //self.ObjArray.ObjTree.done;
      inherited done;
 end;
 constructor GDBObjGenericSubEntry.initnul;
@@ -346,7 +343,7 @@ begin
      inherited initnul(owner);
      ObjArray.init({$IFDEF DEBUGBUILD}'{3EB0D466-D2B3-4F03-802A-8C995283688A}',{$ENDIF}10);
      ObjCasheArray.init({$IFDEF DEBUGBUILD}'{A6F0EFFD-8EBB-4DED-9051-D28BF8F9A93C}',{$ENDIF}10);
-     self.ObjTree.initnul;
+     //self.ObjArray.ObjTree.initnul;
 end;
 procedure GDBObjGenericSubEntry.DrawGeometry;
 begin

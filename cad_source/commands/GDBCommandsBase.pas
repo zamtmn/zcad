@@ -530,7 +530,7 @@ begin
      updatevisible;
      if gdb.currentdwg<>BlockBaseDWG then
                                          begin
-                                         gdb.GetCurrentDWG^.pObjRoot.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjTree,0,nil,TND_Root)^;
+                                         gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
                                          redrawoglwnd;
 
                                          end;
@@ -1363,7 +1363,7 @@ var //i: GDBInteger;
     depth:integer;
 begin
   MainFormN.StartLongProcess(gdb.GetCurrentROOT.ObjArray.count);
-  gdb.GetCurrentDWG^.pObjRoot.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjTree,0,nil,TND_Root)^;
+  gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
   MainFormN.EndLongProcess;
 
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
@@ -1373,7 +1373,7 @@ begin
   clearcp;
   redrawoglwnd;
   depth:=0;
-  PrintTreeNode(@gdb.GetCurrentDWG^.pObjRoot.ObjTree,depth);
+  PrintTreeNode(@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,depth);
   shared.HistoryOutStr('Всего примитивов: '+inttostr(GDB.GetCurrentROOT.ObjArray.count));
   shared.HistoryOutStr('Глубина дерева  : '+inttostr(depth));
 

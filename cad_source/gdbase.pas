@@ -138,15 +138,20 @@ GDBray=record
 GDBPiece=record
              lbegin,dir,lend:GDBvertex;
        end;
+GDBCameraBaseProp=record
+                        point:GDBvertex;
+                        look:GDBvertex;
+                        ydir:GDBvertex;
+                        xdir:GDBvertex;
+                        zoom: GDBDouble;
+                  end;
+
 PGDBBaseCamera=^GDBBaseCamera;
 GDBBaseCamera=object(GDBaseObject)
                 modelMatrix:DMatrix4D;
                 fovy:GDBDouble;
                 totalobj:GDBInteger;
-                point:GDBvertex;
-                look:GDBvertex;
-                ydir:GDBvertex;
-                xdir:GDBvertex;
+                prop:GDBCameraBaseProp;
                 anglx,angly,zmin,zmax:GDBDouble;
                 projMatrix:DMatrix4D;
                 viewport:IMatrix4;

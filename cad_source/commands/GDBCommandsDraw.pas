@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  Clipbrd,LCLType,classes,
+  fileutil,Clipbrd,LCLType,classes,
   //debygunit,
   commandlinedef,
   {windows,}gdbasetypes,commandline,
@@ -270,7 +270,7 @@ begin
            memsubstr.ReadBuffer(s[1],memsubstr.GetSize);
            //s:=memsubstr.ReadAnsiString;
            memsubstr.free;
-                         if fileexists(s) then
+                         if fileexists(utf8tosys(s)) then
               //if messagebox(mainform.handle,'В данной версии возможна двойная загрузка файлов, ПРИВОДЯЩАЯ К ДУБЛИРОВАНИЮ ОБЪЕКТОВ НА ЧЕРТЕЖЕ Осуществить вставку?','QLOAD',MB_YESNO)=IDYES then
               begin
                     addfromdxf(s,@gdb.GetCurrentDWG^.ConstructObjRoot,tloload);

@@ -421,8 +421,8 @@ begin
   if {true//}(((not GDB.GetCurrentDWG.OGLwindow1.param.scrollmode)or(not sysvar.RD.RD_PanObjectDegradation^)) {and (lod=0)})
   then
       begin
-           _lod:=round({self.textprop.size/}10*GDB.GetCurrentDWG.OGLwindow1.param.zoom*GDB.GetCurrentDWG.OGLwindow1.param.zoom+1);
-           if ((self.textprop.size/GDB.GetCurrentDWG.OGLwindow1.param.zoom)>1) then
+           _lod:=round({self.textprop.size/}10*GDB.GetCurrentDWG.pcamera.prop.zoom*GDB.GetCurrentDWG.pcamera.prop.zoom+1);
+           if ((self.textprop.size/GDB.GetCurrentDWG.pcamera.prop.zoom)>1) then
                                                                                    //Vertex3D_in_WCS_Array.simpledrawgeometry({_lod}3)
                                                                                    //simpledrawgeometry
                                                                                    Vertex3D_in_WCS_Array.drawgeometry

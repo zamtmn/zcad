@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
+uses fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
   entnamindex=record
@@ -488,7 +488,13 @@ begin
                                end;
                           end;
                         end;
-                        gdb.GetCurrentDWG.TextStyleTable.addstyle(tstyle.Name,lname,tstyle.prop);
+                        if gdb.GetCurrentDWG.TextStyleTable.FindStyle(tstyle.Name)<>-1 then
+                        begin
+                          if LoadMode=TLOLoad then
+                                                  gdb.GetCurrentDWG.TextStyleTable.addstyle(tstyle.Name,lname,tstyle.prop);
+                        end
+                           else
+                               gdb.GetCurrentDWG.TextStyleTable.addstyle(tstyle.Name,lname,tstyle.prop);
                         {$IFDEF TOTALYLOG}programlog.logoutstr('Found style '+tstyle.Name,0);{$ENDIF}
                       end;
                       {$IFDEF TOTALYLOG}programlog.logoutstr('end; {style table}',lp_DecPos);{$ENDIF}
@@ -521,7 +527,7 @@ begin
         //inc(foc);
         {addfromdxf12}addentitiesfromdxf(f, 'ENDSEC',owner);
         owner.ObjArray.pack;
-        owner.correctobjects(nil,0)
+        owner.correctobjects(nil,0);
         //inc(foc);
         {$IFDEF TOTALYLOG}programlog.logoutstr('end {entities section}',lp_DecPos);{$ENDIF}
       end
@@ -1002,7 +1008,7 @@ begin
   GDBFreeMem(GDBPointer(phandlea));
   templatefile.done;
 
-  if FileExists(name) then
+  if FileExists(utf8tosys(name)) then
                            begin
                                 deletefile(name+'.bak');
                                 renamefile(name,name+'.bak');
@@ -1055,10 +1061,10 @@ begin
      fillchar(gdb^,sizeof(GDBDescriptor),0);
      systype.TypeName2PTD('GDBDescriptor')^.DeSerialize(gdb,SA_SAVED_TO_SHD,memorybuf);}
 
-     outfile:=FileCreate(name);
+     outfile:=FileCreate(UTF8ToSys(name));
      FileWrite(outfile,memorybuf^.parray^,memorybuf^.Count);
      fileclose(outfile);
-     outfile:=FileCreate(name+'remap');
+     outfile:=FileCreate(UTF8ToSys(name+'remap'));
      FileWrite(outfile,linkbyf^.parray^,linkbyf^.Count*linkbyf^.Size);
      fileclose(outfile);
      memorybuf.done;

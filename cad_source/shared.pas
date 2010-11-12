@@ -136,7 +136,7 @@ procedure processfile(s:gdbstring);
 var
    fn:gdbstring;
 begin
-     fn:=path+s;
+     fn:=systoutf8(path+s);
      {$IFDEF TOTALYLOG}programlog.logoutstr('Process file '+fn,0);{$ENDIF}
      if @method<>nil then
                          method(fn);

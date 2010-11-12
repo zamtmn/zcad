@@ -78,20 +78,20 @@ var
 
 begin
       tempmatr:=onematrix;
-      pgdbvertex(@tempmatr[0])^:=xdir;
-      pgdbvertex(@tempmatr[1])^:=ydir;
-      pgdbvertex(@tempmatr[2])^:=look;
+      pgdbvertex(@tempmatr[0])^:=prop.xdir;
+      pgdbvertex(@tempmatr[1])^:=prop.ydir;
+      pgdbvertex(@tempmatr[2])^:=prop.look;
       rotmatr:=MatrixMultiply(CreateRotationMatrixY(sin(uy),cos(uy)),CreateRotationMatrixX(sin(ux),cos(uy)));
       tempmatr:=MatrixMultiply(rotmatr,tempmatr);
 
-      xdir:=pgdbvertex(@tempmatr[0])^;
-      ydir:=pgdbvertex(@tempmatr[1])^;
-      look:=pgdbvertex(@tempmatr[2])^;
+      prop.xdir:=pgdbvertex(@tempmatr[0])^;
+      prop.ydir:=pgdbvertex(@tempmatr[1])^;
+      prop.look:=pgdbvertex(@tempmatr[2])^;
 
-      look:=NormalizeVertex(look);
-      xdir := CrossVertex(ydir, look);
-      xdir:=NormalizeVertex(xdir);
-      ydir := CrossVertex(look, xdir);
+      prop.look:=NormalizeVertex(prop.look);
+      prop.xdir := CrossVertex(prop.ydir,prop.look);
+      prop.xdir:=NormalizeVertex(prop.xdir);
+      prop.ydir := CrossVertex(prop.look,prop.xdir);
 end;
 procedure GDBObjCamera.MoveInLocalCSXY(oldx,oldy:GDBDouble;ax:gdbvertex);
 var
@@ -106,9 +106,9 @@ begin
       tempmatr:=onematrix;
       tempmatr2:=onematrix;
       rotmatr:=onematrix;
-      pgdbvertex(@rotmatr[0])^:=xdir;
-      pgdbvertex(@rotmatr[1])^:=ydir;
-      pgdbvertex(@rotmatr[2])^:=look;
+      pgdbvertex(@rotmatr[0])^:=prop.xdir;
+      pgdbvertex(@rotmatr[1])^:=prop.ydir;
+      pgdbvertex(@rotmatr[2])^:=prop.look;
 
       tv2.x:=-oldx;
       tv2.y:=-oldy;
@@ -136,10 +136,10 @@ begin
       //normalize4d(tv);
 
       tv.x:=tv.x;
-      Pgdbvertex(@rotmatr[3])^:=point;
+      Pgdbvertex(@rotmatr[3])^:=prop.point;
       tempmatr:=CreateTranslationMatrix(Pgdbvertex(@tv)^);
       tempmatr:=MatrixMultiply(rotmatr,tempmatr);
-      point:=Pgdbvertex(@tempmatr[3])^;
+      prop.point:=Pgdbvertex(@tempmatr[3])^;
       end;
 
       end else

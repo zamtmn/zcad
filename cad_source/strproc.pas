@@ -20,7 +20,7 @@ unit strproc;
 {$INCLUDE def.inc}
 
 interface
-uses gdbasetypes,sysutils,sysinfo,log,strutils,LCLProc;
+uses fileutil,gdbasetypes,sysutils,sysinfo,log,strutils,LCLProc;
 function GetPredStr(var s: GDBString; substr: GDBString): GDBString;
 function ExpandPath(path:GDBString):GDBString;
 function readspace(expr: GDBString): GDBString;
@@ -59,7 +59,7 @@ var
    s,ts:gdbstring;
 begin
      FileName:=ExpandPath(FileName);
-     if FileExists(FileName) then
+     if FileExists(utf8tosys(FileName)) then
                                  begin
                                       result:=FileName;
                                       exit;
@@ -78,7 +78,7 @@ begin
      repeat
            GetPartOfPath(ts,s);
            ts:=ExpandPath(ts)+FileName;
-            if FileExists(ts) then
+            if FileExists(utf8tosys(ts)) then
                                  begin
                                       result:=ts;
                                       exit;
@@ -91,7 +91,7 @@ var
    s,ts:gdbstring;
 begin
      FileName:=ExpandPath(FileName);
-     if FileExists(FileName) then
+     if FileExists(utf8tosys(FileName)) then
                                  begin
                                       result:=FileName;
                                       exit;
@@ -110,7 +110,7 @@ begin
      repeat
            GetPartOfPath(ts,s);
            ts:=ExpandPath(ts)+FileName;
-            if FileExists(ts) then
+            if FileExists(utf8tosys(ts)) then
                                  begin
                                       result:=ts;
                                       exit;
@@ -260,7 +260,7 @@ else if path[1]='*' then
                     result:=sysparam.programpath+copy(path,2,length(path)-1)
 else result:=path;
 result:=StringReplace(result,'/', PathDelim,[rfReplaceAll, rfIgnoreCase]);
-if DirectoryExists(result) then
+if DirectoryExists(utf8tosys(result)) then
   if (result[length(result)]<>{'/'}PathDelim)
   //or (result[length(result)]<>'\')
   then

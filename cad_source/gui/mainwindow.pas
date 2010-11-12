@@ -375,7 +375,7 @@ begin
      begin
           if img[1]<>'#' then
                               begin
-                              img:=SysToUTF8(sysparam.programpath)+'menu/BMP/'+img;
+                              img:={SysToUTF8}(sysparam.programpath)+'menu/BMP/'+img;
                               bmp:=TBitmap.create;
                               bmp.LoadFromFile(img);
                               bmp.Transparent:=true;

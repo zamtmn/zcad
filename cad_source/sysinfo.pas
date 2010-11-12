@@ -33,7 +33,7 @@ implementation
 uses {shared,varmandef,} sysutils,WindowsSpecific,log;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('sysinfo.initialization');{$ENDIF}
-     sysparam.programpath:=(ExtractFilePath(paramstr(0)));
+     sysparam.programpath:=SysToUTF8(ExtractFilePath(paramstr(0)));
      sysparam.screenx:={GetSystemMetrics(SM_CXSCREEN)}Screen.Width;
      sysparam.screeny:={GetSystemMetrics(SM_CYSCREEN)}Screen.Height;
      //sysparam.temppath:=GetEnvironmentVariable('TEMP');

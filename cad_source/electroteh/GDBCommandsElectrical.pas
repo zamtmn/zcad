@@ -17,6 +17,7 @@ uses
   gdbase,
   GDBManager,
   sysutils,
+  fileutil,
   varmandef,
   oglwindowdef,
   //OGLtypes,
@@ -1411,7 +1412,7 @@ begin
   DecimalSeparator := ',';
   cman.init;
   cman.build;
-  handle:=FileCreate(filename,fmOpenWrite);
+  handle:=FileCreate(UTF8ToSys(filename),fmOpenWrite);
   line:='Обозначение'+';'+'Материал'+';'+'Длина'+';'+'Начало'+';'+'Конец'+#13#10;
   FileWrite(handle,line[1],length(line));
   pv:=cman.beginiterate(ir);
@@ -1557,7 +1558,7 @@ begin
   if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Сохранить данные...') then
   begin
   bom.init(1000);
-  handle:=FileCreate(filename,fmOpenWrite);
+  handle:=FileCreate(UTF8ToSys(filename),fmOpenWrite);
   line:='Материал'+';'+'Количество'+';'+'Устройства'+#13#10;
   FileWrite(handle,line[1],length(line));
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
@@ -1924,14 +1925,14 @@ begin
         tp:=ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
         tp:=ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
         tp:=ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  gdb.GetCurrentDWG.pcamera^.point.x:=-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2);
-  gdb.GetCurrentDWG.pcamera^.point.y:=-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2);
+  gdb.GetCurrentDWG.pcamera^.prop.point.x:=-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2);
+  gdb.GetCurrentDWG.pcamera^.prop.point.y:=-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2);
 
 
-  gdb.GetCurrentDWG.OGLwindow1.param.zoom:=(wcsRTF.x-wcsLBN.x)/gdb.GetCurrentDWG.OGLwindow1.clientwidth;
+  gdb.GetCurrentDWG.pcamera^.prop.zoom:=(wcsRTF.x-wcsLBN.x)/gdb.GetCurrentDWG.OGLwindow1.clientwidth;
   tpz:=(wcsRTF.y-wcsLBN.y)/gdb.GetCurrentDWG.OGLwindow1.clientheight;
 
-  if tpz>gdb.GetCurrentDWG.OGLwindow1.param.zoom then gdb.GetCurrentDWG.OGLwindow1.param.zoom:=tpz;
+  if tpz>gdb.GetCurrentDWG.pcamera^.prop.zoom then gdb.GetCurrentDWG.pcamera^.prop.zoom:=tpz;
 
   gdb.GetCurrentDWG.OGLwindow1.CalcOptimalMatrix;
   gdb.GetCurrentDWG.OGLwindow1.mouseunproject(gdb.GetCurrentDWG.OGLwindow1.param.md.mouse.x, gdb.GetCurrentDWG.OGLwindow1.param.md.mouse.y);

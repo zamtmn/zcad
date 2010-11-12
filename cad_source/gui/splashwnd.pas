@@ -51,7 +51,7 @@ begin
   self.DoubleBuffered:=true;
   Logo:=TImage.create(self);
   Logo.Align:=alclient;
-  Logo.Picture.LoadFromFile(SysToUTF8(sysparam.programpath)+'components/logo.png');
+  Logo.Picture.LoadFromFile({SysToUTF8}(sysparam.programpath)+'components/logo.png');
   Logo.Parent:=self;
   self.BorderStyle:=bsNone;
   self.Color:=clNone;
@@ -71,7 +71,7 @@ end;
 procedure createsplash;
 begin
      SplashWindow:=TSplashWnd.Create(nil);
-     SplashWindow.show;
+     //SplashWindow.show;
      application.ProcessMessages;
 end;
 procedure removesplash;

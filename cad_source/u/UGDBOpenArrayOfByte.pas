@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfByte;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysutils,UGDBOpenArray,memman,gdbase{,strmy};
+uses gdbasetypes,sysutils,UGDBOpenArray,memman,gdbase,fileutil,shared{,strmy};
 const
      breacer=[#13,#10,' '];
   eol: GDBString=#13 + #10;
@@ -259,7 +259,9 @@ constructor GDBOpenArrayOfByte.InitFromFile;
 var infile,filelength:GDBInteger;
 begin
      //StringToWideChar(filename)
-     infile:=fileopen(FileName,fmShareDenyNone);
+     infile:=fileopen(UTF8ToSys(FileName),fmShareDenyNone);
+     if infile<=0 then
+                      shared.ShowError('Не могу открыть файл "'+FileName+'"');
      pointer(name):=nil;
      name:=filename;
      filelength:=FileSeek(infile,0,2);
@@ -274,7 +276,7 @@ end;
 function GDBOpenArrayOfByte.SaveToFile;
 var infile:GDBInteger;
 begin
-     infile:=filecreate(ExpandPath(FileName));
+     infile:=filecreate(UTF8ToSys(ExpandPath(FileName)));
      if infile>0 then
                      begin
                            FileWrite(InFile,parray^,count);

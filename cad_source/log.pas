@@ -61,7 +61,7 @@ procedure LogOut(s:GDBString);
 var programlog:tlog;
 implementation
 uses
-    splashwnd,sysinfo,UGDBOpenArrayOfByte,UGDBOpenArrayOfData,strutils,sysutils;
+    splashwnd,sysinfo,UGDBOpenArrayOfByte,UGDBOpenArrayOfData,strutils,sysutils,fileutil;
 var
     PerfomaneBuf:GDBOpenArrayOfByte;
     TimeBuf:GDBOpenArrayOfData;
@@ -72,10 +72,10 @@ var
 begin
      logname:=filelog+'hard';
      FileHandle:=0;
-     if not fileexists(logname) then
-                                   FileHandle:=FileCreate(logname)
+     if not fileexists(utf8tosys(logname)) then
+                                   FileHandle:=FileCreate(UTF8ToSys(logname))
                                 else
-                                    FileHandle := FileOpen(logname, fmOpenWrite);
+                                    FileHandle := FileOpen(UTF8ToSys(logname), fmOpenWrite);
      FileSeek(FileHandle, 0, 2);
 
         s:=s+#13#10;
@@ -131,7 +131,7 @@ begin
 end;
 procedure tlog.OpenLog;
 begin
-  FileHandle := FileOpen(logfilename, fmOpenWrite);
+  FileHandle := FileOpen(UTF8ToSys(logfilename), fmOpenWrite);
   FileSeek(FileHandle, 0, 2);
 end;
 
@@ -142,7 +142,7 @@ begin
 end;
 procedure tlog.CreateLog;
 begin
-  FileHandle:=FileCreate(logfilename,fmOpenWrite);
+  FileHandle:=FileCreate(UTF8ToSys(logfilename),fmOpenWrite);
   CloseLog;
 end;
 {procedure tlog.logout;

@@ -20,7 +20,7 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-strproc,GDBBlockDef,UGDBDrawingdef,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
+UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UGDBDrawingdef,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
 UGDBNumerator, gdbase,varmandef,varman{, oglwindowdef, math, UGDBOpenArrayOfByte},
 sysutils, memman, geometry, gdbobjectsconstdef{, strmy,dxflow},
 {UOpenArray,}gdbasetypes,sysinfo,
@@ -86,6 +86,8 @@ TDrawing=object(TAbstractDrawing)
            DWGUnits:TUnitManager;
 
            OGLwindow1:toglwnd;
+
+           UndoStack:GDBObjOpenArrayOfUCommands;
 
            TextStyleTable:GDBTextStyleArray;(*saved_to_shd*)
            BlockDefArray:GDBObjBlockdefArray;(*saved_to_shd*)
@@ -452,6 +454,9 @@ begin
      ts.tblformat.Add(@cs);
 
 
+     UndoStack.init;
+
+
   //OGLwindow1.initxywh('oglwnd',nil,200,72,768,596,false);
   //OGLwindow1.show;
 end;
@@ -523,6 +528,7 @@ begin
 end;
 destructor TDrawing.done;
 begin
+     undostack.done;
      mainObjRoot.done;
      LayerTable.FreeAndDone;
      //ConstructObjRoot.ObjArray.FreeAndDone;

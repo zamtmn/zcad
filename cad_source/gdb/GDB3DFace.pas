@@ -144,9 +144,9 @@ begin
   glEnable(GL_LIGHT0);
 	glEnable (GL_COLOR_MATERIAL);
 
-  p.x:=gdb.GetCurrentDWG.pcamera^.point.x;
-  p.y:=gdb.GetCurrentDWG.pcamera^.point.y;
-  p.z:=gdb.GetCurrentDWG.pcamera^.point.z;
+  p.x:=gdb.GetCurrentDWG.pcamera^.prop.point.x;
+  p.y:=gdb.GetCurrentDWG.pcamera^.prop.point.y;
+  p.z:=gdb.GetCurrentDWG.pcamera^.prop.point.z;
   p.w:=0;
   glLightfv(GL_LIGHT0,
             GL_POSITION,

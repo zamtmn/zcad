@@ -503,7 +503,7 @@ begin
                                                           exit;
                                                      end;
      s:=operands;
-     isload:=FileExists(s);
+     isload:=FileExists(utf8tosys(s));
      if isload then
      begin
           fileext:=uppercase(ExtractFileEXT(s));
@@ -513,7 +513,7 @@ begin
                                      //if operands<>'QS' then
                                      //                      gdb.GetCurrentDWG.FileName:=s;
                                      addfromdxf(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode);
-                                     if FileExists(s+'.dbpas') then
+                                     if FileExists(utf8tosys(s+'.dbpas')) then
                                      begin
                                            pu:=gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase');
                                            mem.InitFromFile(s+'.dbpas');
@@ -609,7 +609,7 @@ begin
      MainFormN.PageControl.ActivePage:=myts;
      sharedgdb.updatevisible;
      tn:=expandpath(sysvar.PATH.Template_Path^)+sysvar.PATH.Template_File^;
-     if fileExists(tn) then
+     if fileExists(utf8tosys(tn)) then
                            merge_com(@tn[1])
                        else
                            shared.ShowError('Не найден файл шаблона "'+tn+'"');
@@ -649,7 +649,7 @@ begin
      if length(operands)=0 then
                         begin
                              isload:=OpenFileDialog(s);
-                             s:=utf8tosys(s);
+                             //s:=utf8tosys(s);
                              if not isload then
                                                begin
                                                     result:=cmd_cancel;
@@ -671,7 +671,7 @@ begin
                                               s:=FindInSupportPath(operands);
                                               end;
                     end;
-     isload:=FileExists(s);
+     isload:=FileExists(utf8tosys(s));
      if isload then
      begin
           newdwg_com(@s[1]);
@@ -784,24 +784,31 @@ begin
 end;
 function Cam_reset_com(Operands:pansichar):GDBInteger;
 begin
-  gdb.GetCurrentDWG.pcamera^.point.x := 0;
-  gdb.GetCurrentDWG.pcamera^.point.y := 0;
-  gdb.GetCurrentDWG.pcamera^.point.z := 50;
-  gdb.GetCurrentDWG.pcamera^.look.x := 0;
-  gdb.GetCurrentDWG.pcamera^.look.y := 0;
-  gdb.GetCurrentDWG.pcamera^.look.z := -1;
-  gdb.GetCurrentDWG.pcamera^.ydir.x := 0;
-  gdb.GetCurrentDWG.pcamera^.ydir.y := 1;
-  gdb.GetCurrentDWG.pcamera^.ydir.z := 0;
-  gdb.GetCurrentDWG.pcamera^.xdir.x := -1;
-  gdb.GetCurrentDWG.pcamera^.xdir.y := 0;
-  gdb.GetCurrentDWG.pcamera^.xdir.z := 0;
+  gdb.GetCurrentDWG.UndoStack.PushChangeCommand(gdb.GetCurrentDWG.pcamera,(ptrint(@gdb.GetCurrentDWG.pcamera^.prop)-ptrint(gdb.GetCurrentDWG.pcamera)),sizeof(GDBCameraBaseProp));
+  gdb.GetCurrentDWG.pcamera^.prop.point.x := 0;
+  gdb.GetCurrentDWG.pcamera^.prop.point.y := 0;
+  gdb.GetCurrentDWG.pcamera^.prop.point.z := 50;
+  gdb.GetCurrentDWG.pcamera^.prop.look.x := 0;
+  gdb.GetCurrentDWG.pcamera^.prop.look.y := 0;
+  gdb.GetCurrentDWG.pcamera^.prop.look.z := -1;
+  gdb.GetCurrentDWG.pcamera^.prop.ydir.x := 0;
+  gdb.GetCurrentDWG.pcamera^.prop.ydir.y := 1;
+  gdb.GetCurrentDWG.pcamera^.prop.ydir.z := 0;
+  gdb.GetCurrentDWG.pcamera^.prop.xdir.x := -1;
+  gdb.GetCurrentDWG.pcamera^.prop.xdir.y := 0;
+  gdb.GetCurrentDWG.pcamera^.prop.xdir.z := 0;
   gdb.GetCurrentDWG.pcamera^.anglx := -pi;
   gdb.GetCurrentDWG.pcamera^.angly := -pi / 2;
   gdb.GetCurrentDWG.pcamera^.zmin := 1;
   gdb.GetCurrentDWG.pcamera^.zmax := 100000;
   gdb.GetCurrentDWG.pcamera^.fovy := 35;
-  GDB.GetCurrentDWG.OGLwindow1.param.zoom := 0.1;
+  gdb.GetCurrentDWG.pcamera^.prop.zoom := 0.1;
+  redrawoglwnd;
+  result:=cmd_ok;
+end;
+function Undo_com(Operands:pansichar):GDBInteger;
+begin
+  gdb.GetCurrentDWG.UndoStack.undo;
   redrawoglwnd;
   result:=cmd_ok;
 end;
@@ -1132,7 +1139,7 @@ var res:longbool;
 
     memsubstr:TMemoryStream;
 begin
-     if fileexists(CopyClipFile) then
+     if fileexists(utf8tosys(CopyClipFile)) then
                                     SysUtils.deletefile(CopyClipFile);
      s:=sysparam.temppath+'Z$C'+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)
                               +inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)
@@ -1440,7 +1447,8 @@ begin
   selframecommand^.overlay:=true;
   selframecommand.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@CTest,'CTest',CADWG,0);
-  CreateCommandFastObjectPlugin(@layer_cmd,'layer',CADWG,0);
+  CreateCommandFastObjectPlugin(@layer_cmd,'Layer',CADWG,0);
+  CreateCommandFastObjectPlugin(@undo_com,'Undo',CADWG,0);
 
   //Optionswindow.initxywh('',@mainformn,500,300,400,100,false);
   //Aboutwindow:=TAboutWnd.create(Application);{.initxywh('',@mainform,500,200,200,180,false);}

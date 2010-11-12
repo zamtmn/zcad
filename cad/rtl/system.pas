@@ -149,15 +149,19 @@ GDBray=record
 GDBPiece=record
              lbegin,dir,lend:GDBvertex;
        end;
+GDBCameraBaseProp=record
+                        point:GDBvertex;
+                        look:GDBvertex;
+                        ydir:GDBvertex;
+                        xdir:GDBvertex;
+                        zoom: GDBDouble;
+                  end;
 PGDBBaseCamera=^GDBBaseCamera;
 GDBBaseCamera=object(GDBaseObject)
                 modelMatrix:DMatrix4D;
                 fovy:GDBDouble;
                 totalobj:GDBInteger;
-                point:GDBvertex;
-                look:GDBvertex;
-                ydir:GDBvertex;
-                xdir:GDBvertex;
+                prop:GDBCameraBaseProp;
                 anglx,angly,zmin,zmax:GDBDouble;
                 projMatrix:DMatrix4D;
                 viewport:IMatrix4;
@@ -896,11 +900,11 @@ GDBObjGenericWithSubordinated=object(GDBaseObject)
                                     function FindVariable(varname:GDBString):pvardesk;virtual;abstract;
                                     function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit):GDBBoolean;virtual;abstract;
                                     destructor done;virtual;abstract;
-                                                             function GetMatrix:PDMatrix4D;virtual;abstract;
-                         function GetLineWeight:GDBSmallint;virtual;abstract;
-                         function GetLayer:PGDBLayerProp;virtual;abstract;
-                         function GetHandle:GDBPlatformint;virtual;abstract;
-                         function IsSelected:GDBBoolean;virtual;abstract;
+                                    function GetMatrix:PDMatrix4D;virtual;abstract;
+                                    function GetLineWeight:GDBSmallint;virtual;abstract;
+                                    function GetLayer:PGDBLayerProp;virtual;abstract;
+                                    function GetHandle:GDBPlatformint;virtual;abstract;
+                                    function IsSelected:GDBBoolean;virtual;abstract;
                                     procedure FormatAfterDXFLoad;virtual;abstract;
                                     procedure Build;virtual;abstract;
 end;
@@ -1236,15 +1240,15 @@ TDrawingPreCalcData=record
                     end;
 PGDBObjGenericSubEntry=^GDBObjGenericSubEntry;
 GDBObjGenericSubEntry=object(GDBObjWithMatrix)
-                            ObjArray:GDBObjEntityOpenArray;(*saved_to_shd*)
+                            ObjArray:GDBObjEntityTreeArray;(*saved_to_shd*)
                             ObjCasheArray:GDBObjOpenArrayOfPV;
                             ObjToConnectedArray:GDBObjOpenArrayOfPV;
                             lstonmouse:PGDBObjEntity;
                             VisibleOBJBoundingBox:GDBBoundingBbox;
-                            ObjTree:TEntTreeNode;
+                            //ObjTree:TEntTreeNode;
                             function AddObjectToObjArray(p:GDBPointer):GDBInteger;virtual;abstract;
-                            function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;virtual;abstract;
-                            function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;virtual;abstract;
+                            {function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;virtual;abstract;
+                            function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;virtual;}abstract;
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
                             procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
@@ -2066,7 +2070,7 @@ type
     CSIconCoord: GDBvertex;
     CSX, CSY, CSZ: GDBvertex2DI;
     projtype: GDBInteger;
-    clipx, clipy, zoom: GDBDouble;
+    clipx, clipy: GDBDouble;
     firstdraw: GDBBoolean;
     md: mousedesc;
     gluetocp: GDBBoolean;
@@ -2141,6 +2145,7 @@ TDrawing=object(TAbstractDrawing)
            OnMouseObj:GDBObjOpenArrayOfPV;
            DWGUnits:TUnitManager;
            OGLwindow1:toglwnd;
+           UndoStack:GDBObjOpenArrayOfUCommands;
            TextStyleTable:GDBTextStyleArray;(*saved_to_shd*)
            BlockDefArray:GDBObjBlockdefArray;(*saved_to_shd*)
            Numerator:GDBNumerator;(*saved_to_shd*)

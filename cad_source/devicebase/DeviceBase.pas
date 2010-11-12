@@ -1,7 +1,7 @@
 unit DeviceBase;
 {$INCLUDE def.inc}
 interface
-uses strproc,strmy,gdbasetypes,gdbase,UUnitManager,varman,varmandef,sysutils,typedescriptors,URecordDescriptor,UObjectDescriptor,shared;
+uses fileutil,strproc,strmy,gdbasetypes,gdbase,UUnitManager,varman,varmandef,sysutils,typedescriptors,URecordDescriptor,UObjectDescriptor,shared;
 type
 {REGISTEROBJECTTYPE DbBaseObject}
 {REGISTEROBJECTTYPE ElDeviceBaseObject}
@@ -130,7 +130,7 @@ begin
      repeat
            GetPartOfPath(ts,s);
            ts:=ExpandPath(ts);
-           if DirectoryExists(ts) then
+           if DirectoryExists(utf8tosys(ts)) then
                                  begin
                                       loadfromdir(ts);
                                  end;
@@ -145,7 +145,7 @@ var sr: TSearchRec;
     s:gdbstring;
 begin
 
-  FromDirIterator(path,'*.pas',firstfilename,loaddev,nil);
+  FromDirIterator(utf8tosys(path),'*.pas',firstfilename,loaddev,nil);
 
 end;
 procedure startup;

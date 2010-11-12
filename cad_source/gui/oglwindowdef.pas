@@ -105,7 +105,7 @@ type
     CSIconCoord: GDBvertex;
     CSX, CSY, CSZ: GDBvertex2DI;
     projtype: GDBInteger;
-    clipx, clipy, zoom: GDBDouble;
+    clipx, clipy: GDBDouble;
     firstdraw: GDBBoolean;
     md: mousedesc;
     gluetocp: GDBBoolean;

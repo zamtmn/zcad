@@ -981,8 +981,12 @@ begin
     begin
       uy :=(x - param.md.mouse.x) / 1000;
       ux :=- (y - param.md.mouse.y) / 1000;
-      gdb.GetCurrentDWG.UndoStack.PushChangeCommand(gdb.GetCurrentDWG.pcamera,(ptrint(@gdb.GetCurrentDWG.pcamera^.prop)-ptrint(gdb.GetCurrentDWG.pcamera)),sizeof(GDBCameraBaseProp));
+      with gdb.GetCurrentDWG.UndoStack.CreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
+      begin
+      //gdb.GetCurrentDWG.UndoStack.PushChangeCommand(gdb.GetCurrentDWG.pcamera,(ptrint(@gdb.GetCurrentDWG.pcamera^.prop)-ptrint(gdb.GetCurrentDWG.pcamera)),sizeof(GDBCameraBaseProp));
       gdb.GetCurrentDWG.pcamera.RotateInLocalCSXY(ux,uy);
+      ComitFromObj;
+      end;
       param.firstdraw := true;
       gdb.GetCurrentDWG.pcamera^.NextPosition;
       CalcOptimalMatrix;
@@ -1003,7 +1007,7 @@ begin
            ax.x:=-(param.md.mouseray.lend.x - glmcoord1.lend.x);
            ax.y:= (param.md.mouseray.lend.y - glmcoord1.lend.y);
            ax.z:= (param.md.mouseray.lend.z - glmcoord1.lend.z);
-           gdb.GetCurrentDWG.UndoStack.PushChangeCommand(gdb.GetCurrentDWG.pcamera,(ptrint(@gdb.GetCurrentDWG.pcamera^.prop)-ptrint(gdb.GetCurrentDWG.pcamera)),sizeof(GDBCameraBaseProp));
+           gdb.GetCurrentDWG.UndoStack.PushChangeCommand(@gdb.GetCurrentDWG.pcamera^.prop,sizeof(GDBCameraBaseProp));
            gdb.GetCurrentDWG.pcamera.moveInLocalCSXY(tv2.x,tv2.y,ax);
            param.firstdraw := true;
            gdb.GetCurrentDWG.pcamera^.NextPosition;
@@ -1615,28 +1619,33 @@ var
 //  fv1: GDBVertex;
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DISP_ZoomFactor',lp_incPos);{$ENDIF}
-  gdb.GetCurrentDWG.UndoStack.PushChangeCommand(gdb.GetCurrentDWG.pcamera,(ptrint(@gdb.GetCurrentDWG.pcamera^.prop)-ptrint(gdb.GetCurrentDWG.pcamera)),sizeof(GDBCameraBaseProp));
-  CalcOptimalMatrix;
-  glx1 := param.md.mouseray.lbegin.x;
-  gly1 := param.md.mouseray.lbegin.y;
-  if param.projtype = ProjParalel then
-    gdb.GetCurrentDWG.pcamera^.prop.zoom := gdb.GetCurrentDWG.pcamera^.prop.zoom * x
-  else
+  //gdb.GetCurrentDWG.UndoStack.PushChangeCommand(@gdb.GetCurrentDWG.pcamera^.prop,sizeof(GDBCameraBaseProp));
+  with gdb.GetCurrentDWG.UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
   begin
-    gdb.GetCurrentDWG.pcamera^.prop.point.x := gdb.GetCurrentDWG.pcamera^.prop.point.x + (gdb.GetCurrentDWG.pcamera^.prop.look.x *
-    (gdb.GetCurrentDWG.pcamera^.zmax - gdb.GetCurrentDWG.pcamera^.zmin) * sign(x - 1) / 100);
-    gdb.GetCurrentDWG.pcamera^.prop.point.y := gdb.GetCurrentDWG.pcamera^.prop.point.y + (gdb.GetCurrentDWG.pcamera^.prop.look.y *
-    (gdb.GetCurrentDWG.pcamera^.zmax - gdb.GetCurrentDWG.pcamera^.zmin) * sign(x - 1) / 100);
-    gdb.GetCurrentDWG.pcamera^.prop.point.z := gdb.GetCurrentDWG.pcamera^.prop.point.z + (gdb.GetCurrentDWG.pcamera^.prop.look.z *
-    (gdb.GetCurrentDWG.pcamera^.zmax - gdb.GetCurrentDWG.pcamera^.zmin) * sign(x - 1) / 100);
-  end;
+        CalcOptimalMatrix;
+        glx1 := param.md.mouseray.lbegin.x;
+        gly1 := param.md.mouseray.lbegin.y;
+        if param.projtype = ProjParalel then
+          gdb.GetCurrentDWG.pcamera^.prop.zoom := gdb.GetCurrentDWG.pcamera^.prop.zoom * x
+        else
+        begin
+          gdb.GetCurrentDWG.pcamera^.prop.point.x := gdb.GetCurrentDWG.pcamera^.prop.point.x + (gdb.GetCurrentDWG.pcamera^.prop.look.x *
+          (gdb.GetCurrentDWG.pcamera^.zmax - gdb.GetCurrentDWG.pcamera^.zmin) * sign(x - 1) / 100);
+          gdb.GetCurrentDWG.pcamera^.prop.point.y := gdb.GetCurrentDWG.pcamera^.prop.point.y + (gdb.GetCurrentDWG.pcamera^.prop.look.y *
+          (gdb.GetCurrentDWG.pcamera^.zmax - gdb.GetCurrentDWG.pcamera^.zmin) * sign(x - 1) / 100);
+          gdb.GetCurrentDWG.pcamera^.prop.point.z := gdb.GetCurrentDWG.pcamera^.prop.point.z + (gdb.GetCurrentDWG.pcamera^.prop.look.z *
+          (gdb.GetCurrentDWG.pcamera^.zmax - gdb.GetCurrentDWG.pcamera^.zmin) * sign(x - 1) / 100);
+        end;
 
-  CalcOptimalMatrix;
-  mouseunproject(param.md.mouse.x, clientheight-param.md.mouse.y);
-  if param.projtype = ProjParalel then
-  begin
-  gdb.GetCurrentDWG.pcamera^.prop.point.x := gdb.GetCurrentDWG.pcamera^.prop.point.x - (glx1 - param.md.mouseray.lbegin.x);
-  gdb.GetCurrentDWG.pcamera^.prop.point.y := gdb.GetCurrentDWG.pcamera^.prop.point.y - (gly1 - param.md.mouseray.lbegin.y);
+        CalcOptimalMatrix;
+        mouseunproject(param.md.mouse.x, clientheight-param.md.mouse.y);
+        if param.projtype = ProjParalel then
+        begin
+        gdb.GetCurrentDWG.pcamera^.prop.point.x := gdb.GetCurrentDWG.pcamera^.prop.point.x - (glx1 - param.md.mouseray.lbegin.x);
+        gdb.GetCurrentDWG.pcamera^.prop.point.y := gdb.GetCurrentDWG.pcamera^.prop.point.y - (gly1 - param.md.mouseray.lbegin.y);
+        end;
+
+        ComitFromObj;
   end;
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DISP_ZoomFactor----{end}',lp_decPos);{$ENDIF}
 end;

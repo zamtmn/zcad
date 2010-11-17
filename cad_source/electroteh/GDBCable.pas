@@ -492,8 +492,9 @@ begin
   end;
   if vertexarrayInWCS.Count>1 then
   begin
-       myglbegin(GL_LINE_STRIP);
+       myglbegin(GL_lines);
        myglvertex3dv(@str21);
+       myglvertex3dv(@str22);
        myglvertex3dv(@str22);
        myglvertex3dv(@str23);
        myglend;

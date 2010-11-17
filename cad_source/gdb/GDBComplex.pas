@@ -66,7 +66,7 @@ begin
      inherited;
      ConstObjArray.SetInFrustumFromTree(infrustumactualy,visibleactualy);
 end;
-function GDBObjComplex.InRect;
+function GDBObjComplex.InRect:TInRect;
 begin
      result:=ConstObjArray.InRect;
 end;
@@ -150,7 +150,7 @@ begin
      ConstObjArray.done;
      inherited done;
 end;
-function GDBObjComplex.CalcInFrustum;
+function GDBObjComplex.CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;
 begin
      result:=ConstObjArray.calcvisible(frustum,infrustumactualy,visibleactualy);
 end;

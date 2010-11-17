@@ -19,17 +19,17 @@
 unit UGDBOpenArrayOfUCommands;
 {$INCLUDE def.inc}
 interface
-uses log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
+uses shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
      gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman,GDBSubordinated;
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
 type
-{Export+}
 TTypeCommand=(TTC_MBegin,TTC_MEnd,TTC_Command,TTC_ChangeCommand);
 PTElementaryCommand=^TElementaryCommand;
 TElementaryCommand=object(GDBaseObject)
                          function GetCommandType:TTypeCommand;virtual;
-                         procedure undo;virtual;abstract;
+                         procedure UnDo;virtual;abstract;
+                         procedure Comit;virtual;abstract;
                          destructor Done;virtual;
                    end;
 PTMarkerCommand=^TMarkerCommand;
@@ -39,29 +39,77 @@ TMarkerCommand=object(TElementaryCommand)
                      constructor init(_name:GDBString;_index:TArrayIndex);
                      function GetCommandType:TTypeCommand;virtual;
                end;
+TCustomChangeCommand=object(TElementaryCommand)
+                           Addr:GDBPointer;
+                           function GetCommandType:TTypeCommand;virtual;
+                     end;
 PTChangeCommand=^TChangeCommand;
-TChangeCommand=object(TElementaryCommand)
-                     obj:GDBPointer;
-                     fieldoffset,fieldsize:PtrInt;
+TChangeCommand=object(TCustomChangeCommand)
+                     datasize:PtrInt;
                      tempdata:GDBPointer;
-                     constructor init(_obj:GDBPointer;_fieldoffset,_fieldsize:PtrInt);
-                     function GetCommandType:TTypeCommand;virtual;
+                     constructor init(obj:GDBPointer;_datasize:PtrInt);
                      procedure undo;virtual;
+                     function GetDataTypeSize:PtrInt;virtual;
+
                end;
+generic TGChangeCommand<_T>=object(TCustomChangeCommand)
+                                      OldData,NewData:_T;
+                                      constructor Assign(const data:_T);
+
+                                      procedure UnDo;virtual;
+                                      procedure Comit;virtual;
+                                      procedure ComitFromObj;virtual;
+                                      function GetDataTypeSize:PtrInt;virtual;
+                                end;
+{$MACRO ON}
+{$DEFINE INTERFACE}
+  {$I TGChangeCommandList.inc}
+{$UNDEF INTERFACE}
+
+{$DEFINE CLASSDECLARATION}
 PGDBObjOpenArrayOfUCommands=^GDBObjOpenArrayOfUCommands;
 GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
+                                 CurrentCommand:TArrayIndex;
                                  currentcommandstartmarker:TArrayIndex;
                                  startmarkercount:GDBInteger;
                                  procedure PushStartMarker(CommandName:GDBString);
                                  procedure PushEndMarker;
-                                 procedure PushChangeCommand(_obj:GDBPointer;_fieldoffset,_fieldsize:PtrInt);
+                                 procedure PushChangeCommand(_obj:GDBPointer;_fieldsize:PtrInt);overload;
                                  procedure undo;
+                                 procedure redo;
                                  constructor init;
-                                 //procedure PushStartMarker(CommandName:GDBString);
+                                 {$I TGChangeCommandList.inc}
                            end;
-{Export-}
+{$UNDEF CLASSDECLARATION}
 implementation
 uses {UGDBDescriptor,}GDBManager,GDBEntity;
+{$DEFINE IMPLEMENTATION}
+  {$I TGChangeCommandList.inc}
+{$UNDEF IMPLEMENTATION}
+{$MACRO OFF}
+
+constructor TGChangeCommand.Assign(const data:_T);
+begin
+     Addr:=@data;
+     olddata:=data;
+     newdata:=data;
+end;
+procedure TGChangeCommand.UnDo;
+begin
+     _T(addr^):=OldData;
+end;
+procedure TGChangeCommand.Comit;
+begin
+     _T(addr^):=NewData;
+end;
+procedure TGChangeCommand.ComitFromObj;
+begin
+     NewData:=_T(addr^);
+end;
+function TGChangeCommand.GetDataTypeSize:PtrInt;
+begin
+     result:=sizeof(_T);
+end;
 function TElementaryCommand.GetCommandType:TTypeCommand;
 begin
      result:=TTC_Command;
@@ -70,22 +118,25 @@ destructor TElementaryCommand.Done;
 begin
 end;
 
-constructor TChangeCommand.init(_obj:GDBPointer;_fieldoffset,_fieldsize:PtrInt);
+constructor TChangeCommand.init(obj:GDBPointer;_datasize:PtrInt);
 begin
-     obj:=_obj;
-     fieldoffset:=_fieldoffset;
-     fieldsize:=_fieldsize;
-     GDBGetMem(pointer(tempdata),fieldsize);
-     Move(pointer(ptrint(obj)+fieldoffset)^,tempdata^,fieldsize);
+     Addr:=obj;
+     datasize:=_datasize;
+     GDBGetMem(pointer(tempdata),datasize);
+     Move(Addr^,tempdata^,datasize);
 end;
 
-function TChangeCommand.GetCommandType:TTypeCommand;
+function TCustomChangeCommand.GetCommandType:TTypeCommand;
 begin
      result:=TTC_ChangeCommand;
 end;
 procedure TChangeCommand.undo;
 begin
-     Move(tempdata^,pointer(ptrint(obj)+fieldoffset)^,fieldsize);
+     Move(tempdata^,Addr^,datasize);
+end;
+function TChangeCommand.GetDataTypeSize:PtrInt;
+begin
+     result:=self.datasize;
 end;
 
 function TMarkerCommand.GetCommandType:TTypeCommand;
@@ -114,7 +165,6 @@ begin
      currentcommandstartmarker:=self.Add(@pmarker);
      end;
 end;
-
 procedure GDBObjOpenArrayOfUCommands.PushEndMarker;
 var
    pmarker:PTMarkerCommand;
@@ -128,7 +178,7 @@ begin
      startmarkercount:=0;
      end;
 end;
-procedure GDBObjOpenArrayOfUCommands.PushChangeCommand(_obj:GDBPointer;_fieldoffset,_fieldsize:PtrInt);
+procedure GDBObjOpenArrayOfUCommands.PushChangeCommand(_obj:GDBPointer;_fieldsize:PtrInt);
 var
    pcc:PTChangeCommand;
 begin
@@ -136,32 +186,58 @@ begin
      begin
           pcc:=pointer(self.GetObject(count-1));
           if pcc^.GetCommandType=TTC_ChangeCommand then
-          if (pcc^.obj=_obj)
-          and(pcc^.fieldoffset=_fieldoffset)
-          and(pcc^.fieldsize=_fieldsize) then
+          if (pcc^.Addr=_obj)
+          and(pcc^.datasize=_fieldsize) then
                                              exit;
      end;
      GDBGetMem(pointer(pcc),sizeof(TChangeCommand));
-     pcc^.init(_obj,_fieldoffset,_fieldsize);
+     pcc^.init(_obj,_fieldsize);
+     inc(CurrentCommand);
      add(@pcc);
 end;
 procedure GDBObjOpenArrayOfUCommands.undo;
 var
    pcc:PTChangeCommand;
 begin
-     if count>0 then
+     if CurrentCommand>0 then
      begin
-          pcc:=pointer(self.GetObject(count-1));
+          pcc:=pointer(self.GetObject(CurrentCommand-1));
           pcc^.undo;
           //pcc^.done;
-          dec(count);
-     end;
+          dec(CurrentCommand);
+     end
+     else
+         shared.ShowError('Нет операций для отмены');
+
+end;
+procedure GDBObjOpenArrayOfUCommands.redo;
+var
+   pcc:PTChangeCommand;
+begin
+     if CurrentCommand<count then
+     begin
+          pcc:=pointer(self.GetObject(CurrentCommand));
+          pcc^.Comit;
+          //pcc^.done;
+          inc(CurrentCommand);
+     end
+     else
+         shared.ShowError('Нет операций для повторного применения');
 end;
 
 constructor GDBObjOpenArrayOfUCommands.init;
 begin
      inherited init({$IFDEF DEBUGBUILD}'{EF79AD53-2ECF-4848-8EDA-C498803A4188}',{$ENDIF}1000);
+     CurrentCommand:=0;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayOfUCommands.initialization');{$ENDIF}
+  {with CreateTGChangeCommand(createvertex(1,1,1))^ do
+  begin
+  newdata.x:=2;
+  end;
+  with CreateTGChangeCommand('нахуй')^ do
+  begin
+  newdata:='В пизду';
+  end;}
 end.

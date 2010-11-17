@@ -19,12 +19,11 @@
 {$IFDEF FPC}
             {$PACKRECORDS 1}
             {$MODE DELPHI}
-            {$ASSERTIONS-}
-            {$SMARTLINK+}
+            {ASSERTIONS-}
+            {SMARTLINK+}
             {$Z1}
-            {$IMPLICITEXCEPTIONS OFF}
+            {IMPLICITEXCEPTIONS OFF}
 {$ENDIF}
-
 {DEFINE REPORTMMEMORYLEAKS}
 {DEFINE DEBUGBUILD}
 {DEFINE TOTALYLOG}

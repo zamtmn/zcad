@@ -19,6 +19,7 @@ Panel UPPANEL 994,68,30,525;
     layercombobox 200,Выбор слоя
     linewcombobox 100,Выбор веса линий
     button Undo,undo.bmp,Отменить действие
+    button Redo,redo.bmp,Вернуть действие
   }
 Panel RIGHTPANEL 994,68,30,525;
   {
@@ -84,6 +85,7 @@ MainMenuItem Правка;
     Command Стереть,Erase,Del,none
     Separator
     Command Отменить??,Undo,none,none
+    Command Вернуть??,Redo,none,none
   }
 MainMenuItem Вид;
   {

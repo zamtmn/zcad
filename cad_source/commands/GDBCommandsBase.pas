@@ -784,7 +784,7 @@ begin
 end;
 function Cam_reset_com(Operands:pansichar):GDBInteger;
 begin
-  gdb.GetCurrentDWG.UndoStack.PushChangeCommand(gdb.GetCurrentDWG.pcamera,(ptrint(@gdb.GetCurrentDWG.pcamera^.prop)-ptrint(gdb.GetCurrentDWG.pcamera)),sizeof(GDBCameraBaseProp));
+  gdb.GetCurrentDWG.UndoStack.PushChangeCommand(@gdb.GetCurrentDWG.pcamera^.prop,sizeof(GDBCameraBaseProp));
   gdb.GetCurrentDWG.pcamera^.prop.point.x := 0;
   gdb.GetCurrentDWG.pcamera^.prop.point.y := 0;
   gdb.GetCurrentDWG.pcamera^.prop.point.z := 50;
@@ -812,6 +812,13 @@ begin
   redrawoglwnd;
   result:=cmd_ok;
 end;
+function Redo_com(Operands:pansichar):GDBInteger;
+begin
+  gdb.GetCurrentDWG.UndoStack.redo;
+  redrawoglwnd;
+  result:=cmd_ok;
+end;
+
 function ChangeProjType_com(Operands:pansichar):GDBInteger;
 begin
   if GDB.GetCurrentDWG.OGLwindow1.param.projtype = projparalel then
@@ -1449,6 +1456,7 @@ begin
   CreateCommandFastObjectPlugin(@CTest,'CTest',CADWG,0);
   CreateCommandFastObjectPlugin(@layer_cmd,'Layer',CADWG,0);
   CreateCommandFastObjectPlugin(@undo_com,'Undo',CADWG,0);
+  CreateCommandFastObjectPlugin(@redo_com,'Redo',CADWG,0);
 
   //Optionswindow.initxywh('',@mainformn,500,300,400,100,false);
   //Aboutwindow:=TAboutWnd.create(Application);{.initxywh('',@mainform,500,200,200,180,false);}

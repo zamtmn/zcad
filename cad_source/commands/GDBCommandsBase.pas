@@ -784,7 +784,9 @@ begin
 end;
 function Cam_reset_com(Operands:pansichar):GDBInteger;
 begin
-  gdb.GetCurrentDWG.UndoStack.PushChangeCommand(@gdb.GetCurrentDWG.pcamera^.prop,sizeof(GDBCameraBaseProp));
+  gdb.GetCurrentDWG.UndoStack.PushStartMarker('Камера в начало');
+  with gdb.GetCurrentDWG.UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
+  begin
   gdb.GetCurrentDWG.pcamera^.prop.point.x := 0;
   gdb.GetCurrentDWG.pcamera^.prop.point.y := 0;
   gdb.GetCurrentDWG.pcamera^.prop.point.z := 50;
@@ -803,6 +805,9 @@ begin
   gdb.GetCurrentDWG.pcamera^.zmax := 100000;
   gdb.GetCurrentDWG.pcamera^.fovy := 35;
   gdb.GetCurrentDWG.pcamera^.prop.zoom := 0.1;
+  ComitFromObj;
+  end;
+  gdb.GetCurrentDWG.UndoStack.PushEndMarker;
   redrawoglwnd;
   result:=cmd_ok;
 end;

@@ -1007,8 +1007,11 @@ begin
            ax.x:=-(param.md.mouseray.lend.x - glmcoord1.lend.x);
            ax.y:= (param.md.mouseray.lend.y - glmcoord1.lend.y);
            ax.z:= (param.md.mouseray.lend.z - glmcoord1.lend.z);
-           gdb.GetCurrentDWG.UndoStack.PushChangeCommand(@gdb.GetCurrentDWG.pcamera^.prop,sizeof(GDBCameraBaseProp));
+           with gdb.GetCurrentDWG.UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
+           begin
            gdb.GetCurrentDWG.pcamera.moveInLocalCSXY(tv2.x,tv2.y,ax);
+           ComitFromObj;
+           end;
            param.firstdraw := true;
            gdb.GetCurrentDWG.pcamera^.NextPosition;
            CalcOptimalMatrix;

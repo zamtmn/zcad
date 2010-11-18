@@ -38,6 +38,8 @@ TMarkerCommand=object(TElementaryCommand)
                      PrevIndex:TArrayIndex;
                      constructor init(_name:GDBString;_index:TArrayIndex);
                      function GetCommandType:TTypeCommand;virtual;
+                     procedure UnDo;virtual;
+                     procedure Comit;virtual;
                end;
 TCustomChangeCommand=object(TElementaryCommand)
                            Addr:GDBPointer;
@@ -78,6 +80,8 @@ GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
                                  procedure undo;
                                  procedure redo;
                                  constructor init;
+                                 function Add(p:GDBPointer):TArrayIndex;virtual;
+
                                  {$I TGChangeCommandList.inc}
                            end;
 {$UNDEF CLASSDECLARATION}
@@ -146,6 +150,15 @@ begin
                       else
                           result:=TTC_MBegin;
 end;
+procedure TMarkerCommand.UnDo;
+begin
+
+end;
+
+procedure TMarkerCommand.Comit;
+begin
+
+end;
 
 constructor TMarkerCommand.init(_name:GDBString;_index:TArrayIndex);
 begin
@@ -163,6 +176,7 @@ begin
      GDBGetMem(pointer(pmarker),sizeof(TMarkerCommand));
      pmarker.init(CommandName,-1);
      currentcommandstartmarker:=self.Add(@pmarker);
+     inc(CurrentCommand);
      end;
 end;
 procedure GDBObjOpenArrayOfUCommands.PushEndMarker;
@@ -175,6 +189,8 @@ begin
      GDBGetMem(pointer(pmarker),sizeof(TMarkerCommand));
      pmarker.init('EndMarker',currentcommandstartmarker);
      currentcommandstartmarker:=-1;
+     self.Add(@pmarker);
+     inc(CurrentCommand);
      startmarkercount:=0;
      end;
 end;
@@ -182,9 +198,9 @@ procedure GDBObjOpenArrayOfUCommands.PushChangeCommand(_obj:GDBPointer;_fieldsiz
 var
    pcc:PTChangeCommand;
 begin
-     if count>0 then
+     if CurrentCommand>0 then
      begin
-          pcc:=pointer(self.GetObject(count-1));
+          pcc:=pointer(self.GetObject(CurrentCommand-1));
           if pcc^.GetCommandType=TTC_ChangeCommand then
           if (pcc^.Addr=_obj)
           and(pcc^.datasize=_fieldsize) then
@@ -198,13 +214,25 @@ end;
 procedure GDBObjOpenArrayOfUCommands.undo;
 var
    pcc:PTChangeCommand;
+   mcounter:integer;
 begin
      if CurrentCommand>0 then
      begin
+          mcounter:=0;
+          repeat
           pcc:=pointer(self.GetObject(CurrentCommand-1));
-          pcc^.undo;
-          //pcc^.done;
+
+          if pcc^.GetCommandType=TTC_MEnd then
+                                              inc(mcounter)
+     else if pcc^.GetCommandType=TTC_MBegin then
+                                                begin
+                                                     dec(mcounter);
+                                                     if mcounter=0 then
+                                                     shared.HistoryOutStr('Отмена "'+PTMarkerCommand(pcc)^.Name+'"');
+                                                end
+     else pcc^.undo;
           dec(CurrentCommand);
+          until mcounter=0;
      end
      else
          shared.ShowError('Нет операций для отмены');
@@ -230,14 +258,12 @@ begin
      inherited init({$IFDEF DEBUGBUILD}'{EF79AD53-2ECF-4848-8EDA-C498803A4188}',{$ENDIF}1000);
      CurrentCommand:=0;
 end;
+function GDBObjOpenArrayOfUCommands.Add(p:GDBPointer):TArrayIndex;
+begin
+     if self.CurrentCommand<>count then
+                                       self.cleareraseobjfrom2(self.CurrentCommand);
+     result:=inherited;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayOfUCommands.initialization');{$ENDIF}
-  {with CreateTGChangeCommand(createvertex(1,1,1))^ do
-  begin
-  newdata.x:=2;
-  end;
-  with CreateTGChangeCommand('нахуй')^ do
-  begin
-  newdata:='В пизду';
-  end;}
 end.

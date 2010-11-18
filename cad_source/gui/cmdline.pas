@@ -21,7 +21,7 @@ unit cmdline;
 interface
 uses
  strproc,lclproc,
- StdCtrls,ExtCtrls,ComCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype{$ENDIF},fileutil,graphics,
+ StdCtrls,ExtCtrls,ComCtrls,Controls,Classes,menus,Forms,{IFDEF FPClcltype,$ENDIF}fileutil,graphics,
  UDMenuWnd{,ZStaticsText},gdbase{,ZPanelsNoFrame}, memman,UGDBDescriptor,math,commandline,varman,languade,
  UGDBTracePropArray,{zforms,}{ZEditsWithProcedure}{,zbasicvisible,}varmandef,{ZGUIsCT,}{ZPanelsGeneric,}
  geometry,shared{,zmemos};

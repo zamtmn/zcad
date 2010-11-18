@@ -18,16 +18,16 @@ var
 implementation
 begin
   VIEW_CommandLineH:=100;
-  VIEW_ObjInspV:=117;
+  VIEW_ObjInspV:=100;
   VIEW_ObjInspSubV:=87;
-  PATH_File0:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File1:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File2:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File3:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File4:='C:\zcad_lasstable_winapi\CAD\autosave\autosave.dxf';
-  PATH_File5:='J:\nh\термоинжиниринг\ГП1А\proj.dxf';
-  PATH_File6:='E:\work3\proj.dxf';
-  PATH_File7:='J:\nh\термоинжиниринг\ГП1А\1.dxf';
-  PATH_File8:='J:\nh\���������������\��1�\proj.dxf';
-  PATH_File9:='E:\CAD_XDXF\test2000\proj.dxf';
+  PATH_File0:='E:\andrey\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File1:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File2:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File3:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File4:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File5:='C:\zcad_lasstable_winapi\CAD\autosave\autosave.dxf';
+  PATH_File6:='J:\nh\термоинжиниринг\ГП1А\proj.dxf';
+  PATH_File7:='E:\work3\proj.dxf';
+  PATH_File8:='J:\nh\термоинжиниринг\ГП1А\1.dxf';
+  PATH_File9:='J:\nh\���������������\��1�\proj.dxf';
 end.

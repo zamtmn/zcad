@@ -28,6 +28,7 @@ GDBOpenArrayOfPObjects=object(GDBOpenArrayOfGDBPointer)
                              procedure cleareraseobj;virtual;
                              procedure eraseobj(ObjAddr:PGDBaseObject);virtual;
                              procedure cleareraseobjfrom(n:GDBInteger);virtual;
+                             procedure cleareraseobjfrom2(n:GDBInteger);virtual;
                              procedure pack;virtual;
                              function GetObject(index:GDBInteger):PGDBaseObject;
                              destructor done;virtual;
@@ -103,6 +104,23 @@ begin
        p:=iterate(ir);
   until p=nil;
   count:=0;
+end;
+procedure GDBOpenArrayOfPObjects.cleareraseobjfrom2(n:GDBInteger);
+var
+  p:PGDBaseObject;
+      ir:itrec;
+begin
+  p:=beginiterate(ir);
+  if p<>nil then
+  repeat
+       if ir.itc>n then
+                       begin
+                       p^.done;
+                       GDBFreeMem(GDBPointer(p));
+                       end;
+       p:=iterate(ir);
+  until p=nil;
+  count:=n;
 end;
 procedure GDBOpenArrayOfPObjects.eraseobj;
 var

@@ -153,13 +153,8 @@ type
 
     {LCL}
     protected
-    //procedure Pre_Char(ch:ansichar; var r:HandledMsg);virtual;
-
-    //procedure Pre_MouseDown(fwkeys:longint;x,y:GDBInteger; var r:HandledMsg);virtual;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);override;
-    //procedure Pre_MouseUp(fwkeys:longint;x,y:GDBInteger; var r:HandledMsg);virtual;
     procedure MouseUp(Button: TMouseButton; Shift:TShiftState;X, Y: Integer);override;
-    //procedure Pre_MouseWheel(fwkeys:longint;wheeldelta,x,y:GDBSmallint; var r:HandledMsg);virtual;
     function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint): Boolean;override;
     procedure EraseBackground(DC: HDC);override;
 

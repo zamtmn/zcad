@@ -241,13 +241,30 @@ end;
 procedure GDBObjOpenArrayOfUCommands.redo;
 var
    pcc:PTChangeCommand;
+   mcounter:integer;
 begin
      if CurrentCommand<count then
      begin
-          pcc:=pointer(self.GetObject(CurrentCommand));
+          {pcc:=pointer(self.GetObject(CurrentCommand));
           pcc^.Comit;
-          //pcc^.done;
+          inc(CurrentCommand);}
+          mcounter:=0;
+          repeat
+          pcc:=pointer(self.GetObject(CurrentCommand));
+
+          if pcc^.GetCommandType=TTC_MEnd then
+                                              begin
+                                              inc(mcounter);
+                                              end
+     else if pcc^.GetCommandType=TTC_MBegin then
+                                                begin
+                                                     if mcounter=0 then
+                                                     shared.HistoryOutStr('Повтор "'+PTMarkerCommand(pcc)^.Name+'"');
+                                                     dec(mcounter);
+                                                end
+     else pcc^.comit;
           inc(CurrentCommand);
+          until mcounter=0;
      end
      else
          shared.ShowError('Нет операций для повторного применения');

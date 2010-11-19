@@ -316,6 +316,7 @@ GDBOpenArrayOfPObjects=object(GDBOpenArrayOfGDBPointer)
                              procedure cleareraseobj;virtual;abstract;
                              procedure eraseobj(ObjAddr:PGDBaseObject);virtual;abstract;
                              procedure cleareraseobjfrom(n:GDBInteger);virtual;abstract;
+                             procedure cleareraseobjfrom2(n:GDBInteger);virtual;abstract;
                              procedure pack;virtual;abstract;
                              function GetObject(index:GDBInteger):PGDBaseObject;
                              destructor done;virtual;abstract;
@@ -732,8 +733,17 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
               SAVE_Auto_Interval:PGDBInteger;(*'Время между автосохраненьями'*)
               SAVE_Auto_FileName:PGDBString;(*'Файл автосохранения'*)
         end;
+  tcompileinfo=record
+                     SYS_Compiler:GDBString;(*'Компилятор'*)(*oi_readonly*)
+                     SYS_CompilerVer:GDBString;(*'Версия компилятора'*)(*oi_readonly*)
+                     SYS_CompilerTargetCPU:GDBString;(*'Целевой процессор'*)(*oi_readonly*)
+                     SYS_CompilerTargetOS:GDBString;(*'Целевая операционная система'*)(*oi_readonly*)
+                     SYS_CompileDate:GDBString;(*'Дата компиляции'*)(*oi_readonly*)
+                     SYS_CompileTime:GDBString;(*'Время компиляции'*)(*oi_readonly*)
+               end;
   tsys=record
              SYS_Version:PGDBString;(*'Версия программы'*)(*oi_readonly*)
+             SSY_CompileInfo:tcompileinfo;(*'Информация о сборке'*)(*oi_readonly*)
              SYS_RunTime:PGDBInteger;(*'Время работы программы'*)(*oi_readonly*)
              SYS_SystmGeometryColor:PGDBInteger;(*'Вспомогательный цвет'*)
              SYS_IsHistoryLineCreated:PGDBBoolean;(*'Окно истории создано'*)(*oi_readonly*)

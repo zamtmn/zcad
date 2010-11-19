@@ -203,7 +203,7 @@ begin
        end;
      end;}
 
-     MyVersion:='0.9.7 Ревизия SVN:'+RevisionStr+' от '+{$I %DATE%}+' FPC ver '+{$I %FPCVERSION%};
+     MyVersion:='0.9.7 Ревизия SVN:'+RevisionStr;
      result.versionstring:=MyVersion;
 
      ts:=GetPredStr(MyVersion,'.');

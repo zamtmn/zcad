@@ -61,7 +61,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-        source.add(@p);  //-----------------//-----------
+        source.add(@p^);  //-----------------//-----------
         p:=iterate(ir);
   until p=nil;
   result:=count;

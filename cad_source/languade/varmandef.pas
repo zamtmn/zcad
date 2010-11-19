@@ -212,8 +212,18 @@ UserTypeDescriptor=object(GDBaseObject)
               SAVE_Auto_Interval:PGDBInteger;(*'Время между автосохраненьями'*)
               SAVE_Auto_FileName:PGDBString;(*'Файл автосохранения'*)
         end;
+  tcompileinfo=record
+                     SYS_Compiler:GDBString;(*'Компилятор'*)(*oi_readonly*)
+                     SYS_CompilerVer:GDBString;(*'Версия компилятора'*)(*oi_readonly*)
+                     SYS_CompilerTargetCPU:GDBString;(*'Целевой процессор'*)(*oi_readonly*)
+                     SYS_CompilerTargetOS:GDBString;(*'Целевая операционная система'*)(*oi_readonly*)
+                     SYS_CompileDate:GDBString;(*'Дата компиляции'*)(*oi_readonly*)
+                     SYS_CompileTime:GDBString;(*'Время компиляции'*)(*oi_readonly*)
+               end;
+
   tsys=record
              SYS_Version:PGDBString;(*'Версия программы'*)(*oi_readonly*)
+             SSY_CompileInfo:tcompileinfo;(*'Информация о сборке'*)(*oi_readonly*)
              SYS_RunTime:PGDBInteger;(*'Время работы программы'*)(*oi_readonly*)
              SYS_SystmGeometryColor:PGDBInteger;(*'Вспомогательный цвет'*)
              SYS_IsHistoryLineCreated:PGDBBoolean;(*'Окно истории создано'*)(*oi_readonly*)
@@ -414,5 +424,11 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('varmandef.initialization');{$ENDIF}
   DecimalSeparator := '.';
+  SysVar.SYS.SSY_CompileInfo.SYS_Compiler:='Free Pascal Compiler (FPC)';
+  SysVar.SYS.SSY_CompileInfo.SYS_CompilerVer:={$I %FPCVERSION%};
+  SysVar.SYS.SSY_CompileInfo.SYS_CompilerTargetCPU:={$I %FPCTARGETCPU%};
+  SysVar.SYS.SSY_CompileInfo.SYS_CompilerTargetOS:={$I %FPCTARGETOS%};
+  SysVar.SYS.SSY_CompileInfo.SYS_CompileDate:={$I %DATE%};
+  SysVar.SYS.SSY_CompileInfo.SYS_CompileTime:={$I %TIME%};
 end.
 

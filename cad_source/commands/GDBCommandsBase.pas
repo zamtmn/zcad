@@ -422,10 +422,11 @@ begin
      mem.SaveToFile(sysparam.programpath+'rtl'+PathDelim+'savedvar.pas');
      mem.done;
 
-
-     application.terminate;
      historyout('   Вот и всё бля...............');
      result:=cmd_ok;
+
+     if operands<>'noexit' then
+                               application.terminate;
 end;
 function CloseDWG_com(Operands:pansichar):GDBInteger;
 var

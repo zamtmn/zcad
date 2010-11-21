@@ -47,6 +47,7 @@ GDBfont=object(GDBNamedObject)
 
     constructor initnul;
     constructor init(n:GDBString);
+    destructor done;virtual;
     function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
     function GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
     function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
@@ -58,6 +59,14 @@ constructor GDBfont.initnul;
 begin
      inherited;
      pointer(fontfile):=nil;
+end;
+destructor GDBfont.done;
+begin
+     fontfile:='';
+     Internalname:='';
+     SHXdata.done;
+     unisymbolinfo.{FreeAnd}Done;
+     inherited;
 end;
 constructor GDBfont.Init;
 var i:integer;

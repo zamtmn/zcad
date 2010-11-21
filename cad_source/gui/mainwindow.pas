@@ -51,6 +51,7 @@ type
                     SystemTimer: TTimer;
 
                     procedure AfterConstruction; override;
+                    destructor Destroy;override;
 
                     procedure draw;
 
@@ -110,7 +111,7 @@ var
   oldlongprocess:integer;
 implementation
 
-uses Objinsp{,optionswnd, Tedit_form, MTedit_form};
+uses {GDBCommandsBase,}Objinsp{,optionswnd, Tedit_form, MTedit_form};
 
 procedure TMainFormN.processfilehistory(filename:GDBString);
 var i,j,k:integer;
@@ -151,7 +152,9 @@ end;
 
 procedure TMainFormN.asynccloseapp(Data: PtrInt);
 begin
-     commandmanager.executecommand('Quit');
+     commandmanager.executecommand('Quit(noexit)');
+     application.terminate;
+     //quit_com('');
 end;
 
 procedure TMainFormN.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -729,14 +732,14 @@ begin
                           OGL.GDBActivate;
 end;
 
-{destructor TMainForm.done;
+destructor TMainFormN.Destroy;
 begin
-     pmenu^.done;
-     pdownpanel.done;
-     prightpanel.done;
+     //pmenu^.done;
+     //pdownpanel.done;
+     //prightpanel.done;
      inherited;
-     GDBFreeMem(pointer(pmenu));
-end;}
+     //GDBFreeMem(pointer(pmenu));
+end;
 
 procedure TMainFormN.myKeyPress{(var Key: char)}(Sender: TObject; var Key: Word; Shift: TShiftState);
 //procedure TMainForm.Pre_Char;

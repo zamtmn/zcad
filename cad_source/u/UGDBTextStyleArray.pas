@@ -51,6 +51,7 @@ uses UGDBDescriptor,io,log;
 procedure GDBTextStyleArray.freeelement;
 begin
   PGDBTextStyle(p).name:='';
+  PGDBTextStyle(p).dxfname:='';
 end;
 constructor GDBTextStyleArray.initnul;
 begin

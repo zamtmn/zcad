@@ -83,7 +83,7 @@ type
     procedure rebuild;
     procedure Notify(Sender: TObject;Command:TMyNotifyCommand); virtual;
     procedure createpda;
-    destructor done; virtual;
+    destructor Destroy; Override;
     procedure createscrollbars;virtual;
     procedure scroll;virtual;
     procedure AfterConstruction; override;
@@ -152,12 +152,11 @@ begin
   pda.init({$IFDEF DEBUGBUILD}'{ED044410-8C08-4113-B2FB-3259017CBF04}',{$ENDIF}100);
 end;
 
-destructor TGDBobjinsp.done;
+destructor TGDBobjinsp.Destroy;
 begin
     if peditor<>nil then
     begin
-      //------------------------------------------------------------peditor^.done;
-      //------------------------------------------------------------gdbfreemem(pointer(peditor));
+         peditor.Free;
     end;
   inherited;
   pda.cleareraseobj;

@@ -1425,6 +1425,9 @@ begin
   tzoom:=(wcsRTF.x-wcsLBN.x)/clientwidth;
   tpz:=(wcsRTF.y-wcsLBN.y)/clientheight;
 
+  with gdb.GetCurrentDWG.UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
+  begin
+
   if tpz>tzoom then tzoom:=tpz;
 
   tzoom:=tzoom-gdb.GetCurrentDWG.pcamera^.prop.zoom;
@@ -1472,6 +1475,8 @@ begin
     if param.seldesc.Frame1.y < 0 then param.seldesc.Frame1.y := 1
     else if param.seldesc.Frame1.y > (clientheight - 1) then param.seldesc.Frame1.y := clientheight - 1;
   end;
+  end;
+  ComitFromObj;
   end;
   //paint;
   draw;

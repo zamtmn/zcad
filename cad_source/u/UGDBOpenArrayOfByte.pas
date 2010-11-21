@@ -54,6 +54,7 @@ GDBOpenArrayOfByte=object(GDBOpenArray)
                       function Seek(pos:GDBInteger):integer;
                       function notEOF:GDBBoolean;
                       function readtoparser(break:GDBString): GDBString;
+                      destructor done;virtual;
                    end;
 {Export-}
 procedure WriteString_EOL(h: GDBInteger; s: GDBString);
@@ -65,6 +66,12 @@ begin
      //writeln(s);
   FileWrite(h, s[1], length(s));
 end;
+destructor GDBOpenArrayOfByte.done;
+begin
+     name:='';
+     inherited;
+end;
+
 procedure GDBOpenArrayOfByte.TXTAddGDBStringEOL;
 begin
      s:=s+eol;

@@ -629,7 +629,7 @@ begin
   if button = 1 then
   begin
     begin
-      gdb.GetCurrentDWG.UndoStack.PushStartMarker('Редактирование на чертежк');
+      gdb.GetCurrentDWG.UndoStack.PushStartMarker('Редактирование на чертеже');
       gdb.GetCurrentDWG.SelObjArray.modifyobj(dist,wc,true,pobj);
       gdb.GetCurrentDWG.UndoStack.PushEndMarker;
       gdb.GetCurrentDWG.SelObjArray.resprojparam;

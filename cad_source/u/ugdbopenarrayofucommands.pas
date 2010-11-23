@@ -321,7 +321,7 @@ end;
 
 constructor GDBObjOpenArrayOfUCommands.init;
 begin
-     inherited init({$IFDEF DEBUGBUILD}'{EF79AD53-2ECF-4848-8EDA-C498803A4188}',{$ENDIF}1000);
+     inherited init({$IFDEF DEBUGBUILD}'{EF79AD53-2ECF-4848-8EDA-C498803A4188}',{$ENDIF}1);
      CurrentCommand:=0;
 end;
 function GDBObjOpenArrayOfUCommands.Add(p:GDBPointer):TArrayIndex;

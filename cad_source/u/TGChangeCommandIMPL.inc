@@ -29,8 +29,11 @@ begin
                                                     exit;
   end;
   result:=CreateTGChangeCommand(data);
+  {if CurrentCommand<>count then
+                               self.cleareraseobjfrom2(CurrentCommand);}
+
   add(@result);
   inc(CurrentCommand);
 end;
 
-{$ENDIF}
+{$ENDIF}

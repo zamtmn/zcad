@@ -67,7 +67,7 @@ begin
   result := -1;
   if parray=nil then
                     createarray;
-  if count = max then exit;
+  if count = max then {exit}grow;
   newp:=pGDBPointer(pobj)^;
   if count >0 then
   begin

@@ -635,7 +635,7 @@ begin
                              Radius:=Radius;
                          end;
             oS_q3..os_q0:begin
-                              Radius:=Vertexlength(rtmod.point.worldcoord, rtmod.wc);
+                              Radius:=Vertexlength(Local.p_insert {rtmod.point.worldcoord}, rtmod.wc);
                          end;
           end;
 end;

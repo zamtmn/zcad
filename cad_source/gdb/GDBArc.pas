@@ -54,7 +54,8 @@ GDBObjArc=object(GDBObjPlain)
                  function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
                  function getsnap(var osp:os_record):GDBBoolean;virtual;
                  function beforertmodify:GDBPointer;virtual;
-                 procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);virtual;
+                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
+                 function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
                  destructor done;virtual;
@@ -502,64 +503,76 @@ begin
      tarcrtmodify(result^).p3.x:=q2.x;
      tarcrtmodify(result^).p3.y:=q2.y;
 end;
-procedure GDBObjARC.rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);
+function GDBObjARC.IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;
+begin
+     result:=true;
+end;
+procedure GDBObjARC.rtmodifyonepoint(rtmod:TRTModifyData);
 var a,b,c,d,e,f,g,p_x,p_y,rr:GDBDouble;
     tv:gdbvertex2d;
+    ptdata:tarcrtmodify;
 begin
-          case point.pointtype of
+     ptdata.p1.x:=q0.x;
+     ptdata.p1.y:=q0.y;
+     ptdata.p2.x:=q1.x;
+     ptdata.p2.y:=q1.y;
+     ptdata.p3.x:=q2.x;
+     ptdata.p3.y:=q2.y;
+
+          case rtmod.point.pointtype of
                os_begin:begin
-                             tarcrtmodify(ptdata^).p1.x:=q0.x+dist.x;
-                             tarcrtmodify(ptdata^).p1.y:=q0.y+dist.y;
+                             ptdata.p1.x:=q0.x+rtmod.dist.x;
+                             ptdata.p1.y:=q0.y+rtmod.dist.y;
                         end;
                os_midle:begin
-                             tarcrtmodify(ptdata^).p2.x:=q1.x+dist.x;
-                             tarcrtmodify(ptdata^).p2.y:=q1.y+dist.y;
+                             ptdata.p2.x:=q1.x+rtmod.dist.x;
+                             ptdata.p2.y:=q1.y+rtmod.dist.y;
                       end;
                os_end:begin
-                             tarcrtmodify(ptdata^).p3.x:=q2.x+dist.x;
-                             tarcrtmodify(ptdata^).p3.y:=q2.y+dist.y;
+                             ptdata.p3.x:=q2.x+rtmod.dist.x;
+                             ptdata.p3.y:=q2.y+rtmod.dist.y;
                         end;
           end;
-        A:= tarcrtmodify(ptdata^).p2.x - tarcrtmodify(ptdata^).p1.x;
-        B:= tarcrtmodify(ptdata^).p2.y - tarcrtmodify(ptdata^).p1.y;
-        C:= tarcrtmodify(ptdata^).p3.x - tarcrtmodify(ptdata^).p1.x;
-        D:= tarcrtmodify(ptdata^).p3.y - tarcrtmodify(ptdata^).p1.y;
+        A:= ptdata.p2.x - ptdata.p1.x;
+        B:= ptdata.p2.y - ptdata.p1.y;
+        C:= ptdata.p3.x - ptdata.p1.x;
+        D:= ptdata.p3.y - ptdata.p1.y;
 
-        E:= A*(tarcrtmodify(ptdata^).p1.x + tarcrtmodify(ptdata^).p2.x) + B*(tarcrtmodify(ptdata^).p1.y + tarcrtmodify(ptdata^).p2.y);
-        F:= C*(tarcrtmodify(ptdata^).p1.x + tarcrtmodify(ptdata^).p3.x) + D*(tarcrtmodify(ptdata^).p1.y + tarcrtmodify(ptdata^).p3.y);
+        E:= A*(ptdata.p1.x + ptdata.p2.x) + B*(ptdata.p1.y + ptdata.p2.y);
+        F:= C*(ptdata.p1.x + ptdata.p3.x) + D*(ptdata.p1.y + ptdata.p3.y);
 
-        G:= 2*(A*(tarcrtmodify(ptdata^).p3.y - tarcrtmodify(ptdata^).p2.y)-B*(tarcrtmodify(ptdata^).p3.x - tarcrtmodify(ptdata^).p2.x));
+        G:= 2*(A*(ptdata.p3.y - ptdata.p2.y)-B*(ptdata.p3.x - ptdata.p2.x));
         if abs(g)>eps then
         begin
         p_x:= (D*E - B*F) / G;
         p_y:= (A*F - C*E) / G;
-        rr:= sqrt(sqr(tarcrtmodify(ptdata^).p1.x - p_x) + sqr(tarcrtmodify(ptdata^).p1.y - p_y));
-        pgdbobjarc(tobj)^.r:=rr;
-        pgdbobjarc(tobj)^.Local.p_insert.x:=p_x;
-        pgdbobjarc(tobj)^.Local.p_insert.y:=p_y;
-        pgdbobjarc(tobj)^.Local.p_insert.z:=0;
+        rr:= sqrt(sqr(ptdata.p1.x - p_x) + sqr(ptdata.p1.y - p_y));
+        r:=rr;
+        Local.p_insert.x:=p_x;
+        Local.p_insert.y:=p_y;
+        Local.p_insert.z:=0;
         tv.x:=p_x;
         tv.y:=p_y;
-        pgdbobjarc(tobj)^.startangle:=vertexangle(tv,tarcrtmodify(ptdata^).p1);
-        pgdbobjarc(tobj)^.endangle:=vertexangle(tv,tarcrtmodify(ptdata^).p3);
-        if pgdbobjarc(tobj)^.startangle>pgdbobjarc(tobj)^.endangle then
+        startangle:=vertexangle(tv,ptdata.p1);
+        endangle:=vertexangle(tv,ptdata.p3);
+        if startangle>endangle then
         begin
-                                                                                      rr:=pgdbobjarc(tobj)^.startangle;
-                                                                                      pgdbobjarc(tobj)^.startangle:=pgdbobjarc(tobj)^.endangle;
-                                                                                      pgdbobjarc(tobj)^.endangle:=rr
+                                                                                      rr:=startangle;
+                                                                                      startangle:=endangle;
+                                                                                      endangle:=rr
         end;
-        rr:=vertexangle(tv,tarcrtmodify(ptdata^).p2);
-        if (rr>pgdbobjarc(tobj)^.startangle) and (rr<pgdbobjarc(tobj)^.endangle) then
+        rr:=vertexangle(tv,ptdata.p2);
+        if (rr>startangle) and (rr<endangle) then
                                                                                  begin
                                                                                  end
                                                                              else
                                                                                  begin
-                                                                                      rr:=pgdbobjarc(tobj)^.startangle;
-                                                                                      pgdbobjarc(tobj)^.startangle:=pgdbobjarc(tobj)^.endangle;
-                                                                                      pgdbobjarc(tobj)^.endangle:=rr
+                                                                                      rr:=startangle;
+                                                                                      startangle:=endangle;
+                                                                                      endangle:=rr
                                                                                  end;
-        pgdbobjarc(tobj)^.format;
-        pgdbobjarc(tobj)^.renderfeedback;
+        format;
+        renderfeedback;
         end;
 
 end;

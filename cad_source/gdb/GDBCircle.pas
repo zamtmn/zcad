@@ -64,7 +64,8 @@ GDBObjCircle=object(GDBObjWithLocalCS)
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  function beforertmodify:GDBPointer;virtual;
-                 procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);virtual;
+                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
+                 function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
 
                  function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
                  destructor done;virtual;
@@ -608,18 +609,33 @@ begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{AC2C102F-944D-4CF8-A111-0DB5CCFB51C8}',{$ENDIF}result,sizeof(tcirclertmodify));
      fillchar(result^,sizeof(tcirclertmodify),0);
 end;
-procedure GDBObjCircle.rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);
+function GDBObjCircle.IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;
 begin
-          case point.pointtype of
+     result:=false;
+  case point.pointtype of
+       os_center:begin
+                      if not ptcirclertmodify(p).p_insert then
+                                                              result:=true;
+                      ptcirclertmodify(p).p_insert:=true;
+                 end;
+    oS_q3..os_q0:begin
+                      if (not ptcirclertmodify(p).r)and
+                         (not ptcirclertmodify(p).p_insert)then
+                                                               result:=true;
+                      ptcirclertmodify(p).r:=true;
+                 end;
+  end;
+
+end;
+procedure GDBObjCircle.rtmodifyonepoint(rtmod:TRTModifyData);
+begin
+          case rtmod.point.pointtype of
                os_center:begin
-                             pgdbobjcircle(tobj)^.Local.p_insert:=VertexAdd(Local.p_insert, dist);
-                             pgdbobjcircle(tobj)^.Radius:=Radius;
-                             ptcirclertmodify(ptdata).p_insert:=true;
+                             Local.p_insert:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+                             Radius:=Radius;
                          end;
             oS_q3..os_q0:begin
-                              if (not ptcirclertmodify(ptdata).r)and(not ptcirclertmodify(ptdata).p_insert) then
-                                            pgdbobjcircle(tobj)^.Radius:=Vertexlength(Local.p_insert, wc);
-                              ptcirclertmodify(ptdata).r:=true;
+                              Radius:=Vertexlength(rtmod.point.worldcoord, rtmod.wc);
                          end;
           end;
 end;

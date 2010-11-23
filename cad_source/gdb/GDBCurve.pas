@@ -43,7 +43,7 @@ GDBObjCurve=object(GDBObj3d)
                  procedure rtsave(refp:GDBPointer);virtual;
                  procedure RenderFeedback;virtual;
                  function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
-                 procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);virtual;
+                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  function getsnap(var osp:os_record):GDBBoolean;virtual;
@@ -417,15 +417,15 @@ begin
                                   end;
    result:=VertexArrayInWCS.onmouse(mf);
 end;
-procedure GDBObjCurve.rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);
+procedure GDBObjCurve.rtmodifyonepoint(rtmod:TRTModifyData);
 var vertexnumber:GDBInteger;
 begin
-     vertexnumber:=abs(point^.pointtype-os_polymin);
+     vertexnumber:=abs(rtmod.point.pointtype-os_polymin);
      //pdesc.worldcoord:=PGDBArrayVertex(vertexarray.parray)^[vertexnumber];
      //pdesc.dispcoord.x:=round(PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].x);
      //pdesc.dispcoord.y:=round(poglwnd^.height-PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].y);
 
-     PGDBArrayVertex(pgdbobjcurve(tobj)^.vertexarrayinocs.parray)^[vertexnumber]:=VertexAdd(PGDBArrayVertex(VertexArrayInWCS.parray)^[vertexnumber], dist);
+     PGDBArrayVertex(vertexarrayinocs.parray)^[vertexnumber]:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
 end;
 procedure GDBObjCurve.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 var vertexnumber:GDBInteger;

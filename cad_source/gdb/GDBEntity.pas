@@ -107,12 +107,14 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                     procedure select;virtual;
                     procedure remapcontrolpoints(pp:PGDBControlPointArray);virtual;
-                    procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
-                    procedure rtmodifyonepoint(point:PControlPointDesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);virtual;abstract;
+                    //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
+                    procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;abstract;
                     procedure transform(t_matrix:PDMatrix4D);virtual;
                     procedure remaponecontrolpoint(pdesc:PControlPointDesc);virtual;abstract;
                     function beforertmodify:GDBPointer;virtual;
                     procedure afterrtmodify(p:GDBPointer);virtual;
+                    function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
+                    procedure clearrtmodify(p:GDBPointer);virtual;
                     function getowner:PGDBObjSubordinated;virtual;
                     function getmatrix:PDMatrix4D;virtual;
                     function getownermatrix:PDMatrix4D;virtual;
@@ -787,7 +789,7 @@ function GDBObjEntity.beforertmodify;
 begin
      result:=nil;
 end;
-procedure GDBObjEntity.rtmodify;
+(*procedure GDBObjEntity.rtmodify;
 var i:GDBInteger;
     point:pcontrolpointdesc;
     p:GDBPointer;
@@ -851,17 +853,22 @@ begin
 
 
                //geometry.NormalizeVertex(tt)
+
                t:=VectorTransform3D(dist,m);
-               rtmodifyonepoint(point,PSelectedObjDesc(md).ptempobj,VectorTransform3D(dist,m),VectorTransform3D(wc,m),p);
                if save then
-                           point.selected:=false;
+                           begin
+                                rtmodifyonepoint(point,@self,VectorTransform3D(dist,m),VectorTransform3D(wc,m),p);
+                                point.selected:=false;
+                           end
+                       else
+                           rtmodifyonepoint(point,PSelectedObjDesc(md).ptempobj,VectorTransform3D(dist,m),VectorTransform3D(wc,m),p);
           end;
           inc(point);
      end;
      if save then
      begin
-          (PSelectedObjDesc(md).ptempobj).rtsave(@self);
-          //format;
+          //--------------(PSelectedObjDesc(md).ptempobj).rtsave(@self);
+
           PGDBObjGenericWithSubordinated(bp.owner)^.ImEdited(@self,bp.PSelfInOwnerArray);
           PSelectedObjDesc(md).ptempobj^.done;
           GDBFreeMem(GDBPointer(PSelectedObjDesc(md).ptempobj));
@@ -874,10 +881,21 @@ begin
      end;
      afterrtmodify(p);
 end;
+*)
+procedure GDBObjEntity.clearrtmodify(p:GDBPointer);
+begin
+
+end;
+
 procedure GDBObjEntity.afterrtmodify;
 begin
      if p<>nil then GDBFreeMem(p);
 end;
+function GDBObjEntity.IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;
+begin
+     result:=true;
+end;
+
 procedure GDBObjEntity.transform;
 begin
 end;

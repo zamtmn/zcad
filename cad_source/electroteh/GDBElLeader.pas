@@ -31,7 +31,7 @@ GDBObjElLeader=object(GDBObjComplex)
             function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
             procedure RenderFeedback;virtual;
             procedure addcontrolpoints(tdesc:GDBPointer);virtual;
-            procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);virtual;
+            procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
             function beforertmodify:GDBPointer;virtual;
             procedure select;virtual;
             procedure Format;virtual;
@@ -403,9 +403,9 @@ function GDBObjElLeader.beforertmodify;
 begin
      result:=mainline.beforertmodify;
 end;
-procedure GDBObjElLeader.rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);
+procedure GDBObjElLeader.rtmodifyonepoint(rtmod:TRTModifyData);
 begin
-     mainline.rtmodifyonepoint(point,tobj,dist,wc,ptdata);
+     mainline.rtmodifyonepoint(rtmod);
 end;
 procedure GDBObjElLeader.addcontrolpoints(tdesc:GDBPointer);
 //var pdesc:controlpointdesc;

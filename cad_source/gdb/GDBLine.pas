@@ -62,7 +62,9 @@ GDBObjLine=object(GDBObj3d)
                 destructor done;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                   function beforertmodify:GDBPointer;virtual;
-                 procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);virtual;
+                  procedure clearrtmodify(p:GDBPointer);virtual;
+                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
+                 function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure transform(t_matrix:PDMatrix4D);virtual;
                   function jointoline(pl:pgdbobjline):GDBBoolean;virtual;
@@ -699,26 +701,54 @@ end;
 function GDBObjLine.beforertmodify;
 begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{D2E91E60-41CC-45FE-AC5E-CAEC5013C0ED}',{$ENDIF}result,sizeof(tlinertmodify));
-     fillchar(result^,sizeof(tlinertmodify),0);
+     clearrtmodify(result);
 end;
-procedure GDBObjLine.rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);
+procedure GDBObjLine.clearrtmodify(p:GDBPointer);
 begin
-          case point.pointtype of
+     fillchar(p^,sizeof(tlinertmodify),0);
+end;
+function GDBObjLine.IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;
+begin
+     result:=false;
+  case point.pointtype of
+       os_begin:begin
+                     if not ptlinertmodify(p)^.lbegin then
+                                                               result:=true;
+                     ptlinertmodify(p)^.lbegin:=true;
+                end;
+       os_end:begin
+                     if not ptlinertmodify(p)^.lend then
+                                                             result:=true;
+                     ptlinertmodify(p)^.lend:=true;
+                end;
+       os_midle:begin
+                     if (not ptlinertmodify(p)^.lbegin)
+                     and (not ptlinertmodify(p)^.lend) then
+                                                               result:=true;
+                     ptlinertmodify(p)^.lbegin:=true;
+                     ptlinertmodify(p)^.lend:=true;
+                end;
+  end;
+
+end;
+
+procedure GDBObjLine.rtmodifyonepoint(rtmod:TRTModifyData);
+var
+    tv,tv2:GDBVERTEX;
+begin
+          case rtmod.point.pointtype of
                os_begin:begin
-                             if not ptlinertmodify(ptdata)^.lbegin then pgdbobjline(tobj)^.CoordInOCS.lbegin:=VertexAdd(CoordInOCS.lBegin, dist);
-                             ptlinertmodify(ptdata)^.lbegin:=true;
-                             if not ptlinertmodify(ptdata)^.lend then pgdbobjline(tobj)^.CoordInOCS.lend:=CoordInOCS.lend;
+                             CoordInOCS.lbegin:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
                         end;
                os_end:begin
-                             if not ptlinertmodify(ptdata)^.lend then pgdbobjline(tobj)^.CoordInOCS.lend:=VertexAdd(CoordInOCS.lend, dist);
-                             ptlinertmodify(ptdata)^.lend:=true;
-                             if not ptlinertmodify(ptdata)^.lbegin then pgdbobjline(tobj)^.CoordInOCS.lbegin:=CoordInOCS.lbegin;
-                        end;
+                           CoordInOCS.lend:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+                      end;
                os_midle:begin
-                             pgdbobjline(tobj)^.CoordInOCS.lbegin:=VertexAdd(CoordInOCS.lBegin, dist);
-                             pgdbobjline(tobj)^.CoordInOCS.lend:=VertexAdd(CoordInOCS.lend, dist);
-                             ptlinertmodify(ptdata)^.lbegin:=true;
-                             ptlinertmodify(ptdata)^.lend:=true;
+                             tv:=geometry.VertexSub(CoordInOCS.lend,CoordInOCS.lbegin);
+                             tv:=geometry.VertexMulOnSc(tv,0.5);
+                             tv2:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+                             CoordInOCS.lbegin:=VertexSub(tv2, tv);
+                             CoordInOCS.lend:=VertexAdd(tv2,tv);
                         end;
           end;
 
@@ -748,6 +778,13 @@ var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{4CBC9A73-A88D-443B-B925-2F0611D82AB0}',{$ENDIF}3);
           pdesc.selected:=false;
+
+          pdesc.pointtype:=os_midle;
+          pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
+          pdesc.dispcoord.x:=round(PProjPoint[4].x);
+          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PProjPoint[4].y);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+
           pdesc.pointtype:=os_begin;
           pdesc.worldcoord:=CoordInWCS.lbegin;
           pdesc.dispcoord.x:=round(PProjPoint[0].x);
@@ -758,12 +795,6 @@ begin
           pdesc.worldcoord:=CoordInWCS.lend;
           pdesc.dispcoord.x:=round(PProjPoint[1].x);
           pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PProjPoint[1].y);
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
-
-          pdesc.pointtype:=os_midle;
-          pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
-          pdesc.dispcoord.x:=round(PProjPoint[4].x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PProjPoint[4].y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 end;
 function GDBObjLine.InRect;

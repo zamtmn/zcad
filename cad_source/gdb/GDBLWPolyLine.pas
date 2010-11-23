@@ -49,7 +49,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  procedure feedbackinrect;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
-                 procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);virtual;
+                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
                  procedure getoutbound;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
@@ -142,15 +142,15 @@ begin
   end;
   //PGDBObjLWPolyline(refp)^.format;
 end;
-procedure GDBObjLWpolyline.rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);
+procedure GDBObjLWpolyline.rtmodifyonepoint(rtmod:TRTModifyData);
 var vertexnumber:GDBInteger;
     tv:gdbvertex;
 begin
-     vertexnumber:=abs(point^.pointtype-os_polymin);
-     tv:=VertexAdd(PGDBArrayVertex(Vertex3D_in_WCS_Array.parray)^[vertexnumber], dist);
+     vertexnumber:=abs(rtmod.point.pointtype-os_polymin);
+     tv:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
      geometry.VectorTransform3D(tv,self.ObjMatrix);
-     PGDBArrayVertex2D(PGDBObjLWPolyline(tobj)^.Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=tv.x;
-     PGDBArrayVertex2D(PGDBObjLWPolyline(tobj)^.Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=tv.y;
+     PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=tv.x;
+     PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=tv.y;
 end;
 procedure GDBObjLWpolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 var vertexnumber:GDBInteger;

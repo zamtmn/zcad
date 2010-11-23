@@ -43,7 +43,7 @@ GDBObjPoint=object(GDBObj3d)
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
-                 procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);virtual;
+                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
                  function GetObjTypeName:GDBString;virtual;
@@ -248,11 +248,11 @@ begin
           pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-ProjPoint.y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 end;
-procedure GDBObjPoint.rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);
+procedure GDBObjPoint.rtmodifyonepoint(rtmod:TRTModifyData);
 begin
-          case point.pointtype of
+          case rtmod.point.pointtype of
                os_point:begin
-                             pgdbobjpoint(tobj)^.P_insertInOCS:=VertexAdd(P_insertInOCS, dist);
+                             P_insertInOCS:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
                         end;
           end;
 end;

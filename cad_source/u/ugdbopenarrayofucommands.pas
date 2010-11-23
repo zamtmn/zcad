@@ -56,16 +56,32 @@ TChangeCommand=object(TCustomChangeCommand)
                end;
 generic TGChangeCommand<_T>=object(TCustomChangeCommand)
                                       OldData,NewData:_T;
-                                      constructor Assign(const data:_T);
+                                      constructor Assign(var data:_T);
 
                                       procedure UnDo;virtual;
                                       procedure Comit;virtual;
                                       procedure ComitFromObj;virtual;
                                       function GetDataTypeSize:PtrInt;virtual;
                                 end;
+TUndableMethod=procedure of object;
+generic TGObjectChangeCommand<_T>=object(TCustomChangeCommand)
+                                      {type
+                                          TCangeMethod=procedure(data:_T)of object;
+                                      private}
+                                      DoData,UnDoData:_T;
+                                      method:tmethod;
+                                      constructor Assign(var _dodata:_T;_method:tmethod);
+                                      procedure StoreUndoData(var _undodata:_T);virtual;
+
+                                      procedure UnDo;virtual;
+                                      procedure Comit;virtual;
+                                      //procedure ComitFromObj;virtual;
+                                      //function GetDataTypeSize:PtrInt;virtual;
+                                  end;
 {$MACRO ON}
 {$DEFINE INTERFACE}
   {$I TGChangeCommandList.inc}
+  {$I TGObjectChangeCommandList.inc}
 {$UNDEF INTERFACE}
 
 {$DEFINE CLASSDECLARATION}
@@ -83,16 +99,43 @@ GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
                                  function Add(p:GDBPointer):TArrayIndex;virtual;
 
                                  {$I TGChangeCommandList.inc}
+                                 {$I TGObjectChangeCommandList.inc}
                            end;
 {$UNDEF CLASSDECLARATION}
 implementation
-uses {UGDBDescriptor,}GDBManager,GDBEntity;
+uses UGDBDescriptor,GDBManager,GDBEntity;
 {$DEFINE IMPLEMENTATION}
   {$I TGChangeCommandList.inc}
+  {$I TGObjectChangeCommandList.inc}
 {$UNDEF IMPLEMENTATION}
 {$MACRO OFF}
+constructor TGObjectChangeCommand.Assign(var _dodata:_T;_method:tmethod);
+begin
+     //Addr:=@data;
+     DoData:=_DoData;
+     method:=_method;
+     //newdata:=data;
+end;
+procedure TGObjectChangeCommand.StoreUndoData(var _undodata:_T);
+begin
+     UnDoData:=_undodata;
+end;
+procedure TGObjectChangeCommand.UnDo;
+type
+    TCangeMethod=procedure(data:_T)of object;
+begin
+     TCangeMethod(method)(UnDoData);
+     PGDBObjSubordinated(method.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(method.Data),PGDBObjSubordinated(method.Data)^.bp.PSelfInOwnerArray);
+end;
+procedure TGObjectChangeCommand.Comit;
+type
+    TCangeMethod=procedure(data:_T)of object;
+begin
+     TCangeMethod(method)(DoData);
+     PGDBObjSubordinated(method.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(method.Data),PGDBObjSubordinated(method.Data)^.bp.PSelfInOwnerArray);
+end;
 
-constructor TGChangeCommand.Assign(const data:_T);
+constructor TGChangeCommand.Assign(var data:_T);
 begin
      Addr:=@data;
      olddata:=data;
@@ -152,12 +195,12 @@ begin
 end;
 procedure TMarkerCommand.UnDo;
 begin
-
+     gdb.GetCurrentROOT.FormatAfterEdit;
 end;
 
 procedure TMarkerCommand.Comit;
 begin
-
+     gdb.GetCurrentROOT.FormatAfterEdit;
 end;
 
 constructor TMarkerCommand.init(_name:GDBString;_index:TArrayIndex);
@@ -223,12 +266,16 @@ begin
           pcc:=pointer(self.GetObject(CurrentCommand-1));
 
           if pcc^.GetCommandType=TTC_MEnd then
-                                              inc(mcounter)
+                                              begin
+                                              inc(mcounter);
+                                              pcc^.undo;
+                                              end
      else if pcc^.GetCommandType=TTC_MBegin then
                                                 begin
                                                      dec(mcounter);
                                                      if mcounter=0 then
                                                      shared.HistoryOutStr('Отмена "'+PTMarkerCommand(pcc)^.Name+'"');
+                                                     pcc^.undo;
                                                 end
      else pcc^.undo;
           dec(CurrentCommand);
@@ -255,12 +302,14 @@ begin
           if pcc^.GetCommandType=TTC_MEnd then
                                               begin
                                               inc(mcounter);
+                                              pcc^.undo;
                                               end
      else if pcc^.GetCommandType=TTC_MBegin then
                                                 begin
                                                      if mcounter=0 then
                                                      shared.HistoryOutStr('Повтор "'+PTMarkerCommand(pcc)^.Name+'"');
                                                      dec(mcounter);
+                                                     pcc^.undo;
                                                 end
      else pcc^.comit;
           inc(CurrentCommand);

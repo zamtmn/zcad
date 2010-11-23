@@ -47,7 +47,7 @@ GDBObjText=object(GDBObjAbstractText)
                  destructor done;virtual;
 
                  function getsnap(var osp:os_record):GDBBoolean;virtual;
-                 procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);virtual;
+                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  function IsHaveObjXData:GDBBoolean;virtual;
                  procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
@@ -654,14 +654,14 @@ begin
      end;
      inc(onlygetsnapcount);
 end;
-procedure GDBObjText.rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);
+procedure GDBObjText.rtmodifyonepoint(rtmod:TRTModifyData);
 //var m:DMatrix4D;
 begin
      //m:=bp.owner.getmatrix^;
      //MatrixInvert(m);
-          case point.pointtype of
+          case rtmod.point.pointtype of
                os_point:begin
-                             pgdbobjtext(tobj)^.Local.p_insert:=VertexAdd(Local.p_insert, dist);
+                             Local.p_insert:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
                         end;
           end;
 end;

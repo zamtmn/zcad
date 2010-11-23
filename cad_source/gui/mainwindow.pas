@@ -1555,3 +1555,4 @@ end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('mainwindow.initialization');{$ENDIF}
 end.
+

@@ -244,7 +244,7 @@ begin
       if tdesc^.pcontrolpoint<>nil then
         if tdesc^.pcontrolpoint^.SelectedCount<>0 then
         begin
-           tdesc^.objaddr^.rtmodify(tdesc,dist,wc,save);
+           {tdesc^.objaddr^}gdb.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
         end;
       inc(tdesc);
     end;

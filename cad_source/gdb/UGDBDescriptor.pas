@@ -126,6 +126,7 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
                     procedure CopyBlock(_from,_to:PTDrawing;_source:PGDBObjBlockdef);
                     function CopyEnt(_from,_to:PTDrawing;_source:PGDBObjEntity):PGDBObjEntity;
                     procedure AddBlockFromDBIfNeed(_to:PTDrawing;name:GDBString);
+                    procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
               end;
 {EXPORT-}
 var GDB: GDBDescriptor;
@@ -140,7 +141,7 @@ procedure RemapAll(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
 procedure startup;
 procedure finalize;
 implementation
- uses GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared{,mainwindow},commandline,log;
+ uses GDBSubordinated,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared{,mainwindow},commandline,log;
 
 function TDrawing.myGluProject2;
 begin
@@ -152,6 +153,123 @@ begin
      _myGluUnProject(win.x,win.y,win.z,@pcamera^.modelMatrixLCS,@pcamera^.projMatrixLCS,@pcamera^.viewport, obj.x,obj.y,obj.z);
      OBJ:=vertexsub(OBJ,pcamera^.CamCSOffset);
 end;
+procedure GDBDescriptor.rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);
+var i:GDBInteger;
+    point:pcontrolpointdesc;
+    p:GDBPointer;
+    var m:DMatrix4D;
+    t:gdbvertex;
+    tt:dvector4d;
+    rtmod:TRTModifyData;
+    tum:TUndableMethod;
+begin
+     if PSelectedObjDesc(md).pcontrolpoint^.count=0 then exit;
+     if PSelectedObjDesc(md).ptempobj=nil then
+     begin
+          PSelectedObjDesc(md).ptempobj:=obj^.Clone(nil);
+          //PSelectedObjDesc(md).ptempobj.BuildGeometry;
+          PSelectedObjDesc(md).ptempobj^.bp.Owner:=obj^.bp.Owner;
+          PSelectedObjDesc(md).ptempobj.format;
+     end;
+     p:=obj^.beforertmodify;
+     if save then PSelectedObjDesc(md).pcontrolpoint^.SelectedCount:=0;
+     point:=PSelectedObjDesc(md).pcontrolpoint^.parray;
+     for i:=1 to PSelectedObjDesc(md).pcontrolpoint^.count do
+     begin
+          if point.selected then
+          begin
+               if save then
+                           save:=save;
+               m:=PSelectedObjDesc(md).objaddr^.getownermatrix^;
+               tt:=m[3];
+               //dist.x:=0;
+               MatrixInvert(m);
+               m[3,0]:=0;
+               m[3,1]:=0;
+               m[3,2]:=0;
+
+               {t.x:=m[0,0];
+               t.y:=m[0,1];
+               t.z:=m[0,2];
+               t:=normalizevertex(t);
+               m[0,0]:=t.x;
+               m[0,1]:=t.y;
+               m[0,2]:=t.z;
+
+               t.x:=m[1,0];
+               t.y:=m[1,1];
+               t.z:=m[1,2];
+               t:=normalizevertex(t);
+               m[1,0]:=t.x;
+               m[1,1]:=t.y;
+               m[1,2]:=t.z;
+
+               t.x:=m[2,0];
+               t.y:=m[2,1];
+               t.z:=m[2,2];
+               t:=normalizevertex(t);
+               m[2,0]:=t.x;
+               m[2,1]:=t.y;
+               m[2,2]:=t.z;}
+
+
+
+
+
+
+
+               //geometry.NormalizeVertex(tt)
+
+               t:=VectorTransform3D(dist,m);
+
+               rtmod.point:=point^;
+               rtmod.dist:=VectorTransform3D(dist,m);
+               rtmod.wc:=VectorTransform3D(wc,m);
+
+               if save then
+                           begin
+                                if obj^.IsRTNeedModify(point,p)then
+                                                                   begin
+                                                                        tmethod(tum).Code:=pointer(obj.rtmodifyonepoint);
+                                                                        tmethod(tum).Data:=obj;
+                                                                        //tum:=tundablemethod(obj^.rtmodifyonepoint);
+                                                                        with GetCurrentDWG.UndoStack.PushCreateTGObjectChangeCommand(rtmod,tmethod(tum))^ do
+                                                                        begin
+                                                                             comit;
+                                                                             rtmod.wc:=rtmod.point.worldcoord;
+                                                                             rtmod.dist:=nulvertex;
+                                                                             StoreUndoData(rtmod);
+                                                                        end;
+                                                                        //obj^.rtmodifyonepoint(rtmod);
+                                                                   end;
+                                point.selected:=false;
+                           end
+                       else
+                           begin
+                                if PSelectedObjDesc(md).ptempobj^.IsRTNeedModify(point,p)then
+                                 PSelectedObjDesc(md).ptempobj^.rtmodifyonepoint(rtmod);
+
+                           end;
+          end;
+          inc(point);
+     end;
+     if save then
+     begin
+          //--------------(PSelectedObjDesc(md).ptempobj).rtsave(@self);
+
+          PGDBObjGenericWithSubordinated(obj^.bp.owner)^.ImEdited({@self}obj,obj^.bp.PSelfInOwnerArray);
+          PSelectedObjDesc(md).ptempobj^.done;
+          GDBFreeMem(GDBPointer(PSelectedObjDesc(md).ptempobj));
+          PSelectedObjDesc(md).ptempobj:=nil;
+     end
+     else
+     begin
+          PSelectedObjDesc(md).ptempobj.format;
+          //PSelectedObjDesc(md).ptempobj.renderfeedback;
+     end;
+     obj^.afterrtmodify(p);
+end;
+
 
 function GDBDescriptor.GetCurrentROOT;
 begin

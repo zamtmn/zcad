@@ -1,6 +1,6 @@
 {$IFDEF CLASSDECLARATION}
-function CreateTGChangeCommand(const data:TData):PTCommand;overload;
-function PushCreateTGChangeCommand(const data:TData):PTCommand;overload;
+function CreateTGChangeCommand(var data:TData):PTCommand;overload;
+function PushCreateTGChangeCommand(var data:TData):PTCommand;overload;
 {$ENDIF}
 
 
@@ -12,12 +12,12 @@ TCommand=specialize TGChangeCommand<TData>;
 {$ENDIF}
 
 {$IFDEF IMPLEMENTATION}
-function GDBObjOpenArrayOfUCommands.CreateTGChangeCommand(const data:TData):PTCommand;overload;
+function GDBObjOpenArrayOfUCommands.CreateTGChangeCommand(var data:TData):PTCommand;overload;
 begin
      gdbgetmem(result,sizeof(TCommand));
      result.Assign(data);
 end;
-function GDBObjOpenArrayOfUCommands.PushCreateTGChangeCommand(const data:TData):PTCommand;overload;
+function GDBObjOpenArrayOfUCommands.PushCreateTGChangeCommand(var data:TData):PTCommand;overload;
 begin
   if CurrentCommand>0 then
   begin
@@ -33,4 +33,4 @@ begin
   inc(CurrentCommand);
 end;
 
-{$ENDIF}
+{$ENDIF}

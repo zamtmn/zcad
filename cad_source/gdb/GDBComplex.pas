@@ -43,7 +43,7 @@ GDBObjComplex=object(GDBObjWithLocalCS)
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                     procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
-                    procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:GDBPointer);virtual;
+                    procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
                     procedure Format;virtual;
                     //procedure feedbackinrect;virtual;
                     function InRect:TInRect;virtual;
@@ -76,10 +76,10 @@ begin
      m:=bp.owner.getmatrix^;
      MatrixInvert(m);
 
-     case point.pointtype of
+     case rtmod.point.pointtype of
                os_point:begin
 
-                             PGDBObjComplex(tobj)^.Local.p_insert:=VertexAdd(Local.p_insert, {dist}VectorTransform3D(dist,m));
+                             Local.p_insert:=VertexAdd(rtmod.point.worldcoord, {dist}VectorTransform3D(rtmod.dist,m));
                          end;
      end;
 end;

@@ -223,6 +223,11 @@ GDBArrayVertex=array[0..0] of GDBvertex;
                          dispcoord:GDBvertex2DI;
                          selected:GDBBoolean;
                    end;
+  TRTModifyData=record
+                     point:controlpointdesc;
+                     dist,wc:gdbvertex;
+               end;
+
   tcontrolpointdist=record
     pcontrolpoint:pcontrolpointdesc;
     disttomouse:GDBInteger;

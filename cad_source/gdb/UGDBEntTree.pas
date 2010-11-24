@@ -26,8 +26,8 @@ type
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
          PTEntTreeNode=^TEntTreeNode;
          TEntTreeNode=object(GDBaseObject)
-                            nodedepth:integer;
-                            pluscount,minuscount:integer;
+                            nodedepth:GDBInteger;
+                            pluscount,minuscount:GDBInteger;
                             point:GDBVertex;
                             plane:DVector4D;
                             BoundingBox:GDBBoundingBbox;
@@ -37,7 +37,7 @@ type
                             NodeDir:TNodeDir;
                             Root:PTEntTreeNode;
 
-                            //selected:boolean;
+                            {selected:boolean;}
                             infrustum:TActulity;
                             nuldrawpos,minusdrawpos,plusdrawpos:TActulity;
                             constructor initnul;
@@ -50,14 +50,14 @@ type
                             function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;
                             function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;
                       end;
-         TTestTreeNode=Object
-                             plane:DVector4D;
-                             nul,plus,minus:GDBObjEntityOpenArray;
-                             constructor initnul;
-                             destructor done;
-                       end;
-         TTestTreeArray=array [0..2] of TTestTreeNode;
 {EXPORT-}
+TTestTreeNode=Object(GDBaseObject)
+                    plane:DVector4D;
+                    nul,plus,minus:GDBObjEntityOpenArray;
+                    constructor initnul;
+                    destructor done;
+              end;
+TTestTreeArray=array [0..2] of TTestTreeNode;
 const
   _InNodeCount=500;
   _NodeDepth=15;

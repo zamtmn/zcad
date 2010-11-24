@@ -445,6 +445,8 @@ begin
            tname:=pfd^.UserName;
            if tname='' then
                            tname:=pfd^.FieldName;
+           if tname='ObjArray' then
+                                   tname:=tname;
            if (pfd^.PFT^.TypeName='TEnumData') then
                        begin
                             GDBEnumDataDescriptorObj.CreateProperties(PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.Attributes or ownerattrib,bmode,addr,'','')

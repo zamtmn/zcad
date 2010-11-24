@@ -84,10 +84,12 @@
         <Filename Value="gui/mainwindow.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="mainwindow"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="353"/>
-        <CursorPos X="20" Y="367"/>
+        <TopLine Value="742"/>
+        <CursorPos X="54" Y="772"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
@@ -120,7 +122,7 @@
       </Unit6>
       <Unit7>
         <Filename Value="def.inc"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="2" Y="29"/>
@@ -131,7 +133,7 @@
       <Unit8>
         <Filename Value="u/UGDBOpenArray.pas"/>
         <UnitName Value="UGDBOpenArray"/>
-        <EditorIndex Value="18"/>
+        <EditorIndex Value="20"/>
         <WindowIndex Value="0"/>
         <TopLine Value="179"/>
         <CursorPos X="1" Y="209"/>
@@ -200,10 +202,12 @@
         <Filename Value="gui/oglwindow.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="oglwindow"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1565"/>
-        <CursorPos X="1" Y="1584"/>
+        <TopLine Value="3361"/>
+        <CursorPos X="44" Y="3396"/>
         <UsageCount Value="202"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit15>
       <Unit16>
@@ -216,7 +220,7 @@
       <Unit17>
         <Filename Value="gui/objinsp.pas"/>
         <UnitName Value="Objinsp"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="17"/>
         <WindowIndex Value="0"/>
         <TopLine Value="857"/>
         <CursorPos X="1" Y="894"/>
@@ -253,7 +257,7 @@
         <Filename Value="languade/URecordDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="URecordDescriptor"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="426"/>
         <CursorPos X="1" Y="449"/>
@@ -283,7 +287,7 @@
       <Unit24>
         <Filename Value="log.pas"/>
         <UnitName Value="log"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="156"/>
         <CursorPos X="1" Y="175"/>
@@ -294,7 +298,7 @@
       <Unit25>
         <Filename Value="languade/TypeDescriptors.pas"/>
         <UnitName Value="TypeDescriptors"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="45"/>
         <CursorPos X="23" Y="64"/>
@@ -334,7 +338,7 @@
       <Unit29>
         <Filename Value="u/UGDBVisibleTreeArray.pas"/>
         <UnitName Value="UGDBVisibleTreeArray"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="15"/>
         <WindowIndex Value="0"/>
         <TopLine Value="9"/>
         <CursorPos X="41" Y="29"/>
@@ -428,7 +432,7 @@
         <Filename Value="gdb/GDBEntity.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GDBEntity"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="354"/>
         <CursorPos X="1" Y="386"/>
@@ -448,7 +452,7 @@
       <Unit41>
         <Filename Value="gdb/UGDBEntTree.pas"/>
         <UnitName Value="UGDBEntTree"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="16"/>
         <WindowIndex Value="0"/>
         <TopLine Value="28"/>
         <CursorPos X="46" Y="60"/>
@@ -590,7 +594,7 @@
       <Unit58>
         <Filename Value="gdb/GDBGenericSubEntry.pas"/>
         <UnitName Value="GDBGenericSubEntry"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
         <TopLine Value="16"/>
         <CursorPos X="48" Y="36"/>
@@ -700,7 +704,7 @@
       <Unit71>
         <Filename Value="gdb/UGDBDescriptor.pas"/>
         <UnitName Value="UGDBDescriptor"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
         <TopLine Value="222"/>
         <CursorPos X="91" Y="241"/>
@@ -1001,10 +1005,10 @@
       <Unit109>
         <Filename Value="electroteh/GDBNet.pas"/>
         <UnitName Value="GDBNet"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="6"/>
-        <CursorPos X="23" Y="19"/>
+        <CursorPos X="1" Y="19"/>
         <UsageCount Value="17"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -1012,7 +1016,7 @@
       <Unit110>
         <Filename Value="u/UGDBOpenArrayOfPointer.pas"/>
         <UnitName Value="UGDBOpenArrayOfPointer"/>
-        <EditorIndex Value="17"/>
+        <EditorIndex Value="19"/>
         <WindowIndex Value="0"/>
         <TopLine Value="52"/>
         <CursorPos X="33" Y="70"/>
@@ -1529,7 +1533,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="100"/>
+        <UsageCount Value="102"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit173>
       <Unit174>
@@ -1538,7 +1542,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="21" Y="4"/>
-        <UsageCount Value="100"/>
+        <UsageCount Value="102"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit174>
       <Unit175>
@@ -1618,7 +1622,7 @@
       <Unit184>
         <Filename Value="u/UGDBGraf.pas"/>
         <UnitName Value="UGDBGraf"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="20"/>
         <CursorPos X="1" Y="39"/>
@@ -1629,7 +1633,7 @@
       <Unit185>
         <Filename Value="gdb/GDBConnected.pas"/>
         <UnitName Value="GDBConnected"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="30" Y="26"/>
@@ -1640,7 +1644,7 @@
       <Unit186>
         <Filename Value="gdb/GDBWithMatrix.pas"/>
         <UnitName Value="GDBWithMatrix"/>
-        <EditorIndex Value="16"/>
+        <EditorIndex Value="18"/>
         <WindowIndex Value="0"/>
         <TopLine Value="8"/>
         <CursorPos X="43" Y="28"/>
@@ -1652,123 +1656,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="languade/URecordDescriptor.pas"/>
-        <Caret Line="448" Column="1" TopLine="426"/>
+        <Caret Line="450" Column="22" TopLine="426"/>
       </Position1>
       <Position2>
-        <Filename Value="languade/URecordDescriptor.pas"/>
-        <Caret Line="449" Column="1" TopLine="426"/>
+        <Filename Value="gdb/GDBConnected.pas"/>
+        <Caret Line="26" Column="32" TopLine="1"/>
       </Position2>
       <Position3>
-        <Filename Value="languade/URecordDescriptor.pas"/>
-        <Caret Line="446" Column="1" TopLine="426"/>
+        <Filename Value="gdb/GDBGenericSubEntry.pas"/>
+        <Caret Line="36" Column="47" TopLine="16"/>
       </Position3>
       <Position4>
-        <Filename Value="languade/URecordDescriptor.pas"/>
-        <Caret Line="448" Column="33" TopLine="426"/>
+        <Filename Value="u/UGDBVisibleTreeArray.pas"/>
+        <Caret Line="29" Column="42" TopLine="9"/>
       </Position4>
       <Position5>
-        <Filename Value="zcad.pas"/>
-        <Caret Line="86" Column="1" TopLine="79"/>
+        <Filename Value="gdb/GDBConnected.pas"/>
+        <Caret Line="26" Column="35" TopLine="1"/>
       </Position5>
       <Position6>
-        <Filename Value="languade/URecordDescriptor.pas"/>
-        <Caret Line="450" Column="22" TopLine="426"/>
+        <Filename Value="gdb/GDBGenericSubEntry.pas"/>
+        <Caret Line="36" Column="44" TopLine="16"/>
       </Position6>
       <Position7>
         <Filename Value="gdb/GDBConnected.pas"/>
-        <Caret Line="26" Column="32" TopLine="1"/>
+        <Caret Line="26" Column="30" TopLine="1"/>
       </Position7>
       <Position8>
         <Filename Value="gdb/GDBGenericSubEntry.pas"/>
-        <Caret Line="36" Column="47" TopLine="16"/>
+        <Caret Line="36" Column="48" TopLine="16"/>
       </Position8>
       <Position9>
         <Filename Value="u/UGDBVisibleTreeArray.pas"/>
-        <Caret Line="29" Column="42" TopLine="9"/>
+        <Caret Line="29" Column="41" TopLine="9"/>
       </Position9>
       <Position10>
-        <Filename Value="gdb/GDBConnected.pas"/>
-        <Caret Line="26" Column="35" TopLine="1"/>
+        <Filename Value="gdb/UGDBEntTree.pas"/>
+        <Caret Line="37" Column="41" TopLine="9"/>
       </Position10>
       <Position11>
-        <Filename Value="gdb/GDBGenericSubEntry.pas"/>
-        <Caret Line="36" Column="44" TopLine="16"/>
+        <Filename Value="gdb/UGDBEntTree.pas"/>
+        <Caret Line="26" Column="10" TopLine="13"/>
       </Position11>
       <Position12>
-        <Filename Value="gdb/GDBConnected.pas"/>
-        <Caret Line="26" Column="30" TopLine="1"/>
+        <Filename Value="gui/objinsp.pas"/>
+        <Caret Line="825" Column="1" TopLine="806"/>
       </Position12>
       <Position13>
-        <Filename Value="gdb/GDBGenericSubEntry.pas"/>
-        <Caret Line="36" Column="48" TopLine="16"/>
+        <Filename Value="gui/objinsp.pas"/>
+        <Caret Line="894" Column="1" TopLine="857"/>
       </Position13>
       <Position14>
-        <Filename Value="u/UGDBVisibleTreeArray.pas"/>
-        <Caret Line="29" Column="41" TopLine="9"/>
+        <Filename Value="gdb/UGDBEntTree.pas"/>
+        <Caret Line="54" Column="40" TopLine="22"/>
       </Position14>
       <Position15>
         <Filename Value="gdb/UGDBEntTree.pas"/>
-        <Caret Line="37" Column="41" TopLine="9"/>
+        <Caret Line="60" Column="46" TopLine="28"/>
       </Position15>
       <Position16>
-        <Filename Value="gdb/UGDBEntTree.pas"/>
-        <Caret Line="26" Column="10" TopLine="13"/>
-      </Position16>
-      <Position17>
-        <Filename Value="gui/objinsp.pas"/>
-        <Caret Line="825" Column="1" TopLine="806"/>
-      </Position17>
-      <Position18>
-        <Filename Value="gui/objinsp.pas"/>
-        <Caret Line="894" Column="1" TopLine="857"/>
-      </Position18>
-      <Position19>
-        <Filename Value="gdb/UGDBEntTree.pas"/>
-        <Caret Line="54" Column="40" TopLine="22"/>
-      </Position19>
-      <Position20>
-        <Filename Value="gdb/UGDBEntTree.pas"/>
-        <Caret Line="60" Column="46" TopLine="28"/>
-      </Position20>
-      <Position21>
         <Filename Value="zcad.pas"/>
         <Caret Line="86" Column="1" TopLine="79"/>
-      </Position21>
-      <Position22>
+      </Position16>
+      <Position17>
         <Filename Value="languade/URecordDescriptor.pas"/>
         <Caret Line="449" Column="1" TopLine="426"/>
-      </Position22>
-      <Position23>
+      </Position17>
+      <Position18>
         <Filename Value="log.pas"/>
         <Caret Line="175" Column="1" TopLine="156"/>
-      </Position23>
-      <Position24>
+      </Position18>
+      <Position19>
         <Filename Value="zcad.pas"/>
         <Caret Line="21" Column="13" TopLine="4"/>
-      </Position24>
-      <Position25>
+      </Position19>
+      <Position20>
         <Filename Value="def.inc"/>
         <Caret Line="29" Column="2" TopLine="1"/>
-      </Position25>
-      <Position26>
+      </Position20>
+      <Position21>
         <Filename Value="log.pas"/>
         <Caret Line="175" Column="1" TopLine="156"/>
-      </Position26>
-      <Position27>
+      </Position21>
+      <Position22>
         <Filename Value="zcad.pas"/>
         <Caret Line="98" Column="1" TopLine="67"/>
+      </Position22>
+      <Position23>
+        <Filename Value="zcad.pas"/>
+        <Caret Line="92" Column="35" TopLine="67"/>
+      </Position23>
+      <Position24>
+        <Filename Value="gdb/GDBEntity.pas"/>
+        <Caret Line="386" Column="1" TopLine="354"/>
+      </Position24>
+      <Position25>
+        <Filename Value="zcad.pas"/>
+        <Caret Line="96" Column="118" TopLine="67"/>
+      </Position25>
+      <Position26>
+        <Filename Value="electroteh/GDBNet.pas"/>
+        <Caret Line="19" Column="1" TopLine="6"/>
+      </Position26>
+      <Position27>
+        <Filename Value="gui/mainwindow.pas"/>
+        <Caret Line="763" Column="19" TopLine="730"/>
       </Position27>
       <Position28>
         <Filename Value="zcad.pas"/>
-        <Caret Line="92" Column="35" TopLine="67"/>
+        <Caret Line="86" Column="1" TopLine="67"/>
       </Position28>
       <Position29>
-        <Filename Value="gdb/GDBEntity.pas"/>
-        <Caret Line="386" Column="1" TopLine="354"/>
+        <Filename Value="gui/mainwindow.pas"/>
+        <Caret Line="772" Column="54" TopLine="742"/>
       </Position29>
       <Position30>
-        <Filename Value="zcad.pas"/>
-        <Caret Line="96" Column="118" TopLine="67"/>
+        <Filename Value="gui/oglwindow.pas"/>
+        <Caret Line="3396" Column="44" TopLine="3361"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

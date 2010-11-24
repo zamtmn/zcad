@@ -40,6 +40,8 @@ C:\zcad\CAD_SOURCE\gdb\GDBPlainWithOX.pas
 C:\zcad\CAD_SOURCE\gdb\GDBAbstractText.pas
 C:\zcad\CAD_SOURCE\gdb\GDBArc.pas
 C:\zcad\CAD_SOURCE\gdb\GDBCircle.pas
+C:\zcad\CAD_SOURCE\gdb\UGDBEntTree.pas
+C:\zcad\CAD_SOURCE\u\UGDBVisibleTreeArray.pas
 C:\zcad\CAD_SOURCE\gdb\GDBGenericSubEntry.pas
 C:\zcad\CAD_SOURCE\gdb\GDBBlockdef.pas
 C:\zcad\CAD_SOURCE\u\UGDBObjBlockdefArray.pas

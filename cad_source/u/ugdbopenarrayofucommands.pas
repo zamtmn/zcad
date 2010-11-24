@@ -66,10 +66,11 @@ generic TGChangeCommand<_T>=object(TCustomChangeCommand)
 TUndableMethod=procedure of object;
 generic TGObjectChangeCommand<_T>=object(TCustomChangeCommand)
                                       {type
-                                          TCangeMethod=procedure(data:_T)of object;
-                                      private}
+                                          TCangeMethod=procedure(data:_T)of object;}
+                                      private
                                       DoData,UnDoData:_T;
                                       method:tmethod;
+                                      public
                                       constructor Assign(var _dodata:_T;_method:tmethod);
                                       procedure StoreUndoData(var _undodata:_T);virtual;
 
@@ -87,6 +88,9 @@ generic TGObjectChangeCommand<_T>=object(TCustomChangeCommand)
 {$DEFINE CLASSDECLARATION}
 PGDBObjOpenArrayOfUCommands=^GDBObjOpenArrayOfUCommands;
 GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
+                                 {type
+                                 TCangeMethod=procedure(data:integer)of object;}
+                                 public
                                  CurrentCommand:TArrayIndex;
                                  currentcommandstartmarker:TArrayIndex;
                                  startmarkercount:GDBInteger;
@@ -332,4 +336,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayOfUCommands.initialization');{$ENDIF}
-end.
+end.

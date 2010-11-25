@@ -49,7 +49,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  procedure feedbackinrect;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
-                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
                  procedure getoutbound;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
@@ -142,7 +142,7 @@ begin
   end;
   //PGDBObjLWPolyline(refp)^.format;
 end;
-procedure GDBObjLWpolyline.rtmodifyonepoint(rtmod:TRTModifyData);
+procedure GDBObjLWpolyline.rtmodifyonepoint(const rtmod:TRTModifyData);
 var vertexnumber:GDBInteger;
     tv:gdbvertex;
 begin

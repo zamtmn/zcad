@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfUCommands;
 {$INCLUDE def.inc}
 interface
-uses shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
+uses GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
      gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman,GDBSubordinated;
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
@@ -79,10 +79,23 @@ generic TGObjectChangeCommand<_T>=object(TCustomChangeCommand)
                                       //procedure ComitFromObj;virtual;
                                       //function GetDataTypeSize:PtrInt;virtual;
                                   end;
+generic TGMultiObjectChangeCommand<_T>=object(TCustomChangeCommand)
+                                      DoData,UnDoData:_T;
+                                      ObjArray:GDBOpenArrayOfData;
+                                      public
+                                      constructor Assign(const _dodata,_undodata:_T;const objcount:GDBInteger);
+                                      //procedure StoreUndoData(var _undodata:_T);virtual;
+                                      procedure AddMethod(method:tmethod);virtual;
+
+                                      procedure UnDo;virtual;
+                                      procedure Comit;virtual;
+                                      destructor Done;virtual;
+                                  end;
 {$MACRO ON}
 {$DEFINE INTERFACE}
   {$I TGChangeCommandList.inc}
   {$I TGObjectChangeCommandList.inc}
+  {$I TGMultiObjectChangeCommandList.inc}
 {$UNDEF INTERFACE}
 
 {$DEFINE CLASSDECLARATION}
@@ -104,21 +117,77 @@ GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
 
                                  {$I TGChangeCommandList.inc}
                                  {$I TGObjectChangeCommandList.inc}
+                                 {$I TGMultiObjectChangeCommandList.inc}
                            end;
 {$UNDEF CLASSDECLARATION}
 implementation
-uses UGDBDescriptor,GDBManager,GDBEntity;
+uses UGDBDescriptor,GDBManager;
 {$DEFINE IMPLEMENTATION}
   {$I TGChangeCommandList.inc}
   {$I TGObjectChangeCommandList.inc}
+  {$I TGMultiObjectChangeCommandList.inc}
 {$UNDEF IMPLEMENTATION}
 {$MACRO OFF}
+constructor TGMultiObjectChangeCommand.Assign(const _dodata,_undodata:_T;const objcount:GDBInteger);
+begin
+     DoData:=_DoData;
+     UnDoData:=_UnDoData;
+     self.ObjArray.init(objcount,sizeof(tmethod));
+end;
+procedure TGMultiObjectChangeCommand.AddMethod(method:tmethod);
+begin
+     objarray.add(@method);
+end;
+{procedure TGMultiObjectChangeCommand.StoreUndoData(var _undodata:_T);
+begin
+     UnDoData:=_undodata;
+end;}
+procedure TGMultiObjectChangeCommand.UnDo;
+type
+    TCangeMethod=procedure(const data:_T)of object;
+    PTMethod=^TMethod;
+var
+  p:PTMethod;
+  ir:itrec;
+begin
+  p:=ObjArray.beginiterate(ir);
+  if p<>nil then
+  repeat
+        TCangeMethod(p^)(UnDoData);
+        PGDBObjSubordinated(p^.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(p^.Data),PGDBObjSubordinated(p^.Data)^.bp.PSelfInOwnerArray);
+
+       p:=ObjArray.iterate(ir);
+  until p=nil;
+end;
+procedure TGMultiObjectChangeCommand.Comit;
+type
+    TCangeMethod=procedure(const data:_T)of object;
+    PTMethod=^TMethod;
+var
+  p:PTMethod;
+  ir:itrec;
+begin
+  p:=ObjArray.beginiterate(ir);
+  if p<>nil then
+  repeat
+        TCangeMethod(p^)(DoData);
+        PGDBObjSubordinated(p^.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(p^.Data),PGDBObjSubordinated(p^.Data)^.bp.PSelfInOwnerArray);
+
+       p:=ObjArray.iterate(ir);
+  until p=nil;
+end;
+
+destructor TGMultiObjectChangeCommand.Done;
+begin
+     inherited;
+     ObjArray.done;
+end;
+
+
 constructor TGObjectChangeCommand.Assign(var _dodata:_T;_method:tmethod);
 begin
-     //Addr:=@data;
      DoData:=_DoData;
      method:=_method;
-     //newdata:=data;
 end;
 procedure TGObjectChangeCommand.StoreUndoData(var _undodata:_T);
 begin
@@ -126,14 +195,14 @@ begin
 end;
 procedure TGObjectChangeCommand.UnDo;
 type
-    TCangeMethod=procedure(data:_T)of object;
+    TCangeMethod=procedure(const data:_T)of object;
 begin
      TCangeMethod(method)(UnDoData);
      PGDBObjSubordinated(method.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(method.Data),PGDBObjSubordinated(method.Data)^.bp.PSelfInOwnerArray);
 end;
 procedure TGObjectChangeCommand.Comit;
 type
-    TCangeMethod=procedure(data:_T)of object;
+    TCangeMethod=procedure(const data:_T)of object;
 begin
      TCangeMethod(method)(DoData);
      PGDBObjSubordinated(method.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(method.Data),PGDBObjSubordinated(method.Data)^.bp.PSelfInOwnerArray);
@@ -287,7 +356,7 @@ begin
      end
      else
          shared.ShowError('Нет операций для отмены');
-
+     gdb.GetCurrentROOT.FormatAfterEdit;
 end;
 procedure GDBObjOpenArrayOfUCommands.redo;
 var
@@ -321,6 +390,7 @@ begin
      end
      else
          shared.ShowError('Нет операций для повторного применения');
+     gdb.GetCurrentROOT.FormatAfterEdit;
 end;
 
 constructor GDBObjOpenArrayOfUCommands.init;
@@ -336,4 +406,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayOfUCommands.initialization');{$ENDIF}
-end.
+end.

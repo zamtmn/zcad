@@ -54,7 +54,7 @@ GDBObjArc=object(GDBObjPlain)
                  function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
                  function getsnap(var osp:os_record):GDBBoolean;virtual;
                  function beforertmodify:GDBPointer;virtual;
-                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
@@ -507,7 +507,7 @@ function GDBObjARC.IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):B
 begin
      result:=true;
 end;
-procedure GDBObjARC.rtmodifyonepoint(rtmod:TRTModifyData);
+procedure GDBObjARC.rtmodifyonepoint(const rtmod:TRTModifyData);
 var a,b,c,d,e,f,g,p_x,p_y,rr:GDBDouble;
     tv:gdbvertex2d;
     ptdata:tarcrtmodify;

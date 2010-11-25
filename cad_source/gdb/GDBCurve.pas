@@ -43,7 +43,7 @@ GDBObjCurve=object(GDBObj3d)
                  procedure rtsave(refp:GDBPointer);virtual;
                  procedure RenderFeedback;virtual;
                  function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
-                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  function getsnap(var osp:os_record):GDBBoolean;virtual;
@@ -55,7 +55,7 @@ GDBObjCurve=object(GDBObj3d)
                  procedure AddVertex(Vertex:GDBVertex);virtual;
                  procedure SaveToDXFfollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                 procedure transform(t_matrix:PDMatrix4D);virtual;
+                 procedure transform(const t_matrix:DMatrix4D);virtual;
                  procedure feedbackinrect;virtual;
 
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
@@ -318,7 +318,7 @@ begin
         ptv2:=PGDBObjCurve(p)^.VertexArrayInOCS.iterate(ir2);
   until (ptv=nil)or(ptv2=nil);
 end;
-procedure GDBObjCurve.transform(t_matrix:PDMatrix4D);
+procedure GDBObjCurve.transform(const t_matrix:DMatrix4D);
 var
     ptv: pgdbvertex;
     ir:itrec;
@@ -326,7 +326,7 @@ begin
   ptv:=VertexArrayInOCS.beginiterate(ir);
   if (ptv<>nil) then
   repeat
-        ptv^:=VectorTransform3D(ptv^,t_matrix^);
+        ptv^:=VectorTransform3D(ptv^,t_matrix);
         {VertexArrayInWCS.Add(@tv);}
         ptv:=vertexarrayinocs.iterate(ir);
   until (ptv=nil);
@@ -417,7 +417,7 @@ begin
                                   end;
    result:=VertexArrayInWCS.onmouse(mf);
 end;
-procedure GDBObjCurve.rtmodifyonepoint(rtmod:TRTModifyData);
+procedure GDBObjCurve.rtmodifyonepoint(const rtmod:TRTModifyData);
 var vertexnumber:GDBInteger;
 begin
      vertexnumber:=abs(rtmod.point.pointtype-os_polymin);

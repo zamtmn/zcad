@@ -49,7 +49,7 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                procedure Format;virtual;
                procedure CalcObjMatrix;virtual;
                function CalcObjMatrixWithoutOwner:DMatrix4D;
-               procedure transform(t_matrix:PDMatrix4D);virtual;
+               procedure transform(const t_matrix:DMatrix4D);virtual;
                procedure Renderfeedback;virtual;
                function GetCenterPoint:GDBVertex;virtual;
                procedure createfield;virtual;
@@ -205,29 +205,29 @@ procedure GDBObjWithLocalCS.transform;
 var tv,tv2:GDBVertex4D;
 begin
 
-  tv2:=PGDBVertex4D(@t_matrix^[3])^;
-  PGDBVertex4D(@t_matrix^[3])^:=NulVertex4D;
+  tv2:=PGDBVertex4D(@t_matrix[3])^;
+  PGDBVertex4D(@t_matrix[3])^:=NulVertex4D;
 
   tv:=NulVertex4D;
   PGDBVertex(@tv)^:=Local.ox;
-  tv:=VectorTransform(tv,t_matrix^);
+  tv:=VectorTransform(tv,t_matrix);
   Local.ox:=PGDBVertex(@tv)^;
 
   tv:=NulVertex4D;
   PGDBVertex(@tv)^:=Local.oy;
-  tv:=VectorTransform(tv,t_matrix^);
+  tv:=VectorTransform(tv,t_matrix);
   Local.oy:=PGDBVertex(@tv)^;
 
   tv:=NulVertex4D;
   PGDBVertex(@tv)^:=Local.oz;
-  tv:=VectorTransform(tv,t_matrix^);
+  tv:=VectorTransform(tv,t_matrix);
   Local.oz:=PGDBVertex(@tv)^;
 
-  PGDBVertex4D(@t_matrix^[3])^:=tv2;
+  PGDBVertex4D(@t_matrix[3])^:=tv2;
 
   tv:=NulVertex4D;
   PGDBVertex(@tv)^:=Local.p_insert;
-  tv:=VectorTransform(tv,t_matrix^);
+  tv:=VectorTransform(tv,t_matrix);
   Local.p_insert:=PGDBVertex(@tv)^;
 end;
 procedure GDBObjWithLocalCS.SaveToDXFObjPostfix;

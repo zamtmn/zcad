@@ -192,7 +192,7 @@ begin
                                 begin
                                      m4:=PGDBObjEntity(newowner)^.getmatrix^;
                                      MatrixInvert(m4);
-                                     pobj^.transform(@m4);
+                                     pobj^.transform(m4);
                                 end;
 
                                 if not trash then
@@ -231,7 +231,7 @@ begin
                                 begin
                                      m4:=PGDBObjEntity(newowner)^.getmatrix^;
                                      MatrixInvert(m4);
-                                     postobj^.transform(@m4);
+                                     postobj^.transform(m4);
                                 end;
 
                                  newowner.AddMi(@postobj);

@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  fileutil,Clipbrd,LCLType,classes,
+  UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,
   //debygunit,
   commandlinedef,
   {windows,}gdbasetypes,commandline,
@@ -228,7 +228,7 @@ begin
               //if pobj.selected then
               begin
                 tv:=gdb.CopyEnt(gdb.GetCurrentDWG,gdb.GetCurrentDWG,pobj);
-                tv.transform(@dispmatr);
+                tv.transform(dispmatr);
                 tv.build;
                 tv.Format;
               end;
@@ -378,7 +378,7 @@ begin
               if pobj.selected then
               begin
                 tv:=gdb.CopyEnt(gdb.GetCurrentDWG,ClipboardDWG,pobj);
-                tv.transform(@dispmatr);
+                tv.transform(dispmatr);
                 tv.Format;
               end;
           end;
@@ -868,9 +868,10 @@ begin
 function Move_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 var //i:GDBInteger;
     dist:gdbvertex;
-    dispmatr:DMatrix4D;
+    dispmatr,im:DMatrix4D;
     ir:itrec;
     pcd:PTCopyObjectDesc;
+    m:tmethod;
 begin
       dist.x := wc.x - t3dp.x;
       dist.y := wc.y - t3dp.y;
@@ -883,19 +884,34 @@ begin
 
   if button = 1 then
   begin
+    im:=dispmatr;
+    geometry.MatrixInvert(im);
+    GDB.GetCurrentDWG.UndoStack.PushStartMarker('Move');
+    with GDB.GetCurrentDWG.UndoStack.PushCreateTGMultiObjectChangeCommand(dispmatr,im,pcoa^.Count)^ do
+    begin
      pcd:=pcoa^.beginiterate(ir);
    if pcd<>nil then
    repeat
-        pcd.obj^.TransformAt(pcd.obj,@dispmatr);
+        //pcd.obj^.TransformAt(pcd.obj,@dispmatr);//старый вариант
+        //pcd.obj^.Transform(dispmatr);//было перед ундой
+
+        m.Data:=pcd.obj;
+        m.Code:=pointer(pcd.obj^.Transform);
+        AddMethod(m);
+
         dec(pcd.obj.vp.LastCameraPos);
         pcd.obj^.Format;
 
         pcd:=pcoa^.iterate(ir);
    until pcd=nil;
+   comit;
+   end;
+    GDB.GetCurrentDWG.UndoStack.PushEndMarker;
 
    gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
    gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
-   commandend;
+   gdb.GetCurrentROOT.FormatAfterEdit;
+   //commandend;
    commandmanager.executecommandend;
   end;
 end;

@@ -63,10 +63,10 @@ GDBObjLine=object(GDBObj3d)
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                   function beforertmodify:GDBPointer;virtual;
                   procedure clearrtmodify(p:GDBPointer);virtual;
-                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
-                 procedure transform(t_matrix:PDMatrix4D);virtual;
+                 procedure transform(const t_matrix:DMatrix4D);virtual;
                   function jointoline(pl:pgdbobjline):GDBBoolean;virtual;
 
                   function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
@@ -732,7 +732,7 @@ begin
 
 end;
 
-procedure GDBObjLine.rtmodifyonepoint(rtmod:TRTModifyData);
+procedure GDBObjLine.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
     tv,tv2:GDBVERTEX;
 begin
@@ -825,12 +825,12 @@ var tv:GDBVertex4D;
 begin
   pgdbvertex(@tv)^:=CoordInOCS.lbegin;
   tv.w:=1;
-  tv:=vectortransform(tv,t_matrix^);
+  tv:=vectortransform(tv,t_matrix);
   CoordInOCS.lbegin:=pgdbvertex(@tv)^;
 
   pgdbvertex(@tv)^:=CoordInOCS.lend;
   tv.w:=1;
-  tv:=vectortransform(tv,t_matrix^);
+  tv:=vectortransform(tv,t_matrix);
   CoordInOCS.lend:=pgdbvertex(@tv)^;
 end;
 begin

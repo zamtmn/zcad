@@ -108,8 +108,8 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure select;virtual;
                     procedure remapcontrolpoints(pp:PGDBControlPointArray);virtual;
                     //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
-                    procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;abstract;
-                    procedure transform(t_matrix:PDMatrix4D);virtual;
+                    procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
+                    procedure transform(const t_matrix:DMatrix4D);virtual;
                     procedure remaponecontrolpoint(pdesc:PControlPointDesc);virtual;abstract;
                     function beforertmodify:GDBPointer;virtual;
                     procedure afterrtmodify(p:GDBPointer);virtual;
@@ -385,10 +385,11 @@ begin
                       bp.owner:=nil;
   if selected or ((bp.owner <> nil) and (bp.owner^.isselected)) then
                                                                     begin
+                                                                      glStencilFunc(GL_ALWAYS,0,1);
+                                                                      //isOpenGLError;
                                                                       glLineStipple(3, ls);
                                                                       glEnable(GL_LINE_STIPPLE);
                                                                       sel := true;
-                                                                      glStencilFunc(GL_ALWAYS,0,1);
 
                                                                       glPolygonStipple(@ps);
                                                                       glEnable(GL_POLYGON_STIPPLE);

@@ -1490,7 +1490,9 @@ end;
 
 procedure TOGLWnd.MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);
 var key: GDBByte;
+    NeedRedraw:boolean;
 begin
+  NeedRedraw:=false;
   if ssDouble in shift then
                            begin
                                 if mbMiddle=button then
@@ -1589,7 +1591,8 @@ begin
                         param.SelDesc.LastSelectedObject := nil;
                         //addoneobject;
                         SetObjInsp;
-                   end
+                   end;
+               NeedRedraw:=true;
           end
           else if ((param.md.mode and MGetSelectionFrame) <> 0) and (key = MZW_LBUTTON) then
           begin
@@ -1615,6 +1618,8 @@ begin
     GDBobjinsp.updateinsp//SetObjInsp;
   end;
   inherited;
+  if needredraw then
+                    redrawoglwnd;
 end;
 procedure TOGLWnd.DISP_ZoomFactor;
 var
@@ -2348,13 +2353,17 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
   begin
     glReadBuffer(GL_back);
      glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT);
-    DrawGrid;
+    //DrawGrid;
 
     //glEnable(GL_STENCIL_TEST);
     CalcOptimalMatrix;
+    if sysvar.RD.RD_UseStencil<>nil then
+    if sysvar.RD.RD_UseStencil^ then
+    begin
     glStencilFunc(GL_NEVER, 1, 0); // значение mask не используется
     glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
     gdb.GetCurrentDWG.SelObjArray.drawobject(gdb.GetCurrentDWG.pcamera.POSCOUNT);
+    end;
     //gldisable(GL_LINE_SMOOTH);
     gllinewidth(1);
     glpointsize(1);

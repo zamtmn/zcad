@@ -712,6 +712,7 @@ begin
   SysVarUnit.AssignToSymbol(SysVar.VIEW.VIEW_ObjInspVisible,'VIEW_ObjInspVisible');
 
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_PanObjectDegradation,'RD_PanObjectDegradation');
+  SysVarUnit.AssignToSymbol(SysVar.RD.RD_UseStencil,'RD_UseStencil');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_LineSmooth,'RD_LineSmooth');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_Restore_Mode,'RD_Restore_Mode');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxLineWidth,'RD_MaxLineWidth');

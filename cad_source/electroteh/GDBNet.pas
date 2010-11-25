@@ -34,7 +34,7 @@ GDBObjNet=object(GDBObjConnected)
                  procedure DelSelectedSubitem;virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                 procedure transform(t_matrix:PDMatrix4D);virtual;
+                 procedure transform(const t_matrix:DMatrix4D);virtual;
 
                  function GetNearestLine(const point:GDBVertex):PGDBObjEntity;
 

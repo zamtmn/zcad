@@ -29,6 +29,7 @@ var
   DISP_OSSize:GDBDouble;
   DISP_DrawZAxis:GDBBoolean;
   DISP_ColorAxis:GDBBoolean;
+  RD_UseStencil:GDBBoolean;
   RD_PanObjectDegradation:GDBBoolean;
   RD_LineSmooth:GDBBoolean;
   RD_MaxLineWidth:GDBDouble;
@@ -89,6 +90,7 @@ begin
   DISP_OSSize:=10.0;
   DISP_DrawZAxis:=False;
   DISP_ColorAxis:=False;
+  RD_UseStencil:=True;
   RD_PanObjectDegradation:=False;
   RD_LineSmooth:=False;
   RD_MaxLineWidth:=-1.0;

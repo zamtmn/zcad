@@ -64,7 +64,7 @@ GDBObjCircle=object(GDBObjWithLocalCS)
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  function beforertmodify:GDBPointer;virtual;
-                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
 
                  function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
@@ -627,7 +627,7 @@ begin
   end;
 
 end;
-procedure GDBObjCircle.rtmodifyonepoint(rtmod:TRTModifyData);
+procedure GDBObjCircle.rtmodifyonepoint(const rtmod:TRTModifyData);
 begin
           case rtmod.point.pointtype of
                os_center:begin

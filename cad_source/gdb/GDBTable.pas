@@ -68,7 +68,7 @@ begin
             pvc:=pvc;
 
          pvc^.bp.Owner:=@self;
-         pvc^.transform(@m4);
+         pvc^.transform(m4);
          self.ObjMatrix:=onematrix;
          pvc^.Format;
 

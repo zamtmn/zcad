@@ -730,6 +730,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
             RD_LastRenderTime:pGDBInteger;(*'Время последнего рендера'*)(*oi_readonly*)
             RD_LastUpdateTime:pGDBInteger;(*'Время последнего обновления'*)(*oi_readonly*)
             RD_MaxRenderTime:pGDBInteger;(*'Максимальное время одного прохода рендера'*)
+            RD_UseStencil:PGDBBoolean;(*'Использовать Stencil буфер'*)
             RD_PanObjectDegradation:PGDBBoolean;(*'Деградация при перетаскивании'*)
             RD_LineSmooth:PGDBBoolean;(*'Сглаживание линий'*)
       end;

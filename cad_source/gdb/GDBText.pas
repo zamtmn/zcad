@@ -47,7 +47,7 @@ GDBObjText=object(GDBObjAbstractText)
                  destructor done;virtual;
 
                  function getsnap(var osp:os_record):GDBBoolean;virtual;
-                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  function IsHaveObjXData:GDBBoolean;virtual;
                  procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
@@ -654,7 +654,7 @@ begin
      end;
      inc(onlygetsnapcount);
 end;
-procedure GDBObjText.rtmodifyonepoint(rtmod:TRTModifyData);
+procedure GDBObjText.rtmodifyonepoint(const rtmod:TRTModifyData);
 //var m:DMatrix4D;
 begin
      //m:=bp.owner.getmatrix^;

@@ -18,8 +18,10 @@ Panel UPPANEL 994,68,30,525;
     button Layer,layer.bmp,Настройка слоев
     layercombobox 200,Выбор слоя
     linewcombobox 100,Выбор веса линий
+    Separator
     button Undo,undo.bmp,Отменить действие
     button Redo,redo.bmp,Вернуть действие
+    Separator
   }
 Panel RIGHTPANEL 994,68,30,525;
   {
@@ -79,13 +81,13 @@ MainMenuItem Файл;
   }
 MainMenuItem Правка;
   {
+    Command Отменить??,CTRL+Z,none,none
+    Command Вернуть??,CTRL+SHIFT+Z,none,none
+    Separator
     Command Копировать,CopyClip,none,none
     Command Копировать с базовой точкой,CopyBase,none,none
     Command Вставить,PasteClip,none,none
     Command Стереть,Erase,Del,none
-    Separator
-    Command Отменить??,Undo,none,none
-    Command Вернуть??,Redo,none,none
   }
 MainMenuItem Вид;
   {

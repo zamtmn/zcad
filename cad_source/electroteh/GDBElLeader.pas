@@ -31,7 +31,7 @@ GDBObjElLeader=object(GDBObjComplex)
             function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
             procedure RenderFeedback;virtual;
             procedure addcontrolpoints(tdesc:GDBPointer);virtual;
-            procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
+            procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
             function beforertmodify:GDBPointer;virtual;
             procedure select;virtual;
             procedure Format;virtual;
@@ -50,7 +50,7 @@ GDBObjElLeader=object(GDBObjComplex)
 
             destructor done;virtual;
 
-            procedure transform(t_matrix:PDMatrix4D);virtual;
+            procedure transform(const t_matrix:DMatrix4D);virtual;
             procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
             procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
             end;
@@ -74,12 +74,12 @@ var tv:GDBVertex4D;
 begin
   pgdbvertex(@tv)^:=MainLine.CoordInOCS.lbegin;
   tv.w:=1;
-  tv:=vectortransform(tv,t_matrix^);
+  tv:=vectortransform(tv,t_matrix);
   MainLine.CoordInOCS.lbegin:=pgdbvertex(@tv)^;
 
   pgdbvertex(@tv)^:=MainLine.CoordInOCS.lend;
   tv.w:=1;
-  tv:=vectortransform(tv,t_matrix^);
+  tv:=vectortransform(tv,t_matrix);
   MainLine.CoordInOCS.lend:=pgdbvertex(@tv)^;
 end;
 function GDBObjElLeader.InRect;
@@ -160,7 +160,7 @@ begin
             pvc:=pvc;
 
          pvc^.bp.Owner:=@gdbtrash;
-         pvc^.transform(@m4);
+         pvc^.transform(m4);
          self.ObjMatrix:=onematrix;
          pvc^.Format;
 
@@ -403,7 +403,7 @@ function GDBObjElLeader.beforertmodify;
 begin
      result:=mainline.beforertmodify;
 end;
-procedure GDBObjElLeader.rtmodifyonepoint(rtmod:TRTModifyData);
+procedure GDBObjElLeader.rtmodifyonepoint(const rtmod:TRTModifyData);
 begin
      mainline.rtmodifyonepoint(rtmod);
 end;

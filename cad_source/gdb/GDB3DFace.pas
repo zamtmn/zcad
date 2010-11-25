@@ -45,7 +45,7 @@ GDBObj3DFace=object(GDBObj3d)
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
-                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
                  function GetObjTypeName:GDBString;virtual;
@@ -284,7 +284,7 @@ begin
           end;
 end;
 
-procedure GDBObj3DFace.rtmodifyonepoint(rtmod:TRTModifyData);
+procedure GDBObj3DFace.rtmodifyonepoint(const rtmod:TRTModifyData);
 var vertexnumber:GDBInteger;
 begin
      vertexnumber:=abs(rtmod.point.pointtype-os_polymin);

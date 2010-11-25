@@ -43,7 +43,7 @@ GDBObjComplex=object(GDBObjWithLocalCS)
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                     procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
-                    procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;
+                    procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                     procedure Format;virtual;
                     //procedure feedbackinrect;virtual;
                     function InRect:TInRect;virtual;

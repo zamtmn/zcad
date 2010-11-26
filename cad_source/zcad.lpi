@@ -48,13 +48,13 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="191">
+    <Units Count="193">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="zcad"/>
         <IsVisibleTab Value="True"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="79"/>
         <CursorPos X="1" Y="86"/>
@@ -93,11 +93,11 @@
       <Unit4>
         <Filename Value="geometry.pas"/>
         <UnitName Value="geometry"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="100"/>
         <CursorPos X="11" Y="119"/>
-        <UsageCount Value="70"/>
+        <UsageCount Value="74"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
@@ -200,10 +200,12 @@
         <Filename Value="gui/oglwindow.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="oglwindow"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="2341"/>
-        <CursorPos X="32" Y="2361"/>
+        <TopLine Value="1818"/>
+        <CursorPos X="1" Y="1840"/>
         <UsageCount Value="202"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit15>
       <Unit16>
@@ -344,8 +346,8 @@
         <UnitName Value="GDBCommandsDraw"/>
         <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="880"/>
-        <CursorPos X="46" Y="909"/>
+        <TopLine Value="985"/>
+        <CursorPos X="1" Y="1004"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -362,20 +364,24 @@
         <Filename Value="languade/UObjectDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UObjectDescriptor"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="404"/>
-        <CursorPos X="1" Y="423"/>
+        <TopLine Value="328"/>
+        <CursorPos X="76" Y="366"/>
         <UsageCount Value="201"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit33>
       <Unit34>
         <Filename Value="sysinfo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="SysInfo"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="19"/>
-        <CursorPos X="28" Y="56"/>
+        <CursorPos X="66" Y="36"/>
         <UsageCount Value="202"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit34>
       <Unit35>
@@ -427,11 +433,11 @@
       <Unit40>
         <Filename Value="commands/commanddefinternal.pas"/>
         <UnitName Value="commanddefinternal"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="116"/>
-        <CursorPos X="1" Y="129"/>
-        <UsageCount Value="37"/>
+        <TopLine Value="115"/>
+        <CursorPos X="56" Y="148"/>
+        <UsageCount Value="41"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit40>
@@ -496,11 +502,11 @@
       <Unit48>
         <Filename Value="commands/commandline.pas"/>
         <UnitName Value="commandline"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="241"/>
         <CursorPos X="1" Y="263"/>
-        <UsageCount Value="37"/>
+        <UsageCount Value="41"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit48>
@@ -690,7 +696,7 @@
       <Unit71>
         <Filename Value="gdb/UGDBDescriptor.pas"/>
         <UnitName Value="UGDBDescriptor"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="15"/>
         <WindowIndex Value="0"/>
         <TopLine Value="212"/>
         <CursorPos X="102" Y="236"/>
@@ -1449,7 +1455,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="29" Y="26"/>
-        <UsageCount Value="15"/>
+        <UsageCount Value="19"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit165>
@@ -1518,18 +1524,18 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="58" Y="22"/>
-        <UsageCount Value="115"/>
+        <UsageCount Value="121"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit173>
       <Unit174>
         <Filename Value="u/TGMultiObjectChangeCommandList.inc"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="31" Y="4"/>
-        <UsageCount Value="115"/>
+        <UsageCount Value="121"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit174>
@@ -1661,135 +1667,153 @@
       </Unit189>
       <Unit190>
         <Filename Value="u/TGObjectChangeCommandIMPL.inc"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="11" Y="9"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="16"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit190>
+      <Unit191>
+        <Filename Value="../../lazarus/components/opengl/glqtcontext.pas"/>
+        <UnitName Value="GLQTContext"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="129"/>
+        <CursorPos X="50" Y="176"/>
+        <UsageCount Value="10"/>
+      </Unit191>
+      <Unit192>
+        <Filename Value="revision.inc"/>
+        <EditorIndex Value="10"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="24" Y="2"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit192>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="zcad.pas"/>
-        <Caret Line="86" Column="1" TopLine="79"/>
+        <Filename Value="commands/commandline.pas"/>
+        <Caret Line="260" Column="1" TopLine="241"/>
       </Position1>
       <Position2>
-        <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="911" Column="1" TopLine="879"/>
+        <Filename Value="commands/commandline.pas"/>
+        <Caret Line="261" Column="1" TopLine="241"/>
       </Position2>
       <Position3>
-        <Filename Value="commands/commanddefinternal.pas"/>
-        <Caret Line="129" Column="1" TopLine="110"/>
+        <Filename Value="commands/commandline.pas"/>
+        <Caret Line="262" Column="1" TopLine="241"/>
       </Position3>
       <Position4>
-        <Filename Value="commands/commanddefinternal.pas"/>
-        <Caret Line="132" Column="1" TopLine="110"/>
+        <Filename Value="commands/commandline.pas"/>
+        <Caret Line="263" Column="1" TopLine="241"/>
       </Position4>
       <Position5>
-        <Filename Value="commands/commanddefinternal.pas"/>
-        <Caret Line="133" Column="1" TopLine="110"/>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="911" Column="38" TopLine="880"/>
       </Position5>
       <Position6>
-        <Filename Value="commands/commanddefinternal.pas"/>
-        <Caret Line="134" Column="1" TopLine="110"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="386" Column="41" TopLine="355"/>
       </Position6>
       <Position7>
-        <Filename Value="commands/commanddefinternal.pas"/>
-        <Caret Line="135" Column="1" TopLine="110"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="87" Column="41" TopLine="62"/>
       </Position7>
       <Position8>
-        <Filename Value="commands/commanddefinternal.pas"/>
-        <Caret Line="136" Column="1" TopLine="110"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="143" Column="6" TopLine="121"/>
       </Position8>
       <Position9>
-        <Filename Value="commands/commanddefinternal.pas"/>
-        <Caret Line="139" Column="1" TopLine="110"/>
+        <Filename Value="zcad.pas"/>
+        <Caret Line="105" Column="49" TopLine="79"/>
       </Position9>
       <Position10>
-        <Filename Value="commands/commanddefinternal.pas"/>
-        <Caret Line="140" Column="1" TopLine="110"/>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="911" Column="38" TopLine="880"/>
       </Position10>
       <Position11>
-        <Filename Value="commands/commanddefinternal.pas"/>
-        <Caret Line="141" Column="1" TopLine="110"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="182" Column="16" TopLine="161"/>
       </Position11>
       <Position12>
-        <Filename Value="commands/commanddefinternal.pas"/>
-        <Caret Line="142" Column="1" TopLine="110"/>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="909" Column="46" TopLine="880"/>
       </Position12>
       <Position13>
-        <Filename Value="commands/commanddefinternal.pas"/>
-        <Caret Line="143" Column="1" TopLine="111"/>
+        <Filename Value="zcad.pas"/>
+        <Caret Line="86" Column="1" TopLine="79"/>
       </Position13>
       <Position14>
-        <Filename Value="commands/commanddefinternal.pas"/>
-        <Caret Line="145" Column="1" TopLine="113"/>
+        <Filename Value="sysinfo.pas"/>
+        <Caret Line="36" Column="66" TopLine="19"/>
       </Position14>
       <Position15>
-        <Filename Value="commands/commanddefinternal.pas"/>
-        <Caret Line="146" Column="1" TopLine="114"/>
+        <Filename Value="zcad.pas"/>
+        <Caret Line="86" Column="1" TopLine="79"/>
       </Position15>
       <Position16>
         <Filename Value="commands/commanddefinternal.pas"/>
-        <Caret Line="147" Column="1" TopLine="115"/>
+        <Caret Line="148" Column="56" TopLine="115"/>
       </Position16>
       <Position17>
-        <Filename Value="commands/commanddefinternal.pas"/>
-        <Caret Line="148" Column="1" TopLine="116"/>
+        <Filename Value="languade/UObjectDescriptor.pas"/>
+        <Caret Line="366" Column="76" TopLine="281"/>
       </Position17>
       <Position18>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="912" Column="1" TopLine="880"/>
+        <Caret Line="884" Column="31" TopLine="888"/>
       </Position18>
       <Position19>
-        <Filename Value="commands/commandline.pas"/>
-        <Caret Line="260" Column="1" TopLine="241"/>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="890" Column="1" TopLine="880"/>
       </Position19>
       <Position20>
-        <Filename Value="commands/commandline.pas"/>
-        <Caret Line="261" Column="1" TopLine="241"/>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="984" Column="27" TopLine="970"/>
       </Position20>
       <Position21>
-        <Filename Value="commands/commandline.pas"/>
-        <Caret Line="262" Column="1" TopLine="241"/>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="1018" Column="1" TopLine="1012"/>
       </Position21>
       <Position22>
-        <Filename Value="commands/commandline.pas"/>
-        <Caret Line="263" Column="1" TopLine="241"/>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="964" Column="15" TopLine="950"/>
       </Position22>
       <Position23>
-        <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="911" Column="38" TopLine="880"/>
+        <Filename Value="zcad.pas"/>
+        <Caret Line="86" Column="1" TopLine="79"/>
       </Position23>
       <Position24>
-        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="386" Column="41" TopLine="355"/>
+        <Filename Value="gui/oglwindow.pas"/>
+        <Caret Line="1840" Column="1" TopLine="1818"/>
       </Position24>
       <Position25>
-        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="87" Column="41" TopLine="62"/>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="1085" Column="76" TopLine="1077"/>
       </Position25>
       <Position26>
-        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="143" Column="6" TopLine="121"/>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="1035" Column="15" TopLine="1025"/>
       </Position26>
       <Position27>
         <Filename Value="zcad.pas"/>
-        <Caret Line="105" Column="49" TopLine="79"/>
+        <Caret Line="86" Column="1" TopLine="79"/>
       </Position27>
       <Position28>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="911" Column="38" TopLine="880"/>
+        <Caret Line="898" Column="1" TopLine="879"/>
       </Position28>
       <Position29>
-        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="182" Column="16" TopLine="161"/>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="1004" Column="1" TopLine="985"/>
       </Position29>
       <Position30>
-        <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="909" Column="46" TopLine="880"/>
+        <Filename Value="revision.inc"/>
+        <Caret Line="2" Column="24" TopLine="1"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -1802,6 +1826,7 @@
       <IncludeFiles Value="u;gdb;commands;gui;devicebase;languade;electroteh;$(ProjOutDir);../cad"/>
       <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;../cad"/>
       <UnitOutputDirectory Value="dcu"/>
+      <LCLWidgetType Value="win32"/>
     </SearchPaths>
     <Parsing>
       <Style Value="1"/>

@@ -257,7 +257,7 @@ begin
      begin
           //--------------(PSelectedObjDesc(md).ptempobj).rtsave(@self);
 
-          PGDBObjGenericWithSubordinated(obj^.bp.owner)^.ImEdited({@self}obj,obj^.bp.PSelfInOwnerArray);
+          //PGDBObjGenericWithSubordinated(obj^.bp.owner)^.ImEdited({@self}obj,obj^.bp.PSelfInOwnerArray);
           PSelectedObjDesc(md).ptempobj^.done;
           GDBFreeMem(GDBPointer(PSelectedObjDesc(md).ptempobj));
           PSelectedObjDesc(md).ptempobj:=nil;

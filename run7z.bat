@@ -1,3 +1,4 @@
+call s3p
 call deltmp
 del c:\cad.7z;c:\cad_source.7z
 7z a c:\cad.7z cad\ -ms=off  -xr!*.svn

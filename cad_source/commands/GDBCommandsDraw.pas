@@ -493,6 +493,7 @@ begin
     pb^.BuildGeometry;
     pb^.BuildVarGeometry;
     pb^.Format;
+    gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
     pb^.Visible:=0;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     pb^.RenderFeedback;

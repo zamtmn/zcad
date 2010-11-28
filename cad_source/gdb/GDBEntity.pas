@@ -386,7 +386,12 @@ begin
   if selected or ((bp.owner <> nil) and (bp.owner^.isselected)) then
                                                                     begin
                                                                       glStencilFunc(GL_ALWAYS,0,1);
-                                                                      //isOpenGLError;
+                                                                      {glStencilFunc(GL_GEQUAL,1,3);
+                                                                      glStencilOp(GL_INCR,GL_KEEP,GL_INCR);}
+
+
+
+
                                                                       glLineStipple(3, ls);
                                                                       glEnable(GL_LINE_STIPPLE);
                                                                       sel := true;
@@ -400,6 +405,7 @@ begin
                                                                 else
                                                                     begin
                                                                          glStencilFunc(GL_EQUAL,0,1);
+                                                                         //glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
                                                                     end;
   {if (POGLWnd.subrender = 0) or
      (PGDBLayerPropArray(GDB.layertable.parray)^[vp.layer].name <> '0')
@@ -472,6 +478,7 @@ end;
 procedure GDBObjEntity.FormatAfterEdit;
 begin
      format;
+     //AddObjectToObjArray
 end;
 procedure GDBObjEntity.higlight;
 begin

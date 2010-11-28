@@ -23,7 +23,8 @@ uses
  strproc,Forms, stdctrls, Controls, Graphics,ExtCtrls,
  gdbasetypes,SysInfo,fileutil;
 const
-     vinfotext='Переходная версия. WINAPI->LCL'#13#10;
+     vinfotext=
+'Не стабильная версия.'#13#10;
 type
   TSplashWnd = class(TForm)
     txt:tlabel;
@@ -71,7 +72,8 @@ end;
 procedure createsplash;
 begin
      SplashWindow:=TSplashWnd.Create(nil);
-     //SplashWindow.show;
+     if not sysparam.nosplash then
+                                  SplashWindow.show;
      application.ProcessMessages;
 end;
 procedure removesplash;

@@ -1022,7 +1022,7 @@ function About_com(Operands:pansichar):GDBInteger;
 begin
   if not assigned(Aboutwindow) then
                                   Aboutwindow:=TAboutWnd.mycreate(Application,@Aboutwindow);
-  Aboutwindow.Show;
+  Aboutwindow.ShowModal;
 end;
 function Help_com(Operands:pansichar):GDBInteger;
 begin
@@ -1412,7 +1412,7 @@ end;
 procedure finalize;
 begin
      //Optionswindow.done;
-     Aboutwindow.{done}free;
+     //Aboutwindow.{done}free;
      //Helpwindow.{done}free;
      MSEditor.done;
 

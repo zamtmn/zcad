@@ -113,7 +113,7 @@ function CreateTranslationMatrix(const V:GDBvertex): DMatrix4D;
 function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;
 function CreateVertex(const x,y,z:GDBDouble):GDBVertex;
 function IsPointInBB(const point:GDBvertex; var fistbb:GDBBoundingBbox):GDBBoolean;
-procedure ConcatBB(var fistbb:GDBBoundingBbox;secbb:GDBBoundingBbox);
+procedure ConcatBB(var fistbb:GDBBoundingBbox;const secbb:GDBBoundingBbox);
 function IsBBNul(const bb:GDBBoundingBbox):boolean;
 function boundingintersect(var bb1,bb2:GDBBoundingBbox):GDBBoolean;
 procedure MatrixInvert(var M: DMatrix4D);
@@ -138,7 +138,7 @@ function PointOf3PlaneIntersect(P1,P2,P3:DVector4D):GDBVertex;
 function PointOfLinePlaneIntersect(p1,d:GDBVertex;plane:DVector4D;var point :GDBVertex):GDBBoolean;
 function PlaneFrom3Pont(P1,P2,P3:GDBVertex):DVector4D;
 
-procedure concatBBandPoint(var fistbb:GDBBoundingBbox;point:GDBvertex);
+procedure concatBBandPoint(var fistbb:GDBBoundingBbox;const point:GDBvertex);
 
 function CalcTrueInFrustum (const lbegin,lend:GDBvertex; const frustum:ClipArray):TINRect;
 function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:ClipArray):TINRect;
@@ -1485,7 +1485,7 @@ begin
      result.y:=y;
      result.z:=z;
 end;
-procedure concatBBandPoint(var fistbb:GDBBoundingBbox;point:GDBvertex);
+procedure concatBBandPoint(var fistbb:GDBBoundingBbox;const point:GDBvertex);
 begin
   if fistbb.LBN.x>point.x then fistbb.LBN.x:=point.x;
   if fistbb.LBN.y>point.y then fistbb.LBN.y:=point.y;
@@ -1496,7 +1496,7 @@ begin
   if fistbb.RTF.z<point.z then fistbb.RTF.z:=point.z;
 
 end;
-procedure ConcatBB(var fistbb:GDBBoundingBbox;secbb:GDBBoundingBbox);
+procedure ConcatBB(var fistbb:GDBBoundingBbox;const secbb:GDBBoundingBbox);
 begin
      if (fistbb.RTF.x=fistbb.LBN.x)
      and (fistbb.RTF.y=fistbb.LBN.y)
@@ -1515,8 +1515,8 @@ begin
                      begin
                            concatBBandPoint(fistbb,secbb.LBN);
                            concatBBandPoint(fistbb,secbb.RTF);
-                           concatBBandPoint(secbb,fistbb.LBN);
-                           concatBBandPoint(secbb,fistbb.RTF);
+                           {concatBBandPoint(secbb,fistbb.LBN);
+                           concatBBandPoint(secbb,fistbb.RTF);}
                      end;
 
            end

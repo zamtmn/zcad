@@ -373,8 +373,13 @@ begin
   restructure;
 end;
 procedure GDBObjGenericSubEntry.formatafteredit;
+var
+  p:pGDBObjEntity;
+      ir:itrec;
+
 begin
   ObjCasheArray.Formatafteredit;
+
   ObjCasheArray.clear;
   calcbb;
   restructure;

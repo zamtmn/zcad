@@ -122,7 +122,6 @@ begin
      p^.bp.TreePos.Owner:=@self;
      p^.bp.TreePos.SelfIndex:=nul.add(@p);
 end;
-
 procedure TEntTreeNode.updateenttreeadress;
 var pobj:PGDBObjEntity;
     ir:itrec;

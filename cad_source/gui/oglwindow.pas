@@ -2211,6 +2211,10 @@ if (clientwidth=0)or(clientheight=0) then
  if gdb.GetCurrentROOT.ObjArray.Count=1 then
                                                     tick:=0;
 
+ glStencilFunc(gl_always,0,1);
+ glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
+
+
   if gdb.GetCurrentDWG<>nil then
   begin
   if sysvar.RD.RD_Restore_Mode^=WND_AccumBuffer then

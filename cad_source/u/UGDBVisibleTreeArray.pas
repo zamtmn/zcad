@@ -21,7 +21,7 @@ unit UGDBVisibleTreeArray;
 interface
 uses UGDBEntTree,UGDBVisibleOpenArray,UGDBOpenArrayOfPV,
      gdbasetypes,gdbase,
-     sysutils,geometry,memman;
+     sysutils,geometry,memman,GDBEntity;
 type
 {Export+}
 PGDBObjEntityTreeArray=^GDBObjEntityTreeArray;
@@ -31,11 +31,18 @@ GDBObjEntityTreeArray=object(GDBObjEntityOpenArray)(*OpenArrayOfPObj*)
                             constructor initnul;
                             destructor done;virtual;
                             function add(p:GDBPointer):GDBInteger;virtual;
+                            procedure RemoveFromTree(p:PGDBObjEntity);
 
                       end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}GDBManager,log,GDBEntity;
+uses {UGDBDescriptor,}GDBManager,log;
+procedure GDBObjEntityTreeArray.RemoveFromTree(p:PGDBObjEntity);
+begin
+     PTEntTreeNode(p^.bp.TreePos.Owner).nul.deliteminarray(p^.bp.TreePos.SelfIndex);
+     p^.bp.TreePos.SelfIndex:=-1;
+     p^.bp.TreePos.Owner:=nil;
+end;
 destructor GDBObjEntityTreeArray.done;
 var
   p:PGDBaseObject;

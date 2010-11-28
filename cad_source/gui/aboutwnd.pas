@@ -47,7 +47,16 @@ begin
   memo.text:=('ZCAD v'+sysparam.ver.versionstring +#13#10+
                        'Writeln by Andrey M. Zubarev'+#13#10+
                        'zamtmn@yandex.ru'+#13#10+
-                       'Copyright (c) 2004-2010'+#13#10#13#10+vinfotext);
+                       'Copyright (c) 2004-2010'+#13#10#13#10+vinfotext+
+                       #13#10+
+                       '-UNDO\REDO - пока лучше не пользоваться;'+#13#10+
+                       #13#10+
+                       '-При проблемах с отображением\выделением'#13#10+
+                       '  выполнить regen и ctest в ком. строке'#13#10+
+                       #13#10+
+                       '-Для отключение показа этого окна'#13#10+
+                       '  закоментируйте строку "About" в файле'#13#10+
+                       '  components\autorun.cmd ');
   Memo.Parent := self;
 end;
 begin

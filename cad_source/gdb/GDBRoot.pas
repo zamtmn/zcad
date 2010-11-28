@@ -168,11 +168,21 @@ begin
 end;
 procedure GDBObjRoot.formatafteredit;
 var pobj:PGDBObjConnected;
+    p:pGDBObjEntity;
     ir:itrec;
 begin
 
      //inherited formatafteredit;
        ObjCasheArray.Formatafteredit;
+
+       p:=ObjCasheArray.beginiterate(ir);
+       if p<>nil then
+       repeat
+            self.ObjArray.RemoveFromTree(p);
+            self.ObjArray.ObjTree.AddObjectToNodeTree(p);
+            p:=ObjCasheArray.iterate(ir);
+       until p=nil;
+
        ObjCasheArray.clear;
        calcbb;
      pobj:=self.ObjToConnectedArray.beginiterate(ir);

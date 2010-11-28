@@ -283,6 +283,7 @@ begin
   pb^.BuildGeometry;
   pb^.BuildVarGeometry;
   pb^.format;
+  gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
   //own.AddObjectToObjArray(addr(pb));
   result:=pb;
   {for i := 0 to GDB.BlockDefArray.count - 1 do

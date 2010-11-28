@@ -41,7 +41,7 @@ procedure SetDCPixelFormat(oglc:TOGLContextDesk);
 function isOpenGLError:GLenum;
 procedure myglbegin(mode:GLenum);
 procedure myglend;
-function CalcDisplaySubFrustum(x,y,w,h:gdbdouble;const mm,pm:DMatrix4D):ClipArray;
+function CalcDisplaySubFrustum(const x,y,w,h:gdbdouble;const mm,pm:DMatrix4D):ClipArray;
 //(const v: PGLdouble); stdcall;
 //procedure myglVertex3dV(V:PGDBVertex);
 procedure myglVertex3dV(const V:PGDBVertex);stdcall;
@@ -122,7 +122,7 @@ begin
                            glVertex3dv(@t);
                       end;
 end;
-function CalcDisplaySubFrustum(x,y,w,h:gdbdouble;const mm,pm:DMatrix4D):ClipArray;
+function CalcDisplaySubFrustum(const x,y,w,h:gdbdouble;const mm,pm:DMatrix4D):ClipArray;
 var
 tm: DMatrix4D;
 begin

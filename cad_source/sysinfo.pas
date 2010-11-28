@@ -26,11 +26,27 @@ type tsysparam=record
                      temppath: GDBString;
                      screenx,screeny:GDBInteger;
                      ver:TmyFileVersionInfo;
+                     nosplash:GDBBoolean;
               end;
 var
   sysparam: tsysparam;
 implementation
+
 uses {shared,varmandef,} sysutils,WindowsSpecific,log;
+procedure ProcessParanstr;
+var
+   i:integer;
+   param:GDBString;
+begin
+     i:=paramcount;
+     for i:=1 to paramcount do
+       begin
+            param:=uppercase(paramstr(i));
+
+            if (param='NOSPLASH')or(param='NS')then
+                                                   sysparam.nosplash:=true;
+       end;
+end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('sysinfo.initialization');{$ENDIF}
      sysparam.programpath:=SysToUTF8(ExtractFilePath(paramstr(0)));
@@ -49,9 +65,10 @@ begin
 
 
      {$IFDEF FPC}
-                 sysparam.ver:=GetVersion('zcad_fpc.exe');
+                 sysparam.ver:=GetVersion('zcad.exe');
      {$ELSE}
                  sysparam.ver:=GetVersion('ZCAD.exe');
      {$ENDIF}
+     ProcessParanstr;
      //sysparam.verstr:=Format('%d.%d.%d.%d SVN: %s',[sysparam.ver.major,sysparam.ver.minor,sysparam.ver.release,sysparam.ver.build,RevisionStr]);
 end.

@@ -498,7 +498,8 @@ function GDBObjNet.ImEdited;
 begin
      //pobj^.format;
      inherited ImEdited(pobj,pobjinarray);
-     PGDBObjGenericSubEntry(bp.owner)^.ImEdited(@self,bp.PSelfInOwnerArray);
+     YouChanged;
+     //PGDBObjGenericSubEntry(bp.owner)^.ImEdited(@self,bp.PSelfInOwnerArray);
      addtoconnect(@self);
 end;
 constructor GDBObjNet.initnul;

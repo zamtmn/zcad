@@ -22,8 +22,8 @@ interface
 uses gdbasetypes;
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       {$IFDEF FPC}
-                  {$IFDEF LINUX}filelog='log/zcad_fpc_linux.log';{$ENDIF}
-                  {$IFDEF WINDOWS}filelog='log/zcad_fpc_windows.log';{$ENDIF}
+                  {$IFDEF LINUX}filelog='log/zcad_linux.log';{$ENDIF}
+                  {$IFDEF WINDOWS}filelog='log/zcad_windows.log';{$ENDIF}
       {$ENDIF}
       lp_IncPos=1;
       lp_DecPos=-lp_IncPos;

@@ -1376,7 +1376,7 @@ begin
                        PrintTreeNode(pnode.pminusnode,depth);
 end;
 
-function CTest:GDBInteger;
+function RebuildTree_com:GDBInteger;
 var //i: GDBInteger;
     pv:pGDBObjEntity;
     ir:itrec;
@@ -1459,7 +1459,7 @@ begin
   selframecommand:=CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,@FrameEdit_com_Command_End,nil,nil,@FrameEdit_com_BeforeClick,@FrameEdit_com_AfterClick,nil,'SelectFrame',0,0);
   selframecommand^.overlay:=true;
   selframecommand.CEndActionAttr:=0;
-  CreateCommandFastObjectPlugin(@CTest,'CTest',CADWG,0);
+  CreateCommandFastObjectPlugin(@RebuildTree_com,'RebuildTree',CADWG,0);
   CreateCommandFastObjectPlugin(@layer_cmd,'Layer',CADWG,0);
   CreateCommandFastObjectPlugin(@undo_com,'Undo',CADWG,0);
   CreateCommandFastObjectPlugin(@redo_com,'Redo',CADWG,0);

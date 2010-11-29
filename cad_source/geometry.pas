@@ -106,7 +106,7 @@ function distance2piece(q:GDBvertex;var p1,p2:GDBvertex): {DistAndPoint}double;o
 function distance2piece_2(var q:GDBvertex2DI; p1,p2:GDBvertex2D): double;overload;
 function distance2piece_2(var q:GDBvertex2DI; p1,p2:GDBvertex2DI): double;overload;
 
-function distance2piece_2_xy(var q:GDBvertex2DI; p1,p2:GDBvertex2D):GDBvertex2DI;
+function distance2piece_2_xy(var q:GDBvertex2DI;const p1,p2:GDBvertex2D):GDBvertex2DI;
 
 function distance2point_2(var p1,p2:GDBvertex2DI):GDBInteger;
 function CreateTranslationMatrix(const V:GDBvertex): DMatrix4D;
@@ -115,7 +115,7 @@ function CreateVertex(const x,y,z:GDBDouble):GDBVertex;
 function IsPointInBB(const point:GDBvertex; var fistbb:GDBBoundingBbox):GDBBoolean;
 procedure ConcatBB(var fistbb:GDBBoundingBbox;const secbb:GDBBoundingBbox);
 function IsBBNul(const bb:GDBBoundingBbox):boolean;
-function boundingintersect(var bb1,bb2:GDBBoundingBbox):GDBBoolean;
+function boundingintersect(const bb1,bb2:GDBBoundingBbox):GDBBoolean;
 procedure MatrixInvert(var M: DMatrix4D);
 function vectordot(const v1,v2:GDBVertex):GDBVertex;
 function scalardot(var v1,v2:GDBVertex):GDBDouble;
@@ -129,14 +129,14 @@ function _myGluProject(const objx,objy,objz:GDBdouble;const modelMatrix,projMatr
 function _myGluProject2(const objcoord:GDBVertex;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; var wincoord:GDBVertex):Integer;
 function _myGluUnProject(const winx,winy,winz:GDBdouble;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4;var objx,objy,objz:GDBdouble):Integer;
 
-function ortho(xmin,xmax,ymin,ymax,zmin,zmax:GDBDouble;matrix:PDMatrix4D):DMatrix4D;
-function Perspective(fovy,W_H,zmin,zmax:GDBDouble;matrix:PDMatrix4D):DMatrix4D;
-function LookAt(point,ex,ey,ez:GDBvertex;matrix:PDMatrix4D):DMatrix4D;
+function ortho(const xmin,xmax,ymin,ymax,zmin,zmax:GDBDouble;const matrix:PDMatrix4D):DMatrix4D;
+function Perspective(const fovy,W_H,zmin,zmax:GDBDouble;const matrix:PDMatrix4D):DMatrix4D;
+function LookAt(point,ex,ey,ez:GDBvertex;const matrix:PDMatrix4D):DMatrix4D;
 
-function calcfrustum(clip:PDMatrix4D):cliparray;
-function PointOf3PlaneIntersect(P1,P2,P3:DVector4D):GDBVertex;
-function PointOfLinePlaneIntersect(p1,d:GDBVertex;plane:DVector4D;var point :GDBVertex):GDBBoolean;
-function PlaneFrom3Pont(P1,P2,P3:GDBVertex):DVector4D;
+function calcfrustum(const clip:PDMatrix4D):cliparray;
+function PointOf3PlaneIntersect(const P1,P2,P3:DVector4D):GDBVertex;
+function PointOfLinePlaneIntersect(const p1,d:GDBVertex;const plane:DVector4D;var point :GDBVertex):GDBBoolean;
+function PlaneFrom3Pont(const P1,P2,P3:GDBVertex):DVector4D;
 
 procedure concatBBandPoint(var fistbb:GDBBoundingBbox;const point:GDBvertex);
 
@@ -387,7 +387,7 @@ begin
 
       result:=IRPartially;
 end;
-function PointOf3PlaneIntersect(P1,P2,P3:DVector4D):GDBVertex;
+function PointOf3PlaneIntersect(const P1,P2,P3:DVector4D):GDBVertex;
 var
    N1,N2,N3,N12,N23,N31,a1,a2,a3:GDBVertex;
    a4:GDBDouble;
@@ -414,7 +414,7 @@ begin
      result:=VertexMulOnSc(a1,-a4);
 
 end;
-function PlaneFrom3Pont(P1,P2,P3:GDBVertex):DVector4D;
+function PlaneFrom3Pont(const P1,P2,P3:GDBVertex):DVector4D;
 //var
 //   N1,N2,N3,N12,N23,N31,a1,a2,a3:GDBVertex;
 //   a4:GDBDouble;
@@ -425,7 +425,7 @@ begin
       result[3]:= -(P1.x*(P2.y*P3.z - P3.y*P2.z) + P2.x*(P3.y*P1.z - P1.y*P3.z) + P3.x*(P1.y*P2.z - P2.y*P1.z));
 
 end;
-function PointOfLinePlaneIntersect(p1,d:GDBVertex;plane:DVector4D;var point :GDBVertex):GDBBoolean;
+function PointOfLinePlaneIntersect(const p1,d:GDBVertex;const plane:DVector4D;var point :GDBVertex):GDBBoolean;
 var
 //   N1,N2,N3,N12,N23,N31,a1,a2,a3:GDBVertex;
    td:GDBDouble;
@@ -441,7 +441,7 @@ begin
      result:=true;
 
 end;
-function calcfrustum(clip:PDMatrix4D):cliparray;
+function calcfrustum(const clip:PDMatrix4D):cliparray;
 var t:GDBDouble;
 begin
    //* Находим A, B, C, D для ПРАВОЙ плоскости */
@@ -939,7 +939,7 @@ begin
   result:= t;
 end;
 
-function distance2piece_2_xy(var q:GDBvertex2DI; p1,p2:GDBvertex2D):GDBvertex2DI;
+function distance2piece_2_xy(var q:GDBvertex2DI;const p1,p2:GDBvertex2D):GDBvertex2DI;
 var t,w,p2x_p1x,p2y_p1y,qx_p1x,qy_p1y,qy_p2y,qx_p2x,s1,s2: double;
 begin
   p2x_p1x:=p2.x-p1.x;
@@ -1563,7 +1563,7 @@ else if IsPointInBB(CreateVertex(bb2.rtf.x,bb2.rtf.y,bb2.rtf.z),bb1) then begin 
 else if IsPointInBB(CreateVertex(bb2.rtf.x,bb2.lbn.y,bb2.rtf.z),bb1) then begin result:=true; exit end
 
 end;}
-function boundingintersect(var bb1,bb2:GDBBoundingBbox):GDBBoolean;
+function boundingintersect(const bb1,bb2:GDBBoundingBbox):GDBBoolean;
 var
    b1,b2,b1c,b2c,dist:gdbvertex;
    //dist:gdbdouble;

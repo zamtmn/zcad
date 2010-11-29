@@ -122,6 +122,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function ReturnLastOnMouse:PGDBObjEntity;virtual;
                     function DeSelect:GDBInteger;virtual;
                     function YouDeleted:GDBInteger;virtual;
+                    procedure YouChanged;virtual;
                     function GetObjTypeName:GDBString;virtual;
                     function GetObjType:GDBWord;virtual;
                     procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
@@ -290,6 +291,10 @@ end;
 function GDBObjEntity.YouDeleted;
 begin
      pgdbobjgenericsubentry(bp.owner)^.EraseMi(@self,bp.PSelfInOwnerArray);
+end;
+procedure GDBObjEntity.YouChanged;
+begin
+     PGDBObjGenericWithSubordinated(bp.owner)^.ImEdited(@self,bp.PSelfInOwnerArray);
 end;
 function GDBObjEntity.ReturnLastOnMouse;
 begin

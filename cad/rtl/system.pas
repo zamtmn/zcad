@@ -249,6 +249,12 @@ GDBArrayVertex=array[0..0] of GDBvertex;
   TArrayIndex=GDBInteger;
   fontfloat=GDBFloat;
   pfontfloat=^fontfloat;
+  TPolyData=record
+                  nearestvertex:gdbinteger;
+                  nearestline:gdbinteger;
+                  dir:gdbinteger;
+                  wc:GDBVertex;
+            end;
 FreeElProc=procedure (p:GDBPointer);
 //Generate on C:\zcad\CAD_SOURCE\u\UOpenArray.pas
 POpenArray=^OpenArray;
@@ -1018,8 +1024,8 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure select;virtual;abstract;
                     procedure remapcontrolpoints(pp:PGDBControlPointArray);virtual;abstract;
                     //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
-                    procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;abstract;
-                    procedure transform(t_matrix:PDMatrix4D);virtual;abstract;
+                    procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
+                    procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                     procedure remaponecontrolpoint(pdesc:PControlPointDesc);virtual;abstract;
                     function beforertmodify:GDBPointer;virtual;abstract;
                     procedure afterrtmodify(p:GDBPointer);virtual;abstract;
@@ -1032,6 +1038,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function ReturnLastOnMouse:PGDBObjEntity;virtual;abstract;
                     function DeSelect:GDBInteger;virtual;abstract;
                     function YouDeleted:GDBInteger;virtual;abstract;
+                    procedure YouChanged;virtual;abstract;
                     function GetObjTypeName:GDBString;virtual;abstract;
                     function GetObjType:GDBWord;virtual;abstract;
                     procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;abstract;
@@ -1072,7 +1079,7 @@ GDBObj3DFace=object(GDBObj3d)
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
-                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;abstract;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  procedure rtsave(refp:GDBPointer);virtual;abstract;
                  function GetObjTypeName:GDBString;virtual;abstract;
@@ -1112,7 +1119,7 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                procedure Format;virtual;abstract;
                procedure CalcObjMatrix;virtual;abstract;
                function CalcObjMatrixWithoutOwner:DMatrix4D;
-               procedure transform(t_matrix:PDMatrix4D);virtual;abstract;
+               procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                procedure Renderfeedback;virtual;abstract;
                function GetCenterPoint:GDBVertex;virtual;abstract;
                procedure createfield;virtual;abstract;
@@ -1199,7 +1206,7 @@ GDBObjArc=object(GDBObjPlain)
                  function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;abstract;
                  function getsnap(var osp:os_record):GDBBoolean;virtual;abstract;
                  function beforertmodify:GDBPointer;virtual;abstract;
-                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;abstract;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;abstract;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  procedure rtsave(refp:GDBPointer);virtual;abstract;
@@ -1246,7 +1253,7 @@ GDBObjCircle=object(GDBObjWithLocalCS)
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
                  function beforertmodify:GDBPointer;virtual;abstract;
-                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;abstract;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;abstract;
                  function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;abstract;
                  destructor done;virtual;abstract;
@@ -1288,6 +1295,7 @@ GDBObjEntityTreeArray=object(GDBObjEntityOpenArray)(*OpenArrayOfPObj*)
                             constructor initnul;
                             destructor done;virtual;abstract;
                             function add(p:GDBPointer):GDBInteger;virtual;abstract;
+                            procedure RemoveFromTree(p:PGDBObjEntity);
                       end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBGenericSubEntry.pas
 PTDrawingPreCalcData=^TDrawingPreCalcData;
@@ -1399,7 +1407,7 @@ GDBObjComplex=object(GDBObjWithLocalCS)
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
                     procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;abstract;
-                    procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;abstract;
+                    procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                     procedure Format;virtual;abstract;
                     //procedure feedbackinrect;virtual;abstract;
                     function InRect:TInRect;virtual;abstract;
@@ -1491,7 +1499,7 @@ GDBObjNet=object(GDBObjConnected)
                  procedure DelSelectedSubitem;virtual;abstract;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
-                 procedure transform(t_matrix:PDMatrix4D);virtual;abstract;
+                 procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                  function GetNearestLine(const point:GDBVertex):PGDBObjEntity;
                  procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
@@ -1528,10 +1536,10 @@ GDBObjLine=object(GDBObj3d)
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                   function beforertmodify:GDBPointer;virtual;abstract;
                   procedure clearrtmodify(p:GDBPointer);virtual;abstract;
-                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;abstract;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;abstract;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
-                 procedure transform(t_matrix:PDMatrix4D);virtual;abstract;
+                 procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                   function jointoline(pl:pgdbobjline):GDBBoolean;virtual;abstract;
                   function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;abstract;
                   function GetObjTypeName:GDBString;virtual;abstract;
@@ -1567,7 +1575,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  procedure feedbackinrect;virtual;abstract;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
-                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;abstract;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                  procedure rtsave(refp:GDBPointer);virtual;abstract;
                  procedure getoutbound;virtual;abstract;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
@@ -1594,7 +1602,7 @@ GDBObjText=object(GDBObjAbstractText)
                  function GetObjTypeName:GDBString;virtual;abstract;
                  destructor done;virtual;abstract;
                  function getsnap(var osp:os_record):GDBBoolean;virtual;abstract;
-                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;abstract;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;abstract;
                  function IsHaveObjXData:GDBBoolean;virtual;abstract;
                  procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
@@ -1639,7 +1647,7 @@ GDBObjPoint=object(GDBObj3d)
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
-                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;abstract;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  procedure rtsave(refp:GDBPointer);virtual;abstract;
                  function GetObjTypeName:GDBString;virtual;abstract;
@@ -1665,7 +1673,7 @@ GDBObjCurve=object(GDBObj3d)
                  procedure rtsave(refp:GDBPointer);virtual;abstract;
                  procedure RenderFeedback;virtual;abstract;
                  function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;abstract;
-                 procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;abstract;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                  function getsnap(var osp:os_record):GDBBoolean;virtual;abstract;
@@ -1675,7 +1683,7 @@ GDBObjCurve=object(GDBObj3d)
                  procedure AddVertex(Vertex:GDBVertex);virtual;abstract;
                  procedure SaveToDXFfollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
-                 procedure transform(t_matrix:PDMatrix4D);virtual;abstract;
+                 procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                  procedure feedbackinrect;virtual;abstract;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
                  procedure AddOnTrackAxis(posr:pos_record);virtual;abstract;
@@ -1692,6 +1700,7 @@ GDBObjPolyline=object(GDBObjCurve)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  function GetObjTypeName:GDBString;virtual;abstract;
                  function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;abstract;
+                 procedure InsertElement(PEProp.nearestline,PEProp.dir,@wc);
            end;
 //Generate on C:\zcad\CAD_SOURCE\electroteh\GDBCable.pas
 PTNodeProp=^TNodeProp;
@@ -1791,7 +1800,7 @@ GDBObjElLeader=object(GDBObjComplex)
             function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;abstract;
             procedure RenderFeedback;virtual;abstract;
             procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
-            procedure rtmodifyonepoint(rtmod:TRTModifyData);virtual;abstract;
+            procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
             function beforertmodify:GDBPointer;virtual;abstract;
             procedure select;virtual;abstract;
             procedure Format;virtual;abstract;
@@ -1807,7 +1816,7 @@ GDBObjElLeader=object(GDBObjComplex)
             procedure SaveToDXFFollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
             function InRect:TInRect;virtual;abstract;
             destructor done;virtual;abstract;
-            procedure transform(t_matrix:PDMatrix4D);virtual;abstract;
+            procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
             procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
             procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;abstract;
             end;

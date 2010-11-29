@@ -197,7 +197,8 @@ function GDBObjDevice.ImEdited;
 //var t:gdbinteger;
 begin
      inherited imedited (pobj,pobjinarray);
-     bp.owner^.ImEdited(@self,bp.PSelfInOwnerArray);
+     //bp.owner^.ImEdited(@self,bp.PSelfInOwnerArray);
+     YouChanged;
      //ObjCasheArray.addnodouble(@pobj);
 end;
 function GDBObjDevice.ReturnLastOnMouse;

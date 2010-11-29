@@ -37,10 +37,22 @@ GDBObjPolyline=object(GDBObjCurve)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
+                 procedure InsertVertex(const PolyData:TPolyData);
+                 procedure DeleteVertex(const PolyData:TPolyData);
            end;
 {Export-}
 implementation
 uses gdbcable,log;
+procedure GDBObjPolyline.InsertVertex(const PolyData:TPolyData);
+begin
+     vertexarrayinocs.InsertElement(PolyData.nearestline,PolyData.dir,@PolyData.wc);
+end;
+
+procedure GDBObjPolyline.DeleteVertex(const PolyData:TPolyData);
+begin
+     vertexarrayinocs.deleteelement(PolyData.nearestvertex);
+end;
+
 function GDBObjPolyline.FromDXFPostProcessBeforeAdd;
 var
     //isdevice:GDBBoolean;

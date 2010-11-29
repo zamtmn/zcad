@@ -181,7 +181,8 @@ function GDBObjElLeader.ImEdited;
 begin
      format;
      inherited imedited (pobj,pobjinarray);
-     bp.owner^.ImEdited(@self,bp.PSelfInOwnerArray);
+     YouChanged;
+     //bp.owner^.ImEdited(@self,bp.PSelfInOwnerArray);
      //ObjCasheArray.addnodouble(@pobj);
 end;
 procedure GDBObjElLeader.format;

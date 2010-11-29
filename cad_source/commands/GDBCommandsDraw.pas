@@ -1218,6 +1218,8 @@ var
     ptv,ptvprev:pgdbvertex;
     ir:itrec;
     v,l:gdbdouble;
+    domethod,undomethod:tmethod;
+    polydata:tpolydata;
 begin
   if button = 1 then
                     button:=button;
@@ -1312,8 +1314,31 @@ begin
                                         begin
                                              if p3dpl^.vertexarrayinocs.Count>2 then
                                              begin
-                                                  p3dpl^.vertexarrayinocs.deleteelement(PEProp.nearestvertex);
-                                                  p3dpl^.Format;
+                                                  polydata.nearestvertex:=PEProp.nearestvertex;
+                                                  polydata.nearestline:={PEProp.nearestline}polydata.nearestvertex;
+                                                  polydata.dir:=PEProp.dir;
+                                                  polydata.dir:=-1;
+                                                  if PEProp.nearestvertex=0 then
+                                                                                polydata.dir:=-1;
+                                                  if PEProp.nearestvertex=p3dpl^.vertexarrayinocs.Count then
+                                                                                polydata.dir:=1;
+                                                  polydata.wc:=PEProp.vvertex;
+                                                  tmethod(domethod).Code:=pointer(p3dpl.DeleteVertex);
+                                                  tmethod(domethod).Data:=p3dpl;
+                                                  tmethod(undomethod).Code:=pointer(p3dpl.InsertVertex);
+                                                  tmethod(undomethod).Data:=p3dpl;
+                                                  with gdb.GetCurrentDWG.UndoStack.PushCreateTGObjectChangeCommand2(polydata,tmethod(domethod),tmethod(undomethod))^ do
+                                                  begin
+                                                       comit;
+                                                  end;
+
+
+
+
+                                                  //p3dpl^.vertexarrayinocs.deleteelement(PEProp.nearestvertex);
+                                                  p3dpl^.YouChanged;
+                                                  gdb.GetCurrentROOT.FormatAfterEdit;
+                                                  //p3dpl^.Format;
                                                   redrawoglwnd;
                                              end
                                              else
@@ -1323,8 +1348,25 @@ begin
                                         begin
                                              if PEProp.setpoint then
                                                                     begin
-                                                                         p3dpl^.vertexarrayinocs.InsertElement(PEProp.nearestline,PEProp.dir,@wc);
-                                                                         p3dpl^.Format;
+                                                                         polydata.nearestvertex:=PEProp.nearestline;
+                                                                         if PEProp.dir=1 then
+                                                                                      inc(polydata.nearestvertex);
+                                                                         polydata.nearestline:=PEProp.nearestline;
+                                                                         polydata.dir:=PEProp.dir;
+                                                                         polydata.wc:=wc;
+                                                                         tmethod(domethod).Code:=pointer(p3dpl.InsertVertex);
+                                                                         tmethod(domethod).Data:=p3dpl;
+                                                                         tmethod(undomethod).Code:=pointer(p3dpl.DeleteVertex);
+                                                                         tmethod(undomethod).Data:=p3dpl;
+                                                                         with gdb.GetCurrentDWG.UndoStack.PushCreateTGObjectChangeCommand2(polydata,tmethod(domethod),tmethod(undomethod))^ do
+                                                                         begin
+                                                                              comit;
+                                                                         end;
+
+                                                                         //p3dpl^.vertexarrayinocs.InsertElement(PEProp.nearestline,PEProp.dir,@wc);
+                                                                         p3dpl^.YouChanged;
+                                                                         gdb.GetCurrentROOT.FormatAfterEdit;
+                                                                         //p3dpl^.Format;
                                                                          redrawoglwnd;
                                                                          PEProp.setpoint:=false;
                                                                     end

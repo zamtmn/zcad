@@ -264,7 +264,7 @@ begin
     if assigned(gdb.GetCurrentDWG) then
     if assigned(gdb.GetCurrentDWG.OGLwindow1) then
     begin
-    gdb.GetCurrentDWG.OGLwindow1.setfocus;
+    //gdb.GetCurrentDWG.OGLwindow1.setfocus;
     gdb.GetCurrentDWG.OGLwindow1.param.firstdraw := TRUE;
     gdb.GetCurrentDWG.OGLwindow1.reprojectaxis;
     gdb.GetCurrentDWG.OGLwindow1.{paint}draw;

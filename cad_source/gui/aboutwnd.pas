@@ -47,7 +47,7 @@ begin
   memo.text:=('ZCAD v'+sysparam.ver.versionstring +#13#10+
                        'Writeln by Andrey M. Zubarev'+#13#10+
                        'zamtmn@yandex.ru'+#13#10+
-                       'Copyright (c) 2004-2010'+#13#10#13#10+vinfotext+
+                       {'Copyright (c) 2004-2010'+#13#10}#13#10+vinfotext+
                        #13#10+
                        '-UNDO\REDO - пока лучше не пользоваться;'+#13#10+
                        #13#10+

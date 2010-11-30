@@ -22,6 +22,8 @@ Panel UPPANEL 994,68,30,525;
     button Undo,undo.bmp,Отменить действие
     button Redo,redo.bmp,Вернуть действие
     Separator
+    button Regen,regen.bmp,Регенерировать чертеж
+    button RebuildTree,#rtree,*DEBUG*Перестроить дерево примитивов
   }
 Panel RIGHTPANEL 994,68,30,525;
   {
@@ -61,8 +63,6 @@ Panel RIGHTPANEL 994,68,30,525;
     button InsertTestTable,spec.bmp,*DEBUG*Вставить таблицу
     Separator
     button SetObjInsp(CURRENT),#FIX,*DEBUG*Фиксировать выделенный объект в инспекторе
-    button RebuildTree,#rtree,*DEBUG*Перестроить дерево примитивов
-
   }
 MainMenuItem Файл;
   {

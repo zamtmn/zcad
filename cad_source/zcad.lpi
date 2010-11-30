@@ -77,7 +77,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="499"/>
         <CursorPos X="62" Y="518"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit2>
       <Unit3>
@@ -228,7 +228,7 @@
       <Unit19>
         <Filename Value="gdb/GDBManager.pas"/>
         <UnitName Value="GDBManager"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="257"/>
         <CursorPos X="61" Y="286"/>
@@ -260,13 +260,13 @@
         <UnitName Value="UPointerDescriptor"/>
         <TopLine Value="99"/>
         <CursorPos X="1" Y="118"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit22>
       <Unit23>
         <Filename Value="gdbase.pas"/>
         <UnitName Value="gdbase"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="226"/>
         <CursorPos X="20" Y="249"/>
@@ -326,7 +326,7 @@
       <Unit29>
         <Filename Value="u/UGDBVisibleTreeArray.pas"/>
         <UnitName Value="UGDBVisibleTreeArray"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
         <TopLine Value="10"/>
         <CursorPos X="44" Y="29"/>
@@ -346,7 +346,6 @@
       <Unit31>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
         <UnitName Value="GDBCommandsDraw"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1303"/>
@@ -443,7 +442,7 @@
       <Unit41>
         <Filename Value="gdb/UGDBEntTree.pas"/>
         <UnitName Value="UGDBEntTree"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="15"/>
         <WindowIndex Value="0"/>
         <TopLine Value="18"/>
         <CursorPos X="75" Y="51"/>
@@ -454,10 +453,13 @@
       <Unit42>
         <Filename Value="gui/cmdline.pas"/>
         <UnitName Value="cmdline"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="13"/>
-        <CursorPos X="59" Y="24"/>
+        <TopLine Value="212"/>
+        <CursorPos X="1" Y="231"/>
         <UsageCount Value="40"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit42>
       <Unit43>
@@ -473,16 +475,18 @@
         <UnitName Value="helpwnd"/>
         <TopLine Value="19"/>
         <CursorPos X="14" Y="46"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit44>
       <Unit45>
         <Filename Value="gui/aboutwnd.pas"/>
         <UnitName Value="aboutwnd"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="23"/>
-        <CursorPos X="81" Y="54"/>
+        <CursorPos X="26" Y="56"/>
         <UsageCount Value="13"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit45>
       <Unit46>
@@ -643,7 +647,7 @@
         <UnitName Value="UEnumDescriptor"/>
         <TopLine Value="135"/>
         <CursorPos X="1" Y="137"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit64>
       <Unit65>
@@ -874,7 +878,7 @@
       <Unit93>
         <Filename Value="u/UGDBOpenArrayOfPObjects.pas"/>
         <UnitName Value="UGDBOpenArrayOfPObjects"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="73"/>
         <CursorPos X="34" Y="70"/>
@@ -962,10 +966,12 @@
       <Unit104>
         <Filename Value="electroteh/GDBCable.pas"/>
         <UnitName Value="GDBCable"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="20"/>
-        <CursorPos X="28" Y="497"/>
-        <UsageCount Value="9"/>
+        <TopLine Value="452"/>
+        <CursorPos X="35" Y="443"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit104>
       <Unit105>
@@ -1002,7 +1008,7 @@
       <Unit109>
         <Filename Value="u/UGDBOpenArrayOfPointer.pas"/>
         <UnitName Value="UGDBOpenArrayOfPointer"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="16"/>
         <WindowIndex Value="0"/>
         <TopLine Value="52"/>
         <CursorPos X="1" Y="84"/>
@@ -1053,7 +1059,7 @@
         <UnitName Value="Buttons"/>
         <TopLine Value="167"/>
         <CursorPos X="3" Y="186"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="10"/>
       </Unit114>
       <Unit115>
         <Filename Value="../../lazarus/lcl/include/lclintfh.inc"/>
@@ -1198,7 +1204,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="46" Y="28"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit134>
       <Unit135>
@@ -1213,7 +1219,7 @@
       <Unit136>
         <Filename Value="gdb/GDBPolyLine.pas"/>
         <UnitName Value="GDBPolyLine"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="29"/>
         <CursorPos X="45" Y="53"/>
@@ -1243,7 +1249,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="22"/>
         <CursorPos X="11" Y="30"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit139>
       <Unit140>
@@ -1326,7 +1332,7 @@
       <Unit149>
         <Filename Value="u/UGDBVisibleOpenArray.pas"/>
         <UnitName Value="UGDBVisibleOpenArray"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
         <TopLine Value="10"/>
         <CursorPos X="32" Y="29"/>
@@ -1507,7 +1513,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="58" Y="22"/>
-        <UsageCount Value="155"/>
+        <UsageCount Value="156"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit170>
       <Unit171>
@@ -1516,7 +1522,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="31" Y="4"/>
-        <UsageCount Value="155"/>
+        <UsageCount Value="156"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit171>
       <Unit172>
@@ -1579,7 +1585,7 @@
       <Unit179>
         <Filename Value="u/UGDBOpenArrayOfPV.pas"/>
         <UnitName Value="UGDBOpenArrayOfPV"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="17"/>
         <WindowIndex Value="0"/>
         <TopLine Value="223"/>
         <CursorPos X="1" Y="237"/>
@@ -1708,123 +1714,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1330" Column="109" TopLine="1302"/>
+        <Caret Line="1221" Column="33" TopLine="1203"/>
       </Position1>
       <Position2>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1315" Column="54" TopLine="1302"/>
+        <Caret Line="1332" Column="103" TopLine="1312"/>
       </Position2>
       <Position3>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1328" Column="115" TopLine="1302"/>
+        <Caret Line="1331" Column="119" TopLine="1312"/>
       </Position3>
       <Position4>
-        <Filename Value="gdb/GDBPolyLine.pas"/>
-        <Caret Line="25" Column="4" TopLine="9"/>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="1333" Column="120" TopLine="1314"/>
       </Position4>
       <Position5>
-        <Filename Value="gdb/GDBPolyLine.pas"/>
-        <Caret Line="46" Column="57" TopLine="24"/>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="1222" Column="5" TopLine="1203"/>
       </Position5>
       <Position6>
-        <Filename Value="gdb/GDBPolyLine.pas"/>
-        <Caret Line="48" Column="80" TopLine="24"/>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="1337" Column="148" TopLine="1318"/>
       </Position6>
       <Position7>
-        <Filename Value="io.pas"/>
-        <Caret Line="791" Column="64" TopLine="348"/>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="1334" Column="115" TopLine="1309"/>
       </Position7>
       <Position8>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1331" Column="112" TopLine="1310"/>
+        <Caret Line="1321" Column="109" TopLine="1308"/>
       </Position8>
       <Position9>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1221" Column="33" TopLine="1203"/>
+        <Caret Line="1317" Column="1" TopLine="1308"/>
       </Position9>
       <Position10>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1332" Column="103" TopLine="1312"/>
+        <Caret Line="1318" Column="1" TopLine="1308"/>
       </Position10>
       <Position11>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1331" Column="119" TopLine="1312"/>
+        <Caret Line="1319" Column="1" TopLine="1308"/>
       </Position11>
       <Position12>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1333" Column="120" TopLine="1314"/>
+        <Caret Line="1323" Column="95" TopLine="1308"/>
       </Position12>
       <Position13>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1222" Column="5" TopLine="1203"/>
+        <Caret Line="1322" Column="82" TopLine="1303"/>
       </Position13>
       <Position14>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1337" Column="148" TopLine="1318"/>
+        <Caret Line="1317" Column="1" TopLine="1303"/>
       </Position14>
       <Position15>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1334" Column="115" TopLine="1309"/>
+        <Caret Line="1318" Column="1" TopLine="1303"/>
       </Position15>
       <Position16>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1321" Column="109" TopLine="1308"/>
+        <Caret Line="1319" Column="1" TopLine="1303"/>
       </Position16>
       <Position17>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1317" Column="1" TopLine="1308"/>
+        <Caret Line="1320" Column="69" TopLine="1303"/>
       </Position17>
       <Position18>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1318" Column="1" TopLine="1308"/>
+        <Caret Line="1317" Column="1" TopLine="1303"/>
       </Position18>
       <Position19>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1319" Column="1" TopLine="1308"/>
+        <Caret Line="1318" Column="1" TopLine="1303"/>
       </Position19>
       <Position20>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1323" Column="95" TopLine="1308"/>
+        <Caret Line="1319" Column="1" TopLine="1303"/>
       </Position20>
       <Position21>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1322" Column="82" TopLine="1303"/>
+        <Caret Line="1317" Column="1" TopLine="1303"/>
       </Position21>
       <Position22>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1317" Column="1" TopLine="1303"/>
+        <Caret Line="1318" Column="1" TopLine="1303"/>
       </Position22>
       <Position23>
-        <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1318" Column="1" TopLine="1303"/>
+        <Filename Value="electroteh/GDBCable.pas"/>
+        <Caret Line="40" Column="41" TopLine="20"/>
       </Position23>
       <Position24>
-        <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1319" Column="1" TopLine="1303"/>
+        <Filename Value="gui/aboutwnd.pas"/>
+        <Caret Line="50" Column="59" TopLine="23"/>
       </Position24>
       <Position25>
-        <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1320" Column="69" TopLine="1303"/>
+        <Filename Value="gui/aboutwnd.pas"/>
+        <Caret Line="52" Column="89" TopLine="23"/>
       </Position25>
       <Position26>
-        <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1317" Column="1" TopLine="1303"/>
+        <Filename Value="gui/cmdline.pas"/>
+        <Caret Line="237" Column="13" TopLine="224"/>
       </Position26>
       <Position27>
-        <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1318" Column="1" TopLine="1303"/>
+        <Filename Value="gui/cmdline.pas"/>
+        <Caret Line="231" Column="1" TopLine="224"/>
       </Position27>
       <Position28>
-        <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1319" Column="1" TopLine="1303"/>
+        <Filename Value="gui/cmdline.pas"/>
+        <Caret Line="232" Column="1" TopLine="224"/>
       </Position28>
       <Position29>
-        <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1317" Column="1" TopLine="1303"/>
+        <Filename Value="gui/cmdline.pas"/>
+        <Caret Line="251" Column="1" TopLine="230"/>
       </Position29>
       <Position30>
-        <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="1318" Column="1" TopLine="1303"/>
+        <Filename Value="gui/cmdline.pas"/>
+        <Caret Line="267" Column="7" TopLine="236"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

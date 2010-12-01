@@ -60,11 +60,22 @@ GDBObjCurve=object(GDBObj3d)
 
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                  procedure AddOnTrackAxis(posr:pos_record);virtual;
+                 procedure InsertVertex(const PolyData:TPolyData);
+                 procedure DeleteVertex(const PolyData:TPolyData);
            end;
 {Export-}
 implementation
 uses
     log;
+procedure GDBObjCurve.InsertVertex(const PolyData:TPolyData);
+begin
+     vertexarrayinocs.InsertElement(PolyData.nearestline,PolyData.dir,@PolyData.wc);
+end;
+
+procedure GDBObjCurve.DeleteVertex(const PolyData:TPolyData);
+begin
+     vertexarrayinocs.deleteelement(PolyData.nearestvertex);
+end;
 procedure GDBObjCurve.AddOnTrackAxis(posr:pos_record);
 var tv:gdbvertex;
     ptv,ppredtv:pgdbvertex;

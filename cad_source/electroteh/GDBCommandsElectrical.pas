@@ -1246,6 +1246,8 @@ var //po:PGDBObjSubordinated;
     tw1,tw2:gdbvertex;
     l1,l2:pgdbobjline;
     pa:GDBPoint3dArray;
+    polydata:tpolydata;
+    domethod,undomethod:tmethod;
 begin
   result:=mclick;
   p3dpl^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
@@ -1255,7 +1257,19 @@ begin
   begin
     if cabcomparam.PTrace=nil then
     begin
-          p3dpl^.AddVertex(wc);
+         polydata.nearestvertex:=p3dpl^.VertexArrayInWCS.Count;
+         polydata.nearestline:=p3dpl^.VertexArrayInWCS.Count;
+         polydata.dir:=1;
+         polydata.wc:=wc;
+         tmethod(domethod).Code:=pointer(p3dpl.InsertVertex);
+         tmethod(domethod).Data:=p3dpl;
+         tmethod(undomethod).Code:=pointer(p3dpl.DeleteVertex);
+         tmethod(undomethod).Data:=p3dpl;
+         with gdb.GetCurrentDWG.UndoStack.PushCreateTGObjectChangeCommand2(polydata,tmethod(domethod),tmethod(undomethod))^ do
+         begin
+              comit;
+         end;
+          {p3dpl^.AddVertex(wc);}
           p3dpl^.Format;
           p3dpl^.RenderFeedback;
           gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);

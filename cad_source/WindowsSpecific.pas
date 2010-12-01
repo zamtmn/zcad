@@ -110,7 +110,7 @@ begin
      od:=TOpenDialog.Create(nil);
      od.Title:='Open file...';
      od.InitialDir:=szCurrentDir;
-     od.Filter:=ProjectFileFilter{[1]};
+     od.Filter:=ProjectFileFilter;
      od.DefaultExt :='dxf';
      od.FilterIndex := 1;
      od.Options := [ofFileMustExist];

@@ -813,8 +813,21 @@ begin
   result:=cmd_ok;
 end;
 function Undo_com(Operands:pansichar):GDBInteger;
+var
+   prevundo:integer;
+   overlay:GDBBoolean;
 begin
-  gdb.GetCurrentDWG.UndoStack.undo;
+  if commandmanager.CommandsStack.Count>0 then
+                                              begin
+                                                   prevundo:=pCommandRTEdObject(ppointer(commandmanager.CommandsStack.getelement(commandmanager.CommandsStack.Count-1))^)^.UndoTop;
+                                                   overlay:=true;
+                                              end
+                                          else
+                                              begin
+                                                   prevundo:=0;
+                                                   overlay:=false;
+                                              end;
+  gdb.GetCurrentDWG.UndoStack.undo(prevundo,overlay);
   redrawoglwnd;
   result:=cmd_ok;
 end;
@@ -1461,8 +1474,8 @@ begin
   selframecommand.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@RebuildTree_com,'RebuildTree',CADWG,0);
   CreateCommandFastObjectPlugin(@layer_cmd,'Layer',CADWG,0);
-  CreateCommandFastObjectPlugin(@undo_com,'Undo',CADWG,0);
-  CreateCommandFastObjectPlugin(@redo_com,'Redo',CADWG,0);
+  CreateCommandFastObjectPlugin(@undo_com,'Undo',CADWG,0).overlay:=true;
+  CreateCommandFastObjectPlugin(@redo_com,'Redo',CADWG,0).overlay:=true;
 
   //Optionswindow.initxywh('',@mainformn,500,300,400,100,false);
   //Aboutwindow:=TAboutWnd.create(Application);{.initxywh('',@mainform,500,200,200,180,false);}

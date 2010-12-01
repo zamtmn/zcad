@@ -1687,6 +1687,8 @@ GDBObjCurve=object(GDBObj3d)
                  procedure feedbackinrect;virtual;abstract;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
                  procedure AddOnTrackAxis(posr:pos_record);virtual;abstract;
+                 procedure InsertVertex(const PolyData:TPolyData);
+                 procedure DeleteVertex(const PolyData:TPolyData);
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBPolyLine.pas
 PGDBObjPolyline=^GDBObjPolyline;
@@ -1700,7 +1702,6 @@ GDBObjPolyline=object(GDBObjCurve)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  function GetObjTypeName:GDBString;virtual;abstract;
                  function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;abstract;
-                 procedure InsertElement(PEProp.nearestline,PEProp.dir,@wc);
            end;
 //Generate on C:\zcad\CAD_SOURCE\electroteh\GDBCable.pas
 PTNodeProp=^TNodeProp;
@@ -1940,6 +1941,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
   pCommandRTEdObject=^CommandRTEdObject;
   CommandRTEdObject = object(CommandRTEdObjectDef)
     saveosmode:GDBInteger;(*hidden_in_objinsp*)
+    UndoTop:TArrayIndex;(*hidden_in_objinsp*)
     commanddata:TTypedData;(*'Параметры команды'*)
     procedure CommandStart(Operands:pansichar); virtual;abstract;
     procedure CommandEnd; virtual;abstract;

@@ -47,6 +47,7 @@ type
   pCommandRTEdObject=^CommandRTEdObject;
   CommandRTEdObject = object(CommandRTEdObjectDef)
     saveosmode:GDBInteger;(*hidden_in_objinsp*)
+    UndoTop:TArrayIndex;(*hidden_in_objinsp*)
     commanddata:TTypedData;(*'Параметры команды'*)
     procedure CommandStart(Operands:pansichar); virtual;
     procedure CommandEnd; virtual;
@@ -75,7 +76,7 @@ type
 function CreateCommandRTEdObjectPlugin(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;ohgd:comdrawfunc;name:pansichar;SA,DA:TCStartAttr):pCommandRTEdObjectPlugin;export;
 function CreateCommandFastObjectPlugin(ocs:comfuncwithoper;name:pansichar;SA,DA:TCStartAttr):pCommandFastObjectPlugin;export;
 implementation
-uses {mainwindow,}{GDBCommandsDraw,GDBCommandsBase,}{oglwindow,}{GDBCommandsElectrical,}Objinsp,varman,log;
+uses {mainwindow,}{GDBCommandsDraw,GDBCommandsBase,}{oglwindow,}{GDBCommandsElectrical,}UGDBOpenArrayOfUCommands,Objinsp,varman,log;
 constructor CommandRTEdObject.init;
 begin
   CommandInit;
@@ -247,6 +248,7 @@ begin
   savemousemode := gdb.GetCurrentDWG.OGLwindow1.param.md.mode;
   saveosmode := sysvar.dwg.DWG_OSMode^;
   mouseclic := 0;
+  UndoTop:=gdb.GetCurrentDWG.UndoStack.CurrentCommand;
 
   if (commanddata.Instance<>nil)
   and(commanddata.PTD<>nil) then

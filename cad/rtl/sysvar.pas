@@ -108,21 +108,21 @@ begin
   RD_LastUpdateTime:=0;
   RD_MaxRenderTime:=0;
   SAVE_Auto_Interval:=300;
-  SAVE_Auto_Current_Interval:=298;
+  SAVE_Auto_Current_Interval:=299;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';
   SAVE_Auto_On:=True;
-  SYS_RunTime:=2;
-  SYS_Version:='0.9.7 SVN:9';
+  SYS_RunTime:=12;
+  SYS_Version:='0.9.7 Ревизия SVN:34';
   SYS_SystmGeometryColor:=250;
   SYS_IsHistoryLineCreated:=True;
   SYS_AlternateFont:='GEWIND.SHX';
   PATH_Device_Library:='*programdb|c:/zcad/userdb';
+  PATH_Template_Path:='*template';
+  PATH_Template_File:='default.dxf';
   PATH_Program_Run:='C:\zcad\cad\';
   PATH_Support_Path:='*rtl|*rtl/objdefunits|*rtl/objdefunits/include|*components|*blocks/el/general';
   PATH_Fonts:='*fonts/|C:/Program Files/AutoCAD 2010/Fonts/';
-  PATH_Template_Path:='*template';
-  PATH_Template_File:='default.dxf';
-  ShowHiddenFieldInObjInsp:=True;
+  ShowHiddenFieldInObjInsp:=False;
   testGDBBoolean:=False;
   pi:=3.14159265359;
 end.

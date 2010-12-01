@@ -119,7 +119,7 @@ GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
                                  procedure PushStartMarker(CommandName:GDBString);
                                  procedure PushEndMarker;
                                  procedure PushChangeCommand(_obj:GDBPointer;_fieldsize:PtrInt);overload;
-                                 procedure undo;
+                                 procedure undo(prevheap:TArrayIndex;overlay:GDBBoolean);
                                  procedure redo;
                                  constructor init;
                                  function Add(p:GDBPointer):TArrayIndex;virtual;
@@ -369,7 +369,7 @@ var
    pcc:PTChangeCommand;
    mcounter:integer;
 begin
-     if CurrentCommand>0 then
+     if CurrentCommand>prevheap then
      begin
           mcounter:=0;
           repeat
@@ -392,7 +392,12 @@ begin
           until mcounter=0;
      end
      else
-         shared.ShowError('Нет операций для отмены');
+         begin
+         if overlay then
+                        shared.ShowError('Нет операций для отмены. Завершите текущую команду')
+                    else
+                        shared.ShowError('Нет операций для отмены. Стек UNDO пуст')
+         end;
      gdb.GetCurrentROOT.FormatAfterEdit;
 end;
 procedure GDBObjOpenArrayOfUCommands.redo;

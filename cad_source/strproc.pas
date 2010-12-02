@@ -43,6 +43,9 @@ function GetPartOfPath(var part,path:GDBString):GDBString;
 function FindInSupportPath(FileName:GDBString):GDBString;
 function FindInPaths(Paths,FileName:GDBString):GDBString;
 
+function ConvertFromDxfString(str:GDBString):GDBString;
+function ConvertToDxfString(str:GDBString):GDBString;
+
 type
   TCodePage=(CP_utf8,CP_win);
 
@@ -54,6 +57,18 @@ var
 implementation
 uses
     varmandef;
+function ConvertFromDxfString(str:GDBString):GDBString;
+begin
+     result:=Tria_AnsiToUtf8(str);
+     result:=StringsReplace(result, ['\P'],[LineEnding],[rfReplaceAll,rfIgnoreCase]);
+end;
+
+function ConvertToDxfString(str:GDBString):GDBString;
+begin
+     result:=StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]);
+     result:=Tria_Utf8ToAnsi(result);
+end;
+
 function FindInSupportPath(FileName:GDBString):GDBString;
 var
    s,ts:gdbstring;
@@ -509,4 +524,4 @@ end;*)
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('strproc.initialization');{$ENDIF}
 CodePage:=CP_utf8;
-end.
+end.

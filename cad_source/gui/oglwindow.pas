@@ -44,7 +44,7 @@ uses
   //strmy,
   UGDBVisibleOpenArray,
   UGDBPoint3DArray,
-  {GDBCamera,UGDBOpenArrayOfPV,}OGLSpecFunc{,zoglforms,ZEditsWithProcedure,ZComboBoxsWithProc,ZStaticSText}{,zbasicvisible},memman,
+  strproc,{GDBCamera,UGDBOpenArrayOfPV,}OGLSpecFunc{,zoglforms,ZEditsWithProcedure,ZComboBoxsWithProc,ZStaticSText}{,zbasicvisible},memman,
   log{,zguisct}{,TypeDescriptors,UGDBOpenArrayOfByte,ZTabControlsGeneric},UGDBEntTree;
 const
 
@@ -183,7 +183,7 @@ procedure finalize;}
 function ProjectPoint(pntx,pnty,pntz:gdbdouble;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;
 procedure textwrite(s: GDBString);
 implementation
-uses mainwindow,UGDBTracePropArray,gdbEntity,io,geometry,gdbobjectsconstdef,UGDBDescriptor,
+uses GDBText,mainwindow,UGDBTracePropArray,GDBEntity,io,geometry,gdbobjectsconstdef,UGDBDescriptor,
      {GDBCommandsBase,}Objinsp{,Tedit_form, MTedit_form},shared,sharedgdb,UGDBLayerArray,cmdline;
 procedure creategrid;
 var i,j:GDBInteger;
@@ -1487,6 +1487,33 @@ procedure TOGLWnd.asynczoomall(Data: PtrInt);
 begin
      ZoomAll();
 end;
+procedure RunTextEditor(Pobj:PGDBObjText);
+var
+   op:gdbstring;
+   size,modalresult:integer;
+   InfoForm:TInfoForm;
+   us:unicodestring;
+   u8s:UTF8String;
+   astring:ansistring;
+begin
+     astring:=ConvertFromDxfString(pobj^.Template);
+
+     InfoForm:=TInfoForm.create(application.MainForm);
+     //InfoForm.DialogPanel.ShowButtons:=[pbOK, pbCancel{, pbClose, pbHelp}];
+     InfoForm.caption:=('Редактор текста');
+
+     InfoForm.memo.text:=astring;
+     modalresult:=InfoForm.ShowModal;
+     if modalresult=MrOk then
+                         begin
+                              pobj^.Template:=ConvertToDxfString(InfoForm.memo.text);
+                              pobj^.YouChanged;
+                              gdb.GetCurrentROOT.FormatAfterEdit;
+                              redrawoglwnd;
+                         end;
+     InfoForm.Free;
+
+end;
 
 procedure TOGLWnd.MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);
 var key: GDBByte;
@@ -1504,6 +1531,17 @@ begin
                                        inherited;
                                        exit;
                                   end;
+                                if mbLeft=button then
+                                  begin
+                                       if assigned(param.SelDesc.OnMouseObject) then
+                                         if (PGDBObjEntity(param.SelDesc.OnMouseObject).vp.ID=GDBtextID)
+                                         or (PGDBObjEntity(param.SelDesc.OnMouseObject).vp.ID=GDBMTextID) then
+                                           begin
+                                                 RunTextEditor(param.SelDesc.OnMouseObject);
+                                           end;
+                                       exit;
+                                  end;
+
                            end;
   if PDWG<>gdb.GetCurrentDWG then
                                  begin
@@ -2561,7 +2599,6 @@ begin
   _total:=0;
   _visible:=0;
   _isonmouse:=0;
-  param.SelDesc.OnMouseObject := nil;
   pp:=pva^.beginiterate(ir);
   if pp<>nil then
   repeat

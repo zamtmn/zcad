@@ -134,6 +134,11 @@ begin
      self.Position:=poScreenCenter;
      self.BorderStyle:=bsSizeToolWin;
      DialogPanel:=TButtonPanel.create(self);
+     {DialogPanel.HelpButton.Visible:=false;
+     DialogPanel.CloseButton.Visible:=false;
+     DialogPanel.CancelButton.Visible:=True;
+     DialogPanel.OkButton.Visible:=True;}
+     DialogPanel.ShowButtons:=[pbOK, pbCancel{, pbClose, pbHelp}];
      DialogPanel.Align:=alBottom;
      DialogPanel.Parent:=self;
 end;

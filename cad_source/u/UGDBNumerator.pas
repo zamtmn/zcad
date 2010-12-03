@@ -55,9 +55,9 @@ begin
   repeat
     if p1^.Nymber<p2.Nymber then
     begin
-      move(p1^,temp,sizeof(GDBNumItem));
+      move(p1^,(@temp)^,sizeof(GDBNumItem));
       move(p2^,p1^,sizeof(GDBNumItem));
-      move(temp,p2^,sizeof(GDBNumItem));
+      move((@temp)^,p2^,sizeof(GDBNumItem));
       //temp:=p1^;
       //p1^:=p2^;
       //p2^:=temp;

@@ -569,13 +569,14 @@ begin
       CreateSymbol(ord(content[i]),matr,minx,miny,maxx,maxy,pfont,ln);
 
     end;
-      FillChar(m1, sizeof(DMatrix4D), 0);
-  m1[0, 0] := 1;
+      //FillChar(m1, sizeof(DMatrix4D), 0);
+      m1:=onematrix;
+  {m1[0, 0] := 1;
   m1[1, 1] := 1;
   m1[2, 2] := 1;
-  m1[3, 3] := 1;
+  m1[3, 3] := 1;}
   m1[3, 0] := {pgdbfont(pbasefont).symbo linfo[GDBByte(content[i])]}pgdbfont(pbasefont).GetOrCreateSymbolInfo(ach2uch(GDBByte(content[i]))).dx;
-  m1[3, 1] := 0;
+  //m1[3, 1] := 0;
   matr:=MatrixMultiply(m1,matr);
   inc(i);
   end;
@@ -742,6 +743,7 @@ begin
   byt:=readmystrtoint(f);
   angleload:=false;
   doublepoint:=false;
+  style:='';
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu) then

@@ -19,7 +19,7 @@
 unit UGDBStringArray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,UGDBOpenArrayOfData,strproc,sysutils,UGDBOpenArray;
+uses gdbase,gdbasetypes,UGDBOpenArrayOfData,strproc,sysutils,UGDBOpenArray;
 type
 {EXPORT+}
     PGDBGDBStringArray=^GDBGDBStringArray;
@@ -28,7 +28,7 @@ type
                           procedure loadfromfile(fname:GDBString);
                           procedure freeelement(p:GDBPointer);virtual;
                           procedure sort;virtual;
-                          function add(p:GDBPointer):GDBInteger;virtual;
+                          function add(p:GDBPointer):TArrayIndex;virtual;
                           function addwithscroll(p:GDBPointer):GDBInteger;virtual;
                           function GetLengthWithEOL:GDBInteger;
                           function GetTextWithEOL:GDBString;
@@ -90,7 +90,7 @@ begin
      until IsEnd;
 
 end;
-function GDBGDBStringArray.add(p:GDBPointer):GDBInteger;
+function GDBGDBStringArray.add(p:GDBPointer):TArrayIndex;
 var s:GDBString;
 begin
      s:=pGDBString(p)^;

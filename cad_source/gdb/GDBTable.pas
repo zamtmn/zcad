@@ -26,13 +26,13 @@ gl,
 GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef{,oglwindowdef},geometry,dxflow,memman{,GDBSubordinated,UGDBOpenArrayOfByte};
 type
 {EXPORT+}
-TCellJustify=(jcl(*'ВерхЛево'*),
+TTableCellJustify=(jcl(*'ВерхЛево'*),
               jcm(*'ВерхЦентр'*),
               jcr(*'ВерхПраво'*));
 PTGDBTableItemFormat=^TGDBTableItemFormat;
 TGDBTableItemFormat=record
                  Width,TextWidth:GDBDouble;
-                 CF:TCellJustify;
+                 CF:TTableCellJustify;
                 end;
 PGDBObjTable=^GDBObjTable;
 GDBObjTable=object(GDBObjComplex)

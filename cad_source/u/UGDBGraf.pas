@@ -19,7 +19,7 @@
 unit UGDBGraf;
 {$INCLUDE def.inc}
 interface
-uses UGDBPoint3DArray,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,UGDBVisibleOpenArray,geometry,gdbEntity,UGDBOpenArrayOfPV;
+uses UGDBPoint3DArray,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry,gdbEntity,UGDBOpenArrayOfPV;
 type
 {EXPORT+}
 pgrafelement=^grafelement;

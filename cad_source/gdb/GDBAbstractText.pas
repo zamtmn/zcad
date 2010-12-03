@@ -19,7 +19,7 @@ unit GDBAbstractText;
 {$INCLUDE def.inc}
 
 interface
-uses GDBEntity,strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},UGDBPolyPoint3DArray{,varman},varmandef,
+uses {GDBEntity,}strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},UGDBPolyPoint3DArray{,varman},varmandef,
 gl,
 GDBase,UGDBDescriptor,gdbobjectsconstdef{,oglwindowdef},geometry{,dxflow,strmy},math{,GDBPlain},OGLSpecFunc{,GDBGenericSubEntry};
 type

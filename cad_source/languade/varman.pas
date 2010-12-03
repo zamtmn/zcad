@@ -157,7 +157,7 @@ TSimpleUnit=object(GDBaseobject)
                   function TypeName2PTD(n: GDBString):PUserTypeDescriptor;virtual;
                   function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
                   function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
-                  procedure setvardesc(var vd: vardesk; varname, username, typename: GDBString);
+                  procedure setvardesc(out vd: vardesk; varname, username, typename: GDBString);
                   procedure free;virtual;abstract;
                   procedure CopyTo(source:PTSimpleUnit);virtual;
                   procedure CopyFrom(source:PTSimpleUnit);virtual;
@@ -194,7 +194,7 @@ var
 
 //function valuetoGDBString(pvalue: GDBPointer; valuetype:pUserTypeDescriptor): GDBString;
 procedure GDBStringtovalue(s: GDBString; pvalue: GDBPointer; valuetype: GDBByte);
-function getpattern(ptd:ptdarray; max:GDBInteger;var line:GDBString; var typ:GDBInteger):PGDBGDBStringArray;
+function getpattern(ptd:ptdarray; max:GDBInteger;var line:GDBString; out typ:GDBInteger):PGDBGDBStringArray;
 function ObjOrRecordRead(var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:GDBString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
 function GetPVarMan: GDBPointer; export;
 function getpsysvar: GDBPointer; export;
@@ -576,7 +576,7 @@ end;
 
 
 
-procedure tsimpleunit.setvardesc(var vd: vardesk; varname, username, typename: GDBString);
+procedure tsimpleunit.setvardesc(out vd: vardesk; varname, username, typename: GDBString);
 //var
 //  tpe:PUserTypeDescriptor;
 begin
@@ -633,7 +633,7 @@ begin
        KillString(vd.name);
        KillString(vd.username);
 end;
-function getpattern(ptd:ptdarray; max:GDBInteger;var line:GDBString; var typ:GDBInteger):PGDBGDBStringArray;
+function getpattern(ptd:ptdarray; max:GDBInteger;var line:GDBString; out typ:GDBInteger):PGDBGDBStringArray;
 var i:GDBInteger;
     parseresult:PGDBGDBStringArray;
     parseerror:GDBBoolean;

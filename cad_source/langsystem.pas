@@ -67,8 +67,8 @@ type
                        //param:ptfunctionparamnype;
   end;
 
-procedure initvardesk(var vd: vardesk);
-procedure initoperandstack(var opstac: operandstack);
+procedure initvardesk(out vd: vardesk);
+procedure initoperandstack(out opstac: operandstack);
 
 function Tnothing_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TGDBInteger_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
@@ -171,7 +171,7 @@ begin
   end;
 end;
 
-procedure initvardesk(var vd: vardesk);
+procedure initvardesk(out vd: vardesk);
 begin
   pGDBInteger(vd.data.Instance) := nil;
   //vd.vartypecustom := 0;
@@ -179,7 +179,7 @@ begin
   vd.name := '';
 end;
 
-procedure initoperandstack(var opstac: operandstack);
+procedure initoperandstack(out opstac: operandstack);
 var
   i: GDBInteger;
 begin

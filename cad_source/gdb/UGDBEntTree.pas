@@ -20,7 +20,7 @@ unit UGDBEntTree;
 {$INCLUDE def.inc}
 interface
 uses
-    math,gl,geometry,UGDBVisibleOpenArray,GDBEntity,gdbase,gdbasetypes,log,memman,OGLSpecFunc;
+    {math,}gl,geometry,UGDBVisibleOpenArray,GDBEntity,gdbase,gdbasetypes,log,memman,OGLSpecFunc;
 type
 {EXPORT+}
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);

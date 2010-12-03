@@ -30,11 +30,11 @@ procedure replaceeqlen(var s: GDBString; substr,newstr: GDBString);
 function replacenull(s:GDBString): GDBString;
 function strtohex(s:GDBString): GDBString;
 function parse(template, str:GDBString; GDBStringarray:PGDBGDBStringArray;mode:GDBBoolean;lexema:pshortString; var position:GDBInteger):GDBBoolean;
-function runparser(template:GDBString;var str:GDBString; var parsed:GDBBoolean):PGDBGDBStringArray;
+function runparser(template:GDBString;var str:GDBString; out parsed:GDBBoolean):PGDBGDBStringArray;
 procedure KillString(var str:GDBString);
 const maxlexem=15;
 
-const str_empty='**пустая строка**';
+const str_empty='**EMPTY STRING**';
       sym_command=['_','?','|','-'];
       symend=#0;
       lexemarray:array[0..maxlexem,0..1] of GDBString=(

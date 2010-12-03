@@ -20,7 +20,7 @@ unit varmandef;
 {$INCLUDE def.inc}
 
 interface
-uses SysUtils,UGDBTree,UGDBStringArray,gdbobjectsconstdef,strutils,gdbasetypes,log,
+uses SysUtils,UGDBTree,UGDBStringArray,{gdbobjectsconstdef,}strutils,gdbasetypes,log,
   UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,gdbase,UGDBOpenArrayOfData,
   memman,UGDBOpenArrayOfPObjects,
   Classes,Controls,StdCtrls;
@@ -106,7 +106,7 @@ TPropEditor=class(TComponent)
 TPropEditorOwner=TWinControl;
 
 UserTypeDescriptor=object(GDBaseObject)
-                         SizeInGDBBytes:GDBInteger;
+                         SizeInGDBBytes:GDBLongword;
                          TypeName:String;
                          PUnit:GDBPointer;
                          OIP:TOIProps;
@@ -114,7 +114,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
                          procedure _init(size:GDBInteger;tname:string;pu:pointer);
                          function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
-                         procedure ApplyOperator(oper,path:GDBString;var offset:GDBLongword;var tc:PUserTypeDescriptor);virtual;abstract;
+                         procedure ApplyOperator(oper,path:GDBString;var offset:GDBLongword;out tc:PUserTypeDescriptor);virtual;abstract;
                          function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
                          function SerializePreProcess(Value:GDBString;sub:integer):GDBString;virtual;
                          function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;abstract;

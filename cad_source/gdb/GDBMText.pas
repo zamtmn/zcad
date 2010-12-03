@@ -820,6 +820,7 @@ begin
   ux.x := 1;
   ux.y := 0;
   ux.z := 0;
+  style:='';
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin

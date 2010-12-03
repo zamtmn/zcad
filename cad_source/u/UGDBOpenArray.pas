@@ -37,7 +37,7 @@ GDBOpenArray=object(OpenArray)
                       function AddRef(var obj):TArrayIndex;virtual;
                       procedure Shrink;virtual;
                       procedure Grow;virtual;
-                      procedure setsize(nsize:GDBLongword);
+                      procedure setsize(nsize:TArrayIndex);
                       procedure iterategl(proc:GDBITERATEPROC);
                       function getelement(index:TArrayIndex):GDBPointer;
                       procedure Invert;

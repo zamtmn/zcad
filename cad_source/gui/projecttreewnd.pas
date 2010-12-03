@@ -182,7 +182,7 @@ begin
          pvdeq^.data.PTD^.ApplyOperator('.','TreeCoord',offset,tc);
          if (offset<>0)and(tc=@GDBStringDescriptorObj) then
          begin
-              treesuperpos:=pgdbstring(GDBPlatformint(pvdeq^.data.Instance) + offset)^;
+              treesuperpos:=pgdbstring(ptruint(pvdeq^.data.Instance) + offset)^;
          end
          else
              treesuperpos:='';

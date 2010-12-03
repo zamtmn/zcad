@@ -300,7 +300,7 @@ PGDBOpenArrayOfData=^GDBOpenArrayOfData;
 GDBOpenArrayOfData=object(GDBOpenArray)
                     function iterate(var ir:itrec):GDBPointer;virtual;abstract;
                     //procedure clear;virtual;abstract;
-                    procedure freeelement(p:GDBPointer);virtual;abstract;
+                    //procedure freeelement(p:GDBPointer);virtual;abstract;
                     destructor FreeAndDone;virtual;abstract;
                     destructor FreewithprocAndDone(freeproc:freeelproc);virtual;abstract;
                     function deleteelement(index:GDBInteger):GDBPointer;
@@ -884,7 +884,7 @@ TSimpleUnit=object(GDBaseobject)
                   function TypeName2PTD(n: GDBString):PUserTypeDescriptor;virtual;abstract;
                   function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
                   function SavePasToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;abstract;
-                  procedure setvardesc(var vd: vardesk; varname, username, typename: GDBString);
+                  procedure setvardesc(out vd: vardesk; varname, username, typename: GDBString);
                   procedure free;virtual;abstract;
                   procedure CopyTo(source:PTSimpleUnit);virtual;abstract;
                   procedure CopyFrom(source:PTSimpleUnit);virtual;abstract;
@@ -999,7 +999,6 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure RenderFeedback;virtual;abstract;
                     procedure RenderFeedbackIFNeed;virtual;abstract;
                     function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;abstract;
-                    procedure FeedbackDraw;virtual;abstract;
                     function CalculateLineWeight:GDBInteger;virtual;abstract;
                     procedure feedbackinrect;virtual;abstract;
                     function InRect:TInRect;virtual;abstract;
@@ -1980,8 +1979,8 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                             Action:TSubPolyEdit;(*'Действие'*)
                             vdist:gdbdouble;(*hidden_in_objinsp*)
                             ldist:gdbdouble;(*hidden_in_objinsp*)
-                            nearestvertex:gdbinteger;(*hidden_in_objinsp*)
-                            nearestline:gdbinteger;(*hidden_in_objinsp*)
+                            nearestvertex:GDBInteger;(*hidden_in_objinsp*)
+                            nearestline:GDBInteger;(*hidden_in_objinsp*)
                             dir:gdbinteger;(*hidden_in_objinsp*)
                             setpoint:gdbboolean;(*hidden_in_objinsp*)
                             vvertex:gdbvertex;(*hidden_in_objinsp*)

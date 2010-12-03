@@ -20,14 +20,14 @@ begin
   VIEW_CommandLineH:=80;
   VIEW_ObjInspV:=350;
   VIEW_ObjInspSubV:=90;
-  PATH_File0:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File1:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File2:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File3:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
+  PATH_File0:='/mnt/win_c/zcad/cad/autosave/autosave.dxf';
+  PATH_File1:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File2:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File3:='C:\zcad\cad\sample\test_dxf\em.dxf';
   PATH_File4:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File5:='E:\work3\proj.dxf';
-  PATH_File6:='E:\CAD_XDXF\test2000\pozar.dxf';
-  PATH_File7:='/mnt/win_c/zcad/cad/autosave/autosave.dxf';
-  PATH_File8:='E:\CAD_XDXF\test2000\text.dxf';
-  PATH_File9:='E:\CAD_XDXF\test2000\shema_Poly_Line_Text_Circle_Arc.dxf';
+  PATH_File5:='E:\CAD_XDXF\test2000\text2.dxf';
+  PATH_File6:='E:\CAD_XDXF\test2000\text.dxf';
+  PATH_File7:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
+  PATH_File8:='E:\work3\proj.dxf';
+  PATH_File9:='E:\CAD_XDXF\test2000\pozar.dxf';
 end.

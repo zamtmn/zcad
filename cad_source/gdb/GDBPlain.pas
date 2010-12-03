@@ -22,7 +22,7 @@ unit GDBPlain;
 interface
 uses
 gl,
- {GDBEntity,}GDBWithLocalCS,gdbase,gdbasetypes,varmandef,OGLSpecFunc,GDBEntity;
+ {GDBEntity,}GDBWithLocalCS,gdbase,gdbasetypes,varmandef,OGLSpecFunc{,GDBEntity};
 type
 {EXPORT+}
 GDBObjPlain=object(GDBObjWithLocalCS)

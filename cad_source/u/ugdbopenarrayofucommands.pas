@@ -20,7 +20,7 @@ unit UGDBOpenArrayOfUCommands;
 {$INCLUDE def.inc}
 interface
 uses GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
-     gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman,GDBSubordinated;
+     gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman{,GDBSubordinated};
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
 type

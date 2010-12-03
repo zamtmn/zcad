@@ -576,7 +576,7 @@ begin
      end;
      inc(onlygetsnapcount);
 end;
-function line2dintercep(var x11, y11, x12, y12, x21, y21, x22, y22,t1,t2: GDBDouble): GDBBoolean;
+function line2dintercep(var x11, y11, x12, y12, x21, y21, x22, y22: GDBDouble; out t1,t2: GDBDouble): GDBBoolean;
 var
   d, d1, d2: GDBDouble;
 begin

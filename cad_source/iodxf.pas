@@ -40,9 +40,21 @@ const
      (entname:'LWPOLYLINE'),
      (entname:'3DFACE')
      );
+const
+     NULZCPHeader:ZCPHeader=(
+     Signature:'';
+     Copyright:'';
+     Coment:'';
+     HiVersion:0;
+     LoVersion:0;
+     OffsetTable:(
+                  GDB:0;
+                  GDBRT:0;
+                 );
+                );
 type
   dxfhandlerec = record
-    old, nev: GDBPlatformint;
+    old, nev: ptruint;
   end;
   dxfhandlerecarray = array[0..300] of dxfhandlerec;
   pdxfhandlerecopenarray = ^dxfhandlerecopenarray;
@@ -80,7 +92,7 @@ begin
   inc(p^.count);
 end;
 
-function getnevhandle(p: pdxfhandlerecopenarray; old: GDBPlatformint): GDBPlatformint;
+function getnevhandle(p: pdxfhandlerecopenarray; old: ptruint): GDBPlatformint;
 var
   i: GDBInteger;
 begin
@@ -1035,7 +1047,7 @@ var
 begin
      memorybuf:=nil;
      linkbyf:=nil;
-     fillchar(s,sizeof(s),0);
+     s:=NULZCPHeader;
      zcpmode:=zcptxt;
      sub:=0;
      sysunit.TypeName2PTD('ZCPHeader')^.Serialize(@ZCPHead,SA_SAVED_TO_SHD,memorybuf,linkbyf,sub);
@@ -1081,7 +1093,7 @@ var
 //  test:gdbvertex;
   linkbyf:PGDBOpenArrayOfTObjLinkRecord;
 begin
-     fillchar(FileHeader,sizeof(FileHeader),0);
+     FileHeader:=NULZCPHeader;
      memorybuf.InitFromFile(name);
      sysunit.TypeName2PTD('ZCPHeader')^.DeSerialize(@FileHeader,SA_SAVED_TO_SHD,memorybuf,nil);
      HistoryOutStr('Loading file: '+name);

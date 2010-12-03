@@ -39,7 +39,7 @@ function ach2uch(ach:byte):word;
 
 function CompareNUMSTR(str1,str2:GDBString):GDBBoolean;
 
-function GetPartOfPath(var part,path:GDBString):GDBString;
+function GetPartOfPath(out part:GDBString;var path:GDBString):GDBString;
 function FindInSupportPath(FileName:GDBString):GDBString;
 function FindInPaths(Paths,FileName:GDBString):GDBString;
 
@@ -133,7 +133,7 @@ begin
      until s='';
      result:='';
 end;
-function GetPartOfPath(var part,path:GDBString):GDBString;
+function GetPartOfPath(out part:GDBString;var path:GDBString):GDBString;
 var
    i:GDBInteger;
 begin
@@ -524,4 +524,4 @@ end;*)
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('strproc.initialization');{$ENDIF}
 CodePage:=CP_utf8;
-end.
+end.

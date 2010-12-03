@@ -64,7 +64,7 @@ destructor TCableDesctiptor.done;
 begin
      name:='';
      Segments.done;
-     inherited;
+     //inherited;
 end;
 procedure TCableManager.build;
 var pobj,pobj2:PGDBObjCable;

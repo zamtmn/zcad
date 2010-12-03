@@ -26,7 +26,7 @@ type
 {Export+}
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
 GDBObjEntityOpenArray=object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
-                      function add(p:GDBPointer):GDBInteger;virtual;
+                      function add(p:GDBPointer):TArrayIndex;virtual;
                       function addwithoutcorrect(p:GDBPointer):GDBInteger;virtual;
                       function copytowithoutcorrect(source:PGDBObjEntityOpenArray):GDBInteger;virtual;
                       function deliteminarray(p:GDBInteger):GDBInteger;virtual;
@@ -38,8 +38,8 @@ GDBObjEntityOpenArray=object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
 implementation
 uses {UGDBDescriptor,}GDBManager,log,GDBEntity;
 type
-objvizarray = array[0..0] of PGDBObjEntity;
-pobjvizarray = ^objvizarray;
+//objvizarray = array[0..0] of PGDBObjEntity;
+//pobjvizarray = ^objvizarray;
 PGDBObjEntityArray=^GDBObjEntityArray;
 GDBObjEntityArray=array [0..0] of PGDBObjEntity;
 procedure GDBObjEntityOpenArray.SetInFrustumFromTree;

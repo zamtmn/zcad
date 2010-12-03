@@ -19,7 +19,7 @@
 unit UGDBFontManager;
 {$INCLUDE def.inc}
 interface
-uses UGDBSHXFont,gdbasetypes,SysInfo,memman,UGDBOpenArrayOfData, oglwindowdef,sysutils,gdbase, geometry,
+uses UGDBSHXFont,gdbasetypes,SysInfo,memman,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
      gl,
      UGDBNamedObjectsArray;
 type

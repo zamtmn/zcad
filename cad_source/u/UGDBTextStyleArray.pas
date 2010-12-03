@@ -19,7 +19,7 @@
 unit UGDBTextStyleArray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,SysInfo,UGDBOpenArrayOfData, oglwindowdef,sysutils,gdbase, geometry,
+uses gdbasetypes,SysInfo,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
      gl,strproc,varmandef,shared,UGDBSHXFont;
 type
   //ptextstyle = ^textstyle;

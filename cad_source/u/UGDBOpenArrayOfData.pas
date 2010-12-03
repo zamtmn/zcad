@@ -27,7 +27,7 @@ GDBOpenArrayOfData=object(GDBOpenArray)
 
                     function iterate(var ir:itrec):GDBPointer;virtual;
                     //procedure clear;virtual;
-                    procedure freeelement(p:GDBPointer);virtual;abstract;
+                    //procedure freeelement(p:GDBPointer);virtual;abstract;
                     destructor FreeAndDone;virtual;
                     destructor FreewithprocAndDone(freeproc:freeelproc);virtual;
                     function deleteelement(index:GDBInteger):GDBPointer;

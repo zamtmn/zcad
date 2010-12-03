@@ -60,7 +60,7 @@ begin
   if count = max then grow;
   begin
        GDBPointer(addr) := parray;
-       addr := addr + count * size;
+       addr := addr + GDBPlatformint(count * size);
        //Move(p^, GDBPointer(addr)^,size);
        result:=pointer(addr);
        inc(count);

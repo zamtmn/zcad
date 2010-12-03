@@ -22,7 +22,7 @@ unit GDBGenericSubEntry;
 interface
 uses UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
 gl,
-geometry{,GDB3d},UGDBVisibleOpenArray,gdbEntity,gdbobjectsconstdef,varmandef,memman,UGDBEntTree;
+geometry{,GDB3d},{UGDBVisibleOpenArray,}gdbEntity,gdbobjectsconstdef,varmandef,memman,UGDBEntTree;
 type
 //GDBObjGenericSubEntry=object(GDBObjWithLocalCS)
 //GDBObjGenericSubEntry=object(GDBObj3d)

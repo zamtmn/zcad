@@ -19,7 +19,7 @@
 unit UGDBSHXFont;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfByte,UGDBPoint3DArray,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,UGDBVisibleOpenArray,geometry,gdbEntity,UGDBOpenArrayOfPV;
+uses UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
 type
 {EXPORT+}
 PGDBsymdolinfo=^GDBsymdolinfo;
@@ -54,7 +54,7 @@ GDBfont=object(GDBNamedObject)
   end;
 {EXPORT-}
 implementation
-uses math,log;
+uses {math,}log;
 constructor GDBfont.initnul;
 begin
      inherited;

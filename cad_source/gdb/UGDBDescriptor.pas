@@ -97,8 +97,8 @@ TDrawing=object(TAbstractDrawing)
            Changed:GDBBoolean;
            attrib:GDBLongword;
 
-           function myGluProject2(objcoord:GDBVertex; var wincoord:GDBVertex):Integer;
-           function myGluUnProject(win:GDBVertex;var obj:GDBvertex):Integer;
+           function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;
+           function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;
 
 
            constructor init(num:PTUnitManager);
@@ -141,14 +141,14 @@ procedure RemapAll(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
 procedure startup;
 procedure finalize;
 implementation
- uses GDBSubordinated,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared{,mainwindow},commandline,log;
+ uses {GDBSubordinated,}GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared{,mainwindow},commandline,log;
 
 function TDrawing.myGluProject2;
 begin
       objcoord:=vertexadd(objcoord,pcamera^.CamCSOffset);
      _myGluProject(objcoord.x,objcoord.y,objcoord.z,@pcamera^.modelMatrixLCS,@pcamera^.projMatrixLCS,@pcamera^.viewport,wincoord.x,wincoord.y,wincoord.z);
 end;
-function TDrawing.myGluUnProject(win:GDBVertex;var obj:GDBvertex):Integer;
+function TDrawing.myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;
 begin
      _myGluUnProject(win.x,win.y,win.z,@pcamera^.modelMatrixLCS,@pcamera^.projMatrixLCS,@pcamera^.viewport, obj.x,obj.y,obj.z);
      OBJ:=vertexsub(OBJ,pcamera^.CamCSOffset);

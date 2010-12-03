@@ -26,13 +26,13 @@ PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
 XYZWGDBGDBStringArray=object(GDBOpenArrayOfData)
                              constructor init(m:GDBInteger);
                              procedure freeelement(p:GDBPointer);virtual;
-                             function add(p:GDBPointer):GDBInteger;virtual;
+                             function add(p:GDBPointer):TArrayIndex;virtual;
                        end;
 {EXPORT-}
 implementation
 uses
     log;
-function XYZWGDBGDBStringArray.add(p:GDBPointer):GDBInteger;
+function XYZWGDBGDBStringArray.add(p:GDBPointer):TArrayIndex;
 begin
      GDBOpenArrayOfData.add(p);
      GDBPointer(PGDBStrWithPoint(p)^.str):=nil;

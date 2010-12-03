@@ -25,10 +25,10 @@ GDBITERATEPROC = procedure(pdata:GDBPointer);stdcall;
 {Export+}
 POpenArray=^OpenArray;
 OpenArray=object(GDBaseObject)
-                Deleted:GDBLongword;(*hidden_in_objinsp*)
-                Count:GDBLongword;(*saved_to_shd*)(*hidden_in_objinsp*)
-                Max:GDBLongword;(*hidden_in_objinsp*)
-                Size:GDBLongword;(*hidden_in_objinsp*)
+                Deleted:TArrayIndex;(*hidden_in_objinsp*)
+                Count:TArrayIndex;(*saved_to_shd*)(*hidden_in_objinsp*)
+                Max:TArrayIndex;(*hidden_in_objinsp*)
+                Size:TArrayIndex;(*hidden_in_objinsp*)
                 constructor init(m,s:GDBInteger);
                 function GetElemCount:GDBInteger;
           end;

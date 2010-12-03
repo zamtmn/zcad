@@ -30,8 +30,8 @@ uses
   {$ENDIF}
 
   UGDBSHXFont,LCLType,InterfaceBase,
-  umytreenode,menus,Classes,{ SysUtils,} FileUtil,{ LResources,}LMessages, Forms,
-  stdctrls, ExtCtrls, ComCtrls,Toolwin, Controls, {Graphics, Dialogs,}
+  umytreenode,menus,Classes,{ SysUtils,} FileUtil,{ LResources,LMessages,} Forms,
+  {stdctrls,} ExtCtrls, ComCtrls,{Toolwin,} Controls, {Graphics, Dialogs,}
   GDBGenericSubEntry,gdbasetypes,{Windows,}sysutils,
   gl,glu,{glx,}OpenGLContext,
   Math,gdbase,varmandef,varman,UUnitManager,
@@ -212,7 +212,7 @@ end;
 
 procedure TOGLWnd.EraseBackground(DC: HDC);
 begin
-     dc:=0;
+     //dc:=0;
 end;
 procedure TOGLWnd.mypaint;
 begin
@@ -1182,14 +1182,15 @@ var
   psymbol: PGDBByte;
   i, j, k: GDBInteger;
   len: GDBWord;
-  matr: array[0..3, 0..3] of GDBDouble;
+  matr: {array[0..3, 0..3] of GDBDouble}DMatrix4D;
 begin
   //exit;
-  FillChar(matr, sizeof(GDBDouble) * 16, 0);
+  {FillChar(matr, sizeof(GDBDouble) * 16, 0);
   matr[0, 0] := 1;
   matr[1, 1] := 1;
   matr[2, 2] := 1;
-  matr[3, 3] := 1;
+  matr[3, 3] := 1;}
+  matr:=geometry.OneMatrix;
   matr[1, 0] := 1/tan(pi/2-12*pi/180);
      //glscaled(PGDBtext(p)^.wfactor,1,1);
   glrotated(0, 0, 0, 1);
@@ -3377,8 +3378,8 @@ begin
       end;
 end;
 procedure TOGLWnd.addoneobject;
-const pusto=-1000;
-      different=-10001;
+//const //pusto=-1000;
+      //different=-10001;
 var lw,layer:GDBInteger;
 begin
   lw:=PGDBObjEntity(param.SelDesc.LastSelectedObject)^.vp.LineWeight;

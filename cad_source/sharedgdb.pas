@@ -25,9 +25,9 @@ procedure updatevisible; export;
 procedure reloadlayer; export;
 
 implementation
-uses strproc,umytreenode,FileUtil,LCLclasses, LCLtype, LCLproc,forms,GDBBlockDef,
+uses strproc,umytreenode,FileUtil,{LCLclasses,} LCLtype, LCLproc,forms,GDBBlockDef,
      mainwindow,
-     log,UGDBDescriptor,varmandef,sysinfo,cmdline,strutils,SysUtils{,zbasicvisible,ZGUIArrays},oglwindow{,ZTabControlsGeneric};
+     log,UGDBDescriptor,varmandef,sysinfo,cmdline,{strutils,}SysUtils{,zbasicvisible,ZGUIArrays},oglwindow{,ZTabControlsGeneric};
 
 procedure redrawoglwnd; export;
 var

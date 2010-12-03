@@ -25,8 +25,8 @@ const
     ProjectFileFilter: GDBString = 'DXF files (*.dxf)'#0'*.dxf'#0'ZCP files (*.zcp)'#0'*.zcp'#0#0;
     CSVFileFilter: GDBString ='CSV files (*.CSV)'#0#0;
     {$INCLUDE revision.inc}
-function OpenFileDialog(var FileName:GDBString):Boolean;
-function SaveFileDialog(var FileName:GDBString;const DefExt, Filter, InitialDir, Title: string):Boolean;
+function OpenFileDialog(out FileName:GDBString):Boolean;
+function SaveFileDialog(out FileName:GDBString;const DefExt, Filter, InitialDir, Title: string):Boolean;
 function GetVersion(_file:pchar):TmyFileVersionInfo;
 implementation
 uses {mainwindow,}log;

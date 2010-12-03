@@ -83,7 +83,6 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure RenderFeedback;virtual;
                     procedure RenderFeedbackIFNeed;virtual;
                     function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
-                    procedure FeedbackDraw;virtual;abstract;
                     function CalculateLineWeight:GDBInteger;virtual;
                     procedure feedbackinrect;virtual;
                     function InRect:TInRect;virtual;
@@ -100,7 +99,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                     function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
                     function isonmouse(popa:GDBPointer):GDBBoolean;virtual;
-                    procedure startsnap(var osp:os_record);virtual;
+                    procedure startsnap(out osp:os_record);virtual;
                     function getsnap(var osp:os_record):GDBBoolean;virtual;
                     function getintersect(var osp:os_record;pobj:PGDBObjEntity):GDBBoolean;virtual;
                     procedure higlight;virtual;
@@ -571,7 +570,7 @@ begin
                                            repeat
                                                  str:='$'+inttostr(i)+'='+pvd^.name+'|'+pfd^.FieldName+'|'+pfd^.PFT^.GetValueAsString(tp);
                                                  dxfGDBStringout(handle,1000,str);
-                                                 GDBPlatformint(tp):=GDBPlatformint(tp)+pfd^.PFT^.SizeInGDBBytes; { TODO : сделать на оффсете }
+                                                 ptruint(tp):=ptruint(tp)+pfd^.PFT^.SizeInGDBBytes; { TODO : сделать на оффсете }
                                                  inc(i);
                                                  pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.iterate(ir2);
                                            until pfd=nil;

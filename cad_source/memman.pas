@@ -26,7 +26,7 @@ uses gdbasetypes,sysutils;
 
 function remapmememblock({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}pblock: GDBPointer; sizeblock: GDBInteger): GDBPointer;
 function enlargememblock({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}pblock: GDBPointer; oldsize, nevsize: GDBInteger): GDBPointer;
-procedure GDBGetMem({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}var p:Pointer; const size: GDBLongWord); export;
+procedure GDBGetMem({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}out p:Pointer; const size: GDBLongWord); export;
 procedure GDBFreeMem(var p: Pointer);
 //procedure startup;
 //procedure Finalize;

@@ -27,7 +27,7 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      SinonimName:GDBString;
                      constructor init(SinonimTypeName,Tname:GDBString;pu:pointer);
                      function CreateProperties(PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
-                     procedure ApplyOperator(oper,path:GDBString;var offset:GDBLongword;var tc:PUserTypeDescriptor);virtual;
+                     procedure ApplyOperator(oper,path:GDBString;var offset:GDBLongword;out tc:PUserTypeDescriptor);virtual;
                      function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                      function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      destructor Done;virtual;

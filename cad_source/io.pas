@@ -19,7 +19,7 @@
 unit io;
 {$INCLUDE def.inc}
 interface
-uses UGDBSHXFont,strproc,FileUtil,LCLProc,GDBBlockDef,math,log,strutils,strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,UGDBObjBlockdefArray,gdbase,GDBManager,iodxf,memman,UGDBDescriptor,gdbobjectsconstdef;
+uses UGDBSHXFont,strproc,FileUtil,LCLProc,GDBBlockDef,math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,GDBManager,iodxf,memman,UGDBDescriptor,gdbobjectsconstdef;
 const
   IgnoreSHP='() '#13;
   BreakSHP='*,'#10;

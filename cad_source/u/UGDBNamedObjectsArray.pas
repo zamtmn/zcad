@@ -33,7 +33,7 @@ GDBNamedObjectsArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBLayerProp
                     function getIndex(name: GDBString):GDBInteger;
                     function getAddres(name: GDBString):GDBPointer;
                     function GetIndexByPointer(p:PGDBNamedObject):GDBInteger;
-                    function AddItem(name:GDBSTRING; var PItem:Pointer):TForCResult;
+                    function AddItem(name:GDBSTRING; out PItem:Pointer):TForCResult;
               end;
 {EXPORT-}
 implementation

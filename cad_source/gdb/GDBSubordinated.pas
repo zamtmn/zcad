@@ -140,7 +140,7 @@ procedure GDBObjGenericWithSubordinated.FormatAfterDXFLoad;
 begin
      format;
 end;
-procedure extractvarfromdxfstring(_Value:GDBString;var vn,vt,vv,vun:GDBString);
+procedure extractvarfromdxfstring(_Value:GDBString;out vn,vt,vv,vun:GDBString);
 var i:integer;
 begin
     i:=pos('|',_value);
@@ -153,7 +153,7 @@ begin
     vv:=copy(_value,1,i-1);
     vun:=copy(_value,i+1,length(_value)-i);
 end;
-procedure extractvarfromdxfstring2(_Value:GDBString;var vn,vt,vun:GDBString);
+procedure extractvarfromdxfstring2(_Value:GDBString;out vn,vt,vun:GDBString);
 var i:integer;
 begin
     i:=pos('|',_value);

@@ -30,7 +30,7 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        function CreateProperties(PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                        procedure AddField(var fd:FieldDescriptor);
                        function FindField(fn:GDBString):PFieldDescriptor;
-                       procedure ApplyOperator(oper,path:GDBString;var offset:GDBLongword;var tc:PUserTypeDescriptor);virtual;
+                       procedure ApplyOperator(oper,path:GDBString;var offset:GDBLongword;out tc:PUserTypeDescriptor);virtual;
                        procedure AddConstField(var fd:FieldDescriptor);
                        procedure CopyTo(RD:PTUserTypeDescriptor);
                        function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
@@ -68,7 +68,7 @@ begin
                           end;
                           if offset>0 then
                                          begin
-                                              pf:=pointer(offset+GDBPlatformint(PInstance));
+                                              pf:=pointer(offset+ptruint(PInstance));
                                               //ps:=copy(ps,1,i-1)+ varman.valuetoGDBString(pv^.pvalue,pv.ptd) +copy(ps,i2+1,length(ps)-i2)
                                               ps:=copy(ps,1,i-1)+tc^.GetUserValueAsString(pf)+copy(ps,i2+1,length(ps)-i2)
                                          end

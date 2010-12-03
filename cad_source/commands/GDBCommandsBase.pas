@@ -22,7 +22,7 @@ unit GDBCommandsBase;
 interface
 uses
  layerwnd,strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
- LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
+ LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
   commandlinedef,
@@ -1259,8 +1259,8 @@ begin
     result:=cmd_ok;
 end;
 function DebClip_com(Operands:pansichar):GDBInteger;
-type
-    twordarray=array [1..100] of word;
+{type
+    twordarray=array [1..100] of word;}
 var
     //res:longbool;
     //uFormat:longword;
@@ -1268,7 +1268,7 @@ var
     //lpszFormatName:string[200];
     //hData:THANDLE;
     pbuf:pansichar;
-    pwordarray:^Twordarray;
+    PWA:Pwordarray;
 
     s,suni:gdbstring;
     I,memsize:gdbinteger;

@@ -34,7 +34,7 @@ GDBBbillOfMaterial=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBNumItem*)
                        constructor init(m:GDBInteger);
                        procedure freeelement(p:GDBPointer);virtual;
                        //function getnamenumber(_Name:GDBString):GDBstring;
-                       function add(p:GDBPointer):GDBInteger;virtual;
+                       function add(p:GDBPointer):TArrayIndex;virtual;
                        function findorcreate(_Name:GDBString):PGDBBOMItem;virtual;
                        end;
 {EXPORT-}
@@ -72,7 +72,7 @@ begin
   ni.processed:=false;
   result:=self.getelement(add(@ni));
 end;
-function GDBBbillOfMaterial.add(p:GDBPointer):GDBInteger;
+function GDBBbillOfMaterial.add(p:GDBPointer):TArrayIndex;
 begin
      result:=inherited add(p);
      GDBPointer(PGDBBOMItem(p)^.Material):=nil;

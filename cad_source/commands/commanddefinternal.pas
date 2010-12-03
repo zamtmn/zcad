@@ -104,7 +104,7 @@ begin
 end;
 procedure CommandFastObjectPlugin.CommandEnd;
 begin
-    inherited;
+    //inherited;
     if gdb.currentdwg<>nil then
     begin
     if (self.CEndActionAttr and CEDeSelect)<>0 then
@@ -127,7 +127,7 @@ begin
 end;
 procedure CommandRTEdObject.CommandEnd;
 begin
-    inherited;
+    //inherited;
     if (self.CEndActionAttr and CEDeSelect)<>0 then
     //if (@self<>pfindcom)and(@self<>@OnDrawingEd)and(@self<>selframecommand) then
     begin

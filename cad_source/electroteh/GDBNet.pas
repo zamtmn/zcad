@@ -8,7 +8,7 @@ unit GDBNet;
 {$INCLUDE def.inc}
 
 interface
-Uses UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,GDBGenericSubEntry,UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
+Uses UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,{GDBGenericSubEntry,}UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
 gl,
 memman,GDBSubordinated,OGLSpecFunc,uunitmanager,shared,sysutils;
 const
@@ -58,7 +58,7 @@ var //xs,ys,zs:double;
     pv,pvold:pGDBObjEntity;
     ir,ir2:itrec;
 begin
-     inherited;
+     //inherited;
      pvold:=PGDBObjNet(p)^.ObjArray.beginiterate(ir2);
      pv:=ObjArray.beginiterate(ir);
       if pv<>nil then

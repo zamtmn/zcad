@@ -19,7 +19,7 @@
 unit UGDBVisibleTreeArray;
 {$INCLUDE def.inc}
 interface
-uses UGDBEntTree,UGDBVisibleOpenArray,UGDBOpenArrayOfPV,
+uses UGDBEntTree,UGDBVisibleOpenArray,{UGDBOpenArrayOfPV,}
      gdbasetypes,gdbase,
      sysutils,geometry,memman,GDBEntity;
 type
@@ -30,7 +30,7 @@ GDBObjEntityTreeArray=object(GDBObjEntityOpenArray)(*OpenArrayOfPObj*)
                             constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                             constructor initnul;
                             destructor done;virtual;
-                            function add(p:GDBPointer):GDBInteger;virtual;
+                            function add(p:GDBPointer):TArrayIndex;virtual;
                             procedure RemoveFromTree(p:PGDBObjEntity);
 
                       end;

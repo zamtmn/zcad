@@ -62,8 +62,8 @@ type
                             Action:TSubPolyEdit;(*'Действие'*)
                             vdist:gdbdouble;(*hidden_in_objinsp*)
                             ldist:gdbdouble;(*hidden_in_objinsp*)
-                            nearestvertex:gdbinteger;(*hidden_in_objinsp*)
-                            nearestline:gdbinteger;(*hidden_in_objinsp*)
+                            nearestvertex:GDBInteger;(*hidden_in_objinsp*)
+                            nearestline:GDBInteger;(*hidden_in_objinsp*)
                             dir:gdbinteger;(*hidden_in_objinsp*)
                             setpoint:gdbboolean;(*hidden_in_objinsp*)
                             vvertex:gdbvertex;(*hidden_in_objinsp*)
@@ -1320,7 +1320,7 @@ begin
                                                   polydata.dir:=-1;
                                                   if PEProp.nearestvertex=0 then
                                                                                 polydata.dir:=-1;
-                                                  if PEProp.nearestvertex=p3dpl^.vertexarrayinocs.Count then
+                                                  if PEProp.nearestvertex=p3dpl^.vertexarrayinocs.{Count}GetElemCount then
                                                                                 polydata.dir:=1;
                                                   polydata.wc:=PEProp.vvertex;
                                                   tmethod(domethod).Code:=pointer(p3dpl.DeleteVertex);

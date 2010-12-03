@@ -47,9 +47,9 @@ var
     historychanged:boolean;
 
 implementation
-uses strproc,{umytreenode,}{FileUtil,LCLclasses,} LCLtype,
+uses {strproc,}{umytreenode,}{FileUtil,LCLclasses,} LCLtype,
      //mainwindow,
-     log,{UGDBDescriptor,}varmandef,sysinfo,{cmdline,}strutils{,oglwindow};
+     log,{UGDBDescriptor,}varmandef,{sysinfo,}{cmdline,}strutils{,oglwindow};
 
 procedure OldVersTextReplace(var vv:GDBString);
 begin

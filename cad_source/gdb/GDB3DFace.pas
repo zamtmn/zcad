@@ -21,7 +21,7 @@ unit GDB3DFace;
 interface
 uses geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
-GDBase,UGDBDescriptor,gdbobjectsconstdef,oglwindowdef{,dxflow},memman,OGLSpecFunc;
+GDBase,UGDBDescriptor,gdbobjectsconstdef{,oglwindowdef,dxflow},memman,OGLSpecFunc;
 type
 {Export+}
 PGDBObj3DFace=^GDBObj3DFace;

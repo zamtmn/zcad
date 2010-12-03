@@ -82,7 +82,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-        if p^.OldAddr=GDBPlatformint(pobj) then
+        if p^.OldAddr=ptruint(pobj) then
                                             begin
                                                  result:=p;
                                             end;

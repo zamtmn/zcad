@@ -1654,6 +1654,7 @@ begin
             sendmousecoord(MZW_LBUTTON);
           end;
     end;
+    if assigned(GDBobjinsp)then
     GDBobjinsp.updateinsp//SetObjInsp;
   end;
   inherited;
@@ -3387,15 +3388,24 @@ begin
   if param.seldesc.Selectedobjcount=1
   then
       begin
-           if lw<0 then LinewBox.ItemIndex:=(lw+3)
+           if assigned(LinewBox)then
+           begin
+           if lw<0 then
+                       begin
+                            LinewBox.ItemIndex:=(lw+3)
+                       end
                    else LinewBox.ItemIndex:=((lw div 10)+3);
+           end;
+           if assigned(LayerBox)then
            LayerBox.ItemIndex:=(layer);
       end
   else
       begin
+           if assigned(LayerBox)then
            if LayerBox.ItemIndex<>layer then LayerBox.ItemIndex:=(LayerBox.Items.Count-1);
            if lw<0 then lw:=lw+3
                    else lw:=(lw div 10)+3;
+           if assigned(LinewBox)then
            if LinewBox.ItemIndex<>lw then LinewBox.ItemIndex:=(LinewBox.Items.Count-1);
       end;
 end;

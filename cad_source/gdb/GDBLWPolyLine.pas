@@ -33,6 +33,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  Width2D_in_OCS_Array:GDBLineWidthArray;(*saved_to_shd*)
                  Width3D_in_WCS_Array:GDBOpenArray;
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
+                 Square:GDBdouble;(*Ориентированная площадь*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul;
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;
@@ -40,6 +41,8 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  procedure Format;virtual;
+                 function CalcSquare:GDBDouble;virtual;
+                 function isPointInside(point:GDBVertex):GDBBoolean;virtual;
                  procedure createpoint;virtual;
                  procedure CalcWidthSegment;virtual;
                  destructor done;virtual;
@@ -494,6 +497,41 @@ begin
   end;
   SaveToDXFObjPostfix(outhandle);
 end;
+function GDBObjLWpolyline.isPointInside(point:GDBVertex):GDBBoolean;
+var m: DMatrix4D;
+    p:GDBVertex2D;
+begin
+     m:=self.getmatrix^;
+     geometry.MatrixInvert(m);
+     point:=VectorTransform3D(point,m);
+     p.x:=point.x;
+     p.y:=point.y;
+     result:=Vertex2D_in_OCS_Array.ispointinside(p);
+end;
+
+function GDBObjLWpolyline.CalcSquare:GDBDouble;
+var
+    pv,pvnext:PGDBVertex2D;
+    i:integer;
+
+begin
+    result:=0;
+    if Vertex2D_in_OCS_Array.count<2 then exit;
+
+    pv:=Vertex2D_in_OCS_Array.parray;
+    pvnext:=pv;
+    inc(pvnext);
+    for i:=1 to Vertex2D_in_OCS_Array.count do
+    begin
+       if i=Vertex2D_in_OCS_Array.count then
+                                            pvnext:=Vertex2D_in_OCS_Array.parray;
+       result:=result+(pv.x+pvnext.x)*(pv.y-pvnext.y);
+       inc(pv);
+       inc(pvnext);
+    end;
+    result:=result/2;
+end;
+
 procedure GDBObjLWpolyline.format;
 begin
      Vertex2D_in_OCS_Array.Shrink;
@@ -501,6 +539,7 @@ begin
      inherited format;
      createpoint;
      CalcWidthSegment;
+     Square:=CalcSquare;
      calcbb;
 end;
 procedure GDBObjLWpolyline.createpoint;

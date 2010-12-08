@@ -45,7 +45,8 @@ uses
  shared,
  sharedgdb,UGDBEntTree,
   {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}
- {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline;
+ {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline,
+ AnchorDocking,dialogs,XMLPropStorage;
 type
 {Export+}
   TMSType=(
@@ -89,7 +90,7 @@ const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 //var DWGPageCxMenu:pzpopupmenu;
 implementation
-uses {oglwindow,}mainwindow,UGDBSelectedObjArray,{ZBasicVisible,}oglwindow;
+uses {oglwindow,}gdbpolyline,UGDBPolyLine2DArray,GDBLWPolyLine,mainwindow,UGDBSelectedObjArray,{ZBasicVisible,}oglwindow,geometry;
 var
    CopyClipFile:GDBString;
    MSEditor:TMSEditor;
@@ -349,12 +350,12 @@ else if Operands='CAMERA' then
 else if Operands='CURRENT' then
                             begin
 
-                                 if (GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject <> nil)
+                                 if (GDB.GetCurrentDWG.GetLastSelected <> nil)
                                  then
                                      begin
-                                          obj:=pGDBObjEntity(GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.GetObjTypeName;
+                                          obj:=pGDBObjEntity(GDB.GetCurrentDWG.GetLastSelected)^.GetObjTypeName;
                                           objt:=SysUnit.TypeName2PTD(obj);
-                                          GDBobjinsp.setptr(objt,GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject);
+                                          GDBobjinsp.setptr(objt,GDB.GetCurrentDWG.GetLastSelected);
                                      end
                                  else
                                      begin
@@ -407,6 +408,9 @@ var
    pint:PGDBInteger;
    mem:GDBOpenArrayOfByte;
 begin
+     if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
+     if sysvar.SYS.SYS_IsHistoryLineCreated^ then
+     begin
      pint:=SavedUnit.FindValue('VIEW_CommandLineH');
      if assigned(pint)then
                           pint^:=Cline.Height;
@@ -421,6 +425,7 @@ begin
      SavedUnit^.SavePasToMem(mem);
      mem.SaveToFile(sysparam.programpath+'rtl'+PathDelim+'savedvar.pas');
      mem.done;
+     end;
 
      historyout('   Вот и всё бля...............');
      result:=cmd_ok;
@@ -573,6 +578,14 @@ begin
      mainform.PageControl.CxMenu:=DWGPageCxMenu;}
 
      myts:=nil;
+
+     if not assigned(MainFormN.PageControl)then
+     begin
+          DockMaster.ShowControl('PageControl',true);
+          //DockMaster.ShowControl('PageControl',true);
+     end;
+
+
      myts:=TTabSheet.create(MainFormN.PageControl);
      myts.Caption:=(Operands);
      myts.Parent:=MainFormN.PageControl;
@@ -1077,7 +1090,7 @@ var
 begin
      pobj:=nil;
      if GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount=1 then
-                                                pobj:=PGDBObjEntity(GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)
+                                                pobj:=PGDBObjEntity(GDB.GetCurrentDWG.GetLastSelected)
 else if length(Operands)>3 then
                                begin
                                     if pos('BD:',operands)=1 then
@@ -1412,6 +1425,259 @@ begin
 
   result:=cmd_ok;
 end;
+procedure polytest_com_CommandStart(Operands:pansichar);
+begin
+  if GDB.GetCurrentDWG.GetLastSelected<>nil then
+  if GDB.GetCurrentDWG.GetLastSelected.vp.ID=GDBlwPolylineID then
+  begin
+  GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera) or (MGet3DPoint));
+  //GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := true;
+  historyout('тыкаем и проверяем внутри\снаружи 2D полилинии:');
+  exit;
+  end;
+  //else
+  begin
+       historyout('перед запуском нужно выбрать 2D полилинию');
+       commandmanager.executecommandend;
+  end;
+end;
+function polytest_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+//var tb:PGDBObjSubordinated;
+begin
+  result:=mclick+1;
+  if button = 1 then
+  begin
+       if pgdbobjlwpolyline(GDB.GetCurrentDWG.GetLastSelected).isPointInside(wc) then
+       historyout('Внутри!')
+       else
+       historyout('Снаружи!')
+  end;
+end;
+function isrect(const p1,p2,p3,p4:GDBVertex2D):boolean;
+var
+   p:gdbdouble;
+begin
+     p:=SqrVertexlength(p1,p3)-sqrVertexlength(p2,p4);
+     p:=SqrVertexlength(p1,p2)-sqrVertexlength(p3,p4);
+     if (abs(SqrVertexlength(p1,p3)-sqrVertexlength(p2,p4))<sqreps)and(abs(SqrVertexlength(p1,p2)-sqrVertexlength(p3,p4))<sqreps)
+     then
+         result:=true
+     else
+         result:=false;
+end;
+function IsSubContur(const pva:GDBPolyline2DArray;const p1,p2,p3,p4:integer):boolean;
+var
+   c,i:integer;
+begin
+     result:=false;
+     for i:=0 to pva.count-1 do
+     begin
+          if (i<>p1)and
+             (i<>p2)and
+             (i<>p3)and
+             (i<>p4)
+                       then
+                       begin
+                            c:=0;
+                            if _intercept2d(PGDBVertex2D(pva.getelement(p1))^,PGDBVertex2D(pva.getelement(p2))^,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            then
+                                inc(c);
+                            if _intercept2d(PGDBVertex2D(pva.getelement(p2))^,PGDBVertex2D(pva.getelement(p3))^,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            then
+                                inc(c);
+                            if _intercept2d(PGDBVertex2D(pva.getelement(p3))^,PGDBVertex2D(pva.getelement(p4))^,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            then
+                                inc(c);
+                            if _intercept2d(PGDBVertex2D(pva.getelement(p4))^,PGDBVertex2D(pva.getelement(p1))^,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            then
+                                inc(c);
+                            if ((c mod 2)=1) then
+                                                 exit;
+                       end;
+     end;
+     result:=true;
+end;
+function IsSubContur2(const pva:GDBPolyline2DArray;const p1,p2,p3:integer;const p:GDBVertex2D):boolean;
+var
+   c,i:integer;
+begin
+     result:=false;
+     for i:=0 to pva.count-1 do
+     begin
+          if (i<>p1)and
+             (i<>p2)and
+             (i<>p3)
+                       then
+                       begin
+                            c:=0;
+                            if _intercept2d(PGDBVertex2D(pva.getelement(p1))^,PGDBVertex2D(pva.getelement(p2))^,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            then
+                                inc(c);
+                            if _intercept2d(PGDBVertex2D(pva.getelement(p2))^,PGDBVertex2D(pva.getelement(p3))^,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            then
+                                inc(c);
+                            if _intercept2d(PGDBVertex2D(pva.getelement(p3))^,p,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            then
+                                inc(c);
+                            if _intercept2d(p,PGDBVertex2D(pva.getelement(p1))^,PGDBVertex2D(pva.getelement(i))^, 1, 0)
+                            then
+                                inc(c);
+                            if ((c mod 2)=1) then
+                                                 exit;
+                       end;
+     end;
+     result:=true;
+end;
+procedure nextP(var p,c:integer);
+begin
+     inc(p);
+     if p=c then
+                        p:=0;
+end;
+function CutRect4(var pva,pvr:GDBPolyline2DArray):boolean;
+var
+   p1,p2,p3,p4,i:integer;
+begin
+     result:=false;
+     p1:=0;p2:=1;p3:=2;p4:=3;
+     for i:=1 to pva.count do
+     begin
+          if isrect(PGDBVertex2D(pva.getelement(p1))^,
+                    PGDBVertex2D(pva.getelement(p2))^,
+                    PGDBVertex2D(pva.getelement(p3))^,
+                    PGDBVertex2D(pva.getelement(p4))^)then
+          if pva.ispointinside(Vertexmorph(PGDBVertex2D(pva.getelement(p1))^,PGDBVertex2D(pva.getelement(p3))^,0.5))then
+          if IsSubContur(pva,p1,p2,p3,p4)then
+              begin
+                   pvr.add(pva.getelement(p1));
+                   pvr.add(pva.getelement(p2));
+                   pvr.add(pva.getelement(p3));
+                   pvr.add(pva.getelement(p4));
+
+                   pva.deleteelement(p3);
+                   pva.deleteelement(p2);
+                   pva.optimize;
+
+                   result:=true;
+                   exit;
+              end;
+          nextP(p1,pva.count);nextP(p2,pva.count);nextP(p3,pva.count);nextP(p4,pva.count);
+     end;
+end;
+function CutRect3(var pva,pvr:GDBPolyline2DArray):boolean;
+var
+   p1,p2,p3,p4,i:integer;
+   p:GDBVertex2d;
+begin
+     result:=false;
+     p1:=0;p2:=1;p3:=2;p4:=3;
+     for i:=1 to pva.count do
+     begin
+          p.x:=PGDBVertex2D(pva.getelement(p1))^.x+(PGDBVertex2D(pva.getelement(p3))^.x-PGDBVertex2D(pva.getelement(p2))^.x);
+          p.y:=PGDBVertex2D(pva.getelement(p1))^.y+(PGDBVertex2D(pva.getelement(p3))^.y-PGDBVertex2D(pva.getelement(p2))^.y);
+          if distance2piece_2dmy(p,PGDBVertex2D(pva.getelement(p3))^,PGDBVertex2D(pva.getelement(p4))^)<eps then
+          if pva.ispointinside(Vertexmorph(PGDBVertex2D(pva.getelement(p1))^,PGDBVertex2D(pva.getelement(p3))^,0.5))then
+          if IsSubContur2(pva,p1,p2,p3,p)then
+              begin
+                   pvr.add(pva.getelement(p1));
+                   pvr.add(pva.getelement(p2));
+                   pvr.add(pva.getelement(p3));
+                   pvr.add(@p);
+
+                   PGDBVertex2D(pva.getelement(p3))^.x:=p.x;
+                   PGDBVertex2D(pva.getelement(p3))^.y:=p.y;
+                   pva.deleteelement(p2);
+                   pva.optimize;
+
+                   result:=true;
+                   exit;
+              end;
+          nextP(p1,pva.count);nextP(p2,pva.count);nextP(p3,pva.count);nextP(p4,pva.count);
+     end;
+end;
+
+procedure polydiv(var pva,pvr:GDBPolyline2DArray;m:DMatrix4D);
+var
+   nstep,i:integer;
+   p3dpl:PGDBObjPolyline;
+   wc:gdbvertex;
+begin
+     nstep:=0;
+     repeat
+           case nstep of
+                       0:begin
+                              if CutRect4(pva,pvr) then
+                                                       nstep:=-1;
+
+                         end;
+                       1:begin
+                              if CutRect3(pva,pvr) then
+                                                       nstep:=-1;
+                         end;
+                       2:begin
+
+                              if CutRect3(pva,pvr) then
+                                                       nstep:=-1;
+                         end
+           end;
+           inc(nstep)
+     until nstep=3;
+     nstep:=nstep;
+     i:=0;
+     p3dpl := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateInitObj(GDBPolylineID,gdb.GetCurrentROOT));
+     p3dpl.Closed:=true;
+     p3dpl^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+     p3dpl^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
+
+     while i<pvr.Count do
+     begin
+          wc.x:=PGDBVertex2D(pvr.getelement(i))^.x;
+          wc.y:=PGDBVertex2D(pvr.getelement(i))^.y;
+          wc.z:=0;
+          wc:=geometry.VectorTransform3D(wc,m);
+          p3dpl^.AddVertex(wc);
+
+          if ((i+1) mod 4)=0 then
+          begin
+               p3dpl^.Format;
+               p3dpl^.RenderFeedback;
+               gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
+               if i<>pvr.Count-1 then
+               p3dpl := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateInitObj(GDBPolylineID,gdb.GetCurrentROOT));
+               p3dpl.Closed:=true;
+          end;
+          inc(i);
+     end;
+
+     p3dpl^.Format;
+     p3dpl^.RenderFeedback;
+     gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
+     //redrawoglwnd;
+end;
+
+procedure polydiv_com(Operands:pansichar);
+var pva,pvr:GDBPolyline2DArray;
+begin
+  if GDB.GetCurrentDWG.GetLastSelected<>nil then
+  if GDB.GetCurrentDWG.GetLastSelected.vp.ID=GDBlwPolylineID then
+  begin
+       pva.init({$IFDEF DEBUGBUILD}'{9372BADE-74EE-4101-8FA4-FC696054CD4F}',{$ENDIF}pgdbobjlwpolyline(GDB.GetCurrentDWG.GetLastSelected).Vertex2D_in_OCS_Array.count,true);
+       pvr.init({$IFDEF DEBUGBUILD}'{9372BADE-74EE-4101-8FA4-FC696054CD4F}',{$ENDIF}pgdbobjlwpolyline(GDB.GetCurrentDWG.GetLastSelected).Vertex2D_in_OCS_Array.count,true);
+
+       pgdbobjlwpolyline(GDB.GetCurrentDWG.GetLastSelected).Vertex2D_in_OCS_Array.copyto(@pva);
+
+       polydiv(pva,pvr,pgdbobjlwpolyline(GDB.GetCurrentDWG.GetLastSelected).GetMatrix^);
+
+       pva.done;
+       pvr.done;
+       exit;
+  end;
+  //else
+  begin
+       historyout('перед запуском нужно выбрать 2D полилинию');
+       commandmanager.executecommandend;
+  end;
+end;
 
 function layer_cmd:GDBInteger;
 begin
@@ -1431,6 +1697,54 @@ begin
 
      //DWGPageCxMenu^.done;
      //gdbfreemem(pointer(DWGPageCxMenu));
+end;
+function SaveLayout_com:GDBInteger;
+var
+  XMLConfig: TXMLConfigStorage;
+  filename:string;
+begin
+  try
+    // create a new xml config file
+    filename:=sysparam.programpath+'components/defaultlayout.xml';
+    XMLConfig:=TXMLConfigStorage.Create(filename,false);
+    try
+      // save the current layout of all forms
+      DockMaster.SaveLayoutToConfig(XMLConfig);
+      XMLConfig.WriteToDisk;
+    finally
+      XMLConfig.Free;
+    end;
+  except
+    on E: Exception do begin
+      MessageDlg('Error',
+        'Error saving layout to file '+Filename+':'#13+E.Message,mtError,
+        [mbCancel],0);
+    end;
+  end;
+  result:=cmd_ok;
+end;
+function Show_com(Operands:pansichar):GDBInteger;
+var
+   obj:gdbstring;
+   objt:PUserTypeDescriptor;
+begin
+     if Operands='ObjInsp' then
+                            begin
+                                 //DockMaster.MakeDockable(GDBobjinsp);
+                                 DockMaster.ShowControl('ObjectInspector',true);
+                            end
+else if Operands='CommandLine' then
+                            begin
+                                 DockMaster.ShowControl('CommandLine',true);
+                            end
+else if Operands='PageControl' then
+                            begin
+                                 DockMaster.ShowControl('PageControl',true);
+                            end
+else if Operands='ToolBarR' then
+                            begin
+                                 DockMaster.ShowControl('ToolBarR',true);
+                            end;
 end;
 procedure startup;
 //var
@@ -1476,6 +1790,13 @@ begin
   CreateCommandFastObjectPlugin(@layer_cmd,'Layer',CADWG,0);
   CreateCommandFastObjectPlugin(@undo_com,'Undo',CADWG,0).overlay:=true;
   CreateCommandFastObjectPlugin(@redo_com,'Redo',CADWG,0).overlay:=true;
+
+  CreateCommandRTEdObjectPlugin(@polytest_com_CommandStart,nil,nil,nil,@polytest_com_BeforeClick,@polytest_com_BeforeClick,nil,'PolyTest',0,0);
+  CreateCommandFastObjectPlugin(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);
+  CreateCommandFastObjectPlugin(@PolyDiv_com,'PolyDiv',CADWG,0).CEndActionAttr:=CEDeSelect;
+  CreateCommandFastObjectPlugin(@SaveLayout_com,'SaveLayout',0,0);
+  CreateCommandFastObjectPlugin(@Show_com,'Show',0,0);
+
 
   //Optionswindow.initxywh('',@mainformn,500,300,400,100,false);
   //Aboutwindow:=TAboutWnd.create(Application);{.initxywh('',@mainform,500,200,200,180,false);}

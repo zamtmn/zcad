@@ -36,7 +36,7 @@ uses splashwnd,shared,log;
 procedure TAboutWnd.AfterConstruction;
 begin
   inherited;
-  self.Position:=poScreenCenter;
+  self.Position:={poScreenCenter}poMainFormCenter;
   caption:=('О программе ZCAD');
 
   self.borderstyle:=bsSizeToolWin;

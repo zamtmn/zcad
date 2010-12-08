@@ -100,8 +100,7 @@ begin
      s:=(ExpandPath(fn));
      historyoutstr('Запущен скрипт "'+s+'";');
      busy:=true;
-     shared.cmdedit.Enabled:=false;
-     shared.HintText.Enabled:=false;
+     shared.DisableCmdLine;
 
      oldlastcomm:=lastcommand;
      sa.init(200);
@@ -116,9 +115,7 @@ begin
   sa.FreeAndDone;
   lastcommand:=oldlastcomm;
 
-     shared.cmdedit.Enabled:=true;
-     shared.HintText.Enabled:=true;
-     shared.cmdedit.SetFocus;
+     shared.EnableCmdLine;
      busy:=false;
 end;
 procedure GDBcommandmanager.sendpoint2command;

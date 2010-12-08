@@ -104,8 +104,8 @@ begin
   //создание окна программы
   Application.CreateForm(TMainFormN, MainFormN);
   MainFormN.show;
-  if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
-                                                  sysvar.SYS.SYS_IsHistoryLineCreated^:=true;
+  {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
+                                                  sysvar.SYS.SYS_IsHistoryLineCreated^:=true;}
   historyoutstr('ZCAD v'+sysvar.SYS.SYS_Version^+' started');
   gdbplugins.loadplugins(sysparam.programpath+'PLUGINS\');
 
@@ -113,6 +113,8 @@ begin
   //убираем срлэш
   removesplash;
 
+  {MainFormN.show;
+  CLine.Show;}
 
   Application.run;
 

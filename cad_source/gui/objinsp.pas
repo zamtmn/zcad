@@ -43,7 +43,7 @@ type
   end;
   arrayarrindop=array[0..10] of arrindop;
   parrayarrindop=^arrayarrindop;
-  TGDBobjinsp=class({TPanel}TScrollBox)
+  TGDBobjinsp=class({TPanel}{TScrollBox}tform)
     public
     GDBobj:GDBBoolean;
     ppropcurrentedit:PPropertyDeskriptor;
@@ -119,6 +119,7 @@ begin
 end;
 procedure TGDBobjinsp.AfterConstruction;
 begin
+     inherited;
      onresize:=_onresize;
      onpaint:=mypaint;
      self.DoubleBuffered:=true;
@@ -126,7 +127,9 @@ begin
      self.BorderWidth:=1;
 
      pcurrobj:=nil;
-  peditor:=nil;
+     peditor:=nil;
+     currobjgdbtype:=nil;
+     createpda;
   ppropcurrentedit:=nil;
   startdrawy:=0;
 

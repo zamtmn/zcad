@@ -146,7 +146,7 @@ begin
 
   if commandline.commandmanager.CommandsStack.Count=0 then
                                                            gdb.GetCurrentDWG.OGLwindow1.setobjinsp;
-  gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
+  //-------------------------------gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   redrawoglwnd;
 end;
 function CreateCommandFastObjectPlugin;

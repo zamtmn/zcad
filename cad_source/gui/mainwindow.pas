@@ -32,7 +32,8 @@ uses
   {GDBCommandsBase,}{ GDBCommandsDraw,GDBCommandsElectrical,}
   commandline,{zmainforms,}memman,UGDBNamedObjectsArray,
   {ZGUIArrays,}{ZBasicVisible,}{ZEditsWithVariable,}{ZTabControlsGeneric,}shared,{ZPanelsWithSplit,}{ZGUIsCT,}{ZstaticsText,}{UZProcessBar,}strmy{,strutils},{ZPanelsGeneric,}
-graphics;
+graphics,
+  AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr;
 
 type
   TFileHistory=Array [0..9] of TmyMenuItem;
@@ -40,9 +41,9 @@ type
                     ToolBarU,ToolBarR:TToolBar;
                     ToolBarD: TToolBar;
                     //ObjInsp,
-                    MainPanel{,MainPanelU}:TPanel;
+                    MainPanel{,MainPanelU}:TForm;
                     //MainPanelD:TCLine;
-                    SplitterV,SplitterH: TSplitter;
+                    //SplitterV,SplitterH: TSplitter;
 
                     PageControl:TmyPageControl;
 
@@ -50,6 +51,7 @@ type
 
                     SystemTimer: TTimer;
 
+                    procedure FormCreate(Sender: TObject);
                     procedure AfterConstruction; override;
                     destructor Destroy;override;
 
@@ -88,6 +90,9 @@ type
 
                     procedure processfilehistory(filename:GDBString);
 
+                    procedure DockMasterCreateControl(Sender: TObject; aName: string; var
+  AControl: TControl; DoDisableAutoSizing: boolean);
+
                end;
 function getoglwndparam: GDBPointer; export;
 procedure clearotrack;
@@ -109,9 +114,12 @@ var
   LineWBox:TComboBox;
   LPTime:Tdatetime;
   oldlongprocess:integer;
+  tf:tform;
+  //DockMaster: TAnchorDockMaster = nil;
 implementation
 
-uses {GDBCommandsBase,}Objinsp{,optionswnd, Tedit_form, MTedit_form};
+uses {GDBCommandsBase,}Objinsp{,optionswnd, Tedit_form, MTedit_form},
+  dialogs,XMLPropStorage;
 
 procedure TMainFormN.processfilehistory(filename:GDBString);
 var i,j,k:integer;
@@ -167,64 +175,260 @@ procedure TMainFormN.draw;
 begin
      update;
 end;
+function ShowAnchorDockOptions(ADockMaster: TAnchorDockMaster): TModalResult;
+var
+  Dlg: TForm;
+  OptsFrame: TAnchorDockOptionsFrame;
+  BtnPanel: TButtonPanel;
+begin
+  Dlg:=TForm.Create(nil);
+  try
+    Dlg.DisableAutoSizing;
+    Dlg.Position:=poScreenCenter;
+    Dlg.AutoSize:=true;
+    Dlg.Caption:=adrsGeneralDockingOptions;
 
-procedure TMainFormN.AfterConstruction;
+    OptsFrame:=TAnchorDockOptionsFrame.Create(Dlg);
+    OptsFrame.Align:=alClient;
+    OptsFrame.Parent:=Dlg;
+    OptsFrame.Master:=ADockMaster;
+
+    BtnPanel:=TButtonPanel.Create(Dlg);
+    BtnPanel.ShowButtons:=[pbOK, pbCancel];
+    BtnPanel.OKButton.OnClick:={@}OptsFrame.OkClick;
+    BtnPanel.Parent:=Dlg;
+    Dlg.EnableAutoSizing;
+    Result:=Dlg.ShowModal;
+  finally
+    Dlg.Free;
+  end;
+end;
+procedure TMainFormN.DockMasterCreateControl(Sender: TObject; aName: string; var
+  AControl: TControl; DoDisableAutoSizing: boolean);
+var
+  i:integer;
+  pint:PGDBInteger;
+  procedure CreateForm(Caption: string; NewBounds: TRect);
+  begin
+       begin
+           AControl:=tform.create(Application);
+           AControl.Name:=aname;
+           Acontrol.Caption:=caption;
+           Acontrol.BoundsRect:=NewBounds;
+       end;
+    //AControl:=CreateSimpleForm(aName,Caption,NewBounds,DoDisableAutoSizing);
+  end;
+
+begin
+  // first check if the form already exists
+  // the LCL Screen has a list of all existing forms.
+  // Note: Remember that the LCL allows as form names only standard
+  // pascal identifiers and compares them case insensitive
+  AControl:=Screen.FindForm(aName);
+  if AControl<>nil then begin
+    // if it already exists, just disable autosizing if requested
+    if DoDisableAutoSizing then
+      AControl.DisableAutoSizing;
+    exit;
+  end;
+  // if the form does not yet exist, create it
+  if aName='CodeExplorer' then
+    CreateForm('Code Explorer',Bounds(700,230,100,250))
+  else if aName='PageControl' then
+  begin
+       MainPanel:=Tform(Tform.NewInstance);
+       MainPanel.DisableAlign;
+       MainPanel.Create(Application);
+   //MainPanel:={TPanel}Tform.create(application);
+   MainPanel.BorderWidth:=0;
+   //MainPanel.Parent:=self;
+   //mainpanel.show;
+
+   PageControl:=TmyPageControl.Create({MainPanel}Application);
+      PageControl.Constraints.MinHeight:=32;
+      PageControl.Parent:=MainPanel;
+      PageControl.Align:=alClient;
+      PageControl.OnPageChanged:=ChangedDWGTabCtrl;
+      //PageControl.Height:=800;
+      PageControl.BorderWidth:=0;
+
+   AControl:=MainPanel;
+   AControl.Name:=aname;
+   //Acontrol.Caption:=caption;
+               if not DoDisableAutoSizing then
+                                            Acontrol.EnableAutoSizing;
+  end
+  else if aName='CommandLine' then
+  begin
+        CLine:=TCLine(TCLine.NewInstance);
+        CLine.DisableAlign;
+        CLine.Create(Application);
+        //CLine.Caption:=Title;
+       //CLine:=TCLine.create({MainPanel}application);
+       //CLine.Parent:=MainPanel;
+       CLine.Caption:='Командная строка';
+       CLine.Align:=alBottom;
+       pint:=SavedUnit.FindValue('VIEW_CommandLineH');
+       if assigned(pint)then
+                            Cline.Height:=pint^;
+       AControl:=CLine;
+
+       AControl.Name:=aname;
+       //Acontrol.Caption:=caption;
+                   if not DoDisableAutoSizing then
+                                                Acontrol.EnableAutoSizing;
+
+  end
+  else if aName='ObjectInspector' then
+            begin
+               GDBObjInsp:=TGDBObjInsp(TGDBObjInsp.NewInstance);
+               GDBObjInsp.DisableAlign;
+               GDBObjInsp.Create(Application);
+               GDBObjInsp.Caption:='Инспектор объектов';
+               //GDBObjInsp.Caption:=Title;
+               //GDBObjInsp:=TGDBObjInsp.create({self}application);
+               //GDBObjInsp.BorderStyle:=bsSingle;
+
+               //GDBObjInsp.Align:=alLeft;
+               //GDBobjinsp.BorderStyle:=bssizetoolwin;
+               GDBobjinsp.setptr(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
+               GDBobjinsp.SetCurrentObjDefault;
+               //GDBobjinsp.ReturnToDefault;
+
+               pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+               if assigned(pint)then
+                                    GDBobjinsp.Width:=pint^;
+               GDBobjinsp.namecol:=GDBobjinsp.Width div 2;
+               pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
+               if assigned(pint)then
+                                    GDBobjinsp.namecol:=pint^;
+
+               //GDBObjInsp.Parent:=self;
+               //  GDBObjInsp.show;
+               AControl:=GDBObjInsp;
+
+               AControl.Name:=aname;
+               //Acontrol.Caption:=caption;
+
+                   if not DoDisableAutoSizing then
+                                                Acontrol.EnableAutoSizing;
+               //Acontrol.BoundsRect:=NewBounds;
+          end
+  (*else if aName='ToolBarR' then
+  begin
+       ToolBarR:=TToolBar(TToolBar.NewInstance);
+       ToolBarR.DisableAlign;
+       ToolBarR.Create(Application);
+       ToolBarR.Caption:='ToolBarR';
+       ToolBarR.SetBounds(260,230,350,350);
+       ToolBarR.show;
+       //ToolBarR:=TToolBar.Create(application);
+       //ToolBarR.Align:=alRight;
+       //ToolBarR.Width:=ToolBarU.Height;
+       //oolBarR.EdgeBorders:=[ebRight];
+       //ToolBarR.ShowCaptions:=true;
+       //ToolBarR.Wrapable:=true;
+
+       AControl:=ToolBarR;
+
+       AControl.Name:=aname;
+       //Acontrol.Caption:=caption;
+           if not DoDisableAutoSizing then
+                                        Acontrol.EnableAutoSizing;
+
+  end*)
+  else if aName='SourceEditor2' then
+    CreateForm('Source Editor 2',Bounds(260,230,350,350))
+  else if aName='ProjectInspector' then
+    CreateForm('Project Inspector',Bounds(10,230,150,250))
+  else if aName='DebugOutput' then
+    CreateForm('Debug Output',Bounds(400,400,350,150));
+end;
+function LoadLayout_com:GDBInteger;
+var
+  XMLConfig: TXMLConfigStorage;
+  filename:string;
+begin
+  try
+    // load the xml config file
+    filename:=sysparam.programpath+'components/defaultlayout.xml';
+    XMLConfig:=TXMLConfigStorage.Create(Filename,True);
+    try
+      // restore the layout
+      // this will close unneeded forms and call OnCreateControl for all needed
+      DockMaster.LoadLayoutFromConfig(XMLConfig,true);
+    finally
+      XMLConfig.Free;
+    end;
+  except
+    on E: Exception do begin
+      MessageDlg('Error',
+        'Error loading layout from file '+Filename+':'#13+E.Message,mtError,
+        [mbCancel],0);
+    end;
+  end;
+  //result:=cmd_ok;
+end;
+procedure TMainFormN.FormCreate(Sender: TObject);
 var
   i:integer;
   pint:PGDBInteger;
 begin
-     inherited;
+  DockMaster.MakeDockSite(Self,[akBottom,akLeft,akRight],admrpChild);
+  DockMaster.OnCreateControl:={@}DockMasterCreateControl;
+  DockMaster.OnShowOptions:={@}ShowAnchorDockOptions;
+  //DockMaster.ShowHeaderCaption:=false;
 
-     self.onclose:=self.FormClose;
+   self.onclose:=self.FormClose;
 
-     WindowState:=wsMaximized;
-     onkeydown:=mykeypress;
-     KeyPreview:=true;
-
-
-     ToolBarD:={TStatusBar}TToolBar.Create(self);
-     ToolBarD.Height:=18;
-     ToolBarD.ButtonHeight:=16;
-     ToolBarD.ShowCaptions:=true;
-     ToolBarD.Align:=alBottom;
-     ToolBarD.AutoSize:=true;
-
-     ProcessBar:=TProgressBar.create(ToolBarD);//.initxywh('?',@Pdownpanel,0,0,400,statusbarclientheight,false);
-     ProcessBar.Hide;
-     ProcessBar.DoubleBuffered:=true;
-     ProcessBar.Align:=alLeft;
-     ProcessBar.Width:=400;
-     ProcessBar.min:=0;
-     ProcessBar.max:=0;
-     ProcessBar.step:=10000;
-     ProcessBar.position:=0;
-     ProcessBar.Smooth:=true;
-     ProcessBar.Parent:=ToolBarD;
-
-     HintText:=TLabel.Create(ToolBarD);
-     HintText.Align:=alLeft;
-     HintText.AutoSize:=false;
-     HintText.Width:=400;
-     HintText.Layout:=tlCenter;
-     HintText.Alignment:=taCenter;
-     HintText.Parent:=ToolBarD;
-
-     ToolBarD.Parent:=self;
+   WindowState:=wsMaximized;
+   onkeydown:=mykeypress;
+   KeyPreview:=true;
 
 
-     ToolBarU:=TToolBar.Create(self);
-     ToolBarU.Align:=alTop;
-     ToolBarU.AutoSize:=true;
-     ToolBarU.ShowCaptions:=true;
-     ToolBarU.Parent:=self;
+   ToolBarD:={TStatusBar}TToolBar.Create(self);
+   ToolBarD.Height:=18;
+   ToolBarD.ButtonHeight:=16;
+   ToolBarD.ShowCaptions:=true;
+   ToolBarD.Align:=alBottom;
+   ToolBarD.AutoSize:=true;
+
+   ProcessBar:=TProgressBar.create(ToolBarD);//.initxywh('?',@Pdownpanel,0,0,400,statusbarclientheight,false);
+   ProcessBar.Hide;
+   ProcessBar.DoubleBuffered:=true;
+   ProcessBar.Align:=alLeft;
+   ProcessBar.Width:=400;
+   ProcessBar.min:=0;
+   ProcessBar.max:=0;
+   ProcessBar.step:=10000;
+   ProcessBar.position:=0;
+   ProcessBar.Smooth:=true;
+   ProcessBar.Parent:=ToolBarD;
+
+   HintText:=TLabel.Create(ToolBarD);
+   HintText.Align:=alLeft;
+   HintText.AutoSize:=false;
+   HintText.Width:=400;
+   HintText.Layout:=tlCenter;
+   HintText.Alignment:=taCenter;
+   HintText.Parent:=ToolBarD;
+
+   ToolBarD.Parent:=self;
+
+
+   ToolBarU:=TToolBar.Create(self);
+   ToolBarU.Align:=alTop;
+   ToolBarU.AutoSize:=true;
+   ToolBarU.ShowCaptions:=true;
+   ToolBarU.Parent:=self;
 
 {     LayerBox:=TComboBox.Create(ToolBarU);
-     LayerBox.ReadOnly:=true;
-     LayerBox.Width:=200;
-     LayerBox.Height:=500;
-     LayerBox.AutoSize:=true;
-     LayerBox.Parent:=ToolBarU;
-     layerbox.OnChange:=ChangeCLayer;
+   LayerBox.ReadOnly:=true;
+   LayerBox.Width:=200;
+   LayerBox.Height:=500;
+   LayerBox.AutoSize:=true;
+   LayerBox.Parent:=ToolBarU;
+   layerbox.OnChange:=ChangeCLayer;
 
 LineWBox:=TComboBox.Create(ToolBarU);
 LineWBox.onChange:=ChangeCLineW;
@@ -236,139 +440,171 @@ LineWbox.items.Add(sys2interf('По слою'));
 for i := 0 to 20 do
 begin
 s:=floattostr(i / 10) + ' мм';
-     LineWbox.items.Add(sys2interf(s));
+   LineWbox.items.Add(sys2interf(s));
 end;
 LineWbox.items.Add(sys2interf('Разный'));
 LineWbox.Parent:=ToolBarU;
 }
 
-     ToolBarR:=TToolBar.Create(self);
-     ToolBarR.Align:=alRight;
-     ToolBarR.Width:=ToolBarU.Height;
-     ToolBarR.EdgeBorders:=[ebRight];
-     ToolBarR.ShowCaptions:=true;
-     //ToolBarR.Constraints.MaxWidth:=ToolBarR.Width;
-     //ToolBarR.AutoSize:=true;
-     ToolBarR.Wrapable:=true;
-     ToolBarR.Parent:=self;
+   ToolBarR:=TToolBar.Create(application);
+   ToolBarR.Align:=alRight;
+   ToolBarR.Width:=ToolBarU.Height;
+   ToolBarR.EdgeBorders:=[ebRight];
+   ToolBarR.ShowCaptions:=true;
+   //ToolBarR.Constraints.MaxWidth:=ToolBarR.Width;
+   //ToolBarR.AutoSize:=true;
+   ToolBarR.Wrapable:=true;
+   ToolBarR.Parent:=self;
+   //DockMaster.ShowControl('ToolBarR',true);
 
-     MainPanel:=TPanel.create(self);
-     MainPanel.Align:=alClient;
-     MainPanel.BorderStyle:=bsNone;
-     MainPanel.BorderWidth:=0;
-     MainPanel.BevelOuter:=bvnone;
+   //MainPanel.Align:=alClient;
+   //MainPanel.BorderStyle:=bsNone;
+   //MainPanel.BevelOuter:=bvnone;
 
 
 (*   CLine:=TCLine.create(MainPanel);
+   CLine.Parent:=MainPanel;
+   CLine.Align:=alClient;
+
+   PageControl:=TmyPageControl.Create(MainPanel);
+   PageControl.Constraints.MinHeight:=32;
+   PageControl.Parent:=MainPanel;
+   PageControl.Align:=alTop;
+   PageControl.OnPageChanged:=ChangedDWGTabCtrl;
+   PageControl.Height:=800;
+   //if PageControl.Height>sysinfo.sysparam.screeny;
+   //PageControl.BorderStyle:=BSsingle;
+   PageControl.BorderWidth:=0;
+   //tobject(PageControl):=mainpanel;
+   //PageControl.BevelOuter:=bvnone;
+
+   SplitterH:=TSplitter.Create(MainPanel);
+   SplitterH.Parent:=MainPanel;
+   SplitterH.Align:=alTop;
+   SplitterH.top:=800;*)
+
+
+     //SplitterH:=TSplitter.Create(MainPanel);
+     //SplitterH.Parent:=MainPanel;
+     //SplitterH.Align:=alTop;
+     //SplitterH.top:=800;
+     //application.ProcessMessages;
+
+     (*CLine:=TCLine.create(MainPanel);
      CLine.Parent:=MainPanel;
-     CLine.Align:=alClient;
-
-     PageControl:=TmyPageControl.Create(MainPanel);
-     PageControl.Constraints.MinHeight:=32;
-     PageControl.Parent:=MainPanel;
-     PageControl.Align:=alTop;
-     PageControl.OnPageChanged:=ChangedDWGTabCtrl;
-     PageControl.Height:=800;
-     //if PageControl.Height>sysinfo.sysparam.screeny;
-     //PageControl.BorderStyle:=BSsingle;
-     PageControl.BorderWidth:=0;
-     //tobject(PageControl):=mainpanel;
-     //PageControl.BevelOuter:=bvnone;
-
-     SplitterH:=TSplitter.Create(MainPanel);
-     SplitterH.Parent:=MainPanel;
-     SplitterH.Align:=alTop;
-     SplitterH.top:=800;*)
-
-
-       SplitterH:=TSplitter.Create(MainPanel);
-       SplitterH.Parent:=MainPanel;
-       SplitterH.Align:=alTop;
-       //SplitterH.top:=800;
-       //application.ProcessMessages;
-
-
-       CLine:=TCLine.create(MainPanel);
-       CLine.Parent:=MainPanel;
-       CLine.Align:=alBottom;
-       pint:=SavedUnit.FindValue('VIEW_CommandLineH');
-       if assigned(pint)then
-                            Cline.Height:=pint^;
-       application.ProcessMessages;
-
-       SplitterH.Align:=alBottom;
-       //application.ProcessMessages;
-
-
-
-       PageControl:=TmyPageControl.Create(MainPanel);
-       PageControl.Constraints.MinHeight:=32;
-       PageControl.Parent:=MainPanel;
-       PageControl.Align:=alClient;
-       PageControl.OnPageChanged:=ChangedDWGTabCtrl;
-       //PageControl.Height:=800;
-       PageControl.BorderWidth:=0;
-
-
-
-
-
-
-
-
-       SplitterV:=TSplitter.Create(self);
-     SplitterV.Align:=alLeft;
-
-     MainPanel.Parent:=self;
-
-     GDBObjInsp:=TGDBObjInsp.create(self);
-     //GDBObjInsp.BorderStyle:=bsSingle;
-
-     GDBObjInsp.Align:=alLeft;
-     GDBobjinsp.createpda;
-     GDBobjinsp.setptr(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
-     GDBobjinsp.SetCurrentObjDefault;
-     //GDBobjinsp.ReturnToDefault;
-
-     pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+     CLine.Top:=0;
+     CLine.Left:=0;
+     CLine.Align:=alBottom;
+     pint:=SavedUnit.FindValue('VIEW_CommandLineH');
      if assigned(pint)then
-                          GDBobjinsp.Width:=pint^;
-     GDBobjinsp.namecol:=GDBobjinsp.Width div 2;
-     pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
-     if assigned(pint)then
-                          GDBobjinsp.namecol:=pint^;
-
-     GDBObjInsp.Parent:=self;
-
-     SplitterV.left:=GDBobjinsp.Width;
-     SplitterV.Parent:=self;
+                          Cline.Height:=pint^;
+     //cline.Show;*)
 
 
-     //Menu:=TMainMenu.create(self);
-     //Menu.Items.Add(TmyMenuItem.create(Menu,'Добавить в базу данных чертежа','DBaseAdd'));
+     //-------------------------application.ProcessMessages;
 
-
-     loadpanels(sysparam.programpath+'menu/mainmenu.mn');
-     //Menu:=TMainMenu(mm);
-
-     //self.caption:=sys2interf('Временно это окно является главным окном программы. Соответственно его закрытие повлечет за собой закрытие программы)). Приносим извинения за неудобства))');
+     //SplitterH.Align:=alBottom;
+     //application.ProcessMessages;
 
 
 
 
-     //self.Menu:=TMainMenu(menu);
 
-   (*  hToolTip := CreateWindowEx(WS_EX_TOPMOST, TOOLTIPS_CLASS, nil,
-         {TTS_ALWAYSTIP=}$01,
-         integer(CW_USEDEFAULT), integer(CW_USEDEFAULT),
-         integer(CW_USEDEFAULT), integer(CW_USEDEFAULT),
-         MainFormN.handle, 0, hInstance, nil );
-   *)
-     application.OnIdle:=self.idle;
-     SystemTimer:=TTimer.Create(self);
-     SystemTimer.Interval:=1000;
-     SystemTimer.Enabled:=true;
-     SystemTimer.OnTimer:=self.generaltick;
+
+
+     //SplitterV:=TSplitter.Create(self);
+   //SplitterV.Align:=alLeft;
+
+   LoadLayout_com;
+
+   (*MainPanel:={TPanel}Tform.create(application);
+   MainPanel.BorderWidth:=0;
+   MainPanel.Parent:=self;
+   mainpanel.show;*)
+   /////DockMaster.ShowControl('PageControl',true);
+
+
+   (*PageControl:=TmyPageControl.Create(MainPanel);
+   PageControl.Constraints.MinHeight:=32;
+   PageControl.Parent:=MainPanel;
+   PageControl.Align:=alClient;
+   PageControl.OnPageChanged:=ChangedDWGTabCtrl;
+   //PageControl.Height:=800;
+   PageControl.BorderWidth:=0;*)
+
+
+   /////DockMaster.ShowControl('CommandLine',true);
+   /////DockMaster.ShowControl('ObjectInspector',true);
+   (*
+   GDBObjInsp:=TGDBObjInsp.create({self}application);
+   //GDBObjInsp.BorderStyle:=bsSingle;
+
+   //GDBObjInsp.Align:=alLeft;
+   GDBobjinsp.setptr(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
+   GDBobjinsp.SetCurrentObjDefault;
+   //GDBobjinsp.ReturnToDefault;
+
+   pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+   if assigned(pint)then
+                        GDBobjinsp.Width:=pint^;
+   GDBobjinsp.namecol:=GDBobjinsp.Width div 2;
+   pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
+   if assigned(pint)then
+                        GDBobjinsp.namecol:=pint^;
+
+   //GDBObjInsp.Parent:=self;
+     GDBObjInsp.show;
+
+
+   SplitterV.left:=GDBobjinsp.Width;
+   SplitterV.Parent:=self;
+    *)
+
+
+   //Menu:=TMainMenu.create(self);
+   //Menu.Items.Add(TmyMenuItem.create(Menu,'Добавить в базу данных чертежа','DBaseAdd'));
+
+
+   loadpanels(sysparam.programpath+'menu/mainmenu.mn');
+
+
+
+   //Menu:=TMainMenu(mm);
+
+   //self.caption:=sys2interf('Временно это окно является главным окном программы. Соответственно его закрытие повлечет за собой закрытие программы)). Приносим извинения за неудобства))');
+
+
+
+
+   //self.Menu:=TMainMenu(menu);
+
+ (*  hToolTip := CreateWindowEx(WS_EX_TOPMOST, TOOLTIPS_CLASS, nil,
+       {TTS_ALWAYSTIP=}$01,
+       integer(CW_USEDEFAULT), integer(CW_USEDEFAULT),
+       integer(CW_USEDEFAULT), integer(CW_USEDEFAULT),
+       MainFormN.handle, 0, hInstance, nil );
+ *)
+   application.OnIdle:=self.idle;
+   SystemTimer:=TTimer.Create(self);
+   SystemTimer.Interval:=1000;
+   SystemTimer.Enabled:=true;
+   SystemTimer.OnTimer:=self.generaltick;
+
+   //self.DisableAutoSizing;
+
+   //DockMaster.ShowControl('ObjectInspector',true);
+   {tf:= tform.Create(nil);
+   tf.Name:='test';
+   tf.show;}
+
+end;
+
+procedure TMainFormN.AfterConstruction;
+
+begin
+    name:='MainForm';
+    oncreate:=FormCreate;
+    inherited;
 end;
 procedure SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean);
 var
@@ -844,6 +1080,7 @@ begin
                         end;}
      if rt<>SysVar.SYS.SYS_RunTime^ then
                                         begin
+                                             if assigned(GDBobjinsp) then
                                              GDBobjinsp.updateinsp;
                                         end;
      rt:=SysVar.SYS.SYS_RunTime^;
@@ -1552,7 +1789,14 @@ begin
      //GDBFreeMem(gdb.GetCurrentDWG.OGLwindow1.param.pglscreen);
      //OSModeEditor.Done;
 end;}
+initialization
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('mainwindow.initialization');{$ENDIF}
+  //DockMaster:=TAnchorDockMaster.Create(nil);
+end
+finalization
+begin
+  //FreeAndNil(DockMaster);
+end;
 end.
 

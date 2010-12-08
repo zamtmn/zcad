@@ -259,10 +259,10 @@ FreeElProc=procedure (p:GDBPointer);
 //Generate on C:\zcad\CAD_SOURCE\u\UOpenArray.pas
 POpenArray=^OpenArray;
 OpenArray=object(GDBaseObject)
-                Deleted:GDBLongword;(*hidden_in_objinsp*)
-                Count:GDBLongword;(*saved_to_shd*)(*hidden_in_objinsp*)
-                Max:GDBLongword;(*hidden_in_objinsp*)
-                Size:GDBLongword;(*hidden_in_objinsp*)
+                Deleted:TArrayIndex;(*hidden_in_objinsp*)
+                Count:TArrayIndex;(*saved_to_shd*)(*hidden_in_objinsp*)
+                Max:TArrayIndex;(*hidden_in_objinsp*)
+                Size:TArrayIndex;(*hidden_in_objinsp*)
                 constructor init(m,s:GDBInteger);
                 function GetElemCount:GDBInteger;
           end;
@@ -282,7 +282,7 @@ GDBOpenArray=object(OpenArray)
                       function AddRef(var obj):TArrayIndex;virtual;abstract;
                       procedure Shrink;virtual;abstract;
                       procedure Grow;virtual;abstract;
-                      procedure setsize(nsize:GDBLongword);
+                      procedure setsize(nsize:TArrayIndex);
                       procedure iterategl(proc:GDBITERATEPROC);
                       function getelement(index:TArrayIndex):GDBPointer;
                       procedure Invert;
@@ -363,7 +363,7 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBVisibleOpenArray.pas
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
 GDBObjEntityOpenArray=object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
-                      function add(p:GDBPointer):GDBInteger;virtual;abstract;
+                      function add(p:GDBPointer):TArrayIndex;virtual;abstract;
                       function addwithoutcorrect(p:GDBPointer):GDBInteger;virtual;abstract;
                       function copytowithoutcorrect(source:PGDBObjEntityOpenArray):GDBInteger;virtual;abstract;
                       function deliteminarray(p:GDBInteger):GDBInteger;virtual;abstract;
@@ -462,7 +462,7 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           procedure loadfromfile(fname:GDBString);
                           procedure freeelement(p:GDBPointer);virtual;abstract;
                           procedure sort;virtual;abstract;
-                          function add(p:GDBPointer):GDBInteger;virtual;abstract;
+                          function add(p:GDBPointer):TArrayIndex;virtual;abstract;
                           function addwithscroll(p:GDBPointer):GDBInteger;virtual;abstract;
                           function GetLengthWithEOL:GDBInteger;
                           function GetTextWithEOL:GDBString;
@@ -584,7 +584,7 @@ PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
 XYZWGDBGDBStringArray=object(GDBOpenArrayOfData)
                              constructor init(m:GDBInteger);
                              procedure freeelement(p:GDBPointer);virtual;abstract;
-                             function add(p:GDBPointer):GDBInteger;virtual;abstract;
+                             function add(p:GDBPointer):TArrayIndex;virtual;abstract;
                        end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBVectorSnapArray.pas
 PVectotSnap=^VectorSnap;
@@ -612,7 +612,7 @@ GDBNamedObjectsArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBLayerProp
                     function getIndex(name: GDBString):GDBInteger;
                     function getAddres(name: GDBString):GDBPointer;
                     function GetIndexByPointer(p:PGDBNamedObject):GDBInteger;
-                    function AddItem(name:GDBSTRING; var PItem:Pointer):TForCResult;
+                    function AddItem(name:GDBSTRING; out PItem:Pointer):TForCResult;
               end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBLayerArray.pas
 PGDBLayerProp=^GDBLayerProp;
@@ -1015,7 +1015,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
                     function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;abstract;
                     function isonmouse(popa:GDBPointer):GDBBoolean;virtual;abstract;
-                    procedure startsnap(var osp:os_record);virtual;abstract;
+                    procedure startsnap(out osp:os_record);virtual;abstract;
                     function getsnap(var osp:os_record):GDBBoolean;virtual;abstract;
                     function getintersect(var osp:os_record;pobj:PGDBObjEntity):GDBBoolean;virtual;abstract;
                     procedure higlight;virtual;abstract;
@@ -1293,7 +1293,7 @@ GDBObjEntityTreeArray=object(GDBObjEntityOpenArray)(*OpenArrayOfPObj*)
                             constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                             constructor initnul;
                             destructor done;virtual;abstract;
-                            function add(p:GDBPointer):GDBInteger;virtual;abstract;
+                            function add(p:GDBPointer):TArrayIndex;virtual;abstract;
                             procedure RemoveFromTree(p:PGDBObjEntity);
                       end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBGenericSubEntry.pas
@@ -1559,6 +1559,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  Width2D_in_OCS_Array:GDBLineWidthArray;(*saved_to_shd*)
                  Width3D_in_WCS_Array:GDBOpenArray;
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
+                 Square:GDBdouble;(*Ориентированная площадь*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul;
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
@@ -1766,13 +1767,13 @@ GDBObjCamera=object(GDBBaseCamera)
                    procedure NextPosition;virtual;abstract;
              end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBTable.pas
-TCellJustify=(jcl(*'ВерхЛево'*),
+TTableCellJustify=(jcl(*'ВерхЛево'*),
               jcm(*'ВерхЦентр'*),
               jcr(*'ВерхПраво'*));
 PTGDBTableItemFormat=^TGDBTableItemFormat;
 TGDBTableItemFormat=record
                  Width,TextWidth:GDBDouble;
-                 CF:TCellJustify;
+                 CF:TTableCellJustify;
                 end;
 PGDBObjTable=^GDBObjTable;
 GDBObjTable=object(GDBObjComplex)
@@ -2221,8 +2222,8 @@ TDrawing=object(TAbstractDrawing)
            FileName:GDBString;
            Changed:GDBBoolean;
            attrib:GDBLongword;
-           function myGluProject2(objcoord:GDBVertex; var wincoord:GDBVertex):Integer;
-           function myGluUnProject(win:GDBVertex;var obj:GDBvertex):Integer;
+           function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;
+           function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;
            constructor init(num:PTUnitManager);
            destructor done;virtual;abstract;
            function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;

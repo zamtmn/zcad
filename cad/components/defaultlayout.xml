@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <MainConfig>
+    <Nodes ChildCount="1">
+      <Item1 Name="MainForm" Type="CustomSite" ChildCount="1">
+        <Bounds Top="30" Left="80" Width="793" Height="426"/>
+        <Item1 Name="AnchorDockSite4" Type="Layout" ChildCount="5">
+          <Bounds Top="24" Width="763" Height="362" SplitterPos="763"/>
+          <Anchors Align="Left"/>
+          <Item1 Name="PageControl" Type="Control">
+            <Bounds Left="220" Width="543" Height="276"/>
+            <Anchors Left="AnchorDockSplitter2" Bottom="AnchorDockSplitter3"/>
+          </Item1>
+          <Item2 Name="AnchorDockSplitter2" Type="SplitterVertical">
+            <Bounds Left="216" Width="4" Height="276"/>
+            <Anchors Bottom="AnchorDockSplitter3"/>
+          </Item2>
+          <Item3 Name="ObjectInspector" Type="Control">
+            <Bounds Width="216" Height="276"/>
+            <Anchors Right="AnchorDockSplitter2" Bottom="AnchorDockSplitter3"/>
+          </Item3>
+          <Item4 Name="AnchorDockSplitter3" Type="SplitterHorizontal">
+            <Bounds Top="276" Width="763" Height="4"/>
+          </Item4>
+          <Item5 Name="CommandLine" Type="Control">
+            <Bounds Top="280" Width="763" Height="82"/>
+            <Anchors Top="AnchorDockSplitter3"/>
+          </Item5>
+        </Item1>
+      </Item1>
+    </Nodes>
+  </MainConfig>
+</CONFIG>

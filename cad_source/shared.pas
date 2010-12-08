@@ -33,6 +33,8 @@ procedure LogError(errstr:GDBString); export;
 procedure ShowError(errstr:GDBString); export;
 procedure OldVersTextReplace(var vv:GDBString);
 procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIterator);
+procedure DisableCmdLine;
+procedure EnableCmdLine;
 
 var
     ProcessBar:TProgressBar;
@@ -50,6 +52,30 @@ implementation
 uses {strproc,}{umytreenode,}{FileUtil,LCLclasses,} LCLtype,
      //mainwindow,
      log,{UGDBDescriptor,}varmandef,{sysinfo,}{cmdline,}strutils{,oglwindow};
+procedure DisableCmdLine;
+begin
+  if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
+  if sysvar.SYS.SYS_IsHistoryLineCreated^=true then
+  begin
+  shared.cmdedit.Enabled:=false;
+  shared.HintText.Enabled:=false;
+
+  end;
+end;
+
+procedure EnableCmdLine;
+begin
+  if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
+  if sysvar.SYS.SYS_IsHistoryLineCreated^=true then
+
+  begin
+  shared.cmdedit.Enabled:=true;
+  shared.HintText.Enabled:=true;
+  shared.cmdedit.SetFocus;
+
+  end;
+
+end;
 
 procedure OldVersTextReplace(var vv:GDBString);
 begin

@@ -104,6 +104,7 @@ TDrawing=object(TAbstractDrawing)
            constructor init(num:PTUnitManager);
            destructor done;virtual;
            function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
+           function GetLastSelected:PGDBObjEntity;virtual;
            //procedure SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
      end;
 PGDBDescriptor=^GDBDescriptor;
@@ -142,7 +143,10 @@ procedure startup;
 procedure finalize;
 implementation
  uses {GDBSubordinated,}GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared{,mainwindow},commandline,log;
-
+function TDrawing.GetLastSelected:PGDBObjEntity;
+begin
+     result:=OGLwindow1.param.SelDesc.LastSelectedObject;
+end;
 function TDrawing.myGluProject2;
 begin
       objcoord:=vertexadd(objcoord,pcamera^.CamCSOffset);

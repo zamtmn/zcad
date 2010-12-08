@@ -53,6 +53,7 @@ GDBObjCurve=object(GDBObj3d)
                  procedure getoutbound;virtual;
 
                  procedure AddVertex(Vertex:GDBVertex);virtual;
+
                  procedure SaveToDXFfollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
@@ -140,6 +141,7 @@ procedure GDBObjCurve.AddVertex(Vertex:GDBVertex);
 begin
      vertexarrayinocs.add(@vertex);
 end;
+
 procedure GDBObjCurve.getoutbound;
 var //tv,tv2:GDBVertex4D;
     t,b,l,r,n,f:GDBDouble;

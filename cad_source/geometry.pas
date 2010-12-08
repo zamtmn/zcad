@@ -76,8 +76,10 @@ function intercept3d(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dpro
 
 function pointinquad2d(const x1, y1, x2, y2, xp, yp: GDBFloat): GDBBoolean; export;
 function Vertexlength(const Vector1, Vector2: GDBVertex): GDBDouble; export;
-function SqrVertexlength(const Vector1, Vector2: GDBVertex): GDBDouble; export;
-function Vertexmorph(const Vector1, Vector2: GDBVertex; a: GDBDouble): GDBVertex; export;
+function SqrVertexlength(const Vector1, Vector2: GDBVertex): GDBDouble; export;overload;
+function SqrVertexlength(const Vector1, Vector2: GDBVertex2d): GDBDouble; export;overload;
+function Vertexmorph(const Vector1, Vector2: GDBVertex; a: GDBDouble): GDBVertex; export;overload;
+function Vertexmorph(const Vector1, Vector2: GDBVertex2D; a: GDBDouble): GDBVertex2D; export;overload;
 function VertexDmorph(const Vector1, Vector2: GDBVertex; a: GDBDouble): GDBVertex; export;
 function Vertexangle(const Vector1, Vector2: GDBVertex2d): GDBDouble; export;
 function oneVertexlength(const Vector1: GDBVertex): GDBDouble;
@@ -103,8 +105,10 @@ function CreateRotationMatrixZ(const Sine, Cosine: GDBDouble): DMatrix4D;
 function CreateAffineRotationMatrix(const anAxis: GDBvertex; angle: double):DMatrix4D;
 function distance2piece(var q:GDBvertex2DI;var p1,p2:GDBvertex2D): double;overload;
 function distance2piece(q:GDBvertex;var p1,p2:GDBvertex): {DistAndPoint}double;overload;
+
 function distance2piece_2(var q:GDBvertex2DI; p1,p2:GDBvertex2D): double;overload;
 function distance2piece_2(var q:GDBvertex2DI; p1,p2:GDBvertex2DI): double;overload;
+function distance2piece_2Dmy(var q:GDBvertex2D; p1,p2:GDBvertex2D): double;
 
 function distance2piece_2_xy(var q:GDBvertex2DI;const p1,p2:GDBvertex2D):GDBvertex2DI;
 
@@ -938,6 +942,24 @@ begin
     t:= sqr((qx_p1x)*(p2y_p1y)-(qy_p1y)*(p2x_p1x))/(sqr(p2x_p1x)+sqr(p2y_p1y));
   result:= t;
 end;
+function distance2piece_2dmy(var q:GDBvertex2D; p1,p2:GDBvertex2D): double;
+var t,w,p2x_p1x,p2y_p1y,qx_p1x,qy_p1y,qy_p2y,qx_p2x: double;
+begin
+  p2x_p1x:=p2.x-p1.x;
+  p2y_p1y:=p2.y-p1.y;
+  qx_p1x:=q.x-p1.x;
+  qx_p2x:=q.x-p2.x;
+  qy_p1y:=q.y-p1.y;
+  qy_p2y:=q.y-p2.y;
+  if((qx_p1x)*(p2x_p1x)+(qy_p1y)*(p2y_p1y))*((qx_p2x)*(p2x_p1x)+(qy_p2y)*(p2y_p1y))>-eps then
+  begin
+    t:= sqr(qx_p1x)+sqr(qy_p1y);
+    w:= sqr(qx_p2x)+sqr(qy_p2y);
+    if w<t then t:= w;
+  end else
+    t:= sqr((qx_p1x)*(p2y_p1y)-(qy_p1y)*(p2x_p1x))/(sqr(p2x_p1x)+sqr(p2y_p1y));
+  result:= t;
+end;
 
 function distance2piece_2_xy(var q:GDBvertex2DI;const p1,p2:GDBvertex2D):GDBvertex2DI;
 var t,w,p2x_p1x,p2y_p1y,qx_p1x,qy_p1y,qy_p2y,qx_p2x,s1,s2: double;
@@ -1112,6 +1134,10 @@ function SqrVertexlength(const Vector1, Vector2: GDBVertex): GDBDouble;
 begin
   result := (sqr(vector1.x - vector2.x) + sqr(vector1.y - vector2.y) + sqr(vector1.z - vector2.z));
 end;
+function SqrVertexlength(const Vector1, Vector2: GDBVertex2d): GDBDouble;
+begin
+  result := (sqr(vector1.x - vector2.x) + sqr(vector1.y - vector2.y));
+end;
 
 function oneVertexlength(const Vector1: GDBVertex): GDBDouble;
 begin
@@ -1168,6 +1194,12 @@ begin
   temp.z := vector1.z + (vector2.z - vector1.z) * a;
   result := temp;
 end;
+function Vertexmorph(const Vector1, Vector2: GDBVertex2D; a: GDBDouble): GDBVertex2d;
+begin
+  result.x := vector1.x + (vector2.x - vector1.x) * a;
+  result.y := vector1.y + (vector2.y - vector1.y) * a;
+end;
+
 function VertexDmorph(const Vector1, Vector2: GDBVertex; a: GDBDouble): GDBVertex;
 var
   temp: GDBVertex;

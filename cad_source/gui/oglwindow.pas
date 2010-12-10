@@ -158,6 +158,8 @@ type
     function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint): Boolean;override;
     procedure EraseBackground(DC: HDC);override;
 
+    procedure FormCreate(Sender: TObject);
+
   end;
 const maxgrid=99;
       stepgrid=10;
@@ -195,6 +197,10 @@ begin
             gridarray[i,j].y:=j*stepgrid-(maxgrid+1)*stepgrid/2;
        end;
 end;
+procedure TOGLWnd.FormCreate(Sender: TObject);
+begin
+     sender:=sender;
+end;
 procedure TOGLWnd.startrender;
 begin
      middlepoint:=nulvertex;
@@ -212,7 +218,7 @@ end;
 
 procedure TOGLWnd.EraseBackground(DC: HDC);
 begin
-     //dc:=0;
+     dc:=0;
 end;
 procedure TOGLWnd.mypaint;
 begin
@@ -244,6 +250,8 @@ begin
      OMMTimer.Interval:=10;
      OMMTimer.OnTimer:=runonmousemove;
      OMMTimer.Enabled:=true;}
+     //onDragDrop:=FormDragDrop;
+     //OnCreate:=formcreate;
 end;
 procedure TOGLWnd.SetMouseMode(smode:GDBByte);
 begin
@@ -2111,9 +2119,9 @@ begin
    repeat
          repeat
                glbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
-               isOpenGLError;
+               //isOpenGLError;
                glCopyTexSubImage2D(GL_TEXTURE_2D,0,0,0,scrx,scry,texturesize,texturesize);
-               isOpenGLError;
+               //isOpenGLError;
                scrx:=scrx+texturesize;
                inc(texture);
          until scrx>clientwidth;
@@ -2146,7 +2154,7 @@ begin
    repeat
    repeat
          glbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
-         isOpenGLError;
+         //isOpenGLError;
          glColor3f(1, 1, 1);
          myglbegin(GL_quads);
                  glTexCoord2d(0,0);
@@ -2158,7 +2166,7 @@ begin
                  glTexCoord2d(0,1);
                  glVertex3d(scrx,scry+texturesize,0);
          myglend;
-         isOpenGLError;
+         //isOpenGLError;
          scrx:=scrx+texturesize;
          inc(texture);
    until scrx>clientwidth;
@@ -2232,7 +2240,7 @@ if (clientwidth=0)or(clientheight=0) then
 
   {glEnable(GL_DEPTH_TEST);
   glDISABLE(GL_LIGHTING);}
-
+  //isOpenGLError;
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_STENCIL_TEST);
 
@@ -2485,6 +2493,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
   {glFlush;
   glFinish;}
   self.SwapBuffers;
+  //isOpenGLError;
 
 
   //EndPaint(Handle, ps);
@@ -3097,15 +3106,15 @@ begin
                  //if texture>80 then texture:=0;
 
                  glGenTextures(1, @myscrbuf[texture]);
-                 isOpenGLError;
+                 //isOpenGLError;
                  glbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
-                 isOpenGLError;
+                 //isOpenGLError;
                  glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,texturesize,texturesize,0,GL_RGB,GL_UNSIGNED_BYTE,@TOGLWND.CreateScrbuf);
-                 isOpenGLError;
+                 //isOpenGLError;
                  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                 isOpenGLError;
+                 //isOpenGLError;
                  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                 isOpenGLError;
+                 //isOpenGLError;
                  scrx:=scrx+texturesize;
                  inc(texture);
            until scrx>w;
@@ -3121,6 +3130,11 @@ begin
     or(param.width<>clientwidth)
   then}
   begin
+
+  self.MakeCurrent(false);
+
+  //self.MakeCurrent(false);
+  //isOpenGLError;
 
   delmyscrbuf;
 

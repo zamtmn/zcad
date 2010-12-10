@@ -21,7 +21,7 @@ unit mainwindow;
 
 interface
 uses
-  LCLType,strproc,log,
+  LCLType,LCLProc,strproc,log,
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Toolwin, Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
   gdbase, languade,geometry,
@@ -41,7 +41,7 @@ type
                     ToolBarU,ToolBarR:TToolBar;
                     ToolBarD: TToolBar;
                     //ObjInsp,
-                    MainPanel{,MainPanelU}:TForm;
+                    MainPanel,FToolBar{,MainPanelU}:TForm;
                     //MainPanelD:TCLine;
                     //SplitterV,SplitterH: TSplitter;
 
@@ -208,6 +208,7 @@ procedure TMainFormN.DockMasterCreateControl(Sender: TObject; aName: string; var
 var
   i:integer;
   pint:PGDBInteger;
+  TB:TToolBar;
   procedure CreateForm(Caption: string; NewBounds: TRect);
   begin
        begin
@@ -240,11 +241,12 @@ begin
        MainPanel.DisableAlign;
        MainPanel.Create(Application);
    //MainPanel:={TPanel}Tform.create(application);
+   MainPanel.Caption:='Рабочая область';
    MainPanel.BorderWidth:=0;
    //MainPanel.Parent:=self;
    //mainpanel.show;
 
-   PageControl:=TmyPageControl.Create({MainPanel}Application);
+   PageControl:=TmyPageControl.Create(MainPanel{Application});
       PageControl.Constraints.MinHeight:=32;
       PageControl.Parent:=MainPanel;
       PageControl.Align:=alClient;
@@ -314,29 +316,43 @@ begin
                                                 Acontrol.EnableAutoSizing;
                //Acontrol.BoundsRect:=NewBounds;
           end
-  (*else if aName='ToolBarR' then
+  else if copy(aName,1,7)='ToolBar' then
   begin
-       ToolBarR:=TToolBar(TToolBar.NewInstance);
-       ToolBarR.DisableAlign;
-       ToolBarR.Create(Application);
-       ToolBarR.Caption:='ToolBarR';
-       ToolBarR.SetBounds(260,230,350,350);
-       ToolBarR.show;
-       //ToolBarR:=TToolBar.Create(application);
-       //ToolBarR.Align:=alRight;
-       //ToolBarR.Width:=ToolBarU.Height;
-       //oolBarR.EdgeBorders:=[ebRight];
-       //ToolBarR.ShowCaptions:=true;
-       //ToolBarR.Wrapable:=true;
+       FToolBar:=TForm(TForm.NewInstance);
+       FToolBar.DisableAlign;
+       FToolBar.Create(Application);
+       FToolBar.Caption:=aName;
+       FToolBar.SetBounds(260,230,350,350);
 
-       AControl:=ToolBarR;
+       TB:=TToolBar.Create(application);
+       TB.Align:={alRight}alclient;
+       //TB.Width:=ToolBarU.Height;
+       //TB.EdgeBorders:=[ebRight];
+       TB.ShowCaptions:=true;
+       //TB.Wrapable:=true;
+       TB.Parent:=ftoolbar;
+
+       if aName='ToolBarR' then
+       begin
+            ToolBarR:=tb;
+       end;
+       if aName='ToolBarU' then
+       begin
+            ToolBarU:=tb;
+       end;
+       if aName='ToolBarD' then
+       begin
+            ToolBarD:=tb;
+       end;
+
+       AControl:=FToolBar;
 
        AControl.Name:=aname;
        //Acontrol.Caption:=caption;
            if not DoDisableAutoSizing then
                                         Acontrol.EnableAutoSizing;
 
-  end*)
+  end
   else if aName='SourceEditor2' then
     CreateForm('Source Editor 2',Bounds(260,230,350,350))
   else if aName='ProjectInspector' then
@@ -374,24 +390,26 @@ var
   i:integer;
   pint:PGDBInteger;
 begin
-  DockMaster.MakeDockSite(Self,[akBottom,akLeft,akRight],admrpChild);
+  DockMaster.MakeDockSite(Self,[akBottom,akLeft,akRight],{admrpChild}admrpNone);
   DockMaster.OnCreateControl:={@}DockMasterCreateControl;
   DockMaster.OnShowOptions:={@}ShowAnchorDockOptions;
+  //TAnchorDockManager(self)
+  //self.DockSite:=true;
   //DockMaster.ShowHeaderCaption:=false;
 
+   //self.AutoSize:=false;
    self.onclose:=self.FormClose;
 
-   WindowState:=wsMaximized;
+   LoadLayout_com;
+
+   //self.AutoSize:=false;
+   //self.BorderStyle:=bsNone;
+
+   //WindowState:=wsMaximized;
    onkeydown:=mykeypress;
    KeyPreview:=true;
 
-
-   ToolBarD:={TStatusBar}TToolBar.Create(self);
-   ToolBarD.Height:=18;
-   ToolBarD.ButtonHeight:=16;
-   ToolBarD.ShowCaptions:=true;
-   ToolBarD.Align:=alBottom;
-   ToolBarD.AutoSize:=true;
+   DockMaster.ShowControl('ToolBarD',true);
 
    ProcessBar:=TProgressBar.create(ToolBarD);//.initxywh('?',@Pdownpanel,0,0,400,statusbarclientheight,false);
    ProcessBar.Hide;
@@ -413,14 +431,15 @@ begin
    HintText.Alignment:=taCenter;
    HintText.Parent:=ToolBarD;
 
-   ToolBarD.Parent:=self;
+   //ToolBarD.Parent:=self;
 
-
-   ToolBarU:=TToolBar.Create(self);
-   ToolBarU.Align:=alTop;
+   DockMaster.ShowControl('ToolBarU',true);
+   (*ToolBarU:=TToolBar.Create(self);
+   ToolBarU.Align:={alTop}alClient;
    ToolBarU.AutoSize:=true;
    ToolBarU.ShowCaptions:=true;
    ToolBarU.Parent:=self;
+   ToolBarU.EdgeBorders:=[ebTop, ebBottom];*)
 
 {     LayerBox:=TComboBox.Create(ToolBarU);
    LayerBox.ReadOnly:=true;
@@ -446,16 +465,8 @@ LineWbox.items.Add(sys2interf('Разный'));
 LineWbox.Parent:=ToolBarU;
 }
 
-   ToolBarR:=TToolBar.Create(application);
-   ToolBarR.Align:=alRight;
-   ToolBarR.Width:=ToolBarU.Height;
-   ToolBarR.EdgeBorders:=[ebRight];
-   ToolBarR.ShowCaptions:=true;
-   //ToolBarR.Constraints.MaxWidth:=ToolBarR.Width;
-   //ToolBarR.AutoSize:=true;
-   ToolBarR.Wrapable:=true;
-   ToolBarR.Parent:=self;
-   //DockMaster.ShowControl('ToolBarR',true);
+
+   DockMaster.ShowControl('ToolBarR',true);
 
    //MainPanel.Align:=alClient;
    //MainPanel.BorderStyle:=bsNone;
@@ -514,8 +525,6 @@ LineWbox.Parent:=ToolBarU;
 
      //SplitterV:=TSplitter.Create(self);
    //SplitterV.Align:=alLeft;
-
-   LoadLayout_com;
 
    (*MainPanel:={TPanel}Tform.create(application);
    MainPanel.BorderWidth:=0;
@@ -597,6 +606,8 @@ LineWbox.Parent:=ToolBarU;
    tf.Name:='test';
    tf.show;}
 
+   TAnchorDockManager(self.DockManager).PreferredSiteSizeAsSiteMinimum:=true;
+
 end;
 
 procedure TMainFormN.AfterConstruction;
@@ -629,8 +640,8 @@ begin
                               begin
                               b.caption:=(system.copy(img,2,length(img)-1));
                               if autosize then
-                               if length(img)>3 then
-                                                    b.Font.size:=11-length(img);
+                               if utf8length(img)>3 then
+                                                    b.Font.size:=11-utf8length(img);
                               end;
      end;
                               b.Height:=ppanel.ButtonHeight;

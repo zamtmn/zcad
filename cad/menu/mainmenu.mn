@@ -93,7 +93,7 @@ MainMenuItem Вид;
   {
     Command Инспектор объектов,Show(ObjInsp),none,none
     Command Командная строка и история,Show(CommandLine),none,none
-    Command Панель чертежа,Show(PageControl),none,none
+    Command Рабочая область,Show(PageControl),none,none
     Command ToolBarR,Show(ToolBarR),none,none
     Separator
     Command Сохранить разбивку окон,SaveLayout,O,none

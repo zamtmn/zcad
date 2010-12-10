@@ -106,6 +106,7 @@ const {as_normal=0;
   os_insert = -1020;
   os_intersection = -1021;
   os_apparentintersection = -1022;
+  os_trace = -1023;
   os_polymin =  -3000;
   os_polymax = -13000;
 

@@ -419,67 +419,71 @@ var ccsLBN,ccsRTF:GDBVertex;
     LBN:GDBvertex;(*'ЛевыйНижнийБлижний'*)
     RTF:GDBvertex;
     tbb,tbb2:GDBBoundingBbox;
+    pdwg:PTDrawing;
+    proot:PGDBObjGenericSubEntry;
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.CalcOptimalMatrix',lp_IncPos);{$ENDIF}
   {Если нет примитивов выходим}
-  if gdb.GetCurrentDWG=nil then exit;
+  pdwg:=gdb.GetCurrentDWG;
+  proot:=gdb.GetCurrentROOT;
 
+  if (assigned(pdwg))and(assigned(proot))then
+  begin
+  pdwg.pcamera^.modelMatrix:=lookat(pdwg.pcamera^.prop.point,
+                                               pdwg.pcamera^.prop.xdir,
+                                               pdwg.pcamera^.prop.ydir,
+                                               pdwg.pcamera^.prop.look,@onematrix);
+  //glGetDoublev(GL_MODELVIEW_MATRIX, @pdwg.pcamera^.modelMatrix);
 
-  gdb.GetCurrentDWG.pcamera^.modelMatrix:=lookat(gdb.GetCurrentDWG.pcamera^.prop.point,
-                                               gdb.GetCurrentDWG.pcamera^.prop.xdir,
-                                               gdb.GetCurrentDWG.pcamera^.prop.ydir,
-                                               gdb.GetCurrentDWG.pcamera^.prop.look,@onematrix);
-  //glGetDoublev(GL_MODELVIEW_MATRIX, @gdb.GetCurrentDWG.pcamera^.modelMatrix);
+  {pdwg.pcamera^.modelMatrix[0][0]:=pdwg.pcamera^.modelMatrix[0][0]/1e5;
+  pdwg.pcamera^.modelMatrix[1][1]:=pdwg.pcamera^.modelMatrix[1][1]/1e5;
+  pdwg.pcamera^.modelMatrix[2][2]:=pdwg.pcamera^.modelMatrix[2][2]/1e5;
 
-  {gdb.GetCurrentDWG.pcamera^.modelMatrix[0][0]:=gdb.GetCurrentDWG.pcamera^.modelMatrix[0][0]/1e5;
-  gdb.GetCurrentDWG.pcamera^.modelMatrix[1][1]:=gdb.GetCurrentDWG.pcamera^.modelMatrix[1][1]/1e5;
-  gdb.GetCurrentDWG.pcamera^.modelMatrix[2][2]:=gdb.GetCurrentDWG.pcamera^.modelMatrix[2][2]/1e5;
+  pdwg.pcamera^.modelMatrix[3][0]:=pdwg.pcamera^.modelMatrix[3][0]/1e5;
+  pdwg.pcamera^.modelMatrix[3][1]:=pdwg.pcamera^.modelMatrix[3][1]/1e5;
+  pdwg.pcamera^.modelMatrix[3][2]:=pdwg.pcamera^.modelMatrix[3][2]/1e5;
 
-  gdb.GetCurrentDWG.pcamera^.modelMatrix[3][0]:=gdb.GetCurrentDWG.pcamera^.modelMatrix[3][0]/1e5;
-  gdb.GetCurrentDWG.pcamera^.modelMatrix[3][1]:=gdb.GetCurrentDWG.pcamera^.modelMatrix[3][1]/1e5;
-  gdb.GetCurrentDWG.pcamera^.modelMatrix[3][2]:=gdb.GetCurrentDWG.pcamera^.modelMatrix[3][2]/1e5;
-
-  gdb.GetCurrentDWG.pcamera^.modelMatrix[3][3]:=gdb.GetCurrentDWG.pcamera^.modelMatrix[3][3]*1e5;}
+  pdwg.pcamera^.modelMatrix[3][3]:=pdwg.pcamera^.modelMatrix[3][3]*1e5;}
 
   ccsLBN:=InfinityVertex;
   ccsRTF:=MinusInfinityVertex;
-  {ProjectPoint2(gdb.GetCurrentROOT.vp.BoundingBox.LBN.x,gdb.GetCurrentROOT.vp.BoundingBox.LBN.y,gdb.GetCurrentROOT.vp.BoundingBox.LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(gdb.GetCurrentROOT.vp.BoundingBox.RTF.x,gdb.GetCurrentROOT.vp.BoundingBox.LBN.y,gdb.GetCurrentROOT.vp.BoundingBox.LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(gdb.GetCurrentROOT.vp.BoundingBox.RTF.x,gdb.GetCurrentROOT.vp.BoundingBox.RTF.y,gdb.GetCurrentROOT.vp.BoundingBox.LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(gdb.GetCurrentROOT.vp.BoundingBox.LBN.x,gdb.GetCurrentROOT.vp.BoundingBox.RTF.y,gdb.GetCurrentROOT.vp.BoundingBox.LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(gdb.GetCurrentROOT.vp.BoundingBox.LBN.x,gdb.GetCurrentROOT.vp.BoundingBox.LBN.y,gdb.GetCurrentROOT.vp.BoundingBox.RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(gdb.GetCurrentROOT.vp.BoundingBox.RTF.x,gdb.GetCurrentROOT.vp.BoundingBox.LBN.y,gdb.GetCurrentROOT.vp.BoundingBox.RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(gdb.GetCurrentROOT.vp.BoundingBox.RTF.x,gdb.GetCurrentROOT.vp.BoundingBox.RTF.y,gdb.GetCurrentROOT.vp.BoundingBox.RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(gdb.GetCurrentROOT.vp.BoundingBox.LBN.x,gdb.GetCurrentROOT.vp.BoundingBox.RTF.y,gdb.GetCurrentROOT.vp.BoundingBox.RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  {ProjectPoint2(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
   }
-  {ProjectPoint2(gdb.GetCurrentROOT.VisibleOBJBoundingBox.LBN.x,gdb.GetCurrentROOT.VisibleOBJBoundingBox.LBN.y,gdb.GetCurrentROOT.VisibleOBJBoundingBox.LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(gdb.GetCurrentROOT.VisibleOBJBoundingBox.RTF.x,gdb.GetCurrentROOT.VisibleOBJBoundingBox.LBN.y,gdb.GetCurrentROOT.VisibleOBJBoundingBox.LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(gdb.GetCurrentROOT.VisibleOBJBoundingBox.RTF.x,gdb.GetCurrentROOT.VisibleOBJBoundingBox.RTF.y,gdb.GetCurrentROOT.VisibleOBJBoundingBox.LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(gdb.GetCurrentROOT.VisibleOBJBoundingBox.LBN.x,gdb.GetCurrentROOT.VisibleOBJBoundingBox.RTF.y,gdb.GetCurrentROOT.VisibleOBJBoundingBox.LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(gdb.GetCurrentROOT.VisibleOBJBoundingBox.LBN.x,gdb.GetCurrentROOT.VisibleOBJBoundingBox.LBN.y,gdb.GetCurrentROOT.VisibleOBJBoundingBox.RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(gdb.GetCurrentROOT.VisibleOBJBoundingBox.RTF.x,gdb.GetCurrentROOT.VisibleOBJBoundingBox.LBN.y,gdb.GetCurrentROOT.VisibleOBJBoundingBox.RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(gdb.GetCurrentROOT.VisibleOBJBoundingBox.RTF.x,gdb.GetCurrentROOT.VisibleOBJBoundingBox.RTF.y,gdb.GetCurrentROOT.VisibleOBJBoundingBox.RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(gdb.GetCurrentROOT.VisibleOBJBoundingBox.LBN.x,gdb.GetCurrentROOT.VisibleOBJBoundingBox.RTF.y,gdb.GetCurrentROOT.VisibleOBJBoundingBox.RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);}
+  {ProjectPoint2(proot.VisibleOBJBoundingBox.LBN.x,proot.VisibleOBJBoundingBox.LBN.y,proot.VisibleOBJBoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.VisibleOBJBoundingBox.RTF.x,proot.VisibleOBJBoundingBox.LBN.y,proot.VisibleOBJBoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.VisibleOBJBoundingBox.RTF.x,proot.VisibleOBJBoundingBox.RTF.y,proot.VisibleOBJBoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.VisibleOBJBoundingBox.LBN.x,proot.VisibleOBJBoundingBox.RTF.y,proot.VisibleOBJBoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.VisibleOBJBoundingBox.LBN.x,proot.VisibleOBJBoundingBox.LBN.y,proot.VisibleOBJBoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.VisibleOBJBoundingBox.RTF.x,proot.VisibleOBJBoundingBox.LBN.y,proot.VisibleOBJBoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.VisibleOBJBoundingBox.RTF.x,proot.VisibleOBJBoundingBox.RTF.y,proot.VisibleOBJBoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.VisibleOBJBoundingBox.LBN.x,proot.VisibleOBJBoundingBox.RTF.y,proot.VisibleOBJBoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);}
 
-  tbb:=gdb.GetCurrentROOT.vp.BoundingBox;
-  if gdb.CurrentDWG.ConstructObjRoot.ObjArray.Count>0 then
+  tbb:=proot.vp.BoundingBox;
+  if pdwg.ConstructObjRoot.ObjArray.Count>0 then
                        begin
-  gdb.CurrentDWG.ConstructObjRoot.calcbb;
-  tbb2:=gdb.CurrentDWG.ConstructObjRoot.vp.BoundingBox;
+  pdwg.ConstructObjRoot.calcbb;
+  tbb2:=pdwg.ConstructObjRoot.vp.BoundingBox;
   ConcatBB(tbb,tbb2);
   end;
 
   LBN:=tbb.LBN;
   RTF:=tbb.RTF;
 
-  ProjectPoint2(LBN.x,LBN.y,LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,LBN.y,LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,RTF.y,LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(LBN.x,RTF.y,LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(LBN.x,LBN.y,RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,LBN.y,RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,RTF.y,RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(LBN.x,RTF.y,RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,LBN.y,LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,LBN.y,LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,RTF.y,LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,RTF.y,LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,LBN.y,RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,LBN.y,RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,RTF.y,RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,RTF.y,RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
 
   ccsLBN.z:=-ccsLBN.z;
   ccsRTF.z:=-ccsRTF.z;
@@ -489,91 +493,96 @@ begin
                                       ccsLBN.z:=ccsLBN.z+1;
                                       ccsRTF.z:=ccsRTF.z-1;
                                  end;
-  gdb.GetCurrentDWG.pcamera^.obj_zmAx:=ccsLBN.z;
-  gdb.GetCurrentDWG.pcamera^.obj_zmin:=ccsRTF.z;
-  gdb.GetCurrentDWG.pcamera^.zmax:=gdb.GetCurrentDWG.pcamera^.obj_zmAx;
-  gdb.GetCurrentDWG.pcamera^.zmin:=gdb.GetCurrentDWG.pcamera^.obj_zmin;
+  pdwg.pcamera^.obj_zmAx:=ccsLBN.z;
+  pdwg.pcamera^.obj_zmin:=ccsRTF.z;
+  pdwg.pcamera^.zmax:=pdwg.pcamera^.obj_zmAx;
+  pdwg.pcamera^.zmin:=pdwg.pcamera^.obj_zmin;
+
+  {if pdwg.pcamera^.zmax>10000 then
+                                                pdwg.pcamera^.zmax:=100000;
+  if pdwg.pcamera^.zmin<10000 then
+                                                  pdwg.pcamera^.zmin:=-10000;}
 
 
   if param.projtype = PROJPerspective then
   begin
-       if gdb.GetCurrentDWG.pcamera^.zmin<gdb.GetCurrentDWG.pcamera^.zmax/10000 then
-                                                  gdb.GetCurrentDWG.pcamera^.zmin:=gdb.GetCurrentDWG.pcamera^.zmax/10000;
-       if gdb.GetCurrentDWG.pcamera^.zmin<10 then
-                                                  gdb.GetCurrentDWG.pcamera^.zmin:=10;
-       if gdb.GetCurrentDWG.pcamera^.zmax<gdb.GetCurrentDWG.pcamera^.zmin then
-                                                  gdb.GetCurrentDWG.pcamera^.zmax:=1000;
+       if pdwg.pcamera^.zmin<pdwg.pcamera^.zmax/10000 then
+                                                  pdwg.pcamera^.zmin:=pdwg.pcamera^.zmax/10000;
+       if pdwg.pcamera^.zmin<10 then
+                                                  pdwg.pcamera^.zmin:=10;
+       if pdwg.pcamera^.zmax<pdwg.pcamera^.zmin then
+                                                  pdwg.pcamera^.zmax:=1000;
   end;
 
 
 
   if param.projtype = ProjParalel then
                                       begin
-                                      gdb.GetCurrentDWG.pcamera^.projMatrix:=ortho(-clientwidth*gdb.GetCurrentDWG.pcamera^.prop.zoom/2,clientwidth*gdb.GetCurrentDWG.pcamera^.prop.zoom/2,
-                                                                                 -clientheight*gdb.GetCurrentDWG.pcamera^.prop.zoom/2,clientheight*gdb.GetCurrentDWG.pcamera^.prop.zoom/2,
-                                                                                 gdb.GetCurrentDWG.pcamera^.zmin, gdb.GetCurrentDWG.pcamera^.zmax,@onematrix);
+                                      pdwg.pcamera^.projMatrix:=ortho(-clientwidth*pdwg.pcamera^.prop.zoom/2,clientwidth*pdwg.pcamera^.prop.zoom/2,
+                                                                                 -clientheight*pdwg.pcamera^.prop.zoom/2,clientheight*pdwg.pcamera^.prop.zoom/2,
+                                                                                 pdwg.pcamera^.zmin, pdwg.pcamera^.zmax,@onematrix);
                                       end
                                   else
                                       BEGIN
-                                           gdb.GetCurrentDWG.pcamera^.projMatrix:=Perspective(gdb.GetCurrentDWG.pcamera^.fovy, Width / Height, gdb.GetCurrentDWG.pcamera^.zmin, gdb.GetCurrentDWG.pcamera^.zmax,@onematrix);
-  //glGetDoublev(GL_PROJECTION_MATRIX, @gdb.GetCurrentDWG.pcamera^.projMatrix);
+                                           pdwg.pcamera^.projMatrix:=Perspective(pdwg.pcamera^.fovy, Width / Height, pdwg.pcamera^.zmin, pdwg.pcamera^.zmax,@onematrix);
+  //glGetDoublev(GL_PROJECTION_MATRIX, @pdwg.pcamera^.projMatrix);
                                       end;
 
 
-  ///gdb.GetCurrentDWG.pcamera.getfrustum(@gdb.GetCurrentDWG.pcamera^.modelMatrix,   @gdb.GetCurrentDWG.pcamera^.projMatrix,   gdb.GetCurrentDWG.pcamera^.clip,   gdb.GetCurrentDWG.pcamera^.frustum);
+  ///pdwg.pcamera.getfrustum(@pdwg.pcamera^.modelMatrix,   @pdwg.pcamera^.projMatrix,   pdwg.pcamera^.clip,   pdwg.pcamera^.frustum);
 
 
 
-  gdb.GetCurrentDWG.pcamera^.CamCSOffset:=NulVertex;
-  //gdb.GetCurrentDWG.pcamera^.CamCSOffset.z:=(gdb.GetCurrentDWG.pcamera^.zmax+gdb.GetCurrentDWG.pcamera^.zmin)/2;
+  pdwg.pcamera^.CamCSOffset:=NulVertex;
+  pdwg.pcamera^.CamCSOffset.z:=(pdwg.pcamera^.zmax+pdwg.pcamera^.zmin)/2;
+  pdwg.pcamera^.CamCSOffset.z:=(pdwg.pcamera^.zmin);
 
 
-  tm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
+  tm:=pdwg.pcamera^.modelMatrix;
   //MatrixInvert(tm);
-  gdb.GetCurrentDWG.pcamera^.CamCSOffset:=geometry.VectorTransform3D(gdb.GetCurrentDWG.pcamera^.CamCSOffset,tm);
-  gdb.GetCurrentDWG.pcamera^.CamCSOffset:=gdb.GetCurrentDWG.pcamera^.prop.point;
-  //gdb.GetCurrentDWG.pcamera^.CamCSOffset.z:=0;
+  pdwg.pcamera^.CamCSOffset:=geometry.VectorTransform3D(pdwg.pcamera^.CamCSOffset,tm);
+  pdwg.pcamera^.CamCSOffset:=pdwg.pcamera^.prop.point;
 
   {получение центра виевфрустума}
-  tm:=geometry.CreateTranslationMatrix({minusvertex(gdb.GetCurrentDWG.pcamera^.CamCSOffset)}nulvertex);
+  tm:=geometry.CreateTranslationMatrix({minusvertex(pdwg.pcamera^.CamCSOffset)}nulvertex);
 
-  //gdb.GetCurrentDWG.pcamera^.modelMatrixLCS:=tm;
-  gdb.GetCurrentDWG.pcamera^.modelMatrixLCS:=lookat(vertexsub(gdb.GetCurrentDWG.pcamera^.prop.point,gdb.GetCurrentDWG.pcamera^.CamCSOffset),
-                                               gdb.GetCurrentDWG.pcamera^.prop.xdir,
-                                               gdb.GetCurrentDWG.pcamera^.prop.ydir,
-                                               gdb.GetCurrentDWG.pcamera^.prop.look,{@tm}@onematrix);
-  gdb.GetCurrentDWG.pcamera^.modelMatrixLCS:=geometry.MatrixMultiply(tm,gdb.GetCurrentDWG.pcamera^.modelMatrixLCS);
+  //pdwg.pcamera^.modelMatrixLCS:=tm;
+  pdwg.pcamera^.modelMatrixLCS:=lookat({vertexsub(pdwg.pcamera^.prop.point,pdwg.pcamera^.CamCSOffset)}nulvertex,
+                                               pdwg.pcamera^.prop.xdir,
+                                               pdwg.pcamera^.prop.ydir,
+                                               pdwg.pcamera^.prop.look,{@tm}@onematrix);
+  pdwg.pcamera^.modelMatrixLCS:=geometry.MatrixMultiply(tm,pdwg.pcamera^.modelMatrixLCS);
   ccsLBN:=InfinityVertex;
   ccsRTF:=MinusInfinityVertex;
-  tbb:=gdb.GetCurrentROOT.VisibleOBJBoundingBox;
-  //gdb.CurrentDWG.ConstructObjRoot.calcbb;
-  tbb2:=gdb.CurrentDWG.ConstructObjRoot.vp.BoundingBox;
+  tbb:=proot.VisibleOBJBoundingBox;
+  //pdwg.ConstructObjRoot.calcbb;
+  tbb2:=pdwg.ConstructObjRoot.vp.BoundingBox;
   ConcatBB(tbb,tbb2);
 
-  //gdb.GetCurrentROOT.VisibleOBJBoundingBox:=tbb;
+  //proot.VisibleOBJBoundingBox:=tbb;
 
   if not IsBBNul(tbb) then
   begin
         LBN:=tbb.LBN;
-        LBN:=vertexadd(LBN,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
+        LBN:=vertexadd(LBN,pdwg.pcamera^.CamCSOffset);
         RTF:=tbb.RTF;
-        RTF:=vertexadd(RTF,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
+        RTF:=vertexadd(RTF,pdwg.pcamera^.CamCSOffset);
   end
   else
   begin
        LBN:=geometry.VertexMulOnSc(MinusOneVertex,100);
-       //LBN:=vertexadd(LBN,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
+       //LBN:=vertexadd(LBN,pdwg.pcamera^.CamCSOffset);
        RTF:=geometry.VertexMulOnSc(onevertex,100);
-       //RTF:=vertexadd(RTF,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
+       //RTF:=vertexadd(RTF,pdwg.pcamera^.CamCSOffset);
   end;
-  ProjectPoint2(LBN.x,LBN.y,LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,LBN.y,LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,RTF.y,LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
-  ProjectPoint2(LBN.x,RTF.y,LBN.Z,gdb.GetCurrentDWG.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
-  ProjectPoint2(LBN.x,LBN.y,RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,LBN.y,RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,RTF.y,RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
-  ProjectPoint2(LBN.x,RTF.y,RTF.Z,gdb.GetCurrentDWG.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,LBN.y,LBN.Z,pdwg.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,LBN.y,LBN.Z,pdwg.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,RTF.y,LBN.Z,pdwg.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,RTF.y,LBN.Z,pdwg.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,LBN.y,RTF.Z,pdwg.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,LBN.y,RTF.Z,pdwg.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,RTF.y,RTF.Z,pdwg.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,RTF.y,RTF.Z,pdwg.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
   ccsLBN.z:=-ccsLBN.z;
   ccsRTF.z:=-ccsRTF.z;
 
@@ -590,51 +599,52 @@ begin
                                       ccsRTF.z:=-1;
                                       end
                                  end;
-  gdb.GetCurrentDWG.pcamera^.obj_zmAx:=ccsLBN.z;
-  gdb.GetCurrentDWG.pcamera^.obj_zmin:=ccsRTF.z;
-  gdb.GetCurrentDWG.pcamera^.zmaxLCS:=gdb.GetCurrentDWG.pcamera^.obj_zmAx;
-  gdb.GetCurrentDWG.pcamera^.zminLCS:=gdb.GetCurrentDWG.pcamera^.obj_zmin;
+  pdwg.pcamera^.obj_zmAx:=ccsLBN.z;
+  pdwg.pcamera^.obj_zmin:=ccsRTF.z;
+  pdwg.pcamera^.zmaxLCS:=pdwg.pcamera^.obj_zmAx;
+  pdwg.pcamera^.zminLCS:=pdwg.pcamera^.obj_zmin;
 
 
   if param.projtype = PROJPerspective then
   begin
-       if gdb.GetCurrentDWG.pcamera^.zminLCS<gdb.GetCurrentDWG.pcamera^.zmaxLCS/10000 then
-                                                  gdb.GetCurrentDWG.pcamera^.zminLCS:=gdb.GetCurrentDWG.pcamera^.zmaxLCS/10000;
-       if gdb.GetCurrentDWG.pcamera^.zminLCS<10 then
-                                                  gdb.GetCurrentDWG.pcamera^.zminLCS:=10;
-       if gdb.GetCurrentDWG.pcamera^.zmaxLCS<gdb.GetCurrentDWG.pcamera^.zminLCS then
-                                                  gdb.GetCurrentDWG.pcamera^.zmaxLCS:=1000;
+       if pdwg.pcamera^.zminLCS<pdwg.pcamera^.zmaxLCS/10000 then
+                                                  pdwg.pcamera^.zminLCS:=pdwg.pcamera^.zmaxLCS/10000;
+       if pdwg.pcamera^.zminLCS<10 then
+                                                  pdwg.pcamera^.zminLCS:=10;
+       if pdwg.pcamera^.zmaxLCS<pdwg.pcamera^.zminLCS then
+                                                  pdwg.pcamera^.zmaxLCS:=1000;
   end;
 
-  gdb.GetCurrentDWG.pcamera^.zminLCS:=gdb.GetCurrentDWG.pcamera^.zminLCS;//-gdb.GetCurrentDWG.pcamera^.CamCSOffset.z;
-  gdb.GetCurrentDWG.pcamera^.zmaxLCS:=gdb.GetCurrentDWG.pcamera^.zmaxLCS;//+gdb.GetCurrentDWG.pcamera^.CamCSOffset.z;
+  pdwg.pcamera^.zminLCS:=pdwg.pcamera^.zminLCS;//-pdwg.pcamera^.CamCSOffset.z;
+  pdwg.pcamera^.zmaxLCS:=pdwg.pcamera^.zmaxLCS;//+pdwg.pcamera^.CamCSOffset.z;
 
 
   //glLoadIdentity;
-  //gdb.GetCurrentDWG.pcamera^.projMatrix:=onematrix;
+  //pdwg.pcamera^.projMatrix:=onematrix;
   if param.projtype = ProjParalel then
                                       begin
-                                      gdb.GetCurrentDWG.pcamera^.projMatrixLCS:=ortho(-clientwidth*gdb.GetCurrentDWG.pcamera^.prop.zoom/2,clientwidth*gdb.GetCurrentDWG.pcamera^.prop.zoom/2,
-                                                                                 -clientheight*gdb.GetCurrentDWG.pcamera^.prop.zoom/2,clientheight*gdb.GetCurrentDWG.pcamera^.prop.zoom/2,
-                                                                                 gdb.GetCurrentDWG.pcamera^.zminLCS, gdb.GetCurrentDWG.pcamera^.zmaxLCS,@onematrix);
+                                      pdwg.pcamera^.projMatrixLCS:=ortho(-clientwidth*pdwg.pcamera^.prop.zoom/2,clientwidth*pdwg.pcamera^.prop.zoom/2,
+                                                                                 -clientheight*pdwg.pcamera^.prop.zoom/2,clientheight*pdwg.pcamera^.prop.zoom/2,
+                                                                                 pdwg.pcamera^.zminLCS, pdwg.pcamera^.zmaxLCS,@onematrix);
                                       end
                                   else
                                       BEGIN
-                                           gdb.GetCurrentDWG.pcamera^.projMatrixLCS:=Perspective(gdb.GetCurrentDWG.pcamera^.fovy, Width / Height, gdb.GetCurrentDWG.pcamera^.zminLCS, gdb.GetCurrentDWG.pcamera^.zmaxLCS,@onematrix);
-  //glGetDoublev(GL_PROJECTION_MATRIX, @gdb.GetCurrentDWG.pcamera^.projMatrix);
+                                           pdwg.pcamera^.projMatrixLCS:=Perspective(pdwg.pcamera^.fovy, Width / Height, pdwg.pcamera^.zminLCS, pdwg.pcamera^.zmaxLCS,@onematrix);
+  //glGetDoublev(GL_PROJECTION_MATRIX, @pdwg.pcamera^.projMatrix);
                                       end;
-  if gdb.GetCurrentDWG.pcamera^.notuseLCS then
+  if pdwg.pcamera^.notuseLCS then
   begin
 
-  gdb.GetCurrentDWG.pcamera^.projMatrixLCS:=gdb.GetCurrentDWG.pcamera^.projMatrix;
-  gdb.GetCurrentDWG.pcamera^.modelMatrixLCS:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
-   gdb.GetCurrentDWG.pcamera^.CamCSOffset:=NulVertex;
+  pdwg.pcamera^.projMatrixLCS:=pdwg.pcamera^.projMatrix;
+  pdwg.pcamera^.modelMatrixLCS:=pdwg.pcamera^.modelMatrix;
+   pdwg.pcamera^.CamCSOffset:=NulVertex;
   end;
 
 
   SetOGLMatrix;
-  OGLSpecFunc.CurrentCamCSOffset:=gdb.GetCurrentDWG.pcamera^.CamCSOffset;
-  OGLSpecFunc.notuseLCS:=gdb.GetCurrentDWG.pcamera^.notuseLCS;
+  OGLSpecFunc.CurrentCamCSOffset:=pdwg.pcamera^.CamCSOffset;
+  OGLSpecFunc.notuseLCS:=pdwg.pcamera^.notuseLCS;
+  end;
     {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.CalcOptimalMatrix----{end}',lp_DecPos);{$ENDIF}
   //gdb.GetCurrentDWG.pcamera.getfrustum(@gdb.GetCurrentDWG.pcamera^.modelMatrixLCS,@gdb.GetCurrentDWG.pcamera^.projMatrixLCS,gdb.GetCurrentDWG.pcamera^.clipLCS,gdb.GetCurrentDWG.pcamera^.frustumLCS);
 end;
@@ -888,7 +898,7 @@ begin
        ptype:=SysUnit.TypeName2PTD(tn);
        if ptype<>nil then
        begin
-            GDBobjinsp.setptr(ptype,param.SelDesc.LastSelectedObject);
+            SetGDBObjInsp(ptype,param.SelDesc.LastSelectedObject);
        end;
   end
   else
@@ -1662,8 +1672,7 @@ begin
             sendmousecoord(MZW_LBUTTON);
           end;
     end;
-    if assigned(GDBobjinsp)then
-    GDBobjinsp.updateinsp//SetObjInsp;
+    UpdateObjInsp;
   end;
   inherited;
   if needredraw then
@@ -2059,7 +2068,14 @@ procedure TOGLWnd.showcursor;
         begin myglbegin(GL_LINE_STRIP);glVertex2d(-1, -1);glVertex2d(-1, 1);glVertex2d(1,1);
               myglend;myglbegin(GL_LINE_STRIP);glVertex2d(-1, 0);glVertex2d(0, 0);glVertex2d(0,1);myglend;end
         else
-        if (param.ospoint.ostype = os_nearest) then
+        if (param.ospoint.ostype = os_trace) then
+        begin
+             myglbegin(GL_LINES);
+                       glVertex2d(-1, -0.5);glVertex2d(1, -0.5);
+                       glVertex2d(-1,  0.5);glVertex2d(1,  0.5);
+              myglend;
+        end
+        else if (param.ospoint.ostype = os_nearest) then
         begin myglbegin(GL_line_loop);glVertex2d(-1, 1);glVertex2d(1, 1);glVertex2d(-1, -1);
               glVertex2d(1, -1);myglend;end;
       gllinewidth(1);
@@ -2888,7 +2904,7 @@ begin
         begin
         //currentontracdist:=pt.dmouse;
         if (pt.dmouse<lastontracdist) then
-        if (param.ospoint.ostype=os_none)or(param.ospoint.ostype=os_intersection) then
+        if (param.ospoint.ostype=os_none)or(param.ospoint.ostype={os_intersection}os_trace) then
         begin
         if geometry.vertexlen2df(param.ontrackarray.otrackarray[j].dispcoord.x,
                                  param.ontrackarray.otrackarray[j].dispcoord.y,
@@ -2915,7 +2931,7 @@ begin
           pt.trace:=true;
           param.ospoint.worldcoord := pt.worldraycoord;
           param.ospoint.dispcoord := pt.dispraycoord;
-          param.ospoint.ostype := {os_polar}{os_midle}os_intersection;
+          param.ospoint.ostype := {os_polar}{os_midle}{os_intersection}os_trace;
           param.pointnum := j;
           param.axisnum := i;
           //param.ospoint.tmouse:=pt.dmouse;

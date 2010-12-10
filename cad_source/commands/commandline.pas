@@ -226,6 +226,7 @@ begin
 
           run(pfoundcommand,operands);
           if pcommandrunning<>nil then
+                                      if assigned(CLine) then
                                       CLine.SetMode(CLCOMMANDRUN);
           end
      else
@@ -287,6 +288,7 @@ begin
   if temp<>nil then
                    temp^.CommandEnd;
   if pcommandrunning=nil then
+                             if assigned(CLine)then
                              CLine.SetMode(CLCOMMANDREDY);
   CommandsStack.Clear;
   ContextCommandParams:=nil;

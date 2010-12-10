@@ -78,8 +78,6 @@ type
     procedure buildproplist(exttype:PUserTypeDescriptor; bmode:GDBInteger; var addr:GDBPointer);
     procedure SetCurrentObjDefault;
     procedure ReturnToDefault;
-    procedure setptr(exttype:PUserTypeDescriptor; addr:GDBPointer);
-    procedure updateINSP;
     procedure rebuild;
     procedure Notify(Sender: TObject;Command:TMyNotifyCommand); virtual;
     procedure createpda;
@@ -100,7 +98,13 @@ type
   //procedure Pre_MouseDown(fwkeys:longint; x,y:GDBInteger; var r:HandledMsg); virtual;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);override;
     procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);override;
+    private
+    procedure setptr(exttype:PUserTypeDescriptor; addr:GDBPointer);
+    procedure updateinsp;
   end;
+
+procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
+procedure UpdateObjInsp;
 
 var
   GDBobjinsp:TGDBobjinsp;
@@ -112,6 +116,20 @@ implementation
 
 uses {oglwindow,mainwindow,ZPanelsWithSplit,}gdbentity,UGDBStringArray,log;
 
+procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
+begin
+     if assigned(GDBobjinsp)then
+                                begin
+                                     GDBobjinsp.setptr(exttype,addr);
+                                end;
+end;
+procedure UpdateObjInsp;
+begin
+     if assigned(GDBobjinsp)then
+                                begin
+                                     GDBobjinsp.updateinsp;
+                                end;
+end;
 
 procedure TGDBobjinsp.EraseBackground(DC: HDC);
 begin

@@ -253,7 +253,7 @@ begin
   if (commanddata.Instance<>nil)
   and(commanddata.PTD<>nil) then
                                 begin
-                                     GDBobjinsp.setptr(SysUnit.TypeName2PTD('CommandRTEdObject'),@self);
+                                     SetGDBObjInsp(SysUnit.TypeName2PTD('CommandRTEdObject'),@self);
                                 end; 
 
 end;

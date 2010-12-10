@@ -446,7 +446,7 @@ begin
                                                exit;
                                          end;
 
-          GDBobjinsp.setptr(SysUnit.TypeName2PTD('TBlockInsert'),@BIProp);
+          SetGDBObjInsp(SysUnit.TypeName2PTD('TBlockInsert'),@BIProp);
           GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
           historyout('Точка вставки:');
      end
@@ -1144,7 +1144,7 @@ begin
     p3dpl^.AddVertex(wc);
     p3dpl^.Format;
     gdb.GetCurrentROOT.ObjArray.ObjTree.AddObjectToNodeTree(p3dpl);
-    GDBobjinsp.setptr(SysUnit.TypeName2PTD('GDBObjPolyline'),p3dpl);
+    SetGDBObjInsp(SysUnit.TypeName2PTD('GDBObjPolyline'),p3dpl);
     end;
 
   end
@@ -1205,7 +1205,7 @@ begin
                    end
                else
                    begin
-                        GDBobjinsp.setptr(SysUnit.TypeName2PTD('TPolyEdit'),@PEProp);
+                        SetGDBObjInsp(SysUnit.TypeName2PTD('TPolyEdit'),@PEProp);
                         GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
                         gdb.GetCurrentDWG.SelObjArray.clearallobjects;
                         historyout('Поехали:');
@@ -1516,7 +1516,7 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
                                                exit;
                                          end;
 
-          GDBobjinsp.setptr(SysUnit.TypeName2PTD('CommandRTEdObject'),pbeditcom);
+          SetGDBObjInsp(SysUnit.TypeName2PTD('CommandRTEdObject'),pbeditcom);
           gdb.GetCurrentDWG.SelObjArray.clearallobjects;
           gdb.GetCurrentROOT.ObjArray.DeSelect;
           result:=cmd_ok;
@@ -1535,7 +1535,7 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
 
 
   exit;
-  GDBobjinsp.setptr(SysUnit.TypeName2PTD('CommandRTEdObject'),pbeditcom);
+  SetGDBObjInsp(SysUnit.TypeName2PTD('CommandRTEdObject'),pbeditcom);
   gdb.GetCurrentDWG.SelObjArray.clearallobjects;
   gdb.GetCurrentROOT.ObjArray.DeSelect;
   result:=cmd_ok;

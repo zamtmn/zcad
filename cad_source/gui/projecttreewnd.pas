@@ -79,7 +79,7 @@ begin
      TypeDesk:=sysunit.TypeName2PTD('GDBObjBlockdef');
      Instance:=gdb.GetCurrentDWG.BlockDefArray.getblockdef(FBlockName);
      if instance<>nil then
-                          GDBobjinsp.setptr(TypeDesk,Instance)
+                          SetGDBObjInsp(TypeDesk,Instance)
                       else
                           shared.ShowError('Определение блока отсутствует в текущем чертеже. Используйте контекстное меню');
 end;
@@ -87,7 +87,7 @@ end;
 
 procedure TEqTreeNode.Select;
 begin
-     GDBobjinsp.setptr(ptd.PTD,ptd.Instance);
+     SetGDBObjInsp(ptd.PTD,ptd.Instance);
 end;
 function TEqTreeNode.GetParams;
 begin

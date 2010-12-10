@@ -288,7 +288,7 @@ begin
   GDB.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,'DEVICE_PS_DAT_TERMO');
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera));
   historyout('Первый угол:');
-  GDBobjinsp.setptr(SysUnit.TypeName2PTD('CommandRTEdObject'),pco);
+  SetGDBObjInsp(SysUnit.TypeName2PTD('CommandRTEdObject'),pco);
   //ZWinManager.ShowZObject(pp);
 end;
 function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: byte;mclick:integer): integer;
@@ -848,7 +848,7 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
   result:=cmd_ok;
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera));
   historyout('Первый угол:');
-  GDBobjinsp.setptr(SysUnit.TypeName2PTD('CommandRTEdObject'),pco2);
+  SetGDBObjInsp(SysUnit.TypeName2PTD('CommandRTEdObject'),pco2);
   OPSPlaceSmokeDetectorOrtoParam.DMC:=TOPSMDC_1_2;
 end;
 function PlBeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: byte;mclick:integer): integer;

@@ -293,7 +293,7 @@ begin
 
                //GDBObjInsp.Align:=alLeft;
                //GDBobjinsp.BorderStyle:=bssizetoolwin;
-               GDBobjinsp.setptr(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
+               SetGDBObjInsp(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
                GDBobjinsp.SetCurrentObjDefault;
                //GDBobjinsp.ReturnToDefault;
 
@@ -400,6 +400,7 @@ begin
    //self.AutoSize:=false;
    self.onclose:=self.FormClose;
 
+   if not sysparam.noloadlayout then
    LoadLayout_com;
 
    //self.AutoSize:=false;
@@ -606,7 +607,7 @@ LineWbox.Parent:=ToolBarU;
    tf.Name:='test';
    tf.show;}
 
-   TAnchorDockManager(self.DockManager).PreferredSiteSizeAsSiteMinimum:=true;
+   //TAnchorDockManager(self.DockManager).PreferredSiteSizeAsSiteMinimum:=true;
 
 end;
 
@@ -993,6 +994,7 @@ procedure TMainFormN.myKeyPress{(var Key: char)}(Sender: TObject; var Key: Word;
 var
    ccg:char;
    tempkey:word;
+   comtext:string;
 begin
      if assigned(GDBobjinsp) then
      if assigned(GDBobjinsp.PEditor) then
@@ -1013,10 +1015,14 @@ begin
                                        exit;
      tempkey:=key;
 
-     if cmdedit.text='' then
+     comtext:='';
+     if assigned(cmdedit) then
+                              comtext:=cmdedit.text;
+     if comtext='' then
      if assigned(gdb.GetCurrentDWG) then
      if assigned(gdb.GetCurrentDWG.OGLwindow1)then
                     gdb.GetCurrentDWG.OGLwindow1.myKeyPress(tempkey,shift);
+     if assigned(cmdedit) then
      if tempkey<>0 then
      begin
          tempkey:=key;
@@ -1091,8 +1097,7 @@ begin
                         end;}
      if rt<>SysVar.SYS.SYS_RunTime^ then
                                         begin
-                                             if assigned(GDBobjinsp) then
-                                             GDBobjinsp.updateinsp;
+                                             UpdateObjInsp;
                                         end;
      rt:=SysVar.SYS.SYS_RunTime^;
      if historychanged then
@@ -1151,7 +1156,7 @@ begin
                                                  else
                                                      begin
                                                           SysVar.dwg.DWG_CLayer^ := layerbox.ItemIndex;
-                                                          GDBobjinsp.setptr(SysUnit.TypeName2PTD('GDBLayerProp'),gdb.GetCurrentDWG.LayerTable.GetCurrentLayer);
+                                                          SetGDBObjInsp(SysUnit.TypeName2PTD('GDBLayerProp'),gdb.GetCurrentDWG.LayerTable.GetCurrentLayer);
                                                      end;
   end
   else
@@ -1342,7 +1347,7 @@ procedure TMainFormN.StartLongProcess(total:integer);
 begin
      LPTime:=now;
 
-     if sysvar.SYS.SYS_IsHistoryLineCreated^ then
+     if (assigned(ProcessBar)and assigned(HintText)) then
      begin
   ProcessBar.max:=total;
   ProcessBar.min:=0;
@@ -1358,7 +1363,7 @@ procedure TMainFormN.ProcessLongProcess(current:integer);
 var
     pos:integer;
 begin
-     if sysvar.SYS.SYS_IsHistoryLineCreated^ then
+     if (assigned(ProcessBar)and assigned(HintText)) then
      begin
           pos:=round(clientwidth*(current/ProcessBar.max));
           if pos>oldlongprocess then
@@ -1385,7 +1390,7 @@ var
    Time:Tdatetime;
    ts:GDBSTRING;
 begin
-     if sysvar.SYS.SYS_IsHistoryLineCreated^ then
+     if (assigned(ProcessBar)and assigned(HintText)) then
      begin
           ProcessBar.Hide;
           HintText.Show;

@@ -1182,9 +1182,7 @@ begin
 
   s:='**Напрямую**';
   cabcomparam.Traces.Enums.add(@s);
-
-
-  GDBobjinsp.setptr(SysUnit.TypeName2PTD('CommandRTEdObject'),pcabcom);
+  SetGDBObjInsp(SysUnit.TypeName2PTD('CommandRTEdObject'),pcabcom);
 
 
 
@@ -1851,7 +1849,7 @@ function Find_com(Operands:pansichar):GDBInteger;
    // pv:pGDBObjEntity;
    // ir:itrec;
 begin
-  GDBobjinsp.setptr(SysUnit.TypeName2PTD('CommandRTEdObject'),pfindcom);
+  SetGDBObjInsp(SysUnit.TypeName2PTD('CommandRTEdObject'),pfindcom);
   gdb.GetCurrentDWG.SelObjArray.clearallobjects;
   gdb.GetCurrentROOT.ObjArray.DeSelect;
   result:=cmd_ok;
@@ -2076,7 +2074,7 @@ begin
         CableManager.init;
         CableManager.build;
 
-        GDBobjinsp.setptr(SysUnit.TypeName2PTD('TCableManager'),@CableManager);
+        SetGDBObjInsp(SysUnit.TypeName2PTD('TCableManager'),@CableManager);
 
 
 end;

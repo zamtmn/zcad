@@ -17,17 +17,17 @@ var
   PATH_File9:GDBString;
 implementation
 begin
-  VIEW_CommandLineH:=266;
-  VIEW_ObjInspV:=237;
+  VIEW_CommandLineH:=90;
+  VIEW_ObjInspV:=220;
   VIEW_ObjInspSubV:=113;
-  PATH_File0:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File1:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
-  PATH_File2:='\\WORKSTATION\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File3:='\\WORKSTATION\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File4:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File5:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File6:='D:\3.dxf';
-  PATH_File7:='/mnt/win_c/zcad/cad/UserGuide.pdf';
-  PATH_File8:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File9:='/mnt/win_c/zcad/cad/autosave/autosave.dxf';
+  PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File1:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File2:='c:\zcad\errors\1.dxf';
+  PATH_File3:='D:\план.dxf';
+  PATH_File4:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
+  PATH_File5:='\\WORKSTATION\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File6:='\\WORKSTATION\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File7:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File8:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File9:='D:\3.dxf';
 end.

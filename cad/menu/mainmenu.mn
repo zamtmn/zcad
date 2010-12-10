@@ -67,7 +67,7 @@ Panel RIGHTPANEL 994,68,30,525;
 MainMenuItem Файл;
   {
     Command Создать,NewDWG,CTRL+N,none
-    Command Загрузить,Load,CTRL+O,none
+    Command Открыть,Load,CTRL+O,none
     Separator
     Command Сохранить,QSave,CTRL+S,none
     Command Сохранить как,SaveAs,CTRL+S,none

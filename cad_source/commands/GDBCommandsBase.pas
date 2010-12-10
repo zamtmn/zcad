@@ -329,7 +329,7 @@ begin
                                  MSEditor.OU.SaveToMem(membuf);
                                  membuf.SaveToFile('*log\lms.pas');
                                  {$ENDIF}
-                                 GDBobjinsp.setptr(SysUnit.TypeName2PTD('TMSEditor'),@MSEditor);
+                                 SetGDBObjInsp(SysUnit.TypeName2PTD('TMSEditor'),@MSEditor);
                                 end
                             else
                                 commandmanager.executecommandend;
@@ -341,11 +341,11 @@ var
 begin
      if Operands='VARS' then
                             begin
-                                 GDBobjinsp.setptr(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
+                                 SetGDBObjInsp(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
                             end
 else if Operands='CAMERA' then
                             begin
-                                 GDBobjinsp.setptr(SysUnit.TypeName2PTD('GDBObjCamera'),gdb.GetCurrentDWG.pcamera);
+                                 SetGDBObjInsp(SysUnit.TypeName2PTD('GDBObjCamera'),gdb.GetCurrentDWG.pcamera);
                             end
 else if Operands='CURRENT' then
                             begin
@@ -355,7 +355,7 @@ else if Operands='CURRENT' then
                                      begin
                                           obj:=pGDBObjEntity(GDB.GetCurrentDWG.GetLastSelected)^.GetObjTypeName;
                                           objt:=SysUnit.TypeName2PTD(obj);
-                                          GDBobjinsp.setptr(objt,GDB.GetCurrentDWG.GetLastSelected);
+                                          SetGDBObjInsp(objt,GDB.GetCurrentDWG.GetLastSelected);
                                      end
                                  else
                                      begin
@@ -365,40 +365,40 @@ else if Operands='CURRENT' then
                             end
 else if Operands='OGLWND_DEBUG' then
                             begin
-                                 GDBobjinsp.setptr(SysUnit.TypeName2PTD('OGLWndtype'),@gdb.GetCurrentDWG.OGLwindow1.param);
+                                 SetGDBObjInsp(SysUnit.TypeName2PTD('OGLWndtype'),@gdb.GetCurrentDWG.OGLwindow1.param);
                             end
 else if Operands='GDBDescriptor' then
                             begin
-                                 GDBobjinsp.setptr(SysUnit.TypeName2PTD('GDBDescriptor'),@gdb);
+                                 SetGDBObjInsp(SysUnit.TypeName2PTD('GDBDescriptor'),@gdb);
                             end
 else if Operands='RELE_DEBUG' then
                             begin
-                                 GDBobjinsp.setptr(dbunit.TypeName2PTD('vardesk'),dbunit.FindVariable('SEVCABLEkvvg'));
+                                 SetGDBObjInsp(dbunit.TypeName2PTD('vardesk'),dbunit.FindVariable('SEVCABLEkvvg'));
                             end
 else if Operands='LAYERS' then
                             begin
-                                 GDBobjinsp.setptr(dbunit.TypeName2PTD('GDBLayerArray'),@gdb.GetCurrentDWG.LayerTable);
+                                 SetGDBObjInsp(dbunit.TypeName2PTD('GDBLayerArray'),@gdb.GetCurrentDWG.LayerTable);
                             end
 else if Operands='TSTYLES' then
                             begin
-                                 GDBobjinsp.setptr(dbunit.TypeName2PTD('GDBTextStyleArray'),@gdb.GetCurrentDWG.TextStyleTable);
+                                 SetGDBObjInsp(dbunit.TypeName2PTD('GDBTextStyleArray'),@gdb.GetCurrentDWG.TextStyleTable);
                             end
 else if Operands='FONTS' then
                             begin
-                                 GDBobjinsp.setptr(dbunit.TypeName2PTD('GDBFontManager'),@FontManager);
+                                 SetGDBObjInsp(dbunit.TypeName2PTD('GDBFontManager'),@FontManager);
                             end
 else if Operands='OSMODE' then
                             begin
                                  OSModeEditor.GetState;
-                                 GDBobjinsp.setptr(dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor);
+                                 SetGDBObjInsp(dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor);
                             end
 else if Operands='NUMERATORS' then
                             begin
-                                 GDBobjinsp.setptr(SysUnit.TypeName2PTD('GDBNumerator'),@gdb.GetCurrentDWG.Numerator);
+                                 SetGDBObjInsp(SysUnit.TypeName2PTD('GDBNumerator'),@gdb.GetCurrentDWG.Numerator);
                             end
 else if Operands='TABLESTYLES' then
                             begin
-                                 GDBobjinsp.setptr(SysUnit.TypeName2PTD('GDBTableStyleArray'),@gdb.GetCurrentDWG.TableStyleTable);
+                                 SetGDBObjInsp(SysUnit.TypeName2PTD('GDBTableStyleArray'),@gdb.GetCurrentDWG.TableStyleTable);
                             end
                             ;
      GDBobjinsp.SetCurrentObjDefault;
@@ -1039,7 +1039,7 @@ begin
 end;
 function Options_com(Operands:pansichar):GDBInteger;
 begin
-  GDBobjinsp.setptr(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
+  SetGDBObjInsp(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
   historyout('Все настройки доступны в инспекторе объектов');
   //Optionswindow.Show;
   result:=cmd_ok;

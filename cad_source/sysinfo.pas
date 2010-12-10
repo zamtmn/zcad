@@ -26,7 +26,7 @@ type tsysparam=record
                      temppath: GDBString;
                      screenx,screeny:GDBInteger;
                      ver:TmyFileVersionInfo;
-                     nosplash:GDBBoolean;
+                     nosplash,noloadlayout:GDBBoolean;
               end;
 var
   sysparam: tsysparam;
@@ -45,6 +45,8 @@ begin
 
             if (param='NOSPLASH')or(param='NS')then
                                                    sysparam.nosplash:=true;
+            if (param='NOLOADLAYOUT')or(param='NLL')then
+                                                               sysparam.noloadlayout:=true;
        end;
 end;
 begin

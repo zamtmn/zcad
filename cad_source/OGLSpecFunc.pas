@@ -138,11 +138,14 @@ begin
   glMatrixMode(GL_MODELVIEW);
 end;
 function isOpenGLError:GLenum;
+var
+   s:string;
 begin
      result:=glgeterror;
      if result<>GL_NO_ERROR then
                       begin
-                           //MessageBox(0,'OPENGL ERROR!',0,MB_OK);
+                           s:='OPENGL ERROR! '+inttostr(result);
+                           //MessageBox(0,@s[1],0,MB_OK);
                            {asm
                               int(3);
                            end;}

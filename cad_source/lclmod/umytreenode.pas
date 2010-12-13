@@ -84,6 +84,14 @@ type
                          DialogPanel: TButtonPanel;
                          procedure AfterConstruction; override;
                     end;
+  TToolButtonForm = class(tform)
+                         procedure AfterConstruction; override;
+                         //public
+                         //procedure GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
+                         //                               Raw: boolean = false;
+                         //                               WithThemeSpace: boolean = true); override;
+
+                    end;
   TInfoForm = class(TDialogForm)
                          Memo: TMemo;
                          procedure AfterConstruction; override;
@@ -125,6 +133,25 @@ begin
                                    _parent.Controls[i].Height:=h;
                               end;
 end;
+procedure TToolButtonForm.AfterConstruction;
+
+begin
+    inherited;
+    //Include(FControlFlags,cfPreferredSizeValid);
+    autosize:=true;
+end;
+
+(*procedure TToolButtonForm.GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
+                               Raw: boolean = false;
+                               WithThemeSpace: boolean = true);
+begin
+     //inherited;
+     controls[0].GetPreferredSize(PreferredWidth, PreferredHeight,
+                               Raw,
+                               WithThemeSpace);
+     {PreferredWidth:=18;
+     PreferredHeight:=18}
+end;*)
 procedure TDialogForm.AfterConstruction;
 begin
      inherited;

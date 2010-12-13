@@ -93,6 +93,10 @@ type
                     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
   AControl: TControl; DoDisableAutoSizing: boolean);
 
+                    procedure GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
+                                                   Raw: boolean = false;
+                                                   WithThemeSpace: boolean = true); override;
+
                end;
 function getoglwndparam: GDBPointer; export;
 procedure clearotrack;
@@ -203,6 +207,15 @@ begin
     Dlg.Free;
   end;
 end;
+procedure TMainFormN.GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
+                               Raw: boolean = false;
+                               WithThemeSpace: boolean = true);
+begin
+     inherited;
+     //PreferredWidth:=0;
+     PreferredHeight:=20;
+end;
+
 procedure TMainFormN.DockMasterCreateControl(Sender: TObject; aName: string; var
   AControl: TControl; DoDisableAutoSizing: boolean);
 var
@@ -238,6 +251,7 @@ begin
   else if aName='PageControl' then
   begin
        MainPanel:=Tform(Tform.NewInstance);
+       MainPanel.FormStyle:=fsStayOnTop;
        MainPanel.DisableAlign;
        MainPanel.Create(Application);
    //MainPanel:={TPanel}Tform.create(application);
@@ -246,12 +260,11 @@ begin
    //MainPanel.Parent:=self;
    //mainpanel.show;
 
-   PageControl:=TmyPageControl.Create(MainPanel{Application});
+  PageControl:=TmyPageControl.Create(MainPanel{Application});
       PageControl.Constraints.MinHeight:=32;
       PageControl.Parent:=MainPanel;
       PageControl.Align:=alClient;
       PageControl.OnPageChanged:=ChangedDWGTabCtrl;
-      //PageControl.Height:=800;
       PageControl.BorderWidth:=0;
 
    AControl:=MainPanel;
@@ -263,6 +276,7 @@ begin
   else if aName='CommandLine' then
   begin
         CLine:=TCLine(TCLine.NewInstance);
+        CLine.FormStyle:=fsStayOnTop;
         CLine.DisableAlign;
         CLine.Create(Application);
         //CLine.Caption:=Title;
@@ -284,6 +298,7 @@ begin
   else if aName='ObjectInspector' then
             begin
                GDBObjInsp:=TGDBObjInsp(TGDBObjInsp.NewInstance);
+               GDBObjInsp.FormStyle:=fsStayOnTop;
                GDBObjInsp.DisableAlign;
                GDBObjInsp.Create(Application);
                GDBObjInsp.Caption:='Инспектор объектов';
@@ -318,7 +333,8 @@ begin
           end
   else if copy(aName,1,7)='ToolBar' then
   begin
-       FToolBar:=TForm(TForm.NewInstance);
+       FToolBar:=TToolButtonForm(TToolButtonForm.NewInstance);
+       FToolBar.FormStyle:=fsStayOnTop;
        FToolBar.DisableAlign;
        FToolBar.Create(Application);
        FToolBar.Caption:=aName;
@@ -390,7 +406,17 @@ var
   i:integer;
   pint:PGDBInteger;
 begin
-  DockMaster.MakeDockSite(Self,[akBottom,akLeft,akRight],{admrpChild}admrpNone);
+  //AutoSize:=false;
+  DockMaster.MakeDockSite(Self,[akTop,akBottom,akLeft,akRight],admrpChild{admrpNone});
+
+  if DockManager is TAnchorDockManager then
+  begin
+    //aManager:=TAnchorDockManager(AForm.DockManager);
+    TAnchorDockManager(DockManager).PreferredSiteSizeAsSiteMinimum:={false}true;
+  end;
+
+  //GetPreferredSize
+
   DockMaster.OnCreateControl:={@}DockMasterCreateControl;
   DockMaster.OnShowOptions:={@}ShowAnchorDockOptions;
   //TAnchorDockManager(self)
@@ -410,13 +436,23 @@ begin
    onkeydown:=mykeypress;
    KeyPreview:=true;
 
-   DockMaster.ShowControl('ToolBarD',true);
+   ToolBarD:=TToolBar.Create(self);
+   ToolBarD.Height:=18;
+   ToolBarD.Align:=alBottom;
+   ToolBarD.AutoSize:=true;
+   ToolBarD.ShowCaptions:=true;
+   ToolBarD.Parent:=self;
+   ToolBarD.EdgeBorders:=[ebTop];
+   ToolBarD.Parent:=self;
+
+   //DockMaster.ShowControl('ToolBarD',true);
 
    ProcessBar:=TProgressBar.create(ToolBarD);//.initxywh('?',@Pdownpanel,0,0,400,statusbarclientheight,false);
    ProcessBar.Hide;
    ProcessBar.DoubleBuffered:=true;
    ProcessBar.Align:=alLeft;
    ProcessBar.Width:=400;
+   ProcessBar.Height:=10;
    ProcessBar.min:=0;
    ProcessBar.max:=0;
    ProcessBar.step:=10000;
@@ -428,6 +464,7 @@ begin
    HintText.Align:=alLeft;
    HintText.AutoSize:=false;
    HintText.Width:=400;
+   HintText.Height:=10;
    HintText.Layout:=tlCenter;
    HintText.Alignment:=taCenter;
    HintText.Parent:=ToolBarD;

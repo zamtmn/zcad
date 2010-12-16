@@ -573,6 +573,10 @@ var
    lx,{rx,}uy,dy:GDBDouble;
    tv:gdbvertex;
 begin
+          name:=strproc.Tria_Utf8ToAnsi(name);
+
+
+
      pointer(pv):=addblockinsert(gdb.GetCurrentROOT,@{gdb.GetCurrentROOT}root.ObjArray,currentcoord, 1, 0,@datname[1]);
      pv^.format;
      pv^.getoutbound;
@@ -694,6 +698,7 @@ begin
              //if PTCableType(pvd^.data.Instance)^=TCT_ShleifOPS then
              if (pcabledesk.StartDevice<>nil)and(pcabledesk.EndDevice<>nil) then
              begin
+                  shared.HistoryOutStr(pcabledesk.Name);
                   programlog.logoutstr(pcabledesk.Name,0);
                   currentcoord:=coord;
                   PTCableType(pvd^.data.Instance)^:=TCT_ShleifOPS;
@@ -734,13 +739,15 @@ begin
                         pvd:=nodeend^.ou.FindVariable('NMO_Name');
                         if pvd<>nil then
                         begin
-                             endname:=pstring(pvd^.data.Instance)^;
+                             //endname:=pstring(pvd^.data.Instance)^;
+                             endname:=pvd^.data.PTD.GetValueAsString(pvd^.data.Instance);
                         end
                            else endname:='';
                         pvd:=nodeend^.ou.FindVariable('DB_link');
                         if pvd<>nil then
                         begin
-                            endmat:=pstring(pvd^.data.Instance)^;
+                            //endmat:=pstring(pvd^.data.Instance)^;
+                            endmat:=pvd^.data.PTD.GetValueAsString(pvd^.data.Instance);
                             if isfirst then
                                            begin
                                                 isfirst:=false;

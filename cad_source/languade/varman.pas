@@ -137,6 +137,7 @@ pvarmanager=^varmanager;
 varmanager=object(varmanagerdef)
                  constructor init;
                  function findvardesc(varname:GDBString): pvardesk;virtual;
+                 function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;
                  procedure createvariable(varname:GDBString; var vd:vardesk);virtual;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBLongword;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;
                  destructor done;virtual;
@@ -999,7 +1000,28 @@ end;
 
 
 
+function varmanager.findvardescbyinst(varinst:GDBPointer):pvardesk;
+var
+  //pblock: pdblock;
+  pdesc: pvardesk;
+  offset: GDBLongword;
+  temp: pvardesk;
+  bc:PUserTypeDescriptor;
+      ir:itrec;
 
+begin
+  result:=nil;
+  pdesc:=self.vardescarray.beginiterate(ir);
+  if pdesc<>nil then
+  repeat
+        if pdesc.data.Instance=varinst then
+        begin
+             result:=pdesc;
+             exit;
+        end;
+  pdesc:=self.vardescarray.iterate(ir);
+  until pdesc=nil;
+end;
 function varmanager.findvardesc(varname: GDBString): pvardesk;
 var
   //pblock: pdblock;

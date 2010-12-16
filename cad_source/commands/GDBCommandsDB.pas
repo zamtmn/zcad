@@ -70,12 +70,42 @@ begin
 end;
 function DBaseLink_com:GDBInteger;
 var //t:PUserTypeDescriptor;
-    pvd:pvardesk;
+    pvd,pdbv:pvardesk;
     //pu:ptunit;
     pv:pGDBObjEntity;
     ir:itrec;
     c:integer;
+
+    p:pointer;
+    pu:ptunit;
+    vn:GDBString;
 begin
+     if commandmanager.ContextCommandParams<>nil then
+     begin
+           pu:=gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase');
+           pdbv:=pu.InterfaceVariables.findvardescbyinst(PTTypedData(commandmanager.ContextCommandParams)^.Instance);
+           if pdbv<>nil then
+           begin
+                 c:=0;
+                 pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+                 if pv<>nil then
+                 repeat
+                      if pv^.Selected then
+                                          begin
+                                               pvd:=pv^.ou.FindVariable('DB_link');
+                                               if pvd<>nil then
+                                               begin
+                                                    PGDBString(pvd^.data.Instance)^:=pdbv^.name;
+                                                    inc(c);
+                                               end;
+                                          end;
+                 pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+                 until pv=nil;
+                 HistoryOutSTR(inttostr(c)+' примитивов обработано');
+           end;
+     end
+        else
+            HistoryOut('Команда работает только из контекстного меню');
 {     if TempPGDBEqNode<>nil then
      begin
              c:=0;

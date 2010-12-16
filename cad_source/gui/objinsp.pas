@@ -499,8 +499,8 @@ var
    pld:GDBPointer;
 begin
   if sender=peditor then
-  begin
-    //pld:=peditor^.GetLincedData;
+  begin   //fghfgh
+    pld:=peditor.PInstance;
     if GDBobj then
                   PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(pld,{self.pcurrobj,}self.currobjgdbtype);
     if Command=TMNC_EditingDone then

@@ -42,6 +42,7 @@ type
     onCommandStart:comfuncwithoper;
     constructor Init(name:pansichar;func:comfuncwithoper);
     procedure CommandStart(Operands:pansichar); virtual;
+    procedure CommandCancel; virtual;
     procedure CommandEnd; virtual;
   end;
   pCommandRTEdObject=^CommandRTEdObject;
@@ -101,6 +102,9 @@ var
 begin
      if assigned(onCommandStart) then rez:=onCommandStart(Operands);
      if rez<>ZCMD_OK_NOEND then commandmanager.executecommandend;
+end;
+procedure CommandFastObjectPlugin.CommandCancel;
+begin
 end;
 procedure CommandFastObjectPlugin.CommandEnd;
 begin

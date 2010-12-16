@@ -6,6 +6,8 @@ type
                            _2_2_0_5(*'2х2х0.5'*),
                            _1_2_0_75(*'1х2х0.75'*),
                            _2_2_0_75(*'2х2х0.75'*),
+                           _4_2_0_75(*'4х2х0.75'*),
+                           _6_2_0_75(*'6х2х0.75'*),
                            _1_2_1_0(*'1х2х1'*),
                            _2_2_1_0(*'2х2х1'*),
                            _1_2_1_5(*'1х2х1.5'*),
@@ -59,14 +61,22 @@ type
     TSPECCABLE_KPSVEV_ng_LS=object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPECCABLE_KPSVEV_WCS;
            end;
-
-
+    TSPECCABLE_KPSVEVKVMN=object(CableDeviceBaseObject)
+                Wire_Count_Section_DESC:TSPECCABLE_KPSVV_WCS;
+           end;
+    TSPECCABLE_KPSVEVBVM=object(CableDeviceBaseObject)
+                Wire_Count_Section_DESC:TSPECCABLE_KPSVV_WCS;
+           end;
 var
    _EQ_SPECCABLE_KPSVV_ng_LS:TSPECCABLE_KPSVV_ng_LS;
    _EQ_SPECCABLE_KPSVV:TSPECCABLE_KPSVV;
    _EQ_SPECCABLE_KPSE_ng_FRLS:TSPECCABLE_KPSE_ng_FRLS;
    _EQ_SPECCABLE_KPSVEV:TSPECCABLE_KPSVEV;
    _EQ_SPECCABLE_KPSVEV_ng_LS:TSPECCABLE_KPSVEV_ng_LS;
+
+   _EQ_SPECCABLE_KPSVEVKVMN:TSPECCABLE_KPSVEVKVMN;
+   _EQ_SPECCABLE_KPSVEVBVM:TSPECCABLE_KPSVEVBVM;
+
 implementation
 begin
 
@@ -160,5 +170,38 @@ begin
      _EQ_SPECCABLE_KPSVEV_ng_LS.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КПСВЭВнг-LS|BC_Кабельная продукция_Связи_КПСВЭВнг-LS(СПЕЦКАБЕЛЬ)';
      _EQ_SPECCABLE_KPSVEV_ng_LS.format;
 
+     _EQ_SPECCABLE_KPSVEVKVMN.initnul;
+     _EQ_SPECCABLE_KPSVEVKVMN.Category:=_kables;
+     _EQ_SPECCABLE_KPSVEVKVMN.Group:=_cables_sv;
+     _EQ_SPECCABLE_KPSVEVKVMN.EdIzm:=_m;
+     _EQ_SPECCABLE_KPSVEVKVMN.ID:='SPECCABLE_KPSVEVKVMN';
+     _EQ_SPECCABLE_KPSVEVKVMN.Standard:='ТУ 16.К99-030-2005';
+     _EQ_SPECCABLE_KPSVEVKVMN.OKP:='';
+     _EQ_SPECCABLE_KPSVEVKVMN.Manufacturer:='НПП "Спецкабель" г.Москва';
+     _EQ_SPECCABLE_KPSVEVKVMN.Description:='';
+     _EQ_SPECCABLE_KPSVEVKVMN.NameShortTemplate:='КПСВЭВКВм %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSVEVKVMN.NameTemplate:='Кабель симметричный парной скрутки для применения в современных системах сигнализации, системах контроля доступа, а также в других системах управления, контроля и связи КПСВЭВКВм %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSVEVKVMN.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSVEVKVMN.NameFullTemplate:='Кабель симметричный парной скрутки для применения в современных системах сигнализации, системах контроля доступа, а также в других системах управления, контроля и связи КПСВЭВКВм %%[Wire_Count_Section_DESC], сечением %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSVEVKVMN.Wire_Count_Section_DESC:=_1_2_0_5;
+     _EQ_SPECCABLE_KPSVEVKVMN.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КПСВЭВКВм|BC_Кабельная продукция_Связи_КПСВЭВКВм(СПЕЦКАБЕЛЬ)';
+     _EQ_SPECCABLE_KPSVEVKVMN.format;
+
+     _EQ_SPECCABLE_KPSVEVBVM.initnul;
+     _EQ_SPECCABLE_KPSVEVBVM.Category:=_kables;
+     _EQ_SPECCABLE_KPSVEVBVM.Group:=_cables_sv;
+     _EQ_SPECCABLE_KPSVEVBVM.EdIzm:=_m;
+     _EQ_SPECCABLE_KPSVEVBVM.ID:='SPECCABLE_KPSVEVBVM';
+     _EQ_SPECCABLE_KPSVEVBVM.Standard:='ТУ 16.К99-030-2005';
+     _EQ_SPECCABLE_KPSVEVBVM.OKP:='';
+     _EQ_SPECCABLE_KPSVEVBVM.Manufacturer:='НПП "Спецкабель" г.Москва';
+     _EQ_SPECCABLE_KPSVEVBVM.Description:='';
+     _EQ_SPECCABLE_KPSVEVBVM.NameShortTemplate:='КПСВЭВБВм %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSVEVBVM.NameTemplate:='Кабель для систем сигнализации и управления одиночной прокладки бронированные морозостойкие КПСВЭВБВм %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSVEVBVM.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSVEVBVM.NameFullTemplate:='Кабель для систем сигнализации и управления одиночной прокладки бронированные морозостойкие КПСВЭВБВм %%[Wire_Count_Section_DESC], сечением %%[Wire_Count_Section_DESC]';
+     _EQ_SPECCABLE_KPSVEVBVM.Wire_Count_Section_DESC:=_1_2_0_5;
+     _EQ_SPECCABLE_KPSVEVBVM.TreeCoord:='BP_СПЕЦКАБЕЛЬ_Для ОПС_КПСВЭВБВм|BC_Кабельная продукция_Связи_КПСВЭВБВм(СПЕЦКАБЕЛЬ)';
+     _EQ_SPECCABLE_KPSVEVBVM.format;
 
 end.

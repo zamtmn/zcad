@@ -104,11 +104,15 @@ var
   pswp:pGDBStrWithPoint;
       ir:itrec;
   psyminfo:PGDBsymdolinfo;
+  TCP:TCodePage;
 begin
+  TCP:=CodePage;
+CodePage:=CP_win;
   if template='' then
                       template:=content;
   swp.str:='';
   content:=textformat(template,@self);
+  CodePage:=TCP;
   linespace := textprop.size * linespacef * 5 / 3;
   if content='' then content:=str_empty;
   text.free;

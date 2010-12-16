@@ -29,6 +29,7 @@ type
                           procedure freeelement(p:GDBPointer);virtual;
                           procedure sort;virtual;
                           function add(p:GDBPointer):TArrayIndex;virtual;
+                          function addutoa(p:GDBPointer):TArrayIndex;
                           function addwithscroll(p:GDBPointer):GDBInteger;virtual;
                           function GetLengthWithEOL:GDBInteger;
                           function GetTextWithEOL:GDBString;
@@ -95,8 +96,16 @@ var s:GDBString;
 begin
      s:=pGDBString(p)^;
      GDBPointer(s):=nil;
-     inherited add(p);
+     result:=inherited add(p);
 end;
+function GDBGDBStringArray.addutoa(p:GDBPointer):TArrayIndex;
+var s:GDBString;
+begin
+     s:=strproc.Tria_Utf8ToAnsi(pGDBString(p)^);
+     result:=inherited add(@s);
+     GDBPointer(s):=nil;
+end;
+
 function GDBGDBStringArray.addnodouble(p:GDBPointer):GDBInteger;
 var
 //   isEnd:boolean;

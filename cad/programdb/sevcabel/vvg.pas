@@ -51,11 +51,13 @@ type
 var
    _EQ_SEVCABLEVVG:tSEVCABLEVVG;
    _EQ_SEVCABLEVVGngLS:tSEVCABLEVVG;
+   _EQ_SEVCABLEVVGSV1:tSEVCABLEVVG;
 implementation
 begin
 
      _EQ_SEVCABLEVVG.initnul;
      _EQ_SEVCABLEVVGngLS.initnul;
+     _EQ_SEVCABLEVVGSV1.initnul;
 
      _EQ_SEVCABLEVVG.Category:=_kables;
      _EQ_SEVCABLEVVG.Group:=_cables;
@@ -98,5 +100,25 @@ begin
 
      _EQ_SEVCABLEVVGngLS.format;
 
+
+
+     _EQ_SEVCABLEVVGSV1.Category:=_kables;
+     _EQ_SEVCABLEVVGSV1.EdIzm:=_m;
+     _EQ_SEVCABLEVVGSV1.ID:='SEVCABLEVVGngLS';
+     _EQ_SEVCABLEVVGSV1.Standard:='ТУ 16.К71-310-2001';
+     _EQ_SEVCABLEVVGSV1.OKP:='35 3371';
+     _EQ_SEVCABLEVVGSV1.Manufacturer:='ОАО "СЕВКАБЕЛЬ-ХОЛДИНГ" г.Санкт-Петербург';
+     _EQ_SEVCABLEVVGSV1.Description:='Кабели контрольные с ПВХ-изоляцией, не распространяющие горение';
+
+     _EQ_SEVCABLEVVGSV1.NameShortTemplate:='ВБбШв-1 -%%[Wire_Count_Section_DESC]';
+     _EQ_SEVCABLEVVGSV1.NameTemplate:='Кабель силовой бронированый ВБбШв-1-%%[Wire_Count_Section_DESC]';
+     _EQ_SEVCABLEVVGSV1.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_SEVCABLEVVGSV1.NameFullTemplate:='Кабель силовой с изоляцией из поливинилхлоридного пластиката бронированный стальными лентами и со шлангом из ПВХ пластиката ВБбШв-1, сечением %%[Wire_Count_Section_DESC]';
+
+     _EQ_SEVCABLEVVGSV1.Wire_Count_Section_DESC:=_01_1_50;
+
+     _EQ_SEVCABLEVVGSV1.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_Силовые_ВБбШв-1|BC_Кабельная продукция_Силовыее_ВБбШв-1(СЕВКАБЕЛЬ)';
+
+     _EQ_SEVCABLEVVGSV1.format;
 
 end.

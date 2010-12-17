@@ -254,7 +254,7 @@ procedure GDBcommandmanager.executecommandend;
 var
    temp:PCommandRTEdObjectDef;
 begin
-  //objinsp.GDBobjinsp.ReturnToDefault;
+  //ReturnToDefault;
   temp:=pcommandrunning;
   pcommandrunning := nil;
   if temp<>nil then
@@ -279,7 +279,7 @@ procedure GDBcommandmanager.executecommandtotalend;
 var
    temp:PCommandRTEdObjectDef;
 begin
-  //objinsp.GDBobjinsp.ReturnToDefault;
+  //ReturnToDefault;
   self.DMHide;
   self.DMClear;
 

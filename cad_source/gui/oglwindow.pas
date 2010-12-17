@@ -903,7 +903,7 @@ begin
   end
   else
   begin
-    GDBobjinsp.ReturnToDefault;
+    {GDBobjinsp.}ReturnToDefault;
   end;
   end
 end;

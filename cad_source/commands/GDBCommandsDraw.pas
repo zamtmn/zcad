@@ -574,7 +574,7 @@ begin
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
   GDB.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
-  objinsp.GDBobjinsp.ReturnToDefault;
+  {objinsp.GDBobjinsp.}ReturnToDefault;
   clearcp;
   redrawoglwnd;
   result:=cmd_ok;
@@ -1125,7 +1125,7 @@ begin
   if p3dpl<>nil then
   if p3dpl^.VertexArrayInOCS.Count<2 then
                                          begin
-                                              objinsp.GDBobjinsp.ReturnToDefault;
+                                              {objinsp.GDBobjinsp.}ReturnToDefault;
                                               p3dpl^.YouDeleted;
                                          end;
   //gdbfreemem(pointer(p3dpl));

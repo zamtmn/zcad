@@ -1155,7 +1155,7 @@ begin
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
-  objinsp.GDBobjinsp.ReturnToDefault;
+  {objinsp.GDBobjinsp.}ReturnToDefault;
   clearcp;
   redrawoglwnd;
   result:=cmd_ok;
@@ -1415,7 +1415,7 @@ begin
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
-  objinsp.GDBobjinsp.ReturnToDefault;
+  {objinsp.GDBobjinsp.}ReturnToDefault;
   clearcp;
   redrawoglwnd;
   depth:=0;

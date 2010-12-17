@@ -36,6 +36,7 @@ begin
   pdwg:=gdb.GetCurrentDWG;
   if pdwg<>nil then
   begin
+       gdb.GetCurrentRoot.FormatAfterEdit;
   pdwg.OGLwindow1.param.firstdraw := TRUE;
   pdwg.OGLwindow1.CalcOptimalMatrix;
   pdwg.pcamera^.totalobj:=0;

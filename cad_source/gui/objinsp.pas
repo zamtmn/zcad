@@ -105,6 +105,7 @@ type
 
 procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
 procedure UpdateObjInsp;
+procedure ReturnToDefault;
 
 var
   GDBobjinsp:TGDBobjinsp;
@@ -129,6 +130,13 @@ begin
                                 begin
                                      GDBobjinsp.updateinsp;
                                 end;
+end;
+procedure ReturnToDefault;
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       GDBobjinsp.ReturnToDefault;
+                                  end;
 end;
 
 procedure TGDBobjinsp.EraseBackground(DC: HDC);

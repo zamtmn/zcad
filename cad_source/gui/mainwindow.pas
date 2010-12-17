@@ -310,7 +310,7 @@ begin
                //GDBobjinsp.BorderStyle:=bssizetoolwin;
                SetGDBObjInsp(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
                GDBobjinsp.SetCurrentObjDefault;
-               //GDBobjinsp.ReturnToDefault;
+               //{GDBobjinsp.}ReturnToDefault;
 
                pint:=SavedUnit.FindValue('VIEW_ObjInspV');
                if assigned(pint)then
@@ -589,7 +589,7 @@ LineWbox.Parent:=ToolBarU;
    //GDBObjInsp.Align:=alLeft;
    GDBobjinsp.setptr(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
    GDBobjinsp.SetCurrentObjDefault;
-   //GDBobjinsp.ReturnToDefault;
+   //{GDBobjinsp.}ReturnToDefault;
 
    pint:=SavedUnit.FindValue('VIEW_ObjInspV');
    if assigned(pint)then
@@ -829,7 +829,7 @@ begin
                           end;
                           LayerBox.OnChange:=ChangeCLayer;
                           LayerBox.ReadOnly:=true;
-                          LayerBox.AutoSize:=false;
+                          LayerBox.AutoSize:={false}true;
                           //LayerBox.Align:=alleft;
                           //LayerBox.Height:=ppanel.ClientHeight;
                           {LayerBox.Parent:=ppanel;
@@ -866,7 +866,7 @@ begin
                           end;
                           LineWbox.items.Add(('Разный'));
                           LineWbox.OnChange:=ChangeCLineW;
-                          LineWbox.AutoSize:=false;
+                          LineWbox.AutoSize:=false{true};
 
                           {LineWbox.Parent:=ppanel;
                           if ppanel.ClientHeight<ppanel.ClientWidth then

@@ -1193,9 +1193,11 @@ begin
   if p3dpl<>nil then
   if p3dpl^.VertexArrayInOCS.Count<2 then
                                          begin
-                                              objinsp.GDBobjinsp.ReturnToDefault;
+                                              {objinsp.GDBobjinsp.}ReturnToDefault;
                                               p3dpl^.YouDeleted;
                                          end;
+  cabcomparam.PCable:=nil;
+  cabcomparam.PTrace:=nil;
   //gdbfreemem(pointer(p3dpl));
 end;
 function _Cable_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
@@ -1838,7 +1840,7 @@ else
   gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
   gdb.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
   gdb.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
-  objinsp.GDBobjinsp.ReturnToDefault;
+  {objinsp.GDBobjinsp.}ReturnToDefault;
   clearcp;
 
   redrawoglwnd;

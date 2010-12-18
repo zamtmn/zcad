@@ -705,6 +705,7 @@ begin
                   lsave:=SysVar.dwg.DWG_CLayer^;
                   SysVar.dwg.DWG_CLayer^:=0;
 
+                  gdb.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,'DEVICE_CABLE_MARK');
                   pointer(pv):=addblockinsert(@GDB.GetCurrentDWG.ConstructObjRoot,@{gdb.GetCurrentROOT.ObjArray}GDB.GetCurrentDWG.ConstructObjRoot.ObjArray,currentcoord, 1, 0,'DEVICE_CABLE_MARK');
 
                   SysVar.dwg.DWG_CLayer^:=lsave;

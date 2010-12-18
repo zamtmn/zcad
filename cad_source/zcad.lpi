@@ -78,11 +78,10 @@
         <Filename Value="gui/mainwindow.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="mainwindow"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="850"/>
-        <CursorPos X="57" Y="869"/>
+        <TopLine Value="1"/>
+        <CursorPos X="66" Y="15"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -129,7 +128,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="13"/>
         <CursorPos X="25" Y="36"/>
-        <UsageCount Value="95"/>
+        <UsageCount Value="94"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
       <Unit8>
@@ -281,7 +280,7 @@
       <Unit24>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
         <UnitName Value="UGDBOpenArrayOfUCommands"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
         <TopLine Value="228"/>
         <CursorPos X="1" Y="246"/>
@@ -328,10 +327,12 @@
       <Unit29>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
         <UnitName Value="GDBCommandsDraw"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1112"/>
-        <CursorPos X="68" Y="1128"/>
+        <TopLine Value="1592"/>
+        <CursorPos X="49" Y="1602"/>
         <UsageCount Value="100"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit29>
       <Unit30>
@@ -366,7 +367,7 @@
       <Unit33>
         <Filename Value="sharedgdb.pas"/>
         <UnitName Value="sharedgdb"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="26"/>
         <CursorPos X="43" Y="39"/>
@@ -396,7 +397,7 @@
         <Filename Value="gdb/GDBEntity.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GDBEntity"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
         <TopLine Value="270"/>
         <CursorPos X="1" Y="297"/>
@@ -407,7 +408,7 @@
       <Unit37>
         <Filename Value="commands/commanddefinternal.pas"/>
         <UnitName Value="commanddefinternal"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="184"/>
         <CursorPos X="1" Y="200"/>
@@ -562,7 +563,7 @@
       <Unit55>
         <Filename Value="gdb/GDBRoot.pas"/>
         <UnitName Value="GDBRoot"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="131"/>
         <CursorPos X="1" Y="153"/>
@@ -585,7 +586,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="96"/>
         <CursorPos X="17" Y="115"/>
-        <UsageCount Value="73"/>
+        <UsageCount Value="72"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit57>
       <Unit58>
@@ -626,10 +627,12 @@
       <Unit62>
         <Filename Value="../../lazarus/components/opengl/openglcontext.pas"/>
         <UnitName Value="OpenGLContext"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="35"/>
         <CursorPos X="4" Y="58"/>
         <UsageCount Value="26"/>
+        <Loaded Value="True"/>
       </Unit62>
       <Unit63>
         <Filename Value="shared.pas"/>
@@ -659,9 +662,9 @@
       <Unit66>
         <Filename Value="gdb/UGDBDescriptor.pas"/>
         <UnitName Value="UGDBDescriptor"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="102"/>
+        <TopLine Value="98"/>
         <CursorPos X="30" Y="121"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
@@ -789,10 +792,10 @@
       <Unit82>
         <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
         <UnitName Value="GDBCommandsElectrical"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1254"/>
-        <CursorPos X="1" Y="1270"/>
+        <TopLine Value="1498"/>
+        <CursorPos X="10" Y="1407"/>
         <UsageCount Value="102"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -816,7 +819,7 @@
       <Unit85>
         <Filename Value="u/UGDBOpenArrayOfPObjects.pas"/>
         <UnitName Value="UGDBOpenArrayOfPObjects"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="70"/>
         <CursorPos X="1" Y="87"/>
@@ -888,10 +891,13 @@
       <Unit94>
         <Filename Value="gdb/GDBTable.pas"/>
         <UnitName Value="GDBTable"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="129"/>
-        <CursorPos X="64" Y="152"/>
-        <UsageCount Value="21"/>
+        <TopLine Value="213"/>
+        <CursorPos X="32" Y="249"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit94>
       <Unit95>
@@ -928,10 +934,12 @@
       <Unit99>
         <Filename Value="electroteh/GDBCommandsOPS.pas"/>
         <UnitName Value="GDBCommandsOPS"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="673"/>
-        <CursorPos X="40" Y="699"/>
+        <TopLine Value="685"/>
+        <CursorPos X="83" Y="708"/>
         <UsageCount Value="36"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit99>
       <Unit100>
@@ -1607,7 +1615,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="76"/>
         <CursorPos X="32" Y="104"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="13"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit181>
       <Unit182>
@@ -1738,8 +1746,8 @@
         <Filename Value="/usr/lib/lazarus/lcl/interfaces/gtk2/gtk2lclintf.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="767"/>
-        <CursorPos X="1" Y="806"/>
-        <UsageCount Value="5"/>
+        <CursorPos X="1" Y="802"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit197>
       <Unit198>
@@ -1845,10 +1853,12 @@
       <Unit211>
         <Filename Value="../../lazarus/lcl/utrace.pp"/>
         <UnitName Value="UTrace"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="30"/>
-        <CursorPos X="1" Y="64"/>
+        <CursorPos X="58" Y="46"/>
         <UsageCount Value="28"/>
+        <Loaded Value="True"/>
       </Unit211>
       <Unit212>
         <Filename Value="commands/GDBCommandsDB.pas"/>
@@ -1868,107 +1878,123 @@
         <UsageCount Value="9"/>
       </Unit213>
     </Units>
-    <JumpHistory Count="25" HistoryIndex="24">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
-        <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
-        <Caret Line="1642" Column="27" TopLine="1608"/>
+        <Filename Value="u/UGDBOpenArrayOfPObjects.pas"/>
+        <Caret Line="87" Column="1" TopLine="70"/>
       </Position1>
       <Position2>
-        <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
-        <Caret Line="1196" Column="68" TopLine="1180"/>
+        <Filename Value="u/UGDBOpenArrayOfPObjects.pas"/>
+        <Caret Line="84" Column="1" TopLine="70"/>
       </Position2>
       <Position3>
         <Filename Value="u/UGDBOpenArrayOfPObjects.pas"/>
-        <Caret Line="89" Column="99" TopLine="70"/>
+        <Caret Line="85" Column="1" TopLine="70"/>
       </Position3>
       <Position4>
-        <Filename Value="u/UGDBOpenArrayOfPObjects.pas"/>
-        <Caret Line="87" Column="1" TopLine="70"/>
-      </Position4>
-      <Position5>
-        <Filename Value="u/UGDBOpenArrayOfPObjects.pas"/>
-        <Caret Line="84" Column="1" TopLine="70"/>
-      </Position5>
-      <Position6>
-        <Filename Value="u/UGDBOpenArrayOfPObjects.pas"/>
-        <Caret Line="85" Column="1" TopLine="70"/>
-      </Position6>
-      <Position7>
         <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
         <Caret Line="2173" Column="143" TopLine="2162"/>
-      </Position7>
-      <Position8>
-        <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
-        <Caret Line="1243" Column="10" TopLine="1248"/>
-      </Position8>
-      <Position9>
+      </Position4>
+      <Position5>
         <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
         <Caret Line="1270" Column="1" TopLine="1248"/>
+      </Position5>
+      <Position6>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="244" Column="1" TopLine="228"/>
+      </Position6>
+      <Position7>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="245" Column="1" TopLine="228"/>
+      </Position7>
+      <Position8>
+        <Filename Value="gdb/GDBEntity.pas"/>
+        <Caret Line="296" Column="1" TopLine="269"/>
+      </Position8>
+      <Position9>
+        <Filename Value="gdb/GDBEntity.pas"/>
+        <Caret Line="297" Column="1" TopLine="270"/>
       </Position9>
       <Position10>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="244" Column="1" TopLine="228"/>
+        <Caret Line="246" Column="1" TopLine="228"/>
       </Position10>
       <Position11>
-        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="245" Column="1" TopLine="228"/>
+        <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
+        <Caret Line="1273" Column="1" TopLine="1248"/>
       </Position11>
       <Position12>
-        <Filename Value="gdb/GDBEntity.pas"/>
-        <Caret Line="296" Column="1" TopLine="269"/>
+        <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
+        <Caret Line="1274" Column="1" TopLine="1248"/>
       </Position12>
       <Position13>
-        <Filename Value="gdb/GDBEntity.pas"/>
-        <Caret Line="297" Column="1" TopLine="270"/>
+        <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
+        <Caret Line="1275" Column="1" TopLine="1248"/>
       </Position13>
       <Position14>
-        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="246" Column="1" TopLine="228"/>
+        <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
+        <Caret Line="1313" Column="1" TopLine="1297"/>
       </Position14>
       <Position15>
         <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
-        <Caret Line="1273" Column="1" TopLine="1248"/>
+        <Caret Line="1314" Column="1" TopLine="1297"/>
       </Position15>
       <Position16>
         <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
-        <Caret Line="1274" Column="1" TopLine="1248"/>
+        <Caret Line="1315" Column="1" TopLine="1297"/>
       </Position16>
       <Position17>
         <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
-        <Caret Line="1275" Column="1" TopLine="1248"/>
+        <Caret Line="1317" Column="1" TopLine="1297"/>
       </Position17>
       <Position18>
         <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
-        <Caret Line="1313" Column="1" TopLine="1297"/>
+        <Caret Line="1315" Column="10" TopLine="1288"/>
       </Position18>
       <Position19>
-        <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
-        <Caret Line="1314" Column="1" TopLine="1297"/>
+        <Filename Value="sharedgdb.pas"/>
+        <Caret Line="36" Column="20" TopLine="26"/>
       </Position19>
       <Position20>
-        <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
-        <Caret Line="1315" Column="1" TopLine="1297"/>
+        <Filename Value="sharedgdb.pas"/>
+        <Caret Line="39" Column="43" TopLine="26"/>
       </Position20>
       <Position21>
         <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
-        <Caret Line="1317" Column="1" TopLine="1297"/>
+        <Caret Line="1270" Column="1" TopLine="1254"/>
       </Position21>
       <Position22>
-        <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
-        <Caret Line="1315" Column="10" TopLine="1288"/>
+        <Filename Value="gui/mainwindow.pas"/>
+        <Caret Line="15" Column="66" TopLine="1"/>
       </Position22>
       <Position23>
-        <Filename Value="sharedgdb.pas"/>
-        <Caret Line="36" Column="20" TopLine="26"/>
+        <Filename Value="../../lazarus/components/opengl/openglcontext.pas"/>
+        <Caret Line="58" Column="4" TopLine="35"/>
       </Position23>
       <Position24>
-        <Filename Value="sharedgdb.pas"/>
-        <Caret Line="39" Column="43" TopLine="26"/>
+        <Filename Value="zcad.pas"/>
+        <Caret Line="117" Column="15" TopLine="40"/>
       </Position24>
       <Position25>
-        <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
-        <Caret Line="1270" Column="1" TopLine="1254"/>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="1614" Column="38" TopLine="1583"/>
       </Position25>
+      <Position26>
+        <Filename Value="commands/GDBCommandsDraw.pas"/>
+        <Caret Line="1602" Column="49" TopLine="1592"/>
+      </Position26>
+      <Position27>
+        <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
+        <Caret Line="1270" Column="1" TopLine="1245"/>
+      </Position27>
+      <Position28>
+        <Filename Value="electroteh/GDBCommandsOPS.pas"/>
+        <Caret Line="708" Column="27" TopLine="685"/>
+      </Position28>
+      <Position29>
+        <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
+        <Caret Line="2182" Column="39" TopLine="2158"/>
+      </Position29>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

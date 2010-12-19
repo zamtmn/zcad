@@ -383,7 +383,7 @@ var
 begin
   try
     // load the xml config file
-    filename:=sysparam.programpath+'components/defaultlayout.xml';
+    filename:=utf8tosys(sysparam.programpath+'components/defaultlayout.xml');
     XMLConfig:=TXMLConfigStorage.Create(Filename,True);
     try
       // restore the layout
@@ -407,7 +407,7 @@ var
   pint:PGDBInteger;
 begin
   //AutoSize:=false;
-  DockMaster.MakeDockSite(Self,[akTop,akBottom,akLeft,akRight],admrpChild{admrpNone});
+  DockMaster.MakeDockSite(Self,[akTop,akBottom,akLeft,akRight],admrpChild{admrpNone},true);
 
   if DockManager is TAnchorDockManager then
   begin

@@ -17,12 +17,12 @@ var
   PATH_File9:GDBString;
 implementation
 begin
-  VIEW_CommandLineH:=152;
+  VIEW_CommandLineH:=67;
   VIEW_ObjInspV:=216;
   VIEW_ObjInspSubV:=90;
-  PATH_File0:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
-  PATH_File1:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File2:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File0:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File1:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File2:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
   PATH_File3:='E:\work5\proj.dxf';
   PATH_File4:='C:\zcad\cad\autosave\autosave.dxf';
   PATH_File5:='/mnt/win_c/zcad/cad/autosave/autosave.dxf';

@@ -1705,7 +1705,7 @@ var
 begin
   try
     // create a new xml config file
-    filename:=sysparam.programpath+'components/defaultlayout.xml';
+    filename:=utf8tosys(sysparam.programpath+'components/defaultlayout.xml');
     XMLConfig:=TXMLConfigStorage.Create(filename,false);
     try
       // save the current layout of all forms

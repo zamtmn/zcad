@@ -512,6 +512,7 @@ var //i: GDBInteger;
     ptn:PGDBObjDevice;
     p:pointer;
     cman:TCableManager;
+    SaveEntUName,SaveCabUName:gdbstring;
 begin
   if gdb.GetCurrentROOT.ObjArray.Count = 0 then exit;
   cman.init;
@@ -527,6 +528,8 @@ begin
              pgdbinteger(pvd.data.Instance)^:=0;
              pvd:=currentunit.FindVariable('CDSC_temp');
              pgdbinteger(pvd.data.Instance)^:=0;
+             SaveCabUName:=pcabledesk.StartSegment.ou.Name;
+             pcabledesk.StartSegment.ou.Name:='Cable';
              p:=@pcabledesk.StartSegment.ou;
              currentunit.InterfaceUses.addnodouble(@p);
              ucount:=currentunit.InterfaceUses.Count;
@@ -540,6 +543,8 @@ begin
                 repeat
                     //if ptn^.DevLink<>nil then
                     begin
+                         SaveEntUName:=ptn^.bp.Owner.ou.Name;
+                         ptn^.bp.Owner.ou.Name:='Entity';
                          p:=@ptn^.bp.Owner.ou;
                          currentunit.InterfaceUses.addnodouble(@p);
 
@@ -549,7 +554,7 @@ begin
 
                          ptn^.bp.Owner^.Format;
                      end;
-
+                    ptn^.bp.Owner.ou.Name:=SaveEntUName;
                     ptn:=pcabledesk^.Devices.iterate(ir_inNodeArray);
                 until ptn=nil;
 
@@ -558,6 +563,7 @@ begin
 
              currentunit.InterfaceUses.Count:=ucount-1;
         end;
+  pcabledesk.StartSegment.ou.Name:=SaveCabUName;
   pcabledesk:=cman.iterate(ir);
   until pcabledesk=nil;
 

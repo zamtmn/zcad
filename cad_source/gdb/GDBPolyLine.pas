@@ -37,10 +37,12 @@ GDBObjPolyline=object(GDBObjCurve)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
+
            end;
 {Export-}
 implementation
 uses gdbcable,log;
+
 function GDBObjPolyline.FromDXFPostProcessBeforeAdd;
 var
     //isdevice:GDBBoolean;

@@ -20,7 +20,7 @@ unit GDBLWPolyLine;
 {$INCLUDE def.inc}
 
 interface
-uses geometry,UGDBLayerArray,GDBEntity,memman,gdbasetypes,UGDBPoint3DArray,UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses oglwindowdef,GDBCurve,UGDBVectorSnapArray,geometry,UGDBLayerArray,GDBEntity,memman,gdbasetypes,UGDBPoint3DArray,UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
 GDBase,UGDBDescriptor,GDBWithLocalCS,gdbobjectsconstdef,math,dxflow,sysutils,UGDBLineWidthArray,OGLSpecFunc;
 type
@@ -33,7 +33,8 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  Width2D_in_OCS_Array:GDBLineWidthArray;(*saved_to_shd*)
                  Width3D_in_WCS_Array:GDBOpenArray;
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
-                 Square:GDBdouble;(*Ориентированная площадь*)
+                 snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
+                 Square:GDBdouble;(*'Ориентированная площадь'*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul;
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;
@@ -57,6 +58,9 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  procedure getoutbound;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                  //function InRect:TInRect;virtual;
+                 function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record):GDBBoolean;virtual;
+                 procedure AddOnTrackAxis(posr:pos_record);virtual;
            end;
 {Export-}
 implementation
@@ -78,6 +82,81 @@ begin
      end;
      result:=IREmpty;
 end;}
+procedure GDBObjLWpolyline.AddOnTrackAxis(posr:pos_record);
+begin
+  GDBPoint3dArrayAddOnTrackAxis(Vertex3D_in_WCS_Array,posr);
+end;
+function GDBObjLWpolyline.getsnap;
+begin
+     result:=GDBPoint3dArraygetsnap(Vertex3D_in_WCS_Array,PProjPoint,snaparray,osp);
+end;
+
+function GDBObjLWpolyline.onmouse;
+var
+   ie,i:gdbinteger;
+   q3d:PGDBQuad3d;
+   subresult:TINRect;
+begin
+
+    result:=false;
+  if closed then ie:=Width3D_in_WCS_Array.count - 1
+            else ie:=Width3D_in_WCS_Array.count - 2;
+
+
+  q3d:=Width3D_in_WCS_Array.parray;
+  for i := 0 to ie do
+  begin
+    begin
+      subresult:=CalcOutBound4VInFrustum(q3d^,mf);
+          if subresult=IRFully then
+                                  begin
+                                       result:=true;
+                                       exit;
+                                    end
+     else if subresult=IRPartially then
+                                        begin
+                                             if geometry.CalcTrueInFrustum (q3d^[0],q3d^[1],mf)<>irempty then
+                                                                                          begin
+                                                                                               result:=true;
+                                                                                               exit;
+                                                                                          end;
+                                             if geometry.CalcTrueInFrustum (q3d^[1],q3d^[2],mf)<>irempty then
+                                                                                          begin
+                                                                                               result:=true;
+                                                                                               exit;
+                                                                                          end;
+                                             if geometry.CalcTrueInFrustum (q3d^[2],q3d^[3],mf)<>irempty then
+                                                                                          begin
+                                                                                               result:=true;
+                                                                                               exit;
+                                                                                          end;
+                                             if geometry.CalcTrueInFrustum (q3d^[3],q3d^[0],mf)<>irempty then
+                                                                                          begin
+                                                                                               result:=true;
+                                                                                               exit;
+                                                                                          end;
+                                        end;
+      inc(q3d);
+    end;
+ end;
+    {subresult:=CalcOutBound4VInFrustum(PInWCS,mf);
+    if subresult<>IRPartially then
+                               if subresult=irempty then
+                                                        exit
+                                                    else
+                                                        begin
+                                                             result:=true;
+                                                             exit;
+                                                        end;
+    result:=true;
+
+  if VertexArrayInWCS.count<2 then
+                                  begin
+                                       result:=false;
+                                       exit;
+                                  end;
+   result:=VertexArrayInWCS.onmouse(mf);}
+end;
 function GDBObjLWpolyline.CalcTrueInFrustum;
 var
 pv1,pv2:pgdbvertex;
@@ -242,6 +321,7 @@ begin
   Width2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{EFDA3BB3-E3AD-4D5C-97D2-FECD92A7276E}',{$ENDIF}1000);
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{C5FE7AEE-3EF6-4AF8-ADCE-4D30495CE3F1}',{$ENDIF}1000);
   Width3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{C9BB8E1B-18AA-464D-8726-68F2F609FEE0}',{$ENDIF}1000, sizeof(GDBQuad3d));
+  snaparray.init({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}1000);
   PProjPoint:=nil;
 end;
 constructor GDBObjLWpolyline.initnul;
@@ -253,11 +333,13 @@ begin
   Width2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{EFDA3BB3-E3AD-4D5C-97D2-FECD92A7276E}',{$ENDIF}1000);
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{C5FE7AEE-3EF6-4AF8-ADCE-4D30495CE3F1}',{$ENDIF}1000);
   Width3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{C9BB8E1B-18AA-464D-8726-68F2F609FEE0}',{$ENDIF}1000, sizeof(GDBQuad3d));
+  snaparray.init({$IFDEF DEBUGBUILD}'{556C3123-58FC-41AA-BA5C-C453F025ACF6}',{$ENDIF}1000);
   PProjPoint:=nil;
 end;
 procedure GDBObjLWpolyline.DrawGeometry;
 var i,ie: GDBInteger;
     q3d:PGDBQuad3d;
+    plw:PGLlwwidth;
 begin
   {glPolygonMode(GL_FRONT_AND_BACK, GL_fill);
   if closed then
@@ -305,29 +387,57 @@ begin
         myglend();
       end;
     end;}
-    if closed then myglbegin(GL_LINE_LOOP)
+    {if closed then myglbegin(GL_LINE_LOOP)
               else myglbegin(GL_LINE_STRIP);
     Vertex3D_in_WCS_Array.iterategl(@myglVertex3dv);
-    myglend();
+    myglend();}
 
     if closed then ie:=Width3D_in_WCS_Array.count - 1
               else ie:=Width3D_in_WCS_Array.count - 2;
 
 
+    myglbegin(GL_QUADS);
     q3d:=Width3D_in_WCS_Array.parray;
+    plw:=Width2D_in_OCS_Array.parray;
     for i := 0 to ie do
     begin
       begin
-                                      //glenable(GL_LIGHTING);
-        myglbegin(GL_QUADS);
+        if plw^.hw then
+        begin
         myglVertex3dv(@q3d^[0]);
         myglVertex3dv(@q3d^[1]);
         myglVertex3dv(@q3d^[2]);
         myglVertex3dv(@q3d^[3]);
-        myglend();
-        inc(q3d);                              //gldisable(GL_LIGHTING);
+        end;
+        inc(plw);
+        inc(q3d);
       end;
    end;
+   myglend();
+
+    myglbegin(GL_Lines);
+    q3d:=Width3D_in_WCS_Array.parray;
+    plw:=Width2D_in_OCS_Array.parray;
+    for i := 0 to ie do
+    begin
+      begin
+        myglVertex3dv(@q3d^[0]);
+        myglVertex3dv(@q3d^[1]);
+        if plw^.hw then
+        begin
+        myglVertex3dv(@q3d^[1]);
+        myglVertex3dv(@q3d^[2]);
+        myglVertex3dv(@q3d^[2]);
+        myglVertex3dv(@q3d^[3]);
+        myglVertex3dv(@q3d^[3]);
+        myglVertex3dv(@q3d^[0]);
+        end;
+        inc(plw);
+        inc(q3d);
+      end;
+   end;
+   myglend();
+
 
 
 
@@ -563,6 +673,7 @@ begin
        inc(pv);
   end;
   Vertex3D_in_WCS_Array.Shrink;
+  BuildSnapArray(Vertex3D_in_WCS_Array,snaparray);
 end;
 procedure GDBObjLWpolyline.Renderfeedback;
 var tv:GDBvertex;

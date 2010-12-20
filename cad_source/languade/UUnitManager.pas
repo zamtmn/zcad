@@ -217,8 +217,8 @@ begin
                                        oldline:=line;
                    end;
     line:=readspace(line);
-   // if line='TCStartAttr=GDBInteger;' then
-   //                line:=line;
+   if line='GDBObjLWPolyline=object(GDBObjWithLocalCS) Closed:GDBBoolean;' then
+                  line:=line;
 
     {$IFDEF TOTALYLOG}programlog.logoutstr(line,0);{$ENDIF}
 

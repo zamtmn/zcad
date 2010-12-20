@@ -829,7 +829,7 @@ begin
                           end;
                           LayerBox.OnChange:=ChangeCLayer;
                           LayerBox.ReadOnly:=true;
-                          LayerBox.AutoSize:={false}true;
+                          LayerBox.AutoSize:=false{true};
                           //LayerBox.Align:=alleft;
                           //LayerBox.Height:=ppanel.ClientHeight;
                           {LayerBox.Parent:=ppanel;

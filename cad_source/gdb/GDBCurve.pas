@@ -65,6 +65,9 @@ GDBObjCurve=object(GDBObj3d)
                  procedure DeleteVertex(const PolyData:TPolyData);
            end;
 {Export-}
+procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray);
+function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record):GDBBoolean;
+procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:pos_record);
 implementation
 uses
     log;
@@ -77,7 +80,7 @@ procedure GDBObjCurve.DeleteVertex(const PolyData:TPolyData);
 begin
      vertexarrayinocs.deleteelement(PolyData.nearestvertex);
 end;
-procedure GDBObjCurve.AddOnTrackAxis(posr:pos_record);
+procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:pos_record);
 var tv:gdbvertex;
     ptv,ppredtv:pgdbvertex;
     ir:itrec;
@@ -109,6 +112,11 @@ begin
         ppredtv:=ptv;
         ptv:=VertexArrayInWCS.iterate(ir);
   until ptv=nil;
+end;
+
+procedure GDBObjCurve.AddOnTrackAxis(posr:pos_record);
+begin
+  GDBPoint3dArrayAddOnTrackAxis(VertexArrayInWCS,posr);
 end;
 function GDBObjCurve.CalcTrueInFrustum;
 begin
@@ -277,6 +285,28 @@ begin
 
   end;
 end;
+procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray);
+var
+    ptv,ptvprev: pgdbvertex;
+    tv:gdbvertex;
+    vs:VectorSnap;
+        ir:itrec;
+begin
+  snaparray.clear;
+  ptvprev:=VertexArrayInWCS.beginiterate(ir);
+  ptv:=VertexArrayInWCS.iterate(ir);
+  if ptv<>nil then
+  repeat
+        vs.l_1_4:=vertexmorph(ptvprev^,ptv^,1/4);
+        vs.l_1_3:=vertexmorph(ptvprev^,ptv^,1/3);
+        vs.l_1_2:=vertexmorph(ptvprev^,ptv^,1/2);
+        vs.l_2_3:=vertexmorph(ptvprev^,ptv^,2/3);
+        vs.l_3_4:=vertexmorph(ptvprev^,ptv^,3/4);
+        snaparray.add(@vs);
+        ptvprev:=ptv;
+        ptv:=VertexArrayInWCS.iterate(ir);
+  until ptv=nil;
+end;
 procedure GDBObjCurve.Format;
 var //i,j: GDBInteger;
     ptv,ptvprev: pgdbvertex;
@@ -284,7 +314,7 @@ var //i,j: GDBInteger;
     vs:VectorSnap;
         ir:itrec;
 begin
-  snaparray.clear;
+  //snaparray.clear;
   length:=0;
   VertexArrayInWCS.clear;
   ptv:=VertexArrayInOCS.beginiterate(ir);
@@ -294,19 +324,13 @@ begin
         VertexArrayInWCS.Add(@tv);
         ptv:=vertexarrayinocs.iterate(ir);
   until ptv=nil;
+
+
+  BuildSnapArray(VertexArrayInWCS,snaparray);
   ptvprev:=VertexArrayInWCS.beginiterate(ir);
   ptv:=VertexArrayInWCS.iterate(ir);
   if ptv<>nil then
   repeat
-        {if ir.itc=VertexArrayInWCS.Count-1 then j:=0
-                                                    else j:=ir.itc;
-        ptv2:=VertexArrayInWCS.getelement(j);}
-        vs.l_1_4:=vertexmorph(ptvprev^,ptv^,1/4);
-        vs.l_1_3:=vertexmorph(ptvprev^,ptv^,1/3);
-        vs.l_1_2:=vertexmorph(ptvprev^,ptv^,1/2);
-        vs.l_2_3:=vertexmorph(ptvprev^,ptv^,2/3);
-        vs.l_3_4:=vertexmorph(ptvprev^,ptv^,3/4);
-        self.snaparray.add(@vs);
         length:=length+geometry.Vertexlength(ptv^,ptvprev^);
         ptvprev:=ptv;
         ptv:=VertexArrayInWCS.iterate(ir);
@@ -502,7 +526,7 @@ begin
 
 end;
 *)
-function GDBObjCurve.getsnap;
+function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record):GDBBoolean;
 const pnum=8;
 var t,d,e:GDBDouble;
     tv,n,v,dir:gdbvertex;
@@ -649,6 +673,158 @@ begin
        end;
      end;
      inc(onlygetsnapcount);
+end;
+
+function GDBObjCurve.getsnap;
+const pnum=8;
+var t,d,e:GDBDouble;
+    tv,n,v,dir:gdbvertex;
+    mode,vertexnum:GDBInteger;
+    pv1:PGDBVertex;
+    pv2:PGDBVertex;
+begin
+     result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,snaparray,osp);
+(*
+     if onlygetsnapcount=VertexArrayInWCS.count*pnum then
+     begin
+          result:=false;
+          exit;
+     end;
+     result:=true;
+     mode:=onlygetsnapcount mod pnum;
+     vertexnum:=onlygetsnapcount div pnum;
+     case mode of
+              0:if (sysvar.dwg.DWG_OSMode^ and osm_endpoint)<>0
+                then
+                begin
+                osp.worldcoord:=PGDBArrayVertex(VertexArrayInWCS.parray)^[vertexnum];
+                pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
+                osp.ostype:=os_begin;
+                end
+                else osp.ostype:=os_none;
+             1:begin
+                if (sysvar.dwg.DWG_OSMode^ and osm_4)<>0
+                then
+                begin
+                ///PVectotSnap(snaparray.getelement(vertexnum))^
+                osp.worldcoord:=PVectotSnap(snaparray.getelement(vertexnum))^.l_1_4;// PGDBArrayVertex(vertexarray.parray)^[vertexnum];
+                gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
+                //pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
+                osp.ostype:=os_1_4;
+                end
+                else osp.ostype:=os_none;
+               end;
+             2:begin
+                if (sysvar.dwg.DWG_OSMode^ and osm_3)<>0
+                then
+                begin
+                ///PVectotSnap(snaparray.getelement(vertexnum))^
+                osp.worldcoord:=PVectotSnap(snaparray.getelement(vertexnum))^.l_1_3;// PGDBArrayVertex(vertexarray.parray)^[vertexnum];
+                gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
+                //pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
+                osp.ostype:=os_1_3;
+                end
+                else osp.ostype:=os_none;
+               end;
+              3:if (sysvar.dwg.DWG_OSMode^ and osm_midpoint)<>0
+                then
+                begin
+                ///PVectotSnap(snaparray.getelement(vertexnum))^
+                osp.worldcoord:=PVectotSnap(snaparray.getelement(vertexnum))^.l_1_2;// PGDBArrayVertex(vertexarray.parray)^[vertexnum];
+                gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
+                //pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
+                osp.ostype:=os_midle;
+                end
+                else osp.ostype:=os_none;
+             4:begin
+                if (sysvar.dwg.DWG_OSMode^ and osm_3)<>0
+                then
+                begin
+                ///PVectotSnap(snaparray.getelement(vertexnum))^
+                osp.worldcoord:=PVectotSnap(snaparray.getelement(vertexnum))^.l_2_3;// PGDBArrayVertex(vertexarray.parray)^[vertexnum];
+                gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
+                //pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
+                osp.ostype:=os_2_3;
+                end
+                else osp.ostype:=os_none;
+               end;
+             5:begin
+                if ((sysvar.dwg.DWG_OSMode^ and osm_4)<>0)
+                then
+                begin
+                ///PVectotSnap(snaparray.getelement(vertexnum))^
+                osp.worldcoord:=PVectotSnap(snaparray.getelement(vertexnum))^.l_3_4;// PGDBArrayVertex(vertexarray.parray)^[vertexnum];
+                gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
+                //pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
+                osp.ostype:=os_3_4;
+                end
+                else osp.ostype:=os_none;
+               end;
+             6:begin
+                    if ((sysvar.dwg.DWG_OSMode^ and osm_perpendicular)<>0)and(vertexnum<(VertexArrayInWCS.count-1))
+                    then
+                    begin
+                    pv1:=VertexArrayInWCS.getelement(vertexnum);
+                    pv2:=VertexArrayInWCS.getelement(vertexnum+1);
+                    dir:=geometry.VertexSub(pv2^,pv1^);
+                    tv:=vectordot(dir,GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir);
+                    t:= -((pv1.x-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.x)*dir.x+(pv1.y-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.y)*dir.y+(pv1.z-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.z)*dir.z)/
+                         ({sqr(dir.x)+sqr(dir.y)+sqr(dir.z)}SqrVertexlength(pv2^,pv1^));
+                    if (t>=0) and (t<=1)
+                    then
+                    begin
+                    osp.worldcoord.x:=pv1^.x+t*dir.x;
+                    osp.worldcoord.y:=pv1^.y+t*dir.y;
+                    osp.worldcoord.z:=pv1^.z+t*dir.z;
+                    gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,tv);
+                    osp.dispcoord:=tv;
+                    osp.ostype:=os_perpendicular;
+                    end
+                    else osp.ostype:=os_none;
+                    end
+                    else osp.ostype:=os_none;
+               end;
+     7:begin
+            if ((sysvar.dwg.DWG_OSMode^ and osm_nearest)<>0)and(vertexnum<(VertexArrayInWCS.count-1))
+            then
+            begin
+            pv1:=VertexArrayInWCS.getelement(vertexnum);
+            pv2:=VertexArrayInWCS.getelement(vertexnum+1);
+            dir:=geometry.VertexSub(pv2^,pv1^);
+            tv:=vectordot(dir,GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir);
+            n:=vectordot(GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir,tv);
+            n:=NormalizeVertex(n);
+            v.x:=GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.lbegin.x-pv1^.x;
+            v.y:=GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.lbegin.y-pv1^.y;
+            v.z:=GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.lbegin.z-pv1^.z;
+            d:=scalardot(n,v);
+            e:=scalardot(n,dir);
+            if e<eps then osp.ostype:=os_none
+                     else
+                         begin
+                              if d<eps then osp.ostype:=os_none
+                                       else
+                                           begin
+                                                t:=d/e;
+                                                if (t>1)or(t<0)then osp.ostype:=os_none
+                                                else
+                                                begin
+                                                      osp.worldcoord.x:=pv1^.x+t*dir.x;
+                                                      osp.worldcoord.y:=pv1^.y+t*dir.y;
+                                                      osp.worldcoord.z:=pv1^.z+t*dir.z;
+                                                      gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,tv);
+                                                      osp.dispcoord:=tv;
+                                                      osp.ostype:=os_nearest;
+                                               end;
+                                           end;
+
+                         end;
+            end
+            else osp.ostype:=os_none;
+       end;
+     end;
+     inc(onlygetsnapcount);
+*)
 end;
 
 begin

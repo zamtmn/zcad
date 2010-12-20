@@ -661,6 +661,8 @@ begin
                    end;
 end;
 function ObjOrRecordRead(var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:GDBString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
+type
+    trrstate=(fields,metods);
 var parseerror{,parsesuberror}:GDBBoolean;
     parseresult{,parsesubresult}:PGDBGDBStringArray;
     count,typ:GDBInteger;
@@ -670,7 +672,7 @@ var parseerror{,parsesuberror}:GDBBoolean;
 //  indmin, indcount, size: GDBLongword;
 //  etd:PUserTypeDescriptor;
 //  addtype:GDBBoolean;
-  state:(fields,metods);
+  state:trrstate;
   fieldsmode:(primary,calced);
   fd:FieldDescriptor;
   //a:word;

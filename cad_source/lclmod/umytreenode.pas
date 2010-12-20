@@ -308,6 +308,7 @@ constructor TFreedForm.myCreate(TheOwner: TComponent; _var:Pointer);
 begin
      inherited create(TheOwner);
      PVariable:=_var;
+     self.FormStyle:=fsStayOnTop;
      self.onclose:=self.FormClose;
 end;
 

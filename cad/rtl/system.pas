@@ -136,7 +136,7 @@ OutBound4V=array [0..3]of GDBvertex;
 Proj4V2DI=array [0..3]of GDBvertex2DI;
 PGDBQuad3d=^GDBQuad3d;
 GDBQuad2d=array[0..3] of GDBvertex2D;
-GDBQuad3d=array[0..3] of GDBvertex;
+GDBQuad3d={array[0..3] of GDBvertex}OutBound4V;
 PGDBLineProj=^GDBLineProj;
 GDBLineProj=array[0..6] of GDBvertex2D;
 GDBplane=record
@@ -412,7 +412,10 @@ GDBPolyline2DArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex2D*)
                       constructor initnul;
                       function onmouse:GDBBoolean;virtual;abstract;
                       procedure DrawGeometry;virtual;abstract;
+                      procedure optimize;virtual;abstract;
+                      function _optimize:GDBBoolean;virtual;abstract;
                       function inrect:GDBBoolean;virtual;abstract;
+                      function ispointinside(point:GDBVertex2D):GDBBoolean;virtual;abstract;
                 end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBPolyPoint2DArray.pas
 PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;
@@ -463,6 +466,7 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           procedure freeelement(p:GDBPointer);virtual;abstract;
                           procedure sort;virtual;abstract;
                           function add(p:GDBPointer):TArrayIndex;virtual;abstract;
+                          function addutoa(p:GDBPointer):TArrayIndex;
                           function addwithscroll(p:GDBPointer):GDBInteger;virtual;abstract;
                           function GetLengthWithEOL:GDBInteger;
                           function GetTextWithEOL:GDBString;
@@ -864,6 +868,7 @@ pvarmanager=^varmanager;
 varmanager=object(varmanagerdef)
                  constructor init;
                  function findvardesc(varname:GDBString): pvardesk;virtual;abstract;
+                 function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;abstract;
                  procedure createvariable(varname:GDBString; var vd:vardesk);virtual;abstract;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBLongword;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;abstract;
                  destructor done;virtual;abstract;
@@ -1559,13 +1564,16 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  Width2D_in_OCS_Array:GDBLineWidthArray;(*saved_to_shd*)
                  Width3D_in_WCS_Array:GDBOpenArray;
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
-                 Square:GDBdouble;(*Ориентированная площадь*)
+                 snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
+                 Square:GDBdouble;(*'Ориентированная площадь'*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul;
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
                  procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
                  procedure Format;virtual;abstract;
+                 function CalcSquare:GDBDouble;virtual;abstract;
+                 function isPointInside(point:GDBVertex):GDBBoolean;virtual;abstract;
                  procedure createpoint;virtual;abstract;
                  procedure CalcWidthSegment;virtual;abstract;
                  destructor done;virtual;abstract;
@@ -1580,6 +1588,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  procedure getoutbound;virtual;abstract;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
                  //function InRect:TInRect;virtual;abstract;
+                 function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBtext.pas
 PGDBObjText=^GDBObjText;
@@ -1936,6 +1945,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     onCommandStart:comfuncwithoper;
     constructor Init(name:pansichar;func:comfuncwithoper);
     procedure CommandStart(Operands:pansichar); virtual;abstract;
+    procedure CommandCancel; virtual;abstract;
     procedure CommandEnd; virtual;abstract;
   end;
   pCommandRTEdObject=^CommandRTEdObject;
@@ -2227,6 +2237,7 @@ TDrawing=object(TAbstractDrawing)
            constructor init(num:PTUnitManager);
            destructor done;virtual;abstract;
            function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
+           function GetLastSelected:PGDBObjEntity;virtual;abstract;
            //procedure SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
      end;
 PGDBDescriptor=^GDBDescriptor;

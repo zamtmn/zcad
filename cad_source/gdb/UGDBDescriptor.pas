@@ -161,7 +161,7 @@ procedure GDBDescriptor.rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvert
 var i:GDBInteger;
     point:pcontrolpointdesc;
     p:GDBPointer;
-    var m:DMatrix4D;
+    m,mt:DMatrix4D;
     t:gdbvertex;
     tt:dvector4d;
     rtmod:TRTModifyData;
@@ -185,49 +185,31 @@ begin
                if save then
                            save:=save;
                m:=PSelectedObjDesc(md).objaddr^.getownermatrix^;
-               tt:=m[3];
-               //dist.x:=0;
+               //mt:=PSelectedObjDesc(md).objaddr^.CalcObjMatrixWithoutOwner;
+               //m[3][0]:=0;
+               //m[3][1]:=0;
+               //m[3][2]:=0;
                MatrixInvert(m);
-               m[3,0]:=0;
-               m[3,1]:=0;
-               m[3,2]:=0;
-
-               {t.x:=m[0,0];
-               t.y:=m[0,1];
-               t.z:=m[0,2];
-               t:=normalizevertex(t);
-               m[0,0]:=t.x;
-               m[0,1]:=t.y;
-               m[0,2]:=t.z;
-
-               t.x:=m[1,0];
-               t.y:=m[1,1];
-               t.z:=m[1,2];
-               t:=normalizevertex(t);
-               m[1,0]:=t.x;
-               m[1,1]:=t.y;
-               m[1,2]:=t.z;
-
-               t.x:=m[2,0];
-               t.y:=m[2,1];
-               t.z:=m[2,2];
-               t:=normalizevertex(t);
-               m[2,0]:=t.x;
-               m[2,1]:=t.y;
-               m[2,2]:=t.z;}
-
-
-
-
-
-
-
-               //geometry.NormalizeVertex(tt)
-
+               //MatrixInvert(mt);
+               //m[3][0]:=0;
+               //m[3][1]:=0;
+               //m[3][2]:=0;
                t:=VectorTransform3D(dist,m);
 
                rtmod.point:=point^;
-               rtmod.dist:=VectorTransform3D(dist,m);
+               t:=point^.worldcoord;
+               t:=VectorTransform3D(t,m);
+               rtmod.point.worldcoord:=t;
+               //t:=VectorTransform3D(t,mt);
+               //rtmod.point.worldcoord:={point^}VectorTransform3D(point^.worldcoord,m);
+               //rtmod.point.worldcoord:={point^}VectorTransform3D(rtmod.point.worldcoord,mt);
+               mt:=m;
+
+               mt[3][0]:=0;
+               mt[3][1]:=0;
+               mt[3][2]:=0;
+
+               rtmod.dist:=VectorTransform3D(dist,mt);
                rtmod.wc:=VectorTransform3D(wc,m);
 
                if save then

@@ -1750,6 +1750,9 @@ procedure TOGLWnd.showcursor;
     if gdb.GetCurrentDWG.SelObjArray.Count<>0 then gdb.GetCurrentDWG.SelObjArray.drawpoint;
     glColor3f(255, 255, 255);
 
+    glEnable(GL_COLOR_LOGIC_OP);
+    glLogicOp(GL_XOR);
+
     Tempplane:=param.mousefrustumLCS[5];
     tempplane[3]:=(tempplane[3]-param.mousefrustumLCS[4][3])/2;
     {курсор фрустума выделения}
@@ -2121,6 +2124,7 @@ procedure TOGLWnd.showcursor;
     myglend;
     end;
     end;
+    glDisable(GL_COLOR_LOGIC_OP);
   end;
 procedure TOGLWnd.SaveBuffers;
   var
@@ -2471,6 +2475,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     gdb.GetCurrentDWG.ConstructObjRoot.DrawBB;
 
     gdb.GetCurrentDWG.SelObjArray.remappoints;
+    glDisable(GL_STENCIL_TEST);
     gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
     dec(param.subrender);
     showcursor;
@@ -2490,6 +2495,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     GDB.GetCurrentDWG.OGLwindow1.param.scrollmode:=scrollmode;
     gdb.GetCurrentDWG.ConstructObjRoot.DrawBB;
 
+    glDisable(GL_STENCIL_TEST);
     gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
     showcursor;
     dec(param.subrender);

@@ -137,11 +137,18 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                     procedure BuildGeometry;virtual;
                     procedure AddOnTrackAxis(posr:pos_record);virtual;
+
+                    function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
               end;
 {Export-}
 var onlygetsnapcount:GDBInteger;
 implementation
 uses UGDBEntTree,GDBGenericSubEntry,UGDBDescriptor,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+function GDBObjEntity.CalcObjMatrixWithoutOwner:DMatrix4D;
+begin
+     result:=onematrix;
+end;
+
 procedure GDBObjEntity.SetInFrustumFromTree;
 begin
      infrustum:=infrustumactualy;

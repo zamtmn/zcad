@@ -79,7 +79,7 @@ begin
      case rtmod.point.pointtype of
                os_point:begin
 
-                             Local.p_insert:=VertexAdd(rtmod.point.worldcoord, {dist}VectorTransform3D(rtmod.dist,m));
+                             Local.p_insert:=VertexAdd(rtmod.point.worldcoord, rtmod.dist{VectorTransform3D(rtmod.dist,m)});
                          end;
      end;
 end;

@@ -48,7 +48,7 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
 
                procedure Format;virtual;
                procedure CalcObjMatrix;virtual;
-               function CalcObjMatrixWithoutOwner:DMatrix4D;
+               function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
                procedure transform(const t_matrix:DMatrix4D);virtual;
                procedure Renderfeedback;virtual;
                function GetCenterPoint:GDBVertex;virtual;

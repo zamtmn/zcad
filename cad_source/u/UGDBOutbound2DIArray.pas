@@ -90,20 +90,20 @@ var p:PGDBvertex2DI;
 begin
   case count of
                1:begin
-                      myglbegin(GL_POINTS);
+                      oglsm.myglbegin(GL_POINTS);
                       glvertex2iv(@PGDBvertex2DIArray(parray)^[0]);
-                      myglend;
+                      oglsm.myglend;
                  end;
                else
                begin
                     p:=parray;
-                    myglbegin(GL_line_loop);
+                    oglsm.myglbegin(GL_line_loop);
                     for i:=1 to count do
                     begin
                       glvertex2iv(@p^);
                       inc(p);
                     end;
-                    myglend;
+                    oglsm.myglend;
                end;
   end;
 end;

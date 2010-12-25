@@ -78,6 +78,11 @@ GDBvertex=record
                 y:GDBDouble;(*saved_to_shd*)
                 z:GDBDouble;(*saved_to_shd*)
           end;
+GDBvertex3S=record
+                x:GDBFloat;(*saved_to_shd*)
+                y:GDBFloat;(*saved_to_shd*)
+                z:GDBFloat;(*saved_to_shd*)
+          end;
 PGDBLineProp=^GDBLineProp;
 GDBLineProp=record
                   lBegin:GDBvertex;(*'Начало'*)(*saved_to_shd*)

@@ -126,6 +126,8 @@ type
     procedure SaveBuffers;virtual;
     procedure RestoreBuffers;virtual;
     procedure showcursor;
+    procedure LightOn;
+    procedure LightOff;
     procedure startrender;
     procedure endrender;
     procedure mypaint(sender:tobject);
@@ -206,12 +208,14 @@ begin
      middlepoint:=nulvertex;
      pointcount:=0;
      primcount:=0;
+     bathcount:=0;
 end;
 procedure TOGLWnd.endrender;
 begin
     //sysvar.debug.renderdeb.middlepoint:=middlepoint;
     sysvar.debug.renderdeb.pointcount:=pointcount;
     sysvar.debug.renderdeb.primcount:=primcount;
+    sysvar.debug.renderdeb.bathcount:=bathcount;
      if pointcount<>0 then
                           sysvar.debug.renderdeb.middlepoint:=geometry.VertexMulOnSc(middlepoint,1/pointcount);
 end;
@@ -381,18 +385,18 @@ begin
 end;
 procedure TOGLWnd.pushmatrix;
 begin
-  glMatrixMode(GL_PROJECTION);
-  glpushmatrix;
-  glMatrixMode(GL_MODELVIEW);
-  glpushmatrix;
+  oglsm.myglMatrixMode(GL_PROJECTION);
+  oglsm.myglpushmatrix;
+  oglsm.myglMatrixMode(GL_MODELVIEW);
+  oglsm.myglpushmatrix;
 end;
 procedure TOGLWnd.popmatrix;
 begin
-  glMatrixMode(GL_MODELVIEW);
-  glpopmatrix;
-  glMatrixMode(GL_PROJECTION);
-  glpopmatrix;
-  glMatrixMode(GL_MODELVIEW);
+  oglsm.myglMatrixMode(GL_MODELVIEW);
+  oglsm.myglpopmatrix;
+  oglsm.myglMatrixMode(GL_PROJECTION);
+  oglsm.myglpopmatrix;
+  oglsm.myglMatrixMode(GL_MODELVIEW);
 end;
 procedure TOGLWnd.SetOGLMatrix;
 begin
@@ -400,13 +404,13 @@ begin
   glViewport(0, 0, clientWidth, clientHeight);
   glGetIntegerv(GL_VIEWPORT, @gdb.GetCurrentDWG.pcamera^.viewport);
 
-  glMatrixMode(GL_MODELVIEW);
+  oglsm.myglMatrixMode(GL_MODELVIEW);
   glLoadMatrixD(@gdb.GetCurrentDWG.pcamera^.modelMatrixLCS);
 
-  glMatrixMode(GL_PROJECTION);
+  oglsm.myglMatrixMode(GL_PROJECTION);
   glLoadMatrixD(@gdb.GetCurrentDWG.pcamera^.projMatrixLCS);
 
-  glMatrixMode(GL_MODELVIEW);
+  oglsm.myglMatrixMode(GL_MODELVIEW);
 
 
   gdb.GetCurrentDWG.pcamera.getfrustum(@gdb.GetCurrentDWG.pcamera^.modelMatrix,   @gdb.GetCurrentDWG.pcamera^.projMatrix,   gdb.GetCurrentDWG.pcamera^.clip,   gdb.GetCurrentDWG.pcamera^.frustum);
@@ -1142,7 +1146,7 @@ end;
 
 
 
-
+  reprojectaxis;
 
   if (param.md.mode and (MGet3DPoint or MGet3DPointWoOp)) <> 0 then
      sendmousecoordwop(key);
@@ -1157,7 +1161,7 @@ end;
     end;}
      //glGetDoublev(GL_MODELVIEW_MATRIX,@modelMatrix);
   //mouseunproject(param.md.mouse.x, param.md.mouse.y);
-  reprojectaxis;
+  //reprojectaxis;
   if param.seldesc.MouseFrameON then
   begin
     gdb.GetCurrentDWG^.myGluProject2(param.seldesc.Frame13d,
@@ -1190,6 +1194,7 @@ end;
 
   SBTextOut(htext);
   //param.firstdraw:=true;
+  isOpenGLError;
   {repaint;//}draw;//paint;
   inc(sysvar.debug.int1);
   //debugvar(Variables,1);
@@ -1202,7 +1207,7 @@ var
   len: GDBWord;
   matr: {array[0..3, 0..3] of GDBDouble}DMatrix4D;
 begin
-  //exit;
+  exit;
   {FillChar(matr, sizeof(GDBDouble) * 16, 0);
   matr[0, 0] := 1;
   matr[1, 1] := 1;
@@ -1226,19 +1231,19 @@ begin
           2:
             begin
               inc(psymbol, sizeof(GDBLineID));
-              myglbegin(GL_lines);
+              oglsm.myglbegin(GL_lines);
               glVertex2fv(GDBPointer(psymbol));
               inc(psymbol, 2 * sizeof(fontfloat));
               glVertex2fv(GDBPointer(psymbol));
               inc(psymbol, 2 * sizeof(fontfloat));
-              myglend;
+              oglsm.myglend;
             end;
           4:
             begin
               inc(psymbol, sizeof(GDBPolylineID));
               len := GDBWord(psymbol^);
               inc(psymbol, sizeof(GDBWord));
-              myglbegin(GL_line_strip);
+              oglsm.myglbegin(GL_line_strip);
               glVertex2fv(GDBPointer(psymbol));
               inc(psymbol, 2 * sizeof(fontfloat));
               k := 1;
@@ -1248,7 +1253,7 @@ begin
                 inc(psymbol, 2 * sizeof(fontfloat));
                 inc(k);
               end;
-              myglend;
+              oglsm.myglend;
             end;
         end;
       end;
@@ -1378,13 +1383,13 @@ begin
   CalcOptimalMatrix;
   glcolor3f(1, 1, 1);
   pg := @gridarray;
-  myglbegin(gl_points);
+  oglsm.myglbegin(gl_points);
   for i := 0 to maxgrid * maxgrid do
   begin
     glVertex2fv(@pg^);
     inc(pg);
   end;
-  myglend;
+  oglsm.myglend;
   end;
 end;
 procedure TOGLWnd.GDBActivate;
@@ -1394,6 +1399,7 @@ begin
                                       gdb.SetCurrentDWG(self.pdwg);
                                       self.param.firstdraw:=true;
                                       MyglMakeCurrent(OGLContext);//wglMakeCurrent(DC, hrc);//initogl;
+                                      isOpenGLError;
                                       //{переделать}size;
                                       paint;
                                  end;
@@ -1730,6 +1736,47 @@ procedure drawtick(uID, msg: UINT; dwUse, dw1, dw2: DWord); stdcall;
 begin
      inc(tick);
 end;
+procedure TOGLWnd.LightOn;
+var
+   p:GDBvertex4F;
+begin
+    if SysVar.RD.RD_Light^ then
+    begin
+    oglsm.myglEnable(GL_LIGHTING);
+    oglsm.myglEnable(GL_LIGHT0);
+    oglsm.myglEnable (GL_COLOR_MATERIAL);
+
+    p.x:=gdb.GetCurrentDWG.pcamera^.prop.point.x;
+    p.y:=gdb.GetCurrentDWG.pcamera^.prop.point.y;
+    p.z:=gdb.GetCurrentDWG.pcamera^.prop.point.z;
+    p.w:=0;
+    glLightfv(GL_LIGHT0,
+              GL_POSITION,
+              @p) ;
+  glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,50.000000);
+    p.x:=0;
+    p.y:=0;
+    p.z:=0;
+    p.w:=1;
+  glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,@p);
+  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,1);
+  glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
+  oglsm.myglEnable(GL_COLOR_MATERIAL);
+    end
+       else LightOff;
+    //oglsm.myglDisable(GL_LIGHTING);
+    //oglsm.myglDisable(GL_LIGHT0);
+    //oglsm.myglDisable(GL_COLOR_MATERIAL);
+end;
+procedure TOGLWnd.LightOff;
+var
+   p:GDBvertex4F;
+begin
+    oglsm.myglDisable(GL_LIGHTING);
+    oglsm.myglDisable(GL_LIGHT0);
+    oglsm.myglDisable(GL_COLOR_MATERIAL);
+end;
+
 procedure TOGLWnd.showcursor;
   var
     i, j: GDBInteger;
@@ -1748,28 +1795,35 @@ procedure TOGLWnd.showcursor;
                             exit;
     CalcOptimalMatrix;
     if gdb.GetCurrentDWG.SelObjArray.Count<>0 then gdb.GetCurrentDWG.SelObjArray.drawpoint;
+    //oglsm.mytotalglend;
+    //isOpenGLError;
     glColor3f(255, 255, 255);
 
-    glEnable(GL_COLOR_LOGIC_OP);
-    glLogicOp(GL_XOR);
+    oglsm.myglEnable(GL_COLOR_LOGIC_OP);
+    oglsm.myglLogicOp(GL_OR);
 
     Tempplane:=param.mousefrustumLCS[5];
     tempplane[3]:=(tempplane[3]-param.mousefrustumLCS[4][3])/2;
     {курсор фрустума выделения}
     if (param.md.mode and MGetSelectObject) <> 0 then
     begin
-    myglbegin(GL_LINE_loop);
     tv1:=PointOf3PlaneIntersect(param.mousefrustumLCS[0],param.mousefrustumLCS[3],Tempplane);
-                   glVertex3dv(@tv1);
     tv2:=PointOf3PlaneIntersect(param.mousefrustumLCS[1],param.mousefrustumLCS[3],Tempplane);
-                   glVertex3dv(@tv2);
     tv3:=PointOf3PlaneIntersect(param.mousefrustumLCS[1],param.mousefrustumLCS[2],Tempplane);
-                   glVertex3dv(@tv3);
     tv4:=PointOf3PlaneIntersect(param.mousefrustumLCS[0],param.mousefrustumLCS[2],Tempplane);
+    oglsm.myglbegin(GL_LINES{_loop});
+                   glVertex3dv(@tv1);
+                   glVertex3dv(@tv2);
+                   glVertex3dv(@tv2);
+                   glVertex3dv(@tv3);
+                   glVertex3dv(@tv3);
                    glVertex3dv(@tv4);
-    myglend;
+                   glVertex3dv(@tv4);
+                   glVertex3dv(@tv1);
+    oglsm.myglend;
     end;
-
+    //oglsm.mytotalglend;
+    //isOpenGLError;
     {оси курсора}
 
     {myglbegin(GL_LINES);
@@ -1783,41 +1837,43 @@ procedure TOGLWnd.showcursor;
     begin
     //sv1:=VertexAdd(param.md.mouse3dcoord,gdb.GetCurrentDWG.pcamera.look);
     //sv1:=gdb.GetCurrentDWG.pcamera.point;
-    sv1:=param.md.mouseray.lbegin;  sv1:=vertexadd(sv1,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
+    sv1:=param.md.mouseray.lbegin;
+    sv1:=vertexadd(sv1,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
 
     plx:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,gdb.GetCurrentDWG.pcamera^.CamCSOffset),
                         vertexadd(VertexAdd(param.md.mouse3dcoord,xWCS{VertexMulOnSc(xWCS,oneVertexlength(param.md.mouse3dcoord))}),gdb.GetCurrentDWG.pcamera^.CamCSOffset));
-
+    //oglsm.mytotalglend;
+    //isOpenGLError;
+    oglsm.myglbegin(GL_LINES);
     if sysvar.DISP.DISP_ColorAxis^ then glColor3f(255, 0, 0);
-    myglbegin(GL_LINES);
     tv1:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[0],plx,Tempplane);
     //tv1:=sv1;
     tv2:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[1],plx,Tempplane);
      glVertex3dv(@tv1);
      glVertex3dv(@tv2);
-    myglend;
+    oglsm.myglend;
 
     ply:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,gdb.GetCurrentDWG.pcamera^.CamCSOffset),
                         vertexadd(VertexAdd(param.md.mouse3dcoord,yWCS{VertexMulOnSc(xWCS,oneVertexlength(param.md.mouse3dcoord))}),gdb.GetCurrentDWG.pcamera^.CamCSOffset));
    if sysvar.DISP.DISP_ColorAxis^ then glColor3f(0, 255, 0);
-    myglbegin(GL_LINES);
+    oglsm.myglbegin(GL_LINES);
     tv1:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[2],ply,Tempplane);
     tv2:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[3],ply,Tempplane);
      glVertex3dv(@tv1);
      glVertex3dv(@tv2);
-    myglend;
+    oglsm.myglend;
 
     if sysvar.DISP.DISP_DrawZAxis^ then
     begin
     plz:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,gdb.GetCurrentDWG.pcamera^.CamCSOffset),
                         vertexadd(VertexAdd(param.md.mouse3dcoord,zWCS{VertexMulOnSc(xWCS,oneVertexlength(param.md.mouse3dcoord))}),gdb.GetCurrentDWG.pcamera^.CamCSOffset));
     if sysvar.DISP.DISP_ColorAxis^ then glColor3f(0, 0, 255);
-    myglbegin(GL_LINES);
+    oglsm.myglbegin(GL_LINES);
     tv1:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[0],plz,Tempplane);
     tv2:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[1],plz,Tempplane);
      glVertex3dv(@tv1);
      glVertex3dv(@tv2);
-    myglend;
+    oglsm.myglend;
     end;
     end;
 
@@ -1886,36 +1942,42 @@ procedure TOGLWnd.showcursor;
 
 
 
+    //oglsm.mytotalglend;
+    //isOpenGLError;
 
-
-    glMatrixMode(GL_PROJECTION);
+    oglsm.myglMatrixMode(GL_PROJECTION);
     glLoadIdentity;
     glOrtho(0.0, clientwidth, clientheight, 0.0, -1.0, 1.0);
-    glMatrixMode(GL_MODELVIEW);
+    oglsm.myglMatrixMode(GL_MODELVIEW);
     glLoadIdentity;
     glscalef(1, -1, 1);
-    glpushmatrix;
+    oglsm.myglpushmatrix;
     gltranslated(0, -clientheight, 0);
 
     if param.lastonmouseobject<>nil then pGDBObjEntity(param.lastonmouseobject)^.higlight;
+    //oglsm.mytotalglend;
 
-    glpopmatrix;
+    oglsm.myglpopmatrix;
     glColor3ub(0, 100, 100);
-    glpushmatrix;
+    oglsm.myglpushmatrix;
     gltranslated(param.csx.x + 2, -clientheight + param.csx.y - 10, 0);
     textwrite('X');
-    glpopmatrix;
-    glpushmatrix;
+    oglsm.myglpopmatrix;
+    oglsm.myglpushmatrix;
     gltranslated(param.csy.x + 2, -clientheight + param.csy.y - 10, 0);
     textwrite('Y');
-    glpopmatrix;
-    glpushmatrix;
+    oglsm.myglpopmatrix;
+    oglsm.myglpushmatrix;
     gltranslated(param.csz.x + 2, -clientheight + param.csz.y - 10, 0);
     textwrite('Z');
-    glpopmatrix;
+    oglsm.myglpopmatrix;
     glLoadIdentity;
     //glColor3ub(255, 255, 255);
     glcolor3ub(not(sysvar.RD.RD_BackGroundColor^.r),not(sysvar.RD.RD_BackGroundColor^.g),not(sysvar.RD.RD_BackGroundColor^.b));
+
+    //oglsm.mytotalglend;
+    //isOpenGLError;
+
     if not param.seldesc.MouseFrameON then
     begin
       {Курсор в DCS
@@ -1939,26 +2001,36 @@ procedure TOGLWnd.showcursor;
     myglend;
     end;
     }
+
+    oglsm.myglLogicOp(GL_XOR);
+
+    //oglsm.mytotalglend;
+    //isOpenGLError;
+
     if param.seldesc.MouseFrameON then
     begin
       if param.seldesc.MouseFrameInverse then
       begin
       glLineStipple(1, $F0F0);
-      glEnable(GL_LINE_STIPPLE);
+      oglsm.myglEnable(GL_LINE_STIPPLE);
       end;
-      myglbegin(GL_line_loop);
+      oglsm.myglbegin(GL_line_loop);
       glVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame1.y);
       glVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame1.y);
       glVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame2.y);
       glVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame2.y);
-      myglend;
+      oglsm.myglend;
       {myglbegin(GL_lines);
       glVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame1.y);
       glVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame2.y);
       myglend;}
-      if param.seldesc.MouseFrameInverse then glDisable(GL_LINE_STIPPLE);
-      glDisable(GL_TEXTURE_2D);
+      if param.seldesc.MouseFrameInverse then oglsm.myglDisable(GL_LINE_STIPPLE);
+      oglsm.myglDisable(GL_TEXTURE_2D);
     end;
+
+    //oglsm.mytotalglend;
+    //isOpenGLError;
+
     if gdb.GetCurrentDWG<>nil then
 
     //if gdb.GetCurrentDWG.SelObjArray.Count<>0 then gdb.GetCurrentDWG.SelObjArray.drawpoint;
@@ -1968,7 +2040,7 @@ procedure TOGLWnd.showcursor;
     begin
       for i := a to param.ontrackarray.total - 1 do
       begin
-       myglbegin(GL_LINES);
+       oglsm.myglbegin(GL_LINES);
        glcolor3f(1, 1, 0);
         glvertex2d(param.ontrackarray.otrackarray[i].dispcoord.x,
                    clientheight - param.ontrackarray.otrackarray[i].dispcoord.y + marksize);
@@ -1992,10 +2064,14 @@ procedure TOGLWnd.showcursor;
 
 
 
-        myglend;
+        oglsm.myglend;
+
+        //oglsm.mytotalglend;
+        //isOpenGLError;
+
         glLineStipple(1, $3333);
-        glEnable(GL_LINE_STIPPLE);
-        myglbegin(GL_LINES);
+        oglsm.myglEnable(GL_LINE_STIPPLE);
+        oglsm.myglbegin(GL_LINES);
         glcolor3f(1, 1, 1);
         if param.ontrackarray.otrackarray[i].arraydispaxis.Count <> 0 then
         begin;
@@ -2010,81 +2086,159 @@ procedure TOGLWnd.showcursor;
             inc(pt);
           end;
         end;
-        myglend;
-        glDisable(GL_LINE_STIPPLE);
+        oglsm.myglend;
+        //oglsm.mytotalglend;
+        //isOpenGLError;
+        oglsm.myglDisable(GL_LINE_STIPPLE);
       end;
     end;
+
+    //oglsm.mytotalglend;
+    //isOpenGLError;
+
     //{$REGION 'snap'}
     if param.ospoint.ostype <> os_none then
     begin
       glcolor3f(1, 1, 0);
       gltranslated(param.ospoint.dispcoord.x, clientheight - param.ospoint.dispcoord.y,0);
-      gllinewidth(2);
+      oglsm.mygllinewidth(2);
         glscaled(sysvar.DISP.DISP_OSSize^,sysvar.DISP.DISP_OSSize^,sysvar.DISP.DISP_OSSize^);
         if (param.ospoint.ostype = os_begin)or(param.ospoint.ostype = os_end) then
-        begin myglbegin(GL_line_loop);
+        begin oglsm.myglbegin(GL_line_loop);
               glVertex2d(-1, 1);
               glVertex2d(1, 1);
               glVertex2d(1, -1);
               glVertex2d(-1, -1);
-              myglend;
+              oglsm.myglend;
         end
         else
         if (param.ospoint.ostype = os_midle) then
-        begin myglbegin(GL_line_loop);glVertex2d(0, -1);
-        glVertex2d(0.8660254037844, 0.5);glVertex2d(-0.8660254037844,0.5);myglend;end
+        begin oglsm.myglbegin(GL_lines{_loop});
+                  glVertex2f(0, -1);
+                  glVertex2f(0.8660254037844, 0.5);
+                  glVertex2f(0.8660254037844, 0.5);
+                  glVertex2f(-0.8660254037844,0.5);
+                  glVertex2f(-0.8660254037844,0.5);
+                  glVertex2f(0, -1);
+              oglsm.myglend;end
         else
         if (param.ospoint.ostype = os_1_4)or(param.ospoint.ostype = os_3_4) then
-        begin myglbegin(GL_lines);glVertex2d(-0.5, 1);
-        glVertex2d(-0.5, -1);glVertex2d(-0.2, -1);
-        glVertex2d(0.15, 1);glVertex2d(0.5, -1);glVertex2d(0.15, 1);myglend;end
+        begin oglsm.myglbegin(GL_lines);
+                                       glVertex2f(-0.5, 1);
+                                       glVertex2f(-0.5, -1);
+                                       glVertex2f(-0.2, -1);
+                                       glVertex2f(0.15, 1);
+                                       glVertex2f(0.5, -1);
+                                       glVertex2f(0.15, 1);
+              oglsm.myglend;end
         else
-        if (param.ospoint.ostype = os_center)then circlepointoflod[8].DrawGeometry
+        if (param.ospoint.ostype = os_center)then
+                                                 circlepointoflod[8].DrawGeometry
         else
         if (param.ospoint.ostype = os_q0)or(param.ospoint.ostype = os_q1)
          or(param.ospoint.ostype = os_q2)or(param.ospoint.ostype = os_q3) then
-        begin myglbegin(GL_line_loop);glVertex2d(-1, 0);glVertex2d(0, 1);
-              glVertex2d(1, 0);glVertex2d(0, -1);myglend;end
+        begin oglsm.myglbegin(GL_lines{_loop});
+                                            glVertex2f(-1, 0);
+                                            glVertex2f(0, 1);
+                                            glVertex2f(0, 1);
+                                            glVertex2f(1, 0);
+                                            glVertex2f(1, 0);
+                                            glVertex2f(0, -1);
+                                            glVertex2f(0, -1);
+                                            glVertex2f(-1, 0);
+              oglsm.myglend;end
         else
         if (param.ospoint.ostype = os_1_3)or(param.ospoint.ostype = os_2_3) then
-        begin myglbegin(GL_lines);glVertex2d(-0.5, 1);glVertex2d(-0.5, -1);
-              glVertex2d(0, 1);glVertex2d(0, -1);glVertex2d(0.5, 1);glVertex2d(0.5, -1);myglend;end
+        begin oglsm.myglbegin(GL_lines);
+                                        glVertex2f(-0.5, 1);
+                                        glVertex2f(-0.5, -1);
+                                        glVertex2f(0, 1);
+                                        glVertex2f(0, -1);
+                                        glVertex2f(0.5, 1);
+                                        glVertex2f(0.5, -1);
+              oglsm.myglend;end
         else
         if (param.ospoint.ostype = os_point) then
-        begin myglbegin(GL_lines);glVertex2d(-1, 1);glVertex2d(1, -1);glVertex2d(-1, -1);
-              glVertex2d(1, 1);myglend;end
+        begin oglsm.myglbegin(GL_lines);
+                                        glVertex2f(-1, 1);
+                                        glVertex2f(1, -1);
+                                        glVertex2f(-1, -1);
+                                        glVertex2f(1, 1);
+              oglsm.myglend;end
         else
         if (param.ospoint.ostype = os_intersection) then
-        begin myglbegin(GL_lines);glVertex2d(-1, 1);glVertex2d(1, -1);glVertex2d(-1, -1);
-              glVertex2d(1, 1);myglend;end
+        begin oglsm.myglbegin(GL_lines);
+                                        glVertex2f(-1, 1);
+                                        glVertex2f(1, -1);
+                                        glVertex2f(-1, -1);
+                                        glVertex2f(1, 1);
+              oglsm.myglend;end
         else
         if (param.ospoint.ostype = os_apparentintersection) then
-        begin myglbegin(GL_lines);glVertex2d(-1, 1);glVertex2d(1, -1);glVertex2d(-1, -1);
-              glVertex2d(1, 1);myglend;myglbegin(GL_line_loop);glVertex2d(-1, 1);
-              glVertex2d(1, 1);glVertex2d(1, -1);glVertex2d(-1, -1);myglend;end
+        begin oglsm.myglbegin(GL_lines);
+                                        glVertex2f(-1, 1);
+                                        glVertex2f(1, -1);
+                                        glVertex2f(-1, -1);
+                                        glVertex2f(1, 1);
+              oglsm.myglend;oglsm.myglbegin(GL_lines{_loop});
+                                        glVertex2f(-1, 1);
+                                        glVertex2f(1, 1);
+                                        glVertex2f(1, 1);
+                                        glVertex2f(1, -1);
+                                        glVertex2f(1, -1);
+                                        glVertex2f(-1, -1);
+                                        glVertex2f(-1, -1);
+                                        glVertex2f(-1, 1);
+              oglsm.myglend;end
         else
         if (param.ospoint.ostype = os_textinsert) then
-        begin myglbegin(GL_lines);glVertex2d(-1, 0);glVertex2d(1, 0);glVertex2d(0, 1);
-              glVertex2d(0, -1);myglend;end
+        begin oglsm.myglbegin(GL_lines);
+                                        glVertex2f(-1, 0);
+                                        glVertex2f(1, 0);
+                                        glVertex2f(0, 1);
+                                        glVertex2f(0, -1);
+               oglsm.myglend;end
         else
         if (param.ospoint.ostype = os_perpendicular) then
-        begin myglbegin(GL_LINE_STRIP);glVertex2d(-1, -1);glVertex2d(-1, 1);glVertex2d(1,1);
-              myglend;myglbegin(GL_LINE_STRIP);glVertex2d(-1, 0);glVertex2d(0, 0);glVertex2d(0,1);myglend;end
+        begin oglsm.myglbegin(GL_LINES{_STRIP});
+                                            glVertex2f(-1, -1);
+                                            glVertex2f(-1, 1);
+                                            glVertex2f(-1, 1);
+                                            glVertex2f(1,1);
+              oglsm.myglend;
+              oglsm.myglbegin(GL_LINES{_STRIP});
+                                            glVertex2f(-1, 0);
+                                            glVertex2f(0, 0);
+                                            glVertex2f(0, 0);
+                                            glVertex2f(0,1);
+              oglsm.myglend;end
         else
         if (param.ospoint.ostype = os_trace) then
         begin
-             myglbegin(GL_LINES);
-                       glVertex2d(-1, -0.5);glVertex2d(1, -0.5);
-                       glVertex2d(-1,  0.5);glVertex2d(1,  0.5);
-              myglend;
+             oglsm.myglbegin(GL_LINES);
+                       glVertex2f(-1, -0.5);glVertex2f(1, -0.5);
+                       glVertex2f(-1,  0.5);glVertex2f(1,  0.5);
+              oglsm.myglend;
         end
         else if (param.ospoint.ostype = os_nearest) then
-        begin myglbegin(GL_line_loop);glVertex2d(-1, 1);glVertex2d(1, 1);glVertex2d(-1, -1);
-              glVertex2d(1, -1);myglend;end;
-      gllinewidth(1);
+        begin oglsm.myglbegin(GL_lines{_loop});
+                                            glVertex2d(-1, 1);
+                                            glVertex2d(1, 1);
+                                            glVertex2d(1, 1);
+                                            glVertex2d(-1, -1);
+                                            glVertex2d(-1, -1);
+                                            glVertex2d(1, -1);
+                                            glVertex2d(1, -1);
+                                            glVertex2d(-1, 1);
+              oglsm.myglend;end;
+      oglsm.mygllinewidth(1);
     end;
+
+    //oglsm.mytotalglend;
+    //isOpenGLError;
+
    //{$ENDREGION}
-    glMatrixMode(GL_PROJECTION);
+    oglsm.myglMatrixMode(GL_PROJECTION);
     //glLoadIdentity;
     //gdb.GetCurrentDWG.pcamera^.projMatrix:=onematrix;
     if gdb.GetCurrentDWG<>nil then
@@ -2104,14 +2258,14 @@ procedure TOGLWnd.showcursor;
                -gdb.GetCurrentDWG.pcamera^.point.z + gdb.GetCurrentDWG.pcamera^.look.z,
                 gdb.GetCurrentDWG.pcamera^.ydir.x, gdb.GetCurrentDWG.pcamera^.ydir.y, gdb.GetCurrentDWG.pcamera^.ydir.z);
     gltranslated(0, 0, -500);
-    glMatrixMode(GL_MODELVIEW);
+    oglsm.myglMatrixMode(GL_MODELVIEW);
     glLoadIdentity;
-    glDisable(GL_LIGHTING);
+    oglsm.myglDisable(GL_LIGHTING);
 }
     CalcOptimalMatrix;
     if param.cslen<>0 then {переделать}
     begin
-    myglbegin(GL_lines);
+    oglsm.myglbegin(GL_lines);
     glColor3ub(255, 0, 0);
     myglVertex3d(param.CSIconCoord);
     myglVertex3d(createvertex(param.CSIconCoord.x + 100/param.cslen, param.CSIconCoord.y , param.CSIconCoord.z));
@@ -2121,17 +2275,20 @@ procedure TOGLWnd.showcursor;
     glColor3ub(0, 0, 255);
     myglVertex3d(param.CSIconCoord);
     myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y, param.CSIconCoord.z + 100/param.cslen));
-    myglend;
+    oglsm.myglend;
     end;
     end;
-    glDisable(GL_COLOR_LOGIC_OP);
+    //oglsm.mytotalglend;
+    //isOpenGLError;
+    oglsm.myglDisable(GL_COLOR_LOGIC_OP);
   end;
 procedure TOGLWnd.SaveBuffers;
   var
     scrx,scry,texture{,e}:integer;
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SaveBuffers',lp_incPos);{$ENDIF};
-  glEnable(GL_TEXTURE_2D);
+  oglsm.myglEnable(GL_TEXTURE_2D);
+  //isOpenGLError;
 
    scrx:=0;
    scry:=0;
@@ -2150,7 +2307,7 @@ begin
    until scry>clientheight;
 
 
-  glDisable(GL_TEXTURE_2D);
+  oglsm.myglDisable(GL_TEXTURE_2D);
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SaveBuffers----{end}',lp_decPos);{$ENDIF}
 end;
 procedure TOGLWnd.RestoreBuffers;
@@ -2158,14 +2315,14 @@ procedure TOGLWnd.RestoreBuffers;
     scrx,scry,texture{,e}:integer;
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers',lp_incPos);{$ENDIF};
-  glEnable(GL_TEXTURE_2D);
-  glDisable(GL_DEPTH_TEST);
-       glMatrixMode(GL_PROJECTION);
-       glPushMatrix;
+  oglsm.myglEnable(GL_TEXTURE_2D);
+  oglsm.myglDisable(GL_DEPTH_TEST);
+       oglsm.myglMatrixMode(GL_PROJECTION);
+       oglsm.myglPushMatrix;
        glLoadIdentity;
        glOrtho(0.0, ClientWidth, 0.0, ClientHeight, -10.0, 10.0);
-       glMatrixMode(GL_MODELVIEW);
-       glPushMatrix;
+       oglsm.myglMatrixMode(GL_MODELVIEW);
+       oglsm.myglPushMatrix;
        glLoadIdentity;
   begin
    scrx:=0;
@@ -2176,7 +2333,7 @@ begin
          glbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
          //isOpenGLError;
          glColor3f(1, 1, 1);
-         myglbegin(GL_quads);
+         oglsm.myglbegin(GL_quads);
                  glTexCoord2d(0,0);
                  glVertex3d(scrx,scry,0);
                  glTexCoord2d(1,0);
@@ -2185,7 +2342,8 @@ begin
                  glVertex3d(scrx+texturesize,scry+texturesize,0);
                  glTexCoord2d(0,1);
                  glVertex3d(scrx,scry+texturesize,0);
-         myglend;
+         oglsm.myglend;
+         oglsm.mytotalglend;
          //isOpenGLError;
          scrx:=scrx+texturesize;
          inc(texture);
@@ -2194,11 +2352,11 @@ begin
    scry:=scry+texturesize;
    until scry>clientheight;
   end;
-  glDisable(GL_TEXTURE_2D);
-       glPopMatrix;
-       glMatrixMode(GL_PROJECTION);
-       glPopMatrix;
-       glMatrixMode(GL_MODELVIEW);
+  oglsm.myglDisable(GL_TEXTURE_2D);
+       oglsm.myglPopMatrix;
+       oglsm.myglMatrixMode(GL_PROJECTION);
+       oglsm.myglPopMatrix;
+       oglsm.myglMatrixMode(GL_MODELVIEW);
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers----{end}',lp_decPos);{$ENDIF}
 end;
 procedure TOGLWnd.finishdraw;
@@ -2234,6 +2392,7 @@ var
 
   const msec=1;
 begin
+  //isOpenGLError;
   if not assigned(gdb.GetCurrentDWG) then exit;
 LPTime:=now();
 if param.firstdraw then
@@ -2258,29 +2417,29 @@ if (clientwidth=0)or(clientheight=0) then
                sysvar.RD.RD_BackGroundColor^.a/255);
 
 
-  {glEnable(GL_DEPTH_TEST);
-  glDISABLE(GL_LIGHTING);}
+  {oglsm.myglEnable(GL_DEPTH_TEST);
+  oglsm.myglDisable(GL_LIGHTING);}
   //isOpenGLError;
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_STENCIL_TEST);
+  oglsm.myglEnable(GL_DEPTH_TEST);
+  oglsm.myglEnable(GL_STENCIL_TEST);
 
   if SysVar.RD.RD_LineSmooth^ then
                                   begin
-                                       glEnable( GL_BLEND );
+                                       oglsm.myglEnable( GL_BLEND );
                                        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-                                       glEnable(GL_LINE_SMOOTH);
+                                       oglsm.myglEnable(GL_LINE_SMOOTH);
                                        glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
                                   end
                               else
                                   begin
-                                       glDisable(GL_BLEND);
-                                       glDisable(GL_LINE_SMOOTH);
+                                       oglsm.myglDisable(GL_BLEND);
+                                       oglsm.myglDisable(GL_LINE_SMOOTH);
                                   end;
  if gdb.GetCurrentROOT.ObjArray.Count=1 then
                                                     tick:=0;
 
- glStencilFunc(gl_always,0,1);
- glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
+ oglsm.myglStencilFunc(gl_always,0,1);
+ oglsm.myglStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
 
 
   if gdb.GetCurrentDWG<>nil then
@@ -2303,7 +2462,7 @@ if (clientwidth=0)or(clientheight=0) then
   end
   else
   begin
-    glDisable(GL_DEPTH_TEST);
+    oglsm.myglDisable(GL_DEPTH_TEST);
     glaccum(GL_return,1);
     inc(param.subrender);
     render(gdb.GetCurrentDWG.ConstructObjRoot);
@@ -2311,14 +2470,14 @@ if (clientwidth=0)or(clientheight=0) then
     dec(param.subrender);
     showcursor;
     CalcOptimalMatrix;
-    glEnable(GL_DEPTH_TEST);
+    oglsm.myglEnable(GL_DEPTH_TEST);
   end;
   end
 else if sysvar.RD.RD_Restore_Mode^=WND_AuxBuffer then
   begin
   if param.firstdraw = true then
   begin
-    glDISABLE(GL_LIGHTING);
+    oglsm.myglDisable(GL_LIGHTING);
     glDrawBuffer(GL_AUX0);
      glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT);
     DrawGrid;
@@ -2327,7 +2486,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_AuxBuffer then
     glDrawBuffer(GL_BACK);
     glReadBuffer(GL_AUX0);
     glcopypixels(0, 0, clientwidth, clientheight, GL_COLOR);
-    glDisable(GL_DEPTH_TEST);
+    oglsm.myglDisable(GL_DEPTH_TEST);
     inc(param.subrender);
     render(gdb.GetCurrentDWG.ConstructObjRoot);
     gdb.GetCurrentDWG.SelObjArray.remappoints;
@@ -2338,7 +2497,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_AuxBuffer then
   end
   else
   begin
-    glDisable(GL_DEPTH_TEST);
+    oglsm.myglDisable(GL_DEPTH_TEST);
     begin
          glDrawBuffer(GL_BACK);
          glReadBuffer(GL_AUX0);
@@ -2350,7 +2509,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_AuxBuffer then
     showcursor;
     CalcOptimalMatrix;
     dec(param.subrender);
-    glEnable(GL_DEPTH_TEST);
+    oglsm.myglEnable(GL_DEPTH_TEST);
     glReadBuffer(GL_BACK);
   end;
   end
@@ -2359,7 +2518,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_DrawPixels then
   if param.firstdraw = true then
   begin
      glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT);
-    glDISABLE(GL_LIGHTING);
+    oglsm.myglDisable(GL_LIGHTING);
     DrawGrid;
     render(gdb.GetCurrentROOT^);
     glreadpixels(0, 0, clientwidth, clientheight, GL_BGRA_EXT, gl_unsigned_Byte, param.pglscreen);
@@ -2375,22 +2534,22 @@ else if sysvar.RD.RD_Restore_Mode^=WND_DrawPixels then
   begin
 
 
-    glDisable(GL_DEPTH_TEST);
+    oglsm.myglDisable(GL_DEPTH_TEST);
     begin
-         glMatrixMode(GL_PROJECTION);
-         glPushMatrix;
+         oglsm.myglMatrixMode(GL_PROJECTION);
+         oglsm.myglPushMatrix;
          glLoadIdentity;
          glOrtho(0.0, ClientWidth, 0.0, ClientHeight, -10.0, 1.0);
-         glMatrixMode(GL_MODELVIEW);
-         glPushMatrix;
+         oglsm.myglMatrixMode(GL_MODELVIEW);
+         oglsm.myglPushMatrix;
          glLoadIdentity;
          glRasterPos2i(0, 0);
-         glDisable(GL_DEPTH_TEST);
+         oglsm.myglDisable(GL_DEPTH_TEST);
          glDrawPixels(ClientWidth, ClientHeight, GL_BGRA_EXT, GL_UNSIGNED_Byte, param.pglscreen);
-         glPopMatrix;
-         glMatrixMode(GL_PROJECTION);
-         glPopMatrix;
-         glMatrixMode(GL_MODELVIEW);
+         oglsm.myglPopMatrix;
+         oglsm.myglMatrixMode(GL_PROJECTION);
+         oglsm.myglPopMatrix;
+         oglsm.myglMatrixMode(GL_MODELVIEW);
     end;
     inc(param.subrender);
     render(gdb.GetCurrentDWG.ConstructObjRoot);
@@ -2398,14 +2557,14 @@ else if sysvar.RD.RD_Restore_Mode^=WND_DrawPixels then
     dec(param.subrender);
     showcursor;
     CalcOptimalMatrix;
-    glEnable(GL_DEPTH_TEST);
+    oglsm.myglEnable(GL_DEPTH_TEST);
 
 
   end;
   end
 else if sysvar.RD.RD_Restore_Mode^=WND_NewDraw then
   begin
-    glDISABLE(GL_LIGHTING);
+    oglsm.myglDisable(GL_LIGHTING);
      glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT);
     DrawGrid;
     inc(param.subrender);
@@ -2423,28 +2582,40 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
   begin
   if param.firstdraw = true then
   begin
+    //isOpenGLError;
+    oglsm.mytotalglend;
+
     glReadBuffer(GL_back);
      glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT);
     //DrawGrid;
 
-    //glEnable(GL_STENCIL_TEST);
+    //oglsm.myglEnable(GL_STENCIL_TEST);
     CalcOptimalMatrix;
     if sysvar.RD.RD_UseStencil<>nil then
     if sysvar.RD.RD_UseStencil^ then
     begin
-    glStencilFunc(GL_NEVER, 1, 0); // значение mask не используется
-    glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
+    oglsm.myglStencilFunc(GL_NEVER, 1, 0); // значение mask не используется
+    oglsm.myglStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
     gdb.GetCurrentDWG.SelObjArray.drawobject(gdb.GetCurrentDWG.pcamera.POSCOUNT);
-    end;
-    //gldisable(GL_LINE_SMOOTH);
-    gllinewidth(1);
-    glpointsize(1);
-    gldisable(gl_point_smooth);
 
-    glStencilFunc(GL_EQUAL,0,1);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    //oglsm.mytotalglend;
+
+    end;
+    //oglsm.myglDisable(GL_LINE_SMOOTH);
+    oglsm.mygllinewidth(1);
+    oglsm.myglpointsize(1);
+    oglsm.myglDisable(gl_point_smooth);
+
+    oglsm.myglStencilFunc(GL_EQUAL,0,1);
+    oglsm.myglStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+    //isOpenGLError;
 
     drawdebuggeometry;
+
+    //oglsm.mytotalglend;
+
+    LightOn;
 
     if (sysvar.DWG.DWG_SystmGeometryDraw^) then
                                                gdb.GetCurrentROOT^.ObjArray.ObjTree.draw;
@@ -2452,17 +2623,25 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
                                               begin
                                               startrender;
                                               gdb.GetCurrentDWG.pcamera.DRAWNOTEND:=treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,lptime);
+                                              //oglsm.mytotalglend;
+                                              //isOpenGLError;
                                               //render(gdb.GetCurrentROOT^);
                                               endrender;
                                               end;
 
 
 
+                                                  //oglsm.mytotalglend;
+
+
     gdb.GetCurrentROOT.DrawBB;
+
+        oglsm.mytotalglend;
+
 
     self.SaveBuffers;
 
-    glDisable(GL_DEPTH_TEST);
+    oglsm.myglDisable(GL_DEPTH_TEST);
     inc(param.subrender);
     if commandmanager.pcommandrunning<>nil then
                                                commandmanager.pcommandrunning^.DrawHeplGeometry;
@@ -2471,19 +2650,38 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     GDB.GetCurrentDWG.OGLwindow1.param.scrollmode:=true;
 
     render(gdb.GetCurrentDWG.ConstructObjRoot);
+
+
+        //oglsm.mytotalglend;
+
+
     GDB.GetCurrentDWG.OGLwindow1.param.scrollmode:=scrollmode;
     gdb.GetCurrentDWG.ConstructObjRoot.DrawBB;
 
+        //oglsm.mytotalglend;
+
+
     gdb.GetCurrentDWG.SelObjArray.remappoints;
-    glDisable(GL_STENCIL_TEST);
+    oglsm.myglDisable(GL_STENCIL_TEST);
     gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
     dec(param.subrender);
+    LightOff;
     showcursor;
+
+        //oglsm.mytotalglend;
+        //isOpenGLError;
+
+
     //param.firstdraw := false;
   end
   else
   begin
+
+      //oglsm.mytotalglend;
+
+    LightOff;
     self.RestoreBuffers;
+    //oglsm.mytotalglend;
     inc(param.subrender);
     if gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count>0 then
                                                     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count:=gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count;
@@ -2492,14 +2690,30 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     scrollmode:=GDB.GetCurrentDWG.OGLwindow1.param.scrollmode;
     GDB.GetCurrentDWG.OGLwindow1.param.scrollmode:=true;
     render(gdb.GetCurrentDWG.ConstructObjRoot);
+
+        //oglsm.mytotalglend;
+
+
     GDB.GetCurrentDWG.OGLwindow1.param.scrollmode:=scrollmode;
     gdb.GetCurrentDWG.ConstructObjRoot.DrawBB;
 
-    glDisable(GL_STENCIL_TEST);
+        //oglsm.mytotalglend;
+
+
+
+    oglsm.myglDisable(GL_STENCIL_TEST);
     gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
+
+        //oglsm.mytotalglend;
+
+
     showcursor;
+
+        //oglsm.mytotalglend;
+
+
     dec(param.subrender);
-    glEnable(GL_DEPTH_TEST);
+    oglsm.myglEnable(GL_DEPTH_TEST);
   end;
   end
   end
@@ -2512,6 +2726,8 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
 
   //------------------------------------------------------------------MySwapBuffers(OGLContext);//SwapBuffers(DC);
 
+  oglsm.mytotalglend;
+  isOpenGLError;
   {glFlush;
   glFinish;}
   self.SwapBuffers;
@@ -3091,7 +3307,8 @@ begin
                       if (osp.radius<sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1) then copyospoint(param.ospoint,osp);
                  end
                  else
-                 if (osp.radius<param.ospoint.radius) then copyospoint(param.ospoint,osp);
+                 //if (osp.radius<param.ospoint.radius) then copyospoint(param.ospoint,osp);
+                 if param.ospoint.ostype=os_none        then copyospoint(param.ospoint,osp);
 
             end
             end;
@@ -3119,7 +3336,9 @@ end;
 procedure TOGLWND.CreateScrbuf(w,h:integer);
 var scrx,scry,texture{,e}:integer;
 begin
-     glEnable(GL_TEXTURE_2D);
+     //oglsm.mytotalglend;
+
+     oglsm.myglEnable(GL_TEXTURE_2D);
      scrx:=0;  { TODO : Сделать генер текстур пакетом }
      scry:=0;
      texture:=0;
@@ -3143,7 +3362,7 @@ begin
            scrx:=0;
            scry:=scry+texturesize;
      until scry>h;
-     glDisable(GL_TEXTURE_2D);
+     oglsm.myglDisable(GL_TEXTURE_2D);
 end;
 
 procedure TOGLWnd._onresize;
@@ -3177,7 +3396,8 @@ begin
   param.width := clientwidth;
   param.firstdraw := true;
   //draw;
-  paint;
+  //paint;
+  self.Invalidate;
 
   end;
 end;
@@ -3613,8 +3833,8 @@ begin
                                       end;
 
 }
-  glMatrixMode(GL_Projection);
-  glpushmatrix;
+  oglsm.myglMatrixMode(GL_Projection);
+  oglsm.myglpushmatrix;
   glLoadIdentity;
   gluPickMatrix(param.md.glmouse.x, {gdb.GetCurrentDWG.pcamera^.viewport[3]-} param.md.glmouse.y, sysvar.DISP.DISP_CursorSize^ * 2, sysvar.DISP.DISP_CursorSize^ * 2, PTViewPortArray(@gdb.GetCurrentDWG.pcamera^.viewport)^);
   {if param.projtype = ProjParalel then
@@ -3632,8 +3852,8 @@ begin
   param.mouseclipmatrix := MatrixMultiply(gdb.GetCurrentDWG.pcamera^.projMatrix, tm);
   param.mouseclipmatrix := MatrixMultiply(gdb.GetCurrentDWG.pcamera^.modelMatrix, param.mouseclipmatrix);
   param.mousefrustum := calcfrustum(@param.mouseclipmatrix);
-  glpopmatrix;
-  glMatrixMode(GL_MODELVIEW);
+  oglsm.myglpopmatrix;
+  oglsm.myglMatrixMode(GL_MODELVIEW);
 end;
 {procedure startup;
 begin

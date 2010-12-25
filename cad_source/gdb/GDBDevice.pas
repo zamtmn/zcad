@@ -257,11 +257,11 @@ begin
   begin
   if p<>nil then
   repeat
-        myglbegin(GL_lines);
+        oglsm.myglbegin(GL_lines);
         glVertex3dV(@self.P_insert_in_WCS);
         v:=p^.getcenterpoint;
         glVertex3dV(@v);
-        myglend;
+        oglsm.myglend;
        p:=VarObjArray.iterate(ir);
   until p=nil;
   end;
@@ -282,11 +282,11 @@ begin
   begin
   if p<>nil then
   repeat
-        myglbegin(GL_lines);
+        oglsm.myglbegin(GL_lines);
         glVertex3dV(@self.P_insert_in_WCS);
         v:=p^.getcenterpoint;
         glVertex3dV(@v);
-        myglend;
+        oglsm.myglend;
        p:=VarObjArray.iterate(ir);
   until p=nil;
   end;

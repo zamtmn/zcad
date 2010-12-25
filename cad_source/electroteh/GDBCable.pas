@@ -446,7 +446,7 @@ var
    ir_inNodeArray:itrec;
    notfirst:boolean;
 begin
-  myglbegin(GL_lines);
+  oglsm.myglbegin(GL_lines);
   ptn2:=NodePropArray.beginiterate(ir_inNodeArray);
   ptn1:=NodePropArray.iterate(ir_inNodeArray);
   if ptn1<>nil then
@@ -458,7 +458,7 @@ begin
         ptn1:=NodePropArray.iterate(ir_inNodeArray);
   until ptn1=nil;
   end;
-  myglend;
+  oglsm.myglend;
   if SysVar.DWG.DWG_HelpGeometryDraw^ then
   begin
   notfirst:=false;
@@ -471,17 +471,22 @@ begin
         begin
         if ptn1<>nil then
         begin
-        glpushmatrix;
+        //oglsm.mytotalglend;
+
+        oglsm.myglpushmatrix;
         gltranslated(ptn2^.Nextp.x+gdb.GetCurrentDWG.pcamera^.CamCSOffset.x,ptn2^.Nextp.y+gdb.GetCurrentDWG.pcamera^.CamCSOffset.y,ptn2^.Nextp.z+gdb.GetCurrentDWG.pcamera^.CamCSOffset.z);
         circlepointoflod[8].drawgeometry;
-        glpopmatrix;
+        //oglsm.mytotalglend;
+        oglsm.myglpopmatrix;
         end;
         if notfirst then
         begin
-        glpushmatrix;
+        //oglsm.mytotalglend;
+        oglsm.myglpushmatrix;
         gltranslated(ptn2^.Prevp.x+gdb.GetCurrentDWG.pcamera^.CamCSOffset.x,ptn2^.Prevp.y+gdb.GetCurrentDWG.pcamera^.CamCSOffset.y,ptn2^.Prevp.z+gdb.GetCurrentDWG.pcamera^.CamCSOffset.z);
         circlepointoflod[8].drawgeometry;
-        glpopmatrix;
+        //oglsm.mytotalglend;
+        oglsm.myglpopmatrix;
         end
            else notfirst:=true;
         end
@@ -492,12 +497,12 @@ begin
   end;
   if vertexarrayInWCS.Count>1 then
   begin
-       myglbegin(GL_lines);
+       oglsm.myglbegin(GL_lines);
        myglvertex3dv(@str21);
        myglvertex3dv(@str22);
        myglvertex3dv(@str22);
        myglvertex3dv(@str23);
-       myglend;
+       oglsm.myglend;
   end;
   end;
   drawbb;

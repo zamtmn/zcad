@@ -48,6 +48,23 @@ var p:PGDBPolyVertex2D;
     i:GDBInteger;
 begin
   if count<2 then exit;
+
+
+  if count>1 then
+  begin
+  oglsm.myglbegin(GL_LINES);
+  p:=parray;
+  for i:=0 to count-1 do
+  begin
+          glvertex2dv(@p^.coord);
+          if p^.count<0 then
+                            glvertex2dv(@p^.coord);
+     inc(p);
+  end;
+  oglsm.myglend;
+
+  end;
+(*
   p:=parray;
   counter:=0;
   for i:=0 to count-1 do
@@ -58,12 +75,12 @@ begin
               if p^.count=0 then
                                 begin
                                      if counter=0 then
-                                                      myglbegin(GL_LINES)
+                                                      oglsm.myglbegin(GL_LINES)
                                 end
                               else
                                   begin
-                                       if counter<0 then myglend;
-                                       myglbegin(GL_LINE_STRIP);
+                                       if counter<0 then oglsm.myglend;
+                                       oglsm.myglbegin(GL_LINE_STRIP);
                                        counter:=p^.count;
                                   end;
          end;
@@ -72,10 +89,11 @@ begin
      dec(counter);
      if (counter=0)then
                        begin
-                            myglend;
+                            oglsm.myglend;
                        end;
   end;
   //myglend;
+*)
 end;
 function GDBPolyPoint2DArray.inrect;
 var p,pp:PGDBPolyVertex2D;

@@ -43,6 +43,7 @@ var
   RD_LastRenderTime:GDBInteger;
   RD_LastUpdateTime:GDBInteger;
   RD_MaxRenderTime:GDBInteger;
+  RD_Light:GDBBoolean;
   SAVE_Auto_Interval:GDBInteger;
   SAVE_Auto_Current_Interval:GDBInteger;
   SAVE_Auto_FileName:GDBString;
@@ -107,6 +108,7 @@ begin
   RD_LastRenderTime:=0;
   RD_LastUpdateTime:=0;
   RD_MaxRenderTime:=0;
+  RD_Light:=false;
   SAVE_Auto_Interval:=300;
   SAVE_Auto_Current_Interval:=296;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';

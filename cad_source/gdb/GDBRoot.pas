@@ -21,7 +21,7 @@ unit GDBRoot;
 
 interface
 Uses
-    gl,UGDBEntTree,{UGDBVisibleTreeArray,}
+   OGLSpecFunc, gl,UGDBEntTree,{UGDBVisibleTreeArray,}
 devices,gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry,uunitmanager{,shared};
 type
 {Export+}
@@ -100,10 +100,10 @@ begin
 end;
 procedure GDBObjRoot.DrawWithAttrib;
 begin
-     glpushmatrix;
+     oglsm.myglpushmatrix;
      glmultmatrixd(@objmatrix);
      inherited;//self.ObjArray.DrawWithattrib;
-     glpopmatrix;
+     oglsm.myglpopmatrix;
 
 end;
 function GDBObjRoot.GetMatrix;

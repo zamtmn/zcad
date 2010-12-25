@@ -678,7 +678,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
                 TotalAllocMb,CurrentAllocMB:PGDBInteger;
           end;
   trenderdeb=record
-                   primcount,pointcount:GDBInteger;
+                   primcount,pointcount,bathcount:GDBInteger;
                    middlepoint:GDBVertex;
              end;
   tdebug=record
@@ -741,6 +741,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
             RD_LastUpdateTime:pGDBInteger;(*'Время последнего обновления'*)(*oi_readonly*)
             RD_MaxRenderTime:pGDBInteger;(*'Максимальное время одного прохода рендера'*)
             RD_UseStencil:PGDBBoolean;(*'Использовать Stencil буфер'*)
+            RD_Light:PGDBBoolean;(*'Освещение'*)
             RD_PanObjectDegradation:PGDBBoolean;(*'Деградация при перетаскивании'*)
             RD_LineSmooth:PGDBBoolean;(*'Сглаживание линий'*)
       end;
@@ -1058,6 +1059,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;abstract;
                     procedure BuildGeometry;virtual;abstract;
                     procedure AddOnTrackAxis(posr:pos_record);virtual;abstract;
+                    function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;abstract;
               end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDB3d.pas
 GDBObj3d=object(GDBObjEntity)
@@ -1069,6 +1071,7 @@ GDBObj3DFace=object(GDBObj3d)
                  PInWCS:OutBound4V;(*'Координаты в WCS'*)(*hidden_in_objinsp*)
                  PInDCS:OutBound4V;(*'Координаты в DCS'*)(*hidden_in_objinsp*)
                  normal:GDBVertex;
+                 triangle:GDBBoolean;
                  //ProjPoint:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -1122,7 +1125,7 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit):GDBBoolean;
                procedure Format;virtual;abstract;
                procedure CalcObjMatrix;virtual;abstract;
-               function CalcObjMatrixWithoutOwner:DMatrix4D;
+               function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;abstract;
                procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                procedure Renderfeedback;virtual;abstract;
                function GetCenterPoint:GDBVertex;virtual;abstract;
@@ -1589,6 +1592,8 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
                  //function InRect:TInRect;virtual;abstract;
                  function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;abstract;
+                 function getsnap(var osp:os_record):GDBBoolean;virtual;abstract;
+                 procedure AddOnTrackAxis(posr:pos_record);virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBtext.pas
 PGDBObjText=^GDBObjText;

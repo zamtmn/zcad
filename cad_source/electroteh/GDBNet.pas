@@ -214,23 +214,23 @@ begin
      if graf.Count=0 then exit;
      tgf:=graf.PArray;
      i:=0;
-     glenable(GL_POINT_SMOOTH);
-     glpointsize(10);
+     oglsm.myglEnable(GL_POINT_SMOOTH);
+     oglsm.myglpointsize(10);
      while i<graf.Count do
      begin
      if tgf^.linkcount>2 then
                              begin
-                             myglbegin(GL_points);
+                             oglsm.myglbegin(GL_points);
                              glVertex3dV(@(tgf^.point));
-                             myglend;
+                             oglsm.myglend;
                              end;
                              gdb.GetCurrentDWG.OGLwindow1.pushmatrix;
 
 
-    glMatrixMode(GL_PROJECTION);
+    oglsm.myglMatrixMode(GL_PROJECTION);
     glLoadIdentity;
     glOrtho(0.0, gdb.GetCurrentDWG.OGLwindow1.clientwidth, gdb.GetCurrentDWG.OGLwindow1.clientheight, 0.0, -1.0, 1.0);
-    glMatrixMode(GL_MODELVIEW);
+    oglsm.myglMatrixMode(GL_MODELVIEW);
     glLoadIdentity;
     glscalef(1, -1, 1);
 
@@ -245,8 +245,8 @@ begin
      inc(tgf);
      inc(i);
      end;
-     gldisable(GL_POINT_SMOOTH);
-     glpointsize(1);
+     oglsm.myglDisable(GL_POINT_SMOOTH);
+     oglsm.myglpointsize(1);
      inherited DrawGeometry(lw,infrustumactualy);
 end;
 function GDBObjNet.DeSelect;

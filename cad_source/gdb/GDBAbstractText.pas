@@ -416,7 +416,7 @@ var
    _lod:integer;
 begin
   //exit;
-  glpointsize(1);
+  //oglsm.myglpointsize(1);
   GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender + 1;
   if {true//}(((not GDB.GetCurrentDWG.OGLwindow1.param.scrollmode)or(not sysvar.RD.RD_PanObjectDegradation^)) {and (lod=0)})
   then
@@ -444,12 +444,12 @@ begin
       end
   else
   begin
-       myglbegin(gl_line_loop);
+       oglsm.myglbegin(gl_line_loop);
        myglvertex3dv(@outbound[0]);
        myglvertex3dv(@outbound[1]);
        myglvertex3dv(@outbound[2]);
        myglvertex3dv(@outbound[3]);
-       myglend;
+       oglsm.myglend;
   end;
   GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender - 1;
   inherited;

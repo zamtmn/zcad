@@ -64,12 +64,12 @@ uses UGDBDescriptor,log;
 procedure GDBObjWithLocalCS.higlight;
 begin
   glcolor3ubv(@palette[sysvar.SYS.SYS_SystmGeometryColor^]);
-  myglbegin(GL_lines);
+  oglsm.myglbegin(GL_lines);
   glVertex2d(ProjP_insert.x-10,ProjP_insert.y);
   glVertex2d(ProjP_insert.x+10,ProjP_insert.y);
   glVertex2d(ProjP_insert.x,ProjP_insert.y-10);
   glVertex2d(ProjP_insert.x,ProjP_insert.y+10);
-  myglend;
+  oglsm.myglend;
   if PProjOutBound<>nil then PProjOutBound.DrawGeometry;
 
 end;

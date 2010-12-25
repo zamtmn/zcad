@@ -19,7 +19,7 @@
 unit sharedgdb;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes;
+uses OGLSpecFunc,gdbasetypes;
 procedure redrawoglwnd; export;
 procedure updatevisible; export;
 procedure reloadlayer; export;
@@ -33,6 +33,7 @@ procedure redrawoglwnd; export;
 var
    pdwg:PTDrawing;
 begin
+  isOpenGLError;
   pdwg:=gdb.GetCurrentDWG;
   if pdwg<>nil then
   begin

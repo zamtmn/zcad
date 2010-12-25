@@ -141,7 +141,7 @@ UserTypeDescriptor=object(GDBaseObject)
                 TotalAllocMb,CurrentAllocMB:PGDBInteger;
           end;
   trenderdeb=record
-                   primcount,pointcount:GDBInteger;
+                   primcount,pointcount,bathcount:GDBInteger;
                    middlepoint:GDBVertex;
              end;
   tdebug=record
@@ -204,6 +204,7 @@ UserTypeDescriptor=object(GDBaseObject)
             RD_LastUpdateTime:pGDBInteger;(*'Время последнего обновления'*)(*oi_readonly*)
             RD_MaxRenderTime:pGDBInteger;(*'Максимальное время одного прохода рендера'*)
             RD_UseStencil:PGDBBoolean;(*'Использовать Stencil буфер'*)
+            RD_Light:PGDBBoolean;(*'Освещение'*)
             RD_PanObjectDegradation:PGDBBoolean;(*'Деградация при перетаскивании'*)
             RD_LineSmooth:PGDBBoolean;(*'Сглаживание линий'*)
       end;

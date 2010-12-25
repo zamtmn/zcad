@@ -147,12 +147,12 @@ begin
   {myglbegin(GL_points);
   glVertex3dV(@P_insertInWCS);
   myglend;}
-  myglbegin(GL_LINES);
+  oglsm.myglbegin(GL_LINES);
   glVertex3d(P_insertInWCS.x-0.5,P_insertInWCS.y-0.5,P_insertInWCS.z);
   glVertex3d(P_insertInWCS.x+0.5,P_insertInWCS.y+0.5,P_insertInWCS.z);
   glVertex3d(P_insertInWCS.x-0.5,P_insertInWCS.y+0.5,P_insertInWCS.z);
   glVertex3d(P_insertInWCS.x+0.5,P_insertInWCS.y-0.5,P_insertInWCS.z);
-  myglend;
+  oglsm.myglend;
   inherited;
 end;
 function GDBObjPoint.CalcInFrustum;

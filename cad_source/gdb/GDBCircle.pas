@@ -338,7 +338,7 @@ begin
   Vertex3D_in_WCS_Array.DrawGeometry;
 
   {
-  glpushmatrix;
+  oglsm.myglpushmatrix;
   glmultmatrixd(@objmatrix);
   if (((not poglwnd.scrollmode)or(not sysvar.RD.RD_PanObjectDegradation^)) and (lod>8)) then begin
                                                                                           circlepointoflod[lod].drawgeometry;
@@ -347,7 +347,7 @@ begin
                                                                                           myglend;
                                                                                      end
                                                                                 else circlepointoflod[8].drawgeometry;
-  glpopmatrix;
+  oglsm.myglpopmatrix;
   }
   inherited;
 end;

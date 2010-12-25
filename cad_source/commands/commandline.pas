@@ -19,7 +19,7 @@
 unit commandline;
 {$INCLUDE def.inc}
 interface
-uses strproc,UGDBOpenArrayOfPointer,UDMenuWnd,gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
+uses sysinfo,strproc,UGDBOpenArrayOfPointer,UDMenuWnd,gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
      memman,shared,log;
 type
   GDBcommandmanager=object(GDBcommandmanagerDef)
@@ -109,7 +109,13 @@ begin
   p:=sa.beginiterate(ir);
   if p<>nil then
   repeat
-        execute(pointer(pGDBString(p)^),false);
+        if (uppercase(pGDBString(p)^)<>'ABOUT')then
+                                                    execute(pointer(pGDBString(p)^),false)
+                                                else
+                                                    begin
+                                                         if not sysparam.nosplash then
+                                                                                      execute(pointer(pGDBString(p)^),false)
+                                                    end;
         p:=sa.iterate(ir);
   until p=nil;
   sa.FreeAndDone;

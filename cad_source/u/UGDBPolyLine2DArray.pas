@@ -147,9 +147,9 @@ begin
   if count<2 then exit;
   //p:=parray;
   //counter:=0;
-  myglbegin(GL_LINE_STRIP);
+  oglsm.myglbegin(GL_LINE_STRIP);
   iterategl(@glvertex2dv);
-  myglend;
+  oglsm.myglend;
 end;
 function GDBPolyline2DArray.inrect;
 var p,pp:PGDBVertex2D;

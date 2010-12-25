@@ -30,6 +30,8 @@ GDBObj3DFace=object(GDBObj3d)
                  PInWCS:OutBound4V;(*'Координаты в WCS'*)(*hidden_in_objinsp*)
                  PInDCS:OutBound4V;(*'Координаты в DCS'*)(*hidden_in_objinsp*)
                  normal:GDBVertex;
+                 triangle:GDBBoolean;
+                 n,p1,p2,p3:GDBVertex3S;
                  //ProjPoint:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -91,7 +93,27 @@ begin
                              );
      {if geometry.IsVectorNul(normal) then
                                          normal:=normal;}
+       if geometry.IsPointEqual(PInOCS[2],PInOCS[3])then
+                                                        triangle:=true
+                                                    else
+                                                        triangle:=false;
   calcbb;
+     p1.x:=PInWCS[0].x;
+     p1.y:=PInWCS[0].y;
+     p1.z:=PInWCS[0].z;
+
+     p2.x:=PInWCS[2].x;
+     p2.y:=PInWCS[2].y;
+     p2.z:=PInWCS[2].z;
+
+     p3.x:=PInWCS[3].x;
+     p3.y:=PInWCS[3].y;
+     p3.z:=PInWCS[3].z;
+
+     n.x:=normal.x;
+     n.y:=normal.y;
+     n.z:=normal.z;
+
 end;
 function GDBObj3DFace.GetObjTypeName;
 begin
@@ -140,9 +162,9 @@ procedure GDBObj3DFace.DrawGeometry;
 var
    p:GDBvertex4F;
 begin
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
-	glEnable (GL_COLOR_MATERIAL);
+(*  oglsm.myglEnable(GL_LIGHTING);
+  oglsm.myglEnable(GL_LIGHT0);
+  oglsm.myglEnable (GL_COLOR_MATERIAL);
 
   p.x:=gdb.GetCurrentDWG.pcamera^.prop.point.x;
   p.y:=gdb.GetCurrentDWG.pcamera^.prop.point.y;
@@ -167,20 +189,37 @@ glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,50.000000);
 glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,@p);
 glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,1);
 glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
-glEnable(GL_COLOR_MATERIAL);
-
-
-  myglbegin(GL_QUADS);
+oglsm.myglEnable(GL_COLOR_MATERIAL);
+*)
+  if triangle then
+  begin
+       oglsm.myglbegin(GL_TRIANGLES);
+       glNormal3dV(@normal);
+       myglVertex3dV(@PInwCS[0]);
+       myglVertex3dV(@PInwCS[1]);
+       myglVertex3dV(@PInwCS[2]);
+       (*
+       glNormal3fV(@n);
+       {my}glVertex3fV(@p1);
+       {my}glVertex3fV(@p2);
+       {my}glVertex3fV(@p3);
+        *)
+       oglsm.myglend;
+  end
+     else
+  begin
+  oglsm.myglbegin(GL_QUADS);
   glNormal3dV(@normal);
   myglVertex3dV(@PInwCS[0]);
   myglVertex3dV(@PInwCS[1]);
   myglVertex3dV(@PInwCS[2]);
   myglVertex3dV(@PInwCS[3]);
-  myglend;
+  oglsm.myglend;
+  end;
 
-  glDisable(GL_LIGHTING);
-  glDisable(GL_LIGHT0);
-	glDisable(GL_COLOR_MATERIAL);
+  //oglsm.myglDisable(GL_LIGHTING);
+  //oglsm.myglDisable(GL_LIGHT0);
+  //oglsm.myglDisable(GL_COLOR_MATERIAL);
   inherited;
 
 end;

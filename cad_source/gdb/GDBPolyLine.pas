@@ -95,10 +95,11 @@ end;
 
 procedure GDBObjPolyline.DrawGeometry;
 begin
-  if closed then myglbegin(GL_line_loop)
-            else myglbegin(GL_line_strip);
+     vertexarrayInWCS.DrawGeometryWClosed(closed);
+{  if closed then oglsm.myglbegin(GL_line_loop)
+            else oglsm.myglbegin(GL_line_strip);
   vertexarrayInWCS.iterategl(@myglVertex3dv);
-  myglend;
+  oglsm.myglend;}
 end;
 function GDBObjPolyline.Clone;
 var tpo: PGDBObjPolyLine;

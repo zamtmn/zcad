@@ -2011,7 +2011,7 @@ procedure TOGLWnd.showcursor;
     begin
       if param.seldesc.MouseFrameInverse then
       begin
-      glLineStipple(1, $F0F0);
+      oglsm.myglLineStipple(1, $F0F0);
       oglsm.myglEnable(GL_LINE_STIPPLE);
       end;
       oglsm.myglbegin(GL_line_loop);
@@ -2069,7 +2069,7 @@ procedure TOGLWnd.showcursor;
         //oglsm.mytotalglend;
         //isOpenGLError;
 
-        glLineStipple(1, $3333);
+        oglsm.myglLineStipple(1, $3333);
         oglsm.myglEnable(GL_LINE_STIPPLE);
         oglsm.myglbegin(GL_LINES);
         glcolor3f(1, 1, 1);

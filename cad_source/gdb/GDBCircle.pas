@@ -422,6 +422,9 @@ begin
      end;
      end;
      result:=Vertex3D_in_WCS_Array.onmouse(mf);
+     if not result then
+                       if CalcPointTrueInFrustum(P_insert_in_WCS,mf)=IRFully then
+                                                                                 result:=true;
 end;
 procedure GDBObjCircle.rtsave;
 begin

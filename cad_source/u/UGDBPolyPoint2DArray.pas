@@ -54,7 +54,9 @@ begin
   begin
   oglsm.myglbegin(GL_LINES);
   p:=parray;
-  for i:=0 to count-1 do
+  glvertex2dv(@p^.coord);
+  inc(p);
+  for i:=0 to count-2 do
   begin
           glvertex2dv(@p^.coord);
           if p^.count<0 then

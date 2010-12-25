@@ -48,6 +48,9 @@ type
 
                            _glMatrixMode:GLenum;
 
+                           _LineStipplefactor: GLint;
+                           _LineStipplepattern: GLushort;
+
                            procedure myglbegin(mode:GLenum);
                            procedure myglend;
                            procedure mytotalglend;
@@ -61,6 +64,7 @@ type
                            procedure myglPushMatrix;
                            procedure myglPopMatrix;
                            procedure myglMatrixMode(const mode: GLenum);
+                           procedure myglLineStipple(const factor: GLint; const pattern: GLushort);
                            constructor init;
     end;
 
@@ -76,9 +80,9 @@ function isOpenGLError:GLenum;
 function CalcDisplaySubFrustum(const x,y,w,h:gdbdouble;const mm,pm:DMatrix4D):ClipArray;
 //(const v: PGLdouble); stdcall;
 //procedure myglVertex3dV(V:PGDBVertex);
-procedure myglVertex3dV(const V:PGDBVertex);stdcall;
-procedure myglVertex3d(const V:GDBVertex);stdcall;
-procedure myglVertex(const x,y,z:GDBDouble);stdcall;
+procedure myglVertex3dV(const V:PGDBVertex);inline;
+procedure myglVertex3d(const V:GDBVertex);inline;
+procedure myglVertex(const x,y,z:GDBDouble);inline;
 procedure MyglMakeCurrent(oglc:TOGLContextDesk);
 procedure MySwapBuffers(oglc:TOGLContextDesk);
 procedure MywglDeleteContext(oglc:TOGLContextDesk);
@@ -310,6 +314,20 @@ begin
      _myglLogicOpCode:=opcode;
      end;
 end;
+procedure TOGLStateManager.myglLineStipple(const factor: GLint; const pattern: GLushort);
+begin
+     if
+     (_LineStipplefactor<>factor)or
+     (_LineStipplepattern<>pattern)
+     then
+         begin
+              mytotalglend;
+              glLineStipple(factor,pattern);
+              _LineStipplefactor:=factor;
+              _LineStipplepattern:=pattern;
+         end;
+end;
+
 procedure TOGLStateManager.myglPushMatrix;
 begin
      mytotalglend;
@@ -347,6 +365,9 @@ begin
 
      _myglLogicOpCode:=maxint;
      _glMatrixMode:=maxint;
+
+     _LineStipplefactor:=maxint;
+     _LineStipplepattern:=maxword;
 
 end;
 

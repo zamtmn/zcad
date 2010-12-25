@@ -18,7 +18,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="71"/>
+      <BuildNr Value="77"/>
       <CharSet Value="0000"/>
       <StringTable ProductVersion="0.0.0.8"/>
     </VersionInfo>
@@ -52,15 +52,15 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="230">
+    <Units Count="231">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="zcad"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="8"/>
-        <CursorPos X="12" Y="21"/>
+        <TopLine Value="68"/>
+        <CursorPos X="3" Y="24"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -87,10 +87,12 @@
       <Unit3>
         <Filename Value="geometry.pas"/>
         <UnitName Value="geometry"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="403"/>
-        <CursorPos X="1" Y="431"/>
-        <UsageCount Value="90"/>
+        <TopLine Value="325"/>
+        <CursorPos X="13" Y="351"/>
+        <UsageCount Value="91"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
@@ -114,21 +116,21 @@
       </Unit5>
       <Unit6>
         <Filename Value="def.inc"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="2" Y="30"/>
-        <UsageCount Value="74"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="76"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit6>
       <Unit7>
         <Filename Value="u/UGDBOpenArray.pas"/>
         <UnitName Value="UGDBOpenArray"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="13"/>
-        <CursorPos X="25" Y="36"/>
-        <UsageCount Value="87"/>
+        <TopLine Value="18"/>
+        <CursorPos X="53" Y="41"/>
+        <UsageCount Value="89"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
       <Unit8>
@@ -193,10 +195,10 @@
         <Filename Value="gui/oglwindow.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="oglwindow"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="2312"/>
-        <CursorPos X="24" Y="2345"/>
+        <TopLine Value="2845"/>
+        <CursorPos X="1" Y="2868"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -257,11 +259,11 @@
       <Unit21>
         <Filename Value="gdbase.pas"/>
         <UnitName Value="gdbase"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="48"/>
-        <CursorPos X="12" Y="81"/>
-        <UsageCount Value="88"/>
+        <TopLine Value="81"/>
+        <CursorPos X="1" Y="104"/>
+        <UsageCount Value="90"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit21>
@@ -322,12 +324,10 @@
       <Unit28>
         <Filename Value="gdb/GDBLine.pas"/>
         <UnitName Value="GDBLine"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="365"/>
         <CursorPos X="18" Y="396"/>
-        <UsageCount Value="31"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="33"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit28>
       <Unit29>
@@ -399,10 +399,12 @@
         <Filename Value="gdb/GDBEntity.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GDBEntity"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="451"/>
-        <CursorPos X="42" Y="473"/>
+        <TopLine Value="675"/>
+        <CursorPos X="1" Y="698"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit36>
       <Unit37>
@@ -519,12 +521,11 @@
       <Unit50>
         <Filename Value="OGLSpecFunc.pas"/>
         <UnitName Value="OGLSpecFunc"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="163"/>
-        <CursorPos X="22" Y="208"/>
-        <UsageCount Value="60"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="62"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit50>
@@ -574,12 +575,10 @@
       <Unit56>
         <Filename Value="u/UGDBOutbound2DIArray.pas"/>
         <UnitName Value="UGDBOutbound2DIArray"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="71"/>
         <CursorPos X="1" Y="109"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="13"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit56>
       <Unit57>
@@ -621,9 +620,9 @@
         <Filename Value="u/UOpenArray.pas"/>
         <UnitName Value="UOpenArray"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="4"/>
-        <CursorPos X="1" Y="27"/>
-        <UsageCount Value="7"/>
+        <TopLine Value="1"/>
+        <CursorPos X="52" Y="24"/>
+        <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit61>
       <Unit62>
@@ -905,20 +904,20 @@
       <Unit96>
         <Filename Value="electroteh/GDBCable.pas"/>
         <UnitName Value="GDBCable"/>
-        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="471"/>
         <CursorPos X="29" Y="489"/>
-        <UsageCount Value="12"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="14"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit96>
       <Unit97>
         <Filename Value="../../lazarus/lcl/include/control.inc"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="4542"/>
         <CursorPos X="1" Y="4565"/>
         <UsageCount Value="51"/>
+        <Loaded Value="True"/>
       </Unit97>
       <Unit98>
         <Filename Value="../../pp/rtl/objpas/classes/classesh.inc"/>
@@ -1095,12 +1094,10 @@
       <Unit120>
         <Filename Value="gdbasetypes.pas"/>
         <UnitName Value="gdbasetypes"/>
-        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="4"/>
         <CursorPos X="20" Y="27"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="13"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit120>
       <Unit121>
@@ -1140,12 +1137,10 @@
       <Unit125>
         <Filename Value="gdb/GDB3DFace.pas"/>
         <UnitName Value="GDB3DFace"/>
-        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="182"/>
         <CursorPos X="34" Y="200"/>
-        <UsageCount Value="17"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit125>
       <Unit126>
@@ -1242,10 +1237,12 @@
       <Unit137>
         <Filename Value="u/UGDBOpenArrayOfData.pas"/>
         <UnitName Value="UGDBOpenArrayOfData"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="57"/>
-        <CursorPos X="1" Y="85"/>
-        <UsageCount Value="15"/>
+        <TopLine Value="2"/>
+        <CursorPos X="32" Y="26"/>
+        <UsageCount Value="17"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit137>
       <Unit138>
@@ -1341,12 +1338,10 @@
       <Unit149>
         <Filename Value="gdb/GDBLWPolyLine.pas"/>
         <UnitName Value="GDBLWPolyLine"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="392"/>
         <CursorPos X="33" Y="420"/>
-        <UsageCount Value="28"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="30"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit149>
       <Unit150>
@@ -1556,10 +1551,12 @@
       <Unit174>
         <Filename Value="u/UGDBPoint3DArray.pas"/>
         <UnitName Value="UGDBPoint3DArray"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="51"/>
-        <CursorPos X="46" Y="58"/>
-        <UsageCount Value="11"/>
+        <TopLine Value="19"/>
+        <CursorPos X="1" Y="55"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit174>
       <Unit175>
@@ -1817,11 +1814,11 @@
       <Unit206>
         <Filename Value="../../pp/packages/opengl/src/gl.pp"/>
         <UnitName Value="GL"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="138"/>
-        <CursorPos X="3" Y="161"/>
-        <UsageCount Value="22"/>
+        <TopLine Value="66"/>
+        <CursorPos X="3" Y="89"/>
+        <UsageCount Value="24"/>
         <Loaded Value="True"/>
       </Unit206>
       <Unit207>
@@ -1925,12 +1922,10 @@
       <Unit219>
         <Filename Value="gdb/GDBWithLocalCS.pas"/>
         <UnitName Value="GDBWithLocalCS"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="49"/>
         <CursorPos X="1" Y="75"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="13"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit219>
       <Unit220>
@@ -1963,10 +1958,13 @@
       <Unit223>
         <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
         <UnitName Value="UGDBPolyPoint2DArray"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="38"/>
-        <CursorPos X="3" Y="50"/>
+        <TopLine Value="26"/>
+        <CursorPos X="22" Y="59"/>
         <UsageCount Value="10"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit223>
       <Unit224>
@@ -1999,10 +1997,12 @@
       <Unit227>
         <Filename Value="gdb/GDBCircle.pas"/>
         <UnitName Value="GDBCircle"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="327"/>
-        <CursorPos X="29" Y="338"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="413"/>
+        <CursorPos X="95" Y="427"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit227>
       <Unit228>
@@ -2020,127 +2020,138 @@
         <CursorPos X="11" Y="168"/>
         <UsageCount Value="10"/>
       </Unit229>
+      <Unit230>
+        <Filename Value="gdb/GDBHelpObj.pas"/>
+        <UnitName Value="GDBHelpObj"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="25"/>
+        <CursorPos X="19" Y="44"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit230>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="OGLSpecFunc.pas"/>
-        <Caret Line="207" Column="1" TopLine="176"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="61" Column="1" TopLine="24"/>
       </Position1>
       <Position2>
-        <Filename Value="OGLSpecFunc.pas"/>
-        <Caret Line="208" Column="1" TopLine="176"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="62" Column="1" TopLine="24"/>
       </Position2>
       <Position3>
-        <Filename Value="OGLSpecFunc.pas"/>
-        <Caret Line="214" Column="1" TopLine="176"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="59" Column="1" TopLine="24"/>
       </Position3>
       <Position4>
-        <Filename Value="gdb/GDBLWPolyLine.pas"/>
-        <Caret Line="421" Column="1" TopLine="392"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="60" Column="1" TopLine="24"/>
       </Position4>
       <Position5>
-        <Filename Value="gdb/GDBLWPolyLine.pas"/>
-        <Caret Line="422" Column="1" TopLine="392"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="61" Column="1" TopLine="24"/>
       </Position5>
       <Position6>
-        <Filename Value="gdb/GDBLWPolyLine.pas"/>
-        <Caret Line="423" Column="1" TopLine="392"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="62" Column="1" TopLine="24"/>
       </Position6>
       <Position7>
-        <Filename Value="gdb/GDBLWPolyLine.pas"/>
-        <Caret Line="424" Column="1" TopLine="392"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="59" Column="1" TopLine="24"/>
       </Position7>
       <Position8>
-        <Filename Value="gdb/GDBLWPolyLine.pas"/>
-        <Caret Line="425" Column="1" TopLine="392"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="60" Column="1" TopLine="24"/>
       </Position8>
       <Position9>
-        <Filename Value="gdb/GDBLWPolyLine.pas"/>
-        <Caret Line="427" Column="1" TopLine="392"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="61" Column="1" TopLine="24"/>
       </Position9>
       <Position10>
-        <Filename Value="gdb/GDBLWPolyLine.pas"/>
-        <Caret Line="428" Column="1" TopLine="392"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="62" Column="1" TopLine="24"/>
       </Position10>
       <Position11>
-        <Filename Value="gdb/GDBLWPolyLine.pas"/>
-        <Caret Line="418" Column="1" TopLine="392"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="59" Column="1" TopLine="24"/>
       </Position11>
       <Position12>
-        <Filename Value="gdb/GDBLWPolyLine.pas"/>
-        <Caret Line="420" Column="1" TopLine="392"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="60" Column="1" TopLine="24"/>
       </Position12>
       <Position13>
-        <Filename Value="OGLSpecFunc.pas"/>
-        <Caret Line="190" Column="1" TopLine="176"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="61" Column="1" TopLine="24"/>
       </Position13>
       <Position14>
-        <Filename Value="OGLSpecFunc.pas"/>
-        <Caret Line="189" Column="20" TopLine="176"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="62" Column="1" TopLine="24"/>
       </Position14>
       <Position15>
-        <Filename Value="OGLSpecFunc.pas"/>
-        <Caret Line="191" Column="1" TopLine="176"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="59" Column="1" TopLine="24"/>
       </Position15>
       <Position16>
-        <Filename Value="OGLSpecFunc.pas"/>
-        <Caret Line="193" Column="1" TopLine="176"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="60" Column="1" TopLine="24"/>
       </Position16>
       <Position17>
-        <Filename Value="OGLSpecFunc.pas"/>
-        <Caret Line="195" Column="1" TopLine="176"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="61" Column="1" TopLine="24"/>
       </Position17>
       <Position18>
-        <Filename Value="OGLSpecFunc.pas"/>
-        <Caret Line="197" Column="1" TopLine="176"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="62" Column="1" TopLine="24"/>
       </Position18>
       <Position19>
-        <Filename Value="OGLSpecFunc.pas"/>
-        <Caret Line="199" Column="1" TopLine="176"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="59" Column="1" TopLine="24"/>
       </Position19>
       <Position20>
-        <Filename Value="OGLSpecFunc.pas"/>
-        <Caret Line="204" Column="1" TopLine="176"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="60" Column="1" TopLine="24"/>
       </Position20>
       <Position21>
-        <Filename Value="OGLSpecFunc.pas"/>
-        <Caret Line="206" Column="1" TopLine="176"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="61" Column="1" TopLine="24"/>
       </Position21>
       <Position22>
-        <Filename Value="OGLSpecFunc.pas"/>
-        <Caret Line="207" Column="1" TopLine="176"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="62" Column="1" TopLine="24"/>
       </Position22>
       <Position23>
-        <Filename Value="OGLSpecFunc.pas"/>
-        <Caret Line="208" Column="1" TopLine="176"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="59" Column="1" TopLine="24"/>
       </Position23>
       <Position24>
-        <Filename Value="OGLSpecFunc.pas"/>
-        <Caret Line="214" Column="1" TopLine="176"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="60" Column="1" TopLine="24"/>
       </Position24>
       <Position25>
-        <Filename Value="u/UGDBOutbound2DIArray.pas"/>
-        <Caret Line="94" Column="1" TopLine="70"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="61" Column="1" TopLine="24"/>
       </Position25>
       <Position26>
-        <Filename Value="u/UGDBOutbound2DIArray.pas"/>
-        <Caret Line="95" Column="1" TopLine="70"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="62" Column="1" TopLine="24"/>
       </Position26>
       <Position27>
-        <Filename Value="u/UGDBOutbound2DIArray.pas"/>
-        <Caret Line="109" Column="1" TopLine="71"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="59" Column="1" TopLine="24"/>
       </Position27>
       <Position28>
-        <Filename Value="gdb/GDBWithLocalCS.pas"/>
-        <Caret Line="75" Column="1" TopLine="49"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="60" Column="1" TopLine="24"/>
       </Position28>
       <Position29>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1960" Column="1" TopLine="1937"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="62" Column="1" TopLine="24"/>
       </Position29>
       <Position30>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="2285" Column="23" TopLine="2252"/>
+        <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
+        <Caret Line="64" Column="1" TopLine="26"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

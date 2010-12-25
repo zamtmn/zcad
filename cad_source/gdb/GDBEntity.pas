@@ -405,7 +405,7 @@ begin
 
 
 
-                                                                      glLineStipple(3, ls);
+                                                                      oglsm.myglLineStipple(3, ls);
                                                                       oglsm.myglEnable(GL_LINE_STIPPLE);
                                                                       sel := true;
 

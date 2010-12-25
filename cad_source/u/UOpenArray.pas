@@ -21,7 +21,7 @@ unit UOpenArray;
 interface
 uses gdbasetypes,sysutils,gdbase;
 type
-GDBITERATEPROC = procedure(pdata:GDBPointer);stdcall;
+GDBITERATEPROC = procedure(const pdata:GDBPointer);
 {Export+}
 POpenArray=^OpenArray;
 OpenArray=object(GDBaseObject)

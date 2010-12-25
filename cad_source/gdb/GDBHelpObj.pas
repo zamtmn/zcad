@@ -41,13 +41,13 @@ begin
        circlepointoflod[j].init({$IFDEF DEBUGBUILD}'{9EFC07BB-AAD4-401E-AA83-9011670A1FF4}',{$ENDIF}j+1);
        pv.coord.x:=1;
        pv.coord.y:=0;
-       pv.count:=j+1;
+       pv.count:=-j;
        circlepointoflod[j].add(@pv);
        for i:=1 to j do
        begin
             pv.coord.x:=cos(i/j*2*pi);
             pv.coord.y:=sin(i/j*2*pi);
-            pv.count:=0;
+            pv.count:=i-j;
             circlepointoflod[j].add(@pv);
         end;
     end;

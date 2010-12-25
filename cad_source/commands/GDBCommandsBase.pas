@@ -518,7 +518,15 @@ begin
                                 begin
                                      //if operands<>'QS' then
                                      //                      gdb.GetCurrentDWG.FileName:=s;
+                                     if gdb.currentdwg<>BlockBaseDWG then
+                                                                       begin
+                                                                       isOpenGLError;
+                                                                       end;
                                      addfromdxf(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode);
+                                     if gdb.currentdwg<>BlockBaseDWG then
+                                                                       begin
+                                                                       isOpenGLError;
+                                                                       end;
                                      if FileExists(utf8tosys(s+'.dbpas')) then
                                      begin
                                            pu:=gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase');
@@ -537,6 +545,7 @@ begin
      if gdb.currentdwg<>BlockBaseDWG then
                                          begin
                                          gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
+                                         isOpenGLError;
                                          redrawoglwnd;
 
                                          end;
@@ -607,8 +616,10 @@ begin
      {gdb.GetCurrentDWG.OGLwindow1}oglwnd.PDWG:=ptd;
      oglwnd._onresize(nil);
      oglwnd.MakeCurrent(false);
+     isOpenGLError;
      //oglwnd.DoubleBuffered:=false;
      oglwnd.show;
+     isOpenGLError;
      //oglwnd.Repaint;
      //gdb.GetCurrentDWG.OGLwindow1.initxywh('oglwnd',tf,200,72,768,596,false);
 

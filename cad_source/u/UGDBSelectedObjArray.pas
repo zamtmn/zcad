@@ -147,8 +147,8 @@ begin
   if count<>0 then
   begin
        tdesc:=parray;
-       glpointsize(10);
-       myglbegin(gl_points);
+       oglsm.myglpointsize(10);
+       oglsm.myglbegin(gl_points);
        for i:=0 to count-1 do
        begin
             if tdesc^.pcontrolpoint<>nil then
@@ -157,8 +157,8 @@ begin
             end;
             inc(tdesc);
        end;
-       myglend;
-       glpointsize(1);
+       oglsm.myglend;
+       oglsm.myglpointsize(1);
   end;
 end;
 procedure GDBSelectedObjArray.RenderFeedBack;

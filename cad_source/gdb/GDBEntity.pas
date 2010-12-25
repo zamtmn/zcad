@@ -348,10 +348,10 @@ begin
     lw := lw div 10;
     if lw>sysvar.RD.RD_MaxWidth^ then lw:=sysvar.RD.RD_MaxWidth^;
     result := lw;
-    gllinewidth(lw);
-    glenable(GL_LINE_SMOOTH);
-    glpointsize(lw);
-    glenable(gl_point_smooth);
+    oglsm.mygllinewidth(lw);
+    oglsm.myglEnable(GL_LINE_SMOOTH);
+    oglsm.myglpointsize(lw);
+    oglsm.myglEnable(gl_point_smooth);
   end
   else
   begin
@@ -380,10 +380,10 @@ begin
   Drawg(lw,visibleactualy);
   if lw > 1 then
   begin
-    gldisable(GL_LINE_SMOOTH);
-    gllinewidth(1);
-    glpointsize(1);
-    gldisable(gl_point_smooth);
+    oglsm.myglDisable(GL_LINE_SMOOTH);
+    oglsm.mygllinewidth(1);
+    oglsm.myglpointsize(1);
+    oglsm.myglDisable(gl_point_smooth);
   end;
 end;
 procedure GDBObjEntity.DrawWithAttrib;
@@ -396,27 +396,28 @@ begin
                       bp.owner:=nil;
   if selected or ((bp.owner <> nil) and (bp.owner^.isselected)) then
                                                                     begin
-                                                                      glStencilFunc(GL_ALWAYS,0,1);
-                                                                      {glStencilFunc(GL_GEQUAL,1,3);
-                                                                      glStencilOp(GL_INCR,GL_KEEP,GL_INCR);}
+                                                                          //oglsm.mytotalglend;
+                                                                          //isOpenGLError;
+                                                                      oglsm.myglStencilFunc(GL_ALWAYS,0,1);
+                                                                      {oglsm.myglStencilFunc(GL_GEQUAL,1,3);
+                                                                      oglsm.myglStencilOp(GL_INCR,GL_KEEP,GL_INCR);}
 
 
 
 
                                                                       glLineStipple(3, ls);
-                                                                      glEnable(GL_LINE_STIPPLE);
+                                                                      oglsm.myglEnable(GL_LINE_STIPPLE);
                                                                       sel := true;
 
                                                                       glPolygonStipple(@ps);
-                                                                      glEnable(GL_POLYGON_STIPPLE);
-
+                                                                      oglsm.myglEnable(GL_POLYGON_STIPPLE);
                                                                       {if bp.TreePos.Owner<>nil then
                                                                                           PTEntTreeNode(bp.TreePos.Owner).draw;}
                                                                     end
                                                                 else
                                                                     begin
-                                                                         glStencilFunc(GL_EQUAL,0,1);
-                                                                         //glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
+                                                                         //oglsm.myglStencilFunc(GL_EQUAL,0,1);
+                                                                         //oglsm.myglStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
                                                                     end;
   {if (POGLWnd.subrender = 0) or
      (PGDBLayerPropArray(GDB.layertable.parray)^[vp.layer].name <> '0')
@@ -453,22 +454,29 @@ begin
                                                                               end;
                                                          //glcolor3ubv(@palette[bp.owner.getlayer^.color]);
                                                     end;
-
-
-
   Draw(lw,visibleactualy);
+  if selected or ((bp.owner <> nil) and (bp.owner^.isselected)) then
+                                                                    begin
+                                                                    end
+                                                                else
+                                                                    begin
+                                                                         //oglsm.mytotalglend;
+                                                                         oglsm.myglStencilFunc(GL_EQUAL,0,1);
+                                                                         //oglsm.myglStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
+                                                                    end;
 
   if lw > 1 then
   begin
-    gldisable(GL_LINE_SMOOTH);
-    gllinewidth(1);
-    glpointsize(1);
-    gldisable(gl_point_smooth);
+    oglsm.myglDisable(GL_LINE_SMOOTH);
+    oglsm.mygllinewidth(1);
+    oglsm.myglpointsize(1);
+    oglsm.myglDisable(gl_point_smooth);
   end;
   if sel then
              begin
-                  gldisable(GL_LINE_STIPPLE);
-                  gldisable(GL_POLYGON_STIPPLE);
+                  //oglsm.mytotalglend;
+                  oglsm.myglDisable(GL_LINE_STIPPLE);
+                  oglsm.myglDisable(GL_POLYGON_STIPPLE);
              end;
 end;
 procedure GDBObjEntity.RenderFeedbackIFNeed;

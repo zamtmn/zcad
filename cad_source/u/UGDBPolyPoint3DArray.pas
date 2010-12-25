@@ -264,7 +264,7 @@ begin
 
   if count>1 then
   begin
-  myglbegin(GL_LINES);
+  oglsm.myglbegin(GL_LINES);
   p:=parray;
   for i:=0 to count-1 do
   begin
@@ -275,7 +275,7 @@ begin
                             //myglVertex(p.coord.x+random(5)/10,p.coord.y+random(5)/10,p.coord.z+random(5)/10);
      inc(p);
   end;
-  myglend;
+  oglsm.myglend;
 
   end;
 
@@ -360,14 +360,14 @@ begin
         case num of
         1:
           begin
-                myglbegin(GL_LINES);
+                oglsm.myglbegin(GL_LINES);
                 myglvertex3dv(self.PArray);
                 myglvertex3dv(self.getelement(self.Count-1));
-                myglend;
+                oglsm.myglend;
           end;
         2:
           begin
-                myglbegin(GL_LINES);
+                oglsm.myglbegin(GL_LINES);
                 if count<num then exit;
                 p:=parray;
                 pp:=nil;
@@ -386,7 +386,7 @@ begin
                    inc(totalcounter);
                 end;
                 myglvertex3dv(@pp^.coord);
-                myglend;
+                oglsm.myglend;
           end;
         end;
   end;

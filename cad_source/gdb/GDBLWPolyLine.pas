@@ -95,16 +95,20 @@ function GDBObjLWpolyline.onmouse;
 var
    ie,i:gdbinteger;
    q3d:PGDBQuad3d;
+   p3d,p3dold:PGDBVertex;
    subresult:TINRect;
 begin
 
     result:=false;
-  if closed then ie:=Width3D_in_WCS_Array.count - 1
-            else ie:=Width3D_in_WCS_Array.count - 2;
+  if closed then ie:=Width3D_in_WCS_Array.count
+            else ie:=Width3D_in_WCS_Array.count - 1;
 
 
   q3d:=Width3D_in_WCS_Array.parray;
-  for i := 0 to ie do
+  p3d:=Vertex3D_in_WCS_Array.PArray;
+  p3dold:=p3d;
+  inc(p3d);
+  for i := 1 to ie do
   begin
     begin
       subresult:=CalcOutBound4VInFrustum(q3d^,mf);
@@ -136,7 +140,17 @@ begin
                                                                                                exit;
                                                                                           end;
                                         end;
+          if geometry.CalcTrueInFrustum (p3d^,p3dold^,mf)<>irempty then
+                                                       begin
+                                                            result:=true;
+                                                            exit;
+                                                       end;
+
       inc(q3d);
+      inc(p3dold);
+      inc(p3d);
+      if i=Width3D_in_WCS_Array.count then
+                                           p3d:=Vertex3D_in_WCS_Array.PArray;
     end;
  end;
     {subresult:=CalcOutBound4VInFrustum(PInWCS,mf);
@@ -346,14 +360,14 @@ begin
     for i := 0 to vertexarray.count - 1 do
     begin
       begin
-                                      //glenable(GL_LIGHTING);
+                                      //oglsm.myglEnable(GL_LIGHTING);
         myglbegin(GL_QUADS);
         glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[0]);
         glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[1]);
         glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[2]);
         glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[3]);
         myglend();
-                                      //gldisable(GL_LIGHTING);
+                                      //oglsm.myglDisable(GL_LIGHTING);
       end;
       begin
         myglbegin(GL_LINEs);
@@ -370,14 +384,14 @@ begin
     begin
                                   //if PGDBlwpolyline(temp)^.pwidtharray^.widtharray[i2].hw then
       begin
-                                      //glenable(GL_LIGHTING);
+                                      //oglsm.myglEnable(GL_LIGHTING);
         myglbegin(GL_QUADS);
         glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[0]);
         glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[1]);
         glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[2]);
         glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[3]);
         myglend();
-                                      //gldisable(GL_LIGHTING);
+                                      //oglsm.myglDisable(GL_LIGHTING);
       end;
                                   //else
       begin
@@ -396,7 +410,6 @@ begin
               else ie:=Width3D_in_WCS_Array.count - 2;
 
 
-    myglbegin(GL_QUADS);
     q3d:=Width3D_in_WCS_Array.parray;
     plw:=Width2D_in_OCS_Array.parray;
     for i := 0 to ie do
@@ -404,18 +417,19 @@ begin
       begin
         if plw^.hw then
         begin
+        oglsm.myglbegin(GL_QUADS);
         myglVertex3dv(@q3d^[0]);
         myglVertex3dv(@q3d^[1]);
         myglVertex3dv(@q3d^[2]);
         myglVertex3dv(@q3d^[3]);
+        oglsm.myglend();
         end;
         inc(plw);
         inc(q3d);
       end;
    end;
-   myglend();
 
-    myglbegin(GL_Lines);
+    oglsm.myglbegin(GL_Lines);
     q3d:=Width3D_in_WCS_Array.parray;
     plw:=Width2D_in_OCS_Array.parray;
     for i := 0 to ie do
@@ -436,7 +450,7 @@ begin
         inc(q3d);
       end;
    end;
-   myglend();
+   oglsm.myglend();
 
 
 

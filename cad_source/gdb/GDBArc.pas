@@ -251,7 +251,7 @@ var
   v:GDBvertex;
   pv:GDBVertex;
 begin
-  {glpushmatrix;
+  {oglsm.myglpushmatrix;
   glscaledf(r, r, 1);
   gltranslatef(p_insert.x / r, p_insert.y / r, p_insert.z);
   angle := endangle - startangle;
@@ -263,7 +263,7 @@ begin
     glVertex3d(cos(startangle + i / arccount * angle), sin(startangle + i / arccount * angle), 0);
   end;
   myglend;
-  glpopmatrix;}
+  oglsm.myglpopmatrix;}
   angle := endangle - startangle;
   if angle < 0 then angle := 2 * pi + angle;
 
@@ -336,7 +336,7 @@ procedure GDBObjARC.DrawGeometry;
 //var
 //  i: GDBInteger;
 begin
-  {glpushmatrix;
+  {oglsm.myglpushmatrix;
   glscaledf(r, r, 1);
   gltranslatef(p_insert.x / r, p_insert.y / r, p_insert.z);
   angle := endangle - startangle;
@@ -348,16 +348,16 @@ begin
     glVertex3d(cos(startangle + i / arccount * angle), sin(startangle + i / arccount * angle), 0);
   end;
   myglend;
-  glpopmatrix;}
+  oglsm.myglpopmatrix;}
 
 
-  //glpushmatrix;
+  //oglsm.myglpushmatrix;
   //glmultmatrixd(@objmatrix);
   Vertex3D_in_WCS_Array.drawgeometry;
   //myglbegin(gl_points);
   //ppoint.iterategl(@glvertex2dv);
   //myglend;
-  //glpopmatrix;
+  //oglsm.myglpopmatrix;
   inherited;
 
 end;

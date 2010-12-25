@@ -385,15 +385,15 @@ end;
 procedure GDBObjLine.DrawGeometry;
 begin
   //exit;
-  myglbegin(GL_lines);
+  oglsm.myglbegin(GL_lines);
   myglVertex3dV(@CoordInWCS.lBegin);
   myglVertex3dV(@CoordInWCS.lEnd);
-  myglend;
+  oglsm.myglend;
 
-  myglbegin(GL_points);
+  {oglsm.myglbegin(GL_points);
   myglVertex3dV(@CoordInWCS.lBegin);
   myglVertex3dV(@CoordInWCS.lEnd);
-  myglend;
+  oglsm.myglend;}
 end;
 procedure GDBObjLine.RenderFeedback;
 var tv:GDBvertex;

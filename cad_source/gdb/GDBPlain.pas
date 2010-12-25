@@ -41,12 +41,12 @@ procedure GDBObjPlain.DrawGeometry;
 begin
   if (sysvar.DWG.DWG_SystmGeometryDraw^){and(POGLWnd.subrender=0)} then
   begin
-       myglbegin(gl_line_loop);
+       oglsm.myglbegin(gl_line_loop);
        myglvertex3dv(@outbound[0]);
        myglvertex3dv(@outbound[1]);
        myglvertex3dv(@outbound[2]);
        myglvertex3dv(@outbound[3]);
-       myglend;
+       oglsm.myglend;
   end;
   inherited;
 

@@ -94,6 +94,7 @@ type
     procedure DISP_ZoomFactor(x: double{; MousePos: TPoint});
     //function mousein(MousePos: TPoint): GDBBoolean;
     procedure mouseunproject(X, Y: glint);
+    procedure CorrectMouseAfterOS;
     procedure getonmouseobject(pva: PGDBObjEntityOpenArray);
     procedure getonmouseobjectbytree(Node:TEntTreeNode);
     procedure processmousenode(Node:TEntTreeNode;var i:integer);
@@ -652,6 +653,24 @@ begin
     {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.CalcOptimalMatrix----{end}',lp_DecPos);{$ENDIF}
   //gdb.GetCurrentDWG.pcamera.getfrustum(@gdb.GetCurrentDWG.pcamera^.modelMatrixLCS,@gdb.GetCurrentDWG.pcamera^.projMatrixLCS,gdb.GetCurrentDWG.pcamera^.clipLCS,gdb.GetCurrentDWG.pcamera^.frustumLCS);
 end;
+procedure TOGLWnd.CorrectMouseAfterOS;
+var d,tv1,tv2:GDBVertex;
+    b1,b2:GDBBoolean;
+begin
+     if param.ospoint.ostype <> os_none then
+     begin
+          //d:=vertexsub(param.ospoint.worldcoord,gdb.GetCurrentDWG.pcamera^.prop.point);
+            d:=gdb.GetCurrentDWG.pcamera^.prop.look;
+          b1:=PointOfLinePlaneIntersect(param.ospoint.worldcoord,d,gdb.GetCurrentDWG.pcamera^.frustum[4],tv1);
+          b2:=PointOfLinePlaneIntersect(param.ospoint.worldcoord,d,gdb.GetCurrentDWG.pcamera^.frustum[5],tv2);
+          if (b1 and b2) then
+                             begin
+                                  param.md.mouseray.lbegin:=tv1;
+                                  param.md.mouseray.lend:=tv2;
+                                  param.md.mouseray.dir:=vertexsub(tv2,tv1);
+                             end;
+     end;
+end;
 
 procedure TOGLWnd.mouseunproject(X, Y: glint);
 var ca, cv: extended;cav: gdbvertex;  ds:GDBString;
@@ -1195,9 +1214,11 @@ end;
   SBTextOut(htext);
   //param.firstdraw:=true;
   isOpenGLError;
+  CorrectMouseAfterOS;
   {repaint;//}draw;//paint;
   inc(sysvar.debug.int1);
   //debugvar(Variables,1);
+
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove----{end}',lp_decPos);{$ENDIF}
 end;
 procedure textwrite(s: GDBString);

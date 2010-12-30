@@ -637,18 +637,36 @@ begin
                                            pdwg.pcamera^.projMatrixLCS:=Perspective(pdwg.pcamera^.fovy, Width / Height, pdwg.pcamera^.zminLCS, pdwg.pcamera^.zmaxLCS,@onematrix);
   //glGetDoublev(GL_PROJECTION_MATRIX, @pdwg.pcamera^.projMatrix);
                                       end;
-  if pdwg.pcamera^.notuseLCS then
+  if param.projtype = ProjParalel then
+                                      begin
+                                            OGLSpecFunc.CurrentCamCSOffset:=pdwg.pcamera^.CamCSOffset;
+                                            OGLSpecFunc.notuseLCS:=pdwg.pcamera^.notuseLCS;
+                                      end
+                                  else
+                                      begin
+                                            OGLSpecFunc.notuseLCS:=true;
+                                      end;
+  if {pdwg.pcamera^.notuseLCS}OGLSpecFunc.notuseLCS then
   begin
-
-  pdwg.pcamera^.projMatrixLCS:=pdwg.pcamera^.projMatrix;
-  pdwg.pcamera^.modelMatrixLCS:=pdwg.pcamera^.modelMatrix;
-   pdwg.pcamera^.CamCSOffset:=NulVertex;
+        pdwg.pcamera^.projMatrixLCS:=pdwg.pcamera^.projMatrix;
+        pdwg.pcamera^.modelMatrixLCS:=pdwg.pcamera^.modelMatrix;
+        pdwg.pcamera^.frustumLCS:=pdwg.pcamera^.frustum;
+        pdwg.pcamera^.CamCSOffset:=NulVertex;
+        OGLSpecFunc.CurrentCamCSOffset:=nulvertex;
   end;
 
 
   SetOGLMatrix;
-  OGLSpecFunc.CurrentCamCSOffset:=pdwg.pcamera^.CamCSOffset;
-  OGLSpecFunc.notuseLCS:=pdwg.pcamera^.notuseLCS;
+
+  if {pdwg.pcamera^.notuseLCS}OGLSpecFunc.notuseLCS then
+  begin
+        pdwg.pcamera^.projMatrixLCS:=pdwg.pcamera^.projMatrix;
+        pdwg.pcamera^.modelMatrixLCS:=pdwg.pcamera^.modelMatrix;
+        pdwg.pcamera^.frustumLCS:=pdwg.pcamera^.frustum;
+        pdwg.pcamera^.CamCSOffset:=NulVertex;
+        OGLSpecFunc.CurrentCamCSOffset:=nulvertex;
+  end;
+
   end;
     {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.CalcOptimalMatrix----{end}',lp_DecPos);{$ENDIF}
   //gdb.GetCurrentDWG.pcamera.getfrustum(@gdb.GetCurrentDWG.pcamera^.modelMatrixLCS,@gdb.GetCurrentDWG.pcamera^.projMatrixLCS,gdb.GetCurrentDWG.pcamera^.clipLCS,gdb.GetCurrentDWG.pcamera^.frustumLCS);
@@ -659,8 +677,10 @@ var d,tv1,tv2:GDBVertex;
 begin
      if param.ospoint.ostype <> os_none then
      begin
-          //d:=vertexsub(param.ospoint.worldcoord,gdb.GetCurrentDWG.pcamera^.prop.point);
-            d:=gdb.GetCurrentDWG.pcamera^.prop.look;
+
+     if param.projtype = ProjParalel then
+     begin
+          d:=gdb.GetCurrentDWG.pcamera^.prop.look;
           b1:=PointOfLinePlaneIntersect(param.ospoint.worldcoord,d,gdb.GetCurrentDWG.pcamera^.frustum[4],tv1);
           b2:=PointOfLinePlaneIntersect(param.ospoint.worldcoord,d,gdb.GetCurrentDWG.pcamera^.frustum[5],tv2);
           if (b1 and b2) then
@@ -669,6 +689,22 @@ begin
                                   param.md.mouseray.lend:=tv2;
                                   param.md.mouseray.dir:=vertexsub(tv2,tv1);
                              end;
+     end
+     else
+     begin
+         d:=VertexSub(param.ospoint.worldcoord,gdb.GetCurrentDWG.pcamera^.prop.point);
+         //d:=gdb.GetCurrentDWG.pcamera^.prop.look;
+         b1:=PointOfLinePlaneIntersect(param.ospoint.worldcoord,d,gdb.GetCurrentDWG.pcamera^.frustum[4],tv1);
+         b2:=PointOfLinePlaneIntersect(param.ospoint.worldcoord,d,gdb.GetCurrentDWG.pcamera^.frustum[5],tv2);
+         if (b1 and b2) then
+                            begin
+                                 param.md.mouseray.lbegin:=tv1;
+                                 param.md.mouseray.lend:=tv2;
+                                 param.md.mouseray.dir:=vertexsub(tv2,tv1);
+                            end;
+         gdb.GetCurrentDWG^.myGluUnProject(createvertex(param.ospoint.dispcoord.x, param.ospoint.dispcoord.y, 0),param.md.mouseray.lbegin);
+         gdb.GetCurrentDWG^.myGluUnProject(createvertex(param.ospoint.dispcoord.x, param.ospoint.dispcoord.y, 1),param.md.mouseray.lend);
+     end;
      end;
 end;
 
@@ -1822,6 +1858,7 @@ procedure TOGLWnd.showcursor;
 
     oglsm.myglEnable(GL_COLOR_LOGIC_OP);
     oglsm.myglLogicOp(GL_OR);
+
 
     Tempplane:=param.mousefrustumLCS[5];
     tempplane[3]:=(tempplane[3]-param.mousefrustumLCS[4][3])/2;

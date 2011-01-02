@@ -20,9 +20,12 @@ unit aboutwnd;
 {$INCLUDE def.inc}
 interface
 uses
+ gettext,translations,intftranslations,
  strproc,umytreenode,{Classes, SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}
  gdbase,{UGDBDescriptor,math,commandline,varman,}languade{,UGDBTracePropArray},
   {zforms,ZEditsWithProcedure,zbasicvisible,varmandef,shared,ZGUIsCT,ZStaticsText,}sysinfo;
+resourcestring
+  AboutWndCaption = 'About ZCAD';
 type
   TAboutWnd = class(TFreedForm)
     Memo:TMemo;
@@ -37,7 +40,7 @@ procedure TAboutWnd.AfterConstruction;
 begin
   inherited;
   self.Position:={poScreenCenter}poMainFormCenter;
-  caption:=('О программе ZCAD');
+  caption:=AboutWndCaption;
 
   self.borderstyle:=bsSizeToolWin;
   memo:=tmemo.create(self);

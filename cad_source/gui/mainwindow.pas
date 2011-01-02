@@ -21,7 +21,7 @@ unit mainwindow;
 
 interface
 uses
-  LCLType,LCLProc,strproc,log,
+  LCLType,LCLProc,strproc,log,intftranslations,
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Toolwin, Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
   gdbase, languade,geometry,
@@ -34,6 +34,10 @@ uses
   {ZGUIArrays,}{ZBasicVisible,}{ZEditsWithVariable,}{ZTabControlsGeneric,}shared,{ZPanelsWithSplit,}{ZGUIsCT,}{ZstaticsText,}{UZProcessBar,}strmy{,strutils},{ZPanelsGeneric,}
 graphics,
   AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr;
+
+resourcestring
+  GDBObjinspWndName='Object Inspector';
+  CommandLineWndName='Command line';
 
 type
   TFileHistory=Array [0..9] of TmyMenuItem;
@@ -282,7 +286,7 @@ begin
         //CLine.Caption:=Title;
        //CLine:=TCLine.create({MainPanel}application);
        //CLine.Parent:=MainPanel;
-       CLine.Caption:='Командная строка';
+       CLine.Caption:=CommandLineWndName;
        CLine.Align:=alBottom;
        pint:=SavedUnit.FindValue('VIEW_CommandLineH');
        if assigned(pint)then
@@ -301,7 +305,7 @@ begin
                GDBObjInsp.FormStyle:=fsStayOnTop;
                GDBObjInsp.DisableAlign;
                GDBObjInsp.Create(Application);
-               GDBObjInsp.Caption:='Инспектор объектов';
+               GDBObjInsp.Caption:=GDBObjInspWndName;
                //GDBObjInsp.Caption:=Title;
                //GDBObjInsp:=TGDBObjInsp.create({self}application);
                //GDBObjInsp.BorderStyle:=bsSingle;
@@ -960,6 +964,7 @@ begin
                                                            line := f.readstring(',','');
                                                            //pmenuitem.command:=line;
 
+                                                           line2:=InterfaceTranslate('menu_'+line2,line2);
                                                            pmenuitem:=TmyMenuItem.Create(pm,line2,line);
                                                            {ppopupmenu}pm.Add(pmenuitem);
                                                            line := f.readstring(',','');

@@ -21,7 +21,7 @@ unit umytreenode;
 interface
 
 uses
-  ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype{$ENDIF},fileutil,ButtonPanel,Buttons,
+  ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,ButtonPanel,Buttons,
   strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo;
 type
     TmyPopupMenu = class (TPopupMenu)

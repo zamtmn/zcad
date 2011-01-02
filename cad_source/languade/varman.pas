@@ -23,7 +23,7 @@ interface
 uses
   {RegCnownTypes,}UGDBOpenArrayOfPointer,SysUtils,UBaseTypeDescriptor,
   gdbasetypes, shared,gdbase,UGDBOpenArrayOfByte,UGDBStringArray,varmandef,sysinfo,
-  log,memman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,strproc;
+  log,memman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,strproc,intftranslations;
 type
     td=record
              template:GDBString;
@@ -766,7 +766,8 @@ begin
            username:
                     begin
                       fieldtype:=parseresult^.getGDBString(0);
-                      PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.username:=parseresult^.getGDBString(0);
+                      fieldtype:=InterfaceTranslate('',fieldtype);
+                      PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.username:={parseresult^.getGDBString(0)}fieldtype;
                       fieldtype:=parseresult^.getGDBString(0);
                     end;
            membermodifier:

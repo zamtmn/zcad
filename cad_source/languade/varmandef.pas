@@ -266,15 +266,15 @@ UserTypeDescriptor=object(GDBaseObject)
         end;
   pgdbsysvariable=^gdbsysvariable;
   gdbsysvariable=record
-    PATH:tpath;(*'Пути'*)
-    RD:trd;(*'Рендер'*)
+    PATH:tpath;(*'Paths'*)
+    RD:trd;(*'Render'*)
     DISP:tdisp;
-    SYS:tsys;(*'Система'*)
-    SAVE:tsave;(*'Сохранение'*)
-    DWG:tdwg;(*'Черчение'*)
-    DSGN:tdesigning;(*'Проектирование'*)
-    VIEW:tview;(*'Вид'*)
-    MISC:tmisc;(*'Разное'*)
+    SYS:tsys;(*'System'*)
+    SAVE:tsave;(*'Saving'*)
+    DWG:tdwg;(*'Drawing'*)
+    DSGN:tdesigning;(*'Design'*)
+    VIEW:tview;(*'View'*)
+    MISC:tmisc;(*'Miscellaneous'*)
     debug:tdebug;(*'Debug'*)
   end;
   indexdesk = record

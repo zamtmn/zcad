@@ -20,14 +20,19 @@ unit cmdline;
 {$INCLUDE def.inc}
 interface
 uses
- strproc,lclproc,
+ strproc,lclproc,sysutils,
  StdCtrls,ExtCtrls,ComCtrls,Controls,Classes,menus,Forms,{IFDEF FPClcltype,$ENDIF}fileutil,graphics,
  UDMenuWnd{,ZStaticsText},gdbase{,ZPanelsNoFrame}, memman,UGDBDescriptor,math,commandline,varman,languade,
  UGDBTracePropArray,{zforms,}{ZEditsWithProcedure}{,zbasicvisible,}varmandef,{ZGUIsCT,}{ZPanelsGeneric,}
  geometry,shared{,zmemos};
+
+resourcestring
+              defaultpromot='Command';
+              exprouttext='Expression %s return %s';
 const
      cheight=18;
-     defaultpromot=' Команда> ';
+     commandsuffix='>';
+     commandprefix=' ';
 type
   TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
   TCLine = class({TPanel}TForm{Tcustomform})
@@ -91,11 +96,11 @@ begin
      case m of
      CLCOMMANDREDY:
      begin
-           prompt.Caption:=(defaultpromot);
+           prompt.Caption:=commandprefix+defaultpromot+commandsuffix;
      end;
      CLCOMMANDRUN:
      begin
-          prompt.Caption:='> ';
+          prompt.Caption:=commandsuffix;
      end;
      end;
      mode:=m;
@@ -233,7 +238,7 @@ var code,ch: GDBInteger;
   len: double;
   temp: gdbvertex;
   v:vardesk;
-  s:GDBString;
+  s,expr:GDBString;
   tv:gdbvertex;
 begin
     ch:=ord(key);
@@ -262,11 +267,12 @@ begin
       end
       end
       else if CmdEdit.text[1] = '$' then begin
-                                              v:=evaluate(copy(CmdEdit.text, 2, length(CmdEdit.text) - 1),SysUnit);
+                                              expr:=copy(CmdEdit.text, 2, length(CmdEdit.text) - 1);
+                                              v:=evaluate(expr,SysUnit);
                                               //s:=valuetoGDBString(v.pvalue,v.ptd);
                                               s:=v.data.ptd^.GetValueAsString(v.data.Instance);
                                               v.data.Instance:=v.data.Instance;
-                                              historyout(GDBPointer(CmdEdit.text+' return '+s));
+                                              historyoutstr(Format(ExprOutText,[expr,s]));
                                          end
       else
           commandmanager.executecommand(GDBPointer(CmdEdit.text));

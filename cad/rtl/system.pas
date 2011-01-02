@@ -89,6 +89,11 @@ GDBvertex=record
                 y:GDBDouble;(*saved_to_shd*)
                 z:GDBDouble;(*saved_to_shd*)
           end;
+GDBvertex3S=record
+                x:GDBFloat;(*saved_to_shd*)
+                y:GDBFloat;(*saved_to_shd*)
+                z:GDBFloat;(*saved_to_shd*)
+          end;
 PGDBLineProp=^GDBLineProp;
 GDBLineProp=record
                   lBegin:GDBvertex;(*'Начало'*)(*saved_to_shd*)
@@ -403,6 +408,7 @@ GDBPoint3dArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex*)
                 function onmouse(const mf:ClipArray):GDBBoolean;virtual;abstract;
                 function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;abstract;
                 procedure DrawGeometry;virtual;abstract;
+                procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;abstract;
              end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBPolyLine2DArray.pas
 PGDBPolyline2DArray=^GDBPolyline2DArray;
@@ -802,15 +808,15 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
         end;
   pgdbsysvariable=^gdbsysvariable;
   gdbsysvariable=record
-    PATH:tpath;(*'Пути'*)
-    RD:trd;(*'Рендер'*)
+    PATH:tpath;(*'Paths'*)
+    RD:trd;(*'Render'*)
     DISP:tdisp;
-    SYS:tsys;(*'Система'*)
-    SAVE:tsave;(*'Сохранение'*)
-    DWG:tdwg;(*'Черчение'*)
-    DSGN:tdesigning;(*'Проектирование'*)
-    VIEW:tview;(*'Вид'*)
-    MISC:tmisc;(*'Разное'*)
+    SYS:tsys;(*'System'*)
+    SAVE:tsave;(*'Saving'*)
+    DWG:tdwg;(*'Drawing'*)
+    DSGN:tdesigning;(*'Design'*)
+    VIEW:tview;(*'View'*)
+    MISC:tmisc;(*'Miscellaneous'*)
     debug:tdebug;(*'Debug'*)
   end;
   indexdesk = record
@@ -1072,6 +1078,7 @@ GDBObj3DFace=object(GDBObj3d)
                  PInDCS:OutBound4V;(*'Координаты в DCS'*)(*hidden_in_objinsp*)
                  normal:GDBVertex;
                  triangle:GDBBoolean;
+                 n,p1,p2,p3:GDBVertex3S;
                  //ProjPoint:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);

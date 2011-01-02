@@ -1,0 +1,103 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: aboutwnd.aboutwndcaption
+msgid "About ZCAD"
+msgstr ""
+
+#: cmdline.defaultpromot
+msgid "Command"
+msgstr ""
+
+#: cmdline.exprouttext
+msgid "Expression %s return %s"
+msgstr ""
+
+#: gdbsysvariable_Debug
+msgctxt "gdbsysvariable_Debug"
+msgid "Debug"
+msgstr ""
+
+#: gdbsysvariable_Design
+msgctxt "gdbsysvariable_Design"
+msgid "Design"
+msgstr ""
+
+#: gdbsysvariable_Drawing
+msgctxt "gdbsysvariable_Drawing"
+msgid "Drawing"
+msgstr ""
+
+#: gdbsysvariable_Miscellaneous
+msgctxt "gdbsysvariable_Miscellaneous"
+msgid "Miscellaneous"
+msgstr ""
+
+#: gdbsysvariable_Paths
+msgctxt "gdbsysvariable_paths"
+msgid "Paths"
+msgstr ""
+
+#: gdbsysvariable_Render
+msgctxt "gdbsysvariable_Render"
+msgid "Render"
+msgstr ""
+
+#: gdbsysvariable_Saving
+msgctxt "gdbsysvariable_Saving"
+msgid "Saving"
+msgstr ""
+
+#: gdbsysvariable_System
+msgctxt "gdbsysvariable_System"
+msgid "System"
+msgstr ""
+
+#: gdbsysvariable_View
+msgctxt "gdbsysvariable_View"
+msgid "View"
+msgstr ""
+
+#: mainwindow.commandlinewndname
+msgid "Command line"
+msgstr ""
+
+#: mainwindow.gdbobjinspwndname
+msgid "Object Inspector"
+msgstr ""
+
+#: menu_Close page
+msgctxt "menu_Close page"
+msgid "Close page"
+msgstr ""
+
+#: menu_Exit
+msgctxt "menu_Exit"
+msgid "Exit"
+msgstr ""
+
+#: menu_New
+msgctxt "menu_New"
+msgid "New"
+msgstr ""
+
+#: menu_Open
+msgctxt "menu_Open"
+msgid "Open"
+msgstr ""
+
+#: menu_Save
+msgctxt "menu_Save"
+msgid "Save"
+msgstr ""
+
+#: menu_Save as
+msgctxt "menu_Save as"
+msgid "Save as"
+msgstr ""
+
+#: menu_Save (Autosave)
+msgctxt "menu_Save (Autosave)"
+msgid "Save (Autosave)"
+msgstr ""
+

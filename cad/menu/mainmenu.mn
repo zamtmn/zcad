@@ -66,18 +66,18 @@ Panel RIGHTPANEL 994,68,30,525;
   }
 MainMenuItem Файл;
   {
-    Command Создать,NewDWG,CTRL+N,none
-    Command Открыть,Load,CTRL+O,none
+    Command New,NewDWG,CTRL+N,none
+    Command Open,Load,CTRL+O,none
     Separator
-    Command Сохранить,QSave,CTRL+S,none
-    Command Сохранить как,SaveAs,CTRL+S,none
-    Command Сохранить(autosave),QSave(QS),CTRL+S,none
+    Command Save,QSave,CTRL+S,none
+    Command Save as,SaveAs,CTRL+S,none
+    Command Save (Autosave),QSave(QS),CTRL+S,none
     Separator
-    Command Закрыть вкладку,CloseDWG,none,none
+    Command Close page,CloseDWG,none,none
     Separator
     FileHistory
     Separator
-    Command Выход,Quit,none,none
+    Command Exit,Quit,none,none
   }
 MainMenuItem Правка;
   {

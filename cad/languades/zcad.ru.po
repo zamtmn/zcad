@@ -1,0 +1,97 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Andrey M. Zubarev <zamtmn@yandex.ru>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: aboutwnd.aboutwndcaption
+msgid "About ZCAD"
+msgstr "О программе ZCAD"
+
+#: cmdline.defaultpromot
+#| msgid " Command> "
+msgid "Command"
+msgstr "Команда"
+
+#: cmdline.exprouttext
+msgid "Expression %s return %s"
+msgstr "Выражение %s вернуло %s"
+
+#: gdbsysvariable_Debug
+msgid "Debug"
+msgstr "Отладка"
+
+#: gdbsysvariable_Design
+msgid "Design"
+msgstr "Проектирование"
+
+#: gdbsysvariable_Drawing
+msgid "Drawing"
+msgstr "Черчение"
+
+#: gdbsysvariable_Miscellaneous
+msgid "Miscellaneous"
+msgstr "Разное"
+
+#: gdbsysvariable_paths
+msgctxt "gdbsysvariable_paths"
+msgid "Paths"
+msgstr "Пути"
+
+#: gdbsysvariable_Render
+msgid "Render"
+msgstr "Рендер"
+
+#: gdbsysvariable_Saving
+msgid "Saving"
+msgstr "Сохранение"
+
+#: gdbsysvariable_System
+msgid "System"
+msgstr "Система"
+
+#: gdbsysvariable_View
+msgid "View"
+msgstr "Вид"
+
+#: mainwindow.commandlinewndname
+msgid "Command line"
+msgstr "Командная строка"
+
+#: mainwindow.gdbobjinspwndname
+msgid "Object Inspector"
+msgstr "Инспектор объектов"
+
+#: menu_Close page
+msgid "Close page"
+msgstr "Закрыть вкладку"
+
+#: menu_Exit
+msgid "Exit"
+msgstr "Выход"
+
+#: menu_New
+msgid "New"
+msgstr "Новый"
+
+#: menu_Open
+msgid "Open"
+msgstr "Открыть"
+
+#: menu_Save
+msgid "Save"
+msgstr "Сохранить"
+
+#: menu_Save as
+msgid "Save as"
+msgstr "Сохранить как"
+
+#: menu_Save (Autosave)
+msgid "Save (Autosave)"
+msgstr "Сохранить (Автосохранение)"
+

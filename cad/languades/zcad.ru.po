@@ -14,50 +14,52 @@ msgid "About ZCAD"
 msgstr "О программе ZCAD"
 
 #: cmdline.defaultpromot
-#| msgid " Command> "
 msgid "Command"
 msgstr "Команда"
 
 #: cmdline.exprouttext
 msgid "Expression %s return %s"
-msgstr "Выражение %s вернуло %s"
+msgstr "Выражение  %s возвращает %s"
 
-#: gdbsysvariable_Debug
+#: gdbsysvariable~debug
 msgid "Debug"
 msgstr "Отладка"
 
-#: gdbsysvariable_Design
+#: gdbsysvariable~DSGN
 msgid "Design"
 msgstr "Проектирование"
 
-#: gdbsysvariable_Drawing
+#: gdbsysvariable~DWG
 msgid "Drawing"
 msgstr "Черчение"
 
-#: gdbsysvariable_Miscellaneous
+#: gdbsysvariable~MISC
 msgid "Miscellaneous"
 msgstr "Разное"
 
-#: gdbsysvariable_paths
-msgctxt "gdbsysvariable_paths"
+#: gdbsysvariable~PATH
 msgid "Paths"
 msgstr "Пути"
 
-#: gdbsysvariable_Render
+#: gdbsysvariable~RD
 msgid "Render"
 msgstr "Рендер"
 
-#: gdbsysvariable_Saving
+#: gdbsysvariable~SAVE
 msgid "Saving"
 msgstr "Сохранение"
 
-#: gdbsysvariable_System
+#: gdbsysvariable~SYS
 msgid "System"
 msgstr "Система"
 
-#: gdbsysvariable_View
+#: gdbsysvariable~VIEW
 msgid "View"
 msgstr "Вид"
+
+#: geometry.ges_dbz
+msgid "Divide by zero (Geometry.NormalizeVertex)"
+msgstr "Деление на ноль (Geometry.NormalizeVertex)"
 
 #: mainwindow.commandlinewndname
 msgid "Command line"
@@ -67,31 +69,405 @@ msgstr "Командная строка"
 msgid "Object Inspector"
 msgstr "Инспектор объектов"
 
-#: menu_Close page
+#: shared.errorprefix
+msgid "ERROR: "
+msgstr "ОШИБКА: "
+
+#: submenu~0(polylines)
+msgid "0(polylines)"
+msgstr ""
+
+#: submenu~1
+msgid "1"
+msgstr ""
+
+#: submenu~2
+msgctxt "submenu~2"
+msgid "2"
+msgstr ""
+
+#: submenu~3
+msgctxt "submenu~3"
+msgid "3"
+msgstr ""
+
+#: submenu~4
+msgctxt "submenu~4"
+msgid "4"
+msgstr ""
+
+#: submenu~Close page
 msgid "Close page"
 msgstr "Закрыть вкладку"
 
-#: menu_Exit
+#: submenu~Exit
 msgid "Exit"
 msgstr "Выход"
 
-#: menu_New
+#: submenu~New
 msgid "New"
 msgstr "Новый"
 
-#: menu_Open
+#: submenu~Open
 msgid "Open"
 msgstr "Открыть"
 
-#: menu_Save
+#: submenu~Save
 msgid "Save"
 msgstr "Сохранить"
 
-#: menu_Save as
+#: submenu~Save (Autosave)
+msgid "Save (Autosave)"
+msgstr "Сохранить (Autosave)"
+
+#: submenu~Save as
 msgid "Save as"
 msgstr "Сохранить как"
 
-#: menu_Save (Autosave)
-msgid "Save (Autosave)"
-msgstr "Сохранить (Автосохранение)"
+#: submenu~ToolBarR
+msgid "ToolBarR"
+msgstr ""
+
+#: TCalcIP~_ICOS_from_P
+msgid "I,Cos=F(P)"
+msgstr ""
+
+#: TCalcIP~_I_from_P
+msgid "I=F(P,Cos)"
+msgstr ""
+
+#: TCalcIP~_P_from_I
+msgid "P=F(I,Cos)"
+msgstr ""
+
+#: tcompileinfo~SYS_CompileDate
+msgid "Compile date"
+msgstr "Дата компиляции"
+
+#: tcompileinfo~SYS_Compiler
+msgid "Compiler"
+msgstr "Компилятор"
+
+#: tcompileinfo~SYS_CompilerTargetCPU
+msgid "Target CPU"
+msgstr "Целевой процессор"
+
+#: tcompileinfo~SYS_CompilerTargetOS
+msgid "Target OS"
+msgstr "Целевая ОС"
+
+#: tcompileinfo~SYS_CompilerVer
+msgid "Compiler version"
+msgstr "Версия компилятора"
+
+#: tcompileinfo~SYS_CompileTime
+msgid "Compile time"
+msgstr "Время компиляции"
+
+#: tdebug~memi2
+msgid "MemMan::I2"
+msgstr ""
+
+#: tdesigning~DSGN_TraceAutoInc
+msgid "Increment trace names"
+msgstr "Инкремент имен трасс"
+
+#: tdisp~DISP_ColorAxis
+msgid "Colored cursor"
+msgstr "Цветной курсор"
+
+#: tdisp~DISP_CursorSize
+msgid "Cursor size"
+msgstr "Размер курсора"
+
+#: tdisp~DISP_DrawZAxis
+msgid "Show Z axis"
+msgstr "Показывать ось Z"
+
+#: tdisp~DISP_OSSize
+msgid "Snap aperture size"
+msgstr "Размер апертуры привязки"
+
+#: tdisp~DISP_ZoomFactor
+msgid "Mouse wheel scale factor"
+msgstr "Масштаб колеса мыши"
+
+#: tdwg~DWG_CLayer
+msgid "Current layer"
+msgstr "Текущий слой"
+
+#: tdwg~DWG_CLinew
+msgid "Current line weigwt"
+msgstr "Текущий вес линии"
+
+#: tdwg~DWG_DrawMode
+msgid "Draw mode?"
+msgstr "Режим черчения?"
+
+#: tdwg~DWG_EditInSubEntry
+msgid "SubEntities edit"
+msgstr "Редактирование составных объектов"
+
+#: tdwg~DWG_OSMode
+msgid "Snap mode"
+msgstr "Режим привязки"
+
+#: tdwg~DWG_PolarMode
+msgid "Polar tracking mode"
+msgstr "Режим полярной трассировки"
+
+#: tdwg~DWG_SelectedObjToInsp
+msgid "SelectedObjToInsp"
+msgstr ""
+
+#: tmisc~ShowHiddenFieldInObjInsp
+msgid "Show hidden fields"
+msgstr ""
+
+#: TObjLinkRecordMode~OBT
+msgid "ObjBeginToken"
+msgstr ""
+
+#: TObjLinkRecordMode~OFT
+msgid "ObjFieldToken"
+msgstr ""
+
+#: TObjLinkRecordMode~UBR
+msgid "UncnownByReference"
+msgstr ""
+
+#: TOPSMinDatCount~TOPSMDC_2
+msgctxt "TOPSMinDatCount~TOPSMDC_2"
+msgid "2"
+msgstr ""
+
+#: TOPSMinDatCount~TOPSMDC_3
+msgctxt "TOPSMinDatCount~TOPSMDC_3"
+msgid "3"
+msgstr ""
+
+#: TOPSMinDatCount~TOPSMDC_4
+msgctxt "TOPSMinDatCount~TOPSMDC_4"
+msgid "4"
+msgstr ""
+
+#: TOSMode~kosm_3
+msgid "1/3"
+msgstr ""
+
+#: TOSMode~kosm_4
+msgid "1/4"
+msgstr ""
+
+#: TOSMode~kosm_apparentintersection
+msgid "Apparent intersection"
+msgstr "Кажущееся пересечение"
+
+#: TOSMode~kosm_center
+msgid "Center"
+msgstr "Центр"
+
+#: TOSMode~kosm_endpoint
+msgid "Endpoint"
+msgstr "Конец"
+
+#: TOSMode~kosm_inspoint
+msgid "Insertion"
+msgstr "Вставка"
+
+#: TOSMode~kosm_intersection
+msgid "Intersection"
+msgstr "Пересечение"
+
+#: TOSMode~kosm_midpoint
+msgid "Midpoint"
+msgstr "Середина"
+
+#: TOSMode~kosm_nearest
+msgid "Nearest"
+msgstr "Ближайшая"
+
+#: TOSMode~kosm_perpendicular
+msgid "Perpendicular"
+msgstr "Перпендикуляр"
+
+#: TOSMode~kosm_point
+msgid "Point"
+msgstr "Точка"
+
+#: TOSMode~kosm_quadrant
+msgid "Quadrant"
+msgstr "Квадрант"
+
+#: TOSMode~kosm_tangent
+msgid "Tangent"
+msgstr "Касательная"
+
+#: tpath~Device_Library
+msgid "Device base"
+msgstr "База описаний устройств"
+
+#: tpath~Fonts_Path
+msgid "Fonts"
+msgstr "Шрифты"
+
+#: tpath~Program_Run
+msgid "Program"
+msgstr "Программа"
+
+#: tpath~Support_Path
+msgid "Support files"
+msgstr "Файлы поддержки"
+
+#: tpath~Template_File
+msgid "Default template"
+msgstr "Шаблон по умолчанию"
+
+#: tpath~Template_Path
+msgid "Templates"
+msgstr "Шаблоны"
+
+#: tpath~Temp_files
+msgid "Temporary files"
+msgstr "Временные файлы"
+
+#: TPhase~_A
+msgid "A"
+msgstr ""
+
+#: TPhase~_ABC
+msgid "ABC"
+msgstr ""
+
+#: TPhase~_B
+msgid "B"
+msgstr ""
+
+#: TPhase~_C
+msgid "C"
+msgstr ""
+
+#: trd~RD_BackGroundColor
+msgid "Background color"
+msgstr "Цвет фона"
+
+#: trd~RD_LastRenderTime
+msgid "Last render time"
+msgstr "Время рендера"
+
+#: trd~RD_LastUpdateTime
+msgid "Last update time"
+msgstr "Время обновления"
+
+#: trd~RD_Light
+msgid "Light"
+msgstr "Освещение"
+
+#: trd~RD_LineSmooth
+msgid "Line smoth"
+msgstr "Сглаживание линий"
+
+#: trd~RD_MaxLineWidth
+msgid "Max line width"
+msgstr "Макс. ширина линий"
+
+#: trd~RD_MaxPointSize
+msgid "Max point size"
+msgstr "Макс. размер точек"
+
+#: trd~RD_MaxRenderTime
+msgid "Maximum single pass time"
+msgstr "Макс. время одного прохода рендера"
+
+#: trd~RD_MaxWidth
+msgid "Max width"
+msgstr "Чаксимальная ширина"
+
+#: trd~RD_PanObjectDegradation
+msgid "Degradation while pan"
+msgstr "Деградация при перетаскивании"
+
+#: trd~RD_Renderer
+msgid "Device"
+msgstr "Устройство"
+
+#: trd~RD_Restore_Mode
+msgid "Restore mode"
+msgstr "Режим обновления"
+
+#: trd~RD_UseStencil
+msgid "Use STENCIL buffer"
+msgstr "Использовать STENCIL буфер"
+
+#: trd~RD_Vendor
+msgid "Vendor"
+msgstr "Производитель"
+
+#: trd~RD_Version
+msgid "Version"
+msgstr "Версия"
+
+#: TRestoreMode~WND_AccumBuffer
+msgid "ACCUM buffer"
+msgstr "ACCUM буфер"
+
+#: TRestoreMode~WND_AuxBuffer
+msgid "AUX buffer"
+msgstr "AUX буфер"
+
+#: TRestoreMode~WND_DrawPixels
+msgid "Memory"
+msgstr "В памяти"
+
+#: TRestoreMode~WND_NewDraw
+msgid "Redraw"
+msgstr "Перерисовка"
+
+#: TRestoreMode~WND_Texture
+msgid "Texture"
+msgstr "Текстура"
+
+#: tsave~SAVE_Auto_Current_Interval
+msgid "Time to autosave"
+msgstr "Время до автосохранения"
+
+#: tsave~SAVE_Auto_FileName
+msgid "Autosave file name"
+msgstr "Файл автосохранения"
+
+#: tsave~SAVE_Auto_Interval
+msgid "Time between autosaves"
+msgstr "Время между автосохранениями"
+
+#: tsave~SAVE_Auto_On
+msgid "Autosave"
+msgstr "Автосохранение"
+
+#: tsys~SSY_CompileInfo
+msgid "Build info"
+msgstr "Информация о сборке"
+
+#: tsys~SYS_AlternateFont
+msgid "Alternate font file"
+msgstr "Файл альтернативного шрифта"
+
+#: tsys~SYS_IsHistoryLineCreated
+msgid "IsHistoryLineCreated"
+msgstr ""
+
+#: tsys~SYS_RunTime
+msgid "Uptime"
+msgstr "Время работы"
+
+#: tsys~SYS_SystmGeometryColor
+msgid "Help color"
+msgstr "Цвет вспомогательной геометрии"
+
+#: TTraceMode~Angle
+msgid "Angle"
+msgstr "Угол"
+
+#: TTraceMode~ZAxis
+msgid "Z Axis"
+msgstr "Ось Z"
 

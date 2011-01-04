@@ -679,6 +679,7 @@ var parseerror{,parsesuberror}:GDBBoolean;
   //vv:smallint;
   mattr:GDBMetodModifier;
   //md:MetodDescriptor;
+  pf:PFieldDescriptor;
 begin
      //vv:=fieldoffset;
      state:=fields;
@@ -766,8 +767,11 @@ begin
            username:
                     begin
                       fieldtype:=parseresult^.getGDBString(0);
-                      fieldtype:=InterfaceTranslate('',fieldtype);
-                      PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.username:={parseresult^.getGDBString(0)}fieldtype;
+                                            pf:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1));
+                      if fieldtype='Paths' then
+                                          fieldtype:=fieldtype;
+                      fieldtype:=InterfaceTranslate(ptd.TypeName+'~'+pf^.FieldName,fieldtype);
+                      pf^.username:={parseresult^.getGDBString(0)}fieldtype;
                       fieldtype:=parseresult^.getGDBString(0);
                     end;
            membermodifier:

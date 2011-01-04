@@ -19,7 +19,7 @@
 unit UUnitManager;
 {$INCLUDE def.inc}
 interface
-uses strproc,Varman,languade,UGDBOpenArrayOfObjects,{RegCnownTypes,URegisterObjects,}SysUtils,
+uses intftranslations,strproc,Varman,languade,UGDBOpenArrayOfObjects,{RegCnownTypes,URegisterObjects,}SysUtils,
      UBaseTypeDescriptor,gdbasetypes, shared,gdbase,UGDBOpenArrayOfByte, strmy, varmandef,sysinfo,
      UGDBOpenArrayOfData,UGDBStringArray,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,UPointerDescriptor,
      URecordDescriptor,UObjectDescriptor,USinonimDescriptor;
@@ -327,7 +327,7 @@ begin
                                              end;
                                  recordtype:begin
                                                   typename:=parseresult^.getGDBString(0);
-                                                  if (typename) = 'RGB'
+                                                  if (typename) = 'TRestoreMode'
                                                   then
                                                        typename:=typename;
                                                   //GDBStringtypearray := chr(Trecord);
@@ -339,7 +339,7 @@ begin
                                  objecttype:begin
                                                   {FPVMT}
                                                   typename:=parseresult^.getGDBString(0);
-                                                  if (typename) = 'GDBfont'
+                                                  if (typename) = 'TRestoreMode'
                                                   then
                                                        typename:=typename;
                                                   gdbgetmem({$IFDEF DEBUGBUILD}'{792FCD4D-5B31-441D-82DC-F62FE270D4DB}',{$ENDIF}GDBPointer(etd),sizeof(ObjectDescriptor));
@@ -479,7 +479,7 @@ begin
                                                   currvalue:=0;
                                                   maxvalue:=0;
                                                   typename:=pGDBString(parseresult^.getelement(0))^;
-                                                  if typename='TOPSDatType' then
+                                                  if typename='TRestoreMode' then
                                                                                 typename:=typename;
                                                   repeat
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
@@ -488,7 +488,11 @@ begin
                                                                 else FatalError('Syntax error in file '+f.name);
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_softspace'#0'=(=*_GDBString'#0'=*=)',line,parseerror);
-                                                  if parseerror then enumodj.user:=parseresult^.getGDBString(0)
+                                                  if parseerror then
+                                                                    begin
+                                                                         enumodj.user:=parseresult^.getGDBString(0);
+                                                                         enumodj.user:=InterfaceTranslate(typename+'~'+enumodj.source,enumodj.user);
+                                                                    end
                                                                 else enumodj.user:=enumodj.source;
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                                                   parseresult:=runparser('_softspace'#0'==_intnumber'#0,line,parseerror);

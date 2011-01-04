@@ -57,6 +57,8 @@ const
       ZWCS4D:DVector4D=(0,0,1,1);
       NulVertex2D:GDBVertex2D=(x:0;y:0);
       XWCS2D2D:GDBVertex=(x:1;y:0);
+resourcestring
+              ges_dbz='Divide by zero (Geometry.NormalizeVertex)';
 type Intercept3DProp=record
                            isintercept:GDBBoolean;
                            interceptcoord:gdbvertex;
@@ -1283,7 +1285,7 @@ begin
                       Result.Z := Vector1.z / len;
                  end
              else
-                 LogError('Divide на zero (Geometry.NormalizeVertex)');
+                 LogError(ges_dbz);
 end;
 function VertexMulOnSc(const Vector1:GDBVertex;sc:GDBDouble): GDBVertex;
 begin

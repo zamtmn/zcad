@@ -13,49 +13,44 @@ msgstr ""
 msgid "Expression %s return %s"
 msgstr ""
 
-#: gdbsysvariable_Debug
-msgctxt "gdbsysvariable_Debug"
+#: gdbsysvariable~debug
 msgid "Debug"
 msgstr ""
 
-#: gdbsysvariable_Design
-msgctxt "gdbsysvariable_Design"
+#: gdbsysvariable~DSGN
 msgid "Design"
 msgstr ""
 
-#: gdbsysvariable_Drawing
-msgctxt "gdbsysvariable_Drawing"
+#: gdbsysvariable~DWG
 msgid "Drawing"
 msgstr ""
 
-#: gdbsysvariable_Miscellaneous
-msgctxt "gdbsysvariable_Miscellaneous"
+#: gdbsysvariable~MISC
 msgid "Miscellaneous"
 msgstr ""
 
-#: gdbsysvariable_Paths
-msgctxt "gdbsysvariable_paths"
+#: gdbsysvariable~PATH
 msgid "Paths"
 msgstr ""
 
-#: gdbsysvariable_Render
-msgctxt "gdbsysvariable_Render"
+#: gdbsysvariable~RD
 msgid "Render"
 msgstr ""
 
-#: gdbsysvariable_Saving
-msgctxt "gdbsysvariable_Saving"
+#: gdbsysvariable~SAVE
 msgid "Saving"
 msgstr ""
 
-#: gdbsysvariable_System
-msgctxt "gdbsysvariable_System"
+#: gdbsysvariable~SYS
 msgid "System"
 msgstr ""
 
-#: gdbsysvariable_View
-msgctxt "gdbsysvariable_View"
+#: gdbsysvariable~VIEW
 msgid "View"
+msgstr ""
+
+#: geometry.ges_dbz
+msgid "Divide by zero (Geometry.NormalizeVertex)"
 msgstr ""
 
 #: mainwindow.commandlinewndname
@@ -66,38 +61,405 @@ msgstr ""
 msgid "Object Inspector"
 msgstr ""
 
-#: menu_Close page
-msgctxt "menu_Close page"
+#: shared.errorprefix
+msgid "ERROR: "
+msgstr ""
+
+#: submenu~0(polylines)
+msgid "0(polylines)"
+msgstr ""
+
+#: submenu~1
+msgid "1"
+msgstr ""
+
+#: submenu~2
+msgctxt "submenu~2"
+msgid "2"
+msgstr ""
+
+#: submenu~3
+msgctxt "submenu~3"
+msgid "3"
+msgstr ""
+
+#: submenu~4
+msgctxt "submenu~4"
+msgid "4"
+msgstr ""
+
+#: submenu~Close page
 msgid "Close page"
 msgstr ""
 
-#: menu_Exit
-msgctxt "menu_Exit"
+#: submenu~Exit
 msgid "Exit"
 msgstr ""
 
-#: menu_New
-msgctxt "menu_New"
+#: submenu~New
 msgid "New"
 msgstr ""
 
-#: menu_Open
-msgctxt "menu_Open"
+#: submenu~Open
 msgid "Open"
 msgstr ""
 
-#: menu_Save
-msgctxt "menu_Save"
+#: submenu~Save
 msgid "Save"
 msgstr ""
 
-#: menu_Save as
-msgctxt "menu_Save as"
+#: submenu~Save (Autosave)
+msgid "Save (Autosave)"
+msgstr ""
+
+#: submenu~Save as
 msgid "Save as"
 msgstr ""
 
-#: menu_Save (Autosave)
-msgctxt "menu_Save (Autosave)"
-msgid "Save (Autosave)"
+#: submenu~ToolBarR
+msgid "ToolBarR"
+msgstr ""
+
+#: TCalcIP~_ICOS_from_P
+msgid "I,Cos=F(P)"
+msgstr ""
+
+#: TCalcIP~_I_from_P
+msgid "I=F(P,Cos)"
+msgstr ""
+
+#: TCalcIP~_P_from_I
+msgid "P=F(I,Cos)"
+msgstr ""
+
+#: tcompileinfo~SYS_CompileDate
+msgid "Compile date"
+msgstr ""
+
+#: tcompileinfo~SYS_Compiler
+msgid "Compiler"
+msgstr ""
+
+#: tcompileinfo~SYS_CompilerTargetCPU
+msgid "Target CPU"
+msgstr ""
+
+#: tcompileinfo~SYS_CompilerTargetOS
+msgid "Target OS"
+msgstr ""
+
+#: tcompileinfo~SYS_CompilerVer
+msgid "Compiler version"
+msgstr ""
+
+#: tcompileinfo~SYS_CompileTime
+msgid "Compile time"
+msgstr ""
+
+#: tdebug~memi2
+msgid "MemMan::I2"
+msgstr ""
+
+#: tdesigning~DSGN_TraceAutoInc
+msgid "Increment trace names"
+msgstr ""
+
+#: tdisp~DISP_ColorAxis
+msgid "Colored cursor"
+msgstr ""
+
+#: tdisp~DISP_CursorSize
+msgid "Cursor size"
+msgstr ""
+
+#: tdisp~DISP_DrawZAxis
+msgid "Show Z axis"
+msgstr ""
+
+#: tdisp~DISP_OSSize
+msgid "Snap aperture size"
+msgstr ""
+
+#: tdisp~DISP_ZoomFactor
+msgid "Mouse wheel scale factor"
+msgstr ""
+
+#: tdwg~DWG_CLayer
+msgid "Current layer"
+msgstr ""
+
+#: tdwg~DWG_CLinew
+msgid "Current line weigwt"
+msgstr ""
+
+#: tdwg~DWG_DrawMode
+msgid "Draw mode?"
+msgstr ""
+
+#: tdwg~DWG_EditInSubEntry
+msgid "SubEntities edit"
+msgstr ""
+
+#: tdwg~DWG_OSMode
+msgid "Snap mode"
+msgstr ""
+
+#: tdwg~DWG_PolarMode
+msgid "Polar tracking mode"
+msgstr ""
+
+#: tdwg~DWG_SelectedObjToInsp
+msgid "SelectedObjToInsp"
+msgstr ""
+
+#: tmisc~ShowHiddenFieldInObjInsp
+msgid "Show hidden fields"
+msgstr ""
+
+#: TObjLinkRecordMode~OBT
+msgid "ObjBeginToken"
+msgstr ""
+
+#: TObjLinkRecordMode~OFT
+msgid "ObjFieldToken"
+msgstr ""
+
+#: TObjLinkRecordMode~UBR
+msgid "UncnownByReference"
+msgstr ""
+
+#: TOPSMinDatCount~TOPSMDC_2
+msgctxt "TOPSMinDatCount~TOPSMDC_2"
+msgid "2"
+msgstr ""
+
+#: TOPSMinDatCount~TOPSMDC_3
+msgctxt "TOPSMinDatCount~TOPSMDC_3"
+msgid "3"
+msgstr ""
+
+#: TOPSMinDatCount~TOPSMDC_4
+msgctxt "TOPSMinDatCount~TOPSMDC_4"
+msgid "4"
+msgstr ""
+
+#: TOSMode~kosm_3
+msgid "1/3"
+msgstr ""
+
+#: TOSMode~kosm_4
+msgid "1/4"
+msgstr ""
+
+#: TOSMode~kosm_apparentintersection
+msgid "Apparent intersection"
+msgstr ""
+
+#: TOSMode~kosm_center
+msgid "Center"
+msgstr ""
+
+#: TOSMode~kosm_endpoint
+msgid "Endpoint"
+msgstr ""
+
+#: TOSMode~kosm_inspoint
+msgid "Insertion"
+msgstr ""
+
+#: TOSMode~kosm_intersection
+msgid "Intersection"
+msgstr ""
+
+#: TOSMode~kosm_midpoint
+msgid "Midpoint"
+msgstr ""
+
+#: TOSMode~kosm_nearest
+msgid "Nearest"
+msgstr ""
+
+#: TOSMode~kosm_perpendicular
+msgid "Perpendicular"
+msgstr ""
+
+#: TOSMode~kosm_point
+msgid "Point"
+msgstr ""
+
+#: TOSMode~kosm_quadrant
+msgid "Quadrant"
+msgstr ""
+
+#: TOSMode~kosm_tangent
+msgid "Tangent"
+msgstr ""
+
+#: tpath~Device_Library
+msgid "Device base"
+msgstr ""
+
+#: tpath~Fonts_Path
+msgid "Fonts"
+msgstr ""
+
+#: tpath~Program_Run
+msgid "Program"
+msgstr ""
+
+#: tpath~Support_Path
+msgid "Support files"
+msgstr ""
+
+#: tpath~Template_File
+msgid "Default template"
+msgstr ""
+
+#: tpath~Template_Path
+msgid "Templates"
+msgstr ""
+
+#: tpath~Temp_files
+msgid "Temporary files"
+msgstr ""
+
+#: TPhase~_A
+msgid "A"
+msgstr ""
+
+#: TPhase~_ABC
+msgid "ABC"
+msgstr ""
+
+#: TPhase~_B
+msgid "B"
+msgstr ""
+
+#: TPhase~_C
+msgid "C"
+msgstr ""
+
+#: trd~RD_BackGroundColor
+msgid "Background color"
+msgstr ""
+
+#: trd~RD_LastRenderTime
+msgid "Last render time"
+msgstr ""
+
+#: trd~RD_LastUpdateTime
+msgid "Last update time"
+msgstr ""
+
+#: trd~RD_Light
+msgid "Light"
+msgstr ""
+
+#: trd~RD_LineSmooth
+msgid "Line smoth"
+msgstr ""
+
+#: trd~RD_MaxLineWidth
+msgid "Max line width"
+msgstr ""
+
+#: trd~RD_MaxPointSize
+msgid "Max point size"
+msgstr ""
+
+#: trd~RD_MaxRenderTime
+msgid "Maximum single pass time"
+msgstr ""
+
+#: trd~RD_MaxWidth
+msgid "Max width"
+msgstr ""
+
+#: trd~RD_PanObjectDegradation
+msgid "Degradation while pan"
+msgstr ""
+
+#: trd~RD_Renderer
+msgid "Device"
+msgstr ""
+
+#: trd~RD_Restore_Mode
+msgid "Restore mode"
+msgstr ""
+
+#: trd~RD_UseStencil
+msgid "Use STENCIL buffer"
+msgstr ""
+
+#: trd~RD_Vendor
+msgid "Vendor"
+msgstr ""
+
+#: trd~RD_Version
+msgid "Version"
+msgstr ""
+
+#: TRestoreMode~WND_AccumBuffer
+msgid "ACCUM buffer"
+msgstr ""
+
+#: TRestoreMode~WND_AuxBuffer
+msgid "AUX buffer"
+msgstr ""
+
+#: TRestoreMode~WND_DrawPixels
+msgid "Memory"
+msgstr ""
+
+#: TRestoreMode~WND_NewDraw
+msgid "Redraw"
+msgstr ""
+
+#: TRestoreMode~WND_Texture
+msgid "Texture"
+msgstr ""
+
+#: tsave~SAVE_Auto_Current_Interval
+msgid "Time to autosave"
+msgstr ""
+
+#: tsave~SAVE_Auto_FileName
+msgid "Autosave file name"
+msgstr ""
+
+#: tsave~SAVE_Auto_Interval
+msgid "Time between autosaves"
+msgstr ""
+
+#: tsave~SAVE_Auto_On
+msgid "Autosave"
+msgstr ""
+
+#: tsys~SSY_CompileInfo
+msgid "Build info"
+msgstr ""
+
+#: tsys~SYS_AlternateFont
+msgid "Alternate font file"
+msgstr ""
+
+#: tsys~SYS_IsHistoryLineCreated
+msgid "IsHistoryLineCreated"
+msgstr ""
+
+#: tsys~SYS_RunTime
+msgid "Uptime"
+msgstr ""
+
+#: tsys~SYS_SystmGeometryColor
+msgid "Help color"
+msgstr ""
+
+#: TTraceMode~Angle
+msgid "Angle"
+msgstr ""
+
+#: TTraceMode~ZAxis
+msgid "Z Axis"
 msgstr ""
 

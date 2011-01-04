@@ -964,7 +964,7 @@ begin
                                                            line := f.readstring(',','');
                                                            //pmenuitem.command:=line;
 
-                                                           line2:=InterfaceTranslate('menu_'+line2,line2);
+                                                           line2:=InterfaceTranslate('submenu~'+line2,line2);
                                                            pmenuitem:=TmyMenuItem.Create(pm,line2,line);
                                                            {ppopupmenu}pm.Add(pmenuitem);
                                                            line := f.readstring(',','');

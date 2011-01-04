@@ -151,102 +151,102 @@ UserTypeDescriptor=object(GDBaseObject)
                int1:GDBInteger;
         end;
   tpath=record
-             Device_Library:PGDBString;(*'К библиотекам'*)
-             Support_Path:PGDBString;(*'К дополнительным файлам'*)
-             Fonts_Path:PGDBString;(*'К шрафтам'*)
-             Template_Path:PGDBString;(*'К шаблонам'*)
-             Template_File:PGDBString;(*'Шаблон по умолчанию'*)
-             Program_Run:PGDBString;(*'К программе'*)(*oi_readonly*)
-             Temp_files:PGDBString;(*'К временным файлам'*)(*oi_readonly*)
+             Device_Library:PGDBString;(*'Device base'*)
+             Support_Path:PGDBString;(*'Support files'*)
+             Fonts_Path:PGDBString;(*'Fonts'*)
+             Template_Path:PGDBString;(*'Templates'*)
+             Template_File:PGDBString;(*'Default template'*)
+             Program_Run:PGDBString;(*'Program'*)(*oi_readonly*)
+             Temp_files:PGDBString;(*'Temporary files'*)(*oi_readonly*)
         end;
   ptrestoremode=^trestoremode;
   TRestoreMode=(
-                WND_AuxBuffer(*'AUX буфер'*),
-                WND_AccumBuffer(*'ACCUM буфер'*),
-                WND_DrawPixels(*'В памяти'*),
-                WND_NewDraw(*'Перерисовка'*),
-                WND_Texture(*'Текстура'*)
+                WND_AuxBuffer(*'AUX buffer'*),
+                WND_AccumBuffer(*'ACCUM buffer'*),
+                WND_DrawPixels(*'Memory'*),
+                WND_NewDraw(*'Redraw'*),
+                WND_Texture(*'Texture'*)
                );
   TTraceAngle=(
-                TTA90(*'90'*),
-                TTA45(*'45'*),
-                TTA30(*'30'*)
+                TTA90(*'90°'*),
+                TTA45(*'45°'*),
+                TTA30(*'30°'*)
                );
   TTraceMode=record
-                   Angle:TTraceAngle;(*'Угол'*)
-                   ZAxis:GDBBoolean;(*'Ось Z'*)
+                   Angle:TTraceAngle;(*'Angle'*)
+                   ZAxis:GDBBoolean;(*'Z Axis'*)
              end;
   TOSMode=record
-                kosm_inspoint:GDBBoolean;(*'Вставка'*)
-                kosm_endpoint:GDBBoolean;(*'Конец'*)
-                kosm_midpoint:GDBBoolean;(*'Середина'*)
-                kosm_3:GDBBoolean;(*'Треть'*)
-                kosm_4:GDBBoolean;(*'Четверть'*)
-                kosm_center:GDBBoolean;(*'Центр'*)
-                kosm_quadrant:GDBBoolean;(*'Квадрант'*)
-                kosm_point:GDBBoolean;(*'Точка'*)
-                kosm_intersection:GDBBoolean;(*'Пересечение'*)
-                kosm_perpendicular:GDBBoolean;(*'Перпендикуляр'*)
-                kosm_tangent:GDBBoolean;(*'Касательная'*)
-                kosm_nearest:GDBBoolean;(*'Ближайшая'*)
-                kosm_apparentintersection:GDBBoolean;(*'Кажущееся пересечение'*)
+                kosm_inspoint:GDBBoolean;(*'Insertion'*)
+                kosm_endpoint:GDBBoolean;(*'Endpoint'*)
+                kosm_midpoint:GDBBoolean;(*'Midpoint'*)
+                kosm_3:GDBBoolean;(*'1/3'*)
+                kosm_4:GDBBoolean;(*'1/4'*)
+                kosm_center:GDBBoolean;(*'Center'*)
+                kosm_quadrant:GDBBoolean;(*'Quadrant'*)
+                kosm_point:GDBBoolean;(*'Point'*)
+                kosm_intersection:GDBBoolean;(*'Intersection'*)
+                kosm_perpendicular:GDBBoolean;(*'Perpendicular'*)
+                kosm_tangent:GDBBoolean;(*'Tangent'*)
+                kosm_nearest:GDBBoolean;(*'Nearest'*)
+                kosm_apparentintersection:GDBBoolean;(*'Apparent intersection'*)
           end;
   trd=record
-            RD_Renderer:PGDBString;(*'Устройство'*)(*oi_readonly*)
-            RD_Version:PGDBString;(*'Версия'*)(*oi_readonly*)
-            RD_Vendor:PGDBString;(*'Производитель'*)(*oi_readonly*)
-            RD_MaxWidth:pGDBInteger;(*'Максимальная ширина'*)(*oi_readonly*)
-            RD_MaxLineWidth:PGDBDouble;(*'Максимальная ширина линии'*)(*oi_readonly*)
-            RD_MaxPointSize:PGDBDouble;(*'Максимальная ширина точки'*)(*oi_readonly*)
-            RD_BackGroundColor:PRGB;(*'Фоновый цвет'*)
-            RD_Restore_Mode:ptrestoremode;(*'Восстановление изображения'*)
-            RD_LastRenderTime:pGDBInteger;(*'Время последнего рендера'*)(*oi_readonly*)
-            RD_LastUpdateTime:pGDBInteger;(*'Время последнего обновления'*)(*oi_readonly*)
-            RD_MaxRenderTime:pGDBInteger;(*'Максимальное время одного прохода рендера'*)
-            RD_UseStencil:PGDBBoolean;(*'Использовать Stencil буфер'*)
-            RD_Light:PGDBBoolean;(*'Освещение'*)
-            RD_PanObjectDegradation:PGDBBoolean;(*'Деградация при перетаскивании'*)
-            RD_LineSmooth:PGDBBoolean;(*'Сглаживание линий'*)
+            RD_Renderer:PGDBString;(*'Device'*)(*oi_readonly*)
+            RD_Version:PGDBString;(*'Version'*)(*oi_readonly*)
+            RD_Vendor:PGDBString;(*'Vendor'*)(*oi_readonly*)
+            RD_MaxWidth:pGDBInteger;(*'Max width'*)(*oi_readonly*)
+            RD_MaxLineWidth:PGDBDouble;(*'Max line width'*)(*oi_readonly*)
+            RD_MaxPointSize:PGDBDouble;(*'Max point size'*)(*oi_readonly*)
+            RD_BackGroundColor:PRGB;(*'Background color'*)
+            RD_Restore_Mode:ptrestoremode;(*'Restore mode'*)
+            RD_LastRenderTime:pGDBInteger;(*'Last render time'*)(*oi_readonly*)
+            RD_LastUpdateTime:pGDBInteger;(*'Last update time'*)(*oi_readonly*)
+            RD_MaxRenderTime:pGDBInteger;(*'Maximum single pass time'*)
+            RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
+            RD_Light:PGDBBoolean;(*'Light'*)
+            RD_PanObjectDegradation:PGDBBoolean;(*'Degradation while pan'*)
+            RD_LineSmooth:PGDBBoolean;(*'Line smoth'*)
       end;
   tsave=record
-              SAVE_Auto_On:PGDBBoolean;(*'Автосохранение'*)
-              SAVE_Auto_Current_Interval:pGDBInteger;(*'Время до автосохраненния'*)(*oi_readonly*)
-              SAVE_Auto_Interval:PGDBInteger;(*'Время между автосохраненьями'*)
-              SAVE_Auto_FileName:PGDBString;(*'Файл автосохранения'*)
+              SAVE_Auto_On:PGDBBoolean;(*'Autosave'*)
+              SAVE_Auto_Current_Interval:pGDBInteger;(*'Time to autosave'*)(*oi_readonly*)
+              SAVE_Auto_Interval:PGDBInteger;(*'Time between autosaves'*)
+              SAVE_Auto_FileName:PGDBString;(*'Autosave file name'*)
         end;
   tcompileinfo=record
-                     SYS_Compiler:GDBString;(*'Компилятор'*)(*oi_readonly*)
-                     SYS_CompilerVer:GDBString;(*'Версия компилятора'*)(*oi_readonly*)
-                     SYS_CompilerTargetCPU:GDBString;(*'Целевой процессор'*)(*oi_readonly*)
-                     SYS_CompilerTargetOS:GDBString;(*'Целевая операционная система'*)(*oi_readonly*)
-                     SYS_CompileDate:GDBString;(*'Дата компиляции'*)(*oi_readonly*)
-                     SYS_CompileTime:GDBString;(*'Время компиляции'*)(*oi_readonly*)
+                     SYS_Compiler:GDBString;(*'Compiler'*)(*oi_readonly*)
+                     SYS_CompilerVer:GDBString;(*'Compiler version'*)(*oi_readonly*)
+                     SYS_CompilerTargetCPU:GDBString;(*'Target CPU'*)(*oi_readonly*)
+                     SYS_CompilerTargetOS:GDBString;(*'Target OS'*)(*oi_readonly*)
+                     SYS_CompileDate:GDBString;(*'Compile date'*)(*oi_readonly*)
+                     SYS_CompileTime:GDBString;(*'Compile time'*)(*oi_readonly*)
                end;
 
   tsys=record
-             SYS_Version:PGDBString;(*'Версия программы'*)(*oi_readonly*)
-             SSY_CompileInfo:tcompileinfo;(*'Информация о сборке'*)(*oi_readonly*)
-             SYS_RunTime:PGDBInteger;(*'Время работы программы'*)(*oi_readonly*)
-             SYS_SystmGeometryColor:PGDBInteger;(*'Вспомогательный цвет'*)
-             SYS_IsHistoryLineCreated:PGDBBoolean;(*'Окно истории создано'*)(*oi_readonly*)
-             SYS_AlternateFont:PGDBString;(*'Альтернативный шрафт'*)
+             SYS_Version:PGDBString;(*'Program version'*)(*oi_readonly*)
+             SSY_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
+             SYS_RunTime:PGDBInteger;(*'Uptime'*)(*oi_readonly*)
+             SYS_SystmGeometryColor:PGDBInteger;(*'Help color'*)
+             SYS_IsHistoryLineCreated:PGDBBoolean;(*'IsHistoryLineCreated'*)(*oi_readonly*)
+             SYS_AlternateFont:PGDBString;(*'Alternate font file'*)
        end;
   tdwg=record
-             DWG_DrawMode:PGDBInteger;(*'Режим рисования?'*)
-             DWG_OSMode:PGDBInteger;(*'Режим привязки'*)
-             DWG_PolarMode:PGDBInteger;(*'Режим полярного слежения'*)
-             DWG_CLayer:PGDBInteger;(*'Текущий слой'*)
-             DWG_CLinew:PGDBInteger;(*'Текущий вес линии'*)
-             DWG_EditInSubEntry:PGDBBoolean;(*'Редактировать сложные объекты'*)
+             DWG_DrawMode:PGDBInteger;(*'Draw mode?'*)
+             DWG_OSMode:PGDBInteger;(*'Snap mode'*)
+             DWG_PolarMode:PGDBInteger;(*'Polar tracking mode'*)
+             DWG_CLayer:PGDBInteger;(*'Current layer'*)
+             DWG_CLinew:PGDBInteger;(*'Current line weigwt'*)
+             DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_SystmGeometryDraw:PGDBBoolean;
              DWG_HelpGeometryDraw:PGDBBoolean;
              DWG_MaxGrid:PGDBInteger;
              DWG_StepGrid:PGDBDouble;
              DWG_DrawGrid:PGDBBoolean;
-             DWG_SelectedObjToInsp:PGDBBoolean;(*'Выбраные объекты в инспекторе'*)
+             DWG_SelectedObjToInsp:PGDBBoolean;(*'SelectedObjToInsp'*)
        end;
   tdesigning=record
-             DSGN_TraceAutoInc:PGDBBoolean;(*'Автоинкремент имен трасс'*)
+             DSGN_TraceAutoInc:PGDBBoolean;(*'Increment trace names'*)
        end;
   tview=record
                VIEW_CommandLineVisible,
@@ -255,14 +255,14 @@ UserTypeDescriptor=object(GDBaseObject)
          end;
   tmisc=record
               PMenuProjType,PMenuCommandLine,PMenuHistoryLine,PMenuDebugObjInsp:pGDBPointer;
-              ShowHiddenFieldInObjInsp:PGDBBoolean;(*'Показывать скрытые поля'*)
+              ShowHiddenFieldInObjInsp:PGDBBoolean;(*'Show hidden fields'*)
         end;
   tdisp=record
-             DISP_ZoomFactor:PGDBDouble;(*'Масштаб колеса'*)
-             DISP_OSSize:PGDBDouble;(*'Размер апертуры привязки'*)
-             DISP_CursorSize:PGDBInteger;(*'Размер курсора'*)
-             DISP_DrawZAxis:PGDBBoolean;(*'Отображать ось Z'*)
-             DISP_ColorAxis:PGDBBoolean;(*'Цветной курсор'*)
+             DISP_ZoomFactor:PGDBDouble;(*'Mouse wheel scale factor'*)
+             DISP_OSSize:PGDBDouble;(*'Snap aperture size'*)
+             DISP_CursorSize:PGDBInteger;(*'Cursor size'*)
+             DISP_DrawZAxis:PGDBBoolean;(*'Show Z axis'*)
+             DISP_ColorAxis:PGDBBoolean;(*'Colored cursor'*)
         end;
   pgdbsysvariable=^gdbsysvariable;
   gdbsysvariable=record

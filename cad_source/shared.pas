@@ -21,6 +21,9 @@ unit shared;
 interface
 uses gdbasetypes,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,lclproc,Masks;
 
+resourcestring
+  errorprefix='ERROR: ';
+
 type
 TFromDirIterator=procedure (filename:GDBString);
 TFromDirIteratorObj=procedure (filename:GDBString) of object;
@@ -138,7 +141,7 @@ begin
 end;
 procedure LogError(errstr:GDBString); export;
 begin
-     errstr:='ERROR: '+errstr;
+     errstr:=errorprefix+errstr;
      if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
      if sysvar.SYS.SYS_IsHistoryLineCreated^ then
      begin

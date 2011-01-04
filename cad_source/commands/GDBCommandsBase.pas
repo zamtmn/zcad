@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- layerwnd,strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ intftranslations,layerwnd,strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -1757,6 +1757,18 @@ else if Operands='ToolBarR' then
                                  DockMaster.ShowControl('ToolBarR',true);
                             end;
 end;
+function UpdatePO_com(Operands:pansichar):GDBInteger;
+begin
+     if sysinfo.sysparam.updatepo then
+     begin
+          if intftranslations.addeditems>0 then
+          begin
+               po.SaveToFile(PODirectory + 'zcad.po');
+          end
+             else showerror('No POFileItem added');
+     end
+        else showerror('Command line swith "UpdatePO" must be set');
+end;
 procedure startup;
 //var
    //pmenuitem:pzmenuitem;
@@ -1807,6 +1819,8 @@ begin
   CreateCommandFastObjectPlugin(@PolyDiv_com,'PolyDiv',CADWG,0).CEndActionAttr:=CEDeSelect;
   CreateCommandFastObjectPlugin(@SaveLayout_com,'SaveLayout',0,0);
   CreateCommandFastObjectPlugin(@Show_com,'Show',0,0);
+
+  CreateCommandFastObjectPlugin(@UpdatePO_com,'UpdatePO',0,0);
 
 
   //Optionswindow.initxywh('',@mainformn,500,300,400,100,false);

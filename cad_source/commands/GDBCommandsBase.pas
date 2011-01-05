@@ -1761,7 +1761,7 @@ function UpdatePO_com(Operands:pansichar):GDBInteger;
 begin
      if sysinfo.sysparam.updatepo then
      begin
-          if intftranslations.addeditems>0 then
+          if intftranslations._UpdatePO>0 then
           begin
                po.SaveToFile(PODirectory + 'zcad.po');
           end

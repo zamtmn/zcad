@@ -35,12 +35,12 @@ type
 {Export+}
 PGDBObjLine=^GDBObjLine;
 GDBObjLine=object(GDBObj3d)
-                 CoordInOCS:GDBLineProp;(*'Координаты в OCS'*)(*saved_to_shd*)
-                 CoordInWCS:GDBLineProp;(*'Координаты в WCS'*)(*hidden_in_objinsp*)
-                 PProjPoint:PGDBLineProj;(*'Проекция'*)
-                 Length:GDBDouble;(*'Длина'*)
-                 Length_2:GDBDouble;(*'Квадрат длины'*)(*hidden_in_objinsp*)
-                 dir:GDBvertex;(*'Направление'*)(*hidden_in_objinsp*)
+                 CoordInOCS:GDBLineProp;(*'Coordinates OCS'*)(*saved_to_shd*)
+                 CoordInWCS:GDBLineProp;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
+                 PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)
+                 Length:GDBDouble;(*'Length'*)
+                 Length_2:GDBDouble;(*'Sqrt length'*)(*hidden_in_objinsp*)
+                 dir:GDBvertex;(*'Direction'*)(*hidden_in_objinsp*)
 
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);

@@ -96,8 +96,8 @@ GDBvertex3S=record
           end;
 PGDBLineProp=^GDBLineProp;
 GDBLineProp=record
-                  lBegin:GDBvertex;(*'Начало'*)(*saved_to_shd*)
-                  lEnd:GDBvertex;(*'Конец'*)(*saved_to_shd*)
+                  lBegin:GDBvertex;(*'Begin'*)(*saved_to_shd*)
+                  lEnd:GDBvertex;(*'End'*)(*saved_to_shd*)
               end;
 PGDBvertex4D=^GDBvertex4D;
 GDBvertex4D=record
@@ -183,15 +183,15 @@ GDBBaseCamera=object(GDBaseObject)
           end;
 PRGB=^RGB;
 RGB=record
-          r:GDBByte;(*'Красный'*)
-          g:GDBByte;(*'Зеленый'*)
-          b:GDBByte;(*'Синий'*)
-          a:GDBByte;(*'Прозрачность'*)
+          r:GDBByte;(*'Red'*)
+          g:GDBByte;(*'Green'*)
+          b:GDBByte;(*'Blue'*)
+          a:GDBByte;(*'Alpha'*)
     end;
 GDBPalette=array[0..255] of RGB;
 PGDBNamedObject=^GDBNamedObject;
 GDBNamedObject=object(GDBaseObject)
-                     Name:GDBString;(*saved_to_shd*)(*'Имя'*)
+                     Name:GDBString;(*saved_to_shd*)(*'Name'*)
                      constructor initnul;
                      constructor init(n:GDBString);
                      destructor Done;virtual;abstract;
@@ -687,9 +687,13 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
                    primcount,pointcount,bathcount:GDBInteger;
                    middlepoint:GDBVertex;
              end;
+  tlanguadedeb=record
+                   UpdatePO,NotEnlishWord:GDBInteger;
+             end;
   tdebug=record
                memdeb:tmemdeb;
                renderdeb:trenderdeb;
+               languadedeb:tlanguadedeb;
                memi2:GDBInteger;(*'MemMan::I2'*)
                int1:GDBInteger;
         end;
@@ -766,7 +770,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
                      SYS_CompileTime:GDBString;(*'Compile time'*)(*oi_readonly*)
                end;
   tsys=record
-             SYS_Version:PGDBString;(*'Version'*)(*oi_readonly*)
+             SYS_Version:PGDBString;(*'Program version'*)(*oi_readonly*)
              SSY_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
              SYS_RunTime:PGDBInteger;(*'Uptime'*)(*oi_readonly*)
              SYS_SystmGeometryColor:PGDBInteger;(*'Help color'*)
@@ -924,7 +928,7 @@ TUnit=object(TSimpleUnit)
 PGDBObjSubordinated=^GDBObjSubordinated;
 PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
 GDBObjGenericWithSubordinated=object(GDBaseObject)
-                                    OU:TObjectUnit;(*'Переменные'*)
+                                    OU:TObjectUnit;(*'Variables'*)
                                     function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;abstract;
                                     function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;abstract;
                                     procedure DelSelectedSubitem;virtual;abstract;
@@ -972,17 +976,17 @@ TExtAttrib=record
 PGDBObjEntity=^GDBObjEntity;
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=record
-                      Layer:PGDBLayerProp;(*'Слой'*)(*saved_to_shd*)
-                      LineWeight:GDBSmallint;(*'Вес линий'*)(*saved_to_shd*)
-                      ID:GDBWord;(*'ТипОбъекта'*)(*oi_readonly*)
-                      BoundingBox:GDBBoundingBbox;(*'Габарит'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                      Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
+                      LineWeight:GDBSmallint;(*'Line Weight'*)(*saved_to_shd*)
+                      ID:GDBWord;(*'Object type'*)(*oi_readonly*)
+                      BoundingBox:GDBBoundingBbox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       LastCameraPos:TActulity;(*oi_readonly*)
                  end;
 GDBObjEntity=object(GDBObjSubordinated)
-                    vp:GDBObjVisualProp;(*'Общее'*)(*saved_to_shd*)
-                    Selected:GDBBoolean;(*'Выбран'*)(*hidden_in_objinsp*)
-                    Visible:TActulity;(*'Видимый'*)(*oi_readonly*)(*hidden_in_objinsp*)
-                    infrustum:TActulity;(*'В камере'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                    vp:GDBObjVisualProp;(*'General'*)(*saved_to_shd*)
+                    Selected:GDBBoolean;(*'Selected'*)(*hidden_in_objinsp*)
+                    Visible:TActulity;(*'Visible'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                    infrustum:TActulity;(*'In frustum'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     PExtAttrib:PTExtAttrib;(*hidden_in_objinsp*)
                     destructor done;virtual;abstract;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
@@ -1103,7 +1107,7 @@ GDBObj3DFace=object(GDBObj3d)
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBWithMatrix.pas
 PGDBObjWithMatrix=^GDBObjWithMatrix;
 GDBObjWithMatrix=object(GDBObjEntity)
-                       ObjMatrix:DMatrix4D;(*'Матрица OCS'*)
+                       ObjMatrix:DMatrix4D;(*'OCS Matrix'*)
                        constructor initnul(owner:PGDBObjGenericWithSubordinated);
                        function GetMatrix:PDMatrix4D;virtual;abstract;
                        procedure CalcObjMatrix;virtual;abstract;
@@ -1113,18 +1117,18 @@ GDBObjWithMatrix=object(GDBObjEntity)
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBWithLocalCS.pas
 PGDBObj2dprop=^GDBObj2dprop;
 GDBObj2dprop=record
-                   OX:GDBvertex;(*'Ocь X'*)(*saved_to_shd*)
-                   OY:GDBvertex;(*'Ocь Y'*)(*saved_to_shd*)
-                   OZ:GDBvertex;(*'Ocь Z'*)(*saved_to_shd*)
-                   P_insert:GDBvertex;(*'Точка вставки в OCS'*)(*saved_to_shd*)
+                   OX:GDBvertex;(*'X Axis'*)(*saved_to_shd*)
+                   OY:GDBvertex;(*'Y Axis'*)(*saved_to_shd*)
+                   OZ:GDBvertex;(*'Z Axis'*)(*saved_to_shd*)
+                   P_insert:GDBvertex;(*'Insertion point OCS'*)(*saved_to_shd*)
              end;
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
 GDBObjWithLocalCS=object(GDBObjWithMatrix)
-               Local:GDBObj2dprop;(*'Ориентация объекта'*)(*saved_to_shd*)
-               P_insert_in_WCS:GDBvertex;(*'Точка вставки в WCS'*)(*saved_to_shd*)
-               ProjP_insert:GDBvertex;(*'Прокция точки вставки в WCS'*)
-               PProjOutBound:PGDBOOutbound2DIArray;(*'Габарит в DCS'*)
-               lod:GDBByte;(*'Уровень детализации'*)
+               Local:GDBObj2dprop;(*'Object orientation'*)(*saved_to_shd*)
+               P_insert_in_WCS:GDBvertex;(*'Insertion point WCS'*)(*saved_to_shd*)
+               ProjP_insert:GDBvertex;(*'Insertion point DCS'*)
+               PProjOutBound:PGDBOOutbound2DIArray;(*'Bounding box DCS'*)
+               lod:GDBByte;(*'Level of detail'*)
                constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;abstract;
@@ -1524,12 +1528,12 @@ GDBObjNet=object(GDBObjConnected)
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBLine.pas
 PGDBObjLine=^GDBObjLine;
 GDBObjLine=object(GDBObj3d)
-                 CoordInOCS:GDBLineProp;(*'Координаты в OCS'*)(*saved_to_shd*)
-                 CoordInWCS:GDBLineProp;(*'Координаты в WCS'*)(*hidden_in_objinsp*)
-                 PProjPoint:PGDBLineProj;(*'Проекция'*)
-                 Length:GDBDouble;(*'Длина'*)
-                 Length_2:GDBDouble;(*'Квадрат длины'*)(*hidden_in_objinsp*)
-                 dir:GDBvertex;(*'Направление'*)(*hidden_in_objinsp*)
+                 CoordInOCS:GDBLineProp;(*'Coordinates OCS'*)(*saved_to_shd*)
+                 CoordInWCS:GDBLineProp;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
+                 PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)
+                 Length:GDBDouble;(*'Length'*)
+                 Length_2:GDBDouble;(*'Sqrt length'*)(*hidden_in_objinsp*)
+                 dir:GDBvertex;(*'Direction'*)(*hidden_in_objinsp*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
@@ -1575,7 +1579,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  Width3D_in_WCS_Array:GDBOpenArray;
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
                  snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
-                 Square:GDBdouble;(*'Ориентированная площадь'*)
+                 Square:GDBdouble;(*'Oriented area'*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul;
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
@@ -1653,8 +1657,8 @@ GDBObjMText=object(GDBObjText)
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBpoint.pas
 PGDBObjPoint=^GDBObjPoint;
 GDBObjPoint=object(GDBObj3d)
-                 P_insertInOCS:GDBvertex;(*'Координаты в OCS'*)(*saved_to_shd*)
-                 P_insertInWCS:GDBvertex;(*'Координаты в WCS'*)(*hidden_in_objinsp*)
+                 P_insertInOCS:GDBvertex;(*'Coordinates OCS'*)(*saved_to_shd*)
+                 P_insertInWCS:GDBvertex;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  ProjPoint:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -1788,9 +1792,9 @@ GDBObjCamera=object(GDBBaseCamera)
                    procedure NextPosition;virtual;abstract;
              end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBTable.pas
-TTableCellJustify=(jcl(*'ВерхЛево'*),
-              jcm(*'ВерхЦентр'*),
-              jcr(*'ВерхПраво'*));
+TTableCellJustify=(jcl(*'TopLeft'*),
+              jcm(*'TopMiddle'*),
+              jcr(*'TopRight'*));
 PTGDBTableItemFormat=^TGDBTableItemFormat;
 TGDBTableItemFormat=record
                  Width,TextWidth:GDBDouble;

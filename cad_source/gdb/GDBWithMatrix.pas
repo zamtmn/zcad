@@ -25,7 +25,7 @@ type
 {EXPORT+}
 PGDBObjWithMatrix=^GDBObjWithMatrix;
 GDBObjWithMatrix=object(GDBObjEntity)
-                       ObjMatrix:DMatrix4D;(*'Матрица OCS'*)
+                       ObjMatrix:DMatrix4D;(*'OCS Matrix'*)
                        constructor initnul(owner:PGDBObjGenericWithSubordinated);
                        function GetMatrix:PDMatrix4D;virtual;
                        procedure CalcObjMatrix;virtual;

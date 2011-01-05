@@ -13,6 +13,135 @@ msgstr ""
 msgid "Expression %s return %s"
 msgstr ""
 
+#: GDBLineProp~lBegin
+msgid "Begin"
+msgstr ""
+
+#: GDBLineProp~lEnd
+msgid "End"
+msgstr ""
+
+#: GDBNamedObject~Name
+msgid "Name"
+msgstr ""
+
+#: GDBObj2dprop~OX
+msgid "X Axis"
+msgstr ""
+
+#: GDBObj2dprop~OY
+msgid "Y Axis"
+msgstr ""
+
+#: GDBObj2dprop~OZ
+msgctxt "GDBObj2dprop~OZ"
+msgid "Z Axis"
+msgstr ""
+
+#: GDBObj2dprop~P_insert
+msgid "Insertion point OCS"
+msgstr ""
+
+#: GDBObjEntity~infrustum
+msgid "In frustum"
+msgstr ""
+
+#: GDBObjEntity~Selected
+msgid "Selected"
+msgstr ""
+
+#: GDBObjEntity~Visible
+msgid "Visible"
+msgstr ""
+
+#: GDBObjEntity~vp
+msgid "General"
+msgstr ""
+
+#: GDBObjGenericWithSubordinated~OU
+msgid "Variables"
+msgstr ""
+
+#: GDBObjLine~CoordInOCS
+msgctxt "GDBObjLine~CoordInOCS"
+msgid "Coordinates OCS"
+msgstr ""
+
+#: GDBObjLine~CoordInWCS
+msgctxt "GDBObjLine~CoordInWCS"
+msgid "Coordinates WCS"
+msgstr ""
+
+#: GDBObjLine~dir
+msgid "Direction"
+msgstr ""
+
+#: GDBObjLine~Length
+msgid "Length"
+msgstr ""
+
+#: GDBObjLine~Length_2
+msgid "Sqrt length"
+msgstr ""
+
+#: GDBObjLine~PProjPoint
+msgid "Coordinates DCS"
+msgstr ""
+
+#: GDBObjLWPolyline~Square
+msgid "Oriented area"
+msgstr ""
+
+#: GDBObjPoint~P_insertInOCS
+msgctxt "GDBObjPoint~P_insertInOCS"
+msgid "Coordinates OCS"
+msgstr ""
+
+#: GDBObjPoint~P_insertInWCS
+msgctxt "GDBObjPoint~P_insertInWCS"
+msgid "Coordinates WCS"
+msgstr ""
+
+#: GDBObjVisualProp~BoundingBox
+msgid "Bounding box"
+msgstr ""
+
+#: GDBObjVisualProp~ID
+msgid "Object type"
+msgstr ""
+
+#: GDBObjVisualProp~Layer
+msgid "Layer"
+msgstr ""
+
+#: GDBObjVisualProp~LineWeight
+msgid "Line Weight"
+msgstr ""
+
+#: GDBObjWithLocalCS~Local
+msgid "Object orientation"
+msgstr ""
+
+#: GDBObjWithLocalCS~lod
+msgid "Level of detail"
+msgstr ""
+
+#: GDBObjWithLocalCS~PProjOutBound
+msgid "Bounding box DCS"
+msgstr ""
+
+#: GDBObjWithLocalCS~ProjP_insert
+msgid "Insertion point DCS"
+msgstr ""
+
+#: GDBObjWithLocalCS~P_insert_in_WCS
+msgid "Insertion point WCS"
+msgstr ""
+
+#: GDBObjWithMatrix~ObjMatrix
+msgid "OCS Matrix"
+msgstr ""
+
 #: gdbsysvariable~debug
 msgid "Debug"
 msgstr ""
@@ -61,6 +190,22 @@ msgstr ""
 msgid "Object Inspector"
 msgstr ""
 
+#: RGB~a
+msgid "Alpha"
+msgstr ""
+
+#: RGB~b
+msgid "Blue"
+msgstr ""
+
+#: RGB~g
+msgid "Green"
+msgstr ""
+
+#: RGB~r
+msgid "Red"
+msgstr ""
+
 #: shared.errorprefix
 msgid "ERROR: "
 msgstr ""
@@ -90,6 +235,26 @@ msgstr ""
 
 #: submenu~Close page
 msgid "Close page"
+msgstr ""
+
+#: submenu~Error 0(polylines)
+msgid "Error 0(polylines)"
+msgstr ""
+
+#: submenu~Error 1
+msgid "Error 1"
+msgstr ""
+
+#: submenu~Error 2
+msgid "Error 2"
+msgstr ""
+
+#: submenu~Error 3
+msgid "Error 3"
+msgstr ""
+
+#: submenu~Error 4
+msgid "Error 4"
 msgstr ""
 
 #: submenu~Exit
@@ -455,11 +620,28 @@ msgstr ""
 msgid "Help color"
 msgstr ""
 
+#: tsys~SYS_Version
+msgid "Program version"
+msgstr ""
+
+#: TTableCellJustify~jcl
+msgid "TopLeft"
+msgstr ""
+
+#: TTableCellJustify~jcm
+msgid "TopMiddle"
+msgstr ""
+
+#: TTableCellJustify~jcr
+msgid "TopRight"
+msgstr ""
+
 #: TTraceMode~Angle
 msgid "Angle"
 msgstr ""
 
 #: TTraceMode~ZAxis
+msgctxt "TTraceMode~ZAxis"
 msgid "Z Axis"
 msgstr ""
 

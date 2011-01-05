@@ -21,6 +21,135 @@ msgstr "Команда"
 msgid "Expression %s return %s"
 msgstr "Выражение  %s возвращает %s"
 
+#: GDBLineProp~lBegin
+msgid "Begin"
+msgstr "Начало"
+
+#: GDBLineProp~lEnd
+msgid "End"
+msgstr "Конец"
+
+#: GDBNamedObject~Name
+msgid "Name"
+msgstr "Имя"
+
+#: GDBObj2dprop~OX
+msgid "X Axis"
+msgstr "Ось X"
+
+#: GDBObj2dprop~OY
+msgid "Y Axis"
+msgstr "Ось Y"
+
+#: GDBObj2dprop~OZ
+msgctxt "GDBObj2dprop~OZ"
+msgid "Z Axis"
+msgstr "Ось Z"
+
+#: GDBObj2dprop~P_insert
+msgid "Insertion point OCS"
+msgstr "Точка вставки в OCS"
+
+#: GDBObjEntity~infrustum
+msgid "In frustum"
+msgstr "В камере"
+
+#: GDBObjEntity~Selected
+msgid "Selected"
+msgstr "Выбран"
+
+#: GDBObjEntity~Visible
+msgid "Visible"
+msgstr "Видимый"
+
+#: GDBObjEntity~vp
+msgid "General"
+msgstr "Общие"
+
+#: GDBObjGenericWithSubordinated~OU
+msgid "Variables"
+msgstr "Переменные"
+
+#: GDBObjLine~CoordInOCS
+msgctxt "GDBObjLine~CoordInOCS"
+msgid "Coordinates OCS"
+msgstr "Координаты в OCS"
+
+#: GDBObjLine~CoordInWCS
+msgctxt "GDBObjLine~CoordInWCS"
+msgid "Coordinates WCS"
+msgstr "Координаты в WCS"
+
+#: GDBObjLine~dir
+msgid "Direction"
+msgstr "Направление"
+
+#: GDBObjLine~Length
+msgid "Length"
+msgstr "Длина"
+
+#: GDBObjLine~Length_2
+msgid "Sqrt length"
+msgstr "Квадрат длины"
+
+#: GDBObjLine~PProjPoint
+msgid "Coordinates DCS"
+msgstr "Координаты в DCS"
+
+#: GDBObjLWPolyline~Square
+msgid "Oriented area"
+msgstr "Ориентированная площадь"
+
+#: GDBObjPoint~P_insertInOCS
+msgctxt "GDBObjPoint~P_insertInOCS"
+msgid "Coordinates OCS"
+msgstr "Координаты в OCS"
+
+#: GDBObjPoint~P_insertInWCS
+msgctxt "GDBObjPoint~P_insertInWCS"
+msgid "Coordinates WCS"
+msgstr "Координаты в WCS"
+
+#: GDBObjVisualProp~BoundingBox
+msgid "Bounding box"
+msgstr "Габарит"
+
+#: GDBObjVisualProp~ID
+msgid "Object type"
+msgstr "Тип объекта"
+
+#: GDBObjVisualProp~Layer
+msgid "Layer"
+msgstr "Слой"
+
+#: GDBObjVisualProp~LineWeight
+msgid "Line Weight"
+msgstr "Вес линий"
+
+#: GDBObjWithLocalCS~Local
+msgid "Object orientation"
+msgstr "Ориентация объекта"
+
+#: GDBObjWithLocalCS~lod
+msgid "Level of detail"
+msgstr "Уровень детализации"
+
+#: GDBObjWithLocalCS~PProjOutBound
+msgid "Bounding box DCS"
+msgstr "Габарит в DCS"
+
+#: GDBObjWithLocalCS~ProjP_insert
+msgid "Insertion point DCS"
+msgstr "Точка вставки в DCS"
+
+#: GDBObjWithLocalCS~P_insert_in_WCS
+msgid "Insertion point WCS"
+msgstr "Точка вставки в WCS"
+
+#: GDBObjWithMatrix~ObjMatrix
+msgid "OCS Matrix"
+msgstr "Матрица СК объекта"
+
 #: gdbsysvariable~debug
 msgid "Debug"
 msgstr "Отладка"
@@ -69,6 +198,22 @@ msgstr "Командная строка"
 msgid "Object Inspector"
 msgstr "Инспектор объектов"
 
+#: RGB~a
+msgid "Alpha"
+msgstr "Прозрачность"
+
+#: RGB~b
+msgid "Blue"
+msgstr "Синий"
+
+#: RGB~g
+msgid "Green"
+msgstr "Зеленый"
+
+#: RGB~r
+msgid "Red"
+msgstr "Красный"
+
 #: shared.errorprefix
 msgid "ERROR: "
 msgstr "ОШИБКА: "
@@ -99,6 +244,26 @@ msgstr ""
 #: submenu~Close page
 msgid "Close page"
 msgstr "Закрыть вкладку"
+
+#: submenu~Error 0(polylines)
+msgid "Error 0(polylines)"
+msgstr ""
+
+#: submenu~Error 1
+msgid "Error 1"
+msgstr ""
+
+#: submenu~Error 2
+msgid "Error 2"
+msgstr ""
+
+#: submenu~Error 3
+msgid "Error 3"
+msgstr ""
+
+#: submenu~Error 4
+msgid "Error 4"
+msgstr ""
 
 #: submenu~Exit
 msgid "Exit"
@@ -463,11 +628,28 @@ msgstr "Время работы"
 msgid "Help color"
 msgstr "Цвет вспомогательной геометрии"
 
+#: tsys~SYS_Version
+msgid "Program version"
+msgstr "Версия программы"
+
+#: TTableCellJustify~jcl
+msgid "TopLeft"
+msgstr ""
+
+#: TTableCellJustify~jcm
+msgid "TopMiddle"
+msgstr ""
+
+#: TTableCellJustify~jcr
+msgid "TopRight"
+msgstr ""
+
 #: TTraceMode~Angle
 msgid "Angle"
 msgstr "Угол"
 
 #: TTraceMode~ZAxis
+msgctxt "TTraceMode~ZAxis"
 msgid "Z Axis"
 msgstr "Ось Z"
 

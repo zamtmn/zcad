@@ -34,7 +34,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  Width3D_in_WCS_Array:GDBOpenArray;
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
                  snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
-                 Square:GDBdouble;(*'Ориентированная площадь'*)
+                 Square:GDBdouble;(*'Oriented area'*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul;
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;

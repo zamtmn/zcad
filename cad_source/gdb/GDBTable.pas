@@ -26,9 +26,9 @@ gl,
 GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef{,oglwindowdef},geometry,dxflow,memman{,GDBSubordinated,UGDBOpenArrayOfByte};
 type
 {EXPORT+}
-TTableCellJustify=(jcl(*'ВерхЛево'*),
-              jcm(*'ВерхЦентр'*),
-              jcr(*'ВерхПраво'*));
+TTableCellJustify=(jcl(*'TopLeft'*),
+              jcm(*'TopMiddle'*),
+              jcr(*'TopRight'*));
 PTGDBTableItemFormat=^TGDBTableItemFormat;
 TGDBTableItemFormat=record
                  Width,TextWidth:GDBDouble;

@@ -35,7 +35,8 @@ function InterfaceTranslate(const Identifier, OriginalValue: String): String;
 var
    PODirectory, Lang, FallbackLang: String;
    po: TmyPOFile;
-   addeditems:integer=0;
+   _UpdatePO:integer=0;
+   _NotEnlishWord:integer=0;
 implementation
 function TmyPOFile.FindByIdentifier(const Identifier: String):TPOFileItem;
 begin
@@ -132,9 +133,11 @@ begin
                begin
                     po.Add(Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',
                         {Context}'', {Flags}'', {PreviousID}'');
-                    inc(addeditems);
+                    inc(_UpdatePO);
                     po.SaveToFile(PODirectory + 'zcad.po');
-               end;
+               end
+                  else
+                      inc(_NotEnlishWord);
           end;
 
      end;

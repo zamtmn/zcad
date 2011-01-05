@@ -28,18 +28,18 @@ type
 {EXPORT+}
 PGDBObj2dprop=^GDBObj2dprop;
 GDBObj2dprop=record
-                   OX:GDBvertex;(*'Ocь X'*)(*saved_to_shd*)
-                   OY:GDBvertex;(*'Ocь Y'*)(*saved_to_shd*)
-                   OZ:GDBvertex;(*'Ocь Z'*)(*saved_to_shd*)
-                   P_insert:GDBvertex;(*'Точка вставки в OCS'*)(*saved_to_shd*)
+                   OX:GDBvertex;(*'X Axis'*)(*saved_to_shd*)
+                   OY:GDBvertex;(*'Y Axis'*)(*saved_to_shd*)
+                   OZ:GDBvertex;(*'Z Axis'*)(*saved_to_shd*)
+                   P_insert:GDBvertex;(*'Insertion point OCS'*)(*saved_to_shd*)
              end;
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
 GDBObjWithLocalCS=object(GDBObjWithMatrix)
-               Local:GDBObj2dprop;(*'Ориентация объекта'*)(*saved_to_shd*)
-               P_insert_in_WCS:GDBvertex;(*'Точка вставки в WCS'*)(*saved_to_shd*)
-               ProjP_insert:GDBvertex;(*'Прокция точки вставки в WCS'*)
-               PProjOutBound:PGDBOOutbound2DIArray;(*'Габарит в DCS'*)
-               lod:GDBByte;(*'Уровень детализации'*)
+               Local:GDBObj2dprop;(*'Object orientation'*)(*saved_to_shd*)
+               P_insert_in_WCS:GDBvertex;(*'Insertion point WCS'*)(*saved_to_shd*)
+               ProjP_insert:GDBvertex;(*'Insertion point DCS'*)
+               PProjOutBound:PGDBOOutbound2DIArray;(*'Bounding box DCS'*)
+               lod:GDBByte;(*'Level of detail'*)
                constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;

@@ -85,8 +85,8 @@ GDBvertex3S=record
           end;
 PGDBLineProp=^GDBLineProp;
 GDBLineProp=record
-                  lBegin:GDBvertex;(*'Начало'*)(*saved_to_shd*)
-                  lEnd:GDBvertex;(*'Конец'*)(*saved_to_shd*)
+                  lBegin:GDBvertex;(*'Begin'*)(*saved_to_shd*)
+                  lEnd:GDBvertex;(*'End'*)(*saved_to_shd*)
               end;
 PGDBvertex4D=^GDBvertex4D;
 GDBvertex4D=record
@@ -173,15 +173,15 @@ GDBBaseCamera=object(GDBaseObject)
           end;
 PRGB=^RGB;
 RGB=record
-          r:GDBByte;(*'Красный'*)
-          g:GDBByte;(*'Зеленый'*)
-          b:GDBByte;(*'Синий'*)
-          a:GDBByte;(*'Прозрачность'*)
+          r:GDBByte;(*'Red'*)
+          g:GDBByte;(*'Green'*)
+          b:GDBByte;(*'Blue'*)
+          a:GDBByte;(*'Alpha'*)
     end;
 GDBPalette=array[0..255] of RGB;
 PGDBNamedObject=^GDBNamedObject;
 GDBNamedObject=object(GDBaseObject)
-                     Name:GDBString;(*saved_to_shd*)(*'Имя'*)
+                     Name:GDBString;(*saved_to_shd*)(*'Name'*)
                      constructor initnul;
                      constructor init(n:GDBString);
                      destructor Done;virtual;

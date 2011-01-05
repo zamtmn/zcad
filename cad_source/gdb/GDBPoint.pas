@@ -27,8 +27,8 @@ type
 {Export+}
 PGDBObjPoint=^GDBObjPoint;
 GDBObjPoint=object(GDBObj3d)
-                 P_insertInOCS:GDBvertex;(*'Координаты в OCS'*)(*saved_to_shd*)
-                 P_insertInWCS:GDBvertex;(*'Координаты в WCS'*)(*hidden_in_objinsp*)
+                 P_insertInOCS:GDBvertex;(*'Coordinates OCS'*)(*saved_to_shd*)
+                 P_insertInWCS:GDBvertex;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  ProjPoint:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);

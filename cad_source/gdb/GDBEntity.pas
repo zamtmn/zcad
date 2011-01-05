@@ -38,17 +38,17 @@ TExtAttrib=record
 PGDBObjEntity=^GDBObjEntity;
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=record
-                      Layer:PGDBLayerProp;(*'Слой'*)(*saved_to_shd*)
-                      LineWeight:GDBSmallint;(*'Вес линий'*)(*saved_to_shd*)
-                      ID:GDBWord;(*'ТипОбъекта'*)(*oi_readonly*)
-                      BoundingBox:GDBBoundingBbox;(*'Габарит'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                      Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
+                      LineWeight:GDBSmallint;(*'Line Weight'*)(*saved_to_shd*)
+                      ID:GDBWord;(*'Object type'*)(*oi_readonly*)
+                      BoundingBox:GDBBoundingBbox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       LastCameraPos:TActulity;(*oi_readonly*)
                  end;
 GDBObjEntity=object(GDBObjSubordinated)
-                    vp:GDBObjVisualProp;(*'Общее'*)(*saved_to_shd*)
-                    Selected:GDBBoolean;(*'Выбран'*)(*hidden_in_objinsp*)
-                    Visible:TActulity;(*'Видимый'*)(*oi_readonly*)(*hidden_in_objinsp*)
-                    infrustum:TActulity;(*'В камере'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                    vp:GDBObjVisualProp;(*'General'*)(*saved_to_shd*)
+                    Selected:GDBBoolean;(*'Selected'*)(*hidden_in_objinsp*)
+                    Visible:TActulity;(*'Visible'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                    infrustum:TActulity;(*'In frustum'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     PExtAttrib:PTExtAttrib;(*hidden_in_objinsp*)
                     destructor done;virtual;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);

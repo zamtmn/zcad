@@ -144,9 +144,14 @@ UserTypeDescriptor=object(GDBaseObject)
                    primcount,pointcount,bathcount:GDBInteger;
                    middlepoint:GDBVertex;
              end;
+  tlanguadedeb=record
+                   UpdatePO,NotEnlishWord:GDBInteger;
+             end;
+
   tdebug=record
                memdeb:tmemdeb;
                renderdeb:trenderdeb;
+               languadedeb:tlanguadedeb;
                memi2:GDBInteger;(*'MemMan::I2'*)
                int1:GDBInteger;
         end;
@@ -432,5 +437,7 @@ begin
   SysVar.SYS.SSY_CompileInfo.SYS_CompilerTargetOS:={$I %FPCTARGETOS%};
   SysVar.SYS.SSY_CompileInfo.SYS_CompileDate:={$I %DATE%};
   SysVar.SYS.SSY_CompileInfo.SYS_CompileTime:={$I %TIME%};
+  SysVar.debug.languadedeb.NotEnlishWord:=0;
+  SysVar.debug.languadedeb.UpdatePO:=0;
 end.
 

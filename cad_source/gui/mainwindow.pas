@@ -1097,6 +1097,8 @@ var
    pdwg:PTDrawing;
 begin
      done:=true;
+     sysvar.debug.languadedeb.UpdatePO:=_UpdatePO;
+     sysvar.debug.languadedeb.NotEnlishWord:=_NotEnlishWord;
      //exit;
      pdwg:=gdb.GetCurrentDWG;
      if pdwg<>nil then

@@ -50,6 +50,42 @@ msgstr "Ось Z"
 msgid "Insertion point OCS"
 msgstr "Точка вставки в OCS"
 
+#: GDBObj3DFace~PInDCS
+msgctxt "GDBObj3DFace~PInDCS"
+msgid "Coordinates DCS"
+msgstr "Координаты в DCS"
+
+#: GDBObj3DFace~PInOCS
+msgctxt "GDBObj3DFace~PInOCS"
+msgid "Coordinates OCS"
+msgstr "Координаты в OCS"
+
+#: GDBObj3DFace~PInWCS
+msgctxt "GDBObj3DFace~PInWCS"
+msgid "Coordinates WCS"
+msgstr "Координаты в WCS"
+
+#: GDBObjBlockInsert~BlockDesc
+msgid "Block params"
+msgstr "Параметры блока"
+
+#: GDBObjCircle~Area
+msgid "Area"
+msgstr "Площадь"
+
+#: GDBObjCircle~Diametr
+msgid "Diametr"
+msgstr "Диаметр"
+
+#: GDBObjCircle~Length
+msgctxt "GDBObjCircle~Length"
+msgid "Length"
+msgstr "Длина"
+
+#: GDBObjCircle~Radius
+msgid "Radius"
+msgstr "Радиус"
+
 #: GDBObjEntity~infrustum
 msgid "In frustum"
 msgstr "В камере"
@@ -85,6 +121,7 @@ msgid "Direction"
 msgstr "Направление"
 
 #: GDBObjLine~Length
+msgctxt "GDBObjLine~Length"
 msgid "Length"
 msgstr "Длина"
 
@@ -93,6 +130,7 @@ msgid "Sqrt length"
 msgstr "Квадрат длины"
 
 #: GDBObjLine~PProjPoint
+msgctxt "GDBObjLine~PProjPoint"
 msgid "Coordinates DCS"
 msgstr "Координаты в DCS"
 
@@ -183,6 +221,7 @@ msgid "System"
 msgstr "Система"
 
 #: gdbsysvariable~VIEW
+msgctxt "gdbsysvariable~VIEW"
 msgid "View"
 msgstr "Вид"
 
@@ -190,13 +229,145 @@ msgstr "Вид"
 msgid "Divide by zero (Geometry.NormalizeVertex)"
 msgstr "Деление на ноль (Geometry.NormalizeVertex)"
 
+#: hint_panel~Layer
+msgid "Setting up layers"
+msgstr "Настройка слоев"
+
+#: hint_panel~LAYERCOMBOBOX
+msgid "Layer selection"
+msgstr "Выбор слоя"
+
+#: hint_panel~LINEWCOMBOBOX
+msgid "Line weight selection"
+msgstr "Выбор веса линий"
+
+#: hint_panel~Load
+msgid "Load drawing"
+msgstr "Загрузить чертеж"
+
+#: hint_panel~NewDWG
+msgid "New drawing"
+msgstr "Новый чертеж"
+
+#: hint_panel~QSave
+msgid "Save drawing"
+msgstr "Сохранить чертеж"
+
 #: mainwindow.commandlinewndname
 msgid "Command line"
 msgstr "Командная строка"
 
+#: mainwindow.es_recreating
+msgid "Re-creating %s!"
+msgstr "Повторное создание %s!"
+
 #: mainwindow.gdbobjinspwndname
 msgid "Object Inspector"
 msgstr "Инспектор объектов"
+
+#: menucommand~CloseDWG
+msgid "Close page"
+msgstr "Закрыть чертеж"
+
+#: menucommand~CopyBase
+msgid "Copy with base point"
+msgstr "Копировать с базовой точкой"
+
+#: menucommand~CopyClip
+msgid "Copy"
+msgstr "Копировать"
+
+#: menucommand~CTRL+SHIFT+Z
+msgid "Redo"
+msgstr "Повторить"
+
+#: menucommand~CTRL+Z
+msgid "Undo"
+msgstr "Отменить"
+
+#: menucommand~Erase
+msgid "Erase"
+msgstr "Стереть"
+
+#: menucommand~Load
+#| msgid "Open"
+msgid "Open ..."
+msgstr "Открыть ..."
+
+#: menucommand~NewDWG
+msgid "New"
+msgstr "Новый"
+
+#: menucommand~PasteClip
+msgid "Paste"
+msgstr "Вставить"
+
+#: menucommand~QSave
+msgid "Save"
+msgstr "Сохранить"
+
+#: menucommand~QSave(QS)
+msgid "Save (Autosave)"
+msgstr "Сохранить (Autosave)"
+
+#: menucommand~Quit
+msgid "Exit"
+msgstr "Выход"
+
+#: menucommand~SaveAs
+#| msgid "Save as"
+msgctxt "menucommand~SaveAs"
+msgid "Save as ..."
+msgstr "Сохранить как ..."
+
+#: menucommand~Show(ToolBarR)
+msgid "ToolBarR"
+msgstr ""
+
+#: menu~Draw
+msgid "Draw"
+msgstr "Черчение"
+
+#: menu~Edit
+msgid "Edit"
+msgstr "Правка"
+
+#: menu~File
+msgid "File"
+msgstr "Файл"
+
+#: menu~Format
+msgid "Format"
+msgstr "Формат"
+
+#: menu~Help
+msgid "Help"
+msgstr "Справка"
+
+#: menu~Model
+msgid "Model"
+msgstr "Модель"
+
+#: menu~Modify
+msgid "Modify"
+msgstr "Изменить"
+
+#: menu~Plan
+msgid "Plan"
+msgstr "План"
+
+#: menu~Schematic
+msgid "Schematic"
+msgstr "Схема"
+
+#: menu~Settings
+msgid "Settings"
+msgstr "Настройка"
+
+#: menu~View
+msgctxt "menu~View"
+msgid "View"
+msgstr "Вид"
 
 #: RGB~a
 msgid "Alpha"
@@ -218,80 +389,17 @@ msgstr "Красный"
 msgid "ERROR: "
 msgstr "ОШИБКА: "
 
-#: submenu~0(polylines)
-msgid "0(polylines)"
-msgstr ""
+#: TBlockDesc~BBorder
+msgid "Border"
+msgstr "Граница"
 
-#: submenu~1
-msgid "1"
-msgstr ""
+#: TBlockDesc~BGroup
+msgid "Block group"
+msgstr "Группа блока"
 
-#: submenu~2
-msgctxt "submenu~2"
-msgid "2"
-msgstr ""
-
-#: submenu~3
-msgctxt "submenu~3"
-msgid "3"
-msgstr ""
-
-#: submenu~4
-msgctxt "submenu~4"
-msgid "4"
-msgstr ""
-
-#: submenu~Close page
-msgid "Close page"
-msgstr "Закрыть вкладку"
-
-#: submenu~Error 0(polylines)
-msgid "Error 0(polylines)"
-msgstr ""
-
-#: submenu~Error 1
-msgid "Error 1"
-msgstr ""
-
-#: submenu~Error 2
-msgid "Error 2"
-msgstr ""
-
-#: submenu~Error 3
-msgid "Error 3"
-msgstr ""
-
-#: submenu~Error 4
-msgid "Error 4"
-msgstr ""
-
-#: submenu~Exit
-msgid "Exit"
-msgstr "Выход"
-
-#: submenu~New
-msgid "New"
-msgstr "Новый"
-
-#: submenu~Open
-msgid "Open"
-msgstr "Открыть"
-
-#: submenu~Save
-msgid "Save"
-msgstr "Сохранить"
-
-#: submenu~Save (Autosave)
-msgid "Save (Autosave)"
-msgstr "Сохранить (Autosave)"
-
-#: submenu~Save as
-msgid "Save as"
-msgstr "Сохранить как"
-
-#: submenu~ToolBarR
-msgid "ToolBarR"
-msgstr ""
+#: TBlockDesc~BType
+msgid "Block type"
+msgstr "Тип блока"
 
 #: TCalcIP~_ICOS_from_P
 msgid "I,Cos=F(P)"
@@ -429,6 +537,7 @@ msgid "Apparent intersection"
 msgstr "Кажущееся пересечение"
 
 #: TOSMode~kosm_center
+msgctxt "TOSMode~kosm_center"
 msgid "Center"
 msgstr "Центр"
 
@@ -632,17 +741,72 @@ msgstr "Цвет вспомогательной геометрии"
 msgid "Program version"
 msgstr "Версия программы"
 
-#: TTableCellJustify~jcl
-msgid "TopLeft"
-msgstr ""
+#: TTableCellJustify~jcc
+msgctxt "TTableCellJustify~jcc"
+msgid "TopCenter"
+msgstr "ВерхЦентр"
 
-#: TTableCellJustify~jcm
-msgid "TopMiddle"
-msgstr ""
+#: TTableCellJustify~jcl
+msgctxt "TTableCellJustify~jcl"
+msgid "TopLeft"
+msgstr "ВерхЛево"
 
 #: TTableCellJustify~jcr
+msgctxt "TTableCellJustify~jcr"
 msgid "TopRight"
-msgstr ""
+msgstr "ВерхПраво"
+
+#: TTextJustify~jsbc
+msgid "BottomCenter"
+msgstr "НизЦентр"
+
+#: TTextJustify~jsbl
+msgid "BottomLeft"
+msgstr "НизЛево"
+
+#: TTextJustify~jsbr
+msgid "BottomRight"
+msgstr "НизПраво"
+
+#: TTextJustify~jsbtc
+msgctxt "TTextJustify~jsbtc"
+msgid "Center"
+msgstr "Центр"
+
+#: TTextJustify~jsbtl
+msgid "Left"
+msgstr "Лево"
+
+#: TTextJustify~jsbtr
+msgid "Right"
+msgstr "Право"
+
+#: TTextJustify~jsmc
+msgid "MiddleCenter"
+msgstr "СерединаЦентр"
+
+#: TTextJustify~jsml
+msgid "MiddleLeft"
+msgstr "СерединаЛево"
+
+#: TTextJustify~jsmr
+msgid "MiddleRight"
+msgstr "СерединаПраво"
+
+#: TTextJustify~jstc
+msgctxt "TTextJustify~jstc"
+msgid "TopCenter"
+msgstr "ВерхЦентр"
+
+#: TTextJustify~jstl
+msgctxt "TTextJustify~jstl"
+msgid "TopLeft"
+msgstr "ВерхЛево"
+
+#: TTextJustify~jstr
+msgctxt "TTextJustify~jstr"
+msgid "TopRight"
+msgstr "ВерхПраво"
 
 #: TTraceMode~Angle
 msgid "Angle"

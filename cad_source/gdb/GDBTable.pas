@@ -24,10 +24,11 @@ uses strproc,UGDBOpenArrayOfByte,UGDBTableStyleArray,GDBLine{,math},gdbasetypes{
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,UGDBSelectedObjArray,UGDBVisibleOpenArray,}gdbEntity{,varman,varmandef},
 gl,
 GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef{,oglwindowdef},geometry,dxflow,memman{,GDBSubordinated,UGDBOpenArrayOfByte};
+//jcm(*'TopMiddle'*),
 type
 {EXPORT+}
 TTableCellJustify=(jcl(*'TopLeft'*),
-              jcm(*'TopMiddle'*),
+              jcc(*'TopCenter'*),
               jcr(*'TopRight'*));
 PTGDBTableItemFormat=^TGDBTableItemFormat;
 TGDBTableItemFormat=record
@@ -161,7 +162,7 @@ ConstObjArray.cleareraseobj;
                                                    pgdbmtext.textprop.justify:=jstl;
                                                    pgdbmtext.Local.P_insert.x:=x+1;
                                               end;
-                                          jcm:begin
+                                          jcc:begin
                                                    pgdbmtext.textprop.justify:=jstm;
                                                    pgdbmtext.Local.P_insert.x:=x+pcf^.Width/2;
                                               end;

@@ -20,7 +20,7 @@ unit aboutwnd;
 {$INCLUDE def.inc}
 interface
 uses
- gettext,translations,intftranslations,
+ gettext,{translations,}intftranslations,
  strproc,umytreenode,{Classes, SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}
  gdbase,{UGDBDescriptor,math,commandline,varman,}languade{,UGDBTracePropArray},
   {zforms,ZEditsWithProcedure,zbasicvisible,varmandef,shared,ZGUIsCT,ZStaticsText,}sysinfo;

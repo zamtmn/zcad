@@ -42,6 +42,42 @@ msgstr ""
 msgid "Insertion point OCS"
 msgstr ""
 
+#: GDBObj3DFace~PInDCS
+msgctxt "GDBObj3DFace~PInDCS"
+msgid "Coordinates DCS"
+msgstr ""
+
+#: GDBObj3DFace~PInOCS
+msgctxt "GDBObj3DFace~PInOCS"
+msgid "Coordinates OCS"
+msgstr ""
+
+#: GDBObj3DFace~PInWCS
+msgctxt "GDBObj3DFace~PInWCS"
+msgid "Coordinates WCS"
+msgstr ""
+
+#: GDBObjBlockInsert~BlockDesc
+msgid "Block params"
+msgstr ""
+
+#: GDBObjCircle~Area
+msgid "Area"
+msgstr ""
+
+#: GDBObjCircle~Diametr
+msgid "Diametr"
+msgstr ""
+
+#: GDBObjCircle~Length
+msgctxt "GDBObjCircle~Length"
+msgid "Length"
+msgstr ""
+
+#: GDBObjCircle~Radius
+msgid "Radius"
+msgstr ""
+
 #: GDBObjEntity~infrustum
 msgid "In frustum"
 msgstr ""
@@ -77,6 +113,7 @@ msgid "Direction"
 msgstr ""
 
 #: GDBObjLine~Length
+msgctxt "GDBObjLine~Length"
 msgid "Length"
 msgstr ""
 
@@ -85,6 +122,7 @@ msgid "Sqrt length"
 msgstr ""
 
 #: GDBObjLine~PProjPoint
+msgctxt "GDBObjLine~PProjPoint"
 msgid "Coordinates DCS"
 msgstr ""
 
@@ -175,6 +213,7 @@ msgid "System"
 msgstr ""
 
 #: gdbsysvariable~VIEW
+msgctxt "gdbsysvariable~VIEW"
 msgid "View"
 msgstr ""
 
@@ -182,12 +221,144 @@ msgstr ""
 msgid "Divide by zero (Geometry.NormalizeVertex)"
 msgstr ""
 
+#: hint_panel~Layer
+msgid "Setting up layers"
+msgstr ""
+
+#: hint_panel~LAYERCOMBOBOX
+msgid "Layer selection"
+msgstr ""
+
+#: hint_panel~LINEWCOMBOBOX
+msgid "Line weight selection"
+msgstr ""
+
+#: hint_panel~Load
+msgid "Load drawing"
+msgstr ""
+
+#: hint_panel~NewDWG
+msgid "New drawing"
+msgstr ""
+
+#: hint_panel~QSave
+msgid "Save drawing"
+msgstr ""
+
 #: mainwindow.commandlinewndname
 msgid "Command line"
 msgstr ""
 
+#: mainwindow.es_recreating
+msgid "Re-creating %s!"
+msgstr ""
+
 #: mainwindow.gdbobjinspwndname
 msgid "Object Inspector"
+msgstr ""
+
+#: menucommand~CloseDWG
+msgid "Close page"
+msgstr ""
+
+#: menucommand~CopyBase
+msgid "Copy with base point"
+msgstr ""
+
+#: menucommand~CopyClip
+msgid "Copy"
+msgstr ""
+
+#: menucommand~CTRL+SHIFT+Z
+msgid "Redo"
+msgstr ""
+
+#: menucommand~CTRL+Z
+msgid "Undo"
+msgstr ""
+
+#: menucommand~Erase
+msgid "Erase"
+msgstr ""
+
+#: menucommand~Load
+#, fuzzy
+msgid "Open ..."
+msgstr ""
+
+#: menucommand~NewDWG
+msgid "New"
+msgstr ""
+
+#: menucommand~PasteClip
+msgid "Paste"
+msgstr ""
+
+#: menucommand~QSave
+msgid "Save"
+msgstr ""
+
+#: menucommand~QSave(QS)
+msgid "Save (Autosave)"
+msgstr ""
+
+#: menucommand~Quit
+msgid "Exit"
+msgstr ""
+
+#: menucommand~SaveAs
+#, fuzzy
+msgctxt "menucommand~SaveAs"
+msgid "Save as ..."
+msgstr ""
+
+#: menucommand~Show(ToolBarR)
+msgid "ToolBarR"
+msgstr ""
+
+#: menu~Draw
+msgid "Draw"
+msgstr ""
+
+#: menu~Edit
+msgid "Edit"
+msgstr ""
+
+#: menu~File
+msgid "File"
+msgstr ""
+
+#: menu~Format
+msgid "Format"
+msgstr ""
+
+#: menu~Help
+msgid "Help"
+msgstr ""
+
+#: menu~Model
+msgid "Model"
+msgstr ""
+
+#: menu~Modify
+msgid "Modify"
+msgstr ""
+
+#: menu~Plan
+msgid "Plan"
+msgstr ""
+
+#: menu~Schematic
+msgid "Schematic"
+msgstr ""
+
+#: menu~Settings
+msgid "Settings"
+msgstr ""
+
+#: menu~View
+msgctxt "menu~View"
+msgid "View"
 msgstr ""
 
 #: RGB~a
@@ -210,79 +381,16 @@ msgstr ""
 msgid "ERROR: "
 msgstr ""
 
-#: submenu~0(polylines)
-msgid "0(polylines)"
+#: TBlockDesc~BBorder
+msgid "Border"
 msgstr ""
 
-#: submenu~1
-msgid "1"
+#: TBlockDesc~BGroup
+msgid "Block group"
 msgstr ""
 
-#: submenu~2
-msgctxt "submenu~2"
-msgid "2"
-msgstr ""
-
-#: submenu~3
-msgctxt "submenu~3"
-msgid "3"
-msgstr ""
-
-#: submenu~4
-msgctxt "submenu~4"
-msgid "4"
-msgstr ""
-
-#: submenu~Close page
-msgid "Close page"
-msgstr ""
-
-#: submenu~Error 0(polylines)
-msgid "Error 0(polylines)"
-msgstr ""
-
-#: submenu~Error 1
-msgid "Error 1"
-msgstr ""
-
-#: submenu~Error 2
-msgid "Error 2"
-msgstr ""
-
-#: submenu~Error 3
-msgid "Error 3"
-msgstr ""
-
-#: submenu~Error 4
-msgid "Error 4"
-msgstr ""
-
-#: submenu~Exit
-msgid "Exit"
-msgstr ""
-
-#: submenu~New
-msgid "New"
-msgstr ""
-
-#: submenu~Open
-msgid "Open"
-msgstr ""
-
-#: submenu~Save
-msgid "Save"
-msgstr ""
-
-#: submenu~Save (Autosave)
-msgid "Save (Autosave)"
-msgstr ""
-
-#: submenu~Save as
-msgid "Save as"
-msgstr ""
-
-#: submenu~ToolBarR
-msgid "ToolBarR"
+#: TBlockDesc~BType
+msgid "Block type"
 msgstr ""
 
 #: TCalcIP~_ICOS_from_P
@@ -421,6 +529,7 @@ msgid "Apparent intersection"
 msgstr ""
 
 #: TOSMode~kosm_center
+msgctxt "TOSMode~kosm_center"
 msgid "Center"
 msgstr ""
 
@@ -624,15 +733,70 @@ msgstr ""
 msgid "Program version"
 msgstr ""
 
+#: TTableCellJustify~jcc
+msgctxt "TTableCellJustify~jcc"
+msgid "TopCenter"
+msgstr ""
+
 #: TTableCellJustify~jcl
+msgctxt "TTableCellJustify~jcl"
 msgid "TopLeft"
 msgstr ""
 
-#: TTableCellJustify~jcm
-msgid "TopMiddle"
+#: TTableCellJustify~jcr
+msgctxt "TTableCellJustify~jcr"
+msgid "TopRight"
 msgstr ""
 
-#: TTableCellJustify~jcr
+#: TTextJustify~jsbc
+msgid "BottomCenter"
+msgstr ""
+
+#: TTextJustify~jsbl
+msgid "BottomLeft"
+msgstr ""
+
+#: TTextJustify~jsbr
+msgid "BottomRight"
+msgstr ""
+
+#: TTextJustify~jsbtc
+msgctxt "TTextJustify~jsbtc"
+msgid "Center"
+msgstr ""
+
+#: TTextJustify~jsbtl
+msgid "Left"
+msgstr ""
+
+#: TTextJustify~jsbtr
+msgid "Right"
+msgstr ""
+
+#: TTextJustify~jsmc
+msgid "MiddleCenter"
+msgstr ""
+
+#: TTextJustify~jsml
+msgid "MiddleLeft"
+msgstr ""
+
+#: TTextJustify~jsmr
+msgid "MiddleRight"
+msgstr ""
+
+#: TTextJustify~jstc
+msgctxt "TTextJustify~jstc"
+msgid "TopCenter"
+msgstr ""
+
+#: TTextJustify~jstl
+msgctxt "TTextJustify~jstl"
+msgid "TopLeft"
+msgstr ""
+
+#: TTextJustify~jstr
+msgctxt "TTextJustify~jstr"
 msgid "TopRight"
 msgstr ""
 

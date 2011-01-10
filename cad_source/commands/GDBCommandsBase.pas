@@ -1761,11 +1761,11 @@ function UpdatePO_com(Operands:pansichar):GDBInteger;
 begin
      if sysinfo.sysparam.updatepo then
      begin
-          if intftranslations._UpdatePO>0 then
+          //if intftranslations._UpdatePO>0 then
           begin
                po.SaveToFile(PODirectory + 'zcad.po');
           end
-             else showerror('No POFileItem added');
+             //else showerror('No POFileItem added');
      end
         else showerror('Command line swith "UpdatePO" must be set');
 end;

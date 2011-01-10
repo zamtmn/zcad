@@ -31,9 +31,9 @@ TBlockType=(BT_Connector,BT_Unknown);
 TBlockBorder=(BB_Owner,BB_Self,BB_Empty);
 TBlockGroup=(BG_El_Device,BG_Unknown);
 TBlockDesc=record
-                 BType:TBlockType;(*'Тип блока'*)
-                 BBorder:TBlockBorder;(*'Граница блока'*)
-                 BGroup:TBlockGroup;(*'Группа блока'*)
+                 BType:TBlockType;(*'Block type'*)
+                 BBorder:TBlockBorder;(*'Border'*)
+                 BGroup:TBlockGroup;(*'Block group'*)
            end;
 PGDBObjBlockdef=^GDBObjBlockdef;
 GDBObjBlockdef=object(GDBObjGenericSubEntry)

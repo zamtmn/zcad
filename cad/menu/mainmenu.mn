@@ -11,13 +11,13 @@ Panel DOWNPANEL 894,68,30,525;
   }
 Panel UPPANEL 994,68,30,525;
   {
-    button NewDWG,new.bmp,Создать новый чертеж
-    button Load,load.bmp,Загрузить файл
-    button QSave,save.bmp,Сохранить файл
+    button NewDWG,new.bmp,New drawing
+    button Load,load.bmp,Load drawing
+    button QSave,save.bmp,Save drawing
     Separator
-    button Layer,layer.bmp,Настройка слоев
-    layercombobox 200,Выбор слоя
-    linewcombobox 100,Выбор веса линий
+    button Layer,layer.bmp,Setting up layers
+    layercombobox 200,Layer selection
+    linewcombobox 100,Line weight selection
     Separator
     button Undo,undo.bmp,Отменить действие
     button Redo,redo.bmp,Вернуть действие
@@ -64,13 +64,13 @@ Panel RIGHTPANEL 994,68,30,525;
     Separator
     button SetObjInsp(CURRENT),#FIX,*DEBUG*Фиксировать выделенный объект в инспекторе
   }
-MainMenuItem Файл;
+MainMenuItem File;
   {
     Command New,NewDWG,CTRL+N,none
-    Command Open,Load,CTRL+O,none
+    Command Open ...,Load,CTRL+O,none
     Separator
     Command Save,QSave,CTRL+S,none
-    Command Save as,SaveAs,CTRL+S,none
+    Command Save as ...,SaveAs,CTRL+S,none
     Command Save (Autosave),QSave(QS),CTRL+S,none
     Separator
     Command Close page,CloseDWG,none,none
@@ -79,17 +79,17 @@ MainMenuItem Файл;
     Separator
     Command Exit,Quit,none,none
   }
-MainMenuItem Правка;
+MainMenuItem Edit;
   {
-    Command Отменить??,CTRL+Z,none,none
-    Command Вернуть??,CTRL+SHIFT+Z,none,none
+    Command Undo,CTRL+Z,none,none
+    Command Redo,CTRL+SHIFT+Z,none,none
     Separator
-    Command Копировать,CopyClip,none,none
-    Command Копировать с базовой точкой,CopyBase,none,none
-    Command Вставить,PasteClip,none,none
-    Command Стереть,Erase,Del,none
+    Command Copy,CopyClip,none,none
+    Command Copy with base point,CopyBase,none,none
+    Command Paste,PasteClip,none,none
+    Command Erase,Erase,Del,none
   }
-MainMenuItem Вид;
+MainMenuItem View;
   {
     Command Инспектор объектов,Show(ObjInsp),none,none
     Command Командная строка и история,Show(CommandLine),none,none
@@ -109,7 +109,7 @@ MainMenuItem Вид;
       }
    Command Дерево проекта,ProjectTree,none,none
   }
-MainMenuItem Формат;
+MainMenuItem Format;
   {
     Command Слои,SetObjInsp(LAYERS),none,none
     MenuItem Текст;
@@ -122,14 +122,14 @@ MainMenuItem Формат;
     Command Стили размеров (пока нет),fuckoff,none,none
     Command Листы (пока нет),fuckoff,none,none
   }
-MainMenuItem Черчение;
+MainMenuItem Draw;
   {
     Command Блок,Insert,none,none
     Command Линия,Line,none,none
     Command ПолиЛиния,3dpoly,none,none
     Command Окружность,Circle,none,none
   }
-MainMenuItem Изменить;
+MainMenuItem Modify;
   {
     Command Менеджер переменных объекта,ObjVarMan,none,none
     Command Редактор полилиний,PolyED,none,none
@@ -138,7 +138,7 @@ MainMenuItem Изменить;
         Command Редактор блоков,BEdit,none,none
       }
   }
-MainMenuItem Схема;
+MainMenuItem Schematic;
   {
     MenuItem Электрическая принципиальная;
       {
@@ -152,7 +152,7 @@ MainMenuItem Схема;
        Command Обновить маркеры кабелей,KIP_Cable_Mark,none,none
       }
   }
-MainMenuItem План;
+MainMenuItem Plan;
   {
     MenuItem Кабель/Трасса;
       {
@@ -245,7 +245,7 @@ MainMenuItem План;
       }
    Command Расстоновка блоков массивом,OrtoDevPlace,none,none
   }
-MainMenuItem Модель;
+MainMenuItem Model;
   {
     Command Менеджер кабелей,EL_CableMan,none,none
     MenuItem ОПС;
@@ -262,43 +262,43 @@ MainMenuItem Модель;
     Command Создать кабельный журнал,El_Cable_Legend,none,none
     Command Создать "ведомость" оборудования,El_Material_Legend,none,none
   }
-MainMenuItem Настройка;
+MainMenuItem Settings;
   {
     Command Параметры,Options,CTRL+O,none
     Command Сохранить параметры,SaveOptions,CTRL+O,none
   }
-MainMenuItem Справка;
+MainMenuItem Help;
   {
     Command Помощь,Help,none,none
     Command О программе,about,none,none
   }
-MainMenuItem ***Debug***;
+MainMenuItem **Debug;
   {
-    MenuItem Файлы с ошибками (текущая отладка);
+    MenuItem **Файлы с ошибками (текущая отладка);
     {
-     Command Error 0(polylines),Load(c:/zcad/errors/0.dxf),none,none
-     Command Error 1,Load(c:/zcad/errors/1.dxf),none,none
-     Command Error 2,Load(c:/zcad/errors/2.dxf),none,none
-     Command Error 3,Load(c:/zcad/errors/3.dxf),none,none
-     Command Error 4,Load(c:/zcad/errors/4.dxf),none,none
+     Command **Error 0(polylines),Load(c:/zcad/errors/0.dxf),none,none
+     Command **Error 1,Load(c:/zcad/errors/1.dxf),none,none
+     Command **Error 2,Load(c:/zcad/errors/2.dxf),none,none
+     Command **Error 3,Load(c:/zcad/errors/3.dxf),none,none
+     Command **Error 4,Load(c:/zcad/errors/4.dxf),none,none
     }
-    Command Загрузить пример ЭМ,Load(*sample/test_dxf/em.dxf),none,none
-    Command Загрузить пример ОПС,Load(*sample/test_dxf/ops.dxf),none,none
-    Command Загрузить схему??,Load(*sample/test_dxf/shema_Poly_Line_Text_Circle_Arc.dxf),none,none
-    Command Загрузить чайник,Load(*sample/test_dxf/teapot.dxf),none,none
-    Command Вставить все определенные блоки,PlaceAllBlocks,none,none
-    Command Пошарить в Clipboard,DebClip,none,none
-    Command Отчет по выделениям памяти,MemSummary,none,none
-    MenuItem Инспектор;
+    Command **Загрузить пример ЭМ,Load(*sample/test_dxf/em.dxf),none,none
+    Command **Загрузить пример ОПС,Load(*sample/test_dxf/ops.dxf),none,none
+    Command **Загрузить схему??,Load(*sample/test_dxf/shema_Poly_Line_Text_Circle_Arc.dxf),none,none
+    Command **Загрузить чайник,Load(*sample/test_dxf/teapot.dxf),none,none
+    Command **Вставить все определенные блоки,PlaceAllBlocks,none,none
+    Command **Пошарить в Clipboard,DebClip,none,none
+    Command **Отчет по выделениям памяти,MemSummary,none,none
+    MenuItem **Инспектор;
       {
-        Command Зафиксировать текущий объект (отладка),SetObjInsp(CURRENT),none,none
-        Command GDB (отладка),SetObjInsp(GDBDescriptor),none,none
-        Command OGLWND (отладка),SetObjInsp(OGLWND_DEBUG),none,none
-        Command Реле? (отладка),SetObjInsp(RELE_DEBUG),none,none
+        Command **Зафиксировать текущий объект (отладка),SetObjInsp(CURRENT),none,none
+        Command **GDB (отладка),SetObjInsp(GDBDescriptor),none,none
+        Command **OGLWND (отладка),SetObjInsp(OGLWND_DEBUG),none,none
+        Command **Реле? (отладка),SetObjInsp(RELE_DEBUG),none,none
       }
   }
-MainMenuItem ??БД Чертежа;
+MainMenuItem **БД Чертежа;
   {
-    Command ??Добавить в базу,DBaseAdd,none,none
-    Command ??Связать с объектом,DBaseLink,none,none
+    Command **Добавить в базу,DBaseAdd,none,none
+    Command **Связать с объектом,DBaseLink,none,none
   }

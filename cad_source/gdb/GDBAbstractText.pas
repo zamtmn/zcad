@@ -23,19 +23,20 @@ uses {GDBEntity,}strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UG
 gl,
 GDBase,UGDBDescriptor,gdbobjectsconstdef{,oglwindowdef},geometry{,dxflow,strmy},math{,GDBPlain},OGLSpecFunc{,GDBGenericSubEntry};
 type
+//jstm(*'TopCenter'*)=2,
 {EXPORT+}
-TTextJustify=(jstl(*'ВерхЛево'*)=1,
-              jstm(*'ВерхЦентр'*)=2,
-              jstr(*'ВерхПраво'*)=3,
-              jsml(*'СерединаЛево'*)=4,
-              jsmc(*'СерединаЦентр'*)=5,
-              jsmr(*'СерединаПраво'*)=6,
-              jsbl(*'НизЛево'*)=7,
-              jsbc(*'НизЦентр'*)=8,
-              jsbr(*'НизПраво'*)=9,
-              jsbtl(*'Лево'*)=10,
-              jsbtc(*'Центр'*)=11,
-              jsbtr(*'Право'*)=12);
+TTextJustify=(jstl(*'TopLeft'*)=1,
+              jstc(*'TopCenter'*)=2,
+              jstr(*'TopRight'*)=3,
+              jsml(*'MiddleLeft'*)=4,
+              jsmc(*'MiddleCenter'*)=5, //СерединаЦентр
+              jsmr(*'MiddleRight'*)=6,
+              jsbl(*'BottomLeft'*)=7,
+              jsbc(*'BottomCenter'*)=8,
+              jsbr(*'BottomRight'*)=9,
+              jsbtl(*'Left'*)=10,
+              jsbtc(*'Center'*)=11,
+              jsbtr(*'Right'*)=12);
 PGDBTextProp=^GDBTextProp;
 GDBTextProp=record
                   size:GDBDouble;(*saved_to_shd*)

@@ -15,7 +15,7 @@ TCommand=specialize TGObjectChangeCommand2<TData>;
 function GDBObjOpenArrayOfUCommands.CreateTGObjectChangeCommand2(var _dodata:TData;_domethod,_undomethod:tmethod):PTCommand;overload;
 begin
      gdbgetmem(result,sizeof(TCommand));
-     result.Assign(_dodata,_domethod,_undomethod);
+     result^.Assign(_dodata,_domethod,_undomethod);
 end;
 function GDBObjOpenArrayOfUCommands.PushCreateTGObjectChangeCommand2(var _dodata:TData;_domethod,_undomethod:tmethod):PTCommand;overload;
 begin

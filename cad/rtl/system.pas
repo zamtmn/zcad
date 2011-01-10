@@ -688,7 +688,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
                    middlepoint:GDBVertex;
              end;
   tlanguadedeb=record
-                   UpdatePO,NotEnlishWord:GDBInteger;
+                   UpdatePO,NotEnlishWord,DebugWord:GDBInteger;
              end;
   tdebug=record
                memdeb:tmemdeb;
@@ -1077,9 +1077,9 @@ GDBObj3d=object(GDBObjEntity)
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDB3DFace.pas
 PGDBObj3DFace=^GDBObj3DFace;
 GDBObj3DFace=object(GDBObj3d)
-                 PInOCS:OutBound4V;(*'Координаты в OCS'*)(*saved_to_shd*)
-                 PInWCS:OutBound4V;(*'Координаты в WCS'*)(*hidden_in_objinsp*)
-                 PInDCS:OutBound4V;(*'Координаты в DCS'*)(*hidden_in_objinsp*)
+                 PInOCS:OutBound4V;(*'Coordinates OCS'*)(*saved_to_shd*)
+                 PInWCS:OutBound4V;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
+                 PInDCS:OutBound4V;(*'Coordinates DCS'*)(*hidden_in_objinsp*)
                  normal:GDBVertex;
                  triangle:GDBBoolean;
                  n,p1,p2,p3:GDBVertex3S;
@@ -1156,18 +1156,18 @@ GDBObjPlainWithOX=object(GDBObjPlain)
                procedure CalcObjMatrix;virtual;abstract;
          end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBAbstractText.pas
-TTextJustify=(jstl(*'ВерхЛево'*)=1,
-              jstm(*'ВерхЦентр'*)=2,
-              jstr(*'ВерхПраво'*)=3,
-              jsml(*'СерединаЛево'*)=4,
-              jsmc(*'СерединаЦентр'*)=5,
-              jsmr(*'СерединаПраво'*)=6,
-              jsbl(*'НизЛево'*)=7,
-              jsbc(*'НизЦентр'*)=8,
-              jsbr(*'НизПраво'*)=9,
-              jsbtl(*'Лево'*)=10,
-              jsbtc(*'Центр'*)=11,
-              jsbtr(*'Право'*)=12);
+TTextJustify=(jstl(*'TopLeft'*)=1,
+              jstc(*'TopCenter'*)=2,
+              jstr(*'TopRight'*)=3,
+              jsml(*'MiddleLeft'*)=4,
+              jsmc(*'MiddleCenter'*)=5, //СерединаЦентр
+              jsmr(*'MiddleRight'*)=6,
+              jsbl(*'BottomLeft'*)=7,
+              jsbc(*'BottomCenter'*)=8,
+              jsbr(*'BottomRight'*)=9,
+              jsbtl(*'Left'*)=10,
+              jsbtc(*'Center'*)=11,
+              jsbtr(*'Right'*)=12);
 PGDBTextProp=^GDBTextProp;
 GDBTextProp=record
                   size:GDBDouble;(*saved_to_shd*)
@@ -1240,10 +1240,10 @@ GDBObjArc=object(GDBObjPlain)
                   end;
 PGDBObjCircle=^GDBObjCircle;
 GDBObjCircle=object(GDBObjWithLocalCS)
-                 Radius:GDBDouble;(*'Радиус'*)(*saved_to_shd*)
-                 Diametr:GDBDouble;(*'Диаметр'*)
-                 Length:GDBDouble;(*'Длина'*)
-                 Area:GDBDouble;(*'Площадь'*)
+                 Radius:GDBDouble;(*'Radius'*)(*saved_to_shd*)
+                 Diametr:GDBDouble;(*'Diametr'*)
+                 Length:GDBDouble;(*'Length'*)
+                 Area:GDBDouble;(*'Area'*)
                  q0,q1,q2,q3:GDBvertex;
                  pq0,pq1,pq2,pq3:GDBvertex;
                  Outbound:OutBound4V;
@@ -1372,9 +1372,9 @@ TBlockType=(BT_Connector,BT_Unknown);
 TBlockBorder=(BB_Owner,BB_Self,BB_Empty);
 TBlockGroup=(BG_El_Device,BG_Unknown);
 TBlockDesc=record
-                 BType:TBlockType;(*'Тип блока'*)
-                 BBorder:TBlockBorder;(*'Граница блока'*)
-                 BGroup:TBlockGroup;(*'Группа блока'*)
+                 BType:TBlockType;(*'Block type'*)
+                 BBorder:TBlockBorder;(*'Border'*)
+                 BGroup:TBlockGroup;(*'Block group'*)
            end;
 PGDBObjBlockdef=^GDBObjBlockdef;
 GDBObjBlockdef=object(GDBObjGenericSubEntry)
@@ -1440,7 +1440,7 @@ GDBObjBlockInsert=object(GDBObjComplex)
                      index:GDBInteger;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
                      Name:GDBString;(*saved_to_shd*)(*oi_readonly*)
                      pattrib:GDBPointer;(*hidden_in_objinsp*)
-                     BlockDesc:TBlockDesc;(*'Параметры блока'*)(*saved_to_shd*)(*oi_readonly*)
+                     BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
                      constructor initnul;
                      constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                      procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
@@ -1793,7 +1793,7 @@ GDBObjCamera=object(GDBBaseCamera)
              end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBTable.pas
 TTableCellJustify=(jcl(*'TopLeft'*),
-              jcm(*'TopMiddle'*),
+              jcc(*'TopCenter'*),
               jcr(*'TopRight'*));
 PTGDBTableItemFormat=^TGDBTableItemFormat;
 TGDBTableItemFormat=record

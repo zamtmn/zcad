@@ -89,8 +89,8 @@ begin
   DISP_ZoomFactor:=1.624;
   DISP_CursorSize:=6;
   DISP_OSSize:=10.0;
-  DISP_DrawZAxis:=True;
-  DISP_ColorAxis:=True;
+  DISP_DrawZAxis:=False;
+  DISP_ColorAxis:=False;
   RD_UseStencil:=True;
   RD_PanObjectDegradation:=False;
   RD_LineSmooth:=False;
@@ -110,11 +110,11 @@ begin
   RD_MaxRenderTime:=0;
   RD_Light:=False;
   SAVE_Auto_Interval:=300;
-  SAVE_Auto_Current_Interval:=232;
+  SAVE_Auto_Current_Interval:=273;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';
   SAVE_Auto_On:=True;
-  SYS_RunTime:=83;
-  SYS_Version:='0.9.7 Ревизия SVN:51';
+  SYS_RunTime:=36;
+  SYS_Version:='0.9.7 Ревизия SVN:54';
   SYS_SystmGeometryColor:=250;
   SYS_IsHistoryLineCreated:=True;
   SYS_AlternateFont:='GEWIND.SHX';

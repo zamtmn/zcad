@@ -32,10 +32,10 @@ type
                   end;
 PGDBObjCircle=^GDBObjCircle;
 GDBObjCircle=object(GDBObjWithLocalCS)
-                 Radius:GDBDouble;(*'Радиус'*)(*saved_to_shd*)
-                 Diametr:GDBDouble;(*'Диаметр'*)
-                 Length:GDBDouble;(*'Длина'*)
-                 Area:GDBDouble;(*'Площадь'*)
+                 Radius:GDBDouble;(*'Radius'*)(*saved_to_shd*)
+                 Diametr:GDBDouble;(*'Diametr'*)
+                 Length:GDBDouble;(*'Length'*)
+                 Area:GDBDouble;(*'Area'*)
                  q0,q1,q2,q3:GDBvertex;
                  pq0,pq1,pq2,pq3:GDBvertex;
                  Outbound:OutBound4V;

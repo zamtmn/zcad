@@ -22,7 +22,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="115"/>
+      <BuildNr Value="125"/>
       <CharSet Value="0000"/>
       <StringTable ProductVersion="0.0.0.8"/>
     </VersionInfo>
@@ -38,25 +38,22 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
-        <CommandLineParams Value="nosplash"/>
+        <CommandLineParams Value="nosplash updatepo"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="4">
+    <RequiredPackages Count="3">
       <Item1>
         <PackageName Value="AnchorDocking"/>
       </Item1>
       <Item2>
-        <PackageName Value="FCL"/>
+        <PackageName Value="LazOpenGLContext"/>
       </Item2>
       <Item3>
-        <PackageName Value="LazOpenGLContext"/>
-      </Item3>
-      <Item4>
         <PackageName Value="LCL"/>
-      </Item4>
+      </Item3>
     </RequiredPackages>
-    <Units Count="226">
+    <Units Count="184">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -72,22 +69,22 @@
       <Unit1>
         <Filename Value="gdb/GDBDevice.pas"/>
         <UnitName Value="GDBDevice"/>
-        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="262"/>
+        <TopLine Value="10"/>
         <CursorPos X="15" Y="289"/>
-        <UsageCount Value="12"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="21"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
         <Filename Value="gui/mainwindow.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="mainwindow"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1078"/>
-        <CursorPos X="60" Y="1101"/>
+        <TopLine Value="949"/>
+        <CursorPos X="98" Y="973"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit2>
       <Unit3>
@@ -95,9 +92,9 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="geometry"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="39"/>
-        <CursorPos X="67" Y="61"/>
-        <UsageCount Value="97"/>
+        <TopLine Value="42"/>
+        <CursorPos X="38" Y="65"/>
+        <UsageCount Value="123"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
@@ -106,17 +103,17 @@
         <WindowIndex Value="0"/>
         <TopLine Value="11"/>
         <CursorPos X="1" Y="668"/>
-        <UsageCount Value="88"/>
+        <UsageCount Value="86"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
         <Filename Value="gdb/GDBAbstractText.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GDBAbstractText"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
+        <TopLine Value="13"/>
+        <CursorPos X="7" Y="26"/>
         <UsageCount Value="204"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -125,8 +122,8 @@
         <Filename Value="def.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="2" Y="30"/>
-        <UsageCount Value="68"/>
+        <CursorPos X="15" Y="21"/>
+        <UsageCount Value="77"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit6>
       <Unit7>
@@ -135,19 +132,10 @@
         <WindowIndex Value="0"/>
         <TopLine Value="223"/>
         <CursorPos X="1" Y="261"/>
-        <UsageCount Value="86"/>
+        <UsageCount Value="84"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
       <Unit8>
-        <Filename Value="languade.pas"/>
-        <UnitName Value="languade"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="393"/>
-        <CursorPos X="1" Y="416"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit8>
-      <Unit9>
         <Filename Value="languade/UUnitManager.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UUnitManager"/>
@@ -156,8 +144,8 @@
         <CursorPos X="1" Y="497"/>
         <UsageCount Value="201"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit9>
-      <Unit10>
+      </Unit8>
+      <Unit9>
         <Filename Value="languade/varman.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Varman"/>
@@ -166,17 +154,17 @@
         <CursorPos X="1" Y="773"/>
         <UsageCount Value="200"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit10>
-      <Unit11>
+      </Unit9>
+      <Unit10>
         <Filename Value="u/UGDBOpenArrayOfByte.pas"/>
         <UnitName Value="UGDBOpenArrayOfByte"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="9" Y="8"/>
-        <UsageCount Value="47"/>
+        <UsageCount Value="45"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit11>
-      <Unit12>
+      </Unit10>
+      <Unit11>
         <Filename Value="languade/UBaseTypeDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UBaseTypeDescriptor"/>
@@ -185,8 +173,8 @@
         <CursorPos X="1" Y="675"/>
         <UsageCount Value="200"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit12>
-      <Unit13>
+      </Unit11>
+      <Unit12>
         <Filename Value="devicebase/DeviceBase.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="DeviceBase"/>
@@ -195,63 +183,61 @@
         <CursorPos X="20" Y="131"/>
         <UsageCount Value="201"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit13>
-      <Unit14>
+      </Unit12>
+      <Unit13>
         <Filename Value="gui/oglwindow.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="oglwindow"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="2684"/>
-        <CursorPos X="46" Y="2707"/>
+        <TopLine Value="138"/>
+        <CursorPos X="109" Y="685"/>
         <UsageCount Value="202"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit14>
-      <Unit15>
+      </Unit13>
+      <Unit14>
         <Filename Value="zwin/ZBasicVisible.pas"/>
         <UnitName Value="ZBasicVisible"/>
         <TopLine Value="1"/>
         <CursorPos X="21" Y="29"/>
-        <UsageCount Value="141"/>
+        <UsageCount Value="139"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit15>
-      <Unit16>
+      </Unit14>
+      <Unit15>
         <Filename Value="gui/objinsp.pas"/>
         <UnitName Value="Objinsp"/>
         <WindowIndex Value="0"/>
         <TopLine Value="120"/>
         <CursorPos X="1" Y="140"/>
-        <UsageCount Value="85"/>
+        <UsageCount Value="83"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit16>
-      <Unit17>
+      </Unit15>
+      <Unit16>
         <Filename Value="zwin/ZGUIArrays.pas"/>
         <UnitName Value="ZGUIArrays"/>
         <TopLine Value="71"/>
         <CursorPos X="1" Y="90"/>
-        <UsageCount Value="143"/>
+        <UsageCount Value="141"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit17>
-      <Unit18>
+      </Unit16>
+      <Unit17>
         <Filename Value="gdb/GDBManager.pas"/>
         <UnitName Value="GDBManager"/>
-        <EditorIndex Value="20"/>
         <WindowIndex Value="0"/>
         <TopLine Value="4"/>
         <CursorPos X="1" Y="145"/>
-        <UsageCount Value="67"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="76"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit18>
-      <Unit19>
+      </Unit17>
+      <Unit18>
         <Filename Value="iodxf.pas"/>
         <UnitName Value="iodxf"/>
         <WindowIndex Value="0"/>
         <TopLine Value="81"/>
         <CursorPos X="62" Y="95"/>
-        <UsageCount Value="69"/>
+        <UsageCount Value="67"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit19>
-      <Unit20>
+      </Unit18>
+      <Unit19>
         <Filename Value="languade/URecordDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="URecordDescriptor"/>
@@ -260,85 +246,83 @@
         <CursorPos X="51" Y="35"/>
         <UsageCount Value="200"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit20>
-      <Unit21>
+      </Unit19>
+      <Unit20>
         <Filename Value="gdbase.pas"/>
         <UnitName Value="gdbase"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="18"/>
         <WindowIndex Value="0"/>
         <TopLine Value="64"/>
         <CursorPos X="40" Y="89"/>
-        <UsageCount Value="97"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="104"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit21>
-      <Unit22>
+      </Unit20>
+      <Unit21>
         <Filename Value="log.pas"/>
         <UnitName Value="log"/>
         <WindowIndex Value="0"/>
         <TopLine Value="184"/>
         <CursorPos X="1" Y="208"/>
-        <UsageCount Value="76"/>
+        <UsageCount Value="74"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit22>
-      <Unit23>
+      </Unit21>
+      <Unit22>
         <Filename Value="languade/TypeDescriptors.pas"/>
         <UnitName Value="TypeDescriptors"/>
         <WindowIndex Value="0"/>
         <TopLine Value="38"/>
         <CursorPos X="1" Y="60"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit23>
-      <Unit24>
+      </Unit22>
+      <Unit23>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
         <UnitName Value="UGDBOpenArrayOfUCommands"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="197"/>
-        <CursorPos X="1" Y="224"/>
-        <UsageCount Value="91"/>
+        <TopLine Value="408"/>
+        <CursorPos X="25" Y="436"/>
+        <UsageCount Value="100"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <UnitName Value="GDBCommandsBase"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1741"/>
+        <CursorPos X="22" Y="1766"/>
+        <UsageCount Value="98"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit24>
       <Unit25>
-        <Filename Value="commands/GDBCommandsBase.pas"/>
-        <UnitName Value="GDBCommandsBase"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1741"/>
-        <CursorPos X="40" Y="1764"/>
-        <UsageCount Value="100"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit25>
-      <Unit26>
         <Filename Value="u/UGDBVisibleTreeArray.pas"/>
         <UnitName Value="UGDBVisibleTreeArray"/>
         <WindowIndex Value="0"/>
         <TopLine Value="27"/>
         <CursorPos X="1" Y="58"/>
-        <UsageCount Value="87"/>
+        <UsageCount Value="85"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="gdb/GDBLine.pas"/>
+        <UnitName Value="GDBLine"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="9"/>
+        <CursorPos X="55" Y="38"/>
+        <UsageCount Value="34"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit26>
       <Unit27>
-        <Filename Value="gdb/GDBLine.pas"/>
-        <UnitName Value="GDBLine"/>
-        <EditorIndex Value="17"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="9"/>
-        <CursorPos X="34" Y="38"/>
-        <UsageCount Value="25"/>
-        <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit27>
-      <Unit28>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
         <UnitName Value="GDBCommandsDraw"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1592"/>
         <CursorPos X="49" Y="1602"/>
-        <UsageCount Value="87"/>
+        <UsageCount Value="85"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit28>
-      <Unit29>
+      </Unit27>
+      <Unit28>
         <Filename Value="languade/UObjectDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UObjectDescriptor"/>
@@ -347,8 +331,8 @@
         <CursorPos X="76" Y="366"/>
         <UsageCount Value="201"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit29>
-      <Unit30>
+      </Unit28>
+      <Unit29>
         <Filename Value="sysinfo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="SysInfo"/>
@@ -357,617 +341,435 @@
         <CursorPos X="1" Y="51"/>
         <UsageCount Value="202"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit30>
-      <Unit31>
+      </Unit29>
+      <Unit30>
         <Filename Value="gui/splashwnd.pas"/>
         <UnitName Value="splashwnd"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3"/>
         <CursorPos X="1" Y="48"/>
-        <UsageCount Value="74"/>
+        <UsageCount Value="72"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit31>
-      <Unit32>
+      </Unit30>
+      <Unit31>
         <Filename Value="sharedgdb.pas"/>
         <UnitName Value="sharedgdb"/>
         <WindowIndex Value="0"/>
         <TopLine Value="24"/>
         <CursorPos X="1" Y="48"/>
-        <UsageCount Value="79"/>
+        <UsageCount Value="77"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit31>
+      <Unit32>
+        <Filename Value="gui/intftranslations.pas"/>
+        <UnitName Value="intftranslations"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="117"/>
+        <CursorPos X="1" Y="155"/>
+        <UsageCount Value="97"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit32>
       <Unit33>
-        <Filename Value="gui/intftranslations.pas"/>
-        <UnitName Value="intftranslations"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="99"/>
-        <CursorPos X="43" Y="140"/>
-        <UsageCount Value="96"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit33>
-      <Unit34>
         <Filename Value="languade/varmandef.pas"/>
         <UnitName Value="varmandef"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="8"/>
-        <CursorPos X="36" Y="441"/>
-        <UsageCount Value="103"/>
+        <TopLine Value="1"/>
+        <CursorPos X="49" Y="155"/>
+        <UsageCount Value="102"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit34>
-      <Unit35>
+      </Unit33>
+      <Unit34>
         <Filename Value="gdb/GDBEntity.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GDBEntity"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="34"/>
-        <CursorPos X="64" Y="60"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit35>
-      <Unit36>
+      </Unit34>
+      <Unit35>
         <Filename Value="commands/commanddefinternal.pas"/>
         <UnitName Value="commanddefinternal"/>
         <WindowIndex Value="0"/>
         <TopLine Value="80"/>
         <CursorPos X="1" Y="103"/>
-        <UsageCount Value="88"/>
+        <UsageCount Value="86"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit36>
-      <Unit37>
+      </Unit35>
+      <Unit36>
         <Filename Value="gdb/UGDBEntTree.pas"/>
         <UnitName Value="UGDBEntTree"/>
         <WindowIndex Value="0"/>
         <TopLine Value="21"/>
         <CursorPos X="1" Y="75"/>
-        <UsageCount Value="85"/>
+        <UsageCount Value="83"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit37>
-      <Unit38>
+      </Unit36>
+      <Unit37>
         <Filename Value="gui/cmdline.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="cmdline"/>
         <WindowIndex Value="0"/>
         <TopLine Value="13"/>
         <CursorPos X="91" Y="275"/>
-        <UsageCount Value="80"/>
+        <UsageCount Value="106"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit38>
-      <Unit39>
+      </Unit37>
+      <Unit38>
         <Filename Value="gui/projecttreewnd.pas"/>
         <UnitName Value="projecttreewnd"/>
         <WindowIndex Value="0"/>
         <TopLine Value="31"/>
         <CursorPos X="29" Y="53"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="44"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit39>
-      <Unit40>
+      </Unit38>
+      <Unit39>
         <Filename Value="gui/aboutwnd.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="aboutwnd"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="7"/>
-        <CursorPos X="33" Y="30"/>
-        <UsageCount Value="70"/>
+        <TopLine Value="11"/>
+        <CursorPos X="32" Y="28"/>
+        <UsageCount Value="96"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit40>
-      <Unit41>
+      </Unit39>
+      <Unit40>
         <Filename Value="lclmod/umytreenode.pas"/>
         <UnitName Value="umytreenode"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="70" Y="24"/>
-        <UsageCount Value="70"/>
+        <TopLine Value="28"/>
+        <CursorPos X="36" Y="51"/>
+        <UsageCount Value="69"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit41>
-      <Unit42>
-        <Filename Value="zwin/zforms.pas"/>
-        <UnitName Value="zforms"/>
-        <TopLine Value="2"/>
-        <CursorPos X="24" Y="10"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit42>
-      <Unit43>
+      </Unit40>
+      <Unit41>
         <Filename Value="commands/commandline.pas"/>
         <UnitName Value="commandline"/>
         <WindowIndex Value="0"/>
         <TopLine Value="94"/>
         <CursorPos X="45" Y="112"/>
-        <UsageCount Value="80"/>
+        <UsageCount Value="78"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit43>
-      <Unit44>
+      </Unit41>
+      <Unit42>
         <Filename Value="u/UGDBTextStyleArray.pas"/>
         <UnitName Value="UGDBTextStyleArray"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3"/>
         <CursorPos X="62" Y="22"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="5"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit44>
-      <Unit45>
+      </Unit42>
+      <Unit43>
         <Filename Value="../../lazarus/lcl/forms.pp"/>
         <UnitName Value="Forms"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1607"/>
         <CursorPos X="3" Y="1630"/>
-        <UsageCount Value="48"/>
-      </Unit45>
-      <Unit46>
+        <UsageCount Value="46"/>
+      </Unit43>
+      <Unit44>
         <Filename Value="../../lazarus/lcl/lclproc.pas"/>
         <UnitName Value="LCLProc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1521"/>
         <CursorPos X="1" Y="1544"/>
-        <UsageCount Value="18"/>
-      </Unit46>
-      <Unit47>
+        <UsageCount Value="16"/>
+      </Unit44>
+      <Unit45>
         <Filename Value="../../lazarus/lcl/controls.pp"/>
         <UnitName Value="Controls"/>
         <WindowIndex Value="0"/>
         <TopLine Value="108"/>
         <CursorPos X="61" Y="131"/>
-        <UsageCount Value="87"/>
-      </Unit47>
-      <Unit48>
-        <Filename Value="../../fpc-2.4.0.source/fpc-2.4.0/rtl/objpas/classes/classesh.inc"/>
-        <TopLine Value="497"/>
-        <CursorPos X="3" Y="497"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit48>
-      <Unit49>
+        <UsageCount Value="85"/>
+      </Unit45>
+      <Unit46>
         <Filename Value="OGLSpecFunc.pas"/>
         <UnitName Value="OGLSpecFunc"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
+        <TopLine Value="11"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="87"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit49>
-      <Unit50>
+      </Unit46>
+      <Unit47>
         <Filename Value="WindowsSpecific.pas"/>
         <UnitName Value="WindowsSpecific"/>
         <WindowIndex Value="0"/>
         <TopLine Value="22"/>
         <CursorPos X="28" Y="28"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit50>
-      <Unit51>
-        <Filename Value="../../lazarus/lcl/graphtype.pp"/>
-        <UnitName Value="GraphType"/>
-        <TopLine Value="26"/>
-        <CursorPos X="13" Y="49"/>
-        <UsageCount Value="1"/>
-      </Unit51>
-      <Unit52>
+      </Unit47>
+      <Unit48>
         <Filename Value="u/UGDBSelectedObjArray.pas"/>
         <UnitName Value="UGDBSelectedObjArray"/>
         <WindowIndex Value="0"/>
         <TopLine Value="140"/>
         <CursorPos X="16" Y="161"/>
-        <UsageCount Value="60"/>
+        <UsageCount Value="58"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit52>
-      <Unit53>
+      </Unit48>
+      <Unit49>
         <Filename Value="gdb/GDBGenericSubEntry.pas"/>
         <UnitName Value="GDBGenericSubEntry"/>
-        <EditorIndex Value="15"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="214"/>
+        <TopLine Value="7"/>
         <CursorPos X="9" Y="246"/>
-        <UsageCount Value="89"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="98"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit53>
-      <Unit54>
+      </Unit49>
+      <Unit50>
         <Filename Value="gdb/GDBRoot.pas"/>
         <UnitName Value="GDBRoot"/>
-        <EditorIndex Value="26"/>
         <WindowIndex Value="0"/>
         <TopLine Value="10"/>
         <CursorPos X="16" Y="24"/>
-        <UsageCount Value="89"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="98"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit54>
-      <Unit55>
+      </Unit50>
+      <Unit51>
         <Filename Value="u/UGDBOutbound2DIArray.pas"/>
         <UnitName Value="UGDBOutbound2DIArray"/>
         <WindowIndex Value="0"/>
         <TopLine Value="71"/>
         <CursorPos X="1" Y="109"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit55>
-      <Unit56>
+      </Unit51>
+      <Unit52>
         <Filename Value="gdb/GDBMText.pas"/>
         <UnitName Value="GDBMText"/>
-        <EditorIndex Value="21"/>
         <WindowIndex Value="0"/>
         <TopLine Value="15"/>
         <CursorPos X="17" Y="115"/>
-        <UsageCount Value="57"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="66"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit56>
-      <Unit57>
+      </Unit52>
+      <Unit53>
         <Filename Value="io.pas"/>
         <UnitName Value="io"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3"/>
         <CursorPos X="64" Y="22"/>
-        <UsageCount Value="60"/>
+        <UsageCount Value="58"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit57>
-      <Unit58>
+      </Unit53>
+      <Unit54>
         <Filename Value="languade/UEnumDescriptor.pas"/>
         <UnitName Value="UEnumDescriptor"/>
         <WindowIndex Value="0"/>
         <TopLine Value="153"/>
         <CursorPos X="37" Y="172"/>
-        <UsageCount Value="17"/>
+        <UsageCount Value="15"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit58>
-      <Unit59>
+      </Unit54>
+      <Unit55>
         <Filename Value="unit8.pas"/>
         <UnitName Value="Unit8"/>
         <TopLine Value="77"/>
         <CursorPos X="19" Y="77"/>
-        <UsageCount Value="146"/>
+        <UsageCount Value="144"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit59>
-      <Unit60>
+      </Unit55>
+      <Unit56>
         <Filename Value="u/UOpenArray.pas"/>
         <UnitName Value="UOpenArray"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="52" Y="24"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="2"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit60>
-      <Unit61>
+      </Unit56>
+      <Unit57>
         <Filename Value="../../lazarus/components/opengl/openglcontext.pas"/>
         <UnitName Value="OpenGLContext"/>
         <WindowIndex Value="0"/>
         <TopLine Value="266"/>
         <CursorPos X="1" Y="289"/>
-        <UsageCount Value="20"/>
-      </Unit61>
-      <Unit62>
+        <UsageCount Value="18"/>
+      </Unit57>
+      <Unit58>
         <Filename Value="shared.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="shared"/>
         <WindowIndex Value="0"/>
         <TopLine Value="4"/>
         <CursorPos X="10" Y="38"/>
-        <UsageCount Value="47"/>
+        <UsageCount Value="73"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit62>
-      <Unit63>
-        <Filename Value="../../lazarus/components/opengl/glwin32wglcontext.pas"/>
-        <UnitName Value="GLWin32WGLContext"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="246"/>
-        <CursorPos X="1" Y="269"/>
-        <UsageCount Value="1"/>
-      </Unit63>
-      <Unit64>
-        <Filename Value="../../fpc-2.4.0.source/fpc-2.4.0/rtl/objpas/strutils.pp"/>
-        <UnitName Value="strutils"/>
-        <TopLine Value="32"/>
-        <CursorPos X="58" Y="52"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit64>
-      <Unit65>
+      </Unit58>
+      <Unit59>
         <Filename Value="gdb/UGDBDescriptor.pas"/>
         <UnitName Value="UGDBDescriptor"/>
         <WindowIndex Value="0"/>
         <TopLine Value="78"/>
         <CursorPos X="1" Y="269"/>
-        <UsageCount Value="96"/>
+        <UsageCount Value="94"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit65>
-      <Unit66>
-        <Filename Value="../../usr/share/fpcsrc/2.4.0/rtl/inc/systemh.inc"/>
-        <TopLine Value="231"/>
-        <CursorPos X="1" Y="247"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit66>
-      <Unit67>
-        <Filename Value="../../usr/lib/lazarus/0.9.28.2/lcl/include/application.inc"/>
-        <TopLine Value="309"/>
-        <CursorPos X="3" Y="320"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit67>
-      <Unit68>
-        <Filename Value="../../usr/lib/lazarus/0.9.28.2/lcl/forms.pp"/>
-        <UnitName Value="Forms"/>
-        <TopLine Value="1203"/>
-        <CursorPos X="17" Y="1230"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit68>
-      <Unit69>
-        <Filename Value="/usr/lib/lazarus/0.9.28.2/components/printers/unix/cupsdyn.pp"/>
-        <UnitName Value="cupsdyn"/>
-        <TopLine Value="229"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit69>
-      <Unit70>
-        <Filename Value="/usr/lib/lazarus/0.9.28.2/lcl/lmessages.pp"/>
-        <UnitName Value="LMessages"/>
-        <TopLine Value="429"/>
-        <CursorPos X="12" Y="456"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit70>
-      <Unit71>
-        <Filename Value="/usr/lib/lazarus/0.9.28.2/lcl/forms.pp"/>
-        <UnitName Value="Forms"/>
-        <TopLine Value="1258"/>
-        <CursorPos X="15" Y="1278"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit71>
-      <Unit72>
-        <Filename Value="/usr/share/fpcsrc/2.4.0/packages/gtk2/src/gtk+/gtk/gtkwindow.inc"/>
-        <TopLine Value="469"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit72>
-      <Unit73>
-        <Filename Value="/usr/lib/lazarus/0.9.29/ide/lazarus.pp"/>
-        <UnitName Value="Lazarus"/>
-        <TopLine Value="86"/>
-        <CursorPos X="11" Y="129"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit73>
-      <Unit74>
-        <Filename Value="../../fpc-2.4.0.source/fpc-2.4.0/rtl/inc/wstringh.inc"/>
-        <TopLine Value="12"/>
-        <CursorPos X="10" Y="41"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit74>
-      <Unit75>
-        <Filename Value="../../fpc-2.4.0.source/fpc-2.4.0/rtl/inc/wstrings.inc"/>
-        <TopLine Value="1270"/>
-        <CursorPos X="5" Y="1280"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit75>
-      <Unit76>
+      </Unit59>
+      <Unit60>
         <Filename Value="u/ugdbshxfont.pas"/>
         <UnitName Value="UGDBSHXFont"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3"/>
         <CursorPos X="26" Y="22"/>
-        <UsageCount Value="47"/>
+        <UsageCount Value="45"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit76>
-      <Unit77>
+      </Unit60>
+      <Unit61>
         <Filename Value="u/UGDBFontManager.pas"/>
         <UnitName Value="UGDBFontManager"/>
         <WindowIndex Value="0"/>
         <TopLine Value="59"/>
         <CursorPos X="15" Y="78"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="37"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit77>
-      <Unit78>
-        <Filename Value="GDBObjAbstractTypes.pas"/>
-        <UnitName Value="GDBObjAbstractTypes"/>
-        <TopLine Value="181"/>
-        <CursorPos X="5" Y="200"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit78>
-      <Unit79>
-        <Filename Value="u/UGDBOpenArrayOfObjects.pas"/>
-        <UnitName Value="UGDBOpenArrayOfObjects"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="44"/>
-        <CursorPos X="30" Y="63"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit79>
-      <Unit80>
+      </Unit61>
+      <Unit62>
         <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
         <UnitName Value="GDBCommandsElectrical"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1498"/>
         <CursorPos X="10" Y="1407"/>
-        <UsageCount Value="88"/>
+        <UsageCount Value="86"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit80>
-      <Unit81>
+      </Unit62>
+      <Unit63>
         <Filename Value="../../pp/rtl/objpas/sysutils/sysstrh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="107"/>
         <CursorPos X="10" Y="130"/>
-        <UsageCount Value="9"/>
-      </Unit81>
-      <Unit82>
+        <UsageCount Value="7"/>
+      </Unit63>
+      <Unit64>
         <Filename Value="gdb/GDBSubordinated.pas"/>
         <UnitName Value="GDBSubordinated"/>
-        <EditorIndex Value="27"/>
         <WindowIndex Value="0"/>
         <TopLine Value="10"/>
         <CursorPos X="64" Y="29"/>
-        <UsageCount Value="29"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="39"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit82>
-      <Unit83>
+      </Unit64>
+      <Unit65>
         <Filename Value="u/UGDBOpenArrayOfPObjects.pas"/>
         <UnitName Value="UGDBOpenArrayOfPObjects"/>
         <WindowIndex Value="0"/>
         <TopLine Value="70"/>
         <CursorPos X="1" Y="87"/>
-        <UsageCount Value="84"/>
+        <UsageCount Value="82"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit83>
-      <Unit84>
+      </Unit65>
+      <Unit66>
         <Filename Value="../../lazarus/lcl/comctrls.pp"/>
         <UnitName Value="ComCtrls"/>
         <WindowIndex Value="0"/>
         <TopLine Value="325"/>
         <CursorPos X="21" Y="1604"/>
-        <UsageCount Value="9"/>
-      </Unit84>
-      <Unit85>
+        <UsageCount Value="7"/>
+      </Unit66>
+      <Unit67>
         <Filename Value="utils/iolow.pas"/>
         <UnitName Value="iolow"/>
         <WindowIndex Value="0"/>
         <TopLine Value="47"/>
         <CursorPos X="17" Y="66"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit85>
-      <Unit86>
-        <Filename Value="u/UGDBTableStyleArray.pas"/>
-        <UnitName Value="UGDBTableStyleArray"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="8"/>
-        <CursorPos X="1" Y="27"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit86>
-      <Unit87>
-        <Filename Value="../../lazarus/lcl/graphics.pp"/>
-        <UnitName Value="Graphics"/>
-        <TopLine Value="1077"/>
-        <CursorPos X="43" Y="1097"/>
-        <UsageCount Value="1"/>
-      </Unit87>
-      <Unit88>
+      </Unit67>
+      <Unit68>
         <Filename Value="/usr/lib/lazarus/lcl/include/wincontrol.inc"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="6344"/>
-        <CursorPos X="1" Y="6371"/>
-        <UsageCount Value="6"/>
+        <TopLine Value="6698"/>
+        <CursorPos X="58" Y="6699"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit88>
-      <Unit89>
-        <Filename Value="/usr/lib/lazarus/lcl/include/winapih.inc"/>
-        <TopLine Value="256"/>
-        <CursorPos X="11" Y="278"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit89>
-      <Unit90>
-        <Filename Value="/usr/lib/lazarus/lcl/include/intfbasewinapi.inc"/>
-        <TopLine Value="1688"/>
-        <CursorPos X="3" Y="1724"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit90>
-      <Unit91>
-        <Filename Value="../cad/rtl/savedvar.pas"/>
-        <UnitName Value="savedvar"/>
-        <TopLine Value="1"/>
-        <CursorPos X="24" Y="22"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit91>
-      <Unit92>
+      </Unit68>
+      <Unit69>
         <Filename Value="gdb/GDBTable.pas"/>
         <UnitName Value="GDBTable"/>
-        <EditorIndex Value="28"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="10"/>
-        <CursorPos X="29" Y="31"/>
-        <UsageCount Value="16"/>
+        <TopLine Value="6"/>
+        <CursorPos X="6" Y="27"/>
+        <UsageCount Value="26"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit92>
-      <Unit93>
+      </Unit69>
+      <Unit70>
         <Filename Value="electroteh/GDBElLeader.pas"/>
         <UnitName Value="GDBElLeader"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="262"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="11"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit93>
-      <Unit94>
+      </Unit70>
+      <Unit71>
         <Filename Value="electroteh/GDBCable.pas"/>
         <UnitName Value="GDBCable"/>
         <WindowIndex Value="0"/>
         <TopLine Value="471"/>
         <CursorPos X="29" Y="489"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit94>
-      <Unit95>
+      </Unit71>
+      <Unit72>
         <Filename Value="../../lazarus/lcl/include/control.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="4542"/>
         <CursorPos X="1" Y="4565"/>
-        <UsageCount Value="53"/>
-      </Unit95>
-      <Unit96>
+        <UsageCount Value="51"/>
+      </Unit72>
+      <Unit73>
         <Filename Value="../../pp/rtl/objpas/classes/classesh.inc"/>
         <TopLine Value="1584"/>
         <CursorPos X="45" Y="1666"/>
-        <UsageCount Value="6"/>
-      </Unit96>
-      <Unit97>
+        <UsageCount Value="4"/>
+      </Unit73>
+      <Unit74>
         <Filename Value="electroteh/GDBCommandsOPS.pas"/>
         <UnitName Value="GDBCommandsOPS"/>
         <WindowIndex Value="0"/>
         <TopLine Value="511"/>
         <CursorPos X="19" Y="560"/>
-        <UsageCount Value="32"/>
+        <UsageCount Value="30"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit97>
-      <Unit98>
+      </Unit74>
+      <Unit75>
         <Filename Value="electroteh/GDBNet.pas"/>
         <UnitName Value="GDBNet"/>
         <WindowIndex Value="0"/>
         <TopLine Value="232"/>
         <CursorPos X="14" Y="248"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit98>
-      <Unit99>
+      </Unit75>
+      <Unit76>
         <Filename Value="u/UGDBOpenArrayOfPointer.pas"/>
         <UnitName Value="UGDBOpenArrayOfPointer"/>
         <WindowIndex Value="0"/>
         <TopLine Value="44"/>
         <CursorPos X="1" Y="60"/>
-        <UsageCount Value="36"/>
+        <UsageCount Value="34"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit99>
-      <Unit100>
+      </Unit76>
+      <Unit77>
         <Filename Value="../../lazarus/lcl/lcltype.pp"/>
         <UnitName Value="LCLType"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2532"/>
         <CursorPos X="3" Y="2555"/>
-        <UsageCount Value="8"/>
-      </Unit100>
-      <Unit101>
-        <Filename Value="/usr/lib/lazarus/ide/lazarus.pp"/>
-        <UnitName Value="Lazarus"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit101>
-      <Unit102>
+        <UsageCount Value="6"/>
+      </Unit77>
+      <Unit78>
         <Filename Value="gui/layerwnd.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Form2"/>
@@ -979,303 +781,224 @@
         <CursorPos X="19" Y="36"/>
         <UsageCount Value="201"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit102>
-      <Unit103>
-        <Filename Value="../../lazarus/lcl/include/lclintfh.inc"/>
-        <TopLine Value="54"/>
-        <CursorPos X="11" Y="73"/>
-        <UsageCount Value="1"/>
-      </Unit103>
-      <Unit104>
-        <Filename Value="../../lazarus/lcl/include/lclintf.inc"/>
-        <TopLine Value="199"/>
-        <CursorPos X="1" Y="206"/>
-        <UsageCount Value="1"/>
-      </Unit104>
-      <Unit105>
-        <Filename Value="../../lazarus/lcl/interfacebase.pp"/>
-        <UnitName Value="InterfaceBase"/>
-        <TopLine Value="153"/>
-        <CursorPos X="3" Y="179"/>
-        <UsageCount Value="1"/>
-      </Unit105>
-      <Unit106>
+      </Unit78>
+      <Unit79>
         <Filename Value="../../lazarus/lcl/interfaces/win32/win32winapi.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3087"/>
         <CursorPos X="1" Y="3111"/>
-        <UsageCount Value="10"/>
-      </Unit106>
-      <Unit107>
+        <UsageCount Value="8"/>
+      </Unit79>
+      <Unit80>
         <Filename Value="../../lazarus/lcl/include/winapi.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="876"/>
         <CursorPos X="1" Y="899"/>
-        <UsageCount Value="10"/>
-      </Unit107>
-      <Unit108>
-        <Filename Value="/usr/lib/lazarus/lcl/masks.pas"/>
-        <UnitName Value="Masks"/>
-        <TopLine Value="7"/>
-        <CursorPos X="22" Y="29"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit108>
-      <Unit109>
+        <UsageCount Value="8"/>
+      </Unit80>
+      <Unit81>
         <Filename Value="/usr/lib/lazarus/0.9.29/components/opengl/glgtkglxcontext.pas"/>
         <UnitName Value="GLGtkGlxContext"/>
         <TopLine Value="787"/>
         <CursorPos X="3" Y="809"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit109>
-      <Unit110>
+      </Unit81>
+      <Unit82>
         <Filename Value="/usr/lib/lazarus/0.9.29/examples/hello.pp"/>
         <UnitName Value="Hello_world"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="31"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit110>
-      <Unit111>
-        <Filename Value="/usr/lib/lazarus/0.9.29/components/codetools/codetoolsstrconsts.pas"/>
-        <UnitName Value="CodeToolsStrConsts"/>
-        <TopLine Value="237"/>
-        <CursorPos X="1" Y="280"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit111>
-      <Unit112>
-        <Filename Value="gui/layerwnd.lrs"/>
-        <TopLine Value="587"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit112>
-      <Unit113>
+      </Unit82>
+      <Unit83>
         <Filename Value="../../pp/rtl/inc/objpash.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="169"/>
         <CursorPos X="23" Y="192"/>
-        <UsageCount Value="11"/>
-      </Unit113>
-      <Unit114>
-        <Filename Value="../../pp/rtl/win32/system.pp"/>
-        <UnitName Value="System"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="1"/>
-      </Unit114>
-      <Unit115>
+        <UsageCount Value="9"/>
+      </Unit83>
+      <Unit84>
         <Filename Value="../../lazarus/lcl/include/toolbar.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="456"/>
         <CursorPos X="1" Y="494"/>
-        <UsageCount Value="10"/>
-      </Unit115>
-      <Unit116>
+        <UsageCount Value="8"/>
+      </Unit84>
+      <Unit85>
         <Filename Value="../../lazarus/lcl/themes.pas"/>
         <UnitName Value="Themes"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1996"/>
         <CursorPos X="1" Y="2004"/>
-        <UsageCount Value="2"/>
-      </Unit116>
-      <Unit117>
+        <UsageCount Value="10"/>
+      </Unit85>
+      <Unit86>
         <Filename Value="gdbasetypes.pas"/>
         <UnitName Value="gdbasetypes"/>
         <WindowIndex Value="0"/>
         <TopLine Value="4"/>
         <CursorPos X="20" Y="27"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit117>
-      <Unit118>
+      </Unit86>
+      <Unit87>
         <Filename Value="gdb/GDBPolyLine.pas"/>
         <UnitName Value="GDBPolyLine"/>
-        <EditorIndex Value="25"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="18" Y="102"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit118>
-      <Unit119>
+      </Unit87>
+      <Unit88>
         <Filename Value="gdb/GDBCurve.pas"/>
         <UnitName Value="GDBCurve"/>
-        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="228"/>
+        <TopLine Value="24"/>
         <CursorPos X="23" Y="232"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit119>
-      <Unit120>
+      </Unit88>
+      <Unit89>
         <Filename Value="../../pp/rtl/objpas/sysutils/filutilh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="48"/>
         <CursorPos X="18" Y="81"/>
-        <UsageCount Value="6"/>
-      </Unit120>
-      <Unit121>
-        <Filename Value="dxflow.pas"/>
-        <UnitName Value="dxflow"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="179"/>
-        <CursorPos X="87" Y="207"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit121>
-      <Unit122>
+        <UsageCount Value="4"/>
+      </Unit89>
+      <Unit90>
         <Filename Value="gdb/GDB3DFace.pas"/>
         <UnitName Value="GDB3DFace"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="182"/>
-        <CursorPos X="34" Y="200"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <TopLine Value="12"/>
+        <CursorPos X="50" Y="31"/>
+        <UsageCount Value="21"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit122>
-      <Unit123>
+      </Unit90>
+      <Unit91>
         <Filename Value="/usr/share/fpcsrc/rtl/objpas/sysutils/filutilh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="49"/>
         <CursorPos X="14" Y="57"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit123>
-      <Unit124>
+      </Unit91>
+      <Unit92>
         <Filename Value="/usr/lib/lazarus/components/opengl/glwin32wglcontext.pas"/>
         <UnitName Value="GLWin32WGLContext"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3"/>
         <CursorPos X="43" Y="27"/>
-        <UsageCount Value="6"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit124>
-      <Unit125>
-        <Filename Value="../../pp/rtl/inc/systemh.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="385"/>
-        <CursorPos X="3" Y="399"/>
         <UsageCount Value="4"/>
-      </Unit125>
-      <Unit126>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit92>
+      <Unit93>
+        <Filename Value="../../pp/rtl/inc/systemh.inc"/>
+        <EditorIndex Value="13"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="830"/>
+        <CursorPos X="11" Y="853"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit93>
+      <Unit94>
         <Filename Value="gdbobjectsconstdef.pas"/>
         <UnitName Value="gdbobjectsconstdef"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="102"/>
-        <CursorPos X="3" Y="125"/>
-        <UsageCount Value="11"/>
+        <TopLine Value="41"/>
+        <CursorPos X="12" Y="64"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit126>
-      <Unit127>
-        <Filename Value="../../lazarus/lcl/lclmessageglue.pas"/>
-        <UnitName Value="LCLMessageGlue"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1097"/>
-        <CursorPos X="1" Y="1142"/>
-        <UsageCount Value="1"/>
-      </Unit127>
-      <Unit128>
+      </Unit94>
+      <Unit95>
         <Filename Value="u/UGDBVisibleOpenArray.pas"/>
         <UnitName Value="UGDBVisibleOpenArray"/>
         <WindowIndex Value="0"/>
         <TopLine Value="6"/>
         <CursorPos X="43" Y="30"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="40"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit128>
-      <Unit129>
+      </Unit95>
+      <Unit96>
         <Filename Value="../../lazarus/lcl/include/winapih.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="188"/>
         <CursorPos X="29" Y="207"/>
-        <UsageCount Value="6"/>
-      </Unit129>
-      <Unit130>
+        <UsageCount Value="4"/>
+      </Unit96>
+      <Unit97>
         <Filename Value="gdb/GDBCamera.pas"/>
         <UnitName Value="GDBCamera"/>
-        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="9"/>
         <CursorPos X="25" Y="29"/>
-        <UsageCount Value="14"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="23"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit130>
-      <Unit131>
+      </Unit97>
+      <Unit98>
         <Filename Value="gui/oglwindowdef.pas"/>
         <UnitName Value="oglwindowdef"/>
         <WindowIndex Value="0"/>
         <TopLine Value="87"/>
         <CursorPos X="13" Y="110"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit131>
-      <Unit132>
+      </Unit98>
+      <Unit99>
         <Filename Value="u/UGDBOpenArrayOfData.pas"/>
         <UnitName Value="UGDBOpenArrayOfData"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2"/>
         <CursorPos X="32" Y="26"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit132>
-      <Unit133>
+      </Unit99>
+      <Unit100>
         <Filename Value="gui/layerwnd.lfm"/>
         <WindowIndex Value="0"/>
         <TopLine Value="70"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
-      </Unit133>
-      <Unit134>
-        <Filename Value="langsystem.pas"/>
-        <UnitName Value="langsystem"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="163"/>
-        <CursorPos X="31" Y="182"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit134>
-      <Unit135>
+      </Unit100>
+      <Unit101>
         <Filename Value="../../freepascal/fpc/rtl/inc/compproc.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="628"/>
         <CursorPos X="1" Y="650"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit135>
-      <Unit136>
+      </Unit101>
+      <Unit102>
         <Filename Value="../../freepascal/fpc/rtl/inc/rtti.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="104"/>
         <CursorPos X="3" Y="106"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit136>
-      <Unit137>
+      </Unit102>
+      <Unit103>
         <Filename Value="../../freepascal/fpc/rtl/inc/objpash.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="169"/>
         <CursorPos X="26" Y="184"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit137>
-      <Unit138>
+      </Unit103>
+      <Unit104>
         <Filename Value="u/TGMultiObjectChangeCommandIMPL.inc"/>
         <IsPartOfProject Value="True"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="58" Y="22"/>
+        <CursorPos X="13" Y="18"/>
         <UsageCount Value="200"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit138>
-      <Unit139>
+      </Unit104>
+      <Unit105>
         <Filename Value="u/TGMultiObjectChangeCommandList.inc"/>
         <IsPartOfProject Value="True"/>
         <WindowIndex Value="0"/>
@@ -1283,760 +1006,786 @@
         <CursorPos X="31" Y="4"/>
         <UsageCount Value="200"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit139>
-      <Unit140>
+      </Unit105>
+      <Unit106>
         <Filename Value="../../lazarus/lcl/include/application.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="222"/>
         <CursorPos X="23" Y="228"/>
-        <UsageCount Value="16"/>
-      </Unit140>
-      <Unit141>
+        <UsageCount Value="14"/>
+      </Unit106>
+      <Unit107>
         <Filename Value="../../lazarus/lcl/include/interfacebase.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="31"/>
         <CursorPos X="1" Y="50"/>
-        <UsageCount Value="2"/>
-      </Unit141>
-      <Unit142>
-        <Filename Value="/usr/lib/lazarus/lcl/interfaces/gtk2/gtk2callback.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1788"/>
-        <CursorPos X="1" Y="1810"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit142>
-      <Unit143>
-        <Filename Value="/usr/lib/lazarus/components/opengl/openglcontext.pas"/>
-        <UnitName Value="OpenGLContext"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit143>
-      <Unit144>
+        <UsageCount Value="10"/>
+      </Unit107>
+      <Unit108>
         <Filename Value="gdb/GDBLWPolyLine.pas"/>
         <UnitName Value="GDBLWPolyLine"/>
-        <EditorIndex Value="19"/>
         <WindowIndex Value="0"/>
         <TopLine Value="20"/>
         <CursorPos X="51" Y="37"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="31"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit144>
-      <Unit145>
+      </Unit108>
+      <Unit109>
         <Filename Value="u/UGDBOpenArrayOfPV.pas"/>
         <UnitName Value="UGDBOpenArrayOfPV"/>
         <WindowIndex Value="0"/>
         <TopLine Value="251"/>
         <CursorPos X="1" Y="274"/>
-        <UsageCount Value="50"/>
+        <UsageCount Value="48"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit145>
-      <Unit146>
+      </Unit109>
+      <Unit110>
         <Filename Value="../../lazarus/ide/outputfilter.pas"/>
         <UnitName Value="OutputFilter"/>
         <WindowIndex Value="0"/>
         <TopLine Value="212"/>
         <CursorPos X="39" Y="231"/>
-        <UsageCount Value="2"/>
-      </Unit146>
-      <Unit147>
-        <Filename Value="u/UGDBGraf.pas"/>
-        <UnitName Value="UGDBGraf"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="3"/>
-        <CursorPos X="94" Y="22"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit147>
-      <Unit148>
+        <UsageCount Value="10"/>
+      </Unit110>
+      <Unit111>
         <Filename Value="gdb/GDBConnected.pas"/>
         <UnitName Value="GDBConnected"/>
-        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="37" Y="26"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit148>
-      <Unit149>
+      </Unit111>
+      <Unit112>
         <Filename Value="../../pp/rtl/win/wininc/struct.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="6823"/>
         <CursorPos X="23" Y="6853"/>
-        <UsageCount Value="6"/>
-      </Unit149>
-      <Unit150>
+        <UsageCount Value="4"/>
+      </Unit112>
+      <Unit113>
         <Filename Value="gdb/GDBPlain.pas"/>
         <UnitName Value="GDBPlain"/>
-        <EditorIndex Value="22"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="14" Y="49"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit150>
-      <Unit151>
+      </Unit113>
+      <Unit114>
         <Filename Value="../../pp/rtl/objpas/objpas.pp"/>
         <UnitName Value="objpas"/>
         <WindowIndex Value="0"/>
         <TopLine Value="310"/>
         <CursorPos X="3" Y="316"/>
-        <UsageCount Value="8"/>
-      </Unit151>
-      <Unit152>
+        <UsageCount Value="6"/>
+      </Unit114>
+      <Unit115>
         <Filename Value="../../lazarus/lcl/dialogs.pp"/>
         <UnitName Value="Dialogs"/>
         <WindowIndex Value="0"/>
         <TopLine Value="120"/>
         <CursorPos X="14" Y="139"/>
-        <UsageCount Value="3"/>
-      </Unit152>
-      <Unit153>
+        <UsageCount Value="1"/>
+      </Unit115>
+      <Unit116>
         <Filename Value="../../lazarus/lcl/include/filedialog.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="104"/>
         <CursorPos X="1" Y="124"/>
-        <UsageCount Value="8"/>
-      </Unit153>
-      <Unit154>
+        <UsageCount Value="6"/>
+      </Unit116>
+      <Unit117>
         <Filename Value="commands/commandlinedef.pas"/>
         <UnitName Value="commandlinedef"/>
         <WindowIndex Value="0"/>
         <TopLine Value="25"/>
         <CursorPos X="39" Y="48"/>
-        <UsageCount Value="35"/>
+        <UsageCount Value="33"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit154>
-      <Unit155>
+      </Unit117>
+      <Unit118>
         <Filename Value="../../pp/rtl/objpas/strutils.pp"/>
         <UnitName Value="strutils"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="221"/>
-        <CursorPos X="7" Y="23"/>
-        <UsageCount Value="2"/>
-      </Unit155>
-      <Unit156>
-        <Filename Value="/usr/share/fpcsrc/rtl/unix/sysutils.pp"/>
-        <UnitName Value="sysutils"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="56"/>
-        <CursorPos X="9" Y="41"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit156>
-      <Unit157>
+        <TopLine Value="1"/>
+        <CursorPos X="5" Y="23"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit118>
+      <Unit119>
         <Filename Value="/usr/share/fpcsrc/rtl/objpas/sysutils/sysutilh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="243"/>
         <CursorPos X="28" Y="249"/>
-        <UsageCount Value="3"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit157>
-      <Unit158>
-        <Filename Value="/usr/lib/lazarus/lcl/lclproc.pas"/>
-        <UnitName Value="LCLProc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="595"/>
-        <CursorPos X="68" Y="34"/>
         <UsageCount Value="1"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit158>
-      <Unit159>
-        <Filename Value="/usr/lib/lazarus/lcl/lclstrconsts.pas"/>
-        <UnitName Value="LCLStrConsts"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="324"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit159>
-      <Unit160>
-        <Filename Value="/usr/lib/lazarus/lcl/fileutil.pas"/>
-        <UnitName Value="FileUtil"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="133"/>
-        <CursorPos X="5" Y="30"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit160>
-      <Unit161>
-        <Filename Value="/usr/share/fpcsrc/rtl/objpas/sysconst.pp"/>
-        <UnitName Value="sysconst"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit161>
-      <Unit162>
+      </Unit119>
+      <Unit120>
         <Filename Value="/usr/share/fpcsrc/rtl/unix/sysunixh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="11"/>
         <CursorPos X="12" Y="28"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="1"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit162>
-      <Unit163>
+      </Unit120>
+      <Unit121>
         <Filename Value="/usr/lib/lazarus/lcl/buttonpanel.pas"/>
         <UnitName Value="ButtonPanel"/>
         <WindowIndex Value="0"/>
         <TopLine Value="210"/>
         <CursorPos X="3" Y="212"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit163>
-      <Unit164>
+      </Unit121>
+      <Unit122>
         <Filename Value="../../lazarus/lcl/buttonpanel.pas"/>
         <UnitName Value="ButtonPanel"/>
         <WindowIndex Value="0"/>
         <TopLine Value="17"/>
         <CursorPos X="16" Y="28"/>
-        <UsageCount Value="3"/>
-      </Unit164>
-      <Unit165>
-        <Filename Value="D:/ExtToolbar/Source/extdock.pas"/>
-        <UnitName Value="extdock"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="3187"/>
-        <CursorPos X="69" Y="3206"/>
         <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit165>
-      <Unit166>
-        <Filename Value="u/UCableManager.pas"/>
-        <UnitName Value="UCableManager"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="153"/>
-        <CursorPos X="1" Y="181"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit166>
-      <Unit167>
+      </Unit122>
+      <Unit123>
         <Filename Value="u/UGDBPoint3DArray.pas"/>
         <UnitName Value="UGDBPoint3DArray"/>
         <WindowIndex Value="0"/>
         <TopLine Value="19"/>
         <CursorPos X="1" Y="55"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="2"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit167>
-      <Unit168>
+      </Unit123>
+      <Unit124>
         <Filename Value="../../pp/rtl/objpas/sysutils/sysutilh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="215"/>
         <CursorPos X="14" Y="228"/>
-        <UsageCount Value="3"/>
-      </Unit168>
-      <Unit169>
+        <UsageCount Value="1"/>
+      </Unit124>
+      <Unit125>
         <Filename Value="languade/USinonimDescriptor.pas"/>
         <UnitName Value="USinonimDescriptor"/>
         <WindowIndex Value="0"/>
         <TopLine Value="11"/>
         <CursorPos X="92" Y="30"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit169>
-      <Unit170>
+      </Unit125>
+      <Unit126>
         <Filename Value="../../pp/rtl/inc/system.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="216"/>
         <CursorPos X="8" Y="237"/>
-        <UsageCount Value="2"/>
-      </Unit170>
-      <Unit171>
-        <Filename Value="u/UGDBNumerator.pas"/>
-        <UnitName Value="UGDBNumerator"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="39"/>
-        <CursorPos X="20" Y="60"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit171>
-      <Unit172>
-        <Filename Value="../../pp/rtl/i386/fastmove.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="815"/>
-        <CursorPos X="11" Y="834"/>
-        <UsageCount Value="1"/>
-      </Unit172>
-      <Unit173>
+        <UsageCount Value="10"/>
+      </Unit126>
+      <Unit127>
         <Filename Value="strmy.pas"/>
         <UnitName Value="strmy"/>
+        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="14"/>
-        <CursorPos X="68" Y="33"/>
-        <UsageCount Value="5"/>
+        <TopLine Value="163"/>
+        <CursorPos X="61" Y="226"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit173>
-      <Unit174>
+      </Unit127>
+      <Unit128>
         <Filename Value="u/UGDBStringArray.pas"/>
         <UnitName Value="UGDBStringArray"/>
         <WindowIndex Value="0"/>
         <TopLine Value="76"/>
         <CursorPos X="32" Y="104"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="6"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit174>
-      <Unit175>
+      </Unit128>
+      <Unit129>
         <Filename Value="u/UGDBOpenArrayOfTObjLinkRecord.pas"/>
         <UnitName Value="UGDBOpenArrayOfTObjLinkRecord"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit175>
-      <Unit176>
+      </Unit129>
+      <Unit130>
         <Filename Value="languade/UArrayDescriptor.pas"/>
         <UnitName Value="UArrayDescriptor"/>
         <WindowIndex Value="0"/>
         <TopLine Value="6"/>
         <CursorPos X="1" Y="25"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit176>
-      <Unit177>
+      </Unit130>
+      <Unit131>
         <Filename Value="gdb/GDBBlockDef.pas"/>
         <UnitName Value="GDBBlockDef"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="168"/>
-        <CursorPos X="1" Y="191"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <TopLine Value="10"/>
+        <CursorPos X="51" Y="36"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit177>
-      <Unit178>
+      </Unit131>
+      <Unit132>
         <Filename Value="u/UGDBPolyLine2DArray.pas"/>
         <UnitName Value="UGDBPolyLine2DArray"/>
         <WindowIndex Value="0"/>
         <TopLine Value="134"/>
         <CursorPos X="19" Y="150"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit178>
-      <Unit179>
+      </Unit132>
+      <Unit133>
         <Filename Value="../../lazarus/lcl/include/customform.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1383"/>
         <CursorPos X="1" Y="1413"/>
-        <UsageCount Value="4"/>
-      </Unit179>
-      <Unit180>
+        <UsageCount Value="2"/>
+      </Unit133>
+      <Unit134>
         <Filename Value="../../lazarus/examples/anchordocking/anchordocking.pas"/>
         <UnitName Value="AnchorDocking"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="5400"/>
+        <TopLine Value="1"/>
         <CursorPos X="1" Y="5439"/>
-        <UsageCount Value="29"/>
-      </Unit180>
-      <Unit181>
+        <UsageCount Value="27"/>
+        <Loaded Value="True"/>
+      </Unit134>
+      <Unit135>
         <Filename Value="../../lazarus/lcl/include/wincontrol.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="5218"/>
         <CursorPos X="1" Y="5241"/>
-        <UsageCount Value="7"/>
-      </Unit181>
-      <Unit182>
+        <UsageCount Value="5"/>
+      </Unit135>
+      <Unit136>
         <Filename Value="../../lazarus/lcl/lresources.pp"/>
         <UnitName Value="LResources"/>
         <WindowIndex Value="0"/>
         <TopLine Value="744"/>
         <CursorPos X="1" Y="767"/>
-        <UsageCount Value="2"/>
-      </Unit182>
-      <Unit183>
+        <UsageCount Value="10"/>
+      </Unit136>
+      <Unit137>
         <Filename Value="../../lazarus/lcl/include/screen.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="217"/>
         <CursorPos X="1" Y="243"/>
-        <UsageCount Value="3"/>
-      </Unit183>
-      <Unit184>
+        <UsageCount Value="1"/>
+      </Unit137>
+      <Unit138>
         <Filename Value="/usr/lib/lazarus/examples/anchordocking/anchordocking.pas"/>
         <UnitName Value="AnchorDocking"/>
         <WindowIndex Value="0"/>
         <TopLine Value="522"/>
         <CursorPos X="13" Y="550"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="6"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit184>
-      <Unit185>
+      </Unit138>
+      <Unit139>
         <Filename Value="/usr/lib/lazarus/lcl/include/application.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2091"/>
         <CursorPos X="1" Y="2117"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit185>
-      <Unit186>
+      </Unit139>
+      <Unit140>
         <Filename Value="/usr/lib/lazarus/lcl/include/control.inc"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="316"/>
-        <CursorPos X="1" Y="343"/>
-        <UsageCount Value="2"/>
+        <TopLine Value="1028"/>
+        <CursorPos X="3" Y="1054"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit186>
-      <Unit187>
+      </Unit140>
+      <Unit141>
         <Filename Value="/usr/lib/lazarus/lcl/interfaces/gtk2/gtk2lclintf.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="776"/>
-        <CursorPos X="1" Y="802"/>
-        <UsageCount Value="2"/>
+        <CursorPos X="1" Y="806"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit187>
-      <Unit188>
+      </Unit141>
+      <Unit142>
         <Filename Value="../../lazarus/lcl/toolwin.pp"/>
         <UnitName Value="Toolwin"/>
         <WindowIndex Value="0"/>
         <TopLine Value="28"/>
         <CursorPos X="50" Y="51"/>
-        <UsageCount Value="10"/>
-      </Unit188>
-      <Unit189>
+        <UsageCount Value="8"/>
+      </Unit142>
+      <Unit143>
         <Filename Value="../../lazarus/examples/anchordocking/anchordockoptionsdlg.pas"/>
+        <ComponentName Value="AnchorDockOptionsFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
         <UnitName Value="AnchorDockOptionsDlg"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="65" Y="27"/>
-        <UsageCount Value="2"/>
-      </Unit189>
-      <Unit190>
+        <UsageCount Value="10"/>
+      </Unit143>
+      <Unit144>
         <Filename Value="/usr/lib/lazarus/examples/anchordocking/anchordockstorage.pas"/>
         <UnitName Value="AnchorDockStorage"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1223"/>
         <CursorPos X="1" Y="1251"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="6"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit190>
-      <Unit191>
+      </Unit144>
+      <Unit145>
         <Filename Value="../../lazarus/lcl/include/customnotebook.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="215"/>
         <CursorPos X="1" Y="238"/>
-        <UsageCount Value="3"/>
-      </Unit191>
-      <Unit192>
+        <UsageCount Value="1"/>
+      </Unit145>
+      <Unit146>
         <Filename Value="../../lazarus/examples/anchordocking/anchordockstorage.pas"/>
         <UnitName Value="AnchorDockStorage"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1228"/>
         <CursorPos X="18" Y="1246"/>
-        <UsageCount Value="2"/>
-      </Unit192>
-      <Unit193>
+        <UsageCount Value="10"/>
+      </Unit146>
+      <Unit147>
         <Filename Value="../../pp/packages/opengl/src/gl.pp"/>
         <UnitName Value="GL"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1277"/>
         <CursorPos X="13" Y="1300"/>
-        <UsageCount Value="31"/>
-      </Unit193>
-      <Unit194>
+        <UsageCount Value="29"/>
+      </Unit147>
+      <Unit148>
         <Filename Value="../../lazarus/lcl/interfaces/win32/win32callback.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2567"/>
         <CursorPos X="1" Y="2605"/>
-        <UsageCount Value="8"/>
-      </Unit194>
-      <Unit195>
-        <Filename Value="../../lazarus/components/opengl/glqtcontext.pas"/>
-        <UnitName Value="GLQTContext"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="48"/>
-        <CursorPos X="50" Y="25"/>
-        <UsageCount Value="1"/>
-      </Unit195>
-      <Unit196>
+        <UsageCount Value="6"/>
+      </Unit148>
+      <Unit149>
         <Filename Value="../../lazarus/lcl/utrace.pp"/>
         <UnitName Value="UTrace"/>
         <WindowIndex Value="0"/>
         <TopLine Value="24"/>
         <CursorPos X="58" Y="46"/>
-        <UsageCount Value="24"/>
-      </Unit196>
-      <Unit197>
+        <UsageCount Value="22"/>
+      </Unit149>
+      <Unit150>
         <Filename Value="commands/GDBCommandsDB.pas"/>
         <UnitName Value="GDBCommandsDB"/>
         <WindowIndex Value="0"/>
         <TopLine Value="66"/>
         <CursorPos X="90" Y="98"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit197>
-      <Unit198>
+      </Unit150>
+      <Unit151>
         <Filename Value="../../lazarus/lcl/menus.pp"/>
         <UnitName Value="Menus"/>
         <WindowIndex Value="0"/>
         <TopLine Value="167"/>
         <CursorPos X="13" Y="125"/>
-        <UsageCount Value="4"/>
-      </Unit198>
-      <Unit199>
+        <UsageCount Value="2"/>
+      </Unit151>
+      <Unit152>
         <Filename Value="/usr/lib/lazarus/lcl/interfaces/qt/qtwidgets.pas"/>
         <UnitName Value="qtwidgets"/>
         <WindowIndex Value="0"/>
         <TopLine Value="20"/>
         <CursorPos X="34" Y="47"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="6"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit199>
-      <Unit200>
+      </Unit152>
+      <Unit153>
         <Filename Value="u/UGDBVectorSnapArray.pas"/>
         <UnitName Value="UGDBVectorSnapArray"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="25" Y="19"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="6"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit200>
-      <Unit201>
+      </Unit153>
+      <Unit154>
         <Filename Value="gdb/GDBWithMatrix.pas"/>
         <UnitName Value="GDBWithMatrix"/>
         <WindowIndex Value="0"/>
         <TopLine Value="4"/>
         <CursorPos X="57" Y="28"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit201>
-      <Unit202>
+      </Unit154>
+      <Unit155>
         <Filename Value="gdb/GDBPlainWithOX.pas"/>
         <UnitName Value="GDBPlainWithOX"/>
-        <EditorIndex Value="23"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="32" Y="30"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit202>
-      <Unit203>
+      </Unit155>
+      <Unit156>
         <Filename Value="gdb/GDBWithLocalCS.pas"/>
         <UnitName Value="GDBWithLocalCS"/>
         <WindowIndex Value="0"/>
         <TopLine Value="16"/>
         <CursorPos X="55" Y="46"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit203>
-      <Unit204>
+      </Unit156>
+      <Unit157>
         <Filename Value="gdb/GDBComplex.pas"/>
         <UnitName Value="GDBComplex"/>
-        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="59"/>
+        <TopLine Value="1"/>
         <CursorPos X="86" Y="82"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit204>
-      <Unit205>
+      </Unit157>
+      <Unit158>
         <Filename Value="../cad/blocks/el/general/DEVICE_CABLE_MARK.pas"/>
         <UnitName Value="DEVICE_CABLE_MARK"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="26" Y="5"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="6"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit205>
-      <Unit206>
+      </Unit158>
+      <Unit159>
         <Filename Value="../cad/blocks/el/general/DEVICE_EL_MOTOR.pas"/>
         <UnitName Value="DEVICE_EL_MOTOR"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="29" Y="6"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="6"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit206>
-      <Unit207>
+      </Unit159>
+      <Unit160>
         <Filename Value="u/UGDBPolyPoint2DArray.pas"/>
         <UnitName Value="UGDBPolyPoint2DArray"/>
         <WindowIndex Value="0"/>
         <TopLine Value="26"/>
         <CursorPos X="22" Y="59"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit207>
-      <Unit208>
+      </Unit160>
+      <Unit161>
         <Filename Value="u/UGDBPolyPoint3DArray.pas"/>
         <UnitName Value="UGDBPolyPoint3DArray"/>
         <WindowIndex Value="0"/>
         <TopLine Value="324"/>
         <CursorPos X="1" Y="265"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit208>
-      <Unit209>
+      </Unit161>
+      <Unit162>
         <Filename Value="gdb/GDBPoint.pas"/>
         <UnitName Value="GDBPoint"/>
-        <EditorIndex Value="24"/>
         <WindowIndex Value="0"/>
         <TopLine Value="12"/>
         <CursorPos X="56" Y="31"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit209>
-      <Unit210>
+      </Unit162>
+      <Unit163>
         <Filename Value="gdb/GDBArc.pas"/>
         <UnitName Value="GDBArc"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="331"/>
-        <CursorPos X="13" Y="344"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <TopLine Value="1"/>
+        <CursorPos X="122" Y="356"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit210>
-      <Unit211>
+      </Unit163>
+      <Unit164>
         <Filename Value="gdb/GDBCircle.pas"/>
         <UnitName Value="GDBCircle"/>
-        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="413"/>
-        <CursorPos X="95" Y="427"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <TopLine Value="7"/>
+        <CursorPos X="40" Y="38"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit211>
-      <Unit212>
+      </Unit164>
+      <Unit165>
         <Filename Value="../../pp/rtl/objpas/sysutils/sysutils.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="609"/>
         <CursorPos X="11" Y="622"/>
-        <UsageCount Value="5"/>
-      </Unit212>
-      <Unit213>
+        <UsageCount Value="3"/>
+      </Unit165>
+      <Unit166>
         <Filename Value="../../pp/rtl/win/sysutils.pp"/>
         <UnitName Value="sysutils"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="155"/>
-        <CursorPos X="11" Y="168"/>
-        <UsageCount Value="2"/>
-      </Unit213>
-      <Unit214>
+        <TopLine Value="865"/>
+        <CursorPos X="13" Y="903"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit166>
+      <Unit167>
         <Filename Value="gdb/GDBHelpObj.pas"/>
         <UnitName Value="GDBHelpObj"/>
-        <EditorIndex Value="16"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="25"/>
+        <TopLine Value="1"/>
         <CursorPos X="19" Y="44"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit214>
-      <Unit215>
+      </Unit167>
+      <Unit168>
         <Filename Value="../../lazarus/examples/anchordocking/anchordockpkg.pas"/>
         <UnitName Value="anchordockpkg"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="10" Y="13"/>
-        <UsageCount Value="8"/>
-      </Unit215>
-      <Unit216>
+        <CursorPos X="5" Y="10"/>
+        <UsageCount Value="9"/>
+      </Unit168>
+      <Unit169>
         <Filename Value="../../lazarus/lcl/translations.pas"/>
         <UnitName Value="Translations"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="92"/>
-        <CursorPos X="19" Y="113"/>
-        <UsageCount Value="34"/>
-      </Unit216>
-      <Unit217>
+        <TopLine Value="50"/>
+        <CursorPos X="1" Y="1002"/>
+        <UsageCount Value="32"/>
+        <Loaded Value="True"/>
+      </Unit169>
+      <Unit170>
         <Filename Value="../../pp/rtl/inc/objpas.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="250"/>
         <CursorPos X="9" Y="267"/>
-        <UsageCount Value="11"/>
-      </Unit217>
-      <Unit218>
+        <UsageCount Value="9"/>
+      </Unit170>
+      <Unit171>
         <Filename Value="../../lazarus/lcl/fileutil.pas"/>
         <UnitName Value="FileUtil"/>
         <WindowIndex Value="0"/>
         <TopLine Value="171"/>
         <CursorPos X="10" Y="194"/>
-        <UsageCount Value="9"/>
-      </Unit218>
-      <Unit219>
+        <UsageCount Value="7"/>
+      </Unit171>
+      <Unit172>
         <Filename Value="../../lazarus/lcl/include/winfileutil.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="538"/>
         <CursorPos X="1" Y="566"/>
-        <UsageCount Value="9"/>
-      </Unit219>
-      <Unit220>
+        <UsageCount Value="7"/>
+      </Unit172>
+      <Unit173>
         <Filename Value="../../pp/rtl/objpas/sysutils/sysstr.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="920"/>
         <CursorPos X="30" Y="920"/>
-        <UsageCount Value="7"/>
-      </Unit220>
-      <Unit221>
+        <UsageCount Value="5"/>
+      </Unit173>
+      <Unit174>
         <Filename Value="../../lazarus/lcl/stringhashlist.pas"/>
         <UnitName Value="StringHashList"/>
         <WindowIndex Value="0"/>
         <TopLine Value="160"/>
         <CursorPos X="1" Y="187"/>
-        <UsageCount Value="10"/>
-      </Unit221>
-      <Unit222>
+        <UsageCount Value="8"/>
+      </Unit174>
+      <Unit175>
         <Filename Value="gdb/devices.pas"/>
         <UnitName Value="devices"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <TopLine Value="31"/>
+        <CursorPos X="5" Y="63"/>
+        <UsageCount Value="20"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit222>
-      <Unit223>
+      </Unit175>
+      <Unit176>
         <Filename Value="gdb/GDB3d.pas"/>
         <UnitName Value="GDB3d"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="20"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit223>
-      <Unit224>
+      </Unit176>
+      <Unit177>
         <Filename Value="gdb/GDBBlockInsert.pas"/>
         <UnitName Value="GDBBlockInsert"/>
-        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <CursorPos X="58" Y="36"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit224>
-      <Unit225>
+      </Unit177>
+      <Unit178>
         <Filename Value="gdb/UGDBDrawingdef.pas"/>
         <UnitName Value="UGDBDrawingdef"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit225>
+      </Unit178>
+      <Unit179>
+        <Filename Value="u/TGChangeCommandIMPL.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="13" Y="18"/>
+        <UsageCount Value="18"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit179>
+      <Unit180>
+        <Filename Value="u/TGObjectChangeCommandIMPL.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="13" Y="18"/>
+        <UsageCount Value="18"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit180>
+      <Unit181>
+        <Filename Value="u/TGObjectChangeCommand2IMPL.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="13" Y="18"/>
+        <UsageCount Value="18"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit181>
+      <Unit182>
+        <Filename Value="strproc.pas"/>
+        <UnitName Value="strproc"/>
+        <EditorIndex Value="10"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="50" Y="23"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit182>
+      <Unit183>
+        <Filename Value="/usr/lib/lazarus/components/codetools/codetools.pas"/>
+        <UnitName Value="CodeTools"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="16" Y="30"/>
+        <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit183>
     </Units>
-    <JumpHistory Count="2" HistoryIndex="1">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
-        <Filename Value="gdb/GDBEntity.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="../../pp/rtl/win/sysutils.pp"/>
+        <Caret Line="14" Column="55" TopLine="1"/>
       </Position1>
       <Position2>
-        <Filename Value="gdb/GDBLine.pas"/>
-        <Caret Line="38" Column="34" TopLine="9"/>
+        <Filename Value="../../pp/rtl/win/sysutils.pp"/>
+        <Caret Line="833" Column="53" TopLine="795"/>
       </Position2>
+      <Position3>
+        <Filename Value="../../pp/rtl/win/sysutils.pp"/>
+        <Caret Line="903" Column="13" TopLine="865"/>
+      </Position3>
+      <Position4>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="131" Column="16" TopLine="109"/>
+      </Position4>
+      <Position5>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="146" Column="37" TopLine="109"/>
+      </Position5>
+      <Position6>
+        <Filename Value="gui/mainwindow.pas"/>
+        <Caret Line="41" Column="35" TopLine="20"/>
+      </Position6>
+      <Position7>
+        <Filename Value="gui/mainwindow.pas"/>
+        <Caret Line="855" Column="110" TopLine="823"/>
+      </Position7>
+      <Position8>
+        <Filename Value="gui/mainwindow.pas"/>
+        <Caret Line="828" Column="109" TopLine="805"/>
+      </Position8>
+      <Position9>
+        <Filename Value="gui/mainwindow.pas"/>
+        <Caret Line="974" Column="85" TopLine="952"/>
+      </Position9>
+      <Position10>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="154" Column="54" TopLine="112"/>
+      </Position10>
+      <Position11>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="119" Column="15" TopLine="112"/>
+      </Position11>
+      <Position12>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="156" Column="81" TopLine="112"/>
+      </Position12>
+      <Position13>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="28" Column="31" TopLine="13"/>
+      </Position13>
+      <Position14>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="122" Column="39" TopLine="105"/>
+      </Position14>
+      <Position15>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="123" Column="1" TopLine="105"/>
+      </Position15>
+      <Position16>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="124" Column="1" TopLine="105"/>
+      </Position16>
+      <Position17>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="125" Column="1" TopLine="105"/>
+      </Position17>
+      <Position18>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="127" Column="1" TopLine="105"/>
+      </Position18>
+      <Position19>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="129" Column="1" TopLine="114"/>
+      </Position19>
+      <Position20>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="130" Column="1" TopLine="114"/>
+      </Position20>
+      <Position21>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="153" Column="1" TopLine="115"/>
+      </Position21>
+      <Position22>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="28" Column="31" TopLine="13"/>
+      </Position22>
+      <Position23>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="123" Column="1" TopLine="115"/>
+      </Position23>
+      <Position24>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="29" Column="19" TopLine="13"/>
+      </Position24>
+      <Position25>
+        <Filename Value="gdb/GDBTable.pas"/>
+        <Caret Line="31" Column="30" TopLine="10"/>
+      </Position25>
+      <Position26>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1768" Column="16" TopLine="1741"/>
+      </Position26>
+      <Position27>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1766" Column="22" TopLine="1741"/>
+      </Position27>
+      <Position28>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="46" Column="17" TopLine="45"/>
+      </Position28>
+      <Position29>
+        <Filename Value="gui/intftranslations.pas"/>
+        <Caret Line="155" Column="1" TopLine="117"/>
+      </Position29>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -2056,14 +1805,12 @@
         <IncludeAssertionCode Value="True"/>
         <AllowLabel Value="False"/>
         <CPPInline Value="False"/>
-        <StaticKeyword Value="True"/>
         <UseAnsiStrings Value="False"/>
       </SyntaxOptions>
     </Parsing>
     <CodeGeneration>
       <Optimizations>
-        <VariablesInRegisters Value="True"/>
-        <OptimizationLevel Value="3"/>
+        <OptimizationLevel Value="0"/>
       </Optimizations>
     </CodeGeneration>
     <Linking>

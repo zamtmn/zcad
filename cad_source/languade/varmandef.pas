@@ -145,7 +145,7 @@ UserTypeDescriptor=object(GDBaseObject)
                    middlepoint:GDBVertex;
              end;
   tlanguadedeb=record
-                   UpdatePO,NotEnlishWord:GDBInteger;
+                   UpdatePO,NotEnlishWord,DebugWord:GDBInteger;
              end;
 
   tdebug=record

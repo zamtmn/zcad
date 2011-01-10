@@ -15,7 +15,7 @@ TCommand=specialize TGChangeCommand<TData>;
 function GDBObjOpenArrayOfUCommands.CreateTGChangeCommand(var data:TData):PTCommand;overload;
 begin
      gdbgetmem(result,sizeof(TCommand));
-     result.Assign(data);
+     result^.Assign(data);
 end;
 function GDBObjOpenArrayOfUCommands.PushCreateTGChangeCommand(var data:TData):PTCommand;overload;
 begin

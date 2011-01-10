@@ -2704,7 +2704,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     if commandmanager.pcommandrunning<>nil then
                                                commandmanager.pcommandrunning^.DrawHeplGeometry;
 
-    scrollmode:=GDB.GetCurrentDWG.OGLwindow1.param.scrollmode;
+    scrollmode:=GDB.GetCurrentDWG^.OGLwindow1.param.scrollmode;
     GDB.GetCurrentDWG.OGLwindow1.param.scrollmode:=true;
 
     render(gdb.GetCurrentDWG.ConstructObjRoot);

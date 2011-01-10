@@ -38,6 +38,7 @@ graphics,
 resourcestring
   GDBObjinspWndName='Object Inspector';
   CommandLineWndName='Command line';
+  ES_ReCreating='Re-creating %s!';
 
 type
   TFileHistory=Array [0..9] of TmyMenuItem;
@@ -772,6 +773,7 @@ begin
                           TmyCommandToolButton(b).FCommand:=bc;
                           if ts<>''then
                           begin
+                               ts:=InterfaceTranslate('hint_panel~'+bc,ts);
                           b.hint:=(ts);
                           b.ShowHint:=true;
                           end;
@@ -802,6 +804,7 @@ begin
                           TmyVariableToolButton(b).AssignToVar(bc);
                           if ts<>''then
                           begin
+                               ts:=InterfaceTranslate('hint_panel~'+bc,ts);
                           b.hint:=(ts);
                           b.ShowHint:=true;
                           end;
@@ -822,12 +825,13 @@ begin
                           ts := f.readstring(#$A,#$D);
                           val(bc,w,code);
                           if assigned(LayerBox) then
-                                                    shared.ShowError('Повторное создание LAYERCOMBOBOX! полноценно будет работать только одна копия');
+                                                    shared.ShowError(format(ES_ReCreating,['LAYERCOMBOBOX']));
                           LayerBox:=TComboBox.Create(ppanel);
                           if code=0 then
                                         LayerBox.Width:=w;
                           if ts<>''then
                           begin
+                               ts:=InterfaceTranslate('hint_panel~LAYERCOMBOBOX',ts);
                                LayerBox.hint:=(ts);
                                LayerBox.ShowHint:=true;
                           end;
@@ -849,12 +853,13 @@ begin
                           ts := f.readstring(#$A,#$D);
                           val(bc,w,code);
                           if assigned(LineWBox) then
-                                                    shared.ShowError('Повторное создание LAYERCOMBOBOX! полноценно будет работать только одна копия');
+                                                    shared.ShowError(format(ES_ReCreating,['LINEWCOMBOBOX']));
                           LineWBox:=TComboBox.Create(ppanel);
                           if code=0 then
                                         LineWBox.Width:=w;
                           if ts<>''then
                           begin
+                               ts:=InterfaceTranslate('hint_panel~LINEWCOMBOBOX',ts);
                                LineWBox.hint:=(ts);
                                LineWBox.ShowHint:=true;
                           end;
@@ -931,6 +936,7 @@ begin
 
 
            ppopupmenu:=TMenuItem.Create(pm);
+           line:=InterfaceTranslate('menu~'+line,line);
            ppopupmenu.Caption:=line;
            pm.items.Add(ppopupmenu);
 
@@ -964,7 +970,7 @@ begin
                                                            line := f.readstring(',','');
                                                            //pmenuitem.command:=line;
 
-                                                           line2:=InterfaceTranslate('submenu~'+line2,line2);
+                                                           line2:=InterfaceTranslate('menucommand~'+line,line2);
                                                            pmenuitem:=TmyMenuItem.Create(pm,line2,line);
                                                            {ppopupmenu}pm.Add(pmenuitem);
                                                            line := f.readstring(',','');
@@ -1002,6 +1008,7 @@ begin
 
                                                            line := f.readstring(';','');
                                                            submenu:=TMenuItem.Create(pm);
+                                                           line:=InterfaceTranslate('submenu~'+line,line);
                                                            submenu.Caption:=(line);
                                                            {ppopupmenu}pm.{items.}Add(submenu);
 
@@ -1099,6 +1106,7 @@ begin
      done:=true;
      sysvar.debug.languadedeb.UpdatePO:=_UpdatePO;
      sysvar.debug.languadedeb.NotEnlishWord:=_NotEnlishWord;
+     sysvar.debug.languadedeb.DebugWord:=_DebugWord;
      //exit;
      pdwg:=gdb.GetCurrentDWG;
      if pdwg<>nil then

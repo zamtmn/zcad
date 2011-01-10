@@ -26,9 +26,9 @@ type
 {Export+}
 PGDBObj3DFace=^GDBObj3DFace;
 GDBObj3DFace=object(GDBObj3d)
-                 PInOCS:OutBound4V;(*'Координаты в OCS'*)(*saved_to_shd*)
-                 PInWCS:OutBound4V;(*'Координаты в WCS'*)(*hidden_in_objinsp*)
-                 PInDCS:OutBound4V;(*'Координаты в DCS'*)(*hidden_in_objinsp*)
+                 PInOCS:OutBound4V;(*'Coordinates OCS'*)(*saved_to_shd*)
+                 PInWCS:OutBound4V;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
+                 PInDCS:OutBound4V;(*'Coordinates DCS'*)(*hidden_in_objinsp*)
                  normal:GDBVertex;
                  triangle:GDBBoolean;
                  n,p1,p2,p3:GDBVertex3S;

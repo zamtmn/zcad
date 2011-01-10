@@ -20,7 +20,7 @@ unit intftranslations;
 {$INCLUDE def.inc}
 
 interface
-uses lclproc,gettext,translations,sysinfo,sysutils,fileutil,log,forms;
+uses strproc,lclproc,gettext,translations,sysinfo,sysutils,fileutil,log,forms;
 
 type
     TmyPOFile = class(TPOFile)
@@ -37,6 +37,7 @@ var
    po: TmyPOFile;
    _UpdatePO:integer=0;
    _NotEnlishWord:integer=0;
+   _DebugWord:integer=0;
 implementation
 function TmyPOFile.FindByIdentifier(const Identifier: String):TPOFileItem;
 begin
@@ -118,7 +119,7 @@ var
   Item: TPOFileItem;
 
 begin
-     if OriginalValue='Version' then
+     if Identifier='TTextJustify~jstm' then
                                 s:=s;
     log.programlog.LogOutStr(Identifier+' '+OriginalValue,0);
     result:=po.Translate({Identifier}'', OriginalValue);
@@ -128,6 +129,12 @@ begin
           Item:=TPOFileItem(po.FIdentifierToItem.Data[Identifier]);
           if not assigned(item) then
           begin
+               if (pos('**',OriginalValue)>0)or(pos('??',OriginalValue)>0)then
+               begin
+                    inc(_DebugWord);
+               end
+               else
+               begin
                if (utf8length(Identifier)=length(Identifier))and
                   (utf8length(OriginalValue)=length(OriginalValue)) then
                begin
@@ -138,6 +145,16 @@ begin
                end
                   else
                       inc(_NotEnlishWord);
+
+               end;
+          end
+          else
+          begin
+               if item.Original<>OriginalValue then
+                                                   begin
+                                                   item.ModifyFlag('fuzzy',true);
+                                                   item.Original:=OriginalValue;
+                                                   end;
           end;
 
      end;

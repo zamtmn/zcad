@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-
+{$MODE OBJFPC}
 unit UGDBOpenArrayOfUCommands;
 {$INCLUDE def.inc}
 interface
@@ -55,6 +55,7 @@ TChangeCommand=object(TCustomChangeCommand)
 
                end;
 generic TGChangeCommand<_T>=object(TCustomChangeCommand)
+                                      public
                                       OldData,NewData:_T;
                                       constructor Assign(var data:_T);
 
@@ -305,12 +306,12 @@ begin
 end;
 procedure TMarkerCommand.UnDo;
 begin
-     gdb.GetCurrentROOT.FormatAfterEdit;
+     gdb.GetCurrentROOT^.FormatAfterEdit;
 end;
 
 procedure TMarkerCommand.Comit;
 begin
-     gdb.GetCurrentROOT.FormatAfterEdit;
+     gdb.GetCurrentROOT^.FormatAfterEdit;
 end;
 
 constructor TMarkerCommand.init(_name:GDBString;_index:TArrayIndex);
@@ -327,7 +328,7 @@ begin
      if startmarkercount=1 then
      begin
      GDBGetMem(pointer(pmarker),sizeof(TMarkerCommand));
-     pmarker.init(CommandName,-1);
+     pmarker^.init(CommandName,-1);
      currentcommandstartmarker:=self.Add(@pmarker);
      inc(CurrentCommand);
      end;
@@ -340,7 +341,7 @@ begin
      if startmarkercount=0 then
      begin
      GDBGetMem(pointer(pmarker),sizeof(TMarkerCommand));
-     pmarker.init('EndMarker',currentcommandstartmarker);
+     pmarker^.init('EndMarker',currentcommandstartmarker);
      currentcommandstartmarker:=-1;
      self.Add(@pmarker);
      inc(CurrentCommand);
@@ -364,7 +365,7 @@ begin
      inc(CurrentCommand);
      add(@pcc);
 end;
-procedure GDBObjOpenArrayOfUCommands.undo;
+procedure GDBObjOpenArrayOfUCommands.undo(prevheap:TArrayIndex;overlay:GDBBoolean);
 var
    pcc:PTChangeCommand;
    mcounter:integer;
@@ -398,7 +399,7 @@ begin
                     else
                         shared.ShowError('Нет операций для отмены. Стек UNDO пуст')
          end;
-     gdb.GetCurrentROOT.FormatAfterEdit;
+     gdb.GetCurrentROOT^.FormatAfterEdit;
 end;
 procedure GDBObjOpenArrayOfUCommands.redo;
 var
@@ -432,7 +433,7 @@ begin
      end
      else
          shared.ShowError('Нет операций для повторного применения');
-     gdb.GetCurrentROOT.FormatAfterEdit;
+     gdb.GetCurrentROOT^.FormatAfterEdit;
 end;
 
 constructor GDBObjOpenArrayOfUCommands.init;
@@ -449,3 +450,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayOfUCommands.initialization');{$ENDIF}
 end.
+

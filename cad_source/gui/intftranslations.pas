@@ -169,6 +169,8 @@ procedure initialize;
                                            TranslateResourceStrings(po);
       //TranslateUnitResourceStrings('aboutwnd',PODirectory + 'zcad.%s.po', Lang, FallbackLang);
       //MessageDlg('Title', 'Text', mtInformation, [mbOk, mbCancel, mbYes], 0);
+
+      TranslateUnitResourceStrings('anchordockstr', PODirectory + 'anchordockstr.%s.po', Lang, FallbackLang)
     end;
 
 begin

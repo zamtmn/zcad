@@ -1,0 +1,259 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Maxim Ganetsky <maxkill@mail.ru>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
+msgid "A free side of a splitter must not be anchored: Node=%s%s%s Type=%s Anchors[%s]=%s%s%s"
+msgstr "Свободная сторона разделителя не должна иметь привязки: Узел=%s%s%s Тип=%s Привязки[%s]=%s%s%s"
+
+#: anchordockstr.adrsallfiles
+msgid "All files"
+msgstr "Все файлы"
+
+#: anchordockstr.adrsamountofpixelthemousehastodragbeforedragstarts
+msgid "Amount of pixel the mouse has to drag before drag starts"
+msgstr "Число пикселов, на которые должна переместиться мышь для начала операции перетаскивания"
+
+#: anchordockstr.adrsanchordockinglayout
+msgid "Anchor Docking Layout"
+msgstr "Разбивка Anchor Docking"
+
+#: anchordockstr.adrsanchorisnotsplitternodeanchors
+msgid "Anchor is not splitter: Node=%s%s%s Anchors[%s]=%s%s%s"
+msgstr "Привязка не является разделителем: Узел=%s%s%s Привязки[%s]=%s%s%s"
+
+#: anchordockstr.adrsanchornotfoundnodeanchors
+msgid "Anchor not found: Node=%s%s%s Anchors[%s]=%s%s%s"
+msgstr "Привязка не найдена: Узел=%s%s%s Привязки[%s]=%s%s%s"
+
+#: anchordockstr.adrsanchortowrongsideofsplitternodeanchors
+msgid "Anchor to wrong side of splitter: Node=%s%s%s Anchors[%s]=%s%s%s"
+msgstr "Привязка к неверной стороне разделителя: Узел=%s%s%s Привязки[%s]=%s%s%s"
+
+#: anchordockstr.adrsapagemustnotbeanchorednodeparentparenttypeanchors
+msgid "A page must not be anchored: Node=%s%s%s Parent=%s ParentType=%s Anchors[%s]=%s%s%s"
+msgstr "Страница не должна иметь привязок: Узел=%s%s%s Родитель=%s Тип родителя=%s Привязки[%s]=%s%s%s"
+
+#: anchordockstr.adrsautomatically
+msgid "Automatically"
+msgstr "Автоматическое"
+
+#: anchordockstr.adrsbottom
+msgid "bottom"
+msgstr "снизу"
+
+#: anchordockstr.adrsclose
+msgid "Close"
+msgstr "Закрыть"
+
+#: anchordockstr.adrscontrolisalreadyadocksite
+msgid "control is already a docksite"
+msgstr "объект уже является областью стыковки"
+
+#: anchordockstr.adrscustomdocksitecanhaveonlyonesite
+msgid "Custom dock site %s%s%s can have only one site."
+msgstr "Пользовательская область стыковки %s%s%s может иметь только один стыковочный элемент."
+
+#: anchordockstr.adrsdockingenabledrequiresarestartoftheide
+msgid "Docking enabled (Requires a restart of the IDE)"
+msgstr "Включить стыковку (требует перезапуска IDE)"
+
+#: anchordockstr.adrsdockingoptions
+msgid "Docking options"
+msgstr "Параметры стыковки"
+
+#: anchordockstr.adrsdraganddockc
+msgid "Use the mouse to drag and dock window \"%c\""
+msgstr "Используйте мышь для перетаскивания и стыковки окна \"%c\""
+
+#: anchordockstr.adrsdragthreshold
+msgid "Drag threshold"
+msgstr "Порог перетаскивания"
+
+#: anchordockstr.adrsduplicatename
+msgid "Duplicate name: "
+msgstr "Имя уже существует: "
+
+#: anchordockstr.adrsemptyname
+msgid "Empty name: "
+msgstr "Имя пусто: "
+
+#: anchordockstr.adrsenlarge
+msgid "Enlarge"
+msgstr "Расширить"
+
+#: anchordockstr.adrsenlargeside
+msgid "Enlarge %s side"
+msgstr "Расширить край %s"
+
+#: anchordockstr.adrserror
+msgid "Error"
+msgstr "Ошибка"
+
+#: anchordockstr.adrserrorloadingwindowlayoutfromfile
+msgid "Error loading window layout from file \"%s\"%s%s"
+msgstr "Ошибка загрузки разбивки окна из файла \"%s\"%s%s"
+
+#: anchordockstr.adrserrorwritingwindowlayouttofile
+msgid "Error writing window layout to file \"%s\"%s%s"
+msgstr "Ошибка записи разбивки окна в файл \"%s\"%s%s"
+
+#: anchordockstr.adrsgeneraldockingoptions
+msgid "General docking options"
+msgstr "Общие параметры стыковки"
+
+#: anchordockstr.adrsheaderalignleft
+msgid "Header align left"
+msgstr "Помещение заголовка слева"
+
+#: anchordockstr.adrsheaderaligntop
+msgid "Header align top"
+msgstr "Помещение заголовка сверху"
+
+#: anchordockstr.adrsheaderposition
+msgid "Header position"
+msgstr "Положение заголовка"
+
+#: anchordockstr.adrshideheadercaptionsforsiteswithonlyonedockedcontrol
+msgid "Hide header captions for sites with only one docked control, as that is already shown in the normal window title"
+msgstr "Скрывать названия заголовков для областей с единственным пристыкованным объектом (это название уже имеется в обычном заголовке окна)"
+
+#: anchordockstr.adrsleft
+msgid "left"
+msgstr "слева"
+
+#: anchordockstr.adrsloadwindowlayoutfromfile
+msgid "Load window layout from file ..."
+msgstr "Загрузить разбивку окна из файла ..."
+
+#: anchordockstr.adrsloadwindowlayoutfromfilexml
+msgid "Load window layout from file (*.xml)"
+msgstr "Загрузить разбивку окна из файла (*.xml)"
+
+#: anchordockstr.adrslocked
+msgid "Locked"
+msgstr "Зафиксирован"
+
+#: anchordockstr.adrsmerge
+msgid "Merge"
+msgstr "Объединить"
+
+#: anchordockstr.adrsmissingcontrolname
+msgid "missing control name"
+msgstr "отсутствует имя объекта"
+
+#: anchordockstr.adrsmodalformscannotbemadedockable
+msgid "modal forms can not be made dockable"
+msgstr "модальные формы не могут иметь возможность стыковки"
+
+#: anchordockstr.adrsmoveheadertoleftwhenwidthheight100headeralignleft
+msgid "Move header to left when (Width/Height)*100>=HeaderAlignLeft"
+msgstr "Помещать заголовок слева, когда этот параметр меньше либо равен значению (Ширина/Высота)*100"
+
+#: anchordockstr.adrsmoveheadertotopwhenwidthheight100headeraligntop
+msgid "Move header to top when (Width/Height)*100<=HeaderAlignTop"
+msgstr "Помещать заголовок сверху, когда этот параметр больше либо равен значению (Ширина/Высота)*100"
+
+#: anchordockstr.adrsmovepageleft
+msgid "Move page left"
+msgstr "Переместить страницу влево"
+
+#: anchordockstr.adrsmovepageleftmost
+msgid "Move page leftmost"
+msgstr "Поместить страницу слева"
+
+#: anchordockstr.adrsmovepageright
+msgid "Move page right"
+msgstr "Переместить страницу вправо"
+
+#: anchordockstr.adrsmovepagerightmost
+msgid "Move page rightmost"
+msgstr "Поместить страницу справа"
+
+#: anchordockstr.adrsnocaptionsforfloatingsites
+msgid "No captions for floating sites"
+msgstr "Не показывать названия непристыкованных объектов"
+
+#: anchordockstr.adrsnochildrenallowedfornodetype
+msgid "No children allowed for Node=%s%s%s Type=%s"
+msgstr "Не разрешается иметь потомков для Узла=%s%s%s Тип=%s"
+
+#: anchordockstr.adrsnotsupportedhasparent
+msgid "Not supported: %s has parent %s"
+msgstr "Не поддерживается: %s имеет родителя %s"
+
+#: anchordockstr.adrsquit
+msgid "Quit %s"
+msgstr "Выход из %s"
+
+#: anchordockstr.adrsrequestedbutcreated
+msgid "%s requested, but %s created"
+msgstr "Запрошен %s, но создан %s"
+
+#: anchordockstr.adrsright
+msgid "right"
+msgstr "справа"
+
+#: anchordockstr.adrssavewindowlayoutasdefault
+msgid "Save window layout as default"
+msgstr "Сохранить разбивку окна как разбивку по умолчанию"
+
+#: anchordockstr.adrssavewindowlayouttofile
+msgid "Save window layout to file ..."
+msgstr "Сохранить разбивку окна в файл ..."
+
+#: anchordockstr.adrssavewindowlayouttofilexml
+msgid "Save window layout to file (*.xml)"
+msgstr "Сохранить разбивку окна в файл (*.xml)"
+
+#: anchordockstr.adrsscaleonresize
+msgid "Scale on resize"
+msgstr "Масштабировать при изменении размера"
+
+#: anchordockstr.adrsscalesubsiteswhenasiteisresized
+msgid "Scale sub sites when a site is resized"
+msgstr "При изменении размеров области масштабировать её подобласти"
+
+#: anchordockstr.adrsshowcaptionsofdockedcontrolsintheheader
+msgid "Show captions of docked controls in the header"
+msgstr "Показывать названия пристыкованных объектов в заголовке"
+
+#: anchordockstr.adrsshowheadercaptions
+msgid "Show header captions"
+msgstr "Показывать названия в заголовках"
+
+#: anchordockstr.adrssplitterthickness
+msgid "Splitter thickness"
+msgstr "Толщина разделителя"
+
+#: anchordockstr.adrssplitterwidth
+msgid "Splitter width"
+msgstr "Ширина разделителя"
+
+#: anchordockstr.adrstabposition
+msgid "Tab position"
+msgstr "Положение заголовков вкладок"
+
+#: anchordockstr.adrsthereisanotherdockmasterinstalledonlyonedockingpac
+msgid "There is another dock master installed. Only one docking package can be installed at a time. Please uninstall the other dock master %s and restart the IDE"
+msgstr "Установленный стыковочный менеджер уже имеется. В каждый момент времени может быть установлен только один такой пакет. Удалите стыковочный менеджер %s и перезапустите IDE"
+
+#: anchordockstr.adrstop
+msgid "top"
+msgstr "сверху"
+
+#: anchordockstr.adrstouseanchordockingyoumustfirstuninstall
+msgid "To use anchordocking you must first uninstall %s"
+msgstr "Для использования anchordocking сначала удалите %s"
+
+#: anchordockstr.adrsundock
+msgid "Undock"
+msgstr "Расстыковать"
+

@@ -286,7 +286,6 @@
       <Unit24>
         <Filename Value="commands/GDBCommandsBase.pas"/>
         <UnitName Value="GDBCommandsBase"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1741"/>
@@ -363,10 +362,11 @@
       <Unit32>
         <Filename Value="gui/intftranslations.pas"/>
         <UnitName Value="intftranslations"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="117"/>
-        <CursorPos X="1" Y="155"/>
+        <TopLine Value="126"/>
+        <CursorPos X="73" Y="169"/>
         <UsageCount Value="97"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>

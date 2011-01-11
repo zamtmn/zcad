@@ -1,0 +1,251 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
+msgid "A free side of a splitter must not be anchored: Node=%s%s%s Type=%s Anchors[%s]=%s%s%s"
+msgstr ""
+
+#: anchordockstr.adrsallfiles
+msgid "All files"
+msgstr ""
+
+#: anchordockstr.adrsamountofpixelthemousehastodragbeforedragstarts
+msgid "Amount of pixel the mouse has to drag before drag starts"
+msgstr ""
+
+#: anchordockstr.adrsanchordockinglayout
+msgid "Anchor Docking Layout"
+msgstr ""
+
+#: anchordockstr.adrsanchorisnotsplitternodeanchors
+msgid "Anchor is not splitter: Node=%s%s%s Anchors[%s]=%s%s%s"
+msgstr ""
+
+#: anchordockstr.adrsanchornotfoundnodeanchors
+msgid "Anchor not found: Node=%s%s%s Anchors[%s]=%s%s%s"
+msgstr ""
+
+#: anchordockstr.adrsanchortowrongsideofsplitternodeanchors
+msgid "Anchor to wrong side of splitter: Node=%s%s%s Anchors[%s]=%s%s%s"
+msgstr ""
+
+#: anchordockstr.adrsapagemustnotbeanchorednodeparentparenttypeanchors
+msgid "A page must not be anchored: Node=%s%s%s Parent=%s ParentType=%s Anchors[%s]=%s%s%s"
+msgstr ""
+
+#: anchordockstr.adrsautomatically
+msgid "Automatically"
+msgstr ""
+
+#: anchordockstr.adrsbottom
+msgid "bottom"
+msgstr ""
+
+#: anchordockstr.adrsclose
+msgid "Close"
+msgstr ""
+
+#: anchordockstr.adrscontrolisalreadyadocksite
+msgid "control is already a docksite"
+msgstr ""
+
+#: anchordockstr.adrscustomdocksitecanhaveonlyonesite
+msgid "Custom dock site %s%s%s can have only one site."
+msgstr ""
+
+#: anchordockstr.adrsdockingenabledrequiresarestartoftheide
+msgid "Docking enabled (Requires a restart of the IDE)"
+msgstr ""
+
+#: anchordockstr.adrsdockingoptions
+msgid "Docking options"
+msgstr ""
+
+#: anchordockstr.adrsdraganddockc
+msgid "Use the mouse to drag and dock window \"%c\""
+msgstr ""
+
+#: anchordockstr.adrsdragthreshold
+msgid "Drag threshold"
+msgstr ""
+
+#: anchordockstr.adrsduplicatename
+msgid "Duplicate name: "
+msgstr ""
+
+#: anchordockstr.adrsemptyname
+msgid "Empty name: "
+msgstr ""
+
+#: anchordockstr.adrsenlarge
+msgid "Enlarge"
+msgstr ""
+
+#: anchordockstr.adrsenlargeside
+msgid "Enlarge %s side"
+msgstr ""
+
+#: anchordockstr.adrserror
+msgid "Error"
+msgstr ""
+
+#: anchordockstr.adrserrorloadingwindowlayoutfromfile
+msgid "Error loading window layout from file \"%s\"%s%s"
+msgstr ""
+
+#: anchordockstr.adrserrorwritingwindowlayouttofile
+msgid "Error writing window layout to file \"%s\"%s%s"
+msgstr ""
+
+#: anchordockstr.adrsgeneraldockingoptions
+msgid "General docking options"
+msgstr ""
+
+#: anchordockstr.adrsheaderalignleft
+msgid "Header align left"
+msgstr ""
+
+#: anchordockstr.adrsheaderaligntop
+msgid "Header align top"
+msgstr ""
+
+#: anchordockstr.adrsheaderposition
+msgid "Header position"
+msgstr ""
+
+#: anchordockstr.adrshideheadercaptionsforsiteswithonlyonedockedcontrol
+msgid "Hide header captions for sites with only one docked control, as that is already shown in the normal window title"
+msgstr ""
+
+#: anchordockstr.adrsleft
+msgid "left"
+msgstr ""
+
+#: anchordockstr.adrsloadwindowlayoutfromfile
+msgid "Load window layout from file ..."
+msgstr ""
+
+#: anchordockstr.adrsloadwindowlayoutfromfilexml
+msgid "Load window layout from file (*.xml)"
+msgstr ""
+
+#: anchordockstr.adrslocked
+msgid "Locked"
+msgstr ""
+
+#: anchordockstr.adrsmerge
+msgid "Merge"
+msgstr ""
+
+#: anchordockstr.adrsmissingcontrolname
+msgid "missing control name"
+msgstr ""
+
+#: anchordockstr.adrsmodalformscannotbemadedockable
+msgid "modal forms can not be made dockable"
+msgstr ""
+
+#: anchordockstr.adrsmoveheadertoleftwhenwidthheight100headeralignleft
+msgid "Move header to left when (Width/Height)*100>=HeaderAlignLeft"
+msgstr ""
+
+#: anchordockstr.adrsmoveheadertotopwhenwidthheight100headeraligntop
+msgid "Move header to top when (Width/Height)*100<=HeaderAlignTop"
+msgstr ""
+
+#: anchordockstr.adrsmovepageleft
+msgid "Move page left"
+msgstr ""
+
+#: anchordockstr.adrsmovepageleftmost
+msgid "Move page leftmost"
+msgstr ""
+
+#: anchordockstr.adrsmovepageright
+msgid "Move page right"
+msgstr ""
+
+#: anchordockstr.adrsmovepagerightmost
+msgid "Move page rightmost"
+msgstr ""
+
+#: anchordockstr.adrsnocaptionsforfloatingsites
+msgid "No captions for floating sites"
+msgstr ""
+
+#: anchordockstr.adrsnochildrenallowedfornodetype
+msgid "No children allowed for Node=%s%s%s Type=%s"
+msgstr ""
+
+#: anchordockstr.adrsnotsupportedhasparent
+msgid "Not supported: %s has parent %s"
+msgstr ""
+
+#: anchordockstr.adrsquit
+msgid "Quit %s"
+msgstr ""
+
+#: anchordockstr.adrsrequestedbutcreated
+msgid "%s requested, but %s created"
+msgstr ""
+
+#: anchordockstr.adrsright
+msgid "right"
+msgstr ""
+
+#: anchordockstr.adrssavewindowlayoutasdefault
+msgid "Save window layout as default"
+msgstr ""
+
+#: anchordockstr.adrssavewindowlayouttofile
+msgid "Save window layout to file ..."
+msgstr ""
+
+#: anchordockstr.adrssavewindowlayouttofilexml
+msgid "Save window layout to file (*.xml)"
+msgstr ""
+
+#: anchordockstr.adrsscaleonresize
+msgid "Scale on resize"
+msgstr ""
+
+#: anchordockstr.adrsscalesubsiteswhenasiteisresized
+msgid "Scale sub sites when a site is resized"
+msgstr ""
+
+#: anchordockstr.adrsshowcaptionsofdockedcontrolsintheheader
+msgid "Show captions of docked controls in the header"
+msgstr ""
+
+#: anchordockstr.adrsshowheadercaptions
+msgid "Show header captions"
+msgstr ""
+
+#: anchordockstr.adrssplitterthickness
+msgid "Splitter thickness"
+msgstr ""
+
+#: anchordockstr.adrssplitterwidth
+msgid "Splitter width"
+msgstr ""
+
+#: anchordockstr.adrstabposition
+msgid "Tab position"
+msgstr ""
+
+#: anchordockstr.adrsthereisanotherdockmasterinstalledonlyonedockingpac
+msgid "There is another dock master installed. Only one docking package can be installed at a time. Please uninstall the other dock master %s and restart the IDE"
+msgstr ""
+
+#: anchordockstr.adrstop
+msgid "top"
+msgstr ""
+
+#: anchordockstr.adrstouseanchordockingyoumustfirstuninstall
+msgid "To use anchordocking you must first uninstall %s"
+msgstr ""
+
+#: anchordockstr.adrsundock
+msgid "Undock"
+msgstr ""
+

@@ -3,44 +3,44 @@
   <MainConfig>
     <Nodes ChildCount="1">
       <Item1 Name="MainForm" Type="CustomSite" ChildCount="1">
-        <Bounds Left="240" Width="820" Height="301"/>
-        <Item1 Name="AnchorDockSite6" Type="Layout" ChildCount="9">
-          <Bounds Width="820" Height="249" SplitterPos="249"/>
+        <Bounds Top="24" Left="122" Width="793" Height="308"/>
+        <Item1 Name="AnchorDockSite3" Type="Layout" ChildCount="9">
+          <Bounds Width="793" Height="255" SplitterPos="255"/>
           <Anchors Align="Top"/>
           <Item1 Name="PageControl" Type="Control">
-            <Bounds Top="34" Left="199" Width="573" Height="149"/>
-            <Anchors Top="AnchorDockSplitter3" Left="AnchorDockSplitter4" Right="AnchorDockSplitter2" Bottom="AnchorDockSplitter5"/>
+            <Bounds Top="34" Left="166" Width="595" Height="167"/>
+            <Anchors Top="AnchorDockSplitter2" Left="AnchorDockSplitter4" Right="AnchorDockSplitter3" Bottom="AnchorDockSplitter5"/>
           </Item1>
-          <Item2 Name="AnchorDockSplitter2" Type="SplitterVertical">
-            <Bounds Left="772" Width="4" Height="249"/>
+          <Item2 Name="AnchorDockSplitter2" Type="SplitterHorizontal">
+            <Bounds Top="30" Width="793" Height="4"/>
           </Item2>
-          <Item3 Name="ToolBarR" Type="Control">
-            <Bounds Left="776" Width="44" Height="249"/>
-            <Anchors Left="AnchorDockSplitter2"/>
+          <Item3 Name="ToolBarU" Type="Control">
+            <Bounds Width="793" Height="30"/>
+            <Anchors Bottom="AnchorDockSplitter2"/>
           </Item3>
-          <Item4 Name="AnchorDockSplitter3" Type="SplitterHorizontal">
-            <Bounds Top="30" Width="772" Height="4"/>
-            <Anchors Right="AnchorDockSplitter2"/>
+          <Item4 Name="AnchorDockSplitter3" Type="SplitterVertical">
+            <Bounds Top="34" Left="761" Width="4" Height="221"/>
+            <Anchors Top="AnchorDockSplitter2"/>
           </Item4>
-          <Item5 Name="ToolBarU" Type="Control">
-            <Bounds Width="772" Height="30"/>
-            <Anchors Right="AnchorDockSplitter2" Bottom="AnchorDockSplitter3"/>
+          <Item5 Name="ToolBarR" Type="Control">
+            <Bounds Top="34" Left="765" Width="28" Height="221"/>
+            <Anchors Top="AnchorDockSplitter2" Left="AnchorDockSplitter3"/>
           </Item5>
           <Item6 Name="AnchorDockSplitter4" Type="SplitterVertical">
-            <Bounds Top="34" Left="195" Width="4" Height="215"/>
-            <Anchors Top="AnchorDockSplitter3"/>
+            <Bounds Top="34" Left="162" Width="4" Height="221"/>
+            <Anchors Top="AnchorDockSplitter2"/>
           </Item6>
           <Item7 Name="ObjectInspector" Type="Control">
-            <Bounds Top="34" Width="195" Height="215"/>
-            <Anchors Top="AnchorDockSplitter3" Right="AnchorDockSplitter4"/>
+            <Bounds Top="34" Width="162" Height="221"/>
+            <Anchors Top="AnchorDockSplitter2" Right="AnchorDockSplitter4"/>
           </Item7>
           <Item8 Name="AnchorDockSplitter5" Type="SplitterHorizontal">
-            <Bounds Top="183" Left="199" Width="573" Height="4"/>
-            <Anchors Left="AnchorDockSplitter4" Right="AnchorDockSplitter2"/>
+            <Bounds Top="201" Left="166" Width="595" Height="4"/>
+            <Anchors Left="AnchorDockSplitter4" Right="AnchorDockSplitter3"/>
           </Item8>
           <Item9 Name="CommandLine" Type="Control">
-            <Bounds Top="187" Left="199" Width="573" Height="62"/>
-            <Anchors Top="AnchorDockSplitter5" Left="AnchorDockSplitter4" Right="AnchorDockSplitter2"/>
+            <Bounds Top="205" Left="166" Width="595" Height="50"/>
+            <Anchors Top="AnchorDockSplitter5" Left="AnchorDockSplitter4" Right="AnchorDockSplitter3"/>
           </Item9>
         </Item1>
       </Item1>

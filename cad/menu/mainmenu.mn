@@ -1,13 +1,13 @@
-Panel DOWNPANEL 894,68,30,525;
+Panel DOWNPANEL;
   {
     Separator
-    variable DWG_DrawGrid,#Сетка,Показывать сетку??
-    variable DWG_EditInSubEntry,#SUB-выделение,Отдельный выбор частей динамических объектов
-    variable DWG_DrawMode,#Вес,Показывать вес линий
-    variable DWG_OSMode,#Привязки,Привязка курсора к характерным точкам примитивов
-    variable DWG_PolarMode,#Полярн.слеж.,Полярное слежение
-    variable DWG_HelpGeometryDraw,#HG,Вспомогательная графика (подключение, направление и т.п.)
-    variable DWG_SystmGeometryDraw,#SG,Системная графика (габариты, связи и т.п. для отладки)
+    variable DWG_DrawGrid,#**Grid,**Показывать сетку
+    variable DWG_EditInSubEntry,#SUB-Select,On/Off Selecting parts of dynamic objects
+    variable DWG_DrawMode,#LWT,Show/Hide Lineweight
+    variable DWG_OSMode,#OSnap,Object snap
+    variable DWG_PolarMode,#Polar,Polar tracking
+    variable DWG_HelpGeometryDraw,#AG,Auxiliary graphics (connectivity, direction, etc.)
+    variable DWG_SystmGeometryDraw,#SG,System graphics (size, communication, etc. for debugging)
   }
 Panel UPPANEL 994,68,30,525;
   {

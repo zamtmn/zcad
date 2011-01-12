@@ -5,6 +5,63 @@ msgstr "Content-Type: text/plain; charset=UTF-8"
 msgid "About ZCAD"
 msgstr ""
 
+#: button_command~BEdit
+msgid "bed"
+msgstr ""
+
+#: button_command~El_Cable_Select
+msgid "csel"
+msgstr ""
+
+#: button_command~Load(QS)
+msgid "QL"
+msgstr ""
+
+#: button_command~ObjVarMan
+msgid "VM"
+msgstr ""
+
+#: button_command~ProjectTree
+msgid "tree"
+msgstr ""
+
+#: button_command~QSave(QS)
+msgid "QS"
+msgstr ""
+
+#: button_command~RebuildTree
+msgid "rtree"
+msgstr ""
+
+#: button_command~SetObjInsp(CURRENT)
+msgid "FIX"
+msgstr ""
+
+#: button_variable~DWG_DrawMode
+msgid "LWT"
+msgstr ""
+
+#: button_variable~DWG_EditInSubEntry
+msgid "SUB-Select"
+msgstr ""
+
+#: button_variable~DWG_HelpGeometryDraw
+#, fuzzy
+msgid "AG"
+msgstr ""
+
+#: button_variable~DWG_OSMode
+msgid "OSnap"
+msgstr ""
+
+#: button_variable~DWG_PolarMode
+msgid "Polar"
+msgstr ""
+
+#: button_variable~DWG_SystmGeometryDraw
+msgid "SG"
+msgstr ""
+
 #: cmdline.defaultpromot
 msgid "Command"
 msgstr ""
@@ -219,6 +276,31 @@ msgstr ""
 
 #: geometry.ges_dbz
 msgid "Divide by zero (Geometry.NormalizeVertex)"
+msgstr ""
+
+#: hint_panel~DWG_DrawMode
+msgid "Show/Hide Lineweight"
+msgstr ""
+
+#: hint_panel~DWG_EditInSubEntry
+#, fuzzy
+msgid "On/Off Selecting parts of dynamic objects"
+msgstr ""
+
+#: hint_panel~DWG_HelpGeometryDraw
+msgid "Auxiliary graphics (connectivity, direction, etc.)"
+msgstr ""
+
+#: hint_panel~DWG_OSMode
+msgid "Object snap"
+msgstr ""
+
+#: hint_panel~DWG_PolarMode
+msgid "Polar tracking"
+msgstr ""
+
+#: hint_panel~DWG_SystmGeometryDraw
+msgid "System graphics (size, communication, etc. for debugging)"
 msgstr ""
 
 #: hint_panel~Layer

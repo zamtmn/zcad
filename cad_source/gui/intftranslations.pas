@@ -141,7 +141,7 @@ begin
                     po.Add(Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',
                         {Context}'', {Flags}'', {PreviousID}'');
                     inc(_UpdatePO);
-                    po.SaveToFile(PODirectory + 'zcad.po');
+                    //po.SaveToFile(PODirectory + 'zcad.po');
                end
                   else
                       inc(_NotEnlishWord);

@@ -21,7 +21,7 @@ unit mainwindow;
 
 interface
 uses
-  LCLType,LCLProc,strproc,log,intftranslations,
+  math,LCLType,LCLProc,strproc,log,intftranslations,
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Toolwin, Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
   gdbase, languade,geometry,
@@ -41,6 +41,11 @@ resourcestring
   ES_ReCreating='Re-creating %s!';
 
 type
+  TmyAnchorDockHeader = class(TAnchorDockHeader)
+                        protected
+                                 procedure Paint; override;
+                        end;
+
   TFileHistory=Array [0..9] of TmyMenuItem;
   TMainFormN = class(TFreedForm)
                     ToolBarU,ToolBarR:TToolBar;
@@ -129,6 +134,69 @@ implementation
 
 uses {GDBCommandsBase,}Objinsp{,optionswnd, Tedit_form, MTedit_form},
   dialogs,XMLPropStorage;
+procedure TmyAnchorDockHeader.Paint;
+
+  procedure DrawGrabber(r: TRect);
+  begin
+    Canvas.Frame3d(r,2,bvLowered);
+    Canvas.Frame3d(r,4,bvRaised);
+  end;
+
+var
+  r,r1: TRect;
+  TxtH: longint;
+  TxtW: longint;
+  dx,dy: Integer;
+  ts:TTextStyle;
+begin
+  //exit;
+  r:=ClientRect;
+  Canvas.Frame3d(r,1,bvRaised);
+  canvas.Brush.Color := clBtnFace;
+  Canvas.FillRect(r);
+  if CloseButton.IsControlVisible and (CloseButton.Parent=Self) then begin
+    if Align in [alLeft,alRight] then
+      r.Top:=CloseButton.Top+CloseButton.Height+1
+    else
+      r.Right:=CloseButton.Left-1;
+  end;
+
+  // caption
+  if Caption<>'' then begin
+    Canvas.Brush.Color:=clNone;
+    Canvas.Brush.Style:=bsClear;
+    Canvas.Font.Orientation:=0;
+    TxtH:=Canvas.TextHeight('ABCMgq');
+    TxtW:=Canvas.TextWidth(Caption);
+    if Align in [alLeft,alRight] then begin
+      // vertical
+      dx:=Max(0,(r.Right-r.Left-Txth) div 2);
+      dy:=Max(0,(r.Bottom-r.Top-Txtw) div 2);
+      Canvas.Font.Orientation:=900;
+      if TxtW<(r.Bottom-r.Top)then
+      Canvas.TextOut(r.Left+dx-1,r.Bottom-dy-2,Caption);
+      //Canvas.Font.Orientation:=-500;
+      //ts:=Canvas.TextStyle;
+      //ts.Alignment:=taCenter;//taRightJustify;
+      //Canvas.TextStyle:=ts;
+      //Canvas.TextRect(r,r.Left+dx,r.Bottom-dy,Caption);
+      //DrawGrabber(Rect(r.Left,r.Top,r.Right,r.Bottom-dy-TxtW-1));
+      //DrawGrabber(Rect(r.Left,r.Bottom-dy+1,r.Right,r.Bottom));
+    end else begin
+      // horizontal
+      dx:=Max(0,(r.Right-r.Left-TxtW) div 2);
+      dy:=Max(0,(r.Bottom-r.Top-TxtH) div 2);
+      Canvas.Font.Orientation:=0;
+      //Canvas.TextOut(r.Left+dx,r.Top+dy,Caption);
+      if TxtW<(r.right-r.Left)then
+      Canvas.TextRect(r,dx+2,dy,Caption);
+      //DrawGrabber(Rect(r.Left,r.Top,r.Left+dx-1,r.Bottom));
+      //DrawGrabber(Rect(r.Left+dx+TxtW+2,r.Top,r.Right,r.Bottom));
+    end;
+  end else
+    DrawGrabber(r);
+end;
+
 
 procedure TMainFormN.processfilehistory(filename:GDBString);
 var i,j,k:integer;
@@ -344,9 +412,11 @@ begin
        FToolBar.Create(Application);
        FToolBar.Caption:=aName;
        FToolBar.SetBounds(260,230,350,350);
+       //FToolBar.AutoSize:=false;
 
        TB:=TToolBar.Create(application);
        TB.Align:={alRight}alclient;
+       //TB.AutoSize:=false;
        //TB.Width:=ToolBarU.Height;
        //TB.EdgeBorders:=[ebRight];
        TB.ShowCaptions:=true;
@@ -412,12 +482,13 @@ var
   pint:PGDBInteger;
 begin
   //AutoSize:=false;
-  DockMaster.MakeDockSite(Self,[akTop,akBottom,akLeft,akRight],admrpChild{admrpNone},true);
+  DockMaster.MakeDockSite(Self,[akTop,akBottom,akLeft,akRight],admrpChild{admrpNone},{true}false);
+  DockMaster.HeaderClass:=TmyAnchorDockHeader;
 
   if DockManager is TAnchorDockManager then
   begin
     //aManager:=TAnchorDockManager(AForm.DockManager);
-    TAnchorDockManager(DockManager).PreferredSiteSizeAsSiteMinimum:={false}true;
+    //TAnchorDockManager(DockManager).PreferredSiteSizeAsSiteMinimum:={false}true;
   end;
 
   //GetPreferredSize
@@ -446,7 +517,6 @@ begin
    ToolBarD.Align:=alBottom;
    ToolBarD.AutoSize:=true;
    ToolBarD.ShowCaptions:=true;
-   ToolBarD.Parent:=self;
    ToolBarD.EdgeBorders:=[ebTop];
    ToolBarD.Parent:=self;
 
@@ -660,7 +730,7 @@ begin
     oncreate:=FormCreate;
     inherited;
 end;
-procedure SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean);
+procedure SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
 var
     bmp:TBitmap;
 begin
@@ -682,6 +752,7 @@ begin
                           else
                               begin
                               b.caption:=(system.copy(img,2,length(img)-1));
+                              b.caption:=InterfaceTranslate(identifer,b.caption);
                               if autosize then
                                if utf8length(img)>3 then
                                                     b.Font.size:=11-utf8length(img);
@@ -725,15 +796,8 @@ begin
     begin
       if uppercase(line) = 'PANEL' then
       begin
-           line := f.readstring(' ','');
+           line := f.readstring('; ','');
            ts:=line;
-           line := f.readstring(',','');
-           line := f.readstring(',','');
-           y:=strtoint(line);
-           line := f.readstring(',','');
-           xx:=strtoint(line);
-           line := f.readstring(';','');
-           yy:=strtoint(line);
            if uppercase(ts)='RIGHTPANEL'
            then
                begin
@@ -749,6 +813,17 @@ begin
                begin
                     ppanel:=ToolBarD;
                end;
+
+           if ppanel<>ToolBarD then
+           begin
+                line := f.readstring(',','');
+                line := f.readstring(',','');
+                y:=strtoint(line);
+                line := f.readstring(',','');
+                xx:=strtoint(line);
+                line := f.readstring(';','');
+                yy:=strtoint(line);
+           end;
 
            buttonpos:=0;
            while line<>'{' do
@@ -777,7 +852,7 @@ begin
                           b.hint:=(ts);
                           b.ShowHint:=true;
                           end;
-                          SetImage(ppanel,b,line,true);
+                          SetImage(ppanel,b,line,true,'button_command~'+bc);
                           //b.AutoSize:=false;
                           buttonpos:=buttonpos+bsize;
                           {b.Parent:=ppanel;
@@ -808,7 +883,7 @@ begin
                           b.hint:=(ts);
                           b.ShowHint:=true;
                           end;
-                          SetImage(ppanel,b,line,false);
+                          SetImage(ppanel,b,line,false,'button_variable~'+bc);
                           b.AutoSize:=true;
 
                           {b.Parent:=ppanel;

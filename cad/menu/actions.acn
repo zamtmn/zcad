@@ -1,0 +1,15 @@
+action ACN_LOAD,Load,load.bmp,Open ...,Open drawing,CTRL+O
+action ACN_LOADQS,Load(QS),#QL,Open (Autosave),Open last autosave,
+action ACN_NEW,NewDWG,new.bmp,New drawing,,CTRL+N
+action ACN_QSAVE,QSave,save.bmp,Save,Save drawing,CTRL+S
+action ACN_SAVEAS,SaveAs,,Save as ...,Save drawing as,
+action ACN_SAVEQS,QSave(QS),#QS,Save (Autosave),Autosave,
+action ACN_CLOSE,CloseDWG,close.bmp,Close drawing,,
+action ACN_QUIT,Quit,exit.bmp,Quit,,CTRL+Q
+
+action ACN_UNDO,Undo,undo.bmp,Undo,,CTRL+Z
+action ACN_REDO,Redo,redo.bmp,Redo,,CTRL+SHIFT+Z
+action ACN_COPYCLIP,CopyClip,,Copy,Copy to clipboard,CTRL+C
+action ACN_COPYCLIPBASE,CopyBase,,Copy with base point,Copy to clipboard with base point,CTRL+INS
+action ACN_PASTE,PasteClip,,Paste,Paste from clipboard,SHIFT+INS
+action ACN_ERASE,Erase,,Erase,,DEL

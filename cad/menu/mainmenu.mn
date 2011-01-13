@@ -11,24 +11,24 @@ Panel DOWNPANEL;
   }
 Panel UPPANEL 994,68,30,525;
   {
-    button NewDWG,new.bmp,New drawing
-    button Load,load.bmp,Load drawing
-    button QSave,save.bmp,Save drawing
+    action ACN_NEW
+    action ACN_LOAD
+    action ACN_QSAVE
     Separator
     button Layer,layer.bmp,Setting up layers
     layercombobox 200,Layer selection
     linewcombobox 100,Line weight selection
     Separator
-    button Undo,undo.bmp,Отменить действие
-    button Redo,redo.bmp,Вернуть действие
+    action ACN_UNDO
+    action ACN_REDO
     Separator
     button Regen,regen.bmp,Регенерировать чертеж
     button RebuildTree,#rtree,*DEBUG*Перестроить дерево примитивов
   }
 Panel RIGHTPANEL 994,68,30,525;
   {
-    button Load(QS),#QL,Загрузка автосохранения
-    button QSave(QS),#QS,Автосохранение
+    action ACN_LOADQS
+    action ACN_SAVEQS
     button ProjectTree,#tree,Показать окно дерева проекта
     Separator
     button BEdit,#bed,Редактор блоков
@@ -66,28 +66,30 @@ Panel RIGHTPANEL 994,68,30,525;
   }
 MainMenuItem File;
   {
-    Command New,NewDWG,CTRL+N,none
-    Command Open ...,Load,CTRL+O,none
+    action ACN_NEW
     Separator
-    Command Save,QSave,CTRL+S,none
-    Command Save as ...,SaveAs,CTRL+S,none
-    Command Save (Autosave),QSave(QS),CTRL+S,none
+    action ACN_LOAD
+    action ACN_LOADQS
     Separator
-    Command Close page,CloseDWG,none,none
+    action ACN_QSAVE
+    action ACN_SAVEAS
+    action ACN_SAVEQS
+    Separator
+    action ACN_CLOSE
     Separator
     FileHistory
     Separator
-    Command Exit,Quit,none,none
+    action ACN_QUIT
   }
 MainMenuItem Edit;
   {
-    Command Undo,CTRL+Z,none,none
-    Command Redo,CTRL+SHIFT+Z,none,none
+    action ACN_UNDO
+    action ACN_REDO
     Separator
-    Command Copy,CopyClip,none,none
-    Command Copy with base point,CopyBase,none,none
-    Command Paste,PasteClip,none,none
-    Command Erase,Erase,Del,none
+    action ACN_COPYCLIP
+    action ACN_COPYCLIPBASE
+    action ACN_PASTE
+    action ACN_ERASE
   }
 MainMenuItem View;
   {

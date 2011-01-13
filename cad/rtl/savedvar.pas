@@ -20,14 +20,14 @@ begin
   VIEW_CommandLineH:=50;
   VIEW_ObjInspV:=162;
   VIEW_ObjInspSubV:=90;
-  PATH_File0:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File1:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
+  PATH_File0:='\\WORKSTATION\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File1:='Z:\000.dxf';
   PATH_File2:='C:\zcad\cad\sample\test_dxf\ops.dxf';
   PATH_File3:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File4:='c:\zcad\errors\0.dxf';
-  PATH_File5:='\\WORKSTATION\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File6:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File7:='Z:\1.dxf';
-  PATH_File8:='J:\nh\Федосеева\ИТП ПОЛИКЛИНИКА\1.dxf';
-  PATH_File9:='J:\nh\Федосеева\ИТП ПОЛИКЛИНИКА\proj.dxf';
+  PATH_File4:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File5:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
+  PATH_File6:='c:\zcad\errors\0.dxf';
+  PATH_File7:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File8:='Z:\1.dxf';
+  PATH_File9:='J:\nh\Федосеева\ИТП ПОЛИКЛИНИКА\1.dxf';
 end.

@@ -5,6 +5,103 @@ msgstr "Content-Type: text/plain; charset=UTF-8"
 msgid "About ZCAD"
 msgstr ""
 
+#: ACN_CLOSE~caption
+msgid "Close drawing"
+msgstr ""
+
+#: ACN_COPYCLIPBASE~caption
+msgid "Copy with base point"
+msgstr ""
+
+#: ACN_COPYCLIPBASE~hint
+msgid "Copy to clipboard with base point"
+msgstr ""
+
+#: ACN_COPYCLIP~caption
+msgid "Copy"
+msgstr ""
+
+#: ACN_COPYCLIP~hint
+msgid "Copy to clipboard"
+msgstr ""
+
+#: ACN_ERASE~caption
+msgid "Erase"
+msgstr ""
+
+#: ACN_LOADQS~caption
+msgid "Open (Autosave)"
+msgstr ""
+
+#: ACN_LOADQS~hint
+msgid "Open last autosave"
+msgstr ""
+
+#: ACN_LOADQS~textimage
+msgid "QL"
+msgstr ""
+
+#: ACN_LOAD~caption
+msgid "Open ..."
+msgstr ""
+
+#: ACN_LOAD~hint
+msgid "Open drawing"
+msgstr ""
+
+#: ACN_NEW~caption
+msgid "New drawing"
+msgstr ""
+
+#: ACN_PASTE~caption
+msgid "Paste"
+msgstr ""
+
+#: ACN_PASTE~hint
+msgid "Paste from clipboard"
+msgstr ""
+
+#: ACN_QSAVE~caption
+msgid "Save"
+msgstr ""
+
+#: ACN_QSAVE~hint
+msgid "Save drawing"
+msgstr ""
+
+#: ACN_QUIT~caption
+msgid "Quit"
+msgstr ""
+
+#: ACN_REDO~caption
+msgid "Redo"
+msgstr ""
+
+#: ACN_SAVEAS~caption
+msgid "Save as ..."
+msgstr ""
+
+#: ACN_SAVEAS~hint
+msgid "Save drawing as"
+msgstr ""
+
+#: ACN_SAVEQS~caption
+msgid "Save (Autosave)"
+msgstr ""
+
+#: ACN_SAVEQS~hint
+msgctxt "ACN_SAVEQS~hint"
+msgid "Autosave"
+msgstr ""
+
+#: ACN_SAVEQS~textimage
+msgid "QS"
+msgstr ""
+
+#: ACN_UNDO~caption
+msgid "Undo"
+msgstr ""
+
 #: button_command~BEdit
 msgid "bed"
 msgstr ""
@@ -13,20 +110,12 @@ msgstr ""
 msgid "csel"
 msgstr ""
 
-#: button_command~Load(QS)
-msgid "QL"
-msgstr ""
-
 #: button_command~ObjVarMan
 msgid "VM"
 msgstr ""
 
 #: button_command~ProjectTree
 msgid "tree"
-msgstr ""
-
-#: button_command~QSave(QS)
-msgid "QS"
 msgstr ""
 
 #: button_command~RebuildTree
@@ -315,20 +404,12 @@ msgstr ""
 msgid "Line weight selection"
 msgstr ""
 
-#: hint_panel~Load
-msgid "Load drawing"
-msgstr ""
-
-#: hint_panel~NewDWG
-msgid "New drawing"
-msgstr ""
-
-#: hint_panel~QSave
-msgid "Save drawing"
-msgstr ""
-
 #: mainwindow.commandlinewndname
 msgid "Command line"
+msgstr ""
+
+#: mainwindow.drawingwindowwndname
+msgid "Drawings window"
 msgstr ""
 
 #: mainwindow.es_recreating
@@ -336,62 +417,7 @@ msgid "Re-creating %s!"
 msgstr ""
 
 #: mainwindow.gdbobjinspwndname
-msgid "Object Inspector"
-msgstr ""
-
-#: menucommand~CloseDWG
-msgid "Close page"
-msgstr ""
-
-#: menucommand~CopyBase
-msgid "Copy with base point"
-msgstr ""
-
-#: menucommand~CopyClip
-msgid "Copy"
-msgstr ""
-
-#: menucommand~CTRL+SHIFT+Z
-msgid "Redo"
-msgstr ""
-
-#: menucommand~CTRL+Z
-msgid "Undo"
-msgstr ""
-
-#: menucommand~Erase
-msgid "Erase"
-msgstr ""
-
-#: menucommand~Load
-#, fuzzy
-msgid "Open ..."
-msgstr ""
-
-#: menucommand~NewDWG
-msgid "New"
-msgstr ""
-
-#: menucommand~PasteClip
-msgid "Paste"
-msgstr ""
-
-#: menucommand~QSave
-msgid "Save"
-msgstr ""
-
-#: menucommand~QSave(QS)
-msgid "Save (Autosave)"
-msgstr ""
-
-#: menucommand~Quit
-msgid "Exit"
-msgstr ""
-
-#: menucommand~SaveAs
-#, fuzzy
-msgctxt "menucommand~SaveAs"
-msgid "Save as ..."
+msgid "Object inspector"
 msgstr ""
 
 #: menucommand~Show(ToolBarR)
@@ -788,6 +814,7 @@ msgid "Time between autosaves"
 msgstr ""
 
 #: tsave~SAVE_Auto_On
+msgctxt "tsave~SAVE_Auto_On"
 msgid "Autosave"
 msgstr ""
 

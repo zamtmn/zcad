@@ -1758,16 +1758,25 @@ else if Operands='ToolBarR' then
                             end;
 end;
 function UpdatePO_com(Operands:pansichar):GDBInteger;
+var
+   cleaned:integer;
+   s:string;
 begin
      if sysinfo.sysparam.updatepo then
      begin
-          //if intftranslations._UpdatePO>0 then
           begin
-               po.SaveToFile(PODirectory + 'zcad.po');
-          end
-             //else showerror('No POFileItem added');
+               cleaned:=po.exportcompileritems(actualypo);
+               s:='Cleaned items: '+inttostr(cleaned)
+           +#13#10'Added items: '+inttostr(_UpdatePO)
+           +#13#10'File zcad.po must be rewriten. Confirm?';
+               if Application.messagebox(@s[1],'UpdatePO',MB_YESNO)=IDNO then
+                                                                         exit;
+               po.SaveToFile(PODirectory + 'zcad.po.backup');
+               actualypo.SaveToFile(PODirectory + 'zcad.po');
+               sysinfo.sysparam.updatepo:=false
+          end;
      end
-        else showerror('Command line swith "UpdatePO" must be set');
+        else showerror('Command line swith "UpdatePO" must be set. (or not the first time running this command)');
 end;
 procedure startup;
 //var

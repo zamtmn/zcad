@@ -13,6 +13,107 @@ msgstr ""
 msgid "About ZCAD"
 msgstr "О программе ZCAD"
 
+#: ACN_CLOSE~caption
+msgid "Close drawing"
+msgstr "Закрыть чертеж"
+
+#: ACN_COPYCLIPBASE~caption
+msgctxt "ACN_COPYCLIPBASE~caption"
+msgid "Copy with base point"
+msgstr "Копировать с базовой точкой"
+
+#: ACN_COPYCLIPBASE~hint
+msgid "Copy to clipboard with base point"
+msgstr "Копировать в клипбоард с базовой точкой"
+
+#: ACN_COPYCLIP~caption
+msgctxt "ACN_COPYCLIP~caption"
+msgid "Copy"
+msgstr "Копировать"
+
+#: ACN_COPYCLIP~hint
+msgid "Copy to clipboard"
+msgstr "Копировать в клипбоард"
+
+#: ACN_ERASE~caption
+msgctxt "ACN_ERASE~caption"
+msgid "Erase"
+msgstr "Стереть"
+
+#: ACN_LOADQS~caption
+msgid "Open (Autosave)"
+msgstr "Открыть (Автосохранение)"
+
+#: ACN_LOADQS~hint
+msgid "Open last autosave"
+msgstr "Открыть последнее автосохранение"
+
+#: ACN_LOADQS~textimage
+msgid "QL"
+msgstr ""
+
+#: ACN_LOAD~caption
+msgid "Open ..."
+msgstr "Открыть ..."
+
+#: ACN_LOAD~hint
+msgid "Open drawing"
+msgstr "Открыть чертеж"
+
+#: ACN_NEW~caption
+msgid "New drawing"
+msgstr "Новый чертеж"
+
+#: ACN_PASTE~caption
+msgctxt "ACN_PASTE~caption"
+msgid "Paste"
+msgstr "Вставить"
+
+#: ACN_PASTE~hint
+msgid "Paste from clipboard"
+msgstr "Вставить из клипбоард"
+
+#: ACN_QSAVE~caption
+msgid "Save"
+msgstr "Сохранить"
+
+#: ACN_QSAVE~hint
+msgid "Save drawing"
+msgstr "Сохранить чертеж"
+
+#: ACN_QUIT~caption
+msgid "Quit"
+msgstr "Выход"
+
+#: ACN_REDO~caption
+msgid "Redo"
+msgstr "Повторить"
+
+#: ACN_SAVEAS~caption
+msgid "Save as ..."
+msgstr "Сохранить как ..."
+
+#: ACN_SAVEAS~hint
+msgid "Save drawing as"
+msgstr "Сохранить чертеж как ..."
+
+#: ACN_SAVEQS~caption
+msgid "Save (Autosave)"
+msgstr "Сохранить (Автосохранение)"
+
+#: ACN_SAVEQS~hint
+msgctxt "ACN_SAVEQS~hint"
+msgid "Autosave"
+msgstr "Автосохранение"
+
+#: ACN_SAVEQS~textimage
+msgid "QS"
+msgstr ""
+
+#: ACN_UNDO~caption
+msgid "Undo"
+msgstr "Отменить"
+
 #: button_command~BEdit
 msgid "bed"
 msgstr ""
@@ -21,20 +122,12 @@ msgstr ""
 msgid "csel"
 msgstr ""
 
-#: button_command~Load(QS)
-msgid "QL"
-msgstr ""
-
 #: button_command~ObjVarMan
 msgid "VM"
 msgstr ""
 
 #: button_command~ProjectTree
 msgid "tree"
-msgstr ""
-
-#: button_command~QSave(QS)
-msgid "QS"
 msgstr ""
 
 #: button_command~RebuildTree
@@ -290,7 +383,6 @@ msgid "Show/Hide Lineweight"
 msgstr "Показать вес линий"
 
 #: hint_panel~DWG_EditInSubEntry
-#| msgid "Selecting parts of dynamic objects"
 msgid "On/Off Selecting parts of dynamic objects"
 msgstr "Вкл./Выкл. отдельный выбор частей динамических объектов"
 
@@ -322,84 +414,21 @@ msgstr "Выбор слоя"
 msgid "Line weight selection"
 msgstr "Выбор веса линий"
 
-#: hint_panel~Load
-msgid "Load drawing"
-msgstr "Загрузить чертеж"
-
-#: hint_panel~NewDWG
-msgid "New drawing"
-msgstr "Новый чертеж"
-
-#: hint_panel~QSave
-msgid "Save drawing"
-msgstr "Сохранить чертеж"
-
 #: mainwindow.commandlinewndname
 msgid "Command line"
 msgstr "Командная строка"
+
+#: mainwindow.drawingwindowwndname
+msgid "Drawings window"
+msgstr "Окно чертежей"
 
 #: mainwindow.es_recreating
 msgid "Re-creating %s!"
 msgstr "Повторное создание %s!"
 
 #: mainwindow.gdbobjinspwndname
-msgid "Object Inspector"
+msgid "Object inspector"
 msgstr "Инспектор объектов"
-
-#: menucommand~CloseDWG
-msgid "Close page"
-msgstr "Закрыть чертеж"
-
-#: menucommand~CopyBase
-msgid "Copy with base point"
-msgstr "Копировать с базовой точкой"
-
-#: menucommand~CopyClip
-msgid "Copy"
-msgstr "Копировать"
-
-#: menucommand~CTRL+SHIFT+Z
-msgid "Redo"
-msgstr "Повторить"
-
-#: menucommand~CTRL+Z
-msgid "Undo"
-msgstr "Отменить"
-
-#: menucommand~Erase
-msgid "Erase"
-msgstr "Стереть"
-
-#: menucommand~Load
-#| msgid "Open"
-msgid "Open ..."
-msgstr "Открыть ..."
-
-#: menucommand~NewDWG
-msgid "New"
-msgstr "Новый"
-
-#: menucommand~PasteClip
-msgid "Paste"
-msgstr "Вставить"
-
-#: menucommand~QSave
-msgid "Save"
-msgstr "Сохранить"
-
-#: menucommand~QSave(QS)
-msgid "Save (Autosave)"
-msgstr "Сохранить (Autosave)"
-
-#: menucommand~Quit
-msgid "Exit"
-msgstr "Выход"
-
-#: menucommand~SaveAs
-#| msgid "Save as"
-msgctxt "menucommand~SaveAs"
-msgid "Save as ..."
-msgstr "Сохранить как ..."
 
 #: menucommand~Show(ToolBarR)
 msgid "ToolBarR"
@@ -591,7 +620,6 @@ msgid "UncnownByReference"
 msgstr ""
 
 #: TOPSMinDatCount~TOPSMDC_2
-msgctxt "TOPSMinDatCount~TOPSMDC_2"
 msgid "2"
 msgstr ""
 
@@ -795,6 +823,7 @@ msgid "Time between autosaves"
 msgstr "Время между автосохранениями"
 
 #: tsave~SAVE_Auto_On
+msgctxt "tsave~SAVE_Auto_On"
 msgid "Autosave"
 msgstr "Автосохранение"
 

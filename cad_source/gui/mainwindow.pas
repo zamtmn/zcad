@@ -21,7 +21,8 @@ unit mainwindow;
 
 interface
 uses
-  math,LCLType,LCLProc,strproc,log,intftranslations,
+  math,
+  ActnList,LCLType,LCLProc,strproc,log,intftranslations,
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Toolwin, Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
   gdbase, languade,geometry,
@@ -36,8 +37,9 @@ graphics,
   AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr;
 
 resourcestring
-  GDBObjinspWndName='Object Inspector';
+  GDBObjinspWndName='Object inspector';
   CommandLineWndName='Command line';
+  DrawingWindowWndName='Drawings window';
   ES_ReCreating='Re-creating %s!';
 
 type
@@ -58,6 +60,7 @@ type
                     PageControl:TmyPageControl;
 
                     mm:TMenu;
+                    StandartActions:TmyActionList;
 
                     SystemTimer: TTimer;
 
@@ -77,6 +80,8 @@ type
                     procedure ProcessLongProcess(current:integer);
                     procedure EndLongProcess;
                     procedure Say(word:gdbstring);
+
+                    procedure SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
 
                     private
                     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -328,7 +333,7 @@ begin
        MainPanel.DisableAlign;
        MainPanel.Create(Application);
    //MainPanel:={TPanel}Tform.create(application);
-   MainPanel.Caption:='Рабочая область';
+   MainPanel.Caption:=DrawingWindowWndName;
    MainPanel.BorderWidth:=0;
    //MainPanel.Parent:=self;
    //mainpanel.show;
@@ -501,6 +506,9 @@ begin
 
    //self.AutoSize:=false;
    self.onclose:=self.FormClose;
+
+   StandartActions:=TmyActionList.Create(self);
+   StandartActions.LoadFromACNFile(sysparam.programpath+'menu/actions.acn');
 
    if not sysparam.noloadlayout then
    LoadLayout_com;
@@ -730,7 +738,7 @@ begin
     oncreate:=FormCreate;
     inherited;
 end;
-procedure SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
+procedure TMainFormN.SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
 var
     bmp:TBitmap;
 begin
@@ -743,7 +751,7 @@ begin
                               bmp.LoadFromFile(img);
                               bmp.Transparent:=true;
                               if not assigned(ppanel.Images) then
-                                                                 ppanel.Images:=TImageList.Create(ppanel);
+                                                                 ppanel.Images:=standartactions.Images;
                               b.ImageIndex:=
                               ppanel.Images.Add(bmp,nil);
                               freeandnil(bmp);
@@ -786,6 +794,7 @@ var
     i:longint;
     y,xx,yy,w,code:GDBInteger;
     bmp:TBitmap;
+    action:tmyaction;
 const bsize=24;
 begin
   f.InitFromFile(pf);
@@ -833,6 +842,17 @@ begin
            begin
                 if (line <> '') and (line[1] <> ';') then
                 begin
+                     if uppercase(line)='ACTION' then
+                     begin
+                          line := f.readstring(#$A,#$D);
+                          action:=tmyaction(self.StandartActions.ActionByName(line));
+                          b:=TmyCommandToolButton.Create(standartactions);
+                          b.Action:=action;
+                          b.ShowCaption:=false;
+                          b.ShowHint:=true;
+                          b.Caption:=action.imgstr;
+                          AddToBar(ppanel,b);
+                     end;
                      if uppercase(line)='BUTTON' then
                      begin
                           bc := f.readstring(',','');
@@ -853,15 +873,8 @@ begin
                           b.ShowHint:=true;
                           end;
                           SetImage(ppanel,b,line,true,'button_command~'+bc);
-                          //b.AutoSize:=false;
                           buttonpos:=buttonpos+bsize;
-                          {b.Parent:=ppanel;
-                          if ppanel.ClientHeight<ppanel.ClientWidth then
-                                                                        b.align:=alLeft
-                                                                    else
-                                                                        b.align:=alTop;}
                           AddToBar(ppanel,b);
-                          //b.Align:=albottom;
                      end;
                      if uppercase(line)='VARIABLE' then
                      begin
@@ -1003,7 +1016,10 @@ var
     ppopupmenu:TMenuItem;
 begin
            if not assigned(pm) then
+                                   begin
                                    pm:=TMainMenu.Create(self);
+                                   pm.Images:=self.StandartActions.Images;
+                                   end;
 
 
            line := f.readstring(';','');
@@ -1021,10 +1037,12 @@ end;
 procedure TMainFormN.loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
 var
     pmenuitem:TmyMenuItem;
+    pm1:TMenuItem;
     ppopupmenu,submenu:TMenuItem;
     line2:GDBString;
     i:integer;
     pstr:PGDBString;
+    action:taction;
 begin
            while line<>'{' do
                              begin
@@ -1036,7 +1054,17 @@ begin
            begin
                 if (line <> '') and (line[1] <> ';') then
                 begin
-                     if uppercase(line)='COMMAND' then
+                     if uppercase(line)='ACTION' then
+                     begin
+                          line := f.readstring(#$A,#$D);
+                          action:=tmyaction(self.StandartActions.ActionByName(line));
+                          pm1:=TMenuItem.Create(pm);
+                          pm1.Action:=action;
+                          pm.Add(pm1);
+                          line := f.readstring(#$A' ',#$D);
+                          line:=readspace(line);
+                     end
+                else if uppercase(line)='COMMAND' then
                                                       begin
                                                            line2 := f.readstring(',','');
                                                            //GDBGetMem({$IFDEF DEBUGBUILD}'{19CBFAC7-4671-4F40-A34F-3F69CE37DA65}',{$ENDIF}GDBPointer(pmenuitem),sizeof(zmenuitem));

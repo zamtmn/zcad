@@ -29,12 +29,14 @@ type
                      procedure Add(const Identifier, OriginalValue, TranslatedValue,
                                    Comments, Context, Flags, PreviousID: string);
                      function Translate(const Identifier, OriginalValue: String): String;
+                     function exportcompileritems(sourcepo:TPOFile):integer;
                 end;
 
 function InterfaceTranslate(const Identifier, OriginalValue: String): String;
 var
    PODirectory, Lang, FallbackLang: String;
    po: TmyPOFile;
+   actualypo: TmyPOFile;
    _UpdatePO:integer=0;
    _NotEnlishWord:integer=0;
    _DebugWord:integer=0;
@@ -46,6 +48,25 @@ end;
 procedure TmyPOFile.SaveToFile(const AFilename: string);
 begin
      inherited//self.f
+end;
+function TmyPOFile.exportcompileritems(sourcepo:TPOFile):integer;
+var
+   j:integer;
+   ident:string;
+   Item: TPOFileItem;
+begin
+      for j:=0 to Fitems.Count-1 do
+           begin
+                item:=TPOFileItem(FItems[j]);
+                 ident:=item.Identifier;
+                 if (pos('~',ident)<=0)
+                 and(pos('.',ident)>0) then
+                 begin
+                      sourcepo.Add(ident, item.Original, item.Translation, item.Comments,
+                                    item.Context, item.Flags,'');
+                 end;
+           end;
+      result:=items.Count-sourcepo.items.Count;
 end;
 function TmyPOFile.Translate(const Identifier, OriginalValue: String): String;
 var
@@ -105,6 +126,7 @@ begin
               if FileExistsUTF8(AFilename) then
                                                begin
                                                     po:=TmyPOFile.Create(AFilename,true);
+                                                    actualypo:=TmyPOFile.Create;
                                                end
                                            else
                                                begin
@@ -138,8 +160,8 @@ begin
                if (utf8length(Identifier)=length(Identifier))and
                   (utf8length(OriginalValue)=length(OriginalValue)) then
                begin
-                    po.Add(Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',
-                        {Context}'', {Flags}'', {PreviousID}'');
+                    po.Add(Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
+                    actualypo.Add(Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
                     inc(_UpdatePO);
                     //po.SaveToFile(PODirectory + 'zcad.po');
                end
@@ -155,6 +177,8 @@ begin
                                                    item.ModifyFlag('fuzzy',true);
                                                    item.Original:=OriginalValue;
                                                    end;
+               actualypo.Add(item.Identifier, item.Original, item.Translation, item.Comments,
+                              item.Context, item.Flags,'');
           end;
 
      end;

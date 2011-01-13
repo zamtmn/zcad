@@ -21,9 +21,19 @@ unit umytreenode;
 interface
 
 uses
-  ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,ButtonPanel,Buttons,
-  strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo;
+  lclproc,Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,ButtonPanel,Buttons,
+  strutils,intftranslations,sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
 type
+    TmyAction=class(TAction)
+                   public
+                   command,imgstr:string;
+                   function Execute: Boolean; override;
+              end;
+
+    TmyActionList=class(TActionList)
+                       procedure LoadFromACNFile(fname:string);
+                       procedure SetImage(img,identifer:string;var action:TmyAction);
+                  end;
     TmyPopupMenu = class (TPopupMenu)
                    end;
     TmyToolButton=class(TToolButton)
@@ -111,6 +121,87 @@ function FindControlByType(_parent:TWinControl;_class:TClass):TControl;
 procedure SetHeightControl(_parent:TWinControl;h:integer);
 implementation
 uses commandline,log,sharedgdb;
+function TmyAction.Execute: Boolean;
+begin
+       commandmanager.executecommand(@command[1]);
+       result:=true;
+       inherited;
+end;
+procedure TmyActionList.SetImage(img,identifer:string;var action:TmyAction);
+var
+    bmp:TBitmap;
+begin
+     if length(img)>1 then
+     begin
+          if img[1]<>'#' then
+                              begin
+                              img:=sysparam.programpath+'menu/BMP/'+img;
+                              bmp:=TBitmap.create;
+                              bmp.LoadFromFile(img);
+                              bmp.Transparent:=true;
+                              if not assigned(Images) then
+                                                          Images:=TImageList.Create(self);
+                              action.ImageIndex:=Images.Add(bmp,nil);
+                              freeandnil(bmp);
+                              action.imgstr:='';
+                              end
+                          else
+                              begin
+                              //action.imgstr:=(system.copy(img,2,length(img)-1));
+                              action.imgstr:=InterfaceTranslate(identifer,system.copy(img,2,length(img)-1));
+                              end;
+     end;
+end;
+procedure TmyActionList.LoadFromACNFile(fname:string);
+var
+    f:GDBOpenArrayOfByte;
+    line,ts,{bn,}bc{,bh}:GDBString;
+    actionname,actioncommand,actionpic,actioncaption,actionhint,actionshortcut:string;
+    buttonpos:GDBInteger;
+    ppanel:TToolBar;
+    b:TToolButton;
+    i:longint;
+    y,xx,yy,w,code:GDBInteger;
+    //bmp:TBitmap;
+    action:TmyAction;
+const bsize=24;
+begin
+  f.InitFromFile(fname);
+  while f.notEOF do
+  begin
+    line := f.readstring(' ',#$D#$A);
+    if (line <> '') and (line[1] <> ';') then
+    begin
+      if uppercase(line) = 'ACTION' then
+           begin
+               actionname:=f.readstring(',','');
+            actioncommand:=f.readstring(',','');
+                actionpic:=f.readstring(',','');
+            actioncaption:=f.readstring(',','');
+            actioncaption:=InterfaceTranslate(actionname+'~caption',actioncaption);
+               actionhint:=f.readstring(',','');
+               if actionhint<>'' then
+                                     actionhint:=InterfaceTranslate(actionname+'~hint',actionhint)
+                                 else
+                                     actionhint:=actioncaption;
+               actionshortcut:=f.readstring(#$A,#$D);
+
+               action:=TmyAction.Create(self);
+               if actionshortcut<>'' then
+                                         action.ShortCut:=TextToShortCut(actionshortcut);
+               action.Name:=uppercase(actionname);
+               action.Caption:=actioncaption;
+               action.command:=actioncommand;
+               action.Hint:=actionhint;
+               action.DisableIfNoHandler:=false;
+               SetImage(actionpic,actionname+'~textimage',action);
+               self.AddAction(action);
+           end;
+    end;
+  end;
+  f.done;
+end;
+
 function FindControlByType(_parent:TWinControl;_class:TClass):TControl;
 var
     i:integer;

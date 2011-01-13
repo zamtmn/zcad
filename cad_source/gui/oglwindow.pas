@@ -3761,21 +3761,21 @@ begin
         commandmanager.ExecuteCommand('SelectAll');
         Key:=00;
       end
- else if (Key = VK_Z) and (shift=[ssCtrl]) then
+ {else if (Key = VK_Z) and (shift=[ssCtrl]) then
       begin
         commandmanager.ExecuteCommand('Undo');
         Key:=00;
-      end
-  else if (Key = VK_Z) and (shift=[ssCtrl,ssShift]) then
+      end}
+  {else if (Key = VK_Z) and (shift=[ssCtrl,ssShift]) then
       begin
         commandmanager.ExecuteCommand('Redo');
         Key:=00;
-      end
- else if (Key = VK_DELETE) then
+      end}
+ {else if (Key = VK_DELETE) then
       begin
         commandmanager.ExecuteCommand('Erase');
         Key:=00;
-      end
+      end}
  else if Key = VK_RETURN then
       begin
            commandmanager.executelastcommad;

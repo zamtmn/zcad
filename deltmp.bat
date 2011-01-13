@@ -1,5 +1,5 @@
 del /S /F /Q *.~*;*.dcu;*.identcache;*.local;*.or;*.s;*.o;*.ppu;*.bak;*.tgs;*.tgw;*.a;*.prjconfig;*.txaPackage;*.txvpck
-del /S /F /Q cad\*.ppu;cad\*.o;cad\*.or;cad\*.a;cad\*.res;
+del /S /F /Q cad\*.ppu;cad\*.o;cad\*.or;cad\*.a;cad\*.res;*.rst
 del /S /F /Q cad_source\dcu\*.res;cad_source\dcu\*.compiled;
 del /S /F /Q cad\log\*.log;
 del /S /F /Q cad\log\*.loghard;

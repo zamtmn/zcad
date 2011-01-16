@@ -101,6 +101,11 @@ type
     private
     procedure setptr(exttype:PUserTypeDescriptor; addr:GDBPointer);
     procedure updateinsp;
+    public
+    procedure SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
+    procedure GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
+                                   Raw: boolean = false;
+                                   WithThemeSpace: boolean = true); override;
   end;
 
 procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
@@ -116,6 +121,20 @@ var
 implementation
 
 uses {oglwindow,mainwindow,ZPanelsWithSplit,}gdbentity,UGDBStringArray,log;
+procedure TGDBobjinsp.GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
+                               Raw: boolean = false;
+                               WithThemeSpace: boolean = true);
+begin
+     inherited;
+     //PreferredWidth:=0;
+     //PreferredHeight:=1;
+end;
+procedure TGDBobjinsp.SetBounds(ALeft, ATop, AWidth, AHeight: integer);
+begin
+     if aheight=38 then
+                       aheight:=aheight;
+  inherited SetBounds(ALeft, ATop, AWidth, AHeight);
+end;
 
 procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
 begin

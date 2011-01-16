@@ -13,3 +13,6 @@ action ACN_COPYCLIP,CopyClip,,Copy,Copy to clipboard,CTRL+C
 action ACN_COPYCLIPBASE,CopyBase,,Copy with base point,Copy to clipboard with base point,CTRL+INS
 action ACN_PASTE,PasteClip,,Paste,Paste from clipboard,SHIFT+INS
 action ACN_ERASE,Erase,,Erase,,DEL
+
+action ACN_COPY,Copy,copy.bmp,Copy,Copy primitives,
+action ACN_MOVE,Move,move.bmp,Move,Move primitives,

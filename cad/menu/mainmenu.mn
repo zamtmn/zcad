@@ -39,8 +39,8 @@ Panel RIGHTPANEL 994,68,30,525;
     button Circle,circle.bmp,Чертить окружность
     button Insert,insert.bmp,Вставить блок
     Separator
-    button Copy,copy.bmp,Копировать
-    button Move,move.bmp,Перенести
+    action ACN_COPY
+    action ACN_MOVE
     button Rotate,rotate.bmp,Повернуть
     button Scale,scale.bmp,Масштабировать
     Separator

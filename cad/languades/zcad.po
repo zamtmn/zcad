@@ -408,6 +408,10 @@ msgstr ""
 msgid "Command line"
 msgstr ""
 
+#: mainwindow.compiledtimemsg
+msgid "Done.  %s second"
+msgstr ""
+
 #: mainwindow.drawingwindowwndname
 msgid "Drawings window"
 msgstr ""

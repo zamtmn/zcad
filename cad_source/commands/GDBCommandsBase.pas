@@ -597,7 +597,9 @@ begin
 
      myts:=TTabSheet.create(MainFormN.PageControl);
      myts.Caption:=(Operands);
+     //mainformn.DisableAutoSizing;
      myts.Parent:=MainFormN.PageControl;
+     //mainformn.EnableAutoSizing;
 
      //tf.align:=al_client;
 

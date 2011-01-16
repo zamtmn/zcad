@@ -18,13 +18,13 @@ var
 implementation
 begin
   VIEW_CommandLineH:=50;
-  VIEW_ObjInspV:=162;
-  VIEW_ObjInspSubV:=90;
-  PATH_File0:='\\WORKSTATION\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File1:='Z:\000.dxf';
-  PATH_File2:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File3:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File4:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
+  VIEW_ObjInspV:=195;
+  VIEW_ObjInspSubV:=48;
+  PATH_File0:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File1:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File2:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File3:='\\WORKSTATION\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File4:='Z:\000.dxf';
   PATH_File5:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
   PATH_File6:='c:\zcad\errors\0.dxf';
   PATH_File7:='C:\zcad\cad\autosave\autosave.dxf';

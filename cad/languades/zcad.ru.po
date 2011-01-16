@@ -418,6 +418,10 @@ msgstr "Выбор веса линий"
 msgid "Command line"
 msgstr "Командная строка"
 
+#: mainwindow.compiledtimemsg
+msgid "Done.  %s second"
+msgstr "Выполнено за  %s сек."
+
 #: mainwindow.drawingwindowwndname
 msgid "Drawings window"
 msgstr "Окно чертежей"

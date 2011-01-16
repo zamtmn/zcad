@@ -41,12 +41,18 @@ resourcestring
   CommandLineWndName='Command line';
   DrawingWindowWndName='Drawings window';
   ES_ReCreating='Re-creating %s!';
+  compiledtimemsg='Done.  %s second';
 
 type
   TmyAnchorDockHeader = class(TAnchorDockHeader)
                         protected
                                  procedure Paint; override;
                         end;
+  TmyAnchorDockSplitter = class(TAnchorDockSplitter)
+  public
+    constructor Create(TheOwner: TComponent); override;
+
+                          end;
 
   TFileHistory=Array [0..9] of TmyMenuItem;
   TMainFormN = class(TFreedForm)
@@ -134,11 +140,18 @@ var
   LPTime:Tdatetime;
   oldlongprocess:integer;
   tf:tform;
-  //DockMaster: TAnchorDockMaster = nil;
+  //DockMaster:  TAnchorDockMaster = nil;
 implementation
 
 uses {GDBCommandsBase,}Objinsp{,optionswnd, Tedit_form, MTedit_form},
   dialogs,XMLPropStorage;
+
+constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
+begin
+  inherited Create(TheOwner);
+  self.MinSize:=1;
+end;
+
 procedure TmyAnchorDockHeader.Paint;
 
   procedure DrawGrabber(r: TRect);
@@ -291,7 +304,7 @@ procedure TMainFormN.GetPreferredSize(var PreferredWidth, PreferredHeight: integ
 begin
      inherited;
      //PreferredWidth:=0;
-     PreferredHeight:=20;
+     PreferredHeight:=1;
 end;
 
 procedure TMainFormN.DockMasterCreateControl(Sender: TObject; aName: string; var
@@ -376,10 +389,10 @@ begin
   else if aName='ObjectInspector' then
             begin
                GDBObjInsp:=TGDBObjInsp(TGDBObjInsp.NewInstance);
-               GDBObjInsp.FormStyle:=fsStayOnTop;
                GDBObjInsp.DisableAlign;
                GDBObjInsp.Create(Application);
                GDBObjInsp.Caption:=GDBObjInspWndName;
+               GDBObjInsp.FormStyle:=fsStayOnTop;
                //GDBObjInsp.Caption:=Title;
                //GDBObjInsp:=TGDBObjInsp.create({self}application);
                //GDBObjInsp.BorderStyle:=bsSingle;
@@ -487,8 +500,9 @@ var
   pint:PGDBInteger;
 begin
   //AutoSize:=false;
-  DockMaster.MakeDockSite(Self,[akTop,akBottom,akLeft,akRight],admrpChild{admrpNone},{true}false);
+  DockMaster.MakeDockSite(Self,[{akTop,}akBottom{,akLeft,akRight}],admrpChild{admrpNone},{true}false);
   DockMaster.HeaderClass:=TmyAnchorDockHeader;
+  DockMaster.SplitterClass:=TmyAnchorDockSplitter;
 
   if DockManager is TAnchorDockManager then
   begin
@@ -520,15 +534,15 @@ begin
    onkeydown:=mykeypress;
    KeyPreview:=true;
 
-   ToolBarD:=TToolBar.Create(self);
+   {ToolBarD:=TToolBar.Create(self);
    ToolBarD.Height:=18;
    ToolBarD.Align:=alBottom;
    ToolBarD.AutoSize:=true;
    ToolBarD.ShowCaptions:=true;
    ToolBarD.EdgeBorders:=[ebTop];
-   ToolBarD.Parent:=self;
+   ToolBarD.Parent:=self;}
 
-   //DockMaster.ShowControl('ToolBarD',true);
+   DockMaster.ShowControl('ToolBarD',true);
 
    ProcessBar:=TProgressBar.create(ToolBarD);//.initxywh('?',@Pdownpanel,0,0,400,statusbarclientheight,false);
    ProcessBar.Hide;
@@ -554,13 +568,13 @@ begin
 
    //ToolBarD.Parent:=self;
 
-   DockMaster.ShowControl('ToolBarU',true);
-   (*ToolBarU:=TToolBar.Create(self);
+   //DockMaster.ShowControl('ToolBarU',true);
+   ToolBarU:=TToolBar.Create(self);
    ToolBarU.Align:={alTop}alClient;
    ToolBarU.AutoSize:=true;
    ToolBarU.ShowCaptions:=true;
    ToolBarU.Parent:=self;
-   ToolBarU.EdgeBorders:=[ebTop, ebBottom];*)
+   //ToolBarU.EdgeBorders:=[{ebTop,} ebBottom];
 
 {     LayerBox:=TComboBox.Create(ToolBarU);
    LayerBox.ReadOnly:=true;
@@ -1137,6 +1151,9 @@ begin
      //pmenu^.done;
      //pdownpanel.done;
      //prightpanel.done;
+     //self.contr
+    if DockMaster<>nil then
+    DockMaster.CloseAll;
      inherited;
      //GDBFreeMem(pointer(pmenu));
 end;
@@ -1556,7 +1573,7 @@ begin
     application.ProcessMessages;
     time:=(now-LPTime)*10e4;
     str(time:3:2,ts);
-    say(('Выполнено за  '+ts+'сек'));
+    say(format(compiledtimemsg,[ts]));
 end;
 (*
 procedure TMainForm.beforeinit;
@@ -1963,11 +1980,14 @@ end;}
 initialization
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('mainwindow.initialization');{$ENDIF}
-  //DockMaster:=TAnchorDockMaster.Create(nil);
+  //DockMaster:= TAnchorDockMaster.Create(nil);
 end
 finalization
 begin
-  //FreeAndNil(DockMaster);
+  //DockMaster.free;
+  //DockMaster:=nil;
+  //DockMaster.CreateCloseButtonBitmap;
+  //freeAndNil(DockMaster);
 end;
 end.
 

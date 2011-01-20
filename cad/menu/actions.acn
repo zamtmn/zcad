@@ -14,5 +14,19 @@ action ACN_COPYCLIPBASE,CopyBase,,Copy with base point,Copy to clipboard with ba
 action ACN_PASTE,PasteClip,,Paste,Paste from clipboard,SHIFT+INS
 action ACN_ERASE,Erase,,Erase,,DEL
 
+action ACN_PROJECTTREE,ProjectTree,treeview.bmp,Project tree,,CTRL+T
+
+action ACN_LAYER,Layer,layer.bmp,Layers ...,Layers properties manager,
+
 action ACN_COPY,Copy,copy.bmp,Copy,Copy primitives,
 action ACN_MOVE,Move,move.bmp,Move,Move primitives,
+action ACN_ROTATE,Rotate,rotate.bmp,Rotate,Rotate primitives,
+action ACN_SCALE,Scale,scale.bmp,scale,Scale primitives,
+
+action ACN_BEDIT,BEdit,#bed,Block editor,,
+action ACN_POLYED,PolyED,polyed.bmp,Edit polyline,,
+
+action ACN_LINE,Line,line.bmp,Draw line,,
+action ACN_3DPOLY,3DPoly,pline.bmp,Draw 3Dpolyline,,
+action ACN_CIRCLE,Circle,circle.bmp,Draw circle,,
+action ACN_BInsert,Insert,insert.bmp,Insert block,,

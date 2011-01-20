@@ -15,7 +15,7 @@ Panel UPPANEL 994,68,30,525;
     action ACN_LOAD
     action ACN_QSAVE
     Separator
-    button Layer,layer.bmp,Setting up layers
+    action ACN_LAYER
     layercombobox 200,Layer selection
     linewcombobox 100,Line weight selection
     Separator
@@ -29,20 +29,20 @@ Panel RIGHTPANEL 994,68,30,525;
   {
     action ACN_LOADQS
     action ACN_SAVEQS
-    button ProjectTree,#tree,Показать окно дерева проекта
+    action ACN_PROJECTTREE
     Separator
-    button BEdit,#bed,Редактор блоков
+    action ACN_BEDIT
+    action ACN_POLYED
     Separator
-    button Line,line.bmp,Чертить линию
-    button 3DPoly,pline.bmp,Чертить полилинию (3dpoly)
-    button PolyED,polyed.bmp,Редактор вершин поли обьектов
-    button Circle,circle.bmp,Чертить окружность
-    button Insert,insert.bmp,Вставить блок
+    action ACN_LINE
+    action ACN_3DPOLY
+    action ACN_CIRCLE
+    action ACN_BInsert
     Separator
     action ACN_COPY
     action ACN_MOVE
-    button Rotate,rotate.bmp,Повернуть
-    button Scale,scale.bmp,Масштабировать
+    action ACN_ROTATE
+    action ACN_SCALE
     Separator
     button El_Cable,el_cable.bmp,Чертить кабель
     button EL_Wire,El_Wire.bmp,Цепь\Трасса
@@ -109,11 +109,12 @@ MainMenuItem View;
         Command Камера,SetObjInsp(CAMERA),none,none
         Command Привязки,SetObjInsp(OSMODE),none,none
       }
-   Command Дерево проекта,ProjectTree,none,none
+   action ACN_PROJECTTREE
   }
 MainMenuItem Format;
   {
-    Command Слои,SetObjInsp(LAYERS),none,none
+    Command **Слои,SetObjInsp(LAYERS),none,none
+    action ACN_LAYER
     MenuItem Текст;
       {
         Command Стили,SetObjInsp(TSTYLES),none,none
@@ -126,19 +127,22 @@ MainMenuItem Format;
   }
 MainMenuItem Draw;
   {
-    Command Блок,Insert,none,none
-    Command Линия,Line,none,none
-    Command ПолиЛиния,3dpoly,none,none
-    Command Окружность,Circle,none,none
+    action ACN_LINE
+    action ACN_3DPOLY
+    action ACN_CIRCLE
+    action ACN_BInsert
   }
 MainMenuItem Modify;
   {
     Command Менеджер переменных объекта,ObjVarMan,none,none
-    Command Редактор полилиний,PolyED,none,none
+    action ACN_POLYED
     MenuItem Блок;
       {
-        Command Редактор блоков,BEdit,none,none
+        action ACN_BEDIT
       }
+    Separator
+    action ACN_ROTATE
+    action ACN_SCALE
   }
 MainMenuItem Schematic;
   {

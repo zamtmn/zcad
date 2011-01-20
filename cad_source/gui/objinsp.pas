@@ -43,7 +43,7 @@ type
   end;
   arrayarrindop=array[0..10] of arrindop;
   parrayarrindop=^arrayarrindop;
-  TGDBobjinsp=class({TPanel}{TScrollBox}tform)
+  TGDBobjinsp=class({TPanel}TScrollBox{tform})
     public
     GDBobj:GDBBoolean;
     ppropcurrentedit:PPropertyDeskriptor;
@@ -106,6 +106,8 @@ type
     procedure GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
                                    Raw: boolean = false;
                                    WithThemeSpace: boolean = true); override;
+    procedure DoSendBoundsToInterface; override; // called by RealizeBounds
+    procedure DoAllAutoSize; override;
   end;
 
 procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
@@ -121,17 +123,26 @@ var
 implementation
 
 uses {oglwindow,mainwindow,ZPanelsWithSplit,}gdbentity,UGDBStringArray,log;
+procedure TGDBobjinsp.DoAllAutoSize;
+begin
+     inherited;
+end;
+procedure TGDBobjinsp.DoSendBoundsToInterface;
+begin
+     inherited;
+end;
 procedure TGDBobjinsp.GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
                                Raw: boolean = false;
                                WithThemeSpace: boolean = true);
 begin
      inherited;
+     //height
      //PreferredWidth:=0;
      //PreferredHeight:=1;
 end;
 procedure TGDBobjinsp.SetBounds(ALeft, ATop, AWidth, AHeight: integer);
 begin
-     if aheight=38 then
+     if aheight=41 then
                        aheight:=aheight;
   inherited SetBounds(ALeft, ATop, AWidth, AHeight);
 end;

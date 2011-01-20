@@ -21,12 +21,13 @@ unit umytreenode;
 interface
 
 uses
-  lclproc,Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,ButtonPanel,Buttons,
+  commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,ButtonPanel,Buttons,
   strutils,intftranslations,sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
 type
     TmyAction=class(TAction)
                    public
-                   command,imgstr:string;
+                   command,options,imgstr:string;
+                   pfoundcommand:PCommandObjectDef;
                    function Execute: Boolean; override;
               end;
 
@@ -94,7 +95,7 @@ type
                          DialogPanel: TButtonPanel;
                          procedure AfterConstruction; override;
                     end;
-  TToolButtonForm = class(tform)
+  TToolButtonForm = class({tform}tpanel)
                          procedure AfterConstruction; override;
                          //public
                          //procedure GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
@@ -122,8 +123,14 @@ procedure SetHeightControl(_parent:TWinControl;h:integer);
 implementation
 uses commandline,log,sharedgdb;
 function TmyAction.Execute: Boolean;
+var
+    s:string;
 begin
-       commandmanager.executecommand(@command[1]);
+     s:=command+'('+options+')';
+     {if assigned(pfoundcommand)then
+
+                               else}
+                                   commandmanager.executecommand(@s[1]);
        result:=true;
        inherited;
 end;
@@ -185,17 +192,21 @@ begin
                                  else
                                      actionhint:=actioncaption;
                actionshortcut:=f.readstring(#$A,#$D);
+              { if actionname='ACN_SAVEQS' then
+                                         actionname:=actionname;}
 
                action:=TmyAction.Create(self);
                if actionshortcut<>'' then
                                          action.ShortCut:=TextToShortCut(actionshortcut);
                action.Name:=uppercase(actionname);
                action.Caption:=actioncaption;
-               action.command:=actioncommand;
+               ParseCommand(@actioncommand[1],action.command,action.options);
+               //action.command:=actioncommand;
                action.Hint:=actionhint;
                action.DisableIfNoHandler:=false;
                SetImage(actionpic,actionname+'~textimage',action);
                self.AddAction(action);
+               action.pfoundcommand:=commandmanager.FindCommand(uppercase(action.command));
            end;
     end;
   end;

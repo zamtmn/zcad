@@ -13,6 +13,27 @@ msgstr ""
 msgid "About ZCAD"
 msgstr "О программе ZCAD"
 
+#: ACN_3DPOLY~caption
+msgid "Draw 3Dpolyline"
+msgstr "Чертить 3D полилинию"
+
+#: ACN_BEDIT~caption
+msgid "Block editor"
+msgstr "Редактор блоков"
+
+#: ACN_BEDIT~textimage
+msgctxt "ACN_BEDIT~textimage"
+msgid "bed"
+msgstr ""
+
+#: ACN_BInsert~caption
+msgid "Insert block"
+msgstr "Вставить блок"
+
+#: ACN_CIRCLE~caption
+msgid "Draw circle"
+msgstr "Чертить окружность"
+
 #: ACN_CLOSE~caption
 msgid "Close drawing"
 msgstr "Закрыть чертеж"
@@ -35,10 +56,31 @@ msgstr "Копировать"
 msgid "Copy to clipboard"
 msgstr "Копировать в клипбоард"
 
+#: ACN_COPY~caption
+msgctxt "ACN_COPY~caption"
+msgid "Copy"
+msgstr "Копировать"
+
+#: ACN_COPY~hint
+msgid "Copy primitives"
+msgstr "Копировать примитивы"
+
 #: ACN_ERASE~caption
 msgctxt "ACN_ERASE~caption"
 msgid "Erase"
 msgstr "Стереть"
+
+#: ACN_LAYER~caption
+msgid "Layers ..."
+msgstr "Слои ..."
+
+#: ACN_LAYER~hint
+msgid "Layers properties manager"
+msgstr "Настройка слоев"
+
+#: ACN_LINE~caption
+msgid "Draw line"
+msgstr "Чертить линию"
 
 #: ACN_LOADQS~caption
 msgid "Open (Autosave)"
@@ -60,6 +102,14 @@ msgstr "Открыть ..."
 msgid "Open drawing"
 msgstr "Открыть чертеж"
 
+#: ACN_MOVE~caption
+msgid "Move"
+msgstr "Переместить"
+
+#: ACN_MOVE~hint
+msgid "Move primitives"
+msgstr "Переместить примитивы"
+
 #: ACN_NEW~caption
 msgid "New drawing"
 msgstr "Новый чертеж"
@@ -72,6 +122,14 @@ msgstr "Вставить"
 #: ACN_PASTE~hint
 msgid "Paste from clipboard"
 msgstr "Вставить из клипбоард"
+
+#: ACN_POLYED~caption
+msgid "Edit polyline"
+msgstr "Редактировать полиобъект"
+
+#: ACN_PROJECTTREE~caption
+msgid "Project tree"
+msgstr "Дерево проекта"
 
 #: ACN_QSAVE~caption
 msgid "Save"
@@ -88,6 +146,14 @@ msgstr "Выход"
 #: ACN_REDO~caption
 msgid "Redo"
 msgstr "Повторить"
+
+#: ACN_ROTATE~caption
+msgid "Rotate"
+msgstr "Повернуть"
+
+#: ACN_ROTATE~hint
+msgid "Rotate primitives"
+msgstr "Повернуть примитивы"
 
 #: ACN_SAVEAS~caption
 msgid "Save as ..."
@@ -110,13 +176,17 @@ msgstr "Автосохранение"
 msgid "QS"
 msgstr ""
 
+#: ACN_SCALE~caption
+msgid "Scale"
+msgstr "Масштабировать"
+
+#: ACN_SCALE~hint
+msgid "Scale primitives"
+msgstr "Масштабировать примитивы"
+
 #: ACN_UNDO~caption
 msgid "Undo"
 msgstr "Отменить"
-
-#: button_command~BEdit
-msgid "bed"
-msgstr ""
 
 #: button_command~El_Cable_Select
 msgid "csel"
@@ -124,10 +194,6 @@ msgstr ""
 
 #: button_command~ObjVarMan
 msgid "VM"
-msgstr ""
-
-#: button_command~ProjectTree
-msgid "tree"
 msgstr ""
 
 #: button_command~RebuildTree
@@ -401,10 +467,6 @@ msgstr "Полярная трассировка"
 #: hint_panel~DWG_SystmGeometryDraw
 msgid "System graphics (size, communication, etc. for debugging)"
 msgstr "Системная графика (габариты, связи и т.п. для отладки)"
-
-#: hint_panel~Layer
-msgid "Setting up layers"
-msgstr "Настройка слоев"
 
 #: hint_panel~LAYERCOMBOBOX
 msgid "Layer selection"

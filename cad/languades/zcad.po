@@ -5,6 +5,26 @@ msgstr "Content-Type: text/plain; charset=UTF-8"
 msgid "About ZCAD"
 msgstr ""
 
+#: ACN_3DPOLY~caption
+msgid "Draw 3Dpolyline"
+msgstr ""
+
+#: ACN_BEDIT~caption
+msgid "Block editor"
+msgstr ""
+
+#: ACN_BEDIT~textimage
+msgid "bed"
+msgstr ""
+
+#: ACN_BInsert~caption
+msgid "Insert block"
+msgstr ""
+
+#: ACN_CIRCLE~caption
+msgid "Draw circle"
+msgstr ""
+
 #: ACN_CLOSE~caption
 msgid "Close drawing"
 msgstr ""
@@ -18,6 +38,7 @@ msgid "Copy to clipboard with base point"
 msgstr ""
 
 #: ACN_COPYCLIP~caption
+msgctxt "ACN_COPYCLIP~caption"
 msgid "Copy"
 msgstr ""
 
@@ -25,8 +46,29 @@ msgstr ""
 msgid "Copy to clipboard"
 msgstr ""
 
+#: ACN_COPY~caption
+msgctxt "ACN_COPY~caption"
+msgid "Copy"
+msgstr ""
+
+#: ACN_COPY~hint
+msgid "Copy primitives"
+msgstr ""
+
 #: ACN_ERASE~caption
 msgid "Erase"
+msgstr ""
+
+#: ACN_LAYER~caption
+msgid "Layers ..."
+msgstr ""
+
+#: ACN_LAYER~hint
+msgid "Layers properties manager"
+msgstr ""
+
+#: ACN_LINE~caption
+msgid "Draw line"
 msgstr ""
 
 #: ACN_LOADQS~caption
@@ -49,6 +91,14 @@ msgstr ""
 msgid "Open drawing"
 msgstr ""
 
+#: ACN_MOVE~caption
+msgid "Move"
+msgstr ""
+
+#: ACN_MOVE~hint
+msgid "Move primitives"
+msgstr ""
+
 #: ACN_NEW~caption
 msgid "New drawing"
 msgstr ""
@@ -59,6 +109,14 @@ msgstr ""
 
 #: ACN_PASTE~hint
 msgid "Paste from clipboard"
+msgstr ""
+
+#: ACN_POLYED~caption
+msgid "Edit polyline"
+msgstr ""
+
+#: ACN_PROJECTTREE~caption
+msgid "Project tree"
 msgstr ""
 
 #: ACN_QSAVE~caption
@@ -75,6 +133,14 @@ msgstr ""
 
 #: ACN_REDO~caption
 msgid "Redo"
+msgstr ""
+
+#: ACN_ROTATE~caption
+msgid "Rotate"
+msgstr ""
+
+#: ACN_ROTATE~hint
+msgid "Rotate primitives"
 msgstr ""
 
 #: ACN_SAVEAS~caption
@@ -98,12 +164,16 @@ msgstr ""
 msgid "QS"
 msgstr ""
 
-#: ACN_UNDO~caption
-msgid "Undo"
+#: ACN_SCALE~caption
+msgid "Scale"
 msgstr ""
 
-#: button_command~BEdit
-msgid "bed"
+#: ACN_SCALE~hint
+msgid "Scale primitives"
+msgstr ""
+
+#: ACN_UNDO~caption
+msgid "Undo"
 msgstr ""
 
 #: button_command~El_Cable_Select
@@ -112,10 +182,6 @@ msgstr ""
 
 #: button_command~ObjVarMan
 msgid "VM"
-msgstr ""
-
-#: button_command~ProjectTree
-msgid "tree"
 msgstr ""
 
 #: button_command~RebuildTree
@@ -390,10 +456,6 @@ msgstr ""
 
 #: hint_panel~DWG_SystmGeometryDraw
 msgid "System graphics (size, communication, etc. for debugging)"
-msgstr ""
-
-#: hint_panel~Layer
-msgid "Setting up layers"
 msgstr ""
 
 #: hint_panel~LAYERCOMBOBOX

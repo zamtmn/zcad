@@ -49,6 +49,8 @@ type
                     end;
 var commandmanager:GDBcommandmanager;
 function getcommandmanager:GDBPointer;export;
+function GetCommandContext:TCStartAttr;
+procedure ParseCommand(comm:pansichar; out command,operands:GDBString);
 {procedure startup;
 procedure finalize;}
 implementation

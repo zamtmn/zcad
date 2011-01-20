@@ -3431,6 +3431,7 @@ begin
   begin
 
   self.MakeCurrent(false);
+  param.lastonmouseobject:=nil;
 
   //self.MakeCurrent(false);
   //isOpenGLError;

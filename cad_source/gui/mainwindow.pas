@@ -59,7 +59,8 @@ type
                     ToolBarU,ToolBarR:TToolBar;
                     ToolBarD: TToolBar;
                     //ObjInsp,
-                    MainPanel,FToolBar{,MainPanelU}:TForm;
+                    MainPanel:{TForm}TPanel;
+                    FToolBar{,MainPanelU}:TToolButtonForm;
                     //MainPanelD:TCLine;
                     //SplitterV,SplitterH: TSplitter;
 
@@ -71,8 +72,10 @@ type
                     SystemTimer: TTimer;
 
                     procedure FormCreate(Sender: TObject);
+                    procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
                     procedure AfterConstruction; override;
                     destructor Destroy;override;
+                    procedure setnormalfocus;
 
                     procedure draw;
 
@@ -302,9 +305,9 @@ procedure TMainFormN.GetPreferredSize(var PreferredWidth, PreferredHeight: integ
                                Raw: boolean = false;
                                WithThemeSpace: boolean = true);
 begin
-     inherited;
-     //PreferredWidth:=0;
-     PreferredHeight:=1;
+     inherited GetPreferredSize(PreferredWidth, PreferredHeight,Raw,WithThemeSpace);
+     PreferredWidth:=0;
+     PreferredHeight:=0;
 end;
 
 procedure TMainFormN.DockMasterCreateControl(Sender: TObject; aName: string; var
@@ -330,6 +333,10 @@ begin
   // Note: Remember that the LCL allows as form names only standard
   // pascal identifiers and compares them case insensitive
   AControl:=Screen.FindForm(aName);
+  if acontrol=nil then
+                      begin
+                           acontrol:=DockMaster.FindControl(aname);
+                      end;
   if AControl<>nil then begin
     // if it already exists, just disable autosizing if requested
     if DoDisableAutoSizing then
@@ -341,8 +348,8 @@ begin
     CreateForm('Code Explorer',Bounds(700,230,100,250))
   else if aName='PageControl' then
   begin
-       MainPanel:=Tform(Tform.NewInstance);
-       MainPanel.FormStyle:=fsStayOnTop;
+       MainPanel:={Tform}Tpanel(Tform.NewInstance);
+       //MainPanel.FormStyle:=fsStayOnTop;
        MainPanel.DisableAlign;
        MainPanel.Create(Application);
    //MainPanel:={TPanel}Tform.create(application);
@@ -392,7 +399,7 @@ begin
                GDBObjInsp.DisableAlign;
                GDBObjInsp.Create(Application);
                GDBObjInsp.Caption:=GDBObjInspWndName;
-               GDBObjInsp.FormStyle:=fsStayOnTop;
+               //GDBObjInsp.FormStyle:=fsStayOnTop;
                //GDBObjInsp.Caption:=Title;
                //GDBObjInsp:=TGDBObjInsp.create({self}application);
                //GDBObjInsp.BorderStyle:=bsSingle;
@@ -425,7 +432,7 @@ begin
   else if copy(aName,1,7)='ToolBar' then
   begin
        FToolBar:=TToolButtonForm(TToolButtonForm.NewInstance);
-       FToolBar.FormStyle:=fsStayOnTop;
+       //FToolBar.FormStyle:=fsStayOnTop;
        FToolBar.DisableAlign;
        FToolBar.Create(Application);
        FToolBar.Caption:=aName;
@@ -494,6 +501,75 @@ begin
   end;
   //result:=cmd_ok;
 end;
+procedure TMainFormN.ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
+var
+   IsEditableFocus:boolean;
+   IsCommandNotEmpty:boolean;
+   _enabled,_disabled:boolean;
+   i:integer;
+const
+     EditableShortCut=[(scCtrl or VK_Z),{(VK_CONTROL or VK_SHIFT or VK_Z),}VK_DELETE,VK_BACK,VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN];
+     ClipboardShortCut=[VK_SHIFT or VK_DELETE,VK_BACK,VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN];
+function IsEditableShortCut(cut:integer):boolean;
+begin
+     case cut of
+               (scCtrl or VK_V),
+               (scCtrl or VK_C),
+               (scCtrl or VK_INSERT),
+               (scShift or VK_INSERT),
+               (scCtrl or VK_Z),
+               (scCtrl or scShift or VK_Z),
+                VK_DELETE,
+                VK_BACK,
+                VK_LEFT,
+                VK_RIGHT,
+                VK_UP,
+                VK_DOWN
+                    :result:=true;
+                else result:=false;
+
+     end;
+
+end;
+
+begin
+     if AAction is TmyAction then
+     begin
+     Handled:=true;
+     _disabled:=false;
+     IsEditableFocus:=(((ActiveControl is tedit)and(ActiveControl<>cmdedit))
+                     or (ActiveControl is tmemo)
+                     or (ActiveControl is tcombobox));
+     if assigned(cmdedit) then
+                              IsCommandNotEmpty:=((cmdedit.Text<>'')and(ActiveControl=cmdedit))
+                          else
+                              IsCommandNotEmpty:=false;
+     {log.programlog.LogOutStr(AAction.Name,0);
+     if AAction.Name='ACN_UNDO'then
+     begin
+          i:=TmyAction(AAction).ShortCut;
+          i:=scCtrl or VK_Z;
+     end;}
+     if IsEditableShortCut(TmyAction(AAction).ShortCut)
+     and ((IsEditableFocus)or(IsCommandNotEmpty))
+          then _disabled:=true;
+     //GetCommandContext;
+     //i:=TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr;
+     if assigned(TmyAction(AAction).pfoundcommand) then
+     if ((GetCommandContext xor TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)and TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)<>0
+          then
+              _disabled:=true;
+
+
+     TmyAction(AAction).Enabled:=not _disabled;
+
+     end;
+end;
+procedure TMainFormN.setnormalfocus;
+begin
+     ActiveControl:=cmdedit;
+end;
+
 procedure TMainFormN.FormCreate(Sender: TObject);
 var
   i:integer;
@@ -514,6 +590,7 @@ begin
 
   DockMaster.OnCreateControl:={@}DockMasterCreateControl;
   DockMaster.OnShowOptions:={@}ShowAnchorDockOptions;
+  TAnchorDockManager(self.DockManager).PreferredSiteSizeAsSiteMinimum:=false;
   //TAnchorDockManager(self)
   //self.DockSite:=true;
   //DockMaster.ShowHeaderCaption:=false;
@@ -523,6 +600,7 @@ begin
 
    StandartActions:=TmyActionList.Create(self);
    StandartActions.LoadFromACNFile(sysparam.programpath+'menu/actions.acn');
+   StandartActions.OnUpdate:=ActionUpdate;
 
    if not sysparam.noloadlayout then
    LoadLayout_com;
@@ -542,7 +620,7 @@ begin
    ToolBarD.EdgeBorders:=[ebTop];
    ToolBarD.Parent:=self;}
 
-   DockMaster.ShowControl('ToolBarD',true);
+   //DockMaster.ShowControl('ToolBarD',true);
 
    ProcessBar:=TProgressBar.create(ToolBarD);//.initxywh('?',@Pdownpanel,0,0,400,statusbarclientheight,false);
    ProcessBar.Hide;
@@ -601,7 +679,7 @@ LineWbox.Parent:=ToolBarU;
 }
 
 
-   DockMaster.ShowControl('ToolBarR',true);
+   //DockMaster.ShowControl('ToolBarR',true);
 
    //MainPanel.Align:=alClient;
    //MainPanel.BorderStyle:=bsNone;
@@ -1315,6 +1393,7 @@ begin
                 gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
            end;
   end;
+  setnormalfocus;
 end;
 procedure TMainFormN.ChangeCLayer(Sender:Tobject);
 var tcl:GDBInteger;
@@ -1347,6 +1426,7 @@ begin
                 gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
            end;
   end;
+  setnormalfocus;
 end;
 (*
 procedure TMainForm.loadmenu;

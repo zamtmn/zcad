@@ -21,7 +21,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="141"/>
+      <BuildNr Value="152"/>
       <CharSet Value="0000"/>
       <StringTable ProductVersion="0.0.0.8"/>
     </VersionInfo>
@@ -52,7 +52,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="219">
+    <Units Count="221">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -79,10 +79,10 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="mainwindow"/>
         <IsVisibleTab Value="True"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1126"/>
-        <CursorPos X="54" Y="1149"/>
+        <TopLine Value="578"/>
+        <CursorPos X="93" Y="602"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -110,7 +110,7 @@
         <Filename Value="gdb/GDBAbstractText.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GDBAbstractText"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="19"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -190,8 +190,8 @@
         <UnitName Value="oglwindow"/>
         <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="3426"/>
-        <CursorPos X="31" Y="3434"/>
+        <TopLine Value="1882"/>
+        <CursorPos X="6" Y="1911"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -290,10 +290,12 @@
       <Unit24>
         <Filename Value="commands/GDBCommandsBase.pas"/>
         <UnitName Value="GDBCommandsBase"/>
+        <EditorIndex Value="17"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="537"/>
-        <CursorPos X="8" Y="602"/>
+        <TopLine Value="405"/>
+        <CursorPos X="24" Y="443"/>
         <UsageCount Value="101"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit24>
       <Unit25>
@@ -321,7 +323,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="531"/>
         <CursorPos X="1" Y="560"/>
-        <UsageCount Value="86"/>
+        <UsageCount Value="90"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit27>
@@ -385,7 +387,7 @@
         <Filename Value="gdb/GDBEntity.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GDBEntity"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="20"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -398,9 +400,9 @@
         <UnitName Value="commanddefinternal"/>
         <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="80"/>
-        <CursorPos X="1" Y="103"/>
-        <UsageCount Value="87"/>
+        <TopLine Value="141"/>
+        <CursorPos X="6" Y="166"/>
+        <UsageCount Value="91"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit35>
@@ -447,20 +449,20 @@
         <UnitName Value="umytreenode"/>
         <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="170"/>
-        <CursorPos X="16" Y="194"/>
-        <UsageCount Value="92"/>
+        <TopLine Value="190"/>
+        <CursorPos X="1" Y="214"/>
+        <UsageCount Value="96"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit40>
       <Unit41>
         <Filename Value="commands/commandline.pas"/>
         <UnitName Value="commandline"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="21"/>
         <WindowIndex Value="0"/>
         <TopLine Value="33"/>
         <CursorPos X="72" Y="53"/>
-        <UsageCount Value="75"/>
+        <UsageCount Value="79"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit41>
@@ -480,7 +482,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="666"/>
         <CursorPos X="11" Y="691"/>
-        <UsageCount Value="60"/>
+        <UsageCount Value="64"/>
         <Loaded Value="True"/>
       </Unit43>
       <Unit44>
@@ -490,7 +492,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1188"/>
         <CursorPos X="10" Y="1195"/>
-        <UsageCount Value="22"/>
+        <UsageCount Value="26"/>
         <Loaded Value="True"/>
       </Unit44>
       <Unit45>
@@ -512,11 +514,14 @@
       </Unit46>
       <Unit47>
         <Filename Value="WindowsSpecific.pas"/>
+        <IsPartOfProject Value="True"/>
         <UnitName Value="WindowsSpecific"/>
+        <EditorIndex Value="15"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="22"/>
-        <CursorPos X="28" Y="28"/>
-        <UsageCount Value="2"/>
+        <TopLine Value="39"/>
+        <CursorPos X="56" Y="65"/>
+        <UsageCount Value="30"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit47>
       <Unit48>
@@ -605,16 +610,19 @@
         <WindowIndex Value="0"/>
         <TopLine Value="19"/>
         <CursorPos X="20" Y="44"/>
-        <UsageCount Value="188"/>
+        <UsageCount Value="199"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit57>
       <Unit58>
         <Filename Value="gdb/UGDBDescriptor.pas"/>
+        <IsPartOfProject Value="True"/>
         <UnitName Value="UGDBDescriptor"/>
+        <EditorIndex Value="18"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="64"/>
-        <CursorPos X="25" Y="88"/>
-        <UsageCount Value="87"/>
+        <TopLine Value="27"/>
+        <CursorPos X="3" Y="46"/>
+        <UsageCount Value="97"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit58>
       <Unit59>
@@ -1087,11 +1095,11 @@
       <Unit115>
         <Filename Value="commands/commandlinedef.pas"/>
         <UnitName Value="commandlinedef"/>
-        <EditorIndex Value="16"/>
+        <EditorIndex Value="22"/>
         <WindowIndex Value="0"/>
         <TopLine Value="20"/>
         <CursorPos X="20" Y="19"/>
-        <UsageCount Value="30"/>
+        <UsageCount Value="34"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit115>
@@ -1188,7 +1196,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1565"/>
         <CursorPos X="1" Y="1589"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="44"/>
         <Loaded Value="True"/>
       </Unit126>
       <Unit127>
@@ -1198,7 +1206,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="430"/>
         <CursorPos X="14" Y="454"/>
-        <UsageCount Value="63"/>
+        <UsageCount Value="67"/>
         <Loaded Value="True"/>
       </Unit127>
       <Unit128>
@@ -1236,10 +1244,9 @@
       <Unit132>
         <Filename Value="/usr/lib/lazarus/lcl/include/control.inc"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="2773"/>
-        <CursorPos X="1" Y="2788"/>
+        <TopLine Value="1291"/>
+        <CursorPos X="1" Y="1317"/>
         <UsageCount Value="12"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit132>
       <Unit133>
         <Filename Value="/usr/lib/lazarus/lcl/interfaces/gtk2/gtk2lclintf.inc"/>
@@ -1610,7 +1617,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="48"/>
         <CursorPos X="1" Y="66"/>
-        <UsageCount Value="29"/>
+        <UsageCount Value="33"/>
         <Loaded Value="True"/>
       </Unit176>
       <Unit177>
@@ -1662,18 +1669,22 @@
       <Unit183>
         <Filename Value="../../lazarus/lcl/actnlist.pas"/>
         <UnitName Value="ActnList"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="199"/>
-        <CursorPos X="14" Y="224"/>
+        <TopLine Value="107"/>
+        <CursorPos X="18" Y="131"/>
         <UsageCount Value="18"/>
+        <Loaded Value="True"/>
       </Unit183>
       <Unit184>
         <Filename Value="../../lazarus/lcl/imglist.pp"/>
         <UnitName Value="ImgList"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="153"/>
-        <CursorPos X="51" Y="187"/>
-        <UsageCount Value="6"/>
+        <TopLine Value="167"/>
+        <CursorPos X="3" Y="107"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit184>
       <Unit185>
         <Filename Value="../../lazarus/lcl/include/imglist.inc"/>
@@ -1695,7 +1706,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="94"/>
         <CursorPos X="1" Y="119"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="27"/>
         <Loaded Value="True"/>
       </Unit187>
       <Unit188>
@@ -1792,10 +1803,9 @@
       <Unit200>
         <Filename Value="/usr/lib/lazarus/lcl/include/customform.inc"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="2738"/>
-        <CursorPos X="1" Y="2764"/>
-        <UsageCount Value="7"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
+        <TopLine Value="52"/>
+        <CursorPos X="1" Y="79"/>
+        <UsageCount Value="10"/>
       </Unit200>
       <Unit201>
         <Filename Value="/usr/lib/lazarus/lcl/forms.pp"/>
@@ -1938,127 +1948,147 @@
         <CursorPos X="11" Y="1382"/>
         <UsageCount Value="13"/>
       </Unit218>
+      <Unit219>
+        <Filename Value="../cad/rtl/sysvar.pas"/>
+        <UnitName Value="sysvar"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="83"/>
+        <CursorPos X="23" Y="117"/>
+        <UsageCount Value="12"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit219>
+      <Unit220>
+        <Filename Value="../cad/rtl/objdefunits/cable.pas"/>
+        <UnitName Value="cable"/>
+        <EditorIndex Value="16"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="15" Y="31"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit220>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="142" Column="20" TopLine="128"/>
+        <Filename Value="WindowsSpecific.pas"/>
+        <Caret Line="28" Column="28" TopLine="22"/>
       </Position1>
       <Position2>
-        <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="133" Column="68" TopLine="100"/>
+        <Filename Value="../cad/rtl/objdefunits/cable.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position2>
       <Position3>
-        <Filename Value="gdb/GDBAbstractText.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="602" Column="8" TopLine="537"/>
       </Position3>
       <Position4>
-        <Filename Value="gdb/GDBEntity.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="583" Column="49" TopLine="564"/>
       </Position4>
       <Position5>
-        <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="197" Column="1" TopLine="168"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1793" Column="37" TopLine="1774"/>
       </Position5>
       <Position6>
-        <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="199" Column="1" TopLine="168"/>
+        <Filename Value="gui/mainwindow.pas"/>
+        <Caret Line="1149" Column="54" TopLine="1126"/>
       </Position6>
       <Position7>
-        <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="200" Column="1" TopLine="168"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1806" Column="36" TopLine="1770"/>
       </Position7>
       <Position8>
-        <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="202" Column="1" TopLine="168"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="756" Column="174" TopLine="727"/>
       </Position8>
       <Position9>
-        <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="203" Column="1" TopLine="168"/>
+        <Filename Value="gui/mainwindow.pas"/>
+        <Caret Line="264" Column="1" TopLine="237"/>
       </Position9>
       <Position10>
-        <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="204" Column="1" TopLine="168"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="407" Column="18" TopLine="406"/>
       </Position10>
       <Position11>
-        <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="205" Column="1" TopLine="168"/>
+        <Filename Value="gui/mainwindow.pas"/>
+        <Caret Line="267" Column="26" TopLine="238"/>
       </Position11>
       <Position12>
-        <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="206" Column="1" TopLine="168"/>
+        <Filename Value="gui/mainwindow.pas"/>
+        <Caret Line="262" Column="15" TopLine="238"/>
       </Position12>
       <Position13>
-        <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="207" Column="1" TopLine="168"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="443" Column="24" TopLine="405"/>
       </Position13>
       <Position14>
-        <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="208" Column="1" TopLine="168"/>
+        <Filename Value="zcad.pas"/>
+        <Caret Line="105" Column="1" TopLine="80"/>
       </Position14>
       <Position15>
-        <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="209" Column="1" TopLine="169"/>
+        <Filename Value="gui/mainwindow.pas"/>
+        <Caret Line="831" Column="1" TopLine="805"/>
       </Position15>
       <Position16>
         <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="197" Column="1" TopLine="170"/>
+        <Caret Line="207" Column="19" TopLine="170"/>
       </Position16>
       <Position17>
         <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="199" Column="1" TopLine="170"/>
+        <Caret Line="152" Column="62" TopLine="148"/>
       </Position17>
       <Position18>
         <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="200" Column="1" TopLine="170"/>
+        <Caret Line="182" Column="1" TopLine="148"/>
       </Position18>
       <Position19>
         <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="202" Column="1" TopLine="170"/>
+        <Caret Line="138" Column="27" TopLine="137"/>
       </Position19>
       <Position20>
         <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="203" Column="1" TopLine="170"/>
+        <Caret Line="37" Column="61" TopLine="13"/>
       </Position20>
       <Position21>
         <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="204" Column="1" TopLine="170"/>
+        <Caret Line="154" Column="14" TopLine="137"/>
       </Position21>
       <Position22>
-        <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="205" Column="1" TopLine="170"/>
+        <Filename Value="gui/mainwindow.pas"/>
+        <Caret Line="602" Column="23" TopLine="578"/>
       </Position22>
       <Position23>
         <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="206" Column="1" TopLine="170"/>
+        <Caret Line="164" Column="73" TopLine="156"/>
       </Position23>
       <Position24>
         <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="207" Column="1" TopLine="170"/>
+        <Caret Line="142" Column="17" TopLine="120"/>
       </Position24>
       <Position25>
-        <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="208" Column="1" TopLine="170"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position25>
       <Position26>
         <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="209" Column="1" TopLine="170"/>
+        <Caret Line="187" Column="50" TopLine="154"/>
       </Position26>
       <Position27>
         <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="210" Column="1" TopLine="170"/>
+        <Caret Line="191" Column="36" TopLine="151"/>
       </Position27>
       <Position28>
-        <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="196" Column="66" TopLine="170"/>
+        <Filename Value="gui/mainwindow.pas"/>
+        <Caret Line="603" Column="1" TopLine="578"/>
       </Position28>
       <Position29>
         <Filename Value="lclmod/umytreenode.pas"/>
-        <Caret Line="194" Column="16" TopLine="170"/>
+        <Caret Line="214" Column="1" TopLine="190"/>
       </Position29>
       <Position30>
         <Filename Value="gui/mainwindow.pas"/>
-        <Caret Line="1212" Column="1" TopLine="1188"/>
+        <Caret Line="602" Column="94" TopLine="578"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

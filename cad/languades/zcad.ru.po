@@ -17,14 +17,13 @@ msgstr "О программе ZCAD"
 msgid "Draw 3Dpolyline"
 msgstr "Чертить 3D полилинию"
 
+#: ACN_ABOUT~caption
+msgid "About"
+msgstr "О программе"
+
 #: ACN_BEDIT~caption
 msgid "Block editor"
 msgstr "Редактор блоков"
-
-#: ACN_BEDIT~textimage
-msgctxt "ACN_BEDIT~textimage"
-msgid "bed"
-msgstr ""
 
 #: ACN_BInsert~caption
 msgid "Insert block"
@@ -65,10 +64,19 @@ msgstr "Копировать"
 msgid "Copy primitives"
 msgstr "Копировать примитивы"
 
+#: ACN_El_FIND~caption
+msgid "Find device"
+msgstr "Найти устройство"
+
 #: ACN_ERASE~caption
 msgctxt "ACN_ERASE~caption"
 msgid "Erase"
 msgstr "Стереть"
+
+#: ACN_Help~caption
+msgctxt "ACN_Help~caption"
+msgid "Help"
+msgstr "Справка"
 
 #: ACN_LAYER~caption
 msgid "Layers ..."
@@ -113,6 +121,14 @@ msgstr "Переместить примитивы"
 #: ACN_NEW~caption
 msgid "New drawing"
 msgstr "Новый чертеж"
+
+#: ACN_OBJVARMAN~caption
+msgid "Object variables manager"
+msgstr "Менеджер переменных объекта"
+
+#: ACN_OPTIONS~caption
+msgid "Options"
+msgstr "Параметры"
 
 #: ACN_PASTE~caption
 msgctxt "ACN_PASTE~caption"
@@ -163,6 +179,10 @@ msgstr "Сохранить как ..."
 msgid "Save drawing as"
 msgstr "Сохранить чертеж как ..."
 
+#: ACN_SAVEOPTIONS~caption
+msgid "Save options"
+msgstr "Сохранить параметры"
+
 #: ACN_SAVEQS~caption
 msgid "Save (Autosave)"
 msgstr "Сохранить (Автосохранение)"
@@ -177,7 +197,8 @@ msgid "QS"
 msgstr ""
 
 #: ACN_SCALE~caption
-msgid "Scale"
+#| msgid "Scale"
+msgid "scale"
 msgstr "Масштабировать"
 
 #: ACN_SCALE~hint
@@ -190,10 +211,6 @@ msgstr "Отменить"
 
 #: button_command~El_Cable_Select
 msgid "csel"
-msgstr ""
-
-#: button_command~ObjVarMan
-msgid "VM"
 msgstr ""
 
 #: button_command~RebuildTree
@@ -517,6 +534,7 @@ msgid "Format"
 msgstr "Формат"
 
 #: menu~Help
+msgctxt "menu~Help"
 msgid "Help"
 msgstr "Справка"
 
@@ -992,4 +1010,12 @@ msgstr "Угол"
 msgctxt "TTraceMode~ZAxis"
 msgid "Z Axis"
 msgstr "Ось Z"
+
+#: ugdbdescriptor.unnamedwindowtitle
+msgid "unnamed"
+msgstr "Без имени"
+
+#: windowsspecific.revstr
+msgid "Revision SVN:"
+msgstr "Ревизия SVN:"
 

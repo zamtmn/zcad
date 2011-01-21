@@ -2,49 +2,45 @@
 <CONFIG>
   <MainConfig>
     <Nodes ChildCount="1">
-      <Item1 Name="MainForm" Type="CustomSite" ChildCount="1" WindowState="Maximized">
-        <Bounds Top="-4" Left="-4" Width="1280" Height="1005">
-          <WorkArea>
-            <Rect Right="1280" Bottom="1024"/>
-          </WorkArea>
-        </Bounds>
-        <Item1 Name="AnchorDockSite6" Type="Layout" ChildCount="9">
-          <Bounds Top="28" Width="1280" Height="958" SplitterPos="24"/>
+      <Item1 Name="MainForm" Type="CustomSite" ChildCount="1">
+        <Bounds Width="797" Height="293"/>
+        <Item1 Name="AnchorDockSite3" Type="Layout" ChildCount="9">
+          <Bounds Top="31" Width="797" Height="240" SplitterPos="26"/>
           <Anchors Align="Bottom"/>
           <Item1 Name="PageControl" Type="Control">
-            <Bounds Left="267" Width="983" Height="843"/>
-            <Anchors Left="AnchorDockSplitter2" Right="AnchorDockSplitter3" Bottom="AnchorDockSplitter5"/>
+            <Bounds Left="146" Width="619" Height="157"/>
+            <Anchors Left="AnchorDockSplitter4" Right="AnchorDockSplitter2" Bottom="AnchorDockSplitter5"/>
           </Item1>
           <Item2 Name="AnchorDockSplitter2" Type="SplitterVertical">
-            <Bounds Left="263" Width="4" Height="947"/>
-            <Anchors Bottom="AnchorDockSplitter4"/>
+            <Bounds Left="765" Width="4" Height="240"/>
           </Item2>
-          <Item3 Name="ObjectInspector" Type="Control">
-            <Bounds Width="263" Height="947"/>
-            <Anchors Right="AnchorDockSplitter2" Bottom="AnchorDockSplitter4"/>
+          <Item3 Name="ToolBarR" Type="Control">
+            <Bounds Left="769" Width="28" Height="240"/>
+            <Anchors Left="AnchorDockSplitter2"/>
           </Item3>
-          <Item4 Name="AnchorDockSplitter3" Type="SplitterVertical">
-            <Bounds Left="1250" Width="4" Height="947"/>
-            <Anchors Bottom="AnchorDockSplitter4"/>
+          <Item4 Name="AnchorDockSplitter3" Type="SplitterHorizontal">
+            <Bounds Top="228" Width="765" Height="4"/>
+            <Anchors Right="AnchorDockSplitter2"/>
           </Item4>
-          <Item5 Name="ToolBarR" Type="Control">
-            <Bounds Left="1254" Width="26" Height="947"/>
-            <Anchors Left="AnchorDockSplitter3" Bottom="AnchorDockSplitter4"/>
+          <Item5 Name="ToolBarD" Type="Control">
+            <Bounds Top="232" Width="765" Height="8"/>
+            <Anchors Top="AnchorDockSplitter3" Right="AnchorDockSplitter2"/>
           </Item5>
-          <Item6 Name="AnchorDockSplitter4" Type="SplitterHorizontal">
-            <Bounds Top="947" Width="1280" Height="4"/>
+          <Item6 Name="AnchorDockSplitter4" Type="SplitterVertical">
+            <Bounds Left="142" Width="4" Height="228"/>
+            <Anchors Bottom="AnchorDockSplitter3"/>
           </Item6>
-          <Item7 Name="ToolBarD" Type="Control">
-            <Bounds Top="951" Width="1280" Height="7"/>
-            <Anchors Top="AnchorDockSplitter4"/>
+          <Item7 Name="ObjectInspector" Type="Control">
+            <Bounds Width="142" Height="228"/>
+            <Anchors Right="AnchorDockSplitter4" Bottom="AnchorDockSplitter3"/>
           </Item7>
           <Item8 Name="AnchorDockSplitter5" Type="SplitterHorizontal">
-            <Bounds Top="843" Left="267" Width="983" Height="4"/>
-            <Anchors Left="AnchorDockSplitter2" Right="AnchorDockSplitter3"/>
+            <Bounds Top="157" Left="146" Width="619" Height="4"/>
+            <Anchors Left="AnchorDockSplitter4" Right="AnchorDockSplitter2"/>
           </Item8>
           <Item9 Name="CommandLine" Type="Control">
-            <Bounds Top="847" Left="267" Width="983" Height="100"/>
-            <Anchors Top="AnchorDockSplitter5" Left="AnchorDockSplitter2" Right="AnchorDockSplitter3" Bottom="AnchorDockSplitter4"/>
+            <Bounds Top="161" Left="146" Width="619" Height="67"/>
+            <Anchors Top="AnchorDockSplitter5" Left="AnchorDockSplitter4" Right="AnchorDockSplitter2" Bottom="AnchorDockSplitter3"/>
           </Item9>
         </Item1>
       </Item1>

@@ -55,9 +55,9 @@ Panel RIGHTPANEL 994,68,30,525;
     Separator
     button PlaceSmokeDetectorOrto,ps.bmp,Авторасстановка пож. извещателей
     button OrtoDevPlace,array.bmp,Расстановка блоков (устройств) массивом
-    button El_Find,find.bmp,Найти оборудование
+    action ACN_El_FIND
     Separator
-    button ObjVarMan,#VM,Менеджер переменных объекта
+    action ACN_OBJVARMAN
     Separator
     button AddToOwner,addtoowner.bmp,(НЕ РАБОТАЕТ)добавить к владельцу
     button InsertTestTable,spec.bmp,*DEBUG*Вставить таблицу
@@ -90,6 +90,8 @@ MainMenuItem Edit;
     action ACN_COPYCLIPBASE
     action ACN_PASTE
     action ACN_ERASE
+    Separator
+    action ACN_El_FIND
   }
 MainMenuItem View;
   {
@@ -134,7 +136,6 @@ MainMenuItem Draw;
   }
 MainMenuItem Modify;
   {
-    Command Менеджер переменных объекта,ObjVarMan,none,none
     action ACN_POLYED
     MenuItem Блок;
       {
@@ -143,6 +144,8 @@ MainMenuItem Modify;
     Separator
     action ACN_ROTATE
     action ACN_SCALE
+    Separator
+    action ACN_OBJVARMAN
   }
 MainMenuItem Schematic;
   {
@@ -270,13 +273,13 @@ MainMenuItem Model;
   }
 MainMenuItem Settings;
   {
-    Command Параметры,Options,CTRL+O,none
-    Command Сохранить параметры,SaveOptions,CTRL+O,none
+    action ACN_OPTIONS
+    action ACN_SAVEOPTIONS
   }
 MainMenuItem Help;
   {
-    Command Помощь,Help,none,none
-    Command О программе,about,none,none
+    action ACN_HELP
+    action ACN_ABOUT
   }
 MainMenuItem **Debug;
   {

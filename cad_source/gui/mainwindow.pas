@@ -33,7 +33,7 @@ uses
   {GDBCommandsBase,}{ GDBCommandsDraw,GDBCommandsElectrical,}
   commandline,{zmainforms,}memman,UGDBNamedObjectsArray,
   {ZGUIArrays,}{ZBasicVisible,}{ZEditsWithVariable,}{ZTabControlsGeneric,}shared,{ZPanelsWithSplit,}{ZGUIsCT,}{ZstaticsText,}{UZProcessBar,}strmy{,strutils},{ZPanelsGeneric,}
-graphics,
+  graphics,
   AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr;
 
 resourcestring
@@ -147,7 +147,7 @@ var
 implementation
 
 uses {GDBCommandsBase,}Objinsp{,optionswnd, Tedit_form, MTedit_form},
-  dialogs,XMLPropStorage;
+  dialogs,XMLPropStorage{,GDBCommandsBase};
 
 constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
 begin
@@ -258,9 +258,9 @@ end;
 
 procedure TMainFormN.asynccloseapp(Data: PtrInt);
 begin
-     commandmanager.executecommand('Quit(noexit)');
-     application.terminate;
-     //quit_com('');
+     commandmanager.executecommand('Quit');
+     //if _QuitWithoutQuit then
+     //                        application.terminate;
 end;
 
 procedure TMainFormN.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -599,6 +599,7 @@ begin
    self.onclose:=self.FormClose;
 
    StandartActions:=TmyActionList.Create(self);
+   StandartActions.brocenicon:=StandartActions.LoadImage(sysparam.programpath+'menu/BMP/noimage.bmp');
    StandartActions.LoadFromACNFile(sysparam.programpath+'menu/actions.acn');
    StandartActions.OnUpdate:=ActionUpdate;
 
@@ -620,7 +621,7 @@ begin
    ToolBarD.EdgeBorders:=[ebTop];
    ToolBarD.Parent:=self;}
 
-   //DockMaster.ShowControl('ToolBarD',true);
+   DockMaster.ShowControl('ToolBarD',true);
 
    ProcessBar:=TProgressBar.create(ToolBarD);//.initxywh('?',@Pdownpanel,0,0,400,statusbarclientheight,false);
    ProcessBar.Hide;
@@ -679,7 +680,7 @@ LineWbox.Parent:=ToolBarU;
 }
 
 
-   //DockMaster.ShowControl('ToolBarR',true);
+   DockMaster.ShowControl('ToolBarR',true);
 
    //MainPanel.Align:=alClient;
    //MainPanel.BorderStyle:=bsNone;

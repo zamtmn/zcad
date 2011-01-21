@@ -110,11 +110,11 @@ begin
   RD_MaxRenderTime:=0;
   RD_Light:=False;
   SAVE_Auto_Interval:=300;
-  SAVE_Auto_Current_Interval:=273;
+  SAVE_Auto_Current_Interval:=292;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';
   SAVE_Auto_On:=True;
-  SYS_RunTime:=36;
-  SYS_Version:='0.9.7 Ревизия SVN:54';
+  SYS_RunTime:=8;
+  SYS_Version:='0.9.7 Revision SVN:61';
   SYS_SystmGeometryColor:=250;
   SYS_IsHistoryLineCreated:=True;
   SYS_AlternateFont:='GEWIND.SHX';

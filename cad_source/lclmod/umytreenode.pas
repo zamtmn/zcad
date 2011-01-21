@@ -34,6 +34,9 @@ type
     TmyActionList=class(TActionList)
                        procedure LoadFromACNFile(fname:string);
                        procedure SetImage(img,identifer:string;var action:TmyAction);
+                       function LoadImage(imgfile:GDBString):Integer;
+                       public
+                       brocenicon:integer;
                   end;
     TmyPopupMenu = class (TPopupMenu)
                    end;
@@ -134,6 +137,24 @@ begin
        result:=true;
        inherited;
 end;
+function TmyActionList.LoadImage(imgfile:GDBString):Integer;
+var
+    bmp:TBitmap;
+begin
+  if fileexists(imgfile) then
+  begin
+  bmp:=TBitmap.create;
+  bmp.LoadFromFile(imgfile);
+  bmp.Transparent:=true;
+  if not assigned(Images) then
+                              Images:=TImageList.Create(self);
+  result:=Images.Add(bmp,nil);
+  freeandnil(bmp);
+  end
+  else
+      result:=-1;
+end;
+
 procedure TmyActionList.SetImage(img,identifer:string;var action:TmyAction);
 var
     bmp:TBitmap;
@@ -142,7 +163,20 @@ begin
      begin
           if img[1]<>'#' then
                               begin
-                              img:=sysparam.programpath+'menu/BMP/'+img;
+                              action.imgstr:='';
+                              action.ImageIndex:=LoadImage(sysparam.programpath+'menu/BMP/'+img);
+                              if action.ImageIndex=-1 then
+                                                  begin
+                                                       action.ImageIndex:=self.brocenicon;
+                                                  end;
+                              if action.ImageIndex=-1 then
+                                                  begin
+                                                       action.imgstr:=img;
+                                                  end;
+
+                              {img:=sysparam.programpath+'menu/BMP/'+img;
+                              if fileexists(img) then
+                              begin
                               bmp:=TBitmap.create;
                               bmp.LoadFromFile(img);
                               bmp.Transparent:=true;
@@ -151,6 +185,10 @@ begin
                               action.ImageIndex:=Images.Add(bmp,nil);
                               freeandnil(bmp);
                               action.imgstr:='';
+                              end
+                              else
+                              begin
+                              end;}
                               end
                           else
                               begin

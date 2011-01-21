@@ -86,6 +86,7 @@ TOSModeEditor=object(GDBaseObject)
    function SaveAs_com(Operands:pansichar):GDBInteger;
    procedure CopyToClipboard;
    function quit_com(Operands:pansichar):GDBInteger;
+   function _QuitWithoutQuit:GDBBoolean;
 const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 //var DWGPageCxMenu:pzpopupmenu;
@@ -403,11 +404,52 @@ else if Operands='TABLESTYLES' then
                             ;
      GDBobjinsp.SetCurrentObjDefault;
 end;
+function _QuitWithoutQuit:GDBBoolean;
+var
+   pint:PGDBInteger;
+   mem:GDBOpenArrayOfByte;
+begin
+     result:=true;
+     if gdb.GetCurrentDWG<>nil then
+     begin
+     if Application.messagebox('Закрыть программу?','QUIT',MB_YESNO)=IDYES then
+     begin
+          result:=true;
+
+          if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
+          if sysvar.SYS.SYS_IsHistoryLineCreated^ then
+          begin
+          pint:=SavedUnit.FindValue('VIEW_CommandLineH');
+          if assigned(pint)then
+                               pint^:=Cline.Height;
+          pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+          if assigned(pint)then
+                               pint^:=GDBobjinsp.Width;
+          pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
+          if assigned(pint)then
+                               pint^:=GDBobjinsp.namecol;
+
+          mem.init({$IFDEF DEBUGBUILD}'{71D987B4-8C57-4C62-8C12-CFC24A0A9C9A}',{$ENDIF}1024);
+          SavedUnit^.SavePasToMem(mem);
+          mem.SaveToFile(sysparam.programpath+'rtl'+PathDelim+'savedvar.pas');
+          mem.done;
+          end;
+
+          historyout('   Вот и всё бля...............');
+
+
+     end
+     else
+         result:=false;
+     end;
+end;
+
 function quit_com(Operands:pansichar):GDBInteger;
 var
    pint:PGDBInteger;
    mem:GDBOpenArrayOfByte;
 begin
+(*
      if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
      if sysvar.SYS.SYS_IsHistoryLineCreated^ then
      begin
@@ -428,10 +470,10 @@ begin
      end;
 
      historyout('   Вот и всё бля...............');
+*)
      result:=cmd_ok;
-
-     if operands<>'noexit' then
-                               application.terminate;
+     if _QuitWithoutQuit then
+                             application.terminate;
 end;
 function CloseDWG_com(Operands:pansichar):GDBInteger;
 var
@@ -580,7 +622,7 @@ begin
      gdb.SetCurrentDWG(ptd);
 
      if length(operands)=0 then
-                               operands:=UnnamedWindowTitle;
+                               operands:=@UnnamedWindowTitle[1];
 
      {tf:=mainform.PageControl.addpage(Operands);
      mainform.PageControl.selpage(mainform.PageControl.lastcreated);

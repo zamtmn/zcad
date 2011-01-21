@@ -9,12 +9,12 @@ msgstr ""
 msgid "Draw 3Dpolyline"
 msgstr ""
 
-#: ACN_BEDIT~caption
-msgid "Block editor"
+#: ACN_ABOUT~caption
+msgid "About"
 msgstr ""
 
-#: ACN_BEDIT~textimage
-msgid "bed"
+#: ACN_BEDIT~caption
+msgid "Block editor"
 msgstr ""
 
 #: ACN_BInsert~caption
@@ -55,8 +55,17 @@ msgstr ""
 msgid "Copy primitives"
 msgstr ""
 
+#: ACN_El_FIND~caption
+msgid "Find device"
+msgstr ""
+
 #: ACN_ERASE~caption
 msgid "Erase"
+msgstr ""
+
+#: ACN_Help~caption
+msgctxt "ACN_Help~caption"
+msgid "Help"
 msgstr ""
 
 #: ACN_LAYER~caption
@@ -101,6 +110,14 @@ msgstr ""
 
 #: ACN_NEW~caption
 msgid "New drawing"
+msgstr ""
+
+#: ACN_OBJVARMAN~caption
+msgid "Object variables manager"
+msgstr ""
+
+#: ACN_OPTIONS~caption
+msgid "Options"
 msgstr ""
 
 #: ACN_PASTE~caption
@@ -151,6 +168,10 @@ msgstr ""
 msgid "Save drawing as"
 msgstr ""
 
+#: ACN_SAVEOPTIONS~caption
+msgid "Save options"
+msgstr ""
+
 #: ACN_SAVEQS~caption
 msgid "Save (Autosave)"
 msgstr ""
@@ -165,7 +186,8 @@ msgid "QS"
 msgstr ""
 
 #: ACN_SCALE~caption
-msgid "Scale"
+#, fuzzy
+msgid "scale"
 msgstr ""
 
 #: ACN_SCALE~hint
@@ -178,10 +200,6 @@ msgstr ""
 
 #: button_command~El_Cable_Select
 msgid "csel"
-msgstr ""
-
-#: button_command~ObjVarMan
-msgid "VM"
 msgstr ""
 
 #: button_command~RebuildTree
@@ -507,6 +525,7 @@ msgid "Format"
 msgstr ""
 
 #: menu~Help
+msgctxt "menu~Help"
 msgid "Help"
 msgstr ""
 
@@ -982,5 +1001,13 @@ msgstr ""
 #: TTraceMode~ZAxis
 msgctxt "TTraceMode~ZAxis"
 msgid "Z Axis"
+msgstr ""
+
+#: ugdbdescriptor.unnamedwindowtitle
+msgid "unnamed"
+msgstr ""
+
+#: windowsspecific.revstr
+msgid "Revision SVN:"
 msgstr ""
 

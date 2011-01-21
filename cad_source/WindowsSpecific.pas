@@ -36,6 +36,8 @@ var
    szFile: array[0..2048] of char = '';
    szFileTitle: array[0..255] of char;
    szCurrentDir: array[0..1024] of char = '';
+resourcestring
+  revstr='Revision SVN:';
 function SaveFileDialog;
 var
    SD:TSaveDialog;
@@ -203,7 +205,7 @@ begin
        end;
      end;}
 
-     MyVersion:='0.9.7 Ревизия SVN:'+RevisionStr;
+     MyVersion:='0.9.7 '+revstr+RevisionStr;
      result.versionstring:=MyVersion;
 
      ts:=GetPredStr(MyVersion,'.');

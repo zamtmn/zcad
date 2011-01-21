@@ -42,6 +42,8 @@ GDBCamera,
 UGDBOpenArrayOfPV,
 GDBRoot,UGDBSHXFont,
 {GDBNet,}OGLWindow,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray;
+resourcestring
+  UnnamedWindowTitle='unnamed';
 const ls = $AAAA;
       ps:array [0..31] of LONGWORD=(
                                    $33333333,$33333333,
@@ -61,7 +63,6 @@ const ls = $AAAA;
                                    $33333333,$33333333,
                                    $CCCCCCCC,$CCCCCCCC
                                   );
-      UnnamedWindowTitle='unnamed';
 type
 {EXPORT+}
 GDBObjTrash=object(GDBObjEntity)

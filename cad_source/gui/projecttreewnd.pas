@@ -124,6 +124,7 @@ begin
      if sender is TmyPageControl then
      if TmyPageControl(sender).ActivePageIndex=1 then
                        begin
+                            T_ProjectDB.Selected:=nil;
                             self.ProjectEquipmentN.DeleteChildren;
                             BuildTreeByEQ(ProjectEquipmentN,gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase'),ProjectDBContextMenuN);
                             (*

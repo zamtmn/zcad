@@ -181,7 +181,7 @@ RGB=record
 GDBPalette=array[0..255] of RGB;
 PGDBNamedObject=^GDBNamedObject;
 GDBNamedObject=object(GDBaseObject)
-                     Name:GDBString;(*saved_to_shd*)(*'Name'*)
+                     Name:GDBAnsiString;(*saved_to_shd*)(*'Name'*)
                      constructor initnul;
                      constructor init(n:GDBString);
                      destructor Done;virtual;

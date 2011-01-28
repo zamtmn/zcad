@@ -21,9 +21,9 @@ unit mainwindow;
 
 interface
 uses
-  math,
-  ActnList,LCLType,LCLProc,strproc,log,intftranslations,
-  umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Toolwin, Controls, {Graphics, Dialogs,}
+  math,LMessages,LCLIntf,
+  ActnList,LCLType,LCLProc,strproc,log,intftranslations,toolwin,
+  umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
   gdbase, languade,geometry,
   varmandef, varman, UUnitManager, GDBManager, {odbase, odbasedef, iodxf,} UGDBOpenArrayOfByte, plugins,
@@ -41,6 +41,14 @@ resourcestring
   CommandLineWndName='Command line';
   DrawingWindowWndName='Drawings window';
   ES_ReCreating='Re-creating %s!';
+  ES_LayoutLoad='Error loading layout from file';
+  ES_ToolBarNotFound='Toolbar "%s" is not found! Create a blank window';
+  S_Different='Different';
+  S_ByLayer='ByLayer';
+  S_ByBlock='ByBlock';
+  S_Default='Default';
+  S_Empty='Empty';
+  S_mm='mm';
   compiledtimemsg='Done.  %s second';
 
 type
@@ -55,9 +63,12 @@ type
                           end;
 
   TFileHistory=Array [0..9] of TmyMenuItem;
+
+  { TMainFormN }
+
   TMainFormN = class(TFreedForm)
-                    ToolBarU,ToolBarR:TToolBar;
-                    ToolBarD: TToolBar;
+                    ToolBarU{,ToolBarR}:TToolBar;
+                    //ToolBarD: TToolBar;
                     //ObjInsp,
                     MainPanel:{TForm}TPanel;
                     FToolBar{,MainPanelU}:TToolButtonForm;
@@ -70,6 +81,12 @@ type
                     StandartActions:TmyActionList;
 
                     SystemTimer: TTimer;
+
+                    toolbars:tstringlist;
+
+                    function findtoolbatdesk(tbn:string):string;
+                    procedure CreateToolbarFromDesk(tb:TToolBar;tbdesk:string);
+                    procedure CreateHTPB(tb:TToolBar);
 
                     procedure FormCreate(Sender: TObject);
                     procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
@@ -121,6 +138,8 @@ type
                                                    Raw: boolean = false;
                                                    WithThemeSpace: boolean = true); override;
 
+                    function IsShortcut(var Message: TLMKey): boolean; override;
+
                end;
 function getoglwndparam: GDBPointer; export;
 procedure clearotrack;
@@ -130,9 +149,9 @@ procedure finalize;}
 const
      menutoken='MAINMENUITEM';
      submenutoken='MENUITEM';
-     TOOLTIPS_CLASS = 'tooltips_class32';
-     statusbarheight=20;
-     statusbarclientheight=18;
+     //TOOLTIPS_CLASS = 'tooltips_class32';
+     //statusbarheight=20;
+     //statusbarclientheight=18;
 var
   MainFormN: TMainFormN;
   //MainForm: TMainForm;
@@ -219,6 +238,23 @@ begin
 end;
 
 
+
+function TMainFormN.findtoolbatdesk(tbn:string):string;
+var i:integer;
+    debs:string;
+begin
+     tbn:=uppercase(tbn)+':';
+     for i:=0 to toolbars.Count-1 do
+     begin
+          debs:=uppercase(toolbars.Strings[i]);
+          if pos(tbn,debs)=1 then
+          begin
+               result:=copy(toolbars.Strings[i],length(tbn)+1,length(toolbars.Strings[i])-length(tbn));
+               exit;
+          end;
+     end;
+end;
+
 procedure TMainFormN.processfilehistory(filename:GDBString);
 var i,j,k:integer;
     pstr,pstrnext:PGDBString;
@@ -252,7 +288,7 @@ begin
       if FileName<>''then
                            FileHistory[0].SetCommand(FileName,'Load('+FileName+')')
                        else
-                           FileHistory[0].SetCommand('Пусто','');
+                           FileHistory[0].SetCommand(S_Empty,'');
 
 end;
 
@@ -316,6 +352,8 @@ var
   i:integer;
   pint:PGDBInteger;
   TB:TToolBar;
+  tbdesk:string;
+  ta:TmyAction;
   procedure CreateForm(Caption: string; NewBounds: TRect);
   begin
        begin
@@ -343,15 +381,19 @@ begin
       AControl.DisableAutoSizing;
     exit;
   end;
+
+                 ta:=tmyaction(self.StandartActions.ActionByName('ACN_Show_'+aname));
+               if ta<>nil then
+                              ta.Checked:=true;
+
   // if the form does not yet exist, create it
-  if aName='CodeExplorer' then
-    CreateForm('Code Explorer',Bounds(700,230,100,250))
-  else if aName='PageControl' then
+  if aName='PageControl' then
   begin
        MainPanel:={Tform}Tpanel(Tform.NewInstance);
        //MainPanel.FormStyle:=fsStayOnTop;
        MainPanel.DisableAlign;
        MainPanel.Create(Application);
+       MainPanel.SetBounds(200,200,600,500);
    //MainPanel:={TPanel}Tform.create(application);
    MainPanel.Caption:=DrawingWindowWndName;
    MainPanel.BorderWidth:=0;
@@ -377,14 +419,15 @@ begin
         CLine.FormStyle:=fsStayOnTop;
         CLine.DisableAlign;
         CLine.Create(Application);
+        CLine.SetBounds(200,100,600,100);
         //CLine.Caption:=Title;
        //CLine:=TCLine.create({MainPanel}application);
        //CLine.Parent:=MainPanel;
        CLine.Caption:=CommandLineWndName;
        CLine.Align:=alBottom;
        pint:=SavedUnit.FindValue('VIEW_CommandLineH');
-       if assigned(pint)then
-                            Cline.Height:=pint^;
+       {if assigned(pint)then
+                            Cline.Height:=pint^;}
        AControl:=CLine;
 
        AControl.Name:=aname;
@@ -399,6 +442,12 @@ begin
                GDBObjInsp.DisableAlign;
                GDBObjInsp.Create(Application);
                GDBObjInsp.Caption:=GDBObjInspWndName;
+               GDBObjInsp.SetBounds(0,100,200,600);
+
+               //if assigned(ACN_Show_ObjectInspector) then
+               //                                 ACN_ShowObjInsp.Checked:=true;
+
+
                //GDBObjInsp.FormStyle:=fsStayOnTop;
                //GDBObjInsp.Caption:=Title;
                //GDBObjInsp:=TGDBObjInsp.create({self}application);
@@ -411,8 +460,8 @@ begin
                //{GDBobjinsp.}ReturnToDefault;
 
                pint:=SavedUnit.FindValue('VIEW_ObjInspV');
-               if assigned(pint)then
-                                    GDBobjinsp.Width:=pint^;
+               {if assigned(pint)then
+                                    GDBobjinsp.Width:=pint^;}
                GDBobjinsp.namecol:=GDBobjinsp.Width div 2;
                pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
                if assigned(pint)then
@@ -429,14 +478,17 @@ begin
                                                 Acontrol.EnableAutoSizing;
                //Acontrol.BoundsRect:=NewBounds;
           end
-  else if copy(aName,1,7)='ToolBar' then
+  else //if copy(aName,1,7)='ToolBar' then
   begin
+       tbdesk:=self.findtoolbatdesk(aName);
+       if tbdesk=''then
+                       shared.ShowError(format(ES_ToolBarNotFound,[aName]));
        FToolBar:=TToolButtonForm(TToolButtonForm.NewInstance);
        //FToolBar.FormStyle:=fsStayOnTop;
        FToolBar.DisableAlign;
        FToolBar.Create(Application);
        FToolBar.Caption:=aName;
-       FToolBar.SetBounds(260,230,350,350);
+       FToolBar.SetBounds(100,64,500,26);
        //FToolBar.AutoSize:=false;
 
        TB:=TToolBar.Create(application);
@@ -450,16 +502,18 @@ begin
 
        if aName='ToolBarR' then
        begin
-            ToolBarR:=tb;
+            //ToolBarR:=tb;
        end;
        if aName='ToolBarU' then
        begin
-            ToolBarU:=tb;
+            //ToolBarU:=tb;
        end;
-       if aName='ToolBarD' then
+       if aName='Status' then
        begin
-            ToolBarD:=tb;
+            //ToolBarD:=tb;
+            CreateHTPB(tb);
        end;
+       CreateToolbarFromDesk(tb,tbdesk);
 
        AControl:=FToolBar;
 
@@ -468,13 +522,7 @@ begin
            if not DoDisableAutoSizing then
                                         Acontrol.EnableAutoSizing;
 
-  end
-  else if aName='SourceEditor2' then
-    CreateForm('Source Editor 2',Bounds(260,230,350,350))
-  else if aName='ProjectInspector' then
-    CreateForm('Project Inspector',Bounds(10,230,150,250))
-  else if aName='DebugOutput' then
-    CreateForm('Debug Output',Bounds(400,400,350,150));
+  end;
 end;
 function LoadLayout_com:GDBInteger;
 var
@@ -494,108 +542,54 @@ begin
     end;
   except
     on E: Exception do begin
-      MessageDlg('Error',
-        'Error loading layout from file '+Filename+':'#13+E.Message,mtError,
-        [mbCancel],0);
+                            shared.ShowError(ES_LayoutLoad+' '+Filename+':'#13+E.Message);
+      //MessageDlg('Error',
+      //  'Error loading layout from file '+Filename+':'#13+E.Message,mtError,
+      //  [mbCancel],0);
     end;
   end;
   //result:=cmd_ok;
 end;
-procedure TMainFormN.ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
-var
-   IsEditableFocus:boolean;
-   IsCommandNotEmpty:boolean;
-   _enabled,_disabled:boolean;
-   i:integer;
-const
-     EditableShortCut=[(scCtrl or VK_Z),{(VK_CONTROL or VK_SHIFT or VK_Z),}VK_DELETE,VK_BACK,VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN];
-     ClipboardShortCut=[VK_SHIFT or VK_DELETE,VK_BACK,VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN];
-function IsEditableShortCut(cut:integer):boolean;
-begin
-     case cut of
-               (scCtrl or VK_V),
-               (scCtrl or VK_C),
-               (scCtrl or VK_INSERT),
-               (scShift or VK_INSERT),
-               (scCtrl or VK_Z),
-               (scCtrl or scShift or VK_Z),
-                VK_DELETE,
-                VK_BACK,
-                VK_LEFT,
-                VK_RIGHT,
-                VK_UP,
-                VK_DOWN
-                    :result:=true;
-                else result:=false;
-
-     end;
-
-end;
-
-begin
-     if AAction is TmyAction then
-     begin
-     Handled:=true;
-     _disabled:=false;
-     IsEditableFocus:=(((ActiveControl is tedit)and(ActiveControl<>cmdedit))
-                     or (ActiveControl is tmemo)
-                     or (ActiveControl is tcombobox));
-     if assigned(cmdedit) then
-                              IsCommandNotEmpty:=((cmdedit.Text<>'')and(ActiveControl=cmdedit))
-                          else
-                              IsCommandNotEmpty:=false;
-     {log.programlog.LogOutStr(AAction.Name,0);
-     if AAction.Name='ACN_UNDO'then
-     begin
-          i:=TmyAction(AAction).ShortCut;
-          i:=scCtrl or VK_Z;
-     end;}
-     if IsEditableShortCut(TmyAction(AAction).ShortCut)
-     and ((IsEditableFocus)or(IsCommandNotEmpty))
-          then _disabled:=true;
-     //GetCommandContext;
-     //i:=TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr;
-     if assigned(TmyAction(AAction).pfoundcommand) then
-     if ((GetCommandContext xor TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)and TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)<>0
-          then
-              _disabled:=true;
-
-
-     TmyAction(AAction).Enabled:=not _disabled;
-
-     end;
-end;
 procedure TMainFormN.setnormalfocus;
 begin
-     ActiveControl:=cmdedit;
+     if assigned(cmdedit) then
+     begin
+     {if (GetParentForm(cmdedit)=Self) then
+                                          ActiveControl:=cmdedit
+                                      else}
+                                          cmdedit.SetFocus;
+     end;
 end;
 
 procedure TMainFormN.FormCreate(Sender: TObject);
 var
   i:integer;
   pint:PGDBInteger;
+  action:tmyaction;
 begin
   //AutoSize:=false;
+  self.SetBounds(0,0,800,44);
   DockMaster.MakeDockSite(Self,[{akTop,}akBottom{,akLeft,akRight}],admrpChild{admrpNone},{true}false);
   DockMaster.HeaderClass:=TmyAnchorDockHeader;
   DockMaster.SplitterClass:=TmyAnchorDockSplitter;
+
+  toolbars:=tstringlist.Create;
 
   if DockManager is TAnchorDockManager then
   begin
     //aManager:=TAnchorDockManager(AForm.DockManager);
     //TAnchorDockManager(DockManager).PreferredSiteSizeAsSiteMinimum:={false}true;
+       DockMaster.OnCreateControl:={@}DockMasterCreateControl;
+       //DockMaster.HideHeaderCaptionFloatingControl:=false;
+       DockMaster.OnShowOptions:={@}ShowAnchorDockOptions;
+       //TAnchorDockManager(self.DockManager).PreferredSiteSizeAsSiteMinimum:=false;
+       //TAnchorDockManager(self)
+       //self.DockSite:=true;
+       //DockMaster.ShowHeaderCaption:=false;
+
+        //self.AutoSize:=false;
+
   end;
-
-  //GetPreferredSize
-
-  DockMaster.OnCreateControl:={@}DockMasterCreateControl;
-  DockMaster.OnShowOptions:={@}ShowAnchorDockOptions;
-  TAnchorDockManager(self.DockManager).PreferredSiteSizeAsSiteMinimum:=false;
-  //TAnchorDockManager(self)
-  //self.DockSite:=true;
-  //DockMaster.ShowHeaderCaption:=false;
-
-   //self.AutoSize:=false;
    self.onclose:=self.FormClose;
 
    StandartActions:=TmyActionList.Create(self);
@@ -603,8 +597,10 @@ begin
    StandartActions.LoadFromACNFile(sysparam.programpath+'menu/actions.acn');
    StandartActions.OnUpdate:=ActionUpdate;
 
-   if not sysparam.noloadlayout then
-   LoadLayout_com;
+   toolbars.Sorted:=true;
+   loadpanels(sysparam.programpath+'menu/mainmenu.mn');
+  if not sysparam.noloadlayout then
+                                    LoadLayout_com;
 
    //self.AutoSize:=false;
    //self.BorderStyle:=bsNone;
@@ -621,192 +617,35 @@ begin
    ToolBarD.EdgeBorders:=[ebTop];
    ToolBarD.Parent:=self;}
 
-   DockMaster.ShowControl('ToolBarD',true);
-
-   ProcessBar:=TProgressBar.create(ToolBarD);//.initxywh('?',@Pdownpanel,0,0,400,statusbarclientheight,false);
-   ProcessBar.Hide;
-   ProcessBar.DoubleBuffered:=true;
-   ProcessBar.Align:=alLeft;
-   ProcessBar.Width:=400;
-   ProcessBar.Height:=10;
-   ProcessBar.min:=0;
-   ProcessBar.max:=0;
-   ProcessBar.step:=10000;
-   ProcessBar.position:=0;
-   ProcessBar.Smooth:=true;
-   ProcessBar.Parent:=ToolBarD;
-
-   HintText:=TLabel.Create(ToolBarD);
-   HintText.Align:=alLeft;
-   HintText.AutoSize:=false;
-   HintText.Width:=400;
-   HintText.Height:=10;
-   HintText.Layout:=tlCenter;
-   HintText.Alignment:=taCenter;
-   HintText.Parent:=ToolBarD;
+   //DockMaster.ShowControl('ToolBarD',true);
 
    //ToolBarD.Parent:=self;
 
    //DockMaster.ShowControl('ToolBarU',true);
+  if sysparam.noloadlayout then
+  begin
+       DockMaster.ShowControl('CommandLine',true);
+       DockMaster.ShowControl('ObjectInspector',true);
+       DockMaster.ShowControl('PageControl',true);
+  end;
+
    ToolBarU:=TToolBar.Create(self);
    ToolBarU.Align:={alTop}alClient;
    ToolBarU.AutoSize:=true;
    ToolBarU.ShowCaptions:=true;
    ToolBarU.Parent:=self;
-   //ToolBarU.EdgeBorders:=[{ebTop,} ebBottom];
+   ToolBarU.EdgeBorders:=[ebTop, ebBottom,ebLeft,ebRight];
+   self.CreateToolbarFromDesk(ToolBarU,self.findtoolbatdesk('STANDART'));
+   action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_STANDART'));
+   if assigned(action) then
+                           begin
+                                action.Enabled:=false;
+                                action.Checked:=true;
+                                action.pfoundcommand:=nil;
+                                action.command:='';
+                                action.options:='';
+                           end;
 
-{     LayerBox:=TComboBox.Create(ToolBarU);
-   LayerBox.ReadOnly:=true;
-   LayerBox.Width:=200;
-   LayerBox.Height:=500;
-   LayerBox.AutoSize:=true;
-   LayerBox.Parent:=ToolBarU;
-   layerbox.OnChange:=ChangeCLayer;
-
-LineWBox:=TComboBox.Create(ToolBarU);
-LineWBox.onChange:=ChangeCLineW;
-LineWbox.Clear;
-LineWbox.readonly:=true;
-LineWbox.items.Add(sys2interf('Обычный'));
-LineWbox.items.Add(sys2interf('По блоку'));
-LineWbox.items.Add(sys2interf('По слою'));
-for i := 0 to 20 do
-begin
-s:=floattostr(i / 10) + ' мм';
-   LineWbox.items.Add(sys2interf(s));
-end;
-LineWbox.items.Add(sys2interf('Разный'));
-LineWbox.Parent:=ToolBarU;
-}
-
-
-   DockMaster.ShowControl('ToolBarR',true);
-
-   //MainPanel.Align:=alClient;
-   //MainPanel.BorderStyle:=bsNone;
-   //MainPanel.BevelOuter:=bvnone;
-
-
-(*   CLine:=TCLine.create(MainPanel);
-   CLine.Parent:=MainPanel;
-   CLine.Align:=alClient;
-
-   PageControl:=TmyPageControl.Create(MainPanel);
-   PageControl.Constraints.MinHeight:=32;
-   PageControl.Parent:=MainPanel;
-   PageControl.Align:=alTop;
-   PageControl.OnPageChanged:=ChangedDWGTabCtrl;
-   PageControl.Height:=800;
-   //if PageControl.Height>sysinfo.sysparam.screeny;
-   //PageControl.BorderStyle:=BSsingle;
-   PageControl.BorderWidth:=0;
-   //tobject(PageControl):=mainpanel;
-   //PageControl.BevelOuter:=bvnone;
-
-   SplitterH:=TSplitter.Create(MainPanel);
-   SplitterH.Parent:=MainPanel;
-   SplitterH.Align:=alTop;
-   SplitterH.top:=800;*)
-
-
-     //SplitterH:=TSplitter.Create(MainPanel);
-     //SplitterH.Parent:=MainPanel;
-     //SplitterH.Align:=alTop;
-     //SplitterH.top:=800;
-     //application.ProcessMessages;
-
-     (*CLine:=TCLine.create(MainPanel);
-     CLine.Parent:=MainPanel;
-     CLine.Top:=0;
-     CLine.Left:=0;
-     CLine.Align:=alBottom;
-     pint:=SavedUnit.FindValue('VIEW_CommandLineH');
-     if assigned(pint)then
-                          Cline.Height:=pint^;
-     //cline.Show;*)
-
-
-     //-------------------------application.ProcessMessages;
-
-     //SplitterH.Align:=alBottom;
-     //application.ProcessMessages;
-
-
-
-
-
-
-
-     //SplitterV:=TSplitter.Create(self);
-   //SplitterV.Align:=alLeft;
-
-   (*MainPanel:={TPanel}Tform.create(application);
-   MainPanel.BorderWidth:=0;
-   MainPanel.Parent:=self;
-   mainpanel.show;*)
-   /////DockMaster.ShowControl('PageControl',true);
-
-
-   (*PageControl:=TmyPageControl.Create(MainPanel);
-   PageControl.Constraints.MinHeight:=32;
-   PageControl.Parent:=MainPanel;
-   PageControl.Align:=alClient;
-   PageControl.OnPageChanged:=ChangedDWGTabCtrl;
-   //PageControl.Height:=800;
-   PageControl.BorderWidth:=0;*)
-
-
-   /////DockMaster.ShowControl('CommandLine',true);
-   /////DockMaster.ShowControl('ObjectInspector',true);
-   (*
-   GDBObjInsp:=TGDBObjInsp.create({self}application);
-   //GDBObjInsp.BorderStyle:=bsSingle;
-
-   //GDBObjInsp.Align:=alLeft;
-   GDBobjinsp.setptr(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
-   GDBobjinsp.SetCurrentObjDefault;
-   //{GDBobjinsp.}ReturnToDefault;
-
-   pint:=SavedUnit.FindValue('VIEW_ObjInspV');
-   if assigned(pint)then
-                        GDBobjinsp.Width:=pint^;
-   GDBobjinsp.namecol:=GDBobjinsp.Width div 2;
-   pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
-   if assigned(pint)then
-                        GDBobjinsp.namecol:=pint^;
-
-   //GDBObjInsp.Parent:=self;
-     GDBObjInsp.show;
-
-
-   SplitterV.left:=GDBobjinsp.Width;
-   SplitterV.Parent:=self;
-    *)
-
-
-   //Menu:=TMainMenu.create(self);
-   //Menu.Items.Add(TmyMenuItem.create(Menu,'Добавить в базу данных чертежа','DBaseAdd'));
-
-
-   loadpanels(sysparam.programpath+'menu/mainmenu.mn');
-
-
-
-   //Menu:=TMainMenu(mm);
-
-   //self.caption:=sys2interf('Временно это окно является главным окном программы. Соответственно его закрытие повлечет за собой закрытие программы)). Приносим извинения за неудобства))');
-
-
-
-
-   //self.Menu:=TMainMenu(menu);
-
- (*  hToolTip := CreateWindowEx(WS_EX_TOPMOST, TOOLTIPS_CLASS, nil,
-       {TTS_ALWAYSTIP=}$01,
-       integer(CW_USEDEFAULT), integer(CW_USEDEFAULT),
-       integer(CW_USEDEFAULT), integer(CW_USEDEFAULT),
-       MainFormN.handle, 0, hInstance, nil );
- *)
    application.OnIdle:=self.idle;
    SystemTimer:=TTimer.Create(self);
    SystemTimer.Interval:=1000;
@@ -862,9 +701,9 @@ begin
                               b.Height:=ppanel.ButtonHeight;
                               b.Width:=ppanel.ButtonWidth;
 end;
-procedure AddToBar(ppanel:TToolBar;b:TControl);
+procedure AddToBar(tb:TToolBar;b:TControl);
 begin
-     if ppanel.ClientHeight<ppanel.ClientWidth then
+     if tb.ClientHeight<tb.ClientWidth then
                                                    begin
                                                         //b.Left:=100;
                                                         //b.align:=alLeft
@@ -874,7 +713,159 @@ begin
                                                         //b.top:=100;
                                                         //b.align:=alTop;
                                                    end;
-    b.Parent:=ppanel;
+    b.Parent:=tb;
+end;
+procedure TMainFormN.CreateToolbarFromDesk(tb:TToolBar;tbdesk:string);
+var
+    f:GDBOpenArrayOfByte;
+    line,ts,{bn,}bc{,bh}:GDBString;
+    buttonpos:GDBInteger;
+    b:TToolButton;
+    i:longint;
+    y,xx,yy,w,code:GDBInteger;
+    bmp:TBitmap;
+    action:tmyaction;
+begin
+     if not assigned(tb.Images) then
+                                    tb.Images:=standartactions.Images;
+     if tbdesk<>'' then
+      begin
+           f.init(length(tbdesk));
+           f.AddData(@tbdesk[1],length(tbdesk));
+
+           repeat
+           line := f.readstring(';','');
+           begin
+                if (line <> '') and (line[1] <> ';') then
+                begin
+                     if uppercase(line)='ACTION' then
+                     begin
+                          line := f.readstring(';','');
+                          action:=tmyaction(self.StandartActions.ActionByName(line));
+                          b:=TmyCommandToolButton.Create(tb);
+                          b.Action:=action;
+                          b.ShowCaption:=false;
+                          b.ShowHint:=true;
+                          b.Caption:=action.imgstr;
+                          AddToBar(tb,b);
+                          b.Visible:=true;
+                     end;
+                     if uppercase(line)='BUTTON' then
+                     begin
+                          bc := f.readstring(',','');
+                          line := f.readstring(';','');
+                          ts:='???';
+                          i:=pos(',',line);
+                          if i>0 then
+                                     begin
+                                          ts:=system.copy(line,i+1,length(line)-i);
+                                          line:=system.copy(line,1,i-1);
+                                     end;
+                          b:=TmyCommandToolButton.Create(tb);
+                          TmyCommandToolButton(b).FCommand:=bc;
+                          if ts<>''then
+                          begin
+                               ts:=InterfaceTranslate('hint_panel~'+bc,ts);
+                          b.hint:=(ts);
+                          b.ShowHint:=true;
+                          end;
+                          SetImage(tb,b,line,true,'button_command~'+bc);
+                          AddToBar(tb,b);
+                     end;
+                     if uppercase(line)='VARIABLE' then
+                     begin
+                          bc := f.readstring(',','');
+                          line := f.readstring(';','');
+                          ts:='???';
+                          i:=pos(',',line);
+                          if i>0 then
+                                     begin
+                                          ts:=system.copy(line,i+1,length(line)-i);
+                                          line:=system.copy(line,1,i-1);
+                                     end;
+                          b:=TmyVariableToolButton.Create(tb);
+                          b.Style:=tbsCheck;
+                          TmyVariableToolButton(b).AssignToVar(bc);
+                          if ts<>''then
+                          begin
+                               ts:=InterfaceTranslate('hint_panel~'+bc,ts);
+                          b.hint:=(ts);
+                          b.ShowHint:=true;
+                          end;
+                          SetImage(tb,b,line,false,'button_variable~'+bc);
+                          b.AutoSize:=true;
+                          AddToBar(tb,b);
+
+                     end;
+                     if uppercase(line)='LAYERCOMBOBOX' then
+                     begin
+                          bc := f.readstring(',','');
+                          ts := f.readstring(';','');
+                          val(bc,w,code);
+                          if assigned(LayerBox) then
+                                                    shared.ShowError(format(ES_ReCreating,['LAYERCOMBOBOX']));
+                          LayerBox:=TComboBox.Create(tb);
+                          if code=0 then
+                                        LayerBox.Width:=w;
+                          if ts<>''then
+                          begin
+                               ts:=InterfaceTranslate('hint_panel~LAYERCOMBOBOX',ts);
+                               LayerBox.hint:=(ts);
+                               LayerBox.ShowHint:=true;
+                          end;
+                          LayerBox.OnChange:=ChangeCLayer;
+                          LayerBox.ReadOnly:=true;
+                          LayerBox.AutoSize:=false;
+                          AddToBar(tb,LayerBox);
+                     end;
+                     if uppercase(line)='LINEWCOMBOBOX' then
+                     begin
+                          bc := f.readstring(',','');
+                          ts := f.readstring(';','');
+                          val(bc,w,code);
+                          if assigned(LineWBox) then
+                                                    shared.ShowError(format(ES_ReCreating,['LINEWCOMBOBOX']));
+                          LineWBox:=TComboBox.Create(tb);
+                          if code=0 then
+                                        LineWBox.Width:=w;
+                          if ts<>''then
+                          begin
+                               ts:=InterfaceTranslate('hint_panel~LINEWCOMBOBOX',ts);
+                               LineWBox.hint:=(ts);
+                               LineWBox.ShowHint:=true;
+                          end;
+                          LineWbox.Clear;
+                          LineWbox.readonly:=true;
+                          LineWbox.items.Add(S_default);
+                          LineWbox.items.Add(S_ByBlock);
+                          LineWbox.items.Add(S_ByLayer);
+                          for i := 0 to 20 do
+                          begin
+                          s:=floattostr(i / 10) + ' '+S_mm;
+                               LineWbox.items.Add((s));
+                          end;
+                          LineWbox.items.Add(S_Different);
+                          LineWbox.OnChange:=ChangeCLineW;
+                          LineWbox.AutoSize:=false;
+                           AddToBar(tb,LineWBox);
+                     end;
+                     if uppercase(line)='SEPARATOR' then
+                                         begin
+                                         buttonpos:=buttonpos+3;
+                                         TToolButton(b):=TmyToolButton.Create(tb);
+                                         b.Style:=
+                                         tbsDivider;
+                                          AddToBar(tb,b);
+                                          TToolButton(b).AutoSize:=false;
+                                         end;
+                end;
+                //line := f.readstring(';','');
+           end;
+
+           until not(f.ReadPos<f.count)
+
+
+      end;
 end;
 
 procedure TMainFormN.loadpanels(pf:GDBString);
@@ -888,6 +879,8 @@ var
     y,xx,yy,w,code:GDBInteger;
     bmp:TBitmap;
     action:tmyaction;
+
+    paneldesk:string;
 const bsize=24;
 begin
   f.InitFromFile(pf);
@@ -899,8 +892,9 @@ begin
       if uppercase(line) = 'PANEL' then
       begin
            line := f.readstring('; ','');
+           paneldesk:=line+':';
            ts:=line;
-           if uppercase(ts)='RIGHTPANEL'
+           {if uppercase(ts)='ToolBarR'
            then
                begin
                     ppanel:=ToolBarR
@@ -911,12 +905,12 @@ begin
                     ppanel:=ToolBarU;
                end
            else
-               if uppercase(ts)='DOWNPANEL' then
+               if uppercase(ts)='TOOLBARD' then
                begin
                     ppanel:=ToolBarD;
-               end;
+               end;}
 
-           if ppanel<>ToolBarD then
+           {if ppanel<>ToolBarD then
            begin
                 line := f.readstring(',','');
                 line := f.readstring(',','');
@@ -925,7 +919,7 @@ begin
                 xx:=strtoint(line);
                 line := f.readstring(';','');
                 yy:=strtoint(line);
-           end;
+           end;}
 
            buttonpos:=0;
            while line<>'{' do
@@ -935,7 +929,8 @@ begin
            begin
                 if (line <> '') and (line[1] <> ';') then
                 begin
-                     if uppercase(line)='ACTION' then
+                     paneldesk:=paneldesk+line+';';
+                     {if uppercase(line)='ACTION' then
                      begin
                           line := f.readstring(#$A,#$D);
                           action:=tmyaction(self.StandartActions.ActionByName(line));
@@ -991,12 +986,6 @@ begin
                           end;
                           SetImage(ppanel,b,line,false,'button_variable~'+bc);
                           b.AutoSize:=true;
-
-                          {b.Parent:=ppanel;
-                          if ppanel.ClientHeight<ppanel.ClientWidth then
-                                                                        b.align:=alLeft
-                                                                    else
-                                                                        b.align:=alTop;}
                           AddToBar(ppanel,b);
 
                      end;
@@ -1018,14 +1007,7 @@ begin
                           end;
                           LayerBox.OnChange:=ChangeCLayer;
                           LayerBox.ReadOnly:=true;
-                          LayerBox.AutoSize:=false{true};
-                          //LayerBox.Align:=alleft;
-                          //LayerBox.Height:=ppanel.ClientHeight;
-                          {LayerBox.Parent:=ppanel;
-                          if ppanel.ClientHeight<ppanel.ClientWidth then
-                                                                        LayerBox.align:=alLeft
-                                                                    else
-                                                                        LayerBox.align:=alTop;}
+                          LayerBox.AutoSize:=false;
                           AddToBar(ppanel,LayerBox);
                      end;
                      if uppercase(line)='LINEWCOMBOBOX' then
@@ -1046,23 +1028,17 @@ begin
                           end;
                           LineWbox.Clear;
                           LineWbox.readonly:=true;
-                          LineWbox.items.Add(('Обычный'));
-                          LineWbox.items.Add(('По блоку'));
-                          LineWbox.items.Add(('По слою'));
+                          LineWbox.items.Add(S_default);
+                          LineWbox.items.Add(S_ByBlock);
+                          LineWbox.items.Add(S_ByLayer);
                           for i := 0 to 20 do
                           begin
-                          s:=floattostr(i / 10) + ' мм';
+                          s:=floattostr(i / 10) + ' '+S_mm;
                                LineWbox.items.Add((s));
                           end;
-                          LineWbox.items.Add(('Разный'));
+                          LineWbox.items.Add(S_Different);
                           LineWbox.OnChange:=ChangeCLineW;
-                          LineWbox.AutoSize:=false{true};
-
-                          {LineWbox.Parent:=ppanel;
-                          if ppanel.ClientHeight<ppanel.ClientWidth then
-                                                                        LineWbox.align:=alLeft
-                                                                    else
-                                                                        LineWbox.align:=alTop;}
+                          LineWbox.AutoSize:=false;
                            AddToBar(ppanel,LineWBox);
                      end;
                      if uppercase(line)='SEPARATOR' then
@@ -1070,24 +1046,15 @@ begin
                                          buttonpos:=buttonpos+3;
                                          TToolButton(b):=TmyToolButton.Create(ppanel);
                                          b.Style:=
-                                         //tbsSeparator;
                                          tbsDivider;
-                                         //b.a
-
-                                         {b.Parent:=ppanel;
-                          if ppanel.ClientHeight<ppanel.ClientWidth then
-                                                                        b.align:=alLeft
-                                                                    else
-                                                                        b.align:=alTop;}
                                           AddToBar(ppanel,b);
                                           TToolButton(b).AutoSize:=false;
-                                          //TToolButton(b).width:=200;
-                                          //TToolButton(b).height:=200;
-                                         end;
-                     //application.ProcessMessages;
+                                         end;}
                 end;
                 line := f.readstring(#$A' ',#$D);
            end;
+           toolbars.Add(paneldesk);
+           log.programlog.LogOutStr(paneldesk,0);
            //ppanel^.setxywh(ppanel.wndx,ppanel.wndy,ppanel.wndw,buttonpos+bsize);
            //ppanel^.Show;
 
@@ -1135,7 +1102,8 @@ var
     line2:GDBString;
     i:integer;
     pstr:PGDBString;
-    action:taction;
+    action:tmyaction;
+    debs:string;
 begin
            while line<>'{' do
                              begin
@@ -1187,9 +1155,52 @@ begin
                                                                 if line<>''then
                                                                                      FileHistory[i]:=TmyMenuItem.Create(pm,line,'Load('+line+')')
                                                                                  else
-                                                                                     FileHistory[i]:=TmyMenuItem.Create(pm,'Пусто','');
+                                                                                     FileHistory[i]:=TmyMenuItem.Create(pm,S_Empty,'');
                                                                 {ppopupmenu}pm.Add(FileHistory[i]);
                                                            end;
+                                                           line := f.readstring(#$A' ',#$D);
+                                                           line:=readspace(line);
+                                                      end
+                else if uppercase(line)='TOOLBARS' then
+                                                      begin
+                                                           for i:=0 to toolbars.Count-1 do
+                                                           begin
+                                                                debs:=toolbars.Strings[i];
+                                                                debs:=copy(debs,1,pos(':',debs)-1);
+
+                                                                action:=TmyAction.Create(self);
+                                                                //if actionshortcut<>'' then
+                                                                //                          action.ShortCut:=TextToShortCut(actionshortcut);
+                                                                action.Name:='ACN_SHOW_'+uppercase(debs);
+                                                                action.Caption:=debs;
+                                                                action.command:='Show';
+                                                                action.options:=debs;
+
+                                                                //action.Hint:=actionhint;
+                                                                action.DisableIfNoHandler:=false;
+                                                                //SetImage(actionpic,actionname+'~textimage',action);
+                                                                self.StandartActions.AddMyAction(action);
+                                                                action.pfoundcommand:=commandmanager.FindCommand('SHOW');
+
+
+                                                                pm1:=TMenuItem.Create(pm);
+                                                                pm1.Action:=action;
+                                                                pm.Add(pm1);
+
+                                                           end;
+                                                           {for i:=0 to 9 do
+                                                           begin
+                                                                pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
+                                                                if assigned(pstr)then
+                                                                                     line:=pstr^
+                                                                                 else
+                                                                                     line:='';
+                                                                if line<>''then
+                                                                                     FileHistory[i]:=TmyMenuItem.Create(pm,line,'Load('+line+')')
+                                                                                 else
+                                                                                     FileHistory[i]:=TmyMenuItem.Create(pm,S_Empty,'');
+                                                                pm.Add(FileHistory[i]);
+                                                           end;}
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);
                                                       end
@@ -1233,8 +1244,111 @@ begin
      //self.contr
     if DockMaster<>nil then
     DockMaster.CloseAll;
+    freeandnil(toolbars);
      inherited;
      //GDBFreeMem(pointer(pmenu));
+end;
+function IsEditableShortCut(var Message: TLMKey):boolean;
+var
+   chrcode:word;
+   ss:tshiftstate;
+begin
+     chrcode:=Message.CharCode;
+     ss:=MsgKeyDataToShiftState(Message.KeyData);
+     if ssShift in ss then
+                               chrcode:=chrcode or scShift;
+    if ssCtrl in ss then
+                              chrcode:=chrcode or scCtrl;
+
+     case chrcode of
+               (scCtrl or VK_V),
+               (scCtrl or VK_C),
+               (scCtrl or VK_INSERT),
+               (scShift or VK_INSERT),
+               (scCtrl or VK_Z),
+               (scCtrl or scShift or VK_Z),
+                VK_DELETE,
+                VK_BACK,
+                VK_LEFT,
+                VK_RIGHT,
+                VK_UP,
+                VK_DOWN
+                    :begin
+                         result:=true;
+                     end
+                else result:=false;
+
+     end;
+
+end;
+procedure TMainFormN.ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
+var
+   IsEditableFocus:boolean;
+   IsCommandNotEmpty:boolean;
+   _enabled,_disabled:boolean;
+   i:integer;
+const
+     EditableShortCut=[(scCtrl or VK_Z),{(VK_CONTROL or VK_SHIFT or VK_Z),}VK_DELETE,VK_BACK,VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN];
+     ClipboardShortCut=[VK_SHIFT or VK_DELETE,VK_BACK,VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN];
+begin
+     if AAction is TmyAction then
+     begin
+     Handled:=true;
+
+     _disabled:=false;
+
+(*
+     IsEditableFocus:=(((ActiveControl is tedit)and(ActiveControl<>cmdedit))
+                     or (ActiveControl is tmemo)
+                     or (ActiveControl is tcombobox));
+     if assigned(cmdedit) then
+                              IsCommandNotEmpty:=((cmdedit.Text<>'')and(ActiveControl=cmdedit))
+                          else
+                              IsCommandNotEmpty:=false;
+     {log.programlog.LogOutStr(AAction.Name,0);
+     if AAction.Name='ACN_UNDO'then
+     begin
+          i:=TmyAction(AAction).ShortCut;
+          i:=scCtrl or VK_Z;
+     end;}
+     if IsEditableShortCut(TmyAction(AAction).ShortCut)
+     and ((IsEditableFocus)or(IsCommandNotEmpty))
+          then _disabled:=true;
+     //GetCommandContext;
+     //i:=TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr;
+*)
+     if assigned(TmyAction(AAction).pfoundcommand) then
+     begin
+     if ((GetCommandContext xor TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)and TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)<>0
+          then
+              _disabled:=true;
+
+
+     TmyAction(AAction).Enabled:=not _disabled;
+     end;
+
+     end;
+end;
+
+function TMainFormN.IsShortcut(var Message: TLMKey): boolean;
+var
+   IsEditableFocus:boolean;
+   IsCommandNotEmpty:boolean;
+begin
+     if message.charcode<>VK_SHIFT then
+     if message.charcode<>VK_CONTROL then
+                                      IsCommandNotEmpty:=IsCommandNotEmpty;
+  IsEditableFocus:=(((ActiveControl is tedit)and(ActiveControl<>cmdedit))
+                  or (ActiveControl is tmemo)
+                  or (ActiveControl is tcombobox));
+  if assigned(cmdedit) then
+                           IsCommandNotEmpty:=((cmdedit.Text<>'')and(ActiveControl=cmdedit))
+                       else
+                           IsCommandNotEmpty:=false;
+  if IsEditableShortCut(Message)
+  and ((IsEditableFocus)or(IsCommandNotEmpty))
+       then result:=false
+       else result:=inherited IsShortcut(Message)
 end;
 
 procedure TMainFormN.myKeyPress{(var Key: char)}(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -1293,6 +1407,33 @@ begin
      if tempkey=0 then
                       key:=0;
 end;
+
+procedure TMainFormN.CreateHTPB(tb:TToolBar);
+begin
+  ProcessBar:=TProgressBar.create(tb); //.initxywh('?', @Pdownpanel, 0,
+    //0, 400, statusbarclientheight, false);
+  ProcessBar.Hide;
+  //ProcessBar.DoubleBuffered:=true;
+  ProcessBar.Align:=alLeft;
+  ProcessBar.Width:=400;
+  ProcessBar.Height:=10;
+  ProcessBar.min:=0;
+  ProcessBar.max:=0;
+  ProcessBar.step:=10000;
+  ProcessBar.position:=0;
+  ProcessBar.Smooth:=true;
+  ProcessBar.Parent:=tb;
+
+  HintText:=TLabel.Create(tb);
+  HintText.Align:=alLeft;
+  HintText.AutoSize:=false;
+  HintText.Width:=400;
+  HintText.Height:=10;
+  HintText.Layout:=tlCenter;
+  HintText.Alignment:=taCenter;
+  HintText.Parent:=tb;
+end;
+
 {procedure TMainForm.close;
 begin
      destroywindow(self.handle);
@@ -1396,6 +1537,17 @@ begin
   end;
   setnormalfocus;
 end;
+
+{procedure TMainFormN.idle(Sender: TObject; var Done: Boolean);
+begin
+
+end;
+
+procedure TMainFormN.ReloadLayer(plt: PGDBNamedObjectsArray);
+begin
+
+end;}
+
 procedure TMainFormN.ChangeCLayer(Sender:Tobject);
 var tcl:GDBInteger;
 begin
@@ -1429,163 +1581,6 @@ begin
   end;
   setnormalfocus;
 end;
-(*
-procedure TMainForm.loadmenu;
-var //p:^tform;
-    //line:GDBString;
-    //buttonpos:GDBInteger;
-    //pvd:pvardesk;
-    //ppanel:pzform;
-    //b:PZButtonWithCommand;
-    //t:pzlistbox;
-    //i:longint;
-    //x,y,xx,yy:GDBInteger;
-    pmenuitem:pzmenuitem;
-    //mi:TMenuItemInfo;
-    //o:GDBInteger;
-    ppopupmenu:pzpopupmenu;
-begin
-           line := f.readstring(';','');
-           GDBGetMem({$IFDEF DEBUGBUILD}'{7A89C3DC-00FB-49E9-B938-030C79A09A37}',{$ENDIF}GDBPointer(ppopupmenu),sizeof(zpopupmenu));
-           //new(ppopupmenu);
-           ppopupmenu.init(line);
-
-           while line<>'{' do
-                             begin
-                             line := f.readstring(#$A,#$D);
-                             line:=readspace(line);
-                             end;
-           line := f.readstring(#$A' ',#$D);
-           while line<>'}' do
-           begin
-                if (line <> '') and (line[1] <> ';') then
-                begin
-                     if uppercase(line)='COMMAND' then
-                                                      begin
-                                                           line := f.readstring(',','');
-                                                           GDBGetMem({$IFDEF DEBUGBUILD}'{19CBFAC7-4671-4F40-A34F-3F69CE37DA65}',{$ENDIF}GDBPointer(pmenuitem),sizeof(zmenuitem));
-                                                           //new(pmenuitem);
-                                                           pmenuitem.init(line);
-                                                           pmenuitem.addto(ppopupmenu);
-                                                           line := f.readstring(',','');
-                                                           pmenuitem.command:=line;
-                                                           line := f.readstring(',','');
-                                                           line := f.readstring(#$A' ',#$D);
-                                                           line := f.readstring(#$A' ',#$D);
-                                                           line:=readspace(line);
-                                                      end
-                else if uppercase(line) = submenutoken then
-                                                      begin
-                                                           loadmenu(f,{ppopupmenu,}{pm}pzmenu(ppopupmenu),line);
-                                                           line := f.readstring(#$A' ',#$D);
-                                                           line:=readspace(line);
-                                                      end
-                end;
-           end;
-           ppopupmenu.addto(pm);
-end;
-*)
-(*
-procedure TMainForm.loadpanels;
-var
-    f:GDBOpenArrayOfByte;
-    line,ts,{bn,}bc{,bh}:GDBString;
-    buttonpos:GDBInteger;
-    ppanel:pzform;
-    b:PZButtonWithCommand;
-    i:longint;
-    y,xx,yy:GDBInteger;
-const bsize=24;
-begin
-  f.InitFromFile(pf);
-  while f.notEOF do
-  begin
-    line := f.readstring(' ',#$D#$A);
-    if (line <> '') and (line[1] <> ';') then
-    begin
-      if uppercase(line) = 'PANEL' then
-      begin
-           //new(ppanel);
-           line := f.readstring(' ','');
-           ts:=line;
-           line := f.readstring(',','');
-           //x:=strtoint(line);
-           line := f.readstring(',','');
-           y:=strtoint(line);
-           line := f.readstring(',','');
-           xx:=strtoint(line);
-           line := f.readstring(';','');
-           yy:=strtoint(line);
-           if uppercase(ts)<>'RIGHTPANEL'
-           then
-               begin
-                    GDBGetMem({$IFDEF DEBUGBUILD}'{16D035CF-7563-4785-96E7-74B992F7DE8F}',{$ENDIF}pointer(ppanel),sizeof(zform));
-                    ppanel^.initxywh('ZForm.'+ts,@mainwindow.MainForm,{x}clientwidth-bsize-5,y,xx,yy,true);
-               end
-           else
-               begin
-                    ppanel:=pointer(@PRightPanel);
-               end;
-           buttonpos:=0;
-           while line<>'{' do
-                             line := f.readstring(#$A,#$D);
-           line := f.readstring(#$A' ',#$D);
-           while line<>'}' do
-           begin
-                if (line <> '') and (line[1] <> ';') then
-                begin
-                     if uppercase(line)='BUTTON' then
-                     begin
-                          GDBGetMem({$IFDEF DEBUGBUILD}'{3712C8F6-B4AB-4184-96DA-6F4E100BD7EC}',{$ENDIF}pointer(b),sizeof(ZButtonWithCommand));
-                          bc := f.readstring(',','');
-                          {b^.initxywh('ZButton.'+bc,bc,ppanel,0,buttonpos,bsize,bsize);
-                          b^.command:=bc;}
-                          line := f.readstring(#$A,#$D);
-                          ts:='???';
-                          i:=pos(',',line);
-                          if i>0 then
-                                     begin
-                                          ts:=system.copy(line,i+1,length(line)-i);
-                                          line:=system.copy(line,1,i-1);
-                                     end;
-                          b^.initxywh('ZButton.'+bc,ts,ppanel,0,buttonpos,bsize,bsize,true);
-                          b^.command:=bc;
-                          b^.hint:=ts;
-                          if length(line)>1 then
-                          begin
-                               if line[1]<>'#' then
-                                                   begin
-                                                   line:=sysparam.programpath+'menu\BMP\'+line;
-                                                   b^.SetImageFromFile(line)
-                                                   end
-                                               else
-                                                   b^.settext(system.copy(line,2,length(line)-1));
-                          if bc='SetObjInsp(CURRENT)' then
-                                     begin
-                                          bc:=bc;
-                                     end;
-                          end;
-                          buttonpos:=buttonpos+bsize;
-                     end;
-                     if uppercase(line)='SPACE' then buttonpos:=buttonpos+3;
-                end;
-                line := f.readstring(#$A' ',#$D);
-           end;
-           ppanel^.setxywh(ppanel.wndx,ppanel.wndy,ppanel.wndw,buttonpos+bsize);
-           ppanel^.Show;
-
-      end
-      else if uppercase(line) = menutoken then
-      begin
-           loadmenu(f,{ppopupmenu,}pmenu,line);
-      end
-    end;
-  end;
-  SetMenu(MainForm.handle,pmenu.handle);
-  //f.close;
-  f.done;
-end;
-*)
 procedure TMainFormN.GeneralTick(Sender: TObject);//(uID, msg: UINT; dwUse, dw1, dw2: DWord); stdcall;
 begin
      if sysvar.SYS.SYS_RunTime<>nil then
@@ -1632,9 +1627,11 @@ procedure TMainFormN.Say(word:gdbstring);
 begin
      if sysvar.SYS.SYS_IsHistoryLineCreated^ then
      begin
-
+          if assigned(HintText)then
+          begin
           HintText.caption:=word;
           HintText.repaint;
+          end;
           //application.ProcessMessages;
      end;
 end;
@@ -1656,292 +1653,6 @@ begin
     str(time:3:2,ts);
     say(format(compiledtimemsg,[ts]));
 end;
-(*
-procedure TMainForm.beforeinit;
-var
-  //initf, registercommands: Initfunc;
-  i: longint;
-  //pv: PluginVersionInfo;
-  //pq:pzform;
-  td:PZButtonWithVariable;
-  tbc:PZButtonWithCommand;
-  //tdd:PZeditWithVariable;
-  //tddd:PZTabControlGeneric;
-  ps,mainps{,p1}:PZPanelWithSplit;
-  s:GDBString;
-  //iconname:GDBString;
-begin
-
-  {hToolTip := CreateWindowEx(WS_EX_TOPMOST, TOOLTIPS_CLASS, nil,
-      $01,
-      integer(CW_USEDEFAULT), integer(CW_USEDEFAULT),
-      integer(CW_USEDEFAULT), integer(CW_USEDEFAULT),
-      MainForm.handle, 0, hInstance, nil );}
-
-
-  GDBGetMem({$IFDEF DEBUGBUILD}'{4017A111-CA16-4465-9D91-4F7ABEC069C9}',{$ENDIF}GDBPointer(tbc),sizeof(ZButtonWithCommand));
-  tbc^.initxywh('mainSAVE','Сохранить как...',@MainForm,0,0,24,24,true);
-  tbc^.command:='SaveAs';
-  tbc^.SetImageFromFile(sysparam.programpath+'menu\BMP\Save.BMP');
-  tbc^.hint:='Сохранить как...';
-
-  GDBGetMem({$IFDEF DEBUGBUILD}'{D04952EE-5A29-4DC7-9A64-E18EB998203C}',{$ENDIF}GDBPointer(tbc),sizeof(ZButtonWithCommand));
-  tbc^.initxywh('mainLOAD','Загрузить...',@MainForm,24,0,24,24,true);
-  tbc^.command:='Load';
-  tbc^.SetImageFromFile(sysparam.programpath+'menu\BMP\Load.BMP');
-  tbc^.hint:='Загрузить...';
-
-  //LayerBox.initxywh('LayerBox',@MainForm,48,00,202,600,false);
-  //LayerBox.onChange:=@ChangeCLayer;
-  //LayerBox.ClearText;
-  //ReloadLayer(@gdb.GetCurrentDWG.LayerTable);
-
-{  LineWBox.initxywh('LineWBox',@MainForm,250,00,80,600,false);
-  LineWBox.onChange:=@ChangeCLineW;
-  LineWbox.ClearText;
-  LineWbox.AddLine('Обычный');
-  LineWbox.AddLine('По блоку');
-  LineWbox.AddLine('По слою');
-  //MainForm.Show;
-  for i := 0 to 20 do
-  begin
-  s:=floattostr(i / 10) + ' мм';
-       LineWbox.AddLine(GDBPointer(s));
-  end;
-  LineWbox.AddLine('Разный');
-}
-
-
-  //Tedform:=TTedform.create(Application);
-  //MTedform:=TMTedform.create(Application);
-  //programlog.logout('loadpanels done');
-//new(p1);
-{------------------}//GDBGetMem({$IFDEF DEBUGBUILD}'{E3AD9BED-C483-4645-80C9-FDEFA6A27FD5}',{$ENDIF}pointer(p1),sizeof(ZPanelWithSplit));
-{------------------}//p1.initxywh('p1',@mainform,0,25,sysinfo.sysparam.screenx,sysinfo.sysparam.screeny-25-80,hor,sysinfo.sysparam.screeny-25-80-40);
-{------------------}//p1^.align:=al_client;
-GDBGetMem({$IFDEF DEBUGBUILD}'{8D26A55E-7388-4BDB-A9A1-B925CB0993CF}',{$ENDIF}pointer(pinterf),sizeof(ZPanelWithSplit));
-pinterf.initxywh('pinterf',@mainform,0,25,
-                           sysinfo.sysparam.screenx,sysinfo.sysparam.screeny-25-80,true,wert,sysinfo.sysparam.screeny-25-80-40);
- //GDBGetMem({$IFDEF DEBUGBUILD}'{26E9AFE5-9612-4A1A-8D06-FB1173AE9236}',{$ENDIF}pointer(prightpanel),sizeof(ZPanelGeneric));
- //GDBGetMem({$IFDEF DEBUGBUILD}'{BFD6676A-F5CB-4D76-BCE8-B08292300178}',{$ENDIF}pointer(PDownPanel),sizeof(ZPanelGeneric));
-
- pdownpanel.initxywh('ZForm.Down',@mainwindow.MainForm,{x}0,0,26,26,false);
- pdownpanel.setstyle(WS_Border,0);
- prightpanel.initxywh('ZForm.Right',@mainwindow.MainForm,{x}0,0,26,26,false);
- prightpanel.setstyle(WS_Border,0);
- prightpanel.align:=al_client or al_fixwsize;
- //pinterf.Set_part(1,mainps);
- pinterf.Set_part(2,@prightpanel);
- prightpanel.Show;
- pinterf^.Show;
- pdownpanel.Show;
-//p1.align:=al_client;
-//new(mainps);
-GDBGetMem({$IFDEF DEBUGBUILD}'{C0C040B7-2C0A-40BC-9F51-933D5255E2BF}',{$ENDIF}pointer(mainps),sizeof(ZPanelWithSplit));
-mainps.initxywh('mainps',pinterf^.p1,0,25,sysinfo.sysparam.screenx,sysinfo.sysparam.screeny-30,true,wert,200);
-mainps^.align:=al_client;
-//new(ps);
-GDBGetMem({$IFDEF DEBUGBUILD}'{3F9AAC32-F7D0-4B07-A529-FC8060F6734C}',{$ENDIF}pointer(ps),sizeof(ZPanelWithSplit));
-ps.initxywh('ps',mainps^.p2,0,25,mainps^.p1.clientwidth,mainps^.p1.clientheight,true,hor,{600}mainps^.p2.clientheight-100);
-//mainps.Set_part(2,ps);
-ps^.align:=al_client;
-
-   //@mainwindow.MainForm
-
-  //gdb.GetCurrentDWG.OGLwindow1.initxywh('oglwnd',@mainwindow.MainForm,200,72,768,596,false);
-
-  //gdb.GetCurrentDWG.OGLwindow1.initxywh('oglwnd',ps^.p1,200,72,768,596);
-  //gdb.GetCurrentDWG.oglwindow1.align:=al_client;
-
-  PageControl.initxywh('DWGPages',@mainwindow.MainForm,0,0,clientwidth,clientheight,false);;
-  PageControl.align:=al_client;
-  //PageControl.PCNotify:=ChangeMainTabCtrl;
-  ps^.Set_part(1,@PageControl);
-
-
-  if gdb.GetCurrentDWG<>nil then
-  begin
-
-  ps^.Set_part(1,@gdb.GetCurrentDWG.OGLwindow1);
-
-  gdb.GetCurrentDWG.OGLwindow1.initogl;
-
-  //gdb.GetCurrentDWG.OGLwindow1.phinttext :=@hinttext;
-  gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
-  end;
-  //gdb.objroot.calcvisible;
-
-  pcommandline := @Cline.CmdEdit;
-  //playercombo := @LayerBox;
-  //plwcombo := @linewbox;
-
-mainps^.Show;
-ps^.Show;
-
-
-{----------------}//p1^.Show;
-  //new(pqwe);
-  //HintText.initxywh('А где мышь?',@Pdownpanel,0,0,400,statusbarclientheight,false);
-  //HintText.setstyle(WS_BORDER,0);
-
-  {GDBGetMem(pq,sizeof(zform));
-  pq^.init('oglwnd',0);}
-
-  {GDBGetMem(pqwe,sizeof(zedit));
-  pqwe^.initxywh('oglwnd',zforms.w,10,10,675,20);}
-
-
-  //programlog.logout('OGLwindow created');
-
-  //LineWbox.DropDownCount:=100;
-  //sendmessageA(LineWbox.handle,CB_setDROPPEDWIDTH ,400,0);
-
-  //OGLwindow1.init;
-  //programlog.logout('OGLwindow inited');
-  GDBGetMem({$IFDEF DEBUGBUILD}'{9A78FA9C-C7B1-473E-9681-15DBFF9213F9}',{$ENDIF}GDBPointer(td),sizeof(ZButtonWithVariable));
-  //new(td);
-  //i:=0;
-  td^.initxywh('Сетка','??Сетка',@Pdownpanel,400,0,50,statusbarclientheight,true);
-  //td^.SetImageFromFile(sysparam.programpath+'menu\BMP\1.BMP');
-  td^.onclickproc:=redrawoglwnd;
-  td^.assigntoboolvar('DWG_DrawGrid');
-  GDBGetMem({$IFDEF DEBUGBUILD}'{2C132A7B-BFC1-4BA8-AF27-9F7DF19F69F7}',{$ENDIF}GDBPointer(td),sizeof(ZButtonWithVariable));
-  //new(td);
-  td^.initxywh('SUB-выделение','Отдельный выбор частей динамических объектов',@Pdownpanel,450,0,90,statusbarclientheight,true);
-  //td^.SetImageFromFile(sysparam.programpath+'menu\BMP\sub.BMP');
-  td^.onclickproc:=redrawoglwnd;
-  td^.assigntoboolvar('DWG_EditInSubEntry');
-
-  GDBGetMem({$IFDEF DEBUGBUILD}'{41A94B0E-2E39-4215-810A-B4E25460E3EB}',{$ENDIF}GDBPointer(td),sizeof(ZButtonWithVariable));
-  //new(td);
-  td^.initxywh('Вес','Вес линий',@Pdownpanel,540,0,30,statusbarclientheight,true);
-  //td^.SetImageFromFile(sysparam.programpath+'menu\BMP\lwt.BMP');
-  td^.onclickproc:=redrawoglwnd;
-  td^.assigntoboolvar('DWG_DrawMode');
-
-  GDBGetMem({$IFDEF DEBUGBUILD}'{A63267BF-9A14-4D15-A6F0-B79187C7F98E}',{$ENDIF}GDBPointer(td),sizeof(ZButtonWithVariable));
-  //new(td);
-  td^.initxywh('Привязки','Привязка к характерным точкам объектов',@Pdownpanel,570,0,60,statusbarclientheight,true);
-  //td^.SetImageFromFile(sysparam.programpath+'menu\BMP\osnap.BMP');
-  td^.onclickproc:=redrawoglwnd;
-  td^.assigntoboolvar('DWG_OSMode');
-
-  GDBGetMem({$IFDEF DEBUGBUILD}'{F0452D72-3E62-465B-8DCD-269E3D2E1D32}',{$ENDIF}GDBPointer(td),sizeof(ZButtonWithVariable));
-  //new(td);
-  td^.initxywh('Полярность','Полярное слежение',@Pdownpanel,630,0,70,statusbarclientheight,true);
-  //td^.SetImageFromFile(sysparam.programpath+'menu\BMP\polar.BMP');
-  td^.onclickproc:=redrawoglwnd;
-  td^.assigntoboolvar('DWG_PolarMode');
-
-
-  GDBGetMem({$IFDEF DEBUGBUILD}'{93F56D49-47DB-45F2-AD9D-FDD0BAF1099D}',{$ENDIF}GDBPointer(td),sizeof(ZButtonWithVariable));
-  td^.initxywh('HG','Вспомогательная графика (подключения, направления и т.п.)',@Pdownpanel,700,0,30,statusbarclientheight,true);
-  td^.onclickproc:=redrawoglwnd;
-  td^.assigntoboolvar('DWG_HelpGeometryDraw');
-
-
-
-
-
-
-  GDBGetMem({$IFDEF DEBUGBUILD}'{4F1A4A50-5EBE-4F35-95A5-AF32970C80E9}',{$ENDIF}GDBPointer(td),sizeof(ZButtonWithVariable));
-  td^.initxywh('SG','Системная графика  (габариты, связи и т.п.)',@Pdownpanel,730,0,30,statusbarclientheight,true);
-  td^.onclickproc:=redrawoglwnd;
-  td^.assigntoboolvar('DWG_SystmGeometryDraw');
-
-
-
-//  GDBGetMem({$IFDEF DEBUGBUILD}'{3C39B205-9392-4A05-B053-B274B203E5CD}',{$ENDIF}GDBPointer(tbc),sizeof(ZButtonWithCommand));
-//  tbc^.initxywh('FIX',@MainForm,498,0,24,24);
-//  tbc^.command:='SetObjInsp(CURRENT)';
-//  tbc^.hint:='Фиксировать выделенный объект в инспекторе';
-
-
-  //tbc^.assigntoboolvar('DWG_SystmGeometryDraw');
-
-// GDBGetMem({$IFDEF DEBUGBUILD}'{3712C8F6-B4AB-4184-96DA-6F4E100BD7EC}',{$ENDIF}pointer(b),sizeof(ZButtonWithCommand));
-//  line := f.readworld(',','');
- // b^.initxywh('ZButton.'+line,ppanel,0,buttonpos,bsize,bsize);
-
-  {new(tdd);
-  tdd.initxywh('test',@MainForm,505,0,100,24);
-  tdd.AssignToVariable('ossize');}
-
-  {new(tddd);
-  tddd.initxywh('',mainform.handle,605,0,400,400);
-  tddd.addpage('хуй');
-  tddd.addpage('бля');
-  tddd.addpage('нахуй');
-  tddd.addpage('ёбть');
-  tddd.selpage(1);
-  new(td);
-  td^.initxywh('Привязка',tddd.getpagehandle(3),100,100,55,24);
-  td^.onclickproc:=redrawoglwnd;
-  td^.assigntoboolvar('osmode');}
-
-  //if OGLwindow1.param.projtype = Projparalel then
-  //  if sysvar.PMenuProjType<>nil then PMenuItem(sysvar.PMenuProjType^)^.caption := 'Перспективная проекция';
-  //if OGLwindow1.param.projtype = projperspective then
-  //  if sysvar.PMenuProjType<>nil then PMenuItem(sysvar.PMenuProjType^)^.caption := 'Паралельная проекция';
-
-
-{  cline.initxywh('Команда',@mainwindow.MainForm,0,708-42,1024,118,false);
-  cline.align:=al_client;
-  ps^.Set_part(2,@cline);
-  if SysVar.VIEW.VIEW_CommandLineVisible^ then
-  begin
-       cline.Height:=40;
-       Cline.Show;
-  end;
-  sysvar.sys.SYS_IsHistoryLineCreated^:=true;}
-
-  {GDBobjinsp.initxywh('GDBobjinsp',@mainwindow.MainForm,0,72,200,596,false);// := TGDBobjinsp.create(Application);
-  GDBobjinsp.createpda;
-
-  mainps^.Set_part(1,@GDBobjinsp);
-  GDBobjinsp.show;
-  GDBobjinsp.setptr(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
-  GDBobjinsp.SetCurrentObjDefault;}
-
-  if gdb.GetCurrentDWG<>nil then
-  begin
-       //gdb.GetCurrentDWG.OGLwindow1.SetObjInsp;
-       gdb.GetCurrentDWG.OGLwindow1.SetFocus;
-  end;
-  //LayerBox.Items:=layernamelist;
-
-  SystemParametersInfo(SPI_SETBEEP,0,nil,0); //выключить
-  //SysTemparametersInfo(SPI_SETBEEP,1,nil,0); //включить
-  //layerbox.FloatingDockSiteClass
-  GeneralTime:=0;
-  uGeneralTimer := timeSetEvent(1000, 500, @GeneralTick, 0, 1);
-  //Application.OnIdle:= idle;
-  {form1 := Tform1.create(Application);
-  Form1.setdevice(@testdevice);
-  //form1.create(Application);
-  Form1.showmodal;}
-
-
-
-  //winmanager.WndCreateEx(100,100,100,100);
-  //winmanager.WndSetOnMouseMove(@TMainForm.mm);
-  //winmanager.WndShowmodal;
-  if gdb.GetCurrentDWG<>nil then
-  begin
-  gdb.GetCurrentDWG.OGLwindow1.CalcOptimalMatrix;
-
-  gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
-  gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum);
-
-  gdb.GetCurrentDWG.OGLwindow1.param.firstdraw := true;
-  gdb.GetCurrentDWG.OGLwindow1.show;
-  end;
-
-   GDBGetMem({$IFDEF DEBUGBUILD}'{06B65959-6B6D-4EF5-9E2F-30B5FAD66350}',{$ENDIF}GDBPointer(pmenu),sizeof(zmenu));
-   pmenu.init;
-  //loadpanels(sysparam.programpath+'menu\mainmenu.mn');
-end;
-*)
 procedure TMainFormN.ReloadLayer;
 var
   //i: GDBInteger;
@@ -1960,84 +1671,13 @@ begin
        layerbox.Items.Add(s);
        plp:=plt^.iterate(ir);
   until plp=nil;
-  layerbox.Items.Add(('_Разный_'));
+  layerbox.Items.Add(S_Different);
   layerbox.ItemIndex:=(SysVar.dwg.DWG_CLayer^);
 end;
-{procedure TMainForm.keypress(Sender: TObject; var Key: GDBWord;
-  Shift: TShiftState);
-var code: GDBInteger;
-  len: GDBDouble;
-  temp: gdbvertex;
-begin
-  if key = 13 then begin
-    if length(cline.CmdEdit.text) > 0 then
-    begin
-      val(cline.CmdEdit.text, len, code);
-      if code = 0 then
-      begin
-        if OGLwindow1.param.polarlinetrace = 1 then
-        begin
-  //        temp.x := OGLwindow1.param.ontrackarray.otrackarray[OGLwindow1.param.pointnum].worldcoord.x + len * OGLwindow1.param.ontrackarray.otrackarray[OGLwindow1.param.pointnum].arrayworldaxis.vertexarray[OGLwindow1.param.axisnum].x * sign(OGLwindow1.p
-aram.ontrackarray.otrackarray[OGLwindow1.param.pointnum].arraydispaxis.arr[OGLwindow1.param.axisnum].tmouse);
-  //        temp.y := OGLwindow1.param.ontrackarray.otrackarray[OGLwindow1.param.pointnum].worldcoord.y - len * OGLwindow1.param.ontrackarray.otrackarray[OGLwindow1.param.pointnum].arrayworldaxis.vertexarray[OGLwindow1.param.axisnum].y * sign(OGLwindow1.p
-aram.ontrackarray.otrackarray[OGLwindow1.param.pointnum].arraydispaxis.arr[OGLwindow1.param.axisnum].tmouse);
-  //        temp.z := OGLwindow1.param.ontrackarray.otrackarray[OGLwindow1.param.pointnum].worldcoord.z + len * OGLwindow1.param.ontrackarray.otrackarray[OGLwindow1.param.pointnum].arrayworldaxis.vertexarray[OGLwindow1.param.axisnum].z * sign(OGLwindow1.p
-aram.ontrackarray.otrackarray[OGLwindow1.param.pointnum].arraydispaxis.arr[OGLwindow1.param.axisnum].tmouse);
-  //        if commandmanager.pcommandrunning <> nil then
-  //        begin
-  //          commandmanager.pcommandrunning^.MouseMoveCallback(temp, OGLwindow1.param.md.mouse, 1);
-  //        end;
-  //      end;
-      end
-      else if cline.CmdEdit.text[1] = '$' then evaluate(system.copy(cline.CmdEdit.text, 2, length(cline.CmdEdit.text) - 1),systemvariable)
-      else commandmanager.executecommand(GDBPointer(cline.CmdEdit.text));
-    end else commandmanager.executelastcommad;
-    cline.CmdEdit.text := '';
-    OGLwindow1.param.firstdraw := TRUE;
-    OGLwindow1.loadmatrix;
-    OGLwindow1.paint;
-  end;
-end;}
-
 function getoglwndparam: GDBPointer; export;
 begin
   result := addr(gdb.GetCurrentDWG.OGLwindow1.param);
 end;
-(*procedure TMainForm.keypressed(Sender: TObject; var Key: ansiChar);
-var code: GDBInteger;
-  len: GDBDouble;
-  //temp: gdbvertex;
-begin
-  if ord(key) = 13 then begin
-    if length(cline.CmdEdit.text) > 0 then
-    begin
-      val(cline.CmdEdit.text, len, code);
-      if code = 0 then
-      begin
-        if gdb.GetCurrentDWG.OGLwindow1.param.polarlinetrace = 1 then
-        begin
-          {temp.x := OGLwindow1.param.ontrackarray.otrackarray[OGLwindow1.param.pointnum].worldcoord.x + len * OGLwindow1.param.ontrackarray.otrackarray[OGLwindow1.param.pointnum].arrayworldaxis.vertexarray[OGLwindow1.param.axisnum].x * sign(OGLwindow1.pa
-ram.ontrackarray.otrackarray[OGLwindow1.param.pointnum].arraydispaxis.arr[OGLwindow1.param.axisnum].tmouse);
-          temp.y := OGLwindow1.param.ontrackarray.otrackarray[OGLwindow1.param.pointnum].worldcoord.y - len * OGLwindow1.param.ontrackarray.otrackarray[OGLwindow1.param.pointnum].arrayworldaxis.vertexarray[OGLwindow1.param.axisnum].y * sign(OGLwindow1.par
-am.ontrackarray.otrackarray[OGLwindow1.param.pointnum].arraydispaxis.arr[OGLwindow1.param.axisnum].tmouse);
-          temp.z := OGLwindow1.param.ontrackarray.otrackarray[OGLwindow1.param.pointnum].worldcoord.z + len * OGLwindow1.param.ontrackarray.otrackarray[OGLwindow1.param.pointnum].arrayworldaxis.vertexarray[OGLwindow1.param.axisnum].z * sign(OGLwindow1.par
-am.ontrackarray.otrackarray[OGLwindow1.param.pointnum].arraydispaxis.arr[OGLwindow1.param.axisnum].tmouse);
-          if commandmanager.pcommandrunning <> nil then
-          begin
-            commandmanager.pcommandrunning^.MouseMoveCallback(temp, OGLwindow1.param.md.mouse, 1);
-          end;}
-        end;
-      end
-      else if cline.CmdEdit.text[1] = '$' then evaluate(system.copy(cline.CmdEdit.text, 2, length(cline.CmdEdit.text) - 1),sysunit)
-      else commandmanager.executecommand(GDBPointer(cline.CmdEdit.text));
-    end else commandmanager.executelastcommad;
-    cline.CmdEdit.text := '';
-    gdb.GetCurrentDWG.OGLwindow1.param.firstdraw := TRUE;
-    gdb.GetCurrentDWG.OGLwindow1.CalcOptimalMatrix;
-    gdb.GetCurrentDWG.OGLwindow1.paint;
-  end;
-
-end;*)
 procedure clearotrack;
 begin
      gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.current:=0;
@@ -2048,16 +1688,6 @@ begin
      gdb.GetCurrentDWG.SelObjArray.clearallobjects;
      //gdb.SelObjArray.clear;
 end;
-{procedure startup;
-begin
-     OSModeEditor.initnul;
-end;
-procedure finalize;
-begin
-     //mainform.done;
-     //GDBFreeMem(gdb.GetCurrentDWG.OGLwindow1.param.pglscreen);
-     //OSModeEditor.Done;
-end;}
 initialization
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('mainwindow.initialization');{$ENDIF}
@@ -2065,10 +1695,6 @@ begin
 end
 finalization
 begin
-  //DockMaster.free;
-  //DockMaster:=nil;
-  //DockMaster.CreateCloseButtonBitmap;
-  //freeAndNil(DockMaster);
 end;
 end.
 

@@ -302,7 +302,7 @@ begin
                                           ps:=psa^.iterate(ir);
                                      until ps=nil;
                                cbedit.AutoSelect:=true;
-                               cbedit.DroppedDown:=true;
+                               //cbedit.DroppedDown:=true;
                                (*
                                //PZComboEdBoxWithProc(result).setitem(0);
                                PZComboEdBoxWithProc(result).LincedData:=pinstance;

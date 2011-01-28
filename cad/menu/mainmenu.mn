@@ -1,15 +1,15 @@
-Panel DOWNPANEL;
+Panel Status;
   {
     Separator
-    variable DWG_DrawGrid,#**Grid,**Показывать сетку
-    variable DWG_EditInSubEntry,#SUB-Select,On/Off Selecting parts of dynamic objects
+    variable DWG_DrawGrid,1.bmp,**Показывать сетку
+    variable DWG_EditInSubEntry,sub.bmp,On/Off Selecting parts of dynamic objects
     variable DWG_DrawMode,#LWT,Show/Hide Lineweight
     variable DWG_OSMode,#OSnap,Object snap
     variable DWG_PolarMode,#Polar,Polar tracking
     variable DWG_HelpGeometryDraw,#AG,Auxiliary graphics (connectivity, direction, etc.)
     variable DWG_SystmGeometryDraw,#SG,System graphics (size, communication, etc. for debugging)
   }
-Panel UPPANEL 994,68,30,525;
+Panel Standart;
   {
     action ACN_NEW
     action ACN_LOAD
@@ -25,25 +25,32 @@ Panel UPPANEL 994,68,30,525;
     button Regen,regen.bmp,Регенерировать чертеж
     button RebuildTree,#rtree,*DEBUG*Перестроить дерево примитивов
   }
-Panel RIGHTPANEL 994,68,30,525;
+Panel Quick;
   {
     action ACN_LOADQS
     action ACN_SAVEQS
-    action ACN_PROJECTTREE
     Separator
+    action ACN_PROJECTTREE
+  }
+Panel Modify;
+  {
     action ACN_BEDIT
     action ACN_POLYED
-    Separator
-    action ACN_LINE
-    action ACN_3DPOLY
-    action ACN_CIRCLE
-    action ACN_BInsert
     Separator
     action ACN_COPY
     action ACN_MOVE
     action ACN_ROTATE
     action ACN_SCALE
-    Separator
+  }
+Panel Draw;
+  {
+    action ACN_LINE
+    action ACN_3DPOLY
+    action ACN_CIRCLE
+    action ACN_BInsert
+  }
+Panel Misc;
+  {
     button El_Cable,el_cable.bmp,Чертить кабель
     button EL_Wire,El_Wire.bmp,Цепь\Трасса
     button El_Leader,el_leader.bmp,Обозначение трасс на плане
@@ -95,23 +102,30 @@ MainMenuItem Edit;
   }
 MainMenuItem View;
   {
-    Command Инспектор объектов,Show(ObjInsp),none,none
-    Command Командная строка и история,Show(CommandLine),none,none
-    Command Рабочая область,Show(PageControl),none,none
-    Command ToolBarR,Show(ToolBarR),none,none
-    Separator
-    Command Сохранить разбивку окон,SaveLayout,O,none
-    Separator
-    Command Камера в начало (Вид сверху),Cam_reset,none,none
-    Command Перспективная/Ортогональная проекция,ChangeProjType,CTRL+P,PMenuProjType
     Command Регенерировать,Regen,CTRL+P,PMenuProjType
+    action ACN_PROJECTTREE
+    Separator
+    MenuItem Камера;
+      {
+        Command Камера в начало (Вид сверху),Cam_reset,none,none
+        Command Перспективная/Ортогональная проекция,ChangeProjType,CTRL+P,PMenuProjType
+      }
+    MenuItem Show window;
+      {
+        action ACN_SHOW_OBJECTINSPECTOR
+        action ACN_SHOW_PAGECONTROL
+        action ACN_SHOW_COMMANDLINE
+        Separator
+        ToolBars
+        Separator
+        Command Сохранить разбивку окон,SaveLayout,O,none
+      }
     MenuItem Инспектор;
       {
         Command Параметры,SetObjInsp(VARS),none,none
         Command Камера,SetObjInsp(CAMERA),none,none
         Command Привязки,SetObjInsp(OSMODE),none,none
       }
-   action ACN_PROJECTTREE
   }
 MainMenuItem Format;
   {

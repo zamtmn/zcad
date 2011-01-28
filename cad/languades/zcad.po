@@ -496,12 +496,44 @@ msgstr ""
 msgid "Drawings window"
 msgstr ""
 
+#: mainwindow.es_layoutload
+msgid "Error loading layout from file"
+msgstr ""
+
 #: mainwindow.es_recreating
 msgid "Re-creating %s!"
 msgstr ""
 
+#: mainwindow.es_toolbarnotfound
+msgid "Toolbar \"%s\" is not found! Create a blank window"
+msgstr ""
+
 #: mainwindow.gdbobjinspwndname
 msgid "Object inspector"
+msgstr ""
+
+#: mainwindow.s_byblock
+msgid "ByBlock"
+msgstr ""
+
+#: mainwindow.s_bylayer
+msgid "ByLayer"
+msgstr ""
+
+#: mainwindow.s_default
+msgid "Default"
+msgstr ""
+
+#: mainwindow.s_different
+msgid "Different"
+msgstr ""
+
+#: mainwindow.s_empty
+msgid "Empty"
+msgstr ""
+
+#: mainwindow.s_mm
+msgid "mm"
 msgstr ""
 
 #: menucommand~Show(ToolBarR)

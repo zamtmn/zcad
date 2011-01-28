@@ -1,0 +1,12 @@
+Index: glwin32wglcontext.pas
+===================================================================
+--- glwin32wglcontext.pas	(revision 29154)
++++ glwin32wglcontext.pas	(working copy)
+@@ -321,6 +321,7 @@
+       iPixelType:=PFD_TYPE_COLORINDEX;
+     cColorBits:=24; // color depth
+     cDepthBits:=16; // Z-Buffer
++    cStencilBits:=8;
+     iLayerType:=PFD_MAIN_PLANE;
+   end;
+

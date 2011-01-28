@@ -2,7 +2,7 @@ action ACN_LOAD,Load,load.bmp,Open ...,Open drawing,CTRL+O
 action ACN_LOADQS,Load(QS),#QL,Open (Autosave),Open last autosave,
 action ACN_NEW,NewDWG,new.bmp,New drawing,,CTRL+N
 action ACN_QSAVE,QSave,save.bmp,Save,Save drawing,CTRL+S
-action ACN_SAVEAS,SaveAs,saveas.bmp,Save as ...,Save drawing as,
+action ACN_SAVEAS,SaveAs,saveas.bmp,Save as ...,Save drawing as,CTRL+SHIFT+S
 action ACN_SAVEQS,QSave(QS),#QS,Save (Autosave),Autosave,
 action ACN_CLOSE,CloseDWG,close.bmp,Close drawing,,CTRL+F4
 action ACN_QUIT,Quit,exit.bmp,Quit,,CTRL+Q
@@ -10,12 +10,15 @@ action ACN_QUIT,Quit,exit.bmp,Quit,,CTRL+Q
 action ACN_UNDO,Undo,undo.bmp,Undo,,CTRL+Z
 action ACN_REDO,Redo,redo.bmp,Redo,,CTRL+SHIFT+Z
 action ACN_COPYCLIP,CopyClip,copyclip.bmp,Copy,Copy to clipboard,CTRL+C
-action ACN_COPYCLIPBASE,CopyBase,,Copy with base point,Copy to clipboard with base point,CTRL+INS
+action ACN_COPYCLIPBASE,CopyBase,copyclipbase.bmp,Copy with base point,Copy to clipboard with base point,CTRL+INS
 action ACN_PASTE,PasteClip,pasteclip.bmp,Paste,Paste from clipboard,SHIFT+INS
-action ACN_ERASE,Erase,,Erase,,DEL
+action ACN_ERASE,Erase,erase.bmp,Erase,,DEL
 action ACN_El_FIND,EL_Find,find.bmp,Find device,,CTRL+F
 
 action ACN_PROJECTTREE,ProjectTree,treeview.bmp,Project tree,,CTRL+T
+action ACN_SHOW_OBJECTINSPECTOR,Show(ObjInsp),#OI,Show object inspector,,
+action ACN_SHOW_PAGECONTROL,Show(PageControl),#DW,Show drawings window,,
+action ACN_SHOW_COMMANDLINE,Show(CommandLine),#CL,Show command line and history,,
 
 action ACN_LAYER,Layer,layer.bmp,Layers ...,Layers properties manager,
 

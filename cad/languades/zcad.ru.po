@@ -505,13 +505,45 @@ msgstr "Выполнено за  %s сек."
 msgid "Drawings window"
 msgstr "Окно чертежей"
 
+#: mainwindow.es_layoutload
+msgid "Error loading layout from file"
+msgstr "Ошибка загрузки файла разбивки окон"
+
 #: mainwindow.es_recreating
 msgid "Re-creating %s!"
 msgstr "Повторное создание %s!"
 
+#: mainwindow.es_toolbarnotfound
+msgid "Toolbar \"%s\" is not found! Create a blank window"
+msgstr ""
+
 #: mainwindow.gdbobjinspwndname
 msgid "Object inspector"
 msgstr "Инспектор объектов"
+
+#: mainwindow.s_byblock
+msgid "ByBlock"
+msgstr "По Слою"
+
+#: mainwindow.s_bylayer
+msgid "ByLayer"
+msgstr "По Блоку"
+
+#: mainwindow.s_default
+msgid "Default"
+msgstr "Обычный"
+
+#: mainwindow.s_different
+msgid "Different"
+msgstr "Разный"
+
+#: mainwindow.s_empty
+msgid "Empty"
+msgstr "Пусто"
+
+#: mainwindow.s_mm
+msgid "mm"
+msgstr "мм"
 
 #: menucommand~Show(ToolBarR)
 msgid "ToolBarR"

@@ -1783,9 +1783,9 @@ var
    obj:gdbstring;
    objt:PUserTypeDescriptor;
 begin
-     if Operands='ObjInsp' then
+  DockMaster.ShowControl(Operands,true);
+{     if Operands='ObjInsp' then
                             begin
-                                 //DockMaster.MakeDockable(GDBobjinsp);
                                  DockMaster.ShowControl('ObjectInspector',true);
                             end
 else if Operands='CommandLine' then
@@ -1799,7 +1799,7 @@ else if Operands='PageControl' then
 else if Operands='ToolBarR' then
                             begin
                                  DockMaster.ShowControl('ToolBarR',true);
-                            end;
+                            end;}
 end;
 function UpdatePO_com(Operands:pansichar):GDBInteger;
 var

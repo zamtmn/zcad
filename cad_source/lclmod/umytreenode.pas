@@ -35,6 +35,7 @@ type
                        procedure LoadFromACNFile(fname:string);
                        procedure SetImage(img,identifer:string;var action:TmyAction);
                        function LoadImage(imgfile:GDBString):Integer;
+                       procedure AddMyAction(Action:TmyAction);
                        public
                        brocenicon:integer;
                   end;
@@ -123,6 +124,8 @@ function IterateFind(Node:TmyTreeNode; CompareFunc:PIterateCmpareFunc;PExpr:Poin
 function IterateFindCategoryN (node:TmyTreeNode;PExpr:Pointer):Boolean;
 function FindControlByType(_parent:TWinControl;_class:TClass):TControl;
 procedure SetHeightControl(_parent:TWinControl;h:integer);
+//var
+//   ACN_ShowObjInsp:TmyAction=nil;
 implementation
 uses commandline,log,sharedgdb;
 function TmyAction.Execute: Boolean;
@@ -137,6 +140,11 @@ begin
        result:=true;
        inherited;
 end;
+procedure TmyActionList.AddMyAction(Action:TmyAction);
+begin
+     self.AddAction(action);
+end;
+
 function TmyActionList.LoadImage(imgfile:GDBString):Integer;
 var
     bmp:TBitmap;
@@ -219,7 +227,7 @@ begin
     begin
       if uppercase(line) = 'ACTION' then
            begin
-               actionname:=f.readstring(',','');
+               actionname:=UPPERCASE(f.readstring(',',''));
             actioncommand:=f.readstring(',','');
                 actionpic:=f.readstring(',','');
             actioncaption:=f.readstring(',','');
@@ -234,6 +242,8 @@ begin
                                          actionname:=actionname;}
 
                action:=TmyAction.Create(self);
+               //if actionname='ACN_SHOWOBJINSP'
+               //                               then ACN_ShowObjInsp:=action;
                if actionshortcut<>'' then
                                          action.ShortCut:=TextToShortCut(actionshortcut);
                action.Name:=uppercase(actionname);
@@ -536,7 +546,8 @@ procedure TmyTreeView.DoSelectionChanged;
 begin
      inherited;
 
-     TmyTreeNode(Selected).Select;
+     if selected<>nil then
+                          TmyTreeNode(Selected).Select;
 end;
 
 function TmyTreeView.CreateNode: TTreeNode;

@@ -27,7 +27,7 @@ uses
   x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
   {$ENDIF}
-  strproc,{umytreenode,}types,graphics,
+  strproc,{umytreenode,}types,graphics, umytreenode,
   {StdCtrls,}ExtCtrls,ComCtrls,Controls,Classes,menus,Forms,lcltype,fileutil,
 
   gdbasetypes,SysUtils,shared,sharedgdb,
@@ -43,7 +43,7 @@ type
   end;
   arrayarrindop=array[0..10] of arrindop;
   parrayarrindop=^arrayarrindop;
-  TGDBobjinsp=class({TPanel}TScrollBox{tform})
+  TGDBobjinsp=class({TPanel}{TScrollBox}tform)
     public
     GDBobj:GDBBoolean;
     ppropcurrentedit:PPropertyDeskriptor;
@@ -108,6 +108,8 @@ type
                                    WithThemeSpace: boolean = true); override;
     procedure DoSendBoundsToInterface; override; // called by RealizeBounds
     procedure DoAllAutoSize; override;
+
+    procedure FormHide(Sender: TObject);
   end;
 
 procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
@@ -123,6 +125,11 @@ var
 implementation
 
 uses {oglwindow,mainwindow,ZPanelsWithSplit,}gdbentity,UGDBStringArray,log;
+procedure TGDBobjinsp.FormHide(Sender: TObject);
+begin
+     proptreeptr:=proptreeptr;
+end;
+
 procedure TGDBobjinsp.DoAllAutoSize;
 begin
      inherited;
@@ -177,6 +184,7 @@ procedure TGDBobjinsp.AfterConstruction;
 begin
      inherited;
      onresize:=_onresize;
+     onhide:=FormHide;
      onpaint:=mypaint;
      self.DoubleBuffered:=true;
      self.BorderStyle:=bsnone;

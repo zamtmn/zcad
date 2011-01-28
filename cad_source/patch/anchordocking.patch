@@ -1,0 +1,15 @@
+Index: anchordocking.pas
+===================================================================
+--- anchordocking.pas	(revision 29154)
++++ anchordocking.pas	(working copy)
+@@ -5066,8 +5066,8 @@
+       ChildSite.BoundSplitter.Top:=SplitterPos;
+     case ChildSite.Align of
+     alTop: ChildSite.Height:=ChildSite.BoundSplitter.Top;
+-    alBottom: ChildSite.Height:=Site.ClientHeight
+-                  -(ChildSite.BoundSplitter.Top+ChildSite.BoundSplitter.Height);
++    //alBottom: ChildSite.Height:=Site.ClientHeight
++    //              -(ChildSite.BoundSplitter.Top+ChildSite.BoundSplitter.Height);
+     alLeft: ChildSite.Width:=ChildSite.BoundSplitter.Left;
+     alRight: ChildSite.Width:=Site.ClientWidth
+                   -(ChildSite.BoundSplitter.Left+ChildSite.BoundSplitter.Width);

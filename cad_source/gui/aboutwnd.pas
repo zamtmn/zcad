@@ -39,7 +39,7 @@ uses splashwnd,shared,log;
 procedure TAboutWnd.AfterConstruction;
 begin
   inherited;
-  self.Position:={poScreenCenter}poMainFormCenter;
+  self.Position:=poScreenCenter{poMainFormCenter};
   caption:=AboutWndCaption;
 
   self.borderstyle:=bsSizeToolWin;

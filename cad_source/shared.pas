@@ -57,27 +57,21 @@ uses {strproc,}{umytreenode,}{FileUtil,LCLclasses,} LCLtype,
      log,{UGDBDescriptor,}varmandef,{sysinfo,}{cmdline,}strutils{,oglwindow};
 procedure DisableCmdLine;
 begin
-  if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
-  if sysvar.SYS.SYS_IsHistoryLineCreated^=true then
-  begin
-  shared.cmdedit.Enabled:=false;
-  shared.HintText.Enabled:=false;
-
-  end;
+  if assigned(shared.cmdedit) then
+                             shared.cmdedit.Enabled:=false;
+  if assigned(shared.HintText) then
+                             shared.HintText.Enabled:=false;
 end;
 
 procedure EnableCmdLine;
 begin
-  if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
-  if sysvar.SYS.SYS_IsHistoryLineCreated^=true then
-
-  begin
-  shared.cmdedit.Enabled:=true;
-  shared.HintText.Enabled:=true;
-  shared.cmdedit.SetFocus;
-
-  end;
-
+  if assigned(shared.cmdedit) then
+                                  begin
+                                       shared.cmdedit.Enabled:=true;
+                                       shared.cmdedit.SetFocus;
+                                  end;
+  if assigned(shared.HintText) then
+                                   shared.HintText.Enabled:=true;
 end;
 
 procedure OldVersTextReplace(var vv:GDBString);
@@ -127,6 +121,7 @@ begin
 end;
 procedure SBTextOut(s:GDBString);
 begin
+     if assigned(HintText) then
      HintText.caption:=(s);
      //HintText.{Update}repaint;
 end;

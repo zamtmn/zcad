@@ -907,17 +907,25 @@ begin
 end;
 
 function ChangeProjType_com(Operands:pansichar):GDBInteger;
+var
+   ta:TmyAction;
 begin
+     ta:=tmyaction(MainFormN.StandartActions.ActionByName('ACN_PERSPECTIVE'));
   if GDB.GetCurrentDWG.OGLwindow1.param.projtype = projparalel then
   begin
     //if sysvar.PMenuProjType<>nil then PMenuItem(sysvar.PMenuProjType^)^.caption := 'Паралельная проекция';
     GDB.GetCurrentDWG.OGLwindow1.param.projtype := projperspective;
+    if ta<>nil then
+                   ta.Checked:=true;
+
   end
   else
     if GDB.GetCurrentDWG.OGLwindow1.param.projtype = projPerspective then
     begin
     //if sysvar.PMenuProjType<>nil then PMenuItem(sysvar.PMenuProjType^)^.caption := 'Перспективная проекция';
     GDB.GetCurrentDWG.OGLwindow1.param.projtype := projparalel;
+      if ta<>nil then
+                     ta.Checked:=false;
     end;
   redrawoglwnd;
   result:=cmd_ok;

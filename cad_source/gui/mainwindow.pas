@@ -569,7 +569,7 @@ var
 begin
   //AutoSize:=false;
   self.SetBounds(0,0,800,44);
-  DockMaster.MakeDockSite(Self,[{akTop,}akBottom{,akLeft,akRight}],admrpChild{admrpNone},{true}false);
+  DockMaster.MakeDockSite(Self,[akTop,akBottom,akLeft,akRight],admrpChild{admrpNone},{true}false);
   DockMaster.HeaderClass:=TmyAnchorDockHeader;
   DockMaster.SplitterClass:=TmyAnchorDockSplitter;
 

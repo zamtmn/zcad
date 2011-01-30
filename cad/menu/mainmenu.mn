@@ -22,7 +22,7 @@ Panel Standart;
     action ACN_UNDO
     action ACN_REDO
     Separator
-    button Regen,regen.bmp,Регенерировать чертеж
+    action ACN_REGEN
     button RebuildTree,#rtree,*DEBUG*Перестроить дерево примитивов
   }
 Panel Quick;
@@ -102,23 +102,25 @@ MainMenuItem Edit;
   }
 MainMenuItem View;
   {
-    Command Регенерировать,Regen,CTRL+P,PMenuProjType
+    action ACN_REGEN
     action ACN_PROJECTTREE
     Separator
     MenuItem Камера;
       {
         Command Камера в начало (Вид сверху),Cam_reset,none,none
-        Command Перспективная/Ортогональная проекция,ChangeProjType,CTRL+P,PMenuProjType
+        action ACN_PERSPECTIVE
       }
     MenuItem Show window;
       {
         action ACN_SHOW_OBJECTINSPECTOR
         action ACN_SHOW_PAGECONTROL
         action ACN_SHOW_COMMANDLINE
+        MenuItem ToolBars;
+           {
+             ToolBars
+           }
         Separator
-        ToolBars
-        Separator
-        Command Сохранить разбивку окон,SaveLayout,O,none
+        action ACN_SAVELAYOUT
       }
     MenuItem Инспектор;
       {

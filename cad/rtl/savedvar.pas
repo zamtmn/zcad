@@ -17,9 +17,9 @@ var
   PATH_File9:GDBString;
 implementation
 begin
-  VIEW_CommandLineH:=100;
-  VIEW_ObjInspV:=200;
-  VIEW_ObjInspSubV:=49;
+  VIEW_CommandLineH:=74;
+  VIEW_ObjInspV:=197;
+  VIEW_ObjInspSubV:=84;
   PATH_File0:='C:\zcad\cad\sample\test_dxf\em.dxf';
   PATH_File1:='C:\zcad\cad\sample\test_dxf\ops.dxf';
   PATH_File2:='C:\zcad\cad\autosave\autosave.dxf';

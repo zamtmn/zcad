@@ -139,6 +139,18 @@ msgstr "Вставить"
 msgid "Paste from clipboard"
 msgstr "Вставить из клипбоард"
 
+#: ACN_PERSPECTIVE~caption
+msgid "Perspective"
+msgstr "Перспектива"
+
+#: ACN_PERSPECTIVE~hint
+msgid "Perspective on/off"
+msgstr "Перспектива вкл/выкл"
+
+#: ACN_PERSPECTIVE~textimage
+msgid "perspective"
+msgstr ""
+
 #: ACN_POLYED~caption
 msgid "Edit polyline"
 msgstr "Редактировать полиобъект"
@@ -163,6 +175,10 @@ msgstr "Выход"
 msgid "Redo"
 msgstr "Повторить"
 
+#: ACN_REGEN~caption
+msgid "Regen all"
+msgstr "Регенерировать всё"
+
 #: ACN_ROTATE~caption
 msgid "Rotate"
 msgstr "Повернуть"
@@ -178,6 +194,14 @@ msgstr "Сохранить как ..."
 #: ACN_SAVEAS~hint
 msgid "Save drawing as"
 msgstr "Сохранить чертеж как ..."
+
+#: ACN_SAVELAYOUT~caption
+msgid "Save window layout as default"
+msgstr "Сохранить разбивку окон по умолчанию"
+
+#: ACN_SAVELAYOUT~textimage
+msgid "SLay"
+msgstr ""
 
 #: ACN_SAVEOPTIONS~caption
 msgid "Save options"
@@ -205,6 +229,32 @@ msgstr "Масштабировать"
 msgid "Scale primitives"
 msgstr "Масштабировать примитивы"
 
+#: ACN_SHOW_COMMANDLINE~caption
+msgid "Command line and history"
+msgstr "Командная строка и история"
+
+#: ACN_SHOW_COMMANDLINE~textimage
+msgid "CL"
+msgstr ""
+
+#: ACN_SHOW_OBJECTINSPECTOR~caption
+msgctxt "ACN_SHOW_OBJECTINSPECTOR~caption"
+msgid "Object inspector"
+msgstr "Инспектор объектов"
+
+#: ACN_SHOW_OBJECTINSPECTOR~textimage
+msgid "OI"
+msgstr ""
+
+#: ACN_SHOW_PAGECONTROL~caption
+msgctxt "ACN_SHOW_PAGECONTROL~caption"
+msgid "Drawings window"
+msgstr "Окно чертежей"
+
+#: ACN_SHOW_PAGECONTROL~textimage
+msgid "DW"
+msgstr ""
+
 #: ACN_UNDO~caption
 msgid "Undo"
 msgstr "Отменить"
@@ -225,10 +275,6 @@ msgstr ""
 msgid "LWT"
 msgstr "Вес"
 
-#: button_variable~DWG_EditInSubEntry
-msgid "SUB-Select"
-msgstr "SUB-выделение"
-
 #: button_variable~DWG_HelpGeometryDraw
 msgid "AG"
 msgstr ""
@@ -238,6 +284,7 @@ msgid "OSnap"
 msgstr "Привязки"
 
 #: button_variable~DWG_PolarMode
+msgctxt "button_variable~DWG_PolarMode"
 msgid "Polar"
 msgstr "Полярность"
 
@@ -389,6 +436,7 @@ msgid "Object type"
 msgstr "Тип объекта"
 
 #: GDBObjVisualProp~Layer
+msgctxt "GDBObjVisualProp~Layer"
 msgid "Layer"
 msgstr "Слой"
 
@@ -449,6 +497,7 @@ msgid "Saving"
 msgstr "Сохранение"
 
 #: gdbsysvariable~SYS
+msgctxt "gdbsysvariable~SYS"
 msgid "System"
 msgstr "Система"
 
@@ -462,35 +511,54 @@ msgid "Divide by zero (Geometry.NormalizeVertex)"
 msgstr "Деление на ноль (Geometry.NormalizeVertex)"
 
 #: hint_panel~DWG_DrawMode
-msgid "Show/Hide Lineweight"
+#, fuzzy
+#| msgid "Show/Hide Lineweight"
+msgid "Show/Hide"
 msgstr "Показать вес линий"
 
 #: hint_panel~DWG_EditInSubEntry
-msgid "On/Off Selecting parts of dynamic objects"
+#, fuzzy
+#| msgid "On/Off Selecting parts of dynamic objects"
+msgid "On/Off"
 msgstr "Вкл./Выкл. отдельный выбор частей динамических объектов"
 
 #: hint_panel~DWG_HelpGeometryDraw
-msgid "Auxiliary graphics (connectivity, direction, etc.)"
+#, fuzzy
+#| msgid "Auxiliary graphics (connectivity, direction, etc.)"
+msgid "Auxiliary"
 msgstr "Вспомогательная графика (подключение, направление и т.п.)"
 
 #: hint_panel~DWG_OSMode
-msgid "Object snap"
+#, fuzzy
+#| msgid "Object snap"
+msgid "Object"
 msgstr "Объектные привязки"
 
 #: hint_panel~DWG_PolarMode
-msgid "Polar tracking"
+#, fuzzy
+#| msgid "Polar tracking"
+msgctxt "hint_panel~DWG_PolarMode"
+msgid "Polar"
 msgstr "Полярная трассировка"
 
 #: hint_panel~DWG_SystmGeometryDraw
-msgid "System graphics (size, communication, etc. for debugging)"
+#, fuzzy
+#| msgid "System graphics (size, communication, etc. for debugging)"
+msgctxt "hint_panel~DWG_SystmGeometryDraw"
+msgid "System"
 msgstr "Системная графика (габариты, связи и т.п. для отладки)"
 
 #: hint_panel~LAYERCOMBOBOX
-msgid "Layer selection"
+#, fuzzy
+#| msgid "Layer selection"
+msgctxt "hint_panel~LAYERCOMBOBOX"
+msgid "Layer"
 msgstr "Выбор слоя"
 
 #: hint_panel~LINEWCOMBOBOX
-msgid "Line weight selection"
+#, fuzzy
+#| msgid "Line weight selection"
+msgid "Line"
 msgstr "Выбор веса линий"
 
 #: mainwindow.commandlinewndname
@@ -502,6 +570,7 @@ msgid "Done.  %s second"
 msgstr "Выполнено за  %s сек."
 
 #: mainwindow.drawingwindowwndname
+msgctxt "mainwindow.drawingwindowwndname"
 msgid "Drawings window"
 msgstr "Окно чертежей"
 
@@ -515,9 +584,10 @@ msgstr "Повторное создание %s!"
 
 #: mainwindow.es_toolbarnotfound
 msgid "Toolbar \"%s\" is not found! Create a blank window"
-msgstr ""
+msgstr "Панель инструментов \"%s\" не найдена! Создано пусте окно"
 
 #: mainwindow.gdbobjinspwndname
+msgctxt "mainwindow.gdbobjinspwndname"
 msgid "Object inspector"
 msgstr "Инспектор объектов"
 
@@ -544,10 +614,6 @@ msgstr "Пусто"
 #: mainwindow.s_mm
 msgid "mm"
 msgstr "мм"
-
-#: menucommand~Show(ToolBarR)
-msgid "ToolBarR"
-msgstr ""
 
 #: menu~Draw
 msgid "Draw"
@@ -614,6 +680,14 @@ msgstr "Красный"
 #: shared.errorprefix
 msgid "ERROR: "
 msgstr "ОШИБКА: "
+
+#: submenu~Show window
+msgid "Show window"
+msgstr "Показать окно"
+
+#: submenu~ToolBars
+msgid "ToolBars"
+msgstr "Панели инструментов"
 
 #: TBlockDesc~BBorder
 msgid "Border"

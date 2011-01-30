@@ -16,9 +16,12 @@ action ACN_ERASE,Erase,erase.bmp,Erase,,DEL
 action ACN_El_FIND,EL_Find,find.bmp,Find device,,CTRL+F
 
 action ACN_PROJECTTREE,ProjectTree,treeview.bmp,Project tree,,CTRL+T
-action ACN_SHOW_OBJECTINSPECTOR,Show(ObjInsp),#OI,Show object inspector,,
-action ACN_SHOW_PAGECONTROL,Show(PageControl),#DW,Show drawings window,,
-action ACN_SHOW_COMMANDLINE,Show(CommandLine),#CL,Show command line and history,,
+action ACN_REGEN,Regen,regen.bmp,Regen all,,
+action ACN_PERSPECTIVE,ChangeProjType,perspective.bmp,Perspective,Perspective on/off,
+action ACN_SHOW_OBJECTINSPECTOR,Show(ObjInsp),#OI,Object inspector,,
+action ACN_SHOW_PAGECONTROL,Show(PageControl),#DW,Drawings window,,
+action ACN_SHOW_COMMANDLINE,Show(CommandLine),#CL,Command line and history,,
+action ACN_SAVELAYOUT,SaveLayout,#SLay,Save window layout as default,,
 
 action ACN_LAYER,Layer,layer.bmp,Layers ...,Layers properties manager,
 

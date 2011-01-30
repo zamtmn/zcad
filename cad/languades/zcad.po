@@ -128,6 +128,18 @@ msgstr ""
 msgid "Paste from clipboard"
 msgstr ""
 
+#: ACN_PERSPECTIVE~caption
+msgid "Perspective"
+msgstr ""
+
+#: ACN_PERSPECTIVE~hint
+msgid "Perspective on/off"
+msgstr ""
+
+#: ACN_PERSPECTIVE~textimage
+msgid "perspective"
+msgstr ""
+
 #: ACN_POLYED~caption
 msgid "Edit polyline"
 msgstr ""
@@ -152,6 +164,10 @@ msgstr ""
 msgid "Redo"
 msgstr ""
 
+#: ACN_REGEN~caption
+msgid "Regen all"
+msgstr ""
+
 #: ACN_ROTATE~caption
 msgid "Rotate"
 msgstr ""
@@ -166,6 +182,14 @@ msgstr ""
 
 #: ACN_SAVEAS~hint
 msgid "Save drawing as"
+msgstr ""
+
+#: ACN_SAVELAYOUT~caption
+msgid "Save window layout as default"
+msgstr ""
+
+#: ACN_SAVELAYOUT~textimage
+msgid "SLay"
 msgstr ""
 
 #: ACN_SAVEOPTIONS~caption
@@ -194,6 +218,35 @@ msgstr ""
 msgid "Scale primitives"
 msgstr ""
 
+#: ACN_SHOW_COMMANDLINE~caption
+#, fuzzy
+msgid "Command line and history"
+msgstr ""
+
+#: ACN_SHOW_COMMANDLINE~textimage
+msgid "CL"
+msgstr ""
+
+#: ACN_SHOW_OBJECTINSPECTOR~caption
+#, fuzzy
+msgctxt "ACN_SHOW_OBJECTINSPECTOR~caption"
+msgid "Object inspector"
+msgstr ""
+
+#: ACN_SHOW_OBJECTINSPECTOR~textimage
+msgid "OI"
+msgstr ""
+
+#: ACN_SHOW_PAGECONTROL~caption
+#, fuzzy
+msgctxt "ACN_SHOW_PAGECONTROL~caption"
+msgid "Drawings window"
+msgstr ""
+
+#: ACN_SHOW_PAGECONTROL~textimage
+msgid "DW"
+msgstr ""
+
 #: ACN_UNDO~caption
 msgid "Undo"
 msgstr ""
@@ -214,10 +267,6 @@ msgstr ""
 msgid "LWT"
 msgstr ""
 
-#: button_variable~DWG_EditInSubEntry
-msgid "SUB-Select"
-msgstr ""
-
 #: button_variable~DWG_HelpGeometryDraw
 #, fuzzy
 msgid "AG"
@@ -228,6 +277,7 @@ msgid "OSnap"
 msgstr ""
 
 #: button_variable~DWG_PolarMode
+msgctxt "button_variable~DWG_PolarMode"
 msgid "Polar"
 msgstr ""
 
@@ -379,6 +429,7 @@ msgid "Object type"
 msgstr ""
 
 #: GDBObjVisualProp~Layer
+msgctxt "GDBObjVisualProp~Layer"
 msgid "Layer"
 msgstr ""
 
@@ -439,6 +490,7 @@ msgid "Saving"
 msgstr ""
 
 #: gdbsysvariable~SYS
+msgctxt "gdbsysvariable~SYS"
 msgid "System"
 msgstr ""
 
@@ -452,36 +504,46 @@ msgid "Divide by zero (Geometry.NormalizeVertex)"
 msgstr ""
 
 #: hint_panel~DWG_DrawMode
-msgid "Show/Hide Lineweight"
+#, fuzzy
+msgid "Show/Hide"
 msgstr ""
 
 #: hint_panel~DWG_EditInSubEntry
 #, fuzzy
-msgid "On/Off Selecting parts of dynamic objects"
+msgid "On/Off"
 msgstr ""
 
 #: hint_panel~DWG_HelpGeometryDraw
-msgid "Auxiliary graphics (connectivity, direction, etc.)"
+#, fuzzy
+msgid "Auxiliary"
 msgstr ""
 
 #: hint_panel~DWG_OSMode
-msgid "Object snap"
+#, fuzzy
+msgid "Object"
 msgstr ""
 
 #: hint_panel~DWG_PolarMode
-msgid "Polar tracking"
+#, fuzzy
+msgctxt "hint_panel~DWG_PolarMode"
+msgid "Polar"
 msgstr ""
 
 #: hint_panel~DWG_SystmGeometryDraw
-msgid "System graphics (size, communication, etc. for debugging)"
+#, fuzzy
+msgctxt "hint_panel~DWG_SystmGeometryDraw"
+msgid "System"
 msgstr ""
 
 #: hint_panel~LAYERCOMBOBOX
-msgid "Layer selection"
+#, fuzzy
+msgctxt "hint_panel~LAYERCOMBOBOX"
+msgid "Layer"
 msgstr ""
 
 #: hint_panel~LINEWCOMBOBOX
-msgid "Line weight selection"
+#, fuzzy
+msgid "Line"
 msgstr ""
 
 #: mainwindow.commandlinewndname
@@ -493,6 +555,7 @@ msgid "Done.  %s second"
 msgstr ""
 
 #: mainwindow.drawingwindowwndname
+msgctxt "mainwindow.drawingwindowwndname"
 msgid "Drawings window"
 msgstr ""
 
@@ -509,6 +572,7 @@ msgid "Toolbar \"%s\" is not found! Create a blank window"
 msgstr ""
 
 #: mainwindow.gdbobjinspwndname
+msgctxt "mainwindow.gdbobjinspwndname"
 msgid "Object inspector"
 msgstr ""
 
@@ -534,10 +598,6 @@ msgstr ""
 
 #: mainwindow.s_mm
 msgid "mm"
-msgstr ""
-
-#: menucommand~Show(ToolBarR)
-msgid "ToolBarR"
 msgstr ""
 
 #: menu~Draw
@@ -604,6 +664,14 @@ msgstr ""
 
 #: shared.errorprefix
 msgid "ERROR: "
+msgstr ""
+
+#: submenu~Show window
+msgid "Show window"
+msgstr ""
+
+#: submenu~ToolBars
+msgid "ToolBars"
 msgstr ""
 
 #: TBlockDesc~BBorder

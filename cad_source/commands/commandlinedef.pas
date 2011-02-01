@@ -63,7 +63,7 @@ type
   GDBcommandmanagerDef=object(GDBOpenArrayOfPObjects)
                                   lastcommand:GDBString;
                                   pcommandrunning:PCommandRTEdObjectDef;
-                                  function executecommand(comm:pansichar): GDBInteger;virtual;abstract;
+                                  function executecommand(const comm:pansichar): GDBInteger;virtual;abstract;
                                   procedure executecommandend;virtual;abstract;
                                   function executelastcommad: GDBInteger;virtual;abstract;
                                   procedure sendpoint2command(p3d:gdbvertex; p2d:gdbvertex2di; mode:GDBByte;osp:pos_record);virtual;abstract;

@@ -324,6 +324,7 @@ begin
      Width2D_in_OCS_Array.done;
      Vertex3D_in_WCS_Array.done;
      Width3D_in_WCS_Array.done;
+     snaparray.done;
      inherited done;//  error
 end;
 constructor GDBObjLWpolyline.init;

@@ -2160,8 +2160,6 @@ begin
 end;
 
 
-
-
 procedure startup;
 //var
   // s:gdbstring;

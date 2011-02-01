@@ -1118,7 +1118,7 @@ begin
   //result := 0;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBCommandsBase.initialization');{$ENDIF}
+  {$IFDEF DEBUGINITSECTION}LogOut('GDBCommandsOPS.initialization');{$ENDIF}
   startup;
 finalization
   finalize;

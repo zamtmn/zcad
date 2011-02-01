@@ -140,7 +140,7 @@ type
     procedure SetMouseMode(smode:GDBByte);
 
     procedure _onresize(sender:tobject);virtual;
-    procedure free;
+    destructor Destroy; override;
 
 
     procedure delmyscrbuf;
@@ -3460,11 +3460,13 @@ begin
 
   end;
 end;
-procedure TOGLwnd.free;
+destructor TOGLWnd.Destroy;
 var
    i:integer;
 begin
      delmyscrbuf;
+     if param.pglscreen <> nil then
+     GDBFreeMem(param.pglscreen);
      MywglDeleteContext(OGLContext);//wglDeleteContext(hrc);
      PolarAxis.done;
      if param.pglscreen<>nil then

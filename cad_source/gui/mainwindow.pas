@@ -730,7 +730,7 @@ begin
                                     tb.Images:=standartactions.Images;
      if tbdesk<>'' then
       begin
-           f.init(length(tbdesk));
+           f.init({$IFDEF DEBUGBUILD}'{BF3C3480-8736-4378-AA0E-D96EFFE4FC7A}',{$ENDIF}length(tbdesk));
            f.AddData(@tbdesk[1],length(tbdesk));
 
            repeat

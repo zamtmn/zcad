@@ -101,7 +101,7 @@ end;
 
 constructor TEntTreeNode.initnul;
 begin
-     nul.init(1000);
+     nul.init({$IFDEF DEBUGBUILD}'{0B3BD93C-D6F7-4F08-B9E5-21574D345206}',{$ENDIF}1000);
 end;
 procedure TEntTreeNode.ClearSub;
 begin
@@ -145,9 +145,9 @@ begin
 end;
 constructor TTestTreeNode.initnul;
 begin
-     nul.init(1000);
-     plus.init(1000);
-     minus.init(1000);
+     nul.init({$IFDEF DEBUGBUILD}'{920880D2-9F43-4861-916C-572E7DF0E049}',{$ENDIF}1000);
+     plus.init({$IFDEF DEBUGBUILD}'{7930F3C0-94EE-4A4B-8263-FF7A04DB0B9B}',{$ENDIF}1000);
+     minus.init({$IFDEF DEBUGBUILD}'{18750ABA-EE1F-4D09-A247-6D1DE22A5170}',{$ENDIF}1000);
 end;
 destructor TTestTreeNode.done;
 begin

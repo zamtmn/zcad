@@ -30,7 +30,7 @@ PVectorSnapArray=^VectorSnapArray;
 VectorSnapArray=array [0..0] of VectorSnap;
 PGDBVectorSnapArray=^GDBVectorSnapArray;
 GDBVectorSnapArray=object(GDBOpenArrayOfData)
-                constructor init(m:GDBInteger);
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
              end;
 {Export-}
 implementation
@@ -38,7 +38,7 @@ uses
     log;
 constructor GDBVectorSnapArray.init;
 begin
-  inherited init({$IFDEF DEBUGBUILD}'{287DD875-12B1-40E0-BA18-EF2844A44618}',{$ENDIF}m,sizeof(VectorSnap));
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(VectorSnap));
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBVectorSnapArray.initialization');{$ENDIF}

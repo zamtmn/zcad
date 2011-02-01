@@ -701,7 +701,7 @@ var
   instyletable:boolean;
 begin
   //--------------------------outstream := FileCreate(name);
-  outstream.init(10*1024*1024);
+  outstream.init({$IFDEF DEBUGBUILD}'{51453949-893A-49C2-9588-42B25346D071}',{$ENDIF}10*1024*1024);
   //--------------------------if outstream>0 then
   begin
   MainFormN.StartLongProcess(pdrawing^.pObjRoot^.ObjArray.Count);

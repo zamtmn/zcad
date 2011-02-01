@@ -87,6 +87,7 @@ end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('splashwnd.initialization');{$ENDIF}
   Application.Initialize;
+  RequireDerivedFormResource:=false;
   createsplash;
 finalization
   removesplash;

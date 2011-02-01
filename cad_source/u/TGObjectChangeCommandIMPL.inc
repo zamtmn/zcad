@@ -14,7 +14,7 @@ TCommand=specialize TGObjectChangeCommand<TData>;
 {$IFDEF IMPLEMENTATION}
 function GDBObjOpenArrayOfUCommands.CreateTGObjectChangeCommand(var data:TData;_method:tmethod):PTCommand;overload;
 begin
-     gdbgetmem(result,sizeof(TCommand));
+     gdbgetmem({$IFDEF DEBUGBUILD}'{9FE25B12-DEE0-410A-BDCD-7E69A41E4389}',{$ENDIF}result,sizeof(TCommand));
      result^.Assign(data,_method);
 end;
 function GDBObjOpenArrayOfUCommands.PushCreateTGObjectChangeCommand(var data:TData;_method:tmethod):PTCommand;overload;

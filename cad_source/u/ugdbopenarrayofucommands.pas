@@ -144,7 +144,7 @@ constructor TGMultiObjectChangeCommand.Assign(const _dodata,_undodata:_T;const o
 begin
      DoData:=_DoData;
      UnDoData:=_UnDoData;
-     self.ObjArray.init(objcount,sizeof(tmethod));
+     self.ObjArray.init({$IFDEF DEBUGBUILD}'{108FD060-E408-4161-9548-64EEAFC3BEB2}',{$ENDIF}objcount,sizeof(tmethod));
 end;
 procedure TGMultiObjectChangeCommand.AddMethod(method:tmethod);
 begin
@@ -280,7 +280,7 @@ constructor TChangeCommand.init(obj:GDBPointer;_datasize:PtrInt);
 begin
      Addr:=obj;
      datasize:=_datasize;
-     GDBGetMem(pointer(tempdata),datasize);
+     GDBGetMem({$IFDEF DEBUGBUILD}'{E438B065-CE41-4BB2-B1C9-1DC526190A85}',{$ENDIF}pointer(tempdata),datasize);
      Move(Addr^,tempdata^,datasize);
 end;
 
@@ -327,7 +327,7 @@ begin
      inc(startmarkercount);
      if startmarkercount=1 then
      begin
-     GDBGetMem(pointer(pmarker),sizeof(TMarkerCommand));
+     GDBGetMem({$IFDEF DEBUGBUILD}'{30D8D2A8-1130-40FB-81BC-10C7D9A1FF38}',{$ENDIF}pointer(pmarker),sizeof(TMarkerCommand));
      pmarker^.init(CommandName,-1);
      currentcommandstartmarker:=self.Add(@pmarker);
      inc(CurrentCommand);
@@ -340,7 +340,7 @@ begin
      dec(startmarkercount);
      if startmarkercount=0 then
      begin
-     GDBGetMem(pointer(pmarker),sizeof(TMarkerCommand));
+     GDBGetMem({$IFDEF DEBUGBUILD}'{F5F5F128-96B3-4AB9-81A1-2B86E0C95EF4}',{$ENDIF}pointer(pmarker),sizeof(TMarkerCommand));
      pmarker^.init('EndMarker',currentcommandstartmarker);
      currentcommandstartmarker:=-1;
      self.Add(@pmarker);
@@ -360,7 +360,7 @@ begin
           and(pcc^.datasize=_fieldsize) then
                                              exit;
      end;
-     GDBGetMem(pointer(pcc),sizeof(TChangeCommand));
+     GDBGetMem({$IFDEF DEBUGBUILD}'{3A3AAA8F-40EB-415B-BDC2-798712E9F402}',{$ENDIF}pointer(pcc),sizeof(TChangeCommand));
      pcc^.init(_obj,_fieldsize);
      inc(CurrentCommand);
      add(@pcc);

@@ -212,7 +212,7 @@ begin
   vp.ID := GDBPolylineID;
   VertexArrayInWCS.init({$IFDEF DEBUGBUILD}'{2C1E462A-ED22-4A83-8C88-B3AF70718E5A}',{$ENDIF}1000);
   vertexarrayinocs.init({$IFDEF DEBUGBUILD}'{3DBA1295-54F6-45D1-984C-2C51A585C5C9}',{$ENDIF}1000);
-  snaparray.init(100);
+  snaparray.init({$IFDEF DEBUGBUILD}'{13C74F96-05DB-4025-93B1-9599B31912CC}',{$ENDIF}100);
   PProjPoint:=nil;
   //Format;
 end;
@@ -223,7 +223,7 @@ begin
   vp.ID := GDBPolylineID;
   VertexArrayInWCS.init({$IFDEF DEBUGBUILD}'{6662A71B-9321-472D-B3C3-3EBFCA8D610A}',{$ENDIF}1000);
   vertexarrayinocs.init({$IFDEF DEBUGBUILD}'{3DBA1295-54F6-45D1-984C-2C51A585C5C9}',{$ENDIF}1000);
-  snaparray.init(100);
+  snaparray.init({$IFDEF DEBUGBUILD}'{0BAF650E-84F9-4851-AC85-53345427B4BE}',{$ENDIF}100);
   PProjPoint:=nil;
 end;
 procedure GDBObjCurve.DrawGeometry;
@@ -306,6 +306,7 @@ begin
         ptvprev:=ptv;
         ptv:=VertexArrayInWCS.iterate(ir);
   until ptv=nil;
+  snaparray.Shrink;
 end;
 procedure GDBObjCurve.Format;
 var //i,j: GDBInteger;

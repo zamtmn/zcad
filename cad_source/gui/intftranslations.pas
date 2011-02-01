@@ -197,7 +197,10 @@ procedure initialize;
       TranslateUnitResourceStrings('anchordockstr', PODirectory + 'anchordockstr.%s.po', Lang, FallbackLang)
     end;
 
-begin
+initialization
 {$IFDEF DEBUGINITSECTION}log.LogOut('intftranslations.initialization');{$ENDIF}
 initialize;
+finalization
+if assigned(actualypo) then freeandnil(actualypo);
+if assigned(po) then freeandnil(po);
 end.

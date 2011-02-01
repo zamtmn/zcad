@@ -17,17 +17,17 @@ var
   PATH_File9:GDBString;
 implementation
 begin
-  VIEW_CommandLineH:=100;
-  VIEW_ObjInspV:=200;
+  VIEW_CommandLineH:=74;
+  VIEW_ObjInspV:=197;
   VIEW_ObjInspSubV:=84;
   PATH_File0:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File1:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File2:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
-  PATH_File3:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File1:='E:\work2\proj.dxf';
+  PATH_File2:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File3:='c:\zcad\errors\0.dxf';
   PATH_File4:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File5:='J:\nh\искандер\гараж\Узел управления\proj.dxf';
-  PATH_File6:='J:\nh\искандер\гараж\proj.dxf';
-  PATH_File7:='E:\work2\proj.dxf';
-  PATH_File8:='E:\work5\переделки\вариант 2\model.dxf';
-  PATH_File9:='E:\work5\autosave\autosave.dxf';
+  PATH_File5:='D:\Drawing1.dxf';
+  PATH_File6:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File7:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
+  PATH_File8:='J:\nh\искандер\гараж\Узел управления\proj.dxf';
+  PATH_File9:='J:\nh\искандер\гараж\proj.dxf';
 end.

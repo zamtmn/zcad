@@ -24,7 +24,7 @@ uses
   UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,
   //debygunit,
   commandlinedef,
-  {windows,}gdbasetypes,commandline,
+  {windows,}gdbasetypes,commandline,GDBCommandsBase,
   plugins,
   //commandlinedef,
   commanddefinternal,
@@ -166,7 +166,7 @@ procedure Line_com_CommandEnd;
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 implementation
-uses GDBCommandsBase,GDBBlockDef,mainwindow,{UGDBObjBlockdefArray,}Varman,projecttreewnd;
+uses GDBBlockDef,mainwindow,{UGDBObjBlockdefArray,}Varman,projecttreewnd;
 procedure FloatInsertWithParams_com.BuildDM(Operands:pansichar);
 begin
 

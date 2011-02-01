@@ -163,10 +163,14 @@ var
   oldlongprocess:integer;
   tf:tform;
   //DockMaster:  TAnchorDockMaster = nil;
+
+  function CloseApp:GDBInteger;
+  function IsRealyQuit:GDBBoolean;
+
 implementation
 
 uses {GDBCommandsBase,}Objinsp{,optionswnd, Tedit_form, MTedit_form},
-  dialogs,XMLPropStorage{,GDBCommandsBase};
+  dialogs,XMLPropStorage;
 
 constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
 begin
@@ -291,11 +295,82 @@ begin
                            FileHistory[0].SetCommand(S_Empty,'');
 
 end;
+function IsRealyQuit:GDBBoolean;
+var
+   pint:PGDBInteger;
+   mem:GDBOpenArrayOfByte;
+begin
+     result:=true;
+     if gdb.GetCurrentDWG<>nil then
+     begin
+     if Application.messagebox('Закрыть программу?','QUIT',MB_YESNO)=IDYES then
+     begin
+          result:=true;
 
+          if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
+          if sysvar.SYS.SYS_IsHistoryLineCreated^ then
+          begin
+          pint:=SavedUnit.FindValue('VIEW_CommandLineH');
+          if assigned(pint)then
+                               pint^:=Cline.Height;
+          pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+          if assigned(pint)then
+                               pint^:=GDBobjinsp.Width;
+          pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
+          if assigned(pint)then
+                               pint^:=GDBobjinsp.namecol;
+
+          mem.init({$IFDEF DEBUGBUILD}'{71D987B4-8C57-4C62-8C12-CFC24A0A9C9A}',{$ENDIF}1024);
+          SavedUnit^.SavePasToMem(mem);
+          mem.SaveToFile(sysparam.programpath+'rtl'+PathDelim+'savedvar.pas');
+          mem.done;
+          end;
+
+          historyout('   Вот и всё бля...............');
+
+
+     end
+     else
+         result:=false;
+     end;
+end;
+
+function CloseApp:GDBInteger;
+var
+   pint:PGDBInteger;
+   mem:GDBOpenArrayOfByte;
+begin
+(*
+     if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
+     if sysvar.SYS.SYS_IsHistoryLineCreated^ then
+     begin
+     pint:=SavedUnit.FindValue('VIEW_CommandLineH');
+     if assigned(pint)then
+                          pint^:=Cline.Height;
+     pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+     if assigned(pint)then
+                          pint^:=GDBobjinsp.Width;
+     pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
+     if assigned(pint)then
+                          pint^:=GDBobjinsp.namecol;
+
+     mem.init({$IFDEF DEBUGBUILD}'{71D987B4-8C57-4C62-8C12-CFC24A0A9C9A}',{$ENDIF}1024);
+     SavedUnit^.SavePasToMem(mem);
+     mem.SaveToFile(sysparam.programpath+'rtl'+PathDelim+'savedvar.pas');
+     mem.done;
+     end;
+
+     historyout('   Вот и всё бля...............');
+*)
+     result:=0;
+     if IsRealyQuit then
+                        application.terminate;
+end;
 procedure TMainFormN.asynccloseapp(Data: PtrInt);
 begin
-     commandmanager.executecommand('Quit');
-     //if _QuitWithoutQuit then
+      CloseApp;
+     //commandmanager.executecommand('Quit');
+     //if IsRealyQuit then
      //                        application.terminate;
 end;
 
@@ -862,8 +937,8 @@ begin
                 //line := f.readstring(';','');
            end;
 
-           until not(f.ReadPos<f.count)
-
+           until not(f.ReadPos<f.count);
+           f.done;
 
       end;
 end;

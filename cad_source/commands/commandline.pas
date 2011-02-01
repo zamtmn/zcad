@@ -28,9 +28,9 @@ type
                           busy:GDBBoolean;
 
                           constructor init(m:GDBInteger);
-                          function execute(comm:pansichar;silent:GDBBoolean): GDBInteger;virtual;
-                          function executecommand(comm:pansichar): GDBInteger;virtual;
-                          function executecommandsilent(comm:pansichar): GDBInteger;virtual;
+                          function execute(const comm:pansichar;silent:GDBBoolean): GDBInteger;virtual;
+                          function executecommand(const comm:pansichar): GDBInteger;virtual;
+                          function executecommandsilent(const comm:pansichar): GDBInteger;virtual;
                           procedure executecommandend;virtual;
                           procedure executecommandtotalend;virtual;
                           procedure executefile(fn:GDBString);virtual;
@@ -207,17 +207,20 @@ begin
           pcommandrunning := pointer(pc);
           pcommandrunning^.CommandStart(pansichar(operands));
 end;
-function GDBcommandmanager.execute(comm:pansichar;silent:GDBBoolean): GDBInteger;
+function GDBcommandmanager.execute(const comm:pansichar;silent:GDBBoolean): GDBInteger;
 var i,p1,p2: GDBInteger;
     command,operands:GDBString;
     cc:TCStartAttr;
     pfoundcommand:PCommandObjectDef;
+    p:pchar;
 begin
   if length(comm)>0 then
   if comm[0]<>';' then
   begin
   ParseCommand(comm,command,operands);
+
   pfoundcommand:=FindCommand(command);
+
   if pfoundcommand<>nil then
   begin
     begin
@@ -245,15 +248,17 @@ begin
   end
   else historyout(GDBPointer('Неизвестная команда: "'+command+'"'));
   end;
+  command:='';
+  operands:='';
 end;
-function GDBcommandmanager.executecommand(comm:pansichar): GDBInteger;
+function GDBcommandmanager.executecommand(const comm:pansichar): GDBInteger;
 begin
      if not busy then
                      result:=execute(comm,false)
                  else
                      shared.ShowError('Клманда не может быть выполнена. Идет выполнение сценария');
 end;
-function GDBcommandmanager.executecommandsilent(comm:pansichar): GDBInteger;
+function GDBcommandmanager.executecommandsilent(const comm:pansichar): GDBInteger;
 begin
      if not busy then
      result:=execute(comm,true);
@@ -325,6 +330,7 @@ end;
 destructor GDBcommandmanager.done;
 begin
      {self.freewithprocanddone(comdeskclear);}
+     lastcommand:='';
      inherited done;
      CommandsStack.done;
 end;

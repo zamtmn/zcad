@@ -124,7 +124,7 @@ var
 
 implementation
 
-uses {oglwindow,mainwindow,ZPanelsWithSplit,}gdbentity,UGDBStringArray,log;
+uses gdbentity,UGDBStringArray,log;
 procedure TGDBobjinsp.FormHide(Sender: TObject);
 begin
      proptreeptr:=proptreeptr;

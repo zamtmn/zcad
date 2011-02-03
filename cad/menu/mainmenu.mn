@@ -302,10 +302,10 @@ MainMenuItem **Debug;
     MenuItem **Файлы с ошибками (текущая отладка);
     {
      Command **Error 0(polylines),Load(*../errors/0.dxf),none,none
-     Command **Error 1,Load(c:/zcad/errors/1.dxf),none,none
-     Command **Error 2,Load(c:/zcad/errors/2.dxf),none,none
-     Command **Error 3,Load(c:/zcad/errors/3.dxf),none,none
-     Command **Error 4,Load(c:/zcad/errors/4.dxf),none,none
+     Command **Error 1,Load(*../errors/1.dxf),none,none
+     Command **Error 2,Load(*../errors/2.dxf),none,none
+     Command **Error 3,Load(*../errors/3.dxf),none,none
+     Command **Error 4,Load(*../errors/4.dxf),none,none
     }
     Command **Загрузить пример ЭМ,Load(*sample/test_dxf/em.dxf),none,none
     Command **Загрузить пример ОПС,Load(*sample/test_dxf/ops.dxf),none,none

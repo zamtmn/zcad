@@ -35,6 +35,7 @@ GDBObjCurve=object(GDBObj3d)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure Format;virtual;
+                 procedure FormatWithoutSnapArray;virtual;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
                  procedure AddControlpoint(pcp:popenarrayobjcontrolpoint_GDBWordwm;objnum:GDBInteger);virtual;
@@ -65,8 +66,8 @@ GDBObjCurve=object(GDBObj3d)
                  procedure DeleteVertex(const PolyData:TPolyData);
            end;
 {Export-}
-procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray);
-function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record):GDBBoolean;
+procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:GDBBoolean);
+function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:GDBBoolean):GDBBoolean;
 procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:pos_record);
 implementation
 uses
@@ -285,7 +286,7 @@ begin
 
   end;
 end;
-procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray);
+procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:GDBBoolean);
 var
     ptv,ptvprev: pgdbvertex;
     tv:gdbvertex;
@@ -306,9 +307,23 @@ begin
         ptvprev:=ptv;
         ptv:=VertexArrayInWCS.iterate(ir);
   until ptv=nil;
+  if closed then
+  begin
+  ptv:=VertexArrayInWCS.beginiterate(ir);
+  vs.l_1_4:=vertexmorph(ptvprev^,ptv^,1/4);
+  vs.l_1_3:=vertexmorph(ptvprev^,ptv^,1/3);
+  vs.l_1_2:=vertexmorph(ptvprev^,ptv^,1/2);
+  vs.l_2_3:=vertexmorph(ptvprev^,ptv^,2/3);
+  vs.l_3_4:=vertexmorph(ptvprev^,ptv^,3/4);
+  snaparray.add(@vs);
+  end;
+
+
+
+
   snaparray.Shrink;
 end;
-procedure GDBObjCurve.Format;
+procedure GDBObjCurve.FormatWithoutSnapArray;
 var //i,j: GDBInteger;
     ptv,ptvprev: pgdbvertex;
     tv:gdbvertex;
@@ -326,8 +341,6 @@ begin
         ptv:=vertexarrayinocs.iterate(ir);
   until ptv=nil;
 
-
-  BuildSnapArray(VertexArrayInWCS,snaparray);
   ptvprev:=VertexArrayInWCS.beginiterate(ir);
   ptv:=VertexArrayInWCS.iterate(ir);
   if ptv<>nil then
@@ -339,6 +352,17 @@ begin
   calcbb;
   VertexArrayInOCS.Shrink;
   VertexArrayInWCS.Shrink;
+end;
+
+procedure GDBObjCurve.Format;
+var //i,j: GDBInteger;
+    ptv,ptvprev: pgdbvertex;
+    tv:gdbvertex;
+    vs:VectorSnap;
+        ir:itrec;
+begin
+  FormatWithoutSnapArray;
+  BuildSnapArray(VertexArrayInWCS,snaparray,false);
 end;
 
 procedure GDBObjCurve.TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);
@@ -453,7 +477,7 @@ begin
                                        result:=false;
                                        exit;
                                   end;
-   result:=VertexArrayInWCS.onmouse(mf);
+   result:=VertexArrayInWCS.onmouse(mf,false);
 end;
 procedure GDBObjCurve.rtmodifyonepoint(const rtmod:TRTModifyData);
 var vertexnumber:GDBInteger;
@@ -527,22 +551,29 @@ begin
 
 end;
 *)
-function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record):GDBBoolean;
+function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:GDBBoolean):GDBBoolean;
 const pnum=8;
 var t,d,e:GDBDouble;
     tv,n,v,dir:gdbvertex;
-    mode,vertexnum:GDBInteger;
+    mode,vertexnum,tc:GDBInteger;
     pv1:PGDBVertex;
     pv2:PGDBVertex;
+
 begin
-     if onlygetsnapcount=VertexArrayInWCS.count*pnum then
+     vertexnum:=(VertexArrayInWCS.count)*pnum;
+     {if not closed then
+                       vertexnum:=vertexnum-pnum;}
+     if onlygetsnapcount>vertexnum then
      begin
           result:=false;
           exit;
      end;
+     tc:=VertexArrayInWCS.count;
+     if not closed then tc:=tc-1;
      result:=true;
      mode:=onlygetsnapcount mod pnum;
      vertexnum:=onlygetsnapcount div pnum;
+     osp.ostype:=os_none;
      case mode of
               0:if (sysvar.dwg.DWG_OSMode^ and osm_endpoint)<>0
                 then
@@ -550,10 +581,9 @@ begin
                 osp.worldcoord:=PGDBArrayVertex(VertexArrayInWCS.parray)^[vertexnum];
                 pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
                 osp.ostype:=os_begin;
-                end
-                else osp.ostype:=os_none;
+                end;
              1:begin
-                if (sysvar.dwg.DWG_OSMode^ and osm_4)<>0
+                if ((sysvar.dwg.DWG_OSMode^ and osm_4)<>0)and(vertexnum<>tc)
                 then
                 begin
                 ///PVectotSnap(snaparray.getelement(vertexnum))^
@@ -561,11 +591,10 @@ begin
                 gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
                 //pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
                 osp.ostype:=os_1_4;
-                end
-                else osp.ostype:=os_none;
+                end;
                end;
              2:begin
-                if (sysvar.dwg.DWG_OSMode^ and osm_3)<>0
+                if ((sysvar.dwg.DWG_OSMode^ and osm_3)<>0)and(vertexnum<>tc)
                 then
                 begin
                 ///PVectotSnap(snaparray.getelement(vertexnum))^
@@ -573,10 +602,9 @@ begin
                 gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
                 //pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
                 osp.ostype:=os_1_3;
-                end
-                else osp.ostype:=os_none;
+                end;
                end;
-              3:if (sysvar.dwg.DWG_OSMode^ and osm_midpoint)<>0
+              3:if ((sysvar.dwg.DWG_OSMode^ and osm_midpoint)<>0)and(vertexnum<>tc)
                 then
                 begin
                 ///PVectotSnap(snaparray.getelement(vertexnum))^
@@ -584,10 +612,9 @@ begin
                 gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
                 //pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
                 osp.ostype:=os_midle;
-                end
-                else osp.ostype:=os_none;
+                end;
              4:begin
-                if (sysvar.dwg.DWG_OSMode^ and osm_3)<>0
+                if ((sysvar.dwg.DWG_OSMode^ and osm_3)<>0)and(vertexnum<>tc)
                 then
                 begin
                 ///PVectotSnap(snaparray.getelement(vertexnum))^
@@ -595,11 +622,10 @@ begin
                 gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
                 //pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
                 osp.ostype:=os_2_3;
-                end
-                else osp.ostype:=os_none;
+                end;
                end;
              5:begin
-                if ((sysvar.dwg.DWG_OSMode^ and osm_4)<>0)
+                if ((sysvar.dwg.DWG_OSMode^ and osm_4)<>0)and(vertexnum<>tc)
                 then
                 begin
                 ///PVectotSnap(snaparray.getelement(vertexnum))^
@@ -607,39 +633,51 @@ begin
                 gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
                 //pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
                 osp.ostype:=os_3_4;
-                end
-                else osp.ostype:=os_none;
+                end;
                end;
              6:begin
-                    if ((sysvar.dwg.DWG_OSMode^ and osm_perpendicular)<>0)and(vertexnum<(VertexArrayInWCS.count-1))
-                    then
+                    if ((sysvar.dwg.DWG_OSMode^ and osm_perpendicular)<>0)then
+                    if ((vertexnum<(tc))){or((vertexnum=tc-1)and closed)}then
                     begin
-                    pv1:=VertexArrayInWCS.getelement(vertexnum);
-                    pv2:=VertexArrayInWCS.getelement(vertexnum+1);
-                    dir:=geometry.VertexSub(pv2^,pv1^);
-                    tv:=vectordot(dir,GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir);
-                    t:= -((pv1.x-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.x)*dir.x+(pv1.y-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.y)*dir.y+(pv1.z-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.z)*dir.z)/
-                         ({sqr(dir.x)+sqr(dir.y)+sqr(dir.z)}SqrVertexlength(pv2^,pv1^));
-                    if (t>=0) and (t<=1)
-                    then
-                    begin
-                    osp.worldcoord.x:=pv1^.x+t*dir.x;
-                    osp.worldcoord.y:=pv1^.y+t*dir.y;
-                    osp.worldcoord.z:=pv1^.z+t*dir.z;
-                    gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,tv);
-                    osp.dispcoord:=tv;
-                    osp.ostype:=os_perpendicular;
-                    end
-                    else osp.ostype:=os_none;
-                    end
-                    else osp.ostype:=os_none;
+                        pv1:=VertexArrayInWCS.getelement(vertexnum);
+                        if vertexnum<VertexArrayInWCS.count-1 then
+                                              pv2:=VertexArrayInWCS.getelement(vertexnum+1)
+                                          else
+                                          begin
+                                               if not closed then
+                                                                 exit;
+                                               pv2:=VertexArrayInWCS.getelement(0);
+                                          end;
+                        dir:=geometry.VertexSub(pv2^,pv1^);
+                        tv:=vectordot(dir,GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir);
+                        t:= -((pv1.x-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.x)*dir.x+(pv1.y-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.y)*dir.y+(pv1.z-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.z)*dir.z)/
+                             ({sqr(dir.x)+sqr(dir.y)+sqr(dir.z)}SqrVertexlength(pv2^,pv1^));
+                        if (t>=0) and (t<=1)
+                        then
+                        begin
+                              osp.worldcoord.x:=pv1^.x+t*dir.x;
+                              osp.worldcoord.y:=pv1^.y+t*dir.y;
+                              osp.worldcoord.z:=pv1^.z+t*dir.z;
+                              gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,tv);
+                              osp.dispcoord:=tv;
+                              osp.ostype:=os_perpendicular;
+                        end
+                           else osp.ostype:=os_none;
+                    end;
                end;
      7:begin
-            if ((sysvar.dwg.DWG_OSMode^ and osm_nearest)<>0)and(vertexnum<(VertexArrayInWCS.count-1))
-            then
+            if ((sysvar.dwg.DWG_OSMode^ and osm_nearest)<>0) then
+            if ((vertexnum<(tc)))then
             begin
-            pv1:=VertexArrayInWCS.getelement(vertexnum);
-            pv2:=VertexArrayInWCS.getelement(vertexnum+1);
+                        pv1:=VertexArrayInWCS.getelement(vertexnum);
+                        if vertexnum<VertexArrayInWCS.count-1 then
+                                              pv2:=VertexArrayInWCS.getelement(vertexnum+1)
+                                          else
+                                          begin
+                                               if not closed then
+                                                                 exit;
+                                               pv2:=VertexArrayInWCS.getelement(0);
+                                          end;
             dir:=geometry.VertexSub(pv2^,pv1^);
             tv:=vectordot(dir,GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir);
             n:=vectordot(GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir,tv);
@@ -684,7 +722,7 @@ var t,d,e:GDBDouble;
     pv1:PGDBVertex;
     pv2:PGDBVertex;
 begin
-     result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,snaparray,osp);
+     result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,snaparray,osp,false);
 (*
      if onlygetsnapcount=VertexArrayInWCS.count*pnum then
      begin

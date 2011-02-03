@@ -28,7 +28,7 @@ GDBPoint3dArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
                 function onpoint(p:gdbvertex;eps:gdbdouble):gdbboolean;
-                function onmouse(const mf:ClipArray):GDBBoolean;virtual;
+                function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;
                 function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
                 procedure DrawGeometry;virtual;
                 procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;
@@ -146,6 +146,15 @@ begin
                             inc(ptpv1);
                             inc(ptpv0);
                        end;
+   end;
+   if closed then
+   begin
+        ptpv1:=parray;
+   if geometry.CalcTrueInFrustum (ptpv0^,ptpv1^,mf)<>IREmpty
+                                                                        then
+                                                                            result:=true
+                                                                        else
+                                                                            result:=false;
    end;
 end;
 

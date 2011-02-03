@@ -55,6 +55,7 @@ GDBObjLine=object(GDBObj3d)
                  procedure rtsave(refp:GDBPointer);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                   function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
+                  function onpoint(const point:GDBVertex):GDBBoolean;virtual;
                  //procedure feedbackinrect;virtual;
                  function InRect:TInRect;virtual;
                   function getsnap(var osp:os_record):GDBBoolean;virtual;
@@ -324,6 +325,14 @@ function GDBObjLine.CalcTrueInFrustum;
 begin
       result:=geometry.CalcTrueInFrustum (CoordInWCS.lBegin,CoordInWCS.lEnd,frustum);
 end;
+function GDBObjLine.onpoint(const point:GDBVertex):GDBBoolean;
+begin
+     if distance2piece(point,self.CoordInWCS.lBegin,self.CoordInWCS.lEnd)<eps then
+                                                                                    result:=true
+                                                                                else
+                                                                                    result:=false;
+end;
+
 function GDBObjLine.onmouse;
 //var t,tt,xx,yy:GDBDouble;
 //    d:GDBvertex2DI;

@@ -22,7 +22,7 @@ unit GDBPolyLine;
 interface
 uses UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
 gl,
-GDBase{,UGDBDescriptor},gdbobjectsconstdef{,oglwindowdef},geometry,dxflow,sysutils,memman,OGLSpecFunc;
+GDBase{,UGDBDescriptor},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman,OGLSpecFunc;
 type
 {Export+}
 PGDBObjPolyline=^GDBObjPolyline;
@@ -32,16 +32,38 @@ GDBObjPolyline=object(GDBObjCurve)
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;
 
+                 procedure Format;virtual;
+                 function getsnap(var osp:os_record):GDBBoolean;virtual;
+
                  procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
+                 function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
 
            end;
 {Export-}
 implementation
 uses gdbcable,log;
+function GDBObjPolyline.onmouse;
+begin
+  if VertexArrayInWCS.count<2 then
+                                  begin
+                                       result:=false;
+                                       exit;
+                                  end;
+   result:=VertexArrayInWCS.onmouse(mf,closed);
+end;
+function GDBObjPolyline.getsnap;
+begin
+     result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,snaparray,osp,closed);
+end;
+procedure GDBObjPolyline.Format;
+begin
+  FormatWithoutSnapArray;
+  BuildSnapArray(VertexArrayInWCS,snaparray,Closed);
+end;
 
 function GDBObjPolyline.FromDXFPostProcessBeforeAdd;
 var

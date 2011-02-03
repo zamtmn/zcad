@@ -78,6 +78,12 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                               function CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;virtual;
                               function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;virtual;
                               procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
+
+                              //function FindObjectsInPointStart(const point:GDBVertex;out Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;
+                              function FindObjectsInPoint(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;
+                              function FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
+                              //function FindObjectsInPointDone(const point:GDBVertex):GDBBoolean;virtual;
+
                       end;
 {Export-}
 implementation
@@ -98,6 +104,50 @@ begin
     ObjTree.addtonul(pobj);
     CorrectNodeTreeBB(pobj);
 end;}
+function GDBObjGenericSubEntry.FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
+var
+    minus:gdbboolean=false;
+    plus:gdbboolean=false;
+    pobj:PGDBObjEntity;
+    ir:itrec;
+begin
+     if assigned(Node.pminusnode) then
+       if geometry.IsPointInBB(point,Node.pminusnode.BoundingBox) then
+       begin
+            minus:=FindObjectsInPointInNode(point,Node.pminusnode^,Objects);
+       end;
+     if assigned(Node.pplusnode) then
+       if geometry.IsPointInBB(point,Node.pplusnode.BoundingBox) then
+       begin
+            plus:=FindObjectsInPointInNode(point,Node.pplusnode^,Objects);
+       end;
+
+       pobj:=Node.nul.beginiterate(ir);
+     if pobj<>nil then
+     repeat
+           if pobj^.onpoint(point) then
+           begin
+                result:=true;
+                Objects.Add(@pobj);
+           end;
+
+           pobj:=Node.nul.iterate(ir);
+     until pobj=nil;
+
+     result:=result or (plus or minus);
+     //self.ObjArray.ObjTree.BoundingBox;
+end;
+
+function GDBObjGenericSubEntry.FindObjectsInPoint(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
+begin
+     if geometry.IsPointInBB(point,self.ObjArray.ObjTree.BoundingBox) then
+     begin
+          result:=FindObjectsInPointInNode(point,ObjArray.ObjTree,Objects);
+     end
+     else
+         result:=false;
+end;
+
 function GDBObjGenericSubEntry.AddObjectToObjArray(p:GDBPointer):GDBInteger;
 begin
      result:=ObjArray.add(p);

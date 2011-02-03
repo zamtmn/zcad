@@ -873,7 +873,7 @@ end;
 
 function FrameEdit_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     historyout('Вторая точка:');
     GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1 := mc;
@@ -893,7 +893,7 @@ begin
   result:=mclick;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2 := mc;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame23d := wc;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     begin
       GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := false;
@@ -1436,7 +1436,7 @@ function polytest_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBBy
 //var tb:PGDBObjSubordinated;
 begin
   result:=mclick+1;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
        if pgdbobjlwpolyline(GDB.GetCurrentDWG.GetLastSelected).isPointInside(wc) then
        historyout('Внутри!')

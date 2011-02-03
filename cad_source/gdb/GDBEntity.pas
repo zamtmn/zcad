@@ -98,6 +98,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure DrawBB;
                     function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                     function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
+                    function onpoint(const point:GDBVertex):GDBBoolean;virtual;
                     function isonmouse(popa:GDBPointer):GDBBoolean;virtual;
                     procedure startsnap(out osp:os_record);virtual;
                     function getsnap(var osp:os_record):GDBBoolean;virtual;
@@ -695,6 +696,10 @@ begin
                           result:=onmouse(popa,GDB.GetCurrentDWG.OGLwindow1.param.mousefrustum)
                       else
                           result:=false;
+end;
+function GDBObjEntity.onpoint(const point:GDBVertex):GDBBoolean;
+begin
+     result:=false;
 end;
 function GDBObjEntity.onmouse;
 begin

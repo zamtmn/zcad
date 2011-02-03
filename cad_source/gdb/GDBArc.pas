@@ -403,7 +403,7 @@ begin
           exit;
      end;
      end;
-     result:=Vertex3D_in_WCS_Array.onmouse(mf);
+     result:=Vertex3D_in_WCS_Array.onmouse(mf,false);
 end;
 procedure GDBObjARC.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin

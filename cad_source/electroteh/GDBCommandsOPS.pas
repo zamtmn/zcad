@@ -868,7 +868,7 @@ end;
 function PlBeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: byte;mclick:integer): integer;
 begin
   result:=mclick;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
     begin
       historyout('Второй угол');
       t3dp:=wc;

@@ -668,6 +668,8 @@ begin
    self.onclose:=self.FormClose;
 
    StandartActions:=TmyActionList.Create(self);
+   if not assigned(StandartActions.Images) then
+                              StandartActions.Images:=TImageList.Create(StandartActions);
    StandartActions.brocenicon:=StandartActions.LoadImage(sysparam.programpath+'menu/BMP/noimage.bmp');
    StandartActions.LoadFromACNFile(sysparam.programpath+'menu/actions.acn');
    StandartActions.OnUpdate:=ActionUpdate;

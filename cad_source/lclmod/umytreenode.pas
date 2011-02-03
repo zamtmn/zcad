@@ -149,7 +149,7 @@ function TmyActionList.LoadImage(imgfile:GDBString):Integer;
 var
     bmp:TBitmap;
 begin
-  if fileexists(imgfile) then
+  if fileexists(utf8tosys(imgfile)) then
   begin
   bmp:=TBitmap.create;
   bmp.LoadFromFile(imgfile);

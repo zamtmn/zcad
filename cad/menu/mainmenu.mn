@@ -301,7 +301,7 @@ MainMenuItem **Debug;
   {
     MenuItem **Файлы с ошибками (текущая отладка);
     {
-     Command **Error 0(polylines),Load(c:/zcad/errors/0.dxf),none,none
+     Command **Error 0(polylines),Load(*../errors/0.dxf),none,none
      Command **Error 1,Load(c:/zcad/errors/1.dxf),none,none
      Command **Error 2,Load(c:/zcad/errors/2.dxf),none,none
      Command **Error 3,Load(c:/zcad/errors/3.dxf),none,none

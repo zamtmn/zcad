@@ -188,9 +188,9 @@ var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
     {group,pribor,}count:gdbinteger;
     l:gdbdouble;
 begin
+  inherited;
   calcbb;
   psldb:=gdb.GetCurrentDWG.LayerTable.getAddres('SYS_DEVICE_BORDER');
-  inherited;
 
   //CreateDeviceNameProcess(@self);
 

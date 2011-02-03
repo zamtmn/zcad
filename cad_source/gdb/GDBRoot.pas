@@ -21,7 +21,7 @@ unit GDBRoot;
 
 interface
 Uses
-   OGLSpecFunc, gl,UGDBEntTree,{UGDBVisibleTreeArray,}
+   OGLSpecFunc, gl,UGDBEntTree,{UGDBVisibleTreeArray,}UGDBOpenArrayOfPV,
 devices,gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry,uunitmanager{,shared};
 type
 {Export+}
@@ -60,7 +60,6 @@ begin
      vp.BoundingBox.LBN:=VectorTransform3D(vp.BoundingBox.LBN,ObjMatrix);
      vp.BoundingBox.RTF:=VectorTransform3D(vp.BoundingBox.RTF,ObjMatrix);
 end;
-
 function GDBObjRoot.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;
 var
    myfrustum:ClipArray;

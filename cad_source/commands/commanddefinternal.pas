@@ -77,7 +77,7 @@ type
 function CreateCommandRTEdObjectPlugin(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;ohgd:comdrawfunc;name:pansichar;SA,DA:TCStartAttr):pCommandRTEdObjectPlugin;export;
 function CreateCommandFastObjectPlugin(ocs:comfuncwithoper;name:pansichar;SA,DA:TCStartAttr):pCommandFastObjectPlugin;export;
 implementation
-uses {mainwindow,}{GDBCommandsDraw,GDBCommandsBase,}{oglwindow,}{GDBCommandsElectrical,}UGDBOpenArrayOfUCommands,Objinsp,varman,log;
+uses {mainwindow,}{GDBCommandsDraw,}GDBCommandsBase,{oglwindow,}{GDBCommandsElectrical,}UGDBOpenArrayOfUCommands,Objinsp,varman,log;
 constructor CommandRTEdObject.init;
 begin
   CommandInit;
@@ -126,6 +126,7 @@ begin
   gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
   gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   //poglwnd^.md.mode := savemousemode;
+  OSModeEditor.GetState;
   redrawoglwnd;
     end;
 end;
@@ -151,6 +152,7 @@ begin
   if commandline.commandmanager.CommandsStack.Count=0 then
                                                            gdb.GetCurrentDWG.OGLwindow1.setobjinsp;
   //-------------------------------gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
+  OSModeEditor.GetState;
   redrawoglwnd;
 end;
 function CreateCommandFastObjectPlugin;

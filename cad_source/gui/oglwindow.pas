@@ -29,7 +29,7 @@ uses
   gtk2,gdk2,{gdk2x,}
   {$ENDIF}
 
-  UGDBSHXFont,LCLType,InterfaceBase,
+  UGDBOpenArrayOfPV,UGDBSHXFont,LCLType,InterfaceBase,
   umytreenode,menus,Classes,{ SysUtils,} FileUtil,{ LResources,LMessages,} Forms,
   {stdctrls,} ExtCtrls, ComCtrls,{Toolwin,} Controls, {Graphics, Dialogs,}
   GDBGenericSubEntry,gdbasetypes,{Windows,}sysutils,
@@ -1640,7 +1640,8 @@ begin
   //r.handled:=true;
   if gdb.GetCurrentDWG=nil then exit;
   key := 0;
-  if (ssLeft in shift) then key := key or MZW_LBUTTON;
+  if (ssLeft in shift) then
+                           key := key or MZW_LBUTTON;
   if (ssShift in shift) then key := key or MZW_SHIFT;
   if (ssCtrl in shift) then key := key or MZW_CONTROL;
   if (ssMiddle in shift) then
@@ -2012,7 +2013,8 @@ procedure TOGLWnd.showcursor;
     oglsm.myglpushmatrix;
     gltranslated(0, -clientheight, 0);
 
-    if param.lastonmouseobject<>nil then pGDBObjEntity(param.lastonmouseobject)^.higlight;
+    if param.lastonmouseobject<>nil then
+                                        pGDBObjEntity(param.lastonmouseobject)^.higlight;
     //oglsm.mytotalglend;
 
     oglsm.myglpopmatrix;
@@ -3017,6 +3019,10 @@ var
   temp: gdbvertex;
   pv:pgdbvertex;
   tp:traceprop;
+
+  Objects:GDBObjOpenArrayOfPV;
+  pobj:pGDBObjEntity;
+  ir:itrec;
 begin
   gdb.GetCurrentDWG^.myGluProject2(param.ospoint.worldcoord,
              param.ospoint.dispcoord);
@@ -3029,9 +3035,23 @@ begin
        param.ospoint.arrayworldaxis.add(@pv^);
        inc(pv);
   end;
-  if param.ospoint.PGDBObject<>nil then
+  //if param.ospoint.PGDBObject<>nil then
   begin
-       pgdbobjentity(param.ospoint.PGDBObject)^.AddOnTrackAxis(@param.ospoint);
+  objects.init(100);
+  if gdb.GetCurrentROOT.FindObjectsInPoint(param.ospoint.worldcoord,Objects) then
+  begin
+                       pobj:=objects.beginiterate(ir);
+                       if pobj<>nil then
+                       repeat
+                             pgdbobjentity(pobj)^.AddOnTrackAxis(@param.ospoint);
+                             pobj:=objects.iterate(ir);
+                       until pobj=nil;
+  end;
+  {if param.ospoint.PGDBObject<>nil then
+  begin
+       pgdbobjentity(param.ospoint.PGDBObject)^.AddOnTrackAxis(@param.ospoint);   fghfgh
+  end;}
+  objects.ClearAndDone;
   end;
   {GDBGetMem(param.ospoint.arrayworldaxis, sizeof(GDBWord) + param.ppolaraxis^.count * sizeof(gdbvertex));
   Move(param.ppolaraxis^, param.ospoint.arrayworldaxis^, sizeof(GDBWord) + param.ppolaraxis^.count * sizeof(gdbvertex));}

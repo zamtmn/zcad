@@ -219,7 +219,7 @@ begin
 
       gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=dispmatr;
 
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
    pobj:=gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.beginiterate(ir);
    if pobj<>nil then
@@ -360,7 +360,7 @@ begin
 
       //gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=dispmatr;
 
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
       ClipboardDWG.pObjRoot.ObjArray.cleareraseobj;
       dist.x := -wc.x;
@@ -460,7 +460,7 @@ function Insert_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte
 var tb:PGDBObjSubordinated;
 begin
   result:=mclick;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     if pb<>nil then begin
                          //pb^.done;
@@ -614,7 +614,7 @@ begin
 end;
 function OnDrawingEd_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 begin
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
                     t3dp := wc;
 end;
 function OnDrawingEd_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
@@ -627,7 +627,7 @@ begin
   dist.z := wc.z - t3dp.z;
   if osp<> nil then pobj:=osp.PGDBObject
                else pobj:=nil;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     begin
       gdb.GetCurrentDWG.UndoStack.PushStartMarker('Редактирование на чертеже');
@@ -661,7 +661,7 @@ end;
 
 function Circle_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     historyout('Точка на окружности:');
     pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBCircleID,gdb.GetCurrentROOT));
@@ -681,7 +681,7 @@ begin
   pc^.Radius := Vertexlength(pc^.local.P_insert, wc);
   pc^.Format;
   pc^.RenderFeedback;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(pc));
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
@@ -709,7 +709,7 @@ end;
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
   result:=0;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     //historyout('Вторая точка:');
     PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
@@ -740,7 +740,7 @@ begin
        end
   end else pold:=nil;
   //pl^.RenderFeedback;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     PCreatedGDBLine^.RenderFeedback;
     if po<>nil then
@@ -883,7 +883,7 @@ begin
 
       gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=dispmatr;
 
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     im:=dispmatr;
     geometry.MatrixInvert(im);
@@ -933,7 +933,7 @@ begin
 
       gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=dispmatr;
 
-   if button = 1 then
+   if (button and MZW_LBUTTON)<>0 then
    begin
    pcd:=pcoa^.beginiterate(ir);
    if pcd<>nil then
@@ -1017,7 +1017,7 @@ begin
                       end;
                       GDB.GetCurrentDWG.UndoStack.PushEndMarker;
                     end;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
    gdb.GetCurrentROOT.FormatAfterEdit;
    gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
@@ -1104,7 +1104,7 @@ begin
                          GDB.GetCurrentDWG.UndoStack.PushEndMarker;
                        end;
 
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     gdb.GetCurrentROOT.FormatAfterEdit;
    gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
@@ -1135,7 +1135,7 @@ end;
 function _3DPoly_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
   result:=mclick;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     if p3dpl=nil then
     begin
@@ -1143,7 +1143,8 @@ begin
     p3dpl := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateInitObj(GDBPolylineID,gdb.GetCurrentROOT));
     p3dpl^.AddVertex(wc);
     p3dpl^.Format;
-    gdb.GetCurrentROOT.ObjArray.ObjTree.AddObjectToNodeTree(p3dpl);
+    //gdb.GetCurrentROOT.ObjArray.ObjTree.AddObjectToNodeTree(p3dpl);
+    gdb.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(p3dpl)}CorrectNodeTreeBB(p3dpl);
     SetGDBObjInsp(SysUnit.TypeName2PTD('GDBObjPolyline'),p3dpl);
     end;
 
@@ -1158,7 +1159,7 @@ begin
   p3dpl^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
   //p3dpl^.CoordInOCS.lEnd:= wc;
   p3dpl^.Format;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     p3dpl^.AddVertex(wc);
     p3dpl^.Format;
@@ -1221,7 +1222,7 @@ var
     domethod,undomethod:tmethod;
     polydata:tpolydata;
 begin
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
                     button:=button;
   if PEProp.Action=TSPE_Remove then
                                    PEProp.setpoint:=false;
@@ -1308,7 +1309,7 @@ begin
 
                                          end;
                                      end;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
        if (PEProp.Action=TSPE_Remove)and(PEProp.nearestvertex<>-1) then
                                         begin

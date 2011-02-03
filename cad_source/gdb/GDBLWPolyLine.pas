@@ -88,7 +88,7 @@ begin
 end;
 function GDBObjLWpolyline.getsnap;
 begin
-     result:=GDBPoint3dArraygetsnap(Vertex3D_in_WCS_Array,PProjPoint,snaparray,osp);
+     result:=GDBPoint3dArraygetsnap(Vertex3D_in_WCS_Array,PProjPoint,snaparray,osp,closed);
 end;
 
 function GDBObjLWpolyline.onmouse;
@@ -661,7 +661,7 @@ procedure GDBObjLWpolyline.format;
 begin
      Vertex2D_in_OCS_Array.Shrink;
      Width2D_in_OCS_Array.Shrink;
-     inherited format;
+     inherited Format;
      createpoint;
      CalcWidthSegment;
      Square:=CalcSquare;
@@ -688,7 +688,7 @@ begin
        inc(pv);
   end;
   Vertex3D_in_WCS_Array.Shrink;
-  BuildSnapArray(Vertex3D_in_WCS_Array,snaparray);
+  BuildSnapArray(Vertex3D_in_WCS_Array,snaparray,closed);
 end;
 procedure GDBObjLWpolyline.Renderfeedback;
 var tv:GDBvertex;

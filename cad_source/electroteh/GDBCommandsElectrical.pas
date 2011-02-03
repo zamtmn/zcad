@@ -1003,7 +1003,7 @@ begin
             FirstOwner:=GDBPointer(po);
        end
   end else FirstOwner:=oldfirstowner;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     historyout('Вторая точка:');
     New_line := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
@@ -1037,7 +1037,7 @@ begin
        end
   end else SecondOwner:=nil;
   //pl^.RenderFeedback;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     New_line^.RenderFeedback;
     if FirstOwner<>nil then
@@ -1205,7 +1205,7 @@ var
    pvd:pvardesk;
 begin
   result:=mclick;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     if p3dpl=nil then
     begin
@@ -1253,7 +1253,7 @@ begin
   p3dpl^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
   p3dpl^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
   //p3dpl^.CoordInOCS.lEnd:= wc;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     if cabcomparam.PTrace=nil then
     begin
@@ -2042,7 +2042,7 @@ begin
        end
   end else pold:=nil;
   //pl^.RenderFeedback;
-  if button = 1 then
+  if (button and MZW_LBUTTON)<>0 then
   begin
     begin
     PCreatedGDBLine^.bp.Owner:=gdb.GetCurrentROOT;

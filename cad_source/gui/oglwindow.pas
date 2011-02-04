@@ -1035,7 +1035,8 @@ begin
 
 
   key:=0;
-  if (ssShift in Shift) then key := key or MZW_SHIFT;
+  if (ssShift in Shift) then
+                            key := key or MZW_SHIFT;
   if (ssCtrl in Shift) then
                                     key := key or MZW_CONTROL;
   if gdb.GetCurrentDWG=nil then
@@ -1383,12 +1384,14 @@ begin
         if param.md.mouseonworkplan
         then
             begin
+                 param.ospoint.worldcoord:=param.md.mouseonworkplanecoord;
                  sendcoordtocommandTraceOn(param.md.mouseonworkplanecoord,key,nil)
                  //if key=MZW_LBUTTON then param.lastpoint:=param.md.mouseonworkplanecoord;
                  //commandmanager.pcommandrunning.MouseMoveCallback(param.md.mouseonworkplanecoord, param.md.mouse, key,nil)
             end
         else
             begin
+                 param.ospoint.worldcoord:=param.md.mouseray.lbegin;
                  sendcoordtocommandTraceOn(param.md.mouseray.lbegin,key,nil)
                  //if key=MZW_LBUTTON then param.lastpoint:=param.md.mouseray.lbegin;
                  //commandmanager.pcommandrunning^.MouseMoveCallback(param.md.mouseray.lbegin, param.md.mouse, key,nil);
@@ -2915,7 +2918,7 @@ begin
        if pp^.visible=gdb.GetCurrentDWG.pcamera.VISCOUNT then
        begin
        inc(_visible);
-       if pp^.isonmouse(@gdb.GetCurrentDWG.OnMouseObj)
+       if pp^.isonmouse(gdb.GetCurrentDWG.OnMouseObj)
        then
            begin
                 inc(_isonmouse);
@@ -3043,7 +3046,7 @@ begin
                        pobj:=objects.beginiterate(ir);
                        if pobj<>nil then
                        repeat
-                             pgdbobjentity(pobj)^.AddOnTrackAxis(@param.ospoint);
+                             pgdbobjentity(pobj)^.AddOnTrackAxis(param.ospoint);
                              pobj:=objects.iterate(ir);
                        until pobj=nil;
   end;
@@ -3082,6 +3085,9 @@ var
   temp: gdbvertex;
   pv:pgdbvertex;
   tp:traceprop;
+  Objects:GDBObjOpenArrayOfPV;
+  pobj:pGDBObjEntity;
+  ir:itrec;
 begin
   gdb.GetCurrentDWG^.myGluProject2(param.ospoint.worldcoord,
              param.ospoint.dispcoord);
@@ -3094,6 +3100,23 @@ begin
        param.ontrackarray.otrackarray[0].arrayworldaxis.add(@pv^);
        inc(pv);
   end;
+
+  if tocommandmcliccount>0 then
+  begin
+  objects.init(100);
+  if gdb.GetCurrentROOT.FindObjectsInPoint(param.ontrackarray.otrackarray[0].worldcoord,Objects) then
+  begin
+                       pobj:=objects.beginiterate(ir);
+                       if pobj<>nil then
+                       repeat
+                             pgdbobjentity(pobj)^.AddOnTrackAxis(param.ontrackarray.otrackarray[0]);
+                             pobj:=objects.iterate(ir);
+                       until pobj=nil;
+  end;
+  objects.ClearAndDone;
+  end;
+
+
   {GDBGetMem(param.ospoint.arrayworldaxis, sizeof(GDBWord) + param.ppolaraxis^.count * sizeof(gdbvertex));
   Move(param.ppolaraxis^, param.ospoint.arrayworldaxis^, sizeof(GDBWord) + param.ppolaraxis^.count * sizeof(gdbvertex));}
   gdb.GetCurrentDWG^.myGluProject2(param.ontrackarray.otrackarray[0].worldcoord,
@@ -3312,6 +3335,17 @@ var
 begin
   param.ospoint.radius:=sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1;
   param.ospoint.ostype:=os_none;
+
+      if param.md.mouseonworkplan
+      then
+          begin
+               param.ospoint.worldcoord:=param.md.mouseonworkplanecoord;
+          end
+      else
+          begin
+               param.ospoint.worldcoord:=param.md.mouseray.lbegin;
+          end;
+
   param.ospoint.PGDBObject:=nil;
   if (param.scrollmode)or(gdb.GetCurrentDWG.OnMouseObj.Count=0)then exit;
   if gdb.GetCurrentDWG.OnMouseObj.Count>0 then

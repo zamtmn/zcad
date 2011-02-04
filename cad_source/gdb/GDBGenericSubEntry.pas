@@ -20,7 +20,7 @@ unit GDBGenericSubEntry;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
+uses UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
 gl,
 geometry{,GDB3d},{UGDBVisibleOpenArray,}gdbEntity,gdbobjectsconstdef,varmandef,memman,UGDBEntTree;
 type
@@ -45,7 +45,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
                             procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
-                            function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
+                            function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                             procedure Format;virtual;
                             procedure FormatAfterEdit;virtual;
                             procedure restructure;virtual;
@@ -125,10 +125,10 @@ begin
        pobj:=Node.nul.beginiterate(ir);
      if pobj<>nil then
      repeat
-           if pobj^.onpoint(point) then
+           if pobj^.onpoint(Objects,point) then
            begin
                 result:=true;
-                Objects.Add(@pobj);
+                //Objects.Add(@pobj);
            end;
 
            pobj:=Node.nul.iterate(ir);
@@ -474,7 +474,7 @@ begin
        if ot then
                  begin
                       lstonmouse:=p;
-                      PGDBObjOpenArrayOfPV(popa).add(addr(p));
+                      {PGDBObjOpenArrayOfPV}(popa).add(addr(p));
                  end;
        result:=result or ot;
        end;

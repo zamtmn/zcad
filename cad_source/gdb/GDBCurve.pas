@@ -20,7 +20,7 @@ unit GDBCurve;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes{,GDBGenericSubEntry},UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBPolyLine2DArray,UGDBPoint3DArray{,UGDBOpenArrayOfByte,varman},varmandef,
+uses UGDBOpenArrayOfPObjects,UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes{,GDBGenericSubEntry},UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBPolyLine2DArray,UGDBPoint3DArray{,UGDBOpenArrayOfByte,varman},varmandef,
 gl,
 GDBase,geometry,UGDBDescriptor,gdbobjectsconstdef,oglwindowdef,math,dxflow,sysutils,memman{,OGLSpecFunc},GDBSubordinated;
 type
@@ -43,7 +43,7 @@ GDBObjCurve=object(GDBObj3d)
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
                  procedure RenderFeedback;virtual;
-                 function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
+                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
@@ -61,14 +61,14 @@ GDBObjCurve=object(GDBObj3d)
                  procedure feedbackinrect;virtual;
 
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
-                 procedure AddOnTrackAxis(posr:pos_record);virtual;
+                 procedure AddOnTrackAxis(var posr:os_record);virtual;
                  procedure InsertVertex(const PolyData:TPolyData);
                  procedure DeleteVertex(const PolyData:TPolyData);
            end;
 {Export-}
 procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:GDBBoolean);
 function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:GDBBoolean):GDBBoolean;
-procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:pos_record);
+procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record);
 implementation
 uses
     log;
@@ -81,7 +81,7 @@ procedure GDBObjCurve.DeleteVertex(const PolyData:TPolyData);
 begin
      vertexarrayinocs.deleteelement(PolyData.nearestvertex);
 end;
-procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:pos_record);
+procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record);
 var tv:gdbvertex;
     ptv,ppredtv:pgdbvertex;
     ir:itrec;
@@ -92,9 +92,9 @@ begin
   ptv:=VertexArrayInWCS.iterate(ir);
   if (ptv<>nil)and(ppredtv<>nil) then
   repeat
-        if (abs(ptv^.x-posr^.worldcoord.x)<eps)
-       and (abs(ptv^.y-posr^.worldcoord.y)<eps)
-       and (abs(ptv^.z-posr^.worldcoord.z)<eps)
+        if (abs(ptv^.x-posr.worldcoord.x)<eps)
+       and (abs(ptv^.y-posr.worldcoord.y)<eps)
+       and (abs(ptv^.z-posr.worldcoord.z)<eps)
                                              then
                                                  begin
                                                       found:=2;
@@ -104,9 +104,9 @@ begin
                        begin
                             tv:=vertexsub(ptv^,ppredtv^);
                             tv:=geometry.NormalizeVertex(tv);
-                            posr^.arrayworldaxis.Add(@tv);
+                            posr.arrayworldaxis.Add(@tv);
                             tv:=geometry.CrossVertex(tv,zwcs);
-                            posr^.arrayworldaxis.Add(@tv);
+                            posr.arrayworldaxis.Add(@tv);
                             dec(found);
                        end;
 
@@ -115,7 +115,7 @@ begin
   until ptv=nil;
 end;
 
-procedure GDBObjCurve.AddOnTrackAxis(posr:pos_record);
+procedure GDBObjCurve.AddOnTrackAxis(var posr:os_record);
 begin
   GDBPoint3dArrayAddOnTrackAxis(VertexArrayInWCS,posr);
 end;

@@ -20,7 +20,7 @@ unit GDBComplex;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
+uses UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
 UGDBOpenArrayOfPV{,UGDBObjBlockdefArray},UGDBSelectedObjArray,UGDBVisibleOpenArray,gdbEntity{,varman,varmandef},
 gl,
 GDBase,UGDBDescriptor,GDBWithLocalCS,gdbobjectsconstdef{,oglwindowdef},geometry{,dxflow},memman{,GDBSubordinated,UGDBOpenArrayOfByte};
@@ -38,7 +38,7 @@ GDBObjComplex=object(GDBObjWithLocalCS)
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
-                    function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
+                    function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                     procedure renderfeedbac(infrustumactualy:TActulity);virtual;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
@@ -174,7 +174,7 @@ begin
        ot:=p^.isonmouse(popa);
        if ot then
                  begin
-                      PGDBObjOpenArrayOfPV(popa).add(addr(p));
+                      {PGDBObjOpenArrayOfPV}(popa).add(addr(p));
                  end;
        result:=result or ot;
        p:=ConstObjArray.iterate(ir);

@@ -54,7 +54,7 @@ GDBObjBlockInsert=object(GDBObjComplex)
                      procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                      procedure rtsave(refp:GDBPointer);virtual;
 
-                     procedure AddOnTrackAxis(posr:pos_record);virtual;
+                     procedure AddOnTrackAxis(var posr:os_record);virtual;
                      procedure Format;virtual;
 
                      //function ProcessFromDXFObjXData(_Name,_Value:GDBString):GDBBoolean;virtual;
@@ -66,11 +66,11 @@ procedure GDBObjBlockInsert.Format;
 begin
      inherited;
 end;
-procedure GDBObjBlockInsert.AddOnTrackAxis(posr:pos_record);
+procedure GDBObjBlockInsert.AddOnTrackAxis(var posr:os_record);
 //var tv:gdbvertex;
 begin
-     posr^.arrayworldaxis.Add(@local.OX);
-     posr^.arrayworldaxis.Add(@local.OY);
+     posr.arrayworldaxis.Add(@local.OX);
+     posr.arrayworldaxis.Add(@local.OY);
 end;
 procedure GDBObjBlockInsert.rtsave;
 //var m:DMatrix4D;

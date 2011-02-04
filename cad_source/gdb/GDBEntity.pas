@@ -23,7 +23,7 @@ uses gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
      {UGDBPolyPoint2DArray,}varman,varmandef,
      gl,
      GDBase,gdbobjectsconstdef,
-     oglwindowdef,geometry,dxflow,sysutils,memman,OGLSpecFunc,UGDBOpenArrayOfByte,UGDBLayerArray;
+     oglwindowdef,geometry,dxflow,sysutils,memman,OGLSpecFunc,UGDBOpenArrayOfByte,UGDBLayerArray,UGDBOpenArrayOfPObjects;
 type
 //Owner:{-}PGDBObjEntity{/GDBPointer/};(*'Владелец'*)
 {Export+}
@@ -97,9 +97,11 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure calcbb;virtual;
                     procedure DrawBB;
                     function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
-                    function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
-                    function onpoint(const point:GDBVertex):GDBBoolean;virtual;
-                    function isonmouse(popa:GDBPointer):GDBBoolean;virtual;
+
+                    function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+                    function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
+
+                    function isonmouse(var popa:GDBOpenArrayOfPObjects):GDBBoolean;virtual;
                     procedure startsnap(out osp:os_record);virtual;
                     function getsnap(var osp:os_record):GDBBoolean;virtual;
                     function getintersect(var osp:os_record;pobj:PGDBObjEntity):GDBBoolean;virtual;
@@ -128,6 +130,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
                     function GetLineWeight:GDBSmallint;virtual;
                     function IsSelected:GDBBoolean;virtual;
+                    function IsActualy:GDBBoolean;virtual;
                     function GetLayer:PGDBLayerProp;virtual;
                     function GetCenterPoint:GDBVertex;virtual;
                     procedure SetInFrustum(infrustumactualy:TActulity);virtual;
@@ -137,7 +140,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                     function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                     procedure BuildGeometry;virtual;
-                    procedure AddOnTrackAxis(posr:pos_record);virtual;
+                    procedure AddOnTrackAxis(var posr:os_record);virtual;
 
                     function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
               end;
@@ -160,7 +163,7 @@ begin
       else
           visible:=0;
 end;
-procedure GDBObjEntity.AddOnTrackAxis(posr:pos_record);
+procedure GDBObjEntity.AddOnTrackAxis(var posr:os_record);
 begin
 
 end;
@@ -690,14 +693,22 @@ end;
 function GDBObjEntity.GetOsnapPoint;
 begin
 end;
-function GDBObjEntity.isonmouse;
+function GDBObjEntity.IsActualy:GDBBoolean;
 begin
      if vp.Layer^._on then
+                               result:=true
+                           else
+                               result:=false;
+end;
+
+function GDBObjEntity.isonmouse;
+begin
+     if IsActualy then
                           result:=onmouse(popa,GDB.GetCurrentDWG.OGLwindow1.param.mousefrustum)
                       else
                           result:=false;
 end;
-function GDBObjEntity.onpoint(const point:GDBVertex):GDBBoolean;
+function GDBObjEntity.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 begin
      result:=false;
 end;

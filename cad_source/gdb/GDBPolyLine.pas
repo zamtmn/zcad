@@ -20,7 +20,7 @@ unit GDBPolyLine;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
+uses UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
 gl,
 GDBase{,UGDBDescriptor},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman,OGLSpecFunc;
 type
@@ -40,7 +40,8 @@ GDBObjPolyline=object(GDBObjCurve)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
-                 function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
+                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+                 function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
 
            end;
 {Export-}
@@ -54,6 +55,16 @@ begin
                                        exit;
                                   end;
    result:=VertexArrayInWCS.onmouse(mf,closed);
+end;
+function GDBObjPolyline.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
+begin
+     if VertexArrayInWCS.onpoint(point,eps) then
+                                                begin
+                                                     result:=true;
+                                                     objects.AddRef(self);
+                                                end
+                                            else
+                                                result:=false;
 end;
 function GDBObjPolyline.getsnap;
 begin

@@ -20,7 +20,7 @@ unit GDBPoint;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
+uses UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
 GDBase,UGDBDescriptor,gdbobjectsconstdef,oglwindowdef,geometry{,dxflow},memman,OGLSpecFunc;
 type
@@ -39,7 +39,7 @@ GDBObjPoint=object(GDBObj3d)
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                  procedure RenderFeedback;virtual;
                  function getsnap(var osp:os_record):GDBBoolean;virtual;
-                 function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
+                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;

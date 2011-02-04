@@ -159,6 +159,7 @@ constructor GDBObjRoot.initnul;
 begin
      inherited initnul(nil);
      bp.owner:=nil;
+     vp.ID:=GDBRootId;
      //bp.PSelfInOwnerArray:=nil;
      bp.PSelfInOwnerArray:=-1;
      ObjToConnectedArray.init({$IFDEF DEBUGBUILD}'{0AD3CD18-E887-4038-BADA-7616D9F52963}',{$ENDIF}100);

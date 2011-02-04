@@ -83,6 +83,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                               function FindObjectsInPoint(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;
                               function FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
                               //function FindObjectsInPointDone(const point:GDBVertex):GDBBoolean;virtual;
+                              function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
 
                       end;
 {Export-}
@@ -441,23 +442,28 @@ procedure GDBObjGenericSubEntry.renderfeedbac(infrustumactualy:TActulity);
 begin
   ObjArray.renderfeedbac(infrustumactualy);
 end;
-
-function GDBObjGenericSubEntry.onmouse;
-{var t,xx,yy:GDBDouble;
+function GDBObjGenericSubEntry.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
+var //t,xx,yy:GDBDouble;
     i:GDBInteger;
-    p:^pGDBObjEntity;
+    p:pGDBObjEntity;
+    ot:GDBBoolean;
 begin
   result:=false;
   for i:=0 to ObjArray.count-1 do
   begin
-       p:=ObjArray.getelement(i);
-       result:=p^.onmouse(popa);
-       if result then
-                     begin
-                          exit;
-                     end;
+       p:=pGDBPointer(ObjArray.getelement(i))^;
+       if p<>nil then
+       begin
+       ot:=p^.onpoint(objects,point);
+       if ot then
+                 begin
+                      result:=true;
+                 end;
+       //result:=result or ot;
+       end;
   end;
-end;}
+end;
+function GDBObjGenericSubEntry.onmouse;
 var //t,xx,yy:GDBDouble;
     i:GDBInteger;
     p:pGDBObjEntity;

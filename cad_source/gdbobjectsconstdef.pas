@@ -40,6 +40,7 @@ const {as_normal=0;
   osm_apparentintersection=4096;
 
   GDBBaseObjectID = 30000;
+  GDBRootId = 30001;
   GDBcameraID = 0;
   GDBPointID = 1;
   GDBLineID = 2;

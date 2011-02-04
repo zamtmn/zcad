@@ -20,7 +20,7 @@ unit GDBDevice;
 {$INCLUDE def.inc}
 
 interface
-uses sysutils,devices,UGDBOpenArrayOfByte,
+uses sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
 gl,OGLSpecFunc,uunitmanager{,shared},
 memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,UGDBOpenArrayOfPV,gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray,UGDBDescriptor{,UGDBLayerArray,oglwindowdef};
 
@@ -38,7 +38,7 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                    procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                    procedure renderfeedbac(infrustumactualy:TActulity);virtual;
-                   function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
+                   function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                    function ReturnLastOnMouse:PGDBObjEntity;virtual;
                    function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
                    function DeSelect:GDBInteger;virtual;
@@ -227,7 +227,7 @@ begin
        if ot then
                  begin
                       lstonmouse:=p^.ReturnLastOnMouse;
-                      PGDBObjOpenArrayOfPV(popa).add(addr(p));
+                      {PGDBObjOpenArrayOfPV}(popa).add(addr(p));
                  end;
        result:=result or ot;
        p:=VarObjArray.iterate(ir);

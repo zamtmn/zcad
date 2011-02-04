@@ -20,7 +20,7 @@ unit GDBLine;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBDescriptor,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
+uses UGDBOpenArrayOfPObjects,UGDBDescriptor,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman{,shared},OGLSpecFunc;
 type
@@ -54,8 +54,8 @@ GDBObjLine=object(GDBObj3d)
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                  function onmouse(popa:GDBPointer;const MF:ClipArray):GDBBoolean;virtual;
-                  function onpoint(const point:GDBVertex):GDBBoolean;virtual;
+                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  //procedure feedbackinrect;virtual;
                  function InRect:TInRect;virtual;
                   function getsnap(var osp:os_record):GDBBoolean;virtual;
@@ -78,7 +78,7 @@ GDBObjLine=object(GDBObj3d)
                   function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
 
                   function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
-                  procedure AddOnTrackAxis(posr:pos_record);virtual;
+                  procedure AddOnTrackAxis(var posr:os_record);virtual;
                   function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
            end;
 {Export-}
@@ -144,12 +144,12 @@ begin
           end;
      end;
 end;
-procedure GDBObjLine.AddOnTrackAxis(posr:pos_record);
+procedure GDBObjLine.AddOnTrackAxis(var posr:os_record);
 var tv:gdbvertex;
 begin
-     posr^.arrayworldaxis.Add(@dir);
+     posr.arrayworldaxis.Add(@dir);
      tv:=geometry.vectordot(dir,zwcs);
-     posr^.arrayworldaxis.Add(@tv);
+     posr.arrayworldaxis.Add(@tv);
 end;
 function GDBObjLine.IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;
 begin
@@ -325,10 +325,13 @@ function GDBObjLine.CalcTrueInFrustum;
 begin
       result:=geometry.CalcTrueInFrustum (CoordInWCS.lBegin,CoordInWCS.lEnd,frustum);
 end;
-function GDBObjLine.onpoint(const point:GDBVertex):GDBBoolean;
+function GDBObjLine.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 begin
      if distance2piece(point,self.CoordInWCS.lBegin,self.CoordInWCS.lEnd)<eps then
-                                                                                    result:=true
+                                                                                  begin
+                                                                                    result:=true;
+                                                                                    objects.AddRef(self);
+                                                                                  end
                                                                                 else
                                                                                     result:=false;
 end;

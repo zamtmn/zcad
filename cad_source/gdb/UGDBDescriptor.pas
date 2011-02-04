@@ -129,6 +129,7 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
                     function CopyEnt(_from,_to:PTDrawing;_source:PGDBObjEntity):PGDBObjEntity;
                     procedure AddBlockFromDBIfNeed(_to:PTDrawing;name:GDBString);
                     procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
+                    function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
               end;
 {EXPORT-}
 var GDB: GDBDescriptor;
@@ -158,6 +159,31 @@ begin
      _myGluUnProject(win.x,win.y,win.z,@pcamera^.modelMatrixLCS,@pcamera^.projMatrixLCS,@pcamera^.viewport, obj.x,obj.y,obj.z);
      OBJ:=vertexsub(OBJ,pcamera^.CamCSOffset);
 end;
+function GDBDescriptor.FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
+var
+   pobj:pGDBObjEntity;
+   ir:itrec;
+begin
+     result:=entities.beginiterate(ir);
+     if result<>nil then
+     repeat
+           if result.vp.ID=objID then
+                                      exit;
+           if inowner then
+                          begin
+                               result:=pointer(result.bp.Owner);
+                               while (result<>nil) do
+                               begin
+                                    if result.vp.ID=objID then
+                                                              exit;
+                                    result:=pointer(result.bp.Owner);
+                               end;
+
+                          end;
+           result:=entities.iterate(ir);
+     until result=nil;
+end;
+
 procedure GDBDescriptor.rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);
 var i:GDBInteger;
     point:pcontrolpointdesc;

@@ -10,7 +10,7 @@ unit GDBCommandsElectrical;
 
 interface
 uses
-  GDBBlockInsert{,ZGUIsCT,zforms},devices{,ZComboBoxsWithProc,ZTreeViewsGeneric},UGDBTree,ugdbdescriptor,gdbasetypes,commandline,GDBCommandsDraw,GDBElLeader,
+  UGDBOpenArrayOfPV,GDBBlockInsert{,ZGUIsCT,zforms},devices{,ZComboBoxsWithProc,ZTreeViewsGeneric},UGDBTree,ugdbdescriptor,gdbasetypes,commandline,GDBCommandsDraw,GDBElLeader,
   plugins,
   commandlinedef,
   commanddefinternal,
@@ -991,7 +991,14 @@ end;
 
 function El_Wire_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 var po:PGDBObjSubordinated;
+    Objects:GDBObjOpenArrayOfPV;
 begin
+  Objects.init(10);
+  if gdb.GetCurrentROOT.FindObjectsInPoint(wc,Objects) then
+  begin
+       FirstOwner:=pointer(GDB.FindOneInArray(Objects,GDBNetID,true));
+  end;
+  Objects.ClearAndDone;
   if osp<>nil then
   begin
        if (PGDBObjEntity(osp^.PGDBObject)<>nil)and(osp^.PGDBObject<>FirstOwner)
@@ -1000,9 +1007,9 @@ begin
             PGDBObjEntity(osp^.PGDBObject)^.format;
             historyout(GDBPointer(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ','')));
             po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
-            FirstOwner:=GDBPointer(po);
+            //FirstOwner:=GDBPointer(po);
        end
-  end else FirstOwner:=oldfirstowner;
+  end {else FirstOwner:=oldfirstowner};
   if (button and MZW_LBUTTON)<>0 then
   begin
     historyout('Вторая точка:');
@@ -1019,12 +1026,22 @@ var po:PGDBObjSubordinated;
     //nn:GDBString;
     pvd{,pvd2}:pvardesk;
     nni:gdbinteger;
+    Objects:GDBObjOpenArrayOfPV;
 begin
   New_line^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
   New_line^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
   New_line.CoordInOCS.lEnd:= wc;
   New_line^.Format;
   //po:=nil;
+  if (button and MZW_LBUTTON)<>0 then
+                                     button:=button;
+  Objects.init(10);
+  if gdb.GetCurrentROOT.FindObjectsInPoint(wc,Objects) then
+  begin
+       SecondOwner:=pointer(GDB.FindOneInArray(Objects,GDBNetID,true));
+  end;
+  Objects.ClearAndDone;
+
   if osp<>nil then
   begin
        if (PGDBObjEntity(osp^.PGDBObject)<>nil)and(osp^.PGDBObject<>SecondOwner)
@@ -1033,9 +1050,9 @@ begin
             PGDBObjEntity(osp^.PGDBObject)^.format;
             historyout(GDBPointer(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ','')));
             po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
-            SecondOwner:=GDBPointer(po);
+            //SecondOwner:=GDBPointer(po);
        end
-  end else SecondOwner:=nil;
+  end {else SecondOwner:=nil};
   //pl^.RenderFeedback;
   if (button and MZW_LBUTTON)<>0 then
   begin

@@ -1007,6 +1007,11 @@ begin
                 if (line <> '') and (line[1] <> ';') then
                 begin
                      paneldesk:=paneldesk+line+';';
+                     if uppercase(line)<>'SEPARATOR' then
+                     begin
+                     line := f.readstring(#$A,#$D);
+                     paneldesk:=paneldesk+line+';';
+                     end;
                      {if uppercase(line)='ACTION' then
                      begin
                           line := f.readstring(#$A,#$D);

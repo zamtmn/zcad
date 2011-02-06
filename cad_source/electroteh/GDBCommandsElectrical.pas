@@ -1657,7 +1657,9 @@ begin
                    s:='';
                    psl.add(@s);
 
-                   s:='  '+system.copy(currentgroup^,2,length(currentgroup^)-1);
+                   s:=Tria_Utf8ToAnsi(currentgroup^);
+                   s:='  '+system.copy(s,2,length(s)-1);
+                   //s:='  '+system.copy(currentgroup^,2,length(currentgroup^)-1);
                    psl.add(@s);
             end
 

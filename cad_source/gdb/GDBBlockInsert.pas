@@ -129,8 +129,8 @@ procedure GDBObjBlockInsert.correctobjects;
 var pobj:PGDBObjEntity;
     ir:itrec;
 begin
-     bp.Owner:=powner;
-     bp.PSelfInOwnerArray:=pinownerarray;
+     bp.ListPos.Owner:=powner;
+     bp.ListPos.SelfIndex:=pinownerarray;
      pobj:=self.ConstObjArray.beginiterate(ir);
      if pobj<>nil then
      repeat
@@ -147,7 +147,7 @@ begin
   inherited init(own,layeraddres,LW);
   POINTER(name):=nil;
   //GDBGetMem(self.varman,sizeof(varmanager));
-  bp.Owner:=own;
+  bp.ListPos.Owner:=own;
   vp.ID:=GDBBlockInsertID;
   scale:=ScaleOne;
   rotate:=0;
@@ -160,7 +160,7 @@ begin
   inherited initnul;
   POINTER(name):=nil;
   //GDBGetMem(self.varman,sizeof(varmanager));
-  bp.Owner:=nil;
+  bp.ListPos.Owner:=nil;
   vp.ID:=GDBBlockInsertID;
   scale:=ScaleOne;
   rotate:=0;
@@ -298,7 +298,7 @@ begin
   tvo^.scale := scale;
   tvo^.rotate := rotate;
   tvo.index := index;
-  tvo^.bp.Owner:=own;
+  tvo^.bp.ListPos.Owner:=own;
   tvo.ConstObjArray.init({$IFDEF DEBUGBUILD}'{E9005274-601F-4A3F-BDB8-E311E59D558C}',{$ENDIF}ConstObjArray.count);
   ConstObjArray.CloneEntityTo(@tvo.ConstObjArray,tvo);
   //tvo^.format;

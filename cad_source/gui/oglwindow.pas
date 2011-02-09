@@ -2329,15 +2329,15 @@ procedure TOGLWnd.showcursor;
     if param.cslen<>0 then {переделать}
     begin
     oglsm.myglbegin(GL_lines);
-    glColor3ub(255, 0, 0);
-    myglVertex3d(param.CSIconCoord);
-    myglVertex3d(createvertex(param.CSIconCoord.x + 100/param.cslen, param.CSIconCoord.y , param.CSIconCoord.z));
-    glColor3ub(0, 255, 0);
-    myglVertex3d(param.CSIconCoord);
-    myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y + 100/param.cslen, param.CSIconCoord.z));
-    glColor3ub(0, 0, 255);
-    myglVertex3d(param.CSIconCoord);
-    myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y, param.CSIconCoord.z + 100/param.cslen));
+    oglsm.myglColor3ub(255, 0, 0);
+    oglsm.myglVertex3d(param.CSIconCoord);
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + 100/param.cslen, param.CSIconCoord.y , param.CSIconCoord.z));
+    oglsm.myglColor3ub(0, 255, 0);
+    oglsm.myglVertex3d(param.CSIconCoord);
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y + 100/param.cslen, param.CSIconCoord.z));
+    oglsm.myglColor3ub(0, 0, 255);
+    oglsm.myglVertex3d(param.CSIconCoord);
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y, param.CSIconCoord.z + 100/param.cslen));
     oglsm.myglend;
     end;
     end;

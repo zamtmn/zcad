@@ -90,7 +90,7 @@ begin
      begin
           GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(tc),sizeof(GDBObjCable));
           result:=tc;
-          Tc^.initnul(pointer(bp.owner));
+          Tc^.initnul(pointer(bp.ListPos.owner));
 {БЛЯДЬ так делать нельзя!!!!}          if PExtAttrib<>nil then
                                                               begin
                                                                    Tc^.PExtAttrib:=PExtAttrib;
@@ -140,7 +140,7 @@ var tpo: PGDBObjPolyLine;
     i:GDBInteger;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{8F88CAFB-14F3-4F33-96B5-F493DB8B28B7}',{$ENDIF}GDBPointer(tpo), sizeof(GDBObjPolyline));
-  tpo^.init(bp.owner,vp.Layer, vp.LineWeight,closed);
+  tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight,closed);
   //tpo^.vertexarray.init({$IFDEF DEBUGBUILD}'{90423E18-2ABF-48A8-8E0E-5D08A9E54255}',{$ENDIF}1000);
   p:=vertexarrayinocs.PArray;
   for i:=0 to vertexarrayinocs.Count-1 do

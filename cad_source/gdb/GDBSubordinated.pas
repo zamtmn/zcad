@@ -22,6 +22,9 @@ unit GDBSubordinated;
 interface
 uses strproc,LCLProc,UGDBOpenArrayOfByte,devices,gdbase,gdbasetypes,varman,varmandef{,UGDBOpenArrayOfByte},dxflow,UBaseTypeDescriptor,sysutils,UGDBLayerArray{,strutils};
 type
+//Owner:PGDBObjGenericWithSubordinated;(*'Владелец'*)
+//PSelfInOwnerArray:TArrayIndex;(*'Индекс у владельца'*)
+
 {EXPORT+}
 PGDBObjSubordinated=^GDBObjSubordinated;
 PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
@@ -49,16 +52,19 @@ GDBObjGenericWithSubordinated=object(GDBaseObject)
 
 end;
 TEntityAdress=record
-                          Owner:GDBPointer;
-                          SelfIndex:TArrayIndex;
-                    end;
+                          Owner:PGDBObjGenericWithSubordinated;(*'Adress'*)
+                          SelfIndex:TArrayIndex;(*'Position'*)
+              end;
+TTreeAdress=record
+                          Owner:GDBPointer;(*'Adress'*)
+                          SelfIndex:TArrayIndex;(*'Position'*)
+              end;
 GDBObjBaseProp=record
-                      Owner:PGDBObjGenericWithSubordinated;(*'Владелец'*)
-                      PSelfInOwnerArray:TArrayIndex;(*'Индекс у владельца'*)
-                      TreePos:TEntityAdress;
+                      ListPos:TEntityAdress;(*'List'*)
+                      TreePos:TTreeAdress;(*'Tree'*)
                  end;
 GDBObjSubordinated=object(GDBObjGenericWithSubordinated)
-                         bp:GDBObjBaseProp;(*'Владелец'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                         bp:GDBObjBaseProp;(*'Owner'*)(*oi_readonly*)(*hidden_in_objinsp*)
                          function GetOwner:PGDBObjSubordinated;virtual;abstract;
                          procedure createfield;virtual;
                          function FindVariable(varname:GDBString):pvardesk;virtual;
@@ -82,8 +88,8 @@ begin
      if PTDeviceClass(pvd^.data.Instance)^=_type then
                                                       result:=@self;
      if result=nil then
-                       if bp.owner<>nil then
-                                             result:=PGDBObjSubordinated(bp.owner).FindShellByClass(_type);
+                       if bp.ListPos.owner<>nil then
+                                             result:=PGDBObjSubordinated(bp.ListPos.owner).FindShellByClass(_type);
                                                                       
 end;
 procedure CreateDeviceNameSubProcess(pvn:pvardesk; const formatstr:GDBString; pEntity:PGDBObjGenericWithSubordinated);
@@ -126,7 +132,7 @@ begin
 end;
 procedure GDBObjSubordinated.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
 begin
-     dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(bp.owner.GetHandle,10));
+     dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(bp.ListPos.owner.GetHandle,10));
 end;
 function GDBObjGenericWithSubordinated.GetHandle:GDBPlatformint;
 begin
@@ -326,8 +332,8 @@ end;
 procedure GDBObjSubordinated.createfield;
 begin
      inherited;
-     bp.owner:=gdb.GetCurrentROOT;
-     bp.PSelfInOwnerArray:=-1{nil};
+     bp.ListPos.owner:=gdb.GetCurrentROOT;
+     bp.ListPos.SelfIndex:=-1{nil};
 end;
 procedure GDBObjGenericWithSubordinated.createfield;
 begin
@@ -343,8 +349,8 @@ function GDBObjSubordinated.FindVariable;
 begin
      result:=ou.FindVariable(varname);
      if result=nil then
-                       if self.bp.Owner<>nil then
-                                                 result:=self.bp.Owner.FindVariable(varname);
+                       if self.bp.ListPos.Owner<>nil then
+                                                 result:=self.bp.ListPos.Owner.FindVariable(varname);
 
 end;
 function GDBObjGenericWithSubordinated.CreateOU;

@@ -268,10 +268,10 @@ begin
   p:=parray;
   for i:=0 to count-1 do
   begin
-          myglvertex3dv(pointer(p));
+          oglsm.myglvertex3dv(pointer(p));
      //myglVertex(p.coord.x+random(5)/10,p.coord.y+random(5)/10,p.coord.z+random(5)/10);
           if p^.count<0 then
-                            myglvertex3dv(pointer(p));
+                            oglsm.myglvertex3dv(pointer(p));
                             //myglVertex(p.coord.x+random(5)/10,p.coord.y+random(5)/10,p.coord.z+random(5)/10);
      inc(p);
   end;
@@ -361,8 +361,8 @@ begin
         1:
           begin
                 oglsm.myglbegin(GL_LINES);
-                myglvertex3dv(self.PArray);
-                myglvertex3dv(self.getelement(self.Count-1));
+                oglsm.myglvertex3dv(self.PArray);
+                oglsm.myglvertex3dv(self.getelement(self.Count-1));
                 oglsm.myglend;
           end;
         2:
@@ -377,15 +377,15 @@ begin
                    if linenumber<>p^.LineNumber then
                    begin
                         if pp<>nil then
-                                       myglvertex3dv(@pp^.coord);
-                        myglvertex3dv(@p^.coord);
+                                       oglsm.myglvertex3dv(@pp^.coord);
+                        oglsm.myglvertex3dv(@p^.coord);
                         linenumber:=p^.LineNumber;
                    end;
                    pp:=p;
                    inc(p);
                    inc(totalcounter);
                 end;
-                myglvertex3dv(@pp^.coord);
+                oglsm.myglvertex3dv(@pp^.coord);
                 oglsm.myglend;
           end;
         end;

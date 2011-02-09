@@ -66,6 +66,12 @@ type
                            procedure myglMatrixMode(const mode: GLenum);
                            procedure myglLineStipple(const factor: GLint; const pattern: GLushort);
                            constructor init;
+
+                           procedure myglVertex3dV(const V:PGDBVertex);inline;
+                           procedure myglNormal3dV(const V:PGDBVertex);inline;
+                           procedure myglColor3ub(const red, green, blue: GLubyte);inline;
+                           procedure myglVertex3d(const V:GDBVertex);inline;
+                           procedure myglVertex(const x,y,z:GDBDouble);inline;
     end;
 
 var
@@ -80,9 +86,6 @@ function isOpenGLError:GLenum;
 function CalcDisplaySubFrustum(const x,y,w,h:gdbdouble;const mm,pm:DMatrix4D):ClipArray;
 //(const v: PGLdouble); stdcall;
 //procedure myglVertex3dV(V:PGDBVertex);
-procedure myglVertex3dV(const V:PGDBVertex);inline;
-procedure myglVertex3d(const V:GDBVertex);inline;
-procedure myglVertex(const x,y,z:GDBDouble);inline;
 procedure MyglMakeCurrent(oglc:TOGLContextDesk);
 procedure MySwapBuffers(oglc:TOGLContextDesk);
 procedure MywglDeleteContext(oglc:TOGLContextDesk);
@@ -121,7 +124,7 @@ begin
      //middlepoint:=geometry.VertexAdd(middlepoint,point);
 end;
 
-procedure myglVertex3dV;
+procedure TOGLStateManager.myglVertex3dV;
 var t:gdbvertex;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}processpoint(v^);{$ENDIF}
@@ -134,7 +137,17 @@ begin
                            glVertex3dV(@t);
                       end;
 end;
-procedure myglVertex3d;
+procedure TOGLStateManager.myglNormal3dV(const V:PGDBVertex);inline;
+begin
+     glNormal3dV(pointer(v))
+end;
+
+procedure TOGLStateManager.myglColor3ub(const red, green, blue: GLubyte);inline;
+begin
+     glColor3ub(red, green, blue);
+end;
+
+procedure TOGLStateManager.myglVertex3d;
 var t:gdbvertex;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}processpoint(v);{$ENDIF}
@@ -147,7 +160,7 @@ begin
                            glVertex3dv(@t);
                       end;
 end;
-procedure myglVertex;
+procedure TOGLStateManager.myglVertex;
 var t,t1:gdbvertex;
 begin
      t1:=createvertex(x,y,z);
@@ -411,26 +424,26 @@ end;
 Procedure DrawAABB(const BoundingBox:GDBBoundingBbox);
 begin
 oglsm.myglbegin(GL_LINE_LOOP);
-   myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
-   myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
-   myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
-   myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
+   oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
+   oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
+   oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
+   oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
 oglsm.myglend();
 oglsm.myglbegin(GL_LINE_LOOP);
-   myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
-   myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
-   myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
-   myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
+   oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
+   oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
+   oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
+   oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
 oglsm.myglend();
 oglsm.myglbegin(GL_LINES);
-   myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
-   myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
-   myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
-   myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
-   myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
-   myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
-   myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
-   myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
+   oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
+   oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
+   oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
+   oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
+   oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
+   oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
+   oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
+   oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
 oglsm.myglend();
 end;
 begin

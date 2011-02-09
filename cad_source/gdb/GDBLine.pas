@@ -251,7 +251,7 @@ end;
 constructor GDBObjLine.initnul;
 begin
   inherited initnul(owner);
-  bp.Owner:=owner;
+  bp.ListPos.Owner:=owner;
   vp.ID := GDBlineID;
   CoordInOCS.lBegin := NulVertex;
   CoordInOCS.lEnd := NulVertex;
@@ -289,8 +289,8 @@ procedure GDBObjLine.format;
 //var //tv,tv2:GDBVertex4D;
     //t,b,l,r,n,f:GDBDouble;
 begin
-  CoordInWCS.lbegin:=VectorTransform3D(CoordInOCS.lbegin,bp.owner^.GetMatrix^);
-  CoordInWCS.lend:=VectorTransform3D(CoordInOCS.lend,bp.owner^.GetMatrix^);
+  CoordInWCS.lbegin:=VectorTransform3D(CoordInOCS.lbegin,bp.ListPos.owner^.GetMatrix^);
+  CoordInWCS.lend:=VectorTransform3D(CoordInOCS.lend,bp.ListPos.owner^.GetMatrix^);
   calcbb;
   //l_1_4 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 4);
   //l_1_3 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 3);
@@ -398,8 +398,8 @@ procedure GDBObjLine.DrawGeometry;
 begin
   //exit;
   oglsm.myglbegin(GL_lines);
-  myglVertex3dV(@CoordInWCS.lBegin);
-  myglVertex3dV(@CoordInWCS.lEnd);
+  oglsm.myglVertex3dV(@CoordInWCS.lBegin);
+  oglsm.myglVertex3dV(@CoordInWCS.lEnd);
   oglsm.myglend;
 
   {oglsm.myglbegin(GL_points);
@@ -669,9 +669,9 @@ function GDBObjLine.Clone;
 var tvo: PGDBObjLine;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{5A1B005F-39F1-431B-B65E-0C532AEFA5D0}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjLine));
-  tvo^.init(bp.owner,vp.Layer, vp.LineWeight, CoordInOCS.lBegin, CoordInOCS.lEnd);
+  tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, CoordInOCS.lBegin, CoordInOCS.lEnd);
   tvo^.CoordInOCS.lBegin.y := tvo^.CoordInOCS.lBegin.y;
-  tvo^.bp.Owner:=own;
+  tvo^.bp.ListPos.Owner:=own;
   //tvo^.format;
   result := tvo;
 end;

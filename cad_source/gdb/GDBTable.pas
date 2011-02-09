@@ -68,15 +68,15 @@ begin
          if pvc^.vp.ID=GDBDeviceID then
             pvc:=pvc;
 
-         pvc^.bp.Owner:=@self;
+         pvc^.bp.ListPos.Owner:=@self;
          pvc^.transform(m4);
          self.ObjMatrix:=onematrix;
          pvc^.Format;
 
-         if bp.Owner<>@GDBTrash then
-                                    pvc^.bp.Owner:=gdb.GetCurrentROOT //@GDBTrash;
+         if bp.ListPos.Owner<>@GDBTrash then
+                                    pvc^.bp.ListPos.Owner:=gdb.GetCurrentROOT //@GDBTrash;
                                 else
-                                    pvc^.bp.Owner:=@GDBTrash;
+                                    pvc^.bp.ListPos.Owner:=@GDBTrash;
 
 
          //pvc^.DXFOut(handle, outhandle);
@@ -109,7 +109,7 @@ begin
   tvo^.vp.layer :=vp.layer;
   tvo^.Local.p_insert := Local.p_insert;
   tvo^.Local := Local;
-  tvo^.bp.Owner:=own;
+  tvo^.bp.ListPos.Owner:=own;
   result := tvo;
 end;
 procedure GDBObjTable.Build;

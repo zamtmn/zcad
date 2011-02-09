@@ -69,7 +69,7 @@ end;
 function GDBObjEntityOpenArray.add;
 begin
   result:=inherited add(p);
-  pGDBObjEntity(p^).bp.PSelfInOwnerArray:={addr(PGDBObjEntityArray(parray)^[}result{])};
+  pGDBObjEntity(p^).bp.ListPos.SelfIndex:={addr(PGDBObjEntityArray(parray)^[}result{])};
 end;
 function GDBObjEntityOpenArray.addwithoutcorrect;
 begin

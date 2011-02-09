@@ -274,26 +274,26 @@ begin
   begin
   glcolor3ubv(@palette[sysvar.SYS.SYS_SystmGeometryColor^+2]);
   oglsm.myglbegin(GL_LINE_LOOP);
-     myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
-     myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
-     myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.LBN.Z);
-     myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.LBN.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.LBN.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.LBN.Z);
   oglsm.myglend();
   oglsm.myglbegin(GL_LINE_LOOP);
-     myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.RTF.Z);
-     myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.RTF.Z);
-     myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.RTF.Z);
-     myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.RTF.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.RTF.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.RTF.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.RTF.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.RTF.Z);
   oglsm.myglend();
   oglsm.myglbegin(GL_LINES);
-     myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
-     myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.RTF.Z);
-     myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
-     myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.RTF.Z);
-     myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.LBN.Z);
-     myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.RTF.Z);
-     myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.LBN.Z);
-     myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.RTF.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.RTF.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.RTF.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.LBN.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.RTF.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.LBN.Z);
+     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.RTF.Z);
   oglsm.myglend();
   end;
 end;
@@ -305,14 +305,14 @@ function GDBObjGenericSubEntry.AddMi;
 begin
      //pobj^.bp.PSelfInOwnerArray:=ObjArray.getelement(ObjArray.add(pobj));
      ObjArray.add(pobj);
-     pGDBObjEntity(ppointer(pobj)^).bp.Owner:=@self;
+     pGDBObjEntity(ppointer(pobj)^).bp.ListPos.Owner:=@self;
 end;
 procedure GDBObjGenericSubEntry.correctobjects;
 var pobj:PGDBObjEntity;
     ir:itrec;
 begin
-     bp.Owner:=powner;
-     bp.PSelfInOwnerArray:=pinownerarray;
+     bp.ListPos.Owner:=powner;
+     bp.ListPos.SelfIndex:=pinownerarray;
      pobj:=self.ObjArray.beginiterate(ir);
      if pobj<>nil then
      repeat
@@ -355,7 +355,7 @@ begin
      p:=objarray.beginiterate(ir);
      if p<>nil then
      repeat
-           p^.bp.Owner:=new_sub;
+           p^.bp.ListPos.Owner:=new_sub;
            new_sub^.ObjArray.add(@p);
      p:=objarray.iterate(ir);
      until p=nil;

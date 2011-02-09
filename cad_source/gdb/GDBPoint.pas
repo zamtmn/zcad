@@ -74,7 +74,7 @@ begin
 end;
 procedure GDBObjPoint.format;
 begin
-  P_insertInWCS:=VectorTransform3D(P_insertInOCS,{CurrentCS}bp.owner^.GetMatrix^);
+  P_insertInWCS:=VectorTransform3D(P_insertInOCS,{CurrentCS}bp.ListPos.owner^.GetMatrix^);
   calcbb;
 end;
 function GDBObjPoint.GetObjTypeName;
@@ -90,7 +90,7 @@ end;
 constructor GDBObjPoint.initnul;
 begin
   inherited initnul(owner);
-  bp.Owner:=owner;
+  bp.ListPos.Owner:=owner;
   vp.ID := GDBPointID;
   P_insertInOCS := NulVertex;
 end;
@@ -260,7 +260,7 @@ function GDBObjPoint.Clone;
 var tvo: PGDBObjPoint;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{1C6F0445-7339-449A-BDEB-7D38A46FD910}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjPoint));
-  tvo^.init(bp.owner,vp.Layer, vp.LineWeight, P_insertInOCS);
+  tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, P_insertInOCS);
   result := tvo;
 end;
 procedure GDBObjPoint.rtsave;

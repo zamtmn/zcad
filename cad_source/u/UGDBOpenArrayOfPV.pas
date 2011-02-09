@@ -183,7 +183,7 @@ begin
   if count<max then
   begin
   temp:=CreateObjFree(t);
-  temp^.bp.Owner:=owner;
+  temp^.bp.ListPos.Owner:=owner;
   add(@temp);
   end;
   result := temp;

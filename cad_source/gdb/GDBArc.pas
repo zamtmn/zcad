@@ -580,7 +580,7 @@ function GDBObjARC.Clone;
 var tvo: PGDBObjArc;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{368BA81A-219B-4DE9-A8E0-64EE16001126}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjArc));
-  tvo^.init(bp.owner,vp.Layer, vp.LineWeight, Local.p_insert, r,startangle,endangle);
+  tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, Local.p_insert, r,startangle,endangle);
   //tvo^.format;
   result := tvo;
 end;

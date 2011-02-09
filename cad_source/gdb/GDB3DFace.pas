@@ -82,7 +82,7 @@ var i:GDBInteger;
 begin
       for i:=0 to 3 do
       begin
-           PInWCS[I]:=VectorTransform3D(PInOCS[I],{CurrentCS}bp.owner^.GetMatrix^);
+           PInWCS[I]:=VectorTransform3D(PInOCS[I],{CurrentCS}bp.ListPos.owner^.GetMatrix^);
       end;
       normal:=normalizevertex(
                               vectordot(
@@ -128,7 +128,7 @@ end;
 constructor GDBObj3DFace.initnul;
 begin
   inherited initnul(owner);
-  bp.Owner:=owner;
+  bp.ListPos.Owner:=owner;
   vp.ID := GDB3DfaceID;
   PInOCS[1]:= NulVertex;
 end;
@@ -194,10 +194,10 @@ oglsm.myglEnable(GL_COLOR_MATERIAL);
   if triangle then
   begin
        oglsm.myglbegin(GL_TRIANGLES);
-       glNormal3dV(@normal);
-       myglVertex3dV(@PInwCS[0]);
-       myglVertex3dV(@PInwCS[1]);
-       myglVertex3dV(@PInwCS[2]);
+       oglsm.myglNormal3dV(@normal);
+       oglsm.myglVertex3dV(@PInwCS[0]);
+       oglsm.myglVertex3dV(@PInwCS[1]);
+       oglsm.myglVertex3dV(@PInwCS[2]);
        (*
        glNormal3fV(@n);
        {my}glVertex3fV(@p1);
@@ -209,11 +209,11 @@ oglsm.myglEnable(GL_COLOR_MATERIAL);
      else
   begin
   oglsm.myglbegin(GL_QUADS);
-  glNormal3dV(@normal);
-  myglVertex3dV(@PInwCS[0]);
-  myglVertex3dV(@PInwCS[1]);
-  myglVertex3dV(@PInwCS[2]);
-  myglVertex3dV(@PInwCS[3]);
+  oglsm.myglNormal3dV(@normal);
+  oglsm.myglVertex3dV(@PInwCS[0]);
+  oglsm.myglVertex3dV(@PInwCS[1]);
+  oglsm.myglVertex3dV(@PInwCS[2]);
+  oglsm.myglVertex3dV(@PInwCS[3]);
   oglsm.myglend;
   end;
 
@@ -334,8 +334,8 @@ function GDBObj3DFace.Clone;
 var tvo: PGDBObj3DFace;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{1C6F0445-7339-449A-BDEB-7D38A46FD910}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObj3DFace));
-  tvo^.init(bp.owner,vp.Layer, vp.LineWeight, nulvertex);
-  tvo^.bp.Owner:=own;
+  tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, nulvertex);
+  tvo^.bp.ListPos.Owner:=own;
   tvo^.PInOCS:=PInOCS;
   tvo^.PInWCS:=PInWCS;
   tvo^.PInDCS:=PInDCS;

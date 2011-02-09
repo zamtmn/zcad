@@ -419,10 +419,10 @@ begin
         if plw^.hw then
         begin
         oglsm.myglbegin(GL_QUADS);
-        myglVertex3dv(@q3d^[0]);
-        myglVertex3dv(@q3d^[1]);
-        myglVertex3dv(@q3d^[2]);
-        myglVertex3dv(@q3d^[3]);
+        oglsm.myglVertex3dv(@q3d^[0]);
+        oglsm.myglVertex3dv(@q3d^[1]);
+        oglsm.myglVertex3dv(@q3d^[2]);
+        oglsm.myglVertex3dv(@q3d^[3]);
         oglsm.myglend();
         end;
         inc(plw);
@@ -436,16 +436,16 @@ begin
     for i := 0 to ie do
     begin
       begin
-        myglVertex3dv(@q3d^[0]);
-        myglVertex3dv(@q3d^[1]);
+        oglsm.myglVertex3dv(@q3d^[0]);
+        oglsm.myglVertex3dv(@q3d^[1]);
         if plw^.hw then
         begin
-        myglVertex3dv(@q3d^[1]);
-        myglVertex3dv(@q3d^[2]);
-        myglVertex3dv(@q3d^[2]);
-        myglVertex3dv(@q3d^[3]);
-        myglVertex3dv(@q3d^[3]);
-        myglVertex3dv(@q3d^[0]);
+        oglsm.myglVertex3dv(@q3d^[1]);
+        oglsm.myglVertex3dv(@q3d^[2]);
+        oglsm.myglVertex3dv(@q3d^[2]);
+        oglsm.myglVertex3dv(@q3d^[3]);
+        oglsm.myglVertex3dv(@q3d^[3]);
+        oglsm.myglVertex3dv(@q3d^[0]);
         end;
         inc(plw);
         inc(q3d);
@@ -473,7 +473,7 @@ begin
   hlGDBWord:=0;
   numv:=0;
   vp.id:=GDBLWPolylineID;
-  local.p_insert:={w0^}PGDBVertex(@bp.owner^.GetMatrix^[3])^;
+  local.p_insert:={w0^}PGDBVertex(@bp.ListPos.owner^.GetMatrix^[3])^;
   closed := false;
   Width2D_in_OCS_Array.createarray;
   (*Vertex2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{270E17CA-8FFF-43B8-A6FB-E553C47023F1}',{$ENDIF}1000,closed);

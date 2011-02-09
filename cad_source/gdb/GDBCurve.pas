@@ -220,7 +220,7 @@ end;
 constructor GDBObjCurve.initnul;
 begin
   inherited initnul(nil);
-  bp.Owner:=owner;
+  bp.ListPos.Owner:=owner;
   vp.ID := GDBPolylineID;
   VertexArrayInWCS.init({$IFDEF DEBUGBUILD}'{6662A71B-9321-472D-B3C3-3EBFCA8D610A}',{$ENDIF}1000);
   vertexarrayinocs.init({$IFDEF DEBUGBUILD}'{3DBA1295-54F6-45D1-984C-2C51A585C5C9}',{$ENDIF}1000);
@@ -336,7 +336,7 @@ begin
   ptv:=VertexArrayInOCS.beginiterate(ir);
   if ptv<>nil then
   repeat
-        tv:=VectorTransform3D(ptv^,bp.owner^.GetMatrix^);
+        tv:=VectorTransform3D(ptv^,bp.ListPos.owner^.GetMatrix^);
         VertexArrayInWCS.Add(@tv);
         ptv:=vertexarrayinocs.iterate(ir);
   until ptv=nil;
@@ -399,7 +399,7 @@ var tpo: PGDBObjCurve;
     i:GDBInteger;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{8F88CAFB-14F3-4F33-96B5-F493DB8B28B7}',{$ENDIF}GDBPointer(tpo), sizeof(GDBObjCurve));
-  tpo^.init(bp.owner,vp.Layer, vp.LineWeight);
+  tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   //tpo^.vertexarrayinocs.init({$IFDEF DEBUGBUILD}'{90423E18-2ABF-48A8-8E0E-5D08A9E54255}',{$ENDIF}1000);
   p:=vertexarrayinocs.PArray;
   for i:=0 to VertexArrayInWCS.Count-1 do

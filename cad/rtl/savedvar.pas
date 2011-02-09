@@ -17,17 +17,17 @@ var
   PATH_File9:GDBString;
 implementation
 begin
-  VIEW_CommandLineH:=55;
-  VIEW_ObjInspV:=197;
+  VIEW_CommandLineH:=47;
+  VIEW_ObjInspV:=307;
   VIEW_ObjInspSubV:=84;
-  PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File1:='D:\план.dxf';
-  PATH_File2:='D:\план1.dxf';
-  PATH_File3:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File4:='C:\zcad_рус\cad\..\errors\0.dxf';
-  PATH_File5:='C:\zcad_рус\cad\autosave\autosave.dxf';
-  PATH_File6:='C:\zcad_рус\cad\sample\test_dxf\ops.dxf';
-  PATH_File7:='E:\work2\proj.dxf';
-  PATH_File8:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File9:='c:\zcad\errors\0.dxf';
+  PATH_File0:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File1:='/mnt/win_c/zcad/cad/autosave/autosave.dxf';
+  PATH_File2:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File3:='D:\план.dxf';
+  PATH_File4:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File5:='D:\план1.dxf';
+  PATH_File6:='C:\zcad_рус\cad\..\errors\0.dxf';
+  PATH_File7:='C:\zcad_рус\cad\autosave\autosave.dxf';
+  PATH_File8:='C:\zcad_рус\cad\sample\test_dxf\ops.dxf';
+  PATH_File9:='E:\work2\proj.dxf';
 end.

@@ -65,7 +65,7 @@ begin
             if point^.selected then glcolor3ub(255, 0, 0)
                                else glcolor3ub(0, 0, 255);
             //glvertex2iv(@point^.dispcoord);
-            myglvertex3dv(@point^.worldcoord);
+            oglsm.myglvertex3dv(@point^.worldcoord);
             inc(point);
        end;
   end;

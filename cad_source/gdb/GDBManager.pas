@@ -123,22 +123,22 @@ begin
     GDBBlockInsertID: begin
         GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.blockinsert}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjBlockinsert));
         pgdbobjblockinsert(temp).initnul;
-        pgdbobjblockinsert(temp).bp.Owner:=owner;
+        pgdbobjblockinsert(temp).bp.ListPos.Owner:=owner;
       end;
     GDBDeviceID: begin
         GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.device}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjDevice));
         pgdbobjdevice(temp).initnul;
-        pgdbobjdevice(temp).bp.Owner:=owner;
+        pgdbobjdevice(temp).bp.ListPos.Owner:=owner;
       end;
     GDBCableID: begin
         GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.cable}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjDevice));
         pgdbobjcable(temp).initnul(owner);
-        pgdbobjcable(temp).bp.Owner:=owner;
+        pgdbobjcable(temp).bp.ListPos.Owner:=owner;
       end;
     GDB3DfaceID: begin
         GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.cable}',{$ENDIF}GDBPointer(temp), sizeof(GDBObj3DFace));
         pGDBObj3DFace(temp).initnul(owner);
-        pGDBObj3DFace(temp).bp.Owner:=owner;
+        pGDBObj3DFace(temp).bp.ListPos.Owner:=owner;
       end;
   end;
   result := temp;
@@ -266,7 +266,7 @@ begin
                                               nam:=s;
                                          end;
   if pb=nil then exit;
-  pb.bp.Owner:={gdb.GetCurrentROOT}own;
+  pb.bp.ListPos.Owner:={gdb.GetCurrentROOT}own;
   setdefaultproperty(pb);
   pb^.Local.P_insert := point;
   pb^.scale.x := scale;

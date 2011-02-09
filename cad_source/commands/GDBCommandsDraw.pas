@@ -745,13 +745,13 @@ begin
     PCreatedGDBLine^.RenderFeedback;
     if po<>nil then
     begin
-    PCreatedGDBLine^.bp.Owner:=po;
+    PCreatedGDBLine^.bp.ListPos.Owner:=po;
     //gdb.ObjRoot.ObjArray.add(addr(pl));
     PGDBObjGenericSubEntry(po)^.ObjArray.add(addr(PCreatedGDBLine));
     end
     else
     begin
-    PCreatedGDBLine^.bp.Owner:=gdb.GetCurrentROOT;
+    PCreatedGDBLine^.bp.ListPos.Owner:=gdb.GetCurrentROOT;
     //gdb.ObjRoot.ObjArray.add(addr(pl));
     gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(PCreatedGDBLine));
     end;
@@ -939,7 +939,7 @@ begin
    if pcd<>nil then
    repeat
                           begin
-                          {}pcopyofcopyobj:=pcd.obj^.Clone(pcd.obj.bp.Owner);
+                          {}pcopyofcopyobj:=pcd.obj^.Clone(pcd.obj.bp.ListPos.Owner);
                             pcopyofcopyobj^.TransformAt(pcd.obj,@dispmatr);
                             pcopyofcopyobj^.format;
 
@@ -1432,7 +1432,7 @@ begin
 
   GDBGetMem({$IFDEF DEBUGBUILD}'{743A21EB-4741-42A4-8CB2-D4E4A1E2EAF8}',{$ENDIF}pointer(pt),sizeof(GDBObjTable));
   pt^.initnul;
-  pt^.bp.Owner:=@gdb.CurrentDWG.ConstructObjRoot;
+  pt^.bp.ListPos.Owner:=@gdb.CurrentDWG.ConstructObjRoot;
   gdb.CurrentDWG.ConstructObjRoot.ObjArray.add(@pt);
 
   pt^.ptablestyle:=gdb.GetCurrentDWG.TableStyleTable.getAddres('ShRaspr');

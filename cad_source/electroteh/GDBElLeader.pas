@@ -123,22 +123,22 @@ begin
 end;
 procedure GDBObjElLeader.SaveToDXF;
 begin
-  MainLine.bp.Owner:=gdb.GetCurrentROOT;
+  MainLine.bp.ListPos.Owner:=gdb.GetCurrentROOT;
   MainLine.SaveToDXF(handle,outhandle);
   dxfGDBStringout(outhandle,1001,'DSTP_XDATA');
   dxfGDBStringout(outhandle,1002,'{');
   dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
   dxfGDBStringout(outhandle,1002,'}');
-  MainLine.bp.Owner:=@self;
+  MainLine.bp.ListPos.Owner:=@self;
 
-  MarkLine.bp.Owner:=@gdbtrash;
+  MarkLine.bp.ListPos.Owner:=@gdbtrash;
   MarkLine.SaveToDXF(handle,outhandle);
   MarkLine.SaveToDXFPostProcess(outhandle);
-  MarkLine.bp.Owner:=@self;
+  MarkLine.bp.ListPos.Owner:=@self;
 
-  tbl.bp.Owner:=@gdbtrash;
+  tbl.bp.ListPos.Owner:=@gdbtrash;
   tbl.SaveToDXFFollow(handle,outhandle);
-  tbl.bp.Owner:=@self;
+  tbl.bp.ListPos.Owner:=@self;
 end;
 procedure GDBObjElLeader.SaveToDXFFollow;
 var
@@ -159,7 +159,7 @@ begin
          if pvc^.vp.ID=GDBDeviceID then
             pvc:=pvc;
 
-         pvc^.bp.Owner:=@gdbtrash;
+         pvc^.bp.ListPos.Owner:=@gdbtrash;
          pvc^.transform(m4);
          self.ObjMatrix:=onematrix;
          pvc^.Format;
@@ -259,7 +259,7 @@ begin
                       begin
                       repeat
                             if ptn.DevLink<>nil then
-                            if pdev=pointer(ptn.DevLink.bp.owner) then
+                            if pdev=pointer(ptn.DevLink.bp.ListPos.owner) then
                             begin
                                   pvn:=pobj^.ou.FindVariable('NMO_Name');
                                   if pvn<>nil then
@@ -544,12 +544,12 @@ begin
   tvo^.initnul;
   tvo^.MainLine.CoordInOCS:=mainline.CoordInOCS;
   //tvo^.MainLine:=mainline;
-  tvo^.MainLine.bp.Owner:=tvo;
+  tvo^.MainLine.bp.ListPos.Owner:=tvo;
   tvo^.vp.id := GDBElLeaderID;
   tvo^.vp.layer :=vp.layer;
   tvo^.Local.p_insert := Local.p_insert;
   tvo^.Local := Local;
-  tvo^.bp.Owner:=own;
+  tvo^.bp.ListPos.Owner:=own;
   result := tvo;
 end;
 constructor GDBObjElLeader.initnul;
@@ -568,7 +568,7 @@ begin
      //MarkLine.Format;
 
      tbl.initnul;
-     tbl.bp.Owner:=@self;
+     tbl.bp.ListPos.Owner:=@self;
      //tbl.Format;
 end;
 destructor GDBObjElLeader.done;

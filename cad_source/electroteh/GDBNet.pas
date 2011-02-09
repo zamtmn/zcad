@@ -84,13 +84,13 @@ function GDBObjNet.Clone;
 var tvo: PGDBObjNet;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjNet));
-  tvo^.initnul(bp.owner);
+  tvo^.initnul(bp.ListPos.owner);
   tvo^.vp.Layer:=vp.Layer;
   tvo^.vp.LineWeight:=vp.LineWeight;
   tvo^.vp.id :=GDBNetID;
   tvo.ObjArray.init({$IFDEF DEBUGBUILD}'{E9005274-601F-4A3F-BDB8-E311E59D558C}',{$ENDIF}ObjArray.Count);
   ObjArray.CloneEntityTo(@tvo.ObjArray,tvo);
-  tvo^.bp.Owner:=own;
+  tvo^.bp.ListPos.Owner:=own;
   result := tvo;
   ou.CopyTo(@tvo.OU);
 end;
@@ -111,7 +111,7 @@ begin
   pv:=ObjArray.iterate(ir);
   until pv=nil;
   ObjArray.pack;
-  self.correctobjects(pointer(bp.Owner),bp.PSelfInOwnerArray);
+  self.correctobjects(pointer(bp.ListPos.Owner),bp.ListPos.SelfIndex);
 end;
 function GDBObjNet.GetNearestLine;
 var pl:pgdbobjline;
@@ -157,9 +157,9 @@ begin
      begin
           tvp:=pobj^.vp;
           pobj^.vp:=vp;
-          pobj.bp.Owner:=gdb.GetCurrentROOT;
+          pobj.bp.ListPos.Owner:=gdb.GetCurrentROOT;
           pobj.SaveToDXF(handle,outhandle);
-          pobj.bp.Owner:=@self;
+          pobj.bp.ListPos.Owner:=@self;
           pobj^.vp:=tvp;
      end;
 end;
@@ -475,14 +475,14 @@ begin
           pl:=GDBPointer(ti.beginiterate(ir));
           if pl<>nil then
           repeat
-                self.ObjArray.deliteminarray(pl^.bp.PSelfInOwnerArray);
+                self.ObjArray.deliteminarray(pl^.bp.ListPos.SelfIndex);
                 //self.EraseMi(pl,pl^.bp.PSelfInOwnerArray);
                 //pl^.bp.Owner:=TempNet;
 
                 //pl^.bp.Owner^.RemoveInArray(pl^.bp.PSelfInOwnerArray);
                 //GDBPointer(pl^.bp.PSelfInOwnerArray^):=nil;
                 tempnet.ObjArray.add(@pl);
-                pl.bp.Owner:=tempnet;
+                pl.bp.ListPos.Owner:=tempnet;
                 pl:=GDBPointer(ti.iterate(ir));
           until pl=nil;
           self.ObjArray.pack;

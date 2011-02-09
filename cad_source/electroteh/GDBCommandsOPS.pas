@@ -543,18 +543,18 @@ begin
                 repeat
                     //if ptn^.DevLink<>nil then
                     begin
-                         SaveEntUName:=ptn^.bp.Owner.ou.Name;
-                         ptn^.bp.Owner.ou.Name:='Entity';
-                         p:=@ptn^.bp.Owner.ou;
+                         SaveEntUName:=ptn^.bp.ListPos.Owner.ou.Name;
+                         ptn^.bp.ListPos.Owner.ou.Name:='Entity';
+                         p:=@ptn^.bp.ListPos.Owner.ou;
                          currentunit.InterfaceUses.addnodouble(@p);
 
                          units.loadunit(expandpath('*rtl\objcalc\opsmark.pas'),(@currentunit));
 
                          dec(currentunit.InterfaceUses.Count);
 
-                         ptn^.bp.Owner^.Format;
+                         ptn^.bp.ListPos.Owner^.Format;
                      end;
-                    ptn^.bp.Owner.ou.Name:=SaveEntUName;
+                    ptn^.bp.ListPos.Owner.ou.Name:=SaveEntUName;
                     ptn:=pcabledesk^.Devices.iterate(ir_inNodeArray);
                 until ptn=nil;
 
@@ -741,8 +741,8 @@ begin
                   count:=0;
                   if nodeend<>nil then
                   repeat
-                        if nodeend^.bp.Owner<>pointer(gdb.GetCurrentROOT) then
-                                                                          nodeend:=pointer(nodeend^.bp.Owner);
+                        if nodeend^.bp.ListPos.Owner<>pointer(gdb.GetCurrentROOT) then
+                                                                          nodeend:=pointer(nodeend^.bp.ListPos.Owner);
                         pvd:=nodeend^.ou.FindVariable('NMO_Name');
                         if pvd<>nil then
                         begin

@@ -62,7 +62,7 @@ begin
      PGDBVertex(@dispmatr[3])^:=Local.p_insert;
 
      objmatrix:=MatrixMultiply(rotmatr,dispmatr);
-     objmatrix:=MatrixMultiply(objmatrix,bp.owner^.GetMatrix^);
+     objmatrix:=MatrixMultiply(objmatrix,bp.ListPos.owner^.GetMatrix^);
 
      P_insert_in_WCS:={PGDBVertex(@dispmatr[3])^;//}VectorTransform3D(nulvertex,objmatrix);
 end;

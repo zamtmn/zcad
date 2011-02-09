@@ -127,13 +127,16 @@ begin
   pprojoutbound:=nil;
 end;
 constructor GDBObjWithLocalCS.init;
+var
+   powner:PGDBObjGenericWithSubordinated;
 begin
   inherited init(own,layeraddres,LW);
-  if bp.owner<>nil then
+  powner:=bp.ListPos.owner;
+  if powner<>nil then
   begin
-  Local.ox:={wx^}PGDBVertex(@bp.owner^.GetMatrix^[0])^;
-  Local.oy:={wy^}PGDBVertex(@bp.owner^.GetMatrix^[1])^;
-  Local.oz:={wz^}PGDBVertex(@bp.owner^.GetMatrix^[2])^;
+  Local.ox:={wx^}PGDBVertex(@powner^.GetMatrix^[0])^;
+  Local.oy:={wy^}PGDBVertex(@powner^.GetMatrix^[1])^;
+  Local.oz:={wz^}PGDBVertex(@powner^.GetMatrix^[2])^;
   end
   else
   begin
@@ -197,7 +200,7 @@ begin
      PGDBVertex(@dispmatr[3])^:=Local.p_insert;
 
      objmatrix:=MatrixMultiply(dispmatr,rotmatr);*)
-     objmatrix:=MatrixMultiply({objmatrix}CalcObjMatrixWithoutOwner,bp.owner^.GetMatrix^);
+     objmatrix:=MatrixMultiply({objmatrix}CalcObjMatrixWithoutOwner,bp.ListPos.owner^.GetMatrix^);
 
      P_insert_in_WCS:={PGDBVertex(@dispmatr[3])^;//}VectorTransform3D(nulvertex,objmatrix);
 end;

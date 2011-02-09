@@ -685,7 +685,7 @@ begin
                          sumpotrp:=0;
                          sumpotri:=0;
                          potrname:='';
-                         if pcabledesk^.StartDevice.bp.Owner=pointer(pobj) then
+                         if pcabledesk^.StartDevice.bp.ListPos.Owner=pointer(pobj) then
                          begin
                               historyoutstr('  Найдена групповая линия "'+pcabledesk^.Name+'"');
 
@@ -696,7 +696,7 @@ begin
                               node:=pcabledesk^.Devices.iterate(ir_inNodeArray);
                               if node<>nil then
                               repeat
-                                    pgroupdev:=pointer(node.bp.Owner);
+                                    pgroupdev:=pointer(node.bp.ListPos.Owner);
                                     if pgroupdev<>nil then
                                     begin
                                          pvd:=pgroupdev^.ou.FindVariable('Device_Type');
@@ -1084,7 +1084,7 @@ begin
                  pvd:=TempNet.ou.FindVariable('NMO_BaseName');
                  pstring(pvd^.data.Instance)^:=UNNAMEDNET;
                  //TempNet^.name:=gdb.numerator.getnamenumber(el_unname_prefix);
-                 New_line^.bp.Owner:=TempNet;
+                 New_line^.bp.ListPos.Owner:=TempNet;
                  TempNet^.ObjArray.add(addr(New_line));
                  TempNet^.Format;
                  gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@TempNet);
@@ -1092,7 +1092,7 @@ begin
                  mode:=-1;
             end;
           1:begin
-                 New_line^.bp.Owner:=FirstOwner;
+                 New_line^.bp.ListPos.Owner:=FirstOwner;
                  FirstOwner^.ObjArray.add(addr(New_line));
                  FirstOwner^.Format;
                  mode:=-1;
@@ -1112,7 +1112,7 @@ begin
                       //FirstOwner^.Name:=nn;
                  end;
 
-                 New_line^.bp.Owner:=FirstOwner;
+                 New_line^.bp.ListPos.Owner:=FirstOwner;
                  FirstOwner^.ObjArray.add(addr(New_line));
                  FirstOwner^.Format;
                  mode:=-1;
@@ -1751,7 +1751,7 @@ begin
                 repeat
                     if ptn^.DevLink<>nil then
                     begin
-                    CurrentObj:=pointer(ptn^.DevLink^.bp.owner);
+                    CurrentObj:=pointer(ptn^.DevLink^.bp.ListPos.owner);
                     CurrentObj^.select;
                     end;
 
@@ -2064,7 +2064,7 @@ begin
   if (button and MZW_LBUTTON)<>0 then
   begin
     begin
-    PCreatedGDBLine^.bp.Owner:=gdb.GetCurrentROOT;
+    PCreatedGDBLine^.bp.ListPos.Owner:=gdb.GetCurrentROOT;
 
   GDBGetMem({$IFDEF DEBUGBUILD}'{33202D9B-6197-4A09-8BC8-1D24AA3053DA}',{$ENDIF}pointer(pleader),sizeof(GDBObjElLeader));
   pleader^.initnul;

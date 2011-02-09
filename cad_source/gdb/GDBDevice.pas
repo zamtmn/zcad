@@ -69,7 +69,7 @@ function GDBObjDevice.AddMi;
 begin
      //pobj^.bp.PSelfInOwnerArray:=ObjArray.getelement(ObjArray.add(pobj));
      VarObjArray.add(pobj);
-     pGDBObjEntity(ppointer(pobj)^).bp.Owner:=@self;
+     pGDBObjEntity(ppointer(pobj)^).bp.ListPos.Owner:=@self;
 end;
 destructor GDBObjDevice.done;
 begin
@@ -96,7 +96,7 @@ begin
          if pvc^.vp.ID=GDBDeviceID then
             pvc:=pvc;
 
-         pvc^.bp.Owner:=@self;
+         pvc^.bp.ListPos.Owner:=@self;
          pvc^.transform(m4);
          self.ObjMatrix:=onematrix;
          pvc^.Format;
@@ -182,7 +182,7 @@ begin
   varObjArray.CloneEntityTo(@tvo.varObjArray,tvo);
   //tvo^.format;
   //tvo.FromDXFPostProcessAfterAdd;
-  tvo^.bp.Owner:=own;
+  tvo^.bp.ListPos.Owner:=own;
   result := tvo;
   ou.CopyTo(@tvo.OU);
   tvo^.BlockDesc:=BlockDesc;

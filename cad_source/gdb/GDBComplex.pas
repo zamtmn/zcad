@@ -73,7 +73,7 @@ end;
 procedure GDBObjComplex.rtmodifyonepoint;
 var m:DMatrix4D;
 begin
-     m:=bp.owner.getmatrix^;
+     m:=bp.ListPos.owner.getmatrix^;
      MatrixInvert(m);
 
      case rtmod.point.pointtype of

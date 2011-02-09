@@ -136,10 +136,6 @@ msgstr ""
 msgid "Perspective on/off"
 msgstr ""
 
-#: ACN_PERSPECTIVE~textimage
-msgid "perspective"
-msgstr ""
-
 #: ACN_POLYED~caption
 msgid "Edit polyline"
 msgstr ""
@@ -337,6 +333,14 @@ msgctxt "GDBObj3DFace~PInWCS"
 msgid "Coordinates WCS"
 msgstr ""
 
+#: GDBObjBaseProp~ListPos
+msgid "List"
+msgstr ""
+
+#: GDBObjBaseProp~TreePos
+msgid "Tree"
+msgstr ""
+
 #: GDBObjBlockInsert~BlockDesc
 msgid "Block params"
 msgstr ""
@@ -418,6 +422,10 @@ msgstr ""
 #: GDBObjPoint~P_insertInWCS
 msgctxt "GDBObjPoint~P_insertInWCS"
 msgid "Coordinates WCS"
+msgstr ""
+
+#: GDBObjSubordinated~bp
+msgid "Owner"
 msgstr ""
 
 #: GDBObjVisualProp~BoundingBox
@@ -505,45 +513,45 @@ msgstr ""
 
 #: hint_panel~DWG_DrawMode
 #, fuzzy
-msgid "Show/Hide"
+msgid "Show/Hide Lineweight"
 msgstr ""
 
 #: hint_panel~DWG_EditInSubEntry
 #, fuzzy
-msgid "On/Off"
+msgid "On/Off Selecting parts of dynamic objects"
 msgstr ""
 
 #: hint_panel~DWG_HelpGeometryDraw
 #, fuzzy
-msgid "Auxiliary"
+msgid "Auxiliary graphics (connectivity, direction, etc.)"
 msgstr ""
 
 #: hint_panel~DWG_OSMode
 #, fuzzy
-msgid "Object"
+msgid "Object snap"
 msgstr ""
 
 #: hint_panel~DWG_PolarMode
 #, fuzzy
 msgctxt "hint_panel~DWG_PolarMode"
-msgid "Polar"
+msgid "Polar tracking"
 msgstr ""
 
 #: hint_panel~DWG_SystmGeometryDraw
 #, fuzzy
 msgctxt "hint_panel~DWG_SystmGeometryDraw"
-msgid "System"
+msgid "System graphics (size, communication, etc. for debugging)"
 msgstr ""
 
 #: hint_panel~LAYERCOMBOBOX
 #, fuzzy
 msgctxt "hint_panel~LAYERCOMBOBOX"
-msgid "Layer"
+msgid "Layer selection"
 msgstr ""
 
 #: hint_panel~LINEWCOMBOBOX
 #, fuzzy
-msgid "Line"
+msgid "Line weight selection"
 msgstr ""
 
 #: mainwindow.commandlinewndname
@@ -776,6 +784,16 @@ msgstr ""
 
 #: tdwg~DWG_SelectedObjToInsp
 msgid "SelectedObjToInsp"
+msgstr ""
+
+#: TEntityAdress~Owner
+msgctxt "TEntityAdress~Owner"
+msgid "Adress"
+msgstr ""
+
+#: TEntityAdress~SelfIndex
+msgctxt "TEntityAdress~SelfIndex"
+msgid "Position"
 msgstr ""
 
 #: tmisc~ShowHiddenFieldInObjInsp
@@ -1101,6 +1119,16 @@ msgstr ""
 #: TTraceMode~ZAxis
 msgctxt "TTraceMode~ZAxis"
 msgid "Z Axis"
+msgstr ""
+
+#: TTreeAdress~Owner
+msgctxt "TTreeAdress~Owner"
+msgid "Adress"
+msgstr ""
+
+#: TTreeAdress~SelfIndex
+msgctxt "TTreeAdress~SelfIndex"
+msgid "Position"
 msgstr ""
 
 #: ugdbdescriptor.unnamedwindowtitle

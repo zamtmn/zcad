@@ -147,10 +147,6 @@ msgstr "Перспектива"
 msgid "Perspective on/off"
 msgstr "Перспектива вкл/выкл"
 
-#: ACN_PERSPECTIVE~textimage
-msgid "perspective"
-msgstr ""
-
 #: ACN_POLYED~caption
 msgid "Edit polyline"
 msgstr "Редактировать полиобъект"
@@ -344,6 +340,14 @@ msgctxt "GDBObj3DFace~PInWCS"
 msgid "Coordinates WCS"
 msgstr "Координаты в WCS"
 
+#: GDBObjBaseProp~ListPos
+msgid "List"
+msgstr "Список"
+
+#: GDBObjBaseProp~TreePos
+msgid "Tree"
+msgstr "Дерево"
+
 #: GDBObjBlockInsert~BlockDesc
 msgid "Block params"
 msgstr "Параметры блока"
@@ -426,6 +430,10 @@ msgstr "Координаты в OCS"
 msgctxt "GDBObjPoint~P_insertInWCS"
 msgid "Coordinates WCS"
 msgstr "Координаты в WCS"
+
+#: GDBObjSubordinated~bp
+msgid "Owner"
+msgstr "Владелец"
 
 #: GDBObjVisualProp~BoundingBox
 msgid "Bounding box"
@@ -511,54 +519,46 @@ msgid "Divide by zero (Geometry.NormalizeVertex)"
 msgstr "Деление на ноль (Geometry.NormalizeVertex)"
 
 #: hint_panel~DWG_DrawMode
-#, fuzzy
-#| msgid "Show/Hide Lineweight"
-msgid "Show/Hide"
+#| msgid "Show/Hide"
+msgid "Show/Hide Lineweight"
 msgstr "Показать вес линий"
 
 #: hint_panel~DWG_EditInSubEntry
-#, fuzzy
-#| msgid "On/Off Selecting parts of dynamic objects"
-msgid "On/Off"
+#| msgid "On/Off"
+msgid "On/Off Selecting parts of dynamic objects"
 msgstr "Вкл./Выкл. отдельный выбор частей динамических объектов"
 
 #: hint_panel~DWG_HelpGeometryDraw
-#, fuzzy
-#| msgid "Auxiliary graphics (connectivity, direction, etc.)"
-msgid "Auxiliary"
+#| msgid "Auxiliary"
+msgid "Auxiliary graphics (connectivity, direction, etc.)"
 msgstr "Вспомогательная графика (подключение, направление и т.п.)"
 
 #: hint_panel~DWG_OSMode
-#, fuzzy
-#| msgid "Object snap"
-msgid "Object"
+#| msgid "Object"
+msgid "Object snap"
 msgstr "Объектные привязки"
 
 #: hint_panel~DWG_PolarMode
-#, fuzzy
-#| msgid "Polar tracking"
+#| msgid "Polar"
 msgctxt "hint_panel~DWG_PolarMode"
-msgid "Polar"
+msgid "Polar tracking"
 msgstr "Полярная трассировка"
 
 #: hint_panel~DWG_SystmGeometryDraw
-#, fuzzy
-#| msgid "System graphics (size, communication, etc. for debugging)"
+#| msgid "System"
 msgctxt "hint_panel~DWG_SystmGeometryDraw"
-msgid "System"
+msgid "System graphics (size, communication, etc. for debugging)"
 msgstr "Системная графика (габариты, связи и т.п. для отладки)"
 
 #: hint_panel~LAYERCOMBOBOX
-#, fuzzy
-#| msgid "Layer selection"
+#| msgid "Layer"
 msgctxt "hint_panel~LAYERCOMBOBOX"
-msgid "Layer"
+msgid "Layer selection"
 msgstr "Выбор слоя"
 
 #: hint_panel~LINEWCOMBOBOX
-#, fuzzy
-#| msgid "Line weight selection"
-msgid "Line"
+#| msgid "Line"
+msgid "Line weight selection"
 msgstr "Выбор веса линий"
 
 #: mainwindow.commandlinewndname
@@ -792,6 +792,16 @@ msgstr "Режим полярной трассировки"
 #: tdwg~DWG_SelectedObjToInsp
 msgid "SelectedObjToInsp"
 msgstr ""
+
+#: TEntityAdress~Owner
+msgctxt "TEntityAdress~Owner"
+msgid "Adress"
+msgstr "Адрес"
+
+#: TEntityAdress~SelfIndex
+msgctxt "TEntityAdress~SelfIndex"
+msgid "Position"
+msgstr "Позиция"
 
 #: tmisc~ShowHiddenFieldInObjInsp
 msgid "Show hidden fields"
@@ -1116,6 +1126,16 @@ msgstr "Угол"
 msgctxt "TTraceMode~ZAxis"
 msgid "Z Axis"
 msgstr "Ось Z"
+
+#: TTreeAdress~Owner
+msgctxt "TTreeAdress~Owner"
+msgid "Adress"
+msgstr "Адрес"
+
+#: TTreeAdress~SelfIndex
+msgctxt "TTreeAdress~SelfIndex"
+msgid "Position"
+msgstr "Позиция"
 
 #: ugdbdescriptor.unnamedwindowtitle
 msgid "unnamed"

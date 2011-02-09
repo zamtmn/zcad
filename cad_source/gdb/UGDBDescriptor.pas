@@ -171,12 +171,12 @@ begin
                                       exit;
            if inowner then
                           begin
-                               result:=pointer(result.bp.Owner);
+                               result:=pointer(result.bp.ListPos.Owner);
                                while (result<>nil) do
                                begin
                                     if result.vp.ID=objID then
                                                               exit;
-                                    result:=pointer(result.bp.Owner);
+                                    result:=pointer(result.bp.ListPos.Owner);
                                end;
 
                           end;
@@ -199,7 +199,7 @@ begin
      begin
           PSelectedObjDesc(md).ptempobj:=obj^.Clone(nil);
           //PSelectedObjDesc(md).ptempobj.BuildGeometry;
-          PSelectedObjDesc(md).ptempobj^.bp.Owner:=obj^.bp.Owner;
+          PSelectedObjDesc(md).ptempobj^.bp.ListPos.Owner:=obj^.bp.ListPos.Owner;
           PSelectedObjDesc(md).ptempobj.format;
      end;
      p:=obj^.beforertmodify;

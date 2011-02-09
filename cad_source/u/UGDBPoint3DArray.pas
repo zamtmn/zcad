@@ -43,16 +43,16 @@ begin
   if count<2 then exit;
   p:=parray;
   oglsm.myglbegin(GL_LINES{_STRIP});
-  myglVertex3dV(@p^);
+  oglsm.myglVertex3dV(@p^);
   inc(p);
   for i:=0 to count-3 do
   begin
-     myglVertex3dV(@p^);
-     myglVertex3dV(@p^);
+     oglsm.myglVertex3dV(@p^);
+     oglsm.myglVertex3dV(@p^);
 
      inc(p);
   end;
-  myglVertex3dV(@p^);
+  oglsm.myglVertex3dV(@p^);
   oglsm.myglend;
 end;
 procedure GDBPoint3DArray.DrawGeometryWClosed(closed:GDBBoolean);
@@ -64,18 +64,18 @@ begin
   if count<2 then exit;
   p:=parray;
   oglsm.myglbegin(GL_LINES{_STRIP});
-  myglVertex3dV(@p^);
+  oglsm.myglVertex3dV(@p^);
   inc(p);
   for i:=0 to count-3 do
   begin
-     myglVertex3dV(@p^);
-     myglVertex3dV(@p^);
+     oglsm.myglVertex3dV(@p^);
+     oglsm.myglVertex3dV(@p^);
 
      inc(p);
   end;
-  myglVertex3dV(@p^);
-  myglVertex3dV(@p^);
-  myglVertex3dV(@parray^);
+  oglsm.myglVertex3dV(@p^);
+  oglsm.myglVertex3dV(@p^);
+  oglsm.myglVertex3dV(@parray^);
 
   oglsm.myglend;
   end

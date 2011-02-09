@@ -808,7 +808,7 @@ begin
   tvo^.width:=width;
   tvo^.linespace:=linespace;
   tvo^.linespacef:=linespacef;
-  tvo^.bp.Owner:=own;
+  tvo^.bp.ListPos.Owner:=own;
   result := tvo;
 end;
 procedure GDBObjMText.LoadFromDXF;

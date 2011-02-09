@@ -219,7 +219,7 @@ end;
 function GDBObjEntity.CalcOwner(own:GDBPointer):GDBPointer;
 begin
      if own=nil then
-                    result:=bp.owner
+                    result:=bp.ListPos.owner
                 else
                     result:=own;
 end;
@@ -279,16 +279,16 @@ begin
                      result:=selected
                  else
                      begin
-                          if bp.owner<>nil then
-                                            result:=bp.owner.IsSelected
+                          if bp.ListPos.owner<>nil then
+                                            result:=bp.ListPos.owner.IsSelected
                                            else
                                                result:=false;
                      end;
 end;
 procedure GDBObjEntity.correctobjects;
 begin
-     bp.Owner:=powner;
-     bp.PSelfInOwnerArray:=pinownerarray;
+     bp.ListPos.Owner:=powner;
+     bp.ListPos.SelfIndex:=pinownerarray;
 end;
 function GDBObjEntity.GetObjTypeName;
 begin
@@ -300,11 +300,11 @@ begin
 end;
 function GDBObjEntity.YouDeleted;
 begin
-     pgdbobjgenericsubentry(bp.owner)^.EraseMi(@self,bp.PSelfInOwnerArray);
+     pgdbobjgenericsubentry(bp.ListPos.owner)^.EraseMi(@self,bp.ListPos.SelfIndex);
 end;
 procedure GDBObjEntity.YouChanged;
 begin
-     PGDBObjGenericWithSubordinated(bp.owner)^.ImEdited(@self,bp.PSelfInOwnerArray);
+     PGDBObjGenericWithSubordinated(bp.ListPos.owner)^.ImEdited(@self,bp.ListPos.SelfIndex);
 end;
 function GDBObjEntity.ReturnLastOnMouse;
 begin
@@ -316,15 +316,15 @@ begin
 end;
 function GDBObjEntity.getowner;
 begin
-     result:=PGDBObjEntity(bp.Owner)^.getowner;
+     result:=PGDBObjEntity(bp.ListPos.Owner)^.getowner;
 end;
 function GDBObjEntity.getmatrix;
 begin
-     result:=PGDBObjEntity(bp.Owner)^.GetMatrix;
+     result:=PGDBObjEntity(bp.ListPos.Owner)^.GetMatrix;
 end;
 function GDBObjEntity.getownermatrix;
 begin
-     result:=PGDBObjEntity(bp.Owner)^.GetMatrix;
+     result:=PGDBObjEntity(bp.ListPos.Owner)^.GetMatrix;
 end;
 procedure GDBObjEntity.DrawGeometry;
 begin
@@ -341,7 +341,7 @@ begin
   begin
     case vp.lineweight of
       -3: lw := 1;
-      -2: lw := bp.owner^.{vp.lineweight}GetLineWeight;
+      -2: lw := bp.ListPos.owner^.{vp.lineweight}GetLineWeight;
       -1: lw := vp.layer^.lineweight;
     end
   end
@@ -368,13 +368,13 @@ begin
   //vp.ID := 0;
   vp.Layer := layeraddres;
   vp.LineWeight := LW;
-  bp.owner:=own;
+  bp.ListPos.owner:=own;
 end;
 constructor GDBObjEntity.initnul;
 begin
      createfield;
      if owner<>nil then
-                       bp.owner:=owner;
+                       bp.ListPos.owner:=owner;
 end;
 procedure GDBObjEntity.DrawWithOutAttrib;
 var lw: GDBInteger;
@@ -396,9 +396,9 @@ var lw: GDBInteger;
 begin
   sel := false;
   lw := CalculateLineWeight;
-  if bp.owner=nil then
-                      bp.owner:=nil;
-  if selected or ((bp.owner <> nil) and (bp.owner^.isselected)) then
+  if bp.ListPos.owner=nil then
+                      bp.ListPos.owner:=nil;
+  if selected or ((bp.ListPos.owner <> nil) and (bp.ListPos.owner^.isselected)) then
                                                                     begin
                                                                           //oglsm.mytotalglend;
                                                                           //isOpenGLError;
@@ -450,8 +450,8 @@ begin
                                                     end
                                                 else
                                                     begin
-                                                    if bp.owner.getlayer^.color<>7 then
-                                                                              glcolor3ubv(@palette[bp.owner.getlayer^.color])
+                                                    if bp.ListPos.owner.getlayer^.color<>7 then
+                                                                              glcolor3ubv(@palette[bp.ListPos.owner.getlayer^.color])
                                                                           else
                                                                               begin
                                                                                    glcolor3ub(not(sysvar.RD.RD_BackGroundColor^.r),not(sysvar.RD.RD_BackGroundColor^.g),not(sysvar.RD.RD_BackGroundColor^.b))
@@ -459,7 +459,7 @@ begin
                                                          //glcolor3ubv(@palette[bp.owner.getlayer^.color]);
                                                     end;
   Draw(lw,visibleactualy);
-  if selected or ((bp.owner <> nil) and (bp.owner^.isselected)) then
+  if selected or ((bp.ListPos.owner <> nil) and (bp.ListPos.owner^.isselected)) then
                                                                     begin
                                                                     end
                                                                 else
@@ -787,7 +787,7 @@ begin
           begin
           GDBGetMem({$IFDEF DEBUGBUILD}'{B50BE8C9-E00A-40C0-A051-230877BD3A56}',{$ENDIF}GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
           addcontrolpoints(tdesc);
-          bp.Owner.ImSelected(@self,bp.PSelfInOwnerArray);
+          bp.ListPos.Owner.ImSelected(@self,bp.ListPos.SelfIndex);
           inc(GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
           end;
      end;

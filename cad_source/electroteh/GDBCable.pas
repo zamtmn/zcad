@@ -61,10 +61,10 @@ begin
   //result:=inherited Clone(own);
   //exit;
   GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjCable));
-  tvo^.init(bp.owner,vp.Layer, vp.LineWeight);
+  tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   tvo^.vp.id :=GDBCableID;
   tvo^.vp.layer :=vp.layer;
-  tvo^.bp.Owner:=own;
+  tvo^.bp.ListPos.Owner:=own;
   p:=vertexarrayinocs.PArray;
   for i:=0 to VertexArrayInWCS.Count-1 do
   begin
@@ -256,7 +256,7 @@ begin
                                                                                         I3DPNext.isintercept:=false;
                                                                                         ptd:=CurrentSubObj;
                                                                                         if CurrentSubObj.BlockDesc.BBorder=BB_owner then
-                                                                                                                               CurrentSubObj:=pointer(CurrentSubObj^.bp.Owner);
+                                                                                                                               CurrentSubObj:=pointer(CurrentSubObj^.bp.ListPos.Owner);
                                                                                         CurrentSubObj2:=CurrentSubObj^.VarObjArray.beginiterate(ir_inDevice2);
                                                                                         if (CurrentSubObj2<>nil) then
                                                                                         repeat
@@ -330,7 +330,7 @@ begin
                 repeat
                     if ptn^.DevLink<>nil then
                     begin
-                    CurrentObj:=pointer(ptn^.DevLink^.bp.owner);
+                    CurrentObj:=pointer(ptn^.DevLink^.bp.ListPos.owner);
                     {pvd:=CurrentObj.ou.FindVariable('OPS_Pribor');
                     if pvd<>nil then
                     pgdbinteger(pvd^.data.Instance)^:=group;
@@ -452,8 +452,8 @@ begin
   if ptn1<>nil then
   begin
   repeat
-        myglvertex3dv(@ptn2^.Nextp );
-        myglvertex3dv(@ptn1^.PrevP );
+        oglsm.myglvertex3dv(@ptn2^.Nextp );
+        oglsm.myglvertex3dv(@ptn1^.PrevP );
         ptn2:=ptn1;
         ptn1:=NodePropArray.iterate(ir_inNodeArray);
   until ptn1=nil;
@@ -498,10 +498,10 @@ begin
   if vertexarrayInWCS.Count>1 then
   begin
        oglsm.myglbegin(GL_lines);
-       myglvertex3dv(@str21);
-       myglvertex3dv(@str22);
-       myglvertex3dv(@str22);
-       myglvertex3dv(@str23);
+       oglsm.myglvertex3dv(@str21);
+       oglsm.myglvertex3dv(@str22);
+       oglsm.myglvertex3dv(@str22);
+       oglsm.myglvertex3dv(@str23);
        oglsm.myglend;
   end;
   end;

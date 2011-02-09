@@ -42,10 +42,10 @@ begin
   if (sysvar.DWG.DWG_SystmGeometryDraw^){and(POGLWnd.subrender=0)} then
   begin
        oglsm.myglbegin(gl_line_loop);
-       myglvertex3dv(@outbound[0]);
-       myglvertex3dv(@outbound[1]);
-       myglvertex3dv(@outbound[2]);
-       myglvertex3dv(@outbound[3]);
+       oglsm.myglvertex3dv(@outbound[0]);
+       oglsm.myglvertex3dv(@outbound[1]);
+       oglsm.myglvertex3dv(@outbound[2]);
+       oglsm.myglvertex3dv(@outbound[3]);
        oglsm.myglend;
   end;
   inherited;

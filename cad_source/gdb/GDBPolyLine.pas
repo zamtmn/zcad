@@ -42,11 +42,16 @@ GDBObjPolyline=object(GDBObjCurve)
                  function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
+                 procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
 
            end;
 {Export-}
 implementation
 uses gdbcable,log;
+procedure GDBObjPolyline.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
+begin
+  GDBPoint3dArrayAddOnTrackAxis(VertexArrayInWCS,posr,processaxis,closed);
+end;
 function GDBObjPolyline.onmouse;
 begin
   if VertexArrayInWCS.count<2 then

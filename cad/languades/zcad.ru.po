@@ -870,6 +870,10 @@ msgstr "Середина"
 msgid "Nearest"
 msgstr "Ближайшая"
 
+#: TOSMode~kosm_paralel
+msgid "Paralel"
+msgstr ""
+
 #: TOSMode~kosm_perpendicular
 msgid "Perpendicular"
 msgstr "Перпендикуляр"

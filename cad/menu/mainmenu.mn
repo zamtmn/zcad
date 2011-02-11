@@ -29,14 +29,12 @@ Panel Quick;
   {
     action ACN_LOADQS
     action ACN_SAVEQS
-    Separator
     action ACN_PROJECTTREE
   }
 Panel Modify;
   {
     action ACN_BEDIT
     action ACN_POLYED
-    Separator
     action ACN_COPY
     action ACN_MOVE
     action ACN_ROTATE
@@ -59,16 +57,12 @@ Panel Misc;
     button El_Cable_Invert,#инв,Инвертировать направление кабеля
     button El_Cable_Legend,#кж,Экспорт кабельного журнала
     button El_Material_Legend,#вм,Экспорт "ведомости" материалов
-    Separator
     button PlaceSmokeDetectorOrto,ps.bmp,Авторасстановка пож. извещателей
     button OrtoDevPlace,array.bmp,Расстановка блоков (устройств) массивом
     action ACN_El_FIND
-    Separator
     action ACN_OBJVARMAN
-    Separator
     button AddToOwner,addtoowner.bmp,(НЕ РАБОТАЕТ)добавить к владельцу
     button InsertTestTable,spec.bmp,*DEBUG*Вставить таблицу
-    Separator
     button SetObjInsp(CURRENT),#FIX,*DEBUG*Фиксировать выделенный объект в инспекторе
   }
 MainMenuItem File;

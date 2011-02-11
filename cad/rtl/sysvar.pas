@@ -65,7 +65,7 @@ var
 implementation
 begin
   DWG_DrawMode:=0;
-  DWG_OSMode:=6119;
+  DWG_OSMode:=14311;
   DWG_PolarMode:=1;
   DWG_CLayer:=0;
   DWG_CLinew:=-1;
@@ -110,11 +110,11 @@ begin
   RD_MaxRenderTime:=0;
   RD_Light:=False;
   SAVE_Auto_Interval:=300;
-  SAVE_Auto_Current_Interval:=292;
+  SAVE_Auto_Current_Interval:=235;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';
   SAVE_Auto_On:=True;
-  SYS_RunTime:=8;
-  SYS_Version:='0.9.7 Revision SVN:61';
+  SYS_RunTime:=69;
+  SYS_Version:='0.9.7 Revision SVN:72';
   SYS_SystmGeometryColor:=250;
   SYS_IsHistoryLineCreated:=True;
   SYS_AlternateFont:='GEWIND.SHX';

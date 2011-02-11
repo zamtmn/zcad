@@ -737,6 +737,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
                 kosm_tangent:GDBBoolean;(*'Tangent'*)
                 kosm_nearest:GDBBoolean;(*'Nearest'*)
                 kosm_apparentintersection:GDBBoolean;(*'Apparent intersection'*)
+                kosm_paralel:GDBBoolean;(*'Paralel'*)
           end;
   trd=record
             RD_Renderer:PGDBString;(*'Device'*)(*oi_readonly*)
@@ -1073,7 +1074,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
                     function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;abstract;
                     procedure BuildGeometry;virtual;abstract;
-                    procedure AddOnTrackAxis(var posr:os_record);virtual;abstract;
+                    procedure AddOnTrackAxis(var posr:os_record; const processaxis:taddotrac);virtual;abstract;
                     function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;abstract;
               end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDB3d.pas
@@ -1468,7 +1469,7 @@ GDBObjBlockInsert=object(GDBObjComplex)
                      procedure BuildVarGeometry;virtual;abstract;
                      procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
                      procedure rtsave(refp:GDBPointer);virtual;abstract;
-                     procedure AddOnTrackAxis(var posr:os_record);virtual;abstract;
+                     procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
                      procedure Format;virtual;abstract;
                      //function ProcessFromDXFObjXData(_Name,_Value:GDBString):GDBBoolean;virtual;abstract;
                   end;
@@ -1577,7 +1578,7 @@ GDBObjLine=object(GDBObj3d)
                   function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
                   function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
                   function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;abstract;
-                  procedure AddOnTrackAxis(var posr:os_record);virtual;abstract;
+                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
                   function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBLWPolyLine.pas
@@ -1615,7 +1616,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  //function InRect:TInRect;virtual;abstract;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
                  function getsnap(var osp:os_record):GDBBoolean;virtual;abstract;
-                 procedure AddOnTrackAxis(var posr:os_record);virtual;abstract;
+                 procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBtext.pas
 PGDBObjText=^GDBObjText;
@@ -1723,7 +1724,7 @@ GDBObjCurve=object(GDBObj3d)
                  procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                  procedure feedbackinrect;virtual;abstract;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
-                 procedure AddOnTrackAxis(var posr:os_record);virtual;abstract;
+                 procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
                  procedure InsertVertex(const PolyData:TPolyData);
                  procedure DeleteVertex(const PolyData:TPolyData);
            end;

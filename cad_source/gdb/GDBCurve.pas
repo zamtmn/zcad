@@ -61,14 +61,14 @@ GDBObjCurve=object(GDBObj3d)
                  procedure feedbackinrect;virtual;
 
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
-                 procedure AddOnTrackAxis(var posr:os_record);virtual;
+                 procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  procedure InsertVertex(const PolyData:TPolyData);
                  procedure DeleteVertex(const PolyData:TPolyData);
            end;
 {Export-}
 procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:GDBBoolean);
 function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:GDBBoolean):GDBBoolean;
-procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record);
+procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record;const processaxis:taddotrac;const closed:GDBBoolean);
 implementation
 uses
     log;
@@ -81,15 +81,26 @@ procedure GDBObjCurve.DeleteVertex(const PolyData:TPolyData);
 begin
      vertexarrayinocs.deleteelement(PolyData.nearestvertex);
 end;
-procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record);
+procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record;const processaxis:taddotrac;const closed:GDBBoolean);
 var tv:gdbvertex;
     ptv,ppredtv:pgdbvertex;
     ir:itrec;
     found:integer;
 
 begin
-  ppredtv:=VertexArrayInWCS.beginiterate(ir);
-  ptv:=VertexArrayInWCS.iterate(ir);
+     if not closed then
+                   begin
+                        ppredtv:=VertexArrayInWCS.beginiterate(ir);
+                        ptv:=VertexArrayInWCS.iterate(ir);
+                   end
+                else
+                    begin
+                           if VertexArrayInWCS.Count<3 then
+                                                        exit;
+                           ptv:=VertexArrayInWCS.beginiterate(ir);
+                           ppredtv:=VertexArrayInWCS.getelement(VertexArrayInWCS.Count-1);
+                    end;
+  found:=0;
   if (ptv<>nil)and(ppredtv<>nil) then
   repeat
         if (abs(ptv^.x-posr.worldcoord.x)<eps)
@@ -98,15 +109,20 @@ begin
                                              then
                                                  begin
                                                       found:=2;
-                                                 end;
+                                                 end
+   else if (found=0)and(distance2piece(posr.worldcoord,ppredtv^,ptv^)<eps) then begin
+                                                          found:=1;
+                                                     end;
 
         if found>0 then
                        begin
                             tv:=vertexsub(ptv^,ppredtv^);
                             tv:=geometry.NormalizeVertex(tv);
-                            posr.arrayworldaxis.Add(@tv);
+                            //posr.arrayworldaxis.Add(@tv);
+                            processaxis(posr,tv);
                             tv:=geometry.CrossVertex(tv,zwcs);
-                            posr.arrayworldaxis.Add(@tv);
+                            //posr.arrayworldaxis.Add(@tv);
+                            processaxis(posr,tv);
                             dec(found);
                        end;
 
@@ -115,9 +131,9 @@ begin
   until ptv=nil;
 end;
 
-procedure GDBObjCurve.AddOnTrackAxis(var posr:os_record);
+procedure GDBObjCurve.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 begin
-  GDBPoint3dArrayAddOnTrackAxis(VertexArrayInWCS,posr);
+  GDBPoint3dArrayAddOnTrackAxis(VertexArrayInWCS,posr,processaxis,false);
 end;
 function GDBObjCurve.CalcTrueInFrustum;
 begin

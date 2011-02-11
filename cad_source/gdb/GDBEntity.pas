@@ -26,6 +26,7 @@ uses gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
      oglwindowdef,geometry,dxflow,sysutils,memman,OGLSpecFunc,UGDBOpenArrayOfByte,UGDBLayerArray,UGDBOpenArrayOfPObjects;
 type
 //Owner:{-}PGDBObjEntity{/GDBPointer/};(*'Владелец'*)
+taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
 {Export+}
 PTExtAttrib=^TExtAttrib;
 TExtAttrib=record
@@ -140,7 +141,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                     function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                     procedure BuildGeometry;virtual;
-                    procedure AddOnTrackAxis(var posr:os_record);virtual;
+                    procedure AddOnTrackAxis(var posr:os_record; const processaxis:taddotrac);virtual;
 
                     function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
               end;
@@ -163,7 +164,7 @@ begin
       else
           visible:=0;
 end;
-procedure GDBObjEntity.AddOnTrackAxis(var posr:os_record);
+procedure GDBObjEntity.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 begin
 
 end;

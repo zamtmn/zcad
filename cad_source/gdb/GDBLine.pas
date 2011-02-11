@@ -78,7 +78,7 @@ GDBObjLine=object(GDBObj3d)
                   function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
 
                   function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
-                  procedure AddOnTrackAxis(var posr:os_record);virtual;
+                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                   function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
            end;
 {Export-}
@@ -144,12 +144,14 @@ begin
           end;
      end;
 end;
-procedure GDBObjLine.AddOnTrackAxis(var posr:os_record);
+procedure GDBObjLine.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 var tv:gdbvertex;
 begin
-     posr.arrayworldaxis.Add(@dir);
+     processaxis(posr,dir);
+     //posr.arrayworldaxis.Add(@dir);
      tv:=geometry.vectordot(dir,zwcs);
-     posr.arrayworldaxis.Add(@tv);
+     processaxis(posr,tv);
+     //posr.arrayworldaxis.Add(@tv);
 end;
 function GDBObjLine.IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;
 begin

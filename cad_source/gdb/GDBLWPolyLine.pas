@@ -60,7 +60,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  //function InRect:TInRect;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function getsnap(var osp:os_record):GDBBoolean;virtual;
-                 procedure AddOnTrackAxis(var posr:os_record);virtual;
+                 procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
            end;
 {Export-}
 implementation
@@ -82,9 +82,9 @@ begin
      end;
      result:=IREmpty;
 end;}
-procedure GDBObjLWpolyline.AddOnTrackAxis(var posr:os_record);
+procedure GDBObjLWpolyline.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 begin
-  GDBPoint3dArrayAddOnTrackAxis(Vertex3D_in_WCS_Array,posr);
+  GDBPoint3dArrayAddOnTrackAxis(Vertex3D_in_WCS_Array,posr,processaxis,closed);
 end;
 function GDBObjLWpolyline.getsnap;
 begin

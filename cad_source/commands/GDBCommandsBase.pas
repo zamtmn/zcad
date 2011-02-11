@@ -114,6 +114,7 @@ begin
     if osm.kosm_tangent then inc(SysVar.dwg.DWG_OSMode^,osm_tangent);
     if osm.kosm_nearest then inc(SysVar.dwg.DWG_OSMode^,osm_nearest);
     if osm.kosm_apparentintersection then inc(SysVar.dwg.DWG_OSMode^,osm_apparentintersection);
+    if osm.kosm_paralel then inc(SysVar.dwg.DWG_OSMode^,osm_paralel);
 
     case self.trace.Angle of
          TTA90:c:=2;
@@ -191,6 +192,10 @@ begin
                                                        osm.kosm_apparentintersection:=false
                                                    else
                                                        osm.kosm_apparentintersection:=true;
+    if (SysVar.dwg.DWG_OSMode^ and osm_paralel)=0 then
+                                                       osm.kosm_paralel:=false
+                                                   else
+                                                       osm.kosm_paralel:=true;
 
 end;
 constructor  TMSEditor.init;

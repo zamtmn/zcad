@@ -40,6 +40,8 @@ uses
   GDBHelpObj,
   commandline,
 
+  zglline3d,
+
   sysinfo,
   //strmy,
   UGDBVisibleOpenArray,
@@ -55,6 +57,9 @@ const
 type
   tmyscrbuf = array [0..maxmybufer] of GLuint;
   PTOGLWnd = ^TOGLWnd;
+
+  { TOGLWnd }
+
   TOGLWnd = class({TPanel}TOpenGLControl)
   private
     OGLContext:TOGLContextDesk;
@@ -85,6 +90,7 @@ type
     procedure beforeinit;virtual;
     procedure initogl;
     procedure AddOntrackpoint;
+    procedure Project0Axis;
 
     procedure render(const Root:GDBObjGenericSubEntry);
     function treerender(var Node:TEntTreeNode;StartTime:TDateTime):GDBBoolean;
@@ -104,7 +110,7 @@ type
     procedure ProcOTrackTimer(Sender:TObject);
     //procedure runonmousemove(Sender:TObject);
     procedure projectaxis;
-    procedure project0axis;
+    procedure create0axis;
     procedure reprojectaxis;
     procedure CalcOptimalMatrix;
     procedure SetOGLMatrix;
@@ -153,6 +159,8 @@ type
     procedure asynczoomall(Data: PtrInt);
     procedure ZoomAll;
     procedure myKeyPress(var Key: Word; Shift: TShiftState);
+
+    procedure addaxistootrack(var posr:os_record;const axis:GDBVertex);
 
     {LCL}
     protected
@@ -262,6 +270,7 @@ procedure TOGLWnd.SetMouseMode(smode:GDBByte);
 begin
      param.md.mode := smode;
 end;
+
 //procedure ProcTime(uID, msg: UINT; dwUse, dw1, dw2: DWord); stdcall;
 procedure TOGLWnd.ProcOTrackTimer(Sender:TObject);
 begin
@@ -321,6 +330,45 @@ begin
   begin
     inc(param.ontrackarray.total);
   end;
+end;
+
+procedure TOGLWnd.Project0Axis;
+var
+  tp: traceprop;
+  temp: gdbvertex;
+  pv: pgdbvertex;
+  i: GDBInteger;
+begin
+  {GDBGetMem(param.ospoint.arrayworldaxis, sizeof(GDBWord) + param.ppolaraxis
+    ^.count * sizeof(gdbvertex));
+  Move(param.ppolaraxis^, param.ospoint.arrayworldaxis^, sizeof(GDBWord) +
+    param.ppolaraxis^.count * sizeof(gdbvertex)); }
+  gdb.GetCurrentDWG^.myGluProject2(param.ontrackarray.otrackarray[0
+    ].worldcoord,
+             param.ontrackarray.otrackarray[0].dispcoord);
+  //param.ontrackarray.otrackarray[0].arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}', {$ENDIF}    param.ontrackarray.otrackarray[0].arrayworldaxis.count);
+  param.ontrackarray.otrackarray[0].arraydispaxis.clear;
+  //GDBGetMem(param.ospoint.arraydispaxis, sizeof(GDBWord) +param.ospoint.arrayworldaxis.count * sizeof(traceprop));
+  //param.ospoint.arraydispaxis.count := param.ospoint.arrayworldaxis.count;
+  pv:=param.ontrackarray.otrackarray[0].arrayworldaxis.PArray;
+  for i := 0 to param.ontrackarray.otrackarray[0].arrayworldaxis.count - 1 do
+  begin
+    gdb.GetCurrentDWG^.myGluProject2(createvertex(param.ontrackarray.otrackarray
+      [0].worldcoord.x + pv.x, param.ontrackarray.otrackarray[0].worldcoord.y +
+      pv.y, param.ontrackarray.otrackarray[0].worldcoord.z + pv.z)
+                                    , temp);
+    tp.dir.x:=temp.x - param.ontrackarray.otrackarray[0].dispcoord.x;
+    tp.dir.y:=(temp.y - param.ontrackarray.otrackarray[0].dispcoord.y);
+    tp.dir.z:=temp.z - param.ontrackarray.otrackarray[0].dispcoord.z;
+    param.ontrackarray.otrackarray[0].arraydispaxis.add(@tp);
+    {param.ospoint.arraydispaxis.arr[i].dir.x := temp.x -
+      param.ospoint.dispcoord.x;
+    param.ospoint.arraydispaxis.arr[i].dir.y := -(temp.y -
+      param.ospoint.dispcoord.y);
+    param.ospoint.arraydispaxis.arr[i].dir.z := temp.z -
+      param.ospoint.dispcoord.z; }
+    inc(pv);
+  end
 end;
 
 procedure TOGLWnd.ClearOntrackpoint;
@@ -708,6 +756,7 @@ begin
      end;
 end;
 
+
 procedure TOGLWnd.mouseunproject(X, Y: glint);
 var ca, cv: extended;cav: gdbvertex;  ds:GDBString;
 begin
@@ -840,6 +889,7 @@ begin
       else
       begin
         ClearOntrackpoint;
+        Create0axis;
         DISP_ZoomFactor(varmandef.sysvar.DISP.DISP_ZoomFactor^);
       end;
       //handled := true;
@@ -1178,13 +1228,14 @@ end;
       if (param.md.mode and MGetSelectObject) = 0 then
                                                       getonmouseobjectbytree(gdb.GetCurrentROOT.ObjArray.ObjTree);
       getosnappoint(@gdb.GetCurrentROOT.ObjArray, 0);
-      project0axis;
+      //create0axis;-------------------------------
     if sysvar.dwg.DWG_OSMode^ <> 0 then
     begin
       if otracktimer = 1 then
       begin
         otracktimer := 0;
         projectaxis;
+        project0axis;//-------------------------------
         AddOntrackpoint;
       end;
       if (param.ospoint.ostype <> os_none)and(param.ospoint.ostype <> os_nearest)and(param.ospoint.ostype<>os_perpendicular) then
@@ -1339,6 +1390,7 @@ begin
             end;
        end;
 end;
+
 procedure TOGLWnd.sendmousecoordwop(key: GDBByte);
 var
    tv:gdbvertex;
@@ -1424,13 +1476,16 @@ begin
 end;
 procedure TOGLWnd.sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);
 begin
+     commandmanager.pcommandrunning^.MouseMoveCallback(coord,param.md.mouse,key,pos);
      if (key and MZW_LBUTTON)<>0 then
+     if commandmanager.pcommandrunning<>nil then
      begin
            inc(tocommandmcliccount);
            param.ontrackarray.otrackarray[0].worldcoord:=coord;
            param.lastpoint:=coord;
+           create0axis;
+           project0axis;
      end;
-     commandmanager.pcommandrunning^.MouseMoveCallback(coord,param.md.mouse,key,pos);
 end;
 
 procedure TOGLWnd.DrawGrid;
@@ -3016,6 +3071,17 @@ begin
 
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobject------{end}',lp_DecPos);{$ENDIF}
 end;
+procedure TOGLWnd.addaxistootrack(var posr:os_record;const axis:GDBVertex);
+begin
+     posr.arrayworldaxis.Add(@axis);
+
+     if @posr<>@param.ontrackarray.otrackarray[0] then
+     if (SysVar.dwg.DWG_OSMode^ and osm_paralel)<>0 then
+     begin
+          param.ontrackarray.otrackarray[0].arrayworldaxis.Add(@axis);
+     end;
+end;
+
 procedure TOGLWnd.projectaxis;
 var
   i: GDBInteger;
@@ -3046,7 +3112,7 @@ begin
                        pobj:=objects.beginiterate(ir);
                        if pobj<>nil then
                        repeat
-                             pgdbobjentity(pobj)^.AddOnTrackAxis(param.ospoint);
+                             pgdbobjentity(pobj)^.AddOnTrackAxis(param.ospoint,addaxistootrack);
                              pobj:=objects.iterate(ir);
                        until pobj=nil;
   end;
@@ -3056,6 +3122,7 @@ begin
   end;}
   objects.ClearAndDone;
   end;
+  project0axis;
   {GDBGetMem(param.ospoint.arrayworldaxis, sizeof(GDBWord) + param.ppolaraxis^.count * sizeof(gdbvertex));
   Move(param.ppolaraxis^, param.ospoint.arrayworldaxis^, sizeof(GDBWord) + param.ppolaraxis^.count * sizeof(gdbvertex));}
   gdb.GetCurrentDWG^.myGluProject2(param.ospoint.worldcoord,
@@ -3079,12 +3146,10 @@ begin
     inc(pv);
   end
 end;
-procedure TOGLWnd.project0axis;
+procedure TOGLWnd.create0axis;
 var
   i: GDBInteger;
-  temp: gdbvertex;
   pv:pgdbvertex;
-  tp:traceprop;
   Objects:GDBObjOpenArrayOfPV;
   pobj:pGDBObjEntity;
   ir:itrec;
@@ -3109,7 +3174,7 @@ begin
                        pobj:=objects.beginiterate(ir);
                        if pobj<>nil then
                        repeat
-                             pgdbobjentity(pobj)^.AddOnTrackAxis(param.ontrackarray.otrackarray[0]);
+                             pgdbobjentity(pobj)^.AddOnTrackAxis(param.ontrackarray.otrackarray[0],addaxistootrack);
                              pobj:=objects.iterate(ir);
                        until pobj=nil;
   end;
@@ -3117,28 +3182,7 @@ begin
   end;
 
 
-  {GDBGetMem(param.ospoint.arrayworldaxis, sizeof(GDBWord) + param.ppolaraxis^.count * sizeof(gdbvertex));
-  Move(param.ppolaraxis^, param.ospoint.arrayworldaxis^, sizeof(GDBWord) + param.ppolaraxis^.count * sizeof(gdbvertex));}
-  gdb.GetCurrentDWG^.myGluProject2(param.ontrackarray.otrackarray[0].worldcoord,
-             param.ontrackarray.otrackarray[0].dispcoord);
-  //param.ontrackarray.otrackarray[0].arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}param.ontrackarray.otrackarray[0].arrayworldaxis.count);
-  param.ontrackarray.otrackarray[0].arraydispaxis.clear;
-  //GDBGetMem(param.ospoint.arraydispaxis, sizeof(GDBWord) + param.ospoint.arrayworldaxis.count * sizeof(traceprop));
-  //param.ospoint.arraydispaxis.count := param.ospoint.arrayworldaxis.count;
-  pv:=param.ontrackarray.otrackarray[0].arrayworldaxis.PArray;
-  for i := 0 to param.ontrackarray.otrackarray[0].arrayworldaxis.count - 1 do
-  begin
-    gdb.GetCurrentDWG^.myGluProject2(createvertex(param.ontrackarray.otrackarray[0].worldcoord.x + pv.x, param.ontrackarray.otrackarray[0].worldcoord.y + pv.y, param.ontrackarray.otrackarray[0].worldcoord.z + pv.z)
-                                    , temp);
-    tp.dir.x:=temp.x - param.ontrackarray.otrackarray[0].dispcoord.x;
-    tp.dir.y:=(temp.y - param.ontrackarray.otrackarray[0].dispcoord.y);
-    tp.dir.z:=temp.z - param.ontrackarray.otrackarray[0].dispcoord.z;
-    param.ontrackarray.otrackarray[0].arraydispaxis.add(@tp);
-    {param.ospoint.arraydispaxis.arr[i].dir.x := temp.x - param.ospoint.dispcoord.x;
-    param.ospoint.arraydispaxis.arr[i].dir.y := -(temp.y - param.ospoint.dispcoord.y);
-    param.ospoint.arraydispaxis.arr[i].dir.z := temp.z - param.ospoint.dispcoord.z;}
-    inc(pv);
-  end
+  Project0Axis;
 end;
 
 procedure TOGLWnd.reprojectaxis;
@@ -3151,6 +3195,7 @@ var
   ip:intercept3dprop;
   lastontracdist,currentontracdist,tx,ty,tz:gdbdouble;
   test:gdbboolean;
+  pobj:pgdbobjentity;
 //  dispraylen:double;
 begin
   if sysvar.dwg.DWG_PolarMode^ = 0 then exit;
@@ -3271,7 +3316,46 @@ begin
       end;
    end;
   end;
-    if param.polarlinetrace<2 then exit;
+
+  lastontracdist:=infinity;
+  if param.polarlinetrace>0 then
+  for i := a to param.ontrackarray.total - 1 do
+  begin
+       pt:=param.ontrackarray.otrackarray[i].arraydispaxis.beginiterate(ir2);
+       if pt<>nil then
+       begin
+       repeat
+            pobj:=gdb.GetCurrentDWG.OnMouseObj.beginiterate(ir);
+            if pobj<>nil then
+            repeat
+                  ip:=pobj.IsIntersect_Line(param.ontrackarray.otrackarray[i].worldcoord,pt.worldraycoord);
+
+                  if ip.isintercept then
+                  begin
+                   gdb.GetCurrentDWG^.myGluProject2(ip.interceptcoord,temp);
+                  currentontracdist:=vertexlen2df(temp.x, temp.y,param.md.glmouse.x,param.md.glmouse.y);
+                  if currentontracdist<lastontracdist then
+                  if currentontracdist<sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1 then
+                  begin
+                  param.ospoint.worldcoord := ip.interceptcoord;
+                  param.ospoint.dispcoord := temp;
+                  param.ospoint.ostype := {os_polar}os_apparentintersection;
+                  lastontracdist:=currentontracdist;
+                  end;
+                  end;
+
+
+
+                  pobj:=gdb.GetCurrentDWG.OnMouseObj.iterate(ir);
+            until pobj=nil;
+            pt:=param.ontrackarray.otrackarray[i].arraydispaxis.iterate(ir2);
+      until pt=nil;
+       end;
+  end;
+
+
+
+  if param.polarlinetrace<2 then exit;
     //lastontracdist:=infinity;
 
   for i := a to param.ontrackarray.total - 1 do
@@ -3294,12 +3378,12 @@ begin
                                     begin
                                       if ip.isintercept then
                                       begin
-                                       gdb.GetCurrentDWG^.myGluProject2(ip.interceptcoord,
-                                                    temp);
+                                      gdb.GetCurrentDWG^.myGluProject2(ip.interceptcoord,
+                                                                       temp);
 
                                       currentontracdist:=vertexlen2df(temp.x, temp.y,param.md.glmouse.x,param.md.glmouse.y);
                                       if currentontracdist<lastontracdist then
-                                      if currentontracdist<10 then
+                                      if currentontracdist<sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1 then
                                       begin
                                       param.ospoint.worldcoord := ip.interceptcoord;
                                       param.ospoint.dispcoord := temp;
@@ -3373,7 +3457,11 @@ begin
                  if (osp.radius<=param.ospoint.radius)or(osp.ostype=os_textinsert) then
                                                                                        begin
                                                                                             if (osp.radius<param.ospoint.radius) then
-                                                                                                                                     copyospoint(param.ospoint,osp)
+                                                                                                                                     begin
+                                                                                                                                     if osp.ostype<param.ospoint.ostype then
+                                                                                                                                          copyospoint(param.ospoint,osp)
+
+                                                                                                                                     end
                                                                                        else
                                                                                            if (osp.ostype<>os_perpendicular) then
                                                                                                                                      copyospoint(param.ospoint,osp)

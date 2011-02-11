@@ -195,6 +195,7 @@ UserTypeDescriptor=object(GDBaseObject)
                 kosm_tangent:GDBBoolean;(*'Tangent'*)
                 kosm_nearest:GDBBoolean;(*'Nearest'*)
                 kosm_apparentintersection:GDBBoolean;(*'Apparent intersection'*)
+                kosm_paralel:GDBBoolean;(*'Paralel'*)
           end;
   trd=record
             RD_Renderer:PGDBString;(*'Device'*)(*oi_readonly*)

@@ -25,7 +25,7 @@ uses
 
 
   {$IFDEF LCLGTK2}
-  x,xlib,{x11,}{xutil,}
+  //x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
   {$ENDIF}
 

@@ -27,7 +27,7 @@ type
 GDBPoint3dArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
-                function onpoint(p:gdbvertex;eps:gdbdouble):gdbboolean;
+                function onpoint(p:gdbvertex;eps:gdbdouble; closed:GDBBoolean):gdbboolean;
                 function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;
                 function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
                 procedure DrawGeometry;virtual;
@@ -158,17 +158,23 @@ begin
    end;
 end;
 
-function GDBPoint3DArray.onpoint(p:gdbvertex;eps:gdbdouble):gdbboolean;
+function GDBPoint3DArray.onpoint(p:gdbvertex;eps:gdbdouble; closed:GDBBoolean):gdbboolean;
 var i{,counter}:GDBInteger;
     d:GDBDouble;
     ptpv0,ptpv1:PGDBVertex;
+    a,b:integer;
 begin
-  result:=false;
+   result:=false;
    ptpv0:=parray;
    ptpv1:=ptpv0;
    inc(ptpv1);
    i:=0;
-   while i<(count-1) do
+   if closed then
+                 a:=count
+             else
+                 a:=count-1;
+   b:=count-1;
+   while i<a do
    begin
      d:=SQRdist_Point_to_Segment(p,ptpv0^,ptpv1^);
      if d<=eps then
@@ -180,7 +186,9 @@ begin
                             inc(i);
                             inc(ptpv1);
                             inc(ptpv0);
-                       end;
+                            if i=b then
+                                       ptpv1:=parray;
+     end;
    end;
 end;
 constructor GDBPoint3DArray.init;
@@ -195,4 +203,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBPoint3DArray.initialization');{$ENDIF}
 end.
-
+

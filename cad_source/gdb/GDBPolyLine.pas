@@ -63,7 +63,7 @@ begin
 end;
 function GDBObjPolyline.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 begin
-     if VertexArrayInWCS.onpoint(point,eps) then
+     if VertexArrayInWCS.onpoint(point,eps,closed) then
                                                 begin
                                                      result:=true;
                                                      objects.AddRef(self);
@@ -272,4 +272,4 @@ begin
 end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
-end.
+end.

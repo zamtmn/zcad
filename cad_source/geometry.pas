@@ -34,7 +34,7 @@ const
                                 (0, 2, 0, 0),
                                 (0, 0, 2, 0),
                                 (0, 0, 0, 2));
-      eps=1e-15;
+      eps=1e-14;
       sqreps=1e-7;
       bigeps=1e-10;
       x=0;y=1;z=2;w=3;
@@ -106,7 +106,7 @@ function CreateRotationMatrixY(const Sine, Cosine: GDBDouble): DMatrix4D;inline;
 function CreateRotationMatrixZ(const Sine, Cosine: GDBDouble): DMatrix4D;inline;
 function CreateAffineRotationMatrix(const anAxis: GDBvertex; angle: double):DMatrix4D;inline;
 function distance2piece(var q:GDBvertex2DI;var p1,p2:GDBvertex2D): double;overload;inline;
-function distance2piece(q:GDBvertex;var p1,p2:GDBvertex): {DistAndPoint}double;overload;inline;
+function distance2piece(q:GDBvertex;var p1,p2:GDBvertex): {DistAndPoint}double;overload;//inline;
 
 function distance2piece_2(var q:GDBvertex2DI; p1,p2:GDBvertex2D): double;overload;inline;
 function distance2piece_2(var q:GDBvertex2DI; p1,p2:GDBvertex2DI): double;overload;inline;

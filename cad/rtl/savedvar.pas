@@ -20,14 +20,14 @@ begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=307;
   VIEW_ObjInspSubV:=84;
-  PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File1:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File2:='E:\Фрагмент.dxf';
-  PATH_File3:='D:\План стартовой локации.dxf';
-  PATH_File4:='/mnt/win_c/zcad/cad/autosave/autosave.dxf';
-  PATH_File5:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File6:='D:\план.dxf';
-  PATH_File7:='D:\план1.dxf';
-  PATH_File8:='C:\zcad_рус\cad\..\errors\0.dxf';
-  PATH_File9:='C:\zcad_рус\cad\autosave\autosave.dxf';
+  PATH_File0:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File1:='D:\poly.dxf';
+  PATH_File2:='E:\Пример.dwg';
+  PATH_File3:='J:\nh\Федосеева\поликлиника 13\изменения\proj(2).dxf';
+  PATH_File4:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File5:='E:\Трасса.dwg';
+  PATH_File6:='\\WORKSTATION\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File7:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File8:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File9:='E:\Фрагмент.dxf';
 end.

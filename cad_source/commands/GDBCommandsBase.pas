@@ -35,7 +35,7 @@ uses
   oglwindowdef,
   //OGLtypes,
   UGDBOpenArrayOfByte,
-  iodxf,
+  iodxf,iodwg,
   //optionswnd,
   objinsp,
   //cmdline,
@@ -510,7 +510,20 @@ begin
                                            units.parseunit(mem,PTSimpleUnit(pu));
                                            mem.done;
                                      end;
-                                end;
+                                end
+          else if fileext='.DWG' then
+                                     begin
+                                          addfromdwg(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode);
+                                          if FileExists(utf8tosys(s+'.dbpas')) then
+                                          begin
+                                                pu:=gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase');
+                                                mem.InitFromFile(s+'.dbpas');
+                                                pu^.free;
+                                                units.parseunit(mem,PTSimpleUnit(pu));
+                                                mem.done;
+                                          end;
+                                     end;
+
      if gdb.currentdwg<>BlockBaseDWG then
                                          ReloadLayer;
      gdb.GetCurrentROOT.calcbb;

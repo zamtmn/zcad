@@ -44,6 +44,7 @@ GDBObjCurve=object(GDBObj3d)
                  procedure rtsave(refp:GDBPointer);virtual;
                  procedure RenderFeedback;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+                 function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
@@ -495,6 +496,17 @@ begin
                                   end;
    result:=VertexArrayInWCS.onmouse(mf,false);
 end;
+function GDBObjCurve.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
+begin
+     if VertexArrayInWCS.onpoint(point,eps,false) then
+                                                begin
+                                                     result:=true;
+                                                     objects.AddRef(self);
+                                                end
+                                            else
+                                                result:=false;
+end;
+
 procedure GDBObjCurve.rtmodifyonepoint(const rtmod:TRTModifyData);
 var vertexnumber:GDBInteger;
 begin

@@ -22,7 +22,7 @@ interface
 uses gdbasetypes, gdbase,sysutils,strproc,
      LResources,Dialogs,FileUtil;
 const
-    ProjectFileFilter: GDBString = 'DXF files (*.dxf)'#0'*.dxf'#0'ZCP files (*.zcp)'#0'*.zcp'#0#0;
+    ProjectFileFilter: GDBString = 'DXF files (*.dxf)'#0'*.dxf'#0'DWG files (*.dwg)'#0'*.dwg'#0'ZCP files (*.zcp)'#0'*.zcp'#0#0;
     CSVFileFilter: GDBString ='CSV files (*.CSV)'#0#0;
     {$INCLUDE revision.inc}
 function OpenFileDialog(out FileName:GDBString):Boolean;

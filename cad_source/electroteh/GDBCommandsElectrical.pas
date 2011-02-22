@@ -1444,7 +1444,7 @@ begin
   cman.init;
   cman.build;
   handle:=FileCreate(UTF8ToSys(filename),fmOpenWrite);
-  line:='Обозначение'+';'+'Материал'+';'+'Длина'+';'+'Начало'+';'+'Конец'+#13#10;
+  line:=Tria_Utf8ToAnsi('Обозначение'+';'+'Материал'+';'+'Длина'+';'+'Начало'+';'+'Конец'+#13#10);
   FileWrite(handle,line[1],length(line));
   pv:=cman.beginiterate(ir);
   if pv<>nil then
@@ -1526,7 +1526,8 @@ begin
                                  psl.add(@s);
                                  psl.add(@s);}
                                  end;
-                FileWrite(handle,line[1],length(line));
+                line:=Tria_Utf8ToAnsi(line);
+                FileWrite(handle,(line)[1],length((line)));
                 firstline:=false;
                 devstart:=devend;
                 nodeend:=pv^.Devices.iterate(ir_inNodeArray);
@@ -1590,7 +1591,7 @@ begin
   begin
   bom.init(1000);
   handle:=FileCreate(UTF8ToSys(filename),fmOpenWrite);
-  line:='Материал'+';'+'Количество'+';'+'Устройства'+#13#10;
+  line:=Tria_Utf8ToAnsi('Материал'+';'+'Количество'+';'+'Устройства'+#13#10);
   FileWrite(handle,line[1],length(line));
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
@@ -1631,6 +1632,7 @@ begin
   if PBOMITEM<>nil then
   repeat
           line:=pbomitem.Material+';'+floattostr(pbomitem.Amount)+';'+pbomitem.Names+#13#10;
+          line:=Tria_Utf8ToAnsi(line);
           FileWrite(handle,line[1],length(line));
 
         PBOMITEM:=bom.iterate(ir);

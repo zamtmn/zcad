@@ -20,8 +20,8 @@ begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=307;
   VIEW_ObjInspSubV:=84;
-  PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File1:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File0:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File1:='C:\zcad\cad\autosave\autosave.dxf';
   PATH_File2:='C:\zcad\cad\..\errors\4.dxf';
   PATH_File3:='C:\zcad\cad\..\errors\3.dxf';
   PATH_File4:='D:\poly.dxf';

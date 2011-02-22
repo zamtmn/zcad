@@ -24,7 +24,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="9"/>
       <RevisionNr Value="7"/>
-      <BuildNr Value="1204"/>
+      <BuildNr Value="1205"/>
       <CharSet Value="0000"/>
       <StringTable ProductVersion="0.0.0.8"/>
     </VersionInfo>
@@ -128,7 +128,7 @@
         <Filename Value="languade/UUnitManager.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UUnitManager"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="668"/>
         <CursorPos X="29" Y="693"/>
@@ -179,11 +179,10 @@
         <Filename Value="gui/oglwindow.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="oglwindow"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="2743"/>
-        <CursorPos X="47" Y="2768"/>
+        <TopLine Value="150"/>
+        <CursorPos X="19" Y="175"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -244,11 +243,11 @@
       <Unit19>
         <Filename Value="gdbase.pas"/>
         <UnitName Value="gdbase"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="93"/>
         <CursorPos X="1" Y="99"/>
-        <UsageCount Value="84"/>
+        <UsageCount Value="85"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit19>
@@ -356,11 +355,11 @@
       <Unit31>
         <Filename Value="languade/varmandef.pas"/>
         <UnitName Value="varmandef"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="225"/>
         <CursorPos X="23" Y="250"/>
-        <UsageCount Value="88"/>
+        <UsageCount Value="89"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit31>
@@ -466,11 +465,11 @@
       <Unit43>
         <Filename Value="OGLSpecFunc.pas"/>
         <UnitName Value="OGLSpecFunc"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="209"/>
         <CursorPos X="47" Y="222"/>
-        <UsageCount Value="98"/>
+        <UsageCount Value="99"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit43>
@@ -586,10 +585,13 @@
       <Unit56>
         <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
         <UnitName Value="GDBCommandsElectrical"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="2042"/>
-        <CursorPos X="32" Y="2067"/>
+        <TopLine Value="1438"/>
+        <CursorPos X="51" Y="1530"/>
         <UsageCount Value="95"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit56>
       <Unit57>
@@ -766,11 +768,11 @@
       <Unit77>
         <Filename Value="gdbobjectsconstdef.pas"/>
         <UnitName Value="gdbobjectsconstdef"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="72"/>
         <CursorPos X="10" Y="88"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit77>
@@ -786,11 +788,11 @@
       <Unit79>
         <Filename Value="gui/oglwindowdef.pas"/>
         <UnitName Value="oglwindowdef"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="6"/>
         <CursorPos X="38" Y="37"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit79>
@@ -970,11 +972,11 @@
       <Unit101>
         <Filename Value="../../pp/packages/opengl/src/gl.pp"/>
         <UnitName Value="GL"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="136"/>
         <CursorPos X="3" Y="161"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit101>
       <Unit102>
@@ -1338,11 +1340,11 @@
       <Unit146>
         <Filename Value="gdbasetypes.pas"/>
         <UnitName Value="gdbasetypes"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="24"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="43"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit146>
@@ -1356,128 +1358,120 @@
       <Unit148>
         <Filename Value="gdb/GDBCamera.pas"/>
         <UnitName Value="GDBCamera"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="27"/>
         <CursorPos X="9" Y="51"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit148>
     </Units>
-    <JumpHistory Count="28" HistoryIndex="27">
+    <JumpHistory Count="26" HistoryIndex="25">
       <Position1>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1506" Column="1" TopLine="1477"/>
+        <Caret Line="1505" Column="1" TopLine="1477"/>
       </Position1>
       <Position2>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1507" Column="1" TopLine="1477"/>
+        <Caret Line="1506" Column="1" TopLine="1477"/>
       </Position2>
       <Position3>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1505" Column="1" TopLine="1477"/>
+        <Caret Line="1507" Column="1" TopLine="1477"/>
       </Position3>
       <Position4>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1506" Column="1" TopLine="1477"/>
+        <Caret Line="1505" Column="1" TopLine="1477"/>
       </Position4>
       <Position5>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1507" Column="1" TopLine="1477"/>
+        <Caret Line="1506" Column="1" TopLine="1477"/>
       </Position5>
       <Position6>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1505" Column="1" TopLine="1477"/>
+        <Caret Line="1507" Column="1" TopLine="1477"/>
       </Position6>
       <Position7>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1506" Column="1" TopLine="1477"/>
+        <Caret Line="1505" Column="1" TopLine="1477"/>
       </Position7>
       <Position8>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1507" Column="1" TopLine="1477"/>
+        <Caret Line="1506" Column="1" TopLine="1477"/>
       </Position8>
       <Position9>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1505" Column="1" TopLine="1477"/>
+        <Caret Line="1507" Column="1" TopLine="1477"/>
       </Position9>
       <Position10>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1506" Column="1" TopLine="1477"/>
+        <Caret Line="1505" Column="1" TopLine="1477"/>
       </Position10>
       <Position11>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1507" Column="1" TopLine="1477"/>
+        <Caret Line="1506" Column="1" TopLine="1477"/>
       </Position11>
       <Position12>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1505" Column="1" TopLine="1477"/>
+        <Caret Line="1507" Column="1" TopLine="1477"/>
       </Position12>
       <Position13>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1506" Column="1" TopLine="1477"/>
+        <Caret Line="1505" Column="1" TopLine="1477"/>
       </Position13>
       <Position14>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1507" Column="1" TopLine="1477"/>
+        <Caret Line="1506" Column="1" TopLine="1477"/>
       </Position14>
       <Position15>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1505" Column="1" TopLine="1477"/>
+        <Caret Line="1507" Column="1" TopLine="1477"/>
       </Position15>
       <Position16>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1506" Column="1" TopLine="1477"/>
+        <Caret Line="1505" Column="1" TopLine="1477"/>
       </Position16>
       <Position17>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1507" Column="1" TopLine="1477"/>
+        <Caret Line="1506" Column="1" TopLine="1477"/>
       </Position17>
       <Position18>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1505" Column="1" TopLine="1477"/>
+        <Caret Line="1507" Column="1" TopLine="1477"/>
       </Position18>
       <Position19>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1506" Column="1" TopLine="1477"/>
+        <Caret Line="1505" Column="1" TopLine="1477"/>
       </Position19>
       <Position20>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1507" Column="1" TopLine="1477"/>
+        <Caret Line="1506" Column="1" TopLine="1477"/>
       </Position20>
       <Position21>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1505" Column="1" TopLine="1477"/>
+        <Caret Line="1507" Column="1" TopLine="1477"/>
       </Position21>
       <Position22>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1506" Column="1" TopLine="1477"/>
+        <Caret Line="1509" Column="1" TopLine="1477"/>
       </Position22>
       <Position23>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1507" Column="1" TopLine="1477"/>
+        <Caret Line="1506" Column="24" TopLine="1477"/>
       </Position23>
       <Position24>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1509" Column="1" TopLine="1477"/>
+        <Caret Line="1503" Column="19" TopLine="1481"/>
       </Position24>
       <Position25>
         <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1506" Column="24" TopLine="1477"/>
+        <Caret Line="175" Column="19" TopLine="150"/>
       </Position25>
       <Position26>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1503" Column="19" TopLine="1481"/>
+        <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
+        <Caret Line="2200" Column="42" TopLine="2187"/>
       </Position26>
-      <Position27>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="175" Column="19" TopLine="150"/>
-      </Position27>
-      <Position28>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="207" Column="15" TopLine="181"/>
-      </Position28>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

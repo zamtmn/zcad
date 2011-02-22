@@ -51,20 +51,20 @@ type
                            _LineStipplefactor: GLint;
                            _LineStipplepattern: GLushort;
 
-                           procedure myglbegin(mode:GLenum);
-                           procedure myglend;
-                           procedure mytotalglend;
-                           procedure myglEnable(const cap: GLenum);
-                           procedure myglDisable(const cap: GLenum);
-                           procedure myglPointSize(const size: GLfloat);
-                           procedure myglLineWidth(const width: GLfloat);
-                           procedure myglStencilFunc(const func: GLenum;const  ref: GLint;const  mask: GLuint);
-                           procedure myglStencilOp(const fail, zfail, zpass: GLenum);
-                           procedure myglLogicOp(const opcode: GLenum);
-                           procedure myglPushMatrix;
-                           procedure myglPopMatrix;
-                           procedure myglMatrixMode(const mode: GLenum);
-                           procedure myglLineStipple(const factor: GLint; const pattern: GLushort);
+                           procedure myglbegin(mode:GLenum);inline;
+                           procedure myglend;inline;
+                           procedure mytotalglend;inline;
+                           procedure myglEnable(const cap: GLenum);inline;
+                           procedure myglDisable(const cap: GLenum);inline;
+                           procedure myglPointSize(const size: GLfloat);inline;
+                           procedure myglLineWidth(const width: GLfloat);inline;
+                           procedure myglStencilFunc(const func: GLenum;const  ref: GLint;const  mask: GLuint);inline;
+                           procedure myglStencilOp(const fail, zfail, zpass: GLenum);inline;
+                           procedure myglLogicOp(const opcode: GLenum);inline;
+                           procedure myglPushMatrix;inline;
+                           procedure myglPopMatrix;inline;
+                           procedure myglMatrixMode(const mode: GLenum);inline;
+                           procedure myglLineStipple(const factor: GLint; const pattern: GLushort);inline;
                            constructor init;
 
                            procedure myglVertex3dV(const V:PGDBVertex);inline;
@@ -127,8 +127,10 @@ end;
 procedure TOGLStateManager.myglVertex3dV;
 var t:gdbvertex;
 begin
-     {$IFDEF DEBUGCOUNTGEOMETRY}processpoint(v^);{$ENDIF}
+     {$IFDEF DEBUGCOUNTGEOMETRY}
+     processpoint(v^);
      inc(pointcount);
+     {$ENDIF}
      if notuseLCS then
                       glVertex3dV(pointer(v))
                   else
@@ -150,8 +152,10 @@ end;
 procedure TOGLStateManager.myglVertex3d;
 var t:gdbvertex;
 begin
-     {$IFDEF DEBUGCOUNTGEOMETRY}processpoint(v);{$ENDIF}
+     {$IFDEF DEBUGCOUNTGEOMETRY}
+     processpoint(v);
      inc(pointcount);
+     {$ENDIF}
      if notuseLCS then
                       glVertex3dV(@v)
                   else
@@ -164,8 +168,10 @@ procedure TOGLStateManager.myglVertex;
 var t,t1:gdbvertex;
 begin
      t1:=createvertex(x,y,z);
-     {$IFDEF DEBUGCOUNTGEOMETRY}processpoint(t1);{$ENDIF}
+     {$IFDEF DEBUGCOUNTGEOMETRY}
+     processpoint(t1);
      inc(pointcount);
+     {$ENDIF}
      if notuseLCS then
                       glVertex3dV(@t1)
                   else
@@ -214,7 +220,7 @@ begin
                                      begin
                                           glend;
                                           //isOpenGLError;
-                                          {IFDEF DEBUGCOUNTGEOMETRY}inc(bathcount);{ENDIF}
+                                          {$IFDEF DEBUGCOUNTGEOMETRY}inc(bathcount);{$ENDIF}
                                      end;
      glbegin(mode);
      //{$IFDEF DEBUGCOUNTGEOMETRY}inc(bathcount);{$ENDIF}
@@ -234,28 +240,28 @@ begin
 end;
 procedure TOGLStateManager.myglend;
 begin
-//(*
+(*
      if bcount<1 then
                      asm
                               {int(3);}
                      end;
      dec(bcount);
-//*)
+*)
 //     glend;
 
 end;
 procedure TOGLStateManager.mytotalglend;
 begin
-     if bcount<1 then
+     (*if bcount<1 then
                      asm
                               {int(3);}
-                     end;
+                     end;*)
      //dec(bcount);
 
      if currentmode<>MY_EmptyMode then
                                      begin
                                           glend;
-                                          {IFDEF DEBUGCOUNTGEOMETRY}inc(bathcount);{ENDIF}
+                                          {$IFDEF DEBUGCOUNTGEOMETRY}inc(bathcount);{$ENDIF}
                                           currentmode:=MY_EmptyMode;
                                      end;
 end;

@@ -84,6 +84,8 @@ const {as_normal=0;
   se_ModelRoot=1;
   se_ElectricalWires=2;
 
+
+  os_snap = -998;
   os_none = -999;
   os_perpendicular = -1000;
   os_midle = -1001;

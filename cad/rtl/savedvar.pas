@@ -20,14 +20,14 @@ begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=307;
   VIEW_ObjInspSubV:=84;
-  PATH_File0:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File1:='D:\poly.dxf';
-  PATH_File2:='E:\Пример.dwg';
-  PATH_File3:='J:\nh\Федосеева\поликлиника 13\изменения\proj(2).dxf';
-  PATH_File4:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File5:='E:\Трасса.dwg';
-  PATH_File6:='\\WORKSTATION\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File7:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File8:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File9:='E:\Фрагмент.dxf';
+  PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File1:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File2:='C:\zcad\cad\..\errors\4.dxf';
+  PATH_File3:='C:\zcad\cad\..\errors\3.dxf';
+  PATH_File4:='D:\poly.dxf';
+  PATH_File5:='E:\Пример.dwg';
+  PATH_File6:='J:\nh\Федосеева\поликлиника 13\изменения\proj(2).dxf';
+  PATH_File7:='E:\Трасса.dwg';
+  PATH_File8:='\\WORKSTATION\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File9:='C:\zcad\cad\sample\test_dxf\em.dxf';
 end.

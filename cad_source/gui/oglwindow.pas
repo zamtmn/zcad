@@ -172,8 +172,7 @@ type
     procedure FormCreate(Sender: TObject);
 
   end;
-const maxgrid=99;
-      stepgrid=10;
+const maxgrid=100;
 var
     //pcommandline:PZEditWithProcedure;
     //playercombo:PZComboBoxWithProc;
@@ -204,8 +203,8 @@ begin
      for i:=0 to maxgrid do
       for j:=0 to maxgrid do
        begin
-            gridarray[i,j].x:=i*stepgrid-(maxgrid+1)*stepgrid/2;
-            gridarray[i,j].y:=j*stepgrid-(maxgrid+1)*stepgrid/2;
+            //gridarray[i,j].x:=i*stepgrid-(maxgrid+1);//*stepgrid/2;
+            //gridarray[i,j].y:=j*stepgrid-(maxgrid+1);//*stepgrid/2;
        end;
 end;
 procedure TOGLWnd.FormCreate(Sender: TObject);
@@ -526,6 +525,12 @@ begin
   ConcatBB(tbb,tbb2);
   end;
 
+  if IsBBNul(tbb) then
+  begin
+       tbb.LBN:=geometry.VertexAdd(pdwg.pcamera^.prop.point,MinusOneVertex);
+       tbb.RTF:=geometry.VertexAdd(pdwg.pcamera^.prop.point,OneVertex);
+  end;
+
   LBN:=tbb.LBN;
   RTF:=tbb.RTF;
 
@@ -623,9 +628,9 @@ begin
   end
   else
   begin
-       LBN:=geometry.VertexMulOnSc(MinusOneVertex,100);
+       LBN:=geometry.VertexMulOnSc(OneVertex,50);
        //LBN:=vertexadd(LBN,pdwg.pcamera^.CamCSOffset);
-       RTF:=geometry.VertexMulOnSc(onevertex,100);
+       RTF:=geometry.VertexMulOnSc(OneVertex,100);
        //RTF:=vertexadd(RTF,pdwg.pcamera^.CamCSOffset);
   end;
   ProjectPoint2(LBN.x,LBN.y,LBN.Z,pdwg.pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
@@ -848,7 +853,6 @@ begin
         param.md.workplane.normal.z * param.md.mouseonworkplanecoord.z+param.md.workplane.d;
 
     if ca<>0 then
-    //repeat
     begin
          param.md.mouseonworkplanecoord.x:=param.md.mouseonworkplanecoord.x-param.md.workplane.normal.x*ca;
          param.md.mouseonworkplanecoord.y:=param.md.mouseonworkplanecoord.y-param.md.workplane.normal.y*ca;
@@ -857,12 +861,8 @@ begin
     ca:=param.md.workplane.normal.x * param.md.mouseonworkplanecoord.x +
         param.md.workplane.normal.y * param.md.mouseonworkplanecoord.y +
         param.md.workplane.normal.z * param.md.mouseonworkplanecoord.z + param.md.workplane.d;
-    //until ca=0;
     str(ca,ds);
-    //title:='ca='+ds+' fps=';
-
   end;
-
 end;
 function TOGLWnd.DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;
   MousePos: TPoint): Boolean;
@@ -1238,7 +1238,7 @@ end;
         project0axis;//-------------------------------
         AddOntrackpoint;
       end;
-      if (param.ospoint.ostype <> os_none)and(param.ospoint.ostype <> os_nearest)and(param.ospoint.ostype<>os_perpendicular) then
+      if (param.ospoint.ostype <> os_none)and(param.ospoint.ostype <> os_snap)and(param.ospoint.ostype <> os_nearest)and(param.ospoint.ostype<>os_perpendicular) then
       begin
         SetOTrackTimer(@self);
         copyospoint(param.oldospoint,param.ospoint);
@@ -1491,17 +1491,19 @@ end;
 procedure TOGLWnd.DrawGrid;
 var
   pg:PGDBvertex2S;
-  i: GDBInteger;
+  i,j: GDBInteger;
 begin
   if sysvar.DWG.DWG_DrawGrid^ then
   begin
-  CalcOptimalMatrix;
-  glcolor3f(1, 1, 1);
+  //CalcOptimalMatrix;
+  glcolor3b(100, 100, 100);
   pg := @gridarray;
   oglsm.myglbegin(gl_points);
-  for i := 0 to maxgrid * maxgrid do
+  for i := 0 to maxgrid do
+  for j := 0 to maxgrid do
   begin
-    glVertex2fv(@pg^);
+    //glVertex2fv(@pg^);
+    oglsm.myglVertex3d(createvertex(i,j,0));
     inc(pg);
   end;
   oglsm.myglend;
@@ -2705,7 +2707,6 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
 
     glReadBuffer(GL_back);
      glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT);
-    //DrawGrid;
 
     //oglsm.myglEnable(GL_STENCIL_TEST);
     CalcOptimalMatrix;
@@ -2728,7 +2729,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     oglsm.myglStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
     //isOpenGLError;
-
+    DrawGrid;
     drawdebuggeometry;
 
     //oglsm.mytotalglend;
@@ -3424,6 +3425,13 @@ begin
       then
           begin
                param.ospoint.worldcoord:=param.md.mouseonworkplanecoord;
+               if SysVar.DWG.DWG_SnapGrid<>nil then
+               if SysVar.DWG.DWG_SnapGrid^ then
+               begin
+                    param.ospoint.worldcoord.x:=round((param.md.mouseonworkplanecoord.x-SysVar.DWG.DWG_OriginGrid.x)/SysVar.DWG.DWG_StepGrid.x)*SysVar.DWG.DWG_StepGrid.x+SysVar.DWG.DWG_OriginGrid.x;
+                    param.ospoint.worldcoord.y:=round((param.md.mouseonworkplanecoord.y-SysVar.DWG.DWG_OriginGrid.y)/SysVar.DWG.DWG_StepGrid.y)*SysVar.DWG.DWG_StepGrid.y+SysVar.DWG.DWG_OriginGrid.y;
+                    param.ospoint.ostype:=os_snap;
+               end;
           end
       else
           begin

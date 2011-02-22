@@ -404,7 +404,7 @@ GDBOOutbound2DIArray=object(GDBOpenArrayOfData)
 GDBPoint3dArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
-                function onpoint(p:gdbvertex;eps:gdbdouble):gdbboolean;
+                function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
                 function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;abstract;
                 function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;abstract;
                 procedure DrawGeometry;virtual;abstract;
@@ -787,9 +787,10 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_SystmGeometryDraw:PGDBBoolean;
              DWG_HelpGeometryDraw:PGDBBoolean;
-             DWG_MaxGrid:PGDBInteger;
-             DWG_StepGrid:PGDBDouble;
+             DWG_StepGrid:PGDBvertex2D;
+             DWG_OriganGrid:PGDBvertex2D;
              DWG_DrawGrid:PGDBBoolean;
+             DWG_SnapGrid:PGDBBoolean;
              DWG_SelectedObjToInsp:PGDBBoolean;(*'SelectedObjToInsp'*)
        end;
   tdesigning=record
@@ -1615,6 +1616,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
                  //function InRect:TInRect;virtual;abstract;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
+                 function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
                  function getsnap(var osp:os_record):GDBBoolean;virtual;abstract;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
            end;
@@ -1711,6 +1713,7 @@ GDBObjCurve=object(GDBObj3d)
                  procedure rtsave(refp:GDBPointer);virtual;abstract;
                  procedure RenderFeedback;virtual;abstract;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
+                 function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
@@ -1744,6 +1747,7 @@ GDBObjPolyline=object(GDBObjCurve)
                  function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;abstract;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
+                 procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\electroteh\GDBCable.pas
 PTNodeProp=^TNodeProp;

@@ -215,7 +215,7 @@ begin
            begin
                 if IsPointInBB(mainline.CoordInWCS.lBegin,pobj^.vp.BoundingBox) then
                 begin
-                     if pobj^.VertexArrayInWCS.onpoint(mainline.CoordInWCS.lBegin,sqreps,false) then
+                     if pobj^.VertexArrayInWCS.onpoint(mainline.CoordInWCS.lBegin,false) then
                      begin
                           pvn:=pobj^.ou.FindVariable('NMO_Name');
                           if pvn<>nil then

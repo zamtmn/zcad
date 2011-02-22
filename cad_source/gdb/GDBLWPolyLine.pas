@@ -59,6 +59,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                  //function InRect:TInRect;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
+                 function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  function getsnap(var osp:os_record):GDBBoolean;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
            end;
@@ -89,6 +90,16 @@ end;
 function GDBObjLWpolyline.getsnap;
 begin
      result:=GDBPoint3dArraygetsnap(Vertex3D_in_WCS_Array,PProjPoint,snaparray,osp,closed);
+end;
+function GDBObjLWpolyline.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
+begin
+     if Vertex3D_in_WCS_Array.onpoint(point,closed) then
+                                                begin
+                                                     result:=true;
+                                                     objects.AddRef(self);
+                                                end
+                                            else
+                                                result:=false;
 end;
 
 function GDBObjLWpolyline.onmouse;

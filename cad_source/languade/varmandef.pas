@@ -246,9 +246,10 @@ UserTypeDescriptor=object(GDBaseObject)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_SystmGeometryDraw:PGDBBoolean;
              DWG_HelpGeometryDraw:PGDBBoolean;
-             DWG_MaxGrid:PGDBInteger;
-             DWG_StepGrid:PGDBDouble;
+             DWG_StepGrid:PGDBvertex2D;
+             DWG_OriginGrid:PGDBvertex2D;
              DWG_DrawGrid:PGDBBoolean;
+             DWG_SnapGrid:PGDBBoolean;
              DWG_SelectedObjToInsp:PGDBBoolean;(*'SelectedObjToInsp'*)
        end;
   tdesigning=record

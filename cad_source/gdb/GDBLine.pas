@@ -329,7 +329,7 @@ begin
 end;
 function GDBObjLine.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 begin
-     if distance2piece(point,self.CoordInWCS.lBegin,self.CoordInWCS.lEnd)<eps then
+     if {distance2piece}SQRdist_Point_to_Segment(point,self.CoordInWCS.lBegin,self.CoordInWCS.lEnd)<bigeps then
                                                                                   begin
                                                                                     result:=true;
                                                                                     objects.AddRef(self);

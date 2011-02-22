@@ -111,7 +111,7 @@ begin
                                                  begin
                                                       found:=2;
                                                  end
-   else if (found=0)and(distance2piece(posr.worldcoord,ppredtv^,ptv^)<eps) then begin
+   else if (found=0)and({distance2piece}SQRdist_Point_to_Segment(posr.worldcoord,ppredtv^,ptv^)<bigeps) then begin
                                                           found:=1;
                                                      end;
 
@@ -498,7 +498,7 @@ begin
 end;
 function GDBObjCurve.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 begin
-     if VertexArrayInWCS.onpoint(point,eps,false) then
+     if VertexArrayInWCS.onpoint(point,false) then
                                                 begin
                                                      result:=true;
                                                      objects.AddRef(self);

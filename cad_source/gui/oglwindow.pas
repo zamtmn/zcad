@@ -1097,7 +1097,9 @@ begin
                                    param.md.glmouse.x := x;
                                    exit;
                             end;
-  glmcoord1 := param.md.mouseray;
+  glmcoord1:= param.md.mouseray;
+  if param.ospoint.ostype<>os_none then
+                                     glmcoord1.lend := param.ospoint.worldcoord;  //пан при привязке ездит меньше
 
   if ((param.md.mode) and ((MRotateCamera) or (MMoveCamera)) <> 0) then
     if ((ssCtrl in shift) and ((ssMiddle in shift))) and ((param.md.mode) and (MRotateCamera) <> 0) then
@@ -2122,8 +2124,6 @@ procedure TOGLWnd.showcursor;
     end;
     }
 
-    oglsm.myglLogicOp(GL_XOR);
-
     //oglsm.mytotalglend;
     //isOpenGLError;
 
@@ -2131,6 +2131,7 @@ procedure TOGLWnd.showcursor;
     begin
       if param.seldesc.MouseFrameInverse then
       begin
+      oglsm.myglLogicOp(GL_XOR);
       oglsm.myglLineStipple(1, $F0F0);
       oglsm.myglEnable(GL_LINE_STIPPLE);
       end;
@@ -2158,6 +2159,7 @@ procedure TOGLWnd.showcursor;
                              else a:=0;
     if param.ontrackarray.total <> 0 then
     begin
+      oglsm.myglLogicOp(GL_XOR);
       for i := a to param.ontrackarray.total - 1 do
       begin
        oglsm.myglbegin(GL_LINES);

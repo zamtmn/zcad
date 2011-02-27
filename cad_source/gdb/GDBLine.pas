@@ -119,6 +119,11 @@ begin
                                     begin
                                          pleader.size:=pgdbinteger(pvi^.data.Instance)^;
                                     end;
+                    pvi:=ptu.FindVariable('scale');
+                    if pvi<>nil then
+                                    begin
+                                         pleader.scale:=pgdbdouble(pvi^.data.Instance)^;
+                                    end;
                     end;
 
                       result:=pleader;

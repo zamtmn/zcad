@@ -40,6 +40,7 @@ GDBObjTable=object(GDBObjComplex)
             PTableStyle:PTGDBTableStyle;
             tbl:GDBTableArray;
             w,h:GDBDouble;
+            scale:GDBDouble;
             constructor initnul;
             destructor done;virtual;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;
@@ -110,6 +111,7 @@ begin
   tvo^.Local.p_insert := Local.p_insert;
   tvo^.Local := Local;
   tvo^.bp.ListPos.Owner:=own;
+  tvo^.scale:=scale;
   result := tvo;
 end;
 procedure GDBObjTable.Build;
@@ -151,24 +153,24 @@ ConstObjArray.cleareraseobj;
                            begin
                            pointer(pgdbmtext):=self.ConstObjArray.CreateInitObj(GDBMtextID,@self);
                            pgdbmtext.Template:={Tria_Utf8ToAnsi}(pstr^);
-                           pgdbmtext.textprop.size:=PTableStyle^.textheight;
+                           pgdbmtext.textprop.size:=PTableStyle^.textheight*scale;
                            pgdbmtext.linespacef:=1;
                            pgdbmtext.linespacef:=PTableStyle^.rowheight/pgdbmtext.textprop.size*3/5;
-                           pgdbmtext.width:=pcf^.TextWidth;
+                           pgdbmtext.width:=pcf^.TextWidth*scale;
 
-                           pgdbmtext.Local.P_insert.y:=-ccount*PTableStyle^.rowheight-PTableStyle^.rowheight/4;
+                           pgdbmtext.Local.P_insert.y:=(-ccount*PTableStyle^.rowheight-PTableStyle^.rowheight/4)*scale;
                            case pcf^.CF of
                                           jcl:begin
                                                    pgdbmtext.textprop.justify:=jstl;
-                                                   pgdbmtext.Local.P_insert.x:=x+1;
+                                                   pgdbmtext.Local.P_insert.x:=(x+scale);
                                               end;
                                           jcc:begin
                                                    pgdbmtext.textprop.justify:=jstm;
-                                                   pgdbmtext.Local.P_insert.x:=x+pcf^.Width/2;
+                                                   pgdbmtext.Local.P_insert.x:=(x+pcf^.Width/2*scale);
                                               end;
                                           jcr:begin
                                                    pgdbmtext.textprop.justify:=jstr;
-                                                   pgdbmtext.Local.P_insert.x:=x+pcf^.Width-1;
+                                                   pgdbmtext.Local.P_insert.x:=(x-scale)+pcf^.Width*scale;
                                               end;
                            end;
                            pgdbmtext.Format;
@@ -185,7 +187,7 @@ ConstObjArray.cleareraseobj;
                            pl^.Format;}
 
 
-                           x:=x+pcf^.Width;
+                           x:=x+pcf^.Width*scale;
                            pcf:=PTableStyle^.tblformat.iterate(icf);
                            if pcf=nil then
                                           pcf:=PTableStyle^.tblformat.beginiterate(icf);
@@ -206,9 +208,9 @@ ConstObjArray.cleareraseobj;
            begin
            pointer(pl):=self.ConstObjArray.CreateInitObj(GDBLineID,@self);
            pl^.CoordInOCS.lBegin.x:=0;
-           pl^.CoordInOCS.lBegin.y:=-({ccount+}i)*PTableStyle^.rowheight;
-           pl^.CoordInOCS.lEnd.x:=xw;
-           pl^.CoordInOCS.lEnd.y:=-({ccount+}i)*PTableStyle^.rowheight;
+           pl^.CoordInOCS.lBegin.y:=-({ccount+}i)*PTableStyle^.rowheight*scale;
+           pl^.CoordInOCS.lEnd.x:=xw{*scale};
+           pl^.CoordInOCS.lEnd.y:=-({ccount+}i)*PTableStyle^.rowheight*scale;
            pl^.Format;
            end;
      if xcount<PTableStyle^.tblformat.Count then
@@ -218,10 +220,10 @@ ConstObjArray.cleareraseobj;
      if xcount>0 then
      repeat
            pointer(pl):=self.ConstObjArray.CreateInitObj(GDBLineID,@self);
-           pl^.CoordInOCS.lBegin.x:=x;
+           pl^.CoordInOCS.lBegin.x:=x*scale;
            pl^.CoordInOCS.lBegin.y:=0;
-           pl^.CoordInOCS.lEnd.x:=x;
-           pl^.CoordInOCS.lEnd.y:=-(ccount)*PTableStyle^.rowheight;
+           pl^.CoordInOCS.lEnd.x:=x*scale;
+           pl^.CoordInOCS.lEnd.y:=-(ccount)*PTableStyle^.rowheight*scale;
            pl^.Format;
 
 
@@ -234,19 +236,22 @@ ConstObjArray.cleareraseobj;
      until xcount=0;
 
      pointer(pl):=self.ConstObjArray.CreateInitObj(GDBLineID,@self);
-     pl^.CoordInOCS.lBegin.x:=x;
+     pl^.CoordInOCS.lBegin.x:=x*scale;
      pl^.CoordInOCS.lBegin.y:=0;
-     pl^.CoordInOCS.lEnd.x:=x;
-     pl^.CoordInOCS.lEnd.y:=-(ccount)*PTableStyle^.rowheight;
+     pl^.CoordInOCS.lEnd.x:=x*scale;
+     pl^.CoordInOCS.lEnd.y:=-(ccount)*PTableStyle^.rowheight*scale;
      pl^.Format;
 
-     h:=(ccount)*PTableStyle^.rowheight;
-     w:=x;
+     h:=(ccount)*PTableStyle^.rowheight*scale;
+     w:=x*scale;
      if self.PTableStyle.HeadBlockName<>'' then
      begin
           GDB.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,PTableStyle.HeadBlockName);
           pointer(pgdbins):=self.ConstObjArray.CreateInitObj(GDBBlockInsertID,@self);
           pgdbins^.name:=self.PTableStyle.HeadBlockName;
+          pgdbins^.scale.x:=scale;
+          pgdbins^.scale.y:=scale;
+          pgdbins^.scale.z:=scale;
           pgdbins^.BuildGeometry;
      end;
 end;
@@ -268,6 +273,7 @@ begin
 
      tbl.init({$IFDEF DEBUGBUILD}'{C6EE9076-623F-4D7A-A355-122C6271B9ED}',{$ENDIF}9,20);
      ptablestyle:=gdb.GetCurrentDWG.TableStyleTable.getAddres('Standart');
+     scale:=1;
      build;
      //tblformat.init({$IFDEF DEBUGBUILD}'{9616C423-CF78-45A4-9244-62F2821332D2}',{$ENDIF}25,sizeof(TGDBTableItemFormat));
 

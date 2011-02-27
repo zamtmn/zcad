@@ -21,6 +21,7 @@ GDBObjElLeader=object(GDBObjComplex)
             Tbl:GDBObjTable;
 
             size:GDBInteger;
+            scale:GDBDouble;
 
 
             procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
@@ -128,6 +129,8 @@ begin
   dxfGDBStringout(outhandle,1001,'DSTP_XDATA');
   dxfGDBStringout(outhandle,1002,'{');
   dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
+  dxfGDBStringout(outhandle,1000,'%1=size|GDBInteger|'+inttostr(size)+'|');
+  dxfGDBStringout(outhandle,1000,'%2=scale|GDBDouble|'+floattostr(scale)+'|');
   dxfGDBStringout(outhandle,1002,'}');
   MainLine.bp.ListPos.Owner:=@self;
 
@@ -312,6 +315,7 @@ begin
 
      sta.FreeAndDone;
      //sta.done;
+     tbl.scale:=scale;
      tbl.Build;
 
 
@@ -319,6 +323,7 @@ begin
      begin
      tv:=geometry.vectordot(mainline.dir,Local.OZ);
      tv:=geometry.NormalizeVertex(tv);
+     tv:=geometry.VertexMulOnSc(tv,scale);
      end
      else tv:=nulvertex;
      //MarkLine.done;
@@ -356,24 +361,24 @@ begin
           ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
           ptext.Template:=s;
           ptext.Local.P_insert:=tbl.Local.P_insert;
-          ptext.Local.P_insert.y:=ptext.Local.P_insert.y+1.5;
+          ptext.Local.P_insert.y:=ptext.Local.P_insert.y+1.5*scale;
           ptext.textprop.justify:=jsbl;
           if mainline.dir.x<=0 then
                                    begin
                                    ptext.Local.P_insert.x:= ptext.Local.P_insert.x+tbl.w;
                                    ptext.textprop.justify:=jsbr;
                                    end;
-          ptext.textprop.size:=2.5;
+          ptext.textprop.size:=2.5*scale;
           ptext.Format;
           pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
           pl.CoordInOCS.lBegin:=ptext.Local.P_insert;
-          pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5;
+          pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
           pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
-          pl.CoordInOCS.lEnd.y:=pl.CoordInOCS.lEnd.y-1;
+          pl.CoordInOCS.lEnd.y:=pl.CoordInOCS.lEnd.y-1*scale;
           pl.Format;
           pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
           pl.CoordInOCS.lBegin:=ptext.Local.P_insert;
-          pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5;
+          pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
           pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
           if mainline.dir.x>0 then
                                    pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x+ptext.obj_width*ptext.textprop.size*0.7
@@ -559,6 +564,7 @@ var
 begin
      inherited;
      size:=0;
+     scale:=1;
      vp.ID:=GDBElLeaderID;
      MainLine.init(@self,vp.Layer,vp.LineWeight,geometry.VertexMulOnSc(onevertex,-10),nulvertex);
      //MainLine.Format;

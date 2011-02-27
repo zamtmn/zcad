@@ -788,7 +788,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
              DWG_SystmGeometryDraw:PGDBBoolean;
              DWG_HelpGeometryDraw:PGDBBoolean;
              DWG_StepGrid:PGDBvertex2D;
-             DWG_OriganGrid:PGDBvertex2D;
+             DWG_OriginGrid:PGDBvertex2D;
              DWG_DrawGrid:PGDBBoolean;
              DWG_SnapGrid:PGDBBoolean;
              DWG_SelectedObjToInsp:PGDBBoolean;(*'SelectedObjToInsp'*)
@@ -1826,6 +1826,7 @@ GDBObjTable=object(GDBObjComplex)
             PTableStyle:PTGDBTableStyle;
             tbl:GDBTableArray;
             w,h:GDBDouble;
+            scale:GDBDouble;
             constructor initnul;
             destructor done;virtual;abstract;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
@@ -1839,6 +1840,7 @@ GDBObjElLeader=object(GDBObjComplex)
             MarkLine:GDBObjLine;
             Tbl:GDBObjTable;
             size:GDBInteger;
+            scale:GDBDouble;
             procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
             procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
             procedure getoutbound;virtual;abstract;

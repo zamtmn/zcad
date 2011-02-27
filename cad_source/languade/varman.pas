@@ -30,7 +30,7 @@ type
              id:GDBInteger;
        end;
     ptdarray=^tdarray;
-    tdarray=array [1..1] of td;
+    tdarray=array [1..maxint div sizeof(td)] of td;
     pasparsemode=(modeOk,modeError,modeEnd);
     penumodj=^tenumodj;
     tenumodj=record

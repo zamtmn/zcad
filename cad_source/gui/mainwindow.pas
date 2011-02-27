@@ -1369,9 +1369,9 @@ var
    IsCommandNotEmpty:boolean;
    _enabled,_disabled:boolean;
    i:integer;
-const
-     EditableShortCut=[(scCtrl or VK_Z),{(VK_CONTROL or VK_SHIFT or VK_Z),}VK_DELETE,VK_BACK,VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN];
-     ClipboardShortCut=[VK_SHIFT or VK_DELETE,VK_BACK,VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN];
+//const
+     //EditableShortCut=[(scCtrl or VK_Z),{(VK_CONTROL or VK_SHIFT or VK_Z),}VK_DELETE,VK_BACK,VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN];
+     //ClipboardShortCut=[VK_SHIFT or VK_DELETE,VK_BACK,VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN];
 begin
      if AAction is TmyAction then
      begin

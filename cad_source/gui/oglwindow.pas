@@ -728,6 +728,7 @@ procedure TOGLWnd.CorrectMouseAfterOS;
 var d,tv1,tv2:GDBVertex;
     b1,b2:GDBBoolean;
 begin
+     param.md.mouseraywithoutos:=param.md.mouseray;
      if param.ospoint.ostype <> os_none then
      begin
 
@@ -1097,9 +1098,9 @@ begin
                                    param.md.glmouse.x := x;
                                    exit;
                             end;
-  glmcoord1:= param.md.mouseray;
-  if param.ospoint.ostype<>os_none then
-                                     glmcoord1.lend := param.ospoint.worldcoord;  //пан при привязке ездит меньше
+  glmcoord1:= param.md.mouseraywithoutos;
+  //if param.ospoint.ostype<>os_none then
+  //                                   glmcoord1.lend := param.ospoint.worldcoord;  //пан при привязке ездит меньше
 
   if ((param.md.mode) and ((MRotateCamera) or (MMoveCamera)) <> 0) then
     if ((ssCtrl in shift) and ((ssMiddle in shift))) and ((param.md.mode) and (MRotateCamera) <> 0) then
@@ -1130,8 +1131,8 @@ begin
       if (abs(tv2.x)>eps)or(abs(tv2.y)>eps) then
       begin
            ax.x:=-(param.md.mouseray.lend.x - glmcoord1.lend.x);
-           ax.y:= (param.md.mouseray.lend.y - glmcoord1.lend.y);
-           ax.z:= (param.md.mouseray.lend.z - glmcoord1.lend.z);
+           ax.y:=(param.md.mouseray.lend.y - glmcoord1.lend.y);
+           ax.z:=0;
            with gdb.GetCurrentDWG.UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
            begin
            gdb.GetCurrentDWG.pcamera.moveInLocalCSXY(tv2.x,tv2.y,ax);

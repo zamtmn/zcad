@@ -84,7 +84,7 @@ type
                constructor Create(AnOwner: TComponent); override;
 
                procedure DoSelectionChanged; override;
-               protected procedure DoContextPopup(const MousePos: TPoint; var Handled: Boolean); override;
+               protected procedure DoContextPopup(MousePos: TPoint; var Handled: Boolean); override;
 
     end;
   PTFreedForm=^TFreedForm;
@@ -481,7 +481,7 @@ begin
                              else
                                  result:=false;
 end;
-procedure TmyTreeView.DoContextPopup(const MousePos: TPoint; var Handled: Boolean);
+procedure TmyTreeView.DoContextPopup(MousePos: TPoint; var Handled: Boolean);
 var
    treenode:TmyTreeNode;
    ScrMousePos: TPoint;

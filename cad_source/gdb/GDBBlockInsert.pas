@@ -52,16 +52,64 @@ GDBObjBlockInsert=object(GDBObjComplex)
                      procedure BuildVarGeometry;virtual;
 
                      procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+                     procedure ReCalcFromObjMatrix;virtual;
                      procedure rtsave(refp:GDBPointer);virtual;
 
                      procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                      procedure Format;virtual;
+
+                     function getrot:GDBDouble;virtual;
+                     procedure setrot(r:GDBDouble);virtual;
+
+                     property rot:GDBDouble read getrot write setrot;
 
                      //function ProcessFromDXFObjXData(_Name,_Value:GDBString):GDBBoolean;virtual;
                   end;
 {Export-}
 implementation
 uses {GDBNet,}GDBDevice{,GDBTEXT},log;
+procedure GDBObjBlockInsert.ReCalcFromObjMatrix;
+var
+    ox:gdbvertex;
+begin
+     inherited;
+     Local.ox:=PGDBVertex(@objmatrix[0])^;
+     Local.oy:=PGDBVertex(@objmatrix[1])^;
+
+     Local.ox:=normalizevertex(Local.ox);
+     Local.oy:=normalizevertex(Local.oy);
+     Local.oz:=normalizevertex(Local.oz);
+
+     Local.P_insert:=PGDBVertex(@objmatrix[3])^;
+
+     scale.x:=PGDBVertex(@objmatrix[0])^.x/local.OX.x;
+     scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y;
+     scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;
+
+     if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
+                                                                    ox:=CrossVertex(YWCS,Local.oz)
+                                                                else
+                                                                    ox:=CrossVertex(ZWCS,Local.oz);
+     normalizevertex(ox);
+     rotate:=geometry.scalardot(Local.ox,ox);
+     rotate:=arccos(rotate)*180/pi;
+     if local.OX.y<-eps then rotate:=360-rotate;
+end;
+procedure GDBObjBlockInsert.setrot(r:GDBDouble);
+var m1:DMatrix4D;
+begin
+m1:=onematrix;
+m1[0,0]:=cos(r*pi/180);
+m1[1,1]:=cos(r*pi/180);
+m1[1,0]:=-sin(r*pi/180);
+m1[0,1]:=sin(r*pi/180);
+objMatrix:=MatrixMultiply(m1,objMatrix);
+end;
+function GDBObjBlockInsert.getrot:GDBDouble;
+begin
+     result:=arccos(objmatrix[0,0])*180/pi
+end;
+
 procedure GDBObjBlockInsert.Format;
 begin
      inherited;
@@ -83,13 +131,14 @@ procedure GDBObjBlockInsert.CalcObjMatrix;
 var m1:DMatrix4D;
 begin
   inherited CalcObjMatrix;
-  m1:= OneMatrix;
+  {m1:= OneMatrix;
 
   m1[0,0]:=cos(rotate*pi/180);
   m1[1,1]:=cos(rotate*pi/180);
   m1[1,0]:=-sin(rotate*pi/180);
   m1[0,1]:=sin(rotate*pi/180);
-  objMatrix:=MatrixMultiply(m1,objMatrix);
+  objMatrix:=MatrixMultiply(m1,objMatrix);}
+  setrot(rotate);
 
   m1:=OneMatrix;
   m1[0, 0] := scale.x;
@@ -98,32 +147,11 @@ begin
   objMatrix:=MatrixMultiply(m1,objMatrix);
 end;
 procedure GDBObjBlockInsert.TransformAt;
-var //xs,ys,zs:double;
+var
     ox:gdbvertex;
 begin
      inherited;
-     Local.ox:=PGDBVertex(@objmatrix[0])^;
-     Local.oy:=PGDBVertex(@objmatrix[1])^;
-
-     Local.ox:=normalizevertex(Local.ox);
-     Local.oy:=normalizevertex(Local.oy);
-     Local.oz:=normalizevertex(Local.oz);
-
-     scale.x:=PGDBVertex(@objmatrix[0])^.x/local.OX.x;
-     scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y;
-     scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;
-
-     if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
-                                                                    ox:=CrossVertex(YWCS,Local.oz)
-                                                                else
-                                                                    ox:=CrossVertex(ZWCS,Local.oz);
-     normalizevertex(ox);
-     rotate:=geometry.scalardot(Local.ox,ox);
-     rotate:=arccos(rotate)*180/pi;
-     if local.OX.y<-eps then rotate:=360-rotate;
-
-
-     //Local.p_insert:=PGDBVertex(@objmatrix[3])^;
+     ReCalcFromObjMatrix;
 end;
 procedure GDBObjBlockInsert.correctobjects;
 var pobj:PGDBObjEntity;

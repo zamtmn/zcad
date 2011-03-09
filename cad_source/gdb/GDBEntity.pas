@@ -149,6 +149,7 @@ GDBObjEntity=object(GDBObjSubordinated)
 var onlygetsnapcount:GDBInteger;
 implementation
 uses UGDBEntTree,GDBGenericSubEntry,UGDBDescriptor,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+
 function GDBObjEntity.CalcObjMatrixWithoutOwner:DMatrix4D;
 begin
      result:=onematrix;

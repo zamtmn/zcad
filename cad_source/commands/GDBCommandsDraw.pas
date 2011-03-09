@@ -58,8 +58,13 @@ type
                        TSPE_Insert(*'Вставить вершину'*),
                        TSPE_Remove(*'Убрать вершину'*)
                        );
+         TPolyEditMode=(
+                       TPEM_Nearest(*'Вставить в ближайший сегмент'*),
+                       TPEM_Select(*'Выбирать сегмент'*)
+                       );
          TPolyEdit=record
                             Action:TSubPolyEdit;(*'Действие'*)
+                            Mode:TPolyEditMode;(*'Режим'*)
                             vdist:gdbdouble;(*hidden_in_objinsp*)
                             ldist:gdbdouble;(*hidden_in_objinsp*)
                             nearestvertex:GDBInteger;(*hidden_in_objinsp*)
@@ -1347,7 +1352,7 @@ begin
                                         end;
        if (PEProp.Action=TSPE_Insert)and(PEProp.nearestline<>-1)and(PEProp.dir<>0) then
                                         begin
-                                             if PEProp.setpoint then
+                                             if (PEProp.setpoint)or(PEProp.Mode=TPEM_Nearest) then
                                                                     begin
                                                                          polydata.nearestvertex:=PEProp.nearestline;
                                                                          if PEProp.dir=1 then

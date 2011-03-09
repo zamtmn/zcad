@@ -31,11 +31,16 @@ GDBObjWithMatrix=object(GDBObjEntity)
                        procedure CalcObjMatrix;virtual;
                        procedure Format;virtual;
                        procedure createfield;virtual;
+                       procedure transform(const t_matrix:DMatrix4D);virtual;
                  end;
 {EXPORT-}
 implementation
 uses
     log;
+procedure GDBObjWithMatrix.transform(const t_matrix:DMatrix4D);
+begin
+     ObjMatrix:=geometry.MatrixMultiply(ObjMatrix,t_matrix);
+end;
 procedure GDBObjWithMatrix.createfield;
 begin
      inherited;

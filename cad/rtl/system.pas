@@ -1120,6 +1120,7 @@ GDBObjWithMatrix=object(GDBObjEntity)
                        procedure CalcObjMatrix;virtual;abstract;
                        procedure Format;virtual;abstract;
                        procedure createfield;virtual;abstract;
+                       procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                  end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBWithLocalCS.pas
 PGDBObj2dprop=^GDBObj2dprop;
@@ -1151,6 +1152,7 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                procedure rtsave(refp:GDBPointer);virtual;abstract;
                procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
                procedure higlight;virtual;abstract;
+               procedure ReCalcFromObjMatrix;virtual;abstract;
          end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBPlain.pas
 GDBObjPlain=object(GDBObjWithLocalCS)
@@ -1469,9 +1471,13 @@ GDBObjBlockInsert=object(GDBObjComplex)
                      procedure BuildGeometry;virtual;abstract;
                      procedure BuildVarGeometry;virtual;abstract;
                      procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
+                     procedure ReCalcFromObjMatrix;virtual;abstract;
                      procedure rtsave(refp:GDBPointer);virtual;abstract;
                      procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
                      procedure Format;virtual;abstract;
+                     function getrot:GDBDouble;virtual;abstract;
+                     procedure setrot(r:GDBDouble);virtual;abstract;
+                     property rot:GDBDouble read getrot write setrot;
                      //function ProcessFromDXFObjXData(_Name,_Value:GDBString):GDBBoolean;virtual;abstract;
                   end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBDevice.pas
@@ -2025,8 +2031,13 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                        TSPE_Insert(*'Вставить вершину'*),
                        TSPE_Remove(*'Убрать вершину'*)
                        );
+         TPolyEditMode=(
+                       TPEM_Nearest(*'Вставить в ближайший сегмент'*),
+                       TPEM_Select(*'Выбирать сегмент'*)
+                       );
          TPolyEdit=record
                             Action:TSubPolyEdit;(*'Действие'*)
+                            Mode:TPolyEditMode;(*'Режим'*)
                             vdist:gdbdouble;(*hidden_in_objinsp*)
                             ldist:gdbdouble;(*hidden_in_objinsp*)
                             nearestvertex:GDBInteger;(*hidden_in_objinsp*)
@@ -2118,6 +2129,7 @@ GDBtracepropArray=object(GDBOpenArrayOfData)
     mouse, mouseglue: GDBvertex2DI;
     glmouse:GDBvertex2DI;
     workplane: GDBplane;
+    mouseraywithoutOS: GDBPiece;
     mouseray: GDBPiece;
     mouseonworkplanecoord: GDBvertex;
     mouse3dcoord: GDBvertex;

@@ -57,10 +57,37 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                procedure rtsave(refp:GDBPointer);virtual;
                procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                procedure higlight;virtual;
+               procedure ReCalcFromObjMatrix;virtual;
          end;
 {EXPORT-}
 implementation
 uses UGDBDescriptor,log;
+procedure GDBObjWithLocalCS.ReCalcFromObjMatrix;
+var
+    ox:gdbvertex;
+begin
+     inherited;
+     Local.ox:=PGDBVertex(@objmatrix[0])^;
+     Local.oy:=PGDBVertex(@objmatrix[1])^;
+
+     Local.ox:=normalizevertex(Local.ox);
+     Local.oy:=normalizevertex(Local.oy);
+     Local.oz:=normalizevertex(Local.oz);
+
+     {scale.x:=PGDBVertex(@objmatrix[0])^.x/local.OX.x;
+     scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y;
+     scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;
+
+     if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
+                                                                    ox:=CrossVertex(YWCS,Local.oz)
+                                                                else
+                                                                    ox:=CrossVertex(ZWCS,Local.oz);
+     normalizevertex(ox);
+     rotate:=geometry.scalardot(Local.ox,ox);
+     rotate:=arccos(rotate)*180/pi;
+     if local.OX.y<-eps then rotate:=360-rotate;}
+end;
+
 procedure GDBObjWithLocalCS.higlight;
 begin
   glcolor3ubv(@palette[sysvar.SYS.SYS_SystmGeometryColor^]);
@@ -232,6 +259,8 @@ begin
   PGDBVertex(@tv)^:=Local.p_insert;
   tv:=VectorTransform(tv,t_matrix);
   Local.p_insert:=PGDBVertex(@tv)^;
+  inherited;
+  //ReCalcFromObjMatrix;
 end;
 procedure GDBObjWithLocalCS.SaveToDXFObjPostfix;
 begin

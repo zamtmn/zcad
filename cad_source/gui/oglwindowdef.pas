@@ -33,6 +33,7 @@ type
     mouse, mouseglue: GDBvertex2DI;
     glmouse:GDBvertex2DI;
     workplane: GDBplane;
+    mouseraywithoutOS: GDBPiece;
     mouseray: GDBPiece;
     mouseonworkplanecoord: GDBvertex;
     mouse3dcoord: GDBvertex;

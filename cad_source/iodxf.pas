@@ -561,13 +561,13 @@ begin
                                begin
                                     //programlog.logoutstr('Ignored double definition block '+s+';',lp_OldPos);
                                     shared.HistoryOutStr('Ignored double definition block '+s+';');
-                                    if s='DEVICE_KIP_UK-P'then
+                                    if s='DEVICE_PS_UK-VK'then
                                                s:=s;
                                     while (s <> 'ENDBLK') do
                                     s := f.readGDBString;
                                end
               else begin
-                   if s='*D1054' then
+                   if s='DEVICE_PS_AR2' then
                                   s:=s;
 
                 tp := gdb.GetCurrentDWG.BlockDefArray.create(s);

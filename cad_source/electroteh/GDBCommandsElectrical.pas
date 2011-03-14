@@ -1231,16 +1231,16 @@ begin
 
     //uunitmanager.units.loadunit(expandpath('*blocks\el\cable.pas'),@p3dpl^.ou);
     p3dpl^.ou.copyfrom(units.findunit('cable'));
-    pvd:=p3dpl^.ou.FindVariable('DB_link');
-    pstring(pvd^.data.Instance)^:='Кабель ??';
+    //pvd:=p3dpl^.ou.FindVariable('DB_link');
+    //pstring(pvd^.data.Instance)^:='Кабель ??';
 
     {pvd:=p3dpl.ou.FindVariable('NMO_BaseName');
     pstring(pvd^.data.Instance)^:=gdb.numerator.getnamenumber('К');}
-    pvd:=p3dpl.ou.FindVariable('NMO_Prefix');
-    pstring(pvd^.data.Instance)^:='';
+    //pvd:=p3dpl.ou.FindVariable('NMO_Prefix');
+    //pstring(pvd^.data.Instance)^:='';
 
-    pvd:=p3dpl.ou.FindVariable('NMO_BaseName');
-    pstring(pvd^.data.Instance)^:='@';
+    //pvd:=p3dpl.ou.FindVariable('NMO_BaseName');
+    //pstring(pvd^.data.Instance)^:='@';
 
     pvd:=p3dpl.ou.FindVariable('NMO_Suffix');
     pstring(pvd^.data.Instance)^:=inttostr(gdb.GetCurrentDWG.numerator.getnumber('К',true));

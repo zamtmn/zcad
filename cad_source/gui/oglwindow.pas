@@ -78,6 +78,7 @@ type
     tocommandmcliccount:GDBInteger;
 
     myscrbuf:tmyscrbuf;
+    currentmousemovesnaptogrid:GDBBoolean;
 
     FastMMShift: TShiftState;
     FastMMX,FastMMY: Integer;
@@ -100,6 +101,7 @@ type
     procedure DISP_ZoomFactor(x: double{; MousePos: TPoint});
     //function mousein(MousePos: TPoint): GDBBoolean;
     procedure mouseunproject(X, Y: glint);
+    procedure calcgrid;
     procedure CorrectMouseAfterOS;
     procedure getonmouseobject(pva: PGDBObjEntityOpenArray);
     procedure getonmouseobjectbytree(Node:TEntTreeNode);
@@ -729,7 +731,7 @@ var d,tv1,tv2:GDBVertex;
     b1,b2:GDBBoolean;
 begin
      param.md.mouseraywithoutos:=param.md.mouseray;
-     if param.ospoint.ostype <> os_none then
+     if (param.ospoint.ostype <> os_none)or(currentmousemovesnaptogrid) then
      begin
 
      if param.projtype = ProjParalel then
@@ -762,62 +764,103 @@ begin
      end;
 end;
 
+procedure TOGLWnd.calcgrid;
+var ca, cv: extended;cav: gdbvertex;  ds:GDBString;
+    l,u,r,b,maxh,maxv,ph,pv:GDBDouble;
+    x,y:integer;
+begin
+     if gdb.GetCurrentDWG=NIL then exit;
+
+     gdb.GetCurrentDWG^.myGluProject2(NulVertex,param.CSIconCoord);
+
+     if (param.CSIconCoord.x>0)and(param.CSIconCoord.y>0)and(param.CSIconCoord.x<clientwidth)and(param.CSIconCoord.y<clientheight)
+     then
+     begin
+          gdb.GetCurrentDWG^.myGluProject2(x_Y_zVertex,
+                                  cav);
+          cav.x:=param.CSIconCoord.x-cav.x;
+          cav.y:=param.CSIconCoord.y-cav.y;
+          param.cslen:=sqrt(cav.x*cav.x+cav.y*cav.y);
+          param.CSIconCoord.x:=0;
+          param.CSIconCoord.y:=0;
+          param.CSIconCoord.z:=0;
+     end
+     else
+     begin
+     gdb.GetCurrentDWG^.myGluUnProject(createvertex(40, 40, 0.1),
+                                 param.CSIconCoord);
+          gdb.GetCurrentDWG^.myGluProject2(CreateVertex(param.CSIconCoord.x,param.CSIconCoord.y+1,param.CSIconCoord.z),
+
+                     cav);
+          cav.x:=40-cav.x;
+          cav.y:=40-cav.y;
+          param.cslen:=sqrt(cav.x*cav.x+cav.y*cav.y);
+
+     end;
+
+
+     gdb.GetCurrentDWG^.myGluProject2(CreateVertex(param.CSIconCoord.x + sizeaxis * gdb.GetCurrentDWG.pcamera^.prop.zoom, param.CSIconCoord.y, param.CSIconCoord.z),
+                CAV);
+     param.csx.x := round(cav.x);
+     param.csx.y := round(cav.y);
+     gdb.GetCurrentDWG^.myGluProject2(CreateVertex(param.CSIconCoord.x, param.CSIconCoord.y + sizeaxis * gdb.GetCurrentDWG.pcamera^.prop.zoom, param.CSIconCoord.z),
+                CAV);
+     param.csy.x := round(cav.x);
+     param.csy.y := round(cav.y);
+     gdb.GetCurrentDWG^.myGluProject2(CreateVertex(param.CSIconCoord.x, param.CSIconCoord.y, param.CSIconCoord.z + sizeaxis * gdb.GetCurrentDWG.pcamera^.prop.zoom),
+                CAV);
+     param.csz.x := round(cav.x);
+     param.csz.y := round(cav.y);
+
+     param.md.WPPointLU:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustum[0],gdb.GetCurrentDWG.pcamera.frustum[3],param.md.workplane);
+     param.md.WPPointUR:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustum[3],gdb.GetCurrentDWG.pcamera.frustum[1],param.md.workplane);
+     param.md.WPPointRB:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustum[1],gdb.GetCurrentDWG.pcamera.frustum[2],param.md.workplane);
+     param.md.WPPointBL:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustum[2],gdb.GetCurrentDWG.pcamera.frustum[0],param.md.workplane);
+     l:=Vertexlength(param.md.WPPointLU,param.md.WPPointBL);
+     r:=Vertexlength(param.md.WPPointUR,param.md.WPPointRB);
+     u:=Vertexlength(param.md.WPPointLU,param.md.WPPointUR);
+     b:=Vertexlength(param.md.WPPointRB,param.md.WPPointBL);
+     if r>l then
+                maxv:=r
+            else
+                maxv:=l;
+     if b>u then
+                maxh:=b
+            else
+                maxh:=u;
+     ph:={round}(maxh/sysvar.DWG.DWG_StepGrid.y);
+     pv:={round}(maxv/sysvar.DWG.DWG_StepGrid.x);
+     param.md.WPPointUR.z:=1;
+     if (4*ph>clientwidth)or(4*pv>clientheight)then
+                                                   begin
+                                                        historyout('Grid too density');
+                                                        param.md.WPPointUR.z:=-1;
+                                                   end;
+     param.md.WPPointLU:=vertexmulonsc(vertexsub(param.md.WPPointLU,param.md.WPPointBL),1/pv);
+     param.md.WPPointRB:=vertexmulonsc(vertexsub(param.md.WPPointRB,param.md.WPPointBL),1/ph);
+
+     param.md.WPPointBL.x:=round((param.md.WPPointBL.x-SysVar.DWG.DWG_OriginGrid.x)/SysVar.DWG.DWG_StepGrid.x)*SysVar.DWG.DWG_StepGrid.x+SysVar.DWG.DWG_OriginGrid.x;
+     param.md.WPPointBL.y:=round((param.md.WPPointBL.y-SysVar.DWG.DWG_OriginGrid.y)/SysVar.DWG.DWG_StepGrid.y)*SysVar.DWG.DWG_StepGrid.y+SysVar.DWG.DWG_OriginGrid.y;
+     param.md.WPPointBL.z:=(-param.md.workplane[3]-param.md.workplane[0]*param.md.WPPointBL.x-param.md.workplane[1]*param.md.WPPointBL.y)/param.md.workplane[2];
+
+     param.md.WPPointUR.x:=ph;
+     param.md.WPPointUR.y:=pv;
+
+
+
+end;
 
 procedure TOGLWnd.mouseunproject(X, Y: glint);
 var ca, cv: extended;cav: gdbvertex;  ds:GDBString;
 begin
   if gdb.GetCurrentDWG=NIL then exit;
-  gdb.GetCurrentDWG^.myGluProject2(NulVertex,
-                   param.CSIconCoord);
-  if (param.CSIconCoord.x>0)and(param.CSIconCoord.y>0)and(param.CSIconCoord.x<clientwidth)and(param.CSIconCoord.y<clientheight)
-  then
-  begin
-       gdb.GetCurrentDWG^.myGluProject2(x_Y_zVertex,
-                               cav);
-       cav.x:=param.CSIconCoord.x-cav.x;
-       cav.y:=param.CSIconCoord.y-cav.y;
-       param.cslen:=sqrt(cav.x*cav.x+cav.y*cav.y);
-       param.CSIconCoord.x:=0;
-       param.CSIconCoord.y:=0;
-       param.CSIconCoord.z:=0;
-  end
-  else
-  begin
-  gdb.GetCurrentDWG^.myGluUnProject(createvertex(40, 40, 0.1),
-                              param.CSIconCoord);
-       gdb.GetCurrentDWG^.myGluProject2(CreateVertex(param.CSIconCoord.x,param.CSIconCoord.y+1,param.CSIconCoord.z),
 
-                  cav);
-       cav.x:=40-cav.x;
-       cav.y:=40-cav.y;
-       param.cslen:=sqrt(cav.x*cav.x+cav.y*cav.y);
-
-  end;
+  //calcgrid;
 
   gdb.GetCurrentDWG^.myGluUnProject(createvertex(x, y, 0),param.md.mouseray.lbegin);
   gdb.GetCurrentDWG^.myGluUnProject(createvertex(x, y, 1),param.md.mouseray.lend);
-  //param.md.mouseray.lbegin:=vertexsub(param.md.mouseray.lbegin,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
-  //param.md.mouseray.lend:=vertexsub(param.md.mouseray.lend,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
 
-
-
-
-  gdb.GetCurrentDWG^.myGluProject2(CreateVertex(param.CSIconCoord.x + sizeaxis * gdb.GetCurrentDWG.pcamera^.prop.zoom, param.CSIconCoord.y, param.CSIconCoord.z),
-             CAV);
-  param.csx.x := round(cav.x);
-  param.csx.y := round(cav.y);
-  gdb.GetCurrentDWG^.myGluProject2(CreateVertex(param.CSIconCoord.x, param.CSIconCoord.y + sizeaxis * gdb.GetCurrentDWG.pcamera^.prop.zoom, param.CSIconCoord.z),
-             CAV);
-  param.csy.x := round(cav.x);
-  param.csy.y := round(cav.y);
-  gdb.GetCurrentDWG^.myGluProject2(CreateVertex(param.CSIconCoord.x, param.CSIconCoord.y, param.CSIconCoord.z + sizeaxis * gdb.GetCurrentDWG.pcamera^.prop.zoom),
-             CAV);
-  param.csz.x := round(cav.x);
-  param.csz.y := round(cav.y);
-
-
-  gdb.GetCurrentDWG^.myGluProject2(CreateVertex(1000, 1000, 1000),
-            cav);
+  //gdb.GetCurrentDWG^.myGluProject2(CreateVertex(1000, 1000, 1000),cav);
   //param.mouseray.lbegin := param.glmcoord[0];
 
 
@@ -829,18 +872,18 @@ begin
 
   cav.x := -param.md.mouseray.lbegin.x;
   cav.y := -param.md.mouseray.lbegin.y;
-  cav.z := -param.md.workplane.d / param.md.workplane.normal.z * param.md.mouseray.dir.z - param.md.mouseray.lbegin.z;
+  cav.z := -param.md.workplane{.d}[3] / param.md.workplane{.normal.z}[2] * param.md.mouseray.dir.z - param.md.mouseray.lbegin.z;
   //ca := param.md.workplane.normal.x * cav.x + param.md.workplane.normal.y * cav.y + param.md.workplane.normal.z * cav.z;
   {cv := param.md.workplane.normal.x * param.md.mouseray.dir.x +
         param.md.workplane.normal.y * param.md.mouseray.dir.y +
         param.md.workplane.normal.z * param.md.mouseray.dir.z;}
 
-  cv:=param.md.workplane.normal.x*param.md.mouseray.dir.x +
-      param.md.workplane.normal.y*param.md.mouseray.dir.y +
-      param.md.workplane.normal.z*param.md.mouseray.dir.z;
-  ca:=-param.md.workplane.d - param.md.workplane.normal.x*param.md.mouseray.lbegin.x -
-       param.md.workplane.normal.y*param.md.mouseray.lbegin.y -
-       param.md.workplane.normal.z*param.md.mouseray.lbegin.z;
+  cv:=param.md.workplane{.normal.x}[0]*param.md.mouseray.dir.x +
+      param.md.workplane{.normal.y}[1]*param.md.mouseray.dir.y +
+      param.md.workplane{.normal.z}[2]*param.md.mouseray.dir.z;
+  ca:=-param.md.workplane{.d}[3] - param.md.workplane{.normal.x}[0]*param.md.mouseray.lbegin.x -
+       param.md.workplane{.normal.y}[1]*param.md.mouseray.lbegin.y -
+       param.md.workplane{.normal.z}[2]*param.md.mouseray.lbegin.z;
   if cv = 0 then param.md.mouseonworkplan := false
   else begin
     param.md.mouseonworkplan := true;
@@ -849,19 +892,19 @@ begin
     param.md.mouseonworkplanecoord.y := param.md.mouseray.lbegin.y + param.md.mouseray.dir.y * ca;
     param.md.mouseonworkplanecoord.z := param.md.mouseray.lbegin.z + param.md.mouseray.dir.z * ca;
 
-    ca:=param.md.workplane.normal.x * param.md.mouseonworkplanecoord.x +
-        param.md.workplane.normal.y * param.md.mouseonworkplanecoord.y +
-        param.md.workplane.normal.z * param.md.mouseonworkplanecoord.z+param.md.workplane.d;
+    ca:=param.md.workplane{.normal.x}[0] * param.md.mouseonworkplanecoord.x +
+        param.md.workplane{.normal.y}[1] * param.md.mouseonworkplanecoord.y +
+        param.md.workplane{.normal.z}[2] * param.md.mouseonworkplanecoord.z+param.md.workplane{.d}[3];
 
     if ca<>0 then
     begin
-         param.md.mouseonworkplanecoord.x:=param.md.mouseonworkplanecoord.x-param.md.workplane.normal.x*ca;
-         param.md.mouseonworkplanecoord.y:=param.md.mouseonworkplanecoord.y-param.md.workplane.normal.y*ca;
-         param.md.mouseonworkplanecoord.z:=param.md.mouseonworkplanecoord.z-param.md.workplane.normal.z*ca;
+         param.md.mouseonworkplanecoord.x:=param.md.mouseonworkplanecoord.x-param.md.workplane{.normal.x}[0]*ca;
+         param.md.mouseonworkplanecoord.y:=param.md.mouseonworkplanecoord.y-param.md.workplane{.normal.y}[1]*ca;
+         param.md.mouseonworkplanecoord.z:=param.md.mouseonworkplanecoord.z-param.md.workplane{.normal.z}[2]*ca;
     end;
-    ca:=param.md.workplane.normal.x * param.md.mouseonworkplanecoord.x +
-        param.md.workplane.normal.y * param.md.mouseonworkplanecoord.y +
-        param.md.workplane.normal.z * param.md.mouseonworkplanecoord.z + param.md.workplane.d;
+    ca:=param.md.workplane{.normal.x}[0] * param.md.mouseonworkplanecoord.x +
+        param.md.workplane{.normal.y}[1] * param.md.mouseonworkplanecoord.y +
+        param.md.workplane{.normal.z}[2] * param.md.mouseonworkplanecoord.z + param.md.workplane{.d}[3];
     str(ca,ds);
   end;
 end;
@@ -947,6 +990,7 @@ begin
                                       end;
 
   Set3dmouse;
+  calcgrid;
 
   paint;
 
@@ -1084,7 +1128,7 @@ begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove',lp_IncPos);{$ENDIF}
 
 
-
+  currentmousemovesnaptogrid:=false;
   key:=0;
   if (ssShift in Shift) then
                             key := key or MZW_SHIFT;
@@ -1116,6 +1160,7 @@ begin
       param.firstdraw := true;
       gdb.GetCurrentDWG.pcamera^.NextPosition;
       CalcOptimalMatrix;
+      calcgrid;
       //-------------------CalcOptimalMatrix;
 
       gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjArray.ObjTree);
@@ -1141,6 +1186,7 @@ begin
            param.firstdraw := true;
            gdb.GetCurrentDWG.pcamera^.NextPosition;
            CalcOptimalMatrix;
+           calcgrid;
            //-------------CalcOptimalMatrix;
 
            gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjArray.ObjTree);
@@ -1375,7 +1421,7 @@ begin
 end;
 procedure TOGLWnd.Set3dmouse;
 begin
-    if param.ospoint.ostype <> os_none
+    if (param.ospoint.ostype <> os_none)or(currentmousemovesnaptogrid)
     then
     begin
          param.md.mouse3dcoord:=param.ospoint.worldcoord;
@@ -1439,8 +1485,9 @@ begin
         if param.md.mouseonworkplan
         then
             begin
+                 if not sysvar.DWG.DWG_SnapGrid^ then
                  param.ospoint.worldcoord:=param.md.mouseonworkplanecoord;
-                 sendcoordtocommandTraceOn(param.md.mouseonworkplanecoord,key,nil)
+                 sendcoordtocommandTraceOn({param.md.mouseonworkplanecoord}param.ospoint.worldcoord,key,nil)
                  //if key=MZW_LBUTTON then param.lastpoint:=param.md.mouseonworkplanecoord;
                  //commandmanager.pcommandrunning.MouseMoveCallback(param.md.mouseonworkplanecoord, param.md.mouse, key,nil)
             end
@@ -1495,22 +1542,50 @@ procedure TOGLWnd.DrawGrid;
 var
   pg:PGDBvertex2S;
   i,j: GDBInteger;
+  v,v1:gdbvertex;
 begin
-  if sysvar.DWG.DWG_DrawGrid^ then
+
+    {   ph:=](maxh/sysvar.DWG.DWG_StepGrid.y);
+     pv:=](maxv/sysvar.DWG.DWG_StepGrid.x);
+     if (2*ph>clientwidth)or(2*pv>clientheight)then
+                                                   begin
+                                                        historyout('Grid too density')
+                                                   end;
+     param.md.WPPointLU:=vertexmulonsc(vertexsub(param.md.WPPointLU,param.md.WPPointBL),1/pv);
+     param.md.WPPointRB:=vertexmulonsc(vertexsub(param.md.WPPointRB,param.md.WPPointBL),1/ph);
+
+     param.md.WPPointBL.x:=round((param.md.WPPointBL.x-SysVar.DWG.DWG_OriginGrid.x)/SysVar.DWG.DWG_StepGrid.x)*SysVar.DWG.DWG_StepGrid.x+SysVar.DWG.DWG_OriginGrid.x;
+     param.md.WPPointBL.y:=round((param.md.WPPointBL.y-SysVar.DWG.DWG_OriginGrid.y)/SysVar.DWG.DWG_StepGrid.y)*SysVar.DWG.DWG_StepGrid.y+SysVar.DWG.DWG_OriginGrid.y;
+
+     param.md.WPPointUR.x:=ph;
+     param.md.WPPointUR.z:=pv;}
+
+  if (sysvar.DWG.DWG_DrawGrid^)and(param.md.WPPointUR.z=1) then
   begin
   //CalcOptimalMatrix;
+  v:=param.md.WPPointBL;
   glcolor3b(100, 100, 100);
   pg := @gridarray;
   oglsm.myglbegin(gl_points);
-  for i := 0 to maxgrid do
-  for j := 0 to maxgrid do
+  for i := 0 to {maxgrid}round(param.md.WPPointUR.x) do
   begin
-    //glVertex2fv(@pg^);
-    oglsm.myglVertex3d(createvertex(i,j,0));
-    inc(pg);
+       v1:=v;
+        for j := 0 to {maxgrid}round(param.md.WPPointUR.y) do
+        begin
+          oglsm.myglVertex3d({createvertex(i,j,0)}v1);
+          v1:=vertexadd(v1,param.md.WPPointLU);
+          inc(pg);
+        end;
+        v:=vertexadd(v,param.md.WPPointRB);
   end;
   oglsm.myglend;
   end;
+  {oglsm.myglbegin(gl_lines);
+  oglsm.myglVertex3d(param.md.WPPointBL);
+  oglsm.myglVertex3d(param.md.WPPointUR);
+  oglsm.myglVertex3d(param.md.WPPointRB);
+  oglsm.myglVertex3d(param.md.WPPointLU);
+  oglsm.myglend;}
 end;
 procedure TOGLWnd.GDBActivate;
 begin
@@ -3202,17 +3277,21 @@ var
   pobj:pgdbobjentity;
 //  dispraylen:double;
 begin
-  if sysvar.dwg.DWG_PolarMode^ = 0 then exit;
   if param.ontrackarray.total = 0 then exit;
   param.polarlinetrace := 0;
 
     if tocommandmcliccount=0 then a:=1
                              else a:=0;
-
+    for j := a to param.ontrackarray.total - 1 do
+    begin
+      gdb.GetCurrentDWG^.myGluProject2(param.ontrackarray.otrackarray[j].worldcoord,
+                 param.ontrackarray.otrackarray[j].dispcoord);
+    end;
+    if sysvar.dwg.DWG_PolarMode^ = 0 then exit;
   for j := a to param.ontrackarray.total - 1 do
   begin
-    gdb.GetCurrentDWG^.myGluProject2(param.ontrackarray.otrackarray[j].worldcoord,
-               param.ontrackarray.otrackarray[j].dispcoord);
+    //gdb.GetCurrentDWG^.myGluProject2(param.ontrackarray.otrackarray[j].worldcoord,
+    //           param.ontrackarray.otrackarray[j].dispcoord);
     param.ontrackarray.otrackarray[j].dispcoord.z:=0;
     param.ontrackarray.otrackarray[j].dmousecoord.x :=
     param.md.glmouse.x - param.ontrackarray.otrackarray[j].dispcoord.x;
@@ -3276,7 +3355,7 @@ begin
         begin
         //currentontracdist:=pt.dmouse;
         if (pt.dmouse<lastontracdist) then
-        if (param.ospoint.ostype=os_none)or(param.ospoint.ostype={os_intersection}os_trace) then
+        if (param.ospoint.ostype=os_blockinsert)or(param.ospoint.ostype=os_insert)or(param.ospoint.ostype=os_textinsert)or(param.ospoint.ostype=os_none)or(param.ospoint.ostype={os_intersection}os_trace) then
         begin
         if geometry.vertexlen2df(param.ontrackarray.otrackarray[j].dispcoord.x,
                                  param.ontrackarray.otrackarray[j].dispcoord.y,
@@ -3423,7 +3502,6 @@ var
 begin
   param.ospoint.radius:=sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1;
   param.ospoint.ostype:=os_none;
-
       if param.md.mouseonworkplan
       then
           begin
@@ -3434,6 +3512,7 @@ begin
                     param.ospoint.worldcoord.x:=round((param.md.mouseonworkplanecoord.x-SysVar.DWG.DWG_OriginGrid.x)/SysVar.DWG.DWG_StepGrid.x)*SysVar.DWG.DWG_StepGrid.x+SysVar.DWG.DWG_OriginGrid.x;
                     param.ospoint.worldcoord.y:=round((param.md.mouseonworkplanecoord.y-SysVar.DWG.DWG_OriginGrid.y)/SysVar.DWG.DWG_StepGrid.y)*SysVar.DWG.DWG_StepGrid.y+SysVar.DWG.DWG_OriginGrid.y;
                     param.ospoint.ostype:=os_snap;
+                    currentmousemovesnaptogrid:=true;
                end;
           end
       else
@@ -3591,6 +3670,8 @@ begin
 
   delmyscrbuf;
 
+  calcgrid;
+
   {переделать}//inherited size{(fwSizeType,nWidth,nHeight)};
 
   CreateScrbuf(clientwidth,clientheight);
@@ -3660,10 +3741,10 @@ begin
   param.otracktimerwork := 0;
   param.ontrackarray.total := 1;
   param.ontrackarray.current := 1;
-  param.md.workplane.normal.x := 0;
-  param.md.workplane.normal.y := {sqrt(0.1)}0;
-  param.md.workplane.normal.z := {sqrt(0.9)}1;
-  param.md.workplane.d := 0;
+  param.md.workplane{.normal.x}[0] := 0;
+  param.md.workplane{.normal.y}[1] := {sqrt(0.1)}0;
+  param.md.workplane{.normal.z}[2] := {sqrt(0.9)}1;
+  param.md.workplane{.d}[3] := 0;
   param.scrollmode:=false;
   //UGDBDescriptor.POGLWnd := @param;
 

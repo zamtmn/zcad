@@ -32,7 +32,8 @@ type
     mode: GDBByte;
     mouse, mouseglue: GDBvertex2DI;
     glmouse:GDBvertex2DI;
-    workplane: GDBplane;
+    workplane: {GDBplane}DVector4D;
+    WPPointLU,WPPointUR,WPPointRB,WPPointBL:GDBvertex;
     mouseraywithoutOS: GDBPiece;
     mouseray: GDBPiece;
     mouseonworkplanecoord: GDBvertex;

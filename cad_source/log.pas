@@ -149,14 +149,36 @@ end;
 begin
      logoutstr(str,IncIndent);
 end;}
+(*function RDTSC: comp;
+var
+  TimeStamp: record
+    case byte of
+      1: (Whole: comp);
+      2: (Lo, Hi: Longint);
+  end;
+begin
+  asm
+    db $0F; db $31;
+  {$ifdef Cpu386}
+    mov [TimeStamp.Lo], eax
+    mov [TimeStamp.Hi], edx
+  {$else}
+    db D32
+    mov word ptr TimeStamp.Lo, AX   dfg
+    db D32
+    mov word ptr TimeStamp.Hi, DX
+  {$endif}
+  end;
+  Result := TimeStamp.Whole;
+end;*)
 function mynow:TMyTimeStamp;
 var a:int64;
 begin
      result.time:=now();
      asm
         rdtsc
-        mov [a],eax
-        mov [a+4],edx
+        mov dword ptr [a],eax
+        mov dword ptr [a+4],edx
      end;
      result.rdtsc:=a;
 end;

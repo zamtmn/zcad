@@ -20,14 +20,14 @@ begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=307;
   VIEW_ObjInspSubV:=85;
-  PATH_File0:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File0:='J:\nh\искандер\гараж\АОВ изм1.dxf';
   PATH_File1:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File2:='J:\nh\термоинжиниринг\ГОМ6\ДУ\proj.dxf';
-  PATH_File3:='J:\nh\ЗВЕЗДИНА\пожаротушение\proj.dxf';
-  PATH_File4:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File5:='D:\TEMP\plan_tv\план TV.dxf';
-  PATH_File6:='C:\zcad\cad\..\errors\4.dxf';
-  PATH_File7:='C:\zcad\cad\..\errors\3.dxf';
-  PATH_File8:='D:\poly.dxf';
-  PATH_File9:='E:\Пример.dwg';
+  PATH_File2:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
+  PATH_File3:='J:\nh\термоинжиниринг\ГП-224\proj2.dxf';
+  PATH_File4:='D:\разная высота.dxf';
+  PATH_File5:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File6:='J:\nh\термоинжиниринг\ГОМ6\ДУ\proj.dxf';
+  PATH_File7:='J:\nh\ЗВЕЗДИНА\пожаротушение\proj.dxf';
+  PATH_File8:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File9:='D:\TEMP\plan_tv\план TV.dxf';
 end.

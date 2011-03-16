@@ -75,7 +75,7 @@ procedure savedxf2000(name: GDBString; PDrawing:PTDrawing);
 procedure saveZCP(name: GDBString; gdb: PGDBDescriptor);
 procedure LoadZCP(name: GDBString; gdb: PGDBDescriptor);
 implementation
-uses GDBBlockDef,mainwindow,UGDBLayerArray;
+uses GDBBlockDef,mainwindow,UGDBLayerArray,varmandef;
 function dxfhandlearraycreate(col: GDBInteger): GDBPointer;
 var
   temp: pdxfhandlerecopenarray;
@@ -145,6 +145,21 @@ begin
       exit;
   end;
 end;
+procedure correctvariableset(pobj: PGDBObjEntity);
+var vd:vardesk;
+begin
+     //if (pobj.vp.ID=GDBBlockInsertID)or
+     //   (pobj.vp.ID=GDBCableID) then
+        begin
+             if pobj.ou.FindVariable('GC_HeadDevice')<>nil then
+             if pobj.ou.FindVariable('GC_Metric')=nil then
+             begin
+                  pobj.ou.setvardesc(vd,'GC_Metric','','GDBString');
+                  pobj.ou.InterfaceVariables.createvariable(vd.name,vd);
+             end;
+        end;
+end;
+
 procedure addentitiesfromdxf(var f: GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjSubordinated);
 var
 //  byt,LayerColor: GDBInteger;
@@ -177,6 +192,7 @@ begin
                                                   i2:=i2;{$ENDIF}
         pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
         PGDBObjEntity(pobj)^.LoadFromDXF(f,@additionalunit);
+        correctvariableset(pobj);
         pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(@additionalunit);
         trash:=false;
         if postobj=nil  then

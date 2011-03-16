@@ -1129,7 +1129,7 @@ else if length(Operands)>3 then
            if modalresult=MrOk then
                                begin
                                      u8s:=InfoForm.memo.text;
-                                     astring:=utf8tosys(u8s);
+                                     astring:={utf8tosys}(u8s);
                                      mem.Clear;
                                      mem.AddData(@astring[1],length(astring));
 

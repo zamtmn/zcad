@@ -2,16 +2,13 @@ unit cable;
 interface
 uses system,cables;
 usescopy cablename;
+usescopy objgroup;
 var
    DB_link:GDBString;(*'Материал'*)
 
    LENGTH_RoundTo:GDBInteger;(*'Округлять до'*)
    LENGTH_Add:GDBDouble;(*'Добавить к длине'*)
    LENGTH_Scale:GDBDouble;(*'Масштаб'*)
-
-   GC_HeadDevice:GDBString;(*'Головное устройство'*)
-   GC_HDShortName:GDBString;(*'Короткое имя головного устройства'*)
-   GC_HDGroup:GDBInteger;(*'Группа в головном устройстве'*)
 
    CABLE_Type:TCableType;(*'Тип'*)
    CABLE_Segment:GDBInteger;(*'Сегмент'*)
@@ -29,7 +26,7 @@ begin
    Segment:=0;
    LENGTH_Scale:=0.1;
    NMO_Name:='unnamed';
-   CABLE_Material:='не задан 7х0.75';
+   CABLE_Material:='не задан ??;
    CABLE_WireCount:=0;
 
    GC_HeadDevice:='??';

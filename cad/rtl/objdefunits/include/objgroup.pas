@@ -8,11 +8,13 @@ var
 
    SerialConnection:GDBInteger;
    GC_NumberInGroup:GDBInteger;
+   GC_Metric:GDBString;
 implementation
 begin
    SerialConnection:=1;
    GC_NumberInGroup:=0;
    GC_HeadDevice:='??';
    GC_HDShortName:='??';
+   GC_Metric:='';
    GC_HDGroup:=0;
 end.

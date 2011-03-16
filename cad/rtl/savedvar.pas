@@ -19,15 +19,15 @@ implementation
 begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=307;
-  VIEW_ObjInspSubV:=85;
-  PATH_File0:='J:\nh\искандер\гараж\АОВ изм1.dxf';
-  PATH_File1:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File2:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
-  PATH_File3:='J:\nh\термоинжиниринг\ГП-224\proj2.dxf';
-  PATH_File4:='D:\разная высота.dxf';
-  PATH_File5:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File6:='J:\nh\термоинжиниринг\ГОМ6\ДУ\proj.dxf';
-  PATH_File7:='J:\nh\ЗВЕЗДИНА\пожаротушение\proj.dxf';
-  PATH_File8:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File9:='D:\TEMP\plan_tv\план TV.dxf';
+  VIEW_ObjInspSubV:=87;
+  PATH_File0:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File1:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File2:='D:\кусок-2.dxf';
+  PATH_File3:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File4:='D:\кусок.dxf';
+  PATH_File5:='J:\nh\ЗВЕЗДИНА\Котельная КС1\ATM.dxf';
+  PATH_File6:='J:\nh\искандер\гараж\АОВ изм1.dxf';
+  PATH_File7:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
+  PATH_File8:='J:\nh\термоинжиниринг\ГП-224\proj2.dxf';
+  PATH_File9:='D:\разная высота.dxf';
 end.

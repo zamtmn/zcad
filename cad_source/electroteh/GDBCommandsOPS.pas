@@ -513,6 +513,7 @@ var //i: GDBInteger;
     p:pointer;
     cman:TCableManager;
     SaveEntUName,SaveCabUName:gdbstring;
+    cablemetric,devicemetric:GDBString;
 begin
   if gdb.GetCurrentROOT.ObjArray.Count = 0 then exit;
   cman.init;
@@ -524,6 +525,18 @@ begin
   if pcabledesk<>nil then
   repeat
         begin
+
+            pvd:=pcabledesk.StartSegment.ou.FindVariable('GC_Metric');
+            if pvd<>nil then
+                            begin
+                                 cablemetric:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
+                            end
+                        else
+                            begin
+                                 cablemetric:='';
+                            end;
+
+
              pvd:=currentunit.FindVariable('CDC_temp');
              pgdbinteger(pvd.data.Instance)^:=0;
              pvd:=currentunit.FindVariable('CDSC_temp');
@@ -541,7 +554,17 @@ begin
              ptn:=pcabledesk^.Devices.beginiterate(ir_inNodeArray);
              if ptn<>nil then
                 repeat
-                    //if ptn^.DevLink<>nil then
+                    begin
+                        pvd:=ptn^.bp.ListPos.Owner.ou.FindVariable('GC_Metric');
+                        if pvd<>nil then
+                                        begin
+                                             devicemetric:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
+                                        end
+                                    else
+                                        begin
+                                             devicemetric:='';
+                                        end;
+                        if devicemetric=cablemetric then
                     begin
                          SaveEntUName:=ptn^.bp.ListPos.Owner.ou.Name;
                          ptn^.bp.ListPos.Owner.ou.Name:='Entity';
@@ -552,9 +575,13 @@ begin
 
                          dec(currentunit.InterfaceUses.Count);
 
+                         ptn^.bp.ListPos.Owner.ou.Name:=SaveEntUName;
+
                          ptn^.bp.ListPos.Owner^.Format;
-                     end;
-                    ptn^.bp.ListPos.Owner.ou.Name:=SaveEntUName;
+                    end;
+
+                    end;
+                    //ptn^.bp.ListPos.Owner.ou.Name:=SaveEntUName;
                     ptn:=pcabledesk^.Devices.iterate(ir_inNodeArray);
                 until ptn=nil;
 

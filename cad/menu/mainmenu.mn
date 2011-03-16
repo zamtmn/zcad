@@ -59,6 +59,7 @@ Panel Misc;
     button El_Cable_Legend,#кж,Экспорт кабельного журнала
     button El_Material_Legend,#вм,Экспорт "ведомости" материалов
     button PlaceSmokeDetectorOrto,ps.bmp,Авторасстановка пож. извещателей
+    button OPS_Sensor_Mark,#++,Нумерация извещателей на плане
     button OrtoDevPlace,array.bmp,Расстановка блоков (устройств) массивом
     action ACN_El_FIND
     action ACN_OBJVARMAN

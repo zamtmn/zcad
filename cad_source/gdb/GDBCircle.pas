@@ -59,7 +59,7 @@ GDBObjCircle=object(GDBObjWithLocalCS)
                  procedure projectpoint;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  //procedure higlight;virtual;
-                 function getsnap(var osp:os_record):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
                  function InRect:TInRect;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;

@@ -38,7 +38,7 @@ GDBObjPoint=object(GDBObj3d)
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                  procedure RenderFeedback;virtual;
-                 function getsnap(var osp:os_record):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;

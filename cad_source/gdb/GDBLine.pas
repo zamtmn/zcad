@@ -58,7 +58,7 @@ GDBObjLine=object(GDBObj3d)
                   function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  //procedure feedbackinrect;virtual;
                  function InRect:TInRect;virtual;
-                  function getsnap(var osp:os_record):GDBBoolean;virtual;
+                  function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
                   function getintersect(var osp:os_record;pobj:PGDBObjEntity):GDBBoolean;virtual;
                 destructor done;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;

@@ -24,6 +24,7 @@ uses UGDBOpenArrayOfPObjects,oglwindowdef,GDBCurve,UGDBVectorSnapArray,geometry,
 gl,
 GDBase,UGDBDescriptor,GDBWithLocalCS,gdbobjectsconstdef,math,dxflow,sysutils,UGDBLineWidthArray,OGLSpecFunc;
 type
+//----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}
 PGDBObjLWPolyline=^GDBObjLWpolyline;
 GDBObjLWPolyline=object(GDBObjWithLocalCS)
@@ -33,7 +34,6 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  Width2D_in_OCS_Array:GDBLineWidthArray;(*saved_to_shd*)
                  Width3D_in_WCS_Array:GDBOpenArray;
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
-                 snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
                  Square:GDBdouble;(*'Oriented area'*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul;
@@ -60,7 +60,9 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  //function InRect:TInRect;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
-                 function getsnap(var osp:os_record):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
+                 procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
+                 procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
            end;
 {Export-}
@@ -87,9 +89,27 @@ procedure GDBObjLWpolyline.AddOnTrackAxis(var posr:os_record;const processaxis:t
 begin
   GDBPoint3dArrayAddOnTrackAxis(Vertex3D_in_WCS_Array,posr,processaxis,closed);
 end;
+procedure GDBObjLWpolyline.startsnap(out osp:os_record; out pdata:GDBPointer);
+begin
+     inherited;
+     gdbgetmem({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}pdata,sizeof(GDBVectorSnapArray));
+     PGDBVectorSnapArray(pdata).init({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}Vertex3D_in_WCS_Array.Max);
+     BuildSnapArray(Vertex3D_in_WCS_Array,PGDBVectorSnapArray(pdata)^,closed);
+end;
+
+procedure GDBObjLWpolyline.endsnap(out osp:os_record; var pdata:GDBPointer);
+begin
+     if pdata<>nil then
+                       begin
+                            PGDBVectorSnapArray(pdata)^.{FreeAnd}Done;
+                            gdbfreemem(pdata);
+                       end;
+     inherited;
+end;
+
 function GDBObjLWpolyline.getsnap;
 begin
-     result:=GDBPoint3dArraygetsnap(Vertex3D_in_WCS_Array,PProjPoint,snaparray,osp,closed);
+     result:=GDBPoint3dArraygetsnap(Vertex3D_in_WCS_Array,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,closed);
 end;
 function GDBObjLWpolyline.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 begin
@@ -335,7 +355,7 @@ begin
      Width2D_in_OCS_Array.done;
      Vertex3D_in_WCS_Array.done;
      Width3D_in_WCS_Array.done;
-     snaparray.done;
+     //----------------snaparray.done;
      inherited done;//  error
 end;
 constructor GDBObjLWpolyline.init;
@@ -347,7 +367,7 @@ begin
   Width2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{EFDA3BB3-E3AD-4D5C-97D2-FECD92A7276E}',{$ENDIF}1000);
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{C5FE7AEE-3EF6-4AF8-ADCE-4D30495CE3F1}',{$ENDIF}1000);
   Width3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{C9BB8E1B-18AA-464D-8726-68F2F609FEE0}',{$ENDIF}1000, sizeof(GDBQuad3d));
-  snaparray.init({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}1000);
+  //----------------snaparray.init({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}1000);
   PProjPoint:=nil;
 end;
 constructor GDBObjLWpolyline.initnul;
@@ -359,7 +379,7 @@ begin
   Width2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{EFDA3BB3-E3AD-4D5C-97D2-FECD92A7276E}',{$ENDIF}1000);
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{C5FE7AEE-3EF6-4AF8-ADCE-4D30495CE3F1}',{$ENDIF}1000);
   Width3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{C9BB8E1B-18AA-464D-8726-68F2F609FEE0}',{$ENDIF}1000, sizeof(GDBQuad3d));
-  snaparray.init({$IFDEF DEBUGBUILD}'{556C3123-58FC-41AA-BA5C-C453F025ACF6}',{$ENDIF}1000);
+  //----------------snaparray.init({$IFDEF DEBUGBUILD}'{556C3123-58FC-41AA-BA5C-C453F025ACF6}',{$ENDIF}1000);
   PProjPoint:=nil;
 end;
 procedure GDBObjLWpolyline.DrawGeometry;
@@ -549,6 +569,8 @@ begin
         begin
           s := f.readgdbstring;
           val(s, tGDBDouble, code);
+          if Width2D_in_OCS_Array.Max<numv then
+                                               Width2D_in_OCS_Array.setsize(numv);
           Width2D_in_OCS_Array.Count := numv;
           for i := 0 to numv - 1 do
           begin
@@ -699,7 +721,7 @@ begin
        inc(pv);
   end;
   Vertex3D_in_WCS_Array.Shrink;
-  BuildSnapArray(Vertex3D_in_WCS_Array,snaparray,closed);
+  //----------------BuildSnapArray(Vertex3D_in_WCS_Array,snaparray,closed);
 end;
 procedure GDBObjLWpolyline.Renderfeedback;
 var tv:GDBvertex;

@@ -30,7 +30,7 @@ procedure GDBGetMem({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}out p:Pointer; 
 procedure GDBFreeMem(var p: Pointer);
 //procedure startup;
 //procedure Finalize;
-const getmemmax=1000000;
+const getmemmax=9000000;
 type
     memdesk=record
                   free:GDBBoolean;

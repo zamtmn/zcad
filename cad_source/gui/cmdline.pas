@@ -20,11 +20,11 @@ unit cmdline;
 {$INCLUDE def.inc}
 interface
 uses
- strproc,lclproc,sysutils,
+ strproc,lclproc,sysutils,gdbasetypes,
  StdCtrls,ExtCtrls,ComCtrls,Controls,Classes,menus,Forms,{IFDEF FPClcltype,$ENDIF}fileutil,graphics,
  UDMenuWnd{,ZStaticsText},gdbase{,ZPanelsNoFrame}, memman,UGDBDescriptor,math,commandline,varman,languade,
  UGDBTracePropArray,{zforms,}{ZEditsWithProcedure}{,zbasicvisible,}varmandef,{ZGUIsCT,}{ZPanelsGeneric,}
- geometry,shared{,zmemos};
+ geometry,shared,UGDBStringArray{,zmemos};
 
 resourcestring
               defaultpromot='Command';
@@ -46,6 +46,7 @@ type
     DMenu:PTDMenuWnd;
     utfpresent:boolean;
     utflen:integer;
+    aliases:GDBGDBStringArray;
     procedure keypressmy(Sender: TObject; var Key: char);
     procedure SetMode(m:TCLineMode);virtual;
     procedure DoOnResize; override;
@@ -53,11 +54,14 @@ type
     procedure HistoryAdd(s:string);
     procedure mypaint(sender:tobject);
     procedure FormCreate(Sender: TObject);
+
+    destructor Destroy;override;
+    function FindAlias(prefix:GDBString;comment,breacer:GDBString):GDBString;
   end;
 var
   CLine: TCLine;
 implementation
-uses gdbasetypes,mainwindow,oglwindowdef,log;
+uses mainwindow,oglwindowdef,log;
 procedure TCLine.mypaint(sender:tobject);
 begin
      canvas.Line(0,0,100,100);
@@ -185,6 +189,13 @@ begin
 
       if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
                                                   sysvar.SYS.SYS_IsHistoryLineCreated^:=true;
+    aliases.init(100);
+    aliases.loadfromfile(expandpath('*menu/default.cla'));
+end;
+destructor TCLine.Destroy;
+begin
+     aliases.FreeAndDone;
+     inherited;
 end;
 
 procedure TCLine.AfterConstruction;
@@ -233,6 +244,46 @@ begin
 //  dmenu.AddProcedure('test3 test3 test3 test3 test3','подсказка3',nil);
 *)
 end;
+
+function TCLine.FindAlias(prefix:GDBString;comment,breacer:GDBString):GDBString;
+var
+   ps{,pspred}:pgdbstring;
+   s:gdbstring;
+   ir:itrec;
+   c:boolean;
+begin
+     result:=prefix;
+     prefix:=uppercase(prefix);
+     ps:=aliases.beginiterate(ir);
+     if (ps<>nil) then
+     repeat
+          if length(ps^)>length(prefix) then
+          begin
+          c:=false;
+          if comment<>'' then
+          if pos(comment,ps^)=1 then
+                                   c:=true;
+          if not c then
+          begin
+          if (uppercase(copy(ps^,1,length(prefix)))=prefix)
+          then
+              begin
+                   s:=copy(ps^,length(prefix)+1,length(ps^)-length(prefix));
+                   s:=readspace(s);
+                   if pos(breacer,s)=1 then
+                                           begin
+                                             s:=copy(s,length(breacer)+1,length(s)-length(breacer));
+                                             s:=readspace(s);
+                                             result:=s;
+                                             exit;
+                                           end;
+             end;
+          end;
+          end;
+          ps:=aliases.iterate(ir);
+     until ps=nil;
+end;
+
 procedure TCLine.keypressmy(Sender: TObject; var Key: char);
 var code,ch: GDBInteger;
   len: double;
@@ -275,7 +326,10 @@ begin
                                               historyoutstr(Format(ExprOutText,[expr,s]));
                                          end
       else
-          commandmanager.executecommand(GDBPointer(CmdEdit.text));
+          begin
+               CmdEdit.text:=FindAlias(CmdEdit.text,';','=');
+               commandmanager.executecommand(GDBPointer(CmdEdit.text));
+          end;
     end;
     CmdEdit.text:='';
     key:=#0;

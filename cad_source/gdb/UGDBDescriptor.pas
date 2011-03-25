@@ -365,7 +365,7 @@ begin
   ts.rowheight:=4;
   ts.textheight:=2.5;
 
-  cs.Width:=10;
+  cs.Width:={20}10;
   cs.TextWidth:={cf.Width-2}0;
   cs.CF:=jcm;
   ts.tblformat.Add(@cs);

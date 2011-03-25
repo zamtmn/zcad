@@ -250,7 +250,12 @@ begin
                       begin
                            nevname:='CABLE_Type';
                       end;
-
+     if  (vn='GC_HDGroup')
+     and (vt<>'GDBString')  then
+                           begin
+                                vt:='GDBString';
+                                //vv:=''''+vv+'''';
+                           end;
 
      OldVersTextReplace(vv);
      if nevname<>'' then

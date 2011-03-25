@@ -52,7 +52,7 @@ GDBObjArc=object(GDBObjPlain)
                  procedure RenderFeedback;virtual;
                  procedure projectpoint;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
-                 function getsnap(var osp:os_record):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
                  function beforertmodify:GDBPointer;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;

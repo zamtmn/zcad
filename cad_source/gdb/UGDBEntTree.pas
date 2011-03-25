@@ -151,7 +151,10 @@ begin
 end;
 destructor TTestTreeNode.done;
 begin
-
+     nul.ClearAndDone;
+     //nul.done;
+     plus.ClearAndDone;
+     minus.ClearAndDone;
 end;
 
 function createtree(entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
@@ -308,16 +311,23 @@ else if (tv.z>=tv.x)and(tv.z>=tv.y) then
                    begin
                         minusaabb.RTF.x:=midlepoint.x;
                         plusaabb.LBN.x:=midlepoint.x;
+                        ta[1].done;
+                        ta[2].done;
                    end;
                  1:
                    begin
                         minusaabb.LBN.y:=midlepoint.y;
                         plusaabb.RTF.y:=midlepoint.y;
+                        ta[0].done;
+                        ta[2].done;
                    end;
                  2:
                    begin
                         minusaabb.RTF.z:=midlepoint.z;
                         plusaabb.LBN.z:=midlepoint.z;
+                        ta[0].done;
+                        ta[1].done;
+
                    end;
      end;
 
@@ -330,6 +340,9 @@ else if (tv.z>=tv.x)and(tv.z>=tv.y) then
      result.pplusnode:=createtree(ta[imin].plus,plusaabb,nil,nodedepth,result,TND_Plus);
      result.pluscount:=ta[imin].plus.Count;
      result.minuscount:=ta[imin].minus.Count;
+     //ta[0].done;
+     //ta[1].done;
+     //ta[2].done;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBEntTre.initialization');{$ENDIF}

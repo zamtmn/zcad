@@ -172,6 +172,33 @@ begin
      pvnt:=pCable^.OU.FindVariable('NMO_Template');
      if (pvnt<>nil) then
      CreateDeviceNameSubProcess(pvn,pstring(pvnt^.data.Instance)^,pCable);
+
+     pvn:=pCable^.OU.FindVariable('GC_HDGroup');
+     pvnt:=pCable^.OU.FindVariable('GC_HDGroupTemplate');
+     if (pvnt<>nil) then
+                        s:=pstring(pvnt^.data.Instance)^
+                    else
+                        s:='';
+     CreateDeviceNameSubProcess(pvn,s,pCable);
+
+     pvn:=pCable^.OU.FindVariable('GC_HeadDevice');
+     pvnt:=pCable^.OU.FindVariable('GC_HeadDeviceTemplate');
+     if (pvnt<>nil) then
+                        s:=pstring(pvnt^.data.Instance)^
+                    else
+                        s:='';
+     CreateDeviceNameSubProcess(pvn,s,pCable);
+
+
+     pvn:=pCable^.OU.FindVariable('GC_HDShortName');
+     pvnt:=pCable^.OU.FindVariable('GC_HDShortNameTemplate');
+     if (pvnt<>nil) then
+                        s:=pstring(pvnt^.data.Instance)^
+                    else
+                        s:='';
+     CreateDeviceNameSubProcess(pvn,s,pCable);
+
+
 end;
 
 procedure GDBObjCable.Format;

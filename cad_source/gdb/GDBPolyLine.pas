@@ -20,7 +20,7 @@ unit GDBPolyLine;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
+uses UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
 gl,
 GDBase{,UGDBDescriptor},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman,OGLSpecFunc;
 type
@@ -33,7 +33,8 @@ GDBObjPolyline=object(GDBObjCurve)
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;
 
                  procedure Format;virtual;
-                 function getsnap(var osp:os_record):GDBBoolean;virtual;
+                 procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
 
                  procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
@@ -71,14 +72,21 @@ begin
                                             else
                                                 result:=false;
 end;
+procedure GDBObjPolyline.startsnap(out osp:os_record; out pdata:GDBPointer);
+begin
+     GDBObjEntity.startsnap(osp,pdata);
+     gdbgetmem({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}pdata,sizeof(GDBVectorSnapArray));
+     PGDBVectorSnapArray(pdata).init({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}VertexArrayInWCS.Max);
+     BuildSnapArray(VertexArrayInWCS,PGDBVectorSnapArray(pdata)^,closed);
+end;
 function GDBObjPolyline.getsnap;
 begin
-     result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,snaparray,osp,closed);
+     result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,closed);
 end;
 procedure GDBObjPolyline.Format;
 begin
   FormatWithoutSnapArray;
-  BuildSnapArray(VertexArrayInWCS,snaparray,Closed);
+  //-------------BuildSnapArray(VertexArrayInWCS,snaparray,Closed);
 end;
 
 function GDBObjPolyline.FromDXFPostProcessBeforeAdd;

@@ -103,8 +103,9 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
 
                     function isonmouse(var popa:GDBOpenArrayOfPObjects):GDBBoolean;virtual;
-                    procedure startsnap(out osp:os_record);virtual;
-                    function getsnap(var osp:os_record):GDBBoolean;virtual;
+                    procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
+                    function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
+                    procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;
                     function getintersect(var osp:os_record;pobj:PGDBObjEntity):GDBBoolean;virtual;
                     procedure higlight;virtual;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
@@ -769,6 +770,10 @@ procedure GDBObjEntity.startsnap;
 begin
      onlygetsnapcount:=0;
      osp.PGDBObject:=@self;
+     pdata:=nil;
+end;
+procedure GDBObjEntity.endsnap(out osp:os_record; var pdata:GDBPointer);
+begin
 end;
 function GDBObjEntity.getsnap;
 begin

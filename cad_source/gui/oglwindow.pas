@@ -96,7 +96,7 @@ type
     procedure render(const Root:GDBObjGenericSubEntry);
     function treerender(var Node:TEntTreeNode;StartTime:TDateTime):GDBBoolean;
 
-    procedure getosnappoint(pva: PGDBObjEntityOpenArray;radius: GDBFloat);
+    procedure getosnappoint({pva: PGDBObjEntityOpenArray;}radius: GDBFloat);
     procedure set3dmouse;
     procedure DISP_ZoomFactor(x: double{; MousePos: TPoint});
     //function mousein(MousePos: TPoint): GDBBoolean;
@@ -1276,7 +1276,7 @@ end;
 
       if (param.md.mode and MGetSelectObject) = 0 then
                                                       getonmouseobjectbytree(gdb.GetCurrentROOT.ObjArray.ObjTree);
-      getosnappoint(@gdb.GetCurrentROOT.ObjArray, 0);
+      getosnappoint({@gdb.GetCurrentROOT.ObjArray,} 0);
       //create0axis;-------------------------------
     if sysvar.dwg.DWG_OSMode^ <> 0 then
     begin
@@ -3185,7 +3185,7 @@ begin
   end;
   //if param.ospoint.PGDBObject<>nil then
   begin
-  objects.init(100);
+  objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}100);
   if gdb.GetCurrentROOT.FindObjectsInPoint(param.ospoint.worldcoord,Objects) then
   begin
                        pobj:=objects.beginiterate(ir);
@@ -3247,7 +3247,7 @@ begin
 
   if tocommandmcliccount>0 then
   begin
-  objects.init(100);
+  objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}100);
   if gdb.GetCurrentROOT.FindObjectsInPoint(param.ontrackarray.otrackarray[0].worldcoord,Objects) then
   begin
                        pobj:=objects.beginiterate(ir);
@@ -3492,13 +3492,14 @@ begin
   end;
 end;
 
-procedure TOGLWND.getosnappoint(pva: PGDBObjEntityOpenArray; radius: GDBFloat);
+procedure TOGLWND.getosnappoint({pva: PGDBObjEntityOpenArray; }radius: GDBFloat);
 var
   pv,pv2:PGDBObjEntity;
   osp:os_record;
   dx,dy:GDBDouble;
 //  oldit:itrec;
       ir,ir2:itrec;
+  pdata:GDBPointer;
 begin
   param.ospoint.radius:=sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1;
   param.ospoint.ostype:=os_none;
@@ -3528,8 +3529,8 @@ begin
      if pv<>nil then
      repeat
      begin
-       pv.startsnap(osp);
-       while pv.getsnap(osp) do
+       pv.startsnap(osp,pdata);
+       while pv.getsnap(osp,pdata) do
        begin
             if osp.ostype<>os_none then
             begin
@@ -3566,6 +3567,7 @@ begin
             end;
             end;
        end;
+       pv.endsnap(osp,pdata);
      end;
      pv:=gdb.GetCurrentDWG.OnMouseObj.iterate(ir);
      until pv=nil;
@@ -3583,7 +3585,7 @@ begin
   repeat
   if pv<>pv2 then
   begin
-       pv.startsnap(osp);
+       pv.startsnap(osp,pdata);
        while pv.getintersect(osp,pv2) do
        begin
             if osp.ostype<>os_none then
@@ -3603,6 +3605,7 @@ begin
             end
             end;
        end;
+       pv.endsnap(osp,pdata);
   end;
   pv2:=gdb.GetCurrentDWG.OnMouseObj.iterate(ir2);
   until pv2=nil;

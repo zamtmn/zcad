@@ -24,6 +24,8 @@ Panel Standart;
     action ACN_REDO
     Separator
     action ACN_REGEN
+    button OPS_Sensor_Mark,#++,Нумерация извещателей на плане
+    Separator
     button RebuildTree,#rtree,*DEBUG*Перестроить дерево примитивов
   }
 Panel Quick;

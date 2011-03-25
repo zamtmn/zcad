@@ -23,5 +23,5 @@ begin
    SerialConnection:=1;
    GC_HeadDevice:='??';
    GC_HDShortName:='??';
-   GC_HDGroup:=0;
+   GC_HDGroup:='0';
 end.

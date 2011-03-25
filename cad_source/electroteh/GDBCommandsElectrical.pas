@@ -60,6 +60,10 @@ TBasicFinter=record
                         PCable:PGDBObjCable;(*'Кабель'*)
                         PTrace:PGDBObjNet;(*'Трасса(указатель)'*)
                    end;
+  TELLeaderComParam=record
+                        Scale:GDBDouble;(*'Масштаб'*)
+                        Size:GDBInteger;(*'Размер'*)
+                   end;
 {Export-}
   El_Wire_com = object(CommandRTEdObject)
     New_line: PGDBObjLine;
@@ -107,6 +111,7 @@ var
 
    //treecontrol:ZTreeViewGeneric;
    //zf:zform;
+   ELLeaderComParam:TELLeaderComParam;
 
 {procedure startup;
 procedure finalize;}
@@ -993,7 +998,7 @@ function El_Wire_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByt
 var po:PGDBObjSubordinated;
     Objects:GDBObjOpenArrayOfPV;
 begin
-  Objects.init(10);
+  Objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}10);
   if gdb.GetCurrentROOT.FindObjectsInPoint(wc,Objects) then
   begin
        FirstOwner:=pointer(GDB.FindOneInArray(Objects,GDBNetID,true));
@@ -1035,7 +1040,7 @@ begin
   //po:=nil;
   if (button and MZW_LBUTTON)<>0 then
                                      button:=button;
-  Objects.init(10);
+  Objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}10);
   if gdb.GetCurrentROOT.FindObjectsInPoint(wc,Objects) then
   begin
        SecondOwner:=pointer(GDB.FindOneInArray(Objects,GDBNetID,true));
@@ -2070,6 +2075,9 @@ begin
 
   GDBGetMem({$IFDEF DEBUGBUILD}'{33202D9B-6197-4A09-8BC8-1D24AA3053DA}',{$ENDIF}pointer(pleader),sizeof(GDBObjElLeader));
   pleader^.initnul;
+  pleader^.scale:=ELLeaderComParam.Scale;
+  pleader^.size:=ELLeaderComParam.Size;
+  pleader^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
   pleader.MainLine.CoordInOCS.lBegin:=PCreatedGDBLine^.CoordInOCS.lBegin;
   pleader.MainLine.CoordInOCS.lEnd:=PCreatedGDBLine^.CoordInOCS.lEnd;
 
@@ -2087,6 +2095,7 @@ begin
   pold:=nil;
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   sysvar.dwg.DWG_OSMode^:=sysvar.dwg.DWG_OSMode^ or osm_nearest;
+  SetGDBObjInsp(SysUnit.TypeName2PTD('TELLeaderComParam'),@ELLeaderComParam);
   historyout('Первая точка:');
 end;
 function _Cable_com_Manager(Operands:pansichar):GDBInteger;
@@ -2222,6 +2231,8 @@ begin
   pfindcom^.commanddata.PTD:=SysUnit.TypeName2PTD('TFindDeviceParam');
   FindDeviceParam.FindType:=tft_obozn;
   FindDeviceParam.FindString:='';
+  ELLeaderComParam.Scale:=1;
+  ELLeaderComParam.Size:=1;
 end;
 
 procedure finalize;

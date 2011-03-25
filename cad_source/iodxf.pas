@@ -157,6 +157,27 @@ begin
                   pobj.ou.setvardesc(vd,'GC_Metric','','GDBString');
                   pobj.ou.InterfaceVariables.createvariable(vd.name,vd);
              end;
+
+             if pobj.ou.FindVariable('GC_HDGroup')<>nil then
+             if pobj.ou.FindVariable('GC_HDGroupTemplate')=nil then
+             begin
+                  pobj.ou.setvardesc(vd,'GC_HDGroupTemplate','Шаблон группы','GDBString');
+                  pobj.ou.InterfaceVariables.createvariable(vd.name,vd);
+             end;
+             if pobj.ou.FindVariable('GC_HeadDevice')<>nil then
+             if pobj.ou.FindVariable('GC_HeadDeviceTemplate')=nil then
+             begin
+                  pobj.ou.setvardesc(vd,'GC_HeadDeviceTemplate','Шаблон головного устройства','GDBString');
+                  pobj.ou.InterfaceVariables.createvariable(vd.name,vd);
+             end;
+
+             if pobj.ou.FindVariable('GC_HDShortName')<>nil then
+             if pobj.ou.FindVariable('GC_HDShortNameTemplate')=nil then
+             begin
+                  pobj.ou.setvardesc(vd,'GC_HDShortNameTemplate','Шаблон короткого имени головного устройства','GDBString');
+                  pobj.ou.InterfaceVariables.createvariable(vd.name,vd);
+             end;
+
         end;
 end;
 

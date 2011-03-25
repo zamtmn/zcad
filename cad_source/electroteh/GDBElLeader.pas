@@ -54,14 +54,41 @@ GDBObjElLeader=object(GDBObjComplex)
             procedure transform(const t_matrix:DMatrix4D);virtual;
             procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
             procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
+            function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
             end;
 {EXPORT-}
 implementation
 uses GDBBlockDef{,shared},log;
+function GDBObjElLeader.calcvisible;
+//var i:GDBInteger;
+//    tv,tv1:gdbvertex4d;
+//    m:DMatrix4D;
+begin
+      visible:=visibleactualy;
+      result:=false;
+      result:=result or MainLine.calcvisible(frustum,infrustumactualy,visibleactualy);
+      result:=result or MarkLine.calcvisible(frustum,infrustumactualy,visibleactualy);
+      result:=result or Tbl.calcvisible(frustum,infrustumactualy,visibleactualy);
+      if result then
+                           begin
+                                setinfrustum(infrustumactualy);
+                           end
+                       else
+                           begin
+                                setnotinfrustum(infrustumactualy);
+                                visible:=0;
+                                result:=false;
+                           end;
+      if not(self.vp.Layer._on) then
+                           begin
+                                visible:=0;
+                                result:=false;
+                           end;
+end;
 procedure GDBObjElLeader.SetInFrustumFromTree;
 begin
      inherited;
-                 MainLine.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+            MainLine.SetInFrustumFromTree(infrustumactualy,visibleactualy);
             MarkLine.SetInFrustumFromTree(infrustumactualy,visibleactualy);
             Tbl.SetInFrustumFromTree(infrustumactualy,visibleactualy);
 end;
@@ -210,6 +237,7 @@ begin
      CodePage:=CP_win;
      pdev:=nil;
      sta.init(10);
+     mainline.vp.Layer:=vp.Layer;
      mainline.format;
      pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
      if pobj<>nil then
@@ -555,6 +583,8 @@ begin
   tvo^.Local.p_insert := Local.p_insert;
   tvo^.Local := Local;
   tvo^.bp.ListPos.Owner:=own;
+  tvo^.size:=size;
+  tvo^.scale:=scale;
   result := tvo;
 end;
 constructor GDBObjElLeader.initnul;

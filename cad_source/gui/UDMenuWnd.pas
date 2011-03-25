@@ -24,24 +24,13 @@ uses
 type
   DMMethod=procedure(sender:GDBPointer) of object;
   PTDMenuWnd=^TDMenuWnd;
-  TDMenuWnd = class({zform}tform)
-    function getstyle:DWord;virtual;
-    function getextstyle:DWord;virtual;
-
+  TDMenuWnd = class(tform)
     //procedure AddProcedure(Text,HText:GDBString;proc:TonClickProc);
     procedure AddMethod(Text,HText:GDBString;proc:DMMethod);
     //function AddButton(Text,HText:GDBString):PZButtonGeneric;
   end;
 implementation
 uses mainwindow,log;
-function TDMenuWnd.getextstyle;
-begin
-     //-----------------------------------------------------------------result:=WS_EX_DLGMODALFRAME;
-end;
-function TDMenuWnd.getstyle;
-begin
-     //-----------------------------------------------------------------result:=WS_CLIPCHILDREN
-end;
 (*function TDMenuWnd.AddButton;
 var
    _dc:hdc;

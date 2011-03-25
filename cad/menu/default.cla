@@ -1,0 +1,4 @@
+;псевдоним = команда
+c       = Copy
+m       = Move
+r       = Rotate

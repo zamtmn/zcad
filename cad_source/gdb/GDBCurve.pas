@@ -24,13 +24,13 @@ uses UGDBOpenArrayOfPObjects,UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes{,GDB
 gl,
 GDBase,geometry,UGDBDescriptor,gdbobjectsconstdef,oglwindowdef,math,dxflow,sysutils,memman{,OGLSpecFunc},GDBSubordinated;
 type
+//------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}
 PGDBObjCurve=^GDBObjCurve;
 GDBObjCurve=object(GDBObj3d)
                  VertexArrayInOCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  VertexArrayInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  length:GDBDouble;
-                 snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -48,7 +48,9 @@ GDBObjCurve=object(GDBObj3d)
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
-                 function getsnap(var osp:os_record):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
+                 procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
+                 procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;
 
                  destructor done;virtual;
                  function GetObjTypeName:GDBString;virtual;
@@ -221,7 +223,7 @@ begin
                             end;
           VertexArrayInWCS.done;
           vertexarrayinocs.done;
-          snaparray.done;
+          //------------snaparray.done;
           inherited;
 end;
 constructor GDBObjCurve.init;
@@ -230,7 +232,7 @@ begin
   vp.ID := GDBPolylineID;
   VertexArrayInWCS.init({$IFDEF DEBUGBUILD}'{2C1E462A-ED22-4A83-8C88-B3AF70718E5A}',{$ENDIF}1000);
   vertexarrayinocs.init({$IFDEF DEBUGBUILD}'{3DBA1295-54F6-45D1-984C-2C51A585C5C9}',{$ENDIF}1000);
-  snaparray.init({$IFDEF DEBUGBUILD}'{13C74F96-05DB-4025-93B1-9599B31912CC}',{$ENDIF}100);
+  //------------snaparray.init({$IFDEF DEBUGBUILD}'{13C74F96-05DB-4025-93B1-9599B31912CC}',{$ENDIF}100);
   PProjPoint:=nil;
   //Format;
 end;
@@ -241,7 +243,7 @@ begin
   vp.ID := GDBPolylineID;
   VertexArrayInWCS.init({$IFDEF DEBUGBUILD}'{6662A71B-9321-472D-B3C3-3EBFCA8D610A}',{$ENDIF}1000);
   vertexarrayinocs.init({$IFDEF DEBUGBUILD}'{3DBA1295-54F6-45D1-984C-2C51A585C5C9}',{$ENDIF}1000);
-  snaparray.init({$IFDEF DEBUGBUILD}'{0BAF650E-84F9-4851-AC85-53345427B4BE}',{$ENDIF}100);
+  //------------snaparray.init({$IFDEF DEBUGBUILD}'{0BAF650E-84F9-4851-AC85-53345427B4BE}',{$ENDIF}100);
   PProjPoint:=nil;
 end;
 procedure GDBObjCurve.DrawGeometry;
@@ -282,7 +284,7 @@ begin
     vertexnum:= (temp div 6);
     {pvsa:=GDBPointer(self.snaparray);
     inc(pvsa,vertexnum);}
-    pvsa:=snaparray.getelement(vertexnum);
+    //------------pvsa:=snaparray.getelement(vertexnum);
     ptv:=VertexArrayInWCS.PArray;
     inc(ptv,vertexnum);
     case mode of
@@ -379,7 +381,7 @@ var //i,j: GDBInteger;
         ir:itrec;
 begin
   FormatWithoutSnapArray;
-  BuildSnapArray(VertexArrayInWCS,snaparray,false);
+  //------------BuildSnapArray(VertexArrayInWCS,snaparray,false);
 end;
 
 procedure GDBObjCurve.TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);
@@ -741,7 +743,23 @@ begin
      end;
      inc(onlygetsnapcount);
 end;
+procedure GDBObjCurve.startsnap(out osp:os_record; out pdata:GDBPointer);
+begin
+     inherited;
+     gdbgetmem({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}pdata,sizeof(GDBVectorSnapArray));
+     PGDBVectorSnapArray(pdata).init({$IFDEF DEBUGBUILD}'{C37BA022-4629-4E16-BEB6-E8AAB9AC6986}',{$ENDIF}VertexArrayInWCS.Max);
+     BuildSnapArray(VertexArrayInWCS,PGDBVectorSnapArray(pdata)^,false{closed});
+end;
 
+procedure GDBObjCurve.endsnap(out osp:os_record; var pdata:GDBPointer);
+begin
+     if pdata<>nil then
+                       begin
+                            PGDBVectorSnapArray(pdata)^.{FreeAnd}Done;
+                            gdbfreemem(pdata);
+                       end;
+     inherited;
+end;
 function GDBObjCurve.getsnap;
 const pnum=8;
 var t,d,e:GDBDouble;
@@ -750,7 +768,7 @@ var t,d,e:GDBDouble;
     pv1:PGDBVertex;
     pv2:PGDBVertex;
 begin
-     result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,snaparray,osp,false);
+     result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,false);
 (*
      if onlygetsnapcount=VertexArrayInWCS.count*pnum then
      begin

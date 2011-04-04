@@ -561,6 +561,7 @@ GDBTextStyleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     function addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp):GDBInteger;
+                    function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp):GDBInteger;
                     function FindStyle(StyleName:GDBString):GDBInteger;
                     procedure freeelement(p:GDBPointer);virtual;abstract;
               end;
@@ -649,6 +650,7 @@ GDBLayerArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLayerProp*)
 TCellJustify=(jcl(*'ВерхЛево'*),
               jcm(*'ВерхЦентр'*),
               jcr(*'ВерхПраво'*));
+PTGDBTableCellStyle=^TGDBTableCellStyle;
 TGDBTableCellStyle=record
                           Width,TextWidth:GDBDouble;
                           CF:TCellJustify;
@@ -795,6 +797,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
        end;
   tdesigning=record
              DSGN_TraceAutoInc:PGDBBoolean;(*'Increment trace names'*)
+             DSGN_LeaderDefaultWidth:PGDBDouble;(*'Default leader width'*)
        end;
   tview=record
                VIEW_CommandLineVisible,
@@ -1851,6 +1854,7 @@ GDBObjElLeader=object(GDBObjComplex)
             Tbl:GDBObjTable;
             size:GDBInteger;
             scale:GDBDouble;
+            twidth:GDBDouble;
             procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
             procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
             procedure getoutbound;virtual;abstract;
@@ -2053,6 +2057,19 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                             lvertex1:gdbvertex;(*hidden_in_objinsp*)
                             lvertex2:gdbvertex;(*hidden_in_objinsp*)
                       end;
+         TIMode=(
+                 TIM_Text(*'Text'*),
+                 TIM_MText(*'MText'*)
+                );
+         TTextInsertParams=record
+                            mode:TIMode;(*'Entity'*)
+                            Style:TEnumData;(*'Style'*)
+                            justify:TTextJustify;(*'Justify'*)
+                            h:GDBDouble;(*'Height'*)
+                            w:GDBDouble;(*'Width factor'*)
+                            o:GDBDouble;(*'Oblique'*)
+                            text:GDBAnsiString;(*'Text'*)
+                      end;
   TBEditParam=record
                     CurrentEditBlock:GDBString;(*'Текущий блок'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Выбор блока'*)
@@ -2095,6 +2112,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     procedure CommandStart(Operands:pansichar); virtual;abstract;
     procedure Build(Operands:pansichar); virtual;abstract;
     procedure Command(Operands:pansichar); virtual;abstract;
+    function DoEnd:GDBBoolean;virtual;abstract;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
   end;
   TFIWPMode=(FIWPCustomize,FIWPRun);
@@ -2102,13 +2120,20 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     CMode:TFIWPMode;
     procedure CommandStart(Operands:pansichar); virtual;abstract;
     procedure BuildDM(Operands:pansichar); virtual;abstract;
-    procedure Run(sender:pointer); virtual;abstract;
+    procedure Run(sender:pointer;pdata:pointer); virtual;abstract;
     function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
     //procedure Command(Operands:pansichar); virtual;abstract;
     //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
   end;
   PasteClip_com = object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;abstract;
+  end;
+  TextInsert_com=object(FloatInsert_com)
+                       pt:PGDBObjText;
+                       //procedure Build(Operands:pansichar); virtual;abstract;
+                       procedure Command(Operands:pansichar); virtual;abstract;
+                       procedure Format;virtual;abstract;
+                       function DoEnd:GDBBoolean;virtual;abstract;
   end;
   ITT_com = object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;abstract;
@@ -2417,6 +2442,7 @@ TBasicFinter=record
   TELLeaderComParam=record
                         Scale:GDBDouble;(*'Масштаб'*)
                         Size:GDBInteger;(*'Размер'*)
+                        twidth:GDBDouble;(*'Ширина'*)
                    end;
 //Generate on C:\zcad\CAD_SOURCE\u\UCableManager.pas
     PTCableDesctiptor=^TCableDesctiptor;

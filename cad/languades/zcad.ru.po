@@ -251,12 +251,20 @@ msgstr "Окно чертежей"
 msgid "DW"
 msgstr ""
 
+#: ACN_TEXT~caption
+msgid "Draw text"
+msgstr "Чертить текст"
+
 #: ACN_UNDO~caption
 msgid "Undo"
 msgstr "Отменить"
 
 #: button_command~El_Cable_Select
 msgid "csel"
+msgstr ""
+
+#: button_command~OPS_Sensor_Mark
+msgid "++"
 msgstr ""
 
 #: button_command~RebuildTree
@@ -283,6 +291,10 @@ msgstr "Привязки"
 msgctxt "button_variable~DWG_PolarMode"
 msgid "Polar"
 msgstr "Полярность"
+
+#: button_variable~DWG_SnapGrid
+msgid "Snap"
+msgstr ""
 
 #: button_variable~DWG_SystmGeometryDraw
 msgid "SG"
@@ -593,11 +605,11 @@ msgstr "Инспектор объектов"
 
 #: mainwindow.s_byblock
 msgid "ByBlock"
-msgstr "По Слою"
+msgstr "По Блоку"
 
 #: mainwindow.s_bylayer
 msgid "ByLayer"
-msgstr "По Блоку"
+msgstr "По Слою"
 
 #: mainwindow.s_default
 msgid "Default"
@@ -740,6 +752,10 @@ msgstr "Время компиляции"
 #: tdebug~memi2
 msgid "MemMan::I2"
 msgstr ""
+
+#: tdesigning~DSGN_LeaderDefaultWidth
+msgid "Default leader width"
+msgstr "Ширина выносок по умолчанию"
 
 #: tdesigning~DSGN_TraceAutoInc
 msgid "Increment trace names"

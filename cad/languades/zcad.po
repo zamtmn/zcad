@@ -243,12 +243,26 @@ msgstr ""
 msgid "DW"
 msgstr ""
 
+#: ACN_TEXT~caption
+msgid "Draw text"
+msgstr ""
+
 #: ACN_UNDO~caption
 msgid "Undo"
 msgstr ""
 
 #: button_command~El_Cable_Select
 msgid "csel"
+msgstr ""
+
+#: button_command~OPS_Sensor_Mark
+msgctxt "button_command~OPS_Sensor_Mark"
+msgid "++"
+msgstr ""
+
+#: button_command~OPS_Sensor_Mark
+msgctxt "button_command~OPS_Sensor_Mark"
+msgid "++"
 msgstr ""
 
 #: button_command~RebuildTree
@@ -275,6 +289,10 @@ msgstr ""
 #: button_variable~DWG_PolarMode
 msgctxt "button_variable~DWG_PolarMode"
 msgid "Polar"
+msgstr ""
+
+#: button_variable~DWG_SnapGrid
+msgid "Snap"
 msgstr ""
 
 #: button_variable~DWG_SystmGeometryDraw
@@ -732,6 +750,10 @@ msgstr ""
 
 #: tdebug~memi2
 msgid "MemMan::I2"
+msgstr ""
+
+#: tdesigning~DSGN_LeaderDefaultWidth
+msgid "Default leader width"
 msgstr ""
 
 #: tdesigning~DSGN_TraceAutoInc

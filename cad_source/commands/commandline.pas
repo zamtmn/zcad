@@ -19,8 +19,11 @@
 unit commandline;
 {$INCLUDE def.inc}
 interface
-uses sysinfo,strproc,UGDBOpenArrayOfPointer,UDMenuWnd,gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
+uses umytreenode,sysinfo,strproc,UGDBOpenArrayOfPointer,UDMenuWnd,gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
      memman,shared,log;
+const
+     tm:tmethod=(Code:nil;Data:nil);
+     nullmethod:{tmethod}TButtonMethod=nil;
 type
   GDBcommandmanager=object(GDBcommandmanagerDef)
                           CommandsStack:GDBOpenArrayOfGDBPointer;
@@ -44,7 +47,8 @@ type
                           procedure DMHide;
                           procedure DMClear;
                           //-----------------------------------------------------------------procedure DMAddProcedure(Text,HText:GDBString;proc:TonClickProc);
-                          procedure DMAddMethod(Text,HText:GDBString;proc:DMMethod);
+                          procedure DMAddMethod(Text,HText:GDBString;FMethod:TButtonMethod);
+                          procedure DMAddProcedure(Text,HText:GDBString;FProc:TButtonProc);
                           function FindCommand(command:GDBString):PCommandObjectDef;
                     end;
 var commandmanager:GDBcommandmanager;
@@ -63,7 +67,10 @@ procedure GDBcommandmanager.DMShow;
 begin
      if assigned(cline) then
      if assigned(CLine.DMenu) then
+     begin
+     //CLine.DMenu.ajustsize;
      CLine.DMenu.Show;
+     end;
 end;
 procedure GDBcommandmanager.DMHide;
 begin
@@ -75,7 +82,7 @@ procedure GDBcommandmanager.DMClear;
 begin
      if assigned(cline) then
      if assigned(CLine.DMenu) then
-     //-----------------------------------------------------------------CLine.DMenu.kids.free;
+     CLine.DMenu.clear;
 end;
 {procedure GDBcommandmanager.DMAddProcedure(Text,HText:GDBString;proc:TonClickProc);
 begin
@@ -83,11 +90,18 @@ begin
      if assigned(CLine.DMenu) then
      CLine.DMenu.AddProcedure(Text,HText,Proc);
 end;}
+procedure GDBcommandmanager.DMAddProcedure;
+begin
+     if assigned(cline) then
+     if assigned(CLine.DMenu) then
+     CLine.DMenu.AddProcedure(Text,HText,FProc);
+end;
+
 procedure GDBcommandmanager.DMAddMethod;
 begin
      if assigned(cline) then
      if assigned(CLine.DMenu) then
-     CLine.DMenu.AddMethod(Text,HText,Proc);
+     CLine.DMenu.AddMethod(Text,HText,FMethod);
 end;
 
 
@@ -256,7 +270,7 @@ begin
      if not busy then
                      result:=execute(comm,false)
                  else
-                     shared.ShowError('Клманда не может быть выполнена. Идет выполнение сценария');
+                     shared.ShowError('Команда не может быть выполнена. Идет выполнение сценария');
 end;
 function GDBcommandmanager.executecommandsilent(const comm:pansichar): GDBInteger;
 begin

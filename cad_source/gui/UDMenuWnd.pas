@@ -20,25 +20,77 @@ unit UDMenuWnd;
 {$INCLUDE def.inc}
 interface
 uses
- gdbase,{zforms,}Forms,memman,gdbasetypes{,ZButtonsGeneric,ZBAsicVisible,ZGUIsCT};
+ ComCtrls,umytreenode,gdbase,Controls,{stdctrl,}Forms,memman,gdbasetypes{,ZButtonsGeneric,ZBAsicVisible,ZGUIsCT};
 type
   DMMethod=procedure(sender:GDBPointer) of object;
-  PTDMenuWnd=^TDMenuWnd;
+  //PTDMenuWnd=^TDMenuWnd;
+
+  { TDMenuWnd }
+
   TDMenuWnd = class(tform)
+    ToolBar1: TToolBar;
+    procedure AfterConstruction; override;
     //procedure AddProcedure(Text,HText:GDBString;proc:TonClickProc);
-    procedure AddMethod(Text,HText:GDBString;proc:DMMethod);
-    //function AddButton(Text,HText:GDBString):PZButtonGeneric;
+    procedure AddMethod(Text,HText:GDBString;FMethod:TButtonMethod);
+    procedure AddProcedure(Text,HText:GDBString;FProc:TButtonProc);
+    function AddButton(Text,HText:GDBString):TmyProcToolButton;
+    public
+      procedure CreateToolBar;
+      procedure clear;
   end;
 implementation
 uses mainwindow,log;
-(*function TDMenuWnd.AddButton;
-var
-   _dc:hdc;
-   sz:TSIZE;
-   hfntOld:HFONT;
-   ww,yy,nw,nh:gdbinteger;
+procedure TDMenuWnd.AfterConstruction;
 begin
-  nw:=0;
+     FormStyle:=fsStayOnTop;
+     caption:=('Параметры команды');
+     borderstyle:=bsSizeToolWin;
+     autosize:=true;
+     CreateToolBar;
+     inherited;
+end;
+
+{procedure TDMenuWnd.AddMethod(Text, HText: GDBString; FMethod: TButtonMethod);
+begin
+
+end;
+
+procedure TDMenuWnd.AddProcedure(Text, HText: GDBString; FProc: TButtonProc);
+begin
+
+end;
+
+function TDMenuWnd.AddButton(Text, HText: GDBString): TmyProcToolButton;
+begin
+
+end;}
+procedure TDMenuWnd.clear;
+begin
+  ToolBar1.Free;
+  CreateToolBar;
+end;
+procedure TDMenuWnd.CreateToolBar;
+begin
+  ToolBar1:=TToolBar.create(self);
+  ToolBar1.AutoSize:=true;
+  ToolBar1.parent:=self;
+  ToolBar1.Align:=alclient;
+  ToolBar1.ShowCaptions:=true;
+  ToolBar1.Wrapable:=true;
+end;
+
+function TDMenuWnd.AddButton;
+begin
+     result:=TmyProcToolButton.Create(ToolBar1);
+     result.caption:=Text;
+     result.showhint:=true;
+     result.hint:=HText;
+     result.parent:=ToolBar1;
+     //result.align:=alTop;
+     //self.DoAutoSize;
+     //result.height:=18
+     //result.height:=10;
+(*  nw:=0;
   nh:=0;
   _dc:=GetDC(handle);
 	hfntOld:=SelectObject(_dc, hFontNormal);
@@ -60,15 +112,20 @@ begin
 	SelectObject(_dc, hfntOld);
 	ReleaseDC(handle,_dc);
   self.setxywh(wndx,wndy,nw,nh+(height-clientheight));
-
+*)
 end;
-procedure TDMenuWnd.AddProcedure(Text,HText:GDBString;proc:TonClickProc);
+(*procedure TDMenuWnd.AddProcedure(Text,HText:GDBString;proc:TonClickProc);
 begin
      AddButton(Text,HText).onclickproc:=proc;
 end;*)
+procedure TDMenuWnd.AddProcedure;
+begin
+
+end;
+
 procedure TDMenuWnd.AddMethod;
 begin
-     //AddButton(Text,HText).onClickMethod:=TonClickMethod(proc);
+     AddButton(Text,HText).FMethod:=FMethod;//.onClickMethod:=TonClickMethod(proc);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('udmenuwnd.initialization');{$ENDIF}

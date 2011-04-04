@@ -38,6 +38,7 @@ action ACN_LINE,Line,line.bmp,Draw line,,
 action ACN_3DPOLY,3DPoly,pline.bmp,Draw 3Dpolyline,,
 action ACN_CIRCLE,Circle,circle.bmp,Draw circle,,
 action ACN_BInsert,Insert,insert.bmp,Insert block,,
+action ACN_TEXT,Text,text.bmp,Draw text,,
 
 action ACN_OPTIONS,Options,options.bmp,Options,,
 action ACN_SAVEOPTIONS,SaveOptions,,Save options,,

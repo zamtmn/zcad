@@ -144,7 +144,7 @@ procedure RemapAll(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
 procedure startup;
 procedure finalize;
 implementation
- uses {GDBSubordinated,}GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared{,mainwindow},commandline,log;
+ uses {GDBSubordinated,}GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared{,mainwindow},commandline,log;
 function TDrawing.GetLastSelected:PGDBObjEntity;
 begin
      result:=OGLwindow1.param.SelDesc.LastSelectedObject;
@@ -360,12 +360,22 @@ begin
 
   TableStyleTable.init({$IFDEF DEBUGBUILD}'{E5CE9274-01D8-4D19-AF2E-D1AB116B5737}',{$ENDIF}10);
 
+  PTempTableStyle:=TableStyleTable.AddStyle('Temp');
+
+  PTempTableStyle.rowheight:=4;
+  PTempTableStyle.textheight:=2.5;
+
+  cs.Width:=1;
+  cs.TextWidth:={cf.Width-2}0;
+  cs.CF:=jcm;
+  PTempTableStyle.tblformat.Add(@cs);
+
   ts:=TableStyleTable.AddStyle('Standart');
 
   ts.rowheight:=4;
   ts.textheight:=2.5;
 
-  cs.Width:={20}10;
+  cs.Width:=20;
   cs.TextWidth:={cf.Width-2}0;
   cs.CF:=jcm;
   ts.tblformat.Add(@cs);
@@ -384,12 +394,12 @@ begin
 
      cs.Width:=130;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=60;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=35;
@@ -419,7 +429,7 @@ begin
 
      cs.Width:=40;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcr;
+     cs.cf:=TCellJustify.jcr;
      ts.tblformat.Add(@cs);
 
   ts:=TableStyleTable.AddStyle('ShRaspr');
@@ -431,82 +441,82 @@ begin
 
      cs.Width:=25;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=33;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=5;
      cs.TextWidth:=cs.Width-1;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=33;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=5;
      cs.TextWidth:=cs.Width-1;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=5;
      cs.TextWidth:=cs.Width-1;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=17;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=13;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=25;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=13;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=23;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=13;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=16;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=12;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=12;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=35;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcl;
+     cs.cf:=TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
 

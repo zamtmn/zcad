@@ -16,6 +16,7 @@ var
   DWG_EditInSubEntry:GDBBoolean;
   DWG_SelectedObjToInsp:GDBBoolean;
   DSGN_TraceAutoInc:GDBBoolean;
+  DSGN_LeaderDefaultWidth:GDBDouble;
   VIEW_CommandLineVisible:GDBBoolean;
   VIEW_HistoryLineVisible:GDBBoolean;
   VIEW_ObjInspVisible:GDBBoolean;
@@ -81,6 +82,7 @@ begin
   DWG_EditInSubEntry:=False;
   DWG_SelectedObjToInsp:=True;
   DSGN_TraceAutoInc:=False;
+  DSGN_LeaderDefaultWidth:=10.0;
   VIEW_CommandLineVisible:=True;
   VIEW_HistoryLineVisible:=True;
   VIEW_ObjInspVisible:=True;
@@ -101,7 +103,7 @@ begin
   RD_MaxLineWidth:=10.0;
   RD_MaxPointSize:=63.375;
   RD_Vendor:='NVIDIA Corporation';
-  RD_Renderer:='GeForce 9600 GT/PCI/SSE2/3DNOW!';
+  RD_Renderer:='GeForce 9600 GT/PCI/SSE2';
   RD_Version:='3.2.0';
   RD_MaxWidth:=10;
   RD_BackGroundColor.r:=0;
@@ -114,11 +116,11 @@ begin
   RD_MaxRenderTime:=0;
   RD_Light:=False;
   SAVE_Auto_Interval:=300;
-  SAVE_Auto_Current_Interval:=291;
+  SAVE_Auto_Current_Interval:=263;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';
   SAVE_Auto_On:=True;
-  SYS_RunTime:=11;
-  SYS_Version:='0.9.7 Revision SVN:80';
+  SYS_RunTime:=37;
+  SYS_Version:='0.9.7 Revision SVN:82';
   SYS_SystmGeometryColor:=250;
   SYS_IsHistoryLineCreated:=True;
   SYS_AlternateFont:='GEWIND.SHX';
@@ -127,7 +129,7 @@ begin
   PATH_Template_File:='default.dxf';
   PATH_Program_Run:='C:\zcad\cad\';
   PATH_Support_Path:='*rtl|*rtl/objdefunits|*rtl/objdefunits/include|*components|*blocks/el/general';
-  PATH_Fonts:='*fonts/|C:/Program Files/AutoCAD 2010/Fonts/';
+  PATH_Fonts:='*fonts/|C:/Program Files/AutoCAD 2010/Fonts/|C:/APPS/MY/acad/support/';
   ShowHiddenFieldInObjInsp:=False;
   testGDBBoolean:=False;
   pi:=3.14159265359;

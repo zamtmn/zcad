@@ -75,6 +75,8 @@ var
       //ir:itrec;
 begin
      FontName:=ExtractFileName(FontPathName);
+          if FontName='_mipgost.shx' then
+                                    fontname:=FontName;
      case AddItem(FontName,pointer(p)) of
              IsFounded:
                        begin

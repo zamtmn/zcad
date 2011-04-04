@@ -27,6 +27,7 @@ type
 TCellJustify=(jcl(*'ВерхЛево'*),
               jcm(*'ВерхЦентр'*),
               jcr(*'ВерхПраво'*));
+PTGDBTableCellStyle=^TGDBTableCellStyle;
 TGDBTableCellStyle=record
                           Width,TextWidth:GDBDouble;
                           CF:TCellJustify;

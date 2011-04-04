@@ -19,15 +19,15 @@ implementation
 begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=307;
-  VIEW_ObjInspSubV:=87;
-  PATH_File0:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File1:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File2:='J:\nh\ЗВЕЗДИНА\Котельная КС1\ATM_v2.dxf';
-  PATH_File3:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File4:='E:\m.dxf';
-  PATH_File5:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File6:='J:\nh\искандер\гараж\АОВ изм1.dxf';
-  PATH_File7:='D:\ар2.dxf';
-  PATH_File8:='D:\кусок-2.dxf';
-  PATH_File9:='D:\кусок.dxf';
+  VIEW_ObjInspSubV:=79;
+  PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File1:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File2:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File3:='D:\ар2.dxf';
+  PATH_File4:='D:\разная высота.dxf';
+  PATH_File5:='D:\план1.dxf';
+  PATH_File6:='D:\text_line2.dxf';
+  PATH_File7:='E:\CAD_XDXF\test2000\text_line2.dxf';
+  PATH_File8:='D:\План 2 этажа на отм.+ 4.800 ПО crash.dxf';
+  PATH_File9:='D:\text_line3.dxf';
 end.

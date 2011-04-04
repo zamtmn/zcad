@@ -59,10 +59,85 @@ var
   onlyver:GDBInteger;
   psyminfo,psubsyminfo:PGDBsymdolinfo;
   inccounter:integer;
+  tbool:boolean;
 procedure  incpshxdata;
 begin
      inc(pshxdata);
      inc(inccounter);
+end;
+procedure createarc;
+begin
+     {ine:=f.readworld(breakshp,ignoreshp);
+     dx:=strtoint(line);
+     line:=f.readworld(breakshp,ignoreshp);
+     dy:=strtoint(line);}
+     tr[1,0]:=x;
+     tr[1,1]:=y;
+     tr[2,0]:=x+dx*baselen;
+     tr[2,1]:=y+dy*baselen;
+     x1:=dx*baselen;
+     y1:=dy*baselen;
+     hordlen:=sqrt(sqr(x1)+sqr(y1));
+     x1:=x1/2;
+     y1:=y1/2;
+     normal:=sqrt(sqr(x1)+sqr(y1));
+     x:=x1+x;
+     y:=y1+y;
+     tgl:=y1;
+     y1:=x1/normal;
+     x1:=-tgl/normal;
+
+
+     incpshxdata;
+     int:=pShortint(pshxdata)^;
+     {line:=f.readworld(breakshp,ignoreshp);
+     int:=strtoint(line);}
+     normal:=-int*hordlen/2/127;
+     tr[3,0]:=x+x1*normal;
+     tr[3,1]:=y+y1*normal;
+     x:=tr[2,0];
+     y:=tr[2,1];
+     if draw then
+       begin
+
+                                    begin
+                                      if tr[1,1]>ymax then
+                                        ymax:=tr[1,1];
+                                      if tr[1,1]<ymin then
+                                        ymin:=tr[1,1];
+                                      if tr[3,1]>ymax then
+                                        ymax:=tr[3,1];
+                                      if tr[3,1]<ymin then
+                                        ymin:=tr[3,1];
+                                      if tr[2,1]>ymax then
+                                        ymax:=tr[2,1];
+                                      if tr[2,1]<ymin then
+                                        ymin:=tr[2,1];
+                                    end;
+
+         pf^.SHXdata.AddByteByVal(GDBLineID);//---------------------pGDBByte(pdata)^:=GDBLineID;
+         //---------------------inc(pdata,sizeof(GDBLineID));
+         pf^.SHXdata.AddFontFloat(@tr[1,0]);//---------------------pfontfloat(pdata)^:=tr[1,0];
+         //---------------------inc(pdata,sizeof(fontfloat));
+         pf^.SHXdata.AddFontFloat(@tr[1,1]);//---------------------pfontfloat(pdata)^:=tr[1,1];
+         //---------------------inc(pdata,sizeof(fontfloat));
+         pf^.SHXdata.AddFontFloat(@tr[3,0]);//---------------------pfontfloat(pdata)^:=tr[3,0];
+         //---------------------inc(pdata,sizeof(fontfloat));
+         pf^.SHXdata.AddFontFloat(@tr[3,1]);//---------------------pfontfloat(pdata)^:=tr[3,1];
+         //---------------------inc(pdata,sizeof(fontfloat));
+         inc(sizeshx);
+         pf^.SHXdata.AddByteByVal(GDBLineID);//---------------------pGDBByte(pdata)^:=GDBLineID;
+         //---------------------inc(pdata,sizeof(GDBLineID));
+         pf^.SHXdata.AddFontFloat(@tr[3,0]);//---------------------pfontfloat(pdata)^:=tr[3,0];
+         //---------------------inc(pdata,sizeof(fontfloat));
+         pf^.SHXdata.AddFontFloat(@tr[3,1]);//---------------------pfontfloat(pdata)^:=tr[3,1];
+         //---------------------inc(pdata,sizeof(fontfloat));
+         pf^.SHXdata.AddFontFloat(@tr[2,0]);//---------------------pfontfloat(pdata)^:=tr[2,0];
+         //---------------------inc(pdata,sizeof(fontfloat));
+         pf^.SHXdata.AddFontFloat(@tr[2,1]);//---------------------pfontfloat(pdata)^:=tr[2,1];
+         //---------------------inc(pdata,sizeof(fontfloat));
+         inc(sizeshx);
+       end;
 end;
 begin
             inccounter:=0;
@@ -101,6 +176,7 @@ begin
                       if onlyver=0 then
                         begin
                           baselen:=baselen/pshxdata^;
+                          {$IFDEF TOTALYLOG}programlog.logoutstr('('+inttostr(pshxdata^)+')',0);{$ENDIF}
                         end;
                     end;
                   004:
@@ -110,6 +186,7 @@ begin
                         begin
                           baselen:=baselen*pshxdata^;
                         end;
+                        {$IFDEF TOTALYLOG}programlog.logoutstr('('+inttostr(pshxdata^)+')',0);{$ENDIF}
                     end;
                   005:
                     begin
@@ -134,22 +211,20 @@ begin
                       incpshxdata;
                       if unicode then
                                      begin
-                                          //subsymbol:=(pword(pshxdata)^);
-                                          subsymbol:=256*{------------uch2ach}({pword}(pshxdata)^);
+                                          subsymbol:=256*((pshxdata)^);
                                           incpshxdata;
-                                          subsymbol:=subsymbol+{------------uch2ach}({pword}(pshxdata)^);
-                                          //incpshxdata;
+                                          subsymbol:=subsymbol+((pshxdata)^);
                                      end
                                  else
                                      begin
                                           subsymbol:=pshxdata^;
-                                          //incpshxdata;
                                      end;
+                      {$IFDEF TOTALYLOG}programlog.logoutstr('('+inttostr(subsymbol)+')',0);{$ENDIF}
                       psubsyminfo:=pf^.GetOrCreateSymbolInfo(subsymbol);
-                      psubsymbol:=pf.SHXdata.getelement(psubsyminfo.addr);//GDBPointer(GDBPlatformint(pf)+pf^.symbo linfo[subsymbol].addr);
+                      psubsymbol:=pf.SHXdata.getelement(psubsyminfo.addr);
                       xb:=x;
                       yb:=y;
-                      if (psubsymbol<>nil){and draw} then
+                      if (psubsymbol<>nil){and(subsymbol<>111)} then
                         for i:=1 to {pf^.symbo linfo[subsymbol]}psubsyminfo.size do
                           begin
                             pf^.SHXdata.AddByteByVal(pGDBByte(psubsymbol)^);//--------------------- pGDBByte(pdata)^:=pGDBByte(psubsymbol)^;
@@ -247,8 +322,8 @@ begin
                                                                                                                                                              //                            end;
 
                             end;
-                            x:={pf^.symbo linfo[subsymbol]}psubsyminfo.dx+xb;
-                            y:={pf^.symbo linfo[subsymbol]}psubsyminfo.dy+yb;
+                            x:=psubsyminfo.dx+xb;
+                            y:=psubsyminfo._dy+yb;
                           end;
                       //dec(pshxdata);
                     end;
@@ -258,6 +333,7 @@ begin
                       dx:=pShortint(pshxdata)^;
                       incpshxdata;
                       dy:=pShortint(pshxdata)^;
+                      {$IFDEF TOTALYLOG}programlog.logoutstr('('+inttostr(dx)+','+inttostr(dy)+')',0);{$ENDIF}
                       if onlyver=0 then
                         begin
                           x1:=x+dx*baselen;
@@ -301,39 +377,35 @@ begin
                                 dy:=pShortint(pshxdata)^;
                     if (dx<>0)or(dy<>0) then
                     begin
-{                          repeat
-                                line:=f.readworld(breakshp,ignoreshp);
-                          until line<>'';
-                          val(line,dx,code);
-                          repeat
-                                line:=f.readworld(breakshp,ignoreshp);
-                          until line<>'';
-                          val(line,dy,code);}
+                      if symbol=107 then
+                      symbol:=symbol;
+                      if onlyver=0 then
+                      begin
                       x1:=x+dx*baselen;
                       y1:=y+dy*baselen;
-                      pf^.SHXdata.AddByteByVal(GDBPolylineID);//---------------------pGDBByte(pdata)^:=GDBPolylineID;
-                      //---------------------inc(pdata,sizeof(GDBPolylineID));
+                      end;
+                      if draw then
+                            begin
+                      pf^.SHXdata.AddByteByVal(GDBPolylineID);
                       ppolycount:=pf^.SHXdata.count;
-                      {ppolycount:=}pf^.SHXdata.AllocData(sizeof(GDBWord));//---------------------ppolycount:=pointer(pdata);
-                      //---------------------inc(pdata,sizeof(GDBWord));
+                      pf^.SHXdata.AllocData(sizeof(GDBWord));
                       inc(sizeshx);
                       if (dx<>0)or(dy<>0) then
                                               sizeshp:=1
                                           else
                                               sizeshp:=0;
-                      pf^.SHXdata.AddFontFloat(@x);//---------------------pfontfloat(pdata)^:=x;
-                      //---------------------inc(pdata,sizeof(fontfloat));
-                      pf^.SHXdata.AddFontFloat(@y);//---------------------pfontfloat(pdata)^:=y;
-                      //---------------------inc(pdata,sizeof(fontfloat));
+                      pf^.SHXdata.AddFontFloat(@x);
+                      pf^.SHXdata.AddFontFloat(@y);
+                            end;
                       while (dx<>0)or(dy<>0) do
                         begin
+                        {$IFDEF TOTALYLOG}programlog.logoutstr('('+inttostr(dx)+','+inttostr(dy)+')',0);{$ENDIF}
                           if draw then
                             begin
-                              pf^.SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
-                              //---------------------inc(pdata,sizeof(fontfloat));
-                              pf^.SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
-                              //---------------------inc(pdata,sizeof(fontfloat));
+                              pf^.SHXdata.AddFontFloat(@x1);
+                              pf^.SHXdata.AddFontFloat(@y1);
                               inc(sizeshp);
+                              if onlyver=0 then
                               begin
                                 if y1>ymax then
                                   ymax:=y1;
@@ -342,25 +414,32 @@ begin
                               end//if draw then begin
 
                             end;
+                        if onlyver=0 then
+                        begin
                           x:=x1;
                           y:=y1;
+                        end;
                                 incpshxdata;
                                 dx:=pShortint(pshxdata)^;
                                 incpshxdata;
                                 dy:=pShortint(pshxdata)^;
-                          {repeat
-                                line:=f.readworld(breakshp,ignoreshp);
-                          until line<>'';
-                          val(line,dx,code);
-                          repeat
-                                line:=f.readworld(breakshp,ignoreshp);
-                          until line<>'';
-                          val(line,dy,code);}
                           x1:=x+dx*baselen;
                           y1:=y+dy*baselen;
+                          if onlyver=0 then
+                          begin
+                          x:=x1;
+                          y:=y1;
 
+                          if y1>ymax then
+                            ymax:=y1;
+                          if y1<ymin then
+                            ymin:=y1;
+                          end;
                         end;
-                      pGDBWord({ppolycount}pf^.SHXdata.getelement(ppolycount))^:=sizeshp;
+                        if draw then
+                            begin
+                      pGDBWord(pf^.SHXdata.getelement(ppolycount))^:=sizeshp;
+                            end;
                       end;
                     end;
                   010:
@@ -447,69 +526,29 @@ begin
                                 dx:=pShortint(pshxdata)^;
                                 incpshxdata;
                                 dy:=pShortint(pshxdata)^;
-                      {ine:=f.readworld(breakshp,ignoreshp);
-                      dx:=strtoint(line);
-                      line:=f.readworld(breakshp,ignoreshp);
-                      dy:=strtoint(line);}
-                      tr[1,0]:=x;
-                      tr[1,1]:=y;
-                      tr[2,0]:=x+dx*baselen;
-                      tr[2,1]:=y+dy*baselen;
-                      x1:=dx*baselen;
-                      y1:=dy*baselen;
-                      hordlen:=sqrt(sqr(x1)+sqr(y1));
-                      x1:=x1/2;
-                      y1:=y1/2;
-                      normal:=sqrt(sqr(x1)+sqr(y1));
-                      x:=x1+x;
-                      y:=y1+y;
-                      tgl:=y1;
-                      y1:=x1/normal;
-                      x1:=-tgl/normal;
-
-
-                      incpshxdata;
-                      int:=pShortint(pshxdata)^;
-                      {line:=f.readworld(breakshp,ignoreshp);
-                      int:=strtoint(line);}
-                      normal:=-int*hordlen/2/127;
-                      tr[3,0]:=x+x1*normal;
-                      tr[3,1]:=y+y1*normal;
-                      tr[3,1]:=y+y1*normal;
-                      x:=tr[2,0];
-                      y:=tr[2,1];
-                      if draw then
-                        begin
-                          pf^.SHXdata.AddByteByVal(GDBLineID);//---------------------pGDBByte(pdata)^:=GDBLineID;
-                          //---------------------inc(pdata,sizeof(GDBLineID));
-                          pf^.SHXdata.AddFontFloat(@tr[1,0]);//---------------------pfontfloat(pdata)^:=tr[1,0];
-                          //---------------------inc(pdata,sizeof(fontfloat));
-                          pf^.SHXdata.AddFontFloat(@tr[1,1]);//---------------------pfontfloat(pdata)^:=tr[1,1];
-                          //---------------------inc(pdata,sizeof(fontfloat));
-                          pf^.SHXdata.AddFontFloat(@tr[3,0]);//---------------------pfontfloat(pdata)^:=tr[3,0];
-                          //---------------------inc(pdata,sizeof(fontfloat));
-                          pf^.SHXdata.AddFontFloat(@tr[3,1]);//---------------------pfontfloat(pdata)^:=tr[3,1];
-                          //---------------------inc(pdata,sizeof(fontfloat));
-                          inc(sizeshx);
-                          pf^.SHXdata.AddByteByVal(GDBLineID);//---------------------pGDBByte(pdata)^:=GDBLineID;
-                          //---------------------inc(pdata,sizeof(GDBLineID));
-                          pf^.SHXdata.AddFontFloat(@tr[3,0]);//---------------------pfontfloat(pdata)^:=tr[3,0];
-                          //---------------------inc(pdata,sizeof(fontfloat));
-                          pf^.SHXdata.AddFontFloat(@tr[3,1]);//---------------------pfontfloat(pdata)^:=tr[3,1];
-                          //---------------------inc(pdata,sizeof(fontfloat));
-                          pf^.SHXdata.AddFontFloat(@tr[2,0]);//---------------------pfontfloat(pdata)^:=tr[2,0];
-                          //---------------------inc(pdata,sizeof(fontfloat));
-                          pf^.SHXdata.AddFontFloat(@tr[2,1]);//---------------------pfontfloat(pdata)^:=tr[2,1];
-                          //---------------------inc(pdata,sizeof(fontfloat));
-                          inc(sizeshx);
-                        end;
+                         createarc;
 
                     end;
                   013:
                     begin
+                         tbool:=false;
+                         repeat
+                         incpshxdata;
+                         dx:=pShortint(pshxdata)^;
+                         incpshxdata;
+                         dy:=pShortint(pshxdata)^;
+                         if (dx=0)and(dy=0) then
+                                                tbool:=true
+                                            else
+                                                begin
+                                                     //incpshxdata;
+                                                     //int:=pShortint(pshxdata)^;
+                                                     createarc;
+                                                end;
+                         until tbool;
+                      {incpshxdata;
                       incpshxdata;
-                      incpshxdata;
-                      incpshxdata;
+                      incpshxdata;}
                       {line:=f.readworld(breakshp,ignoreshp);
                       line:=f.readworld(breakshp,ignoreshp);
                       line:=f.readworld(breakshp,ignoreshp);}
@@ -585,6 +624,8 @@ begin
             {pf^.symbo linfo[symbol]}psyminfo.dx:=x;
             {pf^.symbo linfo[symbol]}psyminfo.dy:=ymax;//-ymin;
             {pf^.symbo linfo[symbol]}psyminfo._dy:=ymin;
+            if symbol=42 then
+                             symbol:=symbol;
 
             result:=inccounter;
           end;
@@ -609,7 +650,7 @@ begin
   memorybuf.InitFromFile(name);
   line:=memorybuf.ReadString(#10,#13);
   line:=uppercase(line);
-  if line='AUTOCAD-86 SHAPES 1.0' then
+  if (line='AUTOCAD-86 SHAPES 1.0')or(line='AUTOCAD-86 SHAPES 1.1') then
   begin
     {$IFDEF TOTALYLOG}programlog.logoutstr('AUTOCAD-86 SHAPES 1.0',0);{$ENDIF}
   initfont(pf,extractfilename(name));
@@ -668,6 +709,7 @@ begin
     end;
         line:=memorybuf.readstring('','');
         memorybuf.done;
+        //pf.compiledsize:=pf.SHXdata.Count;
   end
 else if line='AUTOCAD-86 UNIFONT 1.0' then
   begin
@@ -695,6 +737,8 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
   for i:=0 to symcount-2 do
     begin
          symnum:=memorybuf.readword;
+         if symnum=49 then
+                          symnum:=symnum;
          symlen:=memorybuf.readword;
          datalen:=memorybuf.readbyte;
          if datalen<>0 then
@@ -717,7 +761,7 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
          end;
          {else
              test:=symnum;}
-         if test=1 then
+         if test=49 then
                          test:=test;
          //if (*pf^.GetOrCreateSymbolInfo(test)^.{ .symbo linfo[test].}addr=0*)symnum<2560000 then
          {$IFDEF TOTALYLOG}programlog.logoutstr('symbol '+inttostr(symnum),lp_IncPos);{$ENDIF}
@@ -743,7 +787,8 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
   end
 else
     result:=false;
-  pf^.compiledsize:=GDBPlatformint(pdata)-GDBPlatformint(pf);
+  pf.compiledsize:=pf.SHXdata.Count;
+  //pf^.compiledsize:=GDBPlatformint(pdata)-GDBPlatformint(pf);
   //result:=remapmememblock({$IFDEF DEBUGBUILD}'Compiled fonts',{$ENDIF}pf,pf^.compiledsize);
   memorybuf.done;
   //halt(0);

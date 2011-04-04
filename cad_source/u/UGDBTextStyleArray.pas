@@ -42,6 +42,7 @@ GDBTextStyleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
                     constructor initnul;
 
                     function addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp):GDBInteger;
+                    function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp):GDBInteger;
                     function FindStyle(StyleName:GDBString):GDBInteger;
                     procedure freeelement(p:GDBPointer);virtual;
               end;
@@ -92,6 +93,35 @@ begin
       exit;
     end;
 end;}
+function GDBTextStyleArray.setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp):GDBInteger;
+var ts:GDBTextStyle;
+    ff:gdbstring;
+    ps:PGDBTextStyle;
+    //p:GDBPointer;
+begin
+  ts.name:=stylename;
+  ts.dxfname:=FontFile;
+
+  if pos('.',FontFile)=0 then
+                             FontFile:=FontFile+'.shx';
+
+  ts.pfont:=FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,FontFile));
+  if not assigned(ts.pfont) then
+                                begin
+                                     shared.LogError('Для стиля "'+Tria_AnsiToUtf8(stylename)+'" не найден шрифт "'+FontFile+'", заменен на альтернативный');
+                                     ts.pfont:=pbasefont;
+                                end;
+
+  //ts.pfont:=FontManager.addFonf(FontFile);
+  //ts.pfont:=FontManager.{FindFonf}getAddres(FontFile);
+  //if ts.pfont=nil then ts.pfont:=FontManager.getAddres('normal.shx');
+  ts.prop:=tp;
+  //result:=add(@ts);
+  ps:=getelement(FindStyle(StyleName));
+  ps^:=ts;
+  //pointer(ts.name):=nil;
+  //pointer(ts.dxfname):=nil;
+end;
 function GDBTextStyleArray.addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp):GDBInteger;
 var ts:GDBTextStyle;
     ff:gdbstring;
@@ -123,12 +153,13 @@ var
   pts:pGDBTextStyle;
   i:GDBInteger;
 begin
+  StyleName:=uppercase(StyleName);
   result:=-1;
   if count=0 then exit;
   pts:=parray;
   for i:=0 to count-1 do
   begin
-       if pts^.name=stylename then begin
+       if uppercase(pts^.name)=stylename then begin
                                        result:=i;
                                        exit;
                                   end;

@@ -63,6 +63,7 @@ TBasicFinter=record
   TELLeaderComParam=record
                         Scale:GDBDouble;(*'Масштаб'*)
                         Size:GDBInteger;(*'Размер'*)
+                        twidth:GDBDouble;(*'Ширина'*)
                    end;
 {Export-}
   El_Wire_com = object(CommandRTEdObject)
@@ -79,7 +80,7 @@ TBasicFinter=record
     procedure Command(Operands:pansichar); virtual;
   end;
   EM_SEPBUILD_com = object(FloatInsertWithParams_com)
-    //procedure Command(Operands:pansichar); virtual;
+    procedure Command(Operands:pansichar); virtual;
     procedure BuildDM(Operands:pansichar); virtual;
   end;
 
@@ -525,9 +526,16 @@ end;
 procedure EM_SEPBUILD_com.BuildDM(Operands:pansichar);
 begin
     //commandmanager.DMAddProcedure('test1','подсказка1',nil);
-    //commandmanager.DMAddMethod('Разместить','подсказка3',run);
-    //commandmanager.DMShow;
+    commandmanager.DMAddMethod('Разместить','подсказка3',run);
+    commandmanager.DMAddMethod('Разместить','подсказка3',run);
+    commandmanager.DMAddMethod('Разместить','подсказка3',run);
+    commandmanager.DMShow;
 end;
+procedure EM_SEPBUILD_com.Command(Operands:pansichar);
+begin
+
+end;
+
 (*procedure EM_SEPBUILD_com.Command(Operands:pansichar);
 var
       pobj: pGDBObjEntity;

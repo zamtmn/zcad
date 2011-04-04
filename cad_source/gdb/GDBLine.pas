@@ -124,8 +124,12 @@ begin
                                     begin
                                          pleader.scale:=pgdbdouble(pvi^.data.Instance)^;
                                     end;
+                    pvi:=ptu.FindVariable('twidth');
+                    if pvi<>nil then
+                                    begin
+                                         pleader.twidth:=pgdbdouble(pvi^.data.Instance)^;
+                                    end;
                     end;
-
                       result:=pleader;
                  end;
     UD_LineToNet:begin

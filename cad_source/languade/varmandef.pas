@@ -254,6 +254,7 @@ UserTypeDescriptor=object(GDBaseObject)
        end;
   tdesigning=record
              DSGN_TraceAutoInc:PGDBBoolean;(*'Increment trace names'*)
+             DSGN_LeaderDefaultWidth:PGDBDouble;(*'Default leader width'*)
        end;
   tview=record
                VIEW_CommandLineVisible,

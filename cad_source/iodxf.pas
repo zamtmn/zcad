@@ -378,7 +378,7 @@ end;
 procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
 var
   byt: GDBInteger;
-  error: GDBInteger;
+  error,flags: GDBInteger;
   s, sname, lname, lcolor, llw: String;
   tp: PGDBObjBlockdef;
   oo,ll,pp:GDBBoolean;
@@ -528,6 +528,9 @@ begin
                               begin
                                 tstyle.prop.oblique:=strtofloat(s);
                               end;
+                            70:begin
+                                    flags:=strtoint(s);
+                               end;
                             3:
                               begin
                                    lname:=s;
@@ -537,13 +540,16 @@ begin
                                end;
                           end;
                         end;
+                        if (flags and 1)=0 then
+                        begin
                         if gdb.GetCurrentDWG.TextStyleTable.FindStyle(tstyle.Name)<>-1 then
                         begin
                           if LoadMode=TLOLoad then
-                                                  gdb.GetCurrentDWG.TextStyleTable.addstyle(tstyle.Name,lname,tstyle.prop);
+                                                  gdb.GetCurrentDWG.TextStyleTable.setstyle(tstyle.Name,lname,tstyle.prop);
                         end
                            else
                                gdb.GetCurrentDWG.TextStyleTable.addstyle(tstyle.Name,lname,tstyle.prop);
+                        end;
                         {$IFDEF TOTALYLOG}programlog.logoutstr('Found style '+tstyle.Name,0);{$ENDIF}
                       end;
                       {$IFDEF TOTALYLOG}programlog.logoutstr('end; {style table}',lp_DecPos);{$ENDIF}

@@ -24,6 +24,8 @@ uses
   commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,ButtonPanel,Buttons,
   strutils,intftranslations,sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
 type
+    TButtonProc=procedure(pdata:GDBPointer);
+    TButtonMethod=procedure(Sender:pointer;pdata:GDBPointer)of object;
     TmyAction=class(TAction)
                    public
                    command,options,imgstr:string;
@@ -57,6 +59,14 @@ type
                   FVariable:String;{**<Command to manager commands}
                   FBufer:DWord;
                   procedure AssignToVar(varname:string);
+                  protected procedure Click; override;
+                  end;
+    TmyProcToolButton=class(TmyToolButton)
+                  public
+                  FProc:TButtonProc;
+                  FMethod:TButtonMethod;
+                  PPata:GDBPointer;
+                  //procedure AssignToVar(varname:string);
                   protected procedure Click; override;
                   end;
     {**Modified TMenuItem}
@@ -386,6 +396,15 @@ begin
                                                                                          self.Down:=true;
                                                                     end;
      end;
+end;
+procedure TmyProcToolButton.Click;
+//var
+//   pvd:pvardesk;
+begin
+     if assigned(FProc) then
+                            FProc(PPata);
+     if assigned(FMethod) then
+                            FMethod(@self,PPata);
 end;
 procedure TmyVariableToolButton.Click;
 var

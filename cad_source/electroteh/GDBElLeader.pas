@@ -22,6 +22,7 @@ GDBObjElLeader=object(GDBObjComplex)
 
             size:GDBInteger;
             scale:GDBDouble;
+            twidth:GDBDouble;
 
 
             procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
@@ -58,7 +59,7 @@ GDBObjElLeader=object(GDBObjComplex)
             end;
 {EXPORT-}
 implementation
-uses GDBBlockDef{,shared},log;
+uses UGDBTableStyleArray,GDBBlockDef{,shared},log;
 function GDBObjElLeader.calcvisible;
 //var i:GDBInteger;
 //    tv,tv1:gdbvertex4d;
@@ -158,6 +159,7 @@ begin
   dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
   dxfGDBStringout(outhandle,1000,'%1=size|GDBInteger|'+inttostr(size)+'|');
   dxfGDBStringout(outhandle,1000,'%2=scale|GDBDouble|'+floattostr(scale)+'|');
+  dxfGDBStringout(outhandle,1000,'%3=twidth|GDBDouble|'+floattostr(twidth)+'|');
   dxfGDBStringout(outhandle,1002,'}');
   MainLine.bp.ListPos.Owner:=@self;
 
@@ -344,6 +346,10 @@ begin
      sta.FreeAndDone;
      //sta.done;
      tbl.scale:=scale;
+     if twidth>0 then
+                     PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=twidth
+                 else
+                     PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=SysVar.DSGN.DSGN_LeaderDefaultWidth^;
      tbl.Build;
 
 
@@ -585,16 +591,19 @@ begin
   tvo^.bp.ListPos.Owner:=own;
   tvo^.size:=size;
   tvo^.scale:=scale;
+  tvo^.twidth:=twidth;
   result := tvo;
 end;
 constructor GDBObjElLeader.initnul;
 var
    //pl:pgdbobjline;
    tv:gdbvertex;
+   a:TGDBTableCellStyle;
 begin
      inherited;
      size:=0;
      scale:=1;
+     twidth:=0;
      vp.ID:=GDBElLeaderID;
      MainLine.init(@self,vp.Layer,vp.LineWeight,geometry.VertexMulOnSc(onevertex,-10),nulvertex);
      //MainLine.Format;
@@ -604,6 +613,11 @@ begin
      //MarkLine.Format;
 
      tbl.initnul;
+     tbl.ptablestyle:=gdb.GetCurrentDWG.TableStyleTable.getAddres('Temp');
+     if twidth>0 then
+                     PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=twidth
+                 else
+                     PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=SysVar.DSGN.DSGN_LeaderDefaultWidth^;
      tbl.bp.ListPos.Owner:=@self;
      //tbl.Format;
 end;

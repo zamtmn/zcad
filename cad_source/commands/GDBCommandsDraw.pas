@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,
+  UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   //debygunit,
   commandlinedef,
   {windows,}gdbasetypes,commandline,GDBCommandsBase,
@@ -75,6 +75,19 @@ type
                             lvertex1:gdbvertex;(*hidden_in_objinsp*)
                             lvertex2:gdbvertex;(*hidden_in_objinsp*)
                       end;
+         TIMode=(
+                 TIM_Text(*'Text'*),
+                 TIM_MText(*'MText'*)
+                );
+         TTextInsertParams=record
+                            mode:TIMode;(*'Entity'*)
+                            Style:TEnumData;(*'Style'*)
+                            justify:TTextJustify;(*'Justify'*)
+                            h:GDBDouble;(*'Height'*)
+                            w:GDBDouble;(*'Width factor'*)
+                            o:GDBDouble;(*'Oblique'*)
+                            text:GDBAnsiString;(*'Text'*)
+                      end;
   TBEditParam=record
                     CurrentEditBlock:GDBString;(*'Текущий блок'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Выбор блока'*)
@@ -117,6 +130,7 @@ type
     procedure CommandStart(Operands:pansichar); virtual;
     procedure Build(Operands:pansichar); virtual;
     procedure Command(Operands:pansichar); virtual;abstract;
+    function DoEnd:GDBBoolean;virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
   TFIWPMode=(FIWPCustomize,FIWPRun);
@@ -124,13 +138,21 @@ type
     CMode:TFIWPMode;
     procedure CommandStart(Operands:pansichar); virtual;
     procedure BuildDM(Operands:pansichar); virtual;
-    procedure Run(sender:pointer); virtual;
+    procedure Run(sender:pointer;pdata:pointer); virtual;
     function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     //procedure Command(Operands:pansichar); virtual;abstract;
     //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
   PasteClip_com = object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;
+  end;
+
+  TextInsert_com=object(FloatInsert_com)
+                       pt:PGDBObjText;
+                       //procedure Build(Operands:pansichar); virtual;
+                       procedure Command(Operands:pansichar); virtual;
+                       procedure Format;virtual;
+                       function DoEnd:GDBBoolean;virtual;
   end;
 
   ITT_com = object(FloatInsert_com)
@@ -164,6 +186,9 @@ var
    pbeditcom:pCommandRTEdObjectPlugin;
    BEditParam:TBEditParam;
 
+   TextInsert:TextInsert_com;
+   TextInsertParams:TTextInsertParams;
+
 //procedure startup;
 //procedure Finalize;
 function Line_com_CommandStart(operands:pansichar):GDBInteger;
@@ -172,6 +197,44 @@ function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;o
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 implementation
 uses GDBBlockDef,mainwindow,{UGDBObjBlockdefArray,}Varman,projecttreewnd;
+function GetBlockDefNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDBInteger;
+var pb:PGDBObjBlockdef;
+    ir:itrec;
+    i:gdbinteger;
+begin
+     result:=-1;
+     i:=0;
+     selname:=uppercase(selname);
+     pb:=gdb.GetCurrentDWG.BlockDefArray.beginiterate(ir);
+     if pb<>nil then
+     repeat
+           if uppercase(pb^.name)=selname then
+                                              result:=i;
+
+           BDefNames.add(@pb^.name);
+           pb:=gdb.GetCurrentDWG.BlockDefArray.iterate(ir);
+           inc(i);
+     until pb=nil;
+end;
+function GetStyleNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDBInteger;
+var pb:PGDBTextStyle;
+    ir:itrec;
+    i:gdbinteger;
+begin
+     result:=-1;
+     i:=0;
+     selname:=uppercase(selname);
+     pb:=gdb.GetCurrentDWG.TextStyleTable.beginiterate(ir);
+     if pb<>nil then
+     repeat
+           if uppercase(pb^.name)=selname then
+                                              result:=i;
+
+           BDefNames.add(@pb^.name);
+           pb:=gdb.GetCurrentDWG.TextStyleTable.iterate(ir);
+           inc(i);
+     until pb=nil;
+end;
 procedure FloatInsertWithParams_com.BuildDM(Operands:pansichar);
 begin
 
@@ -201,11 +264,64 @@ begin
               commandmanager.executecommandend;
          end
 end;
+procedure TextInsert_com.Command(Operands:pansichar);
+var
+   s:string;
+   i:integer;
+begin
+     if TextInsertParams.Style.Selected>=TextInsertParams.Style.Enums.Count then
+                                                                                begin
+                                                                                     s:='Standart';
+                                                                                end
+                                                                            else
+                                                                                begin
+                                                                                     s:=TextInsertParams.Style.Enums.getGDBString(TextInsertParams.Style.Selected);
+                                                                                end;
+      TextInsertParams.Style.Enums.Clear;
+      i:=GetStyleNames(TextInsertParams.Style.Enums,s);
+      if i<0 then
+                 TextInsertParams.Style.Selected:=0;
+      UpdateObjInsp;
+
+     GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+     pt := GDBPointer(CreateObjFree(GDBTextID));
+     pt.init(@GDB.GetCurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,'TEXT',nulvertex,2.5,0,1,0,1);
+     GDB.GetCurrentDWG.ConstructObjRoot.ObjArray.add(@pt);
+     format;
+end;
+function TextInsert_com.DoEnd:GDBBoolean;
+begin
+     result:=false;
+     build('');
+     dec(self.mouseclic);
+     redrawoglwnd;
+end;
+
+procedure TextInsert_com.Format;
+begin
+     pt.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+     pt.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
+
+     pt.TXTStyleIndex:=TextInsertParams.Style.Selected;
+     pt.textprop.size:=TextInsertParams.h;
+     pt.textprop.oblique:=TextInsertParams.o;
+     pt.textprop.wfactor:=TextInsertParams.w;
+     byte(pt.textprop.justify):=byte(TextInsertParams.justify);
+
+     pt.Content:='';
+     pt.Template:=(TextInsertParams.text);
+     pt.Format;
+end;
 procedure FloatInsert_com.CommandStart(Operands:pansichar);
 begin
      inherited CommandStart(Operands);
      build(operands);
 end;
+function FloatInsert_com.DoEnd:GDBBoolean;
+begin
+     result:=true;
+end;
+
 function FloatInsert_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 var
     dist:gdbvertex;
@@ -247,7 +363,7 @@ begin
 
    gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
    //commandend;
-   commandmanager.executecommandend;
+   if DoEnd then commandmanager.executecommandend;
   end;
 end;
 procedure pasteclip_com.Command;
@@ -396,25 +512,6 @@ begin
    commandend;
    commandmanager.executecommandend;
   end;
-end;
-function GetBlockDefNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDBInteger;
-var pb:PGDBObjBlockdef;
-    ir:itrec;
-    i:gdbinteger;
-begin
-     result:=-1;
-     i:=0;
-     selname:=uppercase(selname);
-     pb:=gdb.GetCurrentDWG.BlockDefArray.beginiterate(ir);
-     if pb<>nil then
-     repeat
-           if uppercase(pb^.name)=selname then
-                                              result:=i;
-
-           BDefNames.add(@pb^.name);
-           pb:=gdb.GetCurrentDWG.BlockDefArray.iterate(ir);
-           inc(i);
-     until pb=nil;
 end;
 function Insert_com_CommandStart(operands:pansichar):GDBInteger;
 var pb:PGDBObjBlockdef;
@@ -1616,6 +1713,17 @@ begin
   copybase.init('CopyBase',0,0);
   PasteClip.init('PasteClip',0,0);
 
+  TextInsert.init('Text',0,0);
+  TextInsertParams.Style.Enums.init(10);
+  TextInsertParams.Style.Selected:=0;
+  TextInsertParams.h:=2.5;
+  TextInsertParams.o:=0;
+  TextInsertParams.w:=1;
+  TextInsertParams.justify:=GDBAbstractText.jstl;
+  TextInsertParams.text:='text';
+  TextInsert.commanddata.Instance:=@TextInsertParams;
+  TextInsert.commanddata.PTD:=SysUnit.TypeName2PTD('TTextInsertParams');
+
   CreateCommandFastObjectPlugin(@Erase_com,'Erase',CADWG,0);
   CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
   CreateCommandFastObjectPlugin(@PlaceAllBlocks_com,'PlaceAllBlocks',CADWG,0);
@@ -1625,6 +1733,8 @@ begin
   BEditParam.CurrentEditBlock:=modelspacename;
   pbeditcom^.commanddata.Instance:=@BEditParam;
   pbeditcom^.commanddata.PTD:=SysUnit.TypeName2PTD('TBEditParam');
+
+
 
   InsertTestTable.init('InsertTestTable',0,0);
   //CreateCommandFastObjectPlugin(@InsertTestTable_com,'InsertTestTable',0,0);

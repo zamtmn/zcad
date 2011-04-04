@@ -106,7 +106,7 @@ function GDBfont.GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
 var
    usi:GDBUNISymbolInfo;
 begin
-     if symbol=1084 then
+     if symbol=49 then
                         symbol:=symbol;
      if symbol<256 then
                        begin

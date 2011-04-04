@@ -84,11 +84,11 @@ begin
   GDBPointer(content) := nil;
   GDBPointer(template) := nil;
   textprop.size := 1;
-  textprop.oblique := 12;
-  textprop.wfactor := 0.65;
+  textprop.oblique := 0;
+  textprop.wfactor := 1;
   textprop.angle := 0;
   textprop.justify := 1;
-  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{08E35ED5-B4A7-4210-A3C9-0645E8F27ABA}',{$ENDIF}100);
+  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{08E35ED5-B4A7-4210-A3C9-0645E8F27ABA}',{$ENDIF}1000);
   //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{116E3B21-8230-44E8-B7A5-9CEED4B886D2}',{$ENDIF}100);
   PProjoutbound:=nil;
 end;
@@ -105,7 +105,7 @@ begin
   textprop.wfactor := w;
   textprop.angle := a;
   textprop.justify := j;
-  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{8776360E-8115-4773-917D-83ED1843FF9C}',{$ENDIF}100);
+  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{8776360E-8115-4773-917D-83ED1843FF9C}',{$ENDIF}1000);
   //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{EDC6D76B-DDFF-41A0-ACCC-48804795A3F5}',{$ENDIF}100);
   PProjoutbound:=nil;
   //format;
@@ -206,10 +206,10 @@ begin
   obj_y:=0;
   for i:=1 to length(content) do
   begin
-    psyminfo:=pgdbfont(pbasefont)^.GetOrCreateSymbolInfo(ach2uch(GDBByte(content[i])));
-    obj_width:=obj_width+{pgdbfont(pbasefont).symbo linfo[GDBByte(content[i])]}psyminfo.dx;
-    if {pgdbfont(pbasefont).symbo linfo[GDBByte(content[i])]}psyminfo.dy>obj_height then obj_height:={pgdbfont(pbasefont).symbo linfo[GDBByte(content[i])]}psyminfo.dy;
-    if {pgdbfont(pbasefont).symbo linfo[GDBByte(content[i])]}psyminfo._dy<obj_y then obj_y:={pgdbfont(pbasefont).symbo linfo[GDBByte(content[i])]}psyminfo._dy;
+    psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(content[i])));
+    obj_width:=obj_width+psyminfo.dx;
+    if psyminfo.dy>obj_height then obj_height:=psyminfo.dy;
+    if psyminfo._dy<obj_y then obj_y:=psyminfo._dy;
   end;
   obj_width:=obj_width-1/3;
 end;
@@ -224,6 +224,7 @@ begin
   tvo^.Textprop:=textprop;
   tvo^.content:=content;
   tvo^.template:=template;
+  tvo^.TXTStyleIndex:=TXTStyleIndex;
   //tvo^.Format;
   result := tvo;
 end;
@@ -575,8 +576,7 @@ begin
   m1[1, 1] := 1;
   m1[2, 2] := 1;
   m1[3, 3] := 1;}
-  m1[3, 0] := {pgdbfont(pbasefont).symbo linfo[GDBByte(content[i])]}pgdbfont(pbasefont).GetOrCreateSymbolInfo(ach2uch(GDBByte(content[i]))).dx;
-  //m1[3, 1] := 0;
+  m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(ord(content[i]))).dx;
   matr:=MatrixMultiply(m1,matr);
   inc(i);
   end;
@@ -722,7 +722,7 @@ begin
   dxfGDBDoubleout(outhandle,41,textprop.wfactor);
   dxfGDBDoubleout(outhandle,51,textprop.oblique);
   dxfGDBIntegerout(outhandle,72,hv);
-  dxfGDBStringout(outhandle,7,'R2_5');
+  dxfGDBStringout(outhandle,7,PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.name);
 
   SaveToDXFObjPostfix(outhandle);
 

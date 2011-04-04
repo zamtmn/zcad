@@ -105,9 +105,12 @@ var
       ir:itrec;
   psyminfo:PGDBsymdolinfo;
   TCP:TCodePage;
+  pfont:pgdbfont;
 begin
+  textprop.wfactor:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.prop.wfactor;
+  pfont:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont;
   TCP:=CodePage;
-CodePage:=CP_win;
+  CodePage:=CP_win;
   if template='' then
                       template:=content;
   swp.str:='';
@@ -128,7 +131,7 @@ CodePage:=CP_win;
 
   canbreak := false;
   currsymbol := 1;
-  psyminfo:=pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
+  psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
   lastbreak := 1;
   lastcanbreak := 1;
   linewidth := 0;
@@ -141,7 +144,7 @@ CodePage:=CP_win;
       lastcanbreak := currsymbol;
       canbreak := true;
       lastlinewidth := linewidth;
-      linewidth := linewidth + {pgdbfont(pbasefont)^.symbo linfo[GDBByte(content[currsymbol])]}psyminfo.dx
+      linewidth := linewidth + psyminfo.dx
     end
     else
       if {content[currsymbol] = '\'}copy(content,currsymbol,2)='\P' then          {\P}
@@ -149,7 +152,7 @@ CodePage:=CP_win;
         currline := copy(content, lastbreak, currsymbol - lastbreak);
         lastbreak := currsymbol + 2;
         currsymbol := currsymbol + 1;
-        psyminfo:=pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
+        psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
         canbreak := false;
 
         {GDBPointer(ptext.GDBStringarray[ptext.count].str) := nil;
@@ -161,7 +164,7 @@ CodePage:=CP_win;
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
         begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - {pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')]}pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(' '))).dx;
+             swp.w := swp.w - pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(' '))).dx;
         end;
         self.text.add(@swp);
 
@@ -170,7 +173,7 @@ CodePage:=CP_win;
       end
       else
       begin
-        linewidth := linewidth + psyminfo.dx//pgdbfont(pbasefont)^.symbo linfo[GDBByte(content[currsymbol])].dx
+        linewidth := linewidth + psyminfo.dx;
       end;
     if canbreak then
       if maxlinewidth <= linewidth then
@@ -179,7 +182,7 @@ CodePage:=CP_win;
         linewidth := 0;
         lastbreak := lastcanbreak + 1;
         currsymbol := lastcanbreak;
-        psyminfo:=pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
+        psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
 
         canbreak := false;
 
@@ -192,13 +195,13 @@ CodePage:=CP_win;
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
         begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(' '))).dx;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
+             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(' '))).dx;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
         end;
         self.text.add(@swp);
 
       end;
     inc(currsymbol);
-    psyminfo:=pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
+    psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
   until currsymbol > length(content);
   if linewidth=0 then
                      linewidth:=1;
@@ -212,7 +215,7 @@ CodePage:=CP_win;
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
         begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(' '))).dx;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
+             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(' '))).dx;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
         end;
         self.text.add(@swp);
   //w := width;
@@ -687,7 +690,7 @@ begin
   m1[1, 1] := 1;
   m1[2, 2] := 1;
   m1[3, 3] := 1;
-  m1[3, 0] := pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(byte(pswp^.str[i]))).dx;//pgdbfont(pbasefont).symbo linfo[GDBByte(pswp^.str[i])].dx;
+  m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(ord(pswp^.str[i]))).dx;
   m1[3, 1] := 0;
   matr:=MatrixMultiply(m1,matr);
   end;
@@ -809,6 +812,7 @@ begin
   tvo^.linespace:=linespace;
   tvo^.linespacef:=linespacef;
   tvo^.bp.ListPos.Owner:=own;
+  tvo^.TXTStyleIndex:=TXTStyleIndex;
   result := tvo;
 end;
 procedure GDBObjMText.LoadFromDXF;
@@ -909,7 +913,7 @@ begin
     end;
     dxfGDBStringout(outhandle,3,z2dxfmtext(s,ul));
   end;
-  dxfGDBStringout(outhandle,7,'R2_5');
+  dxfGDBStringout(outhandle,7,PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.name);
   SaveToDXFObjPostfix(outhandle);
   dxfvertexout(outhandle,11,Local.ox);
   dxfGDBDoubleout(outhandle,44,3 * linespace / (5 * textprop.size));

@@ -48,6 +48,8 @@ GDBObjTable=object(GDBObjComplex)
             procedure SaveToDXFFollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
             end;
 {EXPORT-}
+var
+  PTempTableStyle:PTGDBTableStyle;
 implementation
 uses GDBBlockInsert,log;
 procedure GDBObjTable.SaveToDXFFollow;

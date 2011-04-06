@@ -1,0 +1,192 @@
+Index: glgtkglxcontext.pas
+===================================================================
+--- glgtkglxcontext.pas	(revision 30197)
++++ glgtkglxcontext.pas	(working copy)
+@@ -129,12 +129,11 @@
+ procedure LOpenGLSwapBuffers(Handle: HWND);
+ function LOpenGLMakeCurrent(Handle: HWND): boolean;
+ function LOpenGLCreateContext(AWinControl: TWinControl;
+-             WSPrivate: TWSPrivateClass; SharedControl: TWinControl;
+-             DoubleBuffered, RGBA: boolean;
+-             const AParams: TCreateParams): HWND;
++  WSPrivate: TWSPrivateClass; SharedControl: TWinControl;
++  DoubleBuffered, RGBA: boolean;ColorBits,DepthBits,StencilBits, AuxBuffers: BYTE; const AParams: TCreateParams): HWND;
+ procedure LOpenGLDestroyContextInfo(AWinControl: TWinControl);
+-function CreateOpenGLContextAttrList(DoubleBuffered: boolean;
+-                                     RGBA: boolean): PInteger;
++function CreateOpenGLContextAttrList(DoubleBuffered: boolean; RGBA: boolean;
++  ColorBits,DepthBits,StencilBits, AuxBuffers: BYTE): PInteger;
+ 
+ implementation
+ 
+@@ -758,15 +757,14 @@
+ 
+ function LOpenGLCreateContext(AWinControl: TWinControl;
+   WSPrivate: TWSPrivateClass; SharedControl: TWinControl;
+-  DoubleBuffered, RGBA: boolean;
+-  const AParams: TCreateParams): HWND;
++  DoubleBuffered, RGBA: boolean;ColorBits,DepthBits,StencilBits, AuxBuffers: BYTE; const AParams: TCreateParams): HWND;
+ var
+   NewWidget: PGtkWidget;
+   SharedArea: PGtkGLArea;
+   AttrList: PInteger;
+ begin
+   if WSPrivate=nil then ;
+-  AttrList:=CreateOpenGLContextAttrList(DoubleBuffered,RGBA);
++  AttrList:=CreateOpenGLContextAttrList(DoubleBuffered,RGBA,ColorBits,DepthBits,StencilBits, AuxBuffers);
+   try
+     if SharedControl<>nil then begin
+       SharedArea:={%H-}PGtkGLArea(PtrUInt(SharedControl.Handle));
+@@ -796,8 +794,8 @@
+   // nothing to do
+ end;
+ 
+-function CreateOpenGLContextAttrList(DoubleBuffered: boolean; RGBA: boolean
+-  ): PInteger;
++function CreateOpenGLContextAttrList(DoubleBuffered: boolean; RGBA: boolean;
++  ColorBits,DepthBits,StencilBits, AuxBuffers: BYTE): PInteger;
+ var
+   p: integer;
+   
+@@ -814,11 +812,13 @@
+       Add(GDK_GL_DOUBLEBUFFER);
+     if RGBA then
+       Add(GDK_GL_RGBA);
++    Add(GDK_GL_BUFFER_SIZE);  Add(ColorBits);
+     Add(GDK_GL_RED_SIZE);  Add(1);
+     Add(GDK_GL_GREEN_SIZE);  Add(1);
+     Add(GDK_GL_BLUE_SIZE);  Add(1);
+-    Add(GDK_GL_DEPTH_SIZE);  Add(1);
+-    Add(GDK_GL_STENCIL_SIZE); Add(1);
++    Add(GDK_GL_DEPTH_SIZE);  Add(DepthBits);
++    Add(GDK_GL_STENCIL_SIZE); Add(StencilBits);
++    Add(GDK_GL_AUX_BUFFERS); Add(AuxBuffers);
+     Add(GDK_GL_None);
+   end;
+   
+Index: glwin32wglcontext.pas
+===================================================================
+--- glwin32wglcontext.pas	(revision 30197)
++++ glwin32wglcontext.pas	(working copy)
+@@ -27,9 +27,8 @@
+ procedure LOpenGLSwapBuffers(Handle: HWND);
+ function LOpenGLMakeCurrent(Handle: HWND): boolean;
+ function LOpenGLCreateContext(AWinControl: TWinControl;
+-                    WSPrivate: TWSPrivateClass; SharedControl: TWinControl;
+-                    DoubleBuffered, RGBA: boolean;
+-                    const AParams: TCreateParams): HWND;
++  WSPrivate: TWSPrivateClass; SharedControl: TWinControl;
++  DoubleBuffered, RGBA: boolean;ColorBits,DepthBits,StencilBits, AuxBuffers: BYTE; const AParams: TCreateParams): HWND;
+ procedure LOpenGLDestroyContextInfo(AWinControl: TWinControl);
+ 
+ procedure InitWGL;
+@@ -278,7 +277,7 @@
+ 
+ function LOpenGLCreateContext(AWinControl: TWinControl;
+   WSPrivate: TWSPrivateClass; SharedControl: TWinControl;
+-  DoubleBuffered, RGBA: boolean; const AParams: TCreateParams): HWND;
++  DoubleBuffered, RGBA: boolean;ColorBits,DepthBits,StencilBits, AuxBuffers: BYTE; const AParams: TCreateParams): HWND;
+ var
+   Params: TCreateWindowExParams;
+   pfd: PIXELFORMATDESCRIPTOR;
+@@ -319,8 +318,11 @@
+       iPixelType:=PFD_TYPE_RGBA
+     else
+       iPixelType:=PFD_TYPE_COLORINDEX;
+-    cColorBits:=24; // color depth
+-    cDepthBits:=16; // Z-Buffer
++    cColorBits:=ColorBits; // color depth
++    cDepthBits:=DepthBits; // Z-Buffer
++    cStencilBits:= StencilBits;
++    cAuxBuffers:= AuxBuffers;
++
+     iLayerType:=PFD_MAIN_PLANE;
+   end;
+   
+Index: openglcontext.pas
+===================================================================
+--- openglcontext.pas	(revision 30197)
++++ openglcontext.pas	(working copy)
+@@ -111,11 +111,19 @@
+     FRGBA: boolean;
+     FSharedOpenGLControl: TCustomOpenGLControl;
+     FSharingOpenGlControls: TList;
++    FColorBits : BYTE;
++    FDepthBits : BYTE;
++    FStencilBits: BYTE;
++    FAuxBuffers: BYTE;
+     function GetSharingControls(Index: integer): TCustomOpenGLControl;
+     procedure SetAutoResizeViewport(const AValue: boolean);
+     procedure SetDoubleBuffered(const AValue: boolean);
+     procedure SetRGBA(const AValue: boolean);
+     procedure SetSharedControl(const AValue: TCustomOpenGLControl);
++    procedure SetColorBits(const AValue: BYTE);
++    procedure SetDepthBits(const AValue: BYTE);
++    procedure SetStencilBits(const AValue: BYTE);
++    procedure SetAuxBuffers(const AValue: BYTE);
+   protected
+     procedure WMPaint(var Message: TLMPaint); message LM_PAINT;
+     procedure WMSize(var Message: TLMSize); message LM_SIZE;
+@@ -145,6 +153,10 @@
+                                          write SetAutoResizeViewport default false;
+     property DoubleBuffered: boolean read FDoubleBuffered write SetDoubleBuffered default true;
+     property RGBA: boolean read FRGBA write SetRGBA default true;
++    property ColorBits: BYTE read FColorBits write SetColorBits default 24;
++    property DepthBits: BYTE read FDepthBits write SetDepthBits default 16;
++    property StencilBits: BYTE read FStencilBits write SetStencilBits default 0;
++    property AuxBuffers: BYTE read FAuxBuffers write SetAuxBuffers default 0;
+   end;
+ 
+   { TOpenGLControl }
+@@ -238,7 +250,30 @@
+   FRGBA:=AValue;
+   OpenGLAttributesChanged;
+ end;
+-
++procedure TCustomOpenGLControl.SetColorBits(const AValue: BYTE);
++begin
++  if FColorBits=AValue then exit;
++  FColorBits:=AValue;
++  OpenGLAttributesChanged;
++end;
++procedure TCustomOpenGLControl.SetDepthBits(const AValue: BYTE);
++begin
++  if FDepthBits=AValue then exit;
++  FDepthBits:=AValue;
++  OpenGLAttributesChanged;
++end;
++procedure TCustomOpenGLControl.SetStencilBits(const AValue: BYTE);
++begin
++  if FStencilBits=AValue then exit;
++  FStencilBits:=AValue;
++  OpenGLAttributesChanged;
++end;
++procedure TCustomOpenGLControl.SetAuxBuffers(const AValue: BYTE);
++begin
++  if FAuxBuffers=AValue then exit;
++  FAuxBuffers:=AValue;
++  OpenGLAttributesChanged;
++end;
+ procedure TCustomOpenGLControl.SetSharedControl(
+   const AValue: TCustomOpenGLControl);
+ begin
+@@ -327,6 +362,10 @@
+   inherited Create(TheOwner);
+   FDoubleBuffered:=true;
+   FRGBA:=true;
++  FColorBits:=24;
++  FDepthBits:=16;
++  FStencilBits:=0;
++  FAuxBuffers:=0;
+   ControlStyle:=ControlStyle-[csSetCaption];
+   if (csDesigning in ComponentState) then begin
+     FCanvas := TControlCanvas.Create;
+@@ -468,6 +507,8 @@
+     Result:=LOpenGLCreateContext(OpenGlControl,WSPrivate,
+                                  OpenGlControl.SharedControl,
+                                  AttrControl.DoubleBuffered,AttrControl.RGBA,
++                                 AttrControl.ColorBits,AttrControl.DepthBits,
++                                 AttrControl.StencilBits,AttrControl.AuxBuffers,
+                                  AParams);
+   end;
+ end;

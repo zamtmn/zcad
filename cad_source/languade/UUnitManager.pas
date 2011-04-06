@@ -664,8 +664,9 @@ begin
   end;
   programlog.logoutstr('end; //TUnitManager.LoadFolder',lp_DecPos);
 end;
+var
+  ptd:PUserTypeDescriptor;
 initialization;
-begin
      {$IFDEF DEBUGINITSECTION}LogOut('uunitmanager.initialization');{$ENDIF}
      programlog.logoutstr('UUnitManager.startup',lp_IncPos);
      units.init;
@@ -720,6 +721,15 @@ begin
 
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_PanObjectDegradation,'RD_PanObjectDegradation');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_UseStencil,'RD_UseStencil');
+  SysVarUnit.AssignToSymbol(SysVar.RD.RD_VSync,'RD_VSync');
+  {$IFNDEF WINDOWS}
+  if SysVar.RD.RD_VSync<>nil then
+                                 SysVar.RD.RD_VSync^:=TVSDefault;
+  ptd:=SysUnit.TypeName2PTD('trd');
+  if ptd<>nil then
+                  PRecordDescriptor(ptd).SetAttrib('RD_VSync',FA_READONLY,0);
+
+  {$ENDIF}
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_LineSmooth,'RD_LineSmooth');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_Restore_Mode,'RD_Restore_Mode');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxLineWidth,'RD_MaxLineWidth');
@@ -810,9 +820,6 @@ begin
 
   //evaluate('abba',sysunit);
 
-end;
 finalization;
-begin
      units.FreeAndDone;
-end;
 end.

@@ -197,6 +197,12 @@ UserTypeDescriptor=object(GDBaseObject)
                 kosm_apparentintersection:GDBBoolean;(*'Apparent intersection'*)
                 kosm_paralel:GDBBoolean;(*'Paralel'*)
           end;
+  PTVSControl=^TVSControl;
+  TVSControl=(
+                TVSOn(*'On'*),
+                TVSOff(*'Off'*),
+                TVSDefault(*'Default'*)
+             );
   trd=record
             RD_Renderer:PGDBString;(*'Device'*)(*oi_readonly*)
             RD_Version:PGDBString;(*'Version'*)(*oi_readonly*)
@@ -210,6 +216,7 @@ UserTypeDescriptor=object(GDBaseObject)
             RD_LastUpdateTime:pGDBInteger;(*'Last update time'*)(*oi_readonly*)
             RD_MaxRenderTime:pGDBInteger;(*'Maximum single pass time'*)
             RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
+            RD_VSync:PTVSControl;(*'VSync'*)
             RD_Light:PGDBBoolean;(*'Light'*)
             RD_PanObjectDegradation:PGDBBoolean;(*'Degradation while pan'*)
             RD_LineSmooth:PGDBBoolean;(*'Line smoth'*)

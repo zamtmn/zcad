@@ -43,7 +43,7 @@ uses
   geometry,
   memman,
   gdbobjectsconstdef,
-  {UGDBVisibleOpenArray,}gdbEntity,GDBCircle,GDBLine,GDBGenericSubEntry,
+  {UGDBVisibleOpenArray,}GDBEntity,GDBCircle,GDBLine,GDBGenericSubEntry,GDBMText,
   shared,sharedgdb,GDBSubordinated,GDBBlockInsert,GDBPolyLine,log,UGDBOpenArrayOfData,math,GDBTable{,GDBElLeader},UGDBStringArray;
 const
      modelspacename:GDBSTring='**Модель**';
@@ -84,9 +84,12 @@ type
                             Style:TEnumData;(*'Style'*)
                             justify:TTextJustify;(*'Justify'*)
                             h:GDBDouble;(*'Height'*)
-                            w:GDBDouble;(*'Width factor'*)
-                            o:GDBDouble;(*'Oblique'*)
+                            WidthFactor:GDBDouble;(*'Width factor'*)
+                            Oblique:GDBDouble;(*'Oblique'*)
+                            Width:GDBDouble;(*'Width'*)
+                            LineSpace:GDBDouble;(*'Line space factor'*)
                             text:GDBAnsiString;(*'Text'*)
+                            runtexteditor:GDBBoolean;(*'Run text editor'*)
                       end;
   TBEditParam=record
                     CurrentEditBlock:GDBString;(*'Текущий блок'*)(*oi_readonly*)
@@ -130,7 +133,7 @@ type
     procedure CommandStart(Operands:pansichar); virtual;
     procedure Build(Operands:pansichar); virtual;
     procedure Command(Operands:pansichar); virtual;abstract;
-    function DoEnd:GDBBoolean;virtual;
+    function DoEnd(pdata:GDBPointer):GDBBoolean;virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
   TFIWPMode=(FIWPCustomize,FIWPRun);
@@ -151,8 +154,9 @@ type
                        pt:PGDBObjText;
                        //procedure Build(Operands:pansichar); virtual;
                        procedure Command(Operands:pansichar); virtual;
+                       procedure BuildPrimitives; virtual;
                        procedure Format;virtual;
-                       function DoEnd:GDBBoolean;virtual;
+                       function DoEnd(pdata:GDBPointer):GDBBoolean;virtual;
   end;
 
   ITT_com = object(FloatInsert_com)
@@ -196,7 +200,7 @@ procedure Line_com_CommandEnd;
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 implementation
-uses GDBBlockDef,mainwindow,{UGDBObjBlockdefArray,}Varman,projecttreewnd;
+uses GDBBlockDef,mainwindow,{UGDBObjBlockdefArray,}Varman,projecttreewnd,oglwindow,URecordDescriptor,TypeDescriptors;
 function GetBlockDefNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDBInteger;
 var pb:PGDBObjBlockdef;
     ir:itrec;
@@ -264,6 +268,38 @@ begin
               commandmanager.executecommandend;
          end
 end;
+procedure TextInsert_com.BuildPrimitives;
+begin
+     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+     case TextInsertParams.mode of
+           TextInsertParams.mode.TIM_Text:
+           begin
+             PRecordDescriptor(TextInsert.commanddata.PTD).SetAttrib('Oblique',0,FA_READONLY);
+             PRecordDescriptor(TextInsert.commanddata.PTD).SetAttrib('WidthFactor',0,FA_READONLY);
+
+             PRecordDescriptor(TextInsert.commanddata.PTD).SetAttrib('Width',FA_READONLY,0);
+             PRecordDescriptor(TextInsert.commanddata.PTD).SetAttrib('LineSpace',FA_READONLY,0);
+
+                pt := GDBPointer(CreateObjFree(GDBTextID));
+                pt.init(@GDB.GetCurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,'',nulvertex,2.5,0,1,0,1);
+           end;
+           TextInsertParams.mode.TIM_MText:
+           begin
+                PRecordDescriptor(TextInsert.commanddata.PTD).SetAttrib('Oblique',FA_READONLY,0);
+                PRecordDescriptor(TextInsert.commanddata.PTD).SetAttrib('WidthFactor',FA_READONLY,0);
+
+                PRecordDescriptor(TextInsert.commanddata.PTD).SetAttrib('Width',0,FA_READONLY);
+                PRecordDescriptor(TextInsert.commanddata.PTD).SetAttrib('LineSpace',0,FA_READONLY);
+
+                pt := GDBPointer(CreateObjFree(GDBMTextID));
+                pgdbobjmtext(pt)^.init(@GDB.GetCurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,
+                                  '',nulvertex,2.5,0,1,0,1,10,1);
+           end;
+
+     end;
+     GDB.GetCurrentDWG.ConstructObjRoot.ObjArray.add(@pt);
+end;
+
 procedure TextInsert_com.Command(Operands:pansichar);
 var
    s:string;
@@ -282,34 +318,56 @@ begin
       if i<0 then
                  TextInsertParams.Style.Selected:=0;
       UpdateObjInsp;
-
+      BuildPrimitives;
      GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-     pt := GDBPointer(CreateObjFree(GDBTextID));
-     pt.init(@GDB.GetCurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,'TEXT',nulvertex,2.5,0,1,0,1);
-     GDB.GetCurrentDWG.ConstructObjRoot.ObjArray.add(@pt);
      format;
 end;
-function TextInsert_com.DoEnd:GDBBoolean;
+function TextInsert_com.DoEnd(pdata:GDBPointer):GDBBoolean;
 begin
      result:=false;
-     build('');
      dec(self.mouseclic);
      redrawoglwnd;
+     if TextInsertParams.runtexteditor then
+                                           RunTextEditor(pdata);
+     //redrawoglwnd;
+     build('');
 end;
 
 procedure TextInsert_com.Format;
 begin
+     if ((pt.vp.ID=GDBTextID)and(TextInsertParams.mode=TIM_MText))
+     or ((pt.vp.ID=GDBMTextID)and(TextInsertParams.mode=TIM_Text)) then
+                                                                        BuildPrimitives;
      pt.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
      pt.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
-
      pt.TXTStyleIndex:=TextInsertParams.Style.Selected;
      pt.textprop.size:=TextInsertParams.h;
-     pt.textprop.oblique:=TextInsertParams.o;
-     pt.textprop.wfactor:=TextInsertParams.w;
-     byte(pt.textprop.justify):=byte(TextInsertParams.justify);
-
      pt.Content:='';
      pt.Template:=(TextInsertParams.text);
+
+     case TextInsertParams.mode of
+     TIM_Text:
+              begin
+                   pt.textprop.oblique:=TextInsertParams.Oblique;
+                   pt.textprop.wfactor:=TextInsertParams.WidthFactor;
+                   byte(pt.textprop.justify):=byte(TextInsertParams.justify);
+              end;
+     TIM_MText:
+              begin
+                   pgdbobjmtext(pt)^.width:=TextInsertParams.Width;
+                   pgdbobjmtext(pt)^.linespace:=TextInsertParams.LineSpace;
+
+                   if TextInsertParams.LineSpace<0 then
+                                               pgdbobjmtext(pt)^.linespacef:=(-TextInsertParams.LineSpace*3/5)/TextInsertParams.h
+                                           else
+                                               pgdbobjmtext(pt)^.linespacef:=TextInsertParams.LineSpace;
+
+                   //linespace := textprop.size * linespacef * 5 / 3;
+
+                   byte(pt.textprop.justify):=byte(TextInsertParams.justify);
+              end;
+
+     end;
      pt.Format;
 end;
 procedure FloatInsert_com.CommandStart(Operands:pansichar);
@@ -317,7 +375,7 @@ begin
      inherited CommandStart(Operands);
      build(operands);
 end;
-function FloatInsert_com.DoEnd:GDBBoolean;
+function FloatInsert_com.DoEnd(pdata:GDBPointer):GDBBoolean;
 begin
      result:=true;
 end;
@@ -351,7 +409,9 @@ begin
                 tv:=gdb.CopyEnt(gdb.GetCurrentDWG,gdb.GetCurrentDWG,pobj);
                 tv.transform(dispmatr);
                 tv.build;
-                tv.Format;
+                tv.YouChanged;
+                //tv.Format;
+                //
               end;
           end;
           pobj:=gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.iterate(ir);
@@ -363,7 +423,7 @@ begin
 
    gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
    //commandend;
-   if DoEnd then commandmanager.executecommandend;
+   if DoEnd(tv) then commandmanager.executecommandend;
   end;
 end;
 procedure pasteclip_com.Command;
@@ -1717,10 +1777,13 @@ begin
   TextInsertParams.Style.Enums.init(10);
   TextInsertParams.Style.Selected:=0;
   TextInsertParams.h:=2.5;
-  TextInsertParams.o:=0;
-  TextInsertParams.w:=1;
+  TextInsertParams.Oblique:=0;
+  TextInsertParams.WidthFactor:=1;
   TextInsertParams.justify:=GDBAbstractText.jstl;
   TextInsertParams.text:='text';
+  TextInsertParams.runtexteditor:=false;
+  TextInsertParams.Width:=100;
+  TextInsertParams.LineSpace:=1;
   TextInsert.commanddata.Instance:=@TextInsertParams;
   TextInsert.commanddata.PTD:=SysUnit.TypeName2PTD('TTextInsertParams');
 

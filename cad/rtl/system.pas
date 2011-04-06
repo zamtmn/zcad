@@ -741,6 +741,12 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
                 kosm_apparentintersection:GDBBoolean;(*'Apparent intersection'*)
                 kosm_paralel:GDBBoolean;(*'Paralel'*)
           end;
+  PTVSControl=^TVSControl;
+  TVSControl=(
+                TVSOn(*'On'*),
+                TVSOff(*'Off'*),
+                TVSDefault(*'Default'*)
+             );
   trd=record
             RD_Renderer:PGDBString;(*'Device'*)(*oi_readonly*)
             RD_Version:PGDBString;(*'Version'*)(*oi_readonly*)
@@ -754,6 +760,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
             RD_LastUpdateTime:pGDBInteger;(*'Last update time'*)(*oi_readonly*)
             RD_MaxRenderTime:pGDBInteger;(*'Maximum single pass time'*)
             RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
+            RD_VSync:PTVSControl;(*'VSync'*)
             RD_Light:PGDBBoolean;(*'Light'*)
             RD_PanObjectDegradation:PGDBBoolean;(*'Degradation while pan'*)
             RD_LineSmooth:PGDBBoolean;(*'Line smoth'*)
@@ -1957,7 +1964,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     overlay:GDBBoolean;(*hidden_in_objinsp*)
     CStartAttrEnableAttr:TCStartAttr;(*hidden_in_objinsp*)
     CStartAttrDisableAttr:TCStartAttr;(*hidden_in_objinsp*)
-    CEndActionAttr:TCEndAttr;
+    CEndActionAttr:TCEndAttr;(*hidden_in_objinsp*)
     procedure CommandStart(Operands:pansichar); virtual; abstract;
     procedure CommandEnd; virtual; abstract;
     procedure CommandCancel; virtual; abstract;
@@ -2066,9 +2073,12 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                             Style:TEnumData;(*'Style'*)
                             justify:TTextJustify;(*'Justify'*)
                             h:GDBDouble;(*'Height'*)
-                            w:GDBDouble;(*'Width factor'*)
-                            o:GDBDouble;(*'Oblique'*)
+                            WidthFactor:GDBDouble;(*'Width factor'*)
+                            Oblique:GDBDouble;(*'Oblique'*)
+                            Width:GDBDouble;(*'Width'*)
+                            LineSpace:GDBDouble;(*'Line space factor'*)
                             text:GDBAnsiString;(*'Text'*)
+                            runtexteditor:GDBBoolean;(*'Run text editor'*)
                       end;
   TBEditParam=record
                     CurrentEditBlock:GDBString;(*'Текущий блок'*)(*oi_readonly*)
@@ -2112,7 +2122,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     procedure CommandStart(Operands:pansichar); virtual;abstract;
     procedure Build(Operands:pansichar); virtual;abstract;
     procedure Command(Operands:pansichar); virtual;abstract;
-    function DoEnd:GDBBoolean;virtual;abstract;
+    function DoEnd(pdata:GDBPointer):GDBBoolean;virtual;abstract;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
   end;
   TFIWPMode=(FIWPCustomize,FIWPRun);
@@ -2132,8 +2142,9 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                        pt:PGDBObjText;
                        //procedure Build(Operands:pansichar); virtual;abstract;
                        procedure Command(Operands:pansichar); virtual;abstract;
+                       procedure BuildPrimitives; virtual;abstract;
                        procedure Format;virtual;abstract;
-                       function DoEnd:GDBBoolean;virtual;abstract;
+                       function DoEnd(pdata:GDBPointer):GDBBoolean;virtual;abstract;
   end;
   ITT_com = object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;abstract;

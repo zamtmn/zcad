@@ -108,6 +108,7 @@ var
   pfont:pgdbfont;
 begin
   textprop.wfactor:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.prop.wfactor;
+  textprop.oblique:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.prop.oblique;
   pfont:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont;
   TCP:=CodePage;
   CodePage:=CP_win;

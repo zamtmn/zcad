@@ -46,6 +46,7 @@ var
   RD_LastUpdateTime:GDBInteger;
   RD_MaxRenderTime:GDBInteger;
   RD_Light:GDBBoolean;
+  RD_VSync:TVSControl;
   SAVE_Auto_Interval:GDBInteger;
   SAVE_Auto_Current_Interval:GDBInteger;
   SAVE_Auto_FileName:GDBString;
@@ -98,6 +99,7 @@ begin
   DISP_DrawZAxis:=False;
   DISP_ColorAxis:=False;
   RD_UseStencil:=True;
+  RD_VSync:=TVSOff;
   RD_PanObjectDegradation:=False;
   RD_LineSmooth:=False;
   RD_MaxLineWidth:=10.0;

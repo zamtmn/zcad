@@ -28,6 +28,9 @@ uses
   //x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
   {$ENDIF}
+  {$IFDEF WINDOWS}
+  GLWin32WGLContext,
+  {$ENDIF}
 
   UGDBOpenArrayOfPV,UGDBSHXFont,LCLType,InterfaceBase,
   umytreenode,menus,Classes,{ SysUtils,} FileUtil,{ LResources,LMessages,} Forms,
@@ -196,9 +199,10 @@ procedure finalize;}
 
 function ProjectPoint(pntx,pnty,pntz:gdbdouble;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;
 procedure textwrite(s: GDBString);
+procedure RunTextEditor(Pobj:GDBPointer);
 implementation
-uses GDBText,mainwindow,UGDBTracePropArray,GDBEntity,io,geometry,gdbobjectsconstdef,UGDBDescriptor,
-     {GDBCommandsBase,}Objinsp{,Tedit_form, MTedit_form},shared,sharedgdb,UGDBLayerArray,cmdline;
+uses mainwindow,UGDBTracePropArray,GDBEntity,io,geometry,gdbobjectsconstdef,UGDBDescriptor,
+     {GDBCommandsBase,}Objinsp{,Tedit_form, MTedit_form},shared,sharedgdb,UGDBLayerArray,cmdline,GDBtext;
 procedure creategrid;
 var i,j:GDBInteger;
 begin
@@ -1707,7 +1711,7 @@ procedure TOGLWnd.asynczoomall(Data: PtrInt);
 begin
      ZoomAll();
 end;
-procedure RunTextEditor(Pobj:PGDBObjText);
+procedure RunTextEditor(Pobj:GDBPointer);
 var
    op:gdbstring;
    size,modalresult:integer;
@@ -1716,7 +1720,7 @@ var
    u8s:UTF8String;
    astring:ansistring;
 begin
-     astring:=ConvertFromDxfString(pobj^.Template);
+     astring:=ConvertFromDxfString(PGDBObjText(pobj)^.Template);
 
      InfoForm:=TInfoForm.create(application.MainForm);
      //InfoForm.DialogPanel.ShowButtons:=[pbOK, pbCancel{, pbClose, pbHelp}];
@@ -1726,8 +1730,8 @@ begin
      modalresult:=InfoForm.ShowModal;
      if modalresult=MrOk then
                          begin
-                              pobj^.Template:=ConvertToDxfString(InfoForm.memo.text);
-                              pobj^.YouChanged;
+                              PGDBObjText(pobj)^.Template:=ConvertToDxfString(InfoForm.memo.text);
+                              PGDBObjText(pobj)^.YouChanged;
                               gdb.GetCurrentROOT.FormatAfterEdit;
                               redrawoglwnd;
                          end;
@@ -3861,6 +3865,28 @@ begin
   MyglMakeCurrent(OGLContext);//wglMakeCurrent(DC, hrc);
   self.MakeCurrent();
   setdeicevariable;
+
+
+  //Pointer(@wglSwapIntervalEXT) := wglGetProcAddress('wglSwapIntervalEXT');
+  //wglSwapIntervalEXT(0);
+
+  {$IFDEF WINDOWS}
+  if SysVar.RD.RD_VSync^<>TVSDefault then
+  begin
+       Pointer(@wglSwapIntervalEXT) := wglGetProcAddress('wglSwapIntervalEXT');
+       if @wglSwapIntervalEXT<>nil then
+                                           begin
+                                                if SysVar.RD.RD_VSync^=TVSOn then
+                                                                                 wglSwapIntervalEXT(1)
+                                                                             else
+                                                                                 wglSwapIntervalEXT(0);
+                                           end
+                                       else
+                                           begin
+                                                shared.ShowError('wglSwapIntervalEXT not supported by your video driver. Please set the VSync in the defaul');
+                                           end;
+  end;
+  {$ENDIF}
   //CalcOptimalMatrix;
   programlog.logoutstr('end;',lp_DecPos)
 end;

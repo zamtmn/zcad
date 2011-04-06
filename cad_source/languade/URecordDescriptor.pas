@@ -30,6 +30,7 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        function CreateProperties(PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                        procedure AddField(var fd:FieldDescriptor);
                        function FindField(fn:GDBString):PFieldDescriptor;
+                       function SetAttrib(fn:GDBString;SetA,UnSetA:GDBWord):PFieldDescriptor;
                        procedure ApplyOperator(oper,path:GDBString;var offset:GDBLongword;out tc:PUserTypeDescriptor);virtual;
                        procedure AddConstField(var fd:FieldDescriptor);
                        procedure CopyTo(RD:PTUserTypeDescriptor);
@@ -290,6 +291,16 @@ begin
         until pd=nil;
         result:=nil;
 end;
+function RecordDescriptor.SetAttrib(fn:GDBString;SetA,UnSetA:GDBWord):PFieldDescriptor;
+begin
+     result:=FindField(fn);
+     if result<>nil then
+                        begin
+                             result.Attributes:=result.Attributes or SetA;
+                             result.Attributes:=result.Attributes and (not UnSetA);
+                        end;
+end;
+
 procedure RecordDescriptor.CopyTo(RD:PTUserTypeDescriptor);
 var pd:PFieldDescriptor;
      d:FieldDescriptor;

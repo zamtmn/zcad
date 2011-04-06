@@ -836,7 +836,7 @@ begin
     tv := _source^.Clone(_to.pObjRoot);
     if tv<>nil then
     begin
-        _to.pObjRoot.ObjArray.add(addr(tv));
+        _to.pObjRoot.AddObjectToObjArray(addr(tv));// .ObjArray.add(addr(tv));
         RemapAll(_from,_to,_source,tv);
     end;
     result:=tv;

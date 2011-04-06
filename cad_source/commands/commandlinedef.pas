@@ -37,7 +37,7 @@ type
     overlay:GDBBoolean;(*hidden_in_objinsp*)
     CStartAttrEnableAttr:TCStartAttr;(*hidden_in_objinsp*)
     CStartAttrDisableAttr:TCStartAttr;(*hidden_in_objinsp*)
-    CEndActionAttr:TCEndAttr;
+    CEndActionAttr:TCEndAttr;(*hidden_in_objinsp*)
     procedure CommandStart(Operands:pansichar); virtual; abstract;
     procedure CommandEnd; virtual; abstract;
     procedure CommandCancel; virtual; abstract;

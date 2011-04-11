@@ -2080,6 +2080,35 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                             text:GDBAnsiString;(*'Text'*)
                             runtexteditor:GDBBoolean;(*'Run text editor'*)
                       end;
+         BRMode=(
+                 BRM_Block(*'Block'*),
+                 BRM_Device(*'Device'*),
+                 BRM_BD(*'Block and Device'*)
+                );
+         TBlockReplaceParams=record
+                            Process:BRMode;(*'Process'*)
+                            CurrentFindBlock:GDBString;(*'**CurrentFind'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                            Find:TEnumData;(*'Find'*)
+                            CurrentReplaceBlock:GDBString;(*'**CurrentReplace'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                            Replace:TEnumData;(*'Replace'*)
+                      end;
+         TSelGeneralParams=record
+                                 SameLayer:GDBBoolean;(*'Same layer'*)
+                                 SameLineWeight:GDBBoolean;(*'Same line weight'*)
+                                 SameEntType:GDBBoolean;(*'Same entity type'*)
+                           end;
+         TSelBlockParams=record
+                                 SameName:GDBBoolean;(*'Same name'*)
+                                 Process:BRMode;(*'Process'*)
+                           end;
+         TSelTextParams=record
+                                 SameContent:GDBBoolean;(*'Same content'*)
+                           end;
+         TSelSimParams=record
+                             General:TSelGeneralParams;(*'General'*)
+                             Blocks:TSelBlockParams;(*'??Blocks'*)
+                             Texts:TSelTextParams;(*'??Texts'*)
+                      end;
   TBEditParam=record
                     CurrentEditBlock:GDBString;(*'Текущий блок'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Выбор блока'*)
@@ -2130,7 +2159,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     CMode:TFIWPMode;
     procedure CommandStart(Operands:pansichar); virtual;abstract;
     procedure BuildDM(Operands:pansichar); virtual;abstract;
-    procedure Run(sender:pointer;pdata:pointer); virtual;abstract;
+    procedure Run(pdata:GDBPlatformint); virtual;abstract;
     function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
     //procedure Command(Operands:pansichar); virtual;abstract;
     //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
@@ -2146,6 +2175,18 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                        procedure Format;virtual;abstract;
                        function DoEnd(pdata:GDBPointer):GDBBoolean;virtual;abstract;
   end;
+  BlockReplace_com=object(CommandRTEdObject)
+                         procedure CommandStart(Operands:pansichar); virtual;abstract;
+                         procedure BuildDM(Operands:pansichar); virtual;abstract;
+                         procedure Format;virtual;abstract;
+                         procedure Run(pdata:{pointer}GDBPlatformint); virtual;abstract;
+                   end;
+  SelSim_com=object(CommandRTEdObject)
+                         procedure CommandStart(Operands:pansichar); virtual;abstract;
+                         //procedure BuildDM(Operands:pansichar); virtual;abstract;
+                         //procedure Format;virtual;abstract;
+                         procedure Run(pdata:GDBPlatformint); virtual;abstract;
+                   end;
   ITT_com = object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;abstract;
   end;

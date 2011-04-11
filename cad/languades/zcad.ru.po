@@ -29,6 +29,14 @@ msgstr "Редактор блоков"
 msgid "Insert block"
 msgstr "Вставить блок"
 
+#: ACN_BREPLACE~caption
+msgid "Block replace"
+msgstr "Замена блокаов"
+
+#: ACN_BREPLACE~textimage
+msgid "BR"
+msgstr ""
+
 #: ACN_CIRCLE~caption
 msgid "Draw circle"
 msgstr "Чертить окружность"
@@ -225,6 +233,22 @@ msgstr "Масштабировать"
 msgid "Scale primitives"
 msgstr "Масштабировать примитивы"
 
+#: ACN_SELECTALL~caption
+msgid "Select all"
+msgstr "Выбрать всё"
+
+#: ACN_SELECTALL~textimage
+msgid "SA"
+msgstr ""
+
+#: ACN_SELSIM~caption
+msgid "Select similar"
+msgstr "Выбрать подобные"
+
+#: ACN_SELSIM~textimage
+msgid "SSim"
+msgstr ""
+
 #: ACN_SHOW_COMMANDLINE~caption
 msgid "Command line and history"
 msgstr "Командная строка и история"
@@ -258,6 +282,19 @@ msgstr "Чертить текст"
 #: ACN_UNDO~caption
 msgid "Undo"
 msgstr "Отменить"
+
+#: BRMode~BRM_BD
+msgid "Block and Device"
+msgstr "Блоки и Устройства"
+
+#: BRMode~BRM_Block
+msgid "Block"
+msgstr "Блоки"
+
+#: BRMode~BRM_Device
+msgctxt "BRMode~BRM_Device"
+msgid "Device"
+msgstr "Устройства"
 
 #: button_command~El_Cable_Select
 msgid "csel"
@@ -612,6 +649,7 @@ msgid "ByLayer"
 msgstr "По Слою"
 
 #: mainwindow.s_default
+msgctxt "mainwindow.s_default"
 msgid "Default"
 msgstr "Обычный"
 
@@ -712,6 +750,18 @@ msgstr "Группа блока"
 #: TBlockDesc~BType
 msgid "Block type"
 msgstr "Тип блока"
+
+#: TBlockReplaceParams~Find
+msgid "Find"
+msgstr "Найти"
+
+#: TBlockReplaceParams~Process
+msgid "Process"
+msgstr "Обрабатывать"
+
+#: TBlockReplaceParams~Replace
+msgid "Replace"
+msgstr "Заменить на"
 
 #: TCalcIP~_ICOS_from_P
 msgid "I,Cos=F(P)"
@@ -819,9 +869,18 @@ msgctxt "TEntityAdress~SelfIndex"
 msgid "Position"
 msgstr "Позиция"
 
+#: TIMode~TIM_MText
+msgid "MText"
+msgstr ""
+
+#: TIMode~TIM_Text
+msgctxt "TIMode~TIM_Text"
+msgid "Text"
+msgstr ""
+
 #: tmisc~ShowHiddenFieldInObjInsp
 msgid "Show hidden fields"
-msgstr ""
+msgstr "Показывать скрытые поля"
 
 #: TObjLinkRecordMode~OBT
 msgid "ObjBeginToken"
@@ -888,7 +947,7 @@ msgstr "Ближайшая"
 
 #: TOSMode~kosm_paralel
 msgid "Paralel"
-msgstr ""
+msgstr "Паралель"
 
 #: TOSMode~kosm_perpendicular
 msgid "Perpendicular"
@@ -991,6 +1050,7 @@ msgid "Degradation while pan"
 msgstr "Деградация при перетаскивании"
 
 #: trd~RD_Renderer
+msgctxt "trd~RD_Renderer"
 msgid "Device"
 msgstr "Устройство"
 
@@ -1009,6 +1069,10 @@ msgstr "Производитель"
 #: trd~RD_Version
 msgid "Version"
 msgstr "Версия"
+
+#: trd~RD_VSync
+msgid "VSync"
+msgstr ""
 
 #: TRestoreMode~WND_AccumBuffer
 msgid "ACCUM buffer"
@@ -1086,6 +1150,47 @@ msgctxt "TTableCellJustify~jcr"
 msgid "TopRight"
 msgstr "ВерхПраво"
 
+#: TTextInsertParams~h
+msgid "Height"
+msgstr "Высота"
+
+#: TTextInsertParams~justify
+msgid "Justify"
+msgstr "Выравнивание"
+
+#: TTextInsertParams~LineSpace
+msgid "Line space factor"
+msgstr "Межстрочное расстояние"
+
+#: TTextInsertParams~mode
+msgid "Entity"
+msgstr "Примитив"
+
+#: TTextInsertParams~Oblique
+msgid "Oblique"
+msgstr "Наклон"
+
+#: TTextInsertParams~runtexteditor
+msgid "Run text editor"
+msgstr "Запускать редактор текста"
+
+#: TTextInsertParams~Style
+msgid "Style"
+msgstr "Стиль"
+
+#: TTextInsertParams~text
+msgctxt "TTextInsertParams~text"
+msgid "Text"
+msgstr "Текст"
+
+#: TTextInsertParams~Width
+msgid "Width"
+msgstr "Ширина"
+
+#: TTextInsertParams~WidthFactor
+msgid "Width factor"
+msgstr "Фактор ширины"
+
 #: TTextJustify~jsbc
 msgid "BottomCenter"
 msgstr "НизЦентр"
@@ -1156,6 +1261,19 @@ msgstr "Адрес"
 msgctxt "TTreeAdress~SelfIndex"
 msgid "Position"
 msgstr "Позиция"
+
+#: TVSControl~TVSDefault
+msgctxt "TVSControl~TVSDefault"
+msgid "Default"
+msgstr "Обычный"
+
+#: TVSControl~TVSOff
+msgid "Off"
+msgstr "Откл."
+
+#: TVSControl~TVSOn
+msgid "On"
+msgstr "Вкл."
 
 #: ugdbdescriptor.unnamedwindowtitle
 msgid "unnamed"

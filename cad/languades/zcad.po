@@ -21,6 +21,14 @@ msgstr ""
 msgid "Insert block"
 msgstr ""
 
+#: ACN_BREPLACE~caption
+msgid "Block replace"
+msgstr ""
+
+#: ACN_BREPLACE~textimage
+msgid "BR"
+msgstr ""
+
 #: ACN_CIRCLE~caption
 msgid "Draw circle"
 msgstr ""
@@ -214,6 +222,22 @@ msgstr ""
 msgid "Scale primitives"
 msgstr ""
 
+#: ACN_SELECTALL~caption
+msgid "Select all"
+msgstr ""
+
+#: ACN_SELECTALL~textimage
+msgid "SA"
+msgstr ""
+
+#: ACN_SELSIM~caption
+msgid "Select similar"
+msgstr ""
+
+#: ACN_SELSIM~textimage
+msgid "SSim"
+msgstr ""
+
 #: ACN_SHOW_COMMANDLINE~caption
 #, fuzzy
 msgid "Command line and history"
@@ -249,6 +273,19 @@ msgstr ""
 
 #: ACN_UNDO~caption
 msgid "Undo"
+msgstr ""
+
+#: BRMode~BRM_BD
+msgid "Block and Device"
+msgstr ""
+
+#: BRMode~BRM_Block
+msgid "Block"
+msgstr ""
+
+#: BRMode~BRM_Device
+msgctxt "BRMode~BRM_Device"
+msgid "Device"
 msgstr ""
 
 #: button_command~El_Cable_Select
@@ -611,6 +648,7 @@ msgid "ByLayer"
 msgstr ""
 
 #: mainwindow.s_default
+msgctxt "mainwindow.s_default"
 msgid "Default"
 msgstr ""
 
@@ -710,6 +748,18 @@ msgstr ""
 
 #: TBlockDesc~BType
 msgid "Block type"
+msgstr ""
+
+#: TBlockReplaceParams~Find
+msgid "Find"
+msgstr ""
+
+#: TBlockReplaceParams~Process
+msgid "Process"
+msgstr ""
+
+#: TBlockReplaceParams~Replace
+msgid "Replace"
 msgstr ""
 
 #: TCalcIP~_ICOS_from_P
@@ -816,6 +866,15 @@ msgstr ""
 #: TEntityAdress~SelfIndex
 msgctxt "TEntityAdress~SelfIndex"
 msgid "Position"
+msgstr ""
+
+#: TIMode~TIM_MText
+msgid "MText"
+msgstr ""
+
+#: TIMode~TIM_Text
+msgctxt "TIMode~TIM_Text"
+msgid "Text"
 msgstr ""
 
 #: tmisc~ShowHiddenFieldInObjInsp
@@ -991,6 +1050,7 @@ msgid "Degradation while pan"
 msgstr ""
 
 #: trd~RD_Renderer
+msgctxt "trd~RD_Renderer"
 msgid "Device"
 msgstr ""
 
@@ -1008,6 +1068,10 @@ msgstr ""
 
 #: trd~RD_Version
 msgid "Version"
+msgstr ""
+
+#: trd~RD_VSync
+msgid "VSync"
 msgstr ""
 
 #: TRestoreMode~WND_AccumBuffer
@@ -1086,6 +1150,47 @@ msgctxt "TTableCellJustify~jcr"
 msgid "TopRight"
 msgstr ""
 
+#: TTextInsertParams~h
+msgid "Height"
+msgstr ""
+
+#: TTextInsertParams~justify
+msgid "Justify"
+msgstr ""
+
+#: TTextInsertParams~LineSpace
+msgid "Line space factor"
+msgstr ""
+
+#: TTextInsertParams~mode
+msgid "Entity"
+msgstr ""
+
+#: TTextInsertParams~Oblique
+msgid "Oblique"
+msgstr ""
+
+#: TTextInsertParams~runtexteditor
+msgid "Run text editor"
+msgstr ""
+
+#: TTextInsertParams~Style
+msgid "Style"
+msgstr ""
+
+#: TTextInsertParams~text
+msgctxt "TTextInsertParams~text"
+msgid "Text"
+msgstr ""
+
+#: TTextInsertParams~Width
+msgid "Width"
+msgstr ""
+
+#: TTextInsertParams~WidthFactor
+msgid "Width factor"
+msgstr ""
+
 #: TTextJustify~jsbc
 msgid "BottomCenter"
 msgstr ""
@@ -1155,6 +1260,19 @@ msgstr ""
 #: TTreeAdress~SelfIndex
 msgctxt "TTreeAdress~SelfIndex"
 msgid "Position"
+msgstr ""
+
+#: TVSControl~TVSDefault
+msgctxt "TVSControl~TVSDefault"
+msgid "Default"
+msgstr ""
+
+#: TVSControl~TVSOff
+msgid "Off"
+msgstr ""
+
+#: TVSControl~TVSOn
+msgid "On"
 msgstr ""
 
 #: ugdbdescriptor.unnamedwindowtitle

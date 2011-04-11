@@ -293,6 +293,7 @@ var pdesc:controlpointdesc;
     pv2d:pGDBvertex2d;
     pv:pGDBvertex;
 begin
+          renderfeedback;
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{48F91543-AAA8-4CF7-A038-D3DDC248BE3E}',{$ENDIF}pprojpoint.count);
           pv2d:=pprojpoint^.parray;
           pv:=Vertex3D_in_WCS_Array.parray;

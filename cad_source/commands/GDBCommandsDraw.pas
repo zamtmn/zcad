@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   //debygunit,
   commandlinedef,
   {windows,}gdbasetypes,commandline,GDBCommandsBase,
@@ -91,6 +91,35 @@ type
                             text:GDBAnsiString;(*'Text'*)
                             runtexteditor:GDBBoolean;(*'Run text editor'*)
                       end;
+         BRMode=(
+                 BRM_Block(*'Block'*),
+                 BRM_Device(*'Device'*),
+                 BRM_BD(*'Block and Device'*)
+                );
+         TBlockReplaceParams=record
+                            Process:BRMode;(*'Process'*)
+                            CurrentFindBlock:GDBString;(*'**CurrentFind'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                            Find:TEnumData;(*'Find'*)
+                            CurrentReplaceBlock:GDBString;(*'**CurrentReplace'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                            Replace:TEnumData;(*'Replace'*)
+                      end;
+         TSelGeneralParams=record
+                                 SameLayer:GDBBoolean;(*'Same layer'*)
+                                 SameLineWeight:GDBBoolean;(*'Same line weight'*)
+                                 SameEntType:GDBBoolean;(*'Same entity type'*)
+                           end;
+         TSelBlockParams=record
+                                 SameName:GDBBoolean;(*'Same name'*)
+                                 Process:BRMode;(*'Process'*)
+                           end;
+         TSelTextParams=record
+                                 SameContent:GDBBoolean;(*'Same content'*)
+                           end;
+         TSelSimParams=record
+                             General:TSelGeneralParams;(*'General'*)
+                             Blocks:TSelBlockParams;(*'??Blocks'*)
+                             Texts:TSelTextParams;(*'??Texts'*)
+                      end;
   TBEditParam=record
                     CurrentEditBlock:GDBString;(*'Текущий блок'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Выбор блока'*)
@@ -141,7 +170,7 @@ type
     CMode:TFIWPMode;
     procedure CommandStart(Operands:pansichar); virtual;
     procedure BuildDM(Operands:pansichar); virtual;
-    procedure Run(sender:pointer;pdata:pointer); virtual;
+    procedure Run(pdata:GDBPlatformint); virtual;
     function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     //procedure Command(Operands:pansichar); virtual;abstract;
     //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
@@ -158,6 +187,19 @@ type
                        procedure Format;virtual;
                        function DoEnd(pdata:GDBPointer):GDBBoolean;virtual;
   end;
+
+  BlockReplace_com=object(CommandRTEdObject)
+                         procedure CommandStart(Operands:pansichar); virtual;
+                         procedure BuildDM(Operands:pansichar); virtual;
+                         procedure Format;virtual;
+                         procedure Run(pdata:{pointer}GDBPlatformint); virtual;
+                   end;
+  SelSim_com=object(CommandRTEdObject)
+                         procedure CommandStart(Operands:pansichar); virtual;
+                         //procedure BuildDM(Operands:pansichar); virtual;
+                         //procedure Format;virtual;
+                         procedure Run(pdata:GDBPlatformint); virtual;
+                   end;
 
   ITT_com = object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;
@@ -192,6 +234,10 @@ var
 
    TextInsert:TextInsert_com;
    TextInsertParams:TTextInsertParams;
+   BlockReplace:BlockReplace_com;
+   BlockReplaceParams:TBlockReplaceParams;
+   SelSim:SelSim_com;
+   SelSimParams:TSelSimParams;
 
 //procedure startup;
 //procedure Finalize;
@@ -200,7 +246,7 @@ procedure Line_com_CommandEnd;
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 implementation
-uses GDBBlockDef,mainwindow,{UGDBObjBlockdefArray,}Varman,projecttreewnd,oglwindow,URecordDescriptor,TypeDescriptors;
+uses UBaseTypeDescriptor,GDBBlockDef,mainwindow,{UGDBObjBlockdefArray,}Varman,projecttreewnd,oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
 function GetBlockDefNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDBInteger;
 var pb:PGDBObjBlockdef;
     ir:itrec;
@@ -218,6 +264,57 @@ begin
            BDefNames.add(@pb^.name);
            pb:=gdb.GetCurrentDWG.BlockDefArray.iterate(ir);
            inc(i);
+     until pb=nil;
+end;
+function GetSelectedBlockNames(var BDefNames:GDBGDBStringArray;selname:GDBString;mode:BRMode):GDBInteger;
+var pb:PGDBObjBlockInsert;
+    ir:itrec;
+    i:gdbinteger;
+    poa:PGDBObjEntityTreeArray;
+begin
+     poa:=@gdb.GetCurrentROOT.ObjArray;
+     result:=-1;
+     i:=0;
+     selname:=uppercase(selname);
+     pb:=poa.beginiterate(ir);
+     if pb<>nil then
+     repeat
+           if pb^.Selected then
+           case mode of
+                       BRM_Block:begin
+                                      if pb^.vp.ID=GDBBlockInsertID then
+                                      begin
+                                           BDefNames.addnodouble(@pb^.name);
+                                           inc(i);
+                                           if result=-1 then
+                                           if uppercase(pb^.name)=selname then
+                                                                              result:=BDefNames.Count-1;
+                                      end;
+                                 end;
+                       BRM_Device:begin
+                                      if pb^.vp.ID=GDBDeviceID then
+                                      begin
+                                           BDefNames.addnodouble(@pb^.name);
+                                           inc(i);
+                                           if result=-1 then
+                                           if uppercase(pb^.name)=selname then
+                                                                              result:=BDefNames.Count-1;
+                                      end;
+                                 end;
+                       BRM_BD:begin
+                                      if (pb^.vp.ID=GDBBlockInsertID)or
+                                         (pb^.vp.ID=GDBDeviceID)then
+                                      begin
+                                           BDefNames.addnodouble(@pb^.name);
+                                           inc(i);
+                                           if result=-1 then
+                                           if uppercase(pb^.name)=selname then
+                                                                              result:=BDefNames.Count-1;
+                                      end;
+
+                                 end;
+           end;
+           pb:=poa.iterate(ir);
      until pb=nil;
 end;
 function GetStyleNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDBInteger;
@@ -268,6 +365,263 @@ begin
               commandmanager.executecommandend;
          end
 end;
+procedure BlockReplace_com.BuildDM(Operands:pansichar);
+begin
+  commandmanager.DMAddMethod('Заменить','Заменить блоки',run);
+  commandmanager.DMShow;
+end;
+procedure BlockReplace_com.Run;
+var pb:PGDBObjBlockInsert;
+    ir:itrec;
+    i,result:gdbinteger;
+    poa:PGDBObjEntityTreeArray;
+    selname,newname:GDBString;
+procedure rb;
+var
+    nb,tb:PGDBObjBlockInsert;
+begin
+
+    nb := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID,gdb.GetCurrentROOT));
+    //PGDBObjBlockInsert(nb)^.initnul;//(@gdb.GetCurrentDWG.ObjRoot,gdb.LayerTable.GetSystemLayer,0);
+    PGDBObjBlockInsert(nb)^.init(gdb.GetCurrentROOT,gdb.GetCurrentDWG.LayerTable.GetSystemLayer,0);
+    nb^.Name:=newname;//'DEVICE_NOC';
+    nb^.vp.ID:=GDBBlockInsertID;
+    nb^.Local.p_insert:=pb.Local.P_insert;
+    nb^.scale:=pb.Scale;
+    nb^.rotate:=pb.rotate;
+    //nb^.
+    //GDBObjCircleInit(pc,gdb.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
+    //pc^.lod:=4;
+    tb:=pointer(nb^.FromDXFPostProcessBeforeAdd(nil));
+    if tb<>nil then begin
+                         tb^.bp:=nb^.bp;
+                         nb^.done;
+                         gdbfreemem(pointer(nb));
+                         nb:=pointer(tb);
+    end;
+    gdb.GetCurrentROOT.AddObjectToObjArray(addr(nb));
+    PGDBObjEntity(nb)^.FromDXFPostProcessAfterAdd;
+    nb^.CalcObjMatrix;
+    nb^.BuildGeometry;
+    nb^.BuildVarGeometry;
+    nb^.Format;
+    gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(nb);
+    nb^.Visible:=0;
+    gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
+    nb^.RenderFeedback;
+
+
+     pb.YouDeleted;
+     inc(result);
+end;
+
+begin
+     if BlockReplaceParams.Find.Enums.Count=0 then
+                                                  shared.ShowError('BlockReplace: Режим не позволяет получить искомый блок для замены')
+                                              else
+     begin
+          poa:=@gdb.GetCurrentROOT.ObjArray;
+          result:=0;
+          i:=0;
+          newname:=TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Replace);
+          selname:=TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Find);
+          selname:=uppercase(selname);
+          pb:=poa.beginiterate(ir);
+          if pb<>nil then
+          repeat
+                if pb^.Selected then
+                case BlockReplaceParams.Process of
+                            BRM_Block:begin
+                                           if pb^.vp.ID=GDBBlockInsertID then
+                                           if uppercase(pb^.name)=selname then
+                                           begin
+                                                rb;
+                                           end;
+                                      end;
+                            BRM_Device:begin
+                                           if pb^.vp.ID=GDBDeviceID then
+                                           if uppercase(pb^.name)=selname then
+                                           begin
+                                                rb;
+                                           end;
+                                      end;
+                            BRM_BD:begin
+                                           if (pb^.vp.ID=GDBBlockInsertID)or
+                                              (pb^.vp.ID=GDBDeviceID)then
+                                           if uppercase(pb^.name)=selname then
+                                           begin
+                                                rb;
+                                           end;
+
+                                      end;
+                end;
+                pb:=poa.iterate(ir);
+          until pb=nil;
+          HistoryOutStr('BlockReplace: '+inttostr(result)+' вхождений заменено');
+          Regen_com('');
+          commandmanager.executecommandend;
+     end;
+end;
+procedure BlockReplace_com.Format;
+var pb:PGDBObjBlockdef;
+    //ir:itrec;
+    i:integer;
+begin
+     BlockReplaceParams.CurrentFindBlock:=TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Find);
+     BlockReplaceParams.CurrentReplaceBlock:=TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Replace);
+     BlockReplaceParams.Find.Enums.free;
+     BlockReplaceParams.Find.Selected:=GetSelectedBlockNames(BlockReplaceParams.Find.Enums,BlockReplaceParams.CurrentFindBlock,BlockReplaceParams.Process);
+     if BlockReplaceParams.Find.Selected<0 then
+                                               begin
+                                                         BlockReplaceParams.Find.Selected:=0;
+                                                         BlockReplaceParams.CurrentFindBlock:='';
+                                               end ;
+     if BlockReplaceParams.Find.Enums.Count=0 then
+                                                       PRecordDescriptor(commanddata.PTD).SetAttrib('Find',FA_READONLY,0)
+                                                   else
+                                                       PRecordDescriptor(commanddata.PTD).SetAttrib('Find',0,FA_READONLY);
+end;
+function GetSelCount:integer;
+var
+  pobj: pGDBObjEntity;
+  ir:itrec;
+begin
+  result:=0;
+
+  pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pobj<>nil then
+  repeat
+    if pobj.selected then
+    inc(result);
+  pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+  until pobj=nil;
+end;
+procedure SelSim_com.Run(pdata:GDBPlatformint);
+var
+   pobj: pGDBObjEntity;
+   ir:itrec;
+   tp:pointer;
+
+   islayer,isweght,isobjtype,select:boolean;
+
+   bnames,textcontents:GDBGDBStringArray;
+   layers,weights,objtypes:GDBOpenArrayOfGDBPointer;
+
+begin
+     bnames.init(100);
+     textcontents.init(100);
+     layers.init(100);
+     weights.init(100);
+     objtypes.init(100);
+
+     pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+     if pobj<>nil then
+     repeat
+       if pobj.selected then
+       begin
+            tp:=pobj.vp.Layer;
+            layers.addnodouble(@tp);
+
+            tp:=pointer(pobj.vp.LineWeight);
+            weights.addnodouble(@tp);
+
+            tp:=pointer(pobj.vp.ID);
+            objtypes.addnodouble(@tp);
+       end;
+     pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+     until pobj=nil;
+
+     pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+     if pobj<>nil then
+     repeat
+           islayer:=false;
+           isweght:=false;
+           isobjtype:=false;
+           if pobj.selected then
+                                pobj.DeSelect;
+
+           islayer:=layers.IsObjExist(pobj.vp.Layer);
+
+           tp:=pointer(pobj.vp.LineWeight);
+           isweght:=weights.IsObjExist(tp);
+
+           tp:=pointer(pobj.vp.ID);
+           isobjtype:=objtypes.IsObjExist(tp);
+
+           select:=true;
+           if SelSimParams.General.SameLayer then
+                                                 begin
+                                                      select:=select and islayer;
+                                                 end;
+           if SelSimParams.General.SameLineWeight then
+                                                 begin
+                                                      select:=select and isweght;
+                                                 end;
+           if SelSimParams.General.SameEntType then
+                                                 begin
+                                                      select:=select and isobjtype;
+                                                 end;
+           if select then pobj^.select;
+
+     pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+     until pobj=nil;
+
+
+     layers.done;
+     weights.done;
+     objtypes.done;
+     textcontents.FreeAndDone;
+     bnames.FreeAndDone;
+     Commandmanager.executecommandend;
+end;
+
+procedure SelSim_com.CommandStart(Operands:pansichar);
+begin
+  self.savemousemode:=GDB.GetCurrentDWG.OGLwindow1.param.md.mode;
+
+  if GetSelCount>0 then
+  begin
+       commandmanager.DMAddMethod('Найти','Найти',run);
+       commandmanager.DMShow;
+       inherited CommandStart('');
+  end
+  else
+  begin
+    historyout('Объекты должны быть выбраны до запуска команды!!!');
+    Commandmanager.executecommandend;
+  end;
+end;
+
+procedure BlockReplace_com.CommandStart(Operands:pansichar);
+var pb:PGDBObjBlockdef;
+    //ir:itrec;
+    i:integer;
+begin
+     BlockReplaceParams.Replace.Enums.free;
+     i:=GetBlockDefNames(BlockReplaceParams.Replace.Enums,BlockReplaceParams.CurrentReplaceBlock);
+     if BlockReplaceParams.Replace.Enums.Count>0 then
+     begin
+          if i>0 then
+                     BlockReplaceParams.Replace.Selected:=i
+                 else
+                     if length(operands)<>0 then
+                                         begin
+                                               HistoryOutStr('Insert: нет определения блока '''+operands+''' в чертеже');
+                                               commandmanager.executecommandend;
+                                               exit;
+                                         end;
+          format;
+
+          BuildDM(Operands);
+          inherited;
+     end
+        else
+            begin
+                 historyout('BlockReplace: нет определений блоков в чертеже');
+                 commandmanager.executecommandend;
+            end;
+end;
+
 procedure TextInsert_com.BuildPrimitives;
 begin
      gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
@@ -1787,6 +2141,13 @@ begin
   TextInsert.commanddata.Instance:=@TextInsertParams;
   TextInsert.commanddata.PTD:=SysUnit.TypeName2PTD('TTextInsertParams');
 
+  BlockReplace.init('BlockReplace',0,0);
+  BlockReplaceParams.Find.Enums.init(10);
+  BlockReplaceParams.Replace.Enums.init(10);
+  BlockReplaceParams.Process:=BRM_Device;
+  BlockReplace.commanddata.Instance:=@BlockReplaceParams;
+  BlockReplace.commanddata.PTD:=SysUnit.TypeName2PTD('TBlockReplaceParams');
+
   CreateCommandFastObjectPlugin(@Erase_com,'Erase',CADWG,0);
   CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
   CreateCommandFastObjectPlugin(@PlaceAllBlocks_com,'PlaceAllBlocks',CADWG,0);
@@ -1797,6 +2158,12 @@ begin
   pbeditcom^.commanddata.Instance:=@BEditParam;
   pbeditcom^.commanddata.PTD:=SysUnit.TypeName2PTD('TBEditParam');
 
+  SelSim.init('SelSim',0,0);
+  SelSim.CEndActionAttr:=0;
+  SelSimParams.General.SameEntType:=true;
+  SelSimParams.General.SameLayer:=true;
+  SelSim.commanddata.Instance:=@SelSimParams;
+  SelSim.commanddata.PTD:=SysUnit.TypeName2PTD('TSelSimParams');
 
 
   InsertTestTable.init('InsertTestTable',0,0);

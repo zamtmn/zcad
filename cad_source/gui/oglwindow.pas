@@ -837,7 +837,8 @@ begin
      param.md.WPPointUR.z:=1;
      if (4*ph>clientwidth)or(4*pv>clientheight)then
                                                    begin
-                                                        historyout('Grid too density');
+                                                        if sysvar.DWG.DWG_DrawGrid^ then
+                                                                                        historyout('Grid too density');
                                                         param.md.WPPointUR.z:=-1;
                                                    end;
      param.md.WPPointLU:=vertexmulonsc(vertexsub(param.md.WPPointLU,param.md.WPPointBL),1/pv);
@@ -4022,11 +4023,11 @@ begin
           end;
         Key:=0;
       end
- else if (Key = VK_A) and (shift=[ssCtrl]) then
+ {else if (Key = VK_A) and (shift=[ssCtrl]) then
       begin
         commandmanager.ExecuteCommand('SelectAll');
         Key:=00;
-      end
+      end}
  {else if (Key = VK_Z) and (shift=[ssCtrl]) then
       begin
         commandmanager.ExecuteCommand('Undo');

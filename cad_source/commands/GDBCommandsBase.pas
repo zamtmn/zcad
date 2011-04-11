@@ -86,6 +86,7 @@ TOSModeEditor=object(GDBaseObject)
    function SaveAs_com(Operands:pansichar):GDBInteger;
    procedure CopyToClipboard;
    function quit_com(Operands:pansichar):GDBInteger;
+   function Regen_com(Operands:pansichar):GDBInteger;
 const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 //var DWGPageCxMenu:pzpopupmenu;
@@ -1169,6 +1170,7 @@ begin
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
+  GDB.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   {objinsp.GDBobjinsp.}ReturnToDefault;
   clearcp;
   redrawoglwnd;

@@ -25,7 +25,7 @@ uses
   strutils,intftranslations,sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
 type
     TButtonProc=procedure(pdata:GDBPointer);
-    TButtonMethod=procedure(Sender:pointer;pdata:GDBPointer)of object;
+    TButtonMethod=procedure({Sender:pointer;}pdata:{GDBPointer}GDBPlatformint)of object;
     TmyAction=class(TAction)
                    public
                    command,options,imgstr:string;
@@ -404,7 +404,8 @@ begin
      if assigned(FProc) then
                             FProc(PPata);
      if assigned(FMethod) then
-                            FMethod(@self,PPata);
+                            Application.QueueAsyncCall({MainFormN.asynccloseapp}FMethod,GDBPlatformint(PPata));
+                            //FMethod(@self,PPata);
 end;
 procedure TmyVariableToolButton.Click;
 var

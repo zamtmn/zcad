@@ -112,6 +112,7 @@ end;
 procedure TCLine.FormCreate(Sender: TObject);
 var
    bv:tbevel;
+   pint:PGDBInteger;
 begin
     self.Constraints.MinHeight:=36;
     utfpresent:=false;
@@ -193,6 +194,13 @@ begin
     aliases.loadfromfile(expandpath('*menu/default.cla'));
 
     DMenu:=TDMenuWnd.Create(self);//'DisplayMenu',@MainForm,200,100,10,10,false);
+
+    pint:=SavedUnit.FindValue('DMenuX');
+    if assigned(pint)then
+                         DMenu.Left:=pint^;
+    pint:=SavedUnit.FindValue('DMenuY');
+    if assigned(pint)then
+                         DMenu.Top:=pint^;
 end;
 destructor TCLine.Destroy;
 begin

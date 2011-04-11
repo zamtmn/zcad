@@ -303,13 +303,21 @@ begin
      result:=true;
      if gdb.GetCurrentDWG<>nil then
      begin
-     if Application.messagebox('Закрыть программу?','QUIT',MB_YESNO)=IDYES then
+     //if dialogs.messagebox('Закрыть программу?','QUIT',MB_YESNO)=IDYES then
+     if Application.messagebox('Закрыть программу?','QUIT',MB_YESNO or MB_ICONQUESTION)=IDYES then
      begin
           result:=true;
 
           if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
           if sysvar.SYS.SYS_IsHistoryLineCreated^ then
           begin
+               pint:=SavedUnit.FindValue('DMenuX');
+               if assigned(pint)then
+                                    pint^:=CLine.DMenu.Left;
+               pint:=SavedUnit.FindValue('DMenuY');
+               if assigned(pint)then
+                                    pint^:=CLine.DMenu.Top;
+
           pint:=SavedUnit.FindValue('VIEW_CommandLineH');
           if assigned(pint)then
                                pint^:=Cline.Height;
@@ -1344,6 +1352,7 @@ begin
 
      case chrcode of
                (scCtrl or VK_V),
+               (scCtrl or VK_A),
                (scCtrl or VK_C),
                (scCtrl or VK_INSERT),
                (scShift or VK_INSERT),

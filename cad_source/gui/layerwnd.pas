@@ -22,12 +22,8 @@ type
     B1: TBitBtn;
     B2: TBitBtn;
     B3: TBitBtn;
-    B4: TBitBtn;
-    B5: TBitBtn;
-    B7: TBitBtn;
-    CheckBox1: TCheckBox;
-    CheckBox2: TCheckBox;
-    CheckBox3: TCheckBox;
+    ButtonApplyClose: TBitBtn;
+    Button_Apply: TBitBtn;
     IL: TImageList;
     Label1: TLabel;
     Label2: TLabel;
@@ -175,6 +171,7 @@ var
    s:ansistring;
    li:TListItem;
 begin
+     //ListView1.onconc
      ListView1.BeginUpdate;
      ListView1.Clear;
      ListView1.OnMouseUp:=@LWMouseUp;

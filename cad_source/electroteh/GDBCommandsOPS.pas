@@ -64,6 +64,7 @@ type
                                         NDW:GDBDouble;(*'Стена-Датчик(Норм)'*)
                                         FDD:GDBDouble;(*'Датчик-Датчик(Факт)'*)(*oi_readonly*)
                                         FDW:GDBDouble;(*'Стена-Датчик(Факт)'*)(*oi_readonly*)
+                                        NormalizePoint:GDBBoolean;(*'Нормализовать по сетке(если включена)'*)
 
                                         oldth:GDBInteger;(*hidden_in_objinsp*)
                                         oldsh:GDBInteger;(*hidden_in_objinsp*)
@@ -77,6 +78,7 @@ type
                                         NY:GDBInteger;(*'Кол-во по ширине'*)
                                         Angle:GDBDouble;(*'Угол'*)
                                         AutoAngle:GDBBoolean;(*'Автоповорот'*)
+                                        NormalizePoint:GDBBoolean;(*'Нормализовать по сетке(если включена)'*)
 
                      end;
      GDBLine=record
@@ -145,8 +147,8 @@ var
 procedure finalize;}
 
 implementation
-uses GDBRoot,oglwindowdef, gdbcable,UUnitManager,GDBCommandsElectrical,{UGDBObjBlockdefArray,}URecordDescriptor,TypeDescriptors;
-procedure place2(pva:PGDBObjEntityOpenArray;basepoint, dir: gdbvertex; count: integer; sd: GDBDouble; name: pansichar;angle:GDBDouble);
+uses GDBRoot,oglwindow,oglwindowdef, gdbcable,UUnitManager,GDBCommandsElectrical,{UGDBObjBlockdefArray,}URecordDescriptor,TypeDescriptors;
+procedure place2(pva:PGDBObjEntityOpenArray;basepoint, dir: gdbvertex; count: integer; sd: GDBDouble; name: pansichar;angle:GDBDouble;norm:GDBBoolean);
 var line2: gdbline;
   i: integer;
 begin
@@ -154,26 +156,26 @@ begin
     1:
        begin
             case OPSPlaceSmokeDetectorOrtoParam.DMC of
-                                            TOPSMDC_1:addblockinsert(gdb.GetCurrentROOT,pva,Vertexdmorph(basepoint, dir, 1 / 4), 1, angle, name);
-                                            TOPSMDC_1_2:addblockinsert(gdb.GetCurrentROOT,pva,Vertexdmorph(basepoint, dir, 1 / 2), 1, angle, name);
+                                            TOPSMDC_1:addblockinsert(gdb.GetCurrentROOT,pva,docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 4),norm), 1, angle, name);
+                                            TOPSMDC_1_2:addblockinsert(gdb.GetCurrentROOT,pva,docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 2),norm), 1, angle, name);
             end;
        end;
     2: begin
-        addblockinsert(gdb.GetCurrentROOT,pva, Vertexdmorph(basepoint, dir, 1 / 4), 1, angle, name);
-        addblockinsert(gdb.GetCurrentROOT,pva, Vertexdmorph(basepoint, dir, 3 / 4), 1, angle, name);
+        addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 4),norm), 1, angle, name);
+        addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexdmorph(basepoint, dir, 3 / 4),norm), 1, angle, name);
       end;
     3: begin
-        addblockinsert(gdb.GetCurrentROOT,pva, Vertexdmorph(basepoint, dir, 1 / 6), 1, angle, name);
-        addblockinsert(gdb.GetCurrentROOT,pva, Vertexdmorph(basepoint, dir, 3 / 6), 1, angle, name);
-        addblockinsert(gdb.GetCurrentROOT,pva, Vertexdmorph(basepoint, dir, 5 / 6), 1, angle, name);
+        addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexdmorph(basepoint, dir, 1 / 6),norm), 1, angle, name);
+        addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexdmorph(basepoint, dir, 3 / 6),norm), 1, angle, name);
+        addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexdmorph(basepoint, dir, 5 / 6),norm), 1, angle, name);
       end
   else begin
-      addblockinsert(gdb.GetCurrentROOT,pva, VertexDmorphabs(basepoint, dir, sd), 1, angle, name);
-      addblockinsert(gdb.GetCurrentROOT,pva, VertexDmorphabs(basepoint, dir, -sd), 1, angle, name);
+      addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(VertexDmorphabs(basepoint, dir, sd),norm), 1, angle, name);
+      addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(VertexDmorphabs(basepoint, dir, -sd),norm), 1, angle, name);
       line2.lbegin := VertexDmorphabs(basepoint, dir, sd);
       line2.lend := VertexDmorphabs(basepoint, dir, -sd);
       count := count - 2;
-      for i := 1 to count do addblockinsert(gdb.GetCurrentROOT,pva, Vertexmorph(line2.lbegin, line2.lend, i / (count + 1)), 1, angle, name);
+      for i := 1 to count do addblockinsert(gdb.GetCurrentROOT,pva, docorrecttogrid(Vertexmorph(line2.lbegin, line2.lend, i / (count + 1)),norm), 1, angle, name);
     end
   end;
 end;
@@ -185,7 +187,7 @@ begin
       line2.lend := VertexDmorph(basepoint, dir, 1);
       for i := 1 to count do addblockinsert(pva, Vertexmorph(line2.lbegin, line2.lend, i / (count + 1)), 1, 0, name);
 end;}
-procedure placedatcic(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; sd, dd: GDBDouble; name: pansichar);
+procedure placedatcic(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; sd, dd: GDBDouble; name: pansichar;norm:GDBBoolean);
 var dx, dy: GDBDouble;
   line1, line2: gdbline;
   l1, l2, i: integer;
@@ -252,18 +254,18 @@ begin
 
   case l1 of
     1: begin
-        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 0.5), dir, l2, sd, name,0);
+        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 0.5), dir, l2, sd, name,0,norm);
        end;
     2: begin
         if (Vertexlength(line1.lbegin, line1.lend) - 2 * sd)<dd then
         begin
-        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 1 / 4), dir, l2, sd, name,0);
-        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 3 / 4), dir, l2, sd, name,0);
+        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 1 / 4), dir, l2, sd, name,0,norm);
+        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 3 / 4), dir, l2, sd, name,0,norm);
         end
         else
         begin
-        place2(pva,Vertexmorphabs(line1.lbegin, line1.lend, sd), dir, l2, sd, name,0);
-        place2(pva,Vertexmorphabs(line1.lbegin, line1.lend, -sd), dir, l2, sd, name,0);
+        place2(pva,Vertexmorphabs(line1.lbegin, line1.lend, sd), dir, l2, sd, name,0,norm);
+        place2(pva,Vertexmorphabs(line1.lbegin, line1.lend, -sd), dir, l2, sd, name,0,norm);
         end
        end{;
     3: begin
@@ -272,12 +274,12 @@ begin
         place2(pva,Vertexmorph(line1.lbegin, line1.lend, 5 / 6), dir, l2, sd, name);
       end}
   else begin
-      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, sd), dir, l2, sd, name,0);
-      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, -sd), dir, l2, sd, name,0);
+      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, sd), dir, l2, sd, name,0,norm);
+      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, -sd), dir, l2, sd, name,0,norm);
       line2.lbegin := Vertexmorphabs2(line1.lbegin, line1.lend, sd);
       line2.lend := Vertexmorphabs2(line1.lbegin, line1.lend, -sd);
       l1:=l1-2;
-      for i := 1 to l1 do place2(pva,Vertexmorph(line2.lbegin, line2.lend, i / (l1 + 1)), dir, l2, sd, name,0);
+      for i := 1 to l1 do place2(pva,Vertexmorph(line2.lbegin, line2.lend, i / (l1 + 1)), dir, l2, sd, name,0,norm);
       //for i := 1 to l2 do place3(pva,Vertexmorph(line2.lbegin, line2.lend, i / (l2 )), dir, l1, dd, name);
        end
   end;
@@ -322,14 +324,14 @@ begin
   pl^.Format;
   if (button and MZW_LBUTTON)=0 then
   begin
-       placedatcic(@gdb.GetCurrentDWG.ConstructObjRoot.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, dw, dd,@sdname[1]);
+       placedatcic(@gdb.GetCurrentDWG.ConstructObjRoot.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, dw, dd,@sdname[1],OPSPlaceSmokeDetectorOrtoParam.NormalizePoint);
   end
   else
   begin
        result:=-1;
        //pco^.mouseclic:=-1;
        //gdb.GetCurrentDWG.ConstructObjRoot.cleareraseobj;
-       placedatcic(@gdb.GetCurrentROOT.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, dw, dd,@sdname[1]);
+       placedatcic(@gdb.GetCurrentROOT.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, dw, dd,@sdname[1],OPSPlaceSmokeDetectorOrtoParam.NormalizePoint);
        gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 
        gdb.GetCurrentROOT.calcbb;
@@ -901,7 +903,7 @@ begin
       t3dp:=wc;
     end
 end;
-procedure placedev(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; nmax, nmin: GDBInteger; name: pansichar;a:gdbdouble;aa:gdbboolean);
+procedure placedev(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; nmax, nmin: GDBInteger; name: pansichar;a:gdbdouble;aa:gdbboolean;Norm:GDBBoolean);
 var dx, dy: GDBDouble;
   line1, line2: gdbline;
   l1, l2, i: integer;
@@ -953,13 +955,13 @@ begin
   l2:=nmax;
   case l1 of
     1: begin
-        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 0.5), dir, l2, sd, name,angle);
+        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 0.5), dir, l2, sd, name,angle,norm);
        end;
     2: begin
         //if (Vertexlength(line1.lbegin, line1.lend) - 2 * sd)<dd then
         begin
-        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 1 / 4), dir, l2, sd, name,angle);
-        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 3 / 4), dir, l2, sd, name,angle);
+        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 1 / 4), dir, l2, sd, name,angle,norm);
+        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 3 / 4), dir, l2, sd, name,angle,norm);
         end
         {else
         begin
@@ -968,12 +970,12 @@ begin
         end}
        end
   else begin
-      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, sdd{}), dir, l2, sd, name,angle);
-      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, -sdd{}), dir, l2, sd, name,angle);
+      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, sdd{}), dir, l2, sd, name,angle,norm);
+      place2(pva,Vertexmorphabs2(line1.lbegin, line1.lend, -sdd{}), dir, l2, sd, name,angle,norm);
       line2.lbegin := Vertexmorphabs2(line1.lbegin, line1.lend, sdd);
       line2.lend := Vertexmorphabs2(line1.lbegin, line1.lend, -sdd);
       l1:=l1-2;
-      for i := 1 to l1 do place2(pva,Vertexmorph(line2.lbegin, line2.lend, i / (l1 + 1)), dir, l2, sd, name,angle);
+      for i := 1 to l1 do place2(pva,Vertexmorph(line2.lbegin, line2.lend, i / (l1 + 1)), dir, l2, sd, name,angle,norm);
       //for i := 1 to l2 do place3(pva,Vertexmorph(line2.lbegin, line2.lend, i / (l2 )), dir, l1, dd, name);
        end
   end;
@@ -1083,14 +1085,14 @@ begin
      end;
   if button=0 then
   begin
-       placedev(@gdb.GetCurrentDWG.ConstructObjRoot.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, NX, NY,@OrtoDevPlaceParam.Name[1],OrtoDevPlaceParam.Angle,OrtoDevPlaceParam.AutoAngle);
+       placedev(@gdb.GetCurrentDWG.ConstructObjRoot.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, NX, NY,@OrtoDevPlaceParam.Name[1],OrtoDevPlaceParam.Angle,OrtoDevPlaceParam.AutoAngle,OrtoDevPlaceParam.NormalizePoint);
   end
   else
   begin
        result:=-1;
        pco^.mouseclic:=-1;
        //gdb.GetCurrentDWG.ConstructObjRoot.cleareraseobj;
-       placedev(@gdb.GetCurrentROOT.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, NX, NY,@OrtoDevPlaceParam.Name[1],OrtoDevPlaceParam.Angle,OrtoDevPlaceParam.AutoAngle);
+       placedev(@gdb.GetCurrentROOT.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, NX, NY,@OrtoDevPlaceParam.Name[1],OrtoDevPlaceParam.Angle,OrtoDevPlaceParam.AutoAngle,OrtoDevPlaceParam.NormalizePoint);
        gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 
        gdb.GetCurrentROOT.calcbb;
@@ -1126,6 +1128,7 @@ begin
   OPSPlaceSmokeDetectorOrtoParam.oldth:=0;
   OPSPlaceSmokeDetectorOrtoParam.oldsh:=0;
   OPSPlaceSmokeDetectorOrtoParam.olddt:=TOPSDT_Termo;
+  OPSPlaceSmokeDetectorOrtoParam.NormalizePoint:=True;
   commformat;
 
   pco2:=CreateCommandRTEdObjectPlugin(@PlCommandStart,nil,nil,@commformat2,@PlBeforeClick,@PlAfterClick,nil,'OrtoDevPlace',0,0);
@@ -1136,6 +1139,7 @@ begin
   OrtoDevPlaceParam.Count:=2;
   OrtoDevPlaceParam.Angle:=0;
   OrtoDevPlaceParam.AutoAngle:=false;
+  OrtoDevPlaceParam.NormalizePoint:=true;
   commformat2;
   //format;
 end;

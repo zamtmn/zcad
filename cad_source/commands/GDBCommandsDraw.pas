@@ -108,17 +108,23 @@ type
                                  SameLineWeight:GDBBoolean;(*'Same line weight'*)
                                  SameEntType:GDBBoolean;(*'Same entity type'*)
                            end;
+         TDiff=(
+                 TD_Diff(*'Diff'*),
+                 TD_NotDiff(*'Not Diff'*)
+                );
          TSelBlockParams=record
                                  SameName:GDBBoolean;(*'Same name'*)
-                                 Process:BRMode;(*'Process'*)
+                                 DiffBlockDevice:TDiff;(*'Block and Device'*)
                            end;
          TSelTextParams=record
                                  SameContent:GDBBoolean;(*'Same content'*)
+                                 SameTemplate:GDBBoolean;(*'Same template'*)
+                                 DiffTextMText:TDiff;(*'Text and Mtext'*)
                            end;
          TSelSimParams=record
                              General:TSelGeneralParams;(*'General'*)
-                             Blocks:TSelBlockParams;(*'??Blocks'*)
-                             Texts:TSelTextParams;(*'??Texts'*)
+                             Blocks:TSelBlockParams;(*'Blocks'*)
+                             Texts:TSelTextParams;(*'Texts'*)
                       end;
   TBEditParam=record
                     CurrentEditBlock:GDBString;(*'Текущий блок'*)(*oi_readonly*)
@@ -504,12 +510,13 @@ var
 
    islayer,isweght,isobjtype,select:boolean;
 
-   bnames,textcontents:GDBGDBStringArray;
+   bnames,textcontents,textremplates:GDBGDBStringArray;
    layers,weights,objtypes:GDBOpenArrayOfGDBPointer;
 
 begin
      bnames.init(100);
      textcontents.init(100);
+     textremplates.init(100);
      layers.init(100);
      weights.init(100);
      objtypes.init(100);
@@ -526,6 +533,20 @@ begin
             weights.addnodouble(@tp);
 
             tp:=pointer(pobj.vp.ID);
+
+            if (cardinal(tp)=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
+                                   cardinal(tp):=GDBBlockInsertID;
+            if ((cardinal(tp)=GDBBlockInsertID)or(cardinal(tp)=GDBDeviceID)) then
+                                       bnames.addnodouble(@PGDBObjBlockInsert(pobj)^.Name);
+
+            if (cardinal(tp)=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
+                                   cardinal(tp):=GDBTextID;
+            if ((cardinal(tp)=GDBTextID)or(cardinal(tp)=GDBMTextID)) then
+                                begin
+                                       textcontents.addnodouble(@PGDBObjText(pobj)^.Content);
+                                       textremplates.addnodouble(@PGDBObjText(pobj)^.Template);
+                                end;
+
             objtypes.addnodouble(@tp);
        end;
      pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
@@ -546,7 +567,25 @@ begin
            isweght:=weights.IsObjExist(tp);
 
            tp:=pointer(pobj.vp.ID);
+           if (cardinal(tp)=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
+                                  cardinal(tp):=GDBBlockInsertID;
+           if (cardinal(tp)=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
+                                  cardinal(tp):=GDBTextID;
            isobjtype:=objtypes.IsObjExist(tp);
+           if isobjtype then
+           begin
+                if ((cardinal(tp)=GDBBlockInsertID)or(cardinal(tp)=GDBDeviceID))and(SelSimParams.Blocks.SameName) then
+                if not bnames.findstring(uppercase(PGDBObjBlockInsert(pobj)^.Name)) then
+                   isobjtype:=false;
+
+                if ((cardinal(tp)=GDBTextID)or(cardinal(tp)=GDBMTextID))and(SelSimParams.Texts.SameContent) then
+                if not textcontents.findstring(uppercase(PGDBObjText(pobj)^.Content)) then
+                   isobjtype:=false;
+                if ((cardinal(tp)=GDBTextID)or(cardinal(tp)=GDBMTextID))and(SelSimParams.Texts.SameContent) then
+                if not textremplates.findstring(uppercase(PGDBObjText(pobj)^.Template)) then
+                   isobjtype:=false;
+
+           end;
 
            select:=true;
            if SelSimParams.General.SameLayer then
@@ -571,6 +610,7 @@ begin
      weights.done;
      objtypes.done;
      textcontents.FreeAndDone;
+     textremplates.FreeAndDone;
      bnames.FreeAndDone;
      Commandmanager.executecommandend;
 end;
@@ -2158,10 +2198,17 @@ begin
   pbeditcom^.commanddata.Instance:=@BEditParam;
   pbeditcom^.commanddata.PTD:=SysUnit.TypeName2PTD('TBEditParam');
 
+
   SelSim.init('SelSim',0,0);
   SelSim.CEndActionAttr:=0;
   SelSimParams.General.SameEntType:=true;
   SelSimParams.General.SameLayer:=true;
+  SelSimParams.General.SameLineWeight:=false;
+  SelSimParams.Texts.SameContent:=false;
+  SelSimParams.Texts.DiffTextMText:=TD_Diff;
+  SelSimParams.Texts.SameTemplate:=false;
+  SelSimParams.Blocks.SameName:=true;
+  SelSimParams.Blocks.DiffBlockDevice:=TD_Diff;
   SelSim.commanddata.Instance:=@SelSimParams;
   SelSim.commanddata.PTD:=SysUnit.TypeName2PTD('TSelSimParams');
 

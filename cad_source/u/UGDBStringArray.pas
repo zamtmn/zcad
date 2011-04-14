@@ -27,6 +27,7 @@ type
                           constructor init(m:GDBInteger);
                           procedure loadfromfile(fname:GDBString);
                           procedure freeelement(p:GDBPointer);virtual;
+                          function findstring(s:GDBString):boolean;
                           procedure sort;virtual;
                           function add(p:GDBPointer):TArrayIndex;virtual;
                           function addutoa(p:GDBPointer):TArrayIndex;
@@ -105,7 +106,23 @@ begin
      result:=inherited add(@s);
      GDBPointer(s):=nil;
 end;
-
+function GDBGDBStringArray.findstring(s:GDBString):boolean;
+var
+   ps{,pspred}:pgdbstring;
+   ir:itrec;
+begin
+     ps:=beginiterate(ir);
+     if (ps<>nil) then
+     repeat
+          if ps^=s then
+                       begin
+                            result:=true;
+                            exit;
+                       end;
+          ps:=iterate(ir);
+     until ps=nil;
+     result:=false;
+end;
 function GDBGDBStringArray.addnodouble(p:GDBPointer):GDBInteger;
 var
 //   isEnd:boolean;

@@ -470,6 +470,7 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           constructor init(m:GDBInteger);
                           procedure loadfromfile(fname:GDBString);
                           procedure freeelement(p:GDBPointer);virtual;abstract;
+                          function findstring(s:GDBString):boolean;
                           procedure sort;virtual;abstract;
                           function add(p:GDBPointer):TArrayIndex;virtual;abstract;
                           function addutoa(p:GDBPointer):TArrayIndex;
@@ -2097,17 +2098,23 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                                  SameLineWeight:GDBBoolean;(*'Same line weight'*)
                                  SameEntType:GDBBoolean;(*'Same entity type'*)
                            end;
+         TDiff=(
+                 TD_Diff(*'Diff'*),
+                 TD_NotDiff(*'Not Diff'*)
+                );
          TSelBlockParams=record
                                  SameName:GDBBoolean;(*'Same name'*)
-                                 Process:BRMode;(*'Process'*)
+                                 DiffBlockDevice:TDiff;(*'Block and Device'*)
                            end;
          TSelTextParams=record
                                  SameContent:GDBBoolean;(*'Same content'*)
+                                 SameTemplate:GDBBoolean;(*'Same template'*)
+                                 DiffTextMText:TDiff;(*'Text and Mtext'*)
                            end;
          TSelSimParams=record
                              General:TSelGeneralParams;(*'General'*)
-                             Blocks:TSelBlockParams;(*'??Blocks'*)
-                             Texts:TSelTextParams;(*'??Texts'*)
+                             Blocks:TSelBlockParams;(*'Blocks'*)
+                             Texts:TSelTextParams;(*'Texts'*)
                       end;
   TBEditParam=record
                     CurrentEditBlock:GDBString;(*'Текущий блок'*)(*oi_readonly*)
@@ -2446,6 +2453,7 @@ TOSModeEditor=object(GDBaseObject)
                                         NDW:GDBDouble;(*'Стена-Датчик(Норм)'*)
                                         FDD:GDBDouble;(*'Датчик-Датчик(Факт)'*)(*oi_readonly*)
                                         FDW:GDBDouble;(*'Стена-Датчик(Факт)'*)(*oi_readonly*)
+                                        NormalizePoint:GDBBoolean;(*'Нормализовать по сетке(если включена)'*)
                                         oldth:GDBInteger;(*hidden_in_objinsp*)
                                         oldsh:GDBInteger;(*hidden_in_objinsp*)
                                         olddt:TOPSDatType;(*hidden_in_objinsp*)
@@ -2458,6 +2466,7 @@ TOSModeEditor=object(GDBaseObject)
                                         NY:GDBInteger;(*'Кол-во по ширине'*)
                                         Angle:GDBDouble;(*'Угол'*)
                                         AutoAngle:GDBBoolean;(*'Автоповорот'*)
+                                        NormalizePoint:GDBBoolean;(*'Нормализовать по сетке(если включена)'*)
                      end;
      GDBLine=record
                   lBegin,lEnd:GDBvertex;

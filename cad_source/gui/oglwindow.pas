@@ -196,7 +196,7 @@ var
 
 {procedure startup;
 procedure finalize;}
-
+function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
 function ProjectPoint(pntx,pnty,pntz:gdbdouble;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;
 procedure textwrite(s: GDBString);
 procedure RunTextEditor(Pobj:GDBPointer);
@@ -3496,6 +3496,29 @@ begin
 
   end;
 end;
+function correcttogrid(point:GDBVertex):GDBVertex;
+begin
+  result.x:=round((point.x-SysVar.DWG.DWG_OriginGrid.x)/SysVar.DWG.DWG_StepGrid.x)*SysVar.DWG.DWG_StepGrid.x+SysVar.DWG.DWG_OriginGrid.x;
+  result.y:=round((point.y-SysVar.DWG.DWG_OriginGrid.y)/SysVar.DWG.DWG_StepGrid.y)*SysVar.DWG.DWG_StepGrid.y+SysVar.DWG.DWG_OriginGrid.y;
+  result.z:=point.z;
+end;
+function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
+var
+   gr:GDBBoolean;
+begin
+     gr:=false;
+     if SysVar.DWG.DWG_SnapGrid<>nil then
+     if SysVar.DWG.DWG_SnapGrid^ then
+                                     gr:=true;
+     if (need and gr) then
+                          begin
+                               result.x:=round((point.x-SysVar.DWG.DWG_OriginGrid.x)/SysVar.DWG.DWG_StepGrid.x)*SysVar.DWG.DWG_StepGrid.x+SysVar.DWG.DWG_OriginGrid.x;
+                               result.y:=round((point.y-SysVar.DWG.DWG_OriginGrid.y)/SysVar.DWG.DWG_StepGrid.y)*SysVar.DWG.DWG_StepGrid.y+SysVar.DWG.DWG_OriginGrid.y;
+                               result.z:=point.z;
+                          end
+                      else
+                          result:=point;
+end;
 
 procedure TOGLWND.getosnappoint({pva: PGDBObjEntityOpenArray; }radius: GDBFloat);
 var
@@ -3515,8 +3538,9 @@ begin
                if SysVar.DWG.DWG_SnapGrid<>nil then
                if SysVar.DWG.DWG_SnapGrid^ then
                begin
-                    param.ospoint.worldcoord.x:=round((param.md.mouseonworkplanecoord.x-SysVar.DWG.DWG_OriginGrid.x)/SysVar.DWG.DWG_StepGrid.x)*SysVar.DWG.DWG_StepGrid.x+SysVar.DWG.DWG_OriginGrid.x;
-                    param.ospoint.worldcoord.y:=round((param.md.mouseonworkplanecoord.y-SysVar.DWG.DWG_OriginGrid.y)/SysVar.DWG.DWG_StepGrid.y)*SysVar.DWG.DWG_StepGrid.y+SysVar.DWG.DWG_OriginGrid.y;
+                    param.ospoint.worldcoord:=correcttogrid(param.ospoint.worldcoord);
+                    //param.ospoint.worldcoord.x:=round((param.md.mouseonworkplanecoord.x-SysVar.DWG.DWG_OriginGrid.x)/SysVar.DWG.DWG_StepGrid.x)*SysVar.DWG.DWG_StepGrid.x+SysVar.DWG.DWG_OriginGrid.x;
+                    //param.ospoint.worldcoord.y:=round((param.md.mouseonworkplanecoord.y-SysVar.DWG.DWG_OriginGrid.y)/SysVar.DWG.DWG_StepGrid.y)*SysVar.DWG.DWG_StepGrid.y+SysVar.DWG.DWG_OriginGrid.y;
                     param.ospoint.ostype:=os_snap;
                     currentmousemovesnaptogrid:=true;
                end;

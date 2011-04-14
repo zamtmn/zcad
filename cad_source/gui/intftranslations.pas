@@ -20,7 +20,7 @@ unit intftranslations;
 {$INCLUDE def.inc}
 
 interface
-uses strproc,lclproc,gettext,translations,sysinfo,sysutils,fileutil,log,forms;
+uses strproc,lclproc,gettext,translations,sysinfo,sysutils,fileutil,log,forms,LResources,Classes, typinfo;
 
 type
     TmyPOFile = class(TPOFile)
@@ -31,6 +31,11 @@ type
                      function Translate(const Identifier, OriginalValue: String): String;
                      function exportcompileritems(sourcepo:TPOFile):integer;
                 end;
+    TPoTranslator=class(TAbstractTranslator)
+    public
+     procedure TranslateStringProperty(Sender:TObject;
+       const Instance: TPersistent; PropInfo: PPropInfo; var Content:string);override;
+    end;
 
 function InterfaceTranslate(const Identifier, OriginalValue: String): String;
 var
@@ -41,6 +46,23 @@ var
    _NotEnlishWord:integer=0;
    _DebugWord:integer=0;
 implementation
+
+procedure TPoTranslator.TranslateStringProperty(Sender: TObject;
+  const Instance: TPersistent; PropInfo: PPropInfo; var Content: string);
+var
+  s: String;
+begin
+  if not Assigned(po) then exit;
+  if not Assigned(PropInfo) then exit;
+{Нужно ли нам это?}
+  if Instance is TComponent then
+   if csDesigning in (Instance as TComponent).ComponentState then exit;
+{:)}
+  if (AnsiUpperCase(PropInfo^.PropType^.Name)<>'TTRANSLATESTRING') then exit;
+  s:=po.Translate(Content, Content);
+  if s<>'' then Content:=s;
+end;
+
 function TmyPOFile.FindByIdentifier(const Identifier: String):TPOFileItem;
 begin
      result:=TPOFileItem(FIdentifierToItem.Data[Identifier]);
@@ -189,12 +211,13 @@ procedure initialize;
       PODirectory := sysinfo.sysparam.programpath+'languades/';
       GetLanguageIDs(Lang, FallbackLang); // определено в модуле gettext
       createpo;
+      LRSTranslator:=TPoTranslator.Create;
       if not sysinfo.sysparam.updatepo then
                                            TranslateResourceStrings(po);
       //TranslateUnitResourceStrings('aboutwnd',PODirectory + 'zcad.%s.po', Lang, FallbackLang);
       //MessageDlg('Title', 'Text', mtInformation, [mbOk, mbCancel, mbYes], 0);
 
-      TranslateUnitResourceStrings('anchordockstr', PODirectory + 'anchordockstr.%s.po', Lang, FallbackLang)
+      TranslateUnitResourceStrings('anchordockstr', PODirectory + 'anchordockstr.%s.po', Lang, FallbackLang);
     end;
 
 initialization

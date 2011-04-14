@@ -276,6 +276,7 @@ msgid "Undo"
 msgstr ""
 
 #: BRMode~BRM_BD
+msgctxt "BRMode~BRM_BD"
 msgid "Block and Device"
 msgstr ""
 
@@ -431,6 +432,7 @@ msgid "Visible"
 msgstr ""
 
 #: GDBObjEntity~vp
+msgctxt "GDBObjEntity~vp"
 msgid "General"
 msgstr ""
 
@@ -756,6 +758,7 @@ msgid "Find"
 msgstr ""
 
 #: TBlockReplaceParams~Process
+msgctxt "TBlockReplaceParams~Process"
 msgid "Process"
 msgstr ""
 
@@ -809,6 +812,14 @@ msgstr ""
 
 #: tdesigning~DSGN_TraceAutoInc
 msgid "Increment trace names"
+msgstr ""
+
+#: TDiff~TD_Diff
+msgid "Diff"
+msgstr ""
+
+#: TDiff~TD_NotDiff
+msgid "Not Diff"
 msgstr ""
 
 #: tdisp~DISP_ColorAxis
@@ -869,105 +880,6 @@ msgctxt "TEntityAdress~SelfIndex"
 msgid "Position"
 msgstr ""
 
-#: TFORM2.B4.CAPTION
-msgctxt "TFORM2.B4.CAPTION"
-msgid "Спрвка"
-msgstr ""
-
-#: TFORM2.B5.CAPTION
-msgctxt "TFORM2.B5.CAPTION"
-msgid "Применить и закрыть"
-msgstr ""
-
-#: TFORM2.B6.CAPTION
-msgctxt "TFORM2.B6.CAPTION"
-msgid "Отменить"
-msgstr ""
-
-#: TFORM2.B7.CAPTION
-msgctxt "TFORM2.B7.CAPTION"
-msgid "Применить"
-msgstr ""
-
-#: TFORM2.CAPTION
-msgid "Form2"
-msgstr ""
-
-#: TFORM2.CHECKBOX1.CAPTION
-msgctxt "TFORM2.CHECKBOX1.CAPTION"
-msgid "CheckBox1"
-msgstr ""
-
-#: TFORM2.CHECKBOX2.CAPTION
-msgctxt "TFORM2.CHECKBOX2.CAPTION"
-msgid "CheckBox2"
-msgstr ""
-
-#: TFORM2.CHECKBOX3.CAPTION
-msgctxt "TFORM2.CHECKBOX3.CAPTION"
-msgid "CheckBox3"
-msgstr ""
-
-#: TFORM2.LABEL1.CAPTION
-msgctxt "TFORM2.LABEL1.CAPTION"
-msgid "Label1"
-msgstr ""
-
-#: TFORM2.LABEL2.CAPTION
-msgctxt "TFORM2.LABEL2.CAPTION"
-msgid "Label2"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[0].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[0].CAPTION"
-msgid "Status"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[1].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[1].CAPTION"
-msgid "Name"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[2].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[2].CAPTION"
-msgid "On"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[3].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[3].CAPTION"
-msgid "Freze"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[4].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[4].CAPTION"
-msgid "Lock"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[5].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[5].CAPTION"
-msgid "Color"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[6].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[6].CAPTION"
-msgid "Line type"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[7].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[7].CAPTION"
-msgid "Line weight"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[8].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[8].CAPTION"
-msgid "Plot"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[9].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[9].CAPTION"
-msgid "Description"
-msgstr ""
-
 #: TIMode~TIM_MText
 msgid "MText"
 msgstr ""
@@ -977,52 +889,28 @@ msgctxt "TIMode~TIM_Text"
 msgid "Text"
 msgstr ""
 
-#: TLAYERWINDOW.B4.CAPTION
-msgctxt "TLAYERWINDOW.B4.CAPTION"
-msgid "Спрвка"
+#: TLAYERWINDOW.BUTTONAPPLYCLOSE.CAPTION
+msgid "Apply and close"
 msgstr ""
 
-#: TLAYERWINDOW.B5.CAPTION
-msgctxt "TLAYERWINDOW.B5.CAPTION"
-msgid "Применить и закрыть"
-msgstr ""
-
-#: TLAYERWINDOW.B7.CAPTION
-msgctxt "TLAYERWINDOW.B7.CAPTION"
-msgid "Применить"
+#: TLAYERWINDOW.BUTTON_APPLY.CAPTION
+msgctxt "TLAYERWINDOW.BUTTON_APPLY.CAPTION"
+msgid "Apply"
 msgstr ""
 
 #: TLAYERWINDOW.CAPTION
 msgid "LayerWindow"
 msgstr ""
 
-#: TLAYERWINDOW.CHECKBOX1.CAPTION
-msgctxt "TLAYERWINDOW.CHECKBOX1.CAPTION"
-msgid "CheckBox1"
-msgstr ""
-
-#: TLAYERWINDOW.CHECKBOX2.CAPTION
-msgctxt "TLAYERWINDOW.CHECKBOX2.CAPTION"
-msgid "CheckBox2"
-msgstr ""
-
-#: TLAYERWINDOW.CHECKBOX3.CAPTION
-msgctxt "TLAYERWINDOW.CHECKBOX3.CAPTION"
-msgid "CheckBox3"
-msgstr ""
-
 #: TLAYERWINDOW.LABEL1.CAPTION
-msgctxt "TLAYERWINDOW.LABEL1.CAPTION"
 msgid "Label1"
 msgstr ""
 
 #: TLAYERWINDOW.LABEL2.CAPTION
-msgctxt "TLAYERWINDOW.LABEL2.CAPTION"
 msgid "Label2"
 msgstr ""
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[0].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[0].CAPTION"
 msgid "Status"
 msgstr ""
 
@@ -1037,37 +925,30 @@ msgid "On"
 msgstr ""
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[3].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[3].CAPTION"
 msgid "Freze"
 msgstr ""
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[4].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[4].CAPTION"
 msgid "Lock"
 msgstr ""
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[5].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[5].CAPTION"
 msgid "Color"
 msgstr ""
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[6].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[6].CAPTION"
 msgid "Line type"
 msgstr ""
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[7].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[7].CAPTION"
 msgid "Line weight"
 msgstr ""
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[8].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[8].CAPTION"
 msgid "Plot"
 msgstr ""
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[9].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[9].CAPTION"
 msgid "Description"
 msgstr ""
 
@@ -1303,6 +1184,52 @@ msgstr ""
 #: tsave~SAVE_Auto_On
 msgctxt "tsave~SAVE_Auto_On"
 msgid "Autosave"
+msgstr ""
+
+#: TSelBlockParams~DiffBlockDevice
+msgctxt "TSelBlockParams~DiffBlockDevice"
+msgid "Block and Device"
+msgstr ""
+
+#: TSelBlockParams~SameName
+msgid "Same name"
+msgstr ""
+
+#: TSelGeneralParams~SameEntType
+msgid "Same entity type"
+msgstr ""
+
+#: TSelGeneralParams~SameLayer
+msgid "Same layer"
+msgstr ""
+
+#: TSelGeneralParams~SameLineWeight
+msgid "Same line weight"
+msgstr ""
+
+#: TSelSimParams~Blocks
+msgid "Blocks"
+msgstr ""
+
+#: TSelSimParams~General
+msgctxt "TSelSimParams~General"
+msgid "General"
+msgstr ""
+
+#: TSelSimParams~Texts
+msgid "Texts"
+msgstr ""
+
+#: TSelTextParams~DiffTextMText
+msgid "Text and Mtext"
+msgstr ""
+
+#: TSelTextParams~SameContent
+msgid "Same content"
+msgstr ""
+
+#: TSelTextParams~SameTemplate
+msgid "Same template"
 msgstr ""
 
 #: tsys~SSY_CompileInfo

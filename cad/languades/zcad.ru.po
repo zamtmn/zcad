@@ -284,6 +284,7 @@ msgid "Undo"
 msgstr "Отменить"
 
 #: BRMode~BRM_BD
+msgctxt "BRMode~BRM_BD"
 msgid "Block and Device"
 msgstr "Блоки и Устройства"
 
@@ -432,6 +433,7 @@ msgid "Visible"
 msgstr "Видимый"
 
 #: GDBObjEntity~vp
+msgctxt "GDBObjEntity~vp"
 msgid "General"
 msgstr "Общие"
 
@@ -757,6 +759,7 @@ msgid "Find"
 msgstr "Найти"
 
 #: TBlockReplaceParams~Process
+msgctxt "TBlockReplaceParams~Process"
 msgid "Process"
 msgstr "Обрабатывать"
 
@@ -811,6 +814,14 @@ msgstr "Ширина выносок по умолчанию"
 #: tdesigning~DSGN_TraceAutoInc
 msgid "Increment trace names"
 msgstr "Инкремент имен трасс"
+
+#: TDiff~TD_Diff
+msgid "Diff"
+msgstr "Различать"
+
+#: TDiff~TD_NotDiff
+msgid "Not Diff"
+msgstr "Не различать"
 
 #: tdisp~DISP_ColorAxis
 msgid "Colored cursor"
@@ -870,162 +881,39 @@ msgctxt "TEntityAdress~SelfIndex"
 msgid "Position"
 msgstr "Позиция"
 
-#: TFORM2.B4.CAPTION
-msgctxt "TFORM2.B4.CAPTION"
-msgid "Спрвка"
-msgstr ""
-
-#: TFORM2.B5.CAPTION
-msgctxt "TFORM2.B5.CAPTION"
-msgid "Применить и закрыть"
-msgstr ""
-
-#: TFORM2.B6.CAPTION
-msgctxt "TFORM2.B6.CAPTION"
-msgid "Отменить"
-msgstr ""
-
-#: TFORM2.B7.CAPTION
-msgctxt "TFORM2.B7.CAPTION"
-msgid "Применить"
-msgstr ""
-
-#: TFORM2.CAPTION
-msgid "Form2"
-msgstr ""
-
-#: TFORM2.CHECKBOX1.CAPTION
-msgctxt "TFORM2.CHECKBOX1.CAPTION"
-msgid "CheckBox1"
-msgstr ""
-
-#: TFORM2.CHECKBOX2.CAPTION
-msgctxt "TFORM2.CHECKBOX2.CAPTION"
-msgid "CheckBox2"
-msgstr ""
-
-#: TFORM2.CHECKBOX3.CAPTION
-msgctxt "TFORM2.CHECKBOX3.CAPTION"
-msgid "CheckBox3"
-msgstr ""
-
-#: TFORM2.LABEL1.CAPTION
-msgctxt "TFORM2.LABEL1.CAPTION"
-msgid "Label1"
-msgstr ""
-
-#: TFORM2.LABEL2.CAPTION
-msgctxt "TFORM2.LABEL2.CAPTION"
-msgid "Label2"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[0].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[0].CAPTION"
-msgid "Status"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[1].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[1].CAPTION"
-msgid "Name"
-msgstr "Имя"
-
-#: TFORM2.LISTVIEW1.COLUMNS[2].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[2].CAPTION"
-msgid "On"
-msgstr "Вкл."
-
-#: TFORM2.LISTVIEW1.COLUMNS[3].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[3].CAPTION"
-msgid "Freze"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[4].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[4].CAPTION"
-msgid "Lock"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[5].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[5].CAPTION"
-msgid "Color"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[6].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[6].CAPTION"
-msgid "Line type"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[7].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[7].CAPTION"
-msgid "Line weight"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[8].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[8].CAPTION"
-msgid "Plot"
-msgstr ""
-
-#: TFORM2.LISTVIEW1.COLUMNS[9].CAPTION
-msgctxt "TFORM2.LISTVIEW1.COLUMNS[9].CAPTION"
-msgid "Description"
-msgstr ""
-
 #: TIMode~TIM_MText
 msgid "MText"
-msgstr ""
+msgstr "Многострочный"
 
 #: TIMode~TIM_Text
 msgctxt "TIMode~TIM_Text"
 msgid "Text"
-msgstr ""
+msgstr "Однострочный"
 
-#: TLAYERWINDOW.B4.CAPTION
-msgctxt "TLAYERWINDOW.B4.CAPTION"
-msgid "Спрвка"
-msgstr ""
+#: TLAYERWINDOW.BUTTONAPPLYCLOSE.CAPTION
+msgid "Apply and close"
+msgstr "Применить и закрыть"
 
-#: TLAYERWINDOW.B5.CAPTION
-msgctxt "TLAYERWINDOW.B5.CAPTION"
-msgid "Применить и закрыть"
-msgstr ""
-
-#: TLAYERWINDOW.B7.CAPTION
-msgctxt "TLAYERWINDOW.B7.CAPTION"
-msgid "Применить"
-msgstr ""
+#: TLAYERWINDOW.BUTTON_APPLY.CAPTION
+msgctxt "TLAYERWINDOW.BUTTON_APPLY.CAPTION"
+msgid "Apply"
+msgstr "Применить"
 
 #: TLAYERWINDOW.CAPTION
 msgid "LayerWindow"
-msgstr ""
-
-#: TLAYERWINDOW.CHECKBOX1.CAPTION
-msgctxt "TLAYERWINDOW.CHECKBOX1.CAPTION"
-msgid "CheckBox1"
-msgstr ""
-
-#: TLAYERWINDOW.CHECKBOX2.CAPTION
-msgctxt "TLAYERWINDOW.CHECKBOX2.CAPTION"
-msgid "CheckBox2"
-msgstr ""
-
-#: TLAYERWINDOW.CHECKBOX3.CAPTION
-msgctxt "TLAYERWINDOW.CHECKBOX3.CAPTION"
-msgid "CheckBox3"
-msgstr ""
+msgstr "Слои"
 
 #: TLAYERWINDOW.LABEL1.CAPTION
-msgctxt "TLAYERWINDOW.LABEL1.CAPTION"
 msgid "Label1"
 msgstr ""
 
 #: TLAYERWINDOW.LABEL2.CAPTION
-msgctxt "TLAYERWINDOW.LABEL2.CAPTION"
 msgid "Label2"
 msgstr ""
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[0].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[0].CAPTION"
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[1].CAPTION
 msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[1].CAPTION"
@@ -1035,42 +923,35 @@ msgstr "Имя"
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[2].CAPTION
 msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[2].CAPTION"
 msgid "On"
-msgstr "Вкл."
+msgstr "Включен"
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[3].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[3].CAPTION"
 msgid "Freze"
-msgstr ""
+msgstr "Заморожен"
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[4].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[4].CAPTION"
 msgid "Lock"
-msgstr ""
+msgstr "Заблокирован"
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[5].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[5].CAPTION"
 msgid "Color"
-msgstr ""
+msgstr "Цвет"
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[6].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[6].CAPTION"
 msgid "Line type"
-msgstr ""
+msgstr "Тип линии"
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[7].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[7].CAPTION"
 msgid "Line weight"
-msgstr ""
+msgstr "Вес линии"
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[8].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[8].CAPTION"
 msgid "Plot"
-msgstr ""
+msgstr "Печать"
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[9].CAPTION
-msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[9].CAPTION"
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
 #: tmisc~ShowHiddenFieldInObjInsp
 msgid "Show hidden fields"
@@ -1266,7 +1147,7 @@ msgstr "Версия"
 
 #: trd~RD_VSync
 msgid "VSync"
-msgstr ""
+msgstr "Вертикальная снхронизация"
 
 #: TRestoreMode~WND_AccumBuffer
 msgid "ACCUM buffer"
@@ -1304,6 +1185,52 @@ msgstr "Время между автосохранениями"
 msgctxt "tsave~SAVE_Auto_On"
 msgid "Autosave"
 msgstr "Автосохранение"
+
+#: TSelBlockParams~DiffBlockDevice
+msgctxt "TSelBlockParams~DiffBlockDevice"
+msgid "Block and Device"
+msgstr "Блоки и Устройства"
+
+#: TSelBlockParams~SameName
+msgid "Same name"
+msgstr "Совпадает имя"
+
+#: TSelGeneralParams~SameEntType
+msgid "Same entity type"
+msgstr "Совпадает тип объекта"
+
+#: TSelGeneralParams~SameLayer
+msgid "Same layer"
+msgstr "Совпадает слой"
+
+#: TSelGeneralParams~SameLineWeight
+msgid "Same line weight"
+msgstr "Совпадает вес линий"
+
+#: TSelSimParams~Blocks
+msgid "Blocks"
+msgstr "Блоки"
+
+#: TSelSimParams~General
+msgctxt "TSelSimParams~General"
+msgid "General"
+msgstr "Общие"
+
+#: TSelSimParams~Texts
+msgid "Texts"
+msgstr "Тексты"
+
+#: TSelTextParams~DiffTextMText
+msgid "Text and Mtext"
+msgstr "Тексты и Мтексты"
+
+#: TSelTextParams~SameContent
+msgid "Same content"
+msgstr "Совпадает содержимое"
+
+#: TSelTextParams~SameTemplate
+msgid "Same template"
+msgstr "Совпатает шаблон"
 
 #: tsys~SSY_CompileInfo
 msgid "Build info"

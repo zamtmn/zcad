@@ -1,11 +1,11 @@
 object LayerWindow: TLayerWindow
-  Left = 246
-  Height = 500
-  Top = 141
+  Left = 225
+  Height = 588
+  Top = 142
   Width = 800
   ActiveControl = B1
   Caption = 'LayerWindow'
-  ClientHeight = 500
+  ClientHeight = 588
   ClientWidth = 800
   Constraints.MinHeight = 500
   Constraints.MinWidth = 800
@@ -49,10 +49,10 @@ object LayerWindow: TLayerWindow
     AnchorSideLeft.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = CheckBox1
+    AnchorSideBottom.Control = Button_Apply
     Left = 5
     Height = 30
-    Top = 408
+    Top = 518
     Width = 790
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 5
@@ -68,7 +68,7 @@ object LayerWindow: TLayerWindow
     AnchorSideBottom.Side = asrBottom
     Left = 12
     Height = 16
-    Top = 415
+    Top = 525
     Width = 776
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 7
@@ -116,91 +116,44 @@ object LayerWindow: TLayerWindow
     BorderSpacing.Left = 2
     TabOrder = 2
   end
-  object CheckBox1: TCheckBox
-    AnchorSideLeft.Control = B4
-    AnchorSideBottom.Control = B4
-    Left = 5
-    Height = 17
-    Top = 443
-    Width = 73
-    Anchors = [akLeft, akBottom]
-    BorderSpacing.Bottom = 5
-    Caption = 'CheckBox1'
-    TabOrder = 3
-  end
-  object CheckBox2: TCheckBox
-    AnchorSideLeft.Control = CheckBox1
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = CheckBox1
-    Left = 93
-    Height = 17
-    Top = 443
-    Width = 73
-    BorderSpacing.Left = 15
-    Caption = 'CheckBox2'
-    TabOrder = 4
-  end
-  object CheckBox3: TCheckBox
-    AnchorSideLeft.Control = CheckBox2
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = CheckBox2
-    Left = 181
-    Height = 17
-    Top = 443
-    Width = 73
-    BorderSpacing.Left = 15
-    Caption = 'CheckBox3'
-    TabOrder = 5
-  end
-  object B4: TBitBtn
-    AnchorSideLeft.Control = Owner
-    AnchorSideBottom.Control = Owner
-    AnchorSideBottom.Side = asrBottom
-    Left = 5
-    Height = 30
-    Top = 465
-    Width = 150
-    Anchors = [akLeft, akBottom]
-    BorderSpacing.Left = 5
-    BorderSpacing.Bottom = 5
-    Caption = 'Спрвка'
-    TabOrder = 6
-  end
-  object B5: TBitBtn
-    AnchorSideBottom.Side = asrBottom
-    Left = 641
-    Height = 30
-    Top = 465
-    Width = 154
-    Anchors = [akRight, akBottom]
-    BorderSpacing.Right = 5
-    Caption = 'Применить и закрыть'
-    OnClick = AplyClose
-    TabOrder = 7
-  end
-  object B7: TBitBtn
+  object ButtonApplyClose: TBitBtn
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 488
+    Left = 641
     Height = 30
-    Top = 465
-    Width = 150
-    Anchors = [akBottom]
+    Top = 553
+    Width = 154
+    Anchors = [akRight, akBottom]
     BorderSpacing.Right = 5
     BorderSpacing.Bottom = 5
-    Caption = 'Применить'
+    Caption = 'Apply and close'
+    OnClick = AplyClose
+    TabOrder = 3
+  end
+  object Button_Apply: TBitBtn
+    AnchorSideRight.Control = ButtonApplyClose
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 486
+    Height = 30
+    Top = 553
+    Width = 150
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Right = 5
+    BorderSpacing.Bottom = 5
+    Caption = 'Apply'
     OnClick = Aply
     ParentShowHint = False
-    TabOrder = 8
+    TabOrder = 4
   end
   object ListView1: TListView
     AnchorSideTop.Control = B1
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Control = Label2
     Left = 5
-    Height = 371
+    Height = 481
     Top = 37
     Width = 790
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -214,7 +167,7 @@ object LayerWindow: TLayerWindow
       end    
       item
         Caption = 'Name'
-        Width = 300
+        Width = 250
       end    
       item
         AutoSize = True
@@ -258,7 +211,7 @@ object LayerWindow: TLayerWindow
     ReadOnly = True
     RowSelect = True
     SortType = stText
-    TabOrder = 9
+    TabOrder = 5
     ViewStyle = vsReport
     OnChange = ListView1Change
     OnSelectItem = ListView1SelectItem

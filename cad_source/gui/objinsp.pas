@@ -331,7 +331,11 @@ var
   ir:itrec;
 begin
   //colorn:=windows.RGB(150,150,150);
-  if ppa^.Count=0 then exit;
+  if ppa^.Count=0 then
+                      begin
+                           y:=y+rowh;
+                           exit;
+                      end;
   ppd:=ppa^.beginiterate(ir);
   if ppd<>nil then
     repeat

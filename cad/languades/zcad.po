@@ -353,6 +353,7 @@ msgid "End"
 msgstr ""
 
 #: GDBNamedObject~Name
+msgctxt "GDBNamedObject~Name"
 msgid "Name"
 msgstr ""
 
@@ -868,6 +869,105 @@ msgctxt "TEntityAdress~SelfIndex"
 msgid "Position"
 msgstr ""
 
+#: TFORM2.B4.CAPTION
+msgctxt "TFORM2.B4.CAPTION"
+msgid "Спрвка"
+msgstr ""
+
+#: TFORM2.B5.CAPTION
+msgctxt "TFORM2.B5.CAPTION"
+msgid "Применить и закрыть"
+msgstr ""
+
+#: TFORM2.B6.CAPTION
+msgctxt "TFORM2.B6.CAPTION"
+msgid "Отменить"
+msgstr ""
+
+#: TFORM2.B7.CAPTION
+msgctxt "TFORM2.B7.CAPTION"
+msgid "Применить"
+msgstr ""
+
+#: TFORM2.CAPTION
+msgid "Form2"
+msgstr ""
+
+#: TFORM2.CHECKBOX1.CAPTION
+msgctxt "TFORM2.CHECKBOX1.CAPTION"
+msgid "CheckBox1"
+msgstr ""
+
+#: TFORM2.CHECKBOX2.CAPTION
+msgctxt "TFORM2.CHECKBOX2.CAPTION"
+msgid "CheckBox2"
+msgstr ""
+
+#: TFORM2.CHECKBOX3.CAPTION
+msgctxt "TFORM2.CHECKBOX3.CAPTION"
+msgid "CheckBox3"
+msgstr ""
+
+#: TFORM2.LABEL1.CAPTION
+msgctxt "TFORM2.LABEL1.CAPTION"
+msgid "Label1"
+msgstr ""
+
+#: TFORM2.LABEL2.CAPTION
+msgctxt "TFORM2.LABEL2.CAPTION"
+msgid "Label2"
+msgstr ""
+
+#: TFORM2.LISTVIEW1.COLUMNS[0].CAPTION
+msgctxt "TFORM2.LISTVIEW1.COLUMNS[0].CAPTION"
+msgid "Status"
+msgstr ""
+
+#: TFORM2.LISTVIEW1.COLUMNS[1].CAPTION
+msgctxt "TFORM2.LISTVIEW1.COLUMNS[1].CAPTION"
+msgid "Name"
+msgstr ""
+
+#: TFORM2.LISTVIEW1.COLUMNS[2].CAPTION
+msgctxt "TFORM2.LISTVIEW1.COLUMNS[2].CAPTION"
+msgid "On"
+msgstr ""
+
+#: TFORM2.LISTVIEW1.COLUMNS[3].CAPTION
+msgctxt "TFORM2.LISTVIEW1.COLUMNS[3].CAPTION"
+msgid "Freze"
+msgstr ""
+
+#: TFORM2.LISTVIEW1.COLUMNS[4].CAPTION
+msgctxt "TFORM2.LISTVIEW1.COLUMNS[4].CAPTION"
+msgid "Lock"
+msgstr ""
+
+#: TFORM2.LISTVIEW1.COLUMNS[5].CAPTION
+msgctxt "TFORM2.LISTVIEW1.COLUMNS[5].CAPTION"
+msgid "Color"
+msgstr ""
+
+#: TFORM2.LISTVIEW1.COLUMNS[6].CAPTION
+msgctxt "TFORM2.LISTVIEW1.COLUMNS[6].CAPTION"
+msgid "Line type"
+msgstr ""
+
+#: TFORM2.LISTVIEW1.COLUMNS[7].CAPTION
+msgctxt "TFORM2.LISTVIEW1.COLUMNS[7].CAPTION"
+msgid "Line weight"
+msgstr ""
+
+#: TFORM2.LISTVIEW1.COLUMNS[8].CAPTION
+msgctxt "TFORM2.LISTVIEW1.COLUMNS[8].CAPTION"
+msgid "Plot"
+msgstr ""
+
+#: TFORM2.LISTVIEW1.COLUMNS[9].CAPTION
+msgctxt "TFORM2.LISTVIEW1.COLUMNS[9].CAPTION"
+msgid "Description"
+msgstr ""
+
 #: TIMode~TIM_MText
 msgid "MText"
 msgstr ""
@@ -875,6 +975,100 @@ msgstr ""
 #: TIMode~TIM_Text
 msgctxt "TIMode~TIM_Text"
 msgid "Text"
+msgstr ""
+
+#: TLAYERWINDOW.B4.CAPTION
+msgctxt "TLAYERWINDOW.B4.CAPTION"
+msgid "Спрвка"
+msgstr ""
+
+#: TLAYERWINDOW.B5.CAPTION
+msgctxt "TLAYERWINDOW.B5.CAPTION"
+msgid "Применить и закрыть"
+msgstr ""
+
+#: TLAYERWINDOW.B7.CAPTION
+msgctxt "TLAYERWINDOW.B7.CAPTION"
+msgid "Применить"
+msgstr ""
+
+#: TLAYERWINDOW.CAPTION
+msgid "LayerWindow"
+msgstr ""
+
+#: TLAYERWINDOW.CHECKBOX1.CAPTION
+msgctxt "TLAYERWINDOW.CHECKBOX1.CAPTION"
+msgid "CheckBox1"
+msgstr ""
+
+#: TLAYERWINDOW.CHECKBOX2.CAPTION
+msgctxt "TLAYERWINDOW.CHECKBOX2.CAPTION"
+msgid "CheckBox2"
+msgstr ""
+
+#: TLAYERWINDOW.CHECKBOX3.CAPTION
+msgctxt "TLAYERWINDOW.CHECKBOX3.CAPTION"
+msgid "CheckBox3"
+msgstr ""
+
+#: TLAYERWINDOW.LABEL1.CAPTION
+msgctxt "TLAYERWINDOW.LABEL1.CAPTION"
+msgid "Label1"
+msgstr ""
+
+#: TLAYERWINDOW.LABEL2.CAPTION
+msgctxt "TLAYERWINDOW.LABEL2.CAPTION"
+msgid "Label2"
+msgstr ""
+
+#: TLAYERWINDOW.LISTVIEW1.COLUMNS[0].CAPTION
+msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[0].CAPTION"
+msgid "Status"
+msgstr ""
+
+#: TLAYERWINDOW.LISTVIEW1.COLUMNS[1].CAPTION
+msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[1].CAPTION"
+msgid "Name"
+msgstr ""
+
+#: TLAYERWINDOW.LISTVIEW1.COLUMNS[2].CAPTION
+msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[2].CAPTION"
+msgid "On"
+msgstr ""
+
+#: TLAYERWINDOW.LISTVIEW1.COLUMNS[3].CAPTION
+msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[3].CAPTION"
+msgid "Freze"
+msgstr ""
+
+#: TLAYERWINDOW.LISTVIEW1.COLUMNS[4].CAPTION
+msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[4].CAPTION"
+msgid "Lock"
+msgstr ""
+
+#: TLAYERWINDOW.LISTVIEW1.COLUMNS[5].CAPTION
+msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[5].CAPTION"
+msgid "Color"
+msgstr ""
+
+#: TLAYERWINDOW.LISTVIEW1.COLUMNS[6].CAPTION
+msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[6].CAPTION"
+msgid "Line type"
+msgstr ""
+
+#: TLAYERWINDOW.LISTVIEW1.COLUMNS[7].CAPTION
+msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[7].CAPTION"
+msgid "Line weight"
+msgstr ""
+
+#: TLAYERWINDOW.LISTVIEW1.COLUMNS[8].CAPTION
+msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[8].CAPTION"
+msgid "Plot"
+msgstr ""
+
+#: TLAYERWINDOW.LISTVIEW1.COLUMNS[9].CAPTION
+msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[9].CAPTION"
+msgid "Description"
 msgstr ""
 
 #: tmisc~ShowHiddenFieldInObjInsp
@@ -1272,6 +1466,7 @@ msgid "Off"
 msgstr ""
 
 #: TVSControl~TVSOn
+msgctxt "TVSControl~TVSOn"
 msgid "On"
 msgstr ""
 

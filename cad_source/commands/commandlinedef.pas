@@ -101,6 +101,10 @@ begin
                             button:=-button;
                             button:=-button;
                         end;}
+                        if (button and MZW_LBUTTON)<>0 then
+                                          begin
+                                                button:=button;
+                                          end;
     if mouseclic = 0 then
                          result := BeforeClick(wc, mc, button,osp)
                      else
@@ -132,4 +136,4 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}LogOut('commandlinedef.initialization');{$ENDIF}
-end.
+end.

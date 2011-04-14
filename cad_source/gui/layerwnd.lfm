@@ -1,16 +1,18 @@
-object Form2: TForm2
-  Left = 346
+object LayerWindow: TLayerWindow
+  Left = 246
   Height = 500
-  Top = 147
+  Top = 141
   Width = 800
   ActiveControl = B1
-  Caption = 'Form2'
+  Caption = 'LayerWindow'
   ClientHeight = 500
   ClientWidth = 800
   Constraints.MinHeight = 500
   Constraints.MinWidth = 800
+  OnClose = FormClose
   OnCreate = FormCreate
-  LCLVersion = '0.9.28.2'
+  OnShow = FormShow
+  LCLVersion = '0.9.31'
   object Bevel1: TBevel
     AnchorSideLeft.Control = B3
     AnchorSideLeft.Side = asrBottom
@@ -50,7 +52,7 @@ object Form2: TForm2
     AnchorSideBottom.Control = CheckBox1
     Left = 5
     Height = 30
-    Top = 403
+    Top = 408
     Width = 790
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 5
@@ -66,7 +68,7 @@ object Form2: TForm2
     AnchorSideBottom.Side = asrBottom
     Left = 12
     Height = 16
-    Top = 410
+    Top = 415
     Width = 776
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 7
@@ -114,140 +116,41 @@ object Form2: TForm2
     BorderSpacing.Left = 2
     TabOrder = 2
   end
-  object SGrid: TStringGrid
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = B1
-    AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = Bevel2
-    Left = 5
-    Height = 358
-    Top = 40
-    Width = 790
-    Anchors = [akTop, akLeft, akRight, akBottom]
-    AutoEdit = False
-    AutoFillColumns = True
-    BorderSpacing.Left = 5
-    BorderSpacing.Top = 5
-    BorderSpacing.Right = 5
-    BorderSpacing.Bottom = 5
-    ColCount = 8
-    Columns = <    
-      item
-        SizePriority = 0
-        Title.Alignment = taCenter
-        Title.Caption = 'Название'
-        Title.Font.Height = -12
-        Title.Font.Name = 'Sans'
-        Width = 80
-      end    
-      item
-        SizePriority = 0
-        Title.Alignment = taCenter
-        Title.Caption = 'Вкл./Выкл.'
-        Title.Font.Height = -12
-        Title.Font.Name = 'Sans'
-        Width = 80
-      end    
-      item
-        SizePriority = 0
-        Title.Alignment = taCenter
-        Title.Caption = 'Блокировка'
-        Title.Font.Height = -12
-        Title.Font.Name = 'Sans'
-        Width = 80
-      end    
-      item
-        SizePriority = 0
-        Title.Alignment = taCenter
-        Title.Caption = 'Цвет'
-        Title.Font.Height = -12
-        Title.Font.Name = 'Sans'
-        Width = 80
-      end    
-      item
-        SizePriority = 0
-        Title.Alignment = taCenter
-        Title.Caption = 'Тип линии'
-        Title.Font.Height = -12
-        Title.Font.Name = 'Sans'
-        Width = 80
-      end    
-      item
-        SizePriority = 0
-        Title.Alignment = taCenter
-        Title.Caption = 'Толщина'
-        Title.Font.Height = -12
-        Title.Font.Name = 'Sans'
-        Width = 80
-      end    
-      item
-        SizePriority = 0
-        Title.Alignment = taCenter
-        Title.Caption = 'Печать'
-        Title.Font.Height = -12
-        Title.Font.Name = 'Sans'
-        Width = 80
-      end    
-      item
-        Title.Alignment = taCenter
-        Title.Caption = 'Описание'
-        Title.Font.Height = -12
-        Title.Font.Name = 'Sans'
-        Width = 226
-      end>
-    DefaultRowHeight = 26
-    FixedCols = 0
-    RowCount = 1
-    TabOrder = 3
-    TitleStyle = tsNative
-    ColWidths = (
-      80
-      80
-      80
-      80
-      80
-      80
-      80
-      226
-    )
-  end
   object CheckBox1: TCheckBox
     AnchorSideLeft.Control = B4
     AnchorSideBottom.Control = B4
     Left = 5
-    Height = 22
-    Top = 438
-    Width = 97
+    Height = 17
+    Top = 443
+    Width = 73
     Anchors = [akLeft, akBottom]
     BorderSpacing.Bottom = 5
     Caption = 'CheckBox1'
-    TabOrder = 4
+    TabOrder = 3
   end
   object CheckBox2: TCheckBox
     AnchorSideLeft.Control = CheckBox1
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = CheckBox1
-    Left = 117
-    Height = 22
-    Top = 438
-    Width = 97
+    Left = 93
+    Height = 17
+    Top = 443
+    Width = 73
     BorderSpacing.Left = 15
     Caption = 'CheckBox2'
-    TabOrder = 5
+    TabOrder = 4
   end
   object CheckBox3: TCheckBox
     AnchorSideLeft.Control = CheckBox2
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = CheckBox2
-    Left = 229
-    Height = 22
-    Top = 438
-    Width = 97
+    Left = 181
+    Height = 17
+    Top = 443
+    Width = 73
     BorderSpacing.Left = 15
     Caption = 'CheckBox3'
-    TabOrder = 6
+    TabOrder = 5
   end
   object B4: TBitBtn
     AnchorSideLeft.Control = Owner
@@ -261,51 +164,104 @@ object Form2: TForm2
     BorderSpacing.Left = 5
     BorderSpacing.Bottom = 5
     Caption = 'Спрвка'
-    TabOrder = 7
+    TabOrder = 6
   end
   object B5: TBitBtn
-    AnchorSideTop.Control = B6
-    AnchorSideRight.Control = B6
-    AnchorSideBottom.Control = B6
     AnchorSideBottom.Side = asrBottom
-    Left = 241
+    Left = 641
     Height = 30
     Top = 465
-    Width = 250
-    Anchors = [akTop, akRight, akBottom]
-    BorderSpacing.Right = 2
+    Width = 154
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Right = 5
     Caption = 'Применить и закрыть'
-    TabOrder = 8
-  end
-  object B6: TBitBtn
-    AnchorSideTop.Control = B7
-    AnchorSideRight.Control = B7
-    AnchorSideBottom.Control = B7
-    AnchorSideBottom.Side = asrBottom
-    Left = 493
-    Height = 30
-    Top = 465
-    Width = 150
-    Anchors = [akTop, akRight, akBottom]
-    BorderSpacing.Right = 2
-    Caption = 'Отменить'
-    TabOrder = 9
+    OnClick = AplyClose
+    TabOrder = 7
   end
   object B7: TBitBtn
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 645
+    Left = 488
     Height = 30
     Top = 465
     Width = 150
-    Anchors = [akRight, akBottom]
+    Anchors = [akBottom]
     BorderSpacing.Right = 5
     BorderSpacing.Bottom = 5
     Caption = 'Применить'
+    OnClick = Aply
     ParentShowHint = False
-    TabOrder = 10
+    TabOrder = 8
+  end
+  object ListView1: TListView
+    AnchorSideTop.Control = B1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideBottom.Control = Label2
+    Left = 5
+    Height = 371
+    Top = 37
+    Width = 790
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Top = 2
+    BorderSpacing.Bottom = 2
+    Columns = <    
+      item
+        AutoSize = True
+        Caption = 'Status'
+        Width = 786
+      end    
+      item
+        Caption = 'Name'
+        Width = 300
+      end    
+      item
+        AutoSize = True
+        Caption = 'On'
+        Width = 26
+      end    
+      item
+        AutoSize = True
+        Caption = 'Freze'
+        Width = 39
+      end    
+      item
+        AutoSize = True
+        Caption = 'Lock'
+        Width = 33
+      end    
+      item
+        AutoSize = True
+        Caption = 'Color'
+        Width = 37
+      end    
+      item
+        AutoSize = True
+        Caption = 'Line type'
+        Width = 56
+      end    
+      item
+        AutoSize = True
+        Caption = 'Line weight'
+        Width = 66
+      end    
+      item
+        Caption = 'Plot'
+      end    
+      item
+        AutoSize = True
+        Caption = 'Description'
+        Width = 65
+      end>
+    MultiSelect = True
+    ReadOnly = True
+    RowSelect = True
+    SortType = stText
+    TabOrder = 9
+    ViewStyle = vsReport
+    OnChange = ListView1Change
+    OnSelectItem = ListView1SelectItem
   end
   object IL: TImageList
     left = 24

@@ -301,7 +301,7 @@ begin
       t3dp:=wc;
     end;
 end;
-function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: byte;mclick:integer): integer;
+function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger):GDBInteger;
 var
 pl:pgdbobjline;
 //debug:string;
@@ -1088,7 +1088,7 @@ begin
   else
   begin
        result:=-1;
-       //pco^.mouseclic:=-1;
+       pco^.mouseclic:=-1;
        //gdb.GetCurrentDWG.ConstructObjRoot.cleareraseobj;
        placedev(@gdb.GetCurrentROOT.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, NX, NY,@OrtoDevPlaceParam.Name[1],OrtoDevPlaceParam.Angle,OrtoDevPlaceParam.AutoAngle);
        gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;

@@ -1697,10 +1697,10 @@ end;
 
 function layer_cmd:GDBInteger;
 begin
-  form2:=TForm2.Create(nil);
-  SetHeightControl(form2,22);
-  form2.ShowModal;
-  Freeandnil(form2);
+  LayerWindow:=TLayerWindow.Create(nil);
+  SetHeightControl(LayerWindow,22);
+  LayerWindow.ShowModal;
+  Freeandnil(LayerWindow);
   result:=cmd_ok;
 end;
 

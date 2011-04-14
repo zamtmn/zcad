@@ -195,10 +195,15 @@ begin
 end;
 
 function CommandRTEdObjectPlugin.AfterClick;
+var a:integer;
 begin
      if assigned(onAfterClick) then
                                    begin
-                                        mouseclic:=onAfterClick(wc,mc,button,osp,mouseclic);
+                                        if mouseclic=1 then
+                                                           mouseclic:=mouseclic;
+
+                                        a:=onAfterClick(wc,mc,button,osp,mouseclic);
+                                        mouseclic:=a;
                                         gdb.GetCurrentROOT.getoutbound;
                                         if (mouseclic=1)and(commandmanager.pcommandrunning<>nil) then BeforeClick(wc,mc,button,osp);
                                         //if mouseclic=0 then
@@ -284,4 +289,4 @@ end;
 begin
      {$IFDEF DEBUGINITSECTION}LogOut('commanddefinternal.initialization');{$ENDIF}
 end.
-
+

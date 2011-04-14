@@ -141,6 +141,10 @@ type
                     function IsShortcut(var Message: TLMKey): boolean; override;
 
                end;
+  TMyAnchorDockManager = class(TAnchorDockManager)
+  public
+    procedure ResetBounds(Force: Boolean); override;
+  end;
 function getoglwndparam: GDBPointer; export;
 procedure clearotrack;
 procedure clearcp;
@@ -171,7 +175,14 @@ implementation
 
 uses {GDBCommandsBase,}Objinsp{,optionswnd, Tedit_form, MTedit_form},
   dialogs,XMLPropStorage;
-
+procedure TMyAnchorDockManager.ResetBounds(Force: Boolean);
+begin
+     inherited;
+     //OldSiteClientRect:=FSiteClientRect;
+     //FSiteClientRect:=Site.ClientRect;
+     //site:=site;
+     //Site.ClientRect:=FSiteClientRect;
+end;
 constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -652,9 +663,12 @@ var
 begin
   //AutoSize:=false;
   self.SetBounds(0,0,800,44);
-  DockMaster.MakeDockSite(Self,[akTop,akBottom,akLeft,akRight],admrpChild{admrpNone},{true}false);
   DockMaster.HeaderClass:=TmyAnchorDockHeader;
   DockMaster.SplitterClass:=TmyAnchorDockSplitter;
+  DockMaster.ManagerClass:=TMyAnchorDockManager;
+  DockMaster.OnCreateControl:={@}DockMasterCreateControl;
+
+  DockMaster.MakeDockSite(Self,[akTop,akBottom,akLeft,akRight],admrpChild{admrpNone},{true}false);
 
   toolbars:=tstringlist.Create;
 
@@ -662,7 +676,6 @@ begin
   begin
     //aManager:=TAnchorDockManager(AForm.DockManager);
     //TAnchorDockManager(DockManager).PreferredSiteSizeAsSiteMinimum:={false}true;
-       DockMaster.OnCreateControl:={@}DockMasterCreateControl;
        //DockMaster.HideHeaderCaptionFloatingControl:=false;
        DockMaster.OnShowOptions:={@}ShowAnchorDockOptions;
        //TAnchorDockManager(self.DockManager).PreferredSiteSizeAsSiteMinimum:=false;

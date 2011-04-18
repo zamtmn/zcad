@@ -1531,7 +1531,6 @@ begin
 end;
 procedure TOGLWnd.sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);
 begin
-     commandmanager.pcommandrunning^.MouseMoveCallback(coord,param.md.mouse,key,pos);
      if (key and MZW_LBUTTON)<>0 then
      if commandmanager.pcommandrunning<>nil then
      begin
@@ -1541,6 +1540,8 @@ begin
            create0axis;
            project0axis;
      end;
+
+     commandmanager.pcommandrunning^.MouseMoveCallback(coord,param.md.mouse,key,pos);
 end;
 
 procedure TOGLWnd.DrawGrid;

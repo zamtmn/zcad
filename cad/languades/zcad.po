@@ -29,6 +29,14 @@ msgstr ""
 msgid "BR"
 msgstr ""
 
+#: ACN_BSCALE~caption
+msgid "Block scale"
+msgstr ""
+
+#: ACN_BSCALE~textimage
+msgid "BS"
+msgstr ""
+
 #: ACN_CIRCLE~caption
 msgid "Draw circle"
 msgstr ""
@@ -61,6 +69,14 @@ msgstr ""
 
 #: ACN_COPY~hint
 msgid "Copy primitives"
+msgstr ""
+
+#: ACN_DESELECTALL~caption
+msgid "DeSelect all"
+msgstr ""
+
+#: ACN_DESELECTALL~textimage
+msgid "DSA"
 msgstr ""
 
 #: ACN_El_FIND~caption
@@ -764,6 +780,14 @@ msgstr ""
 
 #: TBlockReplaceParams~Replace
 msgid "Replace"
+msgstr ""
+
+#: TBlockScaleParams~Absolytly
+msgid "Absolytly"
+msgstr ""
+
+#: TBlockScaleParams~Scale
+msgid "New scale"
 msgstr ""
 
 #: TCalcIP~_ICOS_from_P

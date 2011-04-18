@@ -14,6 +14,7 @@ action ACN_COPYCLIPBASE,CopyBase,copyclipbase.bmp,Copy with base point,Copy to c
 action ACN_PASTE,PasteClip,pasteclip.bmp,Paste,Paste from clipboard,SHIFT+INS
 action ACN_ERASE,Erase,erase.bmp,Erase,,DEL
 action ACN_SELECTALL,SelectAll,#SA,Select all,,CTRL+A
+action ACN_DESELECTALL,DeSelectAll,#DSA,DeSelect all,,CTRL+SHIFT+A
 action ACN_SELSIM,SelSim,#SSim,Select similar,,
 action ACN_El_FIND,EL_Find,find.bmp,Find device,,CTRL+F
 
@@ -34,6 +35,7 @@ action ACN_SCALE,Scale,scale.bmp,scale,Scale primitives,
 
 action ACN_BEDIT,BEdit,bedit.bmp,Block editor,,
 action ACN_BREPLACE,BlockReplace,#BR,Block replace,,
+action ACN_BSCALE,BlockScale,#BS,Block scale,,
 action ACN_POLYED,PolyED,polyed.bmp,Edit polyline,,
 action ACN_OBJVARMAN,ObjVarMan,varman.bmp,Object variables manager,,
 

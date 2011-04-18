@@ -31,10 +31,18 @@ msgstr "Вставить блок"
 
 #: ACN_BREPLACE~caption
 msgid "Block replace"
-msgstr "Замена блокаов"
+msgstr "Замена блоков"
 
 #: ACN_BREPLACE~textimage
 msgid "BR"
+msgstr ""
+
+#: ACN_BSCALE~caption
+msgid "Block scale"
+msgstr "Масштабировать блоки"
+
+#: ACN_BSCALE~textimage
+msgid "BS"
 msgstr ""
 
 #: ACN_CIRCLE~caption
@@ -71,6 +79,14 @@ msgstr "Копировать"
 #: ACN_COPY~hint
 msgid "Copy primitives"
 msgstr "Копировать примитивы"
+
+#: ACN_DESELECTALL~caption
+msgid "DeSelect all"
+msgstr "Снять выделение"
+
+#: ACN_DESELECTALL~textimage
+msgid "DSA"
+msgstr ""
 
 #: ACN_El_FIND~caption
 msgid "Find device"
@@ -766,6 +782,14 @@ msgstr "Обрабатывать"
 #: TBlockReplaceParams~Replace
 msgid "Replace"
 msgstr "Заменить на"
+
+#: TBlockScaleParams~Absolytly
+msgid "Absolytly"
+msgstr "Абсолютно"
+
+#: TBlockScaleParams~Scale
+msgid "New scale"
+msgstr "Новый масштаб"
 
 #: TCalcIP~_ICOS_from_P
 msgid "I,Cos=F(P)"

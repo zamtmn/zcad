@@ -98,6 +98,7 @@ MainMenuItem Edit;
     action ACN_ERASE
     Separator
     action ACN_SELECTALL
+    action ACN_DESELECTALL
     action ACN_SELSIM
     Separator
     action ACN_El_FIND
@@ -160,6 +161,7 @@ MainMenuItem Modify;
       {
         action ACN_BEDIT
         action ACN_BREPLACE
+        action ACN_BSCALE
       }
     Separator
     action ACN_ROTATE

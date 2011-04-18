@@ -2116,6 +2116,10 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                              Blocks:TSelBlockParams;(*'Blocks'*)
                              Texts:TSelTextParams;(*'Texts'*)
                       end;
+         TBlockScaleParams=record
+                             Scale:GDBVertex;(*'New scale'*)
+                             Absolytly:GDBBoolean;(*'Absolytly'*)
+                           end;
   TBEditParam=record
                     CurrentEditBlock:GDBString;(*'Текущий блок'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Выбор блока'*)
@@ -2186,6 +2190,11 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                          procedure CommandStart(Operands:pansichar); virtual;abstract;
                          procedure BuildDM(Operands:pansichar); virtual;abstract;
                          procedure Format;virtual;abstract;
+                         procedure Run(pdata:{pointer}GDBPlatformint); virtual;abstract;
+                   end;
+  BlockScale_com=object(CommandRTEdObject)
+                         procedure CommandStart(Operands:pansichar); virtual;abstract;
+                         procedure BuildDM(Operands:pansichar); virtual;abstract;
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;abstract;
                    end;
   SelSim_com=object(CommandRTEdObject)

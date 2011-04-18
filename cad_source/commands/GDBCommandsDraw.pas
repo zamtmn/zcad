@@ -126,6 +126,10 @@ type
                              Blocks:TSelBlockParams;(*'Blocks'*)
                              Texts:TSelTextParams;(*'Texts'*)
                       end;
+         TBlockScaleParams=record
+                             Scale:GDBVertex;(*'New scale'*)
+                             Absolytly:GDBBoolean;(*'Absolytly'*)
+                           end;
   TBEditParam=record
                     CurrentEditBlock:GDBString;(*'Текущий блок'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Выбор блока'*)
@@ -200,11 +204,21 @@ type
                          procedure Format;virtual;
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;
                    end;
-  SelSim_com=object(CommandRTEdObject)
+  BlockScale_com=object(CommandRTEdObject)
                          procedure CommandStart(Operands:pansichar); virtual;
+                         procedure BuildDM(Operands:pansichar); virtual;
+                         procedure Run(pdata:{pointer}GDBPlatformint); virtual;
+                   end;
+  SelSim_com=object(CommandRTEdObject)
+                         created:boolean;
+                         bnames,textcontents,textremplates:GDBGDBStringArray;
+                         layers,weights,objtypes:GDBOpenArrayOfGDBPointer;
+                         procedure CommandStart(Operands:pansichar); virtual;
+                         procedure createbufs;
                          //procedure BuildDM(Operands:pansichar); virtual;
                          //procedure Format;virtual;
                          procedure Run(pdata:GDBPlatformint); virtual;
+                         procedure Sel(pdata:{pointer}GDBPlatformint); virtual;
                    end;
 
   ITT_com = object(FloatInsert_com)
@@ -244,6 +258,8 @@ var
    BlockReplaceParams:TBlockReplaceParams;
    SelSim:SelSim_com;
    SelSimParams:TSelSimParams;
+   BlockScaleParams:TBlockScaleParams;
+   BlockScale:BlockScale_com;
 
 //procedure startup;
 //procedure Finalize;
@@ -370,6 +386,114 @@ begin
          begin
               commandmanager.executecommandend;
          end
+end;
+{BlockScale_com=object(CommandRTEdObject)
+                       procedure CommandStart(Operands:pansichar); virtual;
+                       procedure BuildDM(Operands:pansichar); virtual;
+                       procedure Run(pdata:GDBPlatformint); virtual;
+                 end;}
+procedure BlockScale_com.CommandStart(Operands:pansichar);
+var pb:PGDBObjBlockdef;
+    pobj:PGDBObjBlockInsert;
+    ir:itrec;
+    i,counter:integer;
+begin
+     counter:=0;
+     savemousemode := gdb.GetCurrentDWG.OGLwindow1.param.md.mode;
+     saveosmode := sysvar.dwg.DWG_OSMode^;
+
+  pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pobj<>nil then
+  repeat
+    if pobj.selected then
+    if (pobj.vp.ID=GDBDeviceID)or(pobj.vp.ID=GDBBlockInsertID) then
+    inc(counter);
+  pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+  until pobj=nil;
+  if counter=0 then
+                      begin
+                            HistoryOutStr('BlockScale: Нет выделенных блоков или устройств');
+                            commandmanager.executecommandend;
+                            exit;
+                      end;
+   BuildDM(Operands);
+          inherited;
+end;
+procedure BlockScale_com.BuildDM(Operands:pansichar);
+begin
+  commandmanager.DMAddMethod('Изменить','Изменить масштаб выделенных блоков',run);
+  commandmanager.DMShow;
+end;
+
+
+procedure BlockScale_com.Run;
+var pb:PGDBObjBlockInsert;
+    ir:itrec;
+    i,result:gdbinteger;
+    poa:PGDBObjEntityTreeArray;
+    selname,newname:GDBString;
+begin
+     begin
+          poa:=@gdb.GetCurrentROOT.ObjArray;
+
+          result:=0;
+          i:=0;
+          pb:=poa.beginiterate(ir);
+          if pb<>nil then
+          repeat
+                if (pb^.Selected)and((pb.vp.ID=GDBDeviceID)or(pb.vp.ID=GDBBlockInsertID)) then
+                begin
+                case BlockScaleParams.Absolytly of
+                            true:begin
+                                      pb.scale:=BlockScaleParams.Scale;
+                                 end;
+                            false:begin
+                                       pb.scale.x:=pb.scale.x*BlockScaleParams.Scale.x;
+                                       pb.scale.y:=pb.scale.y*BlockScaleParams.Scale.y;
+                                       pb.scale.z:=pb.scale.z*BlockScaleParams.Scale.z;
+
+                                      end;
+                end;
+                inc(result);
+                end;
+                pb:=poa.iterate(ir);
+          until pb=nil;
+          HistoryOutStr('BlockScale: '+inttostr(result)+' вхождений изменено');
+          Regen_com('');
+          commandmanager.executecommandend;
+     end;
+end;
+
+
+
+procedure BlockReplace_com.CommandStart(Operands:pansichar);
+var pb:PGDBObjBlockdef;
+    //ir:itrec;
+    i:integer;
+begin
+     BlockReplaceParams.Replace.Enums.free;
+     i:=GetBlockDefNames(BlockReplaceParams.Replace.Enums,BlockReplaceParams.CurrentReplaceBlock);
+     if BlockReplaceParams.Replace.Enums.Count>0 then
+     begin
+          if i>0 then
+                     BlockReplaceParams.Replace.Selected:=i
+                 else
+                     if length(operands)<>0 then
+                                         begin
+                                               HistoryOutStr('Insert: нет определения блока '''+operands+''' в чертеже');
+                                               commandmanager.executecommandend;
+                                               exit;
+                                         end;
+          format;
+
+          BuildDM(Operands);
+          inherited;
+     end
+        else
+            begin
+                 historyout('BlockReplace: нет определений блоков в чертеже');
+                 commandmanager.executecommandend;
+            end;
 end;
 procedure BlockReplace_com.BuildDM(Operands:pansichar);
 begin
@@ -502,59 +626,96 @@ begin
   pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pobj=nil;
 end;
+procedure SelSim_com.CommandStart(Operands:pansichar);
+begin
+  created:=false;
+  self.savemousemode:=GDB.GetCurrentDWG.OGLwindow1.param.md.mode;
+
+  if GetSelCount>0 then
+  begin
+       commandmanager.DMAddMethod('Запомнить','Запомнить примитивы и выделить примитивы для поиска подобных',sel);
+       commandmanager.DMAddMethod('Найти','Найти подобные примитивы (если "шаблонные" примитивы не были запомнены, посиск пройдет во всем чертеже)',run);
+       commandmanager.DMShow;
+       inherited CommandStart('');
+  end
+  else
+  begin
+    historyout('Объекты должны быть выбраны до запуска команды!!!');
+    Commandmanager.executecommandend;
+  end;
+end;
+procedure SelSim_com.Sel(pdata:GDBPlatformint);
+begin
+  createbufs;
+  //commandmanager.ExecuteCommandSilent('SelectFrame');
+end;
+procedure SelSim_com.createbufs;
+var
+   pobj: pGDBObjEntity;
+   ir:itrec;
+   tp:gdbpointer;
+begin
+  if not created then
+  begin
+  bnames.init(100);
+  textcontents.init(100);
+  textremplates.init(100);
+  layers.init(100);
+  weights.init(100);
+  objtypes.init(100);
+
+  pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pobj<>nil then
+  repeat
+    if pobj.selected then
+    begin
+         tp:=pobj.vp.Layer;
+         layers.addnodouble(@tp);
+
+         tp:=pointer(pobj.vp.LineWeight);
+         weights.addnodouble(@tp);
+
+         tp:=pointer(pobj.vp.ID);
+
+         if (GDBPlatformint(tp)=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
+                                GDBPlatformint(tp):=GDBBlockInsertID;
+         if ((GDBPlatformint(tp)=GDBBlockInsertID)or(GDBPlatformint(tp)=GDBDeviceID)) then
+                                    bnames.addnodouble(@PGDBObjBlockInsert(pobj)^.Name);
+
+         if (GDBPlatformint(tp)=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
+                                GDBPlatformint(tp):=GDBTextID;
+         if ((GDBPlatformint(tp)=GDBTextID)or(GDBPlatformint(tp)=GDBMTextID)) then
+                             begin
+                                    textcontents.addnodouble(@PGDBObjText(pobj)^.Content);
+                                    textremplates.addnodouble(@PGDBObjText(pobj)^.Template);
+                             end;
+
+         objtypes.addnodouble(@tp);
+    end;
+  pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+  until pobj=nil;
+  end;
+
+  created:=true;
+
+end;
+
 procedure SelSim_com.Run(pdata:GDBPlatformint);
 var
    pobj: pGDBObjEntity;
    ir:itrec;
-   tp:pointer;
+   tp:gdbpointer;
 
-   islayer,isweght,isobjtype,select:boolean;
-
-   bnames,textcontents,textremplates:GDBGDBStringArray;
-   layers,weights,objtypes:GDBOpenArrayOfGDBPointer;
+   insel,islayer,isweght,isobjtype,select:boolean;
 
 begin
-     bnames.init(100);
-     textcontents.init(100);
-     textremplates.init(100);
-     layers.init(100);
-     weights.init(100);
-     objtypes.init(100);
-
+     insel:=not created;
+     createbufs;
      pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
      if pobj<>nil then
      repeat
-       if pobj.selected then
-       begin
-            tp:=pobj.vp.Layer;
-            layers.addnodouble(@tp);
-
-            tp:=pointer(pobj.vp.LineWeight);
-            weights.addnodouble(@tp);
-
-            tp:=pointer(pobj.vp.ID);
-
-            if (cardinal(tp)=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
-                                   cardinal(tp):=GDBBlockInsertID;
-            if ((cardinal(tp)=GDBBlockInsertID)or(cardinal(tp)=GDBDeviceID)) then
-                                       bnames.addnodouble(@PGDBObjBlockInsert(pobj)^.Name);
-
-            if (cardinal(tp)=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
-                                   cardinal(tp):=GDBTextID;
-            if ((cardinal(tp)=GDBTextID)or(cardinal(tp)=GDBMTextID)) then
-                                begin
-                                       textcontents.addnodouble(@PGDBObjText(pobj)^.Content);
-                                       textremplates.addnodouble(@PGDBObjText(pobj)^.Template);
-                                end;
-
-            objtypes.addnodouble(@tp);
-       end;
-     pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
-     until pobj=nil;
-
-     pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
-     if pobj<>nil then
-     repeat
+           if (pobj.selected)or insel then
+           begin
            islayer:=false;
            isweght:=false;
            isobjtype:=false;
@@ -567,21 +728,21 @@ begin
            isweght:=weights.IsObjExist(tp);
 
            tp:=pointer(pobj.vp.ID);
-           if (cardinal(tp)=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
-                                  cardinal(tp):=GDBBlockInsertID;
-           if (cardinal(tp)=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
-                                  cardinal(tp):=GDBTextID;
+           if (GDBPlatformint(tp)=GDBDeviceID)and(SelSimParams.Blocks.DiffBlockDevice=TD_NotDiff) then
+                                  GDBPlatformint(tp):=GDBBlockInsertID;
+           if (GDBPlatformint(tp)=GDBMtextID)and(SelSimParams.Texts.DiffTextMText=TD_NotDiff) then
+                                  GDBPlatformint(tp):=GDBTextID;
            isobjtype:=objtypes.IsObjExist(tp);
            if isobjtype then
            begin
-                if ((cardinal(tp)=GDBBlockInsertID)or(cardinal(tp)=GDBDeviceID))and(SelSimParams.Blocks.SameName) then
+                if ((GDBPlatformint(tp)=GDBBlockInsertID)or(GDBPlatformint(tp)=GDBDeviceID))and(SelSimParams.Blocks.SameName) then
                 if not bnames.findstring(uppercase(PGDBObjBlockInsert(pobj)^.Name)) then
                    isobjtype:=false;
 
-                if ((cardinal(tp)=GDBTextID)or(cardinal(tp)=GDBMTextID))and(SelSimParams.Texts.SameContent) then
+                if ((GDBPlatformint(tp)=GDBTextID)or(GDBPlatformint(tp)=GDBMTextID))and(SelSimParams.Texts.SameContent) then
                 if not textcontents.findstring(uppercase(PGDBObjText(pobj)^.Content)) then
                    isobjtype:=false;
-                if ((cardinal(tp)=GDBTextID)or(cardinal(tp)=GDBMTextID))and(SelSimParams.Texts.SameContent) then
+                if ((GDBPlatformint(tp)=GDBTextID)or(GDBPlatformint(tp)=GDBMTextID))and(SelSimParams.Texts.SameContent) then
                 if not textremplates.findstring(uppercase(PGDBObjText(pobj)^.Template)) then
                    isobjtype:=false;
 
@@ -602,6 +763,8 @@ begin
                                                  end;
            if select then pobj^.select;
 
+           end;
+
      pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
      until pobj=nil;
 
@@ -612,56 +775,9 @@ begin
      textcontents.FreeAndDone;
      textremplates.FreeAndDone;
      bnames.FreeAndDone;
+     created:=false;
      Commandmanager.executecommandend;
 end;
-
-procedure SelSim_com.CommandStart(Operands:pansichar);
-begin
-  self.savemousemode:=GDB.GetCurrentDWG.OGLwindow1.param.md.mode;
-
-  if GetSelCount>0 then
-  begin
-       commandmanager.DMAddMethod('Найти','Найти',run);
-       commandmanager.DMShow;
-       inherited CommandStart('');
-  end
-  else
-  begin
-    historyout('Объекты должны быть выбраны до запуска команды!!!');
-    Commandmanager.executecommandend;
-  end;
-end;
-
-procedure BlockReplace_com.CommandStart(Operands:pansichar);
-var pb:PGDBObjBlockdef;
-    //ir:itrec;
-    i:integer;
-begin
-     BlockReplaceParams.Replace.Enums.free;
-     i:=GetBlockDefNames(BlockReplaceParams.Replace.Enums,BlockReplaceParams.CurrentReplaceBlock);
-     if BlockReplaceParams.Replace.Enums.Count>0 then
-     begin
-          if i>0 then
-                     BlockReplaceParams.Replace.Selected:=i
-                 else
-                     if length(operands)<>0 then
-                                         begin
-                                               HistoryOutStr('Insert: нет определения блока '''+operands+''' в чертеже');
-                                               commandmanager.executecommandend;
-                                               exit;
-                                         end;
-          format;
-
-          BuildDM(Operands);
-          inherited;
-     end
-        else
-            begin
-                 historyout('BlockReplace: нет определений блоков в чертеже');
-                 commandmanager.executecommandend;
-            end;
-end;
-
 procedure TextInsert_com.BuildPrimitives;
 begin
      gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
@@ -2211,6 +2327,14 @@ begin
   SelSimParams.Blocks.DiffBlockDevice:=TD_Diff;
   SelSim.commanddata.Instance:=@SelSimParams;
   SelSim.commanddata.PTD:=SysUnit.TypeName2PTD('TSelSimParams');
+
+  BlockScale.init('BlockScale',0,0);
+  BlockScale.CEndActionAttr:=0;
+  BlockScaleParams.Scale:=geometry.CreateVertex(1,1,1);
+  BlockScaleParams.Absolytly:=true;
+   BlockScale.commanddata.Instance:=@BlockScaleParams;
+   BlockScale.commanddata.PTD:=SysUnit.TypeName2PTD('TBlockScaleParams');
+
 
 
   InsertTestTable.init('InsertTestTable',0,0);

@@ -122,8 +122,11 @@ begin
     end;
 
   gdb.GetCurrentDWG.OGLwindow1.Clear0Ontrackpoint;
-  gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
-  gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
+  if not overlay then
+                     begin
+                          gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+                          gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
+                     end;
   gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   //poglwnd^.md.mode := savemousemode;
   OSModeEditor.GetState;
@@ -289,4 +292,4 @@ end;
 begin
      {$IFDEF DEBUGINITSECTION}LogOut('commanddefinternal.initialization');{$ENDIF}
 end.
-
+

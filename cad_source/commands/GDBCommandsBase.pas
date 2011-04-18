@@ -79,7 +79,7 @@ TOSModeEditor=object(GDBaseObject)
    procedure finalize;}
    var selframecommand:PCommandObjectDef;
        ms2objinsp:PCommandObjectDef;
-       selall:pCommandFastObjectPlugin;
+       deselall,selall:pCommandFastObjectPlugin;
 
        OSModeEditor:TOSModeEditor;
 
@@ -639,23 +639,44 @@ begin
      application.ProcessMessages;
      oglwnd._onresize(nil);
 end;
+function DeSelectAll_com(Operands:pansichar):GDBInteger;
+begin
+     //redrawoglwnd;
+     updatevisible;
+     result:=cmd_ok;
+end;
 
 function SelectAll_com(Operands:pansichar):GDBInteger;
 var //i: GDBInteger;
     pv:pGDBObjEntity;
-        ir:itrec;
+    ir:itrec;
+    count:integer;
 begin
   if gdb.GetCurrentROOT.ObjArray.Count = 0 then exit;
   GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount:=0;
+
+  count:=0;
+
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
-    //pv^.select;
-    pv^.Selected:=true;
-    if pv^.Selected then if pv^.Selected then pv^.Selected:=true ;
+    inc(count);
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
-  redrawoglwnd;
+
+
+  pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+        if count>10000 then
+                           pv^.Selected:=true
+                       else
+                           pv^.select;
+
+  pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+  until pv=nil;
+
+  //redrawoglwnd;
   updatevisible;
   result:=cmd_ok;
 end;
@@ -1805,6 +1826,10 @@ begin
   selall:=CreateCommandFastObjectPlugin(@SelectAll_com,'SelectAll',CADWG,0);
   selall^.overlay:=true;
   selall.CEndActionAttr:=0;
+  deselall:=CreateCommandFastObjectPlugin(@DeSelectAll_com,'DeSelectAll',CADWG,0);
+  deselall.CEndActionAttr:=CEDeSelect;
+  deselall^.overlay:=true;
+  //deselall.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@QSave_com,'QSave',CADWG,0);
   CreateCommandFastObjectPlugin(@Merge_com,'Merge',CADWG,0);
   CreateCommandFastObjectPlugin(@Load_com,'Load',0,0);

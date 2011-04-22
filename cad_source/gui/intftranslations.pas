@@ -213,11 +213,11 @@ procedure initialize;
       createpo;
       LRSTranslator:=TPoTranslator.Create;
       if not sysinfo.sysparam.updatepo then
+                                       begin
                                            TranslateResourceStrings(po);
-      //TranslateUnitResourceStrings('aboutwnd',PODirectory + 'zcad.%s.po', Lang, FallbackLang);
-      //MessageDlg('Title', 'Text', mtInformation, [mbOk, mbCancel, mbYes], 0);
-
-      TranslateUnitResourceStrings('anchordockstr', PODirectory + 'anchordockstr.%s.po', Lang, FallbackLang);
+                                           TranslateUnitResourceStrings('anchordockstr', PODirectory + 'anchordockstr.%s.po', Lang, FallbackLang);
+                                           TranslateUnitResourceStrings('lclstrconsts', PODirectory + 'lclstrconsts.%S.po', Lang, FallbackLang);
+                                       end;
     end;
 
 initialization

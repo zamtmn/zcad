@@ -1877,7 +1877,7 @@ else
   {objinsp.GDBobjinsp.}ReturnToDefault;
   clearcp;
 
-  redrawoglwnd;
+  //redrawoglwnd;
   result:=cmd_ok;
 end;
 function Find_com(Operands:pansichar):GDBInteger;

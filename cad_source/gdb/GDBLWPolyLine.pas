@@ -131,8 +131,10 @@ var
 begin
 
     result:=false;
-  if closed then ie:=Width3D_in_WCS_Array.count
-            else ie:=Width3D_in_WCS_Array.count - 1;
+  if closed then
+                ie:=Width3D_in_WCS_Array.count
+            else
+                ie:=Width3D_in_WCS_Array.count - 1;
 
 
   q3d:=Width3D_in_WCS_Array.parray;
@@ -142,6 +144,9 @@ begin
   for i := 1 to ie do
   begin
     begin
+            if i=Vertex3D_in_WCS_Array.count then
+                                           p3d:=Vertex3D_in_WCS_Array.PArray;
+
       subresult:=CalcOutBound4VInFrustum(q3d^,mf);
           if subresult=IRFully then
                                   begin
@@ -180,8 +185,6 @@ begin
       inc(q3d);
       inc(p3dold);
       inc(p3d);
-      if i=Width3D_in_WCS_Array.count then
-                                           p3d:=Vertex3D_in_WCS_Array.PArray;
     end;
  end;
     {subresult:=CalcOutBound4VInFrustum(PInWCS,mf);

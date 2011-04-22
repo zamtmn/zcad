@@ -137,7 +137,10 @@ begin
 end;
 function GDBObjElLeader.DeSelect;
 begin
+     MainLine.Selected:=true;
      MainLine.DeSelect;
+     MarkLine.DeSelect;
+     Tbl.DeSelect;
      result:=inherited deselect;
 end;
 function GDBObjElLeader.GetObjTypeName;

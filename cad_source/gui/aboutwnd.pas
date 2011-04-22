@@ -23,7 +23,7 @@ uses
  gettext,{translations,}intftranslations,
  strproc,umytreenode,{Classes, SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}
  gdbase,{UGDBDescriptor,math,commandline,varman,}languade{,UGDBTracePropArray},
-  {zforms,ZEditsWithProcedure,zbasicvisible,varmandef,shared,ZGUIsCT,ZStaticsText,}sysinfo;
+  {zforms,ZEditsWithProcedure,zbasicvisible,varmandef,shared,ZGUIsCT,ZStaticsText,}sysinfo,sysutils,iodxf;
 resourcestring
   AboutWndCaption = 'About ZCAD';
 type
@@ -35,7 +35,7 @@ type
 var
   AboutWindow:TAboutWnd;
 implementation
-uses splashwnd,shared,log;
+uses splashwnd,shared,log,commandline;
 procedure TAboutWnd.AfterConstruction;
 begin
   inherited;
@@ -56,7 +56,8 @@ begin
                        #13#10+
                        '-При проблемах с отображением\выделением выполнить Regen и RebuildTree в ком. строке;'#13#10+
                        #13#10+
-                       '-Для отключение показа этого окна закоментируйте строку "About" в файле components\autorun.cmd. Кодировка всех конфигурационных файлов - UTF8;');
+                       '-Для отключение показа этого окна закоментируйте строку "About" в файле components\autorun.cmd. Кодировка всех конфигурационных файлов - UTF8;'#13#10+
+                       #13#10+'Команд - '+inttostr(commandline.commandmanager.Count)+'; Примитивов - '+inttostr(acadentsupportcol));
   Memo.Parent := self;
 end;
 begin

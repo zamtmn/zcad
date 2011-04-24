@@ -106,6 +106,23 @@ var
   psyminfo:PGDBsymdolinfo;
   TCP:TCodePage;
   pfont:pgdbfont;
+
+  l:GDBInteger;
+  sym:word;
+  newline:boolean;
+procedure setstartx;
+begin
+     if length(pswp.str)>0 then
+                               begin
+                                 if pswp.str[1]=' ' then
+                                                         l:=l;
+                               sym:=getsymbol(pswp.str,1,l);
+                               psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym);
+                               pswp^.x:= 0-psyminfo.SymMinX{*textprop.size};
+                               end
+                           else
+                               pswp^.x:= 0;
+end;
 begin
   textprop.wfactor:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.prop.wfactor;
   textprop.oblique:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.prop.oblique;
@@ -132,28 +149,40 @@ begin
 
   canbreak := false;
   currsymbol := 1;
-  psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
+  //psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
   lastbreak := 1;
   lastcanbreak := 1;
   linewidth := 0;
+
+  //sym:=getsymbol(content,currsymbol,l);
+  //psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym);
+  newline:=true;
+
   lastlinewidth := 0;
   currline := '';
   maxlinewidth := (width / textprop.size) / textprop.wfactor;
   repeat
-    if (content[currsymbol] = ' ') and (maxlinewidth > 0) then
+    sym:=getsymbol(content,currsymbol,l);
+    psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym);
+    if newline then
+                   begin
+                        linewidth:=linewidth-psyminfo.SymMinX;
+                        newline:=false;
+                   end;
+    if ({content[currsymbol]}sym = {' '}32) and (maxlinewidth > 0) then
     begin
       lastcanbreak := currsymbol;
       canbreak := true;
       lastlinewidth := linewidth;
-      linewidth := linewidth + psyminfo.dx
+      linewidth := linewidth + psyminfo.NextSymX
     end
     else
-      if {content[currsymbol] = '\'}copy(content,currsymbol,2)='\P' then          {\P}
+      if copy(content,currsymbol,2)='\P' then          {\P}
       begin
         currline := copy(content, lastbreak, currsymbol - lastbreak);
         lastbreak := currsymbol + 2;
         currsymbol := currsymbol + 1;
-        psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
+        psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}({integer(content[currsymbol])}sym));
         canbreak := false;
 
         {GDBPointer(ptext.GDBStringarray[ptext.count].str) := nil;
@@ -165,25 +194,26 @@ begin
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
         begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(' '))).dx;
+             swp.w := swp.w - pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo({ach2uch}(GDBByte(' '))).NextSymX;
         end;
         self.text.add(@swp);
-
+        newline:=true;
         linewidth := 0;
         lastlinewidth := linewidth;
       end
       else
       begin
-        linewidth := linewidth + psyminfo.dx;
+        linewidth := linewidth + psyminfo.NextSymX;
       end;
     if canbreak then
       if maxlinewidth <= linewidth then
       begin
         currline := copy(content, lastbreak, lastcanbreak - lastbreak);
         linewidth := 0;
+        newline:=true;
         lastbreak := lastcanbreak + 1;
         currsymbol := lastcanbreak;
-        psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
+        psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym);
 
         canbreak := false;
 
@@ -196,13 +226,13 @@ begin
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
         begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(' '))).dx;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
+             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(GDBByte(' '))}32).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
         end;
         self.text.add(@swp);
 
       end;
-    inc(currsymbol);
-    psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
+    inc(currsymbol,l);
+    psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym);
   until currsymbol > length(content);
   if linewidth=0 then
                      linewidth:=1;
@@ -216,7 +246,7 @@ begin
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
         begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(' '))).dx;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
+             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(GDBByte(' '))}32).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
         end;
         self.text.add(@swp);
   //w := width;
@@ -252,7 +282,7 @@ begin
         pswp:=text.beginiterate(ir);
         if pswp<>nil then
         repeat
-          pswp^.x:= 0;
+              setstartx;
           pswp^.y := -(i) * linespace / textprop.size;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
@@ -272,7 +302,8 @@ begin
         pswp:=text.beginiterate(ir);
         if pswp<>nil then
         repeat
-          pswp^.x:= -pswp^.w * textprop.size / 2 / textprop.size;;
+          setstartx;
+          pswp^.x:= pswp^.x-pswp^.w * textprop.size / 2 / textprop.size;;
           pswp^.y := -(i) * linespace / textprop.size;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
@@ -292,7 +323,8 @@ begin
         pswp:=text.beginiterate(ir);
         if pswp<>nil then
         repeat
-          pswp^.x:= -pswp^.w * textprop.size  / textprop.size;
+          setstartx;
+          pswp^.x:= pswp^.x -pswp^.w * textprop.size  / textprop.size;
           pswp^.y := -(i) * linespace / textprop.size;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
@@ -313,7 +345,7 @@ begin
         pswp:=text.beginiterate(ir);
         if pswp<>nil then
         repeat
-          pswp^.x:= 0;
+          setstartx;
           pswp^.y := -(i) * linespace / textprop.size;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
@@ -334,7 +366,8 @@ begin
         pswp:=text.beginiterate(ir);
         if pswp<>nil then
         repeat
-          pswp^.x:= -pswp^.w * textprop.size / 2 / textprop.size;
+          setstartx;
+          pswp^.x:= pswp^.x -pswp^.w * textprop.size / 2 / textprop.size;
           pswp^.y := -(i) * linespace / textprop.size;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
@@ -354,7 +387,8 @@ begin
         pswp:=text.beginiterate(ir);
         if pswp<>nil then
         repeat
-          pswp^.x:= -pswp^.w * textprop.size  / textprop.size;
+          setstartx;
+          pswp^.x:= pswp^.x -pswp^.w * textprop.size  / textprop.size;
           pswp^.y := -(i) * linespace / textprop.size;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
@@ -374,7 +408,7 @@ begin
         pswp:=text.beginiterate(ir);
         if pswp<>nil then
         repeat
-          pswp^.x:= 0;
+          setstartx;
           pswp^.y := -(i) * linespace / textprop.size;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
@@ -394,7 +428,8 @@ begin
         pswp:=text.beginiterate(ir);
         if pswp<>nil then
         repeat
-          pswp^.x:= -pswp^.w * textprop.size  / 2 / textprop.size;
+          setstartx;
+          pswp^.x:= pswp^.x -pswp^.w * textprop.size  / 2 / textprop.size;
           pswp^.y := -(i) * linespace / textprop.size;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
@@ -414,7 +449,8 @@ begin
         pswp:=text.beginiterate(ir);
         if pswp<>nil then
         repeat
-          pswp^.x:= -pswp^.w * textprop.size  / textprop.size;
+          setstartx;
+          pswp^.x:= pswp^.x -pswp^.w * textprop.size  / textprop.size;
           pswp^.y := -(i) * linespace / textprop.size;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
@@ -594,7 +630,9 @@ var
   pl:GDBPoint3DArray;
   ispl:gdbboolean;
   pfont:pgdbfont;
-  ln:GDBInteger;
+  ln,l:GDBInteger;
+
+  sym:word;
 begin
   ln:=0;
   pfont:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont;
@@ -642,7 +680,8 @@ begin
   while i<=length(pswp^.str) do
   begin
     m1:=matr;
-    if pswp^.str[i]=#1 then
+    sym:=getsymbol(pswp^.str{[i]},i,l);
+    if {pswp^.str[i]}sym={#}1 then
     begin
          ispl:=not(ispl);
          if ispl then begin
@@ -683,7 +722,7 @@ begin
     begin
     //matr:=matrixmultiply(matr,objmatrix);
 
-      CreateSymbol(ord(pswp^.str[i]),matr,minx,miny,maxx,maxy,pfont,ln);
+      CreateSymbol({ord(pswp^.str[i])}sym,matr,minx,miny,maxx,maxy,pfont,ln);
 
       matr:=m1;
       FillChar(m1, sizeof(DMatrix4D), 0);
@@ -691,11 +730,13 @@ begin
   m1[1, 1] := 1;
   m1[2, 2] := 1;
   m1[3, 3] := 1;
-  m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(ord(pswp^.str[i]))).dx;
+    {if sym<256 then
+                    sym:=ach2uch(sym);}
+  m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(ord(pswp^.str[i]))}sym).NextSymX;
   m1[3, 1] := 0;
   matr:=MatrixMultiply(m1,matr);
   end;
-  inc(i);
+  inc(i,l);
   end;
                      if ispl then
 
@@ -898,10 +939,14 @@ begin
   dxfGDBDoubleout(outhandle,40,textprop.size);
   dxfGDBDoubleout(outhandle,41,width);
   dxfGDBIntegerout(outhandle,71,textprop.justify);
-  s := content;
+  if  convertfromunicode(template)=content then
+                                               s := template
+                                           else
+                                               s := content;
+  //s := content;
   if length(s) < maxdxfmtextlen then
   begin
-    dxfGDBStringout(outhandle,1,z2dxfmtext(content,ul));
+    dxfGDBStringout(outhandle,1,z2dxfmtext(s,ul));
   end
   else
   begin

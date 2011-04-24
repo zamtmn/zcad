@@ -26,7 +26,7 @@ PGDBsymdolinfo=^GDBsymdolinfo;
 GDBsymdolinfo=record
     addr: GDBInteger;
     size: GDBWord;
-    dx, dy,_dy, w, h: GDBDouble;
+    NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: GDBDouble;
   end;
 PGDBUNISymbolInfo=^GDBUNISymbolInfo;
 GDBUNISymbolInfo=record
@@ -144,12 +144,12 @@ begin
                             begin
                                  usi.symbol:=symbol;
                                  usi.symbolinfo.addr:=0;
-                                 usi.symbolinfo.dx:=0;
-                                 usi.symbolinfo.dy:=0;
+                                 usi.symbolinfo.NextSymX:=0;
+                                 usi.symbolinfo.SymMaxY:=0;
                                  usi.symbolinfo.h:=0;
                                  usi.symbolinfo.size:=0;
                                  usi.symbolinfo.w:=0;
-                                 usi.symbolinfo._dy:=0;
+                                 usi.symbolinfo.SymMinY:=0;
                                  unisymbolinfo.Add(@usi);
 
                                  result:=@(PGDBUNISymbolInfo(unisymbolinfo.getelement(unisymbolinfo.Count-1))^.symbolinfo);

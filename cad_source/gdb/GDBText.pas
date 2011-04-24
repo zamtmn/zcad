@@ -21,7 +21,7 @@ unit GDBText;
 
 interface
 uses
-strproc,UGDBSHXFont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
+strproc,sysutils,UGDBSHXFont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
 GDBase,UGDBDescriptor,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,strmy,math,memman,log,GDBSubordinated,UGDBTextStyleArray;
 type
@@ -54,6 +54,7 @@ GDBObjText=object(GDBObjAbstractText)
                  function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit):GDBBoolean;virtual;
            end;
 {Export-}
+function getsymbol(s:gdbstring; i:integer;out l:integer):word;
 implementation
 uses io,shared;
 function acadvjustify(j: GDBByte): GDBByte;
@@ -68,7 +69,7 @@ begin
 end;
 function GDBObjText.IsHaveObjXData:GDBBoolean;
 begin
-     if template<>content then
+     if  convertfromunicode(template)<>content then
                               result:=true
                           else
                               result:=false;
@@ -200,16 +201,23 @@ procedure GDBObjText.CalcGabarit;
 var
   i: GDBInteger;
   psyminfo:PGDBsymdolinfo;
+  l:GDBInteger;
+  sym:word;
 begin
   obj_height:=1;
   obj_width:=0;
   obj_y:=0;
-  for i:=1 to length(content) do
+  i:=1;
+   while i<=length(content) do
+  //for i:=1 to length(content) do
   begin
-    psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(content[i])));
-    obj_width:=obj_width+psyminfo.dx;
-    if psyminfo.dy>obj_height then obj_height:=psyminfo.dy;
-    if psyminfo._dy<obj_y then obj_y:=psyminfo._dy;
+    sym:=getsymbol(content,i,l);
+    //psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(content[i])));
+    psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(sym);
+    obj_width:=obj_width+psyminfo.NextSymX;
+    if psyminfo.SymMaxY>obj_height then obj_height:=psyminfo.SymMaxY;
+    if psyminfo.SymMinY<obj_y then obj_y:=psyminfo.SymMinY;
+    inc(i,l);
   end;
   obj_width:=obj_width-1/3;
 end;
@@ -373,7 +381,8 @@ var
 begin
   if _symbol=100 then
                       _symbol:=_symbol;
-  _symbol:=ach2uch(_symbol);
+  {if _symbol<256 then
+                    _symbol:=ach2uch(_symbol);}
   if _symbol=32 then
                       _symbol:=_symbol;
 
@@ -510,6 +519,67 @@ begin
       end;
     end;
   end;
+function getsymbol(s:gdbstring; i:integer;out l:integer):word;
+var
+   ts:gdbstring;
+   code:integer;
+begin
+     if length(s)>=i+6 then
+     if s[i]='\' then
+     if uppercase(s[i+1])='U' then
+     if s[i+2]='+' then
+     begin
+          ts:='$'+copy(s,i+3,4);
+          val(ts,result,code);
+          if code=0 then
+                        begin
+                             l:=7;
+                             exit;
+                        end;
+     end;
+
+     if length(s)>=i+2 then
+     if s[i]='%' then
+     if s[i+1]='%' then
+     begin
+          l:=3;
+          case (s[i+2]) of
+            'D','d':begin
+                     result:=35;
+                     exit;
+                end;
+            'P','p':begin
+                     result:=96;
+                     exit;
+                end;
+            'C','c':begin
+                     result:=143;
+                     exit;
+                end;
+            'U','u':begin
+                     result:=1;
+                     exit;
+                end;
+
+          end;    ;
+     end;
+
+     if length(s)>=i+1 then
+     if s[i]='\' then
+     begin
+          l:=2;
+          case (s[i+1]) of
+            'L','l':begin
+                     result:=1;
+                     exit;
+                end;
+
+          end;
+     end;
+
+     l:=1;
+     result:=ach2uch(ord(s[i]));
+end;
 
 procedure GDBObjText.createpoint;
 var
@@ -529,7 +599,8 @@ var
   ispl:gdbboolean;
   ir:itrec;  
   pfont:pgdbfont;
-  ln:GDBInteger;
+  ln,l:GDBInteger;
+  sym:word;
 begin
   ln:=1;
   pfont:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont;
@@ -549,7 +620,8 @@ begin
   i := 1;
   while i <= length(content) do
   begin
-    if content[i]=#1 then
+    sym:=getsymbol(content,i,l);
+    if {content[i]}sym={#}1 then
     begin
          ispl:=not(ispl);
          if ispl then begin
@@ -567,7 +639,7 @@ begin
     end
     else
     begin
-      CreateSymbol(ord(content[i]),matr,minx,miny,maxx,maxy,pfont,ln);
+      CreateSymbol({ord(content[i])}sym,matr,minx,miny,maxx,maxy,pfont,ln);
 
     end;
       //FillChar(m1, sizeof(DMatrix4D), 0);
@@ -576,9 +648,9 @@ begin
   m1[1, 1] := 1;
   m1[2, 2] := 1;
   m1[3, 3] := 1;}
-  m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(ord(content[i]))).dx;
+  m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}{(ord(content[i]))}sym).NextSymX;
   matr:=MatrixMultiply(m1,matr);
-  inc(i);
+  inc(i,l);
   end;
                        if ispl then
 
@@ -668,7 +740,7 @@ begin
 end;
 procedure GDBObjText.SaveToDXFObjXData;
 begin
-     if content<>template then
+     if content<>convertfromunicode(template) then
                               dxfGDBStringout(outhandle,1000,'_TMPL1='+template);
      inherited;
 end;
@@ -699,6 +771,7 @@ procedure GDBObjText.SaveToDXF(var handle: longint;var outhandle:{GDBInteger}GDB
 var
   hv, vv: GDBByte;
   tv:gdbvertex;
+  s:GDBString;
 begin
   vv := acadvjustify(textprop.justify);
   hv := (textprop.justify - 1) mod 3;
@@ -726,7 +799,14 @@ begin
 
   SaveToDXFObjPostfix(outhandle);
 
-  dxfGDBStringout(outhandle,1,z2dxftext(content));
+
+    if  convertfromunicode(template)=content then
+                                               s := template
+                                           else
+                                               s := content;
+
+
+  dxfGDBStringout(outhandle,1,z2dxftext({content}s));
   dxfGDBStringout(outhandle,100,'AcDbText');
   dxfGDBIntegerout(outhandle,73,vv);
 end;

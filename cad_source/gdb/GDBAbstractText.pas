@@ -64,16 +64,39 @@ GDBObjAbstractText=object(GDBObjPlainWithOX)
                    end;
 {EXPORT-}
 function textformat(s:GDBString;pobj:GDBPointer):GDBString;
+function convertfromunicode(s:GDBString):GDBString;
 implementation
 uses
    log,GDBSubordinated;
-function textformat;
+function convertfromunicode(s:GDBString):GDBString;
 var i,i2:GDBInteger;
     ps,varname:GDBString;
     pv:pvardesk;
     num,code:integer;
 begin
      ps:=s;
+     {
+       repeat
+            i:=pos('\U+',uppercase(ps));
+            if i>0 then
+                       begin
+                            varname:='$'+copy(ps,i+3,4);
+                            val(varname,num,code);
+                            if code=0 then
+                                          ps:=copy(ps,1,i-1)+Chr(uch2ach(num))+copy(ps,i+7,length(ps)-i-6)
+                       end;
+       until i<=0;
+     }
+     result:=ps;
+end;
+function textformat;
+var i,i2:GDBInteger;
+    ps,varname:GDBString;
+    pv:pvardesk;
+    num,code:integer;
+begin
+     //ps:=s;
+     ps:=convertfromunicode(s);
      repeat
           i:=pos('%%DATE',uppercase(ps));
           if i>0 then
@@ -81,7 +104,7 @@ begin
                           ps:=copy(ps,1,i-1)+datetostr(date)+copy(ps,i+6,length(ps)-i-5)
                      end;
      until i<=0;
-     repeat
+     {repeat
           i:=pos('\U+',uppercase(ps));
           if i>0 then
                      begin
@@ -90,8 +113,8 @@ begin
                           if code=0 then
                                         ps:=copy(ps,1,i-1)+Chr(uch2ach(num))+copy(ps,i+7,length(ps)-i-6)
                      end;
-     until i<=0;
-     repeat
+     until i<=0;}
+     {repeat
           i:=pos('%%D',uppercase(ps));
           if i>0 then
                      begin
@@ -113,6 +136,13 @@ begin
                      end;
      until i<=0;
      repeat
+          i:=pos('%%U',uppercase(ps));
+          if i>0 then
+                     begin
+                          ps:=copy(ps,1,i-1)+#1+copy(ps,i+3,length(ps)-i-2)
+                     end;
+     until i<=0;}
+{     repeat
           i:=pos('\L',uppercase(ps));
           if i>0 then
                      begin
@@ -125,15 +155,7 @@ begin
                      begin
                           ps:=copy(ps,1,i-1)+#1+copy(ps,i+2,length(ps)-i-1)
                      end;
-     until i<=0;
-     repeat
-          i:=pos('%%U',uppercase(ps));
-          if i>0 then
-                     begin
-                          ps:=copy(ps,1,i-1)+#1+copy(ps,i+3,length(ps)-i-2)
-                     end;
-     until i<=0;
-
+     until i<=0; }
      repeat
           i:=pos('@@[',ps);
           if i>0 then

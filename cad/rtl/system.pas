@@ -519,7 +519,7 @@ PGDBsymdolinfo=^GDBsymdolinfo;
 GDBsymdolinfo=record
     addr: GDBInteger;
     size: GDBWord;
-    dx, dy,_dy, w, h: GDBDouble;
+    NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: GDBDouble;
   end;
 PGDBUNISymbolInfo=^GDBUNISymbolInfo;
 GDBUNISymbolInfo=record
@@ -1055,6 +1055,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure higlight;virtual;abstract;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                     procedure select;virtual;abstract;
+                    function SelectQuik:GDBBoolean;virtual;abstract;
                     procedure remapcontrolpoints(pp:PGDBControlPointArray);virtual;abstract;
                     //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
@@ -2046,7 +2047,8 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                       end;
          TSubPolyEdit=(
                        TSPE_Insert(*'Вставить вершину'*),
-                       TSPE_Remove(*'Убрать вершину'*)
+                       TSPE_Remove(*'Убрать вершину'*),
+                       TSPE_Scissor(*'Разрезать на две'*)
                        );
          TPolyEditMode=(
                        TPEM_Nearest(*'Вставить в ближайший сегмент'*),
@@ -2198,10 +2200,15 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;abstract;
                    end;
   SelSim_com=object(CommandRTEdObject)
+                         created:boolean;
+                         bnames,textcontents,textremplates:GDBGDBStringArray;
+                         layers,weights,objtypes:GDBOpenArrayOfGDBPointer;
                          procedure CommandStart(Operands:pansichar); virtual;abstract;
+                         procedure createbufs;
                          //procedure BuildDM(Operands:pansichar); virtual;abstract;
                          //procedure Format;virtual;abstract;
                          procedure Run(pdata:GDBPlatformint); virtual;abstract;
+                         procedure Sel(pdata:{pointer}GDBPlatformint); virtual;abstract;
                    end;
   ITT_com = object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;abstract;

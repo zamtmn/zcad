@@ -422,7 +422,9 @@ begin
      //b2addr:=baddr;
      ts:=inherited CreateProperties(PPDA,Name,PCollapsed,ownerattrib,bmode,addr,valkey,valtype);
      if bmode<>property_build then exit;
-     ownerattrib:=ownerattrib or FA_READONLY;
+
+     //-------------------------ownerattrib:=ownerattrib or FA_READONLY;
+
      //eaddr:=addr;
         if colarray.parray=nil then
                                    colarray.CreateArray;
@@ -483,7 +485,7 @@ begin
              repeat
                    //b2addr:=p;
                    //pcol^:=false;
-                   if bmode=property_build then
+                   //---------------------------------if bmode=property_build then
                                                pld^.CreateProperties({PPDA}ts,LincedData,pcol{PCollapsed}{field_no_attrib},ownerattrib,bmode,p,'','');
                    //p:=b2addr;
                    pcol:=colarray.iterate(ir2);

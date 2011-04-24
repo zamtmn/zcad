@@ -6,5 +6,5 @@
 c          = Copy
 m          = Move
 r          = Rotate
-t          = text
+t          = Text
 exit       = quit

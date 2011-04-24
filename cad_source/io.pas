@@ -47,7 +47,7 @@ var
   {temp,}psubsymbol:PGDBByte;
   ppolycount:longint;
   i,j,poz,code,sizeshp,sizeshx,stackheap:GDBInteger;
-  baselen,ymin,ymax,x,y,x1,y1,xb,yb,r,startangle,angle,normal,hordlen,tgl:fontfloat;
+  baselen,ymin,ymax,xmin,xmax,x,y,x1,y1,xb,yb,r,startangle,angle,normal,hordlen,tgl:fontfloat;
   stack:array[0..4,0..1] of fontfloat;
   tr:array[1..3,0..1] of fontfloat;
   hi,lo,byt,byt2:GDBByte;
@@ -60,6 +60,17 @@ var
   psyminfo,psubsyminfo:PGDBsymdolinfo;
   inccounter:integer;
   tbool:boolean;
+procedure ProcessMinMax(_x,_y:fontfloat);
+begin
+      if _y>ymax then
+        ymax:=_y;
+      if _y<ymin then
+        ymin:=_y;
+      if _x>xmax then
+        xmax:=_x;
+      if _x<xmin then
+        xmin:=_x;
+end;
 procedure  incpshxdata;
 begin
      inc(pshxdata);
@@ -101,7 +112,10 @@ begin
        begin
 
                                     begin
-                                      if tr[1,1]>ymax then
+                                         ProcessMinMax(tr[1,0],tr[1,1]);
+                                         ProcessMinMax(tr[2,0],tr[2,1]);
+                                         ProcessMinMax(tr[3,0],tr[3,1]);
+                                      {if tr[1,1]>ymax then
                                         ymax:=tr[1,1];
                                       if tr[1,1]<ymin then
                                         ymin:=tr[1,1];
@@ -112,7 +126,7 @@ begin
                                       if tr[2,1]>ymax then
                                         ymax:=tr[2,1];
                                       if tr[2,1]<ymin then
-                                        ymin:=tr[2,1];
+                                        ymin:=tr[2,1];}
                                     end;
 
          pf^.SHXdata.AddByteByVal(GDBLineID);//---------------------pGDBByte(pdata)^:=GDBLineID;
@@ -150,8 +164,10 @@ begin
             stackheap:=-1;
             x:=0;
             y:=0;
-            ymin:=0;
-            ymax:=0;
+            ymin:=infinity;
+            ymax:=-infinity;
+            xmin:=infinity;
+            xmax:=-infinity;
             while pshxdata^<>0 do
               begin
                 {$IFDEF TOTALYLOG}programlog.logoutstr('shx command '+inttohex(pshxdata^,2),0);{$ENDIF}
@@ -243,14 +259,16 @@ begin
                                   inc(psubsymbol,sizeof(fontfloat));
                                   if draw then
                                     begin
-                                      if y>ymax then
+                                         ProcessMinMax(x,y);
+                                         ProcessMinMax(x1,y1);
+                                      {if y>ymax then
                                         ymax:=y;
                                       if y<ymin then
                                         ymin:=y;
                                       if y1>ymax then
                                         ymax:=y1;
                                       if y1<ymin then
-                                        ymin:=y1;
+                                        ymin:=y1;}
                                     end;
                                                                                                                                                                                                                 //pGDBByte(pdata)^:=GDBLineID;
                                                                                                                                                                                                                 //inc(pdata,sizeof(GDBLineID));
@@ -279,10 +297,11 @@ begin
                                   inc(psubsymbol,sizeof(fontfloat));
                                   if draw then
                                     begin
-                                      if y1>ymax then
+                                         ProcessMinMax(x1,y1);
+                                      {if y1>ymax then
                                         ymax:=y1;
                                       if y1<ymin then
-                                        ymin:=y1;
+                                        ymin:=y1;}
                                     end;//if draw then begin
 
                                   pf^.SHXdata.AddByteByVal(GDBLineID);//--------------------- pGDBByte(pdata)^:=GDBLineID;
@@ -302,10 +321,11 @@ begin
                                       inc(psubsymbol,sizeof(fontfloat));
                                       if draw then
                                         begin
-                                          if y>ymax then
+                                        ProcessMinMax(x,y);
+                                          {if y>ymax then
                                             ymax:=y;
                                           if y<ymin then
-                                            ymin:=y;
+                                            ymin:=y;}
                                         end;//if draw then begin;
                                                                                                                                                                                                                         //if draw then begin
 
@@ -322,8 +342,8 @@ begin
                                                                                                                                                              //                            end;
 
                             end;
-                            x:=psubsyminfo.dx+xb;
-                            y:=psubsyminfo._dy+yb;
+                            x:=psubsyminfo.NextSymX+xb;
+                            y:=psubsyminfo.SymMinY+yb;
                           end;
                       //dec(pshxdata);
                     end;
@@ -353,14 +373,16 @@ begin
                               inc(sizeshx);
                               if draw then
                                 begin
-                                  if y>ymax then
+                                ProcessMinMax(x,y);
+                                ProcessMinMax(x1,y1);
+                                  {if y>ymax then
                                     ymax:=y;
                                   if y<ymin then
                                     ymin:=y;
                                   if y1>ymax then
                                     ymax:=y1;
                                   if y1<ymin then
-                                    ymin:=y1;
+                                    ymin:=y1;}
                                 end//if draw then begin
 
                             end;
@@ -407,10 +429,11 @@ begin
                               inc(sizeshp);
                               if onlyver=0 then
                               begin
-                                if y1>ymax then
+                                         ProcessMinMax(x1,y1);
+                                {if y1>ymax then
                                   ymax:=y1;
                                 if y1<ymin then
-                                  ymin:=y1;
+                                  ymin:=y1;}
                               end//if draw then begin
 
                             end;
@@ -430,10 +453,11 @@ begin
                           x:=x1;
                           y:=y1;
 
-                          if y1>ymax then
+                          ProcessMinMax(x1,y1);
+                          {if y1>ymax then
                             ymax:=y1;
                           if y1<ymin then
-                            ymin:=y1;
+                            ymin:=y1;}
                           end;
                         end;
                         if draw then
@@ -487,10 +511,11 @@ begin
                           y1:=yb+r*sin(startangle+i/arccount*angle);
                           if draw then
                             begin
-                              if y1>ymax then
+                                         ProcessMinMax(x1,y1);
+                              {if y1>ymax then
                                 ymax:=y1;
                               if y1<ymin then
-                                ymin:=y1;
+                                ymin:=y1;}
                               pf^.SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
                               //---------------------inc(pdata,sizeof(fontfloat));
                               pf^.SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
@@ -588,14 +613,16 @@ begin
                                 pf^.SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
                                 //---------------------inc(pdata,sizeof(fontfloat));
                                 inc(sizeshx);
-                                if y>ymax then
+                                ProcessMinMax(x,y);
+                                ProcessMinMax(x1,y1);
+                                {if y>ymax then
                                   ymax:=y;
                                 if y<ymin then
                                   ymin:=y;
                                 if y1>ymax then
                                   ymax:=y1;
                                 if y1<ymin then
-                                  ymin:=y1;
+                                  ymin:=y1;}
 
                               end;
                             x:=x1;
@@ -621,9 +648,19 @@ begin
               end;
             psyminfo:=pf^.GetOrCreateSymbolInfo(symbol);
             {pf^.symbo linfo[symbol]}psyminfo.size:=sizeshx;
-            {pf^.symbo linfo[symbol]}psyminfo.dx:=x;
-            {pf^.symbo linfo[symbol]}psyminfo.dy:=ymax;//-ymin;
-            {pf^.symbo linfo[symbol]}psyminfo._dy:=ymin;
+            {pf^.symbo linfo[symbol]}psyminfo.NextSymX:=x;
+            {pf^.symbo linfo[symbol]}psyminfo.SymMaxY:=ymax;//-ymin;
+            {pf^.symbo linfo[symbol]}psyminfo.SymMinY:=ymin;
+                                     if symbol=32 then
+                                                      symbol:=symbol;
+                                    if xmax<>-infinity then
+                                                           psyminfo.SymMaxX:=Xmax
+                                                       else
+                                                           psyminfo.SymMaxX:=psyminfo.NextSymX;
+                                    if xmin<>infinity then
+                                                          psyminfo.SymMinX:=Xmin
+                                                      else
+                                                          psyminfo.SymMinX:=0;
             if symbol=42 then
                              symbol:=symbol;
 

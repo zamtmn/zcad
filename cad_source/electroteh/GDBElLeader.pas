@@ -353,6 +353,7 @@ begin
                      PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=twidth
                  else
                      PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=SysVar.DSGN.DSGN_LeaderDefaultWidth^;
+     tbl.vp.Layer:=vp.Layer;
      tbl.Build;
 
 

@@ -121,6 +121,14 @@ begin
                                     ListItem.SubItemImages[1]:=3;
                     changedstamp:=true;
              end;
+           3:begin
+                   PGDBLayerProp(ListItem.Data)^._lock:=not PGDBLayerProp(ListItem.Data)^._lock;
+                   if PGDBLayerProp(ListItem.Data)^._lock then
+                                    ListItem.SubItemImages[3]:=8
+                                else
+                                    ListItem.SubItemImages[3]:=7;
+                    changedstamp:=true;
+             end;
      end;
 end;
 procedure TLayerWindow.ProcessClick(ListItem:TListItem;SubItem:Integer);

@@ -669,7 +669,7 @@ begin
   if pv<>nil then
   repeat
         if count>10000 then
-                           pv^.Selected:=true
+                           pv^.SelectQuik//:=true
                        else
                            pv^.select;
 

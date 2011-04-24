@@ -1256,7 +1256,7 @@ begin
     //pstring(pvd^.data.Instance)^:='@';
 
     pvd:=p3dpl.ou.FindVariable('NMO_Suffix');
-    pstring(pvd^.data.Instance)^:=inttostr(gdb.GetCurrentDWG.numerator.getnumber('К',true));
+    pstring(pvd^.data.Instance)^:=inttostr(gdb.GetCurrentDWG.numerator.getnumber('CableNum',true));
     //p3dpl^.bp.Owner:=@gdb.GetCurrentDWG.ObjRoot;
     //gdb.GetCurrentDWG.ObjRoot.ObjArray.add(addr(p3dpl));
     //GDBobjinsp.setptr(SysUnit.TypeName2PTD('GDBObjCable'),p3dpl);

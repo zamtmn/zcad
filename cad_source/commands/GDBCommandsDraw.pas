@@ -56,7 +56,8 @@ type
                       end;
          TSubPolyEdit=(
                        TSPE_Insert(*'Вставить вершину'*),
-                       TSPE_Remove(*'Убрать вершину'*)
+                       TSPE_Remove(*'Убрать вершину'*),
+                       TSPE_Scissor(*'Разрезать на две'*)
                        );
          TPolyEditMode=(
                        TPEM_Nearest(*'Вставить в ближайший сегмент'*),
@@ -1893,6 +1894,9 @@ var
     v,l:gdbdouble;
     domethod,undomethod:tmethod;
     polydata:tpolydata;
+    _tv:gdbvertex;
+    p3dpl2:pgdbobjpolyline;
+    i:integer;
 begin
   if (button and MZW_LBUTTON)<>0 then
                     button:=button;
@@ -1981,6 +1985,26 @@ begin
 
                                          end;
                                      end;
+  if (PEProp.Action=TSPE_Scissor) then
+  begin
+  if PEProp.vdist>PEProp.ldist++bigeps then
+                                   begin
+                                        _tv:=NearestPointOnSegment(wc,PEProp.lvertex1,PEProp.lvertex2);
+                                        pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBCircleID,gdb.GetCurrentROOT));
+                                        GDBObjCircleInit(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, _tv, 10*gdb.GetCurrentDWG.pcamera.prop.zoom);
+                                        pc^.Format;
+                                        PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
+                                        GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, _tv, wc);
+                                        PCreatedGDBLine^.Format;
+                                   end
+                               else
+                               begin
+                                    pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBCircleID,gdb.GetCurrentROOT));
+                                    GDBObjCircleInit(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.vvertex, 40*gdb.GetCurrentDWG.pcamera.prop.zoom);
+                                    pc^.Format;
+                               end
+
+  end;
   if (button and MZW_LBUTTON)<>0 then
   begin
        if (PEProp.Action=TSPE_Remove)and(PEProp.nearestvertex<>-1) then
@@ -2050,7 +2074,57 @@ begin
 
 
                                         end;
-      gdb.GetCurrentDWG.OGLwindow1.draw;
+
+       if (PEProp.Action=TSPE_Scissor) then
+       begin
+       if PEProp.vdist>PEProp.ldist+bigeps then
+                                        begin
+                                        p3dpl2 := pointer(p3dpl.Clone(p3dpl.bp.ListPos.Owner));
+                                        gdb.GetCurrentROOT.AddObjectToObjArray(@p3dpl2);
+                                        _tv:=NearestPointOnSegment(wc,PEProp.lvertex1,PEProp.lvertex2);
+                                        for i:=0 to p3dpl.VertexArrayInOCS.count-1 do
+                                          begin
+                                               if i<PEProp.nearestline then
+                                                                             p3dpl2.VertexArrayInOCS.deleteelement(0);
+                                               if i>PEProp.nearestline-1 then
+                                                                             p3dpl.VertexArrayInOCS.deleteelement(PEProp.nearestvertex+1);
+
+                                          end;
+                                        if p3dpl2.VertexArrayInOCS.Count>1 then
+                                                                               p3dpl2.VertexArrayInOCS.InsertElement(0,1,@_tv)
+                                                                           else
+                                                                               p3dpl2.VertexArrayInOCS.InsertElement(0,-1,@_tv);
+                                        p3dpl.VertexArrayInOCS.InsertElement(p3dpl.VertexArrayInOCS.Count-1,1,@_tv);
+                                        p3dpl2^.Format;
+                                        p3dpl^.Format;
+                                        gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl2);
+                                        end
+                                    else
+                                    begin
+                                         if (PEProp.nearestvertex=0)or(PEProp.nearestvertex=p3dpl.VertexArrayInOCS.Count-1) then
+                                         begin
+                                              shared.ShowError('С краю неотрезать((');
+                                              exit;
+                                         end;
+                                         p3dpl2 := pointer(p3dpl.Clone(p3dpl.bp.ListPos.Owner));
+                                         gdb.GetCurrentROOT.AddObjectToObjArray(@p3dpl2);
+
+                                         for i:=0 to p3dpl.VertexArrayInOCS.count-1 do
+                                           begin
+                                                if i<PEProp.nearestvertex then
+                                                                              p3dpl2.VertexArrayInOCS.deleteelement(0);
+                                                if i>PEProp.nearestvertex then
+                                                                              p3dpl.VertexArrayInOCS.deleteelement(PEProp.nearestvertex+1);
+
+                                           end;
+                                         p3dpl2^.Format;
+                                         p3dpl^.Format;
+                                         gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl2);
+                                    end
+
+       end;
+      sharedgdb.redrawoglwnd;
+      //gdb.GetCurrentDWG.OGLwindow1.draw;
 
   end
 end;

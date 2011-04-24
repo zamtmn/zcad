@@ -110,6 +110,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure higlight;virtual;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                     procedure select;virtual;
+                    function SelectQuik:GDBBoolean;virtual;
                     procedure remapcontrolpoints(pp:PGDBControlPointArray);virtual;
                     //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
@@ -783,12 +784,25 @@ function GDBObjEntity.getintersect;
 begin
      result:=false;
 end;
+function GDBObjEntity.SelectQuik;
+begin
+     if vp.Layer._lock then
+                           begin
+                                result:=false;
+                           end
+                       else
+                           begin
+                                result:=true;
+                                selected:=true;
+                           end;
+end;
 procedure GDBObjEntity.select;
 var tdesc:pselectedobjdesc;
 begin
      if selected=false then
+     if SelectQuik then
      begin
-          selected:=true;
+          //selected:=true;
           tdesc:=gdb.GetCurrentDWG.SelObjArray.addobject(@self);
           if tdesc<>nil then
           begin

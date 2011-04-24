@@ -735,14 +735,17 @@ var
   templatefile: GDBOpenArrayOfByte;
   outstream: {GDBInteger}GDBOpenArrayOfByte;
   groups, values: GDBString;
-  groupi, valuei, intable: GDBInteger;
+  groupi, valuei, intable,attr: GDBInteger;
   handle,plottablefansdle,i{,cod}: GDBInteger;
   phandlea: pdxfhandlerecopenarray;
   inlayertable, inblocksec, inblocktable: GDBBoolean;
   handlepos:integer;
   ignoredsource:boolean;
   instyletable:boolean;
+  olddwg:ptdrawing;
 begin
+  olddwg:=gdb.GetCurrentDWG;
+  gdb.SetCurrentDWG(pdrawing);
   //--------------------------outstream := FileCreate(name);
   outstream.init({$IFDEF DEBUGBUILD}'{51453949-893A-49C2-9588-42B25346D071}',{$ENDIF}10*1024*1024);
   //--------------------------if outstream>0 then
@@ -926,8 +929,11 @@ begin
                     outstream.TXTAddGDBStringEOL('AcDbLayerTableRecord');
                     outstream.TXTAddGDBStringEOL('2');
                     outstream.TXTAddGDBStringEOL(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name);
+                    attr:=0;
+                    if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i]._lock then
+                                                                                             attr:=attr + 4;
                     outstream.TXTAddGDBStringEOL('70');
-                    outstream.TXTAddGDBStringEOL('0');
+                    outstream.TXTAddGDBStringEOL(inttostr(attr));
                     outstream.TXTAddGDBStringEOL('62');
                     if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i]._on
                      then
@@ -1075,6 +1081,7 @@ begin
 
   end;
   outstream.done;
+  gdb.SetCurrentDWG(olddwg);
 end;
 procedure SaveZCP(name: GDBString; gdb: PGDBDescriptor);
 var

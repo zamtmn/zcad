@@ -1420,7 +1420,7 @@ begin
             end;
         end;
       end;
-    gltranslated(pgdbfont(pbasefont).symbolinfo[GDBByte(s[i])].dx, 0, 0);
+    gltranslated(pgdbfont(pbasefont).symbolinfo[GDBByte(s[i])].NextSymX, 0, 0);
     inc(i);
   end;
 end;
@@ -2598,6 +2598,7 @@ var
 begin
   //isOpenGLError;
   if not assigned(gdb.GetCurrentDWG) then exit;
+  if not assigned(GDB.GetCurrentDWG.OGLwindow1) then exit;
 LPTime:=now();
 if param.firstdraw then
                  inc(gdb.GetCurrentDWG.pcamera^.DRAWCOUNT);

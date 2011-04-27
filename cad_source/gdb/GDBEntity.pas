@@ -109,7 +109,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function getintersect(var osp:os_record;pobj:PGDBObjEntity):GDBBoolean;virtual;
                     procedure higlight;virtual;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
-                    procedure select;virtual;
+                    function select:GDBBoolean;virtual;
                     function SelectQuik:GDBBoolean;virtual;
                     procedure remapcontrolpoints(pp:PGDBControlPointArray);virtual;
                     //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
@@ -796,11 +796,14 @@ begin
                                 selected:=true;
                            end;
 end;
-procedure GDBObjEntity.select;
+function GDBObjEntity.select;
 var tdesc:pselectedobjdesc;
 begin
+     result:=false;
      if selected=false then
-     if SelectQuik then
+     begin
+       result:=SelectQuik;
+     if result then
      begin
           //selected:=true;
           tdesc:=gdb.GetCurrentDWG.SelObjArray.addobject(@self);
@@ -811,6 +814,7 @@ begin
           bp.ListPos.Owner.ImSelected(@self,bp.ListPos.SelfIndex);
           inc(GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
           end;
+     end;
      end;
 end;
 function GDBObjEntity.DeSelect;

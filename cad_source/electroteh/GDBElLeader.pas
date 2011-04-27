@@ -35,7 +35,7 @@ GDBObjElLeader=object(GDBObjComplex)
             procedure addcontrolpoints(tdesc:GDBPointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
             function beforertmodify:GDBPointer;virtual;
-            procedure select;virtual;
+            function select:GDBBoolean;virtual;
             procedure Format;virtual;
             function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
 
@@ -59,7 +59,7 @@ GDBObjElLeader=object(GDBObjComplex)
             end;
 {EXPORT-}
 implementation
-uses UGDBTableStyleArray,GDBBlockDef{,shared},log;
+uses UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV;
 function GDBObjElLeader.calcvisible;
 //var i:GDBInteger;
 //    tv,tv1:gdbvertex4d;
@@ -214,7 +214,7 @@ end;
 function GDBObjElLeader.ImEdited;
 //var t:gdbinteger;
 begin
-     format;
+     //format;
      inherited imedited (pobj,pobjinarray);
      YouChanged;
      //bp.owner^.ImEdited(@self,bp.PSelfInOwnerArray);
@@ -237,14 +237,48 @@ var
    ptext:PGDBObjText;
    width:gdbinteger;
    TCP:TCodePage;
+
+   Objects:GDBObjOpenArrayOfPV;
+
 begin
      TCP:=CodePage;
      CodePage:=CP_win;
      pdev:=nil;
+     //pobj:=nil;
      sta.init(10);
      mainline.vp.Layer:=vp.Layer;
      mainline.format;
-     pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+
+     objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}100);
+
+     if gdb.GetCurrentROOT.FindObjectsInPoint(mainline.CoordInWCS.lBegin,Objects) then
+     begin
+          pobj:=objects.beginiterate(ir);
+          if pobj<>nil then
+          repeat
+                pobj:=pointer(pobj.bp.ListPos.Owner);
+                if pobj^.vp.ID=GDBDeviceID then
+                begin
+                begin
+                     if PGDBObjDevice(pobj).BlockDesc.BGroup=BG_El_Device then
+                     if IsPointInBB(mainline.CoordInWCS.lBegin,pobj^.vp.BoundingBox) then
+                     //if PGDBObjDevice(pobj).BlockDesc.BBorder=BB_Self then
+                     begin
+                     bb:=PGDBObjDevice(pobj)^.ConstObjArray.getoutbound;
+                     if IsPointInBB(mainline.CoordInWCS.lBegin,bb) then
+                     begin
+                               pdev:=pointer(pobj);
+                               system.break;
+                     end;
+                     end;
+                end;
+                end;
+                pobj:=objects.iterate(ir);
+          until pobj=nil;
+     end;
+     if pdev=nil then
+     begin
+     pobj:=gdb.GetCurrentROOT.ObjArray{objects}.beginiterate(ir);
      if pobj<>nil then
      repeat
            if pobj^.vp.ID=GDBCableID then
@@ -279,8 +313,9 @@ begin
                 end;
                 end;
            end;
-           pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+           pobj:=gdb.GetCurrentROOT.ObjArray{objects}.iterate(ir);
            until pobj=nil;
+     end;
            if pdev<>nil then
            begin
                 sta.free;
@@ -429,17 +464,23 @@ begin
      inherited;
 
      CodePage:=TCP;
+     objects.ClearAndDone;
 end;
-procedure GDBObjElLeader.select;
+function GDBObjElLeader.select:GDBBoolean;
 var tdesc:pselectedobjdesc;
 begin
+     result:=false;
      if selected=false then
+     begin
+       result:=SelectQuik;
+     if result then
      begin
           selected:=true;
           tdesc:=gdb.GetCurrentDWG.SelObjArray.addobject(@mainline);
           GDBGetMem({$IFDEF DEBUGBUILD}'{B50BE8C9-E00A-40C0-A051-230877BD3A56}',{$ENDIF}GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
           mainline.addcontrolpoints(tdesc);
           inc(GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
+     end;
      end;
 end;
 

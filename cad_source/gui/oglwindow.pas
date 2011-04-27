@@ -1353,6 +1353,18 @@ end;
   end;
 
 
+if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
+                                                       begin
+                                                            if PGDBObjEntity(param.SelDesc.OnMouseObject)^.vp.Layer._lock
+                                                              then
+                                                                  self.Cursor:=crNoDrop
+                                                              else
+                                                                  self.Cursor:=crNone;
+                                                       end
+                                                   else
+                                                       self.Cursor:=crNone;
+
+
   SBTextOut(htext);
   //param.firstdraw:=true;
   isOpenGLError;
@@ -1845,10 +1857,12 @@ begin
                if (key and MZW_SHIFT)=0
                then
                    begin
-                        PGDBObjEntity(param.SelDesc.OnMouseObject)^.select;
+                        if PGDBObjEntity(param.SelDesc.OnMouseObject)^.select then
+                          begin
                         param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
                         addoneobject;
                         SetObjInsp;
+                          end;
                    end
                else
                    begin

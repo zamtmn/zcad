@@ -251,7 +251,7 @@ var //num:cardinal;
    cbedit:TComboBox;
 begin
      result:=nil;
-     if psa^.count=0 then
+     if (psa=nil)or(psa^.count=0) then
                          begin
                                propeditor:=TPropEditor.Create(theowner,PInstance,@self);
 

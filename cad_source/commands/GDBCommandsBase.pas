@@ -529,6 +529,9 @@ begin
                                          ReloadLayer;
      gdb.GetCurrentROOT.calcbb;
      //gdb.GetCurrentDWG.ObjRoot.format;//FormatAfterEdit;
+     //gdb.GetCurrentROOT.sddf
+     //gdb.GetCurrentROOT.format;
+     gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
      gdb.GetCurrentROOT.format;
      updatevisible;
      if gdb.currentdwg<>BlockBaseDWG then
@@ -536,7 +539,6 @@ begin
                                          gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
                                          isOpenGLError;
                                          redrawoglwnd;
-
                                          end;
      result:=cmd_ok;
 
@@ -629,11 +631,15 @@ begin
 
      MainFormN.PageControl.ActivePage:=myts;
      sharedgdb.updatevisible;
+     operands:=operands;
+     if not fileexists(operands) then
+     begin
      tn:=expandpath(sysvar.PATH.Template_Path^)+sysvar.PATH.Template_File^;
      if fileExists(utf8tosys(tn)) then
                            merge_com(@tn[1])
                        else
                            shared.ShowError('Не найден файл шаблона "'+tn+'"');
+     end;
      //redrawoglwnd;
      result:=cmd_ok;
      application.ProcessMessages;

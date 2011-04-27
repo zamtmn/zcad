@@ -193,6 +193,7 @@ type
   TextInsert_com=object(FloatInsert_com)
                        pt:PGDBObjText;
                        //procedure Build(Operands:pansichar); virtual;
+                       procedure CommandStart(Operands:pansichar); virtual;
                        procedure Command(Operands:pansichar); virtual;
                        procedure BuildPrimitives; virtual;
                        procedure Format;virtual;
@@ -781,6 +782,8 @@ begin
 end;
 procedure TextInsert_com.BuildPrimitives;
 begin
+     if gdb.GetCurrentDWG.TextStyleTable.GetRealCount>0 then
+     begin
      gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
      case TextInsertParams.mode of
            TextInsertParams.mode.TIM_Text:
@@ -809,13 +812,24 @@ begin
 
      end;
      GDB.GetCurrentDWG.ConstructObjRoot.ObjArray.add(@pt);
+     end;
 end;
-
+procedure TextInsert_com.CommandStart(Operands:pansichar);
+begin
+     inherited;
+     if gdb.GetCurrentDWG.TextStyleTable.GetRealCount<1 then
+     begin
+          shared.ShowError('В чертеже не определено ни одного стиля текста!');
+          commandmanager.executecommandend;
+     end;
+end;
 procedure TextInsert_com.Command(Operands:pansichar);
 var
    s:string;
    i:integer;
 begin
+       if gdb.GetCurrentDWG.TextStyleTable.GetRealCount>0 then
+     begin
      if TextInsertParams.Style.Selected>=TextInsertParams.Style.Enums.Count then
                                                                                 begin
                                                                                      s:='Standart';
@@ -832,6 +846,7 @@ begin
       BuildPrimitives;
      GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
      format;
+     end;
 end;
 function TextInsert_com.DoEnd(pdata:GDBPointer):GDBBoolean;
 begin
@@ -1948,7 +1963,7 @@ begin
   if PEProp.nearestvertex>-1 then
                           begin
                           pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBCircleID,gdb.GetCurrentROOT));
-                          GDBObjCircleInit(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.vvertex, 1);
+                          GDBObjCircleInit(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.vvertex,10*gdb.GetCurrentDWG.pcamera.prop.zoom);
                           pc^.Format;
                           end;
   end;

@@ -790,7 +790,9 @@ begin
                                         _source.lineweight,
                                         _source._on,
                                         _source._lock,
-                                        _source._print);
+                                        _source._print,
+                                        _source.desk,
+                                        TLOMerge);
            end;
 end;
 procedure RemapLayer(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);

@@ -299,6 +299,7 @@ GDBOpenArray=object(OpenArray)
                       function CreateArray:GDBPointer;virtual;abstract;
                       function SetCount(index:GDBInteger):GDBPointer;virtual;abstract;
                       function copyto(source:PGDBOpenArray):GDBInteger;virtual;abstract;
+                      function GetRealCount:GDBInteger;
              end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBOpenArrayOfData.pas
 PGDBOpenArrayOfData=^GDBOpenArrayOfData;
@@ -364,6 +365,7 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
                       procedure Format;virtual;abstract;
                       procedure FormatAfterEdit;virtual;abstract;
                       function InRect:TInRect;virtual;abstract;
+                      function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
                 end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBVisibleOpenArray.pas
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
@@ -634,7 +636,8 @@ GDBLayerProp=object(GDBNamedObject)
                _on:GDBBoolean;(*saved_to_shd*)(*'Включен'*)
                _lock:GDBBoolean;(*saved_to_shd*)(*'Закрыт'*)
                _print:GDBBoolean;(*saved_to_shd*)(*'Печать'*)
-               constructor Init(N:GDBString; C: GDBInteger; LW: GDBInteger;oo,ll,pp:GDBBoolean);
+               desk:GDBAnsiString;(*saved_to_shd*)(*'Коментарий'*)
+               constructor Init(N:GDBString; C: GDBInteger; LW: GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString);
                function GetFullName:GDBString;virtual;abstract;
          end;
 PGDBLayerPropArray=^GDBLayerPropArray;
@@ -643,7 +646,7 @@ PGDBLayerArray=^GDBLayerArray;
 GDBLayerArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLayerProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
-                    function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean):PGDBLayerProp;virtual;abstract;
+                    function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString):PGDBLayerProp;virtual;abstract;
                     function GetSystemLayer:PGDBLayerProp;
                     function GetCurrentLayer:PGDBLayerProp;
               end;
@@ -979,6 +982,7 @@ GDBObjSubordinated=object(GDBObjGenericWithSubordinated)
                          function FindVariable(varname:GDBString):pvardesk;virtual;abstract;
                          procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                          function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;abstract;
+                         destructor done;virtual;abstract;
          end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBEntity.pas
 PTExtAttrib=^TExtAttrib;
@@ -1054,7 +1058,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function getintersect(var osp:os_record;pobj:PGDBObjEntity):GDBBoolean;virtual;abstract;
                     procedure higlight;virtual;abstract;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
-                    procedure select;virtual;abstract;
+                    function select:GDBBoolean;virtual;abstract;
                     function SelectQuik:GDBBoolean;virtual;abstract;
                     procedure remapcontrolpoints(pp:PGDBControlPointArray);virtual;abstract;
                     //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
@@ -1361,7 +1365,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             procedure FormatAfterEdit;virtual;abstract;
                             procedure restructure;virtual;abstract;
                             procedure renderfeedbac(infrustumactualy:TActulity);virtual;abstract;
-                            procedure select;virtual;abstract;
+                            function select:GDBBoolean;virtual;abstract;
                             function getowner:PGDBObjSubordinated;virtual;abstract;
                             function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;abstract;
                             function EubEntryType:GDBInteger;virtual;abstract;
@@ -1458,6 +1462,7 @@ GDBObjComplex=object(GDBObjWithLocalCS)
                     function InRect:TInRect;virtual;abstract;
                     //procedure Draw(lw:GDBInteger);virtual;abstract;
                     procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;abstract;
+                    function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
               end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBBlockInsert.pas
 PGDBObjBlockInsert=^GDBObjBlockInsert;
@@ -1874,7 +1879,7 @@ GDBObjElLeader=object(GDBObjComplex)
             procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
             function beforertmodify:GDBPointer;virtual;abstract;
-            procedure select;virtual;abstract;
+            function select:GDBBoolean;virtual;abstract;
             procedure Format;virtual;abstract;
             function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;abstract;
             constructor initnul;
@@ -2183,6 +2188,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
   TextInsert_com=object(FloatInsert_com)
                        pt:PGDBObjText;
                        //procedure Build(Operands:pansichar); virtual;abstract;
+                       procedure CommandStart(Operands:pansichar); virtual;abstract;
                        procedure Command(Operands:pansichar); virtual;abstract;
                        procedure BuildPrimitives; virtual;abstract;
                        procedure Format;virtual;abstract;

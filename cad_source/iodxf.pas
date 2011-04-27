@@ -62,7 +62,6 @@ type
     count: GDBInteger;
     arr: dxfhandlerecarray;
   end;
-  TLoadOpt=(TLOLoad,TLOMerge);
 const
   eol: GDBString = #13 + #10;
 {$IFDEF DEBUGBUILD}
@@ -145,6 +144,32 @@ begin
       exit;
   end;
 end;
+function GoToDXForENDTAB(var f: GDBOpenArrayOfByte; fcode: GDBInteger; fname: GDBString):boolean;
+var
+  byt: GDBByte;
+  s: GDBString;
+  error: GDBInteger;
+begin
+  result:=false;
+  while f.notEOF do
+  begin
+    s := f.readGDBString;
+    val(s, byt, error);
+    if error <> 0 then
+      s := s{чето тут не так};
+    s := f.readGDBString;
+    if (byt = fcode) and (s = fname) then
+                                         begin
+                                              result:=true;
+                                              exit;
+                                         end;
+    if (byt = 0) and (uppercase(s) = 'ENDTAB') then
+                                         begin
+                                              exit;
+                                         end;
+  end;
+end;
+
 procedure correctvariableset(pobj: PGDBObjEntity);
 var vd:vardesk;
 begin
@@ -339,7 +364,7 @@ begin
               end;{case}
         until GroupCode=0;
         {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer '+LayerName,0);{$ENDIF}
-        gdb.GetCurrentDWG.LayerTable.addlayer(LayerName,LayerColor,-3,true,false,true);
+        gdb.GetCurrentDWG.LayerTable.addlayer(LayerName,LayerColor,-3,true,false,true,'',TLOLoad);
       until sname='ENDTAB';
       {$IFDEF TOTALYLOG}programlog.logoutstr('end; {layer table}',lp_DecPos);{$ENDIF}
     end
@@ -379,7 +404,7 @@ procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owne
 var
   byt: GDBInteger;
   error,flags: GDBInteger;
-  s, sname, lname, lcolor, llw: String;
+  s, sname, lname, lcolor, llw,desk: String;
   tp: PGDBObjBlockdef;
   oo,ll,pp:GDBBoolean;
   blockload:boolean;
@@ -438,6 +463,7 @@ begin
                     oo:=true;
                     ll:=false;
                     pp:=true;
+                    desk:='';
                     while byt <> 0 do
                     begin
                       s := f.readGDBString;
@@ -468,16 +494,27 @@ begin
                            end;
                         290:
                           begin
-                               if (strtoint(s)and 4)=0 then
+                               if (strtoint(s))=0 then
                                                             begin
                                                                  pp:=false;
                                                             end;
+                           end;
+                        1001:
+                          begin
+                               //s := f.readGDBString;
+                               if s='AcAecLayerStandard' then
+                                 begin
+                                      s := f.readGDBString;
+                                      s := f.readGDBString;
+                                      s := f.readGDBString;
+                                      desk := f.readGDBString;
+                                 end;
                            end;
 
 
                       end;
                     end;
-                    gdb.GetCurrentDWG.LayerTable.addlayer(lname, abs(strtoint(lcolor)), strtoint(llw),oo,ll,pp);
+                    gdb.GetCurrentDWG.LayerTable.addlayer(lname, abs(strtoint(lcolor)), strtoint(llw),oo,ll,pp,desk,LoadMode);
                     {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer '+lname,0);{$ENDIF}
                   end;
                   {$IFDEF TOTALYLOG}programlog.logoutstr('end; {layer table}',lp_DecPos);{$ENDIF}
@@ -495,8 +532,9 @@ begin
                     end}
                     begin
                       {$IFDEF TOTALYLOG}programlog.logoutstr('Found style table',lp_IncPos);{$ENDIF}
-                      gotodxf(f, 0, 'STYLE');
-
+                      //gotodxf(f, 0, 'STYLE');
+                      if GoToDXForENDTAB(f, 0, 'STYLE') then
+                      //begin
                       while s = 'STYLE' do
                       begin
                         tstyle.name:='';
@@ -943,7 +981,8 @@ begin
                     outstream.TXTAddGDBStringEOL('6');
                     outstream.TXTAddGDBStringEOL('Continuous');
                     outstream.TXTAddGDBStringEOL('290');
-                    if uppercase(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name) <> 'DEFPOINTS' then
+                    if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i]._print then
+                    //if uppercase(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name) <> 'DEFPOINTS' then
                       outstream.TXTAddGDBStringEOL('1')
                     else
                       outstream.TXTAddGDBStringEOL('0');
@@ -952,6 +991,16 @@ begin
                     //WriteString_EOL(outstream, '-3');
                     outstream.TXTAddGDBStringEOL('390');
                     outstream.TXTAddGDBStringEOL(inttohex(plottablefansdle,0));
+
+                    if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].desk<>''then
+                    begin
+                         outstream.TXTAddGDBStringEOL('1001');
+                         outstream.TXTAddGDBStringEOL('AcAecLayerStandard');
+                         outstream.TXTAddGDBStringEOL('1000');
+                         outstream.TXTAddGDBStringEOL('');
+                         outstream.TXTAddGDBStringEOL('1000');
+                         outstream.TXTAddGDBStringEOL(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].desk);
+                    end;
                   end;
                 end;
                 outstream.TXTAddGDBStringEOL(groups);

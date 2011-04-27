@@ -10,7 +10,7 @@ uses
 
   UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,sharedgdb,
 
-  strproc;
+  strproc,shared,UBaseTypeDescriptor;
 
 type
 
@@ -50,6 +50,7 @@ type
     MouseDownItem:TListItem;
     MouseDownSubItem: Integer;
     changedstamp:boolean;
+    PEditor:TPropEditor;
     { private declarations }
   public
     { public declarations }
@@ -96,6 +97,8 @@ begin
          result:=false;
 end;
 procedure TLayerWindow.Process(ListItem:TListItem;SubItem:Integer);
+var
+   pos,si: integer;
 begin
      {if SubItem>0 then
                   ListItem.SubItemImages[SubItem-1]:=3
@@ -128,6 +131,30 @@ begin
                                 else
                                     ListItem.SubItemImages[3]:=7;
                     changedstamp:=true;
+             end;
+           7:begin
+                   PGDBLayerProp(ListItem.Data)^._print:=not PGDBLayerProp(ListItem.Data)^._print;
+                   if uppercase(PGDBLayerProp(ListItem.Data)^.Name)='DEFPOINTS' then
+                   begin
+                   if PGDBLayerProp(ListItem.Data)^._print then shared.ShowError('Слой DEFPOINTS не может быть печатным');
+                   PGDBLayerProp(ListItem.Data)^._print:=false;
+                   end;
+                   if PGDBLayerProp(ListItem.Data)^._print then
+                                    ListItem.SubItemImages[7]:=6
+                                else
+                                    ListItem.SubItemImages[7]:=5;
+                    changedstamp:=true;
+             end;
+           8:begin
+                Pos := -GetScrollPos (ListView1.Handle, SB_HORZ);
+                si := -1;
+                while si < subitem do
+                begin
+                  Inc (Si);
+                  Inc (Pos, ListView1.Columns.Items[si].Width);
+                end;
+                si:=ListItem.DisplayRect(drSelectBounds).Bottom-ListItem.DisplayRect(drSelectBounds).Top-1;
+                PEditor:=GDBAnsiStringDescriptorObj.CreateEditor(self.ListView1,pos,ListItem.Top{Position.y},ListView1.Columns.Items[SubItem+1].Width,si,@PGDBLayerProp(ListItem.Data)^.desk,nil);
              end;
      end;
 end;
@@ -206,7 +233,7 @@ begin
             li.SubItems.Add('Continuous');
             li.SubItems.Add(inttostr(plp^.lineweight));
             li.SubItems.Add('');
-            li.SubItems.Add('desk');
+            li.SubItems.Add(strproc.Tria_AnsiToUtf8(plp^.desk));
             if plp^._on then
                             li.SubItemImages[1]:=4
                         else

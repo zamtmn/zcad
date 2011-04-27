@@ -545,15 +545,15 @@ begin
           l:=3;
           case (s[i+2]) of
             'D','d':begin
-                     result:=35;
+                     result:={35}176;
                      exit;
                 end;
             'P','p':begin
-                     result:=96;
+                     result:={96}177;
                      exit;
                 end;
             'C','c':begin
-                     result:=143;
+                     result:={143}8709;
                      exit;
                 end;
             'U','u':begin

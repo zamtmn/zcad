@@ -2,21 +2,11 @@ unit DEVICE_PS_ARK_DEVICE;
 interface
 uses system,devices;
 usescopy objname;
+usescopy objmaterial;
 usescopy blocktype;
-var
-   Device_Type:TDeviceType;(*'Тип устройства'*) 
-
-   DB_link:GDBString;(*'Материал'*)
-   
-   GC_HeadDevice:GDBString;
-   GC_HDShortName:GDBString;
-   GC_HDGroup:GDBInteger;
-   GC_NumberInGroup:GDBInteger;
-
-   SerialConnection:GDBInteger;
-
-
-   EL_Cab_AddLength:GDBDouble;(*'Добавлять к длине кабеля'*)
+usescopy objgroup;
+usescopy objconnect;
+usescopy blocktype;
 implementation
 begin
    DB_link:='Прибор ОПС';

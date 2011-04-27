@@ -45,10 +45,32 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
                       procedure Format;virtual;
                       procedure FormatAfterEdit;virtual;
                       function InRect:TInRect;virtual;
+                      function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                 end;
 {Export-}
 implementation
 uses {UGDBDescriptor,}GDBManager,GDBEntity;
+function GDBObjOpenArrayOfPV.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
+var pobj:pGDBObjEntity;
+    ir:itrec;
+    fr:TInRect;
+    all:boolean;
+begin
+     result:=false;
+     pobj:=beginiterate(ir);
+     if pobj<>nil then
+     repeat
+           if pobj^.onpoint(Objects,point) then
+           begin
+                result:=true;
+                //Objects.Add(@pobj);
+           end;
+
+           pobj:=iterate(ir);
+     until pobj=nil;
+
+end;
+
 function GDBObjOpenArrayOfPV.inrect;
 var pobj:pGDBObjEntity;
     ir:itrec;

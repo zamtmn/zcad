@@ -31,7 +31,8 @@ GDBLayerProp=object(GDBNamedObject)
                _on:GDBBoolean;(*saved_to_shd*)(*'Включен'*)
                _lock:GDBBoolean;(*saved_to_shd*)(*'Закрыт'*)
                _print:GDBBoolean;(*saved_to_shd*)(*'Печать'*)
-               constructor Init(N:GDBString; C: GDBInteger; LW: GDBInteger;oo,ll,pp:GDBBoolean);
+               desk:GDBAnsiString;(*saved_to_shd*)(*'Коментарий'*)
+               constructor Init(N:GDBString; C: GDBInteger; LW: GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString);
                function GetFullName:GDBString;virtual;
          end;
 PGDBLayerPropArray=^GDBLayerPropArray;
@@ -41,7 +42,7 @@ GDBLayerArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLayerProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
 
-                    function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean):PGDBLayerProp;virtual;
+                    function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
                     function GetSystemLayer:PGDBLayerProp;
                     function GetCurrentLayer:PGDBLayerProp;
               end;
@@ -52,15 +53,15 @@ uses
 constructor GDBLayerArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBLayerProp));
-  addlayer(LNSysLayerName,CGDBWhile,lwgdbdefault,true,false,true);
-  addlayer(LNMetricLayerName,CGDBWhile,lwgdbdefault,false,false,false);
+  addlayer(LNSysLayerName,CGDBWhile,lwgdbdefault,true,false,true,'',TLOLoad);
+  addlayer(LNMetricLayerName,CGDBWhile,lwgdbdefault,false,false,false,'',TLOLoad);
 end;
 constructor GDBLayerArray.initnul;
 begin
   inherited initnul;
   size:=sizeof(GDBLayerProp);
 end;
-constructor GDBLayerProp.Init(N:GDBString; C: GDBInteger; LW: GDBInteger;oo,ll,pp:GDBBoolean);
+constructor GDBLayerProp.Init(N:GDBString; C: GDBInteger; LW: GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString);
 begin
     initnul;
     SetName(n);
@@ -69,6 +70,7 @@ begin
     _on:=oo;
     _lock:=ll;
     _print:=pp;
+    desk:=d;
 end;
 function GDBLayerProp.GetFullName;
 {const
@@ -108,10 +110,19 @@ begin
      case AddItem(name,pointer(p)) of
              IsFounded:
                        begin
+                            if lm=TLoadOpt.TLOLoad then
+                            begin
+                                 p^.color:=color;
+                                 p^.lineweight:=lw;
+                                 p^._on:=oo;
+                                 p^._lock:=ll;
+                                 p^._print:=pp;
+                                 p^.desk:=d;
+                            end;
                        end;
              IsCreated:
                        begin
-                            p^.init(Name,Color,LW,oo,ll,pp);
+                            p^.init(Name,Color,LW,oo,ll,pp,d);
                        end;
              IsError:
                        begin

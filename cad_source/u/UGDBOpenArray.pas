@@ -49,6 +49,7 @@ GDBOpenArray=object(OpenArray)
                       function CreateArray:GDBPointer;virtual;
                       function SetCount(index:GDBInteger):GDBPointer;virtual;
                       function copyto(source:PGDBOpenArray):GDBInteger;virtual;
+                      function GetRealCount:GDBInteger;
              end;
 {Export-}
 implementation
@@ -65,6 +66,18 @@ begin
         p:=iterate(ir);
   until p=nil;
   result:=count;
+end;
+function GDBOpenArray.GetRealCount:GDBInteger;
+var p:GDBPointer;
+    ir:itrec;
+begin
+  result:=0;
+  p:=beginiterate(ir);
+  if p<>nil then
+  repeat
+        inc(result);
+        p:=iterate(ir);
+  until p=nil;
 end;
 procedure GDBOpenArray.freewithproc;
 var p:GDBPointer;

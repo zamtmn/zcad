@@ -49,6 +49,7 @@ GDBObjComplex=object(GDBObjWithLocalCS)
                     function InRect:TInRect;virtual;
                     //procedure Draw(lw:GDBInteger);virtual;
                     procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
+                    function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
               end;
 {EXPORT-}
 implementation
@@ -61,6 +62,10 @@ begin
        self.DrawWithAttrib; //DrawGeometry(lw);
   end;
 end;}
+function GDBObjComplex.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
+begin
+     result:=ConstObjArray.onpoint(objects,point);
+end;
 procedure GDBObjComplex.SetInFrustumFromTree;
 begin
      inherited;

@@ -253,7 +253,7 @@ GDBArrayVertex=array[0..0] of GDBvertex;
                   dir:gdbinteger;
                   wc:GDBVertex;
             end;
-
+  TLoadOpt=(TLOLoad,TLOMerge);
 FreeElProc=procedure (p:GDBPointer);
 {EXPORT-}
 const

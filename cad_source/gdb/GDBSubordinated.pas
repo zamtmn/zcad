@@ -70,6 +70,7 @@ GDBObjSubordinated=object(GDBObjGenericWithSubordinated)
                          function FindVariable(varname:GDBString):pvardesk;virtual;
                          procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                          function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
+                         destructor done;virtual;
 
          end;
 {EXPORT-}
@@ -78,6 +79,11 @@ procedure CreateDeviceNameSubProcess(pvn:pvardesk; const formatstr:GDBString;pEn
 function GetEntName(pu:PGDBObjGenericWithSubordinated):GDBString;
 implementation
 uses UGDBDescriptor,UUnitManager,URecordDescriptor,shared,log,GDBAbstractText;
+destructor GDBObjSubordinated.done;
+begin
+     inherited;
+end;
+
 function GDBObjSubordinated.FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;
 var
    pvd:pvardesk;

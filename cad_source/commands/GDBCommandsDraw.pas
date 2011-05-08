@@ -131,6 +131,12 @@ type
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
                            end;
+         TSetVarStyle=record
+                            ent:TMSType;(*'Entity'*)
+                            CurrentFindBlock:GDBString;(*'**CurrentFind'*)
+                             Scale:GDBVertex;(*'New scale'*)
+                             Absolytly:GDBBoolean;(*'Absolytly'*)
+                           end;
   TBEditParam=record
                     CurrentEditBlock:GDBString;(*'Текущий блок'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Выбор блока'*)

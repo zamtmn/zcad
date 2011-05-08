@@ -616,7 +616,7 @@ if addtype then
                                                else
                                                    begin
                                                         programlog.logoutstr(line,0);
-                                                        if line='_EQ_C2000_4.initnul;'
+                                                        if copy(line,1,10)='VIEW_ObjIn'
                                                         then
                                                             line:=line;
                                                         line:=copy(line,1,pos(';',line)-1);
@@ -787,6 +787,7 @@ initialization;
   units.loadunit(expandpath('*rtl/cables.pas'),nil);
   units.loadunit(expandpath('*rtl/devices.pas'),nil);
   units.loadunit(expandpath('*rtl/connectors.pas'),nil);
+  units.loadunit(expandpath('*rtl/styles/styles.pas'),nil);
 
   //units.loadunit(expandpath('*rtl\objdefunits\objname.pas'),nil);
   //units.loadunit(expandpath('*rtl\objdefunits\blocktype.pas'),nil);

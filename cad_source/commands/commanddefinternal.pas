@@ -146,6 +146,7 @@ begin
     gdb.GetCurrentDWG.SelObjArray.clearallobjects;
     end;
 
+  gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   gdb.GetCurrentDWG.OGLwindow1.Clear0Ontrackpoint;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;

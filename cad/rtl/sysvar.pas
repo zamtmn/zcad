@@ -130,7 +130,7 @@ begin
   PATH_Template_Path:='*template';
   PATH_Template_File:='default.dxf';
   PATH_Program_Run:='C:\zcad\cad\';
-  PATH_Support_Path:='*rtl|*rtl/objdefunits|*rtl/objdefunits/include|*components|*blocks/el/general';
+  PATH_Support_Path:='*rtl|*rtl/objdefunits|*rtl/objdefunits/include|*components|*blocks/el/general|*rtl/styles';
   PATH_Fonts:='*fonts/|C:/Program Files/AutoCAD 2010/Fonts/|C:/APPS/MY/acad/support/';
   ShowHiddenFieldInObjInsp:=False;
   testGDBBoolean:=False;

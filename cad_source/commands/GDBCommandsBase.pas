@@ -83,6 +83,8 @@ TOSModeEditor=object(GDBaseObject)
 
        OSModeEditor:TOSModeEditor;
 
+       InfoFormVar:TInfoForm=nil;
+
    function SaveAs_com(Operands:pansichar):GDBInteger;
    procedure CopyToClipboard;
    function quit_com(Operands:pansichar):GDBInteger;
@@ -1125,7 +1127,7 @@ var
    pobj:PGDBObjEntity;
    op:gdbstring;
    size,modalresult:integer;
-   InfoForm:TInfoForm;
+   //InfoForm:TInfoForm;
    us:unicodestring;
    u8s:UTF8String;
    astring:ansistring;
@@ -1152,16 +1154,19 @@ else if length(Operands)>3 then
            StrLCopy(@astring[1],mem.PArray,mem.Count);
            u8s:=(astring);
 
-           InfoForm:=TInfoForm.create(application.MainForm);
-           InfoForm.DialogPanel.HelpButton.Hide;
-           InfoForm.DialogPanel.CancelButton.Hide;
-           InfoForm.caption:=('ОСТОРОЖНО! Проверки синтаксиса пока нет. При нажатии "ОК" объект обновится. При ошибке - ВЫЛЕТ!');
+           if not assigned(InfoFormVar) then
+           begin
+           InfoFormVar:=TInfoForm.create(application.MainForm);
+           InfoFormVar.DialogPanel.HelpButton.Hide;
+           InfoFormVar.DialogPanel.CancelButton.Hide;
+           InfoFormVar.caption:=('ОСТОРОЖНО! Проверки синтаксиса пока нет. При нажатии "ОК" объект обновится. При ошибке - ВЫЛЕТ!');
+           end;
 
-           InfoForm.memo.text:=u8s;
-           modalresult:=InfoForm.ShowModal;
+           InfoFormVar.memo.text:=u8s;
+           modalresult:=InfoFormVar.ShowModal;
            if modalresult=MrOk then
                                begin
-                                     u8s:=InfoForm.memo.text;
+                                     u8s:=InfoFormVar.memo.text;
                                      astring:={utf8tosys}(u8s);
                                      mem.Clear;
                                      mem.AddData(@astring[1],length(astring));
@@ -1172,7 +1177,7 @@ else if length(Operands)>3 then
                                end;
 
 
-           InfoForm.Free;
+           //InfoFormVar.Free;
            mem.done;
       end
   else
@@ -1200,7 +1205,7 @@ begin
   GDB.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   {objinsp.GDBobjinsp.}ReturnToDefault;
   clearcp;
-  redrawoglwnd;
+  //redrawoglwnd;
   result:=cmd_ok;
 end;
 procedure CopyToClipboard;

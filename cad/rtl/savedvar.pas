@@ -23,15 +23,15 @@ begin
   DMenuY:=101;
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=307;
-  VIEW_ObjInspSubV:=160;
+  VIEW_ObjInspSubV:=88;
   PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File1:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File2:='D:\3.dxf';
-  PATH_File3:='D:\Z$C6C555AA9.dxf';
-  PATH_File4:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File5:='D:\MenuY:.dxf';
-  PATH_File6:='D:\temp.dxf';
-  PATH_File7:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File8:='/mnt/win_c/zcad/cad/autosave/autosave.dxf';
-  PATH_File9:='E:\CAD_XDXF\test2000\mtext.dxf';
+  PATH_File1:='J:\nh\Зварыгина\стоянка\ГАРАЖ ОВ_задание АС ЭЛ  А ВК.dxf';
+  PATH_File2:='J:\nh\Зварыгина\стоянка\ГАРАЖ ОВ_задание АС ЭЛ А ВК.dxf';
+  PATH_File3:='J:\nh\Зварыгина\стоянка\ГАРАЖ ОВ_задание АС ЭЛ А ВК.dxf';
+  PATH_File4:='J:\nh\виталя\школа\школа Ноябрьск планы.dxf';
+  PATH_File5:='J:\nh\Зварыгина\стоянка\ГАРАЖ ОВ_задание АС ЭЛ А ВК.dxf';
+  PATH_File6:='J:\nh\Зварыгина\стоянка\ГАРАЖ ОВ_задание АС ЭЛ А ВК.dxf';
+  PATH_File7:='J:\nh\Зварыгина\стоянка\ГАРАЖ ОВ_задание АС ЭЛ А ВК.dxf';
+  PATH_File8:='J:\nh\Зварыгина\стоянка\ГАРАЖ ОВ_задание АС ЭЛ А ВК.dxf';
+  PATH_File9:='J:\nh\Зварыгина\стоянка\ГАРАЖ ОВ_задание АС ЭЛ А ВК.dxf';
 end.

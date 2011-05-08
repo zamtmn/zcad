@@ -838,6 +838,7 @@ begin
     tv := _source^.Clone(_to.pObjRoot);
     if tv<>nil then
     begin
+        tv.correctobjects(pointer(tv.bp.ListPos.Owner),tv.bp.ListPos.SelfIndex);
         _to.pObjRoot.AddObjectToObjArray(addr(tv));// .ObjArray.add(addr(tv));
         RemapAll(_from,_to,_source,tv);
     end;

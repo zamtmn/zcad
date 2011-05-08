@@ -92,15 +92,21 @@ var
   scobcacount:GDBInteger;
   mode:(parse,commenttoendline,commenttouncomment);
   lastbreak:GDBBoolean;
+  stringread:GDBBoolean;
 begin
   lastbreak:=false;
   scobcacount:=0;
   s:='';
   //i:=1;
   mode:=parse;
+  stringread:=false;
   begin
     while noteof do
     begin
+      if (GetChar(readpos)='''')and(mode=parse) then
+                                  begin
+                                       stringread:=not stringread;
+                                  end;
       if (GetChar(readpos)='{')and(mode=parse) then
                                   begin
                                        mode:=commenttouncomment;
@@ -138,7 +144,7 @@ begin
           begin
                if GetChar(readpos)='(' then inc(scobcacount);
                if GetChar(readpos)=')' then dec(scobcacount);
-                            if GetChar(readpos) in syn_breacer then
+                            if ((GetChar(readpos) in syn_breacer))and(not stringread) then
                                                  begin
                                                       if not lastbreak then
                                                                            s:=s+{bufer^[readpos]}' ';

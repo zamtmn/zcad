@@ -332,7 +332,9 @@ end;
 procedure TInfoForm.AfterConstruction;
 begin
      inherited;
+     self.Position:=poDesigned;
      Memo:=TMemo.create(self);
+     Memo.ScrollBars:=ssAutoBoth;
      Memo.Align:=alClient;
      Memo.Parent:=self;
 end;

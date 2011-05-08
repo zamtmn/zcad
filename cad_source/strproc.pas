@@ -73,6 +73,7 @@ function FindInSupportPath(FileName:GDBString):GDBString;
 var
    s,ts:gdbstring;
 begin
+     log.programlog.LogOutStr(utf8tosys(FileName),0);
      FileName:=ExpandPath(FileName);
      if FileExists(utf8tosys(FileName)) then
                                  begin

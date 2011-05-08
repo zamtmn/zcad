@@ -191,6 +191,7 @@ var
   tick:cardinal;
   fps:single;
   gridarray:array [0..maxgrid,0..maxgrid] of GDBvertex2S;
+  InfoForm:TInfoForm=nil;
 //function timeSetEvent(uDelay, uReolution: UINT; lpTimeProc: GDBPointer;dwUser: DWord; fuEvent: UINT): GDBInteger; stdcall; external 'winmm';
 //function timeKillEvent(uID: UINT): GDBInteger; stdcall; external 'winmm';
 
@@ -1729,13 +1730,12 @@ procedure RunTextEditor(Pobj:GDBPointer);
 var
    op:gdbstring;
    size,modalresult:integer;
-   InfoForm:TInfoForm;
    us:unicodestring;
    u8s:UTF8String;
    astring:ansistring;
 begin
      astring:=ConvertFromDxfString(PGDBObjText(pobj)^.Template);
-
+     if not assigned(InfoForm) then
      InfoForm:=TInfoForm.create(application.MainForm);
      //InfoForm.DialogPanel.ShowButtons:=[pbOK, pbCancel{, pbClose, pbHelp}];
      InfoForm.caption:=('Редактор текста');
@@ -1749,7 +1749,7 @@ begin
                               gdb.GetCurrentROOT.FormatAfterEdit;
                               redrawoglwnd;
                          end;
-     InfoForm.Free;
+     //InfoForm.Free;
 
 end;
 

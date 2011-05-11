@@ -24,7 +24,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="9"/>
       <RevisionNr Value="7"/>
-      <BuildNr Value="1304"/>
+      <BuildNr Value="1305"/>
       <CharSet Value="0000"/>
       <StringTable ProductVersion="0.0.0.8"/>
     </VersionInfo>
@@ -167,12 +167,12 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="173">
+    <Units Count="175">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="zcad"/>
-        <EditorIndex Value="18"/>
+        <EditorIndex Value="24"/>
         <WindowIndex Value="0"/>
         <TopLine Value="77"/>
         <CursorPos X="18" Y="112"/>
@@ -203,10 +203,12 @@
       <Unit3>
         <Filename Value="gdb/GDBText.pas"/>
         <UnitName Value="GDBText"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="182"/>
-        <CursorPos X="1" Y="216"/>
+        <TopLine Value="521"/>
+        <CursorPos X="32" Y="564"/>
         <UsageCount Value="99"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
@@ -289,7 +291,7 @@
         <Filename Value="gui/oglwindow.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="oglwindow"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2150"/>
         <CursorPos X="78" Y="2175"/>
@@ -380,16 +382,19 @@
       <Unit22>
         <Filename Value="commands/GDBCommandsBase.pas"/>
         <UnitName Value="GDBCommandsBase"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="686"/>
-        <CursorPos X="1" Y="703"/>
+        <TopLine Value="1245"/>
+        <CursorPos X="20" Y="1286"/>
         <UsageCount Value="100"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit22>
       <Unit23>
         <Filename Value="u/UGDBVisibleTreeArray.pas"/>
         <UnitName Value="UGDBVisibleTreeArray"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="23"/>
         <CursorPos X="1" Y="58"/>
@@ -411,8 +416,8 @@
         <UnitName Value="GDBCommandsDraw"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="906"/>
-        <CursorPos X="1" Y="941"/>
+        <TopLine Value="951"/>
+        <CursorPos X="1" Y="976"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -449,7 +454,7 @@
       <Unit29>
         <Filename Value="sharedgdb.pas"/>
         <UnitName Value="sharedgdb"/>
-        <EditorIndex Value="17"/>
+        <EditorIndex Value="23"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3"/>
         <CursorPos X="1" Y="40"/>
@@ -479,7 +484,7 @@
         <Filename Value="gdb/GDBEntity.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GDBEntity"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="108"/>
         <CursorPos X="37" Y="133"/>
@@ -537,7 +542,7 @@
       <Unit38>
         <Filename Value="lclmod/umytreenode.pas"/>
         <UnitName Value="umytreenode"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
         <TopLine Value="311"/>
         <CursorPos X="1" Y="334"/>
@@ -557,7 +562,7 @@
       <Unit40>
         <Filename Value="../../lazarus/lcl/forms.pp"/>
         <UnitName Value="Forms"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="15"/>
         <WindowIndex Value="0"/>
         <TopLine Value="25"/>
         <CursorPos X="15" Y="59"/>
@@ -594,16 +599,18 @@
       <Unit44>
         <Filename Value="u/UGDBSelectedObjArray.pas"/>
         <UnitName Value="UGDBSelectedObjArray"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="230"/>
-        <CursorPos X="1" Y="255"/>
+        <TopLine Value="1"/>
+        <CursorPos X="32" Y="50"/>
         <UsageCount Value="22"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit44>
       <Unit45>
         <Filename Value="gdb/GDBGenericSubEntry.pas"/>
         <UnitName Value="GDBGenericSubEntry"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="129"/>
         <CursorPos X="1" Y="156"/>
@@ -614,7 +621,7 @@
       <Unit46>
         <Filename Value="gdb/GDBRoot.pas"/>
         <UnitName Value="GDBRoot"/>
-        <EditorIndex Value="16"/>
+        <EditorIndex Value="22"/>
         <WindowIndex Value="0"/>
         <TopLine Value="155"/>
         <CursorPos X="1" Y="176"/>
@@ -670,7 +677,7 @@
         <Filename Value="gdb/UGDBDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UGDBDescriptor"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="816"/>
         <CursorPos X="9" Y="841"/>
@@ -715,8 +722,7 @@
       <Unit57>
         <Filename Value="u/UGDBOpenArrayOfPObjects.pas"/>
         <UnitName Value="UGDBOpenArrayOfPObjects"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="62"/>
         <CursorPos X="1" Y="87"/>
@@ -901,7 +907,7 @@
       <Unit78>
         <Filename Value="u/UGDBOpenArrayOfPV.pas"/>
         <UnitName Value="UGDBOpenArrayOfPV"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="21"/>
         <WindowIndex Value="0"/>
         <TopLine Value="231"/>
         <CursorPos X="1" Y="256"/>
@@ -936,10 +942,12 @@
       <Unit82>
         <Filename Value="u/UGDBStringArray.pas"/>
         <UnitName Value="UGDBStringArray"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="104"/>
-        <CursorPos X="1" Y="125"/>
+        <TopLine Value="30"/>
+        <CursorPos X="61" Y="30"/>
         <UsageCount Value="48"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit82>
       <Unit83>
@@ -1032,7 +1040,7 @@
       <Unit94>
         <Filename Value="gdb/GDBBlockInsert.pas"/>
         <UnitName Value="GDBBlockInsert"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="292"/>
         <CursorPos X="1" Y="334"/>
@@ -1043,7 +1051,7 @@
       <Unit95>
         <Filename Value="strproc.pas"/>
         <UnitName Value="strproc"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="17"/>
         <WindowIndex Value="0"/>
         <TopLine Value="247"/>
         <CursorPos X="1" Y="284"/>
@@ -1213,7 +1221,7 @@
       <Unit115>
         <Filename Value="gdb/GDBWithLocalCS.pas"/>
         <UnitName Value="GDBWithLocalCS"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="19"/>
         <WindowIndex Value="0"/>
         <TopLine Value="199"/>
         <CursorPos X="39" Y="234"/>
@@ -1680,7 +1688,7 @@
       <Unit170>
         <Filename Value="../../lazarus/lcl/stdctrls.pp"/>
         <UnitName Value="StdCtrls"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="16"/>
         <WindowIndex Value="0"/>
         <TopLine Value="921"/>
         <CursorPos X="20" Y="956"/>
@@ -1689,7 +1697,7 @@
       </Unit170>
       <Unit171>
         <Filename Value="../../lazarus/lcl/include/fileutil.inc"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="18"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3"/>
         <CursorPos X="11" Y="42"/>
@@ -1699,7 +1707,7 @@
       <Unit172>
         <Filename Value="gdb/GDBArc.pas"/>
         <UnitName Value="GDBArc"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="20"/>
         <WindowIndex Value="0"/>
         <TopLine Value="127"/>
         <CursorPos X="1" Y="169"/>
@@ -1707,112 +1715,147 @@
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit172>
+      <Unit173>
+        <Filename Value="../../lazarus/lcl/clipbrd.pp"/>
+        <UnitName Value="Clipbrd"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="211"/>
+        <CursorPos X="26" Y="236"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit173>
+      <Unit174>
+        <Filename Value="../../lazarus/lcl/include/clipbrd.inc"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="110"/>
+        <CursorPos X="1" Y="146"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit174>
     </Units>
-    <JumpHistory Count="26" HistoryIndex="25">
+    <JumpHistory Count="30" HistoryIndex="26">
       <Position1>
-        <Filename Value="gdb/UGDBDescriptor.pas"/>
-        <Caret Line="297" Column="1" TopLine="271"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1239" Column="1" TopLine="1202"/>
       </Position1>
       <Position2>
-        <Filename Value="gdb/UGDBDescriptor.pas"/>
-        <Caret Line="296" Column="1" TopLine="271"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1240" Column="1" TopLine="1202"/>
       </Position2>
       <Position3>
-        <Filename Value="gdb/UGDBDescriptor.pas"/>
-        <Caret Line="297" Column="1" TopLine="271"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1287" Column="1" TopLine="1256"/>
       </Position3>
       <Position4>
-        <Filename Value="gdb/UGDBDescriptor.pas"/>
-        <Caret Line="837" Column="1" TopLine="812"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1240" Column="1" TopLine="1215"/>
       </Position4>
       <Position5>
-        <Filename Value="gdb/UGDBDescriptor.pas"/>
-        <Caret Line="838" Column="1" TopLine="812"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1287" Column="1" TopLine="1262"/>
       </Position5>
       <Position6>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="316" Column="1" TopLine="292"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1276" Column="1" TopLine="1239"/>
       </Position6>
       <Position7>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="317" Column="1" TopLine="292"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1277" Column="1" TopLine="1239"/>
       </Position7>
       <Position8>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="318" Column="1" TopLine="292"/>
+        <Filename Value="../../lazarus/lcl/clipbrd.pp"/>
+        <Caret Line="263" Column="1" TopLine="238"/>
       </Position8>
       <Position9>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="319" Column="1" TopLine="292"/>
+        <Filename Value="../../lazarus/lcl/clipbrd.pp"/>
+        <Caret Line="283" Column="1" TopLine="247"/>
       </Position9>
       <Position10>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="320" Column="1" TopLine="292"/>
+        <Filename Value="../../lazarus/lcl/clipbrd.pp"/>
+        <Caret Line="285" Column="1" TopLine="247"/>
       </Position10>
       <Position11>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="321" Column="1" TopLine="292"/>
+        <Filename Value="../../lazarus/lcl/clipbrd.pp"/>
+        <Caret Line="286" Column="1" TopLine="247"/>
       </Position11>
       <Position12>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="322" Column="1" TopLine="292"/>
+        <Filename Value="../../lazarus/lcl/clipbrd.pp"/>
+        <Caret Line="264" Column="1" TopLine="247"/>
       </Position12>
       <Position13>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="323" Column="1" TopLine="292"/>
+        <Filename Value="../../lazarus/lcl/include/clipbrd.inc"/>
+        <Caret Line="135" Column="1" TopLine="110"/>
       </Position13>
       <Position14>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="324" Column="1" TopLine="292"/>
+        <Filename Value="../../lazarus/lcl/include/clipbrd.inc"/>
+        <Caret Line="136" Column="1" TopLine="110"/>
       </Position14>
       <Position15>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="325" Column="1" TopLine="292"/>
+        <Filename Value="../../lazarus/lcl/include/clipbrd.inc"/>
+        <Caret Line="137" Column="1" TopLine="110"/>
       </Position15>
       <Position16>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="326" Column="1" TopLine="292"/>
+        <Filename Value="../../lazarus/lcl/include/clipbrd.inc"/>
+        <Caret Line="138" Column="1" TopLine="110"/>
       </Position16>
       <Position17>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="327" Column="1" TopLine="292"/>
+        <Filename Value="../../lazarus/lcl/include/clipbrd.inc"/>
+        <Caret Line="139" Column="1" TopLine="110"/>
       </Position17>
       <Position18>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="328" Column="1" TopLine="292"/>
+        <Filename Value="../../lazarus/lcl/include/clipbrd.inc"/>
+        <Caret Line="140" Column="1" TopLine="110"/>
       </Position18>
       <Position19>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="329" Column="1" TopLine="292"/>
+        <Filename Value="../../lazarus/lcl/include/clipbrd.inc"/>
+        <Caret Line="141" Column="1" TopLine="110"/>
       </Position19>
       <Position20>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="330" Column="1" TopLine="292"/>
+        <Filename Value="../../lazarus/lcl/include/clipbrd.inc"/>
+        <Caret Line="142" Column="1" TopLine="110"/>
       </Position20>
       <Position21>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="331" Column="1" TopLine="292"/>
+        <Filename Value="../../lazarus/lcl/include/clipbrd.inc"/>
+        <Caret Line="144" Column="1" TopLine="110"/>
       </Position21>
       <Position22>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="333" Column="1" TopLine="292"/>
+        <Filename Value="../../lazarus/lcl/include/clipbrd.inc"/>
+        <Caret Line="146" Column="1" TopLine="110"/>
       </Position22>
       <Position23>
-        <Filename Value="gdb/GDBBlockInsert.pas"/>
-        <Caret Line="334" Column="1" TopLine="292"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1279" Column="1" TopLine="1239"/>
       </Position23>
       <Position24>
-        <Filename Value="gdb/UGDBDescriptor.pas"/>
-        <Caret Line="839" Column="1" TopLine="812"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1280" Column="1" TopLine="1239"/>
       </Position24>
       <Position25>
-        <Filename Value="gdb/UGDBDescriptor.pas"/>
-        <Caret Line="841" Column="9" TopLine="816"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1282" Column="1" TopLine="1240"/>
       </Position25>
       <Position26>
-        <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="941" Column="1" TopLine="906"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1283" Column="1" TopLine="1241"/>
       </Position26>
+      <Position27>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1287" Column="1" TopLine="1245"/>
+      </Position27>
+      <Position28>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1277" Column="8" TopLine="1245"/>
+      </Position28>
+      <Position29>
+        <Filename Value="../../lazarus/lcl/clipbrd.pp"/>
+        <Caret Line="236" Column="26" TopLine="211"/>
+      </Position29>
+      <Position30>
+        <Filename Value="../../lazarus/lcl/clipbrd.pp"/>
+        <Caret Line="220" Column="15" TopLine="190"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1858,15 +1901,27 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="2">
+    <BreakPoints Count="4">
       <Item1>
+        <Kind Value="bpkSource"/>
         <Source Value="commands/GDBCommandsBase.pas"/>
         <Line Value="1095"/>
       </Item1>
       <Item2>
+        <Kind Value="bpkSource"/>
         <Source Value="../../lazarus/lcl/include/customlistview.inc"/>
         <Line Value="174"/>
       </Item2>
+      <Item3>
+        <Kind Value="bpkSource"/>
+        <Source Value="commands/GDBCommandsDraw.pas"/>
+        <Line Value="976"/>
+      </Item3>
+      <Item4>
+        <Kind Value="bpkSource"/>
+        <Source Value="commands/GDBCommandsDraw.pas"/>
+        <Line Value="1078"/>
+      </Item4>
     </BreakPoints>
     <Watches Count="2">
       <Item1>

@@ -1273,6 +1273,8 @@ begin
     //memsubstr.WriteAnsiString(s);
     //memsubstr.Write(s[1],length(s));
 
+    Clipboard.Open;
+    Clipboard.Clear;
     zcformat:=RegisterClipboardFormat(ZCAD_DXF_CLIPBOARD_NAME);
     clipboard.AddFormat(zcformat,s[1],length(s));
 
@@ -1281,7 +1283,7 @@ begin
 
     zcformat:=RegisterClipboardFormat('AutoCAD.r18');
     clipboard.AddFormat(zcformat,suni[1],length(suni));
-
+    Clipboard.Close;
 
     //memsubstr.free;
 end;

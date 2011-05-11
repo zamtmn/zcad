@@ -560,6 +560,10 @@ begin
                      result:=1;
                      exit;
                 end;
+            '%':begin
+                     result:=37;
+                     exit;
+                end;
 
           end;    ;
      end;

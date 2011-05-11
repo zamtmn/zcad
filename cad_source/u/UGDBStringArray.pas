@@ -27,7 +27,7 @@ type
                           constructor init(m:GDBInteger);
                           procedure loadfromfile(fname:GDBString);
                           procedure freeelement(p:GDBPointer);virtual;
-                          function findstring(s:GDBString):boolean;
+                          function findstring(s:GDBString;ucase:gdbboolean):boolean;
                           procedure sort;virtual;
                           function add(p:GDBPointer):TArrayIndex;virtual;
                           function addutoa(p:GDBPointer):TArrayIndex;
@@ -106,15 +106,20 @@ begin
      result:=inherited add(@s);
      GDBPointer(s):=nil;
 end;
-function GDBGDBStringArray.findstring(s:GDBString):boolean;
+function GDBGDBStringArray.findstring(s:GDBString;ucase:gdbboolean):boolean;
 var
    ps{,pspred}:pgdbstring;
    ir:itrec;
+   ss:gdbstring;
 begin
      ps:=beginiterate(ir);
      if (ps<>nil) then
      repeat
-          if ps^=s then
+          if ucase then
+                           ss:=uppercase(ps^)
+                       else
+                           ss:=ps^;
+          if {ps^}ss=s then
                        begin
                             result:=true;
                             exit;

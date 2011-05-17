@@ -709,6 +709,27 @@ begin
           CopyBlock(BlockBaseDWG,_to,td);
      end;
 end;
+function createtstylebyindex(_from,_to:PTDrawing;oldti:TArrayIndex):TArrayIndex;
+var
+   {_dest,}td:PGDBObjBlockdef;
+   newti:TArrayIndex;
+   tsname:gdbstring;
+   poldstyle,pnevstyle:PGDBTextStyle;
+   ir:itrec;
+   {pvisible,}pvisible2:PGDBObjEntity;
+   //pl:PGDBLayerProp;
+begin
+                    poldstyle:=PGDBTextStyle(_from.TextStyleTable.getelement(oldti));
+                    tsname:=poldstyle^.name;
+                    newti:=_to.TextStyleTable.FindStyle(tsname);
+                    if newti<0 then
+                                   begin
+                                        newti:=_to.TextStyleTable.addstyle(poldstyle.name,poldstyle.pfont.Name,poldstyle.prop);
+                                        pnevstyle:=PGDBTextStyle(_to.TextStyleTable.getelement(newti));
+                                        pnevstyle^:=poldstyle^;
+                                   end;
+      result:=_to.TextStyleTable.FindStyle(tsname);
+end;
 procedure createtstyleifneed(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
 var
    {_dest,}td:PGDBObjBlockdef;
@@ -722,7 +743,8 @@ begin
                if (_source^.vp.ID=GDBTextID)
                or (_source^.vp.ID=GDBMtextID) then
                begin
-                    oldti:=PGDBObjText(_source)^.TXTStyleIndex;
+                    PGDBObjText(_dest)^.TXTStyleIndex:=createtstylebyindex(_from,_to,PGDBObjText(_source)^.TXTStyleIndex);
+                    {oldti:=PGDBObjText(_source)^.TXTStyleIndex;
                     poldstyle:=PGDBTextStyle(_from.TextStyleTable.getelement(oldti));
                     tsname:=poldstyle^.name;
                     newti:=_to.TextStyleTable.FindStyle(tsname);
@@ -732,9 +754,10 @@ begin
                                         pnevstyle:=PGDBTextStyle(_to.TextStyleTable.getelement(newti));
                                         pnevstyle^:=poldstyle^;
                                    end
+                    createtstylebyindex
+                    oldti:=_to.TextStyleTable.FindStyle(tsname);
+                    PGDBObjText(_dest)^.TXTStyleIndex:=newti;}
                end;
-      oldti:=_to.TextStyleTable.FindStyle(tsname);
-      PGDBObjText(_dest)^.TXTStyleIndex:=newti;
 end;
 procedure createblockifneed(_from,_to:PTDrawing;_source:PGDBObjEntity);
 var
@@ -818,6 +841,9 @@ procedure RemapAll(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
 begin
   RemapLayer(_from,_to,_source,_dest);
   case _source.vp.ID of
+                        GDBElLeaderID,gdbtableid:begin
+                                           createtstylebyindex(_from,_to,0);
+                                             end;
                         GDBTextID,GDBMtextID:begin
                                              createtstyleifneed(_from,_to,_source,_dest);
                                              end;

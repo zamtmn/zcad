@@ -63,9 +63,9 @@ begin
   if (pdwg<>nil)and(pdwg<>BlockBaseDWG) then
   begin
                                       begin
+                                           reloadlayer;
                                            gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
                                            mainformn.Caption:=(('ZCad v'+sysvar.SYS.SYS_Version^+' - ['+gdb.GetCurrentDWG.FileName+']'));
-  reloadlayer;
   if assigned(mainwindow.LayerBox) then
   mainwindow.LayerBox.enabled:=true;
   if assigned(mainwindow.LineWBox) then

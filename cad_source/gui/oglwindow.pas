@@ -38,7 +38,7 @@ uses
   GDBGenericSubEntry,gdbasetypes,{Windows,}sysutils,
   gl,glu,{glx,}OpenGLContext,
   Math,gdbase,varmandef,varman,UUnitManager,
-  oglwindowdef,
+  oglwindowdef,UGDBSelectedObjArray,
 
   GDBHelpObj,
   commandline,
@@ -201,6 +201,7 @@ function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
 function ProjectPoint(pntx,pnty,pntz:gdbdouble;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;
 procedure textwrite(s: GDBString);
 procedure RunTextEditor(Pobj:GDBPointer);
+function getsortedindex(cl:integer):integer;
 implementation
 uses mainwindow,UGDBTracePropArray,GDBEntity,io,geometry,gdbobjectsconstdef,UGDBDescriptor,
      {GDBCommandsBase,}Objinsp{,Tedit_form, MTedit_form},shared,sharedgdb,UGDBLayerArray,cmdline,GDBtext;
@@ -3940,6 +3941,19 @@ begin
     or (MousePos.y < 0) then
     mousein := false;
 end;}
+function getsortedindex(cl:integer):integer;
+var i:integer;
+    s:string;
+begin
+     s:=(pGDBLayerProp(gdb.GetCurrentDWG.LayerTable.getelement(cl))^.GetFullName);
+     for i:=0 to layerbox.Items.Count-1 do
+     if layerbox.Items.Strings[i]=s then
+     begin
+          result:=i;
+          exit;
+     end;
+     result:=0;
+end;
 procedure TOGLWnd.setvisualprop;
 const pusto=-1000;
       lpusto=pointer(0);
@@ -3948,7 +3962,7 @@ const pusto=-1000;
 var lw:GDBInteger;
     layer:pgdblayerprop;
     //i,se:GDBInteger;
-    pv:pgdbobjEntity;
+    pv:{pgdbobjEntity}PSelectedObjDesc;
         ir:itrec;
 begin
   if param.seldesc.Selectedobjcount=0
@@ -3958,30 +3972,33 @@ begin
            if sysvar.dwg.DWG_CLinew^<0 then LineWbox.ItemIndex:=(sysvar.dwg.DWG_CLinew^+3)
                                        else LinewBox.ItemIndex:=((sysvar.dwg.DWG_CLinew^ div 10)+3);
            if assigned(LayerBox) then
-           LayerBox.ItemIndex:=(sysvar.dwg.DWG_CLayer^);
+           LayerBox.ItemIndex:=getsortedindex(SysVar.dwg.DWG_CLayer^);
       end
   else
       begin
            //se:=param.seldesc.Selectedobjcount;
            lw:=pusto;
            layer:=lpusto;
-           pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+           pv:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
+           //pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
            if pv<>nil then
            repeat
-           //for i:=0 to gdb.ObjRoot.ObjArray.Count-1 do
+           if pv^.objaddr<>nil then
            begin
-                if pv^.Selected
-                then
+                //if pv^.Selected
+                //then
                     begin
-                         if lw=pusto then lw:=pv^.vp.LineWeight
-                                      else if lw<> pv^.vp.LineWeight then lw:=different;
-                         if layer=lpusto then layer:=pv^.vp.layer
-                                      else if layer<> pv^.vp.layer then layer:=ldifferent;
+                         if lw=pusto then lw:=pv^.objaddr^.vp.LineWeight
+                                      else if lw<> pv^.objaddr^.vp.LineWeight then lw:=different;
+                         if layer=lpusto then layer:=pv^.objaddr^.vp.layer
+                                      else if layer<> pv^.objaddr^.vp.layer then layer:=ldifferent;
                     end;
                 if (layer=ldifferent)and(lw=different) then system.Break;
            end;
-           pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+           //pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+           pv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
            until pv=nil;
+           if lw<>pusto then
            if assigned(LinewBox)then
            if lw=different then
                                LinewBox.ItemIndex:=(LinewBox.Items.Count-1)
@@ -3990,12 +4007,13 @@ begin
                                     if lw<0 then LinewBox.ItemIndex:=(lw+3)
                                             else LinewBox.ItemIndex:=((lw div 10)+3)
                                end;
+           if layer<>lpusto then
            if assigned(LayerBox)then
            if layer=ldifferent then
                                   LayerBox.ItemIndex:=(LayerBox.Items.Count-1)
                            else
                                begin
-                                    LayerBox.ItemIndex:=(gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(layer));
+                                    LayerBox.ItemIndex:=getsortedindex(gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(layer));
                                end;
       end;
 end;
@@ -4018,12 +4036,12 @@ begin
                    else LinewBox.ItemIndex:=((lw div 10)+3);
            end;
            if assigned(LayerBox)then
-           LayerBox.ItemIndex:=(layer);
+           LayerBox.ItemIndex:=getsortedindex((layer));//(layer);
       end
   else
       begin
            if assigned(LayerBox)then
-           if LayerBox.ItemIndex<>layer then LayerBox.ItemIndex:=(LayerBox.Items.Count-1);
+           if LayerBox.ItemIndex<>getsortedindex((layer)) then LayerBox.ItemIndex:=(LayerBox.Items.Count-1);
            if lw<0 then lw:=lw+3
                    else lw:=(lw div 10)+3;
            if assigned(LinewBox)then

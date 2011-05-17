@@ -285,7 +285,7 @@ else*) if (pos('DEVICE_',uppercase(name))=1)or isdevice then
                 pvisible:=pblockdef.ObjArray.iterate(ir);
           until pvisible=nil;}
 
-
+          TempDevice.vp.Layer:=vp.Layer;
           TempDevice^.Local:=local;
           TempDevice^.scale:=scale;
           TempDevice^.rotate:=rotate;

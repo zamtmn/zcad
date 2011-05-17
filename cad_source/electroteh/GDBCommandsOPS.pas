@@ -509,20 +509,37 @@ var //i: GDBInteger;
     pcabledesk:PTCableDesctiptor;
     ir,ir_inNodeArray:itrec;
     pvd:pvardesk;
-    currentunit:TUnit;
+    defaultunit:TUnit;
+    currentunit:PTUnit;
+    UManager:TUnitManager;
     ucount:gdbinteger;
     ptn:PGDBObjDevice;
     p:pointer;
     cman:TCableManager;
     SaveEntUName,SaveCabUName:gdbstring;
-    cablemetric,devicemetric:GDBString;
+    cablemetric,devicemetric,numingroupmetric:GDBString;
+const
+      DefNumMetric='default_num_in_group';
+function GetNumUnit(uname:gdbstring):PTUnit;
+begin
+     //result:=nil;
+     result:=UManager.internalfindunit(uname);
+     if result=nil then
+     begin
+          result:=pointer(UManager.CreateObject);
+          result.init(uname);
+          result.CopyFrom(@defaultunit);
+     end;
+end;
+
 begin
   if gdb.GetCurrentROOT.ObjArray.Count = 0 then exit;
   cman.init;
   cman.build;
+  UManager.init;
 
-  currentunit.init('calc');
-  units.loadunit(expandpath('*rtl\objcalc\opsmarkdef.pas'),(@currentunit));
+  defaultunit.init(DefNumMetric);
+  units.loadunit(expandpath('*rtl\objcalc\opsmarkdef.pas'),(@defaultunit));
   pcabledesk:=cman.beginiterate(ir);
   if pcabledesk<>nil then
   repeat
@@ -538,7 +555,9 @@ begin
                                  cablemetric:='';
                             end;
 
-
+             currentunit:=Umanager.beginiterate(ir);
+             if currentunit<>nil then
+             repeat
              pvd:=currentunit.FindVariable('CDC_temp');
              pgdbinteger(pvd.data.Instance)^:=0;
              pvd:=currentunit.FindVariable('CDSC_temp');
@@ -548,6 +567,9 @@ begin
              p:=@pcabledesk.StartSegment.ou;
              currentunit.InterfaceUses.addnodouble(@p);
              ucount:=currentunit.InterfaceUses.Count;
+             currentunit:=Umanager.iterate(ir);
+             until currentunit=nil;
+             currentunit:=nil;
 
 
 
@@ -566,14 +588,27 @@ begin
                                         begin
                                              devicemetric:='';
                                         end;
+                        pvd:=ptn^.bp.ListPos.Owner.ou.FindVariable('GC_InGroup_Metric');
+                                        if pvd<>nil then
+                                                        begin
+                                                             numingroupmetric:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
+                                                             if numingroupmetric='' then
+                                                                                        numingroupmetric:=DefNumMetric;
+
+                                                        end
+                                                    else
+                                                        begin
+                                                             numingroupmetric:=DefNumMetric;
+                                                        end;
                         if devicemetric=cablemetric then
                     begin
+                         currentunit:=GetNumUnit(numingroupmetric);
                          SaveEntUName:=ptn^.bp.ListPos.Owner.ou.Name;
                          ptn^.bp.ListPos.Owner.ou.Name:='Entity';
                          p:=@ptn^.bp.ListPos.Owner.ou;
                          currentunit.InterfaceUses.addnodouble(@p);
 
-                         units.loadunit(expandpath('*rtl\objcalc\opsmark.pas'),(@currentunit));
+                         units.loadunit(expandpath('*rtl\objcalc\opsmark.pas'),(currentunit));
 
                          dec(currentunit.InterfaceUses.Count);
 
@@ -596,8 +631,9 @@ begin
   pcabledesk:=cman.iterate(ir);
   until pcabledesk=nil;
 
+  defaultunit.done;
+  UManager.done;
   cman.done;
-  currentunit.done;
   redrawoglwnd;
   result:=cmd_ok;
 end;

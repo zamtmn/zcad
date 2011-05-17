@@ -1055,6 +1055,7 @@ end;
 
 function SelObjChangeLayerToCurrent_com:GDBInteger;
 var pv:pGDBObjEntity;
+    psv:PSelectedObjDesc;
     ir:itrec;
 begin
   if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
@@ -1064,6 +1065,14 @@ begin
     if pv^.Selected then pv^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
+  psv:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
+  if psv<>nil then
+  begin
+       repeat
+             if psv.objaddr^.Selected then psv.objaddr^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+       psv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
+       until psv=nil;
+  end;
   redrawoglwnd;
   result:=cmd_ok;
 end;

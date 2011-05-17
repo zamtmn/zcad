@@ -23,15 +23,15 @@ begin
   DMenuY:=101;
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=307;
-  VIEW_ObjInspSubV:=94;
+  VIEW_ObjInspSubV:=141;
   PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File1:='J:\nh\СибИНКор\лесокомплекс\03_09П-АПТ.dxf';
-  PATH_File2:='J:\nh\СибИНКор\лесокомплекс\03_09П-2,3-АПТ.dxf';
-  PATH_File3:='J:\nh\СибИНКор\лесокомплекс\03_09П-1-АПТ.dxf';
-  PATH_File4:='J:\nh\СибИНКор\лесокомплекс\03_09П-10-АПТ.dxf';
-  PATH_File5:='J:\nh\Зварыгина\стоянка\авк.dxf';
-  PATH_File6:='C:\zcad\cad\autosave\autosave2.dxf';
-  PATH_File7:='J:\nh\ЗВЕЗДИНА\пожаротушение\proj.dxf';
-  PATH_File8:='J:\nh\Зварыгина\стоянка\аов.dxf';
-  PATH_File9:='J:\nh\виталя\школа\школа Ноябрьск планы.dxf';
+  PATH_File1:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File2:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File3:='D:\план 3-6 эт ПС crash.dxf';
+  PATH_File4:='J:\nh\ЗВЕЗДИНА\Котельная КС2 вторая\agsv.dxf';
+  PATH_File5:='J:\nh\ЗВЕЗДИНА\Котельная КС2\agsv.dxf';
+  PATH_File6:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File7:='/mnt/win_c/zcad/cad/autosave/autosave.dxf';
+  PATH_File8:='D:\ar2.dxf';
+  PATH_File9:='J:\nh\СибИНКор\лесокомплекс\03_09П-АПТ.dxf';
 end.

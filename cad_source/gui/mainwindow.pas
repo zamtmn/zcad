@@ -83,7 +83,10 @@ type
                     SystemTimer: TTimer;
 
                     toolbars:tstringlist;
+                    iconlist: TImageList;
 
+                    procedure LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+  State: TOwnerDrawState);
                     function findtoolbatdesk(tbn:string):string;
                     procedure CreateToolbarFromDesk(tb:TToolBar;tbdesk:string);
                     procedure CreateHTPB(tb:TToolBar);
@@ -92,7 +95,7 @@ type
                     procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
                     procedure AfterConstruction; override;
                     destructor Destroy;override;
-                    procedure setnormalfocus;
+                    procedure setnormalfocus(Sender: TObject);
 
                     procedure draw;
 
@@ -174,7 +177,7 @@ var
 implementation
 
 uses {GDBCommandsBase,}Objinsp{,optionswnd, Tedit_form, MTedit_form},
-  dialogs,XMLPropStorage;
+  dialogs,XMLPropStorage,layerwnd;
 procedure TMyAnchorDockManager.ResetBounds(Force: Boolean);
 begin
      inherited;
@@ -654,14 +657,41 @@ begin
                                           cmdedit.SetFocus;
      end;
 end;
+function loadicon(iconlist: TImageList;f:string):integer;
+var
+  bmp:TPortableNetworkGraphic;
+begin
+  bmp:=TPortableNetworkGraphic.create;
+  bmp.LoadFromFile(f);
+  bmp.Transparent:=true;
+  result:=iconlist.Add(bmp,nil);
+  freeandnil(bmp);
+end;
 
 procedure TMainFormN.FormCreate(Sender: TObject);
 var
   i:integer;
   pint:PGDBInteger;
   action:tmyaction;
+  bmp:TPortableNetworkGraphic;
 begin
   //AutoSize:=false;
+  iconlist:=timagelist.Create(self);
+
+  loadicon(iconlist,sysparam.programpath+'images/plus.png');
+  loadicon(iconlist,sysparam.programpath+'images/minus.png');
+  loadicon(iconlist,sysparam.programpath+'images/ok.png');
+  loadicon(iconlist,sysparam.programpath+'images/off.png');
+  loadicon(iconlist,sysparam.programpath+'images/on.png');
+  loadicon(iconlist,sysparam.programpath+'images/unprint.png');
+  loadicon(iconlist,sysparam.programpath+'images/print.png');
+  loadicon(iconlist,sysparam.programpath+'images/unlock.png');
+  loadicon(iconlist,sysparam.programpath+'images/lock.png');
+  loadicon(iconlist,sysparam.programpath+'images/freze.png');
+  loadicon(iconlist,sysparam.programpath+'images/unfreze.png');
+
+
+  //iconlist.
   self.SetBounds(0,0,800,44);
   DockMaster.HeaderClass:=TmyAnchorDockHeader;
   DockMaster.SplitterClass:=TmyAnchorDockSplitter;
@@ -813,6 +843,35 @@ begin
                                                    end;
     b.Parent:=tb;
 end;
+procedure TMainFormN.LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+  State: TOwnerDrawState);
+var
+   plp:PGDBLayerProp;
+   Dest: PChar;
+begin
+     //LayerBox.Canvas.TextRect(ARect,1,1,'asdasd');
+  canvas.Brush.Color := clBtnFace;
+  canvas.FillRect(ARect);
+    //canvas.FillRect(arect);
+    pointer(plp):=LayerBox.Items.Objects[Index];
+    if plp=nil then
+                   s:=S_Different
+               else
+                   begin
+                   s:=LayerBox.Items.Strings[Index];// (plp^.name){S_Different};
+                   if plp^._on then
+                                   iconlist.Draw(LayerBox.Canvas,1,ARect.Top{+1},4)
+                               else
+                                   iconlist.Draw(LayerBox.Canvas,1,ARect.Top{+1},3);
+                   if plp^._lock then
+                                   iconlist.Draw(LayerBox.Canvas,17,ARect.Top{+1},8)
+                               else
+                                   iconlist.Draw(LayerBox.Canvas,17,ARect.Top{+1},7);
+                   end;
+    ARect.Left:=ARect.Left+36;
+    DrawText(LayerBox.canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
+end;
+
 procedure TMainFormN.CreateToolbarFromDesk(tb:TToolBar;tbdesk:string);
 var
     f:GDBOpenArrayOfByte;
@@ -903,6 +962,8 @@ begin
                           if assigned(LayerBox) then
                                                     shared.ShowError(format(ES_ReCreating,['LAYERCOMBOBOX']));
                           LayerBox:=TComboBox.Create(tb);
+                          LayerBox.Style:=csOwnerDrawFixed{Variable};
+                          LayerBox.OnDrawItem:=LayerBoxDrawItem;
                           if code=0 then
                                         LayerBox.Width:=w;
                           if ts<>''then
@@ -914,6 +975,7 @@ begin
                           LayerBox.OnChange:=ChangeCLayer;
                           LayerBox.ReadOnly:=true;
                           LayerBox.AutoSize:=false;
+                          LayerBox.OnMouseLeave:=self.setnormalfocus;
                           AddToBar(tb,LayerBox);
                      end;
                      if uppercase(line)='LINEWCOMBOBOX' then
@@ -945,6 +1007,7 @@ begin
                           LineWbox.items.Add(S_Different);
                           LineWbox.OnChange:=ChangeCLineW;
                           LineWbox.AutoSize:=false;
+                          LineWbox.OnMouseLeave:=self.setnormalfocus;
                            AddToBar(tb,LineWBox);
                      end;
                      if uppercase(line)='SEPARATOR' then
@@ -1345,6 +1408,8 @@ begin
      //pdownpanel.done;
      //prightpanel.done;
      //self.contr
+    if layerbox<>nil then
+                         layerbox.Items.Clear;
     if DockMaster<>nil then
     DockMaster.CloseAll;
     freeandnil(toolbars);
@@ -1473,12 +1538,14 @@ begin
                                      exit;
                                 end;
       end;
-     if ((ActiveControl<>cmdedit)
-     and(ActiveControl<>HistoryLine)) then
-     if (ActiveControl is tedit)
-     or (ActiveControl is tmemo)
-     or (ActiveControl is tcombobox)then
-                                       exit;
+
+     if ((ActiveControl<>cmdedit)and(ActiveControl<>HistoryLine)and(ActiveControl<>LayerBox)and(ActiveControl<>LineWBox))then
+     if (ActiveControl is tedit)or (ActiveControl is tmemo)or (ActiveControl is tcombobox)then
+                                                                                              exit;
+     if ((ActiveControl=LayerBox)or(ActiveControl<>LineWBox))then
+                                                                 begin
+                                                                 self.setnormalfocus(nil);
+                                                                 end;
      tempkey:=key;
 
      comtext:='';
@@ -1639,7 +1706,7 @@ begin
                 gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
            end;
   end;
-  setnormalfocus;
+  setnormalfocus(nil);
 end;
 
 {procedure TMainFormN.idle(Sender: TObject; var Done: Boolean);
@@ -1658,18 +1725,16 @@ begin
   if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
   then
   begin
-  if {layerbox.ItemIndex = layerbox.ItemsCount-1}
-      layerbox.ItemIndex = layerbox.Items.Count-1 then {layerbox.ItemIndex := SysVar.dwg.DWG_CLayer^}
-                                                        layerbox.ItemIndex := SysVar.dwg.DWG_CLayer^
-                                                 else
+  if layerbox.ItemIndex = layerbox.Items.Count-1 then layerbox.ItemIndex := getsortedindex(SysVar.dwg.DWG_CLayer^)
+                                                else
                                                      begin
-                                                          SysVar.dwg.DWG_CLayer^ := layerbox.ItemIndex;
+                                                          SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(pointer(layerbox.Items.Objects[layerbox.ItemIndex]));
                                                           SetGDBObjInsp(SysUnit.TypeName2PTD('GDBLayerProp'),gdb.GetCurrentDWG.LayerTable.GetCurrentLayer);
                                                      end;
   end
   else
   begin
-       if layerbox.ItemIndex = {layerbox.ItemsCount-1}layerbox.Items.Count-1
+       if layerbox.ItemIndex = layerbox.Items.Count-1
            then
            begin
                 gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
@@ -1677,13 +1742,13 @@ begin
            else
            begin
                 tcl:=SysVar.dwg.DWG_CLayer^;
-                SysVar.dwg.DWG_CLayer^:=layerbox.ItemIndex;
+                SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(pointer(layerbox.Items.Objects[layerbox.ItemIndex]));
                 commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent');
                 SysVar.dwg.DWG_CLayer^:=tcl;
                 gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
            end;
   end;
-  setnormalfocus;
+  setnormalfocus(nil);
 end;
 procedure TMainFormN.GeneralTick(Sender: TObject);//(uID, msg: UINT; dwUse, dw1, dw2: DWord); stdcall;
 begin
@@ -1768,14 +1833,19 @@ begin
 
   {layerbox.ClearText;}
   layerbox.Items.Clear;
+  layerbox.Sorted:=true;
   plp:=plt^.beginiterate(ir);
   if plp<>nil then
   repeat
        s:=plp^.GetFullName;
-       layerbox.Items.Add(s);
+       layerbox.AddItem(s,pointer(plp));//      sdfg
+       //layerbox.Items.Add(s);
        plp:=plt^.iterate(ir);
   until plp=nil;
-  layerbox.Items.Add(S_Different);
+  //layerbox.Items.;
+  layerbox.Sorted:=false;
+  //layerbox.Items.Add(S_Different);
+  layerbox.Additem(S_Different,nil);
   layerbox.ItemIndex:=(SysVar.dwg.DWG_CLayer^);
 end;
 function getoglwndparam: GDBPointer; export;

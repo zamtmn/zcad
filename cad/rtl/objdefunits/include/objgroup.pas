@@ -11,7 +11,8 @@ var
 
    SerialConnection:GDBInteger;
    GC_NumberInGroup:GDBInteger;(*'Номер устройства в группе'*)
-   GC_Metric:GDBString;
+   GC_InGroup_Metric:GDBString;(*'Метрика нумерации в группе'*)
+   GC_Metric:GDBString;(*'Метрика нумерации'*)
 implementation
 begin
    SerialConnection:=1;

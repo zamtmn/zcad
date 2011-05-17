@@ -34,6 +34,7 @@ type
                        function parseunit(var f: GDBOpenArrayOfByte; pcreatedunit:PTSimpleUnit):ptunit;virtual;
                        function changeparsemode(newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
                        function findunit(uname:GDBString):ptunit;virtual;
+                       function internalfindunit(uname:GDBString):ptunit;virtual;
                        procedure SetNextManager(PNM:PTUnitManager);
                        procedure LoadFolder(path: GDBString);
 
@@ -98,7 +99,7 @@ procedure TUnitManager.SetNextManager;
 begin
      NextUnitManager:=PNM;
 end;
-function TUnitManager.findunit;
+function TUnitManager.internalfindunit;
 var
   p:PTUnit;
   ir:itrec;
@@ -119,6 +120,30 @@ begin
   until p=nil;
   if NextUnitManager<>NIL then
                               result:=NextUnitManager^.findunit(uname);
+end;
+
+function TUnitManager.findunit;
+var
+  p:PTUnit;
+  ir:itrec;
+  nfn:gdbstring;
+  tcurrentunit:PTUnit;
+begin
+  {p:=beginiterate(ir);
+  //uname:=uppercase(uname);
+  result:=nil;
+  if p<>nil then
+  repeat
+       if uppercase(p^.Name)=uppercase(uname) then
+                            begin
+                                 result:=p;
+                                 exit;
+                            end;
+       p:=iterate(ir);
+  until p=nil;
+  if NextUnitManager<>NIL then
+                              result:=NextUnitManager^.findunit(uname);}
+  result:=internalfindunit(uname);
   if result=nil then
                     begin
                          nfn:=FindInSupportPath(uname+'.pas');

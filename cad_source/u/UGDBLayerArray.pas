@@ -75,12 +75,10 @@ end;
 function GDBLayerProp.GetFullName;
 {const
      ls=24;}
-var ss:gdbstring;
+//var ss:gdbstring;
 begin
      result:=ansi2cp(getname);
-       {if length(result)<ls then
-                         result:=result+dupestring(' ',ls-length(result));}
-       if _on then
+     {  if _on then
                        ss:='[O'
                    else
                        ss:='[–';
@@ -91,8 +89,8 @@ begin
        if _print then
                        ss:=ss+'P] '
                    else
-                       ss:=ss+'–] ';
-       result:=ss+result;
+                       ss:=ss+'–] '; }
+       result:={ss+}result;
 end;
 function GDBLayerArray.GetSystemLayer;
 begin

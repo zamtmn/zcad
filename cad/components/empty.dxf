@@ -89,7 +89,7 @@ $TRACEWID
   9
 $TEXTSTYLE
   7
-R2_5
+Standard
   9
 $CLAYER
   8
@@ -117,15 +117,15 @@ $DIMSCALE
   9
 $DIMASZ
  40
-2.5
+0.18
   9
 $DIMEXO
  40
-0.625
+0.0625
   9
 $DIMDLI
  40
-3.75
+0.38
   9
 $DIMRND
  40
@@ -137,7 +137,7 @@ $DIMDLE
   9
 $DIMEXE
  40
-1.25
+0.18
   9
 $DIMTP
  40
@@ -149,11 +149,11 @@ $DIMTM
   9
 $DIMTXT
  40
-2.5
+0.18
   9
 $DIMCEN
  40
-2.5
+0.09
   9
 $DIMTSZ
  40
@@ -169,11 +169,11 @@ $DIMLIM
   9
 $DIMTIH
  70
-     0
+     1
   9
 $DIMTOH
  70
-     0
+     1
   9
 $DIMSE1
  70
@@ -185,11 +185,11 @@ $DIMSE2
   9
 $DIMTAD
  70
-     1
+     0
   9
 $DIMZIN
  70
-     8
+     0
   9
 $DIMBLK
   1
@@ -217,11 +217,11 @@ $DIMALT
   9
 $DIMALTD
  70
-     3
+     2
   9
 $DIMALTF
  40
-0.03937007874016
+25.4
   9
 $DIMLFAC
  40
@@ -229,7 +229,7 @@ $DIMLFAC
   9
 $DIMTOFL
  70
-     1
+     0
   9
 $DIMTVP
  40
@@ -257,7 +257,7 @@ $DIMBLK2
   9
 $DIMSTYLE
   2
-ISO-25
+Standard
   9
 $DIMCLRD
  70
@@ -277,7 +277,7 @@ $DIMTFAC
   9
 $DIMGAP
  40
-0.625
+0.09
   9
 $DIMJUST
  70
@@ -293,11 +293,11 @@ $DIMSD2
   9
 $DIMTOLJ
  70
-     0
+     1
   9
 $DIMTZIN
  70
-     8
+     0
   9
 $DIMALTZ
  70
@@ -313,11 +313,11 @@ $DIMUPT
   9
 $DIMDEC
  70
-     2
+     4
   9
 $DIMTDEC
  70
-     2
+     4
   9
 $DIMALTU
  70
@@ -325,7 +325,7 @@ $DIMALTU
   9
 $DIMALTTD
  70
-     3
+     2
   9
 $DIMTXSTY
   7
@@ -349,7 +349,7 @@ $DIMAZIN
   9
 $DIMDSEP
  70
-    44
+    46
   9
 $DIMATFIT
  70
@@ -453,19 +453,19 @@ $TDUCREATE
   9
 $TDUPDATE
  40
-2455679.005913982
+2455694.624051458
   9
 $TDUUPDATE
  40
-2455678.755913982
+2455694.374051458
   9
 $TDINDWG
  40
-0.0106255324
+0.0121107986
   9
 $TDUSRTIMER
  40
-0.0106251736
+0.0121104398
   9
 $USRTIMER
  70
@@ -505,7 +505,7 @@ $SPLINESEGS
   9
 $HANDSEED
   5
-145
+2B4
   9
 $SURFTAB1
  70
@@ -889,7 +889,7 @@ $FINGERPRINTGUID
   9
 $VERSIONGUID
   2
-{0B255B79-9EFC-4FE5-B79F-9B596FE341B8}
+{687BA470-A50B-4F07-854F-729D023A6E33}
   9
 $EXTNAMES
 290
@@ -999,7 +999,7 @@ AcDbSymbolTable
   0
 VPORT
   5
-13C
+2AB
 330
 8
 100
@@ -1019,9 +1019,9 @@ AcDbViewportTableRecord
  21
 1.0
  12
-210.0
+390.4547463557241
  22
-175.5203064691001
+194.9963087256912
  13
 0.0
  23
@@ -1047,9 +1047,9 @@ AcDbViewportTableRecord
  37
 0.0
  40
-420.2228693450462
+420.481902819253
  41
-1.005875440658049
+1.016627078384798
  42
 50.0
  43
@@ -1273,34 +1273,6 @@ txt
   4
 
   0
-STYLE
-  5
-107
-330
-3
-100
-AcDbSymbolTableRecord
-100
-AcDbTextStyleTableRecord
-  2
-R2_5
- 70
-     0
- 40
-2.5
- 41
-0.65
- 50
-12.0
- 71
-     0
- 42
-2.5
-  3
-romant.shx
-  4
-
-  0
 ENDTAB
   0
 TABLE
@@ -1341,7 +1313,7 @@ APPID
 100
 AcDbSymbolTable
  70
-     5
+    11
   0
 APPID
   5
@@ -1413,6 +1385,90 @@ AcAecLayerStandard
  70
      0
   0
+APPID
+  5
+15B
+330
+9
+100
+AcDbSymbolTableRecord
+100
+AcDbRegAppTableRecord
+  2
+ACAD_DSTYLE_DIMTEXT_FILL
+ 70
+     0
+  0
+APPID
+  5
+15C
+330
+9
+100
+AcDbSymbolTableRecord
+100
+AcDbRegAppTableRecord
+  2
+ACAD_DSTYLE_DIMEXT_LENGTH
+ 70
+     0
+  0
+APPID
+  5
+15D
+330
+9
+100
+AcDbSymbolTableRecord
+100
+AcDbRegAppTableRecord
+  2
+ACAD_DSTYLE_DIMEXT_ENABLED
+ 70
+     0
+  0
+APPID
+  5
+15E
+330
+9
+100
+AcDbSymbolTableRecord
+100
+AcDbRegAppTableRecord
+  2
+ACAD_DSTYLE_DIM_LINETYPE
+ 70
+     0
+  0
+APPID
+  5
+15F
+330
+9
+100
+AcDbSymbolTableRecord
+100
+AcDbRegAppTableRecord
+  2
+ACAD_DSTYLE_DIM_EXT1_LINETYPE
+ 70
+     0
+  0
+APPID
+  5
+160
+330
+9
+100
+AcDbSymbolTableRecord
+100
+AcDbRegAppTableRecord
+  2
+ACAD_DSTYLE_DIM_EXT2_LINETYPE
+ 70
+     0
+  0
 ENDTAB
   0
 TABLE
@@ -1431,63 +1487,7 @@ AcDbDimStyleTable
  71
      1
 340
-27
-  0
-DIMSTYLE
-105
-27
-330
-A
-100
-AcDbSymbolTableRecord
-100
-AcDbDimStyleTableRecord
-  2
-ISO-25
- 70
-     0
- 41
-2.5
- 42
-0.625
- 43
-3.75
- 44
-1.25
- 73
-     0
- 74
-     0
- 77
-     1
- 78
-     8
-140
-2.5
-141
-2.5
-143
-0.03937007874016
-147
-0.625
-171
-     3
-172
-     1
-271
-     2
-272
-     2
-274
-     3
-278
-    44
-283
-     0
-284
-     8
-340
-11
+108
   0
 DIMSTYLE
 105
@@ -1747,7 +1747,7 @@ ACAD_TABLESTYLE
   3
 ACDBHEADERROUNDTRIPXREC
 350
-13E
+2AD
   3
 AcDbVariableDictionary
 350
@@ -1755,7 +1755,7 @@ AcDbVariableDictionary
   3
 DWGPROPS
 350
-13D
+2AC
   0
 DICTIONARY
   5
@@ -1939,7 +1939,7 @@ Standard
   0
 DICTIONARY
   5
-13E
+2AD
 102
 {ACAD_REACTORS
 330
@@ -1987,7 +1987,7 @@ E4
   0
 XRECORD
   5
-13D
+2AC
 102
 {ACAD_REACTORS
 330
@@ -2037,11 +2037,11 @@ Autodesk
 309
 =
  40
-0.0106253472222222
+0.0121102546296296
  41
 2455008.558453229
  42
-2455679.005913982
+2455694.624051458
   1
 
  90
@@ -2105,7 +2105,7 @@ D3
 102
 {ACAD_XDICTIONARY
 360
-141
+2B0
 102
 }
 102
@@ -2237,7 +2237,7 @@ D7
 102
 {ACAD_XDICTIONARY
 360
-143
+2B2
 102
 }
 102
@@ -2369,7 +2369,7 @@ LAYOUT
 102
 {ACAD_XDICTIONARY
 360
-13F
+2AE
 102
 }
 102
@@ -2805,7 +2805,7 @@ DictionaryVariables
   0
 DICTIONARY
   5
-141
+2B0
 330
 D3
 100
@@ -2817,11 +2817,11 @@ AcDbDictionary
   3
 ACAD_XREC_ROUNDTRIP
 360
-142
+2B1
   0
 DICTIONARY
   5
-143
+2B2
 330
 D7
 100
@@ -2833,11 +2833,11 @@ AcDbDictionary
   3
 ACAD_XREC_ROUNDTRIP
 360
-144
+2B3
   0
 DICTIONARY
   5
-13F
+2AE
 330
 22
 100
@@ -2849,19 +2849,19 @@ AcDbDictionary
   3
 ACAD_XREC_ROUNDTRIP
 360
-140
+2AF
   0
 XRECORD
   5
-142
+2B1
 102
 {ACAD_REACTORS
 330
-141
+2B0
 102
 }
 330
-141
+2B0
 100
 AcDbXrecord
 280
@@ -2881,15 +2881,15 @@ SHADEPLOTCUSTOMDPI
   0
 XRECORD
   5
-144
+2B3
 102
 {ACAD_REACTORS
 330
-143
+2B2
 102
 }
 330
-143
+2B2
 100
 AcDbXrecord
 280
@@ -2909,15 +2909,15 @@ SHADEPLOTCUSTOMDPI
   0
 XRECORD
   5
-140
+2AF
 102
 {ACAD_REACTORS
 330
-13F
+2AE
 102
 }
 330
-13F
+2AE
 100
 AcDbXrecord
 280

@@ -101,9 +101,20 @@ begin
       result := p^.arr[i].nev;
       exit;
     end;
+  result := -1;
+end;
+function getnevhandleWithNil(p: pdxfhandlerecopenarray; old: ptruint): GDBPlatformint;
+var
+  i: GDBInteger;
+begin
+  for i := 0 to p^.count - 1 do
+    if p^.arr[i].old = old then
+    begin
+      result := p^.arr[i].nev;
+      exit;
+    end;
   result := 0;
 end;
-
 function getoldhandle(p: pdxfhandlerecopenarray; nev: GDBLongword): GDBLongword;
 var
   i: GDBInteger;
@@ -114,7 +125,7 @@ begin
       result := p^.arr[i].old;
       exit;
     end;
-  result := 0;
+  result := -1;
 end;
 function entname2GDBID(name:GDBString):GDBInteger;
 var i:GDBInteger;
@@ -249,7 +260,7 @@ begin
                                      if PGDBObjEntity(pobj).PExtAttrib.Handle>200 then
                                                                                       pushhandle(phandlearray,PGDBObjEntity(pobj).PExtAttrib.Handle,GDBPlatformint(pobj));
                                      if PGDBObjEntity(pobj).PExtAttrib.OwnerHandle>200 then
-                                                                                      newowner:=pointer(getnevhandle(phandlearray,PGDBObjEntity(pobj).PExtAttrib.OwnerHandle));
+                                                                                      newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj).PExtAttrib.OwnerHandle));
                                      if PGDBObjEntity(pobj).PExtAttrib.OwnerHandle=h_trash then
                                                                                       trash:=true;
 
@@ -292,7 +303,7 @@ begin
                                 if PGDBObjEntity(pobj).PExtAttrib<>nil then
                                 begin
                                      if PGDBObjEntity(pobj).PExtAttrib.OwnerHandle>200 then
-                                                                                      newowner:=pointer(getnevhandle(phandlearray,PGDBObjEntity(pobj).PExtAttrib.OwnerHandle));
+                                                                                      newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj).PExtAttrib.OwnerHandle));
                                 end;
                                 if newowner<>nil then
                                 begin
@@ -301,6 +312,8 @@ begin
                                      if PGDBObjEntity(pobj).PExtAttrib.Handle>200 then
                                                                                       pushhandle(phandlearray,PGDBObjEntity(pobj).PExtAttrib.Handle,GDBPlatformint(postobj));
                                 end;
+                                if newowner=pointer($ffffffff) then
+                                                           newowner:=newowner;
                                 if newowner<>owner then
                                 begin
                                      m4:=PGDBObjEntity(newowner)^.getmatrix^;
@@ -774,7 +787,7 @@ var
   outstream: {GDBInteger}GDBOpenArrayOfByte;
   groups, values: GDBString;
   groupi, valuei, intable,attr: GDBInteger;
-  handle,plottablefansdle,i{,cod}: GDBInteger;
+  handle,lasthandle,plottablefansdle,standartstylehandle,i{,cod}: GDBInteger;
   phandlea: pdxfhandlerecopenarray;
   inlayertable, inblocksec, inblocktable: GDBBoolean;
   handlepos:integer;
@@ -782,6 +795,7 @@ var
   instyletable:boolean;
   olddwg:ptdrawing;
 begin
+  standartstylehandle:=0;
   olddwg:=gdb.GetCurrentDWG;
   gdb.SetCurrentDWG(pdrawing);
   //--------------------------outstream := FileCreate(name);
@@ -790,6 +804,7 @@ begin
   begin
   MainFormN.StartLongProcess(pdrawing^.pObjRoot^.ObjArray.Count);
   phandlea := dxfhandlearraycreate(10000);
+  pushhandle(phandlea,0,0);
   templatefile.InitFromFile(sysparam.programpath + 'components/empty.dxf');
   handle := $2;
   inlayertable := false;
@@ -815,37 +830,56 @@ begin
       //WriteString_EOL(outstream, '5');
       handlepos:=outstream.Count;
       //handlepos:=FileSeek(outstream,0,1);
-      outstream.TXTAddGDBStringEOL('FUCK OFF');
+      outstream.TXTAddGDBStringEOL('FUCK OFF!');
       //WriteString_EOL(outstream, 'FUCK OFF');
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
       handle := strtoint('$' + values);
     end
     else
-      if (groupi = 5) or (groupi = 320) or (groupi = 330) or (groupi = 340) or (groupi = 350) or (groupi = 1005) or (groupi = 390) or (groupi = 360) or (groupi = 105) then
+      if (groupi = 5)
+      or (groupi = 320)
+      or (groupi = 330)
+      or (groupi = 340)
+      or (groupi = 350)
+      or (groupi = 1005)
+      or (groupi = 390)
+      or (groupi = 360)
+      or (groupi = 105) then
       begin
         valuei := strtoint('$' + values);
                           {if valuei<>0 then
                                        begin}
-        intable := {getnevhandle(phandlea, valuei)}valuei;
-        if {intable <> 0}true then
+        if valuei=0 then
+                        valuei:=0;
+        if inlayertable and (groupi=390) then
+                                             plottablefansdle:={handle-1}intable;  {поймать плоттабле}
+
+        intable := {}getnevhandle(phandlea, valuei){}{valuei};
+        if {}intable <>-1{}{true} then
         begin
+          if not ignoredsource then
+          begin
           outstream.TXTAddGDBStringEOL(groups);
-          //WriteString_EOL(outstream, groups);
           outstream.TXTAddGDBStringEOL(inttohex(intable, 0));
-          //WriteString_EOL(outstream, inttohex(intable, 0));
+          end;
+          lasthandle:=intable;
         end
         else
         begin
           pushhandle(phandlea, valuei, handle);
+          if not ignoredsource then
+          begin
           outstream.TXTAddGDBStringEOL(groups);
-          //WriteString_EOL(outstream, groups);
           outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
-          //WriteString_EOL(outstream, inttohex(handle, 0));
+          end;
+          lasthandle:=handle;
           inc(handle);
         end;
         if inlayertable and (groupi=390) then
-                                             plottablefansdle:={handle-1}intable;  {поймать плоттабле}
+                                             plottablefansdle:=lasthandle;  {поймать плоттабле}
+        if instyletable and (groupi=5) then
+                                             standartstylehandle:=lasthandle;{intable;}  {поймать standart}
       end
       else
         if (groupi = 2) and (values = 'ENTITIES') then
@@ -1020,8 +1054,14 @@ begin
                     outstream.TXTAddGDBStringEOL('0');
                     outstream.TXTAddGDBStringEOL('STYLE');
                     outstream.TXTAddGDBStringEOL('5');
+                    if uppercase(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.name)<>'STANDARD' then
+                    begin
                     outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                     inc(handle);
+                    end
+                    else
+                        outstream.TXTAddGDBStringEOL(inttohex(standartstylehandle, 0));
+
                     outstream.TXTAddGDBStringEOL('100');
                     outstream.TXTAddGDBStringEOL('AcDbSymbolTableRecord');
                     outstream.TXTAddGDBStringEOL('100');
@@ -1107,7 +1147,7 @@ begin
 
   i:=outstream.Count;
   outstream.Count:=handlepos;
-  outstream.TXTAddGDBStringEOL(inttohex(handle+1,8));
+  outstream.TXTAddGDBStringEOL(inttohex(handle+$100000000,9){'100000013'});
   outstream.Count:=i;
 
   //-------------FileSeek(outstream,handlepos,0);

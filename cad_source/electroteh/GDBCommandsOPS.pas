@@ -507,7 +507,7 @@ end;}
 function OPS_Sensor_Mark_com(Operands:pansichar):GDBInteger;
 var //i: GDBInteger;
     pcabledesk:PTCableDesctiptor;
-    ir,ir_inNodeArray:itrec;
+    ir,ir2,ir_inNodeArray:itrec;
     pvd:pvardesk;
     defaultunit:TUnit;
     currentunit:PTUnit;
@@ -555,19 +555,14 @@ begin
                                  cablemetric:='';
                             end;
 
-             currentunit:=Umanager.beginiterate(ir);
+             currentunit:=Umanager.beginiterate(ir2);
              if currentunit<>nil then
              repeat
              pvd:=currentunit.FindVariable('CDC_temp');
              pgdbinteger(pvd.data.Instance)^:=0;
              pvd:=currentunit.FindVariable('CDSC_temp');
              pgdbinteger(pvd.data.Instance)^:=0;
-             SaveCabUName:=pcabledesk.StartSegment.ou.Name;
-             pcabledesk.StartSegment.ou.Name:='Cable';
-             p:=@pcabledesk.StartSegment.ou;
-             currentunit.InterfaceUses.addnodouble(@p);
-             ucount:=currentunit.InterfaceUses.Count;
-             currentunit:=Umanager.iterate(ir);
+             currentunit:=Umanager.iterate(ir2);
              until currentunit=nil;
              currentunit:=nil;
 
@@ -603,6 +598,13 @@ begin
                         if devicemetric=cablemetric then
                     begin
                          currentunit:=GetNumUnit(numingroupmetric);
+
+                         SaveCabUName:=pcabledesk.StartSegment.ou.Name;
+                         pcabledesk.StartSegment.ou.Name:='Cable';
+                         p:=@pcabledesk.StartSegment.ou;
+                         currentunit.InterfaceUses.addnodouble(@p);
+                         ucount:=currentunit.InterfaceUses.Count;
+
                          SaveEntUName:=ptn^.bp.ListPos.Owner.ou.Name;
                          ptn^.bp.ListPos.Owner.ou.Name:='Entity';
                          p:=@ptn^.bp.ListPos.Owner.ou;
@@ -610,9 +612,10 @@ begin
 
                          units.loadunit(expandpath('*rtl\objcalc\opsmark.pas'),(currentunit));
 
-                         dec(currentunit.InterfaceUses.Count);
+                         dec(currentunit.InterfaceUses.Count,2);
 
                          ptn^.bp.ListPos.Owner.ou.Name:=SaveEntUName;
+                         pcabledesk.StartSegment.ou.Name:=SaveCabUName;
 
                          ptn^.bp.ListPos.Owner^.Format;
                     end;
@@ -624,7 +627,7 @@ begin
 
 
 
-
+             if currentunit<>nil then
              currentunit.InterfaceUses.Count:=ucount-1;
         end;
   pcabledesk.StartSegment.ou.Name:=SaveCabUName;

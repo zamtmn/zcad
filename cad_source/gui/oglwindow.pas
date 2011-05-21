@@ -265,7 +265,9 @@ begin
      //dc:=GetDeviceContext(thdc);
      beforeinit;
      self.Cursor:=crNone;
+     programlog.logoutstr('self.Cursor:=crNone;',0);
      OTTimer:=TTimer.create(self);
+     programlog.logoutstr('OTTimer:=TTimer.create(self);',0);
      {OMMTimer:=TTimer.create(self);
      OMMTimer.Interval:=10;
      OMMTimer.OnTimer:=runonmousemove;

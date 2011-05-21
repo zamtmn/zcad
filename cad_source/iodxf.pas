@@ -213,6 +213,13 @@ begin
                   pobj.ou.setvardesc(vd,'GC_HDShortNameTemplate','Шаблон короткого имени головного устройства','GDBString');
                   pobj.ou.InterfaceVariables.createvariable(vd.name,vd);
              end;
+             if pobj.ou.FindVariable('GC_Metric')<>nil then
+             if pobj.ou.FindVariable('GC_InGroup_Metric')=nil then
+             begin
+                  pobj.ou.setvardesc(vd,'GC_InGroup_Metric','Метрика нумерации в группе','GDBString');
+                  pobj.ou.InterfaceVariables.createvariable(vd.name,vd);
+             end;
+
 
         end;
 end;

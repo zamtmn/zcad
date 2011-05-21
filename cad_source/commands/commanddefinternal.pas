@@ -125,6 +125,8 @@ begin
   if not overlay then
                      begin
                           gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+                          gdb.GetCurrentDWG.ConstructObjRoot.ObjCasheArray.Clear;
+                          gdb.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
                           gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
                      end;
   gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
@@ -149,6 +151,8 @@ begin
   gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   gdb.GetCurrentDWG.OGLwindow1.Clear0Ontrackpoint;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+  gdb.GetCurrentDWG.ConstructObjRoot.ObjCasheArray.Clear;
+  gdb.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
   gdb.GetCurrentDWG.OGLwindow1.SetMouseMode(savemousemode);
   sysvar.dwg.DWG_OSMode^ := saveosmode;

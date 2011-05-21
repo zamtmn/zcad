@@ -25,13 +25,13 @@ begin
   VIEW_ObjInspV:=307;
   VIEW_ObjInspSubV:=141;
   PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File1:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File2:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File3:='D:\план 3-6 эт ПС crash.dxf';
-  PATH_File4:='J:\nh\ЗВЕЗДИНА\Котельная КС2 вторая\agsv.dxf';
-  PATH_File5:='J:\nh\ЗВЕЗДИНА\Котельная КС2\agsv.dxf';
-  PATH_File6:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File7:='/mnt/win_c/zcad/cad/autosave/autosave.dxf';
-  PATH_File8:='D:\ar2.dxf';
-  PATH_File9:='J:\nh\СибИНКор\лесокомплекс\03_09П-АПТ.dxf';
+  PATH_File1:='D:\123 ar2.dxf';
+  PATH_File2:='D:\ar2.dxf';
+  PATH_File3:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File4:='D:\Рабочая\Ветошкин\2011\Мытная_13 Английский дом_ПС жилье 2 очередь\ops.dxf';
+  PATH_File5:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File6:='D:\план 3-6 эт ПС crash.dxf';
+  PATH_File7:='J:\nh\ЗВЕЗДИНА\Котельная КС2 вторая\agsv.dxf';
+  PATH_File8:='J:\nh\ЗВЕЗДИНА\Котельная КС2\agsv.dxf';
+  PATH_File9:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
 end.

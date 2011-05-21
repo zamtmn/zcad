@@ -614,12 +614,18 @@ begin
      {gdb.GetCurrentDWG.OGLwindow1}oglwnd.Parent:=myts;
      {gdb.GetCurrentDWG.OGLwindow1}oglwnd.init;{переделать из инита нужно убрать обнуление pdwg}
      {gdb.GetCurrentDWG.OGLwindow1}oglwnd.PDWG:=ptd;
+     programlog.logoutstr('oglwnd.PDWG:=ptd;',0);
      oglwnd._onresize(nil);
+     programlog.logoutstr('oglwnd._onresize(nil);',0);
      oglwnd.MakeCurrent(false);
+     programlog.logoutstr('oglwnd.MakeCurrent(false);',0);
      isOpenGLError;
+     programlog.logoutstr('isOpenGLError;',0);
      //oglwnd.DoubleBuffered:=false;
      oglwnd.show;
+     programlog.logoutstr('oglwnd.show;',0);
      isOpenGLError;
+     programlog.logoutstr('isOpenGLError;',0);
      //oglwnd.Repaint;
      //gdb.GetCurrentDWG.OGLwindow1.initxywh('oglwnd',tf,200,72,768,596,false);
 
@@ -632,8 +638,11 @@ begin
      //addfromdxf(sysvar.path.Program_Run^+'blocks\el\general\_nok.dxf',@gdb.GetCurrentDWG.ObjRoot);
 
      MainFormN.PageControl.ActivePage:=myts;
+     programlog.logoutstr('MainFormN.PageControl.ActivePage:=myts;',0);
      sharedgdb.updatevisible;
+     programlog.logoutstr('sharedgdb.updatevisible;',0);
      operands:=operands;
+     programlog.logoutstr('operands:=operands;???????????????',0);
      if not fileexists(operands) then
      begin
      tn:=expandpath(sysvar.PATH.Template_Path^)+sysvar.PATH.Template_File^;
@@ -644,8 +653,11 @@ begin
      end;
      //redrawoglwnd;
      result:=cmd_ok;
+     programlog.logoutstr('result:=cmd_ok;',0);
      application.ProcessMessages;
+     programlog.logoutstr(' application.ProcessMessages;',0);
      oglwnd._onresize(nil);
+     programlog.logoutstr('oglwnd._onresize(nil);',0);
 end;
 function DeSelectAll_com(Operands:pansichar):GDBInteger;
 begin
@@ -727,7 +739,9 @@ begin
           newdwg_com(@s[1]);
           //if operands<>'QS' then
                                 gdb.GetCurrentDWG.FileName:=s;
+          programlog.logoutstr('gdb.GetCurrentDWG.FileName:=s;',0);
           load_merge(@s[1],tloload);
+          programlog.logoutstr('load_merge(@s[1],tloload);',0);
           MainFormN.processfilehistory(s);
      end
                else

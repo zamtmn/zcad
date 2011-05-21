@@ -86,7 +86,9 @@ type
                     iconlist: TImageList;
 
                     procedure LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-  State: TOwnerDrawState);
+                                               State: TOwnerDrawState);
+                    procedure LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+                                               State: TOwnerDrawState);
                     function findtoolbatdesk(tbn:string):string;
                     procedure CreateToolbarFromDesk(tb:TToolBar;tbdesk:string);
                     procedure CreateHTPB(tb:TToolBar);
@@ -872,6 +874,30 @@ begin
     DrawText(LayerBox.canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
 end;
 
+procedure TMainFormN.LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+  State: TOwnerDrawState);
+var
+   plp:PGDBLayerProp;
+   Dest: PChar;
+   y:integer;
+const
+     ll=30;
+begin
+    s:=LinewBox.Items[index];
+    ARect.Left:=ARect.Left+2;
+    if (index>2)and(index<LinewBox.Items.Count-1) then
+     begin
+          y:=(index-3);
+          if y>10 then
+                                               y:=10;
+          LinewBox.canvas.Pen.Width:=y;//div 10;
+          y:=(ARect.Top+ARect.Bottom)div 2;
+          LinewBox.canvas.Line(ARect.Left,y,ARect.Left+ll,y);
+          ARect.Left:=ARect.Left+ll+5;
+     end;
+    DrawText(LinewBox.canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
+end;
+
 procedure TMainFormN.CreateToolbarFromDesk(tb:TToolBar;tbdesk:string);
 var
     f:GDBOpenArrayOfByte;
@@ -986,6 +1012,8 @@ begin
                           if assigned(LineWBox) then
                                                     shared.ShowError(format(ES_ReCreating,['LINEWCOMBOBOX']));
                           LineWBox:=TComboBox.Create(tb);
+                          LineWBox.Style:=csOwnerDrawFixed;
+                          LineWBox.OnDrawItem:=LineWBoxDrawItem;
                           if code=0 then
                                         LineWBox.Width:=w;
                           if ts<>''then

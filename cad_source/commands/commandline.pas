@@ -21,6 +21,11 @@ unit commandline;
 interface
 uses umytreenode,sysinfo,strproc,UGDBOpenArrayOfPointer,UDMenuWnd,gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
      memman,shared,log;
+resourcestring
+S_RunCommand='Running command';
+S_UnknownCommand='Unknown command';
+S_CommandNRInC='Command can not run';
+
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;
@@ -247,7 +252,7 @@ begin
           if silent then
                         programlog.logoutstr('GDBCommandManager.ExecuteCommandSilent('+pfoundcommand^.CommandName+');',0)
                     else
-                        historyoutstr('Запущена команда('+pfoundcommand^.CommandName+');');
+                        historyoutstr(S_RunCommand+':'+pfoundcommand^.CommandName);
 
           run(pfoundcommand,operands);
           if pcommandrunning<>nil then
@@ -256,11 +261,11 @@ begin
           end
      else
          begin
-              historyout('Команда не может быть запущена в данном контексте');
+              historyout(@S_CommandNRInC[1]);
          end;
     end;
   end
-  else historyout(GDBPointer('Неизвестная команда: "'+command+'"'));
+  else historyout(GDBPointer(S_UnknownCommand+':"'+command+'"'));
   end;
   command:='';
   operands:='';
@@ -270,7 +275,7 @@ begin
      if not busy then
                      result:=execute(comm,false)
                  else
-                     shared.ShowError('Команда не может быть выполнена. Идет выполнение сценария');
+                     shared.ShowError({'Команда не может быть выполнена. Идет выполнение сценария'}S_CommandNRInC);
 end;
 function GDBcommandmanager.executecommandsilent(const comm:pansichar): GDBInteger;
 begin

@@ -1165,7 +1165,7 @@ begin
                     end;
     pb := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID,gdb.GetCurrentROOT));
     //PGDBObjBlockInsert(pb)^.initnul;//(@gdb.GetCurrentDWG.ObjRoot,gdb.LayerTable.GetSystemLayer,0);
-    PGDBObjBlockInsert(pb)^.init(gdb.GetCurrentROOT,gdb.GetCurrentDWG.LayerTable.GetSystemLayer,0);
+    PGDBObjBlockInsert(pb)^.init(gdb.GetCurrentROOT,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,0);
     pb^.Name:=PGDBObjBlockdef(gdb.GetCurrentDWG.BlockDefArray.getelement(BIProp.Blocks.Selected))^.Name;//'DEVICE_NOC';
     pb^.vp.ID:=GDBBlockInsertID;
     pb^.Local.p_insert:=wc;
@@ -1211,7 +1211,7 @@ begin
     //pointer(pb) :=gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID,gdb.GetCurrentROOT);
     //pb := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.CreateObj(GDBBlockInsertID,@gdb.GetCurrentDWG.ObjRoot));
     //PGDBObjBlockInsert(pb)^.initnul;//(@gdb.GetCurrentDWG.ObjRoot,gdb.LayerTable.GetSystemLayer,0);
-    PGDBObjBlockInsert(pb)^.init(gdb.GetCurrentROOT,gdb.GetCurrentDWG.LayerTable.GetSystemLayer,0);
+    PGDBObjBlockInsert(pb)^.init(gdb.GetCurrentROOT,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,0);
     pb^.Name:=PGDBObjBlockdef(gdb.GetCurrentDWG.BlockDefArray.getelement(BIProp.Blocks.Selected))^.Name;//'NOC';//'TESTBLOCK';
     pb^.vp.ID:=GDBBlockInsertID;
     pb^.Local.p_insert:=wc;

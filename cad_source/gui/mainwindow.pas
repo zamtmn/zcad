@@ -907,6 +907,7 @@ var
     i:longint;
     y,xx,yy,w,code:GDBInteger;
     bmp:TBitmap;
+    te:tedit;
     action:tmyaction;
 begin
      if not assigned(tb.Images) then

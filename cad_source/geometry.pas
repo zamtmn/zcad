@@ -87,7 +87,7 @@ function Vertexangle(const Vector1, Vector2: GDBVertex2d): GDBDouble;inline;
 function oneVertexlength(const Vector1: GDBVertex): GDBDouble;inline;
 function SqrOneVertexlength(const Vector1: GDBVertex): GDBDouble;inline;
 function vertexlen2df(const x1, y1, x2, y2: GDBFloat): GDBFloat;inline;
-function NormalizeVertex(const Vector1: GDBVertex): GDBVertex;inline;
+function NormalizeVertex(const Vector1: GDBVertex): GDBVertex;{inline;}
 function VertexMulOnSc(const Vector1:GDBVertex;sc:GDBDouble): GDBVertex;inline;
 function VertexAdd(const Vector1, Vector2: GDBVertex): GDBVertex;inline;
 function VertexSub(const Vector1, Vector2: GDBVertex): GDBVertex;inline;
@@ -1285,7 +1285,10 @@ begin
                       Result.Z := Vector1.z / len;
                  end
              else
+                 begin
                  LogError(ges_dbz);
+                 len:=len+2;
+                 end;
 end;
 function VertexMulOnSc(const Vector1:GDBVertex;sc:GDBDouble): GDBVertex;
 begin

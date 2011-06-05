@@ -1767,7 +1767,8 @@ begin
                     if ptn^.DevLink<>nil then
                     begin
                     CurrentObj:=pointer(ptn^.DevLink^.bp.ListPos.owner);
-                    CurrentObj^.select;
+                    if CurrentObj<>nil then
+                                           CurrentObj^.select;
                     end;
 
                     ptn:=PGDBObjCable(pv)^.NodePropArray.iterate(irnpa);

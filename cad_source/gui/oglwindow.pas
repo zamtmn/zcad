@@ -1611,6 +1611,9 @@ begin
 end;
 procedure TOGLWnd.GDBActivate;
 begin
+     PTDrawing(self.pdwg)^.DWGUnits.findunit('DrawingVars').AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
+     PTDrawing(self.pdwg)^.DWGUnits.findunit('DrawingVars').AssignToSymbol(SysVar.dwg.DWG_CLinew,'DWG_CLinew');
+
   //if PDWG<>gdb.GetCurrentDWG then
                                  begin
                                       gdb.SetCurrentDWG(self.pdwg);

@@ -89,6 +89,8 @@ TOSModeEditor=object(GDBaseObject)
    procedure CopyToClipboard;
    function quit_com(Operands:pansichar):GDBInteger;
    function Regen_com(Operands:pansichar):GDBInteger;
+resourcestring
+     s_unknownFileExt='Unknown file format "%s". Saving failed.';
 const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 //var DWGPageCxMenu:pzpopupmenu;
@@ -616,6 +618,7 @@ begin
      {gdb.GetCurrentDWG.OGLwindow1}oglwnd.PDWG:=ptd;
      programlog.logoutstr('oglwnd.PDWG:=ptd;',0);
      oglwnd._onresize(nil);
+     oglwnd.GDBActivate;
      programlog.logoutstr('oglwnd._onresize(nil);',0);
      oglwnd.MakeCurrent(false);
      programlog.logoutstr('oglwnd.MakeCurrent(false);',0);
@@ -842,7 +845,10 @@ begin
                                      filename:=ExtractFileName(s);
                                      mem.SaveToFile(s+'.dbpas');
                                      mem.done; *)
-                                end;
+                                end
+     else begin
+          shared.ShowError(Format(s_unknownFileExt, [fileext]));
+          end;
      end;
      result:=cmd_ok;
 end;

@@ -652,8 +652,9 @@ begin
      vp.ID:=GDBElLeaderID;
      MainLine.init(@self,vp.Layer,vp.LineWeight,geometry.VertexMulOnSc(onevertex,-10),nulvertex);
      //MainLine.Format;
-     tv:=geometry.vectordot(mainline.dir,Local.OZ);
-     tv:=geometry.NormalizeVertex(tv);
+     tv:=geometry.vectordot(geometry.VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin) ,Local.OZ);
+     if not IsVectorNul(tv) then
+                                tv:=geometry.NormalizeVertex(tv);
      MarkLine.init(@self,vp.Layer,vp.LineWeight,VertexSub(MainLine.CoordInOCS.lBegin,tv),VertexAdd(MainLine.CoordInOCS.lBegin,tv));
      //MarkLine.Format;
 

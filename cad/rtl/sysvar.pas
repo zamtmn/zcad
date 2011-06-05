@@ -5,8 +5,6 @@ var
   DWG_DrawMode:GDBInteger;
   DWG_OSMode:GDBInteger;
   DWG_PolarMode:GDBInteger;
-  DWG_CLayer:GDBInteger;
-  DWG_CLinew:GDBInteger;
   DWG_SystmGeometryDraw:GDBBoolean;
   DWG_HelpGeometryDraw:GDBBoolean;
   DWG_StepGrid:GDBvertex2D;
@@ -70,8 +68,6 @@ begin
   DWG_DrawMode:=0;
   DWG_OSMode:=14311;
   DWG_PolarMode:=1;
-  DWG_CLayer:=0;
-  DWG_CLinew:=-1;
   DWG_SystmGeometryDraw:=False;
   DWG_HelpGeometryDraw:=True;
   DWG_StepGrid.x:=0.5;

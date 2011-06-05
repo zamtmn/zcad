@@ -361,6 +361,18 @@ msgstr ""
 msgid "Expression %s return %s"
 msgstr ""
 
+#: commandline.s_commandnrinc
+msgid "Command can not run"
+msgstr ""
+
+#: commandline.s_runcommand
+msgid "Running command"
+msgstr ""
+
+#: commandline.s_unknowncommand
+msgid "Unknown command"
+msgstr ""
+
 #: GDBLineProp~lBegin
 msgid "Begin"
 msgstr ""

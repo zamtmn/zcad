@@ -192,7 +192,7 @@ begin
                                       //or (ppd^._bmode<>bmode)
                                                              then
                                                                  asm
-                                                                    int 3;
+                                                                    //int 3;
                                                                  end;
 
 

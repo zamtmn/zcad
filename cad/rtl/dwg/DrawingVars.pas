@@ -5,10 +5,17 @@ var
    camera:GDBObjCamera;
    DWGProps:TDWGProps;
 
+  DWG_CLayer:GDBInteger;
+  DWG_CLinew:GDBInteger;
+
    Developer:GDBString;
 
 implementation
 begin
+
+  DWG_CLayer:=0;
+  DWG_CLinew:=-1;
+
      camera.initnul;
      camera.fovy:=35.0;
      camera.prop.point.x:=0.0;

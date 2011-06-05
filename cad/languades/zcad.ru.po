@@ -362,6 +362,18 @@ msgstr "Команда"
 msgid "Expression %s return %s"
 msgstr "Выражение  %s возвращает %s"
 
+#: commandline.s_commandnrinc
+msgid "Command can not run"
+msgstr "Команда не может быть запущена"
+
+#: commandline.s_runcommand
+msgid "Running command"
+msgstr "Запущена команда"
+
+#: commandline.s_unknowncommand
+msgid "Unknown command"
+msgstr "Неизвестная команда"
+
 #: GDBLineProp~lBegin
 msgid "Begin"
 msgstr "Начало"

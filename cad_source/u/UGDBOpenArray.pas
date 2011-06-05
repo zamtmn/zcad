@@ -162,6 +162,13 @@ begin
      count:=index;
      if parray=nil then
                         createarray;
+     if count>=max then
+                       begin
+                            if count>2*max then
+                                               setsize(2*count)
+                                           else
+                                               setsize(2*max);
+                       end;
      result:=parray;
 end;
 function GDBOpenArray.CreateArray;

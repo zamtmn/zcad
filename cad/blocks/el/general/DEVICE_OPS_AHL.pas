@@ -1,4 +1,4 @@
-unit DEVICE_PS_ARK_DEVICE;
+unit DEVICE_OPS_AHL;
 interface
 uses system,devices;
 usescopy objname;
@@ -19,20 +19,20 @@ var
    EL_Cab_AddLength:GDBDouble;(*'Добавлять к длине кабеля'*)
 implementation
 begin
-   DB_link:='Прибор ОПС';
+   DB_link:='С2000-БИ';
 
-   BTY_TreeCoord:='PLAN_OPS_Прибор ОПС';
+   BTY_TreeCoord:='PLAN_OPS_Блок индикации';
    Device_Type:=TDT_PriborOPS;
    NMO_Template:='@@[NMO_BaseName]@@[NMO_Prefix]@@[NMO_Suffix]';
    EL_Cab_AddLength:=1;
 
    NMO_Prefix:='';
-   NMO_BaseName:='ARK';
+   NMO_BaseName:='AHL';
    NMO_Suffix:='??';
 
 
 
-   SerialConnection:=0;
+   SerialConnection:=1;
    GC_HDShortName:='??';
    GC_HeadDevice:='??';
    GC_HDGroup:=0;

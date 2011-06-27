@@ -12,7 +12,7 @@ var
    GC_HDShortName:GDBString;
    GC_HDGroup:GDBInteger;
    GC_NumberInGroup:GDBInteger;
-
+   GC_Metric:GDBString;
    SerialConnection:GDBInteger;
 
 
@@ -30,10 +30,10 @@ begin
    NMO_BaseName:='ARK';
    NMO_Suffix:='??';
 
-
-
    SerialConnection:=0;
    GC_HDShortName:='??';
    GC_HeadDevice:='??';
    GC_HDGroup:=0;
+   GC_NumberInGroup=0:
+   GC_Metric:='';
 end.

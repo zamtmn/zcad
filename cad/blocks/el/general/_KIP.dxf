@@ -25,19 +25,19 @@ $INSBASE
   9
 $EXTMIN
  10
-1.000000000000000E+20
+37227.5
  20
-1.000000000000000E+20
+34237.5
  30
-1.000000000000000E+20
+0.0
   9
 $EXTMAX
  10
--1.000000000000000E+20
+37249.65639140416
  20
--1.000000000000000E+20
+34244.5
  30
--1.000000000000000E+20
+0.0
   9
 $LIMMIN
  10
@@ -445,7 +445,7 @@ $SKPOLY
   9
 $TDCREATE
  40
-2452500.735102477
+2452500.651769144
   9
 $TDUCREATE
  40
@@ -453,19 +453,19 @@ $TDUCREATE
   9
 $TDUPDATE
  40
-2455293.899750972
+2455701.402892790
   9
 $TDUUPDATE
  40
-2455293.649750972
+2455701.236226123
   9
 $TDINDWG
  40
-1.5878774769
+1.6264851389
   9
 $TDUSRTIMER
  40
-1.5878521644
+1.6264560069
   9
 $USRTIMER
  70
@@ -505,7 +505,7 @@ $SPLINESEGS
   9
 $HANDSEED
   5
-D23
+113C
   9
 $SURFTAB1
  70
@@ -889,7 +889,7 @@ $FINGERPRINTGUID
   9
 $VERSIONGUID
   2
-{91A944C8-E5DC-44EB-954D-A8277CA81954}
+{F7864D67-45A1-4021-9539-4AD1016AD508}
   9
 $EXTNAMES
 290
@@ -1001,7 +1001,7 @@ AcDbEvalGraph
   3
 ObjectDBX Classes
  90
-    33921
+     1153
 280
      0
 281
@@ -1015,7 +1015,7 @@ AcAeEditorObj
   3
 AcAeEditorObj
  90
-    33792
+     1024
 280
      0
 281
@@ -1029,7 +1029,7 @@ AcDbDynamicBlockPurgePreventer
   3
 ObjectDBX Classes
  90
-    33921
+     1153
 280
      0
 281
@@ -1173,7 +1173,7 @@ AcDbSymbolTable
   0
 VPORT
   5
-CE0
+F28
 330
 CE
 100
@@ -1193,17 +1193,17 @@ AcDbViewportTableRecord
  21
 1.0
  12
-32086.01183356355
+37256.49038151176
  22
-35597.58860791087
+34241.88945312997
  13
 0.0
  23
 0.0
  14
-10.0
+0.5
  24
-10.0
+0.5
  15
 10.0
  25
@@ -1221,9 +1221,9 @@ AcDbViewportTableRecord
  37
 0.0
  40
-78.31272217872701
+104.6351636347244
  41
-1.138461538461538
+2.011264080100125
  42
 50.0
  43
@@ -1243,7 +1243,7 @@ AcDbViewportTableRecord
  74
      3
  75
-     0
+     1
  76
      0
  77
@@ -1289,7 +1289,7 @@ CB
 100
 AcDbSymbolTable
  70
-     1
+     2
   0
 LTYPE
   5
@@ -1375,7 +1375,7 @@ C8
 100
 AcDbSymbolTable
  70
-     7
+     8
   0
 LAYER
   5
@@ -1569,6 +1569,34 @@ CONTINUOUS
 390
 D5
   0
+LAYER
+  5
+10D4
+330
+C8
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+EL_DEVICE_BLUE
+ 70
+     0
+ 62
+     5
+  6
+CONTINUOUS
+370
+    40
+390
+D5
+1001
+AcAecLayerStandard
+1000
+
+1000
+
+  0
 ENDTAB
   0
 TABLE
@@ -1581,7 +1609,7 @@ C9
 100
 AcDbSymbolTable
  70
-     6
+     7
   0
 STYLE
   5
@@ -1748,6 +1776,34 @@ WeSchemeStyle02
 2.5
   3
 simplex.shx
+  4
+
+  0
+STYLE
+  5
+DDC
+330
+C9
+100
+AcDbSymbolTableRecord
+100
+AcDbTextStyleTableRecord
+  2
+DDDXI
+ 70
+     0
+ 40
+0.0
+ 41
+1.0
+ 50
+5.0
+ 71
+     0
+ 42
+2.5
+  3
+_mipgost.shx
   4
 
   0
@@ -2197,7 +2253,7 @@ D0
 100
 AcDbSymbolTable
  70
-     4
+     5
 100
 AcDbDimStyleTable
  71
@@ -2487,7 +2543,7 @@ C7
 100
 AcDbSymbolTable
  70
-    19
+    39
   0
 BLOCK_RECORD
   5
@@ -2600,6 +2656,22 @@ C3C
 C6A
 331
 C86
+331
+D9A
+331
+E85
+331
+EDA
+331
+F0C
+331
+FE5
+331
+1094
+331
+1114
+331
+1125
 102
 }
   0
@@ -3634,6 +3706,426 @@ C0C08000C0C0A000F0FBFF00A4A0A000808080000000FF0000FF000000FFFF00FF000000FF00FF00
 AcDbDynamicBlockGUID
 1000
 {7D2D7DAF-5B1C-4BA4-B381-3F28D9E71402}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        6
+  0
+BLOCK_RECORD
+  5
+D36
+102
+{ACAD_XDICTIONARY
+360
+DA0
+102
+}
+330
+C7
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+DEVICE_KIP_KOROBKA
+340
+0
+1001
+AcDbDynamicBlockGUID
+1000
+{8B4E28E8-7CFA-4098-9E0B-9FD66CABA2FE}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        5
+  0
+BLOCK_RECORD
+  5
+D65
+102
+{ACAD_XDICTIONARY
+360
+D71
+102
+}
+330
+C7
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+KIP_KOROBKA
+340
+0
+1001
+AcDbDynamicBlockGUID
+1000
+{5539E05F-FB35-49D5-905A-45889841B8AF}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       23
+  0
+BLOCK_RECORD
+  5
+DCE
+102
+{ACAD_XDICTIONARY
+360
+E78
+102
+}
+330
+C7
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+KIP_KDU
+340
+0
+1001
+AcDbDynamicBlockGUID
+1000
+{B91250AA-AB80-4942-9F30-2C9CF0801F76}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       27
+  0
+BLOCK_RECORD
+  5
+E2A
+102
+{ACAD_XDICTIONARY
+360
+E8B
+102
+}
+330
+C7
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+DEVICE_KIP_KDU
+340
+0
+1001
+AcDbDynamicBlockGUID
+1000
+{F1D4AAFD-922C-43A7-99AA-548ECDAF2553}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        6
+  0
+BLOCK_RECORD
+  5
+EA2
+102
+{ACAD_XDICTIONARY
+360
+EB1
+102
+}
+330
+C7
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+KIP_OZK
+340
+0
+1001
+AcDbDynamicBlockGUID
+1000
+{76A3C5B9-9E05-4396-9A56-2B7090D424F6}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       27
+  0
+BLOCK_RECORD
+  5
+ED3
+102
+{ACAD_XDICTIONARY
+360
+EE0
+102
+}
+330
+C7
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+DEVICE_KIP_OZK
+340
+0
+1001
+AcDbDynamicBlockGUID
+1000
+{2AE36601-23CD-4859-A9EB-3F72EAE3BB37}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        6
+  0
+BLOCK_RECORD
+  5
+EF5
+102
+{ACAD_XDICTIONARY
+360
+F40
+102
+}
+330
+C7
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+KIP_KPV
+340
+0
+1001
+AcDbDynamicBlockGUID
+1000
+{28AC367D-1294-46AC-A088-E9BDD33D13D6}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       27
+  0
+BLOCK_RECORD
+  5
+F17
+102
+{ACAD_XDICTIONARY
+360
+F12
+102
+}
+330
+C7
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+DEVICE_KIP_KPV
+340
+0
+1001
+AcDbDynamicBlockGUID
+1000
+{8596EBFF-8622-4F82-B985-0E3450D2E912}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        6
+  0
+BLOCK_RECORD
+  5
+F77
+102
+{ACAD_XDICTIONARY
+360
+FDD
+102
+}
+330
+C7
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+KIP_KNOPKA_PKE
+340
+0
+1001
+AcDbDynamicBlockGUID
+1000
+{9FDA3A25-2785-49DC-B592-7CFDBB9BB7C2}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       23
+  0
+BLOCK_RECORD
+  5
+F9B
+102
+{ACAD_XDICTIONARY
+360
+FEB
+102
+}
+330
+C7
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+DEVICE_KIP_KNOPKA_PKE
+340
+0
+1001
+AcDbDynamicBlockGUID
+1000
+{11A26FFE-CF03-4B53-86AD-D593A17F0419}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        5
+  0
+BLOCK_RECORD
+  5
+101A
+102
+{ACAD_XDICTIONARY
+360
+10E4
+102
+}
+330
+C7
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+KIP_SPZH
+340
+0
+1001
+AcDbDynamicBlockGUID
+1000
+{231EECC8-6FB9-4342-BB1A-37F61A34F795}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       31
+  0
+BLOCK_RECORD
+  5
+1037
+102
+{ACAD_XDICTIONARY
+360
+109A
+102
+}
+330
+C7
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+DEVICE_KIP_SPZH
+340
+0
+1001
+AcDbDynamicBlockGUID
+1000
+{49B5F679-953D-44A2-9281-9A6A32741CA4}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        6
+  0
+BLOCK_RECORD
+  5
+10F8
+102
+{ACAD_XDICTIONARY
+360
+1107
+102
+}
+330
+C7
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+KIP_VALVE
+340
+0
+1001
+AcDbDynamicBlockGUID
+1000
+{52EFD096-76B6-45CE-9F20-9F5522D38ADA}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       31
+  0
+BLOCK_RECORD
+  5
+111E
+102
+{ACAD_XDICTIONARY
+360
+112B
+102
+}
+330
+C7
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+DEVICE_KIP_VALVE
+340
+0
+1001
+AcDbDynamicBlockGUID
+1000
+{FE48172D-6D35-4501-B035-4E16092B833A}
 1001
 AcDbBlockRepETag
 1070
@@ -5719,7 +6211,7 @@ AcDbLine
  30
 0.0
  11
--1.060660171779815
+-1.060660171779814
  21
 -0.3535533905932737
  31
@@ -5747,7 +6239,7 @@ EL_DEVICE
 100
 AcDbLine
  10
-1.060660171779815
+1.060660171779814
  20
 0.3535533905932737
  30
@@ -7195,6 +7687,3932 @@ DSTP_XDATA
 1002
 }
   0
+BLOCK
+  5
+D37
+330
+D36
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockBegin
+  2
+DEVICE_KIP_KOROBKA
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+DEVICE_KIP_KOROBKA
+  1
+
+  0
+INSERT
+  5
+D9A
+330
+D36
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockReference
+  2
+DEVICE_CONNECTOR_SQUARE
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 41
+1.199999999999999
+ 42
+1.199999999999999
+ 43
+1.199999999999999
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        0
+1005
+D9A
+  0
+LINE
+  5
+D9B
+330
+D36
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-1.5
+ 20
+-1.5
+ 30
+0.0
+ 11
+-1.5
+ 21
+1.5
+ 31
+0.0
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        1
+1005
+D9B
+  0
+LINE
+  5
+D9C
+330
+D36
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+1.5
+ 20
+-1.5
+ 30
+0.0
+ 11
+1.5
+ 21
+1.5
+ 31
+0.0
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        2
+1005
+D9C
+  0
+LINE
+  5
+D9D
+330
+D36
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-1.5
+ 20
+1.5
+ 30
+0.0
+ 11
+1.5
+ 21
+1.5
+ 31
+0.0
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        3
+1005
+D9D
+  0
+LINE
+  5
+D9E
+330
+D36
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-1.5
+ 20
+-1.5
+ 30
+0.0
+ 11
+1.5
+ 21
+-1.5
+ 31
+0.0
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        4
+1005
+D9E
+  0
+TEXT
+  5
+D9F
+330
+D36
+100
+AcDbEntity
+  8
+EL_DEVICE_NAME
+100
+AcDbText
+ 10
+-6.125
+ 20
+2.25
+ 30
+0.0
+ 40
+2.5
+  1
+@@[Name]
+ 41
+0.7
+ 51
+12.0
+  7
+R2_5
+ 72
+     1
+ 11
+0.0
+ 21
+2.25
+ 31
+0.0
+100
+AcDbText
+1001
+ACAD
+1000
+MTEXTBEGIN
+1070
+    73
+1070
+     1
+1070
+    44
+1040
+1.0
+1070
+    74
+1070
+     0
+1000
+MTEXTEND
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        6
+1005
+D9F
+  0
+ENDBLK
+  5
+D38
+330
+D36
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+D66
+330
+D65
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockBegin
+  2
+KIP_KOROBKA
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+KIP_KOROBKA
+  1
+
+  0
+LINE
+  5
+D6C
+330
+D65
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+1.499999999999993
+ 20
+1.499999999999995
+ 30
+0.0
+ 11
+1.499999999999993
+ 21
+-1.499999999999995
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        1
+1005
+D6C
+  0
+LINE
+  5
+D6D
+330
+D65
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+-1.5
+ 20
+-1.499999999999995
+ 30
+0.0
+ 11
+1.499999999999993
+ 21
+-1.499999999999995
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        2
+1005
+D6D
+  0
+LINE
+  5
+D6E
+330
+D65
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+1.499999999999995
+ 20
+1.499999999999995
+ 30
+0.0
+ 11
+-1.499999999999995
+ 21
+1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       20
+1005
+D6E
+  0
+LINE
+  5
+D6F
+330
+D65
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+-1.5
+ 20
+-1.499999999999995
+ 30
+0.0
+ 11
+-1.499999999999995
+ 21
+1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       21
+1005
+D6F
+  0
+ENDBLK
+  5
+D67
+330
+D65
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+DCF
+330
+DCE
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockBegin
+  2
+KIP_KDU
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+KIP_KDU
+  1
+
+  0
+LINE
+  5
+E70
+330
+DCE
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+-4.0
+ 20
+2.0
+ 30
+0.0
+ 11
+4.0
+ 21
+2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        0
+1005
+E70
+  0
+LINE
+  5
+E71
+330
+DCE
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+4.0
+ 20
+2.0
+ 30
+0.0
+ 11
+4.0
+ 21
+-2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        1
+1005
+E71
+  0
+LINE
+  5
+E72
+330
+DCE
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+4.0
+ 20
+-2.0
+ 30
+0.0
+ 11
+-4.0
+ 21
+-1.999999999999999
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        2
+1005
+E72
+  0
+LINE
+  5
+E73
+330
+DCE
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+-4.0
+ 20
+-2.0
+ 30
+0.0
+ 11
+-4.0
+ 21
+2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        3
+1005
+E73
+  0
+LINE
+  5
+E74
+330
+DCE
+100
+AcDbEntity
+  8
+EL_DEVICE
+  6
+Continuous
+370
+    30
+100
+AcDbLine
+ 10
+-0.5618488567892996
+ 20
+1.280297972750001
+ 30
+0.0
+ 11
+-3.027958797329926
+ 21
+-1.18581196779053
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       23
+1005
+E74
+  0
+CIRCLE
+  5
+E75
+330
+DCE
+100
+AcDbEntity
+  8
+EL_DEVICE
+  6
+Continuous
+370
+     0
+100
+AcDbCircle
+ 10
+-1.797395439200484
+ 20
+0.0447513903387247
+ 30
+0.0
+ 40
+0.7586552567598118
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       24
+1005
+E75
+  0
+TEXT
+  5
+E76
+330
+DCE
+100
+AcDbEntity
+  8
+EL_DEVICE
+  6
+Continuous
+370
+    30
+100
+AcDbText
+ 10
+0.1090875566455992
+ 20
+-1.020835341443264
+ 30
+0.0
+ 40
+2.5
+  1
+дс
+ 50
+0.0001929119895993
+ 41
+0.9
+ 51
+5.0
+  7
+R2_5
+100
+AcDbText
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       25
+1005
+E76
+  0
+LWPOLYLINE
+  5
+E77
+330
+DCE
+100
+AcDbEntity
+  8
+EL_DEVICE
+ 48
+100.0
+100
+AcDbPolyline
+ 90
+        2
+ 70
+     1
+ 43
+0.8
+ 10
+-2.200609510579111
+ 20
+0.04211598578419
+ 42
+1.0
+ 10
+-1.40060951057911
+ 20
+0.04211598578419
+ 42
+1.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       26
+1005
+E77
+  0
+ENDBLK
+  5
+DD0
+330
+DCE
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+E2B
+330
+E2A
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockBegin
+  2
+DEVICE_KIP_KDU
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+DEVICE_KIP_KDU
+  1
+
+  0
+INSERT
+  5
+E85
+330
+E2A
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockReference
+  2
+DEVICE_CONNECTOR_SQUARE
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 41
+1.199999999999999
+ 42
+1.199999999999999
+ 43
+1.199999999999999
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        0
+1005
+E85
+  0
+TEXT
+  5
+E86
+330
+E2A
+100
+AcDbEntity
+  8
+EL_DEVICE_NAME
+100
+AcDbText
+ 10
+-6.032776677706735
+ 20
+3.134874580874758
+ 30
+0.0
+ 40
+2.5
+  1
+@@[Name]
+ 41
+0.7
+ 51
+12.0
+  7
+R2_5
+ 72
+     1
+ 11
+0.0922233222932647
+ 21
+3.134874580874758
+ 31
+0.0
+100
+AcDbText
+1001
+ACAD
+1000
+MTEXTBEGIN
+1070
+    73
+1070
+     1
+1070
+    44
+1040
+1.0
+1070
+    74
+1070
+     0
+1000
+MTEXTEND
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        6
+1005
+E86
+  0
+LINE
+  5
+E87
+330
+E2A
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-4.0
+ 20
+2.0
+ 30
+0.0
+ 11
+4.0
+ 21
+2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        5
+1005
+E87
+  0
+LINE
+  5
+E88
+330
+E2A
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+4.0
+ 20
+2.0
+ 30
+0.0
+ 11
+4.0
+ 21
+-2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        1
+1005
+E88
+  0
+LINE
+  5
+E89
+330
+E2A
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+4.0
+ 20
+-2.0
+ 30
+0.0
+ 11
+-4.0
+ 21
+-1.999999999999999
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        2
+1005
+E89
+  0
+LINE
+  5
+E8A
+330
+E2A
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-4.0
+ 20
+-2.0
+ 30
+0.0
+ 11
+-4.0
+ 21
+2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        3
+1005
+E8A
+  0
+ENDBLK
+  5
+E2C
+330
+E2A
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+EA3
+330
+EA2
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockBegin
+  2
+KIP_OZK
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+KIP_OZK
+  1
+
+  0
+LINE
+  5
+EA9
+330
+EA2
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+-4.0
+ 20
+2.0
+ 30
+0.0
+ 11
+4.0
+ 21
+2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        0
+1005
+EA9
+  0
+LINE
+  5
+EAA
+330
+EA2
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+4.0
+ 20
+2.0
+ 30
+0.0
+ 11
+4.0
+ 21
+-2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        1
+1005
+EAA
+  0
+LINE
+  5
+EAB
+330
+EA2
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+4.0
+ 20
+-2.0
+ 30
+0.0
+ 11
+-4.0
+ 21
+-1.999999999999999
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        2
+1005
+EAB
+  0
+LINE
+  5
+EAC
+330
+EA2
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+-4.0
+ 20
+-2.0
+ 30
+0.0
+ 11
+-4.0
+ 21
+2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        3
+1005
+EAC
+  0
+LINE
+  5
+EAD
+330
+EA2
+100
+AcDbEntity
+  8
+EL_DEVICE
+  6
+Continuous
+370
+    30
+100
+AcDbLine
+ 10
+-0.5618488567892996
+ 20
+1.280297972750001
+ 30
+0.0
+ 11
+-3.027958797329926
+ 21
+-1.18581196779053
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       23
+1005
+EAD
+  0
+CIRCLE
+  5
+EAE
+330
+EA2
+100
+AcDbEntity
+  8
+EL_DEVICE
+  6
+Continuous
+370
+     0
+100
+AcDbCircle
+ 10
+-1.797395439200484
+ 20
+0.0447513903387247
+ 30
+0.0
+ 40
+0.7586552567598118
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       24
+1005
+EAE
+  0
+TEXT
+  5
+EAF
+330
+EA2
+100
+AcDbEntity
+  8
+EL_DEVICE
+  6
+Continuous
+370
+    30
+100
+AcDbText
+ 10
+0.1090875566455992
+ 20
+-1.020835341443264
+ 30
+0.0
+ 40
+2.5
+  1
+нг
+ 50
+0.0001929119895993
+ 41
+0.9
+ 51
+5.0
+  7
+R2_5
+100
+AcDbText
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       25
+1005
+EAF
+  0
+LWPOLYLINE
+  5
+EB0
+330
+EA2
+100
+AcDbEntity
+  8
+EL_DEVICE
+ 48
+100.0
+100
+AcDbPolyline
+ 90
+        2
+ 70
+     1
+ 43
+0.8
+ 10
+-2.200609510579111
+ 20
+0.04211598578419
+ 42
+1.0
+ 10
+-1.40060951057911
+ 20
+0.04211598578419
+ 42
+1.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       26
+1005
+EB0
+  0
+ENDBLK
+  5
+EA4
+330
+EA2
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+ED4
+330
+ED3
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockBegin
+  2
+DEVICE_KIP_OZK
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+DEVICE_KIP_OZK
+  1
+
+  0
+INSERT
+  5
+EDA
+330
+ED3
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockReference
+  2
+DEVICE_CONNECTOR_SQUARE
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 41
+1.199999999999999
+ 42
+1.199999999999999
+ 43
+1.199999999999999
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        0
+1005
+EDA
+  0
+TEXT
+  5
+EDB
+330
+ED3
+100
+AcDbEntity
+  8
+EL_DEVICE_NAME
+100
+AcDbText
+ 10
+-6.032776677706735
+ 20
+3.134874580874758
+ 30
+0.0
+ 40
+2.5
+  1
+@@[Name]
+ 41
+0.7
+ 51
+12.0
+  7
+R2_5
+ 72
+     1
+ 11
+0.0922233222932647
+ 21
+3.134874580874758
+ 31
+0.0
+100
+AcDbText
+1001
+ACAD
+1000
+MTEXTBEGIN
+1070
+    73
+1070
+     1
+1070
+    44
+1040
+1.0
+1070
+    74
+1070
+     0
+1000
+MTEXTEND
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        6
+1005
+EDB
+  0
+LINE
+  5
+EDC
+330
+ED3
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-4.0
+ 20
+2.0
+ 30
+0.0
+ 11
+4.0
+ 21
+2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        5
+1005
+EDC
+  0
+LINE
+  5
+EDD
+330
+ED3
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+4.0
+ 20
+2.0
+ 30
+0.0
+ 11
+4.0
+ 21
+-2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        1
+1005
+EDD
+  0
+LINE
+  5
+EDE
+330
+ED3
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+4.0
+ 20
+-2.0
+ 30
+0.0
+ 11
+-4.0
+ 21
+-1.999999999999999
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        2
+1005
+EDE
+  0
+LINE
+  5
+EDF
+330
+ED3
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-4.0
+ 20
+-2.0
+ 30
+0.0
+ 11
+-4.0
+ 21
+2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        3
+1005
+EDF
+  0
+ENDBLK
+  5
+ED5
+330
+ED3
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+EF6
+330
+EF5
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockBegin
+  2
+KIP_KPV
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+KIP_KPV
+  1
+
+  0
+LINE
+  5
+F38
+330
+EF5
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+-4.0
+ 20
+2.0
+ 30
+0.0
+ 11
+4.0
+ 21
+2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        0
+1005
+F38
+  0
+LINE
+  5
+F39
+330
+EF5
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+4.0
+ 20
+2.0
+ 30
+0.0
+ 11
+4.0
+ 21
+-2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        1
+1005
+F39
+  0
+LINE
+  5
+F3A
+330
+EF5
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+4.0
+ 20
+-2.0
+ 30
+0.0
+ 11
+-4.0
+ 21
+-1.999999999999999
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        2
+1005
+F3A
+  0
+LINE
+  5
+F3B
+330
+EF5
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+-4.0
+ 20
+-2.0
+ 30
+0.0
+ 11
+-4.0
+ 21
+2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        3
+1005
+F3B
+  0
+LINE
+  5
+F3C
+330
+EF5
+100
+AcDbEntity
+  8
+EL_DEVICE
+  6
+Continuous
+370
+    30
+100
+AcDbLine
+ 10
+-0.5618488567892996
+ 20
+1.280297972750001
+ 30
+0.0
+ 11
+-3.027958797329926
+ 21
+-1.18581196779053
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       23
+1005
+F3C
+  0
+CIRCLE
+  5
+F3D
+330
+EF5
+100
+AcDbEntity
+  8
+EL_DEVICE
+  6
+Continuous
+370
+     0
+100
+AcDbCircle
+ 10
+-1.797395439200484
+ 20
+0.0447513903387247
+ 30
+0.0
+ 40
+0.7586552567598118
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       24
+1005
+F3D
+  0
+TEXT
+  5
+F3E
+330
+EF5
+100
+AcDbEntity
+  8
+EL_DEVICE
+  6
+Continuous
+370
+    30
+100
+AcDbText
+ 10
+0.1090875566455992
+ 20
+-1.020835341443264
+ 30
+0.0
+ 40
+2.5
+  1
+од
+ 50
+0.0001929119895993
+ 41
+0.9
+ 51
+5.0
+  7
+R2_5
+100
+AcDbText
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       25
+1005
+F3E
+  0
+LWPOLYLINE
+  5
+F3F
+330
+EF5
+100
+AcDbEntity
+  8
+EL_DEVICE
+ 48
+100.0
+100
+AcDbPolyline
+ 90
+        2
+ 70
+     1
+ 43
+0.8
+ 10
+-2.200609510579111
+ 20
+0.04211598578419
+ 42
+1.0
+ 10
+-1.40060951057911
+ 20
+0.04211598578419
+ 42
+1.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       26
+1005
+F3F
+  0
+ENDBLK
+  5
+EF7
+330
+EF5
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+F18
+330
+F17
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockBegin
+  2
+DEVICE_KIP_KPV
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+DEVICE_KIP_KPV
+  1
+
+  0
+INSERT
+  5
+F0C
+330
+F17
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockReference
+  2
+DEVICE_CONNECTOR_SQUARE
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 41
+1.199999999999999
+ 42
+1.199999999999999
+ 43
+1.199999999999999
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        0
+1005
+F0C
+  0
+TEXT
+  5
+F0D
+330
+F17
+100
+AcDbEntity
+  8
+EL_DEVICE_NAME
+100
+AcDbText
+ 10
+-6.032776677706735
+ 20
+3.134874580874758
+ 30
+0.0
+ 40
+2.5
+  1
+@@[Name]
+ 41
+0.7
+ 51
+12.0
+  7
+R2_5
+ 72
+     1
+ 11
+0.0922233222932647
+ 21
+3.134874580874758
+ 31
+0.0
+100
+AcDbText
+1001
+ACAD
+1000
+MTEXTBEGIN
+1070
+    73
+1070
+     1
+1070
+    44
+1040
+1.0
+1070
+    74
+1070
+     0
+1000
+MTEXTEND
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        6
+1005
+F0D
+  0
+LINE
+  5
+F0E
+330
+F17
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-4.0
+ 20
+2.0
+ 30
+0.0
+ 11
+4.0
+ 21
+2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        5
+1005
+F0E
+  0
+LINE
+  5
+F0F
+330
+F17
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+4.0
+ 20
+2.0
+ 30
+0.0
+ 11
+4.0
+ 21
+-2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        1
+1005
+F0F
+  0
+LINE
+  5
+F10
+330
+F17
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+4.0
+ 20
+-2.0
+ 30
+0.0
+ 11
+-4.0
+ 21
+-1.999999999999999
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        2
+1005
+F10
+  0
+LINE
+  5
+F11
+330
+F17
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-4.0
+ 20
+-2.0
+ 30
+0.0
+ 11
+-4.0
+ 21
+2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        3
+1005
+F11
+  0
+ENDBLK
+  5
+F19
+330
+F17
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+F78
+330
+F77
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockBegin
+  2
+KIP_KNOPKA_PKE
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+KIP_KNOPKA_PKE
+  1
+
+  0
+LINE
+  5
+FD8
+330
+F77
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+2.50499999999999
+ 20
+2.504999999999999
+ 30
+0.0
+ 11
+2.504999999999999
+ 21
+-2.504999999999999
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        1
+1005
+FD8
+  0
+LINE
+  5
+FD9
+330
+F77
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+-2.504999999999999
+ 20
+-2.504999999999999
+ 30
+0.0
+ 11
+2.504999999999999
+ 21
+-2.504999999999999
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        2
+1005
+FD9
+  0
+LINE
+  5
+FDA
+330
+F77
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+2.504999999999999
+ 20
+2.504999999999999
+ 30
+0.0
+ 11
+-2.504999999999999
+ 21
+2.504999999999999
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       20
+1005
+FDA
+  0
+LINE
+  5
+FDB
+330
+F77
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbLine
+ 10
+-2.504999999999999
+ 20
+-2.504999999999999
+ 30
+0.0
+ 11
+-2.504999999999999
+ 21
+2.504999999999999
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       21
+1005
+FDB
+  0
+CIRCLE
+  5
+FDC
+330
+F77
+100
+AcDbEntity
+  8
+EL_DEVICE
+100
+AcDbCircle
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 40
+1.252499999999999
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       22
+1005
+FDC
+  0
+ENDBLK
+  5
+F79
+330
+F77
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+F9C
+330
+F9B
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockBegin
+  2
+DEVICE_KIP_KNOPKA_PKE
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+DEVICE_KIP_KNOPKA_PKE
+  1
+
+  0
+INSERT
+  5
+FE5
+330
+F9B
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockReference
+  2
+DEVICE_CONNECTOR_SQUARE
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 41
+1.199999999999999
+ 42
+1.199999999999999
+ 43
+1.199999999999999
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        0
+1005
+FE5
+  0
+LINE
+  5
+FE6
+330
+F9B
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-2.504999999999999
+ 20
+-2.504999999999999
+ 30
+0.0
+ 11
+-2.504999999999999
+ 21
+2.504999999999999
+ 31
+0.0
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        1
+1005
+FE6
+  0
+LINE
+  5
+FE7
+330
+F9B
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+2.504999999999999
+ 20
+-2.504999999999999
+ 30
+0.0
+ 11
+2.504999999999999
+ 21
+2.504999999999999
+ 31
+0.0
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        2
+1005
+FE7
+  0
+LINE
+  5
+FE8
+330
+F9B
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-2.504999999999999
+ 20
+2.504999999999999
+ 30
+0.0
+ 11
+2.504999999999999
+ 21
+2.504999999999999
+ 31
+0.0
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        3
+1005
+FE8
+  0
+LINE
+  5
+FE9
+330
+F9B
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-2.504999999999999
+ 20
+-2.504999999999999
+ 30
+0.0
+ 11
+2.504999999999999
+ 21
+-2.504999999999999
+ 31
+0.0
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        4
+1005
+FE9
+  0
+TEXT
+  5
+FEA
+330
+F9B
+100
+AcDbEntity
+  8
+EL_DEVICE_NAME
+100
+AcDbText
+ 10
+-6.125
+ 20
+3.0
+ 30
+0.0
+ 40
+2.5
+  1
+@@[Name]
+ 41
+0.7
+ 51
+12.0
+  7
+R2_5
+ 72
+     1
+ 11
+0.0
+ 21
+3.0
+ 31
+0.0
+100
+AcDbText
+1001
+ACAD
+1000
+MTEXTBEGIN
+1070
+    73
+1070
+     1
+1070
+    44
+1040
+1.0
+1070
+    74
+1070
+     0
+1000
+MTEXTEND
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        6
+1005
+FEA
+  0
+ENDBLK
+  5
+F9D
+330
+F9B
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+101B
+330
+101A
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockBegin
+  2
+KIP_SPZH
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+KIP_SPZH
+  1
+
+  0
+LINE
+  5
+10DC
+330
+101A
+100
+AcDbEntity
+  8
+EL_DEVICE_BLUE
+100
+AcDbLine
+ 10
+-3.5
+ 20
+2.5
+ 30
+0.0
+ 11
+3.5
+ 21
+2.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        0
+1005
+10DC
+  0
+LINE
+  5
+10DD
+330
+101A
+100
+AcDbEntity
+  8
+EL_DEVICE_BLUE
+100
+AcDbLine
+ 10
+3.0
+ 20
+1.5
+ 30
+0.0
+ 11
+3.0
+ 21
+-1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        1
+1005
+10DD
+  0
+LINE
+  5
+10DE
+330
+101A
+100
+AcDbEntity
+  8
+EL_DEVICE_BLUE
+100
+AcDbLine
+ 10
+3.0
+ 20
+1.5
+ 30
+0.0
+ 11
+-3.0
+ 21
+-1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        2
+1005
+10DE
+  0
+LINE
+  5
+10DF
+330
+101A
+100
+AcDbEntity
+  8
+EL_DEVICE_BLUE
+100
+AcDbLine
+ 10
+-3.0
+ 20
+-1.5
+ 30
+0.0
+ 11
+-3.0
+ 21
+1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        3
+1005
+10DF
+  0
+LINE
+  5
+10E0
+330
+101A
+100
+AcDbEntity
+  8
+EL_DEVICE_BLUE
+ 48
+100.0
+100
+AcDbLine
+ 10
+3.5
+ 20
+2.5
+ 30
+0.0
+ 11
+2.5
+ 21
+3.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       27
+1005
+10E0
+  0
+LINE
+  5
+10E1
+330
+101A
+100
+AcDbEntity
+  8
+EL_DEVICE_BLUE
+ 48
+100.0
+100
+AcDbLine
+ 10
+3.5
+ 20
+2.5
+ 30
+0.0
+ 11
+2.5
+ 21
+2.0
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       28
+1005
+10E1
+  0
+LINE
+  5
+10E2
+330
+101A
+100
+AcDbEntity
+  8
+EL_DEVICE_BLUE
+100
+AcDbLine
+ 10
+-3.5
+ 20
+-1.5
+ 30
+0.0
+ 11
+-3.5
+ 21
+1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       29
+1005
+10E2
+  0
+LINE
+  5
+10E3
+330
+101A
+100
+AcDbEntity
+  8
+EL_DEVICE_BLUE
+100
+AcDbLine
+ 10
+3.5
+ 20
+-1.5
+ 30
+0.0
+ 11
+3.5
+ 21
+1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       30
+1005
+10E3
+  0
+ENDBLK
+  5
+101C
+330
+101A
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+1038
+330
+1037
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockBegin
+  2
+DEVICE_KIP_SPZH
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+DEVICE_KIP_SPZH
+  1
+
+  0
+INSERT
+  5
+1094
+330
+1037
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockReference
+  2
+DEVICE_CONNECTOR_SQUARE
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 41
+1.199999999999999
+ 42
+1.199999999999999
+ 43
+1.199999999999999
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        0
+1005
+1094
+  0
+TEXT
+  5
+1095
+330
+1037
+100
+AcDbEntity
+  8
+EL_DEVICE_NAME
+100
+AcDbText
+ 10
+-6.125
+ 20
+3.0
+ 30
+0.0
+ 40
+2.5
+  1
+@@[Name]
+ 41
+0.7
+ 51
+12.0
+  7
+R2_5
+ 72
+     1
+ 11
+0.0
+ 21
+3.0
+ 31
+0.0
+100
+AcDbText
+1001
+ACAD
+1000
+MTEXTBEGIN
+1070
+    73
+1070
+     1
+1070
+    44
+1040
+1.0
+1070
+    74
+1070
+     0
+1000
+MTEXTEND
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        6
+1005
+1095
+  0
+LINE
+  5
+1096
+330
+1037
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-3.0
+ 20
+1.5
+ 30
+0.0
+ 11
+3.0
+ 21
+1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        5
+1005
+1096
+  0
+LINE
+  5
+1097
+330
+1037
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+3.0
+ 20
+1.5
+ 30
+0.0
+ 11
+3.0
+ 21
+-1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        1
+1005
+1097
+  0
+LINE
+  5
+1098
+330
+1037
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+3.0
+ 20
+-1.5
+ 30
+0.0
+ 11
+-3.0
+ 21
+-1.499999999999999
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        2
+1005
+1098
+  0
+LINE
+  5
+1099
+330
+1037
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-3.0
+ 20
+-1.5
+ 30
+0.0
+ 11
+-3.0
+ 21
+1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        3
+1005
+1099
+  0
+ENDBLK
+  5
+1039
+330
+1037
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+10F9
+330
+10F8
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockBegin
+  2
+KIP_VALVE
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+KIP_VALVE
+  1
+
+  0
+LINE
+  5
+10FF
+330
+10F8
+100
+AcDbEntity
+  8
+EL_DEVICE_BLUE
+100
+AcDbLine
+ 10
+-3.0
+ 20
+1.5
+ 30
+0.0
+ 11
+3.0
+ 21
+-1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        0
+1005
+10FF
+  0
+LINE
+  5
+1100
+330
+10F8
+100
+AcDbEntity
+  8
+EL_DEVICE_BLUE
+100
+AcDbLine
+ 10
+3.0
+ 20
+1.5
+ 30
+0.0
+ 11
+3.0
+ 21
+-1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        1
+1005
+1100
+  0
+LINE
+  5
+1101
+330
+10F8
+100
+AcDbEntity
+  8
+EL_DEVICE_BLUE
+100
+AcDbLine
+ 10
+3.0
+ 20
+1.5
+ 30
+0.0
+ 11
+-3.0
+ 21
+-1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        2
+1005
+1101
+  0
+LINE
+  5
+1102
+330
+10F8
+100
+AcDbEntity
+  8
+EL_DEVICE_BLUE
+100
+AcDbLine
+ 10
+-3.0
+ 20
+-1.5
+ 30
+0.0
+ 11
+-3.0
+ 21
+1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        3
+1005
+1102
+  0
+LINE
+  5
+1104
+330
+10F8
+100
+AcDbEntity
+  8
+EL_DEVICE_BLUE
+ 48
+100.0
+100
+AcDbLine
+ 10
+0.0
+ 20
+1.5
+ 30
+0.0
+ 11
+0.0
+ 21
+-1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       28
+1005
+1104
+  0
+LINE
+  5
+1105
+330
+10F8
+100
+AcDbEntity
+  8
+EL_DEVICE_BLUE
+100
+AcDbLine
+ 10
+-3.5
+ 20
+-1.5
+ 30
+0.0
+ 11
+-3.5
+ 21
+1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       29
+1005
+1105
+  0
+LINE
+  5
+1106
+330
+10F8
+100
+AcDbEntity
+  8
+EL_DEVICE_BLUE
+100
+AcDbLine
+ 10
+3.5
+ 20
+-1.5
+ 30
+0.0
+ 11
+3.5
+ 21
+1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+       30
+1005
+1106
+  0
+ENDBLK
+  5
+10FA
+330
+10F8
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+111F
+330
+111E
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockBegin
+  2
+DEVICE_KIP_VALVE
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+DEVICE_KIP_VALVE
+  1
+
+  0
+INSERT
+  5
+1125
+330
+111E
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockReference
+  2
+DEVICE_CONNECTOR_SQUARE
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 41
+1.199999999999999
+ 42
+1.199999999999999
+ 43
+1.199999999999999
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        0
+1005
+1125
+  0
+TEXT
+  5
+1126
+330
+111E
+100
+AcDbEntity
+  8
+EL_DEVICE_NAME
+100
+AcDbText
+ 10
+-6.125
+ 20
+2.0
+ 30
+0.0
+ 40
+2.5
+  1
+@@[Name]
+ 41
+0.7
+ 51
+12.0
+  7
+R2_5
+ 72
+     1
+ 11
+0.0
+ 21
+2.0
+ 31
+0.0
+100
+AcDbText
+1001
+ACAD
+1000
+MTEXTBEGIN
+1070
+    73
+1070
+     1
+1070
+    44
+1040
+1.0
+1070
+    74
+1070
+     0
+1000
+MTEXTEND
+1001
+DSTP_XDATA
+1002
+{
+1002
+}
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        6
+1005
+1126
+  0
+LINE
+  5
+1127
+330
+111E
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-3.0
+ 20
+1.5
+ 30
+0.0
+ 11
+3.0
+ 21
+1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        5
+1005
+1127
+  0
+LINE
+  5
+1128
+330
+111E
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+3.0
+ 20
+1.5
+ 30
+0.0
+ 11
+3.0
+ 21
+-1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        1
+1005
+1128
+  0
+LINE
+  5
+1129
+330
+111E
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+3.0
+ 20
+-1.5
+ 30
+0.0
+ 11
+-3.0
+ 21
+-1.499999999999999
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        2
+1005
+1129
+  0
+LINE
+  5
+112A
+330
+111E
+100
+AcDbEntity
+  8
+SYS_DEVICE_BORDER
+100
+AcDbLine
+ 10
+-3.0
+ 20
+-1.5
+ 30
+0.0
+ 11
+-3.0
+ 21
+1.5
+ 31
+0.0
+1001
+AcDbBlockRepETag
+1070
+     1
+1071
+        3
+1005
+112A
+  0
+ENDBLK
+  5
+1120
+330
+111E
+100
+AcDbEntity
+  8
+0
+ 48
+100.0
+100
+AcDbBlockEnd
+  0
 ENDSEC
   0
 SECTION
@@ -7219,7 +11637,7 @@ AcDbDictionary
   3
 ACAD_2007HEADERVARS_RT
 350
-CF2
+1131
   3
 ACAD_COLOR
 350
@@ -7271,7 +11689,7 @@ CF0
   3
 ACDBHEADERROUNDTRIPXREC
 350
-CE2
+F2A
   3
 AcDbVariableDictionary
 350
@@ -7287,7 +11705,7 @@ AEC_PROPERTY_SET_DEFS
   3
 DWGPROPS
 350
-CF1
+1130
   3
 LEP_INFORMATION
 350
@@ -7339,7 +11757,7 @@ AcDbDictionary
   3
 ACAD_LAYERFILTERS
 360
-824
+10D8
   3
 ACAD_LAYERSTATES
 360
@@ -7347,7 +11765,7 @@ ACAD_LAYERSTATES
   3
 ACLYDICTIONARY
 360
-823
+10D7
   0
 DICTIONARY
   5
@@ -7515,7 +11933,7 @@ AcDbDictionary
   3
 AcDbBlockTableRecordData
 360
-D19
+1138
   0
 DICTIONARY
   5
@@ -7531,7 +11949,7 @@ AcDbDictionary
   3
 AcDbBlockTableRecordData
 360
-D1B
+113A
   0
 DICTIONARY
   5
@@ -7695,7 +12113,231 @@ C84
   0
 DICTIONARY
   5
-CF2
+DA0
+330
+D36
+100
+AcDbDictionary
+280
+     1
+281
+     1
+  3
+ACAD_SORTENTS
+360
+DA1
+  0
+DICTIONARY
+  5
+D71
+330
+D65
+100
+AcDbDictionary
+280
+     1
+281
+     1
+  3
+ACAD_SORTENTS
+360
+D73
+  0
+DICTIONARY
+  5
+E78
+330
+DCE
+100
+AcDbDictionary
+280
+     1
+281
+     1
+  3
+ACAD_SORTENTS
+360
+E79
+  0
+DICTIONARY
+  5
+E8B
+330
+E2A
+100
+AcDbDictionary
+280
+     1
+281
+     1
+  3
+ACAD_SORTENTS
+360
+E8C
+  0
+DICTIONARY
+  5
+EB1
+330
+EA2
+100
+AcDbDictionary
+280
+     1
+281
+     1
+  3
+ACAD_SORTENTS
+360
+EB3
+  0
+DICTIONARY
+  5
+EE0
+330
+ED3
+100
+AcDbDictionary
+280
+     1
+281
+     1
+  3
+ACAD_SORTENTS
+360
+EE2
+  0
+DICTIONARY
+  5
+F40
+330
+EF5
+100
+AcDbDictionary
+280
+     1
+281
+     1
+  3
+ACAD_SORTENTS
+360
+F41
+  0
+DICTIONARY
+  5
+F12
+330
+F17
+100
+AcDbDictionary
+280
+     1
+281
+     1
+  3
+ACAD_SORTENTS
+360
+F13
+  0
+DICTIONARY
+  5
+FDD
+330
+F77
+100
+AcDbDictionary
+280
+     1
+281
+     1
+  3
+ACAD_SORTENTS
+360
+FDE
+  0
+DICTIONARY
+  5
+FEB
+330
+F9B
+100
+AcDbDictionary
+280
+     1
+281
+     1
+  3
+ACAD_SORTENTS
+360
+FEC
+  0
+DICTIONARY
+  5
+10E4
+330
+101A
+100
+AcDbDictionary
+280
+     1
+281
+     1
+  3
+ACAD_SORTENTS
+360
+10E5
+  0
+DICTIONARY
+  5
+109A
+330
+1037
+100
+AcDbDictionary
+280
+     1
+281
+     1
+  3
+ACAD_SORTENTS
+360
+109B
+  0
+DICTIONARY
+  5
+1107
+330
+10F8
+100
+AcDbDictionary
+280
+     1
+281
+     1
+  3
+ACAD_SORTENTS
+360
+1109
+  0
+DICTIONARY
+  5
+112B
+330
+111E
+100
+AcDbDictionary
+280
+     1
+281
+     1
+  3
+ACAD_SORTENTS
+360
+112D
+  0
+DICTIONARY
+  5
+1131
 102
 {ACAD_REACTORS
 330
@@ -7711,7 +12353,7 @@ AcDbDictionary
   3
 DIMFXL
 350
-CF3
+1132
   0
 DICTIONARY
   5
@@ -7892,6 +12534,62 @@ D2
 AcDbDictionary
 281
      1
+  3
+*A1
+350
+DDD
+  3
+*A10
+350
+DE8
+  3
+*A11
+350
+DE9
+  3
+*A12
+350
+DEA
+  3
+*A13
+350
+DDE
+  3
+*A14
+350
+DDF
+  3
+*A2
+350
+DE0
+  3
+*A3
+350
+DE1
+  3
+*A4
+350
+DE2
+  3
+*A5
+350
+DE3
+  3
+*A6
+350
+DE4
+  3
+*A7
+350
+DE5
+  3
+*A8
+350
+DE6
+  3
+*A9
+350
+DE7
   3
 A0
 350
@@ -8159,7 +12857,7 @@ AcDbXrecord
   0
 DICTIONARY
   5
-CE2
+F2A
 102
 {ACAD_REACTORS
 330
@@ -8255,7 +12953,7 @@ AcDbDictionary
   0
 XRECORD
   5
-CF1
+1130
 102
 {ACAD_REACTORS
 330
@@ -8281,7 +12979,7 @@ DWGPROPS COOKIE
   7
 
   8
-zam
+a.vetoshkin
   9
 
 300
@@ -8305,11 +13003,11 @@ zam
 309
 =
  40
-1.587877118055555
+1.626484050925926
  41
-2452500.735102477
+2452500.651769144
  42
-2455293.899750972
+2455701.40289279
   1
 
  90
@@ -9159,7 +13857,7 @@ AcDbXrecord
   0
 DICTIONARY
   5
-824
+10D8
 102
 {ACAD_REACTORS
 330
@@ -9191,7 +13889,7 @@ AcDbDictionary
   0
 DICTIONARY
   5
-823
+10D7
 102
 {ACAD_REACTORS
 330
@@ -9345,7 +14043,7 @@ AcDbSortentsTable
   0
 DICTIONARY
   5
-D19
+1138
 102
 {ACAD_REACTORS
 330
@@ -9363,11 +14061,11 @@ AcDbDictionary
   3
 Edit
 360
-D1A
+1139
   0
 DICTIONARY
   5
-D1B
+113A
 102
 {ACAD_REACTORS
 330
@@ -9385,7 +14083,7 @@ AcDbDictionary
   3
 Edit
 360
-D1C
+113B
   0
 SORTENTSTABLE
   5
@@ -9547,17 +14245,241 @@ AcDbSortentsTable
 330
 C82
   0
-XRECORD
+SORTENTSTABLE
   5
-CF3
+DA1
 102
 {ACAD_REACTORS
 330
-CF2
+DA0
 102
 }
 330
-CF2
+DA0
+100
+AcDbSortentsTable
+330
+D36
+  0
+SORTENTSTABLE
+  5
+D73
+102
+{ACAD_REACTORS
+330
+D71
+102
+}
+330
+D71
+100
+AcDbSortentsTable
+330
+D65
+  0
+SORTENTSTABLE
+  5
+E79
+102
+{ACAD_REACTORS
+330
+E78
+102
+}
+330
+E78
+100
+AcDbSortentsTable
+330
+DCE
+  0
+SORTENTSTABLE
+  5
+E8C
+102
+{ACAD_REACTORS
+330
+E8B
+102
+}
+330
+E8B
+100
+AcDbSortentsTable
+330
+E2A
+  0
+SORTENTSTABLE
+  5
+EB3
+102
+{ACAD_REACTORS
+330
+EB1
+102
+}
+330
+EB1
+100
+AcDbSortentsTable
+330
+EA2
+  0
+SORTENTSTABLE
+  5
+EE2
+102
+{ACAD_REACTORS
+330
+EE0
+102
+}
+330
+EE0
+100
+AcDbSortentsTable
+330
+ED3
+  0
+SORTENTSTABLE
+  5
+F41
+102
+{ACAD_REACTORS
+330
+F40
+102
+}
+330
+F40
+100
+AcDbSortentsTable
+330
+EF5
+  0
+SORTENTSTABLE
+  5
+F13
+102
+{ACAD_REACTORS
+330
+F12
+102
+}
+330
+F12
+100
+AcDbSortentsTable
+330
+F17
+  0
+SORTENTSTABLE
+  5
+FDE
+102
+{ACAD_REACTORS
+330
+FDD
+102
+}
+330
+FDD
+100
+AcDbSortentsTable
+330
+F77
+  0
+SORTENTSTABLE
+  5
+FEC
+102
+{ACAD_REACTORS
+330
+FEB
+102
+}
+330
+FEB
+100
+AcDbSortentsTable
+330
+F9B
+  0
+SORTENTSTABLE
+  5
+10E5
+102
+{ACAD_REACTORS
+330
+10E4
+102
+}
+330
+10E4
+100
+AcDbSortentsTable
+330
+101A
+  0
+SORTENTSTABLE
+  5
+109B
+102
+{ACAD_REACTORS
+330
+109A
+102
+}
+330
+109A
+100
+AcDbSortentsTable
+330
+1037
+  0
+SORTENTSTABLE
+  5
+1109
+102
+{ACAD_REACTORS
+330
+1107
+102
+}
+330
+1107
+100
+AcDbSortentsTable
+330
+10F8
+  0
+SORTENTSTABLE
+  5
+112D
+102
+{ACAD_REACTORS
+330
+112B
+102
+}
+330
+112B
+100
+AcDbSortentsTable
+330
+111E
+  0
+XRECORD
+  5
+1132
+102
+{ACAD_REACTORS
+330
+1131
+102
+}
+330
+1131
 100
 AcDbXrecord
 280
@@ -9571,7 +14493,7 @@ E5
 102
 {ACAD_XDICTIONARY
 360
-CF4
+1133
 102
 }
 102
@@ -9703,7 +14625,7 @@ E9
 102
 {ACAD_XDICTIONARY
 360
-CF6
+1135
 102
 }
 102
@@ -9829,7 +14751,7 @@ Model
 330
 E6
 331
-CE0
+F28
   0
 MATERIAL
   5
@@ -10595,15 +15517,15 @@ D7
 143
 0.125
 1001
+ACAD_MLEADERVER
+1070
+     2
+1001
 ACAD
 1000
 AcRTDxfName
 1000
 MLEADERSTYLE
-1001
-ACAD_MLEADERVER
-1070
-     2
   0
 MLINESTYLE
   5
@@ -10656,6 +15578,426 @@ D4
 }
 330
 D4
+  0
+SCALE
+  5
+DDD
+102
+{ACAD_REACTORS
+330
+8FE
+102
+}
+330
+8FE
+100
+AcDbScale
+ 70
+     0
+300
+1/8" = 1'-0"_XREF
+140
+0.125
+141
+12.0
+290
+     0
+1001
+ACAD
+1000
+AcRTDxfName
+1000
+SCALE
+  0
+SCALE
+  5
+DE8
+102
+{ACAD_REACTORS
+330
+8FE
+102
+}
+330
+8FE
+100
+AcDbScale
+ 70
+     0
+300
+1:200_XREF
+140
+1.0
+141
+200.0
+290
+     0
+1001
+ACAD
+1000
+AcRTDxfName
+1000
+SCALE
+  0
+SCALE
+  5
+DE9
+102
+{ACAD_REACTORS
+330
+8FE
+102
+}
+330
+8FE
+100
+AcDbScale
+ 70
+     0
+300
+1:95
+140
+1.0
+141
+95.0
+290
+     0
+1001
+ACAD
+1000
+AcRTDxfName
+1000
+SCALE
+  0
+SCALE
+  5
+DEA
+102
+{ACAD_REACTORS
+330
+8FE
+102
+}
+330
+8FE
+100
+AcDbScale
+ 70
+     0
+300
+1:80
+140
+1.0
+141
+80.0
+290
+     0
+1001
+ACAD
+1000
+AcRTDxfName
+1000
+SCALE
+  0
+SCALE
+  5
+DDE
+102
+{ACAD_REACTORS
+330
+8FE
+102
+}
+330
+8FE
+100
+AcDbScale
+ 70
+     0
+300
+1:70
+140
+1.0
+141
+70.0
+290
+     0
+1001
+ACAD
+1000
+AcRTDxfName
+1000
+SCALE
+  0
+SCALE
+  5
+DDF
+102
+{ACAD_REACTORS
+330
+8FE
+102
+}
+330
+8FE
+100
+AcDbScale
+ 70
+     0
+300
+1:90
+140
+1.0
+141
+90.0
+290
+     0
+1001
+ACAD
+1000
+AcRTDxfName
+1000
+SCALE
+  0
+SCALE
+  5
+DE0
+102
+{ACAD_REACTORS
+330
+8FE
+102
+}
+330
+8FE
+100
+AcDbScale
+ 70
+     0
+300
+1:120
+140
+1.0
+141
+120.0
+290
+     0
+1001
+ACAD
+1000
+AcRTDxfName
+1000
+SCALE
+  0
+SCALE
+  5
+DE1
+102
+{ACAD_REACTORS
+330
+8FE
+102
+}
+330
+8FE
+100
+AcDbScale
+ 70
+     0
+300
+1:150
+140
+1.0
+141
+150.0
+290
+     0
+1001
+ACAD
+1000
+AcRTDxfName
+1000
+SCALE
+  0
+SCALE
+  5
+DE2
+102
+{ACAD_REACTORS
+330
+8FE
+102
+}
+330
+8FE
+100
+AcDbScale
+ 70
+     0
+300
+1:200
+140
+1.0
+141
+200.0
+290
+     0
+1001
+ACAD
+1000
+AcRTDxfName
+1000
+SCALE
+  0
+SCALE
+  5
+DE3
+102
+{ACAD_REACTORS
+330
+8FE
+102
+}
+330
+8FE
+100
+AcDbScale
+ 70
+     0
+300
+1:250
+140
+1.0
+141
+250.0
+290
+     0
+1001
+ACAD
+1000
+AcRTDxfName
+1000
+SCALE
+  0
+SCALE
+  5
+DE4
+102
+{ACAD_REACTORS
+330
+8FE
+102
+}
+330
+8FE
+100
+AcDbScale
+ 70
+     0
+300
+1:300
+140
+1.0
+141
+300.0
+290
+     0
+1001
+ACAD
+1000
+AcRTDxfName
+1000
+SCALE
+  0
+SCALE
+  5
+DE5
+102
+{ACAD_REACTORS
+330
+8FE
+102
+}
+330
+8FE
+100
+AcDbScale
+ 70
+     0
+300
+1:350
+140
+1.0
+141
+350.0
+290
+     0
+1001
+ACAD
+1000
+AcRTDxfName
+1000
+SCALE
+  0
+SCALE
+  5
+DE6
+102
+{ACAD_REACTORS
+330
+8FE
+102
+}
+330
+8FE
+100
+AcDbScale
+ 70
+     0
+300
+1:400
+140
+1.0
+141
+450.0
+290
+     0
+1001
+ACAD
+1000
+AcRTDxfName
+1000
+SCALE
+  0
+SCALE
+  5
+DE7
+102
+{ACAD_REACTORS
+330
+8FE
+102
+}
+330
+8FE
+100
+AcDbScale
+ 70
+     0
+300
+1:450
+140
+1.0
+141
+450.0
+290
+     0
+1001
+ACAD
+1000
+AcRTDxfName
+1000
+SCALE
   0
 SCALE
   5
@@ -11922,6 +17264,34 @@ VISUALSTYLE
 AcDbSavedByObjectVersion
 1070
      0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
   0
 VISUALSTYLE
   5
@@ -12016,6 +17386,34 @@ ACAD
 AcRTDxfName
 1000
 VISUALSTYLE
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
 1000
 AcDbSavedByObjectVersion
 1070
@@ -12118,6 +17516,34 @@ VISUALSTYLE
 AcDbSavedByObjectVersion
 1070
      0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
   0
 VISUALSTYLE
   5
@@ -12212,6 +17638,34 @@ ACAD
 AcRTDxfName
 1000
 VISUALSTYLE
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
 1000
 AcDbSavedByObjectVersion
 1070
@@ -12314,6 +17768,34 @@ VISUALSTYLE
 AcDbSavedByObjectVersion
 1070
      0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
   0
 VISUALSTYLE
   5
@@ -12408,6 +17890,34 @@ ACAD
 AcRTDxfName
 1000
 VISUALSTYLE
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
 1000
 AcDbSavedByObjectVersion
 1070
@@ -12510,6 +18020,34 @@ VISUALSTYLE
 AcDbSavedByObjectVersion
 1070
      0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
   0
 VISUALSTYLE
   5
@@ -12608,6 +18146,34 @@ VISUALSTYLE
 AcDbSavedByObjectVersion
 1070
      0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
   0
 VISUALSTYLE
   5
@@ -12698,6 +18264,38 @@ EdgeColorOff
 0.0
 1001
 ACAD
+1000
+AcRTDxfName
+1000
+VISUALSTYLE
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
 1000
 AcDbSavedByObjectVersion
 1070
@@ -12800,6 +18398,34 @@ VISUALSTYLE
 AcDbSavedByObjectVersion
 1070
      0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
   0
 VISUALSTYLE
   5
@@ -12894,6 +18520,34 @@ ACAD
 AcRTDxfName
 1000
 VISUALSTYLE
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
 1000
 AcDbSavedByObjectVersion
 1070
@@ -12996,6 +18650,34 @@ VISUALSTYLE
 AcDbSavedByObjectVersion
 1070
      0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
   0
 VISUALSTYLE
   5
@@ -13090,6 +18772,34 @@ ACAD
 AcRTDxfName
 1000
 VISUALSTYLE
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
 1000
 AcDbSavedByObjectVersion
 1070
@@ -13192,6 +18902,34 @@ VISUALSTYLE
 AcDbSavedByObjectVersion
 1070
      0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
   0
 VISUALSTYLE
   5
@@ -13282,6 +19020,38 @@ JitterOff
 0.0
 1001
 ACAD
+1000
+AcRTDxfName
+1000
+VISUALSTYLE
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
 1000
 AcDbSavedByObjectVersion
 1070
@@ -13384,6 +19154,34 @@ VISUALSTYLE
 AcDbSavedByObjectVersion
 1070
      0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
   0
 VISUALSTYLE
   5
@@ -13474,6 +19272,38 @@ OverhangOff
 0.0
 1001
 ACAD
+1000
+AcRTDxfName
+1000
+VISUALSTYLE
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
 1000
 AcDbSavedByObjectVersion
 1070
@@ -13576,6 +19406,34 @@ VISUALSTYLE
 AcDbSavedByObjectVersion
 1070
      0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
   0
 VISUALSTYLE
   5
@@ -13670,6 +19528,34 @@ ACAD
 AcRTDxfName
 1000
 VISUALSTYLE
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
+1000
+AcDbSavedByObjectVersion
+1070
+     0
 1000
 AcDbSavedByObjectVersion
 1070
@@ -13817,7 +19703,7 @@ DictionaryVariables
 280
      0
   1
-2
+0
   0
 XRECORD
   5
@@ -14047,15 +19933,15 @@ MCS_PARAMS_HIDDEN_DATA
   0
 XRECORD
   5
-D1A
+1139
 102
 {ACAD_REACTORS
 330
-D19
+1138
 102
 }
 330
-D19
+1138
 100
 AcDbXrecord
 280
@@ -14069,15 +19955,15 @@ AcDbXrecord
   0
 XRECORD
   5
-D1C
+113B
 102
 {ACAD_REACTORS
 330
-D1B
+113A
 102
 }
 330
-D1B
+113A
 100
 AcDbXrecord
 280
@@ -14091,7 +19977,7 @@ AcDbXrecord
   0
 DICTIONARY
   5
-CF4
+1133
 330
 E5
 100
@@ -14103,11 +19989,11 @@ AcDbDictionary
   3
 ACAD_XREC_ROUNDTRIP
 360
-CF5
+1134
   0
 DICTIONARY
   5
-CF6
+1135
 330
 E9
 100
@@ -14119,7 +20005,7 @@ AcDbDictionary
   3
 ACAD_XREC_ROUNDTRIP
 360
-CF7
+1136
   0
 DICTIONARY
   5
@@ -14255,11 +20141,11 @@ AcDbDictionary
   3
 ACAD_ROUNDTRIP_2008_TABLESTYLE_CELLSTYLEMAP
 360
-CEF
+112F
   3
 ACAD_XREC_ROUNDTRIP
 360
-CF8
+1137
   0
 DICTIONARY
   5
@@ -14567,15 +20453,15 @@ D12
   0
 XRECORD
   5
-CF5
+1134
 102
 {ACAD_REACTORS
 330
-CF4
+1133
 102
 }
 330
-CF4
+1133
 100
 AcDbXrecord
 280
@@ -14595,15 +20481,15 @@ SHADEPLOTCUSTOMDPI
   0
 XRECORD
   5
-CF7
+1136
 102
 {ACAD_REACTORS
 330
-CF6
+1135
 102
 }
 330
-CF6
+1135
 100
 AcDbXrecord
 280
@@ -15109,7 +20995,7 @@ AcDbXrecord
   0
 CELLSTYLEMAP
   5
-CEF
+112F
 102
 {ACAD_REACTORS
 330
@@ -15755,7 +21641,7 @@ CELLSTYLE_END
   0
 XRECORD
   5
-CF8
+1137
 102
 {ACAD_REACTORS
 330

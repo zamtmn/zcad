@@ -1082,14 +1082,22 @@ begin
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
-    if pv^.Selected then pv^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+    if pv^.Selected then
+                        begin
+                             pv^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+                             pv^.Format;
+                        end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
   psv:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
   if psv<>nil then
   begin
        repeat
-             if psv.objaddr^.Selected then psv.objaddr^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+             if psv.objaddr^.Selected then
+                                          begin
+                                               psv.objaddr^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+                                               psv.objaddr^.Format;
+                                          end;
        psv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
        until psv=nil;
   end;

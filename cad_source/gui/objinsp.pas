@@ -549,9 +549,16 @@ end;
 procedure TGDBobjinsp.Notify;
 var
    pld:GDBPointer;
+   pdwg:PTDrawing;
 begin
   if sender=peditor then
   begin   //fghfgh
+
+    pdwg:=gdb.GetCurrentDWG;
+    if pdwg<>nil then
+    begin
+         pdwg.OGLwindow1.param.lastonmouseobject:=nil;
+    end;
     pld:=peditor.PInstance;
     if GDBobj then
                   PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(pld,{self.pcurrobj,}self.currobjgdbtype);

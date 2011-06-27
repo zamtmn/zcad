@@ -310,7 +310,9 @@ begin
       tm.Data:=obj;
       if (pmd^.Attributes and m_virtual)<>0 then
                                              begin
-                                                  tm.Code:=ppointer(GDBPlatformint(self.PVMT)+GDBPlatformint(pmd^.MetodAddr))^;
+                                                  tm.Code:=
+                                                  ppointer(GDBPlatformint(self.PVMT)+
+                                                  GDBPlatformint(pmd^.MetodAddr))^;
                                              end
                                          else
                                              begin

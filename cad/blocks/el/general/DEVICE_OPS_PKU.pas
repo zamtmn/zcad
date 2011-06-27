@@ -1,4 +1,4 @@
-unit DEVICE_PS_ARK_DEVICE;
+unit DEVICE_OPS_PKU;
 interface
 uses system,devices;
 usescopy objname;
@@ -19,9 +19,9 @@ var
    EL_Cab_AddLength:GDBDouble;(*'Добавлять к длине кабеля'*)
 implementation
 begin
-   DB_link:='Прибор ОПС';
+   DB_link:='С2000М';
 
-   BTY_TreeCoord:='PLAN_OPS_Прибор ОПС';
+   BTY_TreeCoord:='PLAN_OPS_Пульт контроля и управления';
    Device_Type:=TDT_PriborOPS;
    NMO_Template:='@@[NMO_BaseName]@@[NMO_Prefix]@@[NMO_Suffix]';
    EL_Cab_AddLength:=1;
@@ -32,7 +32,7 @@ begin
 
 
 
-   SerialConnection:=0;
+   SerialConnection:=1;
    GC_HDShortName:='??';
    GC_HeadDevice:='??';
    GC_HDGroup:=0;

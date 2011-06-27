@@ -344,6 +344,23 @@ begin
           if assigned(pint)then
                                pint^:=GDBobjinsp.namecol;
 
+     if assigned(InfoForm) then
+     begin
+     pint:=SavedUnit.FindValue('TEdWND_Left');
+     if assigned(pint)then
+                          pint^:=InfoForm.Left;
+     pint:=SavedUnit.FindValue('TEdWND_Top');
+     if assigned(pint)then
+                          pint^:=InfoForm.Top;
+     pint:=SavedUnit.FindValue('TEdWND_Width');
+     if assigned(pint)then
+                          pint^:=InfoForm.Width;
+     pint:=SavedUnit.FindValue('TEdWND_Height');
+     if assigned(pint)then
+                          pint^:=InfoForm.Height;
+
+     end;
+
           mem.init({$IFDEF DEBUGBUILD}'{71D987B4-8C57-4C62-8C12-CFC24A0A9C9A}',{$ENDIF}1024);
           SavedUnit^.SavePasToMem(mem);
           mem.SaveToFile(sysparam.programpath+'rtl'+PathDelim+'savedvar.pas');

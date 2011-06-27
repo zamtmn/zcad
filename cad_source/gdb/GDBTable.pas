@@ -159,6 +159,7 @@ ConstObjArray.cleareraseobj;
                            pgdbmtext.linespacef:=1;
                            pgdbmtext.linespacef:=PTableStyle^.rowheight/pgdbmtext.textprop.size*3/5;
                            pgdbmtext.width:=pcf^.TextWidth*scale;
+                           pgdbmtext.vp.Layer:=vp.Layer;
 
                            pgdbmtext.Local.P_insert.y:=(-ccount*PTableStyle^.rowheight-PTableStyle^.rowheight/4)*scale;
                            case pcf^.CF of
@@ -213,6 +214,7 @@ ConstObjArray.cleareraseobj;
            pl^.CoordInOCS.lBegin.y:=-({ccount+}i)*PTableStyle^.rowheight*scale;
            pl^.CoordInOCS.lEnd.x:=xw{*scale};
            pl^.CoordInOCS.lEnd.y:=-({ccount+}i)*PTableStyle^.rowheight*scale;
+           pl^.vp.Layer:=vp.Layer;
            pl^.Format;
            end;
      if xcount<PTableStyle^.tblformat.Count then
@@ -226,6 +228,7 @@ ConstObjArray.cleareraseobj;
            pl^.CoordInOCS.lBegin.y:=0;
            pl^.CoordInOCS.lEnd.x:=x*scale;
            pl^.CoordInOCS.lEnd.y:=-(ccount)*PTableStyle^.rowheight*scale;
+           pl^.vp.Layer:=vp.Layer;
            pl^.Format;
 
 
@@ -242,6 +245,7 @@ ConstObjArray.cleareraseobj;
      pl^.CoordInOCS.lBegin.y:=0;
      pl^.CoordInOCS.lEnd.x:=x*scale;
      pl^.CoordInOCS.lEnd.y:=-(ccount)*PTableStyle^.rowheight*scale;
+     pl^.vp.Layer:=vp.Layer;
      pl^.Format;
 
      h:=(ccount)*PTableStyle^.rowheight*scale;
@@ -254,6 +258,7 @@ ConstObjArray.cleareraseobj;
           pgdbins^.scale.x:=scale;
           pgdbins^.scale.y:=scale;
           pgdbins^.scale.z:=scale;
+          pgdbins^.vp.Layer:=vp.Layer;
           pgdbins^.BuildGeometry;
      end;
 end;

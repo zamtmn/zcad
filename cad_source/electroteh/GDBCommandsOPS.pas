@@ -10,7 +10,7 @@ unit GDBCommandsOPS;
 interface
 uses
 
-  strproc,gdbasetypes,commandline,log,
+  strproc,gdbasetypes,commandline,log,UGDBOpenArrayOfPObjects,
   plugins,
   commandlinedef,
   commanddefinternal,
@@ -518,6 +518,8 @@ var //i: GDBInteger;
     cman:TCableManager;
     SaveEntUName,SaveCabUName:gdbstring;
     cablemetric,devicemetric,numingroupmetric:GDBString;
+    ProcessedDevices:GDBOpenArrayOfPObjects;
+    name:gdbstring;
 const
       DefNumMetric='default_num_in_group';
 function GetNumUnit(uname:gdbstring):PTUnit;
@@ -534,6 +536,7 @@ end;
 
 begin
   if gdb.GetCurrentROOT.ObjArray.Count = 0 then exit;
+  ProcessedDevices.init(100);
   cman.init;
   cman.build;
   UManager.init;
@@ -561,7 +564,7 @@ begin
              pvd:=currentunit.FindVariable('CDC_temp');
              pgdbinteger(pvd.data.Instance)^:=0;
              pvd:=currentunit.FindVariable('CDSC_temp');
-             pgdbinteger(pvd.data.Instance)^:=0;
+             pgdbinteger(pvd.data.Instance)^:=1;
              currentunit:=Umanager.iterate(ir2);
              until currentunit=nil;
              currentunit:=nil;
@@ -596,6 +599,8 @@ begin
                                                              numingroupmetric:=DefNumMetric;
                                                         end;
                         if devicemetric=cablemetric then
+                        begin
+                        if ProcessedDevices.IsObjExist(@ptn^.bp.ListPos.Owner^)=false then
                     begin
                          currentunit:=GetNumUnit(numingroupmetric);
 
@@ -612,13 +617,29 @@ begin
 
                          units.loadunit(expandpath('*rtl\objcalc\opsmark.pas'),(currentunit));
 
+                         ProcessedDevices.Add(@ptn^.bp.ListPos.Owner);
+
                          dec(currentunit.InterfaceUses.Count,2);
 
                          ptn^.bp.ListPos.Owner.ou.Name:=SaveEntUName;
                          pcabledesk.StartSegment.ou.Name:=SaveCabUName;
 
                          ptn^.bp.ListPos.Owner^.Format;
-                    end;
+                    end
+                        else
+                            begin
+                            pvd:=ptn^.bp.ListPos.Owner.ou.FindVariable('NMO_Name');
+                            if pvd<>nil then
+                                        begin
+                                             name:='"'+pvd.data.PTD.GetValueAsString(pvd.data.Instance)+'"';
+                                        end
+                                    else
+                                        begin
+                                             name:='"без имени"';
+                                        end;
+                            shared.HistoryOutstr(format('Попытка повторной нумерации устройства %s кабелем (сегментом кабеля) %s',[name,'"'+pcabledesk^.Name+'"']));
+                            end;
+                        end;
 
                     end;
                     //ptn^.bp.ListPos.Owner.ou.Name:=SaveEntUName;
@@ -637,6 +658,7 @@ begin
   defaultunit.done;
   UManager.done;
   cman.done;
+  ProcessedDevices.ClearAndDone;
   redrawoglwnd;
   result:=cmd_ok;
 end;
@@ -770,7 +792,7 @@ begin
         if pvd<>nil then
         begin
              //if PTCableType(pvd^.data.Instance)^=TCT_ShleifOPS then
-             if (pcabledesk.StartDevice<>nil)and(pcabledesk.EndDevice<>nil) then
+             if (pcabledesk.StartDevice<>nil){and(pcabledesk.EndDevice<>nil)} then
              begin
                   shared.HistoryOutStr(pcabledesk.Name);
                   programlog.logoutstr(pcabledesk.Name,0);

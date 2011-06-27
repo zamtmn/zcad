@@ -1739,10 +1739,26 @@ var
    us:unicodestring;
    u8s:UTF8String;
    astring:ansistring;
+   pint:PGDBInteger;
 begin
      astring:=ConvertFromDxfString(PGDBObjText(pobj)^.Template);
      if not assigned(InfoForm) then
+     begin
      InfoForm:=TInfoForm.create(application.MainForm);
+     pint:=SavedUnit.FindValue('TEdWND_Left');
+     if assigned(pint)then
+                          InfoForm.Left:=pint^;
+     pint:=SavedUnit.FindValue('TEdWND_Top');
+     if assigned(pint)then
+                          InfoForm.Top:=pint^;
+     pint:=SavedUnit.FindValue('TEdWND_Width');
+     if assigned(pint)then
+                          InfoForm.Width:=pint^;
+     pint:=SavedUnit.FindValue('TEdWND_Height');
+     if assigned(pint)then
+                          InfoForm.Height:=pint^;
+
+     end;
      //InfoForm.DialogPanel.ShowButtons:=[pbOK, pbCancel{, pbClose, pbHelp}];
      InfoForm.caption:=('Редактор текста');
 

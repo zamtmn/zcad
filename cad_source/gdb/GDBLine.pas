@@ -110,7 +110,8 @@ begin
                       GDBGetMem({$IFDEF DEBUGBUILD}'{6E92EE79-96D1-45BB-94CF-5C4C2141D886}',{$ENDIF}pointer(pleader),sizeof(GDBObjElLeader));
                       pleader^.initnul;
                       pleader.MainLine.CoordInOCS:=CoordInOCS;
-                      pleader.vp:=vp;
+                      pleader.vp.Layer:=vp.Layer;
+                      pleader.vp.LineWeight:=vp.LineWeight;
 
                     if ptu<>nil then
                     begin
@@ -601,16 +602,20 @@ begin
 end;
 function line2dintercep(var x11, y11, x12, y12, x21, y21, x22, y22: GDBDouble; out t1,t2: GDBDouble): GDBBoolean;
 var
-  d, d1, d2: GDBDouble;
+  d, d1, d2, dx1,dy1,dx2,dy2: GDBDouble;
 begin
   t1 := 0;
   t2 := 0;
   result := false;
-  D := (y12 - y11) * (x21 - x22) - (y21 - y22) * (x12 - x11);
-  D1 := (y12 - y11) * (x21 - x11) - (y21 - y11) * (x12 - x11);
-  D2 := (y21 - y11) * (x21 - x22) - (y21 - y22) * (x21 - x11);
-  if (D <> 0) then
+  dy1:=(y12 - y11);
+  dx2:=(x21 - x22);
+  dy2:=(y21 - y22);
+  dx1:=(x12 - x11);
+  D := dy1{(y12 - y11)} * dx2{(x21 - x22)} - dy2{(y21 - y22)} * dx1{(x12 - x11)};
+  if {(D <> 0)}abs(d)>{bigeps}sqreps then
   begin
+       D1 := (y12 - y11) * (x21 - x11) - (y21 - y11) * (x12 - x11);
+       D2 := (y21 - y11) * (x21 - x22) - (y21 - y22) * (x21 - x11);
     t2 := D1 / D;
     t1 := D2 / D;
     if ((t1 <= 1) and (t1 >= 0) and (t2 >= 0) and (t2 <= 1)) then
@@ -621,7 +626,7 @@ begin
 end;
 function GDBObjLine.getintersect;
 var t1,t2,dist:GDBDouble;
-    tv1,tv2{,d}:gdbvertex;
+    tv1,tv2{,d},e:gdbvertex;
 begin
      if (onlygetsnapcount=1)or(pobj^.vp.id<>gdblineid) then
      begin
@@ -664,6 +669,7 @@ begin
                               then
                               begin
                               osp.worldcoord:=tv1;
+                              line2dintercep(pprojpoint[0].x,pprojpoint[0].y,pprojpoint[1].x,pprojpoint[1].y,   pgdbobjline(pobj)^.pprojpoint[0].x,pgdbobjline(pobj)^.pprojpoint[0].y,pgdbobjline(pobj)^.pprojpoint[1].x,pgdbobjline(pobj)^.pprojpoint[1].y,  t1,t2);
                               gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
                               osp.ostype:=os_apparentintersection;
                               end

@@ -336,7 +336,12 @@ begin
   if parray=nil then
                     createarray;
   if count+sdata>max then
-                         Grow;
+                         begin
+                              if count+sdata>2*max then
+                                                       {Grow}SetSize(count+sdata)
+                                                   else
+                                                        Grow;
+                         end;
   {if count = max then
                      begin
                           parray := enlargememblock(parray, size * max, 2*size * max);

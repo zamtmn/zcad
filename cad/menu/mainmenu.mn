@@ -66,6 +66,7 @@ Panel Misc;
     button OrtoDevPlace,array.bmp,Расстановка блоков (устройств) массивом
     action ACN_El_FIND
     action ACN_OBJVARMAN
+    action ACN_MULTIOBJVARMAN
     button AddToOwner,addtoowner.bmp,(НЕ РАБОТАЕТ)добавить к владельцу
     button InsertTestTable,spec.bmp,*DEBUG*Вставить таблицу
     button SetObjInsp(CURRENT),#FIX,*DEBUG*Фиксировать выделенный объект в инспекторе
@@ -168,6 +169,7 @@ MainMenuItem Modify;
     action ACN_SCALE
     Separator
     action ACN_OBJVARMAN
+    action ACN_MULTIOBJVARMAN
   }
 MainMenuItem Schematic;
   {

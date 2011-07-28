@@ -38,6 +38,7 @@ action ACN_BREPLACE,BlockReplace,#BR,Block replace,,
 action ACN_BSCALE,BlockScale,#BS,Block scale,,
 action ACN_POLYED,PolyED,polyed.bmp,Edit polyline,,
 action ACN_OBJVARMAN,ObjVarMan,varman.bmp,Object variables manager,,
+action ACN_MULTIOBJVARMAN,MultiObjVarMan,#Mvar,Multi object variables manager,,
 
 action ACN_LINE,Line,line.bmp,Draw line,,
 action ACN_3DPOLY,3DPoly,pline.bmp,Draw 3Dpolyline,,

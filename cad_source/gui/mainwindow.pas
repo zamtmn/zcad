@@ -196,11 +196,33 @@ end;
 
 procedure TmyAnchorDockHeader.Paint;
 
-  procedure DrawGrabber(r: TRect);
+  {procedure DrawGrabber(r: TRect);
   begin
     Canvas.Frame3d(r,2,bvLowered);
     Canvas.Frame3d(r,4,bvRaised);
-  end;
+  end;}
+  procedure DrawGrabber(r: TRect);
+   var
+     dx : integer = 0;
+     dy : integer = 0;
+   begin
+     InflateRect(r,-2,-2);
+     if Align in [alLeft,alRight] then begin // Vertical
+       dx := 3;
+       r.Right := r.Left + (r.Right - r.Left) div 3 ;
+       r.Left := r.Right - dx;
+     end else begin
+       dy := 3;
+       r.Bottom := r.top + (r.bottom - r.Top) div 3;
+       r.top := r.bottom - dy;
+     end;
+
+     DrawEdge(Canvas.Handle,r, BDR_RAISEDINNER, BF_RECT );
+     OffsetRect(r,dx,dy);
+     DrawEdge(Canvas.Handle,r, BDR_RAISEDINNER, BF_RECT );
+     OffsetRect(r,dx,dy);
+     DrawEdge(Canvas.Handle,r, BDR_RAISEDINNER, BF_RECT );
+   end;
 
 var
   r,r1: TRect;
@@ -234,14 +256,17 @@ begin
       dy:=Max(0,(r.Bottom-r.Top-Txtw) div 2);
       Canvas.Font.Orientation:=900;
       if TxtW<(r.Bottom-r.Top)then
+        begin
       Canvas.TextOut(r.Left+dx-1,r.Bottom-dy-2,Caption);
       //Canvas.Font.Orientation:=-500;
       //ts:=Canvas.TextStyle;
       //ts.Alignment:=taCenter;//taRightJustify;
       //Canvas.TextStyle:=ts;
       //Canvas.TextRect(r,r.Left+dx,r.Bottom-dy,Caption);
-      //DrawGrabber(Rect(r.Left,r.Top,r.Right,r.Bottom-dy-TxtW-1));
-      //DrawGrabber(Rect(r.Left,r.Bottom-dy+1,r.Right,r.Bottom));
+      DrawGrabber(Rect(r.Left,r.Top,r.Right,r.Bottom-dy-TxtW-1));
+      DrawGrabber(Rect(r.Left,r.Bottom-dy+1,r.Right,r.Bottom));
+        end
+           else DrawGrabber(r);
     end else begin
       // horizontal
       dx:=Max(0,(r.Right-r.Left-TxtW) div 2);
@@ -249,9 +274,12 @@ begin
       Canvas.Font.Orientation:=0;
       //Canvas.TextOut(r.Left+dx,r.Top+dy,Caption);
       if TxtW<(r.right-r.Left)then
+        begin
       Canvas.TextRect(r,dx+2,dy,Caption);
-      //DrawGrabber(Rect(r.Left,r.Top,r.Left+dx-1,r.Bottom));
-      //DrawGrabber(Rect(r.Left+dx+TxtW+2,r.Top,r.Right,r.Bottom));
+      DrawGrabber(Rect(r.Left,r.Top,r.Left+dx-1,r.Bottom));
+      DrawGrabber(Rect(r.Left+dx+TxtW+2,r.Top,r.Right,r.Bottom));
+        end
+        else DrawGrabber(r);
     end;
   end else
     DrawGrabber(r);

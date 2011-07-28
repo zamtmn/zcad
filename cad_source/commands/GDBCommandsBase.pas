@@ -81,6 +81,8 @@ TOSModeEditor=object(GDBaseObject)
        ms2objinsp:PCommandObjectDef;
        deselall,selall:pCommandFastObjectPlugin;
 
+       MSEditor:TMSEditor;
+
        OSModeEditor:TOSModeEditor;
 
        InfoFormVar:TInfoForm=nil;
@@ -98,7 +100,6 @@ implementation
 uses {oglwindow,}commandline,GDBPolyLine,UGDBPolyLine2DArray,GDBLWPolyLine,mainwindow,UGDBSelectedObjArray,{ZBasicVisible,}oglwindow,geometry;
 var
    CopyClipFile:GDBString;
-   MSEditor:TMSEditor;
 procedure  TOSModeEditor.Format;
 var
    i,c:integer;
@@ -1017,7 +1018,10 @@ begin
                              if r<>IREmpty then
                                                begin
                                                pv^.RenderFeedbackIFNeed;
-                                               pv^.select;
+                                               if (button and MZW_SHIFT)=0 then
+                                                                               pv^.select
+                                                                           else
+                                                                               pv^.deselect;
                                                GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject:=pv;
                                                end;
                         end
@@ -1026,7 +1030,10 @@ begin
                              if r=IRFully then
                                               begin
                                                pv^.RenderFeedbackIFNeed;
-                                               pv^.select;
+                                               if (button and MZW_SHIFT)=0 then
+                                                                               pv^.select
+                                                                           else
+                                                                               pv^.deselect;
                                                GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject:=pv;
                                               end;
                         end
@@ -1157,14 +1164,23 @@ begin
            mem.SaveToFile(sysparam.programpath+'rtl\sysvar.pas');
            mem.done;
 end;
+procedure createInfoFormVar;
+begin
+  if not assigned(InfoFormVar) then
+  begin
+  InfoFormVar:=TInfoForm.create(application.MainForm);
+  InfoFormVar.DialogPanel.HelpButton.Hide;
+  InfoFormVar.DialogPanel.CancelButton.Hide;
+  InfoFormVar.caption:=('ОСТОРОЖНО! Проверки синтаксиса пока нет. При нажатии "ОК" объект обновится. При ошибке - ВЫЛЕТ!');
+  end;
+end;
+
 function ObjVarMan_com(Operands:pansichar):GDBInteger;
 var
    mem:GDBOpenArrayOfByte;
-//   a:integer;
    pobj:PGDBObjEntity;
    op:gdbstring;
    size,modalresult:integer;
-   //InfoForm:TInfoForm;
    us:unicodestring;
    u8s:UTF8String;
    astring:ansistring;
@@ -1191,13 +1207,7 @@ else if length(Operands)>3 then
            StrLCopy(@astring[1],mem.PArray,mem.Count);
            u8s:=(astring);
 
-           if not assigned(InfoFormVar) then
-           begin
-           InfoFormVar:=TInfoForm.create(application.MainForm);
-           InfoFormVar.DialogPanel.HelpButton.Hide;
-           InfoFormVar.DialogPanel.CancelButton.Hide;
-           InfoFormVar.caption:=('ОСТОРОЖНО! Проверки синтаксиса пока нет. При нажатии "ОК" объект обновится. При ошибке - ВЫЛЕТ!');
-           end;
+           createInfoFormVar;
 
            InfoFormVar.memo.text:=u8s;
            modalresult:=InfoFormVar.ShowModal;
@@ -1220,6 +1230,56 @@ else if length(Operands)>3 then
   else
       historyout('Выбери или укажи в параметрах объект!');
 end;
+function MultiObjVarMan_com(Operands:pansichar):GDBInteger;
+var
+   mem:GDBOpenArrayOfByte;
+   pobj:PGDBObjEntity;
+   op:gdbstring;
+   size,modalresult:integer;
+   us:unicodestring;
+   u8s:UTF8String;
+   astring:ansistring;
+   counter:integer;
+   ir:itrec;
+begin
+      begin
+           mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
+
+           createInfoFormVar;
+           counter:=0;
+
+           InfoFormVar.memo.text:='';
+           modalresult:=InfoFormVar.ShowModal;
+           if modalresult=MrOk then
+                               begin
+                                     u8s:=InfoFormVar.memo.text;
+                                     astring:={utf8tosys}(u8s);
+                                     mem.Clear;
+                                     mem.AddData(@astring[1],length(astring));
+
+                                     pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+                                     if pobj<>nil then
+                                     repeat
+                                           if pobj^.Selected then
+                                           begin
+                                                pobj^.OU.free;
+                                                units.parseunit(mem,PTSimpleUnit(@pobj^.OU));
+                                                mem.Seek(0);
+                                                inc(counter);
+                                           end;
+                                           pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+                                     until pobj=nil;
+                                     if GDBobjinsp.pcurrobj=@MSEditor then  MSEditor.CreateUnit;
+                                     GDBobjinsp.rebuild;
+                               end;
+
+
+           //InfoFormVar.Free;
+           mem.done;
+           historyoutstr('Обработано '+inttostr(counter)+' примитивов');
+      end
+end;
+
 function Regen_com(Operands:pansichar):GDBInteger;
 var //i: GDBInteger;
     pv:pGDBObjEntity;
@@ -1891,6 +1951,7 @@ begin
   CreateCommandFastObjectPlugin(@Help_com,'Help',0,0);
   CreateCommandFastObjectPlugin(@ProjectTree_com,'ProjectTree',CADWG,0);
   CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG,0);
+  CreateCommandFastObjectPlugin(@MultiObjVarMan_com,'MultiObjVarMan',CADWG,0);
   CreateCommandFastObjectPlugin(@SaveOptions_com,'SaveOptions',0,0);
   CreateCommandFastObjectPlugin(@Regen_com,'Regen',CADWG,0);
   CreateCommandFastObjectPlugin(@Copyclip_com,'CopyClip',CADWG,0);

@@ -766,40 +766,51 @@ var
    ir:itrec;
    {pvisible,}pvisible2:PGDBObjEntity;
    //pl:PGDBLayerProp;
+procedure processblock;
+begin
+  td:=_to.BlockDefArray.getblockdef(tn);
+  if td=nil then
+                 begin
+                      td:=_from.BlockDefArray.getblockdef(tn);
+                      if td<>nil then
+                      begin
+                      pvisible2:=td.ObjArray.beginiterate(ir);
+                      if pvisible2<>nil then
+                      repeat
+                            createblockifneed(_from,_to,pvisible2);
+
+                            pvisible2:=td.ObjArray.iterate(ir);
+                      until pvisible2=nil;
+                      end;
+                      if (_source^.vp.ID=GDBDeviceID) then
+                      begin
+                      pvisible2:=PGDBObjDevice(_source)^.VarObjArray.beginiterate(ir);
+                      if pvisible2<>nil then
+                      repeat
+                            createblockifneed(_from,_to,pvisible2);
+
+                            pvisible2:=PGDBObjDevice(_source)^.VarObjArray.iterate(ir);
+                      until pvisible2=nil;
+
+                      end;
+
+
+                      if td<>nil then
+                                     gdb.CopyBlock(_from,_to,td);
+                 end;
+end;
+
 begin
                if (_source^.vp.ID=GDBBlockInsertID)
                or (_source^.vp.ID=GDBDeviceID) then
                begin
                     tn:=PGDBObjBlockInsert(_source)^.name;
+                    processblock;
                     if (_source^.vp.ID=GDBDeviceID) then
-                                                         tn:='DEVICE_'+tn;
-                    td:=_to.BlockDefArray.getblockdef(tn);
-                    if td=nil then
-                                   begin
-                                        td:=_from.BlockDefArray.getblockdef(tn);
-                                        pvisible2:=td.ObjArray.beginiterate(ir);
-                                        if pvisible2<>nil then
-                                        repeat
-                                              createblockifneed(_from,_to,pvisible2);
-
-                                              pvisible2:=td.ObjArray.iterate(ir);
-                                        until pvisible2=nil;
-                                        if (_source^.vp.ID=GDBDeviceID) then
-                                        begin
-                                        pvisible2:=PGDBObjDevice(_source)^.VarObjArray.beginiterate(ir);
-                                        if pvisible2<>nil then
-                                        repeat
-                                              createblockifneed(_from,_to,pvisible2);
-
-                                              pvisible2:=PGDBObjDevice(_source)^.VarObjArray.iterate(ir);
-                                        until pvisible2=nil;
-
-                                        end;
-
-
-
-                                        gdb.CopyBlock(_from,_to,td);
-                                   end;
+                    begin
+                         tn:='DEVICE_'+tn;
+                         processblock;
+                    end;
 
                end;
 end;

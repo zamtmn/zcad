@@ -32,14 +32,14 @@ begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=307;
   VIEW_ObjInspSubV:=141;
-  PATH_File0:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File1:='C:\zcad\cad\sample\test_dxf\teapot.dxf';
-  PATH_File2:='J:\nh\Рыков Иван Васильевич\Стоматология\projAOV2.dxf';
-  PATH_File3:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File4:='J:\nh\термоинжиниринг\ГОМ6\ДУ\proj.dxf';
-  PATH_File5:='J:\nh\Зварыгина\стоянка\аов.dxf';
-  PATH_File6:='J:\nh\Рыков Иван Васильевич\Стоматология\proj.dxf';
-  PATH_File7:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File8:='D:\FA.dxf';
-  PATH_File9:='D:\многосегментность.dxf';
+  PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File1:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File2:='/mnt/win_c/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File3:='J:\nh\термоинжиниринг\ГОМ6\Пожарка\ГОМ6-Планы-схемы.dxf';
+  PATH_File4:='J:\nh\Зварыгина\стоянка\аов.dwg';
+  PATH_File5:='J:\nh\виталя\школа\школа Ноябрьск планы.dxf';
+  PATH_File6:='J:\nh\Запсибпроектсервис\ГП17\proj.dxf';
+  PATH_File7:='J:\nh\Рыков Иван Васильевич\Стоматология\proj.dxf';
+  PATH_File8:='D:\2.dxf';
+  PATH_File9:='/mnt/win_c/zcad/cad/autosave/autosave.dxf';
 end.

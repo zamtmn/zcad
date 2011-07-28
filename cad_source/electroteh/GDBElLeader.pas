@@ -34,6 +34,7 @@ GDBObjElLeader=object(GDBObjComplex)
             procedure RenderFeedback;virtual;
             procedure addcontrolpoints(tdesc:GDBPointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
+            procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
             function beforertmodify:GDBPointer;virtual;
             function select:GDBBoolean;virtual;
             procedure Format;virtual;
@@ -476,12 +477,16 @@ begin
      if result then
      begin
           selected:=true;
-          tdesc:=gdb.GetCurrentDWG.SelObjArray.addobject(@mainline);
+          tdesc:=gdb.GetCurrentDWG.SelObjArray.addobject(@{mainline}self);
           GDBGetMem({$IFDEF DEBUGBUILD}'{B50BE8C9-E00A-40C0-A051-230877BD3A56}',{$ENDIF}GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
           mainline.addcontrolpoints(tdesc);
           inc(GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
      end;
      end;
+end;
+function GDBObjElLeader.ReturnLastOnMouse;
+begin
+     result:={@MainLine}@self;
 end;
 
 function GDBObjElLeader.beforertmodify;
@@ -492,6 +497,11 @@ procedure GDBObjElLeader.rtmodifyonepoint(const rtmod:TRTModifyData);
 begin
      mainline.rtmodifyonepoint(rtmod);
 end;
+procedure GDBObjElLeader.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+begin
+     mainline.remaponecontrolpoint(pdesc);
+end;
+
 procedure GDBObjElLeader.addcontrolpoints(tdesc:GDBPointer);
 //var pdesc:controlpointdesc;
 begin
@@ -506,10 +516,6 @@ begin
      MainLine.RenderFeedback;
      markline.RenderFeedback;
      tbl.RenderFeedback;
-end;
-function GDBObjElLeader.ReturnLastOnMouse;
-begin
-     result:=@MainLine{@self};
 end;
 function GDBObjElLeader.onmouse;
 var //t,xx,yy:GDBDouble;

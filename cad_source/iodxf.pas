@@ -430,8 +430,11 @@ var
   blockload:boolean;
 
   tstyle:GDBTextStyle;
+
+  nulisread:boolean;
 begin
   blockload:=false;
+  nulisread:=false;
   {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF2000',lp_IncPos);{$ENDIF}
   repeat
     gotodxf(f, 0, 'SECTION');
@@ -486,9 +489,14 @@ begin
                     desk:='';
                     while byt <> 0 do
                     begin
+                      if not nulisread then
+                      begin
                       s := f.readGDBString;
                       byt := strtoint(s);
                       s := f.readGDBString;
+                      end
+                      else
+                          nulisread:=false;
                       case byt of
                         2:
                           begin
@@ -525,9 +533,28 @@ begin
                                if s='AcAecLayerStandard' then
                                  begin
                                       s := f.readGDBString;
-                                      s := f.readGDBString;
-                                      s := f.readGDBString;
-                                      desk := f.readGDBString;
+                                      byt:=strtoint(s);
+                                      if byt<>0 then
+                                      begin
+                                          s := f.readGDBString;
+                                          begin
+                                                s := f.readGDBString;
+                                                byt:=strtoint(s);
+                                                if byt<>0 then
+                                                              desk := f.readGDBString
+                                                          else
+                                                              begin
+                                                              nulisread:=true;
+                                                              s := f.readGDBString;
+                                                              end;
+
+                                          end;
+                                      end
+                                         else
+                                         begin
+                                          nulisread:=true;
+                                          s := f.readGDBString;
+                                         end;
                                  end;
                            end;
 

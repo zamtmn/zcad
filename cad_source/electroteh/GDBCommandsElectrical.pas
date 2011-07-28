@@ -2084,6 +2084,7 @@ begin
 
   GDBGetMem({$IFDEF DEBUGBUILD}'{33202D9B-6197-4A09-8BC8-1D24AA3053DA}',{$ENDIF}pointer(pleader),sizeof(GDBObjElLeader));
   pleader^.initnul;
+  //pleader^.ou.copyfrom(units.findunit('_riser'));
   pleader^.scale:=ELLeaderComParam.Scale;
   pleader^.size:=ELLeaderComParam.Size;
   pleader^.twidth:=ELLeaderComParam.twidth;

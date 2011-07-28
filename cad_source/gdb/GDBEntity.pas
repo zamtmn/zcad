@@ -994,7 +994,12 @@ begin
      case dxfcod of
                    8:begin
                           if vp.layer.name='0' then
-                                                   vp.Layer :=gdb.GetCurrentDWG.LayerTable.getAddres(readmystr(f))
+                                                   begin
+                                                        name:=readmystr(f);
+                                                   vp.Layer :=gdb.GetCurrentDWG.LayerTable.getAddres(name);
+                                                   if vp.Layer=nil then
+                                                                        vp.Layer:=vp.Layer;
+                                                   end
                                                else
                                                    APP_NAME:=readmystr(f);
                           result:=true

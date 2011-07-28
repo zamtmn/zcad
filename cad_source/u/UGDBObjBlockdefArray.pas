@@ -68,12 +68,16 @@ end;
 function GDBObjBlockdefArray.getindex;
 var
    i:GDBInteger;
+   debugs:string;
 begin
   result:=-1;
   if count = 0 then exit;
   for i:=0 to count-1 do
+                        begin
+                        debugs:=PBlockdefArray(parray)[i].Name;
                         if PBlockdefArray(parray)[i].Name=name then
                                                                    result := i;
+                        end;
 end;
 procedure GDBObjBlockdefArray.format;
 var

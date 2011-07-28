@@ -1470,6 +1470,8 @@ begin
     then
     begin
          begin
+              {if (key and MZW_LBUTTON)<>0 then
+                                              shared.HistoryOutStr(floattostr(param.ospoint.ostype));}
               tv:=param.ospoint.worldcoord;
               if (key and MZW_SHIFT)<>0 then
                                             begin
@@ -1895,7 +1897,7 @@ begin
                    end;
                NeedRedraw:=true;
           end
-          else if ((param.md.mode and MGetSelectionFrame) <> 0) and (key = MZW_LBUTTON) then
+          else if ((param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then
           begin
             commandmanager.ExecuteCommandSilent('SelectFrame');
             sendmousecoord(MZW_LBUTTON);
@@ -1910,7 +1912,7 @@ begin
         sendmousecoordwop(key);
         //GDBFreeMem(GDB.PObjPropArray^.propertyarray[0].pobject);
       end
-      else if ((param.md.mode and MGetSelectionFrame) <> 0) and (key = MZW_LBUTTON) then
+      else if ((param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then
           begin
             commandmanager.ExecuteCommandSilent('SelectFrame');
             sendmousecoord(MZW_LBUTTON);

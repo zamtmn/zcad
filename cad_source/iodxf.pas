@@ -26,7 +26,7 @@ type
                     entname:GDBString;
               end;
 const
-     acadentsupportcol=10;
+     acadentsupportcol=11;
      entnamtable:array[1..acadentsupportcol]of entnamindex=
      (
      (entname:'POINT'),
@@ -38,7 +38,8 @@ const
      (entname:'INSERT'),
      (entname:'MTEXT'),
      (entname:'LWPOLYLINE'),
-     (entname:'3DFACE')
+     (entname:'3DFACE'),
+     (entname:'SOLID')
      );
 const
      NULZCPHeader:ZCPHeader=(

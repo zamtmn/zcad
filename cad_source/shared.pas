@@ -52,7 +52,7 @@ var
     historychanged:boolean;
 
 implementation
-uses {strproc,}{umytreenode,}{FileUtil,LCLclasses,} LCLtype,
+uses strproc,{umytreenode,}{FileUtil,LCLclasses,} LCLtype,
      //mainwindow,
      log,{UGDBDescriptor,}varmandef,{sysinfo,}{cmdline,}strutils{,oglwindow};
 procedure DisableCmdLine;
@@ -160,7 +160,9 @@ procedure processfile(s:gdbstring);
 var
    fn:gdbstring;
 begin
-     fn:=systoutf8(path+s);
+     fn:={systoutf8}({systoutf8}Tria_AnsiToUtf8(path)+systoutf8(s));
+     programlog.logoutstr('utf '+fn,0);
+     programlog.logoutstr('sys '+path,0);
      {$IFDEF TOTALYLOG}programlog.logoutstr('Process file '+fn,0);{$ENDIF}
      if @method<>nil then
                          method(fn);

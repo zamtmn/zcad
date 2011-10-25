@@ -41,6 +41,8 @@ PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=record
                       Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
                       LineWeight:GDBSmallint;(*'Line Weight'*)(*saved_to_shd*)
+                      LineType:GDBString;(*'Line Weight'*)(*saved_to_shd*)
+                      LineTypeScale:GDBSmallint;(*'Line Weight'*)(*saved_to_shd*)
                       ID:GDBWord;(*'Object type'*)(*oi_readonly*)
                       BoundingBox:GDBBoundingBbox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       LastCameraPos:TActulity;(*oi_readonly*)
@@ -213,6 +215,9 @@ begin
      Selected := false;
      self.Visible:=0;
      vp.lineweight:=-1;
+     vp.LineType:='';
+     vp.LineTypeScale:=1;
+
      if gdb.GetCurrentDWG<>nil then
                                    vp.layer:=gdb.GetCurrentDWG.LayerTable.GetSystemLayer
                                else
@@ -372,6 +377,8 @@ begin
   //vp.ID := 0;
   vp.Layer := layeraddres;
   vp.LineWeight := LW;
+  vp.LineType:='';
+  vp.LineTypeScale:=1;
   bp.ListPos.owner:=own;
 end;
 constructor GDBObjEntity.initnul;
@@ -762,6 +769,8 @@ begin
      inherited;
      if PExtAttrib<>nil then
                             gdbfreemem(pointer(PExtAttrib));
+     vp.LineType:='';
+
 end;
 
 procedure GDBObjEntity.rtsave;

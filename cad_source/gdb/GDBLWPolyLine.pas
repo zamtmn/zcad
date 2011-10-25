@@ -274,13 +274,38 @@ begin
 end;
 procedure GDBObjLWpolyline.rtmodifyonepoint(const rtmod:TRTModifyData);
 var vertexnumber:GDBInteger;
-    tv:gdbvertex;
+    tv,wwc:gdbvertex;
+
+    M: DMatrix4D;
 begin
-     vertexnumber:=abs(rtmod.point.pointtype-os_polymin);
+  vertexnumber:=abs(rtmod.point.pointtype-os_polymin);
+
+  m:=self.ObjMatrix;
+
+  {m[3][0]:=0;
+  m[3][1]:=0;
+  m[3][2]:=0;}
+
+  geometry.MatrixInvert(m);
+
+
+  tv:=rtmod.dist;
+  wwc:=rtmod.point.worldcoord;
+
+  wwc:=VertexAdd(wwc,tv);
+
+  //tv:=geometry.VectorTransform3D(tv,m);
+  wwc:=geometry.VectorTransform3D(wwc,m);
+
+
+  PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=wwc.x{VertexAdd(wwc,tv)};
+  PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=wwc.y;
+  //PInOCS[vertexnumber].z:=0;
+     {vertexnumber:=abs(rtmod.point.pointtype-os_polymin);
      tv:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
      geometry.VectorTransform3D(tv,self.ObjMatrix);
      PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=tv.x;
-     PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=tv.y;
+     PGDBArrayVertex2D(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=tv.y;}
 end;
 procedure GDBObjLWpolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 var vertexnumber:GDBInteger;
@@ -651,7 +676,7 @@ begin
        tv.x:=PGDBArrayVertex2D(Vertex2D_in_OCS_Array.PArray)^[j].x;
        tv.y:=PGDBArrayVertex2D(Vertex2D_in_OCS_Array.PArray)^[j].y;
        tv.z:=0;
-       tv:=geometry.VectorTransform3D(tv,m);
+       //tv:=geometry.VectorTransform3D(tv,m);
     dxfvertex2dout(outhandle,10,PGDBVertex2D(@tv)^);
     //dxfvertex2dout(outhandle,10,PGDBArrayVertex2D(Vertex2D_in_OCS_Array.PArray)^[j]);
     dxfGDBDoubleout(outhandle,40,PGLLWWidth(Width2D_in_OCS_Array.getelement(j)).startw);

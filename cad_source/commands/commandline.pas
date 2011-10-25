@@ -248,11 +248,15 @@ begin
       then
           begin
 
-          lastcommand := command;
+          //lastcommand := command;
+
           if silent then
                         programlog.logoutstr('GDBCommandManager.ExecuteCommandSilent('+pfoundcommand^.CommandName+');',0)
                     else
+                        begin
                         historyoutstr(S_RunCommand+':'+pfoundcommand^.CommandName);
+                        lastcommand := command;
+                        end;
 
           run(pfoundcommand,operands);
           if pcommandrunning<>nil then

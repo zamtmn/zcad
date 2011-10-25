@@ -25,7 +25,7 @@ uses GDB3DFace,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
      UGDBDescriptor,varmandef,gdbobjectsconstdef,
      UGDBVisibleOpenArray,GDBGenericSubEntry,gdbEntity,GDBCable,GDBDevice,
      GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMText,GDBLine,
-     GDBPolyLine,GDBLWPolyLine,memman;
+     GDBPolyLine,GDBLWPolyLine,memman,GDBSolid;
 type
     TSelObjDesk=record
                       PFirstObj:PGDBObjEntity;
@@ -139,6 +139,11 @@ begin
         GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.cable}',{$ENDIF}GDBPointer(temp), sizeof(GDBObj3DFace));
         pGDBObj3DFace(temp).initnul(owner);
         pGDBObj3DFace(temp).bp.ListPos.Owner:=owner;
+      end;
+    GDBSolidID: begin
+        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.cable}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjSolid));
+        pGDBObjSolid(temp).initnul(owner);
+        pGDBObjSolid(temp).bp.ListPos.Owner:=owner;
       end;
   end;
   result := temp;

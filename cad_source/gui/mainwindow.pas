@@ -548,7 +548,7 @@ begin
       PageControl.Constraints.MinHeight:=32;
       PageControl.Parent:=MainPanel;
       PageControl.Align:=alClient;
-      PageControl.OnPageChanged:=ChangedDWGTabCtrl;
+      PageControl.{OnPageChanged}OnChange:=ChangedDWGTabCtrl;
       PageControl.BorderWidth:=0;
 
    AControl:=MainPanel;
@@ -1907,7 +1907,7 @@ begin
 
   {layerbox.ClearText;}
   layerbox.Items.Clear;
-  layerbox.Sorted:=true;
+  //layerbox.Sorted:=true;
   plp:=plt^.beginiterate(ir);
   if plp<>nil then
   repeat
@@ -1921,6 +1921,7 @@ begin
   //layerbox.Items.Add(S_Different);
   layerbox.Additem(S_Different,nil);
   layerbox.ItemIndex:=(SysVar.dwg.DWG_CLayer^);
+  //layerbox.Sorted:=true;
 end;
 function getoglwndparam: GDBPointer; export;
 begin

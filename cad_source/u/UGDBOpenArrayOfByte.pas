@@ -193,7 +193,7 @@ begin
 end;
 function GDBOpenArrayOfByte.notEOF:GDBBoolean;
 begin
-     result:=readpos<(count-1)
+     result:=(readpos<(count-1))and(parray<>nil)
 end;
 function GDBOpenArrayOfByte.Jump;
 begin
@@ -274,7 +274,9 @@ begin
      //StringToWideChar(filename)
      infile:=fileopen(UTF8ToSys(FileName),fmShareDenyNone);
      if infile<=0 then
-                      shared.ShowError('Не могу открыть файл "'+FileName+'"');
+                      shared.ShowError('Не могу открыть файл "'+FileName+'"')
+     else
+     begin
      pointer(name):=nil;
      name:=filename;
      filelength:=FileSeek(infile,0,2);
@@ -285,6 +287,7 @@ begin
      FileRead(InFile,parray^,filelength);
      count:=filelength;
      fileclose(infile)
+     end;
 end;
 function GDBOpenArrayOfByte.SaveToFile;
 var infile:GDBInteger;

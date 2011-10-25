@@ -23,7 +23,7 @@ interface
 
 uses
 
-
+   ucxmenumgr,GLext,
   {$IFDEF LCLGTK2}
   //x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
@@ -71,7 +71,9 @@ type
     thdc:HDC;}
     procedure CalcMouseFrustum;
   public
+    sh:integer;
     OTTimer:TTimer;
+    OHTimer:TTimer;
     //OMMTimer:TTimer;
     PolarAxis:GDBPoint3dArray;
     param: OGLWndtype;
@@ -99,6 +101,8 @@ type
     procedure render(const Root:GDBObjGenericSubEntry);
     function treerender(var Node:TEntTreeNode;StartTime:TDateTime):GDBBoolean;
 
+    function GetOnMouseObjDesc:GDBString;
+
     procedure getosnappoint({pva: PGDBObjEntityOpenArray;}radius: GDBFloat);
     procedure set3dmouse;
     procedure DISP_ZoomFactor(x: double{; MousePos: TPoint});
@@ -113,6 +117,11 @@ type
     procedure SetOTrackTimer(Sender: TObject);
     procedure KillOTrackTimer(Sender: TObject);
     procedure ProcOTrackTimer(Sender:TObject);
+
+    procedure SetOHintTimer(Sender: TObject);
+    procedure KillOHintTimer(Sender: TObject);
+    procedure ProcOHintTimer(Sender:TObject);
+
     //procedure runonmousemove(Sender:TObject);
     procedure projectaxis;
     procedure create0axis;
@@ -242,6 +251,7 @@ begin
 end;
 procedure TOGLWnd.mypaint;
 begin
+     param.firstdraw:=true;
      draw;
      inherited;
 end;
@@ -256,6 +266,12 @@ begin
      //ControlStyle:=ControlStyle+[csNeedsBorderPaint];
      //FCompStyle:=csNonLCL;
 
+  sh:=0;
+
+  self.Hint:=inttostr(random(100));
+  self.ShowHint:=true;
+
+
      onpaint:=mypaint;
      //Application.AddOnIdleHandler(mypaint2);
      //=====-----------------------------------------------------------------------------------------
@@ -267,6 +283,7 @@ begin
      self.Cursor:=crNone;
      programlog.logoutstr('self.Cursor:=crNone;',0);
      OTTimer:=TTimer.create(self);
+     OHTimer:=TTimer.create(self);
      programlog.logoutstr('OTTimer:=TTimer.create(self);',0);
      {OMMTimer:=TTimer.create(self);
      OMMTimer.Interval:=10;
@@ -306,6 +323,53 @@ begin
                                         OTTimer.Interval:=500;
                                         OTTimer.OnTimer:=ProcOTrackTimer;
                                         OTTimer.Enabled:=true;
+
+                                   end;
+end;
+procedure TOGLWnd.ProcOHintTimer(Sender:TObject);
+begin
+  //timeKillEvent(uEventID);
+  //otracktimer := 1;
+  {OHTimer.Interval:=0;
+  OHTimer.Enabled:=false;
+
+  if sh=0 then
+  begin
+  self.Hint:=inttostr(random(100));
+  self.ShowHint:=true;
+  sh:=1;
+  end;}
+end;
+procedure TOGLWnd.KillOHintTimer(Sender: TObject);
+begin
+  //Application.CancelHint;
+  {if self.ShowHint then
+   self.ShowHint:=self.ShowHint;
+  if sh=1 then
+                       begin
+                            //self.Hint:='++';
+                            //self.ShowHint:=false;
+                            sh:=0;
+                       end;
+  }
+  OHTimer.Interval:=0;
+  OHTimer.Enabled:=false;
+end;
+
+procedure TOGLWnd.SetOHintTimer(Sender: TObject);
+begin
+    Hint:=GetOnMouseObjDesc;
+    ShowHint:=true;
+    if hint<>'' then
+    Application.ActivateHint(ClientToScreen(Point(param.md.mouse.x,param.md.mouse.y)))
+    else
+        application.CancelHint;
+
+                                   begin
+                                        //uEventID := timeSetEvent(500, 250, @ProcTime, 0, 1)
+                                        OHTimer.Interval:=500;
+                                        OHTimer.OnTimer:=ProcOHintTimer;
+                                        OHTimer.Enabled:=true;
 
                                    end;
 end;
@@ -1135,8 +1199,9 @@ begin
   //if   (param.md.mouse.y=y)and(param.md.mouse.x=x)then
   //                                                    exit;
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove',lp_IncPos);{$ENDIF}
-
-
+  cxmenumgr.reset;
+  KillOHintTimer(self);
+  SetOHintTimer(self);
   currentmousemovesnaptogrid:=false;
   key:=0;
   if (ssShift in Shift) then
@@ -1781,6 +1846,9 @@ procedure TOGLWnd.MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integ
 var key: GDBByte;
     NeedRedraw:boolean;
 begin
+  if (cxmenumgr.ismenupopup)or(ActivePopupMenu<>nil) then
+                                                         exit;
+  ActivePopupMenu:=ActivePopupMenu;
   NeedRedraw:=false;
   if ssDouble in shift then
                            begin
@@ -1859,6 +1927,12 @@ begin
         begin
           getonmouseobjectbytree(gdb.GetCurrentROOT.ObjArray.ObjTree);
           //getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
+          if (key and MZW_CONTROL)<>0 then
+          begin
+               commandmanager.ExecuteCommandSilent('SelectOnMouseObjects');
+          end
+          else
+          begin
           param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
 
           {//Выделение всех объектов под мышью
@@ -1897,11 +1971,13 @@ begin
                    end;
                NeedRedraw:=true;
           end
+
           else if ((param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then
           begin
             commandmanager.ExecuteCommandSilent('SelectFrame');
             sendmousecoord(MZW_LBUTTON);
           end;
+        end;
         end;
 
     end
@@ -3163,6 +3239,41 @@ begin
   param.lastonmouseobject:=nil;}
 
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobjectbytree------{end}',lp_DecPos);{$ENDIF}
+end;
+function TOGLWnd.GetOnMouseObjDesc:GDBString;
+var
+  i: GDBInteger;
+  pp:PGDBObjEntity;
+  ir:itrec;
+  inr:TINRect;
+  line:GDBString;
+  pvd:pvardesk;
+begin
+     result:='';
+     i:=0;
+     pp:=gdb.GetCurrentDWG.OnMouseObj.beginiterate(ir);
+     if pp<>nil then
+                    begin
+                         repeat
+                         pvd:=pp.ou.FindVariable('NMO_Name');
+                         if pvd<>nil then
+                                         begin
+                                         if i=20 then
+                                         begin
+                                              result:=result+#13#10+'...';
+                                              exit;
+                                         end;
+                                         line:=pp^.GetObjName+' Layer='+pp^.vp.Layer.GetFullName;
+                                         line:=line+' Name='+pvd.data.PTD.GetValueAsString(pvd.data.Instance);
+                                         if result='' then
+                                                          result:=line
+                                                      else
+                                                          result:=result+#13#10+line;
+                                         inc(i);
+                                         end;
+                               pp:=gdb.GetCurrentDWG.OnMouseObj.iterate(ir);
+                         until pp=nil;
+                    end;
 end;
 
 procedure TOGLWnd.getonmouseobject;

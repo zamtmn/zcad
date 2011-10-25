@@ -1369,8 +1369,12 @@ begin
      result:=InterfaceTypes._TypeIndex2PTD(ind);
 end;
 function tunit.AssignToSymbol;//(var psymbol;symbolname:GDBString);
+var
+  vd:pvardesk;
 begin
-     pointer(psymbol):=InterfaceVariables.findvardesc(symbolname).data.Instance;
+     vd:=InterfaceVariables.findvardesc(symbolname);
+     if vd<>nil then
+     pointer(psymbol):=vd^.data.Instance;
 end;
 function FindCategory(category:GDBString;var catname:GDBString):Pointer;
 var

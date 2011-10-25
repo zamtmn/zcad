@@ -710,6 +710,8 @@ initialization;
   SavedUnit:=units.findunit('savedvar');
   DBUnit:=units.findunit('devicebase');
 
+  if SysVarUnit<>nil then
+  begin
   SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_DrawMode,'DWG_DrawMode');
   SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_OSMode,'DWG_OSMode');
   //SysVarUnit.AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
@@ -808,6 +810,8 @@ initialization;
   sysvar.PATH.Program_Run^:=sysparam.programpath;
   sysvar.PATH.Temp_files:=@sysparam.temppath;
   sysvar.SYS.SYS_Version^:=sysparam.ver.versionstring;
+  end;
+
 
   units.loadunit(expandpath('*rtl/cables.pas'),nil);
   units.loadunit(expandpath('*rtl/devices.pas'),nil);
@@ -840,7 +844,7 @@ initialization;
   SysVar.debug.memdeb.TotalAllocMb:=@memman.TotalAllocMb;
   SysVar.debug.memdeb.CurrentAllocMB:=@memman.CurrentAllocMB;
 
-
+  if sysunit<>nil then
   PRecordDescriptor(sysunit.TypeName2PTD('CommandRTEdObject'))^.FindField('commanddata')^.Collapsed:=false;
   programlog.logoutstr('UUnitManager.startup',lp_DecPos);
 

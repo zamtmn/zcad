@@ -20,7 +20,7 @@ unit projecttreewnd;
 {$INCLUDE def.inc}
 interface
 uses
- strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ ucxmenumgr,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}ComCtrls,
  {ZTabControlsGeneric,zmenus,}DeviceBase,log,SysUtils,{UGDBTree,}gdbase,UGDBDescriptor{,math,commandline},varman,languade{,UGDBTracePropArray},
   {ZEditsWithProcedure,zbasicvisible,}varmandef,shared,sysinfo{,ZTreeViewsGeneric},memman,gdbasetypes;
@@ -333,6 +333,8 @@ begin
   ProjectTreeWindow:=nil;
 
   ProgramDBContextMenuN:=TmyPopupMenu.create(nil);
+  cxmenumgr.RegisterLCLMenu(ProgramDBContextMenuN);
+  //ProgramDBContextMenuN.OnClose:=cxmenumgr.CloseNotify;
   ProgramDBContextMenuN.Items.Add(TmyMenuItem.create(ProgramDBContextMenuN,'Добавить в базу данных чертежа','DBaseAdd'));
 
   ProjectDBContextMenuN:=TmyPopupMenu.create(nil);
@@ -340,6 +342,8 @@ begin
 
   ProgramDEVContextMenuN:=TmyPopupMenu.create(nil);
   ProgramDEVContextMenuN.Items.Add(TmyMenuItem.create(ProgramDEVContextMenuN,'Вставить в чертеж','Insert2'));
+  cxmenumgr.RegisterLCLMenu(ProgramDEVContextMenuN);
+  //ProgramDEVContextMenuN.OnClose:=cxmenumgr.CloseNotify;
 end;
 finalization
 begin

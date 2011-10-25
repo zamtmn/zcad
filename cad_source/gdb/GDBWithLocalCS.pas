@@ -43,7 +43,7 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;
-               procedure SaveToDXFObjPostfix(outhandle:{GDBInteger}GDBOpenArrayOfByte);
+               procedure SaveToDXFObjPostfix(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
                function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit):GDBBoolean;
 
                procedure Format;virtual;

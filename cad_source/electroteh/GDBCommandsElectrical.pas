@@ -1779,6 +1779,85 @@ begin
   redrawoglwnd;
   result:=cmd_ok;
 end;
+{
+function _Ren_n_to_0n_com(Operands:pansichar):GDBInteger;
+var len: GDBInteger;
+    pv:pGDBObjEntity;
+    ir:itrec;
+    pvd:pvardesk;
+    name:gdbstring;
+begin
+  pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+    if pv^.vp.ID=GDBCableID then
+    begin
+         pvd:=pv^.ou.FindVariable('NMO_Name');
+         if pvd<>nil then
+                         begin
+                              name:=pgdbstring(pvd.data.Instance)^;
+                              len:=length(name);
+                              if len=3 then
+                              if name[len] in ['0'..'9'] then
+                              if not(name[len-1] in ['0'..'9']) then
+                              begin
+                                   name:=system.copy(name,1,len-1)+'0'+system.copy(name,len,1);
+                                   pgdbstring(pvd.data.Instance)^:=name;
+                                   historyoutstr('Переименован кабель '+name);
+                              end
+                         end;
+    end;
+  pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+  until pv=nil;
+end;
+}
+function VarReport_com(Operands:pansichar):GDBInteger;
+var pv:pGDBObjEntity;
+    ir:itrec;
+    pvd:pvardesk;
+    name,content:gdbstring;
+    VarContents:GDBGDBStringArray;
+    ps{,pspred}:pgdbstring;
+begin
+  if operands<>''then
+  begin
+  VarContents.init(100);
+  name:=Operands;
+  pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+    if pv^.Selected then
+    begin
+    pvd:=pv^.ou.FindVariable(name);
+    if pvd<>nil then
+    begin
+         content:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
+    end
+       else
+           begin
+                content:='Переменной в описании примитива не обнаружено';
+           end;
+    VarContents.add(@content);
+    end;
+  pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+  until pv=nil;
+  VarContents.sort;
+
+  ps:=VarContents.beginiterate(ir);
+  if (ps<>nil) then
+  repeat
+       historyoutstr(ps^);
+       ps:=VarContents.iterate(ir);
+  until ps=nil;
+
+  VarContents.FreeAndDone;
+  end
+  else
+      historyoutstr('Имя переменной должно быть задано в параметре команды');
+  redrawoglwnd;
+  result:=cmd_ok;
+end;
+
 function _Cable_com_Invert(Operands:pansichar):GDBInteger;
 var //i: GDBInteger;
     pv:pGDBObjEntity;
@@ -2244,6 +2323,8 @@ begin
   FindDeviceParam.FindString:='';
   ELLeaderComParam.Scale:=1;
   ELLeaderComParam.Size:=1;
+
+  CreateCommandFastObjectPlugin(@VarReport_com,'VarReport',CADWG,0);
 end;
 
 procedure finalize;

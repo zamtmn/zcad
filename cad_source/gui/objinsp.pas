@@ -707,7 +707,9 @@ begin
   self.ShowHint:=true;
 
   //SendMessage(MainFormN.hToolTip, TTM_ADDTOOL, 0, LPARAM(@ti));
-  end;
+  end
+  else
+  Application.ActivateHint(ClientToScreen(Point(X, Y)));
 
   oldpp:=pp;
   if (pp^.Attr and FA_READONLY)<>0 then exit;

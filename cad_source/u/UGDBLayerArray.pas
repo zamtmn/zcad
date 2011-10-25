@@ -108,7 +108,7 @@ begin
      case AddItem(name,pointer(p)) of
              IsFounded:
                        begin
-                            if lm=TLoadOpt.TLOLoad then
+                            if lm=TLOLoad then
                             begin
                                  p^.color:=color;
                                  p^.lineweight:=lw;

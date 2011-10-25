@@ -260,6 +260,7 @@ GDBArrayVertex=array[0..0] of GDBvertex;
                   dir:gdbinteger;
                   wc:GDBVertex;
             end;
+  TLoadOpt=(TLOLoad,TLOMerge);
 FreeElProc=procedure (p:GDBPointer);
 //Generate on C:\zcad\CAD_SOURCE\u\UOpenArray.pas
 POpenArray=^OpenArray;
@@ -472,7 +473,7 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           constructor init(m:GDBInteger);
                           procedure loadfromfile(fname:GDBString);
                           procedure freeelement(p:GDBPointer);virtual;abstract;
-                          function findstring(s:GDBString):boolean;
+                          function findstring(s:GDBString;ucase:gdbboolean):boolean;
                           procedure sort;virtual;abstract;
                           function add(p:GDBPointer):TArrayIndex;virtual;abstract;
                           function addutoa(p:GDBPointer):TArrayIndex;
@@ -646,7 +647,7 @@ PGDBLayerArray=^GDBLayerArray;
 GDBLayerArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLayerProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
-                    function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString):PGDBLayerProp;virtual;abstract;
+                    function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;abstract;
                     function GetSystemLayer:PGDBLayerProp;
                     function GetCurrentLayer:PGDBLayerProp;
               end;
@@ -998,6 +999,8 @@ PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=record
                       Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
                       LineWeight:GDBSmallint;(*'Line Weight'*)(*saved_to_shd*)
+                      LineType:GDBString;(*'Line Weight'*)(*saved_to_shd*)
+                      LineTypeScale:GDBSmallint;(*'Line Weight'*)(*saved_to_shd*)
                       ID:GDBWord;(*'Object type'*)(*oi_readonly*)
                       BoundingBox:GDBBoundingBbox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       LastCameraPos:TActulity;(*oi_readonly*)
@@ -1157,7 +1160,7 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;abstract;
-               procedure SaveToDXFObjPostfix(outhandle:{GDBInteger}GDBOpenArrayOfByte);
+               procedure SaveToDXFObjPostfix(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
                function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit):GDBBoolean;
                procedure Format;virtual;abstract;
                procedure CalcObjMatrix;virtual;abstract;
@@ -1171,6 +1174,37 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                procedure higlight;virtual;abstract;
                procedure ReCalcFromObjMatrix;virtual;abstract;
          end;
+//Generate on C:\zcad\CAD_SOURCE\gdb\GDBSolid.pas
+PGDBObjSolid=^GDBObjSolid;
+GDBObjSolid=object(GDBObjWithLocalCS)
+                 PInOCS:OutBound4V;(*'Coordinates OCS'*)(*saved_to_shd*)
+                 PInWCS:OutBound4V;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
+                 PInDCS:OutBound4V;(*'Coordinates DCS'*)(*hidden_in_objinsp*)
+                 normal:GDBVertex;
+                 triangle:GDBBoolean;
+                 n,p1,p2,p3:GDBVertex3S;
+                 //ProjPoint:GDBvertex;
+                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
+                 constructor initnul(owner:PGDBObjGenericWithSubordinated);
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
+                 procedure Format;virtual;abstract;
+                 procedure createpoint;virtual;abstract;
+                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
+                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
+                 procedure RenderFeedback;virtual;abstract;
+                 //function getsnap(var osp:os_record):GDBBoolean;virtual;abstract;
+                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
+                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
+                 procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
+                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
+                 procedure rtsave(refp:GDBPointer);virtual;abstract;
+                 function GetObjTypeName:GDBString;virtual;abstract;
+                 procedure getoutbound;virtual;abstract;
+                 //procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
+           end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBPlain.pas
 GDBObjPlain=object(GDBObjWithLocalCS)
                   Outbound:OutBound4V;
@@ -1878,6 +1912,7 @@ GDBObjElLeader=object(GDBObjComplex)
             procedure RenderFeedback;virtual;abstract;
             procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
+            procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
             function beforertmodify:GDBPointer;virtual;abstract;
             function select:GDBBoolean;virtual;abstract;
             procedure Format;virtual;abstract;
@@ -2099,6 +2134,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                             Find:TEnumData;(*'Find'*)
                             CurrentReplaceBlock:GDBString;(*'**CurrentReplace'*)(*oi_readonly*)(*hidden_in_objinsp*)
                             Replace:TEnumData;(*'Replace'*)
+                            SaveVariables:GDBBoolean;(*'Save Variables'*)
                       end;
          TSelGeneralParams=record
                                  SameLayer:GDBBoolean;(*'Same layer'*)
@@ -2124,6 +2160,12 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                              Texts:TSelTextParams;(*'Texts'*)
                       end;
          TBlockScaleParams=record
+                             Scale:GDBVertex;(*'New scale'*)
+                             Absolytly:GDBBoolean;(*'Absolytly'*)
+                           end;
+         TSetVarStyle=record
+                            ent:TMSType;(*'Entity'*)
+                            CurrentFindBlock:GDBString;(*'**CurrentFind'*)
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
                            end;
@@ -2341,6 +2383,7 @@ type
                        function parseunit(var f: GDBOpenArrayOfByte; pcreatedunit:PTSimpleUnit):ptunit;virtual;abstract;
                        function changeparsemode(newmode:GDBInteger;var mode:GDBInteger):pasparsemode;
                        function findunit(uname:GDBString):ptunit;virtual;abstract;
+                       function internalfindunit(uname:GDBString):ptunit;virtual;abstract;
                        procedure SetNextManager(PNM:PTUnitManager);
                        procedure LoadFolder(path: GDBString);
                        procedure AfterObjectDone(p:PGDBaseObject);virtual;abstract;

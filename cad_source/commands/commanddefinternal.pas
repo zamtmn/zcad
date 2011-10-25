@@ -130,6 +130,7 @@ begin
                           gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
                      end;
   gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
+  gdb.GetCurrentDWG.OnMouseObj.Clear;
   //poglwnd^.md.mode := savemousemode;
   OSModeEditor.GetState;
   redrawoglwnd;
@@ -149,6 +150,7 @@ begin
     end;
 
   gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
+  gdb.GetCurrentDWG.OnMouseObj.Clear;
   gdb.GetCurrentDWG.OGLwindow1.Clear0Ontrackpoint;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjCasheArray.Clear;

@@ -294,6 +294,7 @@ MainMenuItem Model;
     Command Проверка,EL_Сheck,none,none
     Command Создать кабельный журнал,El_Cable_Legend,none,none
     Command Создать "ведомость" оборудования,El_Material_Legend,none,none
+    Command Отчет по именам примитивов,VarReport(NMO_Name),none,none
   }
 MainMenuItem Settings;
   {

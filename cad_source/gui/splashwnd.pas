@@ -21,7 +21,7 @@ unit splashwnd;
 interface
 uses
  strproc,Forms, stdctrls, Controls, Graphics,ExtCtrls,
- gdbasetypes,SysInfo,fileutil;
+ gdbasetypes,SysInfo,fileutil,sysutils;
 const
      vinfotext=
 'Не стабильная версия.'#13#10;
@@ -52,7 +52,8 @@ begin
   self.DoubleBuffered:=true;
   Logo:=TImage.create(self);
   Logo.Align:=alclient;
-  Logo.Picture.LoadFromFile({SysToUTF8}(sysparam.programpath)+'components/logo.png');
+  if FileExists((sysparam.programpath)+'components/logo.png') then
+                                                                 Logo.Picture.LoadFromFile({SysToUTF8}(sysparam.programpath)+'components/logo.png');
   Logo.Parent:=self;
   self.BorderStyle:=bsNone;
   self.Color:=clNone;

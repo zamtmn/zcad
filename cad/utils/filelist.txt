@@ -35,6 +35,7 @@ C:\zcad\CAD_SOURCE\gdb\GDB3d.pas
 C:\zcad\CAD_SOURCE\gdb\GDB3DFace.pas
 C:\zcad\CAD_SOURCE\gdb\GDBWithMatrix.pas
 C:\zcad\CAD_SOURCE\gdb\GDBWithLocalCS.pas
+C:\zcad\CAD_SOURCE\gdb\GDBSolid.pas
 C:\zcad\CAD_SOURCE\gdb\GDBPlain.pas
 C:\zcad\CAD_SOURCE\gdb\GDBPlainWithOX.pas
 C:\zcad\CAD_SOURCE\gdb\GDBAbstractText.pas

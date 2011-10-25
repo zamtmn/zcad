@@ -89,7 +89,8 @@ begin
                                       exit;
                                  end;
      end;}
-
+     if SysVar.PATH.Support_Path<>nil then
+     begin
      s:=SysVar.PATH.Support_Path^;
      repeat
            GetPartOfPath(ts,s);
@@ -100,6 +101,7 @@ begin
                                       exit;
                                  end;
      until s='';
+     end;
      result:='';
 end;
 function FindInPaths(Paths,FileName:GDBString):GDBString;

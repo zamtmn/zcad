@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- intftranslations,layerwnd,strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ ucxmenumgr,intftranslations,layerwnd,strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -87,6 +87,8 @@ TOSModeEditor=object(GDBaseObject)
 
        InfoFormVar:TInfoForm=nil;
 
+       MSelectCXMenu:TmyPopupMenu=nil;
+
    function SaveAs_com(Operands:pansichar):GDBInteger;
    procedure CopyToClipboard;
    function quit_com(Operands:pansichar):GDBInteger;
@@ -97,7 +99,7 @@ const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 //var DWGPageCxMenu:pzpopupmenu;
 implementation
-uses {oglwindow,}commandline,GDBPolyLine,UGDBPolyLine2DArray,GDBLWPolyLine,mainwindow,UGDBSelectedObjArray,{ZBasicVisible,}oglwindow,geometry;
+uses commandline,GDBPolyLine,UGDBPolyLine2DArray,GDBLWPolyLine,mainwindow,UGDBSelectedObjArray,{ZBasicVisible,}oglwindow,geometry;
 var
    CopyClipFile:GDBString;
 procedure  TOSModeEditor.Format;
@@ -345,6 +347,66 @@ begin
                             else
                                 commandmanager.executecommandend;
 end;
+function GetOnMouseObjWAddr(var ContextMenu:TmyPopupMenu):GDBInteger;
+var
+  pp:PGDBObjEntity;
+  ir:itrec;
+  inr:TINRect;
+  line:GDBString;
+  pvd:pvardesk;
+begin
+     result:=0;
+     pp:=gdb.GetCurrentDWG.OnMouseObj.beginiterate(ir);
+     if pp<>nil then
+                    begin
+                         repeat
+                         pvd:=pp.ou.FindVariable('NMO_Name');
+                         if pvd<>nil then
+                                         begin
+                                         if Result=20 then
+                                         begin
+                                              //result:=result+#13#10+'...';
+                                              exit;
+                                         end;
+                                         line:=pp^.GetObjName+' Layer='+pp^.vp.Layer.GetFullName;
+                                         line:=line+' Name='+pvd.data.PTD.GetValueAsString(pvd.data.Instance);
+                                         ContextMenu.Items.Add(TmyMenuItem.create(ContextMenu,line,'SelectObjectByAddres('+inttostr(GDBPlatformint(pp))+')'));
+                                         //if result='' then
+                                         //                 result:=line
+                                         //             else
+                                         //                 result:=result+#13#10+line;
+                                         inc(Result);
+                                         end;
+                               pp:=gdb.GetCurrentDWG.OnMouseObj.iterate(ir);
+                         until pp=nil;
+                    end;
+end;
+function SelectOnMouseObjects_com(Operands:pansichar):GDBInteger;
+begin
+     cxmenumgr.closecurrentmenu;
+     MSelectCXMenu:=TmyPopupMenu.create(nil);
+     if GetOnMouseObjWAddr(MSelectCXMenu)=0 then
+                                                         FreeAndNil(MSelectCXMenu)
+                                                     else
+                                                         cxmenumgr.PopUpMenu(MSelectCXMenu);
+end;
+function SelectObjectByAddres_com(Operands:pansichar):GDBInteger;
+var
+   pp:PGDBObjEntity;
+   code:integer;
+begin
+     val(Operands,GDBPlatformint(pp),code);
+     if (code=0)and(assigned(pp))then
+                                     begin
+                                     pp^.select;
+                                     gdb.CurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject:=pp;
+                                     end;
+     updatevisible;
+     gdb.CurrentDWG.OGLwindow1.SetObjInsp;
+     //SetObjInsp;
+     //commandmanager.executecommandsilent('MultiSelect2ObjIbsp');
+end;
+
 function SetObjInsp_com(Operands:pansichar):GDBInteger;
 var
    obj:gdbstring;
@@ -1461,7 +1523,8 @@ begin
 
           Clipboard.GetFormat(cf,memsubstr);
 
-          memsize:=memsubstr.GetSize;
+          //memsize:=memsubstr.GetSize;
+          memsize:=memsubstr.Seek(0,soFromEnd);
           pbuf:=memsubstr.Memory;
 
           InfoForm.Memo.lines.Add('  ANSI: '+pbuf);
@@ -1929,6 +1992,8 @@ begin
   CreateCommandFastObjectPlugin(@SetObjInsp_com,'SetObjInsp',CADWG,0);
   ms2objinsp:=CreateCommandFastObjectPlugin(@MultiSelect2ObjIbsp_com,'MultiSelect2ObjIbsp',CADWG,0);
   ms2objinsp.CEndActionAttr:=0;
+  CreateCommandFastObjectPlugin(@SelectOnMouseObjects_com,'SelectOnMouseObjects',CADWG,0);
+  CreateCommandFastObjectPlugin(@SelectObjectByAddres_com,'SelectObjectByAddres',CADWG,0);
   CreateCommandFastObjectPlugin(@quit_com,'Quit',0,0);
   CreateCommandFastObjectPlugin(@newdwg_com,'NewDWG',0,0);
   CreateCommandFastObjectPlugin(@CloseDWGOnMouse_com,'CloseDWGOnMouse',CADWG,0);

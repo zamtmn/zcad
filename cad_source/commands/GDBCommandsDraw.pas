@@ -103,6 +103,7 @@ type
                             Find:TEnumData;(*'Find'*)
                             CurrentReplaceBlock:GDBString;(*'**CurrentReplace'*)(*oi_readonly*)(*hidden_in_objinsp*)
                             Replace:TEnumData;(*'Replace'*)
+                            SaveVariables:GDBBoolean;(*'Save Variables'*)
                       end;
          TSelGeneralParams=record
                                  SameLayer:GDBBoolean;(*'Same layer'*)
@@ -514,7 +515,7 @@ var pb:PGDBObjBlockInsert;
     i,result:gdbinteger;
     poa:PGDBObjEntityTreeArray;
     selname,newname:GDBString;
-procedure rb;
+procedure rb(pb:PGDBObjBlockInsert);
 var
     nb,tb:PGDBObjBlockInsert;
 begin
@@ -539,9 +540,18 @@ begin
     end;
     gdb.GetCurrentROOT.AddObjectToObjArray(addr(nb));
     PGDBObjEntity(nb)^.FromDXFPostProcessAfterAdd;
+
     nb^.CalcObjMatrix;
     nb^.BuildGeometry;
     nb^.BuildVarGeometry;
+
+    if BlockReplaceParams.SaveVariables then
+    begin
+         nb.OU.free;
+         //pb.OU.CopyTo(@nb.OU);
+         nb.OU.CopyFrom(@pb.OU);
+    end;
+
     nb^.Format;
     gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(nb);
     nb^.Visible:=0;
@@ -573,25 +583,24 @@ begin
                                            if pb^.vp.ID=GDBBlockInsertID then
                                            if uppercase(pb^.name)=selname then
                                            begin
-                                                rb;
+                                                rb(pb);
                                            end;
                                       end;
                             BRM_Device:begin
                                            if pb^.vp.ID=GDBDeviceID then
                                            if uppercase(pb^.name)=selname then
                                            begin
-                                                rb;
+                                                rb(pb);
                                            end;
-                                      end;
+                                       end;
                             BRM_BD:begin
                                            if (pb^.vp.ID=GDBBlockInsertID)or
                                               (pb^.vp.ID=GDBDeviceID)then
                                            if uppercase(pb^.name)=selname then
                                            begin
-                                                rb;
+                                                rb(pb);
                                            end;
-
-                                      end;
+                                   end;
                 end;
                 pb:=poa.iterate(ir);
           until pb=nil;
@@ -971,6 +980,7 @@ var res:longbool;
 
     zcformat:TClipboardFormat;
     memsubstr:TMemoryStream;
+    size:longword;
 //    I:gdbinteger;
 begin
      zcformat:=RegisterClipboardFormat(ZCAD_DXF_CLIPBOARD_NAME);
@@ -978,9 +988,11 @@ begin
      begin
            memsubstr:=TMemoryStream.create;
            clipboard.GetFormat(zcformat,memsubstr);
+           setlength(s,{memsubstr.GetSize}memsubstr.Seek(0,soFromEnd));
+           size:=memsubstr.Seek(0,soFromEnd);
+           memsubstr.Seek(0,soFromBeginning);
+           memsubstr.ReadBuffer(s[1],{memsubstr.GetSize}size);
            memsubstr.Seek(0,0);
-           setlength(s,memsubstr.GetSize);
-           memsubstr.ReadBuffer(s[1],memsubstr.GetSize);
            //s:=memsubstr.ReadAnsiString;
            memsubstr.free;
                          if fileexists(utf8tosys(s)) then
@@ -2396,6 +2408,7 @@ begin
   BlockReplaceParams.Find.Enums.init(10);
   BlockReplaceParams.Replace.Enums.init(10);
   BlockReplaceParams.Process:=BRM_Device;
+  BlockReplaceParams.SaveVariables:=true;
   BlockReplace.commanddata.Instance:=@BlockReplaceParams;
   BlockReplace.commanddata.PTD:=SysUnit.TypeName2PTD('TBlockReplaceParams');
 

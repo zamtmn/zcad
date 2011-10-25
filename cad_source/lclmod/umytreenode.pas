@@ -73,6 +73,7 @@ type
     TmyMenuItem = class (TMenuItem)
                        public
                        FCommand:String;{**<Command to manager commands}
+                       FSilent:Boolean;
                        constructor create(TheOwner: TComponent;_Caption,_Command:TTranslateString);
                        procedure SetCommand(_Caption,_Command:TTranslateString);
                        protected
@@ -456,7 +457,10 @@ end;
 
 procedure TmyMenuItem.Click;
 begin
-     commandmanager.executecommand(@Fcommand[1]);
+     if fsilent then
+                    commandmanager.executecommandsilent(@Fcommand[1])
+                else
+                    commandmanager.executecommand(@Fcommand[1]);
      inherited;
 end;
 procedure TmyMenuItem.SetCommand(_Caption,_Command:TTranslateString);
@@ -472,6 +476,7 @@ end;
 constructor TmyMenuItem.create(TheOwner: TComponent;_Caption,_Command:TTranslateString);
 begin
      inherited create(TheOwner);
+     FSilent:=false;
      SetCommand(_Caption,_Command);
 end;
 

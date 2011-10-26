@@ -40,9 +40,9 @@ PGDBObjEntity=^GDBObjEntity;
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=record
                       Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
-                      LineWeight:GDBSmallint;(*'Line Weight'*)(*saved_to_shd*)
-                      LineType:GDBString;(*'Line Weight'*)(*saved_to_shd*)
-                      LineTypeScale:GDBSmallint;(*'Line Weight'*)(*saved_to_shd*)
+                      LineWeight:GDBSmallint;(*'Line weight'*)(*saved_to_shd*)
+                      LineType:GDBString;(*'Line type'*)(*saved_to_shd*)
+                      LineTypeScale:GDBDouble;(*'Line type scale'*)(*saved_to_shd*)
                       ID:GDBWord;(*'Object type'*)(*oi_readonly*)
                       BoundingBox:GDBBoundingBbox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       LastCameraPos:TActulity;(*oi_readonly*)
@@ -986,6 +986,8 @@ begin
   if vp.lineweight<>-1 then dxfGDBIntegerout(outhandle,370,vp.lineweight);
   if dbname<>'' then
                     dxfGDBStringout(outhandle,100,dbname);
+  {if vp.LineType<>'' then dxfGDBStringout(outhandle,6,vp.LineType);
+  if vp.LineTypeScale<>1 then dxfGDBDoubleout(outhandle,48,vp.LineTypeScale);}
 end;
 function GDBObjEntity.IsHaveObjXData:GDBBoolean;
 begin
@@ -1001,7 +1003,11 @@ var APP_NAME:GDBString;
 begin
      result:=false;
      case dxfcod of
-                   8:begin
+                6:begin
+                       vp.LineType:=readmystr(f);
+                       result:=true
+                  end;
+                     8:begin
                           if vp.layer.name='0' then
                                                    begin
                                                         name:=readmystr(f);
@@ -1013,6 +1019,10 @@ begin
                                                    APP_NAME:=readmystr(f);
                           result:=true
                      end;
+                    48:begin
+                            vp.LineTypeScale :=readmystrtodouble(f);
+                            result:=true
+                       end;
                  370:begin
                           vp.lineweight :=readmystrtoint(f);
                           result:=true

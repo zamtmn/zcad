@@ -998,9 +998,9 @@ PGDBObjEntity=^GDBObjEntity;
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=record
                       Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
-                      LineWeight:GDBSmallint;(*'Line Weight'*)(*saved_to_shd*)
-                      LineType:GDBString;(*'Line Weight'*)(*saved_to_shd*)
-                      LineTypeScale:GDBSmallint;(*'Line Weight'*)(*saved_to_shd*)
+                      LineWeight:GDBSmallint;(*'Line weight'*)(*saved_to_shd*)
+                      LineType:GDBString;(*'Line type'*)(*saved_to_shd*)
+                      LineTypeScale:GDBDouble;(*'Line type scale'*)(*saved_to_shd*)
                       ID:GDBWord;(*'Object type'*)(*oi_readonly*)
                       BoundingBox:GDBBoundingBbox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       LastCameraPos:TActulity;(*oi_readonly*)

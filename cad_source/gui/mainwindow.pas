@@ -896,6 +896,8 @@ var
    plp:PGDBLayerProp;
    Dest: PChar;
 begin
+  if gdb.GetCurrentDWG=nil then
+   exit;
      //LayerBox.Canvas.TextRect(ARect,1,1,'asdasd');
   canvas.Brush.Color := clBtnFace;
   canvas.FillRect(ARect);
@@ -928,6 +930,9 @@ var
 const
      ll=30;
 begin
+    if gdb.GetCurrentDWG=nil then
+     exit;
+
     s:=LinewBox.Items[index];
     ARect.Left:=ARect.Left+2;
     if (index>2)and(index<LinewBox.Items.Count-1) then

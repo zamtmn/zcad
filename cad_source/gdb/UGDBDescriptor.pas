@@ -130,6 +130,7 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
                     procedure AddBlockFromDBIfNeed(_to:PTDrawing;name:GDBString);
                     procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
                     function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
+                    function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
               end;
 {EXPORT-}
 var GDB: GDBDescriptor;
@@ -881,6 +882,37 @@ begin
     end;
     result:=tv;
 end;
+function GDBDescriptor.FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
+var
+   croot:PGDBObjGenericSubEntry;
+   pvisible,pvisible2,pv:PGDBObjEntity;
+   ir:itrec;
+   pvd:pvardesk;
+begin
+     result:=nil;
+     croot:=self.GetCurrentROOT;
+     if croot<>nil then
+     begin
+         pvisible:=croot.ObjArray.beginiterate(ir);
+         if pvisible<>nil then
+         repeat
+               if pvisible.vp.ID=objID then
+               begin
+                    pvd:=pvisible^.ou.FindVariable(vname);
+                    if pvd<>nil then
+                    begin
+                         if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
+                         begin
+                              result:=pvisible;
+                              exit;
+                         end;
+                    end;
+               end;
+              pvisible:=croot.ObjArray.iterate(ir);
+         until pvisible=nil;
+     end;
+end;
+
 procedure GDBDescriptor.CopyBlock(_from,_to:PTDrawing;_source:PGDBObjBlockdef);
 var
    _dest{,td}:PGDBObjBlockdef;

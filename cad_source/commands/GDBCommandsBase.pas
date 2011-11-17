@@ -776,7 +776,7 @@ var
 begin
      if length(operands)=0 then
                         begin
-                             isload:=OpenFileDialog(s);
+                             isload:=OpenFileDialog(s,'dxf',ProjectFileFilter,'','Открыть проект...');
                              //s:=utf8tosys(s);
                              if not isload then
                                                begin

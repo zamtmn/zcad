@@ -25,7 +25,7 @@ const
     ProjectFileFilter: GDBString = 'DXF files (*.dxf)'#0'*.dxf'#0'DWG files (*.dwg)'#0'*.dwg'#0'ZCP files (*.zcp)'#0'*.zcp'#0#0;
     CSVFileFilter: GDBString ='CSV files (*.CSV)'#0#0;
     {$INCLUDE revision.inc}
-function OpenFileDialog(out FileName:GDBString):Boolean;
+function OpenFileDialog(out FileName:GDBString;const DefExt, Filter, InitialDir, Title: string):Boolean;
 function SaveFileDialog(out FileName:GDBString;const DefExt, Filter, InitialDir, Title: string):Boolean;
 function GetVersion(_file:pchar):TmyFileVersionInfo;
 implementation
@@ -41,14 +41,6 @@ resourcestring
 function SaveFileDialog;
 var
    SD:TSaveDialog;
-
-(*
-   sfn: TopenFILENAME;
-//   cf: pansichar;
-   s: GDBString;
-//   errcode: DWord;
-//    fileext:GDBString;
-*)
    fileext:GDBString;
 begin
      sd:=TSaveDialog.Create(nil);
@@ -110,10 +102,10 @@ var
 *)
 begin
      od:=TOpenDialog.Create(nil);
-     od.Title:='Open file...';
-     od.InitialDir:=szCurrentDir;
-     od.Filter:=ProjectFileFilter;
-     od.DefaultExt :='dxf';
+     od.Title:=Title;
+     od.InitialDir:={szCurrentDir}InitialDir;
+     od.Filter:=Filter;
+     od.DefaultExt :=DefExt;
      od.FilterIndex := 1;
      od.Options := [ofFileMustExist];
      if od.Execute

@@ -1912,7 +1912,7 @@ begin
 
   {layerbox.ClearText;}
   layerbox.Items.Clear;
-  //layerbox.Sorted:=true;
+  layerbox.Sorted:=true;
   plp:=plt^.beginiterate(ir);
   if plp<>nil then
   repeat

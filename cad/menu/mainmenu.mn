@@ -198,6 +198,10 @@ MainMenuItem Plan;
         Command Приходит сверху,Insert(DEVICE_EL_CABLE_FROMUP),none,none
         Command Приходит снизу,Insert(DEVICE_EL_CABLE_FROMDOWN),none,none
       }
+    MenuItem Внешний кабельный журнал;
+      {
+        Command Обработать журнал,EL_ExternalKZ,none,none
+      }
     MenuItem КИПиА;
       {
        MenuItem Расстоновка оборудования;

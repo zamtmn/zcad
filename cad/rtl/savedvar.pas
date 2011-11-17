@@ -32,14 +32,14 @@ begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=307;
   VIEW_ObjInspSubV:=141;
-  PATH_File0:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File0:='C:\zcad\cad\sample\test_dxf\by_trace.dxf';
   PATH_File1:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File2:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File3:='C:\zcad\cad\sample\test_dxf\teapot.dxf';
-  PATH_File4:='H:\nh\Зварыгина\стоянка\proj CO.dxf';
-  PATH_File5:='H:\nh\Зварыгина\стоянка\co.dxf';
-  PATH_File6:='H:\nh\Коробова\Муравленко\парковка\proj.dxf';
-  PATH_File7:='/mnt/win_c/zcad/cad/sample/test_dxf/em.dxf';
-  PATH_File8:='Z:\cad\autosave\autosave.dxf';
-  PATH_File9:='J:\nh\Коробова\Муравленко\парковка\proj.dxf';
+  PATH_File2:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File3:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File4:='E:\olde\CAD_XDXF\test2000\circ.dxf';
+  PATH_File5:='E:\olde\CAD_XDXF\test2000\MODEL.dxf';
+  PATH_File6:='E:\olde\CAD_XDXF\test2000\delphin_3dface.dxf';
+  PATH_File7:='E:\olde\CAD_XDXF\test2000\ATX.dxf';
+  PATH_File8:='E:\olde\CAD_XDXF\test2000\Oil Module.dxf';
+  PATH_File9:='E:\olde\CAD_XDXF\test2000\MiniGun.dxf';
 end.

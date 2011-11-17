@@ -221,7 +221,7 @@ begin
                                 end
                              else
                                  begin
-                                      eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,(treepos)));
+                                      eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,(treepos+'asas')));
                                       eqnode.fBlockName:=pvdeq^.name;
                                       eqnode.FPopupMenu:=pcm;
                                       eqnode.ptd.PTD:=pvdeq^.data.PTD;

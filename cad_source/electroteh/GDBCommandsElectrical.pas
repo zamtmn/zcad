@@ -10,6 +10,7 @@ unit GDBCommandsElectrical;
 
 interface
 uses
+  csvdocument,
   UGDBOpenArrayOfPV,GDBBlockInsert{,ZGUIsCT,zforms},devices{,ZComboBoxsWithProc,ZTreeViewsGeneric},UGDBTree,ugdbdescriptor,gdbasetypes,commandline,GDBCommandsDraw,GDBElLeader,
   plugins,
   commandlinedef,
@@ -1269,6 +1270,46 @@ begin
     end;
   end
 end;
+procedure rootbytrace(firstpoint,lastpoint:GDBVertex;PTrace:PGDBObjNet;cable:PGDBObjCable);
+var //po:PGDBObjSubordinated;
+    //plastw:pgdbvertex;
+    tw1,tw2:gdbvertex;
+    l1,l2:pgdbobjline;
+    pa:GDBPoint3dArray;
+    //polydata:tpolydata;
+    //domethod,undomethod:tmethod;
+begin
+  pointer(l1):=PTrace.GetNearestLine(firstpoint);
+  pointer(l2):=PTrace.GetNearestLine(lastpoint);
+  tw1:=NearestPointOnSegment(firstpoint,l1.CoordInWCS.lBegin,l1.CoordInWCS.lEnd);
+  if l1=l2 then
+               begin
+                    if not IsPointEqual(tw1,firstpoint) then
+                                                        cable^.AddVertex(tw1);
+                    tw1:=NearestPointOnSegment(lastpoint,l1.CoordInWCS.lBegin,l1.CoordInWCS.lEnd);
+                    if not IsPointEqual(tw1,lastpoint) then
+                                                   cable^.AddVertex(tw1);
+                    cable^.AddVertex(lastpoint);
+                    //l1:=l2;
+               end
+           else
+               begin
+                    tw2:=NearestPointOnSegment(lastpoint,l2.CoordInWCS.lBegin,l2.CoordInWCS.lEnd);
+                    PTrace.BuildGraf;
+                    pa.init({$IFDEF DEBUGBUILD}'{FE5DE449-60C7-4D92-9BA5-FEB937820B96}',{$ENDIF}100);
+                    PTrace.graf.FindPath(tw1,tw2,l1,l2,pa);
+                    cable^.AddVertex(firstpoint);
+                    if not IsPointEqual(tw1,firstpoint) then
+                                                        cable^.AddVertex(tw1);
+                    pa.copyto(@cable.VertexArrayInOCS);
+                    //firstpoint:=pgdbvertex(cable^.VertexArrayInWCS.getelement(cable^.VertexArrayInWCS.Count-1))^;
+                    if not IsPointEqual(tw2,firstpoint) then
+                                                        cable^.AddVertex(tw2);
+                    if not IsPointEqual(tw2,lastpoint) then
+                                                   cable^.AddVertex(lastpoint);
+                    pa.done;
+               end;
+end;
 
 function _Cable_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var //po:PGDBObjSubordinated;
@@ -2262,6 +2303,131 @@ begin
   //OGLwindow1.SetObjInsp;
       //updatevisible;
 end;
+function findconnector(CurrentObj:PGDBObjDevice):PGDBObjDevice;
+var
+    CurrentSubObj:PGDBObjDevice;
+    ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice:itrec;
+begin
+     result:=nil;
+CurrentSubObj:=CurrentObj^.VarObjArray.beginiterate(ir_inDevice);
+if (CurrentSubObj<>nil) then
+repeat
+      if (CurrentSubObj^.vp.ID=GDBDeviceID) then
+      begin
+      if CurrentSubObj^.BlockDesc.BType=BT_Connector then
+                                                         begin
+                                                              result:=CurrentSubObj;
+                                                              exit;
+                                                         end;
+      end;
+      CurrentSubObj:=CurrentObj^.VarObjArray.iterate(ir_inDevice);
+until CurrentSubObj=nil;
+end;
+
+function _El_ExternalKZ_com (Operands:pansichar):GDBInteger;
+var
+    FDoc: TCSVDocument;
+    isload:boolean;
+    s: GDBString;
+    row,col:integer;
+    startdev,enddev:PGDBObjDevice;
+    net:PGDBObjNet;
+    cable:PGDBObjCable;
+    pvd:pvardesk;
+begin
+  if length(operands)=0 then
+                     begin
+                          isload:=OpenFileDialog(s,'csv',CSVFileFilter,'','Открыть журнал...');
+                          if not isload then
+                                            begin
+                                                 result:=cmd_cancel;
+                                                 exit;
+                                            end
+                                        else
+                                            begin
+
+                                            end;
+
+                     end
+                 else
+                 begin
+                                           begin
+                                           s:=ExpandPath(operands);
+                                           s:=FindInSupportPath(operands);
+                                           end;
+                 end;
+  isload:=FileExists(utf8tosys(s));
+  if isload then
+  begin
+       FDoc:=TCSVDocument.Create;
+       FDoc.Delimiter:=';';
+       FDoc.LoadFromFile(s);
+
+       for row:=0 to FDoc.RowCount-1 do
+       begin
+            if FDoc.ColCount[row]>4 then
+            begin
+                 PGDBObjEntity(startdev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',FDoc.Cells[1,row]);
+                 PGDBObjEntity(enddev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',FDoc.Cells[2,row]);
+                 PGDBObjEntity(net):=GDB.FindEntityByVar(GDBNetID,'NMO_Name',FDoc.Cells[3,row]);
+                 if startdev=nil then
+                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено стартовое устройство '+FDoc.Cells[1,row]);
+                 if enddev=nil then
+                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено конечное устройство '+FDoc.Cells[2,row]);
+                 if net=nil then
+                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найдена трасса '+FDoc.Cells[3,row]);
+                 if (startdev<>nil)and(enddev<>nil)and(net<>nil) then
+                 begin
+                 startdev:=findconnector(startdev);
+                 enddev:=findconnector(enddev);
+                 if startdev=nil then
+                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+FDoc.Cells[1,row]);
+                 if enddev=nil then
+                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+FDoc.Cells[2,row]);
+                 if (startdev<>nil)and(enddev<>nil) then
+                 begin
+                 cable := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
+                 cable^.ou.copyfrom(units.findunit('cable'));
+                 pvd:=cable.ou.FindVariable('NMO_Suffix');
+                 pstring(pvd^.data.Instance)^:='';
+                 pvd:=cable.ou.FindVariable('NMO_Prefix');
+                 pstring(pvd^.data.Instance)^:='';
+                 pvd:=cable.ou.FindVariable('NMO_BaseName');
+                 pstring(pvd^.data.Instance)^:='';
+                 pvd:=cable.ou.FindVariable('NMO_Template');
+                 pstring(pvd^.data.Instance)^:='';
+                 pvd:=cable.ou.FindVariable('NMO_Name');
+                 pstring(pvd^.data.Instance)^:=FDoc.Cells[0,row];
+                 pvd:=cable.ou.FindVariable('DB_link');
+                 pstring(pvd^.data.Instance)^:=FDoc.Cells[4,row];
+                 gdb.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeTreeBB(cable);
+
+                 rootbytrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,net,Cable);
+
+                 Cable^.Format;
+                 Cable^.RenderFeedback;
+                 gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(Cable);
+
+                 end;
+                 end;
+
+
+            end
+            else
+                begin
+                shared.HistoryOutStr('В строке '+inttostr(row)+'мало параметров');
+                for col:=0 to FDoc.ColCount[row] do
+                shared.HistoryOutStr(FDoc.Cells[col,row]);
+                end;
+
+
+       end;
+
+       FDoc.Destroy;
+  end
+            else
+     shared.ShowError('GDBCommandsElectrical.El_ExternalKZ: Не могу открыть файл: '+s+'('+Operands+')');
+end;
 
 function _test_com(Operands:pansichar):GDBInteger;
 var i: GDBInteger;
@@ -2278,7 +2444,6 @@ begin
      historyout('Конец теста. выходим, смотрим результаты в конце лога.');
      quit_com('');
 end;
-
 
 procedure startup;
 //var
@@ -2307,6 +2472,7 @@ begin
   CreateCommandFastObjectPlugin(@_Ren_n_to_0n_com,'El_Cable_RenN_0N',CADWG,0);
   CreateCommandFastObjectPlugin(@_SelectMaterial_com,'SelMat',CADWG,0);
   CreateCommandFastObjectPlugin(@_test_com,'test',CADWG,0);
+  CreateCommandFastObjectPlugin(@_El_ExternalKZ_com,'El_ExternalKZ',CADWG,0);
 
   EM_SRBUILD.init('EM_SRBUILD',0,0);
   EM_SEPBUILD.init('EM_SEPBUILD',0,0);

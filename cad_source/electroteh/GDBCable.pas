@@ -198,6 +198,8 @@ begin
                         s:='';
      CreateDeviceNameSubProcess(pvn,s,pCable);
 
+     CreateDBLinkProcess(pCable);
+
 
 end;
 
@@ -395,6 +397,9 @@ begin
                                              begin
                                              if (pvd<>nil)and(pvds<>nil)and(pvdal<>nil)and(pvdrt<>nil) then
                                              pgdbdouble(pvd^.data.Instance)^:=roundto(length*pgdbdouble(pvds^.data.Instance)^+pgdbdouble(pvdal^.data.Instance)^+l,pgdbinteger(pvdrt^.data.Instance)^);
+                                             pvds:=ou.FindVariable('LENGTH_KReserve');
+                                             if pvds<>nil then
+                                                              pgdbdouble(pvd^.data.Instance)^:=pgdbdouble(pvd^.data.Instance)^*pgdbdouble(pvds^.data.Instance)^;
                                              end
                                          else
                                              begin

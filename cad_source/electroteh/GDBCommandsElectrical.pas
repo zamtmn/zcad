@@ -1270,7 +1270,7 @@ begin
     end;
   end
 end;
-procedure rootbytrace(firstpoint,lastpoint:GDBVertex;PTrace:PGDBObjNet;cable:PGDBObjCable);
+procedure rootbytrace(firstpoint,lastpoint:GDBVertex;PTrace:PGDBObjNet;cable:PGDBObjCable;addfirstpoint:gdbboolean);
 var //po:PGDBObjSubordinated;
     //plastw:pgdbvertex;
     tw1,tw2:gdbvertex;
@@ -1284,6 +1284,8 @@ begin
   tw1:=NearestPointOnSegment(firstpoint,l1.CoordInWCS.lBegin,l1.CoordInWCS.lEnd);
   if l1=l2 then
                begin
+                    if addfirstpoint then
+                    cable^.AddVertex(firstpoint);
                     if not IsPointEqual(tw1,firstpoint) then
                                                         cable^.AddVertex(tw1);
                     tw1:=NearestPointOnSegment(lastpoint,l1.CoordInWCS.lBegin,l1.CoordInWCS.lEnd);
@@ -1298,6 +1300,7 @@ begin
                     PTrace.BuildGraf;
                     pa.init({$IFDEF DEBUGBUILD}'{FE5DE449-60C7-4D92-9BA5-FEB937820B96}',{$ENDIF}100);
                     PTrace.graf.FindPath(tw1,tw2,l1,l2,pa);
+                    if addfirstpoint then
                     cable^.AddVertex(firstpoint);
                     if not IsPointEqual(tw1,firstpoint) then
                                                         cable^.AddVertex(tw1);
@@ -1348,7 +1351,9 @@ begin
 else begin
           plastw:=p3dpl^.VertexArrayInWCS.getelement(p3dpl^.VertexArrayInWCS.Count-1);
 
-          pointer(l1):=cabcomparam.PTrace.GetNearestLine(plastw^);
+          rootbytrace(plastw^,wc,cabcomparam.PTrace,p3dpl,false);
+
+          (*pointer(l1):=cabcomparam.PTrace.GetNearestLine(plastw^);
           pointer(l2):=cabcomparam.PTrace.GetNearestLine(wc);
           tw1:=NearestPointOnSegment(plastw^,l1.CoordInWCS.lBegin,l1.CoordInWCS.lEnd);
           if l1=l2 then
@@ -1376,7 +1381,7 @@ else begin
                             if not IsPointEqual(tw2,wc) then
                                                            p3dpl^.AddVertex(wc);
                             pa.done;
-                       end;
+                       end;*)
         p3dpl^.Format;
         p3dpl^.RenderFeedback;
         gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
@@ -1640,6 +1645,10 @@ var //i: GDBInteger;
     pdbu:ptunit;
     pdbv:pvardesk;
     pdbi:PDbBaseObject;
+
+    cman:TCableManager;
+    pcd:PTCableDesctiptor;
+
 begin
   if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Сохранить данные...') then
   begin
@@ -1650,6 +1659,7 @@ begin
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
+    if pv^.vp.ID<>GDBCableID then
     begin
          pvm:=pv^.ou.FindVariable('DB_link');
          if pvm<>nil then
@@ -1681,6 +1691,35 @@ begin
     end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
+
+  cman.init;
+  cman.build;
+
+  pcd:=cman.beginiterate(ir);
+  repeat
+
+
+  if pcd.StartSegment<>nil then
+  begin
+  pvm:=pcd.StartSegment^.ou.FindVariable('DB_link');
+  if pvm<>nil then
+  begin
+       begin
+            pbomitem:=bom.findorcreate(pstring(pvm^.data.Instance)^);
+            if pbomitem<>nil then
+            begin
+                 pbomitem.Amount:=pbomitem.Amount+pcd.length;
+            end;
+       end;
+  end;
+  end;
+
+
+  pcd:=cman.iterate(ir);
+  until pcd=nil;
+
+  cman.done;
+
   DecimalSeparator := ',';
   PBOMITEM:=bom.beginiterate(ir);
   if PBOMITEM<>nil then
@@ -2400,9 +2439,13 @@ begin
                  pstring(pvd^.data.Instance)^:=FDoc.Cells[0,row];
                  pvd:=cable.ou.FindVariable('DB_link');
                  pstring(pvd^.data.Instance)^:=FDoc.Cells[4,row];
+
+                 pvd:=cable.ou.FindVariable('CABLE_AutoGen');
+                 pgdbboolean(pvd^.data.Instance)^:=true;
+
                  gdb.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeTreeBB(cable);
 
-                 rootbytrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,net,Cable);
+                 rootbytrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,net,Cable,true);
 
                  Cable^.Format;
                  Cable^.RenderFeedback;
@@ -2427,6 +2470,30 @@ begin
   end
             else
      shared.ShowError('GDBCommandsElectrical.El_ExternalKZ: Не могу открыть файл: '+s+'('+Operands+')');
+end;
+function _AutoGenCableRemove_com(Operands:pansichar):GDBInteger;
+var //i,len: GDBInteger;
+    pv:pGDBObjEntity;
+    ir:itrec;
+    pvd{,pvn,pvm,pvmc,pvl}:pvardesk;
+    mat:gdbstring;
+begin
+  pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+    if (pv^.vp.ID=GDBCableID) then
+    begin
+         pvd:=pv^.ou.FindVariable('CABLE_AutoGen');
+         if pvd<>nil then
+                         begin
+                              if pgdbboolean(pvd^.data.Instance)^ then
+                                                                        begin
+                                                                        pv^.YouDeleted;
+                                                                        end;
+                         end;
+    end;
+  pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+  until pv=nil;
 end;
 
 function _test_com(Operands:pansichar):GDBInteger;
@@ -2473,6 +2540,7 @@ begin
   CreateCommandFastObjectPlugin(@_SelectMaterial_com,'SelMat',CADWG,0);
   CreateCommandFastObjectPlugin(@_test_com,'test',CADWG,0);
   CreateCommandFastObjectPlugin(@_El_ExternalKZ_com,'El_ExternalKZ',CADWG,0);
+  CreateCommandFastObjectPlugin(@_AutoGenCableRemove_com,'EL_AutoGen_Cable_Remove',CADWG,0);
 
   EM_SRBUILD.init('EM_SRBUILD',0,0);
   EM_SEPBUILD.init('EM_SEPBUILD',0,0);

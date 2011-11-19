@@ -201,6 +201,7 @@ MainMenuItem Plan;
     MenuItem Внешний кабельный журнал;
       {
         Command Обработать журнал,EL_ExternalKZ,none,none
+        Command Удалить автоматически сгенерированные кабели,EL_AutoGen_Cable_Remove,none,none
       }
     MenuItem КИПиА;
       {

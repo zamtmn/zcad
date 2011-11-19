@@ -2464,6 +2464,7 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
                     procedure AddBlockFromDBIfNeed(_to:PTDrawing;name:GDBString);
                     procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
                     function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
+                    function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
               end;
 //Generate on C:\zcad\CAD_SOURCE\commands\GDBCommandsBase.pas
   TMSType=(
@@ -2510,6 +2511,7 @@ TOSModeEditor=object(GDBaseObject)
   TOPSPlaceSmokeDetectorOrtoParam=record
                                         InsertType:TInsertType;(*'Вставлять'*)
                                         Scale:GDBDouble;(*'Масштаб плана'*)
+                                        ScaleBlock:GDBDouble;(*'Масштаб блоков'*)
                                         StartAuto:GDBBoolean;(*'Сигнал "Пуск"'*)
                                         DatType:TOPSDatType;(*'Тип извещателя'*)
                                         DMC:TOPSMinDatCount;(*'Мин. кол-во извещателей'*)
@@ -2525,6 +2527,7 @@ TOSModeEditor=object(GDBaseObject)
                                   end;
   TOrtoDevPlaceParam=record
                                         Name:GDBString;(*'Блок'*)(*oi_readonly*)
+                                        ScaleBlock:GDBDouble;(*'Масштаб блоков'*)
                                         CountType:TODPCountType;(*'Расставлять'*)
                                         Count:GDBInteger;(*'Общее количество'*)
                                         NX:GDBInteger;(*'Кол-во по длине'*)

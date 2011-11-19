@@ -32,10 +32,10 @@ begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=307;
   VIEW_ObjInspSubV:=141;
-  PATH_File0:='C:\zcad\cad\sample\test_dxf\by_trace.dxf';
-  PATH_File1:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File2:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File3:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File1:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File2:='C:\zcad\cad\sample\test_dxf\by_trace.dxf';
+  PATH_File3:='C:\zcad\cad\sample\test_dxf\em.dxf';
   PATH_File4:='E:\olde\CAD_XDXF\test2000\circ.dxf';
   PATH_File5:='E:\olde\CAD_XDXF\test2000\MODEL.dxf';
   PATH_File6:='E:\olde\CAD_XDXF\test2000\delphin_3dface.dxf';

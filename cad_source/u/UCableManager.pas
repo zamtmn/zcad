@@ -145,6 +145,23 @@ begin
                             if pnp^.DevLink<>nil then
                             begin
                                  pcd^.Devices.AddRef(pnp^.DevLink^);
+                                 if pcd^.EndDevice<>nil then
+                                 begin
+                                      pvn :=pnp^.DevLink.FindVariable('RiserName');
+                                      pvn2:=pcd^.EndDevice^.FindVariable('RiserName');
+                                      if (pvn<>nil)and(pvn2<>nil)then
+                                      begin
+                                           if pstring(pvn^.data.Instance)^=pstring(pvn2^.data.Instance)^ then
+                                           begin
+                                                pvn :=pnp^.DevLink.FindVariable('Elevation');
+                                                pvn2:=pcd^.EndDevice^.FindVariable('Elevation');
+                                                if (pvn<>nil)and(pvn2<>nil)then
+                                                begin
+                                                     pcd^.length:=pcd^.length+abs(pgdbdouble(pvn^.data.Instance)^-pgdbdouble(pvn2^.data.Instance)^);
+                                                end;
+                                           end;
+                                      end;
+                                 end;
                             end;
                             pcd^.EndDevice:=pnp^.DevLink;
                             pnp:=pobj^.NodePropArray.iterate(ir3);

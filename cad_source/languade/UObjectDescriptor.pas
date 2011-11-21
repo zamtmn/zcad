@@ -196,11 +196,17 @@ begin
      inherited;
 end;
 constructor ObjectDescriptor.init;
+{type
+VMT=RECORD
+  Size,NegSize:Longint;
+  ParentLink:PVMT;
+END;}
 begin
      inherited init(tname,pu);
      SimpleMenods.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20,sizeof(MetodDescriptor));
      pvmt:=nil;
      {$IFDEF FPC}VMTCurrentOffset:=12;{$ENDIF}
+     {$IFDEF WIN64}VMTCurrentOffset:=24{sizeof(VMT)};{$ENDIF}
      {$IFDEF DELPHI}VMTCurrentOffset:=0;{$ENDIF}
      PDefaultConstructor:=nil;
      pointer(LincedData):=nil;
@@ -298,10 +304,10 @@ var pmd:pMetodDescriptor;
     p:GDBPointer;
     ppp:pointer;
     {$ENDIF}
+    deb:integer;
 //    ppp2:pointer;
 //    ps:gdbstring;
 begin
-
       {$IFDEF fpc}
       ppp:=@self;
       p:=pvmt;
@@ -312,15 +318,35 @@ begin
                                              begin
                                                   tm.Code:=
                                                   ppointer(GDBPlatformint(self.PVMT)+
-                                                  GDBPlatformint(pmd^.MetodAddr))^;
+                                                  GDBPlatformint(pmd^.MetodAddr){+12})^;
                                              end
                                          else
                                              begin
                                                   tm.Code:=pmd^.MetodAddr;
                                              end;
-
-      case pmd^.Attributes of
-      m_procedure:SimpleProcOfObj(tm);
+      deb:=(pmd^.Attributes)and(not m_virtual);
+      {if ((pmd^.Attributes)and(not m_virtual))=m_procedure then
+                  begin
+                       pgdbaseobject(obj)^.Format;
+                  end;}
+      case (pmd^.Attributes)and(not m_virtual) of
+      m_procedure:
+                  begin
+                       {$ifdef WIN64}
+                       //tm.Code:=ppointer(GDBPlatformint(self.PVMT)+
+                       //         GDBPlatformint(pmd^.MetodAddr)+12)^;
+                       {$endif WIN64}
+                  SimpleProcOfObj(tm);
+                       pgdbaseobject(obj)^.Format;
+                  (*asm
+                                                                {$ifdef WINDOWS}
+                                                                mov rax,[obj]//win64
+                                                                mov rcx,[obj]//win64
+                                                                mov rax,[rax]
+                                                                call tm.Code//win64
+                                                                {$endif WINDOWS}
+                  end;*)
+                  end;
       m_function:SimpleProcOfObj(tm);
       m_constructor:
                                                         begin
@@ -355,13 +381,26 @@ begin
                                                                 {mov rsi,[obj]
                                                                 mov rdi,[p]}
 
-                                                                mov rdi,[obj]
-                                                                mov rsi,[p]
+                                                                //{$ifdef LINUX}
+                                                                //mov rdi,[obj]//lin64
+                                                                //mov rsi,[p]//lin64
+                                                                //call tm.Code//lin64
+                                                                //{$endif LINUX}
+
+                                                                {$ifdef WIN64}
+                                                                mov rcx,[obj]//win64
+                                                                mov rdx,[p]//win64
+                                                                call tm.Code//win64
+                                                                {$else}
+                                                                mov rdi,[obj]//lin64
+                                                                mov rsi,[p]//lin64
+                                                                call tm.Code//lin64
+                                                                {$endif WIN64}
 
                                                                 {mov rax,[ppp]
                                                                 mov rdx,[p]
                                                                 mov rax,[obj]}
-                                                                call tm.Code
+
                                                              end;
                                                              //simpleproc(tm);
                                                              //self.initnul;

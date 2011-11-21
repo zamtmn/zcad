@@ -33,7 +33,7 @@ uses
   {UGDBVisibleOpenArray,}gdbEntity{,GDBCircle},GDBLine,
   {GDBGenericSubEntry,}GDBNet,
   shared,sharedgdb,GDBSubordinated,gdbCable,varman,WindowsSpecific,uunitmanager,
-  UGDBBillOfMaterial,UCableManager,GDBDevice,GDBTable,UGDBStringArray,math,{strutils,}Masks,log,GDBCommandsBase,strproc;
+  UGDBOpenArrayOfPObjects,UGDBBillOfMaterial,UCableManager,GDBDevice,GDBTable,UGDBStringArray,math,{strutils,}Masks,log,GDBCommandsBase,strproc;
 type
 {Export+}
   TFindType=(
@@ -2373,6 +2373,7 @@ var
     net:PGDBObjNet;
     cable:PGDBObjCable;
     pvd:pvardesk;
+    netarray:GDBOpenArrayOfPObjects;
 begin
   if length(operands)=0 then
                      begin
@@ -2401,6 +2402,7 @@ begin
        FDoc:=TCSVDocument.Create;
        FDoc.Delimiter:=';';
        FDoc.LoadFromFile(s);
+       netarray.init(100);
 
        for row:=0 to FDoc.RowCount-1 do
        begin
@@ -2408,7 +2410,12 @@ begin
             begin
                  PGDBObjEntity(startdev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',FDoc.Cells[1,row]);
                  PGDBObjEntity(enddev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',FDoc.Cells[2,row]);
-                 PGDBObjEntity(net):=GDB.FindEntityByVar(GDBNetID,'NMO_Name',FDoc.Cells[3,row]);
+                 netarray.Clear;
+                 GDB.FindMultiEntityByVar(GDBNetID,'NMO_Name',FDoc.Cells[3,row],netarray);
+                 if netarray.Count=1 then
+                 begin
+                  PGDBaseObject(net):=netarray.GetObject(0);
+                 //PGDBObjEntity(net):=GDB.FindEntityByVar(GDBNetID,'NMO_Name',FDoc.Cells[3,row]);
                  if startdev=nil then
                                      shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено стартовое устройство '+FDoc.Cells[1,row]);
                  if enddev=nil then
@@ -2450,9 +2457,12 @@ begin
                  Cable^.Format;
                  Cable^.RenderFeedback;
                  gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(Cable);
+                 end;
 
                  end;
-                 end;
+                 end
+                 else
+                     shared.ShowError('В строке '+inttostr(row)+' обнаружена множественная трасса "'+FDoc.Cells[3,row]+'". Пока недопилено((');
 
 
             end
@@ -2465,6 +2475,7 @@ begin
 
 
        end;
+       netarray.ClearAndDone;
 
        FDoc.Destroy;
   end

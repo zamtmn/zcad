@@ -44,7 +44,7 @@ uses
   gdbasetypes,{optionswnd,}strutils;
   //procedure startup;
 implementation
-uses {URecordDescriptor,}UObjectDescriptor,projecttreewnd,commandline,log;
+uses {URecordDescriptor,}UObjectDescriptor,projecttreewnd,commandline,log,GDBSubordinated;
 
 function DBaseAdd_com:GDBInteger;
 var //t:PUserTypeDescriptor;
@@ -63,6 +63,7 @@ begin
            p:=pu.FindVariable(vn).data.Instance;
            PObjectDescriptor(PTTypedData(commandmanager.ContextCommandParams)^.ptd)^.RunMetod('initnul',p);
            PUserTypeDescriptor(PTTypedData(commandmanager.ContextCommandParams)^.ptd)^.CopyInstanceTo(PTTypedData(commandmanager.ContextCommandParams)^.Instance,p);
+           PObjectDescriptor(PTTypedData(commandmanager.ContextCommandParams)^.ptd)^.RunMetod('format',p);
            inc(GDBInteger(pvd.data.Instance^));
      end
         else
@@ -96,6 +97,7 @@ begin
                                                if pvd<>nil then
                                                begin
                                                     PGDBString(pvd^.data.Instance)^:=pdbv^.name;
+                                                    CreateDBLinkProcess(pv);
                                                     inc(c);
                                                end;
                                           end;

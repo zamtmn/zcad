@@ -131,6 +131,7 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
                     procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
                     function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
                     function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
+                    procedure FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:GDBOpenArrayOfPObjects);
               end;
 {EXPORT-}
 var GDB: GDBDescriptor;
@@ -882,6 +883,35 @@ begin
     end;
     result:=tv;
 end;
+procedure GDBDescriptor.FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:GDBOpenArrayOfPObjects);
+var
+   croot:PGDBObjGenericSubEntry;
+   pvisible,pvisible2,pv:PGDBObjEntity;
+   ir:itrec;
+   pvd:pvardesk;
+begin
+     croot:=self.GetCurrentROOT;
+     if croot<>nil then
+     begin
+         pvisible:=croot.ObjArray.beginiterate(ir);
+         if pvisible<>nil then
+         repeat
+               if pvisible.vp.ID=objID then
+               begin
+                    pvd:=pvisible^.ou.FindVariable(vname);
+                    if pvd<>nil then
+                    begin
+                         if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
+                         begin
+                              entarray.Add(@pvisible);
+                         end;
+                    end;
+               end;
+              pvisible:=croot.ObjArray.iterate(ir);
+         until pvisible=nil;
+     end;
+end;
+
 function GDBDescriptor.FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
 var
    croot:PGDBObjGenericSubEntry;

@@ -23,6 +23,7 @@ program zcad;
 {$IFNDEF LINUX}
   {$APPTYPE GUI}
 {$ENDIF}
+{$ifdef WIN64} {$imagebase $400000} {$endif}
 uses
   {$IFDEF REPORTMMEMORYLEAKS}heaptrc,{$ENDIF}
   Interfaces,forms, classes,

@@ -10,7 +10,7 @@ unit GDBNet;
 interface
 Uses UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,{GDBGenericSubEntry,}UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
 gl,
-memman,GDBSubordinated,OGLSpecFunc,uunitmanager,shared,sysutils;
+memman,GDBSubordinated,OGLSpecFunc,uunitmanager,shared,sysutils,UGDBOpenArrayOfPObjects;
 const
      UNNAMEDNET='NET';
 type
@@ -18,6 +18,7 @@ type
 PGDBObjNet=^GDBObjNet;
 GDBObjNet=object(GDBObjConnected)
                  graf:GDBGraf;
+                 riserarray:GDBOpenArrayOfPObjects;
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
                  function EubEntryType:GDBInteger;virtual;
@@ -72,11 +73,13 @@ procedure GDBObjNet.transform;
 var pv{,pvold}:pGDBObjEntity;
     ir{,ir2}:itrec;
 begin
-     inherited;
+     //inherited;
      pv:=ObjArray.beginiterate(ir);
       if pv<>nil then
       repeat
             pv^.Transform(t_matrix);
+            pv^.YouChanged;
+            //pv^.Format;
       pv:=ObjArray.iterate(ir);
       until pv=nil;
 end;
@@ -126,13 +129,15 @@ begin
      if pl<>nil then
      begin
           repeat
+                if getlinktype(pl)=LT_Normal then
+                begin
                 d:=SQRdist_Point_to_Segment(point,pl^.CoordInWCS.lBegin,pl^.CoordInWCS.lEnd);
-
                 if d<d0 then
                             begin
                                  d0:=d;
                                  result:=pl;
                             end;
+                end;
                 pl:=ObjArray.iterate(ir);
           until pl=nil;
      end;
@@ -197,6 +202,7 @@ begin
      //name:='';
      {name:='';}
      graf.FreeAndDone;
+     riserarray.ClearAndDone;
      inherited done;//  error
 end;
 function GDBObjNet.EraseMi;
@@ -509,6 +515,7 @@ begin
      self.vp.layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer {getaddres('EL_WIRES')};
      vp.ID := GDBNetID;
      graf.init(10000);
+     riserarray.init(100);
      //uunitmanager.units.loadunit(expandpath('*CAD\rtl\objdefunits\elwire.pas'),@ou);
 end;
 function GDBObjNet.EubEntryType;

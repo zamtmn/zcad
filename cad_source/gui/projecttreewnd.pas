@@ -339,6 +339,7 @@ begin
 
   ProjectDBContextMenuN:=TmyPopupMenu.create(nil);
   ProjectDBContextMenuN.Items.Add(TmyMenuItem.create(ProjectDBContextMenuN,'Cвязать с выделенными объектами','DBaseLink'));
+  ProjectDBContextMenuN.Items.Add(TmyMenuItem.create(ProjectDBContextMenuN,'Переименовать','DBaseRename'));
 
   ProgramDEVContextMenuN:=TmyPopupMenu.create(nil);
   ProgramDEVContextMenuN.Items.Add(TmyMenuItem.create(ProgramDEVContextMenuN,'Вставить в чертеж','Insert2'));

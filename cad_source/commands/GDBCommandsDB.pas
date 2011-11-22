@@ -41,10 +41,10 @@ uses
   //gdbobjectsconstdef,
   gdbEntity,
   shared,
-  gdbasetypes,{optionswnd,}strutils;
+  gdbasetypes,{optionswnd,}strutils,forms,Controls;
   //procedure startup;
 implementation
-uses {URecordDescriptor,}UObjectDescriptor,projecttreewnd,commandline,log,GDBSubordinated;
+uses {URecordDescriptor,}sltexteditor,UObjectDescriptor,projecttreewnd,commandline,log,GDBSubordinated;
 
 function DBaseAdd_com:GDBInteger;
 var //t:PUserTypeDescriptor;
@@ -65,6 +65,38 @@ begin
            PUserTypeDescriptor(PTTypedData(commandmanager.ContextCommandParams)^.ptd)^.CopyInstanceTo(PTTypedData(commandmanager.ContextCommandParams)^.Instance,p);
            PObjectDescriptor(PTTypedData(commandmanager.ContextCommandParams)^.ptd)^.RunMetod('format',p);
            inc(GDBInteger(pvd.data.Instance^));
+     end
+        else
+            HistoryOut('Команда работает только из контекстного меню');
+end;
+function DBaseRename_com:GDBInteger;
+var //t:PUserTypeDescriptor;
+    pvd,pdbv:pvardesk;
+    //pu:ptunit;
+    pv:pGDBObjEntity;
+    ir:itrec;
+    c:integer;
+
+    p:pointer;
+    pu:ptunit;
+    vn:GDBString;
+begin
+     if commandmanager.ContextCommandParams<>nil then
+     begin
+           pu:=gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase');
+           pdbv:=pu.InterfaceVariables.findvardescbyinst(PTTypedData(commandmanager.ContextCommandParams)^.Instance);
+           if pdbv<>nil then
+           begin
+                 if sltexteditor1=nil then
+                                  Application.CreateForm(Tsltexteditor1, sltexteditor1);
+                 sltexteditor1.caption:=('Переименовать вхождение');
+                 sltexteditor1.helptext.Caption:=' _EQ ';
+                 sltexteditor1.EditField.Caption:=copy(pdbv.name,4,length(pdbv.name)-3);
+                 if sltexteditor1.ShowModal=mrok then
+                 begin
+                      pdbv.name:='_EQ'+sltexteditor1.EditField.Caption;
+                 end;
+           end;
      end
         else
             HistoryOut('Команда работает только из контекстного меню');
@@ -134,6 +166,7 @@ procedure startup;
 begin
   CreateCommandFastObjectPlugin(@DBaseAdd_com,'DBaseAdd',CADWG,0);
   CreateCommandFastObjectPlugin(@DBaseLink_com,'DBaseLink',CADWG,0);
+  CreateCommandFastObjectPlugin(@DBaseRename_com,'DBaseRename',CADWG,0);
 end;
 begin
      {$IFDEF DEBUGINITSECTION}LogOut('GDBCommandsDB.initialization');{$ENDIF}

@@ -1313,6 +1313,77 @@ begin
                     pa.done;
                end;
 end;
+function RootByMultiTrace(firstpoint,lastpoint:GDBVertex;PTrace:PGDBObjNet;cable:PGDBObjCable;addfirstpoint:gdbboolean):GDBOpenArrayOfPObjects;
+var //po:PGDBObjSubordinated;
+    //plastw:pgdbvertex;
+    tw1,tw2:gdbvertex;
+    l1,l2:pgdbobjline;
+    pa:GDBPoint3dArray;
+    pv:pGDBVertex;
+    ir:itrec;
+    tcable:PGDBObjCable;
+    pvd:pvardesk;
+    cablecount:integer;
+    //polydata:tpolydata;
+    //domethod,undomethod:tmethod;
+begin
+  pointer(l1):=PTrace.GetNearestLine(firstpoint);
+  pointer(l2):=PTrace.GetNearestLine(lastpoint);
+  tw1:=NearestPointOnSegment(firstpoint,l1.CoordInWCS.lBegin,l1.CoordInWCS.lEnd);
+  result.init(100);
+  if l1=l2 then
+               begin
+                    if addfirstpoint then
+                    cable^.AddVertex(firstpoint);
+                    if not IsPointEqual(tw1,firstpoint) then
+                                                        cable^.AddVertex(tw1);
+                    tw1:=NearestPointOnSegment(lastpoint,l1.CoordInWCS.lBegin,l1.CoordInWCS.lEnd);
+                    if not IsPointEqual(tw1,lastpoint) then
+                                                   cable^.AddVertex(tw1);
+                    cable^.AddVertex(lastpoint);
+                    //l1:=l2;
+               end
+           else
+               begin
+                    tw2:=NearestPointOnSegment(lastpoint,l2.CoordInWCS.lBegin,l2.CoordInWCS.lEnd);
+                    PTrace.BuildGraf;
+                    pa.init({$IFDEF DEBUGBUILD}'{FE5DE449-60C7-4D92-9BA5-FEB937820B96}',{$ENDIF}100);
+                    PTrace.graf.FindPath(tw1,tw2,l1,l2,pa);
+                    if addfirstpoint then
+                    cable^.AddVertex(firstpoint);
+                    if not IsPointEqual(tw1,firstpoint) then
+                                                        cable^.AddVertex(tw1);
+                    //pa.copyto(@cable.VertexArrayInOCS);
+                    tcable:=cable;
+  cablecount:=1;
+  pv:=pa.beginiterate(ir);
+  if pv<>nil then
+  repeat
+        if pv^.x<>infinity then
+                               tcable.VertexArrayInOCS.add(@pv^)
+                           else
+                               begin
+                                    tcable := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
+                                    tcable^.ou.copyfrom(@cable.ou);
+                                    pvd:=tcable.ou.FindVariable('CABLE_Segment');
+                                    if pvd<>nil then
+                                    PGDBInteger(pvd^.data.Instance)^:=PGDBInteger(pvd^.data.Instance)^+cablecount;
+                                    inc(cablecount);
+                                    result.Add(@tcable);
+                               end;
+        pv:=pa.iterate(ir);
+  until pv=nil;
+
+
+                    //firstpoint:=pgdbvertex(cable^.VertexArrayInWCS.getelement(cable^.VertexArrayInWCS.Count-1))^;
+                    if not IsPointEqual(tw2,firstpoint) then
+                                                        tcable^.AddVertex(tw2);
+                    if not IsPointEqual(tw2,lastpoint) then
+                                                   tcable^.AddVertex(lastpoint);
+                    pa.done;
+               end;
+end;
+
 
 function _Cable_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var //po:PGDBObjSubordinated;
@@ -1696,6 +1767,7 @@ begin
   cman.build;
 
   pcd:=cman.beginiterate(ir);
+  if pcd<>nil then
   repeat
 
 
@@ -2369,11 +2441,18 @@ var
     isload:boolean;
     s: GDBString;
     row,col:integer;
-    startdev,enddev:PGDBObjDevice;
-    net:PGDBObjNet;
+    startdev,enddev,riser,riser2:PGDBObjDevice;
+    supernet,net,net2:PGDBObjNet;
     cable:PGDBObjCable;
-    pvd:pvardesk;
-    netarray:GDBOpenArrayOfPObjects;
+    pvd,pvd2:pvardesk;
+    netarray,riserarray:GDBOpenArrayOfPObjects;
+    ir_net,ir_net2,ir_riser,ir_riser2:itrec;
+    nline,new_line:pgdbobjline;
+    np:GDBVertex;
+    net2processed:boolean;
+    processednets:GDBOpenArrayOfPObjects;
+    vd,pvn,pvn2: pvardesk;
+    segments:GDBOpenArrayOfPObjects;
 begin
   if length(operands)=0 then
                      begin
@@ -2462,7 +2541,153 @@ begin
                  end;
                  end
                  else
-                     shared.ShowError('В строке '+inttostr(row)+' обнаружена множественная трасса "'+FDoc.Cells[3,row]+'". Пока недопилено((');
+                     begin
+                          if netarray.Count>1 then
+                          begin
+                          riserarray.init(100);
+                          GDB.FindMultiEntityByVar2(GDBDeviceID,'RiserName',riserarray);
+                          supernet:=nil;
+                          net:=netarray.beginiterate(ir_net);
+                          if (net<>nil) then
+                          repeat
+                                riser:=riserarray.beginiterate(ir_riser);
+                                if (riser<>nil) then
+                                repeat
+                                      pointer(nline):=net.GetNearestLine(riser.P_insert_in_WCS);
+                                      np:=NearestPointOnSegment(riser.P_insert_in_WCS,nline.CoordInWCS.lBegin,nline.CoordInWCS.lEnd);
+                                      if IsPointEqual(np,riser.P_insert_in_WCS)then
+                                      begin
+                                           net.riserarray.add(@riser);
+                                      end;
+                                      riser:=riserarray.iterate(ir_riser);
+                                until riser=nil;
+                                net:=netarray.iterate(ir_net);
+                          until net=nil;
+
+
+                          processednets.init(100);
+                          net:=netarray.beginiterate(ir_net);
+                          if (net<>nil) then
+                          repeat
+
+                                ir_net2:=ir_net;
+                                net2:=netarray.iterate(ir_net2);
+                                if (net2<>nil) then
+                                repeat
+
+                                      net2processed:=false;
+                                      riser:=net.riserarray.beginiterate(ir_riser);
+                                      if (riser<>nil) then
+                                      repeat
+
+                                            riser2:=net2.riserarray.beginiterate(ir_riser2);
+                                            if (riser2<>nil) then
+                                            repeat
+
+                                                  pvd:=riser.ou.FindVariable('RiserName');
+                                                  pvd2:=riser2.ou.FindVariable('RiserName');
+                                                  if (pvd<>nil)and(pvd2<>nil) then
+                                                  begin
+                                                       if pstring(pvd^.data.Instance)^=pstring(pvd2^.data.Instance)^then
+                                                       begin
+                                                            if supernet=nil then
+                                                            begin
+                                                                 gdbgetmem(supernet,sizeof(GDBObjNet));
+                                                                 supernet.initnul(nil);
+                                                                 net.objarray.copyto(@supernet.ObjArray);
+                                                            end;
+                                                            processednets.IsObjExist(net2);
+                                                            //if not net2processed then
+                                                            begin
+                                                                 net2.objarray.copyto(@supernet.ObjArray);
+                                                                 processednets.AddRef(net2^);
+                                                                 net2processed:=true;
+                                                            end;
+
+                                                                New_line := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
+                                                                GDBObjLineInit(gdb.GetCurrentROOT,New_line,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,riser.P_insert_in_WCS,riser2.P_insert_in_WCS);
+                                                                New_line^.ou.copyfrom(units.findunit('_riserlink'));
+                                                                vd:=New_line.OU.FindVariable('LengthOverrider');
+
+                                                                pvn :=riser.FindVariable('Elevation');
+                                                                pvn2:=riser.FindVariable('Elevation');
+                                                                if (pvn<>nil)and(pvn2<>nil)and(vd<>nil)then
+                                                                begin
+                                                                     pgdbdouble(vd^.data.Instance)^:=abs(pgdbdouble(pvn^.data.Instance)^-pgdbdouble(pvn2^.data.Instance)^);
+                                                                end;
+                                                                New_line^.Format;
+                                                                supernet^.ObjArray.add(addr(New_line));
+
+
+                                                            pvd:=pvd;
+                                                       end;
+                                                  end;
+
+
+                                                 riser2:=net.riserarray.iterate(ir_riser2);
+                                            until riser2=nil;
+
+
+                                           riser:=net.riserarray.iterate(ir_riser);
+                                      until riser=nil;
+
+
+                                net2:=netarray.iterate(ir_net2);
+                                until net2=nil;
+
+                                net:=netarray.iterate(ir_net);
+                          until (net=nil){or(supernet<>nil)};
+
+                          //supernet.BuildGraf;
+
+                          cable := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
+                          cable^.ou.copyfrom(units.findunit('cable'));
+                          pvd:=cable.ou.FindVariable('NMO_Suffix');
+                          pstring(pvd^.data.Instance)^:='';
+                          pvd:=cable.ou.FindVariable('NMO_Prefix');
+                          pstring(pvd^.data.Instance)^:='';
+                          pvd:=cable.ou.FindVariable('NMO_BaseName');
+                          pstring(pvd^.data.Instance)^:='';
+                          pvd:=cable.ou.FindVariable('NMO_Template');
+                          pstring(pvd^.data.Instance)^:='';
+                          pvd:=cable.ou.FindVariable('NMO_Name');
+                          pstring(pvd^.data.Instance)^:=FDoc.Cells[0,row];
+                          pvd:=cable.ou.FindVariable('DB_link');
+                          pstring(pvd^.data.Instance)^:=FDoc.Cells[4,row];
+
+                          pvd:=cable.ou.FindVariable('CABLE_AutoGen');
+                          pgdbboolean(pvd^.data.Instance)^:=true;
+
+                          gdb.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeTreeBB(cable);
+
+                          segments:=rootbymultitrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,supernet,Cable,true);
+
+                          Cable^.Format;
+                          Cable^.RenderFeedback;
+                          gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(Cable);
+
+                          cable:=segments.beginiterate(ir_net);
+                          if (cable<>nil) then
+                          repeat
+
+                                Cable^.Format;
+                                Cable^.RenderFeedback;
+                                gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(Cable);
+
+                          cable:=segments.iterate(ir_net);
+                          until cable=nil;
+
+                          supernet.objarray.Clear;
+                          supernet.done;
+                          segments.Clear;
+                          segments.done;
+
+                          riserarray.ClearAndDone;
+                          //shared.ShowError('В строке '+inttostr(row)+' обнаружена множественная трасса "'+FDoc.Cells[3,row]+'". Пока недопилено((');
+                          end
+                          else
+                              shared.ShowError('В строке '+inttostr(row)+' обнаружена трасса "'+FDoc.Cells[3,row]+'" отсутствующая в чертеже((');
+                     end;
 
 
             end

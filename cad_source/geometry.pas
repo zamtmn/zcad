@@ -77,7 +77,7 @@ function intercept3dmy2(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3d
 function intercept3d(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;inline;
 
 function pointinquad2d(const x1, y1, x2, y2, xp, yp: GDBFloat): GDBBoolean;inline;
-function Vertexlength(const Vector1, Vector2: GDBVertex): GDBDouble;inline;
+function Vertexlength(const Vector1, Vector2: GDBVertex): GDBDouble;{inline;}
 function SqrVertexlength(const Vector1, Vector2: GDBVertex): GDBDouble;inline;overload;
 function SqrVertexlength(const Vector1, Vector2: GDBVertex2d): GDBDouble;inline; overload;
 function Vertexmorph(const Vector1, Vector2: GDBVertex; a: GDBDouble): GDBVertex;inline;overload;

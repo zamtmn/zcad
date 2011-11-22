@@ -34,11 +34,24 @@ GDBOpenArrayOfGDBPointer=object(GDBOpenArray)
                       destructor FreeAndDone;virtual;
                       procedure cleareraseobj;virtual;abstract;
                       function IsObjExist(pobj:GDBPointer):GDBBoolean;
+                      function copyto(source:PGDBOpenArray):GDBInteger;virtual;
              end;
 {Export-}
 implementation
 uses
     log;
+function GDBOpenArrayOfGDBPointer.copyto;
+var p:GDBPointer;
+    ir:itrec;
+begin
+  p:=beginiterate(ir);
+  if p<>nil then
+  repeat
+        source.add(@p{^});  //-----------------//-----------
+        p:=iterate(ir);
+  until p=nil;
+  result:=count;
+end;
 function GDBOpenArrayOfGDBPointer.IsObjExist;
 var p:GDBPointer;
     ir:itrec;

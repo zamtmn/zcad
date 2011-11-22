@@ -19,14 +19,17 @@
 unit UGDBGraf;
 {$INCLUDE def.inc}
 interface
-uses UGDBPoint3DArray,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry,gdbEntity,UGDBOpenArrayOfPV;
+uses varmandef,UGDBPoint3DArray,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry,gdbEntity,UGDBOpenArrayOfPV;
 type
 {EXPORT+}
+PTLinkType=^TLinkType;
+TLinkType=(LT_Normal,LT_OnlyLink);
 pgrafelement=^grafelement;
 grafelement=object(GDBaseObject)
                   linkcount:GDBInteger;
                   point:gdbvertex;
                   link:GDBObjOpenArrayOfPV;
+                  workedlink:PGDBObjEntity;
                   connected:GDBInteger;
                   step:GDBInteger;
                   pathlength:GDBDouble;
@@ -34,7 +37,7 @@ grafelement=object(GDBaseObject)
                   constructor initnul;
                   constructor init(v:gdbvertex);
                   function addline(pv:pgdbobjEntity):GDBInteger;
-                  function IsConnectedTo(node:pgrafelement):GDBBoolean;
+                  function IsConnectedTo(node:pgrafelement):pgdbobjEntity;
             end;
 GDBGraf=object(GDBOpenArrayOfData)(*OpenArrayOfData=grafelement*)
                 constructor init(m:GDBInteger);
@@ -49,8 +52,44 @@ GDBGraf=object(GDBOpenArrayOfData)(*OpenArrayOfData=grafelement*)
                 procedure FindPath(point1,point2:gdbvertex;l1,l2:pgdbobjEntity;var pa:GDBPoint3dArray);
              end;
 {EXPORT-}
+function getlinktype(pv:PGDBObjEntity):TLinktype;
 implementation
 uses GDBLine,math,log;
+procedure GDBGraf.BeginFindPath;
+var
+  pgfe: pgrafelement;
+  ir:itrec;
+begin
+  pgfe:=beginiterate(ir);
+  if pgfe<>nil then
+  repeat
+        pgfe^.step:=0;
+        pgfe^.pathlength:=+infinity;
+        pgfe^.workedlink:=nil;
+
+        pgfe:=iterate(ir);
+  until pgfe=nil;
+end;
+function getlinktype(pv:PGDBObjEntity):TLinktype;
+var
+    pvd:pvardesk;
+begin
+     pvd:=pv^.ou.FindVariable('LinkType');
+     if pvd=nil then
+                    result:=LT_Normal
+                else
+                    result:=PTLinkType(pvd.data.Instance)^;
+end;
+function getlinklength(pv:PGDBObjLine):GDBDouble;
+var
+    pvd:pvardesk;
+begin
+     pvd:=pv^.ou.FindVariable('LengthOverrider');
+     if pvd=nil then
+                    result:=pv^.Length
+                else
+                    result:=PGDBDouble(pvd.data.Instance)^;
+end;
 procedure GDBGraf.FindPath;
 var
   pgfe,pgfe2,pgfe3: pgrafelement;
@@ -58,7 +97,8 @@ var
   step,oldstep:gdbinteger;
   isend:gdbboolean;
   pl:pgdbobjEntity;
-  npath,npathmin:gdbdouble;
+  npath,npathmin,linklength:gdbdouble;
+  linkline,mainlinkline:pgdbobjEntity;
 begin
 
      BeginFindPath;
@@ -87,17 +127,18 @@ begin
               pl:=pgfe^.link.beginiterate(ir2);
               if pl<>nil then
               repeat
-
+                    linklength:=getlinklength(pointer(pl));
                     pgfe2:=beginiterate(ir3);
                     if pgfe2<>nil then
                     repeat
                           if (pgfe<>pgfe2)and(pgfe2^.link.IsObjExist(pl)) then
                           begin
-                          npath:=pgfe^.pathlength+Vertexlength(pgfe^.point,pgfe2^.point);
+                          npath:=pgfe^.pathlength+{Vertexlength(pgfe^.point,pgfe2^.point)}linklength;
                           if {(pgfe2.step=0)or}(pgfe2.pathlength>npath) then
                                               begin
                                                    pgfe2^.step:=step;
                                                    pgfe2^.pathlength:=npath;
+                                                   pgfe2^.workedlink:=pl;
                                                    isend:=false;
                                               end;
                           end;
@@ -138,13 +179,16 @@ begin
         repeat
         if pgfe^.step=step then
         begin
-             if pgfe^.IsConnectedTo(pgfe2) then
+             linkline:=pgfe^.IsConnectedTo(pgfe2);
+             if linkline<>nil then
              begin
-             npath:=pgfe^.pathlength+Vertexlength(pgfe2^.point,pgfe^.point);
+                  linklength:=getlinklength(pointer(linkline));
+             npath:=pgfe^.pathlength+{Vertexlength(pgfe2^.point,pgfe^.point)}linklength;
              if {npathmin>npath}abs(npath-pgfe2^.pathlength)<eps then
              begin
                   //npathmin:=pgfe^.pathlength;
                   pgfe3:=pgfe;
+                  mainlinkline:=linkline;
              end;
              end;
         end;
@@ -152,26 +196,14 @@ begin
         until pgfe=nil;
         dec(step);
         pgfe2:=pgfe3;
+        if getlinktype(mainlinkline)=LT_OnlyLink then
+        begin
+             pa.Add(@InfinityVertex);
+        end;
         pa.Add(@pgfe2.point);
   end;
 
   pa.Invert;
-
-
-end;
-procedure GDBGraf.BeginFindPath;
-var
-  pgfe: pgrafelement;
-  ir:itrec;
-begin
-  pgfe:=beginiterate(ir);
-  if pgfe<>nil then
-  repeat
-        pgfe^.step:=0;
-        pgfe^.pathlength:=+infinity;
-
-        pgfe:=iterate(ir);
-  until pgfe=nil;
 end;
 function grafelement.IsConnectedTo;
 var
@@ -183,12 +215,12 @@ begin
   repeat
         if node^.link.IsObjExist(line)then
                                           begin
-                                               result:=true;
+                                               result:=line;
                                                exit;
                                           end;
         line:=link.iterate(ir);
   until line=nil;
-  result:=false;
+  result:=nil;
 end;
 function grafelement.addline;
 begin

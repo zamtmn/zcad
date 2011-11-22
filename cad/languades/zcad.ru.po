@@ -917,6 +917,23 @@ msgctxt "TEntityAdress~SelfIndex"
 msgid "Position"
 msgstr "Позиция"
 
+#: TFORM1.BUTTON1.CAPTION
+msgid "Button1"
+msgstr ""
+
+#: TFORM1.CAPTION
+msgid "Form1"
+msgstr ""
+
+#: TFORM1.EDIT1.TEXT
+msgid "Edit1"
+msgstr ""
+
+#: TFORM1.LABEL1.CAPTION
+msgctxt "TFORM1.LABEL1.CAPTION"
+msgid "lkjlkjlkjlkjlkj"
+msgstr ""
+
 #: TIMode~TIM_MText
 msgid "MText"
 msgstr "Многострочный"
@@ -940,6 +957,7 @@ msgid "LayerWindow"
 msgstr "Слои"
 
 #: TLAYERWINDOW.LABEL1.CAPTION
+msgctxt "TLAYERWINDOW.LABEL1.CAPTION"
 msgid "Label1"
 msgstr ""
 
@@ -1267,6 +1285,22 @@ msgstr "Совпадает содержимое"
 #: TSelTextParams~SameTemplate
 msgid "Same template"
 msgstr "Совпатает шаблон"
+
+#: TSLTEXTEDITOR1.CAPTION
+msgid "sltexteditor1"
+msgstr ""
+
+#: TSLTEXTEDITOR1.EDITFIELD.TEXT
+msgid "EditField"
+msgstr ""
+
+#: TSLTEXTEDITOR1.HELPTEXT.CAPTION
+msgid " тест "
+msgstr ""
+
+#: TSLTEXTEDITOR1.OKBUTTON.CAPTION
+msgid "Ok"
+msgstr ""
 
 #: tsys~SSY_CompileInfo
 msgid "Build info"

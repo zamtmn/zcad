@@ -895,8 +895,12 @@ procedure TMainFormN.LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARec
 var
    plp:PGDBLayerProp;
    Dest: PChar;
+   pdwg:PTDrawing;
 begin
-  if gdb.GetCurrentDWG=nil then
+  pdwg:=gdb.GetCurrentDWG;
+  if pdwg=nil then
+   exit;
+  if pdwg.LayerTable.Count=0 then
    exit;
      //LayerBox.Canvas.TextRect(ARect,1,1,'asdasd');
   canvas.Brush.Color := clBtnFace;

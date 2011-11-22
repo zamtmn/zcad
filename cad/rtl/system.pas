@@ -326,6 +326,7 @@ GDBOpenArrayOfGDBPointer=object(GDBOpenArray)
                       destructor FreeAndDone;virtual;abstract;
                       procedure cleareraseobj;virtual;abstract;
                       function IsObjExist(pobj:GDBPointer):GDBBoolean;
+                      function copyto(source:PGDBOpenArray):GDBInteger;virtual;abstract;
              end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBOpenArrayOfPObjects.pas
 PGDBOpenArrayOfPObjects=^GDBOpenArrayOfPObjects;
@@ -570,6 +571,7 @@ GDBTextStyleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
                     procedure freeelement(p:GDBPointer);virtual;abstract;
               end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBGraf.pas
+TLinkType=(LT_Normal,LT_OnlyLink);
 pgrafelement=^grafelement;
 grafelement=object(GDBaseObject)
                   linkcount:GDBInteger;
@@ -1571,6 +1573,7 @@ GDBObjConnected=object(GDBObjGenericSubEntry)
 PGDBObjNet=^GDBObjNet;
 GDBObjNet=object(GDBObjConnected)
                  graf:GDBGraf;
+                 riserarray:GDBOpenArrayOfPObjects;
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;abstract;
                  function EubEntryType:GDBInteger;virtual;abstract;
@@ -2465,6 +2468,8 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
                     procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
                     function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
                     function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
+                    procedure FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:GDBOpenArrayOfPObjects);
+                    procedure FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:GDBOpenArrayOfPObjects);
               end;
 //Generate on C:\zcad\CAD_SOURCE\commands\GDBCommandsBase.pas
   TMSType=(

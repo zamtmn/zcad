@@ -50,7 +50,7 @@ uses
   UGDBVisibleOpenArray,
   UGDBPoint3DArray,
   strproc,{GDBCamera,UGDBOpenArrayOfPV,}OGLSpecFunc{,zoglforms,ZEditsWithProcedure,ZComboBoxsWithProc,ZStaticSText}{,zbasicvisible},memman,
-  log{,zguisct}{,TypeDescriptors,UGDBOpenArrayOfByte,ZTabControlsGeneric},UGDBEntTree;
+  log{,zguisct}{,TypeDescriptors,UGDBOpenArrayOfByte,ZTabControlsGeneric},UGDBEntTree,sltexteditor;
 const
 
   ontracdist=10;
@@ -1809,6 +1809,10 @@ var
    pint:PGDBInteger;
 begin
      astring:=ConvertFromDxfString(PGDBObjText(pobj)^.Template);
+
+
+     if PGDBObjText(pobj)^.vp.ID=GDBMTextID then
+     begin
      if not assigned(InfoForm) then
      begin
      InfoForm:=TInfoForm.create(application.MainForm);
@@ -1827,13 +1831,33 @@ begin
 
      end;
      //InfoForm.DialogPanel.ShowButtons:=[pbOK, pbCancel{, pbClose, pbHelp}];
-     InfoForm.caption:=('Редактор текста');
+     InfoForm.caption:=('Редактор многострочного текста');
 
      InfoForm.memo.text:=astring;
      modalresult:=InfoForm.ShowModal;
      if modalresult=MrOk then
                          begin
                               PGDBObjText(pobj)^.Template:=ConvertToDxfString(InfoForm.memo.text);
+                         end;
+     end
+     else
+     begin
+     if not assigned(sltexteditor1) then
+                                        Application.CreateForm(Tsltexteditor1, sltexteditor1);
+     sltexteditor1.caption:=('Редактор однострочного текста');
+
+     sltexteditor1.helptext.Caption:=' TEXT: ';
+     sltexteditor1.EditField.Caption:=astring;
+
+     modalresult:=sltexteditor1.ShowModal;
+     if modalresult=MrOk then
+                         begin
+                              PGDBObjText(pobj)^.Template:=ConvertToDxfString(sltexteditor1.EditField.text);
+                         end;
+     end;
+     if modalresult=MrOk then
+                         begin
+                              //PGDBObjText(pobj)^.Template:=ConvertToDxfString(InfoForm.memo.text);
                               PGDBObjText(pobj)^.YouChanged;
                               gdb.GetCurrentROOT.FormatAfterEdit;
                               redrawoglwnd;

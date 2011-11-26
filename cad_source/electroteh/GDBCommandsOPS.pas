@@ -673,8 +673,7 @@ var
 begin
           name:=strproc.Tria_Utf8ToAnsi(name);
 
-
-
+     gdb.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,datname);
      pointer(pv):=addblockinsert(gdb.GetCurrentROOT,@{gdb.GetCurrentROOT}root.ObjArray,currentcoord, 1, 0,@datname[1]);
      pv^.format;
      pv^.getoutbound;
@@ -868,7 +867,10 @@ begin
                         prevname:=endname;
                         nodeend:=pcabledesk^.Devices.iterate(ir_inNodeArray);
                   until nodeend=nil;
-                  InsertDat(nodestart^.name,startname,endname,count,currentcoord,GDB.GetCurrentDWG.ConstructObjRoot).YouDeleted;
+                  if nodestart<>nil then
+                                        InsertDat(nodestart^.name,startname,endname,count,currentcoord,GDB.GetCurrentDWG.ConstructObjRoot).YouDeleted
+                                    else
+                                        InsertDat('_error_here',startname,endname,count,currentcoord,GDB.GetCurrentDWG.ConstructObjRoot).YouDeleted;
 
                   pvd:=PCableSS.ou.FindVariable('CABLE_WireCount');
                   if pvd=nil then

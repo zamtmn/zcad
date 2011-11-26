@@ -72,6 +72,7 @@ GDBObjCurve=object(GDBObj3d)
 procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:GDBBoolean);
 function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:GDBBoolean):GDBBoolean;
 procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record;const processaxis:taddotrac;const closed:GDBBoolean);
+function GetDirInPoint(const VertexArrayInWCS:GDBPoint3dArray;point:GDBVertex;closed:GDBBoolean):GDBVertex;
 implementation
 uses
     log;
@@ -83,6 +84,54 @@ end;
 procedure GDBObjCurve.DeleteVertex(const PolyData:TPolyData);
 begin
      vertexarrayinocs.deleteelement(PolyData.nearestvertex);
+end;
+function GetDirInPoint(const VertexArrayInWCS:GDBPoint3dArray;point:GDBVertex;closed:GDBBoolean):GDBVertex;
+var //tv:gdbvertex;
+    ptv,ppredtv:pgdbvertex;
+    ir:itrec;
+    found:integer;
+
+begin
+     if not closed then
+                   begin
+                        ppredtv:=VertexArrayInWCS.beginiterate(ir);
+                        ptv:=VertexArrayInWCS.iterate(ir);
+                   end
+                else
+                    begin
+                           if VertexArrayInWCS.Count<3 then
+                                                        exit;
+                           ptv:=VertexArrayInWCS.beginiterate(ir);
+                           ppredtv:=VertexArrayInWCS.getelement(VertexArrayInWCS.Count-1);
+                    end;
+  found:=0;
+  if (ptv<>nil)and(ppredtv<>nil) then
+  repeat
+        if (abs(ptv^.x-point.x)<eps)
+       and (abs(ptv^.y-point.y)<eps)
+       and (abs(ptv^.z-point.z)<eps)
+                                             then
+                                                 begin
+                                                      found:=2;
+                                                 end
+   else if (found=0)and({distance2piece}SQRdist_Point_to_Segment(point,ppredtv^,ptv^)<bigeps) then begin
+                                                          found:=1;
+                                                     end;
+
+        if found>0 then
+                       begin
+                            result:=vertexsub(ptv^,ppredtv^);
+                            result:=geometry.NormalizeVertex(result);
+                            exit;
+                            //processaxis(posr,result);
+                            //result:=geometry.CrossVertex(tv,zwcs);
+                            //processaxis(posr,result);
+                            dec(found);
+                       end;
+
+        ppredtv:=ptv;
+        ptv:=VertexArrayInWCS.iterate(ir);
+  until ptv=nil;
 end;
 procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record;const processaxis:taddotrac;const closed:GDBBoolean);
 var tv:gdbvertex;

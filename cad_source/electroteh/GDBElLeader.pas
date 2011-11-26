@@ -60,7 +60,7 @@ GDBObjElLeader=object(GDBObjComplex)
             end;
 {EXPORT-}
 implementation
-uses UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV;
+uses UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve;
 function GDBObjElLeader.calcvisible;
 //var i:GDBInteger;
 //    tv,tv1:gdbvertex4d;
@@ -224,8 +224,8 @@ end;
 procedure GDBObjElLeader.format;
 var
    pl:pgdbobjline;
-   tv:gdbvertex;
-   pobj:PGDBObjCable;
+   tv,tv2,tv3:gdbvertex;
+   pobj,pcable:PGDBObjCable;
    ir,ir2:itrec;
    s:gdbstring;
    psl:PGDBGDBStringArray;
@@ -249,6 +249,8 @@ begin
      sta.init(10);
      mainline.vp.Layer:=vp.Layer;
      mainline.format;
+
+     pcable:=nil;
 
      objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}100);
 
@@ -288,6 +290,7 @@ begin
                 begin
                      if pobj^.VertexArrayInWCS.onpoint(mainline.CoordInWCS.lBegin,false) then
                      begin
+                          pcable:=pobj;
                           pvn:=pobj^.ou.FindVariable('NMO_Name');
                           if pvn<>nil then
                           begin
@@ -398,6 +401,26 @@ begin
      tv:=geometry.vectordot(mainline.dir,Local.OZ);
      tv:=geometry.NormalizeVertex(tv);
      tv:=geometry.VertexMulOnSc(tv,scale);
+
+     if pcable<>nil then
+                        begin
+                             tv2:=GetDirInPoint(pcable^.VertexArrayInWCS,mainline.CoordInWCS.lBegin,false);
+                             tv3:=geometry.vectordot(tv2,mainline.dir);
+                             if {tv3.z}scalardot(tv2,mainline.dir)>0 then
+                                            tv2:=geometry.vectordot(tv2,Local.OZ)
+                                        else
+                                            tv2:=geometry.vectordot(Local.OZ,tv2);
+                             //tv2:=geometry.vectordot(tv2,Local.OZ);
+                             tv2:=geometry.NormalizeVertex(tv2);
+                             tv2:=geometry.VertexMulOnSc(tv2,scale);
+
+                             tv:=vertexadd(tv2,tv);
+                             tv:=geometry.NormalizeVertex(tv);
+                             tv:=geometry.VertexMulOnSc(tv,scale);
+
+                             //tv:=tv2;
+                        end;
+
      end
      else tv:=nulvertex;
      //MarkLine.done;

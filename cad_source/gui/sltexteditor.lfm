@@ -1,7 +1,7 @@
 object sltexteditor1: Tsltexteditor1
-  Left = 271
+  Left = 227
   Height = 18
-  Top = 270
+  Top = 289
   Width = 503
   BorderStyle = bsSizeToolWin
   Caption = 'sltexteditor1'
@@ -9,12 +9,13 @@ object sltexteditor1: Tsltexteditor1
   ClientWidth = 503
   Constraints.MaxHeight = 18
   Constraints.MinHeight = 18
+  OnShow = shoftedform
   LCLVersion = '0.9.31'
   object EditField: TEdit
-    Left = 30
+    Left = 29
     Height = 18
     Top = 0
-    Width = 434
+    Width = 433
     Align = alClient
     Anchors = []
     TabOrder = 0
@@ -24,20 +25,21 @@ object sltexteditor1: Tsltexteditor1
     Left = 0
     Height = 18
     Top = 0
-    Width = 30
+    Width = 29
     Align = alLeft
     Caption = ' тест '
     Layout = tlCenter
     ParentColor = False
   end
   object OkButton: TButton
-    Left = 464
+    Left = 462
     Height = 18
     Top = 0
-    Width = 39
+    Width = 41
     Align = alRight
     AutoSize = True
     Caption = 'Ok'
+    Default = True
     ModalResult = 1
     TabOrder = 1
   end

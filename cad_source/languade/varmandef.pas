@@ -23,7 +23,7 @@ interface
 uses SysUtils,UGDBTree,UGDBStringArray,{gdbobjectsconstdef,}strutils,gdbasetypes,log,
   UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,gdbase,UGDBOpenArrayOfData,
   memman,UGDBOpenArrayOfPObjects,
-  Classes,Controls,StdCtrls;
+  Classes,Controls,StdCtrls,LCLVersion;
 const
   {Ttypenothing=-1;
   Ttypecustom=1;
@@ -234,6 +234,7 @@ UserTypeDescriptor=object(GDBaseObject)
                      SYS_CompilerTargetOS:GDBString;(*'Target OS'*)(*oi_readonly*)
                      SYS_CompileDate:GDBString;(*'Compile date'*)(*oi_readonly*)
                      SYS_CompileTime:GDBString;(*'Compile time'*)(*oi_readonly*)
+                     SYS_LCLVersion:GDBString;(*'LCL version'*)(*oi_readonly*)
                end;
 
   tsys=record
@@ -447,6 +448,7 @@ begin
   SysVar.SYS.SSY_CompileInfo.SYS_CompilerTargetOS:={$I %FPCTARGETOS%};
   SysVar.SYS.SSY_CompileInfo.SYS_CompileDate:={$I %DATE%};
   SysVar.SYS.SSY_CompileInfo.SYS_CompileTime:={$I %TIME%};
+  SysVar.SYS.SSY_CompileInfo.SYS_LCLVersion:=lcl_version;
   SysVar.debug.languadedeb.NotEnlishWord:=0;
   SysVar.debug.languadedeb.UpdatePO:=0;
 end.

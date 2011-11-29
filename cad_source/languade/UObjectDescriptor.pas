@@ -337,7 +337,7 @@ begin
                        //         GDBPlatformint(pmd^.MetodAddr)+12)^;
                        {$endif WIN64}
                   SimpleProcOfObj(tm);
-                       pgdbaseobject(obj)^.Format;
+                       //pgdbaseobject(obj)^.Format;
                   (*asm
                                                                 {$ifdef WINDOWS}
                                                                 mov rax,[obj]//win64

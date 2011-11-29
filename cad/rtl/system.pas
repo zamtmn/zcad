@@ -571,19 +571,21 @@ GDBTextStyleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
                     procedure freeelement(p:GDBPointer);virtual;abstract;
               end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBGraf.pas
+PTLinkType=^TLinkType;
 TLinkType=(LT_Normal,LT_OnlyLink);
 pgrafelement=^grafelement;
 grafelement=object(GDBaseObject)
                   linkcount:GDBInteger;
                   point:gdbvertex;
                   link:GDBObjOpenArrayOfPV;
+                  workedlink:PGDBObjEntity;
                   connected:GDBInteger;
                   step:GDBInteger;
                   pathlength:GDBDouble;
                   constructor initnul;
                   constructor init(v:gdbvertex);
                   function addline(pv:pgdbobjEntity):GDBInteger;
-                  function IsConnectedTo(node:pgrafelement):GDBBoolean;
+                  function IsConnectedTo(node:pgrafelement):pgdbobjEntity;
             end;
 GDBGraf=object(GDBOpenArrayOfData)(*OpenArrayOfData=grafelement*)
                 constructor init(m:GDBInteger);
@@ -785,6 +787,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
                      SYS_CompilerTargetOS:GDBString;(*'Target OS'*)(*oi_readonly*)
                      SYS_CompileDate:GDBString;(*'Compile date'*)(*oi_readonly*)
                      SYS_CompileTime:GDBString;(*'Compile time'*)(*oi_readonly*)
+                     SYS_LCLVersion:GDBString;(*'LCL version'*)(*oi_readonly*)
                end;
   tsys=record
              SYS_Version:PGDBString;(*'Program version'*)(*oi_readonly*)

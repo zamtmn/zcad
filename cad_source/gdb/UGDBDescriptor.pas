@@ -692,7 +692,7 @@ end;
 //end;
 destructor GDBDescriptor.done;
 begin
-
+    CurrentDWG:=nil;
     inherited;
     // gdbfreemem(pointer(currentdwg));
      ProjectUnits.done;

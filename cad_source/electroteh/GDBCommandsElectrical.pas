@@ -2480,7 +2480,7 @@ begin
   begin
        FDoc:=TCSVDocument.Create;
        FDoc.Delimiter:=';';
-       FDoc.LoadFromFile(s);
+       FDoc.LoadFromFile(utf8tosys(s));
        netarray.init(100);
 
        for row:=0 to FDoc.RowCount-1 do

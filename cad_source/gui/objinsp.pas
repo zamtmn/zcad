@@ -91,6 +91,8 @@ type
     procedure asyncfreeeditor(Data: PtrInt);
     function IsMouseOnSpliter(pp:PPropertyDeskriptor; X:Integer):GDBBoolean;
 
+    procedure createeditor(pp:PPropertyDeskriptor);
+
     {LCL}
   //procedure Pre_MouseMove(fwkeys:longint; x,y:GDBSmallInt; var r:HandledMsg); virtual;
     procedure MouseMove(Shift: TShiftState; X, Y: Integer);override;
@@ -491,6 +493,32 @@ end;
 begin
      halt(0);
 end;}
+function findnext(psubtree:PTPropertyDeskriptorArray;current:PPropertyDeskriptor):PPropertyDeskriptor;
+var
+  {rez,}curr:PPropertyDeskriptor;
+      ir:itrec;
+begin
+  result:=nil;
+  //rez:=nil;
+  curr:=psubtree^.beginiterate(ir);
+  if curr<>nil then
+    repeat
+      if curr^.IsVisible then
+      begin
+        if curr=current then
+        begin
+          result:=psubtree^.iterate(ir);
+          if result<>nil then
+           if result^.SubNode<>nil then
+              result:=nil;
+          exit;
+        end;
+        if (curr^.SubNode<>nil)and(not curr^.Collapsed^) then result:=findnext(GDBPointer(curr^.SubNode),current);
+        if result<>nil then exit;
+      end;
+      curr:=psubtree^.iterate(ir);
+    until curr=nil;
+end;
 
 function mousetoprop(psubtree:PTPropertyDeskriptorArray; mx,my:GDBInteger; var y:GDBInteger):PPropertyDeskriptor;
 var
@@ -542,8 +570,13 @@ begin
 end;
 
 procedure TGDBobjinsp.asyncfreeeditor;
+var
+      next:PPropertyDeskriptor;
 begin
+     next:=findnext(@pda,ppropcurrentedit);
      freeeditor;
+     if next<>nil then
+     createeditor(next);
 end;
 
 procedure TGDBobjinsp.Notify;
@@ -744,6 +777,87 @@ begin
                                     exit;
                                     end;
 end;
+procedure TGDBobjinsp.createeditor(pp:PPropertyDeskriptor);
+var
+  my:GDBInteger;
+
+  //pedipor:pzbasic;
+//  tb:GDBBoolean;
+//  pb:PGDBBoolean;
+  tp:pointer;
+  pobj:pGDBObjEntity;
+  pv:pvardesk;
+  vv:gdbstring;
+  vsa:GDBGDBStringArray;
+  ir:itrec;
+begin
+     if pp^.SubNode<>nil then
+     begin
+       if peditor<>nil then
+                           begin
+                             freeandnil(peditor);
+                           //-----------------------------------------------------------------peditor^.done;
+                           //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
+                           end;
+
+       if pGDBByte(pp^.Collapsed)^<>0 then pGDBByte(pp^.Collapsed)^:=1;
+                                           pp^.Collapsed^:=not(pp^.Collapsed^);
+       updateinsp;
+       //draw;
+       //exit;
+     end
+   else
+   begin
+      if (pp^.Attr and FA_READONLY)<>0 then exit;
+      if pp^.PTypeManager<>nil then
+     begin
+       if peditor<>nil then
+       begin
+         tp:=pcurrobj;
+         GDBobjinsp.buildproplist(currobjgdbtype,property_correct,tp);
+
+         freeandnil(peditor);
+         //-----------------------------------------------------------------peditor^.done;
+         //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
+         //ppropcurrentedit:=pp;
+       end;
+       vsa.init(50);
+       if pp^.valkey<>'' then
+       begin
+            pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+            if pobj<>nil then
+            repeat
+                  if self.GDBobj then
+                  if (pobj^.GetObjType=pgdbobjentity(pcurrobj)^.GetObjType)or(pgdbobjentity(pcurrobj)^.GetObjType=0) then
+                  begin
+                       pv:=pobj.OU.FindVariable(pp^.valkey);
+                       if pv<>nil then
+                       begin
+                            vv:=pv.data.PTD.GetValueAsString(pv.data.Instance);
+                            if vv<>'' then
+
+                            vsa.addnodouble(@vv);
+                       end;
+                  end;
+                  pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+            until pobj=nil;
+            vsa.sort;
+       end;
+       PEditor:=pp^.PTypeManager^.CreateEditor(self,{namecol-6}pp^.x1,{my}pp^.y1,{clientwidth-namecol+3}pp^.x2-pp^.x1,{rowh}pp^.y2-pp^.y1,pp^.valueAddres,@vsa);
+       vsa.done;
+       if assigned(PEditor){<>nil} then
+       begin
+            ppropcurrentedit:=pp;
+            peditor.OwnerNotify:=self.Notify;
+            peditor.geteditor.setfocus;
+         //-----------------------------------------------------------------PEditor^.SetFocus;
+         //-----------------------------------------------------------------PEditor^.show;
+         //-----------------------------------------------------------------PEditor^.SetFocus;
+       end;
+     end;
+end;
+end;
+
 procedure TGDBobjinsp.MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);
 var
   my:GDBInteger;
@@ -773,71 +887,7 @@ begin
                                     end;
   if pp=nil then
     exit;
-  if pp^.SubNode<>nil then
-  begin
-    if peditor<>nil then
-                        begin
-                          freeandnil(peditor);
-                        //-----------------------------------------------------------------peditor^.done;
-                        //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
-                        end;
-
-    if pGDBByte(pp^.Collapsed)^<>0 then pGDBByte(pp^.Collapsed)^:=1;
-                                        pp^.Collapsed^:=not(pp^.Collapsed^);
-    updateinsp;
-    //draw;
-    //exit;
-  end
-else
-begin
-   if (pp^.Attr and FA_READONLY)<>0 then exit;
-   if pp^.PTypeManager<>nil then
-  begin
-    if peditor<>nil then
-    begin
-      tp:=pcurrobj;
-      GDBobjinsp.buildproplist(currobjgdbtype,property_correct,tp);
-
-      freeandnil(peditor);
-      //-----------------------------------------------------------------peditor^.done;
-      //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
-      //ppropcurrentedit:=pp;
-    end;
-    vsa.init(50);
-    if pp^.valkey<>'' then
-    begin
-         pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
-         if pobj<>nil then
-         repeat
-               if self.GDBobj then
-               if (pobj^.GetObjType=pgdbobjentity(pcurrobj)^.GetObjType)or(pgdbobjentity(pcurrobj)^.GetObjType=0) then
-               begin
-                    pv:=pobj.OU.FindVariable(pp^.valkey);
-                    if pv<>nil then
-                    begin
-                         vv:=pv.data.PTD.GetValueAsString(pv.data.Instance);
-                         if vv<>'' then
-
-                         vsa.addnodouble(@vv);
-                    end;
-               end;
-               pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
-         until pobj=nil;
-         vsa.sort;
-    end;
-    PEditor:=pp^.PTypeManager^.CreateEditor(self,{namecol-6}pp^.x1,{my}pp^.y1,{clientwidth-namecol+3}pp^.x2-pp^.x1,{rowh}pp^.y2-pp^.y1,pp^.valueAddres,@vsa);
-    vsa.done;
-    if assigned(PEditor){<>nil} then
-    begin
-         ppropcurrentedit:=pp;
-         peditor.OwnerNotify:=self.Notify;
-         peditor.geteditor.setfocus;
-      //-----------------------------------------------------------------PEditor^.SetFocus;
-      //-----------------------------------------------------------------PEditor^.show;
-      //-----------------------------------------------------------------PEditor^.SetFocus;
-    end;
-  end;
-end;
+  createeditor(pp);
 
   contentheigth:=gettreeh;
   createscrollbars;

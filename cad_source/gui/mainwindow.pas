@@ -631,7 +631,9 @@ begin
        //FToolBar.FormStyle:=fsStayOnTop;
        FToolBar.DisableAlign;
        FToolBar.Create(Application);
-       FToolBar.Caption:=aName;
+       //FToolBar.Caption:=aName;
+       FToolBar.Caption:='';
+       //FToolBar.BevelInner:=bvnone;
        FToolBar.SetBounds(100,64,500,26);
        //FToolBar.AutoSize:=false;
 
@@ -662,6 +664,7 @@ begin
        AControl:=FToolBar;
 
        AControl.Name:=aname;
+       FToolBar.Caption:='';
        //Acontrol.Caption:=caption;
            if not DoDisableAutoSizing then
                                         Acontrol.EnableAutoSizing;

@@ -36,12 +36,32 @@ GDBPolyline2DArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex2D*)
                       function _optimize:GDBBoolean;virtual;
                       function inrect:GDBBoolean;virtual;
                       function ispointinside(point:GDBVertex2D):GDBBoolean;virtual;
+                      procedure transform(const t_matrix:DMatrix4D);virtual;
 
                 end;
 {Export-}
 function _intercept2d(const p1,p2,p:GDBVertex2D;const dirx, diry: GDBDouble): GDBBoolean;
 implementation
 uses UGDBDescriptor,log;
+procedure GDBPolyline2DArray.transform(const t_matrix:DMatrix4D);
+var
+    pv:PGDBVertex2D;
+    tv:GDBVertex;
+    i,c:integer;
+
+begin
+    pv:=parray;
+    for i:=1 to count do
+    begin
+         tv.x:=pv^.x;
+         tv.y:=pv^.y;
+         tv.z:=0;
+         tv:=geometry.VectorTransform3D(tv,t_matrix);
+         pv^.x:=tv.x;
+         pv^.y:=tv.y;
+       inc(pv);
+    end;
+end;
 function _intercept2d(const p1,p2,p:GDBVertex2D;const dirx, diry: GDBDouble): GDBBoolean;
 var
    t1, t2, d, d1, d2: GDBDouble;

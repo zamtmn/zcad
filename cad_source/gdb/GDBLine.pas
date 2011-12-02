@@ -298,11 +298,14 @@ begin
      inherited done;
 end;
 procedure GDBObjLine.format;
-//var //tv,tv2:GDBVertex4D;
-    //t,b,l,r,n,f:GDBDouble;
+var m:DMatrix4D;
 begin
-  CoordInWCS.lbegin:=VectorTransform3D(CoordInOCS.lbegin,bp.ListPos.owner^.GetMatrix^);
-  CoordInWCS.lend:=VectorTransform3D(CoordInOCS.lend,bp.ListPos.owner^.GetMatrix^);
+  if bp.ListPos.owner<>nil then
+                               m:=bp.ListPos.owner^.GetMatrix^
+                           else
+                               m:=onematrix;
+  CoordInWCS.lbegin:=VectorTransform3D(CoordInOCS.lbegin,m);
+  CoordInWCS.lend:=VectorTransform3D(CoordInOCS.lend,m);
   calcbb;
   //l_1_4 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 4);
   //l_1_3 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 3);
@@ -806,7 +809,10 @@ procedure GDBObjLine.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{4CBC9A73-A88D-443B-B925-2F0611D82AB0}',{$ENDIF}3);
+
           pdesc.selected:=false;
+          pdesc.pobject:=nil;
+
           renderfeedback;
 
           pdesc.pointtype:=os_midle;

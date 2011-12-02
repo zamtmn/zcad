@@ -64,6 +64,8 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
                  procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
+                 procedure transform(const t_matrix:DMatrix4D);virtual;
+                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
            end;
 {Export-}
 implementation
@@ -85,6 +87,20 @@ begin
      end;
      result:=IREmpty;
 end;}
+procedure GDBObjLWpolyline.TransformAt;
+begin
+    inherited;
+    Vertex2D_in_OCS_Array.clear;
+    pGDBObjLWpolyline(p)^.Vertex2D_in_OCS_Array.copyto(@Vertex2D_in_OCS_Array);
+    Vertex2D_in_OCS_Array.transform(t_matrix^);
+end;
+
+procedure GDBObjLWpolyline.transform;
+var tv,tv2:GDBVertex4D;
+begin
+ inherited;
+ Vertex2D_in_OCS_Array.transform(t_matrix);
+end;
 procedure GDBObjLWpolyline.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 begin
   GDBPoint3dArrayAddOnTrackAxis(Vertex3D_in_WCS_Array,posr,processaxis,closed);
@@ -325,9 +341,11 @@ begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{48F91543-AAA8-4CF7-A038-D3DDC248BE3E}',{$ENDIF}pprojpoint.count);
           pv2d:=pprojpoint^.parray;
           pv:=Vertex3D_in_WCS_Array.parray;
+          pdesc.selected:=false;
+          pdesc.pobject:=nil;
+
           for i:=0 to pprojpoint.count-1 do
           begin
-               pdesc.selected:=false;
                pdesc.pointtype:=os_polymin-i;
                pdesc.worldcoord:=pv^;
                pdesc.dispcoord.x:=round(pv2d^.x);

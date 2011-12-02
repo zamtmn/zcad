@@ -49,5 +49,8 @@ action ACN_TEXT,Text,text.bmp,Draw text,,
 action ACN_OPTIONS,Options,options.bmp,Options,,
 action ACN_SAVEOPTIONS,SaveOptions,,Save options,,
 
+action ACN_WNEXT,NextDrawing,,Next window,,CTRL+TAB
+action ACN_WPREV,PrevDrawing,,Previous window,,SHIFT+CTRL+TAB
+
 action ACN_ABOUT,About,about.bmp,About,,
 action ACN_Help,Help,help.bmp,Help,,F1

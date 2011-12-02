@@ -32,14 +32,14 @@ begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=307;
   VIEW_ObjInspSubV:=89;
-  PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File1:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File2:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File3:='J:\nh\Рыков Иван Васильевич\Изменения РОВД\proj.dxf';
-  PATH_File4:='J:\nh\Рыков Иван Васильевич\Изменения РОВД\ОВД п.Пурпе-Дымоудаление.dxf';
-  PATH_File5:='D:\План 1 этажа АПМ.dxf';
-  PATH_File6:='C:\zcad\cad\sample\test_dxf\by_trace.dxf';
-  PATH_File7:='E:\olde\CAD_XDXF\test2000\proj2.dxf';
-  PATH_File8:='E:\olde\CAD_XDXF\test2000\pozar.dxf';
-  PATH_File9:='E:\olde\CAD_XDXF\test2000\proj_new.dxf';
+  PATH_File0:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File1:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File2:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File3:='C:\zcad\cad\sample\test_dxf\3d_mount.dxf';
+  PATH_File4:='J:\nh\искандер\ФАС\plans.dxf';
+  PATH_File5:='D:\План перегородок. 7 этаж for_PS\План перегородок. 7 этаж for_PS.dxf';
+  PATH_File6:='D:\Чертеж3.dxf';
+  PATH_File7:='C:\Spec.dxf';
+  PATH_File8:='C:\Вентиляция 08.08.11.dxf';
+  PATH_File9:='J:\nh\искандер\ФАС\Чертеж4.dxf';
 end.

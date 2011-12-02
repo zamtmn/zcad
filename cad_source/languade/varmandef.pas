@@ -252,6 +252,7 @@ UserTypeDescriptor=object(GDBaseObject)
              DWG_CLayer:PGDBInteger;(*'Current layer'*)
              DWG_CLinew:PGDBInteger;(*'Current line weigwt'*)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
+             DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
              DWG_SystmGeometryDraw:PGDBBoolean;
              DWG_HelpGeometryDraw:PGDBBoolean;
              DWG_StepGrid:PGDBvertex2D;

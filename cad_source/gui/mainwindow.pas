@@ -543,7 +543,6 @@ begin
    MainPanel.BorderWidth:=0;
    //MainPanel.Parent:=self;
    //mainpanel.show;
-
   PageControl:=TmyPageControl.Create(MainPanel{Application});
       PageControl.Constraints.MinHeight:=32;
       PageControl.Parent:=MainPanel;
@@ -700,6 +699,7 @@ end;
 procedure TMainFormN.setnormalfocus;
 begin
      if assigned(cmdedit) then
+     if cmdedit.Enabled then
      begin
      {if (GetParentForm(cmdedit)=Self) then
                                           ActiveControl:=cmdedit

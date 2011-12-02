@@ -44,6 +44,8 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           procedure RenderFeedBack;virtual;
                           //destructor done;virtual;
                           procedure modifyobj(dist,wc:gdbvertex;save:GDBBoolean;pconobj:pgdbobjEntity);virtual;
+                          procedure freeclones;
+                          procedure TransformAt(dispmatr:DMatrix4D);
                           procedure drawobj(infrustumactualy:TActulity);virtual;
                           procedure freeelement(p:GDBPointer);virtual;
                           function calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
@@ -230,6 +232,33 @@ begin
   end;
   result:=td;
 end;
+procedure GDBSelectedObjArray.TransformAt(dispmatr:DMatrix4D);
+var i: GDBInteger;
+//  d: GDBDouble;
+//  td:tcontrolpointdist;
+  tdesc:pselectedobjdesc;
+begin
+  if count > 0 then
+  begin
+    tdesc:=parray;
+    for i := 0 to count - 1 do
+    begin
+      if tdesc^.pcontrolpoint<>nil then
+        if tdesc^.pcontrolpoint^.SelectedCount<>0 then
+        begin
+             tdesc^.ptempobj^.Transform{At}(dispmatr);
+             tdesc^.ptempobj^.Format;
+
+             //tdesc^.objaddr^.Transform{At}(dispmatr);
+             //tdesc^.objaddr^.Format;
+             //gdb.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
+        end;
+      inc(tdesc);
+    end;
+  end;
+  {if save then
+              gdb.GetCurrentROOT.FormatAfterEdit;}
+end;
 procedure GDBSelectedObjArray.modifyobj;
 var i: GDBInteger;
 //  d: GDBDouble;
@@ -253,6 +282,28 @@ begin
               gdb.GetCurrentROOT.FormatAfterEdit;
 
 end;
+procedure GDBSelectedObjArray.freeclones;
+var i: GDBInteger;
+//  d: GDBDouble;
+//  td:tcontrolpointdist;
+  tdesc:pselectedobjdesc;
+begin
+  if count > 0 then
+  begin
+    tdesc:=parray;
+    for i := 0 to count - 1 do
+    begin
+      if tdesc^.ptempobj<>nil then
+        begin
+          tdesc^.ptempobj^.done;
+          GDBFreeMem(GDBPointer(tdesc^.ptempobj));
+          tdesc^.ptempobj:=nil;
+        end;
+      inc(tdesc);
+    end;
+  end;
+end;
+
 function GDBSelectedObjArray.calcvisible;
 {var
   p:pGDBObjEntity;

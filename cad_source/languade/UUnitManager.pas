@@ -725,6 +725,7 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_SystmGeometryDraw,'DWG_SystmGeometryDraw');
   SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_HelpGeometryDraw,'DWG_HelpGeometryDraw');
   SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_EditInSubEntry,'DWG_EditInSubEntry');
+  SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_AdditionalGrips,'DWG_AdditionalGrips');
   SysVarUnit.AssignToSymbol(SysVar.DWG.DWG_SelectedObjToInsp,'DWG_SelectedObjToInsp');
 
   SysVarUnit.AssignToSymbol(SysVar.DSGN.DSGN_TraceAutoInc,'DSGN_TraceAutoInc');

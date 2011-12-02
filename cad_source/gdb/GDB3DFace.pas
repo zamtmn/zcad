@@ -312,6 +312,7 @@ var pdesc:controlpointdesc;
     i:GDBInteger;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{92DDADAD-909D-4938-A1F9-3BD78FBB2B70}',{$ENDIF}1);
+          pdesc.pobject:=nil;
           for i := 0 to 3 do
           begin
           pdesc.selected:=false;

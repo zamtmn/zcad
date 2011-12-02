@@ -242,6 +242,8 @@ var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{92DDADAD-909D-4938-A1F9-3BD78FBB2B70}',{$ENDIF}1);
           pdesc.selected:=false;
+          pdesc.pobject:=nil;
+
           pdesc.pointtype:=os_point;
           pdesc.worldcoord:=P_insertInOCS;
           pdesc.dispcoord.x:=round(ProjPoint.x);

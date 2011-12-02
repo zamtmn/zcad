@@ -224,7 +224,9 @@ GDBArrayVertex=array[0..0] of GDBvertex;
   pcontrolpointdesc=^controlpointdesc;
   controlpointdesc=record
                          pointtype:GDBInteger;
+                         pobject:GDBPointer;
                          worldcoord:GDBvertex;
+                         dcoord:GDBvertex;
                          dispcoord:GDBvertex2DI;
                          selected:GDBBoolean;
                    end;
@@ -232,7 +234,6 @@ GDBArrayVertex=array[0..0] of GDBvertex;
                      point:controlpointdesc;
                      dist,wc:gdbvertex;
                end;
-
   tcontrolpointdist=record
     pcontrolpoint:pcontrolpointdesc;
     disttomouse:GDBInteger;

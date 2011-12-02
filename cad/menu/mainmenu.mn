@@ -4,6 +4,7 @@ Panel Status;
     variable DWG_SnapGrid,#Snap,**Сетка
     variable DWG_DrawGrid,1.bmp,**Показывать сетку
     variable DWG_EditInSubEntry,sub.bmp,On/Off Selecting parts of dynamic objects
+    variable DWG_AdditionalGrips,#+G,On/Off Additional grips
     variable DWG_DrawMode,#LWT,Show/Hide Lineweight
     variable DWG_OSMode,#OSnap,Object snap
     variable DWG_PolarMode,#Polar,Polar tracking
@@ -305,6 +306,13 @@ MainMenuItem Settings;
   {
     action ACN_OPTIONS
     action ACN_SAVEOPTIONS
+  }
+MainMenuItem Window;
+  {
+    action ACN_CLOSE
+    Separator
+    action ACN_WNEXT
+    action ACN_WPREV
   }
 MainMenuItem Help;
   {

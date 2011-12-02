@@ -1013,7 +1013,7 @@ begin
        FirstOwner:=pointer(GDB.FindOneInArray(Objects,GDBNetID,true));
   end;
   Objects.ClearAndDone;
-  if osp<>nil then
+  (*if osp<>nil then
   begin
        if (PGDBObjEntity(osp^.PGDBObject)<>nil)and(osp^.PGDBObject<>FirstOwner)
        then
@@ -1023,7 +1023,7 @@ begin
             po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
             //FirstOwner:=GDBPointer(po);
        end
-  end {else FirstOwner:=oldfirstowner};
+  end {else FirstOwner:=oldfirstowner};*)
   if (button and MZW_LBUTTON)<>0 then
   begin
     historyout('Вторая точка:');
@@ -1140,6 +1140,11 @@ begin
     gdb.GetCurrentROOT.calcbb;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     oldfirstowner:=firstowner;
+    gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
+
+    gdb.GetCurrentDWG.OnMouseObj.Clear;
+    ClrarIfItIs(SecondOwner);
+
     redrawoglwnd;
     if mode= 2 then commandmanager.executecommandend
                else beforeclick(wc,mc,button,osp);
@@ -2487,21 +2492,41 @@ begin
        begin
             if FDoc.ColCount[row]>4 then
             begin
+                 if FDoc.Cells[0,row]='-2CO7' then
+                                                  log.LogOut('asdasd');
+                 //log.LogOut(FDoc.Cells[0,row]);
+
+                 s:='прочитана строка';
+                 for col:=0 to FDoc.ColCount[row] do
+                 begin
+                 s:=s+' '+FDoc.Cells[col,row];
+                 end;
+                 log.LogOut(s);
+
                  PGDBObjEntity(startdev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',FDoc.Cells[1,row]);
                  PGDBObjEntity(enddev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',FDoc.Cells[2,row]);
                  netarray.Clear;
                  GDB.FindMultiEntityByVar(GDBNetID,'NMO_Name',FDoc.Cells[3,row],netarray);
+                 if startdev=nil then
+                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено стартовое устройство '+FDoc.Cells[1,row])
+                                 else
+                                     startdev:=findconnector(startdev);
+                 if enddev=nil then
+                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено конечное устройство '+FDoc.Cells[2,row])
+                                 else
+                                     enddev:=findconnector(enddev);
+                 if startdev=nil then
+                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+FDoc.Cells[1,row]);
+                 if enddev=nil then
+                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+FDoc.Cells[2,row]);
+                 if (startdev<>nil)and(enddev<>nil) then
                  if netarray.Count=1 then
                  begin
                   PGDBaseObject(net):=netarray.GetObject(0);
                  //PGDBObjEntity(net):=GDB.FindEntityByVar(GDBNetID,'NMO_Name',FDoc.Cells[3,row]);
-                 if startdev=nil then
-                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено стартовое устройство '+FDoc.Cells[1,row]);
-                 if enddev=nil then
-                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено конечное устройство '+FDoc.Cells[2,row]);
                  if net=nil then
                                      shared.HistoryOutStr('В строке '+inttostr(row)+' не найдена трасса '+FDoc.Cells[3,row]);
-                 if (startdev<>nil)and(enddev<>nil)and(net<>nil) then
+                 if (net<>nil) then
                  begin
                  startdev:=findconnector(startdev);
                  enddev:=findconnector(enddev);
@@ -2550,6 +2575,7 @@ begin
                           net:=netarray.beginiterate(ir_net);
                           if (net<>nil) then
                           repeat
+                                net.riserarray.Clear;
                                 riser:=riserarray.beginiterate(ir_riser);
                                 if (riser<>nil) then
                                 repeat
@@ -2595,13 +2621,15 @@ begin
                                                                  gdbgetmem(supernet,sizeof(GDBObjNet));
                                                                  supernet.initnul(nil);
                                                                  net.objarray.copyto(@supernet.ObjArray);
+                                                                 log.LogOut('supernet.initnul(nil); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
-                                                            processednets.IsObjExist(net2);
+                                                            if not processednets.IsObjExist(net2) then
                                                             //if not net2processed then
                                                             begin
                                                                  net2.objarray.copyto(@supernet.ObjArray);
                                                                  processednets.AddRef(net2^);
                                                                  net2processed:=true;
+                                                                 log.LogOut('processednets.AddRef(net2^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
 
                                                                 New_line := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
@@ -2617,6 +2645,7 @@ begin
                                                                 end;
                                                                 New_line^.Format;
                                                                 supernet^.ObjArray.add(addr(New_line));
+                                                                log.LogOut('supernet^.ObjArray.add(addr(New_line)); Примитивов в графе: '+inttostr(supernet^.objarray.count));
 
 
                                                             pvd:=pvd;
@@ -2660,6 +2689,8 @@ begin
 
                           gdb.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeTreeBB(cable);
 
+                          log.LogOut('Примитивов в графе: '+inttostr(supernet^.objarray.count));
+
                           segments:=rootbymultitrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,supernet,Cable,true);
 
                           Cable^.Format;
@@ -2678,6 +2709,7 @@ begin
                           until cable=nil;
 
                           supernet.objarray.Clear;
+                          supernet.riserarray.clear;
                           supernet.done;
                           segments.Clear;
                           segments.done;

@@ -586,9 +586,11 @@ begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{48F91543-AAA8-4CF7-A038-D3DDC248BE3E}',{$ENDIF}pprojpoint.count);
           pv2d:=pprojpoint^.parray;
           pv:=VertexArrayInWCS.parray;
+          pdesc.selected:=false;
+          pdesc.pobject:=nil;
+
           for i:=0 to pprojpoint.count-1 do
           begin
-               pdesc.selected:=false;
                pdesc.pointtype:=os_polymin-i;
                pdesc.worldcoord:=pv^;
                pdesc.dispcoord.x:=round(pv2d^.x);

@@ -234,7 +234,9 @@ GDBArrayVertex=array[0..0] of GDBvertex;
   pcontrolpointdesc=^controlpointdesc;
   controlpointdesc=record
                          pointtype:GDBInteger;
+                         pobject:GDBPointer;
                          worldcoord:GDBvertex;
+                         dcoord:GDBvertex;
                          dispcoord:GDBvertex2DI;
                          selected:GDBBoolean;
                    end;
@@ -570,34 +572,6 @@ GDBTextStyleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
                     function FindStyle(StyleName:GDBString):GDBInteger;
                     procedure freeelement(p:GDBPointer);virtual;abstract;
               end;
-//Generate on C:\zcad\CAD_SOURCE\u\UGDBGraf.pas
-PTLinkType=^TLinkType;
-TLinkType=(LT_Normal,LT_OnlyLink);
-pgrafelement=^grafelement;
-grafelement=object(GDBaseObject)
-                  linkcount:GDBInteger;
-                  point:gdbvertex;
-                  link:GDBObjOpenArrayOfPV;
-                  workedlink:PGDBObjEntity;
-                  connected:GDBInteger;
-                  step:GDBInteger;
-                  pathlength:GDBDouble;
-                  constructor initnul;
-                  constructor init(v:gdbvertex);
-                  function addline(pv:pgdbobjEntity):GDBInteger;
-                  function IsConnectedTo(node:pgrafelement):pgdbobjEntity;
-            end;
-GDBGraf=object(GDBOpenArrayOfData)(*OpenArrayOfData=grafelement*)
-                constructor init(m:GDBInteger);
-                function addge(v:gdbvertex):pgrafelement;
-                procedure clear;virtual;abstract;
-                function minimalize:GDBBoolean;
-                function divide:GDBBoolean;
-                destructor done;virtual;abstract;
-                procedure freeelement(p:GDBPointer);virtual;abstract;
-                procedure BeginFindPath;
-                procedure FindPath(point1,point2:gdbvertex;l1,l2:pgdbobjEntity;var pa:GDBPoint3dArray);
-             end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBXYZWStringArray.pas
 PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
 XYZWGDBGDBStringArray=object(GDBOpenArrayOfData)
@@ -804,6 +778,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
              DWG_CLayer:PGDBInteger;(*'Current layer'*)
              DWG_CLinew:PGDBInteger;(*'Current line weigwt'*)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
+             DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
              DWG_SystmGeometryDraw:PGDBBoolean;
              DWG_HelpGeometryDraw:PGDBBoolean;
              DWG_StepGrid:PGDBvertex2D;
@@ -1476,6 +1451,7 @@ GDBObjBlockdefArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBObjBlockdef*)
                       function create(name:GDBString):PGDBObjBlockdef;virtual;abstract;
                       procedure freeelement(p:GDBPointer);virtual;abstract;
                       procedure Format;virtual;abstract;
+                      procedure Grow;virtual;abstract;
                     end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBComplex.pas
 PGDBObjComplex=^GDBObjComplex;
@@ -1565,6 +1541,7 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;abstract;
                    //procedure select;virtual;abstract;
                    procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;abstract;
+                   procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
              end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBconnected.pas
 PGDBObjConnected=^GDBObjConnected;
@@ -1572,6 +1549,34 @@ GDBObjConnected=object(GDBObjGenericSubEntry)
                       procedure addtoconnect(pobj:pgdbobjEntity);virtual;abstract;
                       procedure connectedtogdb;virtual;abstract;
                 end;
+//Generate on C:\zcad\CAD_SOURCE\u\UGDBGraf.pas
+PTLinkType=^TLinkType;
+TLinkType=(LT_Normal,LT_OnlyLink);
+pgrafelement=^grafelement;
+grafelement=object(GDBaseObject)
+                  linkcount:GDBInteger;
+                  point:gdbvertex;
+                  link:GDBObjOpenArrayOfPV;
+                  workedlink:PGDBObjEntity;
+                  connected:GDBInteger;
+                  step:GDBInteger;
+                  pathlength:GDBDouble;
+                  constructor initnul;
+                  constructor init(v:gdbvertex);
+                  function addline(pv:pgdbobjEntity):GDBInteger;
+                  function IsConnectedTo(node:pgrafelement):pgdbobjEntity;
+            end;
+GDBGraf=object(GDBOpenArrayOfData)(*OpenArrayOfData=grafelement*)
+                constructor init(m:GDBInteger);
+                function addge(v:gdbvertex):pgrafelement;
+                procedure clear;virtual;abstract;
+                function minimalize:GDBBoolean;
+                function divide:GDBBoolean;
+                destructor done;virtual;abstract;
+                procedure freeelement(p:GDBPointer);virtual;abstract;
+                procedure BeginFindPath;
+                procedure FindPath(point1,point2:gdbvertex;l1,l2:pgdbobjEntity;var pa:GDBPoint3dArray);
+             end;
 //Generate on C:\zcad\CAD_SOURCE\electroteh\GDBNet.pas
 PGDBObjNet=^GDBObjNet;
 GDBObjNet=object(GDBObjConnected)
@@ -2375,6 +2380,7 @@ type
     cslen:GDBDouble;
     lastonmouseobject:GDBPointer;
     nearesttcontrolpoint:tcontrolpointdist;
+    startgluepoint:pcontrolpointdesc;
     ontrackarray: totrackarray;
     mouseclipmatrix:Dmatrix4D;
     mousefrustum,mousefrustumLCS:ClipArray;

@@ -74,6 +74,7 @@ GDBObjCircle=object(GDBObjWithLocalCS)
 
                  procedure createfield;virtual;
                  function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
+                 procedure ReCalcFromObjMatrix;virtual;
 
 
            end;
@@ -81,6 +82,25 @@ GDBObjCircle=object(GDBObjWithLocalCS)
 implementation
 uses
     log;
+procedure GDBObjCircle.ReCalcFromObjMatrix;
+var
+    ox:gdbvertex;
+begin
+     inherited;
+     Local.P_insert:=PGDBVertex(@objmatrix[3])^;
+     self.Radius:=PGDBVertex(@objmatrix[0])^.x/local.OX.x;
+     {scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y;
+     scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;}
+
+     {if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
+                                                                    ox:=CrossVertex(YWCS,Local.oz)
+                                                                else
+                                                                    ox:=CrossVertex(ZWCS,Local.oz);
+     normalizevertex(ox);
+     rotate:=geometry.scalardot(Local.ox,ox);
+     rotate:=arccos(rotate)*180/pi;
+     if local.OX.y<-eps then rotate:=360-rotate;}
+end;
 function GDBObjCircle.IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;
 var
    m1:DMatrix4D;
@@ -577,6 +597,7 @@ var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{8B6B9276-7E44-4F66-AE81-AAED0879173A}',{$ENDIF}5);
           pdesc.selected:=false;
+          pdesc.pobject:=nil;
           pdesc.pointtype:=os_center;
           pdesc.worldcoord:=Local.p_insert;
           pdesc.dispcoord.x:=round(ProjP_insert.x);

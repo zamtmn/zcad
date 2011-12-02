@@ -285,6 +285,7 @@ begin
                                 begin
                                      m4:=PGDBObjEntity(newowner)^.getmatrix^;
                                      MatrixInvert(m4);
+                                     pobj^.Format;
                                      pobj^.transform(m4);
                                 end;
 
@@ -326,6 +327,7 @@ begin
                                 begin
                                      m4:=PGDBObjEntity(newowner)^.getmatrix^;
                                      MatrixInvert(m4);
+                                     postobj^.Format;
                                      postobj^.transform(m4);
                                 end;
 

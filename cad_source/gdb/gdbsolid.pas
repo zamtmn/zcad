@@ -322,9 +322,11 @@ var pdesc:controlpointdesc;
     i:GDBInteger;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{92DDADAD-909D-4938-A1F9-3BD78FBB2B70}',{$ENDIF}1);
+          pdesc.selected:=false;
+          pdesc.pobject:=nil;
+
           for i := 0 to 3 do
           begin
-          pdesc.selected:=false;
           pdesc.pointtype:=os_polymin-i;
           pdesc.worldcoord:=PInWCS[i];
           pdesc.dispcoord.x:=round(PInDCS[i].x);

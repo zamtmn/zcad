@@ -57,10 +57,15 @@ uses strproc,{umytreenode,}{FileUtil,LCLclasses,} LCLtype,
      log,{UGDBDescriptor,}varmandef,{sysinfo,}{cmdline,}strutils{,oglwindow};
 procedure DisableCmdLine;
 begin
+  application.MainForm.ActiveControl:=nil;
   if assigned(shared.cmdedit) then
-                             shared.cmdedit.Enabled:=false;
+                                  begin
+                                      shared.cmdedit.Enabled:=false;
+                                  end;
   if assigned(shared.HintText) then
+                                   begin
                              shared.HintText.Enabled:=false;
+                                   end;
 end;
 
 procedure EnableCmdLine;

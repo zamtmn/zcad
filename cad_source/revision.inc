@@ -1,2 +1,2 @@
 // Created by Svn2RevisionInc
-const RevisionStr = '105';
+const RevisionStr = '106';

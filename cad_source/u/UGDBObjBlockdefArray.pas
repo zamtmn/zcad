@@ -37,10 +37,25 @@ GDBObjBlockdefArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBObjBlockdef*)
                       function create(name:GDBString):PGDBObjBlockdef;virtual;
                       procedure freeelement(p:GDBPointer);virtual;
                       procedure Format;virtual;
+                      procedure Grow;virtual;
                     end;
 {Export-}
 implementation
 uses iodxf{,UGDBDescriptor},UUnitManager{,shared},log;
+procedure GDBObjBlockdefArray.Grow;
+var
+  p:PGDBObjBlockdef;
+      ir:itrec;
+begin
+  inherited;
+  p:=beginiterate(ir);
+  if p<>nil then
+  repeat
+       p^.correctobjects(nil,0);
+       p:=iterate(ir);
+  until p=nil;
+end;
+
 procedure GDBObjBlockdefArray.freeelement;
 begin
   PGDBObjBlockdef(p).done;
@@ -75,7 +90,7 @@ begin
   for i:=0 to count-1 do
                         begin
                         debugs:=PBlockdefArray(parray)[i].Name;
-                        if PBlockdefArray(parray)[i].Name=name then
+                        if uppercase(PBlockdefArray(parray)[i].Name)=uppercase(name) then
                                                                    result := i;
                         end;
 end;
@@ -87,6 +102,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
+       programlog.LogOutStr('GDBObjBlockdefArray.format; '+p^.name,lp_OldPos);
        p^.format;
        p:=iterate(ir);
   until p=nil;

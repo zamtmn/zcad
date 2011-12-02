@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: Andrey M. Zubarev <zamtmn@yandex.ru>\n"
+"Last-Translator: Andrey Zubarev <zamtmn@yandex.ru>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -141,6 +141,14 @@ msgstr "Переместить"
 #: ACN_MOVE~hint
 msgid "Move primitives"
 msgstr "Переместить примитивы"
+
+#: ACN_MULTIOBJVARMAN~caption
+msgid "Multi object variables manager"
+msgstr ""
+
+#: ACN_MULTIOBJVARMAN~textimage
+msgid "Mvar"
+msgstr ""
 
 #: ACN_NEW~caption
 msgid "New drawing"
@@ -298,6 +306,14 @@ msgstr "Чертить текст"
 #: ACN_UNDO~caption
 msgid "Undo"
 msgstr "Отменить"
+
+#: ACN_WNEXT~caption
+msgid "Next window"
+msgstr "Следующее окно"
+
+#: ACN_WPREV~caption
+msgid "Previous window"
+msgstr "Предыдущее окно"
 
 #: BRMode~BRM_BD
 msgctxt "BRMode~BRM_BD"
@@ -511,6 +527,21 @@ msgctxt "GDBObjPoint~P_insertInWCS"
 msgid "Coordinates WCS"
 msgstr "Координаты в WCS"
 
+#: GDBObjSolid~PInDCS
+msgctxt "GDBObjSolid~PInDCS"
+msgid "Coordinates DCS"
+msgstr "Координаты в DCS"
+
+#: GDBObjSolid~PInOCS
+msgctxt "GDBObjSolid~PInOCS"
+msgid "Coordinates OCS"
+msgstr "Координаты в OCS"
+
+#: GDBObjSolid~PInWCS
+msgctxt "GDBObjSolid~PInWCS"
+msgid "Coordinates WCS"
+msgstr "Координаты в WCS"
+
 #: GDBObjSubordinated~bp
 msgid "Owner"
 msgstr "Владелец"
@@ -528,8 +559,20 @@ msgctxt "GDBObjVisualProp~Layer"
 msgid "Layer"
 msgstr "Слой"
 
+#: GDBObjVisualProp~LineType
+msgctxt "GDBObjVisualProp~LineType"
+msgid "Line type"
+msgstr "Тип линии"
+
+#: GDBObjVisualProp~LineTypeScale
+msgid "Line type scale"
+msgstr ""
+
 #: GDBObjVisualProp~LineWeight
-msgid "Line Weight"
+#, fuzzy
+#| msgid "Line Weight"
+msgctxt "GDBObjVisualProp~LineWeight"
+msgid "Line weight"
 msgstr "Вес линий"
 
 #: GDBObjWithLocalCS~Local
@@ -742,6 +785,10 @@ msgctxt "menu~View"
 msgid "View"
 msgstr "Вид"
 
+#: menu~Window
+msgid "Window"
+msgstr "Окно"
+
 #: RGB~a
 msgid "Alpha"
 msgstr "Прозрачность"
@@ -795,11 +842,17 @@ msgstr "Обрабатывать"
 msgid "Replace"
 msgstr "Заменить на"
 
+#: TBlockReplaceParams~SaveVariables
+msgid "Save Variables"
+msgstr ""
+
 #: TBlockScaleParams~Absolytly
+msgctxt "TBlockScaleParams~Absolytly"
 msgid "Absolytly"
 msgstr "Абсолютно"
 
 #: TBlockScaleParams~Scale
+msgctxt "TBlockScaleParams~Scale"
 msgid "New scale"
 msgstr "Новый масштаб"
 
@@ -838,6 +891,10 @@ msgstr "Версия компилятора"
 #: tcompileinfo~SYS_CompileTime
 msgid "Compile time"
 msgstr "Время компиляции"
+
+#: tcompileinfo~SYS_LCLVersion
+msgid "LCL version"
+msgstr ""
 
 #: tdebug~memi2
 msgid "MemMan::I2"
@@ -992,10 +1049,12 @@ msgid "Color"
 msgstr "Цвет"
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[6].CAPTION
+msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[6].CAPTION"
 msgid "Line type"
 msgstr "Тип линии"
 
 #: TLAYERWINDOW.LISTVIEW1.COLUMNS[7].CAPTION
+msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[7].CAPTION"
 msgid "Line weight"
 msgstr "Вес линии"
 
@@ -1286,6 +1345,21 @@ msgstr "Совпадает содержимое"
 msgid "Same template"
 msgstr "Совпатает шаблон"
 
+#: TSetVarStyle~Absolytly
+msgctxt "TSetVarStyle~Absolytly"
+msgid "Absolytly"
+msgstr "Абсолютно"
+
+#: TSetVarStyle~ent
+msgctxt "TSetVarStyle~ent"
+msgid "Entity"
+msgstr "Примитив"
+
+#: TSetVarStyle~Scale
+msgctxt "TSetVarStyle~Scale"
+msgid "New scale"
+msgstr "Новый масштаб"
+
 #: TSLTEXTEDITOR1.CAPTION
 msgid "sltexteditor1"
 msgstr ""
@@ -1354,6 +1428,7 @@ msgid "Line space factor"
 msgstr "Межстрочное расстояние"
 
 #: TTextInsertParams~mode
+msgctxt "TTextInsertParams~mode"
 msgid "Entity"
 msgstr "Примитив"
 

@@ -83,8 +83,10 @@ begin
 
      case rtmod.point.pointtype of
                os_point:begin
-
-                             Local.p_insert:=VertexAdd(rtmod.point.worldcoord, rtmod.dist{VectorTransform3D(rtmod.dist,m)});
+                             if rtmod.point.pobject=nil then
+                             Local.p_insert:=VertexAdd(rtmod.point.worldcoord, rtmod.dist{VectorTransform3D(rtmod.dist,m)})
+                             else
+                               Local.p_insert:=VertexSub(VertexAdd(rtmod.point.worldcoord, rtmod.dist),rtmod.point.dcoord);
                          end;
      end;
 end;
@@ -100,9 +102,19 @@ procedure GDBObjComplex.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin
                     case pdesc^.pointtype of
                     os_point:begin
-          pdesc.worldcoord:=self.P_insert_in_WCS;// Local.P_insert;
-          pdesc.dispcoord.x:=round(ProjP_insert.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-ProjP_insert.y);
+                                  if pdesc.pobject=nil then
+                                  begin
+                                  pdesc.worldcoord:=self.P_insert_in_WCS;// Local.P_insert;
+                                  pdesc.dispcoord.x:=round(ProjP_insert.x);
+                                  pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-ProjP_insert.y);
+                                  end
+                                  else
+                                  begin
+                                  pdesc.worldcoord:=PGDBObjComplex(pdesc.pobject).P_insert_in_WCS;// Local.P_insert;
+                                  pdesc.dispcoord.x:=round(PGDBObjComplex(pdesc.pobject).ProjP_insert.x);
+                                  pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PGDBObjComplex(pdesc.pobject).ProjP_insert.y);
+                                  end
+
                              end;
                     end;
 end;
@@ -111,7 +123,9 @@ var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{E8AC77BE-9C28-4A6E-BB1A-D5F8729BDDAD}',{$ENDIF}1);
           pdesc.selected:=false;
+          pdesc.pobject:=nil;
           pdesc.pointtype:=os_point;
+          pdesc.pobject:=nil;
           pdesc.worldcoord:=self.P_insert_in_WCS;// Local.P_insert;
           pdesc.dispcoord.x:=round(ProjP_insert.x);
           pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-ProjP_insert.y);

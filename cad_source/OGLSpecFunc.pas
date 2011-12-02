@@ -22,7 +22,7 @@ unit OGLSpecFunc;
 interface
 uses gdbasetypes,gdbase,LCLType,
      gl,glu,
-     {$IFDEF LINUX}glx,{$ENDIF}
+     {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}
      log,sysutils,varmandef;
 type

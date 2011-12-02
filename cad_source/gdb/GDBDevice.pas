@@ -56,10 +56,44 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
                    //procedure select;virtual;
                    procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
+                   procedure addcontrolpoints(tdesc:GDBPointer);virtual;
              end;
 {EXPORT-}
 implementation
-uses GDBBlockDef,dxflow,log;
+uses GDBBlockDef,dxflow,log,UGDBSelectedObjArray;
+procedure GDBObjDevice.addcontrolpoints(tdesc:GDBPointer);
+var pdesc:controlpointdesc;
+    ir:itrec;
+    pv,pvc:pgdbobjEntity;
+begin
+          inherited addcontrolpoints(tdesc);
+
+          pdesc.selected:=false;
+          pdesc.pobject:=nil;
+
+
+          if assigned(SysVar.DWG.DWG_AdditionalGrips)then
+          if SysVar.DWG.DWG_AdditionalGrips^ then
+          begin
+          pv:=VarObjArray.beginiterate(ir);
+          if pv<>nil then
+          repeat
+               if (pv^.vp.ID=GDBDeviceID)or(pv^.vp.ID=GDBBlockInsertID) then
+               if PGDBObjDevice(pv).Name='FIX' then
+               begin
+               pdesc.pointtype:=os_point;
+               pdesc.pobject:=pv;
+               pdesc.dcoord:=      vertexsub(PGDBObjDevice(pv).P_insert_in_WCS,P_insert_in_WCS);
+               pdesc.worldcoord:=PGDBObjDevice(pv).P_insert_in_WCS;
+               pdesc.dispcoord.x:=round(PGDBObjDevice(pv).ProjP_insert.x);
+               pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PGDBObjDevice(pv).ProjP_insert.y);
+               PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+               end;
+              pv:=VarObjArray.iterate(ir);
+          until pv=nil
+          end;
+end;
+
 procedure GDBObjDevice.SetInFrustumFromTree;
 begin
      inherited SetInFrustumFromTree(infrustumactualy,visibleactualy);
@@ -97,8 +131,11 @@ begin
             pvc:=pvc;
 
          pvc^.bp.ListPos.Owner:=@self;
-         pvc^.transform(m4);
+
          self.ObjMatrix:=onematrix;
+         if pvc^.IsHaveLCS then
+                               pvc^.Format;
+         pvc^.transform(m4);
          pvc^.Format;
 
 

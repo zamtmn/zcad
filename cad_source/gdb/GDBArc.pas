@@ -430,6 +430,7 @@ var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{8E7285C9-05AD-4D34-9E9D-479D394B2AAF}',{$ENDIF}3);
           pdesc.selected:=false;
+          pdesc.pobject:=nil;
 
           pdesc.pointtype:=os_begin;
           pdesc.worldcoord:=q0;

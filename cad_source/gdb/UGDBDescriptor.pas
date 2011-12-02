@@ -20,7 +20,7 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UGDBDrawingdef,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
+GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UGDBDrawingdef,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
 UGDBNumerator, gdbase,varmandef,varman{, oglwindowdef, math, UGDBOpenArrayOfByte},
 sysutils, memman, geometry, gdbobjectsconstdef{, strmy,dxflow},
 {UOpenArray,}gdbasetypes,sysinfo,
@@ -191,7 +191,7 @@ procedure GDBDescriptor.rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvert
 var i:GDBInteger;
     point:pcontrolpointdesc;
     p:GDBPointer;
-    m,mt:DMatrix4D;
+    m,m2,mt:DMatrix4D;
     t:gdbvertex;
     tt:dvector4d;
     rtmod:TRTModifyData;
@@ -214,18 +214,24 @@ begin
           begin
                if save then
                            save:=save;
+               {учет СК владельца}
                m:=PSelectedObjDesc(md).objaddr^.getownermatrix^;
-               //mt:=PSelectedObjDesc(md).objaddr^.CalcObjMatrixWithoutOwner;
-               //m[3][0]:=0;
-               //m[3][1]:=0;
-               //m[3][2]:=0;
                MatrixInvert(m);
-               //MatrixInvert(mt);
-               //m[3][0]:=0;
-               //m[3][1]:=0;
-               //m[3][2]:=0;
                t:=VectorTransform3D(dist,m);
+               {учет СК владельца}
 
+     (*          {учет своей СК  CalcObjMatrixWithoutOwner}
+               if PSelectedObjDesc(md).objaddr^.IsHaveLCS then
+               begin
+               m2:=PGDBObjWithLocalCS(PSelectedObjDesc(md).objaddr)^.CalcObjMatrixWithoutOwner;
+               //PGDBVertex(@m)^:=geometry.NulVertex;
+               MatrixInvert(m2);
+               t:=VectorTransform3D({dist}t,m2);
+
+               m2:=m;
+               end;
+               {учет своей СК}
+     *)
                rtmod.point:=point^;
                t:=point^.worldcoord;
                t:=VectorTransform3D(t,m);
@@ -242,6 +248,22 @@ begin
                rtmod.dist:=VectorTransform3D(dist,mt);
                rtmod.wc:=VectorTransform3D(wc,m);
 
+                   {учет своей СК  CalcObjMatrixWithoutOwner}
+                    if PSelectedObjDesc(md).objaddr^.IsHaveLCS then
+                    begin
+                    m2:=PGDBObjWithLocalCS(PSelectedObjDesc(md).objaddr)^.CalcObjMatrixWithoutOwner;
+                    MatrixInvert(m2);
+                    m2[3][0]:=0;
+                    m2[3][1]:=0;
+                    m2[3][2]:=0;
+
+                    rtmod.dist:=VectorTransform3D(rtmod.dist,m2);
+                    rtmod.wc:=VectorTransform3D(rtmod.wc,m2);
+
+                    rtmod.point.worldcoord:=VectorTransform3D(rtmod.point.worldcoord,m2);
+                    end;
+
+                    {учет своей СК}
                if save then
                            begin
                                 if obj^.IsRTNeedModify(point,p)then
@@ -397,12 +419,12 @@ begin
 
      cs.Width:=130;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=TCellJustify.jcl;
+     cs.cf:=UGDBTableStyleArray.TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=60;
      cs.TextWidth:=cs.Width-2;
-     cs.cf:=TCellJustify.jcl;
+     cs.cf:=UGDBTableStyleArray.TCellJustify.jcl;
      ts.tblformat.Add(@cs);
 
      cs.Width:=35;

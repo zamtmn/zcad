@@ -136,6 +136,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function GetLineWeight:GDBSmallint;virtual;
                     function IsSelected:GDBBoolean;virtual;
                     function IsActualy:GDBBoolean;virtual;
+                    function IsHaveLCS:GDBBoolean;virtual;
                     function GetLayer:PGDBLayerProp;virtual;
                     function GetCenterPoint:GDBVertex;virtual;
                     procedure SetInFrustum(infrustumactualy:TActulity);virtual;
@@ -153,6 +154,10 @@ GDBObjEntity=object(GDBObjSubordinated)
 var onlygetsnapcount:GDBInteger;
 implementation
 uses UGDBEntTree,GDBGenericSubEntry,UGDBDescriptor,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+function GDBObjEntity.IsHaveLCS:GDBBoolean;
+begin
+     result:=false;
+end;
 
 function GDBObjEntity.CalcObjMatrixWithoutOwner:DMatrix4D;
 begin
@@ -857,6 +862,8 @@ begin
                pdesc:=pp^.parray;
                for i:=0 to pp.count-1 do
                begin
+                    if pdesc.pobject<>nil then
+                                              PGDBObjEntity(pdesc.pobject).RenderFeedback;
                     remaponecontrolpoint(pdesc);
                     inc(pdesc);
                end;

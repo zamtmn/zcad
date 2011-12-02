@@ -1934,6 +1934,7 @@ begin
           gdb.GetCurrentDWG.SelObjArray.selectcurrentcontrolpoint(key);
           if (key and MZW_SHIFT) = 0 then
           begin
+            param.startgluepoint:=param.nearesttcontrolpoint.pcontrolpoint;
             commandmanager.ExecuteCommandSilent('OnDrawingEd');
             //param.lastpoint:=param.nearesttcontrolpoint.pcontrolpoint^.worldcoord;
             //sendmousecoord{wop}(key);  bnmbnm
@@ -2041,11 +2042,11 @@ begin
         else
         begin
           gdb.GetCurrentDWG.pcamera^.prop.point.x := gdb.GetCurrentDWG.pcamera^.prop.point.x + (gdb.GetCurrentDWG.pcamera^.prop.look.x *
-          (gdb.GetCurrentDWG.pcamera^.zmax - gdb.GetCurrentDWG.pcamera^.zmin) * sign(x - 1) / 100);
+          (gdb.GetCurrentDWG.pcamera^.zmax - gdb.GetCurrentDWG.pcamera^.zmin) * sign(x - 1) / 10);
           gdb.GetCurrentDWG.pcamera^.prop.point.y := gdb.GetCurrentDWG.pcamera^.prop.point.y + (gdb.GetCurrentDWG.pcamera^.prop.look.y *
-          (gdb.GetCurrentDWG.pcamera^.zmax - gdb.GetCurrentDWG.pcamera^.zmin) * sign(x - 1) / 100);
+          (gdb.GetCurrentDWG.pcamera^.zmax - gdb.GetCurrentDWG.pcamera^.zmin) * sign(x - 1) / 10);
           gdb.GetCurrentDWG.pcamera^.prop.point.z := gdb.GetCurrentDWG.pcamera^.prop.point.z + (gdb.GetCurrentDWG.pcamera^.prop.look.z *
-          (gdb.GetCurrentDWG.pcamera^.zmax - gdb.GetCurrentDWG.pcamera^.zmin) * sign(x - 1) / 100);
+          (gdb.GetCurrentDWG.pcamera^.zmax - gdb.GetCurrentDWG.pcamera^.zmin) * sign(x - 1) / 10);
         end;
 
         CalcOptimalMatrix;
@@ -4269,6 +4270,24 @@ begin
                          commandmanager.executecommand('PasteClip');
                          key:=00;
                     end
+ else if (Key=VK_TAB)and(shift=[ssctrl,ssShift]) then
+                          begin
+                               if assigned(MainFormN.PageControl)then
+                                  if MainFormN.PageControl.PageCount>1 then
+                                  begin
+                                       commandmanager.executecommandsilent('PrevDrawing');
+                                       key:=00;
+                                  end;
+                          end
+ else if (Key=VK_TAB)and(shift=[ssctrl]) then
+                          begin
+                               if assigned(MainFormN.PageControl)then
+                                  if MainFormN.PageControl.PageCount>1 then
+                                  begin
+                                       commandmanager.executecommandsilent('NextDrawing');
+                                       key:=00;
+                                  end;
+                          end
 end;
 function ProjectPoint(pntx,pnty,pntz:gdbdouble;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;
 begin

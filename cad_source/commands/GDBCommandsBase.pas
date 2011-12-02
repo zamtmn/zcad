@@ -509,6 +509,7 @@ begin
             poglwnd.GDBActivate;
        end;
        shared.SBTextOut('Закрыто');
+       GDBobjinsp.ReturnToDefault;
        sharedgdb.updatevisible;
   end;
 end;
@@ -613,6 +614,36 @@ begin
         else
         shared.ShowError('GDBCommandsBase.MERGE: Не могу открыть файл: '+s);
 end;
+
+function NextDrawint_com(Operands:pansichar):GDBInteger;
+var
+   i:integer;
+begin
+     if assigned(MainFormN.PageControl)then
+     if MainFormN.PageControl.PageCount>1 then
+     begin
+          i:=MainFormN.PageControl.ActivePageIndex+1;
+          if i=MainFormN.PageControl.PageCount
+                                              then
+                                                  i:=0;
+             MainFormN.PageControl.ActivePageIndex:=i;
+     end;
+end;
+function PrevDrawint_com(Operands:pansichar):GDBInteger;
+var
+   i:integer;
+begin
+     if assigned(MainFormN.PageControl)then
+     if MainFormN.PageControl.PageCount>1 then
+     begin
+          i:=MainFormN.PageControl.ActivePageIndex-1;
+          if i<0
+                                            then
+                                                  i:=MainFormN.PageControl.PageCount-1;
+             MainFormN.PageControl.ActivePageIndex:=i;
+     end;
+end;
+
 function Merge_com(Operands:pansichar):GDBInteger;
 var
    s: GDBString;
@@ -1996,6 +2027,8 @@ begin
   CreateCommandFastObjectPlugin(@SelectObjectByAddres_com,'SelectObjectByAddres',CADWG,0);
   CreateCommandFastObjectPlugin(@quit_com,'Quit',0,0);
   CreateCommandFastObjectPlugin(@newdwg_com,'NewDWG',0,0);
+  CreateCommandFastObjectPlugin(@NextDrawint_com,'NextDrawing',0,0);
+  CreateCommandFastObjectPlugin(@PrevDrawint_com,'PrevDrawing',0,0);
   CreateCommandFastObjectPlugin(@CloseDWGOnMouse_com,'CloseDWGOnMouse',CADWG,0);
   CreateCommandFastObjectPlugin(@CloseDWG_com,'CloseDWG',CADWG,0);
   selall:=CreateCommandFastObjectPlugin(@SelectAll_com,'SelectAll',CADWG,0);

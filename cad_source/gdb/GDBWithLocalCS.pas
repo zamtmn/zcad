@@ -58,10 +58,15 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                procedure higlight;virtual;
                procedure ReCalcFromObjMatrix;virtual;
+               function IsHaveLCS:GDBBoolean;virtual;
          end;
 {EXPORT-}
 implementation
 uses UGDBDescriptor,log;
+function GDBObjWithLocalCS.IsHaveLCS:GDBBoolean;
+begin
+     result:=true;
+end;
 procedure GDBObjWithLocalCS.ReCalcFromObjMatrix;
 var
     ox:gdbvertex;
@@ -105,11 +110,9 @@ begin
     objmatrix:=geometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
 
 
-     //Local.ox:=PGDBVertex(@objmatrix[0])^;
-     //Local.oy:=PGDBVertex(@objmatrix[1])^;
-     Local.oz:=PGDBVertex(@objmatrix[2])^;
+     {Local.oz:=PGDBVertex(@objmatrix[2])^;
 
-     Local.p_insert:=PGDBVertex(@objmatrix[3])^;
+     Local.p_insert:=PGDBVertex(@objmatrix[3])^;}ReCalcFromObjMatrix;
 end;
 procedure GDBObjWithLocalCS.rtsave;
 //var m:DMatrix4D;
@@ -227,7 +230,11 @@ begin
      PGDBVertex(@dispmatr[3])^:=Local.p_insert;
 
      objmatrix:=MatrixMultiply(dispmatr,rotmatr);*)
-     objmatrix:=MatrixMultiply({objmatrix}CalcObjMatrixWithoutOwner,bp.ListPos.owner^.GetMatrix^);
+     if bp.ListPos.owner<>nil then
+                                  objmatrix:=MatrixMultiply({objmatrix}CalcObjMatrixWithoutOwner,bp.ListPos.owner^.GetMatrix^)
+                              else
+                                  objmatrix:=CalcObjMatrixWithoutOwner;
+
 
      P_insert_in_WCS:={PGDBVertex(@dispmatr[3])^;//}VectorTransform3D(nulvertex,objmatrix);
 end;
@@ -235,7 +242,7 @@ procedure GDBObjWithLocalCS.transform;
 var tv,tv2:GDBVertex4D;
 begin
 
-  tv2:=PGDBVertex4D(@t_matrix[3])^;
+  {tv2:=PGDBVertex4D(@t_matrix[3])^;
   PGDBVertex4D(@t_matrix[3])^:=NulVertex4D;
 
   tv:=NulVertex4D;
@@ -258,9 +265,9 @@ begin
   tv:=NulVertex4D;
   PGDBVertex(@tv)^:=Local.p_insert;
   tv:=VectorTransform(tv,t_matrix);
-  Local.p_insert:=PGDBVertex(@tv)^;
+  Local.p_insert:=PGDBVertex(@tv)^;}
   inherited;
-  //ReCalcFromObjMatrix;
+  ReCalcFromObjMatrix;
 end;
 procedure GDBObjWithLocalCS.SaveToDXFObjPostfix;
 begin

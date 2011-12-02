@@ -117,6 +117,7 @@ type
 procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
 procedure UpdateObjInsp;
 procedure ReturnToDefault;
+procedure ClrarIfItIs(addr:GDBPointer);
 
 var
   GDBobjinsp:TGDBobjinsp;
@@ -170,6 +171,15 @@ begin
                                      GDBobjinsp.updateinsp;
                                 end;
 end;
+procedure ClrarIfItIs(addr:GDBPointer);
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       if GDBobjinsp.pcurrobj=addr then
+                                       GDBobjinsp.ReturnToDefault;
+                                  end;
+end;
+
 procedure ReturnToDefault;
 begin
        if assigned(GDBobjinsp)then

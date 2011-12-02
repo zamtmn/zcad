@@ -122,10 +122,10 @@ type
     cslen:GDBDouble;
     lastonmouseobject:GDBPointer;
     nearesttcontrolpoint:tcontrolpointdist;
+    startgluepoint:pcontrolpointdesc;
     ontrackarray: totrackarray;
     mouseclipmatrix:Dmatrix4D;
     mousefrustum,mousefrustumLCS:ClipArray;
-
   end;
 {Export-}
 //ppolaraxis: PGDBOpenArrayVertex_GDBWord;

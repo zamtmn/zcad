@@ -237,6 +237,7 @@ type
 {EXPORT-}
 
 var
+    fixentities:boolean;
    PEProp:TPolyEdit;
    pworkvertex:pgdbvertex;
    BIProp:TBlockInsert;
@@ -277,7 +278,7 @@ procedure Line_com_CommandEnd;
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 implementation
-uses UBaseTypeDescriptor,GDBBlockDef,mainwindow,{UGDBObjBlockdefArray,}Varman,projecttreewnd,oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
+uses GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,mainwindow,{UGDBObjBlockdefArray,}Varman,projecttreewnd,oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
 function GetBlockDefNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDBInteger;
 var pb:PGDBObjBlockdef;
     ir:itrec;
@@ -1314,9 +1315,12 @@ begin
   inherited commandstart('');
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   if gdb.GetCurrentDWG.SelObjArray.SelectedCount=0 then CommandEnd;
+  fixentities:=false;
 end;
 procedure OnDrawingEd_com.CommandCancel;
 begin
+    gdb.GetCurrentDWG.OGLwindow1.param.startgluepoint:=nil;
+    fixentities:=false;
 end;
 function OnDrawingEd_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 begin
@@ -1327,7 +1331,18 @@ function OnDrawingEd_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDB
 var //oldi, newi, i: GDBInteger;
   dist: gdbvertex;
   pobj: GDBPointer;
+  xdir,ydir:GDBVertex;
+  rotmatr,dispmatr:DMatrix4D;
 begin
+  if fixentities then
+  gdb.GetCurrentDWG.SelObjArray.freeclones;
+  fixentities:=false;
+  if gdb.GetCurrentDWG.OGLwindow1.param.startgluepoint<>nil then
+  if gdb.GetCurrentDWG.OGLwindow1.param.startgluepoint^.pobject<>nil then
+  if osp<>nil then
+  if osp.PGDBObject<>nil then
+  if pgdbobjentity(osp.PGDBObject).vp.ID=GDBlwPolylineID then
+    fixentities:=true;
   dist.x := wc.x - t3dp.x;
   dist.y := wc.y - t3dp.y;
   dist.z := wc.z - t3dp.z;
@@ -1351,6 +1366,35 @@ begin
   begin
     if mouseclic = 1 then
     begin
+      if fixentities then
+      begin
+           gdb.GetCurrentDWG.SelObjArray.modifyobj(dist,wc,false,pobj);
+
+           xdir:=GetDirInPoint(pgdbobjlwPolyline(osp.PGDBObject).Vertex3D_in_WCS_Array,wc,pgdbobjlwPolyline(osp.PGDBObject).closed);
+           ydir:=geometry.vectordot(xdir,pgdbobjlwPolyline(osp.PGDBObject).Local.OZ);
+
+
+           dispmatr:=geometry.CreateTranslationMatrix(createvertex(-wc.x,-wc.y,-wc.z));
+           rotmatr:=onematrix;
+           PGDBVertex(@rotmatr[0])^:=xdir;
+           PGDBVertex(@rotmatr[1])^:=ydir;
+           PGDBVertex(@rotmatr[2])^:=pgdbobjlwPolyline(osp.PGDBObject).Local.OZ;
+           rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
+           dispmatr:=geometry.CreateTranslationMatrix(createvertex(wc.x,wc.y,wc.z));
+           dispmatr:=geometry.MatrixMultiply(rotmatr,dispmatr);
+
+           {dispmatr:=geometry.CreateTranslationMatrix(createvertex(-wc.x,-wc.y,-wc.z));
+           rotmatr:=geometry.CreateRotationMatrixZ(sin(pi/4),cos(pi/4));
+           rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
+           dispmatr:=geometry.CreateTranslationMatrix(createvertex(wc.x,wc.y,wc.z));
+           dispmatr:=geometry.MatrixMultiply(rotmatr,dispmatr);}
+
+
+           gdb.GetCurrentDWG.SelObjArray.TransformAt(dispmatr);
+
+           fixentities:=true;
+      end
+      else
       gdb.GetCurrentDWG.SelObjArray.modifyobj(dist,wc,false,pobj);
     end
   end;
@@ -1532,7 +1576,7 @@ begin
           begin
               if pobj.selected then
               begin
-                tv := pobj^.Clone(gdb.GetCurrentROOT);
+                tv := pobj^.Clone({gdb.GetCurrentROOT}@gdb.GetCurrentDWG.ConstructObjRoot);
                 if tv<>nil then
                 begin
                     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.add(addr(tv));
@@ -1678,7 +1722,6 @@ begin
 
       //dispmatr:=onematrix;
       dispmatr:=geometry.CreateTranslationMatrix(createvertex(-t3dp.x,-t3dp.y,-t3dp.z));
-
       rotmatr:=geometry.CreateRotationMatrixZ(sin(a),cos(a));
       rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
       dispmatr:=geometry.CreateTranslationMatrix(createvertex(t3dp.x,t3dp.y,t3dp.z));
@@ -1686,6 +1729,7 @@ begin
 
    if button<>1 then
                      begin
+                          //gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=dispmatr;
                            pcd:=pcoa^.beginiterate(ir);
                            if pcd<>nil then
                            repeat

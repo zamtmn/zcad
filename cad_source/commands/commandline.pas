@@ -63,7 +63,7 @@ procedure ParseCommand(comm:pansichar; out command,operands:GDBString);
 {procedure startup;
 procedure finalize;}
 implementation
-uses Objinsp,UGDBStringArray,cmdline,UGDBDescriptor;
+uses Objinsp,UGDBStringArray,cmdline,UGDBDescriptor,forms;
 function getcommandmanager:GDBPointer;
 begin
      result:=@commandmanager;
@@ -121,6 +121,7 @@ begin
      s:=(ExpandPath(fn));
      historyoutstr('Запущен скрипт "'+s+'";');
      busy:=true;
+
      shared.DisableCmdLine;
 
      oldlastcomm:=lastcommand;

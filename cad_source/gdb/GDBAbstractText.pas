@@ -61,6 +61,7 @@ GDBObjAbstractText=object(GDBObjPlainWithOX)
                          function InRect:TInRect;virtual;
                          procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                          procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                         procedure ReCalcFromObjMatrix;virtual;
                    end;
 {EXPORT-}
 function textformat(s:GDBString;pobj:GDBPointer):GDBString;
@@ -68,6 +69,34 @@ function convertfromunicode(s:GDBString):GDBString;
 implementation
 uses
    log,GDBSubordinated;
+procedure GDBObjAbstractText.ReCalcFromObjMatrix;
+var
+    ox:gdbvertex;
+begin
+     inherited;
+     Local.ox:=PGDBVertex(@objmatrix[0])^;
+     Local.oy:=PGDBVertex(@objmatrix[1])^;
+
+     Local.ox:=normalizevertex(Local.ox);
+     Local.oy:=normalizevertex(Local.oy);
+     Local.oz:=normalizevertex(Local.oz);
+
+     Local.P_insert:=PGDBVertex(@objmatrix[3])^;
+
+     {scale.x:=PGDBVertex(@objmatrix[0])^.x/local.OX.x;
+     scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y;
+     scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;}
+
+     if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
+                                                                    ox:=CrossVertex(YWCS,Local.oz)
+                                                                else
+                                                                    ox:=CrossVertex(ZWCS,Local.oz);
+     normalizevertex(ox);
+     textprop.angle:=geometry.scalardot(Local.ox,ox);
+     textprop.angle:=arccos(textprop.angle)*180/pi;
+     if local.OX.y<-eps then textprop.angle:=360-textprop.angle;
+end;
+
 function convertfromunicode(s:GDBString):GDBString;
 var i,i2:GDBInteger;
     ps,varname:GDBString;
@@ -194,6 +223,7 @@ var pdesc:controlpointdesc;
 begin
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{5A458E80-F735-432A-8E6D-85B580F5F0DC}',{$ENDIF}1);
           pdesc.selected:=false;
+          pdesc.pobject:=nil;
           pdesc.pointtype:=os_point;
           pdesc.worldcoord:=P_insert_in_WCS;//Local.P_insert;
           pdesc.dispcoord.x:=round(ProjP_insert.x);

@@ -1964,6 +1964,11 @@ begin
   end;
   result:=cmd_ok;
 end;
+function SnapProp_com(Operands:pansichar):GDBInteger;
+begin
+      StoreAndSetGDBObjInsp(dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor);
+      result:=cmd_ok;
+end;
 function Show_com(Operands:pansichar):GDBInteger;
 var
    obj:gdbstring;
@@ -2074,6 +2079,10 @@ begin
   CreateCommandFastObjectPlugin(@Show_com,'Show',0,0);
 
   CreateCommandFastObjectPlugin(@UpdatePO_com,'UpdatePO',0,0);
+
+  CreateCommandFastObjectPlugin(@LoadLayout_com,'LoadLayout',0,0);
+  CreateCommandFastObjectPlugin(@SnapProp_com,'SnapProperties',CADWG,0).overlay:=true;
+
 
 
   //Optionswindow.initxywh('',@mainformn,500,300,400,100,false);

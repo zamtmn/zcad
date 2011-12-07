@@ -206,7 +206,7 @@ begin
      SimpleMenods.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20,sizeof(MetodDescriptor));
      pvmt:=nil;
      {$IFDEF FPC}VMTCurrentOffset:=12;{$ENDIF}
-     {$IFDEF WIN64}VMTCurrentOffset:=24{sizeof(VMT)};{$ENDIF}
+     {$IFDEF CPU64}VMTCurrentOffset:=24{sizeof(VMT)};{$ENDIF}
      {$IFDEF DELPHI}VMTCurrentOffset:=0;{$ENDIF}
      PDefaultConstructor:=nil;
      pointer(LincedData):=nil;

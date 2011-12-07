@@ -32,6 +32,7 @@ GDBObjWithMatrix=object(GDBObjEntity)
                        procedure Format;virtual;
                        procedure createfield;virtual;
                        procedure transform(const t_matrix:DMatrix4D);virtual;
+                       procedure ReCalcFromObjMatrix;virtual;abstract;
                  end;
 {EXPORT-}
 implementation

@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   //debygunit,
   commandlinedef,
   {windows,}gdbasetypes,commandline,GDBCommandsBase,
@@ -229,6 +229,18 @@ type
                          procedure Run(pdata:GDBPlatformint); virtual;
                          procedure Sel(pdata:{pointer}GDBPlatformint); virtual;
                    end;
+  ATO_com=object(CommandRTEdObject)
+                         powner:PGDBObjDevice;
+                         procedure CommandStart(Operands:pansichar); virtual;
+                         procedure Run(pdata:GDBPlatformint); virtual;
+                         {created:boolean;
+                         bnames,textcontents,textremplates:GDBGDBStringArray;
+                         layers,weights,objtypes:GDBOpenArrayOfGDBPointer;
+                         procedure CommandStart(Operands:pansichar); virtual;
+                         procedure createbufs;
+                         procedure Run(pdata:GDBPlatformint); virtual;
+                         procedure Sel(pdata:GDBPlatformint); virtual;}
+                   end;
 
   ITT_com = object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;
@@ -267,6 +279,7 @@ var
    BlockReplace:BlockReplace_com;
    BlockReplaceParams:TBlockReplaceParams;
    SelSim:SelSim_com;
+   ATO:ATO_com;
    SelSimParams:TSelSimParams;
    BlockScaleParams:TBlockScaleParams;
    BlockScale:BlockScale_com;
@@ -644,6 +657,66 @@ begin
   pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pobj=nil;
 end;
+procedure ATO_com.CommandStart(Operands:pansichar);
+var
+   test:boolean;
+begin
+  self.savemousemode:=GDB.GetCurrentDWG.OGLwindow1.param.md.mode;
+  test:=false;
+  if (GetSelCount=1) then
+  if GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject<>nil then
+  if PGDBObjEntity(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject)^.vp.ID=GDBDeviceID then
+  test:=true;
+  if test then
+  begin
+       commandmanager.DMAddMethod('Добавить','Добавить выбранные примитивы к устройству',run);
+       //commandmanager.DMAddMethod('Найти','Найти подобные примитивы (если "шаблонные" примитивы не были запомнены, посиск пройдет во всем чертеже)',run);
+       commandmanager.DMShow;
+       powner:=GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject;
+       inherited CommandStart('');
+  end
+  else
+  begin
+    historyout('Устройство должно быть выбрано до запуска команды!!!');
+    Commandmanager.executecommandend;
+  end;
+end;
+procedure ATO_com.Run(pdata:GDBPlatformint);
+var
+   pobj,pvisible: pGDBObjEntity;
+   ir:itrec;
+   tp:gdbpointer;
+   m,m2:DMatrix4D;
+begin
+     m:=powner^.objmatrix;
+     m2:=m;
+     matrixinvert(m);
+     pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+     if pobj<>nil then
+     repeat
+           if pobj^.Selected then
+           if pobj<>pointer(powner) then
+           begin
+           powner^.objmatrix:=onematrix;
+           pvisible:=pobj^.Clone(@powner^);
+                    if pvisible^.IsHaveLCS then
+                               pvisible^.Format;
+           pvisible^.transform(m);
+           //pvisible^.correctobjects(powner,{pblockdef.ObjArray.getelement(i)}i);
+           powner^.objmatrix:=m2;
+           pvisible^.format;
+           pvisible.BuildGeometry;
+           powner^.VarObjArray.add(@pvisible);
+           pobj^.YouDeleted;
+           end;
+           pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+     until pobj=nil;
+     powner^.Format;
+     powner^.objmatrix:=m2;
+     powner:=nil;
+     Commandmanager.executecommandend;
+end;
+
 procedure SelSim_com.CommandStart(Operands:pansichar);
 begin
   created:=false;
@@ -949,6 +1022,8 @@ begin
               //if pobj.selected then
               begin
                 tv:=gdb.CopyEnt(gdb.GetCurrentDWG,gdb.GetCurrentDWG,pobj);
+                if tv.IsHaveLCS then
+                                    PGDBObjWithLocalCS(tv)^.CalcObjMatrix;
                 tv.transform(dispmatr);
                 tv.build;
                 tv.YouChanged;
@@ -1104,6 +1179,8 @@ begin
               if pobj.selected then
               begin
                 tv:=gdb.CopyEnt(gdb.GetCurrentDWG,ClipboardDWG,pobj);
+                if tv.IsHaveLCS then
+                                    PGDBObjWithLocalCS(tv)^.CalcObjMatrix;
                 tv.transform(dispmatr);
                 tv.Format;
               end;
@@ -1332,7 +1409,7 @@ var //oldi, newi, i: GDBInteger;
   dist: gdbvertex;
   pobj: GDBPointer;
   xdir,ydir:GDBVertex;
-  rotmatr,dispmatr:DMatrix4D;
+  rotmatr,dispmatr,dispmatr2:DMatrix4D;
 begin
   if fixentities then
   gdb.GetCurrentDWG.SelObjArray.freeclones;
@@ -1356,6 +1433,33 @@ begin
       gdb.GetCurrentDWG.UndoStack.PushEndMarker;
       gdb.GetCurrentDWG.SelObjArray.resprojparam;
 
+
+      if fixentities then
+      begin
+
+           xdir:=GetDirInPoint(pgdbobjlwPolyline(osp.PGDBObject).Vertex3D_in_WCS_Array,wc,pgdbobjlwPolyline(osp.PGDBObject).closed);
+           xdir:=normalizevertex(xdir);
+           ydir:=geometry.vectordot(pgdbobjlwPolyline(osp.PGDBObject).Local.OZ,xdir);
+
+
+           dispmatr:=geometry.CreateTranslationMatrix(createvertex(-wc.x,-wc.y,-wc.z));
+
+           rotmatr:=onematrix;
+           PGDBVertex(@rotmatr[0])^:=xdir;
+           PGDBVertex(@rotmatr[1])^:=ydir;
+           PGDBVertex(@rotmatr[2])^:=pgdbobjlwPolyline(osp.PGDBObject).Local.OZ;
+
+           //rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
+           dispmatr2:=geometry.CreateTranslationMatrix(createvertex(wc.x,wc.y,wc.z));
+           //dispmatr:=geometry.MatrixMultiply(rotmatr,dispmatr2);
+
+           //gdb.GetCurrentDWG.SelObjArray.TransformObj(dispmatr);
+           gdb.GetCurrentDWG.SelObjArray.SetRotateObj(dispmatr,dispmatr2,rotmatr,xdir,ydir,pgdbobjlwPolyline(osp.PGDBObject).Local.OZ);
+
+           fixentities:=true;
+      end;
+
+
       GDB.GetCurrentDWG.OGLwindow1.SetMouseMode(savemousemode);
       commandmanager.executecommandend;
       //if pobj<>nil then halt(0);
@@ -1371,26 +1475,24 @@ begin
            gdb.GetCurrentDWG.SelObjArray.modifyobj(dist,wc,false,pobj);
 
            xdir:=GetDirInPoint(pgdbobjlwPolyline(osp.PGDBObject).Vertex3D_in_WCS_Array,wc,pgdbobjlwPolyline(osp.PGDBObject).closed);
-           ydir:=geometry.vectordot(xdir,pgdbobjlwPolyline(osp.PGDBObject).Local.OZ);
+           xdir:=normalizevertex(xdir);
+           ydir:=geometry.vectordot(pgdbobjlwPolyline(osp.PGDBObject).Local.OZ,xdir);
 
 
            dispmatr:=geometry.CreateTranslationMatrix(createvertex(-wc.x,-wc.y,-wc.z));
+
            rotmatr:=onematrix;
            PGDBVertex(@rotmatr[0])^:=xdir;
            PGDBVertex(@rotmatr[1])^:=ydir;
            PGDBVertex(@rotmatr[2])^:=pgdbobjlwPolyline(osp.PGDBObject).Local.OZ;
-           rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
-           dispmatr:=geometry.CreateTranslationMatrix(createvertex(wc.x,wc.y,wc.z));
-           dispmatr:=geometry.MatrixMultiply(rotmatr,dispmatr);
 
-           {dispmatr:=geometry.CreateTranslationMatrix(createvertex(-wc.x,-wc.y,-wc.z));
-           rotmatr:=geometry.CreateRotationMatrixZ(sin(pi/4),cos(pi/4));
-           rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
-           dispmatr:=geometry.CreateTranslationMatrix(createvertex(wc.x,wc.y,wc.z));
-           dispmatr:=geometry.MatrixMultiply(rotmatr,dispmatr);}
+           //rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
+           dispmatr2:=geometry.CreateTranslationMatrix(createvertex(wc.x,wc.y,wc.z));
+           //dispmatr:=geometry.MatrixMultiply(rotmatr,dispmatr2);
 
 
-           gdb.GetCurrentDWG.SelObjArray.TransformAt(dispmatr);
+           //gdb.GetCurrentDWG.SelObjArray.Transform(dispmatr);
+           gdb.GetCurrentDWG.SelObjArray.SetRotate(dispmatr,dispmatr2,rotmatr,xdir,ydir,pgdbobjlwPolyline(osp.PGDBObject).Local.OZ);
 
            fixentities:=true;
       end
@@ -1414,8 +1516,9 @@ begin
   if (button and MZW_LBUTTON)<>0 then
   begin
     historyout('Точка на окружности:');
-    pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBCircleID,gdb.GetCurrentROOT));
-    GDBObjCircleInit(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
+    pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,gdb.GetCurrentROOT));
+    GDBObjSetCircleProp(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
+    //GDBObjCircleInit(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
     //pc^.lod:=4;
     pc^.Format;
     pc^.RenderFeedback;
@@ -1462,8 +1565,9 @@ begin
   if (button and MZW_LBUTTON)<>0 then
   begin
     //historyout('Вторая точка:');
-    PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
-    GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, wc);
+    PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+    GDBObjSetLineProp(PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, wc);
+    //GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, wc);
     PCreatedGDBLine^.Format;
   end
 end;
@@ -2466,7 +2570,7 @@ begin
   pbeditcom^.commanddata.Instance:=@BEditParam;
   pbeditcom^.commanddata.PTD:=SysUnit.TypeName2PTD('TBEditParam');
 
-
+  ATO.init('AddToOwner',0,0);
   SelSim.init('SelSim',0,0);
   SelSim.CEndActionAttr:=0;
   SelSimParams.General.SameEntType:=true;

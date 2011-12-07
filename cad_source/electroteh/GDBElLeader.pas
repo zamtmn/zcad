@@ -196,8 +196,10 @@ begin
             pvc:=pvc;
 
          pvc^.bp.ListPos.Owner:=@gdbtrash;
-         pvc^.transform(m4);
          self.ObjMatrix:=onematrix;
+         if pvc^.IsHaveLCS then
+                               pvc^.Format;
+         pvc^.transform(m4);
          pvc^.Format;
 
               pvc^.SaveToDXF(handle, outhandle);

@@ -83,7 +83,7 @@ begin
                begin
                pdesc.pointtype:=os_point;
                pdesc.pobject:=pv;
-               pdesc.dcoord:=      vertexsub(PGDBObjDevice(pv).P_insert_in_WCS,P_insert_in_WCS);
+               pdesc.dcoord:=vertexsub(PGDBObjDevice(pv).P_insert_in_WCS,P_insert_in_WCS);
                pdesc.worldcoord:=PGDBObjDevice(pv).P_insert_in_WCS;
                pdesc.dispcoord.x:=round(PGDBObjDevice(pv).ProjP_insert.x);
                pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PGDBObjDevice(pv).ProjP_insert.y);

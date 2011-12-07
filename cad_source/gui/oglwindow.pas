@@ -213,7 +213,7 @@ procedure RunTextEditor(Pobj:GDBPointer);
 function getsortedindex(cl:integer):integer;
 implementation
 uses mainwindow,UGDBTracePropArray,GDBEntity,io,geometry,gdbobjectsconstdef,UGDBDescriptor,
-     {GDBCommandsBase,}Objinsp{,Tedit_form, MTedit_form},shared,sharedgdb,UGDBLayerArray,cmdline,GDBtext;
+     {GDBCommandsBase,}Objinsp{,Tedit_form, MTedit_form},shared,sharedgdb,UGDBLayerArray,cmdline,GDBText;
 procedure creategrid;
 var i,j:GDBInteger;
 begin
@@ -4219,6 +4219,8 @@ procedure TOGLWnd.myKeyPress(var Key: Word; Shift: TShiftState);
 begin
       if Key=VK_ESCAPE then
       begin
+        if not ReStoreGDBObjInsp then
+        begin
         ClearOntrackpoint;
         if commandmanager.pcommandrunning=nil then
           begin
@@ -4238,6 +4240,7 @@ begin
                commandmanager.pcommandrunning.CommandCancel;
                commandmanager.executecommandend;
           end;
+        end;
         Key:=0;
       end
  {else if (Key = VK_A) and (shift=[ssCtrl]) then

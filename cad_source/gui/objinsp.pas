@@ -47,10 +47,10 @@ type
     public
     GDBobj:GDBBoolean;
     ppropcurrentedit:PPropertyDeskriptor;
-    //bdc:hdc;
-    //cdc:hdc;
-    //dc:hdc;
-    //so,br,tbr:thandle;
+
+    PStoredObj:GDBPointer;
+    StoredObjGDBType:PUserTypeDescriptor;
+
     pcurrobj,pdefaultobj:GDBPointer;
     currobjgdbtype,defaultobjgdbtype:PUserTypeDescriptor;
     PEditor:TPropEditor;
@@ -115,6 +115,8 @@ type
   end;
 
 procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
+procedure StoreAndSetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
+function ReStoreGDBObjInsp:GDBBoolean;
 procedure UpdateObjInsp;
 procedure ReturnToDefault;
 procedure ClrarIfItIs(addr:GDBPointer);
@@ -156,6 +158,37 @@ begin
                        aheight:=aheight;
   inherited SetBounds(ALeft, ATop, AWidth, AHeight);
 end;
+function ReStoreGDBObjInsp:GDBBoolean;
+begin
+     result:=false;
+     if assigned(GDBobjinsp)then
+     begin
+     if (GDBobjinsp.PStoredObj=nil) then
+                                    else
+                                    begin
+                                         GDBobjinsp.setptr(GDBobjinsp.StoredObjGDBType,GDBobjinsp.PStoredObj);
+                                         GDBobjinsp.PStoredObj:=nil;
+                                         GDBobjinsp.StoredObjGDBType:=nil;
+
+                                         {GDBobjinsp.pcurrobj:=GDBobjinsp.PStoredObj;
+                                         GDBobjinsp.currobjgdbtype:=GDBobjinsp.StoredObjGDBType;
+                                         GDBobjinsp.SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);}
+                                         result:=true;
+                                    end;
+     end;
+end;
+procedure StoreAndSetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
+begin
+     if assigned(GDBobjinsp)then
+     begin
+     if (GDBobjinsp.PStoredObj=nil) then
+                             begin
+                                  GDBobjinsp.PStoredObj:=GDBobjinsp.pcurrobj;
+                                  GDBobjinsp.StoredObjGDBType:=GDBobjinsp.currobjgdbtype;
+                             end;
+     GDBobjinsp.setptr(exttype,addr);
+     end;
+end;
 
 procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
 begin
@@ -184,6 +217,8 @@ procedure ReturnToDefault;
 begin
        if assigned(GDBobjinsp)then
                                   begin
+                                       GDBobjinsp.PStoredObj:=nil;
+                                       GDBobjinsp.StoredObjGDBType:=nil;
                                        GDBobjinsp.ReturnToDefault;
                                   end;
 end;
@@ -991,6 +1026,10 @@ end;
 
 procedure TGDBobjinsp.beforeinit;
 begin
+
+  PStoredObj:=nil;
+  StoredObjGDBType:=nil;
+
   pcurrobj:=nil;
   peditor:=nil;
   ppropcurrentedit:=nil;

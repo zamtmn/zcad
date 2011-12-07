@@ -68,7 +68,7 @@ Panel Misc;
     action ACN_El_FIND
     action ACN_OBJVARMAN
     action ACN_MULTIOBJVARMAN
-    button AddToOwner,addtoowner.bmp,(НЕ РАБОТАЕТ)добавить к владельцу
+    action ACN_ADDTOOWNER
     button InsertTestTable,spec.bmp,*DEBUG*Вставить таблицу
     button SetObjInsp(CURRENT),#FIX,*DEBUG*Фиксировать выделенный объект в инспекторе
   }
@@ -159,9 +159,11 @@ MainMenuItem Draw;
 MainMenuItem Modify;
   {
     action ACN_POLYED
-    MenuItem Блок;
+    MenuItem Блок/Устройство;
       {
         action ACN_BEDIT
+        action ACN_ADDTOOWNER
+        Separator
         action ACN_BREPLACE
         action ACN_BSCALE
       }

@@ -164,8 +164,25 @@ var sr: TSearchRec;
 procedure processfile(s:gdbstring);
 var
    fn:gdbstring;
+function IsASCII(const s: string): boolean; inline;
+   var
+     i: Integer;
+   begin
+     for i:=1 to length(s) do if ord(s[i])>127 then exit(false);
+     Result:=true;
+   end;
 begin
-     fn:={systoutf8}({systoutf8}Tria_AnsiToUtf8(path)+systoutf8(s));
+     (*РАботало на xp,lin, перестало на 7х64*)
+     //fn:={systoutf8}(systoutf8{Tria_AnsiToUtf8}(path)+systoutf8(s));
+
+     (*попытка закостылить*)
+     if NeedRTLAnsi and (not IsASCII(path)) then
+        fn:=Tria_AnsiToUtf8(path)+systoutf8(s)
+     else
+         fn:=path+systoutf8(s);
+     //fn:=fn+systoutf8(s);
+     (*конец попытки*)
+
      programlog.logoutstr('utf '+fn,0);
      programlog.logoutstr('sys '+path,0);
      {$IFDEF TOTALYLOG}programlog.logoutstr('Process file '+fn,0);{$ENDIF}

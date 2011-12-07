@@ -67,7 +67,7 @@ var
 implementation
 begin
   DWG_DrawMode:=0;
-  DWG_OSMode:=16359;
+  DWG_OSMode:=14311;
   DWG_PolarMode:=1;
   DWG_SystmGeometryDraw:=False;
   DWG_HelpGeometryDraw:=True;
@@ -111,16 +111,16 @@ begin
   RD_BackGroundColor.a:=255;
   RD_Restore_Mode:=WND_Texture;
   RD_LastRenderTime:=2;
-  RD_LastUpdateTime:=1;
+  RD_LastUpdateTime:=0;
   RD_MaxRenderTime:=0;
   RD_Light:=False;
   RD_VSync:=TVSOff;
   SAVE_Auto_Interval:=300;
-  SAVE_Auto_Current_Interval:=266;
+  SAVE_Auto_Current_Interval:=248;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';
   SAVE_Auto_On:=True;
-  SYS_RunTime:=39;
-  SYS_Version:='0.9.7 Revision SVN:106';
+  SYS_RunTime:=485;
+  SYS_Version:='0.9.7 Revision SVN:107 Проверочная! Проверь загрузку/сохранение на своих проектах';
   SYS_SystmGeometryColor:=250;
   SYS_IsHistoryLineCreated:=True;
   SYS_AlternateFont:='GEWIND.SHX';

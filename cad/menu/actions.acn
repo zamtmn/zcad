@@ -26,6 +26,8 @@ action ACN_SHOW_PAGECONTROL,Show(PageControl),#DW,Drawings window,,
 action ACN_SHOW_COMMANDLINE,Show(CommandLine),#CL,Command line and history,,
 action ACN_SAVELAYOUT,SaveLayout,#SLay,Save window layout as default,,
 
+action ACN_SNAPRUNTIME,SnapProperties,#snap,Run time snap editor,,ALT+S
+
 action ACN_LAYER,Layer,layer.bmp,Layers ...,Layers properties manager,
 
 action ACN_COPY,Copy,copy.bmp,Copy,Copy primitives,
@@ -36,6 +38,7 @@ action ACN_SCALE,Scale,scale.bmp,scale,Scale primitives,
 action ACN_BEDIT,BEdit,bedit.bmp,Block editor,,
 action ACN_BREPLACE,BlockReplace,#BR,Block replace,,
 action ACN_BSCALE,BlockScale,#BS,Block scale,,
+action ACN_ADDTOOWNER,AddToOwner,addtoowner.bmp,Add to owner,,
 action ACN_POLYED,PolyED,polyed.bmp,Edit polyline,,
 action ACN_OBJVARMAN,ObjVarMan,varman.bmp,Object variables manager,,
 action ACN_MULTIOBJVARMAN,MultiObjVarMan,#Mvar,Multi object variables manager,,

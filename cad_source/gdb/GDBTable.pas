@@ -72,8 +72,10 @@ begin
             pvc:=pvc;
 
          pvc^.bp.ListPos.Owner:=@self;
-         pvc^.transform(m4);
          self.ObjMatrix:=onematrix;
+         if pvc^.IsHaveLCS then
+                               pvc^.Format;
+         pvc^.transform(m4);
          pvc^.Format;
 
          if bp.ListPos.Owner<>@GDBTrash then

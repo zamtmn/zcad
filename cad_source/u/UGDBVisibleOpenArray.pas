@@ -68,6 +68,10 @@ begin
 end;
 function GDBObjEntityOpenArray.add;
 begin
+  {if pGDBObjEntity(p^).bp.ListPos.Owner<>nil then
+  begin
+       pGDBObjEntity(p^).bp.ListPos.Owner.RemoveInArray(pGDBObjEntity(p^).bp.ListPos.SelfIndex);
+  end;}
   result:=inherited add(p);
   pGDBObjEntity(p^).bp.ListPos.SelfIndex:={addr(PGDBObjEntityArray(parray)^[}result{])};
 end;
@@ -89,6 +93,7 @@ begin
 end;
 function GDBObjEntityOpenArray.deliteminarray;
 begin
+     //if (parray<>nil)and(p>=0)then
      PGDBObjEntityArray(parray)^[p]:=nil;
      //GDBPointer(p^):=nil;     bvmn
 end;

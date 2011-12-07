@@ -138,7 +138,7 @@ begin
 end;
 procedure loaddev(fn:gdbstring);
 begin
-     units.loadunit(fn,nil);
+     units.loadunit({utf8tosys}(fn),nil);
 end;
 procedure DeviceManager.loadfromdir(path: GDBString);
 var sr: TSearchRec;

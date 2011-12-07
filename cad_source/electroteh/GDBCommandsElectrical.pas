@@ -2510,15 +2510,20 @@ begin
                  if startdev=nil then
                                      shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено стартовое устройство '+FDoc.Cells[1,row])
                                  else
+                                     begin
                                      startdev:=findconnector(startdev);
+                                     if startdev=nil then
+                                                         shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+FDoc.Cells[1,row]);
+                                     end;
                  if enddev=nil then
                                      shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено конечное устройство '+FDoc.Cells[2,row])
                                  else
+                                     begin
                                      enddev:=findconnector(enddev);
-                 if startdev=nil then
-                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+FDoc.Cells[1,row]);
-                 if enddev=nil then
-                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+FDoc.Cells[2,row]);
+                                     if enddev=nil then
+                                                         shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+FDoc.Cells[2,row]);
+
+                                     end;
                  if (startdev<>nil)and(enddev<>nil) then
                  if netarray.Count=1 then
                  begin
@@ -2528,12 +2533,12 @@ begin
                                      shared.HistoryOutStr('В строке '+inttostr(row)+' не найдена трасса '+FDoc.Cells[3,row]);
                  if (net<>nil) then
                  begin
-                 startdev:=findconnector(startdev);
-                 enddev:=findconnector(enddev);
-                 if startdev=nil then
-                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+FDoc.Cells[1,row]);
-                 if enddev=nil then
-                                     shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+FDoc.Cells[2,row]);
+                 //startdev:=findconnector(startdev);
+                 //enddev:=findconnector(enddev);
+                 //if startdev=nil then
+                 //                    shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+FDoc.Cells[1,row]);
+                 //if enddev=nil then
+                 //                    shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+FDoc.Cells[2,row]);
                  if (startdev<>nil)and(enddev<>nil) then
                  begin
                  cable := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
@@ -2644,6 +2649,7 @@ begin
                                                                      pgdbdouble(vd^.data.Instance)^:=abs(pgdbdouble(pvn^.data.Instance)^-pgdbdouble(pvn2^.data.Instance)^);
                                                                 end;
                                                                 New_line^.Format;
+                                                                //New_line.bp.ListPos.Owner^.RemoveInArray(New_line.bp.ListPos.SelfIndex);
                                                                 supernet^.ObjArray.add(addr(New_line));
                                                                 log.LogOut('supernet^.ObjArray.add(addr(New_line)); Примитивов в графе: '+inttostr(supernet^.objarray.count));
 
@@ -2669,6 +2675,8 @@ begin
 
                           //supernet.BuildGraf;
 
+                          if supernet<>nil then
+                          begin
                           cable := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
                           cable^.ou.copyfrom(units.findunit('cable'));
                           pvd:=cable.ou.FindVariable('NMO_Suffix');
@@ -2713,6 +2721,10 @@ begin
                           supernet.done;
                           segments.Clear;
                           segments.done;
+                          //gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Clear;
+                          end
+                          else
+                              shared.ShowError('В строке '+inttostr(row)+' обнаружено несколько не связанных трасс "'+FDoc.Cells[3,row]);
 
                           riserarray.ClearAndDone;
                           //shared.ShowError('В строке '+inttostr(row)+' обнаружена множественная трасса "'+FDoc.Cells[3,row]+'". Пока недопилено((');

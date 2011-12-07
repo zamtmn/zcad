@@ -32,14 +32,14 @@ begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=307;
   VIEW_ObjInspSubV:=89;
-  PATH_File0:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File0:='C:\zcad\cad\sample\test_dxf\3d_mount.dxf';
   PATH_File1:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File2:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File3:='C:\zcad\cad\sample\test_dxf\3d_mount.dxf';
-  PATH_File4:='J:\nh\искандер\ФАС\plans.dxf';
-  PATH_File5:='D:\План перегородок. 7 этаж for_PS\План перегородок. 7 этаж for_PS.dxf';
-  PATH_File6:='D:\Чертеж3.dxf';
-  PATH_File7:='C:\Spec.dxf';
-  PATH_File8:='C:\Вентиляция 08.08.11.dxf';
-  PATH_File9:='J:\nh\искандер\ФАС\Чертеж4.dxf';
+  PATH_File2:='J:\nh\искандер\ФАС\plans.dxf';
+  PATH_File3:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File4:='J:\nh\Тюменьпромстройпроект\медоборудование\склад готовой продукции\aov.dxf';
+  PATH_File5:='J:\nh\Рыков Иван Васильевич\Завод\aob2.dxf';
+  PATH_File6:='J:\nh\Рыков Иван Васильевич\Изменения РОВД\proj.dxf';
+  PATH_File7:='/mnt/winc/zcad/cad/sample/test_dxf/em.dxf';
+  PATH_File8:='/mnt/winc/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File9:='J:\nh\Рыков Иван Васильевич\Завод\aob.dxf';
 end.

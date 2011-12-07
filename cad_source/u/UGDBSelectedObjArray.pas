@@ -19,7 +19,7 @@
 unit UGDBSelectedObjArray;
 {$INCLUDE def.inc}
 interface
-uses GDBEntity,UGDBControlPointArray,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
+uses GDBWithMatrix,GDBEntity,UGDBControlPointArray,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
      gl,
      gdbasetypes{,varmandef,gdbobjectsconstdef},memman,OGLSpecFunc;
 type
@@ -45,7 +45,11 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           //destructor done;virtual;
                           procedure modifyobj(dist,wc:gdbvertex;save:GDBBoolean;pconobj:pgdbobjEntity);virtual;
                           procedure freeclones;
-                          procedure TransformAt(dispmatr:DMatrix4D);
+                          procedure Transform(dispmatr:DMatrix4D);
+                          procedure SetRotate(minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
+                          procedure SetRotateObj(minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
+                          procedure TransformObj(dispmatr:DMatrix4D);
+
                           procedure drawobj(infrustumactualy:TActulity);virtual;
                           procedure freeelement(p:GDBPointer);virtual;
                           function calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
@@ -232,7 +236,84 @@ begin
   end;
   result:=td;
 end;
-procedure GDBSelectedObjArray.TransformAt(dispmatr:DMatrix4D);
+procedure GDBSelectedObjArray.SetRotate(minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
+var i: GDBInteger;
+//  d: GDBDouble;
+//  td:tcontrolpointdist;
+  tdesc:pselectedobjdesc;
+  m:DMatrix4D;
+begin
+  if count > 0 then
+  begin
+    tdesc:=parray;
+    for i := 0 to count - 1 do
+    begin
+      if tdesc^.pcontrolpoint<>nil then
+        if tdesc^.pcontrolpoint^.SelectedCount<>0 then
+        begin
+             tdesc^.ptempobj^.Transform(minusd);
+             m:=PGDBObjWithMatrix(tdesc^.ptempobj)^.ObjMatrix;
+             PGDBVertex(@m[3])^:=nulvertex;
+             matrixinvert(m);
+             tdesc^.ptempobj^.Transform(m);
+             tdesc^.ptempobj^.Transform(rm);
+             {PGDBVertex(@PGDBObjWithMatrix(tdesc^.ptempobj)^.ObjMatrix[0])^:=x;
+             PGDBVertex(@PGDBObjWithMatrix(tdesc^.ptempobj)^.ObjMatrix[1])^:=y;
+             PGDBVertex(@PGDBObjWithMatrix(tdesc^.ptempobj)^.ObjMatrix[2])^:=z;}
+             tdesc^.ptempobj^.Transform(plusd);
+             PGDBObjWithMatrix(tdesc^.ptempobj)^.{Format}ReCalcFromObjMatrix;
+             PGDBObjWithMatrix(tdesc^.ptempobj)^.Format;
+
+             //tdesc^.objaddr^.Transform{At}(dispmatr);
+             //tdesc^.objaddr^.Format;
+             //gdb.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
+        end;
+      inc(tdesc);
+    end;
+  end;
+  {if save then
+              gdb.GetCurrentROOT.FormatAfterEdit;}
+end;
+procedure GDBSelectedObjArray.SetRotateObj(minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
+var i: GDBInteger;
+//  d: GDBDouble;
+//  td:tcontrolpointdist;
+  tdesc:pselectedobjdesc;
+  m:DMatrix4D;
+begin
+  if count > 0 then
+  begin
+    tdesc:=parray;
+    for i := 0 to count - 1 do
+    begin
+      if tdesc^.pcontrolpoint<>nil then
+        //if tdesc^.pcontrolpoint^.SelectedCount<>0 then
+        begin
+             tdesc^.objaddr^.Transform(minusd);
+             m:=PGDBObjWithMatrix(tdesc^.objaddr)^.ObjMatrix;
+             PGDBVertex(@m[3])^:=nulvertex;
+             matrixinvert(m);
+             tdesc^.objaddr^.Transform(m);
+             tdesc^.objaddr^.Transform(rm);
+             {PGDBVertex(@PGDBObjWithMatrix(tdesc^.ptempobj)^.ObjMatrix[0])^:=x;
+             PGDBVertex(@PGDBObjWithMatrix(tdesc^.ptempobj)^.ObjMatrix[1])^:=y;
+             PGDBVertex(@PGDBObjWithMatrix(tdesc^.ptempobj)^.ObjMatrix[2])^:=z;}
+             tdesc^.objaddr^.Transform(plusd);
+             PGDBObjWithMatrix(tdesc^.objaddr)^.{Format}ReCalcFromObjMatrix;
+             PGDBObjWithMatrix(tdesc^.objaddr)^.Format;
+
+             //tdesc^.objaddr^.Transform{At}(dispmatr);
+             //tdesc^.objaddr^.Format;
+             //gdb.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
+        end;
+      inc(tdesc);
+    end;
+  end;
+  {if save then
+              gdb.GetCurrentROOT.FormatAfterEdit;}
+end;
+
+procedure GDBSelectedObjArray.Transform(dispmatr:DMatrix4D);
 var i: GDBInteger;
 //  d: GDBDouble;
 //  td:tcontrolpointdist;
@@ -246,7 +327,7 @@ begin
       if tdesc^.pcontrolpoint<>nil then
         if tdesc^.pcontrolpoint^.SelectedCount<>0 then
         begin
-             tdesc^.ptempobj^.Transform{At}(dispmatr);
+             tdesc^.ptempobj^.Transform(dispmatr);
              tdesc^.ptempobj^.Format;
 
              //tdesc^.objaddr^.Transform{At}(dispmatr);
@@ -259,6 +340,32 @@ begin
   {if save then
               gdb.GetCurrentROOT.FormatAfterEdit;}
 end;
+procedure GDBSelectedObjArray.TransformObj(dispmatr:DMatrix4D);
+var i: GDBInteger;
+  tdesc:pselectedobjdesc;
+begin
+  if count > 0 then
+  begin
+    tdesc:=parray;
+    for i := 0 to count - 1 do
+    begin
+      if tdesc^.pcontrolpoint<>nil then
+        //if tdesc^.pcontrolpoint^.SelectedCount<>0 then
+        begin
+             tdesc^.objaddr^.Transform(dispmatr);
+             tdesc^.objaddr^.Format;
+
+             //tdesc^.objaddr^.Transform{At}(dispmatr);
+             //tdesc^.objaddr^.Format;
+             //gdb.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
+        end;
+      inc(tdesc);
+    end;
+  end;
+  {if save then
+              gdb.GetCurrentROOT.FormatAfterEdit;}
+end;
+
 procedure GDBSelectedObjArray.modifyobj;
 var i: GDBInteger;
 //  d: GDBDouble;

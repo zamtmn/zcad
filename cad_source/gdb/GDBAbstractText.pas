@@ -62,6 +62,8 @@ GDBObjAbstractText=object(GDBObjPlainWithOX)
                          procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                          procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                          procedure ReCalcFromObjMatrix;virtual;
+                         procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
+                         procedure setrot(r:GDBDouble);
                    end;
 {EXPORT-}
 function textformat(s:GDBString;pobj:GDBPointer):GDBString;
@@ -69,6 +71,45 @@ function convertfromunicode(s:GDBString):GDBString;
 implementation
 uses
    log,GDBSubordinated;
+procedure GDBObjAbstractText.setrot(r:GDBDouble);
+var m1:DMatrix4D;
+begin
+m1:=onematrix;
+m1[0,0]:=cos(r*pi/180);
+m1[1,1]:=cos(r*pi/180);
+m1[1,0]:=-sin(r*pi/180);
+m1[0,1]:=sin(r*pi/180);
+objMatrix:=MatrixMultiply(m1,objMatrix);
+end;
+procedure GDBObjAbstractText.FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);
+var
+   r:double;
+   ox:gdbvertex;
+   m,m2,m3:DMAtrix4D;
+begin
+     if PField=@textprop.angle then
+                                   begin
+                                        m:=self.CalcObjMatrixWithoutOwner;
+                                        m2:=self.getownermatrix^;
+                                        m3:=m2;
+                                        matrixinvert(m3);
+                                        objMatrix:=MatrixMultiply(m3,objMatrix);
+                                        if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
+                                                                                                       ox:=CrossVertex(YWCS,{PGDBVertex(@m[2])^}Local.oz)
+                                                                                                   else
+                                                                                                       ox:=CrossVertex(ZWCS,{PGDBVertex(@m[2])^}Local.oz);
+                                        r:=geometry.scalardot({PGDBVertex(@m[0])^}Local.ox,ox);
+                                        r:=arccos(r)*180/pi;
+                                        setrot(-r);
+                                        r:=textprop.angle;
+                                        setrot(textprop.angle);
+                                        ReCalcFromObjMatrix;
+                                        objMatrix:=MatrixMultiply(m2,objMatrix);
+                                        textprop.angle:=r;
+                                   end;
+     inherited;
+end;
+
 procedure GDBObjAbstractText.ReCalcFromObjMatrix;
 var
     ox:gdbvertex;

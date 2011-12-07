@@ -221,7 +221,7 @@ begin
                                 end
                              else
                                  begin
-                                      eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,(PDbBaseObject(pvdeq^.data.Instance)^.NameShort)+' из '+treepos));
+                                      eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,(PDbBaseObject(pvdeq^.data.Instance)^.NameShort)+' ('+pvdeq^.name+') '+' из '+treepos));
                                       eqnode.fBlockName:=pvdeq^.name;
                                       eqnode.FPopupMenu:=pcm;
                                       eqnode.ptd.PTD:=pvdeq^.data.PTD;

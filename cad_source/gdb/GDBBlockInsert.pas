@@ -82,9 +82,24 @@ begin
 
      Local.P_insert:=PGDBVertex(@objmatrix[3])^;
 
-     scale.x:=PGDBVertex(@objmatrix[0])^.x/local.OX.x;
-     scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y;
-     scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;
+     scale.x:=geometry.oneVertexlength(PGDBVertex(@objmatrix[0])^);
+     scale.y:=geometry.oneVertexlength(PGDBVertex(@objmatrix[1])^);
+     scale.z:=geometry.oneVertexlength(PGDBVertex(@objmatrix[2])^);
+
+     {if abs(local.OX.x)>eps then
+                                scale.x:=PGDBVertex(@objmatrix[0])^.x/local.OX.x
+                            else
+                                scale.x:=1;
+     if abs(local.Oy.y)>eps then
+                                scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y
+     else
+         scale.y:=1;
+
+     if abs(local.Oz.z)>eps then
+                                scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z
+     else
+         scale.z:=1;
+     }
 
      if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
                                                                     ox:=CrossVertex(YWCS,Local.oz)
@@ -315,6 +330,7 @@ var tvo: PGDBObjBlockInsert;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjBlockInsert));
   tvo^.scale:=scale;
+  //tvo^.ObjMatrix:=objmatrix;;
   tvo^.init({bp.owner}own,vp.Layer, vp.LineWeight);
   tvo^.vp.id := GDBBlockInsertID;
   tvo^.vp.layer :=vp.layer;

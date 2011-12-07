@@ -90,7 +90,7 @@ type
                     procedure LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                                State: TOwnerDrawState);
                     function findtoolbatdesk(tbn:string):string;
-                    procedure CreateToolbarFromDesk(tb:TToolBar;tbdesk:string);
+                    procedure CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
                     procedure CreateHTPB(tb:TToolBar);
 
                     procedure FormCreate(Sender: TObject);
@@ -102,6 +102,7 @@ type
                     procedure draw;
 
                     procedure loadpanels(pf:GDBString);
+                    procedure CreateLayoutbox(tb:TToolBar);
                     procedure loadmenu(var f:GDBOpenArrayOfByte;var pm:TMenu;var line:GDBString);
                     procedure loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
 
@@ -127,6 +128,8 @@ type
                     procedure ChangeCLayer(Sender:Tobject);
                     procedure ChangeCLineW(Sender:Tobject);
 
+                    procedure ChangeLayout(Sender:Tobject);
+
                     procedure idle(Sender: TObject; var Done: Boolean);virtual;
                     procedure ReloadLayer(plt:PGDBNamedObjectsArray);
 
@@ -151,6 +154,7 @@ type
     procedure ResetBounds(Force: Boolean); override;
   end;
 function getoglwndparam: GDBPointer; export;
+function LoadLayout_com(Operands:pansichar):GDBInteger;
 procedure clearotrack;
 procedure clearcp;
 {procedure startup;
@@ -168,6 +172,7 @@ var
   GeneralTime:GDBInteger;
   LayerBox:TComboBox;
   LineWBox:TComboBox;
+  LayoutBox:TComboBox;
   LPTime:Tdatetime;
   oldlongprocess:integer;
   tf:tform;
@@ -658,7 +663,7 @@ begin
             //ToolBarD:=tb;
             CreateHTPB(tb);
        end;
-       CreateToolbarFromDesk(tb,tbdesk);
+       CreateToolbarFromDesk(tb,aName,tbdesk);
 
        AControl:=FToolBar;
 
@@ -670,14 +675,20 @@ begin
 
   end;
 end;
-function LoadLayout_com:GDBInteger;
+function LoadLayout_com(Operands:pansichar):GDBInteger;
 var
   XMLConfig: TXMLConfigStorage;
   filename:string;
+  s:string;
 begin
+  if Operands='' then
+                     s:='defaultlayout.xml'
+                 else
+                     s:=Operands;
+
   try
     // load the xml config file
-    filename:=utf8tosys(sysparam.programpath+'components/defaultlayout.xml');
+    filename:=utf8tosys(sysparam.programpath+'components/'+{'defaultlayout.xml'}s);
     XMLConfig:=TXMLConfigStorage.Create(Filename,True);
     try
       // restore the layout
@@ -778,7 +789,7 @@ begin
    toolbars.Sorted:=true;
    loadpanels(sysparam.programpath+'menu/mainmenu.mn');
   if not sysparam.noloadlayout then
-                                    LoadLayout_com;
+                                    LoadLayout_com('');
 
    //self.AutoSize:=false;
    //self.BorderStyle:=bsNone;
@@ -813,7 +824,7 @@ begin
    ToolBarU.ShowCaptions:=true;
    ToolBarU.Parent:=self;
    ToolBarU.EdgeBorders:=[ebTop, ebBottom,ebLeft,ebRight];
-   self.CreateToolbarFromDesk(ToolBarU,self.findtoolbatdesk('STANDART'));
+   self.CreateToolbarFromDesk(ToolBarU,'STANDART',self.findtoolbatdesk('STANDART'));
    action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_STANDART'));
    if assigned(action) then
                            begin
@@ -955,7 +966,7 @@ begin
     DrawText(LinewBox.canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
 end;
 
-procedure TMainFormN.CreateToolbarFromDesk(tb:TToolBar;tbdesk:string);
+procedure TMainFormN.CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
 var
     f:GDBOpenArrayOfByte;
     line,ts,{bn,}bc{,bh}:GDBString;
@@ -1110,9 +1121,66 @@ begin
            end;
 
            until not(f.ReadPos<f.count);
+           if tbname='STANDART' then
+                       begin
+                            if assigned(LayoutBox) then
+                                                      shared.ShowError(format(ES_ReCreating,['LAYOUTBOX']));
+                            CreateLayoutbox(tb);
+                            //LayoutBox.OnDrawItem:=LineWBoxDrawItem;
+
+                            //if code=0 then
+                            //              LineWBox.Width:=w;
+                            if ts<>''then
+                            begin
+                                 //ts:=InterfaceTranslate('hint_panel~LAYOUTBOX',ts);
+                                 //LineWBox.hint:=(ts);
+                                 //LineWBox.ShowHint:=true;
+                            end;
+                            AddToBar(tb,LayoutBox);
+                            LayoutBox.AutoSize:=false;
+                            LayoutBox.Width:=200;
+                            LayoutBox.Align:=alRight;
+
+                       end;
            f.done;
 
       end;
+end;
+procedure addfiletoLayoutbox(filename:GDBString);
+var
+    s:string;
+begin
+     s:=ExtractFileName(filename);
+     LayoutBox.AddItem(copy(s,1,length(s)-4),nil);
+end;
+procedure TMainFormN.CreateLayoutbox(tb:TToolBar);
+begin
+  LayoutBox:=TComboBox.Create(tb);
+  LayoutBox.Style:=csDropDownList;
+  FromDirIterator(sysparam.programpath+'components/','*.xml','',addfiletoLayoutbox,nil);
+  LayoutBox.OnChange:=ChangeLayout;
+end;
+procedure TMainFormN.ChangeLayout(Sender:Tobject);
+var
+    s:string;
+begin
+  //LayoutBox.Items.Strings[LayoutBox.ItemIndex]:='1';
+  //LayoutBox.text:=LayoutBox.text;
+  s:=sysparam.programpath+'components/'+LayoutBox.text+'.xml';
+  LoadLayout_com(@s[1]);
+  (*var
+    XMLConfig: TXMLConfigStorage;
+    filename:string;
+    s:string;
+  begin
+    if Operands='' then
+                       s:='defaultlayout.xml'
+                   else
+                       s:=Operands;
+
+    try
+      // load the xml config file
+      filename:=utf8tosys(sysparam.programpath+'components/'+{'defaultlayout.xml'}s);*)
 end;
 
 procedure TMainFormN.loadpanels(pf:GDBString);

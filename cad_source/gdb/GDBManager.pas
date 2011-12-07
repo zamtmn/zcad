@@ -46,8 +46,11 @@ function getgdb: GDBPointer; export;
 function GetSelOjbj:TSelObjDesk;
 function CreateInitObjFree(t:GDBByte;owner:PGDBObjGenericSubEntry):PGDBObjEntity;export;
 function CreateObjFree(t: GDBByte): PGDBObjEntity;export;
+procedure GDBObjSetEntityProp(var pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;LW: GDBSmallint); export;
+procedure GDBObjSetLineProp(var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LW: GDBSmallint; p1, p2: GDBvertex); export;
 procedure GDBObjLineInit(own:PGDBObjGenericSubEntry;var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LW: GDBSmallint; p1, p2: GDBvertex); export;
 procedure GDBObjCircleInit(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble); export;
+procedure GDBObjSetCircleProp(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble); export;
 var a: GDBObjLine;
   p: gdbvertex;
 implementation
@@ -74,9 +77,28 @@ begin
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
 end;
+procedure GDBObjSetEntityProp(var pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;LW: GDBSmallint);
+begin
+     pobjent^.vp.Layer:=layeraddres;
+     pobjent^.vp.LineWeight:=LW;
+end;
+
+procedure GDBObjSetLineProp(var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LW: GDBSmallint; p1, p2: GDBvertex);
+begin
+  GDBObjSetEntityProp(pobjline,layeraddres,LW);
+  pobjline.CoordInOCS.lBegin := p1;
+  pobjline.CoordInOCS.lEnd := p2;
+end;
+
 procedure GDBObjLineInit(own:PGDBObjGenericSubEntry;var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LW: GDBSmallint; p1, p2: GDBvertex); export;
 begin
   pobjline^.init(own,layeraddres, LW, p1, p2);
+end;
+procedure GDBObjSetCircleProp(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble);
+begin
+     GDBObjSetEntityProp(pobjcircle,layeraddres,LW);
+     pobjcircle.Local.p_insert := p;
+     pobjcircle.Radius := rr;
 end;
 
 procedure GDBObjCircleInit(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble);

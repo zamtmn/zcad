@@ -805,6 +805,8 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.PATH.Template_File,'PATH_Template_File');
   s:=SysVar.PATH.Template_File^;
 
+  SysVarUnit.AssignToSymbol(SysVar.PATH.LayoutFile,'PATH_LayoutFile');
+
   SysVarUnit.AssignToSymbol(SysVar.PATH.Fonts_Path,'PATH_Fonts');
 
   sysvar.RD.RD_LastRenderTime^:=0;

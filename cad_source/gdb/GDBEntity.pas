@@ -149,6 +149,8 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure AddOnTrackAxis(var posr:os_record; const processaxis:taddotrac);virtual;
 
                     function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
+
+                    function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;abstract;
               end;
 {Export-}
 var onlygetsnapcount:GDBInteger;

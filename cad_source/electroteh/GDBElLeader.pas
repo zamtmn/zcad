@@ -458,6 +458,7 @@ begin
           if s<>'' then
           begin
           ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
+          ptext.vp.Layer:=vp.Layer;
           ptext.Template:=s;
           ptext.Local.P_insert:=tbl.Local.P_insert;
           ptext.Local.P_insert.y:=ptext.Local.P_insert.y+1.5*scale;
@@ -470,12 +471,14 @@ begin
           ptext.textprop.size:=2.5*scale;
           ptext.Format;
           pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
+          pl.vp.Layer:=vp.Layer;
           pl.CoordInOCS.lBegin:=ptext.Local.P_insert;
           pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
           pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
           pl.CoordInOCS.lEnd.y:=pl.CoordInOCS.lEnd.y-1*scale;
           pl.Format;
           pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
+          pl.vp.Layer:=vp.Layer;
           pl.CoordInOCS.lBegin:=ptext.Local.P_insert;
           pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
           pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;

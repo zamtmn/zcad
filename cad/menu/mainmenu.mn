@@ -163,6 +163,7 @@ MainMenuItem Modify;
       {
         action ACN_BEDIT
         action ACN_ADDTOOWNER
+        action ACN_COPYFROMOWNER
         Separator
         action ACN_BREPLACE
         action ACN_BSCALE

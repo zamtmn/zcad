@@ -428,6 +428,7 @@ GDBPolyline2DArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex2D*)
                       function _optimize:GDBBoolean;virtual;abstract;
                       function inrect:GDBBoolean;virtual;abstract;
                       function ispointinside(point:GDBVertex2D):GDBBoolean;virtual;abstract;
+                      procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                 end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBPolyPoint2DArray.pas
 PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;
@@ -465,6 +466,11 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           procedure RenderFeedBack;virtual;abstract;
                           //destructor done;virtual;abstract;
                           procedure modifyobj(dist,wc:gdbvertex;save:GDBBoolean;pconobj:pgdbobjEntity);virtual;abstract;
+                          procedure freeclones;
+                          procedure Transform(dispmatr:DMatrix4D);
+                          procedure SetRotate(minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
+                          procedure SetRotateObj(minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
+                          procedure TransformObj(dispmatr:DMatrix4D);
                           procedure drawobj(infrustumactualy:TActulity);virtual;abstract;
                           procedure freeelement(p:GDBPointer);virtual;abstract;
                           function calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
@@ -688,6 +694,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
              Fonts_Path:PGDBString;(*'Fonts'*)
              Template_Path:PGDBString;(*'Templates'*)
              Template_File:PGDBString;(*'Default template'*)
+             LayoutFile:PGDBString;(*'Current layout'*)
              Program_Run:PGDBString;(*'Program'*)(*oi_readonly*)
              Temp_files:PGDBString;(*'Temporary files'*)(*oi_readonly*)
         end;
@@ -1066,6 +1073,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function GetLineWeight:GDBSmallint;virtual;abstract;
                     function IsSelected:GDBBoolean;virtual;abstract;
                     function IsActualy:GDBBoolean;virtual;abstract;
+                    function IsHaveLCS:GDBBoolean;virtual;abstract;
                     function GetLayer:PGDBLayerProp;virtual;abstract;
                     function GetCenterPoint:GDBVertex;virtual;abstract;
                     procedure SetInFrustum(infrustumactualy:TActulity);virtual;abstract;
@@ -1077,6 +1085,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure BuildGeometry;virtual;abstract;
                     procedure AddOnTrackAxis(var posr:os_record; const processaxis:taddotrac);virtual;abstract;
                     function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;abstract;
+                    function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;abstract;
               end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDB3d.pas
 GDBObj3d=object(GDBObjEntity)
@@ -1121,6 +1130,7 @@ GDBObjWithMatrix=object(GDBObjEntity)
                        procedure Format;virtual;abstract;
                        procedure createfield;virtual;abstract;
                        procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
+                       procedure ReCalcFromObjMatrix;virtual;abstract;
                  end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBWithLocalCS.pas
 PGDBObj2dprop=^GDBObj2dprop;
@@ -1153,6 +1163,7 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
                procedure higlight;virtual;abstract;
                procedure ReCalcFromObjMatrix;virtual;abstract;
+               function IsHaveLCS:GDBBoolean;virtual;abstract;
          end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBSolid.pas
 PGDBObjSolid=^GDBObjSolid;
@@ -1232,6 +1243,9 @@ GDBObjAbstractText=object(GDBObjPlainWithOX)
                          function InRect:TInRect;virtual;abstract;
                          procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                          procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
+                         procedure ReCalcFromObjMatrix;virtual;abstract;
+                         procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
+                         procedure setrot(r:GDBDouble);
                    end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBArc.pas
   ptarcrtmodify=^tarcrtmodify;
@@ -1318,6 +1332,7 @@ GDBObjCircle=object(GDBObjWithLocalCS)
                  function GetObjTypeName:GDBString;virtual;abstract;
                  procedure createfield;virtual;abstract;
                  function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;abstract;
+                 procedure ReCalcFromObjMatrix;virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\UGDBEntTree.pas
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
@@ -1542,6 +1557,8 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    //procedure select;virtual;abstract;
                    procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;abstract;
                    procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
+                   function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;abstract;
+                   procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;abstract;
              end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBconnected.pas
 PGDBObjConnected=^GDBObjConnected;
@@ -1689,6 +1706,8 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;abstract;
                  procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;abstract;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
+                 procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
+                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBtext.pas
 PGDBObjText=^GDBObjText;
@@ -2269,6 +2288,16 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                          procedure Run(pdata:GDBPlatformint); virtual;abstract;
                          procedure Sel(pdata:{pointer}GDBPlatformint); virtual;abstract;
                    end;
+  ATO_com=object(CommandRTEdObject)
+                         powner:PGDBObjDevice;
+                         procedure CommandStart(Operands:pansichar); virtual;abstract;
+                         procedure ShowMenu;virtual;abstract;
+                         procedure Run(pdata:GDBPlatformint); virtual;abstract;
+          end;
+  CFO_com=object(ATO_com)
+                         procedure ShowMenu;virtual;abstract;
+                         procedure Run(pdata:GDBPlatformint); virtual;abstract;
+          end;
   ITT_com = object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;abstract;
   end;

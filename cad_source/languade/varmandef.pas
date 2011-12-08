@@ -161,6 +161,7 @@ UserTypeDescriptor=object(GDBaseObject)
              Fonts_Path:PGDBString;(*'Fonts'*)
              Template_Path:PGDBString;(*'Templates'*)
              Template_File:PGDBString;(*'Default template'*)
+             LayoutFile:PGDBString;(*'Current layout'*)
              Program_Run:PGDBString;(*'Program'*)(*oi_readonly*)
              Temp_files:PGDBString;(*'Temporary files'*)(*oi_readonly*)
         end;

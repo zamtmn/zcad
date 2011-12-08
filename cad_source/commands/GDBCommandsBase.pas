@@ -46,7 +46,7 @@ uses
  sharedgdb,UGDBEntTree,
   {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline,
- AnchorDocking,dialogs,XMLPropStorage;
+ AnchorDocking,dialogs,XMLPropStorage,xmlconf;
 type
 {Export+}
   TMSType=(
@@ -1939,6 +1939,26 @@ begin
      //DWGPageCxMenu^.done;
      //gdbfreemem(pointer(DWGPageCxMenu));
 end;
+procedure SaveLayoutToFile(Filename: string);
+var
+  XMLConfig: TXMLConfig;
+  Config: TXMLConfigStorage;
+begin
+  XMLConfig:=TXMLConfig.Create(nil);
+  try
+    XMLConfig.StartEmpty:=true;
+    XMLConfig.Filename:=Filename;
+    Config:=TXMLConfigStorage.Create(XMLConfig);
+    try
+      DockMaster.SaveLayoutToConfig(Config);
+    finally
+      Config.Free;
+    end;
+    XMLConfig.Flush;
+  finally
+    XMLConfig.Free;
+  end;
+end;
 function SaveLayout_com:GDBInteger;
 var
   XMLConfig: TXMLConfigStorage;
@@ -1947,6 +1967,8 @@ begin
   try
     // create a new xml config file
     filename:=utf8tosys(sysparam.programpath+'components/defaultlayout.xml');
+    SaveLayoutToFile(filename);
+    exit;
     XMLConfig:=TXMLConfigStorage.Create(filename,false);
     try
       // save the current layout of all forms

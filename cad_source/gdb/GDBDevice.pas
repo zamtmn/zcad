@@ -57,10 +57,46 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    //procedure select;virtual;
                    procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
                    procedure addcontrolpoints(tdesc:GDBPointer);virtual;
+
+                   function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
+                   procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
              end;
 {EXPORT-}
 implementation
-uses GDBBlockDef,dxflow,log,UGDBSelectedObjArray;
+uses GDBBlockDef,dxflow,log,UGDBSelectedObjArray,UGDBEntTree;
+procedure GDBObjDevice.correctobjects;
+var pobj:PGDBObjEntity;
+    ir:itrec;
+begin
+     inherited;
+     {bp.ListPos.Owner:=powner;
+     bp.ListPos.SelfIndex:=pinownerarray;}
+     pobj:=self.VarObjArray.beginiterate(ir);
+     if pobj<>nil then
+     repeat
+           pobj^.correctobjects(@self,{ir.itp}ir.itc);
+           pobj:=self.VarObjArray.iterate(ir);
+     until pobj=nil;
+end;
+
+function GDBObjDevice.EraseMi;
+var
+p:PGDBObjEntity;
+begin
+     if pobj^.bp.TreePos.Owner<>nil then
+     begin
+          PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.deliteminarray(pobj^.bp.TreePos.SelfIndex);
+     end;
+
+     pointer(p):= VarObjArray.GetObject(pobjinarray);
+     VarObjArray.deliteminarray(pobjinarray);
+
+     //p^.done;
+     //memman.GDBFreeMem(GDBPointer(p))
+     pobj^.done;
+     memman.GDBFreeMem(GDBPointer(pobj));
+end;
+
 procedure GDBObjDevice.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
     ir:itrec;

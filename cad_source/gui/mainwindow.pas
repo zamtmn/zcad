@@ -34,7 +34,7 @@ uses
   commandline,{zmainforms,}memman,UGDBNamedObjectsArray,
   {ZGUIArrays,}{ZBasicVisible,}{ZEditsWithVariable,}{ZTabControlsGeneric,}shared,{ZPanelsWithSplit,}{ZGUIsCT,}{ZstaticsText,}{UZProcessBar,}strmy{,strutils},{ZPanelsGeneric,}
   graphics,
-  AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr;
+  AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,xmlconf;
 
 resourcestring
   GDBObjinspWndName='Object inspector';
@@ -675,6 +675,27 @@ begin
 
   end;
 end;
+procedure LoadLayoutFromFile(Filename: string);
+var
+  XMLConfig: TXMLConfig;
+  Config: TXMLConfigStorage;
+begin
+  //debugln(['TIDEAnchorDockMaster.LoadLayoutFromFile ',Filename]);
+  sysvar.PATH.LayoutFile^:=Filename;
+  XMLConfig:=TXMLConfig.Create(nil);
+  try
+    XMLConfig.Filename:=Filename;
+    Config:=TXMLConfigStorage.Create(XMLConfig);
+    try
+      DockMaster.LoadLayoutFromConfig(Config,true);
+    finally
+      Config.Free;
+    end;
+    XMLConfig.Flush;
+  finally
+    XMLConfig.Free;
+  end;
+end;
 function LoadLayout_com(Operands:pansichar):GDBInteger;
 var
   XMLConfig: TXMLConfigStorage;
@@ -682,13 +703,18 @@ var
   s:string;
 begin
   if Operands='' then
-                     s:='defaultlayout.xml'
+                     filename:={'defaultlayout.xml'}sysvar.PATH.LayoutFile^
                  else
+                     begin
                      s:=Operands;
-
+                     filename:=utf8tosys(sysparam.programpath+'components/'+{'defaultlayout.xml'}s);
+                     end;
+  if not fileexists(filename) then
+                              filename:=utf8tosys(sysparam.programpath+'components/defaultlayout.xml');
+  LoadLayoutFromFile(Filename);
+  exit;
   try
     // load the xml config file
-    filename:=utf8tosys(sysparam.programpath+'components/'+{'defaultlayout.xml'}s);
     XMLConfig:=TXMLConfigStorage.Create(Filename,True);
     try
       // restore the layout
@@ -707,10 +733,13 @@ begin
   end;
   //result:=cmd_ok;
 end;
+
 procedure TMainFormN.setnormalfocus;
 begin
      if assigned(cmdedit) then
      if cmdedit.Enabled then
+     if cmdedit.{IsControlVisible}IsVisible then
+     if cmdedit.CanFocus then
      begin
      {if (GetParentForm(cmdedit)=Self) then
                                           ActiveControl:=cmdedit
@@ -1154,11 +1183,18 @@ begin
      LayoutBox.AddItem(copy(s,1,length(s)-4),nil);
 end;
 procedure TMainFormN.CreateLayoutbox(tb:TToolBar);
+var
+    s:string;
 begin
   LayoutBox:=TComboBox.Create(tb);
   LayoutBox.Style:=csDropDownList;
+  LayoutBox.Sorted:=true;
   FromDirIterator(sysparam.programpath+'components/','*.xml','',addfiletoLayoutbox,nil);
   LayoutBox.OnChange:=ChangeLayout;
+
+  s:=extractfilename(sysvar.PATH.LayoutFile^);
+  LayoutBox.ItemIndex:=LayoutBox.Items.IndexOf(copy(s,1,length(s)-4));
+
 end;
 procedure TMainFormN.ChangeLayout(Sender:Tobject);
 var
@@ -1167,7 +1203,8 @@ begin
   //LayoutBox.Items.Strings[LayoutBox.ItemIndex]:='1';
   //LayoutBox.text:=LayoutBox.text;
   s:=sysparam.programpath+'components/'+LayoutBox.text+'.xml';
-  LoadLayout_com(@s[1]);
+  //LoadLayout_com(@s[1]);
+  LoadLayoutFromFile(s);
   (*var
     XMLConfig: TXMLConfigStorage;
     filename:string;

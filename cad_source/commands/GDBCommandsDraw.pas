@@ -232,15 +232,13 @@ type
   ATO_com=object(CommandRTEdObject)
                          powner:PGDBObjDevice;
                          procedure CommandStart(Operands:pansichar); virtual;
+                         procedure ShowMenu;virtual;
                          procedure Run(pdata:GDBPlatformint); virtual;
-                         {created:boolean;
-                         bnames,textcontents,textremplates:GDBGDBStringArray;
-                         layers,weights,objtypes:GDBOpenArrayOfGDBPointer;
-                         procedure CommandStart(Operands:pansichar); virtual;
-                         procedure createbufs;
+          end;
+  CFO_com=object(ATO_com)
+                         procedure ShowMenu;virtual;
                          procedure Run(pdata:GDBPlatformint); virtual;
-                         procedure Sel(pdata:GDBPlatformint); virtual;}
-                   end;
+          end;
 
   ITT_com = object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;
@@ -280,6 +278,7 @@ var
    BlockReplaceParams:TBlockReplaceParams;
    SelSim:SelSim_com;
    ATO:ATO_com;
+   CFO:CFO_com;
    SelSimParams:TSelSimParams;
    BlockScaleParams:TBlockScaleParams;
    BlockScale:BlockScale_com;
@@ -657,6 +656,67 @@ begin
   pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pobj=nil;
 end;
+procedure CFO_com.ShowMenu;
+begin
+  commandmanager.DMAddMethod('Копировать','Копировать примитивы в выбраные устройства',run);
+  commandmanager.DMShow;
+end;
+procedure CFO_com.Run(pdata:GDBPlatformint);
+var
+   pobj,pvisible: pGDBObjDevice;
+   psubobj:PGDBObjEntity;
+   ir,ir2:itrec;
+   tp:gdbpointer;
+   m,m2:DMatrix4D;
+begin
+     m:=powner^.objmatrix;
+     m2:=m;
+     matrixinvert(m);
+     pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+     if pobj<>nil then
+     repeat
+           if pobj^.Selected then
+           if pobj<>pointer(powner) then
+           if pobj^.vp.ID=GDBDeviceID then
+           begin
+                psubobj:=pobj^.VarObjArray.beginiterate(ir2);
+                if psubobj<>nil then
+                repeat
+                      psubobj^.YouDeleted;
+                      psubobj:=pobj^.VarObjArray.iterate(ir2);
+                until psubobj=nil;
+
+                powner^.VarObjArray.cloneentityto(@pobj^.VarObjArray,psubobj);
+                pobj^.correctobjects(pointer(pobj^.bp.ListPos.Owner),pobj^.bp.ListPos.SelfIndex);
+                pobj.Format;
+
+                //pobj^.VarObjArray.free;
+           {powner^.objmatrix:=onematrix;
+           pvisible:=pobj^.Clone(@powner^);
+                    if pvisible^.IsHaveLCS then
+                               pvisible^.Format;
+           pvisible^.transform(m);
+           powner^.objmatrix:=m2;
+           pvisible^.format;
+           pvisible.BuildGeometry;
+           powner^.VarObjArray.add(@pvisible);
+           pobj^.YouDeleted;}
+           end;
+           pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+     until pobj=nil;
+     powner^.Format;
+     powner^.objmatrix:=m2;
+     powner:=nil;
+     Commandmanager.executecommandend;
+end;
+
+
+procedure ATO_com.ShowMenu;
+begin
+  commandmanager.DMAddMethod('Добавить','Добавить выбранные примитивы к устройству',run);
+  commandmanager.DMShow;
+end;
+
 procedure ATO_com.CommandStart(Operands:pansichar);
 var
    test:boolean;
@@ -669,9 +729,7 @@ begin
   test:=true;
   if test then
   begin
-       commandmanager.DMAddMethod('Добавить','Добавить выбранные примитивы к устройству',run);
-       //commandmanager.DMAddMethod('Найти','Найти подобные примитивы (если "шаблонные" примитивы не были запомнены, посиск пройдет во всем чертеже)',run);
-       commandmanager.DMShow;
+       showmenu;
        powner:=GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject;
        inherited CommandStart('');
   end
@@ -2571,6 +2629,7 @@ begin
   pbeditcom^.commanddata.PTD:=SysUnit.TypeName2PTD('TBEditParam');
 
   ATO.init('AddToOwner',0,0);
+  CFO.init('CopyFromOwner',0,0);
   SelSim.init('SelSim',0,0);
   SelSim.CEndActionAttr:=0;
   SelSimParams.General.SameEntType:=true;

@@ -69,7 +69,8 @@ const
      oi_hidden=11;
      oaod=12;
      oaopo=13;
-     maxobjmember=14;
+     propertymember=14;
+     maxobjmember=15;
      parseobjmember:array [1..maxobjmember] of td=
      (
       (template:'_softspace'#0'=(=*=O=p=e=n=A=r=r=a=y=O=f=P=O=b=j=*=)';id:oaopo),
@@ -85,7 +86,8 @@ const
       (template:'_softspace'#0'=(=*=h=i=d=d=e=n=_=i=n=_=o=b=j=i=n=s=p=*=)';id:oi_hidden),
       (template:'_identifiers_cs'#0'=:_identifier'#0'_softend'#0;id:field),
       (template:'_softspace'#0'=e=n=d_softspace'#0'=;';id:objend),
-      (template:'_softspace'#0'=(=*_GDBString'#0'=*=)';id:username)
+      (template:'_softspace'#0'=(=*_GDBString'#0'=*=)';id:username),
+      (template:'_softspace'#0'=p=r=o=p=e=r=t=y_hardspace'#0;id:propertymember)
       );
      varmode=1;
      typemode=2;
@@ -666,7 +668,7 @@ type
 var parseerror{,parsesuberror}:GDBBoolean;
     parseresult{,parsesubresult}:PGDBGDBStringArray;
     count,typ:GDBInteger;
-    {typename,}oldline, fieldname, {fieldvalue,} fieldtype, {sub, indmins, indmaxs, arrind1,}functionname,functionoperands: GDBString;
+    {typename,}oldline, fieldname, {fieldvalue,} fieldtype, {sub, indmins, indmaxs, arrind1,}rname,wname,functionname,functionoperands: GDBString;
     fieldgdbtype:PUserTypeDescriptor;
     i: GDBInteger;
 //  indmin, indcount, size: GDBLongword;
@@ -675,11 +677,13 @@ var parseerror{,parsesuberror}:GDBBoolean;
   state:trrstate;
   fieldsmode:(primary,calced);
   fd:FieldDescriptor;
+  pd:PropertyDescriptor;
   //a:word;
   //vv:smallint;
   mattr:GDBMetodModifier;
   //md:MetodDescriptor;
   pf:PFieldDescriptor;
+//function getla
 begin
      //vv:=fieldoffset;
      state:=fields;
@@ -732,6 +736,9 @@ begin
                                                        end;
                                                       {$ENDIF}
                                                   end;
+                               if functionname='getrot' then
+                                                                   functionname:=functionname;
+
                                if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                                repeat
                                line := f.readtoparser(';');
@@ -741,25 +748,26 @@ begin
                                                  mattr:=mattr or m_virtual;
                                             end;
                                mod_abstract:begin
+                                                 mattr:=mattr;
                                             end;
                                end;
                                if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
                                until typ=0;
-                               PObjectDescriptor(ptd)^.addmetod(functionname,functionoperands,nil,mattr);
+                               PObjectDescriptor(ptd)^.addmetod(ptd^.TypeName,functionname,functionoperands,nil,mattr);
                                //line:=oldline;
                                //typ:=0;
                           end;
            oi_hidden:
                           begin
                                //a:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.Attributes;
-                               PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.Attributes:=
-                               PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.Attributes or FA_HIDDEN_IN_OBJ_INSP;
+                               PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.base.Attributes:=
+                               PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP;
                           end;
            oi_readonly:
                        begin
                                //a:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.Attributes;
-                               PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.Attributes:=
-                               PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.Attributes or FA_READONLY;
+                               PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.base.Attributes:=
+                               PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.base.Attributes or FA_READONLY;
                           end;
            savedtoshd:
                       PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.saved:=
@@ -767,11 +775,11 @@ begin
            username:
                     begin
                       fieldtype:=parseresult^.getGDBString(0);
-                                            pf:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1));
+                      pf:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1));
                       if fieldtype='Paths' then
                                           fieldtype:=fieldtype;
-                      fieldtype:=InterfaceTranslate(ptd.TypeName+'~'+pf^.FieldName,fieldtype);
-                      pf^.username:={parseresult^.getGDBString(0)}fieldtype;
+                      fieldtype:=InterfaceTranslate(ptd.TypeName+'~'+pf^.base.ProgramName,fieldtype);
+                      pf^.base.username:={parseresult^.getGDBString(0)}fieldtype;
                       fieldtype:=parseresult^.getGDBString(0);
                     end;
            membermodifier:
@@ -779,6 +787,30 @@ begin
                                if state<>metods then FatalError('Syntax error in file '+f.name);
 
                           end;
+          propertymember:
+          begin
+               if state<>metods then FatalError('Syntax error in file '+f.name);
+               oldline:=line;
+               parseresult:=runparser('_softspace'#0'_identifier'#0'_softspace'#0'=:'#0'_softspace'#0'_identifier'#0'_softspace'#0'=r=e=a=d'#0'_softspace'#0'_identifier'#0'_softspace'#0'=w=r=i=t=e'#0'_softspace'#0'_identifier'#0'_softspace'#0'=;',line,parseerror);
+               if parseerror then
+                                  begin
+                                       pd.base.ProgramName:=parseresult^.getGDBString(0);
+                                       fieldtype:=parseresult^.getGDBString(1);
+                                       fieldgdbtype:=PTUnit(PRecordDescriptor(ptd)^.punit).TypeName2PTD(fieldtype);
+                                       pd.base.PFT:=fieldgdbtype;
+                                       pd.r:=parseresult^.getGDBString(2);
+                                       pd.w:=parseresult^.getGDBString(3);
+                                       if ptd<>nil then PObjectDescriptor(ptd)^.AddProperty(pd);
+                                  end
+                              else
+                                  begin
+                                       {$IFDEF BREACKPOINTSONERRORS}
+                                       asm
+                                          int 3;
+                                       end;
+                                      {$ENDIF}
+                                  end;
+          end;
                     field:
                           begin
                                if state=metods then FatalError('Syntax error in file '+f.name)
@@ -802,17 +834,17 @@ begin
                                                                                    else GDBStringtypearray := GDBStringtypearray+'C';
                                                              //GDBStringtypearray := GDBStringtypearray + char(fieldsmode);
                                                              //GDBStringtypearray := GDBStringtypearray + pac_GDBWord_to_GDBString(fieldgdbtype.gdbtypecustom) + pac_lGDBWord_to_GDBString(fieldgdbtype.sizeinmem);
-                                                             fd.FieldName:=fieldname;
-                                                             fd.PFT:=fieldgdbtype;
-                                                             GDBPointer(fd.UserName):=nil;
+                                                             fd.base.ProgramName:=fieldname;
+                                                             fd.base.PFT:=fieldgdbtype;
+                                                             GDBPointer(fd.base.UserName):=nil;
                                                              //fd.UserName:='sdfsdf';
-                                                             fd.Attributes:=0;
+                                                             fd.base.Attributes:=0;
                                                              fd.Saved:=0;
                                                              fd.Collapsed:=true;
                                                              //if fieldsmode<>primary then fd.Attributes:=fd.Attributes or FA_CALCULATED;
                                                              fd.Offset:=fieldoffset;
-                                                             if fd.PFT<>nil then
-                                                                                fd.Size:=fd.PFT^.SizeInGDBBytes
+                                                             if fd.base.PFT<>nil then
+                                                                                fd.Size:=fd.base.PFT^.SizeInGDBBytes
                                                                             else
                                                                                 fd.Size:=1;
                                                              //if PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count))^.username=''

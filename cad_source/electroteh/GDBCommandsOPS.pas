@@ -906,26 +906,26 @@ begin
           TODPCT_by_Count:begin
                                pf:=pcfd^.FindField('NX');
                                if pf<>nil then
-                                              pf^.Attributes:=pf.Attributes or FA_READONLY;
+                                              pf^.base.Attributes:=pf.base.Attributes or FA_READONLY;
 
                                pf:=pcfd^.FindField('NY');
                                if pf<>nil then
-                                              pf^.Attributes:=pf.Attributes or FA_READONLY;
+                                              pf^.base.Attributes:=pf.base.Attributes or FA_READONLY;
                                pf:=pcfd^.FindField('Count');
                                if pf<>nil then
-                                              pf^.Attributes:=pf.Attributes and (not FA_READONLY);
+                                              pf^.base.Attributes:=pf.base.Attributes and (not FA_READONLY);
                           end;
           TODPCT_by_XY:begin
                                pf:=pcfd^.FindField('NX');
                                if pf<>nil then
-                                              pf^.Attributes:=pf.Attributes and (not FA_READONLY);
+                                              pf^.base.Attributes:=pf.base.Attributes and (not FA_READONLY);
 
                                pf:=pcfd^.FindField('NY');
                                if pf<>nil then
-                                              pf^.Attributes:=pf.Attributes and (not FA_READONLY);
+                                              pf^.base.Attributes:=pf.base.Attributes and (not FA_READONLY);
                                pf:=pcfd^.FindField('Count');
                                if pf<>nil then
-                                              pf^.Attributes:=pf.Attributes or FA_READONLY;
+                                              pf^.base.Attributes:=pf.base.Attributes or FA_READONLY;
                        end;
      end;
 end;

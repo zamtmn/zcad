@@ -102,7 +102,15 @@ var pdesc:controlpointdesc;
     ir:itrec;
     pv,pvc:pgdbobjEntity;
 begin
+          if assigned(SysVar.DWG.DWG_AdditionalGrips)then
+          begin
+          if SysVar.DWG.DWG_AdditionalGrips^ then
+          begin
+               PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{E8AC77BE-9C28-4A6E-BB1A-D5F8729BDDAD}',{$ENDIF}1);
+          end
+          else
           inherited addcontrolpoints(tdesc);
+          end;
 
           pdesc.selected:=false;
           pdesc.pobject:=nil;

@@ -74,6 +74,7 @@ begin
      inherited;
      Local.ox:=PGDBVertex(@objmatrix[0])^;
      Local.oy:=PGDBVertex(@objmatrix[1])^;
+     Local.oz:=PGDBVertex(@objmatrix[2])^;
 
      Local.ox:=normalizevertex(Local.ox);
      Local.oy:=normalizevertex(Local.oy);

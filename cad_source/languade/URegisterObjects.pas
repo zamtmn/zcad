@@ -32,11 +32,11 @@ procedure startup;
 begin
      potd:=PObjectDescriptor(SysUnit^.TypeName2PTD('GDBBaseCamera'));
      potd^.RegisterObject(typeof(GDBBaseCamera),@GDBBaseCamera.initnul);
-     potd^.AddMetod('initnul','',@GDBBaseCamera.initnul,m_constructor);
+     potd^.AddMetod('','initnul','',@GDBBaseCamera.initnul,m_constructor);
 
      potd:=PObjectDescriptor(SysUnit^.TypeName2PTD('GDBObjCamera'));
      potd^.RegisterObject(typeof(GDBObjCamera),@GDBObjCamera.initnul);
-     potd^.AddMetod('initnul','',@GDBObjCamera.initnul,m_constructor);
+     potd^.AddMetod('','initnul','',@GDBObjCamera.initnul,m_constructor);
 
      potd:=PObjectDescriptor(SysUnit^.TypeName2PTD('GDBDescriptor'));
      potd^.RegisterObject(typeof(GDBDescriptor),@GDBDescriptor.initnul);

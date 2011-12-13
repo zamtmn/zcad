@@ -30,7 +30,6 @@ uses
 
   splashwnd,
 
-
   memman,log,sysinfo,
 
   varmandef,

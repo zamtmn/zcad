@@ -150,12 +150,23 @@ GDBObjEntity=object(GDBObjSubordinated)
 
                     function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
 
-                    function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;abstract;
+                    function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
+                    function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
               end;
 {Export-}
 var onlygetsnapcount:GDBInteger;
 implementation
 uses UGDBEntTree,GDBGenericSubEntry,UGDBDescriptor,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+function GDBObjEntity.EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;
+begin
+
+end;
+
+function GDBObjEntity.GetTangentInPoint(point:GDBVertex):GDBVertex;
+begin
+     result:=nulvertex;
+end;
+
 function GDBObjEntity.IsHaveLCS:GDBBoolean;
 begin
      result:=false;
@@ -605,9 +616,9 @@ begin
                                            pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.beginiterate(ir2);
                                            if pfd<>nil then
                                            repeat
-                                                 str:='$'+inttostr(i)+'='+pvd^.name+'|'+pfd^.FieldName+'|'+pfd^.PFT^.GetValueAsString(tp);
+                                                 str:='$'+inttostr(i)+'='+pvd^.name+'|'+pfd^.base.ProgramName+'|'+pfd^.base.PFT^.GetValueAsString(tp);
                                                  dxfGDBStringout(handle,1000,str);
-                                                 ptruint(tp):=ptruint(tp)+pfd^.PFT^.SizeInGDBBytes; { TODO : сделать на оффсете }
+                                                 ptruint(tp):=ptruint(tp)+pfd^.base.PFT^.SizeInGDBBytes; { TODO : сделать на оффсете }
                                                  inc(i);
                                                  pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.iterate(ir2);
                                            until pfd=nil;

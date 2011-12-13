@@ -76,12 +76,19 @@ GDBObjCircle=object(GDBObjWithLocalCS)
                  function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                  procedure ReCalcFromObjMatrix;virtual;
 
+                 function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
+
 
            end;
 {Export-}
 implementation
 uses
     log;
+function GDBObjCircle.GetTangentInPoint(point:GDBVertex):GDBVertex;
+begin
+     point:=geometry.VertexSub(self.P_insert_in_WCS,point);
+     result:=normalizevertex(geometry.vectordot(point,self.Local.oz));
+end;
 procedure GDBObjCircle.ReCalcFromObjMatrix;
 var
     ox:gdbvertex;
@@ -484,8 +491,11 @@ begin
       result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum);
 end;
 function GDBObjCircle.getsnap;
+var
+   tv,n,v:gdbvertex;
+   plane:DVector4D;
 begin
-     if onlygetsnapcount=5 then
+     if onlygetsnapcount=6 then
      begin
           result:=false;
           exit;
@@ -540,8 +550,31 @@ begin
             osp.dispcoord:=pq3;
             osp.ostype:=os_q3;
             end
-            else osp.ostype:=os_none;
        end;
+     5:begin
+            if (sysvar.dwg.DWG_OSMode^ and osm_nearest)<>0
+            then
+            begin
+            osp.ostype:=os_none;
+            plane:=PlaneFrom3Pont(q0,q1,q2);
+            Normalizeplane(plane);
+            if
+            PointOfLinePlaneIntersect(GDB.GetCurrentDWG.OGLwindow1.param.md.mouseraywithoutOS.lbegin,
+                                      GDB.GetCurrentDWG.OGLwindow1.param.md.mouseraywithoutOS.dir,
+                                      plane,tv)
+            then
+            begin
+                 n:=geometry.VertexSub(tv,P_insert_in_WCS);
+                 n:=geometry.NormalizeVertex(n);
+                 n:=geometry.VertexMulOnSc(n,radius);
+                 osp.worldcoord:=geometry.VertexAdd(P_insert_in_WCS,n);
+                 gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,tv);
+                 osp.dispcoord:=tv;
+                 osp.ostype:=os_nearest;
+            end;
+            end
+       end
+     else osp.ostype:=os_none;
      end;
      inc(onlygetsnapcount);
 end;

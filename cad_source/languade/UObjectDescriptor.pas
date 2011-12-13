@@ -33,17 +33,21 @@ ObjectDescriptor=object(RecordDescriptor)
                        LincedData:GDBString;
                        LincedObjects:GDBboolean;
                        ColArray:GDBOpenArrayOfByte;
+                       Properties:GDBOpenArrayOfData;
 
 
                        constructor init(tname:string;pu:pointer);
-                       function CreateProperties(PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
+                       function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                        procedure CopyTo(RD:PTUserTypeDescriptor);
                        procedure RegisterVMT(pv:GDBPointer);
                        procedure RegisterDefaultConstructor(pv:GDBPointer);
                        procedure RegisterObject(pv,pc:GDBPointer);
-                       procedure AddMetod(mn,dt:GDBString;ma:GDBPointer;attr:GDBMetodModifier);
-                       function FindMetod(mn:GDBString):PMetodDescriptor;virtual;
+                       procedure AddMetod(objname,mn,dt:GDBString;ma:GDBPointer;attr:GDBMetodModifier);
+                       procedure AddProperty(var pd:PropertyDescriptor);
+                       function FindMetod(mn:GDBString;obj:GDBPointer):PMetodDescriptor;virtual;
+                       function FindMetodAddr(mn:GDBString;obj:GDBPointer;out pmd:pMetodDescriptor):TMethod;virtual;
                        procedure RunMetod(mn:GDBString;obj:GDBPointer);
+                       procedure SimpleRunMetodWithArg(mn:GDBString;obj,arg:GDBPointer);
                        procedure RunDefaultConstructor(PInstance:GDBPointer);
                        function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                        function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
@@ -52,7 +56,15 @@ ObjectDescriptor=object(RecordDescriptor)
                        procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
                  end;
 implementation
-uses {ZBasicVisible,}varman{,UGDBDescriptor}{,shared};
+uses {ZBasicVisible,}varman{,UGDBDescriptor}{,shared},lineinfo;
+procedure ObjectDescriptor.AddProperty(var pd:PropertyDescriptor);
+begin
+     Properties.add(@pd);
+     GDBPointer(pd.base.ProgramName):=nil;
+     GDBPointer(pd.r):=nil;
+     GDBPointer(pd.w):=nil;
+end;
+
 procedure ObjectDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);
 //var pd:PFieldDescriptor;
 //    d:FieldDescriptor;
@@ -183,13 +195,20 @@ end;
 procedure freemetods(p:GDBPointer);
 begin
      PMetodDescriptor(p)^.MetodName:='';
+     PMetodDescriptor(p)^.ObjName:='';
      PMetodDescriptor(p)^.Operands.done;
+end;
+procedure FREEPROP(p:GDBPointer);
+begin
+     PPropertyDescriptor(p)^.base.ProgramName:='';
+     PPropertyDescriptor(p)^.base.UserName:='';
 end;
 destructor ObjectDescriptor.done;
 begin
      //destructor FreewithprocAndDone(freeproc:freeelproc);virtual;
      //SimpleMenods.FreewithprocAndDone(freemetods);
      SimpleMenods.FreeAndDone;
+     fields.FreewithprocAndDone(freeprop);
      parent:=nil;
      ColArray.done;
      LincedData:='';
@@ -204,6 +223,7 @@ END;}
 begin
      inherited init(tname,pu);
      SimpleMenods.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20,sizeof(MetodDescriptor));
+     Properties.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20,sizeof(PropertyDescriptor));
      pvmt:=nil;
      {$IFDEF FPC}VMTCurrentOffset:=12;{$ENDIF}
      {$IFDEF CPU64}VMTCurrentOffset:=24{sizeof(VMT)};{$ENDIF}
@@ -217,17 +237,17 @@ procedure ObjectDescriptor.AddMetod;
 var pcmd:pMetodDescriptor;
     pmd:PMetodDescriptor;
 begin
-     pmd:=FindMetod(mn);
+     pmd:=FindMetod(mn,nil);
      if pmd=nil then
                     begin
                          pcmd:=pointer(SimpleMenods.CreateObject);
                          if (attr and m_virtual)=0 then
-                                                       pcmd.init(mn,dt,ma,attr,punit)
+                                                       pcmd.init(objname,mn,dt,ma,attr,punit)
                                                    else
                                                        begin
                                                             if uppercase(mn)='FORMAT' then
                                                                                            mn:=mn;
-                                                            pcmd.init(mn,dt,pointer(vmtcurrentoffset),attr,punit);
+                                                            pcmd.init(objname,mn,dt,pointer(vmtcurrentoffset),attr,punit);
                                                             inc(vmtcurrentoffset,{4 cpu64}sizeof(pointer));
                                                        end;
                          //SimpleMenods.add(@pcmd);
@@ -283,11 +303,29 @@ end;
 function ObjectDescriptor.FindMetod;
 var pmd:pMetodDescriptor;
     ir:itrec;
+    f,s:shortstring;
+    l:longint;
+    tm:tmethod;
 begin
      result:=nil;
      pmd:=SimpleMenods.beginiterate(ir);
      if pmd<>nil then
      repeat
+           {if PVMT<>nil then
+           begin
+                 if (pmd^.Attributes and m_virtual)<>0 then
+                                             begin
+                                                  tm.Code:=
+                                                  ppointer(GDBPlatformint(self.PVMT)+
+                                                  GDBPlatformint(pmd^.MetodAddr))^;
+                                             end
+                                         else
+                                             begin
+                                                  tm.Code:=pmd^.MetodAddr;
+                                             end;
+           if GetLineInfo(ptruint(tm.Code),f,s,l) then
+                                                      programlog.logoutstr(pmd^.MetodName+' '+pmd^.objname + ' '+f+' '+s,0);
+           end;}
            if uppercase(pmd^.MetodName)=uppercase(mn) then
            begin
                 result:=pmd;
@@ -296,39 +334,71 @@ begin
            pmd:=SimpleMenods.iterate(ir);
      until pmd=nil;
 end;
+function ObjectDescriptor.FindMetodAddr(mn:GDBString;obj:GDBPointer;out pmd:pMetodDescriptor):TMethod;
+begin
+     pmd:=findmetod(mn,obj);
+     if pmd<>nil then
+     begin
+     result.Data:=obj;
+     if (pmd^.Attributes and m_virtual)<>0 then
+                                            begin
+                                                 result.Code:=
+                                                 ppointer(GDBPlatformint(self.PVMT)+
+                                                 GDBPlatformint(pmd^.MetodAddr){+12})^;
+                                            end
+                                        else
+                                            begin
+                                                 result.Code:=pmd^.MetodAddr;
+                                            end;
+     end
+     else
+     begin
+          result.Data:=obj;
+          result.Code:=nil;
+     end;
+end;
+procedure ObjectDescriptor.SimpleRunMetodWithArg(mn:GDBString;obj,arg:GDBPointer);
+var pmd:pMetodDescriptor;
+    tm:tmethod;
+begin
+     tm:=FindMetodAddr(mn,obj,pmd);
+     if pmd=nil then exit;
+     case (pmd^.Attributes)and(not m_virtual) of
+     m_procedure:
+                 begin
+                      SimpleProcOfObjDouble(tm)(PGDBDouble(arg)^);
+                 end;
+     m_function:PGDBDouble(arg)^:=SimpleFuncOfObjDouble(tm);
+     end;
+end;
+
 procedure ObjectDescriptor.RunMetod;
 var pmd:pMetodDescriptor;
-//    pp:SimpleProcOfObj;
     tm:tmethod;
     {$IFDEF fpc}
     p:GDBPointer;
     ppp:pointer;
     {$ENDIF}
-    deb:integer;
-//    ppp2:pointer;
-//    ps:gdbstring;
 begin
       {$IFDEF fpc}
       ppp:=@self;
       p:=pvmt;
       {$ENDIF}
-      pmd:=findmetod(mn);
-      tm.Data:=obj;
+      //pmd:=findmetod(mn,obj);
+      tm:=FindMetodAddr(mn,obj,pmd);
+      if pmd=nil then exit;
+      {tm.Data:=obj;
       if (pmd^.Attributes and m_virtual)<>0 then
                                              begin
                                                   tm.Code:=
                                                   ppointer(GDBPlatformint(self.PVMT)+
-                                                  GDBPlatformint(pmd^.MetodAddr){+12})^;
+                                                  GDBPlatformint(pmd^.MetodAddr))^;
                                              end
                                          else
                                              begin
                                                   tm.Code:=pmd^.MetodAddr;
                                              end;
-      deb:=(pmd^.Attributes)and(not m_virtual);
-      {if ((pmd^.Attributes)and(not m_virtual))=m_procedure then
-                  begin
-                       pgdbaseobject(obj)^.Format;
-                  end;}
+      deb:=(pmd^.Attributes)and(not m_virtual);}
       case (pmd^.Attributes)and(not m_virtual) of
       m_procedure:
                   begin
@@ -427,6 +497,7 @@ begin
            pointer(pcmd):=PObjectDescriptor(rd)^.SimpleMenods.createobject;
            pcmd^.initnul;
            pcmd.MetodName:=pmd^.MetodName;
+           pcmd.objname:=pmd^.objname;
            pcmd.OperandsName:=pmd^.OperandsName;
            pcmd.ResultPTD:=pmd^.ResultPTD;
            pcmd.MetodAddr:=pmd^.MetodAddr;
@@ -444,11 +515,22 @@ function ObjectDescriptor.GetTypeAttributes;
 begin
      result:=TA_COMPOUND or TA_OBJECT;
 end;
+function processPROPERTYppd({ppd:PPropertyDeskriptor;}pp:PPropertyDescriptor):GDBPointer;
+begin
+     //ppd.mode:=PDM_Property;
+     //ppd^.Name:=pp^.PropertyName;
+     //ppd^.PTypeManager:=pp^.PFT;
+     //if ppd^.valueAddres=nil then
+                                 begin
+                                      GDBGetmem({$IFDEF DEBUGBUILD}'{4ADDC0E7-C264-4A97-A3E4-AA08E702E3AC}',{$ENDIF}{ppd^.valueAddres}result,pp^.base.PFT.SizeInGDBBytes);
+                                 end;
+end;
 function ObjectDescriptor.CreateProperties;
 var
    pld:PtUserTypeDescriptor;
-   p:pointer;
-   objtypename:string;
+   p,p2:pointer;
+   pp:PPropertyDescriptor;
+   objtypename,propname:string;
    ir,ir2:itrec;
    baddr{,b2addr,eaddr}:GDBPointer;
 //   ppd:PPropertyDeskriptor;
@@ -457,11 +539,38 @@ var
    ts:PTPropertyDeskriptorArray;
    sca,sa:GDBINTEGER;
    pcol:pboolean;
-
+   ppd:PPropertyDeskriptor;
 begin
      baddr:=addr;
      //b2addr:=baddr;
-     ts:=inherited CreateProperties(PPDA,Name,PCollapsed,ownerattrib,bmode,addr,valkey,valtype);
+     ts:=inherited CreateProperties(PDM_Field,PPDA,Name,PCollapsed,ownerattrib,bmode,addr,valkey,valtype);
+
+     pp:=Properties.beginiterate(ir);
+     if pp<>nil then
+     repeat
+           if pp^.base.UserName='' then
+                                  propname:=pp^.base.ProgramName
+                              else
+                                  propname:=pp^.base.UserName;
+
+           if bmode=property_build then
+                                       p:=processPROPERTYppd({ppd{,}pp)
+                                   else
+                                       begin
+                                            ppd:=ppda^.getelement(abs(bmode)-1);
+                                            ppd:=pGDBPointer(ppd)^;
+                                            ppd.r:=pp.r;
+                                            ppd.w:=pp.w;
+                                            p:=ppd^.valueAddres;
+                                       end;
+           ObjectDescriptor.SimpleRunMetodWithArg(pp.r,baddr,p);
+           p2:=p;
+           PTUserTypeDescriptor(pp^.base.PFT)^.CreateProperties(PDM_Property,PPDA,propname,@pp^.collapsed,{ppd^.Attr}pp^.base.Attributes or ownerattrib,bmode,p,'','');
+
+           pp:=Properties.iterate(ir);
+     until pp=nil;
+
+
      if bmode<>property_build then exit;
 
      //-------------------------ownerattrib:=ownerattrib or FA_READONLY;
@@ -527,7 +636,7 @@ begin
                    //b2addr:=p;
                    //pcol^:=false;
                    //---------------------------------if bmode=property_build then
-                                               pld^.CreateProperties({PPDA}ts,LincedData,pcol{PCollapsed}{field_no_attrib},ownerattrib,bmode,p,'','');
+                                               pld^.CreateProperties(PDM_Field,{PPDA}ts,LincedData,pcol{PCollapsed}{field_no_attrib},ownerattrib,bmode,p,'','');
                    //p:=b2addr;
                    pcol:=colarray.iterate(ir2);
                    p:=PGDBOpenArrayOfData(baddr)^.iterate(ir);
@@ -544,7 +653,7 @@ begin
                    objtypename:=PGDBaseObject(P)^.GetObjName{ObjToGDBString('','')};
                    pld:=pointer(SysUnit.TypeName2PTD(PGDBaseObject(P)^.GetObjTypeName));
                    if bmode=property_build then
-                                               pld^.CreateProperties({PPDA}ts,objtypename,pcol{PCollapsed}{field_no_attrib},ownerattrib,bmode,p,'','');
+                                               pld^.CreateProperties(PDM_Field,{PPDA}ts,objtypename,pcol{PCollapsed}{field_no_attrib},ownerattrib,bmode,p,'','');
                    pcol:=colarray.iterate(ir2);
                    p:=PGDBOpenArrayOfData(baddr)^.iterate(ir);
              until p=nil;

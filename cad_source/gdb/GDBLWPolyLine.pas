@@ -66,10 +66,62 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+                 function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
+
+
            end;
 {Export-}
 implementation
 uses UGDBSelectedObjArray,log;
+function GDBObjLWpolyline.GetTangentInPoint(point:GDBVertex):GDBVertex;
+var //tv:gdbvertex;
+    ptv,ppredtv:pgdbvertex;
+    ir:itrec;
+    found:integer;
+
+begin
+     if not closed then
+                   begin
+                        ppredtv:=Vertex3D_in_WCS_Array.beginiterate(ir);
+                        ptv:=Vertex3D_in_WCS_Array.iterate(ir);
+                   end
+                else
+                    begin
+                           if Vertex3D_in_WCS_Array.Count<3 then
+                                                        exit;
+                           ptv:=Vertex3D_in_WCS_Array.beginiterate(ir);
+                           ppredtv:=Vertex3D_in_WCS_Array.getelement(Vertex3D_in_WCS_Array.Count-1);
+                    end;
+  found:=0;
+  if (ptv<>nil)and(ppredtv<>nil) then
+  repeat
+        if (abs(ptv^.x-point.x)<eps)
+       and (abs(ptv^.y-point.y)<eps)
+       and (abs(ptv^.z-point.z)<eps)
+                                             then
+                                                 begin
+                                                      found:=2;
+                                                 end
+   else if (found=0)and({distance2piece}SQRdist_Point_to_Segment(point,ppredtv^,ptv^)<bigeps) then begin
+                                                          found:=1;
+                                                     end;
+
+        if found>0 then
+                       begin
+                            result:=vertexsub(ptv^,ppredtv^);
+                            result:=geometry.NormalizeVertex(result);
+                            exit;
+                            //processaxis(posr,result);
+                            //result:=geometry.CrossVertex(tv,zwcs);
+                            //processaxis(posr,result);
+                            dec(found);
+                       end;
+
+        ppredtv:=ptv;
+        ptv:=Vertex3D_in_WCS_Array.iterate(ir);
+  until ptv=nil;
+end;
+
 {function GDBObjLWpolyline.InRect;
 var i:GDBInteger;
     ptpv:PGDBPolyVertex2D;

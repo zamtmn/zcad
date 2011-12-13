@@ -80,6 +80,8 @@ GDBObjLine=object(GDBObj3d)
                   function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                   procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                   function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
+
+                  function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
            end;
 {Export-}
 ptlinertmodify=^tlinertmodify;
@@ -88,6 +90,10 @@ tlinertmodify=record
                 end;
 implementation
 uses GDBElLeader,GDBNet,log;
+function GDBObjLine.GetTangentInPoint(point:GDBVertex):GDBVertex;
+begin
+     result:=normalizevertex(dir);
+end;
 function GDBObjLine.FromDXFPostProcessBeforeAdd;
 var
 //    pvisible:PGDBObjEntity;

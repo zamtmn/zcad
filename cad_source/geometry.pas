@@ -141,8 +141,9 @@ function LookAt(point,ex,ey,ez:GDBvertex;const matrix:PDMatrix4D):DMatrix4D;inli
 
 function calcfrustum(const clip:PDMatrix4D):cliparray;inline;
 function PointOf3PlaneIntersect(const P1,P2,P3:DVector4D):GDBVertex;inline;
-function PointOfLinePlaneIntersect(const p1,d:GDBVertex;const plane:DVector4D;var point :GDBVertex):GDBBoolean;inline;
+function PointOfLinePlaneIntersect(const p1,d:GDBVertex;const plane:DVector4D;var point :GDBVertex):GDBBoolean;{inline;}
 function PlaneFrom3Pont(const P1,P2,P3:GDBVertex):DVector4D;inline;
+procedure NormalizePlane(var plane:DVector4D);{inline;}
 
 procedure concatBBandPoint(var fistbb:GDBBoundingBbox;const point:GDBvertex);inline;
 
@@ -441,6 +442,16 @@ begin
      result:=VertexMulOnSc(a1,-a4);
 
 end;
+procedure NormalizePlane(var plane:DVector4D);{inline;}
+var t:GDBDouble;
+begin
+  t := sqrt( plane[0] * plane[0] + plane[1] * plane[1] + plane[2] * plane[2] );
+  plane[0] := plane[0]/t;
+  plane[1] := plane[1]/t;
+  plane[2] := plane[2]/t;
+  plane[3] := plane[3]/t;
+end;
+
 function PlaneFrom3Pont(const P1,P2,P3:GDBVertex):DVector4D;
 //var
 //   N1,N2,N3,N12,N23,N31,a1,a2,a3:GDBVertex;

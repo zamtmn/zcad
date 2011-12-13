@@ -32,7 +32,7 @@ ArrayDescriptor=object(TUserTypeDescriptor)
                      Indexs:GDBOpenArrayOfData;
                      constructor init(var t:PUserTypeDescriptor;tname:string;pu:pointer);
                      procedure AddIndex(var Index:ArrayIndexDescriptor);
-                     function CreateProperties(PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
+                     function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
                end;
 implementation

@@ -687,7 +687,7 @@ begin
     XMLConfig.Filename:=Filename;
     Config:=TXMLConfigStorage.Create(XMLConfig);
     try
-      DockMaster.LoadLayoutFromConfig(Config,true);
+      DockMaster.LoadLayoutFromConfig(Config,{true}false);
     finally
       Config.Free;
     end;

@@ -61,7 +61,7 @@ GDBObjBlockInsert=object(GDBObjComplex)
                      function getrot:GDBDouble;virtual;
                      procedure setrot(r:GDBDouble);virtual;
 
-                     property rot:GDBDouble read getrot write setrot;
+                     property testrotate:GDBDouble read getrot write setrot;(*'Rotate'*)
 
                      //function ProcessFromDXFObjXData(_Name,_Value:GDBString):GDBBoolean;virtual;
                   end;

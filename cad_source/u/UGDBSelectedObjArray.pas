@@ -19,7 +19,7 @@
 unit UGDBSelectedObjArray;
 {$INCLUDE def.inc}
 interface
-uses GDBWithMatrix,GDBEntity,UGDBControlPointArray,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
+uses GDBWithLocalCS,GDBWithMatrix,GDBEntity,UGDBControlPointArray,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
      gl,
      gdbasetypes{,varmandef,gdbobjectsconstdef},memman,OGLSpecFunc;
 type
@@ -236,12 +236,135 @@ begin
   end;
   result:=td;
 end;
+
+(*procedure processobject(pobj:PGDBObjEntity;minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
+var i: GDBInteger;
+  m,m2,oplus,ominus:DMatrix4D;
+  tv,P_insert_in_OCS,P_insert_in_WCS:gdbvertex;
+begin
+  pobj^.Transform(minusd);
+
+  //1) Делаем M единичной
+  m:=onematrix;
+  //2) Сдвигаем в начало координат. Для этого выдираем из матрицы объекта элементы
+  //отвечающие за смещение, и строим на них матрицу сдвига в начало координат - minus
+  //и вторую, для сдвига обратно - plus.Умножаем М на матрицу сдвига в начало системы
+  m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
+  P_insert_in_OCS:=PGDBVertex(@m[3])^;
+  ominus:=geometry.CreateTranslationMatrix(geometry.MinusVertex(P_insert_in_OCS));
+  oplus:=geometry.CreateTranslationMatrix(P_insert_in_OCS);
+  m:=geometry.MatrixMultiply(m,ominus);
+
+  //3) Выравниваем оси по глобальной СКО. Берем матрицу из объекта Mobj и удаляем
+  //у нее элементы сдвига, потом инвертируем (или транспонируем, для матриц
+  //вращения это одно и то же). M = M*Mobj_inv
+  m2:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
+  PGDBVertex(@m2[3])^:=nulvertex;
+  matrixinvert(m2);
+  m:=geometry.MatrixMultiply(m,m2);
+
+  //4) Выравниваем оси по СКО приемника. Выдираем матрицу из приемника - Mdest,
+  //обнуляем ей элементы сдвига и умножаем на M: M = M*Mdest
+  m:=geometry.MatrixMultiply(m,rm);
+
+  //5) Двигаем объект обратно. M = M*plus
+  m:=geometry.MatrixMultiply(m,oplus);
+
+
+  //6) Двигаем объект в точку крепежа на приемнике. Составляем матрицу сдвига
+  //Мpick на основе вектора Vpick - Vobj (точка крепежа минус положение объекта).
+  //M = M*Mpck.
+  //7) Двигаем объект с учетом смещения точки крепежа исходного объекта внутри
+  //его локальной системы координат. Ну думаю сообразишь.
+
+  pobj^.Transform(m);
+
+  pobj^.Transform(plusd);
+  PGDBObjWithMatrix(pobj)^.ReCalcFromObjMatrix;
+  PGDBObjWithMatrix(pobj)^.Format;
+end;
+
+*)
+procedure processobject(pobj:PGDBObjEntity;minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
+var i: GDBInteger;
+  m,oplus,ominus:DMatrix4D;
+  tv,P_insert_in_OCS,P_insert_in_WCS:gdbvertex;
+begin
+  pobj^.Transform(minusd);
+
+  m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
+  P_insert_in_OCS:=PGDBVertex(@m[3])^;
+  PGDBVertex(@m[3])^:=nulvertex;
+  matrixinvert(m);
+  P_insert_in_WCS:=VectorTransform3D(P_insert_in_OCS,m);
+  m:=onematrix;
+  PGDBVertex(@m[3])^:=P_insert_in_wCS;
+  PGDBObjWithMatrix(pobj)^.ObjMatrix:=m;
+  pobj^.Transform(rm);
+
+  pobj^.Transform(plusd);
+  PGDBObjWithMatrix(pobj)^.ReCalcFromObjMatrix;
+  PGDBObjWithMatrix(pobj)^.Format;
+end;
+
+(*procedure processobject(pobj:PGDBObjEntity;minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
+var i: GDBInteger;
+//  d: GDBDouble;
+//  td:tcontrolpointdist;
+  m,m2,oplus,ominus:DMatrix4D;
+  tv:gdbvertex;
+  l1,l2:GDBObj2dprop;
+{
+pobj^.Transform(minusd);
+m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
+PGDBVertex(@m[3])^:=nulvertex;
+matrixinvert(m);
+pobj^.Transform(m);
+pobj^.Transform(rm);
+pobj^.Transform(plusd);
+PGDBObjWithMatrix(pobj)^.ReCalcFromObjMatrix;
+PGDBObjWithMatrix(pobj)^.Format;
+}
+begin
+  l1:=PGDBObjWithLocalCS(pobj)^.Local;
+  m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
+  pobj^.Transform({minusd}onematrix);
+  l2:=PGDBObjWithLocalCS(pobj)^.Local;
+  //m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
+  //PGDBVertex(@m[3])^:=nulvertex;
+  //matrixinvert(m);
+  //pobj^.Transform(m);
+  //pobj^.Transform(rm);
+  pobj^.Transform({plusd}onematrix);
+  m2:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
+  l2:=PGDBObjWithLocalCS(pobj)^.Local;
+  //PGDBObjWithMatrix(pobj)^.ReCalcFromObjMatrix;
+  m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
+  PGDBObjWithMatrix(pobj)^.Format;
+  m2:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
+  {pobj^.Transform(minusd);
+  m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
+  tv:=vectortransform3d(nulvertex,m);
+  oplus:=geometry.CreateTranslationMatrix(tv);
+  ominus:=geometry.CreateTranslationMatrix(createvertex(-tv.x,-tv.y,-tv.z));
+  PGDBVertex(@m[3])^:=nulvertex;
+  matrixinvert(m);
+  PGDBObjWithMatrix(pobj)^.ObjMatrix:=onematrix;
+  //pobj^.Transform(m);
+  pobj^.Transform(oplus);
+  pobj^.Transform(rm);
+  pobj^.Transform(plusd);
+  PGDBObjWithMatrix(pobj)^.ReCalcFromObjMatrix;
+  PGDBObjWithMatrix(pobj)^.Format;}
+end;
+*)
 procedure GDBSelectedObjArray.SetRotate(minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
 var i: GDBInteger;
 //  d: GDBDouble;
 //  td:tcontrolpointdist;
   tdesc:pselectedobjdesc;
-  m:DMatrix4D;
+  m,oplus:DMatrix4D;
+  tv:gdbvertex;
 begin
   if count > 0 then
   begin
@@ -251,22 +374,7 @@ begin
       if tdesc^.pcontrolpoint<>nil then
         if tdesc^.pcontrolpoint^.SelectedCount<>0 then
         begin
-             tdesc^.ptempobj^.Transform(minusd);
-             m:=PGDBObjWithMatrix(tdesc^.ptempobj)^.ObjMatrix;
-             PGDBVertex(@m[3])^:=nulvertex;
-             matrixinvert(m);
-             tdesc^.ptempobj^.Transform(m);
-             tdesc^.ptempobj^.Transform(rm);
-             {PGDBVertex(@PGDBObjWithMatrix(tdesc^.ptempobj)^.ObjMatrix[0])^:=x;
-             PGDBVertex(@PGDBObjWithMatrix(tdesc^.ptempobj)^.ObjMatrix[1])^:=y;
-             PGDBVertex(@PGDBObjWithMatrix(tdesc^.ptempobj)^.ObjMatrix[2])^:=z;}
-             tdesc^.ptempobj^.Transform(plusd);
-             PGDBObjWithMatrix(tdesc^.ptempobj)^.{Format}ReCalcFromObjMatrix;
-             PGDBObjWithMatrix(tdesc^.ptempobj)^.Format;
-
-             //tdesc^.objaddr^.Transform{At}(dispmatr);
-             //tdesc^.objaddr^.Format;
-             //gdb.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
+             processobject(tdesc^.ptempobj,minusd,plusd,rm,x,y,z);
         end;
       inc(tdesc);
     end;
@@ -279,7 +387,8 @@ var i: GDBInteger;
 //  d: GDBDouble;
 //  td:tcontrolpointdist;
   tdesc:pselectedobjdesc;
-  m:DMatrix4D;
+  m,tempm,oplus,ominus:DMatrix4D;
+  tv:gdbvertex;
 begin
   if count > 0 then
   begin
@@ -289,22 +398,16 @@ begin
       if tdesc^.pcontrolpoint<>nil then
         //if tdesc^.pcontrolpoint^.SelectedCount<>0 then
         begin
-             tdesc^.objaddr^.Transform(minusd);
-             m:=PGDBObjWithMatrix(tdesc^.objaddr)^.ObjMatrix;
-             PGDBVertex(@m[3])^:=nulvertex;
-             matrixinvert(m);
-             tdesc^.objaddr^.Transform(m);
-             tdesc^.objaddr^.Transform(rm);
-             {PGDBVertex(@PGDBObjWithMatrix(tdesc^.ptempobj)^.ObjMatrix[0])^:=x;
-             PGDBVertex(@PGDBObjWithMatrix(tdesc^.ptempobj)^.ObjMatrix[1])^:=y;
-             PGDBVertex(@PGDBObjWithMatrix(tdesc^.ptempobj)^.ObjMatrix[2])^:=z;}
-             tdesc^.objaddr^.Transform(plusd);
-             PGDBObjWithMatrix(tdesc^.objaddr)^.{Format}ReCalcFromObjMatrix;
-             PGDBObjWithMatrix(tdesc^.objaddr)^.Format;
-
-             //tdesc^.objaddr^.Transform{At}(dispmatr);
-             //tdesc^.objaddr^.Format;
-             //gdb.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
+          processobject(tdesc^.objaddr,minusd,plusd,rm,x,y,z);
+          {tdesc^.objaddr^.Transform(minusd);
+          m:=PGDBObjWithMatrix(tdesc^.objaddr)^.ObjMatrix;
+          PGDBVertex(@m[3])^:=nulvertex;
+          matrixinvert(m);
+          tdesc^.objaddr^.Transform(m);
+          tdesc^.objaddr^.Transform(rm);
+          tdesc^.objaddr^.Transform(plusd);
+          PGDBObjWithMatrix(tdesc^.objaddr)^.ReCalcFromObjMatrix;
+          PGDBObjWithMatrix(tdesc^.objaddr)^.Format;}
         end;
       inc(tdesc);
     end;

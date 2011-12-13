@@ -248,6 +248,8 @@ begin
                rtmod.dist:=VectorTransform3D(dist,mt);
                rtmod.wc:=VectorTransform3D(wc,m);
 
+               rtmod.point.dcoord:=VectorTransform3D(rtmod.point.dcoord,mt);
+
                    {учет своей СК  CalcObjMatrixWithoutOwner}
                     if PSelectedObjDesc(md).objaddr^.IsHaveLCS then
                     begin
@@ -261,6 +263,8 @@ begin
                     rtmod.wc:=VectorTransform3D(rtmod.wc,m2);
 
                     rtmod.point.worldcoord:=VectorTransform3D(rtmod.point.worldcoord,m2);
+
+                    rtmod.point.dcoord:=VectorTransform3D(rtmod.point.dcoord,m2);
                     end;
 
                     {учет своей СК}

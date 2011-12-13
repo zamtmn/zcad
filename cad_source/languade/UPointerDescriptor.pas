@@ -27,7 +27,7 @@ GDBPointerDescriptor=object(TUserTypeDescriptor)
                      ReferType:GDBString;
                      //constructor init(var t:gdbtypedesk);
                      constructor init(ptype:GDBString;tname:string;pu:pointer);
-                     function CreateProperties(PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
+                     function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                      function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                      function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      procedure Format;virtual;
@@ -134,7 +134,7 @@ begin
                         begin
 
                              if (PTUserTypeDescriptor(PUserTypeDescriptor((TypeOf)))^.GetTypeAttributes and TA_COMPOUND)=0 then
-                                                                                                                        PTUserTypeDescriptor(PUserTypeDescriptor((TypeOf)))^.CreateProperties(PPDA,name,PCollapsed,ownerattrib,bmode,ta,valkey,valtype)
+                                                                                                                        PTUserTypeDescriptor(PUserTypeDescriptor((TypeOf)))^.CreateProperties(PDM_Field,PPDA,name,PCollapsed,ownerattrib,bmode,ta,valkey,valtype)
                                                                                                                     else
                                                                                                                     begin
                                                                                                                          if bmode<>property_build then
@@ -143,13 +143,13 @@ begin
                                                                                                                          if (ppd^.SubNode=nil) then
                                                                                                                                                        begin
                                                                                                                                                        bm2:=-bmode;
-                                                                                                                                                       PTUserTypeDescriptor(PUserTypeDescriptor((TypeOf)))^.CreateProperties(PPDA,name,PCollapsed,ownerattrib,bm2,ta,valkey,valtype);
+                                                                                                                                                       PTUserTypeDescriptor(PUserTypeDescriptor((TypeOf)))^.CreateProperties(PDM_Field,PPDA,name,PCollapsed,ownerattrib,bm2,ta,valkey,valtype);
                                                                                                                                                        bmode:=bm2;
                                                                                                                                                        end
                                                                                                                                                    else
                                                                                                                                                        begin
                                                                                                                                                             if (ppd^.valueAddres=nil)or(ppd^.valueAddres=ta) then
-                                                                                                                                                                                       PTUserTypeDescriptor(PUserTypeDescriptor((TypeOf)))^.CreateProperties(PPDA,name,PCollapsed,ownerattrib,bmode,ta,valkey,valtype)
+                                                                                                                                                                                       PTUserTypeDescriptor(PUserTypeDescriptor((TypeOf)))^.CreateProperties(PDM_Field,PPDA,name,PCollapsed,ownerattrib,bmode,ta,valkey,valtype)
                                                                                                                                                                                    else
                                                                                                                                                                                        begin
                                                                                                                                                                                             if ppd^.SubNode<>nil then
@@ -160,14 +160,14 @@ begin
 
                                                                                                                                                                                             end;
                                                                                                                                                                                             bm2:=-bmode;
-                                                                                                                                                                                            PTUserTypeDescriptor(PUserTypeDescriptor((TypeOf)))^.CreateProperties(PPDA,name,PCollapsed,ownerattrib,{bmode}bm2,ta,valkey,valtype);
+                                                                                                                                                                                            PTUserTypeDescriptor(PUserTypeDescriptor((TypeOf)))^.CreateProperties(PDM_Field,PPDA,name,PCollapsed,ownerattrib,{bmode}bm2,ta,valkey,valtype);
                                                                                                                                                                                             bmode:=bm2;
                                                                                                                                                                                        end;
                                                                                                                                                        end;
                                                                                                                              ppd^.valueAddres:=oldta;
                                                                                                                          end
                                                                                                                          else
-                                                                                                                             PTUserTypeDescriptor(PUserTypeDescriptor((TypeOf)))^.CreateProperties(PPDA,name,PCollapsed,ownerattrib,bmode,ta,valkey,valtype)
+                                                                                                                             PTUserTypeDescriptor(PUserTypeDescriptor((TypeOf)))^.CreateProperties(PDM_Field,PPDA,name,PCollapsed,ownerattrib,bmode,ta,valkey,valtype)
 
                                                                                                                     end
                         end

@@ -1,11 +1,15 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <CONFIG>
   <MainConfig>
     <Nodes ChildCount="1">
       <Item1 Name="MainForm" Type="CustomSite" ChildCount="1">
-        <Bounds Width="1236" Height="864"/>
-        <Item1 Name="AnchorDockSite9" Type="Layout" ChildCount="15">
-          <Bounds Top="33" Width="1236" Height="809" SplitterPos="29"/>
+        <Bounds Width="1236" Height="864">
+          <WorkArea>
+            <Rect Right="1280" Bottom="1024"/>
+          </WorkArea>
+        </Bounds>
+        <Item1 Name="AnchorDockSite9" Type="Layout" ChildCount="17">
+          <Bounds Top="36" Width="1236" Height="809" SplitterPos="32"/>
           <Anchors Align="Bottom"/>
           <Item1 Name="PageControl" Type="Control">
             <Bounds Left="311" Width="892" Height="709"/>
@@ -16,8 +20,8 @@
             <Anchors Bottom="AnchorDockSplitter8"/>
           </Item2>
           <Item3 Name="ObjectInspector" Type="Control">
-            <Bounds Width="307" Height="778"/>
-            <Anchors Right="AnchorDockSplitter2" Bottom="AnchorDockSplitter8"/>
+            <Bounds Top="31" Width="307" Height="747"/>
+            <Anchors Top="AnchorDockSplitter9" Right="AnchorDockSplitter2" Bottom="AnchorDockSplitter8"/>
           </Item3>
           <Item4 Name="AnchorDockSplitter3" Type="SplitterHorizontal">
             <Bounds Top="709" Left="311" Width="925" Height="4"/>
@@ -66,6 +70,14 @@
             <Bounds Top="782" Width="1236" Height="27"/>
             <Anchors Top="AnchorDockSplitter8"/>
           </Item15>
+          <Item16 Name="AnchorDockSplitter9" Type="SplitterHorizontal">
+            <Bounds Top="27" Width="307" Height="4"/>
+            <Anchors Right="AnchorDockSplitter2"/>
+          </Item16>
+          <Item17 Name="OIButtons" Type="Control">
+            <Bounds Width="307" Height="27"/>
+            <Anchors Right="AnchorDockSplitter2" Bottom="AnchorDockSplitter9"/>
+          </Item17>
         </Item1>
       </Item1>
     </Nodes>

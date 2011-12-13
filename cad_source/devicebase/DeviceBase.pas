@@ -154,15 +154,15 @@ var pt:PObjectDescriptor;
 begin
      pt:=SysUnit.ObjectTypeName2PTD('DbBaseObject');
      pt^.RegisterVMT(TypeOf(DbBaseObject));
-     pt^.AddMetod('initnul','',@DbBaseObject.initnul,m_constructor);
+     pt^.AddMetod('','initnul','',@DbBaseObject.initnul,m_constructor);
 
      pt:=SysUnit.ObjectTypeName2PTD('ElDeviceBaseObject');
      pt^.RegisterVMT(TypeOf(ElDeviceBaseObject));
-     pt^.AddMetod('initnul','',@ElDeviceBaseObject.initnul,m_constructor);
+     pt^.AddMetod('','initnul','',@ElDeviceBaseObject.initnul,m_constructor);
 
      pt:=SysUnit.ObjectTypeName2PTD('CableDeviceBaseObject');
      pt^.RegisterVMT(TypeOf(CableDeviceBaseObject));
-     pt^.AddMetod('initnul','',@CableDeviceBaseObject.initnul,m_constructor);
+     pt^.AddMetod('','initnul','',@CableDeviceBaseObject.initnul,m_constructor);
 
      //pt^.AddMetod('AfterDeSerialize','(SaveFlag:GDBWord; membuf:GDBPointer):GDBInteger;',nil,m_virtual);
      //pt^.AddMetod('format','',@ElDeviceBaseObject.format,m_procedure);

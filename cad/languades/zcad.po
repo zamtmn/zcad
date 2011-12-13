@@ -13,6 +13,10 @@ msgstr ""
 msgid "About"
 msgstr ""
 
+#: ACN_ADDTOOWNER~caption
+msgid "Add to owner"
+msgstr ""
+
 #: ACN_BEDIT~caption
 msgid "Block editor"
 msgstr ""
@@ -60,6 +64,14 @@ msgstr ""
 
 #: ACN_COPYCLIP~hint
 msgid "Copy to clipboard"
+msgstr ""
+
+#: ACN_COPYFROMOWNER~caption
+msgid "Copy from owner"
+msgstr ""
+
+#: ACN_COPYFROMOWNER~textimage
+msgid "COF"
 msgstr ""
 
 #: ACN_COPY~caption
@@ -291,6 +303,14 @@ msgstr ""
 msgid "DW"
 msgstr ""
 
+#: ACN_SNAPRUNTIME~caption
+msgid "Run time snap editor"
+msgstr ""
+
+#: ACN_SNAPRUNTIME~textimage
+msgid "snap"
+msgstr ""
+
 #: ACN_TEXT~caption
 msgid "Draw text"
 msgstr ""
@@ -341,6 +361,10 @@ msgstr ""
 
 #: button_command~SetObjInsp(CURRENT)
 msgid "FIX"
+msgstr ""
+
+#: button_variable~DWG_AdditionalGrips
+msgid "+G"
 msgstr ""
 
 #: button_variable~DWG_DrawMode
@@ -639,6 +663,10 @@ msgstr ""
 msgid "Divide by zero (Geometry.NormalizeVertex)"
 msgstr ""
 
+#: hint_panel~DWG_AdditionalGrips
+msgid "On/Off Additional grips"
+msgstr ""
+
 #: hint_panel~DWG_DrawMode
 #, fuzzy
 msgid "Show/Hide Lineweight"
@@ -934,6 +962,10 @@ msgstr ""
 msgid "Mouse wheel scale factor"
 msgstr ""
 
+#: tdwg~DWG_AdditionalGrips
+msgid "Additional grips"
+msgstr ""
+
 #: tdwg~DWG_CLayer
 msgid "Current layer"
 msgstr ""
@@ -1158,6 +1190,10 @@ msgstr ""
 
 #: tpath~Fonts_Path
 msgid "Fonts"
+msgstr ""
+
+#: tpath~LayoutFile
+msgid "Current layout"
 msgstr ""
 
 #: tpath~Program_Run

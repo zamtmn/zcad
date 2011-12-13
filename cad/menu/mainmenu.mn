@@ -1,3 +1,8 @@
+Panel OIButtons;
+  {
+    action ACN_SNAPRUNTIME
+    action ACN_El_FIND
+  }
 Panel Status;
   {
     Separator
@@ -65,7 +70,6 @@ Panel Misc;
     button PlaceSmokeDetectorOrto,ps.bmp,Авторасстановка пож. извещателей
     button OPS_Sensor_Mark,#++,Нумерация извещателей на плане
     button OrtoDevPlace,array.bmp,Расстановка блоков (устройств) массивом
-    action ACN_El_FIND
     action ACN_OBJVARMAN
     action ACN_MULTIOBJVARMAN
     action ACN_ADDTOOWNER

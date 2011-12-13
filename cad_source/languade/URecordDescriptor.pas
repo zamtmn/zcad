@@ -27,7 +27,7 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        Fields:GDBOpenArrayOfData;
                        Parent:PRecordDescriptor;
                        constructor init(tname:string;pu:pointer);
-                       function CreateProperties(PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
+                       function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                        procedure AddField(var fd:FieldDescriptor);
                        function FindField(fn:GDBString):PFieldDescriptor;
                        function SetAttrib(fn:GDBString;SetA,UnSetA:GDBWord):PFieldDescriptor;
@@ -93,7 +93,7 @@ begin
         repeat
               begin
                    GDBPlatformint(p):=GDBPlatformint(PInstance)+pd^.Offset;
-                   pd^.PFT^.MagicFreeInstance(p);
+                   pd^.base.PFT^.MagicFreeInstance(p);
               end;
               pd:=Fields.iterate(ir);
         until pd=nil;
@@ -113,9 +113,9 @@ begin
         pd:=Fields.beginiterate(ir);
         if pd<>nil then
         repeat
-              if (pd^.FieldName=path) then
+              if (pd^.base.ProgramName=path) then
               begin
-                   tc:=pd^.PFT;
+                   tc:=pd^.base.PFT;
                    offset:=offset+pd^.Offset;
                    exit;
               end;
@@ -153,7 +153,7 @@ begin
         pd:=Fields.beginiterate(ir);
         if pd<>nil then
         repeat
-                   if pd^.FieldName='Entities' then
+                   if pd^.base.ProgramName='Entities' then
                                     pd:=pd;
               if (pd^.Saved and SaveFlag)<>0 then
               begin
@@ -171,16 +171,16 @@ begin
 
                    if zcpmode=zcptxt then
                    begin
-                   membuf^.AddData(pointer(pd^.FieldName),length(pd^.FieldName));
+                   membuf^.AddData(pointer(pd^.base.ProgramName),length(pd^.base.ProgramName));
                    membuf^.AddData(pointer(lineend),length(lineend));
                    end;
-                   if {pd^.FieldType.TypeIndex>=Basetypesendindex}((pd^.PFT^.GetTypeAttributes)and TA_COMPOUND)>0 then
+                   if {pd^.FieldType.TypeIndex>=Basetypesendindex}((pd^.base.PFT^.GetTypeAttributes)and TA_COMPOUND)>0 then
                                                             begin
-                                                                 pd^.PFT^.Serialize(p,SaveFlag,membuf,linkbuf,sub)
+                                                                 pd^.base.PFT^.Serialize(p,SaveFlag,membuf,linkbuf,sub)
                                                             end
                                                         else
                                                             begin
-                                                                 pd^.PFT^.Serialize(p,SaveFlag,membuf,linkbuf,sub)
+                                                                 pd^.base.PFT^.Serialize(p,SaveFlag,membuf,linkbuf,sub)
                                                             end;
                    pd^.Saved:=pd^.Saved;
               end;
@@ -226,15 +226,15 @@ begin
                    {$IFDEF TOTALYLOG}programlog.logoutstr(pd^.FieldName,0);{$ENDIF}
                    p:=PInstance;
                    inc(pbyte(p),pd^.Offset);
-                   if pd^.FieldName='TextStyleTable' then
+                   if pd^.base.ProgramName='TextStyleTable' then
                                     pd:=pd;
-                   if {pd^.FieldType.TypeIndex>=basetypesendindex}((pd^.PFT^.GetTypeAttributes)and TA_COMPOUND)>0 then
+                   if {pd^.FieldType.TypeIndex>=basetypesendindex}((pd^.base.PFT^.GetTypeAttributes)and TA_COMPOUND)>0 then
                                                             begin
-                                                                 pd^.PFT^.DeSerialize(p,SaveFlag,membuf,linkbuf)
+                                                                 pd^.base.PFT^.DeSerialize(p,SaveFlag,membuf,linkbuf)
                                                             end
                                                         else
                                                             begin
-                                                                 pd^.PFT^.DeSerialize(p,SaveFlag,membuf,linkbuf)
+                                                                 pd^.base.PFT^.DeSerialize(p,SaveFlag,membuf,linkbuf)
                                                             end;
               end;
               //fo:=fo+pd^.Size;
@@ -253,8 +253,8 @@ begin
 end;
 procedure FREEFIELD(p:GDBPointer);
 begin
-     PFieldDescriptor(p)^.FieldName:='';
-     PFieldDescriptor(p)^.UserName:='';
+     PFieldDescriptor(p)^.base.ProgramName:='';
+     PFieldDescriptor(p)^.base.UserName:='';
 end;
 destructor RecordDescriptor.done;
 begin
@@ -271,7 +271,7 @@ end;
 procedure RecordDescriptor.AddField;
 begin
      AddConstField(fd);
-     GDBPointer(fd.FieldName):=nil;
+     GDBPointer(fd.base.ProgramName):=nil;
 end;
 function RecordDescriptor.FindField(fn:GDBString):PFieldDescriptor;
 var pd:PFieldDescriptor;
@@ -282,7 +282,7 @@ begin
         pd:=Fields.beginiterate(ir);
         if pd<>nil then
         repeat
-              if fn=uppercase(pd^.FieldName) then
+              if fn=uppercase(pd^.base.ProgramName) then
                                       begin
                                            result:=pd;
                                            exit;
@@ -296,8 +296,8 @@ begin
      result:=FindField(fn);
      if result<>nil then
                         begin
-                             result.Attributes:=result.Attributes or SetA;
-                             result.Attributes:=result.Attributes and (not UnSetA);
+                             result.base.Attributes:=result.base.Attributes or SetA;
+                             result.base.Attributes:=result.base.Attributes and (not UnSetA);
                         end;
 end;
 
@@ -309,17 +309,17 @@ begin
         pd:=Fields.beginiterate(ir);
         if pd<>nil then
         repeat
-              d.FieldName:=pd^.FieldName;
-              d.UserName:=pd^.UserName;
-              d.PFT:=pd^.PFT;
+              d.base.ProgramName:=pd^.base.ProgramName;
+              d.base.UserName:=pd^.base.UserName;
+              d.base.PFT:=pd^.base.PFT;
               d.Offset:=pd^.Offset;
               d.Size:=pd^.Size;
-              d.Attributes:=pd^.Attributes;
+              d.base.Attributes:=pd^.base.Attributes;
               d.Saved:=pd^.Saved;
               d.Collapsed:=pd^.Collapsed;
               PRecordDescriptor(rd)^.AddField(d);
-              GDBPointer(d.FieldName):=nil;
-              GDBPointer(d.userName):=nil;
+              GDBPointer(d.base.ProgramName):=nil;
+              GDBPointer(d.base.userName):=nil;
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;
@@ -331,8 +331,8 @@ begin
         pd:=Fields.beginiterate(ir);
         if pd<>nil then
         repeat
-              if pd^.FieldName<>'#' then
-                                        pd.PFT.SavePasToMem(membuf,pointer(GDBPlatformint(PInstance)+pd^.Offset),prefix+'.'+pd^.FieldName);
+              if pd^.base.ProgramName<>'#' then
+                                        pd.base.PFT.SavePasToMem(membuf,pointer(GDBPlatformint(PInstance)+pd^.Offset),prefix+'.'+pd^.base.ProgramName);
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;
@@ -428,12 +428,12 @@ begin
                                                   bmodesave2:=ppda^.findvalkey(pvd^.name);
                                                   if bmodesave2<>0 then
                                                   PTUserTypeDescriptor(pvd^.data.PTD)^.CreateProperties
-                                                  (PPDA,tname,{pcollapsed}@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName)
+                                                  (PDM_Field,PPDA,tname,{pcollapsed}@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName)
                                                                    else
                                                                    begin
                                                   bmodetemp:=property_build;
                                                   PTUserTypeDescriptor(pvd^.data.PTD)^.CreateProperties
-                                                  (PPDA,tname,{pcollapsed}@pvd^.data.PTD^.collapsed,(ownerattrib or tw),{bmode}bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
+                                                  (PDM_Field,PPDA,tname,{pcollapsed}@pvd^.data.PTD^.collapsed,(ownerattrib or tw),{bmode}bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
 
                                                   if (bmode<>property_build)then
                                                                                 inc(bmode);
@@ -453,14 +453,14 @@ begin
      if pfd<>nil then
      repeat
            begin
-           tname:=pfd^.UserName;
+           tname:=pfd^.base.UserName;
            if tname='' then
-                           tname:=pfd^.FieldName;
+                           tname:=pfd^.base.ProgramName;
            if tname='ObjArray' then
                                    tname:=tname;
-           if (pfd^.PFT^.TypeName='TEnumData') then
+           if (pfd^.base.PFT^.TypeName='TEnumData') then
                        begin
-                            GDBEnumDataDescriptorObj.CreateProperties(PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.Attributes or ownerattrib,bmode,addr,'','')
+                            GDBEnumDataDescriptorObj.CreateProperties(PDM_Field,PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,addr,'','')
                        end
                    else
            (*if (pfd^.PFT^.TypeName='TObjectUnit') then
@@ -480,7 +480,7 @@ begin
                             inc(integer(addr),sizeof(TObjectUnit));
                        end
                    else*)
-           if pfd^.FieldName='#' then begin
+           if pfd^.base.ProgramName='#' then begin
                                                 {$IFDEF TOTALYLOG}programlog.LogOutStr('Found ##PVMT',lp_OldPos);{$ENDIF}
                                                 ppd:=GetPPD(ppda,bmode);
                                                 if ppd^._bmode=property_build then
@@ -502,7 +502,7 @@ begin
                                                                             end;
                                                                                 ppd^.Name:=tname;
                                                                                 ppd^.PTypeManager:=nil;
-                                                                                ppd^.Attr:=ownerattrib or pfd^.Attributes;
+                                                                                ppd^.Attr:=ownerattrib or pfd^.base.Attributes;
                                                                                 ppd^.Collapsed:=PCollapsed;
                                                                                 ppd^.valueAddres:=addr;
                                                                                 ppd^.value:='Не инициализирован';
@@ -521,16 +521,16 @@ begin
                                            end
                    else
                    begin
-                   if pfd^.PFT^.TypeName='TTypedData' then
+                   if pfd^.base.PFT^.TypeName='TTypedData' then
                                                           Begin
                                                                tb:=PTTypedData(addr)^.Instance;
                                                                ta:=PTTypedData(addr)^.ptd;
-                                                               PTUserTypeDescriptor(ta)^.CreateProperties(PPDA,{PTTypedData(addr)^.ptd^.TypeName}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.Attributes or ownerattrib,bmode,tb,'','');
+                                                               PTUserTypeDescriptor(ta)^.CreateProperties(PDM_Field,PPDA,{PTTypedData(addr)^.ptd^.TypeName}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,tb,'','');
                                                                inc(GDBPlatformint(addr),sizeof(TTypedData));
                                                           end
                                                        else
                                                            begin
-                                                                PTUserTypeDescriptor(pfd^.PFT)^.CreateProperties(PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.Attributes or ownerattrib,bmode,addr,'','')
+                                                                PTUserTypeDescriptor(pfd^.base.PFT)^.CreateProperties(PDM_Field,PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,addr,'','')
                                                            end;
                    end;
            end;
@@ -555,8 +555,8 @@ begin
         pd:=Fields.beginiterate(ir);
         if pd<>nil then
         repeat
-              if pd^.FieldName<>'#' then
-                                        pd.PFT.MagicAfterCopyInstance(pointer(GDBPlatformint(PInstance)+pd^.Offset));
+              if pd^.base.ProgramName<>'#' then
+                                        pd.base.PFT.MagicAfterCopyInstance(pointer(GDBPlatformint(PInstance)+pd^.Offset));
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;

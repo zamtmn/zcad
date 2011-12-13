@@ -78,23 +78,30 @@ end;
 procedure GDBObjComplex.rtmodifyonepoint;
 var m:DMatrix4D;
 begin
-     m:=bp.ListPos.owner.getmatrix^;
-     MatrixInvert(m);
+     //m:=bp.ListPos.owner.getmatrix^;
+     //m:=objmatrix;
+     //PGDBVertex(@m[3])^:=nulvertex;
+     //MatrixInvert(m);
+     m:=onematrix;
 
      case rtmod.point.pointtype of
                os_point:begin
                              if rtmod.point.pobject=nil then
-                             Local.p_insert:=VertexAdd(rtmod.point.worldcoord, rtmod.dist{VectorTransform3D(rtmod.dist,m)})
+                             Local.p_insert:=vectortransform3d(VertexAdd(rtmod.point.worldcoord, rtmod.dist{VectorTransform3D(rtmod.dist,m)}),m)
                              else
-                               Local.p_insert:=VertexSub(VertexAdd(rtmod.point.worldcoord, rtmod.dist),rtmod.point.dcoord);
+                               Local.p_insert:=vectortransform3d(VertexSub(VertexAdd(rtmod.point.worldcoord, rtmod.dist),rtmod.point.dcoord),m);
                          end;
      end;
 end;
 procedure GDBObjComplex.rtedit;
+var
+   m:DMatrix4D;
 begin
   if mode = os_blockinsert then
   begin
-    Local.p_insert := VertexAdd(PGDBObjComplex(refp)^.Local.p_insert, dist);
+    m:=objmatrix;
+    matrixinvert(m);
+    Local.p_insert :={vectortransform3d( }VertexAdd(PGDBObjComplex(refp)^.Local.p_insert, dist){,m)};
   end;
   format;
 end;

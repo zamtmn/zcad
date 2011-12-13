@@ -68,7 +68,7 @@ var
 implementation
 begin
   DWG_DrawMode:=0;
-  DWG_OSMode:=14311;
+  DWG_OSMode:=16359;
   DWG_PolarMode:=1;
   DWG_SystmGeometryDraw:=False;
   DWG_HelpGeometryDraw:=True;
@@ -100,27 +100,27 @@ begin
   RD_UseStencil:=True;
   RD_PanObjectDegradation:=False;
   RD_LineSmooth:=False;
-  RD_MaxLineWidth:=-1.0;
-  RD_MaxPointSize:=-1.0;
-  RD_Vendor:='контекст OpenGL не создан';
-  RD_Renderer:='контекст OpenGL не создан';
-  RD_Version:='контекст OpenGL не создан';
-  RD_MaxWidth:=-1;
+  RD_MaxLineWidth:=10.0;
+  RD_MaxPointSize:=63.375;
+  RD_Vendor:='NVIDIA Corporation';
+  RD_Renderer:='GeForce 9600 GT/PCI/SSE2';
+  RD_Version:='3.3.0';
+  RD_MaxWidth:=10;
   RD_BackGroundColor.r:=0;
   RD_BackGroundColor.g:=0;
   RD_BackGroundColor.b:=0;
   RD_BackGroundColor.a:=255;
   RD_Restore_Mode:=WND_Texture;
-  RD_LastRenderTime:=0;
+  RD_LastRenderTime:=1;
   RD_LastUpdateTime:=0;
   RD_MaxRenderTime:=0;
   RD_Light:=False;
   RD_VSync:=TVSOff;
   SAVE_Auto_Interval:=300;
-  SAVE_Auto_Current_Interval:=300;
+  SAVE_Auto_Current_Interval:=260;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';
   SAVE_Auto_On:=True;
-  SYS_RunTime:=13;
+  SYS_RunTime:=43;
   SYS_Version:='0.9.7 Revision SVN:108';
   SYS_SystmGeometryColor:=250;
   SYS_IsHistoryLineCreated:=True;

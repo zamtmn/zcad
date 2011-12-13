@@ -1086,6 +1086,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure AddOnTrackAxis(var posr:os_record; const processaxis:taddotrac);virtual;abstract;
                     function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;abstract;
                     function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;abstract;
+                    function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;abstract;
               end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDB3d.pas
 GDBObj3d=object(GDBObjEntity)
@@ -1247,46 +1248,6 @@ GDBObjAbstractText=object(GDBObjPlainWithOX)
                          procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
                          procedure setrot(r:GDBDouble);
                    end;
-//Generate on C:\zcad\CAD_SOURCE\gdb\GDBArc.pas
-  ptarcrtmodify=^tarcrtmodify;
-  tarcrtmodify=record
-                        p1,p2,p3:GDBVertex2d;
-                  end;
-PGDBObjArc=^GDBObjARC;
-GDBObjArc=object(GDBObjPlain)
-                 R:GDBDouble;(*saved_to_shd*)
-                 StartAngle:GDBDouble;(*saved_to_shd*)
-                 EndAngle:GDBDouble;(*saved_to_shd*)
-                 angle:GDBDouble;
-                 Vertex3D_in_WCS_Array:GDBPoint3DArray;
-                 length:GDBDouble;
-                 q0,q1,q2:GDBvertex;
-                 pq0,pq1,pq2:GDBvertex;
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;RR,S,E:GDBDouble);
-                 constructor initnul;
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
-                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
-                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
-                 procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
-                 procedure CalcObjMatrix;virtual;abstract;
-                 procedure Format;virtual;abstract;
-                 procedure createpoint;virtual;abstract;
-                 procedure getoutbound;virtual;abstract;
-                 procedure RenderFeedback;virtual;abstract;
-                 procedure projectpoint;virtual;abstract;
-                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
-                 function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;abstract;
-                 function beforertmodify:GDBPointer;virtual;abstract;
-                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
-                 function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;abstract;
-                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
-                 procedure rtsave(refp:GDBPointer);virtual;abstract;
-                 destructor done;virtual;abstract;
-                 function GetObjTypeName:GDBString;virtual;abstract;
-                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
-                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
-           end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBCircle.pas
   ptcirclertmodify=^tcirclertmodify;
   tcirclertmodify=record
@@ -1333,6 +1294,47 @@ GDBObjCircle=object(GDBObjWithLocalCS)
                  procedure createfield;virtual;abstract;
                  function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;abstract;
                  procedure ReCalcFromObjMatrix;virtual;abstract;
+                 function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;abstract;
+           end;
+//Generate on C:\zcad\CAD_SOURCE\gdb\GDBArc.pas
+  ptarcrtmodify=^tarcrtmodify;
+  tarcrtmodify=record
+                        p1,p2,p3:GDBVertex2d;
+                  end;
+PGDBObjArc=^GDBObjARC;
+GDBObjArc=object(GDBObjPlain)
+                 R:GDBDouble;(*saved_to_shd*)
+                 StartAngle:GDBDouble;(*saved_to_shd*)
+                 EndAngle:GDBDouble;(*saved_to_shd*)
+                 angle:GDBDouble;
+                 Vertex3D_in_WCS_Array:GDBPoint3DArray;
+                 length:GDBDouble;
+                 q0,q1,q2:GDBvertex;
+                 pq0,pq1,pq2:GDBvertex;
+                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;RR,S,E:GDBDouble);
+                 constructor initnul;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
+                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
+                 procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
+                 procedure CalcObjMatrix;virtual;abstract;
+                 procedure Format;virtual;abstract;
+                 procedure createpoint;virtual;abstract;
+                 procedure getoutbound;virtual;abstract;
+                 procedure RenderFeedback;virtual;abstract;
+                 procedure projectpoint;virtual;abstract;
+                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;abstract;
+                 function beforertmodify:GDBPointer;virtual;abstract;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
+                 function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;abstract;
+                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
+                 procedure rtsave(refp:GDBPointer);virtual;abstract;
+                 destructor done;virtual;abstract;
+                 function GetObjTypeName:GDBString;virtual;abstract;
+                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
+                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\UGDBEntTree.pas
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
@@ -1525,7 +1527,7 @@ GDBObjBlockInsert=object(GDBObjComplex)
                      procedure Format;virtual;abstract;
                      function getrot:GDBDouble;virtual;abstract;
                      procedure setrot(r:GDBDouble);virtual;abstract;
-                     property rot:GDBDouble read getrot write setrot;
+                     property testrotate:GDBDouble read getrot write setrot;(*'Rotate'*)
                      //function ProcessFromDXFObjXData(_Name,_Value:GDBString):GDBBoolean;virtual;abstract;
                   end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBDevice.pas
@@ -1667,6 +1669,7 @@ GDBObjLine=object(GDBObj3d)
                   function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;abstract;
                   procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
                   function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;abstract;
+                  function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBLWPolyLine.pas
 PGDBObjLWPolyline=^GDBObjLWpolyline;
@@ -1708,6 +1711,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
                  procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
+                 function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBtext.pas
 PGDBObjText=^GDBObjText;

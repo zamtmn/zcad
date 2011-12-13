@@ -129,7 +129,7 @@ var
 
 implementation
 
-uses gdbentity,UGDBStringArray,log;
+uses UObjectDescriptor,gdbentity,UGDBStringArray,log;
 procedure TGDBobjinsp.FormHide(Sender: TObject);
 begin
      proptreeptr:=proptreeptr;
@@ -325,7 +325,7 @@ begin
     //PEPD:=PUserTypeDescriptor(Types.exttype.getelement(exttype)^);
     //PTUserTypeDescriptor(PEPD)^.CreateProperties(@PDA,'root',field_no_attrib,0,bmode,addr);
     //PD:=PUserTypeDescriptor(Types.exttype.getelement(exttype)^);
-  PTUserTypeDescriptor(exttype)^.CreateProperties(@PDA,'root',field_no_attrib,0,bmode,addr,'','');
+  PTUserTypeDescriptor(exttype)^.CreateProperties(PDM_Field,@PDA,'root',field_no_attrib,0,bmode,addr,'','');
 end;
 
 procedure TGDBobjinsp.calctreeh;
@@ -639,7 +639,16 @@ begin
     end;
     pld:=peditor.PInstance;
     if GDBobj then
-                  PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(pld,{self.pcurrobj,}self.currobjgdbtype);
+                  begin
+                       if ppropcurrentedit^.mode=PDM_Field then
+                                                               PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(pld,{self.pcurrobj,}self.currobjgdbtype)
+                                                           else
+                                                               begin
+                                                                 PObjectDescriptor(currobjgdbtype)^.SimpleRunMetodWithArg(ppropcurrentedit^.w,pcurrobj,ppropcurrentedit^.valueAddres);
+                                                                 PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(nil,self.currobjgdbtype)
+                                                               end;
+
+                  end;
     if Command=TMNC_EditingDone then
                                     Application.QueueAsyncCall(asyncfreeeditor, 0);
 

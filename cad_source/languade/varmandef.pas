@@ -52,6 +52,7 @@ const
   vda_different=1;
   vda_RO=2;
 type
+PDMode=(PDM_Field,PDM_Property);
 PUserTypeDescriptor=^UserTypeDescriptor;
   PBasePropertyDeskriptor=^BasePropertyDeskriptor;
   BasePropertyDeskriptor=object({GDBaseObject}GDBBaseNode)
@@ -69,6 +70,8 @@ PUserTypeDescriptor=^UserTypeDescriptor;
     x1,y1,x2,y2:GDBInteger;
     _ppda:GDBPointer;
     _bmode:GDBInteger;
+    mode:PDMode;
+    r,w:GDBString;
   end;
   propdeskptr = ^propdesk;
   propdesk = record

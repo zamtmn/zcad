@@ -57,14 +57,35 @@ TPropertyDeskriptorArray=object(GDBOpenArrayOfGDBPointer)
                                function findvalkey(valkey:GDBString):integer;
                          end;
 SimpleProcOfObj=procedure of object;
+SimpleProcOfObjDouble=procedure (arg:GDBDouble) of object;
+SimpleFuncOfObjDouble=function:GDBDouble  of object;
 PFieldDescriptor=^FieldDescriptor;
-FieldDescriptor=record
-                      FieldName:GDBString;
+pBaseDescriptor=^BaseDescriptor;
+BaseDescriptor=record
+                      ProgramName:GDBString;
                       UserName:GDBString;
                       PFT:PUserTypeDescriptor;
-                      Offset,Size:GDBInteger;
                       Attributes:GDBWord;
+               end;
+
+FieldDescriptor=record
+                      base:BaseDescriptor;
+                      //FieldName:GDBString;
+                      //UserName:GDBString;
+                      //PFT:PUserTypeDescriptor;
+                      Offset,Size:GDBInteger;
+                      //Attributes:GDBWord;
                       Saved:GDBWord;
+                      Collapsed:GDBBoolean;
+                end;
+PPropertyDescriptor=^PropertyDescriptor;
+PropertyDescriptor=record
+                      base:BaseDescriptor;
+                      //PropertyName:GDBString;
+                      //UserName:GDBString;
+                      r,w:GDBString;
+                      //PFT:PUserTypeDescriptor;
+                      //Attributes:GDBWord;
                       Collapsed:GDBBoolean;
                 end;
 GDBTOperandStoreMode=GDBByte;
@@ -75,6 +96,7 @@ GDBOperandDesc=record
 GDBMetodModifier=GDBWord;
 PMetodDescriptor=^MetodDescriptor;
 MetodDescriptor=object(GDBaseObject)
+                      objname:GDBString;
                       MetodName:GDBString;
                       OperandsName:GDBString;
                       Operands:GDBOpenArrayOfdata; {DATA}
@@ -82,12 +104,12 @@ MetodDescriptor=object(GDBaseObject)
                       MetodAddr:GDBPointer;
                       Attributes:GDBMetodModifier;
                       punit:pointer;
-                      constructor init(mn,dt:GDBString;ma:GDBPointer;attr:GDBMetodModifier;pu:pointer);
+                      constructor init(objn,mn,dt:GDBString;ma:GDBPointer;attr:GDBMetodModifier;pu:pointer);
                       destructor Done;virtual;
                 end;
 PTUserTypeDescriptor=^TUserTypeDescriptor;
 TUserTypeDescriptor=object(UserTypeDescriptor)
-                          function CreateProperties(PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;abstract;
+                          function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;abstract;
                           procedure IncAddr(var addr:GDBPointer);virtual;
                           function CreatePD:GDBPointer;
                           function GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:GDBInteger):PPropertyDeskriptor;
@@ -97,6 +119,7 @@ uses varman,strmy;
 destructor MetodDescriptor.Done;
 begin
                       MetodName:='';
+                      ObjName:='';
                       OperandsName:='';
                       Operands.done;
                       ResultPTD:=nil;
@@ -112,9 +135,11 @@ var
   i:integer;
 begin
      punit:=pu;
+     GDBPointer(ObjName):=nil;
      GDBPointer(MetodName):=nil;
      GDBPointer(OperandsName):=nil;
      ResultPTD:=nil;
+     ObjName:=objn;
      MetodName:=mn;
      OperandsName:=dt;
      if dt='(var obj):GDBInteger;' then
@@ -198,13 +223,15 @@ begin
     GDBPointer(ValKey):=nil;
     GDBPointer(ValType):=nil;
     GDBPointer(category):=nil;
+    GDBPointer(r):=nil;
+    GDBPointer(w):=nil;
     PTypeManager:=nil;
     Attr:=0;
     Collapsed:=nil;
     ValueOffsetInMem:=0;
     valueAddres:=nil;
     HelpPointer:=nil;
-
+    Mode:=PDM_Field;
     _ppda:=nil;
     _bmode:=-1000;
 end;
@@ -215,7 +242,14 @@ begin
     ValKey:='';
     ValType:='';
     category:='';
-
+    r:='';
+    w:='';
+    if mode=PDM_Property then
+    if valueAddres<>nil then
+                                 begin
+                                      PTypeManager.MagicFreeInstance(valueAddres);
+                                      GDBFreeMem(valueAddres);
+                                 end;
     if SubNode<>nil then
     begin
          PTPropertyDeskriptorArray(SubNode)^.FreeAndDone;

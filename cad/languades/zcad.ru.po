@@ -21,6 +21,10 @@ msgstr "Чертить 3D полилинию"
 msgid "About"
 msgstr "О программе"
 
+#: ACN_ADDTOOWNER~caption
+msgid "Add to owner"
+msgstr ""
+
 #: ACN_BEDIT~caption
 msgid "Block editor"
 msgstr "Редактор блоков"
@@ -70,6 +74,14 @@ msgstr "Копировать"
 #: ACN_COPYCLIP~hint
 msgid "Copy to clipboard"
 msgstr "Копировать в клипбоард"
+
+#: ACN_COPYFROMOWNER~caption
+msgid "Copy from owner"
+msgstr ""
+
+#: ACN_COPYFROMOWNER~textimage
+msgid "COF"
+msgstr ""
 
 #: ACN_COPY~caption
 msgctxt "ACN_COPY~caption"
@@ -144,7 +156,7 @@ msgstr "Переместить примитивы"
 
 #: ACN_MULTIOBJVARMAN~caption
 msgid "Multi object variables manager"
-msgstr ""
+msgstr "Редактор переменных множества объектов"
 
 #: ACN_MULTIOBJVARMAN~textimage
 msgid "Mvar"
@@ -299,6 +311,14 @@ msgstr "Окно чертежей"
 msgid "DW"
 msgstr ""
 
+#: ACN_SNAPRUNTIME~caption
+msgid "Run time snap editor"
+msgstr "Редактор привязок"
+
+#: ACN_SNAPRUNTIME~textimage
+msgid "snap"
+msgstr ""
+
 #: ACN_TEXT~caption
 msgid "Draw text"
 msgstr "Чертить текст"
@@ -343,6 +363,10 @@ msgstr ""
 
 #: button_command~SetObjInsp(CURRENT)
 msgid "FIX"
+msgstr ""
+
+#: button_variable~DWG_AdditionalGrips
+msgid "+G"
 msgstr ""
 
 #: button_variable~DWG_DrawMode
@@ -566,7 +590,7 @@ msgstr "Тип линии"
 
 #: GDBObjVisualProp~LineTypeScale
 msgid "Line type scale"
-msgstr ""
+msgstr "Масштаб типа линии"
 
 #: GDBObjVisualProp~LineWeight
 #, fuzzy
@@ -640,6 +664,10 @@ msgstr "Вид"
 #: geometry.ges_dbz
 msgid "Divide by zero (Geometry.NormalizeVertex)"
 msgstr "Деление на ноль (Geometry.NormalizeVertex)"
+
+#: hint_panel~DWG_AdditionalGrips
+msgid "On/Off Additional grips"
+msgstr "Вкл./Выкл. добавочных ручек"
 
 #: hint_panel~DWG_DrawMode
 #| msgid "Show/Hide"
@@ -936,6 +964,10 @@ msgstr "Размер апертуры привязки"
 msgid "Mouse wheel scale factor"
 msgstr "Масштаб колеса мыши"
 
+#: tdwg~DWG_AdditionalGrips
+msgid "Additional grips"
+msgstr ""
+
 #: tdwg~DWG_CLayer
 msgid "Current layer"
 msgstr "Текущий слой"
@@ -1160,6 +1192,10 @@ msgstr "База описаний устройств"
 #: tpath~Fonts_Path
 msgid "Fonts"
 msgstr "Шрифты"
+
+#: tpath~LayoutFile
+msgid "Current layout"
+msgstr ""
 
 #: tpath~Program_Run
 msgid "Program"

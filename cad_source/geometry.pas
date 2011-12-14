@@ -152,6 +152,8 @@ function CalcPointTrueInFrustum (const lbegin:GDBvertex; const frustum:ClipArray
 function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:ClipArray):TINRect;inline;
 function CalcAABBInFrustum (const AABB:GDBBoundingBbox; const frustum:ClipArray):TINRect;inline;
 
+function GetXfFromZ(oz:GDBVertex):GDBVertex;
+
 var WorldMatrix{,CurrentCS}:DMatrix4D;
     wx:PGDBVertex;
     wy:PGDBVertex;
@@ -161,6 +163,15 @@ type
     TLineClipArray=array[0..5]of gdbdouble;
 implementation
 uses shared,log;
+function GetXfFromZ(oz:GDBVertex):GDBVertex;
+begin
+     if (abs (oz.x) < 1/64) and (abs (oz.y) < 1/64) then
+                                                                    result:=CrossVertex(YWCS,oz)
+                                                                else
+                                                                    result:=CrossVertex(ZWCS,oz);
+     normalizevertex(oz);
+end;
+
 function IsPointEqual(const p1,p2:gdbvertex):boolean;
 begin
      if SqrVertexlength(p1,p2)>sqreps then

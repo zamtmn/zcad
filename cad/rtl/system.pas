@@ -89,6 +89,11 @@ GDBvertex=record
                 y:GDBDouble;(*saved_to_shd*)
                 z:GDBDouble;(*saved_to_shd*)
           end;
+GDBBasis=record
+                ox:GDBvertex;(*'OX Axis'*)(*saved_to_shd*)
+                oy:GDBvertex;(*'OY Axis'*)(*saved_to_shd*)
+                oz:GDBvertex;(*'OZ Axis'*)(*saved_to_shd*)
+          end;
 GDBvertex3S=record
                 x:GDBFloat;(*saved_to_shd*)
                 y:GDBFloat;(*saved_to_shd*)
@@ -1087,6 +1092,8 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;abstract;
                     function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;abstract;
                     function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;abstract;
+                    procedure CalcObjMatrix;virtual;abstract;
+                    procedure ReCalcFromObjMatrix;virtual;abstract;
               end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDB3d.pas
 GDBObj3d=object(GDBObjEntity)
@@ -1136,9 +1143,7 @@ GDBObjWithMatrix=object(GDBObjEntity)
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBWithLocalCS.pas
 PGDBObj2dprop=^GDBObj2dprop;
 GDBObj2dprop=record
-                   OX:GDBvertex;(*'X Axis'*)(*saved_to_shd*)
-                   OY:GDBvertex;(*'Y Axis'*)(*saved_to_shd*)
-                   OZ:GDBvertex;(*'Z Axis'*)(*saved_to_shd*)
+                   Basis:GDBBasis;(*'Basis'*)(*saved_to_shd*)
                    P_insert:GDBvertex;(*'Insertion point OCS'*)(*saved_to_shd*)
              end;
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;

@@ -66,6 +66,7 @@ BaseDescriptor=record
                       UserName:GDBString;
                       PFT:PUserTypeDescriptor;
                       Attributes:GDBWord;
+                      Saved:GDBWord;
                end;
 
 FieldDescriptor=record
@@ -75,7 +76,6 @@ FieldDescriptor=record
                       //PFT:PUserTypeDescriptor;
                       Offset,Size:GDBInteger;
                       //Attributes:GDBWord;
-                      Saved:GDBWord;
                       Collapsed:GDBBoolean;
                 end;
 PPropertyDescriptor=^PropertyDescriptor;

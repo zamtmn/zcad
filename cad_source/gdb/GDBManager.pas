@@ -302,11 +302,13 @@ begin
   GDBPointer(pb^.name) := nil;
   pb^.name := nam;
   pb.index := -1;
-  pb.rotate := angle;
+  //pb.rotate := angle;
   pb.pattrib := nil;
   pb^.index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(nam));
   //pb^.format;
   //pb^.ObjArray.init(1000);
+  pb^.CalcObjMatrix;
+  pb.setrot(angle);
   pb^.BuildGeometry;
   pb^.BuildVarGeometry;
   pb^.format;

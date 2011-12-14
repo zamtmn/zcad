@@ -94,11 +94,11 @@ begin
                                         m3:=m2;
                                         matrixinvert(m3);
                                         objMatrix:=MatrixMultiply(m3,objMatrix);
-                                        if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
-                                                                                                       ox:=CrossVertex(YWCS,{PGDBVertex(@m[2])^}Local.oz)
+                                        if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
+                                                                                                       ox:=CrossVertex(YWCS,{PGDBVertex(@m[2])^}Local.basis.oz)
                                                                                                    else
-                                                                                                       ox:=CrossVertex(ZWCS,{PGDBVertex(@m[2])^}Local.oz);
-                                        r:=geometry.scalardot({PGDBVertex(@m[0])^}Local.ox,ox);
+                                                                                                       ox:=CrossVertex(ZWCS,{PGDBVertex(@m[2])^}Local.basis.oz);
+                                        r:=geometry.scalardot({PGDBVertex(@m[0])^}Local.basis.ox,ox);
                                         r:=arccos(r)*180/pi;
                                         setrot(-r);
                                         r:=textprop.angle;
@@ -115,12 +115,12 @@ var
     ox:gdbvertex;
 begin
      inherited;
-     Local.ox:=PGDBVertex(@objmatrix[0])^;
-     Local.oy:=PGDBVertex(@objmatrix[1])^;
+     Local.basis.ox:=PGDBVertex(@objmatrix[0])^;
+     Local.basis.oy:=PGDBVertex(@objmatrix[1])^;
 
-     Local.ox:=normalizevertex(Local.ox);
-     Local.oy:=normalizevertex(Local.oy);
-     Local.oz:=normalizevertex(Local.oz);
+     Local.basis.ox:=normalizevertex(Local.basis.ox);
+     Local.basis.oy:=normalizevertex(Local.basis.oy);
+     Local.basis.oz:=normalizevertex(Local.basis.oz);
 
      Local.P_insert:=PGDBVertex(@objmatrix[3])^;
 
@@ -128,14 +128,14 @@ begin
      scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y;
      scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;}
 
-     if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
-                                                                    ox:=CrossVertex(YWCS,Local.oz)
+     if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
+                                                                    ox:=CrossVertex(YWCS,Local.basis.oz)
                                                                 else
-                                                                    ox:=CrossVertex(ZWCS,Local.oz);
+                                                                    ox:=CrossVertex(ZWCS,Local.basis.oz);
      normalizevertex(ox);
-     textprop.angle:=geometry.scalardot(Local.ox,ox);
+     textprop.angle:=geometry.scalardot(Local.basis.ox,ox);
      textprop.angle:=arccos(textprop.angle)*180/pi;
-     if local.OX.y<-eps then textprop.angle:=360-textprop.angle;
+     if local.basis.OX.y<-eps then textprop.angle:=360-textprop.angle;
 end;
 
 function convertfromunicode(s:GDBString):GDBString;

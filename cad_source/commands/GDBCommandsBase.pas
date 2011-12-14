@@ -411,6 +411,8 @@ function SetObjInsp_com(Operands:pansichar):GDBInteger;
 var
    obj:gdbstring;
    objt:PUserTypeDescriptor;
+  pp:PGDBObjEntity;
+  ir:itrec;
 begin
      if Operands='VARS' then
                             begin
@@ -432,7 +434,21 @@ else if Operands='CURRENT' then
                                      end
                                  else
                                      begin
-                                          ShowError('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL');
+                                          ShowError('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL, try find selected in DRAWING...');
+                                          pp:=gdb.GetCurrentROOT.objarray.beginiterate(ir);
+                                          if pp<>nil then
+                                         begin
+                                              repeat
+                                              if pp^.Selected then
+                                                              begin
+                                                                   obj:=pp^.GetObjTypeName;
+                                                                   objt:=SysUnit.TypeName2PTD(obj);
+                                                                   SetGDBObjInsp(objt,pp);
+                                                                   exit;
+                                                              end;
+                                              pp:=gdb.GetCurrentROOT.objarray.iterate(ir);
+                                              until pp=nil;
+                                         end;
                                      end;
                                  SysVar.DWG.DWG_SelectedObjToInsp^:=false;
                             end

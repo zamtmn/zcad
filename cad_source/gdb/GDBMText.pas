@@ -84,11 +84,11 @@ begin
 
 //  if angleload then
   begin
-     if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
-                                                                    Local.ox:=CrossVertex(YWCS,Local.oz)
+     if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
+                                                                    Local.basis.ox:=CrossVertex(YWCS,Local.basis.oz)
                                                                 else
-                                                                    Local.ox:=CrossVertex(ZWCS,Local.oz);
-  local.OX:=VectorTransform3D(local.OX,geometry.CreateAffineRotationMatrix(Local.oz,-textprop.angle*pi/180));
+                                                                    Local.basis.ox:=CrossVertex(ZWCS,Local.basis.oz);
+  local.basis.OX:=VectorTransform3D(local.basis.OX,geometry.CreateAffineRotationMatrix(Local.basis.oz,-textprop.angle*pi/180));
   end;
 
   text.init(10);
@@ -902,7 +902,7 @@ begin
   linespace := textprop.size * linespacef * 5 / 3;
   if not angleload then
                        textprop.angle := vertexangle(NulVertex2D,pgdbvertex2d(@ux)^) * 180 / pi;
-  Local.ox:=ux;
+  Local.basis.ox:=ux;
   //ptext := nil;
   //text.init(10);
   //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{60EB8545-4D59-48BF-9489-41979066A13F}',{$ENDIF}100);
@@ -961,7 +961,7 @@ begin
   end;
   dxfGDBStringout(outhandle,7,PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.name);
   SaveToDXFObjPostfix(outhandle);
-  dxfvertexout(outhandle,11,Local.ox);
+  dxfvertexout(outhandle,11,Local.basis.ox);
   dxfGDBDoubleout(outhandle,44,3 * linespace / (5 * textprop.size));
 end;
 begin

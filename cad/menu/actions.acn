@@ -19,7 +19,7 @@ action ACN_SELSIM,SelSim,#SSim,Select similar,,
 action ACN_El_FIND,EL_Find,find.bmp,Find device,,CTRL+F
 
 action ACN_PROJECTTREE,ProjectTree,treeview.bmp,Project tree,,CTRL+T
-action ACN_REGEN,Regen,regen.bmp,Regen all,,
+action ACN_REGEN,Regen,regen.bmp,Regen all,,CTRL+R
 action ACN_PERSPECTIVE,ChangeProjType,perspective.bmp,Perspective,Perspective on/off,
 action ACN_SHOW_OBJECTINSPECTOR,Show(ObjectInspector),#OI,Object inspector,,
 action ACN_SHOW_PAGECONTROL,Show(PageControl),#DW,Drawings window,,

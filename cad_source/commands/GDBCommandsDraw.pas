@@ -540,7 +540,7 @@ begin
     nb^.vp.ID:=GDBBlockInsertID;
     nb^.Local.p_insert:=pb.Local.P_insert;
     nb^.scale:=pb.Scale;
-    nb^.rotate:=pb.rotate;
+    //nb^.rotate:=pb.rotate;
     //nb^.
     //GDBObjCircleInit(pc,gdb.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
     //pc^.lod:=4;
@@ -1318,7 +1318,9 @@ begin
     pb^.vp.ID:=GDBBlockInsertID;
     pb^.Local.p_insert:=wc;
     pb^.scale:=BIProp.Scale;
-    pb^.rotate:=BIProp.Rotation;
+    pb^.CalcObjMatrix;
+    //pb^.rotate:=BIProp.Rotation;
+    pb.setrot(BIProp.Rotation);
     //pb^.
     //GDBObjCircleInit(pc,gdb.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
     //pc^.lod:=4;
@@ -1366,7 +1368,9 @@ begin
 
     pb^.Local.p_insert:=wc;
     pb^.scale:=BIProp.Scale;
-    pb^.rotate:=BIProp.Rotation;
+    pb^.CalcObjMatrix;
+    //pb^.rotate:=BIProp.Rotation;
+    pb.setrot(BIProp.Rotation);
 
     tb:=pb^.FromDXFPostProcessBeforeAdd(nil);
     if tb<>nil then begin
@@ -1500,7 +1504,7 @@ begin
            if not geometry.IsVectorNul(xdir) then
            begin
            if pgdbobjentity(osp.PGDBObject)^.IsHaveLCS then
-                                                           ydir:=normalizevertex(geometry.vectordot(pgdbobjlwPolyline(osp.PGDBObject).Local.OZ,xdir))
+                                                           ydir:=normalizevertex(geometry.vectordot(pgdbobjlwPolyline(osp.PGDBObject).Local.basis.OZ,xdir))
                                                        else
                                                            ydir:=normalizevertex(geometry.vectordot(ZWCS,xdir));
            tv:=wc;
@@ -1511,7 +1515,7 @@ begin
            PGDBVertex(@rotmatr[0])^:=xdir;
            PGDBVertex(@rotmatr[1])^:=ydir;
            if pgdbobjentity(osp.PGDBObject)^.IsHaveLCS then
-                                                           PGDBVertex(@rotmatr[2])^:=pgdbobjlwPolyline(osp.PGDBObject).Local.OZ
+                                                           PGDBVertex(@rotmatr[2])^:=pgdbobjlwPolyline(osp.PGDBObject).Local.basis.OZ
                                                        else
                                                            PGDBVertex(@rotmatr[2])^:={ZWCS}normalizevertex(geometry.vectordot(ydir,xdir));
            //rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
@@ -1545,7 +1549,7 @@ begin
            if not geometry.IsVectorNul(xdir) then
            begin
            if pgdbobjentity(osp.PGDBObject)^.IsHaveLCS then
-                                                           ydir:=normalizevertex(geometry.vectordot(pgdbobjlwPolyline(osp.PGDBObject).Local.OZ,xdir))
+                                                           ydir:=normalizevertex(geometry.vectordot(pgdbobjlwPolyline(osp.PGDBObject).Local.basis.OZ,xdir))
                                                        else
                                                            ydir:=normalizevertex(geometry.vectordot(ZWCS,xdir));
 
@@ -1557,7 +1561,7 @@ begin
            PGDBVertex(@rotmatr[0])^:=xdir;
            PGDBVertex(@rotmatr[1])^:=ydir;
            if pgdbobjentity(osp.PGDBObject)^.IsHaveLCS then
-                                                           PGDBVertex(@rotmatr[2])^:=pgdbobjlwPolyline(osp.PGDBObject).Local.OZ
+                                                           PGDBVertex(@rotmatr[2])^:=pgdbobjlwPolyline(osp.PGDBObject).Local.basis.OZ
                                                        else
                                                            PGDBVertex(@rotmatr[2])^:={ZWCS}normalizevertex(geometry.vectordot(ydir,xdir));;
            {xdir:=normalizevertex(xdir);

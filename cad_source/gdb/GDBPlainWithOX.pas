@@ -46,15 +46,15 @@ begin
      Local.ox.y:=0;
      Local.ox.z:=0;}
 
-     Local.ox:=NormalizeVertex(Local.ox);
-     Local.oy:=CrossVertex(Local.oz,Local.ox);
-     Local.oy:=NormalizeVertex(Local.oy);
-     Local.oz:=NormalizeVertex(Local.oz);
+     Local.basis.ox:=NormalizeVertex(Local.basis.ox);
+     Local.basis.oy:=CrossVertex(Local.basis.oz,Local.basis.ox);
+     Local.basis.oy:=NormalizeVertex(Local.basis.oy);
+     Local.basis.oz:=NormalizeVertex(Local.basis.oz);
 
      rotmatr:=onematrix;
-     PGDBVertex(@rotmatr[0])^:=Local.ox;
-     PGDBVertex(@rotmatr[1])^:=Local.oy;
-     PGDBVertex(@rotmatr[2])^:=Local.oz;
+     PGDBVertex(@rotmatr[0])^:=Local.basis.ox;
+     PGDBVertex(@rotmatr[1])^:=Local.basis.oy;
+     PGDBVertex(@rotmatr[2])^:=Local.basis.oz;
 
      //MatrixTranspose(rotmatr);
 

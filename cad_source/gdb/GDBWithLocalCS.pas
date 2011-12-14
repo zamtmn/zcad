@@ -28,9 +28,7 @@ type
 {EXPORT+}
 PGDBObj2dprop=^GDBObj2dprop;
 GDBObj2dprop=record
-                   OX:GDBvertex;(*'X Axis'*)(*saved_to_shd*)
-                   OY:GDBvertex;(*'Y Axis'*)(*saved_to_shd*)
-                   OZ:GDBvertex;(*'Z Axis'*)(*saved_to_shd*)
+                   Basis:GDBBasis;(*'Basis'*)(*saved_to_shd*)
                    P_insert:GDBvertex;(*'Insertion point OCS'*)(*saved_to_shd*)
              end;
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
@@ -72,13 +70,13 @@ var
     ox:gdbvertex;
 begin
      inherited;
-     Local.ox:=PGDBVertex(@objmatrix[0])^;
-     Local.oy:=PGDBVertex(@objmatrix[1])^;
-     Local.oz:=PGDBVertex(@objmatrix[2])^;
+     Local.basis.ox:=PGDBVertex(@objmatrix[0])^;
+     Local.basis.oy:=PGDBVertex(@objmatrix[1])^;
+     Local.basis.oz:=PGDBVertex(@objmatrix[2])^;
 
-     Local.ox:=normalizevertex(Local.ox);
-     Local.oy:=normalizevertex(Local.oy);
-     Local.oz:=normalizevertex(Local.oz);
+     Local.basis.ox:=normalizevertex(Local.basis.ox);
+     Local.basis.oy:=normalizevertex(Local.basis.oy);
+     Local.basis.oz:=normalizevertex(Local.basis.oz);
 
      {scale.x:=PGDBVertex(@objmatrix[0])^.x/local.OX.x;
      scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y;
@@ -150,9 +148,9 @@ end;
 constructor GDBObjWithLocalCS.initnul;
 begin
   ObjMatrix:=OneMatrix;
-  Local.ox:=XWCS;
-  Local.oy:=YWCS;
-  Local.oz:=ZWCS;
+  Local.basis.ox:=XWCS;
+  Local.basis.oy:=YWCS;
+  Local.basis.oz:=ZWCS;
   local.p_insert:=nulvertex;
   inherited initnul(owner);
   pprojoutbound:=nil;
@@ -165,15 +163,15 @@ begin
   powner:=bp.ListPos.owner;
   if powner<>nil then
   begin
-  Local.ox:={wx^}PGDBVertex(@powner^.GetMatrix^[0])^;
-  Local.oy:={wy^}PGDBVertex(@powner^.GetMatrix^[1])^;
-  Local.oz:={wz^}PGDBVertex(@powner^.GetMatrix^[2])^;
+  Local.basis.ox:={wx^}PGDBVertex(@powner^.GetMatrix^[0])^;
+  Local.basis.oy:={wy^}PGDBVertex(@powner^.GetMatrix^[1])^;
+  Local.basis.oz:={wz^}PGDBVertex(@powner^.GetMatrix^[2])^;
   end
   else
   begin
-  Local.ox:=XWCS;
-  Local.oy:=YWCS;
-  Local.oz:=ZWCS;
+  Local.basis.ox:=XWCS;
+  Local.basis.oy:=YWCS;
+  Local.basis.oz:=ZWCS;
   end;
 
   pprojoutbound:=nil;
@@ -187,19 +185,20 @@ function GDBObjWithLocalCS.CalcObjMatrixWithoutOwner;
 var rotmatr,dispmatr:DMatrix4D;
 begin
      //Local.oz:=NormalizeVertex(Local.oz);
-     if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
+     Local.basis.ox:=GetXfFromZ(Local.basis.oz);
+     {if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
                                                                     Local.ox:=CrossVertex(YWCS,Local.oz)
                                                                 else
-                                                                    Local.ox:=CrossVertex(ZWCS,Local.oz);
-     Local.ox:=NormalizeVertex(Local.ox);
-     Local.oy:=CrossVertex(Local.oz,Local.ox);
-     Local.oy:=NormalizeVertex(Local.oy);
-     Local.oz:=NormalizeVertex(Local.oz);
+                                                                    Local.ox:=CrossVertex(ZWCS,Local.oz);}
+     Local.basis.oy:=CrossVertex(Local.basis.oz,Local.basis.ox);
+
+     Local.basis.oy:=NormalizeVertex(Local.basis.oy);
+     Local.basis.oz:=NormalizeVertex(Local.basis.oz);
 
      rotmatr:=onematrix;
-     PGDBVertex(@rotmatr[0])^:=Local.ox;
-     PGDBVertex(@rotmatr[1])^:=Local.oy;
-     PGDBVertex(@rotmatr[2])^:=Local.oz;
+     PGDBVertex(@rotmatr[0])^:=Local.basis.ox;
+     PGDBVertex(@rotmatr[1])^:=Local.basis.oy;
+     PGDBVertex(@rotmatr[2])^:=Local.basis.oz;
 
      dispmatr:=onematrix;
      PGDBVertex(@dispmatr[3])^:=Local.p_insert;
@@ -272,9 +271,9 @@ begin
 end;
 procedure GDBObjWithLocalCS.SaveToDXFObjPostfix;
 begin
-  if (abs(local.oz.x)>eps)or(abs(local.oz.y)>eps)or(abs(local.oz.z-1)>eps) then
+  if (abs(local.basis.oz.x)>eps)or(abs(local.basis.oz.y)>eps)or(abs(local.basis.oz.z-1)>eps) then
   begin
-  dxfvertexout(outhandle,210,local.oz);
+  dxfvertexout(outhandle,210,local.basis.oz);
   {WriteString_EOL(outhandle, '210');
   WriteString_EOL(outhandle, floattostr(local.oz.x));
   WriteString_EOL(outhandle, '220');
@@ -287,7 +286,7 @@ function GDBObjWithLocalCS.LoadFromDXFObjShared;
 //var s:GDBString;
 begin
      result:=inherited LoadFromDXFObjShared(f,dxfcod,ptu);
-     if not result then result:=dxfvertexload(f,210,dxfcod,Local.oz);
+     if not result then result:=dxfvertexload(f,210,dxfcod,Local.basis.oz);
 end;
 destructor GDBObjWithLocalCS.done;
 begin

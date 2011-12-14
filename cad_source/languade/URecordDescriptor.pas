@@ -155,7 +155,7 @@ begin
         repeat
                    if pd^.base.ProgramName='Entities' then
                                     pd:=pd;
-              if (pd^.Saved and SaveFlag)<>0 then
+              if (pd^.base.Saved and SaveFlag)<>0 then
               begin
                    {$IFDEF DEBUGBUILD}programlog.logoutstr(pd^.FieldName,0);{$ENDIF}
                    p:=PInstance;
@@ -182,7 +182,7 @@ begin
                                                             begin
                                                                  pd^.base.PFT^.Serialize(p,SaveFlag,membuf,linkbuf,sub)
                                                             end;
-                   pd^.Saved:=pd^.Saved;
+                   pd^.base.Saved:=pd^.base.Saved;
               end;
               fo:=fo+pd^.Size;
               pd:=Fields.iterate(ir);
@@ -221,7 +221,7 @@ begin
      pd:=Fields.beginiterate(ir);
      if pd<>nil then
      repeat
-              if (pd^.Saved and SaveFlag)<>0 then
+              if (pd^.base.Saved and SaveFlag)<>0 then
               begin
                    {$IFDEF TOTALYLOG}programlog.logoutstr(pd^.FieldName,0);{$ENDIF}
                    p:=PInstance;
@@ -315,7 +315,7 @@ begin
               d.Offset:=pd^.Offset;
               d.Size:=pd^.Size;
               d.base.Attributes:=pd^.base.Attributes;
-              d.Saved:=pd^.Saved;
+              d.base.Saved:=pd^.base.Saved;
               d.Collapsed:=pd^.Collapsed;
               PRecordDescriptor(rd)^.AddField(d);
               GDBPointer(d.base.ProgramName):=nil;

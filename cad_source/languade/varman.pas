@@ -684,12 +684,21 @@ var parseerror{,parsesuberror}:GDBBoolean;
   //md:MetodDescriptor;
   pf:PFieldDescriptor;
 //function getla
+function getlastfirld:PBaseDescriptor;
+begin
+     if state=metods then
+                         result:=@PPropertyDescriptor(PObjectDescriptor(ptd)^.Properties.getelement(PObjectDescriptor(ptd)^.Properties.Count-1))^.base
+                     else
+                         result:=@PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.base
+end;
+
 begin
      //vv:=fieldoffset;
      state:=fields;
      count:=0;
      fieldsmode:=primary;
      repeat
+           //programlog.LogOutStr(line,0);
            parseresult:=getpattern(@parseobjmember,maxobjmember,line,typ);
            case typ of
            oaopo:begin
@@ -736,7 +745,7 @@ begin
                                                        end;
                                                       {$ENDIF}
                                                   end;
-                               if functionname='getrot' then
+                               if functionname='ReCalcFromObjMatrix' then
                                                                    functionname:=functionname;
 
                                if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
@@ -760,18 +769,18 @@ begin
            oi_hidden:
                           begin
                                //a:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.Attributes;
-                               PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.base.Attributes:=
-                               PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP;
+                               getlastfirld.Attributes:=
+                               getlastfirld.Attributes or FA_HIDDEN_IN_OBJ_INSP;
                           end;
            oi_readonly:
                        begin
                                //a:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.Attributes;
-                               PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.base.Attributes:=
-                               PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.base.Attributes or FA_READONLY;
+                               getlastfirld.Attributes:=
+                               getlastfirld.Attributes or FA_READONLY;
                           end;
            savedtoshd:
-                      PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.saved:=
-                      PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1))^.saved or SA_SAVED_TO_SHD;
+                      getlastfirld.saved:=
+                      getlastfirld.saved or SA_SAVED_TO_SHD;
            username:
                     begin
                       fieldtype:=parseresult^.getGDBString(0);
@@ -779,8 +788,8 @@ begin
                       if fieldtype='Paths' then
                                           fieldtype:=fieldtype;
                       fieldtype:=InterfaceTranslate(ptd.TypeName+'~'+pf^.base.ProgramName,fieldtype);
-                      pf^.base.username:={parseresult^.getGDBString(0)}fieldtype;
-                      fieldtype:=parseresult^.getGDBString(0);
+                      getlastfirld.username:={parseresult^.getGDBString(0)}fieldtype;
+                      //fieldtype:=parseresult^.getGDBString(0);
                     end;
            membermodifier:
                           begin
@@ -800,6 +809,7 @@ begin
                                        pd.base.PFT:=fieldgdbtype;
                                        pd.r:=parseresult^.getGDBString(2);
                                        pd.w:=parseresult^.getGDBString(3);
+                                       pd.base.Attributes:=0;
                                        if ptd<>nil then PObjectDescriptor(ptd)^.AddProperty(pd);
                                   end
                               else
@@ -813,7 +823,8 @@ begin
           end;
                     field:
                           begin
-                               if state=metods then FatalError('Syntax error in file '+f.name)
+                               if state=metods then
+                                                    FatalError('Syntax error in file '+f.name)
                                                else
                                                    begin
                                                        {if (line='')or(count=5) then
@@ -829,6 +840,8 @@ begin
                                                         for i:=0 to parseresult.Count-2 do
                                                         begin
                                                              fieldname:=parseresult^.getGDBString(i);
+                                                             if fieldname='PInOCS' then
+                                                                                           fieldname:=fieldname;
                                                              GDBStringtypearray := GDBStringtypearray + fieldname + #0;
                                                              if fieldsmode=primary then GDBStringtypearray := GDBStringtypearray+'P'
                                                                                    else GDBStringtypearray := GDBStringtypearray+'C';
@@ -839,7 +852,7 @@ begin
                                                              GDBPointer(fd.base.UserName):=nil;
                                                              //fd.UserName:='sdfsdf';
                                                              fd.base.Attributes:=0;
-                                                             fd.Saved:=0;
+                                                             fd.base.Saved:=0;
                                                              fd.Collapsed:=true;
                                                              //if fieldsmode<>primary then fd.Attributes:=fd.Attributes or FA_CALCULATED;
                                                              fd.Offset:=fieldoffset;
@@ -859,7 +872,7 @@ begin
                           end;
            end;{case}
            if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
-           if (line='')or(count=100) then
+           if (line='')or(count=200) then
                                                              line := f.readtoparser(';')
                                                          else
                                                              begin

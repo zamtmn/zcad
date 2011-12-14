@@ -110,7 +110,7 @@ type
                          DialogPanel: TButtonPanel;
                          procedure AfterConstruction; override;
                     end;
-  TToolButtonForm = class({tform}tpanel)
+  TToolButtonForm = class(tform{tpanel})
                          procedure AfterConstruction; override;
                          //public
                          //procedure GetPreferredSize(var PreferredWidth, PreferredHeight: integer;

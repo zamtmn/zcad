@@ -22,7 +22,7 @@ interface
 uses {URecordDescriptor,}UObjectDescriptor,TypeDescriptors;
 procedure startup;
 implementation
-uses GDBBlockDef,varman,UGDBDescriptor,UGDBLayerArray,UGDBTextStyleArray,
+uses GDBDevice,GDBBlockDef,varman,UGDBDescriptor,UGDBLayerArray,UGDBTextStyleArray,
      UGDBOpenArrayOfTObjLinkRecord,UGDBObjBlockdefArray,UGDBVisibleOpenArray,
      GDBRoot,{gdbEntity,}GDBBlockInsert,GDBCircle,GDBArc,
      GDBPoint,GDBText,GDBMText,GDBLine,GDBPolyLine,GDBLWPolyLine,GDBNet,
@@ -106,6 +106,9 @@ begin
      potd:=PObjectDescriptor(SysUnit.TypeName2PTD('GDBObjBlockInsert'));
      potd^.RegisterObject(typeof(GDBObjBlockInsert),@GDBObjBlockInsert.initnul);
 
+     potd:=PObjectDescriptor(SysUnit.TypeName2PTD('GDBObjDevice'));
+     potd^.RegisterObject(typeof(GDBObjDevice),@GDBObjDevice.initnul);
+
      potd:=PObjectDescriptor(SysUnit.TypeName2PTD('GDBObjText'));
      potd^.RegisterObject(typeof(GDBObjText),@GDBObjText.initnul);
      //PObjectDescriptor(Types.TypeName2PTD('GDBObjText'))^.RegisterVMT(typeof(GDBObjText));
@@ -116,6 +119,7 @@ begin
 
      potd:=PObjectDescriptor(SysUnit.TypeName2PTD('GDBObjBlockdef'));
      potd^.RegisterObject(typeof(GDBObjBlockdef),@GDBObjBlockdef.initnul);
+
      //PObjectDescriptor(Types.TypeName2PTD('GDBObjBlockdef'))^.RegisterVMT(typeof(GDBObjBlockdef));
      //PObjectDescriptor(Types.TypeName2PTD('GDBObjBlockdef'))^.RegisterDefaultConstructor(@GDBObjBlockdef.initnul);
 

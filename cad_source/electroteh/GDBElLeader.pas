@@ -400,7 +400,7 @@ begin
 
      if pdev=nil then
      begin
-     tv:=geometry.vectordot(mainline.dir,Local.OZ);
+     tv:=geometry.vectordot(mainline.dir,Local.basis.OZ);
      tv:=geometry.NormalizeVertex(tv);
      tv:=geometry.VertexMulOnSc(tv,scale);
 
@@ -409,9 +409,9 @@ begin
                              tv2:=GetDirInPoint(pcable^.VertexArrayInWCS,mainline.CoordInWCS.lBegin,false);
                              tv3:=geometry.vectordot(tv2,mainline.dir);
                              if {tv3.z}scalardot(tv2,mainline.dir)>0 then
-                                            tv2:=geometry.vectordot(tv2,Local.OZ)
+                                            tv2:=geometry.vectordot(tv2,Local.basis.OZ)
                                         else
-                                            tv2:=geometry.vectordot(Local.OZ,tv2);
+                                            tv2:=geometry.vectordot(Local.basis.OZ,tv2);
                              //tv2:=geometry.vectordot(tv2,Local.OZ);
                              tv2:=geometry.NormalizeVertex(tv2);
                              tv2:=geometry.VertexMulOnSc(tv2,scale);
@@ -686,7 +686,7 @@ begin
      vp.ID:=GDBElLeaderID;
      MainLine.init(@self,vp.Layer,vp.LineWeight,geometry.VertexMulOnSc(onevertex,-10),nulvertex);
      //MainLine.Format;
-     tv:=geometry.vectordot(geometry.VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin) ,Local.OZ);
+     tv:=geometry.vectordot(geometry.VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin) ,Local.basis.OZ);
      if not IsVectorNul(tv) then
                                 tv:=geometry.NormalizeVertex(tv);
      MarkLine.init(@self,vp.Layer,vp.LineWeight,VertexSub(MainLine.CoordInOCS.lBegin,tv),VertexAdd(MainLine.CoordInOCS.lBegin,tv));

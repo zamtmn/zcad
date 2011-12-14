@@ -686,17 +686,17 @@ begin
       210:
         begin
           s := f.readgdbstring;
-          val(s, Local.oz.x, code);
+          val(s, Local.basis.oz.x, code);
         end;
       220:
         begin
           s := f.readgdbstring;
-          val(s, Local.oz.y, code);
+          val(s, Local.basis.oz.y, code);
         end;
       230:
         begin
           s := f.readgdbstring;
-          val(s, Local.oz.z, code);
+          val(s, Local.basis.oz.z, code);
         end;
       370:
         begin

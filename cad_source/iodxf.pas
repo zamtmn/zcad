@@ -335,7 +335,8 @@ begin
                                  pobj.OU.CopyTo(@PGDBObjEntity(postobj)^.ou);
                                  pobj.done;
                                  GDBFreeMem(pointer(pobj));
-                                 if foc=0 then PGDBObjEntity(postobj)^.BuildGeometry;
+                                 if foc=0 then
+                                              PGDBObjEntity(postobj)^.BuildGeometry;
                                  if foc=0 then
                                               PGDBObjEntity(postobj)^.FormatAfterDXFLoad;
                                  if foc=0 then PGDBObjEntity(postobj)^.FromDXFPostProcessAfterAdd;

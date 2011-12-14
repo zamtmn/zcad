@@ -645,7 +645,8 @@ begin
        TB.Align:={alRight}alclient;
        //TB.AutoSize:=false;
        //TB.Width:=ToolBarU.Height;
-       //TB.EdgeBorders:=[ebRight];
+       if aName<>'Status' then
+       TB.EdgeBorders:=[];
        TB.ShowCaptions:=true;
        //TB.Wrapable:=true;
        TB.Parent:=ftoolbar;
@@ -675,8 +676,9 @@ begin
 
   end;
 end;
+
 procedure LoadLayoutFromFile(Filename: string);
-var
+(*var
   XMLConfig: TXMLConfig;
   Config: TXMLConfigStorage;
 begin
@@ -694,6 +696,27 @@ begin
     XMLConfig.Flush;
   finally
     XMLConfig.Free;
+  end;
+end;*)
+var
+  XMLConfig: TXMLConfigStorage;
+begin
+  try
+    // load the xml config file
+    XMLConfig:=TXMLConfigStorage.Create(Filename,True);
+    try
+      // restore the layout
+      // this will close unneeded forms and call OnCreateControl for all needed
+      DockMaster.LoadLayoutFromConfig(XMLConfig,false);
+    finally
+      XMLConfig.Free;
+    end;
+  except
+    on E: Exception do begin
+      MessageDlg('Error',
+        'Error loading layout from file '+Filename+':'#13+E.Message,mtError,
+        [mbCancel],0);
+    end;
   end;
 end;
 function LoadLayout_com(Operands:pansichar):GDBInteger;

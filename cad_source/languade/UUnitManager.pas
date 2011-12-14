@@ -377,7 +377,7 @@ begin
                                  objecttype:begin
                                                   {FPVMT}
                                                   typename:=parseresult^.getGDBString(0);
-                                                  if (typename) = 'TRestoreMode'
+                                                  if (typename) = 'GDBObj3DFace'
                                                   then
                                                        typename:=typename;
                                                   gdbgetmem({$IFDEF DEBUGBUILD}'{792FCD4D-5B31-441D-82DC-F62FE270D4DB}',{$ENDIF}GDBPointer(etd),sizeof(ObjectDescriptor));

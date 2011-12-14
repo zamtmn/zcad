@@ -44,6 +44,7 @@ type
     procedure CommandInit; virtual; abstract;
     procedure DrawHeplGeometry;virtual;
     destructor done;virtual;
+    function GetObjTypeName:GDBString;virtual;
   end;
   CommandFastObjectDef = object(CommandObjectDef)
     procedure CommandInit; virtual;abstract;
@@ -72,6 +73,12 @@ type
 {Export-}
 implementation
 //uses oglwindow;
+function CommandObjectDef.GetObjTypeName;
+begin
+     //pointer(result):=typeof(testobj);
+     result:='CommandObjectDef';
+
+end;
 destructor CommandObjectDef.done;
 begin
          //inherited;
@@ -136,4 +143,4 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}LogOut('commandlinedef.initialization');{$ENDIF}
-end.
+end.

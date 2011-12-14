@@ -87,7 +87,7 @@ uses
 function GDBObjCircle.GetTangentInPoint(point:GDBVertex):GDBVertex;
 begin
      point:=geometry.VertexSub(self.P_insert_in_WCS,point);
-     result:=normalizevertex(geometry.vectordot(point,self.Local.oz));
+     result:=normalizevertex(geometry.vectordot(point,self.Local.basis.oz));
 end;
 procedure GDBObjCircle.ReCalcFromObjMatrix;
 var
@@ -95,7 +95,7 @@ var
 begin
      inherited;
      Local.P_insert:=PGDBVertex(@objmatrix[3])^;
-     self.Radius:=PGDBVertex(@objmatrix[0])^.x/local.OX.x;
+     self.Radius:=PGDBVertex(@objmatrix[0])^.x/local.basis.OX.x;
      {scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y;
      scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;}
 
@@ -199,9 +199,9 @@ begin
   inherited init(own,layeraddres, lw);
   vp.ID := GDBCircleID;
   Local.p_insert := p;
-  Local.ox:=XWCS;
-  Local.oy:=YWCS;
-  Local.oz:=ZWCS;
+  Local.basis.ox:=XWCS;
+  Local.basis.oy:=YWCS;
+  Local.basis.oz:=ZWCS;
   Radius := rr;
   //ObjToGDBString('','');
   PProjoutbound:=nil;

@@ -152,11 +152,21 @@ GDBObjEntity=object(GDBObjSubordinated)
 
                     function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
                     function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
+                    procedure CalcObjMatrix;virtual;
+                    procedure ReCalcFromObjMatrix;virtual;
               end;
 {Export-}
 var onlygetsnapcount:GDBInteger;
 implementation
 uses UGDBEntTree,GDBGenericSubEntry,UGDBDescriptor,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+procedure GDBObjEntity.ReCalcFromObjMatrix;
+begin
+
+end;
+procedure GDBObjEntity.CalcObjMatrix;
+begin
+
+end;
 function GDBObjEntity.EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;
 begin
 

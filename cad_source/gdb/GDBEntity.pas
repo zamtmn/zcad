@@ -137,6 +137,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function IsSelected:GDBBoolean;virtual;
                     function IsActualy:GDBBoolean;virtual;
                     function IsHaveLCS:GDBBoolean;virtual;
+                    function IsHaveGRIPS:GDBBoolean;virtual;
                     function GetLayer:PGDBLayerProp;virtual;
                     function GetCenterPoint:GDBVertex;virtual;
                     procedure SetInFrustum(infrustumactualy:TActulity);virtual;
@@ -159,6 +160,11 @@ GDBObjEntity=object(GDBObjSubordinated)
 var onlygetsnapcount:GDBInteger;
 implementation
 uses UGDBEntTree,GDBGenericSubEntry,UGDBDescriptor,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+function GDBObjEntity.IsHaveGRIPS:GDBBoolean;
+begin
+     result:=true;
+end;
+
 procedure GDBObjEntity.ReCalcFromObjMatrix;
 begin
 
@@ -845,12 +851,14 @@ begin
           //selected:=true;
           tdesc:=gdb.GetCurrentDWG.SelObjArray.addobject(@self);
           if tdesc<>nil then
+          if IsHaveGRIPS then
           begin
           GDBGetMem({$IFDEF DEBUGBUILD}'{B50BE8C9-E00A-40C0-A051-230877BD3A56}',{$ENDIF}GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
           addcontrolpoints(tdesc);
+          end;
           bp.ListPos.Owner.ImSelected(@self,bp.ListPos.SelfIndex);
           inc(GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
-          end;
+
      end;
      end;
 end;

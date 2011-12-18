@@ -2218,8 +2218,12 @@ begin
   begin
   if PEProp.nearestvertex>-1 then
                           begin
-                          pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBCircleID,gdb.GetCurrentROOT));
-                          GDBObjCircleInit(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.vvertex,10*gdb.GetCurrentDWG.pcamera.prop.zoom);
+
+                          pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,gdb.GetCurrentROOT));
+                          GDBObjSetCircleProp(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.vvertex,10*gdb.GetCurrentDWG.pcamera.prop.zoom);
+
+                          //pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBCircleID,gdb.GetCurrentROOT));
+                          //GDBObjCircleInit(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.vvertex,10*gdb.GetCurrentDWG.pcamera.prop.zoom);
                           pc^.Format;
                           end;
   end;
@@ -2227,11 +2231,18 @@ begin
                                      begin
                                           if abs(PEProp.vdist-PEProp.ldist)>sqreps then
                                           begin
-                                               PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
-                                               GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.lvertex1, wc);
+                                              PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+                                              GDBObjSetLineProp(PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.lvertex1, wc);
+
+                                               //PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
+                                               //GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.lvertex1, wc);
                                                PCreatedGDBLine^.Format;
-                                               PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
-                                               GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc,PEProp.lvertex2);
+
+                                               PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+                                               GDBObjSetLineProp(PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.lvertex2, wc);
+
+                                               //PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
+                                               //GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc,PEProp.lvertex2);
                                                PCreatedGDBLine^.Format;
                                                PEProp.dir:=-1;
                                           end
@@ -2239,16 +2250,20 @@ begin
                                          begin
                                               if PEProp.nearestvertex=0 then
                                               begin
-                                                   PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
-                                                   GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.lvertex1, wc);
+                                              PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+                                               GDBObjSetLineProp(PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.lvertex1, wc);
+                                                   //PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
+                                                   //GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.lvertex1, wc);
                                                    PCreatedGDBLine^.Format;
                                                    PEProp.nearestline:=PEProp.nearestvertex;
                                                    PEProp.dir:=-1;
                                               end
                                               else if PEProp.nearestvertex=p3dpl^.vertexarrayinwcs.Count-1 then
                                               begin
-                                                   PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
-                                                   GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.lvertex2, wc);
+                                               PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+                                               GDBObjSetLineProp(PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.lvertex2, wc);
+                                                   //PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
+                                                   //GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.lvertex2, wc);
                                                    PCreatedGDBLine^.Format;
                                                    PEProp.nearestline:=PEProp.nearestvertex;
                                                    PEProp.dir:=1;
@@ -2258,20 +2273,29 @@ begin
                                      end;
   if (PEProp.Action=TSPE_Scissor) then
   begin
-  if PEProp.vdist>PEProp.ldist++bigeps then
+  if PEProp.vdist>PEProp.ldist+bigeps then
                                    begin
                                         _tv:=NearestPointOnSegment(wc,PEProp.lvertex1,PEProp.lvertex2);
-                                        pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBCircleID,gdb.GetCurrentROOT));
-                                        GDBObjCircleInit(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, _tv, 10*gdb.GetCurrentDWG.pcamera.prop.zoom);
+                                         pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,gdb.GetCurrentROOT));
+                                         GDBObjSetCircleProp(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, _tv, 10*gdb.GetCurrentDWG.pcamera.prop.zoom);
+                                        //pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBCircleID,gdb.GetCurrentROOT));
+                                        //GDBObjCircleInit(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, _tv, 10*gdb.GetCurrentDWG.pcamera.prop.zoom);
                                         pc^.Format;
-                                        PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
-                                        GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, _tv, wc);
+
+                                        PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+                                        GDBObjSetLineProp(PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, _tv, wc);
+
+                                        //PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
+                                        //GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, _tv, wc);
                                         PCreatedGDBLine^.Format;
                                    end
                                else
                                begin
-                                    pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBCircleID,gdb.GetCurrentROOT));
-                                    GDBObjCircleInit(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.vvertex, 40*gdb.GetCurrentDWG.pcamera.prop.zoom);
+                                 pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,gdb.GetCurrentROOT));
+                                 GDBObjSetCircleProp(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.vvertex, 40*gdb.GetCurrentDWG.pcamera.prop.zoom);
+
+                                    //pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBCircleID,gdb.GetCurrentROOT));
+                                    //GDBObjCircleInit(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, PEProp.vvertex, 40*gdb.GetCurrentDWG.pcamera.prop.zoom);
                                     pc^.Format;
                                end
 

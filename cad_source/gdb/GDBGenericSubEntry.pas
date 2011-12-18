@@ -50,7 +50,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             procedure FormatAfterEdit;virtual;
                             procedure restructure;virtual;
                             procedure renderfeedbac(infrustumactualy:TActulity);virtual;
-                            function select:GDBBoolean;virtual;
+                            //function select:GDBBoolean;virtual;
                             function getowner:PGDBObjSubordinated;virtual;
                             function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
                             function EubEntryType:GDBInteger;virtual;
@@ -488,7 +488,7 @@ begin
        //inc(pGDBPointer(p));
   end;
 end;
-function GDBObjGenericSubEntry.select;
+(*function GDBObjGenericSubEntry.select;
 //var tdesc:pselectedobjdesc;
 begin
   result:=false;
@@ -505,7 +505,7 @@ begin
           inc(poglwnd^.SelDesc.Selectedobjcount);}
      end;
   end;
-end;
+end;*)
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBSubEntry.initialization');{$ENDIF}
 end.

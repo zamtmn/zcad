@@ -36,23 +36,23 @@
             <Anchors Bottom="AnchorDockSplitter3"/>
           </Item6>
           <Item7 Name="Quick" Type="Control">
-            <Bounds Left="1212" Width="24" Height="87"/>
+            <Bounds Left="1212" Width="24" Height="80"/>
             <Anchors Left="AnchorDockSplitter4" Bottom="AnchorDockSplitter6"/>
           </Item7>
           <Item8 Name="AnchorDockSplitter5" Type="SplitterHorizontal">
-            <Bounds Top="245" Left="1212" Width="24" Height="4"/>
+            <Bounds Top="230" Left="1212" Width="24" Height="4"/>
             <Anchors Left="AnchorDockSplitter4"/>
           </Item8>
           <Item9 Name="Draw" Type="Control">
-            <Bounds Top="249" Left="1212" Width="24" Height="109"/>
+            <Bounds Top="234" Left="1212" Width="24" Height="124"/>
             <Anchors Top="AnchorDockSplitter5" Left="AnchorDockSplitter4" Bottom="AnchorDockSplitter7"/>
           </Item9>
           <Item10 Name="AnchorDockSplitter6" Type="SplitterHorizontal">
-            <Bounds Top="87" Left="1212" Width="24" Height="4"/>
+            <Bounds Top="80" Left="1212" Width="24" Height="4"/>
             <Anchors Left="AnchorDockSplitter4"/>
           </Item10>
           <Item11 Name="Modify" Type="Control">
-            <Bounds Top="91" Left="1212" Width="24" Height="154"/>
+            <Bounds Top="84" Left="1212" Width="24" Height="146"/>
             <Anchors Top="AnchorDockSplitter6" Left="AnchorDockSplitter4" Bottom="AnchorDockSplitter5"/>
           </Item11>
           <Item12 Name="AnchorDockSplitter7" Type="SplitterHorizontal">

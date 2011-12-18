@@ -65,7 +65,7 @@ end;
 
 function TmyPOFile.FindByIdentifier(const Identifier: String):TPOFileItem;
 begin
-     result:=TPOFileItem(FIdentifierToItem.Data[Identifier]);
+     result:=TPOFileItem({FIdentifierToItem}FIdentLowVarToItem.Data[Identifier]);
 end;
 procedure TmyPOFile.SaveToFile(const AFilename: string);
 begin
@@ -80,7 +80,7 @@ begin
       for j:=0 to Fitems.Count-1 do
            begin
                 item:=TPOFileItem(FItems[j]);
-                 ident:=item.Identifier;
+                 ident:=item.IdentifierLow;
                  if (pos('~',ident)<=0)
                  and(pos('.',ident)>0) then
                  begin
@@ -94,7 +94,7 @@ function TmyPOFile.Translate(const Identifier, OriginalValue: String): String;
 var
   Item: TPOFileItem;
 begin
-  Item:=TPOFileItem(FIdentifierToItem.Data[Identifier]);
+  Item:=TPOFileItem({FIdentifierToItem}FIdentLowVarToItem.Data[Identifier]);
   if Item=nil then
     Item:=TPOFileItem(FOriginalToItem.Data[OriginalValue]);
   if Item<>nil then begin
@@ -170,7 +170,7 @@ begin
 
     if sysinfo.sysparam.updatepo then
      begin
-          Item:=TPOFileItem(po.FIdentifierToItem.Data[Identifier]);
+          Item:=TPOFileItem(po.{FIdentifierToItem}FIdentLowVarToItem.Data[Identifier]);
           if not assigned(item) then
           begin
                if (pos('**',OriginalValue)>0)or(pos('??',OriginalValue)>0)then
@@ -199,7 +199,7 @@ begin
                                                    item.ModifyFlag('fuzzy',true);
                                                    item.Original:=OriginalValue;
                                                    end;
-               actualypo.Add(item.Identifier, item.Original, item.Translation, item.Comments,
+               actualypo.Add(item.IdentifierLow, item.Original, item.Translation, item.Comments,
                               item.Context, item.Flags,'');
           end;
 

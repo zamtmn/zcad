@@ -2486,13 +2486,13 @@ begin
        FDoc:=TCSVDocument.Create;
        FDoc.Delimiter:=';';
        FDoc.LoadFromFile(utf8tosys(s));
+       MainFormN.StartLongProcess(FDoc.RowCount);
        netarray.init(100);
-
        for row:=0 to FDoc.RowCount-1 do
        begin
             if FDoc.ColCount[row]>4 then
             begin
-                 if FDoc.Cells[0,row]='-2CO7' then
+                 if FDoc.Cells[0,row]='0S1' then
                                                   log.LogOut('asdasd');
                  //log.LogOut(FDoc.Cells[0,row]);
 
@@ -2601,10 +2601,14 @@ begin
                           if (net<>nil) then
                           repeat
 
-                                ir_net2:=ir_net;
-                                net2:=netarray.iterate(ir_net2);
+                                //ir_net2:=ir_net;
+                                //net2:=netarray.iterate(ir_net2);
+                                net2:=netarray.beginiterate(ir_net2);
+
                                 if (net2<>nil) then
                                 repeat
+                                      if net<>net2 then
+                                      begin
 
                                       net2processed:=false;
                                       riser:=net.riserarray.beginiterate(ir_riser);
@@ -2625,15 +2629,22 @@ begin
                                                             begin
                                                                  gdbgetmem(supernet,sizeof(GDBObjNet));
                                                                  supernet.initnul(nil);
-                                                                 net.objarray.copyto(@supernet.ObjArray);
+                                                                 //net.objarray.copyto(@supernet.ObjArray);
                                                                  log.LogOut('supernet.initnul(nil); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
+                                                            if not processednets.IsObjExist(net) then
+                                                            begin
+                                                                 net.objarray.copyto(@supernet.ObjArray);
+                                                                 processednets.AddRef(net^);
+                                                                 //net2processed:=true;
+                                                                 log.LogOut('processednets.AddRef(net^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
+                                                            end;
+
                                                             if not processednets.IsObjExist(net2) then
-                                                            //if not net2processed then
                                                             begin
                                                                  net2.objarray.copyto(@supernet.ObjArray);
                                                                  processednets.AddRef(net2^);
-                                                                 net2processed:=true;
+                                                                 //net2processed:=true;
                                                                  log.LogOut('processednets.AddRef(net2^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
 
@@ -2666,7 +2677,7 @@ begin
                                            riser:=net.riserarray.iterate(ir_riser);
                                       until riser=nil;
 
-
+                                end;
                                 net2:=netarray.iterate(ir_net2);
                                 until net2=nil;
 
@@ -2742,11 +2753,12 @@ begin
                 shared.HistoryOutStr(FDoc.Cells[col,row]);
                 end;
 
-
+       MainFormN.ProcessLongProcess(row);
        end;
        netarray.ClearAndDone;
 
        FDoc.Destroy;
+       MainFormN.EndLongProcess;
   end
             else
      shared.ShowError('GDBCommandsElectrical.El_ExternalKZ: Не могу открыть файл: '+s+'('+Operands+')');

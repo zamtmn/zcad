@@ -5,391 +5,391 @@ msgstr "Content-Type: text/plain; charset=UTF-8"
 msgid "About ZCAD"
 msgstr ""
 
-#: ACN_3DPOLY~caption
+#: acn_3dpoly~caption
 msgid "Draw 3Dpolyline"
 msgstr ""
 
-#: ACN_ABOUT~caption
+#: acn_about~caption
 msgid "About"
 msgstr ""
 
-#: ACN_ADDTOOWNER~caption
+#: acn_addtoowner~caption
 msgid "Add to owner"
 msgstr ""
 
-#: ACN_BEDIT~caption
+#: acn_bedit~caption
 msgid "Block editor"
 msgstr ""
 
-#: ACN_BInsert~caption
+#: acn_binsert~caption
 msgid "Insert block"
 msgstr ""
 
-#: ACN_BREPLACE~caption
+#: acn_breplace~caption
 msgid "Block replace"
 msgstr ""
 
-#: ACN_BREPLACE~textimage
+#: acn_breplace~textimage
 msgid "BR"
 msgstr ""
 
-#: ACN_BSCALE~caption
+#: acn_bscale~caption
 msgid "Block scale"
 msgstr ""
 
-#: ACN_BSCALE~textimage
+#: acn_bscale~textimage
 msgid "BS"
 msgstr ""
 
-#: ACN_CIRCLE~caption
+#: acn_circle~caption
 msgid "Draw circle"
 msgstr ""
 
-#: ACN_CLOSE~caption
+#: acn_close~caption
 msgid "Close drawing"
 msgstr ""
 
-#: ACN_COPYCLIPBASE~caption
+#: acn_copyclipbase~caption
 msgid "Copy with base point"
 msgstr ""
 
-#: ACN_COPYCLIPBASE~hint
+#: acn_copyclipbase~hint
 msgid "Copy to clipboard with base point"
 msgstr ""
 
-#: ACN_COPYCLIP~caption
+#: acn_copyclip~caption
 msgctxt "ACN_COPYCLIP~caption"
 msgid "Copy"
 msgstr ""
 
-#: ACN_COPYCLIP~hint
+#: acn_copyclip~hint
 msgid "Copy to clipboard"
 msgstr ""
 
-#: ACN_COPYFROMOWNER~caption
+#: acn_copyfromowner~caption
 msgid "Copy from owner"
 msgstr ""
 
-#: ACN_COPYFROMOWNER~textimage
+#: acn_copyfromowner~textimage
 msgid "COF"
 msgstr ""
 
-#: ACN_COPY~caption
+#: acn_copy~caption
 msgctxt "ACN_COPY~caption"
 msgid "Copy"
 msgstr ""
 
-#: ACN_COPY~hint
+#: acn_copy~hint
 msgid "Copy primitives"
 msgstr ""
 
-#: ACN_DESELECTALL~caption
+#: acn_deselectall~caption
 msgid "DeSelect all"
 msgstr ""
 
-#: ACN_DESELECTALL~textimage
+#: acn_deselectall~textimage
 msgid "DSA"
 msgstr ""
 
-#: ACN_El_FIND~caption
+#: acn_el_find~caption
 msgid "Find device"
 msgstr ""
 
-#: ACN_ERASE~caption
+#: acn_erase~caption
 msgid "Erase"
 msgstr ""
 
-#: ACN_Help~caption
+#: acn_help~caption
 msgctxt "ACN_Help~caption"
 msgid "Help"
 msgstr ""
 
-#: ACN_LAYER~caption
+#: acn_layer~caption
 msgid "Layers ..."
 msgstr ""
 
-#: ACN_LAYER~hint
+#: acn_layer~hint
 msgid "Layers properties manager"
 msgstr ""
 
-#: ACN_LINE~caption
+#: acn_line~caption
 msgid "Draw line"
 msgstr ""
 
-#: ACN_LOADQS~caption
+#: acn_loadqs~caption
 msgid "Open (Autosave)"
 msgstr ""
 
-#: ACN_LOADQS~hint
+#: acn_loadqs~hint
 msgid "Open last autosave"
 msgstr ""
 
-#: ACN_LOADQS~textimage
+#: acn_loadqs~textimage
 msgid "QL"
 msgstr ""
 
-#: ACN_LOAD~caption
+#: acn_load~caption
 msgid "Open ..."
 msgstr ""
 
-#: ACN_LOAD~hint
+#: acn_load~hint
 msgid "Open drawing"
 msgstr ""
 
-#: ACN_MOVE~caption
+#: acn_move~caption
 msgid "Move"
 msgstr ""
 
-#: ACN_MOVE~hint
+#: acn_move~hint
 msgid "Move primitives"
 msgstr ""
 
-#: ACN_MULTIOBJVARMAN~caption
+#: acn_multiobjvarman~caption
 msgid "Multi object variables manager"
 msgstr ""
 
-#: ACN_MULTIOBJVARMAN~textimage
+#: acn_multiobjvarman~textimage
 msgid "Mvar"
 msgstr ""
 
-#: ACN_NEW~caption
+#: acn_new~caption
 msgid "New drawing"
 msgstr ""
 
-#: ACN_OBJVARMAN~caption
+#: acn_objvarman~caption
 msgid "Object variables manager"
 msgstr ""
 
-#: ACN_OPTIONS~caption
+#: acn_options~caption
 msgid "Options"
 msgstr ""
 
-#: ACN_PASTE~caption
+#: acn_paste~caption
 msgid "Paste"
 msgstr ""
 
-#: ACN_PASTE~hint
+#: acn_paste~hint
 msgid "Paste from clipboard"
 msgstr ""
 
-#: ACN_PERSPECTIVE~caption
+#: acn_perspective~caption
 msgid "Perspective"
 msgstr ""
 
-#: ACN_PERSPECTIVE~hint
+#: acn_perspective~hint
 msgid "Perspective on/off"
 msgstr ""
 
-#: ACN_POLYED~caption
+#: acn_polyed~caption
 msgid "Edit polyline"
 msgstr ""
 
-#: ACN_PROJECTTREE~caption
+#: acn_projecttree~caption
 msgid "Project tree"
 msgstr ""
 
-#: ACN_QSAVE~caption
+#: acn_qsave~caption
 msgid "Save"
 msgstr ""
 
-#: ACN_QSAVE~hint
+#: acn_qsave~hint
 msgid "Save drawing"
 msgstr ""
 
-#: ACN_QUIT~caption
+#: acn_quit~caption
 msgid "Quit"
 msgstr ""
 
-#: ACN_REDO~caption
+#: acn_redo~caption
 msgid "Redo"
 msgstr ""
 
-#: ACN_REGEN~caption
+#: acn_regen~caption
 msgid "Regen all"
 msgstr ""
 
-#: ACN_ROTATE~caption
+#: acn_rotate~caption
 msgid "Rotate"
 msgstr ""
 
-#: ACN_ROTATE~hint
+#: acn_rotate~hint
 msgid "Rotate primitives"
 msgstr ""
 
-#: ACN_SAVEAS~caption
+#: acn_saveas~caption
 msgid "Save as ..."
 msgstr ""
 
-#: ACN_SAVEAS~hint
+#: acn_saveas~hint
 msgid "Save drawing as"
 msgstr ""
 
-#: ACN_SAVELAYOUT~caption
+#: acn_savelayout~caption
 msgid "Save window layout as default"
 msgstr ""
 
-#: ACN_SAVELAYOUT~textimage
+#: acn_savelayout~textimage
 msgid "SLay"
 msgstr ""
 
-#: ACN_SAVEOPTIONS~caption
+#: acn_saveoptions~caption
 msgid "Save options"
 msgstr ""
 
-#: ACN_SAVEQS~caption
+#: acn_saveqs~caption
 msgid "Save (Autosave)"
 msgstr ""
 
-#: ACN_SAVEQS~hint
+#: acn_saveqs~hint
 msgctxt "ACN_SAVEQS~hint"
 msgid "Autosave"
 msgstr ""
 
-#: ACN_SAVEQS~textimage
+#: acn_saveqs~textimage
 msgid "QS"
 msgstr ""
 
-#: ACN_SCALE~caption
+#: acn_scale~caption
 #, fuzzy
 msgid "scale"
 msgstr ""
 
-#: ACN_SCALE~hint
+#: acn_scale~hint
 msgid "Scale primitives"
 msgstr ""
 
-#: ACN_SELECTALL~caption
+#: acn_selectall~caption
 msgid "Select all"
 msgstr ""
 
-#: ACN_SELECTALL~textimage
+#: acn_selectall~textimage
 msgid "SA"
 msgstr ""
 
-#: ACN_SELSIM~caption
+#: acn_selsim~caption
 msgid "Select similar"
 msgstr ""
 
-#: ACN_SELSIM~textimage
+#: acn_selsim~textimage
 msgid "SSim"
 msgstr ""
 
-#: ACN_SHOW_COMMANDLINE~caption
+#: acn_show_commandline~caption
 #, fuzzy
 msgid "Command line and history"
 msgstr ""
 
-#: ACN_SHOW_COMMANDLINE~textimage
+#: acn_show_commandline~textimage
 msgid "CL"
 msgstr ""
 
-#: ACN_SHOW_OBJECTINSPECTOR~caption
+#: acn_show_objectinspector~caption
 #, fuzzy
 msgctxt "ACN_SHOW_OBJECTINSPECTOR~caption"
 msgid "Object inspector"
 msgstr ""
 
-#: ACN_SHOW_OBJECTINSPECTOR~textimage
+#: acn_show_objectinspector~textimage
 msgid "OI"
 msgstr ""
 
-#: ACN_SHOW_PAGECONTROL~caption
+#: acn_show_pagecontrol~caption
 #, fuzzy
 msgctxt "ACN_SHOW_PAGECONTROL~caption"
 msgid "Drawings window"
 msgstr ""
 
-#: ACN_SHOW_PAGECONTROL~textimage
+#: acn_show_pagecontrol~textimage
 msgid "DW"
 msgstr ""
 
-#: ACN_SNAPRUNTIME~caption
+#: acn_snapruntime~caption
 msgid "Run time snap editor"
 msgstr ""
 
-#: ACN_SNAPRUNTIME~textimage
+#: acn_snapruntime~textimage
 msgid "snap"
 msgstr ""
 
-#: ACN_TEXT~caption
+#: acn_text~caption
 msgid "Draw text"
 msgstr ""
 
-#: ACN_UNDO~caption
+#: acn_undo~caption
 msgid "Undo"
 msgstr ""
 
-#: ACN_WNEXT~caption
+#: acn_wnext~caption
 msgid "Next window"
 msgstr ""
 
-#: ACN_WPREV~caption
+#: acn_wprev~caption
 msgid "Previous window"
 msgstr ""
 
-#: BRMode~BRM_BD
+#: brmode~brm_bd
 msgctxt "BRMode~BRM_BD"
 msgid "Block and Device"
 msgstr ""
 
-#: BRMode~BRM_Block
+#: brmode~brm_block
 msgid "Block"
 msgstr ""
 
-#: BRMode~BRM_Device
+#: brmode~brm_device
 msgctxt "BRMode~BRM_Device"
 msgid "Device"
 msgstr ""
 
-#: button_command~El_Cable_Select
+#: button_command~el_cable_select
 msgid "csel"
 msgstr ""
 
-#: button_command~OPS_Sensor_Mark
+#: button_command~ops_sensor_mark
 msgctxt "button_command~OPS_Sensor_Mark"
 msgid "++"
 msgstr ""
 
-#: button_command~OPS_Sensor_Mark
+#: button_command~ops_sensor_mark
 msgctxt "button_command~OPS_Sensor_Mark"
 msgid "++"
 msgstr ""
 
-#: button_command~RebuildTree
+#: button_command~rebuildtree
 msgid "rtree"
 msgstr ""
 
-#: button_command~SetObjInsp(CURRENT)
+#: button_command~setobjinsp(current)
 msgid "FIX"
 msgstr ""
 
-#: button_variable~DWG_AdditionalGrips
+#: button_variable~dwg_additionalgrips
 msgid "+G"
 msgstr ""
 
-#: button_variable~DWG_DrawMode
+#: button_variable~dwg_drawmode
 msgid "LWT"
 msgstr ""
 
-#: button_variable~DWG_HelpGeometryDraw
+#: button_variable~dwg_helpgeometrydraw
 #, fuzzy
 msgid "AG"
 msgstr ""
 
-#: button_variable~DWG_OSMode
+#: button_variable~dwg_osmode
 msgid "OSnap"
 msgstr ""
 
-#: button_variable~DWG_PolarMode
+#: button_variable~dwg_polarmode
 msgctxt "button_variable~DWG_PolarMode"
 msgid "Polar"
 msgstr ""
 
-#: button_variable~DWG_SnapGrid
+#: button_variable~dwg_snapgrid
 msgid "Snap"
 msgstr ""
 
-#: button_variable~DWG_SystmGeometryDraw
+#: button_variable~dwg_systmgeometrydraw
 msgid "SG"
 msgstr ""
 
@@ -413,211 +413,211 @@ msgstr ""
 msgid "Unknown command"
 msgstr ""
 
-#: GDBLineProp~lBegin
+#: gdblineprop~lbegin
 msgid "Begin"
 msgstr ""
 
-#: GDBLineProp~lEnd
+#: gdblineprop~lend
 msgid "End"
 msgstr ""
 
-#: GDBNamedObject~Name
+#: gdbnamedobject~name
 msgctxt "GDBNamedObject~Name"
 msgid "Name"
 msgstr ""
 
-#: GDBObj2dprop~OX
+#: gdbobj2dprop~ox
 msgid "X Axis"
 msgstr ""
 
-#: GDBObj2dprop~OY
+#: gdbobj2dprop~oy
 msgid "Y Axis"
 msgstr ""
 
-#: GDBObj2dprop~OZ
+#: gdbobj2dprop~oz
 msgctxt "GDBObj2dprop~OZ"
 msgid "Z Axis"
 msgstr ""
 
-#: GDBObj2dprop~P_insert
+#: gdbobj2dprop~p_insert
 msgid "Insertion point OCS"
 msgstr ""
 
-#: GDBObj3DFace~PInDCS
+#: gdbobj3dface~pindcs
 msgctxt "GDBObj3DFace~PInDCS"
 msgid "Coordinates DCS"
 msgstr ""
 
-#: GDBObj3DFace~PInOCS
+#: gdbobj3dface~pinocs
 msgctxt "GDBObj3DFace~PInOCS"
 msgid "Coordinates OCS"
 msgstr ""
 
-#: GDBObj3DFace~PInWCS
+#: gdbobj3dface~pinwcs
 msgctxt "GDBObj3DFace~PInWCS"
 msgid "Coordinates WCS"
 msgstr ""
 
-#: GDBObjBaseProp~ListPos
+#: gdbobjbaseprop~listpos
 msgid "List"
 msgstr ""
 
-#: GDBObjBaseProp~TreePos
+#: gdbobjbaseprop~treepos
 msgid "Tree"
 msgstr ""
 
-#: GDBObjBlockInsert~BlockDesc
+#: gdbobjblockinsert~blockdesc
 msgid "Block params"
 msgstr ""
 
-#: GDBObjCircle~Area
+#: gdbobjcircle~area
 msgid "Area"
 msgstr ""
 
-#: GDBObjCircle~Diametr
+#: gdbobjcircle~diametr
 msgid "Diametr"
 msgstr ""
 
-#: GDBObjCircle~Length
+#: gdbobjcircle~length
 msgctxt "GDBObjCircle~Length"
 msgid "Length"
 msgstr ""
 
-#: GDBObjCircle~Radius
+#: gdbobjcircle~radius
 msgid "Radius"
 msgstr ""
 
-#: GDBObjEntity~infrustum
+#: gdbobjentity~infrustum
 msgid "In frustum"
 msgstr ""
 
-#: GDBObjEntity~Selected
+#: gdbobjentity~selected
 msgid "Selected"
 msgstr ""
 
-#: GDBObjEntity~Visible
+#: gdbobjentity~visible
 msgid "Visible"
 msgstr ""
 
-#: GDBObjEntity~vp
+#: gdbobjentity~vp
 msgctxt "GDBObjEntity~vp"
 msgid "General"
 msgstr ""
 
-#: GDBObjGenericWithSubordinated~OU
+#: gdbobjgenericwithsubordinated~ou
 msgid "Variables"
 msgstr ""
 
-#: GDBObjLine~CoordInOCS
+#: gdbobjline~coordinocs
 msgctxt "GDBObjLine~CoordInOCS"
 msgid "Coordinates OCS"
 msgstr ""
 
-#: GDBObjLine~CoordInWCS
+#: gdbobjline~coordinwcs
 msgctxt "GDBObjLine~CoordInWCS"
 msgid "Coordinates WCS"
 msgstr ""
 
-#: GDBObjLine~dir
+#: gdbobjline~dir
 msgid "Direction"
 msgstr ""
 
-#: GDBObjLine~Length
+#: gdbobjline~length
 msgctxt "GDBObjLine~Length"
 msgid "Length"
 msgstr ""
 
-#: GDBObjLine~Length_2
+#: gdbobjline~length_2
 msgid "Sqrt length"
 msgstr ""
 
-#: GDBObjLine~PProjPoint
+#: gdbobjline~pprojpoint
 msgctxt "GDBObjLine~PProjPoint"
 msgid "Coordinates DCS"
 msgstr ""
 
-#: GDBObjLWPolyline~Square
+#: gdbobjlwpolyline~square
 msgid "Oriented area"
 msgstr ""
 
-#: GDBObjPoint~P_insertInOCS
+#: gdbobjpoint~p_insertinocs
 msgctxt "GDBObjPoint~P_insertInOCS"
 msgid "Coordinates OCS"
 msgstr ""
 
-#: GDBObjPoint~P_insertInWCS
+#: gdbobjpoint~p_insertinwcs
 msgctxt "GDBObjPoint~P_insertInWCS"
 msgid "Coordinates WCS"
 msgstr ""
 
-#: GDBObjSolid~PInDCS
+#: gdbobjsolid~pindcs
 msgctxt "GDBObjSolid~PInDCS"
 msgid "Coordinates DCS"
 msgstr ""
 
-#: GDBObjSolid~PInOCS
+#: gdbobjsolid~pinocs
 msgctxt "GDBObjSolid~PInOCS"
 msgid "Coordinates OCS"
 msgstr ""
 
-#: GDBObjSolid~PInWCS
+#: gdbobjsolid~pinwcs
 msgctxt "GDBObjSolid~PInWCS"
 msgid "Coordinates WCS"
 msgstr ""
 
-#: GDBObjSubordinated~bp
+#: gdbobjsubordinated~bp
 msgid "Owner"
 msgstr ""
 
-#: GDBObjVisualProp~BoundingBox
+#: gdbobjvisualprop~boundingbox
 msgid "Bounding box"
 msgstr ""
 
-#: GDBObjVisualProp~ID
+#: gdbobjvisualprop~id
 msgid "Object type"
 msgstr ""
 
-#: GDBObjVisualProp~Layer
+#: gdbobjvisualprop~layer
 msgctxt "GDBObjVisualProp~Layer"
 msgid "Layer"
 msgstr ""
 
-#: GDBObjVisualProp~LineType
+#: gdbobjvisualprop~linetype
 msgctxt "GDBObjVisualProp~LineType"
 msgid "Line type"
 msgstr ""
 
-#: GDBObjVisualProp~LineTypeScale
+#: gdbobjvisualprop~linetypescale
 msgid "Line type scale"
 msgstr ""
 
-#: GDBObjVisualProp~LineWeight
+#: gdbobjvisualprop~lineweight
 #, fuzzy
 msgctxt "GDBObjVisualProp~LineWeight"
 msgid "Line weight"
 msgstr ""
 
-#: GDBObjWithLocalCS~Local
+#: gdbobjwithlocalcs~local
 msgid "Object orientation"
 msgstr ""
 
-#: GDBObjWithLocalCS~lod
+#: gdbobjwithlocalcs~lod
 msgid "Level of detail"
 msgstr ""
 
-#: GDBObjWithLocalCS~PProjOutBound
+#: gdbobjwithlocalcs~pprojoutbound
 msgid "Bounding box DCS"
 msgstr ""
 
-#: GDBObjWithLocalCS~ProjP_insert
+#: gdbobjwithlocalcs~projp_insert
 msgid "Insertion point DCS"
 msgstr ""
 
-#: GDBObjWithLocalCS~P_insert_in_WCS
+#: gdbobjwithlocalcs~p_insert_in_wcs
 msgid "Insertion point WCS"
 msgstr ""
 
-#: GDBObjWithMatrix~ObjMatrix
+#: gdbobjwithmatrix~objmatrix
 msgid "OCS Matrix"
 msgstr ""
 
@@ -625,36 +625,36 @@ msgstr ""
 msgid "Debug"
 msgstr ""
 
-#: gdbsysvariable~DSGN
+#: gdbsysvariable~dsgn
 msgid "Design"
 msgstr ""
 
-#: gdbsysvariable~DWG
+#: gdbsysvariable~dwg
 msgid "Drawing"
 msgstr ""
 
-#: gdbsysvariable~MISC
+#: gdbsysvariable~misc
 msgid "Miscellaneous"
 msgstr ""
 
-#: gdbsysvariable~PATH
+#: gdbsysvariable~path
 msgid "Paths"
 msgstr ""
 
-#: gdbsysvariable~RD
+#: gdbsysvariable~rd
 msgid "Render"
 msgstr ""
 
-#: gdbsysvariable~SAVE
+#: gdbsysvariable~save
 msgid "Saving"
 msgstr ""
 
-#: gdbsysvariable~SYS
+#: gdbsysvariable~sys
 msgctxt "gdbsysvariable~SYS"
 msgid "System"
 msgstr ""
 
-#: gdbsysvariable~VIEW
+#: gdbsysvariable~view
 msgctxt "gdbsysvariable~VIEW"
 msgid "View"
 msgstr ""
@@ -663,49 +663,49 @@ msgstr ""
 msgid "Divide by zero (Geometry.NormalizeVertex)"
 msgstr ""
 
-#: hint_panel~DWG_AdditionalGrips
+#: hint_panel~dwg_additionalgrips
 msgid "On/Off Additional grips"
 msgstr ""
 
-#: hint_panel~DWG_DrawMode
+#: hint_panel~dwg_drawmode
 #, fuzzy
 msgid "Show/Hide Lineweight"
 msgstr ""
 
-#: hint_panel~DWG_EditInSubEntry
+#: hint_panel~dwg_editinsubentry
 #, fuzzy
 msgid "On/Off Selecting parts of dynamic objects"
 msgstr ""
 
-#: hint_panel~DWG_HelpGeometryDraw
+#: hint_panel~dwg_helpgeometrydraw
 #, fuzzy
 msgid "Auxiliary graphics (connectivity, direction, etc.)"
 msgstr ""
 
-#: hint_panel~DWG_OSMode
+#: hint_panel~dwg_osmode
 #, fuzzy
 msgid "Object snap"
 msgstr ""
 
-#: hint_panel~DWG_PolarMode
+#: hint_panel~dwg_polarmode
 #, fuzzy
 msgctxt "hint_panel~DWG_PolarMode"
 msgid "Polar tracking"
 msgstr ""
 
-#: hint_panel~DWG_SystmGeometryDraw
+#: hint_panel~dwg_systmgeometrydraw
 #, fuzzy
 msgctxt "hint_panel~DWG_SystmGeometryDraw"
 msgid "System graphics (size, communication, etc. for debugging)"
 msgstr ""
 
-#: hint_panel~LAYERCOMBOBOX
+#: hint_panel~layercombobox
 #, fuzzy
 msgctxt "hint_panel~LAYERCOMBOBOX"
 msgid "Layer selection"
 msgstr ""
 
-#: hint_panel~LINEWCOMBOBOX
+#: hint_panel~linewcombobox
 #, fuzzy
 msgid "Line weight selection"
 msgstr ""
@@ -765,69 +765,69 @@ msgstr ""
 msgid "mm"
 msgstr ""
 
-#: menu~Draw
+#: menu~draw
 msgid "Draw"
 msgstr ""
 
-#: menu~Edit
+#: menu~edit
 msgid "Edit"
 msgstr ""
 
-#: menu~File
+#: menu~file
 msgid "File"
 msgstr ""
 
-#: menu~Format
+#: menu~format
 msgid "Format"
 msgstr ""
 
-#: menu~Help
+#: menu~help
 msgctxt "menu~Help"
 msgid "Help"
 msgstr ""
 
-#: menu~Model
+#: menu~model
 msgid "Model"
 msgstr ""
 
-#: menu~Modify
+#: menu~modify
 msgid "Modify"
 msgstr ""
 
-#: menu~Plan
+#: menu~plan
 msgid "Plan"
 msgstr ""
 
-#: menu~Schematic
+#: menu~schematic
 msgid "Schematic"
 msgstr ""
 
-#: menu~Settings
+#: menu~settings
 msgid "Settings"
 msgstr ""
 
-#: menu~View
+#: menu~view
 msgctxt "menu~View"
 msgid "View"
 msgstr ""
 
-#: menu~Window
+#: menu~window
 msgid "Window"
 msgstr ""
 
-#: RGB~a
+#: rgb~a
 msgid "Alpha"
 msgstr ""
 
-#: RGB~b
+#: rgb~b
 msgid "Blue"
 msgstr ""
 
-#: RGB~g
+#: rgb~g
 msgid "Green"
 msgstr ""
 
-#: RGB~r
+#: rgb~r
 msgid "Red"
 msgstr ""
 
@@ -835,90 +835,90 @@ msgstr ""
 msgid "ERROR: "
 msgstr ""
 
-#: submenu~Show window
+#: submenu~show window
 msgid "Show window"
 msgstr ""
 
-#: submenu~ToolBars
+#: submenu~toolbars
 msgid "ToolBars"
 msgstr ""
 
-#: TBlockDesc~BBorder
+#: tblockdesc~bborder
 msgid "Border"
 msgstr ""
 
-#: TBlockDesc~BGroup
+#: tblockdesc~bgroup
 msgid "Block group"
 msgstr ""
 
-#: TBlockDesc~BType
+#: tblockdesc~btype
 msgid "Block type"
 msgstr ""
 
-#: TBlockReplaceParams~Find
+#: tblockreplaceparams~find
 msgid "Find"
 msgstr ""
 
-#: TBlockReplaceParams~Process
+#: tblockreplaceparams~process
 msgctxt "TBlockReplaceParams~Process"
 msgid "Process"
 msgstr ""
 
-#: TBlockReplaceParams~Replace
+#: tblockreplaceparams~replace
 msgid "Replace"
 msgstr ""
 
-#: TBlockReplaceParams~SaveVariables
+#: tblockreplaceparams~savevariables
 msgid "Save Variables"
 msgstr ""
 
-#: TBlockScaleParams~Absolytly
+#: tblockscaleparams~absolytly
 msgctxt "TBlockScaleParams~Absolytly"
 msgid "Absolytly"
 msgstr ""
 
-#: TBlockScaleParams~Scale
+#: tblockscaleparams~scale
 msgctxt "TBlockScaleParams~Scale"
 msgid "New scale"
 msgstr ""
 
-#: TCalcIP~_ICOS_from_P
+#: tcalcip~_icos_from_p
 msgid "I,Cos=F(P)"
 msgstr ""
 
-#: TCalcIP~_I_from_P
+#: tcalcip~_i_from_p
 msgid "I=F(P,Cos)"
 msgstr ""
 
-#: TCalcIP~_P_from_I
+#: tcalcip~_p_from_i
 msgid "P=F(I,Cos)"
 msgstr ""
 
-#: tcompileinfo~SYS_CompileDate
+#: tcompileinfo~sys_compiledate
 msgid "Compile date"
 msgstr ""
 
-#: tcompileinfo~SYS_Compiler
+#: tcompileinfo~sys_compiler
 msgid "Compiler"
 msgstr ""
 
-#: tcompileinfo~SYS_CompilerTargetCPU
+#: tcompileinfo~sys_compilertargetcpu
 msgid "Target CPU"
 msgstr ""
 
-#: tcompileinfo~SYS_CompilerTargetOS
+#: tcompileinfo~sys_compilertargetos
 msgid "Target OS"
 msgstr ""
 
-#: tcompileinfo~SYS_CompilerVer
+#: tcompileinfo~sys_compilerver
 msgid "Compiler version"
 msgstr ""
 
-#: tcompileinfo~SYS_CompileTime
+#: tcompileinfo~sys_compiletime
 msgid "Compile time"
 msgstr ""
 
-#: tcompileinfo~SYS_LCLVersion
+#: tcompileinfo~sys_lclversion
 msgid "LCL version"
 msgstr ""
 
@@ -926,653 +926,653 @@ msgstr ""
 msgid "MemMan::I2"
 msgstr ""
 
-#: tdesigning~DSGN_LeaderDefaultWidth
+#: tdesigning~dsgn_leaderdefaultwidth
 msgid "Default leader width"
 msgstr ""
 
-#: tdesigning~DSGN_TraceAutoInc
+#: tdesigning~dsgn_traceautoinc
 msgid "Increment trace names"
 msgstr ""
 
-#: TDiff~TD_Diff
+#: tdiff~td_diff
 msgid "Diff"
 msgstr ""
 
-#: TDiff~TD_NotDiff
+#: tdiff~td_notdiff
 msgid "Not Diff"
 msgstr ""
 
-#: tdisp~DISP_ColorAxis
+#: tdisp~disp_coloraxis
 msgid "Colored cursor"
 msgstr ""
 
-#: tdisp~DISP_CursorSize
+#: tdisp~disp_cursorsize
 msgid "Cursor size"
 msgstr ""
 
-#: tdisp~DISP_DrawZAxis
+#: tdisp~disp_drawzaxis
 msgid "Show Z axis"
 msgstr ""
 
-#: tdisp~DISP_OSSize
+#: tdisp~disp_ossize
 msgid "Snap aperture size"
 msgstr ""
 
-#: tdisp~DISP_ZoomFactor
+#: tdisp~disp_zoomfactor
 msgid "Mouse wheel scale factor"
 msgstr ""
 
-#: tdwg~DWG_AdditionalGrips
+#: tdwg~dwg_additionalgrips
 msgid "Additional grips"
 msgstr ""
 
-#: tdwg~DWG_CLayer
+#: tdwg~dwg_clayer
 msgid "Current layer"
 msgstr ""
 
-#: tdwg~DWG_CLinew
+#: tdwg~dwg_clinew
 msgid "Current line weigwt"
 msgstr ""
 
-#: tdwg~DWG_DrawMode
+#: tdwg~dwg_drawmode
 msgid "Draw mode?"
 msgstr ""
 
-#: tdwg~DWG_EditInSubEntry
+#: tdwg~dwg_editinsubentry
 msgid "SubEntities edit"
 msgstr ""
 
-#: tdwg~DWG_OSMode
+#: tdwg~dwg_osmode
 msgid "Snap mode"
 msgstr ""
 
-#: tdwg~DWG_PolarMode
+#: tdwg~dwg_polarmode
 msgid "Polar tracking mode"
 msgstr ""
 
-#: tdwg~DWG_SelectedObjToInsp
+#: tdwg~dwg_selectedobjtoinsp
 msgid "SelectedObjToInsp"
 msgstr ""
 
-#: TEntityAdress~Owner
+#: tentityadress~owner
 msgctxt "TEntityAdress~Owner"
 msgid "Adress"
 msgstr ""
 
-#: TEntityAdress~SelfIndex
+#: tentityadress~selfindex
 msgctxt "TEntityAdress~SelfIndex"
 msgid "Position"
 msgstr ""
 
-#: TFORM1.BUTTON1.CAPTION
+#: tform1.button1.caption
 msgid "Button1"
 msgstr ""
 
-#: TFORM1.CAPTION
+#: tform1.caption
 msgid "Form1"
 msgstr ""
 
-#: TFORM1.EDIT1.TEXT
+#: tform1.edit1.text
 msgid "Edit1"
 msgstr ""
 
-#: TFORM1.LABEL1.CAPTION
+#: tform1.label1.caption
 msgctxt "TFORM1.LABEL1.CAPTION"
 msgid "lkjlkjlkjlkjlkj"
 msgstr ""
 
-#: TIMode~TIM_MText
+#: timode~tim_mtext
 msgid "MText"
 msgstr ""
 
-#: TIMode~TIM_Text
+#: timode~tim_text
 msgctxt "TIMode~TIM_Text"
 msgid "Text"
 msgstr ""
 
-#: TLAYERWINDOW.BUTTONAPPLYCLOSE.CAPTION
+#: tlayerwindow.buttonapplyclose.caption
 msgid "Apply and close"
 msgstr ""
 
-#: TLAYERWINDOW.BUTTON_APPLY.CAPTION
+#: tlayerwindow.button_apply.caption
 msgctxt "TLAYERWINDOW.BUTTON_APPLY.CAPTION"
 msgid "Apply"
 msgstr ""
 
-#: TLAYERWINDOW.CAPTION
+#: tlayerwindow.caption
 msgid "LayerWindow"
 msgstr ""
 
-#: TLAYERWINDOW.LABEL1.CAPTION
+#: tlayerwindow.label1.caption
 msgctxt "TLAYERWINDOW.LABEL1.CAPTION"
 msgid "Label1"
 msgstr ""
 
-#: TLAYERWINDOW.LABEL2.CAPTION
+#: tlayerwindow.label2.caption
 msgid "Label2"
 msgstr ""
 
-#: TLAYERWINDOW.LISTVIEW1.COLUMNS[0].CAPTION
+#: tlayerwindow.listview1.columns[0].caption
 msgid "Status"
 msgstr ""
 
-#: TLAYERWINDOW.LISTVIEW1.COLUMNS[1].CAPTION
+#: tlayerwindow.listview1.columns[1].caption
 msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[1].CAPTION"
 msgid "Name"
 msgstr ""
 
-#: TLAYERWINDOW.LISTVIEW1.COLUMNS[2].CAPTION
+#: tlayerwindow.listview1.columns[2].caption
 msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[2].CAPTION"
 msgid "On"
 msgstr ""
 
-#: TLAYERWINDOW.LISTVIEW1.COLUMNS[3].CAPTION
+#: tlayerwindow.listview1.columns[3].caption
 msgid "Freze"
 msgstr ""
 
-#: TLAYERWINDOW.LISTVIEW1.COLUMNS[4].CAPTION
+#: tlayerwindow.listview1.columns[4].caption
 msgid "Lock"
 msgstr ""
 
-#: TLAYERWINDOW.LISTVIEW1.COLUMNS[5].CAPTION
+#: tlayerwindow.listview1.columns[5].caption
 msgid "Color"
 msgstr ""
 
-#: TLAYERWINDOW.LISTVIEW1.COLUMNS[6].CAPTION
+#: tlayerwindow.listview1.columns[6].caption
 msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[6].CAPTION"
 msgid "Line type"
 msgstr ""
 
-#: TLAYERWINDOW.LISTVIEW1.COLUMNS[7].CAPTION
+#: tlayerwindow.listview1.columns[7].caption
 msgctxt "TLAYERWINDOW.LISTVIEW1.COLUMNS[7].CAPTION"
 msgid "Line weight"
 msgstr ""
 
-#: TLAYERWINDOW.LISTVIEW1.COLUMNS[8].CAPTION
+#: tlayerwindow.listview1.columns[8].caption
 msgid "Plot"
 msgstr ""
 
-#: TLAYERWINDOW.LISTVIEW1.COLUMNS[9].CAPTION
+#: tlayerwindow.listview1.columns[9].caption
 msgid "Description"
 msgstr ""
 
-#: tmisc~ShowHiddenFieldInObjInsp
+#: tmisc~showhiddenfieldinobjinsp
 msgid "Show hidden fields"
 msgstr ""
 
-#: TObjLinkRecordMode~OBT
+#: tobjlinkrecordmode~obt
 msgid "ObjBeginToken"
 msgstr ""
 
-#: TObjLinkRecordMode~OFT
+#: tobjlinkrecordmode~oft
 msgid "ObjFieldToken"
 msgstr ""
 
-#: TObjLinkRecordMode~UBR
+#: tobjlinkrecordmode~ubr
 msgid "UncnownByReference"
 msgstr ""
 
-#: TOPSMinDatCount~TOPSMDC_2
+#: topsmindatcount~topsmdc_2
 msgctxt "TOPSMinDatCount~TOPSMDC_2"
 msgid "2"
 msgstr ""
 
-#: TOPSMinDatCount~TOPSMDC_3
+#: topsmindatcount~topsmdc_3
 msgctxt "TOPSMinDatCount~TOPSMDC_3"
 msgid "3"
 msgstr ""
 
-#: TOPSMinDatCount~TOPSMDC_4
+#: topsmindatcount~topsmdc_4
 msgctxt "TOPSMinDatCount~TOPSMDC_4"
 msgid "4"
 msgstr ""
 
-#: TOSMode~kosm_3
+#: tosmode~kosm_3
 msgid "1/3"
 msgstr ""
 
-#: TOSMode~kosm_4
+#: tosmode~kosm_4
 msgid "1/4"
 msgstr ""
 
-#: TOSMode~kosm_apparentintersection
+#: tosmode~kosm_apparentintersection
 msgid "Apparent intersection"
 msgstr ""
 
-#: TOSMode~kosm_center
+#: tosmode~kosm_center
 msgctxt "TOSMode~kosm_center"
 msgid "Center"
 msgstr ""
 
-#: TOSMode~kosm_endpoint
+#: tosmode~kosm_endpoint
 msgid "Endpoint"
 msgstr ""
 
-#: TOSMode~kosm_inspoint
+#: tosmode~kosm_inspoint
 msgid "Insertion"
 msgstr ""
 
-#: TOSMode~kosm_intersection
+#: tosmode~kosm_intersection
 msgid "Intersection"
 msgstr ""
 
-#: TOSMode~kosm_midpoint
+#: tosmode~kosm_midpoint
 msgid "Midpoint"
 msgstr ""
 
-#: TOSMode~kosm_nearest
+#: tosmode~kosm_nearest
 msgid "Nearest"
 msgstr ""
 
-#: TOSMode~kosm_paralel
+#: tosmode~kosm_paralel
 msgid "Paralel"
 msgstr ""
 
-#: TOSMode~kosm_perpendicular
+#: tosmode~kosm_perpendicular
 msgid "Perpendicular"
 msgstr ""
 
-#: TOSMode~kosm_point
+#: tosmode~kosm_point
 msgid "Point"
 msgstr ""
 
-#: TOSMode~kosm_quadrant
+#: tosmode~kosm_quadrant
 msgid "Quadrant"
 msgstr ""
 
-#: TOSMode~kosm_tangent
+#: tosmode~kosm_tangent
 msgid "Tangent"
 msgstr ""
 
-#: tpath~Device_Library
+#: tpath~device_library
 msgid "Device base"
 msgstr ""
 
-#: tpath~Fonts_Path
+#: tpath~fonts_path
 msgid "Fonts"
 msgstr ""
 
-#: tpath~LayoutFile
+#: tpath~layoutfile
 msgid "Current layout"
 msgstr ""
 
-#: tpath~Program_Run
+#: tpath~program_run
 msgid "Program"
 msgstr ""
 
-#: tpath~Support_Path
+#: tpath~support_path
 msgid "Support files"
 msgstr ""
 
-#: tpath~Template_File
+#: tpath~template_file
 msgid "Default template"
 msgstr ""
 
-#: tpath~Template_Path
+#: tpath~template_path
 msgid "Templates"
 msgstr ""
 
-#: tpath~Temp_files
+#: tpath~temp_files
 msgid "Temporary files"
 msgstr ""
 
-#: TPhase~_A
+#: tphase~_a
 msgid "A"
 msgstr ""
 
-#: TPhase~_ABC
+#: tphase~_abc
 msgid "ABC"
 msgstr ""
 
-#: TPhase~_B
+#: tphase~_b
 msgid "B"
 msgstr ""
 
-#: TPhase~_C
+#: tphase~_c
 msgid "C"
 msgstr ""
 
-#: trd~RD_BackGroundColor
+#: trd~rd_backgroundcolor
 msgid "Background color"
 msgstr ""
 
-#: trd~RD_LastRenderTime
+#: trd~rd_lastrendertime
 msgid "Last render time"
 msgstr ""
 
-#: trd~RD_LastUpdateTime
+#: trd~rd_lastupdatetime
 msgid "Last update time"
 msgstr ""
 
-#: trd~RD_Light
+#: trd~rd_light
 msgid "Light"
 msgstr ""
 
-#: trd~RD_LineSmooth
+#: trd~rd_linesmooth
 msgid "Line smoth"
 msgstr ""
 
-#: trd~RD_MaxLineWidth
+#: trd~rd_maxlinewidth
 msgid "Max line width"
 msgstr ""
 
-#: trd~RD_MaxPointSize
+#: trd~rd_maxpointsize
 msgid "Max point size"
 msgstr ""
 
-#: trd~RD_MaxRenderTime
+#: trd~rd_maxrendertime
 msgid "Maximum single pass time"
 msgstr ""
 
-#: trd~RD_MaxWidth
+#: trd~rd_maxwidth
 msgid "Max width"
 msgstr ""
 
-#: trd~RD_PanObjectDegradation
+#: trd~rd_panobjectdegradation
 msgid "Degradation while pan"
 msgstr ""
 
-#: trd~RD_Renderer
+#: trd~rd_renderer
 msgctxt "trd~RD_Renderer"
 msgid "Device"
 msgstr ""
 
-#: trd~RD_Restore_Mode
+#: trd~rd_restore_mode
 msgid "Restore mode"
 msgstr ""
 
-#: trd~RD_UseStencil
+#: trd~rd_usestencil
 msgid "Use STENCIL buffer"
 msgstr ""
 
-#: trd~RD_Vendor
+#: trd~rd_vendor
 msgid "Vendor"
 msgstr ""
 
-#: trd~RD_Version
+#: trd~rd_version
 msgid "Version"
 msgstr ""
 
-#: trd~RD_VSync
+#: trd~rd_vsync
 msgid "VSync"
 msgstr ""
 
-#: TRestoreMode~WND_AccumBuffer
+#: trestoremode~wnd_accumbuffer
 msgid "ACCUM buffer"
 msgstr ""
 
-#: TRestoreMode~WND_AuxBuffer
+#: trestoremode~wnd_auxbuffer
 msgid "AUX buffer"
 msgstr ""
 
-#: TRestoreMode~WND_DrawPixels
+#: trestoremode~wnd_drawpixels
 msgid "Memory"
 msgstr ""
 
-#: TRestoreMode~WND_NewDraw
+#: trestoremode~wnd_newdraw
 msgid "Redraw"
 msgstr ""
 
-#: TRestoreMode~WND_Texture
+#: trestoremode~wnd_texture
 msgid "Texture"
 msgstr ""
 
-#: tsave~SAVE_Auto_Current_Interval
+#: tsave~save_auto_current_interval
 msgid "Time to autosave"
 msgstr ""
 
-#: tsave~SAVE_Auto_FileName
+#: tsave~save_auto_filename
 msgid "Autosave file name"
 msgstr ""
 
-#: tsave~SAVE_Auto_Interval
+#: tsave~save_auto_interval
 msgid "Time between autosaves"
 msgstr ""
 
-#: tsave~SAVE_Auto_On
+#: tsave~save_auto_on
 msgctxt "tsave~SAVE_Auto_On"
 msgid "Autosave"
 msgstr ""
 
-#: TSelBlockParams~DiffBlockDevice
+#: tselblockparams~diffblockdevice
 msgctxt "TSelBlockParams~DiffBlockDevice"
 msgid "Block and Device"
 msgstr ""
 
-#: TSelBlockParams~SameName
+#: tselblockparams~samename
 msgid "Same name"
 msgstr ""
 
-#: TSelGeneralParams~SameEntType
+#: tselgeneralparams~sameenttype
 msgid "Same entity type"
 msgstr ""
 
-#: TSelGeneralParams~SameLayer
+#: tselgeneralparams~samelayer
 msgid "Same layer"
 msgstr ""
 
-#: TSelGeneralParams~SameLineWeight
+#: tselgeneralparams~samelineweight
 msgid "Same line weight"
 msgstr ""
 
-#: TSelSimParams~Blocks
+#: tselsimparams~blocks
 msgid "Blocks"
 msgstr ""
 
-#: TSelSimParams~General
+#: tselsimparams~general
 msgctxt "TSelSimParams~General"
 msgid "General"
 msgstr ""
 
-#: TSelSimParams~Texts
+#: tselsimparams~texts
 msgid "Texts"
 msgstr ""
 
-#: TSelTextParams~DiffTextMText
+#: tseltextparams~difftextmtext
 msgid "Text and Mtext"
 msgstr ""
 
-#: TSelTextParams~SameContent
+#: tseltextparams~samecontent
 msgid "Same content"
 msgstr ""
 
-#: TSelTextParams~SameTemplate
+#: tseltextparams~sametemplate
 msgid "Same template"
 msgstr ""
 
-#: TSetVarStyle~Absolytly
+#: tsetvarstyle~absolytly
 msgctxt "TSetVarStyle~Absolytly"
 msgid "Absolytly"
 msgstr ""
 
-#: TSetVarStyle~ent
+#: tsetvarstyle~ent
 msgctxt "TSetVarStyle~ent"
 msgid "Entity"
 msgstr ""
 
-#: TSetVarStyle~Scale
+#: tsetvarstyle~scale
 msgctxt "TSetVarStyle~Scale"
 msgid "New scale"
 msgstr ""
 
-#: TSLTEXTEDITOR1.CAPTION
+#: tsltexteditor1.caption
 msgid "sltexteditor1"
 msgstr ""
 
-#: TSLTEXTEDITOR1.EDITFIELD.TEXT
+#: tsltexteditor1.editfield.text
 msgid "EditField"
 msgstr ""
 
-#: TSLTEXTEDITOR1.HELPTEXT.CAPTION
+#: tsltexteditor1.helptext.caption
 msgid " тест "
 msgstr ""
 
-#: TSLTEXTEDITOR1.OKBUTTON.CAPTION
+#: tsltexteditor1.okbutton.caption
 msgid "Ok"
 msgstr ""
 
-#: tsys~SSY_CompileInfo
+#: tsys~ssy_compileinfo
 msgid "Build info"
 msgstr ""
 
-#: tsys~SYS_AlternateFont
+#: tsys~sys_alternatefont
 msgid "Alternate font file"
 msgstr ""
 
-#: tsys~SYS_IsHistoryLineCreated
+#: tsys~sys_ishistorylinecreated
 msgid "IsHistoryLineCreated"
 msgstr ""
 
-#: tsys~SYS_RunTime
+#: tsys~sys_runtime
 msgid "Uptime"
 msgstr ""
 
-#: tsys~SYS_SystmGeometryColor
+#: tsys~sys_systmgeometrycolor
 msgid "Help color"
 msgstr ""
 
-#: tsys~SYS_Version
+#: tsys~sys_version
 msgid "Program version"
 msgstr ""
 
-#: TTableCellJustify~jcc
+#: ttablecelljustify~jcc
 msgctxt "TTableCellJustify~jcc"
 msgid "TopCenter"
 msgstr ""
 
-#: TTableCellJustify~jcl
+#: ttablecelljustify~jcl
 msgctxt "TTableCellJustify~jcl"
 msgid "TopLeft"
 msgstr ""
 
-#: TTableCellJustify~jcr
+#: ttablecelljustify~jcr
 msgctxt "TTableCellJustify~jcr"
 msgid "TopRight"
 msgstr ""
 
-#: TTextInsertParams~h
+#: ttextinsertparams~h
 msgid "Height"
 msgstr ""
 
-#: TTextInsertParams~justify
+#: ttextinsertparams~justify
 msgid "Justify"
 msgstr ""
 
-#: TTextInsertParams~LineSpace
+#: ttextinsertparams~linespace
 msgid "Line space factor"
 msgstr ""
 
-#: TTextInsertParams~mode
+#: ttextinsertparams~mode
 msgctxt "TTextInsertParams~mode"
 msgid "Entity"
 msgstr ""
 
-#: TTextInsertParams~Oblique
+#: ttextinsertparams~oblique
 msgid "Oblique"
 msgstr ""
 
-#: TTextInsertParams~runtexteditor
+#: ttextinsertparams~runtexteditor
 msgid "Run text editor"
 msgstr ""
 
-#: TTextInsertParams~Style
+#: ttextinsertparams~style
 msgid "Style"
 msgstr ""
 
-#: TTextInsertParams~text
+#: ttextinsertparams~text
 msgctxt "TTextInsertParams~text"
 msgid "Text"
 msgstr ""
 
-#: TTextInsertParams~Width
+#: ttextinsertparams~width
 msgid "Width"
 msgstr ""
 
-#: TTextInsertParams~WidthFactor
+#: ttextinsertparams~widthfactor
 msgid "Width factor"
 msgstr ""
 
-#: TTextJustify~jsbc
+#: ttextjustify~jsbc
 msgid "BottomCenter"
 msgstr ""
 
-#: TTextJustify~jsbl
+#: ttextjustify~jsbl
 msgid "BottomLeft"
 msgstr ""
 
-#: TTextJustify~jsbr
+#: ttextjustify~jsbr
 msgid "BottomRight"
 msgstr ""
 
-#: TTextJustify~jsbtc
+#: ttextjustify~jsbtc
 msgctxt "TTextJustify~jsbtc"
 msgid "Center"
 msgstr ""
 
-#: TTextJustify~jsbtl
+#: ttextjustify~jsbtl
 msgid "Left"
 msgstr ""
 
-#: TTextJustify~jsbtr
+#: ttextjustify~jsbtr
 msgid "Right"
 msgstr ""
 
-#: TTextJustify~jsmc
+#: ttextjustify~jsmc
 msgid "MiddleCenter"
 msgstr ""
 
-#: TTextJustify~jsml
+#: ttextjustify~jsml
 msgid "MiddleLeft"
 msgstr ""
 
-#: TTextJustify~jsmr
+#: ttextjustify~jsmr
 msgid "MiddleRight"
 msgstr ""
 
-#: TTextJustify~jstc
+#: ttextjustify~jstc
 msgctxt "TTextJustify~jstc"
 msgid "TopCenter"
 msgstr ""
 
-#: TTextJustify~jstl
+#: ttextjustify~jstl
 msgctxt "TTextJustify~jstl"
 msgid "TopLeft"
 msgstr ""
 
-#: TTextJustify~jstr
+#: ttextjustify~jstr
 msgctxt "TTextJustify~jstr"
 msgid "TopRight"
 msgstr ""
 
-#: TTraceMode~Angle
+#: ttracemode~angle
 msgid "Angle"
 msgstr ""
 
-#: TTraceMode~ZAxis
+#: ttracemode~zaxis
 msgctxt "TTraceMode~ZAxis"
 msgid "Z Axis"
 msgstr ""
 
-#: TTreeAdress~Owner
+#: ttreeadress~owner
 msgctxt "TTreeAdress~Owner"
 msgid "Adress"
 msgstr ""
 
-#: TTreeAdress~SelfIndex
+#: ttreeadress~selfindex
 msgctxt "TTreeAdress~SelfIndex"
 msgid "Position"
 msgstr ""
 
-#: TVSControl~TVSDefault
+#: tvscontrol~tvsdefault
 msgctxt "TVSControl~TVSDefault"
 msgid "Default"
 msgstr ""
 
-#: TVSControl~TVSOff
+#: tvscontrol~tvsoff
 msgid "Off"
 msgstr ""
 
-#: TVSControl~TVSOn
+#: tvscontrol~tvson
 msgctxt "TVSControl~TVSOn"
 msgid "On"
 msgstr ""

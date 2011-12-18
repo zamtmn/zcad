@@ -45,10 +45,16 @@ GDBObjNet=object(GDBObjConnected)
 
                  destructor done;virtual;
                  procedure FormatAfterDXFLoad;virtual;
+                 function IsHaveGRIPS:GDBBoolean;virtual;
            end;
 {Export-}
 implementation
 uses GDBLine,ugdbdescriptor,GDBManager,dxflow,math,oglwindow,log;
+function GDBObjNet.IsHaveGRIPS:GDBBoolean;
+begin
+     result:=false;
+end;
+
 procedure GDBObjNet.FormatAfterDXFLoad;
 begin
 

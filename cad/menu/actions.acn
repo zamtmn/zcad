@@ -10,8 +10,10 @@ action ACN_QUIT,Quit,exit.bmp,Quit,,CTRL+Q
 action ACN_UNDO,Undo,undo.bmp,Undo,,CTRL+Z
 action ACN_REDO,Redo,redo.bmp,Redo,,CTRL+SHIFT+Z
 action ACN_COPYCLIP,CopyClip,copyclip.bmp,Copy,Copy to clipboard,CTRL+C
-action ACN_COPYCLIPBASE,CopyBase,copyclipbase.bmp,Copy with base point,Copy to clipboard with base point,CTRL+INS
-action ACN_PASTE,PasteClip,pasteclip.bmp,Paste,Paste from clipboard,SHIFT+INS
+action ACN_COPYCLIPBASE,CopyBase,copyclipbase.bmp,Copy with base point,Copy to clipboard with base point,CTRL+SHIFT+C
+action ACN_FAKECOPYCLIPBASE,CopyBase,#CB,,,CTRL+INS
+action ACN_PASTE,PasteClip,pasteclip.bmp,Paste,Paste from clipboard,CTRL+V
+action ACN_FAKEPASTE,PasteClip,#Paste,,,SHIFT+INS
 action ACN_ERASE,Erase,erase.bmp,Erase,,DEL
 action ACN_SELECTALL,SelectAll,#SA,Select all,,CTRL+A
 action ACN_DESELECTALL,DeSelectAll,#DSA,DeSelect all,,CTRL+SHIFT+A

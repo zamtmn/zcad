@@ -55,7 +55,7 @@ const
 
   ontracdist=10;
   ontracignoredist=25;
-  texturesize=128;
+  texturesize=256;
   maxmybufer=99;
 type
   tmyscrbuf = array [0..maxmybufer] of GLuint;
@@ -1999,6 +1999,7 @@ begin
 
           else if ((param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then
           begin
+          { TODO : Добавить возможность выбора объектов без секрамки во время выполнения команды }
             commandmanager.ExecuteCommandSilent('SelectFrame');
             sendmousecoord(MZW_LBUTTON);
           end;

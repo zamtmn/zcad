@@ -2439,6 +2439,29 @@ repeat
       CurrentSubObj:=CurrentObj^.VarObjArray.iterate(ir_inDevice);
 until CurrentSubObj=nil;
 end;
+function CreateCable(name,mater:gdbstring):PGDBObjCable;
+var
+    vd,pvn,pvn2: pvardesk;
+    pvd,pvd2:pvardesk;
+begin
+  result := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
+  result^.ou.copyfrom(units.findunit('cable'));
+  pvd:=result.ou.FindVariable('NMO_Suffix');
+  pstring(pvd^.data.Instance)^:='';
+  pvd:=result.ou.FindVariable('NMO_Prefix');
+  pstring(pvd^.data.Instance)^:='';
+  pvd:=result.ou.FindVariable('NMO_BaseName');
+  pstring(pvd^.data.Instance)^:='';
+  pvd:=result.ou.FindVariable('NMO_Template');
+  pstring(pvd^.data.Instance)^:='';
+  pvd:=result.ou.FindVariable('NMO_Name');
+  pstring(pvd^.data.Instance)^:=name;
+  pvd:=result.ou.FindVariable('DB_link');
+  pstring(pvd^.data.Instance)^:=mater;
+
+  pvd:=result.ou.FindVariable('CABLE_AutoGen');
+  pgdbboolean(pvd^.data.Instance)^:=true;
+end;
 
 function _El_ExternalKZ_com (Operands:pansichar):GDBInteger;
 var
@@ -2458,6 +2481,52 @@ var
     processednets:GDBOpenArrayOfPObjects;
     vd,pvn,pvn2: pvardesk;
     segments:GDBOpenArrayOfPObjects;
+    supernetsarray:GDBObjOpenArrayOfPV;
+procedure GetStartEndPin(startdevname,enddevname:GDBString);
+begin
+  PGDBObjEntity(startdev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',startdevname);
+  PGDBObjEntity(enddev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',enddevname);
+  if startdev=nil then
+                      shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено стартовое устройство '+startdevname)
+                  else
+                      begin
+                      startdev:=findconnector(startdev);
+                      if startdev=nil then
+                                          shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор стартового устройства '+startdevname);
+                      end;
+  if enddev=nil then
+                      shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено конечное устройство '+enddevname)
+                  else
+                      begin
+                      enddev:=findconnector(enddev);
+                      if enddev=nil then
+                                          shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+enddevname);
+
+                      end;
+end;
+procedure LinkRisersToNets;
+begin
+  GDB.FindMultiEntityByVar2(GDBDeviceID,'RiserName',riserarray);
+  supernet:=nil;
+  net:=netarray.beginiterate(ir_net);
+  if (net<>nil) then
+  repeat
+        net.riserarray.Clear;
+        riser:=riserarray.beginiterate(ir_riser);
+        if (riser<>nil) then
+        repeat
+              pointer(nline):=net.GetNearestLine(riser.P_insert_in_WCS);
+              np:=NearestPointOnSegment(riser.P_insert_in_WCS,nline.CoordInWCS.lBegin,nline.CoordInWCS.lEnd);
+              if IsPointEqual(np,riser.P_insert_in_WCS)then
+              begin
+                   net.riserarray.add(@riser);
+              end;
+              riser:=riserarray.iterate(ir_riser);
+        until riser=nil;
+        net:=netarray.iterate(ir_net);
+  until net=nil;
+end;
+
 begin
   if length(operands)=0 then
                      begin
@@ -2483,6 +2552,8 @@ begin
   isload:=FileExists(utf8tosys(s));
   if isload then
   begin
+       processednets.init(100);
+       supernetsarray.init(100);
        FDoc:=TCSVDocument.Create;
        FDoc.Delimiter:=';';
        FDoc.LoadFromFile(utf8tosys(s));
@@ -2492,21 +2563,23 @@ begin
        begin
             if FDoc.ColCount[row]>4 then
             begin
-                 if FDoc.Cells[0,row]='0S1' then
-                                                  log.LogOut('asdasd');
-                 //log.LogOut(FDoc.Cells[0,row]);
+                 //if FDoc.Cells[0,row]='0S1' then
+                 //                                 log.LogOut('asdasd');
+                 //s:='прочитана строка';
+                 //for col:=0 to FDoc.ColCount[row] do
+                 //begin
+                 //s:=s+' '+FDoc.Cells[col,row];
+                 //end;
+                 //log.LogOut(s);
 
-                 s:='прочитана строка';
-                 for col:=0 to FDoc.ColCount[row] do
-                 begin
-                 s:=s+' '+FDoc.Cells[col,row];
-                 end;
-                 log.LogOut(s);
 
-                 PGDBObjEntity(startdev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',FDoc.Cells[1,row]);
+            netarray.Clear;
+            GDB.FindMultiEntityByVar(GDBNetID,'NMO_Name',FDoc.Cells[3,row],netarray);
+
+                 GetStartEndPin(FDoc.Cells[1,row],FDoc.Cells[2,row]);
+
+                 {PGDBObjEntity(startdev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',FDoc.Cells[1,row]);
                  PGDBObjEntity(enddev):=GDB.FindEntityByVar(GDBDeviceID,'NMO_Name',FDoc.Cells[2,row]);
-                 netarray.Clear;
-                 GDB.FindMultiEntityByVar(GDBNetID,'NMO_Name',FDoc.Cells[3,row],netarray);
                  if startdev=nil then
                                      shared.HistoryOutStr('В строке '+inttostr(row)+' не найдено стартовое устройство '+FDoc.Cells[1,row])
                                  else
@@ -2523,7 +2596,7 @@ begin
                                      if enddev=nil then
                                                          shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+FDoc.Cells[2,row]);
 
-                                     end;
+                                     end;}
                  if (startdev<>nil)and(enddev<>nil) then
                  if netarray.Count=1 then
                  begin
@@ -2541,6 +2614,8 @@ begin
                  //                    shared.HistoryOutStr('В строке '+inttostr(row)+' не найден коннектор конечного устройства '+FDoc.Cells[2,row]);
                  if (startdev<>nil)and(enddev<>nil) then
                  begin
+                 cable:=CreateCable(FDoc.Cells[0,row],FDoc.Cells[4,row]);
+                 {
                  cable := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
                  cable^.ou.copyfrom(units.findunit('cable'));
                  pvd:=cable.ou.FindVariable('NMO_Suffix');
@@ -2557,7 +2632,7 @@ begin
                  pstring(pvd^.data.Instance)^:=FDoc.Cells[4,row];
 
                  pvd:=cable.ou.FindVariable('CABLE_AutoGen');
-                 pgdbboolean(pvd^.data.Instance)^:=true;
+                 pgdbboolean(pvd^.data.Instance)^:=true;}
 
                  gdb.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeTreeBB(cable);
 
@@ -2574,29 +2649,15 @@ begin
                      begin
                           if netarray.Count>1 then
                           begin
+                          supernet:=PGDBObjNet(supernetsarray.FindEntityByVar(GDBNetID,'NMO_Name',FDoc.Cells[3,row]));
+
+                          if supernet=nil then
+                          begin
                           riserarray.init(100);
                           GDB.FindMultiEntityByVar2(GDBDeviceID,'RiserName',riserarray);
-                          supernet:=nil;
-                          net:=netarray.beginiterate(ir_net);
-                          if (net<>nil) then
-                          repeat
-                                net.riserarray.Clear;
-                                riser:=riserarray.beginiterate(ir_riser);
-                                if (riser<>nil) then
-                                repeat
-                                      pointer(nline):=net.GetNearestLine(riser.P_insert_in_WCS);
-                                      np:=NearestPointOnSegment(riser.P_insert_in_WCS,nline.CoordInWCS.lBegin,nline.CoordInWCS.lEnd);
-                                      if IsPointEqual(np,riser.P_insert_in_WCS)then
-                                      begin
-                                           net.riserarray.add(@riser);
-                                      end;
-                                      riser:=riserarray.iterate(ir_riser);
-                                until riser=nil;
-                                net:=netarray.iterate(ir_net);
-                          until net=nil;
 
-
-                          processednets.init(100);
+                          LinkRisersToNets;
+                          processednets.Clear;
                           net:=netarray.beginiterate(ir_net);
                           if (net<>nil) then
                           repeat
@@ -2630,6 +2691,7 @@ begin
                                                                  gdbgetmem(supernet,sizeof(GDBObjNet));
                                                                  supernet.initnul(nil);
                                                                  //net.objarray.copyto(@supernet.ObjArray);
+                                                                 supernet.ou.copyfrom(@net.ou);
                                                                  log.LogOut('supernet.initnul(nil); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
                                                             if not processednets.IsObjExist(net) then
@@ -2683,12 +2745,19 @@ begin
 
                                 net:=netarray.iterate(ir_net);
                           until (net=nil){or(supernet<>nil)};
+                          riserarray.ClearAndDone;
+                          if supernet<>nil then
+                                          supernetsarray.AddRef(supernet^);
+                          end
+                             else
+                                 supernet:=supernet;
 
                           //supernet.BuildGraf;
 
                           if supernet<>nil then
                           begin
-                          cable := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
+                          cable:=CreateCable(FDoc.Cells[0,row],FDoc.Cells[4,row]);
+                          {cable := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
                           cable^.ou.copyfrom(units.findunit('cable'));
                           pvd:=cable.ou.FindVariable('NMO_Suffix');
                           pstring(pvd^.data.Instance)^:='';
@@ -2704,7 +2773,7 @@ begin
                           pstring(pvd^.data.Instance)^:=FDoc.Cells[4,row];
 
                           pvd:=cable.ou.FindVariable('CABLE_AutoGen');
-                          pgdbboolean(pvd^.data.Instance)^:=true;
+                          pgdbboolean(pvd^.data.Instance)^:=true;}
 
                           gdb.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeTreeBB(cable);
 
@@ -2727,9 +2796,9 @@ begin
                           cable:=segments.iterate(ir_net);
                           until cable=nil;
 
-                          supernet.objarray.Clear;
-                          supernet.riserarray.clear;
-                          supernet.done;
+                          //supernet.objarray.Clear;
+                          //supernet.riserarray.clear;
+                          //supernet.done;
                           segments.Clear;
                           segments.done;
                           //gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Clear;
@@ -2737,7 +2806,8 @@ begin
                           else
                               shared.ShowError('В строке '+inttostr(row)+' обнаружено несколько не связанных трасс "'+FDoc.Cells[3,row]);
 
-                          riserarray.ClearAndDone;
+
+
                           //shared.ShowError('В строке '+inttostr(row)+' обнаружена множественная трасса "'+FDoc.Cells[3,row]+'". Пока недопилено((');
                           end
                           else
@@ -2758,6 +2828,20 @@ begin
        netarray.ClearAndDone;
 
        FDoc.Destroy;
+       processednets.ClearAndDone;
+
+       net:=supernetsarray.beginiterate(ir_net);
+       if (net<>nil) then
+       repeat
+            net.objarray.Clear;
+            net.riserarray.clear;
+            //net.done;
+            net:=supernetsarray.iterate(ir_net);
+       until net=nil;
+       supernetsarray.done;
+
+
+
        MainFormN.EndLongProcess;
   end
             else
@@ -2786,6 +2870,13 @@ begin
     end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
+  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
+  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
+  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
+  GDB.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
+  GDB.GetCurrentDWG.SelObjArray.Clear;
+  ReturnToDefault;
+  clearcp;
 end;
 
 function _test_com(Operands:pansichar):GDBInteger;

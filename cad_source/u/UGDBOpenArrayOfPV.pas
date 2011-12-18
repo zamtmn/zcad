@@ -46,10 +46,38 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
                       procedure FormatAfterEdit;virtual;
                       function InRect:TInRect;virtual;
                       function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
+                      function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;virtual;
                 end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}GDBManager,GDBEntity;
+uses {UGDBDescriptor,}GDBManager,GDBEntity,varmandef;
+function GDBObjOpenArrayOfPV.FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;
+var
+   pvisible:PGDBObjEntity;
+   ir:itrec;
+   pvd:pvardesk;
+begin
+     result:=nil;
+     begin
+         pvisible:=beginiterate(ir);
+         if pvisible<>nil then
+         repeat
+               if pvisible.vp.ID=objID then
+               begin
+                    pvd:=pvisible^.ou.FindVariable(vname);
+                    if pvd<>nil then
+                    begin
+                         if pvd.data.PTD.GetValueAsString(pvd.data.Instance)=vvalue then
+                         begin
+                              result:=pvisible;
+                              exit;
+                         end;
+                    end;
+               end;
+              pvisible:=iterate(ir);
+         until pvisible=nil;
+     end;
+end;
 function GDBObjOpenArrayOfPV.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 var pobj:pGDBObjEntity;
     ir:itrec;

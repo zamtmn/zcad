@@ -1,0 +1,14 @@
+LazarusResources.Add('Tsltexteditor1','FORMDATA',[
+  'TPF0'#14'Tsltexteditor1'#13'sltexteditor1'#4'Left'#3#231#0#6'Height'#2#18#3
+  +'Top'#3'%'#1#5'Width'#3#247#1#11'BorderStyle'#7#13'bsSizeToolWin'#7'Caption'
+  +#6#13'sltexteditor1'#12'ClientHeight'#2#18#11'ClientWidth'#3#247#1#21'Constr'
+  +'aints.MaxHeight'#2#18#21'Constraints.MinHeight'#2#18#6'OnShow'#7#11'shofted'
+  +'form'#10'LCLVersion'#6#6'0.9.31'#0#5'TEdit'#9'EditField'#4'Left'#2#29#6'Hei'
+  +'ght'#2#18#3'Top'#2#0#5'Width'#3#177#1#5'Align'#7#8'alClient'#7'Anchors'#11#0
+  +#8'TabOrder'#2#0#4'Text'#6#9'EditField'#0#0#6'TLabel'#8'helptext'#4'Left'#2#0
+  +#6'Height'#2#18#3'Top'#2#0#5'Width'#2#29#5'Align'#7#6'alLeft'#7'Caption'#6#10
+  +' '#209#130#208#181#209#129#209#130' '#6'Layout'#7#8'tlCenter'#11'ParentColo'
+  +'r'#8#0#0#7'TButton'#8'OkButton'#4'Left'#3#206#1#6'Height'#2#18#3'Top'#2#0#5
+  +'Width'#2')'#5'Align'#7#7'alRight'#8'AutoSize'#9#7'Caption'#6#2'Ok'#7'Defaul'
+  +'t'#9#11'ModalResult'#2#1#8'TabOrder'#2#1#0#0#0
+]);

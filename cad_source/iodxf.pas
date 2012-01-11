@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
+uses gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
   entnamindex=record
@@ -31,8 +31,9 @@ const
      (
      (entname:'HATCH')
      );
-
-     acadentsupportcol=11;
+     {MODE OBJFPC}
+     //a: array of string = ('aaa', 'bbb', 'ccc');
+     acadentsupportcol=12;
      entnamtable:array[1..acadentsupportcol]of entnamindex=
      (
      (entname:'POINT'),
@@ -45,7 +46,8 @@ const
      (entname:'MTEXT'),
      (entname:'LWPOLYLINE'),
      (entname:'3DFACE'),
-     (entname:'SOLID')
+     (entname:'SOLID'),
+     (entname:'ELLIPSE')
      );
 const
      NULZCPHeader:ZCPHeader=(

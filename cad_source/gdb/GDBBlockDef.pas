@@ -187,6 +187,7 @@ begin
   p:=ObjArray.beginiterate(ir);
   if p<>nil then
   repeat
+       //programlog.LogOutStr('format entity '+inttostr(ir.itc),lp_OldPos);
        p^.format;
        p^.BuildGeometry;
        p^.FromDXFPostProcessAfterAdd;

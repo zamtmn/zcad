@@ -109,7 +109,7 @@ begin
   historyoutstr('ZCAD v'+sysvar.SYS.SYS_Version^+' started');
   gdbplugins.loadplugins(sysparam.programpath+'PLUGINS\');
 
-  SplashWindow.TXTOut('Выполнение *components\autorun.cmd');commandmanager.executefile('*components/autorun.cmd');
+  SplashWindow.TXTOut('Выполнение *components\autorun.cmd',false);commandmanager.executefile('*components/autorun.cmd');
   //убираем срлэш
   removesplash;
 
@@ -125,7 +125,7 @@ begin
   //SplashWindow.TXTOut('GDBCommandsOPS.finalize;');GDBCommandsOPS.finalize;
   //SplashWindow.TXTOut('GDBCommandsElectrical.finalize;');GDBCommandsElectrical.finalize;
 
-  SplashWindow.TXTOut('ugdbdescriptor.finalize;');ugdbdescriptor.finalize;
+  SplashWindow.TXTOut('ugdbdescriptor.finalize;',false);ugdbdescriptor.finalize;
 
   programlog.logoutstr('END.',0);
   programlog.done;

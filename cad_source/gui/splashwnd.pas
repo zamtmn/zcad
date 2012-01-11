@@ -29,7 +29,7 @@ type
   TSplashWnd = class(TForm)
     txt:tlabel;
     Logo: TImage;
-    procedure TXTOut(s:GDBstring);virtual;
+    procedure TXTOut(s:GDBstring;pm:boolean);virtual;
     private
     procedure AfterConstruction; override;
   end;
@@ -43,8 +43,10 @@ uses log;
 procedure TSplashWnd.TXTOut;
 begin
      self.txt.Caption:=vinfotext+'Инициализация:'#13#10+s;
-     self.txt.repaint;
-     //application.ProcessMessages;
+     if pm then
+               application.ProcessMessages
+           else
+               self.txt.repaint;
 end;
 procedure TSplashWnd.AfterConstruction;
 begin

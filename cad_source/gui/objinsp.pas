@@ -22,7 +22,7 @@ unit Objinsp;
 interface
 
 uses
-
+  Themes,
   {$IFDEF LCLGTK2}
   x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
@@ -376,6 +376,37 @@ var
   //colorn,coloro:tCOLORREF;
   tempcolor:TColor;
   ir:itrec;
+  temp:integer;
+  Size: TSize;
+  procedure DrawTreeIcon(X, Y: Integer; Minus: Boolean);
+  const
+    PlusMinusDetail: array[Boolean] of TThemedTreeview =
+    (
+      ttGlyphClosed,
+      ttGlyphOpened
+    );
+  var
+    Details: TThemedElementDetails;
+    Size: TSize;
+  begin
+    Details := ThemeServices.GetElementDetails(PlusMinusDetail[Minus]);
+    Size := ThemeServices.GetDetailSize(Details);
+    ThemeServices.DrawElement(Canvas.Handle, Details, Rect(X, Y, X + Size.cx, Y + Size.cy), nil);
+  end;
+  function GetSizeTreeIcon(Minus: Boolean):TSize;
+  const
+    PlusMinusDetail: array[Boolean] of TThemedTreeview =
+    (
+      ttGlyphClosed,
+      ttGlyphOpened
+    );
+  var
+    Details: TThemedElementDetails;
+  begin
+    Details := ThemeServices.GetElementDetails(PlusMinusDetail[Minus]);
+    result := ThemeServices.GetDetailSize(Details);
+    //ThemeServices.DrawElement(Canvas.Handle, Details, Rect(X, Y, X + result.cx, Y + result.cy), nil);
+  end;
 begin
   //colorn:=windows.RGB(150,150,150);
 
@@ -401,10 +432,10 @@ begin
         if ppd^.SubNode<>nil
           then
         begin
-          if not ppd^.Collapsed^ then
+          {if not ppd^.Collapsed^ then
             s:='–'+ppd^.Name
           else
-            s:='+'+ppd^.Name;
+            s:='+'+ppd^.Name;}s:=ppd^.Name;
           r.Right:=clientwidth-2;
                                  {c:=GetBkColor(cdc);
                                  SetBkColor(cdc,0);
@@ -426,7 +457,12 @@ begin
 
             tempcolor:=canvas.Font.Color;
             canvas.Font.Color:=clGrayText;
+            size:=GetSizeTreeIcon(not ppd^.Collapsed^);
+            temp:=(r.bottom-r.top-size.cy)div 3;
+            DrawTreeIcon(r.left,r.top+temp,not ppd^.Collapsed^);
+            inc(r.left,size.cx+1);
             canvas.TextRect(r,r.Left,r.Top,(s));
+            dec(r.left,size.cx+1);
             //drawtextA({cdc}dc,GDBPointer(s),length(s),r,DT_left);
             canvas.Font.Color:=tempcolor;
             //SetTextColor({cdc}dc,coloro);
@@ -435,7 +471,13 @@ begin
               begin
               //drawtextA({cdc}dc,GDBPointer(s),length(s),r,DT_left);
               //canvas.Font.Color:=clYellow;    dfg
+                size:=GetSizeTreeIcon(not ppd^.Collapsed^);
+                temp:=(r.bottom-r.top-size.cy)div 3;
+              DrawTreeIcon(r.left,r.top+temp,not ppd^.Collapsed^);
+              inc(r.left,size.cx+1);
               canvas.TextRect(r,r.Left,r.Top,(s));
+
+              dec(r.left,size.cx+1);
               end;
           inc(sub);
           y:=y+rowh;

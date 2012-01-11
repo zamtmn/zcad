@@ -31,15 +31,15 @@ begin
   TEdWND_Height:=483;
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=238;
-  VIEW_ObjInspSubV:=102;
-  PATH_File0:='J:\nh\Мурка\II\proj.dxf';
-  PATH_File1:='J:\nh\Мурка\III очередь\proj.dxf';
-  PATH_File2:='/mnt/winc/zcad/cad/sample/test_dxf/teapot.dxf';
-  PATH_File3:='/mnt/winc/zcad/cad/sample/test_dxf/em.dxf';
-  PATH_File4:='/mnt/winc/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File5:='/mnt/winc/zcad/cad/autosave/autosave.dxf';
-  PATH_File6:='J:\nh\Мурка\III очередь\видео\video III очередь.dxf';
-  PATH_File7:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File8:='J:\nh\Наиль\СС.dxf';
-  PATH_File9:='J:\nh\Мурка\III очередь\error.dxf';
+  VIEW_ObjInspSubV:=86;
+  PATH_File0:='/mnt/winc/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File1:='Z:\mnt\winc\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File2:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File3:='J:\nh\искандер\Салтыкова-Щедрина\АОВ\proj.dxf';
+  PATH_File4:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File5:='C:\zcad\cad\sample\test_dxf\3d_mount.dxf';
+  PATH_File6:='J:\nh\термоинжиниринг\ГОМ6\ДУ\proj.dxf';
+  PATH_File7:='J:\nh\искандер\Салтыкова-Щедрина\загазованность\proj.dxf';
+  PATH_File8:='D:\1 этаж_план_EXPLODED.dxf';
+  PATH_File9:='/media/temp/1 этаж_план.dxf';
 end.

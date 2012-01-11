@@ -33,6 +33,9 @@ Panel Standart;
     button OPS_Sensor_Mark,#++,Нумерация извещателей на плане
     Separator
     button RebuildTree,#rtree,*DEBUG*Перестроить дерево примитивов
+    Separator
+    action ACN_PROCESSKZ
+    action ACN_REMAUTOCABLES
   }
 Panel Quick;
   {

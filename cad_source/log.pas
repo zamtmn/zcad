@@ -70,6 +70,8 @@ var
    FileHandle:cardinal;
    logname:string;
 begin
+                    if assigned(SplashWindow) then
+                                   SplashWindow.TXTOut(s,true);
      logname:=filelog+'hard';
      FileHandle:=0;
      if not fileexists(utf8tosys(logname)) then
@@ -227,9 +229,9 @@ else if IncIndent>0 then
 end;
 procedure tlog.logoutstr;
 begin
-     if (incindent>0)and(Indent=0) then
+     if (incindent<2){and(Indent=0)} then
                     if assigned(SplashWindow) then
-                                   SplashWindow.TXTOut(str);
+                                   SplashWindow.TXTOut(str,false);
      processstr(str,IncIndent,true);
 end;
 procedure tlog.LogOutStrFast;

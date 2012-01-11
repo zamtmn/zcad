@@ -60,3 +60,7 @@ action ACN_WPREV,PrevDrawing,,Previous window,,SHIFT+CTRL+TAB
 
 action ACN_ABOUT,About,about.bmp,About,,
 action ACN_Help,Help,help.bmp,Help,,F1
+
+
+action ACN_PROCESSKZ,EL_ExternalKZ,#Process external KZ,,,
+action ACN_REMAUTOCABLES,EL_AutoGen_Cable_Remove,#Remove auto cables,,,

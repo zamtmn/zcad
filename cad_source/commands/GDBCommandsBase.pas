@@ -1270,7 +1270,7 @@ var
 begin
            mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
            SysVarUnit^.SavePasToMem(mem);
-           mem.SaveToFile(sysparam.programpath+'rtl\sysvar.pas');
+           mem.SaveToFile(sysparam.programpath+'rtl/sysvar.pas');
            mem.done;
 end;
 procedure createInfoFormVar;

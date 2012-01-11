@@ -19,7 +19,7 @@
 unit UGDBObjBlockdefArray;
 {$INCLUDE def.inc}
 interface
-uses GDBBlockDef{,dxflow,UGDBOpenArrayOfByte}{,UGDBVisibleOpenArray,GDBEntity,UGDBControlPointArray},UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase,memman, geometry,
+uses strproc,GDBBlockDef{,dxflow,UGDBOpenArrayOfByte}{,UGDBVisibleOpenArray,GDBEntity,UGDBControlPointArray},UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase,memman, geometry,
      gl,gdbasetypes
      {varmandef,gdbobjectsconstdef,GDBGenericSubEntry,GDBSubordinated,varman};
 type
@@ -102,6 +102,9 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
+       if strproc.Tria_Utf8ToAnsi(p^.Name)='*D234' then
+                            p^.Name:=p^.Name;
+
        programlog.LogOutStr('GDBObjBlockdefArray.format; '+p^.name,lp_OldPos);
        p^.format;
        p:=iterate(ir);

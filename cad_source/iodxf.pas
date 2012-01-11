@@ -26,6 +26,12 @@ type
                     entname:GDBString;
               end;
 const
+     acadentignoredcol=1;
+     ignorenamtable:array[1..acadentignoredcol]of entnamindex=
+     (
+     (entname:'HATCH')
+     );
+
      acadentsupportcol=11;
      entnamtable:array[1..acadentsupportcol]of entnamindex=
      (
@@ -128,6 +134,18 @@ begin
     end;
   result := -1;
 end;
+function ISIFNOREDENT(name:GDBString):GDBInteger;
+var i:GDBInteger;
+begin
+     result:=-1;
+     for i:=1 to acadentignoredcol do
+          if uppercase(ignorenamtable[i].entname)=uppercase(name) then
+          begin
+               result:=i;
+               exit;
+          end;
+end;
+
 function entname2GDBID(name:GDBString):GDBInteger;
 var i:GDBInteger;
 begin
@@ -145,6 +163,8 @@ var
   s: GDBString;
   error: GDBInteger;
 begin
+  if fname<>'' then
+  begin
   while f.notEOF do
   begin
     s := f.readGDBString;
@@ -154,6 +174,20 @@ begin
     s := f.readGDBString;
     if (byt = fcode) and (s = fname) then
       exit;
+  end;
+  end
+  else
+  begin
+  while f.notEOF do
+  begin
+    s := f.readGDBString;
+    val(s, byt, error);
+    if error <> 0 then
+      s := s{чето тут не так};
+    if (byt = fcode) then
+          exit;
+    s := f.readGDBString;
+  end;
   end;
 end;
 function GoToDXForENDTAB(var f: GDBOpenArrayOfByte; fcode: GDBInteger; fname: GDBString):boolean;
@@ -346,6 +380,12 @@ begin
                             end;
       end;
       additionalunit.free;
+    end
+    else
+    begin
+         objid:=ISIFNOREDENT(s);
+         if objid>0 then
+         gotodxf(f, 0, '');
     end;
   end;
   additionalunit.done;
@@ -727,7 +767,7 @@ begin
                 inc(foc);
                 AddEntitiesFromDXF(f,'ENDBLK',tp);
                 dec(foc);
-                if tp^.name='DEVICE_EL_MOTOR' then
+                if tp^.name='TX' then
                                                            tp.name:=tp.name;
                 tp^.LoadFromDXF(f,nil);
                 blockload:=true;

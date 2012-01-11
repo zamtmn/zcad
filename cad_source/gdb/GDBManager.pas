@@ -21,7 +21,7 @@ unit GDBManager;
 
 
 interface
-uses GDB3DFace,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
+uses gdbellipse,GDB3DFace,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
      UGDBDescriptor,varmandef,gdbobjectsconstdef,
      UGDBVisibleOpenArray,GDBGenericSubEntry,gdbEntity,GDBCable,GDBDevice,
      GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMText,GDBLine,
@@ -158,15 +158,20 @@ begin
         pgdbobjcable(temp).bp.ListPos.Owner:=owner;
       end;
     GDB3DfaceID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.cable}',{$ENDIF}GDBPointer(temp), sizeof(GDBObj3DFace));
+        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.3DFace}',{$ENDIF}GDBPointer(temp), sizeof(GDBObj3DFace));
         pGDBObj3DFace(temp).initnul(owner);
         pGDBObj3DFace(temp).bp.ListPos.Owner:=owner;
       end;
     GDBSolidID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.cable}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjSolid));
+        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Solid}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjSolid));
         pGDBObjSolid(temp).initnul(owner);
         pGDBObjSolid(temp).bp.ListPos.Owner:=owner;
       end;
+    GDBEllipseID: begin
+        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Ellipse}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjEllipse));
+        PGDBObjEllipse(temp).initnul{(owner)};
+        PGDBObjEllipse(temp).bp.ListPos.Owner:=owner;
+      end
   end;
   result := temp;
 end;
@@ -208,6 +213,9 @@ begin
     GDBDeviceID: begin
         GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.device}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjDevice));
       end;
+    GDBEllipseID: begin
+        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.Ellipse}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjEllipse));
+      end
   end;
   result := temp;
 end;

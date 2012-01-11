@@ -375,6 +375,7 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
                       procedure FormatAfterEdit;virtual;abstract;
                       function InRect:TInRect;virtual;abstract;
                       function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
+                      function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;virtual;abstract;
                 end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBVisibleOpenArray.pas
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
@@ -1079,6 +1080,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function IsSelected:GDBBoolean;virtual;abstract;
                     function IsActualy:GDBBoolean;virtual;abstract;
                     function IsHaveLCS:GDBBoolean;virtual;abstract;
+                    function IsHaveGRIPS:GDBBoolean;virtual;abstract;
                     function GetLayer:PGDBLayerProp;virtual;abstract;
                     function GetCenterPoint:GDBVertex;virtual;abstract;
                     procedure SetInFrustum(infrustumactualy:TActulity);virtual;abstract;
@@ -1341,6 +1343,48 @@ GDBObjArc=object(GDBObjPlain)
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
            end;
+//Generate on C:\zcad\CAD_SOURCE\gdb\GDBEllipse.pas
+  ptEllipsertmodify=^tEllipsertmodify;
+  tEllipsertmodify=record
+                        p1,p2,p3:GDBVertex2d;
+                  end;
+PGDBObjEllipse=^GDBObjEllipse;
+GDBObjEllipse=object(GDBObjPlain)
+                 RR:GDBDouble;(*saved_to_shd*)
+                 MajorAxis:GDBvertex;
+                 Ratio:GDBDouble;(*saved_to_shd*)
+                 StartAngle:GDBDouble;(*saved_to_shd*)
+                 EndAngle:GDBDouble;(*saved_to_shd*)
+                 angle:GDBDouble;
+                 Vertex3D_in_WCS_Array:GDBPoint3DArray;
+                 length:GDBDouble;
+                 q0,q1,q2:GDBvertex;
+                 pq0,pq1,pq2:GDBvertex;
+                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;{RR,}S,E:GDBDouble);
+                 constructor initnul;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
+                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
+                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;abstract;
+                 procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
+                 procedure CalcObjMatrix;virtual;abstract;
+                 procedure Format;virtual;abstract;
+                 procedure createpoint;virtual;abstract;
+                 procedure getoutbound;virtual;abstract;
+                 procedure RenderFeedback;virtual;abstract;
+                 procedure projectpoint;virtual;abstract;
+                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;abstract;
+                 function beforertmodify:GDBPointer;virtual;abstract;
+                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
+                 function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;abstract;
+                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
+                 procedure rtsave(refp:GDBPointer);virtual;abstract;
+                 destructor done;virtual;abstract;
+                 function GetObjTypeName:GDBString;virtual;abstract;
+                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
+                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
+           end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\UGDBEntTree.pas
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
          PTEntTreeNode=^TEntTreeNode;
@@ -1401,7 +1445,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             procedure FormatAfterEdit;virtual;abstract;
                             procedure restructure;virtual;abstract;
                             procedure renderfeedbac(infrustumactualy:TActulity);virtual;abstract;
-                            function select:GDBBoolean;virtual;abstract;
+                            //function select:GDBBoolean;virtual;abstract;
                             function getowner:PGDBObjSubordinated;virtual;abstract;
                             function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;abstract;
                             function EubEntryType:GDBInteger;virtual;abstract;
@@ -1629,6 +1673,7 @@ GDBObjNet=object(GDBObjConnected)
                  procedure SaveToDXFfollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  destructor done;virtual;abstract;
                  procedure FormatAfterDXFLoad;virtual;abstract;
+                 function IsHaveGRIPS:GDBBoolean;virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBLine.pas
 PGDBObjLine=^GDBObjLine;
@@ -2052,6 +2097,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     procedure CommandInit; virtual; abstract;
     procedure DrawHeplGeometry;virtual;abstract;
     destructor done;virtual;abstract;
+    function GetObjTypeName:GDBString;virtual;abstract;
   end;
   CommandFastObjectDef = object(CommandObjectDef)
     procedure CommandInit; virtual;abstract;

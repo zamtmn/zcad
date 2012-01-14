@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- ucxmenumgr,intftranslations,layerwnd,strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ UGDBStringArray,ucxmenumgr,intftranslations,layerwnd,strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -2056,6 +2056,35 @@ begin
      //Application.QueueAsyncCall(MainFormN.asynccloseapp, 0);
      CloseApp;
 end;
+function tw_com(Operands:pansichar):GDBInteger;
+begin
+     //Application.QueueAsyncCall(MainFormN.asynccloseapp, 0);
+  if CWMemo.IsVisible then
+                                 CWindow.Hide
+                             else
+                                 CWindow.Show;
+
+end;
+function CommandList_com(Operands:pansichar):GDBInteger;
+var
+   p:PCommandObjectDef;
+   ps:pgdbstring;
+   ir:itrec;
+   clist:GDBGDBStringArray;
+begin
+   clist.init(200);
+   p:=commandmanager.beginiterate(ir);
+   if p<>nil then
+   repeat
+         //shared.HistoryOutStr(p^.CommandName);
+         clist.add(@p^.CommandName);
+         p:=commandmanager.iterate(ir);
+   until p=nil;
+   clist.sort;
+   shared.HistoryOutStr(clist.GetTextWithEOL);
+   clist.done;
+   result:=cmd_ok;
+end;
 procedure startup;
 //var
    //pmenuitem:pzmenuitem;
@@ -2064,6 +2093,7 @@ begin
   MSEditor.init;
   CopyClipFile:='Empty';
   CreateCommandFastObjectPlugin(@SetObjInsp_com,'SetObjInsp',CADWG,0);
+  CreateCommandFastObjectPlugin(@CommandList_com,'CommandList',0,0);
   ms2objinsp:=CreateCommandFastObjectPlugin(@MultiSelect2ObjIbsp_com,'MultiSelect2ObjIbsp',CADWG,0);
   ms2objinsp.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@SelectOnMouseObjects_com,'SelectOnMouseObjects',CADWG,0);
@@ -2120,6 +2150,8 @@ begin
 
   CreateCommandFastObjectPlugin(@LoadLayout_com,'LoadLayout',0,0);
   CreateCommandFastObjectPlugin(@SnapProp_com,'SnapProperties',CADWG,0).overlay:=true;
+
+  CreateCommandFastObjectPlugin(@TW_com,'TextWindow',0,0).overlay:=true;
 
 
 

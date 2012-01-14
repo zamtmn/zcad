@@ -35,6 +35,10 @@ const
      commandprefix=' ';
 type
   TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
+  TCWindow = class(TForm)
+    private
+    procedure AfterConstruction; override;
+  end;
   TCLine = class({TPanel}TForm{Tcustomform})
     procedure beforeinit;virtual;
     procedure AfterConstruction; override;
@@ -60,8 +64,25 @@ type
   end;
 var
   CLine: TCLine;
+  CWindow:TCWindow;
 implementation
 uses mainwindow,oglwindowdef,log;
+procedure TCWindow.AfterConstruction;
+begin
+    inherited;
+    self.Width:=600;
+    self.Position:=poScreenCenter{poMainFormCenter};
+
+    caption:='Window';
+
+    self.borderstyle:=bsSizeToolWin;
+    CWMemo:=tmemo.create(self);
+    CWMemo.scrollbars:=ssAutoBoth;
+    CWMemo.align:=alclient;
+    CWMemo.ReadOnly:=true;
+    CWMemo.Parent := self;
+end;
+
 procedure TCLine.mypaint(sender:tobject);
 begin
      canvas.Line(0,0,100,100);
@@ -79,6 +100,7 @@ begin
                                             utflen:=2+utflen+UTF8Length(ss);
     //TTextStrings(CLine.HistoryLine.lines).add(ss);
     HistoryLine.Append(ss);
+    CWMemo.Append(ss);
     l:=HistoryLine.GetTextLen;
     HistoryLine.SelStart:=utflen;
     HistoryLine.SelLength:=2;
@@ -201,6 +223,8 @@ begin
     pint:=SavedUnit.FindValue('DMenuY');
     if assigned(pint)then
                          DMenu.Top:=pint^;
+    CWindow:=TCWindow.Create(application);
+    //CWindow.Show;
 end;
 destructor TCLine.Destroy;
 begin

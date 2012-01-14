@@ -47,6 +47,7 @@ var
     cmdedit:TEdit;
     panel:tpanel;
     HistoryLine:TMemo;
+    CWMemo:TMemo;
 
     utflen:integer;
     historychanged:boolean;
@@ -108,13 +109,15 @@ begin
                                         else
                                             utflen:=2+utflen+{UTF8}Length(a);
           HistoryLine.Append(a);
+          CWMemo.Append(a);
           //application.ProcessMessages;
-          HistoryLine.SelStart:=utflen{HistoryLine.GetTextLen};
-          HistoryLine.SelLength:=2;
+
+          //HistoryLine.SelStart:=utflen{HistoryLine.GetTextLen};
+          //HistoryLine.SelLength:=2;
           historychanged:=true;
           //HistoryLine.SelLength:=0;
           //{CLine}HistoryLine.append(s);
-          {CLine}HistoryLine.repaint;
+          {CLine}//---------------------------------------------------------HistoryLine.repaint;
           //a:=CLine.HistoryLine.Lines[CLine.HistoryLine.Lines.Count];
      //SendMessageA(cline.HistoryLine.Handle, WM_vSCROLL, SB_PAGEDOWN	, 0);
      end;

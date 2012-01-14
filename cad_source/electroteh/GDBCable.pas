@@ -440,8 +440,8 @@ begin
 
   str22:=ptnlast.PrevP;
   //str22:=VectorTransform3D(geometry.CreateVertex(0,0,0),m);
-  str21:=VectorTransform3D(geometry.CreateVertex(-3,0.5,0),m);
-  str23:=VectorTransform3D(geometry.CreateVertex(-3,-0.5,0),m);
+  str21:=VectorTransform3D(geometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
+  str23:=VectorTransform3D(geometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,-0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
   end;
   NodePropArray.Shrink;
 end;
@@ -507,6 +507,7 @@ begin
 
         oglsm.myglpushmatrix;
         gltranslated(ptn2^.Nextp.x+gdb.GetCurrentDWG.pcamera^.CamCSOffset.x,ptn2^.Nextp.y+gdb.GetCurrentDWG.pcamera^.CamCSOffset.y,ptn2^.Nextp.z+gdb.GetCurrentDWG.pcamera^.CamCSOffset.z);
+        glscaled(SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^);
         circlepointoflod[8].drawgeometry;
         //oglsm.mytotalglend;
         oglsm.myglpopmatrix;
@@ -516,6 +517,7 @@ begin
         //oglsm.mytotalglend;
         oglsm.myglpushmatrix;
         gltranslated(ptn2^.Prevp.x+gdb.GetCurrentDWG.pcamera^.CamCSOffset.x,ptn2^.Prevp.y+gdb.GetCurrentDWG.pcamera^.CamCSOffset.y,ptn2^.Prevp.z+gdb.GetCurrentDWG.pcamera^.CamCSOffset.z);
+        glscaled(SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^);
         circlepointoflod[8].drawgeometry;
         //oglsm.mytotalglend;
         oglsm.myglpopmatrix;

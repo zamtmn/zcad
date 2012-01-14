@@ -1059,6 +1059,7 @@ var
     dispmatr:DMatrix4D;
     ir:itrec;
     tv,pobj: pGDBObjEntity;
+    domethod,undomethod:tmethod;
 begin
 
       //gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=dispmatr;
@@ -1085,8 +1086,15 @@ begin
                 tv.transform(dispmatr);
                 tv.build;
                 tv.YouChanged;
-                //tv.Format;
-                //
+
+                SetObjCreateManipulator(domethod,undomethod);
+                with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+                begin
+                     AddObject(tv);
+                     FreeArray:=false;
+                     //comit;
+                end;
+
               end;
           end;
           pobj:=gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.iterate(ir);
@@ -1300,6 +1308,7 @@ begin
 end;
 function Insert_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var tb:PGDBObjSubordinated;
+    domethod,undomethod:tmethod;
 begin
   result:=mclick;
   if (button and MZW_LBUTTON)<>0 then
@@ -1331,7 +1340,15 @@ begin
                          gdbfreemem(pointer(pb));
                          pb:=pointer(tb);
     end;
-    gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(pb));
+
+    SetObjCreateManipulator(domethod,undomethod);
+    with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+    begin
+         AddObject(pb);
+         comit;
+    end;
+
+    //gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(pb));
     PGDBObjEntity(pb)^.FromDXFPostProcessAfterAdd;
     pb^.CalcObjMatrix;
     pb^.BuildGeometry;
@@ -1402,20 +1419,42 @@ end;
 function Erase_com:GDBInteger;
 var pv:pGDBObjEntity;
     ir:itrec;
+    count:integer;
+    domethod,undomethod:tmethod;
 begin
   if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
+  count:=0;
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
     if pv^.Selected then
                         begin
-                        pv^.YouDeleted;
+                             //pv^.YouDeleted;
+                             inc(count);
                         end
                     else
                         pv^.DelSelectedSubitem;
 
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
+  SetObjCreateManipulator(undomethod,domethod);
+  with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),count)^ do
+  begin
+    pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+    if pv<>nil then
+    repeat
+      if pv^.Selected then
+                          begin
+                               AddObject(pv);
+                               pv^.Selected:=false;
+                          end;
+    pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+    until pv=nil;
+       //AddObject(pc);
+       comit;
+       FreeArray:=true;
+       //UnDo;
+  end;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
@@ -1617,6 +1656,8 @@ begin
 end;
 
 function Circle_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+var
+    domethod,undomethod:tmethod;
 begin
   result:=mclick;
   pc^.vp.Layer := gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
@@ -1626,9 +1667,16 @@ begin
   pc^.RenderFeedback;
   if (button and MZW_LBUTTON)<>0 then
   begin
-    gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(pc));
+
+         SetObjCreateManipulator(domethod,undomethod);
+         with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+         begin
+              AddObject(pc);
+              comit;
+         end;
+
+    //gdb.GetCurrentROOT.AddObjectToObjArray(addr(pc));
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
-    //commandend;
     commandmanager.executecommandend;
   end;
 end;
@@ -1664,6 +1712,7 @@ end;
 
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var po:PGDBObjSubordinated;
+    domethod,undomethod:tmethod;
 begin
   result:=mclick;
   PCreatedGDBLine^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
@@ -1697,7 +1746,13 @@ begin
     begin
     PCreatedGDBLine^.bp.ListPos.Owner:=gdb.GetCurrentROOT;
     //gdb.ObjRoot.ObjArray.add(addr(pl));
-    gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(PCreatedGDBLine));
+    SetObjCreateManipulator(domethod,undomethod);
+    with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+    begin
+         AddObject(PCreatedGDBLine);
+         comit;
+    end;
+    //gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(PCreatedGDBLine));
     end;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
@@ -2064,14 +2119,27 @@ begin
 end;
 
 Procedure _3DPoly_com_CommandEnd;
+var
+    domethod,undomethod:tmethod;
 begin
 
   if p3dpl<>nil then
   if p3dpl^.VertexArrayInOCS.Count<2 then
                                          begin
                                               {objinsp.GDBobjinsp.}ReturnToDefault;
-                                              p3dpl^.YouDeleted;
-                                         end;
+                                              //p3dpl^.YouDeleted;
+                                         end
+                                      else
+                                      begin
+                                        SetObjCreateManipulator(domethod,undomethod);
+                                        with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(domethod,undomethod,1)^ do
+                                        begin
+                                             AddObject(p3dpl);
+                                             comit;
+                                        end;
+                                        gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
+                                        p3dpl:=nil;
+                                      end;
   //gdbfreemem(pointer(p3dpl));
 end;
 
@@ -2084,11 +2152,13 @@ begin
     if p3dpl=nil then
     begin
 
-    p3dpl := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateInitObj(GDBPolylineID,gdb.GetCurrentROOT));
+    p3dpl := GDBPointer({gdb.GetCurrentROOT.ObjArray.CreateInitObj}gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBPolylineID,gdb.GetCurrentROOT));
+    GDBObjSetEntityProp(p3dpl,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^);
     p3dpl^.AddVertex(wc);
     p3dpl^.Format;
     //gdb.GetCurrentROOT.ObjArray.ObjTree.AddObjectToNodeTree(p3dpl);
-    gdb.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(p3dpl)}CorrectNodeTreeBB(p3dpl);
+    //gdb.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(p3dpl)}CorrectNodeTreeBB(p3dpl);   vbnvbn
+    //gdb.GetCurrentROOT.AddObjectToObjArray(addr(p3dpl));
     SetGDBObjInsp(SysUnit.TypeName2PTD('GDBObjPolyline'),p3dpl);
     end;
 
@@ -2108,8 +2178,8 @@ begin
     p3dpl^.AddVertex(wc);
     p3dpl^.Format;
     p3dpl^.RenderFeedback;
-    gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
-    gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
+    //gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
+    //gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
     redrawoglwnd;
   end;
@@ -2639,7 +2709,7 @@ begin
 
   CreateCommandRTEdObjectPlugin(@Circle_com_CommandStart,@Circle_com_CommandEnd,nil,nil,@Circle_com_BeforeClick,@Circle_com_AfterClick,nil,'Circle',0,0);
   CreateCommandRTEdObjectPlugin(@Line_com_CommandStart,@Line_com_CommandEnd,nil,nil,@Line_com_BeforeClick,@Line_com_AfterClick,nil,'Line',0,0);
-  CreateCommandRTEdObjectPlugin(@_3DPoly_com_CommandStart,_3DPoly_com_CommandEnd,nil,nil,@_3DPoly_com_BeforeClick,@_3DPoly_com_AfterClick,nil,'3DPoly',0,0);
+  CreateCommandRTEdObjectPlugin(@_3DPoly_com_CommandStart,_3DPoly_com_CommandEnd,{nil}_3DPoly_com_CommandEnd,nil,@_3DPoly_com_BeforeClick,@_3DPoly_com_AfterClick,nil,'3DPoly',0,0);
   CreateCommandRTEdObjectPlugin(@_3DPolyEd_com_CommandStart,nil,nil,nil,@_3DPolyEd_com_BeforeClick,@_3DPolyEd_com_BeforeClick,nil,'PolyEd',0,0);
   CreateCommandRTEdObjectPlugin(@Insert_com_CommandStart,Insert_com_CommandEnd,nil,nil,Insert_com_BeforeClick,Insert_com_BeforeClick,nil,'Insert',0,0);
 

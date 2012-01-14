@@ -16,6 +16,7 @@ var
   DWG_SelectedObjToInsp:GDBBoolean;
   DSGN_TraceAutoInc:GDBBoolean;
   DSGN_LeaderDefaultWidth:GDBDouble;
+  DSGN_HelpScale:GDBDouble;
   VIEW_CommandLineVisible:GDBBoolean;
   VIEW_HistoryLineVisible:GDBBoolean;
   VIEW_ObjInspVisible:GDBBoolean;
@@ -83,6 +84,7 @@ begin
   DWG_SelectedObjToInsp:=True;
   DSGN_TraceAutoInc:=False;
   DSGN_LeaderDefaultWidth:=10.0;
+  DSGN_HelpScale:=1.0;
   VIEW_CommandLineVisible:=True;
   VIEW_HistoryLineVisible:=True;
   VIEW_ObjInspVisible:=True;

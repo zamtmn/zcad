@@ -803,6 +803,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
   tdesigning=record
              DSGN_TraceAutoInc:PGDBBoolean;(*'Increment trace names'*)
              DSGN_LeaderDefaultWidth:PGDBDouble;(*'Default leader width'*)
+             DSGN_HelpScale:PGDBDouble;(*'Scale of auxiliary elements'*)
        end;
   tview=record
                VIEW_CommandLineVisible,
@@ -1384,6 +1385,10 @@ GDBObjEllipse=object(GDBObjPlain)
                  function GetObjTypeName:GDBString;virtual;abstract;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
+                 function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;abstract;
+                 procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
+                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
+                 procedure ReCalcFromObjMatrix;virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\UGDBEntTree.pas
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);

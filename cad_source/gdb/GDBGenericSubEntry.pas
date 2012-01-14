@@ -40,6 +40,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             VisibleOBJBoundingBox:GDBBoundingBbox;
                             //ObjTree:TEntTreeNode;
                             function AddObjectToObjArray(p:GDBPointer):GDBInteger;virtual;
+                            function GoodAddObjectToObjArray(const obj:GDBObjEntity):GDBInteger;virtual;
                             {function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;virtual;
                             function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;virtual;}
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -56,6 +57,8 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             function EubEntryType:GDBInteger;virtual;
                             function MigrateTo(new_sub:PGDBObjGenericSubEntry):GDBInteger;virtual;
                             function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
+                            function RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
+                            function GoodRemoveMiFromArray(const obj:GDBObjEntity):GDBInteger;virtual;
                             {function SubMi(pobj:pGDBObjEntity):GDBInteger;virtual;}
                             function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
                             function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
@@ -147,6 +150,13 @@ begin
      end
      else
          result:=false;
+end;
+function GDBObjGenericSubEntry.GoodAddObjectToObjArray(const obj:GDBObjEntity):GDBInteger;
+var
+    p:pointer;
+begin
+     p:=@obj;
+     AddObjectToObjArray(@p);
 end;
 
 function GDBObjGenericSubEntry.AddObjectToObjArray(p:GDBPointer):GDBInteger;
@@ -320,7 +330,11 @@ begin
            pobj:=self.ObjArray.iterate(ir);
      until pobj=nil;
 end;
-function GDBObjGenericSubEntry.EraseMi;
+function GDBObjGenericSubEntry.GoodRemoveMiFromArray(const obj:GDBObjEntity):GDBInteger;
+begin
+     RemoveMiFromArray(@obj,obj.bp.ListPos.SelfIndex);
+end;
+function GDBObjGenericSubEntry.RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;
 var
 p:PGDBObjEntity;
 begin
@@ -331,9 +345,22 @@ begin
 
      pointer(p):=ObjArray.GetObject(pobjinarray);
      ObjArray.deliteminarray(pobjinarray);
+end;
+function GDBObjGenericSubEntry.EraseMi;
+var
+p:PGDBObjEntity;
+begin
+     {if pobj^.bp.TreePos.Owner<>nil then
+     begin
+          PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.deliteminarray(pobj^.bp.TreePos.SelfIndex);
+     end;
+
+     pointer(p):=ObjArray.GetObject(pobjinarray);
+     ObjArray.deliteminarray(pobjinarray);
 
      //p^.done;
-     //memman.GDBFreeMem(GDBPointer(p))
+     //memman.GDBFreeMem(GDBPointer(p))}
+     RemoveMiFromArray(pobj,pobjinarray);
      pobj^.done;
      memman.GDBFreeMem(GDBPointer(pobj));
 end;

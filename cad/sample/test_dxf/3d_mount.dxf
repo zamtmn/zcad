@@ -504,9 +504,15 @@ $SPLINESEGS
 8
 9
 $HANDSEED
+<<<<<<< .mine
+5
+100000358
+9
+=======
 5
 1000003A6
 9
+>>>>>>> .r114
 $SURFTAB1
 70
 6
@@ -1818,6 +1824,9 @@ Continuous
 -3
 390
 2BD
+<<<<<<< .mine
+0
+=======
 0
 LAYER
 5
@@ -1885,13 +1894,19 @@ Continuous
 390
 2BD
 0
+>>>>>>> .r114
 ENDTAB
 0
 TABLE
 2
 STYLE
+<<<<<<< .mine
+5
+2DA
+=======
 5
 2DD
+>>>>>>> .r114
 330
 0
 100
@@ -1900,8 +1915,13 @@ AcDbSymbolTable
 2
 0
 STYLE
+<<<<<<< .mine
+5
+2DB
+=======
 5
 2DE
+>>>>>>> .r114
 100
 AcDbSymbolTableRecord
 100
@@ -1926,8 +1946,13 @@ _mipgost.shx
 
 0
 STYLE
+<<<<<<< .mine
+5
+2DC
+=======
 5
 2DF
+>>>>>>> .r114
 100
 AcDbSymbolTableRecord
 100
@@ -1956,8 +1981,13 @@ ENDTAB
 TABLE
 2
 VIEW
+<<<<<<< .mine
+5
+2DD
+=======
 5
 2E0
+>>>>>>> .r114
 330
 0
 100
@@ -1970,8 +2000,13 @@ ENDTAB
 TABLE
 2
 UCS
+<<<<<<< .mine
+5
+2DE
+=======
 5
 2E1
+>>>>>>> .r114
 330
 0
 100
@@ -1984,8 +2019,13 @@ ENDTAB
 TABLE
 2
 APPID
+<<<<<<< .mine
+5
+2DF
+=======
 5
 2E2
+>>>>>>> .r114
 330
 0
 100
@@ -1994,8 +2034,13 @@ AcDbSymbolTable
 11
 0
 APPID
+<<<<<<< .mine
+5
+2E0
+=======
 5
 2E3
+>>>>>>> .r114
 330
 2E2
 100
@@ -2008,8 +2053,13 @@ ACAD
 0
 0
 APPID
+<<<<<<< .mine
+5
+2E1
+=======
 5
 2E4
+>>>>>>> .r114
 330
 2E2
 100
@@ -2022,8 +2072,13 @@ ACAD_PSEXT
 0
 0
 APPID
+<<<<<<< .mine
+5
+2E2
+=======
 5
 2E5
+>>>>>>> .r114
 330
 2E2
 100
@@ -2036,8 +2091,13 @@ ACAD_EXEMPT_FROM_CAD_STANDARDS
 0
 0
 APPID
+<<<<<<< .mine
+5
+2E3
+=======
 5
 2E6
+>>>>>>> .r114
 330
 2E2
 100
@@ -2050,8 +2110,13 @@ DSTP_XDATA
 0
 0
 APPID
+<<<<<<< .mine
+5
+2E4
+=======
 5
 2E7
+>>>>>>> .r114
 330
 2E2
 100
@@ -2064,8 +2129,13 @@ AcAecLayerStandard
 0
 0
 APPID
+<<<<<<< .mine
+5
+2E5
+=======
 5
 2E8
+>>>>>>> .r114
 330
 2E2
 100
@@ -2078,8 +2148,13 @@ ACAD_DSTYLE_DIMTEXT_FILL
 0
 0
 APPID
+<<<<<<< .mine
+5
+2E6
+=======
 5
 2E9
+>>>>>>> .r114
 330
 2E2
 100
@@ -2092,8 +2167,13 @@ ACAD_DSTYLE_DIMEXT_LENGTH
 0
 0
 APPID
+<<<<<<< .mine
+5
+2E7
+=======
 5
 2EA
+>>>>>>> .r114
 330
 2E2
 100
@@ -2106,8 +2186,13 @@ ACAD_DSTYLE_DIMEXT_ENABLED
 0
 0
 APPID
+<<<<<<< .mine
+5
+2E8
+=======
 5
 2EB
+>>>>>>> .r114
 330
 2E2
 100
@@ -2120,8 +2205,13 @@ ACAD_DSTYLE_DIM_LINETYPE
 0
 0
 APPID
+<<<<<<< .mine
+5
+2E9
+=======
 5
 2EC
+>>>>>>> .r114
 330
 2E2
 100
@@ -2134,8 +2224,13 @@ ACAD_DSTYLE_DIM_EXT1_LINETYPE
 0
 0
 APPID
+<<<<<<< .mine
+5
+2EA
+=======
 5
 2ED
+>>>>>>> .r114
 330
 2E2
 100
@@ -2152,8 +2247,13 @@ ENDTAB
 TABLE
 2
 DIMSTYLE
+<<<<<<< .mine
+5
+2EB
+=======
 5
 2EE
+>>>>>>> .r114
 330
 0
 100
@@ -2165,8 +2265,13 @@ AcDbDimStyleTable
 71
 1
 340
+<<<<<<< .mine
+2EC
+0
+=======
 2EF
 0
+>>>>>>> .r114
 DIMSTYLE
 105
 2EF
@@ -2181,15 +2286,25 @@ Standard
 70
 0
 340
+<<<<<<< .mine
+2DB
+0
+=======
 2DE
 0
+>>>>>>> .r114
 ENDTAB
 0
 TABLE
 2
 BLOCK_RECORD
+<<<<<<< .mine
+5
+2ED
+=======
 5
 2F0
+>>>>>>> .r114
 330
 0
 100
@@ -2198,8 +2313,13 @@ AcDbSymbolTable
 1
 0
 BLOCK_RECORD
+<<<<<<< .mine
+5
+2EE
+=======
 5
 2F1
+>>>>>>> .r114
 330
 2F0
 100
@@ -2209,11 +2329,21 @@ AcDbBlockTableRecord
 2
 *Model_Space
 340
+<<<<<<< .mine
+2EF
+0
+=======
 2F2
 0
+>>>>>>> .r114
 BLOCK_RECORD
+<<<<<<< .mine
+5
+2F0
+=======
 5
 2F3
+>>>>>>> .r114
 330
 2F0
 100
@@ -2223,11 +2353,21 @@ AcDbBlockTableRecord
 2
 *Paper_Space
 340
+<<<<<<< .mine
+2F1
+0
+=======
 2F4
 0
+>>>>>>> .r114
 BLOCK_RECORD
+<<<<<<< .mine
+5
+2F2
+=======
 5
 2F5
+>>>>>>> .r114
 330
 2F0
 100
@@ -2237,11 +2377,21 @@ AcDbBlockTableRecord
 2
 *Paper_Space0
 340
+<<<<<<< .mine
+2F3
+0
+=======
 2F6
 0
+>>>>>>> .r114
 BLOCK_RECORD
+<<<<<<< .mine
+5
+2F4
+=======
 5
 2F7
+>>>>>>> .r114
 100
 AcDbSymbolTableRecord
 100
@@ -2250,8 +2400,13 @@ AcDbBlockTableRecord
 _Oblique
 0
 BLOCK_RECORD
+<<<<<<< .mine
+5
+2F5
+=======
 5
 2F8
+>>>>>>> .r114
 100
 AcDbSymbolTableRecord
 100
@@ -2260,8 +2415,13 @@ AcDbBlockTableRecord
 ARROWHEAD_6
 0
 BLOCK_RECORD
+<<<<<<< .mine
+5
+2F6
+=======
 5
 2F9
+>>>>>>> .r114
 100
 AcDbSymbolTableRecord
 100
@@ -2270,8 +2430,13 @@ AcDbBlockTableRecord
 TESTBLOCK
 0
 BLOCK_RECORD
+<<<<<<< .mine
+5
+2F7
+=======
 5
 2FA
+>>>>>>> .r114
 100
 AcDbSymbolTableRecord
 100
@@ -2280,8 +2445,13 @@ AcDbBlockTableRecord
 testbox
 0
 BLOCK_RECORD
+<<<<<<< .mine
+5
+2F8
+=======
 5
 2FB
+>>>>>>> .r114
 100
 AcDbSymbolTableRecord
 100
@@ -2290,8 +2460,13 @@ AcDbBlockTableRecord
 FIX
 0
 BLOCK_RECORD
+<<<<<<< .mine
+5
+2F9
+=======
 5
 2FC
+>>>>>>> .r114
 100
 AcDbSymbolTableRecord
 100
@@ -2299,6 +2474,8 @@ AcDbBlockTableRecord
 2
 DEVICE_TESTBOX
 0
+<<<<<<< .mine
+=======
 BLOCK_RECORD
 5
 2FD
@@ -2369,6 +2546,7 @@ AcDbBlockTableRecord
 2
 DEVICE_PS_DAT_TERMO
 0
+>>>>>>> .r114
 ENDTAB
 0
 ENDSEC
@@ -2378,8 +2556,13 @@ SECTION
 BLOCKS
 0
 BLOCK
+<<<<<<< .mine
+5
+2FA
+=======
 5
 304
+>>>>>>> .r114
 330
 2F1
 100
@@ -2404,8 +2587,13 @@ AcDbBlockBegin
 
 0
 ENDBLK
+<<<<<<< .mine
+5
+2FB
+=======
 5
 305
+>>>>>>> .r114
 330
 2F1
 100
@@ -2416,8 +2604,13 @@ AcDbEntity
 AcDbBlockEnd
 0
 BLOCK
+<<<<<<< .mine
+5
+2FC
+=======
 5
 306
+>>>>>>> .r114
 330
 2F3
 100
@@ -2444,8 +2637,13 @@ AcDbBlockBegin
 
 0
 ENDBLK
+<<<<<<< .mine
+5
+2FD
+=======
 5
 307
+>>>>>>> .r114
 330
 2F3
 100
@@ -2458,8 +2656,13 @@ AcDbEntity
 AcDbBlockEnd
 0
 BLOCK
+<<<<<<< .mine
+5
+2FE
+=======
 5
 308
+>>>>>>> .r114
 330
 2F5
 100
@@ -2486,8 +2689,13 @@ AcDbBlockBegin
 
 0
 ENDBLK
+<<<<<<< .mine
+5
+2FF
+=======
 5
 309
+>>>>>>> .r114
 330
 2F5
 100
@@ -2500,8 +2708,13 @@ AcDbEntity
 AcDbBlockEnd
 0
 BLOCK
+<<<<<<< .mine
+5
+300
+=======
 5
 30A
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2524,8 +2737,13 @@ _Oblique
 
 0
 LINE
+<<<<<<< .mine
+5
+301
+=======
 5
 30B
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2556,8 +2774,13 @@ _OWNERHANDLE=0000000064
 }
 0
 ENDBLK
+<<<<<<< .mine
+5
+302
+=======
 5
 30C
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2566,8 +2789,13 @@ AcDbEntity
 AcDbBlockEnd
 0
 BLOCK
+<<<<<<< .mine
+5
+303
+=======
 5
 30D
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2590,8 +2818,13 @@ ARROWHEAD_6
 
 0
 LINE
+<<<<<<< .mine
+5
+304
+=======
 5
 30E
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2620,8 +2853,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+305
+=======
 5
 30F
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2650,8 +2888,13 @@ _OWNERHANDLE=0000000064
 }
 0
 ENDBLK
+<<<<<<< .mine
+5
+306
+=======
 5
 310
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2660,8 +2903,13 @@ AcDbEntity
 AcDbBlockEnd
 0
 BLOCK
+<<<<<<< .mine
+5
+307
+=======
 5
 311
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2684,8 +2932,13 @@ TESTBLOCK
 
 0
 CIRCLE
+<<<<<<< .mine
+5
+308
+=======
 5
 312
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2710,8 +2963,13 @@ _OWNERHANDLE=0000000064
 }
 0
 TEXT
+<<<<<<< .mine
+5
+309
+=======
 5
 313
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2758,8 +3016,13 @@ _OWNERHANDLE=0000000064
 }
 0
 ENDBLK
+<<<<<<< .mine
+5
+30A
+=======
 5
 314
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2768,8 +3031,13 @@ AcDbEntity
 AcDbBlockEnd
 0
 BLOCK
+<<<<<<< .mine
+5
+30B
+=======
 5
 315
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2792,8 +3060,13 @@ testbox
 
 0
 LINE
+<<<<<<< .mine
+5
+30C
+=======
 5
 316
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2822,8 +3095,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+30D
+=======
 5
 317
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2852,8 +3130,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+30E
+=======
 5
 318
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2882,8 +3165,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+30F
+=======
 5
 319
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2912,8 +3200,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+310
+=======
 5
 31A
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2942,8 +3235,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+311
+=======
 5
 31B
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -2972,8 +3270,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+312
+=======
 5
 31C
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3002,8 +3305,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+313
+=======
 5
 31D
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3032,8 +3340,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+314
+=======
 5
 31E
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3062,8 +3375,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+315
+=======
 5
 31F
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3092,8 +3410,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+316
+=======
 5
 320
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3122,8 +3445,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+317
+=======
 5
 321
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3152,8 +3480,13 @@ _OWNERHANDLE=0000000064
 }
 0
 INSERT
+<<<<<<< .mine
+5
+318
+=======
 5
 322
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3186,8 +3519,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+319
+=======
 5
 323
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3216,8 +3554,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+31A
+=======
 5
 324
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3246,8 +3589,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+31B
+=======
 5
 325
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3276,8 +3624,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+31C
+=======
 5
 326
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3306,8 +3659,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+31D
+=======
 5
 327
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3336,8 +3694,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+31E
+=======
 5
 328
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3366,8 +3729,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+31F
+=======
 5
 329
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3396,8 +3764,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+320
+=======
 5
 32A
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3426,8 +3799,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+321
+=======
 5
 32B
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3456,8 +3834,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+322
+=======
 5
 32C
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3486,8 +3869,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+323
+=======
 5
 32D
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3516,8 +3904,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+324
+=======
 5
 32E
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3546,8 +3939,13 @@ _OWNERHANDLE=0000000064
 }
 0
 ENDBLK
+<<<<<<< .mine
+5
+325
+=======
 5
 32F
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3556,8 +3954,16 @@ AcDbEntity
 AcDbBlockEnd
 0
 BLOCK
+<<<<<<< .mine
 5
+326
+=======
+5
+>>>>>>> .r114
+<<<<<<< .mine
+=======
 330
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3580,8 +3986,13 @@ FIX
 
 0
 LINE
+<<<<<<< .mine
+5
+327
+=======
 5
 331
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3610,8 +4021,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LINE
+<<<<<<< .mine
+5
+328
+=======
 5
 332
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3640,8 +4056,13 @@ _OWNERHANDLE=0000000064
 }
 0
 ENDBLK
+<<<<<<< .mine
+5
+329
+=======
 5
 333
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3650,8 +4071,13 @@ AcDbEntity
 AcDbBlockEnd
 0
 BLOCK
+<<<<<<< .mine
+5
+32A
+=======
 5
 334
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3674,8 +4100,13 @@ DEVICE_TESTBOX
 
 0
 INSERT
+<<<<<<< .mine
+5
+32B
+=======
 5
 335
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -3708,14 +4139,22 @@ _OWNERHANDLE=0000000064
 }
 0
 ENDBLK
+<<<<<<< .mine
+5
+32C
+=======
 5
 336
+>>>>>>> .r114
 100
 AcDbEntity
 8
 0
 100
 AcDbBlockEnd
+<<<<<<< .mine
+0
+=======
 0
 BLOCK
 5
@@ -4937,6 +5376,7 @@ AcDbEntity
 100
 AcDbBlockEnd
 0
+>>>>>>> .r114
 ENDSEC
 0
 SECTION
@@ -4944,8 +5384,13 @@ SECTION
 ENTITIES
 0
 INSERT
+<<<<<<< .mine
+5
+32D
+=======
 5
 364
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -4954,6 +5399,22 @@ AcDbEntity
 AcDbBlockReference
 2
 testbox
+<<<<<<< .mine
+10
+2.5084907988
+20
+769.4551758412
+30
+0.0000000000
+41
+1.0000000000
+42
+1.0000000000
+43
+1.0000000000
+50
+342.3633316023
+=======
 10
 267.5716113459
 20
@@ -4968,6 +5429,7 @@ testbox
 1.0000000000
 50
 0.0000000000
+>>>>>>> .r114
 1001
 DSTP_XDATA
 1002
@@ -4975,15 +5437,24 @@ DSTP_XDATA
 1000
 _OWNERHANDLE=0000000064
 1000
+<<<<<<< .mine
+_HANDLE=000890CAC8
+=======
 _HANDLE=001384EF90
+>>>>>>> .r114
 1000
 _UPGRADE=1
 1002
 }
 0
 INSERT
+<<<<<<< .mine
+5
+32E
+=======
 5
 365
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -4992,6 +5463,22 @@ AcDbEntity
 AcDbBlockReference
 2
 FIX
+<<<<<<< .mine
+10
+19.6129568006
+20
+790.2503012987
+30
+0.0000000000
+41
+1.9685039370
+42
+1.9685039370
+43
+1.9685039370
+50
+342.3633316023
+=======
 10
 277.5716113459
 20
@@ -5006,18 +5493,28 @@ FIX
 1.9685039370
 50
 0.0000000000
+>>>>>>> .r114
 1001
 DSTP_XDATA
 1002
 {
 1000
+<<<<<<< .mine
+_OWNERHANDLE=000890CAC8
+=======
 _OWNERHANDLE=001384EF90
+>>>>>>> .r114
 1002
 }
 0
 LWPOLYLINE
+<<<<<<< .mine
+5
+32F
+=======
 5
 366
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -5072,8 +5569,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LWPOLYLINE
+<<<<<<< .mine
+5
+330
+=======
 5
 367
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -5112,8 +5614,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LWPOLYLINE
+<<<<<<< .mine
+5
+331
+=======
 5
 368
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -5152,8 +5659,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LWPOLYLINE
+<<<<<<< .mine
+5
+332
+=======
 5
 369
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -5198,8 +5710,13 @@ _OWNERHANDLE=0000000064
 }
 0
 INSERT
+<<<<<<< .mine
+5
+333
+=======
 5
 36A
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -5235,15 +5752,24 @@ DSTP_XDATA
 1000
 _OWNERHANDLE=0000000064
 1000
+<<<<<<< .mine
+_HANDLE=0027625120
+=======
 _HANDLE=0012714C30
+>>>>>>> .r114
 1000
 _UPGRADE=1
 1002
 }
 0
 INSERT
+<<<<<<< .mine
+5
+334
+=======
 5
 36B
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -5252,6 +5778,22 @@ AcDbEntity
 AcDbBlockReference
 2
 FIX
+<<<<<<< .mine
+10
+448.5062702021
+20
+-10.0057616350
+30
+7.5735931288
+41
+1.9685039370
+42
+1.3919424826
+43
+1.9685039370
+50
+90.0000000000
+=======
 10
 441.4352023902
 20
@@ -5266,6 +5808,7 @@ FIX
 1.9685039370
 50
 90.0000000000
+>>>>>>> .r114
 210
 -0.7071067812
 220
@@ -5277,13 +5820,22 @@ DSTP_XDATA
 1002
 {
 1000
+<<<<<<< .mine
+_OWNERHANDLE=0027625120
+=======
 _OWNERHANDLE=0012714C30
+>>>>>>> .r114
 1002
 }
 0
 INSERT
+<<<<<<< .mine
+5
+335
+=======
 5
 36C
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -5319,15 +5871,24 @@ DSTP_XDATA
 1000
 _OWNERHANDLE=0000000064
 1000
+<<<<<<< .mine
+_HANDLE=0027625800
+=======
 _HANDLE=0012715310
+>>>>>>> .r114
 1000
 _UPGRADE=1
 1002
 }
 0
 INSERT
+<<<<<<< .mine
+5
+336
+=======
 5
 36D
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -5336,6 +5897,22 @@ AcDbEntity
 AcDbBlockReference
 2
 FIX
+<<<<<<< .mine
+10
+544.9852297602
+20
+34.6932284116
+30
+33.5355339059
+41
+1.7969900181
+42
+1.8846990310
+43
+1.9685039370
+50
+312.1304147614
+=======
 10
 559.4773249374
 20
@@ -5350,6 +5927,7 @@ FIX
 1.9685039370
 50
 302.2251926008
+>>>>>>> .r114
 210
 -0.7071067812
 220
@@ -5361,13 +5939,22 @@ DSTP_XDATA
 1002
 {
 1000
+<<<<<<< .mine
+_OWNERHANDLE=0027625800
+=======
 _OWNERHANDLE=0012715310
+>>>>>>> .r114
 1002
 }
 0
 LWPOLYLINE
+<<<<<<< .mine
+5
+337
+=======
 5
 36E
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -5428,8 +6015,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LWPOLYLINE
+<<<<<<< .mine
+5
+338
+=======
 5
 36F
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -5474,8 +6066,13 @@ _OWNERHANDLE=0000000064
 }
 0
 LWPOLYLINE
+<<<<<<< .mine
+5
+339
+=======
 5
 370
+>>>>>>> .r114
 100
 AcDbEntity
 8
@@ -5520,14 +6117,59 @@ _OWNERHANDLE=0000000064
 }
 0
 LWPOLYLINE
+<<<<<<< .mine
+5
+33A
+=======
 5
 371
+>>>>>>> .r114
 100
 AcDbEntity
 8
 0
 100
 AcDbPolyline
+<<<<<<< .mine
+90
+4
+70
+1
+38
+-7.3447486828
+10
+-222.5190775554
+20
+57.9281624698
+40
+1.0000000000
+41
+1.0000000000
+10
+-10.3870431994
+20
+57.9281624698
+40
+1.0000000000
+41
+1.0000000000
+10
+-10.3870431994
+20
+765.0349436564
+40
+1.0000000000
+41
+1.0000000000
+10
+-222.5190775554
+20
+765.0349436564
+40
+1.0000000000
+41
+1.0000000000
+=======
 90
 4
 70
@@ -5566,6 +6208,7 @@ AcDbPolyline
 1.0000000000
 41
 1.0000000000
+>>>>>>> .r114
 210
 0.7071067812
 220
@@ -5582,14 +6225,43 @@ _OWNERHANDLE=0000000064
 }
 0
 LWPOLYLINE
+<<<<<<< .mine
+5
+33B
+=======
 5
 372
+>>>>>>> .r114
 100
 AcDbEntity
 8
 0
 100
 AcDbPolyline
+<<<<<<< .mine
+90
+2
+70
+0
+38
+-7.3447486828
+10
+-215.4480097435
+20
+623.6135874191
+40
+1.0000000000
+41
+1.0000000000
+10
+-17.4581110113
+20
+623.6135874191
+40
+1.0000000000
+41
+1.0000000000
+=======
 90
 2
 70
@@ -5612,6 +6284,7 @@ AcDbPolyline
 1.0000000000
 41
 1.0000000000
+>>>>>>> .r114
 210
 0.7071067812
 220
@@ -5628,14 +6301,43 @@ _OWNERHANDLE=0000000064
 }
 0
 LWPOLYLINE
+<<<<<<< .mine
+5
+33C
+=======
 5
 373
+>>>>>>> .r114
 100
 AcDbEntity
 8
 0
 100
 AcDbPolyline
+<<<<<<< .mine
+90
+2
+70
+0
+38
+-7.3447486828
+10
+-215.4480097435
+20
+558.7913468830
+40
+1.0000000000
+41
+1.0000000000
+10
+-17.4581110113
+20
+428.4040641423
+40
+1.0000000000
+41
+1.0000000000
+=======
 90
 2
 70
@@ -5658,6 +6360,7 @@ AcDbPolyline
 1.0000000000
 41
 1.0000000000
+>>>>>>> .r114
 210
 0.7071067812
 220
@@ -5672,6 +6375,9 @@ DSTP_XDATA
 _OWNERHANDLE=0000000064
 1002
 }
+<<<<<<< .mine
+0
+=======
 0
 LWPOLYLINE
 5
@@ -6945,6 +7651,7 @@ _OWNERHANDLE=000D920D38
 1002
 }
 0
+>>>>>>> .r114
 ENDSEC
 0
 SECTION
@@ -6952,8 +7659,13 @@ SECTION
 OBJECTS
 0
 DICTIONARY
+<<<<<<< .mine
+5
+33D
+=======
 5
 38B
+>>>>>>> .r114
 330
 0
 100
@@ -6963,48 +7675,104 @@ AcDbDictionary
 3
 ACAD_COLOR
 350
+<<<<<<< .mine
+33E
+3
+=======
 38C
 3
+>>>>>>> .r114
 ACAD_GROUP
 350
+<<<<<<< .mine
+33F
+3
+=======
 38D
 3
+>>>>>>> .r114
 ACAD_LAYOUT
 350
+<<<<<<< .mine
+340
+3
+=======
 38E
 3
+>>>>>>> .r114
 ACAD_MATERIAL
 350
+<<<<<<< .mine
+341
+3
+=======
 38F
 3
+>>>>>>> .r114
 ACAD_MLINESTYLE
 350
+<<<<<<< .mine
+342
+3
+=======
 390
 3
+>>>>>>> .r114
 ACAD_PLOTSETTINGS
 350
+<<<<<<< .mine
+343
+3
+=======
 391
 3
+>>>>>>> .r114
 ACAD_PLOTSTYLENAME
 350
+<<<<<<< .mine
+344
+3
+=======
 392
 3
+>>>>>>> .r114
 ACAD_TABLESTYLE
 350
+<<<<<<< .mine
+345
+3
+ACDBHEADERROUNDTRIPXREC
+=======
 393
 3
 ACDBHEADERROUNDTRIPXREC
+>>>>>>> .r114
 350
+<<<<<<< .mine
+346
+3
+=======
 394
 3
+>>>>>>> .r114
 AcDbVariableDictionary
 350
+<<<<<<< .mine
+347
+3
+=======
 395
 3
+>>>>>>> .r114
 DWGPROPS
 350
+<<<<<<< .mine
+348
+0
+=======
 396
 0
+>>>>>>> .r114
 DICTIONARY
 5
 2BB
@@ -7019,59 +7787,113 @@ AcDbDictionary
 3
 ACAD_LAYERFILTERS
 360
+<<<<<<< .mine
+349
+3
+=======
 397
 3
+>>>>>>> .r114
 ACAD_LAYERSTATES
 360
+<<<<<<< .mine
+34A
+3
+=======
 398
 3
+>>>>>>> .r114
 ACLYDICTIONARY
 360
+<<<<<<< .mine
+34B
+0
+=======
 399
 0
+>>>>>>> .r114
 DICTIONARY
+<<<<<<< .mine
+5
+33E
+=======
 5
 38C
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 100
 AcDbDictionary
 281
 1
 0
 DICTIONARY
+<<<<<<< .mine
+5
+33F
+=======
 5
 38D
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 100
 AcDbDictionary
 281
 1
 0
 DICTIONARY
+<<<<<<< .mine
+5
+340
+=======
 5
 38E
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 100
 AcDbDictionary
 281
@@ -7079,43 +7901,84 @@ AcDbDictionary
 3
 Layout1
 350
+<<<<<<< .mine
+2F1
+3
+=======
 2F4
 3
+>>>>>>> .r114
 Layout2
 350
+<<<<<<< .mine
+2F3
+3
+=======
 2F6
 3
+>>>>>>> .r114
 Model
 350
+<<<<<<< .mine
+2EF
+0
+=======
 2F2
 0
+>>>>>>> .r114
 DICTIONARY
+<<<<<<< .mine
+5
+341
+=======
 5
 38F
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 100
 AcDbDictionary
 281
 1
 0
 DICTIONARY
+<<<<<<< .mine
+5
+342
+=======
 5
 390
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 100
 AcDbDictionary
 281
@@ -7123,14 +7986,36 @@ AcDbDictionary
 3
 Standard
 350
+<<<<<<< .mine
+34C
+0
+=======
 39A
 0
+>>>>>>> .r114
 DICTIONARY
+<<<<<<< .mine
+5
+343
+=======
 5
 391
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+33D
+102
+}
+330
+33D
+100
+AcDbDictionary
+281
+1
+0
+=======
 38B
 102
 }
@@ -7141,17 +8026,31 @@ AcDbDictionary
 281
 1
 0
+>>>>>>> .r114
 ACDBDICTIONARYWDFLT
+<<<<<<< .mine
+5
+344
+=======
 5
 392
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 100
 AcDbDictionary
 281
@@ -7166,16 +8065,29 @@ AcDbDictionaryWithDefault
 2BD
 0
 DICTIONARY
+<<<<<<< .mine
+5
+345
+=======
 5
 393
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 100
 AcDbDictionary
 281
@@ -7183,35 +8095,66 @@ AcDbDictionary
 3
 Standard
 350
+<<<<<<< .mine
+34D
+0
+=======
 39B
 0
+>>>>>>> .r114
 DICTIONARY
+<<<<<<< .mine
+5
+346
+=======
 5
 394
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 100
 AcDbDictionary
 281
 1
 0
 DICTIONARY
+<<<<<<< .mine
+5
+347
+=======
 5
 395
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 100
 AcDbDictionary
 281
@@ -7219,31 +8162,64 @@ AcDbDictionary
 3
 CTABLESTYLE
 350
+<<<<<<< .mine
+34E
+3
+=======
 39C
 3
+>>>>>>> .r114
 DIMASSOC
 350
+<<<<<<< .mine
+34F
+3
+=======
 39D
 3
+>>>>>>> .r114
 HIDETEXT
 350
+<<<<<<< .mine
+350
+3
+=======
 39E
 3
+>>>>>>> .r114
 PROJECTNAME
 350
+<<<<<<< .mine
+351
+0
+=======
 39F
 0
+>>>>>>> .r114
 XRECORD
+<<<<<<< .mine
+5
+348
+=======
 5
 396
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+33D
+=======
 38B
+>>>>>>> .r114
 100
 AcDbXrecord
 280
@@ -7296,8 +8272,13 @@ Autodesk
 0
 0
 DICTIONARY
+<<<<<<< .mine
+5
+349
+=======
 5
 397
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
@@ -7312,8 +8293,13 @@ AcDbDictionary
 1
 0
 DICTIONARY
+<<<<<<< .mine
+5
+34A
+=======
 5
 398
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
@@ -7328,8 +8314,13 @@ AcDbDictionary
 1
 0
 DICTIONARY
+<<<<<<< .mine
+5
+34B
+=======
 5
 399
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
@@ -7348,22 +8339,39 @@ ACAD
 <All
 0
 LAYOUT
+<<<<<<< .mine
+5
+2F1
+=======
 5
 2F4
+>>>>>>> .r114
 102
 {ACAD_XDICTIONARY
 360
+<<<<<<< .mine
+352
+=======
 3A0
+>>>>>>> .r114
 102
 }
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+340
+=======
 38E
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+340
+=======
 38E
+>>>>>>> .r114
 100
 AcDbPlotSettings
 1
@@ -7477,6 +8485,13 @@ Layout1
 76
 0
 330
+<<<<<<< .mine
+2F0
+0
+LAYOUT
+5
+=======
+>>>>>>> .r114
 2F3
 0
 LAYOUT
@@ -7485,17 +8500,29 @@ LAYOUT
 102
 {ACAD_XDICTIONARY
 360
+<<<<<<< .mine
+353
+=======
 3A1
+>>>>>>> .r114
 102
 }
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+340
+=======
 38E
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+340
+=======
 38E
+>>>>>>> .r114
 100
 AcDbPlotSettings
 1
@@ -7609,25 +8636,47 @@ Layout2
 76
 0
 330
+<<<<<<< .mine
+2F2
+0
+=======
 2F5
 0
+>>>>>>> .r114
 LAYOUT
+<<<<<<< .mine
+5
+2EF
+=======
 5
 2F2
+>>>>>>> .r114
 102
 {ACAD_XDICTIONARY
 360
+<<<<<<< .mine
+354
+=======
 3A2
+>>>>>>> .r114
 102
 }
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+340
+=======
 38E
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+340
+=======
 38E
+>>>>>>> .r114
 100
 AcDbPlotSettings
 1
@@ -7741,7 +8790,11 @@ Model
 76
 0
 330
+<<<<<<< .mine
+2EE
+=======
 2F1
+>>>>>>> .r114
 1001
 ACAD_PSEXT
 1000
@@ -7753,19 +8806,38 @@ Not applicable
 1000
 The layout will not be plotted unless a new plotter configuration name is selected.
 1070
+<<<<<<< .mine
+0
+0
+MLINESTYLE
+5
+34C
+102
+{ACAD_REACTORS
+330
+342
+=======
 0
 0
 MLINESTYLE
 5
 39A
+>>>>>>> .r114
 102
+<<<<<<< .mine
+=======
 {ACAD_REACTORS
 330
 390
 102
+>>>>>>> .r114
 }
 330
+<<<<<<< .mine
+342
+=======
 390
+>>>>>>> .r114
 100
 AcDbMlineStyle
 2
@@ -7801,23 +8873,45 @@ ACDBPLACEHOLDER
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+344
+=======
 392
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+344
+0
+=======
 392
 0
+>>>>>>> .r114
 TABLESTYLE
+<<<<<<< .mine
+5
+34D
+=======
 5
 39B
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+345
+=======
 393
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+345
+=======
 393
+>>>>>>> .r114
 100
 AcDbTableStyle
 3
@@ -7980,16 +9074,29 @@ Standard
 0
 0
 DICTIONARYVAR
+<<<<<<< .mine
+5
+34E
+=======
 5
 39C
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+347
+=======
 395
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+347
+=======
 395
+>>>>>>> .r114
 100
 DictionaryVariables
 280
@@ -7998,16 +9105,29 @@ DictionaryVariables
 STANDARD
 0
 DICTIONARYVAR
+<<<<<<< .mine
+5
+34F
+=======
 5
 39D
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+347
+=======
 395
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+347
+=======
 395
+>>>>>>> .r114
 100
 DictionaryVariables
 280
@@ -8016,16 +9136,29 @@ DictionaryVariables
 2
 0
 DICTIONARYVAR
+<<<<<<< .mine
+5
+350
+=======
 5
 39E
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+347
+=======
 395
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+347
+=======
 395
+>>>>>>> .r114
 100
 DictionaryVariables
 280
@@ -8034,16 +9167,29 @@ DictionaryVariables
 1
 0
 DICTIONARYVAR
+<<<<<<< .mine
+5
+351
+=======
 5
 39F
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+347
+=======
 395
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+347
+=======
 395
+>>>>>>> .r114
 100
 DictionaryVariables
 280
@@ -8052,8 +9198,13 @@ DictionaryVariables
 
 0
 DICTIONARY
+<<<<<<< .mine
+5
+352
+=======
 5
 3A0
+>>>>>>> .r114
 330
 2F4
 100
@@ -8065,11 +9216,21 @@ AcDbDictionary
 3
 ACAD_XREC_ROUNDTRIP
 360
+<<<<<<< .mine
+355
+0
+=======
 3A3
 0
+>>>>>>> .r114
 DICTIONARY
+<<<<<<< .mine
+5
+353
+=======
 5
 3A1
+>>>>>>> .r114
 330
 2F6
 100
@@ -8081,11 +9242,21 @@ AcDbDictionary
 3
 ACAD_XREC_ROUNDTRIP
 360
+<<<<<<< .mine
+356
+0
+=======
 3A4
 0
+>>>>>>> .r114
 DICTIONARY
+<<<<<<< .mine
+5
+354
+=======
 5
 3A2
+>>>>>>> .r114
 330
 2F2
 100
@@ -8097,19 +9268,37 @@ AcDbDictionary
 3
 ACAD_XREC_ROUNDTRIP
 360
+<<<<<<< .mine
+357
+0
+=======
 3A5
 0
+>>>>>>> .r114
 XRECORD
+<<<<<<< .mine
+5
+355
+=======
 5
 3A3
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+352
+=======
 3A0
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+352
+=======
 3A0
+>>>>>>> .r114
 100
 AcDbXrecord
 280
@@ -8128,16 +9317,29 @@ SHADEPLOTCUSTOMDPI
 300
 0
 XRECORD
+<<<<<<< .mine
+5
+356
+=======
 5
 3A4
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+353
+=======
 3A1
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+353
+=======
 3A1
+>>>>>>> .r114
 100
 AcDbXrecord
 280
@@ -8156,16 +9358,29 @@ SHADEPLOTCUSTOMDPI
 300
 0
 XRECORD
+<<<<<<< .mine
+5
+357
+=======
 5
 3A5
+>>>>>>> .r114
 102
 {ACAD_REACTORS
 330
+<<<<<<< .mine
+354
+=======
 3A2
+>>>>>>> .r114
 102
 }
 330
+<<<<<<< .mine
+354
+=======
 3A2
+>>>>>>> .r114
 100
 AcDbXrecord
 280

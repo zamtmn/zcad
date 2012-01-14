@@ -2292,6 +2292,7 @@ end;
 function El_Leader_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var //po:PGDBObjSubordinated;
     pleader:PGDBObjElLeader;
+    domethod,undomethod:tmethod;
 begin
   //result:=Line_com_AfterClick(wc,mc,button,osp,mclick);
   result:=mclick;
@@ -2328,7 +2329,15 @@ begin
   pleader.MainLine.CoordInOCS.lBegin:=PCreatedGDBLine^.CoordInOCS.lBegin;
   pleader.MainLine.CoordInOCS.lEnd:=PCreatedGDBLine^.CoordInOCS.lEnd;
 
-  gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@pleader);
+
+  SetObjCreateManipulator(domethod,undomethod);
+  with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+  begin
+       AddObject(pleader);
+       comit;
+  end;
+
+  //gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@pleader);
   pleader^.Format;
 
     end;

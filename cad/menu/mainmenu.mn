@@ -331,6 +331,7 @@ MainMenuItem Help;
   }
 MainMenuItem **Debug;
   {
+    Command **Command list,CommandList,none,none
     MenuItem **Файлы с ошибками (текущая отладка);
     {
      Command **Error 0(polylines),Load(*../errors/0.dxf),none,none

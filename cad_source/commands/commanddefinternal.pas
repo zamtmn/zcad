@@ -255,9 +255,10 @@ begin
 end;
 procedure CommandRTEdObjectPlugin.CommandCancel;
 begin
-     inherited CommandCancel;
+     //inherited CommandCancel;
      if assigned(onCommandCancel) then
                                      onCommandCancel;
+     inherited CommandCancel;
 end;
 
 procedure CommandFastObject.CommandEnd;

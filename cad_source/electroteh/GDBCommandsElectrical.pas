@@ -1227,11 +1227,15 @@ end;
 Procedure _Cable_com_CommandEnd;
 begin
   if p3dpl<>nil then
+  begin
+  gdb.GetCurrentDWG.UndoStack.PushEndMarker;
   if p3dpl^.VertexArrayInOCS.Count<2 then
                                          begin
                                               {objinsp.GDBobjinsp.}ReturnToDefault;
                                               p3dpl^.YouDeleted;
+                                              gdb.GetCurrentDWG.UndoStack.KillLastCommand;
                                          end;
+  end;
   cabcomparam.PCable:=nil;
   cabcomparam.PTrace:=nil;
   //gdbfreemem(pointer(p3dpl));
@@ -1239,13 +1243,16 @@ end;
 function _Cable_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
    pvd:pvardesk;
+   domethod,undomethod:tmethod;
 begin
   result:=mclick;
   if (button and MZW_LBUTTON)<>0 then
   begin
     if p3dpl=nil then
     begin
-    p3dpl := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
+    p3dpl := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBCableID,gdb.GetCurrentROOT));
+    //p3dpl := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
+    GDBObjSetEntityProp(p3dpl,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^);
     //p3dpl^.init(@gdb.GetCurrentDWG.ObjRoot,gdb.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^);
 
     //uunitmanager.units.loadunit(expandpath('*blocks\el\cable.pas'),@p3dpl^.ou);
@@ -1268,7 +1275,18 @@ begin
     //GDBobjinsp.setptr(SysUnit.TypeName2PTD('GDBObjCable'),p3dpl);
     p3dpl^.AddVertex(wc);
     p3dpl^.Format;
-    gdb.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(p3dpl)}CorrectNodeTreeBB(p3dpl);
+
+    gdb.GetCurrentDWG.UndoStack.PushStartMarker('Create cable');
+    SetObjCreateManipulator(domethod,undomethod);
+    with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+    begin
+         AddObject(p3dpl);
+         comit;
+    end;
+    gdb.GetCurrentDWG.UndoStack.PushStone;
+    gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count:=0;
+
+    //gdb.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(p3dpl)}CorrectNodeTreeBB(p3dpl);
 
     cabcomparam.Pcable:=p3dpl;
     //GDBobjinsp.setptr(SysUnit.TypeName2PTD('GDBObjCable'),p3dpl);

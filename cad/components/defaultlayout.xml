@@ -3,13 +3,13 @@
   <MainConfig>
     <Nodes ChildCount="1">
       <Item1 Name="MainForm" Type="CustomSite" ChildCount="1">
-        <Bounds Width="1236" Height="864">
+        <Bounds Top="61" Left="231" Width="1236" Height="864">
           <WorkArea>
             <Rect Right="1920" Bottom="1080"/>
           </WorkArea>
         </Bounds>
         <Item1 Name="AnchorDockSite10" Type="Layout" ChildCount="17">
-          <Bounds Top="36" Width="1236" Height="809" SplitterPos="32"/>
+          <Bounds Top="35" Width="1236" Height="809" SplitterPos="31"/>
           <Anchors Align="Bottom"/>
           <Item1 Name="PageControl" Type="Control">
             <Bounds Left="242" Width="966" Height="709"/>

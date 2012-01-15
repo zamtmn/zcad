@@ -24,7 +24,7 @@ uses UGDBOpenArrayOfPV,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,mat
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
 type
-TTypeCommand=(TTC_MBegin,TTC_MEnd,TTC_Command,TTC_ChangeCommand);
+TTypeCommand=(TTC_MBegin,TTC_MEnd,TTC_MNotUndableIfOverlay,TTC_Command,TTC_ChangeCommand);
 PTElementaryCommand=^TElementaryCommand;
 TElementaryCommand=object(GDBaseObject)
                          function GetCommandType:TTypeCommand;virtual;
@@ -133,8 +133,10 @@ GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
                                  startmarkercount:GDBInteger;
                                  procedure PushStartMarker(CommandName:GDBString);
                                  procedure PushEndMarker;
+                                 procedure PushStone;
                                  procedure PushChangeCommand(_obj:GDBPointer;_fieldsize:PtrInt);overload;
                                  procedure undo(prevheap:TArrayIndex;overlay:GDBBoolean);
+                                 procedure KillLastCommand;
                                  procedure redo;
                                  constructor init;
                                  function Add(p:GDBPointer):TArrayIndex;virtual;
@@ -372,11 +374,17 @@ begin
 end;
 
 function TMarkerCommand.GetCommandType:TTypeCommand;
-begin
-     if PrevIndex<>-1 then
+begin //TTC_MNotUndableIfOverlay
+     case PrevIndex of
+                      -1:result:=TTC_MBegin;
+                      -2:result:=TTC_MNotUndableIfOverlay;
+                    else
+                       result:=TTC_MEnd
+     end;
+    { if PrevIndex<>-1 then
                           result:=TTC_MEnd
                       else
-                          result:=TTC_MBegin;
+                          result:=TTC_MBegin;}
 end;
 procedure TMarkerCommand.UnDo;
 begin
@@ -403,6 +411,19 @@ begin
      begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{30D8D2A8-1130-40FB-81BC-10C7D9A1FF38}',{$ENDIF}pointer(pmarker),sizeof(TMarkerCommand));
      pmarker^.init(CommandName,-1);
+     currentcommandstartmarker:=self.Add(@pmarker);
+     inc(CurrentCommand);
+     end;
+end;
+procedure GDBObjOpenArrayOfUCommands.PushStone;
+var
+   pmarker:PTMarkerCommand;
+begin
+     //inc(startmarkercount);
+     //if startmarkercount=1 then
+     begin
+     GDBGetMem({$IFDEF DEBUGBUILD}'{30D8D2A8-1130-40FB-81BC-10C7D9A1FF38}',{$ENDIF}pointer(pmarker),sizeof(TMarkerCommand));
+     pmarker^.init('StoneMarker',-2);
      currentcommandstartmarker:=self.Add(@pmarker);
      inc(CurrentCommand);
      end;
@@ -439,6 +460,33 @@ begin
      inc(CurrentCommand);
      add(@pcc);
 end;
+procedure GDBObjOpenArrayOfUCommands.KillLastCommand;
+var
+   pcc:PTChangeCommand;
+   mcounter:integer;
+begin
+     begin
+          mcounter:=0;
+          repeat
+          pcc:=pointer(self.GetObject(CurrentCommand-1));
+
+          if pcc^.GetCommandType=TTC_MEnd then
+                                              begin
+                                              inc(mcounter);
+                                              pcc^.Done;
+                                              end
+     else if pcc^.GetCommandType=TTC_MBegin then
+                                                begin
+                                                     dec(mcounter);
+                                                     pcc^.Done;
+                                                end
+     else
+          pcc^.Done;
+          dec(CurrentCommand);
+          until mcounter=0;
+     end;
+     count:=self.CurrentCommand;
+end;
 procedure GDBObjOpenArrayOfUCommands.undo(prevheap:TArrayIndex;overlay:GDBBoolean);
 var
    pcc:PTChangeCommand;
@@ -462,8 +510,19 @@ begin
                                                      shared.HistoryOutStr('Отмена "'+PTMarkerCommand(pcc)^.Name+'"');
                                                      pcc^.undo;
                                                 end
-     else pcc^.undo;
-          dec(CurrentCommand);
+     else if pcc^.GetCommandType=TTC_MNotUndableIfOverlay then
+                                                begin
+                                                     if overlay then
+                                                     shared.ShowError('Нет операций для отмены. Завершите текущую команду')
+                                                end
+     else
+          pcc^.undo;
+
+          if (pcc^.GetCommandType<>TTC_MNotUndableIfOverlay)then
+                                                              dec(CurrentCommand)
+                                                            else
+                                                                if not overlay then
+                                                                dec(CurrentCommand);
           until mcounter=0;
      end
      else

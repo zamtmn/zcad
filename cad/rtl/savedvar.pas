@@ -31,9 +31,9 @@ begin
   TEdWND_Height:=483;
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=238;
-  VIEW_ObjInspSubV:=86;
-  PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File1:='J:\nh\Мурка\IV\proj.dxf';
+  VIEW_ObjInspSubV:=89;
+  PATH_File0:='J:\nh\Мурка\IV\proj.dxf';
+  PATH_File1:='C:\zcad\cad\autosave\autosave.dxf';
   PATH_File2:='J:\nh\Мурка\II\proj.dxf';
   PATH_File3:='/mnt/winc/zcad/cad/sample/test_dxf/ops.dxf';
   PATH_File4:='C:\zcad\cad\sample\test_dxf\em.dxf';

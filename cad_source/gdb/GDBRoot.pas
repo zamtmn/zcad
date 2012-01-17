@@ -185,6 +185,8 @@ begin
 
        ObjCasheArray.clear;
        calcbb;
+
+
      pobj:=self.ObjToConnectedArray.beginiterate(ir);
      if pobj<>nil then
      repeat
@@ -193,6 +195,8 @@ begin
            pobj:=self.ObjToConnectedArray.iterate(ir);
      until pobj=nil;
      self.ObjToConnectedArray.clear;
+
+
   {ObjCasheArray.Format;
   ObjCasheArray.clear;
   vp.BoundingBox:=objarray.calcbb;

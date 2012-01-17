@@ -45,11 +45,27 @@ GDBLayerArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLayerProp*)
                     function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
                     function GetSystemLayer:PGDBLayerProp;
                     function GetCurrentLayer:PGDBLayerProp;
+                    function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
               end;
 {EXPORT-}
 implementation
 uses
     log;
+function  GDBLayerArray.createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
+begin
+           result:=getAddres(_source.Name);
+           if result=nil then
+           begin
+                result:=addlayer(_source.Name,
+                                        _source.color,
+                                        _source.lineweight,
+                                        _source._on,
+                                        _source._lock,
+                                        _source._print,
+                                        _source.desk,
+                                        TLOMerge);
+           end;
+end;
 constructor GDBLayerArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBLayerProp));

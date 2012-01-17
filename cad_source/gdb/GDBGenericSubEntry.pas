@@ -20,7 +20,7 @@ unit GDBGenericSubEntry;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
+uses UGDBLayerArray,UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
 gl,
 geometry{,GDB3d},{UGDBVisibleOpenArray,}gdbEntity,gdbobjectsconstdef,varmandef,memman,UGDBEntTree;
 type
@@ -87,6 +87,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                               function FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
                               //function FindObjectsInPointDone(const point:GDBVertex):GDBBoolean;virtual;
                               function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
+                              procedure correctsublayers(var la:GDBLayerArray);virtual;
 
                       end;
 {Export-}
@@ -108,6 +109,20 @@ begin
     ObjTree.addtonul(pobj);
     CorrectNodeTreeBB(pobj);
 end;}
+procedure GDBObjGenericSubEntry.correctsublayers(var la:GDBLayerArray);
+var p:pGDBObjEntity;
+//    i:GDBInteger;
+        ir:itrec;
+begin
+     if objarray.Count=0 then exit;
+     p:=objarray.beginiterate(ir);
+     if p<>nil then
+     repeat
+          p^.vp.Layer:=la.createlayerifneed(p^.vp.Layer);
+          p^.correctsublayers(la);
+     p:=objarray.iterate(ir);
+     until p=nil;
+end;
 function GDBObjGenericSubEntry.FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
 var
     minus:gdbboolean=false;

@@ -215,6 +215,7 @@ function GDBObjNet.EraseMi;
 begin
      objarray.deliteminarray(pobjinarray);
      objarray.pack;
+     self.correctobjects(pointer(bp.ListPos.Owner),bp.ListPos.SelfIndex);
      pobj^.done;
      format;
 end;
@@ -341,12 +342,16 @@ var CurrentNet:PGDBObjNet;
     pmyline,ptestline:pgdbobjline;
     inter:intercept3dprop;
     ir,ir2,ir3:itrec;
+    p:pointer;
 begin
      format;
      CurrentNet:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
      if (currentnet<>nil) then
      repeat
-           if (currentnet<>@self) and (currentnet^.vp.ID=GDBNetID) then
+           p:=@self;
+           p:=currentnet;
+           if (currentnet<>@self) then
+           if {(currentnet<>@self) and }(currentnet^.vp.ID=GDBNetID) then
            begin
                 if boundingintersect(vp.BoundingBox,currentnet^.vp.BoundingBox) then
                 begin
@@ -459,6 +464,7 @@ begin
      //ObjArray.Shrink;
      BuildGraf;
      if graf.minimalize then exit;
+     //exit;
      if graf.divide then
      begin
           GDBGetMem({$IFDEF DEBUGBUILD}'{4BB9158C-D16F-4310-9770-3BC2F2AF82C9}',{$ENDIF}GDBPointer(TempNet),sizeof(GDBObjNet));

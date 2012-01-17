@@ -851,7 +851,7 @@ begin
 
                end;
 end;
-function createlayerifneed(_from,_to:PTDrawing;_source:PGDBLayerProp):PGDBLayerProp;
+{function createlayerifneed(_from,_to:PTDrawing;_source:PGDBLayerProp):PGDBLayerProp;
 begin
            result:=_to.LayerTable.getAddres(_source.Name);
            if result=nil then
@@ -865,10 +865,12 @@ begin
                                         _source.desk,
                                         TLOMerge);
            end;
-end;
+end;}
 procedure RemapLayer(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
 begin
-           _dest.vp.Layer:=createlayerifneed(_from,_to,_source.vp.Layer);
+     _dest.vp.Layer:=_to.LayerTable.createlayerifneed(_source.vp.Layer);
+     _dest.correctsublayers(_to.LayerTable);
+     //_dest.vp.Layer:=createlayerifneed(_from,_to,_source.vp.Layer);
 end;
 procedure RemapEntArray(_from,_to:PTDrawing;const _source,_dest:GDBObjEntityOpenArray);
 var

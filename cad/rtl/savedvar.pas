@@ -32,14 +32,14 @@ begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=238;
   VIEW_ObjInspSubV:=86;
-  PATH_File0:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File1:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File2:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File3:='D:\2 этаж_ПС план.dxf';
-  PATH_File4:='D:\ellipse.dxf';
-  PATH_File5:='E:\CAD_XDXF\test2000\shema_Poly_Line_Text_Circle_Arc.dxf';
-  PATH_File6:='/mnt/winc/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File7:='Z:\mnt\winc\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File8:='J:\nh\искандер\Салтыкова-Щедрина\АОВ\proj.dxf';
-  PATH_File9:='C:\zcad\cad\sample\test_dxf\3d_mount.dxf';
+  PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File1:='J:\nh\Мурка\IV\proj.dxf';
+  PATH_File2:='J:\nh\Мурка\II\proj.dxf';
+  PATH_File3:='/mnt/winc/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File4:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File5:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File6:='D:\2 этаж_ПС план.dxf';
+  PATH_File7:='D:\ellipse.dxf';
+  PATH_File8:='E:\CAD_XDXF\test2000\shema_Poly_Line_Text_Circle_Arc.dxf';
+  PATH_File9:='Z:\mnt\winc\zcad\cad\sample\test_dxf\ops.dxf';
 end.

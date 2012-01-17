@@ -1922,6 +1922,8 @@ var //i:GDBInteger;
     ir:itrec;
     pcd:PTCopyObjectDesc;
     pcopyofcopyobj:pGDBObjEntity;
+
+    domethod,undomethod:tmethod;
 begin
       dist.x := wc.x - t3dp.x;
       dist.y := wc.y - t3dp.y;
@@ -1934,6 +1936,9 @@ begin
 
    if (button and MZW_LBUTTON)<>0 then
    begin
+   SetObjCreateManipulator(domethod,undomethod);
+   with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+   begin
    pcd:=pcoa^.beginiterate(ir);
    if pcd<>nil then
    repeat
@@ -1942,11 +1947,17 @@ begin
                             pcopyofcopyobj^.TransformAt(pcd.obj,@dispmatr);
                             pcopyofcopyobj^.format;
 
-                            gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(pcopyofcopyobj));
+                             begin
+                                  AddObject(pcopyofcopyobj);
+                             end;
+
+                            //gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(pcopyofcopyobj));
                           end;
 
         pcd:=pcoa^.iterate(ir);
    until pcd=nil;
+   comit;
+   end;
       redrawoglwnd;
    //gdb.GetCurrentDWG.ConstructObjRoot.Count:=0;
    //commandend;

@@ -74,6 +74,7 @@ begin
            inc(c);
      until c=count;
      count:=nc;
+     deleted:=0;
      end;
 end;
 procedure GDBOpenArrayOfPObjects.cleareraseobj;

@@ -155,11 +155,17 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
                     procedure CalcObjMatrix;virtual;
                     procedure ReCalcFromObjMatrix;virtual;
+                    procedure correctsublayers(var la:GDBLayerArray);virtual;
               end;
 {Export-}
 var onlygetsnapcount:GDBInteger;
 implementation
 uses UGDBEntTree,GDBGenericSubEntry,UGDBDescriptor,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+procedure GDBObjEntity.correctsublayers(var la:GDBLayerArray);
+begin
+
+end;
+
 function GDBObjEntity.IsHaveGRIPS:GDBBoolean;
 begin
      result:=true;

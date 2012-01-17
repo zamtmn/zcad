@@ -1437,6 +1437,8 @@ begin
 
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
+  if count>0 then
+  begin
   SetObjCreateManipulator(undomethod,domethod);
   with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),count)^ do
   begin
@@ -1454,6 +1456,7 @@ begin
        comit;
        FreeArray:=true;
        //UnDo;
+  end;
   end;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;

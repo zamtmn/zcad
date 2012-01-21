@@ -1834,7 +1834,7 @@ begin
      InfoForm.caption:=('Редактор многострочного текста');
 
      InfoForm.memo.text:=astring;
-     modalresult:=InfoForm.ShowModal;
+     modalresult:=MainFormN.DOShowModal(InfoForm);
      if modalresult=MrOk then
                          begin
                               PGDBObjText(pobj)^.Template:=ConvertToDxfString(InfoForm.memo.text);
@@ -1849,7 +1849,7 @@ begin
      sltexteditor1.helptext.Caption:=' TEXT: ';
      sltexteditor1.EditField.Caption:=astring;
 
-     modalresult:=sltexteditor1.ShowModal;
+     modalresult:=MainFormN.DOShowModal(sltexteditor1);
      if modalresult=MrOk then
                          begin
                               PGDBObjText(pobj)^.Template:=ConvertToDxfString(sltexteditor1.EditField.text);

@@ -503,7 +503,7 @@ begin
   begin
        if CurrentDWG.Changed then
                                  begin
-                                      if application.MessageBox('Чертеж имеет изменения. Закрыть?','Внимание!',MB_YESNO)<>IDYES then exit;
+                                      if MainFormN.MessageBox('Чертеж имеет изменения. Закрыть?','Внимание!',MB_YESNO)<>IDYES then exit;
                                  end;
        poglwnd:=CurrentDWG.OGLwindow1;
        //mainform.PageControl.delpage(mainform.PageControl.onmouse);
@@ -565,7 +565,7 @@ begin
      if gdb.currentdwg<>BlockBaseDWG then
      if gdb.GetCurrentROOT.ObjArray.Count>0 then
                                                      begin
-                                                          if Application.messagebox('Чертеж уже содержит данные. Осуществить подгрузку?','QLOAD',MB_YESNO)=IDNO then
+                                                          if MainFormN.messagebox('Чертеж уже содержит данные. Осуществить подгрузку?','QLOAD',MB_YESNO)=IDNO then
                                                           exit;
                                                      end;
      s:=operands;
@@ -823,7 +823,9 @@ var
 begin
      if length(operands)=0 then
                         begin
+                             mainformn.ShowAllCursors;
                              isload:=OpenFileDialog(s,'dxf',ProjectFileFilter,'','Открыть проект...');
+                             mainformn.RestoreCursors;
                              //s:=utf8tosys(s);
                              if not isload then
                                                begin
@@ -897,7 +899,7 @@ var s,s1:GDBString;
 begin
      if gdb.GetCurrentROOT.ObjArray.Count<1 then
                                                      begin
-                                                          if Application.messagebox('Сохраняемый файл пуст. Уверенны?','QSAVE',MB_YESNO)=IDNO then
+                                                          if MainFormN.messagebox('Сохраняемый файл пуст. Уверенны?','QSAVE',MB_YESNO)=IDNO then
                                                           exit;
                                                      end;
      if operands='QS' then
@@ -937,6 +939,7 @@ var //pd:^TSaveDialog;
 //   pu:ptunit;
 
 begin
+     mainformn.ShowAllCursors;
      if SaveFileDialog(s,'dxf',ProjectFileFilter,'','Сохранить проект...') then
      begin
           fileext:=uppercase(ExtractFileEXT(s));
@@ -961,6 +964,7 @@ begin
           end;
      end;
      result:=cmd_ok;
+     mainformn.RestoreCursors;
 end;
 function Cam_reset_com(Operands:pansichar):GDBInteger;
 begin
@@ -1245,13 +1249,13 @@ function About_com(Operands:pansichar):GDBInteger;
 begin
   if not assigned(Aboutwindow) then
                                   Aboutwindow:=TAboutWnd.mycreate(Application,@Aboutwindow);
-  Aboutwindow.ShowModal;
+  MainFormN.DOShowModal(Aboutwindow);
 end;
 function Help_com(Operands:pansichar):GDBInteger;
 begin
   if not assigned(Helpwindow) then
                                   Helpwindow:=THelpWnd.mycreate(Application,@Helpwindow);
-  Helpwindow.ShowModal;
+  MainFormN.DOShowModal(Helpwindow);
 end;
 function ProjectTree_com(Operands:pansichar):GDBInteger;
 begin
@@ -1319,7 +1323,7 @@ else if length(Operands)>3 then
            createInfoFormVar;
 
            InfoFormVar.memo.text:=u8s;
-           modalresult:=InfoFormVar.ShowModal;
+           modalresult:=MainFormN.DOShowModal(InfoFormVar);
            if modalresult=MrOk then
                                begin
                                      u8s:=InfoFormVar.memo.text;
@@ -1358,7 +1362,7 @@ begin
            counter:=0;
 
            InfoFormVar.memo.text:='';
-           modalresult:=InfoFormVar.ShowModal;
+           modalresult:=MainFormN.DOShowModal(InfoFormVar);
            if modalresult=MrOk then
                                begin
                                      u8s:=InfoFormVar.memo.text;
@@ -1583,7 +1587,7 @@ begin
      end;
      memsubstr.Free;
 
-     modalresult:=InfoForm.ShowModal;
+     modalresult:=MainFormN.DOShowModal(InfoForm);
      InfoForm.Free;
 
      result:=cmd_ok;
@@ -1631,7 +1635,7 @@ begin
      until pmemcounter=nil;
 
 
-     InfoForm.ShowModal;
+     MainFormN.DOShowModal(InfoForm);
      InfoForm.Free;
      memcount.FreeAndDone;
     result:=cmd_ok;
@@ -1940,7 +1944,7 @@ function layer_cmd:GDBInteger;
 begin
   LayerWindow:=TLayerWindow.Create(nil);
   SetHeightControl(LayerWindow,22);
-  LayerWindow.ShowModal;
+  MainFormN.DOShowModal(LayerWindow);
   Freeandnil(LayerWindow);
   result:=cmd_ok;
 end;
@@ -2042,7 +2046,7 @@ begin
                s:='Cleaned items: '+inttostr(cleaned)
            +#13#10'Added items: '+inttostr(_UpdatePO)
            +#13#10'File zcad.po must be rewriten. Confirm?';
-               if Application.messagebox(@s[1],'UpdatePO',MB_YESNO)=IDNO then
+               if MainFormN.messagebox(@s[1],'UpdatePO',MB_YESNO)=IDNO then
                                                                          exit;
                po.SaveToFile(PODirectory + 'zcad.po.backup');
                actualypo.SaveToFile(PODirectory + 'zcad.po');

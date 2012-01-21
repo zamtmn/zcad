@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   //debygunit,
   commandlinedef,
   {windows,}gdbasetypes,commandline,GDBCommandsBase,
@@ -44,7 +44,7 @@ uses
   memman,
   gdbobjectsconstdef,
   {UGDBVisibleOpenArray,}GDBEntity,GDBCircle,GDBLine,GDBGenericSubEntry,GDBMText,
-  shared,sharedgdb,GDBSubordinated,GDBBlockInsert,GDBPolyLine,log,UGDBOpenArrayOfData,math,GDBTable{,GDBElLeader},UGDBStringArray;
+  shared,sharedgdb,GDBSubordinated,GDBBlockInsert,GDBPolyLine,log,UGDBOpenArrayOfData,math,GDBTable{,GDBElLeader},UGDBStringArray,printerspecfunc;
 const
      modelspacename:GDBSTring='**Модель**';
 type
@@ -239,6 +239,14 @@ type
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:GDBPlatformint); virtual;
           end;
+  Print_com=object(CommandRTEdObject)
+                         procedure CommandStart(Operands:pansichar); virtual;
+                         procedure ShowMenu;virtual;
+                         procedure Print(pdata:GDBPlatformint); virtual;
+                         procedure SelectPrinter(pdata:GDBPlatformint); virtual;
+                         procedure SelectPaper(pdata:GDBPlatformint); virtual;
+          end;
+
 
   ITT_com = object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;
@@ -247,7 +255,10 @@ type
 {EXPORT-}
 
 var
-    fixentities:boolean;
+    PSD: TPrinterSetupDialog;
+    PAGED: TPageSetupDialog;
+
+   fixentities:boolean;
    PEProp:TPolyEdit;
    pworkvertex:pgdbvertex;
    BIProp:TBlockInsert;
@@ -282,6 +293,7 @@ var
    SelSimParams:TSelSimParams;
    BlockScaleParams:TBlockScaleParams;
    BlockScale:BlockScale_com;
+   Print:Print_com;
 
 //procedure startup;
 //procedure Finalize;
@@ -927,6 +939,111 @@ begin
      created:=false;
      Commandmanager.executecommandend;
 end;
+procedure Print_com.CommandStart(Operands:pansichar);
+begin
+  self.savemousemode:=GDB.GetCurrentDWG.OGLwindow1.param.md.mode;
+  begin
+       ShowMenu;
+       commandmanager.DMShow;
+       inherited CommandStart('');
+  end
+end;
+procedure Print_com.ShowMenu;
+begin
+  commandmanager.DMAddMethod('Printer setup..','Printer setup..',SelectPrinter);
+  commandmanager.DMAddMethod('Page setup..','Printer setup..',SelectPaper);
+  commandmanager.DMAddMethod('Print','Print',print);
+  commandmanager.DMShow;
+end;
+procedure Print_com.SelectPrinter(pdata:GDBPlatformint);
+begin
+  historyout('Not yet implemented');
+  mainformn.ShowAllCursors;
+  if PSD.Execute then;
+  mainformn.RestoreCursors;
+       //UpdatePrinterInfo;
+end;
+procedure Print_com.SelectPaper(pdata:GDBPlatformint);
+begin
+  historyout('Not yet implemented');
+  mainformn.ShowAllCursors;
+  if Paged.Execute then;
+  mainformn.RestoreCursors;
+end;
+function Inch(AValue: Double; VertRes:boolean=true): Integer;
+begin
+  if VertRes then
+    result := Round(AValue*Printer.YDPI)
+  else
+    result := Round(AValue*Printer.XDPI);
+end;
+procedure Print_com.Print(pdata:GDBPlatformint);
+ var
+  //Pic: TPicture;
+  d, pgw,pgh: Integer;
+  Hin: Integer; // half inch
+  s: string;
+  prn:TPrinterRasterizer;
+  oldrasterozer:PTOGLStateManager;
+begin
+  prn.init;
+  oldrasterozer:=OGLSM;
+  OGLSM:=@prn;
+  try
+  Printer.Title := 'zcadprint';
+  Printer.BeginDoc;
+  sharedgdb.redrawoglwnd;
+  Printer.EndDoc;
+
+    {// some often used consts
+    pgw := Printer.PageWidth-1;
+    pgh := Printer.PageHeight-1;
+    Hin := Inch(0.5);
+
+    // center title text on page width
+    Printer.Canvas.Font.Size := 12;
+    Printer.Canvas.Font.Color:= clBlue;
+    //CenterText(pgw div 2, CM(0.5), 'This is test for lazarus printer4lazarus package');
+
+    // print margins marks, assumes XRes=YRes
+    Printer.Canvas.Pen.Color:=clBlack;
+    Printer.Canvas.Line(0, HIn, 0, 0);            // top-left
+    Printer.Canvas.Line(0, 0, HIn, 0);
+
+    Printer.Canvas.Brush.Color := clSilver;
+    Printer.Canvas.EllipseC(Hin,Hin,Hin div 2,Hin div 2);
+    //CenterText(Hin, Hin, '1');
+
+    Printer.Canvas.Pen.Color := clRed;
+    Printer.Canvas.Pen.Width := 3;
+    Printer.Canvas.Frame(0,0,pgw,pgh);
+
+    Printer.Canvas.Pen.Color := clBlack;
+    Printer.Canvas.Pen.Width := 3;
+    Printer.Canvas.Line(0, pgh-HIn, 0, pgh);      // bottom-left
+    Printer.Canvas.Line(0, pgh, HIn, pgh);
+    Printer.Canvas.Line(pgw-Hin, pgh, pgw, pgh);  // bottom-right
+    Printer.Canvas.Line(pgw,pgh,pgw,pgh-HIn);
+    Printer.Canvas.Line(pgw-Hin, 0, pgw, 0);      // top-right
+    Printer.Canvas.Line(pgw,0,pgw,HIn);
+
+    Printer.Canvas.Line(0,0,pgw,pgh);
+
+
+    Printer.EndDoc;}
+
+  except
+    on E:Exception do
+    begin
+      Printer.Abort;
+      MainFormn.MessageBox(pChar(e.message),'Error',mb_iconhand);
+    end;
+  end;
+  OGLSM:=oldrasterozer;
+  //prn.done;
+end;
+
+
 procedure TextInsert_com.BuildPrimitives;
 begin
      if gdb.GetCurrentDWG.TextStyleTable.GetRealCount>0 then
@@ -2667,7 +2784,6 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
   result:=cmd_ok;
   redrawoglwnd;
 end;
-
 function PlaceAllBlocks_com:GDBInteger;
 var pb:PGDBObjBlockdef;
     ir:itrec;
@@ -2770,6 +2886,7 @@ begin
 
   ATO.init('AddToOwner',0,0);
   CFO.init('CopyFromOwner',0,0);
+  Print.init('Print',CADWG,0);
   SelSim.init('SelSim',0,0);
   SelSim.CEndActionAttr:=0;
   SelSimParams.General.SameEntType:=true;
@@ -2795,11 +2912,15 @@ begin
   InsertTestTable.init('InsertTestTable',0,0);
   //CreateCommandFastObjectPlugin(@InsertTestTable_com,'InsertTestTable',0,0);
 
+  PSD:=TPrinterSetupDialog.Create(nil);
+  PAGED:=TPageSetupDialog.Create(nil);
 end;
 procedure Finalize;
 begin
   BIProp.Blocks.Enums.freeanddone;
   BEditParam.Blocks.Enums.freeanddone;
+  freeandnil(psd);
+  freeandnil(paged);
 end;
 initialization
      {$IFDEF DEBUGINITSECTION}LogOut('GDBCommandsDraw.initialization');{$ENDIF}

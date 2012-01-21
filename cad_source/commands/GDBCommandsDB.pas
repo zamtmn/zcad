@@ -44,7 +44,7 @@ uses
   gdbasetypes,{optionswnd,}strutils,forms,Controls;
   //procedure startup;
 implementation
-uses {URecordDescriptor,}sltexteditor,UObjectDescriptor,projecttreewnd,commandline,log,GDBSubordinated;
+uses {URecordDescriptor,}mainwindow,sltexteditor,UObjectDescriptor,projecttreewnd,commandline,log,GDBSubordinated;
 
 function DBaseAdd_com:GDBInteger;
 var //t:PUserTypeDescriptor;
@@ -92,7 +92,7 @@ begin
                  sltexteditor1.caption:=('Переименовать вхождение');
                  sltexteditor1.helptext.Caption:=' _EQ ';
                  sltexteditor1.EditField.Caption:=copy(pdbv.name,4,length(pdbv.name)-3);
-                 if sltexteditor1.ShowModal=mrok then
+                 if MainFormN.DOShowModal(sltexteditor1)=mrok then
                  begin
                       pdbv.name:='_EQ'+sltexteditor1.EditField.Caption;
                  end;

@@ -115,6 +115,11 @@ type
 
                     procedure SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
 
+                    function MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
+                    procedure ShowAllCursors;
+                    procedure RestoreCursors;
+                    function DOShowModal(MForm:TForm): Integer;
+
                     private
                     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
                     public
@@ -353,7 +358,7 @@ begin
      if gdb.GetCurrentDWG<>nil then
      begin
      //if dialogs.messagebox('Закрыть программу?','QUIT',MB_YESNO)=IDYES then
-     if Application.messagebox('Закрыть программу?','QUIT',MB_YESNO or MB_ICONQUESTION)=IDYES then
+     if MainFormN.messagebox('Закрыть программу?','QUIT',MB_YESNO or MB_ICONQUESTION)=IDYES then
      begin
           result:=true;
 
@@ -481,7 +486,7 @@ begin
     BtnPanel.OKButton.OnClick:={@}OptsFrame.OkClick;
     BtnPanel.Parent:=Dlg;
     Dlg.EnableAutoSizing;
-    Result:=Dlg.ShowModal;
+    Result:=MainFormN.DOShowModal(Dlg){.ShowModal};
   finally
     Dlg.Free;
   end;
@@ -756,7 +761,6 @@ begin
   end;
   //result:=cmd_ok;
 end;
-
 procedure TMainFormN.setnormalfocus;
 begin
      if assigned(cmdedit) then
@@ -789,6 +793,8 @@ var
   bmp:TPortableNetworkGraphic;
 begin
   //AutoSize:=false;
+  CursorOn:=ShowAllCursors;
+  CursorOff:=RestoreCursors;
   iconlist:=timagelist.Create(self);
 
   loadicon(iconlist,sysparam.programpath+'images/plus.png');
@@ -2006,6 +2012,30 @@ begin
           end;
      end;
 end;
+function TMainFormN.DOShowModal(MForm:TForm): Integer;
+begin
+     ShowAllCursors;
+     result:=MForm.ShowModal;
+     RestoreCursors;
+end;
+function TMainFormN.MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
+begin
+     ShowAllCursors;
+     result:=application.MessageBox(Text, Caption,Flags);
+     RestoreCursors;
+end;
+procedure TMainFormN.ShowAllCursors;
+begin
+     if gdb.GetCurrentDWG<>nil then
+     gdb.GetCurrentDWG.OGLwindow1.Cursor:=crDefault;
+end;
+
+procedure TMainFormN.RestoreCursors;
+begin
+     if gdb.GetCurrentDWG<>nil then
+     gdb.GetCurrentDWG.OGLwindow1.Cursor:=crNone;
+end;
+
 procedure TMainFormN.Say(word:gdbstring);
 begin
      if sysvar.SYS.SYS_IsHistoryLineCreated^ then

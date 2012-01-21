@@ -4,6 +4,7 @@ action ACN_NEW,NewDWG,new.bmp,New drawing,,CTRL+N
 action ACN_QSAVE,QSave,save.bmp,Save,Save drawing,CTRL+S
 action ACN_SAVEAS,SaveAs,saveas.bmp,Save as ...,Save drawing as,CTRL+SHIFT+S
 action ACN_SAVEQS,QSave(QS),#QS,Save (Autosave),Autosave,
+action ACN_PRINT,Print,print.bmp,Print,Print,CTRL+P
 action ACN_CLOSE,CloseDWG,close.bmp,Close drawing,,CTRL+F4
 action ACN_QUIT,Quit,exit.bmp,Quit,,CTRL+Q
 

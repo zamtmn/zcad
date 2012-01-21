@@ -22,6 +22,8 @@ Panel Standart;
     action ACN_LOAD
     action ACN_QSAVE
     Separator
+    action ACN_PRINT
+    Separator
     action ACN_LAYER
     layercombobox 200,Layer selection
     linewcombobox 100,Line weight selection
@@ -89,6 +91,8 @@ MainMenuItem File;
     action ACN_QSAVE
     action ACN_SAVEAS
     action ACN_SAVEQS
+    Separator
+    action ACN_PRINT
     Separator
     action ACN_CLOSE
     Separator

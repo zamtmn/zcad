@@ -27,6 +27,7 @@ resourcestring
 type
 TFromDirIterator=procedure (filename:GDBString);
 TFromDirIteratorObj=procedure (filename:GDBString) of object;
+SimpleProcOfObject=procedure of object;
 
 procedure HistoryOut(s: pansichar); export;
 procedure HistoryOutStr(s:GDBString);
@@ -51,6 +52,8 @@ var
 
     utflen:integer;
     historychanged:boolean;
+    CursorOn:SimpleProcOfObject=nil;
+    CursorOff:SimpleProcOfObject=nil;
 
 implementation
 uses strproc,{umytreenode,}{FileUtil,LCLclasses,} LCLtype,
@@ -139,7 +142,12 @@ begin
      s:='FATALERROR: '+errstr;
      programlog.logoutstr(s,0);
      s:=(s);
+     if  assigned(CursorOn) then
+                                CursorOn;
      Application.MessageBox(@s[1],0,MB_OK);
+     if  assigned(CursorOff) then
+                                CursorOff;
+
      halt(0);
 end;
 procedure LogError(errstr:GDBString); export;
@@ -159,7 +167,11 @@ var
 begin
      LogError(errstr);
      ts:=(errstr);
+     if  assigned(CursorOn) then
+                                CursorOn;
      Application.MessageBox(@ts[1],0,MB_ICONERROR);
+     if  assigned(CursorOff) then
+                                CursorOff;
 end;
 procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIterator);
 var sr: TSearchRec;

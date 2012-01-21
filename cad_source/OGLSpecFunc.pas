@@ -32,6 +32,7 @@ type
                           hrc: {HGLRC}thandle;
                           dc:HDC;
                     end;
+    PTOGLStateManager=^TOGLStateManager;
     TOGLStateManager=object
                            currentpointsize,currentlinewidth:GLfloat;
                            currentmode,lastmode:GLenum;
@@ -67,17 +68,18 @@ type
                            procedure myglLineStipple(const factor: GLint; const pattern: GLushort);inline;
                            constructor init;
 
-                           procedure myglVertex3dV(const V:PGDBVertex);inline;
                            procedure myglNormal3dV(const V:PGDBVertex);inline;
                            procedure myglColor3ub(const red, green, blue: GLubyte);inline;
-                           procedure myglVertex3d(const V:GDBVertex);inline;
-                           procedure myglVertex(const x,y,z:GDBDouble);inline;
+                           procedure myglVertex3d(const V:GDBVertex);virtual;//inline;
+                           procedure myglVertex(const x,y,z:GDBDouble);virtual;//inline;
+                           procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
     end;
 
 var
    CurrentCamCSOffset:GDBvertex;
    notuseLCS:GDBBOOLEAN;
-   OGLSM:TOGLStateManager;
+   GLRasterizer:TOGLStateManager;
+   OGLSM:PTOGLStateManager;
 const
      MY_EmptyMode=1000000;
 
@@ -98,7 +100,7 @@ var
    middlepoint:GDBVertex;
 implementation
 uses
-    ugdbdescriptor,geometry;
+    UGDBDescriptor,geometry;
 procedure MywglCreateContext(var oglc:TOGLContextDesk);
 begin
      //oglc.hrc := wglCreateContext(oglc.DC);
@@ -455,5 +457,7 @@ end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('oglspecfunc.initialization');{$ENDIF}
      bcount:=0;
-     oglsm.init;
+     GLRasterizer.init;
+     //oglsm.init;
+     oglsm:=@GLRasterizer;
 end.

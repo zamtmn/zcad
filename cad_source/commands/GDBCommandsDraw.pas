@@ -941,6 +941,7 @@ begin
 end;
 procedure Print_com.CommandStart(Operands:pansichar);
 begin
+  shared.showerror('Print_com.CommandStart: Not yet implemented');
   self.savemousemode:=GDB.GetCurrentDWG.OGLwindow1.param.md.mode;
   begin
        ShowMenu;
@@ -989,6 +990,8 @@ begin
   prn.init;
   oldrasterozer:=OGLSM;
   OGLSM:=@prn;
+  prn.model:=gdb.GetCurrentDWG.pcamera.modelMatrixLCS;
+  prn.project:=gdb.GetCurrentDWG.pcamera.projMatrixLCS;
   try
   Printer.Title := 'zcadprint';
   Printer.BeginDoc;

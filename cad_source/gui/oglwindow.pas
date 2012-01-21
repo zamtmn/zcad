@@ -149,8 +149,6 @@ type
     procedure showcursor;
     procedure LightOn;
     procedure LightOff;
-    procedure startrender;
-    procedure endrender;
     procedure mypaint(sender:tobject);
     procedure mypaint2(sender:tobject;var f:boolean);
 
@@ -228,23 +226,6 @@ procedure TOGLWnd.FormCreate(Sender: TObject);
 begin
      sender:=sender;
 end;
-procedure TOGLWnd.startrender;
-begin
-     middlepoint:=nulvertex;
-     pointcount:=0;
-     primcount:=0;
-     bathcount:=0;
-end;
-procedure TOGLWnd.endrender;
-begin
-    //sysvar.debug.renderdeb.middlepoint:=middlepoint;
-    sysvar.debug.renderdeb.pointcount:=pointcount;
-    sysvar.debug.renderdeb.primcount:=primcount;
-    sysvar.debug.renderdeb.bathcount:=bathcount;
-     if pointcount<>0 then
-                          sysvar.debug.renderdeb.middlepoint:=geometry.VertexMulOnSc(middlepoint,1/pointcount);
-end;
-
 procedure TOGLWnd.EraseBackground(DC: HDC);
 begin
      dc:=0;
@@ -2965,12 +2946,12 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
                                                gdb.GetCurrentROOT^.ObjArray.ObjTree.draw;
                                            //else
                                               begin
-                                              startrender;
+                                              OGLSM.startrender;
                                               gdb.GetCurrentDWG.pcamera.DRAWNOTEND:=treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,lptime);
                                               //oglsm.mytotalglend;
                                               //isOpenGLError;
                                               //render(gdb.GetCurrentROOT^);
-                                              endrender;
+                                              OGLSM.endrender;
                                               end;
 
 

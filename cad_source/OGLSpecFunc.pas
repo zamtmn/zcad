@@ -73,6 +73,8 @@ type
                            procedure myglVertex3d(const V:GDBVertex);virtual;//inline;
                            procedure myglVertex(const x,y,z:GDBDouble);virtual;//inline;
                            procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
+                           procedure startrender;virtual;//inline;
+                           procedure endrender;virtual;//inline;
     end;
 
 var
@@ -125,7 +127,22 @@ begin
      //inc(pointcount);
      //middlepoint:=geometry.VertexAdd(middlepoint,point);
 end;
-
+procedure TOGLStateManager.startrender;
+begin
+     middlepoint:=nulvertex;
+     pointcount:=0;
+     primcount:=0;
+     bathcount:=0;
+end;
+procedure TOGLStateManager.endrender;
+begin
+    //sysvar.debug.renderdeb.middlepoint:=middlepoint;
+    sysvar.debug.renderdeb.pointcount:=pointcount;
+    sysvar.debug.renderdeb.primcount:=primcount;
+    sysvar.debug.renderdeb.bathcount:=bathcount;
+     if pointcount<>0 then
+                          sysvar.debug.renderdeb.middlepoint:=geometry.VertexMulOnSc(middlepoint,1/pointcount);
+end;
 procedure TOGLStateManager.myglVertex3dV;
 var t:gdbvertex;
 begin

@@ -1,2 +1,3 @@
-;cd cad_source 
-svn2revisioninc.exe C:\zcad\cad_source
+#!/bin/sh
+;cd cad_source
+svn2revisioninc.exe cad_source

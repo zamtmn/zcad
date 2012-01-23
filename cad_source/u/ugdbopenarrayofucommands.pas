@@ -185,8 +185,8 @@ begin
   if p<>nil then
   repeat
         TCangeMethod(UnDoData)(p^);
-       // if FreeArray then
-       //                      PGDBObjEntity(p)^.YouChanged;
+        if FreeArray then
+                             PGDBObjEntity(p)^.YouChanged;
        p:=ObjArray.iterate(ir);
   until p=nil;
   FreeArray:=not FreeArray;
@@ -203,8 +203,8 @@ begin
   if p<>nil then
   repeat
         TCangeMethod(DoData)(p^);
-        //if FreeArray then
-        //                     PGDBObjEntity(p)^.YouChanged;
+        if FreeArray then
+                             PGDBObjEntity(p)^.YouChanged;
        p:=ObjArray.iterate(ir);
   until p=nil;
   FreeArray:=not FreeArray;
@@ -583,4 +583,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayOfUCommands.initialization');{$ENDIF}
 end.
-
+

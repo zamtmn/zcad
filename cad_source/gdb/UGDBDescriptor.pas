@@ -146,10 +146,10 @@ procedure CalcZ(z:GDBDouble);
 procedure RemapAll(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
 procedure startup;
 procedure finalize;
-procedure SetObjCreateManipulator(var domethod,undomethod:tmethod);
+procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
 implementation
  uses {GDBSubordinated,}GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared{,mainwindow},commandline,log;
- procedure SetObjCreateManipulator(var domethod,undomethod:tmethod);
+ procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
  begin
       domethod.Code:=pointer(gdb.GetCurrentROOT^.GoodAddObjectToObjArray);
       domethod.Data:=gdb.GetCurrentROOT;

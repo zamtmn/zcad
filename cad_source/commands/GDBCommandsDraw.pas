@@ -992,6 +992,10 @@ begin
   OGLSM:=@prn;
   prn.model:=gdb.GetCurrentDWG.pcamera.modelMatrixLCS;
   prn.project:=gdb.GetCurrentDWG.pcamera.projMatrixLCS;
+  prn.project:=ortho(-420,420,
+                     -297,297,
+                     gdb.GetCurrentDWG.pcamera^.zmin, gdb.GetCurrentDWG.pcamera^.zmax,@onematrix);
+
   try
   Printer.Title := 'zcadprint';
   Printer.BeginDoc;

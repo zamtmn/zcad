@@ -59,7 +59,7 @@ begin
     begin
     if pointcount=2 then
                   begin
-                  Printer.Canvas.Line(round(prevpoint.x*Printer.PageWidth),round(prevpoint.y*Printer.PageHeight),round(t.x*Printer.PageWidth),round(t.y*Printer.PageHeight));
+                  Printer.Canvas.Line(round(prevpoint.x*Printer.PageWidth),round(Printer.PageHeight-prevpoint.y*Printer.PageHeight),round(t.x*Printer.PageWidth),round(Printer.PageHeight-t.y*Printer.PageHeight));
                   pointcount:=0
                   end
     else
@@ -93,7 +93,7 @@ begin
     begin
     if pointcount=2 then
                   begin
-                  Printer.Canvas.Line(round(prevpoint.x*Printer.PageWidth),round(prevpoint.y*Printer.PageHeight),round(t.x*Printer.PageWidth),round(t.y*Printer.PageHeight));
+                  Printer.Canvas.Line(round(prevpoint.x*Printer.PageWidth),round(Printer.PageHeight-prevpoint.y*Printer.PageHeight),round(t.x*Printer.PageWidth),round(Printer.PageHeight-t.y*Printer.PageHeight));
                   pointcount:=0
                   end
     else
@@ -124,7 +124,7 @@ begin
     begin
     if pointcount=2 then
                   begin
-                  Printer.Canvas.Line(round(prevpoint.x*Printer.PageWidth),round(prevpoint.y*Printer.PageHeight),round(t.x*Printer.PageWidth),round(t.y*Printer.PageHeight));
+                  Printer.Canvas.Line(round(prevpoint.x*Printer.PageWidth),round(Printer.PageHeight-prevpoint.y*Printer.PageHeight),round(t.x*Printer.PageWidth),round(Printer.PageHeight-t.y*Printer.PageHeight));
                   pointcount:=0
                   end
     else

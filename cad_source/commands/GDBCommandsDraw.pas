@@ -1573,8 +1573,8 @@ begin
     pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;
        //AddObject(pc);
+       FreeArray:=false;
        comit;
-       FreeArray:=true;
        //UnDo;
   end;
   end;

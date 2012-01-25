@@ -583,4 +583,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayOfUCommands.initialization');{$ENDIF}
 end.
-
+

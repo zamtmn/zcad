@@ -1000,6 +1000,7 @@ var
    prevundo:integer;
    overlay:GDBBoolean;
 begin
+  gdb.GetCurrentROOT.ObjArray.DeSelect;
   if commandmanager.CommandsStack.Count>0 then
                                               begin
                                                    prevundo:=pCommandRTEdObject(ppointer(commandmanager.CommandsStack.getelement(commandmanager.CommandsStack.Count-1))^)^.UndoTop;
@@ -1016,6 +1017,7 @@ begin
 end;
 function Redo_com(Operands:pansichar):GDBInteger;
 begin
+  gdb.GetCurrentROOT.ObjArray.DeSelect;
   gdb.GetCurrentDWG.UndoStack.redo;
   redrawoglwnd;
   result:=cmd_ok;

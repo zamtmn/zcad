@@ -32,14 +32,14 @@ begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=238;
   VIEW_ObjInspSubV:=89;
-  PATH_File0:='/home/zamtmn/zcad/cad/sample/test_dxf/em.dxf';
-  PATH_File1:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File2:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File3:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File4:='J:\nh\Мурка\II\proj.dxf';
-  PATH_File5:='J:\nh\Мурка\IV\video\video IV очередь.dxf';
-  PATH_File6:='J:\nh\Мурка\IV\proj.dxf';
-  PATH_File7:='/mnt/winc/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File8:='D:\2 этаж_ПС план.dxf';
-  PATH_File9:='D:\ellipse.dxf';
+  PATH_File0:='D:\printtest.dxf';
+  PATH_File1:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File2:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File3:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File4:='/mnt/winc/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File5:='/mnt/winc/zcad/cad/sample/test_dxf/em.dxf';
+  PATH_File6:='J:\nh\Мурка\II\proj.dxf';
+  PATH_File7:='J:\nh\Мурка\IV\video\video IV очередь.dxf';
+  PATH_File8:='J:\nh\Мурка\IV\proj.dxf';
+  PATH_File9:='D:\2 этаж_ПС план.dxf';
 end.

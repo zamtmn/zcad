@@ -24,14 +24,14 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="9"/>
       <RevisionNr Value="7"/>
-      <BuildNr Value="1459"/>
+      <BuildNr Value="1460"/>
       <CharSet Value="0000"/>
       <StringTable ProductVersion="0.0.0.8"/>
     </VersionInfo>
     <MacroValues Count="1">
       <Macro1 Name="LCLWidgetType" Value="win32"/>
     </MacroValues>
-    <BuildModes Count="4" Active="GTK2">
+    <BuildModes Count="4" Active="WIN">
       <Item1 Name="WIN" Default="True"/>
       <Item2 Name="GTK2">
         <MacroValues Count="1">
@@ -226,7 +226,7 @@
         <Filename Value="geometry.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="geometry"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="17"/>
         <WindowIndex Value="0"/>
         <TopLine Value="79"/>
         <CursorPos X="10" Y="102"/>
@@ -247,7 +247,7 @@
         <Filename Value="gdb/GDBAbstractText.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GDBAbstractText"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -325,7 +325,7 @@
         <Filename Value="gui/oglwindow.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="oglwindow"/>
-        <EditorIndex Value="17"/>
+        <EditorIndex Value="19"/>
         <WindowIndex Value="0"/>
         <TopLine Value="499"/>
         <CursorPos X="62" Y="508"/>
@@ -372,11 +372,11 @@
       <Unit17>
         <Filename Value="gdbase.pas"/>
         <UnitName Value="gdbase"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="15"/>
         <WindowIndex Value="0"/>
         <TopLine Value="144"/>
         <CursorPos X="31" Y="167"/>
-        <UsageCount Value="82"/>
+        <UsageCount Value="85"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit17>
@@ -392,21 +392,21 @@
       <Unit19>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
         <UnitName Value="UGDBOpenArrayOfUCommands"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="176"/>
-        <CursorPos X="1" Y="211"/>
-        <UsageCount Value="60"/>
+        <TopLine Value="534"/>
+        <CursorPos X="1" Y="542"/>
+        <UsageCount Value="63"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit19>
       <Unit20>
         <Filename Value="commands/GDBCommandsBase.pas"/>
         <UnitName Value="GDBCommandsBase"/>
-        <EditorIndex Value="0"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="2085"/>
-        <CursorPos X="37" Y="1947"/>
+        <TopLine Value="986"/>
+        <CursorPos X="40" Y="1020"/>
         <UsageCount Value="101"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -423,7 +423,7 @@
       <Unit22>
         <Filename Value="gdb/GDBLine.pas"/>
         <UnitName Value="GDBLine"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
         <TopLine Value="398"/>
         <CursorPos X="27" Y="421"/>
@@ -434,11 +434,10 @@
       <Unit23>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
         <UnitName Value="GDBCommandsDraw"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1556"/>
-        <CursorPos X="1" Y="1577"/>
+        <TopLine Value="1544"/>
+        <CursorPos X="24" Y="1576"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -475,11 +474,11 @@
       <Unit27>
         <Filename Value="sharedgdb.pas"/>
         <UnitName Value="sharedgdb"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="28"/>
+        <TopLine Value="40"/>
         <CursorPos X="1" Y="48"/>
-        <UsageCount Value="65"/>
+        <UsageCount Value="68"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit27>
@@ -505,7 +504,7 @@
         <Filename Value="gdb/GDBEntity.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GDBEntity"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="216"/>
         <CursorPos X="1" Y="241"/>
@@ -516,10 +515,12 @@
       <Unit31>
         <Filename Value="commands/commanddefinternal.pas"/>
         <UnitName Value="commanddefinternal"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="23"/>
-        <CursorPos X="5" Y="66"/>
-        <UsageCount Value="98"/>
+        <TopLine Value="133"/>
+        <CursorPos X="42" Y="145"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit31>
       <Unit32>
@@ -598,11 +599,11 @@
       <Unit40>
         <Filename Value="printerspecfunc.pas"/>
         <UnitName Value="printerspecfunc"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="16"/>
         <WindowIndex Value="0"/>
         <TopLine Value="88"/>
         <CursorPos X="10" Y="133"/>
-        <UsageCount Value="53"/>
+        <UsageCount Value="56"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit40>
@@ -619,10 +620,12 @@
       <Unit42>
         <Filename Value="u/UGDBSelectedObjArray.pas"/>
         <UnitName Value="UGDBSelectedObjArray"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="547"/>
-        <CursorPos X="1" Y="579"/>
+        <TopLine Value="25"/>
+        <CursorPos X="1" Y="33"/>
         <UsageCount Value="100"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit42>
       <Unit43>
@@ -655,10 +658,12 @@
       <Unit46>
         <Filename Value="../../lazarus/components/opengl/openglcontext.pas"/>
         <UnitName Value="OpenGLContext"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="475"/>
-        <CursorPos X="49" Y="509"/>
+        <TopLine Value="35"/>
+        <CursorPos X="4" Y="58"/>
         <UsageCount Value="103"/>
+        <Loaded Value="True"/>
       </Unit46>
       <Unit47>
         <Filename Value="shared.pas"/>
@@ -674,10 +679,11 @@
         <Filename Value="gdb/UGDBDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UGDBDescriptor"/>
-        <EditorIndex Value="4"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="131"/>
-        <CursorPos X="39" Y="152"/>
+        <TopLine Value="890"/>
+        <CursorPos X="1" Y="913"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -819,7 +825,7 @@
       <Unit64>
         <Filename Value="u/TGMultiObjectCreateCommand.inc"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="42" Y="3"/>
@@ -839,7 +845,7 @@
       <Unit66>
         <Filename Value="u/UGDBOpenArrayOfPV.pas"/>
         <UnitName Value="UGDBOpenArrayOfPV"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="294"/>
         <CursorPos X="1" Y="325"/>
@@ -1222,12 +1228,10 @@
       <Unit110>
         <Filename Value="/usr/lib/lazarus/lcl/interfaces/win32/win32wsdialogs.pp"/>
         <UnitName Value="Win32WSDialogs"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="74"/>
         <CursorPos X="7" Y="95"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit110>
       <Unit111>
         <Filename Value="/usr/lib/lazarus/lcl/interfaces/gtk2/gtk2widgetset.inc"/>
@@ -1423,11 +1427,11 @@
       </Unit133>
       <Unit134>
         <Filename Value="u/TGMultiObjectCreateCommandIMPL.inc"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="10" Y="3"/>
-        <UsageCount Value="30"/>
+        <UsageCount Value="33"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit134>
@@ -1554,146 +1558,146 @@
       <Unit150>
         <Filename Value="OGLSpecFunc.pas"/>
         <UnitName Value="OGLSpecFunc"/>
-        <EditorIndex Value="16"/>
+        <EditorIndex Value="18"/>
         <WindowIndex Value="0"/>
         <TopLine Value="225"/>
         <CursorPos X="28" Y="38"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="16"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit150>
       <Unit151>
         <Filename Value="gdb/GDBCamera.pas"/>
         <UnitName Value="GDBCamera"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="45" Y="30"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit151>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="111" Column="19" TopLine="73"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="206" Column="1" TopLine="173"/>
       </Position1>
       <Position2>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="519" Column="1" TopLine="514"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="207" Column="1" TopLine="173"/>
       </Position2>
       <Position3>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="508" Column="62" TopLine="499"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="202" Column="1" TopLine="173"/>
       </Position3>
       <Position4>
-        <Filename Value="gdbase.pas"/>
-        <Caret Line="167" Column="31" TopLine="144"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="203" Column="1" TopLine="173"/>
       </Position4>
       <Position5>
-        <Filename Value="printerspecfunc.pas"/>
-        <Caret Line="99" Column="89" TopLine="58"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="205" Column="1" TopLine="173"/>
       </Position5>
       <Position6>
-        <Filename Value="printerspecfunc.pas"/>
-        <Caret Line="32" Column="48" TopLine="22"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="206" Column="1" TopLine="173"/>
       </Position6>
       <Position7>
-        <Filename Value="printerspecfunc.pas"/>
-        <Caret Line="58" Column="8" TopLine="37"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="207" Column="1" TopLine="173"/>
       </Position7>
       <Position8>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="944" Column="19" TopLine="933"/>
+        <Caret Line="1576" Column="24" TopLine="1544"/>
       </Position8>
       <Position9>
-        <Filename Value="/usr/lib/lazarus/lcl/interfaces/win32/win32wsdialogs.pp"/>
-        <Caret Line="101" Column="22" TopLine="74"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="202" Column="1" TopLine="173"/>
       </Position9>
       <Position10>
-        <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="944" Column="45" TopLine="921"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="203" Column="1" TopLine="173"/>
       </Position10>
       <Position11>
-        <Filename Value="commands/GDBCommandsDraw.pas"/>
-        <Caret Line="2268" Column="46" TopLine="2247"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="205" Column="1" TopLine="173"/>
       </Position11>
       <Position12>
-        <Filename Value="gdb/UGDBDescriptor.pas"/>
-        <Caret Line="149" Column="38" TopLine="128"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="206" Column="1" TopLine="173"/>
       </Position12>
       <Position13>
-        <Filename Value="gdb/GDBAbstractText.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
+        <Caret Line="207" Column="1" TopLine="173"/>
       </Position13>
       <Position14>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="515" Column="57" TopLine="492"/>
+        <Caret Line="202" Column="1" TopLine="173"/>
       </Position14>
       <Position15>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="207" Column="9" TopLine="179"/>
+        <Caret Line="203" Column="1" TopLine="173"/>
       </Position15>
       <Position16>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="202" Column="1" TopLine="179"/>
+        <Caret Line="205" Column="1" TopLine="173"/>
       </Position16>
       <Position17>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="203" Column="1" TopLine="179"/>
+        <Caret Line="206" Column="1" TopLine="173"/>
       </Position17>
       <Position18>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="205" Column="1" TopLine="179"/>
+        <Caret Line="208" Column="1" TopLine="173"/>
       </Position18>
       <Position19>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="206" Column="1" TopLine="179"/>
+        <Caret Line="209" Column="1" TopLine="173"/>
       </Position19>
       <Position20>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="207" Column="1" TopLine="179"/>
+        <Caret Line="184" Column="1" TopLine="173"/>
       </Position20>
       <Position21>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="208" Column="1" TopLine="176"/>
+        <Caret Line="185" Column="1" TopLine="173"/>
       </Position21>
       <Position22>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="202" Column="1" TopLine="176"/>
+        <Caret Line="187" Column="1" TopLine="173"/>
       </Position22>
       <Position23>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="203" Column="1" TopLine="176"/>
+        <Caret Line="188" Column="1" TopLine="173"/>
       </Position23>
       <Position24>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="205" Column="1" TopLine="176"/>
+        <Caret Line="189" Column="1" TopLine="173"/>
       </Position24>
       <Position25>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="206" Column="1" TopLine="176"/>
+        <Caret Line="542" Column="1" TopLine="534"/>
       </Position25>
       <Position26>
-        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="207" Column="1" TopLine="176"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1003" Column="33" TopLine="996"/>
       </Position26>
       <Position27>
-        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="208" Column="1" TopLine="176"/>
+        <Filename Value="gdb/UGDBDescriptor.pas"/>
+        <Caret Line="84" Column="12" TopLine="61"/>
       </Position27>
       <Position28>
-        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="209" Column="1" TopLine="176"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1003" Column="33" TopLine="64"/>
       </Position28>
       <Position29>
-        <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="210" Column="1" TopLine="176"/>
+        <Filename Value="commands/GDBCommandsBase.pas"/>
+        <Caret Line="1020" Column="40" TopLine="986"/>
       </Position29>
       <Position30>
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
-        <Caret Line="211" Column="1" TopLine="176"/>
+        <Caret Line="542" Column="1" TopLine="534"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -1745,7 +1749,7 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="5">
+    <BreakPoints Count="2">
       <Item1>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
@@ -1760,27 +1764,6 @@
         <Source Value="gdb/gdbellipse.pas"/>
         <Line Value="683"/>
       </Item2>
-      <Item3>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="gdb/UGDBDescriptor.pas"/>
-        <Line Value="913"/>
-      </Item3>
-      <Item4>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="u/ugdbopenarrayofucommands.pas"/>
-        <Line Value="202"/>
-      </Item4>
-      <Item5>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="u/ugdbopenarrayofucommands.pas"/>
-        <Line Value="187"/>
-      </Item5>
     </BreakPoints>
     <Watches Count="4">
       <Item1>

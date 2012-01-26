@@ -206,10 +206,13 @@
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="zcad"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="89"/>
-        <CursorPos X="1" Y="132"/>
+        <TopLine Value="80"/>
+        <CursorPos X="99" Y="99"/>
         <UsageCount Value="201"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
@@ -514,10 +517,9 @@
         <Filename Value="gui/cmdline.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="cmdline"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="330"/>
+        <TopLine Value="8"/>
         <CursorPos X="67" Y="348"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -584,7 +586,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="55"/>
         <CursorPos X="10" Y="55"/>
-        <UsageCount Value="57"/>
+        <UsageCount Value="58"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit40>
@@ -646,7 +648,7 @@
         <Filename Value="shared.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="shared"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="55"/>
         <CursorPos X="5" Y="48"/>
@@ -1231,11 +1233,12 @@
       </Unit113>
       <Unit114>
         <Filename Value="/usr/share/fpcsrc/rtl/inc/systemh.inc"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="226"/>
-        <CursorPos X="18" Y="244"/>
-        <UsageCount Value="8"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
+        <TopLine Value="488"/>
+        <CursorPos X="20" Y="511"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit114>
       <Unit115>
         <Filename Value="languade/URegisterObjects.pas"/>
@@ -1546,16 +1549,16 @@
       <Unit152>
         <Filename Value="strmy.pas"/>
         <UnitName Value="strmy"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="30"/>
         <CursorPos X="114" Y="55"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit152>
     </Units>
-    <JumpHistory Count="22" HistoryIndex="21">
+    <JumpHistory Count="25" HistoryIndex="24">
       <Position1>
         <Filename Value="gui/cmdline.pas"/>
         <Caret Line="337" Column="7" TopLine="309"/>
@@ -1644,6 +1647,18 @@
         <Filename Value="gui/cmdline.pas"/>
         <Caret Line="336" Column="1" TopLine="309"/>
       </Position22>
+      <Position23>
+        <Filename Value="zcad.pas"/>
+        <Caret Line="104" Column="28" TopLine="80"/>
+      </Position23>
+      <Position24>
+        <Filename Value="/usr/share/fpcsrc/rtl/inc/systemh.inc"/>
+        <Caret Line="509" Column="3" TopLine="488"/>
+      </Position24>
+      <Position25>
+        <Filename Value="zcad.pas"/>
+        <Caret Line="99" Column="112" TopLine="80"/>
+      </Position25>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

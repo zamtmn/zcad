@@ -30,6 +30,7 @@ type
     TPrinterRasterizer=object(TOGLStateManager)
                            model,project,RM:DMatrix4D;
                            prevpoint:gdbvertex;
+                           w,h:Integer;
                            procedure myglVertex3d(const V:GDBVertex);virtual;//inline;
                            procedure myglVertex(const x,y,z:GDBDouble);virtual;//inline;
                            procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
@@ -93,7 +94,7 @@ begin
     begin
     if pointcount=2 then
                   begin
-                  Printer.Canvas.Line(round(prevpoint.x*Printer.PageWidth),round(Printer.PageHeight-prevpoint.y*Printer.PageHeight),round(t.x*Printer.PageWidth),round(Printer.PageHeight-t.y*Printer.PageHeight));
+                  Printer.Canvas.Line(round(prevpoint.x*w),round(h-prevpoint.y*h),round(t.x*w),round(h-t.y*h));
                   pointcount:=0
                   end
     else

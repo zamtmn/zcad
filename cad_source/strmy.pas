@@ -52,7 +52,7 @@ const str_empty='**EMPTY STRING**';
                                                     (('decdig'),('?0123456789'#0)),
                                                     (('sign'),('?+-'#0)),
                                                     (('intnumber'),('+I[{_sign'#0'}_decdig'#0'[{_decdig'#0'}-I')),
-                                                    (('realnumber'),('+I[{_sign'#0'}[{_decdig'#0'}@{=._decdig'#0'}-I')),
+                                                    (('realnumber'),('+I[{_sign'#0'}[{_decdig'#0'}@{=._decdig'#0'[{_decdig'#0'}}-I_softspace'#0)),
                                                     (('intdiapazon'),('_intnumber'#0'_softspace'#0'=.=._softspace'#0'_intnumber'#0)),
                                                     (('GDBString'),('+S`-S')),
                                                     (('intdiapazons_cs'),('_intdiapazon'#0'[{_softspace'#0'=,_softspace'#0'_intdiapazon'#0'}'))
@@ -406,4 +406,4 @@ begin
 end;
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('strmy.initialization');{$ENDIF}
-end.
+end.

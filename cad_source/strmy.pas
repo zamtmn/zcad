@@ -31,8 +31,9 @@ function replacenull(s:GDBString): GDBString;
 function strtohex(s:GDBString): GDBString;
 function parse(template, str:GDBString; GDBStringarray:PGDBGDBStringArray;mode:GDBBoolean;lexema:pshortString; var position:GDBInteger):GDBBoolean;
 function runparser(template:GDBString;var str:GDBString; out parsed:GDBBoolean):PGDBGDBStringArray;
+function IsParsed(template:GDBString;var str:GDBString; var strins:PGDBGDBStringArray):boolean;
 procedure KillString(var str:GDBString);
-const maxlexem=15;
+const maxlexem=16;
 
 const str_empty='**EMPTY STRING**';
       sym_command=['_','?','|','-'];
@@ -51,6 +52,7 @@ const str_empty='**EMPTY STRING**';
                                                     (('decdig'),('?0123456789'#0)),
                                                     (('sign'),('?+-'#0)),
                                                     (('intnumber'),('+I[{_sign'#0'}_decdig'#0'[{_decdig'#0'}-I')),
+                                                    (('realnumber'),('+I[{_sign'#0'}[{_decdig'#0'}@{=._decdig'#0'}-I')),
                                                     (('intdiapazon'),('_intnumber'#0'_softspace'#0'=.=._softspace'#0'_intnumber'#0)),
                                                     (('GDBString'),('+S`-S')),
                                                     (('intdiapazons_cs'),('_intdiapazon'#0'[{_softspace'#0'=,_softspace'#0'_intdiapazon'#0'}'))
@@ -203,8 +205,11 @@ begin
   while (expr[subend]<>sym) and (subend < length(expr)) do
         inc(subend);
 end;
-
-function runparser;
+function IsParsed(template:GDBString;var str:GDBString; var strins:PGDBGDBStringArray):boolean;
+begin
+     strins:=runparser(template,str,result);
+end;
+function runparser(template:GDBString;var str:GDBString; out parsed:GDBBoolean):PGDBGDBStringArray;
 var i:GDBInteger;
     GDBStringarray:PGDBGDBStringArray;
 begin
@@ -251,6 +256,7 @@ var i,iend{,subpos},subi:GDBInteger;
     strarr:GDBGDBStringArray;
     //mode:GDBBoolean;
 begin
+     result:=false;
      i:=1;
      //mode:=false;
      while i<=length(template) do
@@ -329,6 +335,7 @@ begin
                '=':begin
                         if str[position]=template[i] then
                                                          begin
+                                                              if (lexema<>nil) and mode then lexema^:=lexema^+str[position];
                                                               inc(position);
                                                               result:=true
                                                         end
@@ -368,6 +375,15 @@ begin
                         repeat
                               subresult:=parse(subexpr,str,GDBStringarray,mode,lexema,position);
                         until not subresult;
+                        i:=iend{+1};
+                        result:=true
+                   end;
+               '@':begin
+                        inc(i);
+                        iend:=i;
+                        readsubexpr('{','}',template,i,iend);
+                        subexpr:=copy(template,i,iend-i);
+                              subresult:=parse(subexpr,str,GDBStringarray,mode,lexema,position);
                         i:=iend{+1};
                         result:=true
                    end;

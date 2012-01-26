@@ -66,7 +66,7 @@ var
   CLine: TCLine;
   CWindow:TCWindow;
 implementation
-uses mainwindow,oglwindowdef,log;
+uses mainwindow,oglwindowdef,log,strmy;
 procedure TCWindow.AfterConstruction;
 begin
     inherited;
@@ -323,15 +323,20 @@ var code,ch: GDBInteger;
   len: double;
   temp: gdbvertex;
   v:vardesk;
-  s,expr:GDBString;
+  s,xx,yy,zz,expr:GDBString;
   tv:gdbvertex;
+  parseresult:PGDBGDBStringArray;
 begin
     ch:=ord(key);
     if ord(key)=13 then
     begin
     if (length(CmdEdit.text) > 0) then
     begin
+      expr:=CmdEdit.text;
+      //if IsParsed('_realnumber'#0,expr,parseresult)then
+      // expr:=expr;
       val(CmdEdit.text, len, code);
+      //code:=1;
       if code = 0 then
       begin
       if assigned(gdb.GetCurrentDWG) then
@@ -359,6 +364,20 @@ begin
                                               v.data.Instance:=v.data.Instance;
                                               historyoutstr(Format(ExprOutText,[expr,s]));
                                          end
+      else if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0'_softspace'#0'=,_realnumber'#0,expr,parseresult)then
+      begin
+            gdb.GetCurrentDWG.OGLwindow1.sendcoordtocommandTraceOn(geometry.CreateVertex(strtodouble(parseresult^.getGDBString(0)),
+                                                                                         strtodouble(parseresult^.getGDBString(1)),
+                                                                                         strtodouble(parseresult^.getGDBString(2))),MZW_LBUTTON,nil);
+            if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+      end
+      else if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0,expr,parseresult)then
+      begin
+            gdb.GetCurrentDWG.OGLwindow1.sendcoordtocommandTraceOn(geometry.CreateVertex(strtodouble(parseresult^.getGDBString(0)),
+                                                                                         strtodouble(parseresult^.getGDBString(1)),
+                                                                                         0),MZW_LBUTTON,nil);
+            if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+      end
       else
           begin
                CmdEdit.text:=FindAlias(CmdEdit.text,';','=');

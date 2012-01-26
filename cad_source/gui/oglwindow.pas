@@ -1605,7 +1605,9 @@ begin
            project0axis;
      end;
 
+     if commandmanager.pcommandrunning<>nil then
      commandmanager.pcommandrunning^.MouseMoveCallback(coord,param.md.mouse,key,pos);
+     //end;
 end;
 
 procedure TOGLWnd.DrawGrid;

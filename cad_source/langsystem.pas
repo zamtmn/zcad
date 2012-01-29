@@ -23,7 +23,7 @@ uses gdbasetypes{,varman},varmandef,memman,UBaseTypeDescriptor;
 const
   basicoperatorcount = 5;
   basicfunctioncount = 1;
-  basicoperatorparamcount = 11;
+  basicoperatorparamcount = 12;
   basicfunctionparamcount = 1;
   foneGDBBoolean = #7;
   foneGDBByte = #8;
@@ -81,6 +81,8 @@ function TGDBString_let_TGDBString(var rez, hrez: vardesk): vardesk;
 function TGDBByte_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TGDBBoolean_let_TGDBBoolean(var rez, hrez: vardesk): vardesk;
 
+function TGDBDouble_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
+
 function TEnum_let_TIdentificator(var rez, hrez: vardesk): vardesk;
 
 
@@ -118,6 +120,7 @@ const
     , (name: '-'; param: nil; hparam: @GDBDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_minus_TGDBDouble)
     , (name: ':='; param: @GDBBooleanDescriptorOdj; hparam: @GDBBooleanDescriptorOdj; addr: {$IFDEF FPC}@{$ENDIF}TGDBBoolean_let_TGDBBoolean)
     , (name: ':='; param: @GDBEnumDataDescriptorObj; hparam: @GDBEnumDataDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TEnum_let_TIdentificator)
+    , (name: ':='; param: @GDBDoubleDescriptorObj; hparam: @GDBIntegerDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_let_TGDBInteger)
 
     );
 
@@ -225,6 +228,19 @@ begin
   pdouble(rez.data.Instance)^ := pdouble(hrez.data.Instance)^;
   result := r;
 end;
+function TGDBDouble_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBInteger(r.data.Instance) := nil;
+  r.data.ptd:=@GDBDoubleDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{16787BA2-CB34-474C-8111-51332666044A}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+  pdouble(r.data.Instance)^ := pgdbinteger(hrez.data.Instance)^;
+  pdouble(rez.data.Instance)^ := pgdbinteger(hrez.data.Instance)^;
+  result := r;
+end;
+
 
 function TGDBInteger_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var

@@ -160,7 +160,7 @@ begin
      result:=ps;
 end;
 function textformat;
-var i,i2:GDBInteger;
+var i,i2,counter:GDBInteger;
     ps,varname:GDBString;
     pv:pvardesk;
     num,code:integer;
@@ -226,7 +226,9 @@ begin
                           ps:=copy(ps,1,i-1)+#1+copy(ps,i+2,length(ps)-i-1)
                      end;
      until i<=0; }
+     counter:=0;
      repeat
+          inc(counter);
           i:=pos('@@[',ps);
           if i>0 then
                      begin
@@ -246,8 +248,11 @@ begin
                                      else
                                          ps:=copy(ps,1,i-1)+'!!ERR('+varname+')!!'+copy(ps,i2+1,length(ps)-i2)
                      end;
-     until i<=0;
-     result:=ps;
+     until (i<=0)or(counter>100);
+     if counter>100 then
+                        result:='!!ERR(Loop detected)'
+                    else
+                        result:=ps;
 end;
 procedure GDBObjAbstractText.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin

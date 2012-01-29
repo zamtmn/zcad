@@ -658,7 +658,7 @@ if addtype then
                                                         then
                                                             line:=line;
                                                         line:=copy(line,1,pos(';',line)-1);
-                                                        if line='EL_ShortName:=''BTH'''
+                                                        if line='RD_Restore_Mode:=WND_Texture'
                                                                  then
                                                                      line:=line;
                                                         vd:=evaluate(line,currentunit);

@@ -19,7 +19,7 @@ unit GDBAbstractText;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBOpenArrayOfPObjects,{GDBEntity,}strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},UGDBPolyPoint3DArray{,varman},varmandef,
+uses languade,UGDBOpenArrayOfPObjects,{GDBEntity,}strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},UGDBPolyPoint3DArray{,varman},varmandef,
 gl,
 GDBase,UGDBDescriptor,gdbobjectsconstdef{,oglwindowdef},geometry{,dxflow,strmy},math{,GDBPlain},OGLSpecFunc{,GDBGenericSubEntry};
 type
@@ -164,6 +164,7 @@ var i,i2,counter:GDBInteger;
     ps,varname:GDBString;
     pv:pvardesk;
     num,code:integer;
+    vd:vardesk;
 begin
      //ps:=s;
      ps:=convertfromunicode(s);
@@ -247,7 +248,22 @@ begin
                                          end
                                      else
                                          ps:=copy(ps,1,i-1)+'!!ERR('+varname+')!!'+copy(ps,i2+1,length(ps)-i2)
+                     end
+          else
+          begin
+          i:=pos('##[',ps);
+          if i>0 then
+                     begin
+                          i2:=pos(']',ps);
+                          if i2<i then system.break;
+                          varname:=copy(ps,i+3,i2-i-3);
+                          vd:=evaluate(varname,@PGDBObjGenericWithSubordinated(pobj).OU);
+                          if (assigned(vd.data.ptd))and(assigned(vd.data.Instance)) then
+                                                                                        ps:=copy(ps,1,i-1)+vd.data.ptd^.GetValueAsString(vd.data.Instance)+copy(ps,i2+1,length(ps)-i2)
+                                                                                    else
+                                                                                        ps:=copy(ps,1,i-1)+'!!ERR('+varname+')!!'+copy(ps,i2+1,length(ps)-i2)
                      end;
+          end;
      until (i<=0)or(counter>100);
      if counter>100 then
                         result:='!!ERR(Loop detected)'
@@ -558,4 +574,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBAbstractText.initialization');{$ENDIF}
-end.
+end.

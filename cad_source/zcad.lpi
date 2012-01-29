@@ -31,7 +31,7 @@
     <MacroValues Count="1">
       <Macro1 Name="LCLWidgetType" Value="win32"/>
     </MacroValues>
-    <BuildModes Count="4" Active="WIN">
+    <BuildModes Count="4" Active="GTK2">
       <Item1 Name="WIN" Default="True"/>
       <Item2 Name="GTK2">
         <MacroValues Count="1">
@@ -247,10 +247,10 @@
         <Filename Value="gdb/GDBAbstractText.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GDBAbstractText"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="68"/>
-        <CursorPos X="36" Y="69"/>
+        <TopLine Value="232"/>
+        <CursorPos X="158" Y="264"/>
         <UsageCount Value="204"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -276,13 +276,10 @@
         <Filename Value="languade/UUnitManager.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UUnitManager"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
         <TopLine Value="641"/>
         <CursorPos X="1" Y="667"/>
         <UsageCount Value="201"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
       <Unit8>
@@ -427,12 +424,10 @@
       <Unit23>
         <Filename Value="commands/GDBCommandsBaseDraw.pas"/>
         <UnitName Value="GDBCommandsBaseDraw"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="25" Y="19"/>
         <UsageCount Value="100"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit23>
       <Unit24>
@@ -592,7 +587,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="55"/>
         <CursorPos X="10" Y="55"/>
-        <UsageCount Value="60"/>
+        <UsageCount Value="62"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit40>
@@ -654,7 +649,7 @@
         <Filename Value="shared.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="shared"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="195"/>
         <CursorPos X="5" Y="48"/>
@@ -692,11 +687,11 @@
       <Unit51>
         <Filename Value="gdb/GDBSubordinated.pas"/>
         <UnitName Value="GDBSubordinated"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="79"/>
         <CursorPos X="100" Y="109"/>
-        <UsageCount Value="45"/>
+        <UsageCount Value="47"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit51>
@@ -889,11 +884,11 @@
       <Unit73>
         <Filename Value="strproc.pas"/>
         <UnitName Value="strproc"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="485"/>
         <CursorPos X="13" Y="19"/>
-        <UsageCount Value="70"/>
+        <UsageCount Value="72"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit73>
@@ -945,11 +940,11 @@
       <Unit79>
         <Filename Value="gdb/GDBDevice.pas"/>
         <UnitName Value="GDBDevice"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="500"/>
         <CursorPos X="24" Y="514"/>
-        <UsageCount Value="71"/>
+        <UsageCount Value="73"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit79>
@@ -1042,11 +1037,12 @@
       <Unit90>
         <Filename Value="languade.pas"/>
         <UnitName Value="languade"/>
-        <EditorIndex Value="12"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="409"/>
-        <CursorPos X="1" Y="423"/>
-        <UsageCount Value="11"/>
+        <TopLine Value="57"/>
+        <CursorPos X="17" Y="79"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit90>
@@ -1222,8 +1218,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="74"/>
         <CursorPos X="7" Y="95"/>
-        <UsageCount Value="11"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
+        <UsageCount Value="12"/>
       </Unit110>
       <Unit111>
         <Filename Value="/usr/lib/lazarus/lcl/interfaces/gtk2/gtk2widgetset.inc"/>
@@ -1287,12 +1282,10 @@
       <Unit118>
         <Filename Value="langsystem.pas"/>
         <UnitName Value="langsystem"/>
-        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="212"/>
         <CursorPos X="1" Y="235"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit118>
       <Unit119>
@@ -1307,12 +1300,10 @@
       <Unit120>
         <Filename Value="gdb/GDBBlockDef.pas"/>
         <UnitName Value="GDBBlockDef"/>
-        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="141"/>
+        <TopLine Value="129"/>
         <CursorPos X="1" Y="164"/>
-        <UsageCount Value="54"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="55"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit120>
       <Unit121>
@@ -1572,147 +1563,95 @@
       <Unit152>
         <Filename Value="strmy.pas"/>
         <UnitName Value="strmy"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="19"/>
         <CursorPos X="114" Y="55"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="16"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit152>
       <Unit153>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
         <UnitName Value="GDBCommandsDraw"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1771"/>
         <CursorPos X="38" Y="1809"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit153>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="0">
+    <JumpHistory Count="17" HistoryIndex="16">
       <Position1>
-        <Filename Value="languade/UUnitManager.pas"/>
-        <Caret Line="667" Column="1" TopLine="641"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="69" Column="36" TopLine="65"/>
       </Position1>
       <Position2>
-        <Filename Value="languade/UUnitManager.pas"/>
-        <Caret Line="677" Column="1" TopLine="641"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="251" Column="21" TopLine="242"/>
       </Position2>
       <Position3>
-        <Filename Value="languade/UUnitManager.pas"/>
-        <Caret Line="678" Column="1" TopLine="641"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="254" Column="1" TopLine="242"/>
       </Position3>
       <Position4>
-        <Filename Value="languade/UUnitManager.pas"/>
-        <Caret Line="239" Column="1" TopLine="216"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="255" Column="1" TopLine="242"/>
       </Position4>
       <Position5>
-        <Filename Value="langsystem.pas"/>
-        <Caret Line="235" Column="1" TopLine="212"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="268" Column="112" TopLine="233"/>
       </Position5>
       <Position6>
-        <Filename Value="languade/UUnitManager.pas"/>
-        <Caret Line="664" Column="1" TopLine="641"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="251" Column="15" TopLine="230"/>
       </Position6>
       <Position7>
-        <Filename Value="languade/UUnitManager.pas"/>
-        <Caret Line="665" Column="1" TopLine="641"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="256" Column="1" TopLine="242"/>
       </Position7>
       <Position8>
-        <Filename Value="langsystem.pas"/>
-        <Caret Line="235" Column="1" TopLine="212"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="257" Column="1" TopLine="242"/>
       </Position8>
       <Position9>
-        <Filename Value="languade/UUnitManager.pas"/>
-        <Caret Line="664" Column="1" TopLine="641"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="258" Column="1" TopLine="242"/>
       </Position9>
       <Position10>
-        <Filename Value="languade/UUnitManager.pas"/>
-        <Caret Line="665" Column="1" TopLine="641"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="259" Column="1" TopLine="242"/>
       </Position10>
       <Position11>
-        <Filename Value="gdb/GDBBlockDef.pas"/>
-        <Caret Line="164" Column="1" TopLine="141"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="260" Column="1" TopLine="242"/>
       </Position11>
       <Position12>
-        <Filename Value="languade/UUnitManager.pas"/>
-        <Caret Line="665" Column="1" TopLine="641"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="261" Column="1" TopLine="242"/>
       </Position12>
       <Position13>
-        <Filename Value="langsystem.pas"/>
-        <Caret Line="235" Column="1" TopLine="212"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="22" Column="15" TopLine="1"/>
       </Position13>
       <Position14>
-        <Filename Value="langsystem.pas"/>
-        <Caret Line="236" Column="1" TopLine="212"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="260" Column="27" TopLine="239"/>
       </Position14>
       <Position15>
-        <Filename Value="langsystem.pas"/>
-        <Caret Line="237" Column="1" TopLine="212"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="167" Column="8" TopLine="158"/>
       </Position15>
       <Position16>
-        <Filename Value="langsystem.pas"/>
-        <Caret Line="238" Column="1" TopLine="212"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="261" Column="78" TopLine="235"/>
       </Position16>
       <Position17>
-        <Filename Value="langsystem.pas"/>
-        <Caret Line="239" Column="1" TopLine="212"/>
+        <Filename Value="gdb/GDBAbstractText.pas"/>
+        <Caret Line="264" Column="158" TopLine="232"/>
       </Position17>
-      <Position18>
-        <Filename Value="langsystem.pas"/>
-        <Caret Line="240" Column="1" TopLine="212"/>
-      </Position18>
-      <Position19>
-        <Filename Value="langsystem.pas"/>
-        <Caret Line="241" Column="1" TopLine="212"/>
-      </Position19>
-      <Position20>
-        <Filename Value="langsystem.pas"/>
-        <Caret Line="242" Column="1" TopLine="212"/>
-      </Position20>
-      <Position21>
-        <Filename Value="languade.pas"/>
-        <Caret Line="423" Column="1" TopLine="409"/>
-      </Position21>
-      <Position22>
-        <Filename Value="languade.pas"/>
-        <Caret Line="424" Column="1" TopLine="409"/>
-      </Position22>
-      <Position23>
-        <Filename Value="languade.pas"/>
-        <Caret Line="428" Column="1" TopLine="409"/>
-      </Position23>
-      <Position24>
-        <Filename Value="languade.pas"/>
-        <Caret Line="496" Column="1" TopLine="460"/>
-      </Position24>
-      <Position25>
-        <Filename Value="languade.pas"/>
-        <Caret Line="497" Column="1" TopLine="460"/>
-      </Position25>
-      <Position26>
-        <Filename Value="languade/UUnitManager.pas"/>
-        <Caret Line="665" Column="1" TopLine="641"/>
-      </Position26>
-      <Position27>
-        <Filename Value="languade/UUnitManager.pas"/>
-        <Caret Line="199" Column="1" TopLine="176"/>
-      </Position27>
-      <Position28>
-        <Filename Value="languade/UUnitManager.pas"/>
-        <Caret Line="166" Column="1" TopLine="143"/>
-      </Position28>
-      <Position29>
-        <Filename Value="gdb/GDBBlockDef.pas"/>
-        <Caret Line="164" Column="1" TopLine="141"/>
-      </Position29>
-      <Position30>
-        <Filename Value="langsystem.pas"/>
-        <Caret Line="235" Column="1" TopLine="212"/>
-      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

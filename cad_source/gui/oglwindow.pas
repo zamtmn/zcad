@@ -2101,6 +2101,31 @@ begin
     oglsm.myglDisable(GL_LIGHT0);
     oglsm.myglDisable(GL_COLOR_MATERIAL);
 end;
+procedure drawfrustustum(frustum:ClipArray);
+var
+tv1,tv2,tv3,tv4,sv1{,sv2,sv3,sv4},d1{,d2,d3,d4}:gdbvertex;
+Tempplane:DVector4D;
+
+begin
+  Tempplane:=frustum[5];
+  tempplane[3]:=(tempplane[3]-frustum[4][3])/2;
+  begin
+  tv1:=PointOf3PlaneIntersect(frustum[0],frustum[3],Tempplane);
+  tv2:=PointOf3PlaneIntersect(frustum[1],frustum[3],Tempplane);
+  tv3:=PointOf3PlaneIntersect(frustum[1],frustum[2],Tempplane);
+  tv4:=PointOf3PlaneIntersect(frustum[0],frustum[2],Tempplane);
+  oglsm.myglbegin(GL_LINES{_loop});
+                 glVertex3dv(@tv1);
+                 glVertex3dv(@tv2);
+                 glVertex3dv(@tv2);
+                 glVertex3dv(@tv3);
+                 glVertex3dv(@tv3);
+                 glVertex3dv(@tv4);
+                 glVertex3dv(@tv4);
+                 glVertex3dv(@tv1);
+  oglsm.myglend;
+  end;
+end;
 
 procedure TOGLWnd.showcursor;
   var
@@ -2127,17 +2152,19 @@ procedure TOGLWnd.showcursor;
     oglsm.myglEnable(GL_COLOR_LOGIC_OP);
     oglsm.myglLogicOp(GL_OR);
 
+    drawfrustustum(param.debugfrustum);
 
     Tempplane:=param.mousefrustumLCS[5];
     tempplane[3]:=(tempplane[3]-param.mousefrustumLCS[4][3])/2;
     {курсор фрустума выделения}
     if (param.md.mode and MGetSelectObject) <> 0 then
     begin
-    tv1:=PointOf3PlaneIntersect(param.mousefrustumLCS[0],param.mousefrustumLCS[3],Tempplane);
+    drawfrustustum(param.mousefrustumLCS);
+    {tv1:=PointOf3PlaneIntersect(param.mousefrustumLCS[0],param.mousefrustumLCS[3],Tempplane);
     tv2:=PointOf3PlaneIntersect(param.mousefrustumLCS[1],param.mousefrustumLCS[3],Tempplane);
     tv3:=PointOf3PlaneIntersect(param.mousefrustumLCS[1],param.mousefrustumLCS[2],Tempplane);
     tv4:=PointOf3PlaneIntersect(param.mousefrustumLCS[0],param.mousefrustumLCS[2],Tempplane);
-    oglsm.myglbegin(GL_LINES{_loop});
+    oglsm.myglbegin(GL_LINES);
                    glVertex3dv(@tv1);
                    glVertex3dv(@tv2);
                    glVertex3dv(@tv2);
@@ -2146,7 +2173,7 @@ procedure TOGLWnd.showcursor;
                    glVertex3dv(@tv4);
                    glVertex3dv(@tv4);
                    glVertex3dv(@tv1);
-    oglsm.myglend;
+    oglsm.myglend;}
     end;
     //oglsm.mytotalglend;
     //isOpenGLError;
@@ -3097,8 +3124,8 @@ function TOGLWnd.treerender(var Node:TEntTreeNode;StartTime:TDateTime):GDBboolea
 var
    currtime:TDateTime;
    Hour,Minute,Second,MilliSecond:word;
-   q1,q2:gdbboolean;
-begin
+   q1,q2:gdbboolean; currd:PTDrawing;
+begin currd:=gdb.GetCurrentDWG;
      currtime:=now;
      decodetime(currtime-StartTime,Hour,Minute,Second,MilliSecond);
      if assigned(sysvar.RD.RD_MaxRenderTime) then
@@ -3111,7 +3138,7 @@ begin
      q1:=false;
      q2:=false;
 
-  if Node.infrustum=gdb.GetCurrentDWG.pcamera.POSCOUNT then
+  if Node.infrustum={gdb.GetCurrentDWG}currd.pcamera.POSCOUNT then
   begin
        if assigned(node.pminusnode)then
                                        if node.minusdrawpos<>gdb.GetCurrentDWG.pcamera.DRAWCOUNT then
@@ -3129,7 +3156,7 @@ begin
                                                                                     else
                                                                                         q2:=true;
                                       end;
-       if node.nuldrawpos<>gdb.GetCurrentDWG.pcamera.DRAWCOUNT then
+       if node.nuldrawpos<>currd.pcamera.DRAWCOUNT then
        begin
         Node.nul.DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT);
         node.nuldrawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;

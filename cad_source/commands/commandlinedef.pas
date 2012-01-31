@@ -56,6 +56,7 @@ type
     procedure CommandEnd; virtual;abstract;
     procedure CommandCancel; virtual;abstract;
     procedure CommandInit; virtual;abstract;
+    procedure CommandContinue; virtual;
     function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
@@ -99,6 +100,9 @@ begin
                          else
                              result:=0;
 end;
+procedure CommandRTEdObjectDef.CommandContinue;
+begin
+end;
 function CommandRTEdObjectDef.MouseMoveCallback;
 begin
   //result:=0;
@@ -116,30 +120,10 @@ begin
                          result := BeforeClick(wc, mc, button,osp)
                      else
                          result := AfterClick(wc, mc, button,osp);
-  {if result=0 then
-                  begin}
-    {if button = 32 then
-                       button:=1;}
-                       if (button and MZW_LBUTTON)<>0 then
+    if ((button and MZW_LBUTTON)<>0)and(result=0) then
                                          begin
                                                inc(self.mouseclic);
-
-                                               //button:=button+1;
-                                               //button:=button-1;
-{                  end
-              else
-                  begin
-                       if button = 1 then begin
-                                               mouseclic:=result;
-                                          end;
-                  end}
-
-  {  if mouseclic <= 1 then result := BeforeClick(wc, mc, button,osp)
-    else result := AfterClick(wc, mc, button,osp);
-  end
-  else if mouseclic > 0 then
-    result := AfterClick(wc, mc, button,osp);}
-    end;
+                                         end;
 end;
 begin
      {$IFDEF DEBUGINITSECTION}LogOut('commandlinedef.initialization');{$ENDIF}

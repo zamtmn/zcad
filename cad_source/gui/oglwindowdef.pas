@@ -126,6 +126,7 @@ type
     ontrackarray: totrackarray;
     mouseclipmatrix:Dmatrix4D;
     mousefrustum,mousefrustumLCS:ClipArray;
+    debugfrustum:ClipArray;
   end;
 {Export-}
 //ppolaraxis: PGDBOpenArrayVertex_GDBWord;

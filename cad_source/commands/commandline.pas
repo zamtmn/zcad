@@ -20,7 +20,7 @@ unit commandline;
 {$INCLUDE def.inc}
 interface
 uses umytreenode,sysinfo,strproc,UGDBOpenArrayOfPointer,UDMenuWnd,gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
-     memman,shared,log;
+     memman,shared,log,varmandef,varman;
 resourcestring
 S_RunCommand='Running command';
 S_UnknownCommand='Unknown command';
@@ -30,11 +30,14 @@ const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;
 type
+  tvarstack=object({varmanagerdef}varmanager)
+            end;
+
   GDBcommandmanager=object(GDBcommandmanagerDef)
                           CommandsStack:GDBOpenArrayOfGDBPointer;
                           ContextCommandParams:GDBPointer;
                           busy:GDBBoolean;
-
+                          varstack:tvarstack;
                           constructor init(m:GDBInteger);
                           function execute(const comm:pansichar;silent:GDBBoolean): GDBInteger;virtual;
                           function executecommand(const comm:pansichar): GDBInteger;virtual;
@@ -55,6 +58,10 @@ type
                           procedure DMAddMethod(Text,HText:GDBString;FMethod:TButtonMethod);
                           procedure DMAddProcedure(Text,HText:GDBString;FProc:TButtonProc);
                           function FindCommand(command:GDBString):PCommandObjectDef;
+                          procedure PushValue(varname,vartype:GDBString;instance:GDBPointer);virtual;
+                          function PopValue:vardesk;virtual;
+                          function GetValue:vardesk;virtual;
+                          function GetValueHeap:GDBInteger;
                     end;
 var commandmanager:GDBcommandmanager;
 function getcommandmanager:GDBPointer;export;
@@ -63,7 +70,43 @@ procedure ParseCommand(comm:pansichar; out command,operands:GDBString);
 {procedure startup;
 procedure finalize;}
 implementation
-uses Objinsp,UGDBStringArray,cmdline,UGDBDescriptor,forms;
+uses Objinsp,UGDBStringArray,cmdline,UGDBDescriptor,forms{,varman};
+function GDBcommandmanager.GetValueHeap:GDBInteger;
+begin
+     result:=varstack.vardescarray.count;
+end;
+
+procedure GDBcommandmanager.PushValue(varname,vartype:GDBString;instance:GDBPointer);
+var
+   vd: vardesk;
+begin
+     vd.name:=varname;
+     //vd.data.Instance:=instance;
+     vd.data.PTD:=SysUnit.TypeName2PTD(vartype);
+     varstack.createvariable(varname,vd);
+     vd.data.PTD.CopyInstanceTo(instance,vd.data.Instance);
+end;
+function GDBcommandmanager.GetValue:vardesk;
+var
+lastelement:pvardesk;
+begin
+     lastelement:=pvardesk(varstack.vardescarray.getelement(varstack.vardescarray.Count-1));
+     result:=lastelement^;
+end;
+
+function GDBcommandmanager.PopValue:vardesk;
+var
+lastelement:pvardesk;
+begin
+     lastelement:=pvardesk(varstack.vardescarray.getelement(varstack.vardescarray.Count-1));
+     dec(varstack.vardescarray.Count);
+     result:=lastelement^;
+     lastelement.name:='';
+     lastelement.username:='';
+     lastelement.data.PTD:=nil;
+     lastelement.data.Instance:=nil;
+end;
+
 function getcommandmanager:GDBPointer;
 begin
      result:=@commandmanager;
@@ -282,7 +325,7 @@ begin
                  else
                      shared.ShowError({'Команда не может быть выполнена. Идет выполнение сценария'}S_CommandNRInC);
 end;
-function GDBcommandmanager.executecommandsilent(const comm:pansichar): GDBInteger;
+function GDBcommandmanager.executecommandsilent{(const comm:pansichar): GDBInteger};
 begin
      if not busy then
      result:=execute(comm,true);
@@ -303,6 +346,7 @@ begin
                                     begin
                                          pcommandrunning:=ppointer(CommandsStack.getelement(CommandsStack.Count-1))^;
                                          dec(CommandsStack.Count);
+                                         pcommandrunning.CommandContinue;
                                     end
                                 else
                                     begin
@@ -338,6 +382,7 @@ constructor GDBcommandmanager.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}'{8B10F808-46AD-4EF1-BCDD-55B74D27187B}',{$ENDIF}m);
   CommandsStack.init({$IFDEF DEBUGBUILD}'{8B10F808-46AD-4EF1-BCDD-55B74D27187B}',{$ENDIF}10);
+  varstack.init;
 end;
 procedure GDBcommandmanager.CommandRegister(pc:PCommandObjectDef);
 begin
@@ -357,6 +402,7 @@ begin
      lastcommand:='';
      inherited done;
      CommandsStack.done;
+     varstack.Done;
 end;
 {procedure startup;
 begin

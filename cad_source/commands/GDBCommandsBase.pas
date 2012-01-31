@@ -1062,6 +1062,7 @@ end;
 
 function FrameEdit_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
+  result:=0;
   if (button and MZW_LBUTTON)<>0 then
   begin
     historyout('Вторая точка:');
@@ -2138,7 +2139,7 @@ begin
   CreateCommandFastObjectPlugin(@SelObjChangeLayerToCurrent_com,'SelObjChangeLayerToCurrent',CADWG,0);
   CreateCommandFastObjectPlugin(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);
   CreateCommandFastObjectPlugin(@MemSummary_com,'MeMSummary',0,0);
-  selframecommand:=CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,@FrameEdit_com_Command_End,nil,nil,@FrameEdit_com_BeforeClick,@FrameEdit_com_AfterClick,nil,'SelectFrame',0,0);
+  selframecommand:=CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,@FrameEdit_com_Command_End,nil,nil,@FrameEdit_com_BeforeClick,@FrameEdit_com_AfterClick,nil,nil,'SelectFrame',0,0);
   selframecommand^.overlay:=true;
   selframecommand.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@RebuildTree_com,'RebuildTree',CADWG,0);
@@ -2146,7 +2147,7 @@ begin
   CreateCommandFastObjectPlugin(@undo_com,'Undo',CADWG,0).overlay:=true;
   CreateCommandFastObjectPlugin(@redo_com,'Redo',CADWG,0).overlay:=true;
 
-  CreateCommandRTEdObjectPlugin(@polytest_com_CommandStart,nil,nil,nil,@polytest_com_BeforeClick,@polytest_com_BeforeClick,nil,'PolyTest',0,0);
+  CreateCommandRTEdObjectPlugin(@polytest_com_CommandStart,nil,nil,nil,@polytest_com_BeforeClick,@polytest_com_BeforeClick,nil,nil,'PolyTest',0,0);
   CreateCommandFastObjectPlugin(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);
   CreateCommandFastObjectPlugin(@PolyDiv_com,'PolyDiv',CADWG,0).CEndActionAttr:=CEDeSelect;
   CreateCommandFastObjectPlugin(@SaveLayout_com,'SaveLayout',0,0);

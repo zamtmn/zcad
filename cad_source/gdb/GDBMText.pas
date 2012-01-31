@@ -79,6 +79,7 @@ end;
 constructor GDBObjMText.init;
 begin
   inherited init(own,layeraddres, lw, c, p, s, o, w, a, j);
+  vp.ID := GDBMtextID;
   width := wi;
   linespacef := l;
 

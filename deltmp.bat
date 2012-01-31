@@ -7,19 +7,30 @@ rm cad/autosave/*.dxf;
 rm cad/autosave/*.dbpas;
 rm cad/autosave/*.pas;
 rm -rf cad_source/__history
+rm cad_source/*.bak
 rm -rf cad_source/backup
 rm -rf cad_source/electroteh/backup
+rm cad_source/electroteh/*.bak
 rm -rf cad_source/devicebase/backup
+rm cad_source/devicebase/*.bak
 rm -rf cad_source/utils/backup
+rm cad_source/utils/*.bak
 rm -rf cad/rtl/backup
 rm -rf cad_source/LCLmod/__history
+rm cad_source/LCLmod/*.bak
 rm -rf cad_source/LCLmod/backup
 rm -rf cad_source/gui/backup
+rm cad_source/gui/*.bak
 rm -rf cad_source/u/backup
+rm cad_source/u/*.bak
 rm -rf cad_source/commands/backup
+rm cad_source/commands/*.bak
 rm -rf cad_source/languade/backup
+rm cad_source/languade/*.bak
 rm -rf cad_source/zwin/backup
+rm cad_source/zwin/*.bak
 rm -rf cad_source/GDB/backup
+rm cad_source/GDB/*.bak
 rm -rf cad_source/languade/__history
 rm -rf cad_source/commands/__history
 rm -rf cad_source/gdb/__history

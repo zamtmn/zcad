@@ -2930,7 +2930,7 @@ begin
   MainSpecContentFormat.loadfromfile(FindInSupportPath('main.sf'));
   Wire.init('El_Wire',0,0);
   commandmanager.CommandRegister(@Wire);
-  pcabcom:=CreateCommandRTEdObjectPlugin(@_Cable_com_CommandStart, _Cable_com_CommandEnd,nil,@cabcomformat,@_Cable_com_BeforeClick,@_Cable_com_AfterClick,@_Cable_com_Hd,'EL_Cable',0,0);
+  pcabcom:=CreateCommandRTEdObjectPlugin(@_Cable_com_CommandStart, _Cable_com_CommandEnd,nil,@cabcomformat,@_Cable_com_BeforeClick,@_Cable_com_AfterClick,@_Cable_com_Hd,nil,'EL_Cable',0,0);
 
   pcabcom^.commanddata.Instance:=@cabcomparam;
   pcabcom^.commanddata.PTD:=SysUnit.TypeName2PTD('TELCableComParam');
@@ -2958,8 +2958,8 @@ begin
   EM_SEPBUILD.commanddata.Instance:=@em_sepbuild_params;
   EM_SEPBUILD.commanddata.PTD:=SysUnit.TypeName2PTD('TBasicFinter');
 
-  CreateCommandRTEdObjectPlugin(@ElLeaser_com_CommandStart,@Line_com_CommandEnd,nil,nil,@Line_com_BeforeClick,@El_Leader_com_AfterClick,nil,'El_Leader',0,0);
-  pfindcom:=CreateCommandRTEdObjectPlugin(@Find_com,nil,nil,@commformat,nil,nil,nil,'El_Find',0,0);
+  CreateCommandRTEdObjectPlugin(@ElLeaser_com_CommandStart,@Line_com_CommandEnd,nil,nil,@Line_com_BeforeClick,@El_Leader_com_AfterClick,nil,nil,'El_Leader',0,0);
+  pfindcom:=CreateCommandRTEdObjectPlugin(@Find_com,nil,nil,@commformat,nil,nil,nil,nil,'El_Find',0,0);
   pfindcom.CEndActionAttr:=0;
   pfindcom^.commanddata.Instance:=@FindDeviceParam;
   pfindcom^.commanddata.PTD:=SysUnit.TypeName2PTD('TFindDeviceParam');

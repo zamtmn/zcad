@@ -64,17 +64,19 @@ type
     onCommandEnd,onCommandCancel,onFormat:comproc;(*hidden_in_objinsp*)
     onBeforeClick,onAfterClick:commousefunc;(*hidden_in_objinsp*)
     onHelpGeometryDraw:comdrawfunc;
-    constructor init(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;name:pansichar);
+    onCommandContinue:comproc;
+    constructor init(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;onCCont:comproc;name:pansichar);
     procedure CommandStart(Operands:pansichar); virtual;
     procedure CommandEnd; virtual;
     procedure CommandCancel; virtual;
     procedure Format;virtual;
+    procedure CommandContinue; virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     procedure DrawHeplGeometry;virtual;
   end;
 {Export-}
-function CreateCommandRTEdObjectPlugin(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;ohgd:comdrawfunc;name:pansichar;SA,DA:TCStartAttr):pCommandRTEdObjectPlugin;export;
+function CreateCommandRTEdObjectPlugin(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;ohgd:comdrawfunc;occont:comproc;name:pansichar;SA,DA:TCStartAttr):pCommandRTEdObjectPlugin;export;
 function CreateCommandFastObjectPlugin(ocs:comfuncwithoper;name:pansichar;SA,DA:TCStartAttr):pCommandFastObjectPlugin;export;
 implementation
 uses {mainwindow,}{GDBCommandsDraw,}GDBCommandsBase,{oglwindow,}{GDBCommandsElectrical,}UGDBOpenArrayOfUCommands,Objinsp,varman,log;
@@ -151,11 +153,14 @@ begin
 
   gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   gdb.GetCurrentDWG.OnMouseObj.Clear;
+  if commandline.commandmanager.CommandsStack.Count=0 then
+  begin
   gdb.GetCurrentDWG.OGLwindow1.Clear0Ontrackpoint;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjCasheArray.Clear;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
+  end;
   gdb.GetCurrentDWG.OGLwindow1.SetMouseMode(savemousemode);
   sysvar.dwg.DWG_OSMode^ := saveosmode;
 
@@ -182,7 +187,7 @@ var p:pCommandRTEdObjectPlugin;
 begin
      p:=nil;
      GDBGetMem({$IFDEF DEBUGBUILD}'{8F72364A-04F8-46BA-A5DC-0178CF78FC27}',{$ENDIF}GDBPointer(p),sizeof(CommandRTEdObjectPlugin));
-     p^.init(ocs,oce,occ,ocf,obc,oac,name);
+     p^.init(ocs,oce,occ,ocf,obc,oac,occont,name);
      p^.onHelpGeometryDraw:=@ohgd;
      p^.dyn:=true;
 
@@ -200,6 +205,7 @@ begin
      onFormat:=ocf;
      onBeforeClick:=obc;
      onAfterClick:=oac;
+     onCommandContinue:=onCCont;
      CommandName:=name;
      overlay:=false;
 end;
@@ -235,7 +241,7 @@ end;
 function CommandRTEdObjectPlugin.BeforeClick;
 begin
      if assigned(onBeforeClick) then
-                                     onBeforeClick(wc,mc,button,osp,mouseclic);
+                                     result:=onBeforeClick(wc,mc,button,osp,mouseclic);
 end;
 procedure CommandRTEdObjectPlugin.CommandStart;
 begin
@@ -260,7 +266,11 @@ begin
                                      onCommandCancel;
      inherited CommandCancel;
 end;
-
+procedure CommandRTEdObjectPlugin.CommandContinue;
+begin
+     if assigned(onCommandContinue) then
+                                     onCommandContinue;
+end;
 procedure CommandFastObject.CommandEnd;
 begin
 end;

@@ -62,8 +62,8 @@ type
                            procedure myglStencilFunc(const func: GLenum;const  ref: GLint;const  mask: GLuint);inline;
                            procedure myglStencilOp(const fail, zfail, zpass: GLenum);inline;
                            procedure myglLogicOp(const opcode: GLenum);inline;
-                           procedure myglPushMatrix;inline;
-                           procedure myglPopMatrix;inline;
+                           procedure myglPushMatrix;virtual;//inline;
+                           procedure myglPopMatrix;virtual;//inline;
                            procedure myglMatrixMode(const mode: GLenum);inline;
                            procedure myglLineStipple(const factor: GLint; const pattern: GLushort);inline;
                            constructor init;
@@ -254,6 +254,7 @@ begin
                      asm
                               {int(3);}
                      end;
+     pointcount:=0;
 //*)
 //    glbegin(mode)
 end;
@@ -267,6 +268,7 @@ begin
      dec(bcount);
 *)
 //     glend;
+     pointcount:=0;
 
 end;
 procedure TOGLStateManager.mytotalglend;

@@ -101,6 +101,7 @@ function VectorTransform(const V:GDBVertex4D;const M:DMatrix4D):GDBVertex4D;inli
 procedure normalize4d(var tv:GDBVertex4d);inline;
 function VectorTransform3D(const V:GDBVertex;const M:DMatrix4D):GDBVertex;inline;
 procedure MatrixTranspose(var M: DMatrix4D);inline;
+procedure MatrixNormalize(var M: DMatrix4D);inline;
 function CreateRotationMatrixX(const Sine, Cosine: GDBDouble): DMatrix4D;inline;
 function CreateRotationMatrixY(const Sine, Cosine: GDBDouble): DMatrix4D;inline;
 function CreateRotationMatrixZ(const Sine, Cosine: GDBDouble): DMatrix4D;inline;
@@ -150,7 +151,7 @@ procedure concatBBandPoint(var fistbb:GDBBoundingBbox;const point:GDBvertex);inl
 function CalcTrueInFrustum (const lbegin,lend:GDBvertex; const frustum:ClipArray):TINRect;inline;
 function CalcPointTrueInFrustum (const lbegin:GDBvertex; const frustum:ClipArray):TInRect;
 function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:ClipArray):TINRect;inline;
-function CalcAABBInFrustum (const AABB:GDBBoundingBbox; const frustum:ClipArray):TINRect;inline;
+function CalcAABBInFrustum (const AABB:GDBBoundingBbox; const frustum:ClipArray):TINRect;{inline;}
 
 function GetXfFromZ(oz:GDBVertex):GDBVertex;
 
@@ -1135,6 +1136,13 @@ begin
   for I := 0 to 3 do
     for J := 0 to 3 do TM[J, I] := M[I, J];
   M := TM;
+end;
+procedure MatrixNormalize(var M: DMatrix4D);
+var I, J: GDBInteger;
+begin
+  for I := 0 to 3 do
+    for J := 0 to 3 do
+      M[I,J]:=M[I,J]/M[3,3];
 end;
 
 function VectorTransform(const V:GDBVertex4D;const M:DMatrix4D):GDBVertex4D;

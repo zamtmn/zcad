@@ -35,10 +35,22 @@ type
                            procedure myglVertex(const x,y,z:GDBDouble);virtual;//inline;
                            procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
                            procedure startrender;virtual;//inline;
+                           procedure myglPushMatrix;virtual;//inline;
+                           procedure myglPopMatrix;virtual;//inline;
     end;
 implementation
 uses
     UGDBDescriptor,geometry;
+procedure TPrinterRasterizer.myglPushMatrix;
+begin
+     inherited;
+end;
+
+procedure TPrinterRasterizer.myglPopMatrix;
+begin
+     inherited;
+end;
+
 procedure TPrinterRasterizer.myglVertex3dV;
 var t:gdbvertex;
 begin
@@ -60,7 +72,7 @@ begin
     begin
     if pointcount=2 then
                   begin
-                  Printer.Canvas.Line(round(prevpoint.x*Printer.PageWidth),round(Printer.PageHeight-prevpoint.y*Printer.PageHeight),round(t.x*Printer.PageWidth),round(Printer.PageHeight-t.y*Printer.PageHeight));
+                  Printer.Canvas.Line(round(((prevpoint.x+1)/2)*w),round(h-((prevpoint.y+1)/2)*h),round(((t.x+1)/2)*w),round(h-((t.y+1)/2)*h));
                   pointcount:=0
                   end
     else
@@ -94,7 +106,7 @@ begin
     begin
     if pointcount=2 then
                   begin
-                  Printer.Canvas.Line(round(prevpoint.x*w),round(h-prevpoint.y*h),round(t.x*w),round(h-t.y*h));
+                  Printer.Canvas.Line(round(((prevpoint.x+1)/2)*w),round(h-((prevpoint.y+1)/2)*h),round(((t.x+1)/2)*w),round(h-((t.y+1)/2)*h));
                   pointcount:=0
                   end
     else
@@ -125,7 +137,7 @@ begin
     begin
     if pointcount=2 then
                   begin
-                  Printer.Canvas.Line(round(prevpoint.x*Printer.PageWidth),round(Printer.PageHeight-prevpoint.y*Printer.PageHeight),round(t.x*Printer.PageWidth),round(Printer.PageHeight-t.y*Printer.PageHeight));
+                  Printer.Canvas.Line(round(((prevpoint.x+1)/2)*w),round(h-((prevpoint.y+1)/2)*h),round(((t.x+1)/2)*w),round(h-((t.y+1)/2)*h));
                   pointcount:=0
                   end
     else

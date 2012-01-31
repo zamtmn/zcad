@@ -240,9 +240,13 @@ type
                          procedure Run(pdata:GDBPlatformint); virtual;
           end;
   Print_com=object(CommandRTEdObject)
+                         VS:GDBInteger;
+                         p1,p2:GDBVertex;
+                         procedure CommandContinue; virtual;
                          procedure CommandStart(Operands:pansichar); virtual;
                          procedure ShowMenu;virtual;
                          procedure Print(pdata:GDBPlatformint); virtual;
+                         procedure SetWindow(pdata:GDBPlatformint); virtual;
                          procedure SelectPrinter(pdata:GDBPlatformint); virtual;
                          procedure SelectPaper(pdata:GDBPlatformint); virtual;
           end;
@@ -939,6 +943,28 @@ begin
      created:=false;
      Commandmanager.executecommandend;
 end;
+procedure Print_com.CommandContinue;
+var v1,v2:vardesk;
+   tp1,tp2:gdbvertex;
+begin
+     if (commandmanager.GetValueHeap-vs)=2 then
+     begin
+     v2:=commandmanager.PopValue;
+     v1:=commandmanager.PopValue;
+     vs:=commandmanager.GetValueHeap;
+     tp1:=Pgdbvertex(v1.data.Instance)^;
+     tp2:=Pgdbvertex(v2.data.Instance)^;
+
+     p1.x:=min(tp1.x,tp2.x);
+     p1.y:=min(tp1.y,tp2.y);
+     p1.z:=min(tp1.z,tp2.z);
+
+     p2.x:=max(tp1.x,tp2.x);
+     p2.y:=max(tp1.y,tp2.y);
+     p2.z:=max(tp1.z,tp2.z);
+     end;
+
+end;
 procedure Print_com.CommandStart(Operands:pansichar);
 begin
   shared.showerror('Print_com.CommandStart: Not yet implemented');
@@ -946,6 +972,7 @@ begin
   begin
        ShowMenu;
        commandmanager.DMShow;
+       vs:=commandmanager.GetValueHeap;
        inherited CommandStart('');
   end
 end;
@@ -953,6 +980,7 @@ procedure Print_com.ShowMenu;
 begin
   commandmanager.DMAddMethod('Printer setup..','Printer setup..',SelectPrinter);
   commandmanager.DMAddMethod('Page setup..','Printer setup..',SelectPaper);
+  commandmanager.DMAddMethod('Set window','Set window',SetWindow);
   commandmanager.DMAddMethod('Print','Print',print);
   commandmanager.DMShow;
 end;
@@ -964,7 +992,13 @@ begin
   mainformn.RestoreCursors;
        //UpdatePrinterInfo;
 end;
+procedure Print_com.SetWindow(pdata:GDBPlatformint);
+begin
+  commandmanager.executecommandsilent('GetRect');
+end;
+
 procedure Print_com.SelectPaper(pdata:GDBPlatformint);
+
 begin
   historyout('Not yet implemented');
   mainformn.ShowAllCursors;
@@ -986,23 +1020,51 @@ procedure Print_com.Print(pdata:GDBPlatformint);
   s: string;
   prn:TPrinterRasterizer;
   oldrasterozer:PTOGLStateManager;
+  dx,dy,cx,cy:gdbdouble;
+  tmatrix,_clip:DMatrix4D;
+  cdwg:PTDrawing;
 begin
+  cdwg:=gdb.GetCurrentDWG;
   prn.init;
   oldrasterozer:=OGLSM;
   OGLSM:=@prn;
-  prn.model:=gdb.GetCurrentDWG.pcamera.modelMatrixLCS;
-  prn.project:=gdb.GetCurrentDWG.pcamera.projMatrixLCS;
+  dx:=p2.x-p1.x;
+  dy:=p2.y-p1.y;
+  cx:=(p2.x+p1.x)/2;
+  cy:=(p2.y+p1.y)/2;
+  prn.model:=onematrix;//cdwg.pcamera.modelMatrix{LCS};
+  prn.project:=cdwg.pcamera.projMatrix{LCS};
   prn.w:=Printer.PageWidth;
   prn.h:=Printer.PageHeight;
-  prn.project:=ortho(-420,420,
-                     -297,297,
-                     gdb.GetCurrentDWG.pcamera^.zmin, gdb.GetCurrentDWG.pcamera^.zmax,@onematrix);
-
+  prn.project:=ortho({-420}p1.x{-dx},{420}p2.x{dx},
+                     {-297}p1.y{-dy},{297}p2.y{dy},
+                     {cdwg.pcamera^.zmin+cdwg.pcamera^.CamCSOffset.z}-1, {cdwg.pcamera^.zmax+cdwg.pcamera^.CamCSOffset.z}1,@onematrix);
+  //MatrixNormalize(prn.project);
+  //prn.project:=geometry.MatrixMultiply(CreateTranslationMatrix(createvertex(-p1.x,-p1.y,0)),prn.project);
+  tmatrix:=gdb.GetCurrentDWG.pcamera.projMatrix;
+  gdb.GetCurrentDWG.pcamera.projMatrix:=prn.project;
+  gdb.GetCurrentDWG.pcamera^.modelMatrix:=prn.model;
   try
   Printer.Title := 'zcadprint';
   Printer.BeginDoc;
-  sharedgdb.redrawoglwnd;
+  //sharedgdb.redrawoglwnd;
+
+  gdb.GetCurrentDWG.pcamera.NextPosition;
+  inc(cdwg.pcamera.DRAWCOUNT);
+  _clip:=MatrixMultiply(prn.model,prn.project);
+  gdb.GetCurrentDWG.pcamera.getfrustum(@cdwg.pcamera^.modelMatrix,   @cdwg.pcamera^.projMatrix,   cdwg.pcamera^.clip,   cdwg.pcamera^.frustum);
+  //_frustum:=calcfrustum(@_clip);
+  gdb.GetCurrentDWG.OGLwindow1.param.firstdraw := TRUE;
+  cdwg.OGLwindow1.param.debugfrustum:=cdwg.pcamera^.frustum;
+  gdb.GetCurrentROOT.CalcVisibleByTree(cdwg.pcamera^.frustum{calcfrustum(@_clip)},cdwg.pcamera.POSCOUNT,cdwg.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjArray.ObjTree);
+  //gdb.GetCurrentDWG.OGLwindow1.draw;
+  prn.startrender;
+  gdb.GetCurrentDWG.OGLwindow1.treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,0);
+  prn.endrender;
+  inc(cdwg.pcamera.DRAWCOUNT);
+
   Printer.EndDoc;
+  gdb.GetCurrentDWG.pcamera.projMatrix:=tmatrix;
 
     {// some often used consts
     pgw := Printer.PageWidth-1;
@@ -1049,6 +1111,7 @@ begin
     end;
   end;
   OGLSM:=oldrasterozer;
+  sharedgdb.redrawoglwnd;
   //prn.done;
 end;
 
@@ -1633,6 +1696,7 @@ function OnDrawingEd_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GD
 begin
   if (button and MZW_LBUTTON)<>0 then
                     t3dp := wc;
+  result:=0;
 end;
 function OnDrawingEd_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 var //oldi, newi, i: GDBInteger;
@@ -1992,6 +2056,7 @@ function Move_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;o
  //     ir:itrec;
 begin
   t3dp:=wc;
+  result:=0;
  end;
 
 function Move_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
@@ -2846,11 +2911,11 @@ begin
   BIProp.Rotation:=0;
   PEProp.Action:=TSPE_Insert;
 
-  CreateCommandRTEdObjectPlugin(@Circle_com_CommandStart,@Circle_com_CommandEnd,nil,nil,@Circle_com_BeforeClick,@Circle_com_AfterClick,nil,'Circle',0,0);
-  CreateCommandRTEdObjectPlugin(@Line_com_CommandStart,@Line_com_CommandEnd,nil,nil,@Line_com_BeforeClick,@Line_com_AfterClick,nil,'Line',0,0);
-  CreateCommandRTEdObjectPlugin(@_3DPoly_com_CommandStart,_3DPoly_com_CommandEnd,{nil}_3DPoly_com_CommandEnd,nil,@_3DPoly_com_BeforeClick,@_3DPoly_com_AfterClick,nil,'3DPoly',0,0);
-  CreateCommandRTEdObjectPlugin(@_3DPolyEd_com_CommandStart,nil,nil,nil,@_3DPolyEd_com_BeforeClick,@_3DPolyEd_com_BeforeClick,nil,'PolyEd',0,0);
-  CreateCommandRTEdObjectPlugin(@Insert_com_CommandStart,Insert_com_CommandEnd,nil,nil,Insert_com_BeforeClick,Insert_com_BeforeClick,nil,'Insert',0,0);
+  CreateCommandRTEdObjectPlugin(@Circle_com_CommandStart,@Circle_com_CommandEnd,nil,nil,@Circle_com_BeforeClick,@Circle_com_AfterClick,nil,nil,'Circle',0,0);
+  CreateCommandRTEdObjectPlugin(@Line_com_CommandStart,@Line_com_CommandEnd,nil,nil,@Line_com_BeforeClick,@Line_com_AfterClick,nil,nil,'Line',0,0);
+  CreateCommandRTEdObjectPlugin(@_3DPoly_com_CommandStart,_3DPoly_com_CommandEnd,{nil}_3DPoly_com_CommandEnd,nil,@_3DPoly_com_BeforeClick,@_3DPoly_com_AfterClick,nil,nil,'3DPoly',0,0);
+  CreateCommandRTEdObjectPlugin(@_3DPolyEd_com_CommandStart,nil,nil,nil,@_3DPolyEd_com_BeforeClick,@_3DPolyEd_com_BeforeClick,nil,nil,'PolyEd',0,0);
+  CreateCommandRTEdObjectPlugin(@Insert_com_CommandStart,Insert_com_CommandEnd,nil,nil,Insert_com_BeforeClick,Insert_com_BeforeClick,nil,nil,'Insert',0,0);
 
   OnDrawingEd.init('OnDrawingEd',0,0);
   OnDrawingEd.CEndActionAttr:=0;
@@ -2887,7 +2952,7 @@ begin
   CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
   CreateCommandFastObjectPlugin(@PlaceAllBlocks_com,'PlaceAllBlocks',CADWG,0);
   //CreateCommandFastObjectPlugin(@bedit_com,'BEdit');
-  pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,'BEdit',0,0);
+  pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);
   BEditParam.Blocks.Enums.init(100);
   BEditParam.CurrentEditBlock:=modelspacename;
   pbeditcom^.commanddata.Instance:=@BEditParam;

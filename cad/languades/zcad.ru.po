@@ -1585,4 +1585,4 @@ msgstr "Без имени"
 #: windowsspecific.revstr
 msgid "Revision SVN:"
 msgstr "Ревизия SVN:"
-
+

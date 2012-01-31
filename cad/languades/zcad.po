@@ -1584,4 +1584,4 @@ msgstr ""
 #: windowsspecific.revstr
 msgid "Revision SVN:"
 msgstr ""
-
+

@@ -155,7 +155,7 @@ GDBCameraBaseProp=record
                         xdir:GDBvertex;
                         zoom: GDBDouble;
                   end;
-
+TActulity=GDBInteger;
 PGDBBaseCamera=^GDBBaseCamera;
 GDBBaseCamera=object(GDBaseObject)
                 modelMatrix:DMatrix4D;
@@ -171,8 +171,8 @@ GDBBaseCamera=object(GDBaseObject)
                 obj_zmax,obj_zmin:GDBDouble;
                 DRAWNOTEND:GDBBoolean;
                 DRAWCOUNT:GDBInteger;
-                POSCOUNT:GDBInteger;
-                VISCOUNT:GDBInteger;
+                POSCOUNT:TActulity;
+                VISCOUNT:TActulity;
                 CamCSOffset:GDBvertex;
                 procedure NextPosition;virtual; abstract;
           end;
@@ -247,7 +247,6 @@ GDBArrayVertex=array[0..0] of GDBvertex;
                          major,minor,release,build,revision:GDBInteger;
                          versionstring:GDBstring;
                      end;
-  TActulity=GDBInteger;
   TArrayIndex=GDBInteger;
 
   fontfloat=GDBFloat;

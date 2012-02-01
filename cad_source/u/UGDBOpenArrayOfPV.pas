@@ -29,9 +29,9 @@ GDBObjEntityArray=array [0..0] of PGDBObjEntity;}
 {Export+}
 PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
 GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
-                      procedure DrawWithattrib(infrustumactualy:TActulity);virtual;
-                      procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
-                      procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+                      procedure DrawWithattrib(infrustumactualy:TActulity;subrender:GDBInteger);virtual;
+                      procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);virtual;
+                      procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);virtual;
                       procedure renderfeedbac(infrustumactualy:TActulity);virtual;
                       function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                       function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
@@ -322,7 +322,7 @@ begin
        if p^.vp.ID<>0 then
                          //p^.vp.ID:=p^.vp.ID;
        if p^.infrustum=infrustumactualy then
-                           p^.DrawWithAttrib(infrustumactualy);
+                           p^.DrawWithAttrib(infrustumactualy,subrender);
        p:=iterate(ir);
   until p=nil;
 end;
@@ -339,7 +339,7 @@ begin
        if p^.vp.ID<>0 then
                          //p^.vp.ID:=p^.vp.ID;
        if p^.infrustum=infrustumactualy then
-                           p^.DrawGeometry(lw,infrustumactualy);
+                           p^.DrawGeometry(lw,infrustumactualy,subrender);
        p:=iterate(ir);
   until p=nil;
 end;
@@ -356,7 +356,7 @@ begin
        if p^.vp.ID<>0 then
                          //p^.vp.ID:=p^.vp.ID;
        if p^.infrustum=infrustumactualy then
-                           p^.DrawOnlyGeometry(lw,infrustumactualy);
+                           p^.DrawOnlyGeometry(lw,infrustumactualy,subrender);
        p:=iterate(ir);
   until p=nil;
 end;

@@ -38,7 +38,7 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           procedure clearallobjects;virtual;
                           procedure remappoints;virtual;
                           procedure drawpoint;virtual;
-                          procedure drawobject(infrustumactualy:TActulity);virtual;
+                          procedure drawobject(infrustumactualy:TActulity;subrender:GDBInteger);virtual;
                           function getnearesttomouse:tcontrolpointdist;virtual;
                           procedure selectcurrentcontrolpoint(key:GDBByte);virtual;
                           procedure RenderFeedBack;virtual;
@@ -50,7 +50,7 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           procedure SetRotateObj(minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
                           procedure TransformObj(dispmatr:DMatrix4D);
 
-                          procedure drawobj(infrustumactualy:TActulity);virtual;
+                          procedure drawobj(infrustumactualy:TActulity;subrender:GDBInteger);virtual;
                           procedure freeelement(p:GDBPointer);virtual;
                           function calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                           procedure resprojparam;
@@ -194,7 +194,7 @@ begin
        begin
             if tdesc^.objaddr<>nil then
             begin
-                 tdesc^.objaddr^.DrawWithOutAttrib(infrustumactualy); //DrawGeometry(tdesc^.objaddr^.CalculateLineWeight);
+                 tdesc^.objaddr^.DrawWithOutAttrib(infrustumactualy,subrender); //DrawGeometry(tdesc^.objaddr^.CalculateLineWeight);
             end;
             inc(tdesc);
        end;
@@ -555,7 +555,7 @@ begin
     for i := 0 to count - 1 do
     begin
       if tdesc^.ptempobj<>nil then
-                                  tdesc^.ptempobj^.DrawWithAttrib(infrustumactualy);
+                                  tdesc^.ptempobj^.DrawWithAttrib(infrustumactualy,subrender);
       inc(tdesc);
     end;
   end;

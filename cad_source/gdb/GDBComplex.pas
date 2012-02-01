@@ -29,8 +29,8 @@ type
 PGDBObjComplex=^GDBObjComplex;
 GDBObjComplex=object(GDBObjWithLocalCS)
                     ConstObjArray:GDBObjEntityOpenArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                    procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
-                    procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+                    procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);virtual;
+                    procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);virtual;
                     procedure getoutbound;virtual;
                     procedure getonlyoutbound;virtual;
                     destructor done;virtual;
@@ -141,16 +141,16 @@ begin
 end;
 procedure GDBObjComplex.DrawOnlyGeometry;
 begin
-  inc(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
-  ConstObjArray.{DrawWithattrib}DrawOnlyGeometry(CalculateLineWeight,infrustumactualy);
-  dec(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
+  inc(subrender);
+  ConstObjArray.{DrawWithattrib}DrawOnlyGeometry(CalculateLineWeight,infrustumactualy,subrender);
+  dec(subrender);
   //inherited;
 end;
 procedure GDBObjComplex.DrawGeometry;
 begin
-  inc(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
-  ConstObjArray.DrawWithattrib(infrustumactualy){DrawGeometry(CalculateLineWeight)};
-  dec(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
+  inc(subrender);
+  ConstObjArray.DrawWithattrib(infrustumactualy,subrender){DrawGeometry(CalculateLineWeight)};
+  dec(subrender);
   inherited;
 end;
 procedure GDBObjComplex.getoutbound;

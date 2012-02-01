@@ -116,7 +116,7 @@ type
     height, width: GDBInteger;
     SelDesc: Selectiondesc;
     pglscreen: GDBPointer;
-    subrender, otracktimerwork: GDBInteger;
+    {subrender,} otracktimerwork: GDBInteger;
     scrollmode:GDBBoolean;
     lastcp3dpoint,lastpoint: GDBVertex;
     cslen:GDBDouble;

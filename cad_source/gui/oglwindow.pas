@@ -98,8 +98,8 @@ type
     procedure AddOntrackpoint;
     procedure Project0Axis;
 
-    procedure render(const Root:GDBObjGenericSubEntry);
-    function treerender(var Node:TEntTreeNode;StartTime:TDateTime):GDBBoolean;
+    procedure render(const Root:GDBObjGenericSubEntry;subrender:GDBInteger);
+    function treerender(var Node:TEntTreeNode;StartTime:TDateTime;subrender:GDBInteger):GDBBoolean;
 
     function GetOnMouseObjDesc:GDBString;
 
@@ -2723,7 +2723,7 @@ begin
      CalcOptimalMatrix;
      self.RestoreBuffers;
      LPTime:=now();
-     gdb.GetCurrentDWG.pcamera.DRAWNOTEND:=treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,lptime);
+     gdb.GetCurrentDWG.pcamera.DRAWNOTEND:=treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,lptime,0);
      self.SaveBuffers;
      self.showcursor;
      self.SwapBuffers;
@@ -2745,8 +2745,9 @@ var
 //  t:gdbdouble;
   scrollmode:GDBBOOlean;
   LPTime:Tdatetime;
-
+  subrender:GDBInteger;
   const msec=1;
+
 begin
   //isOpenGLError;
   if not assigned(gdb.GetCurrentDWG) then exit;
@@ -2755,6 +2756,7 @@ begin
   foreground.g:=not(sysvar.RD.RD_BackGroundColor^.g);
   foreground.b:=not(sysvar.RD.RD_BackGroundColor^.b);
 LPTime:=now();
+subrender:=0;
 if param.firstdraw then
                  inc(gdb.GetCurrentDWG.pcamera^.DRAWCOUNT);
 
@@ -2810,13 +2812,13 @@ if (clientwidth=0)or(clientheight=0) then
   begin
     glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT);
     DrawGrid;
-    render(gdb.GetCurrentROOT^);
+    render(gdb.GetCurrentROOT^,subrender);
     glaccum(GL_LOAD,1);
-    inc(param.subrender);
-    render(gdb.GetCurrentDWG.ConstructObjRoot);
+    inc(subrender);
+    render(gdb.GetCurrentDWG.ConstructObjRoot,subrender);
     gdb.GetCurrentDWG.SelObjArray.remappoints;
-    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
-    dec(param.subrender);
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender);
+    dec(subrender);
     showcursor;
     //param.firstdraw := false;
   end
@@ -2824,10 +2826,10 @@ if (clientwidth=0)or(clientheight=0) then
   begin
     oglsm.myglDisable(GL_DEPTH_TEST);
     glaccum(GL_return,1);
-    inc(param.subrender);
-    render(gdb.GetCurrentDWG.ConstructObjRoot);
-    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
-    dec(param.subrender);
+    inc(subrender);
+    render(gdb.GetCurrentDWG.ConstructObjRoot,subrender);
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender);
+    dec(subrender);
     showcursor;
     CalcOptimalMatrix;
     oglsm.myglEnable(GL_DEPTH_TEST);
@@ -2841,17 +2843,17 @@ else if sysvar.RD.RD_Restore_Mode^=WND_AuxBuffer then
     glDrawBuffer(GL_AUX0);
      glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT);
     DrawGrid;
-    render(gdb.GetCurrentROOT^);
+    render(gdb.GetCurrentROOT^,subrender);
     gdb.GetCurrentROOT.DrawBB;
     glDrawBuffer(GL_BACK);
     glReadBuffer(GL_AUX0);
     glcopypixels(0, 0, clientwidth, clientheight, GL_COLOR);
     oglsm.myglDisable(GL_DEPTH_TEST);
-    inc(param.subrender);
-    render(gdb.GetCurrentDWG.ConstructObjRoot);
+    inc(subrender);
+    render(gdb.GetCurrentDWG.ConstructObjRoot,subrender);
     gdb.GetCurrentDWG.SelObjArray.remappoints;
-    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
-    dec(param.subrender);
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender);
+    dec(subrender);
     showcursor;
     //param.firstdraw := false;
   end
@@ -2863,12 +2865,12 @@ else if sysvar.RD.RD_Restore_Mode^=WND_AuxBuffer then
          glReadBuffer(GL_AUX0);
          glcopypixels(0, 0, clientwidth, clientheight, GL_COLOR);
     end;
-    inc(param.subrender);
-    render(gdb.GetCurrentDWG.ConstructObjRoot);
-    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
+    inc(subrender);
+    render(gdb.GetCurrentDWG.ConstructObjRoot,subrender);
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender);
     showcursor;
     CalcOptimalMatrix;
-    dec(param.subrender);
+    dec(subrender);
     oglsm.myglEnable(GL_DEPTH_TEST);
     glReadBuffer(GL_BACK);
   end;
@@ -2880,13 +2882,13 @@ else if sysvar.RD.RD_Restore_Mode^=WND_DrawPixels then
      glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT);
     oglsm.myglDisable(GL_LIGHTING);
     DrawGrid;
-    render(gdb.GetCurrentROOT^);
+    render(gdb.GetCurrentROOT^,subrender);
     glreadpixels(0, 0, clientwidth, clientheight, GL_BGRA_EXT, gl_unsigned_Byte, param.pglscreen);
-    inc(param.subrender);
-    render(gdb.GetCurrentDWG.ConstructObjRoot);
+    inc(subrender);
+    render(gdb.GetCurrentDWG.ConstructObjRoot,subrender);
     gdb.GetCurrentDWG.SelObjArray.remappoints;
-    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
-    dec(param.subrender);
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender);
+    dec(subrender);
     showcursor;
     //param.firstdraw := false;
   end
@@ -2911,10 +2913,10 @@ else if sysvar.RD.RD_Restore_Mode^=WND_DrawPixels then
          oglsm.myglPopMatrix;
          oglsm.myglMatrixMode(GL_MODELVIEW);
     end;
-    inc(param.subrender);
-    render(gdb.GetCurrentDWG.ConstructObjRoot);
-    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
-    dec(param.subrender);
+    inc(subrender);
+    render(gdb.GetCurrentDWG.ConstructObjRoot,subrender);
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender);
+    dec(subrender);
     showcursor;
     CalcOptimalMatrix;
     oglsm.myglEnable(GL_DEPTH_TEST);
@@ -2927,13 +2929,13 @@ else if sysvar.RD.RD_Restore_Mode^=WND_NewDraw then
     oglsm.myglDisable(GL_LIGHTING);
      glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT);
     DrawGrid;
-    inc(param.subrender);
-    render(gdb.GetCurrentROOT^);
-    dec(param.subrender);
-    inc(param.subrender);
+    inc(subrender);
+    render(gdb.GetCurrentROOT^,subrender);
+    dec(subrender);
+    inc(subrender);
     gdb.GetCurrentDWG.SelObjArray.remappoints;
-    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
-    dec(param.subrender);
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender);
+    dec(subrender);
     showcursor;
     //param.firstdraw := false;
     gdb.GetCurrentDWG.SelObjArray.remappoints;
@@ -2955,7 +2957,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     begin
     oglsm.myglStencilFunc(GL_NEVER, 1, 0); // значение mask не используется
     oglsm.myglStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
-    gdb.GetCurrentDWG.SelObjArray.drawobject(gdb.GetCurrentDWG.pcamera.POSCOUNT);
+    gdb.GetCurrentDWG.SelObjArray.drawobject(gdb.GetCurrentDWG.pcamera.POSCOUNT,0);
 
     //oglsm.mytotalglend;
 
@@ -2981,7 +2983,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
                                            //else
                                               begin
                                               OGLSM.startrender;
-                                              gdb.GetCurrentDWG.pcamera.DRAWNOTEND:=treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,lptime);
+                                              gdb.GetCurrentDWG.pcamera.DRAWNOTEND:=treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,lptime,0);
                                               //oglsm.mytotalglend;
                                               //isOpenGLError;
                                               //render(gdb.GetCurrentROOT^);
@@ -3001,14 +3003,14 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     self.SaveBuffers;
 
     oglsm.myglDisable(GL_DEPTH_TEST);
-    inc(param.subrender);
+    inc(subrender);
     if commandmanager.pcommandrunning<>nil then
                                                commandmanager.pcommandrunning^.DrawHeplGeometry;
 
     scrollmode:=GDB.GetCurrentDWG^.OGLwindow1.param.scrollmode;
     GDB.GetCurrentDWG.OGLwindow1.param.scrollmode:=true;
 
-    render(gdb.GetCurrentDWG.ConstructObjRoot);
+    render(gdb.GetCurrentDWG.ConstructObjRoot,subrender);
 
 
         //oglsm.mytotalglend;
@@ -3022,8 +3024,8 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
 
     gdb.GetCurrentDWG.SelObjArray.remappoints;
     oglsm.myglDisable(GL_STENCIL_TEST);
-    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
-    dec(param.subrender);
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender);
+    dec(subrender);
     LightOff;
     showcursor;
 
@@ -3041,14 +3043,14 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     LightOff;
     self.RestoreBuffers;
     //oglsm.mytotalglend;
-    inc(param.subrender);
+    inc(subrender);
     if gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count>0 then
                                                     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count:=gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count;
     if commandmanager.pcommandrunning<>nil then
                                                commandmanager.pcommandrunning^.DrawHeplGeometry;
     scrollmode:=GDB.GetCurrentDWG.OGLwindow1.param.scrollmode;
     GDB.GetCurrentDWG.OGLwindow1.param.scrollmode:=true;
-    render(gdb.GetCurrentDWG.ConstructObjRoot);
+    render(gdb.GetCurrentDWG.ConstructObjRoot,subrender);
 
         //oglsm.mytotalglend;
 
@@ -3061,7 +3063,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
 
 
     oglsm.myglDisable(GL_STENCIL_TEST);
-    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT);
+    gdb.GetCurrentDWG.SelObjArray.drawobj(gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender);
 
         //oglsm.mytotalglend;
 
@@ -3071,7 +3073,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
         //oglsm.mytotalglend;
 
 
-    dec(param.subrender);
+    dec(subrender);
     oglsm.myglEnable(GL_DEPTH_TEST);
   end;
   end
@@ -3125,7 +3127,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
 end;
 
 
-function TOGLWnd.treerender(var Node:TEntTreeNode;StartTime:TDateTime):GDBboolean;
+function TOGLWnd.treerender(var Node:TEntTreeNode;StartTime:TDateTime;subrender:GDBInteger):GDBboolean;
 var
    currtime:TDateTime;
    Hour,Minute,Second,MilliSecond:word;
@@ -3148,7 +3150,7 @@ begin currd:=gdb.GetCurrentDWG;
        if assigned(node.pminusnode)then
                                        if node.minusdrawpos<>gdb.GetCurrentDWG.pcamera.DRAWCOUNT then
                                        begin
-                                       if not treerender(node.pminusnode^,StartTime) then
+                                       if not treerender(node.pminusnode^,StartTime,0) then
                                            node.minusdrawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT
                                                                                      else
                                                                                          q1:=true;
@@ -3156,14 +3158,14 @@ begin currd:=gdb.GetCurrentDWG;
        if assigned(node.pplusnode)then
                                       if node.plusdrawpos<>gdb.GetCurrentDWG.pcamera.DRAWCOUNT then
                                       begin
-                                       if not treerender(node.pplusnode^,StartTime) then
+                                       if not treerender(node.pplusnode^,StartTime,0) then
                                            node.plusdrawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT
                                                                                     else
                                                                                         q2:=true;
                                       end;
        if node.nuldrawpos<>currd.pcamera.DRAWCOUNT then
        begin
-        Node.nul.DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT);
+        Node.nul.DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender);
         node.nuldrawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;
        end;
   end;
@@ -3175,7 +3177,7 @@ end;
 
 procedure TOGLWnd.render;
 begin
-  if param.subrender = 0 then
+  if subrender = 0 then
   begin
     gdb.GetCurrentDWG.pcamera^.obj_zmax:=-nan;
     gdb.GetCurrentDWG.pcamera^.obj_zmin:=-1000000;
@@ -3193,7 +3195,7 @@ begin
   //pva^.DeSelect;
   //if pva^.Count>0 then
   //                       pva^.Count:=pva^.Count;
-  root.{ObjArray.}DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT);
+  root.{ObjArray.}DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT,0);
 end;
 function TOGLWnd.findonmobj(pva: PGDBObjEntityOpenArray; var i: GDBInteger): GDBInteger;
 var
@@ -3951,7 +3953,7 @@ begin
 
   gdb.GetCurrentDWG.pcamera^.prop.zoom := 0.1;
   param.projtype := Projparalel;
-  param.subrender := 0;
+  //param.subrender := 0;
   param.firstdraw := true;
   param.SelDesc.OnMouseObject := nil;
   param.lastonmouseobject:=nil;

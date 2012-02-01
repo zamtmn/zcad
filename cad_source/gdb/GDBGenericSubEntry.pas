@@ -297,7 +297,7 @@ begin
   inherited;
   if (sysvar.DWG.DWG_SystmGeometryDraw^){and(GDB.GetCurrentDWG.OGLwindow1.param.subrender=0)} then
   begin
-  glcolor3ubv(@palette[sysvar.SYS.SYS_SystmGeometryColor^+2]);
+  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^+2]);
   oglsm.myglbegin(GL_LINE_LOOP);
      oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
      oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);

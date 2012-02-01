@@ -159,6 +159,7 @@ GDBObjEntity=object(GDBObjSubordinated)
               end;
 {Export-}
 var onlygetsnapcount:GDBInteger;
+    ForeGround:RGB;
 implementation
 uses UGDBEntTree,GDBGenericSubEntry,UGDBDescriptor,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
 procedure GDBObjEntity.correctsublayers(var la:GDBLayerArray);
@@ -276,7 +277,7 @@ procedure GDBObjEntity.DrawBB;
 begin
   if (sysvar.DWG.DWG_SystmGeometryDraw^){and(GDB.GetCurrentDWG.OGLwindow1.param.subrender=0)} then
   begin
-  glcolor3ubv(@palette[sysvar.SYS.SYS_SystmGeometryColor^]);
+  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^]);
   DrawAABB(vp.BoundingBox);
   end;
 end;
@@ -445,6 +446,10 @@ procedure GDBObjEntity.DrawWithAttrib;
 var lw: GDBInteger;
   sel: GDBBoolean;
 begin
+  if visible<>visibleactualy then
+                                 exit;
+  //Draw(lw,visibleactualy);
+  //exit;
   sel := false;
   lw := CalculateLineWeight;
   if bp.ListPos.owner=nil then
@@ -479,35 +484,34 @@ begin
       then glcolor3ubv(@palette[PGDBLayerPropArray(GDB.layertable.parray)^[vp.layer].color])
       else glcolor3ubv(@palette[PGDBLayerPropArray(GDB.layertable.parray)^[owner.vp.layer].color]);}
   self:=self;
-  if (GDB.GetCurrentDWG.OGLwindow1.param.subrender = 0)
+  if (GDB.GetCurrentDWG.OGLwindow1.param.subrender = 0)true
       then
           begin
                                                     if vp.layer^.color<>7 then
-                                                                              glcolor3ubv(@palette[vp.layer^.color])
+                                                                              oglsm.glcolor3ubv(palette[vp.layer^.color])
                                                                           else
                                                                               begin
-                                                                                   glcolor3ub(not(sysvar.RD.RD_BackGroundColor^.r),not(sysvar.RD.RD_BackGroundColor^.g),not(sysvar.RD.RD_BackGroundColor^.b))
+                                                                                   oglsm.glcolor3ubv(foreground);
                                                                               end;
           end
       else
           if (vp.layer^.name <> LNSysLayerName) then
                                                     begin
                                                     if vp.layer^.color<>7 then
-                                                                              glcolor3ubv(@palette[vp.layer^.color])
+                                                                              oglsm.glcolor3ubv(palette[vp.layer^.color])
                                                                           else
                                                                               begin
-                                                                                   glcolor3ub(not(sysvar.RD.RD_BackGroundColor^.r),not(sysvar.RD.RD_BackGroundColor^.g),not(sysvar.RD.RD_BackGroundColor^.b))
+                                                                                   oglsm.glcolor3ubv(foreground);
                                                                               end;
                                                     end
                                                 else
                                                     begin
                                                     if bp.ListPos.owner.getlayer^.color<>7 then
-                                                                              glcolor3ubv(@palette[bp.ListPos.owner.getlayer^.color])
+                                                                              oglsm.glcolor3ubv(palette[bp.ListPos.owner.getlayer^.color])
                                                                           else
                                                                               begin
-                                                                                   glcolor3ub(not(sysvar.RD.RD_BackGroundColor^.r),not(sysvar.RD.RD_BackGroundColor^.g),not(sysvar.RD.RD_BackGroundColor^.b))
+                                                                                   oglsm.glcolor3ubv(foreground);
                                                                               end;
-                                                         //glcolor3ubv(@palette[bp.owner.getlayer^.color]);
                                                     end;
   Draw(lw,visibleactualy);
   if selected or ((bp.ListPos.owner <> nil) and (bp.ListPos.owner^.isselected)) then

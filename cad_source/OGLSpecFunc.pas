@@ -70,8 +70,8 @@ type
                            procedure myglLineStipple(const factor: GLint; const pattern: GLushort);inline;
                            constructor init;
 
-                           procedure glcolor3ub(red, green, blue: GLubyte);
-                           procedure glColor3ubv(const v: rgb);
+                           procedure glcolor3ub(red, green, blue: GLubyte);virtual;//inline;
+                           procedure glColor3ubv(const v: rgb);virtual;//inline;
 
                            procedure myglNormal3dV(const V:PGDBVertex);inline;
                            //procedure myglColor3ub(const red, green, blue: GLubyte);inline;

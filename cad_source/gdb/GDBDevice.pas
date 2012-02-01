@@ -35,8 +35,8 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    destructor done;virtual;
                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                    procedure Format;virtual;
-                   procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
-                   procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+                   procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);virtual;
+                   procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);virtual;
                    procedure renderfeedbac(infrustumactualy:TActulity);virtual;
                    function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                    function ReturnLastOnMouse:PGDBObjEntity;virtual;
@@ -329,9 +329,9 @@ var p:pgdbobjEntity;
      v:gdbvertex;
          ir:itrec;
 begin
-  GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender + 1;
-  VarObjArray.DrawOnlyGeometry(CalculateLineWeight,infrustumactualy);
-  GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender - 1;
+  subrender := subrender + 1;
+  VarObjArray.DrawOnlyGeometry(CalculateLineWeight,infrustumactualy,subrender);
+  subrender := subrender - 1;
   p:=VarObjArray.beginiterate(ir);
   oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^]);
   if sysvar.DWG.DWG_SystmGeometryDraw^ then
@@ -354,9 +354,9 @@ var p:pgdbobjEntity;
      v:gdbvertex;
          ir:itrec;
 begin
-  GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender + 1;
-  VarObjArray.DrawWithattrib(infrustumactualy){DrawGeometry(CalculateLineWeight)};
-  GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender - 1;
+  subrender := subrender + 1;
+  VarObjArray.DrawWithattrib(infrustumactualy,subrender){DrawGeometry(CalculateLineWeight)};
+  subrender := subrender - 1;
   p:=VarObjArray.beginiterate(ir);
   oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^]);
   if sysvar.DWG.DWG_SystmGeometryDraw^ then

@@ -39,7 +39,7 @@ GDBObjRoot=object(GDBObjGenericSubEntry)
                  function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
 
                  function GetMatrix:PDMatrix4D;virtual;
-                 procedure DrawWithAttrib(infrustumactualy:TActulity);virtual;
+                 procedure DrawWithAttrib(infrustumactualy:TActulity;subrender:GDBInteger);virtual;
                  function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                  function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;virtual;
                  procedure calcbb;virtual;

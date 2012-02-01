@@ -24,7 +24,7 @@ uses gdbasetypes,gdbase,LCLType,Printers,
      gl,glu,OGLSpecFunc,
      {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}
-     log,sysutils,varmandef;
+     log,sysutils,varmandef,Graphics;
 type
     PTPrinterRasterizer=^TPrinterRasterizer;
     TPrinterRasterizer=object(TOGLStateManager)
@@ -37,10 +37,38 @@ type
                            procedure startrender;virtual;//inline;
                            procedure myglPushMatrix;virtual;//inline;
                            procedure myglPopMatrix;virtual;//inline;
+
+                           procedure glcolor3ub(red, green, blue: GLubyte);virtual;//inline;
+                           procedure glColor3ubv(const v: rgb);virtual;//inline;
     end;
 implementation
 uses
     UGDBDescriptor,geometry;
+procedure TPrinterRasterizer.glcolor3ub(red, green, blue: GLubyte);
+begin
+     if (red<>_colour.r)
+     or (green<>_colour.g)
+     or (blue<>_colour.b)then
+                              begin
+                                   _colour.r:=red;
+                                   _colour.g:=green;
+                                   _colour.b:=blue;
+                                   Printer.Canvas.Pen.Color:=RGBToColor(_colour.r,_colour.g,_colour.b);
+                                   //gl.glColor3ubv(@_colour);
+                              end;
+end;
+
+procedure TPrinterRasterizer.glColor3ubv(const v: rgb);
+begin
+     if (v.r<>_colour.r)
+     or (v.g<>_colour.g)
+     or (v.b<>_colour.b)then
+                              begin
+                                   Printer.Canvas.Pen.Color:=RGBToColor(v.r,v.g,v.b);
+                                   //gl.glColor3ubv(@v);
+                                   _colour:=v;
+                              end;
+end;
 procedure TPrinterRasterizer.myglPushMatrix;
 begin
      inherited;

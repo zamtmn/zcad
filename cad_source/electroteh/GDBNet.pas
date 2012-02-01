@@ -26,7 +26,7 @@ GDBObjNet=object(GDBObjConnected)
                  procedure restructure;virtual;
                  function DeSelect:GDBInteger;virtual;
                  function BuildGraf:GDBInteger;virtual;
-                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);virtual;
                  function EraseMi(pobj:pgdbobjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
                  function CalcNewName(Net1,Net2:PGDBObjNet):GDBInteger;
                  procedure connectedtogdb;virtual;
@@ -219,7 +219,7 @@ begin
      pobj^.done;
      format;
 end;
-procedure GDBObjNet.DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);
+procedure GDBObjNet.DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);
 var i{,j}:GDBInteger;
     tgf: pgrafelement;
     wcoord:gdbvertex;
@@ -260,7 +260,7 @@ begin
      end;
      oglsm.myglDisable(GL_POINT_SMOOTH);
      oglsm.myglpointsize(1);
-     inherited DrawGeometry(lw,infrustumactualy);
+     inherited DrawGeometry(lw,infrustumactualy,subrender);
 end;
 function GDBObjNet.DeSelect;
 begin

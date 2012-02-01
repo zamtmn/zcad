@@ -44,7 +44,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             {function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;virtual;
                             function CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;virtual;}
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                            procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+                            procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);virtual;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                             function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                             procedure Format;virtual;
@@ -71,7 +71,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             procedure DrawBB;
 
                             procedure RemoveInArray(pobjinarray:GDBInteger);virtual;
-                            procedure DrawWithAttrib(infrustumactualy:TActulity);virtual;
+                            procedure DrawWithAttrib(infrustumactualy:TActulity;subrender:GDBInteger);virtual;
 
                             function CreatePreCalcData:PTDrawingPreCalcData;virtual;
                             procedure DestroyPreCalcData(PreCalcData:PTDrawingPreCalcData);virtual;
@@ -290,7 +290,7 @@ begin
 end;
 procedure GDBObjGenericSubEntry.DrawWithAttrib;
 begin
-     self.ObjArray.DrawWithattrib(infrustumactualy);
+     self.ObjArray.DrawWithattrib(infrustumactualy,subrender);
 end;
 procedure GDBObjGenericSubEntry.DrawBB;
 begin
@@ -440,7 +440,7 @@ begin
 end;
 procedure GDBObjGenericSubEntry.DrawGeometry;
 begin
-  ObjArray.DrawGeometry(CalculateLineWeight,infrustumactualy);
+  ObjArray.DrawGeometry(CalculateLineWeight,infrustumactualy,subrender);
   DrawBB;
 end;
 function GDBObjGenericSubEntry.CalcInFrustum;

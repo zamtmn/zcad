@@ -25,8 +25,8 @@ GDBObjElLeader=object(GDBObjComplex)
             twidth:GDBDouble;
 
 
-            procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
-            procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+            procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);virtual;
+            procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);virtual;
             procedure getoutbound;virtual;
             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
             function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
@@ -640,20 +640,20 @@ end;
 procedure GDBObjElLeader.DrawGeometry;
 begin
   inherited;
-  inc(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
-  MainLine.DrawGeometry(lw,infrustumactualy);
-  MarkLine.DrawGeometry(lw,infrustumactualy);
-  tbl.DrawGeometry(lw,infrustumactualy);
-  dec(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
+  inc(subrender);
+  MainLine.DrawGeometry(lw,infrustumactualy,subrender);
+  MarkLine.DrawGeometry(lw,infrustumactualy,subrender);
+  tbl.DrawGeometry(lw,infrustumactualy,subrender);
+  dec(subrender);
 end;
 procedure GDBObjElLeader.DrawOnlyGeometry;
 begin
   inherited;
-  inc(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
-  MainLine.DrawOnlyGeometry(lw,infrustumactualy);
-  MarkLine.DrawOnlyGeometry(lw,infrustumactualy);
-  tbl.DrawOnlyGeometry(lw,infrustumactualy);
-  dec(GDB.GetCurrentDWG.OGLwindow1.param.subrender);
+  inc(subrender);
+  MainLine.DrawOnlyGeometry(lw,infrustumactualy,subrender);
+  MarkLine.DrawOnlyGeometry(lw,infrustumactualy,subrender);
+  tbl.DrawOnlyGeometry(lw,infrustumactualy,subrender);
+  dec(subrender);
 end;
 function GDBObjElLeader.Clone;
 var tvo: PGDBObjElLeader;

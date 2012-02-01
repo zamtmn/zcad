@@ -48,7 +48,7 @@ GDBObjLine=object(GDBObj3d)
 
                  procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure Format;virtual;
-                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);virtual;
                  procedure RenderFeedback;virtual;
                   function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;

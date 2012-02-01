@@ -74,14 +74,14 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure Format;virtual;
                     procedure FormatAfterEdit;virtual;
 
-                    procedure DrawWithAttrib(visibleactualy:TActulity);virtual;
-                    procedure DrawWithOutAttrib(visibleactualy:TActulity);virtual;
+                    procedure DrawWithAttrib(visibleactualy:TActulity;subrender:GDBInteger);virtual;
+                    procedure DrawWithOutAttrib(visibleactualy:TActulity;subrender:GDBInteger);virtual;
 
-                    procedure DrawGeometry(lw:GDBInteger;visibleactualy:TActulity);virtual;
-                    procedure DrawOnlyGeometry(lw:GDBInteger;visibleactualy:TActulity);virtual;
+                    procedure DrawGeometry(lw:GDBInteger;visibleactualy:TActulity;subrender:GDBInteger);virtual;
+                    procedure DrawOnlyGeometry(lw:GDBInteger;visibleactualy:TActulity;subrender:GDBInteger);virtual;
 
-                    procedure Draw(lw:GDBInteger;visibleactualy:TActulity);virtual;
-                    procedure DrawG(lw:GDBInteger;visibleactualy:TActulity);virtual;
+                    procedure Draw(lw:GDBInteger;visibleactualy:TActulity;subrender:GDBInteger);virtual;
+                    procedure DrawG(lw:GDBInteger;visibleactualy:TActulity;subrender:GDBInteger);virtual;
 
                     procedure RenderFeedback;virtual;
                     procedure RenderFeedbackIFNeed;virtual;
@@ -239,14 +239,14 @@ procedure GDBObjEntity.Draw;
 begin
   if visible=visibleactualy then
   begin
-       DrawGeometry(lw,visibleactualy);
+       DrawGeometry(lw,visibleactualy,subrender);
   end;
 end;
 procedure GDBObjEntity.Drawg;
 begin
   if visible=visibleactualy then
   begin
-       DrawOnlyGeometry(lw,visibleactualy);
+       DrawOnlyGeometry(lw,visibleactualy,subrender);
   end;
 end;
 
@@ -382,7 +382,7 @@ begin
 end;
 procedure GDBObjEntity.DrawOnlyGeometry;
 begin
-     DrawGeometry(lw,visibleactualy);
+     DrawGeometry(lw,visibleactualy,0);
 end;
 function GDBObjEntity.CalculateLineWeight;
 var lw: GDBInteger;
@@ -433,7 +433,7 @@ var lw: GDBInteger;
 //  sel: GDBBoolean;
 begin
   lw := CalculateLineWeight;
-  Drawg(lw,visibleactualy);
+  Drawg(lw,visibleactualy,subrender);
   if lw > 1 then
   begin
     oglsm.myglDisable(GL_LINE_SMOOTH);
@@ -484,7 +484,7 @@ begin
       then glcolor3ubv(@palette[PGDBLayerPropArray(GDB.layertable.parray)^[vp.layer].color])
       else glcolor3ubv(@palette[PGDBLayerPropArray(GDB.layertable.parray)^[owner.vp.layer].color]);}
   self:=self;
-  if (GDB.GetCurrentDWG.OGLwindow1.param.subrender = 0)true
+  if (subrender = 0)
       then
           begin
                                                     if vp.layer^.color<>7 then
@@ -513,7 +513,7 @@ begin
                                                                                    oglsm.glcolor3ubv(foreground);
                                                                               end;
                                                     end;
-  Draw(lw,visibleactualy);
+  Draw(lw,visibleactualy,subrender);
   if selected or ((bp.ListPos.owner <> nil) and (bp.ListPos.owner^.isselected)) then
                                                                     begin
                                                                     end

@@ -1060,7 +1060,7 @@ begin
   gdb.GetCurrentROOT.CalcVisibleByTree(cdwg.pcamera^.frustum{calcfrustum(@_clip)},cdwg.pcamera.POSCOUNT,cdwg.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjArray.ObjTree);
   //gdb.GetCurrentDWG.OGLwindow1.draw;
   prn.startrender;
-  gdb.GetCurrentDWG.OGLwindow1.treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,0);
+  gdb.GetCurrentDWG.OGLwindow1.treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,0,0);
   prn.endrender;
   inc(cdwg.pcamera.DRAWCOUNT);
 

@@ -52,7 +52,7 @@ GDBObjAbstractText=object(GDBObjPlainWithOX)
                          DrawMatrix:DMatrix4D;
                          Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;
                          procedure CalcObjMatrix;virtual;
-                         procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity);virtual;
+                         procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);virtual;
                          procedure SimpleDrawGeometry;virtual;
                          procedure RenderFeedback;virtual;
                          function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
@@ -533,7 +533,7 @@ var
 begin
   //exit;
   //oglsm.myglpointsize(1);
-  GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender + 1;
+  subrender := subrender + 1;
   if {true//}(((not GDB.GetCurrentDWG.OGLwindow1.param.scrollmode)or(not sysvar.RD.RD_PanObjectDegradation^)) {and (lod=0)})
   then
       begin
@@ -569,9 +569,9 @@ begin
        oglsm.myglvertex3dv(@outbound[3]);
        oglsm.myglend;
   end;
-  GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender - 1;
+  subrender := subrender - 1;
   inherited;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBAbstractText.initialization');{$ENDIF}
-end.
+end.

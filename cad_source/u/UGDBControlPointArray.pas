@@ -62,13 +62,13 @@ begin
        point:=parray;
        for i:=0 to count-1 do
        begin
-            if point^.selected then glcolor3ub(255, 0, 0)
+            if point^.selected then oglsm.glcolor3ub(255, 0, 0)
                                else
                                    begin
                                         if point^.pobject<>nil then
-                                                                   glcolor3ub(0, 255, 50)
+                                                                   oglsm.glcolor3ub(0, 255, 50)
                                                                else
-                                                                   glcolor3ub(0, 0, 255)
+                                                                   oglsm.glcolor3ub(0, 0, 255)
 
                                    end;
             //glvertex2iv(@point^.dispcoord);

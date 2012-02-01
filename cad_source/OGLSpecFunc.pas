@@ -52,6 +52,8 @@ type
                            _LineStipplefactor: GLint;
                            _LineStipplepattern: GLushort;
 
+                           _colour:rgb;
+
                            procedure myglbegin(mode:GLenum);inline;
                            procedure myglend;inline;
                            procedure mytotalglend;inline;
@@ -68,8 +70,11 @@ type
                            procedure myglLineStipple(const factor: GLint; const pattern: GLushort);inline;
                            constructor init;
 
+                           procedure glcolor3ub(red, green, blue: GLubyte);
+                           procedure glColor3ubv(const v: rgb);
+
                            procedure myglNormal3dV(const V:PGDBVertex);inline;
-                           procedure myglColor3ub(const red, green, blue: GLubyte);inline;
+                           //procedure myglColor3ub(const red, green, blue: GLubyte);inline;
                            procedure myglVertex3d(const V:GDBVertex);virtual;//inline;
                            procedure myglVertex(const x,y,z:GDBDouble);virtual;//inline;
                            procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
@@ -127,6 +132,30 @@ begin
      //inc(pointcount);
      //middlepoint:=geometry.VertexAdd(middlepoint,point);
 end;
+procedure TOGLStateManager.glcolor3ub(red, green, blue: GLubyte);
+begin
+     if (red<>_colour.r)
+     or (green<>_colour.g)
+     or (blue<>_colour.b)then
+                              begin
+                                   _colour.r:=red;
+                                   _colour.g:=green;
+                                   _colour.b:=blue;
+                                   gl.glColor3ubv(@_colour);
+                              end;
+end;
+
+procedure TOGLStateManager.glColor3ubv(const v: rgb);
+begin
+     if (v.r<>_colour.r)
+     or (v.g<>_colour.g)
+     or (v.b<>_colour.b)then
+                              begin
+                                   gl.glColor3ubv(@v);
+                                   _colour:=v;
+                              end;
+end;
+
 procedure TOGLStateManager.startrender;
 begin
      middlepoint:=nulvertex;
@@ -161,11 +190,6 @@ end;
 procedure TOGLStateManager.myglNormal3dV(const V:PGDBVertex);inline;
 begin
      glNormal3dV(pointer(v))
-end;
-
-procedure TOGLStateManager.myglColor3ub(const red, green, blue: GLubyte);inline;
-begin
-     glColor3ub(red, green, blue);
 end;
 
 procedure TOGLStateManager.myglVertex3d;
@@ -408,6 +432,9 @@ begin
 
      _LineStipplefactor:=maxint;
      _LineStipplepattern:=maxword;
+     _colour.r:=255;
+     _colour.g:=255;
+     _colour.b:=255;
 
 end;
 

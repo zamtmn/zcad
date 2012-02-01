@@ -199,6 +199,7 @@ var
   fps:single;
   gridarray:array [0..maxgrid,0..maxgrid] of GDBvertex2S;
   InfoForm:TInfoForm=nil;
+
 //function timeSetEvent(uDelay, uReolution: UINT; lpTimeProc: GDBPointer;dwUser: DWord; fuEvent: UINT): GDBInteger; stdcall; external 'winmm';
 //function timeKillEvent(uID: UINT): GDBInteger; stdcall; external 'winmm';
 
@@ -1636,7 +1637,7 @@ begin
   begin
   //CalcOptimalMatrix;
   v:=param.md.WPPointBL;
-  glcolor3b(100, 100, 100);
+  oglsm.glcolor3ub(100, 100, 100);
   pg := @gridarray;
   oglsm.myglbegin(gl_points);
   for i := 0 to {maxgrid}round(param.md.WPPointUR.x) do
@@ -2199,7 +2200,7 @@ procedure TOGLWnd.showcursor;
     //oglsm.mytotalglend;
     //isOpenGLError;
     oglsm.myglbegin(GL_LINES);
-    if sysvar.DISP.DISP_ColorAxis^ then glColor3f(255, 0, 0);
+    if sysvar.DISP.DISP_ColorAxis^ then oglsm.glColor3ub(255, 0, 0);
     tv1:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[0],plx,Tempplane);
     //tv1:=sv1;
     tv2:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[1],plx,Tempplane);
@@ -2209,7 +2210,7 @@ procedure TOGLWnd.showcursor;
 
     ply:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,gdb.GetCurrentDWG.pcamera^.CamCSOffset),
                         vertexadd(VertexAdd(param.md.mouse3dcoord,yWCS{VertexMulOnSc(xWCS,oneVertexlength(param.md.mouse3dcoord))}),gdb.GetCurrentDWG.pcamera^.CamCSOffset));
-   if sysvar.DISP.DISP_ColorAxis^ then glColor3f(0, 255, 0);
+   if sysvar.DISP.DISP_ColorAxis^ then oglsm.glColor3ub(0, 255, 0);
     oglsm.myglbegin(GL_LINES);
     tv1:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[2],ply,Tempplane);
     tv2:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[3],ply,Tempplane);
@@ -2221,7 +2222,7 @@ procedure TOGLWnd.showcursor;
     begin
     plz:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,gdb.GetCurrentDWG.pcamera^.CamCSOffset),
                         vertexadd(VertexAdd(param.md.mouse3dcoord,zWCS{VertexMulOnSc(xWCS,oneVertexlength(param.md.mouse3dcoord))}),gdb.GetCurrentDWG.pcamera^.CamCSOffset));
-    if sysvar.DISP.DISP_ColorAxis^ then glColor3f(0, 0, 255);
+    if sysvar.DISP.DISP_ColorAxis^ then oglsm.glColor3ub(0, 0, 255);
     oglsm.myglbegin(GL_LINES);
     tv1:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[0],plz,Tempplane);
     tv2:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[1],plz,Tempplane);
@@ -2235,7 +2236,7 @@ procedure TOGLWnd.showcursor;
 
     //if param.scrollmode then exit;
 
-    glColor3f(255, 255, 255);
+    oglsm.glColor3ub(255, 255, 255);
 
 
     {sv1:=geometry.Vertexmorph(tv1,tv2,1/3);
@@ -2313,7 +2314,7 @@ procedure TOGLWnd.showcursor;
     //oglsm.mytotalglend;
 
     oglsm.myglpopmatrix;
-    glColor3ub(0, 100, 100);
+    oglsm.glColor3ub(0, 100, 100);
     oglsm.myglpushmatrix;
     gltranslated(param.csx.x + 2, -clientheight + param.csx.y - 10, 0);
     textwrite('X');
@@ -2328,7 +2329,7 @@ procedure TOGLWnd.showcursor;
     oglsm.myglpopmatrix;
     glLoadIdentity;
     //glColor3ub(255, 255, 255);
-    glcolor3ub(not(sysvar.RD.RD_BackGroundColor^.r),not(sysvar.RD.RD_BackGroundColor^.g),not(sysvar.RD.RD_BackGroundColor^.b));
+    oglsm.glColor3ubv(foreground{not(sysvar.RD.RD_BackGroundColor^.r),not(sysvar.RD.RD_BackGroundColor^.g),not(sysvar.RD.RD_BackGroundColor^.b)});
 
     //oglsm.mytotalglend;
     //isOpenGLError;
@@ -2396,7 +2397,7 @@ procedure TOGLWnd.showcursor;
       for i := a to param.ontrackarray.total - 1 do
       begin
        oglsm.myglbegin(GL_LINES);
-       glcolor3f(1, 1, 0);
+       oglsm.glcolor3ub(255,255, 0);
         glvertex2d(param.ontrackarray.otrackarray[i].dispcoord.x,
                    clientheight - param.ontrackarray.otrackarray[i].dispcoord.y + marksize);
         glvertex2d(param.ontrackarray.otrackarray[i].dispcoord.x,
@@ -2427,7 +2428,7 @@ procedure TOGLWnd.showcursor;
         oglsm.myglLineStipple(1, $3333);
         oglsm.myglEnable(GL_LINE_STIPPLE);
         oglsm.myglbegin(GL_LINES);
-        glcolor3f(1, 1, 1);
+        oglsm.glcolor3ub(255,255, 255);
         if param.ontrackarray.otrackarray[i].arraydispaxis.Count <> 0 then
         begin;
         pt:=param.ontrackarray.otrackarray[i].arraydispaxis.PArray;
@@ -2454,7 +2455,7 @@ procedure TOGLWnd.showcursor;
     //{$REGION 'snap'}
     if param.ospoint.ostype <> os_none then
     begin
-      glcolor3f(1, 1, 0);
+     oglsm.glcolor3ub(255,255, 0);
       gltranslated(param.ospoint.dispcoord.x, clientheight - param.ospoint.dispcoord.y,0);
       oglsm.mygllinewidth(2);
         glscaled(sysvar.DISP.DISP_OSSize^,sysvar.DISP.DISP_OSSize^,sysvar.DISP.DISP_OSSize^);
@@ -2621,13 +2622,13 @@ procedure TOGLWnd.showcursor;
     if param.cslen<>0 then {переделать}
     begin
     oglsm.myglbegin(GL_lines);
-    oglsm.myglColor3ub(255, 0, 0);
+    oglsm.glColor3ub(255, 0, 0);
     oglsm.myglVertex3d(param.CSIconCoord);
     oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + 100/param.cslen, param.CSIconCoord.y , param.CSIconCoord.z));
-    oglsm.myglColor3ub(0, 255, 0);
+    oglsm.glColor3ub(0, 255, 0);
     oglsm.myglVertex3d(param.CSIconCoord);
     oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y + 100/param.cslen, param.CSIconCoord.z));
-    oglsm.myglColor3ub(0, 0, 255);
+    oglsm.glColor3ub(0, 0, 255);
     oglsm.myglVertex3d(param.CSIconCoord);
     oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y, param.CSIconCoord.z + 100/param.cslen));
     oglsm.myglend;
@@ -2687,7 +2688,7 @@ begin
    repeat
          glbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
          //isOpenGLError;
-         glColor3f(1, 1, 1);
+         oglsm.glcolor3ub(255,255,255);
          oglsm.myglbegin(GL_quads);
                  glTexCoord2d(0,0);
                  glVertex3d(scrx,scry,0);
@@ -2750,6 +2751,9 @@ begin
   //isOpenGLError;
   if not assigned(gdb.GetCurrentDWG) then exit;
   if not assigned(GDB.GetCurrentDWG.OGLwindow1) then exit;
+  foreground.r:=not(sysvar.RD.RD_BackGroundColor^.r);
+  foreground.g:=not(sysvar.RD.RD_BackGroundColor^.g);
+  foreground.b:=not(sysvar.RD.RD_BackGroundColor^.b);
 LPTime:=now();
 if param.firstdraw then
                  inc(gdb.GetCurrentDWG.pcamera^.DRAWCOUNT);

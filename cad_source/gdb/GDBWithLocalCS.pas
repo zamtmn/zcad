@@ -94,7 +94,7 @@ end;
 
 procedure GDBObjWithLocalCS.higlight;
 begin
-  glcolor3ubv(@palette[sysvar.SYS.SYS_SystmGeometryColor^]);
+  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^]);
   oglsm.myglbegin(GL_lines);
   glVertex2d(ProjP_insert.x-10,ProjP_insert.y);
   glVertex2d(ProjP_insert.x+10,ProjP_insert.y);

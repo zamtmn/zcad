@@ -333,7 +333,7 @@ begin
   VarObjArray.DrawOnlyGeometry(CalculateLineWeight,infrustumactualy);
   GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender - 1;
   p:=VarObjArray.beginiterate(ir);
-  glcolor3ubv(@palette[sysvar.SYS.SYS_SystmGeometryColor^]);
+  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^]);
   if sysvar.DWG.DWG_SystmGeometryDraw^ then
   begin
   if p<>nil then
@@ -358,7 +358,7 @@ begin
   VarObjArray.DrawWithattrib(infrustumactualy){DrawGeometry(CalculateLineWeight)};
   GDB.GetCurrentDWG.OGLwindow1.param.subrender := GDB.GetCurrentDWG.OGLwindow1.param.subrender - 1;
   p:=VarObjArray.beginiterate(ir);
-  glcolor3ubv(@palette[sysvar.SYS.SYS_SystmGeometryColor^]);
+  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^]);
   if sysvar.DWG.DWG_SystmGeometryDraw^ then
   begin
   if p<>nil then

@@ -21,7 +21,7 @@ unit GDBCommandsBaseDraw;
 
 interface
 uses
-  OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  GL,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   //debygunit,
   commandlinedef,
   {windows,}gdbasetypes,commandline,GDBCommandsBase,
@@ -49,18 +49,18 @@ implementation
 uses GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,mainwindow,{UGDBObjBlockdefArray,}Varman,projecttreewnd,oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
 var
    c1,c2:integer;
+   point:gdbvertex;
 function Line_com_CommandStart(operands:pansichar):GDBInteger;
 begin
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  historyout('Точка:');
+  if operands='' then
+                     historyout('Точка:')
+                 else
+                     historyout(operands);
 end;
-
-procedure Line_com_CommandEnd;
-begin
-end;
-
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
+  point:=wc;
   if (button and MZW_LBUTTON)<>0 then
   begin
        commandmanager.PushValue('','GDBVertex',@wc);
@@ -72,7 +72,7 @@ function Rect_com_CommandStart(operands:pansichar):GDBInteger;
 begin
      c1:=commandmanager.GetValueHeap;
      c2:=-1;
-     commandmanager.executecommandsilent('Get3DPoint');
+     commandmanager.executecommandsilent('Get3DPoint(Первая точка:)');
 end;
 procedure Rect_com_CommandCont;
 begin
@@ -86,11 +86,20 @@ begin
      if c1=c2 then
                   commandmanager.executecommandend
               else
-                  commandmanager.executecommandsilent('Get3DPoint');
+                  commandmanager.executecommandsilent('Get3DPoint_DrawRect(Вторая точка:)');
 end;
+function DrawRect(mclick:GDBInteger):GDBInteger;
+begin
+  oglsm.myglbegin(GL_lines);
+  oglsm.myglVertex3dV(@nulvertex);
+  oglsm.myglVertex3dV(@point);
+  oglsm.myglend;
+end;
+
 procedure startup;
 begin
-  CreateCommandRTEdObjectPlugin(@Line_com_CommandStart,@Line_com_CommandEnd,nil,nil,@Line_com_BeforeClick,nil,nil,nil,'Get3DPoint',0,0).overlay:=true;
+  CreateCommandRTEdObjectPlugin(@Line_com_CommandStart,nil,nil,nil,@Line_com_BeforeClick,nil,nil,nil,'Get3DPoint',0,0).overlay:=true;
+  CreateCommandRTEdObjectPlugin(@Line_com_CommandStart,nil,nil,nil,@Line_com_BeforeClick,nil,@DrawRect,nil,'Get3DPoint_DrawRect',0,0).overlay:=true;
   CreateCommandRTEdObjectPlugin(@Rect_com_CommandStart,nil,nil,nil,nil,nil,nil,@Rect_com_CommandCont,'GetRect',0,0).overlay:=true;
 end;
 procedure Finalize;

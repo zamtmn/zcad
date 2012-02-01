@@ -65,7 +65,7 @@ begin
   begin
        commandmanager.PushValue('','GDBVertex',@wc);
        commandmanager.executecommandend;
-       result:=-1;
+       result:=1;
   end
 end;
 function Rect_com_CommandStart(operands:pansichar):GDBInteger;

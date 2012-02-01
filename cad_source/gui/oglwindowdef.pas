@@ -126,6 +126,7 @@ type
     ontrackarray: totrackarray;
     mouseclipmatrix:Dmatrix4D;
     mousefrustum,mousefrustumLCS:ClipArray;
+    ShowDebugFrustum:GDBBoolean;
     debugfrustum:ClipArray;
   end;
 {Export-}

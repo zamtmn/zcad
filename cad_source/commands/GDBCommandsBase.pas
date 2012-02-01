@@ -2092,6 +2092,16 @@ begin
    clist.done;
    result:=cmd_ok;
 end;
+function StoreFrustum_com(Operands:pansichar):GDBInteger;
+var
+   p:PCommandObjectDef;
+   ps:pgdbstring;
+   ir:itrec;
+   clist:GDBGDBStringArray;
+begin
+   gdb.GetCurrentDWG.OGLwindow1.param.debugfrustum:=gdb.GetCurrentDWG.pcamera.frustum;
+   gdb.GetCurrentDWG.OGLwindow1.param.ShowDebugFrustum:=true;
+end;
 procedure startup;
 //var
    //pmenuitem:pzmenuitem;
@@ -2159,6 +2169,8 @@ begin
   CreateCommandFastObjectPlugin(@SnapProp_com,'SnapProperties',CADWG,0).overlay:=true;
 
   CreateCommandFastObjectPlugin(@TW_com,'TextWindow',0,0).overlay:=true;
+
+  CreateCommandFastObjectPlugin(@StoreFrustum_com,'StoreFrustum',CADWG,0).overlay:=true;
 
 
 

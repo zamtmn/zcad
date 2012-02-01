@@ -2152,7 +2152,8 @@ procedure TOGLWnd.showcursor;
     oglsm.myglEnable(GL_COLOR_LOGIC_OP);
     oglsm.myglLogicOp(GL_OR);
 
-    drawfrustustum(param.debugfrustum);
+    if param.ShowDebugFrustum then
+                            drawfrustustum(param.debugfrustum);
 
     Tempplane:=param.mousefrustumLCS[5];
     tempplane[3]:=(tempplane[3]-param.mousefrustumLCS[4][3])/2;

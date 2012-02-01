@@ -1007,6 +1007,7 @@ function El_Wire_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByt
 var po:PGDBObjSubordinated;
     Objects:GDBObjOpenArrayOfPV;
 begin
+  result:=0;
   Objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}10);
   if gdb.GetCurrentROOT.FindObjectsInPoint(wc,Objects) then
   begin

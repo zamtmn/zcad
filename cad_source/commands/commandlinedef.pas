@@ -120,7 +120,7 @@ begin
                          result := BeforeClick(wc, mc, button,osp)
                      else
                          result := AfterClick(wc, mc, button,osp);
-    if ((button and MZW_LBUTTON)<>0)and(result=0) then
+    if ((button and MZW_LBUTTON)<>0)and(result<=0) then
                                          begin
                                                inc(self.mouseclic);
                                          end;

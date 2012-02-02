@@ -1833,6 +1833,7 @@ end;}
 procedure TMainFormN.idle;
 var
    pdwg:PTDrawing;
+   rc:TDrawContext;
 begin
      done:=true;
      sysvar.debug.languadedeb.UpdatePO:=_UpdatePO;
@@ -1852,7 +1853,8 @@ begin
           else
               if  pdwg.pcamera.DRAWNOTEND then
                                               begin
-                                              pdwg.OGLwindow1.finishdraw;
+                                                   rc:=pdwg.OGLwindow1.CreateRC;
+                                              pdwg.OGLwindow1.finishdraw(rc);
                                               done:=false;
                                               end;
      end

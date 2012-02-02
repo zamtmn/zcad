@@ -35,7 +35,7 @@ GDBObjPoint=object(GDBObj3d)
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;
                  procedure Format;virtual;
 
-                 procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);virtual;
+                 procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                  procedure RenderFeedback;virtual;
                  function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;

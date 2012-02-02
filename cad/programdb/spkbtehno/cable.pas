@@ -18,7 +18,7 @@ type
                            _2_2_2_5(*'2х2х2.50'*));
 
     TSPKBTEHNO_KPKEV_ng_LS=object(CableDeviceBaseObject)
-                Wire_Count_Section_DESC:TSPECCABLE_KPSVV_WCS;
+                Wire_Count_Section_DESC:TSPKBTEHNO_KPKEV_WCS;
            end;
 var
    _EQ_SPKBTEHNO_KPKEV_ng_LS:TSPKBTEHNO_KPKEV_ng_LS;

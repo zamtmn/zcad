@@ -32,14 +32,14 @@ begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=238;
   VIEW_ObjInspSubV:=89;
-  PATH_File0:='c:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File1:='D:\2 этаж_ПС план.dxf';
-  PATH_File2:='c:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File3:='J:\nh\НОВЫЙ ПРОЕКТ\СТоловка\proj_izm.dxf';
-  PATH_File4:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File5:='c:\zcad\cad\autosave\autosave.dxf';
-  PATH_File6:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File7:='D:\printtest.dxf';
-  PATH_File8:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File9:='/mnt/winc/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File0:='/home/zamtmn/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File1:='/home/zamtmn/zcad/cad/autosave/autosave.dxf';
+  PATH_File2:='/home/zamtmn/zcad/cad/sample/test_dxf/em.dxf';
+  PATH_File3:='c:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File4:='D:\2 этаж_ПС план.dxf';
+  PATH_File5:='c:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File6:='J:\nh\НОВЫЙ ПРОЕКТ\СТоловка\proj_izm.dxf';
+  PATH_File7:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File8:='c:\zcad\cad\autosave\autosave.dxf';
+  PATH_File9:='C:\zcad\cad\sample\test_dxf\ops.dxf';
 end.

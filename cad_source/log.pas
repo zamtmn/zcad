@@ -144,7 +144,7 @@ begin
 end;
 procedure tlog.CreateLog;
 begin
-  FileHandle:=FileCreate(UTF8ToSys(logfilename),fmOpenWrite);
+  FileHandle:=FileCreate(UTF8ToSys(logfilename){,fmOpenWrite});
   CloseLog;
 end;
 {procedure tlog.logout;

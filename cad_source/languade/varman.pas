@@ -321,12 +321,16 @@ begin
   result := @SysUnit.InterfaceVariables;
 end;
 procedure vardeskclear(p:GDBPointer);
+//var
+   //s:string;
 begin
      {$IFDEF TOTALYLOG}
      log.programlog.logoutstr(pvardesk(p)^.name+';',0);
      {$ENDIF}
      if pvardesk(p)^.name='_EQ_C2000_KPB' then
      pvardesk(p)^.name:=pvardesk(p)^.name;
+
+     //s:=pvardesk(p)^.name;
 
      pvardesk(p)^.name:='';
      pvardesk(p)^.username:='';

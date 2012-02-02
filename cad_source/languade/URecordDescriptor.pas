@@ -93,7 +93,10 @@ begin
         repeat
               begin
                    GDBPlatformint(p):=GDBPlatformint(PInstance)+pd^.Offset;
-                   pd^.base.PFT^.MagicFreeInstance(p);
+                   if assigned(pd^.base.PFT) then
+                                                 pd^.base.PFT^.MagicFreeInstance(p)
+                                             else
+                                                 pd:=pd;
               end;
               pd:=Fields.iterate(ir);
         until pd=nil;
@@ -223,7 +226,7 @@ begin
      repeat
               if (pd^.base.Saved and SaveFlag)<>0 then
               begin
-                   {$IFDEF TOTALYLOG}programlog.logoutstr(pd^.FieldName,0);{$ENDIF}
+                   {$IFDEF TOTALYLOG}programlog.logoutstr(pd^.base.ProgramName,0);{$ENDIF}
                    p:=PInstance;
                    inc(pbyte(p),pd^.Offset);
                    if pd^.base.ProgramName='TextStyleTable' then

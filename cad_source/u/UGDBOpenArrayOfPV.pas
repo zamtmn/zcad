@@ -29,9 +29,9 @@ GDBObjEntityArray=array [0..0] of PGDBObjEntity;}
 {Export+}
 PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
 GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
-                      procedure DrawWithattrib(infrustumactualy:TActulity;subrender:GDBInteger);virtual;
-                      procedure DrawGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);virtual;
-                      procedure DrawOnlyGeometry(lw:GDBInteger;infrustumactualy:TActulity;subrender:GDBInteger);virtual;
+                      procedure DrawWithattrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
+                      procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
+                      procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                       procedure renderfeedbac(infrustumactualy:TActulity);virtual;
                       function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                       function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
@@ -321,8 +321,8 @@ begin
   repeat
        if p^.vp.ID<>0 then
                          //p^.vp.ID:=p^.vp.ID;
-       if p^.infrustum=infrustumactualy then
-                           p^.DrawWithAttrib(infrustumactualy,subrender);
+       if p^.infrustum=dc.infrustumactualy then
+                           p^.DrawWithAttrib({infrustumactualy,subrender}dc);
        p:=iterate(ir);
   until p=nil;
 end;
@@ -338,8 +338,8 @@ begin
   repeat
        if p^.vp.ID<>0 then
                          //p^.vp.ID:=p^.vp.ID;
-       if p^.infrustum=infrustumactualy then
-                           p^.DrawGeometry(lw,infrustumactualy,subrender);
+       if p^.infrustum=dc.infrustumactualy then
+                           p^.DrawGeometry(lw,dc{infrustumactualy,subrender});
        p:=iterate(ir);
   until p=nil;
 end;
@@ -355,8 +355,8 @@ begin
   repeat
        if p^.vp.ID<>0 then
                          //p^.vp.ID:=p^.vp.ID;
-       if p^.infrustum=infrustumactualy then
-                           p^.DrawOnlyGeometry(lw,infrustumactualy,subrender);
+       if p^.infrustum=dc.infrustumactualy then
+                           p^.DrawOnlyGeometry(lw,dc{infrustumactualy,subrender});
        p:=iterate(ir);
   until p=nil;
 end;

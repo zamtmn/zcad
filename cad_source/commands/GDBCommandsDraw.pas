@@ -1023,8 +1023,15 @@ procedure Print_com.Print(pdata:GDBPlatformint);
   dx,dy,cx,cy:gdbdouble;
   tmatrix,_clip:DMatrix4D;
   cdwg:PTDrawing;
+  oldForeGround:rgb;
+  DC:TDrawContext;
 begin
   cdwg:=gdb.GetCurrentDWG;
+  dc:=cdwg.OGLwindow1.CreateRC;
+  oldForeGround:=ForeGround;
+  ForeGround.r:=0;
+  ForeGround.g:=0;
+  ForeGround.b:=0;
   prn.init;
   oldrasterozer:=OGLSM;
   OGLSM:=@prn;
@@ -1060,7 +1067,7 @@ begin
   gdb.GetCurrentROOT.CalcVisibleByTree(cdwg.pcamera^.frustum{calcfrustum(@_clip)},cdwg.pcamera.POSCOUNT,cdwg.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjArray.ObjTree);
   //gdb.GetCurrentDWG.OGLwindow1.draw;
   prn.startrender;
-  gdb.GetCurrentDWG.OGLwindow1.treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,0,0);
+  gdb.GetCurrentDWG.OGLwindow1.treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,0,{0}dc);
   prn.endrender;
   inc(cdwg.pcamera.DRAWCOUNT);
 
@@ -1111,6 +1118,7 @@ begin
       MainFormn.MessageBox(pChar(e.message),'Error',mb_iconhand);
     end;
   end;
+  ForeGround:=oldForeGround;
   OGLSM:=oldrasterozer;
   sharedgdb.redrawoglwnd;
   //prn.done;

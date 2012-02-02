@@ -156,6 +156,12 @@ GDBCameraBaseProp=record
                         zoom: GDBDouble;
                   end;
 TActulity=GDBInteger;
+TDrawContext=record
+                   VisibleActualy:TActulity;
+                   InfrustumActualy:TActulity;
+                   Subrender:GDBInteger;
+             end;
+
 PGDBBaseCamera=^GDBBaseCamera;
 GDBBaseCamera=object(GDBaseObject)
                 modelMatrix:DMatrix4D;

@@ -1027,7 +1027,6 @@ procedure Print_com.Print(pdata:GDBPlatformint);
   DC:TDrawContext;
 begin
   cdwg:=gdb.GetCurrentDWG;
-  dc:=cdwg.OGLwindow1.CreateRC;
   oldForeGround:=ForeGround;
   ForeGround.r:=0;
   ForeGround.g:=0;
@@ -1064,6 +1063,7 @@ begin
   gdb.GetCurrentDWG.OGLwindow1.param.firstdraw := TRUE;
   cdwg.OGLwindow1.param.debugfrustum:=cdwg.pcamera^.frustum;
   cdwg.OGLwindow1.param.ShowDebugFrustum:=true;
+  dc:=cdwg.OGLwindow1.CreateRC;
   gdb.GetCurrentROOT.CalcVisibleByTree(cdwg.pcamera^.frustum{calcfrustum(@_clip)},cdwg.pcamera.POSCOUNT,cdwg.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjArray.ObjTree);
   //gdb.GetCurrentDWG.OGLwindow1.draw;
   prn.startrender;

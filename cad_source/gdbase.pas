@@ -160,6 +160,8 @@ TDrawContext=record
                    VisibleActualy:TActulity;
                    InfrustumActualy:TActulity;
                    Subrender:GDBInteger;
+                   Selected:GDBBoolean;
+                   SysLayer:GDBPointer;
              end;
 
 PGDBBaseCamera=^GDBBaseCamera;

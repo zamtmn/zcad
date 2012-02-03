@@ -2738,8 +2738,10 @@ end;
 function TOGLWnd.CreateRC:TDrawContext;
 begin
   result.Subrender:=0;
+  result.Selected:=false;
   result.VisibleActualy:=gdb.GetCurrentDWG.pcamera.POSCOUNT;
   result.InfrustumActualy:=gdb.GetCurrentDWG.pcamera.POSCOUNT;
+  result.SysLayer:=gdb.GetCurrentDWG.LayerTable.GetSystemLayer;
 end;
 
 procedure TOGLWnd.draw;

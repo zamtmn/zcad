@@ -86,7 +86,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure RenderFeedback;virtual;
                     procedure RenderFeedbackIFNeed;virtual;
                     function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
-                    function CalculateLineWeight:GDBInteger;virtual;
+                    function CalculateLineWeight:GDBInteger;inline;
                     procedure feedbackinrect;virtual;
                     function InRect:TInRect;virtual;
                     function Clone(own:GDBPointer):PGDBObjEntity;virtual;
@@ -133,7 +133,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function GetObjTypeName:GDBString;virtual;
                     function GetObjType:GDBWord;virtual;
                     procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
-                    function GetLineWeight:GDBSmallint;virtual;
+                    function GetLineWeight:GDBSmallint;inline;
                     function IsSelected:GDBBoolean;virtual;
                     function IsActualy:GDBBoolean;virtual;
                     function IsHaveLCS:GDBBoolean;virtual;
@@ -391,7 +391,7 @@ begin
   begin
     case vp.lineweight of
       -3: lw := 1;
-      -2: lw := bp.ListPos.owner^.{vp.lineweight}GetLineWeight;
+      -2: lw := PGDBObjEntity(bp.ListPos.owner)^.{vp.lineweight}GetLineWeight;
       -1: lw := vp.layer^.lineweight;
     end
   end
@@ -444,46 +444,27 @@ begin
 end;
 procedure GDBObjEntity.DrawWithAttrib;
 var lw: GDBInteger;
-  sel: GDBBoolean;
+  sel,_selected: GDBBoolean;
 begin
   if visible<>dc.visibleactualy then
                                  exit;
-  //Draw(lw,visibleactualy);
+  //Draw(lw,dc);
   //exit;
   sel := false;
   lw := CalculateLineWeight;
-  if bp.ListPos.owner=nil then
-                      bp.ListPos.owner:=nil;
-  if selected or ((bp.ListPos.owner <> nil) and (bp.ListPos.owner^.isselected)) then
+
+  if selected or dc.selected then
                                                                     begin
-                                                                          //oglsm.mytotalglend;
-                                                                          //isOpenGLError;
-                                                                      oglsm.myglStencilFunc(GL_ALWAYS,0,1);
-                                                                      {oglsm.myglStencilFunc(GL_GEQUAL,1,3);
-                                                                      oglsm.myglStencilOp(GL_INCR,GL_KEEP,GL_INCR);}
+                                                                         _selected:=dc.selected;
+                                                                         dc.selected:=true;
+                                                                         oglsm.myglStencilFunc(GL_ALWAYS,0,1);
+                                                                         oglsm.myglLineStipple(3, ls);
+                                                                         oglsm.myglEnable(GL_LINE_STIPPLE);
+                                                                         sel := true;
 
-
-
-
-                                                                      oglsm.myglLineStipple(3, ls);
-                                                                      oglsm.myglEnable(GL_LINE_STIPPLE);
-                                                                      sel := true;
-
-                                                                      glPolygonStipple(@ps);
-                                                                      oglsm.myglEnable(GL_POLYGON_STIPPLE);
-                                                                      {if bp.TreePos.Owner<>nil then
-                                                                                          PTEntTreeNode(bp.TreePos.Owner).draw;}
-                                                                    end
-                                                                else
-                                                                    begin
-                                                                         //oglsm.myglStencilFunc(GL_EQUAL,0,1);
-                                                                         //oglsm.myglStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
+                                                                         glPolygonStipple(@ps);
+                                                                         oglsm.myglEnable(GL_POLYGON_STIPPLE);
                                                                     end;
-  {if (POGLWnd.subrender = 0) or
-     (PGDBLayerPropArray(GDB.layertable.parray)^[vp.layer].name <> '0')
-      then glcolor3ubv(@palette[PGDBLayerPropArray(GDB.layertable.parray)^[vp.layer].color])
-      else glcolor3ubv(@palette[PGDBLayerPropArray(GDB.layertable.parray)^[owner.vp.layer].color]);}
-  self:=self;
   if (dc.subrender = 0)
       then
           begin
@@ -495,7 +476,7 @@ begin
                                                                               end;
           end
       else
-          if (vp.layer^.name <> LNSysLayerName) then
+          if (vp.layer{^.name} <> {LNSysLayerName}dc.SysLayer) then
                                                     begin
                                                     if vp.layer^.color<>7 then
                                                                               oglsm.glcolor3ubv(palette[vp.layer^.color])
@@ -514,7 +495,8 @@ begin
                                                                               end;
                                                     end;
   Draw(lw,dc{visibleactualy,subrender});
-  if selected or ((bp.ListPos.owner <> nil) and (bp.ListPos.owner^.isselected)) then
+  //if selected or ((bp.ListPos.owner <> nil) and (bp.ListPos.owner^.isselected)) then
+  (*if {selected or dc.selected}sel then
                                                                     begin
                                                                     end
                                                                 else
@@ -522,7 +504,7 @@ begin
                                                                          //oglsm.mytotalglend;
                                                                          oglsm.myglStencilFunc(GL_EQUAL,0,1);
                                                                          //oglsm.myglStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
-                                                                    end;
+                                                                    end;*)
 
   if lw > 1 then
   begin
@@ -536,6 +518,7 @@ begin
                   //oglsm.mytotalglend;
                   oglsm.myglDisable(GL_LINE_STIPPLE);
                   oglsm.myglDisable(GL_POLYGON_STIPPLE);
+                  dc.selected:=_selected;
              end;
 end;
 procedure GDBObjEntity.RenderFeedbackIFNeed;

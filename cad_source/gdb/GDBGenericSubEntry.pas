@@ -241,7 +241,7 @@ begin
                        IREmpty:begin
                                      OwnerInFrustum:=OwnerInFrustum;
                                end;
-                       IRFully{,IRPartially}:begin
+                       IRFully,IRPartially:begin
                                      enttree.infrustum:=infrustumactualy;
                                      pobj:=enttree.nul.beginiterate(ir);
                                      if pobj<>nil then
@@ -256,7 +256,7 @@ begin
                                                                          ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pplusnode^,ImInFrustum);
 
                               end;
-                  IRPartially:begin
+                  {IRPartially:begin
                                      enttree.infrustum:=infrustumactualy;
                                      pobj:=enttree.nul.beginiterate(ir);
                                      if pobj<>nil then
@@ -272,7 +272,7 @@ begin
                                      if assigned(enttree.pplusnode) then
                                                                          ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pplusnode^,IRPartially);
 
-                              end;
+                              end;}
                   end;
 
              end;

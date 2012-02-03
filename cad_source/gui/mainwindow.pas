@@ -2029,12 +2029,14 @@ end;
 procedure TMainFormN.ShowAllCursors;
 begin
      if gdb.GetCurrentDWG<>nil then
+     if gdb.GetCurrentDWG.OGLwindow1<>nil then
      gdb.GetCurrentDWG.OGLwindow1.Cursor:=crDefault;
 end;
 
 procedure TMainFormN.RestoreCursors;
 begin
      if gdb.GetCurrentDWG<>nil then
+     if gdb.GetCurrentDWG.OGLwindow1<>nil then
      gdb.GetCurrentDWG.OGLwindow1.Cursor:=crNone;
 end;
 

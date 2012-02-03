@@ -41,7 +41,7 @@ GDBObjGenericWithSubordinated=object(GDBaseObject)
                                     function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit):GDBBoolean;virtual;
                                     destructor done;virtual;
                                     function GetMatrix:PDMatrix4D;virtual;abstract;
-                                    function GetLineWeight:GDBSmallint;virtual;abstract;
+                                    //function GetLineWeight:GDBSmallint;virtual;abstract;
                                     function GetLayer:PGDBLayerProp;virtual;abstract;
                                     function GetHandle:GDBPlatformint;virtual;
                                     function IsSelected:GDBBoolean;virtual;abstract;

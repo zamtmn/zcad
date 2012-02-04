@@ -1030,7 +1030,6 @@ begin
      ta:=tmyaction(MainFormN.StandartActions.ActionByName('ACN_PERSPECTIVE'));
   if GDB.GetCurrentDWG.OGLwindow1.param.projtype = projparalel then
   begin
-    //if sysvar.PMenuProjType<>nil then PMenuItem(sysvar.PMenuProjType^)^.caption := 'Паралельная проекция';
     GDB.GetCurrentDWG.OGLwindow1.param.projtype := projperspective;
     if ta<>nil then
                    ta.Checked:=true;
@@ -1039,7 +1038,6 @@ begin
   else
     if GDB.GetCurrentDWG.OGLwindow1.param.projtype = projPerspective then
     begin
-    //if sysvar.PMenuProjType<>nil then PMenuItem(sysvar.PMenuProjType^)^.caption := 'Перспективная проекция';
     GDB.GetCurrentDWG.OGLwindow1.param.projtype := projparalel;
       if ta<>nil then
                      ta.Checked:=false;

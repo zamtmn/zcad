@@ -171,6 +171,8 @@ TDrawContext=record
                    VisibleActualy:TActulity;
                    InfrustumActualy:TActulity;
                    Subrender:GDBInteger;
+                   Selected:GDBBoolean;
+                   SysLayer:GDBPointer;
              end;
 PGDBBaseCamera=^GDBBaseCamera;
 GDBBaseCamera=object(GDBaseObject)
@@ -957,7 +959,7 @@ GDBObjGenericWithSubordinated=object(GDBaseObject)
                                     function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit):GDBBoolean;virtual;abstract;
                                     destructor done;virtual;abstract;
                                     function GetMatrix:PDMatrix4D;virtual;abstract;
-                                    function GetLineWeight:GDBSmallint;virtual;abstract;
+                                    //function GetLineWeight:GDBSmallint;virtual;abstract;
                                     function GetLayer:PGDBLayerProp;virtual;abstract;
                                     function GetHandle:GDBPlatformint;virtual;abstract;
                                     function IsSelected:GDBBoolean;virtual;abstract;
@@ -1038,7 +1040,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure RenderFeedback;virtual;abstract;
                     procedure RenderFeedbackIFNeed;virtual;abstract;
                     function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;abstract;
-                    function CalculateLineWeight:GDBInteger;virtual;abstract;
+                    function CalculateLineWeight:GDBInteger;inline;
                     procedure feedbackinrect;virtual;abstract;
                     function InRect:TInRect;virtual;abstract;
                     function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
@@ -1083,7 +1085,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function GetObjTypeName:GDBString;virtual;abstract;
                     function GetObjType:GDBWord;virtual;abstract;
                     procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;abstract;
-                    function GetLineWeight:GDBSmallint;virtual;abstract;
+                    function GetLineWeight:GDBSmallint;inline;
                     function IsSelected:GDBBoolean;virtual;abstract;
                     function IsActualy:GDBBoolean;virtual;abstract;
                     function IsHaveLCS:GDBBoolean;virtual;abstract;

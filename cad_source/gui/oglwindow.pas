@@ -143,7 +143,7 @@ type
 
     procedure draw;virtual;
     procedure drawdebuggeometry;
-    function CreateRC:TDrawContext;
+    function CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;
     procedure finishdraw(var RC:TDrawContext);virtual;
     procedure SaveBuffers;virtual;
     procedure RestoreBuffers;virtual;
@@ -2735,13 +2735,14 @@ begin
 
 
 end;
-function TOGLWnd.CreateRC:TDrawContext;
+function TOGLWnd.CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;
 begin
   result.Subrender:=0;
   result.Selected:=false;
   result.VisibleActualy:=gdb.GetCurrentDWG.pcamera.POSCOUNT;
   result.InfrustumActualy:=gdb.GetCurrentDWG.pcamera.POSCOUNT;
   result.SysLayer:=gdb.GetCurrentDWG.LayerTable.GetSystemLayer;
+  result.MaxDetail:=_maxdetail;
 end;
 
 procedure TOGLWnd.draw;

@@ -162,6 +162,7 @@ TDrawContext=record
                    Subrender:GDBInteger;
                    Selected:GDBBoolean;
                    SysLayer:GDBPointer;
+                   MaxDetail:GDBBoolean;
              end;
 
 PGDBBaseCamera=^GDBBaseCamera;

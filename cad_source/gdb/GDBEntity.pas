@@ -446,8 +446,8 @@ procedure GDBObjEntity.DrawWithAttrib;
 var lw: GDBInteger;
   sel,_selected: GDBBoolean;
 begin
-  if visible<>dc.visibleactualy then
-                                 exit;
+  //if visible<>dc.visibleactualy then
+  //                               exit;
   //Draw(lw,dc);
   //exit;
   sel := false;

@@ -221,6 +221,7 @@ begin
                                         a:=onAfterClick(wc,mc,button,osp,mouseclic);
                                         mouseclic:=a;
                                         gdb.GetCurrentROOT.getoutbound;
+                                        result:=a;
                                         if (mouseclic=1)and(commandmanager.pcommandrunning<>nil) then BeforeClick(wc,mc,button,osp);
                                         //if mouseclic=0 then
                                         //                   mouseclic:=0;

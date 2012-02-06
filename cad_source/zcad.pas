@@ -27,7 +27,6 @@ program zcad;
 uses
   {$IFDEF REPORTMMEMORYLEAKS}heaptrc,{$ENDIF}
   Interfaces,forms, classes,
-
   splashwnd,
 
   memman,log,sysinfo,

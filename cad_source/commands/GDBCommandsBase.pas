@@ -46,7 +46,17 @@ uses
  sharedgdb,UGDBEntTree,
   {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline,
- AnchorDocking,dialogs,XMLPropStorage,xmlconf;
+ AnchorDocking,dialogs,XMLPropStorage,xmlconf,
+   uPSCompiler,
+  uPSRuntime,
+  uPSC_std,
+  uPSC_controls,
+  uPSC_stdctrls,
+  uPSC_forms,
+  uPSR_std,
+  uPSR_controls,
+  uPSR_stdctrls,
+  uPSR_forms;
 type
 {Export+}
   TMSType=(
@@ -2100,6 +2110,111 @@ begin
    gdb.GetCurrentDWG.OGLwindow1.param.debugfrustum:=gdb.GetCurrentDWG.pcamera.frustum;
    gdb.GetCurrentDWG.OGLwindow1.param.ShowDebugFrustum:=true;
 end;
+function ScriptOnUses(Sender: TPSPascalCompiler; const Name: string): Boolean;
+{ the OnUses callback function is called for each "uses" in the script.
+  It's always called with the parameter 'SYSTEM' at the top of the script.
+  For example: uses ii1, ii2;
+  This will call this function 3 times. First with 'SYSTEM' then 'II1' and then 'II2'.
+}
+begin
+  if Name = 'SYSTEM' then
+  begin
+    SIRegister_Std(Sender);
+    { This will register the declarations of these classes:
+      TObject, TPersisent. This can be found
+      in the uPSC_std.pas unit. }
+    SIRegister_Controls(Sender);
+    { This will register the declarations of these classes:
+      TControl, TWinControl, TFont, TStrings, TStringList, TGraphicControl. This can be found
+      in the uPSC_controls.pas unit. }
+
+    SIRegister_Forms(Sender);
+    { This will register: TScrollingWinControl, TCustomForm, TForm and TApplication. uPSC_forms.pas unit. }
+
+    SIRegister_stdctrls(Sender);
+     { This will register: TButtonContol, TButton, TCustomCheckbox, TCheckBox, TCustomEdit, TEdit, TCustomMemo, TMemo,
+      TCustomLabel and TLabel. Can be found in the uPSC_stdctrls.pas unit. }
+
+    AddImportedClassVariable(Sender, 'Application', 'TApplication');
+    // Registers the application variable to the script engine.
+    sender.AddDelphiFunction('procedure test;');
+    Result := True;
+  end else
+    Result := False;
+end;
+
+procedure test;
+var
+  Script:GDBString;
+begin
+                   Script:='GDBString;';
+                   shared.ShowError(Script);
+end;
+function TestScript_com(Operands:pansichar):GDBInteger;
+var
+  Compiler: TPSPascalCompiler;
+  { TPSPascalCompiler is the compiler part of the scriptengine. This will
+    translate a Pascal script into a compiled form the executer understands. }
+  Exec: TPSExec;
+   { TPSExec is the executer part of the scriptengine. It uses the output of
+    the compiler to run a script. }
+  {$IFDEF UNICODE}Data: AnsiString;{$ELSE}Data: string;{$ENDIF}
+  Script,Messages:GDBString;
+  i:integer;
+  CI: TPSRuntimeClassImporter;
+begin
+(*
+var f: TForm; i: Longint; begin f := TForm.CreateNew(f{, 0}); f.Show; while f.Visible do Application.ProcessMessages; F.free;  end.
+*)
+     Script:='type tt=record a:Longint; end; var b:tt; f: TForm; i: Longint; begin b.a:=1; test; f := TForm.CreateNew(f{, 0}); f.Show; while f.Visible do Application.ProcessMessages; F.free;  end.';
+     Compiler := TPSPascalCompiler.Create; // create an instance of the compiler.
+     Compiler.OnUses := ScriptOnUses; // assign the OnUses event.
+     if not Compiler.Compile(Script) then  // Compile the Pascal script into bytecode.
+     begin
+       //Compiler.
+       for i := 0 to Compiler.MsgCount -1 do
+         Messages := Messages +
+                     Compiler.Msg[i].MessageToString +
+                     #13#10;
+       shared.ShowError(Messages);
+       Compiler.Free;
+        // You could raise an exception here.
+       Exit;
+     end;
+
+     Compiler.GetOutput(Data); // Save the output of the compiler in the string Data.
+     Compiler.Free; // After compiling the script, there is no need for the compiler anymore.
+
+     CI := TPSRuntimeClassImporter.Create;
+     { Create an instance of the runtime class importer.}
+
+     RIRegister_Std(CI);  // uPSR_std.pas unit.
+     RIRegister_Controls(CI); // uPSR_controls.pas unti.
+     RIRegister_stdctrls(CI);  // uPSR_stdctrls.pas unit.
+     RIRegister_Forms(CI);  // uPSR_forms.pas unit.
+
+     Exec := TPSExec.Create;  // Create an instance of the executer.
+     RegisterClassLibraryRuntime(Exec, CI);
+     Exec.RegisterDelphiFunction(@test, 'test', cdRegister);
+     //----Exec.RegisterDelphiFunction(@MyOwnFunction, 'MYOWNFUNCTION', cdRegister);
+     { This will register the function to the executer. The first parameter is a
+       pointer to the function. The second parameter is the name of the function (in uppercase).
+   	And the last parameter is the calling convention (usually Register). }
+
+     if not  Exec.LoadData(Data) then // Load the data from the Data string.
+     begin
+         Exec.LastEx;
+
+       { For some reason the script could not be loaded. This is usually the case when a
+         library that has been used at compile time isn't registered at runtime. }
+       Exec.Free;
+        // You could raise an exception here.
+       Exit;
+     end;
+
+     Exec.RunScript; // Run the script.
+     Exec.Free; // Free the executer.
+end;
 procedure startup;
 //var
    //pmenuitem:pzmenuitem;
@@ -2169,6 +2284,7 @@ begin
   CreateCommandFastObjectPlugin(@TW_com,'TextWindow',0,0).overlay:=true;
 
   CreateCommandFastObjectPlugin(@StoreFrustum_com,'StoreFrustum',CADWG,0).overlay:=true;
+  CreateCommandFastObjectPlugin(@TestScript_com,'TestScript',0,0).overlay:=true;
 
 
 

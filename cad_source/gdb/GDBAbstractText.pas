@@ -64,6 +64,7 @@ GDBObjAbstractText=object(GDBObjPlainWithOX)
                          procedure ReCalcFromObjMatrix;virtual;
                          procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
                          procedure setrot(r:GDBDouble);
+                         procedure transform(const t_matrix:DMatrix4D);virtual;
                    end;
 {EXPORT-}
 function textformat(s:GDBString;pobj:GDBPointer):GDBString;
@@ -71,6 +72,21 @@ function convertfromunicode(s:GDBString):GDBString;
 implementation
 uses
    log,GDBSubordinated;
+procedure GDBObjAbstractText.transform;
+var tv,tv2:GDBVertex4D;
+   m:DMatrix4D;
+begin
+
+  m:=onematrix;
+  m[0,0]:=textprop.size;
+  m:=geometry.MatrixMultiply(m,t_matrix);
+  {tv:=NulVertex4D;
+  tv.x:=textprop.size;
+  tv:=VectorTransform(tv,t_matrix);}
+  textprop.size:=m[0,0];
+
+  inherited;
+end;
 procedure GDBObjAbstractText.setrot(r:GDBDouble);
 var m1:DMatrix4D;
 begin

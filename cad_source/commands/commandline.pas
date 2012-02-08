@@ -62,6 +62,7 @@ type
                           function PopValue:vardesk;virtual;
                           function GetValue:vardesk;virtual;
                           function GetValueHeap:GDBInteger;
+                          procedure PrepairVarStack;
                     end;
 var commandmanager:GDBcommandmanager;
 function getcommandmanager:GDBPointer;export;
@@ -330,6 +331,28 @@ begin
      if not busy then
      result:=execute(comm,true);
 end;
+procedure GDBcommandmanager.PrepairVarStack;
+var
+    ir:itrec;
+    pvd:pvardesk;
+    value:GDBString;
+begin
+     if self.varstack.vardescarray.Count<>0 then
+     begin
+     shared.HistoryOutStr('In stack found following data:');
+     pvd:=self.varstack.vardescarray.beginiterate(ir);
+     if pvd<>nil then
+     repeat
+           value:=pvd.data.PTD.GetValueAsString(pvd.data.Instance);
+           shared.HistoryOutStr(pvd.data.PTD.TypeName+':'+value);
+
+     pvd:=self.varstack.vardescarray.iterate(ir);
+     until pvd=nil;
+     end;
+     varstack.vardescarray.Clear;
+     varstack.vararray.Clear;
+end;
+
 procedure GDBcommandmanager.executecommandend;
 var
    temp:PCommandRTEdObjectDef;
@@ -352,6 +375,7 @@ begin
                                     begin
                                          self.DMHide;
                                          self.DMClear;
+                                         PrepairVarStack;
                                     end;
    ContextCommandParams:=nil;
 

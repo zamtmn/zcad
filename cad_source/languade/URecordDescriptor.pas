@@ -41,6 +41,7 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        destructor Done;virtual;
                        procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
                        procedure MagicAfterCopyInstance(PInstance:GDBPointer);virtual;
+                       function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                    end;
 function typeformat(s:GDBString;PInstance,PTypeDescriptor:GDBPointer):GDBString;
 implementation
@@ -549,7 +550,27 @@ begin
 end;
 
 //procedure MagicAfterCopyInstance(PInstance:GDBPointer);virtual;
-
+function RecordDescriptor.GetValueAsString(pinstance:GDBPointer):GDBString;
+var pd:PFieldDescriptor;
+    ir:itrec;
+    notfirst:gdbboolean;
+begin
+     result:='(';
+     notfirst:=false;
+        pd:=Fields.beginiterate(ir);
+        if pd<>nil then
+        repeat
+              if pd^.base.ProgramName<>'#' then
+              begin
+                   if notfirst then
+                                   result:=result+'; ';
+                   result:=result+pd.base.ProgramName+'='+pd.base.PFT.GetValueAsString(pointer(GDBPlatformint(PInstance)+pd^.Offset));
+                   notfirst:=true;
+              end;
+              pd:=Fields.iterate(ir);
+        until pd=nil;
+     result:=result+')';
+end;
 procedure RecordDescriptor.MagicAfterCopyInstance(PInstance:GDBPointer);
 var pd:PFieldDescriptor;
 //    d:FieldDescriptor;

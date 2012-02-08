@@ -822,7 +822,7 @@ begin
 end;
 function GDBObjEntity.SelectQuik;
 begin
-     if vp.Layer._lock then
+     if (vp.Layer._lock)or(not vp.Layer._on) then
                            begin
                                 result:=false;
                            end

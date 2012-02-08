@@ -17,6 +17,7 @@ action ACN_PASTE,PasteClip,pasteclip.bmp,Paste,Paste from clipboard,CTRL+V
 action ACN_FAKEPASTE,PasteClip,#Paste,,,SHIFT+INS
 action ACN_ERASE,Erase,erase.bmp,Erase,,DEL
 action ACN_SELECTALL,SelectAll,#SA,Select all,,CTRL+A
+action ACN_INVERSESELECTED,InverseSelected,#SI,Inverse selected,,
 action ACN_DESELECTALL,DeSelectAll,#DSA,DeSelect all,,CTRL+SHIFT+A
 action ACN_SELSIM,SelSim,#SSim,Select similar,,
 action ACN_El_FIND,EL_Find,find.bmp,Find device,,CTRL+F

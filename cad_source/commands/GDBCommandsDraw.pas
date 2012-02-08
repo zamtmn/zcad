@@ -1665,6 +1665,40 @@ begin
   redrawoglwnd;
   result:=cmd_ok;
 end;
+function InverseSelected_com:GDBInteger;
+var pv:pGDBObjEntity;
+    ir:itrec;
+    count:integer;
+    domethod,undomethod:tmethod;
+begin
+  //if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
+  count:=0;
+  pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+    if pv^.Selected then
+                        begin
+                             pv^.deselect;
+                             inc(count);
+                        end
+                    else
+                        begin
+                          pv^.select;
+                          inc(count);
+                        end;
+
+  pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+  until pv=nil;
+  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=count;
+  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
+  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
+  GDB.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
+  //{objinsp.GDBobjinsp.}ReturnToDefault;
+  //clearcp;
+  redrawoglwnd;
+  result:=cmd_ok;
+end;
+
 {var i, newend, objdel: GDBInteger;
 begin
   if gdb.ObjRoot.ObjArray.count = 0 then exit;
@@ -2960,6 +2994,7 @@ begin
   CreateCommandFastObjectPlugin(@Erase_com,'Erase',CADWG,0);
   CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
   CreateCommandFastObjectPlugin(@PlaceAllBlocks_com,'PlaceAllBlocks',CADWG,0);
+  CreateCommandFastObjectPlugin(@InverseSelected_com,'InverseSelected',CADWG,0);
   //CreateCommandFastObjectPlugin(@bedit_com,'BEdit');
   pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);
   BEditParam.Blocks.Enums.init(100);

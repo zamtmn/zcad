@@ -112,6 +112,7 @@ MainMenuItem Edit;
     Separator
     action ACN_SELECTALL
     action ACN_DESELECTALL
+    action ACN_INVERSESELECTED
     action ACN_SELSIM
     Separator
     action ACN_El_FIND

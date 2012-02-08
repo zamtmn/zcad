@@ -2135,12 +2135,13 @@ procedure TOGLWnd.showcursor;
     pt:ptraceprop;
 //      ir:itrec;
 //  ptp:ptraceprop;
-  tv1,tv2,tv3,tv4,sv1{,sv2,sv3,sv4},d1{,d2,d3,d4}:gdbvertex;
+  mvertex,dvertex,tv1,tv2,tv3,tv4,sv1{,sv2,sv3,sv4},d1{,d2,d3,d4}:gdbvertex;
   Tempplane,plx,ply,plz:DVector4D;
     a: GDBInteger;
     scrx,scry,texture{,e}:integer;
     scrollmode:GDBBOOlean;
     LPTime:Tdatetime;
+
 
   begin
     if param.scrollmode then
@@ -2196,6 +2197,9 @@ procedure TOGLWnd.showcursor;
     sv1:=param.md.mouseray.lbegin;
     sv1:=vertexadd(sv1,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
 
+    PointOfLinePlaneIntersect(VertexAdd(param.md.mouseray.lbegin,gdb.GetCurrentDWG.pcamera^.CamCSOffset),param.md.mouseray.dir,tempplane,mvertex);
+    //mvertex:=vertexadd(mvertex,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
+
     plx:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,gdb.GetCurrentDWG.pcamera^.CamCSOffset),
                         vertexadd(VertexAdd(param.md.mouse3dcoord,xWCS{VertexMulOnSc(xWCS,oneVertexlength(param.md.mouse3dcoord))}),gdb.GetCurrentDWG.pcamera^.CamCSOffset));
     //oglsm.mytotalglend;
@@ -2205,6 +2209,12 @@ procedure TOGLWnd.showcursor;
     tv1:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[0],plx,Tempplane);
     //tv1:=sv1;
     tv2:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[1],plx,Tempplane);
+    dvertex:=geometry.VertexSub(tv2,tv1);
+    dvertex:=geometry.VertexMulOnSc(dvertex,1);
+    tv1:=VertexSub(mvertex,dvertex);
+    tv2:=VertexAdd(mvertex,dvertex);
+
+
      glVertex3dv(@tv1);
      glVertex3dv(@tv2);
     oglsm.myglend;
@@ -2215,6 +2225,10 @@ procedure TOGLWnd.showcursor;
     oglsm.myglbegin(GL_LINES);
     tv1:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[2],ply,Tempplane);
     tv2:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[3],ply,Tempplane);
+    dvertex:=geometry.VertexSub(tv2,tv1);
+    dvertex:=geometry.VertexMulOnSc(dvertex,1);
+    tv1:=VertexSub(mvertex,dvertex);
+    tv2:=VertexAdd(mvertex,dvertex);
      glVertex3dv(@tv1);
      glVertex3dv(@tv2);
     oglsm.myglend;
@@ -2227,6 +2241,10 @@ procedure TOGLWnd.showcursor;
     oglsm.myglbegin(GL_LINES);
     tv1:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[0],plz,Tempplane);
     tv2:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[1],plz,Tempplane);
+    dvertex:=geometry.VertexSub(tv2,tv1);
+    dvertex:=geometry.VertexMulOnSc(dvertex,1);
+    tv1:=VertexSub(mvertex,dvertex);
+    tv2:=VertexAdd(mvertex,dvertex);
      glVertex3dv(@tv1);
      glVertex3dv(@tv2);
     oglsm.myglend;

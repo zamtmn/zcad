@@ -746,6 +746,7 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.DSGN.DSGN_HelpScale,'DSGN_HelpScale');
 
   SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_CursorSize,'DISP_CursorSize');
+  SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_CrosshairSize,'DISP_CrosshairSize');
   SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_OSSize,'DISP_OSSize');
   SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_ZoomFactor,'DISP_ZoomFactor');
   SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_DrawZAxis,'DISP_DrawZAxis');

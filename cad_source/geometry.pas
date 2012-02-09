@@ -64,6 +64,11 @@ type Intercept3DProp=record
                            interceptcoord:gdbvertex;
                            t1,t2:GDBDouble;
                      end;
+    Intercept2DProp=record
+                           isintercept:GDBBoolean;
+                           interceptcoord:GDBvertex2D;
+                           t1,t2:GDBDouble;
+                         end;
      DistAndPoint=record
                            point:gdbvertex;
                            d:GDBDouble;
@@ -71,6 +76,7 @@ type Intercept3DProp=record
 function CrossVertex(const Vector1, Vector2: GDBVertex): GDBVertex;inline;
 function intercept2d(const x1, y1, x2, y2, x3, y3, x4, y4: GDBDouble): GDBBoolean;inline;
 function intercept2d2(const x11, y11, x12, y12, x21, y21, x22, y22: GDBFloat): GDBBoolean;inline;
+function intercept2dmy(const l1begin,l1end,l2begin,l2end:gdbvertex2d):intercept2dprop;//inline;
 function intercept3dmy(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;inline;
 function intercept3dmy2(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;inline;
 
@@ -119,6 +125,7 @@ function distance2point_2(var p1,p2:GDBvertex2DI):GDBInteger;inline;
 function CreateTranslationMatrix(const V:GDBvertex): DMatrix4D;inline;
 function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;inline;
 function CreateVertex(const x,y,z:GDBDouble):GDBVertex;inline;
+function CreateVertex2D(const x,y:GDBDouble):GDBVertex2D;inline;
 function IsPointInBB(const point:GDBvertex; var fistbb:GDBBoundingBbox):GDBBoolean;inline;
 procedure ConcatBB(var fistbb:GDBBoundingBbox;const secbb:GDBBoundingBbox);inline;
 function IsBBNul(const bb:GDBBoundingBbox):boolean;inline;
@@ -1368,6 +1375,34 @@ begin
   if (x1 <= xp) and (x2 >= xp) and (y1 <= yp) and (y2 >= yp) then result := true
   else result := false;
 end;
+function intercept2dmy(const l1begin,l1end,l2begin,l2end:gdbvertex2d):intercept2dprop;
+var
+  z, {t,} t1, t2, d, d1, d2: GDBDouble;
+begin
+  //t := 0;
+  //t1 := 0;
+  //t2 := 0;
+  result.isintercept := false;
+  D := (l1end.y - l1begin.y) * (l2begin.x - l2end.x) - (l2begin.y - l2end.y) * (l1end.x - l1begin.x);
+  D1 := (l1end.y - l1begin.y) * (l2begin.x - l1begin.x) - (l2begin.y - l1begin.y) * (l1end.x - l1begin.x);
+  D2 := (l2begin.y - l1begin.y) * (l2begin.x - l2end.x) - (l2begin.y - l2end.y) * (l2begin.x - l1begin.x);
+  if (D <> 0) then
+  begin
+    t1 := D1 / D;
+    t2 := D2 / D;
+    //if ((t1 <= 1) and (t1 >= 0) and (t2 >= 0) and (t2 <= 1)) then
+    begin
+      result.interceptcoord.x := l1begin.x + (l1end.x - l1begin.x) * t2;
+      result.interceptcoord.y := l1begin.y + (l1end.y - l1begin.y) * t2;
+      //if abs(result.interceptcoord.z-z)<eps then
+      begin
+           result.t1:=t2;
+           result.t2:=t1;
+           result.isintercept:=true;
+      end;
+    end;
+  end;
+end;
 function intercept3dmy(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;
 var
   z, {t,} t1, t2, d, d1, d2: GDBDouble;
@@ -1573,6 +1608,12 @@ begin
      result.y:=y;
      result.z:=z;
 end;
+function CreateVertex2D(const x,y:GDBDouble):GDBVertex2D;
+begin
+     result.x:=x;
+     result.y:=y;
+end;
+
 procedure concatBBandPoint(var fistbb:GDBBoundingBbox;const point:GDBvertex);
 begin
   if fistbb.LBN.x>point.x then fistbb.LBN.x:=point.x;

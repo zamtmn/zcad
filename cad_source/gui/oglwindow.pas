@@ -1414,7 +1414,8 @@ if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
                                                                   self.Cursor:=crNone;
                                                        end
                                                    else
-                                                       self.Cursor:=crNone;
+                                                       if not param.scrollmode then
+                                                                                   self.Cursor:=crNone;
 
 
   SBTextOut(htext);
@@ -2142,6 +2143,8 @@ procedure TOGLWnd.showcursor;
     scrollmode:GDBBOOlean;
     LPTime:Tdatetime;
 
+    i2d,i2dresult:intercept2dprop;
+
 
   begin
     if param.scrollmode then
@@ -2210,7 +2213,7 @@ procedure TOGLWnd.showcursor;
     //tv1:=sv1;
     tv2:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[1],plx,Tempplane);
     dvertex:=geometry.VertexSub(tv2,tv1);
-    dvertex:=geometry.VertexMulOnSc(dvertex,1);
+    dvertex:=geometry.VertexMulOnSc(dvertex,SysVar.DISP.DISP_CrosshairSize^);
     tv1:=VertexSub(mvertex,dvertex);
     tv2:=VertexAdd(mvertex,dvertex);
 
@@ -2226,7 +2229,7 @@ procedure TOGLWnd.showcursor;
     tv1:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[2],ply,Tempplane);
     tv2:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[3],ply,Tempplane);
     dvertex:=geometry.VertexSub(tv2,tv1);
-    dvertex:=geometry.VertexMulOnSc(dvertex,1);
+    dvertex:=geometry.VertexMulOnSc(dvertex,SysVar.DISP.DISP_CrosshairSize^);
     tv1:=VertexSub(mvertex,dvertex);
     tv2:=VertexAdd(mvertex,dvertex);
      glVertex3dv(@tv1);
@@ -2242,7 +2245,7 @@ procedure TOGLWnd.showcursor;
     tv1:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[0],plz,Tempplane);
     tv2:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[1],plz,Tempplane);
     dvertex:=geometry.VertexSub(tv2,tv1);
-    dvertex:=geometry.VertexMulOnSc(dvertex,1);
+    dvertex:=geometry.VertexMulOnSc(dvertex,SysVar.DISP.DISP_CrosshairSize^);
     tv1:=VertexSub(mvertex,dvertex);
     tv2:=VertexAdd(mvertex,dvertex);
      glVertex3dv(@tv1);
@@ -2455,8 +2458,34 @@ procedure TOGLWnd.showcursor;
           begin
             if pt.trace then
             begin
+                 //i2d,i2dresult
+              i2dresult:=intercept2dmy(CreateVertex2D(0,0),CreateVertex2D(0,clientheight),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
+              i2d:=intercept2dmy(CreateVertex2D(0,clientheight),CreateVertex2D(clientwidth,clientheight),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
+              if not i2dresult.isintercept then
+                                               i2dresult:=i2d;
+              if i2d.isintercept then
+              if i2d.t2>0 then
+              if (i2d.t2<i2dresult.t2)or(i2dresult.t2<0) then
+                                              i2dresult:=i2d;
+              i2d:=intercept2dmy(CreateVertex2D(clientwidth,clientheight),CreateVertex2D(clientwidth,0),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
+              if not i2dresult.isintercept then
+                                               i2dresult:=i2d;
+              if i2d.isintercept then
+              if i2d.t2>0 then
+              if (i2d.t2<i2dresult.t2)or(i2dresult.t2<0) then
+                                              i2dresult:=i2d;
+              i2d:=intercept2dmy(CreateVertex2D(clientwidth,0),CreateVertex2D(0,0),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
+              if not i2dresult.isintercept then
+                                               i2dresult:=i2d;
+              if i2d.isintercept then
+              if i2d.t2>0 then
+              if (i2d.t2<i2dresult.t2)or(i2dresult.t2<0) then
+                                              i2dresult:=i2d;
+
+              //geometry.
               glvertex2d(param.ontrackarray.otrackarray[i].dispcoord.x, clientheight - param.ontrackarray.otrackarray[i].dispcoord.y);
-              glvertex2d(pt.dispraycoord.x, clientheight - pt.dispraycoord.y);
+              glvertex2d(i2dresult.interceptcoord.x, clientheight - i2dresult.interceptcoord.y);
+              //glvertex2d(pt.dispraycoord.x, clientheight - pt.dispraycoord.y);
             end;
             inc(pt);
           end;

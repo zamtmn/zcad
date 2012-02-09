@@ -28,6 +28,7 @@ var
   StatusPanelVisible:GDBBoolean;
   DISP_ZoomFactor:GDBDouble;
   DISP_CursorSize:GDBInteger;
+  DISP_CrosshairSize:GDBDouble;
   DISP_OSSize:GDBDouble;
   DISP_DrawZAxis:GDBBoolean;
   DISP_ColorAxis:GDBBoolean;
@@ -96,6 +97,7 @@ begin
   StatusPanelVisible:=False;
   DISP_ZoomFactor:=1.624;
   DISP_CursorSize:=6;
+  DISP_CrosshairSize:=0.05;
   DISP_OSSize:=10.0;
   DISP_DrawZAxis:=False;
   DISP_ColorAxis:=False;

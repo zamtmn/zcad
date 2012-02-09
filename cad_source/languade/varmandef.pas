@@ -283,6 +283,7 @@ UserTypeDescriptor=object(GDBaseObject)
              DISP_ZoomFactor:PGDBDouble;(*'Mouse wheel scale factor'*)
              DISP_OSSize:PGDBDouble;(*'Snap aperture size'*)
              DISP_CursorSize:PGDBInteger;(*'Cursor size'*)
+             DISP_CrosshairSize:PGDBDouble;(*'Crosshair size'*)
              DISP_DrawZAxis:PGDBBoolean;(*'Show Z axis'*)
              DISP_ColorAxis:PGDBBoolean;(*'Colored cursor'*)
         end;

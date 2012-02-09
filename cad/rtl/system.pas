@@ -173,6 +173,7 @@ TDrawContext=record
                    Subrender:GDBInteger;
                    Selected:GDBBoolean;
                    SysLayer:GDBPointer;
+                   MaxDetail:GDBBoolean;
              end;
 PGDBBaseCamera=^GDBBaseCamera;
 GDBBaseCamera=object(GDBaseObject)
@@ -826,6 +827,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
              DISP_ZoomFactor:PGDBDouble;(*'Mouse wheel scale factor'*)
              DISP_OSSize:PGDBDouble;(*'Snap aperture size'*)
              DISP_CursorSize:PGDBInteger;(*'Cursor size'*)
+             DISP_CrosshairSize:PGDBDouble;(*'Crosshair size'*)
              DISP_DrawZAxis:PGDBBoolean;(*'Show Z axis'*)
              DISP_ColorAxis:PGDBBoolean;(*'Colored cursor'*)
         end;
@@ -1264,6 +1266,7 @@ GDBObjAbstractText=object(GDBObjPlainWithOX)
                          procedure ReCalcFromObjMatrix;virtual;abstract;
                          procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
                          procedure setrot(r:GDBDouble);
+                         procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                    end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBCircle.pas
   ptcirclertmodify=^tcirclertmodify;

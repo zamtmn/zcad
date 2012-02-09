@@ -628,7 +628,10 @@ var
       psl,psfirstline:PGDBGDBStringArray;
       //first:boolean;
       s:gdbstring;
+      TCP:TCodePage;
 begin
+    TCP:=CodePage;
+    CodePage:=CP_win;
   counter:=0;
   cman.init;
   cman.build;
@@ -724,9 +727,9 @@ begin
                                                                       if pvd<>nil then
                                                                                       begin
                                                                                            if potrname='' then
-                                                                                                              potrname:=pgdbstring(pvd.data.Instance)^
+                                                                                                              potrname:=Uni2CP(pgdbstring(pvd.data.Instance)^)
                                                                                                           else
-                                                                                                              potrname:=potrname+'+ '+pgdbstring(pvd.data.Instance)^;
+                                                                                                              potrname:=potrname+'+ '+Uni2CP(pgdbstring(pvd.data.Instance)^);
                                                                                       end;
                                                                       pvd:=pgroupdev^.ou.FindVariable('DB_link');
                                                                       if pvd<>nil then
@@ -826,9 +829,9 @@ begin
                                                                       if pvd<>nil then
                                                                                       begin
                                                                                            if potrname='' then
-                                                                                                              potrname:=pgdbstring(pvd.data.Instance)^
+                                                                                                              potrname:=Uni2CP(pgdbstring(pvd.data.Instance)^)
                                                                                                           else
-                                                                                                              potrname:=potrname+'+ '+pgdbstring(pvd.data.Instance)^;
+                                                                                                              potrname:=potrname+'+ '+Uni2CP(pgdbstring(pvd.data.Instance)^);
                                                                                       end;
                                                                       pvd:=pgroupdev^.ou.FindVariable('DB_link');
                                                                       if pvd<>nil then
@@ -904,14 +907,14 @@ begin
                   psl.add(@s);
                   s:='1';
                   psl.add(@s);
-                  s:=pcabledesk^.Name;
+                  s:=Uni2CP(pcabledesk^.Name);
                   psl.add(@s);
                   s:='';
                   psl.add(@s);
                   s:='qwer';
                   pvd:=pcabledesk^.StartSegment^.ou.FindVariable('DB_link');
                   if pvd<>nil then
-                                  s:=pgdbstring(pvd.data.Instance)^;
+                                  s:=Uni2CP(pgdbstring(pvd.data.Instance)^);
                   //pvd:=pgroupdev^.ou.FindVariable('DB_link');
                   psl.add(@s);
                   s:=floattostr(pcabledesk^.length);
@@ -926,7 +929,7 @@ begin
                   psl.add(@s);
                   s:=floattostr(roundto({sumpotri}potriust,-2));
                   psl.add(@s);
-                  s:='Потребитель';
+                  s:=Uni2CP('Потребитель');
                   psl.add(@s);
 
                          end;
@@ -938,7 +941,7 @@ begin
               if cosf<>nil then
               cosf^:=sumpcos/pust^;
 
-                  s:=name;
+                  s:=Uni2CP(name);
                   psfirstline.add(@s);
                   s:='';
                   psfirstline.add(@s);
@@ -965,7 +968,7 @@ begin
                   psfirstline.add(@s);
                   s:=floattostr(roundto(i^,-2));
                   psfirstline.add(@s);
-                  s:='Ввод';
+                  s:=Uni2CP('Ввод');
                   psfirstline.add(@s);
 
 
@@ -982,6 +985,7 @@ begin
   if counter=0 then
                    historyout('Выбери объект(ы) источник энергии!');
   cman.done;
+  CodePage:=TCP;
 end;
 constructor El_Wire_com.init;
 begin

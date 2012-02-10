@@ -749,7 +749,7 @@ begin
                                                        end;
                                                       {$ENDIF}
                                                   end;
-                               if functionname='ReCalcFromObjMatrix' then
+                               if uppercase(functionname)='FORMAT' then
                                                                    functionname:=functionname;
 
                                if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;

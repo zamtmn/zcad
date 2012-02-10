@@ -2166,7 +2166,7 @@ begin
 (*
 var f: TForm; i: Longint; begin f := TForm.CreateNew(f{, 0}); f.Show; while f.Visible do Application.ProcessMessages; F.free;  end.
 *)
-     Script:='type tt=record a:Longint; end; var b:tt; f: TForm; i: Longint; begin b.a:=1; test; f := TForm.CreateNew(f{, 0}); f.Show; while f.Visible do Application.ProcessMessages; F.free;  end.';
+     Script:='var f: TForm; i: Longint; begin end.';
      Compiler := TPSPascalCompiler.Create; // create an instance of the compiler.
      Compiler.OnUses := ScriptOnUses; // assign the OnUses event.
      if not Compiler.Compile(Script) then  // Compile the Pascal script into bytecode.

@@ -19,7 +19,7 @@
 unit log;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes;
+uses gdbasetypes,sysinfo;
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       {$IFDEF FPC}
                   {$IFDEF LINUX}filelog='log/zcad_linux.log';{$ENDIF}
@@ -61,7 +61,7 @@ procedure LogOut(s:GDBString);
 var programlog:tlog;
 implementation
 uses
-    splashwnd,sysinfo,UGDBOpenArrayOfByte,UGDBOpenArrayOfData,strutils,sysutils,fileutil;
+    splashwnd,UGDBOpenArrayOfByte,UGDBOpenArrayOfData,strutils,sysutils,fileutil;
 var
     PerfomaneBuf:GDBOpenArrayOfByte;
     TimeBuf:GDBOpenArrayOfData;
@@ -72,7 +72,7 @@ var
 begin
                     if assigned(SplashWindow) then
                                    SplashWindow.TXTOut(s,true);
-     logname:=filelog+'hard';
+     logname:=SysToUTF8(ExtractFilePath(paramstr(0)))+filelog+'hard';
      FileHandle:=0;
      if not fileexists(utf8tosys(logname)) then
                                    FileHandle:=FileCreate(UTF8ToSys(logname))
@@ -267,6 +267,7 @@ begin
 end;
 initialization
 begin
+    getsysinfo;
     {$IFDEF DEBUGINITSECTION}LogOut('log.initialization');{$ENDIF}
     programlog.init(sysparam.programpath+filelog);
 end;

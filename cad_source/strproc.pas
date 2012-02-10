@@ -45,6 +45,7 @@ function FindInPaths(Paths,FileName:GDBString):GDBString;
 
 function ConvertFromDxfString(str:GDBString):GDBString;
 function ConvertToDxfString(str:GDBString):GDBString;
+function MakeHash(const s: GDBString): GDBLongword;
 
 type
   TCodePage=(CP_utf8,CP_win);
@@ -57,6 +58,15 @@ var
 implementation
 uses
     varmandef;
+function MakeHash(const s: GDBString): GDBLongword;
+var
+  I: Integer;
+begin
+  Result := 0;
+  for I := 1 to Length(s) do
+    Result := ((Result shl 7) or (Result shr 25)) + Ord(s[I]);
+end;
+
 function ConvertFromDxfString(str:GDBString):GDBString;
 begin
      result:=Tria_AnsiToUtf8(str);
@@ -527,4 +537,4 @@ end;*)
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('strproc.initialization');{$ENDIF}
 CodePage:=CP_utf8;
-end.
+end.

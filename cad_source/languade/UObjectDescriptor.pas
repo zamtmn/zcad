@@ -21,7 +21,7 @@ unit UObjectDescriptor;
 interface
 uses UGDBOpenArrayOfObjects,log,ugdbopenarray,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      UBaseTypeDescriptor,gdbobjectsconstdef,UGDBOpenArrayOfTObjLinkRecord,TypeDescriptors,
-     UGDBOpenArrayOfPointer,UGDBOpenArrayOfData,gdbasetypes,varmandef,gdbase{,UGDBStringArray},memman;
+     UGDBOpenArrayOfPointer,UGDBOpenArrayOfData,gdbasetypes,varmandef,gdbase{,UGDBStringArray},memman,strproc;
 type
 simpleproc=procedure of object;
 PObjectDescriptor=^ObjectDescriptor;
@@ -306,8 +306,12 @@ var pmd:pMetodDescriptor;
     f,s:shortstring;
     l:longint;
     tm:tmethod;
+    h:gdblongword;
+    umn:GDBSTRING;
 begin
      result:=nil;
+     umn:=uppercase(mn);
+     h:=MakeHash(umn);
      pmd:=SimpleMenods.beginiterate(ir);
      if pmd<>nil then
      repeat
@@ -326,11 +330,14 @@ begin
            if GetLineInfo(ptruint(tm.Code),f,s,l) then
                                                       programlog.logoutstr(pmd^.MetodName+' '+pmd^.objname + ' '+f+' '+s,0);
            end;}
-           if uppercase(pmd^.MetodName)=uppercase(mn) then
+           if h=pmd^.NameHash then
+           if uppercase(pmd^.MetodName)=umn then
            begin
                 result:=pmd;
                 exit;
-           end;
+           end
+              else
+                  result:=nil;
            pmd:=SimpleMenods.iterate(ir);
      until pmd=nil;
 end;
@@ -498,6 +505,7 @@ begin
            pcmd^.initnul;
            pcmd.MetodName:=pmd^.MetodName;
            pcmd.objname:=pmd^.objname;
+           pcmd.NameHash:=pmd^.NameHash;
            pcmd.OperandsName:=pmd^.OperandsName;
            pcmd.ResultPTD:=pmd^.ResultPTD;
            pcmd.MetodAddr:=pmd^.MetodAddr;

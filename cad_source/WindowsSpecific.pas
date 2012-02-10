@@ -22,8 +22,10 @@ interface
 uses gdbasetypes, gdbase,sysutils,strproc,
      LResources,Dialogs,FileUtil;
 const
-    ProjectFileFilter: GDBString = 'DXF files (*.dxf)'#0'*.dxf'#0'DWG files (*.dwg)'#0'*.dwg'#0'ZCP files (*.zcp)'#0'*.zcp'#0'All files (*.*)'#0'*.*'#0#0;
-    CSVFileFilter: GDBString ='CSV files (*.csv)'#0'*.csv'#0'All files (*.*)'#0'*.*'#0#0;
+    ProjectFileFilter: GDBString = 'DXF files (*.dxf)|*.dxf|AutoCAD DWG files (*.dwg)|*.dwg|ZCAD ZCP files (*.zcp)|*.zcp|All files (*.*)|*.*';
+    CSVFileFilter: GDBString ='CSV files (*.csv)|*.csv|All files (*.*)|*.*';
+    //ProjectFileFilter: GDBString = 'DXF files (*.dxf)'#0'*.dxf'#0'DWG files (*.dwg)'#0'*.dwg'#0'ZCP files (*.zcp)'#0'*.zcp'#0'All files (*.*)'#0'*.*'#0#0;
+    //CSVFileFilter: GDBString ='CSV files (*.csv)'#0'*.csv'#0'All files (*.*)'#0'*.*'#0#0;
     {$INCLUDE revision.inc}
 function OpenFileDialog(out FileName:GDBString;const DefExt, Filter, InitialDir, Title: string):Boolean;
 function SaveFileDialog(out FileName:GDBString;const DefExt, Filter, InitialDir, Title: string):Boolean;
@@ -102,6 +104,7 @@ var
 *)
 begin
      od:=TOpenDialog.Create(nil);
+     //InitIDEFileDialog(Dlg);
      od.Title:=Title;
      od.InitialDir:={szCurrentDir}InitialDir;
      od.Filter:=Filter;

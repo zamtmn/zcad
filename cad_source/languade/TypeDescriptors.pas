@@ -20,7 +20,7 @@ unit TypeDescriptors;
 
 interface
 uses log,gdbasetypes,varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,
-      UGDBOpenArrayOfPointer,UGDBOpenArrayOfObjects;
+      UGDBOpenArrayOfPointer,UGDBOpenArrayOfObjects,strproc,sysutils;
 const
      m_procedure=1;
      m_function=2;
@@ -104,6 +104,7 @@ MetodDescriptor=object(GDBaseObject)
                       MetodAddr:GDBPointer;
                       Attributes:GDBMetodModifier;
                       punit:pointer;
+                      NameHash:GDBLongword;
                       constructor init(objn,mn,dt:GDBString;ma:GDBPointer;attr:GDBMetodModifier;pu:pointer);
                       destructor Done;virtual;
                 end;
@@ -141,6 +142,7 @@ begin
      ResultPTD:=nil;
      ObjName:=objn;
      MetodName:=mn;
+     NameHash:=makehash(uppercase(MetodName));
      OperandsName:=dt;
      if dt='(var obj):GDBInteger;' then
                                         dt:=dt;

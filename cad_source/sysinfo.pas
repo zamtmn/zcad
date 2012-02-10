@@ -30,6 +30,8 @@ type tsysparam=record
               end;
 var
   sysparam: tsysparam;
+
+Procedure getsysinfo;
 implementation
 
 uses {shared,varmandef,} sysutils,WindowsSpecific,log;
@@ -51,8 +53,9 @@ begin
                                                                sysparam.updatepo:=true;
        end;
 end;
+Procedure getsysinfo;
 begin
-     {$IFDEF DEBUGINITSECTION}log.LogOut('sysinfo.initialization');{$ENDIF}
+     {$IFDEF DEBUGINITSECTION}log.LogOut('sysinfo.getsysinfo');{$ENDIF}
      sysparam.programpath:=SysToUTF8(ExtractFilePath(paramstr(0)));
      sysparam.screenx:={GetSystemMetrics(SM_CXSCREEN)}Screen.Width;
      sysparam.screeny:={GetSystemMetrics(SM_CYSCREEN)}Screen.Height;
@@ -75,4 +78,5 @@ begin
      {$ENDIF}
      ProcessParanstr;
      //sysparam.verstr:=Format('%d.%d.%d.%d SVN: %s',[sysparam.ver.major,sysparam.ver.minor,sysparam.ver.release,sysparam.ver.build,RevisionStr]);
-end.
+end;
+end.

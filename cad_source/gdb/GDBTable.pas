@@ -46,12 +46,32 @@ GDBObjTable=object(GDBObjComplex)
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;
             procedure Build;virtual;
             procedure SaveToDXFFollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+            procedure ReCalcFromObjMatrix;virtual;
             end;
 {EXPORT-}
 var
   PTempTableStyle:PTGDBTableStyle;
 implementation
 uses GDBBlockInsert,log;
+procedure GDBObjTable.ReCalcFromObjMatrix;
+var
+    ox:gdbvertex;
+begin
+     inherited;
+     Local.basis.ox:=PGDBVertex(@objmatrix[0])^;
+     Local.basis.oy:=PGDBVertex(@objmatrix[1])^;
+
+     Local.basis.ox:=normalizevertex(Local.basis.ox);
+     Local.basis.oy:=normalizevertex(Local.basis.oy);
+     Local.basis.oz:=normalizevertex(Local.basis.oz);
+
+     Local.P_insert:=PGDBVertex(@objmatrix[3])^;
+
+     if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
+                                                                    ox:=CrossVertex(YWCS,Local.basis.oz)
+                                                                else
+                                                                    ox:=CrossVertex(ZWCS,Local.basis.oz);
+end;
 procedure GDBObjTable.SaveToDXFFollow;
 var
   //i:GDBInteger;

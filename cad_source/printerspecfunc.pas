@@ -31,6 +31,7 @@ type
                            model,project,RM:DMatrix4D;
                            prevpoint:gdbvertex;
                            w,h:Integer;
+                           wmm,hmm:GDBDouble;
                            procedure myglVertex3d(const V:GDBVertex);virtual;//inline;
                            procedure myglVertex(const x,y,z:GDBDouble);virtual;//inline;
                            procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
@@ -38,13 +39,13 @@ type
                            procedure myglPushMatrix;virtual;//inline;
                            procedure myglPopMatrix;virtual;//inline;
 
-                           procedure glcolor3ub(red, green, blue: GLubyte);virtual;//inline;
+                           procedure glcolor3ub(const red, green, blue: GLubyte);virtual;//inline;
                            procedure glColor3ubv(const v: rgb);virtual;//inline;
     end;
 implementation
 uses
     UGDBDescriptor,geometry;
-procedure TPrinterRasterizer.glcolor3ub(red, green, blue: GLubyte);
+procedure TPrinterRasterizer.glcolor3ub(const red, green, blue: GLubyte);
 begin
      if (red<>_colour.r)
      or (green<>_colour.g)
@@ -100,7 +101,7 @@ begin
     begin
     if pointcount=2 then
                   begin
-                  Printer.Canvas.Line(round(((prevpoint.x+1)/2)*w),round(h-((prevpoint.y+1)/2)*h),round(((t.x+1)/2)*w),round(h-((t.y+1)/2)*h));
+                  Printer.Canvas.Line(round(((prevpoint.x+1)/2)*wmm),round(h{mm}-((prevpoint.y+1)/2)*hmm),round(((t.x+1)/2)*wmm),round(h{mm}-((t.y+1)/2)*hmm));
                   pointcount:=0
                   end
     else
@@ -134,7 +135,7 @@ begin
     begin
     if pointcount=2 then
                   begin
-                  Printer.Canvas.Line(round(((prevpoint.x+1)/2)*w),round(h-((prevpoint.y+1)/2)*h),round(((t.x+1)/2)*w),round(h-((t.y+1)/2)*h));
+                  Printer.Canvas.Line(round(((prevpoint.x+1)/2)*wmm),round(h{mm}-((prevpoint.y+1)/2)*hmm),round(((t.x+1)/2)*wmm),round(h{mm}-((t.y+1)/2)*hmm));
                   pointcount:=0
                   end
     else
@@ -165,7 +166,7 @@ begin
     begin
     if pointcount=2 then
                   begin
-                  Printer.Canvas.Line(round(((prevpoint.x+1)/2)*w),round(h-((prevpoint.y+1)/2)*h),round(((t.x+1)/2)*w),round(h-((t.y+1)/2)*h));
+                  Printer.Canvas.Line(round(((prevpoint.x+1)/2)*wmm),round(h{mm}-((prevpoint.y+1)/2)*hmm),round(((t.x+1)/2)*wmm),round(h{mm}-((t.y+1)/2)*hmm));
                   pointcount:=0
                   end
     else

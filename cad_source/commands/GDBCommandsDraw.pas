@@ -138,6 +138,11 @@ type
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
                            end;
+         TPrintParams=record
+                            FitToPage:GDBBoolean;(*'Fit to page'*)
+                            Center:GDBBoolean;(*'Center'*)
+                            Scale:GDBDouble;(*'Scale'*)
+                      end;
   TBEditParam=record
                     CurrentEditBlock:GDBString;(*'Текущий блок'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Выбор блока'*)
@@ -259,6 +264,7 @@ type
 {EXPORT-}
 
 var
+    PrintParam:TPrintParams;
     PSD: TPrinterSetupDialog;
     PAGED: TPageSetupDialog;
 
@@ -1042,6 +1048,8 @@ begin
   prn.project:=cdwg.pcamera.projMatrix{LCS};
   prn.w:=Printer.PageWidth;
   prn.h:=Printer.PageHeight;
+  prn.wmm:=(prn.w/Printer.XDPI)*02.54*dx*PrintParam.scale;
+  prn.hmm:=(prn.h/Printer.YDPI)*02.54*dy*PrintParam.scale;
   prn.project:=ortho({-420}p1.x{-dx},{420}p2.x{dx},
                      {-297}p1.y{-dy},{297}p2.y{dy},
                      {cdwg.pcamera^.zmin+cdwg.pcamera^.CamCSOffset.z}-1, {cdwg.pcamera^.zmax+cdwg.pcamera^.CamCSOffset.z}1,@onematrix);
@@ -3005,6 +3013,9 @@ begin
   ATO.init('AddToOwner',0,0);
   CFO.init('CopyFromOwner',0,0);
   Print.init('Print',CADWG,0);
+  PrintParam.Scale:=1;
+  Print.commanddata.Instance:=@PrintParam;
+  Print.commanddata.PTD:=SysUnit.TypeName2PTD('TPrintParams');
   SelSim.init('SelSim',0,0);
   SelSim.CEndActionAttr:=0;
   SelSimParams.General.SameEntType:=true;

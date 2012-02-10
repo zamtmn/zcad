@@ -1998,6 +1998,7 @@ GDBObjTable=object(GDBObjComplex)
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
             procedure Build;virtual;abstract;
             procedure SaveToDXFFollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
+            procedure ReCalcFromObjMatrix;virtual;abstract;
             end;
 //Generate on C:\zcad\CAD_SOURCE\electroteh\GDBElLeader.pas
 PGDBObjElLeader=^GDBObjElLeader;
@@ -2278,6 +2279,11 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
                            end;
+         TPrintParams=record
+                            FitToPage:GDBBoolean;(*'Fit to page'*)
+                            Center:GDBBoolean;(*'Center'*)
+                            Scale:GDBDouble;(*'Scale'*)
+                      end;
   TBEditParam=record
                     CurrentEditBlock:GDBString;(*'Текущий блок'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Выбор блока'*)

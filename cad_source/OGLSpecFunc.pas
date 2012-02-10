@@ -70,7 +70,7 @@ type
                            procedure myglLineStipple(const factor: GLint; const pattern: GLushort);inline;
                            constructor init;
 
-                           procedure glcolor3ub(red, green, blue: GLubyte);virtual;//inline;
+                           procedure glcolor3ub(const red, green, blue: GLubyte);virtual;//inline;
                            procedure glColor3ubv(const v: rgb);virtual;//inline;
 
                            procedure myglNormal3dV(const V:PGDBVertex);inline;
@@ -132,7 +132,7 @@ begin
      //inc(pointcount);
      //middlepoint:=geometry.VertexAdd(middlepoint,point);
 end;
-procedure TOGLStateManager.glcolor3ub(red, green, blue: GLubyte);
+procedure TOGLStateManager.glcolor3ub(const red, green, blue: GLubyte);
 begin
      if (red<>_colour.r)
      or (green<>_colour.g)

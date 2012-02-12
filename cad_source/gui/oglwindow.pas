@@ -2229,7 +2229,7 @@ procedure TOGLWnd.showcursor;
     tv1:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[2],ply,Tempplane);
     tv2:=PointOf3PlaneIntersect(gdb.GetCurrentDWG.pcamera.frustumLCS[3],ply,Tempplane);
     dvertex:=geometry.VertexSub(tv2,tv1);
-    dvertex:=geometry.VertexMulOnSc(dvertex,SysVar.DISP.DISP_CrosshairSize^);
+    dvertex:=geometry.VertexMulOnSc(dvertex,SysVar.DISP.DISP_CrosshairSize^*gdb.GetCurrentDWG.OGLwindow1.ClientWidth/gdb.GetCurrentDWG.OGLwindow1.ClientHeight);
     tv1:=VertexSub(mvertex,dvertex);
     tv2:=VertexAdd(mvertex,dvertex);
      glVertex3dv(@tv1);

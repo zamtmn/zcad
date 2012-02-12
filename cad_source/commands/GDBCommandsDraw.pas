@@ -1048,7 +1048,7 @@ begin
   prn.project:=cdwg.pcamera.projMatrix{LCS};
   prn.w:=Printer.PageWidth;
   prn.h:=Printer.PageHeight;
-  prn.wmm:=(prn.w/Printer.XDPI)*02.54*dx*PrintParam.scale;
+  prn.wmm:=prn.w;//(prn.w/Printer.XDPI)*02.54*dx*PrintParam.scale;
   prn.hmm:=prn.h;//(prn.h/Printer.YDPI)*02.54*dy*PrintParam.scale;
   prn.project:=ortho({-420}p1.x{-dx},{420}p2.x{dx},
                      {-297}p1.y{-dy},{297}p2.y{dy},

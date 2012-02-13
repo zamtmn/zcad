@@ -31,7 +31,7 @@ type
                            model,project,RM:DMatrix4D;
                            prevpoint:gdbvertex;
                            w,h:Integer;
-                           wmm,hmm:GDBDouble;
+                           wmm,hmm,scalex,scaley:GDBDouble;
                            procedure myglVertex3d(const V:GDBVertex);virtual;//inline;
                            procedure myglVertex(const x,y,z:GDBDouble);virtual;//inline;
                            procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
@@ -41,10 +41,27 @@ type
 
                            procedure glcolor3ub(const red, green, blue: GLubyte);virtual;//inline;
                            procedure glColor3ubv(const v: rgb);virtual;//inline;
+                           Function translate(const V:GDBVertex):GDBVertex2DI;
+                           procedure myglPointSize(const size: GLfloat);virtual;//inline;
+                           procedure myglLineWidth(const width: GLfloat);virtual;//inline;
     end;
 implementation
 uses
     UGDBDescriptor,geometry;
+procedure TPrinterRasterizer.myglPointSize(const size: GLfloat);
+begin
+     myglLineWidth(size);
+end;
+procedure TPrinterRasterizer.myglLineWidth(const width: GLfloat);
+begin
+     if currentlinewidth<>width then
+                     begin
+                          mytotalglend;
+                          Printer.Canvas.Pen.Width:=round(width/25.4*60);
+                          currentlinewidth:=width;
+                     end;
+end;
+
 procedure TPrinterRasterizer.glcolor3ub(const red, green, blue: GLubyte);
 begin
      if (red<>_colour.r)
@@ -79,9 +96,27 @@ procedure TPrinterRasterizer.myglPopMatrix;
 begin
      inherited;
 end;
-
+Function TPrinterRasterizer.translate(const V:GDBVertex):GDBVertex2DI;
+begin
+     //result.x:=round(((v.x+1)/2)*w{mm});
+     //result.y:=round(h{mm}-((v.y+1)/2)*h{mm});
+     result.x:=round(v.x);
+     result.y:=round(v.y);
+end;
+procedure TPrinterRasterizer.startrender;
+begin
+    //scalex:={w}scalex*1000;
+    //scaley:={h}scaley*1000;
+     inherited;
+     RM:=geometry.MatrixMultiply(model,project);
+     RM:=geometry.MatrixMultiply(RM,geometry.CreateTranslationMatrix(createvertex(1,1,0)));
+     RM:=geometry.MatrixMultiply(RM,geometry.CreateScaleMatrix(createvertex(0.5,-0.5,1)));
+     RM:=geometry.MatrixMultiply(RM,geometry.CreateScaleMatrix(createvertex(wmm*scalex*600/25.4,hmm*scalex*600/25.4,1)));
+     RM:=geometry.MatrixMultiply(RM,geometry.CreateTranslationMatrix(createvertex(0,h,0)));
+end;
 procedure TPrinterRasterizer.myglVertex3dV;
 var t:gdbvertex;
+    p1,p2:GDBVertex2DI;
 begin
      (*{$IFDEF DEBUGCOUNTGEOMETRY}
      processpoint(v^);
@@ -101,7 +136,10 @@ begin
     begin
     if pointcount=2 then
                   begin
-                  Printer.Canvas.Line(round(((prevpoint.x+1)/2)*wmm),round(h{mm}-((prevpoint.y+1)/2)*hmm),round(((t.x+1)/2)*wmm),round(h{mm}-((t.y+1)/2)*hmm));
+                  p1:=translate(prevpoint);
+                  p2:=translate(t);
+                  Printer.Canvas.Line(p1.x,p1.y,p2.x,p2.y);
+                  //Printer.Canvas.Line(round(((prevpoint.x+1)/2)*wmm),round(h{mm}-((prevpoint.y+1)/2)*hmm),round(((t.x+1)/2)*wmm),round(h{mm}-((t.y+1)/2)*hmm));
                   pointcount:=0
                   end
     else
@@ -109,13 +147,9 @@ begin
 
     end;
 end;
-procedure TPrinterRasterizer.startrender;
-begin
-     inherited;
-     RM:=geometry.MatrixMultiply(model,project);
-end;
 procedure TPrinterRasterizer.myglVertex3d;
 var t:gdbvertex;
+    p1,p2:GDBVertex2DI;
 begin
      (*{$IFDEF DEBUGCOUNTGEOMETRY}
      processpoint(v);
@@ -135,7 +169,10 @@ begin
     begin
     if pointcount=2 then
                   begin
-                  Printer.Canvas.Line(round(((prevpoint.x+1)/2)*wmm),round(h{mm}-((prevpoint.y+1)/2)*hmm),round(((t.x+1)/2)*wmm),round(h{mm}-((t.y+1)/2)*hmm));
+                  p1:=translate(prevpoint);
+                  p2:=translate(t);
+                  Printer.Canvas.Line(p1.x,p1.y,p2.x,p2.y);
+                  //Printer.Canvas.Line(round(((prevpoint.x+1)/2)*wmm),round(h{mm}-((prevpoint.y+1)/2)*hmm),round(((t.x+1)/2)*wmm),round(h{mm}-((t.y+1)/2)*hmm));
                   pointcount:=0
                   end
     else
@@ -145,6 +182,7 @@ begin
 end;
 procedure TPrinterRasterizer.myglVertex;
 var t,t1:gdbvertex;
+    p1,p2:GDBVertex2DI;
 begin
      (*
      t1:=createvertex(x,y,z);
@@ -166,7 +204,10 @@ begin
     begin
     if pointcount=2 then
                   begin
-                  Printer.Canvas.Line(round(((prevpoint.x+1)/2)*wmm),round(h{mm}-((prevpoint.y+1)/2)*hmm),round(((t.x+1)/2)*wmm),round(h{mm}-((t.y+1)/2)*hmm));
+                  p1:=translate(prevpoint);
+                  p2:=translate(t);
+                  Printer.Canvas.Line(p1.x,p1.y,p2.x,p2.y);
+                  //Printer.Canvas.Line(round(((prevpoint.x+1)/2)*wmm),round(h{mm}-((prevpoint.y+1)/2)*hmm),round(((t.x+1)/2)*wmm),round(h{mm}-((t.y+1)/2)*hmm));
                   pointcount:=0
                   end
     else

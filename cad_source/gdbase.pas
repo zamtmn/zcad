@@ -163,6 +163,9 @@ TDrawContext=record
                    Selected:GDBBoolean;
                    SysLayer:GDBPointer;
                    MaxDetail:GDBBoolean;
+                   DrawMode:GDBInteger;
+                   OwnerLineWeight:GDBSmallInt;
+                   MaxWidth:GDBInteger;
              end;
 
 PGDBBaseCamera=^GDBBaseCamera;

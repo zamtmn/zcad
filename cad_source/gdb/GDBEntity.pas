@@ -86,7 +86,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure RenderFeedback;virtual;
                     procedure RenderFeedbackIFNeed;virtual;
                     function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
-                    function CalculateLineWeight:GDBInteger;inline;
+                    function CalculateLineWeight(const DC:TDrawContext):GDBInteger;//inline;
                     procedure feedbackinrect;virtual;
                     function InRect:TInRect;virtual;
                     function Clone(own:GDBPointer):PGDBObjEntity;virtual;
@@ -387,20 +387,24 @@ end;
 function GDBObjEntity.CalculateLineWeight;
 var lw: GDBInteger;
 begin
+     if dc.drawmode = 0 then
+                                         begin
+                                              lw := 1;
+                                              exit;
+                                         end;
   if vp.lineweight < 0 then
   begin
     case vp.lineweight of
       -3: lw := 1;
-      -2: lw := PGDBObjEntity(bp.ListPos.owner)^.{vp.lineweight}GetLineWeight;
+      -2: lw := {PGDBObjEntity(bp.ListPos.owner)^.GetLineWeight}dc.OwnerLineWeight;
       -1: lw := vp.layer^.lineweight;
     end
   end
   else lw := vp.lineweight;
-  if sysvar.dwg.DWG_DrawMode^ = 0 then lw := 1;
   if lw <= 0 then lw := 1;
   if lw > 19 then begin
     lw := lw div 10;
-    if lw>sysvar.RD.RD_MaxWidth^ then lw:=sysvar.RD.RD_MaxWidth^;
+    if lw>dc.MaxWidth then lw:=dc.MaxWidth;
     result := lw;
     oglsm.mygllinewidth(lw);
     oglsm.myglEnable(GL_LINE_SMOOTH);
@@ -432,7 +436,7 @@ procedure GDBObjEntity.DrawWithOutAttrib;
 var lw: GDBInteger;
 //  sel: GDBBoolean;
 begin
-  lw := CalculateLineWeight;
+  lw := CalculateLineWeight(dc);
   Drawg(lw,dc{visibleactualy,subrender});
   if lw > 1 then
   begin
@@ -451,7 +455,7 @@ begin
   //Draw(lw,dc);
   //exit;
   sel := false;
-  lw := CalculateLineWeight;
+  lw := CalculateLineWeight(dc);
 
   if selected or dc.selected then
                                                                     begin

@@ -1026,11 +1026,12 @@ procedure Print_com.Print(pdata:GDBPlatformint);
   s: string;
   prn:TPrinterRasterizer;
   oldrasterozer:PTOGLStateManager;
-  dx,dy,cx,cy:gdbdouble;
+  dx,dy,cx,cy,sx,sy,scale:gdbdouble;
   tmatrix,_clip:DMatrix4D;
   cdwg:PTDrawing;
   oldForeGround:rgb;
   DC:TDrawContext;
+  pr:TPaperRect;
 begin
   cdwg:=gdb.GetCurrentDWG;
   oldForeGround:=ForeGround;
@@ -1041,20 +1042,42 @@ begin
   oldrasterozer:=OGLSM;
   OGLSM:=@prn;
   dx:=p2.x-p1.x;
+  if dx=0 then
+              dx:=1;
   dy:=p2.y-p1.y;
+  if dy=0 then
+              dy:=1;
   cx:=(p2.x+p1.x)/2;
   cy:=(p2.y+p1.y)/2;
   prn.model:=onematrix;//cdwg.pcamera.modelMatrix{LCS};
   prn.project:=cdwg.pcamera.projMatrix{LCS};
+  //prn.w:=Printer.PaperSize.Width;
+  //prn.h:=Printer.PaperSize.Height;
+  pr:=Printer.PaperSize.PaperRect;
   prn.w:=Printer.PageWidth;
   prn.h:=Printer.PageHeight;
-  prn.wmm:=prn.w;//(prn.w/Printer.XDPI)*02.54*dx*PrintParam.scale;
-  prn.hmm:=prn.h;//(prn.h/Printer.YDPI)*02.54*dy*PrintParam.scale;
-  prn.project:=ortho({-420}p1.x{-dx},{420}p2.x{dx},
-                     {-297}p1.y{-dy},{297}p2.y{dy},
-                     {cdwg.pcamera^.zmin+cdwg.pcamera^.CamCSOffset.z}-1, {cdwg.pcamera^.zmax+cdwg.pcamera^.CamCSOffset.z}1,@onematrix);
-  //MatrixNormalize(prn.project);
-  //prn.project:=geometry.MatrixMultiply(CreateTranslationMatrix(createvertex(-p1.x,-p1.y,0)),prn.project);
+  prn.wmm:=dx;
+  prn.hmm:=dy;
+  prn.project:=ortho(p1.x,p2.x,p1.y,p2.y,-1,1,@onematrix);
+
+  prn.scalex:=1;
+  prn.scaley:=dy/dx;
+
+  if PrintParam.FitToPage then
+     begin
+          sx:=((prn.w/Printer.XDPI)*25.4);
+          sx:=((prn.w/Printer.XDPI)*25.4)/dx;
+          sy:=((prn.h/Printer.YDPI)*25.4)/dy;
+          scale:=sy;
+          if sx<sy then
+                       scale:=sx;
+          PrintParam.Scale:=scale;
+     end
+  else
+      scale:=PrintParam.Scale;
+  prn.scalex:=prn.scalex*scale;
+  prn.scaley:=prn.scaley*scale;
+
   tmatrix:=gdb.GetCurrentDWG.pcamera.projMatrix;
   gdb.GetCurrentDWG.pcamera.projMatrix:=prn.project;
   gdb.GetCurrentDWG.pcamera^.modelMatrix:=prn.model;
@@ -1072,6 +1095,7 @@ begin
   cdwg.OGLwindow1.param.debugfrustum:=cdwg.pcamera^.frustum;
   cdwg.OGLwindow1.param.ShowDebugFrustum:=true;
   dc:=cdwg.OGLwindow1.CreateRC(true);
+  dc.DrawMode:=1;
   gdb.GetCurrentROOT.CalcVisibleByTree(cdwg.pcamera^.frustum{calcfrustum(@_clip)},cdwg.pcamera.POSCOUNT,cdwg.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjArray.ObjTree);
   //gdb.GetCurrentDWG.OGLwindow1.draw;
   prn.startrender;

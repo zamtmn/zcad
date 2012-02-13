@@ -59,8 +59,8 @@ type
                            procedure mytotalglend;inline;
                            procedure myglEnable(const cap: GLenum);inline;
                            procedure myglDisable(const cap: GLenum);inline;
-                           procedure myglPointSize(const size: GLfloat);inline;
-                           procedure myglLineWidth(const width: GLfloat);inline;
+                           procedure myglPointSize(const size: GLfloat);virtual;//inline;
+                           procedure myglLineWidth(const width: GLfloat);virtual;//inline;
                            procedure myglStencilFunc(const func: GLenum;const  ref: GLint;const  mask: GLuint);inline;
                            procedure myglStencilOp(const fail, zfail, zpass: GLenum);inline;
                            procedure myglLogicOp(const opcode: GLenum);inline;

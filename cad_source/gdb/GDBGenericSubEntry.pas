@@ -440,7 +440,7 @@ begin
 end;
 procedure GDBObjGenericSubEntry.DrawGeometry;
 begin
-  ObjArray.DrawGeometry(CalculateLineWeight,dc{infrustumactualy,subrender});
+  ObjArray.DrawGeometry(CalculateLineWeight(dc),dc{infrustumactualy,subrender});
   DrawBB;
 end;
 function GDBObjGenericSubEntry.CalcInFrustum;

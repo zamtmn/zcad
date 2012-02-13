@@ -330,7 +330,7 @@ var p:pgdbobjEntity;
          ir:itrec;
 begin
   dc.subrender := dc.subrender + 1;
-  VarObjArray.DrawOnlyGeometry(CalculateLineWeight,dc{infrustumactualy,subrender});
+  VarObjArray.DrawOnlyGeometry(CalculateLineWeight(dc),dc{infrustumactualy,subrender});
   dc.subrender := dc.subrender - 1;
   p:=VarObjArray.beginiterate(ir);
   oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^]);
@@ -353,7 +353,10 @@ procedure GDBObjDevice.DrawGeometry;
 var p:pgdbobjEntity;
      v:gdbvertex;
          ir:itrec;
+   oldlw:gdbsmallint;
 begin
+  oldlw:=dc.OwnerLineWeight;
+  dc.OwnerLineWeight:=self.GetLineWeight;
   dc.subrender := dc.subrender + 1;
   VarObjArray.DrawWithattrib(dc{infrustumactualy,subrender}){DrawGeometry(CalculateLineWeight)};
   dc.subrender := dc.subrender - 1;
@@ -372,6 +375,7 @@ begin
   until p=nil;
   end;
 
+  dc.OwnerLineWeight:=oldlw;
   inherited;
 end;
 procedure GDBObjDevice.BuildVarGeometry;

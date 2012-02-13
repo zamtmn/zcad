@@ -2790,6 +2790,10 @@ begin
   result.InfrustumActualy:=gdb.GetCurrentDWG.pcamera.POSCOUNT;
   result.SysLayer:=gdb.GetCurrentDWG.LayerTable.GetSystemLayer;
   result.MaxDetail:=_maxdetail;
+
+  result.DrawMode:=sysvar.dwg.DWG_DrawMode^;
+  result.OwnerLineWeight:=-3;
+  result.MaxWidth:=sysvar.RD.RD_MaxWidth^;
 end;
 
 procedure TOGLWnd.draw;

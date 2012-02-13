@@ -142,15 +142,20 @@ end;
 procedure GDBObjComplex.DrawOnlyGeometry;
 begin
   inc(dc.subrender);
-  ConstObjArray.{DrawWithattrib}DrawOnlyGeometry(CalculateLineWeight,dc{infrustumactualy,subrender});
+  ConstObjArray.{DrawWithattrib}DrawOnlyGeometry(CalculateLineWeight(dc),dc{infrustumactualy,subrender});
   dec(dc.subrender);
   //inherited;
 end;
 procedure GDBObjComplex.DrawGeometry;
+var
+   oldlw:gdbsmallint;
 begin
+  oldlw:=dc.OwnerLineWeight;
+  dc.OwnerLineWeight:=self.GetLineWeight;
   inc(dc.subrender);
   ConstObjArray.DrawWithattrib(dc{infrustumactualy,subrender)}{DrawGeometry(CalculateLineWeight});
   dec(dc.subrender);
+  dc.OwnerLineWeight:=oldlw;
   inherited;
 end;
 procedure GDBObjComplex.getoutbound;

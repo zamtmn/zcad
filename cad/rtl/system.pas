@@ -174,6 +174,9 @@ TDrawContext=record
                    Selected:GDBBoolean;
                    SysLayer:GDBPointer;
                    MaxDetail:GDBBoolean;
+                   DrawMode:GDBInteger;
+                   OwnerLineWeight:GDBSmallInt;
+                   MaxWidth:GDBInteger;
              end;
 PGDBBaseCamera=^GDBBaseCamera;
 GDBBaseCamera=object(GDBaseObject)
@@ -762,7 +765,8 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
             RD_BackGroundColor:PRGB;(*'Background color'*)
             RD_Restore_Mode:ptrestoremode;(*'Restore mode'*)
             RD_LastRenderTime:pGDBInteger;(*'Last render time'*)(*oi_readonly*)
-            RD_LastUpdateTime:pGDBInteger;(*'Last update time'*)(*oi_readonly*)
+            RD_LastUpdateTime:pGDBInteger;(*'Last visible calculation time'*)(*oi_readonly*)
+            RD_LastCalcVisible:GDBInteger;(*'Last update time'*)(*oi_readonly*)
             RD_MaxRenderTime:pGDBInteger;(*'Maximum single pass time'*)
             RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
             RD_VSync:PTVSControl;(*'VSync'*)
@@ -1042,7 +1046,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure RenderFeedback;virtual;abstract;
                     procedure RenderFeedbackIFNeed;virtual;abstract;
                     function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;abstract;
-                    function CalculateLineWeight:GDBInteger;inline;
+                    function CalculateLineWeight(const DC:TDrawContext):GDBInteger;//inline;
                     procedure feedbackinrect;virtual;abstract;
                     function InRect:TInRect;virtual;abstract;
                     function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;

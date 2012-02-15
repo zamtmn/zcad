@@ -455,7 +455,10 @@ begin
   //Draw(lw,dc);
   //exit;
   sel := false;
-  lw := CalculateLineWeight(dc);
+  if dc.drawmode = 0 then
+                         lw := 1
+                     else
+                         lw := CalculateLineWeight(dc);
 
   if selected or dc.selected then
                                                                     begin

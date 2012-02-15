@@ -1177,6 +1177,7 @@ var
 
 //  i:integer;
   key: GDBByte;
+  lptime:ttime;
 begin
   //if random<0.8 then exit;
   //if   (param.md.mouse.y=y)and(param.md.mouse.x=x)then
@@ -1245,8 +1246,10 @@ begin
            CalcOptimalMatrix;
            calcgrid;
            //-------------CalcOptimalMatrix;
-
+           lptime:=now();
            gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjArray.ObjTree);
+           lptime:=now()-LPTime;
+           sysvar.RD.RD_LastCalcVisible:=round(lptime*10e7);
            //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT);
            gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
       end;

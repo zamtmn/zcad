@@ -26,6 +26,7 @@ uses gdbasetypes,gdbase,LCLType,
      {$IFDEF WINDOWS}windows,{$ENDIF}
      log,sysutils,varmandef;
 type
+    {//glu }TViewPortArray = array [0..3] of GLint;
     PTViewPortArray=^TViewPortArray;
 
     TOGLContextDesk=record

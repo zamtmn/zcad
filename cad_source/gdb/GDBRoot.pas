@@ -21,7 +21,7 @@ unit GDBRoot;
 
 interface
 Uses
-   OGLSpecFunc, gl,UGDBEntTree,{UGDBVisibleTreeArray,}UGDBOpenArrayOfPV,
+   OGLSpecFunc, gl,UGDBEntTree,{UGDBVisibleTreeArray,UGDBOpenArrayOfPV,}
 devices,gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry,uunitmanager{,shared};
 type
 {Export+}

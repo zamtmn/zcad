@@ -40,7 +40,7 @@ type
 
                            _myglStencilfunc: GLenum;
                            _myglStencilref: GLint;
-                           _myglStencilmask: GLint;
+                           _myglStencilmask: GLuint;
 
                            _myglStencilfail,
                            _myglStencilzfail,

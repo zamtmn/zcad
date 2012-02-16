@@ -176,7 +176,7 @@ end;
 procedure TGMultiObjectProcessCommand.UnDo;
 type
     TCangeMethod=procedure(const data:GDBASEOBJECT)of object;
-    PTMethod=^TMethod;
+    //PTMethod=^TMethod;
 var
   p:PGDBASEOBJECT;
   ir:itrec;
@@ -194,7 +194,7 @@ end;
 procedure TGMultiObjectProcessCommand.Comit;
 type
     TCangeMethod=procedure(const data:GDBASEOBJECT)of object;
-    PTMethod=^TMethod;
+    //PTMethod=^TMethod;
 var
   p:PGDBASEOBJECT;
   ir:itrec;

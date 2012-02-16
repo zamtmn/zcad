@@ -22,7 +22,7 @@ unit GDBDevice;
 interface
 uses sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
 gl,OGLSpecFunc,uunitmanager{,shared},
-memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,UGDBOpenArrayOfPV,gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray,UGDBDescriptor{,UGDBLayerArray,oglwindowdef};
+memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray,UGDBDescriptor{,UGDBLayerArray,oglwindowdef};
 
 type
 {EXPORT+}

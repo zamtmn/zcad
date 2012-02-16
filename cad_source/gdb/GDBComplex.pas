@@ -21,7 +21,7 @@ unit GDBComplex;
 
 interface
 uses UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
-UGDBOpenArrayOfPV{,UGDBObjBlockdefArray},UGDBSelectedObjArray,UGDBVisibleOpenArray,gdbEntity{,varman,varmandef},
+{UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray,UGDBVisibleOpenArray,gdbEntity{,varman,varmandef},
 gl,
 GDBase,UGDBDescriptor,GDBWithLocalCS,gdbobjectsconstdef{,oglwindowdef},geometry{,dxflow},memman{,GDBSubordinated,UGDBOpenArrayOfByte};
 type

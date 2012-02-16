@@ -27,8 +27,8 @@ uses
   x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
   {$ENDIF}
-  strproc,{umytreenode,}types,graphics, umytreenode,
-  {StdCtrls,}ExtCtrls,ComCtrls,Controls,Classes,menus,Forms,lcltype,fileutil,
+  strproc,{umytreenode,}types,graphics,
+  {StdCtrls,}ExtCtrls,{ComCtrls,}Controls,Classes,menus,Forms,lcltype,fileutil,
 
   gdbasetypes,SysUtils,shared,sharedgdb,
   gdbase,{OGLtypes,} io{,UGDBOpenArrayOfByte,varman},varmandef,UGDBDescriptor{,UGDBOpenArrayOfPV},

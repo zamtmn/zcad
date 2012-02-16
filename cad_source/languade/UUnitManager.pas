@@ -214,7 +214,7 @@ var
   fieldgdbtype:pUserTypeDescriptor;
   fieldoffset: GDBSmallint;
   //handle,poz, kolvo, i,oldcount: GDBInteger;
-  indmin, indcount, razmer: GDBLongword;
+  indmin, indcount, razmer: GDBInteger;
   etd:PUserTypeDescriptor;
   addtype:GDBBoolean;
   penu:penumodj;

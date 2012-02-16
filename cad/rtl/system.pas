@@ -849,7 +849,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
     debug:tdebug;(*'Debug'*)
   end;
   indexdesk = record
-    indexmin, count: GDBLongword;
+    indexmin, count: GDBInteger;
   end;
   arrayindex = array[1..2] of indexdesk;
   parrayindex = ^arrayindex;
@@ -886,7 +886,7 @@ varmanagerdef=object(GDBaseObject)
                  procedure createvariable(varname:GDBString; var vd:vardesk);virtual;abstract;
                  procedure createvariablebytype(varname,vartype:GDBString);virtual;abstract;
                  procedure createbasevaluefromGDBString(varname: GDBString; varvalue: GDBString; var vd: vardesk);virtual;abstract;
-                 function findfieldcustom(var pdesc: pGDBByte; var offset: GDBLongword;var tc:PUserTypeDescriptor; nam: shortString): GDBBoolean;virtual;abstract;
+                 function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: shortString): GDBBoolean;virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\languade\varman.pas
 ptypemanager=^typemanager;
@@ -906,7 +906,7 @@ varmanager=object(varmanagerdef)
                  function findvardesc(varname:GDBString): pvardesk;virtual;abstract;
                  function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;abstract;
                  procedure createvariable(varname:GDBString; var vd:vardesk);virtual;abstract;
-                 function findfieldcustom(var pdesc: pGDBByte; var offset: GDBLongword;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;abstract;
+                 function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;abstract;
                  destructor done;virtual;abstract;
                  procedure free;virtual;abstract;
            end;
@@ -1419,6 +1419,7 @@ GDBObjEllipse=object(GDBObjPlain)
                             pplusnode,pminusnode:PTEntTreeNode;
                             NodeDir:TNodeDir;
                             Root:PTEntTreeNode;
+                            FulDraw:GDBBoolean;
                             {selected:boolean;}
                             infrustum:TActulity;
                             nuldrawpos,minusdrawpos,plusdrawpos:TActulity;

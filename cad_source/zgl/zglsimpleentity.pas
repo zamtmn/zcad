@@ -19,7 +19,7 @@ unit zglsimpleentity;
 {$INCLUDE def.inc}
 
 interface
-uses GDBEntity,log,GDBase,gdbasetypes;
+uses {GDBEntity,}log,GDBase{,gdbasetypes};
 type
 {EXPORT+}
 ZGLObjSimpleEntity=object(GDBaseObject)

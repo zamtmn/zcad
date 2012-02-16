@@ -20,8 +20,8 @@ unit cmdline;
 {$INCLUDE def.inc}
 interface
 uses
- strproc,lclproc,sysutils,gdbasetypes,umytreenode,
- StdCtrls,ExtCtrls,ComCtrls,Controls,Classes,menus,Forms,{IFDEF FPClcltype,$ENDIF}fileutil,graphics,
+ strproc,lclproc,sysutils,gdbasetypes,{umytreenode,}
+ StdCtrls,ExtCtrls,{ComCtrls,}Controls,Classes,menus,Forms,{IFDEF FPClcltype,$ENDIF}fileutil,graphics,
  UDMenuWnd{,ZStaticsText},gdbase{,ZPanelsNoFrame}, memman,UGDBDescriptor,math,commandline,varman,languade,
  UGDBTracePropArray,{zforms,}{ZEditsWithProcedure}{,zbasicvisible,}varmandef,{ZGUIsCT,}{ZPanelsGeneric,}
  geometry,shared,UGDBStringArray{,zmemos};

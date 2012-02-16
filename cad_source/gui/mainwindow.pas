@@ -34,7 +34,7 @@ uses
   commandline,{zmainforms,}memman,UGDBNamedObjectsArray,
   {ZGUIArrays,}{ZBasicVisible,}{ZEditsWithVariable,}{ZTabControlsGeneric,}shared,{ZPanelsWithSplit,}{ZGUIsCT,}{ZstaticsText,}{UZProcessBar,}strmy{,strutils},{ZPanelsGeneric,}
   graphics,
-  AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,xmlconf;
+  AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr{,xmlconf};
 
 resourcestring
   GDBObjinspWndName='Object inspector';
@@ -1262,7 +1262,7 @@ var
     action:tmyaction;
 
     paneldesk:string;
-const bsize=24;
+//const bsize=24;
 begin
   f.InitFromFile(pf);
   while f.notEOF do

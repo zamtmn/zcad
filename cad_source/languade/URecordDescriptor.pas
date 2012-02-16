@@ -31,7 +31,7 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        procedure AddField(var fd:FieldDescriptor);
                        function FindField(fn:GDBString):PFieldDescriptor;
                        function SetAttrib(fn:GDBString;SetA,UnSetA:GDBWord):PFieldDescriptor;
-                       procedure ApplyOperator(oper,path:GDBString;var offset:GDBLongword;out tc:PUserTypeDescriptor);virtual;
+                       procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;
                        procedure AddConstField(var fd:FieldDescriptor);
                        procedure CopyTo(RD:PTUserTypeDescriptor);
                        function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
@@ -50,7 +50,7 @@ function typeformat(s:GDBString;PInstance,PTypeDescriptor:GDBPointer):GDBString;
 var i,i2:GDBInteger;
     ps,fieldname:GDBString;
 //    pv:pvardesk;
-    offset:GDBLongword;
+    offset:GDBInteger;
     tc:PUserTypeDescriptor;
     pf:GDBPointer;
 begin

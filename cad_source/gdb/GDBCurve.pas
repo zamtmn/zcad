@@ -812,7 +812,7 @@ begin
      inherited;
 end;
 function GDBObjCurve.getsnap;
-const pnum=8;
+//const pnum=8;
 var t,d,e:GDBDouble;
     tv,n,v,dir:gdbvertex;
     mode,vertexnum:GDBInteger;

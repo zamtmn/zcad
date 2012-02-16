@@ -34,7 +34,7 @@ uses
 
   UGDBOpenArrayOfPV,UGDBSHXFont,LCLType,InterfaceBase,
   umytreenode,menus,Classes,{ SysUtils,} FileUtil,{ LResources,LMessages,} Forms,
-  {stdctrls,} ExtCtrls, ComCtrls,{Toolwin,} Controls, {Graphics, Dialogs,}
+  {stdctrls,} ExtCtrls, {ComCtrls,}{Toolwin,} Controls, {Graphics, Dialogs,}
   GDBGenericSubEntry,gdbasetypes,{Windows,}sysutils,
   gl,glu,{glx,}OpenGLContext,
   Math,gdbase,varmandef,varman,UUnitManager,
@@ -3197,6 +3197,8 @@ var
    Hour,Minute,Second,MilliSecond:word;
    q1,q2:gdbboolean; currd:PTDrawing;
 begin currd:=gdb.GetCurrentDWG;
+    if (sysvar.RD.RD_MaxRenderTime^<>0) then
+    begin
      currtime:=now;
      decodetime(currtime-StartTime,Hour,Minute,Second,MilliSecond);
      if assigned(sysvar.RD.RD_MaxRenderTime) then
@@ -3206,11 +3208,14 @@ begin currd:=gdb.GetCurrentDWG;
                                   result:=true;
                                   exit;
                             end;
+     end;
      q1:=false;
      q2:=false;
 
   if Node.infrustum={gdb.GetCurrentDWG}currd.pcamera.POSCOUNT then
   begin
+       if (Node.FulDraw)or(Node.nul.count=0) then
+       begin
        if assigned(node.pminusnode)then
                                        if node.minusdrawpos<>gdb.GetCurrentDWG.pcamera.DRAWCOUNT then
                                        begin
@@ -3227,6 +3232,7 @@ begin currd:=gdb.GetCurrentDWG;
                                                                                     else
                                                                                         q2:=true;
                                       end;
+       end;
        if node.nuldrawpos<>currd.pcamera.DRAWCOUNT then
        begin
         Node.nul.DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});

@@ -307,7 +307,7 @@ var //APP_NAME:GDBString;
     vd: vardesk;
     pvd:pvardesk;
     uou:PTObjectUnit;
-    offset:GDBLongword;
+    offset:GDBInteger;
     tc:PUserTypeDescriptor;
 begin
      result:=false;

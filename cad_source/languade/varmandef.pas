@@ -109,7 +109,7 @@ TPropEditor=class(TComponent)
 TPropEditorOwner=TWinControl;
 
 UserTypeDescriptor=object(GDBaseObject)
-                         SizeInGDBBytes:GDBLongword;
+                         SizeInGDBBytes:GDBInteger;
                          TypeName:String;
                          PUnit:GDBPointer;
                          OIP:TOIProps;
@@ -117,7 +117,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
                          procedure _init(size:GDBInteger;tname:string;pu:pointer);
                          function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
-                         procedure ApplyOperator(oper,path:GDBString;var offset:GDBLongword;out tc:PUserTypeDescriptor);virtual;abstract;
+                         procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;abstract;
                          function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
                          function SerializePreProcess(Value:GDBString;sub:integer):GDBString;virtual;
                          function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;abstract;
@@ -302,7 +302,7 @@ UserTypeDescriptor=object(GDBaseObject)
     debug:tdebug;(*'Debug'*)
   end;
   indexdesk = record
-    indexmin, count: GDBLongword;
+    indexmin, count: GDBInteger;
   end;
   arrayindex = array[1..2] of indexdesk;
   parrayindex = ^arrayindex;
@@ -339,7 +339,7 @@ varmanagerdef=object(GDBaseObject)
                  procedure createvariable(varname:GDBString; var vd:vardesk);virtual;abstract;
                  procedure createvariablebytype(varname,vartype:GDBString);virtual;abstract;
                  procedure createbasevaluefromGDBString(varname: GDBString; varvalue: GDBString; var vd: vardesk);virtual;abstract;
-                 function findfieldcustom(var pdesc: pGDBByte; var offset: GDBLongword;var tc:PUserTypeDescriptor; nam: shortString): GDBBoolean;virtual;abstract;
+                 function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: shortString): GDBBoolean;virtual;abstract;
            end;
 {EXPORT-}
 var

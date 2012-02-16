@@ -60,7 +60,7 @@ var
   LayerWindow: TLayerWindow;
 
 implementation
-uses mainwindow;
+//uses mainwindow;
 { TLayerWindow }
 
 procedure TLayerWindow.FormCreate(Sender: TObject); // Процедура выполняется при отрисовке окна

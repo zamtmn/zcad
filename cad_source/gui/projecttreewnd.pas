@@ -166,7 +166,7 @@ procedure TProjectTreeWnd.BuildTreeByEQ(var BuildNode:TmyTreeNode;PDBUNIT:PTUnit
 var
    pvdeq:pvardesk;
    ir:itrec;
-   offset:GDBLongword;
+   offset:GDBInteger;
    tc:PUserTypeDescriptor;
    treepos,treesuperpos{,category},s:GDBString;
    i:integer;

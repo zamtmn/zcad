@@ -19,7 +19,7 @@
 unit commandline;
 {$INCLUDE def.inc}
 interface
-uses umytreenode,sysinfo,strproc,UGDBOpenArrayOfPointer,UDMenuWnd,gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
+uses umytreenode,sysinfo,strproc,UGDBOpenArrayOfPointer,{UDMenuWnd,}gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
      memman,shared,log,varmandef,varman;
 resourcestring
 S_RunCommand='Running command';

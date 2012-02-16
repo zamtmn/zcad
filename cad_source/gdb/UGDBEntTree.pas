@@ -36,6 +36,7 @@ type
 
                             NodeDir:TNodeDir;
                             Root:PTEntTreeNode;
+                            FulDraw:GDBBoolean;
 
                             {selected:boolean;}
                             infrustum:TActulity;
@@ -59,8 +60,8 @@ TTestTreeNode=Object(GDBaseObject)
               end;
 TTestTreeArray=array [0..2] of TTestTreeNode;
 const
-  _InNodeCount=1000;
-  _NodeDepth=16;
+  _InNodeCount=20;
+  _NodeDepth=20;
 function createtree(entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 implementation
 function TEntTreeNode.CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;
@@ -102,6 +103,7 @@ end;
 constructor TEntTreeNode.initnul;
 begin
      nul.init({$IFDEF DEBUGBUILD}'{0B3BD93C-D6F7-4F08-B9E5-21574D345206}',{$ENDIF}1000);
+     FulDraw:=True;
 end;
 procedure TEntTreeNode.ClearSub;
 begin
@@ -174,7 +176,10 @@ begin
                            PRootNode^.ClearSub;
                            end
                        else
+                           begin
                            GDBGetMem({$IFDEF DEBUGBUILD}'{A1E9743F-63CF-4C8F-8C40-57CCDC24F8CF}',{$ENDIF}pointer(result),sizeof(TEntTreeNode));
+                           result.initnul;
+                           end;
      result.BoundingBox:=aabb;
      result.pluscount:=0;
      result.minuscount:=0;
@@ -333,6 +338,7 @@ else if (tv.z>=tv.x)and(tv.z>=tv.y) then
 
      result.plane:=ta[imin].plane;
      result.point:=midlepoint;
+     GDBFreeMem(Result.nul.PArray);
      result.nul:=ta[imin].nul;
      result^.updateenttreeadress;
      result.nodedepth:=nodedepth;

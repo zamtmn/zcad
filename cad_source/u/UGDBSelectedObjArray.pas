@@ -19,7 +19,7 @@
 unit UGDBSelectedObjArray;
 {$INCLUDE def.inc}
 interface
-uses GDBWithLocalCS,GDBWithMatrix,GDBEntity,UGDBControlPointArray,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
+uses {GDBWithLocalCS,}GDBWithMatrix,GDBEntity,UGDBControlPointArray,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
      gl,
      gdbasetypes{,varmandef,gdbobjectsconstdef},memman,OGLSpecFunc;
 type

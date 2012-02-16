@@ -31,7 +31,7 @@ function replacenull(s:GDBString): GDBString;
 function strtohex(s:GDBString): GDBString;
 function parse(template, str:GDBString; GDBStringarray:PGDBGDBStringArray;mode:GDBBoolean;lexema:pshortString; var position:GDBInteger):GDBBoolean;
 function runparser(template:GDBString;var str:GDBString; out parsed:GDBBoolean):PGDBGDBStringArray;
-function IsParsed(template:GDBString;var str:GDBString; var strins:PGDBGDBStringArray):boolean;
+function IsParsed(template:GDBString;var str:GDBString; out strins:PGDBGDBStringArray):boolean;
 procedure KillString(var str:GDBString);
 const maxlexem=16;
 
@@ -205,7 +205,7 @@ begin
   while (expr[subend]<>sym) and (subend < length(expr)) do
         inc(subend);
 end;
-function IsParsed(template:GDBString;var str:GDBString; var strins:PGDBGDBStringArray):boolean;
+function IsParsed(template:GDBString;var str:GDBString; out strins:PGDBGDBStringArray):boolean;
 begin
      strins:=runparser(template,str,result);
 end;
@@ -406,4 +406,4 @@ begin
 end;
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('strmy.initialization');{$ENDIF}
-end.
+end.

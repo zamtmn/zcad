@@ -634,7 +634,7 @@ begin
                                            repeat
                                                  str:='$'+inttostr(i)+'='+pvd^.name+'|'+pfd^.base.ProgramName+'|'+pfd^.base.PFT^.GetValueAsString(tp);
                                                  dxfGDBStringout(handle,1000,str);
-                                                 ptruint(tp):=ptruint(tp)+pfd^.base.PFT^.SizeInGDBBytes; { TODO : сделать на оффсете }
+                                                 ptruint(tp):=ptruint(tp)+ptruint(pfd^.base.PFT^.SizeInGDBBytes); { TODO : сделать на оффсете }
                                                  inc(i);
                                                  pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.iterate(ir2);
                                            until pfd=nil;

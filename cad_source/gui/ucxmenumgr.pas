@@ -21,8 +21,8 @@ unit ucxmenumgr;
 interface
 
 uses
-  umytreenode,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,ButtonPanel,Buttons,
-  strutils,intftranslations,sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
+  umytreenode,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,{ComCtrls,StdCtrls,}Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,{ButtonPanel,}Buttons,
+  {strutils,}intftranslations,sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
 
 type
    tcxmenumgr=class
@@ -41,7 +41,7 @@ type
 var
    cxmenumgr:tcxmenumgr=nil;
 implementation
-uses commandline,log,sharedgdb;
+uses {commandline,}log{,sharedgdb};
 procedure tcxmenumgr.RegisterLCLMenu(var menu:TmyPopupMenu);
 begin
      menu.OnClose:=LCLCloseNotify;

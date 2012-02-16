@@ -22,7 +22,7 @@ interface
 
 uses
   commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,ButtonPanel,Buttons,
-  strutils,intftranslations,sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
+  {strutils,}intftranslations,sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
 type
     TButtonProc=procedure(pdata:GDBPointer);
     TButtonMethod=procedure({Sender:pointer;}pdata:{GDBPointer}GDBPlatformint)of object;
@@ -228,7 +228,7 @@ var
     y,xx,yy,w,code:GDBInteger;
     //bmp:TBitmap;
     action:TmyAction;
-const bsize=24;
+//const bsize=24;
 begin
   f.InitFromFile(fname);
   while f.notEOF do

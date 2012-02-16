@@ -216,7 +216,15 @@ var
      ImInFrustum:TInRect;
      pobj:PGDBObjEntity;
      ir:itrec;
+     v1,v2:gdbvertex;
 begin
+     //enttree.FulDraw:=random(100)<80;
+     gdb.GetCurrentDWG^.myGluProject2(enttree.BoundingBox.LBN,v1);
+     gdb.GetCurrentDWG^.myGluProject2(enttree.BoundingBox.RTF,v2);
+     if abs((v2.x-v1.x)*(v2.y-v1.y))<40 then
+                                             enttree.FulDraw:=false
+                                         else
+                                             enttree.FulDraw:=true;
      case OwnerInFrustum of
      IREmpty:begin
                    OwnerInFrustum:=OwnerInFrustum;

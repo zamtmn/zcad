@@ -56,7 +56,8 @@ uses
   uPSR_std,
   uPSR_controls,
   uPSR_stdctrls,
-  uPSR_forms;
+  uPSR_forms,
+  uPSUtils;
 type
 {Export+}
   TMSType=(
@@ -2137,7 +2138,28 @@ begin
 
     AddImportedClassVariable(Sender, 'Application', 'TApplication');
     // Registers the application variable to the script engine.
+    {PGDBDouble=^GDBDouble;
+    PGDBFloat=^GDBFloat;
+    PGDBString=^GDBString;
+    PGDBAnsiString=^GDBAnsiString;
+    PGDBBoolean=^GDBBoolean;
+    PGDBInteger=^GDBInteger;
+    PGDBByte=^GDBByte;
+    PGDBLongword=^GDBLongword;
+    PGDBQWord=^GDBQWord;
+    PGDBWord=^GDBWord;
+    PGDBSmallint=^GDBSmallint;
+    PGDBShortint=^GDBShortint;
+    PGDBPointer=^GDBPointer;}
+    Sender.AddType('GDBDouble',btDouble){: TPSType};
+    Sender.AddType('GDBFloat',btSingle);
+    Sender.AddType('GDBString',btString);
+    Sender.AddType('GDBInteger',btS32);
+    //Sender.AddType('GDBBoolean',btBoolean);
+
     sender.AddDelphiFunction('procedure test;');
+    sender.AddDelphiFunction('procedure ShowError(errstr:GDBString);');
+
     Result := True;
   end else
     Result := False;
@@ -2166,7 +2188,7 @@ begin
 (*
 var f: TForm; i: Longint; begin f := TForm.CreateNew(f{, 0}); f.Show; while f.Visible do Application.ProcessMessages; F.free;  end.
 *)
-     Script:='var f: TForm; i: Longint; begin end.';
+     Script:='var r1,r2:GDBInteger; begin r1:=10;r2:=2;r1:=r1/r2; ShowError(IntToStr(r1)); end.';
      Compiler := TPSPascalCompiler.Create; // create an instance of the compiler.
      Compiler.OnUses := ScriptOnUses; // assign the OnUses event.
      if not Compiler.Compile(Script) then  // Compile the Pascal script into bytecode.
@@ -2196,6 +2218,7 @@ var f: TForm; i: Longint; begin f := TForm.CreateNew(f{, 0}); f.Show; while f.Vi
      Exec := TPSExec.Create;  // Create an instance of the executer.
      RegisterClassLibraryRuntime(Exec, CI);
      Exec.RegisterDelphiFunction(@test, 'test', cdRegister);
+     Exec.RegisterDelphiFunction(@ShowError, 'ShowError', cdRegister);
      //----Exec.RegisterDelphiFunction(@MyOwnFunction, 'MYOWNFUNCTION', cdRegister);
      { This will register the function to the executer. The first parameter is a
        pointer to the function. The second parameter is the name of the function (in uppercase).

@@ -141,7 +141,7 @@ varmanager=object(varmanagerdef)
                  function findvardesc(varname:GDBString): pvardesk;virtual;
                  function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;
                  procedure createvariable(varname:GDBString; var vd:vardesk);virtual;
-                 function findfieldcustom(var pdesc: pGDBByte; var offset: GDBLongword;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;
+                 function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;
                  destructor done;virtual;
                  procedure free;virtual;
            end;
@@ -890,7 +890,7 @@ var
   oper: ansichar;
   i, oldi, j, indexcount: GDBInteger;
   pind: parrayindex;
-  ind, sum: GDBLongword;
+  ind, sum: GDBInteger;
   sizeinmem: GDBLongword;
   deb1,deb2:shortString;
   pt:PTUserTypeDescriptor;
@@ -1082,7 +1082,7 @@ function varmanager.findvardesc(varname: GDBString): pvardesk;
 var
   //pblock: pdblock;
   pdesc: pvardesk;
-  offset: GDBLongword;
+  offset: GDBInteger;
   temp: pvardesk;
   bc:PUserTypeDescriptor;
       ir:itrec;

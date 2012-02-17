@@ -170,7 +170,7 @@ begin
     sysvar.debug.renderdeb.pointcount:=pointcount;
     sysvar.debug.renderdeb.primcount:=primcount;
     sysvar.debug.renderdeb.bathcount:=bathcount;
-     if pointcount<>0 then
+    if pointcount<>0 then
                           sysvar.debug.renderdeb.middlepoint:=geometry.VertexMulOnSc(middlepoint,1/pointcount);
 end;
 procedure TOGLStateManager.myglVertex3dV;

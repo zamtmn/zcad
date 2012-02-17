@@ -268,9 +268,15 @@ begin
   p:=parray;
   for i:=0 to count-1 do
   begin
-          oglsm.myglvertex3dv(pointer(p));
+          //oglsm.myglvertex3dv(pointer(p));
+          //inc(p);
      //myglVertex(p.coord.x+random(5)/10,p.coord.y+random(5)/10,p.coord.z+random(5)/10);
           if p^.count<0 then
+                            begin
+                            oglsm.myglvertex3dv(pointer(p));
+                            oglsm.myglvertex3dv(pointer(p));
+                            end
+                        else
                             oglsm.myglvertex3dv(pointer(p));
                             //myglVertex(p.coord.x+random(5)/10,p.coord.y+random(5)/10,p.coord.z+random(5)/10);
      inc(p);
@@ -368,7 +374,7 @@ begin
         2:
           begin
                 oglsm.myglbegin(GL_LINES);
-                if count<num then exit;
+                //if count<num then exit;
                 p:=parray;
                 pp:=nil;
                 linenumber:=0;

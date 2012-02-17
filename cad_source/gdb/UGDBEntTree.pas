@@ -346,6 +346,7 @@ else if (tv.z>=tv.x)and(tv.z>=tv.y) then
      result.pplusnode:=createtree(ta[imin].plus,plusaabb,nil,nodedepth,result,TND_Plus);
      result.pluscount:=ta[imin].plus.Count;
      result.minuscount:=ta[imin].minus.Count;
+     //result.BoundingBox:=result.nul.getoutbound;
      //ta[0].done;
      //ta[1].done;
      //ta[2].done;

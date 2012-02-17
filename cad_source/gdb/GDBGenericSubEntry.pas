@@ -221,7 +221,7 @@ begin
      //enttree.FulDraw:=random(100)<80;
      gdb.GetCurrentDWG^.myGluProject2(enttree.BoundingBox.LBN,v1);
      gdb.GetCurrentDWG^.myGluProject2(enttree.BoundingBox.RTF,v2);
-     if abs((v2.x-v1.x)*(v2.y-v1.y))<40 then
+     if abs((v2.x-v1.x)*(v2.y-v1.y))<10 then
                                              enttree.FulDraw:=false
                                          else
                                              enttree.FulDraw:=true;

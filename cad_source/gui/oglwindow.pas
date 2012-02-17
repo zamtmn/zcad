@@ -749,14 +749,19 @@ begin
                                       end;
   if param.projtype = ProjParalel then
                                       begin
-                                            OGLSpecFunc.CurrentCamCSOffset:=pdwg.pcamera^.CamCSOffset;
+                                           //OGLSpecFunc.CurrentCamCSOffset:=pdwg.pcamera^.CamCSOffset;
+                                           if geometry.oneVertexlength(pdwg.pcamera^.CamCSOffset)>1000000 then
+                                           begin
+                                                OGLSpecFunc.CurrentCamCSOffset:=pdwg.pcamera^.CamCSOffset;
                                             OGLSpecFunc.notuseLCS:=pdwg.pcamera^.notuseLCS;
+                                           end
+                                           else OGLSpecFunc.notuseLCS:=true;
                                       end
                                   else
                                       begin
                                             OGLSpecFunc.notuseLCS:=true;
                                       end;
-  if {pdwg.pcamera^.notuseLCS}OGLSpecFunc.notuseLCS then
+  if OGLSpecFunc.notuseLCS then
   begin
         pdwg.pcamera^.projMatrixLCS:=pdwg.pcamera^.projMatrix;
         pdwg.pcamera^.modelMatrixLCS:=pdwg.pcamera^.modelMatrix;

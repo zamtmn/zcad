@@ -84,6 +84,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
 
                               //function FindObjectsInPointStart(const point:GDBVertex;out Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;
                               function FindObjectsInPoint(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;
+                              function FindObjectsInPointSlow(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
                               function FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
                               //function FindObjectsInPointDone(const point:GDBVertex):GDBBoolean;virtual;
                               function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
@@ -123,6 +124,29 @@ begin
      p:=objarray.iterate(ir);
      until p=nil;
 end;
+function GDBObjGenericSubEntry.FindObjectsInPointSlow(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
+var
+    minus:gdbboolean=false;
+    plus:gdbboolean=false;
+    pobj:PGDBObjEntity;
+    ir:itrec;
+begin
+     pobj:=objarray.beginiterate(ir);
+     if pobj<>nil then
+     repeat
+           if pobj^.onpoint(Objects,point) then
+           begin
+                result:=true;
+                //Objects.Add(@pobj);
+           end;
+
+           pobj:=objarray.iterate(ir);
+     until pobj=nil;
+
+     //result:=result or (plus or minus);
+     //self.ObjArray.ObjTree.BoundingBox;
+end;
+
 function GDBObjGenericSubEntry.FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
 var
     minus:gdbboolean=false;
@@ -365,6 +389,7 @@ begin
      begin
           PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.deliteminarray(pobj^.bp.TreePos.SelfIndex);
      end;
+     pobj^.bp.TreePos.Owner:=nil;
 
      pointer(p):=ObjArray.GetObject(pobjinarray);
      ObjArray.deliteminarray(pobjinarray);

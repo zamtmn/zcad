@@ -178,8 +178,11 @@ begin
        p:=ObjCasheArray.beginiterate(ir);
        if p<>nil then
        repeat
-            self.ObjArray.RemoveFromTree(p);
-            self.ObjArray.ObjTree.AddObjectToNodeTree(p);
+             if p^.bp.TreePos.Owner<>nil then
+             begin
+                  self.ObjArray.RemoveFromTree(p);
+                  self.ObjArray.ObjTree.AddObjectToNodeTree(p);
+             end;
             p:=ObjCasheArray.iterate(ir);
        until p=nil;
 

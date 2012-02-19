@@ -1229,7 +1229,7 @@ begin
 
   historyout('Первая точка:');
 end;
-Procedure _Cable_com_CommandEnd;
+Procedure _Cable_com_CommandEnd(_self:GDBPointer);
 begin
   if p3dpl<>nil then
   begin

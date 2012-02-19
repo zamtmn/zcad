@@ -128,6 +128,7 @@ type
     mousefrustum,mousefrustumLCS:ClipArray;
     ShowDebugFrustum:GDBBoolean;
     debugfrustum:ClipArray;
+    processObjConstruct:GDBBoolean;
   end;
 {Export-}
 //ppolaraxis: PGDBOpenArrayVertex_GDBWord;

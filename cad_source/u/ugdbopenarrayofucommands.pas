@@ -27,6 +27,7 @@ type
 TTypeCommand=(TTC_MBegin,TTC_MEnd,TTC_MNotUndableIfOverlay,TTC_Command,TTC_ChangeCommand);
 PTElementaryCommand=^TElementaryCommand;
 TElementaryCommand=object(GDBaseObject)
+                         AutoProcessGDB:GDBBoolean;
                          function GetCommandType:TTypeCommand;virtual;
                          procedure UnDo;virtual;abstract;
                          procedure Comit;virtual;abstract;
@@ -140,6 +141,7 @@ GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
                                  procedure redo;
                                  constructor init;
                                  function Add(p:GDBPointer):TArrayIndex;virtual;
+                                 Procedure ClearFrom(cc:TArrayIndex);
 
                                  {$I TGChangeCommandList.inc}
                                  {$I TGObjectChangeCommandList.inc}
@@ -301,6 +303,7 @@ begin
 end;
 constructor TGObjectChangeCommand2.Assign(var _dodata:_T;_domethod,_undomethod:tmethod);
 begin
+  AutoProcessGDB:=True;
   Data:=_DoData;
   domethod:=_domethod;
   undomethod:=_undomethod;
@@ -311,7 +314,10 @@ type
     TCangeMethod=procedure(const data:_T)of object;
 begin
      TCangeMethod(undomethod)(Data);
-     PGDBObjEntity(undomethod.Data)^.YouChanged;
+     if AutoProcessGDB then
+                           PGDBObjEntity(undomethod.Data)^.YouChanged
+                       else
+                           PGDBObjEntity(undomethod.Data)^.format;
 end;
 
 procedure TGObjectChangeCommand2.Comit;
@@ -319,7 +325,10 @@ type
     TCangeMethod=procedure(const data:_T)of object;
 begin
      TCangeMethod(domethod)(Data);
-     PGDBObjEntity(domethod.Data)^.YouChanged;
+     if AutoProcessGDB then
+                           PGDBObjEntity(undomethod.Data)^.YouChanged
+                       else
+                           PGDBObjEntity(undomethod.Data)^.format;
 end;
 
 constructor TGChangeCommand.Assign(var data:_T);
@@ -501,14 +510,14 @@ begin
           if pcc^.GetCommandType=TTC_MEnd then
                                               begin
                                               inc(mcounter);
-                                              pcc^.undo;
+                                              //pcc^.undo;
                                               end
      else if pcc^.GetCommandType=TTC_MBegin then
                                                 begin
                                                      dec(mcounter);
                                                      if mcounter=0 then
                                                      shared.HistoryOutStr('Отмена "'+PTMarkerCommand(pcc)^.Name+'"');
-                                                     pcc^.undo;
+                                                     //pcc^.undo;
                                                 end
      else if pcc^.GetCommandType=TTC_MNotUndableIfOverlay then
                                                 begin
@@ -574,9 +583,15 @@ begin
      inherited init({$IFDEF DEBUGBUILD}'{EF79AD53-2ECF-4848-8EDA-C498803A4188}',{$ENDIF}1);
      CurrentCommand:=0;
 end;
+procedure GDBObjOpenArrayOfUCommands.ClearFrom(cc:TArrayIndex);
+begin
+     cleareraseobjfrom2(cc);
+     CurrentCommand:=Count;
+end;
+
 function GDBObjOpenArrayOfUCommands.Add(p:GDBPointer):TArrayIndex;
 begin
-     if self.CurrentCommand<>count then
+     if self.CurrentCommand<count then
                                        self.cleareraseobjfrom2(self.CurrentCommand);
      result:=inherited;
 end;

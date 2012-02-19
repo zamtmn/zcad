@@ -114,7 +114,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       if ir.itc>n then
+       if ir.itc>=n then
                        begin
                        p^.done;
                        GDBFreeMem(GDBPointer(p));

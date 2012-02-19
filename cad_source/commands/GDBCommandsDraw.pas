@@ -1637,7 +1637,7 @@ begin
     //pb^.RenderFeedback;
   end;
 end;
-procedure Insert_com_CommandEnd;
+procedure Insert_com_CommandEnd(_self:GDBPointer);
 begin
      if pb<>nil then
                     begin
@@ -2396,21 +2396,29 @@ begin
   p3dpl:=nil;
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   historyout('Первая точка:');
+  gdb.GetCurrentDWG.OGLwindow1.param.processObjConstruct:=true;
 end;
 
-Procedure _3DPoly_com_CommandEnd;
+Procedure _3DPoly_com_CommandEnd(_self:GDBPointer);
 var
     domethod,undomethod:tmethod;
+    cc:integer;
 begin
-
+     gdb.GetCurrentDWG.OGLwindow1.param.processObjConstruct:=false;
   if p3dpl<>nil then
   if p3dpl^.VertexArrayInOCS.Count<2 then
                                          begin
                                               {objinsp.GDBobjinsp.}ReturnToDefault;
                                               //p3dpl^.YouDeleted;
+                                              cc:=pCommandRTEdObject(_self)^.UndoTop;
+                                              gdb.GetCurrentDWG.UndoStack.ClearFrom(cc);
+                                              p3dpl:=nil;
                                          end
                                       else
                                       begin
+                                        cc:=pCommandRTEdObject(_self)^.UndoTop;
+                                        gdb.GetCurrentDWG.UndoStack.ClearFrom(cc);
+
                                         SetObjCreateManipulator(domethod,undomethod);
                                         with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(domethod,undomethod,1)^ do
                                         begin
@@ -2446,7 +2454,15 @@ begin
 end;
 
 function _3DPoly_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
-//var po:PGDBObjSubordinated;
+var
+    ptv,ptvprev:pgdbvertex;
+    ir:itrec;
+    v,l:gdbdouble;
+    domethod,undomethod:tmethod;
+    polydata:tpolydata;
+    _tv:gdbvertex;
+    p3dpl2:pgdbobjpolyline;
+    i:integer;
 begin
   result:=mclick;
   p3dpl^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
@@ -2455,7 +2471,23 @@ begin
   p3dpl^.Format;
   if (button and MZW_LBUTTON)<>0 then
   begin
-    p3dpl^.AddVertex(wc);
+
+
+  polydata.nearestvertex:=p3dpl.VertexArrayInOCS.count;
+  polydata.nearestline:=p3dpl.VertexArrayInOCS.count-1;
+  polydata.dir:=1;
+  polydata.wc:=wc;
+  tmethod(domethod).Code:=pointer(p3dpl.InsertVertex);
+  tmethod(domethod).Data:=p3dpl;
+  tmethod(undomethod).Code:=pointer(p3dpl.DeleteVertex);
+  tmethod(undomethod).Data:=p3dpl;
+  with gdb.GetCurrentDWG.UndoStack.PushCreateTGObjectChangeCommand2(polydata,tmethod(domethod),tmethod(undomethod))^ do
+  begin
+       AutoProcessGDB:=false;
+       comit;
+  end;
+
+    //p3dpl^.AddVertex(wc);
     p3dpl^.Format;
     p3dpl^.RenderFeedback;
     //gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);

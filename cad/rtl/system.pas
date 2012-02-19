@@ -1496,6 +1496,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                               procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;abstract;
                               //function FindObjectsInPointStart(const point:GDBVertex;out Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;abstract;
                               function FindObjectsInPoint(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;abstract;
+                              function FindObjectsInPointSlow(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
                               function FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
                               //function FindObjectsInPointDone(const point:GDBVertex):GDBBoolean;virtual;abstract;
                               function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
@@ -2516,6 +2517,7 @@ type
     mousefrustum,mousefrustumLCS:ClipArray;
     ShowDebugFrustum:GDBBoolean;
     debugfrustum:ClipArray;
+    processObjConstruct:GDBBoolean;
   end;
 //Generate on C:\zcad\CAD_SOURCE\languade\UUnitManager.pas
     PTUnitManager=^TUnitManager;

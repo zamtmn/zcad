@@ -27,7 +27,7 @@ const cmd_ok=-1;
 const cmd_cancel=-2;
 const ZCMD_OK_NOEND=-10;
 type
-  comproc=procedure;
+  comproc=procedure(_self:pointer);
   commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger):GDBInteger;
   comdrawfunc=function(mclick:GDBInteger):GDBInteger;
   comfunc=function:GDBInteger;
@@ -237,7 +237,7 @@ end;
 procedure CommandRTEdObjectPlugin.Format;
 begin
      if assigned(self.onFormat) then
-                                     onFormat;
+                                     onFormat(@self);
 end;
 function CommandRTEdObjectPlugin.BeforeClick;
 begin
@@ -256,7 +256,7 @@ procedure CommandRTEdObjectPlugin.CommandEnd;
 begin
      if assigned(onCommandEnd) then
                                    begin
-                                        onCommandEnd;
+                                        onCommandEnd(@self);
                                    end;
      inherited CommandEnd;
 end;
@@ -264,13 +264,13 @@ procedure CommandRTEdObjectPlugin.CommandCancel;
 begin
      //inherited CommandCancel;
      if assigned(onCommandCancel) then
-                                     onCommandCancel;
+                                     onCommandCancel(@self);
      inherited CommandCancel;
 end;
 procedure CommandRTEdObjectPlugin.CommandContinue;
 begin
      if assigned(onCommandContinue) then
-                                     onCommandContinue;
+                                     onCommandContinue(@self);
 end;
 procedure CommandFastObject.CommandEnd;
 begin
@@ -294,6 +294,7 @@ end;
 procedure CommandRTEdObject.CommandCancel;
 begin
   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+  gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
   gdb.GetCurrentDWG.OGLwindow1.SetMouseMode(savemousemode);
   redrawoglwnd;

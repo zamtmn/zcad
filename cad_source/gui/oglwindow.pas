@@ -1606,6 +1606,9 @@ begin
 end;
 procedure TOGLWnd.sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);
 begin
+     if commandmanager.pcommandrunning<>nil then
+     commandmanager.pcommandrunning^.MouseMoveCallback(coord,param.md.mouse,key,pos);
+
      if (key and MZW_LBUTTON)<>0 then
      if commandmanager.pcommandrunning<>nil then
      begin
@@ -1615,9 +1618,6 @@ begin
            create0axis;
            project0axis;
      end;
-
-     if commandmanager.pcommandrunning<>nil then
-     commandmanager.pcommandrunning^.MouseMoveCallback(coord,param.md.mouse,key,pos);
      //end;
 end;
 
@@ -2458,7 +2458,7 @@ procedure TOGLWnd.showcursor;
         oglsm.myglLineStipple(1, $3333);
         oglsm.myglEnable(GL_LINE_STIPPLE);
         oglsm.myglbegin(GL_LINES);
-        oglsm.glcolor3ub(255,255, 255);
+        oglsm.glcolor3ub(80,80, 80);
         if param.ontrackarray.otrackarray[i].arraydispaxis.Count <> 0 then
         begin;
         pt:=param.ontrackarray.otrackarray[i].arraydispaxis.PArray;
@@ -3338,6 +3338,8 @@ begin
 
 
   processmousenode(Node,i);
+  if param.processObjConstruct then
+                                   findonmobj(@gdb.GetCurrentDWG.ConstructObjRoot.ObjArray,i);
 
   pp:=gdb.GetCurrentDWG.OnMouseObj.beginiterate(ir);
   if pp<>nil then
@@ -3474,6 +3476,20 @@ begin
        pgdbobjentity(param.ospoint.PGDBObject)^.AddOnTrackAxis(@param.ospoint);   fghfgh
   end;}
   objects.ClearAndDone;
+  if param.processObjConstruct then
+  begin
+  objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}100);
+  if gdb.GetCurrentDWG.ConstructObjRoot.FindObjectsInPointSlow(param.ospoint.worldcoord,Objects) then
+  begin
+                       pobj:=objects.beginiterate(ir);
+                       if pobj<>nil then
+                       repeat
+                             pgdbobjentity(pobj)^.AddOnTrackAxis(param.ospoint,addaxistootrack);
+                             pobj:=objects.iterate(ir);
+                       until pobj=nil;
+  end;
+  objects.ClearAndDone;
+  end;
   end;
   project0axis;
   {GDBGetMem(param.ospoint.arrayworldaxis, sizeof(GDBWord) + param.ppolaraxis^.count * sizeof(gdbvertex));
@@ -3532,6 +3548,20 @@ begin
                        until pobj=nil;
   end;
   objects.ClearAndDone;
+                       if param.processObjConstruct then
+                       begin
+  objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}100);
+  if gdb.GetCurrentDWG.ConstructObjRoot.FindObjectsInPointSlow(param.ontrackarray.otrackarray[0].worldcoord,Objects) then
+  begin
+                       pobj:=objects.beginiterate(ir);
+                       if pobj<>nil then
+                       repeat
+                             pgdbobjentity(pobj)^.AddOnTrackAxis(param.ontrackarray.otrackarray[0],addaxistootrack);
+                             pobj:=objects.iterate(ir);
+                       until pobj=nil;
+  end;
+  objects.ClearAndDone;
+  end;
   end;
 
 
@@ -3554,8 +3584,10 @@ begin
   if param.ontrackarray.total = 0 then exit;
   param.polarlinetrace := 0;
 
-    if tocommandmcliccount=0 then a:=1
-                             else a:=0;
+    if tocommandmcliccount=0 then
+                                 a:=1
+                             else
+                                 a:=0;
     for j := a to param.ontrackarray.total - 1 do
     begin
       gdb.GetCurrentDWG^.myGluProject2(param.ontrackarray.otrackarray[j].worldcoord,
@@ -3564,8 +3596,8 @@ begin
     if sysvar.dwg.DWG_PolarMode^ = 0 then exit;
   for j := a to param.ontrackarray.total - 1 do
   begin
-    //gdb.GetCurrentDWG^.myGluProject2(param.ontrackarray.otrackarray[j].worldcoord,
-    //           param.ontrackarray.otrackarray[j].dispcoord);
+    {gdb.GetCurrentDWG^.myGluProject2(param.ontrackarray.otrackarray[j].worldcoord,
+               param.ontrackarray.otrackarray[j].dispcoord);}
     param.ontrackarray.otrackarray[j].dispcoord.z:=0;
     param.ontrackarray.otrackarray[j].dmousecoord.x :=
     param.md.glmouse.x - param.ontrackarray.otrackarray[j].dispcoord.x;
@@ -4047,6 +4079,7 @@ begin
   param.md.workplane{.normal.z}[2] := {sqrt(0.9)}1;
   param.md.workplane{.d}[3] := 0;
   param.scrollmode:=false;
+  param.processObjConstruct:=false;
   //UGDBDescriptor.POGLWnd := @param;
 
   {gdb.GetCurrentDWG.pcamera.initnul;

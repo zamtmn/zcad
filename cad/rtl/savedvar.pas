@@ -23,8 +23,8 @@ var
   PATH_File9:GDBString;
 implementation
 begin
-  DMenuX:=503;
-  DMenuY:=171;
+  DMenuX:=902;
+  DMenuY:=90;
   TEdWND_Left:=495;
   TEdWND_Top:=197;
   TEdWND_Width:=570;
@@ -32,14 +32,14 @@ begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=238;
   VIEW_ObjInspSubV:=89;
-  PATH_File0:='c:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File1:='D:\por.DXF';
-  PATH_File2:='c:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File3:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File4:='c:\zcad\cad\autosave\autosave.dxf';
-  PATH_File5:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File6:='C:\3 кровля_29.12.2011.dxf (1)\3 кровля_29.12.2011.dxf';
-  PATH_File7:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File8:='D:\2 этаж_ПС план.dxf';
-  PATH_File9:='D:\План 2 этажа ПС_ИД.dxf';
+  PATH_File0:='/home/zamtmn/Рабочий стол/2 этаж_ПС план invisible_kabel.dxf';
+  PATH_File1:='/home/zamtmn/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File2:='/home/zamtmn/zcad/cad/autosave/autosave.dxf';
+  PATH_File3:='/home/zamtmn/zcad/cad/sample/test_dxf/em.dxf';
+  PATH_File4:='/home/zamtmn/zcad/cad/../errors/1.dxf';
+  PATH_File5:='c:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File6:='D:\por.DXF';
+  PATH_File7:='c:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File8:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File9:='c:\zcad\cad\autosave\autosave.dxf';
 end.

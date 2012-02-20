@@ -55,7 +55,7 @@ GDBObjComplex=object(GDBObjWithLocalCS)
 {EXPORT-}
 implementation
 uses
-    log,oglwindow;
+    log,oglwindow,varmandef;
 {procedure GDBObjComplex.Draw;
 begin
   if visible then
@@ -164,6 +164,7 @@ begin
   currd:=gdb.GetCurrentDWG;
   if Node.infrustum=currd.pcamera.POSCOUNT then
   begin
+       if node.FulDraw then
        if (Node.FulDraw)or(Node.nul.count=0) then
        begin
        if assigned(node.pminusnode)then
@@ -200,6 +201,8 @@ begin
   inc(dc.subrender);
   //ConstObjArray.DrawWithattrib(dc{infrustumactualy,subrender)}{DrawGeometry(CalculateLineWeight});
   treerender(ConstObjArray.ObjTree,dc);
+      if (sysvar.DWG.DWG_SystmGeometryDraw^) then
+                                               ConstObjArray.ObjTree.draw;
   dec(dc.subrender);
   dc.OwnerLineWeight:=oldlw;
   inherited;
@@ -317,7 +320,8 @@ begin
      calcobjmatrix;
      ConstObjArray.Format;
      calcbb;
+     self.BuildGeometry;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBComplex.initialization');{$ENDIF}
-end.
+end.

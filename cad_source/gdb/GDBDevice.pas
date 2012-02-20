@@ -55,7 +55,7 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                    function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
                    //procedure select;virtual;
-                   procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
+                   procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
                    procedure addcontrolpoints(tdesc:GDBPointer);virtual;
 
                    function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
@@ -140,8 +140,8 @@ end;
 
 procedure GDBObjDevice.SetInFrustumFromTree;
 begin
-     inherited SetInFrustumFromTree(infrustumactualy,visibleactualy);
-     VarObjArray.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+     inherited SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy);
+     VarObjArray.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy);
 end;
 function GDBObjDevice.AddMi;
 begin

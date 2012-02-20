@@ -283,6 +283,7 @@ ConstObjArray.cleareraseobj;
           pgdbins^.vp.Layer:=vp.Layer;
           pgdbins^.BuildGeometry;
      end;
+     BuildGeometry;
 end;
 constructor GDBObjTable.initnul;
 //var

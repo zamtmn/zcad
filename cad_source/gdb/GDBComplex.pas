@@ -22,13 +22,13 @@ unit GDBComplex;
 interface
 uses UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray,UGDBVisibleOpenArray,gdbEntity{,varman,varmandef},
-gl,
+gl,UGDBVisibleTreeArray,UGDBEntTree,
 GDBase,UGDBDescriptor,GDBWithLocalCS,gdbobjectsconstdef{,oglwindowdef},geometry{,dxflow},memman{,GDBSubordinated,UGDBOpenArrayOfByte};
 type
 {EXPORT+}
 PGDBObjComplex=^GDBObjComplex;
 GDBObjComplex=object(GDBObjWithLocalCS)
-                    ConstObjArray:GDBObjEntityOpenArray;(*oi_readonly*)(*hidden_in_objinsp*)
+                    ConstObjArray:{GDBObjEntityOpenArray;}GDBObjEntityTreeArray;(*oi_readonly*)(*hidden_in_objinsp*)
                     procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                     procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                     procedure getoutbound;virtual;
@@ -48,13 +48,14 @@ GDBObjComplex=object(GDBObjWithLocalCS)
                     //procedure feedbackinrect;virtual;
                     function InRect:TInRect;virtual;
                     //procedure Draw(lw:GDBInteger);virtual;
-                    procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
+                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
                     function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
+                    procedure BuildGeometry;virtual;
               end;
 {EXPORT-}
 implementation
 uses
-    log;
+    log,oglwindow;
 {procedure GDBObjComplex.Draw;
 begin
   if visible then
@@ -62,6 +63,11 @@ begin
        self.DrawWithAttrib; //DrawGeometry(lw);
   end;
 end;}
+procedure GDBObjComplex.BuildGeometry;
+begin
+ConstObjArray.ObjTree:=createtree(ConstObjArray,vp.BoundingBox,@ConstObjArray.ObjTree,0,nil,TND_Root)^;
+end;
+
 function GDBObjComplex.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 begin
      result:=ConstObjArray.onpoint(objects,point);
@@ -69,7 +75,9 @@ end;
 procedure GDBObjComplex.SetInFrustumFromTree;
 begin
      inherited;
-     ConstObjArray.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+     ConstObjArray.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy);
+     ConstObjArray.ObjTree.BoundingBox:=vp.BoundingBox;
+     ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRFully);
 end;
 function GDBObjComplex.InRect:TInRect;
 begin
@@ -146,6 +154,43 @@ begin
   dec(dc.subrender);
   //inherited;
 end;
+
+procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInteger});
+var
+   currtime:TDateTime;
+   Hour,Minute,Second,MilliSecond:word;
+   q1,q2:gdbboolean; currd:PTDrawing;
+begin
+  currd:=gdb.GetCurrentDWG;
+  if Node.infrustum=currd.pcamera.POSCOUNT then
+  begin
+       if (Node.FulDraw)or(Node.nul.count=0) then
+       begin
+       if assigned(node.pminusnode)then
+                                       if node.minusdrawpos<>gdb.GetCurrentDWG.pcamera.DRAWCOUNT then
+                                       begin
+                                            treerender(node.pminusnode^,dc);
+                                            node.minusdrawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT
+                                       end;
+       if assigned(node.pplusnode)then
+                                      if node.plusdrawpos<>gdb.GetCurrentDWG.pcamera.DRAWCOUNT then
+                                      begin
+                                       treerender(node.pplusnode^,dc);
+                                           node.plusdrawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT
+                                      end;
+       end;
+       //if (node.FulDraw) then
+       begin
+            if node.FulDraw then
+        Node.nul.DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
+        node.nuldrawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;
+       end;
+  end;
+  //Node.drawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;
+
+  //root.DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT);
+end;
+
 procedure GDBObjComplex.DrawGeometry;
 var
    oldlw:gdbsmallint;
@@ -153,7 +198,8 @@ begin
   oldlw:=dc.OwnerLineWeight;
   dc.OwnerLineWeight:=self.GetLineWeight;
   inc(dc.subrender);
-  ConstObjArray.DrawWithattrib(dc{infrustumactualy,subrender)}{DrawGeometry(CalculateLineWeight});
+  //ConstObjArray.DrawWithattrib(dc{infrustumactualy,subrender)}{DrawGeometry(CalculateLineWeight});
+  treerender(ConstObjArray.ObjTree,dc);
   dec(dc.subrender);
   dc.OwnerLineWeight:=oldlw;
   inherited;
@@ -185,6 +231,7 @@ end;
 function GDBObjComplex.CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;
 begin
      result:=ConstObjArray.calcvisible(frustum,infrustumactualy,visibleactualy);
+     ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRPartially);
 end;
 function GDBObjComplex.CalcTrueInFrustum;
 begin

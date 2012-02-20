@@ -21,7 +21,7 @@ unit GDBBlockInsert;
 interface
 uses UGDBLayerArray,GDBBlockDef{,UGDBLayerArray},math,gdbasetypes,GDBComplex,{GDBGenericSubEntry,}SysInfo,sysutils,
 {UGDBOpenArrayOfPV,}UGDBObjBlockdefArray{,UGDBSelectedObjArray,UGDBVisibleOpenArray},gdbEntity,varman{,varmandef},
-gl,
+gl,UGDBEntTree,
 GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBSubordinated,UGDBOpenArrayOfByte;
 const zcadmetric='!!ZMODIFIER:';
 type
@@ -405,6 +405,8 @@ begin
           ConstObjArray.Shrink;
           end;
           self.BlockDesc:=pblockdef.BlockDesc;
+          self.getoutbound;
+          inherited;
 end;
 function GDBObjBlockInsert.getosnappoint;
 begin

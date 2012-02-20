@@ -2362,6 +2362,7 @@ begin
 
   //gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@pleader);
   pleader^.Format;
+  //pleader.BuildGeometry;
 
     end;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;

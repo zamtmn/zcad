@@ -76,11 +76,11 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             function CreatePreCalcData:PTDrawingPreCalcData;virtual;
                             procedure DestroyPreCalcData(PreCalcData:PTDrawingPreCalcData);virtual;
 
-                            procedure ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInRect);
+                            //procedure ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInRect);
                             //function CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;const enttree:TEntTreeNode):GDBBoolean;virtual;
                               function CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;virtual;
-                              function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;virtual;
-                              procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
+                              //function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;virtual;
+                              procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
 
                               //function FindObjectsInPointStart(const point:GDBVertex;out Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;
                               function FindObjectsInPoint(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;virtual;
@@ -206,12 +206,12 @@ end;
 procedure GDBObjGenericSubEntry.SetInFrustumFromTree;
 begin
      inherited;
-     ObjArray.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+     ObjArray.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy);
 end;
-function GDBObjGenericSubEntry.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;
+(*function GDBObjGenericSubEntry.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;
 begin
      ProcessTree(frustum,infrustumactualy,visibleactualy,enttree,IRPartially)
-end;
+end;*)
 function GDBObjGenericSubEntry.CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('GDBObjGenericSubEntry.CalcVisibleByTree',lp_incPos);{$ENDIF}
@@ -235,7 +235,7 @@ begin
                           end;
      {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('GDBObjGenericSubEntry.CalcVisibleByTree----{end}',lp_decPos);{$ENDIF}
 end;
-procedure GDBObjGenericSubEntry.ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInRect);
+(*procedure GDBObjGenericSubEntry.ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInRect);
 var
      ImInFrustum:TInRect;
      pobj:PGDBObjEntity;
@@ -273,7 +273,7 @@ begin
                        IREmpty:begin
                                      OwnerInFrustum:=OwnerInFrustum;
                                end;
-                       IRFully,IRPartially:begin
+                       IRFully{,IRPartially}:begin
                                      enttree.infrustum:=infrustumactualy;
                                      pobj:=enttree.nul.beginiterate(ir);
                                      if pobj<>nil then
@@ -288,7 +288,7 @@ begin
                                                                          ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pplusnode^,ImInFrustum);
 
                               end;
-                  {IRPartially:begin
+                  IRPartially:begin
                                      enttree.infrustum:=infrustumactualy;
                                      pobj:=enttree.nul.beginiterate(ir);
                                      if pobj<>nil then
@@ -304,12 +304,12 @@ begin
                                      if assigned(enttree.pplusnode) then
                                                                          ProcessTree(frustum,infrustumactualy,visibleactualy,enttree.pplusnode^,IRPartially);
 
-                              end;}
+                              end;
                   end;
 
              end;
      end;
-end;
+end;*)
 function GDBObjGenericSubEntry.CreatePreCalcData:PTDrawingPreCalcData;
 begin
      GDBGetMem({$IFDEF DEBUGBUILD}'{1F00FCF0-E9C6-4A6B-8B98-FFCC5D163190}',{$ENDIF}GDBPointer(result),sizeof(TDrawingPreCalcData));

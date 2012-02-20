@@ -31,7 +31,7 @@ GDBObjEntityOpenArray=object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
                       function copytowithoutcorrect(source:PGDBObjEntityOpenArray):GDBInteger;virtual;
                       function deliteminarray(p:GDBInteger):GDBInteger;virtual;
                       function cloneentityto(PEA:PGDBObjEntityOpenArray;own:GDBPointer):GDBInteger;virtual;
-                      procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
+                      procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
 
                 end;
 {Export-}
@@ -49,7 +49,7 @@ begin
      pobj:=beginiterate(ir);
      if pobj<>nil then
      repeat
-           pobj^.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+           pobj^.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy);
            pobj:=iterate(ir);
      until pobj=nil;
 end;

@@ -35,7 +35,7 @@ type
                             pplusnode,pminusnode:PTEntTreeNode;
 
                             NodeDir:TNodeDir;
-                            Root:PTEntTreeNode;
+                            Root:{-}PTEntTreeNode{/GDBPointer/};
                             FulDraw:GDBBoolean;
 
                             {selected:boolean;}
@@ -60,7 +60,7 @@ TTestTreeNode=Object(GDBaseObject)
               end;
 TTestTreeArray=array [0..2] of TTestTreeNode;
 const
-  _InNodeCount=20;
+  _InNodeCount=1;
   _NodeDepth=20;
 function createtree(entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 implementation

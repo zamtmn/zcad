@@ -55,7 +55,7 @@ GDBObjElLeader=object(GDBObjComplex)
 
             procedure transform(const t_matrix:DMatrix4D);virtual;
             procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-            procedure SetInFrustumFromTree(infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
+            procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
             function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
             end;
 {EXPORT-}
@@ -90,9 +90,9 @@ end;
 procedure GDBObjElLeader.SetInFrustumFromTree;
 begin
      inherited;
-            MainLine.SetInFrustumFromTree(infrustumactualy,visibleactualy);
-            MarkLine.SetInFrustumFromTree(infrustumactualy,visibleactualy);
-            Tbl.SetInFrustumFromTree(infrustumactualy,visibleactualy);
+            MainLine.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy);
+            MarkLine.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy);
+            Tbl.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy);
 end;
 procedure GDBObjElLeader.TransformAt;
 begin
@@ -494,6 +494,7 @@ begin
 
      CodePage:=TCP;
      objects.ClearAndDone;
+     buildgeometry;
 end;
 function GDBObjElLeader.select:GDBBoolean;
 var tdesc:pselectedobjdesc;

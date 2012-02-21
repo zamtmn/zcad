@@ -44,6 +44,7 @@ GDBObjGenericWithSubordinated=object(GDBaseObject)
                                     //function GetLineWeight:GDBSmallint;virtual;abstract;
                                     function GetLayer:PGDBLayerProp;virtual;abstract;
                                     function GetHandle:GDBPlatformint;virtual;
+                                    function GetType:GDBPlatformint;virtual;
                                     function IsSelected:GDBBoolean;virtual;abstract;
                                     procedure FormatAfterDXFLoad;virtual;
 
@@ -162,6 +163,10 @@ end;
 procedure GDBObjSubordinated.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
 begin
      dxfGDBStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(bp.ListPos.owner.GetHandle,10));
+end;
+function GDBObjGenericWithSubordinated.GetType:GDBPlatformint;
+begin
+     result:=0;
 end;
 function GDBObjGenericWithSubordinated.GetHandle:GDBPlatformint;
 begin
@@ -401,4 +406,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBSubordinated.initialization');{$ENDIF}
-end.
+end.

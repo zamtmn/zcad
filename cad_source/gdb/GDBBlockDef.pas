@@ -51,10 +51,20 @@ GDBObjBlockdef=object(GDBObjGenericSubEntry)
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;
                      function GetHandle:GDBPlatformint;virtual;
+                     function GetMainOwner:PGDBObjSubordinated;virtual;
+                     function GetType:GDBPlatformint;virtual;
                end;
 {Export-}
 implementation
 uses iodxf{,UGDBDescriptor},UUnitManager,shared,log;
+function GDBObjBlockdef.GetType:GDBPlatformint;
+begin
+     result:=1;
+end;
+function GDBObjBlockdef.GetMainOwner:PGDBObjSubordinated;
+begin
+     result:=@self;
+end;
 function GDBObjBlockdef.GetHandle:GDBPlatformint;
 begin
      result:=H_Root;

@@ -33,6 +33,7 @@ GDBObjRoot=object(GDBObjGenericSubEntry)
                  procedure FormatAfterEdit;virtual;
                  function AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):integer;virtual;
                  function getowner:PGDBObjSubordinated;virtual;
+                 function GetMainOwner:PGDBObjSubordinated;virtual;
                  procedure getoutbound;virtual;
                  function FindVariable(varname:GDBString):pvardesk;virtual;
                  function GetHandle:GDBPlatformint;virtual;
@@ -50,6 +51,10 @@ GDBObjRoot=object(GDBObjGenericSubEntry)
 implementation
 uses
     log;
+function GDBObjRoot.GetMainOwner:PGDBObjSubordinated;
+begin
+     result:=@self;
+end;
 function GDBObjRoot.FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;
 begin
      result:=nil;

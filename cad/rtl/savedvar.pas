@@ -32,14 +32,14 @@ begin
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=238;
   VIEW_ObjInspSubV:=89;
-  PATH_File0:='/home/zamtmn/Рабочий стол/2 этаж_ПС план invisible_kabel.dxf';
-  PATH_File1:='/home/zamtmn/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File2:='/home/zamtmn/zcad/cad/autosave/autosave.dxf';
+  PATH_File0:='/mnt/wind/1 этаж_план_EXPLODED.dxf';
+  PATH_File1:='/home/zamtmn/zcad/cad/../errors/1.dxf';
+  PATH_File2:='/home/zamtmn/zcad/cad/sample/test_dxf/ops.dxf';
   PATH_File3:='/home/zamtmn/zcad/cad/sample/test_dxf/em.dxf';
-  PATH_File4:='/home/zamtmn/zcad/cad/../errors/1.dxf';
-  PATH_File5:='c:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File6:='D:\por.DXF';
-  PATH_File7:='c:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File8:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File9:='c:\zcad\cad\autosave\autosave.dxf';
+  PATH_File4:='/home/zamtmn/Рабочий стол/2 этаж_ПС план invisible_kabel.dxf';
+  PATH_File5:='/home/zamtmn/zcad/cad/autosave/autosave.dxf';
+  PATH_File6:='c:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File7:='D:\por.DXF';
+  PATH_File8:='c:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File9:='C:\zcad\cad\sample\test_dxf\em.dxf';
 end.

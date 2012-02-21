@@ -123,6 +123,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
                     procedure clearrtmodify(p:GDBPointer);virtual;
                     function getowner:PGDBObjSubordinated;virtual;
+                    function GetMainOwner:PGDBObjSubordinated;virtual;
                     function getmatrix:PDMatrix4D;virtual;
                     function getownermatrix:PDMatrix4D;virtual;
                     function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
@@ -363,6 +364,10 @@ end;
 function GDBObjEntity.ObjToGDBString(prefix,sufix:GDBString):GDBString;
 begin
      result:=prefix+'#'+inttohex(GDBPlatformint(@self),10)+sufix;
+end;
+function GDBObjEntity.GetMainOwner:PGDBObjSubordinated;
+begin
+     result:=PGDBObjEntity(bp.ListPos.Owner)^.getmainowner;
 end;
 function GDBObjEntity.getowner;
 begin
@@ -1123,4 +1128,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBEntity.initialization');{$ENDIF}
-end.
+end.

@@ -378,6 +378,13 @@ begin
                                                                                 PBlockDefArray(gdb.GetCurrentDWG.BlockDefArray.parray)^[index].format;
                                                                                end;
           ConstObjArray.cleareraseobj;
+
+          if getmainowner.gettype=1 then
+                                                begin
+                                                     i:=i+1;
+                                                exit;
+                                                end;
+
           pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
           if pblockdef.ObjArray.count>0 then
           begin
@@ -581,4 +588,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBBlockInsert.initialization');{$ENDIF}
-end.
+end.

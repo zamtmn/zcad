@@ -60,7 +60,7 @@ TTestTreeNode=Object(GDBaseObject)
               end;
 TTestTreeArray=array [0..2] of TTestTreeNode;
 const
-  _InNodeCount=1;
+  _InNodeCount=10;
   _NodeDepth=20;
 function createtree(entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 implementation

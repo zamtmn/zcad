@@ -1837,13 +1837,14 @@ begin
      else
      begin
      if not assigned(sltexteditor1) then
-                                        Application.CreateForm(Tsltexteditor1, sltexteditor1);
+     Application.CreateForm(Tsltexteditor1, sltexteditor1);
      sltexteditor1.caption:=('Редактор однострочного текста');
 
      sltexteditor1.helptext.Caption:=' TEXT: ';
      sltexteditor1.EditField.Caption:=astring;
 
      modalresult:=MainFormN.DOShowModal(sltexteditor1);
+
      if modalresult=MrOk then
                          begin
                               PGDBObjText(pobj)^.Template:=ConvertToDxfString(sltexteditor1.EditField.text);
@@ -1851,12 +1852,10 @@ begin
      end;
      if modalresult=MrOk then
                          begin
-                              //PGDBObjText(pobj)^.Template:=ConvertToDxfString(InfoForm.memo.text);
                               PGDBObjText(pobj)^.YouChanged;
                               gdb.GetCurrentROOT.FormatAfterEdit;
                               redrawoglwnd;
                          end;
-     //InfoForm.Free;
 
 end;
 

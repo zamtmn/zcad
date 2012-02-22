@@ -343,7 +343,10 @@ begin
   tvo^.rotate := rotate;
   tvo.index := index;
   tvo^.bp.ListPos.Owner:=own;
-  tvo.ConstObjArray.init({$IFDEF DEBUGBUILD}'{E9005274-601F-4A3F-BDB8-E311E59D558C}',{$ENDIF}ConstObjArray.count);
+  if ConstObjArray.count>0 then
+                               tvo.ConstObjArray.init({$IFDEF DEBUGBUILD}'{E9005274-601F-4A3F-BDB8-E311E59D558C}',{$ENDIF}ConstObjArray.count)
+                           else
+                               tvo.ConstObjArray.init({$IFDEF DEBUGBUILD}'{E9005274-601F-4A3F-BDB8-E311E59D558C}',{$ENDIF}100);
   ConstObjArray.CloneEntityTo(@tvo.ConstObjArray,tvo);
   //tvo^.format;
   result := tvo;
@@ -381,7 +384,6 @@ begin
 
           if getmainowner.gettype=1 then
                                                 begin
-                                                     i:=i+1;
                                                 exit;
                                                 end;
 
@@ -565,6 +567,7 @@ else if not dxfGDBStringload(f,2,byt,name)then s := f.readgdbstring;
       end;}
       if name='EL_LIGHT_SWIITH' then
                                         name:=name;
+      programlog.LogOutStr('GDBBlockInsert.LoadFromDXF '+name,0);
       index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
       //format;
 end;
@@ -588,4 +591,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBBlockInsert.initialization');{$ENDIF}
-end.
+end.

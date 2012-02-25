@@ -392,7 +392,7 @@ begin
   //TextStyleTable.addstyle('R2_5','romant.shx',tp);
   //TextStyleTable.addstyle('standart','txt.shx',tp);
 
-  BlockDefArray.init({$IFDEF DEBUGBUILD}'{E5CE9274-01D8-4D19-AF2E-D1AB116B5737}',{$ENDIF}10000);
+  BlockDefArray.init({$IFDEF DEBUGBUILD}'{D53DA395-A6A2-4FDD-842D-A52E6385E2DD}',{$ENDIF}100);
   Numerator.init(10);
 
   TableStyleTable.init({$IFDEF DEBUGBUILD}'{E5CE9274-01D8-4D19-AF2E-D1AB116B5737}',{$ENDIF}10);

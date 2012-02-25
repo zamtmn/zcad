@@ -1358,7 +1358,7 @@ begin
   pointer(l1):=PTrace.GetNearestLine(firstpoint);
   pointer(l2):=PTrace.GetNearestLine(lastpoint);
   tw1:=NearestPointOnSegment(firstpoint,l1.CoordInWCS.lBegin,l1.CoordInWCS.lEnd);
-  result.init(100);
+  result.init({$IFDEF DEBUGBUILD}'{C8C93C89-003D-407B-A6F3-2AAA5D12E01D}',{$ENDIF}100);
   if l1=l2 then
                begin
                     if addfirstpoint then
@@ -2585,13 +2585,13 @@ begin
   isload:=FileExists(utf8tosys(s));
   if isload then
   begin
-       processednets.init(100);
-       supernetsarray.init(100);
+       processednets.init({$IFDEF DEBUGBUILD}'{01A8C9B3-E4A9-4A72-9697-A7049151B7B7}',{$ENDIF}100);
+       supernetsarray.init({$IFDEF DEBUGBUILD}'{B8FBA153-889E-4FC7-AF16-5DE56A14A72F}',{$ENDIF}100);
        FDoc:=TCSVDocument.Create;
        FDoc.Delimiter:=';';
        FDoc.LoadFromFile(utf8tosys(s));
        MainFormN.StartLongProcess(FDoc.RowCount);
-       netarray.init(100);
+       netarray.init({$IFDEF DEBUGBUILD}'{6FC12C96-F62C-47A3-A5B4-35D9564DB25E}',{$ENDIF}100);
        for row:=0 to FDoc.RowCount-1 do
        begin
             if FDoc.ColCount[row]>4 then
@@ -2686,7 +2686,7 @@ begin
 
                           if supernet=nil then
                           begin
-                          riserarray.init(100);
+                          riserarray.init({$IFDEF DEBUGBUILD}'{FC1F0E75-3A1C-4144-A901-7DCE7B8BB0BB}',{$ENDIF}100);
                           GDB.FindMultiEntityByVar2(GDBDeviceID,'RiserName',riserarray);
 
                           LinkRisersToNets;
@@ -2721,7 +2721,7 @@ begin
                                                        begin
                                                             if supernet=nil then
                                                             begin
-                                                                 gdbgetmem(supernet,sizeof(GDBObjNet));
+                                                                 gdbgetmem({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}supernet,sizeof(GDBObjNet));
                                                                  supernet.initnul(nil);
                                                                  //net.objarray.copyto(@supernet.ObjArray);
                                                                  supernet.ou.copyfrom(@net.ou);

@@ -55,14 +55,14 @@ type
 TTestTreeNode=Object(GDBaseObject)
                     plane:DVector4D;
                     nul,plus,minus:GDBObjEntityOpenArray;
-                    constructor initnul;
+                    constructor initnul(InNodeCount:integer);
                     destructor done;
               end;
 TTestTreeArray=array [0..2] of TTestTreeNode;
 const
-  _InNodeCount=10;
+  //_InNodeCount=10;
   _NodeDepth=20;
-function createtree(entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
+function createtree(var entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 implementation
 function TEntTreeNode.CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;
 begin
@@ -102,7 +102,7 @@ end;
 
 constructor TEntTreeNode.initnul;
 begin
-     nul.init({$IFDEF DEBUGBUILD}'{0B3BD93C-D6F7-4F08-B9E5-21574D345206}',{$ENDIF}1000);
+     nul.init({$IFDEF DEBUGBUILD}'{0B3BD93C-D6F7-4F08-B9E5-21574D345206}',{$ENDIF}50);
      FulDraw:=True;
 end;
 procedure TEntTreeNode.ClearSub;
@@ -147,9 +147,9 @@ begin
 end;
 constructor TTestTreeNode.initnul;
 begin
-     nul.init({$IFDEF DEBUGBUILD}'{920880D2-9F43-4861-916C-572E7DF0E049}',{$ENDIF}1000);
-     plus.init({$IFDEF DEBUGBUILD}'{7930F3C0-94EE-4A4B-8263-FF7A04DB0B9B}',{$ENDIF}1000);
-     minus.init({$IFDEF DEBUGBUILD}'{18750ABA-EE1F-4D09-A247-6D1DE22A5170}',{$ENDIF}1000);
+     nul.init({$IFDEF DEBUGBUILD}'{920880D2-9F43-4861-916C-572E7DF0E049}',{$ENDIF}InNodeCount{*2});
+     plus.init({$IFDEF DEBUGBUILD}'{7930F3C0-94EE-4A4B-8263-FF7A04DB0B9B}',{$ENDIF}InNodeCount{*2});
+     minus.init({$IFDEF DEBUGBUILD}'{18750ABA-EE1F-4D09-A247-6D1DE22A5170}',{$ENDIF}InNodeCount{*2});
 end;
 destructor TTestTreeNode.done;
 begin
@@ -159,7 +159,7 @@ begin
      minus.ClearAndDone;
 end;
 
-function createtree(entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
+function createtree(var entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 var pobj:PGDBObjEntity;
     ir:itrec;
     midlepoint:gdbvertex;
@@ -168,7 +168,10 @@ var pobj:PGDBObjEntity;
     ta:TTestTreeArray;
     plusaabb,minusaabb:GDBBoundingBbox;
     tv:gdbvertex;
+    _InNodeCount:gdbinteger;
 begin
+     _InNodeCount:=entitys.GetRealCount div _NodeDepth + 1;
+
      inc(nodedepth);
      if PRootNode<>nil then
                            begin
@@ -202,10 +205,15 @@ begin
                                                                            end
                                                                        else
                                                                            begin
+                                                                                if Result.nul.PArray<>nil then
+                                                                                GDBFreeMem(Result.nul.PArray);
                                                                                 result.nul:=entitys;
+                                                                                entitys.Clear;
+                                                                                entitys.PArray:=nil;
                                                                                 //entitys.FreeAndDone;
                                                                            end;
                                                      result.updateenttreeadress;
+                                                     result.nul.Shrink;
                                                      exit;
                                                 end;
      midlepoint:=nulvertex;
@@ -225,17 +233,17 @@ begin
                         midlepoint:=geometry.VertexMulOnSc(midlepoint,1/entcount);
 
      d:=sqrt(sqr(midlepoint.x) + sqr(midlepoint.y) + sqr(midlepoint.z));
-     ta[0].initnul;
+     ta[0].initnul(entitys.GetRealCount);
      ta[0].plane:=geometry.PlaneFrom3Pont(midlepoint,
                                           vertexadd(midlepoint,VertexMulOnSc(x_Y_zVertex,d)),
                                           vertexadd(midlepoint,VertexMulOnSc(xy_Z_Vertex,d))
                                           );
-     ta[1].initnul;
+     ta[1].initnul(entitys.GetRealCount);
      ta[1].plane:=geometry.PlaneFrom3Pont(midlepoint,
                                           vertexadd(midlepoint,VertexMulOnSc(_X_yzVertex,d)),
                                           vertexadd(midlepoint,VertexMulOnSc(xy_Z_Vertex,d))
                                           );
-     ta[2].initnul;
+     ta[2].initnul(entitys.GetRealCount);
      ta[2].plane:=geometry.PlaneFrom3Pont(midlepoint,
                                           vertexadd(midlepoint,VertexMulOnSc(_X_yzVertex,d)),
                                           vertexadd(midlepoint,VertexMulOnSc(x_Y_ZVertex,d))
@@ -338,15 +346,28 @@ else if (tv.z>=tv.x)and(tv.z>=tv.y) then
 
      result.plane:=ta[imin].plane;
      result.point:=midlepoint;
+     if Result.nul.PArray<>nil then
      GDBFreeMem(Result.nul.PArray);
      result.nul:=ta[imin].nul;
+     ta[imin].nul.PArray:=nil;
+     ta[imin].nul.Clear;
+
+     result.nul.Shrink;
+
      result^.updateenttreeadress;
      result.nodedepth:=nodedepth;
      result.pminusnode:=createtree(ta[imin].minus,minusaabb,nil,nodedepth,result,TND_Minus);
      result.pplusnode:=createtree(ta[imin].plus,plusaabb,nil,nodedepth,result,TND_Plus);
      result.pluscount:=ta[imin].plus.Count;
      result.minuscount:=ta[imin].minus.Count;
+     if prootnode=nil then
+                          begin
+                          ta[imin].done;
+                          entitys.ClearAndDone;
+                          end;
+
      //result.BoundingBox:=result.nul.getoutbound;
+     //ta[0].nul.done;
      //ta[0].done;
      //ta[1].done;
      //ta[2].done;

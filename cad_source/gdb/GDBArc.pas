@@ -116,7 +116,7 @@ begin
   startangle := 0;
   endangle := pi/2;
   PProjoutbound:=nil;
-  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{B591E6C2-9BD5-4099-BE5A-5CB3911661B7}',{$ENDIF}100);
+  Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{7E7B2243-1D9C-43AD-BB6B-959FE9F49D5D}-GDBObjARC.Vertex3D_in_WCS_Array',{$ENDIF}100);
 end;
 constructor GDBObjARC.init;
 begin

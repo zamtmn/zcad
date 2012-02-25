@@ -90,7 +90,7 @@ begin
 
             lastallocated:=longword(p);
             lasti:=i;
-            if i=134300 then
+            if i=7019 then
             begin
                 inc(i2);
                 if i2=14 then
@@ -107,7 +107,7 @@ begin
   begin
        inc(memdesktotal);
 
-       if memdesktotal=134300 then
+       if memdesktotal=7019 then
        begin
                           i2:=i2;
         end;

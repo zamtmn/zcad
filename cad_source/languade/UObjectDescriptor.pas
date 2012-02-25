@@ -208,7 +208,9 @@ begin
      //destructor FreewithprocAndDone(freeproc:freeelproc);virtual;
      //SimpleMenods.FreewithprocAndDone(freemetods);
      SimpleMenods.FreeAndDone;
-     fields.FreewithprocAndDone(freeprop);
+     //fields.FreewithprocAndDone(freeprop);
+     Properties.FreewithprocAndDone(freeprop);
+     //Properties.FreeAndDone;
      parent:=nil;
      ColArray.done;
      LincedData:='';
@@ -223,7 +225,7 @@ END;}
 begin
      inherited init(tname,pu);
      SimpleMenods.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20,sizeof(MetodDescriptor));
-     Properties.init({$IFDEF DEBUGBUILD}'{E4674594-B99F-4A72-8766-E2B49DF50FCE}',{$ENDIF}20,sizeof(PropertyDescriptor));
+     Properties.init({$IFDEF DEBUGBUILD}'{CFC9264A-23FA-4FE4-AE71-30495AD54ECE}',{$ENDIF}20,sizeof(PropertyDescriptor));
      pvmt:=nil;
      {$IFDEF FPC}VMTCurrentOffset:=12;{$ENDIF}
      {$IFDEF CPU64}VMTCurrentOffset:=24{sizeof(VMT)};{$ENDIF}

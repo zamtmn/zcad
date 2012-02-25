@@ -694,7 +694,7 @@ end;
 function GDBObjLine.Clone;
 var tvo: PGDBObjLine;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{5A1B005F-39F1-431B-B65E-0C532AEFA5D0}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjLine));
+  GDBGetMem({$IFDEF DEBUGBUILD}'{5A1B005F-39F1-431B-B65E-0C532AEFA5D0}-GDBObjLine.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjLine));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, CoordInOCS.lBegin, CoordInOCS.lEnd);
   tvo^.CoordInOCS.lBegin.y := tvo^.CoordInOCS.lBegin.y;
   tvo^.bp.ListPos.Owner:=own;

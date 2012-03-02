@@ -45,6 +45,8 @@ var
    _UpdatePO:integer=0;
    _NotEnlishWord:integer=0;
    _DebugWord:integer=0;
+const
+  identpref='zcadexternal.';
 implementation
 
 procedure TPoTranslator.TranslateStringProperty(Sender: TObject;
@@ -157,20 +159,20 @@ begin
                                                end;
          end;
 end;
-function InterfaceTranslate(const Identifier, OriginalValue: String): String;
+function InterfaceTranslate( const Identifier, OriginalValue: String): String;
 var
    s:string;
   Item: TPOFileItem;
 
 begin
-     if Identifier='TTextJustify~jstm' then
+    if UTF8LowerCase(Identifier)='acn_close~caption' then
                                 s:=s;
     log.programlog.LogOutStr(Identifier+' '+OriginalValue,0);
     result:=po.Translate({Identifier}'', OriginalValue);
 
     if sysinfo.sysparam.updatepo then
      begin
-          Item:=TPOFileItem(po.{FIdentifierToItem}FIdentLowVarToItem.Data[Identifier]);
+          Item:=TPOFileItem(po.{FIdentifierToItem}FIdentLowVarToItem{FOriginalToItem}.Data[UTF8LowerCase(Identifier)]);
           if not assigned(item) then
           begin
                if (pos('**',OriginalValue)>0)or(pos('??',OriginalValue)>0)then
@@ -182,8 +184,8 @@ begin
                if (utf8length(Identifier)=length(Identifier))and
                   (utf8length(OriginalValue)=length(OriginalValue)) then
                begin
-                    po.Add(Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
-                    actualypo.Add(Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
+                    po.Add(identpref+Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
+                    actualypo.Add(identpref+Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
                     inc(_UpdatePO);
                     //po.SaveToFile(PODirectory + 'zcad.po');
                end
@@ -199,7 +201,7 @@ begin
                                                    item.ModifyFlag('fuzzy',true);
                                                    item.Original:=OriginalValue;
                                                    end;
-               actualypo.Add(item.IdentifierLow, item.Original, item.Translation, item.Comments,
+               actualypo.Add(identpref+item.IdentifierLow, item.Original, item.Translation, item.Comments,
                               item.Context, item.Flags,'');
           end;
 
@@ -226,4 +228,5 @@ initialize;
 finalization
 if assigned(actualypo) then freeandnil(actualypo);
 if assigned(po) then freeandnil(po);
+if assigned(LRSTranslator) then freeandnil(LRSTranslator);
 end.

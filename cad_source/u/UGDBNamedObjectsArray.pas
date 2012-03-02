@@ -24,9 +24,9 @@ uses {,UGDBOpenArray}UGDBOpenArrayOfObjects{,oglwindowdef},sysutils,gdbase, geom
      {varmandef,gdbobjectsconstdef}gdbasetypes;
 type
 {EXPORT+}
-TForCResult=(IsFounded(*'Найден'*)=1,
-             IsCreated(*'Создан'*)=2,
-             IsError(*'Ошибка'*)=3);
+TForCResult=(IsFounded(*'IsFounded'*)=1,
+             IsCreated(*'IsCreated'*)=2,
+             IsError(*'IsError'*)=3);
 PGDBNamedObjectsArray=^GDBNamedObjectsArray;
 GDBNamedObjectsArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBLayerProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m,s:GDBInteger);

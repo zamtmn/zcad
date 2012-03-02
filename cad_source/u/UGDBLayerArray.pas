@@ -26,12 +26,12 @@ type
 {EXPORT+}
 PGDBLayerProp=^GDBLayerProp;
 GDBLayerProp=object(GDBNamedObject)
-               color:GDBByte;(*saved_to_shd*)(*'Цвет'*)
-               lineweight:GDBSmallint;(*saved_to_shd*)(*'Вес линии'*)
-               _on:GDBBoolean;(*saved_to_shd*)(*'Включен'*)
-               _lock:GDBBoolean;(*saved_to_shd*)(*'Закрыт'*)
-               _print:GDBBoolean;(*saved_to_shd*)(*'Печать'*)
-               desk:GDBAnsiString;(*saved_to_shd*)(*'Коментарий'*)
+               color:GDBByte;(*saved_to_shd*)(*'Color'*)
+               lineweight:GDBSmallint;(*saved_to_shd*)(*'Line weight'*)
+               _on:GDBBoolean;(*saved_to_shd*)(*'On'*)
+               _lock:GDBBoolean;(*saved_to_shd*)(*'Lock'*)
+               _print:GDBBoolean;(*saved_to_shd*)(*'Print'*)
+               desk:GDBAnsiString;(*saved_to_shd*)(*'Description'*)
                constructor Init(N:GDBString; C: GDBInteger; LW: GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString);
                function GetFullName:GDBString;virtual;
          end;

@@ -824,6 +824,7 @@ begin
                                        end;
                                       {$ENDIF}
                                   end;
+              //if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
           end;
                     field:
                           begin

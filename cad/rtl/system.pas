@@ -619,9 +619,9 @@ GDBLineWidthArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GLLWWidth*)
                 constructor initnul;
              end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBNamedObjectsArray.pas
-TForCResult=(IsFounded(*'Найден'*)=1,
-             IsCreated(*'Создан'*)=2,
-             IsError(*'Ошибка'*)=3);
+TForCResult=(IsFounded(*'IsFounded'*)=1,
+             IsCreated(*'IsCreated'*)=2,
+             IsError(*'IsError'*)=3);
 PGDBNamedObjectsArray=^GDBNamedObjectsArray;
 GDBNamedObjectsArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBLayerProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m,s:GDBInteger);
@@ -633,12 +633,12 @@ GDBNamedObjectsArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBLayerProp
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBLayerArray.pas
 PGDBLayerProp=^GDBLayerProp;
 GDBLayerProp=object(GDBNamedObject)
-               color:GDBByte;(*saved_to_shd*)(*'Цвет'*)
-               lineweight:GDBSmallint;(*saved_to_shd*)(*'Вес линии'*)
-               _on:GDBBoolean;(*saved_to_shd*)(*'Включен'*)
-               _lock:GDBBoolean;(*saved_to_shd*)(*'Закрыт'*)
-               _print:GDBBoolean;(*saved_to_shd*)(*'Печать'*)
-               desk:GDBAnsiString;(*saved_to_shd*)(*'Коментарий'*)
+               color:GDBByte;(*saved_to_shd*)(*'Color'*)
+               lineweight:GDBSmallint;(*saved_to_shd*)(*'Line weight'*)
+               _on:GDBBoolean;(*saved_to_shd*)(*'On'*)
+               _lock:GDBBoolean;(*saved_to_shd*)(*'Lock'*)
+               _print:GDBBoolean;(*saved_to_shd*)(*'Print'*)
+               desk:GDBAnsiString;(*saved_to_shd*)(*'Description'*)
                constructor Init(N:GDBString; C: GDBInteger; LW: GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString);
                function GetFullName:GDBString;virtual;abstract;
          end;
@@ -968,6 +968,7 @@ GDBObjGenericWithSubordinated=object(GDBaseObject)
                                     //function GetLineWeight:GDBSmallint;virtual;abstract;
                                     function GetLayer:PGDBLayerProp;virtual;abstract;
                                     function GetHandle:GDBPlatformint;virtual;abstract;
+                                    function GetType:GDBPlatformint;virtual;abstract;
                                     function IsSelected:GDBBoolean;virtual;abstract;
                                     procedure FormatAfterDXFLoad;virtual;abstract;
                                     procedure Build;virtual;abstract;
@@ -1081,6 +1082,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;abstract;
                     procedure clearrtmodify(p:GDBPointer);virtual;abstract;
                     function getowner:PGDBObjSubordinated;virtual;abstract;
+                    function GetMainOwner:PGDBObjSubordinated;virtual;abstract;
                     function getmatrix:PDMatrix4D;virtual;abstract;
                     function getownermatrix:PDMatrix4D;virtual;abstract;
                     function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;abstract;
@@ -1532,6 +1534,8 @@ GDBObjBlockdef=object(GDBObjGenericSubEntry)
                      destructor done;virtual;abstract;
                      function GetMatrix:PDMatrix4D;virtual;abstract;
                      function GetHandle:GDBPlatformint;virtual;abstract;
+                     function GetMainOwner:PGDBObjSubordinated;virtual;abstract;
+                     function GetType:GDBPlatformint;virtual;abstract;
                end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBObjBlockdefArray.pas
 PGDBObjBlockdefArray=^GDBObjBlockdefArray;
@@ -1960,6 +1964,7 @@ GDBObjRoot=object(GDBObjGenericSubEntry)
                  procedure FormatAfterEdit;virtual;abstract;
                  function AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):integer;virtual;abstract;
                  function getowner:PGDBObjSubordinated;virtual;abstract;
+                 function GetMainOwner:PGDBObjSubordinated;virtual;abstract;
                  procedure getoutbound;virtual;abstract;
                  function FindVariable(varname:GDBString):pvardesk;virtual;abstract;
                  function GetHandle:GDBPlatformint;virtual;abstract;

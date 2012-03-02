@@ -202,6 +202,8 @@ procedure FREEPROP(p:GDBPointer);
 begin
      PPropertyDescriptor(p)^.base.ProgramName:='';
      PPropertyDescriptor(p)^.base.UserName:='';
+     PPropertyDescriptor(p)^.r:='';
+     PPropertyDescriptor(p)^.w:='';
 end;
 destructor ObjectDescriptor.done;
 begin

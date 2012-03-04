@@ -171,7 +171,7 @@ begin
      repeat
          pvc:=pv^.Clone(@self{.bp.Owner});
          //historyoutstr(pv^.ObjToGDBString('','')+'  cloned obj='+pvc^.ObjToGDBString('',''));
-         if pvc^.vp.ID=GDBMtextID then
+         if pvc^.vp.ID=GDBTextID then
             pvc:=pvc;
 
          pvc^.bp.ListPos.Owner:=@self;

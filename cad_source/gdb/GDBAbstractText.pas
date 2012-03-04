@@ -73,17 +73,21 @@ implementation
 uses
    log,GDBSubordinated;
 procedure GDBObjAbstractText.transform;
-var tv,tv2:GDBVertex4D;
+var tv,tv2:GDBVertex;
    m:DMatrix4D;
 begin
 
-  m:=onematrix;
+  {m:=onematrix;
   m[0,0]:=textprop.size;
-  m:=geometry.MatrixMultiply(m,t_matrix);
-  {tv:=NulVertex4D;
+  m:=geometry.MatrixMultiply(m,t_matrix);}
+  tv:=NulVertex;
   tv.x:=textprop.size;
-  tv:=VectorTransform(tv,t_matrix);}
-  textprop.size:=m[0,0];
+  m:=t_matrix;
+  PGDBVertex(@m[3])^:=NulVertex;
+
+  tv:=VectorTransform3d(tv,m);
+  textprop.size:=geometry.oneVertexlength(tv);
+  {textprop.size:=m[0,0];}
 
   inherited;
 end;
@@ -590,4 +594,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBAbstractText.initialization');{$ENDIF}
-end.
+end.

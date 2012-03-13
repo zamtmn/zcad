@@ -61,14 +61,14 @@ uses
 type
 {Export+}
   TMSType=(
-           TMST_All(*'Всех примитивов'*),
-           TMST_Devices(*'Устройств'*),
-           TMST_Cables(*'Кабелей'*)
+           TMST_All(*'All entities'*),
+           TMST_Devices(*'Devices'*),
+           TMST_Cables(*'Cables'*)
           );
   TMSEditor=object(GDBaseObject)
-                SelCount:GDBInteger;(*'Выбрано объектов'*)(*oi_readonly*)
-                EntType:TMSType;(*'Показать переменные'*)
-                OU:TObjectUnit;(*'Переменные'*)
+                SelCount:GDBInteger;(*'Selected objects'*)(*oi_readonly*)
+                EntType:TMSType;(*'Process primitives'*)
+                OU:TObjectUnit;(*'Variables'*)
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
                 procedure CreateUnit;virtual;
                 function GetObjType:GDBWord;virtual;
@@ -76,8 +76,8 @@ type
                 destructor done;virtual;
             end;
 TOSModeEditor=object(GDBaseObject)
-              osm:TOSMode;(*'Привязка'*)
-              trace:TTraceMode;(*'Трассировка'*)
+              osm:TOSMode;(*'Snap'*)
+              trace:TTraceMode;(*'Trace'*)
               procedure Format;virtual;
               procedure GetState;
              end;

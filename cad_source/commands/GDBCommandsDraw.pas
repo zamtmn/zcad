@@ -50,22 +50,22 @@ const
 type
 {EXPORT+}
          TBlockInsert=record
-                            Blocks:TEnumData;(*'Блок'*)
-                            Scale:GDBvertex;(*'Масштаб'*)
-                            Rotation:GDBDouble;(*'Поворот'*)
+                            Blocks:TEnumData;(*'Block'*)
+                            Scale:GDBvertex;(*'Scale'*)
+                            Rotation:GDBDouble;(*'Rotation'*)
                       end;
          TSubPolyEdit=(
-                       TSPE_Insert(*'Вставить вершину'*),
-                       TSPE_Remove(*'Убрать вершину'*),
-                       TSPE_Scissor(*'Разрезать на две'*)
+                       TSPE_Insert(*'Insert vertex'*),
+                       TSPE_Remove(*'Remove vertex'*),
+                       TSPE_Scissor(*'Cut into two parts'*)
                        );
          TPolyEditMode=(
-                       TPEM_Nearest(*'Вставить в ближайший сегмент'*),
-                       TPEM_Select(*'Выбирать сегмент'*)
+                       TPEM_Nearest(*'Paste in nearest segment'*),
+                       TPEM_Select(*'Choose a segment'*)
                        );
          TPolyEdit=record
-                            Action:TSubPolyEdit;(*'Действие'*)
-                            Mode:TPolyEditMode;(*'Режим'*)
+                            Action:TSubPolyEdit;(*'Action'*)
+                            Mode:TPolyEditMode;(*'Mode'*)
                             vdist:gdbdouble;(*hidden_in_objinsp*)
                             ldist:gdbdouble;(*hidden_in_objinsp*)
                             nearestvertex:GDBInteger;(*hidden_in_objinsp*)
@@ -144,8 +144,8 @@ type
                             Scale:GDBDouble;(*'Scale'*)
                       end;
   TBEditParam=record
-                    CurrentEditBlock:GDBString;(*'Текущий блок'*)(*oi_readonly*)
-                    Blocks:TEnumData;(*'Выбор блока'*)
+                    CurrentEditBlock:GDBString;(*'Current block'*)(*oi_readonly*)
+                    Blocks:TEnumData;(*'Select block'*)
               end;
   PTCopyObjectDesc=^TCopyObjectDesc;
   TCopyObjectDesc=record

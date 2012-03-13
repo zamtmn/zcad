@@ -23,14 +23,17 @@ uses gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gd
      gl,
      {varmandef,gdbobjectsconstdef,}UGDBNamedObjectsArray,UGDBOpenArrayOfData;
 type
-{EXPORT+}
-TCellJustify=(jcl(*'ВерхЛево'*),
+{TCellJustify=(jcl(*'ВерхЛево'*),
               jcm(*'ВерхЦентр'*),
-              jcr(*'ВерхПраво'*));
+              jcr(*'ВерхПраво'*));}
+{EXPORT+}
+TTableCellJustify=(jcl(*'TopLeft'*),
+              jcc(*'TopCenter'*),
+              jcr(*'TopRight'*));
 PTGDBTableCellStyle=^TGDBTableCellStyle;
 TGDBTableCellStyle=record
                           Width,TextWidth:GDBDouble;
-                          CF:TCellJustify;
+                          CF:TTableCellJustify;
                     end;
 GDBCellFormatArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=TGDBTableCellStyle*)
                    end;

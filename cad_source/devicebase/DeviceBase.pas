@@ -7,51 +7,51 @@ type
 {REGISTEROBJECTTYPE ElDeviceBaseObject}
 {REGISTEROBJECTTYPE CableDeviceBaseObject}
 {EXPORT+}
-TOborudCategory=(_misc(*'Разное'*),
-                 _elapp(*'Электроаппараты'*),
-                 _ppkop(*'Приборы приемноконтрольные ОПС'*),
-                 _detsmokesl(*'Извещатель дымовой шлейфовый'*),
-                 _kables(*'Кабельная продукция'*));
-TEdIzm=(_sht(*'шт.'*),
-        _m(*'м'*));
+TOborudCategory=(_misc(*'**Разное'*),
+                 _elapp(*'**Электроаппараты'*),
+                 _ppkop(*'**Приборы приемноконтрольные ОПС'*),
+                 _detsmokesl(*'**Извещатель дымовой шлейфовый'*),
+                 _kables(*'**Кабельная продукция'*));
+TEdIzm=(_sht(*'**шт.'*),
+        _m(*'**м'*));
 PDbBaseObject=^DbBaseObject;        
 DbBaseObject=object(GDBaseObject)
-                       Category:TOborudCategory;(*'Категория'*)(*oi_readonly*)
-                       Group:GDBString;(*'Группа'*)
-                       Position:GDBString;(*'Позиция'*)(*oi_readonly*)
-                       NameShort:GDBString;(*'Короткое название'*)(*oi_readonly*)
-                       Name:GDBString;(*'Название'*)(*oi_readonly*)
-                       NameFull:GDBString;(*'Полное название'*)(*oi_readonly*)
-                       Description:GDBString;(*'Описание'*)(*oi_readonly*)
-                       ID:GDBString;(*'Идентификатор'*)(*oi_readonly*)
-                       Standard:GDBString;(*'Технический документ'*)(*oi_readonly*)
-                       OKP:GDBString;(*'Код ОКП'*)(*oi_readonly*)
-                       EdIzm:TEdIzm;(*'Ед. изм.'*)(*oi_readonly*)
-                       Manufacturer:GDBString;(*'Производитель'*)(*oi_readonly*)
-                       TreeCoord:GDBString;(*'Позиция в дереве БД'*)(*oi_readonly*)
+                       Category:TOborudCategory;(*'**Категория'*)(*oi_readonly*)
+                       Group:GDBString;(*'**Группа'*)
+                       Position:GDBString;(*'**Позиция'*)(*oi_readonly*)
+                       NameShort:GDBString;(*'**Короткое название'*)(*oi_readonly*)
+                       Name:GDBString;(*'**Название'*)(*oi_readonly*)
+                       NameFull:GDBString;(*'**Полное название'*)(*oi_readonly*)
+                       Description:GDBString;(*'**Описание'*)(*oi_readonly*)
+                       ID:GDBString;(*'**Идентификатор'*)(*oi_readonly*)
+                       Standard:GDBString;(*'**Технический документ'*)(*oi_readonly*)
+                       OKP:GDBString;(*'**Код ОКП'*)(*oi_readonly*)
+                       EdIzm:TEdIzm;(*'**Ед. изм.'*)(*oi_readonly*)
+                       Manufacturer:GDBString;(*'**Производитель'*)(*oi_readonly*)
+                       TreeCoord:GDBString;(*'**Позиция в дереве БД'*)(*oi_readonly*)
                        constructor initnul;
                  end;
 PDeviceDbBaseObject=^DeviceDbBaseObject;
 DeviceDbBaseObject=object(DbBaseObject)
-                       UID:GDBString;(*'Уникальный идентификатор'*)(*oi_readonly*)
+                       UID:GDBString;(*'**Уникальный идентификатор'*)(*oi_readonly*)
 
-                       NameShortTemplate:GDBString;(*'Формат короткого названия'*)(*oi_readonly*)
-                       NameTemplate:GDBString;(*'Формат названия'*)(*oi_readonly*)
-                       NameFullTemplate:GDBString;(*'Формат полного названия'*)(*oi_readonly*)
-                       UIDTemplate:GDBString;(*'Формат уникального идентификатора'*)(*oi_readonly*)
+                       NameShortTemplate:GDBString;(*'**Формат короткого названия'*)(*oi_readonly*)
+                       NameTemplate:GDBString;(*'**Формат названия'*)(*oi_readonly*)
+                       NameFullTemplate:GDBString;(*'**Формат полного названия'*)(*oi_readonly*)
+                       UIDTemplate:GDBString;(*'**Формат уникального идентификатора'*)(*oi_readonly*)
                        constructor initnul;
                        procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
                        procedure Format;virtual;
                  end;
 ElDeviceBaseObject=object(DeviceDbBaseObject)
-                                   Pins:GDBString;(*'Клеммы'*)
+                                   Pins:GDBString;(*'**Клеммы'*)
                                    constructor initnul;
                                    procedure Format;virtual;
                              end;
 CableDeviceBaseObject=object(DeviceDbBaseObject)
-                                   ThreadSection:GDBDouble;(*'Сечение жилы'*)
-                                   ThreadCount:GDBDouble;(*'Количество жил'*)
-                                   OuterDiameter:GDBDouble;(*'Наружный диаметр'*)
+                                   ThreadSection:GDBDouble;(*'**Сечение жилы'*)
+                                   ThreadCount:GDBDouble;(*'**Количество жил'*)
+                                   OuterDiameter:GDBDouble;(*'**Наружный диаметр'*)
                                    constructor initnul;
                              end;
 {EXPORT-}

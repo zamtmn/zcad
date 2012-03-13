@@ -26,10 +26,11 @@ gl,
 GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef{,oglwindowdef},geometry,dxflow,memman{,GDBSubordinated,UGDBOpenArrayOfByte};
 //jcm(*'TopMiddle'*),
 type
-{EXPORT+}
-TTableCellJustify=(jcl(*'TopLeft'*),
+{TTableCellJustify=(jcl(*'TopLeft'*),
               jcc(*'TopCenter'*),
-              jcr(*'TopRight'*));
+              jcr(*'TopRight'*));}
+
+{EXPORT+}
 PTGDBTableItemFormat=^TGDBTableItemFormat;
 TGDBTableItemFormat=record
                  Width,TextWidth:GDBDouble;

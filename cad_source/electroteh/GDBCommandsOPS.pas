@@ -35,52 +35,52 @@ uses
 type
 {Export+}
   TInsertType=(
-               TIT_Block(*'Блок'*),
-               TIT_Device(*'Устройство'*)
+               TIT_Block(*'Block'*),
+               TIT_Device(*'Device'*)
               );
   TOPSDatType=(
-               TOPSDT_Termo(*'Тепловой'*),
-               TOPSDT_Smoke(*'Дымовой'*)
+               TOPSDT_Termo(*'Termo'*),
+               TOPSDT_Smoke(*'Smoke'*)
               );
   TOPSMinDatCount=(
-                   TOPSMDC_1(*'1 в четверти длины'*),
-                   TOPSMDC_1_2(*'1 в середине'*),
+                   TOPSMDC_1(*'1 in the quarter'*),
+                   TOPSMDC_1_2(*'1 in the middle'*),
                    TOPSMDC_2(*'2'*),
                    TOPSMDC_3(*'3'*),
                    TOPSMDC_4(*'4'*)
                   );
   TODPCountType=(
-                   TODPCT_by_Count(*'по количеству'*),
-                   TODPCT_by_XY(*'по ширине/длине'*)
+                   TODPCT_by_Count(*'by number'*),
+                   TODPCT_by_XY(*'by width/height'*)
                  );
   TOPSPlaceSmokeDetectorOrtoParam=record
-                                        InsertType:TInsertType;(*'Вставлять'*)
-                                        Scale:GDBDouble;(*'Масштаб плана'*)
-                                        ScaleBlock:GDBDouble;(*'Масштаб блоков'*)
-                                        StartAuto:GDBBoolean;(*'Сигнал "Пуск"'*)
-                                        DatType:TOPSDatType;(*'Тип извещателя'*)
-                                        DMC:TOPSMinDatCount;(*'Мин. кол-во извещателей'*)
-                                        Height:TEnumData;(*'Высота установки'*)
-                                        NDD:GDBDouble;(*'Датчик-Датчик(Норм)'*)
-                                        NDW:GDBDouble;(*'Стена-Датчик(Норм)'*)
-                                        FDD:GDBDouble;(*'Датчик-Датчик(Факт)'*)(*oi_readonly*)
-                                        FDW:GDBDouble;(*'Стена-Датчик(Факт)'*)(*oi_readonly*)
-                                        NormalizePoint:GDBBoolean;(*'Нормализовать по сетке(если включена)'*)
+                                        InsertType:TInsertType;(*'Insert'*)
+                                        Scale:GDBDouble;(*'Plan scale'*)
+                                        ScaleBlock:GDBDouble;(*'Blocks scale'*)
+                                        StartAuto:GDBBoolean;(*'"Start" signal'*)
+                                        DatType:TOPSDatType;(*'Sensor type'*)
+                                        DMC:TOPSMinDatCount;(*'Min. number of sensors'*)
+                                        Height:TEnumData;(*'Height of installation'*)
+                                        NDD:GDBDouble;(*'Sensor-Sensor(standard)'*)
+                                        NDW:GDBDouble;(*'Sensor-Wall(standard)'*)
+                                        FDD:GDBDouble;(*'Sensor-Sensor(fact)'*)(*oi_readonly*)
+                                        FDW:GDBDouble;(*'Sensor-Wall(fact)'*)(*oi_readonly*)
+                                        NormalizePoint:GDBBoolean;(*'Normalize to grid (if enabled)'*)
 
                                         oldth:GDBInteger;(*hidden_in_objinsp*)
                                         oldsh:GDBInteger;(*hidden_in_objinsp*)
                                         olddt:TOPSDatType;(*hidden_in_objinsp*)
                                   end;
   TOrtoDevPlaceParam=record
-                                        Name:GDBString;(*'Блок'*)(*oi_readonly*)
-                                        ScaleBlock:GDBDouble;(*'Масштаб блоков'*)
-                                        CountType:TODPCountType;(*'Расставлять'*)
-                                        Count:GDBInteger;(*'Общее количество'*)
-                                        NX:GDBInteger;(*'Кол-во по длине'*)
-                                        NY:GDBInteger;(*'Кол-во по ширине'*)
-                                        Angle:GDBDouble;(*'Угол'*)
-                                        AutoAngle:GDBBoolean;(*'Автоповорот'*)
-                                        NormalizePoint:GDBBoolean;(*'Нормализовать по сетке(если включена)'*)
+                                        Name:GDBString;(*'Block'*)(*oi_readonly*)
+                                        ScaleBlock:GDBDouble;(*'Blocks scale'*)
+                                        CountType:TODPCountType;(*'Type of placement'*)
+                                        Count:GDBInteger;(*'Total number'*)
+                                        NX:GDBInteger;(*'Number of length'*)
+                                        NY:GDBInteger;(*'Number of width'*)
+                                        Angle:GDBDouble;(*'Rotation'*)
+                                        AutoAngle:GDBBoolean;(*'Auto rotation'*)
+                                        NormalizePoint:GDBBoolean;(*'Normalize to grid (if enabled)'*)
 
                      end;
      GDBLine=record

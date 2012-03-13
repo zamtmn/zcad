@@ -37,34 +37,34 @@ uses
 type
 {Export+}
   TFindType=(
-               TFT_Obozn(*'обозначении'*),
-               TFT_DBLink(*'материале'*),
+               TFT_Obozn(*'**обозначении'*),
+               TFT_DBLink(*'**материале'*),
                TFT_variable(*'??указанной переменной'*)
              );
 PTBasicFinter=^TBasicFinter;
 TBasicFinter=record
-                   IncludeCable:GDBBoolean;(*'Фильтр включения'*)
-                   IncludeCableMask:GDBString;(*'Маска включения'*)
-                   ExcludeCable:GDBBoolean;(*'Фильтр исключения'*)
-                   ExcludeCableMask:GDBString;(*'Маска исключения'*)
+                   IncludeCable:GDBBoolean;(*'Include filter'*)
+                   IncludeCableMask:GDBString;(*'Include mask'*)
+                   ExcludeCable:GDBBoolean;(*'Exclude filter'*)
+                   ExcludeCableMask:GDBString;(*'Exclude mask'*)
              end;
   TFindDeviceParam=record
-                        FindType:TFindType;(*'Искать в'*)
-                        FindMethod:GDBBoolean;(*'Применять символы *, ?'*)
-                        FindString:GDBString;(*'Текст'*)
+                        FindType:TFindType;(*'Find in'*)
+                        FindMethod:GDBBoolean;(*'Use symbols *, ?'*)
+                        FindString:GDBString;(*'Text'*)
                     end;
      GDBLine=record
                   lBegin,lEnd:GDBvertex;
               end;
   TELCableComParam=record
-                        Traces:TEnumData;(*'Трасса'*)
-                        PCable:PGDBObjCable;(*'Кабель'*)
-                        PTrace:PGDBObjNet;(*'Трасса(указатель)'*)
+                        Traces:TEnumData;(*'Trace'*)
+                        PCable:PGDBObjCable;(*'Cabel'*)
+                        PTrace:PGDBObjNet;(*'Trace (pointer)'*)
                    end;
   TELLeaderComParam=record
-                        Scale:GDBDouble;(*'Масштаб'*)
-                        Size:GDBInteger;(*'Размер'*)
-                        twidth:GDBDouble;(*'Ширина'*)
+                        Scale:GDBDouble;(*'Scale'*)
+                        Size:GDBInteger;(*'Size'*)
+                        twidth:GDBDouble;(*'Width'*)
                    end;
 {Export-}
   El_Wire_com = object(CommandRTEdObject)

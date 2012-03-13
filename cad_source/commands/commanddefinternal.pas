@@ -49,7 +49,7 @@ type
   CommandRTEdObject = object(CommandRTEdObjectDef)
     saveosmode:GDBInteger;(*hidden_in_objinsp*)
     UndoTop:TArrayIndex;(*hidden_in_objinsp*)
-    commanddata:TTypedData;(*'Параметры команды'*)
+    commanddata:TTypedData;(*'Command options'*)
     procedure CommandStart(Operands:pansichar); virtual;
     procedure CommandEnd; virtual;
     procedure CommandCancel; virtual;

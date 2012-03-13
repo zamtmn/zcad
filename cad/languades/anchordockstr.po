@@ -53,6 +53,10 @@ msgstr ""
 msgid "Custom dock site %s%s%s can have only one site."
 msgstr ""
 
+#: anchordockstr.adrsdockinganchordocking
+msgid "Docking / Anchordocking"
+msgstr ""
+
 #: anchordockstr.adrsdockingenabledrequiresarestartoftheide
 msgid "Docking enabled (Requires a restart of the IDE)"
 msgstr ""
@@ -71,6 +75,10 @@ msgstr ""
 
 #: anchordockstr.adrsduplicatename
 msgid "Duplicate name: "
+msgstr ""
+
+#: anchordockstr.adrseachdockedwindowhasaheaderthatallowsdragginghasaco
+msgid "Each docked window has a header that allows dragging, has a context menu with extra layout functions and shows the caption of the docked window"
 msgstr ""
 
 #: anchordockstr.adrsemptyname
@@ -189,6 +197,10 @@ msgstr ""
 msgid "%s requested, but %s created"
 msgstr ""
 
+#: anchordockstr.adrsrestoredefaultlayout
+msgid "Restore default layout"
+msgstr ""
+
 #: anchordockstr.adrsright
 msgid "right"
 msgstr ""
@@ -219,6 +231,10 @@ msgstr ""
 
 #: anchordockstr.adrsshowheadercaptions
 msgid "Show header captions"
+msgstr ""
+
+#: anchordockstr.adrsshowheaders
+msgid "Show headers"
 msgstr ""
 
 #: anchordockstr.adrssplitterthickness

@@ -41,7 +41,7 @@ GDBObjBlockdef=object(GDBObjGenericSubEntry)
                      VarFromFile:GDBString;(*saved_to_shd*)
                      Base:GDBvertex;(*saved_to_shd*)
                      Formated:GDBBoolean;
-                     BlockDesc:TBlockDesc;(*'Параметры блока'*)(*saved_to_shd*)(*oi_readonly*)
+                     BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
                      constructor initnul(owner:PGDBObjGenericWithSubordinated);
                      constructor init(_name:GDBString);
                      procedure format;virtual;

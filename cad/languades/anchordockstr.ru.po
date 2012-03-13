@@ -61,6 +61,10 @@ msgstr "объект уже является областью стыковки"
 msgid "Custom dock site %s%s%s can have only one site."
 msgstr "Пользовательская область стыковки %s%s%s может иметь только один стыковочный элемент."
 
+#: anchordockstr.adrsdockinganchordocking
+msgid "Docking / Anchordocking"
+msgstr "Стыковка / Anchordocking"
+
 #: anchordockstr.adrsdockingenabledrequiresarestartoftheide
 msgid "Docking enabled (Requires a restart of the IDE)"
 msgstr "Включить стыковку (требует перезапуска IDE)"
@@ -80,6 +84,10 @@ msgstr "Порог перетаскивания"
 #: anchordockstr.adrsduplicatename
 msgid "Duplicate name: "
 msgstr "Имя уже существует: "
+
+#: anchordockstr.adrseachdockedwindowhasaheaderthatallowsdragginghasaco
+msgid "Each docked window has a header that allows dragging, has a context menu with extra layout functions and shows the caption of the docked window"
+msgstr "Каждое пристыкованное окно имеет заголовок, позволяющий осуществить перетаскивание, имеющий контекстное меню с дополнительными функциями разбивки и отображающий его название"
 
 #: anchordockstr.adrsemptyname
 msgid "Empty name: "
@@ -197,6 +205,10 @@ msgstr "Выход из %s"
 msgid "%s requested, but %s created"
 msgstr "Запрошен %s, но создан %s"
 
+#: anchordockstr.adrsrestoredefaultlayout
+msgid "Restore default layout"
+msgstr "Восстановить разбивку окна по умолчанию"
+
 #: anchordockstr.adrsright
 msgid "right"
 msgstr "справа"
@@ -228,6 +240,10 @@ msgstr "Показывать названия пристыкованных об�
 #: anchordockstr.adrsshowheadercaptions
 msgid "Show header captions"
 msgstr "Показывать названия в заголовках"
+
+#: anchordockstr.adrsshowheaders
+msgid "Show headers"
+msgstr "Показывать заголовки"
 
 #: anchordockstr.adrssplitterthickness
 msgid "Splitter thickness"

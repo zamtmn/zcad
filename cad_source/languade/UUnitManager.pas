@@ -46,8 +46,8 @@ var units:TUnitManager;
     //SysUnit,SysVarUnit:PTUnit;
 //procedure startup;
 //procedure finalize;
-const
-     nOGLc='контекст OpenGL не создан';
+Resourcestring
+     nOGLc='OpenGL context is not created';
 implementation
 uses
     log,memman;
@@ -61,7 +61,7 @@ const
      VMTBase:BaseDescriptor=
                            (
                            ProgramName:'#';
-                           UserName:'Объект';
+                           UserName:'Object';
                            PFT:@GDBPointerDescriptorOdj;
                            Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY;
                            );
@@ -69,7 +69,7 @@ const
                            (
                             base:(
                                   ProgramName:'#';
-                           UserName:'Объект';
+                           UserName:'Object';
                            PFT:@GDBPointerDescriptorOdj;
                            Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY;
                            );

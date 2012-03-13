@@ -135,8 +135,8 @@ GDBvertex2DI=record
                    x,y:GDBInteger;
              end;
 GDBBoundingBbox=record
-                      LBN:GDBvertex;(*'ЛевыйНижнийБлижний'*)
-                      RTF:GDBvertex;(*'ПравыйВерхнийДальний'*)
+                      LBN:GDBvertex;(*'Near'*)
+                      RTF:GDBvertex;(*'Far'*)
                 end;
 TInRect=(IRFully,IRPartially,IREmpty);                
 PGDBvertex2DI=^GDBvertex2DI;
@@ -654,13 +654,13 @@ GDBLayerArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLayerProp*)
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
               end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBTableStyleArray.pas
-TCellJustify=(jcl(*'ВерхЛево'*),
-              jcm(*'ВерхЦентр'*),
-              jcr(*'ВерхПраво'*));
+TTableCellJustify=(jcl(*'TopLeft'*),
+              jcc(*'TopCenter'*),
+              jcr(*'TopRight'*));
 PTGDBTableCellStyle=^TGDBTableCellStyle;
 TGDBTableCellStyle=record
                           Width,TextWidth:GDBDouble;
-                          CF:TCellJustify;
+                          CF:TTableCellJustify;
                     end;
 GDBCellFormatArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=TGDBTableCellStyle*)
                    end;
@@ -724,10 +724,11 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
                 WND_NewDraw(*'Redraw'*),
                 WND_Texture(*'Texture'*)
                );
+  {°}
   TTraceAngle=(
-                TTA90(*'90°'*),
-                TTA45(*'45°'*),
-                TTA30(*'30°'*)
+                TTA90(*'90 deg'*),
+                TTA45(*'45 deg'*),
+                TTA30(*'30 deg'*)
                );
   TTraceMode=record
                    Angle:TTraceAngle;(*'Angle'*)
@@ -1524,7 +1525,7 @@ GDBObjBlockdef=object(GDBObjGenericSubEntry)
                      VarFromFile:GDBString;(*saved_to_shd*)
                      Base:GDBvertex;(*saved_to_shd*)
                      Formated:GDBBoolean;
-                     BlockDesc:TBlockDesc;(*'Параметры блока'*)(*saved_to_shd*)(*oi_readonly*)
+                     BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
                      constructor initnul(owner:PGDBObjGenericWithSubordinated);
                      constructor init(_name:GDBString);
                      procedure format;virtual;abstract;
@@ -1993,9 +1994,6 @@ GDBObjCamera=object(GDBBaseCamera)
                    procedure NextPosition;virtual;abstract;
              end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBTable.pas
-TTableCellJustify=(jcl(*'TopLeft'*),
-              jcc(*'TopCenter'*),
-              jcr(*'TopRight'*));
 PTGDBTableItemFormat=^TGDBTableItemFormat;
 TGDBTableItemFormat=record
                  Width,TextWidth:GDBDouble;
@@ -2067,50 +2065,50 @@ GDBOpenArrayOfTObjLinkRecord=object(GDBOpenArrayOfData)(*OpenArrayOfData=TObjLin
                       procedure Minimize;
                    end;
 //Generate on C:\zcad\CAD_SOURCE\DeviceBase\DeviceBase.pas
-TOborudCategory=(_misc(*'Разное'*),
-                 _elapp(*'Электроаппараты'*),
-                 _ppkop(*'Приборы приемноконтрольные ОПС'*),
-                 _detsmokesl(*'Извещатель дымовой шлейфовый'*),
-                 _kables(*'Кабельная продукция'*));
-TEdIzm=(_sht(*'шт.'*),
-        _m(*'м'*));
+TOborudCategory=(_misc(*'**Разное'*),
+                 _elapp(*'**Электроаппараты'*),
+                 _ppkop(*'**Приборы приемноконтрольные ОПС'*),
+                 _detsmokesl(*'**Извещатель дымовой шлейфовый'*),
+                 _kables(*'**Кабельная продукция'*));
+TEdIzm=(_sht(*'**шт.'*),
+        _m(*'**м'*));
 PDbBaseObject=^DbBaseObject;        
 DbBaseObject=object(GDBaseObject)
-                       Category:TOborudCategory;(*'Категория'*)(*oi_readonly*)
-                       Group:GDBString;(*'Группа'*)
-                       Position:GDBString;(*'Позиция'*)(*oi_readonly*)
-                       NameShort:GDBString;(*'Короткое название'*)(*oi_readonly*)
-                       Name:GDBString;(*'Название'*)(*oi_readonly*)
-                       NameFull:GDBString;(*'Полное название'*)(*oi_readonly*)
-                       Description:GDBString;(*'Описание'*)(*oi_readonly*)
-                       ID:GDBString;(*'Идентификатор'*)(*oi_readonly*)
-                       Standard:GDBString;(*'Технический документ'*)(*oi_readonly*)
-                       OKP:GDBString;(*'Код ОКП'*)(*oi_readonly*)
-                       EdIzm:TEdIzm;(*'Ед. изм.'*)(*oi_readonly*)
-                       Manufacturer:GDBString;(*'Производитель'*)(*oi_readonly*)
-                       TreeCoord:GDBString;(*'Позиция в дереве БД'*)(*oi_readonly*)
+                       Category:TOborudCategory;(*'**Категория'*)(*oi_readonly*)
+                       Group:GDBString;(*'**Группа'*)
+                       Position:GDBString;(*'**Позиция'*)(*oi_readonly*)
+                       NameShort:GDBString;(*'**Короткое название'*)(*oi_readonly*)
+                       Name:GDBString;(*'**Название'*)(*oi_readonly*)
+                       NameFull:GDBString;(*'**Полное название'*)(*oi_readonly*)
+                       Description:GDBString;(*'**Описание'*)(*oi_readonly*)
+                       ID:GDBString;(*'**Идентификатор'*)(*oi_readonly*)
+                       Standard:GDBString;(*'**Технический документ'*)(*oi_readonly*)
+                       OKP:GDBString;(*'**Код ОКП'*)(*oi_readonly*)
+                       EdIzm:TEdIzm;(*'**Ед. изм.'*)(*oi_readonly*)
+                       Manufacturer:GDBString;(*'**Производитель'*)(*oi_readonly*)
+                       TreeCoord:GDBString;(*'**Позиция в дереве БД'*)(*oi_readonly*)
                        constructor initnul;
                  end;
 PDeviceDbBaseObject=^DeviceDbBaseObject;
 DeviceDbBaseObject=object(DbBaseObject)
-                       UID:GDBString;(*'Уникальный идентификатор'*)(*oi_readonly*)
-                       NameShortTemplate:GDBString;(*'Формат короткого названия'*)(*oi_readonly*)
-                       NameTemplate:GDBString;(*'Формат названия'*)(*oi_readonly*)
-                       NameFullTemplate:GDBString;(*'Формат полного названия'*)(*oi_readonly*)
-                       UIDTemplate:GDBString;(*'Формат уникального идентификатора'*)(*oi_readonly*)
+                       UID:GDBString;(*'**Уникальный идентификатор'*)(*oi_readonly*)
+                       NameShortTemplate:GDBString;(*'**Формат короткого названия'*)(*oi_readonly*)
+                       NameTemplate:GDBString;(*'**Формат названия'*)(*oi_readonly*)
+                       NameFullTemplate:GDBString;(*'**Формат полного названия'*)(*oi_readonly*)
+                       UIDTemplate:GDBString;(*'**Формат уникального идентификатора'*)(*oi_readonly*)
                        constructor initnul;
                        procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
                        procedure Format;virtual;abstract;
                  end;
 ElDeviceBaseObject=object(DeviceDbBaseObject)
-                                   Pins:GDBString;(*'Клеммы'*)
+                                   Pins:GDBString;(*'**Клеммы'*)
                                    constructor initnul;
                                    procedure Format;virtual;abstract;
                              end;
 CableDeviceBaseObject=object(DeviceDbBaseObject)
-                                   ThreadSection:GDBDouble;(*'Сечение жилы'*)
-                                   ThreadCount:GDBDouble;(*'Количество жил'*)
-                                   OuterDiameter:GDBDouble;(*'Наружный диаметр'*)
+                                   ThreadSection:GDBDouble;(*'**Сечение жилы'*)
+                                   ThreadCount:GDBDouble;(*'**Количество жил'*)
+                                   OuterDiameter:GDBDouble;(*'**Наружный диаметр'*)
                                    constructor initnul;
                              end;
 //Generate on C:\zcad\CAD_SOURCE\commands\commandlinedef.pas
@@ -2177,7 +2175,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
   CommandRTEdObject = object(CommandRTEdObjectDef)
     saveosmode:GDBInteger;(*hidden_in_objinsp*)
     UndoTop:TArrayIndex;(*hidden_in_objinsp*)
-    commanddata:TTypedData;(*'Параметры команды'*)
+    commanddata:TTypedData;(*'Command options'*)
     procedure CommandStart(Operands:pansichar); virtual;abstract;
     procedure CommandEnd; virtual;abstract;
     procedure CommandCancel; virtual;abstract;
@@ -2205,22 +2203,22 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
   end;
 //Generate on C:\zcad\CAD_SOURCE\commands\GDBCommandsDraw.pas
          TBlockInsert=record
-                            Blocks:TEnumData;(*'Блок'*)
-                            Scale:GDBvertex;(*'Масштаб'*)
-                            Rotation:GDBDouble;(*'Поворот'*)
+                            Blocks:TEnumData;(*'Block'*)
+                            Scale:GDBvertex;(*'Scale'*)
+                            Rotation:GDBDouble;(*'Rotation'*)
                       end;
          TSubPolyEdit=(
-                       TSPE_Insert(*'Вставить вершину'*),
-                       TSPE_Remove(*'Убрать вершину'*),
-                       TSPE_Scissor(*'Разрезать на две'*)
+                       TSPE_Insert(*'Insert vertex'*),
+                       TSPE_Remove(*'Remove vertex'*),
+                       TSPE_Scissor(*'Cut into two parts'*)
                        );
          TPolyEditMode=(
-                       TPEM_Nearest(*'Вставить в ближайший сегмент'*),
-                       TPEM_Select(*'Выбирать сегмент'*)
+                       TPEM_Nearest(*'Paste in nearest segment'*),
+                       TPEM_Select(*'Choose a segment'*)
                        );
          TPolyEdit=record
-                            Action:TSubPolyEdit;(*'Действие'*)
-                            Mode:TPolyEditMode;(*'Режим'*)
+                            Action:TSubPolyEdit;(*'Action'*)
+                            Mode:TPolyEditMode;(*'Mode'*)
                             vdist:gdbdouble;(*hidden_in_objinsp*)
                             ldist:gdbdouble;(*hidden_in_objinsp*)
                             nearestvertex:GDBInteger;(*hidden_in_objinsp*)
@@ -2299,8 +2297,8 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                             Scale:GDBDouble;(*'Scale'*)
                       end;
   TBEditParam=record
-                    CurrentEditBlock:GDBString;(*'Текущий блок'*)(*oi_readonly*)
-                    Blocks:TEnumData;(*'Выбор блока'*)
+                    CurrentEditBlock:GDBString;(*'Current block'*)(*oi_readonly*)
+                    Blocks:TEnumData;(*'Select block'*)
               end;
   PTCopyObjectDesc=^TCopyObjectDesc;
   TCopyObjectDesc=record
@@ -2624,14 +2622,14 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
               end;
 //Generate on C:\zcad\CAD_SOURCE\commands\GDBCommandsBase.pas
   TMSType=(
-           TMST_All(*'Всех примитивов'*),
-           TMST_Devices(*'Устройств'*),
-           TMST_Cables(*'Кабелей'*)
+           TMST_All(*'All entities'*),
+           TMST_Devices(*'Devices'*),
+           TMST_Cables(*'Cables'*)
           );
   TMSEditor=object(GDBaseObject)
-                SelCount:GDBInteger;(*'Выбрано объектов'*)(*oi_readonly*)
-                EntType:TMSType;(*'Показать переменные'*)
-                OU:TObjectUnit;(*'Переменные'*)
+                SelCount:GDBInteger;(*'Selected objects'*)(*oi_readonly*)
+                EntType:TMSType;(*'Process primitives'*)
+                OU:TObjectUnit;(*'Variables'*)
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
                 procedure CreateUnit;virtual;abstract;
                 function GetObjType:GDBWord;virtual;abstract;
@@ -2639,58 +2637,58 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
                 destructor done;virtual;abstract;
             end;
 TOSModeEditor=object(GDBaseObject)
-              osm:TOSMode;(*'Привязка'*)
-              trace:TTraceMode;(*'Трассировка'*)
+              osm:TOSMode;(*'Snap'*)
+              trace:TTraceMode;(*'Trace'*)
               procedure Format;virtual;abstract;
               procedure GetState;
              end;
 //Generate on C:\zcad\CAD_SOURCE\electroteh\GDBCommandsOPS.pas
   TInsertType=(
-               TIT_Block(*'Блок'*),
-               TIT_Device(*'Устройство'*)
+               TIT_Block(*'Block'*),
+               TIT_Device(*'Device'*)
               );
   TOPSDatType=(
-               TOPSDT_Termo(*'Тепловой'*),
-               TOPSDT_Smoke(*'Дымовой'*)
+               TOPSDT_Termo(*'Termo'*),
+               TOPSDT_Smoke(*'Smoke'*)
               );
   TOPSMinDatCount=(
-                   TOPSMDC_1(*'1 в четверти длины'*),
-                   TOPSMDC_1_2(*'1 в середине'*),
+                   TOPSMDC_1(*'1 in the quarter'*),
+                   TOPSMDC_1_2(*'1 in the middle'*),
                    TOPSMDC_2(*'2'*),
                    TOPSMDC_3(*'3'*),
                    TOPSMDC_4(*'4'*)
                   );
   TODPCountType=(
-                   TODPCT_by_Count(*'по количеству'*),
-                   TODPCT_by_XY(*'по ширине/длине'*)
+                   TODPCT_by_Count(*'by number'*),
+                   TODPCT_by_XY(*'by width/height'*)
                  );
   TOPSPlaceSmokeDetectorOrtoParam=record
-                                        InsertType:TInsertType;(*'Вставлять'*)
-                                        Scale:GDBDouble;(*'Масштаб плана'*)
-                                        ScaleBlock:GDBDouble;(*'Масштаб блоков'*)
-                                        StartAuto:GDBBoolean;(*'Сигнал "Пуск"'*)
-                                        DatType:TOPSDatType;(*'Тип извещателя'*)
-                                        DMC:TOPSMinDatCount;(*'Мин. кол-во извещателей'*)
-                                        Height:TEnumData;(*'Высота установки'*)
-                                        NDD:GDBDouble;(*'Датчик-Датчик(Норм)'*)
-                                        NDW:GDBDouble;(*'Стена-Датчик(Норм)'*)
-                                        FDD:GDBDouble;(*'Датчик-Датчик(Факт)'*)(*oi_readonly*)
-                                        FDW:GDBDouble;(*'Стена-Датчик(Факт)'*)(*oi_readonly*)
-                                        NormalizePoint:GDBBoolean;(*'Нормализовать по сетке(если включена)'*)
+                                        InsertType:TInsertType;(*'Insert'*)
+                                        Scale:GDBDouble;(*'Plan scale'*)
+                                        ScaleBlock:GDBDouble;(*'Blocks scale'*)
+                                        StartAuto:GDBBoolean;(*'"Start" signal'*)
+                                        DatType:TOPSDatType;(*'Sensor type'*)
+                                        DMC:TOPSMinDatCount;(*'Min. number of sensors'*)
+                                        Height:TEnumData;(*'Height of installation'*)
+                                        NDD:GDBDouble;(*'Sensor-Sensor(standard)'*)
+                                        NDW:GDBDouble;(*'Sensor-Wall(standard)'*)
+                                        FDD:GDBDouble;(*'Sensor-Sensor(fact)'*)(*oi_readonly*)
+                                        FDW:GDBDouble;(*'Sensor-Wall(fact)'*)(*oi_readonly*)
+                                        NormalizePoint:GDBBoolean;(*'Normalize to grid (if enabled)'*)
                                         oldth:GDBInteger;(*hidden_in_objinsp*)
                                         oldsh:GDBInteger;(*hidden_in_objinsp*)
                                         olddt:TOPSDatType;(*hidden_in_objinsp*)
                                   end;
   TOrtoDevPlaceParam=record
-                                        Name:GDBString;(*'Блок'*)(*oi_readonly*)
-                                        ScaleBlock:GDBDouble;(*'Масштаб блоков'*)
-                                        CountType:TODPCountType;(*'Расставлять'*)
-                                        Count:GDBInteger;(*'Общее количество'*)
-                                        NX:GDBInteger;(*'Кол-во по длине'*)
-                                        NY:GDBInteger;(*'Кол-во по ширине'*)
-                                        Angle:GDBDouble;(*'Угол'*)
-                                        AutoAngle:GDBBoolean;(*'Автоповорот'*)
-                                        NormalizePoint:GDBBoolean;(*'Нормализовать по сетке(если включена)'*)
+                                        Name:GDBString;(*'Block'*)(*oi_readonly*)
+                                        ScaleBlock:GDBDouble;(*'Blocks scale'*)
+                                        CountType:TODPCountType;(*'Type of placement'*)
+                                        Count:GDBInteger;(*'Total number'*)
+                                        NX:GDBInteger;(*'Number of length'*)
+                                        NY:GDBInteger;(*'Number of width'*)
+                                        Angle:GDBDouble;(*'Rotation'*)
+                                        AutoAngle:GDBBoolean;(*'Auto rotation'*)
+                                        NormalizePoint:GDBBoolean;(*'Normalize to grid (if enabled)'*)
                      end;
      GDBLine=record
                   lBegin,lEnd:GDBvertex;
@@ -2700,34 +2698,34 @@ TOSModeEditor=object(GDBaseObject)
   end;
 //Generate on C:\zcad\CAD_SOURCE\electroteh\GDBCommandsElectrical.pas
   TFindType=(
-               TFT_Obozn(*'обозначении'*),
-               TFT_DBLink(*'материале'*),
+               TFT_Obozn(*'**обозначении'*),
+               TFT_DBLink(*'**материале'*),
                TFT_variable(*'??указанной переменной'*)
              );
 PTBasicFinter=^TBasicFinter;
 TBasicFinter=record
-                   IncludeCable:GDBBoolean;(*'Фильтр включения'*)
-                   IncludeCableMask:GDBString;(*'Маска включения'*)
-                   ExcludeCable:GDBBoolean;(*'Фильтр исключения'*)
-                   ExcludeCableMask:GDBString;(*'Маска исключения'*)
+                   IncludeCable:GDBBoolean;(*'Include filter'*)
+                   IncludeCableMask:GDBString;(*'Include mask'*)
+                   ExcludeCable:GDBBoolean;(*'Exclude filter'*)
+                   ExcludeCableMask:GDBString;(*'Exclude mask'*)
              end;
   TFindDeviceParam=record
-                        FindType:TFindType;(*'Искать в'*)
-                        FindMethod:GDBBoolean;(*'Применять символы *, ?'*)
-                        FindString:GDBString;(*'Текст'*)
+                        FindType:TFindType;(*'Find in'*)
+                        FindMethod:GDBBoolean;(*'Use symbols *, ?'*)
+                        FindString:GDBString;(*'Text'*)
                     end;
      GDBLine=record
                   lBegin,lEnd:GDBvertex;
               end;
   TELCableComParam=record
-                        Traces:TEnumData;(*'Трасса'*)
-                        PCable:PGDBObjCable;(*'Кабель'*)
-                        PTrace:PGDBObjNet;(*'Трасса(указатель)'*)
+                        Traces:TEnumData;(*'Trace'*)
+                        PCable:PGDBObjCable;(*'Cabel'*)
+                        PTrace:PGDBObjNet;(*'Trace (pointer)'*)
                    end;
   TELLeaderComParam=record
-                        Scale:GDBDouble;(*'Масштаб'*)
-                        Size:GDBInteger;(*'Размер'*)
-                        twidth:GDBDouble;(*'Ширина'*)
+                        Scale:GDBDouble;(*'Scale'*)
+                        Size:GDBInteger;(*'Size'*)
+                        twidth:GDBDouble;(*'Width'*)
                    end;
 //Generate on C:\zcad\CAD_SOURCE\u\UCableManager.pas
     PTCableDesctiptor=^TCableDesctiptor;

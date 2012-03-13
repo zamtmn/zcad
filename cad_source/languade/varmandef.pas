@@ -176,10 +176,11 @@ UserTypeDescriptor=object(GDBaseObject)
                 WND_NewDraw(*'Redraw'*),
                 WND_Texture(*'Texture'*)
                );
+  {°}
   TTraceAngle=(
-                TTA90(*'90°'*),
-                TTA45(*'45°'*),
-                TTA30(*'30°'*)
+                TTA90(*'90 deg'*),
+                TTA45(*'45 deg'*),
+                TTA30(*'30 deg'*)
                );
   TTraceMode=record
                    Angle:TTraceAngle;(*'Angle'*)

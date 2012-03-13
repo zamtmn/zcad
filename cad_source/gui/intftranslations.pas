@@ -184,8 +184,16 @@ begin
                if (utf8length(Identifier)=length(Identifier))and
                   (utf8length(OriginalValue)=length(OriginalValue)) then
                begin
+                    if pos(identpref,Identifier)<>1 then
+                    begin
                     po.Add(identpref+Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
                     actualypo.Add(identpref+Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
+                    end
+                    else
+                                       begin
+                                       po.Add(Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
+                                       actualypo.Add(Identifier,OriginalValue, {TranslatedValue}'', {Comments}'',{Context}'', {Flags}'', {PreviousID}'');
+                                       end;
                     inc(_UpdatePO);
                     //po.SaveToFile(PODirectory + 'zcad.po');
                end
@@ -201,7 +209,7 @@ begin
                                                    item.ModifyFlag('fuzzy',true);
                                                    item.Original:=OriginalValue;
                                                    end;
-               actualypo.Add(identpref+item.IdentifierLow, item.Original, item.Translation, item.Comments,
+               actualypo.Add({identpref+}item.IdentifierLow, item.Original, item.Translation, item.Comments,
                               item.Context, item.Flags,'');
           end;
 

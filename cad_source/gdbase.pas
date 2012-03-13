@@ -124,8 +124,8 @@ GDBvertex2DI=record
                    x,y:GDBInteger;
              end;
 GDBBoundingBbox=record
-                      LBN:GDBvertex;(*'ЛевыйНижнийБлижний'*)
-                      RTF:GDBvertex;(*'ПравыйВерхнийДальний'*)
+                      LBN:GDBvertex;(*'Near'*)
+                      RTF:GDBvertex;(*'Far'*)
                 end;
 TInRect=(IRFully,IRPartially,IREmpty);                
 PGDBvertex2DI=^GDBvertex2DI;

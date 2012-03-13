@@ -29,6 +29,10 @@ msgstr "Команда не может быть запущена"
 msgid "Running command"
 msgstr "Запущена команда"
 
+#: commandline.s_runscript
+msgid "Running script \"%s\";"
+msgstr ""
+
 #: commandline.s_unknowncommand
 msgid "Unknown command"
 msgstr "Неизвестная команда"

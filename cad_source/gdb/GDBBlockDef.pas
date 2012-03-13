@@ -21,6 +21,8 @@ interface
 uses {UGDBDrawingdef,}dxflow,UGDBOpenArrayOfByte,gdbasetypes,{UGDBVisibleOpenArray,}GDBEntity{,UGDBControlPointArray,UGDBOpenArrayOfData, oglwindowdef},sysutils,gdbase,memman, geometry,
      gl,
      varmandef,gdbobjectsconstdef,GDBGenericSubEntry,GDBSubordinated,varman;
+Resourcestring
+  s_fardeffilenotfounf='File definition of the variables can not be found for the device "%s";';
 type
 {Export+}
 TShapeBorder=(SB_Owner,SB_Self,SB_Empty);
@@ -178,7 +180,7 @@ begin
                                                                 end
                                                             else
                                                                 begin
-                                                                       HistoryOutStr('Файл определения переменных не найден для устройства "'+self.Name+'"');
+                                                                       HistoryOutStr(sysutils.format(s_fardeffilenotfounf,[self.Name]));
                                                                 end;
                                             end;
                                        end;

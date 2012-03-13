@@ -25,6 +25,7 @@ resourcestring
 S_RunCommand='Running command';
 S_UnknownCommand='Unknown command';
 S_CommandNRInC='Command can not run';
+S_RunScript='Running script "%s";';
 
 const
      tm:tmethod=(Code:nil;Data:nil);
@@ -163,7 +164,7 @@ var
    s:gdbstring;
 begin
      s:=(ExpandPath(fn));
-     historyoutstr('Запущен скрипт "'+s+'";');
+     historyoutstr(sysutils.format(S_RunScript,[s]));
      busy:=true;
 
      shared.DisableCmdLine;

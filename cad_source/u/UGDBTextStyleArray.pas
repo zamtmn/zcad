@@ -21,6 +21,8 @@ unit UGDBTextStyleArray;
 interface
 uses gdbasetypes,SysInfo,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
      gl,strproc,varmandef,shared,UGDBSHXFont;
+resourcestring
+  fontnotfoundandreplace='For text style "%s" not found font "%s", is replaced by an alternative';
 type
   //ptextstyle = ^textstyle;
 {EXPORT+}
@@ -108,7 +110,7 @@ begin
   ts.pfont:=FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,FontFile));
   if not assigned(ts.pfont) then
                                 begin
-                                     shared.LogError('Для стиля "'+Tria_AnsiToUtf8(stylename)+'" не найден шрифт "'+FontFile+'", заменен на альтернативный');
+                                     shared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
                                      ts.pfont:=pbasefont;
                                 end;
 
@@ -136,7 +138,7 @@ begin
   ts.pfont:=FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,FontFile));
   if not assigned(ts.pfont) then
                                 begin
-                                     shared.LogError('Для стиля "'+Tria_AnsiToUtf8(stylename)+'" не найден шрифт "'+FontFile+'", заменен на альтернативный');
+                                     shared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
                                      ts.pfont:=pbasefont;
                                 end;
 

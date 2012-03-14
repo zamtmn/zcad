@@ -19,7 +19,7 @@
 unit UUnitManager;
 {$INCLUDE def.inc}
 interface
-uses intftranslations,strproc,Varman,languade,UGDBOpenArrayOfObjects,{RegCnownTypes,URegisterObjects,}SysUtils,
+uses zcadstrconsts,intftranslations,strproc,Varman,languade,UGDBOpenArrayOfObjects,{RegCnownTypes,URegisterObjects,}SysUtils,
      UBaseTypeDescriptor,gdbasetypes, shared,gdbase,UGDBOpenArrayOfByte, strmy, varmandef,sysinfo,
      UGDBOpenArrayOfData,UGDBStringArray,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,UPointerDescriptor,
      URecordDescriptor,UObjectDescriptor,USinonimDescriptor;
@@ -46,8 +46,6 @@ var units:TUnitManager;
     //SysUnit,SysVarUnit:PTUnit;
 //procedure startup;
 //procedure finalize;
-Resourcestring
-     nOGLc='OpenGL context is not created';
 implementation
 uses
     log,memman;
@@ -780,11 +778,11 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxPointSize,'RD_MaxPointSize');
   SysVar.RD.RD_MaxPointSize^:=-1;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_Vendor,'RD_Vendor');
-  SysVar.RD.RD_Vendor^:=nOGLc;
+  SysVar.RD.RD_Vendor^:=rsncOGLc;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_Renderer,'RD_Renderer');
-  SysVar.RD.RD_Renderer^:=nOGLc;
+  SysVar.RD.RD_Renderer^:=rsncOGLc;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_Version,'RD_Version');
-  SysVar.RD.RD_Version^:=nOGLc;
+  SysVar.RD.RD_Version^:=rsncOGLc;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxWidth,'RD_MaxWidth');
   SysVar.RD.RD_MaxWidth^:=-1;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_BackGroundColor,'RD_BackGroundColor');
@@ -865,8 +863,6 @@ initialization;
   if sysunit<>nil then
   PRecordDescriptor(sysunit.TypeName2PTD('CommandRTEdObject'))^.FindField('commanddata')^.Collapsed:=false;
   programlog.logoutstr('UUnitManager.startup',lp_DecPos);
-
-  //evaluate('abba',sysunit);
 
 finalization;
      units.FreeAndDone;

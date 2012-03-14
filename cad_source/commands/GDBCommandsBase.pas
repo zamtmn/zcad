@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- UGDBStringArray,ucxmenumgr,intftranslations,layerwnd,strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ zcadstrconsts,UGDBStringArray,ucxmenumgr,intftranslations,layerwnd,strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -104,8 +104,6 @@ TOSModeEditor=object(GDBaseObject)
    procedure CopyToClipboard;
    function quit_com(Operands:pansichar):GDBInteger;
    function Regen_com(Operands:pansichar):GDBInteger;
-resourcestring
-     s_unknownFileExt='Unknown file format "%s". Saving failed.';
 const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 //var DWGPageCxMenu:pzpopupmenu;
@@ -639,7 +637,7 @@ begin
 
      end
         else
-        shared.ShowError('GDBCommandsBase.MERGE: Не могу открыть файл: '+s);
+        shared.ShowError('GDBCommandsBase.MERGE:'+format(rsUnableToOpenFile,[s]));
 end;
 
 function NextDrawint_com(Operands:pansichar):GDBInteger;
@@ -696,7 +694,7 @@ begin
      gdb.SetCurrentDWG(ptd);
 
      if length(operands)=0 then
-                               operands:=@UnnamedWindowTitle[1];
+                               operands:=@rsUnnamedWindowTitle[1];
 
      {tf:=mainform.PageControl.addpage(Operands);
      mainform.PageControl.selpage(mainform.PageControl.lastcreated);
@@ -773,7 +771,8 @@ begin
      if fileExists(utf8tosys(tn)) then
                            merge_com(@tn[1])
                        else
-                           shared.ShowError('Не найден файл шаблона "'+tn+'"');
+                           shared.ShowError(format(rsTemplateNotFound,[tn]));
+                           //shared.ShowError('Не найден файл шаблона "'+tn+'"');
      end;
      //redrawoglwnd;
      result:=cmd_ok;
@@ -871,7 +870,8 @@ begin
           MainFormN.processfilehistory(s);
      end
                else
-        shared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
+        shared.ShowError('GDBCommandsBase.LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
+        //shared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
 function MergeBlocks_com(Operands:pansichar):GDBInteger;
 var
@@ -921,7 +921,7 @@ begin
                           end
                       else
                           begin
-                               if gdb.GetCurrentDWG.FileName=UnnamedWindowTitle then
+                               if gdb.GetCurrentDWG.FileName=rsUnnamedWindowTitle then
                                                                       begin
                                                                            //commandmanager.executecommandend;
                                                                            SaveAs_com('');
@@ -971,7 +971,7 @@ begin
                                      mem.done; *)
                                 end
      else begin
-          shared.ShowError(Format(s_unknownFileExt, [fileext]));
+          shared.ShowError(Format(rsunknownFileExt, [fileext]));
           end;
      end;
      result:=cmd_ok;

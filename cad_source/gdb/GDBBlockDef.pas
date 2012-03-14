@@ -20,9 +20,7 @@ unit GDBBlockDef;
 interface
 uses {UGDBDrawingdef,}dxflow,UGDBOpenArrayOfByte,gdbasetypes,{UGDBVisibleOpenArray,}GDBEntity{,UGDBControlPointArray,UGDBOpenArrayOfData, oglwindowdef},sysutils,gdbase,memman, geometry,
      gl,
-     varmandef,gdbobjectsconstdef,GDBGenericSubEntry,GDBSubordinated,varman;
-Resourcestring
-  s_fardeffilenotfounf='File definition of the variables can not be found for the device "%s";';
+     zcadstrconsts,varmandef,gdbobjectsconstdef,GDBGenericSubEntry,GDBSubordinated,varman;
 type
 {Export+}
 TShapeBorder=(SB_Owner,SB_Self,SB_Empty);
@@ -135,7 +133,7 @@ begin
                                              end
       else if _Name='SETFROMFILE' then
                              begin
-                                  ShowError('Устаревшая опция (SETFROMFILE)');
+                                  ShowError('Deprecated option: SETFROMFILE');
                                   uou:=pointer(units.findunit(_Value));
                                   if uou<>nil then
                                                   begin
@@ -143,7 +141,7 @@ begin
                                                   end
                                               else
                                                   begin
-                                                       ShowError('Определение блока "'+self.Name+'" (SETFROMFILE): не найден файл '+_Value);
+                                                       ShowError('BlockDef "'+self.Name+'" (SETFROMFILE):'+sysutils.format(rsUnableToFindFile,[_Value]));
                                                   end;
                                   self.VarFromFile:=_Value;
                                   result:=true;
@@ -180,7 +178,7 @@ begin
                                                                 end
                                                             else
                                                                 begin
-                                                                       HistoryOutStr(sysutils.format(s_fardeffilenotfounf,[self.Name]));
+                                                                       HistoryOutStr(sysutils.format(rsfardeffilenotfounf,[self.Name]));
                                                                 end;
                                             end;
                                        end;

@@ -20,7 +20,7 @@ unit GDBCamera;
 {$INCLUDE def.inc}
 
 interface
-uses gdbase,{ogltypes,}gdbasetypes,geometry;
+uses zcadstrconsts,gdbase,{ogltypes,}gdbasetypes,geometry;
 
 type
 {REGISTEROBJECTTYPE GDBObjCamera}
@@ -143,7 +143,7 @@ begin
       end;
 
       end else
-              ShowError('Divide by zero (GDBObjCamera.MoveInLocalCSXY)');
+              ShowError('GDBObjCamera.MoveInLocalCSXY:'+rsDivByZero);
               //shared.historyoutstr('Divide by zero');
 end;
 

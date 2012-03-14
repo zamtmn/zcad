@@ -20,7 +20,7 @@ unit geometry;
 {$INCLUDE def.inc}
 
 interface
-uses gdbase,gdbasetypes, math;
+uses zcadstrconsts,gdbase,gdbasetypes, math;
 const
       EmptyMatrix: DMatrix4D = ((0, 0, 0, 0),
                                 (0, 0, 0, 0),
@@ -57,8 +57,6 @@ const
       ZWCS4D:DVector4D=(0,0,1,1);
       NulVertex2D:GDBVertex2D=(x:0;y:0);
       XWCS2D2D:GDBVertex=(x:1;y:0);
-resourcestring
-              ges_dbz='Divide by zero (Geometry.NormalizeVertex)';
 type Intercept3DProp=record
                            isintercept:GDBBoolean;
                            interceptcoord:gdbvertex;
@@ -1323,7 +1321,7 @@ begin
                  end
              else
                  begin
-                 LogError(ges_dbz);
+                 LogError(rsDivByZero);
                  len:=len+2;
                  end;
 end;

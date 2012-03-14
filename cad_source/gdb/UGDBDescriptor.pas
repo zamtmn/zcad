@@ -20,7 +20,7 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UGDBDrawingdef,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
+zcadstrconsts,GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UGDBDrawingdef,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
 UGDBNumerator, gdbase,varmandef,varman{, oglwindowdef, math, UGDBOpenArrayOfByte},
 sysutils, memman, geometry, gdbobjectsconstdef{, strmy,dxflow},
 {UOpenArray,}gdbasetypes,sysinfo,
@@ -42,8 +42,6 @@ GDBCamera,
 UGDBOpenArrayOfPV,
 GDBRoot,UGDBSHXFont,
 {GDBNet,}OGLWindow,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray;
-resourcestring
-  UnnamedWindowTitle='unnamed';
 const ls = $AAAA;
       ps:array [0..31] of LONGWORD=(
                                    $33333333,$33333333,
@@ -381,7 +379,7 @@ begin
 
 
   Pointer(FileName):=nil;
-  FileName:=UnnamedWindowTitle;
+  FileName:=rsUnnamedWindowTitle;
   Changed:=True;
 
   TextStyleTable.init({$IFDEF DEBUGBUILD}'{146FC836-1490-4046-8B09-863722570C9F}',{$ENDIF}200);

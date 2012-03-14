@@ -19,10 +19,7 @@
 unit shared;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,lclproc,Masks;
-
-resourcestring
-  errorprefix='ERROR: ';
+uses zcadstrconsts,gdbasetypes,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,lclproc,Masks;
 
 type
 TFromDirIterator=procedure (filename:GDBString);
@@ -152,7 +149,7 @@ begin
 end;
 procedure LogError(errstr:GDBString); export;
 begin
-     errstr:=errorprefix+errstr;
+     errstr:=rserrorprefix+errstr;
      if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
      if sysvar.SYS.SYS_IsHistoryLineCreated^ then
      begin

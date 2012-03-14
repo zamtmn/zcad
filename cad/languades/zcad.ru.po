@@ -31,7 +31,7 @@ msgstr "Запущена команда"
 
 #: commandline.s_runscript
 msgid "Running script \"%s\";"
-msgstr ""
+msgstr "Запущенн скрипт \"%s\";"
 
 #: commandline.s_unknowncommand
 msgid "Unknown command"
@@ -522,7 +522,6 @@ msgid "Remove auto cables"
 msgstr "Удалить сгенерированные кабели"
 
 #: zcadexternal.acn_rotate~caption
-#, fuzzy
 #| msgid "Block params"
 msgctxt "zcadexternal.acn_rotate~caption"
 msgid "Rotate"
@@ -574,8 +573,9 @@ msgid "QS"
 msgstr ""
 
 #: zcadexternal.acn_scale~caption
+#| msgid "scale"
 msgctxt "zcadexternal.acn_scale~caption"
-msgid "scale"
+msgid "Scale"
 msgstr "Масштабировать"
 
 #: zcadexternal.acn_scale~hint
@@ -646,7 +646,7 @@ msgstr ""
 #: zcadexternal.acn_textwindow~caption
 msgctxt "zcadexternal.acn_textwindow~caption"
 msgid "View text window"
-msgstr ""
+msgstr "Показать текстовое окно"
 
 #: zcadexternal.acn_textwindow~textimage
 msgctxt "zcadexternal.acn_textwindow~textimage"
@@ -745,7 +745,7 @@ msgstr ""
 
 #: zcadexternal.commandrtedobject~commanddata
 msgid "Command options"
-msgstr ""
+msgstr "Опции команды"
 
 #: zcadexternal.gdbbasis~ox
 msgctxt "zcadexternal.gdbbasis~ox"
@@ -851,18 +851,17 @@ msgid "Tree"
 msgstr "Дерево"
 
 #: zcadexternal.gdbobjblockdef~blockdesc
-#, fuzzy
 #| msgid "Rotate"
 msgctxt "zcadexternal.gdbobjblockdef~blockdesc"
 msgid "Block params"
-msgstr "Повернуть"
+msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
-#| msgid "Block params"
+#| msgid "Rotate"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
-msgstr "Повернуть"
+msgid "Block params"
+msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjcircle~area
 msgctxt "zcadexternal.gdbobjcircle~area"
@@ -1084,6 +1083,10 @@ msgctxt "zcadexternal.hint_panel~dwg_additionalgrips"
 msgid "On/Off Additional grips"
 msgstr "Вкл./Выкл. добавочных ручек"
 
+#: zcadexternal.hint_panel~dwg_drawgrid
+msgid "Show grid"
+msgstr "Показать сетку"
+
 #: zcadexternal.hint_panel~dwg_drawmode
 msgctxt "zcadexternal.hint_panel~dwg_drawmode"
 msgid "Show/Hide Lineweight"
@@ -1109,10 +1112,46 @@ msgctxt "zcadexternal.hint_panel~dwg_polarmode"
 msgid "Polar tracking"
 msgstr "Полярная трассировка"
 
+#: zcadexternal.hint_panel~dwg_snapgrid
+msgid "Snap to grid"
+msgstr "Привязка к сетке"
+
 #: zcadexternal.hint_panel~dwg_systmgeometrydraw
 msgctxt "zcadexternal.hint_panel~dwg_systmgeometrydraw"
 msgid "System graphics (size, communication, etc. for debugging)"
 msgstr "Системная графика (габариты, связи и т.п. для отладки)"
+
+#: zcadexternal.hint_panel~el_cable
+msgid "Draw cable"
+msgstr "Чертить кабель"
+
+#: zcadexternal.hint_panel~el_cable_invert
+msgid "Reverse cable direction"
+msgstr "Изменить направление кабеля"
+
+#: zcadexternal.hint_panel~el_cable_join
+msgid "Glue cables"
+msgstr "Соединить кабели"
+
+#: zcadexternal.hint_panel~el_cable_legend
+msgid "Export cables legend"
+msgstr "Экспорт кабельного журнала"
+
+#: zcadexternal.hint_panel~el_cable_select
+msgid "Select connected devices"
+msgstr "Выбрать подключенные устройства"
+
+#: zcadexternal.hint_panel~el_leader
+msgid "Mark cables"
+msgstr "Обозначить кабели"
+
+#: zcadexternal.hint_panel~el_material_legend
+msgid "Export materials legend"
+msgstr "Экспорт \"ведомости материалов\""
+
+#: zcadexternal.hint_panel~el_wire
+msgid "Net\\Trace"
+msgstr "Цепь\\Трасса"
 
 #: zcadexternal.hint_panel~layercombobox
 msgctxt "zcadexternal.hint_panel~layercombobox"
@@ -1123,6 +1162,67 @@ msgstr "Выбор слоя"
 msgctxt "zcadexternal.hint_panel~linewcombobox"
 msgid "Line weight selection"
 msgstr "Выбор веса линий"
+
+#: zcadexternal.hint_panel~ops_sensor_mark
+msgid "Numbering sensors on the plan"
+msgstr "Нумерация извещателей на плане"
+
+#: zcadexternal.hint_panel~ortodevplace
+msgid "Device placement"
+msgstr "Расстановка устройств"
+
+#: zcadexternal.hint_panel~placesmokedetectororto
+msgid "Automatic placement of fire detectors"
+msgstr "Автоматическая расстановка извещателей"
+
+#: zcadexternal.hint_panel~rebuildtree
+msgid "Rebuild entitys tree"
+msgstr "Перестроить дерево примитивов"
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr "Камера в начало"
+
+#: zcadexternal.menucommand~fuckoff
+#, fuzzy
+#| msgid "Dimensions styles (not impl)"
+msgid "Layouts (not impl)"
+msgstr "Листы (не реализовано)"
+
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
+msgstr "Камера"
+
+#: zcadexternal.menucommand~setobjinsp(fonts)
+msgctxt "zcadexternal.menucommand~setobjinsp(fonts)"
+msgid "Fonts"
+msgstr "Шрифты"
+
+#: zcadexternal.menucommand~setobjinsp(layers)
+msgid "Layers"
+msgstr "Слои"
+
+#: zcadexternal.menucommand~setobjinsp(numerators)
+msgid "Numerators"
+msgstr "Нумераторы"
+
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
+msgstr "Объектные привязки"
+
+#: zcadexternal.menucommand~setobjinsp(tablestyles)
+msgid "Table styles"
+msgstr "Стили таблиц"
+
+#: zcadexternal.menucommand~setobjinsp(tstyles)
+msgid "Styles"
+msgstr "Стили"
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
+msgstr "Параметры"
 
 #: zcadexternal.menu~draw
 msgctxt "zcadexternal.menu~draw"
@@ -1204,31 +1304,49 @@ msgctxt "zcadexternal.rgb~r"
 msgid "Red"
 msgstr "Красный"
 
+#: zcadexternal.submenu~block/device
+msgid "Block/Device"
+msgstr "Блок/Устройство"
+
+#: zcadexternal.submenu~inspector
+msgid "Inspector"
+msgstr "Инспектор"
+
 #: zcadexternal.submenu~show window
 msgctxt "zcadexternal.submenu~show window"
 msgid "Show window"
 msgstr "Показать окно"
+
+#: zcadexternal.submenu~text
+msgctxt "zcadexternal.submenu~text"
+msgid "Text"
+msgstr "Текст"
 
 #: zcadexternal.submenu~toolbars
 msgctxt "zcadexternal.submenu~toolbars"
 msgid "ToolBars"
 msgstr "Панели инструментов"
 
+#: zcadexternal.submenu~view
+msgctxt "zcadexternal.submenu~view"
+msgid "View"
+msgstr "Вид"
+
 #: zcadexternal.tbasicfinter~excludecable
 msgid "Exclude filter"
-msgstr ""
+msgstr "Фильтр исключения"
 
 #: zcadexternal.tbasicfinter~excludecablemask
 msgid "Exclude mask"
-msgstr ""
+msgstr "Маска исключения"
 
 #: zcadexternal.tbasicfinter~includecable
 msgid "Include filter"
-msgstr ""
+msgstr "Фильтр включения"
 
 #: zcadexternal.tbasicfinter~includecablemask
 msgid "Include mask"
-msgstr ""
+msgstr "Маска включения"
 
 #: zcadexternal.tbeditparam~blocks
 msgid "Select block"
@@ -1266,7 +1384,7 @@ msgstr ""
 #: zcadexternal.tblockinsert~scale
 msgctxt "zcadexternal.tblockinsert~scale"
 msgid "Scale"
-msgstr ""
+msgstr "Масштабировать"
 
 #: zcadexternal.tblockreplaceparams~find
 msgctxt "zcadexternal.tblockreplaceparams~find"
@@ -1464,7 +1582,7 @@ msgstr ""
 #: zcadexternal.telleadercomparam~scale
 msgctxt "zcadexternal.telleadercomparam~scale"
 msgid "Scale"
-msgstr ""
+msgstr "Масштабировать"
 
 #: zcadexternal.telleadercomparam~size
 msgid "Size"
@@ -1876,7 +1994,7 @@ msgstr ""
 #: zcadexternal.tprintparams~scale
 msgctxt "zcadexternal.tprintparams~scale"
 msgid "Scale"
-msgstr ""
+msgstr "Масштабировать"
 
 #: zcadexternal.trd~rd_backgroundcolor
 msgctxt "zcadexternal.trd~rd_backgroundcolor"
@@ -1894,11 +2012,10 @@ msgid "Last render time"
 msgstr "Время рендера"
 
 #: zcadexternal.trd~rd_lastupdatetime
-#, fuzzy
 #| msgid "Last update time"
 msgctxt "zcadexternal.trd~rd_lastupdatetime"
 msgid "Last visible calculation time"
-msgstr "Время обновления"
+msgstr "Время расчета видимости"
 
 #: zcadexternal.trd~rd_light
 msgctxt "zcadexternal.trd~rd_light"

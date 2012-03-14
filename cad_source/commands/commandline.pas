@@ -19,14 +19,8 @@
 unit commandline;
 {$INCLUDE def.inc}
 interface
-uses umytreenode,sysinfo,strproc,UGDBOpenArrayOfPointer,{UDMenuWnd,}gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
+uses zcadstrconsts,umytreenode,sysinfo,strproc,UGDBOpenArrayOfPointer,{UDMenuWnd,}gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
      memman,shared,log,varmandef,varman;
-resourcestring
-S_RunCommand='Running command';
-S_UnknownCommand='Unknown command';
-S_CommandNRInC='Command can not run';
-S_RunScript='Running script "%s";';
-
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;
@@ -164,7 +158,7 @@ var
    s:gdbstring;
 begin
      s:=(ExpandPath(fn));
-     historyoutstr(sysutils.format(S_RunScript,[s]));
+     historyoutstr(sysutils.format(rsRunScript,[s]));
      busy:=true;
 
      shared.DisableCmdLine;
@@ -300,7 +294,7 @@ begin
                         programlog.logoutstr('GDBCommandManager.ExecuteCommandSilent('+pfoundcommand^.CommandName+');',0)
                     else
                         begin
-                        historyoutstr(S_RunCommand+':'+pfoundcommand^.CommandName);
+                        historyoutstr(rsRunCommand+':'+pfoundcommand^.CommandName);
                         lastcommand := command;
                         end;
 
@@ -311,11 +305,11 @@ begin
           end
      else
          begin
-              historyout(@S_CommandNRInC[1]);
+              historyout(@rsCommandNRInC[1]);
          end;
     end;
   end
-  else historyout(GDBPointer(S_UnknownCommand+':"'+command+'"'));
+  else historyout(GDBPointer(rsUnknownCommand+':"'+command+'"'));
   end;
   command:='';
   operands:='';
@@ -325,7 +319,7 @@ begin
      if not busy then
                      result:=execute(comm,false)
                  else
-                     shared.ShowError({'Команда не может быть выполнена. Идет выполнение сценария'}S_CommandNRInC);
+                     shared.ShowError(rsCommandNRInC);
 end;
 function GDBcommandmanager.executecommandsilent{(const comm:pansichar): GDBInteger};
 begin

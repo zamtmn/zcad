@@ -389,6 +389,7 @@ msgid "Object variables manager"
 msgstr ""
 
 #: zcadexternal.acn_options~caption
+msgctxt "zcadexternal.acn_options~caption"
 msgid "Options"
 msgstr ""
 
@@ -508,7 +509,9 @@ msgid "QS"
 msgstr ""
 
 #: zcadexternal.acn_scale~caption
-msgid "scale"
+#, fuzzy
+msgctxt "zcadexternal.acn_scale~caption"
+msgid "Scale"
 msgstr ""
 
 #: zcadexternal.acn_scale~hint
@@ -761,13 +764,13 @@ msgstr ""
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+msgid "Rotate"
 msgstr ""
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
+msgid "Block params"
 msgstr ""
 
 #: zcadexternal.gdbobjcircle~area
@@ -961,6 +964,10 @@ msgstr ""
 msgid "On/Off Additional grips"
 msgstr ""
 
+#: zcadexternal.hint_panel~dwg_drawgrid
+msgid "Show grid"
+msgstr ""
+
 #: zcadexternal.hint_panel~dwg_drawmode
 msgid "Show/Hide Lineweight"
 msgstr ""
@@ -974,6 +981,7 @@ msgid "Auxiliary graphics (connectivity, direction, etc.)"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_osmode
+msgctxt "zcadexternal.hint_panel~dwg_osmode"
 msgid "Object snap"
 msgstr ""
 
@@ -981,8 +989,44 @@ msgstr ""
 msgid "Polar tracking"
 msgstr ""
 
+#: zcadexternal.hint_panel~dwg_snapgrid
+msgid "Snap to grid"
+msgstr ""
+
 #: zcadexternal.hint_panel~dwg_systmgeometrydraw
 msgid "System graphics (size, communication, etc. for debugging)"
+msgstr ""
+
+#: zcadexternal.hint_panel~el_cable
+msgid "Draw cable"
+msgstr ""
+
+#: zcadexternal.hint_panel~el_cable_invert
+msgid "Reverse cable direction"
+msgstr ""
+
+#: zcadexternal.hint_panel~el_cable_join
+msgid "Glue cables"
+msgstr ""
+
+#: zcadexternal.hint_panel~el_cable_legend
+msgid "Export cables legend"
+msgstr ""
+
+#: zcadexternal.hint_panel~el_cable_select
+msgid "Select connected devices"
+msgstr ""
+
+#: zcadexternal.hint_panel~el_leader
+msgid "Mark cables"
+msgstr ""
+
+#: zcadexternal.hint_panel~el_material_legend
+msgid "Export materials legend"
+msgstr ""
+
+#: zcadexternal.hint_panel~el_wire
+msgid "Net\\Trace"
 msgstr ""
 
 #: zcadexternal.hint_panel~layercombobox
@@ -991,6 +1035,76 @@ msgstr ""
 
 #: zcadexternal.hint_panel~linewcombobox
 msgid "Line weight selection"
+msgstr ""
+
+#: zcadexternal.hint_panel~ops_sensor_mark
+msgctxt "zcadexternal.hint_panel~ops_sensor_mark"
+msgid "Numbering sensors on the plan"
+msgstr ""
+
+#: zcadexternal.hint_panel~ops_sensor_mark
+msgctxt "zcadexternal.hint_panel~ops_sensor_mark"
+msgid "Numbering sensors on the plan"
+msgstr ""
+
+#: zcadexternal.hint_panel~ortodevplace
+msgid "Device placement"
+msgstr ""
+
+#: zcadexternal.hint_panel~placesmokedetectororto
+msgid "Automatic placement of fire detectors"
+msgstr ""
+
+#: zcadexternal.hint_panel~rebuildtree
+msgid "Rebuild entitys tree"
+msgstr ""
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~fuckoff
+msgid "Dimensions styles (not impl)"
+msgstr ""
+
+#: zcadexternal.menucommand~fuckoff
+#, fuzzy
+msgid "Layouts (not impl)"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(fonts)
+msgctxt "zcadexternal.menucommand~setobjinsp(fonts)"
+msgid "Fonts"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(layers)
+msgid "Layers"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(numerators)
+msgid "Numerators"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(tablestyles)
+msgid "Table styles"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(tstyles)
+msgid "Styles"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
 msgstr ""
 
 #: zcadexternal.menu~draw
@@ -1059,12 +1173,30 @@ msgstr ""
 msgid "Red"
 msgstr ""
 
+#: zcadexternal.submenu~block/device
+msgid "Block/Device"
+msgstr ""
+
+#: zcadexternal.submenu~inspector
+msgid "Inspector"
+msgstr ""
+
 #: zcadexternal.submenu~show window
 msgid "Show window"
 msgstr ""
 
+#: zcadexternal.submenu~text
+msgctxt "zcadexternal.submenu~text"
+msgid "Text"
+msgstr ""
+
 #: zcadexternal.submenu~toolbars
 msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.submenu~view
+msgctxt "zcadexternal.submenu~view"
+msgid "View"
 msgstr ""
 
 #: zcadexternal.tbasicfinter~excludecable
@@ -1584,6 +1716,7 @@ msgid "Device base"
 msgstr ""
 
 #: zcadexternal.tpath~fonts_path
+msgctxt "zcadexternal.tpath~fonts_path"
 msgid "Fonts"
 msgstr ""
 

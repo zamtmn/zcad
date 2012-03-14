@@ -38,7 +38,7 @@ action ACN_LAYER,Layer,layer.bmp,Layers ...,Layers properties manager,
 action ACN_COPY,Copy,copy.bmp,Copy,Copy primitives,
 action ACN_MOVE,Move,move.bmp,Move,Move primitives,
 action ACN_ROTATE,Rotate,rotate.bmp,Rotate,Rotate primitives,
-action ACN_SCALE,Scale,scale.bmp,scale,Scale primitives,
+action ACN_SCALE,Scale,scale.bmp,Scale,Scale primitives,
 
 action ACN_BEDIT,BEdit,bedit.bmp,Block editor,,
 action ACN_BREPLACE,BlockReplace,#BR,Block replace,,

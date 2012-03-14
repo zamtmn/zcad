@@ -19,7 +19,7 @@
 unit iodwg;
 {$INCLUDE def.inc}
 interface
-uses iodxf,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,{gdbobjectsconstdef,}
+uses zcadstrconsts,iodxf,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,{gdbobjectsconstdef,}
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
 implementation
@@ -112,7 +112,7 @@ var
   s: GDBString;
 begin
   programlog.logoutstr('AddFromDWG',lp_IncPos);
-  shared.HistoryOutStr('Loading file '+name+';');
+  shared.HistoryOutStr(format(rsLoadingFile,[name]));
   f.InitFromFile(name);
   if f.Count<>0 then
   begin
@@ -120,17 +120,17 @@ begin
     s := f.ReadString(#0,'');
     if s = 'AC1018' then
         begin
-          shared.HistoryOutStr('DWG2004 fileformat;');
+          shared.HistoryOutStr(format(rsFileFormat,['DWG2004']));
           addfromdwg2004(f,'EOF',owner,loadmode);
         end
         else
         begin
-             ShowError('Uncnown fileformat '+s);
+             ShowError(rsUnknownFileFormat);
         end;
   MainFormN.EndLongProcess;
   end
      else
-         shared.ShowError('IODXF.ADDFromDWG: Не могу открыть файл: '+name);
+         shared.ShowError('IODXF.ADDFromDWG:'+format(rsUnableToOpenFile,[name]));
   f.done;
   programlog.logoutstr('end; {AddFromDWG}',lp_DecPos);
 end;

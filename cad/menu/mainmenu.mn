@@ -6,8 +6,8 @@ Panel OIButtons;
 Panel Status;
   {
     Separator
-    variable DWG_SnapGrid,#Snap,**Сетка
-    variable DWG_DrawGrid,1.bmp,**Показывать сетку
+    variable DWG_SnapGrid,#Snap,Snap to grid
+    variable DWG_DrawGrid,1.bmp,Show grid
     variable DWG_EditInSubEntry,sub.bmp,On/Off Selecting parts of dynamic objects
     variable DWG_AdditionalGrips,#+G,On/Off Additional grips
     variable DWG_DrawMode,#LWT,Show/Hide Lineweight
@@ -32,9 +32,9 @@ Panel Standart;
     action ACN_REDO
     Separator
     action ACN_REGEN
-    button OPS_Sensor_Mark,#++,Нумерация извещателей на плане
+    button OPS_Sensor_Mark,#++,Numbering sensors on the plan
     Separator
-    button RebuildTree,#rtree,*DEBUG*Перестроить дерево примитивов
+    button RebuildTree,#rtree,Rebuild entitys tree
     Separator
     action ACN_PROCESSKZ
     action ACN_REMAUTOCABLES
@@ -64,17 +64,17 @@ Panel Draw;
   }
 Panel Misc;
   {
-    button El_Cable,el_cable.bmp,Чертить кабель
-    button EL_Wire,El_Wire.bmp,Цепь\Трасса
-    button El_Leader,el_leader.bmp,Обозначение трасс на плане
-    button El_Cable_Join,#к+к,Объеденить 2 кабеля
-    button El_Cable_Select,#csel,Выбрать подключеное к кабелю оборудование
-    button El_Cable_Invert,#инв,Инвертировать направление кабеля
-    button El_Cable_Legend,#кж,Экспорт кабельного журнала
-    button El_Material_Legend,#вм,Экспорт "ведомости" материалов
-    button PlaceSmokeDetectorOrto,ps.bmp,Авторасстановка пож. извещателей
-    button OPS_Sensor_Mark,#++,Нумерация извещателей на плане
-    button OrtoDevPlace,array.bmp,Расстановка блоков (устройств) массивом
+    button El_Cable,el_cable.bmp,Draw cable
+    button EL_Wire,El_Wire.bmp,Net\Trace
+    button El_Leader,el_leader.bmp,Mark cables
+    button El_Cable_Join,#к+к,Glue cables
+    button El_Cable_Select,#csel,Select connected devices
+    button El_Cable_Invert,#инв,Reverse cable direction
+    button El_Cable_Legend,#кж,Export cables legend
+    button El_Material_Legend,#вм,Export materials legend
+    button PlaceSmokeDetectorOrto,ps.bmp,Automatic placement of fire detectors
+    button OPS_Sensor_Mark,#++,Numbering sensors on the plan
+    button OrtoDevPlace,array.bmp,Device placement
     action ACN_OBJVARMAN
     action ACN_MULTIOBJVARMAN
     action ACN_ADDTOOWNER
@@ -122,9 +122,9 @@ MainMenuItem View;
     action ACN_REGEN
     action ACN_PROJECTTREE
     Separator
-    MenuItem Камера;
+    MenuItem View;
       {
-        Command Камера в начало (Вид сверху),Cam_reset,none,none
+        Command Reset camera,Cam_reset,none,none
         action ACN_PERSPECTIVE
       }
     MenuItem Show window;
@@ -139,26 +139,26 @@ MainMenuItem View;
         Separator
         action ACN_SAVELAYOUT
       }
-    MenuItem Инспектор;
+    MenuItem Inspector;
       {
-        Command Параметры,SetObjInsp(VARS),none,none
-        Command Камера,SetObjInsp(CAMERA),none,none
-        Command Привязки,SetObjInsp(OSMODE),none,none
+        Command Options,SetObjInsp(VARS),none,none
+        Command Camera,SetObjInsp(CAMERA),none,none
+        Command Object snap,SetObjInsp(OSMODE),none,none
       }
   }
 MainMenuItem Format;
   {
-    Command **Слои,SetObjInsp(LAYERS),none,none
+    Command Layers,SetObjInsp(LAYERS),none,none
     action ACN_LAYER
-    MenuItem Текст;
+    MenuItem Text;
       {
-        Command Стили,SetObjInsp(TSTYLES),none,none
-		Command Шрифты,SetObjInsp(FONTS),none,none
+        Command Styles,SetObjInsp(TSTYLES),none,none
+	Command Fonts,SetObjInsp(FONTS),none,none
       }
-    Command Стили таблиц,SetObjInsp(TABLESTYLES),none,none
-    Command Нумераторы,SetObjInsp(NUMERATORS),none,none
-    Command Стили размеров (пока нет),fuckoff,none,none
-    Command Листы (пока нет),fuckoff,none,none
+    Command Table styles,SetObjInsp(TABLESTYLES),none,none
+    Command Numerators,SetObjInsp(NUMERATORS),none,none
+    Command Dimensions styles (not impl),fuckoff,none,none
+    Command Layouts (not impl),fuckoff,none,none
   }
 MainMenuItem Draw;
   {
@@ -171,7 +171,7 @@ MainMenuItem Draw;
 MainMenuItem Modify;
   {
     action ACN_POLYED
-    MenuItem Блок/Устройство;
+    MenuItem Block/Device;
       {
         action ACN_BEDIT
         action ACN_ADDTOOWNER
@@ -189,16 +189,16 @@ MainMenuItem Modify;
   }
 MainMenuItem Schematic;
   {
-    MenuItem Электрическая принципиальная;
+    MenuItem **Электрическая принципиальная;
       {
-        Command Цепь,EL_Wire,none,none
-        Command Контакт НО1,Insert(DEVICE_NOC),none,none
-        Command Контакт НО2,Insert(DEVICE_NOC2),none,none
+        Command **Цепь,EL_Wire,none,none
+        Command **Контакт НО1,Insert(DEVICE_NOC),none,none
+        Command **Контакт НО2,Insert(DEVICE_NOC2),none,none
       }
-    MenuItem Электрическая подключений;
+    MenuItem **Электрическая подключений;
       {
-       Command Расстановка маркеров кабелей,Insert(DEVICE_CABLE_MARK),none,none
-       Command Обновить маркеры кабелей,KIP_Cable_Mark,none,none
+       Command **Расстановка маркеров кабелей,Insert(DEVICE_CABLE_MARK),none,none
+       Command **Обновить маркеры кабелей,KIP_Cable_Mark,none,none
       }
   }
 MainMenuItem Plan;

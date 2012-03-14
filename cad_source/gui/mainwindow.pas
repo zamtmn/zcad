@@ -21,7 +21,7 @@ unit mainwindow;
 
 interface
 uses
-  math,LMessages,LCLIntf,
+  zcadstrconsts,math,LMessages,LCLIntf,
   ActnList,LCLType,LCLProc,strproc,log,intftranslations,toolwin,
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
@@ -35,22 +35,6 @@ uses
   {ZGUIArrays,}{ZBasicVisible,}{ZEditsWithVariable,}{ZTabControlsGeneric,}shared,{ZPanelsWithSplit,}{ZGUIsCT,}{ZstaticsText,}{UZProcessBar,}strmy{,strutils},{ZPanelsGeneric,}
   graphics,
   AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr{,xmlconf};
-
-resourcestring
-  GDBObjinspWndName='Object inspector';
-  CommandLineWndName='Command line';
-  DrawingWindowWndName='Drawings window';
-  ES_ReCreating='Re-creating %s!';
-  ES_LayoutLoad='Error loading layout from file';
-  ES_ToolBarNotFound='Toolbar "%s" is not found! Create a blank window';
-  S_Different='Different';
-  S_ByLayer='ByLayer';
-  S_ByBlock='ByBlock';
-  S_Default='Default';
-  S_Empty='Empty';
-  S_mm='mm';
-  compiledtimemsg='Done.  %s second';
-
 type
   TmyAnchorDockHeader = class(TAnchorDockHeader)
                         protected
@@ -346,7 +330,7 @@ begin
       if FileName<>''then
                            FileHistory[0].SetCommand(FileName,'Load('+FileName+')')
                        else
-                           FileHistory[0].SetCommand(S_Empty,'');
+                           FileHistory[0].SetCommand(rsEmpty,'');
 
 end;
 function IsRealyQuit:GDBBoolean;
@@ -549,7 +533,7 @@ begin
        MainPanel.Create(Application);
        MainPanel.SetBounds(200,200,600,500);
    //MainPanel:={TPanel}Tform.create(application);
-   MainPanel.Caption:=DrawingWindowWndName;
+   MainPanel.Caption:=rsDrawingWindowWndName;
    MainPanel.BorderWidth:=0;
    //MainPanel.Parent:=self;
    //mainpanel.show;
@@ -576,7 +560,7 @@ begin
         //CLine.Caption:=Title;
        //CLine:=TCLine.create({MainPanel}application);
        //CLine.Parent:=MainPanel;
-       CLine.Caption:=CommandLineWndName;
+       CLine.Caption:=rsCommandLineWndName;
        CLine.Align:=alBottom;
        pint:=SavedUnit.FindValue('VIEW_CommandLineH');
        {if assigned(pint)then
@@ -594,7 +578,7 @@ begin
                GDBObjInsp:=TGDBObjInsp(TGDBObjInsp.NewInstance);
                GDBObjInsp.DisableAlign;
                GDBObjInsp.Create(Application);
-               GDBObjInsp.Caption:=GDBObjInspWndName;
+               GDBObjInsp.Caption:=rsGDBObjInspWndName;
                GDBObjInsp.SetBounds(0,100,200,600);
 
                //if assigned(ACN_Show_ObjectInspector) then
@@ -635,7 +619,7 @@ begin
   begin
        tbdesk:=self.findtoolbatdesk(aName);
        if tbdesk=''then
-                       shared.ShowError(format(ES_ToolBarNotFound,[aName]));
+                       shared.ShowError(format(rsToolBarNotFound,[aName]));
        FToolBar:=TToolButtonForm(TToolButtonForm.NewInstance);
        //FToolBar.FormStyle:=fsStayOnTop;
        FToolBar.DisableAlign;
@@ -753,7 +737,7 @@ begin
     end;
   except
     on E: Exception do begin
-                            shared.ShowError(ES_LayoutLoad+' '+Filename+':'#13+E.Message);
+                            shared.ShowError(rsLayoutLoad+' '+Filename+':'#13+E.Message);
       //MessageDlg('Error',
       //  'Error loading layout from file '+Filename+':'#13+E.Message,mtError,
       //  [mbCancel],0);
@@ -980,7 +964,7 @@ begin
     //canvas.FillRect(arect);
     pointer(plp):=LayerBox.Items.Objects[Index];
     if plp=nil then
-                   s:=S_Different
+                   s:=rsDifferent
                else
                    begin
                    s:=LayerBox.Items.Strings[Index];// (plp^.name){S_Different};
@@ -1113,7 +1097,7 @@ begin
                           ts := f.readstring(';','');
                           val(bc,w,code);
                           if assigned(LayerBox) then
-                                                    shared.ShowError(format(ES_ReCreating,['LAYERCOMBOBOX']));
+                                                    shared.ShowError(format(rsReCreating,['LAYERCOMBOBOX']));
                           LayerBox:=TComboBox.Create(tb);
                           LayerBox.Style:=csOwnerDrawFixed{Variable};
                           LayerBox.OnDrawItem:=LayerBoxDrawItem;
@@ -1137,7 +1121,7 @@ begin
                           ts := f.readstring(';','');
                           val(bc,w,code);
                           if assigned(LineWBox) then
-                                                    shared.ShowError(format(ES_ReCreating,['LINEWCOMBOBOX']));
+                                                    shared.ShowError(format(rsReCreating,['LINEWCOMBOBOX']));
                           LineWBox:=TComboBox.Create(tb);
                           LineWBox.Style:=csOwnerDrawFixed;
                           LineWBox.OnDrawItem:=LineWBoxDrawItem;
@@ -1151,15 +1135,15 @@ begin
                           end;
                           LineWbox.Clear;
                           LineWbox.readonly:=true;
-                          LineWbox.items.Add(S_default);
-                          LineWbox.items.Add(S_ByBlock);
-                          LineWbox.items.Add(S_ByLayer);
+                          LineWbox.items.Add(rsdefault);
+                          LineWbox.items.Add(rsByBlock);
+                          LineWbox.items.Add(rsByLayer);
                           for i := 0 to 20 do
                           begin
-                          s:=floattostr(i / 10) + ' '+S_mm;
+                          s:=floattostr(i / 10) + ' '+rsmm;
                                LineWbox.items.Add((s));
                           end;
-                          LineWbox.items.Add(S_Different);
+                          LineWbox.items.Add(rsDifferent);
                           LineWbox.OnChange:=ChangeCLineW;
                           LineWbox.AutoSize:=false;
                           LineWbox.OnMouseLeave:=self.setnormalfocus;
@@ -1182,7 +1166,7 @@ begin
            if tbname='STANDART' then
                        begin
                             if assigned(LayoutBox) then
-                                                      shared.ShowError(format(ES_ReCreating,['LAYOUTBOX']));
+                                                      shared.ShowError(format(rsReCreating,['LAYOUTBOX']));
                             CreateLayoutbox(tb);
                             //LayoutBox.OnDrawItem:=LineWBoxDrawItem;
 
@@ -1541,7 +1525,7 @@ begin
                                                                 if line<>''then
                                                                                      FileHistory[i]:=TmyMenuItem.Create(pm,line,'Load('+line+')')
                                                                                  else
-                                                                                     FileHistory[i]:=TmyMenuItem.Create(pm,S_Empty,'');
+                                                                                     FileHistory[i]:=TmyMenuItem.Create(pm,rsEmpty,'');
                                                                 {ppopupmenu}pm.Add(FileHistory[i]);
                                                            end;
                                                            line := f.readstring(#$A' ',#$D);
@@ -2068,7 +2052,7 @@ begin
     application.ProcessMessages;
     time:=(now-LPTime)*10e4;
     str(time:3:2,ts);
-    say(format(compiledtimemsg,[ts]));
+    say(format(rscompiledtimemsg,[ts]));
 end;
 procedure TMainFormN.ReloadLayer;
 var
@@ -2093,7 +2077,7 @@ begin
   //layerbox.Items.;
   layerbox.Sorted:=false;
   //layerbox.Items.Add(S_Different);
-  layerbox.Additem(S_Different,nil);
+  layerbox.Additem(rsDifferent,nil);
   layerbox.ItemIndex:=(SysVar.dwg.DWG_CLayer^);
   //layerbox.Sorted:=true;
 end;

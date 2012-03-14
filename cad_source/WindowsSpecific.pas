@@ -19,7 +19,7 @@
 unit WindowsSpecific;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes, gdbase,sysutils,strproc,
+uses zcadstrconsts,gdbasetypes, gdbase,sysutils,strproc,
      LResources,Dialogs,FileUtil;
 const
     ProjectFileFilter: GDBString = 'DXF files (*.dxf)|*.dxf|AutoCAD DWG files (*.dwg)|*.dwg|ZCAD ZCP files (*.zcp)|*.zcp|All files (*.*)|*.*';
@@ -38,8 +38,6 @@ var
    szFile: array[0..2048] of char = '';
    szFileTitle: array[0..255] of char;
    szCurrentDir: array[0..1024] of char = '';
-resourcestring
-  revstr='Revision SVN:';
 function SaveFileDialog;
 var
    SD:TSaveDialog;
@@ -200,7 +198,7 @@ begin
        end;
      end;}
 
-     MyVersion:='0.9.7 '+revstr+RevisionStr;
+     MyVersion:='0.9.7 '+rsRevStr+RevisionStr;
      result.versionstring:=MyVersion;
 
      ts:=GetPredStr(MyVersion,'.');

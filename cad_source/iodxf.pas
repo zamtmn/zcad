@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
+uses zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
   entnamindex=record
@@ -816,21 +816,24 @@ begin
         s := f.ReadString2;
         if s = 'AC1009' then
         begin
-          shared.HistoryOutStr('DXF12 fileformat;');
+          shared.HistoryOutStr(format(rsFileFormat,['DXF12']));
+          //shared.HistoryOutStr('DXF12 fileformat;');
           //programlog.logout('DXF12 fileformat;',lp_OldPos);
           gotodxf(f, 0, 'ENDSEC');
           addfromdxf12(f,'EOF',owner,loadmode);
         end
         else if s = 'AC1015' then
         begin
-          shared.HistoryOutStr('DXF2000 fileformat;');
+          shared.HistoryOutStr(format(rsFileFormat,['DXF2000']));
+          //shared.HistoryOutStr('DXF2000 fileformat;');
           //programlog.logout('DXF2000 fileformat;',lp_OldPos);
           gotodxf(f, 0, 'ENDSEC');
           addfromdxf2000(f,'EOF',owner,loadmode);
         end
         else
         begin
-             ShowError('Uncnown fileformat; $ACADVER='+s);
+             ShowError(rsUnknownFileFormat+' $ACADVER='+s);
+             //ShowError('Uncnown fileformat; $ACADVER='+s);
              //programlog.logoutstr('ERROR: Uncnown fileformat; $ACADVER='+s,lp_OldPos);
         end;
       end;
@@ -1245,7 +1248,8 @@ begin
                            end;
 
   if outstream.SaveToFile(name)<=0 then
-                                       shared.ShowError('Не могу открыть для записи файл: '+name);
+                                       shared.ShowError(format(rsUnableToWriteFile,[name]));
+                                       //shared.ShowError('Не могу открыть для записи файл: '+name);
   MainFormN.EndLongProcess;
 
   end;

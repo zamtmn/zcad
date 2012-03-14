@@ -20,15 +20,12 @@ unit cmdline;
 {$INCLUDE def.inc}
 interface
 uses
- strproc,lclproc,sysutils,gdbasetypes,{umytreenode,}
+ zcadstrconsts,strproc,lclproc,sysutils,gdbasetypes,{umytreenode,}
  StdCtrls,ExtCtrls,{ComCtrls,}Controls,Classes,menus,Forms,{IFDEF FPClcltype,$ENDIF}fileutil,graphics,
  UDMenuWnd{,ZStaticsText},gdbase{,ZPanelsNoFrame}, memman,UGDBDescriptor,math,commandline,varman,languade,
  UGDBTracePropArray,{zforms,}{ZEditsWithProcedure}{,zbasicvisible,}varmandef,{ZGUIsCT,}{ZPanelsGeneric,}
  geometry,shared,UGDBStringArray{,zmemos};
 
-resourcestring
-              defaultpromot='Command';
-              exprouttext='Expression %s return %s';
 const
      cheight=18;
      commandsuffix='>';
@@ -122,7 +119,7 @@ begin
      case m of
      CLCOMMANDREDY:
      begin
-           prompt.Caption:=commandprefix+defaultpromot+commandsuffix;
+           prompt.Caption:=commandprefix+rsdefaultpromot+commandsuffix;
      end;
      CLCOMMANDRUN:
      begin
@@ -362,7 +359,7 @@ begin
                                               //s:=valuetoGDBString(v.pvalue,v.ptd);
                                               s:=v.data.ptd^.GetValueAsString(v.data.Instance);
                                               v.data.Instance:=v.data.Instance;
-                                              historyoutstr(Format(ExprOutText,[expr,s]));
+                                              historyoutstr(Format(rsExprOutText,[expr,s]));
                                          end
       else if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0'_softspace'#0'=,_realnumber'#0,expr,parseresult)then
       begin

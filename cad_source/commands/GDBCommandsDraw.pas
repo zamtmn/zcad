@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   //debygunit,
   commandlinedef,
   {windows,}gdbasetypes,commandline,GDBCommandsBase,
@@ -600,7 +600,7 @@ end;
 
 begin
      if BlockReplaceParams.Find.Enums.Count=0 then
-                                                  shared.ShowError('BlockReplace: Режим не позволяет получить искомый блок для замены')
+                                                  shared.ShowError('BlockReplace:'+rscmCantGetBlockToReplace)
                                               else
      begin
           poa:=@gdb.GetCurrentROOT.ObjArray;
@@ -973,7 +973,7 @@ begin
 end;
 procedure Print_com.CommandStart(Operands:pansichar);
 begin
-  shared.showerror('Print_com.CommandStart: Not yet implemented');
+  shared.showerror('Print_com.CommandStart:'+rsNotYetImplemented);
   self.savemousemode:=GDB.GetCurrentDWG.OGLwindow1.param.md.mode;
   begin
        ShowMenu;
@@ -1196,7 +1196,7 @@ begin
      inherited;
      if gdb.GetCurrentDWG.TextStyleTable.GetRealCount<1 then
      begin
-          shared.ShowError('В чертеже не определено ни одного стиля текста!');
+          shared.ShowError(rscmInDwgTxtStyleNotDeffined);
           commandmanager.executecommandend;
      end;
 end;
@@ -2780,7 +2780,7 @@ begin
                                     begin
                                          if (PEProp.nearestvertex=0)or(PEProp.nearestvertex=p3dpl.VertexArrayInOCS.Count-1) then
                                          begin
-                                              shared.ShowError('С краю неотрезать((');
+                                              shared.ShowError(rscmNotCutHere);
                                               exit;
                                          end;
                                          p3dpl2 := pointer(p3dpl.Clone(p3dpl.bp.ListPos.Owner));

@@ -20,9 +20,7 @@ unit UGDBTextStyleArray;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes,SysInfo,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
-     gl,strproc,varmandef,shared,UGDBSHXFont;
-resourcestring
-  fontnotfoundandreplace='For text style "%s" not found font "%s", is replaced by an alternative';
+     gl,strproc,varmandef,shared,UGDBSHXFont,zcadstrconsts;
 type
   //ptextstyle = ^textstyle;
 {EXPORT+}

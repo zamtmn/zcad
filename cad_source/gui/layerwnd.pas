@@ -10,7 +10,7 @@ uses
 
   UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,sharedgdb,
 
-  strproc,shared,UBaseTypeDescriptor;
+  zcadstrconsts,strproc,shared,UBaseTypeDescriptor;
 
 type
 
@@ -136,7 +136,7 @@ begin
                    PGDBLayerProp(ListItem.Data)^._print:=not PGDBLayerProp(ListItem.Data)^._print;
                    if uppercase(PGDBLayerProp(ListItem.Data)^.Name)='DEFPOINTS' then
                    begin
-                   if PGDBLayerProp(ListItem.Data)^._print then shared.ShowError('Слой DEFPOINTS не может быть печатным');
+                   if PGDBLayerProp(ListItem.Data)^._print then shared.ShowError(rsLayerDefpaontsCanNotBePrinted);
                    PGDBLayerProp(ListItem.Data)^._print:=false;
                    end;
                    if PGDBLayerProp(ListItem.Data)^._print then

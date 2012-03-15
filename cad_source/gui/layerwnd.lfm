@@ -1,5 +1,5 @@
 object LayerWindow: TLayerWindow
-  Left = 225
+  Left = 386
   Height = 588
   Top = 142
   Width = 800
@@ -172,7 +172,7 @@ object LayerWindow: TLayerWindow
       item
         AutoSize = True
         Caption = 'On'
-        Width = 26
+        Width = 28
       end    
       item
         AutoSize = True
@@ -182,22 +182,22 @@ object LayerWindow: TLayerWindow
       item
         AutoSize = True
         Caption = 'Lock'
-        Width = 33
-      end    
-      item
-        AutoSize = True
-        Caption = 'Color'
         Width = 37
       end    
       item
         AutoSize = True
+        Caption = 'Color'
+        Width = 41
+      end    
+      item
+        AutoSize = True
         Caption = 'Line type'
-        Width = 56
+        Width = 60
       end    
       item
         AutoSize = True
         Caption = 'Line weight'
-        Width = 66
+        Width = 73
       end    
       item
         Caption = 'Plot'
@@ -205,7 +205,7 @@ object LayerWindow: TLayerWindow
       item
         AutoSize = True
         Caption = 'Description'
-        Width = 65
+        Width = 72
       end>
     MultiSelect = True
     ReadOnly = True

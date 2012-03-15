@@ -55,11 +55,20 @@ resourcestring
   rscmCantGetBlockToReplace='Режим не позволяет получить искомый блок для замены';
   rscmInDwgTxtStyleNotDeffined='In drawing not defined any textstyle!';
   rscmNotCutHere='Do not cut off here';
+  rscmNoCTU='No comands to undo. Complete the current command';
+  rscmNoCTUSE='No comands to undo. UNDO stack is empty';
+  rscmNoCTR='No comands to redo';
 
   {messages}
   rsNotYetImplemented='Not yet implemented';
+  rsLayerDefpaontsCanNotBePrinted='Layer DEFPOINTS can not be printed';
+  rsQuitQuery='Do yo want to quit ZCAD?';
+  rsCloseDWGQuery='Drawing not saved. Close?';
+  rsSaveEmptyDWG='Drawing is empty. Sure?';
 
   {window names}
+  rsQuitCaption='Quit';
+  rsWarningCaption='Warning!';
   rsAboutWndCaption = 'About ZCAD';
 
   rsdefaultpromot='Command';

@@ -92,23 +92,6 @@ msgstr ""
 msgid "ERROR: "
 msgstr ""
 
-#: tform1.button1.caption
-msgid "Button1"
-msgstr ""
-
-#: tform1.caption
-msgid "Form1"
-msgstr ""
-
-#: tform1.edit1.text
-msgid "Edit1"
-msgstr ""
-
-#: tform1.label1.caption
-msgctxt "TFORM1.LABEL1.CAPTION"
-msgid "lkjlkjlkjlkjlkj"
-msgstr ""
-
 #: tlayerwindow.buttonapplyclose.caption
 msgid "Apply and close"
 msgstr ""

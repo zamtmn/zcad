@@ -100,22 +100,6 @@ msgstr "мм"
 msgid "ERROR: "
 msgstr "ОШИБКА: "
 
-#: tform1.button1.caption
-msgid "Button1"
-msgstr ""
-
-#: tform1.caption
-msgid "Form1"
-msgstr ""
-
-#: tform1.edit1.text
-msgid "Edit1"
-msgstr ""
-
-#: tform1.label1.caption
-msgid "lkjlkjlkjlkjlkj"
-msgstr ""
-
 #: tlayerwindow.buttonapplyclose.caption
 msgid "Apply and close"
 msgstr "Применить и закрыть"
@@ -326,19 +310,9 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
-#: zcadexternal.acn_fakecopyclipbase~caption
-msgctxt "zcadexternal.acn_fakecopyclipbase~caption"
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
-msgstr ""
-
-#: zcadexternal.acn_fakepaste~caption
-msgctxt "zcadexternal.acn_fakepaste~caption"
-msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -471,11 +445,6 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr ""
 
-#: zcadexternal.acn_processkz~caption
-msgctxt "zcadexternal.acn_processkz~caption"
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_processkz~textimage
 msgctxt "zcadexternal.acn_processkz~textimage"
 msgid "Process external KZ"
@@ -510,11 +479,6 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
-
-#: zcadexternal.acn_remautocables~caption
-msgctxt "zcadexternal.acn_remautocables~caption"
-msgid ""
-msgstr ""
 
 #: zcadexternal.acn_remautocables~textimage
 msgctxt "zcadexternal.acn_remautocables~textimage"
@@ -857,7 +821,6 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#, fuzzy
 #| msgid "Rotate"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Block params"
@@ -1184,7 +1147,6 @@ msgid "Reset camera"
 msgstr "Камера в начало"
 
 #: zcadexternal.menucommand~fuckoff
-#, fuzzy
 #| msgid "Dimensions styles (not impl)"
 msgid "Layouts (not impl)"
 msgstr "Листы (не реализовано)"
@@ -1350,11 +1312,11 @@ msgstr "Маска включения"
 
 #: zcadexternal.tbeditparam~blocks
 msgid "Select block"
-msgstr ""
+msgstr "Выбор блока"
 
 #: zcadexternal.tbeditparam~currenteditblock
 msgid "Current block"
-msgstr ""
+msgstr "Текущий блок"
 
 #: zcadexternal.tblockdesc~bborder
 msgctxt "zcadexternal.tblockdesc~bborder"
@@ -1379,7 +1341,7 @@ msgstr "Блоки"
 #: zcadexternal.tblockinsert~rotation
 msgctxt "zcadexternal.tblockinsert~rotation"
 msgid "Rotation"
-msgstr ""
+msgstr "Поворот"
 
 #: zcadexternal.tblockinsert~scale
 msgctxt "zcadexternal.tblockinsert~scale"
@@ -1404,7 +1366,7 @@ msgstr "Заменить на"
 #: zcadexternal.tblockreplaceparams~savevariables
 msgctxt "zcadexternal.tblockreplaceparams~savevariables"
 msgid "Save Variables"
-msgstr ""
+msgstr "Сохранять переменные"
 
 #: zcadexternal.tblockscaleparams~absolytly
 msgctxt "zcadexternal.tblockscaleparams~absolytly"
@@ -1474,7 +1436,7 @@ msgstr ""
 #: zcadexternal.tdesigning~dsgn_helpscale
 msgctxt "zcadexternal.tdesigning~dsgn_helpscale"
 msgid "Scale of auxiliary elements"
-msgstr ""
+msgstr "Масштаб вспомогательных элементов"
 
 #: zcadexternal.tdesigning~dsgn_leaderdefaultwidth
 msgctxt "zcadexternal.tdesigning~dsgn_leaderdefaultwidth"
@@ -1568,16 +1530,16 @@ msgstr ""
 
 #: zcadexternal.telcablecomparam~pcable
 msgid "Cabel"
-msgstr ""
+msgstr "Кабель"
 
 #: zcadexternal.telcablecomparam~ptrace
 msgid "Trace (pointer)"
-msgstr ""
+msgstr "Трасса (указатель)"
 
 #: zcadexternal.telcablecomparam~traces
 msgctxt "zcadexternal.telcablecomparam~traces"
 msgid "Trace"
-msgstr ""
+msgstr "Трасса"
 
 #: zcadexternal.telleadercomparam~scale
 msgctxt "zcadexternal.telleadercomparam~scale"
@@ -1586,7 +1548,7 @@ msgstr "Масштабировать"
 
 #: zcadexternal.telleadercomparam~size
 msgid "Size"
-msgstr ""
+msgstr "Размер"
 
 #: zcadexternal.telleadercomparam~twidth
 msgctxt "zcadexternal.telleadercomparam~twidth"
@@ -1605,7 +1567,7 @@ msgstr "Позиция"
 
 #: zcadexternal.tfinddeviceparam~findmethod
 msgid "Use symbols *, ?"
-msgstr ""
+msgstr "Использовать символы *, ?"
 
 #: zcadexternal.tfinddeviceparam~findstring
 msgctxt "zcadexternal.tfinddeviceparam~findstring"
@@ -1614,7 +1576,7 @@ msgstr "Текст"
 
 #: zcadexternal.tfinddeviceparam~findtype
 msgid "Find in"
-msgstr ""
+msgstr "Искать в"
 
 #: zcadexternal.tforcresult~iscreated
 msgctxt "zcadexternal.tforcresult~iscreated"
@@ -1658,7 +1620,7 @@ msgstr "Показывать скрытые поля"
 
 #: zcadexternal.tmseditor~enttype
 msgid "Process primitives"
-msgstr ""
+msgstr "Обрабатывать примитивы"
 
 #: zcadexternal.tmseditor~ou
 msgctxt "zcadexternal.tmseditor~ou"
@@ -1667,19 +1629,19 @@ msgstr "Переменные"
 
 #: zcadexternal.tmseditor~selcount
 msgid "Selected objects"
-msgstr ""
+msgstr "Выбрано обьектов"
 
 #: zcadexternal.tmstype~tmst_all
 msgid "All entities"
-msgstr ""
+msgstr "Все примитивы"
 
 #: zcadexternal.tmstype~tmst_cables
 msgid "Cables"
-msgstr ""
+msgstr "Кабели"
 
 #: zcadexternal.tmstype~tmst_devices
 msgid "Devices"
-msgstr ""
+msgstr "Устройства"
 
 #: zcadexternal.tobjlinkrecordmode~obt
 msgctxt "zcadexternal.tobjlinkrecordmode~obt"
@@ -1698,27 +1660,27 @@ msgstr ""
 
 #: zcadexternal.todpcounttype~todpct_by_count
 msgid "by number"
-msgstr ""
+msgstr "по количеству"
 
 #: zcadexternal.todpcounttype~todpct_by_xy
 msgid "by width/height"
-msgstr ""
+msgstr "по ширине/длине"
 
 #: zcadexternal.topsdattype~topsdt_smoke
 msgid "Smoke"
-msgstr ""
+msgstr "Дымовой"
 
 #: zcadexternal.topsdattype~topsdt_termo
 msgid "Termo"
-msgstr ""
+msgstr "Тепловой"
 
 #: zcadexternal.topsmindatcount~topsmdc_1
 msgid "1 in the quarter"
-msgstr ""
+msgstr "1 в четверти"
 
 #: zcadexternal.topsmindatcount~topsmdc_1_2
 msgid "1 in the middle"
-msgstr ""
+msgstr "1 в середине"
 
 #: zcadexternal.topsmindatcount~topsmdc_2
 msgctxt "zcadexternal.topsmindatcount~topsmdc_2"
@@ -1737,70 +1699,70 @@ msgstr ""
 
 #: zcadexternal.topsplacesmokedetectorortoparam~dattype
 msgid "Sensor type"
-msgstr ""
+msgstr "Тип извещателя"
 
 #: zcadexternal.topsplacesmokedetectorortoparam~dmc
 msgid "Min. number of sensors"
-msgstr ""
+msgstr "Мин. кол-во извещателей"
 
 #: zcadexternal.topsplacesmokedetectorortoparam~fdd
 msgid "Sensor-Sensor(fact)"
-msgstr ""
+msgstr "Извещатель-извещатель(факт)"
 
 #: zcadexternal.topsplacesmokedetectorortoparam~fdw
 msgid "Sensor-Wall(fact)"
-msgstr ""
+msgstr "Извещатель-стена(факт)"
 
 #: zcadexternal.topsplacesmokedetectorortoparam~height
 msgid "Height of installation"
-msgstr ""
+msgstr "Высота установки"
 
 #: zcadexternal.topsplacesmokedetectorortoparam~inserttype
 msgid "Insert"
-msgstr ""
+msgstr "Вставлять"
 
 #: zcadexternal.topsplacesmokedetectorortoparam~ndd
 msgid "Sensor-Sensor(standard)"
-msgstr ""
+msgstr "Извещатель-извещатель(норм.)"
 
 #: zcadexternal.topsplacesmokedetectorortoparam~ndw
 msgid "Sensor-Wall(standard)"
-msgstr ""
+msgstr "Извещатель-стена(норм.)"
 
 #: zcadexternal.topsplacesmokedetectorortoparam~normalizepoint
 msgctxt "zcadexternal.topsplacesmokedetectorortoparam~normalizepoint"
 msgid "Normalize to grid (if enabled)"
-msgstr ""
+msgstr "Нормализовать по сетке"
 
 #: zcadexternal.topsplacesmokedetectorortoparam~scale
 msgid "Plan scale"
-msgstr ""
+msgstr "Масштаб плана"
 
 #: zcadexternal.topsplacesmokedetectorortoparam~scaleblock
 msgctxt "zcadexternal.topsplacesmokedetectorortoparam~scaleblock"
 msgid "Blocks scale"
-msgstr ""
+msgstr "Масштаб блоков"
 
 #: zcadexternal.topsplacesmokedetectorortoparam~startauto
 msgid "\"Start\" signal"
-msgstr ""
+msgstr "Сигнал \"Пуск\""
 
 #: zcadexternal.tortodevplaceparam~angle
 msgctxt "zcadexternal.tortodevplaceparam~angle"
 msgid "Rotation"
-msgstr ""
+msgstr "Поворот"
 
 #: zcadexternal.tortodevplaceparam~autoangle
 msgid "Auto rotation"
-msgstr ""
+msgstr "Авто поворот"
 
 #: zcadexternal.tortodevplaceparam~count
 msgid "Total number"
-msgstr ""
+msgstr "Общее количество"
 
 #: zcadexternal.tortodevplaceparam~counttype
 msgid "Type of placement"
-msgstr ""
+msgstr "Тип размещения"
 
 #: zcadexternal.tortodevplaceparam~name
 msgctxt "zcadexternal.tortodevplaceparam~name"
@@ -1810,30 +1772,30 @@ msgstr "Блоки"
 #: zcadexternal.tortodevplaceparam~normalizepoint
 msgctxt "zcadexternal.tortodevplaceparam~normalizepoint"
 msgid "Normalize to grid (if enabled)"
-msgstr ""
+msgstr "Нормализовать по сетке (если включена)"
 
 #: zcadexternal.tortodevplaceparam~nx
 msgid "Number of length"
-msgstr ""
+msgstr "Кол-во по длине"
 
 #: zcadexternal.tortodevplaceparam~ny
 msgid "Number of width"
-msgstr ""
+msgstr "Кол-во по ширине"
 
 #: zcadexternal.tortodevplaceparam~scaleblock
 msgctxt "zcadexternal.tortodevplaceparam~scaleblock"
 msgid "Blocks scale"
-msgstr ""
+msgstr "Масштаб блоков"
 
 #: zcadexternal.tosmodeeditor~osm
 msgctxt "zcadexternal.tosmodeeditor~osm"
 msgid "Snap"
-msgstr ""
+msgstr "Привязка"
 
 #: zcadexternal.tosmodeeditor~trace
 msgctxt "zcadexternal.tosmodeeditor~trace"
 msgid "Trace"
-msgstr ""
+msgstr "Трассировка"
 
 #: zcadexternal.tosmode~kosm_3
 msgctxt "zcadexternal.tosmode~kosm_3"
@@ -1918,7 +1880,7 @@ msgstr "Шрифты"
 #: zcadexternal.tpath~layoutfile
 msgctxt "zcadexternal.tpath~layoutfile"
 msgid "Current layout"
-msgstr ""
+msgstr "Текущая раскладка окон"
 
 #: zcadexternal.tpath~program_run
 msgctxt "zcadexternal.tpath~program_run"
@@ -1967,19 +1929,19 @@ msgstr ""
 
 #: zcadexternal.tpolyeditmode~tpem_nearest
 msgid "Paste in nearest segment"
-msgstr ""
+msgstr "Вставлять в ближайший сегмент"
 
 #: zcadexternal.tpolyeditmode~tpem_select
 msgid "Choose a segment"
-msgstr ""
+msgstr "Выбирать сегмент"
 
 #: zcadexternal.tpolyedit~action
 msgid "Action"
-msgstr ""
+msgstr "Действие"
 
 #: zcadexternal.tpolyedit~mode
 msgid "Mode"
-msgstr ""
+msgstr "Режим"
 
 #: zcadexternal.tprintparams~center
 msgctxt "zcadexternal.tprintparams~center"
@@ -1989,7 +1951,7 @@ msgstr "Центр"
 #: zcadexternal.tprintparams~fittopage
 msgctxt "zcadexternal.tprintparams~fittopage"
 msgid "Fit to page"
-msgstr ""
+msgstr "Вписать в страницу"
 
 #: zcadexternal.tprintparams~scale
 msgctxt "zcadexternal.tprintparams~scale"
@@ -2199,15 +2161,15 @@ msgstr "Новый масштаб"
 
 #: zcadexternal.tsubpolyedit~tspe_insert
 msgid "Insert vertex"
-msgstr ""
+msgstr "Вставить вершину"
 
 #: zcadexternal.tsubpolyedit~tspe_remove
 msgid "Remove vertex"
-msgstr ""
+msgstr "Удалить вершину"
 
 #: zcadexternal.tsubpolyedit~tspe_scissor
 msgid "Cut into two parts"
-msgstr ""
+msgstr "Резать на 2 части"
 
 #: zcadexternal.tsys~ssy_compileinfo
 msgctxt "zcadexternal.tsys~ssy_compileinfo"
@@ -2366,15 +2328,15 @@ msgstr "ВерхПраво"
 
 #: zcadexternal.ttraceangle~tta30
 msgid "30 deg"
-msgstr ""
+msgstr "30°"
 
 #: zcadexternal.ttraceangle~tta45
 msgid "45 deg"
-msgstr ""
+msgstr "45°"
 
 #: zcadexternal.ttraceangle~tta90
 msgid "90 deg"
-msgstr ""
+msgstr "90°"
 
 #: zcadexternal.ttracemode~angle
 msgctxt "zcadexternal.ttracemode~angle"

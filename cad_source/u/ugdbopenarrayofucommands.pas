@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfUCommands;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfPV,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
+uses zcadstrconsts,UGDBOpenArrayOfPV,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
      gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman{,GDBSubordinated};
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
@@ -522,7 +522,7 @@ begin
      else if pcc^.GetCommandType=TTC_MNotUndableIfOverlay then
                                                 begin
                                                      if overlay then
-                                                     shared.ShowError('Нет операций для отмены. Завершите текущую команду')
+                                                     shared.ShowError(rscmNoCTU)
                                                 end
      else
           pcc^.undo;
@@ -537,9 +537,9 @@ begin
      else
          begin
          if overlay then
-                        shared.ShowError('Нет операций для отмены. Завершите текущую команду')
+                        shared.ShowError(rscmNoCTU)
                     else
-                        shared.ShowError('Нет операций для отмены. Стек UNDO пуст')
+                        shared.ShowError(rscmNoCTUSE)
          end;
      gdb.GetCurrentROOT^.FormatAfterEdit;
 end;
@@ -574,7 +574,7 @@ begin
           until mcounter=0;
      end
      else
-         shared.ShowError('Нет операций для повторного применения');
+         shared.ShowError(rscmNoCTR);
      gdb.GetCurrentROOT^.FormatAfterEdit;
 end;
 

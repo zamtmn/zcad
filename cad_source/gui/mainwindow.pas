@@ -342,7 +342,7 @@ begin
      if gdb.GetCurrentDWG<>nil then
      begin
      //if dialogs.messagebox('Закрыть программу?','QUIT',MB_YESNO)=IDYES then
-     if MainFormN.messagebox('Закрыть программу?','QUIT',MB_YESNO or MB_ICONQUESTION)=IDYES then
+     if MainFormN.messagebox(@rsQuitQuery[1],@rsQuitCaption[1],MB_YESNO or MB_ICONQUESTION)=IDYES then
      begin
           result:=true;
 

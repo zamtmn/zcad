@@ -512,7 +512,7 @@ begin
   begin
        if CurrentDWG.Changed then
                                  begin
-                                      if MainFormN.MessageBox('Чертеж имеет изменения. Закрыть?','Внимание!',MB_YESNO)<>IDYES then exit;
+                                      if MainFormN.MessageBox(@rsCloseDWGQuery[1],@rsWarningCaption[1],MB_YESNO)<>IDYES then exit;
                                  end;
        poglwnd:=CurrentDWG.OGLwindow1;
        //mainform.PageControl.delpage(mainform.PageControl.onmouse);
@@ -910,7 +910,7 @@ var s,s1:GDBString;
 begin
      if gdb.GetCurrentROOT.ObjArray.Count<1 then
                                                      begin
-                                                          if MainFormN.messagebox('Сохраняемый файл пуст. Уверенны?','QSAVE',MB_YESNO)=IDNO then
+                                                          if MainFormN.messagebox(@rsSaveEmptyDWG[1],@rsWarningCaption[1],MB_YESNO)=IDNO then
                                                           exit;
                                                      end;
      if operands='QS' then

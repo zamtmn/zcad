@@ -1,7 +1,7 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TLayerWindow','FORMDATA',[
-  'TPF0'#12'TLayerWindow'#11'LayerWindow'#4'Left'#3#225#0#6'Height'#3'L'#2#3'To'
+  'TPF0'#12'TLayerWindow'#11'LayerWindow'#4'Left'#3#130#1#6'Height'#3'L'#2#3'To'
   +'p'#3#142#0#5'Width'#3' '#3#13'ActiveControl'#7#2'B1'#7'Caption'#6#11'LayerW'
   +'indow'#12'ClientHeight'#3'L'#2#11'ClientWidth'#3' '#3#21'Constraints.MinHei'
   +'ght'#3#244#1#20'Constraints.MinWidth'#3' '#3#7'OnClose'#7#9'FormClose'#8'On'
@@ -58,12 +58,12 @@ LazarusResources.Add('TLayerWindow','FORMDATA',[
   +'p'#2'%'#5'Width'#3#22#3#7'Anchors'#11#5'akTop'#6'akLeft'#7'akRight'#8'akBot'
   +'tom'#0#17'BorderSpacing.Top'#2#2#20'BorderSpacing.Bottom'#2#2#7'Columns'#14
   +#1#8'AutoSize'#9#7'Caption'#6#6'Status'#5'Width'#3#18#3#0#1#7'Caption'#6#4'N'
-  +'ame'#5'Width'#3#250#0#0#1#8'AutoSize'#9#7'Caption'#6#2'On'#5'Width'#2#26#0#1
+  +'ame'#5'Width'#3#250#0#0#1#8'AutoSize'#9#7'Caption'#6#2'On'#5'Width'#2#28#0#1
   +#8'AutoSize'#9#7'Caption'#6#5'Freze'#5'Width'#2''''#0#1#8'AutoSize'#9#7'Capt'
-  +'ion'#6#4'Lock'#5'Width'#2'!'#0#1#8'AutoSize'#9#7'Caption'#6#5'Color'#5'Widt'
-  +'h'#2'%'#0#1#8'AutoSize'#9#7'Caption'#6#9'Line type'#5'Width'#2'8'#0#1#8'Aut'
-  +'oSize'#9#7'Caption'#6#11'Line weight'#5'Width'#2'B'#0#1#7'Caption'#6#4'Plot'
-  +#0#1#8'AutoSize'#9#7'Caption'#6#11'Description'#5'Width'#2'A'#0#0#11'MultiSe'
+  +'ion'#6#4'Lock'#5'Width'#2'%'#0#1#8'AutoSize'#9#7'Caption'#6#5'Color'#5'Widt'
+  +'h'#2')'#0#1#8'AutoSize'#9#7'Caption'#6#9'Line type'#5'Width'#2'<'#0#1#8'Aut'
+  +'oSize'#9#7'Caption'#6#11'Line weight'#5'Width'#2'I'#0#1#7'Caption'#6#4'Plot'
+  +#0#1#8'AutoSize'#9#7'Caption'#6#11'Description'#5'Width'#2'H'#0#0#11'MultiSe'
   +'lect'#9#8'ReadOnly'#9#9'RowSelect'#9#8'SortType'#7#6'stText'#8'TabOrder'#2#5
   ,#9'ViewStyle'#7#8'vsReport'#8'OnChange'#7#15'ListView1Change'#12'OnSelectIte'
   +'m'#7#19'ListView1SelectItem'#0#0#10'TImageList'#2'IL'#4'left'#2#24#3'top'#3

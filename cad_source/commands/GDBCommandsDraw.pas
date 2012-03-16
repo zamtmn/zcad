@@ -456,7 +456,7 @@ begin
   until pobj=nil;
   if counter=0 then
                       begin
-                            HistoryOutStr('BlockScale: Нет выделенных блоков или устройств');
+                            HistoryOutStr('BlockScale:'+rscmNoBlocksOrDevices);
                             commandmanager.executecommandend;
                             exit;
                       end;
@@ -502,7 +502,7 @@ begin
                 end;
                 pb:=poa.iterate(ir);
           until pb=nil;
-          HistoryOutStr('BlockScale: '+inttostr(result)+' вхождений изменено');
+          HistoryOutStr('BlockScale:'+sysutils.format(rscmNEntitiesProcessed,[inttostr(result)]));
           Regen_com('');
           commandmanager.executecommandend;
      end;
@@ -524,7 +524,7 @@ begin
                  else
                      if length(operands)<>0 then
                                          begin
-                                               HistoryOutStr('Insert: нет определения блока '''+operands+''' в чертеже');
+                                               HistoryOutStr('Insert:'+rscmNoBlockDefInDWG);
                                                commandmanager.executecommandend;
                                                exit;
                                          end;
@@ -535,7 +535,7 @@ begin
      end
         else
             begin
-                 historyout('BlockReplace: нет определений блоков в чертеже');
+                 historyoutstr('BlockReplace:'+rscmInDwgBlockDefNotDeffined);
                  commandmanager.executecommandend;
             end;
 end;
@@ -639,7 +639,7 @@ begin
                 end;
                 pb:=poa.iterate(ir);
           until pb=nil;
-          HistoryOutStr('BlockReplace: '+inttostr(result)+' вхождений заменено');
+          HistoryOutStr('BlockReplace:'+sysutils.format(rscmNEntitiesProcessed,[inttostr(result)]));
           Regen_com('');
           commandmanager.executecommandend;
      end;
@@ -757,7 +757,7 @@ begin
   end
   else
   begin
-    historyout('Устройство должно быть выбрано до запуска команды!!!');
+    historyoutstr(rscmSelDevBeforeComm);
     Commandmanager.executecommandend;
   end;
 end;
@@ -811,7 +811,7 @@ begin
   end
   else
   begin
-    historyout('Объекты должны быть выбраны до запуска команды!!!');
+    historyoutstr(rscmSelEntBeforeComm);
     Commandmanager.executecommandend;
   end;
 end;
@@ -992,7 +992,7 @@ begin
 end;
 procedure Print_com.SelectPrinter(pdata:GDBPlatformint);
 begin
-  historyout('Not yet implemented');
+  historyoutstr(rsNotYetImplemented);
   mainformn.ShowAllCursors;
   if PSD.Execute then;
   mainformn.RestoreCursors;
@@ -1006,7 +1006,7 @@ end;
 procedure Print_com.SelectPaper(pdata:GDBPlatformint);
 
 begin
-  historyout('Not yet implemented');
+  historyoutstr(rsNotYetImplemented);
   mainformn.ShowAllCursors;
   if Paged.Execute then;
   mainformn.RestoreCursors;
@@ -1432,11 +1432,11 @@ begin
   if counter>0 then
   begin
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  historyout('Базовая точка:');
+  historyoutstr(rscmBasePoint);
   end
   else
   begin
-    historyout('Объекты должны быть выбраны до запуска команды!!!');
+    historyoutstr(rscmSelEntBeforeComm);
     Commandmanager.executecommandend;
   end;
 end;
@@ -1521,18 +1521,18 @@ begin
                  else
                      if length(operands)<>0 then
                                          begin
-                                               HistoryOutStr('Insert: нет определения блока '''+operands+''' в чертеже');
+                                               HistoryOutStr('Insert:'+sysutils.format(rscmNoBlockDefInDWG,[operands]));
                                                commandmanager.executecommandend;
                                                exit;
                                          end;
 
           SetGDBObjInsp(SysUnit.TypeName2PTD('TBlockInsert'),@BIProp);
           GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-          historyout('Точка вставки:');
+          historyoutstr(rscmInsertPoint);
      end
         else
             begin
-                 historyout('Insert: нет определений блоков в чертеже');
+                 historyoutstr('Insert:'+rscmInDwgBlockDefNotDeffined);
                  commandmanager.executecommandend;
             end;
 end;
@@ -1901,7 +1901,7 @@ end;
 function Circle_com_CommandStart(operands:pansichar):GDBInteger;
 begin
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  historyout('Центр окружности:');
+  historyoutstr(rscmCenterPointCircle);
 end;
 
 procedure Circle_com_CommandEnd;
@@ -1912,7 +1912,7 @@ function Circle_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte
 begin
   if (button and MZW_LBUTTON)<>0 then
   begin
-    historyout('Точка на окружности:');
+    historyoutstr(rscmPointOnCircle);
     pc := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,gdb.GetCurrentROOT));
     GDBObjSetCircleProp(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
     //GDBObjCircleInit(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
@@ -1958,7 +1958,7 @@ function Line_com_CommandStart(operands:pansichar):GDBInteger;
 begin
   pold:=nil;
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  historyout('Первая точка:');
+  historyoutstr(rscmFirstPoint);
 end;
 
 procedure Line_com_CommandEnd;
@@ -2083,7 +2083,7 @@ begin
   begin
   inherited CommandStart('');
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  historyout('Базовая точка:');
+  historyoutstr(rscmBasePoint);
 
    GDBGetMem({$IFDEF DEBUGBUILD}'{7702D93A-064E-4935-BFB5-DFDDBAFF9A93}',{$ENDIF}GDBPointer(pcoa),sizeof(GDBOpenArrayOfData));
    pcoa^.init({$IFDEF DEBUGBUILD}'{379DC609-F39E-42E5-8E79-6D15F8630061}',{$ENDIF}counter,sizeof(TCopyObjectDesc));
@@ -2109,7 +2109,7 @@ begin
   end
   else
   begin
-    historyout('Объекты должны быть выбраны до запуска команды!!!');
+    historyoutstr(rscmSelEntBeforeComm);
     Commandmanager.executecommandend;
   end;
 end;
@@ -2395,7 +2395,7 @@ function _3DPoly_com_CommandStart(operands:pansichar):GDBInteger;
 begin
   p3dpl:=nil;
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  historyout('Первая точка:');
+  historyoutstr(rscmFirstPoint);
   gdb.GetCurrentDWG.OGLwindow1.param.processObjConstruct:=true;
 end;
 
@@ -2527,7 +2527,7 @@ begin
    until pobj=nil;
    if p3dpl=nil then
                    begin
-                        historyout('Poly обьектов не выделено!');
+                        historyoutstr(rscmPolyNotSel);
                         commandmanager.executecommandend;
                    end
                else
@@ -2535,7 +2535,7 @@ begin
                         SetGDBObjInsp(SysUnit.TypeName2PTD('TPolyEdit'),@PEProp);
                         GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
                         gdb.GetCurrentDWG.SelObjArray.clearallobjects;
-                        historyout('Поехали:');
+                        //historyout('Поехали:');
                    end;
 end;
 
@@ -2716,7 +2716,7 @@ begin
                                                   redrawoglwnd;
                                              end
                                              else
-                                                 historyout('Всего 2 вершины, тут нечего удалять');
+                                                 historyoutstr(rscm2VNotRemove);
                                         end;
        if (PEProp.Action=TSPE_Insert)and(PEProp.nearestline<>-1)and(PEProp.dir<>0) then
                                         begin
@@ -2840,7 +2840,7 @@ begin
      end;
      end
         else
-            HistoryOut('Команда работает только из контекстного меню');
+            HistoryOutstr(rscmCommandOnlyCTXMenu);
 end;
 procedure ITT_com.Command;
 var //pv:pGDBObjEntity;
@@ -2935,7 +2935,7 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
                  else
                      if length(operands)<>0 then
                                          begin
-                                               HistoryOutStr('BEdit: нет определения блока '''+operands+''' в чертеже');
+                                               HistoryOutStr('BEdit:'+format(rscmNoBlockDefInDWG,[operands]));
                                                commandmanager.executecommandend;
                                                exit;
                                          end;
@@ -2952,7 +2952,7 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
      end
         else
             begin
-                 historyout('BEdit: нет определений блоков в чертеже');
+                 historyoutstr('BEdit:'+rscmInDwgBlockDefNotDeffined);
                  commandmanager.executecommandend;
             end;
 

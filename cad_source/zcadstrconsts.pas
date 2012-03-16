@@ -52,12 +52,35 @@ resourcestring
   rsTemplateNotFound='Template file "%s" not found';
 
   {commands messages}
-  rscmCantGetBlockToReplace='Режим не позволяет получить искомый блок для замены';
+  rscmCantGetBlockToReplace='Unable get block name to replace';
   rscmInDwgTxtStyleNotDeffined='In drawing not defined any textstyle!';
   rscmNotCutHere='Do not cut off here';
   rscmNoCTU='No comands to undo. Complete the current command';
   rscmNoCTUSE='No comands to undo. UNDO stack is empty';
   rscmNoCTR='No comands to redo';
+  rscmInStackData='In stack found following data:';
+  rscmPoint='Point:';
+  rscmFirstPoint='First point:';
+  rscmSecondPoint='Second point:';
+  rscmBasePoint='Base point:';
+  rscmInsertPoint='Insert point:';
+  rscmCenterPointCircle='Center point for circle:';
+  rscmPointOnCircle='Point on a circle:';
+
+  rscmOptions2OI='Options are available in the Object Inspector';
+  rscmSelOrSpecEntity='Select or specify the parameters entity!';
+  rscmNEntitiesProcessed='%s entities processed';
+
+  rscmNoBlocksOrDevices='No selected blocks or devices';
+  rscmNoBlockDefInDWG='No BlockDef "%s" in the drawing';
+  rscmInDwgBlockDefNotDeffined='In drawing not defined any BlockDefs!';
+
+  rscmSelEntBeforeComm='Entities must be selected before run the command';
+  rscmSelDevBeforeComm='Device must be selected before run the command';
+  rscmPolyNotSel='Poly entities not selected';
+  rscm2VNotRemove='Only 2 vertex there is nothing to remove';
+
+  rscmCommandOnlyCTXMenu='The command works only from context menu';
 
   {messages}
   rsNotYetImplemented='Not yet implemented';
@@ -65,6 +88,10 @@ resourcestring
   rsQuitQuery='Do yo want to quit ZCAD?';
   rsCloseDWGQuery='Drawing not saved. Close?';
   rsSaveEmptyDWG='Drawing is empty. Sure?';
+  rsBlockIgnored='Ignored block "%s"';
+  rsDoubleBlockIgnored='Ignored double definition block "%s"';
+  rsZCADStarted='ZCAD v%s started';
+  rsGridTooDensity='Grid too density';
 
   {window names}
   rsQuitCaption='Quit';

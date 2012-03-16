@@ -21,7 +21,7 @@ unit GDBCommandsDB;
 
 interface
 uses
-  plugins,
+  zcadstrconsts,plugins,
   commandlinedef,
   commanddefinternal,
   //commandline,
@@ -67,7 +67,7 @@ begin
            inc(GDBInteger(pvd.data.Instance^));
      end
         else
-            HistoryOut('Команда работает только из контекстного меню');
+            HistoryOutStr(rscmCommandOnlyCTXMenu);
 end;
 function DBaseRename_com:GDBInteger;
 var //t:PUserTypeDescriptor;
@@ -99,7 +99,7 @@ begin
            end;
      end
         else
-            HistoryOut('Команда работает только из контекстного меню');
+            HistoryOutStr(rscmCommandOnlyCTXMenu);
 end;
 function DBaseLink_com:GDBInteger;
 var //t:PUserTypeDescriptor;
@@ -135,11 +135,11 @@ begin
                                           end;
                  pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
                  until pv=nil;
-                 HistoryOutSTR(inttostr(c)+' примитивов обработано');
+                 HistoryOutSTR(format(rscmNEntitiesProcessed,[inttostr(c)]));
            end;
      end
         else
-            HistoryOut('Команда работает только из контекстного меню');
+            HistoryOutStr(rscmCommandOnlyCTXMenu);
 {     if TempPGDBEqNode<>nil then
      begin
              c:=0;

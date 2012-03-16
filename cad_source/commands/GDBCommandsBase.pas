@@ -1061,7 +1061,7 @@ begin
   //inherited CommandStart;
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera));
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := true;
-  historyout('Первая точка:');
+  historyoutstr(rscmFirstPoint);
 end;
 procedure FrameEdit_com_Command_End;
 begin
@@ -1074,7 +1074,7 @@ begin
   result:=0;
   if (button and MZW_LBUTTON)<>0 then
   begin
-    historyout('Вторая точка:');
+    historyoutstr(rscmSecondPoint);
     GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1 := mc;
     GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2 := mc;
     GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame13d := wc;
@@ -1253,7 +1253,7 @@ end;
 function Options_com(Operands:pansichar):GDBInteger;
 begin
   SetGDBObjInsp(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
-  historyout('Все настройки доступны в инспекторе объектов');
+  historyoutstr(rscmOptions2OI);
   //Optionswindow.Show;
   result:=cmd_ok;
 end;
@@ -1353,7 +1353,7 @@ else if length(Operands)>3 then
            mem.done;
       end
   else
-      historyout('Выбери или укажи в параметрах объект!');
+      historyoutstr(rscmSelOrSpecEntity);
 end;
 function MultiObjVarMan_com(Operands:pansichar):GDBInteger;
 var
@@ -1401,7 +1401,7 @@ begin
 
            //InfoFormVar.Free;
            mem.done;
-           historyoutstr('Обработано '+inttostr(counter)+' примитивов');
+           historyoutstr(format(rscmNEntitiesProcessed,[inttostr(counter)]));
       end
 end;
 
@@ -1693,8 +1693,8 @@ begin
   redrawoglwnd;
   depth:=0;
   PrintTreeNode(@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,depth);
-  shared.HistoryOutStr('Всего примитивов: '+inttostr(GDB.GetCurrentROOT.ObjArray.count));
-  shared.HistoryOutStr('Глубина дерева  : '+inttostr(depth));
+  shared.HistoryOutStr('Total entities: '+inttostr(GDB.GetCurrentROOT.ObjArray.count));
+  shared.HistoryOutStr('Tree depth  : '+inttostr(depth));
 
   result:=cmd_ok;
 end;

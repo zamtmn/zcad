@@ -334,7 +334,7 @@ var
 begin
      if self.varstack.vardescarray.Count<>0 then
      begin
-     shared.HistoryOutStr('In stack found following data:');
+     shared.HistoryOutStr(rscmInStackData);
      pvd:=self.varstack.vardescarray.beginiterate(ir);
      if pvd<>nil then
      repeat

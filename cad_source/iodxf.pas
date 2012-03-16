@@ -727,14 +727,14 @@ begin
               if (pos('MODEL_SPACE',uppercase(s))<>0)or(pos('PAPER_SPACE',uppercase(s))<>0)then
               begin
                 //programlog.logoutstr('Ignored block '+s+';',lp_OldPos);
-                shared.HistoryOutStr('Ignored block '+s+';');
+                shared.HistoryOutStr(format(rsBlockIgnored,[s]));
                 while (s <> 'ENDBLK') do
                   s := f.readGDBString;
               end
               else if gdb.GetCurrentDWG.BlockDefArray.getindex(pointer(@s[1]))>=0 then
                                begin
                                     //programlog.logoutstr('Ignored double definition block '+s+';',lp_OldPos);
-                                    shared.HistoryOutStr('Ignored double definition block '+s+';');
+                                    shared.HistoryOutStr(format(rsDoubleBlockIgnored,[s]));
                                     if s='DEVICE_PS_UK-VK'then
                                                s:=s;
                                     while (s <> 'ENDBLK') do
@@ -798,7 +798,7 @@ var
   s: GDBString;
 begin
   programlog.logoutstr('AddFromDXF',lp_IncPos);
-  shared.HistoryOutStr('Loading file '+name+';');
+  shared.HistoryOutStr(format(rsLoadingFile,[name]));
   f.InitFromFile(name);
   if f.Count<>0 then
   begin

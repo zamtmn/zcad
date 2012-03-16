@@ -2,30 +2,37 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
 #: aboutwnd.aboutwndcaption
+msgctxt "aboutwnd.aboutwndcaption"
 msgid "About ZCAD"
 msgstr ""
 
 #: cmdline.defaultpromot
+msgctxt "cmdline.defaultpromot"
 msgid "Command"
 msgstr ""
 
 #: cmdline.exprouttext
+msgctxt "cmdline.exprouttext"
 msgid "Expression %s return %s"
 msgstr ""
 
 #: commandline.s_commandnrinc
+msgctxt "commandline.s_commandnrinc"
 msgid "Command can not run"
 msgstr ""
 
 #: commandline.s_runcommand
+msgctxt "commandline.s_runcommand"
 msgid "Running command"
 msgstr ""
 
 #: commandline.s_runscript
+msgctxt "commandline.s_runscript"
 msgid "Running script \"%s\";"
 msgstr ""
 
 #: commandline.s_unknowncommand
+msgctxt "commandline.s_unknowncommand"
 msgid "Unknown command"
 msgstr ""
 
@@ -34,10 +41,12 @@ msgid "Divide by zero (Geometry.NormalizeVertex)"
 msgstr ""
 
 #: mainwindow.commandlinewndname
+msgctxt "mainwindow.commandlinewndname"
 msgid "Command line"
 msgstr ""
 
 #: mainwindow.compiledtimemsg
+msgctxt "mainwindow.compiledtimemsg"
 msgid "Done.  %s second"
 msgstr ""
 
@@ -47,14 +56,17 @@ msgid "Drawings window"
 msgstr ""
 
 #: mainwindow.es_layoutload
+msgctxt "mainwindow.es_layoutload"
 msgid "Error loading layout from file"
 msgstr ""
 
 #: mainwindow.es_recreating
+msgctxt "mainwindow.es_recreating"
 msgid "Re-creating %s!"
 msgstr ""
 
 #: mainwindow.es_toolbarnotfound
+msgctxt "mainwindow.es_toolbarnotfound"
 msgid "Toolbar \"%s\" is not found! Create a blank window"
 msgstr ""
 
@@ -64,10 +76,12 @@ msgid "Object inspector"
 msgstr ""
 
 #: mainwindow.s_byblock
+msgctxt "mainwindow.s_byblock"
 msgid "ByBlock"
 msgstr ""
 
 #: mainwindow.s_bylayer
+msgctxt "mainwindow.s_bylayer"
 msgid "ByLayer"
 msgstr ""
 
@@ -77,18 +91,22 @@ msgid "Default"
 msgstr ""
 
 #: mainwindow.s_different
+msgctxt "mainwindow.s_different"
 msgid "Different"
 msgstr ""
 
 #: mainwindow.s_empty
+msgctxt "mainwindow.s_empty"
 msgid "Empty"
 msgstr ""
 
 #: mainwindow.s_mm
+msgctxt "mainwindow.s_mm"
 msgid "mm"
 msgstr ""
 
 #: shared.errorprefix
+msgctxt "shared.errorprefix"
 msgid "ERROR: "
 msgstr ""
 
@@ -178,14 +196,17 @@ msgid "Ok"
 msgstr ""
 
 #: ugdbdescriptor.unnamedwindowtitle
+msgctxt "ugdbdescriptor.unnamedwindowtitle"
 msgid "unnamed"
 msgstr ""
 
 #: uunitmanager.noglc
+msgctxt "uunitmanager.noglc"
 msgid "OpenGL context is not created"
 msgstr ""
 
 #: windowsspecific.revstr
+msgctxt "windowsspecific.revstr"
 msgid "Revision SVN:"
 msgstr ""
 
@@ -429,6 +450,7 @@ msgid "Save drawing"
 msgstr ""
 
 #: zcadexternal.acn_quit~caption
+msgctxt "zcadexternal.acn_quit~caption"
 msgid "Quit"
 msgstr ""
 
@@ -747,13 +769,13 @@ msgstr ""
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
+msgid "Block params"
 msgstr ""
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+msgid "Rotate"
 msgstr ""
 
 #: zcadexternal.gdbobjcircle~area
@@ -1047,12 +1069,12 @@ msgid "Reset camera"
 msgstr ""
 
 #: zcadexternal.menucommand~fuckoff
-msgid "Dimensions styles (not impl)"
+#, fuzzy
+msgid "Layouts (not impl)"
 msgstr ""
 
 #: zcadexternal.menucommand~fuckoff
-#, fuzzy
-msgid "Layouts (not impl)"
+msgid "Dimensions styles (not impl)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(camera)
@@ -2128,5 +2150,314 @@ msgstr ""
 #: zcadexternal.tvscontrol~tvson
 msgctxt "zcadexternal.tvscontrol~tvson"
 msgid "On"
+msgstr ""
+
+#: zcadstrconsts.fontnotfoundandreplace
+msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+msgstr ""
+
+#: zcadstrconsts.rsaboutwndcaption
+msgctxt "zcadstrconsts.rsaboutwndcaption"
+msgid "About ZCAD"
+msgstr ""
+
+#: zcadstrconsts.rsblockignored
+msgid "Ignored block \"%s\""
+msgstr ""
+
+#: zcadstrconsts.rsbyblock
+msgctxt "zcadstrconsts.rsbyblock"
+msgid "ByBlock"
+msgstr ""
+
+#: zcadstrconsts.rsbylayer
+msgctxt "zcadstrconsts.rsbylayer"
+msgid "ByLayer"
+msgstr ""
+
+#: zcadstrconsts.rsclosedwgquery
+msgid "Drawing not saved. Close?"
+msgstr ""
+
+#: zcadstrconsts.rscm2vnotremove
+msgid "Only 2 vertex there is nothing to remove"
+msgstr ""
+
+#: zcadstrconsts.rscmbasepoint
+msgid "Base point:"
+msgstr ""
+
+#: zcadstrconsts.rscmcantgetblocktoreplace
+msgid "Unable get block name to replace"
+msgstr ""
+
+#: zcadstrconsts.rscmcenterpointcircle
+msgid "Center point for circle:"
+msgstr ""
+
+#: zcadstrconsts.rscmcommandonlyctxmenu
+msgid "The command works only from context menu"
+msgstr ""
+
+#: zcadstrconsts.rscmfirstpoint
+msgid "First point:"
+msgstr ""
+
+#: zcadstrconsts.rscmindwgblockdefnotdeffined
+msgid "In drawing not defined any BlockDefs!"
+msgstr ""
+
+#: zcadstrconsts.rscmindwgtxtstylenotdeffined
+msgid "In drawing not defined any textstyle!"
+msgstr ""
+
+#: zcadstrconsts.rscminsertpoint
+msgid "Insert point:"
+msgstr ""
+
+#: zcadstrconsts.rscminstackdata
+msgid "In stack found following data:"
+msgstr ""
+
+#: zcadstrconsts.rscmnentitiesprocessed
+msgid "%s entities processed"
+msgstr ""
+
+#: zcadstrconsts.rscmnoblockdefindwg
+msgid "No BlockDef \"%s\" in the drawing"
+msgstr ""
+
+#: zcadstrconsts.rscmnoblocksordevices
+msgid "No selected blocks or devices"
+msgstr ""
+
+#: zcadstrconsts.rscmnoctr
+msgid "No comands to redo"
+msgstr ""
+
+#: zcadstrconsts.rscmnoctu
+msgid "No comands to undo. Complete the current command"
+msgstr ""
+
+#: zcadstrconsts.rscmnoctuse
+msgid "No comands to undo. UNDO stack is empty"
+msgstr ""
+
+#: zcadstrconsts.rscmnotcuthere
+msgid "Do not cut off here"
+msgstr ""
+
+#: zcadstrconsts.rscmoptions2oi
+msgid "Options are available in the Object Inspector"
+msgstr ""
+
+#: zcadstrconsts.rscmpoint
+msgid "Point:"
+msgstr ""
+
+#: zcadstrconsts.rscmpointoncircle
+msgid "Point on a circle:"
+msgstr ""
+
+#: zcadstrconsts.rscmpolynotsel
+msgid "Poly entities not selected"
+msgstr ""
+
+#: zcadstrconsts.rscmsecondpoint
+msgid "Second point:"
+msgstr ""
+
+#: zcadstrconsts.rscmseldevbeforecomm
+msgid "Device must be selected before run the command"
+msgstr ""
+
+#: zcadstrconsts.rscmselentbeforecomm
+msgid "Entities must be selected before run the command"
+msgstr ""
+
+#: zcadstrconsts.rscmselorspecentity
+msgid "Select or specify the parameters entity!"
+msgstr ""
+
+#: zcadstrconsts.rscommandlinewndname
+msgctxt "zcadstrconsts.rscommandlinewndname"
+msgid "Command line"
+msgstr ""
+
+#: zcadstrconsts.rscommandnrinc
+msgctxt "zcadstrconsts.rscommandnrinc"
+msgid "Command can not run"
+msgstr ""
+
+#: zcadstrconsts.rscompiledtimemsg
+msgctxt "zcadstrconsts.rscompiledtimemsg"
+msgid "Done.  %s second"
+msgstr ""
+
+#: zcadstrconsts.rsdefault
+msgctxt "zcadstrconsts.rsdefault"
+msgid "Default"
+msgstr ""
+
+#: zcadstrconsts.rsdefaultpromot
+msgctxt "zcadstrconsts.rsdefaultpromot"
+msgid "Command"
+msgstr ""
+
+#: zcadstrconsts.rsdifferent
+msgctxt "zcadstrconsts.rsdifferent"
+msgid "Different"
+msgstr ""
+
+#: zcadstrconsts.rsdivbyzero
+msgid "Divide by zero"
+msgstr ""
+
+#: zcadstrconsts.rsdoubleblockignored
+msgid "Ignored double definition block \"%s\""
+msgstr ""
+
+#: zcadstrconsts.rsdrawingwindowwndname
+msgctxt "zcadstrconsts.rsdrawingwindowwndname"
+msgid "Drawings window"
+msgstr ""
+
+#: zcadstrconsts.rsempty
+msgctxt "zcadstrconsts.rsempty"
+msgid "Empty"
+msgstr ""
+
+#: zcadstrconsts.rserrorprefix
+msgctxt "zcadstrconsts.rserrorprefix"
+msgid "ERROR: "
+msgstr ""
+
+#: zcadstrconsts.rsexprouttext
+msgctxt "zcadstrconsts.rsexprouttext"
+msgid "Expression %s return %s"
+msgstr ""
+
+#: zcadstrconsts.rsfardeffilenotfounf
+msgid "File definition of the variables can not be found for the device \"%s\";"
+msgstr ""
+
+#: zcadstrconsts.rsfileformat
+msgid "%s file format"
+msgstr ""
+
+#: zcadstrconsts.rsgdbobjinspwndname
+msgctxt "zcadstrconsts.rsgdbobjinspwndname"
+msgid "Object inspector"
+msgstr ""
+
+#: zcadstrconsts.rsgridtoodensity
+msgid "Grid too density"
+msgstr ""
+
+#: zcadstrconsts.rslayerdefpaontscannotbeprinted
+msgid "Layer DEFPOINTS can not be printed"
+msgstr ""
+
+#: zcadstrconsts.rslayoutload
+msgctxt "zcadstrconsts.rslayoutload"
+msgid "Error loading layout from file"
+msgstr ""
+
+#: zcadstrconsts.rsloadingfile
+msgid "Loading file \"%s\""
+msgstr ""
+
+#: zcadstrconsts.rsmm
+msgctxt "zcadstrconsts.rsmm"
+msgid "mm"
+msgstr ""
+
+#: zcadstrconsts.rsncoglc
+msgctxt "zcadstrconsts.rsncoglc"
+msgid "OpenGL context is not created"
+msgstr ""
+
+#: zcadstrconsts.rsnotyetimplemented
+msgid "Not yet implemented"
+msgstr ""
+
+#: zcadstrconsts.rsquitcaption
+msgctxt "zcadstrconsts.rsquitcaption"
+msgid "Quit"
+msgstr ""
+
+#: zcadstrconsts.rsquitquery
+msgid "Do yo want to quit ZCAD?"
+msgstr ""
+
+#: zcadstrconsts.rsrecreating
+msgctxt "zcadstrconsts.rsrecreating"
+msgid "Re-creating %s!"
+msgstr ""
+
+#: zcadstrconsts.rsrevstr
+msgctxt "zcadstrconsts.rsrevstr"
+msgid "Revision SVN:"
+msgstr ""
+
+#: zcadstrconsts.rsruncommand
+msgctxt "zcadstrconsts.rsruncommand"
+msgid "Running command"
+msgstr ""
+
+#: zcadstrconsts.rsrunscript
+msgctxt "zcadstrconsts.rsrunscript"
+msgid "Running script \"%s\";"
+msgstr ""
+
+#: zcadstrconsts.rssaveemptydwg
+msgid "Drawing is empty. Sure?"
+msgstr ""
+
+#: zcadstrconsts.rstemplatenotfound
+msgid "Template file \"%s\" not found"
+msgstr ""
+
+#: zcadstrconsts.rstoolbarnotfound
+msgctxt "zcadstrconsts.rstoolbarnotfound"
+msgid "Toolbar \"%s\" is not found! Create a blank window"
+msgstr ""
+
+#: zcadstrconsts.rsunabletofindfile
+msgid "Unable to find file \"%s\""
+msgstr ""
+
+#: zcadstrconsts.rsunabletoopenfile
+msgid "Unable to open file \"%s\""
+msgstr ""
+
+#: zcadstrconsts.rsunabletowritefile
+msgid "Unable to write file \"%s\""
+msgstr ""
+
+#: zcadstrconsts.rsunknowncommand
+msgctxt "zcadstrconsts.rsunknowncommand"
+msgid "Unknown command"
+msgstr ""
+
+#: zcadstrconsts.rsunknownfileext
+msgid "Unknown file format \"%s\". Saving failed."
+msgstr ""
+
+#: zcadstrconsts.rsunknownfileformat
+msgid "Unknown file format"
+msgstr ""
+
+#: zcadstrconsts.rsunnamedwindowtitle
+msgctxt "zcadstrconsts.rsunnamedwindowtitle"
+msgid "unnamed"
+msgstr ""
+
+#: zcadstrconsts.rswarningcaption
+msgid "Warning!"
+msgstr ""
+
+#: zcadstrconsts.rszcadstarted
+msgid "ZCAD v%s started"
 msgstr ""
 

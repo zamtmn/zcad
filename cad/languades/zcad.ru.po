@@ -10,30 +10,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: aboutwnd.aboutwndcaption
+msgctxt "aboutwnd.aboutwndcaption"
 msgid "About ZCAD"
 msgstr "О программе ZCAD"
 
 #: cmdline.defaultpromot
+msgctxt "cmdline.defaultpromot"
 msgid "Command"
 msgstr "Команда"
 
 #: cmdline.exprouttext
+msgctxt "cmdline.exprouttext"
 msgid "Expression %s return %s"
 msgstr "Выражение  %s возвращает %s"
 
 #: commandline.s_commandnrinc
+msgctxt "commandline.s_commandnrinc"
 msgid "Command can not run"
 msgstr "Команда не может быть запущена"
 
 #: commandline.s_runcommand
+msgctxt "commandline.s_runcommand"
 msgid "Running command"
 msgstr "Запущена команда"
 
 #: commandline.s_runscript
+msgctxt "commandline.s_runscript"
 msgid "Running script \"%s\";"
-msgstr "Запущенн скрипт \"%s\";"
+msgstr "Выполняется скрипт \"%s\";"
 
 #: commandline.s_unknowncommand
+msgctxt "commandline.s_unknowncommand"
 msgid "Unknown command"
 msgstr "Неизвестная команда"
 
@@ -42,10 +49,12 @@ msgid "Divide by zero (Geometry.NormalizeVertex)"
 msgstr "Деление на ноль (Geometry.NormalizeVertex)"
 
 #: mainwindow.commandlinewndname
+msgctxt "mainwindow.commandlinewndname"
 msgid "Command line"
 msgstr "Командная строка"
 
 #: mainwindow.compiledtimemsg
+msgctxt "mainwindow.compiledtimemsg"
 msgid "Done.  %s second"
 msgstr "Выполнено за  %s сек."
 
@@ -55,14 +64,17 @@ msgid "Drawings window"
 msgstr "Окно чертежей"
 
 #: mainwindow.es_layoutload
+msgctxt "mainwindow.es_layoutload"
 msgid "Error loading layout from file"
 msgstr "Ошибка загрузки файла разбивки окон"
 
 #: mainwindow.es_recreating
+msgctxt "mainwindow.es_recreating"
 msgid "Re-creating %s!"
 msgstr "Повторное создание %s!"
 
 #: mainwindow.es_toolbarnotfound
+msgctxt "mainwindow.es_toolbarnotfound"
 msgid "Toolbar \"%s\" is not found! Create a blank window"
 msgstr "Панель инструментов \"%s\" не найдена! Создано пусте окно"
 
@@ -72,10 +84,12 @@ msgid "Object inspector"
 msgstr "Инспектор объектов"
 
 #: mainwindow.s_byblock
+msgctxt "mainwindow.s_byblock"
 msgid "ByBlock"
 msgstr "По Блоку"
 
 #: mainwindow.s_bylayer
+msgctxt "mainwindow.s_bylayer"
 msgid "ByLayer"
 msgstr "По Слою"
 
@@ -85,18 +99,22 @@ msgid "Default"
 msgstr "Обычный"
 
 #: mainwindow.s_different
+msgctxt "mainwindow.s_different"
 msgid "Different"
 msgstr "Разный"
 
 #: mainwindow.s_empty
+msgctxt "mainwindow.s_empty"
 msgid "Empty"
 msgstr "Пусто"
 
 #: mainwindow.s_mm
+msgctxt "mainwindow.s_mm"
 msgid "mm"
 msgstr "мм"
 
 #: shared.errorprefix
+msgctxt "shared.errorprefix"
 msgid "ERROR: "
 msgstr "ОШИБКА: "
 
@@ -184,14 +202,17 @@ msgid "Ok"
 msgstr ""
 
 #: ugdbdescriptor.unnamedwindowtitle
+msgctxt "ugdbdescriptor.unnamedwindowtitle"
 msgid "unnamed"
 msgstr "Без имени"
 
 #: uunitmanager.noglc
+msgctxt "uunitmanager.noglc"
 msgid "OpenGL context is not created"
 msgstr "Контекст OpenGL не создан"
 
 #: windowsspecific.revstr
+msgctxt "windowsspecific.revstr"
 msgid "Revision SVN:"
 msgstr "Ревизия SVN:"
 
@@ -821,10 +842,10 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#| msgid "Rotate"
+#| msgid "Block params"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
-msgstr "Параметры блока"
+msgid "Rotate"
+msgstr "Поворот"
 
 #: zcadexternal.gdbobjcircle~area
 msgctxt "zcadexternal.gdbobjcircle~area"
@@ -1147,9 +1168,9 @@ msgid "Reset camera"
 msgstr "Камера в начало"
 
 #: zcadexternal.menucommand~fuckoff
-#| msgid "Dimensions styles (not impl)"
-msgid "Layouts (not impl)"
-msgstr "Листы (не реализовано)"
+#| msgid "Layouts (not impl)"
+msgid "Dimensions styles (not impl)"
+msgstr "Стили размеров (не реализовано)"
 
 #: zcadexternal.menucommand~setobjinsp(camera)
 msgid "Camera"
@@ -2372,4 +2393,313 @@ msgstr "Откл."
 msgctxt "zcadexternal.tvscontrol~tvson"
 msgid "On"
 msgstr "Включен"
+
+#: zcadstrconsts.fontnotfoundandreplace
+msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+msgstr "Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
+
+#: zcadstrconsts.rsaboutwndcaption
+msgctxt "zcadstrconsts.rsaboutwndcaption"
+msgid "About ZCAD"
+msgstr "О программе ZCAD"
+
+#: zcadstrconsts.rsblockignored
+msgid "Ignored block \"%s\""
+msgstr "Игнорирован блок \"%s\""
+
+#: zcadstrconsts.rsbyblock
+msgctxt "zcadstrconsts.rsbyblock"
+msgid "ByBlock"
+msgstr "По Блоку"
+
+#: zcadstrconsts.rsbylayer
+msgctxt "zcadstrconsts.rsbylayer"
+msgid "ByLayer"
+msgstr "По Слою"
+
+#: zcadstrconsts.rsclosedwgquery
+msgid "Drawing not saved. Close?"
+msgstr "Чертеж не сохранен. Закрыть?"
+
+#: zcadstrconsts.rscm2vnotremove
+msgid "Only 2 vertex there is nothing to remove"
+msgstr "Всего 2 вершины, нечего удалять тут"
+
+#: zcadstrconsts.rscmbasepoint
+msgid "Base point:"
+msgstr "Базовая точка:"
+
+#: zcadstrconsts.rscmcantgetblocktoreplace
+msgid "Unable get block name to replace"
+msgstr "Не возможно получить имя блока для замены"
+
+#: zcadstrconsts.rscmcenterpointcircle
+msgid "Center point for circle:"
+msgstr "Центр окружности:"
+
+#: zcadstrconsts.rscmcommandonlyctxmenu
+msgid "The command works only from context menu"
+msgstr "Команда работает только из контекстного меню"
+
+#: zcadstrconsts.rscmfirstpoint
+msgid "First point:"
+msgstr "Первая точка:"
+
+#: zcadstrconsts.rscmindwgblockdefnotdeffined
+msgid "In drawing not defined any BlockDefs!"
+msgstr "В чертеже отсутствуют определения блоков"
+
+#: zcadstrconsts.rscmindwgtxtstylenotdeffined
+msgid "In drawing not defined any textstyle!"
+msgstr "В чертеже не определено ниодного стиля текста"
+
+#: zcadstrconsts.rscminsertpoint
+msgid "Insert point:"
+msgstr "Точка вставки:"
+
+#: zcadstrconsts.rscminstackdata
+msgid "In stack found following data:"
+msgstr "В стеке обнаружены следующие данные:"
+
+#: zcadstrconsts.rscmnentitiesprocessed
+msgid "%s entities processed"
+msgstr "Обработвно %s примитивов"
+
+#: zcadstrconsts.rscmnoblockdefindwg
+msgid "No BlockDef \"%s\" in the drawing"
+msgstr "В чертеже отсутствует определение блока \"%s\""
+
+#: zcadstrconsts.rscmnoblocksordevices
+msgid "No selected blocks or devices"
+msgstr "Не выбрано блоков или устройств"
+
+#: zcadstrconsts.rscmnoctr
+msgid "No comands to redo"
+msgstr "Нет команд для повтора"
+
+#: zcadstrconsts.rscmnoctu
+msgid "No comands to undo. Complete the current command"
+msgstr "Невозможно отменить. Завершите текущую команду"
+
+#: zcadstrconsts.rscmnoctuse
+msgid "No comands to undo. UNDO stack is empty"
+msgstr "Невозможно отменить. Стек отмен пуст"
+
+#: zcadstrconsts.rscmnotcuthere
+msgid "Do not cut off here"
+msgstr "Нельзя резать здесь"
+
+#: zcadstrconsts.rscmoptions2oi
+msgid "Options are available in the Object Inspector"
+msgstr "Настройки доступны в инспекторе обьектов"
+
+#: zcadstrconsts.rscmpoint
+msgid "Point:"
+msgstr "Точка:"
+
+#: zcadstrconsts.rscmpointoncircle
+msgid "Point on a circle:"
+msgstr "Точка на окружности:"
+
+#: zcadstrconsts.rscmpolynotsel
+msgid "Poly entities not selected"
+msgstr "Poly объект не выбран"
+
+#: zcadstrconsts.rscmsecondpoint
+msgid "Second point:"
+msgstr "Вторая точка:"
+
+#: zcadstrconsts.rscmseldevbeforecomm
+msgid "Device must be selected before run the command"
+msgstr "Устройство должно быть выбрано до запуска команды"
+
+#: zcadstrconsts.rscmselentbeforecomm
+msgid "Entities must be selected before run the command"
+msgstr "Примитивы должны быть выбраны до запуска команды"
+
+#: zcadstrconsts.rscmselorspecentity
+msgid "Select or specify the parameters entity!"
+msgstr "Выбери или укажи в параметрах примитив"
+
+#: zcadstrconsts.rscommandlinewndname
+msgctxt "zcadstrconsts.rscommandlinewndname"
+msgid "Command line"
+msgstr "Командная строка"
+
+#: zcadstrconsts.rscommandnrinc
+msgctxt "zcadstrconsts.rscommandnrinc"
+msgid "Command can not run"
+msgstr "Команда не может быть запущена"
+
+#: zcadstrconsts.rscompiledtimemsg
+msgctxt "zcadstrconsts.rscompiledtimemsg"
+msgid "Done.  %s second"
+msgstr "Выполнено за  %s сек."
+
+#: zcadstrconsts.rsdefault
+msgctxt "zcadstrconsts.rsdefault"
+msgid "Default"
+msgstr "Обычный"
+
+#: zcadstrconsts.rsdefaultpromot
+msgctxt "zcadstrconsts.rsdefaultpromot"
+msgid "Command"
+msgstr "Команда"
+
+#: zcadstrconsts.rsdifferent
+msgctxt "zcadstrconsts.rsdifferent"
+msgid "Different"
+msgstr "Разный"
+
+#: zcadstrconsts.rsdivbyzero
+msgid "Divide by zero"
+msgstr "Деление на ноль"
+
+#: zcadstrconsts.rsdoubleblockignored
+msgid "Ignored double definition block \"%s\""
+msgstr "Игнорировано повторное определение блока \"%s\""
+
+#: zcadstrconsts.rsdrawingwindowwndname
+msgctxt "zcadstrconsts.rsdrawingwindowwndname"
+msgid "Drawings window"
+msgstr "Окно чертежей"
+
+#: zcadstrconsts.rsempty
+msgctxt "zcadstrconsts.rsempty"
+msgid "Empty"
+msgstr "Пусто"
+
+#: zcadstrconsts.rserrorprefix
+msgctxt "zcadstrconsts.rserrorprefix"
+msgid "ERROR: "
+msgstr "ОШИБКА: "
+
+#: zcadstrconsts.rsexprouttext
+msgctxt "zcadstrconsts.rsexprouttext"
+msgid "Expression %s return %s"
+msgstr "Выражение  %s возвращает %s"
+
+#: zcadstrconsts.rsfardeffilenotfounf
+msgid "File definition of the variables can not be found for the device \"%s\";"
+msgstr "Файл определения переменных не найден для устройства \"%s\";"
+
+#: zcadstrconsts.rsfileformat
+msgid "%s file format"
+msgstr "Формат файла %s"
+
+#: zcadstrconsts.rsgdbobjinspwndname
+msgctxt "zcadstrconsts.rsgdbobjinspwndname"
+msgid "Object inspector"
+msgstr "Инспектор объектов"
+
+#: zcadstrconsts.rsgridtoodensity
+msgid "Grid too density"
+msgstr "Сетка слишком мелкая"
+
+#: zcadstrconsts.rslayerdefpaontscannotbeprinted
+msgid "Layer DEFPOINTS can not be printed"
+msgstr "Слой DEFPOINTS не может быть печатным"
+
+#: zcadstrconsts.rslayoutload
+msgctxt "zcadstrconsts.rslayoutload"
+msgid "Error loading layout from file"
+msgstr "Ошибка загрузки файла разбивки окон"
+
+#: zcadstrconsts.rsloadingfile
+msgid "Loading file \"%s\""
+msgstr "Загрузка файла  \"%s\""
+
+#: zcadstrconsts.rsmm
+msgctxt "zcadstrconsts.rsmm"
+msgid "mm"
+msgstr "мм"
+
+#: zcadstrconsts.rsncoglc
+msgctxt "zcadstrconsts.rsncoglc"
+msgid "OpenGL context is not created"
+msgstr "Контекст OpenGL не создан"
+
+#: zcadstrconsts.rsnotyetimplemented
+msgid "Not yet implemented"
+msgstr "Пока не реализовано"
+
+#: zcadstrconsts.rsquitcaption
+msgctxt "zcadstrconsts.rsquitcaption"
+msgid "Quit"
+msgstr "Выход"
+
+#: zcadstrconsts.rsquitquery
+msgid "Do yo want to quit ZCAD?"
+msgstr "Закрыть ZCAD"
+
+#: zcadstrconsts.rsrecreating
+msgctxt "zcadstrconsts.rsrecreating"
+msgid "Re-creating %s!"
+msgstr "Повторное создание %s!"
+
+#: zcadstrconsts.rsrevstr
+msgctxt "zcadstrconsts.rsrevstr"
+msgid "Revision SVN:"
+msgstr "Ревизия SVN:"
+
+#: zcadstrconsts.rsruncommand
+msgctxt "zcadstrconsts.rsruncommand"
+msgid "Running command"
+msgstr "Запущена команда"
+
+#: zcadstrconsts.rsrunscript
+msgctxt "zcadstrconsts.rsrunscript"
+msgid "Running script \"%s\";"
+msgstr "Выполняется скрипт \"%s\";"
+
+#: zcadstrconsts.rssaveemptydwg
+msgid "Drawing is empty. Sure?"
+msgstr "Чертеж не сохранен. Уверен?"
+
+#: zcadstrconsts.rstemplatenotfound
+msgid "Template file \"%s\" not found"
+msgstr "Файл шаблона \"%s\" не найден"
+
+#: zcadstrconsts.rstoolbarnotfound
+msgctxt "zcadstrconsts.rstoolbarnotfound"
+msgid "Toolbar \"%s\" is not found! Create a blank window"
+msgstr "Панель инструментов \"%s\" не найдена! Создано пусте окно"
+
+#: zcadstrconsts.rsunabletofindfile
+msgid "Unable to find file \"%s\""
+msgstr "Не могу найти файл \"%s\""
+
+#: zcadstrconsts.rsunabletoopenfile
+msgid "Unable to open file \"%s\""
+msgstr "Не могу открыть файл \"%s\""
+
+#: zcadstrconsts.rsunabletowritefile
+msgid "Unable to write file \"%s\""
+msgstr "Не могу записать файл \"%s\""
+
+#: zcadstrconsts.rsunknowncommand
+msgctxt "zcadstrconsts.rsunknowncommand"
+msgid "Unknown command"
+msgstr "Неизвестная команда"
+
+#: zcadstrconsts.rsunknownfileext
+msgid "Unknown file format \"%s\". Saving failed."
+msgstr "Неизвестный формат файла \"%s\". Сохранение не произведено"
+
+#: zcadstrconsts.rsunknownfileformat
+msgid "Unknown file format"
+msgstr "Неизвестный формат файла"
+
+#: zcadstrconsts.rsunnamedwindowtitle
+msgctxt "zcadstrconsts.rsunnamedwindowtitle"
+msgid "unnamed"
+msgstr "Без имени"
+
+#: zcadstrconsts.rswarningcaption
+msgid "Warning!"
+msgstr "Внимание!"
+
+#: zcadstrconsts.rszcadstarted
+msgid "ZCAD v%s started"
+msgstr "ZCAD v%s запущен"
 

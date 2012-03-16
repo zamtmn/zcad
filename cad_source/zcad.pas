@@ -66,7 +66,8 @@ uses
   GDBCommandsOPS,
   cmdline,
   plugins,
-  layerwnd;
+  layerwnd,
+  zcadstrconsts;
   //RegCnownTypes,URegisterObjects;
 
 //exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {shared}
@@ -108,7 +109,7 @@ begin
   MainFormN.show;
   {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
                                                   sysvar.SYS.SYS_IsHistoryLineCreated^:=true;}
-  historyoutstr('ZCAD v'+sysvar.SYS.SYS_Version^+' started');
+  historyoutstr(format(rsZCADStarted,[sysvar.SYS.SYS_Version^]));
   gdbplugins.loadplugins(sysparam.programpath+'PLUGINS\');
 
   SplashWindow.TXTOut('Выполнение *components\autorun.cmd',false);commandmanager.executefile('*components/autorun.cmd');

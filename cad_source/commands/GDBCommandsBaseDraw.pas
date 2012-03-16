@@ -21,7 +21,7 @@ unit GDBCommandsBaseDraw;
 
 interface
 uses
-  GL,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  zcadstrconsts,GL,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   //debygunit,
   commandlinedef,
   {windows,}gdbasetypes,commandline,GDBCommandsBase,
@@ -54,7 +54,7 @@ function Line_com_CommandStart(operands:pansichar):GDBInteger;
 begin
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   if operands='' then
-                     historyout('Точка:')
+                     historyoutstr(rscmPoint)
                  else
                      historyout(operands);
 end;

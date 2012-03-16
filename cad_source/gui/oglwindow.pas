@@ -23,7 +23,7 @@ interface
 
 uses
 
-   ucxmenumgr,GLext,
+   zcadstrconsts,ucxmenumgr,GLext,
   {$IFDEF LCLGTK2}
   //x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
@@ -894,7 +894,7 @@ begin
      if (4*ph>clientwidth)or(4*pv>clientheight)then
                                                    begin
                                                         if sysvar.DWG.DWG_DrawGrid^ then
-                                                                                        historyout('Grid too density');
+                                                                                        historyoutstr(rsGridTooDensity);
                                                         param.md.WPPointUR.z:=-1;
                                                    end;
      param.md.WPPointLU:=vertexmulonsc(vertexsub(param.md.WPPointLU,param.md.WPPointBL),1/pv);

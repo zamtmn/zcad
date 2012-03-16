@@ -9,115 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: aboutwnd.aboutwndcaption
-msgctxt "aboutwnd.aboutwndcaption"
-msgid "About ZCAD"
-msgstr "О программе ZCAD"
-
-#: cmdline.defaultpromot
-msgctxt "cmdline.defaultpromot"
-msgid "Command"
-msgstr "Команда"
-
-#: cmdline.exprouttext
-msgctxt "cmdline.exprouttext"
-msgid "Expression %s return %s"
-msgstr "Выражение  %s возвращает %s"
-
-#: commandline.s_commandnrinc
-msgctxt "commandline.s_commandnrinc"
-msgid "Command can not run"
-msgstr "Команда не может быть запущена"
-
-#: commandline.s_runcommand
-msgctxt "commandline.s_runcommand"
-msgid "Running command"
-msgstr "Запущена команда"
-
-#: commandline.s_runscript
-msgctxt "commandline.s_runscript"
-msgid "Running script \"%s\";"
-msgstr "Выполняется скрипт \"%s\";"
-
-#: commandline.s_unknowncommand
-msgctxt "commandline.s_unknowncommand"
-msgid "Unknown command"
-msgstr "Неизвестная команда"
-
-#: geometry.ges_dbz
-msgid "Divide by zero (Geometry.NormalizeVertex)"
-msgstr "Деление на ноль (Geometry.NormalizeVertex)"
-
-#: mainwindow.commandlinewndname
-msgctxt "mainwindow.commandlinewndname"
-msgid "Command line"
-msgstr "Командная строка"
-
-#: mainwindow.compiledtimemsg
-msgctxt "mainwindow.compiledtimemsg"
-msgid "Done.  %s second"
-msgstr "Выполнено за  %s сек."
-
-#: mainwindow.drawingwindowwndname
-msgctxt "mainwindow.drawingwindowwndname"
-msgid "Drawings window"
-msgstr "Окно чертежей"
-
-#: mainwindow.es_layoutload
-msgctxt "mainwindow.es_layoutload"
-msgid "Error loading layout from file"
-msgstr "Ошибка загрузки файла разбивки окон"
-
-#: mainwindow.es_recreating
-msgctxt "mainwindow.es_recreating"
-msgid "Re-creating %s!"
-msgstr "Повторное создание %s!"
-
-#: mainwindow.es_toolbarnotfound
-msgctxt "mainwindow.es_toolbarnotfound"
-msgid "Toolbar \"%s\" is not found! Create a blank window"
-msgstr "Панель инструментов \"%s\" не найдена! Создано пусте окно"
-
-#: mainwindow.gdbobjinspwndname
-msgctxt "mainwindow.gdbobjinspwndname"
-msgid "Object inspector"
-msgstr "Инспектор объектов"
-
-#: mainwindow.s_byblock
-msgctxt "mainwindow.s_byblock"
-msgid "ByBlock"
-msgstr "По Блоку"
-
-#: mainwindow.s_bylayer
-msgctxt "mainwindow.s_bylayer"
-msgid "ByLayer"
-msgstr "По Слою"
-
-#: mainwindow.s_default
-msgctxt "mainwindow.s_default"
-msgid "Default"
-msgstr "Обычный"
-
-#: mainwindow.s_different
-msgctxt "mainwindow.s_different"
-msgid "Different"
-msgstr "Разный"
-
-#: mainwindow.s_empty
-msgctxt "mainwindow.s_empty"
-msgid "Empty"
-msgstr "Пусто"
-
-#: mainwindow.s_mm
-msgctxt "mainwindow.s_mm"
-msgid "mm"
-msgstr "мм"
-
-#: shared.errorprefix
-msgctxt "shared.errorprefix"
-msgid "ERROR: "
-msgstr "ОШИБКА: "
-
 #: tlayerwindow.buttonapplyclose.caption
 msgid "Apply and close"
 msgstr "Применить и закрыть"
@@ -331,9 +222,19 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
+#: zcadexternal.acn_fakecopyclipbase~caption
+msgctxt "zcadexternal.acn_fakecopyclipbase~caption"
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
+msgstr ""
+
+#: zcadexternal.acn_fakepaste~caption
+msgctxt "zcadexternal.acn_fakepaste~caption"
+msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -466,6 +367,11 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr ""
 
+#: zcadexternal.acn_processkz~caption
+msgctxt "zcadexternal.acn_processkz~caption"
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_processkz~textimage
 msgctxt "zcadexternal.acn_processkz~textimage"
 msgid "Process external KZ"
@@ -500,6 +406,11 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
+
+#: zcadexternal.acn_remautocables~caption
+msgctxt "zcadexternal.acn_remautocables~caption"
+msgid ""
+msgstr ""
 
 #: zcadexternal.acn_remautocables~textimage
 msgctxt "zcadexternal.acn_remautocables~textimage"
@@ -842,6 +753,7 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
+#, fuzzy
 #| msgid "Block params"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Rotate"
@@ -1168,6 +1080,7 @@ msgid "Reset camera"
 msgstr "Камера в начало"
 
 #: zcadexternal.menucommand~fuckoff
+#, fuzzy
 #| msgid "Layouts (not impl)"
 msgid "Dimensions styles (not impl)"
 msgstr "Стили размеров (не реализовано)"

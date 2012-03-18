@@ -1,0 +1,15 @@
+action ACN_CABLE,El_Cable,el_cable.bmp,Draw cable,Draw cable,
+action ACN_WIRE,El_Wire,El_Wire.bmp,Draw net\trace,Draw net\trace,
+action ACN_LEADER,El_Leader,el_leader.bmp,Mark cables,Mark cables,
+
+action ACN_CABLEJOIN,El_Cable_Join,#c+c,Glue cables,Glue cables,
+action ACN_CABLESELECT,El_Cable_Select,#csel,Select connected devices,Select connected devices,
+action ACN_CABLEINVERT,El_Cable_Invert,#inv,Reverse cable direction,Reverse cable direction,
+action ACN_CABLELEGEND,El_Cable_Legend,#КЖ,Export cables legend,Export cables legend,
+action ACN_MATERIALLEGEND,El_Material_Legend,#ВМ,Export materials legend,Export materials legend,
+action ACN_PLACESMOKEDETECTORORTO,PlaceSmokeDetectorOrto,ps.bmp,Automatic placement of fire detectors,Automatic placement of fire detectors,
+action ACN_SENSORMARK,OPS_Sensor_Mark,#++,Numbering sensors on the plan,Numbering sensors on the plan,
+action ACN_ORTODEVPLACE,OrtoDevPlace,array.bmp,Device placement,Device placement,
+
+action ACN_PROCESSKZ,EL_ExternalKZ,#Process external KZ,,,
+action ACN_REMAUTOCABLES,EL_AutoGen_Cable_Remove,#Remove auto cables,,,

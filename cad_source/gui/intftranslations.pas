@@ -198,7 +198,10 @@ begin
                     //po.SaveToFile(PODirectory + 'zcad.po');
                end
                   else
+                      begin
                       inc(_NotEnlishWord);
+                      //log.LogOut(Identifier+'--------------'+OriginalValue)
+                      end;
 
                end;
           end

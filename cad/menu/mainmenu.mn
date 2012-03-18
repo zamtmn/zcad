@@ -64,17 +64,17 @@ Panel Draw;
   }
 Panel Misc;
   {
-    button El_Cable,el_cable.bmp,Draw cable
-    button EL_Wire,El_Wire.bmp,Net\Trace
-    button El_Leader,el_leader.bmp,Mark cables
-    button El_Cable_Join,#к+к,Glue cables
-    button El_Cable_Select,#csel,Select connected devices
-    button El_Cable_Invert,#инв,Reverse cable direction
-    button El_Cable_Legend,#кж,Export cables legend
-    button El_Material_Legend,#вм,Export materials legend
-    button PlaceSmokeDetectorOrto,ps.bmp,Automatic placement of fire detectors
-    button OPS_Sensor_Mark,#++,Numbering sensors on the plan
-    button OrtoDevPlace,array.bmp,Device placement
+    action ACN_CABLE
+    action ACN_WIRE
+    action ACN_LEADER
+    action ACN_CABLEJOIN
+    action ACN_CABLESELECT
+    action ACN_CABLEINVERT
+    action ACN_CABLELEGEND
+    action ACN_MATERIALLEGEND
+    action ACN_PLACESMOKEDETECTORORTO
+    action ACN_SENSORMARK
+    action ACN_ORTODEVPLACE
     action ACN_OBJVARMAN
     action ACN_MULTIOBJVARMAN
     action ACN_ADDTOOWNER
@@ -205,10 +205,11 @@ MainMenuItem Plan;
   {
     MenuItem Кабель/Трасса;
       {
-        Command Прокладка трассы,EL_Wire,none,none
-        Command Прокладка кабеля,EL_Cable,none,none
-        Command Сменить направление кабеля,El_Cable_Invert,none,none
-        Command Объеденить 2 кабеля,El_Cable_Join,none,none
+        action ACN_WIRE
+        action ACN_CABLE
+        action ACN_CABLEJOIN
+        action ACN_CABLESELECT
+        action ACN_CABLEINVERT
         Command Уходит вверх,Insert(DEVICE_EL_CABLE_UP),none,none
         Command Уходит вниз,Insert(DEVICE_EL_CABLE_DOWN),none,none
         Command Приходит сверху,Insert(DEVICE_EL_CABLE_FROMUP),none,none

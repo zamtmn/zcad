@@ -137,6 +137,68 @@ msgstr ""
 msgid "BS"
 msgstr ""
 
+#: zcadexternal.acn_cableinvert~caption
+msgctxt "zcadexternal.acn_cableinvert~caption"
+msgid "Reverse cable direction"
+msgstr ""
+
+#: zcadexternal.acn_cableinvert~hint
+msgctxt "zcadexternal.acn_cableinvert~hint"
+msgid "Reverse cable direction"
+msgstr ""
+
+#: zcadexternal.acn_cableinvert~textimage
+msgid "inv"
+msgstr ""
+
+#: zcadexternal.acn_cablejoin~caption
+msgctxt "zcadexternal.acn_cablejoin~caption"
+msgid "Glue cables"
+msgstr ""
+
+#: zcadexternal.acn_cablejoin~hint
+msgctxt "zcadexternal.acn_cablejoin~hint"
+msgid "Glue cables"
+msgstr ""
+
+#: zcadexternal.acn_cablejoin~textimage
+msgid "c+c"
+msgstr ""
+
+#: zcadexternal.acn_cablelegend~caption
+msgctxt "zcadexternal.acn_cablelegend~caption"
+msgid "Export cables legend"
+msgstr ""
+
+#: zcadexternal.acn_cablelegend~hint
+msgctxt "zcadexternal.acn_cablelegend~hint"
+msgid "Export cables legend"
+msgstr ""
+
+#: zcadexternal.acn_cableselect~caption
+msgctxt "zcadexternal.acn_cableselect~caption"
+msgid "Select connected devices"
+msgstr ""
+
+#: zcadexternal.acn_cableselect~hint
+msgctxt "zcadexternal.acn_cableselect~hint"
+msgid "Select connected devices"
+msgstr ""
+
+#: zcadexternal.acn_cableselect~textimage
+msgid "csel"
+msgstr ""
+
+#: zcadexternal.acn_cable~caption
+msgctxt "zcadexternal.acn_cable~caption"
+msgid "Draw cable"
+msgstr ""
+
+#: zcadexternal.acn_cable~hint
+msgctxt "zcadexternal.acn_cable~hint"
+msgid "Draw cable"
+msgstr ""
+
 #: zcadexternal.acn_circle~caption
 msgid "Draw circle"
 msgstr ""
@@ -235,6 +297,16 @@ msgstr ""
 msgid "Layers properties manager"
 msgstr ""
 
+#: zcadexternal.acn_leader~caption
+msgctxt "zcadexternal.acn_leader~caption"
+msgid "Mark cables"
+msgstr ""
+
+#: zcadexternal.acn_leader~hint
+msgctxt "zcadexternal.acn_leader~hint"
+msgid "Mark cables"
+msgstr ""
+
 #: zcadexternal.acn_line~caption
 msgid "Draw line"
 msgstr ""
@@ -257,6 +329,16 @@ msgstr ""
 
 #: zcadexternal.acn_load~hint
 msgid "Open drawing"
+msgstr ""
+
+#: zcadexternal.acn_materiallegend~caption
+msgctxt "zcadexternal.acn_materiallegend~caption"
+msgid "Export materials legend"
+msgstr ""
+
+#: zcadexternal.acn_materiallegend~hint
+msgctxt "zcadexternal.acn_materiallegend~hint"
+msgid "Export materials legend"
 msgstr ""
 
 #: zcadexternal.acn_move~caption
@@ -288,6 +370,16 @@ msgctxt "zcadexternal.acn_options~caption"
 msgid "Options"
 msgstr ""
 
+#: zcadexternal.acn_ortodevplace~caption
+msgctxt "zcadexternal.acn_ortodevplace~caption"
+msgid "Device placement"
+msgstr ""
+
+#: zcadexternal.acn_ortodevplace~hint
+msgctxt "zcadexternal.acn_ortodevplace~hint"
+msgid "Device placement"
+msgstr ""
+
 #: zcadexternal.acn_paste~caption
 msgctxt "zcadexternal.acn_paste~caption"
 msgid "Paste"
@@ -303,6 +395,16 @@ msgstr ""
 
 #: zcadexternal.acn_perspective~hint
 msgid "Perspective on/off"
+msgstr ""
+
+#: zcadexternal.acn_placesmokedetectororto~caption
+msgctxt "zcadexternal.acn_placesmokedetectororto~caption"
+msgid "Automatic placement of fire detectors"
+msgstr ""
+
+#: zcadexternal.acn_placesmokedetectororto~hint
+msgctxt "zcadexternal.acn_placesmokedetectororto~hint"
+msgid "Automatic placement of fire detectors"
 msgstr ""
 
 #: zcadexternal.acn_polyed~caption
@@ -430,6 +532,21 @@ msgstr ""
 msgid "SSim"
 msgstr ""
 
+#: zcadexternal.acn_sensormark~caption
+msgctxt "zcadexternal.acn_sensormark~caption"
+msgid "Numbering sensors on the plan"
+msgstr ""
+
+#: zcadexternal.acn_sensormark~hint
+msgctxt "zcadexternal.acn_sensormark~hint"
+msgid "Numbering sensors on the plan"
+msgstr ""
+
+#: zcadexternal.acn_sensormark~textimage
+msgctxt "zcadexternal.acn_sensormark~textimage"
+msgid "++"
+msgstr ""
+
 #: zcadexternal.acn_show_commandline~caption
 msgid "Command line and history"
 msgstr ""
@@ -480,6 +597,16 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
+#: zcadexternal.acn_wire~caption
+msgctxt "zcadexternal.acn_wire~caption"
+msgid "Draw net\\trace"
+msgstr ""
+
+#: zcadexternal.acn_wire~hint
+msgctxt "zcadexternal.acn_wire~hint"
+msgid "Draw net\\trace"
+msgstr ""
+
 #: zcadexternal.acn_wnext~caption
 msgid "Next window"
 msgstr ""
@@ -501,15 +628,6 @@ msgstr ""
 #: zcadexternal.brmode~brm_device
 msgctxt "zcadexternal.brmode~brm_device"
 msgid "Device"
-msgstr ""
-
-#: zcadexternal.button_command~el_cable_select
-msgid "csel"
-msgstr ""
-
-#: zcadexternal.button_command~ops_sensor_mark
-msgctxt "zcadexternal.button_command~ops_sensor_mark"
-msgid "++"
 msgstr ""
 
 #: zcadexternal.button_command~ops_sensor_mark
@@ -893,38 +1011,6 @@ msgstr ""
 msgid "System graphics (size, communication, etc. for debugging)"
 msgstr ""
 
-#: zcadexternal.hint_panel~el_cable
-msgid "Draw cable"
-msgstr ""
-
-#: zcadexternal.hint_panel~el_cable_invert
-msgid "Reverse cable direction"
-msgstr ""
-
-#: zcadexternal.hint_panel~el_cable_join
-msgid "Glue cables"
-msgstr ""
-
-#: zcadexternal.hint_panel~el_cable_legend
-msgid "Export cables legend"
-msgstr ""
-
-#: zcadexternal.hint_panel~el_cable_select
-msgid "Select connected devices"
-msgstr ""
-
-#: zcadexternal.hint_panel~el_leader
-msgid "Mark cables"
-msgstr ""
-
-#: zcadexternal.hint_panel~el_material_legend
-msgid "Export materials legend"
-msgstr ""
-
-#: zcadexternal.hint_panel~el_wire
-msgid "Net\\Trace"
-msgstr ""
-
 #: zcadexternal.hint_panel~layercombobox
 msgid "Layer selection"
 msgstr ""
@@ -936,19 +1022,6 @@ msgstr ""
 #: zcadexternal.hint_panel~ops_sensor_mark
 msgctxt "zcadexternal.hint_panel~ops_sensor_mark"
 msgid "Numbering sensors on the plan"
-msgstr ""
-
-#: zcadexternal.hint_panel~ops_sensor_mark
-msgctxt "zcadexternal.hint_panel~ops_sensor_mark"
-msgid "Numbering sensors on the plan"
-msgstr ""
-
-#: zcadexternal.hint_panel~ortodevplace
-msgid "Device placement"
-msgstr ""
-
-#: zcadexternal.hint_panel~placesmokedetectororto
-msgid "Automatic placement of fire detectors"
 msgstr ""
 
 #: zcadexternal.hint_panel~rebuildtree

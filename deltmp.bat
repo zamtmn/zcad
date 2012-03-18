@@ -1,11 +1,12 @@
 #!/bin/sh
 rm cad_source/dcu/*.ppu cad_source/dcu/*.o cad_source/dcu/*.or cad_source/dcu/*.a cad_source/dcu/*.rst
 rm cad_source/dcu/*.res cad_source/dcu/*.compiled cad_source/dcu/*.lrs
-rm cad/log/*.log;
-rm cad/log/*.loghard;
-rm cad/autosave/*.dxf;
-rm cad/autosave/*.dbpas;
-rm cad/autosave/*.pas;
+rm cad/log/*.log
+rm cad/log/*.loghard
+rm cad/autosave/*.dxf
+rm cad/autosave/*.dbpas
+rm cad/autosave/*.pas
+rm cad/autosave/*.bak
 rm -rf cad_source/__history
 rm cad_source/*.bak
 rm -rf cad_source/backup

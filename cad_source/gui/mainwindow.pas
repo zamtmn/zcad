@@ -826,6 +826,7 @@ begin
                               StandartActions.Images:=TImageList.Create(StandartActions);
    StandartActions.brocenicon:=StandartActions.LoadImage(sysparam.programpath+'menu/BMP/noimage.bmp');
    StandartActions.LoadFromACNFile(sysparam.programpath+'menu/actions.acn');
+   StandartActions.LoadFromACNFile(sysparam.programpath+'menu/electrotech.acn');
    StandartActions.OnUpdate:=ActionUpdate;
 
    toolbars.Sorted:=true;

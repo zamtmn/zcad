@@ -154,6 +154,7 @@ const {as_normal=0;
   ObjN_ArrayEnd='ArrayEnd';
 
   LNSysLayerName='0';
+  LNSysDefpoints='DEFPOINTS';
   LNMetricLayerName='SYS_METRIC';
 
   H_Root=100;

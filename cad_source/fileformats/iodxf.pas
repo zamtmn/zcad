@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
+uses dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
   entnamindex=record
@@ -409,7 +409,7 @@ begin
   MainFormN.ProcessLongProcess(f.ReadPos);
 
     s := f.readGDBString;
-    if s = 'LAYER' then
+    if s = dxfName_Layer then
     begin
       {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer table',lp_IncPos);{$ENDIF}
       repeat
@@ -419,7 +419,7 @@ begin
       until GroupCode=0;
       repeat
         if sname='ENDTAB' then system.break;
-        if sname<>'LAYER' then FatalError('''LAYER'' expected but '''+sname+''' found');
+        if sname<>dxfName_Layer then FatalError('''LAYER'' expected but '''+sname+''' found');
         repeat
               scode := f.readGDBString;
               sname := f.readGDBString;
@@ -521,12 +521,12 @@ begin
                 gotodxf(f, 0, 'ENDTAB');
               end
               else
-                if s = 'LAYER' then
+                if s = dxfName_Layer then
                 begin
                   {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer table',lp_IncPos);{$ENDIF}
-                  gotodxf(f, 0, 'LAYER');
+                  gotodxf(f, 0, dxfName_Layer);
 
-                  while s = 'LAYER' do
+                  while s = dxfName_Layer do
                   begin
                     byt := 2;
                     oo:=true;
@@ -619,16 +619,16 @@ begin
                     gotodxf(f, 0, 'ENDTAB');
                   end
                   else
-                    if s = 'STYLE' then
+                    if s = dxfName_Style then
                     {begin
                       gotodxf(f, 0, 'ENDTAB');
                     end}
                     begin
                       {$IFDEF TOTALYLOG}programlog.logoutstr('Found style table',lp_IncPos);{$ENDIF}
-                      //gotodxf(f, 0, 'STYLE');
-                      if GoToDXForENDTAB(f, 0, 'STYLE') then
+                      //gotodxf(f, 0, dxfName_Style);
+                      if GoToDXForENDTAB(f, 0, dxfName_Style) then
                       //begin
-                      while s = 'STYLE' do
+                      while s = dxfName_Style do
                       begin
                         tstyle.name:='';
                         tstyle.pfont:=nil;
@@ -990,51 +990,51 @@ begin
               if pdrawing^.BlockDefArray.count>0 then
               for i := 0 to pdrawing^.BlockDefArray.count - 1 do
               begin
-                outstream.TXTAddGDBStringEOL('0');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                 outstream.TXTAddGDBStringEOL('BLOCK');
-                outstream.TXTAddGDBStringEOL('5');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                 outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                 inc(handle);
-                outstream.TXTAddGDBStringEOL('100');
-                outstream.TXTAddGDBStringEOL('AcDbEntity');
-                outstream.TXTAddGDBStringEOL('8');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+                outstream.TXTAddGDBStringEOL(dxfName_AcDbEntity);
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(8));
                 outstream.TXTAddGDBStringEOL('0');
-                outstream.TXTAddGDBStringEOL('100');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                 outstream.TXTAddGDBStringEOL('AcDbBlockBegin');
-                outstream.TXTAddGDBStringEOL('2');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
                 outstream.TXTAddGDBStringEOL(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].name);
-                outstream.TXTAddGDBStringEOL('70');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
                 outstream.TXTAddGDBStringEOL('2');
-                outstream.TXTAddGDBStringEOL('10');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(10));
                 outstream.TXTAddGDBStringEOL(floattostr(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].base.x));
-                outstream.TXTAddGDBStringEOL('20');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(20));
                 outstream.TXTAddGDBStringEOL(floattostr(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].base.y));
-                outstream.TXTAddGDBStringEOL('30');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(30));
                 outstream.TXTAddGDBStringEOL(floattostr(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].base.z));
-                outstream.TXTAddGDBStringEOL('3');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(3));
                 outstream.TXTAddGDBStringEOL(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].name);
-                outstream.TXTAddGDBStringEOL('1');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(1));
                 outstream.TXTAddGDBStringEOL('');
 
                 saveentitiesdxf2000(@PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].ObjArray, outstream, handle);
 
-                outstream.TXTAddGDBStringEOL('0');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                 outstream.TXTAddGDBStringEOL('ENDBLK');
-                outstream.TXTAddGDBStringEOL('5');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                 outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                 inc(handle);
-                outstream.TXTAddGDBStringEOL('100');
-                outstream.TXTAddGDBStringEOL('AcDbEntity');
-                outstream.TXTAddGDBStringEOL('8');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+                outstream.TXTAddGDBStringEOL(dxfName_AcDbEntity);
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(8));
                 outstream.TXTAddGDBStringEOL('0');
-                outstream.TXTAddGDBStringEOL('100');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                 outstream.TXTAddGDBStringEOL('AcDbBlockEnd');
 
                 //PBlockdefArray(gdb^.BlockDefArray.parray)^[i].SaveToDXFPostProcess(outstream); asdasd
 
               end;
 
-              outstream.TXTAddGDBStringEOL('0');
+              outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
               outstream.TXTAddGDBStringEOL('ENDSEC');
 
 
@@ -1047,20 +1047,20 @@ begin
 
               for i := 0 to pdrawing^.BlockDefArray.count - 1 do
               begin
-                outstream.TXTAddGDBStringEOL('0');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                 outstream.TXTAddGDBStringEOL('BLOCK_RECORD');
-                outstream.TXTAddGDBStringEOL('5');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                 outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                 inc(handle);
-                outstream.TXTAddGDBStringEOL('100');
-                outstream.TXTAddGDBStringEOL('AcDbSymbolTableRecord');
-                outstream.TXTAddGDBStringEOL('100');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+                outstream.TXTAddGDBStringEOL(dxfName_AcDbSymbolTableRecord);
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                 outstream.TXTAddGDBStringEOL('AcDbBlockTableRecord');
-                outstream.TXTAddGDBStringEOL('2');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
                 outstream.TXTAddGDBStringEOL(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].name);
 
               end;
-              outstream.TXTAddGDBStringEOL('0');
+              outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
               outstream.TXTAddGDBStringEOL('ENDTAB');
             end
 
@@ -1073,49 +1073,49 @@ begin
                 begin
                   //if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name <> '0' then
                   begin
-                    outstream.TXTAddGDBStringEOL('0');
-                    outstream.TXTAddGDBStringEOL('LAYER');
-                    outstream.TXTAddGDBStringEOL('5');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
+                    outstream.TXTAddGDBStringEOL(dxfName_Layer);
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                     outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                     inc(handle);
-                    outstream.TXTAddGDBStringEOL('100');
-                    outstream.TXTAddGDBStringEOL('AcDbSymbolTableRecord');
-                    outstream.TXTAddGDBStringEOL('100');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+                    outstream.TXTAddGDBStringEOL(dxfName_AcDbSymbolTableRecord);
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                     outstream.TXTAddGDBStringEOL('AcDbLayerTableRecord');
-                    outstream.TXTAddGDBStringEOL('2');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
                     outstream.TXTAddGDBStringEOL(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name);
                     attr:=0;
                     if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i]._lock then
                                                                                              attr:=attr + 4;
-                    outstream.TXTAddGDBStringEOL('70');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
                     outstream.TXTAddGDBStringEOL(inttostr(attr));
-                    outstream.TXTAddGDBStringEOL('62');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(62));
                     if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i]._on
                      then
                          outstream.TXTAddGDBStringEOL(inttostr(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].color))
                      else
                          outstream.TXTAddGDBStringEOL(inttostr(-PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].color));
-                    outstream.TXTAddGDBStringEOL('6');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(6));
                     outstream.TXTAddGDBStringEOL('Continuous');
-                    outstream.TXTAddGDBStringEOL('290');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(290));
                     if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i]._print then
                     //if uppercase(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name) <> 'DEFPOINTS' then
                       outstream.TXTAddGDBStringEOL('1')
                     else
                       outstream.TXTAddGDBStringEOL('0');
-                    outstream.TXTAddGDBStringEOL('370');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(370));
                     outstream.TXTAddGDBStringEOL(inttostr(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].lineweight));
                     //WriteString_EOL(outstream, '-3');
-                    outstream.TXTAddGDBStringEOL('390');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(390));
                     outstream.TXTAddGDBStringEOL(inttohex(plottablefansdle,0));
 
                     if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].desk<>''then
                     begin
-                         outstream.TXTAddGDBStringEOL('1001');
+                         outstream.TXTAddGDBStringEOL(dxfGroupCode(1001));
                          outstream.TXTAddGDBStringEOL('AcAecLayerStandard');
-                         outstream.TXTAddGDBStringEOL('1000');
+                         outstream.TXTAddGDBStringEOL(dxfGroupCode(1000));
                          outstream.TXTAddGDBStringEOL('');
-                         outstream.TXTAddGDBStringEOL('1000');
+                         outstream.TXTAddGDBStringEOL(dxfGroupCode(1000));
                          outstream.TXTAddGDBStringEOL(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].desk);
                     end;
                   end;
@@ -1134,9 +1134,9 @@ begin
                 begin
                   //if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name <> '0' then
                   begin
-                    outstream.TXTAddGDBStringEOL('0');
-                    outstream.TXTAddGDBStringEOL('STYLE');
-                    outstream.TXTAddGDBStringEOL('5');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
+                    outstream.TXTAddGDBStringEOL(dxfName_Style);
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                     if uppercase(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.name)<>'STANDARD' then
                     begin
                     outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
@@ -1145,34 +1145,34 @@ begin
                     else
                         outstream.TXTAddGDBStringEOL(inttohex(standartstylehandle, 0));
 
-                    outstream.TXTAddGDBStringEOL('100');
-                    outstream.TXTAddGDBStringEOL('AcDbSymbolTableRecord');
-                    outstream.TXTAddGDBStringEOL('100');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+                    outstream.TXTAddGDBStringEOL(dxfName_AcDbSymbolTableRecord);
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                     outstream.TXTAddGDBStringEOL('AcDbTextStyleTableRecord');
-                    outstream.TXTAddGDBStringEOL('2');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
                     outstream.TXTAddGDBStringEOL(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.name);
-                    outstream.TXTAddGDBStringEOL('70');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
                     outstream.TXTAddGDBStringEOL('0');
 
-                    outstream.TXTAddGDBStringEOL('40');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(40));
                     outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.prop.size));
 
-                    outstream.TXTAddGDBStringEOL('41');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(41));
                     outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.prop.wfactor));
 
-                    outstream.TXTAddGDBStringEOL('50');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(50));
                     outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.prop.oblique));
 
-                    outstream.TXTAddGDBStringEOL('71');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(71));
                     outstream.TXTAddGDBStringEOL('0');
 
-                    outstream.TXTAddGDBStringEOL('42');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(42));
                     outstream.TXTAddGDBStringEOL('2.5');
 
-                    outstream.TXTAddGDBStringEOL('3');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(3));
                     outstream.TXTAddGDBStringEOL(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.dxfname);
 
-                    outstream.TXTAddGDBStringEOL('4');
+                    outstream.TXTAddGDBStringEOL(dxfGroupCode(4));
                     outstream.TXTAddGDBStringEOL('');
 
                   end;
@@ -1192,7 +1192,7 @@ begin
                   groupi := strtoint(groups);
                   outstream.TXTAddGDBStringEOL(groups);
                   outstream.TXTAddGDBStringEOL(values);
-                  if (groupi = 2) and (values = 'LAYER') then
+                  if (groupi = 2) and (values = dxfName_Layer) then
                   begin
                     inlayertable := true;
                   end
@@ -1200,18 +1200,18 @@ begin
                   begin
                     inblocktable := true;
                   end
-                  else if (groupi = 2) and (values = 'STYLE') then
+                  else if (groupi = 2) and (values = dxfName_Style) then
                   begin
                     instyletable := true;
                   end;
 
                 end
 
-              else if (groupi = 0) and (values = 'LAYER')and inlayertable then
+              else if (groupi = 0) and (values = dxfName_Layer)and inlayertable then
                   begin
                     IgnoredSource := true;
                   end
-              else if (groupi = 0) and (values = 'STYLE')and instyletable then
+              else if (groupi = 0) and (values = dxfName_Style)and instyletable then
                   begin
                     IgnoredSource := true;
                   end

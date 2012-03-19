@@ -1,0 +1,32 @@
+Index: anchordocking.pas
+===================================================================
+--- anchordocking.pas	(revision 36148)
++++ anchordocking.pas	(working copy)
+@@ -1730,6 +1730,7 @@
+   FHeaderButtonSize:=Max(1,AValue);
+   FreeCloseButtonBitmap;
+   AutoSizeAllHeaders(true);
++  CreateCloseButtonBitmap;
+ end;
+ 
+ procedure TAnchorDockMaster.SetShowHeader(AValue: boolean);
+@@ -1784,7 +1785,7 @@
+ 
+ procedure TAnchorDockMaster.FreeCloseButtonBitmap;
+ begin
+-  fCloseBtnBitmap.Free;
++  freeandnil(fCloseBtnBitmap);
+ end;
+ 
+Index: anchordockoptionsdlg.pas
+===================================================================
+--- anchordockoptionsdlg.pas	(revision 36148)
++++ anchordockoptionsdlg.pas	(working copy)
+@@ -239,6 +239,7 @@
+   TheSettings.ShowHeader:=ShowHeaderCheckBox.Checked;
+   TheSettings.ShowHeaderCaption:=ShowHeaderCaptionCheckBox.Checked;
+   TheSettings.HideHeaderCaptionFloatingControl:=HideHeaderCaptionForFloatingCheckBox.Checked;
++  TheSettings.HeaderButtonSize:=Master.HeaderButtonSize;
+ end;
+ 
+ procedure TAnchorDockOptionsFrame.LoadFromSettings(

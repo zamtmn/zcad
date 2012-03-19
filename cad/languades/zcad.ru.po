@@ -285,9 +285,19 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
+#: zcadexternal.acn_fakecopyclipbase~caption
+msgctxt "zcadexternal.acn_fakecopyclipbase~caption"
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
+msgstr ""
+
+#: zcadexternal.acn_fakepaste~caption
+msgctxt "zcadexternal.acn_fakepaste~caption"
+msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -460,6 +470,11 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr ""
 
+#: zcadexternal.acn_processkz~caption
+msgctxt "zcadexternal.acn_processkz~caption"
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_processkz~textimage
 msgctxt "zcadexternal.acn_processkz~textimage"
 msgid "Process external KZ"
@@ -494,6 +509,11 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
+
+#: zcadexternal.acn_remautocables~caption
+msgctxt "zcadexternal.acn_remautocables~caption"
+msgid ""
+msgstr ""
 
 #: zcadexternal.acn_remautocables~textimage
 msgctxt "zcadexternal.acn_remautocables~textimage"
@@ -856,6 +876,7 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
+#, fuzzy
 #| msgid "Block params"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Rotate"
@@ -1143,6 +1164,7 @@ msgid "Reset camera"
 msgstr "Камера в начало"
 
 #: zcadexternal.menucommand~fuckoff
+#, fuzzy
 #| msgid "Layouts (not impl)"
 msgid "Dimensions styles (not impl)"
 msgstr "Стили размеров (не реализовано)"

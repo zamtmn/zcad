@@ -22,6 +22,12 @@ unit dxflow;
 interface
 uses gdbasetypes,gdbase,sysutils,UGDBOpenArrayOfByte{,ogltypes};
 
+const
+  dxfName_AcDbEntity='AcDbEntity';
+  dxfName_AcDbSymbolTableRecord='AcDbSymbolTableRecord';
+  dxfName_Layer='LAYER';
+  dxfName_Style='STYLE';
+
 
 
 procedure dxfvertexout(var f:GDBOpenArrayOfByte;dxfcode:GDBInteger;const v:gdbvertex);
@@ -39,6 +45,7 @@ function dxfvertexload1(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger
 function dxfGDBDoubleload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:GDBDouble):GDBBoolean;
 function dxfGDBIntegerload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:GDBInteger):GDBBoolean;
 function dxfGDBStringload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:GDBString):GDBBoolean;
+function dxfGroupCode(const dxfcod:GDBInteger):GDBString;
 
 
 
@@ -51,6 +58,11 @@ function dxfGDBStringload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteg
 implementation
 uses
     log;
+function dxfGroupCode(const dxfcod:GDBInteger):GDBString;
+begin
+     result:=inttostr(dxfcod);
+end;
+
 procedure dxfvertexout(var f:GDBOpenArrayOfByte;dxfcode:GDBInteger;const v:gdbvertex);
 var s:GDBString;
 begin

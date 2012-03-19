@@ -1024,7 +1024,7 @@ begin
   dxfGDBStringout(outhandle,0,entname);
   dxfGDBStringout(outhandle,5,inttohex(handle, 0));
   inc(handle);
-  dxfGDBStringout(outhandle,100,'AcDbEntity');
+  dxfGDBStringout(outhandle,100,dxfName_AcDbEntity);
   dxfGDBStringout(outhandle,8,vp.layer^.name);
   if vp.lineweight<>-1 then dxfGDBIntegerout(outhandle,370,vp.lineweight);
   if dbname<>'' then
@@ -1051,7 +1051,7 @@ begin
                        result:=true
                   end;
                      8:begin
-                          if vp.layer.name='0' then
+                          if vp.layer.name=LNSysLayerName then
                                                    begin
                                                         name:=readmystr(f);
                                                    vp.Layer :=gdb.GetCurrentDWG.LayerTable.getAddres(name);
@@ -1128,4 +1128,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBEntity.initialization');{$ENDIF}
-end.
+end.

@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Buttons, ExtCtrls, StdCtrls, Grids, ComCtrls,LCLIntf,lcltype,
 
-  UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,sharedgdb,
+  gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,sharedgdb,
 
   zcadstrconsts,strproc,shared,UBaseTypeDescriptor;
 
@@ -134,7 +134,7 @@ begin
              end;
            7:begin
                    PGDBLayerProp(ListItem.Data)^._print:=not PGDBLayerProp(ListItem.Data)^._print;
-                   if uppercase(PGDBLayerProp(ListItem.Data)^.Name)='DEFPOINTS' then
+                   if uppercase(PGDBLayerProp(ListItem.Data)^.Name)=LNSysDefpoints then
                    begin
                    if PGDBLayerProp(ListItem.Data)^._print then shared.ShowError(rsLayerDefpaontsCanNotBePrinted);
                    PGDBLayerProp(ListItem.Data)^._print:=false;

@@ -46,16 +46,12 @@ begin
   memo.align:=alclient;
 
   memo.text:=('ZCAD v'+sysparam.ver.versionstring +#13#10+
-                       'Writeln by Andrey M. Zubarev'+#13#10+
-                       'zamtmn@yandex.ru'+#13#10+
-                       {'Copyright (c) 2004-2010'+#13#10}#13#10+vinfotext+
-                       #13#10+
-                       '-UNDO\REDO - пока лучше не пользоваться;'+#13#10+
-                       #13#10+
-                       '-При проблемах с отображением\выделением выполнить Regen и RebuildTree в ком. строке;'#13#10+
-                       #13#10+
-                       '-Для отключение показа этого окна закоментируйте строку "About" в файле components\autorun.cmd. Кодировка всех конфигурационных файлов - UTF8;'#13#10+
-                       #13#10+'Команд - '+inttostr(commandline.commandmanager.Count)+'; Примитивов - '+inttostr(acadentsupportcol));
+                       rsAuthor+#13#10+
+                       'zamtmn@yandex.ru'+#13#10#13#10
+                       +rsVinfotext+#13#10+
+                       rsReleaseNotes
+                       +#13#10
+                       +format(rsCommEntEeport,[inttostr(commandline.commandmanager.Count),inttostr(acadentsupportcol)]));
   Memo.Parent := self;
 end;
 begin

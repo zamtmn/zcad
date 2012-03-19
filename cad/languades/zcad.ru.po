@@ -285,19 +285,9 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
-#: zcadexternal.acn_fakecopyclipbase~caption
-msgctxt "zcadexternal.acn_fakecopyclipbase~caption"
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
-msgstr ""
-
-#: zcadexternal.acn_fakepaste~caption
-msgctxt "zcadexternal.acn_fakepaste~caption"
-msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -470,11 +460,6 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr ""
 
-#: zcadexternal.acn_processkz~caption
-msgctxt "zcadexternal.acn_processkz~caption"
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_processkz~textimage
 msgctxt "zcadexternal.acn_processkz~textimage"
 msgid "Process external KZ"
@@ -509,11 +494,6 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
-
-#: zcadexternal.acn_remautocables~caption
-msgctxt "zcadexternal.acn_remautocables~caption"
-msgid ""
-msgstr ""
 
 #: zcadexternal.acn_remautocables~textimage
 msgctxt "zcadexternal.acn_remautocables~textimage"
@@ -2400,6 +2380,10 @@ msgctxt "zcadstrconsts.rsaboutwndcaption"
 msgid "About ZCAD"
 msgstr "О программе ZCAD"
 
+#: zcadstrconsts.rsauthor
+msgid "Writeln by Andrey M. Zubarev"
+msgstr "Автор: Зубарев А.М."
+
 #: zcadstrconsts.rsblockignored
 msgid "Ignored block \"%s\""
 msgstr "Игнорирован блок \"%s\""
@@ -2528,6 +2512,11 @@ msgctxt "zcadstrconsts.rscommandnrinc"
 msgid "Command can not run"
 msgstr "Команда не может быть запущена"
 
+#: zcadstrconsts.rscommenteeport
+msgctxt "zcadstrconsts.rscommenteeport"
+msgid "Registered commands - %s; supported entities - %s"
+msgstr "Зарегистрированных команд - %s; поддерживаемых примитивов - %s"
+
 #: zcadstrconsts.rscompiledtimemsg
 msgctxt "zcadstrconsts.rscompiledtimemsg"
 msgid "Done.  %s second"
@@ -2593,6 +2582,10 @@ msgstr "Инспектор объектов"
 msgid "Grid too density"
 msgstr "Сетка слишком мелкая"
 
+#: zcadstrconsts.rsinitialization
+msgid "Initialization:"
+msgstr "Инициализация:"
+
 #: zcadstrconsts.rslayerdefpaontscannotbeprinted
 msgid "Layer DEFPOINTS can not be printed"
 msgstr "Слой DEFPOINTS не может быть печатным"
@@ -2633,6 +2626,20 @@ msgstr "Закрыть ZCAD"
 msgctxt "zcadstrconsts.rsrecreating"
 msgid "Re-creating %s!"
 msgstr "Повторное создание %s!"
+
+#: zcadstrconsts.rsreleasenotes
+msgid ""
+"-UNDO\\REDO - yet it is better not to use;\n"
+"\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
+"\n"
+"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
+msgstr ""
+"-UNDO\\REDO - пока лучше не пользоваться;\n"
+"\n"
+"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
+"\n"
+"-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
 
 #: zcadstrconsts.rsrevstr
 msgctxt "zcadstrconsts.rsrevstr"
@@ -2691,6 +2698,10 @@ msgstr "Неизвестный формат файла"
 msgctxt "zcadstrconsts.rsunnamedwindowtitle"
 msgid "unnamed"
 msgstr "Без имени"
+
+#: zcadstrconsts.rsvinfotext
+msgid "Unstable version"
+msgstr "Нестабильная версия"
 
 #: zcadstrconsts.rswarningcaption
 msgid "Warning!"

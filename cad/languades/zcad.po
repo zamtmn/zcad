@@ -2125,6 +2125,10 @@ msgctxt "zcadstrconsts.rsaboutwndcaption"
 msgid "About ZCAD"
 msgstr ""
 
+#: zcadstrconsts.rsauthor
+msgid "Writeln by Andrey M. Zubarev"
+msgstr ""
+
 #: zcadstrconsts.rsblockignored
 msgid "Ignored block \"%s\""
 msgstr ""
@@ -2253,6 +2257,11 @@ msgctxt "zcadstrconsts.rscommandnrinc"
 msgid "Command can not run"
 msgstr ""
 
+#: zcadstrconsts.rscommenteeport
+msgctxt "zcadstrconsts.rscommenteeport"
+msgid "Registered commands - %s; supported entities - %s"
+msgstr ""
+
 #: zcadstrconsts.rscompiledtimemsg
 msgctxt "zcadstrconsts.rscompiledtimemsg"
 msgid "Done.  %s second"
@@ -2318,6 +2327,10 @@ msgstr ""
 msgid "Grid too density"
 msgstr ""
 
+#: zcadstrconsts.rsinitialization
+msgid "Initialization:"
+msgstr ""
+
 #: zcadstrconsts.rslayerdefpaontscannotbeprinted
 msgid "Layer DEFPOINTS can not be printed"
 msgstr ""
@@ -2357,6 +2370,15 @@ msgstr ""
 #: zcadstrconsts.rsrecreating
 msgctxt "zcadstrconsts.rsrecreating"
 msgid "Re-creating %s!"
+msgstr ""
+
+#: zcadstrconsts.rsreleasenotes
+msgid ""
+"-UNDO\\REDO - yet it is better not to use;\n"
+"\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
+"\n"
+"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
 msgstr ""
 
 #: zcadstrconsts.rsrevstr
@@ -2415,6 +2437,10 @@ msgstr ""
 #: zcadstrconsts.rsunnamedwindowtitle
 msgctxt "zcadstrconsts.rsunnamedwindowtitle"
 msgid "unnamed"
+msgstr ""
+
+#: zcadstrconsts.rsvinfotext
+msgid "Unstable version"
 msgstr ""
 
 #: zcadstrconsts.rswarningcaption

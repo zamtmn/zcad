@@ -20,11 +20,8 @@ unit splashwnd;
 {$INCLUDE def.inc}
 interface
 uses
- strproc,Forms, stdctrls, Controls, Graphics,ExtCtrls,
+ zcadstrconsts,strproc,Forms, stdctrls, Controls, Graphics,ExtCtrls,
  gdbasetypes,SysInfo,fileutil,sysutils;
-const
-     vinfotext=
-'Не стабильная версия.'#13#10;
 type
   TSplashWnd = class(TForm)
     txt:tlabel;
@@ -42,7 +39,7 @@ implementation
 uses log;
 procedure TSplashWnd.TXTOut;
 begin
-     self.txt.Caption:=vinfotext+'Инициализация:'#13#10+s;
+     self.txt.Caption:=rsVinfotext+#13#10+rsInitialization+#13#10+s;
      if pm then
                application.ProcessMessages
            else

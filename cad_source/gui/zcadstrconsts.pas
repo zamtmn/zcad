@@ -30,7 +30,15 @@ resourcestring
 
 
   rsRevStr='Revision SVN:';
-
+  rsInitialization='Initialization:';
+  rsVinfotext='Unstable version';
+  rsCommEntEeport='Registered commands - %s; supported entities - %s';
+  rsReleaseNotes='-UNDO\REDO - yet it is better not to use;'+#13#10+
+                 #13#10+
+                 '-If you have problems with rendering or selecting entities, run "Regen" and "RebuildTree" in command line;'#13#10+
+                 #13#10+
+                 '-To disable the display of this window comment out line "About" in the file "components\autorun.cmd". Encoding of all configuration files - UTF8;'#13#10;
+  rsAuthor='Writeln by Andrey M. Zubarev';
   rsRunCommand='Running command';
   rsUnknownCommand='Unknown command';
   rsCommandNRInC='Command can not run';

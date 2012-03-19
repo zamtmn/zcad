@@ -128,7 +128,7 @@ var
 begin
      s:=sysvar.PATH.device_library^;
      repeat
-           GetPartOfPath(ts,s);
+           GetPartOfPath(ts,s,'|');
            ts:=ExpandPath(ts);
            if DirectoryExists(utf8tosys(ts)) then
                                  begin

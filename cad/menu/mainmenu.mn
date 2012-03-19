@@ -335,7 +335,7 @@ MainMenuItem Help;
     action ACN_HELP
     action ACN_ABOUT
   }
-MainMenuItem **Debug;
+MainMenuItem __Debug;
   {
     Command **Command list,CommandList,none,none
     MenuItem **Файлы с ошибками (текущая отладка);
@@ -361,8 +361,9 @@ MainMenuItem **Debug;
         Command **Реле? (отладка),SetObjInsp(RELE_DEBUG),none,none
       }
   }
-MainMenuItem **БД Чертежа;
+MainMenuItem __DB;
   {
     Command **Добавить в базу,DBaseAdd,none,none
     Command **Связать с объектом,DBaseLink,none,none
   }
+CreateMainMenu File,Edit,View,Format,Draw,Modify,Schematic,Plan,Model,Settings,Window,Help,__Debug,__DB;

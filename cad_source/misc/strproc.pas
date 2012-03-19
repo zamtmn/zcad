@@ -39,7 +39,7 @@ function ach2uch(ach:byte):word;
 
 function CompareNUMSTR(str1,str2:GDBString):GDBBoolean;
 
-function GetPartOfPath(out part:GDBString;var path:GDBString):GDBString;
+function GetPartOfPath(out part:GDBString;var path:GDBString; const separator:GDBString):GDBString;
 function FindInSupportPath(FileName:GDBString):GDBString;
 function FindInPaths(Paths,FileName:GDBString):GDBString;
 
@@ -103,7 +103,7 @@ begin
      begin
      s:=SysVar.PATH.Support_Path^;
      repeat
-           GetPartOfPath(ts,s);
+           GetPartOfPath(ts,s,'|');
            ts:=ExpandPath(ts)+FileName;
             if FileExists(utf8tosys(ts)) then
                                  begin
@@ -136,7 +136,7 @@ begin
 
      s:=Paths;
      repeat
-           GetPartOfPath(ts,s);
+           GetPartOfPath(ts,s,'|');
            ts:=ExpandPath(ts)+FileName;
             if FileExists(utf8tosys(ts)) then
                                  begin
@@ -146,11 +146,11 @@ begin
      until s='';
      result:='';
 end;
-function GetPartOfPath(out part:GDBString;var path:GDBString):GDBString;
+function GetPartOfPath(out part:GDBString;var path:GDBString;const separator:GDBString):GDBString;
 var
    i:GDBInteger;
 begin
-           i:=pos('|',path);
+           i:=pos(separator,path);
            if i<>0 then
                        begin
                             part:=copy(path,1,i-1);

@@ -44,9 +44,10 @@ resourcestring
   rsCommandNRInC='Command can not run';
   rsRunScript='Running script "%s";';
 
-  rsunknownFileExt='Unknown file format "%s". Saving failed.';
+  rsUnknownFileExt='Unknown file format "%s". Saving failed.';
 
   rsfardeffilenotfounf='File definition of the variables can not be found for the device "%s";';
+  rsMenuNotFounf='Menu "%s" not found';
 
   rsUnnamedWindowTitle='unnamed';
 
@@ -126,4 +127,4 @@ resourcestring
   rsncOGLc='OpenGL context is not created';
 implementation
 
-end.
+end.

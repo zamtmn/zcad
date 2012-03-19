@@ -35,6 +35,8 @@ uses
   {ZGUIArrays,}{ZBasicVisible,}{ZEditsWithVariable,}{ZTabControlsGeneric,}shared,{ZPanelsWithSplit,}{ZGUIsCT,}{ZstaticsText,}{UZProcessBar,}strmy{,strutils},{ZPanelsGeneric,}
   graphics,
   AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr{,xmlconf};
+const
+     MenuNameModifier='MENU_';
 type
   TmyAnchorDockHeader = class(TAnchorDockHeader)
                         protected
@@ -61,7 +63,7 @@ type
 
                     PageControl:TmyPageControl;
 
-                    mm:TMenu;
+                    MainMenu:TMenu;
                     StandartActions:TmyActionList;
 
                     SystemTimer: TTimer;
@@ -88,6 +90,7 @@ type
                     procedure loadpanels(pf:GDBString);
                     procedure CreateLayoutbox(tb:TToolBar);
                     procedure loadmenu(var f:GDBOpenArrayOfByte;var pm:TMenu;var line:GDBString);
+                    procedure createmenu(var f:GDBOpenArrayOfByte;var pm:TMenu;var line:GDBString);
                     procedure loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
 
                     procedure ChangedDWGTabCtrl(Sender: TObject);
@@ -151,6 +154,7 @@ procedure finalize;}
 const
      menutoken='MAINMENUITEM';
      submenutoken='MENUITEM';
+     createmenutoken='CREATEMAINMENU';
      //TOOLTIPS_CLASS = 'tooltips_class32';
      //statusbarheight=20;
      //statusbarclientheight=18;
@@ -1430,10 +1434,15 @@ begin
            //ppanel^.Show;
 
       end
+      else if uppercase(line) =createmenutoken  then
+      begin
+           //MainMenu:=menu;
+           createmenu(f,MainMenu,line);
+      end
       else if uppercase(line) = menutoken then
       begin
-           //mm:=menu;
-           loadmenu(f,mm,line);
+           //MainMenu:=menu;
+           loadmenu(f,MainMenu,line);
       end
     end;
   end;
@@ -1457,14 +1466,54 @@ begin
            line:=(line);
 
 
-           ppopupmenu:=TMenuItem.Create(pm);
+           ppopupmenu:=TMenuItem.Create({pm}application);
+           ppopupmenu.Name:=MenuNameModifier+uppercase(line);
            line:=InterfaceTranslate('menu~'+line,line);
            ppopupmenu.Caption:=line;
-           pm.items.Add(ppopupmenu);
+           //pm.items.Add(ppopupmenu);
 
            loadsubmenu(f,ppopupmenu,line);
 
 end;
+procedure TMainFormN.createmenu(var f:GDBOpenArrayOfByte;var pm:TMenu;var line:GDBString);
+var
+    pmenuitem:TmyMenuItem;
+    ppopupmenu:TMenuItem;
+    ts:GDBString;
+begin
+           if not assigned(pm) then
+                                   begin
+                                   pm:=TMainMenu.Create(self);
+                                   pm.Images:=self.StandartActions.Images;
+                                   end;
+
+
+           line := f.readstring(';','');
+           line:=(line);
+           repeat
+           GetPartOfPath(ts,line,',');
+           ppopupmenu:=tmenuitem(application.FindComponent(MenuNameModifier+uppercase(ts)));
+           if ppopupmenu<>nil then
+                                  begin
+                                       pm.items.Add(ppopupmenu);
+                                  end
+                              else
+                                  shared.ShowError(format(rsMenuNotFounf,[ts]));
+
+
+           until line='';
+
+
+           (*ppopupmenu:=TMenuItem.Create({pm}application);
+           ppopupmenu.Name:='menu_'+line;
+           line:=InterfaceTranslate('menu~'+line,line);
+           ppopupmenu.Caption:=line;
+           //pm.items.Add(ppopupmenu);
+
+           loadsubmenu(f,ppopupmenu,line);*)
+
+end;
+
 procedure TMainFormN.loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
 var
     pmenuitem:TmyMenuItem;

@@ -453,12 +453,12 @@ msgstr "Редактировать полиобъект"
 #: zcadexternal.acn_print~caption
 msgctxt "zcadexternal.acn_print~caption"
 msgid "Print"
-msgstr ""
+msgstr "Печать"
 
 #: zcadexternal.acn_print~hint
 msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
-msgstr ""
+msgstr "Печать"
 
 #: zcadexternal.acn_processkz~textimage
 msgctxt "zcadexternal.acn_processkz~textimage"
@@ -856,11 +856,10 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#, fuzzy
-#| msgid "Block params"
+#| msgid "Rotate"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
-msgstr "Поворот"
+msgid "Block params"
+msgstr "Параметры блоков"
 
 #: zcadexternal.gdbobjcircle~area
 msgctxt "zcadexternal.gdbobjcircle~area"
@@ -1144,10 +1143,9 @@ msgid "Reset camera"
 msgstr "Камера в начало"
 
 #: zcadexternal.menucommand~fuckoff
-#, fuzzy
-#| msgid "Layouts (not impl)"
-msgid "Dimensions styles (not impl)"
-msgstr "Стили размеров (не реализовано)"
+#| msgid "Dimensions styles (not impl)"
+msgid "Layouts (not impl)"
+msgstr "Листы (не реализовано)"
 
 #: zcadexternal.menucommand~setobjinsp(camera)
 msgid "Camera"
@@ -1638,6 +1636,7 @@ msgid "Cables"
 msgstr "Кабели"
 
 #: zcadexternal.tmstype~tmst_devices
+msgctxt "zcadexternal.tmstype~tmst_devices"
 msgid "Devices"
 msgstr "Устройства"
 
@@ -2388,6 +2387,11 @@ msgstr "Автор: Зубарев А.М."
 msgid "Ignored block \"%s\""
 msgstr "Игнорирован блок \"%s\""
 
+#: zcadstrconsts.rsblocks
+msgctxt "zcadstrconsts.rsblocks"
+msgid "Blocks"
+msgstr "Блоки"
+
 #: zcadstrconsts.rsbyblock
 msgctxt "zcadstrconsts.rsbyblock"
 msgid "ByBlock"
@@ -2449,6 +2453,10 @@ msgstr "Обработвно %s примитивов"
 #: zcadstrconsts.rscmnoblockdefindwg
 msgid "No BlockDef \"%s\" in the drawing"
 msgstr "В чертеже отсутствует определение блока \"%s\""
+
+#: zcadstrconsts.rscmnoblockdefindwgcxmenu
+msgid "No BlockDef \"%s\" in the drawing. Use context menu"
+msgstr "Нет определения блока \"%s\" в чертеже. Используйте контекстное меню"
 
 #: zcadstrconsts.rscmnoblocksordevices
 msgid "No selected blocks or devices"
@@ -2532,6 +2540,11 @@ msgctxt "zcadstrconsts.rsdefaultpromot"
 msgid "Command"
 msgstr "Команда"
 
+#: zcadstrconsts.rsdevices
+msgctxt "zcadstrconsts.rsdevices"
+msgid "Devices"
+msgstr "Устройства"
+
 #: zcadstrconsts.rsdifferent
 msgctxt "zcadstrconsts.rsdifferent"
 msgid "Different"
@@ -2554,6 +2567,10 @@ msgstr "Окно чертежей"
 msgctxt "zcadstrconsts.rsempty"
 msgid "Empty"
 msgstr "Пусто"
+
+#: zcadstrconsts.rsequipment
+msgid "Equipment"
+msgstr "Оборудование"
 
 #: zcadstrconsts.rserrorprefix
 msgctxt "zcadstrconsts.rserrorprefix"
@@ -2599,6 +2616,10 @@ msgstr "Ошибка загрузки файла разбивки окон"
 msgid "Loading file \"%s\""
 msgstr "Загрузка файла  \"%s\""
 
+#: zcadstrconsts.rsmenunotfounf
+msgid "Menu \"%s\" not found"
+msgstr "Меню \"%s\" не найдено"
+
 #: zcadstrconsts.rsmm
 msgctxt "zcadstrconsts.rsmm"
 msgid "mm"
@@ -2612,6 +2633,18 @@ msgstr "Контекст OpenGL не создан"
 #: zcadstrconsts.rsnotyetimplemented
 msgid "Not yet implemented"
 msgstr "Пока не реализовано"
+
+#: zcadstrconsts.rsprogramdb
+msgid "Program DB"
+msgstr "БД программы"
+
+#: zcadstrconsts.rsprojectdb
+msgid "Project DB"
+msgstr "БД чертежа"
+
+#: zcadstrconsts.rsprojecttree
+msgid "Project Tree"
+msgstr "Дерево проекта"
 
 #: zcadstrconsts.rsquitcaption
 msgctxt "zcadstrconsts.rsquitcaption"
@@ -2680,6 +2713,10 @@ msgstr "Не могу открыть файл \"%s\""
 #: zcadstrconsts.rsunabletowritefile
 msgid "Unable to write file \"%s\""
 msgstr "Не могу записать файл \"%s\""
+
+#: zcadstrconsts.rsuncategorized
+msgid "Uncategorized"
+msgstr "Без категории"
 
 #: zcadstrconsts.rsunknowncommand
 msgctxt "zcadstrconsts.rsunknowncommand"

@@ -31,7 +31,7 @@ resourcestring
 
   rsRevStr='Revision SVN:';
   rsInitialization='Initialization:';
-  rsVinfotext='Unstable version';
+  rsVInfoText='Unstable version';
   rsCommEntEeport='Registered commands - %s; supported entities - %s';
   rsReleaseNotes='-UNDO\REDO - yet it is better not to use;'+#13#10+
                  #13#10+
@@ -82,6 +82,7 @@ resourcestring
 
   rscmNoBlocksOrDevices='No selected blocks or devices';
   rscmNoBlockDefInDWG='No BlockDef "%s" in the drawing';
+  rscmNoBlockDefInDWGCXMenu='No BlockDef "%s" in the drawing. Use context menu';
   rscmInDwgBlockDefNotDeffined='In drawing not defined any BlockDefs!';
 
   rscmSelEntBeforeComm='Entities must be selected before run the command';
@@ -106,6 +107,13 @@ resourcestring
   rsQuitCaption='Quit';
   rsWarningCaption='Warning!';
   rsAboutWndCaption = 'About ZCAD';
+  rsProjectTree = 'Project Tree';
+  rsProgramDB = 'Program DB';
+  rsProjectDB = 'Project DB';
+  rsBlocks='Blocks';
+  rsUncategorized='Uncategorized';
+  rsDevices='Devices';
+  rsEquipment='Equipment';
 
   rsdefaultpromot='Command';
   rsexprouttext='Expression %s return %s';
@@ -127,4 +135,4 @@ resourcestring
   rsncOGLc='OpenGL context is not created';
 implementation
 
-end.
+end.

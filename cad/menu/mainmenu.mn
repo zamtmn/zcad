@@ -366,4 +366,17 @@ MainMenuItem __DB;
     Command **Добавить в базу,DBaseAdd,none,none
     Command **Связать с объектом,DBaseLink,none,none
   }
+PopUpMenu PROGRAMDBCXMENU;
+  {
+    action ACN_DBASEADD
+  }
+PopUpMenu PROJECTDBCXMENU;
+  {
+    action ACN_DBASELINK
+    action ACN_DBASERENAME
+  }
+PopUpMenu PROGRAMBLOCKSCXMENU;
+  {
+    action ACN_INSERTTODRAWING
+  }
 CreateMainMenu File,Edit,View,Format,Draw,Modify,Schematic,Plan,Model,Settings,Window,Help,__Debug,__DB;

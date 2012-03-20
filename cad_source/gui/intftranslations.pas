@@ -175,7 +175,7 @@ begin
           Item:=TPOFileItem(po.{FIdentifierToItem}FIdentLowVarToItem{FOriginalToItem}.Data[UTF8LowerCase(Identifier)]);
           if not assigned(item) then
           begin
-               if (pos('**',OriginalValue)>0)or(pos('??',OriginalValue)>0)then
+               if (pos('**',OriginalValue)>0)or(pos('??',OriginalValue)>0)or(pos('__',OriginalValue)=1)then
                begin
                     inc(_DebugWord);
                end

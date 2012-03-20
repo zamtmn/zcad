@@ -778,13 +778,13 @@ msgstr ""
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+msgid "Rotate"
 msgstr ""
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
+msgid "Block params"
 msgstr ""
 
 #: zcadexternal.gdbobjcircle~area
@@ -1033,12 +1033,12 @@ msgid "Reset camera"
 msgstr ""
 
 #: zcadexternal.menucommand~fuckoff
-#, fuzzy
-msgid "Layouts (not impl)"
+msgid "Dimensions styles (not impl)"
 msgstr ""
 
 #: zcadexternal.menucommand~fuckoff
-msgid "Dimensions styles (not impl)"
+#, fuzzy
+msgid "Layouts (not impl)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(camera)
@@ -1472,6 +1472,7 @@ msgid "Cables"
 msgstr ""
 
 #: zcadexternal.tmstype~tmst_devices
+msgctxt "zcadexternal.tmstype~tmst_devices"
 msgid "Devices"
 msgstr ""
 
@@ -1887,6 +1888,7 @@ msgid "Same line weight"
 msgstr ""
 
 #: zcadexternal.tselsimparams~blocks
+msgctxt "zcadexternal.tselsimparams~blocks"
 msgid "Blocks"
 msgstr ""
 
@@ -2133,6 +2135,11 @@ msgstr ""
 msgid "Ignored block \"%s\""
 msgstr ""
 
+#: zcadstrconsts.rsblocks
+msgctxt "zcadstrconsts.rsblocks"
+msgid "Blocks"
+msgstr ""
+
 #: zcadstrconsts.rsbyblock
 msgctxt "zcadstrconsts.rsbyblock"
 msgid "ByBlock"
@@ -2193,6 +2200,10 @@ msgstr ""
 
 #: zcadstrconsts.rscmnoblockdefindwg
 msgid "No BlockDef \"%s\" in the drawing"
+msgstr ""
+
+#: zcadstrconsts.rscmnoblockdefindwgcxmenu
+msgid "No BlockDef \"%s\" in the drawing. Use context menu"
 msgstr ""
 
 #: zcadstrconsts.rscmnoblocksordevices
@@ -2277,6 +2288,11 @@ msgctxt "zcadstrconsts.rsdefaultpromot"
 msgid "Command"
 msgstr ""
 
+#: zcadstrconsts.rsdevices
+msgctxt "zcadstrconsts.rsdevices"
+msgid "Devices"
+msgstr ""
+
 #: zcadstrconsts.rsdifferent
 msgctxt "zcadstrconsts.rsdifferent"
 msgid "Different"
@@ -2298,6 +2314,10 @@ msgstr ""
 #: zcadstrconsts.rsempty
 msgctxt "zcadstrconsts.rsempty"
 msgid "Empty"
+msgstr ""
+
+#: zcadstrconsts.rsequipment
+msgid "Equipment"
 msgstr ""
 
 #: zcadstrconsts.rserrorprefix
@@ -2344,6 +2364,10 @@ msgstr ""
 msgid "Loading file \"%s\""
 msgstr ""
 
+#: zcadstrconsts.rsmenunotfounf
+msgid "Menu \"%s\" not found"
+msgstr ""
+
 #: zcadstrconsts.rsmm
 msgctxt "zcadstrconsts.rsmm"
 msgid "mm"
@@ -2356,6 +2380,18 @@ msgstr ""
 
 #: zcadstrconsts.rsnotyetimplemented
 msgid "Not yet implemented"
+msgstr ""
+
+#: zcadstrconsts.rsprogramdb
+msgid "Program DB"
+msgstr ""
+
+#: zcadstrconsts.rsprojectdb
+msgid "Project DB"
+msgstr ""
+
+#: zcadstrconsts.rsprojecttree
+msgid "Project Tree"
 msgstr ""
 
 #: zcadstrconsts.rsquitcaption
@@ -2419,6 +2455,10 @@ msgstr ""
 
 #: zcadstrconsts.rsunabletowritefile
 msgid "Unable to write file \"%s\""
+msgstr ""
+
+#: zcadstrconsts.rsuncategorized
+msgid "Uncategorized"
 msgstr ""
 
 #: zcadstrconsts.rsunknowncommand

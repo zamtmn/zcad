@@ -63,3 +63,8 @@ action ACN_WPREV,PrevDrawing,,Previous window,,SHIFT+CTRL+TAB
 
 action ACN_ABOUT,About,about.bmp,About,,
 action ACN_Help,Help,help.bmp,Help,,F1
+
+action ACN_DBASEADD,DBaseAdd,#DBAdd,Add to drawing database,,
+action ACN_DBASELINK,DBaseLink,#DBLink,Link to selected entities,,
+action ACN_DBASERENAME,DBaseRename,#DBRename,Rename,,
+action ACN_INSERTTODRAWING,Insert2,#ITD,Insert to drawing,,

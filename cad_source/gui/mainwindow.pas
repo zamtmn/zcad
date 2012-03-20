@@ -21,7 +21,7 @@ unit mainwindow;
 
 interface
 uses
-  zcadstrconsts,math,LMessages,LCLIntf,
+  ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
   ActnList,LCLType,LCLProc,strproc,log,intftranslations,toolwin,
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
@@ -90,6 +90,7 @@ type
                     procedure loadpanels(pf:GDBString);
                     procedure CreateLayoutbox(tb:TToolBar);
                     procedure loadmenu(var f:GDBOpenArrayOfByte;var pm:TMenu;var line:GDBString);
+                    procedure loadpopupmenu(var f:GDBOpenArrayOfByte;var pm:TMenu;var line:GDBString);
                     procedure createmenu(var f:GDBOpenArrayOfByte;var pm:TMenu;var line:GDBString);
                     procedure loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
 
@@ -153,6 +154,7 @@ procedure clearcp;
 procedure finalize;}
 const
      menutoken='MAINMENUITEM';
+     popupmenutoken='POPUPMENU';
      submenutoken='MENUITEM';
      createmenutoken='CREATEMAINMENU';
      //TOOLTIPS_CLASS = 'tooltips_class32';
@@ -1444,6 +1446,11 @@ begin
            //MainMenu:=menu;
            loadmenu(f,MainMenu,line);
       end
+      else if uppercase(line) = popupmenutoken then
+      begin
+           //MainMenu:=menu;
+           loadpopupmenu(f,MainMenu,line);
+      end
     end;
   end;
   //--------------------------------SetMenu(MainForm.handle,pmenu.handle);
@@ -1475,6 +1482,33 @@ begin
            loadsubmenu(f,ppopupmenu,line);
 
 end;
+procedure TMainFormN.loadpopupmenu(var f:GDBOpenArrayOfByte;var pm:TMenu;var line:GDBString);
+var
+    pmenuitem:TmyMenuItem;
+    ppopupmenu:TmyPopupMenu;
+begin
+           if not assigned(pm) then
+                                   begin
+                                   pm:=TMainMenu.Create(self);
+                                   pm.Images:=self.StandartActions.Images;
+                                   end;
+
+
+           line := f.readstring(';','');
+           line:=(line);
+
+
+           ppopupmenu:=TmyPopupMenu.Create({pm}application);
+           ppopupmenu.Name:=MenuNameModifier+uppercase(line);
+           line:=InterfaceTranslate('menu~'+line,line);
+           //ppopupmenu.Caption:=line;
+           //pm.items.Add(ppopupmenu);
+
+           loadsubmenu(f,TMenuItem(ppopupmenu),line);
+           cxmenumgr.RegisterLCLMenu(ppopupmenu)
+
+end;
+
 procedure TMainFormN.createmenu(var f:GDBOpenArrayOfByte;var pm:TMenu;var line:GDBString);
 var
     pmenuitem:TmyMenuItem;
@@ -1541,7 +1575,10 @@ begin
                           action:=tmyaction(self.StandartActions.ActionByName(line));
                           pm1:=TMenuItem.Create(pm);
                           pm1.Action:=action;
-                          pm.Add(pm1);
+                          if pm is TMenuItem then
+                                                 pm.Add(pm1)
+                                             else
+                                                 TMyPopUpMenu(pm).Items.Add(pm1);
                           line := f.readstring(#$A' ',#$D);
                           line:=readspace(line);
                      end

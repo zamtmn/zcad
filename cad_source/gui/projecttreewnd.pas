@@ -20,7 +20,7 @@ unit projecttreewnd;
 {$INCLUDE def.inc}
 interface
 uses
- ucxmenumgr,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ zcadstrconsts,ucxmenumgr,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}ComCtrls,
  {ZTabControlsGeneric,zmenus,}DeviceBase,log,SysUtils,{UGDBTree,}gdbase,UGDBDescriptor{,math,commandline},varman,languade{,UGDBTracePropArray},
   {ZEditsWithProcedure,zbasicvisible,}varmandef,shared,sysinfo{,ZTreeViewsGeneric},memman,gdbasetypes;
@@ -62,10 +62,10 @@ type
 var
   ProjectTreeWindow:TProjectTreeWnd;{<Дерево проекта}
 
-  ProgramDBContextMenuN,ProjectDBContextMenuN,ProgramDEVContextMenuN:TmyPopupMenu;
+  //ProgramDBContextMenuN,ProjectDBContextMenuN,ProgramDEVContextMenuN:TmyPopupMenu;
 
 implementation
-uses commandline,GDBBlockDef{,UGDBObjBlockdefArray},UBaseTypeDescriptor,objinsp,UGDBStringArray,UUnitManager;
+uses commandline,GDBBlockDef{,UGDBObjBlockdefArray},UBaseTypeDescriptor,objinsp,UGDBStringArray,UUnitManager,mainwindow;
 function TBlockTreeNode.GetParams;
 begin
      result:=@FBlockName;
@@ -81,7 +81,7 @@ begin
      if instance<>nil then
                           SetGDBObjInsp(TypeDesk,Instance)
                       else
-                          shared.ShowError('Определение блока отсутствует в текущем чертеже. Используйте контекстное меню');
+                          shared.ShowError(format(rscmNoBlockDefInDWGCXMenu,[FBlockName]));
 end;
 
 
@@ -126,7 +126,7 @@ begin
                        begin
                             T_ProjectDB.Selected:=nil;
                             self.ProjectEquipmentN.DeleteChildren;
-                            BuildTreeByEQ(ProjectEquipmentN,gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase'),ProjectDBContextMenuN);
+                            BuildTreeByEQ(ProjectEquipmentN,gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase'),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
                             (*
                             ProjectEquipmentNodeN.free;
                             gdbgetmem({$IFDEF DEBUGBUILD}'{B941B71E-2BA6-4B5E-B436-633B6C8FC500}',{$ENDIF}pointer(ProjectEquipmentNode.SubNode),sizeof(TGDBTree));
@@ -251,7 +251,7 @@ var
 begin
   inherited;
   self.Position:=poScreenCenter;
-  caption:=('Дерево проекта');
+  caption:=rsProjectTree;
   self.borderstyle:=bsSizeToolWin;
 
   PT_PageControl:=TmyPageControl.create(self);
@@ -259,15 +259,15 @@ begin
   PT_PageControl.OnChange:=self.ChangePage;
 
   PT_P_ProgramDB:=TTabSheet.create(PT_PageControl);
-  PT_P_ProgramDB.Caption:=('БД программы');
+  PT_P_ProgramDB.Caption:=rsProgramDB;
   T_ProgramDB:=TmyTreeView.create(PT_P_ProgramDB);
-  BlockNodeN:=TmyTreeNode(T_ProgramDB.Items.add(nil,('Блоки')));
-  BlockNodeUnCatN:=TmyTreeNode(T_ProgramDB.Items.addchild(BlockNodeN,('Без категории')));
+  BlockNodeN:=TmyTreeNode(T_ProgramDB.Items.add(nil,(rsBlocks)));
+  BlockNodeUnCatN:=TmyTreeNode(T_ProgramDB.Items.addchild(BlockNodeN,(rsUncategorized)));
   BlockNodeUnCatN.fcategory:='UNCAT';
-  DeviceNodeN:=TmyTreeNode(T_ProgramDB.Items.add(nil,('Устройства')));
-  DeviceNodeUnCatN:=TmyTreeNode(T_ProgramDB.Items.addchild(DeviceNodeN,('Без категории')));
+  DeviceNodeN:=TmyTreeNode(T_ProgramDB.Items.add(nil,(rsDevices)));
+  DeviceNodeUnCatN:=TmyTreeNode(T_ProgramDB.Items.addchild(DeviceNodeN,(rsUncategorized)));
   DeviceNodeUnCatN.fcategory:='UNCAT';
-  ProgramEquipmentN:=TmyTreeNode(T_ProgramDB.Items.add(nil,('Оборудование')));
+  ProgramEquipmentN:=TmyTreeNode(T_ProgramDB.Items.add(nil,(rsEquipment)));
 
 
 
@@ -278,9 +278,9 @@ begin
   PT_P_ProgramDB.Parent:=PT_PageControl;
 
   PT_P_ProjectDB:=TTabSheet.create(PT_PageControl);
-  PT_P_ProjectDB.Caption:=('БД чертежа');
+  PT_P_ProjectDB.Caption:=rsProjectDB;
   T_ProjectDB:=TmyTreeView.create(PT_P_ProjectDB);
-  ProjectEquipmentN :=TmyTreeNode(T_ProjectDB.Items.add(nil,('Оборудование')));
+  ProjectEquipmentN :=TmyTreeNode(T_ProjectDB.Items.add(nil,(rsEquipment)));
   T_ProjectDB.align:=alClient;
   T_ProjectDB.scrollbars:=ssAutoBoth;
   T_ProjectDB.Parent:=PT_P_ProjectDB;
@@ -316,22 +316,22 @@ begin
         TmyTreeView(CurrNode.TreeView).NodeType:=TBlockTreeNode;
         BlockNode:=TBlockTreeNode(T_ProgramDB.Items.addchild(CurrNode,(treepos)));
         BlockNode.fBlockName:=pb^.name;
-        BlockNode.FPopupMenu:=ProgramDEVContextMenuN;
+        BlockNode.FPopupMenu:={ProgramDEVContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROGRAMBLOCKSCXMENU'));
 
         pb:=BlockBaseDWG.BlockDefArray.iterate(ir);
   until pb=nil;
   end;
 
-  BuildTreeByEQ(ProgramEquipmentN,DBUnit,ProgramDBContextMenuN);
+  BuildTreeByEQ(ProgramEquipmentN,DBUnit,{ProgramDBContextMenuN}{}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROGRAMDBCXMENU')){});
   if gdb.GetCurrentDWG<>nil then
-  BuildTreeByEQ(ProjectEquipmentN,gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase'),ProjectDBContextMenuN);
+  BuildTreeByEQ(ProjectEquipmentN,gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase'),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
 
 end;
 initialization
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('projecttreewnd.initialization');{$ENDIF}
   ProjectTreeWindow:=nil;
-
+  (*
   ProgramDBContextMenuN:=TmyPopupMenu.create(nil);
   cxmenumgr.RegisterLCLMenu(ProgramDBContextMenuN);
   //ProgramDBContextMenuN.OnClose:=cxmenumgr.CloseNotify;
@@ -345,11 +345,12 @@ begin
   ProgramDEVContextMenuN.Items.Add(TmyMenuItem.create(ProgramDEVContextMenuN,'Вставить в чертеж','Insert2'));
   cxmenumgr.RegisterLCLMenu(ProgramDEVContextMenuN);
   //ProgramDEVContextMenuN.OnClose:=cxmenumgr.CloseNotify;
+  *)
 end;
 finalization
 begin
-     FreeAndNil(ProgramDBContextMenuN);
+     {FreeAndNil(ProgramDBContextMenuN);
      FreeAndNil(ProjectDBContextMenuN);
-     FreeAndNil(ProgramDEVContextMenuN);
+     FreeAndNil(ProgramDEVContextMenuN);}
 end;
 end.

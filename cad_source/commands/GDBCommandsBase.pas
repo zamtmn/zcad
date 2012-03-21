@@ -598,7 +598,7 @@ begin
                                                                        end;
                                      if FileExists(utf8tosys(s+'.dbpas')) then
                                      begin
-                                           pu:=gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase');
+                                           pu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
                                            mem.InitFromFile(s+'.dbpas');
                                            pu^.free;
                                            units.parseunit(mem,PTSimpleUnit(pu));
@@ -610,7 +610,7 @@ begin
                                           addfromdwg(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode);
                                           if FileExists(utf8tosys(s+'.dbpas')) then
                                           begin
-                                                pu:=gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase');
+                                                pu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
                                                 mem.InitFromFile(s+'.dbpas');
                                                 pu^.free;
                                                 units.parseunit(mem,PTSimpleUnit(pu));
@@ -637,7 +637,7 @@ begin
 
      end
         else
-        shared.ShowError('GDBCommandsBase.MERGE:'+format(rsUnableToOpenFile,[s]));
+        shared.ShowError('MERGE:'+format(rsUnableToOpenFile,[s]));
 end;
 
 function NextDrawint_com(Operands:pansichar):GDBInteger;
@@ -870,7 +870,7 @@ begin
           MainFormN.processfilehistory(s);
      end
                else
-        shared.ShowError('GDBCommandsBase.LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
+        shared.ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
         //shared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
 function MergeBlocks_com(Operands:pansichar):GDBInteger;
@@ -896,7 +896,7 @@ var
 begin
      savedxf2000(s, GDB.GetCurrentDWG);
 
-     pu:=gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase');
+     pu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
      mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
      pu^.SavePasToMem(mem);
      filepath:=ExtractFilePath(s);
@@ -962,7 +962,7 @@ begin
                                      gdb.GetCurrentDWG.FileName:=s;
                                      updatevisible;
                                     (* savedxf2000(s, @GDB);
-                                     pu:=gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase');
+                                     pu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
                                      mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
                                      pu^.SavePasToMem(mem);
                                      filepath:=ExtractFilePath(s);
@@ -2238,6 +2238,19 @@ var f: TForm; i: Longint; begin f := TForm.CreateNew(f{, 0}); f.Show; while f.Vi
      Exec.RunScript; // Run the script.
      Exec.Free; // Free the executer.
 end;
+function ObjInspCopyToClip_com(Operands:pansichar):GDBInteger;
+begin
+   if Objinsp.currpd=nil then
+                             HistoryOutStr(rscmCommandOnlyCTXMenu)
+                         else
+                             begin
+                                  if uppercase(Operands)='VAR' then
+                                                                   clipbrd.clipboard.AsText:=Objinsp.currpd.ValKey
+                             else if uppercase(Operands)='VALUE' then
+                                                                   clipbrd.clipboard.AsText:=Objinsp.currpd.Value;
+                                  Objinsp.currpd:=nil;
+                             end;
+end;
 procedure startup;
 //var
    //pmenuitem:pzmenuitem;
@@ -2245,6 +2258,7 @@ begin
   Randomize;
   MSEditor.init;
   CopyClipFile:='Empty';
+  CreateCommandFastObjectPlugin(@ObjInspCopyToClip_com,'ObjInspCopyToClip',0,0);
   CreateCommandFastObjectPlugin(@SetObjInsp_com,'SetObjInsp',CADWG,0);
   CreateCommandFastObjectPlugin(@CommandList_com,'CommandList',0,0);
   ms2objinsp:=CreateCommandFastObjectPlugin(@MultiSelect2ObjIbsp_com,'MultiSelect2ObjIbsp',CADWG,0);

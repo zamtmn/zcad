@@ -387,7 +387,7 @@ var pblockdef:PGDBObjBlockdef;
     devnam:GDBString;
 begin
           //name:=copy(name,8,length(name)-7);
-          devnam:='DEVICE_'+name;
+          devnam:=DevicePrefix+name;
           index:=gdb.GetCurrentDWG.BlockDefArray.getindex(@devnam[1]);
           pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
           for i:=0 to pblockdef.ObjArray.count-1 do
@@ -461,7 +461,7 @@ begin
                                     end;
           end;
           //name:=copy(name,8,length(name)-7);
-          {devnam:='DEVICE_'+name;
+          {devnam:=DevicePrefix+name;
           index:=GDB.BlockDefArray.getindex(@devnam[1]);
           pblockdef:=GDB.BlockDefArray.getelement(index);
           for i:=0 to pblockdef.ObjArray.count-1 do

@@ -456,7 +456,7 @@ begin
   until pobj=nil;
   if counter=0 then
                       begin
-                            HistoryOutStr('BlockScale:'+rscmNoBlocksOrDevices);
+                            Prompt(rscmNoBlocksOrDevices);
                             commandmanager.executecommandend;
                             exit;
                       end;
@@ -502,7 +502,7 @@ begin
                 end;
                 pb:=poa.iterate(ir);
           until pb=nil;
-          HistoryOutStr('BlockScale:'+sysutils.format(rscmNEntitiesProcessed,[inttostr(result)]));
+          Prompt(sysutils.format(rscmNEntitiesProcessed,[inttostr(result)]));
           Regen_com('');
           commandmanager.executecommandend;
      end;
@@ -524,7 +524,7 @@ begin
                  else
                      if length(operands)<>0 then
                                          begin
-                                               HistoryOutStr('Insert:'+rscmNoBlockDefInDWG);
+                                               Prompt(rscmNoBlockDefInDWG);
                                                commandmanager.executecommandend;
                                                exit;
                                          end;
@@ -535,7 +535,7 @@ begin
      end
         else
             begin
-                 historyoutstr('BlockReplace:'+rscmInDwgBlockDefNotDeffined);
+                 Prompt(rscmInDwgBlockDefNotDeffined);
                  commandmanager.executecommandend;
             end;
 end;
@@ -600,7 +600,7 @@ end;
 
 begin
      if BlockReplaceParams.Find.Enums.Count=0 then
-                                                  shared.ShowError('BlockReplace:'+rscmCantGetBlockToReplace)
+                                                  Error(rscmCantGetBlockToReplace)
                                               else
      begin
           poa:=@gdb.GetCurrentROOT.ObjArray;
@@ -639,7 +639,7 @@ begin
                 end;
                 pb:=poa.iterate(ir);
           until pb=nil;
-          HistoryOutStr('BlockReplace:'+sysutils.format(rscmNEntitiesProcessed,[inttostr(result)]));
+          Prompt(sysutils.format(rscmNEntitiesProcessed,[inttostr(result)]));
           Regen_com('');
           commandmanager.executecommandend;
      end;
@@ -973,7 +973,7 @@ begin
 end;
 procedure Print_com.CommandStart(Operands:pansichar);
 begin
-  shared.showerror('Print_com.CommandStart:'+rsNotYetImplemented);
+  Error(rsNotYetImplemented);
   self.savemousemode:=GDB.GetCurrentDWG.OGLwindow1.param.md.mode;
   begin
        ShowMenu;
@@ -1516,7 +1516,7 @@ begin
      i:=GetBlockDefNames(BIProp.Blocks.Enums,operands);
      if BIProp.Blocks.Enums.Count>0 then
      begin
-          if i>0 then
+          if i>=0 then
                      BIProp.Blocks.Selected:=i
                  else
                      if length(operands)<>0 then
@@ -2911,7 +2911,7 @@ begin
     end
 else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
     begin
-         tn:='DEVICE_'+PGDBObjBlockInsert(sd.PFirstObj)^.name;
+         tn:=DevicePrefix+PGDBObjBlockInsert(sd.PFirstObj)^.name;
     end;
      end;
 

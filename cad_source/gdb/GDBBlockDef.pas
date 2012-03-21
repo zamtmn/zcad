@@ -169,7 +169,7 @@ begin
 
   //if ou.InterfaceVariables.vararray.Count=0 then
                                        begin
-                                            if pos('DEVICE_',name)=1 then
+                                            if pos(DevicePrefix,name)=1 then
                                             begin
                                                 uou:=pointer(units.findunit(name));
                                                 if uou<>nil then

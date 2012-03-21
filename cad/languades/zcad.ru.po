@@ -255,6 +255,22 @@ msgctxt "zcadexternal.acn_copyfromowner~textimage"
 msgid "COF"
 msgstr ""
 
+#: zcadexternal.acn_copyvaluetoclip~caption
+msgid "Copy value"
+msgstr "Копировать значение"
+
+#: zcadexternal.acn_copyvaluetoclip~textimage
+msgid "CVL"
+msgstr ""
+
+#: zcadexternal.acn_copyvarnametoclip~caption
+msgid "Copy var name"
+msgstr "Копировать имя переменной"
+
+#: zcadexternal.acn_copyvarnametoclip~textimage
+msgid "CVN"
+msgstr ""
+
 #: zcadexternal.acn_copy~caption
 msgctxt "zcadexternal.acn_copy~caption"
 msgid "Copy"
@@ -264,6 +280,30 @@ msgstr "Копировать"
 msgctxt "zcadexternal.acn_copy~hint"
 msgid "Copy primitives"
 msgstr "Копировать примитивы"
+
+#: zcadexternal.acn_dbaseadd~caption
+msgid "Add to drawing database"
+msgstr "Добавить в базу данных чертежа"
+
+#: zcadexternal.acn_dbaseadd~textimage
+msgid "DBAdd"
+msgstr ""
+
+#: zcadexternal.acn_dbaselink~caption
+msgid "Link to selected entities"
+msgstr "Связать с выделенными объектами"
+
+#: zcadexternal.acn_dbaselink~textimage
+msgid "DBLink"
+msgstr ""
+
+#: zcadexternal.acn_dbaserename~caption
+msgid "Rename"
+msgstr "Переименовать"
+
+#: zcadexternal.acn_dbaserename~textimage
+msgid "DBRename"
+msgstr ""
 
 #: zcadexternal.acn_deselectall~caption
 msgctxt "zcadexternal.acn_deselectall~caption"
@@ -299,6 +339,14 @@ msgstr "Вставить"
 msgctxt "zcadexternal.acn_help~caption"
 msgid "Help"
 msgstr "Справка"
+
+#: zcadexternal.acn_inserttodrawing~caption
+msgid "Insert to drawing"
+msgstr "Вставить в чертеж"
+
+#: zcadexternal.acn_inserttodrawing~textimage
+msgid "ITD"
+msgstr ""
 
 #: zcadexternal.acn_inverseselected~caption
 msgctxt "zcadexternal.acn_inverseselected~caption"
@@ -1143,9 +1191,9 @@ msgid "Reset camera"
 msgstr "Камера в начало"
 
 #: zcadexternal.menucommand~fuckoff
-#| msgid "Dimensions styles (not impl)"
-msgid "Layouts (not impl)"
-msgstr "Листы (не реализовано)"
+#| msgid "Layouts (not impl)"
+msgid "Dimensions styles (not impl)"
+msgstr "Стили размеров (не реализовано)"
 
 #: zcadexternal.menucommand~setobjinsp(camera)
 msgid "Camera"
@@ -1217,10 +1265,30 @@ msgctxt "zcadexternal.menu~modify"
 msgid "Modify"
 msgstr "Изменить"
 
+#: zcadexternal.menu~objinspcxmenu
+msgid "OBJINSPCXMENU"
+msgstr ""
+
+#: zcadexternal.menu~objinspvarcxmenu
+msgid "OBJINSPVARCXMENU"
+msgstr ""
+
 #: zcadexternal.menu~plan
 msgctxt "zcadexternal.menu~plan"
 msgid "Plan"
 msgstr "План"
+
+#: zcadexternal.menu~programblockscxmenu
+msgid "PROGRAMBLOCKSCXMENU"
+msgstr ""
+
+#: zcadexternal.menu~programdbcxmenu
+msgid "PROGRAMDBCXMENU"
+msgstr ""
+
+#: zcadexternal.menu~projectdbcxmenu
+msgid "PROJECTDBCXMENU"
+msgstr ""
 
 #: zcadexternal.menu~schematic
 msgctxt "zcadexternal.menu~schematic"

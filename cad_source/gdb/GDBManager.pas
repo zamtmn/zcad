@@ -288,7 +288,7 @@ var
   nam:gdbstring;
 begin
   result:=nil;
-  if pos('DEVICE_', uppercase(s))=1  then
+  if pos(DevicePrefix, uppercase(s))=1  then
                                          begin
                                          GDBPointer(pb):=pva^.CreateInitObj(GDBDeviceID,gdb.GetCurrentROOT);
                                          //pgdbobjdevice(pb)^.initnul;

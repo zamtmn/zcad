@@ -153,6 +153,9 @@ const {as_normal=0;
   ObjN_GDBObjElLeader='GDBObjElLeader';
   ObjN_ArrayEnd='ArrayEnd';
 
+  DevicePrefix='DEVICE_';
+  DrawingDeviceBaseUnitName='drawingdevicebase';
+
   LNSysLayerName='0';
   LNSysDefpoints='DEFPOINTS';
   LNMetricLayerName='SYS_METRIC';

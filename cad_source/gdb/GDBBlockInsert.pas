@@ -251,10 +251,10 @@ begin
                 pvisible:=pblockdef.ObjArray.iterate(ir);
           until pvisible=nil;
      end
-else*) if (pos('DEVICE_',uppercase(name))=1)or isdevice then
+else*) if (pos(DevicePrefix,uppercase(name))=1)or isdevice then
      begin
           if isdevice then
-                          name:='DEVICE_'+name;
+                          name:=DevicePrefix+name;
           GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(TempDevice),sizeof(GDBObjDevice));
           result:=tempdevice;
           TempDevice^.initnul;

@@ -68,3 +68,6 @@ action ACN_DBASEADD,DBaseAdd,#DBAdd,Add to drawing database,,
 action ACN_DBASELINK,DBaseLink,#DBLink,Link to selected entities,,
 action ACN_DBASERENAME,DBaseRename,#DBRename,Rename,,
 action ACN_INSERTTODRAWING,Insert2,#ITD,Insert to drawing,,
+
+action ACN_COPYVARNAMETOCLIP,ObjInspCopyToClip(VAR),#CVN,Copy var name,,
+action ACN_COPYVALUETOCLIP,ObjInspCopyToClip(VALUE),#CVL,Copy value,,

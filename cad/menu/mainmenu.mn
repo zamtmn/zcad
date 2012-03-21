@@ -379,4 +379,14 @@ PopUpMenu PROGRAMBLOCKSCXMENU;
   {
     action ACN_INSERTTODRAWING
   }
+PopUpMenu OBJINSPVARCXMENU;
+  {
+    action ACN_COPYVARNAMETOCLIP
+    action ACN_COPYVALUETOCLIP
+  }
+PopUpMenu OBJINSPCXMENU;
+  {
+    action ACN_COPYVALUETOCLIP
+  }
+
 CreateMainMenu File,Edit,View,Format,Draw,Modify,Schematic,Plan,Model,Settings,Window,Help,__Debug,__DB;

@@ -22,6 +22,7 @@ unit Objinsp;
 interface
 
 uses
+  ucxmenumgr,umytreenode,
   Themes,
   {$IFDEF LCLGTK2}
   x,xlib,{x11,}{xutil,}
@@ -62,7 +63,6 @@ type
     OLDPP:PPropertyDeskriptor;
 
     MResplit:boolean;
-
 
     procedure draw; virtual;
     procedure mypaint(sender:tobject);
@@ -126,10 +126,11 @@ var
   typecount:GDBWord;
   //temp: GDBPointer;
   proptreeptr:propdeskptr;
+  currpd:PPropertyDeskriptor;
 
 implementation
 
-uses UObjectDescriptor,gdbentity,UGDBStringArray,log;
+uses UObjectDescriptor,gdbentity,UGDBStringArray,log,mainwindow;
 procedure TGDBobjinsp.FormHide(Sender: TObject);
 begin
      proptreeptr:=proptreeptr;
@@ -968,6 +969,8 @@ var
   vsa:GDBGDBStringArray;
   ir:itrec;
 
+  menu:TmyPopupMenu;
+
 begin
   inherited;
   y:=y+self.VertScrollBar.Position;
@@ -975,15 +978,32 @@ begin
   my:=startdrawy;
   pp:=mousetoprop(@pda,x,y,my);
 
-    if (button=mbLeft)
-   and (IsMouseOnSpliter(pp,X)) then
+  if (button=mbLeft)
+  and (IsMouseOnSpliter(pp,X)) then
                                     begin
                                     mresplit:=true;
                                     exit;
                                     end;
   if pp=nil then
-    exit;
-  createeditor(pp);
+                exit;
+  if (button=mbLeft) then
+                         createeditor(pp)
+                     else
+                         begin
+                              begin
+                                   menu:=nil;
+                                   if pp^.valkey<>''then
+                                   menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPVARCXMENU'))
+                              else if pp^.Value<>''then
+                                   menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPCXMENU'));
+                                   if menu<>nil then
+                                   begin
+                                   currpd:=pp;
+                                   menu.PopUp;
+                                   end;
+                                   //cxmenumgr.PopUpMenu(menu);
+                              end;
+                         end;
 
   contentheigth:=gettreeh;
   createscrollbars;
@@ -1034,6 +1054,7 @@ procedure TGDBobjinsp.setptr;
 begin
   if (pcurrobj<>addr)or(currobjgdbtype<>exttype) then
   begin
+    Objinsp.currpd:=nil;
     if peditor<>nil then
     begin
          self.freeeditor;
@@ -1123,5 +1144,6 @@ end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('objinsp.initialization');{$ENDIF}
   proptreeptr:=nil;
+  Objinsp.currpd:=nil;
 end.
 

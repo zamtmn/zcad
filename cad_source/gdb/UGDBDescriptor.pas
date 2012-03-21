@@ -366,7 +366,7 @@ begin
   DWGUnits.init;
   DWGUnits.SetNextManager(num);
   DWGUnits.loadunit(expandpath('*rtl/dwg/DrawingDeviceBase.pas'),nil);
-  DWGDBUnit:=DWGUnits.findunit('DrawingDeviceBase');
+  DWGDBUnit:=DWGUnits.findunit(DrawingDeviceBaseUnitName);
   DWGUnits.loadunit(expandpath('*rtl/dwg/DrawingVars.pas'),nil);
   DWGUnits.findunit('DrawingVars').AssignToSymbol(pcamera,'camera');
   //pcamera^.initnul;
@@ -843,7 +843,7 @@ begin
                     processblock;
                     if (_source^.vp.ID=GDBDeviceID) then
                     begin
-                         tn:='DEVICE_'+tn;
+                         tn:=DevicePrefix+tn;
                          processblock;
                     end;
 
@@ -1012,7 +1012,7 @@ var
    pl:PGDBLayerProp;
 
 begin
-      if pos('DEVICE_',_source.Name)=1 then
+      if pos(DevicePrefix,_source.Name)=1 then
                                          CopyBlock(_from,_to,_from.BlockDefArray.getblockdef(copy(_source.Name,8,length(_source.Name)-7)));
 
      _dest:=_to.BlockDefArray.create(_source.Name);

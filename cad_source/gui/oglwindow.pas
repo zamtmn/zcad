@@ -1895,7 +1895,9 @@ begin
                            begin
                                 menu:=nil;
                                 if param.SelDesc.Selectedobjcount>0 then
-                                menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'SELECTEDENTSCXMENU'));
+                                                                        menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'SELECTEDENTSCXMENU'))
+                                                                    else
+                                                                        menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'NONSELECTEDENTSCXMENU'));
                                 if menu<>nil then
                                 begin
                                      menu.PopUp;

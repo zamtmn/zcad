@@ -1500,11 +1500,13 @@ begin
 
            ppopupmenu:=TmyPopupMenu.Create({pm}application);
            ppopupmenu.Name:=MenuNameModifier+uppercase(line);
+           ppopupmenu.Images := StandartActions.Images;
            line:=InterfaceTranslate('menu~'+line,line);
            //ppopupmenu.Caption:=line;
            //pm.items.Add(ppopupmenu);
 
            loadsubmenu(f,TMenuItem(ppopupmenu),line);
+
            cxmenumgr.RegisterLCLMenu(ppopupmenu)
 
 end;
@@ -1663,7 +1665,14 @@ begin
                                                       end
                 else     if uppercase(line)='SEPARATOR' then
                                                       begin
-                                                           {ppopupmenu}pm.AddSeparator;
+                                                           if pm is TMenuItem then
+                                                                                  pm.AddSeparator
+                                                                              else
+                                                                                  begin
+                                                                                       pm1:=TMenuItem.Create(pm);
+                                                                                       pm1.Caption:='-';
+                                                                                       TMyPopUpMenu(pm).Items.Add(pm1);
+                                                                                  end;
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);
                                                       end

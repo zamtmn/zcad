@@ -20,7 +20,7 @@ unit GDBSubordinated;
 {$INCLUDE def.inc}
 
 interface
-uses strproc,LCLProc,UGDBOpenArrayOfByte,devices,gdbase,gdbasetypes,varman,varmandef{,UGDBOpenArrayOfByte},dxflow,UBaseTypeDescriptor,sysutils,UGDBLayerArray{,strutils};
+uses gdbobjectsconstdef,strproc,LCLProc,UGDBOpenArrayOfByte,devices,gdbase,gdbasetypes,varman,varmandef{,UGDBOpenArrayOfByte},dxflow,UBaseTypeDescriptor,sysutils,UGDBLayerArray{,strutils};
 type
 //Owner:PGDBObjGenericWithSubordinated;(*'Владелец'*)
 //PSelfInOwnerArray:TArrayIndex;(*'Индекс у владельца'*)
@@ -128,7 +128,7 @@ begin
      pvnt^.attrib:=pvnt^.attrib or (vda_RO);
      if (pvn<>nil)and(pvnt<>nil) then
      begin
-          pdbu:=gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase');
+          pdbu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
           pdbv:=pdbu^.FindVariable(pstring(pvn.data.Instance)^);
           if pdbv<>nil then
                            pstring(pvnt.data.Instance)^:=PDbBaseObject(pdbv.data.Instance)^.Name
@@ -406,4 +406,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBSubordinated.initialization');{$ENDIF}
-end.
+end.

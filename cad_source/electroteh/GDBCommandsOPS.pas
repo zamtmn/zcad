@@ -439,7 +439,7 @@ begin
                             end;
      end;
     if OPSPlaceSmokeDetectorOrtoParam.InsertType=TIT_Device then
-                                                                sdname:='DEVICE_'+sdname;
+                                                                sdname:=DevicePrefix+sdname;
 end;
 {function OPS_Sensor_Mark_com(Operands:pansichar):GDBInteger;
 var i: GDBInteger;
@@ -942,7 +942,7 @@ begin
     end
 else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
     begin
-         OrtoDevPlaceParam.Name:='DEVICE_'+PGDBObjBlockInsert(sd.PFirstObj)^.name;
+         OrtoDevPlaceParam.Name:=DevicePrefix+PGDBObjBlockInsert(sd.PFirstObj)^.name;
     end;
 
   if (OrtoDevPlaceParam.Name='')or(sd.Count=0)or(sd.Count>1) then

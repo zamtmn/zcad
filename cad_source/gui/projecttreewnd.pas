@@ -20,10 +20,13 @@ unit projecttreewnd;
 {$INCLUDE def.inc}
 interface
 uses
- zcadstrconsts,ucxmenumgr,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ gdbobjectsconstdef,zcadstrconsts,ucxmenumgr,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}ComCtrls,
  {ZTabControlsGeneric,zmenus,}DeviceBase,log,SysUtils,{UGDBTree,}gdbase,UGDBDescriptor{,math,commandline},varman,languade{,UGDBTracePropArray},
   {ZEditsWithProcedure,zbasicvisible,}varmandef,shared,sysinfo{,ZTreeViewsGeneric},memman,gdbasetypes;
+const
+  uncat='UNCAT';
+  uncat_='UNCAT_';
 type
       {**@abstract(Node represents a block definition)
          Modified TTreeNode}
@@ -126,12 +129,12 @@ begin
                        begin
                             T_ProjectDB.Selected:=nil;
                             self.ProjectEquipmentN.DeleteChildren;
-                            BuildTreeByEQ(ProjectEquipmentN,gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase'),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
+                            BuildTreeByEQ(ProjectEquipmentN,gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
                             (*
                             ProjectEquipmentNodeN.free;
                             gdbgetmem({$IFDEF DEBUGBUILD}'{B941B71E-2BA6-4B5E-B436-633B6C8FC500}',{$ENDIF}pointer(ProjectEquipmentNode.SubNode),sizeof(TGDBTree));
                             ProjectEquipmentNode.SubNode.init({$IFDEF DEBUGBUILD}'{CE1105DB-7CAD-4353-922A-5A31956421C4}',{$ENDIF}10);
-                            BuildTreeByEQ(ProjectEquipmentNode,gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase'),ProjectDBContextMenu);
+                            BuildTreeByEQ(ProjectEquipmentNode,gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName),ProjectDBContextMenu);
                             ProjectDB.Sync;
                             *)
                        end;
@@ -160,7 +163,7 @@ begin
                                  end;
 
      i:=pos('_',treepos);
-     until (i=0)or(category='UNCAT');
+     until (i=0)or(category=uncat);
 end;
 procedure TProjectTreeWnd.BuildTreeByEQ(var BuildNode:TmyTreeNode;PDBUNIT:PTUnit;pcm:TmyPopupMenu);
 var
@@ -188,7 +191,7 @@ begin
          else
              treesuperpos:='';
          if treesuperpos='' then
-                            treesuperpos:='UNCAT_'+pvdeq^.name;
+                            treesuperpos:=uncat_+pvdeq^.name;
          repeat
          i:=pos('|',treesuperpos);
          if i=0 then i:=length(treesuperpos)+1;
@@ -209,7 +212,7 @@ begin
                             else
                                 s:='';
          TmyTreeView(CurrNode.TreeView).NodeType:=TEqTreeNode;
-         if treepos='UNCAT' then
+         if treepos=uncat then
                                 begin
                                      eqnode:=TEqTreeNode({tree}TmyTreeView(BuildNode.TreeView).Items.addchild(CurrNode,(treepos)));
                                      eqnode.fBlockName:=pvdeq^.name;
@@ -263,10 +266,10 @@ begin
   T_ProgramDB:=TmyTreeView.create(PT_P_ProgramDB);
   BlockNodeN:=TmyTreeNode(T_ProgramDB.Items.add(nil,(rsBlocks)));
   BlockNodeUnCatN:=TmyTreeNode(T_ProgramDB.Items.addchild(BlockNodeN,(rsUncategorized)));
-  BlockNodeUnCatN.fcategory:='UNCAT';
+  BlockNodeUnCatN.fcategory:=uncat;
   DeviceNodeN:=TmyTreeNode(T_ProgramDB.Items.add(nil,(rsDevices)));
   DeviceNodeUnCatN:=TmyTreeNode(T_ProgramDB.Items.addchild(DeviceNodeN,(rsUncategorized)));
-  DeviceNodeUnCatN.fcategory:='UNCAT';
+  DeviceNodeUnCatN.fcategory:=uncat;
   ProgramEquipmentN:=TmyTreeNode(T_ProgramDB.Items.add(nil,(rsEquipment)));
 
 
@@ -293,7 +296,7 @@ begin
   pb:=BlockBaseDWG.BlockDefArray.beginiterate(ir);
   if pb<>nil then
   repeat
-        i:=pos('DEVICE_',pb^.name);
+        i:=pos(DevicePrefix,pb^.name);
         if i=0 then
                    begin
                         CurrNode:=BlockNodeN;
@@ -302,7 +305,7 @@ begin
                    begin
                         CurrNode:=DeviceNodeN;
                    end;
-        treepos:='UNCAT_'+pb^.name;
+        treepos:=uncat_+pb^.name;
 
         pvd:=pb^.ou.FindVariable('BTY_TreeCoord');
         if pvd<>nil then
@@ -324,7 +327,7 @@ begin
 
   BuildTreeByEQ(ProgramEquipmentN,DBUnit,{ProgramDBContextMenuN}{}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROGRAMDBCXMENU')){});
   if gdb.GetCurrentDWG<>nil then
-  BuildTreeByEQ(ProjectEquipmentN,gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase'),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
+  BuildTreeByEQ(ProjectEquipmentN,gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
 
 end;
 initialization

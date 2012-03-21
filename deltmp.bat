@@ -31,6 +31,7 @@ rm cad_source/languade/*.bak
 rm -rf cad_source/zwin/backup
 rm cad_source/zwin/*.bak
 rm -rf cad_source/GDB/backup
+rm -rf cad_source/misc/backup
 rm cad_source/GDB/*.bak
 rm -rf cad_source/languade/__history
 rm -rf cad_source/commands/__history

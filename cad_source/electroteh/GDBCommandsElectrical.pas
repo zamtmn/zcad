@@ -1000,7 +1000,7 @@ begin
   SecondOwner:=nil;
   OldFirstOwner:=nil;
   gdb.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  historyout('Начало цепи:');
+  Prompt('Начало цепи:');
 end;
 
 procedure El_Wire_com.CommandCancel;
@@ -1031,7 +1031,7 @@ begin
   end {else FirstOwner:=oldfirstowner};*)
   if (button and MZW_LBUTTON)<>0 then
   begin
-    historyout('Вторая точка:');
+    Prompt('Вторая точка:');
     New_line := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
     GDBObjLineInit(gdb.GetCurrentROOT,New_line,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,wc,wc);
     New_line^.Format;
@@ -1839,7 +1839,7 @@ begin
                      pt^.ptablestyle:=gdb.GetCurrentDWG.TableStyleTable.getAddres('Spec');
                      pt^.tbl.cleareraseobj;
 
-  pdbu:=gdb.GetCurrentDWG.DWGUnits.findunit('drawingdevicebase');
+  pdbu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
   currentgroup:=MainSpecContentFormat.beginiterate(ir_inscf);
   if currentgroup<>nil then
   if length(currentgroup^)>1 then

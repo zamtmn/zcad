@@ -185,6 +185,7 @@ MainMenuItem Modify;
     action ACN_MOVE
     action ACN_ROTATE
     action ACN_SCALE
+    action ACN_MIRROR
     Separator
     action ACN_OBJVARMAN
     action ACN_MULTIOBJVARMAN
@@ -396,6 +397,7 @@ PopUpMenu SELECTEDENTSCXMENU;
     action ACN_MOVE
     action ACN_ROTATE
     action ACN_SCALE
+    action ACN_MIRROR
     Separator
     action ACN_COPYCLIP
     action ACN_COPYCLIPBASE

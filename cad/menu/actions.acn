@@ -10,8 +10,8 @@ action ACN_QUIT,Quit,exit.bmp,Quit,,CTRL+Q
 
 action ACN_UNDO,Undo,undo.bmp,Undo,,CTRL+Z
 action ACN_REDO,Redo,redo.bmp,Redo,,CTRL+SHIFT+Z
-action ACN_COPYCLIP,CopyClip,copyclip.bmp,Copy,Copy to clipboard,CTRL+C
-action ACN_COPYCLIPBASE,CopyBase,copyclipbase.bmp,Copy with base point,Copy to clipboard with base point,CTRL+SHIFT+C
+action ACN_COPYCLIP,CopyClip,copyclip.bmp,Copy to clipboard,Copy to clipboard,CTRL+C
+action ACN_COPYCLIPBASE,CopyBase,copyclipbase.bmp,Copy to clipboard with base point,Copy to clipboard with base point,CTRL+SHIFT+C
 action ACN_FAKECOPYCLIPBASE,CopyBase,#CB,,,CTRL+INS
 action ACN_PASTE,PasteClip,pasteclip.bmp,Paste,Paste from clipboard,CTRL+V
 action ACN_FAKEPASTE,PasteClip,#Paste,,,SHIFT+INS
@@ -39,6 +39,7 @@ action ACN_COPY,Copy,copy.bmp,Copy,Copy primitives,
 action ACN_MOVE,Move,move.bmp,Move,Move primitives,
 action ACN_ROTATE,Rotate,rotate.bmp,Rotate,Rotate primitives,
 action ACN_SCALE,Scale,scale.bmp,Scale,Scale primitives,
+action ACN_MIRROR,Mirror,mirror.bmp,Mirror,Reflect primitives,
 
 action ACN_BEDIT,BEdit,bedit.bmp,Block editor,,
 action ACN_BREPLACE,BlockReplace,#BR,Block replace,,

@@ -171,6 +171,10 @@ type
   copy_com = object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
+  mirror_com = object(move_com)
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
+  end;
+
   rotate_com = object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
@@ -282,6 +286,7 @@ var
    //Line:Line_com;
    OnDrawingEd:OnDrawingEd_com;
    Copy:copy_com;
+   mirror:mirror_com;
    move:move_com;
    rotate:rotate_com;
    scale:Scale_com;
@@ -2175,7 +2180,7 @@ begin
    until pcd=nil;
    comit;
    end;
-    GDB.GetCurrentDWG.UndoStack.PushEndMarker;
+   GDB.GetCurrentDWG.UndoStack.PushEndMarker;
 
    gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
    gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
@@ -2233,6 +2238,69 @@ begin
    //commandmanager.executecommandend;
    end;
 end;
+function Mirror_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
+var //i:GDBInteger;
+    dist,p3:gdbvertex;
+    d:GDBDouble;
+    dispmatr:DMatrix4D;
+    ir:itrec;
+    pcd:PTCopyObjectDesc;
+    pcopyofcopyobj:pGDBObjEntity;
+
+    domethod,undomethod:tmethod;
+    plane:DVector4D;
+begin
+  dist.x := wc.x - t3dp.x;
+  dist.y := wc.y - t3dp.y;
+  dist.z := wc.z - t3dp.z;
+
+
+  {}
+  d:=geometry.oneVertexlength(dist);
+  p3:=geometry.VertexMulOnSc(ZWCS,d);
+  p3:=geometry.VertexAdd(p3,t3dp);
+
+  plane:=PlaneFrom3Pont(t3dp,wc,p3);
+  normalizeplane(plane);
+  dispmatr:=CreateReflectionMatrix(plane);
+  {}
+
+  //dispmatr:=onematrix;
+  //PGDBVertex(@dispmatr[3])^:=dist;
+
+  gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=dispmatr;
+
+   if (button and MZW_LBUTTON)<>0 then
+   begin
+   SetObjCreateManipulator(domethod,undomethod);
+   with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+   begin
+   pcd:=pcoa^.beginiterate(ir);
+   if pcd<>nil then
+   repeat
+                          begin
+                          {}pcopyofcopyobj:=pcd.obj^.Clone(pcd.obj.bp.ListPos.Owner);
+                            pcopyofcopyobj^.TransformAt(pcd.obj,@dispmatr);
+                            pcopyofcopyobj^.format;
+
+                             begin
+                                  AddObject(pcopyofcopyobj);
+                             end;
+
+                            //gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(pcopyofcopyobj));
+                          end;
+
+        pcd:=pcoa^.iterate(ir);
+   until pcd=nil;
+   comit;
+   end;
+      redrawoglwnd;
+   //gdb.GetCurrentDWG.ConstructObjRoot.Count:=0;
+   //commandend;
+   //commandmanager.executecommandend;
+   end;
+end;
+
 function rotate_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 var //i:GDBInteger;
     //dist:gdbvertex;
@@ -3027,6 +3095,7 @@ begin
   OnDrawingEd.init('OnDrawingEd',0,0);
   OnDrawingEd.CEndActionAttr:=0;
   copy.init('Copy',0,0);
+  mirror.init('Mirror',0,0);
   move.init('Move',0,0);
   rotate.init('Rotate',0,0);
   scale.init('Scale',0,0);

@@ -2258,7 +2258,7 @@ begin
   Randomize;
   MSEditor.init;
   CopyClipFile:='Empty';
-  CreateCommandFastObjectPlugin(@ObjInspCopyToClip_com,'ObjInspCopyToClip',0,0);
+  CreateCommandFastObjectPlugin(@ObjInspCopyToClip_com,'ObjInspCopyToClip',0,0).overlay:=true;
   CreateCommandFastObjectPlugin(@SetObjInsp_com,'SetObjInsp',CADWG,0);
   CreateCommandFastObjectPlugin(@CommandList_com,'CommandList',0,0);
   ms2objinsp:=CreateCommandFastObjectPlugin(@MultiSelect2ObjIbsp_com,'MultiSelect2ObjIbsp',CADWG,0);

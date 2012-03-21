@@ -226,8 +226,10 @@ msgid "Close drawing"
 msgstr "Закрыть чертеж"
 
 #: zcadexternal.acn_copyclipbase~caption
+#, fuzzy
+#| msgid "Copy with base point"
 msgctxt "zcadexternal.acn_copyclipbase~caption"
-msgid "Copy with base point"
+msgid "Copy to clipboard with base point"
 msgstr "Копировать с базовой точкой"
 
 #: zcadexternal.acn_copyclipbase~hint
@@ -236,8 +238,10 @@ msgid "Copy to clipboard with base point"
 msgstr "Копировать в клипбоард с базовой точкой"
 
 #: zcadexternal.acn_copyclip~caption
+#, fuzzy
+#| msgid "Copy"
 msgctxt "zcadexternal.acn_copyclip~caption"
-msgid "Copy"
+msgid "Copy to clipboard"
 msgstr "Копировать"
 
 #: zcadexternal.acn_copyclip~hint
@@ -427,6 +431,14 @@ msgstr "Экспорт \"ведомости материалов\""
 msgctxt "zcadexternal.acn_materiallegend~hint"
 msgid "Export materials legend"
 msgstr "Экспорт \"ведомости материалов\""
+
+#: zcadexternal.acn_mirror~caption
+msgid "Mirror"
+msgstr "Отразить"
+
+#: zcadexternal.acn_mirror~hint
+msgid "Reflect primitives"
+msgstr "Отразить примитивы"
 
 #: zcadexternal.acn_move~caption
 msgctxt "zcadexternal.acn_move~caption"
@@ -928,7 +940,7 @@ msgstr "Параметры блока"
 #| msgid "Rotate"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Block params"
-msgstr "Параметры блоков"
+msgstr "Поворот"
 
 #: zcadexternal.gdbobjcircle~area
 msgctxt "zcadexternal.gdbobjcircle~area"
@@ -1213,9 +1225,9 @@ msgstr "Камера в начало"
 
 #: zcadexternal.menucommand~fuckoff
 #, fuzzy
-#| msgid "Layouts (not impl)"
-msgid "Dimensions styles (not impl)"
-msgstr "Стили размеров (не реализовано)"
+#| msgid "Dimensions styles (not impl)"
+msgid "Layouts (not impl)"
+msgstr "Листы (не реализовано)"
 
 #: zcadexternal.menucommand~setobjinsp(camera)
 msgid "Camera"
@@ -1287,6 +1299,10 @@ msgctxt "zcadexternal.menu~modify"
 msgid "Modify"
 msgstr "Изменить"
 
+#: zcadexternal.menu~nonselectedentscxmenu
+msgid "NONSELECTEDENTSCXMENU"
+msgstr ""
+
 #: zcadexternal.menu~objinspcxmenu
 msgid "OBJINSPCXMENU"
 msgstr ""
@@ -1316,6 +1332,10 @@ msgstr ""
 msgctxt "zcadexternal.menu~schematic"
 msgid "Schematic"
 msgstr "Схема"
+
+#: zcadexternal.menu~selectedentscxmenu
+msgid "SELECTEDENTSCXMENU"
+msgstr ""
 
 #: zcadexternal.menu~settings
 msgctxt "zcadexternal.menu~settings"

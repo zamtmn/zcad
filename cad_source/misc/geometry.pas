@@ -122,6 +122,7 @@ function distance2piece_2_xy(var q:GDBvertex2DI;const p1,p2:GDBvertex2D):GDBvert
 function distance2point_2(var p1,p2:GDBvertex2DI):GDBInteger;inline;
 function CreateTranslationMatrix(const V:GDBvertex): DMatrix4D;inline;
 function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;inline;
+function CreateReflectionMatrix(plane:DVector4D): DMatrix4D;
 function CreateVertex(const x,y,z:GDBDouble):GDBVertex;inline;
 function CreateVertex2D(const x,y:GDBDouble):GDBVertex2D;inline;
 function IsPointInBB(const point:GDBvertex; var fistbb:GDBBoundingBbox):GDBBoolean;inline;
@@ -1059,6 +1060,29 @@ begin
   Result[3, 2] := V.z;
   Result[3, 3] := 1;
 end;
+function CreateReflectionMatrix(plane:DVector4D): DMatrix4D;
+begin
+  result[0,0] :=-2 * plane[0] * plane[0] + 1;
+  result[1,0] :=-2 * plane[0] * plane[1];
+  result[2,0] :=-2 * plane[0] * plane[2];
+  result[3,0] :=-2 * plane[0] * plane[3];
+
+  result[0,1] :=-2 * plane[1] * plane[0];
+  result[1,1] :=-2 * plane[1] * plane[1] + 1;
+  result[2,1] :=-2 * plane[1] * plane[2];
+  result[3,1] :=-2 * plane[1] * plane[3];
+
+  result[0,2] :=-2 * plane[2] * plane[0];
+  result[1,2] :=-2 * plane[2] * plane[1];
+  result[2,2] :=-2 * plane[2] * plane[2] + 1;
+  result[3,2] :=-2 * plane[2] * plane[3];
+
+  result[0,3]:=0;
+  result[1,3]:=0;
+  result[2,3]:=0;
+  result[3,3]:=1;
+end;
+
 function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;
 begin
   Result := onematrix;

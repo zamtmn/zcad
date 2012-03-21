@@ -1,16 +1,3 @@
-PopUpMenu SELECTEDENTSCXMENU;
-  {
-    action ACN_COPY
-    action ACN_MOVE
-    action ACN_ROTATE
-    action ACN_SCALE
-    action ACN_COPYCLIP
-    action ACN_COPYCLIPBASE
-    action ACN_ERASE
-    action ACN_DESELECTALL
-    action ACN_INVERSESELECTED
-    action ACN_SELSIM
-  }
 Panel OIButtons;
   {
     action ACN_SNAPRUNTIME
@@ -403,7 +390,7 @@ PopUpMenu OBJINSPCXMENU;
   {
     action ACN_COPYVALUETOCLIP
   }
-PopUpMenu SEQQLECTEDENTSCXMENU;
+PopUpMenu SELECTEDENTSCXMENU;
   {
     action ACN_COPY
     action ACN_MOVE
@@ -418,5 +405,11 @@ PopUpMenu SEQQLECTEDENTSCXMENU;
     action ACN_DESELECTALL
     action ACN_INVERSESELECTED
     action ACN_SELSIM
+  }
+PopUpMenu NONSELECTEDENTSCXMENU;
+  {
+    action ACN_PASTE
+    Separator
+    action ACN_SELECTALL
   }
 CreateMainMenu File,Edit,View,Format,Draw,Modify,Schematic,Plan,Model,Settings,Window,Help,__Debug,__DB;

@@ -1862,6 +1862,7 @@ end;
 procedure TOGLWnd.MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);
 var key: GDBByte;
     NeedRedraw:boolean;
+    menu:TmyPopupMenu;
 begin
   if (cxmenumgr.ismenupopup)or(ActivePopupMenu<>nil) then
                                                          exit;
@@ -1889,6 +1890,17 @@ begin
                                        exit;
                                   end;
 
+                           end;
+  if ssRight in shift then
+                           begin
+                                menu:=nil;
+                                if param.SelDesc.Selectedobjcount>0 then
+                                menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'SELECTEDENTSCXMENU'));
+                                if menu<>nil then
+                                begin
+                                     menu.PopUp;
+                                end;
+                                exit;
                            end;
   if PDWG<>gdb.GetCurrentDWG then
                                  begin

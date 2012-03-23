@@ -108,7 +108,6 @@ procedure GDBObjWithLocalCS.TransformAt;
 begin
     objmatrix:=geometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
 
-
      {Local.oz:=PGDBVertex(@objmatrix[2])^;
 
      Local.p_insert:=PGDBVertex(@objmatrix[3])^;}ReCalcFromObjMatrix;

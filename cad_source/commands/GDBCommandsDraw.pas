@@ -49,6 +49,11 @@ const
      modelspacename:GDBSTring='**Модель**';
 type
 {EXPORT+}
+         TEntityProcess=(
+                       TEP_Erase(*'Erase'*),
+                       TEP_leave(*'Leave'*)
+                       );
+
          TBlockInsert=record
                             Blocks:TEnumData;(*'Block'*)
                             Scale:GDBvertex;(*'Scale'*)
@@ -63,6 +68,10 @@ type
                        TPEM_Nearest(*'Paste in nearest segment'*),
                        TPEM_Select(*'Choose a segment'*)
                        );
+         TMirrorParam=record
+                            SourceEnts:TEntityProcess;(*'Source entities'*)
+                      end;
+
          TPolyEdit=record
                             Action:TSubPolyEdit;(*'Action'*)
                             Mode:TPolyEditMode;(*'Mode'*)
@@ -167,11 +176,15 @@ type
     procedure CommandCancel; virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
+    function Move(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
   end;
   copy_com = object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function Copy(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
   end;
-  mirror_com = object(move_com)
+  mirror_com = object(copy_com)
+    function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
 
@@ -268,6 +281,7 @@ type
 {EXPORT-}
 
 var
+    MirrorParam:TMirrorParam;
     PrintParam:TPrintParams;
     PSD: TPrinterSetupDialog;
     PAGED: TPageSetupDialog;
@@ -2138,37 +2152,29 @@ begin
   t3dp:=wc;
   result:=0;
  end;
-
-function Move_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
-var //i:GDBInteger;
+function Move_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
+var
     dist:gdbvertex;
-    dispmatr,im:DMatrix4D;
+begin
+        dist:=geometry.VertexSub(p2,p1);
+        result:=geometry.CreateTranslationMatrix(dist);
+end;
+function Move_com.Move(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
+var
+    dist:gdbvertex;
+    im:DMatrix4D;
     ir:itrec;
     pcd:PTCopyObjectDesc;
     m:tmethod;
 begin
-      dist.x := wc.x - t3dp.x;
-      dist.y := wc.y - t3dp.y;
-      dist.z := wc.z - t3dp.z;
-
-      dispmatr:=onematrix;
-      PGDBVertex(@dispmatr[3])^:=dist;
-
-      gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=dispmatr;
-
-  if (button and MZW_LBUTTON)<>0 then
-  begin
     im:=dispmatr;
     geometry.MatrixInvert(im);
-    GDB.GetCurrentDWG.UndoStack.PushStartMarker('Move');
+    GDB.GetCurrentDWG.UndoStack.PushStartMarker(UndoMaker);
     with GDB.GetCurrentDWG.UndoStack.PushCreateTGMultiObjectChangeCommand(dispmatr,im,pcoa^.Count)^ do
     begin
      pcd:=pcoa^.beginiterate(ir);
    if pcd<>nil then
    repeat
-        //pcd.obj^.TransformAt(pcd.obj,@dispmatr);//старый вариант
-        //pcd.obj^.Transform(dispmatr);//было перед ундой
-
         m.Data:=pcd.obj;
         m.Code:=pointer(pcd.obj^.Transform);
         AddMethod(m);
@@ -2181,123 +2187,107 @@ begin
    comit;
    end;
    GDB.GetCurrentDWG.UndoStack.PushEndMarker;
+end;
+function Move_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
+var //i:GDBInteger;
+    dist:gdbvertex;
+    dispmatr,im:DMatrix4D;
+    ir:itrec;
+    pcd:PTCopyObjectDesc;
+    m:tmethod;
+begin
+      dispmatr:=CalcTransformMatrix(t3dp,wc);
+      gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=dispmatr;
+
+  if (button and MZW_LBUTTON)<>0 then
+  begin
+   move(dispmatr,self.CommandName);
 
    gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
    gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
    gdb.GetCurrentROOT.FormatAfterEdit;
-   //commandend;
+
    commandmanager.executecommandend;
   end;
 end;
-function Copy_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
-var //i:GDBInteger;
+function Copy_com.Copy(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
+var
     dist:gdbvertex;
-    dispmatr:DMatrix4D;
+    im:DMatrix4D;
     ir:itrec;
     pcd:PTCopyObjectDesc;
-    pcopyofcopyobj:pGDBObjEntity;
-
+    m:tmethod;
     domethod,undomethod:tmethod;
+    pcopyofcopyobj:pGDBObjEntity;
 begin
-      dist.x := wc.x - t3dp.x;
-      dist.y := wc.y - t3dp.y;
-      dist.z := wc.z - t3dp.z;
+  GDB.GetCurrentDWG.UndoStack.PushStartMarker(UndoMaker);
+  SetObjCreateManipulator(domethod,undomethod);
+     with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+     begin
+     pcd:=pcoa^.beginiterate(ir);
+     if pcd<>nil then
+     repeat
+                            begin
+                            {}pcopyofcopyobj:=pcd.obj^.Clone(pcd.obj.bp.ListPos.Owner);
+                              pcopyofcopyobj^.TransformAt(pcd.obj,@dispmatr);
+                              pcopyofcopyobj^.format;
 
-      dispmatr:=onematrix;
-      PGDBVertex(@dispmatr[3])^:=dist;
+                               begin
+                                    AddObject(pcopyofcopyobj);
+                               end;
 
-      gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=dispmatr;
+                              //gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(pcopyofcopyobj));
+                            end;
 
-   if (button and MZW_LBUTTON)<>0 then
-   begin
-   SetObjCreateManipulator(domethod,undomethod);
-   with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
-   begin
-   pcd:=pcoa^.beginiterate(ir);
-   if pcd<>nil then
-   repeat
-                          begin
-                          {}pcopyofcopyobj:=pcd.obj^.Clone(pcd.obj.bp.ListPos.Owner);
-                            pcopyofcopyobj^.TransformAt(pcd.obj,@dispmatr);
-                            pcopyofcopyobj^.format;
-
-                             begin
-                                  AddObject(pcopyofcopyobj);
-                             end;
-
-                            //gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(pcopyofcopyobj));
-                          end;
-
-        pcd:=pcoa^.iterate(ir);
-   until pcd=nil;
-   comit;
-   end;
-      redrawoglwnd;
-   //gdb.GetCurrentDWG.ConstructObjRoot.Count:=0;
-   //commandend;
-   //commandmanager.executecommandend;
-   end;
+          pcd:=pcoa^.iterate(ir);
+     until pcd=nil;
+     comit;
+     end;
+     GDB.GetCurrentDWG.UndoStack.PushEndMarker;
 end;
-function Mirror_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
-var //i:GDBInteger;
+function Copy_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
+var
+   dispmatr:DMatrix4D;
+begin
+      dispmatr:=CalcTransformMatrix(t3dp,wc);
+      gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=dispmatr;
+      if (button and MZW_LBUTTON)<>0 then
+      begin
+           copy(dispmatr,self.CommandName);
+           redrawoglwnd;
+      end;
+end;
+function Mirror_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
+var
     dist,p3:gdbvertex;
     d:GDBDouble;
-    dispmatr:DMatrix4D;
-    ir:itrec;
-    pcd:PTCopyObjectDesc;
-    pcopyofcopyobj:pGDBObjEntity;
-
-    domethod,undomethod:tmethod;
     plane:DVector4D;
 begin
-  dist.x := wc.x - t3dp.x;
-  dist.y := wc.y - t3dp.y;
-  dist.z := wc.z - t3dp.z;
+        dist:=geometry.VertexSub(p2,p1);
+        d:=geometry.oneVertexlength(dist);
+        p3:=geometry.VertexMulOnSc(ZWCS,d);
+        p3:=geometry.VertexAdd(p3,t3dp);
 
+        plane:=PlaneFrom3Pont(p1,p2,p3);
+        normalizeplane(plane);
+        result:=CreateReflectionMatrix(plane);
+end;
+function Mirror_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
+var
+    dispmatr:DMatrix4D;
+begin
 
-  {}
-  d:=geometry.oneVertexlength(dist);
-  p3:=geometry.VertexMulOnSc(ZWCS,d);
-  p3:=geometry.VertexAdd(p3,t3dp);
-
-  plane:=PlaneFrom3Pont(t3dp,wc,p3);
-  normalizeplane(plane);
-  dispmatr:=CreateReflectionMatrix(plane);
-  {}
-
-  //dispmatr:=onematrix;
-  //PGDBVertex(@dispmatr[3])^:=dist;
-
+  dispmatr:=CalcTransformMatrix(t3dp,wc);
   gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=dispmatr;
 
    if (button and MZW_LBUTTON)<>0 then
    begin
-   SetObjCreateManipulator(domethod,undomethod);
-   with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
-   begin
-   pcd:=pcoa^.beginiterate(ir);
-   if pcd<>nil then
-   repeat
-                          begin
-                          {}pcopyofcopyobj:=pcd.obj^.Clone(pcd.obj.bp.ListPos.Owner);
-                            pcopyofcopyobj^.TransformAt(pcd.obj,@dispmatr);
-                            pcopyofcopyobj^.format;
-
-                             begin
-                                  AddObject(pcopyofcopyobj);
-                             end;
-
-                            //gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(pcopyofcopyobj));
-                          end;
-
-        pcd:=pcoa^.iterate(ir);
-   until pcd=nil;
-   comit;
-   end;
-      redrawoglwnd;
-   //gdb.GetCurrentDWG.ConstructObjRoot.Count:=0;
-   //commandend;
-   //commandmanager.executecommandend;
+      case MirrorParam.SourceEnts of
+                           TEP_Erase:move(dispmatr,self.CommandName);
+                           TEP_Leave:copy(dispmatr,self.CommandName);
+      end;
+      //redrawoglwnd;
+      commandmanager.executecommandend;
    end;
 end;
 
@@ -3096,6 +3086,8 @@ begin
   OnDrawingEd.CEndActionAttr:=0;
   copy.init('Copy',0,0);
   mirror.init('Mirror',0,0);
+  mirror.commanddata.Instance:=@MirrorParam;
+  mirror.commanddata.PTD:=SysUnit.TypeName2PTD('TMirrorParam');
   move.init('Move',0,0);
   rotate.init('Rotate',0,0);
   scale.init('Scale',0,0);

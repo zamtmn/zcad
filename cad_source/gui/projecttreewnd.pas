@@ -264,6 +264,7 @@ begin
   PT_P_ProgramDB:=TTabSheet.create(PT_PageControl);
   PT_P_ProgramDB.Caption:=rsProgramDB;
   T_ProgramDB:=TmyTreeView.create(PT_P_ProgramDB);
+  T_ProgramDB.ReadOnly:=true;
   BlockNodeN:=TmyTreeNode(T_ProgramDB.Items.add(nil,(rsBlocks)));
   BlockNodeUnCatN:=TmyTreeNode(T_ProgramDB.Items.addchild(BlockNodeN,(rsUncategorized)));
   BlockNodeUnCatN.fcategory:=uncat;
@@ -283,6 +284,7 @@ begin
   PT_P_ProjectDB:=TTabSheet.create(PT_PageControl);
   PT_P_ProjectDB.Caption:=rsProjectDB;
   T_ProjectDB:=TmyTreeView.create(PT_P_ProjectDB);
+  T_ProjectDB.ReadOnly:=true;
   ProjectEquipmentN :=TmyTreeNode(T_ProjectDB.Items.add(nil,(rsEquipment)));
   T_ProjectDB.align:=alClient;
   T_ProjectDB.scrollbars:=ssAutoBoth;

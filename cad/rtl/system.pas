@@ -2,7 +2,7 @@ unit System;
 {Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}
 interface
 type
-//Generate on C:\zcad\CAD_SOURCE\gdbasetypes.pas
+//Generate on C:\zcad\CAD_SOURCE\languade\gdbasetypes.pas
 PGDBDouble=^GDBDouble;
 
 PGDBFloat=^GDBFloat;
@@ -33,7 +33,7 @@ itrec=record
             itp:GDBPointer;
             itc:GDBInteger;
       end;
-//Generate on C:\zcad\CAD_SOURCE\gdbase.pas
+//Generate on C:\zcad\CAD_SOURCE\gdb\gdbase.pas
 GDBTypedPointer=record
                       Instance:GDBPointer;
                       PTD:GDBPointer;
@@ -2180,6 +2180,8 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     procedure CommandEnd; virtual;abstract;
     procedure CommandCancel; virtual;abstract;
     procedure CommandInit; virtual;abstract;
+    procedure Prompt(msg:GDBString);
+    procedure Error(msg:GDBString);
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
     //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual; abstract;
     //function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual; abstract;
@@ -2202,6 +2204,10 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     procedure DrawHeplGeometry;virtual;abstract;
   end;
 //Generate on C:\zcad\CAD_SOURCE\commands\GDBCommandsDraw.pas
+         TEntityProcess=(
+                       TEP_Erase(*'Erase'*),
+                       TSPE_leave(*'Leave'*)
+                       );
          TBlockInsert=record
                             Blocks:TEnumData;(*'Block'*)
                             Scale:GDBvertex;(*'Scale'*)
@@ -2216,6 +2222,9 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                        TPEM_Nearest(*'Paste in nearest segment'*),
                        TPEM_Select(*'Choose a segment'*)
                        );
+         TMirrorParam=record
+                            SourceEnts:TEntityProcess;(*'Source entities'*)
+                      end;
          TPolyEdit=record
                             Action:TSubPolyEdit;(*'Action'*)
                             Mode:TPolyEditMode;(*'Mode'*)
@@ -2320,8 +2329,15 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     procedure CommandCancel; virtual;abstract;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
+    function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;abstract;
+    function Move(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
   end;
   copy_com = object(move_com)
+    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
+    function Copy(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
+  end;
+  mirror_com = object(copy_com)
+    function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;abstract;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
   end;
   rotate_com = object(move_com)

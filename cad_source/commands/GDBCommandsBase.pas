@@ -2246,6 +2246,8 @@ begin
                              begin
                                   if uppercase(Operands)='VAR' then
                                                                    clipbrd.clipboard.AsText:=Objinsp.currpd.ValKey
+                             else if uppercase(Operands)='LVAR' then
+                                                                   clipbrd.clipboard.AsText:='@@['+Objinsp.currpd.ValKey+']'
                              else if uppercase(Operands)='VALUE' then
                                                                    clipbrd.clipboard.AsText:=Objinsp.currpd.Value;
                                   Objinsp.currpd:=nil;

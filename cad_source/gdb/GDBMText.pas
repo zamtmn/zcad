@@ -930,7 +930,7 @@ end;
 procedure GDBObjMText.SaveToDXF(var handle: longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);
 var
 //  i, j: GDBInteger;
-//  hv, vv: GDBByte;
+  bw: GDBByte;
   s: GDBString;
   ul:boolean;
 begin

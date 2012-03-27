@@ -44,6 +44,8 @@ GDBTextProp=record
                   wfactor:GDBDouble;(*saved_to_shd*)
                   angle:GDBDouble;(*saved_to_shd*)
                   justify:{-}GDBByte{/TTextJustify/};(*saved_to_shd*)
+                  upsidedown:GDBBoolean;
+                  backward:GDBBoolean;
             end;
 PGDBObjAbstractText=^GDBObjAbstractText;
 GDBObjAbstractText=object(GDBObjPlainWithOX)
@@ -156,6 +158,7 @@ begin
      textprop.angle:=geometry.scalardot(Local.basis.ox,ox);
      textprop.angle:=arccos(textprop.angle)*180/pi;
      if local.basis.OX.y<-eps then textprop.angle:=360-textprop.angle;
+     //Local.basis.ox:=ox;
 end;
 
 function convertfromunicode(s:GDBString):GDBString;
@@ -510,6 +513,18 @@ var m1,m2,m3:DMatrix4D;
     angle:GDBDouble;
 begin
   inherited CalcObjMatrix;
+  if textprop.upsidedown then
+  begin
+        PGDBVertex(@objmatrix[1])^.x:=-Local.basis.oy.x;
+        PGDBVertex(@objmatrix[1])^.y:=-Local.basis.oy.y;
+        PGDBVertex(@objmatrix[1])^.z:=-Local.basis.oy.z;
+  end;
+  if textprop.backward then
+  begin
+        PGDBVertex(@objmatrix[0])^.x:=-Local.basis.ox.x;
+        PGDBVertex(@objmatrix[0])^.y:=-Local.basis.ox.y;
+        PGDBVertex(@objmatrix[0])^.z:=-Local.basis.ox.z;
+  end;
   m1:= OneMatrix;
 
   {m1[0,0]:=cos(self.textprop.angle*pi/180);
@@ -594,4 +609,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBAbstractText.initialization');{$ENDIF}
-end.
+end.

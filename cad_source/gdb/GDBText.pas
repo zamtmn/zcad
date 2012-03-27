@@ -116,7 +116,7 @@ var
       TCP:TCodePage;
 begin
   TCP:=CodePage;
-CodePage:=CP_win;
+  CodePage:=CP_win;
      if template='' then
                       template:=content;
   content:=textformat(template,@self);
@@ -773,7 +773,7 @@ begin
 end;
 procedure GDBObjText.SaveToDXF(var handle: longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);
 var
-  hv, vv: GDBByte;
+  hv, vv,bw: GDBByte;
   tv:gdbvertex;
   s:GDBString;
 begin
@@ -799,6 +799,13 @@ begin
   dxfGDBDoubleout(outhandle,41,textprop.wfactor);
   dxfGDBDoubleout(outhandle,51,textprop.oblique);
   dxfGDBIntegerout(outhandle,72,hv);
+  bw:=0;
+  if textprop.upsidedown then
+                             bw:=bw+4;
+  if textprop.backward then
+                             bw:=bw+2;
+  if bw<>0 then
+               dxfGDBIntegerout(outhandle,71,bw);
   dxfGDBStringout(outhandle,7,PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.name);
 
   SaveToDXFObjPostfix(outhandle);
@@ -818,7 +825,7 @@ procedure GDBObjText.LoadFromDXF;
 var s{, layername}: GDBString;
   byt{, code}: GDBInteger;
   doublepoint,angleload: GDBBoolean;
-  vv, gv: GDBInteger;
+  vv, gv, textbackward: GDBInteger;
   style:GDBString;
 begin
   //initnul;
@@ -828,6 +835,7 @@ begin
   angleload:=false;
   doublepoint:=false;
   style:='';
+  textbackward:=0;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu) then
@@ -848,10 +856,19 @@ else if     dxfGDBStringload(f,7,byt,style)then
                                              end
 else if not dxfGDBIntegerload(f,72,byt,gv)then
      if not dxfGDBIntegerload(f,73,byt,vv)then
+     if not dxfGDBIntegerload(f,71,byt,textbackward)then
      if not dxfGDBStringload(f,1,byt,content)then
                                                s := f.readgdbstring;
     byt:=readmystrtoint(f);
   end;
+  if (textbackward and 4)<>0 then
+                                 textprop.upsidedown:=true
+                             else
+                                 textprop.upsidedown:=false;
+  if (textbackward and 2)<>0 then
+                                 textprop.backward:=true
+                             else
+                                 textprop.backward:=false;
   OldVersTextReplace(Template);
   OldVersTextReplace(Content);
   textprop.justify := jt[vv, gv];

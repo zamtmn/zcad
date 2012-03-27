@@ -1825,7 +1825,8 @@ procedure TMainFormN.myKeyPress{(var Key: char)}(Sender: TObject; var Key: Word;
 var
    ccg:char;
    tempkey:word;
-   comtext:string;
+   comtext,deb:string;
+   ct:tclass;
 begin
      if assigned(GDBobjinsp) then
      if assigned(GDBobjinsp.PEditor) then
@@ -1838,11 +1839,17 @@ begin
                                      exit;
                                 end;
       end;
-
+     deb:=ActiveControl.ClassName;
+     ct:=ActiveControl.ClassType;
      if ((ActiveControl<>cmdedit)and(ActiveControl<>HistoryLine)and(ActiveControl<>LayerBox)and(ActiveControl<>LineWBox))then
-     if (ActiveControl is tedit)or (ActiveControl is tmemo)or (ActiveControl is tcombobox)then
+     begin
+     if (ActiveControl is tedit)or (ActiveControl is tmemo)or (ActiveControl is TComboBox)then
                                                                                               exit;
-     if ((ActiveControl=LayerBox)or(ActiveControl<>LineWBox))then
+     if (GDBobjinsp.PEditor)<>nil then
+     if (ActiveControl=GDBobjinsp.PEditor.geteditor) then
+                                                            exit;
+     end;
+     if ((ActiveControl=LayerBox)or(ActiveControl=LineWBox))then
                                                                  begin
                                                                  self.setnormalfocus(nil);
                                                                  end;

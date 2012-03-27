@@ -1255,6 +1255,8 @@ GDBTextProp=record
                   wfactor:GDBDouble;(*saved_to_shd*)
                   angle:GDBDouble;(*saved_to_shd*)
                   justify:TTextJustify;(*saved_to_shd*)
+                  upsidedown:GDBBoolean;
+                  backward:GDBBoolean;
             end;
 PGDBObjAbstractText=^GDBObjAbstractText;
 GDBObjAbstractText=object(GDBObjPlainWithOX)
@@ -2206,7 +2208,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
 //Generate on C:\zcad\CAD_SOURCE\commands\GDBCommandsDraw.pas
          TEntityProcess=(
                        TEP_Erase(*'Erase'*),
-                       TSPE_leave(*'Leave'*)
+                       TEP_leave(*'Leave'*)
                        );
          TBlockInsert=record
                             Blocks:TEnumData;(*'Block'*)

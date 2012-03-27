@@ -53,6 +53,7 @@ Panel Modify;
     action ACN_MOVE
     action ACN_ROTATE
     action ACN_SCALE
+    action ACN_MIRROR
   }
 Panel Draw;
   {

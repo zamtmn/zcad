@@ -71,6 +71,7 @@ uses {GDBNet,}GDBDevice{,GDBTEXT},log;
 procedure GDBObjBlockInsert.ReCalcFromObjMatrix;
 var
     ox:gdbvertex;
+    tv:gdbvertex;
 begin
      inherited;
      Local.basis.ox:=PGDBVertex(@objmatrix[0])^;
@@ -85,6 +86,21 @@ begin
      scale.x:=geometry.oneVertexlength(PGDBVertex(@objmatrix[0])^);
      scale.y:=geometry.oneVertexlength(PGDBVertex(@objmatrix[1])^);
      scale.z:=geometry.oneVertexlength(PGDBVertex(@objmatrix[2])^);
+
+     {tv:=geometry.vectordot(PGDBVertex(@objmatrix[1])^,PGDBVertex(@objmatrix[2])^);
+     tv:=normalizevertex(tv);
+     if not IsPointEqual(tv,normalizevertex(PGDBVertex(@objmatrix[0])^)) then
+                                                                             scale.x:=-scale.x;
+
+     tv:=geometry.vectordot(PGDBVertex(@objmatrix[2])^,PGDBVertex(@objmatrix[0])^);
+     tv:=normalizevertex(tv);
+     if IsPointEqual(tv,normalizevertex(PGDBVertex(@objmatrix[1])^)) then
+                                                                             scale.y:=-scale.y;
+
+     tv:=geometry.vectordot(PGDBVertex(@objmatrix[0])^,PGDBVertex(@objmatrix[1])^);
+     tv:=normalizevertex(tv);
+     if IsPointEqual(tv,normalizevertex(PGDBVertex(@objmatrix[2])^)) then
+                                                                             scale.z:=-scale.z;}
 
      {if abs(local.OX.x)>eps then
                                 scale.x:=PGDBVertex(@objmatrix[0])^.x/local.OX.x
@@ -106,6 +122,8 @@ begin
                                                                 else
                                                                     ox:=CrossVertex(ZWCS,Local.basis.oz);
      normalizevertex(ox);
+     {if scale.x<0 then
+                      ox:=geometry.VertexMulOnSc(ox,-1);}
      rotate:=geometry.scalardot(Local.basis.ox,ox);
      rotate:=arccos(rotate)*180/pi;
      if local.basis.OX.y<-eps then rotate:=360-rotate;
@@ -160,6 +178,7 @@ begin
   m1[1, 1] := scale.y;
   m1[2, 2] := scale.z;
   objMatrix:=MatrixMultiply(m1,objMatrix);
+  //setrot(rotate);
 end;
 procedure GDBObjBlockInsert.TransformAt;
 var
@@ -329,9 +348,9 @@ function GDBObjBlockInsert.Clone;
 var tvo: PGDBObjBlockInsert;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjBlockInsert));
-  tvo^.scale:=scale;
   //tvo^.ObjMatrix:=objmatrix;;
   tvo^.init({bp.owner}own,vp.Layer, vp.LineWeight);
+  tvo^.scale:=scale;
   tvo^.vp.id := GDBBlockInsertID;
   tvo^.vp.layer :=vp.layer;
   GDBPointer(tvo^.name) := nil;

@@ -161,6 +161,8 @@ function CalcAABBInFrustum (const AABB:GDBBoundingBbox; const frustum:ClipArray)
 
 function GetXfFromZ(oz:GDBVertex):GDBVertex;
 
+function MatrixDeterminant(M: DMatrix4D): GDBDouble;
+
 var WorldMatrix{,CurrentCS}:DMatrix4D;
     wx:PGDBVertex;
     wy:PGDBVertex;

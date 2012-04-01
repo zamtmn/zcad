@@ -260,11 +260,12 @@ begin
                                                                 else
                                                                     ox:=CrossVertex(ZWCS,Local.basis.oz);
      normalizevertex(ox);
-     if scale.x<0 then
-                      ox:=geometry.VertexMulOnSc(ox,-1);
-     rotate:=geometry.scalardot(Local.basis.ox,ox);
+     tv:=Local.basis.ox;
+     if scale.x<-eps then
+                      tv:=geometry.VertexMulOnSc(tv,-1);
+     rotate:=geometry.scalardot(tv,ox);
      rotate:=arccos(rotate)*180/pi;
-     //if local.basis.OX.y<-eps then rotate:=360-rotate;
+     if tv.y<-eps then rotate:=360-rotate;
 end;
 procedure GDBObjBlockInsert.setrot(r:GDBDouble);
 var m1:DMatrix4D;

@@ -321,8 +321,16 @@ begin
      gdbfreemem(pointer(PreCalcData));
 end;
 procedure GDBObjGenericSubEntry.DrawWithAttrib;
+var
+   _selected: GDBBoolean;
 begin
+     inc(dc.subrender);
+     _selected:=dc.selected;
+     if selected then dc.selected:=true;
      self.ObjArray.DrawWithattrib({infrustumactualy,subrender}dc);
+     dec(dc.subrender);
+     dc.selected:=_selected;
+
 end;
 procedure GDBObjGenericSubEntry.DrawBB;
 begin
@@ -472,8 +480,15 @@ begin
      //self.ObjArray.ObjTree.initnul;
 end;
 procedure GDBObjGenericSubEntry.DrawGeometry;
+var
+   _selected: GDBBoolean;
 begin
+     inc(dc.subrender);
+     _selected:=dc.selected;
+     if selected then dc.selected:=true;
   ObjArray.DrawGeometry(CalculateLineWeight(dc),dc{infrustumactualy,subrender});
+     dc.selected:=_selected;
+     dec(dc.subrender);
   DrawBB;
 end;
 function GDBObjGenericSubEntry.CalcInFrustum;

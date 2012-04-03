@@ -211,7 +211,7 @@ begin
                                               result:=true;
                                               exit;
                                          end;
-    if (byt = 0) and (uppercase(s) = 'ENDTAB') then
+    if (byt = 0) and (uppercase(s) = dxfName_ENDTAB) then
                                          begin
                                               exit;
                                          end;
@@ -418,7 +418,7 @@ begin
             val(scode,GroupCode,ErrorCode);
       until GroupCode=0;
       repeat
-        if sname='ENDTAB' then system.break;
+        if sname=dxfName_ENDTAB then system.break;
         if sname<>dxfName_Layer then FatalError('''LAYER'' expected but '''+sname+''' found');
         repeat
               scode := f.readGDBString;
@@ -431,7 +431,7 @@ begin
         until GroupCode=0;
         {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer '+LayerName,0);{$ENDIF}
         gdb.GetCurrentDWG.LayerTable.addlayer(LayerName,LayerColor,-3,true,false,true,'',TLOLoad);
-      until sname='ENDTAB';
+      until sname=dxfName_ENDTAB;
       {$IFDEF TOTALYLOG}programlog.logoutstr('end; {layer table}',lp_DecPos);{$ENDIF}
     end
     else if s = 'BLOCKS' then
@@ -454,7 +454,7 @@ begin
           end;
         sname := f.readGDBString;
         s := f.readGDBString;
-      until (s = 'ENDSEC');
+      until (s = dxfName_ENDSEC);
       {$IFDEF TOTALYLOG}programlog.logoutstr('end; {block table}',lp_DecPos);{$ENDIF}
     end
     else if s = 'ENTITIES' then
@@ -483,42 +483,42 @@ begin
   nulisread:=false;
   {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF2000',lp_IncPos);{$ENDIF}
   repeat
-    gotodxf(f, 0, 'SECTION');
+    gotodxf(f, 0, dxfName_SECTION);
     if not f.notEOF then
       exit;
     s := f.readGDBString;
     s := f.readGDBString;
-    if s = 'TABLES' then
+    if s = dxfName_TABLES then
     begin
       if not f.notEOF then
         exit;
       s := f.readGDBString;
       s := f.readGDBString;
-      while s = 'TABLE' do
+      while s = dxfName_TABLE do
       begin
         if not f.notEOF then
           exit;
         s := f.readGDBString;
         s := f.readGDBString;
 
-        if s = 'CLASSES' then
+        if s = dxfName_CLASSES then
         begin
-          gotodxf(f, 0, 'ENDTAB');
+          gotodxf(f, 0, dxfName_ENDTAB);
         end
         else
-          if s = 'APPID' then
+          if s = dxfName_APPID then
           begin
-            gotodxf(f, 0, 'ENDTAB');
+            gotodxf(f, 0, dxfName_ENDTAB);
           end
           else
-            if s = 'BLOCK_RECORD' then
+            if s = dxfName_BLOCK_RECORD then
             begin
-              gotodxf(f, 0, 'ENDTAB');
+              gotodxf(f, 0, dxfName_ENDTAB);
             end
             else
-              if s = 'DIMSTYLE' then
+              if s = dxfName_DIMSTYLE then
               begin
-                gotodxf(f, 0, 'ENDTAB');
+                gotodxf(f, 0, dxfName_ENDTAB);
               end
               else
                 if s = dxfName_Layer then
@@ -611,17 +611,17 @@ begin
                     {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer '+lname,0);{$ENDIF}
                   end;
                   {$IFDEF TOTALYLOG}programlog.logoutstr('end; {layer table}',lp_DecPos);{$ENDIF}
-          //gotodxf(f, 0, 'ENDTAB');
+          //gotodxf(f, 0, dxfName_ENDTAB);
                 end
                 else
                   if s = 'LTYPE' then
                   begin
-                    gotodxf(f, 0, 'ENDTAB');
+                    gotodxf(f, 0, dxfName_ENDTAB);
                   end
                   else
                     if s = dxfName_Style then
                     {begin
-                      gotodxf(f, 0, 'ENDTAB');
+                      gotodxf(f, 0, dxfName_ENDTAB);
                     end}
                     begin
                       {$IFDEF TOTALYLOG}programlog.logoutstr('Found style table',lp_IncPos);{$ENDIF}
@@ -684,22 +684,22 @@ begin
                         {$IFDEF TOTALYLOG}programlog.logoutstr('Found style '+tstyle.Name,0);{$ENDIF}
                       end;
                       {$IFDEF TOTALYLOG}programlog.logoutstr('end; {style table}',lp_DecPos);{$ENDIF}
-              //gotodxf(f, 0, 'ENDTAB');
+              //gotodxf(f, 0, dxfName_ENDTAB);
                     end
                     else
                       if s = 'UCS' then
                       begin
-                        gotodxf(f, 0, 'ENDTAB');
+                        gotodxf(f, 0, dxfName_ENDTAB);
                       end
                       else
                         if s = 'VIEW' then
                         begin
-                          gotodxf(f, 0, 'ENDTAB');
+                          gotodxf(f, 0, dxfName_ENDTAB);
                         end
                         else
                           if s = 'VPORT' then
                           begin
-                            gotodxf(f, 0, 'ENDTAB');
+                            gotodxf(f, 0, dxfName_ENDTAB);
                           end;
         s := f.readGDBString;
         s := f.readGDBString;
@@ -711,7 +711,7 @@ begin
       begin
         {$IFDEF TOTALYLOG}programlog.logoutstr('Found entities section',lp_IncPos);{$ENDIF}
         //inc(foc);
-        {addfromdxf12}addentitiesfromdxf(f, 'ENDSEC',owner);
+        {addfromdxf12}addentitiesfromdxf(f, dxfName_ENDSEC,owner);
         owner.ObjArray.pack;
         owner.correctobjects(nil,0);
         //inc(foc);
@@ -780,7 +780,7 @@ begin
                                  sname := f.readGDBString;
             blockload:=false;
             s := f.readGDBString;
-          until (s = 'ENDSEC');
+          until (s = dxfName_ENDSEC);
           {$IFDEF TOTALYLOG}programlog.logoutstr('end; {block table}',lp_DecPos);{$ENDIF}
           gdb.GetCurrentDWG.BlockDefArray.Format;
         end;
@@ -819,7 +819,7 @@ begin
           shared.HistoryOutStr(format(rsFileFormat,['DXF12']));
           //shared.HistoryOutStr('DXF12 fileformat;');
           //programlog.logout('DXF12 fileformat;',lp_OldPos);
-          gotodxf(f, 0, 'ENDSEC');
+          gotodxf(f, 0, dxfName_ENDSEC);
           addfromdxf12(f,'EOF',owner,loadmode);
         end
         else if s = 'AC1015' then
@@ -827,7 +827,7 @@ begin
           shared.HistoryOutStr(format(rsFileFormat,['DXF2000']));
           //shared.HistoryOutStr('DXF2000 fileformat;');
           //programlog.logout('DXF2000 fileformat;',lp_OldPos);
-          gotodxf(f, 0, 'ENDSEC');
+          gotodxf(f, 0, dxfName_ENDSEC);
           addfromdxf2000(f,'EOF',owner,loadmode);
         end
         else
@@ -984,7 +984,7 @@ begin
             inblocksec := true;
           end
           else
-            if (inblocksec) and ((groupi = 0) and (values = 'ENDSEC')) then
+            if (inblocksec) and ((groupi = 0) and (values = dxfName_ENDSEC)) then
             begin
               //historyoutstr('Blockdefs start here_______________________________________________________');
               if pdrawing^.BlockDefArray.count>0 then
@@ -1035,12 +1035,12 @@ begin
               end;
 
               outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
-              outstream.TXTAddGDBStringEOL('ENDSEC');
+              outstream.TXTAddGDBStringEOL(dxfName_ENDSEC);
 
 
               inblocksec := false;
             end
-            else if (inblocktable) and ((groupi = 0) and (values = 'ENDTAB')) then
+            else if (inblocktable) and ((groupi = 0) and (values = dxfName_ENDTAB)) then
             begin
               inblocktable := false;
               if pdrawing^.BlockDefArray.count>0 then
@@ -1048,7 +1048,7 @@ begin
               for i := 0 to pdrawing^.BlockDefArray.count - 1 do
               begin
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
-                outstream.TXTAddGDBStringEOL('BLOCK_RECORD');
+                outstream.TXTAddGDBStringEOL(dxfName_BLOCK_RECORD);
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                 outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                 inc(handle);
@@ -1061,11 +1061,11 @@ begin
 
               end;
               outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
-              outstream.TXTAddGDBStringEOL('ENDTAB');
+              outstream.TXTAddGDBStringEOL(dxfName_ENDTAB);
             end
 
             else
-              if (inlayertable) and ((groupi = 0) and (values = 'ENDTAB')) then
+              if (inlayertable) and ((groupi = 0) and (values = dxfName_ENDTAB)) then
               begin
                 inlayertable := false;
                 ignoredsource:=false;
@@ -1126,7 +1126,7 @@ begin
 
 
             else
-              if (instyletable) and ((groupi = 0) and (values = 'ENDTAB')) then
+              if (instyletable) and ((groupi = 0) and (values = dxfName_ENDTAB)) then
               begin
                 instyletable := false;
                 ignoredsource:=false;
@@ -1137,7 +1137,7 @@ begin
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                     outstream.TXTAddGDBStringEOL(dxfName_Style);
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
-                    if uppercase(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.name)<>'STANDARD' then
+                    if uppercase(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.name)<>TSNStandardStyleName then
                     begin
                     outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                     inc(handle);
@@ -1183,7 +1183,7 @@ begin
 
 
               else
-                if (groupi = 0) and (values = 'TABLE') then
+                if (groupi = 0) and (values = dxfName_TABLE) then
                 begin
                   outstream.TXTAddGDBStringEOL(groups);
                   outstream.TXTAddGDBStringEOL(values);
@@ -1196,7 +1196,7 @@ begin
                   begin
                     inlayertable := true;
                   end
-                  else if (groupi = 2) and (values = 'BLOCK_RECORD') then
+                  else if (groupi = 2) and (values = dxfName_BLOCK_RECORD) then
                   begin
                     inblocktable := true;
                   end

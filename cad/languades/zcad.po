@@ -237,6 +237,14 @@ msgstr ""
 msgid "COF"
 msgstr ""
 
+#: zcadexternal.acn_copylinktovartoclip~caption
+msgid "Copy link to var"
+msgstr ""
+
+#: zcadexternal.acn_copylinktovartoclip~textimage
+msgid "CLV"
+msgstr ""
+
 #: zcadexternal.acn_copyvaluetoclip~caption
 msgid "Copy value"
 msgstr ""
@@ -299,6 +307,7 @@ msgid "Find device"
 msgstr ""
 
 #: zcadexternal.acn_erase~caption
+msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr ""
 
@@ -1095,12 +1104,12 @@ msgstr ""
 
 #: zcadexternal.menucommand~fuckoff
 #, fuzzy
-msgid "Layouts (not impl)"
+msgid "Dimensions styles (not impl)"
 msgstr ""
 
 #: zcadexternal.menucommand~fuckoff
 #, fuzzy
-msgid "Dimensions styles (not impl)"
+msgid "Layouts (not impl)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(camera)
@@ -1492,6 +1501,15 @@ msgctxt "zcadexternal.tentityadress~selfindex"
 msgid "Position"
 msgstr ""
 
+#: zcadexternal.tentityprocess~tep_erase
+msgctxt "zcadexternal.tentityprocess~tep_erase"
+msgid "Erase"
+msgstr ""
+
+#: zcadexternal.tentityprocess~tep_leave
+msgid "Leave"
+msgstr ""
+
 #: zcadexternal.tfinddeviceparam~findmethod
 msgid "Use symbols *, ?"
 msgstr ""
@@ -1534,6 +1552,10 @@ msgstr ""
 #: zcadexternal.tinserttype~tit_device
 msgctxt "zcadexternal.tinserttype~tit_device"
 msgid "Device"
+msgstr ""
+
+#: zcadexternal.tmirrorparam~sourceents
+msgid "Source entities"
 msgstr ""
 
 #: zcadexternal.tmisc~showhiddenfieldinobjinsp

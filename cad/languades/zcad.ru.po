@@ -226,11 +226,10 @@ msgid "Close drawing"
 msgstr "Закрыть чертеж"
 
 #: zcadexternal.acn_copyclipbase~caption
-#, fuzzy
 #| msgid "Copy with base point"
 msgctxt "zcadexternal.acn_copyclipbase~caption"
 msgid "Copy to clipboard with base point"
-msgstr "Копировать с базовой точкой"
+msgstr "Копировать в буфер обмена с базовой точкой"
 
 #: zcadexternal.acn_copyclipbase~hint
 msgctxt "zcadexternal.acn_copyclipbase~hint"
@@ -238,11 +237,10 @@ msgid "Copy to clipboard with base point"
 msgstr "Копировать в клипбоард с базовой точкой"
 
 #: zcadexternal.acn_copyclip~caption
-#, fuzzy
 #| msgid "Copy"
 msgctxt "zcadexternal.acn_copyclip~caption"
 msgid "Copy to clipboard"
-msgstr "Копировать"
+msgstr "Копировать в буфер обмена"
 
 #: zcadexternal.acn_copyclip~hint
 msgctxt "zcadexternal.acn_copyclip~hint"
@@ -257,6 +255,14 @@ msgstr ""
 #: zcadexternal.acn_copyfromowner~textimage
 msgctxt "zcadexternal.acn_copyfromowner~textimage"
 msgid "COF"
+msgstr ""
+
+#: zcadexternal.acn_copylinktovartoclip~caption
+msgid "Copy link to var"
+msgstr "Копировать ссылку на переменную"
+
+#: zcadexternal.acn_copylinktovartoclip~textimage
+msgid "CLV"
 msgstr ""
 
 #: zcadexternal.acn_copyvaluetoclip~caption
@@ -329,19 +335,9 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
-#: zcadexternal.acn_fakecopyclipbase~caption
-msgctxt "zcadexternal.acn_fakecopyclipbase~caption"
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
-msgstr ""
-
-#: zcadexternal.acn_fakepaste~caption
-msgctxt "zcadexternal.acn_fakepaste~caption"
-msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -530,11 +526,6 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
-#: zcadexternal.acn_processkz~caption
-msgctxt "zcadexternal.acn_processkz~caption"
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_processkz~textimage
 msgctxt "zcadexternal.acn_processkz~textimage"
 msgid "Process external KZ"
@@ -569,11 +560,6 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
-
-#: zcadexternal.acn_remautocables~caption
-msgctxt "zcadexternal.acn_remautocables~caption"
-msgid ""
-msgstr ""
 
 #: zcadexternal.acn_remautocables~textimage
 msgctxt "zcadexternal.acn_remautocables~textimage"
@@ -936,7 +922,6 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#, fuzzy
 #| msgid "Block params"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Rotate"
@@ -1224,9 +1209,8 @@ msgid "Reset camera"
 msgstr "Камера в начало"
 
 #: zcadexternal.menucommand~fuckoff
-#, fuzzy
-#| msgid "Layouts (not impl)"
-msgid "Dimensions styles (not impl)"
+#| msgid "Dimensions styles (not impl)"
+msgid "Layouts (not impl)"
 msgstr "Листы (не реализовано)"
 
 #: zcadexternal.menucommand~setobjinsp(camera)
@@ -1671,6 +1655,15 @@ msgctxt "zcadexternal.tentityadress~selfindex"
 msgid "Position"
 msgstr "Позиция"
 
+#: zcadexternal.tentityprocess~tep_erase
+msgctxt "zcadexternal.tentityprocess~tep_erase"
+msgid "Erase"
+msgstr "Стереть"
+
+#: zcadexternal.tentityprocess~tep_leave
+msgid "Leave"
+msgstr ""
+
 #: zcadexternal.tfinddeviceparam~findmethod
 msgid "Use symbols *, ?"
 msgstr "Использовать символы *, ?"
@@ -1718,6 +1711,10 @@ msgstr "Блоки"
 msgctxt "zcadexternal.tinserttype~tit_device"
 msgid "Device"
 msgstr "Устройство"
+
+#: zcadexternal.tmirrorparam~sourceents
+msgid "Source entities"
+msgstr ""
 
 #: zcadexternal.tmisc~showhiddenfieldinobjinsp
 msgctxt "zcadexternal.tmisc~showhiddenfieldinobjinsp"

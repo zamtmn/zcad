@@ -224,6 +224,7 @@ var i{,j}:GDBInteger;
     tgf: pgrafelement;
     wcoord:gdbvertex;
 begin
+     inc(dc.subrender);
      if graf.Count=0 then exit;
      tgf:=graf.PArray;
      i:=0;
@@ -260,6 +261,7 @@ begin
      end;
      oglsm.myglDisable(GL_POINT_SMOOTH);
      oglsm.myglpointsize(1);
+     dec(dc.subrender);
      inherited DrawGeometry(lw,dc{infrustumactualy,subrender});
 end;
 function GDBObjNet.DeSelect;

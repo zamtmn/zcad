@@ -160,6 +160,8 @@ const {as_normal=0;
   LNSysDefpoints='DEFPOINTS';
   LNMetricLayerName='SYS_METRIC';
 
+  TSNStandardStyleName='STANDARD';
+
   H_Root=100;
   H_Trash=110;
 

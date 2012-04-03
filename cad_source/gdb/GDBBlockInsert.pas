@@ -203,14 +203,15 @@ begin
      scale.y:=geometry.oneVertexlength(PGDBVertex(@objmatrix[1])^)*sign(scale.y);
      scale.z:=geometry.oneVertexlength(PGDBVertex(@objmatrix[2])^)*sign(scale.z);
 
-     m1:=objmatrix;
-     PGDBVertex(@m1[0])^.x:={geometry.VertexMulOnSc}(PGDBVertex(@m1[0])^.x/scale.x);
-     PGDBVertex(@m1[1])^.y:={geometry.VertexMulOnSc}(PGDBVertex(@m1[1])^.y/scale.y);
-     PGDBVertex(@m1[2])^.z:={geometry.VertexMulOnSc}(PGDBVertex(@m1[2])^.z/scale.z);
+     {m1:=objmatrix;
+     PGDBVertex(@m1[0])^.x:=(PGDBVertex(@m1[0])^.x/scale.x);
+     PGDBVertex(@m1[1])^.y:=(PGDBVertex(@m1[1])^.y/scale.y);
+     PGDBVertex(@m1[2])^.z:=(PGDBVertex(@m1[2])^.z/scale.z);
      PGDBVertex(@m1[3])^:=nulvertex;
      m2:=m1;
      geometry.MatrixTranspose(m2);
-     m1:=geometry.MatrixMultiply(m1,m2);
+     m1:=geometry.MatrixMultiply(m1,m2);}
+
      //mmm[0,0]:=objmatrix[0,0];mmm[0,1]:=objmatrix[0,1];mmm[0,2]:=objmatrix[0,2];mmm[0,3]:=objmatrix[0,3];
      //mmm[1,0]:=objmatrix[1,0];mmm[1,1]:=objmatrix[1,1];mmm[1,2]:=objmatrix[1,2];mmm[1,3]:=objmatrix[1,3];
      //mmm[2,0]:=objmatrix[2,0];mmm[2,1]:=objmatrix[2,1];mmm[2,2]:=objmatrix[2,2];mmm[2,3]:=objmatrix[2,3];

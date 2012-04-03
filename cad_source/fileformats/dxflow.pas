@@ -25,6 +25,15 @@ uses gdbasetypes,gdbase,sysutils,UGDBOpenArrayOfByte{,ogltypes};
 const
   dxfName_AcDbEntity='AcDbEntity';
   dxfName_AcDbSymbolTableRecord='AcDbSymbolTableRecord';
+  dxfName_BLOCK_RECORD='BLOCK_RECORD';
+  dxfName_ENDTAB='ENDTAB';
+  dxfName_TABLE='TABLE';
+  dxfName_TABLES='TABLES';
+  dxfName_SECTION='SECTION';
+  dxfName_CLASSES='CLASSES';
+  dxfName_APPID='APPID';
+  dxfName_DIMSTYLE='DIMSTYLE';
+  dxfName_ENDSEC='ENDSEC';
   dxfName_Layer='LAYER';
   dxfName_Style='STYLE';
 

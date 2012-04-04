@@ -34,9 +34,31 @@ ArrayDescriptor=object(TUserTypeDescriptor)
                      procedure AddIndex(var Index:ArrayIndexDescriptor);
                      function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
+                     function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                end;
 implementation
 uses {ZBasicVisible,}varman;
+function ArrayDescriptor.GetValueAsString(pinstance:GDBPointer):GDBString;
+var
+   PAID:PArrayIndexDescriptor;
+   ir:itrec;
+   i:integer;
+begin
+     result:='(';
+     PAID:=Indexs.beginiterate(ir);
+     if paid<>nil then
+                     repeat
+                           for i:=paid^.IndexMin to paid^.IndexMin+paid^.IndexCount do
+                           begin
+                                if i<>paid^.IndexMin then result:=result+',';
+                                result:=result+typeof^.GetValueAsString(pinstance);
+                                typeof^.IncAddr(pinstance);
+                           end;
+                           PAID:=Indexs.iterate(ir);
+                     until paid=nil;
+     result:=result+')';
+end;
+
 constructor ArrayDescriptor.init;
 begin
      inherited init(0,tname,pu);
@@ -65,7 +87,7 @@ begin
      ppd^.Attr:=ownerattrib;
      ppd^.Collapsed:=PCollapsed;
      ppd^.valueAddres:=addr;
-     ppd^.value:='not ready';
+     ppd^.value:=GetValueAsString(addr);//'not ready';
 
            if ppd<>nil then
                            begin

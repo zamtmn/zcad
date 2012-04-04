@@ -111,7 +111,7 @@ MetodDescriptor=object(GDBaseObject)
 PTUserTypeDescriptor=^TUserTypeDescriptor;
 TUserTypeDescriptor=object(UserTypeDescriptor)
                           function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;abstract;
-                          procedure IncAddr(var addr:GDBPointer);virtual;
+                          //procedure IncAddr(var addr:GDBPointer);virtual;
                           function CreatePD:GDBPointer;
                           function GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:GDBInteger):PPropertyDeskriptor;
                    end;
@@ -212,10 +212,10 @@ begin
      gdbgetmem({$IFDEF DEBUGBUILD}'{CC044792-AE73-48C9-B10A-346BFE9E46C9}',{$ENDIF}result,sizeof(PropertyDeskriptor));
      PPropertyDeskriptor(result)^.initnul;
 end;
-procedure TUserTypeDescriptor.IncAddr;
+{procedure TUserTypeDescriptor.IncAddr;
 begin
      inc(pGDBByte(addr),SizeInGDBBytes);
-end;
+end;}
 constructor PropertyDeskriptor.initnul;
 begin
      inherited;

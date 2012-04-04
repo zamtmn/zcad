@@ -131,6 +131,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          procedure MagicFreeInstance(PInstance:GDBPointer);virtual;
                          procedure MagicAfterCopyInstance(PInstance:GDBPointer);virtual;
                          procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
+                         procedure IncAddr(var addr:GDBPointer);virtual;
                    end;
   //pd=^GDBDouble;
   {-}{/pGDBInteger=^GDBInteger;/}
@@ -386,7 +387,10 @@ begin
                                   end;
 end;
 
-
+procedure UserTypeDescriptor.IncAddr;
+begin
+     inc(pGDBByte(addr),SizeInGDBBytes);
+end;
 procedure UserTypeDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);
 begin
      membuf.TXTAddGDBStringEOL(prefix+':='+{pvd.data.PTD.}GetValueAsString(PInstance)+';');

@@ -106,6 +106,8 @@ type
     pointnum, axisnum: GDBInteger;
     CSIconCoord: GDBvertex;
     CSX, CSY, CSZ: GDBvertex2DI;
+    BLPoint,CPoint,TRPoint:GDBvertex2D;
+    ViewHeight:GDBDouble;
     projtype: GDBInteger;
     clipx, clipy: GDBDouble;
     firstdraw: GDBBoolean;

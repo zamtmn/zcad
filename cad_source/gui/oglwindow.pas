@@ -825,11 +825,42 @@ begin
 end;
 
 procedure TOGLWnd.calcgrid;
-var ca, cv: extended;cav: gdbvertex;  ds:GDBString;
+var ca, cv: extended;
+    tempv,cav: gdbvertex;  ds:GDBString;
     l,u,r,b,maxh,maxv,ph,pv:GDBDouble;
     x,y:integer;
 begin
      if gdb.GetCurrentDWG=NIL then exit;
+
+
+     //BLPoint,CPoint,TRPoint:GDBvertex2D;
+     tempv.x:=0;
+     tempv.y:=0;
+     tempv.z:=0;
+     gdb.GetCurrentDWG^.myGluUnProject(tempv,cav);
+     param.BLPoint.x:=cav.x;
+     param.BLPoint.y:=cav.y;
+
+     tempv.x:=clientwidth/2;
+     tempv.y:=clientheight/2;
+     tempv.z:=0;
+     gdb.GetCurrentDWG^.myGluUnProject(tempv,cav);
+     param.CPoint.x:=cav.x;
+     param.CPoint.y:=cav.y;
+
+     tempv.x:=clientwidth;
+     tempv.y:=clientheight;
+     tempv.z:=0;
+     gdb.GetCurrentDWG^.myGluUnProject(tempv,cav);
+     param.TRPoint.x:=cav.x;
+     param.TRPoint.y:=cav.y;
+
+     tempv.x:=0;
+     tempv.y:=clientheight;
+     tempv.z:=0;
+     gdb.GetCurrentDWG^.myGluUnProject(tempv,cav);
+     param.ViewHeight:=cav.y-param.BLPoint.y;
+
 
      gdb.GetCurrentDWG^.myGluProject2(NulVertex,param.CSIconCoord);
 
@@ -1787,6 +1818,7 @@ begin
   ComitFromObj;
   end;
   //paint;
+  calcgrid;
   draw;
 
   end;

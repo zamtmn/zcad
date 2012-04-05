@@ -999,12 +999,13 @@ var
   outstream: {GDBInteger}GDBOpenArrayOfByte;
   groups, values: GDBString;
   groupi, valuei, intable,attr: GDBInteger;
-  handle,lasthandle,plottablefansdle,standartstylehandle,i{,cod}: GDBInteger;
+  handle,lasthandle,vporttablehandle,plottablefansdle,standartstylehandle,i{,cod}: GDBInteger;
   phandlea: pdxfhandlerecopenarray;
   inlayertable, inblocksec, inblocktable: GDBBoolean;
   handlepos:integer;
   ignoredsource:boolean;
   instyletable:boolean;
+  invporttable:boolean;
   olddwg:ptdrawing;
 begin
   standartstylehandle:=0;
@@ -1024,6 +1025,7 @@ begin
   inblocktable := false;
   instyletable := false;
   ignoredsource:=false;
+  invporttable:=false;
   while templatefile.notEOF do
   begin
     if  (templatefile.count-templatefile.ReadPos)<10
@@ -1168,6 +1170,157 @@ begin
 
 
               inblocksec := false;
+            end
+            else if (invporttable) and ((groupi = 0) and (values = dxfName_ENDTAB)) then
+            begin
+               invporttable:=false;
+               ignoredsource:=false;
+
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
+               outstream.TXTAddGDBStringEOL(inttohex(handle,0));
+               vporttablehandle:=handle;
+               inc(handle);
+
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(330));
+               outstream.TXTAddGDBStringEOL('0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+               outstream.TXTAddGDBStringEOL('AcDbSymbolTable');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
+               outstream.TXTAddGDBStringEOL('1');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
+               outstream.TXTAddGDBStringEOL('VPORT');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
+               outstream.TXTAddGDBStringEOL(inttohex(handle,0));
+               inc(handle);
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(330));
+               outstream.TXTAddGDBStringEOL(inttohex(vporttablehandle,0));
+
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+               outstream.TXTAddGDBStringEOL('AcDbSymbolTableRecord');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+               outstream.TXTAddGDBStringEOL('AcDbViewportTableRecord');
+
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
+               outstream.TXTAddGDBStringEOL('*Active');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
+               outstream.TXTAddGDBStringEOL('0');
+
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(10));
+               outstream.TXTAddGDBStringEOL('0.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(20));
+               outstream.TXTAddGDBStringEOL('0.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(11));
+               outstream.TXTAddGDBStringEOL('1.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(21));
+               outstream.TXTAddGDBStringEOL('1.0');
+
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(12));
+               outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.param.CPoint.x));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(22));
+               outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.param.CPoint.y));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(13));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_OriginGrid^.x));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(23));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_OriginGrid^.y));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(14));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_StepGrid^.x));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(24));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_StepGrid^.y));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(15));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_StepGrid^.x));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(25));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_StepGrid^.y));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(16));
+               outstream.TXTAddGDBStringEOL(floattostr(-gdb.GetCurrentDWG.pcamera.prop.look.x));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(26));
+               outstream.TXTAddGDBStringEOL(floattostr(-gdb.GetCurrentDWG.pcamera.prop.look.y));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(36));
+               outstream.TXTAddGDBStringEOL(floattostr(-gdb.GetCurrentDWG.pcamera.prop.look.z));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(17));
+               outstream.TXTAddGDBStringEOL(floattostr({-gdb.GetCurrentDWG.pcamera.prop.point.x}0));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(27));
+               outstream.TXTAddGDBStringEOL(floattostr({-gdb.GetCurrentDWG.pcamera.prop.point.y}0));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(37));
+               outstream.TXTAddGDBStringEOL(floattostr({-gdb.GetCurrentDWG.pcamera.prop.point.z}0));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(40));
+               outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.param.ViewHeight));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(41));
+               outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.ClientWidth/gdb.GetCurrentDWG.OGLwindow1.ClientHeight));
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(42));
+               outstream.TXTAddGDBStringEOL('50.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(43));
+               outstream.TXTAddGDBStringEOL('0.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(44));
+               outstream.TXTAddGDBStringEOL('0.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(50));
+               outstream.TXTAddGDBStringEOL('0.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(51));
+               outstream.TXTAddGDBStringEOL('0.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(71));
+               outstream.TXTAddGDBStringEOL('0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(72));
+               outstream.TXTAddGDBStringEOL('1000');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(73));
+               outstream.TXTAddGDBStringEOL('1');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(74));
+               outstream.TXTAddGDBStringEOL('3');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(75));
+               if sysvar.DWG.DWG_SnapGrid<>nil then
+                                                   begin
+                                                        if sysvar.DWG.DWG_SnapGrid^ then
+                                                                                        outstream.TXTAddGDBStringEOL('1')
+                                                                                    else
+                                                                                        outstream.TXTAddGDBStringEOL('0');
+                                                   end
+                                               else
+                                                   outstream.TXTAddGDBStringEOL('0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(76));
+               if sysvar.DWG.DWG_DrawGrid<>nil then
+                                                     begin
+                                                          if sysvar.DWG.DWG_DrawGrid^ then
+                                                                                          outstream.TXTAddGDBStringEOL('1')
+                                                                                      else
+                                                                                          outstream.TXTAddGDBStringEOL('0');
+                                                     end
+                                                 else
+                                                     outstream.TXTAddGDBStringEOL('0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(77));
+               outstream.TXTAddGDBStringEOL('0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(78));
+               outstream.TXTAddGDBStringEOL('0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(281));
+               outstream.TXTAddGDBStringEOL('0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(65));
+               outstream.TXTAddGDBStringEOL('1');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(110));
+               outstream.TXTAddGDBStringEOL('0.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(120));
+               outstream.TXTAddGDBStringEOL('0.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(130));
+               outstream.TXTAddGDBStringEOL('0.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(111));
+               outstream.TXTAddGDBStringEOL('1.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(121));
+               outstream.TXTAddGDBStringEOL('0.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(131));
+               outstream.TXTAddGDBStringEOL('0.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(112));
+               outstream.TXTAddGDBStringEOL('0.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(122));
+               outstream.TXTAddGDBStringEOL('1.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(132));
+               outstream.TXTAddGDBStringEOL('0.0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(79));
+               outstream.TXTAddGDBStringEOL('0');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(146));
+               outstream.TXTAddGDBStringEOL('0.0');
+               //outstream.TXTAddGDBStringEOL(dxfGroupCode(1001));
+               //outstream.TXTAddGDBStringEOL('ACAD_NAV_VCDISPLAY');
+               //outstream.TXTAddGDBStringEOL(dxfGroupCode(1070));
+               //outstream.TXTAddGDBStringEOL('3');
+               outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
+               outstream.TXTAddGDBStringEOL('ENDTAB');
+
             end
             else if (inblocktable) and ((groupi = 0) and (values = dxfName_ENDTAB)) then
             begin
@@ -1332,6 +1485,11 @@ begin
                   else if (groupi = 2) and (values = dxfName_Style) then
                   begin
                     instyletable := true;
+                  end
+                  else if (groupi = 2) and (values = 'VPORT') then
+                  begin
+                    invporttable := true;
+                    IgnoredSource := true;
                   end;
 
                 end

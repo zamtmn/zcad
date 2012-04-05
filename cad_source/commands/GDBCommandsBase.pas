@@ -736,8 +736,8 @@ begin
      {gdb.GetCurrentDWG.OGLwindow1}oglwnd.init;{переделать из инита нужно убрать обнуление pdwg}
      {gdb.GetCurrentDWG.OGLwindow1}oglwnd.PDWG:=ptd;
      programlog.logoutstr('oglwnd.PDWG:=ptd;',0);
-     oglwnd._onresize(nil);
      oglwnd.GDBActivate;
+     oglwnd._onresize(nil);
      programlog.logoutstr('oglwnd._onresize(nil);',0);
      oglwnd.MakeCurrent(false);
      programlog.logoutstr('oglwnd.MakeCurrent(false);',0);
@@ -884,6 +884,7 @@ begin
      if length(operands)>0 then
      s:=FindInSupportPath(operands);
      result:=Merge_com(@s[1]);
+
 
      GDB.CurrentDWG:=pdwg;
 end;

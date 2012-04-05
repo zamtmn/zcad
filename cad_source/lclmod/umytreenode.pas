@@ -384,9 +384,14 @@ var
    pvd:pvardesk;
 begin
      FVariable:=varname;
+     pvd:=nil;
+     if DWGUnit<>nil then
+     pvd:=DWGUnit^.InterfaceVariables.findvardesc(FVariable);
+     if pvd=nil then
      pvd:=SysVarUnit^.InterfaceVariables.findvardesc(FVariable);
      if pvd<>nil then
      begin
+          enabled:=true;
           if pvd^.data.PTD=@GDBBooleanDescriptorOdj then
                                                         begin
                                                              self.Down:=PGDBBoolean(pvd^.data.Instance)^;
@@ -398,7 +403,9 @@ begin
                                                                          if fbufer<>0 then
                                                                                          self.Down:=true;
                                                                     end;
-     end;
+     end
+        else
+            enabled:=false;
 end;
 procedure TmyProcToolButton.Click;
 //var
@@ -414,7 +421,11 @@ procedure TmyVariableToolButton.Click;
 var
    pvd:pvardesk;
 begin
-     pvd:=SysVarUnit^.InterfaceVariables.findvardesc(FVariable);
+  pvd:=nil;
+  if DWGUnit<>nil then
+  pvd:=DWGUnit^.InterfaceVariables.findvardesc(FVariable);
+  if pvd=nil then
+  pvd:=SysVarUnit^.InterfaceVariables.findvardesc(FVariable);
      if pvd<>nil then
      begin
           if pvd^.data.PTD=@GDBBooleanDescriptorOdj then

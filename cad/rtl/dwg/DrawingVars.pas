@@ -5,13 +5,26 @@ var
    camera:GDBObjCamera;
    DWGProps:TDWGProps;
 
-  DWG_CLayer:GDBInteger;
-  DWG_CLinew:GDBInteger;
+   DWG_CLayer:GDBInteger;
+   DWG_CLinew:GDBInteger;
+
+   DWG_DrawGrid:GDBBoolean;
+   DWG_SnapGrid:GDBBoolean;
+
+  DWG_StepGrid:GDBvertex2D;
+  DWG_OriginGrid:GDBvertex2D;
+
 
    Developer:GDBString;
 
 implementation
 begin
+
+  DWG_StepGrid.x:=0.5;
+  DWG_StepGrid.y:=0.5;
+  DWG_OriginGrid.x:=0.0;
+  DWG_OriginGrid.y:=0.0;
+
 
   DWG_CLayer:=0;
   DWG_CLinew:=-1;

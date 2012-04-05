@@ -71,6 +71,8 @@ type
                     toolbars:tstringlist;
                     iconlist: TImageList;
 
+                    updatesbytton:tlist;
+
                     procedure LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                                State: TOwnerDrawState);
                     procedure LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
@@ -95,6 +97,7 @@ type
                     procedure loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
 
                     procedure ChangedDWGTabCtrl(Sender: TObject);
+                    procedure UpdateControls;
 
                     procedure StartLongProcess(total:integer);
                     procedure ProcessLongProcess(current:integer);
@@ -783,6 +786,9 @@ var
   bmp:TPortableNetworkGraphic;
 begin
   //AutoSize:=false;
+
+  updatesbytton:=tlist.Create;
+
   CursorOn:=ShowAllCursors;
   CursorOff:=RestoreCursors;
   iconlist:=timagelist.Create(self);
@@ -1096,6 +1102,8 @@ begin
                           SetImage(tb,b,line,false,'button_variable~'+bc);
                           b.AutoSize:=true;
                           AddToBar(tb,b);
+
+                          updatesbytton.Add(b);
 
                      end;
                      if uppercase(line)='LAYERCOMBOBOX' then
@@ -1693,6 +1701,17 @@ begin
            end;
            //ppopupmenu.addto(pm);
 end;
+procedure TMainFormN.UpdateControls;
+var
+    i:integer;
+begin
+     for i:=0 to updatesbytton.Count-1 do
+     begin
+          TmyVariableToolButton(updatesbytton[i]).AssignToVar(TmyVariableToolButton(updatesbytton[i]).FVariable);
+     end;
+
+end;
+
 procedure  TMainFormN.ChangedDWGTabCtrl(Sender: TObject);
 var
    ogl:TOGlwnd;
@@ -1713,6 +1732,7 @@ begin
     if DockMaster<>nil then
     DockMaster.CloseAll;
     freeandnil(toolbars);
+    freeandnil(updatesbytton);
      inherited;
      //GDBFreeMem(pointer(pmenu));
 end;

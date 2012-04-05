@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
+uses oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
   entnamindex=record
@@ -477,6 +477,8 @@ var
 
   tstyle:GDBTextStyle;
 
+  active:boolean;
+
   nulisread:boolean;
 begin
   blockload:=false;
@@ -698,8 +700,135 @@ begin
                         end
                         else
                           if s = 'VPORT' then
+                          if GoToDXForENDTAB(f, 0, 'VPORT') then
                           begin
-                            gotodxf(f, 0, dxfName_ENDTAB);
+                            //gotodxf(f, 0, dxfName_ENDTAB);
+
+                            byt := -100;
+                            active:=false;
+
+                            while byt <> 0 do
+                            begin
+                              s := f.readGDBString;
+                              byt := strtoint(s);
+                              s := f.readGDBString;
+                              case byt of
+                                2:
+                                  begin
+                                       if uppercase(s)='*ACTIVE' then
+                                                                     active:=true
+                                                                 else
+                                                                     active:=false;
+                                  end;
+                                12:
+                                  begin
+                                       if active then
+                                       if gdb.GetCurrentDWG<>nil then
+                                       if gdb.GetCurrentDWG.pcamera<>nil then
+                                       begin
+                                            gdb.GetCurrentDWG.pcamera.prop.point.x:=-strtofloat(s);
+                                       end;
+                                   end;
+                                22:
+                                  begin
+                                       if active then
+                                       if gdb.GetCurrentDWG<>nil then
+                                       if gdb.GetCurrentDWG.pcamera<>nil then
+                                       begin
+                                            gdb.GetCurrentDWG.pcamera.prop.point.y:=-strtofloat(s);
+                                       end;
+                                   end;
+                                13:
+                                  begin
+                                       if active then
+                                       if sysvar.DWG.DWG_OriginGrid<>nil then
+                                       begin
+                                            sysvar.DWG.DWG_OriginGrid^.x:=strtofloat(s);
+                                       end;
+                                   end;
+                                23:
+                                  begin
+                                       if active then
+                                       if sysvar.DWG.DWG_OriginGrid<>nil then
+                                       begin
+                                            sysvar.DWG.DWG_OriginGrid^.y:=strtofloat(s);
+                                       end;
+                                   end;
+                                14:
+                                  begin
+                                       if active then
+                                       if sysvar.DWG.DWG_StepGrid<>nil then
+                                       begin
+                                            sysvar.DWG.DWG_StepGrid^.x:=strtofloat(s);
+                                       end;
+                                   end;
+                                24:
+                                  begin
+                                       if active then
+                                       if sysvar.DWG.DWG_StepGrid<>nil then
+                                       begin
+                                            sysvar.DWG.DWG_StepGrid^.y:=strtofloat(s);
+                                       end;
+                                   end;
+                                40:
+                                  begin
+                                       if active then
+                                       if gdb.GetCurrentDWG<>nil then
+                                       if gdb.GetCurrentDWG.pcamera<>nil then
+                                       if gdb.GetCurrentDWG.OGLwindow1<>nil then
+                                       begin
+                                            gdb.GetCurrentDWG.pcamera.prop.zoom:=(strtofloat(s)/gdb.GetCurrentDWG.OGLwindow1.ClientHeight);
+                                       end;
+                                   end;
+                                41:
+                                  begin
+                                       if active then
+                                       if gdb.GetCurrentDWG<>nil then
+                                       if gdb.GetCurrentDWG.pcamera<>nil then
+                                       if gdb.GetCurrentDWG.OGLwindow1<>nil then
+                                       begin
+                                            if gdb.GetCurrentDWG.OGLwindow1.ClientHeight*strtofloat(s)>gdb.GetCurrentDWG.OGLwindow1.ClientWidth then
+                                            gdb.GetCurrentDWG.pcamera.prop.zoom:=gdb.GetCurrentDWG.pcamera.prop.zoom*strtofloat(s)*gdb.GetCurrentDWG.OGLwindow1.ClientHeight/gdb.GetCurrentDWG.OGLwindow1.ClientWidth;
+                                       end;
+                                   end;
+                                71:
+                                  begin
+                                       if active then
+                                       if gdb.GetCurrentDWG<>nil then
+                                       if gdb.GetCurrentDWG.OGLwindow1<>nil then
+                                       begin
+                                            flags:=strtoint(s);
+                                            if (flags and 1)<>0 then
+                                                          gdb.GetCurrentDWG.OGLwindow1.param.projtype:=PROJPerspective
+                                                      else
+                                                          gdb.GetCurrentDWG.OGLwindow1.param.projtype:=PROJParalel;
+                                       end;
+                                  end;
+                                75:
+                                  begin
+                                       if active then
+                                       if sysvar.DWG.DWG_SnapGrid<>nil then
+                                       begin
+                                            if s<>'0' then
+                                                          sysvar.DWG.DWG_SnapGrid^:=true
+                                                      else
+                                                          sysvar.DWG.DWG_SnapGrid^:=false;
+                                       end;
+                                  end;
+                              76:
+                                begin
+                                     if active then
+                                     if sysvar.DWG.DWG_DrawGrid<>nil then
+                                     begin
+                                          if s<>'0' then
+                                                        sysvar.DWG.DWG_DrawGrid^:=true
+                                                    else
+                                                        sysvar.DWG.DWG_DrawGrid^:=false;
+                                     end;
+                                 end;
+                            end;
+
+                          end;
                           end;
         s := f.readGDBString;
         s := f.readGDBString;

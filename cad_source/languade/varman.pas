@@ -188,7 +188,7 @@ TUnit=object(TSimpleUnit)
 {EXPORT-}
 procedure vardeskclear(p:GDBPointer);
 var
-  SysUnit,SavedUnit,SysVarUnit,DBUnit,DWGDBUnit:PTUnit;
+  SysUnit,SavedUnit,SysVarUnit,DBUnit,DWGDBUnit,DWGUnit:PTUnit;
   BaseTypesEndIndex:GDBInteger;
   OldTypesCount:GDBInteger;
   VarCategory,BlockCategory,EqCategory:GDBGDBStringArray;

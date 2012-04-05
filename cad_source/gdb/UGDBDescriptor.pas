@@ -118,6 +118,7 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
                     function GetCurrentROOT:PGDBObjGenericSubEntry;
 
                     function GetCurrentDWG:PTDrawing;
+                    procedure asociatedwgvars;
                     procedure SetCurrentDWG(PDWG:PTDrawing);
 
                     function CreateDWG:PTDrawing;
@@ -330,10 +331,25 @@ function GDBDescriptor.GetCurrentDWG;
 begin
  result:=CurrentDWG;
 end;
+procedure GDBDescriptor.asociatedwgvars;
+//var
+//    DWGUnit:PTUnit;
+begin
+   DWGUnit:=CurrentDWG.DWGUnits.findunit('DrawingVars');
+   DWGUnit.AssignToSymbol(SysVar.DWG.DWG_SnapGrid,'DWG_SnapGrid');
+   DWGUnit.AssignToSymbol(SysVar.DWG.DWG_DrawGrid,'DWG_DrawGrid');
+   DWGUnit.AssignToSymbol(SysVar.DWG.DWG_StepGrid,'DWG_StepGrid');
+   DWGUnit.AssignToSymbol(SysVar.DWG.DWG_OriginGrid,'DWG_OriginGrid');
+
+   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
+   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLinew,'DWG_CLinew');
+end;
+
 procedure GDBDescriptor.SetCurrentDWG(PDWG:PTDrawing);
 begin
  commandmanager.executecommandend;
  CurrentDWG:=PDWG;
+ asociatedwgvars;
 end;
 
 function GDBObjTrash.GetHandle;

@@ -893,6 +893,7 @@ begin
      param.md.WPPointUR.z:=1;
      if (4*ph>clientwidth)or(4*pv>clientheight)then
                                                    begin
+                                                        if sysvar.DWG.DWG_DrawGrid<>nil then
                                                         if sysvar.DWG.DWG_DrawGrid^ then
                                                                                         historyoutstr(rsGridTooDensity);
                                                         param.md.WPPointUR.z:=-1;
@@ -1643,6 +1644,7 @@ begin
      param.md.WPPointUR.x:=ph;
      param.md.WPPointUR.z:=pv;}
 
+  if sysvar.DWG.DWG_DrawGrid<>nil then
   if (sysvar.DWG.DWG_DrawGrid^)and(param.md.WPPointUR.z=1) then
   begin
   //CalcOptimalMatrix;
@@ -1672,8 +1674,8 @@ begin
 end;
 procedure TOGLWnd.GDBActivate;
 begin
-     PTDrawing(self.pdwg)^.DWGUnits.findunit('DrawingVars').AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
-     PTDrawing(self.pdwg)^.DWGUnits.findunit('DrawingVars').AssignToSymbol(SysVar.dwg.DWG_CLinew,'DWG_CLinew');
+     //PTDrawing(self.pdwg)^.DWGUnits.findunit('DrawingVars').AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
+     //PTDrawing(self.pdwg)^.DWGUnits.findunit('DrawingVars').AssignToSymbol(SysVar.dwg.DWG_CLinew,'DWG_CLinew');
 
   //if PDWG<>gdb.GetCurrentDWG then
                                  begin

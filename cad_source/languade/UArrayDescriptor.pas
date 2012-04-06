@@ -50,13 +50,17 @@ begin
                      repeat
                            for i:=paid^.IndexMin to paid^.IndexMin+paid^.IndexCount do
                            begin
-                                if i<>paid^.IndexMin then result:=result+',';
+                                if i<>paid^.IndexMin then
+                                                         begin
+                                                              result:=result+',';
+                                                              //if typeof^.GetTypeAttributes=TA_COMPOUND then result:=result+#10#13;
+                                                         end;
                                 result:=result+typeof^.GetValueAsString(pinstance);
                                 typeof^.IncAddr(pinstance);
                            end;
                            PAID:=Indexs.iterate(ir);
                      until paid=nil;
-     result:=result+')';
+     result:=result+')'{#10#13;};
 end;
 
 constructor ArrayDescriptor.init;

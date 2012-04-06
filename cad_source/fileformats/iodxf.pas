@@ -192,6 +192,35 @@ begin
   end;
   end;
 end;
+procedure readvariables(var f: GDBOpenArrayOfByte;var clayer:GDBString);
+var
+  byt: GDBByte;
+  s: GDBString;
+  error: GDBInteger;
+begin
+     //gotodxf(f, 0, dxfName_ENDSEC);
+  while f.notEOF do
+  begin
+    s := f.readGDBString;
+    val(s, byt, error);
+    if error <> 0 then
+                      s := s{чето тут не так};
+    s := f.readGDBString;
+     if (byt = 9) and (s = '$CLAYER') then
+                                          begin
+                                               s := f.readGDBString;
+                                               clayer := f.readGDBString;
+                                          end
+else if (byt = 9) and (s = '$CELWEIGHT') then
+                                          begin
+                                               s := f.readGDBString;
+                                               if sysvar.DWG.DWG_CLinew<>nil then
+                                               sysvar.DWG.DWG_CLinew^ := strtoint(f.readGDBString);
+                                          end
+else if (byt = 0) and (s = dxfName_ENDSEC) then
+                                              exit;
+  end;
+end;
 function GoToDXForENDTAB(var f: GDBOpenArrayOfByte; fcode: GDBInteger; fname: GDBString):boolean;
 var
   byt: GDBByte;
@@ -480,10 +509,14 @@ var
   active:boolean;
 
   nulisread:boolean;
+
+  clayer:GDBString;
+  player:PGDBLayerProp;
 begin
   blockload:=false;
   nulisread:=false;
   {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF2000',lp_IncPos);{$ENDIF}
+  readvariables(f,clayer);
   repeat
     gotodxf(f, 0, dxfName_SECTION);
     if not f.notEOF then
@@ -609,7 +642,10 @@ begin
 
                       end;
                     end;
-                    gdb.GetCurrentDWG.LayerTable.addlayer(lname, abs(strtoint(lcolor)), strtoint(llw),oo,ll,pp,desk,LoadMode);
+                    player:=gdb.GetCurrentDWG.LayerTable.addlayer(lname, abs(strtoint(lcolor)), strtoint(llw),oo,ll,pp,desk,LoadMode);
+                    if uppercase(lname)=uppercase(clayer)then
+                                                             if sysvar.DWG.DWG_CLayer<>nil then
+                                                                                               sysvar.DWG.DWG_CLayer^:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(player);
                     {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer '+lname,0);{$ENDIF}
                   end;
                   {$IFDEF TOTALYLOG}programlog.logoutstr('end; {layer table}',lp_DecPos);{$ENDIF}
@@ -954,9 +990,8 @@ begin
         else if s = 'AC1015' then
         begin
           shared.HistoryOutStr(format(rsFileFormat,['DXF2000']));
-          //shared.HistoryOutStr('DXF2000 fileformat;');
-          //programlog.logout('DXF2000 fileformat;',lp_OldPos);
-          gotodxf(f, 0, dxfName_ENDSEC);
+          //gotodxf(f, 0, dxfName_ENDSEC);
+          //readvariables(f);
           addfromdxf2000(f,'EOF',owner,loadmode);
         end
         else
@@ -997,7 +1032,7 @@ procedure savedxf2000;
 var
   templatefile: GDBOpenArrayOfByte;
   outstream: {GDBInteger}GDBOpenArrayOfByte;
-  groups, values: GDBString;
+  groups, values, ucvalues: GDBString;
   groupi, valuei, intable,attr: GDBInteger;
   handle,lasthandle,vporttablehandle,plottablefansdle,standartstylehandle,i{,cod}: GDBInteger;
   phandlea: pdxfhandlerecopenarray;
@@ -1033,6 +1068,7 @@ begin
         handle:=handle;
     groups := templatefile.readGDBString;
     values := templatefile.readGDBString;
+    ucvalues:=uppercase(values);
     groupi := strtoint(groups);
     if (groupi = 9) and (values = '$HANDSEED') then
     begin
@@ -1049,6 +1085,24 @@ begin
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
       handle := strtoint('$' + values);
+    end
+else if (groupi = 9) and (ucvalues = '$CLAYER') then
+    begin
+      outstream.TXTAddGDBStringEOL(groups);
+      outstream.TXTAddGDBStringEOL('$CLAYER');
+      outstream.TXTAddGDBStringEOL('8');
+      outstream.TXTAddGDBStringEOL(gdb.GetCurrentDWG.LayerTable.GetCurrentLayer.Name);
+      groups := templatefile.readGDBString;
+      values := templatefile.readGDBString;
+    end
+else if (groupi = 9) and (ucvalues = '$CELWEIGHT') then
+    begin
+      outstream.TXTAddGDBStringEOL(groups);
+      outstream.TXTAddGDBStringEOL('$CELWEIGHT');
+      outstream.TXTAddGDBStringEOL('370');
+      outstream.TXTAddGDBStringEOL(inttostr(sysvar.DWG.DWG_CLinew^));
+      groups := templatefile.readGDBString;
+      values := templatefile.readGDBString;
     end
     else
       if (groupi = 5)

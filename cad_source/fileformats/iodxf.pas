@@ -1043,6 +1043,7 @@ var
   invporttable:boolean;
   olddwg:ptdrawing;
 begin
+  DecimalSeparator := '.';
   standartstylehandle:=0;
   olddwg:=gdb.GetCurrentDWG;
   gdb.SetCurrentDWG(pdrawing);

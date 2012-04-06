@@ -7,10 +7,6 @@ var
   DWG_PolarMode:GDBInteger;
   DWG_SystmGeometryDraw:GDBBoolean;
   DWG_HelpGeometryDraw:GDBBoolean;
-  DWG_StepGrid_:GDBvertex2D;
-  DWG_OriginGrid_:GDBvertex2D;
-  DWG_DrawGrid_:GDBBoolean;
-  DWG_SnapGrid_:GDBBoolean;
   DWG_EditInSubEntry:GDBBoolean;
   DWG_AdditionalGrips:GDBBoolean;
   DWG_SelectedObjToInsp:GDBBoolean;
@@ -74,12 +70,6 @@ begin
   DWG_PolarMode:=1;
   DWG_SystmGeometryDraw:=False;
   DWG_HelpGeometryDraw:=True;
-  DWG_StepGrid_.x:=0.5;
-  DWG_StepGrid_.y:=0.5;
-  DWG_OriginGrid_.x:=0.0;
-  DWG_OriginGrid_.y:=0.0;
-  DWG_DrawGrid_:=False;
-  DWG_SnapGrid_:=False;
   DWG_EditInSubEntry:=False;
   DWG_AdditionalGrips:=False;
   DWG_SelectedObjToInsp:=True;

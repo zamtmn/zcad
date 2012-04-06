@@ -31,7 +31,7 @@ uses
   {gdbobjectsconstdef,}UGDBLayerArray,{deveditor,}
   {ZEditsWithProcedure,}{zforms,}{ZButtonsWithCommand,}{ZComboBoxsWithProc,}{ZButtonsWithVariable,}{zmenus,}
   {GDBCommandsBase,}{ GDBCommandsDraw,GDBCommandsElectrical,}
-  commandline,{zmainforms,}memman,UGDBNamedObjectsArray,
+  commandline,{zmainforms,}memman,UGDBNamedObjectsArray,sharedgdb,
   {ZGUIArrays,}{ZBasicVisible,}{ZEditsWithVariable,}{ZTabControlsGeneric,}shared,{ZPanelsWithSplit,}{ZGUIsCT,}{ZstaticsText,}{UZProcessBar,}strmy{,strutils},{ZPanelsGeneric,}
   graphics,
   AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr{,xmlconf};
@@ -110,6 +110,7 @@ type
                     procedure ShowAllCursors;
                     procedure RestoreCursors;
                     function DOShowModal(MForm:TForm): Integer;
+                    procedure CloseDWGPage(Sender: TObject);
 
                     private
                     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -153,6 +154,7 @@ function getoglwndparam: GDBPointer; export;
 function LoadLayout_com(Operands:pansichar):GDBInteger;
 procedure clearotrack;
 procedure clearcp;
+procedure _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject);
 {procedure startup;
 procedure finalize;}
 const
@@ -492,6 +494,53 @@ begin
      PreferredWidth:=0;
      PreferredHeight:=0;
 end;
+procedure _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject);
+var
+   poglwnd:toglwnd;
+   i:integer;
+begin
+  if ClosedDWG<>nil then
+  begin
+       if ClosedDWG.Changed then
+                                 begin
+                                      if MainFormN.MessageBox(@rsCloseDWGQuery[1],@rsWarningCaption[1],MB_YESNO)<>IDYES then exit;
+                                 end;
+       poglwnd:=ClosedDWG.OGLwindow1;
+       gdb.eraseobj(ClosedDWG);
+       gdb.pack;
+       poglwnd.PDWG:=nil;
+
+       poglwnd.{GDBActivateGLContext}MakeCurrent;
+       poglwnd.free;
+
+       lincedcontrol.Free;
+       tobject(poglwnd):=mainformn.PageControl.ActivePage;
+
+       if poglwnd<>nil then
+       begin
+            tobject(poglwnd):=FindControlByType(poglwnd,TOGLWnd);
+            gdb.CurrentDWG:=poglwnd.PDWG;
+            poglwnd.GDBActivate;
+       end;
+       shared.SBTextOut('Закрыто');
+       GDBobjinsp.ReturnToDefault;
+       sharedgdb.updatevisible;
+  end;
+end;
+
+procedure TMainFormN.CloseDWGPage(Sender: TObject);
+var
+   poglwnd:toglwnd;
+   ClosedDWG:PTDrawing;
+   i:integer;
+begin
+  //application.ProcessMessages;
+  Closeddwg:=nil;
+  TControl(poglwnd):=FindControlByType(TTabSheet(sender),TOGLWnd);
+  if poglwnd<>nil then
+                      Closeddwg:=poglwnd.PDWG;
+  _CloseDWGPage(ClosedDWG,Sender);
+end;
 
 procedure TMainFormN.DockMasterCreateControl(Sender: TObject; aName: string; var
   AControl: TControl; DoDisableAutoSizing: boolean);
@@ -552,6 +601,8 @@ begin
       PageControl.Align:=alClient;
       PageControl.{OnPageChanged}OnChange:=ChangedDWGTabCtrl;
       PageControl.BorderWidth:=0;
+      PageControl.Options:=[nboShowCloseButtons];
+      PageControl.OnCloseTabClicked:=CloseDWGPage;
 
    AControl:=MainPanel;
    AControl.Name:=aname;

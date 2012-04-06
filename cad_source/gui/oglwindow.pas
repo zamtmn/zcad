@@ -166,6 +166,7 @@ type
     procedure CreateScrbuf(w,h:integer);
 
     procedure GDBActivate;
+    procedure GDBActivateGLContext;
 
     procedure _onMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
     procedure _onFastMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
@@ -1703,6 +1704,12 @@ begin
   oglsm.myglVertex3d(param.md.WPPointLU);
   oglsm.myglend;}
 end;
+procedure TOGLWnd.GDBActivateGLContext;
+begin
+                                      MyglMakeCurrent(OGLContext);//wglMakeCurrent(DC, hrc);//initogl;
+                                      isOpenGLError;
+end;
+
 procedure TOGLWnd.GDBActivate;
 begin
      //PTDrawing(self.pdwg)^.DWGUnits.findunit('DrawingVars').AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
@@ -1712,8 +1719,7 @@ begin
                                  begin
                                       gdb.SetCurrentDWG(self.pdwg);
                                       self.param.firstdraw:=true;
-                                      MyglMakeCurrent(OGLContext);//wglMakeCurrent(DC, hrc);//initogl;
-                                      isOpenGLError;
+                                      GDBActivateGLContext;
                                       //{переделать}size;
                                       paint;
                                  end;

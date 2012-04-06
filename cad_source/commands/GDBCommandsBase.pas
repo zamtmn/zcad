@@ -508,7 +508,8 @@ var
 begin
   application.ProcessMessages;
   CurrentDWG:=gdb.GetCurrentDWG;
-  if CurrentDWG<>nil then
+  _CloseDWGPage(CurrentDWG,mainformn.PageControl.ActivePage);
+  (*if CurrentDWG<>nil then
   begin
        if CurrentDWG.Changed then
                                  begin
@@ -536,7 +537,7 @@ begin
        shared.SBTextOut('Закрыто');
        GDBobjinsp.ReturnToDefault;
        sharedgdb.updatevisible;
-  end;
+  end;*)
 end;
 
 function CloseDWGOnMouse_com(Operands:pansichar):GDBInteger;

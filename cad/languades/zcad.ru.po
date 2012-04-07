@@ -335,17 +335,9 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
-#: zcadexternal.acn_fakecopyclipbase~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
-msgstr ""
-
-#: zcadexternal.acn_fakepaste~caption
-msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -534,10 +526,6 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
-#: zcadexternal.acn_processkz~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_processkz~textimage
 msgctxt "zcadexternal.acn_processkz~textimage"
 msgid "Process external KZ"
@@ -572,10 +560,6 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
-
-#: zcadexternal.acn_remautocables~caption
-msgid ""
-msgstr ""
 
 #: zcadexternal.acn_remautocables~textimage
 msgctxt "zcadexternal.acn_remautocables~textimage"
@@ -938,11 +922,10 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#, fuzzy
 #| msgid "Rotate"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Block params"
-msgstr "Поворот"
+msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjcircle~area
 msgctxt "zcadexternal.gdbobjcircle~area"
@@ -1226,10 +1209,9 @@ msgid "Reset camera"
 msgstr "Камера в начало"
 
 #: zcadexternal.menucommand~fuckoff
-#, fuzzy
 #| msgid "Layouts (not impl)"
 msgid "Dimensions styles (not impl)"
-msgstr "Листы (не реализовано)"
+msgstr "Стили размеров (не реализовано)"
 
 #: zcadexternal.menucommand~setobjinsp(camera)
 msgid "Camera"
@@ -2528,8 +2510,9 @@ msgid "ByLayer"
 msgstr "По Слою"
 
 #: zcadstrconsts.rsclosedwgquery
-msgid "Drawing not saved. Close?"
-msgstr "Чертеж не сохранен. Закрыть?"
+#| msgid "Drawing not saved. Close?"
+msgid "Drawing \"%s\" not saved. Close?"
+msgstr "Чертеж \"%s\" не сохранен. Закрыть?"
 
 #: zcadstrconsts.rscm2vnotremove
 msgid "Only 2 vertex there is nothing to remove"

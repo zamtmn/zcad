@@ -2263,7 +2263,7 @@ msgid "ByLayer"
 msgstr ""
 
 #: zcadstrconsts.rsclosedwgquery
-msgid "Drawing not saved. Close?"
+msgid "Drawing \"%s\" not saved. Close?"
 msgstr ""
 
 #: zcadstrconsts.rscm2vnotremove

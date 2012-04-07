@@ -112,6 +112,9 @@ type
                     function DOShowModal(MForm:TForm): Integer;
                     procedure CloseDWGPage(Sender: TObject);
 
+                    procedure PageControlMouseDown(Sender: TObject;Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+
+
                     private
                     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
                     public
@@ -498,12 +501,14 @@ procedure _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject);
 var
    poglwnd:toglwnd;
    i:integer;
+   s:string;
 begin
   if ClosedDWG<>nil then
   begin
        if ClosedDWG.Changed then
                                  begin
-                                      if MainFormN.MessageBox(@rsCloseDWGQuery[1],@rsWarningCaption[1],MB_YESNO)<>IDYES then exit;
+                                      s:=format(rsCloseDWGQuery,[ClosedDWG.FileName]);
+                                      if MainFormN.MessageBox(@s[1],@rsWarningCaption[1],MB_YESNO)<>IDYES then exit;
                                  end;
        poglwnd:=ClosedDWG.OGLwindow1;
        gdb.eraseobj(ClosedDWG);
@@ -541,7 +546,17 @@ begin
                       Closeddwg:=poglwnd.PDWG;
   _CloseDWGPage(ClosedDWG,Sender);
 end;
-
+procedure TMainFormN.PageControlMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var //TS: TsTabSheet;
+     i: integer;
+begin
+  I:=(Sender as TPageControl).TabIndexAtClientPos(Point(X,Y));
+  if i>-1 then
+  if ssMiddle in Shift then
+  if (Sender is TPageControl) then
+                                  CloseDWGPage((Sender as TPageControl).Pages[I]);
+end;
 procedure TMainFormN.DockMasterCreateControl(Sender: TObject; aName: string; var
   AControl: TControl; DoDisableAutoSizing: boolean);
 var
@@ -603,6 +618,7 @@ begin
       PageControl.BorderWidth:=0;
       PageControl.Options:=[nboShowCloseButtons];
       PageControl.OnCloseTabClicked:=CloseDWGPage;
+      PageControl.OnMouseDown:=PageControlMouseDown;
 
    AControl:=MainPanel;
    AControl.Name:=aname;

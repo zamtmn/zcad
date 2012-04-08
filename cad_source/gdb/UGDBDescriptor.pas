@@ -343,6 +343,7 @@ begin
 
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLinew,'DWG_CLinew');
+   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_DrawMode,'DWG_DrawMode');
 end;
 
 procedure GDBDescriptor.SetCurrentDWG(PDWG:PTDrawing);

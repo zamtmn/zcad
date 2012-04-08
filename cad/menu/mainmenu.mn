@@ -10,9 +10,9 @@ Panel Status;
     variable DWG_DrawGrid,1.bmp,Show grid
     variable DWG_EditInSubEntry,sub.bmp,On/Off Selecting parts of dynamic objects
     variable DWG_AdditionalGrips,#+G,On/Off Additional grips
-    variable DWG_DrawMode,#LWT,Show/Hide Lineweight
-    variable DWG_OSMode,#OSnap,Object snap
-    variable DWG_PolarMode,#Polar,Polar tracking
+    variable DWG_DrawMode,lwt.bmp,Show/Hide Lineweight
+    variable DWG_OSMode,osnap.bmp,Object snap
+    variable DWG_PolarMode,polar.bmp,Polar tracking
     variable DWG_HelpGeometryDraw,#AG,Auxiliary graphics (connectivity, direction, etc.)
     variable DWG_SystmGeometryDraw,#SG,System graphics (size, communication, etc. for debugging)
   }

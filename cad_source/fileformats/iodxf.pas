@@ -206,6 +206,7 @@ begin
     if error <> 0 then
                       s := s{чето тут не так};
     s := f.readGDBString;
+    //programlog.LogOutStrfast(s,0);
      if (byt = 9) and (s = '$CLAYER') then
                                           begin
                                                s := f.readGDBString;
@@ -214,8 +215,16 @@ begin
 else if (byt = 9) and (s = '$CELWEIGHT') then
                                           begin
                                                s := f.readGDBString;
+                                               s := f.readGDBString;
                                                if sysvar.DWG.DWG_CLinew<>nil then
-                                               sysvar.DWG.DWG_CLinew^ := strtoint(f.readGDBString);
+                                               sysvar.DWG.DWG_CLinew^ := strtoint(s);
+                                          end
+else if (byt = 9) and (s = '$LWDISPLAY') then
+                                          begin
+                                               s := f.readGDBString;
+                                               s := f.readGDBString;
+                                               if sysvar.DWG.DWG_DrawMode<>nil then
+                                               sysvar.DWG.DWG_DrawMode^ := strtoint(s);
                                           end
 else if (byt = 0) and (s = dxfName_ENDSEC) then
                                               exit;
@@ -1102,6 +1111,15 @@ else if (groupi = 9) and (ucvalues = '$CELWEIGHT') then
       outstream.TXTAddGDBStringEOL('$CELWEIGHT');
       outstream.TXTAddGDBStringEOL('370');
       outstream.TXTAddGDBStringEOL(inttostr(sysvar.DWG.DWG_CLinew^));
+      groups := templatefile.readGDBString;
+      values := templatefile.readGDBString;
+    end
+else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
+    begin
+      outstream.TXTAddGDBStringEOL(groups);
+      outstream.TXTAddGDBStringEOL('$LWDISPLAY');
+      outstream.TXTAddGDBStringEOL('290');
+      outstream.TXTAddGDBStringEOL(inttostr(sysvar.DWG.DWG_DrawMode^));
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
     end

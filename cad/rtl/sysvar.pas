@@ -2,7 +2,6 @@ unit sysvar;
 interface
 uses System;
 var
-  DWG_DrawMode:GDBInteger;
   DWG_OSMode:GDBInteger;
   DWG_PolarMode:GDBInteger;
   DWG_SystmGeometryDraw:GDBBoolean;
@@ -65,7 +64,6 @@ var
   pi:GDBDouble;
 implementation
 begin
-  DWG_DrawMode:=0;
   DWG_OSMode:=14311;
   DWG_PolarMode:=1;
   DWG_SystmGeometryDraw:=False;

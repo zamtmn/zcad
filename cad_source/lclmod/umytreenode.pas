@@ -383,6 +383,8 @@ procedure TmyVariableToolButton.AssignToVar(varname:string);
 var
    pvd:pvardesk;
 begin
+     if varname='DWG_DrawMode' then
+                                     varname:=varname;
      FVariable:=varname;
      pvd:=nil;
      if DWGUnit<>nil then
@@ -401,7 +403,9 @@ begin
                                                                          fbufer:=0;
                                                                          Move(pvd^.data.Instance^, FBufer,pvd^.data.PTD^.SizeInGDBBytes);
                                                                          if fbufer<>0 then
-                                                                                         self.Down:=true;
+                                                                                         self.Down:=true
+                                                                                      else
+                                                                                          self.Down:=false;
                                                                     end;
      end
         else

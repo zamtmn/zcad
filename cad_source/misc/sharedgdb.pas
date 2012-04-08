@@ -61,10 +61,10 @@ var
    pdwg:PTDrawing;
 begin
    pdwg:=gdb.GetCurrentDWG;
+   mainformn.UpdateControls;
   if (pdwg<>nil)and(pdwg<>BlockBaseDWG) then
   begin
                                       begin
-                                           mainformn.UpdateControls;
                                            reloadlayer;
                                            gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
                                            mainformn.Caption:=(('ZCad v'+sysvar.SYS.SYS_Version^+' - ['+gdb.GetCurrentDWG.FileName+']'));

@@ -909,7 +909,9 @@ begin
 end;
 function QSave_com(Operands:pansichar):GDBInteger;
 var s,s1:GDBString;
+    itautoseve:boolean;
 begin
+     itautoseve:=false;
      if gdb.GetCurrentROOT.ObjArray.Count<1 then
                                                      begin
                                                           if MainFormN.messagebox(@rsSaveEmptyDWG[1],@rsWarningCaption[1],MB_YESNO)=IDNO then
@@ -920,6 +922,7 @@ begin
                                s1:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^);
                                s:='Autosave... '''+s1+'''';
                                historyout(pansichar(s));
+                               itautoseve:=true;
                           end
                       else
                           begin
@@ -931,6 +934,8 @@ begin
                                                                       end;
                                s1:=gdb.GetCurrentDWG.FileName;
                           end;
+     if not itautoseve then
+                           gdb.GetCurrentDWG.Changed:=false;
      SaveDXFDPAS(s1);
      //savedxf2000(s1, @GDB);
      SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
@@ -962,6 +967,7 @@ begin
                                 begin
                                      SaveDXFDPAS(s);
                                      gdb.GetCurrentDWG.FileName:=s;
+                                     gdb.GetCurrentDWG.Changed:=false;
                                      updatevisible;
                                     (* savedxf2000(s, @GDB);
                                      pu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
@@ -2270,11 +2276,11 @@ begin
   CreateCommandFastObjectPlugin(@SelectOnMouseObjects_com,'SelectOnMouseObjects',CADWG,0);
   CreateCommandFastObjectPlugin(@SelectObjectByAddres_com,'SelectObjectByAddres',CADWG,0);
   CreateCommandFastObjectPlugin(@quit_com,'Quit',0,0);
-  CreateCommandFastObjectPlugin(@newdwg_com,'NewDWG',0,0);
+  CreateCommandFastObjectPlugin(@newdwg_com,'NewDWG',0,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@NextDrawint_com,'NextDrawing',0,0);
   CreateCommandFastObjectPlugin(@PrevDrawint_com,'PrevDrawing',0,0);
   CreateCommandFastObjectPlugin(@CloseDWGOnMouse_com,'CloseDWGOnMouse',CADWG,0);
-  CreateCommandFastObjectPlugin(@CloseDWG_com,'CloseDWG',CADWG,0);
+  CreateCommandFastObjectPlugin(@CloseDWG_com,'CloseDWG',CADWG,0).CEndActionAttr:=CEDWGNChanged;;
   selall:=CreateCommandFastObjectPlugin(@SelectAll_com,'SelectAll',CADWG,0);
   selall^.overlay:=true;
   selall.CEndActionAttr:=0;
@@ -2282,9 +2288,9 @@ begin
   deselall.CEndActionAttr:=CEDeSelect;
   deselall^.overlay:=true;
   //deselall.CEndActionAttr:=0;
-  CreateCommandFastObjectPlugin(@QSave_com,'QSave',CADWG,0);
+  CreateCommandFastObjectPlugin(@QSave_com,'QSave',CADWG,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@Merge_com,'Merge',CADWG,0);
-  CreateCommandFastObjectPlugin(@Load_com,'Load',0,0);
+  CreateCommandFastObjectPlugin(@Load_com,'Load',0,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@MergeBlocks_com,'MergeBlocks',0,0);
   CreateCommandFastObjectPlugin(@SaveAs_com,'SaveAs',CADWG,0);
   CreateCommandFastObjectPlugin(@Cam_reset_com,'Cam_Reset',CADWG,0);

@@ -396,7 +396,7 @@ begin
 
   Pointer(FileName):=nil;
   FileName:=rsUnnamedWindowTitle;
-  Changed:=True;
+  Changed:=False;
 
   TextStyleTable.init({$IFDEF DEBUGBUILD}'{146FC836-1490-4046-8B09-863722570C9F}',{$ENDIF}200);
   tp.size:=2.5;

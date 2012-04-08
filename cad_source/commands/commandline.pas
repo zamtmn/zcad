@@ -247,7 +247,13 @@ begin
    result:=nil;
 end;
 procedure GDBcommandmanager.run(pc:PCommandObjectDef;operands:GDBString);
+var
+   pd:PTDrawing;
 begin
+   pd:=gdb.GetCurrentDWG;
+   if pd<>nil then
+   if ((pc^.CEndActionAttr)and CEDWGNChanged)=0 then
+                                                   pd.Changed:=true;
           if pcommandrunning<>nil then
                                       begin
                                            if pc^.overlay then

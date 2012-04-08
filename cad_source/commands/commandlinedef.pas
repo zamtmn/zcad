@@ -23,6 +23,7 @@ uses gdbasetypes,gdbase{,UGDBOpenArrayOfPointer},oglwindowdef,log,UGDBOpenArrayO
 const
      CADWG=1;
      CEDeSelect=1;
+     CEDWGNChanged=2;
 type
 {Export+}
   TCStartAttr=GDBInteger;{атрибут разрешения\запрещения запуска команды}
@@ -44,6 +45,7 @@ type
     procedure CommandInit; virtual; abstract;
     procedure DrawHeplGeometry;virtual;
     destructor done;virtual;
+    constructor init(cn:GDBString;SA,DA:TCStartAttr);
     function GetObjTypeName:GDBString;virtual;
   end;
   CommandFastObjectDef = object(CommandObjectDef)
@@ -80,6 +82,14 @@ begin
      result:='CommandObjectDef';
 
 end;
+constructor CommandObjectDef.init;
+begin
+  CStartAttrEnableAttr:=SA or CADWG;
+  CStartAttrDisableAttr:=DA;
+  overlay:=false;
+  CEndActionAttr:=CEDeSelect;
+end;
+
 destructor CommandObjectDef.done;
 begin
          //inherited;

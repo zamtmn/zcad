@@ -1257,6 +1257,7 @@ begin
       gdb.GetCurrentDWG.pcamera^.NextPosition;
       CalcOptimalMatrix;
       calcgrid;
+      gdb.GetCurrentDWG.Changed:=true;
       //-------------------CalcOptimalMatrix;
 
       gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjArray.ObjTree);
@@ -1283,6 +1284,7 @@ begin
            gdb.GetCurrentDWG.pcamera^.NextPosition;
            CalcOptimalMatrix;
            calcgrid;
+           gdb.GetCurrentDWG.Changed:=true;
            //-------------CalcOptimalMatrix;
            lptime:=now();
            gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentDWG.pObjRoot.ObjArray.ObjTree);

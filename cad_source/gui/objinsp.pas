@@ -679,6 +679,7 @@ begin
     if pdwg<>nil then
     begin
          pdwg.OGLwindow1.param.lastonmouseobject:=nil;
+         pdwg.Changed:=true;
     end;
     pld:=peditor.PInstance;
     if GDBobj then

@@ -84,14 +84,10 @@ implementation
 uses {mainwindow,}{GDBCommandsDraw,}GDBCommandsBase,{oglwindow,}{GDBCommandsElectrical,}UGDBOpenArrayOfUCommands,Objinsp,varman,log;
 constructor CommandRTEdObject.init;
 begin
+  inherited;
   CommandInit;
   CommandName := cn;
   CommandGDBString := '';
-  CStartAttrEnableAttr:=SA or CADWG;
-  CStartAttrDisableAttr:=DA;
-  overlay:=false;
-  CEndActionAttr:=CEDeSelect;
-
   commandmanager.CommandRegister(@self);
 end;
 constructor CommandFastObjectPlugin.Init;
@@ -124,7 +120,6 @@ begin
     gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
     gdb.GetCurrentDWG.SelObjArray.clearallobjects;
     end;
-
   gdb.GetCurrentDWG.OGLwindow1.Clear0Ontrackpoint;
   if not overlay then
                      begin
@@ -152,7 +147,6 @@ begin
     gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
     gdb.GetCurrentDWG.SelObjArray.clearallobjects;
     end;
-
   gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   gdb.GetCurrentDWG.OnMouseObj.Clear;
   if commandline.commandmanager.CommandsStack.Count=0 then

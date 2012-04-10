@@ -192,7 +192,7 @@ begin
   end;
   end;
 end;
-procedure readvariables(var f: GDBOpenArrayOfByte;var clayer:GDBString);
+procedure readvariables(var f: GDBOpenArrayOfByte;var clayer:GDBString;LoadMode:TLoadOpt);
 var
   byt: GDBByte;
   s: GDBString;
@@ -210,12 +210,15 @@ begin
      if (byt = 9) and (s = '$CLAYER') then
                                           begin
                                                s := f.readGDBString;
-                                               clayer := f.readGDBString;
+                                               s:=f.readGDBString;
+                                               if LoadMode=TLOLoad then
+                                                                       clayer := s;
                                           end
 else if (byt = 9) and (s = '$CELWEIGHT') then
                                           begin
                                                s := f.readGDBString;
                                                s := f.readGDBString;
+                                               if LoadMode=TLOLoad then
                                                if sysvar.DWG.DWG_CLinew<>nil then
                                                sysvar.DWG.DWG_CLinew^ := strtoint(s);
                                           end
@@ -223,6 +226,7 @@ else if (byt = 9) and (s = '$LWDISPLAY') then
                                           begin
                                                s := f.readGDBString;
                                                s := f.readGDBString;
+                                               if LoadMode=TLOLoad then
                                                if sysvar.DWG.DWG_DrawMode<>nil then
                                                sysvar.DWG.DWG_DrawMode^ := strtoint(s);
                                           end
@@ -525,7 +529,7 @@ begin
   blockload:=false;
   nulisread:=false;
   {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF2000',lp_IncPos);{$ENDIF}
-  readvariables(f,clayer);
+  readvariables(f,clayer,LoadMode);
   repeat
     gotodxf(f, 0, dxfName_SECTION);
     if not f.notEOF then
@@ -767,6 +771,7 @@ begin
                                   end;
                                 12:
                                   begin
+                                       if LoadMode=TLOLoad then
                                        if active then
                                        if gdb.GetCurrentDWG<>nil then
                                        if gdb.GetCurrentDWG.pcamera<>nil then
@@ -776,6 +781,7 @@ begin
                                    end;
                                 22:
                                   begin
+                                       if LoadMode=TLOLoad then
                                        if active then
                                        if gdb.GetCurrentDWG<>nil then
                                        if gdb.GetCurrentDWG.pcamera<>nil then
@@ -785,6 +791,7 @@ begin
                                    end;
                                 13:
                                   begin
+                                       if LoadMode=TLOLoad then
                                        if active then
                                        if sysvar.DWG.DWG_OriginGrid<>nil then
                                        begin
@@ -793,6 +800,7 @@ begin
                                    end;
                                 23:
                                   begin
+                                       if LoadMode=TLOLoad then
                                        if active then
                                        if sysvar.DWG.DWG_OriginGrid<>nil then
                                        begin
@@ -801,6 +809,7 @@ begin
                                    end;
                                 14:
                                   begin
+                                       if LoadMode=TLOLoad then
                                        if active then
                                        if sysvar.DWG.DWG_StepGrid<>nil then
                                        begin
@@ -809,6 +818,7 @@ begin
                                    end;
                                 24:
                                   begin
+                                       if LoadMode=TLOLoad then
                                        if active then
                                        if sysvar.DWG.DWG_StepGrid<>nil then
                                        begin
@@ -817,6 +827,7 @@ begin
                                    end;
                                 40:
                                   begin
+                                       if LoadMode=TLOLoad then
                                        if active then
                                        if gdb.GetCurrentDWG<>nil then
                                        if gdb.GetCurrentDWG.pcamera<>nil then
@@ -827,6 +838,7 @@ begin
                                    end;
                                 41:
                                   begin
+                                       if LoadMode=TLOLoad then
                                        if active then
                                        if gdb.GetCurrentDWG<>nil then
                                        if gdb.GetCurrentDWG.pcamera<>nil then
@@ -838,6 +850,7 @@ begin
                                    end;
                                 71:
                                   begin
+                                       if LoadMode=TLOLoad then
                                        if active then
                                        if gdb.GetCurrentDWG<>nil then
                                        if gdb.GetCurrentDWG.OGLwindow1<>nil then
@@ -851,6 +864,7 @@ begin
                                   end;
                                 75:
                                   begin
+                                       if LoadMode=TLOLoad then
                                        if active then
                                        if sysvar.DWG.DWG_SnapGrid<>nil then
                                        begin
@@ -862,6 +876,7 @@ begin
                                   end;
                               76:
                                 begin
+                                     if LoadMode=TLOLoad then
                                      if active then
                                      if sysvar.DWG.DWG_DrawGrid<>nil then
                                      begin
@@ -1287,10 +1302,20 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                outstream.TXTAddGDBStringEOL(dxfGroupCode(21));
                outstream.TXTAddGDBStringEOL('1.0');
 
-               outstream.TXTAddGDBStringEOL(dxfGroupCode(12));
-               outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.param.CPoint.x));
-               outstream.TXTAddGDBStringEOL(dxfGroupCode(22));
-               outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.param.CPoint.y));
+               if gdb.GetCurrentDWG.OGLwindow1<>nil then
+                                                        begin
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(12));
+                                                             outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.param.CPoint.x));
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(22));
+                                                             outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.param.CPoint.y));
+                                                        end
+                                                    else
+                                                        begin
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(12));
+                                                             outstream.TXTAddGDBStringEOL('0');
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(22));
+                                                             outstream.TXTAddGDBStringEOL('0');
+                                                        end;
                outstream.TXTAddGDBStringEOL(dxfGroupCode(13));
                outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_OriginGrid^.x));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(23));
@@ -1316,9 +1341,15 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                outstream.TXTAddGDBStringEOL(dxfGroupCode(37));
                outstream.TXTAddGDBStringEOL(floattostr({-gdb.GetCurrentDWG.pcamera.prop.point.z}0));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(40));
-               outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.param.ViewHeight));
+               if gdb.GetCurrentDWG.OGLwindow1<>nil then
+                                                        outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.param.ViewHeight))
+                                                    else
+                                                        outstream.TXTAddGDBStringEOL(inttostr(500));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(41));
-               outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.ClientWidth/gdb.GetCurrentDWG.OGLwindow1.ClientHeight));
+               if gdb.GetCurrentDWG.OGLwindow1<>nil then
+                                                        outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.ClientWidth/gdb.GetCurrentDWG.OGLwindow1.ClientHeight))
+                                                    else
+                                                        outstream.TXTAddGDBStringEOL(inttostr(1));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(42));
                outstream.TXTAddGDBStringEOL('50.0');
                outstream.TXTAddGDBStringEOL(dxfGroupCode(43));

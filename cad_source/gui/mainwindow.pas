@@ -1926,8 +1926,8 @@ begin
                                      exit;
                                 end;
       end;
-     deb:=ActiveControl.ClassName;
-     ct:=ActiveControl.ClassType;
+     //deb:=ActiveControl.ClassName;
+     //ct:=ActiveControl.ClassType;
      if ((ActiveControl<>cmdedit)and(ActiveControl<>HistoryLine)and(ActiveControl<>LayerBox)and(ActiveControl<>LineWBox))then
      begin
      if (ActiveControl is tedit)or (ActiveControl is tmemo)or (ActiveControl is TComboBox)then

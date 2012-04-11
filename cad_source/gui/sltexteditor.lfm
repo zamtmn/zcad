@@ -9,8 +9,10 @@ object sltexteditor1: Tsltexteditor1
   ClientWidth = 503
   Constraints.MaxHeight = 18
   Constraints.MinHeight = 18
+  KeyPreview = True
+  OnKeyDown = KeyDown
   OnShow = shoftedform
-  LCLVersion = '0.9.31'
+  LCLVersion = '1.1'
   object EditField: TEdit
     Left = 29
     Height = 18

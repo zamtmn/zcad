@@ -114,6 +114,10 @@ resourcestring
   rsUncategorized='Uncategorized';
   rsDevices='Devices';
   rsEquipment='Equipment';
+  rsTextEditor='Text editor';
+  rsTextEdCaption=' TEXT: ';
+  rsMTextEditor='MText editor';
+
 
   rsdefaultpromot='Command';
   rsexprouttext='Expression %s return %s';

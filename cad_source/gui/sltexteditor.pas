@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls;
+  StdCtrls,
+  LCLType;
 
 type
 
@@ -16,6 +17,7 @@ type
     OkButton: TButton;
     EditField: TEdit;
     helptext: TLabel;
+    procedure KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure shoftedform(Sender: TObject);
   private
     { private declarations }
@@ -33,6 +35,16 @@ implementation
 procedure Tsltexteditor1.shoftedform(Sender: TObject);
 begin
      EditField.SelectAll;
+end;
+
+procedure Tsltexteditor1.KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+     if key=VK_ESCAPE then
+                          begin
+                          key:=0;
+                          close;
+                          end;
 end;
 
 initialization

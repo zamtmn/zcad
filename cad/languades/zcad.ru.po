@@ -335,9 +335,17 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
+#: zcadexternal.acn_fakecopyclipbase~caption
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
+msgstr ""
+
+#: zcadexternal.acn_fakepaste~caption
+msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -526,6 +534,10 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
+#: zcadexternal.acn_processkz~caption
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_processkz~textimage
 msgctxt "zcadexternal.acn_processkz~textimage"
 msgid "Process external KZ"
@@ -560,6 +572,10 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
+
+#: zcadexternal.acn_remautocables~caption
+msgid ""
+msgstr ""
 
 #: zcadexternal.acn_remautocables~textimage
 msgctxt "zcadexternal.acn_remautocables~textimage"
@@ -922,10 +938,11 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#| msgid "Rotate"
+#, fuzzy
+#| msgid "Block params"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
-msgstr "Параметры блока"
+msgid "Rotate"
+msgstr "Поворот"
 
 #: zcadexternal.gdbobjcircle~area
 msgctxt "zcadexternal.gdbobjcircle~area"
@@ -1209,9 +1226,10 @@ msgid "Reset camera"
 msgstr "Камера в начало"
 
 #: zcadexternal.menucommand~fuckoff
-#| msgid "Layouts (not impl)"
-msgid "Dimensions styles (not impl)"
-msgstr "Стили размеров (не реализовано)"
+#, fuzzy
+#| msgid "Dimensions styles (not impl)"
+msgid "Layouts (not impl)"
+msgstr "Листы (не реализовано)"
 
 #: zcadexternal.menucommand~setobjinsp(camera)
 msgid "Camera"
@@ -2733,6 +2751,10 @@ msgctxt "zcadstrconsts.rsmm"
 msgid "mm"
 msgstr "мм"
 
+#: zcadstrconsts.rsmtexteditor
+msgid "MText editor"
+msgstr "Редактор многострочного текста"
+
 #: zcadstrconsts.rsncoglc
 msgctxt "zcadstrconsts.rsncoglc"
 msgid "OpenGL context is not created"
@@ -2804,6 +2826,14 @@ msgstr "Чертеж не сохранен. Уверен?"
 #: zcadstrconsts.rstemplatenotfound
 msgid "Template file \"%s\" not found"
 msgstr "Файл шаблона \"%s\" не найден"
+
+#: zcadstrconsts.rstextedcaption
+msgid " TEXT: "
+msgstr " ТЕКСТ: "
+
+#: zcadstrconsts.rstexteditor
+msgid "Text editor"
+msgstr "Редактор текста"
 
 #: zcadstrconsts.rstoolbarnotfound
 msgctxt "zcadstrconsts.rstoolbarnotfound"

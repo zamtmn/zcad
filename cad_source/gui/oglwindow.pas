@@ -1867,7 +1867,7 @@ begin
 
      end;
      //InfoForm.DialogPanel.ShowButtons:=[pbOK, pbCancel{, pbClose, pbHelp}];
-     InfoForm.caption:=('Редактор многострочного текста');
+     InfoForm.caption:=(rsMTextEditor);
 
      InfoForm.memo.text:=astring;
      modalresult:=MainFormN.DOShowModal(InfoForm);
@@ -1880,9 +1880,9 @@ begin
      begin
      if not assigned(sltexteditor1) then
      Application.CreateForm(Tsltexteditor1, sltexteditor1);
-     sltexteditor1.caption:=('Редактор однострочного текста');
+     sltexteditor1.caption:=(rsTextEditor);
 
-     sltexteditor1.helptext.Caption:=' TEXT: ';
+     sltexteditor1.helptext.Caption:=rsTextEdCaption;
      sltexteditor1.EditField.Caption:=astring;
 
      modalresult:=MainFormN.DOShowModal(sltexteditor1);

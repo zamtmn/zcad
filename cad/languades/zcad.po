@@ -848,13 +848,13 @@ msgstr ""
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
+msgid "Block params"
 msgstr ""
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+msgid "Rotate"
 msgstr ""
 
 #: zcadexternal.gdbobjcircle~area
@@ -1104,12 +1104,12 @@ msgstr ""
 
 #: zcadexternal.menucommand~fuckoff
 #, fuzzy
-msgid "Layouts (not impl)"
+msgid "Dimensions styles (not impl)"
 msgstr ""
 
 #: zcadexternal.menucommand~fuckoff
 #, fuzzy
-msgid "Dimensions styles (not impl)"
+msgid "Layouts (not impl)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(camera)
@@ -2485,6 +2485,10 @@ msgctxt "zcadstrconsts.rsmm"
 msgid "mm"
 msgstr ""
 
+#: zcadstrconsts.rsmtexteditor
+msgid "MText editor"
+msgstr ""
+
 #: zcadstrconsts.rsncoglc
 msgctxt "zcadstrconsts.rsncoglc"
 msgid "OpenGL context is not created"
@@ -2550,6 +2554,14 @@ msgstr ""
 
 #: zcadstrconsts.rstemplatenotfound
 msgid "Template file \"%s\" not found"
+msgstr ""
+
+#: zcadstrconsts.rstextedcaption
+msgid " TEXT: "
+msgstr ""
+
+#: zcadstrconsts.rstexteditor
+msgid "Text editor"
 msgstr ""
 
 #: zcadstrconsts.rstoolbarnotfound

@@ -42,8 +42,8 @@ GDBOpenArrayOfByte=object(GDBOpenArray)
                       function AllocData(SData:GDBword):GDBPointer;virtual;
                       function ReadData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                       function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
-                      function ReadString(break, ignore: GDBString): shortString;
-                      function ReadGDBString: shortString;
+                      function ReadString(break, ignore: GDBString): {short}String;
+                      function ReadGDBString: {short}String;
                       function ReadString2:GDBString;
                       function GetCurrentReadAddres:GDBPointer;virtual;
                       function Jump(offset:GDBInteger):GDBPointer;virtual;
@@ -189,7 +189,7 @@ begin
 end;
 function GDBOpenArrayOfByte.ReadGDBString;
 begin
-     result:=ReadString(#13,#10);
+     result:=ReadString(#10,#13);
 end;
 function GDBOpenArrayOfByte.notEOF:GDBBoolean;
 begin
@@ -214,7 +214,7 @@ begin
      result:=readbyte;
      result:=result+256*readbyte;
 end;
-function GDBOpenArrayOfByte.readstring(break, ignore: GDBString): shortString;
+function GDBOpenArrayOfByte.readstring{(break, ignore: GDBString): shortString};
 var
   s: shortString;
   //i:GDBInteger;
@@ -257,7 +257,7 @@ begin
         result := s;
         //inc(addr);
         inc(readpos);
-        result := s;
+        //result := s;
         exit;
       end;
     end;

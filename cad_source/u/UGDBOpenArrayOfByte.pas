@@ -216,7 +216,7 @@ begin
 end;
 function GDBOpenArrayOfByte.readstring(break, ignore: GDBString): shortString;
 var
-  s: {short}GDBString;
+  s: shortString;
   //i:GDBInteger;
   lastbreak:GDBBoolean;
   addr:pansichar;

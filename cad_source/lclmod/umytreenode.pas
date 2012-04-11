@@ -466,7 +466,8 @@ begin
 end;
 procedure TmyCommandToolButton.click;
 begin
-     commandmanager.executecommand(@Fcommand[1]);
+     if action=nil then
+                       commandmanager.executecommand(@Fcommand[1]);
      inherited;
 end;
 

@@ -153,13 +153,14 @@ begin
   until isend;
 
   npathmin:=Infinity;
+  pgfe2:=nil;{-----------}
   pgfe:=beginiterate(ir);
   if pgfe<>nil then
   repeat
         if pgfe^.link.IsObjExist(l2) then
         begin
              npath:=pgfe^.pathlength+Vertexlength(pgfe^.point,point2);
-             if npath<npathmin then
+             if npath<=npathmin then
              begin
                   pgfe2:=pgfe;
                   step:=pgfe^.step;
@@ -168,6 +169,7 @@ begin
         end;
         pgfe:=iterate(ir);
   until pgfe=nil;
+  if pgfe2<>nil then
   pa.Add(@pgfe2.point);
   dec(step);
   pgfe3:=pgfe2;

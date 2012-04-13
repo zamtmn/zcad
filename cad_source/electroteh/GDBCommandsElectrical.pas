@@ -2725,14 +2725,14 @@ begin
                                                                  supernet.initnul(nil);
                                                                  //net.objarray.copyto(@supernet.ObjArray);
                                                                  supernet.ou.copyfrom(@net.ou);
-                                                                 log.LogOut('supernet.initnul(nil); Примитивов в графе: '+inttostr(supernet^.objarray.count));
+                                                                 //log.LogOut('supernet.initnul(nil); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
                                                             if not processednets.IsObjExist(net) then
                                                             begin
                                                                  net.objarray.copyto(@supernet.ObjArray);
                                                                  processednets.AddRef(net^);
                                                                  //net2processed:=true;
-                                                                 log.LogOut('processednets.AddRef(net^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
+                                                                 //log.LogOut('processednets.AddRef(net^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
 
                                                             if not processednets.IsObjExist(net2) then
@@ -2740,7 +2740,7 @@ begin
                                                                  net2.objarray.copyto(@supernet.ObjArray);
                                                                  processednets.AddRef(net2^);
                                                                  //net2processed:=true;
-                                                                 log.LogOut('processednets.AddRef(net2^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
+                                                                 //log.LogOut('processednets.AddRef(net2^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
 
                                                                 New_line := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
@@ -2757,7 +2757,7 @@ begin
                                                                 New_line^.Format;
                                                                 //New_line.bp.ListPos.Owner^.RemoveInArray(New_line.bp.ListPos.SelfIndex);
                                                                 supernet^.ObjArray.add(addr(New_line));
-                                                                log.LogOut('supernet^.ObjArray.add(addr(New_line)); Примитивов в графе: '+inttostr(supernet^.objarray.count));
+                                                                //log.LogOut('supernet^.ObjArray.add(addr(New_line)); Примитивов в графе: '+inttostr(supernet^.objarray.count));
 
 
                                                             pvd:=pvd;
@@ -2810,7 +2810,7 @@ begin
 
                           gdb.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(cable)}CorrectNodeTreeBB(cable);
 
-                          log.LogOut('Примитивов в графе: '+inttostr(supernet^.objarray.count));
+                          //log.LogOut('Примитивов в графе: '+inttostr(supernet^.objarray.count));
 
                           segments:=rootbymultitrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,supernet,Cable,true);
 

@@ -63,7 +63,7 @@ type
 
                     PageControl:TmyPageControl;
 
-                    MainMenu:TMenu;
+                    //MainMenu:TMenu;
                     StandartActions:TmyActionList;
 
                     SystemTimer: TTimer;
@@ -91,9 +91,10 @@ type
 
                     procedure loadpanels(pf:GDBString);
                     procedure CreateLayoutbox(tb:TToolBar);
-                    procedure loadmenu(var f:GDBOpenArrayOfByte;var pm:TMenu;var line:GDBString);
-                    procedure loadpopupmenu(var f:GDBOpenArrayOfByte;var pm:TMenu;var line:GDBString);
-                    procedure createmenu(var f:GDBOpenArrayOfByte;var pm:TMenu;var line:GDBString);
+                    procedure loadmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
+                    procedure loadpopupmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
+                    procedure createmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
+                    procedure setmainmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
                     procedure loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
 
                     procedure ChangedDWGTabCtrl(Sender: TObject);
@@ -164,7 +165,8 @@ const
      menutoken='MAINMENUITEM';
      popupmenutoken='POPUPMENU';
      submenutoken='MENUITEM';
-     createmenutoken='CREATEMAINMENU';
+     createmenutoken='CREATEMENU';
+     setmainmenutoken='SETMAINMENU';
      //TOOLTIPS_CLASS = 'tooltips_class32';
      //statusbarheight=20;
      //statusbarclientheight=18;
@@ -1514,17 +1516,22 @@ begin
       else if uppercase(line) =createmenutoken  then
       begin
            //MainMenu:=menu;
-           createmenu(f,MainMenu,line);
+           createmenu(f,{MainMenu,}line);
+      end
+      else if uppercase(line) =setmainmenutoken  then
+      begin
+           //MainMenu:=menu;
+           setmainmenu(f,{MainMenu,}line);
       end
       else if uppercase(line) = menutoken then
       begin
            //MainMenu:=menu;
-           loadmenu(f,MainMenu,line);
+           loadmenu(f,{MainMenu,}line);
       end
       else if uppercase(line) = popupmenutoken then
       begin
            //MainMenu:=menu;
-           loadpopupmenu(f,MainMenu,line);
+           loadpopupmenu(f,{MainMenu,}line);
       end
     end;
   end;
@@ -1532,16 +1539,16 @@ begin
   //f.close;
   f.done;
 end;
-procedure TMainFormN.loadmenu(var f:GDBOpenArrayOfByte;var pm:TMenu;var line:GDBString);
+procedure TMainFormN.loadmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
 var
     pmenuitem:TmyMenuItem;
     ppopupmenu:TMenuItem;
 begin
-           if not assigned(pm) then
+           {if not assigned(pm) then
                                    begin
                                    pm:=TMainMenu.Create(self);
                                    pm.Images:=self.StandartActions.Images;
-                                   end;
+                                   end;}
 
 
            line := f.readstring(';','');
@@ -1557,16 +1564,16 @@ begin
            loadsubmenu(f,ppopupmenu,line);
 
 end;
-procedure TMainFormN.loadpopupmenu(var f:GDBOpenArrayOfByte;var pm:TMenu;var line:GDBString);
+procedure TMainFormN.loadpopupmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
 var
     pmenuitem:TmyMenuItem;
     ppopupmenu:TmyPopupMenu;
 begin
-           if not assigned(pm) then
+           {if not assigned(pm) then
                                    begin
                                    pm:=TMainMenu.Create(self);
                                    pm.Images:=self.StandartActions.Images;
-                                   end;
+                                   end;}
 
 
            line := f.readstring(';','');
@@ -1585,28 +1592,39 @@ begin
            cxmenumgr.RegisterLCLMenu(ppopupmenu)
 
 end;
+procedure TMainFormN.setmainmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
+var
+    pmenu:TMainMenu;
+begin
+     line := f.readstring(';','');
+     pmenu:=TMainMenu(application.FindComponent(MenuNameModifier+uppercase(line)));
+     self.Menu:=pmenu;
+end;
 
-procedure TMainFormN.createmenu(var f:GDBOpenArrayOfByte;var pm:TMenu;var line:GDBString);
+procedure TMainFormN.createmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
 var
     pmenuitem:TmyMenuItem;
     ppopupmenu:TMenuItem;
     ts:GDBString;
+    menuname:string;
+    createdmenu:TMenu;
 begin
-           if not assigned(pm) then
-                                   begin
-                                   pm:=TMainMenu.Create(self);
-                                   pm.Images:=self.StandartActions.Images;
-                                   end;
+           {if not assigned(createdmenu) then
+                                   begin}
+                                   createdmenu:=TMainMenu.Create({self}application);
+                                   createdmenu.Images:=self.StandartActions.Images;
+                                   {end;}
 
 
            line := f.readstring(';','');
-           line:=(line);
+           GetPartOfPath(menuname,line,' ');
+           createdmenu.Name:=MenuNameModifier+uppercase(menuname);
            repeat
            GetPartOfPath(ts,line,',');
            ppopupmenu:=tmenuitem(application.FindComponent(MenuNameModifier+uppercase(ts)));
            if ppopupmenu<>nil then
                                   begin
-                                       pm.items.Add(ppopupmenu);
+                                       createdmenu.items.Add(ppopupmenu);
                                   end
                               else
                                   shared.ShowError(format(rsMenuNotFounf,[ts]));
@@ -1615,11 +1633,11 @@ begin
            until line='';
 
 
-           (*ppopupmenu:=TMenuItem.Create({pm}application);
+           (*ppopupmenu:=TMenuItem.Create({createdmenu}application);
            ppopupmenu.Name:='menu_'+line;
            line:=InterfaceTranslate('menu~'+line,line);
            ppopupmenu.Caption:=line;
-           //pm.items.Add(ppopupmenu);
+           //createdmenu.items.Add(ppopupmenu);
 
            loadsubmenu(f,ppopupmenu,line);*)
 

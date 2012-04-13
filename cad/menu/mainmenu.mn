@@ -416,4 +416,5 @@ PopUpMenu NONSELECTEDENTSCXMENU;
     Separator
     action ACN_SELECTALL
   }
-CreateMainMenu File,Edit,View,Format,Draw,Modify,Schematic,Plan,Model,Settings,Window,Help,__Debug,__DB;
+CreateMenu MailMenu File,Edit,View,Format,Draw,Modify,Schematic,Plan,Model,Settings,Window,Help,__Debug,__DB;
+SetMainMenu MailMenu;

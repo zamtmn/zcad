@@ -132,6 +132,7 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
                     function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
                     procedure FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:GDBOpenArrayOfPObjects);
                     procedure FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:GDBOpenArrayOfPObjects);
+                    procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
               end;
 {EXPORT-}
 var GDB: GDBDescriptor;
@@ -146,8 +147,42 @@ procedure RemapAll(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
 procedure startup;
 procedure finalize;
 procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
+//procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses {GDBSubordinated,}GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared{,mainwindow},commandline,log;
+procedure GDBDescriptor.standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
+var
+    pproglayer:PGDBLayerProp;
+    pnevlayer:PGDBLayerProp;
+begin
+     case ObjType of
+                  GDBNetID:
+                    begin
+                         if sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Net<>nil then
+                         if sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Net^.Enabled then
+                         begin
+                              pproglayer:=BlockBaseDWG.LayerTable.getAddres(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Net^.LayerName);
+                              pnevlayer:=GetCurrentDWG.LayerTable.createlayerifneedbyname(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Net^.LayerName,pproglayer);
+                              if pnevlayer=nil then
+                                                   pnevlayer:=GetCurrentDWG.LayerTable.addlayer(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Net^.LayerName,7,-1,true,false,true,'???',TLOLoad);
+                              pent.vp.Layer:=pnevlayer;
+                         end;
+                    end;
+                  GDBCableID:
+                    begin
+                         if sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Cable<>nil then
+                         if sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Cable^.Enabled then
+                         begin
+                              pproglayer:=BlockBaseDWG.LayerTable.getAddres(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Cable^.LayerName);
+                              pnevlayer:=GetCurrentDWG.LayerTable.createlayerifneedbyname(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Cable^.LayerName,pproglayer);
+                              if pnevlayer=nil then
+                                                   pnevlayer:=GetCurrentDWG.LayerTable.addlayer(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Cable^.LayerName,7,-1,true,false,true,'???',TLOLoad);
+                              pent.vp.Layer:=pnevlayer;
+                         end;
+                    end;
+
+     end;
+end;
  procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
  begin
       domethod.Code:=pointer(gdb.GetCurrentROOT^.GoodAddObjectToObjArray);

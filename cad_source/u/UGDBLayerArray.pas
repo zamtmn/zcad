@@ -46,16 +46,18 @@ GDBLayerArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLayerProp*)
                     function GetSystemLayer:PGDBLayerProp;
                     function GetCurrentLayer:PGDBLayerProp;
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
+                    function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;
               end;
 {EXPORT-}
 implementation
 uses
     log;
-function  GDBLayerArray.createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
+function  GDBLayerArray.createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;
 begin
-           result:=getAddres(_source.Name);
+           result:=getAddres(lname);
            if result=nil then
            begin
+                if _source<>nil then
                 result:=addlayer(_source.Name,
                                         _source.color,
                                         _source.lineweight,
@@ -65,6 +67,23 @@ begin
                                         _source.desk,
                                         TLOMerge);
            end;
+end;
+function  GDBLayerArray.createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
+begin
+           result:=createlayerifneedbyname(_source.Name,_source);
+           {result:=getAddres(_source.Name);
+           if result=nil then
+           begin
+                if _source<>nil then
+                result:=addlayer(_source.Name,
+                                        _source.color,
+                                        _source.lineweight,
+                                        _source._on,
+                                        _source._lock,
+                                        _source._print,
+                                        _source.desk,
+                                        TLOMerge);
+           end;}
 end;
 constructor GDBLayerArray.init;
 begin
@@ -136,6 +155,9 @@ begin
                        end;
              IsCreated:
                        begin
+                            if uppercase(name)='DEFPOINTS' then
+                                                               p^.init(Name,Color,LW,oo,ll,false,d)
+                            else
                             p^.init(Name,Color,LW,oo,ll,pp,d);
                        end;
              IsError:

@@ -158,6 +158,7 @@ GDBCameraBaseProp=record
                         zoom: GDBDouble;
                   end;
 TActulity=GDBInteger;
+TObjID=GDBWord;
 TDrawContext=record
                    VisibleActualy:TActulity;
                    InfrustumActualy:TActulity;
@@ -273,6 +274,11 @@ GDBArrayVertex=array[0..0] of GDBvertex;
                   wc:GDBVertex;
             end;
   TLoadOpt=(TLOLoad,TLOMerge);
+  PTLayerControl=^TLayerControl;
+  TLayerControl=record
+                      Enabled:GDBBoolean;
+                      LayerName:GDBString;
+                end;
 FreeElProc=procedure (p:GDBPointer);
 {EXPORT-}
 const

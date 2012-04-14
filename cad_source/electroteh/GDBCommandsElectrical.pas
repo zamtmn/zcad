@@ -1048,6 +1048,7 @@ var po:PGDBObjSubordinated;
     Objects:GDBObjOpenArrayOfPV;
 begin
   New_line^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+  gdb.standardization(New_line,GDBNetID);
   New_line^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
   New_line.CoordInOCS.lEnd:= wc;
   New_line^.Format;
@@ -1095,6 +1096,7 @@ begin
                  TempNet:=nil;
                  GDBGetMem({$IFDEF DEBUGBUILD}'{C92353C3-EA26-48A9-A47F-89F7723E3D16}',{$ENDIF}GDBPointer(TempNet),sizeof(GDBObjNet));
                  TempNet^.initnul(nil);
+                 gdb.standardization(TempNet,GDBNetID);
                  TempNet^.ou.copyfrom(units.findunit('trace'));
                  pvd:=TempNet.ou.FindVariable('NMO_Suffix');
                  pstring(pvd^.data.Instance)^:=inttostr(gdb.GetCurrentDWG.numerator.getnumber(UNNAMEDNET,SysVar.DSGN.DSGN_TraceAutoInc^));
@@ -1258,6 +1260,7 @@ begin
     p3dpl := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBCableID,gdb.GetCurrentROOT));
     //p3dpl := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
     GDBObjSetEntityProp(p3dpl,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^);
+    gdb.standardization(p3dpl,GDBCableID);
     //p3dpl^.init(@gdb.GetCurrentDWG.ObjRoot,gdb.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^);
 
     //uunitmanager.units.loadunit(expandpath('*blocks\el\cable.pas'),@p3dpl^.ou);
@@ -1425,6 +1428,7 @@ begin
   result:=mclick;
   p3dpl^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
   p3dpl^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
+  gdb.standardization(p3dpl,GDBCableID);
   //p3dpl^.CoordInOCS.lEnd:= wc;
   if (button and MZW_LBUTTON)<>0 then
   begin

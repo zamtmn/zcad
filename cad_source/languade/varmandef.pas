@@ -268,7 +268,13 @@ UserTypeDescriptor=object(GDBaseObject)
              DWG_SnapGrid:PGDBBoolean;
              DWG_SelectedObjToInsp:PGDBBoolean;(*'SelectedObjToInsp'*)
        end;
+  TLayerControls=record
+                       DSGN_LC_Net:PTLayerControl;
+                       DSGN_LC_Cable:PTLayerControl;
+                 end;
+
   tdesigning=record
+             DSGN_LayerControls:TLayerControls;
              DSGN_TraceAutoInc:PGDBBoolean;(*'Increment trace names'*)
              DSGN_LeaderDefaultWidth:PGDBDouble;(*'Default leader width'*)
              DSGN_HelpScale:PGDBDouble;(*'Scale of auxiliary elements'*)

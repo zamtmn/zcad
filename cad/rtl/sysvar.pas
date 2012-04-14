@@ -12,6 +12,8 @@ var
   DSGN_TraceAutoInc:GDBBoolean;
   DSGN_LeaderDefaultWidth:GDBDouble;
   DSGN_HelpScale:GDBDouble;
+  DSGN_LCNet:TLayerControl;
+  DSGN_LCCable:TLayerControl;
   VIEW_CommandLineVisible:GDBBoolean;
   VIEW_HistoryLineVisible:GDBBoolean;
   VIEW_ObjInspVisible:GDBBoolean;
@@ -74,6 +76,10 @@ begin
   DSGN_TraceAutoInc:=False;
   DSGN_LeaderDefaultWidth:=10.0;
   DSGN_HelpScale:=1.0;
+  DSGN_LCNet.Enabled:=true;
+  DSGN_LCNet.LayerName:='DEFPOINTS';
+  DSGN_LCCable.Enabled:=true;
+  DSGN_LCCable.LayerName:='EL_KABLE';
   VIEW_CommandLineVisible:=True;
   VIEW_HistoryLineVisible:=True;
   VIEW_ObjInspVisible:=True;

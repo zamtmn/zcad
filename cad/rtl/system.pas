@@ -80,8 +80,10 @@ TObjLinkRecord=record
 PIMatrix4=^IMatrix4;               
 IMatrix4=array[0..3]of GDBInteger;
 DVector4D=array[0..3]of GDBDouble;
+DVector3D=array[0..2]of GDBDouble;
 PDMatrix4D=^DMatrix4D;
 DMatrix4D=array[0..3]of DVector4D;
+DMatrix3D=array[0..2]of DVector3D;
 ClipArray=array[0..5]of DVector4D;
 PGDBvertex=^GDBvertex;
 GDBvertex=record
@@ -167,6 +169,7 @@ GDBCameraBaseProp=record
                         zoom: GDBDouble;
                   end;
 TActulity=GDBInteger;
+TObjID=GDBWord;
 TDrawContext=record
                    VisibleActualy:TActulity;
                    InfrustumActualy:TActulity;
@@ -279,6 +282,11 @@ GDBArrayVertex=array[0..0] of GDBvertex;
                   wc:GDBVertex;
             end;
   TLoadOpt=(TLOLoad,TLOMerge);
+  PTLayerControl=^TLayerControl;
+  TLayerControl=record
+                      Enabled:GDBBoolean;
+                      LayerName:GDBString;
+                end;
 FreeElProc=procedure (p:GDBPointer);
 //Generate on C:\zcad\CAD_SOURCE\u\UOpenArray.pas
 POpenArray=^OpenArray;
@@ -529,8 +537,8 @@ GDBOpenArrayOfByte=object(GDBOpenArray)
                       function AllocData(SData:GDBword):GDBPointer;virtual;abstract;
                       function ReadData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
                       function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
-                      function ReadString(break, ignore: GDBString): shortString;
-                      function ReadGDBString: shortString;
+                      function ReadString(break, ignore: GDBString): {short}String;
+                      function ReadGDBString: {short}String;
                       function ReadString2:GDBString;
                       function GetCurrentReadAddres:GDBPointer;virtual;abstract;
                       function Jump(offset:GDBInteger):GDBPointer;virtual;abstract;
@@ -652,6 +660,7 @@ GDBLayerArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLayerProp*)
                     function GetSystemLayer:PGDBLayerProp;
                     function GetCurrentLayer:PGDBLayerProp;
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
+                    function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;
               end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBTableStyleArray.pas
 TTableCellJustify=(jcl(*'TopLeft'*),
@@ -814,7 +823,12 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
              DWG_SnapGrid:PGDBBoolean;
              DWG_SelectedObjToInsp:PGDBBoolean;(*'SelectedObjToInsp'*)
        end;
+  TLayerControls=record
+                       DSGN_LC_Net:PTLayerControl;
+                       DSGN_LC_Cable:PTLayerControl;
+                 end;
   tdesigning=record
+             DSGN_LayerControls:TLayerControls;
              DSGN_TraceAutoInc:PGDBBoolean;(*'Increment trace names'*)
              DSGN_LeaderDefaultWidth:PGDBDouble;(*'Default leader width'*)
              DSGN_HelpScale:PGDBDouble;(*'Scale of auxiliary elements'*)
@@ -1011,7 +1025,7 @@ GDBObjVisualProp=record
                       LineWeight:GDBSmallint;(*'Line weight'*)(*saved_to_shd*)
                       LineType:GDBString;(*'Line type'*)(*saved_to_shd*)
                       LineTypeScale:GDBDouble;(*'Line type scale'*)(*saved_to_shd*)
-                      ID:GDBWord;(*'Object type'*)(*oi_readonly*)
+                      ID:TObjID;(*'Object type'*)(*oi_readonly*)
                       BoundingBox:GDBBoundingBbox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       LastCameraPos:TActulity;(*oi_readonly*)
                  end;
@@ -2133,6 +2147,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     procedure CommandInit; virtual; abstract;
     procedure DrawHeplGeometry;virtual;abstract;
     destructor done;virtual;abstract;
+    constructor init(cn:GDBString;SA,DA:TCStartAttr);
     function GetObjTypeName:GDBString;virtual;abstract;
   end;
   CommandFastObjectDef = object(CommandObjectDef)
@@ -2519,6 +2534,8 @@ type
     pointnum, axisnum: GDBInteger;
     CSIconCoord: GDBvertex;
     CSX, CSY, CSZ: GDBvertex2DI;
+    BLPoint,CPoint,TRPoint:GDBvertex2D;
+    ViewHeight:GDBDouble;
     projtype: GDBInteger;
     clipx, clipy: GDBDouble;
     firstdraw: GDBBoolean;
@@ -2626,6 +2643,7 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
                     function AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):integer;virtual;abstract;
                     function GetCurrentROOT:PGDBObjGenericSubEntry;
                     function GetCurrentDWG:PTDrawing;
+                    procedure asociatedwgvars;
                     procedure SetCurrentDWG(PDWG:PTDrawing);
                     function CreateDWG:PTDrawing;
                     procedure eraseobj(ObjAddr:PGDBaseObject);virtual;abstract;
@@ -2637,6 +2655,7 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
                     function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
                     procedure FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:GDBOpenArrayOfPObjects);
                     procedure FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:GDBOpenArrayOfPObjects);
+                    procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
               end;
 //Generate on C:\zcad\CAD_SOURCE\commands\GDBCommandsBase.pas
   TMSType=(

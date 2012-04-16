@@ -361,7 +361,7 @@ var
   pp:PGDBObjEntity;
   ir:itrec;
   inr:TINRect;
-  line:GDBString;
+  line,saddr:GDBString;
   pvd:pvardesk;
 begin
      result:=0;
@@ -379,7 +379,8 @@ begin
                                          end;
                                          line:=pp^.GetObjName+' Layer='+pp^.vp.Layer.GetFullName;
                                          line:=line+' Name='+pvd.data.PTD.GetValueAsString(pvd.data.Instance);
-                                         ContextMenu.Items.Add(TmyMenuItem.create(ContextMenu,line,'SelectObjectByAddres('+inttostr(GDBPlatformint(pp))+')'));
+                                         system.str(GDBPlatforumint(pp),saddr);
+                                         ContextMenu.Items.Add(TmyMenuItem.create(ContextMenu,line,'SelectObjectByAddres('+saddr+')'));
                                          //if result='' then
                                          //                 result:=line
                                          //             else
@@ -404,7 +405,7 @@ var
    pp:PGDBObjEntity;
    code:integer;
 begin
-     val(Operands,GDBPlatformint(pp),code);
+     val(Operands,GDBPlatforumint(pp),code);
      if (code=0)and(assigned(pp))then
                                      begin
                                      pp^.select;

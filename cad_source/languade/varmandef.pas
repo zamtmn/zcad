@@ -269,12 +269,13 @@ UserTypeDescriptor=object(GDBaseObject)
              DWG_SelectedObjToInsp:PGDBBoolean;(*'SelectedObjToInsp'*)
        end;
   TLayerControls=record
-                       DSGN_LC_Net:PTLayerControl;
-                       DSGN_LC_Cable:PTLayerControl;
+                       DSGN_LC_Net:PTLayerControl;(*'Nets'*)
+                       DSGN_LC_Cable:PTLayerControl;(*'Cables'*)
+                       DSGN_LC_Leader:PTLayerControl;(*'Leaders'*)
                  end;
 
   tdesigning=record
-             DSGN_LayerControls:TLayerControls;
+             DSGN_LayerControls:TLayerControls;(*'Control layers'*)
              DSGN_TraceAutoInc:PGDBBoolean;(*'Increment trace names'*)
              DSGN_LeaderDefaultWidth:PGDBDouble;(*'Default leader width'*)
              DSGN_HelpScale:PGDBDouble;(*'Scale of auxiliary elements'*)

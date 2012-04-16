@@ -276,8 +276,8 @@ GDBArrayVertex=array[0..0] of GDBvertex;
   TLoadOpt=(TLOLoad,TLOMerge);
   PTLayerControl=^TLayerControl;
   TLayerControl=record
-                      Enabled:GDBBoolean;
-                      LayerName:GDBString;
+                      Enabled:GDBBoolean;(*'Enabled'*)
+                      LayerName:GDBString;(*'Layer name'*)
                 end;
 FreeElProc=procedure (p:GDBPointer);
 {EXPORT-}

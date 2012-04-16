@@ -284,8 +284,8 @@ GDBArrayVertex=array[0..0] of GDBvertex;
   TLoadOpt=(TLOLoad,TLOMerge);
   PTLayerControl=^TLayerControl;
   TLayerControl=record
-                      Enabled:GDBBoolean;
-                      LayerName:GDBString;
+                      Enabled:GDBBoolean;(*'Enabled'*)
+                      LayerName:GDBString;(*'Layer name'*)
                 end;
 FreeElProc=procedure (p:GDBPointer);
 //Generate on C:\zcad\CAD_SOURCE\u\UOpenArray.pas
@@ -824,11 +824,12 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
              DWG_SelectedObjToInsp:PGDBBoolean;(*'SelectedObjToInsp'*)
        end;
   TLayerControls=record
-                       DSGN_LC_Net:PTLayerControl;
-                       DSGN_LC_Cable:PTLayerControl;
+                       DSGN_LC_Net:PTLayerControl;(*'Nets'*)
+                       DSGN_LC_Cable:PTLayerControl;(*'Cables'*)
+                       DSGN_LC_Leader:PTLayerControl;(*'Leaders'*)
                  end;
   tdesigning=record
-             DSGN_LayerControls:TLayerControls;
+             DSGN_LayerControls:TLayerControls;(*'Control layers'*)
              DSGN_TraceAutoInc:PGDBBoolean;(*'Increment trace names'*)
              DSGN_LeaderDefaultWidth:PGDBDouble;(*'Default leader width'*)
              DSGN_HelpScale:PGDBDouble;(*'Scale of auxiliary elements'*)

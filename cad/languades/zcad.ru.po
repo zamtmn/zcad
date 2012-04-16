@@ -335,17 +335,9 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
-#: zcadexternal.acn_fakecopyclipbase~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
-msgstr ""
-
-#: zcadexternal.acn_fakepaste~caption
-msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -534,10 +526,6 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
-#: zcadexternal.acn_processkz~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_processkz~textimage
 msgctxt "zcadexternal.acn_processkz~textimage"
 msgid "Process external KZ"
@@ -572,10 +560,6 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
-
-#: zcadexternal.acn_remautocables~caption
-msgid ""
-msgstr ""
 
 #: zcadexternal.acn_remautocables~textimage
 msgctxt "zcadexternal.acn_remautocables~textimage"
@@ -794,29 +778,9 @@ msgctxt "zcadexternal.button_variable~dwg_additionalgrips"
 msgid "+G"
 msgstr ""
 
-#: zcadexternal.button_variable~dwg_drawmode
-msgctxt "zcadexternal.button_variable~dwg_drawmode"
-msgid "LWT"
-msgstr "Вес"
-
 #: zcadexternal.button_variable~dwg_helpgeometrydraw
 msgctxt "zcadexternal.button_variable~dwg_helpgeometrydraw"
 msgid "AG"
-msgstr ""
-
-#: zcadexternal.button_variable~dwg_osmode
-msgctxt "zcadexternal.button_variable~dwg_osmode"
-msgid "OSnap"
-msgstr "Привязки"
-
-#: zcadexternal.button_variable~dwg_polarmode
-msgctxt "zcadexternal.button_variable~dwg_polarmode"
-msgid "Polar"
-msgstr "Полярность"
-
-#: zcadexternal.button_variable~dwg_snapgrid
-msgctxt "zcadexternal.button_variable~dwg_snapgrid"
-msgid "Snap"
 msgstr ""
 
 #: zcadexternal.button_variable~dwg_systmgeometrydraw
@@ -938,7 +902,6 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#, fuzzy
 #| msgid "Block params"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Rotate"
@@ -1226,7 +1189,6 @@ msgid "Reset camera"
 msgstr "Камера в начало"
 
 #: zcadexternal.menucommand~fuckoff
-#, fuzzy
 #| msgid "Dimensions styles (not impl)"
 msgid "Layouts (not impl)"
 msgstr "Листы (не реализовано)"
@@ -1546,6 +1508,10 @@ msgctxt "zcadexternal.tdesigning~dsgn_helpscale"
 msgid "Scale of auxiliary elements"
 msgstr "Масштаб вспомогательных элементов"
 
+#: zcadexternal.tdesigning~dsgn_layercontrols
+msgid "Control layers"
+msgstr "Управление слоями"
+
 #: zcadexternal.tdesigning~dsgn_leaderdefaultwidth
 msgctxt "zcadexternal.tdesigning~dsgn_leaderdefaultwidth"
 msgid "Default leader width"
@@ -1680,7 +1646,7 @@ msgstr "Стереть"
 
 #: zcadexternal.tentityprocess~tep_leave
 msgid "Leave"
-msgstr ""
+msgstr "Оставить"
 
 #: zcadexternal.tfinddeviceparam~findmethod
 msgid "Use symbols *, ?"
@@ -1730,9 +1696,32 @@ msgctxt "zcadexternal.tinserttype~tit_device"
 msgid "Device"
 msgstr "Устройство"
 
+#: zcadexternal.tlayercontrols~dsgn_lc_cable
+#| msgid "Cable"
+msgctxt "zcadexternal.tlayercontrols~dsgn_lc_cable"
+msgid "Cables"
+msgstr "Кабели"
+
+#: zcadexternal.tlayercontrols~dsgn_lc_leader
+msgid "Leaders"
+msgstr "Выноски"
+
+#: zcadexternal.tlayercontrols~dsgn_lc_net
+#| msgid "Net"
+msgid "Nets"
+msgstr "Цепи-трассы"
+
+#: zcadexternal.tlayercontrol~enabled
+msgid "Enabled"
+msgstr "Включено"
+
+#: zcadexternal.tlayercontrol~layername
+msgid "Layer name"
+msgstr "Слой"
+
 #: zcadexternal.tmirrorparam~sourceents
 msgid "Source entities"
-msgstr ""
+msgstr "Исходные примитивы"
 
 #: zcadexternal.tmisc~showhiddenfieldinobjinsp
 msgctxt "zcadexternal.tmisc~showhiddenfieldinobjinsp"
@@ -1757,6 +1746,7 @@ msgid "All entities"
 msgstr "Все примитивы"
 
 #: zcadexternal.tmstype~tmst_cables
+msgctxt "zcadexternal.tmstype~tmst_cables"
 msgid "Cables"
 msgstr "Кабели"
 

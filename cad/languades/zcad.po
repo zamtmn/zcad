@@ -717,25 +717,8 @@ msgstr ""
 msgid "+G"
 msgstr ""
 
-#: zcadexternal.button_variable~dwg_drawmode
-msgid "LWT"
-msgstr ""
-
 #: zcadexternal.button_variable~dwg_helpgeometrydraw
 msgid "AG"
-msgstr ""
-
-#: zcadexternal.button_variable~dwg_osmode
-msgid "OSnap"
-msgstr ""
-
-#: zcadexternal.button_variable~dwg_polarmode
-msgid "Polar"
-msgstr ""
-
-#: zcadexternal.button_variable~dwg_snapgrid
-msgctxt "zcadexternal.button_variable~dwg_snapgrid"
-msgid "Snap"
 msgstr ""
 
 #: zcadexternal.button_variable~dwg_systmgeometrydraw
@@ -1392,6 +1375,10 @@ msgstr ""
 msgid "Scale of auxiliary elements"
 msgstr ""
 
+#: zcadexternal.tdesigning~dsgn_layercontrols
+msgid "Control layers"
+msgstr ""
+
 #: zcadexternal.tdesigning~dsgn_leaderdefaultwidth
 msgid "Default leader width"
 msgstr ""
@@ -1554,6 +1541,29 @@ msgctxt "zcadexternal.tinserttype~tit_device"
 msgid "Device"
 msgstr ""
 
+#: zcadexternal.tlayercontrols~dsgn_lc_cable
+#, fuzzy
+msgctxt "zcadexternal.tlayercontrols~dsgn_lc_cable"
+msgid "Cables"
+msgstr ""
+
+#: zcadexternal.tlayercontrols~dsgn_lc_leader
+msgid "Leaders"
+msgstr ""
+
+#: zcadexternal.tlayercontrols~dsgn_lc_net
+#, fuzzy
+msgid "Nets"
+msgstr ""
+
+#: zcadexternal.tlayercontrol~enabled
+msgid "Enabled"
+msgstr ""
+
+#: zcadexternal.tlayercontrol~layername
+msgid "Layer name"
+msgstr ""
+
 #: zcadexternal.tmirrorparam~sourceents
 msgid "Source entities"
 msgstr ""
@@ -1580,6 +1590,7 @@ msgid "All entities"
 msgstr ""
 
 #: zcadexternal.tmstype~tmst_cables
+msgctxt "zcadexternal.tmstype~tmst_cables"
 msgid "Cables"
 msgstr ""
 

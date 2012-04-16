@@ -66,8 +66,9 @@ itrec=record
       end;
 {EXPORT-}
 GDBPlatformint=PtrInt;
+GDBPlatforumint=PtrUInt;
 //GDBchar=Char;
 implementation
 end.
 
-
+

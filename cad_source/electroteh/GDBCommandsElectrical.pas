@@ -2353,6 +2353,7 @@ begin
   pleader^.size:=ELLeaderComParam.Size;
   pleader^.twidth:=ELLeaderComParam.twidth;
   pleader^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+  gdb.standardization(pleader,GDBELleaderID);
   pleader.MainLine.CoordInOCS.lBegin:=PCreatedGDBLine^.CoordInOCS.lBegin;
   pleader.MainLine.CoordInOCS.lEnd:=PCreatedGDBLine^.CoordInOCS.lEnd;
 

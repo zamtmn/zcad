@@ -180,6 +180,18 @@ begin
                               pent.vp.Layer:=pnevlayer;
                          end;
                     end;
+                  GDBElLeaderID:
+                    begin
+                         if sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Leader<>nil then
+                         if sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Leader^.Enabled then
+                         begin
+                              pproglayer:=BlockBaseDWG.LayerTable.getAddres(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Leader^.LayerName);
+                              pnevlayer:=GetCurrentDWG.LayerTable.createlayerifneedbyname(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Leader^.LayerName,pproglayer);
+                              if pnevlayer=nil then
+                                                   pnevlayer:=GetCurrentDWG.LayerTable.addlayer(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Leader^.LayerName,7,-1,true,false,true,'???',TLOLoad);
+                              pent.vp.Layer:=pnevlayer;
+                         end;
+                    end;
 
      end;
 end;

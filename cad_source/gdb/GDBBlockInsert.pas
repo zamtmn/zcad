@@ -526,6 +526,7 @@ var pblockdef:PGDBObjBlockdef;
     pvisible,pvisible2:PGDBObjEntity;
     //freelayer:PGDBLayerProp;
     i:GDBInteger;
+    mainowner:PGDBObjSubordinated;
     //varobject:gdbboolean;
 begin
           if name='' then
@@ -540,8 +541,9 @@ begin
                                                                                 PBlockDefArray(gdb.GetCurrentDWG.BlockDefArray.parray)^[index].format;
                                                                                end;
           ConstObjArray.cleareraseobj;
-
-          if getmainowner.gettype=1 then
+          mainowner:=getmainowner;
+          if mainowner<>nil then
+          if mainowner.gettype=1 then
                                                 begin
                                                 exit;
                                                 end;

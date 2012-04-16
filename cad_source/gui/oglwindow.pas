@@ -1209,7 +1209,7 @@ var
   tv2:gdbvertex4d;
   ax:gdbvertex;
   ux,uy:GDBDouble;
-  htext:gdbstring;
+  htext,htext2:gdbstring;
 
 //  tm2,tm3:dmatrix4d;
 
@@ -1444,7 +1444,10 @@ end;
   htext:=FloatToStrf(param.md.mouse3dcoord.x,ffFixed,10,3)+','+FloatToStrf(param.md.mouse3dcoord.y,ffFixed,10,3)+','+FloatToStrf(param.md.mouse3dcoord.z,ffFixed,10,3);
   if {mainwindow.OGLwindow1.}param.polarlinetrace = 1 then
   begin
-       htext:=htext+' L='+FloatToStrf(param.ontrackarray.otrackarray[param.pointnum].tmouse,ffFixed,10,3);
+       htext2:='L='+FloatToStrf(param.ontrackarray.otrackarray[param.pointnum].tmouse,ffFixed,10,3);
+       htext:=htext+' '+htext2;
+       Hint:=htext2;
+       Application.ActivateHint(ClientToScreen(Point(param.md.mouse.x,param.md.mouse.y)));
   end;
 
 

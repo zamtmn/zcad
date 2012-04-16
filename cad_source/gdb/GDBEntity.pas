@@ -367,7 +367,10 @@ begin
 end;
 function GDBObjEntity.GetMainOwner:PGDBObjSubordinated;
 begin
-     result:=PGDBObjEntity(bp.ListPos.Owner)^.getmainowner;
+     if bp.ListPos.Owner<>nil then
+                                  result:=PGDBObjEntity(bp.ListPos.Owner)^.getmainowner
+                              else
+                                  result:=nil;
 end;
 function GDBObjEntity.getowner;
 begin

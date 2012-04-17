@@ -255,9 +255,9 @@ begin
      if PSelectedObjDesc(md).ptempobj=nil then
      begin
           PSelectedObjDesc(md).ptempobj:=obj^.Clone(nil);
-          //PSelectedObjDesc(md).ptempobj.BuildGeometry;
           PSelectedObjDesc(md).ptempobj^.bp.ListPos.Owner:=obj^.bp.ListPos.Owner;
           PSelectedObjDesc(md).ptempobj.format;
+          PSelectedObjDesc(md).ptempobj.BuildGeometry;
      end;
      p:=obj^.beforertmodify;
      if save then PSelectedObjDesc(md).pcontrolpoint^.SelectedCount:=0;
@@ -361,6 +361,7 @@ begin
      else
      begin
           PSelectedObjDesc(md).ptempobj.format;
+          PSelectedObjDesc(md).ptempobj.BuildGeometry;
           //PSelectedObjDesc(md).ptempobj.renderfeedback;
      end;
      obj^.afterrtmodify(p);

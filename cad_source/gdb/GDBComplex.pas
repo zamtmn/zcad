@@ -163,29 +163,29 @@ var
    q1,q2:gdbboolean; currd:PTDrawing;
 begin
   currd:=gdb.GetCurrentDWG;
-  if Node.infrustum=currd.pcamera.POSCOUNT then
+  if (Node.infrustum=currd.pcamera.POSCOUNT) then
   begin
        if node.FulDraw then
        if (Node.FulDraw)or(Node.nul.count=0) then
        begin
        if assigned(node.pminusnode)then
-                                       if node.minusdrawpos<>gdb.GetCurrentDWG.pcamera.DRAWCOUNT then
+                                       if (node.minusdrawpos<>currd.pcamera.DRAWCOUNT)or(dc.MaxDetail) then
                                        begin
                                             treerender(node.pminusnode^,dc);
-                                            node.minusdrawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT
+                                            node.minusdrawpos:=currd.pcamera.DRAWCOUNT
                                        end;
        if assigned(node.pplusnode)then
-                                      if node.plusdrawpos<>gdb.GetCurrentDWG.pcamera.DRAWCOUNT then
+                                      if (node.plusdrawpos<>currd.pcamera.DRAWCOUNT)or(dc.MaxDetail) then
                                       begin
                                        treerender(node.pplusnode^,dc);
-                                           node.plusdrawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT
+                                           node.plusdrawpos:=currd.pcamera.DRAWCOUNT
                                       end;
        end;
        //if (node.FulDraw) then
        begin
-            if node.FulDraw then
+            if (node.FulDraw)or(dc.MaxDetail) then
         Node.nul.DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
-        node.nuldrawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;
+        node.nuldrawpos:=currd.pcamera.DRAWCOUNT;
        end;
   end;
   //Node.drawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;

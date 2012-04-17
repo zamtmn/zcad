@@ -1098,6 +1098,7 @@ begin
 
   inherited;
   result:=true;
+  _onFastMouseMove(self,[],param.md.mouse.x,param.md.mouse.y);
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DoMouseWheel----{end}',lp_decPos);{$ENDIF}
 end;
 {var
@@ -3151,6 +3152,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
 
     gdb.GetCurrentDWG.SelObjArray.remappoints;
     oglsm.myglDisable(GL_STENCIL_TEST);
+    dc.MaxDetail:=true;
     gdb.GetCurrentDWG.SelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
     LightOff;
@@ -3190,6 +3192,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
 
 
     oglsm.myglDisable(GL_STENCIL_TEST);
+    dc.MaxDetail:=true;
     gdb.GetCurrentDWG.SelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
 
         //oglsm.mytotalglend;

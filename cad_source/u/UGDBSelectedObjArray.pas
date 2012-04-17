@@ -180,6 +180,10 @@ begin
             begin
                  tdesc^.objaddr^.RenderFeedbackIFNeed;
             end;
+            if tdesc^.ptempobj<>nil then
+            begin
+                 tdesc^.ptempobj^.RenderFeedbackIFNeed;
+            end;
             inc(tdesc);
        end;
   end;
@@ -537,7 +541,10 @@ begin
     for i := 0 to count - 1 do
     begin
       if tdesc^.ptempobj<>nil then
+                                  begin
+                                  //tdesc^.ptempobj^.getoutbound;
                                   tdesc^.ptempobj^.calcvisible(frustum,infrustumactualy,visibleactualy);
+                                  end;
       inc(tdesc);
     end;
   end;

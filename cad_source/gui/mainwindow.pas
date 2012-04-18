@@ -48,7 +48,7 @@ type
 
                           end;
 
-  TFileHistory=Array [0..9] of TmyMenuItem;
+  TFileHistory=Array [0..9] of {TmyMenuItem}TmyAction;
 
   { TMainFormN }
 
@@ -337,17 +337,24 @@ begin
            if (assigned(pstr))and(assigned(pstrnext))then
                                                          pstrnext^:=pstr^;
            if (assigned(FileHistory[j]))and(assigned(FileHistory[i]))then
-           FileHistory[j].SetCommand(FileHistory[i].caption,FileHistory[i].FCommand);
+           FileHistory[j].SetCommand(FileHistory[i].caption,FileHistory[i].{F}Command,FileHistory[i].options);
       end;
       pstr:=SavedUnit.FindValue('PATH_File0');
       if (assigned(pstr))then
                               pstr^:=filename;
       if assigned(FileHistory[0]) then
       if FileName<>''then
-                           FileHistory[0].SetCommand(FileName,'Load('+FileName+')')
+                           FileHistory[0].SetCommand(FileName,'Load',FileName)
                        else
-                           FileHistory[0].SetCommand(rsEmpty,'');
-
+                           FileHistory[0].SetCommand(rsEmpty,'','');
+      for i:=0 to 9 do
+      begin
+           if assigned(FileHistory[i]) then
+           if FileHistory[i].command='' then
+                                            FileHistory[i].visible:=false
+                                        else
+                                            FileHistory[i].visible:=true;
+      end;
 end;
 function IsRealyQuit:GDBBoolean;
 var
@@ -855,7 +862,10 @@ var
   bmp:TPortableNetworkGraphic;
 begin
   //AutoSize:=false;
-
+  for i:=0 to 9 do
+  begin
+       FileHistory[i]:=TmyAction.Create(self);
+  end;
   updatesbytton:=tlist.Create;
 
   CursorOn:=ShowAllCursors;
@@ -1705,10 +1715,20 @@ begin
                                                                                  else
                                                                                      line:='';
                                                                 if line<>''then
-                                                                                     FileHistory[i]:=TmyMenuItem.Create(pm,line,'Load('+line+')')
+                                                                                     //FileHistory[i]:=TmyMenuItem.Create(pm,line,'Load('+line+')')
+                                                                                       begin
+                                                                                       FileHistory[i].SetCommand(line,'Load',line);
+                                                                                       FileHistory[i].visible:=true;
+                                                                                       end
                                                                                  else
-                                                                                     FileHistory[i]:=TmyMenuItem.Create(pm,rsEmpty,'');
-                                                                {ppopupmenu}pm.Add(FileHistory[i]);
+                                                                                     //FileHistory[i]:=TmyMenuItem.Create(line,rsEmpty,line);
+                                                                                     begin
+                                                                                     FileHistory[i].SetCommand(line,'',line);
+                                                                                     FileHistory[i].visible:=false
+                                                                                     end;
+                                                                pm1:=TMenuItem.Create(pm);
+                                                                pm1.Action:=FileHistory[i];
+                                                                {ppopupmenu}pm.Add(pm1);
                                                            end;
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);

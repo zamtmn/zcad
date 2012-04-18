@@ -31,6 +31,7 @@ type
                    command,options,imgstr:string;
                    pfoundcommand:PCommandObjectDef;
                    function Execute: Boolean; override;
+                   procedure SetCommand(_Caption,_Command,_Options:TTranslateString);
               end;
 
     TmyActionList=class(TActionList)
@@ -139,17 +140,27 @@ procedure SetHeightControl(_parent:TWinControl;h:integer);
 //   ACN_ShowObjInsp:TmyAction=nil;
 implementation
 uses commandline,log,sharedgdb;
+procedure TmyAction.SetCommand(_Caption,_Command,_Options:TTranslateString);
+begin
+     command:=_Command;
+     options:=_Options;
+     caption:=(_Caption);
+     if _Command=''then
+                       self.Enabled:=false
+                   else
+                       self.Enabled:=true;
+end;
 function TmyAction.Execute: Boolean;
 var
     s:string;
 begin
+     //inherited;
      s:=command+'('+options+')';
      {if assigned(pfoundcommand)then
 
                                else}
                                    commandmanager.executecommand(@s[1]);
-       result:=true;
-       inherited;
+     result:=true;
 end;
 procedure TmyActionList.AddMyAction(Action:TmyAction);
 begin

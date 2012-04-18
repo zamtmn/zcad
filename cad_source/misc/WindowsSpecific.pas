@@ -198,7 +198,7 @@ begin
        end;
      end;}
 
-     MyVersion:='0.9.7 '+rsRevStr+RevisionStr;
+     MyVersion:='0.9.8 '+rsRevStr+RevisionStr;
      result.versionstring:=MyVersion;
 
      ts:=GetPredStr(MyVersion,'.');

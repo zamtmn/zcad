@@ -25,21 +25,21 @@ implementation
 begin
   DMenuX:=503;
   DMenuY:=171;
-  TEdWND_Left:=495;
-  TEdWND_Top:=197;
-  TEdWND_Width:=570;
-  TEdWND_Height:=483;
+  TEdWND_Left:=504;
+  TEdWND_Top:=267;
+  TEdWND_Width:=794;
+  TEdWND_Height:=481;
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=238;
-  VIEW_ObjInspSubV:=89;
-  PATH_File0:='c:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File1:='c:\zcad\cad\autosave\autosave.dxf';
-  PATH_File2:='c:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File3:='D:\000.dxf\000.dxf';
-  PATH_File4:='J:\nh\Наиль\СС.dwg';
-  PATH_File5:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File6:='J:\nh\Наиль\ССдоготовка.dxf';
-  PATH_File7:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File8:='J:\nh\Наиль\AOB\Чертеж1.dxf';
-  PATH_File9:='C:\План подвала АПМ.dxf';
+  VIEW_ObjInspSubV:=103;
+  PATH_File0:='';
+  PATH_File1:='';
+  PATH_File2:='';
+  PATH_File3:='';
+  PATH_File4:='';
+  PATH_File5:='';
+  PATH_File6:='';
+  PATH_File7:='';
+  PATH_File8:='';
+  PATH_File9:='';
 end.

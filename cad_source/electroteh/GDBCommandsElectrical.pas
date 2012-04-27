@@ -2499,6 +2499,8 @@ begin
 
   pvd:=result.ou.FindVariable('CABLE_AutoGen');
   pgdbboolean(pvd^.data.Instance)^:=true;
+
+  gdb.standardization(result,GDBCableID);
 end;
 
 function _El_ExternalKZ_com (Operands:pansichar):GDBInteger;

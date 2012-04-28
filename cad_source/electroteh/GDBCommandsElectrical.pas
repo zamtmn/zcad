@@ -1395,7 +1395,9 @@ begin
                            else
                                begin
                                     tcable := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
+
                                     tcable^.ou.copyfrom(@cable.ou);
+                                    gdb.standardization(tcable,GDBCableID);
                                     pvd:=tcable.ou.FindVariable('CABLE_Segment');
                                     if pvd<>nil then
                                     PGDBInteger(pvd^.data.Instance)^:=PGDBInteger(pvd^.data.Instance)^+cablecount;

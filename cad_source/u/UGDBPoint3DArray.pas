@@ -31,6 +31,7 @@ GDBPoint3dArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex*)
                 function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;
                 function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
                 procedure DrawGeometry;virtual;
+                procedure DrawGeometry2;virtual;
                 procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;
              end;
 {Export-}
@@ -49,6 +50,25 @@ begin
   begin
      oglsm.myglVertex3dV(@p^);
      oglsm.myglVertex3dV(@p^);
+
+     inc(p);
+  end;
+  oglsm.myglVertex3dV(@p^);
+  oglsm.myglend;
+end;
+procedure GDBPoint3DArray.drawgeometry2;
+var p:PGDBVertex;
+    i:GDBInteger;
+begin
+  if count<2 then exit;
+  p:=parray;
+  oglsm.myglbegin(GL_LINE_STRIP);
+  oglsm.myglVertex3dV(@p^);
+  inc(p);
+  for i:=0 to count-3 do
+  begin
+     oglsm.myglVertex3dV(@p^);
+     //oglsm.myglVertex3dV(@p^);
 
      inc(p);
   end;

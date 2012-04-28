@@ -353,7 +353,10 @@ begin
 
   //oglsm.myglpushmatrix;
   //glmultmatrixd(@objmatrix);
-  Vertex3D_in_WCS_Array.drawgeometry;
+  if dc.selected then
+                     Vertex3D_in_WCS_Array.drawgeometry2
+                 else
+                     Vertex3D_in_WCS_Array.drawgeometry;
   //myglbegin(gl_points);
   //ppoint.iterategl(@glvertex2dv);
   //myglend;

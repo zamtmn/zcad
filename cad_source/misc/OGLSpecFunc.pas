@@ -258,7 +258,7 @@ begin
 //(*
     //if (mode<>GL_LINES)and(mode<>GL_QUADS) then
     //                          mode:=mode;
-     if mode<>currentmode then
+     if (mode<>currentmode)or(currentmode=GL_LINE_STRIP) then
      begin
      if currentmode<>MY_EmptyMode then
                                      begin

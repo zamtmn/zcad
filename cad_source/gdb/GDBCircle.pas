@@ -361,8 +361,11 @@ procedure GDBObjCircle.DrawGeometry;
   //angle: GDBDouble;
   //i: GDBInteger;
 begin
-
-  Vertex3D_in_WCS_Array.DrawGeometry;
+           if dc.selected then
+                              Vertex3D_in_WCS_Array.drawgeometry2
+                          else
+                              Vertex3D_in_WCS_Array.drawgeometry;
+  //Vertex3D_in_WCS_Array.DrawGeometry;
 
   {
   oglsm.myglpushmatrix;

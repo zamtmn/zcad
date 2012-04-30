@@ -1018,6 +1018,11 @@ begin
           //readvariables(f);
           addfromdxf2000(f,'EOF',owner,loadmode);
         end
+        else if s = 'AC1018' then
+        begin
+          shared.HistoryOutStr(format(rsFileFormat,['DXF2004']));
+          addfromdxf2000(f,'EOF',owner,loadmode);
+        end
         else
         begin
              ShowError(rsUnknownFileFormat+' $ACADVER='+s);

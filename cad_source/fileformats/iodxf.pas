@@ -984,7 +984,8 @@ end;
 procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
 var
   f: GDBOpenArrayOfByte;
-  s: GDBString;
+  s,s1,s2: GDBString;
+  dxfversion,code:integer;
 begin
   programlog.logoutstr('AddFromDXF',lp_IncPos);
   shared.HistoryOutStr(format(rsLoadingFile,[name]));
@@ -1003,6 +1004,45 @@ begin
       if s = '1' then
       begin
         s := f.ReadString2;
+
+        s1:=copy(s,3,length(s)-2);
+        s2:=copy(s,1,2);
+        val(s1,dxfversion,code);
+
+        if (uppercase(s2)='AC')and(code=0)then
+        begin
+             case dxfversion of
+                               1009:begin
+                                         shared.HistoryOutStr(format(rsFileFormat,['DXF12 ('+s+')']));
+                                         gotodxf(f, 0, dxfName_ENDSEC);
+                                         addfromdxf12(f,'EOF',owner,loadmode);
+                                    end;
+                               1015:begin
+                                         shared.HistoryOutStr(format(rsFileFormat,['DXF2000 ('+s+')']));
+                                         addfromdxf2000(f,'EOF',owner,loadmode)
+                                    end;
+                               1018:begin
+                                         shared.HistoryOutStr(format(rsFileFormat,['DXF2004 ('+s+')']));
+                                         addfromdxf2000(f,'EOF',owner,loadmode)
+                                    end;
+                               1021:begin
+                                         shared.HistoryOutStr(format(rsFileFormat,['DXF2007 ('+s+')']));
+                                         addfromdxf2000(f,'EOF',owner,loadmode)
+                                    end;
+                               1024:begin
+                                         shared.HistoryOutStr(format(rsFileFormat,['DXF2010 ('+s+')']));
+                                         addfromdxf2000(f,'EOF',owner,loadmode)
+                                    end;
+                               else
+                                       begin
+                                            ShowError(rsUnknownFileFormat+' $ACADVER='+s);
+                                       end;
+
+
+             end;
+        end
+           else ShowError(rsUnknownFileFormat+' $ACADVER='+s);
+        (*
         if s = 'AC1009' then
         begin
           shared.HistoryOutStr(format(rsFileFormat,['DXF12']));
@@ -1028,7 +1068,7 @@ begin
              ShowError(rsUnknownFileFormat+' $ACADVER='+s);
              //ShowError('Uncnown fileformat; $ACADVER='+s);
              //programlog.logoutstr('ERROR: Uncnown fileformat; $ACADVER='+s,lp_OldPos);
-        end;
+        end;*)
       end;
     end;
   end;

@@ -61,7 +61,7 @@ TTestTreeNode=Object(GDBaseObject)
 TTestTreeArray=array [0..2] of TTestTreeNode;
 const
   //_InNodeCount=10;
-  _NodeDepth=20;
+  _NodeDepth=10;
 function createtree(var entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 implementation
 function TEntTreeNode.CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;

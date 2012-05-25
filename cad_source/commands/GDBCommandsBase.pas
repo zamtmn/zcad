@@ -46,7 +46,7 @@ uses
  sharedgdb,UGDBEntTree,
   {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline,
- AnchorDocking,dialogs,XMLPropStorage,xmlconf,
+ AnchorDocking,dialogs,XMLPropStorage,xmlconf{,
    uPSCompiler,
   uPSRuntime,
   uPSC_std,
@@ -57,7 +57,7 @@ uses
   uPSR_controls,
   uPSR_stdctrls,
   uPSR_forms,
-  uPSUtils;
+  uPSUtils};
 type
 {Export+}
   TMSType=(
@@ -2120,7 +2120,7 @@ begin
    gdb.GetCurrentDWG.OGLwindow1.param.debugfrustum:=gdb.GetCurrentDWG.pcamera.frustum;
    gdb.GetCurrentDWG.OGLwindow1.param.ShowDebugFrustum:=true;
 end;
-function ScriptOnUses(Sender: TPSPascalCompiler; const Name: string): Boolean;
+(*function ScriptOnUses(Sender: TPSPascalCompiler; const Name: string): Boolean;
 { the OnUses callback function is called for each "uses" in the script.
   It's always called with the parameter 'SYSTEM' at the top of the script.
   For example: uses ii1, ii2;
@@ -2173,7 +2173,7 @@ begin
   end else
     Result := False;
 end;
-
+*)
 procedure test;
 var
   Script:GDBString;
@@ -2182,7 +2182,7 @@ begin
                    shared.ShowError(Script);
 end;
 function TestScript_com(Operands:pansichar):GDBInteger;
-var
+(*var
   Compiler: TPSPascalCompiler;
   { TPSPascalCompiler is the compiler part of the scriptengine. This will
     translate a Pascal script into a compiled form the executer understands. }
@@ -2192,11 +2192,12 @@ var
   {$IFDEF UNICODE}Data: AnsiString;{$ELSE}Data: string;{$ENDIF}
   Script,Messages:GDBString;
   i:integer;
-  CI: TPSRuntimeClassImporter;
+  CI: TPSRuntimeClassImporter; *)
 begin
-(*
+(*старое чтото
 var f: TForm; i: Longint; begin f := TForm.CreateNew(f{, 0}); f.Show; while f.Visible do Application.ProcessMessages; F.free;  end.
 *)
+  (*
      Script:='var r1,r2:GDBInteger; begin r1:=10;r2:=2;r1:=r1/r2; ShowError(IntToStr(r1)); end.';
      Compiler := TPSPascalCompiler.Create; // create an instance of the compiler.
      Compiler.OnUses := ScriptOnUses; // assign the OnUses event.
@@ -2245,7 +2246,7 @@ var f: TForm; i: Longint; begin f := TForm.CreateNew(f{, 0}); f.Show; while f.Vi
      end;
 
      Exec.RunScript; // Run the script.
-     Exec.Free; // Free the executer.
+     Exec.Free; // Free the executer. *)
 end;
 function ObjInspCopyToClip_com(Operands:pansichar):GDBInteger;
 begin

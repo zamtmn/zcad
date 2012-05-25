@@ -131,7 +131,7 @@ function IsBBNul(const bb:GDBBoundingBbox):boolean;inline;
 function boundingintersect(const bb1,bb2:GDBBoundingBbox):GDBBoolean;inline;
 procedure MatrixInvert(var M: DMatrix4D);inline;
 function vectordot(const v1,v2:GDBVertex):GDBVertex;inline;
-function scalardot(const v1,v2:GDBVertex):GDBDouble;inline;
+function scalardot(const v1,v2:GDBVertex):GDBDouble;//inline;
 function vertexeq(const v1,v2:gdbvertex):GDBBoolean;inline;
 function SQRdist_Point_to_Segment(const p:GDBVertex;const s0,s1:GDBvertex):gdbdouble;inline;
 function NearestPointOnSegment(const p:GDBVertex;const s0,s1:GDBvertex):GDBvertex;inline;

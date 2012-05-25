@@ -39,7 +39,7 @@ GDBObjEllipse=object(GDBObjPlain)
                  length:GDBDouble;
                  q0,q1,q2:GDBvertex;
                  pq0,pq1,pq2:GDBvertex;
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;{RR,}S,E:GDBDouble);
+                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;{RR,}S,E:GDBDouble;majaxis:GDBVertex);
                  constructor initnul;
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;
 
@@ -193,12 +193,13 @@ begin
 end;
 constructor GDBObjEllipse.initnul;
 begin
-  inherited initnul(nil);
-  vp.ID := GDBArcID;
-  //r := 1;
   startangle := 0;
   endangle := 2*pi;
   PProjoutbound:=nil;
+  majoraxis:=onevertex;
+  inherited initnul(nil);
+  vp.ID := GDBArcID;
+  //r := 1;
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{B591E6C2-9BD5-4099-BE5A-5CB3911661B7}',{$ENDIF}100);
 end;
 constructor GDBObjEllipse.init;
@@ -209,6 +210,7 @@ begin
   //r := rr;
   startangle := s;
   endangle := e;
+  majoraxis:=majaxis;
   PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{AEF4273C-4EE8-4520-B23A-04C3AD6DABE3}',{$ENDIF}100);
   format;
@@ -670,7 +672,7 @@ function GDBObjEllipse.Clone;
 var tvo: PGDBObjEllipse;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{368BA81A-219B-4DE9-A8E0-64EE16001126}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjEllipse));
-  tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, Local.p_insert, {r,}startangle,endangle);
+  tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, Local.p_insert, {r,}startangle,endangle,majoraxis);
   tvo^.RR:=RR;
   tvo^.MajorAxis:=MajorAxis;
   tvo^.Ratio:=Ratio;

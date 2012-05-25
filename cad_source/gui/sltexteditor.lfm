@@ -1,7 +1,7 @@
 object sltexteditor1: Tsltexteditor1
-  Left = 336
+  Left = 384
   Height = 18
-  Top = 238
+  Top = 224
   Width = 503
   BorderStyle = bsSizeToolWin
   Caption = 'sltexteditor1'

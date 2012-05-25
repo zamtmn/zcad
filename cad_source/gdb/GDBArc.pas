@@ -18,7 +18,7 @@
 unit GDBArc;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses math,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
 GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain{,OGLSpecFunc};
 type
@@ -62,10 +62,46 @@ GDBObjArc=object(GDBObjPlain)
                  function GetObjTypeName:GDBString;virtual;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
+                 procedure ReCalcFromObjMatrix;virtual;
+                 procedure transform(const t_matrix:DMatrix4D);virtual;
            end;
 {EXPORT-}
 implementation
 uses log;
+procedure GDBObjARC.transform;
+var tv,tv2:GDBVertex;
+    a:gdbdouble;
+begin
+
+  {tv.x:=cos(startangle);
+  tv.y:=sin(startangle);
+  tv.z:=0;
+  //tv:=VectorTransform3D(tv,objmatrix);
+  tv:=VectorTransform3D(tv,t_matrix);
+
+  tv2.x:=cos(angle*pi/180);
+  tv2.y:=sin(angle*pi/180);
+  tv2.z:=0;
+  //tv2:=VectorTransform3D(tv2,objmatrix);
+  tv2:=VectorTransform3D(tv2,t_matrix);
+
+  startangle:=startangle+arccos(scalardot(PGDBVertex(@t_matrix[0])^,XWCS)/(geometry.oneVertexlength(PGDBVertex(@t_matrix[0])^)));
+
+  endangle:=endangle+arccos(scalardot(PGDBVertex(@t_matrix[0])^,XWCS)/(geometry.oneVertexlength(PGDBVertex(@t_matrix[0])^)));}
+
+
+  inherited;
+
+
+end;
+procedure GDBObjARC.ReCalcFromObjMatrix;
+var
+    ox:gdbvertex;
+begin
+     inherited;
+     Local.P_insert:=PGDBVertex(@objmatrix[3])^;
+     self.R:=PGDBVertex(@objmatrix[0])^.x/local.basis.OX.x;
+end;
 function GDBObjARC.CalcTrueInFrustum;
 var i{,count}:GDBInteger;
     //d1,d2,d3,d4:gdbdouble;

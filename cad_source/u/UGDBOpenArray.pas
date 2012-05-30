@@ -246,6 +246,7 @@ destructor GDBOpenArray.done;
 begin
   if PArray<>nil then
                      GDBFreeMem(PArray);
+  PArray:=nil;
   {$IFDEF DEBUGBUILD}Guid:='';{$ENDIF}                   
 end;
 destructor GDBOpenArray.clearanddone;

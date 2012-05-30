@@ -46,6 +46,7 @@ var
    TotalAllocMb,CurrentAllocMB:GDBInteger;
    lastallocated:GDBLongWord;
    lasti:integer;
+   debp:pointer;
   {$IFDEF DEBUGBUILD}
    var
       size,i:integer;
@@ -183,6 +184,12 @@ begin
                                   end;
             lastallocated:=0;
       end;
+  {$ENDIF}
+  {$IFDEF BREACKPOINTSONERRORS}
+  if (p)=debp then
+                     asm
+                        int 3;
+                     end;
   {$ENDIF}
   if p<> nil then freemem(p);
   p:=nil;

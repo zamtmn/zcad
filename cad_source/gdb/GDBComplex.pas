@@ -65,7 +65,8 @@ begin
 end;}
 procedure GDBObjComplex.BuildGeometry;
 begin
-     ConstObjArray.ObjTree.done;
+     //ConstObjArray.ObjTree.done;
+     ConstObjArray.ObjTree.Clear;
      ConstObjArray.ObjTree:=createtree(ConstObjArray,vp.BoundingBox,@ConstObjArray.ObjTree,0,nil,TND_Root)^;
 end;
 

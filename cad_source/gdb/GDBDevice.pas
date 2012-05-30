@@ -257,7 +257,7 @@ begin
   tvo^.scale := scale;
   tvo^.rotate := rotate;
   tvo.index := index;
-  tvo.ConstObjArray.init({$IFDEF DEBUGBUILD}'{E9005274-601F-4A3F-BDB8-E311E59D558C}',{$ENDIF}ConstObjArray.Count);
+  //tvo.ConstObjArray.init({$IFDEF DEBUGBUILD}'{E9005274-601F-4A3F-BDB8-E311E59D558C}',{$ENDIF}ConstObjArray.Count);
   tvo.VarObjArray.init({$IFDEF DEBUGBUILD}'{E9005274-601F-4A3F-BDB8-E311E59D558C}',{$ENDIF}varObjArray.Count+1);
   ConstObjArray.CloneEntityTo(@tvo.ConstObjArray,tvo);
   varObjArray.CloneEntityTo(@tvo.varObjArray,tvo);
@@ -400,9 +400,12 @@ begin
                                           pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
                                           pvisible^.format;
                                           pvisible.BuildGeometry;
-                                          VarObjArray.add(@pvisible);
                                           if pvisible^.vp.ID=GDBDeviceID then
+                                          begin
                                                                              PGDBObjDevice(pvisible)^.BuildVarGeometry;
+                                                                             //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
+                                          end;
+                                          VarObjArray.add(@pvisible);
 
                                      end
                                  else
@@ -411,9 +414,12 @@ begin
                                           pvisible2^.FromDXFPostProcessBeforeAdd(nil);
                                           pvisible2^.format;
                                           pvisible2.BuildGeometry;
-                                          VarObjArray.add(@pvisible2);
                                           if pvisible2^.vp.ID=GDBDeviceID then
+                                          begin
                                                                               PGDBObjDevice(pvisible2)^.BuildVarGeometry;
+                                                                              //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
+                                          end;
+                                          VarObjArray.add(@pvisible2);
                                     end;
           end;
           ConstObjArray.Shrink;

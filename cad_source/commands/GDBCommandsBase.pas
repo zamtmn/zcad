@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- zcadstrconsts,UGDBStringArray,ucxmenumgr,intftranslations,layerwnd,strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,intftranslations,layerwnd,strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -684,7 +684,6 @@ end;
 function newdwg_com(Operands:pansichar):GDBInteger;
 var
    ptd:PTDrawing;
-   //tf:PZbasic;
    myts:TTabSheet;
    oglwnd:TOGLWND;
    tn:GDBString;
@@ -783,6 +782,10 @@ begin
      programlog.logoutstr(' application.ProcessMessages;',0);
      oglwnd._onresize(nil);
      programlog.logoutstr('oglwnd._onresize(nil);',0);
+
+     //GDB.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,'DEVICE_TEST');
+     //addblockinsert(gdb.GetCurrentROOT,@gdb.GetCurrentDWG.ConstructObjRoot.ObjArray, nulvertex, 1, 0, 'DEVICE_TEST');
+     //gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 end;
 function DeSelectAll_com(Operands:pansichar):GDBInteger;
 begin

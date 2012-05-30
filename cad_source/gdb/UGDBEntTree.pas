@@ -46,6 +46,7 @@ type
                             procedure draw;
                             procedure drawonlyself;
                             procedure ClearSub;
+                            procedure Clear;
                             procedure updateenttreeadress;
                             procedure addtonul(p:PGDBObjEntity);
                             function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;
@@ -61,7 +62,7 @@ TTestTreeNode=Object(GDBaseObject)
 TTestTreeArray=array [0..2] of TTestTreeNode;
 const
   //_InNodeCount=10;
-  _NodeDepth=10;
+  _NodeDepth=16;
 function createtree(var entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 implementation
 function TEntTreeNode.CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;
@@ -119,6 +120,11 @@ begin
                                      gdbfreemem(pminusnode);
                                 end;
 end;
+procedure TEntTreeNode.Clear;
+begin
+     clearsub;
+end;
+
 procedure TEntTreeNode.addtonul(p:PGDBObjEntity);
 begin
      p^.bp.TreePos.Owner:=@self;

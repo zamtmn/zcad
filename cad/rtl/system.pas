@@ -439,6 +439,7 @@ GDBPoint3dArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex*)
                 function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;abstract;
                 function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;abstract;
                 procedure DrawGeometry;virtual;abstract;
+                procedure DrawGeometry2;virtual;abstract;
                 procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;abstract;
              end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBPolyLine2DArray.pas
@@ -1023,7 +1024,7 @@ PGDBObjEntity=^GDBObjEntity;
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=record
                       Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
-                      LineWeight:GDBSmallint;(*'Line weight'*)(*saved_to_shd*)
+                      LineWeight:GDBShortint;(*'Line weight'*)(*saved_to_shd*)
                       LineType:GDBString;(*'Line type'*)(*saved_to_shd*)
                       LineTypeScale:GDBDouble;(*'Line type scale'*)(*saved_to_shd*)
                       ID:TObjID;(*'Object type'*)(*oi_readonly*)
@@ -1381,6 +1382,8 @@ GDBObjArc=object(GDBObjPlain)
                  function GetObjTypeName:GDBString;virtual;abstract;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
+                 procedure ReCalcFromObjMatrix;virtual;abstract;
+                 procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBEllipse.pas
   ptEllipsertmodify=^tEllipsertmodify;
@@ -1399,7 +1402,7 @@ GDBObjEllipse=object(GDBObjPlain)
                  length:GDBDouble;
                  q0,q1,q2:GDBvertex;
                  pq0,pq1,pq2:GDBvertex;
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;{RR,}S,E:GDBDouble);
+                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;{RR,}S,E:GDBDouble;majaxis:GDBVertex);
                  constructor initnul;
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
                  procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
@@ -1450,6 +1453,7 @@ GDBObjEllipse=object(GDBObjPlain)
                             procedure draw;
                             procedure drawonlyself;
                             procedure ClearSub;
+                            procedure Clear;
                             procedure updateenttreeadress;
                             procedure addtonul(p:PGDBObjEntity);
                             function AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;

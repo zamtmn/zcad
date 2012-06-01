@@ -507,9 +507,12 @@ begin
      begin
           selected:=true;
           tdesc:=gdb.GetCurrentDWG.SelObjArray.addobject(@{mainline}self);
+          if tdesc<>nil then
+          begin
           GDBGetMem({$IFDEF DEBUGBUILD}'{B50BE8C9-E00A-40C0-A051-230877BD3A56}',{$ENDIF}GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
           mainline.addcontrolpoints(tdesc);
           inc(GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
+          end;
      end;
      end;
 end;

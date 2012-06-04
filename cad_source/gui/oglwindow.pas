@@ -1464,7 +1464,9 @@ if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
                                                        if not param.scrollmode then
                                                                                    self.Cursor:=crNone;
 
-
+  if assigned(GDBobjinsp)then
+                             if GDBobjinsp.pcurrobj=@sysvar then
+                                                                objinsp.UpdateObjInsp;
   SBTextOut(htext);
   //param.firstdraw:=true;
   isOpenGLError;

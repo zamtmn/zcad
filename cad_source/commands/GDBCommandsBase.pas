@@ -828,6 +828,40 @@ begin
   updatevisible;
   result:=cmd_ok;
 end;
+function Import_com(Operands:pansichar):GDBInteger;
+var
+   s: GDBString;
+   //fileext:GDBString;
+   isload:boolean;
+begin
+  if length(operands)=0 then
+                     begin
+                          mainformn.ShowAllCursors;
+                          isload:=OpenFileDialog(s,'svg',ImportFileFilter,'','Import...');
+                          mainformn.RestoreCursors;
+                          //s:=utf8tosys(s);
+                          if not isload then
+                                            begin
+                                                 result:=cmd_cancel;
+                                                 exit;
+                                            end
+                     end
+                 else
+                 begin
+                   s:=ExpandPath(operands);
+                   s:=FindInSupportPath(operands);
+                 end;
+  isload:=FileExists(utf8tosys(s));
+  if isload then
+  begin
+       newdwg_com(@s[1]);
+       gdb.GetCurrentDWG.FileName:=s;
+       import(s);
+  end
+            else
+     shared.ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
+     //shared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
+end;
 function Load_com(Operands:pansichar):GDBInteger;
 var
    s: GDBString;
@@ -2296,6 +2330,7 @@ begin
   CreateCommandFastObjectPlugin(@QSave_com,'QSave',CADWG,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@Merge_com,'Merge',CADWG,0);
   CreateCommandFastObjectPlugin(@Load_com,'Load',0,0).CEndActionAttr:=CEDWGNChanged;
+  CreateCommandFastObjectPlugin(@Import_com,'Import',0,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@MergeBlocks_com,'MergeBlocks',0,0);
   CreateCommandFastObjectPlugin(@SaveAs_com,'SaveAs',CADWG,0);
   CreateCommandFastObjectPlugin(@Cam_reset_com,'Cam_Reset',CADWG,0);

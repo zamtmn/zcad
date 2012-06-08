@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
+uses dxfvectorialreader,svgvectorialreader,epsvectorialreader,{pdfvectorialreader,}GDBCircle,GDBArc,fpvectorial,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
   entnamindex=record
@@ -82,6 +82,7 @@ procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoad
 procedure savedxf2000(name: GDBString; PDrawing:PTDrawing);
 procedure saveZCP(name: GDBString; gdb: PGDBDescriptor);
 procedure LoadZCP(name: GDBString; gdb: PGDBDescriptor);
+procedure Import(name: GDBString);
 implementation
 uses GDBBlockDef,mainwindow,UGDBLayerArray,varmandef;
 function dxfhandlearraycreate(col: GDBInteger): GDBPointer;
@@ -1791,6 +1792,55 @@ begin
           FileRead(infile,header,sizeof(shdblockheader));
      end;
      fileclose(infile);*)
+end;
+procedure Import(name: GDBString);
+var
+  Vec: TvVectorialDocument;
+  source:TvVectorialPage;
+  CurEntity: TvEntity;
+  i:integer;
+  pobj:PGDBObjEntity;
+begin
+    Vec := TvVectorialDocument.Create;
+  try
+    Vec.ReadFromFile(name);
+    source:=Vec.GetPage(0);
+    for i := 0 to source.GetEntitiesCount - 1 do
+    begin
+      CurEntity := source.GetEntity(i);
+      if CurEntity is TvCircle then
+      begin
+           pobj := CreateInitObjFree(GDBCircleID,nil);
+           pgdbobjCircle(pobj).Radius:=TvCircle(CurEntity).Radius;
+           pgdbobjCircle(pobj).Local.P_insert.x:=TvCircle(CurEntity).x;
+           pgdbobjCircle(pobj).Local.P_insert.y:=TvCircle(CurEntity).y;
+           gdb.GetCurrentRoot.AddMi(@pobj);
+           PGDBObjEntity(pobj)^.BuildGeometry;
+           PGDBObjEntity(pobj)^.format;
+      end
+ else if CurEntity is TvCircularArc then
+      begin
+           pobj := CreateInitObjFree(GDBArcID,nil);
+           pgdbobjArc(pobj).R:=TvCircularArc(CurEntity).Radius;
+           pgdbobjArc(pobj).Local.P_insert.x:=TvCircularArc(CurEntity).x;
+           pgdbobjArc(pobj).Local.P_insert.y:=TvCircularArc(CurEntity).y;
+           pgdbobjArc(pobj).StartAngle:=TvCircularArc(CurEntity).StartAngle*pi/180;
+           pgdbobjArc(pobj).EndAngle:=TvCircularArc(CurEntity).EndAngle*pi/180;
+           gdb.GetCurrentRoot.AddMi(@pobj);
+           PGDBObjEntity(pobj)^.BuildGeometry;
+           PGDBObjEntity(pobj)^.format;
+      end;
+
+    end;
+  except
+        on Exception do
+        begin
+             shared.ShowError('Unsupported vector graphics format?');
+        end
+  end;
+  //finally
+    Vec.Free;
+  //end;
 end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodxf.initialization');{$ENDIF} 

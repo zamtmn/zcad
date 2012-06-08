@@ -89,6 +89,8 @@ MainMenuItem File;
     action ACN_LOAD
     action ACN_LOADQS
     Separator
+    action ACN_IMPORT
+    Separator
     action ACN_QSAVE
     action ACN_SAVEAS
     action ACN_SAVEQS

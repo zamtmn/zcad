@@ -720,9 +720,9 @@ begin
 
      oglwnd:=TOGLWnd.Create(myts);
 
-     oglwnd.AuxBuffers:=4;
+     oglwnd.AuxBuffers:=0;
      oglwnd.StencilBits:=8;
-     oglwnd.ColorBits:=24;
+     //oglwnd.ColorBits:=24;
      oglwnd.DepthBits:=24;
 
 

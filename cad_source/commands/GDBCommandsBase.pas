@@ -873,7 +873,7 @@ begin
      if length(operands)=0 then
                         begin
                              mainformn.ShowAllCursors;
-                             isload:=OpenFileDialog(s,'dxf',ProjectFileFilter,'','Открыть проект...');
+                             isload:=OpenFileDialog(s,'dxf',ProjectFileFilter,'',rsOpenFile);
                              mainformn.RestoreCursors;
                              //s:=utf8tosys(s);
                              if not isload then
@@ -958,7 +958,7 @@ begin
      if operands='QS' then
                           begin
                                s1:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^);
-                               s:='Autosave... '''+s1+'''';
+                               s:='rsAutoSave: '''+s1+'''';
                                historyout(pansichar(s));
                                itautoseve:=true;
                           end
@@ -996,7 +996,7 @@ var //pd:^TSaveDialog;
 
 begin
      mainformn.ShowAllCursors;
-     if SaveFileDialog(s,'dxf',ProjectFileFilter,'','Сохранить проект...') then
+     if SaveFileDialog(s,'dxf',ProjectFileFilter,'',rsSaveFile) then
      begin
           fileext:=uppercase(ExtractFileEXT(s));
           if fileext='.ZCP' then

@@ -104,6 +104,9 @@ resourcestring
   rsGridTooDensity='Grid too density';
 
   {window names}
+  rsOpenFile='Open file...';
+  rsSaveFile='Save file...';
+  rsAutoSave='Autosave';
   rsQuitCaption='Quit';
   rsWarningCaption='Warning!';
   rsAboutWndCaption = 'About ZCAD';

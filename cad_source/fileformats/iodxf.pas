@@ -84,7 +84,7 @@ procedure saveZCP(name: GDBString; gdb: PGDBDescriptor);
 procedure LoadZCP(name: GDBString; gdb: PGDBDescriptor);
 procedure Import(name: GDBString);
 implementation
-uses GDBBlockDef,mainwindow,UGDBLayerArray,varmandef;
+uses GDBLine,GDBBlockDef,mainwindow,UGDBLayerArray,varmandef;
 function dxfhandlearraycreate(col: GDBInteger): GDBPointer;
 var
   temp: pdxfhandlerecopenarray;
@@ -1800,6 +1800,10 @@ var
   CurEntity: TvEntity;
   i:integer;
   pobj:PGDBObjEntity;
+  j, k: Integer;
+  CurSegment: TPathSegment;
+  Cur2DSegment: T2DSegment absolute CurSegment;
+  PosX, PosY: Double;
 begin
     Vec := TvVectorialDocument.Create;
   try
@@ -1829,8 +1833,35 @@ begin
            gdb.GetCurrentRoot.AddMi(@pobj);
            PGDBObjEntity(pobj)^.BuildGeometry;
            PGDBObjEntity(pobj)^.format;
+      end
+  else if CurEntity is fpvectorial.TPath then
+      begin
+      fpvectorial.TPath(CurEntity).PrepareForSequentialReading;
+      for j := 0 to fpvectorial.TPath(CurEntity).Len - 1 do
+      begin
+        CurSegment := TPathSegment(fpvectorial.TPath(CurEntity).Next());
+
+        case CurSegment.SegmentType of
+        stMoveTo:
+        begin
+          PosX := Cur2DSegment.X;
+          PosY := Cur2DSegment.Y;
+        end;
+        st2DLineWithPen,st2DLine, st3DLine:
+        begin
+           pobj := CreateInitObjFree(GDBLineID,nil);
+           PGDBObjLine(pobj).CoordInOCS.lBegin:=createvertex(PosX,PosY,0);
+           PosX := Cur2DSegment.X;
+           PosY := Cur2DSegment.Y;
+           PGDBObjLine(pobj).CoordInOCS.lEnd:=createvertex(PosX,PosY,0);
+           gdb.GetCurrentRoot.AddMi(@pobj);
+           PGDBObjEntity(pobj)^.BuildGeometry;
+           PGDBObjEntity(pobj)^.format;
+        end;
+        end;
       end;
 
+      end;
     end;
   except
         on Exception do

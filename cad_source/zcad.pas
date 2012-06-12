@@ -84,6 +84,7 @@ uses
 {$R *.res}
 
 begin
+{$IFDEF REPORTMMEMORYLEAKS}printleakedblock:=true;{$ENDIF}
 {$IFDEF REPORTMMEMORYLEAKS}
        SetHeapTraceOutput('log/memory-heaptrace.txt');
        keepreleased:=true;

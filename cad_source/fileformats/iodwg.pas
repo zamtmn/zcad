@@ -160,7 +160,7 @@ function bit_chain.readbyte_rc:DWGByte;
 begin
      if bit=0 then
          begin
-              result:=PDWGByte(DWGLong(chain)+DWGLong(byte))^
+              result:=PDWGByte({DWGLong}PtrUInt(chain)+{DWGLong}(byte))^
          end
      else
         begin
@@ -281,7 +281,7 @@ begin
                            opcode1:=bc.readbyte_rc;
           if opcode1 >= $40 then
                   begin
-                    shared.HistoryOutStr('1');
+                    shared.HistoryOutStr('1 '+format('writeln %d bytes',[ptruint(dst)-ptruint(result)]));
                     comp_bytes:=((opcode1 and $F0) shr 4) - 1;
                     opcode2 := bc.readbyte_rc;
                     comp_offset := (opcode2 shl 2) or ((opcode1 and $0C) shr 2);
@@ -292,6 +292,9 @@ begin
                       end
                     else
                       lit_length := read_literal_length(bc, opcode1);
+                    if lit_length=0 then
+                                        lit_length:=lit_length;
+                    shared.HistoryOutStr('  '+format('comp_bytes=%d comp_offset=%d lit_length=%d',[comp_bytes,comp_offset,lit_length]));
                   end
           else if (opcode1 >= $21) and (opcode1 <= $3F) then
             begin
@@ -350,7 +353,7 @@ begin
           for (i = 0; i < comp_bytes; ++i)
             *dst++ = *src++;}
 
-          src:=pointer(longint(dst)-comp_offset-1);
+          src:=pointer(PTRUINT(dst)-comp_offset-1);
           for i := 1  to comp_bytes do
           begin
               dst^:=src^;
@@ -433,7 +436,7 @@ begin
      SectionInfo:=syssec;
      inc(pointer(SectionInfo),SectionMap.CompSizeData+sizeof(dwg2004systemsection));
      shared.HistoryOutStr('MAP');
-     USectionMap:=decompresssection(pointer(longint(SectionMap)+sizeof(dwg2004systemsection)),SectionMap.CompSizeData,SectionMap.DecompSizeData);
+     USectionMap:=decompresssection(pointer(PTRUINT(SectionMap)+sizeof(dwg2004systemsection)),SectionMap.CompSizeData,SectionMap.DecompSizeData);
      setlength(sarray,fdh.SectionPageArraySize);
      sm:=pointer(USectionMap);
      for i:=0 to {SectionMap.DecompSizeData div 8}fdh.SectionPageAmount-1 do
@@ -450,7 +453,7 @@ begin
      SectionInfo:=f.PArray;
      inc(pointer(SectionInfo),FindSectionByID(sarray,fdh.SectionInfoID).Offset);
      shared.HistoryOutStr('INFO');
-     USectionInfo:=decompresssection(pointer(longint(SectionInfo)+sizeof(dwg2004systemsection)),SectionInfo.CompSizeData,SectionInfo.DecompSizeData);
+     USectionInfo:=decompresssection(pointer(PTRUINT(SectionInfo)+sizeof(dwg2004systemsection)),SectionInfo.CompSizeData,SectionInfo.DecompSizeData);
 
      FileHandle:=FileCreate('log/SectionInfo');
      FileWrite(FileHandle,USectionInfo^,SectionInfo.DecompSizeData);
@@ -458,7 +461,7 @@ begin
 
      sid:=USectionInfo;
      //sid:=pointer(longint(SectionInfo)+sizeof(dwg2004systemsection));
-     sd:=pointer(longint(sid)+sizeof(dwg2004sectioninfo));
+     sd:=pointer(PTRUINT(sid)+{sizeof(dwg2004sectioninfo)}+20);
      for i:=0 to {SectionMap.DecompSizeData div 8}sid.NumDescriptions-1 do
      begin
           {sarray[i].Number:=sm.SectionNumber;
@@ -471,7 +474,8 @@ begin
           //longint(sd):=longint(sd)-64+length(pchar(@sd.SectionName[1]));
           //a:=64-length(pchar(@sd.SectionName[1]);
           a:=sizeof(sd^);
-          inc(longword(sd),sizeof(sd^));
+          PtrUInt(sd):=PtrUInt(sd)+{sizeof(dwg2004sectiondesc}32+64;
+          //inc(longword(sd),sizeof({sd^}dwg2004sectiondesc));
 
      end;
 end;
@@ -506,4 +510,4 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodwg.initialization');{$ENDIF}
-end.
+end.

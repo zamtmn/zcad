@@ -98,10 +98,17 @@ type
                                    _0x00:DWGLong;
                                    Unknown:DWGLong;
                               end;
+    pdwg2004pageinfo=^dwg2004pageinfo;
+    dwg2004pageinfo=packed record
+                                 PageNumber:DWGLong;
+                                 DataSize:DWGLong;
+                                 StartOffset:DWG2Long;
+                           end;
+
     pdwg2004sectiondesc=^dwg2004sectiondesc;
     dwg2004sectiondesc=packed record
-                                    SizeOfSection:DWGLong;
-                                    Unknown:DWGLong;
+                                    SizeOfSection:DWG2Long;
+                                    //Unknown:DWGLong;
                                     NumberOfSectionsThisType:DWGLong;
                                     MaxDecompressedSize:DWGLong;
                                     Unknown2:DWGLong;
@@ -110,7 +117,6 @@ type
                                     Encrypted:DWGLong;
                                     SectionName:packed array[1..64]of ansichar;
                              end;
-
     PTMyDWGSectionDesc=^TMyDWGSectionDesc;
     TMyDWGSectionDesc=record
                             Number:DWGLong;
@@ -281,7 +287,7 @@ begin
                            opcode1:=bc.readbyte_rc;
           if opcode1 >= $40 then
                   begin
-                    shared.HistoryOutStr('1 '+format('writeln %d bytes',[ptruint(dst)-ptruint(result)]));
+                    //shared.HistoryOutStr('1 '+format('writeln %d bytes',[ptruint(dst)-ptruint(result)]));
                     comp_bytes:=((opcode1 and $F0) shr 4) - 1;
                     opcode2 := bc.readbyte_rc;
                     comp_offset := (opcode2 shl 2) or ((opcode1 and $0C) shr 2);
@@ -294,11 +300,11 @@ begin
                       lit_length := read_literal_length(bc, opcode1);
                     if lit_length=0 then
                                         lit_length:=lit_length;
-                    shared.HistoryOutStr('  '+format('comp_bytes=%d comp_offset=%d lit_length=%d',[comp_bytes,comp_offset,lit_length]));
+                    //shared.HistoryOutStr('  '+format('comp_bytes=%d comp_offset=%d lit_length=%d',[comp_bytes,comp_offset,lit_length]));
                   end
           else if (opcode1 >= $21) and (opcode1 <= $3F) then
             begin
-              shared.HistoryOutStr('2');
+              //shared.HistoryOutStr('2');
               comp_bytes  := opcode1 - $1E;
               comp_offset := read_two_byte_offset(bc, lit_length);
 
@@ -406,10 +412,11 @@ var fh:pdwg2004header;
     fdh:dwg2004headerdecrypteddata;
     syssec,SectionMap,SectionInfo:pdwg2004systemsection;
     USectionMap,USectionInfo:pointer;
-    i,a:integer;
+    i,a,NumberOfSectionsThisType:integer;
     sm:pdwg2004sectionmap;
     sid:pdwg2004sectioninfo;
     sd:pdwg2004sectiondesc;
+    pi:pdwg2004pageinfo;
     sarray:TMyDWGSectionDescArray;
 
     FileHandle:cardinal;
@@ -461,20 +468,19 @@ begin
 
      sid:=USectionInfo;
      //sid:=pointer(longint(SectionInfo)+sizeof(dwg2004systemsection));
-     sd:=pointer(PTRUINT(sid)+{sizeof(dwg2004sectioninfo)}+20);
+     sd:=pointer(PTRUINT(sid)+sizeof(dwg2004sectioninfo){+20});
      for i:=0 to {SectionMap.DecompSizeData div 8}sid.NumDescriptions-1 do
      begin
-          {sarray[i].Number:=sm.SectionNumber;
-          sarray[i].Size:=sm.SectionSize;
-          if i=0 then
-                     sarray[i].Offset:=$100
-                 else
-                     sarray[i].Offset:=sarray[i-1].Offset+sarray[i-1].Size;
-          shared.HistoryOutStr(format('Section %d, size %d, offset %d',[sarray[i].Number,sarray[i].Size,sarray[i].Offset]));}
-          //longint(sd):=longint(sd)-64+length(pchar(@sd.SectionName[1]));
-          //a:=64-length(pchar(@sd.SectionName[1]);
-          a:=sizeof(sd^);
-          PtrUInt(sd):=PtrUInt(sd)+{sizeof(dwg2004sectiondesc}32+64;
+          shared.HistoryOutStr('Section name: '+ pchar(@sd.SectionName));
+          NumberOfSectionsThisType:=sd.NumberOfSectionsThisType;
+          PtrUInt(sd):=PtrUInt(sd)+sizeof(dwg2004sectiondesc){32+64}{+16*sd.NumberOfSectionsThisType};
+          pi:=pointer(sd);
+          for a:=1 to NumberOfSectionsThisType do
+          begin
+               shared.HistoryOutStr(format(' Page: %d, DataSize: %d, StartOffset: %d,',[pi.PageNumber, pi.DataSize,pi.StartOffset]));
+               PtrUInt(pi):=PtrUInt(pi)+sizeof(dwg2004pageinfo);
+          end;
+          sd:=pointer(pi);
           //inc(longword(sd),sizeof({sd^}dwg2004sectiondesc));
 
      end;
@@ -510,4 +516,4 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodwg.initialization');{$ENDIF}
-end.
+end.

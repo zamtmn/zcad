@@ -99,16 +99,18 @@ type
                                    Unknown:DWGLong;
                               end;
     pdwg2004pageinfo=^dwg2004pageinfo;
+    PTMyDWGSectionDesc=^TMyDWGSectionDesc;
     dwg2004pageinfo=packed record
                                  PageNumber:DWGLong;
                                  DataSize:DWGLong;
                                  StartOffset:DWG2Long;
+                                 section:PTMyDWGSectionDesc;
+                                 decompdata:pointer;
                            end;
-
+    mypageinfoArray=array of dwg2004pageinfo;
     pdwg2004sectiondesc=^dwg2004sectiondesc;
     dwg2004sectiondesc=packed record
                                     SizeOfSection:DWG2Long;
-                                    //Unknown:DWGLong;
                                     NumberOfSectionsThisType:DWGLong;
                                     MaxDecompressedSize:DWGLong;
                                     Unknown2:DWGLong;
@@ -117,28 +119,94 @@ type
                                     Encrypted:DWGLong;
                                     SectionName:packed array[1..64]of ansichar;
                              end;
-    PTMyDWGSectionDesc=^TMyDWGSectionDesc;
-    TMyDWGSectionDesc=record
+    pmysectiondesc=^mysectiondesc;
+    mysectiondesc=packed record
+                                    SizeOfSection:DWG2Long;
+                                    NumberOfSectionsThisType:DWGLong;
+                                    MaxDecompressedSize:DWGLong;
+                                    Unknown2:DWGLong;
+                                    Compressed:DWGLong;
+                                    SectionType:DWGLong;
+                                    Encrypted:DWGLong;
+                                    SectionName:string;
+                                    pages:mypageinfoArray;
+                             end;
+    mysectiondescArray=array of mysectiondesc;
+    TMyDWGSectionDesc=packed record
                             Number:DWGLong;
                             Size:DWGLong;
                             Offset:DWGLong;
                       end;
     TMyDWGSectionDescArray=array of TMyDWGSectionDesc;
+    BITCODE_RL=Longword;
+    BITCODE_RS=word;
+    BITCODE_RC=byte;
+    BITCODE_MS={Longword}word;
+    BITCODE_BS=word;
+
+    BITCODE_BB=byte;
     bit_chain=packed object
                            chain:PDWGByte;
                            size:DWord;
                            byte:DWord;
                            bit:DWGByte;
                            constructor init(_chain:pointer;_size:DWord);
-                           function readbyte_rc:DWGByte;
+                           procedure setto(_chain:pointer;_size:DWord);
+                           function BitRead_rc:BITCODE_RC;
+                           function BitRead_rs:BITCODE_RS;
+                           function BitRead_rl:BITCODE_RL;
+                           function BitRead_ms:BITCODE_MS;
+                           function BitRead_bb:BITCODE_BB;
+                           function BitRead_bs:BITCODE_BS;
+                           procedure scroll(scrollbit:integer);
                      end;
+    TEncryptedSectionHeader=packed record
+                            case byte of
+                            0:(field:packed record
+                            tag:DWGLong;
+                            section_type:DWGLong;
+                            data_size:DWGLong;
+                            section_size:DWGLong;
+                            start_offset:DWGLong;
+                            unknown:DWGLong;
+                            checksum_1:DWGLong;
+                            checksum_2:DWGLong;
+                            end);
+                            1:(LongData:
+                            array [0..7] of DWGLong);
+                            2:(ByteData:
+                            array [0..31] of DWGByte);
+                            end;
+const
+    SECTION_HEADER = $01;
+    SECTION_AUXHEADER = $02;
+    SECTION_CLASSES = $03;
+    SECTION_HANDLES = $04;
+    SECTION_TEMPLATE = $05;
+    SECTION_OBJFREESPACE = $06;
+    SECTION_DBOBJECTS = $07;
+    SECTION_REVHISTORY = $08;
+    SECTION_SUMMARYINFO = $09;
+    SECTION_PREVIEW = $0a;
+    SECTION_APPINFO = $0b;
+    SECTION_APPINFOHISTORY = $0c;
+    SECTION_FILEDEPLIST = $0d;
+    //SECTION_SECURITY,      //
+    //SECTION_VBAPROJECT,    // not seen
+    //SECTION_SIGNATURE      //
+
 constructor bit_chain.init(_chain:pointer;_size:DWord);
+begin
+     setto(_chain,_size);
+end;
+procedure bit_chain.setto(_chain:pointer;_size:DWord);
 begin
      chain:=_chain;
      size:=_size;
      byte:=0;
      bit:=0;
 end;
+
 (*
 bit_read_RC(Bit_Chain * dat)
 {
@@ -162,18 +230,131 @@ bit_read_RC(Bit_Chain * dat)
   return ((unsigned char) result);
 }
 *)
-function bit_chain.readbyte_rc:DWGByte;
+procedure bit_chain.scroll(scrollbit:integer);
+var
+  endpos:integer;
+begin
+  endpos:=bit+scrollbit;
+  if (byte>=size - 1) and (endpos > 7) then
+    begin
+      bit:=7;
+      exit;
+    end;
+  bit:=endpos mod 8;
+  byte:=byte+(endpos div 8);
+end;
+
+function bit_chain.BitRead_rc:BITCODE_RC;
+var
+   b:DWGByte;
 begin
      if bit=0 then
          begin
-              result:=PDWGByte({DWGLong}PtrUInt(chain)+{DWGLong}(byte))^
+              result:=PDWGByte(PtrUInt(chain)+(byte))^;
+              inc(byte);
          end
      else
         begin
-             shared.ShowError('bit_chain.readbyte_rc bit<>0 not implement');
+             result:=PDWGByte(PtrUInt(chain)+(byte))^ shl bit;
+          if (byte < size - 1) then
+            begin
+              b:=PDWGByte(PtrUInt(chain)+(byte+1))^;
+              result:=result or (b shr (8-bit));
+            end;
+             scroll(8);
         end;
-     inc(byte);
 end;
+function bit_chain.BitRead_rl:BITCODE_RL;
+var
+   b1:BITCODE_RS;
+   b2:BITCODE_RL;
+begin
+     b1:=BitRead_rs;
+     b2:=BitRead_rs;
+     result:=((b2 shl 16) or b1);
+end;
+function bit_chain.BitRead_ms:BITCODE_MS;
+var
+   b1:BITCODE_RS;
+   b2:BITCODE_RL;
+   i, j:integer;
+   w:array [0..1] of word;
+   //long unsigned int result;
+begin
+       result:= 0;
+       w[0]:=0;
+       w[1]:=0;
+       j:=0;
+       for i:=1 downto 0 do
+       //for (i = 1, j = 0; i > -1; i--, j += 15)
+         begin
+           w[i]:=BitRead_rs;
+           if (not(w[i] and $8000))>0 then
+             begin
+               result :=result or ((w[i]) shl j);
+               exit;
+             end
+           else
+             begin
+             w[i] := w[i] and $7fff;
+             result := result or ((w[i]) shl j);
+             end;
+             j:=j+15;
+         end;
+       result:=0;
+end;
+function bit_chain.BitRead_bb:BITCODE_BB;
+var
+   b:BITCODE_RC;
+begin
+       b:=PDWGByte(PtrUInt(chain)+(byte))^;
+       if (bit<7) then
+         result:=(b and ($c0 shr bit)) shr (6 - bit)
+       else
+         begin
+           result := (b and $01) shl 1;
+           if (byte < size-1) then
+             begin
+               b:=PDWGByte(PtrUInt(chain)+(byte+1))^;
+               result :=result or ((b and $80) shr 7);
+             end;
+         end;
+       scroll(2);
+end;
+function bit_chain.BitRead_bs:BITCODE_BS;
+var
+   two_bit_code:BITCODE_RC;
+begin
+  two_bit_code:= BitRead_BB;
+
+  if (two_bit_code = 0) then
+    begin
+      result := BitRead_RS;
+      exit;
+    end
+  else if (two_bit_code = 1) then
+    begin
+      result := BitRead_RC;
+      exit;
+    end
+  else if (two_bit_code = 2) then
+    exit(0)
+  else
+    // if (two_bit_code == 3) */
+    exit(256);
+
+end;
+
+function bit_chain.BitRead_rs:BITCODE_RS;
+var
+   b1:BITCODE_RC;
+   b2:BITCODE_RS;
+begin
+     b1:=BitRead_rc;
+     b2:=BitRead_rc;
+     result:=((b2 shl 8) or b1);
+end;
+
 (*
 read_literal_length(Bit_Chain* dat, unsigned char *opcode)
 {
@@ -205,7 +386,7 @@ var total:integer=0;
 begin
   //int total = 0;
   //unsigned char byte = bit_read_RC(dat);
-     byte:=bc.readbyte_rc;
+     byte:=bc.BitRead_rc;
 
   //*opcode = 0x00;
   opcode:=0;
@@ -218,11 +399,11 @@ begin
   else if (byte = 0) then
     begin
       total:=$0F;
-      byte:=bc.readbyte_rc;
+      byte:=bc.BitRead_rc;
       while (byte=$00) do
                          begin
                           total:=total+$FF;
-                          byte:=bc.readbyte_rc;
+                          byte:=bc.BitRead_rc;
                          end;
       result:=total+byte+3;
       exit;
@@ -235,8 +416,8 @@ function read_two_byte_offset(var bc:bit_chain;var lit_length:integer):integer;
 var
     firstbyte,secondbyte:DWGByte;
 begin
-  firstByte := bc.readbyte_rc;
-  secondByte := bc.readbyte_rc;
+  firstByte := bc.BitRead_rc;
+  secondByte := bc.BitRead_rc;
   result := (firstByte shr 2) or (secondByte shl 6);
   lit_length := (firstByte and $03);
 end;
@@ -246,21 +427,21 @@ var
     byte:DWGByte;
 begin
   total:=0;
-  byte := bc.readbyte_rc;
+  byte := bc.BitRead_rc;
   if (byte = 0) then
     begin
       total := $FF;
-     byte := bc.readbyte_rc;
+     byte := bc.BitRead_rc;
       while ((byte) = $00) do
         begin
         total := total+$FF;
-        byte := bc.readbyte_rc;
+        byte := bc.BitRead_rc;
         end;
     end;
   result:=total + byte;
 end;
 
-function decompresssection(ptr:pbyte;csize,usize:integer):PDWGByte;
+function decompresssection(ptr:pbyte;csize,usize:integer;var decompsize:integer):PDWGByte;
 var
    bc:bit_chain;
    opcode1,opcode2:DWGByte;
@@ -269,6 +450,7 @@ var
    dst,src:pbyte;
    comp_bytes,comp_offset:integer;
 begin
+     decompsize:=-1;
      GDBGetMem(result,usize);
      dst:=result;
      bc.init(ptr,csize);
@@ -276,7 +458,7 @@ begin
 
      for i := 1  to lit_length do
      begin
-         dst^:=bc.readbyte_rc;
+         dst^:=bc.BitRead_rc;
          inc(dst);
      end;
 
@@ -284,12 +466,12 @@ begin
      while bc.byte<csize do
      begin
           if opcode1=0 then
-                           opcode1:=bc.readbyte_rc;
+                           opcode1:=bc.BitRead_rc;
           if opcode1 >= $40 then
                   begin
                     //shared.HistoryOutStr('1 '+format('writeln %d bytes',[ptruint(dst)-ptruint(result)]));
                     comp_bytes:=((opcode1 and $F0) shr 4) - 1;
-                    opcode2 := bc.readbyte_rc;
+                    opcode2 := bc.BitRead_rc;
                     comp_offset := (opcode2 shl 2) or ((opcode1 and $0C) shr 2);
                     if (opcode1 and $03)>0 then
                       begin
@@ -315,7 +497,7 @@ begin
             end
           else if (opcode1 = $20) then
             begin
-              shared.HistoryOutStr('3');
+              //shared.HistoryOutStr('3');
               comp_bytes  := read_long_compression_offset(bc) + $21;
               comp_offset := read_two_byte_offset(bc, lit_length);
 
@@ -326,7 +508,7 @@ begin
             end
           else if (opcode1 >= $12) and (opcode1 <= $1F) then
             begin
-              shared.HistoryOutStr('4');
+              //shared.HistoryOutStr('4');
               comp_bytes  := (opcode1 and $0F) + 2;
               comp_offset := read_two_byte_offset(bc, lit_length) + $3FFF;
 
@@ -337,7 +519,7 @@ begin
             end
           else if (opcode1 = $10) then
             begin
-              shared.HistoryOutStr('5');
+              //shared.HistoryOutStr('5');
               comp_bytes  := read_long_compression_offset(bc) + 9;
               comp_offset := read_two_byte_offset(bc, lit_length) + $3FFF;
 
@@ -349,7 +531,10 @@ begin
           else if (opcode1 = $11) then
               break     // Terminates the input stream, everything is ok!
           else
+              begin
+                opcode1:=opcode1;
               exit{(1)};  // error in input stream
+              end;
 
 
           //LOG_TRACE("got compressed data %d\n",comp_bytes)
@@ -374,11 +559,12 @@ begin
 
           for i := 1  to lit_length do
           begin
-              dst^:=bc.readbyte_rc;
+              dst^:=bc.BitRead_rc;
               inc(dst);
           end;
 
      end;
+     decompsize:=dst-result;
 end;
 procedure decodeheader(ptr:pbyte;size:integer);
 var
@@ -406,20 +592,41 @@ begin
        end;
      result:=nil;
 end;
+function FindInfoByType(const siarray:mysectiondescArray;SectionType:DWGLong):pmysectiondesc;
+var
+    i:integer;
+begin
+     for i:=low(siarray) to High(siarray) do
+     if siarray[i].SectionType=SectionType then
+       begin
+            result:=@siarray[i];
+            exit;
+       end;
+     result:=nil;
+end;
 
 procedure addfromdwg2004(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
 var fh:pdwg2004header;
     fdh:dwg2004headerdecrypteddata;
     syssec,SectionMap,SectionInfo:pdwg2004systemsection;
-    USectionMap,USectionInfo:pointer;
-    i,a,NumberOfSectionsThisType:integer;
+    USectionMap,USectionInfo,objsection:pointer;
+    i,j,a,NumberOfSectionsThisType:integer;
     sm:pdwg2004sectionmap;
     sid:pdwg2004sectioninfo;
     sd:pdwg2004sectiondesc;
     pi:pdwg2004pageinfo;
     sarray:TMyDWGSectionDescArray;
+    siarray:mysectiondescArray;
+
+    objinfo:pmysectiondesc;
 
     FileHandle:cardinal;
+
+    address:integer;
+    bc,objbitreader:bit_chain;
+    es:TEncryptedSectionHeader;
+    sec_mask:DWGLong;
+    decompsize:integer;
 begin
      fh:=f.PArray;
      fdh:=pdwg2004headerdecrypteddata(@fh.EncryptedData)^;
@@ -443,7 +650,7 @@ begin
      SectionInfo:=syssec;
      inc(pointer(SectionInfo),SectionMap.CompSizeData+sizeof(dwg2004systemsection));
      shared.HistoryOutStr('MAP');
-     USectionMap:=decompresssection(pointer(PTRUINT(SectionMap)+sizeof(dwg2004systemsection)),SectionMap.CompSizeData,SectionMap.DecompSizeData);
+     USectionMap:=decompresssection(pointer(PTRUINT(SectionMap)+sizeof(dwg2004systemsection)),SectionMap.CompSizeData,SectionMap.DecompSizeData,decompsize);
      setlength(sarray,fdh.SectionPageArraySize);
      sm:=pointer(USectionMap);
      for i:=0 to {SectionMap.DecompSizeData div 8}fdh.SectionPageAmount-1 do
@@ -460,30 +667,83 @@ begin
      SectionInfo:=f.PArray;
      inc(pointer(SectionInfo),FindSectionByID(sarray,fdh.SectionInfoID).Offset);
      shared.HistoryOutStr('INFO');
-     USectionInfo:=decompresssection(pointer(PTRUINT(SectionInfo)+sizeof(dwg2004systemsection)),SectionInfo.CompSizeData,SectionInfo.DecompSizeData);
+     USectionInfo:=decompresssection(pointer(PTRUINT(SectionInfo)+sizeof(dwg2004systemsection)),SectionInfo.CompSizeData,SectionInfo.DecompSizeData,decompsize);
 
-     FileHandle:=FileCreate('log/SectionInfo');
+     {FileHandle:=FileCreate('log/SectionInfo');
      FileWrite(FileHandle,USectionInfo^,SectionInfo.DecompSizeData);
-     fileclose(FileHandle);
+     fileclose(FileHandle);}
 
      sid:=USectionInfo;
      //sid:=pointer(longint(SectionInfo)+sizeof(dwg2004systemsection));
      sd:=pointer(PTRUINT(sid)+sizeof(dwg2004sectioninfo){+20});
+     setlength(siarray,sid.NumDescriptions);
      for i:=0 to {SectionMap.DecompSizeData div 8}sid.NumDescriptions-1 do
      begin
+                                   {SizeOfSection:DWG2Long;
+                                    NumberOfSectionsThisType:DWGLong;
+                                    MaxDecompressedSize:DWGLong;
+                                    Unknown2:DWGLong;
+                                    Compressed:DWGLong;
+                                    SectionType:DWGLong;
+                                    Encrypted:DWGLong;
+                                    SectionName:packed array[1..64]of ansichar;}
           shared.HistoryOutStr('Section name: '+ pchar(@sd.SectionName));
+          shared.HistoryOutStr(format(' SizeOfSection: %d, NumberOfSectionsThisType: %d, MaxDecompressedSize: %d, Unknown2: %d, Compressed: %d, SectionType: %d, Encrypted: %d',
+                                    [sd.SizeOfSection,  sd.NumberOfSectionsThisType,  sd.MaxDecompressedSize,  sd.Unknown2,  sd.Compressed,  sd.SectionType,  sd.Encrypted]));
+          siarray[i].SizeOfSection:=sd.SizeOfSection;
+          siarray[i].NumberOfSectionsThisType:=sd.NumberOfSectionsThisType;
+          siarray[i].MaxDecompressedSize:=sd.MaxDecompressedSize;
+          siarray[i].Unknown2:=sd.Unknown2;
+          siarray[i].Compressed:=sd.Compressed;
+          siarray[i].SectionType:=sd.SectionType;
+          siarray[i].Encrypted:=sd.Encrypted;
+          siarray[i].SectionName:=pchar(@sd.SectionName);
+          setlength(siarray[i].pages,sd.NumberOfSectionsThisType);
           NumberOfSectionsThisType:=sd.NumberOfSectionsThisType;
           PtrUInt(sd):=PtrUInt(sd)+sizeof(dwg2004sectiondesc){32+64}{+16*sd.NumberOfSectionsThisType};
           pi:=pointer(sd);
-          for a:=1 to NumberOfSectionsThisType do
+          for a:=0 to NumberOfSectionsThisType-1 do
           begin
+               siarray[i].pages[a].PageNumber:=pi.PageNumber;
+               siarray[i].pages[a].DataSize:=pi.DataSize;
+               siarray[i].pages[a].StartOffset:=pi.StartOffset;
+               siarray[i].pages[a].section:=FindSectionByID(sarray,pi.PageNumber);
+               if siarray[i].pages[a].section=nil then
+                                                      pi:=pi;
                shared.HistoryOutStr(format(' Page: %d, DataSize: %d, StartOffset: %d,',[pi.PageNumber, pi.DataSize,pi.StartOffset]));
-               PtrUInt(pi):=PtrUInt(pi)+sizeof(dwg2004pageinfo);
+               PtrUInt(pi):=PtrUInt(pi)+{sizeof(dwg2004pageinfo)}16;
           end;
           sd:=pointer(pi);
           //inc(longword(sd),sizeof({sd^}dwg2004sectiondesc));
-
      end;
+     shared.HistoryOutStr('Prepare AcDb:AcDbObjects section');
+     objinfo:=FindInfoByType(siarray,SECTION_DBOBJECTS);
+     GDBGetMem(objsection,objinfo^.MaxDecompressedSize*objinfo^.NumberOfSectionsThisType);
+      bc.setto(f.PArray,f.size);
+     for i:=0 to objinfo^.NumberOfSectionsThisType-1 do
+       begin
+         address:=objinfo^.pages[i].section.Offset;
+         bc.byte:=address;
+         for j:= 0 to $20-1 do
+           es.ByteData[j]:= bc.BitRead_rc;
+
+         sec_mask:= $4164536b xor address;
+         for j:= 0 to 7 do
+           es.LongData[j]:=es.LongData[j] xor sec_mask;
+         objinfo^.pages[i].decompdata:=decompresssection(pointer(PtrUInt(bc.chain)+bc.byte),es.field.data_size,$7400,decompsize);
+         shared.HistoryOutStr(format(' Page: %d, tag: %d, section_type: %d, data_size: %d, section_size: %d, start_offset: %d',
+                                             [i, es.field.tag,es.field.section_type,es.field.data_size,es.field.section_size,es.field.start_offset]));
+         shared.HistoryOutStr(format(' Total decompressed size: %d',
+                                             [decompsize]));
+         objbitreader.init(objinfo^.pages[i].decompdata,decompsize);
+         objbitreader.BitRead_rl;
+         objbitreader.BitRead_ms;
+         objbitreader.BitRead_bs;
+
+       end;
+
+
+
 end;
 
 procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);

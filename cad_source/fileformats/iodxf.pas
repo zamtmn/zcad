@@ -656,10 +656,12 @@ begin
 
                       end;
                     end;
+                    if llw='' then llw:='-1';
                     player:=gdb.GetCurrentDWG.LayerTable.addlayer(lname, abs(strtoint(lcolor)), strtoint(llw),oo,ll,pp,desk,LoadMode);
                     if uppercase(lname)=uppercase(clayer)then
                                                              if sysvar.DWG.DWG_CLayer<>nil then
                                                                                                sysvar.DWG.DWG_CLayer^:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(player);
+                    llw:='';
                     {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer '+lname,0);{$ENDIF}
                   end;
                   {$IFDEF TOTALYLOG}programlog.logoutstr('end; {layer table}',lp_DecPos);{$ENDIF}

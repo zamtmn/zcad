@@ -42,7 +42,7 @@ GDBOpenArrayOfByte=object(GDBOpenArray)
                       function AllocData(SData:GDBword):GDBPointer;virtual;
                       function ReadData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                       function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
-                      function ReadString(break, ignore: GDBString): {short}String;
+                      function ReadString(break, ignore: GDBString): shortString;
                       function ReadGDBString: {short}String;
                       function ReadString2:GDBString;
                       function GetCurrentReadAddres:GDBPointer;virtual;
@@ -216,35 +216,42 @@ begin
 end;
 function GDBOpenArrayOfByte.readstring{(break, ignore: GDBString): shortString};
 var
-  s: shortString;
-  //i:GDBInteger;
+  //{s,}result: shortString;
+  i:GDBInteger;
   lastbreak:GDBBoolean;
   addr:pansichar;
 begin
-  s := '';
+  //s := '';
+  setlength(result,255);
   lastbreak:=false;
-  //i:=1;
+  i:=0;
   addr:=pointer(GDBPlatformint(parray)+readpos);
     while ReadPos <> count do
     begin
-      if (pos(addr[0], break) = 0)or((s='')and(addr[0]=' ')) then
+      if (pos(addr[0], break) = 0)or(({s=''}i=0)and(addr[0]=' ')) then
       begin
         if pos(addr[0], ignore) = 0 then
           begin
           //setlength(s,i);
           //s[i]:=bufer^[buferpos];
           //inc(i);
-          if (s<>'')or(addr[0]<>' ') then
+          if ({s<>''}i<>0)or(addr[0]<>' ') then
 
           if addr[0] in breacer then
                                                  begin
                                                       if not lastbreak then
-                                                                           s:=s+addr[0];
+                                                                           begin
+                                                                                //s:=s+addr[0];
+                                                                                inc(i);
+                                                                                result[i]:=addr[0];
+                                                                           end;
                                                       lastbreak:=true;
                                                  end
                                              else
                                                  begin
-                                                      s:=s+addr[0];
+                                                      //s:=s+addr[0];
+                                                      inc(i);
+                                                      result[i]:=addr[0];
                                                       lastbreak:=false;
                                                  end;
 
@@ -254,14 +261,18 @@ begin
       end
       else
       begin
-        result := s;
+        //result := s;
+        setlength(result,i);
+        //result := result;
         //inc(addr);
         inc(readpos);
         //result := s;
         exit;
       end;
     end;
-  result := s;
+    setlength(result,i);
+  //result := s;
+  //result := result;
 end;
 function GDBOpenArrayOfByte.Seek(pos:GDBInteger):integer;
 begin

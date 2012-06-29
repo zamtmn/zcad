@@ -18,8 +18,9 @@
 
 unit iodwg;
 {$INCLUDE def.inc}
+{$MODE OBJFPC}
 interface
-uses zcadstrconsts,iodxf,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,{gdbobjectsconstdef,}
+uses typinfo,zcadstrconsts,iodxf,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,{gdbobjectsconstdef,}
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
 implementation
@@ -194,6 +195,184 @@ const
     //SECTION_SECURITY,      //
     //SECTION_VBAPROJECT,    // not seen
     //SECTION_SIGNATURE      //
+    	{$TYPEINFO ON}
+      type
+      DWG_OBJECT_TYPE=(
+      DWG_TYPE_UNUSED:= $00,
+      DWG_TYPE_TEXT:= $01,
+      DWG_TYPE_ATTRIB := $02,
+      DWG_TYPE_ATTDEF := $03,
+      DWG_TYPE_BLOCK := $04,
+      DWG_TYPE_ENDBLK := $05,
+      DWG_TYPE_SEQEND := $06,
+      DWG_TYPE_INSERT := $07,
+      DWG_TYPE_MINSERT := $08,
+      //DWG_TYPE_<UNKNOWN> := $09,
+      DWG_TYPE_VERTEX_2D := $0a,
+      DWG_TYPE_VERTEX_3D := $0b,
+      DWG_TYPE_VERTEX_MESH := $0c,
+      DWG_TYPE_VERTEX_PFACE := $0d,
+      DWG_TYPE_VERTEX_PFACE_FACE := $0e,
+      DWG_TYPE_POLYLINE_2D := $0f,
+      DWG_TYPE_POLYLINE_3D := $10,
+      DWG_TYPE_ARC := $11,
+      DWG_TYPE_CIRCLE := $12,
+      DWG_TYPE_LINE := $13,
+      DWG_TYPE_DIMENSION_ORDINATE := $14,
+      DWG_TYPE_DIMENSION_LINEAR := $15,
+      DWG_TYPE_DIMENSION_ALIGNED := $16,
+      DWG_TYPE_DIMENSION_ANG3PT := $17,
+      DWG_TYPE_DIMENSION_ANG2LN := $18,
+      DWG_TYPE_DIMENSION_RADIUS := $19,
+      DWG_TYPE_DIMENSION_DIAMETER := $1A,
+      DWG_TYPE_POINT := $1b,
+      DWG_TYPE__3DFACE := $1c,
+      DWG_TYPE_POLYLINE_PFACE := $1d,
+      DWG_TYPE_POLYLINE_MESH := $1e,
+      DWG_TYPE_SOLID := $1f,
+      DWG_TYPE_TRACE := $20,
+      DWG_TYPE_SHAPE := $21,
+      DWG_TYPE_VIEWPORT := $22,
+      DWG_TYPE_ELLIPSE := $23,
+      DWG_TYPE_SPLINE := $24,
+      DWG_TYPE_REGION := $25,
+      DWG_TYPE_3DSOLID := $26,
+      DWG_TYPE_BODY := $27,
+      DWG_TYPE_RAY := $28,
+      DWG_TYPE_XLINE := $29,
+      DWG_TYPE_DICTIONARY := $2a,
+      //DWG_TYPE_<UNKNOWN> := $2b,
+      DWG_TYPE_MTEXT := $2c,
+      DWG_TYPE_LEADER := $2d,
+      DWG_TYPE_TOLERANCE := $2e,
+      DWG_TYPE_MLINE := $2f,
+      DWG_TYPE_BLOCK_CONTROL := $30,
+      DWG_TYPE_BLOCK_HEADER := $31,
+      DWG_TYPE_LAYER_CONTROL := $32,
+      DWG_TYPE_LAYER := $33,
+      DWG_TYPE_SHAPEFILE_CONTROL := $34,
+      DWG_TYPE_SHAPEFILE := $35,
+      //DWG_TYPE_<UNKNOWN> := $36,
+      //DWG_TYPE_<UNKNOWN> := $37,
+      DWG_TYPE_LTYPE_CONTROL := $38,
+      DWG_TYPE_LTYPE := $39,
+      //DWG_TYPE_<UNKNOWN> := $3a,
+      //DWG_TYPE_<UNKNOWN> := $3b,
+      DWG_TYPE_VIEW_CONTROL := $3c,
+      DWG_TYPE_VIEW := $3d,
+      DWG_TYPE_UCS_CONTROL := $3e,
+      DWG_TYPE_UCS := $3f,
+      DWG_TYPE_VPORT_CONTROL := $40,
+      DWG_TYPE_VPORT := $41,
+      DWG_TYPE_APPID_CONTROL := $42,
+      DWG_TYPE_APPID := $43,
+      DWG_TYPE_DIMSTYLE_CONTROL := $44,
+      DWG_TYPE_DIMSTYLE := $45,
+      DWG_TYPE_VP_ENT_HDR_CONTROL := $46,
+      DWG_TYPE_VP_ENT_HDR := $47,
+      DWG_TYPE_GROUP := $48,
+      DWG_TYPE_MLINESTYLE := $49,
+      //DWG_TYPE_<UNKNOWN> := $4a
+      //DWG_TYPE_<UNKNOWN> := $4b
+      //DWG_TYPE_<UNKNOWN> := $4c
+      DWG_TYPE_LWPLINE := $4d,
+      DWG_TYPE_HATCH := $4e,
+      DWG_TYPE_XRECORD := $4f,
+      DWG_TYPE_PLACEHOLDER := $50,
+      //DWG_TYPE_<UNKNOWN> := $51,
+      DWG_TYPE_LAYOUT := $52
+      );
+function DWGObjectName(ot:DWG_OBJECT_TYPE):string;
+begin
+     result:='Unknown';
+     if integer(ot)<=$52 then
+     case ot of
+     DWG_TYPE_UNUSED:result:='DWG_TYPE_UNUSED';
+     DWG_TYPE_TEXT:result:='DWG_TYPE_TEXT';
+     DWG_TYPE_ATTRIB :result:='DWG_TYPE_ATTRIB';
+     DWG_TYPE_ATTDEF :result:='DWG_TYPE_ATTDEF';
+     DWG_TYPE_BLOCK :result:='DWG_TYPE_BLOCK';
+     DWG_TYPE_ENDBLK :result:='DWG_TYPE_ENDBLK';
+     DWG_TYPE_SEQEND :result:='DWG_TYPE_SEQEND';
+     DWG_TYPE_INSERT :result:='DWG_TYPE_INSERT';
+     DWG_TYPE_MINSERT :result:='DWG_TYPE_MINSERT';
+     //DWG_TYPE_<UNKNOWN> :result:=''; $09,
+     DWG_TYPE_VERTEX_2D :result:='DWG_TYPE_VERTEX_2D';
+     DWG_TYPE_VERTEX_3D :result:='DWG_TYPE_VERTEX_3D';
+     DWG_TYPE_VERTEX_MESH :result:='DWG_TYPE_VERTEX_MESH';
+     DWG_TYPE_VERTEX_PFACE :result:='DWG_TYPE_VERTEX_PFACE';
+     DWG_TYPE_VERTEX_PFACE_FACE :result:='DWG_TYPE_VERTEX_PFACE_FACE';
+     DWG_TYPE_POLYLINE_2D :result:='DWG_TYPE_POLYLINE_2D';
+     DWG_TYPE_POLYLINE_3D :result:='DWG_TYPE_POLYLINE_3D';
+     DWG_TYPE_ARC :result:='DWG_TYPE_ARC';
+     DWG_TYPE_CIRCLE :result:='DWG_TYPE_CIRCLE';
+     DWG_TYPE_LINE :result:='DWG_TYPE_LINE';
+     DWG_TYPE_DIMENSION_ORDINATE :result:='DWG_TYPE_DIMENSION_ORDINATE';
+     DWG_TYPE_DIMENSION_LINEAR :result:='DWG_TYPE_DIMENSION_LINEAR';
+     DWG_TYPE_DIMENSION_ALIGNED :result:='DWG_TYPE_DIMENSION_ALIGNED';
+     DWG_TYPE_DIMENSION_ANG3PT :result:='DWG_TYPE_DIMENSION_ANG3PT';
+     DWG_TYPE_DIMENSION_ANG2LN :result:='DWG_TYPE_DIMENSION_ANG2LN';
+     DWG_TYPE_DIMENSION_RADIUS :result:='DWG_TYPE_DIMENSION_RADIUS';
+     DWG_TYPE_DIMENSION_DIAMETER :result:='DWG_TYPE_DIMENSION_DIAMETER';
+     DWG_TYPE_POINT :result:='DWG_TYPE_POINT';
+     DWG_TYPE__3DFACE :result:='DWG_TYPE__3DFACE';
+     DWG_TYPE_POLYLINE_PFACE :result:='DWG_TYPE_POLYLINE_PFACE';
+     DWG_TYPE_POLYLINE_MESH :result:='DWG_TYPE_POLYLINE_MESH';
+     DWG_TYPE_SOLID :result:='DWG_TYPE_SOLID';
+     DWG_TYPE_TRACE :result:='DWG_TYPE_TRACE';
+     DWG_TYPE_SHAPE :result:='DWG_TYPE_SHAPE';
+     DWG_TYPE_VIEWPORT :result:='DWG_TYPE_VIEWPORT';
+     DWG_TYPE_ELLIPSE :result:='DWG_TYPE_ELLIPSE';
+     DWG_TYPE_SPLINE :result:='DWG_TYPE_SPLINE';
+     DWG_TYPE_REGION :result:='DWG_TYPE_REGION';
+     DWG_TYPE_3DSOLID :result:='DWG_TYPE_3DSOLID';
+     DWG_TYPE_BODY :result:='DWG_TYPE_BODY';
+     DWG_TYPE_RAY :result:='DWG_TYPE_RAY';
+     DWG_TYPE_XLINE :result:='DWG_TYPE_XLINE';
+     DWG_TYPE_DICTIONARY :result:='DWG_TYPE_DICTIONARY';
+     //DWG_TYPE_<UNKNOWN> :result:=''; $2b,
+     DWG_TYPE_MTEXT :result:='DWG_TYPE_MTEXT';
+     DWG_TYPE_LEADER :result:='DWG_TYPE_LEADER';
+     DWG_TYPE_TOLERANCE :result:='DWG_TYPE_TOLERANCE';
+     DWG_TYPE_MLINE :result:='DWG_TYPE_MLINE';
+     DWG_TYPE_BLOCK_CONTROL :result:='DWG_TYPE_BLOCK_CONTROL';
+     DWG_TYPE_BLOCK_HEADER :result:='DWG_TYPE_BLOCK_HEADER';
+     DWG_TYPE_LAYER_CONTROL :result:='DWG_TYPE_LAYER_CONTROL';
+     DWG_TYPE_LAYER :result:='DWG_TYPE_LAYER';
+     DWG_TYPE_SHAPEFILE_CONTROL :result:='DWG_TYPE_SHAPEFILE_CONTROL';
+     DWG_TYPE_SHAPEFILE :result:='DWG_TYPE_SHAPEFILE';
+     //DWG_TYPE_<UNKNOWN> :result:=''; $36,
+     //DWG_TYPE_<UNKNOWN> :result:=''; $37,
+     DWG_TYPE_LTYPE_CONTROL :result:='DWG_TYPE_LTYPE_CONTROL';
+     DWG_TYPE_LTYPE :result:='DWG_TYPE_LTYPE';
+     //DWG_TYPE_<UNKNOWN> :result:=''; $3a,
+     //DWG_TYPE_<UNKNOWN> :result:=''; $3b,
+     DWG_TYPE_VIEW_CONTROL :result:='DWG_TYPE_VIEW_CONTROL';
+     DWG_TYPE_VIEW :result:='DWG_TYPE_VIEW';
+     DWG_TYPE_UCS_CONTROL :result:='DWG_TYPE_UCS_CONTROL';
+     DWG_TYPE_UCS :result:='DWG_TYPE_UCS';
+     DWG_TYPE_VPORT_CONTROL :result:='DWG_TYPE_VPORT_CONTROL';
+     DWG_TYPE_VPORT :result:='DWG_TYPE_VPORT';
+     DWG_TYPE_APPID_CONTROL :result:='DWG_TYPE_APPID_CONTROL';
+     DWG_TYPE_APPID :result:='DWG_TYPE_APPID';
+     DWG_TYPE_DIMSTYLE_CONTROL :result:='DWG_TYPE_DIMSTYLE_CONTROL';
+     DWG_TYPE_DIMSTYLE :result:='DWG_TYPE_DIMSTYLE';
+     DWG_TYPE_VP_ENT_HDR_CONTROL :result:='DWG_TYPE_VP_ENT_HDR_CONTROL';
+     DWG_TYPE_VP_ENT_HDR :result:='DWG_TYPE_VP_ENT_HDR';
+     DWG_TYPE_GROUP :result:='DWG_TYPE_GROUP';
+     DWG_TYPE_MLINESTYLE :result:='DWG_TYPE_MLINESTYLE';
+     //DWG_TYPE_<UNKNOWN> :result:=''; $4a
+     //DWG_TYPE_<UNKNOWN> :result:=''; $4b
+     //DWG_TYPE_<UNKNOWN> :result:=''; $4c
+     DWG_TYPE_LWPLINE :result:='DWG_TYPE_LWPLINE';
+     DWG_TYPE_HATCH :result:='DWG_TYPE_HATCH';
+     DWG_TYPE_XRECORD :result:='DWG_TYPE_XRECORD';
+     DWG_TYPE_PLACEHOLDER :result:='';
+     //DWG_TYPE_<UNKNOWN> :result:=''; $51,
+     DWG_TYPE_LAYOUT :result:='DWG_TYPE_LAYOUT';
+     end;
+
+end;
 
 constructor bit_chain.init(_chain:pointer;_size:DWord);
 begin
@@ -627,9 +806,10 @@ var fh:pdwg2004header;
     es:TEncryptedSectionHeader;
     sec_mask:DWGLong;
     decompsize:integer;
+    ot:DWG_OBJECT_TYPE;
 begin
      fh:=f.PArray;
-     fdh:=pdwg2004headerdecrypteddata(@fh.EncryptedData)^;
+     fdh:=pdwg2004headerdecrypteddata(@fh^.EncryptedData)^;
      i:=sizeof(dwgbyte);
      i:=sizeof(dwgword);
      i:=sizeof(dwglong);
@@ -648,15 +828,15 @@ begin
      inc(pointer(syssec),$100);
      SectionMap:=syssec;
      SectionInfo:=syssec;
-     inc(pointer(SectionInfo),SectionMap.CompSizeData+sizeof(dwg2004systemsection));
+     inc(pointer(SectionInfo),SectionMap^.CompSizeData+sizeof(dwg2004systemsection));
      shared.HistoryOutStr('MAP');
-     USectionMap:=decompresssection(pointer(PTRUINT(SectionMap)+sizeof(dwg2004systemsection)),SectionMap.CompSizeData,SectionMap.DecompSizeData,decompsize);
+     USectionMap:=decompresssection(pointer(PTRUINT(SectionMap)+sizeof(dwg2004systemsection)),SectionMap^.CompSizeData,SectionMap^.DecompSizeData,decompsize);
      setlength(sarray,fdh.SectionPageArraySize);
      sm:=pointer(USectionMap);
      for i:=0 to {SectionMap.DecompSizeData div 8}fdh.SectionPageAmount-1 do
      begin
-          sarray[i].Number:=sm.SectionNumber;
-          sarray[i].Size:=sm.SectionSize;
+          sarray[i].Number:=sm^.SectionNumber;
+          sarray[i].Size:=sm^.SectionSize;
           if i=0 then
                      sarray[i].Offset:=$100
                  else
@@ -665,9 +845,9 @@ begin
           inc(sm);
      end;
      SectionInfo:=f.PArray;
-     inc(pointer(SectionInfo),FindSectionByID(sarray,fdh.SectionInfoID).Offset);
+     inc(pointer(SectionInfo),FindSectionByID(sarray,fdh.SectionInfoID)^.Offset);
      shared.HistoryOutStr('INFO');
-     USectionInfo:=decompresssection(pointer(PTRUINT(SectionInfo)+sizeof(dwg2004systemsection)),SectionInfo.CompSizeData,SectionInfo.DecompSizeData,decompsize);
+     USectionInfo:=decompresssection(pointer(PTRUINT(SectionInfo)+sizeof(dwg2004systemsection)),SectionInfo^.CompSizeData,SectionInfo^.DecompSizeData,decompsize);
 
      {FileHandle:=FileCreate('log/SectionInfo');
      FileWrite(FileHandle,USectionInfo^,SectionInfo.DecompSizeData);
@@ -676,8 +856,8 @@ begin
      sid:=USectionInfo;
      //sid:=pointer(longint(SectionInfo)+sizeof(dwg2004systemsection));
      sd:=pointer(PTRUINT(sid)+sizeof(dwg2004sectioninfo){+20});
-     setlength(siarray,sid.NumDescriptions);
-     for i:=0 to {SectionMap.DecompSizeData div 8}sid.NumDescriptions-1 do
+     setlength(siarray,sid^.NumDescriptions);
+     for i:=0 to {SectionMap.DecompSizeData div 8}sid^.NumDescriptions-1 do
      begin
                                    {SizeOfSection:DWG2Long;
                                     NumberOfSectionsThisType:DWGLong;
@@ -687,30 +867,30 @@ begin
                                     SectionType:DWGLong;
                                     Encrypted:DWGLong;
                                     SectionName:packed array[1..64]of ansichar;}
-          shared.HistoryOutStr('Section name: '+ pchar(@sd.SectionName));
+          shared.HistoryOutStr('Section name: '+ pchar(@sd^.SectionName));
           shared.HistoryOutStr(format(' SizeOfSection: %d, NumberOfSectionsThisType: %d, MaxDecompressedSize: %d, Unknown2: %d, Compressed: %d, SectionType: %d, Encrypted: %d',
-                                    [sd.SizeOfSection,  sd.NumberOfSectionsThisType,  sd.MaxDecompressedSize,  sd.Unknown2,  sd.Compressed,  sd.SectionType,  sd.Encrypted]));
-          siarray[i].SizeOfSection:=sd.SizeOfSection;
-          siarray[i].NumberOfSectionsThisType:=sd.NumberOfSectionsThisType;
-          siarray[i].MaxDecompressedSize:=sd.MaxDecompressedSize;
-          siarray[i].Unknown2:=sd.Unknown2;
-          siarray[i].Compressed:=sd.Compressed;
-          siarray[i].SectionType:=sd.SectionType;
-          siarray[i].Encrypted:=sd.Encrypted;
-          siarray[i].SectionName:=pchar(@sd.SectionName);
-          setlength(siarray[i].pages,sd.NumberOfSectionsThisType);
-          NumberOfSectionsThisType:=sd.NumberOfSectionsThisType;
+                                    [sd^.SizeOfSection,  sd^.NumberOfSectionsThisType,  sd^.MaxDecompressedSize,  sd^.Unknown2,  sd^.Compressed,  sd^.SectionType,  sd^.Encrypted]));
+          siarray[i].SizeOfSection:=sd^.SizeOfSection;
+          siarray[i].NumberOfSectionsThisType:=sd^.NumberOfSectionsThisType;
+          siarray[i].MaxDecompressedSize:=sd^.MaxDecompressedSize;
+          siarray[i].Unknown2:=sd^.Unknown2;
+          siarray[i].Compressed:=sd^.Compressed;
+          siarray[i].SectionType:=sd^.SectionType;
+          siarray[i].Encrypted:=sd^.Encrypted;
+          siarray[i].SectionName:=pchar(@sd^.SectionName);
+          setlength(siarray[i].pages,sd^.NumberOfSectionsThisType);
+          NumberOfSectionsThisType:=sd^.NumberOfSectionsThisType;
           PtrUInt(sd):=PtrUInt(sd)+sizeof(dwg2004sectiondesc){32+64}{+16*sd.NumberOfSectionsThisType};
           pi:=pointer(sd);
           for a:=0 to NumberOfSectionsThisType-1 do
           begin
-               siarray[i].pages[a].PageNumber:=pi.PageNumber;
-               siarray[i].pages[a].DataSize:=pi.DataSize;
-               siarray[i].pages[a].StartOffset:=pi.StartOffset;
-               siarray[i].pages[a].section:=FindSectionByID(sarray,pi.PageNumber);
+               siarray[i].pages[a].PageNumber:=pi^.PageNumber;
+               siarray[i].pages[a].DataSize:=pi^.DataSize;
+               siarray[i].pages[a].StartOffset:=pi^.StartOffset;
+               siarray[i].pages[a].section:=FindSectionByID(sarray,pi^.PageNumber);
                if siarray[i].pages[a].section=nil then
                                                       pi:=pi;
-               shared.HistoryOutStr(format(' Page: %d, DataSize: %d, StartOffset: %d,',[pi.PageNumber, pi.DataSize,pi.StartOffset]));
+               shared.HistoryOutStr(format(' Page: %d, DataSize: %d, StartOffset: %d,',[pi^.PageNumber, pi^.DataSize,pi^.StartOffset]));
                PtrUInt(pi):=PtrUInt(pi)+{sizeof(dwg2004pageinfo)}16;
           end;
           sd:=pointer(pi);
@@ -722,7 +902,7 @@ begin
       bc.setto(f.PArray,f.size);
      for i:=0 to objinfo^.NumberOfSectionsThisType-1 do
        begin
-         address:=objinfo^.pages[i].section.Offset;
+         address:=objinfo^.pages[i].section^.Offset;
          bc.byte:=address;
          for j:= 0 to $20-1 do
            es.ByteData[j]:= bc.BitRead_rc;
@@ -736,10 +916,2016 @@ begin
          shared.HistoryOutStr(format(' Total decompressed size: %d',
                                              [decompsize]));
          objbitreader.init(objinfo^.pages[i].decompdata,decompsize);
-         objbitreader.BitRead_rl;
-         objbitreader.BitRead_ms;
-         objbitreader.BitRead_bs;
+         shared.HistoryOutStr(format(' 0x0dca: %x',[objbitreader.BitRead_rl]));
 
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+
+         a:=objbitreader.BitRead_ms;
+         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         a:=objbitreader.byte+a;
+         ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);
+         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         objbitreader.byte:=a;
+         objbitreader.bit:=0;
+         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
        end;
 
 

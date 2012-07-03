@@ -621,7 +621,7 @@ var
    _byte,b2:BITCODE_RC;
 
 begin
-     _byte:=PDWGByte(PtrUInt(chain)+(_byte))^;
+     _byte:=PDWGByte(PtrUInt(chain)+(byte))^;
      b2:= (_byte and ($80 shr bit))shr(7-bit);
      scroll(1);
      if b2>0 then
@@ -1271,9 +1271,9 @@ begin
               ziszero:=objbitreader.BitRead_b;
               if ziszero then begin
                                    v1.x:=objbitreader.BitRead_rd;
-                                   v2.x:=objbitreader.BitRead_dd(10);
+                                   v2.x:=objbitreader.BitRead_dd(v1.x);
                                    v1.y:=objbitreader.BitRead_rd;
-                                   v2.y:=objbitreader.BitRead_dd(20);
+                                   v2.y:=objbitreader.BitRead_dd(v1.y);
                                    v1.z:=0;
                                    v2.z:=0;
 
@@ -1281,11 +1281,11 @@ begin
                          else
                              begin
                              v1.x:=objbitreader.BitRead_rd;
-                             v2.x:=objbitreader.BitRead_dd(10);
+                             v2.x:=objbitreader.BitRead_dd(v1.x);
                              v1.y:=objbitreader.BitRead_rd;
-                             v2.y:=objbitreader.BitRead_dd(20);
+                             v2.y:=objbitreader.BitRead_dd(v1.y);
                              v1.z:=objbitreader.BitRead_rd;
-                             v2.z:=objbitreader.BitRead_dd(30);
+                             v2.z:=objbitreader.BitRead_dd(v1.z);
                              end;
 
                              pobj := CreateInitObjFree(GDBLineID,nil);
@@ -1334,4 +1334,4 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodwg.initialization');{$ENDIF}
-end.
+end.

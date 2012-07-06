@@ -1164,12 +1164,15 @@ begin
          for j:= 0 to 7 do
            es.LongData[j]:=es.LongData[j] xor sec_mask;
          objinfo^.pages[i].decompdata:=objsection;
-         objsection:=decompresssection(pointer(PtrUInt(bc.chain)+bc.byte),es.field.data_size,$7400,decompsize,objsection);
+         objsection:=decompresssection(pointer(PtrUInt(bc.chain)+bc.byte),es.field.data_size,  $7400,decompsize,objsection);
          shared.HistoryOutStr(format(' Page: %d, tag: %d, section_type: %d, data_size: %d, section_size: %d, start_offset: %d',
                                              [i, es.field.tag,es.field.section_type,es.field.data_size,es.field.section_size,es.field.start_offset]));
          shared.HistoryOutStr(format(' Total decompressed size: %d',
                                              [decompsize]));
        end;
+               FileHandle:=FileCreate('log/objsecmy');
+     FileWrite(FileHandle,objinfo^.pages[0].decompdata^,objinfo^.MaxDecompressedSize*objinfo^.NumberOfSectionsThisType);
+     fileclose(FileHandle);
 
          objbitreader.init(objinfo^.pages[0].decompdata,objinfo^.MaxDecompressedSize*objinfo^.NumberOfSectionsThisType);
          shared.HistoryOutStr(format(' 0x0dca: %x',[objbitreader.BitRead_rl]));
@@ -1289,7 +1292,7 @@ begin
          objbitreader.BitRead_rc;//Lineweight
 
               ziszero:=objbitreader.BitRead_b;
-              //if not tb then
+              //if (objbitreader.byte div $7400)=1 then
               begin
               if ziszero then begin
                                    v1.x:=objbitreader.BitRead_rd;

@@ -299,3 +299,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBWithLocalCS.initialization');{$ENDIF}
 end.
+

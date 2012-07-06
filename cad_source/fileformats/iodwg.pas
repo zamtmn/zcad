@@ -510,6 +510,30 @@ begin
      b2:=BitRead_rs;
      result:=((b2 shl 16) or b1);
 end;
+//BITCODE_MS
+//bit_read_MS(Bit_Chain * dat)
+{
+  int i, j;
+  unsigned int word[2];
+  long unsigned int result;
+
+  result = 0;
+  for (i = 1, j = 0; i > -1; i--, j += 15)
+    {
+      word[i] = bit_read_RS(dat);
+      if (!(word[i] & 0x8000))
+        {
+          result |= (((long unsigned int) word[i]) << j);
+          return (result);
+        }
+      else
+        word[i] &= 0x7fff;
+      result |= ((long unsigned int) word[i]) << j;
+    }
+  LOG_ERROR("bit_read_MS: error parsing modular short.")
+  return 0; /* error... */
+}
+
 function bit_chain.BitRead_ms:BITCODE_MS;
 var
    b1:BITCODE_RS;
@@ -526,15 +550,15 @@ begin
        //for (i = 1, j = 0; i > -1; i--, j += 15)
          begin
            w[i]:=BitRead_rs;
-           if (not(w[i] and $8000))>0 then
+           if not((w[i] and $8000)>0) then
              begin
-               result :=result or ((w[i]) shl j);
+               result :=result or (Longword(w[i]) shl j);
                exit;
              end
            else
              begin
              w[i] := w[i] and $7fff;
-             result := result or ((w[i]) shl j);
+             result := result or (Longword(w[i]) shl j);
              end;
              j:=j+15;
          end;
@@ -1399,4 +1423,4 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodwg.initialization');{$ENDIF}
-end.
+end.

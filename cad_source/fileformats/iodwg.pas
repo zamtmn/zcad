@@ -1181,7 +1181,7 @@ begin
          //shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
          a:=objbitreader.byte+a;
          ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);//Object type
-         shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
+         shared.HistoryOutStr(format(' Object type: %x(%d), Name: %s',[ot,ot,DWGObjectName(ot)]));
          if ot=DWG_TYPE_LINE then
          begin
          objbitreader.BitRead_rl;//Size of object data in bits (number of bits before the handles), or the “endbit” of the pre-handles section.
@@ -1309,13 +1309,15 @@ begin
                              v1.z:=objbitreader.BitRead_rd;
                              v2.z:=objbitreader.BitRead_dd(v1.z);
                              end;
-
+                             if (oneVertexlength(v1)<1000000)and(oneVertexlength(v2)<1000000)then
+                             begin
                              pobj := CreateInitObjFree(GDBLineID,nil);
                              PGDBObjLine(pobj)^.CoordInOCS.lBegin:=v1;
                              PGDBObjLine(pobj)^.CoordInOCS.lEnd:=v2;
                              gdb.GetCurrentRoot^.AddMi(@pobj);
                              PGDBObjEntity(pobj)^.BuildGeometry;
                              PGDBObjEntity(pobj)^.format;
+                             end;
               end;
 
          end;
@@ -1357,4 +1359,4 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodwg.initialization');{$ENDIF}
-end.
+end.

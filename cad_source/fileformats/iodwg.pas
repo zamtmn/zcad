@@ -139,17 +139,54 @@ type
                             Offset:DWGLong;
                       end;
     TMyDWGSectionDescArray=array of TMyDWGSectionDesc;
+{
+#define BITCODE_DOUBLE double
+
+#define BITCODE_RC char
+#define FORMAT_RC "%2x"
+#define BITCODE_MC long int
+#define FORMAT_MC "%l"
+#define BITCODE_MS long unsigned int
+#define FORMAT_MS "%lu"
+#define BITCODE_B unsigned char
+#define FORMAT_B "%d"
+#define BITCODE_BB unsigned char
+#define FORMAT_BB "%d"
+#define BITCODE_BS unsigned int
+#define FORMAT_BS "%d"
+#define BITCODE_RS unsigned int
+#define FORMAT_RS "%d"
+#define BITCODE_RL long unsigned int
+#define FORMAT_RL "%lu"
+#define BITCODE_RD BITCODE_DOUBLE
+#define FORMAT_RD "%f"
+#define BITCODE_BL long unsigned int
+#define FORMAT_BL "%lu"
+#define BITCODE_TV unsigned char *
+#define FORMAT_TV "\"%s\""
+#define BITCODE_BT BITCODE_DOUBLE
+#define FORMAT_BT "%f"
+#define BITCODE_DD BITCODE_DOUBLE
+#define FORMAT_DD "%f"
+#define BITCODE_BD BITCODE_DOUBLE
+#define FORMAT_BD "%f"
+#define BITCODE_BE BITCODE_3BD
+#define BITCODE_CMC Dwg_Color
+#define BITCODE_H Dwg_Object_Ref*
+#define BITCODE_4BITS BITCODE_RC
+#define FORMAT_4BITS "%1x"
+}
     BITCODE_RL=Longword;
     BITCODE_RS=word;
     BITCODE_RC=byte;
-    BITCODE_MS={Longword}word;
+    BITCODE_MS=Longword{word};
     BITCODE_BS=word;
     BITCODE_H=DWGLong;
     BITCODE_B=Boolean;
     BITCODE_DD=double;
     BITCODE_RD=double;
     BITCODE_BD=double;
-    BITCODE_BL=word;
+    BITCODE_BL=Longword{word};
 
     BITCODE_CMC=byte;//error--------------------------------------------
     BITCODE_TV=string;
@@ -1170,7 +1207,7 @@ begin
          shared.HistoryOutStr(format(' Total decompressed size: %d',
                                              [decompsize]));
        end;
-               FileHandle:=FileCreate('log/objsecmy');
+               FileHandle:=FileCreate('log/objsecmy2');
      FileWrite(FileHandle,objinfo^.pages[0].decompdata^,objinfo^.MaxDecompressedSize*objinfo^.NumberOfSectionsThisType);
      fileclose(FileHandle);
 
@@ -1362,4 +1399,4 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodwg.initialization');{$ENDIF}
-end.
+end.

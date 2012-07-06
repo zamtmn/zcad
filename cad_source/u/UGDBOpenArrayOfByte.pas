@@ -42,9 +42,9 @@ GDBOpenArrayOfByte=object(GDBOpenArray)
                       function AllocData(SData:GDBword):GDBPointer;virtual;
                       function ReadData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                       function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
-                      function ReadString(break, ignore: GDBString): shortString;
-                      function ReadGDBString: {short}String;
-                      function ReadString2:GDBString;
+                      function ReadString(break, ignore: GDBString): shortString;inline;
+                      function ReadGDBString: {short}String;inline;
+                      function ReadString2:GDBString;inline;
                       function GetCurrentReadAddres:GDBPointer;virtual;
                       function Jump(offset:GDBInteger):GDBPointer;virtual;
                       function SaveToFile(FileName:string):GDBInteger;
@@ -216,13 +216,14 @@ begin
 end;
 function GDBOpenArrayOfByte.readstring{(break, ignore: GDBString): shortString};
 var
-  //{s,}result: shortString;
+  //{s,}myresult: shortString;
   i:GDBInteger;
   lastbreak:GDBBoolean;
   addr:pansichar;
+  myresult:shortString;
 begin
   //s := '';
-  setlength(result,255);
+  setlength(myresult,255);
   lastbreak:=false;
   i:=0;
   addr:=pointer(GDBPlatformint(parray)+readpos);
@@ -243,7 +244,7 @@ begin
                                                                            begin
                                                                                 //s:=s+addr[0];
                                                                                 inc(i);
-                                                                                result[i]:=addr[0];
+                                                                                myresult[i]:=addr[0];
                                                                            end;
                                                       lastbreak:=true;
                                                  end
@@ -251,7 +252,7 @@ begin
                                                  begin
                                                       //s:=s+addr[0];
                                                       inc(i);
-                                                      result[i]:=addr[0];
+                                                      myresult[i]:=addr[0];
                                                       lastbreak:=false;
                                                  end;
 
@@ -261,18 +262,18 @@ begin
       end
       else
       begin
-        //result := s;
-        setlength(result,i);
-        //result := result;
+        //myresult := s;
+        setlength(myresult,i);
+        result := myresult;
         //inc(addr);
         inc(readpos);
-        //result := s;
+        //myresult := s;
         exit;
       end;
     end;
-    setlength(result,i);
-  //result := s;
-  //result := result;
+    setlength(myresult,i);
+  //myresult := s;
+  result := myresult;
 end;
 function GDBOpenArrayOfByte.Seek(pos:GDBInteger):integer;
 begin

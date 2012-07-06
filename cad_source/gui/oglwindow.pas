@@ -3013,7 +3013,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_DrawPixels then
     oglsm.myglDisable(GL_LIGHTING);
     DrawGrid;
     render(gdb.GetCurrentROOT^,dc);
-    glreadpixels(0, 0, clientwidth, clientheight, GL_BGRA_EXT, gl_unsigned_Byte, param.pglscreen);
+    glreadpixels(0, 0, clientwidth, clientheight, GL_BGRA_EXT{GL_RGBA}, gl_unsigned_Byte, param.pglscreen);
     inc(dc.subrender);
     render(gdb.GetCurrentDWG.ConstructObjRoot,dc);
     gdb.GetCurrentDWG.SelObjArray.remappoints;
@@ -3037,7 +3037,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_DrawPixels then
          glLoadIdentity;
          glRasterPos2i(0, 0);
          oglsm.myglDisable(GL_DEPTH_TEST);
-         glDrawPixels(ClientWidth, ClientHeight, GL_BGRA_EXT, GL_UNSIGNED_Byte, param.pglscreen);
+         glDrawPixels(ClientWidth, ClientHeight, GL_BGRA_EXT{GL_RGBA}, GL_UNSIGNED_Byte, param.pglscreen);
          oglsm.myglPopMatrix;
          oglsm.myglMatrixMode(GL_PROJECTION);
          oglsm.myglPopMatrix;

@@ -592,7 +592,7 @@ begin
      _code:=BitRead_rc;
      _size:=_code and $0f;
      _code:=(_code and $f0)shr 4;
-     if _size>4 then
+     if _size>16 then
                    begin
                         shared.ShowError('Handle is longer than 4 bytes');
                    end
@@ -600,7 +600,7 @@ begin
                    begin
                      pointer(pb):= @r;
                      for i:=_size-1 downto 0 do
-                       pb^[i]:=BitRead_rc;
+                       {pb^[i]:=}BitRead_rc;
                    end;
    result:=r;
 end;
@@ -635,6 +635,7 @@ var
    ba:pbarray;
    res:double;
 begin
+     res:=0;
      ba:=@res;
        for i:=0 to 7 do
          ba^[i]:=BitRead_rc;
@@ -1027,7 +1028,9 @@ var fh:pdwg2004header;
     fdh:dwg2004headerdecrypteddata;
     syssec,SectionMap,SectionInfo:pdwg2004systemsection;
     USectionMap,USectionInfo,objsection:pointer;
-    i,j,a,extdatasize,NumberOfSectionsThisType:integer;
+    i,j,jj,a,extdatasize,NumberOfSectionsThisType:integer;
+    psize:dwglong;
+    tb:boolean;
     sm:pdwg2004sectionmap;
     sid:pdwg2004sectioninfo;
     sd:pdwg2004sectiondesc;
@@ -1175,7 +1178,7 @@ begin
          begin
          //18.1  Common non-entity object format
          a:=objbitreader.BitRead_ms;//Size in bytes of object, not including the CRC
-         shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
+         //shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
          a:=objbitreader.byte+a;
          ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);//Object type
          shared.HistoryOutStr(format(' Object type: %x, Name: %s',[ot,DWGObjectName(ot)]));
@@ -1184,7 +1187,24 @@ begin
          objbitreader.BitRead_rl;//Size of object data in bits (number of bits before the handles), or the “endbit” of the pre-handles section.
          objbitreader.BitRead_h;//Object’s handle
          extdatasize:=objbitreader.BitRead_bs;//Size of extended object data, if any
-         objbitreader.BitRead_b;//1 if a graphic is present
+         while extdatasize<>0 do
+         begin
+         if extdatasize<>0 then
+                               begin
+                               objbitreader.BitRead_h;
+                               extdatasize:=extdatasize;
+                               for jj:=1 to extdatasize do
+                               objbitreader.BitRead_rc;
+                               end;
+         extdatasize:=objbitreader.BitRead_bs;//Size of extended object data, if any
+         end;
+         tb:=objbitreader.BitRead_b;//1 if a graphic is present
+         if tb then
+                   begin
+                   psize:=objbitreader.BitRead_rl;
+                   for jj:=1 to psize do
+                   objbitreader.BitRead_rc;
+                   end;
 
          {objbitreader.BitRead_b;
          objbitreader.BitRead_bs;
@@ -1269,6 +1289,8 @@ begin
          objbitreader.BitRead_rc;//Lineweight
 
               ziszero:=objbitreader.BitRead_b;
+              //if not tb then
+              begin
               if ziszero then begin
                                    v1.x:=objbitreader.BitRead_rd;
                                    v2.x:=objbitreader.BitRead_dd(v1.x);
@@ -1294,13 +1316,14 @@ begin
                              gdb.GetCurrentRoot^.AddMi(@pobj);
                              PGDBObjEntity(pobj)^.BuildGeometry;
                              PGDBObjEntity(pobj)^.format;
+              end;
 
          end;
 
 
          objbitreader.byte:=a;
          objbitreader.bit:=0;
-         shared.HistoryOutStr(format(' CRC: %x',[objbitreader.BitRead_rs]));
+         {shared.HistoryOutStr(format(' CRC: %x',[}objbitreader.BitRead_rs{]))};
          end;
 end;
 
@@ -1334,4 +1357,4 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodwg.initialization');{$ENDIF}
-end.
+end.

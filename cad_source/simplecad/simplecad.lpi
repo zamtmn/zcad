@@ -1,0 +1,441 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="9"/>
+    <PathDelim Value="\"/>
+    <General>
+      <MainUnit Value="0"/>
+      <ResourceType Value="res"/>
+      <UseXPManifest Value="True"/>
+      <Icon Value="0"/>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <i18n>
+      <EnableI18N LFM="False"/>
+    </i18n>
+    <VersionInfo>
+      <StringTable ProductVersion=""/>
+    </VersionInfo>
+    <BuildModes Count="1" Active="Default">
+      <Item1 Name="Default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+      <IncludeFileFilter Value="*.(pas|pp|inc|lfm|lpr|lrs|lpi|lpk|sh|xml)"/>
+      <ExcludeFileFilter Value="*.(bak|ppu|o|so);*~;backup"/>
+    </PublishOptions>
+    <RunParams>
+      <local>
+        <FormatVersion Value="1"/>
+      </local>
+    </RunParams>
+    <RequiredPackages Count="3">
+      <Item1>
+        <PackageName Value="AnchorDocking"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="LazOpenGLContext"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="LCL"/>
+      </Item3>
+    </RequiredPackages>
+    <Units Count="20">
+      <Unit0>
+        <Filename Value="simplecad.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="simplecad"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="10" Y="19"/>
+        <UsageCount Value="49"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="umainform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="umainform"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="77" Y="8"/>
+        <UsageCount Value="49"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="..\gui\oglwindow.pas"/>
+        <UnitName Value="oglwindow"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="31"/>
+        <CursorPos X="9" Y="56"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="..\gui\ucxmenumgr.pas"/>
+        <UnitName Value="ucxmenumgr"/>
+        <EditorIndex Value="17"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="17"/>
+        <CursorPos X="5" Y="42"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="..\memman.pas"/>
+        <UnitName Value="memman"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="4"/>
+        <CursorPos X="11" Y="29"/>
+        <UsageCount Value="7"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="..\gui\mainwindow.pas"/>
+        <UnitName Value="mainwindow"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="277"/>
+        <CursorPos X="1" Y="304"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="C:\lazarus\lcl\interfaces\win32\win32object.inc"/>
+        <EditorIndex Value="7"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="402"/>
+        <CursorPos X="1" Y="427"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="..\languade\varman.pas"/>
+        <UnitName Value="Varman"/>
+        <EditorIndex Value="8"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="154"/>
+        <CursorPos X="68" Y="179"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="..\strproc.pas"/>
+        <UnitName Value="strproc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="68"/>
+        <CursorPos X="17" Y="103"/>
+        <UsageCount Value="7"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="..\u\UGDBStringArray.pas"/>
+        <UnitName Value="UGDBStringArray"/>
+        <EditorIndex Value="15"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="202"/>
+        <CursorPos X="1" Y="247"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="..\u\UGDBOpenArrayOfByte.pas"/>
+        <UnitName Value="UGDBOpenArrayOfByte"/>
+        <EditorIndex Value="16"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="168"/>
+        <CursorPos X="45" Y="196"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="..\languade\varmandef.pas"/>
+        <UnitName Value="varmandef"/>
+        <EditorIndex Value="14"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="66"/>
+        <CursorPos X="1" Y="91"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="..\languade\UUnitManager.pas"/>
+        <UnitName Value="UUnitManager"/>
+        <EditorIndex Value="9"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="805"/>
+        <CursorPos X="7" Y="813"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="..\gui\sltexteditor.pas"/>
+        <ComponentName Value="sltexteditor1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="sltexteditor"/>
+        <EditorIndex Value="10"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="9"/>
+        <CursorPos X="92" Y="32"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="..\gdb\gdbase.pas"/>
+        <UnitName Value="gdbase"/>
+        <EditorIndex Value="12"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="284"/>
+        <CursorPos X="6" Y="307"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="..\gdb\GDBSubordinated.pas"/>
+        <UnitName Value="GDBSubordinated"/>
+        <EditorIndex Value="13"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="127" Y="23"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="..\devicebase\DeviceBase.pas"/>
+        <UnitName Value="DeviceBase"/>
+        <EditorIndex Value="11"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="132"/>
+        <CursorPos X="1" Y="155"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="C:\lazarus\lcl\controls.pp"/>
+        <UnitName Value="Controls"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1564"/>
+        <CursorPos X="34" Y="1581"/>
+        <UsageCount Value="23"/>
+        <Loaded Value="True"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="C:\ppsrc\rtl\objpas\classes\classesh.inc"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1904"/>
+        <CursorPos X="10" Y="1927"/>
+        <UsageCount Value="23"/>
+        <Loaded Value="True"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="C:\lazarus\lcl\forms.pp"/>
+        <UnitName Value="Forms"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="730"/>
+        <CursorPos X="16" Y="749"/>
+        <UsageCount Value="23"/>
+        <Loaded Value="True"/>
+      </Unit19>
+    </Units>
+    <JumpHistory Count="30" HistoryIndex="26">
+      <Position1>
+        <Filename Value="..\languade\varman.pas"/>
+        <Caret Line="1371" Column="19" TopLine="1348"/>
+      </Position1>
+      <Position2>
+        <Filename Value="..\languade\varman.pas"/>
+        <Caret Line="181" Column="36" TopLine="181"/>
+      </Position2>
+      <Position3>
+        <Filename Value="..\languade\varman.pas"/>
+        <Caret Line="1373" Column="15" TopLine="1348"/>
+      </Position3>
+      <Position4>
+        <Filename Value="..\languade\varman.pas"/>
+        <Caret Line="1375" Column="46" TopLine="1348"/>
+      </Position4>
+      <Position5>
+        <Filename Value="..\languade\varman.pas"/>
+        <Caret Line="1373" Column="3" TopLine="1348"/>
+      </Position5>
+      <Position6>
+        <Filename Value="..\languade\varman.pas"/>
+        <Caret Line="1410" Column="1" TopLine="1378"/>
+      </Position6>
+      <Position7>
+        <Filename Value="..\languade\varman.pas"/>
+        <Caret Line="1375" Column="32" TopLine="1350"/>
+      </Position7>
+      <Position8>
+        <Filename Value="..\languade\varman.pas"/>
+        <Caret Line="1377" Column="27" TopLine="1350"/>
+      </Position8>
+      <Position9>
+        <Filename Value="..\languade\varman.pas"/>
+        <Caret Line="1375" Column="17" TopLine="1350"/>
+      </Position9>
+      <Position10>
+        <Filename Value="..\languade\varman.pas"/>
+        <Caret Line="1371" Column="30" TopLine="1350"/>
+      </Position10>
+      <Position11>
+        <Filename Value="..\languade\UUnitManager.pas"/>
+        <Caret Line="713" Column="6" TopLine="688"/>
+      </Position11>
+      <Position12>
+        <Filename Value="..\languade\UUnitManager.pas"/>
+        <Caret Line="763" Column="7" TopLine="725"/>
+      </Position12>
+      <Position13>
+        <Filename Value="..\languade\UUnitManager.pas"/>
+        <Caret Line="813" Column="7" TopLine="776"/>
+      </Position13>
+      <Position14>
+        <Filename Value="..\languade\UUnitManager.pas"/>
+        <Caret Line="763" Column="1" TopLine="738"/>
+      </Position14>
+      <Position15>
+        <Filename Value="..\languade\UUnitManager.pas"/>
+        <Caret Line="847" Column="36" TopLine="805"/>
+      </Position15>
+      <Position16>
+        <Filename Value="..\languade\UUnitManager.pas"/>
+        <Caret Line="852" Column="21" TopLine="805"/>
+      </Position16>
+      <Position17>
+        <Filename Value="..\languade\UUnitManager.pas"/>
+        <Caret Line="851" Column="14" TopLine="811"/>
+      </Position17>
+      <Position18>
+        <Filename Value="..\languade\UUnitManager.pas"/>
+        <Caret Line="849" Column="15" TopLine="811"/>
+      </Position18>
+      <Position19>
+        <Filename Value="..\languade\UUnitManager.pas"/>
+        <Caret Line="838" Column="46" TopLine="811"/>
+      </Position19>
+      <Position20>
+        <Filename Value="..\languade\UUnitManager.pas"/>
+        <Caret Line="846" Column="23" TopLine="805"/>
+      </Position20>
+      <Position21>
+        <Filename Value="..\gui\sltexteditor.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position21>
+      <Position22>
+        <Filename Value="..\gui\sltexteditor.pas"/>
+        <Caret Line="39" Column="4" TopLine="1"/>
+      </Position22>
+      <Position23>
+        <Filename Value="..\gdb\gdbase.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position23>
+      <Position24>
+        <Filename Value="..\gdb\GDBSubordinated.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position24>
+      <Position25>
+        <Filename Value="..\gui\sltexteditor.pas"/>
+        <Caret Line="39" Column="4" TopLine="1"/>
+      </Position25>
+      <Position26>
+        <Filename Value="..\gui\sltexteditor.pas"/>
+        <Caret Line="32" Column="92" TopLine="9"/>
+      </Position26>
+      <Position27>
+        <Filename Value="..\gui\mainwindow.pas"/>
+        <Caret Line="304" Column="17" TopLine="277"/>
+      </Position27>
+      <Position28>
+        <Filename Value="C:\lazarus\lcl\forms.pp"/>
+        <Caret Line="749" Column="16" TopLine="730"/>
+      </Position28>
+      <Position29>
+        <Filename Value="C:\lazarus\lcl\controls.pp"/>
+        <Caret Line="1581" Column="34" TopLine="1564"/>
+      </Position29>
+      <Position30>
+        <Filename Value="C:\lazarus\lcl\controls.pp"/>
+        <Caret Line="573" Column="3" TopLine="550"/>
+      </Position30>
+    </JumpHistory>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <PathDelim Value="\"/>
+    <Target>
+      <Filename Value="simplecad"/>
+    </Target>
+    <SearchPaths>
+      <IncludeFiles Value="..;..\u;..\gdb;..\commands;..\gui;..\devicebase;..\languade;..\lclmod;..\electroteh;..\zgl;$(ProjOutDir);..\..\cad;..\misc;..\fileformats"/>
+      <OtherUnitFiles Value="..;..\u;..\gdb;..\commands;..\gui;..\devicebase;..\languade;..\lclmod;..\electroteh;..\zgl;$(ProjOutDir);..\..\cad;..\misc;..\fileformats"/>
+      <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+    </SearchPaths>
+    <Parsing>
+      <SyntaxOptions>
+        <SyntaxMode Value="Delphi"/>
+      </SyntaxOptions>
+    </Parsing>
+    <Linking>
+      <Options>
+        <Win32>
+          <GraphicApplication Value="True"/>
+        </Win32>
+      </Options>
+    </Linking>
+    <Other>
+      <CompilerMessages>
+        <UseMsgFile Value="True"/>
+      </CompilerMessages>
+      <CompilerPath Value="$(CompPath)"/>
+    </Other>
+  </CompilerOptions>
+  <Debugging>
+    <BreakPoints Count="1">
+      <Item1>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsGlobal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="..\languade\varman.pas"/>
+        <Line Value="1375"/>
+      </Item1>
+    </BreakPoints>
+    <Exceptions Count="3">
+      <Item1>
+        <Name Value="EAbort"/>
+      </Item1>
+      <Item2>
+        <Name Value="ECodetoolError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EFOpenError"/>
+      </Item3>
+    </Exceptions>
+  </Debugging>
+</CONFIG>

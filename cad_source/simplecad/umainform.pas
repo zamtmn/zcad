@@ -21,6 +21,7 @@ type
     procedure kd(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure sh(Sender: TObject);
   private
+    oglwnd:TOGLWND;
     { private declarations }
   public
     { public declarations }
@@ -51,7 +52,6 @@ end;
 procedure TForm1.fc(Sender: TObject);
 var
    ptd:PTDrawing;
-   oglwnd:TOGLWND;
    tn:GDBString;
    i:integer;
    pobj:PGDBObjEntity;
@@ -110,4 +110,4 @@ end;
 
 
 end.
-
+

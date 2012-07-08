@@ -152,6 +152,8 @@ procedure startup;
 var pt:PObjectDescriptor;
      //t:ElDeviceBaseObject;
 begin
+     if assigned(sysunit) then
+     begin
      pt:=SysUnit.ObjectTypeName2PTD('DbBaseObject');
      pt^.RegisterVMT(TypeOf(DbBaseObject));
      pt^.AddMetod('','initnul','',@DbBaseObject.initnul,m_constructor);
@@ -170,6 +172,7 @@ begin
      //pt^.RunMetod('initnul',@t);
      //pt^.RunMetod('format',@t);
      devman.init;
+     end;
 end;
 procedure finalize;
 begin

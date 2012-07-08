@@ -20,7 +20,7 @@ unit splashwnd;
 {$INCLUDE def.inc}
 interface
 uses
- zcadstrconsts,strproc,Forms, stdctrls, Controls, Graphics,ExtCtrls,
+ sharedcalls,zcadstrconsts,strproc,Forms, stdctrls, Controls, Graphics,ExtCtrls,
  gdbasetypes,SysInfo,fileutil,sysutils;
 type
   TSplashWnd = class(TForm)
@@ -35,8 +35,15 @@ var
 
 procedure createsplash;
 procedure removesplash;
+procedure SplashTextOutProc(s:string;pm:boolean);
 implementation
 uses log;
+procedure SplashTextOutProc(s:string;pm:boolean);
+begin
+     if assigned(SplashWindow) then
+                                   SplashWindow.TXTOut(s,true);
+end;
+
 procedure TSplashWnd.TXTOut;
 begin
      self.txt.Caption:=rsVinfotext+#13#10+rsInitialization+#13#10+s;
@@ -89,6 +96,7 @@ initialization
   Application.Initialize;
   //RequireDerivedFormResource:=false;
   createsplash;
+  SplashTextOut:=SplashTextOutProc;
 finalization
   removesplash;
 end.

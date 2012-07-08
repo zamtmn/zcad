@@ -5,9 +5,10 @@ unit umainform;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
+  LCLType,geometry,sharedgdb,GDBase,GDBasetypes,ComCtrls,UGDBDescriptor, Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   {From ZCAD}
-  oglwindow;
+  oglwindow,  UUnitManager,
+  GDBCommandsDraw,UGDBEntTree,GDBLine,GDBCircle,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
 
 type
 
@@ -16,6 +17,9 @@ type
   TForm1 = class(TForm)
     Panel1: TPanel;
     Splitter1: TSplitter;
+    procedure fc(Sender: TObject);
+    procedure kd(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure sh(Sender: TObject);
   private
     { private declarations }
   public
@@ -28,6 +32,82 @@ var
 implementation
 
 {$R *.lfm}
+procedure TForm1.kd(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if Key=VK_ESCAPE then
+  begin
+       gdb.GetCurrentDWG^.SelObjArray.clearallobjects;
+       gdb.GetCurrentROOT^.ObjArray.DeSelect;
+       sharedgdb.redrawoglwnd;
+       Key:=0;
+  end
+end;
+
+procedure TForm1.sh(Sender: TObject);
+begin
+    sharedgdb.redrawoglwnd;
+end;
+
+procedure TForm1.fc(Sender: TObject);
+var
+   ptd:PTDrawing;
+   oglwnd:TOGLWND;
+   tn:GDBString;
+   i:integer;
+   pobj:PGDBObjEntity;
+   v1,v2:gdbvertex;
+begin
+     ugdbdescriptor.startup;
+
+     ptd:=gdb.CreateDWG;
+     gdb.AddRef(ptd^);
+     gdb.SetCurrentDWG(ptd);
+
+     oglwnd:=TOGLWnd.Create(Panel1);
+     oglwnd.AuxBuffers:=0;
+     oglwnd.StencilBits:=8;
+     oglwnd.DepthBits:=24;
+
+
+
+     gdb.GetCurrentDWG^.OGLwindow1:=oglwnd;
+     oglwnd.PDWG:=ptd;
+     oglwnd.align:=alClient;
+     oglwnd.Parent:=Panel1;
+     oglwnd.init;
+     oglwnd.PDWG:=ptd;
+     oglwnd.GDBActivate;
+
+     for i:=0 to 1000 do
+     begin
+       pobj := CreateInitObjFree(GDBLineID,nil);
+       v1:=createvertex(random(1000)-500,random(1000)-500,random(1000)-500);
+       v2:=geometry.VertexAdd(v1,createvertex(random(50)-25,random(50)-25,random(50)-25));
+       PGDBObjLine(pobj)^.CoordInOCS.lBegin:=v1;
+       PGDBObjLine(pobj)^.CoordInOCS.lEnd:=v2;
+       gdb.GetCurrentRoot^.AddMi(@pobj);
+       PGDBObjEntity(pobj)^.BuildGeometry;
+       PGDBObjEntity(pobj)^.format;
+     end;
+     for i:=0 to 500 do
+     begin
+       pobj := CreateInitObjFree(GDBCircleID,nil);
+       v1:=createvertex(random(1000)-500,random(1000)-500,random(1000)-500);
+       PGDBObjCircle(pobj)^.Local.P_insert:=v1;
+       PGDBObjCircle(pobj)^.Radius:=random(10)+1;
+       gdb.GetCurrentRoot^.AddMi(@pobj);
+       PGDBObjEntity(pobj)^.BuildGeometry;
+       PGDBObjEntity(pobj)^.format;
+     end;
+     gdb.GetCurrentRoot^.Format;
+     gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
+
+     oglwnd._onresize(nil);
+     oglwnd.MakeCurrent(false);
+     oglwnd.show;
+     sharedgdb.redrawoglwnd;
+end;
+
 
 end.
 

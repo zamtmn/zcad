@@ -33,7 +33,7 @@ type
 var
   AboutWindow:TAboutWnd;
 implementation
-uses splashwnd,shared,log,commandline;
+uses {splashwnd,}shared,log,commandline;
 procedure TAboutWnd.AfterConstruction;
 begin
   inherited;

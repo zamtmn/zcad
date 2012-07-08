@@ -1373,7 +1373,7 @@ begin
                              v1.z:=objbitreader.BitRead_rd;
                              v2.z:=objbitreader.BitRead_dd(v1.z);
                              end;
-                             if (oneVertexlength(v1)<1000000)and(oneVertexlength(v2)<1000000)then
+                             //if (oneVertexlength(v1)<1000000)and(oneVertexlength(v2)<1000000)then
                              begin
                              pobj := CreateInitObjFree(GDBLineID,nil);
                              PGDBObjLine(pobj)^.CoordInOCS.lBegin:=v1;

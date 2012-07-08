@@ -7,7 +7,8 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, anchordockpkg, lazopenglcontext, umainform
+  Forms, anchordockpkg, lazopenglcontext, fpvectorialpkg, printer4lazarus,
+  umainform
   { you can add units after this };
 
 {$R *.res}

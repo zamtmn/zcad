@@ -1810,6 +1810,7 @@ procedure TMainFormN.UpdateControls;
 var
     i:integer;
 begin
+     if assigned(updatesbytton) then
      for i:=0 to updatesbytton.Count-1 do
      begin
           TmyVariableToolButton(updatesbytton[i]).AssignToVar(TmyVariableToolButton(updatesbytton[i]).FVariable);

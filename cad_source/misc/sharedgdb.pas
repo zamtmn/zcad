@@ -61,6 +61,8 @@ var
    pdwg:PTDrawing;
 begin
    pdwg:=gdb.GetCurrentDWG;
+   if assigned(mainformn)then
+   begin
    mainformn.UpdateControls;
   if (pdwg<>nil)and(pdwg<>BlockBaseDWG) then
   begin
@@ -115,6 +117,7 @@ begin
            if assigned(mainwindow.LineWBox)then
            mainwindow.LineWBox.enabled:=false;
       end;
+  end;
 end;
 procedure reloadlayer; export;
 begin

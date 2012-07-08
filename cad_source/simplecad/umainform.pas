@@ -17,9 +17,9 @@ type
   TForm1 = class(TForm)
     Panel1: TPanel;
     Splitter1: TSplitter;
-    procedure fc(Sender: TObject);
-    procedure kd(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure sh(Sender: TObject);
+    procedure _FormCreate(Sender: TObject);
+    procedure _KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure _FormShow(Sender: TObject);
   private
     oglwnd:TOGLWND;
     { private declarations }
@@ -33,7 +33,7 @@ var
 implementation
 
 {$R *.lfm}
-procedure TForm1.kd(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TForm1._KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if Key=VK_ESCAPE then
   begin
@@ -44,12 +44,12 @@ begin
   end
 end;
 
-procedure TForm1.sh(Sender: TObject);
+procedure TForm1._FormShow(Sender: TObject);
 begin
     sharedgdb.redrawoglwnd;
 end;
 
-procedure TForm1.fc(Sender: TObject);
+procedure TForm1._FormCreate(Sender: TObject);
 var
    ptd:PTDrawing;
    tn:GDBString;
@@ -81,8 +81,8 @@ begin
      for i:=0 to 1000 do
      begin
        pobj := CreateInitObjFree(GDBLineID,nil);
-       v1:=createvertex(random(1000)-500,random(1000)-500,random(1000)-500);
-       v2:=geometry.VertexAdd(v1,createvertex(random(50)-25,random(50)-25,random(50)-25));
+       v1:=createvertex(random(1000)-500,random(1000)-500,{random(1000)-500}0);
+       v2:=geometry.VertexAdd(v1,createvertex(random(50)-25,random(50)-25,{random(50)-25}0));
        PGDBObjLine(pobj)^.CoordInOCS.lBegin:=v1;
        PGDBObjLine(pobj)^.CoordInOCS.lEnd:=v2;
        gdb.GetCurrentRoot^.AddMi(@pobj);
@@ -92,7 +92,7 @@ begin
      for i:=0 to 500 do
      begin
        pobj := CreateInitObjFree(GDBCircleID,nil);
-       v1:=createvertex(random(1000)-500,random(1000)-500,random(1000)-500);
+       v1:=createvertex(random(1000)-500,random(1000)-500,{random(1000)-500}0);
        PGDBObjCircle(pobj)^.Local.P_insert:=v1;
        PGDBObjCircle(pobj)^.Radius:=random(10)+1;
        gdb.GetCurrentRoot^.AddMi(@pobj);

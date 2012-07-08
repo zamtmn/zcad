@@ -68,7 +68,17 @@ object Form1: TForm1
     Top = 14
     Width = 94
     MaxValue = 100000
+    MinValue = 1
     TabOrder = 6
     Value = 1000
+  end
+  object Button4: TButton
+    Left = 829
+    Height = 45
+    Top = 207
+    Width = 89
+    Caption = 'Erase Selected'
+    OnClick = Button4Click
+    TabOrder = 7
   end
 end

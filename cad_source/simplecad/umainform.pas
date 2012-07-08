@@ -20,6 +20,7 @@ type
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
+    Button4: TButton;
     CheckBox1: TCheckBox;
     Panel1: TPanel;
     SpinEdit1: TSpinEdit;
@@ -27,6 +28,7 @@ type
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
     procedure TreeChange(Sender: TObject);
     procedure _FormCreate(Sender: TObject);
     procedure _KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -145,6 +147,31 @@ procedure TForm1.Button3Click(Sender: TObject);
 begin
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
      sharedgdb.redrawoglwnd;
+end;
+
+procedure TForm1.Button4Click(Sender: TObject);
+var pv:pGDBObjEntity;
+    ir:itrec;
+    count:integer;
+    domethod,undomethod:tmethod;
+begin
+  if (gdb.GetCurrentROOT^.ObjArray.count = 0)or(GDB.GetCurrentDWG^.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
+  pv:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+    if pv^.Selected then
+                        begin
+                             pv^.YouDeleted;
+                             inc(count);
+                        end;
+  pv:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
+  until pv=nil;
+  GDB.GetCurrentDWG^.OGLwindow1.param.seldesc.Selectedobjcount:=0;
+  GDB.GetCurrentDWG^.OGLwindow1.param.seldesc.OnMouseObject:=nil;
+  GDB.GetCurrentDWG^.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
+  GDB.GetCurrentDWG^.OGLwindow1.param.lastonmouseobject:=nil;
+  gdb.GetCurrentDWG^.SelObjArray.clearallobjects;
+  sharedgdb.redrawoglwnd;
 end;
 
 procedure TForm1.TreeChange(Sender: TObject);

@@ -5,9 +5,11 @@ unit umainform;
 interface
 
 uses
-  LCLType,geometry,sharedgdb,GDBase,GDBasetypes,ComCtrls,UGDBDescriptor, Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
+  LCLType, geometry, sharedgdb, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
+  StdCtrls, Spin,
   {From ZCAD}
-  oglwindow,  UUnitManager,
+  varmandef, oglwindow,  UUnitManager,
   GDBCommandsDraw,UGDBEntTree,GDBLine,GDBCircle,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
 
 type
@@ -15,8 +17,17 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    CheckBox1: TCheckBox;
     Panel1: TPanel;
+    SpinEdit1: TSpinEdit;
     Splitter1: TSplitter;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure TreeChange(Sender: TObject);
     procedure _FormCreate(Sender: TObject);
     procedure _KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure _FormShow(Sender: TObject);
@@ -78,36 +89,70 @@ begin
      oglwnd.PDWG:=ptd;
      oglwnd.GDBActivate;
 
-     for i:=0 to 1000 do
-     begin
-       pobj := CreateInitObjFree(GDBLineID,nil);
-       v1:=createvertex(random(1000)-500,random(1000)-500,{random(1000)-500}0);
-       v2:=geometry.VertexAdd(v1,createvertex(random(50)-25,random(50)-25,{random(50)-25}0));
-       PGDBObjLine(pobj)^.CoordInOCS.lBegin:=v1;
-       PGDBObjLine(pobj)^.CoordInOCS.lEnd:=v2;
-       gdb.GetCurrentRoot^.AddMi(@pobj);
-       PGDBObjEntity(pobj)^.BuildGeometry;
-       PGDBObjEntity(pobj)^.format;
-     end;
-     for i:=0 to 500 do
-     begin
-       pobj := CreateInitObjFree(GDBCircleID,nil);
-       v1:=createvertex(random(1000)-500,random(1000)-500,{random(1000)-500}0);
-       PGDBObjCircle(pobj)^.Local.P_insert:=v1;
-       PGDBObjCircle(pobj)^.Radius:=random(10)+1;
-       gdb.GetCurrentRoot^.AddMi(@pobj);
-       PGDBObjEntity(pobj)^.BuildGeometry;
-       PGDBObjEntity(pobj)^.format;
-     end;
-     gdb.GetCurrentRoot^.Format;
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
 
-     oglwnd._onresize(nil);
-     oglwnd.MakeCurrent(false);
-     oglwnd.show;
+     sysvar.DWG.DWG_SystmGeometryDraw^:=CheckBox1.Checked;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+var
+   ptd:PTDrawing;
+   tn:GDBString;
+   i:integer;
+   pobj:PGDBObjEntity;
+   v1,v2:gdbvertex;
+begin
+  for i:=1 to SpinEdit1.Value do
+  begin
+    pobj := CreateInitObjFree(GDBLineID,nil);
+    v1:=createvertex(random(1000)-500,random(1000)-500,{random(1000)-500}0);
+    v2:=geometry.VertexAdd(v1,createvertex(random(50)-25,random(50)-25,{random(50)-25}0));
+    PGDBObjLine(pobj)^.CoordInOCS.lBegin:=v1;
+    PGDBObjLine(pobj)^.CoordInOCS.lEnd:=v2;
+    gdb.GetCurrentRoot^.AddMi(@pobj);
+    PGDBObjEntity(pobj)^.BuildGeometry;
+    PGDBObjEntity(pobj)^.format;
+  end;
+  gdb.GetCurrentDWG^.pObjRoot^.Format;
+  gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
+  sharedgdb.redrawoglwnd;
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+var
+   ptd:PTDrawing;
+   tn:GDBString;
+   i:integer;
+   pobj:PGDBObjEntity;
+   v1,v2:gdbvertex;
+begin
+  for i:=1 to SpinEdit1.Value do
+  begin
+    pobj := CreateInitObjFree(GDBCircleID,nil);
+    v1:=createvertex(random(1000)-500,random(1000)-500,{random(1000)-500}0);
+    PGDBObjCircle(pobj)^.Local.P_insert:=v1;
+    PGDBObjCircle(pobj)^.Radius:=random(10)+1;
+    gdb.GetCurrentRoot^.AddMi(@pobj);
+    PGDBObjEntity(pobj)^.BuildGeometry;
+    PGDBObjEntity(pobj)^.format;
+  end;
+  gdb.GetCurrentDWG^.pObjRoot^.Format;
+  gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
+   sharedgdb.redrawoglwnd;
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+begin
+     gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
+     sharedgdb.redrawoglwnd;
+end;
+
+procedure TForm1.TreeChange(Sender: TObject);
+begin
+     sysvar.DWG.DWG_SystmGeometryDraw^:=CheckBox1.Checked;
      sharedgdb.redrawoglwnd;
 end;
 
 
 end.
-
+

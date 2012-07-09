@@ -9,8 +9,8 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Spin,
   {From ZCAD}
-  varmandef, oglwindow,  UUnitManager,
-  GDBCommandsDraw,UGDBEntTree,GDBLine,GDBCircle,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
+  iodxf,varmandef, oglwindow,  UUnitManager,
+  UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDBText,GDBLine,GDBCircle,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
 
 type
 
@@ -21,14 +21,22 @@ type
     Button2: TButton;
     Button3: TButton;
     Button4: TButton;
+    Button5: TButton;
+    Button6: TButton;
+    Button7: TButton;
     CheckBox1: TCheckBox;
+    OpenDialog1: TOpenDialog;
     Panel1: TPanel;
+    SaveDialog1: TSaveDialog;
     SpinEdit1: TSpinEdit;
     Splitter1: TSplitter;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
     procedure TreeChange(Sender: TObject);
     procedure _FormCreate(Sender: TObject);
     procedure _KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -54,7 +62,12 @@ begin
        gdb.GetCurrentROOT^.ObjArray.DeSelect;
        sharedgdb.redrawoglwnd;
        Key:=0;
-  end
+  end;
+  if Key=VK_DELETE then
+  begin
+       Button4Click(nil);
+       Key:=0;
+  end;
 end;
 
 procedure TForm1._FormShow(Sender: TObject);
@@ -170,8 +183,64 @@ begin
   GDB.GetCurrentDWG^.OGLwindow1.param.seldesc.OnMouseObject:=nil;
   GDB.GetCurrentDWG^.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
   GDB.GetCurrentDWG^.OGLwindow1.param.lastonmouseobject:=nil;
+  gdb.GetCurrentDWG^.OnMouseObj.Clear;
   gdb.GetCurrentDWG^.SelObjArray.clearallobjects;
   sharedgdb.redrawoglwnd;
+end;
+
+procedure TForm1.Button5Click(Sender: TObject);
+var
+   ptd:PTDrawing;
+   tn:GDBString;
+   i:integer;
+   pobj:PGDBObjEntity;
+   v1,v2:gdbvertex;
+   tp:GDBTextStyleProp;
+   angl:double;
+begin
+  if gdb.GetCurrentDWG^.TextStyleTable.count=0 then
+  begin
+       tp.size:=2.5;
+       tp.oblique:=0;
+       gdb.GetCurrentDWG^.TextStyleTable.addstyle('standart','txt.shx',tp);
+  end;
+  for i:=1 to SpinEdit1.Value do
+  begin
+    pobj := CreateInitObjFree(GDBTextID,nil);
+    v1:=createvertex(random(1000)-500,random(1000)-500,{random(1000)-500}0);
+    PGDBObjText(pobj)^.Local.P_insert:=v1;
+    PGDBObjText(pobj)^.TXTStyleIndex:=0;
+    PGDBObjText(pobj)^.Template:='Hello word!';
+    PGDBObjText(pobj)^.textprop.size:=1+random(10);
+    PGDBObjText(pobj)^.textprop.oblique:=random(20);
+    angl:=pi*random/2;
+    PGDBObjText(pobj)^.textprop.angle:=angl*180/pi;
+    PGDBObjText(pobj)^.local.basis.OX:=VectorTransform3D(PGDBObjText(pobj)^.local.basis.OX,geometry.CreateAffineRotationMatrix(PGDBObjText(pobj)^.Local.basis.oz,-angl));
+    gdb.GetCurrentRoot^.AddMi(@pobj);
+    PGDBObjText(pobj)^.BuildGeometry;
+    PGDBObjText(pobj)^.format;
+  end;
+  gdb.GetCurrentDWG^.pObjRoot^.Format;
+  gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
+   sharedgdb.redrawoglwnd;
+end;
+
+procedure TForm1.Button6Click(Sender: TObject);
+begin
+     if OpenDialog1.Execute then
+     begin
+          addfromdxf(OpenDialog1.FileName,@gdb.GetCurrentDWG^.pObjRoot^,TLOLoad);
+          gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
+          sharedgdb.redrawoglwnd;
+     end;
+end;
+
+procedure TForm1.Button7Click(Sender: TObject);
+begin
+     if SaveDialog1.Execute then
+     begin
+          savedxf2000(SaveDialog1.FileName, GDB.GetCurrentDWG);
+     end;
 end;
 
 procedure TForm1.TreeChange(Sender: TObject);

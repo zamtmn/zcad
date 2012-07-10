@@ -81,7 +81,7 @@ type
 function CreateCommandRTEdObjectPlugin(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;ohgd:comdrawfunc;occont:comproc;name:pansichar;SA,DA:TCStartAttr):pCommandRTEdObjectPlugin;export;
 function CreateCommandFastObjectPlugin(ocs:comfuncwithoper;name:pansichar;SA,DA:TCStartAttr):pCommandFastObjectPlugin;export;
 implementation
-uses {mainwindow,}{GDBCommandsDraw,}GDBCommandsBase,{oglwindow,}{GDBCommandsElectrical,}UGDBOpenArrayOfUCommands,Objinsp,varman,log;
+uses {mainwindow,}{GDBCommandsDraw,}GDBCommandsBase,{oglwindow,}{GDBCommandsElectrical,}UGDBOpenArrayOfUCommands,sharedcalls,varman,log;
 constructor CommandRTEdObject.init;
 begin
   inherited;
@@ -282,7 +282,8 @@ begin
   if (commanddata.Instance<>nil)
   and(commanddata.PTD<>nil) then
                                 begin
-                                     SetGDBObjInsp(SysUnit.TypeName2PTD('CommandRTEdObject'),@self);
+                                     if assigned(SetGDBObjInspProc)then
+                                                                       SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),@self);
                                 end; 
 
 end;

@@ -38,7 +38,8 @@ uses
   //UGDBOpenArrayOfByte,
   iodxf,
   //optionswnd,
-  objinsp,
+  {objinsp,}
+  sharedcalls,
   //cmdli{%H-}{%H-}ne,
   geometry,
   memman,
@@ -1238,7 +1239,8 @@ begin
       i:=GetStyleNames(TextInsertParams.Style.Enums,s);
       if i<0 then
                  TextInsertParams.Style.Selected:=0;
-      UpdateObjInsp;
+      if assigned(UpdateObjInspProc)then
+      UpdateObjInspProc;
       BuildPrimitives;
      GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
      format;
@@ -1544,8 +1546,8 @@ begin
                                                commandmanager.executecommandend;
                                                exit;
                                          end;
-
-          SetGDBObjInsp(SysUnit.TypeName2PTD('TBlockInsert'),@BIProp);
+          if assigned(SetGDBObjInspProc)then
+                                            SetGDBObjInspProc(SysUnit.TypeName2PTD('TBlockInsert'),@BIProp);
           GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
           historyoutstr(rscmInsertPoint);
      end
@@ -1711,7 +1713,8 @@ begin
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
   GDB.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
-  {objinsp.GDBobjinsp.}ReturnToDefault;
+  if assigned(ReturnToDefaultProc)then
+                                      ReturnToDefaultProc;
   clearcp;
   redrawoglwnd;
   result:=cmd_ok;
@@ -2466,7 +2469,8 @@ begin
   if p3dpl<>nil then
   if p3dpl^.VertexArrayInOCS.Count<2 then
                                          begin
-                                              {objinsp.GDBobjinsp.}ReturnToDefault;
+                                               if assigned(ReturnToDefaultProc)then
+                                                                                   ReturnToDefaultProc;
                                               //p3dpl^.YouDeleted;
                                               cc:=pCommandRTEdObject(_self)^.UndoTop;
                                               gdb.GetCurrentDWG.UndoStack.ClearFrom(cc);
@@ -2505,7 +2509,8 @@ begin
     //gdb.GetCurrentROOT.ObjArray.ObjTree.AddObjectToNodeTree(p3dpl);
     //gdb.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(p3dpl)}CorrectNodeTreeBB(p3dpl);   vbnvbn
     //gdb.GetCurrentROOT.AddObjectToObjArray(addr(p3dpl));
-    SetGDBObjInsp(SysUnit.TypeName2PTD('GDBObjPolyline'),p3dpl);
+    if assigned(SetGDBObjInspProc)then
+    SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBObjPolyline'),p3dpl);
     end;
 
   end
@@ -2590,7 +2595,8 @@ begin
                    end
                else
                    begin
-                        SetGDBObjInsp(SysUnit.TypeName2PTD('TPolyEdit'),@PEProp);
+                        if assigned(SetGDBObjInspProc)then
+                        SetGDBObjInspProc(SysUnit.TypeName2PTD('TPolyEdit'),@PEProp);
                         GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
                         gdb.GetCurrentDWG.SelObjArray.clearallobjects;
                         //historyout('Поехали:');
@@ -2997,8 +3003,8 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
                                                commandmanager.executecommandend;
                                                exit;
                                          end;
-
-          SetGDBObjInsp(SysUnit.TypeName2PTD('CommandRTEdObject'),pbeditcom);
+          if assigned(SetGDBObjInspProc)then
+          SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pbeditcom);
           gdb.GetCurrentDWG.SelObjArray.clearallobjects;
           gdb.GetCurrentROOT.ObjArray.DeSelect;
           result:=cmd_ok;
@@ -3017,7 +3023,8 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
 
 
   exit;
-  SetGDBObjInsp(SysUnit.TypeName2PTD('CommandRTEdObject'),pbeditcom);
+  if assigned(SetGDBObjInspProc)then
+  SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pbeditcom);
   gdb.GetCurrentDWG.SelObjArray.clearallobjects;
   gdb.GetCurrentROOT.ObjArray.DeSelect;
   result:=cmd_ok;

@@ -35,7 +35,7 @@ uses
   UGDBOpenArrayOfByte,
   iodxf,
   //optionswnd,
-  objinsp,
+  {objinsp,}
   cmdline,
   //UGDBVisibleOpenArray,
   //gdbobjectsconstdef,

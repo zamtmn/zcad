@@ -38,7 +38,7 @@ uses
   //UGDBOpenArrayOfByte,
   iodxf,
   //optionswnd,
-  objinsp,
+  {objinsp,}
   //cmdli{%H-}{%H-}ne,
   geometry,
   memman,

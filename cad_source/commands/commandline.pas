@@ -66,7 +66,7 @@ procedure ParseCommand(comm:pansichar; out command,operands:GDBString);
 {procedure startup;
 procedure finalize;}
 implementation
-uses Objinsp,UGDBStringArray,cmdline,UGDBDescriptor,forms{,varman};
+uses {Objinsp,}UGDBStringArray,cmdline,UGDBDescriptor,forms{,varman};
 function GDBcommandmanager.GetValueHeap:GDBInteger;
 begin
      result:=varstack.vardescarray.count;

@@ -68,7 +68,7 @@ var
   //ProgramDBContextMenuN,ProjectDBContextMenuN,ProgramDEVContextMenuN:TmyPopupMenu;
 
 implementation
-uses commandline,GDBBlockDef{,UGDBObjBlockdefArray},UBaseTypeDescriptor,objinsp,UGDBStringArray,UUnitManager,mainwindow;
+uses commandline,GDBBlockDef{,UGDBObjBlockdefArray},UBaseTypeDescriptor,{objinsp,}sharedcalls,UGDBStringArray,UUnitManager,mainwindow;
 function TBlockTreeNode.GetParams;
 begin
      result:=@FBlockName;
@@ -82,7 +82,10 @@ begin
      TypeDesk:=sysunit.TypeName2PTD('GDBObjBlockdef');
      Instance:=gdb.GetCurrentDWG.BlockDefArray.getblockdef(FBlockName);
      if instance<>nil then
-                          SetGDBObjInsp(TypeDesk,Instance)
+                          begin
+                               if assigned(SetGDBObjInspProc)then
+                                                                 SetGDBObjInspProc(TypeDesk,Instance)
+                          end
                       else
                           shared.ShowError(format(rscmNoBlockDefInDWGCXMenu,[FBlockName]));
 end;
@@ -90,7 +93,8 @@ end;
 
 procedure TEqTreeNode.Select;
 begin
-     SetGDBObjInsp(ptd.PTD,ptd.Instance);
+     if assigned(SetGDBObjInspProc)then
+     SetGDBObjInspProc(ptd.PTD,ptd.Instance);
 end;
 function TEqTreeNode.GetParams;
 begin

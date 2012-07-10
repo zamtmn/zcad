@@ -213,8 +213,8 @@ procedure textwrite(s: GDBString);
 procedure RunTextEditor(Pobj:GDBPointer);
 function getsortedindex(cl:integer):integer;
 implementation
-uses mainwindow,UGDBTracePropArray,GDBEntity,io,geometry,gdbobjectsconstdef,UGDBDescriptor,
-     {GDBCommandsBase,}Objinsp{,Tedit_form, MTedit_form},shared,sharedgdb,UGDBLayerArray,cmdline,GDBText;
+uses mainwindow,UGDBTracePropArray,GDBEntity,io,geometry,gdbobjectsconstdef,UGDBDescriptor,sharedcalls,
+     {GDBCommandsBase,Objinsp,Tedit_form, MTedit_form}shared,sharedgdb,UGDBLayerArray,cmdline,GDBText;
 procedure creategrid;
 var i,j:GDBInteger;
 begin
@@ -1147,12 +1147,14 @@ begin
        ptype:=SysUnit.TypeName2PTD(tn);
        if ptype<>nil then
        begin
-            SetGDBObjInsp(ptype,param.SelDesc.LastSelectedObject);
+            If assigned(SetGDBObjInspProc)then
+            SetGDBObjInspProc(ptype,param.SelDesc.LastSelectedObject);
        end;
   end
   else
   begin
-    {GDBobjinsp.}ReturnToDefault;
+    If assigned(ReturnToDefaultProc)then
+    {GDBobjinsp.}ReturnToDefaultProc;
   end;
   end
 end;
@@ -1464,9 +1466,11 @@ if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
                                                        if not param.scrollmode then
                                                                                    self.Cursor:=crNone;
 
-  if assigned(GDBobjinsp)then
-                             if GDBobjinsp.pcurrobj=@sysvar then
-                                                                objinsp.UpdateObjInsp;
+  //if assigned(GDBobjinsp)then
+                               if assigned(GetCurrentObjProc) then
+                               if GetCurrentObjProc=@sysvar then
+                               If assigned(UpdateObjInspProc)then
+                                                                UpdateObjInspProc;
   SBTextOut(htext);
   //param.firstdraw:=true;
   isOpenGLError;
@@ -2075,7 +2079,8 @@ begin
             sendmousecoord(MZW_LBUTTON);
           end;
     end;
-    UpdateObjInsp;
+    If assigned(UpdateObjInspProc)then
+    UpdateObjInspProc;
   end;
   inherited;
   if needredraw then
@@ -4408,7 +4413,9 @@ procedure TOGLWnd.myKeyPress(var Key: Word; Shift: TShiftState);
 begin
       if Key=VK_ESCAPE then
       begin
-        if not ReStoreGDBObjInsp then
+        if assigned(ReStoreGDBObjInspProc)then
+        begin
+        if not ReStoreGDBObjInspProc then
         begin
         ClearOntrackpoint;
         if commandmanager.pcommandrunning=nil then
@@ -4429,6 +4436,7 @@ begin
                commandmanager.pcommandrunning.CommandCancel;
                commandmanager.executecommandend;
           end;
+        end;
         end;
         Key:=0;
       end

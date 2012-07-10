@@ -67,7 +67,7 @@ object Form1: TForm1
     Height = 23
     Top = 24
     Width = 96
-    MaxValue = 100000
+    MaxValue = 1000000
     MinValue = 1
     TabOrder = 6
     Value = 1000

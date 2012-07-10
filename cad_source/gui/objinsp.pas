@@ -22,7 +22,7 @@ unit Objinsp;
 interface
 
 uses
-  ucxmenumgr,umytreenode,
+  sharedcalls,ucxmenumgr,umytreenode,
   Themes,
   {$IFDEF LCLGTK2}
   x,xlib,{x11,}{xutil,}
@@ -119,14 +119,21 @@ procedure StoreAndSetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
 function ReStoreGDBObjInsp:GDBBoolean;
 procedure UpdateObjInsp;
 procedure ReturnToDefault;
+procedure rebuild;
+procedure SetCurrentObjDefault;
+function  GetCurrentObj:Pointer;
 procedure ClrarIfItIs(addr:GDBPointer);
+procedure SetNameColWidth(w:integer);
+function GetNameColWidth:integer;
+function CreateObjInspInstance:TForm;
+function GetPeditor:TComponent;
+procedure FreEditor;
 
 var
   GDBobjinsp:TGDBobjinsp;
   typecount:GDBWord;
   //temp: GDBPointer;
   proptreeptr:propdeskptr;
-  currpd:PPropertyDeskriptor;
 
 implementation
 
@@ -213,7 +220,44 @@ begin
                                        GDBobjinsp.ReturnToDefault;
                                   end;
 end;
+procedure SetNameColWidth(w:integer);
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       GDBobjinsp.namecol:=w;
+                                  end;
+end;
+function CreateObjInspInstance:TForm;
+begin
+     GDBobjinsp:=TGDBObjInsp(TGDBObjInsp.NewInstance);
+     result:=GDBobjinsp;
+end;
+function GetPeditor:TComponent;
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       result:=GDBobjinsp.peditor;
+                                  end
+                               else
+                                   result:=nil;
+end;
+procedure FreEditor;
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       GDBobjinsp.freeeditor;
+                                  end
+end;
 
+function GetNameColWidth:integer;
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       result:=GDBobjinsp.namecol;
+                                  end
+                               else
+                                   result:=0;
+end;
 procedure ReturnToDefault;
 begin
        if assigned(GDBobjinsp)then
@@ -221,6 +265,29 @@ begin
                                        GDBobjinsp.PStoredObj:=nil;
                                        GDBobjinsp.StoredObjGDBType:=nil;
                                        GDBobjinsp.ReturnToDefault;
+                                  end;
+end;
+procedure SetCurrentObjDefault;
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       GDBobjinsp.SetCurrentObjDefault;
+                                  end;
+end;
+function  GetCurrentObj:Pointer;
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       result:=GDBobjinsp.pcurrobj;
+                                  end
+                              else
+                                  result:=nil;
+end;
+procedure ReBuild;
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       GDBobjinsp.ReBuild;
                                   end;
 end;
 
@@ -1055,7 +1122,7 @@ procedure TGDBobjinsp.setptr;
 begin
   if (pcurrobj<>addr)or(currobjgdbtype<>exttype) then
   begin
-    Objinsp.currpd:=nil;
+    {Objinsp.}currpd:=nil;
     if peditor<>nil then
     begin
          self.freeeditor;
@@ -1145,6 +1212,20 @@ end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('objinsp.initialization');{$ENDIF}
   proptreeptr:=nil;
-  Objinsp.currpd:=nil;
+  {Objinsp.}currpd:=nil;
+  SetGDBObjInspProc:=SetGDBObjInsp;
+  StoreAndSetGDBObjInspProc:=StoreAndSetGDBObjInsp;
+  ReStoreGDBObjInspProc:=ReStoreGDBObjInsp;
+  UpdateObjInspProc:=UpdateObjInsp;
+  ReturnToDefaultProc:=ReturnToDefault;
+  ClrarIfItIsProc:=ClrarIfItIs;
+  ReBuildProc:=ReBuild;
+  SetCurrentObjDefaultProc:=SetCurrentObjDefault;
+  GetCurrentObjProc:=GetCurrentObj;
+  SetNameColWidthProc:=SetNameColWidth;
+  GetNameColWidthProc:=GetNameColWidth;
+  CreateObjInspInstanceProc:=CreateObjInspInstance;
+  GetPeditorProc:=GetPeditor;
+  FreEditorProc:=FreEditor;
 end.
 

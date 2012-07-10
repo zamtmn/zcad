@@ -20,7 +20,7 @@ unit strproc;
 {$INCLUDE def.inc}
 
 interface
-uses fileutil,gdbasetypes,sysutils,sysinfo,log,strutils,LCLProc;
+uses fileutil,gdbasetypes,sysutils,sysinfo,strutils,LCLProc;
 function GetPredStr(var s: GDBString; substr: GDBString): GDBString;
 function ExpandPath(path:GDBString):GDBString;
 function readspace(expr: GDBString): GDBString;
@@ -57,7 +57,7 @@ var
   CodePage:TCodePage;
 implementation
 uses
-    varmandef;
+    varmandef,log;
 function MakeHash(const s: GDBString): GDBLongword;
 var
   I: Integer;
@@ -537,4 +537,4 @@ end;*)
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('strproc.initialization');{$ENDIF}
 CodePage:=CP_utf8;
-end.
+end.

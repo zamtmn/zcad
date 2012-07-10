@@ -42,8 +42,6 @@ const
 
 type tzcpmode=(zcptxt,zcpbin);
 
-var zcpmode:tzcpmode;
-type
   PPropertyDeskriptor=^PropertyDeskriptor;
   PropertyDeskriptor=object(BasePropertyDeskriptor)
                            constructor initnul;
@@ -115,6 +113,8 @@ TUserTypeDescriptor=object(UserTypeDescriptor)
                           function CreatePD:GDBPointer;
                           function GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:GDBInteger):PPropertyDeskriptor;
                    end;
+var zcpmode:tzcpmode;
+    currpd:PPropertyDeskriptor;
 implementation
 uses varman,strmy;
 destructor MetodDescriptor.Done;

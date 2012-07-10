@@ -193,7 +193,7 @@ var
    ptd:PTDrawing;
    tn:GDBString;
    i:integer;
-   pobj:PGDBObjEntity;
+   pobj:PGDBObjText;
    v1,v2:gdbvertex;
    tp:GDBTextStyleProp;
    angl:double;
@@ -206,19 +206,19 @@ begin
   end;
   for i:=1 to SpinEdit1.Value do
   begin
-    pobj := CreateInitObjFree(GDBTextID,nil);
+    pGDBObjEntity(pobj):=CreateInitObjFree(GDBTextID,nil);
     v1:=createvertex(random(1000)-500,random(1000)-500,{random(1000)-500}0);
-    PGDBObjText(pobj)^.Local.P_insert:=v1;
-    PGDBObjText(pobj)^.TXTStyleIndex:=0;
-    PGDBObjText(pobj)^.Template:='Hello word!';
-    PGDBObjText(pobj)^.textprop.size:=1+random(10);
-    PGDBObjText(pobj)^.textprop.oblique:=random(20);
+    pobj^.Local.P_insert:=v1;
+    pobj^.TXTStyleIndex:=0;
+    pobj^.Template:='Hello word!';
+    pobj^.textprop.size:=1+random(10);
+    pobj^.textprop.oblique:=random(20);
     angl:=pi*random/2;
-    PGDBObjText(pobj)^.textprop.angle:=angl*180/pi;
-    PGDBObjText(pobj)^.local.basis.OX:=VectorTransform3D(PGDBObjText(pobj)^.local.basis.OX,geometry.CreateAffineRotationMatrix(PGDBObjText(pobj)^.Local.basis.oz,-angl));
+    pobj^.textprop.angle:=angl*180/pi;
+    pobj^.local.basis.OX:=VectorTransform3D(PGDBObjText(pobj)^.local.basis.OX,geometry.CreateAffineRotationMatrix(PGDBObjText(pobj)^.Local.basis.oz,-angl));
     gdb.GetCurrentRoot^.AddMi(@pobj);
-    PGDBObjText(pobj)^.BuildGeometry;
-    PGDBObjText(pobj)^.format;
+    pobj^.BuildGeometry;
+    pobj^.format;
   end;
   gdb.GetCurrentDWG^.pObjRoot^.Format;
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;

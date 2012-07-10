@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,intftranslations,layerwnd,strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,intftranslations,layerwnd,strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -37,7 +37,8 @@ uses
   UGDBOpenArrayOfByte,
   iodxf,iodwg,
   //optionswnd,
-  objinsp,
+  {objinsp,}
+   sharedcalls,
   //cmdline,
   //UGDBVisibleOpenArray,
   gdbobjectsconstdef,
@@ -262,7 +263,9 @@ begin
             pvd:=ou.InterfaceVariables.vardescarray.iterate(ir2)
       until pvd=nil;
      createunit;
-     GDBobjinsp.rebuild;
+     if assigned(ReBuildProc)then
+                                 ReBuildProc;
+     //GDBobjinsp.rebuild;
      //GDBobjinsp.setptr(SysUnit.TypeName2PTD('TMSEditor'),@MSEditor);
 end;
 function TMSEditor.GetObjType:GDBWord;
@@ -351,7 +354,8 @@ begin
                                  MSEditor.OU.SaveToMem(membuf);
                                  membuf.SaveToFile('*log\lms.pas');
                                  {$ENDIF}
-                                 SetGDBObjInsp(SysUnit.TypeName2PTD('TMSEditor'),@MSEditor);
+                                 if assigned(SetGDBObjInspProc)then
+                                                               SetGDBObjInspProc(SysUnit.TypeName2PTD('TMSEditor'),@MSEditor);
                                 end
                             else
                                 commandmanager.executecommandend;
@@ -426,11 +430,13 @@ var
 begin
      if Operands='VARS' then
                             begin
-                                 SetGDBObjInsp(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
                             end
 else if Operands='CAMERA' then
                             begin
-                                 SetGDBObjInsp(SysUnit.TypeName2PTD('GDBObjCamera'),gdb.GetCurrentDWG.pcamera);
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBObjCamera'),gdb.GetCurrentDWG.pcamera);
                             end
 else if Operands='CURRENT' then
                             begin
@@ -440,7 +446,8 @@ else if Operands='CURRENT' then
                                      begin
                                           obj:=pGDBObjEntity(GDB.GetCurrentDWG.GetLastSelected)^.GetObjTypeName;
                                           objt:=SysUnit.TypeName2PTD(obj);
-                                          SetGDBObjInsp(objt,GDB.GetCurrentDWG.GetLastSelected);
+                                          If assigned(SetGDBObjInspProc)then
+                                          SetGDBObjInspProc(objt,GDB.GetCurrentDWG.GetLastSelected);
                                      end
                                  else
                                      begin
@@ -453,7 +460,8 @@ else if Operands='CURRENT' then
                                                               begin
                                                                    obj:=pp^.GetObjTypeName;
                                                                    objt:=SysUnit.TypeName2PTD(obj);
-                                                                   SetGDBObjInsp(objt,pp);
+                                                                   If assigned(SetGDBObjInspProc)then
+                                                                   SetGDBObjInspProc(objt,pp);
                                                                    exit;
                                                               end;
                                               pp:=gdb.GetCurrentROOT.objarray.iterate(ir);
@@ -464,43 +472,53 @@ else if Operands='CURRENT' then
                             end
 else if Operands='OGLWND_DEBUG' then
                             begin
-                                 SetGDBObjInsp(SysUnit.TypeName2PTD('OGLWndtype'),@gdb.GetCurrentDWG.OGLwindow1.param);
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('OGLWndtype'),@gdb.GetCurrentDWG.OGLwindow1.param);
                             end
 else if Operands='GDBDescriptor' then
                             begin
-                                 SetGDBObjInsp(SysUnit.TypeName2PTD('GDBDescriptor'),@gdb);
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBDescriptor'),@gdb);
                             end
 else if Operands='RELE_DEBUG' then
                             begin
-                                 SetGDBObjInsp(dbunit.TypeName2PTD('vardesk'),dbunit.FindVariable('SEVCABLEkvvg'));
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(dbunit.TypeName2PTD('vardesk'),dbunit.FindVariable('SEVCABLEkvvg'));
                             end
 else if Operands='LAYERS' then
                             begin
-                                 SetGDBObjInsp(dbunit.TypeName2PTD('GDBLayerArray'),@gdb.GetCurrentDWG.LayerTable);
+                                 SetGDBObjInspProc(dbunit.TypeName2PTD('GDBLayerArray'),@gdb.GetCurrentDWG.LayerTable);
                             end
 else if Operands='TSTYLES' then
                             begin
-                                 SetGDBObjInsp(dbunit.TypeName2PTD('GDBTextStyleArray'),@gdb.GetCurrentDWG.TextStyleTable);
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(dbunit.TypeName2PTD('GDBTextStyleArray'),@gdb.GetCurrentDWG.TextStyleTable);
                             end
 else if Operands='FONTS' then
                             begin
-                                 SetGDBObjInsp(dbunit.TypeName2PTD('GDBFontManager'),@FontManager);
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(dbunit.TypeName2PTD('GDBFontManager'),@FontManager);
                             end
 else if Operands='OSMODE' then
                             begin
                                  OSModeEditor.GetState;
-                                 SetGDBObjInsp(dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor);
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor);
                             end
 else if Operands='NUMERATORS' then
                             begin
-                                 SetGDBObjInsp(SysUnit.TypeName2PTD('GDBNumerator'),@gdb.GetCurrentDWG.Numerator);
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBNumerator'),@gdb.GetCurrentDWG.Numerator);
                             end
 else if Operands='TABLESTYLES' then
                             begin
-                                 SetGDBObjInsp(SysUnit.TypeName2PTD('GDBTableStyleArray'),@gdb.GetCurrentDWG.TableStyleTable);
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBTableStyleArray'),@gdb.GetCurrentDWG.TableStyleTable);
                             end
                             ;
-     GDBobjinsp.SetCurrentObjDefault;
+     If assigned(SetCurrentObjDefaultProc)then
+                                              SetCurrentObjDefaultProc
+     //GDBobjinsp.SetCurrentObjDefault;
 end;
 function CloseDWG_com(Operands:pansichar):GDBInteger;
 var
@@ -1298,7 +1316,8 @@ begin
 end;
 function Options_com(Operands:pansichar):GDBInteger;
 begin
-  SetGDBObjInsp(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
+  if assigned(SetGDBObjInspProc)then
+                                    SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
   historyoutstr(rscmOptions2OI);
   //Optionswindow.Show;
   result:=cmd_ok;
@@ -1391,7 +1410,9 @@ else if length(Operands)>3 then
 
                                      pobj^.OU.free;
                                      units.parseunit(mem,PTSimpleUnit(@pobj^.OU));
-                                     GDBobjinsp.rebuild;
+                                     if assigned(rebuildproc)then
+                                     rebuildproc;
+                                     //GDBobjinsp.rebuild;
                                end;
 
 
@@ -1440,8 +1461,10 @@ begin
                                            end;
                                            pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
                                      until pobj=nil;
-                                     if GDBobjinsp.pcurrobj=@MSEditor then  MSEditor.CreateUnit;
-                                     GDBobjinsp.rebuild;
+                                     if assigned(GetCurrentObjProc)then
+                                                                       if GetCurrentObjProc=@MSEditor then  MSEditor.CreateUnit;
+                                     if assigned(rebuildProc)then
+                                                                 rebuildproc;
                                end;
 
 
@@ -1471,7 +1494,9 @@ begin
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
   GDB.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
-  {objinsp.GDBobjinsp.}ReturnToDefault;
+  {objinsp.GDBobjinsp.}
+  if assigned(ReturnToDefaultProc)then
+                                      ReturnToDefaultProc;
   clearcp;
   //redrawoglwnd;
   result:=cmd_ok;
@@ -1734,7 +1759,8 @@ begin
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
-  {objinsp.GDBobjinsp.}ReturnToDefault;
+    if assigned(ReturnToDefaultProc)then
+                                      ReturnToDefaultProc;
   clearcp;
   redrawoglwnd;
   depth:=0;
@@ -2066,7 +2092,8 @@ begin
 end;
 function SnapProp_com(Operands:pansichar):GDBInteger;
 begin
-      StoreAndSetGDBObjInsp(dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor);
+     if assigned(StoreAndSetGDBObjInspProc)then
+      StoreAndSetGDBObjInspProc(dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor);
       result:=cmd_ok;
 end;
 function Show_com(Operands:pansichar):GDBInteger;
@@ -2287,18 +2314,21 @@ var f: TForm; i: Longint; begin f := TForm.CreateNew(f{, 0}); f.Show; while f.Vi
 end;
 function ObjInspCopyToClip_com(Operands:pansichar):GDBInteger;
 begin
-   if Objinsp.currpd=nil then
+   if assigned(GetCurrentObjProc)then
+   begin
+   if GetCurrentObjProc=nil then
                              HistoryOutStr(rscmCommandOnlyCTXMenu)
                          else
                              begin
                                   if uppercase(Operands)='VAR' then
-                                                                   clipbrd.clipboard.AsText:=Objinsp.currpd.ValKey
+                                                                   clipbrd.clipboard.AsText:={Objinsp.}currpd.ValKey
                              else if uppercase(Operands)='LVAR' then
-                                                                   clipbrd.clipboard.AsText:='@@['+Objinsp.currpd.ValKey+']'
+                                                                   clipbrd.clipboard.AsText:='@@['+{Objinsp.}currpd.ValKey+']'
                              else if uppercase(Operands)='VALUE' then
-                                                                   clipbrd.clipboard.AsText:=Objinsp.currpd.Value;
-                                  Objinsp.currpd:=nil;
+                                                                   clipbrd.clipboard.AsText:={Objinsp.}currpd.Value;
+                                  {Objinsp.}currpd:=nil;
                              end;
+   end;
 end;
 procedure startup;
 //var

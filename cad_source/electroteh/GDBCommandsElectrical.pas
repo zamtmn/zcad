@@ -25,7 +25,8 @@ uses
   //UGDBOpenArrayOfByte,
   //iodxf,
   //optionswnd,
-  objinsp,
+  //objinsp,
+  sharedcalls,
   //cmdline,
   geometry,
   memman,
@@ -1150,7 +1151,8 @@ begin
     gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
 
     gdb.GetCurrentDWG.OnMouseObj.Clear;
-    ClrarIfItIs(SecondOwner);
+    if assigned(ClrarIfItIsProc)then
+    ClrarIfItIsProc(SecondOwner);
 
     redrawoglwnd;
     if mode= 2 then commandmanager.executecommandend
@@ -1225,7 +1227,8 @@ begin
 
   s:='**Напрямую**';
   cabcomparam.Traces.Enums.add(@s);
-  SetGDBObjInsp(SysUnit.TypeName2PTD('CommandRTEdObject'),pcabcom);
+  if assigned(SetGDBObjInspProc)then
+  SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pcabcom);
 
 
 
@@ -1238,7 +1241,8 @@ begin
   gdb.GetCurrentDWG.UndoStack.PushEndMarker;
   if p3dpl^.VertexArrayInOCS.Count<2 then
                                          begin
-                                              {objinsp.GDBobjinsp.}ReturnToDefault;
+                                              if assigned(ReturnToDefaultProc)then
+                                                                                  ReturnToDefaultProc;
                                               p3dpl^.YouDeleted;
                                               gdb.GetCurrentDWG.UndoStack.KillLastCommand;
                                          end;
@@ -2140,7 +2144,8 @@ else
   gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
   gdb.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
   gdb.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
-  {objinsp.GDBobjinsp.}ReturnToDefault;
+     if assigned(ReturnToDefaultProc)then
+                                         ReturnToDefaultProc;
   clearcp;
 
   //redrawoglwnd;
@@ -2151,7 +2156,8 @@ function Find_com(Operands:pansichar):GDBInteger;
    // pv:pGDBObjEntity;
    // ir:itrec;
 begin
-  SetGDBObjInsp(SysUnit.TypeName2PTD('CommandRTEdObject'),pfindcom);
+     if assigned(SetGDBObjInspProc)then
+  SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pfindcom);
   gdb.GetCurrentDWG.SelObjArray.clearallobjects;
   gdb.GetCurrentROOT.ObjArray.DeSelect;
   result:=cmd_ok;
@@ -2382,7 +2388,8 @@ begin
   pold:=nil;
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   sysvar.dwg.DWG_OSMode^:=sysvar.dwg.DWG_OSMode^ or osm_nearest;
-  SetGDBObjInsp(SysUnit.TypeName2PTD('TELLeaderComParam'),@ELLeaderComParam);
+  if assigned(SetGDBObjInspProc)then
+  SetGDBObjInspProc(SysUnit.TypeName2PTD('TELLeaderComParam'),@ELLeaderComParam);
   historyout('Первая точка:');
 end;
 function _Cable_com_Manager(Operands:pansichar):GDBInteger;
@@ -2392,8 +2399,8 @@ function _Cable_com_Manager(Operands:pansichar):GDBInteger;
 begin
         CableManager.init;
         CableManager.build;
-
-        SetGDBObjInsp(SysUnit.TypeName2PTD('TCableManager'),@CableManager);
+        if assigned(SetGDBObjInspProc)then
+        SetGDBObjInspProc(SysUnit.TypeName2PTD('TCableManager'),@CableManager);
 
 
 end;
@@ -2917,7 +2924,8 @@ begin
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
   GDB.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   GDB.GetCurrentDWG.SelObjArray.Clear;
-  ReturnToDefault;
+  if assigned(ReturnToDefaultProc)then
+  ReturnToDefaultProc;
   clearcp;
 end;
 

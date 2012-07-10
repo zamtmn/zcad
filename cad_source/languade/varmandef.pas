@@ -20,7 +20,7 @@ unit varmandef;
 {$INCLUDE def.inc}
 
 interface
-uses SysUtils,UGDBTree,UGDBStringArray,{gdbobjectsconstdef,}strutils,gdbasetypes,log,
+uses SysUtils,UGDBTree,UGDBStringArray,{gdbobjectsconstdef,}strutils,gdbasetypes,
   UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,gdbase,UGDBOpenArrayOfData,
   memman,UGDBOpenArrayOfPObjects,
   Classes,Controls,StdCtrls,LCLVersion;
@@ -355,7 +355,7 @@ var
   sysvar: gdbsysvariable;
   date:TDateTime;
 implementation
-//uses ugdbdescriptor;
+uses log;
 
 constructor TPropEditor.Create(AOwner:TComponent;_PInstance:GDBPointer;_PTD:PUserTypeDescriptor);
 begin

@@ -188,7 +188,7 @@ var
 
 implementation
 
-uses {GDBCommandsBase,}Objinsp{,optionswnd, Tedit_form, MTedit_form},
+uses {GDBCommandsBase,}{Objinsp}{,optionswnd, Tedit_form, MTedit_form}sharedcalls,
   dialogs,XMLPropStorage,layerwnd;
 procedure TMyAnchorDockManager.ResetBounds(Force: Boolean);
 begin
@@ -383,11 +383,12 @@ begin
           if assigned(pint)then
                                pint^:=Cline.Height;
           pint:=SavedUnit.FindValue('VIEW_ObjInspV');
-          if assigned(pint)then
-                               pint^:=GDBobjinsp.Width;
+          {if assigned(pint)then
+                               pint^:=GDBobjinsp.Width;}
           pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
           if assigned(pint)then
-                               pint^:=GDBobjinsp.namecol;
+                               if assigned(GetNameColWidthProc)then
+                               pint^:=GetNameColWidthProc;
 
      if assigned(InfoForm) then
      begin
@@ -537,7 +538,8 @@ begin
             poglwnd.GDBActivate;
        end;
        shared.SBTextOut('Закрыто');
-       GDBobjinsp.ReturnToDefault;
+       if assigned(ReturnToDefaultProc)then
+                                           ReturnToDefaultProc;
        sharedgdb.updatevisible;
   end;
 end;
@@ -574,6 +576,7 @@ var
   TB:TToolBar;
   tbdesk:string;
   ta:TmyAction;
+  TempForm:TForm;
   procedure CreateForm(Caption: string; NewBounds: TRect);
   begin
        begin
@@ -660,44 +663,52 @@ begin
   end
   else if aName='ObjectInspector' then
             begin
-               GDBObjInsp:=TGDBObjInsp(TGDBObjInsp.NewInstance);
-               GDBObjInsp.DisableAlign;
-               GDBObjInsp.Create(Application);
-               GDBObjInsp.Caption:=rsGDBObjInspWndName;
-               GDBObjInsp.SetBounds(0,100,200,600);
+               if assigned(CreateObjInspInstanceProc)then
+               begin
+               TempForm:=CreateObjInspInstanceProc;
+               TempForm.DisableAlign;
+               TempForm.Create(Application);
+               TempForm.Caption:=rsGDBObjInspWndName;
+               TempForm.SetBounds(0,100,200,600);
 
                //if assigned(ACN_Show_ObjectInspector) then
                //                                 ACN_ShowObjInsp.Checked:=true;
 
 
-               //GDBObjInsp.FormStyle:=fsStayOnTop;
-               //GDBObjInsp.Caption:=Title;
-               //GDBObjInsp:=TGDBObjInsp.create({self}application);
-               //GDBObjInsp.BorderStyle:=bsSingle;
+               //TempForm.FormStyle:=fsStayOnTop;
+               //TempForm.Caption:=Title;
+               //TempForm:=TGDBObjInsp.create({self}application);
+               //TempForm.BorderStyle:=bsSingle;
 
-               //GDBObjInsp.Align:=alLeft;
-               //GDBobjinsp.BorderStyle:=bssizetoolwin;
-               SetGDBObjInsp(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
-               GDBobjinsp.SetCurrentObjDefault;
-               //{GDBobjinsp.}ReturnToDefault;
+               //TempForm.Align:=alLeft;
+               //TempForm.BorderStyle:=bssizetoolwin;
+               if assigned(SetGDBObjInspProc)then
+               SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
+               if assigned(SetCurrentObjDefaultProc)then
+                                                        SetCurrentObjDefaultProc;
+               //{TempForm.}ReturnToDefault;
 
                pint:=SavedUnit.FindValue('VIEW_ObjInspV');
                {if assigned(pint)then
-                                    GDBobjinsp.Width:=pint^;}
-               GDBobjinsp.namecol:=GDBobjinsp.Width div 2;
+                                    TempForm.Width:=pint^;}
+               if assigned(SetNameColWidthProc)then
+               //TempForm.namecol:=TempForm.Width div 2;
+                                                  SetNameColWidthProc(TempForm.Width div 2);
                pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
                if assigned(pint)then
-                                    GDBobjinsp.namecol:=pint^;
+                                    if assigned(SetNameColWidthProc)then
+                                    SetNameColWidthProc(pint^);//TempForm.namecol:=pint^;
 
-               //GDBObjInsp.Parent:=self;
-               //  GDBObjInsp.show;
-               AControl:=GDBObjInsp;
+               //TempForm.Parent:=self;
+               //  TempForm.show;
+               AControl:=TempForm;
 
                AControl.Name:=aname;
                //Acontrol.Caption:=caption;
 
                    if not DoDisableAutoSizing then
                                                 Acontrol.EnableAutoSizing;
+               end;
                //Acontrol.BoundsRect:=NewBounds;
           end
   else //if copy(aName,1,7)='ToolBar' then
@@ -1954,13 +1965,14 @@ var
    comtext,deb:string;
    ct:tclass;
 begin
-     if assigned(GDBobjinsp) then
-     if assigned(GDBobjinsp.PEditor) then
+     if assigned(GetPeditorProc) then
+     if GetPeditorProc<>nil then
      //if (ActiveControl)=GDBobjinsp.PEditor.Components[0] then
       begin
            if key=VK_ESCAPE then
                                 begin
-                                     GDBobjinsp.freeeditor;
+                                     if assigned(FreEditorProc) then
+                                                                    FreEditorProc;
                                      key:=0;
                                      exit;
                                 end;
@@ -1971,8 +1983,9 @@ begin
      begin
      if (ActiveControl is tedit)or (ActiveControl is tmemo)or (ActiveControl is TComboBox)then
                                                                                               exit;
-     if (GDBobjinsp.PEditor)<>nil then
-     if (ActiveControl=GDBobjinsp.PEditor.geteditor) then
+     if assigned(GetPeditorProc) then
+     if (GetPeditorProc)<>nil then
+     if (ActiveControl=TPropEditor(GetPeditorProc).geteditor) then
                                                             exit;
      end;
      if ((ActiveControl=LayerBox)or(ActiveControl=LineWBox))then
@@ -2095,7 +2108,8 @@ begin
                         end;}
      if rt<>SysVar.SYS.SYS_RunTime^ then
                                         begin
-                                             UpdateObjInsp;
+                                             if assigned(UpdateObjInspProc)then
+                                                                               UpdateObjInspProc;
                                         end;
      rt:=SysVar.SYS.SYS_RunTime^;
      if historychanged then
@@ -2164,7 +2178,8 @@ begin
                                                 else
                                                      begin
                                                           SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(pointer(layerbox.Items.Objects[layerbox.ItemIndex]));
-                                                          SetGDBObjInsp(SysUnit.TypeName2PTD('GDBLayerProp'),gdb.GetCurrentDWG.LayerTable.GetCurrentLayer);
+                                                          if assigned(SetGDBObjInspProc)then
+                                                          SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBLayerProp'),gdb.GetCurrentDWG.LayerTable.GetCurrentLayer);
                                                      end;
   end
   else

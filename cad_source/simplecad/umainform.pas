@@ -121,7 +121,7 @@ begin
   begin
     pobj := CreateInitObjFree(GDBLineID,nil);
     v1:=createvertex(random(1000)-500,random(1000)-500,{random(1000)-500}0);
-    v2:=geometry.VertexAdd(v1,createvertex(random(50)-25,random(50)-25,{random(50)-25}0));
+    v2:=geometry.VertexAdd(v1,createvertex(random(100)-50,random(100)-50,{random(50)-25}0));
     PGDBObjLine(pobj)^.CoordInOCS.lBegin:=v1;
     PGDBObjLine(pobj)^.CoordInOCS.lEnd:=v2;
     gdb.GetCurrentRoot^.AddMi(@pobj);
@@ -212,8 +212,10 @@ begin
     pobj^.TXTStyleIndex:=0;
     pobj^.Template:='Hello word!';
     pobj^.textprop.size:=1+random(10);
+    pobj^.textprop.justify:=1+random(20);
+    pobj^.textprop.wfactor:=0.3+random*0.7;
     pobj^.textprop.oblique:=random(20);
-    angl:=pi*random/2;
+    angl:=pi*random{*0.5};
     pobj^.textprop.angle:=angl*180/pi;
     pobj^.local.basis.OX:=VectorTransform3D(PGDBObjText(pobj)^.local.basis.OX,geometry.CreateAffineRotationMatrix(PGDBObjText(pobj)^.Local.basis.oz,-angl));
     gdb.GetCurrentRoot^.AddMi(@pobj);

@@ -19,7 +19,7 @@
 unit log;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysinfo,sharedcalls;
+uses gdbasetypes,sysinfo,zcadinterface;
 const {$IFDEF DELPHI}filelog='log/zcad_delphi.log';{$ENDIF}
       {$IFDEF FPC}
                   {$IFDEF LINUX}filelog='log/zcad_linux.log';{$ENDIF}

@@ -67,7 +67,8 @@ uses
   cmdline,
   plugins,
   layerwnd,
-  zcadstrconsts;
+  zcadstrconsts,
+  Objinsp;
   //RegCnownTypes,URegisterObjects;
 
 //exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {shared}

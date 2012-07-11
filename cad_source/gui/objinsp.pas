@@ -22,7 +22,7 @@ unit Objinsp;
 interface
 
 uses
-  sharedcalls,ucxmenumgr,umytreenode,
+  zcadinterface,ucxmenumgr,umytreenode,
   Themes,
   {$IFDEF LCLGTK2}
   x,xlib,{x11,}{xutil,}

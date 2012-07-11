@@ -38,7 +38,7 @@ uses
   iodxf,iodwg,
   //optionswnd,
   {objinsp,}
-   sharedcalls,
+   zcadinterface,
   //cmdline,
   //UGDBVisibleOpenArray,
   gdbobjectsconstdef,

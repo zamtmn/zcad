@@ -39,7 +39,7 @@ uses
   iodxf,
   //optionswnd,
   {objinsp,}
-  sharedcalls,
+  zcadinterface,
   //cmdli{%H-}{%H-}ne,
   geometry,
   memman,

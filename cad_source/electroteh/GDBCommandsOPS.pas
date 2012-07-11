@@ -25,7 +25,7 @@ uses
   iodxf,
   //optionswnd,
   //objinsp,
-  sharedcalls,
+  zcadinterface,
   geometry,
   memman,
   gdbobjectsconstdef,

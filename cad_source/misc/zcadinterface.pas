@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit sharedcalls;
+unit zcadinterface;
 {$INCLUDE def.inc}
 interface
 uses varmandef,forms,classes;

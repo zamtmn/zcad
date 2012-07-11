@@ -20,7 +20,7 @@ unit splashwnd;
 {$INCLUDE def.inc}
 interface
 uses
- sharedcalls,zcadstrconsts,strproc,Forms, stdctrls, Controls, Graphics,ExtCtrls,
+ zcadinterface,zcadstrconsts,strproc,Forms, stdctrls, Controls, Graphics,ExtCtrls,
  gdbasetypes,SysInfo,fileutil,sysutils;
 type
   TSplashWnd = class(TForm)

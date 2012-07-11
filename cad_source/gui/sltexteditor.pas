@@ -51,4 +51,4 @@ initialization
   {$I sltexteditor.lrs}
 
 end.
-
+

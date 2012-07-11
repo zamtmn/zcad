@@ -26,7 +26,7 @@ uses
   //iodxf,
   //optionswnd,
   //objinsp,
-  sharedcalls,
+  zcadinterface,
   //cmdline,
   geometry,
   memman,

@@ -213,7 +213,7 @@ procedure textwrite(s: GDBString);
 procedure RunTextEditor(Pobj:GDBPointer);
 function getsortedindex(cl:integer):integer;
 implementation
-uses mainwindow,UGDBTracePropArray,GDBEntity,io,geometry,gdbobjectsconstdef,UGDBDescriptor,sharedcalls,
+uses mainwindow,UGDBTracePropArray,GDBEntity,io,geometry,gdbobjectsconstdef,UGDBDescriptor,zcadinterface,
      {GDBCommandsBase,Objinsp,Tedit_form, MTedit_form}shared,sharedgdb,UGDBLayerArray,cmdline,GDBText;
 procedure creategrid;
 var i,j:GDBInteger;
@@ -1861,7 +1861,7 @@ begin
      begin
      if not assigned(InfoForm) then
      begin
-     InfoForm:=TInfoForm.create(application.MainForm);
+     InfoForm:=TInfoForm.createnew(application.MainForm);
      pint:=SavedUnit.FindValue('TEdWND_Left');
      if assigned(pint)then
                           InfoForm.Left:=pint^;

@@ -188,7 +188,7 @@ var
 
 implementation
 
-uses {GDBCommandsBase,}{Objinsp}{,optionswnd, Tedit_form, MTedit_form}sharedcalls,
+uses {GDBCommandsBase,}{Objinsp}{,optionswnd, Tedit_form, MTedit_form}zcadinterface,
   dialogs,XMLPropStorage,layerwnd;
 procedure TMyAnchorDockManager.ResetBounds(Force: Boolean);
 begin
@@ -2296,7 +2296,8 @@ begin
     application.ProcessMessages;
     time:=(now-LPTime)*10e4;
     str(time:3:2,ts);
-    say(format(rscompiledtimemsg,[ts]));
+    //say(format(rscompiledtimemsg,[ts]));
+    shared.HistoryOutStr(format(rscompiledtimemsg,[ts]));
 end;
 procedure TMainFormN.ReloadLayer;
 var

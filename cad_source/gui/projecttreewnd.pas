@@ -68,7 +68,7 @@ var
   //ProgramDBContextMenuN,ProjectDBContextMenuN,ProgramDEVContextMenuN:TmyPopupMenu;
 
 implementation
-uses commandline,GDBBlockDef{,UGDBObjBlockdefArray},UBaseTypeDescriptor,{objinsp,}sharedcalls,UGDBStringArray,UUnitManager,mainwindow;
+uses commandline,GDBBlockDef{,UGDBObjBlockdefArray},UBaseTypeDescriptor,{objinsp,}zcadinterface,UGDBStringArray,UUnitManager,mainwindow;
 function TBlockTreeNode.GetParams;
 begin
      result:=@FBlockName;

@@ -466,7 +466,7 @@ begin
     if sListHeight>0 then
                          PoleLista.Height:=sListHeight
                      else
-                         PoleLista.Height:={LV..Height*LV.Items.Count}1000;
+                         PoleLista.Height:=LV.Items.Count*19+4;//{LV..Height*LV.Items.Count}1000;
 
     PoleLista.Show;
   end;

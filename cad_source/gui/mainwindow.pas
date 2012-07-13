@@ -21,7 +21,7 @@ unit mainwindow;
 
 interface
 uses
-  ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
+  laercombobox,ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
   ActnList,LCLType,LCLProc,strproc,log,intftranslations,toolwin,
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
@@ -69,12 +69,12 @@ type
                     SystemTimer: TTimer;
 
                     toolbars:tstringlist;
-                    iconlist: TImageList;
+                    IconList: TImageList;
 
                     updatesbytton:tlist;
 
-                    procedure LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-                                               State: TOwnerDrawState);
+                    {procedure LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+                                               State: TOwnerDrawState);}
                     procedure LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                                State: TOwnerDrawState);
                     function findtoolbatdesk(tbn:string):string;
@@ -148,6 +148,9 @@ type
                                                    WithThemeSpace: boolean = true); override;
 
                     function IsShortcut(var Message: TLMKey): boolean; override;
+                    function GetLayerProp(PLayer:Pointer;var lp:TLayerPropRecord):boolean;
+                    function GetLayersArray(var la:TLayerArray):boolean;
+                    function ClickOnLayerProp(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean;
 
                end;
   TMyAnchorDockManager = class(TAnchorDockManager)
@@ -175,13 +178,27 @@ var
   //MainForm: TMainForm;
   uGeneralTimer:cardinal;
   GeneralTime:GDBInteger;
-  LayerBox:TComboBox;
+  LayerBox:{TComboBox}TZCADLaerComboBox;
   LineWBox:TComboBox;
   LayoutBox:TComboBox;
   LPTime:Tdatetime;
   oldlongprocess:integer;
   tf:tform;
   //DockMaster:  TAnchorDockMaster = nil;
+
+  //imagesindex
+  II_Plus,
+  II_Minus,
+  II_Ok,
+  II_LayerOff,
+  II_LayerOn,
+  II_LayerUnPrint,
+  II_LayerPrint,
+  II_LayerUnLock,
+  II_LayerLock,
+  II_LayerFreze,
+  II_LayerUnFreze
+  :integer;
 
   function CloseApp:GDBInteger;
   function IsRealyQuit:GDBBoolean;
@@ -294,8 +311,108 @@ begin
   end else
     DrawGrabber(r);
 end;
+procedure setlayerstate(PLayer:PGDBLayerProp;var lp:TLayerPropRecord);
+begin
+     lp.OnOff:=player^._on;
+     lp.Freze:=false;
+     lp.Lock:=player^._lock;
+     lp.Name:=player.Name;
+     lp.PLayer:=player;;
+end;
+function TMainFormN.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean;
+var
+   cdwg:PTDrawing;
+begin
+     result:=false;
+     case numprop of
+                    0:PGDBLayerProp(PLayer)^._on:=not(PGDBLayerProp(PLayer)^._on);
+                    {1:;}
+                    2:PGDBLayerProp(PLayer)^._lock:=not(PGDBLayerProp(PLayer)^._lock);
+                    3:begin
+                           cdwg:=gdb.GetCurrentDWG;
+                           if cdwg<>nil then
+                              if assigned(sysvar.dwg.DWG_CLayer) then
+                                            sysvar.dwg.DWG_CLayer^:=cdwg^.LayerTable.GetIndexByPointer(Player);
+                           result:=true;
+                      end;
+     end;
+     setlayerstate(PLayer,newlp);
+     if not result then
+                       begin
+                            updatevisible;
+                            redrawoglwnd;
+                       end;
+end;
 
+function TMainFormN.GetLayersArray(var la:TLayerArray):boolean;
+var
+   cdwg:PTDrawing;
+   pcl:PGDBLayerProp;
+   ir:itrec;
+   counter:integer;
+begin
+     result:=false;
+     cdwg:=gdb.GetCurrentDWG;
+     if cdwg<>nil then
+     begin
+         if assigned(cdwg^.OGLwindow1) then
+         begin
+              setlength(la,cdwg^.LayerTable.Count);
+              counter:=0;
+              pcl:=cdwg^.LayerTable.beginiterate(ir);
+              if pcl<>nil then
+              repeat
+                    setlayerstate(pcl,la[counter]);
+                    inc(counter);
+                    pcl:=cdwg^.LayerTable.iterate(ir);
+              until pcl=nil;
+              setlength(la,counter);
+              if counter>0 then
+                               result:=true;
+         end;
+     end;
+end;
+function TMainFormN.GetLayerProp(PLayer:Pointer;var lp:TLayerPropRecord):boolean;
+var
+   cdwg:PTDrawing;
+   pcl:PGDBLayerProp;
+begin
+     if player=nil then
+                       begin
+                            result:=false;
+                            cdwg:=gdb.GetCurrentDWG;
+                            if cdwg<>nil then
+                            begin
+                                 if assigned(cdwg^.OGLwindow1) then
+                                 begin
+                                 pcl:=cdwg^.LayerTable.GetCurrentLayer;
+                                 if cdwg^.OGLwindow1.param.seldesc.Selectedobjcount=0 then
+                                 begin
+                                 if pcl<>nil then
+                                                 begin
+                                                      setlayerstate(pcl,lp);
+                                                      result:=true;
+                                                 end;
+                                 end
+                                 else
+                                     begin
+                                          if cdwg^.OGLwindow1.SelectedObjectsPLayer<>nil then
+                                          begin
+                                               setlayerstate(cdwg^.OGLwindow1.SelectedObjectsPLayer,lp);
+                                               result:=true;
+                                          end;
+                                     end;
+                                end;
+                            end;
 
+                       end
+                   else
+                       begin
+                            result:=true;
+                            setlayerstate(PLayer,lp);
+                       end;
+
+end;
 
 function TMainFormN.findtoolbatdesk(tbn:string):string;
 var i:integer;
@@ -883,17 +1000,17 @@ begin
   CursorOff:=RestoreCursors;
   iconlist:=timagelist.Create(self);
 
-  loadicon(iconlist,sysparam.programpath+'images/plus.png');
-  loadicon(iconlist,sysparam.programpath+'images/minus.png');
-  loadicon(iconlist,sysparam.programpath+'images/ok.png');
-  loadicon(iconlist,sysparam.programpath+'images/off.png');
-  loadicon(iconlist,sysparam.programpath+'images/on.png');
-  loadicon(iconlist,sysparam.programpath+'images/unprint.png');
-  loadicon(iconlist,sysparam.programpath+'images/print.png');
-  loadicon(iconlist,sysparam.programpath+'images/unlock.png');
-  loadicon(iconlist,sysparam.programpath+'images/lock.png');
-  loadicon(iconlist,sysparam.programpath+'images/freze.png');
-  loadicon(iconlist,sysparam.programpath+'images/unfreze.png');
+  II_Plus:=loadicon(iconlist,sysparam.programpath+'images/plus.png');
+  II_Minus:=loadicon(iconlist,sysparam.programpath+'images/minus.png');
+  II_Ok:=loadicon(iconlist,sysparam.programpath+'images/ok.png');
+  II_LayerOff:=loadicon(iconlist,sysparam.programpath+'images/off.png');
+  II_LayerOn:=loadicon(iconlist,sysparam.programpath+'images/on.png');
+  II_LayerUnPrint:=loadicon(iconlist,sysparam.programpath+'images/unprint.png');
+  II_LayerPrint:=loadicon(iconlist,sysparam.programpath+'images/print.png');
+  II_LayerUnLock:=loadicon(iconlist,sysparam.programpath+'images/unlock.png');
+  II_LayerLock:=loadicon(iconlist,sysparam.programpath+'images/lock.png');
+  II_LayerFreze:=loadicon(iconlist,sysparam.programpath+'images/freze.png');
+  II_LayerUnFreze:=loadicon(iconlist,sysparam.programpath+'images/unfreze.png');
 
 
   //iconlist.
@@ -1049,7 +1166,7 @@ begin
                                                    end;
     b.Parent:=tb;
 end;
-procedure TMainFormN.LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+{procedure TMainFormN.LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: TOwnerDrawState);
 var
    plp:PGDBLayerProp;
@@ -1061,28 +1178,26 @@ begin
    exit;
   if pdwg.LayerTable.Count=0 then
    exit;
-     //LayerBox.Canvas.TextRect(ARect,1,1,'asdasd');
   canvas.Brush.Color := clBtnFace;
   canvas.FillRect(ARect);
-    //canvas.FillRect(arect);
     pointer(plp):=LayerBox.Items.Objects[Index];
     if plp=nil then
                    s:=rsDifferent
                else
                    begin
-                   s:=LayerBox.Items.Strings[Index];// (plp^.name){S_Different};
+                   s:=LayerBox.Items.Strings[Index];;
                    if plp^._on then
-                                   iconlist.Draw(LayerBox.Canvas,1,ARect.Top{+1},4)
+                                   iconlist.Draw(LayerBox.Canvas,1,ARect.Top,4)
                                else
-                                   iconlist.Draw(LayerBox.Canvas,1,ARect.Top{+1},3);
+                                   iconlist.Draw(LayerBox.Canvas,1,ARect.Top,3);
                    if plp^._lock then
-                                   iconlist.Draw(LayerBox.Canvas,17,ARect.Top{+1},8)
+                                   iconlist.Draw(LayerBox.Canvas,17,ARect.Top,8)
                                else
-                                   iconlist.Draw(LayerBox.Canvas,17,ARect.Top{+1},7);
+                                   iconlist.Draw(LayerBox.Canvas,17,ARect.Top,7);
                    end;
     ARect.Left:=ARect.Left+36;
     DrawText(LayerBox.canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
-end;
+end;}
 
 procedure TMainFormN.LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: TOwnerDrawState);
@@ -1203,9 +1318,20 @@ begin
                           val(bc,w,code);
                           if assigned(LayerBox) then
                                                     shared.ShowError(format(rsReCreating,['LAYERCOMBOBOX']));
-                          LayerBox:=TComboBox.Create(tb);
-                          LayerBox.Style:=csOwnerDrawFixed{Variable};
-                          LayerBox.OnDrawItem:=LayerBoxDrawItem;
+                          LayerBox:={TComboBox}TZCADLaerComboBox.Create(tb);
+                          IconList.GetBitmap(II_LayerOn,LayerBox.Glyph_OnOff_ON);
+                          IconList.GetBitmap(II_LayerOff,LayerBox.Glyph_OnOff_OFF);
+                          IconList.GetBitmap(II_LayerFreze,LayerBox.Glyph_Freze_ON);
+                          IconList.GetBitmap(II_LayerUnFreze,LayerBox.Glyph_Freze_OFF);
+                          IconList.GetBitmap(II_LayerLock,LayerBox.Glyph_Lock_ON);
+                          IconList.GetBitmap(II_LayerUnLock,LayerBox.Glyph_Lock_OFF);
+                          LayerBox.UpdateIcon;
+
+                          LayerBox.fGetLayerProp:=self.GetLayerProp;
+                          LayerBox.fGetLayersArray:=self.GetLayersArray;
+                          LayerBox.fClickOnLayerProp:=self.ClickOnLayerProp;
+                          {LayerBox.Style:=csOwnerDrawFixed}{Variable};
+                          {LayerBox.OnDrawItem:=LayerBoxDrawItem;}
                           if code=0 then
                                         LayerBox.Width:=w;
                           if ts<>''then
@@ -1215,9 +1341,9 @@ begin
                                LayerBox.ShowHint:=true;
                           end;
                           LayerBox.OnChange:=ChangeCLayer;
-                          LayerBox.ReadOnly:=true;
+                          {LayerBox.ReadOnly:=true;}
                           LayerBox.AutoSize:=false;
-                          LayerBox.OnMouseLeave:=self.setnormalfocus;
+                          {LayerBox.OnMouseLeave:=self.setnormalfocus;}
                           AddToBar(tb,LayerBox);
                      end;
                      if uppercase(line)='LINEWCOMBOBOX' then
@@ -1840,18 +1966,13 @@ end;
 
 destructor TMainFormN.Destroy;
 begin
-     //pmenu^.done;
-     //pdownpanel.done;
-     //prightpanel.done;
-     //self.contr
-    if layerbox<>nil then
-                         layerbox.Items.Clear;
+    {if layerbox<>nil then
+                         layerbox.Items.Clear;}
     if DockMaster<>nil then
     DockMaster.CloseAll;
     freeandnil(toolbars);
     freeandnil(updatesbytton);
      inherited;
-     //GDBFreeMem(pointer(pmenu));
 end;
 function IsEditableShortCut(var Message: TLMKey):boolean;
 var
@@ -2174,17 +2295,17 @@ begin
   if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
   then
   begin
-  if layerbox.ItemIndex = layerbox.Items.Count-1 then layerbox.ItemIndex := getsortedindex(SysVar.dwg.DWG_CLayer^)
+  if layerbox.ItemIndex = layerbox.ItemsCount-1 then layerbox.ItemIndex := getsortedindex(SysVar.dwg.DWG_CLayer^)
                                                 else
                                                      begin
-                                                          SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(pointer(layerbox.Items.Objects[layerbox.ItemIndex]));
+                                                          SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(pointer(layerbox.Item{s.Objects}[layerbox.ItemIndex].PLayer));
                                                           if assigned(SetGDBObjInspProc)then
                                                           SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBLayerProp'),gdb.GetCurrentDWG.LayerTable.GetCurrentLayer);
                                                      end;
   end
   else
   begin
-       if layerbox.ItemIndex = layerbox.Items.Count-1
+       if layerbox.ItemIndex = layerbox.ItemsCount-1
            then
            begin
                 gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
@@ -2192,7 +2313,7 @@ begin
            else
            begin
                 tcl:=SysVar.dwg.DWG_CLayer^;
-                SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(pointer(layerbox.Items.Objects[layerbox.ItemIndex]));
+                SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(pointer(layerbox.Item{s.Objects}[layerbox.ItemIndex].PLayer));
                 commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent');
                 SysVar.dwg.DWG_CLayer^:=tcl;
                 gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
@@ -2309,20 +2430,21 @@ var
 begin
 
   {layerbox.ClearText;}
-  layerbox.Items.Clear;
-  layerbox.Sorted:=true;
+  layerbox.ItemsClear;
+  //layerbox.Sorted:=true;
   plp:=plt^.beginiterate(ir);
   if plp<>nil then
   repeat
        s:=plp^.GetFullName;
-       layerbox.AddItem(s,pointer(plp));//      sdfg
+       //(OnOff,Freze,Lock:boolean;ItemName:utf8string;lo:pointer)
+       layerbox.AddItem(plp^._on,false,plp^._lock,s,pointer(plp));//      sdfg
        //layerbox.Items.Add(s);
        plp:=plt^.iterate(ir);
   until plp=nil;
   //layerbox.Items.;
-  layerbox.Sorted:=false;
+  //layerbox.Sorted:=false;
   //layerbox.Items.Add(S_Different);
-  layerbox.Additem(rsDifferent,nil);
+  layerbox.Additem(false,false,false,rsDifferent,nil);
   layerbox.ItemIndex:=(SysVar.dwg.DWG_CLayer^);
   //layerbox.Sorted:=true;
 end;

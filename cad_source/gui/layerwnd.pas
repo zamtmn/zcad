@@ -24,7 +24,6 @@ type
     B3: TBitBtn;
     ButtonApplyClose: TBitBtn;
     Button_Apply: TBitBtn;
-    IL: TImageList;
     Label1: TLabel;
     Label2: TLabel;
     ListView1: TListView;
@@ -60,16 +59,16 @@ var
   LayerWindow: TLayerWindow;
 
 implementation
-//uses mainwindow;
+uses mainwindow;
 { TLayerWindow }
 
 procedure TLayerWindow.FormCreate(Sender: TObject); // Процедура выполняется при отрисовке окна
 begin
 // Отрисовываем картинки на кнопках
-IL.GetBitmap(0, B1.Glyph);
-IL.GetBitmap(1, B2.Glyph);
-IL.GetBitmap(2, B3.Glyph);
-ListView1.SmallImages:=il;
+MainFormN.IconList.GetBitmap(II_Plus, B1.Glyph);
+MainFormN.IconList.GetBitmap(II_Minus, B2.Glyph);
+MainFormN.IconList.GetBitmap(II_Ok, B3.Glyph);
+ListView1.SmallImages:=MainFormN.IconList;
 MouseDownItem:=nil;
 MouseDownSubItem:=-1;
 changedstamp:=false;
@@ -110,7 +109,7 @@ begin
                    if CurrentLayer<>ListItem then
                    begin
                    SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer(ListItem.Data);
-                   ListItem.ImageIndex:=2;
+                   ListItem.ImageIndex:=II_Ok;
                    CurrentLayer.ImageIndex:=-1;
                    CurrentLayer:=ListItem;
                    changedstamp:=true;
@@ -119,17 +118,17 @@ begin
            1:begin
                    PGDBLayerProp(ListItem.Data)^._on:=not PGDBLayerProp(ListItem.Data)^._on;
                    if PGDBLayerProp(ListItem.Data)^._on then
-                                    ListItem.SubItemImages[1]:=4
+                                    ListItem.SubItemImages[1]:=II_LayerOn
                                 else
-                                    ListItem.SubItemImages[1]:=3;
+                                    ListItem.SubItemImages[1]:=II_LayerOff;
                     changedstamp:=true;
              end;
            3:begin
                    PGDBLayerProp(ListItem.Data)^._lock:=not PGDBLayerProp(ListItem.Data)^._lock;
                    if PGDBLayerProp(ListItem.Data)^._lock then
-                                    ListItem.SubItemImages[3]:=8
+                                    ListItem.SubItemImages[3]:=II_LayerLock
                                 else
-                                    ListItem.SubItemImages[3]:=7;
+                                    ListItem.SubItemImages[3]:=II_LayerUnLock;
                     changedstamp:=true;
              end;
            7:begin
@@ -140,9 +139,9 @@ begin
                    PGDBLayerProp(ListItem.Data)^._print:=false;
                    end;
                    if PGDBLayerProp(ListItem.Data)^._print then
-                                    ListItem.SubItemImages[7]:=6
+                                    ListItem.SubItemImages[7]:=II_LayerPrint
                                 else
-                                    ListItem.SubItemImages[7]:=5;
+                                    ListItem.SubItemImages[7]:=II_LayerUnPrint;
                     changedstamp:=true;
              end;
            8:begin
@@ -235,20 +234,20 @@ begin
             li.SubItems.Add('');
             li.SubItems.Add(strproc.Tria_AnsiToUtf8(plp^.desk));
             if plp^._on then
-                            li.SubItemImages[1]:=4
+                            li.SubItemImages[1]:=II_LayerOn
                         else
-                            li.SubItemImages[1]:=3;
+                            li.SubItemImages[1]:=II_LayerOff;
 
             li.SubItemImages[2]:=10;
 
             if plp^._lock then
-                            li.SubItemImages[3]:=8
+                            li.SubItemImages[3]:=II_LayerLock
                         else
-                            li.SubItemImages[3]:=7;
+                            li.SubItemImages[3]:=II_LayerUnLock;
             if plp^._print then
-                            li.SubItemImages[7]:=6
+                            li.SubItemImages[7]:=II_LayerPrint
                         else
-                            li.SubItemImages[7]:=5;
+                            li.SubItemImages[7]:=II_LayerUnPrint;
 
 
             //s:=plp^.GetFullName;

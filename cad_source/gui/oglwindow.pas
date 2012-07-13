@@ -23,7 +23,7 @@ interface
 
 uses
 
-   zcadstrconsts,ucxmenumgr,GLext,
+   UGDBLayerArray,zcadstrconsts,ucxmenumgr,GLext,
   {$IFDEF LCLGTK2}
   //x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
@@ -87,6 +87,8 @@ type
 
     FastMMShift: TShiftState;
     FastMMX,FastMMY: Integer;
+
+    SelectedObjectsPLayer:PGDBLayerProp;
 
     //procedure keydown(var Key: GDBWord; Shift: TShiftState);
     //procedure dock(Sender: TObject; Source: TDragDockObject; X, Y: GDBInteger;State: TDragState; var Accept: GDBBoolean);
@@ -214,7 +216,7 @@ procedure RunTextEditor(Pobj:GDBPointer);
 function getsortedindex(cl:integer):integer;
 implementation
 uses mainwindow,UGDBTracePropArray,GDBEntity,io,geometry,gdbobjectsconstdef,UGDBDescriptor,zcadinterface,
-     {GDBCommandsBase,Objinsp,Tedit_form, MTedit_form}shared,sharedgdb,UGDBLayerArray,cmdline,GDBText;
+     {GDBCommandsBase,Objinsp,Tedit_form, MTedit_form}shared,sharedgdb,{UGDBLayerArray,}cmdline,GDBText;
 procedure creategrid;
 var i,j:GDBInteger;
 begin
@@ -249,7 +251,7 @@ procedure TOGLWnd.init;
 begin
      //ControlStyle:=ControlStyle+[csNeedsBorderPaint];
      //FCompStyle:=csNonLCL;
-
+  SelectedObjectsPLayer:=nil;
   sh:=0;
 
   self.Hint:=inttostr(random(100));
@@ -4299,8 +4301,8 @@ var i:integer;
     s:string;
 begin
      s:=(pGDBLayerProp(gdb.GetCurrentDWG.LayerTable.getelement(cl))^.GetFullName);
-     for i:=0 to layerbox.Items.Count-1 do
-     if layerbox.Items.Strings[i]=s then
+     for i:=0 to layerbox.ItemsCount-1 do
+     if layerbox.Item{s.Strings}[i].Name=s then
      begin
           result:=i;
           exit;
@@ -4363,7 +4365,7 @@ begin
            if layer<>lpusto then
            if assigned(LayerBox)then
            if layer=ldifferent then
-                                  LayerBox.ItemIndex:=(LayerBox.Items.Count-1)
+                                  LayerBox.ItemIndex:=(LayerBox.ItemsCount-1)
                            else
                                begin
                                     LayerBox.ItemIndex:=getsortedindex(gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(layer));
@@ -4388,13 +4390,18 @@ begin
                        end
                    else LinewBox.ItemIndex:=((lw div 10)+3);
            end;
-           if assigned(LayerBox)then
-           LayerBox.ItemIndex:=getsortedindex((layer));//(layer);
+           {if assigned(LayerBox)then
+           LayerBox.ItemIndex:=getsortedindex((layer));//(layer);    xcvxcv}
+           SelectedObjectsPLayer:=PGDBObjEntity(param.SelDesc.LastSelectedObject)^.vp.layer;
       end
   else
       begin
            if assigned(LayerBox)then
-           if LayerBox.ItemIndex<>getsortedindex((layer)) then LayerBox.ItemIndex:=(LayerBox.Items.Count-1);
+           begin
+                if SelectedObjectsPLayer<>PGDBObjEntity(param.SelDesc.LastSelectedObject)^.vp.layer then
+                   SelectedObjectsPLayer:=nil;
+           end;
+           //if LayerBox.ItemIndex<>getsortedindex((layer)) then LayerBox.ItemIndex:=(LayerBox.ItemsCount-1);
            if lw<0 then lw:=lw+3
                    else lw:=(lw div 10)+3;
            if assigned(LinewBox)then

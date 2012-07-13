@@ -133,7 +133,10 @@ begin
 end;
 function GDBLayerArray.GetCurrentLayer;
 begin
-     result:=getelement(sysvar.dwg.DWG_CLayer^);
+     if assigned(sysvar.dwg.DWG_CLayer) then
+                                            result:=getelement(sysvar.dwg.DWG_CLayer^)
+                                        else
+                                            result:=nil;
 end;
 function GDBLayerArray.addlayer;
 var

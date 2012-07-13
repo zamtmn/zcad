@@ -121,6 +121,7 @@ begin
 end;
 procedure reloadlayer; export;
 begin
+     exit;
      if assigned(layerbox) then
      mainformN.ReloadLayer(@gdb.GetCurrentDWG.LayerTable);
 end;

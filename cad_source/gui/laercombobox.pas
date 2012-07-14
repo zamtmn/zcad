@@ -114,6 +114,8 @@ type
     procedure AddItem(OnOff,Freze,Lock:boolean;ItemName:utf8string;lo:pointer);
     procedure DelItem(ItemIndex:integer);
     destructor Destroy;override;
+    procedure CompareEvent(Sender: TObject; Item1, Item2: TListItem;
+                               Data: Integer; var Compare: Integer);
     property ItemIndex:integer read sItemIndex write SetItemIndex;
     property ItemsCount:integer read ReadItemsCount;
     property Item[iIndex:Integer]:TLayerPropRecord read ReadItem;
@@ -226,6 +228,17 @@ begin
 end;
 
 //============================================================================//
+procedure TZCADLaerComboBox.CompareEvent(Sender: TObject; Item1, Item2: TListItem;
+                           Data: Integer; var Compare: Integer);
+begin
+     if Item1.SubItems[2]>Item2.SubItems[2] then
+                                                compare:=1
+else if Item1.SubItems[2]=Item2.SubItems[2] then
+                                                compare:=0
+                                            else
+                                                compare:=-1;
+
+end;
 
 constructor TZCADLaerComboBox.Create(AOwner:TComponent);                      // Создание объекта класса
   var
@@ -462,6 +475,7 @@ begin
     LV.Columns.Items[3].Width:=PoleLista.Width-18*3-30;
     LV.OnClick:=@LVKlac;
     LV.OnKeyDown:=@KeyDown;
+    LV.OnCompare:=@Compareevent;
     ObnovitSpisok;
     if sListHeight>0 then
                          PoleLista.Height:=sListHeight
@@ -546,6 +560,7 @@ begin
       if LayerArray[n].Freze=true then LV.Items.Item[n].SubItemImages[0]:=2 else LV.Items.Item[n].SubItemImages[0]:=3;
       if LayerArray[n].Lock=true then LV.Items.Item[n].SubItemImages[1]:=4 else LV.Items.Item[n].SubItemImages[1]:=5;}
     end;
+    LV.SortType:=stBoth;
     LV.EndUpdate;
   end;
 end;

@@ -322,6 +322,7 @@ end;
 function TMainFormN.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean;
 var
    cdwg:PTDrawing;
+   tcl:integer;
 begin
      result:=false;
      case numprop of
@@ -331,9 +332,22 @@ begin
                     3:begin
                            cdwg:=gdb.GetCurrentDWG;
                            if cdwg<>nil then
-                              if assigned(sysvar.dwg.DWG_CLayer) then
+                           begin
+                                if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0 then
+                                begin
+                                          if assigned(sysvar.dwg.DWG_CLayer) then
                                             sysvar.dwg.DWG_CLayer^:=cdwg^.LayerTable.GetIndexByPointer(Player);
+                                end
+                                else
+                                begin
+                                       tcl:=SysVar.dwg.DWG_CLayer^;
+                                       SysVar.dwg.DWG_CLayer^:=cdwg^.LayerTable.GetIndexByPointer(Player);
+                                       commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent');
+                                       SysVar.dwg.DWG_CLayer^:=tcl;
+                                       gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
+                                end;
                            result:=true;
+                           end;
                       end;
      end;
      setlayerstate(PLayer,newlp);

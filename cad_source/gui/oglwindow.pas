@@ -2046,6 +2046,7 @@ begin
                         param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
                         addoneobject;
                         SetObjInsp;
+                        updatevisible
                           end;
                    end
                else
@@ -2054,6 +2055,7 @@ begin
                         param.SelDesc.LastSelectedObject := nil;
                         //addoneobject;
                         SetObjInsp;
+                        updatevisible;
                    end;
                NeedRedraw:=true;
           end

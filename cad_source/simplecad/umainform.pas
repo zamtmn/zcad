@@ -5,11 +5,11 @@ unit umainform;
 interface
 
 uses
-  LCLType, geometry, sharedgdb, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
+  LCLType, geometry, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Spin,
   {From ZCAD}
-  iodxf,varmandef, oglwindow,  UUnitManager,
+  {zcadinterface,} iodxf,varmandef, oglwindow,  UUnitManager,
   UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDBText,GDBLine,GDBCircle,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
 
 type
@@ -60,7 +60,7 @@ begin
   begin
        gdb.GetCurrentDWG^.SelObjArray.clearallobjects;
        gdb.GetCurrentROOT^.ObjArray.DeSelect;
-       sharedgdb.redrawoglwnd;
+       UGDBDescriptor.redrawoglwnd;
        Key:=0;
   end;
   if Key=VK_DELETE then
@@ -72,7 +72,7 @@ end;
 
 procedure TForm1._FormShow(Sender: TObject);
 begin
-    sharedgdb.redrawoglwnd;
+    UGDBDescriptor.redrawoglwnd;
 end;
 
 procedure TForm1._FormCreate(Sender: TObject);
@@ -130,7 +130,7 @@ begin
   end;
   gdb.GetCurrentDWG^.pObjRoot^.Format;
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
-  sharedgdb.redrawoglwnd;
+  UGDBDescriptor.redrawoglwnd;
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -153,13 +153,13 @@ begin
   end;
   gdb.GetCurrentDWG^.pObjRoot^.Format;
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
-   sharedgdb.redrawoglwnd;
+  UGDBDescriptor.redrawoglwnd;
 end;
 
 procedure TForm1.Button3Click(Sender: TObject);
 begin
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
-     sharedgdb.redrawoglwnd;
+     UGDBDescriptor.redrawoglwnd;
 end;
 
 procedure TForm1.Button4Click(Sender: TObject);
@@ -185,7 +185,7 @@ begin
   GDB.GetCurrentDWG^.OGLwindow1.param.lastonmouseobject:=nil;
   gdb.GetCurrentDWG^.OnMouseObj.Clear;
   gdb.GetCurrentDWG^.SelObjArray.clearallobjects;
-  sharedgdb.redrawoglwnd;
+  UGDBDescriptor.redrawoglwnd;
 end;
 
 procedure TForm1.Button5Click(Sender: TObject);
@@ -224,7 +224,7 @@ begin
   end;
   gdb.GetCurrentDWG^.pObjRoot^.Format;
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
-   sharedgdb.redrawoglwnd;
+  UGDBDescriptor.redrawoglwnd;
 end;
 
 procedure TForm1.Button6Click(Sender: TObject);
@@ -233,7 +233,7 @@ begin
      begin
           addfromdxf(OpenDialog1.FileName,@gdb.GetCurrentDWG^.pObjRoot^,TLOLoad);
           gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
-          sharedgdb.redrawoglwnd;
+          UGDBDescriptor.redrawoglwnd;
      end;
 end;
 
@@ -248,7 +248,7 @@ end;
 procedure TForm1.TreeChange(Sender: TObject);
 begin
      sysvar.DWG.DWG_SystmGeometryDraw^:=CheckBox1.Checked;
-     sharedgdb.redrawoglwnd;
+     UGDBDescriptor.redrawoglwnd;
 end;
 
 

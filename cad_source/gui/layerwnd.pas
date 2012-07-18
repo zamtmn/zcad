@@ -8,9 +8,9 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Buttons, ExtCtrls, StdCtrls, Grids, ComCtrls,LCLIntf,lcltype,
 
-  gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,sharedgdb,
+  gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
 
-  zcadstrconsts,strproc,shared,UBaseTypeDescriptor;
+  zcadinterface,zcadstrconsts,strproc,shared,UBaseTypeDescriptor;
 
 type
 
@@ -285,8 +285,9 @@ procedure TLayerWindow.Aply(Sender: TObject);
 begin
      if changedstamp then
      begin
-           updatevisible;
-           redrawoglwnd;
+           if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+           if assigned(redrawoglwndproc)then
+                                            redrawoglwndproc;
      end;
 end;
 

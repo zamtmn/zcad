@@ -22,11 +22,9 @@ unit GDBCommandsDraw;
 interface
 uses
   zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
-  //debygunit,
   commandlinedef,
-  {windows,}gdbasetypes,commandline,GDBCommandsBase,
+  gdbasetypes,commandline,GDBCommandsBase,
   plugins,
-  //commandlinedef,
   commanddefinternal,
   gdbase,
   UGDBDescriptor,
@@ -34,18 +32,13 @@ uses
   sysutils,
   varmandef,
   oglwindowdef,
-  //OGLtypes,
-  //UGDBOpenArrayOfByte,
   iodxf,
-  //optionswnd,
-  {objinsp,}
   zcadinterface,
-  //cmdli{%H-}{%H-}ne,
   geometry,
   memman,
   gdbobjectsconstdef,
-  {UGDBVisibleOpenArray,}GDBEntity,GDBCircle,GDBLine,GDBGenericSubEntry,GDBMText,
-  shared,sharedgdb,GDBSubordinated,GDBBlockInsert,GDBPolyLine,log,UGDBOpenArrayOfData,math,GDBTable{,GDBElLeader},UGDBStringArray,printerspecfunc;
+  GDBEntity,GDBCircle,GDBLine,GDBGenericSubEntry,GDBMText,
+  shared,GDBSubordinated,GDBBlockInsert,GDBPolyLine,log,UGDBOpenArrayOfData,math,GDBTable,UGDBStringArray,printerspecfunc;
 const
      modelspacename:GDBSTring='**Модель**';
 type
@@ -332,7 +325,7 @@ procedure Line_com_CommandEnd;
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 implementation
-uses GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,mainwindow,{UGDBObjBlockdefArray,}Varman,projecttreewnd,oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
+uses GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,Varman,projecttreewnd,oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
 function GetBlockDefNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDBInteger;
 var pb:PGDBObjBlockdef;
     ir:itrec;
@@ -1013,9 +1006,11 @@ end;
 procedure Print_com.SelectPrinter(pdata:GDBPlatformint);
 begin
   historyoutstr(rsNotYetImplemented);
-  mainformn.ShowAllCursors;
+       if assigned(ShowAllCursorsProc) then
+                                         ShowAllCursorsProc;
   if PSD.Execute then;
-  mainformn.RestoreCursors;
+  if assigned(RestoreAllCursorsProc) then
+                                      RestoreAllCursorsProc;
        //UpdatePrinterInfo;
 end;
 procedure Print_com.SetWindow(pdata:GDBPlatformint);
@@ -1027,9 +1022,11 @@ procedure Print_com.SelectPaper(pdata:GDBPlatformint);
 
 begin
   historyoutstr(rsNotYetImplemented);
-  mainformn.ShowAllCursors;
+  if assigned(ShowAllCursorsProc) then
+                                      ShowAllCursorsProc;
   if Paged.Execute then;
-  mainformn.RestoreCursors;
+       if assigned(RestoreAllCursorsProc) then
+                                         RestoreAllCursorsProc;
 end;
 function Inch(AValue: Double; VertRes:boolean=true): Integer;
 begin
@@ -1167,12 +1164,12 @@ begin
     on E:Exception do
     begin
       Printer.Abort;
-      MainFormn.MessageBox(pChar(e.message),'Error',mb_iconhand);
+      MessageBox(pChar(e.message),'Error',mb_iconhand);
     end;
   end;
   ForeGround:=oldForeGround;
   OGLSM:=oldrasterozer;
-  sharedgdb.redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   //prn.done;
 end;
 
@@ -1250,7 +1247,7 @@ function TextInsert_com.DoEnd(pdata:GDBPointer):GDBBoolean;
 begin
      result:=false;
      dec(self.mouseclic);
-     redrawoglwnd;
+     if assigned(redrawoglwndproc) then redrawoglwndproc;
      if TextInsertParams.runtexteditor then
                                            RunTextEditor(pdata);
      //redrawoglwnd;
@@ -1612,7 +1609,7 @@ begin
     pb:=nil;
     //commandmanager.executecommandend;
     //result:=1;
-    redrawoglwnd;
+    if assigned(redrawoglwndproc) then redrawoglwndproc;
 
     result:=0;
   end
@@ -1716,7 +1713,7 @@ begin
   if assigned(ReturnToDefaultProc)then
                                       ReturnToDefaultProc;
   clearcp;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 function InverseSelected_com:GDBInteger;
@@ -1749,7 +1746,7 @@ begin
   GDB.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   //{objinsp.GDBobjinsp.}ReturnToDefault;
   //clearcp;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 
@@ -2047,7 +2044,7 @@ begin
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
     //Line_com_BeforeClick(wc,mc,button,osp);
-    redrawoglwnd;
+    if assigned(redrawoglwndproc) then redrawoglwndproc;
     //commandend;
     //commandmanager.executecommandend;
   end;
@@ -2257,7 +2254,7 @@ begin
       if (button and MZW_LBUTTON)<>0 then
       begin
            copy(dispmatr,self.CommandName);
-           redrawoglwnd;
+           if assigned(redrawoglwndproc) then redrawoglwndproc;
       end;
 end;
 function Mirror_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
@@ -2556,7 +2553,7 @@ begin
     //gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
     //gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
-    redrawoglwnd;
+    if assigned(redrawoglwndproc) then redrawoglwndproc;
   end;
 end;
 
@@ -2777,7 +2774,7 @@ begin
                                                   p3dpl^.YouChanged;
                                                   gdb.GetCurrentROOT.FormatAfterEdit;
                                                   //p3dpl^.Format;
-                                                  redrawoglwnd;
+                                                  if assigned(redrawoglwndproc) then redrawoglwndproc;
                                              end
                                              else
                                                  historyoutstr(rscm2VNotRemove);
@@ -2805,7 +2802,7 @@ begin
                                                                          p3dpl^.YouChanged;
                                                                          gdb.GetCurrentROOT.FormatAfterEdit;
                                                                          //p3dpl^.Format;
-                                                                         redrawoglwnd;
+                                                                         if assigned(redrawoglwndproc) then redrawoglwndproc;
                                                                          PEProp.setpoint:=false;
                                                                     end
                                                                 else
@@ -2864,7 +2861,7 @@ begin
                                     end
 
        end;
-      sharedgdb.redrawoglwnd;
+      if assigned(redrawoglwndproc) then redrawoglwndproc;
       //gdb.GetCurrentDWG.OGLwindow1.draw;
 
   end
@@ -2955,8 +2952,8 @@ begin
                                       gdb.GetCurrentDWG.pObjRoot:=gdb.GetCurrentDWG.BlockDefArray.getblockdef(nname)
                                   else
                                       gdb.GetCurrentDWG.pObjRoot:=@gdb.GetCurrentDWG.mainObjRoot;
-          updatevisible;
-          redrawoglwnd;
+          if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+          if assigned(redrawoglwndproc) then redrawoglwndproc;
      end;
 end;
 function bedit_com(operands:pansichar):GDBInteger;
@@ -3008,7 +3005,7 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
           gdb.GetCurrentDWG.SelObjArray.clearallobjects;
           gdb.GetCurrentROOT.ObjArray.DeSelect;
           result:=cmd_ok;
-          redrawoglwnd;
+          if assigned(redrawoglwndproc) then redrawoglwndproc;
           if tn<>'' then
                         bedit_format;
           //poglwnd^.md.mode := (MGet3DPoint) or (MMoveCamera) or (MRotateCamera);
@@ -3028,7 +3025,7 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
   gdb.GetCurrentDWG.SelObjArray.clearallobjects;
   gdb.GetCurrentROOT.ObjArray.DeSelect;
   result:=cmd_ok;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
 end;
 function PlaceAllBlocks_com:GDBInteger;
 var pb:PGDBObjBlockdef;
@@ -3070,7 +3067,7 @@ begin
            xcoord:=xcoord+20;
      until pb=nil;
 
-    redrawoglwnd;
+    if assigned(redrawoglwndproc) then redrawoglwndproc;
 
     result:=0;
 

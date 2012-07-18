@@ -20,11 +20,11 @@ unit iodwg;
 {$INCLUDE def.inc}
 {$MODE OBJFPC}
 interface
-uses GDBLine,gdbobjectsconstdef,typinfo,zcadstrconsts,iodxf,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,{gdbobjectsconstdef,}
-     UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
+uses zcadinterface,GDBLine,gdbobjectsconstdef,typinfo,zcadstrconsts,iodxf,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes,log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, sysutils, memman, UGDBDescriptor,
+     UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity,TypeDescriptors;
 procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
 implementation
-uses GDBBlockDef,mainwindow,UGDBLayerArray;
+uses GDBBlockDef,UGDBLayerArray;
 
 type
     PDWGByte=^DWGByte;
@@ -1403,7 +1403,8 @@ begin
   f.InitFromFile(name);
   if f.Count<>0 then
   begin
-    MainFormN.StartLongProcess(f.Count);
+    if assigned(StartLongProcessProc) then
+                                           StartLongProcessProc(f.Count);
     s := f.ReadString(#0,'');
     if s = 'AC1018' then
         begin
@@ -1414,7 +1415,8 @@ begin
         begin
              ShowError(rsUnknownFileFormat);
         end;
-  MainFormN.EndLongProcess;
+    if assigned(EndLongProcessProc) then
+                                        EndLongProcessProc;
   end
      else
          shared.ShowError('IODWG.ADDFromDWG:'+format(rsUnableToOpenFile,[name]));
@@ -1423,4 +1425,4 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodwg.initialization');{$ENDIF}
-end.
+end.

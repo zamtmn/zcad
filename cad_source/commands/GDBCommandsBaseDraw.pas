@@ -21,12 +21,10 @@ unit GDBCommandsBaseDraw;
 
 interface
 uses
-  zcadstrconsts,GL,OGLSpecFunc,{PrintersDlgs,}printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
-  //debygunit,
+  zcadstrconsts,GL,OGLSpecFunc,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,
-  {windows,}gdbasetypes,commandline,GDBCommandsBase,
+  gdbasetypes,commandline,GDBCommandsBase,
   plugins,
-  //commandlinedef,
   commanddefinternal,
   gdbase,
   UGDBDescriptor,
@@ -34,19 +32,14 @@ uses
   sysutils,
   varmandef,
   oglwindowdef,
-  //OGLtypes,
-  //UGDBOpenArrayOfByte,
   iodxf,
-  //optionswnd,
-  {objinsp,}
-  //cmdli{%H-}{%H-}ne,
   geometry,
   memman,
   gdbobjectsconstdef,
-  {UGDBVisibleOpenArray,}GDBEntity,GDBCircle,GDBLine,GDBGenericSubEntry,GDBMText,
-  shared,sharedgdb,GDBSubordinated,GDBBlockInsert,GDBPolyLine,log,UGDBOpenArrayOfData,math,GDBTable{,GDBElLeader},UGDBStringArray,printerspecfunc;
+  GDBEntity,GDBCircle,GDBLine,GDBGenericSubEntry,GDBMText,
+  shared,GDBSubordinated,GDBBlockInsert,GDBPolyLine,log,UGDBOpenArrayOfData,GDBTable,UGDBStringArray,printerspecfunc;
 implementation
-uses GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,mainwindow,{UGDBObjBlockdefArray,}Varman,projecttreewnd,oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
+uses GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,Varman,projecttreewnd,oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
 var
    c1,c2:integer;
    point:gdbvertex;

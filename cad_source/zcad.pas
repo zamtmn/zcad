@@ -42,10 +42,10 @@ uses
   GDBHelpObj,
   GDBManager,
   //UGDBDescriptor,
+  commandline,
   mainwindow,
   oglwindow,
   shared,
-  sharedgdb,
   DeviceBase,
   URecordDescriptor,
   //gdbase,
@@ -56,7 +56,7 @@ uses
 
 
 
-  commandline,
+  //commandline,
 
   GDBCommandsBase,
   GDBCommandsDB,

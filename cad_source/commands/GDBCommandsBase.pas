@@ -44,7 +44,7 @@ uses
   gdbobjectsconstdef,
   GDBEntity,
  shared,
- sharedgdb,UGDBEntTree,
+ UGDBEntTree,
   {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline,
  AnchorDocking,dialogs,XMLPropStorage,xmlconf{,
@@ -109,7 +109,8 @@ const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 //var DWGPageCxMenu:pzpopupmenu;
 implementation
-uses commandline,GDBPolyLine,UGDBPolyLine2DArray,GDBLWPolyLine,mainwindow,UGDBSelectedObjArray,{ZBasicVisible,}oglwindow,geometry;
+uses commandline,GDBPolyLine,UGDBPolyLine2DArray,GDBLWPolyLine,mainwindow,UGDBSelectedObjArray,
+     oglwindow,geometry;
 var
    CopyClipFile:GDBString;
 procedure  TOSModeEditor.Format;
@@ -638,8 +639,6 @@ begin
                                           end;
                                      end;
 
-     if gdb.currentdwg<>BlockBaseDWG then
-                                         ReloadLayer;
      gdb.GetCurrentROOT.calcbb;
      //gdb.GetCurrentDWG.ObjRoot.format;//FormatAfterEdit;
      //gdb.GetCurrentROOT.sddf
@@ -651,7 +650,7 @@ begin
                                          begin
                                          gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
                                          isOpenGLError;
-                                         redrawoglwnd;
+                                         if assigned(redrawoglwndproc) then redrawoglwndproc;
                                          end;
      result:=cmd_ok;
 
@@ -780,7 +779,7 @@ begin
 
      MainFormN.PageControl.ActivePage:=myts;
      programlog.logoutstr('MainFormN.PageControl.ActivePage:=myts;',0);
-     sharedgdb.updatevisible;
+     if assigned(UpdateVisibleProc) then UpdateVisibleProc;
      programlog.logoutstr('sharedgdb.updatevisible;',0);
      operands:=operands;
      programlog.logoutstr('operands:=operands;???????????????',0);
@@ -1067,7 +1066,7 @@ begin
   ComitFromObj;
   end;
   gdb.GetCurrentDWG.UndoStack.PushEndMarker;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 function Undo_com(Operands:pansichar):GDBInteger;
@@ -1087,14 +1086,14 @@ begin
                                                    overlay:=false;
                                               end;
   gdb.GetCurrentDWG.UndoStack.undo(prevundo,overlay);
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 function Redo_com(Operands:pansichar):GDBInteger;
 begin
   gdb.GetCurrentROOT.ObjArray.DeSelect;
   gdb.GetCurrentDWG.UndoStack.redo;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 
@@ -1117,7 +1116,7 @@ begin
       if ta<>nil then
                      ta.Checked:=false;
     end;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 procedure FrameEdit_com_CommandStart(Operands:pansichar);
@@ -1297,7 +1296,7 @@ begin
        psv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
        until psv=nil;
   end;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 function SelObjChangeLWToCurrent_com:GDBInteger;
@@ -1311,7 +1310,7 @@ begin
     if pv^.Selected then pv^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^ ;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 function Options_com(Operands:pansichar):GDBInteger;
@@ -1326,13 +1325,13 @@ function About_com(Operands:pansichar):GDBInteger;
 begin
   if not assigned(Aboutwindow) then
                                   Aboutwindow:=TAboutWnd.mycreate(Application,@Aboutwindow);
-  MainFormN.DOShowModal(Aboutwindow);
+  DOShowModal(Aboutwindow);
 end;
 function Help_com(Operands:pansichar):GDBInteger;
 begin
   if not assigned(Helpwindow) then
                                   Helpwindow:=THelpWnd.mycreate(Application,@Helpwindow);
-  MainFormN.DOShowModal(Helpwindow);
+  DOShowModal(Helpwindow);
 end;
 function ProjectTree_com(Operands:pansichar):GDBInteger;
 begin
@@ -1400,7 +1399,7 @@ else if length(Operands)>3 then
            createInfoFormVar;
 
            InfoFormVar.memo.text:=u8s;
-           modalresult:=MainFormN.DOShowModal(InfoFormVar);
+           modalresult:=DOShowModal(InfoFormVar);
            if modalresult=MrOk then
                                begin
                                      u8s:=InfoFormVar.memo.text;
@@ -1441,7 +1440,7 @@ begin
            counter:=0;
 
            InfoFormVar.memo.text:='';
-           modalresult:=MainFormN.DOShowModal(InfoFormVar);
+           modalresult:=DOShowModal(InfoFormVar);
            if modalresult=MrOk then
                                begin
                                      u8s:=InfoFormVar.memo.text;
@@ -1670,7 +1669,7 @@ begin
      end;
      memsubstr.Free;
 
-     modalresult:=MainFormN.DOShowModal(InfoForm);
+     modalresult:=DOShowModal(InfoForm);
      InfoForm.Free;
 
      result:=cmd_ok;
@@ -1718,7 +1717,7 @@ begin
      until pmemcounter=nil;
 
 
-     MainFormN.DOShowModal(InfoForm);
+     DOShowModal(InfoForm);
      InfoForm.Free;
      memcount.FreeAndDone;
     result:=cmd_ok;
@@ -1762,7 +1761,7 @@ begin
     if assigned(ReturnToDefaultProc)then
                                       ReturnToDefaultProc;
   clearcp;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   depth:=0;
   PrintTreeNode(@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,depth);
   shared.HistoryOutStr('Total entities: '+inttostr(GDB.GetCurrentROOT.ObjArray.count));
@@ -2028,7 +2027,7 @@ function layer_cmd:GDBInteger;
 begin
   LayerWindow:=TLayerWindow.Create(nil);
   SetHeightControl(LayerWindow,22);
-  MainFormN.DOShowModal(LayerWindow);
+  DOShowModal(LayerWindow);
   Freeandnil(LayerWindow);
   result:=cmd_ok;
 end;

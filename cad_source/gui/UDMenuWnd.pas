@@ -39,7 +39,7 @@ type
       procedure clear;
   end;
 implementation
-uses mainwindow,log;
+uses log;
 procedure TDMenuWnd.AfterConstruction;
 begin
      FormStyle:=fsStayOnTop;

@@ -11,7 +11,7 @@ unit GDBCommandsElectrical;
 interface
 uses
   csvdocument,
-  UGDBOpenArrayOfPV,GDBBlockInsert{,ZGUIsCT,zforms},devices{,ZComboBoxsWithProc,ZTreeViewsGeneric},UGDBTree,ugdbdescriptor,gdbasetypes,commandline,GDBCommandsDraw,GDBElLeader,
+  UGDBOpenArrayOfPV,GDBBlockInsert,devices,UGDBTree,ugdbdescriptor,gdbasetypes,commandline,GDBCommandsDraw,GDBElLeader,
   plugins,
   commandlinedef,
   commanddefinternal,
@@ -21,20 +21,14 @@ uses
   fileutil,
   varmandef,
   oglwindowdef,
-  //OGLtypes,
-  //UGDBOpenArrayOfByte,
-  //iodxf,
-  //optionswnd,
-  //objinsp,
   zcadinterface,
-  //cmdline,
   geometry,
   memman,
   gdbobjectsconstdef,
-  {UGDBVisibleOpenArray,}gdbEntity{,GDBCircle},GDBLine,
-  {GDBGenericSubEntry,}GDBNet,
-  shared,sharedgdb,GDBSubordinated,gdbCable,varman,WindowsSpecific,uunitmanager,
-  UGDBOpenArrayOfPObjects,UGDBBillOfMaterial,UCableManager,GDBDevice,GDBTable,UGDBStringArray,math,{strutils,}Masks,log,GDBCommandsBase,strproc;
+  gdbEntity,GDBLine,
+  GDBNet,
+  shared,GDBSubordinated,gdbCable,varman,WindowsSpecific,uunitmanager,
+  UGDBOpenArrayOfPObjects,UGDBBillOfMaterial,UCableManager,GDBDevice,GDBTable,UGDBStringArray,math,Masks,log,GDBCommandsBase,strproc;
 type
 {Export+}
   TFindType=(
@@ -120,7 +114,7 @@ var
 procedure finalize;}
 procedure Cable2CableMark(pcd:PTCableDesctiptor;pv:pGDBObjDevice);
 implementation
-uses {ZButtonsGeneric,}GDBMText,GDBBlockDef,mainwindow,oglwindow,{ZGUIsCT,}UGDBPoint3DArray,DeviceBase;
+uses GDBMText,GDBBlockDef,oglwindow,UGDBPoint3DArray,DeviceBase;
 function GetCableMaterial(pcd:PTCableDesctiptor):GDBString;
 var
    {pvn,}pvm,pvmc,pvl:pvardesk;
@@ -1154,7 +1148,7 @@ begin
     if assigned(ClrarIfItIsProc)then
     ClrarIfItIsProc(SecondOwner);
 
-    redrawoglwnd;
+    if assigned(redrawoglwndproc) then redrawoglwndproc;
     if mode= 2 then commandmanager.executecommandend
                else beforeclick(wc,mc,button,osp);
   end;
@@ -1497,7 +1491,7 @@ else begin
      end;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
-    redrawoglwnd;
+    if assigned(redrawoglwndproc) then redrawoglwndproc;
   end;
 end;
 function _Cable_com_Hd(mclick:GDBInteger):GDBInteger;
@@ -1725,7 +1719,7 @@ begin
   pt^.Build;
   pt^.Format;
   end;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   FileClose(handle);
   cman.done;
   DecimalSeparator := '.';
@@ -1933,7 +1927,7 @@ begin
   pt^.Format;
 
 
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   bom.done;
   end;
   result:=cmd_ok;
@@ -1966,7 +1960,7 @@ begin
     end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
-  redrawoglwnd;
+ if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 {
@@ -2044,7 +2038,7 @@ begin
   end
   else
       historyoutstr('Имя переменной должно быть задано в параметре команды');
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 
@@ -2065,7 +2059,7 @@ begin
     end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 function _Cable_com_Join(Operands:pansichar):GDBInteger;
@@ -2161,7 +2155,7 @@ begin
   gdb.GetCurrentDWG.SelObjArray.clearallobjects;
   gdb.GetCurrentROOT.ObjArray.DeSelect;
   result:=cmd_ok;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
 end;
 procedure commformat;
 var pv,pvlast:pGDBObjEntity;
@@ -2263,7 +2257,7 @@ begin
   //gdb.GetCurrentDWG.ObjRoot.calcvisible;
   //gdb.GetCurrentDWG.ConstructObjRoot.calcvisible;
   end;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   historyoutstr('Найдено '+inttostr(count)+' объектов');
 end;
 function _Cable_mark_com(Operands:pansichar):GDBInteger;
@@ -2320,7 +2314,7 @@ begin
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
 
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   cman.done;
   result:=cmd_ok;
 end;
@@ -2380,7 +2374,7 @@ begin
     end;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
     result:=-1;
-    redrawoglwnd;
+    if assigned(redrawoglwndproc) then redrawoglwndproc;
   end;
 end;
 function ElLeaser_com_CommandStart(operands:pansichar):GDBInteger;
@@ -2606,7 +2600,8 @@ begin
        FDoc:=TCSVDocument.Create;
        FDoc.Delimiter:=';';
        FDoc.LoadFromFile(utf8tosys(s));
-       MainFormN.StartLongProcess(FDoc.RowCount);
+       if assigned (StartLongProcessProc) then
+                          StartLongProcessProc(FDoc.RowCount);
        netarray.init({$IFDEF DEBUGBUILD}'{6FC12C96-F62C-47A3-A5B4-35D9564DB25E}',{$ENDIF}100);
        for row:=0 to FDoc.RowCount-1 do
        begin
@@ -2871,8 +2866,8 @@ begin
                 for col:=0 to FDoc.ColCount[row] do
                 shared.HistoryOutStr(FDoc.Cells[col,row]);
                 end;
-
-       MainFormN.ProcessLongProcess(row);
+       if assigned (ProcessLongProcessProc) then
+                                                ProcessLongProcessProc(row);
        end;
        netarray.ClearAndDone;
 
@@ -2890,8 +2885,8 @@ begin
        supernetsarray.done;
 
 
-
-       MainFormN.EndLongProcess;
+       if assigned (EndLongProcessProc) then
+                                            EndLongProcessProc
   end
             else
      shared.ShowError('GDBCommandsElectrical.El_ExternalKZ: Не могу открыть файл: '+s+'('+Operands+')');

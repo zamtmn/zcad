@@ -53,9 +53,8 @@ var
     CursorOff:SimpleProcOfObject=nil;
 
 implementation
-uses strproc,{umytreenode,}{FileUtil,LCLclasses,} LCLtype,
-     //mainwindow,
-     log,{UGDBDescriptor,}varmandef,{sysinfo,}{cmdline,}strutils{,oglwindow};
+uses strproc,LCLtype,
+     log,varmandef,strutils;
 procedure DisableCmdLine;
 begin
   application.MainForm.ActiveControl:=nil;

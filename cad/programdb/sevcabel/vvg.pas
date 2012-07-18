@@ -82,6 +82,8 @@ begin
 
 
      _EQ_SEVCABLEVVGngLS.Category:=_kables;
+     _EQ_SEVCABLEVVGngLS.Group:=_cables;
+
      _EQ_SEVCABLEVVGngLS.EdIzm:=_m;
      _EQ_SEVCABLEVVGngLS.ID:='SEVCABLEVVGngLS';
      _EQ_SEVCABLEVVGngLS.Standard:='ТУ 16.К71-310-2001';
@@ -103,6 +105,7 @@ begin
 
 
      _EQ_SEVCABLEVVGSV1.Category:=_kables;
+     _EQ_SEVCABLEVVGSV1.Group:=_cables;
      _EQ_SEVCABLEVVGSV1.EdIzm:=_m;
      _EQ_SEVCABLEVVGSV1.ID:='SEVCABLEVVGngLS';
      _EQ_SEVCABLEVVGSV1.Standard:='ТУ 16.К71-310-2001';

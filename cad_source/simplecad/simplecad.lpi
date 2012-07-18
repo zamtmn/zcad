@@ -47,15 +47,17 @@
         <PackageName Value="LCL"/>
       </Item5>
     </RequiredPackages>
-    <Units Count="70">
+    <Units Count="71">
       <Unit0>
         <Filename Value="simplecad.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="simplecad"/>
+        <EditorIndex Value="19"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="1" Y="21"/>
+        <CursorPos X="1" Y="19"/>
         <UsageCount Value="90"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
@@ -65,10 +67,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="umainform"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="112"/>
-        <CursorPos X="73" Y="124"/>
+        <TopLine Value="70"/>
+        <CursorPos X="6" Y="86"/>
         <UsageCount Value="90"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -77,7 +80,7 @@
       <Unit2>
         <Filename Value="..\gui\oglwindow.pas"/>
         <UnitName Value="oglwindow"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1841"/>
         <CursorPos X="20" Y="1857"/>
@@ -106,7 +109,7 @@
       <Unit5>
         <Filename Value="..\gui\mainwindow.pas"/>
         <UnitName Value="mainwindow"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2283"/>
         <CursorPos X="7" Y="2299"/>
@@ -161,7 +164,7 @@
       <Unit11>
         <Filename Value="..\languade\varmandef.pas"/>
         <UnitName Value="varmandef"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="81"/>
         <CursorPos X="1" Y="97"/>
@@ -172,10 +175,12 @@
       <Unit12>
         <Filename Value="..\languade\UUnitManager.pas"/>
         <UnitName Value="UUnitManager"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="698"/>
-        <CursorPos X="1" Y="708"/>
+        <TopLine Value="178"/>
+        <CursorPos X="1" Y="197"/>
         <UsageCount Value="37"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit12>
       <Unit13>
@@ -184,7 +189,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="sltexteditor"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="16"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="3" Y="51"/>
@@ -230,7 +235,7 @@
       </Unit17>
       <Unit18>
         <Filename Value="C:\ppsrc\rtl\objpas\classes\classesh.inc"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1598"/>
         <CursorPos X="3" Y="1614"/>
@@ -240,7 +245,7 @@
       <Unit19>
         <Filename Value="C:\lazarus\lcl\forms.pp"/>
         <UnitName Value="Forms"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="691"/>
         <CursorPos X="3" Y="707"/>
@@ -268,10 +273,12 @@
       <Unit22>
         <Filename Value="..\gdb\UGDBDescriptor.pas"/>
         <UnitName Value="UGDBDescriptor"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="416"/>
-        <CursorPos X="1" Y="450"/>
+        <TopLine Value="1131"/>
+        <CursorPos X="26" Y="1166"/>
         <UsageCount Value="10"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit22>
       <Unit23>
@@ -295,10 +302,12 @@
       <Unit25>
         <Filename Value="..\languade\UObjectDescriptor.pas"/>
         <UnitName Value="UObjectDescriptor"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="427"/>
         <CursorPos X="1" Y="451"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit25>
       <Unit26>
@@ -367,7 +376,7 @@
       <Unit33>
         <Filename Value="..\u\UGDBControlPointArray.pas"/>
         <UnitName Value="UGDBControlPointArray"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="15"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -395,10 +404,10 @@
       </Unit35>
       <Unit36>
         <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="3029"/>
-        <CursorPos X="1" Y="3052"/>
+        <TopLine Value="931"/>
+        <CursorPos X="1" Y="950"/>
         <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit36>
@@ -547,7 +556,7 @@
       <Unit53>
         <Filename Value="..\gdb\GDBAbstractText.pas"/>
         <UnitName Value="GDBAbstractText"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="26"/>
         <CursorPos X="32" Y="39"/>
@@ -558,8 +567,7 @@
       <Unit54>
         <Filename Value="..\u\UGDBOpenArray.pas"/>
         <UnitName Value="UGDBOpenArray"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="17"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -619,7 +627,7 @@
       <Unit61>
         <Filename Value="..\gui\objinsp.pas"/>
         <UnitName Value="Objinsp"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="37"/>
         <CursorPos X="27" Y="1228"/>
@@ -674,7 +682,7 @@
       <Unit67>
         <Filename Value="..\gui\zcadstrconsts.pas"/>
         <UnitName Value="zcadstrconsts"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
         <TopLine Value="100"/>
         <CursorPos X="3" Y="140"/>
@@ -685,7 +693,7 @@
       <Unit68>
         <Filename Value="..\misc\OGLSpecFunc.pas"/>
         <UnitName Value="OGLSpecFunc"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="465"/>
         <CursorPos X="104" Y="466"/>
@@ -696,7 +704,7 @@
       <Unit69>
         <Filename Value="..\languade\gdbasetypes.pas"/>
         <UnitName Value="gdbasetypes"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="20"/>
         <CursorPos X="4" Y="43"/>
@@ -704,116 +712,139 @@
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit69>
+      <Unit70>
+        <Filename Value="..\u\UGDBOpenArrayOfTObjLinkRecord.pas"/>
+        <UnitName Value="UGDBOpenArrayOfTObjLinkRecord"/>
+        <EditorIndex Value="18"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit70>
     </Units>
-    <JumpHistory Count="27" HistoryIndex="26">
+    <JumpHistory Count="30" HistoryIndex="19">
       <Position1>
         <Filename Value="..\gui\mainwindow.pas"/>
-        <Caret Line="694" Column="21" TopLine="678"/>
+        <Caret Line="1974" Column="38" TopLine="1959"/>
       </Position1>
       <Position2>
         <Filename Value="..\gui\mainwindow.pas"/>
-        <Caret Line="696" Column="93" TopLine="681"/>
+        <Caret Line="1987" Column="24" TopLine="1970"/>
       </Position2>
       <Position3>
         <Filename Value="..\gui\mainwindow.pas"/>
-        <Caret Line="699" Column="78" TopLine="677"/>
+        <Caret Line="1988" Column="38" TopLine="1972"/>
       </Position3>
       <Position4>
-        <Filename Value="..\gui\mainwindow.pas"/>
-        <Caret Line="700" Column="64" TopLine="688"/>
+        <Filename Value="..\gui\objinsp.pas"/>
+        <Caret Line="1228" Column="27" TopLine="37"/>
       </Position4>
       <Position5>
-        <Filename Value="..\gui\objinsp.pas"/>
-        <Caret Line="57" Column="17" TopLine="47"/>
+        <Filename Value="..\gui\mainwindow.pas"/>
+        <Caret Line="1988" Column="51" TopLine="1972"/>
       </Position5>
       <Position6>
-        <Filename Value="..\languade\varmandef.pas"/>
-        <Caret Line="98" Column="26" TopLine="81"/>
+        <Filename Value="..\gui\mainwindow.pas"/>
+        <Caret Line="2111" Column="59" TopLine="2095"/>
       </Position6>
       <Position7>
-        <Filename Value="..\u\UGDBOpenArray.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="..\gui\mainwindow.pas"/>
+        <Caret Line="2112" Column="80" TopLine="2095"/>
       </Position7>
       <Position8>
         <Filename Value="..\gui\mainwindow.pas"/>
-        <Caret Line="1975" Column="42" TopLine="1952"/>
+        <Caret Line="2181" Column="76" TopLine="2165"/>
       </Position8>
       <Position9>
-        <Filename Value="..\gui\mainwindow.pas"/>
-        <Caret Line="1968" Column="28" TopLine="1952"/>
+        <Filename Value="..\u\UGDBControlPointArray.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position9>
       <Position10>
         <Filename Value="..\gui\mainwindow.pas"/>
-        <Caret Line="1969" Column="28" TopLine="1952"/>
+        <Caret Line="2299" Column="21" TopLine="2283"/>
       </Position10>
       <Position11>
-        <Filename Value="..\gui\objinsp.pas"/>
-        <Caret Line="1219" Column="30" TopLine="1189"/>
-      </Position11>
-      <Position12>
-        <Filename Value="..\gui\mainwindow.pas"/>
-        <Caret Line="1974" Column="38" TopLine="1959"/>
-      </Position12>
-      <Position13>
-        <Filename Value="..\gui\mainwindow.pas"/>
-        <Caret Line="1987" Column="24" TopLine="1970"/>
-      </Position13>
-      <Position14>
-        <Filename Value="..\gui\mainwindow.pas"/>
-        <Caret Line="1988" Column="38" TopLine="1972"/>
-      </Position14>
-      <Position15>
-        <Filename Value="..\gui\objinsp.pas"/>
-        <Caret Line="1228" Column="27" TopLine="37"/>
-      </Position15>
-      <Position16>
-        <Filename Value="..\gui\mainwindow.pas"/>
-        <Caret Line="1988" Column="51" TopLine="1972"/>
-      </Position16>
-      <Position17>
-        <Filename Value="..\gui\mainwindow.pas"/>
-        <Caret Line="2111" Column="59" TopLine="2095"/>
-      </Position17>
-      <Position18>
-        <Filename Value="..\gui\mainwindow.pas"/>
-        <Caret Line="2112" Column="80" TopLine="2095"/>
-      </Position18>
-      <Position19>
-        <Filename Value="..\gui\mainwindow.pas"/>
-        <Caret Line="2181" Column="76" TopLine="2165"/>
-      </Position19>
-      <Position20>
-        <Filename Value="..\u\UGDBControlPointArray.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position20>
-      <Position21>
-        <Filename Value="..\gui\mainwindow.pas"/>
-        <Caret Line="2299" Column="21" TopLine="2283"/>
-      </Position21>
-      <Position22>
         <Filename Value="..\misc\OGLSpecFunc.pas"/>
         <Caret Line="466" Column="104" TopLine="465"/>
-      </Position22>
-      <Position23>
+      </Position11>
+      <Position12>
         <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
         <Caret Line="1957" Column="1" TopLine="1934"/>
+      </Position12>
+      <Position13>
+        <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
+        <Caret Line="3052" Column="1" TopLine="3029"/>
+      </Position13>
+      <Position14>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="216" Column="24" TopLine="187"/>
+      </Position14>
+      <Position15>
+        <Filename Value="..\gdb\GDBAbstractText.pas"/>
+        <Caret Line="43" Column="19" TopLine="20"/>
+      </Position15>
+      <Position16>
+        <Filename Value="..\u\UGDBOpenArray.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position16>
+      <Position17>
+        <Filename Value="..\u\UGDBOpenArrayOfTObjLinkRecord.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position17>
+      <Position18>
+        <Filename Value="simplecad.lpr"/>
+        <Caret Line="21" Column="1" TopLine="1"/>
+      </Position18>
+      <Position19>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="86" Column="8" TopLine="70"/>
+      </Position19>
+      <Position20>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="89" Column="1" TopLine="70"/>
+      </Position20>
+      <Position21>
+        <Filename Value="simplecad.lpr"/>
+        <Caret Line="19" Column="1" TopLine="1"/>
+      </Position21>
+      <Position22>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="86" Column="24" TopLine="70"/>
+      </Position22>
+      <Position23>
+        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
+        <Caret Line="1166" Column="26" TopLine="1131"/>
       </Position23>
       <Position24>
         <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
-        <Caret Line="3052" Column="1" TopLine="3029"/>
+        <Caret Line="950" Column="1" TopLine="931"/>
       </Position24>
       <Position25>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="216" Column="24" TopLine="187"/>
+        <Filename Value="..\languade\UObjectDescriptor.pas"/>
+        <Caret Line="451" Column="1" TopLine="427"/>
       </Position25>
       <Position26>
-        <Filename Value="..\gdb\GDBAbstractText.pas"/>
-        <Caret Line="43" Column="19" TopLine="20"/>
+        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
+        <Caret Line="1166" Column="1" TopLine="1132"/>
       </Position26>
       <Position27>
-        <Filename Value="..\u\UGDBOpenArray.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
+        <Caret Line="1148" Column="1" TopLine="1132"/>
       </Position27>
+      <Position28>
+        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
+        <Caret Line="723" Column="1" TopLine="704"/>
+      </Position28>
+      <Position29>
+        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
+        <Caret Line="440" Column="1" TopLine="421"/>
+      </Position29>
+      <Position30>
+        <Filename Value="..\languade\UUnitManager.pas"/>
+        <Caret Line="197" Column="1" TopLine="178"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

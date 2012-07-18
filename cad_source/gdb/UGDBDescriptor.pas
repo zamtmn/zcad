@@ -141,10 +141,11 @@ procedure finalize;
 procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
 procedure clearotrack;
 procedure clearcp;
+procedure redrawoglwnd;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log,OGLSpecFunc;
-procedure redrawoglwnd; export;
+procedure redrawoglwnd;
 var
    pdwg:PTDrawing;
 begin

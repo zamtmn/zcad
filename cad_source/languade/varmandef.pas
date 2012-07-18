@@ -22,7 +22,7 @@ unit varmandef;
 interface
 uses SysUtils,UGDBTree,UGDBStringArray,{gdbobjectsconstdef,}strutils,gdbasetypes,
   UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,gdbase,UGDBOpenArrayOfData,
-  memman,UGDBOpenArrayOfPObjects,
+  UGDBOpenArrayOfPObjects,
   Classes,Controls,StdCtrls,LCLVersion;
 const
   {Ttypenothing=-1;

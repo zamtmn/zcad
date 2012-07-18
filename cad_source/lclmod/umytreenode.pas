@@ -21,7 +21,7 @@ unit umytreenode;
 interface
 
 uses
-  commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,ButtonPanel,Buttons,
+  zcadinterface,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,ButtonPanel,Buttons,
   {strutils,}intftranslations,sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
 type
     TButtonProc=procedure(pdata:GDBPointer);
@@ -139,7 +139,7 @@ procedure SetHeightControl(_parent:TWinControl;h:integer);
 //var
 //   ACN_ShowObjInsp:TmyAction=nil;
 implementation
-uses commandline,log,sharedgdb;
+uses commandline,log;
 procedure TmyAction.SetCommand(_Caption,_Command,_Options:TTranslateString);
 begin
      command:=_Command;
@@ -473,7 +473,7 @@ begin
                                                                     end;
                                                                end;
      end;
-     redrawoglwnd;
+     if assigned(redrawoglwndproc) then redrawoglwndproc;
 end;
 procedure TmyCommandToolButton.click;
 begin

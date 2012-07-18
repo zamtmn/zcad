@@ -213,10 +213,10 @@ function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
 function ProjectPoint(pntx,pnty,pntz:gdbdouble;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;
 procedure textwrite(s: GDBString);
 procedure RunTextEditor(Pobj:GDBPointer);
-function getsortedindex(cl:integer):integer;
+//function getsortedindex(cl:integer):integer;
 implementation
 uses mainwindow,UGDBTracePropArray,GDBEntity,io,geometry,gdbobjectsconstdef,UGDBDescriptor,zcadinterface,
-     {GDBCommandsBase,Objinsp,Tedit_form, MTedit_form}shared,sharedgdb,{UGDBLayerArray,}cmdline,GDBText;
+     shared,cmdline,GDBText;
 procedure creategrid;
 var i,j:GDBInteger;
 begin
@@ -1882,7 +1882,7 @@ begin
      InfoForm.caption:=(rsMTextEditor);
 
      InfoForm.memo.text:=astring;
-     modalresult:=MainFormN.DOShowModal(InfoForm);
+     modalresult:=DOShowModal(InfoForm);
      if modalresult=MrOk then
                          begin
                               PGDBObjText(pobj)^.Template:=ConvertToDxfString(InfoForm.memo.text);
@@ -1897,7 +1897,7 @@ begin
      sltexteditor1.helptext.Caption:=rsTextEdCaption;
      sltexteditor1.EditField.Caption:=astring;
 
-     modalresult:=MainFormN.DOShowModal(sltexteditor1);
+     modalresult:=DOShowModal(sltexteditor1);
 
      if modalresult=MrOk then
                          begin
@@ -1908,7 +1908,7 @@ begin
                          begin
                               PGDBObjText(pobj)^.YouChanged;
                               gdb.GetCurrentROOT.FormatAfterEdit;
-                              redrawoglwnd;
+                              if assigned(redrawoglwndproc) then redrawoglwndproc;
                          end;
 
 end;
@@ -2088,7 +2088,7 @@ begin
   end;
   inherited;
   if needredraw then
-                    redrawoglwnd;
+                    if assigned(redrawoglwndproc) then redrawoglwndproc;
 end;
 procedure TOGLWnd.DISP_ZoomFactor;
 var
@@ -4302,14 +4302,14 @@ function getsortedindex(cl:integer):integer;
 var i:integer;
     s:string;
 begin
-     s:=(pGDBLayerProp(gdb.GetCurrentDWG.LayerTable.getelement(cl))^.GetFullName);
+     {s:=(pGDBLayerProp(gdb.GetCurrentDWG.LayerTable.getelement(cl))^.GetFullName);
      for i:=0 to layerbox.ItemsCount-1 do
-     if layerbox.Item{s.Strings}[i].Name=s then
+     if layerbox.Item[i].Name=s then
      begin
           result:=i;
           exit;
      end;
-     result:=0;
+     result:=0;}
 end;
 procedure TOGLWnd.setvisualprop;
 const pusto=-1000;

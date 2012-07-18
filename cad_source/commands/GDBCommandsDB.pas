@@ -24,27 +24,19 @@ uses
   gdbobjectsconstdef,zcadstrconsts,plugins,
   commandlinedef,
   commanddefinternal,
-  //commandline,
   gdbase,
   UGDBDescriptor,
   sysutils,
   varmandef,
   varman,
-  //oglwindowdef,
-  //OGLtypes,
   UGDBOpenArrayOfByte,
   iodxf,
-  //optionswnd,
-  {objinsp,}
   cmdline,
-  //UGDBVisibleOpenArray,
-  //gdbobjectsconstdef,
   gdbEntity,
   shared,
-  gdbasetypes,{optionswnd,}strutils,forms,Controls;
-  //procedure startup;
+  gdbasetypes,strutils,forms,Controls,zcadinterface;
 implementation
-uses {URecordDescriptor,}mainwindow,sltexteditor,UObjectDescriptor,projecttreewnd,commandline,log,GDBSubordinated;
+uses sltexteditor,UObjectDescriptor,projecttreewnd,commandline,log,GDBSubordinated;
 
 function DBaseAdd_com:GDBInteger;
 var //t:PUserTypeDescriptor;
@@ -92,7 +84,7 @@ begin
                  sltexteditor1.caption:=('Переименовать вхождение');
                  sltexteditor1.helptext.Caption:=' _EQ ';
                  sltexteditor1.EditField.Caption:=copy(pdbv.name,4,length(pdbv.name)-3);
-                 if MainFormN.DOShowModal(sltexteditor1)=mrok then
+                 if DoShowModal(sltexteditor1)=mrok then
                  begin
                       pdbv.name:='_EQ'+sltexteditor1.EditField.Caption;
                  end;

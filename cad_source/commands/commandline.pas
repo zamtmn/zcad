@@ -19,7 +19,8 @@
 unit commandline;
 {$INCLUDE def.inc}
 interface
-uses zcadstrconsts,umytreenode,sysinfo,strproc,UGDBOpenArrayOfPointer,{UDMenuWnd,}gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
+uses zcadstrconsts,umytreenode,sysinfo,strproc,UGDBOpenArrayOfPointer,
+     gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
      memman,shared,log,varmandef,varman;
 const
      tm:tmethod=(Code:nil;Data:nil);
@@ -66,7 +67,7 @@ procedure ParseCommand(comm:pansichar; out command,operands:GDBString);
 {procedure startup;
 procedure finalize;}
 implementation
-uses {Objinsp,}UGDBStringArray,cmdline,UGDBDescriptor,forms{,varman};
+uses UGDBStringArray,cmdline,UGDBDescriptor,forms{,varman};
 function GDBcommandmanager.GetValueHeap:GDBInteger;
 begin
      result:=varstack.vardescarray.count;

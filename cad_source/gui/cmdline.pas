@@ -20,11 +20,11 @@ unit cmdline;
 {$INCLUDE def.inc}
 interface
 uses
- zcadstrconsts,strproc,lclproc,sysutils,gdbasetypes,{umytreenode,}
- StdCtrls,ExtCtrls,{ComCtrls,}Controls,Classes,menus,Forms,{IFDEF FPClcltype,$ENDIF}fileutil,graphics,
- UDMenuWnd{,ZStaticsText},gdbase{,ZPanelsNoFrame}, memman,UGDBDescriptor,math,commandline,varman,languade,
- UGDBTracePropArray,{zforms,}{ZEditsWithProcedure}{,zbasicvisible,}varmandef,{ZGUIsCT,}{ZPanelsGeneric,}
- geometry,shared,UGDBStringArray{,zmemos};
+ zcadstrconsts,strproc,lclproc,sysutils,gdbasetypes,
+ StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
+ UDMenuWnd,gdbase, memman,UGDBDescriptor,math,commandline,varman,languade,
+ UGDBTracePropArray,varmandef,
+ geometry,shared,UGDBStringArray;
 
 const
      cheight=18;
@@ -63,7 +63,7 @@ var
   CLine: TCLine;
   CWindow:TCWindow;
 implementation
-uses mainwindow,oglwindowdef,log,strmy;
+uses oglwindowdef,log,strmy;
 procedure TCWindow.AfterConstruction;
 begin
     inherited;
@@ -349,7 +349,7 @@ begin
 
           gdb.GetCurrentDWG.OGLwindow1.sendcoordtocommandTraceOn(temp,MZW_LBUTTON,nil);
           //commandmanager.sendpoint2command(temp, poglwnd.md.mouse, 1,nil);
-          //mainwindow.OGLwindow1.param.lastpoint:=temp;
+          //OGLwindow1.param.lastpoint:=temp;
         end;
       end
       end

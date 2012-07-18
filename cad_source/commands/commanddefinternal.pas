@@ -22,7 +22,7 @@ unit commanddefinternal;
 
 interface
 uses geometry,varmandef,gdbasetypes,gdbase,commandlinedef,commandline,oglwindowdef,UGDBDescriptor
-  {,UGDBLayerArray},memman,shared,sharedgdb;
+  {,UGDBLayerArray},memman,shared;
 const cmd_ok=-1;
 const cmd_cancel=-2;
 const ZCMD_OK_NOEND=-10;
@@ -81,7 +81,7 @@ type
 function CreateCommandRTEdObjectPlugin(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;ohgd:comdrawfunc;occont:comproc;name:pansichar;SA,DA:TCStartAttr):pCommandRTEdObjectPlugin;export;
 function CreateCommandFastObjectPlugin(ocs:comfuncwithoper;name:pansichar;SA,DA:TCStartAttr):pCommandFastObjectPlugin;export;
 implementation
-uses {mainwindow,}{GDBCommandsDraw,}GDBCommandsBase,{oglwindow,}{GDBCommandsElectrical,}UGDBOpenArrayOfUCommands,zcadinterface,varman,log;
+uses GDBCommandsBase,UGDBOpenArrayOfUCommands,zcadinterface,varman,log;
 constructor CommandRTEdObject.init;
 begin
   inherited;
@@ -132,7 +132,7 @@ begin
   gdb.GetCurrentDWG.OnMouseObj.Clear;
   //poglwnd^.md.mode := savemousemode;
   OSModeEditor.GetState;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
     end;
 end;
 procedure CommandRTEdObject.CommandEnd;
@@ -164,7 +164,7 @@ begin
                                                            gdb.GetCurrentDWG.OGLwindow1.setobjinsp;
   //-------------------------------gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   OSModeEditor.GetState;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
 end;
 function CreateCommandFastObjectPlugin;
 var p:pCommandFastObjectPlugin;
@@ -294,7 +294,7 @@ begin
   gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
   gdb.GetCurrentDWG.OGLwindow1.SetMouseMode(savemousemode);
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
 end;
 
 procedure CommandFastObject.CommandInit;

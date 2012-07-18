@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses dxfvectorialreader,svgvectorialreader,epsvectorialreader,{pdfvectorialreader,}GDBCircle,GDBArc,fpvectorial,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
+uses zcadinterface,dxfvectorialreader,svgvectorialreader,epsvectorialreader,{pdfvectorialreader,}GDBCircle,GDBArc,fpvectorial,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
   entnamindex=record
@@ -84,7 +84,7 @@ procedure saveZCP(name: GDBString; gdb: PGDBDescriptor);
 procedure LoadZCP(name: GDBString; gdb: PGDBDescriptor);
 procedure Import(name: GDBString);
 implementation
-uses GDBLine,GDBBlockDef,mainwindow,UGDBLayerArray,varmandef;
+uses GDBLine,GDBBlockDef,UGDBLayerArray,varmandef;
 function dxfhandlearraycreate(col: GDBInteger): GDBPointer;
 var
   temp: pdxfhandlerecopenarray;
@@ -322,8 +322,8 @@ begin
   additionalunit.InterfaceUses.addnodouble(@SysUnit);
   while (f.notEOF) and (s <> exitGDBString) do
   begin
-
-    MainFormN.ProcessLongProcess(f.ReadPos);
+    if assigned(ProcessLongProcessProc) then
+                                            ProcessLongProcessProc(f.ReadPos);
 
     s := f.readGDBString;
     objid:=entname2GDBID(s);
@@ -448,8 +448,8 @@ begin
   {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF12',lp_IncPos);{$ENDIF}
   while (f.notEOF) and (s <> exitGDBString) do
   begin
-
-  MainFormN.ProcessLongProcess(f.ReadPos);
+  if assigned(ProcessLongProcessProc)then
+  ProcessLongProcessProc(f.ReadPos);
 
     s := f.readGDBString;
     if s = dxfName_Layer then
@@ -979,7 +979,8 @@ begin
 
     s := s;
 //       if (byt=fcode) and (s=fname) then exit;
-    MainFormN.ProcessLongProcess(f.ReadPos);
+    if assigned(ProcessLongProcessProc)then
+    ProcessLongProcessProc(f.ReadPos);
   until not f.notEOF;
   {$IFDEF TOTALYLOG}programlog.logoutstr('end; {AddFromDXF2000}',lp_decPos);{$ENDIF}
 end;
@@ -997,7 +998,8 @@ begin
   begin
      phandlearray := dxfhandlearraycreate(10000);
   //f.ReadFromFile(name);
-    MainFormN.StartLongProcess(f.Count);
+  if assigned(StartLongProcessProc)then
+    StartLongProcessProc(f.Count);
   while f.notEOF do
   begin
     s := f.ReadString2;
@@ -1075,7 +1077,8 @@ begin
       end;
     end;
   end;
-    MainFormN.EndLongProcess;
+  if assigned(EndLongProcessProc)then
+    EndLongProcessProc;
   owner.calcbb;
   GDBFreeMem(GDBPointer(phandlearray));
   end
@@ -1094,7 +1097,8 @@ begin
      pv:=pva^.beginiterate(ir);
      if pv<>nil then
      repeat
-          MainFormN.ProcessLongProcess(ir.itc);
+          if assigned(ProcessLongProcessProc)then
+                                                 ProcessLongProcessProc(ir.itc);
           pv^.DXFOut(handle, outhandle);
      pv:=pva^.iterate(ir);
      until pv=nil;
@@ -1123,7 +1127,8 @@ begin
   outstream.init({$IFDEF DEBUGBUILD}'{51453949-893A-49C2-9588-42B25346D071}',{$ENDIF}10*1024*1024);
   //--------------------------if outstream>0 then
   begin
-  MainFormN.StartLongProcess(pdrawing^.pObjRoot^.ObjArray.Count);
+    if assigned(StartLongProcessProc)then
+  StartLongProcessProc(pdrawing^.pObjRoot^.ObjArray.Count);
   phandlea := dxfhandlearraycreate(10000);
   pushhandle(phandlea,0,0);
   templatefile.InitFromFile(sysparam.programpath + 'components/empty.dxf');
@@ -1689,7 +1694,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
   if outstream.SaveToFile(name)<=0 then
                                        shared.ShowError(format(rsUnableToWriteFile,[name]));
                                        //shared.ShowError('Не могу открыть для записи файл: '+name);
-  MainFormN.EndLongProcess;
+  if assigned(EndLongProcessProc)then
+  EndLongProcessProc;
 
   end;
   outstream.done;

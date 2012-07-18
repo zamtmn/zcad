@@ -23,7 +23,6 @@ interface
 uses gdbasetypes,gdbase,LCLType,Printers,
      gl,glu,OGLSpecFunc,
      {$IFDEF SLINUX}glx,{$ENDIF}
-     {$IFDEF WINDOWS}windows,{$ENDIF}
      log,sysutils,varmandef,Graphics;
 type
     PTPrinterRasterizer=^TPrinterRasterizer;

@@ -31,7 +31,7 @@ uses
   gdbobjectsconstdef,
   GDBCommandsDraw,
   UGDBVisibleOpenArray,{gdbEntity,}{GDBCircle,}GDBLine,{GDBGenericSubEntry,}
-  shared,sharedgdb,{GDBSubordinated,}GDBBlockInsert,{ZWinMan,}sysinfo,varman,UCableManager,GDBDevice,GDBMText,math;
+  shared,{GDBSubordinated,}GDBBlockInsert,{ZWinMan,}sysinfo,varman,UCableManager,GDBDevice,GDBMText,math;
 
 type
 {Export+}
@@ -339,7 +339,7 @@ begin
        gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 
        gdb.GetCurrentROOT.calcbb;
-       redrawoglwnd;
+       if assigned(redrawoglwndproc) then redrawoglwndproc;
        historyout('Первый угол:');
        //commandend;
        //pcommandmanager^.executecommandend;
@@ -663,7 +663,7 @@ begin
   UManager.done;
   cman.done;
   ProcessedDevices.ClearAndDone;
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 procedure InsertDat2(datname,name:GDBString;var currentcoord:GDBVertex; var root:GDBObjRoot);
@@ -894,7 +894,7 @@ begin
 
   cman.done;
 
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
 end;
 procedure commformat2;
 var
@@ -954,7 +954,7 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
                                         exit;
                                    end;
 
-  redrawoglwnd;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera));
   historyout('Первый угол:');
@@ -1164,7 +1164,7 @@ begin
        gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 
        gdb.GetCurrentROOT.calcbb;
-       redrawoglwnd;
+       if assigned(redrawoglwndproc) then redrawoglwndproc;
        historyout('Первый угол:');
        //commandend;
        //pcommandmanager^.executecommandend;

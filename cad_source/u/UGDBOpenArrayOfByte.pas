@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfByte;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysutils,UGDBOpenArray,memman,gdbase,fileutil,shared{,strmy};
+uses gdbasetypes,sysutils,UGDBOpenArray,gdbase,fileutil,shared;
 const
      breacer=[#13,#10,' '];
   eol: GDBString=#13 + #10;

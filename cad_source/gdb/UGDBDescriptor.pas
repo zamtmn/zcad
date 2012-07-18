@@ -20,28 +20,20 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-zcadstrconsts,GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UGDBDrawingdef,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
-UGDBNumerator, gdbase,varmandef,varman{, oglwindowdef, math, UGDBOpenArrayOfByte},
-sysutils, memman, geometry, gdbobjectsconstdef{, strmy,dxflow},
-{UOpenArray,}gdbasetypes,sysinfo,
+zcadinterface,zcadstrconsts,GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UGDBDrawingdef,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
+UGDBNumerator, gdbase,varmandef,varman,
+sysutils, memman, geometry, gdbobjectsconstdef,
+gdbasetypes,sysinfo,
 GDBGenericSubEntry,
-//UGDBOpenArray,
-//UGDBOutbound2DIArray,
-//UGDBPoint3DArray,
-//UGDBPolyLine2DArray,
-//UGDBPolyPoint2DArray,
-//UGDBPolyPoint3DArray,
 UGDBLayerArray,
-//UGDBControlPointArray,
 GDBEntity,
-//UGDBVisibleOpenArray,
 UGDBSelectedObjArray,
 UGDBTextStyleArray,
 UGDBFontManager,
 GDBCamera,
 UGDBOpenArrayOfPV,
 GDBRoot,UGDBSHXFont,
-{GDBNet,}OGLWindow,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray;
+OGLWindow,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray;
 const ls = $AAAA;
       ps:array [0..31] of LONGWORD=(
                                    $33333333,$33333333,
@@ -147,9 +139,44 @@ procedure RemapAll(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
 procedure startup;
 procedure finalize;
 procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
+procedure clearotrack;
+procedure clearcp;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses {GDBSubordinated,}GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared{,mainwindow},commandline,log;
+ uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log,OGLSpecFunc;
+procedure redrawoglwnd; export;
+var
+   pdwg:PTDrawing;
+begin
+  isOpenGLError;
+  pdwg:=gdb.GetCurrentDWG;
+  if pdwg<>nil then
+  begin
+       gdb.GetCurrentRoot.FormatAfterEdit;
+  pdwg.OGLwindow1.param.firstdraw := TRUE;
+  pdwg.OGLwindow1.CalcOptimalMatrix;
+  pdwg.pcamera^.totalobj:=0;
+  pdwg.pcamera^.infrustum:=0;
+  gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjArray.ObjTree);
+  //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
+  pdwg.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
+  pdwg.OGLwindow1.calcgrid;
+  pdwg.OGLwindow1.draw;
+  end;
+  //gdb.GetCurrentDWG.OGLwindow1.repaint;
+end;
+
+procedure clearotrack;
+begin
+     gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.current:=0;
+     gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.total:=0;
+end;
+procedure clearcp;
+begin
+     gdb.GetCurrentDWG.SelObjArray.clearallobjects;
+     //gdb.SelObjArray.clear;
+end;
+
 procedure GDBDescriptor.standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 var
     pproglayer:PGDBLayerProp;
@@ -1118,6 +1145,7 @@ end;
 
 procedure startup;
 begin
+  RedrawOGLWNDProc:=RedrawOGLWND;
   FontManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
 
   //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\times.shx');
@@ -1158,6 +1186,7 @@ begin
 end;
 begin
   programlog.logoutstr('UGDBDescriptor.startup',lp_IncPos);
+  //UGDBDescriptor.startup;
   {$IFDEF DEBUGINITSECTION}LogOut('GDBDescriptor.initialization');{$ENDIF}
   programlog.logoutstr('UGDBDescriptor.startup',lp_DecPos);
 end.

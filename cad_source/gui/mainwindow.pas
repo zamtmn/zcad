@@ -21,7 +21,7 @@ unit mainwindow;
 
 interface
 uses
-  laercombobox,ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
+  GDBBlockDef,laercombobox,ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
   ActnList,LCLType,LCLProc,strproc,log,intftranslations,toolwin,
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
@@ -31,12 +31,10 @@ uses
   {gdbobjectsconstdef,}UGDBLayerArray,{deveditor,}
   {ZEditsWithProcedure,}{zforms,}{ZButtonsWithCommand,}{ZComboBoxsWithProc,}{ZButtonsWithVariable,}{zmenus,}
   {GDBCommandsBase,}{ GDBCommandsDraw,GDBCommandsElectrical,}
-  commandline,{zmainforms,}memman,UGDBNamedObjectsArray,sharedgdb,
+  commandline,{zmainforms,}memman,UGDBNamedObjectsArray,
   {ZGUIArrays,}{ZBasicVisible,}{ZEditsWithVariable,}{ZTabControlsGeneric,}shared,{ZPanelsWithSplit,}{ZGUIsCT,}{ZstaticsText,}{UZProcessBar,}strmy{,strutils},{ZPanelsGeneric,}
   graphics,
-  AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr{,xmlconf};
-const
-     MenuNameModifier='MENU_';
+  AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr{,xmlconf},zcadinterface;
 type
   TmyAnchorDockHeader = class(TAnchorDockHeader)
                         protected
@@ -110,7 +108,7 @@ type
                     function MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
                     procedure ShowAllCursors;
                     procedure RestoreCursors;
-                    function DOShowModal(MForm:TForm): Integer;
+                    //function DOShowModal(MForm:TForm): Integer;
                     procedure CloseDWGPage(Sender: TObject);
 
                     procedure PageControlMouseDown(Sender: TObject;Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -157,22 +155,12 @@ type
   public
     procedure ResetBounds(Force: Boolean); override;
   end;
+procedure UpdateVisible;
 function getoglwndparam: GDBPointer; export;
 function LoadLayout_com(Operands:pansichar):GDBInteger;
-procedure clearotrack;
-procedure clearcp;
 procedure _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject);
 {procedure startup;
 procedure finalize;}
-const
-     menutoken='MAINMENUITEM';
-     popupmenutoken='POPUPMENU';
-     submenutoken='MENUITEM';
-     createmenutoken='CREATEMENU';
-     setmainmenutoken='SETMAINMENU';
-     //TOOLTIPS_CLASS = 'tooltips_class32';
-     //statusbarheight=20;
-     //statusbarclientheight=18;
 var
   MainFormN: TMainFormN;
   //MainForm: TMainForm;
@@ -205,7 +193,7 @@ var
 
 implementation
 
-uses {GDBCommandsBase,}{Objinsp}{,optionswnd, Tedit_form, MTedit_form}zcadinterface,
+uses {GDBCommandsBase,}{Objinsp}{,optionswnd, Tedit_form, MTedit_form}
   dialogs,XMLPropStorage,layerwnd;
 procedure TMyAnchorDockManager.ResetBounds(Force: Boolean);
 begin
@@ -353,8 +341,8 @@ begin
      setlayerstate(PLayer,newlp);
      if not result then
                        begin
-                            updatevisible;
-                            redrawoglwnd;
+                            if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+                            if assigned(redrawoglwndproc) then redrawoglwndproc;
                        end;
 end;
 
@@ -625,7 +613,7 @@ begin
     BtnPanel.OKButton.OnClick:={@}OptsFrame.OkClick;
     BtnPanel.Parent:=Dlg;
     Dlg.EnableAutoSizing;
-    Result:=MainFormN.DOShowModal(Dlg){.ShowModal};
+    Result:=DOShowModal(Dlg){.ShowModal};
   finally
     Dlg.Free;
   end;
@@ -671,7 +659,7 @@ begin
        shared.SBTextOut('Закрыто');
        if assigned(ReturnToDefaultProc)then
                                            ReturnToDefaultProc;
-       sharedgdb.updatevisible;
+       if assigned(UpdateVisibleProc) then UpdateVisibleProc;
   end;
 end;
 
@@ -1003,6 +991,15 @@ var
   action:tmyaction;
   bmp:TPortableNetworkGraphic;
 begin
+
+  ShowAllCursorsProc:=self.ShowAllCursors;
+  RestoreAllCursorsProc:=self.RestoreCursors;
+  StartLongProcessProc:=self.StartLongProcess;
+  ProcessLongProcessproc:=self.ProcessLongProcess;
+  EndLongProcessProc:=self.EndLongProcess;
+
+  UpdateVisibleProc:=UpdateVisible;
+
   //AutoSize:=false;
   for i:=0 to 9 do
   begin
@@ -2309,7 +2306,7 @@ begin
   if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
   then
   begin
-  if layerbox.ItemIndex = layerbox.ItemsCount-1 then layerbox.ItemIndex := getsortedindex(SysVar.dwg.DWG_CLayer^)
+  if layerbox.ItemIndex = layerbox.ItemsCount-1 then {layerbox.ItemIndex := getsortedindex(SysVar.dwg.DWG_CLayer^)}
                                                 else
                                                      begin
                                                           SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(pointer(layerbox.Item{s.Objects}[layerbox.ItemIndex].PLayer));
@@ -2377,12 +2374,12 @@ begin
           end;
      end;
 end;
-function TMainFormN.DOShowModal(MForm:TForm): Integer;
+{function TMainFormN.DOShowModal(MForm:TForm): Integer;
 begin
      ShowAllCursors;
      result:=MForm.ShowModal;
      RestoreCursors;
-end;
+end;}
 function TMainFormN.MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
 begin
      ShowAllCursors;
@@ -2466,15 +2463,71 @@ function getoglwndparam: GDBPointer; export;
 begin
   result := addr(gdb.GetCurrentDWG.OGLwindow1.param);
 end;
-procedure clearotrack;
+procedure updatevisible; export;
+var
+   ir:itrec;
+   poglwnd:toglwnd;
+   name:gdbstring;
+   i:Integer;
+   pdwg:PTDrawing;
 begin
-     gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.current:=0;
-     gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.total:=0;
-end;
-procedure clearcp;
-begin
-     gdb.GetCurrentDWG.SelObjArray.clearallobjects;
-     //gdb.SelObjArray.clear;
+   pdwg:=gdb.GetCurrentDWG;
+   if assigned(mainformn)then
+   begin
+   mainformn.UpdateControls;
+  if (pdwg<>nil)and(pdwg<>BlockBaseDWG) then
+  begin
+                                      begin
+                                           gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
+                                           mainformn.Caption:=(('ZCad v'+sysvar.SYS.SYS_Version^+' - ['+gdb.GetCurrentDWG.FileName+']'));
+  if assigned(mainwindow.LayerBox) then
+  mainwindow.LayerBox.enabled:=true;
+  if assigned(mainwindow.LineWBox) then
+  mainwindow.LineWBox.enabled:=true;
+  for i:=0 to MainFormN.PageControl.PageCount-1 do
+    begin
+         tobject(poglwnd):=FindControlByType(MainFormN.PageControl.Pages[i]{.PageControl},TOGLwnd);
+           if assigned(poglwnd) then
+            if poglwnd.PDWG<>nil then
+           begin
+                name:=extractfilename(PTDrawing(poglwnd.PDWG)^.FileName);
+                if @PTDRAWING(poglwnd.PDWG).mainObjRoot=(PTDRAWING(poglwnd.PDWG).pObjRoot) then
+                                                                     MainFormN.PageControl.Pages[i].caption:=(name)
+                                                                 else
+                                                                     MainFormN.PageControl.Pages[i].caption:='BEdit('+name+':'+PGDBObjBlockdef(PTDRAWING(poglwnd.PDWG).pObjRoot).Name+')';
+           end;    end;
+    { i:=0;
+    pcontrol:=MainForm.PageControl.pages.beginiterate(ir);
+     if pcontrol<>nil then
+     repeat
+           if pcontrol^.pobj<>nil then
+           begin
+           poglwnd:=nil;
+           //переделать//poglwnd:=pointer(pzbasic(pcontrol^.pobj)^.FindKidsByType(typeof(TOGLWnd)));
+           if poglwnd<>nil then
+            if poglwnd^.PDWG<>nil then
+           begin
+                name:=extractfilename(PTDrawing(poglwnd^.PDWG)^.FileName);
+                if @PTDRAWING(poglwnd^.PDWG).mainObjRoot=(PTDRAWING(poglwnd^.PDWG).pObjRoot) then
+                                                                     MainForm.PageControl.setpagetext(name,i)
+                                                                 else
+                                                                     MainForm.PageControl.setpagetext('BEdit('+name+':'+PGDBObjBlockdef(PTDRAWING(poglwnd^.PDWG).pObjRoot).Name+')',i);
+           end;
+           end;
+           inc(i);
+           pcontrol:=MainForm.PageControl.pages.iterate(ir);
+     until pcontrol=nil;                  }
+                                      end;
+  end
+  else
+      begin
+           mainformn.Caption:=('ZCad v'+sysvar.SYS.SYS_Version^);
+           if assigned(mainwindow.LayerBox)then
+           mainwindow.LayerBox.enabled:=false;
+           if assigned(mainwindow.LineWBox)then
+           mainwindow.LineWBox.enabled:=false;
+      end;
+  end;
 end;
 initialization
 begin

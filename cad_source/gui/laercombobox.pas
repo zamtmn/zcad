@@ -148,7 +148,7 @@ procedure Register;
 implementation
 
 uses
-  StdCtrls,GraphType,Themes,types,{убрать!}mainwindow;
+  StdCtrls,GraphType,Themes,types;
 
 //============================================================================//
 

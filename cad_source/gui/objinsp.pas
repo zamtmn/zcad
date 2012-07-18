@@ -31,7 +31,7 @@ uses
   strproc,{umytreenode,}types,graphics,
   {StdCtrls,}ExtCtrls,{ComCtrls,}Controls,Classes,menus,Forms,lcltype,fileutil,
 
-  gdbasetypes,SysUtils,shared,sharedgdb,
+  gdbasetypes,SysUtils,shared,
   gdbase,{OGLtypes,} io{,UGDBOpenArrayOfByte,varman},varmandef,UGDBDescriptor{,UGDBOpenArrayOfPV},
   {zforms,ZComboBoxsWithProc,ZEditsWithProcedure,log,gdbcircle,}memman{,zbasicvisible,zguisct},TypeDescriptors{,commctrl};
 const
@@ -137,7 +137,7 @@ var
 
 implementation
 
-uses UObjectDescriptor,gdbentity,UGDBStringArray,log,mainwindow;
+uses UObjectDescriptor,gdbentity,UGDBStringArray,log;
 procedure TGDBobjinsp.FormHide(Sender: TObject);
 begin
      proptreeptr:=proptreeptr;
@@ -763,9 +763,9 @@ begin
     if Command=TMNC_EditingDone then
                                     Application.QueueAsyncCall(asyncfreeeditor, 0);
 
-    redrawoglwnd;
+    if assigned(redrawoglwndproc) then redrawoglwndproc;
     self.updateinsp;
-    updatevisible;
+    if assigned(UpdateVisibleProc) then UpdateVisibleProc;
     //MainForm.ReloadLayer(@gdb.GetCurrentDWG.LayerTable);
   end;
 end;

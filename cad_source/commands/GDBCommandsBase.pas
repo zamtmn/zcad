@@ -45,9 +45,9 @@ uses
   GDBEntity,
  shared,
  UGDBEntTree,
-  {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}
+  {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}{AboutWnd,HelpWnd,}memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline,
- AnchorDocking,dialogs,XMLPropStorage,xmlconf{,
+ {AnchorDocking,}dialogs,XMLPropStorage,xmlconf{,
    uPSCompiler,
   uPSRuntime,
   uPSC_std,
@@ -95,6 +95,8 @@ type
    function SaveAs_com(Operands:pansichar):GDBInteger;
    procedure CopyToClipboard;
    function Regen_com(Operands:pansichar):GDBInteger;
+   function Load_Merge(Operands:pansichar;LoadMode:TLoadOpt):GDBInteger;
+   function Merge_com(Operands:pansichar):GDBInteger;
 const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 //var DWGPageCxMenu:pzpopupmenu;
@@ -955,18 +957,6 @@ begin
   //Optionswindow.Show;
   result:=cmd_ok;
 end;
-function About_com(Operands:pansichar):GDBInteger;
-begin
-  if not assigned(Aboutwindow) then
-                                  Aboutwindow:=TAboutWnd.mycreate(Application,@Aboutwindow);
-  DOShowModal(Aboutwindow);
-end;
-function Help_com(Operands:pansichar):GDBInteger;
-begin
-  if not assigned(Helpwindow) then
-                                  Helpwindow:=THelpWnd.mycreate(Application,@Helpwindow);
-  DOShowModal(Helpwindow);
-end;
 function ProjectTree_com(Operands:pansichar):GDBInteger;
 begin
   if not assigned(ProjectTreeWindow) then
@@ -1667,81 +1657,11 @@ begin
      //DWGPageCxMenu^.done;
      //gdbfreemem(pointer(DWGPageCxMenu));
 end;
-procedure SaveLayoutToFile(Filename: string);
-var
-  XMLConfig: TXMLConfig;
-  Config: TXMLConfigStorage;
-begin
-  XMLConfig:=TXMLConfig.Create(nil);
-  try
-    XMLConfig.StartEmpty:=true;
-    XMLConfig.Filename:=Filename;
-    Config:=TXMLConfigStorage.Create(XMLConfig);
-    try
-      DockMaster.SaveLayoutToConfig(Config);
-    finally
-      Config.Free;
-    end;
-    XMLConfig.Flush;
-  finally
-    XMLConfig.Free;
-  end;
-end;
-function SaveLayout_com:GDBInteger;
-var
-  XMLConfig: TXMLConfigStorage;
-  filename:string;
-begin
-  try
-    // create a new xml config file
-    filename:=utf8tosys(sysparam.programpath+'components/defaultlayout.xml');
-    SaveLayoutToFile(filename);
-    exit;
-    XMLConfig:=TXMLConfigStorage.Create(filename,false);
-    try
-      // save the current layout of all forms
-      DockMaster.SaveLayoutToConfig(XMLConfig);
-      XMLConfig.WriteToDisk;
-    finally
-      XMLConfig.Free;
-    end;
-  except
-    on E: Exception do begin
-      MessageDlg('Error',
-        'Error saving layout to file '+Filename+':'#13+E.Message,mtError,
-        [mbCancel],0);
-    end;
-  end;
-  result:=cmd_ok;
-end;
 function SnapProp_com(Operands:pansichar):GDBInteger;
 begin
      if assigned(StoreAndSetGDBObjInspProc)then
       StoreAndSetGDBObjInspProc(dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor);
       result:=cmd_ok;
-end;
-function Show_com(Operands:pansichar):GDBInteger;
-var
-   obj:gdbstring;
-   objt:PUserTypeDescriptor;
-begin
-  DockMaster.ShowControl(Operands,true);
-{     if Operands='ObjInsp' then
-                            begin
-                                 DockMaster.ShowControl('ObjectInspector',true);
-                            end
-else if Operands='CommandLine' then
-                            begin
-                                 DockMaster.ShowControl('CommandLine',true);
-                            end
-else if Operands='PageControl' then
-                            begin
-                                 DockMaster.ShowControl('PageControl',true);
-                            end
-else if Operands='ToolBarR' then
-                            begin
-                                 DockMaster.ShowControl('ToolBarR',true);
-                            end;}
 end;
 function UpdatePO_com(Operands:pansichar):GDBInteger;
 var
@@ -1978,8 +1898,6 @@ begin
   CreateCommandFastObjectPlugin(@SaveAs_com,'SaveAs',CADWG,0);
   CreateCommandFastObjectPlugin(@Cam_reset_com,'Cam_Reset',CADWG,0);
   CreateCommandFastObjectPlugin(@Options_com,'Options',0,0);
-  CreateCommandFastObjectPlugin(@About_com,'About',0,0);
-  CreateCommandFastObjectPlugin(@Help_com,'Help',0,0);
   CreateCommandFastObjectPlugin(@ProjectTree_com,'ProjectTree',CADWG,0);
   CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG,0);
   CreateCommandFastObjectPlugin(@MultiObjVarMan_com,'MultiObjVarMan',CADWG,0);
@@ -2002,9 +1920,6 @@ begin
   CreateCommandRTEdObjectPlugin(@polytest_com_CommandStart,nil,nil,nil,@polytest_com_BeforeClick,@polytest_com_BeforeClick,nil,nil,'PolyTest',0,0);
   CreateCommandFastObjectPlugin(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);
   CreateCommandFastObjectPlugin(@PolyDiv_com,'PolyDiv',CADWG,0).CEndActionAttr:=CEDeSelect;
-  CreateCommandFastObjectPlugin(@SaveLayout_com,'SaveLayout',0,0);
-  CreateCommandFastObjectPlugin(@Show_com,'Show',0,0);
-
   CreateCommandFastObjectPlugin(@UpdatePO_com,'UpdatePO',0,0);
 
   CreateCommandFastObjectPlugin(@SnapProp_com,'SnapProperties',CADWG,0).overlay:=true;
@@ -2019,8 +1934,7 @@ begin
   //Optionswindow.initxywh('',@mainformn,500,300,400,100,false);
   //Aboutwindow:=TAboutWnd.create(Application);{.initxywh('',@mainform,500,200,200,180,false);}
   //Application.CreateForm(TAboutWnd,Aboutwindow);
-  Aboutwindow:=nil;
-  Helpwindow:=nil;//THelpWnd.create(Application);{Helpwindow.initxywh('',@mainform,500,290,400,150,false);}
+  //THelpWnd.create(Application);{Helpwindow.initxywh('',@mainform,500,290,400,150,false);}
   //Aboutwindow.show;
   //Helpwindow.show;
   //Application.mainform:=

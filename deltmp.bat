@@ -30,6 +30,11 @@ rm -rf cad_source/languade/backup
 rm cad_source/languade/*.bak
 rm -rf cad_source/zwin/backup
 rm cad_source/zwin/*.bak
+rm cad_source/misc/*.bak
+rm -rf cad_source/simplecad/lib/
+rm cad_source/simplecad/*.bak
+rm cad_source/fileformats/*.bak
+rm cad_source/other/*.bak
 rm -rf cad_source/GDB/backup
 rm -rf cad_source/misc/backup
 rm cad_source/GDB/*.bak

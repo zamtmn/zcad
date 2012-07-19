@@ -538,9 +538,9 @@ GDBOpenArrayOfByte=object(GDBOpenArray)
                       function AllocData(SData:GDBword):GDBPointer;virtual;abstract;
                       function ReadData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
                       function PopData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
-                      function ReadString(break, ignore: GDBString): {short}String;
-                      function ReadGDBString: {short}String;
-                      function ReadString2:GDBString;
+                      function ReadString(break, ignore: GDBString): shortString;inline;
+                      function ReadGDBString: {short}String;inline;
+                      function ReadString2:GDBString;inline;
                       function GetCurrentReadAddres:GDBPointer;virtual;abstract;
                       function Jump(offset:GDBInteger):GDBPointer;virtual;abstract;
                       function SaveToFile(FileName:string):GDBInteger;
@@ -697,7 +697,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
                     procedure cleareraseobj;virtual;abstract;
                     function copyto(source:PGDBOpenArray):GDBInteger;virtual;abstract;
               end;
-//Generate on C:\zcad\CAD_SOURCE\languade\varmandef.pas
+//Generate on C:\zcad\CAD_SOURCE\languade\zcadsysvars.pas
   tmemdeb=record
                 GetMemCount,FreeMemCount:PGDBInteger;
                 TotalAllocMb,CurrentAllocMB:PGDBInteger;
@@ -735,31 +735,6 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
                 WND_Texture(*'Texture'*)
                );
   {°}
-  TTraceAngle=(
-                TTA90(*'90 deg'*),
-                TTA45(*'45 deg'*),
-                TTA30(*'30 deg'*)
-               );
-  TTraceMode=record
-                   Angle:TTraceAngle;(*'Angle'*)
-                   ZAxis:GDBBoolean;(*'Z Axis'*)
-             end;
-  TOSMode=record
-                kosm_inspoint:GDBBoolean;(*'Insertion'*)
-                kosm_endpoint:GDBBoolean;(*'Endpoint'*)
-                kosm_midpoint:GDBBoolean;(*'Midpoint'*)
-                kosm_3:GDBBoolean;(*'1/3'*)
-                kosm_4:GDBBoolean;(*'1/4'*)
-                kosm_center:GDBBoolean;(*'Center'*)
-                kosm_quadrant:GDBBoolean;(*'Quadrant'*)
-                kosm_point:GDBBoolean;(*'Point'*)
-                kosm_intersection:GDBBoolean;(*'Intersection'*)
-                kosm_perpendicular:GDBBoolean;(*'Perpendicular'*)
-                kosm_tangent:GDBBoolean;(*'Tangent'*)
-                kosm_nearest:GDBBoolean;(*'Nearest'*)
-                kosm_apparentintersection:GDBBoolean;(*'Apparent intersection'*)
-                kosm_paralel:GDBBoolean;(*'Paralel'*)
-          end;
   PTVSControl=^TVSControl;
   TVSControl=(
                 TVSOn(*'On'*),
@@ -865,6 +840,32 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
     MISC:tmisc;(*'Miscellaneous'*)
     debug:tdebug;(*'Debug'*)
   end;
+//Generate on C:\zcad\CAD_SOURCE\languade\varmandef.pas
+TTraceAngle=(
+              TTA90(*'90 deg'*),
+              TTA45(*'45 deg'*),
+              TTA30(*'30 deg'*)
+             );
+TTraceMode=record
+                 Angle:TTraceAngle;(*'Angle'*)
+                 ZAxis:GDBBoolean;(*'Z Axis'*)
+           end;
+TOSMode=record
+              kosm_inspoint:GDBBoolean;(*'Insertion'*)
+              kosm_endpoint:GDBBoolean;(*'Endpoint'*)
+              kosm_midpoint:GDBBoolean;(*'Midpoint'*)
+              kosm_3:GDBBoolean;(*'1/3'*)
+              kosm_4:GDBBoolean;(*'1/4'*)
+              kosm_center:GDBBoolean;(*'Center'*)
+              kosm_quadrant:GDBBoolean;(*'Quadrant'*)
+              kosm_point:GDBBoolean;(*'Point'*)
+              kosm_intersection:GDBBoolean;(*'Intersection'*)
+              kosm_perpendicular:GDBBoolean;(*'Perpendicular'*)
+              kosm_tangent:GDBBoolean;(*'Tangent'*)
+              kosm_nearest:GDBBoolean;(*'Nearest'*)
+              kosm_apparentintersection:GDBBoolean;(*'Apparent intersection'*)
+              kosm_paralel:GDBBoolean;(*'Paralel'*)
+        end;
   indexdesk = record
     indexmin, count: GDBInteger;
   end;
@@ -2085,7 +2086,7 @@ GDBOpenArrayOfTObjLinkRecord=object(GDBOpenArrayOfData)(*OpenArrayOfData=TObjLin
                       function SetGenMode(Mode:TGenLincMode):TGenLincMode;
                       procedure Minimize;
                    end;
-//Generate on C:\zcad\CAD_SOURCE\DeviceBase\DeviceBase.pas
+//Generate on C:\zcad\CAD_SOURCE\DeviceBase\devicebaseabstract.pas
 TOborudCategory=(_misc(*'**Разное'*),
                  _elapp(*'**Электроаппараты'*),
                  _ppkop(*'**Приборы приемноконтрольные ОПС'*),
@@ -2110,6 +2111,7 @@ DbBaseObject=object(GDBaseObject)
                        TreeCoord:GDBString;(*'**Позиция в дереве БД'*)(*oi_readonly*)
                        constructor initnul;
                  end;
+//Generate on C:\zcad\CAD_SOURCE\DeviceBase\DeviceBase.pas
 PDeviceDbBaseObject=^DeviceDbBaseObject;
 DeviceDbBaseObject=object(DbBaseObject)
                        UID:GDBString;(*'**Уникальный идентификатор'*)(*oi_readonly*)
@@ -2225,6 +2227,12 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
     procedure DrawHeplGeometry;virtual;abstract;
   end;
+  TOSModeEditor=object(GDBaseObject)
+              osm:TOSMode;(*'Snap'*)
+              trace:TTraceMode;(*'Trace'*)
+              procedure Format;virtual;abstract;
+              procedure GetState;
+             end;
 //Generate on C:\zcad\CAD_SOURCE\commands\GDBCommandsDraw.pas
          TEntityProcess=(
                        TEP_Erase(*'Erase'*),
@@ -2678,12 +2686,6 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
                 constructor init;
                 destructor done;virtual;abstract;
             end;
-TOSModeEditor=object(GDBaseObject)
-              osm:TOSMode;(*'Snap'*)
-              trace:TTraceMode;(*'Trace'*)
-              procedure Format;virtual;abstract;
-              procedure GetState;
-             end;
 //Generate on C:\zcad\CAD_SOURCE\electroteh\GDBCommandsOPS.pas
   TInsertType=(
                TIT_Block(*'Block'*),

@@ -26,6 +26,7 @@ C:\zcad\CAD_SOURCE\u\UGDBNamedObjectsArray.pas
 C:\zcad\CAD_SOURCE\u\UGDBLayerArray.pas
 C:\zcad\CAD_SOURCE\u\UGDBTableStyleArray.pas
 C:\zcad\CAD_SOURCE\u\UGDBTable.pas
+C:\zcad\CAD_SOURCE\languade\zcadsysvars.pas
 C:\zcad\CAD_SOURCE\languade\varmandef.pas
 C:\zcad\CAD_SOURCE\languade\varman.pas
 C:\zcad\CAD_SOURCE\gdb\GDBSubordinated.pas
@@ -65,6 +66,7 @@ C:\zcad\CAD_SOURCE\gdb\GDBCamera.pas
 C:\zcad\CAD_SOURCE\gdb\GDBTable.pas
 C:\zcad\CAD_SOURCE\electroteh\GDBElLeader.pas
 C:\zcad\CAD_SOURCE\u\UGDBOpenArrayOfTObjLinkRecord.pas
+C:\zcad\CAD_SOURCE\DeviceBase\devicebaseabstract.pas
 C:\zcad\CAD_SOURCE\DeviceBase\DeviceBase.pas
 C:\zcad\CAD_SOURCE\commands\commandlinedef.pas
 C:\zcad\CAD_SOURCE\commands\commanddefinternal.pas

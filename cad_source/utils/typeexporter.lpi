@@ -1,16 +1,14 @@
 <?xml version="1.0"?>
 <CONFIG>
   <ProjectOptions>
+    <Version Value="9"/>
     <PathDelim Value="\"/>
-    <Version Value="7"/>
     <General>
       <Flags>
         <MainUnitHasCreateFormStatements Value="False"/>
         <MainUnitHasTitleStatement Value="False"/>
-        <UseDefaultCompilerOptions Value="True"/>
       </Flags>
       <MainUnit Value="0"/>
-      <TargetFileExt Value=".exe"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
       <Icon Value="0"/>
@@ -22,8 +20,11 @@
     <VersionInfo>
       <Language Value=""/>
       <CharSet Value=""/>
-      <StringTable Comments="" CompanyName="" FileDescription="" FileVersion="" InternalName="" LegalCopyright="" LegalTrademarks="" OriginalFilename="" ProductName="" ProductVersion=""/>
+      <StringTable ProductVersion=""/>
     </VersionInfo>
+    <BuildModes Count="1">
+      <Item1 Name="default" Default="True"/>
+    </BuildModes>
     <PublishOptions>
       <Version Value="2"/>
       <IgnoreBinaries Value="False"/>
@@ -43,10 +44,11 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="26"/>
-        <CursorPos X="1" Y="33"/>
+        <TopLine Value="211"/>
+        <CursorPos X="88" Y="235"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="..\shared.pas"/>
@@ -140,8 +142,8 @@
         <UnitName Value="iolow"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="142"/>
-        <CursorPos X="55" Y="165"/>
+        <TopLine Value="317"/>
+        <CursorPos X="62" Y="247"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit12>
@@ -195,30 +197,24 @@
       </Unit18>
       <Unit19>
         <Filename Value="E:\fpc-2.4.0.source\fpc-2.4.0\rtl\objpas\classes\classesh.inc"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="567"/>
         <CursorPos X="14" Y="604"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit19>
       <Unit20>
         <Filename Value="E:\fpc-2.4.0.source\fpc-2.4.0\rtl\inc\objpash.inc"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="167"/>
         <CursorPos X="23" Y="175"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit20>
       <Unit21>
         <Filename Value="E:\fpc-2.4.0.source\fpc-2.4.0\rtl\inc\systemh.inc"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="261"/>
         <CursorPos X="27" Y="281"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit21>
       <Unit22>
         <Filename Value="..\def.inc"/>
@@ -233,135 +229,135 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="iolow.pas"/>
-        <Caret Line="175" Column="1" TopLine="150"/>
+        <Caret Line="14" Column="3" TopLine="13"/>
       </Position1>
       <Position2>
         <Filename Value="iolow.pas"/>
-        <Caret Line="177" Column="1" TopLine="150"/>
+        <Caret Line="43" Column="47" TopLine="26"/>
       </Position2>
       <Position3>
         <Filename Value="iolow.pas"/>
-        <Caret Line="178" Column="1" TopLine="150"/>
+        <Caret Line="49" Column="28" TopLine="32"/>
       </Position3>
       <Position4>
         <Filename Value="iolow.pas"/>
-        <Caret Line="179" Column="1" TopLine="150"/>
+        <Caret Line="26" Column="49" TopLine="9"/>
       </Position4>
       <Position5>
         <Filename Value="iolow.pas"/>
-        <Caret Line="158" Column="10" TopLine="150"/>
+        <Caret Line="49" Column="56" TopLine="32"/>
       </Position5>
       <Position6>
         <Filename Value="iolow.pas"/>
-        <Caret Line="165" Column="15" TopLine="150"/>
+        <Caret Line="64" Column="23" TopLine="47"/>
       </Position6>
       <Position7>
         <Filename Value="iolow.pas"/>
-        <Caret Line="15" Column="19" TopLine="1"/>
+        <Caret Line="27" Column="64" TopLine="10"/>
       </Position7>
       <Position8>
         <Filename Value="iolow.pas"/>
-        <Caret Line="11" Column="32" TopLine="1"/>
+        <Caret Line="64" Column="26" TopLine="47"/>
       </Position8>
       <Position9>
-        <Filename Value="typeexporter.lpr"/>
-        <Caret Line="4" Column="16" TopLine="1"/>
+        <Filename Value="iolow.pas"/>
+        <Caret Line="27" Column="21" TopLine="10"/>
       </Position9>
       <Position10>
-        <Filename Value="..\def.inc"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="iolow.pas"/>
+        <Caret Line="64" Column="71" TopLine="47"/>
       </Position10>
       <Position11>
         <Filename Value="iolow.pas"/>
-        <Caret Line="3" Column="1" TopLine="1"/>
+        <Caret Line="102" Column="27" TopLine="85"/>
       </Position11>
       <Position12>
-        <Filename Value="typeexporter.lpr"/>
-        <Caret Line="33" Column="1" TopLine="1"/>
+        <Filename Value="iolow.pas"/>
+        <Caret Line="31" Column="30" TopLine="13"/>
       </Position12>
       <Position13>
-        <Filename Value="typeexporter.lpr"/>
-        <Caret Line="34" Column="1" TopLine="2"/>
+        <Filename Value="iolow.pas"/>
+        <Caret Line="102" Column="59" TopLine="85"/>
       </Position13>
       <Position14>
-        <Filename Value="typeexporter.lpr"/>
-        <Caret Line="35" Column="1" TopLine="3"/>
+        <Filename Value="iolow.pas"/>
+        <Caret Line="126" Column="31" TopLine="109"/>
       </Position14>
       <Position15>
-        <Filename Value="typeexporter.lpr"/>
-        <Caret Line="36" Column="1" TopLine="4"/>
+        <Filename Value="iolow.pas"/>
+        <Caret Line="32" Column="35" TopLine="15"/>
       </Position15>
       <Position16>
-        <Filename Value="typeexporter.lpr"/>
-        <Caret Line="105" Column="1" TopLine="85"/>
+        <Filename Value="iolow.pas"/>
+        <Caret Line="126" Column="42" TopLine="109"/>
       </Position16>
       <Position17>
-        <Filename Value="typeexporter.lpr"/>
-        <Caret Line="106" Column="1" TopLine="85"/>
+        <Filename Value="iolow.pas"/>
+        <Caret Line="130" Column="26" TopLine="113"/>
       </Position17>
       <Position18>
-        <Filename Value="typeexporter.lpr"/>
-        <Caret Line="107" Column="1" TopLine="85"/>
+        <Filename Value="iolow.pas"/>
+        <Caret Line="33" Column="31" TopLine="16"/>
       </Position18>
       <Position19>
-        <Filename Value="typeexporter.lpr"/>
-        <Caret Line="108" Column="1" TopLine="85"/>
+        <Filename Value="iolow.pas"/>
+        <Caret Line="130" Column="38" TopLine="113"/>
       </Position19>
       <Position20>
-        <Filename Value="typeexporter.lpr"/>
-        <Caret Line="109" Column="1" TopLine="85"/>
+        <Filename Value="iolow.pas"/>
+        <Caret Line="139" Column="26" TopLine="122"/>
       </Position20>
       <Position21>
-        <Filename Value="typeexporter.lpr"/>
-        <Caret Line="111" Column="1" TopLine="85"/>
+        <Filename Value="iolow.pas"/>
+        <Caret Line="34" Column="31" TopLine="17"/>
       </Position21>
       <Position22>
-        <Filename Value="typeexporter.lpr"/>
-        <Caret Line="112" Column="1" TopLine="85"/>
+        <Filename Value="iolow.pas"/>
+        <Caret Line="139" Column="38" TopLine="122"/>
       </Position22>
       <Position23>
-        <Filename Value="typeexporter.lpr"/>
-        <Caret Line="113" Column="1" TopLine="85"/>
+        <Filename Value="iolow.pas"/>
+        <Caret Line="143" Column="32" TopLine="126"/>
       </Position23>
       <Position24>
         <Filename Value="iolow.pas"/>
-        <Caret Line="147" Column="1" TopLine="127"/>
+        <Caret Line="31" Column="38" TopLine="14"/>
       </Position24>
       <Position25>
         <Filename Value="iolow.pas"/>
-        <Caret Line="148" Column="1" TopLine="127"/>
+        <Caret Line="143" Column="45" TopLine="126"/>
       </Position25>
       <Position26>
         <Filename Value="iolow.pas"/>
-        <Caret Line="150" Column="1" TopLine="127"/>
+        <Caret Line="189" Column="24" TopLine="172"/>
       </Position26>
       <Position27>
         <Filename Value="iolow.pas"/>
-        <Caret Line="151" Column="1" TopLine="127"/>
+        <Caret Line="35" Column="63" TopLine="18"/>
       </Position27>
       <Position28>
         <Filename Value="iolow.pas"/>
-        <Caret Line="152" Column="1" TopLine="127"/>
+        <Caret Line="189" Column="70" TopLine="172"/>
       </Position28>
       <Position29>
         <Filename Value="iolow.pas"/>
-        <Caret Line="153" Column="1" TopLine="127"/>
+        <Caret Line="247" Column="33" TopLine="230"/>
       </Position29>
       <Position30>
         <Filename Value="iolow.pas"/>
-        <Caret Line="165" Column="55" TopLine="142"/>
+        <Caret Line="36" Column="55" TopLine="19"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
-    <Version Value="9"/>
+    <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
       <Filename Value="..\..\CAD\utils\typeexporter"/>
     </Target>
     <SearchPaths>
-      <IncludeFiles Value="..\;..\u\;..\gdb\;..\commands\;..\gui\;..\DeviceBase\;..\languade\;..\LCLmod\;..\CAD\"/>
-      <OtherUnitFiles Value="..\;..\u\;..\gdb\;..\commands\;..\gui\;..\DeviceBase\;..\languade\;..\LCLmod\;..\CAD\"/>
+      <IncludeFiles Value="..;..\u;..\gdb;..\commands;..\gui;..\DeviceBase;..\languade;..\LCLmod;..\CAD"/>
+      <OtherUnitFiles Value="..;..\u;..\gdb;..\commands;..\gui;..\DeviceBase;..\languade;..\LCLmod;..\CAD"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Other>
@@ -384,4 +380,5 @@
       </Item3>
     </Exceptions>
   </Debugging>
+  <EditorMacros Count="0"/>
 </CONFIG>

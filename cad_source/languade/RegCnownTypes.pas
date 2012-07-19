@@ -17,5 +17,11 @@ begin
      pt^.RegisterVMT(TypeOf(ElDeviceBaseObject));
      pt:=SysUnit.ObjectTypeName2PTD('CableDeviceBaseObject');
      pt^.RegisterVMT(TypeOf(CableDeviceBaseObject));
+     pt:=SysUnit.ObjectTypeName2PTD('DbBaseObject');
+     pt^.RegisterVMT(TypeOf(DbBaseObject));
+     pt:=SysUnit.ObjectTypeName2PTD('ElDeviceBaseObject');
+     pt^.RegisterVMT(TypeOf(ElDeviceBaseObject));
+     pt:=SysUnit.ObjectTypeName2PTD('CableDeviceBaseObject');
+     pt^.RegisterVMT(TypeOf(CableDeviceBaseObject));
 end;
 end.

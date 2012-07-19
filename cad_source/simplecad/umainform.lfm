@@ -3,7 +3,7 @@ object Form1: TForm1
   Height = 663
   Top = 177
   Width = 943
-  Caption = 'Form1'
+  Caption = 'ZCAD engine demo program'
   ClientHeight = 663
   ClientWidth = 943
   KeyPreview = True

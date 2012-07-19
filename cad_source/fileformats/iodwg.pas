@@ -20,11 +20,11 @@ unit iodwg;
 {$INCLUDE def.inc}
 {$MODE OBJFPC}
 interface
-uses zcadinterface,GDBLine,gdbobjectsconstdef,typinfo,zcadstrconsts,iodxf,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes,log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, sysutils, memman, UGDBDescriptor,
-     UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity,TypeDescriptors;
+uses zcadinterface,GDBLine,gdbobjectsconstdef,typinfo,zcadstrconsts,iodxf,fileutil,{UGDBTextStyleArray,}varman,geometry,{GDBSubordinated,}shared,gdbasetypes,log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, sysutils, memman, UGDBDescriptor,
+     {UGDBObjBlockdefArray,}UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,{UGDBVisibleOpenArray,}GDBEntity,TypeDescriptors;
 procedure addfromdwg(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
 implementation
-uses GDBBlockDef,UGDBLayerArray;
+uses {GDBBlockDef,}UGDBLayerArray;
 
 type
     PDWGByte=^DWGByte;

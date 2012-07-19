@@ -19,7 +19,7 @@
 unit GDBEntity;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
+uses zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
      {UGDBPolyPoint2DArray,}varman,varmandef,
      gl,
      GDBase,gdbobjectsconstdef,

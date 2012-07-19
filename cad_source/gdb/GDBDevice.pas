@@ -20,7 +20,7 @@ unit GDBDevice;
 {$INCLUDE def.inc}
 
 interface
-uses sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
+uses zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
 gl,OGLSpecFunc,uunitmanager{,shared},
 memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray,UGDBDescriptor{,UGDBLayerArray,oglwindowdef};
 

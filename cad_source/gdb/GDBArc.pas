@@ -18,7 +18,7 @@
 unit GDBArc;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
 GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain{,OGLSpecFunc};
 type

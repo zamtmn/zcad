@@ -21,7 +21,7 @@ unit GDBManager;
 
 
 interface
-uses gdbellipse,GDB3DFace,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
+uses zcadsysvars,gdbellipse,GDB3DFace,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
      UGDBDescriptor,varmandef,gdbobjectsconstdef,
      UGDBVisibleOpenArray,GDBGenericSubEntry,gdbEntity,GDBCable,GDBDevice,
      GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMText,GDBLine,

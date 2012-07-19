@@ -20,7 +20,7 @@ unit GDBLine;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBOpenArrayOfPObjects,UGDBDescriptor,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
+uses zcadsysvars,UGDBOpenArrayOfPObjects,UGDBDescriptor,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman{,shared},OGLSpecFunc;
 type

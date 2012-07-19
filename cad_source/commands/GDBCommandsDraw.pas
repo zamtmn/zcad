@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,

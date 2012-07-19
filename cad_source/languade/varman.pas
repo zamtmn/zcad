@@ -200,7 +200,7 @@ procedure GDBStringtovalue(s: GDBString; pvalue: GDBPointer; valuetype: GDBByte)
 function getpattern(ptd:ptdarray; max:GDBInteger;var line:GDBString; out typ:GDBInteger):PGDBGDBStringArray;
 function ObjOrRecordRead(var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:GDBString; var fieldoffset: GDBSmallint; ptd:PRecordDescriptor):GDBBoolean;
 function GetPVarMan: GDBPointer; export;
-function getpsysvar: GDBPointer; export;
+//function getpsysvar: GDBPointer; export;
 function FindCategory(category:GDBString;var catname:GDBString):Pointer;
 //procedure startup;
 //procedure finalize;
@@ -312,10 +312,10 @@ begin
             membuf.TXTAddGDBString('end.');
         end;
 end;
-function getpsysvar: GDBPointer; export;
+{function getpsysvar: GDBPointer; export;
 begin
   result := @sysvar;
-end;
+end;}
 function GetPVarMan: GDBPointer; export;
 begin
   result := @SysUnit.InterfaceVariables;

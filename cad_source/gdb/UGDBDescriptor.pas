@@ -20,7 +20,7 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-zcadinterface,zcadstrconsts,GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UGDBDrawingdef,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
+zcadsysvars,zcadinterface,zcadstrconsts,GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UGDBDrawingdef,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
 UGDBNumerator, gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,sysinfo,

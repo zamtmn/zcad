@@ -40,6 +40,8 @@ type
     TFunction__TForm=Function:TForm;
     TFunction__TComponent=Function:TComponent;
 
+    TMethod_String_=procedure (s:String);
+
 
     //SplashWnd
     TSplashTextOutProc=procedure (s:string;pm:boolean);
@@ -47,6 +49,9 @@ type
     //ObjInsp
     TSetGDBObjInsp=procedure(exttype:PUserTypeDescriptor; addr:Pointer);
     TStoreAndSetGDBObjInsp=procedure(exttype:PUserTypeDescriptor; addr:Pointer);
+
+    //mainwindow
+    TMessageBox=function(Text, Caption: PChar; Flags: Longint): Integer of object;
 var
    //SplashWnd
    SplashTextOut:TSplashTextOutProc;
@@ -73,6 +78,10 @@ var
    ProcessLongProcessProc:TMethod_Integer_;
    EndLongProcessProc:TSimpleMethod;
    UpdateVisibleProc:TSimpleProcedure;
+   MessageBoxProc:TMessageBox;
+   ProcessFilehistoryProc:TMethod_String_;
+   AddOneObjectProc:TSimpleMethod;
+   SetVisuaProplProc:TSimpleMethod;
 
    //UGDBDescriptor
    RedrawOGLWNDProc:TSimpleProcedure;

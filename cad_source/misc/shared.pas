@@ -19,7 +19,7 @@
 unit shared;
 {$INCLUDE def.inc}
 interface
-uses zcadstrconsts,gdbasetypes,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,lclproc,Masks;
+uses LCLtype,zcadstrconsts,gdbasetypes,strutils,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,lclproc,Masks;
 
 type
 TFromDirIterator=procedure (filename:GDBString);
@@ -53,8 +53,8 @@ var
     CursorOff:SimpleProcOfObject=nil;
 
 implementation
-uses strproc,LCLtype,
-     log,varmandef,strutils;
+uses strproc,
+     log;
 procedure DisableCmdLine;
 begin
   application.MainForm.ActiveControl:=nil;
@@ -99,8 +99,9 @@ procedure HistoryOut(s: pansichar); export;
 var
    a:string;
 begin
-     if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
-     if sysvar.SYS.SYS_IsHistoryLineCreated^ then
+     {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
+     if sysvar.SYS.SYS_IsHistoryLineCreated^ then}
+     if assigned(HistoryLine) then
      begin
           a:=(s);
                if HistoryLine.Lines.Count=0 then
@@ -149,8 +150,9 @@ end;
 procedure LogError(errstr:GDBString); export;
 begin
      errstr:=rserrorprefix+errstr;
-     if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
-     if sysvar.SYS.SYS_IsHistoryLineCreated^ then
+     {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
+     if sysvar.SYS.SYS_IsHistoryLineCreated^ then}
+     if assigned(HistoryLine) then
      begin
      HistoryOut(@errstr[1]);
      //SendMessageA(cline.HistoryLine.Handle, WM_vSCROLL, SB_PAGEDOWN	, 0);

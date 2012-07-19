@@ -20,7 +20,7 @@ unit GDBCurve;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBOpenArrayOfPObjects,UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes{,GDBGenericSubEntry},UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBPolyLine2DArray,UGDBPoint3DArray{,UGDBOpenArrayOfByte,varman},varmandef,
+uses zcadsysvars,UGDBOpenArrayOfPObjects,UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes{,GDBGenericSubEntry},UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBPolyLine2DArray,UGDBPoint3DArray{,UGDBOpenArrayOfByte,varman},varmandef,
 gl,
 GDBase,geometry,UGDBDescriptor,gdbobjectsconstdef,oglwindowdef,math,dxflow,sysutils,memman{,OGLSpecFunc},GDBSubordinated;
 type

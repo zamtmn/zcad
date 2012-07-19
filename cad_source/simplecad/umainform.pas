@@ -9,7 +9,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Spin,
   {From ZCAD}
-  {zcadinterface,} iodxf,varmandef, oglwindow,  UUnitManager,
+  zcadsysvars,{zcadinterface,} iodxf,varmandef, oglwindow,  UUnitManager,
   UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDBText,GDBLine,GDBCircle,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
 
 type

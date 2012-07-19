@@ -5,7 +5,7 @@ unit layerwnd;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  zcadsysvars,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Buttons, ExtCtrls, StdCtrls, Grids, ComCtrls,LCLIntf,lcltype,
 
   gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,

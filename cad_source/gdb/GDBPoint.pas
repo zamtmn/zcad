@@ -20,7 +20,7 @@ unit GDBPoint;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
+uses zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
 GDBase,UGDBDescriptor,gdbobjectsconstdef,oglwindowdef,geometry{,dxflow},memman,OGLSpecFunc;
 type

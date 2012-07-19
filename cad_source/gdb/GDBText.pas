@@ -21,7 +21,7 @@ unit GDBText;
 
 interface
 uses
-strproc,sysutils,UGDBSHXFont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
+zcadsysvars,strproc,sysutils,UGDBSHXFont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
 GDBase,UGDBDescriptor,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,strmy,math,memman,log,GDBSubordinated,UGDBTextStyleArray;
 type

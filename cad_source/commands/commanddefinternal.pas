@@ -21,7 +21,7 @@ unit commanddefinternal;
 
 
 interface
-uses geometry,varmandef,gdbasetypes,gdbase,commandlinedef,commandline,oglwindowdef,UGDBDescriptor
+uses gdbobjectsconstdef,zcadsysvars,geometry,varmandef,gdbasetypes,gdbase,commandlinedef,commandline,oglwindowdef,UGDBDescriptor
   {,UGDBLayerArray},memman,shared;
 const cmd_ok=-1;
 const cmd_cancel=-2;
@@ -77,11 +77,124 @@ type
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     procedure DrawHeplGeometry;virtual;
   end;
+  TOSModeEditor=object(GDBaseObject)
+              osm:TOSMode;(*'Snap'*)
+              trace:TTraceMode;(*'Trace'*)
+              procedure Format;virtual;
+              procedure GetState;
+             end;
 {Export-}
+var
+     OSModeEditor:TOSModeEditor;
 function CreateCommandRTEdObjectPlugin(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;ohgd:comdrawfunc;occont:comproc;name:pansichar;SA,DA:TCStartAttr):pCommandRTEdObjectPlugin;export;
 function CreateCommandFastObjectPlugin(ocs:comfuncwithoper;name:pansichar;SA,DA:TCStartAttr):pCommandFastObjectPlugin;export;
 implementation
-uses GDBCommandsBase,UGDBOpenArrayOfUCommands,zcadinterface,varman,log;
+uses {GDBCommandsBase,}UGDBOpenArrayOfUCommands,zcadinterface,varman,log;
+procedure  TOSModeEditor.Format;
+var
+   i,c:integer;
+   v:gdbvertex;
+
+begin
+    SysVar.dwg.DWG_OSMode^:=0;
+    if osm.kosm_inspoint then inc(SysVar.dwg.DWG_OSMode^,osm_inspoint);
+    if osm.kosm_endpoint then inc(SysVar.dwg.DWG_OSMode^,osm_endpoint);
+    if osm.kosm_midpoint then inc(SysVar.dwg.DWG_OSMode^,osm_midpoint);
+    if osm.kosm_3 then inc(SysVar.dwg.DWG_OSMode^,osm_3);
+    if osm.kosm_4 then inc(SysVar.dwg.DWG_OSMode^,osm_4);
+    if osm.kosm_center then inc(SysVar.dwg.DWG_OSMode^,osm_center);
+    if osm.kosm_quadrant then inc(SysVar.dwg.DWG_OSMode^,osm_quadrant);
+    if osm.kosm_point then inc(SysVar.dwg.DWG_OSMode^,osm_point);
+    if osm.kosm_intersection then inc(SysVar.dwg.DWG_OSMode^,osm_intersection);
+    if osm.kosm_perpendicular then inc(SysVar.dwg.DWG_OSMode^,osm_perpendicular);
+    if osm.kosm_tangent then inc(SysVar.dwg.DWG_OSMode^,osm_tangent);
+    if osm.kosm_nearest then inc(SysVar.dwg.DWG_OSMode^,osm_nearest);
+    if osm.kosm_apparentintersection then inc(SysVar.dwg.DWG_OSMode^,osm_apparentintersection);
+    if osm.kosm_paralel then inc(SysVar.dwg.DWG_OSMode^,osm_paralel);
+
+    case self.trace.Angle of
+         TTA90:c:=2;
+         TTA45:c:=4;
+         TTA30:c:=6;
+    end;
+
+  gdb.GetCurrentDWG.oglwindow1.PolarAxis.clear;
+  for i := 0 to c - 1 do
+  begin
+    v.x:=cos(pi * i / c);
+    v.y:=sin(pi * i / c);
+    v.z:=0;
+    gdb.GetCurrentDWG.oglwindow1.PolarAxis.add(@v);
+  end;
+  if self.trace.ZAxis then
+  begin
+    v.x:=0;
+    v.y:=0;
+    v.z:=1;
+    gdb.GetCurrentDWG.oglwindow1.PolarAxis.add(@v);
+  end;
+end;
+procedure TOSModeEditor.GetState;
+begin
+    if (SysVar.dwg.DWG_OSMode^ and osm_inspoint)=0 then
+                                                       osm.kosm_inspoint:=false
+                                                   else
+                                                       osm.kosm_inspoint:=true;
+    if (SysVar.dwg.DWG_OSMode^ and osm_endpoint)=0 then
+                                                       osm.kosm_endpoint:=false
+                                                   else
+                                                       osm.kosm_endpoint:=true;
+    if (SysVar.dwg.DWG_OSMode^ and osm_midpoint)=0 then
+                                                       osm.kosm_midpoint:=false
+                                                   else
+                                                       osm.kosm_midpoint:=true;
+    if (SysVar.dwg.DWG_OSMode^ and osm_3)=0 then
+                                                       osm.kosm_3:=false
+                                                   else
+                                                       osm.kosm_3:=true;
+    if (SysVar.dwg.DWG_OSMode^ and osm_4)=0 then
+                                                       osm.kosm_4:=false
+                                                   else
+                                                       osm.kosm_4:=true;
+    if (SysVar.dwg.DWG_OSMode^ and osm_center)=0 then
+                                                       osm.kosm_center:=false
+                                                   else
+                                                       osm.kosm_center:=true;
+    if (SysVar.dwg.DWG_OSMode^ and osm_quadrant)=0 then
+                                                       osm.kosm_quadrant:=false
+                                                   else
+                                                       osm.kosm_quadrant:=true;
+    if (SysVar.dwg.DWG_OSMode^ and osm_point)=0 then
+                                                       osm.kosm_point:=false
+                                                   else
+                                                       osm.kosm_point:=true;
+    if (SysVar.dwg.DWG_OSMode^ and osm_intersection)=0 then
+                                                       osm.kosm_intersection:=false
+                                                   else
+                                                       osm.kosm_intersection:=true;
+    if (SysVar.dwg.DWG_OSMode^ and osm_perpendicular)=0 then
+                                                       osm.kosm_perpendicular:=false
+                                                   else
+                                                       osm.kosm_perpendicular:=true;
+    if (SysVar.dwg.DWG_OSMode^ and osm_tangent)=0 then
+                                                       osm.kosm_tangent:=false
+                                                   else
+                                                       osm.kosm_tangent:=true;
+    if (SysVar.dwg.DWG_OSMode^ and osm_nearest)=0 then
+                                                       osm.kosm_nearest:=false
+                                                   else
+                                                       osm.kosm_nearest:=true;
+    if (SysVar.dwg.DWG_OSMode^ and osm_apparentintersection)=0 then
+                                                       osm.kosm_apparentintersection:=false
+                                                   else
+                                                       osm.kosm_apparentintersection:=true;
+    if (SysVar.dwg.DWG_OSMode^ and osm_paralel)=0 then
+                                                       osm.kosm_paralel:=false
+                                                   else
+                                                       osm.kosm_paralel:=true;
+
+end;
+
 constructor CommandRTEdObject.init;
 begin
   inherited;

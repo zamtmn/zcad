@@ -10,7 +10,7 @@ unit GDBCommandsOPS;
 interface
 uses
 
-  strproc,gdbasetypes,commandline,log,UGDBOpenArrayOfPObjects,
+  zcadsysvars,strproc,gdbasetypes,commandline,log,UGDBOpenArrayOfPObjects,
   plugins,
   commandlinedef,
   commanddefinternal,
@@ -106,7 +106,7 @@ var
    //pwnd:POGLWndtype;
    t3dp: gdbvertex;
    //pgdbinplugin: PGDBDescriptor;
-   psysvarinplugin: pgdbsysvariable;
+   //psysvarinplugin: pgdbsysvariable;
    pluginspath:string;
    pvarman:pvarmanagerdef;
    pdw,pdd,pdtw,pdtd:PGDBDouble;

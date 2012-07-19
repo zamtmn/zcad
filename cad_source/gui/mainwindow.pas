@@ -21,7 +21,7 @@ unit mainwindow;
 
 interface
 uses
-  GDBBlockDef,laercombobox,ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
+  gdbcommandsinterface,zcadsysvars,GDBBlockDef,laercombobox,ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
   ActnList,LCLType,LCLProc,strproc,log,intftranslations,toolwin,
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
@@ -31,7 +31,7 @@ uses
   {gdbobjectsconstdef,}UGDBLayerArray,{deveditor,}
   {ZEditsWithProcedure,}{zforms,}{ZButtonsWithCommand,}{ZComboBoxsWithProc,}{ZButtonsWithVariable,}{zmenus,}
   {GDBCommandsBase,}{ GDBCommandsDraw,GDBCommandsElectrical,}
-  commandline,{zmainforms,}memman,UGDBNamedObjectsArray,
+  commanddefinternal,commandline,{zmainforms,}memman,UGDBNamedObjectsArray,
   {ZGUIArrays,}{ZBasicVisible,}{ZEditsWithVariable,}{ZTabControlsGeneric,}shared,{ZPanelsWithSplit,}{ZGUIsCT,}{ZstaticsText,}{UZProcessBar,}strmy{,strutils},{ZPanelsGeneric,}
   graphics,
   AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr{,xmlconf},zcadinterface;
@@ -150,6 +150,9 @@ type
                     function GetLayersArray(var la:TLayerArray):boolean;
                     function ClickOnLayerProp(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean;
 
+                    procedure setvisualprop;
+                    procedure addoneobject;
+
                end;
   TMyAnchorDockManager = class(TAnchorDockManager)
   public
@@ -194,7 +197,7 @@ var
 implementation
 
 uses {GDBCommandsBase,}{Objinsp}{,optionswnd, Tedit_form, MTedit_form}
-  dialogs,XMLPropStorage,layerwnd;
+  GDBEntity,UGDBSelectedObjArray,dialogs,XMLPropStorage{,layerwnd};
 procedure TMyAnchorDockManager.ResetBounds(Force: Boolean);
 begin
      inherited;
@@ -307,6 +310,108 @@ begin
      lp.Name:=player.Name;
      lp.PLayer:=player;;
 end;
+procedure TMainFormN.setvisualprop;
+const pusto=-1000;
+      lpusto=pointer(0);
+      different=-10001;
+      ldifferent=pointer(1);
+var lw:GDBInteger;
+    layer:pgdblayerprop;
+    //i,se:GDBInteger;
+    pv:{pgdbobjEntity}PSelectedObjDesc;
+        ir:itrec;
+begin
+
+  if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
+  then
+      begin
+           if assigned(LinewBox) then
+           if sysvar.dwg.DWG_CLinew^<0 then LineWbox.ItemIndex:=(sysvar.dwg.DWG_CLinew^+3)
+                                       else LinewBox.ItemIndex:=((sysvar.dwg.DWG_CLinew^ div 10)+3);
+           {if assigned(LayerBox) then
+           LayerBox.ItemIndex:=getsortedindex(SysVar.dwg.DWG_CLayer^);}
+      end
+  else
+      begin
+           //se:=param.seldesc.Selectedobjcount;
+           lw:=pusto;
+           layer:=lpusto;
+           pv:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
+           //pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+           if pv<>nil then
+           repeat
+           if pv^.objaddr<>nil then
+           begin
+                //if pv^.Selected
+                //then
+                    begin
+                         if lw=pusto then lw:=pv^.objaddr^.vp.LineWeight
+                                      else if lw<> pv^.objaddr^.vp.LineWeight then lw:=different;
+                         if layer=lpusto then layer:=pv^.objaddr^.vp.layer
+                                      else if layer<> pv^.objaddr^.vp.layer then layer:=ldifferent;
+                    end;
+                if (layer=ldifferent)and(lw=different) then system.Break;
+           end;
+           //pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+           pv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
+           until pv=nil;
+           if lw<>pusto then
+           if assigned(LinewBox)then
+           if lw=different then
+                               LinewBox.ItemIndex:=(LinewBox.Items.Count-1)
+                           else
+                               begin
+                                    if lw<0 then LinewBox.ItemIndex:=(lw+3)
+                                            else LinewBox.ItemIndex:=((lw div 10)+3)
+                               end;
+           if layer<>lpusto then
+           if assigned(LayerBox)then
+           if layer=ldifferent then
+                                  LayerBox.ItemIndex:=(LayerBox.ItemsCount-1)
+                           else
+                               begin
+                                    //LayerBox.ItemIndex:=getsortedindex(gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(layer));
+                               end;
+      end;
+end;
+procedure TMainFormN.addoneobject;
+//const //pusto=-1000;
+      //different=-10001;
+var lw,layer:GDBInteger;
+begin
+
+  lw:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.LineWeight;
+  layer:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.layer);
+  if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=1
+  then
+      begin
+           if assigned(LinewBox)then
+           begin
+           if lw<0 then
+                       begin
+                            LinewBox.ItemIndex:=(lw+3)
+                       end
+                   else LinewBox.ItemIndex:=((lw div 10)+3);
+           end;
+           {if assigned(LayerBox)then
+           LayerBox.ItemIndex:=getsortedindex((layer));//(layer);    xcvxcv}
+           gdb.GetCurrentDWG.OGLwindow1.SelectedObjectsPLayer:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.layer;
+      end
+  else
+      begin
+           if assigned(LayerBox)then
+           begin
+                if gdb.GetCurrentDWG.OGLwindow1.SelectedObjectsPLayer<>PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.layer then
+                   gdb.GetCurrentDWG.OGLwindow1.SelectedObjectsPLayer:=nil;
+           end;
+           //if LayerBox.ItemIndex<>getsortedindex((layer)) then LayerBox.ItemIndex:=(LayerBox.ItemsCount-1);
+           if lw<0 then lw:=lw+3
+                   else lw:=(lw div 10)+3;
+           if assigned(LinewBox)then
+           if LinewBox.ItemIndex<>lw then LinewBox.ItemIndex:=(LinewBox.Items.Count-1);
+      end;
+end;
+
 function TMainFormN.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean;
 var
    cdwg:PTDrawing;
@@ -332,7 +437,7 @@ begin
                                        SysVar.dwg.DWG_CLayer^:=cdwg^.LayerTable.GetIndexByPointer(Player);
                                        commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent');
                                        SysVar.dwg.DWG_CLayer^:=tcl;
-                                       gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
+                                       {gdb.GetCurrentDWG.OGLwindow1.}setvisualprop;
                                 end;
                            result:=true;
                            end;
@@ -997,6 +1102,9 @@ begin
   StartLongProcessProc:=self.StartLongProcess;
   ProcessLongProcessproc:=self.ProcessLongProcess;
   EndLongProcessProc:=self.EndLongProcess;
+  messageboxproc:=self.MessageBox;
+  AddOneObjectProc:=self.addoneobject;
+  SetVisuaProplProc:=self.setvisualprop;
 
   UpdateVisibleProc:=UpdateVisible;
 
@@ -2133,6 +2241,27 @@ begin
      if assigned(gdb.GetCurrentDWG) then
      if assigned(gdb.GetCurrentDWG.OGLwindow1)then
                     gdb.GetCurrentDWG.OGLwindow1.myKeyPress(tempkey,shift);
+     if tempkey<>0 then
+     begin
+        if (tempkey=VK_TAB)and(shift=[ssctrl,ssShift]) then
+                                 begin
+                                      if assigned(PageControl)then
+                                         if PageControl.PageCount>1 then
+                                         begin
+                                              commandmanager.executecommandsilent('PrevDrawing');
+                                              tempkey:=00;
+                                         end;
+                                 end
+        else if (tempkey=VK_TAB)and(shift=[ssctrl]) then
+                                 begin
+                                      if assigned(PageControl)then
+                                         if PageControl.PageCount>1 then
+                                         begin
+                                              commandmanager.executecommandsilent('NextDrawing');
+                                              tempkey:=00;
+                                         end;
+                                 end
+     end;
      if assigned(cmdedit) then
      if tempkey<>0 then
      begin
@@ -2274,7 +2403,7 @@ begin
        if linewbox.ItemIndex = linewbox.Items.Count-1
            then
            begin
-                gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
+                setvisualprop;
            end
            else
            begin
@@ -2284,7 +2413,7 @@ begin
                 if SysVar.dwg.DWG_CLinew^>0 then SysVar.dwg.DWG_CLinew^:=SysVar.dwg.DWG_CLinew^*10;
                 commandmanager.ExecuteCommand('SelObjChangeLWToCurrent');
                 SysVar.dwg.DWG_CLinew^:=tcl;
-                gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
+                setvisualprop;
            end;
   end;
   setnormalfocus(nil);
@@ -2319,7 +2448,7 @@ begin
        if layerbox.ItemIndex = layerbox.ItemsCount-1
            then
            begin
-                gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
+                setvisualprop;
            end
            else
            begin
@@ -2327,7 +2456,7 @@ begin
                 SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(pointer(layerbox.Item{s.Objects}[layerbox.ItemIndex].PLayer));
                 commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent');
                 SysVar.dwg.DWG_CLayer^:=tcl;
-                gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
+                setvisualprop;
            end;
   end;
   setnormalfocus(nil);
@@ -2478,7 +2607,7 @@ begin
   if (pdwg<>nil)and(pdwg<>BlockBaseDWG) then
   begin
                                       begin
-                                           gdb.GetCurrentDWG.OGLwindow1.setvisualprop;
+                                           mainformn.setvisualprop;
                                            mainformn.Caption:=(('ZCad v'+sysvar.SYS.SYS_Version^+' - ['+gdb.GetCurrentDWG.FileName+']'));
   if assigned(mainwindow.LayerBox) then
   mainwindow.LayerBox.enabled:=true;
@@ -2533,6 +2662,7 @@ initialization
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('mainwindow.initialization');{$ENDIF}
   //DockMaster:= TAnchorDockMaster.Create(nil);
+  CreateCommandFastObjectPlugin(pointer($100),'GetAV',0,0);
 end
 finalization
 begin

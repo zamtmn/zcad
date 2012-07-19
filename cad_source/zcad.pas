@@ -28,6 +28,7 @@ uses
   {$IFDEF REPORTMMEMORYLEAKS}heaptrc,{$ENDIF}
   Interfaces,forms, classes,
   splashwnd,
+  zcadsysvars,
 
   memman,log,sysinfo,
 
@@ -43,7 +44,6 @@ uses
   GDBManager,
   //UGDBDescriptor,
   commandline,
-  mainwindow,
   oglwindow,
   shared,
   DeviceBase,
@@ -68,7 +68,8 @@ uses
   plugins,
   layerwnd,
   zcadstrconsts,
-  Objinsp;
+  Objinsp,
+  mainwindow;
   //RegCnownTypes,URegisterObjects;
 
 //exports HistoryOut,redrawoglwnd,updatevisible,reloadlayer; {shared}

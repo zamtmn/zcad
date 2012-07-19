@@ -20,7 +20,7 @@ unit GDBGenericSubEntry;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBLayerArray,UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
+uses zcadsysvars,UGDBLayerArray,UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
 gl,
 geometry{,GDB3d},{UGDBVisibleOpenArray,}gdbEntity,gdbobjectsconstdef,varmandef,memman,UGDBEntTree;
 type

@@ -23,7 +23,7 @@ interface
 
 uses
 
-   UGDBLayerArray,zcadstrconsts,ucxmenumgr,GLext,
+   zcadsysvars,UGDBLayerArray,zcadstrconsts,ucxmenumgr,GLext,
   {$IFDEF LCLGTK2}
   //x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
@@ -138,8 +138,8 @@ type
     procedure sendmousecoord(key: GDBByte);
     procedure sendcoordtocommand(coord:GDBVertex;key: GDBByte);
     procedure sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);
-    procedure setvisualprop;
-    procedure addoneobject;
+    //procedure setvisualprop;
+    //procedure addoneobject;
     procedure setdeicevariable;
     procedure SetObjInsp;
 
@@ -215,7 +215,7 @@ procedure textwrite(s: GDBString);
 procedure RunTextEditor(Pobj:GDBPointer);
 //function getsortedindex(cl:integer):integer;
 implementation
-uses mainwindow,UGDBTracePropArray,GDBEntity,io,geometry,gdbobjectsconstdef,UGDBDescriptor,zcadinterface,
+uses {mainwindow,}UGDBTracePropArray,GDBEntity,io,geometry,gdbobjectsconstdef,UGDBDescriptor,zcadinterface,
      shared,cmdline,GDBText;
 procedure creategrid;
 var i,j:GDBInteger;
@@ -1017,7 +1017,7 @@ var
 
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DoMouseWheel',lp_incPos);{$ENDIF}
-  smallwheel:=1+(varmandef.sysvar.DISP.DISP_ZoomFactor^-1)/10;
+  smallwheel:=1+(sysvar.DISP.DISP_ZoomFactor^-1)/10;
   //mpoint := point(mousepos.x - clientorigin.X, mousepos.y - clientorigin.y);
   if {mousein(mpoint)}true then
   begin
@@ -1030,7 +1030,7 @@ begin
       begin
         ClearOntrackpoint;
         Create0axis;
-        DISP_ZoomFactor(varmandef.sysvar.DISP.DISP_ZoomFactor^);
+        DISP_ZoomFactor(sysvar.DISP.DISP_ZoomFactor^);
       end;
       //handled := true;
     end
@@ -1041,7 +1041,7 @@ begin
       else
       begin
         ClearOntrackpoint;
-        DISP_ZoomFactor(1 / varmandef.sysvar.DISP.DISP_ZoomFactor^);
+        DISP_ZoomFactor(1 / sysvar.DISP.DISP_ZoomFactor^);
       end;
       //handled := true;
     end;
@@ -1737,7 +1737,7 @@ begin
                                       //{переделать}size;
                                       paint;
                                  end;
-  updatevisible;
+  if assigned(updatevisibleproc) then updatevisibleproc;
 end;
 procedure TOGLWnd.ZoomAll;
 const
@@ -2044,9 +2044,9 @@ begin
                         if PGDBObjEntity(param.SelDesc.OnMouseObject)^.select then
                           begin
                         param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
-                        addoneobject;
+                        if assigned(addoneobjectproc) then addoneobjectproc;
                         SetObjInsp;
-                        updatevisible
+                        if assigned(updatevisibleproc) then updatevisibleproc;
                           end;
                    end
                else
@@ -2055,7 +2055,7 @@ begin
                         param.SelDesc.LastSelectedObject := nil;
                         //addoneobject;
                         SetObjInsp;
-                        updatevisible;
+                        if assigned(updatevisibleproc) then updatevisibleproc;
                    end;
                NeedRedraw:=true;
           end
@@ -4311,105 +4311,7 @@ begin
      end;
      result:=0;}
 end;
-procedure TOGLWnd.setvisualprop;
-const pusto=-1000;
-      lpusto=pointer(0);
-      different=-10001;
-      ldifferent=pointer(1);
-var lw:GDBInteger;
-    layer:pgdblayerprop;
-    //i,se:GDBInteger;
-    pv:{pgdbobjEntity}PSelectedObjDesc;
-        ir:itrec;
-begin
-  if param.seldesc.Selectedobjcount=0
-  then
-      begin
-           if assigned(LinewBox) then
-           if sysvar.dwg.DWG_CLinew^<0 then LineWbox.ItemIndex:=(sysvar.dwg.DWG_CLinew^+3)
-                                       else LinewBox.ItemIndex:=((sysvar.dwg.DWG_CLinew^ div 10)+3);
-           if assigned(LayerBox) then
-           LayerBox.ItemIndex:=getsortedindex(SysVar.dwg.DWG_CLayer^);
-      end
-  else
-      begin
-           //se:=param.seldesc.Selectedobjcount;
-           lw:=pusto;
-           layer:=lpusto;
-           pv:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
-           //pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
-           if pv<>nil then
-           repeat
-           if pv^.objaddr<>nil then
-           begin
-                //if pv^.Selected
-                //then
-                    begin
-                         if lw=pusto then lw:=pv^.objaddr^.vp.LineWeight
-                                      else if lw<> pv^.objaddr^.vp.LineWeight then lw:=different;
-                         if layer=lpusto then layer:=pv^.objaddr^.vp.layer
-                                      else if layer<> pv^.objaddr^.vp.layer then layer:=ldifferent;
-                    end;
-                if (layer=ldifferent)and(lw=different) then system.Break;
-           end;
-           //pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
-           pv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
-           until pv=nil;
-           if lw<>pusto then
-           if assigned(LinewBox)then
-           if lw=different then
-                               LinewBox.ItemIndex:=(LinewBox.Items.Count-1)
-                           else
-                               begin
-                                    if lw<0 then LinewBox.ItemIndex:=(lw+3)
-                                            else LinewBox.ItemIndex:=((lw div 10)+3)
-                               end;
-           if layer<>lpusto then
-           if assigned(LayerBox)then
-           if layer=ldifferent then
-                                  LayerBox.ItemIndex:=(LayerBox.ItemsCount-1)
-                           else
-                               begin
-                                    LayerBox.ItemIndex:=getsortedindex(gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(layer));
-                               end;
-      end;
-end;
-procedure TOGLWnd.addoneobject;
-//const //pusto=-1000;
-      //different=-10001;
-var lw,layer:GDBInteger;
-begin
-  lw:=PGDBObjEntity(param.SelDesc.LastSelectedObject)^.vp.LineWeight;
-  layer:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(PGDBObjEntity(param.SelDesc.LastSelectedObject)^.vp.layer);
-  if param.seldesc.Selectedobjcount=1
-  then
-      begin
-           if assigned(LinewBox)then
-           begin
-           if lw<0 then
-                       begin
-                            LinewBox.ItemIndex:=(lw+3)
-                       end
-                   else LinewBox.ItemIndex:=((lw div 10)+3);
-           end;
-           {if assigned(LayerBox)then
-           LayerBox.ItemIndex:=getsortedindex((layer));//(layer);    xcvxcv}
-           SelectedObjectsPLayer:=PGDBObjEntity(param.SelDesc.LastSelectedObject)^.vp.layer;
-      end
-  else
-      begin
-           if assigned(LayerBox)then
-           begin
-                if SelectedObjectsPLayer<>PGDBObjEntity(param.SelDesc.LastSelectedObject)^.vp.layer then
-                   SelectedObjectsPLayer:=nil;
-           end;
-           //if LayerBox.ItemIndex<>getsortedindex((layer)) then LayerBox.ItemIndex:=(LayerBox.ItemsCount-1);
-           if lw<0 then lw:=lw+3
-                   else lw:=(lw div 10)+3;
-           if assigned(LinewBox)then
-           if LinewBox.ItemIndex<>lw then LinewBox.ItemIndex:=(LinewBox.Items.Count-1);
-      end;
-end;
+
 {procedure TOGLWnd.Pre_KeyDown;
 begin
 if ch = #46 then
@@ -4437,7 +4339,7 @@ begin
           gdb.GetCurrentDWG.SelObjArray.clearallobjects;
           CalcOptimalMatrix;
           paint;
-          setvisualprop;
+          if assigned(SetVisuaProplProc) then SetVisuaProplProc;
           setobjinsp;
           end
         else
@@ -4479,10 +4381,10 @@ begin
                          commandmanager.executecommand('PasteClip');
                          key:=00;
                     end
- else if (Key=VK_TAB)and(shift=[ssctrl,ssShift]) then
+ (*else if (Key=VK_TAB)and(shift=[ssctrl,ssShift]) then
                           begin
-                               if assigned(MainFormN.PageControl)then
-                                  if MainFormN.PageControl.PageCount>1 then
+                               //if assigned(MainFormN.PageControl)then
+                               //   if MainFormN.PageControl.PageCount>1 then
                                   begin
                                        commandmanager.executecommandsilent('PrevDrawing');
                                        key:=00;
@@ -4490,13 +4392,13 @@ begin
                           end
  else if (Key=VK_TAB)and(shift=[ssctrl]) then
                           begin
-                               if assigned(MainFormN.PageControl)then
-                                  if MainFormN.PageControl.PageCount>1 then
+                               //if assigned(MainFormN.PageControl)then
+                               //   if MainFormN.PageControl.PageCount>1 then
                                   begin
                                        commandmanager.executecommandsilent('NextDrawing');
                                        key:=00;
                                   end;
-                          end
+                          end*)
 end;
 function ProjectPoint(pntx,pnty,pntz:gdbdouble;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;
 begin

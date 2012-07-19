@@ -47,16 +47,16 @@
         <PackageName Value="LCL"/>
       </Item5>
     </RequiredPackages>
-    <Units Count="72">
+    <Units Count="73">
       <Unit0>
         <Filename Value="simplecad.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="simplecad"/>
-        <EditorIndex Value="21"/>
+        <EditorIndex Value="23"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="1" Y="19"/>
-        <UsageCount Value="90"/>
+        <CursorPos X="7" Y="11"/>
+        <UsageCount Value="91"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
@@ -70,9 +70,9 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="204"/>
-        <CursorPos X="31" Y="227"/>
-        <UsageCount Value="90"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="91"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -189,7 +189,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="sltexteditor"/>
-        <EditorIndex Value="18"/>
+        <EditorIndex Value="20"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="3" Y="51"/>
@@ -264,10 +264,12 @@
       <Unit21>
         <Filename Value="..\commands\GDBCommandsBase.pas"/>
         <UnitName Value="GDBCommandsBase"/>
+        <EditorIndex Value="18"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="24"/>
-        <CursorPos X="4" Y="40"/>
+        <TopLine Value="1982"/>
+        <CursorPos X="73" Y="1998"/>
         <UsageCount Value="23"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit21>
       <Unit22>
@@ -378,7 +380,7 @@
         <UnitName Value="UGDBControlPointArray"/>
         <EditorIndex Value="17"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
+        <TopLine Value="14"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="15"/>
         <Loaded Value="True"/>
@@ -569,7 +571,7 @@
       <Unit54>
         <Filename Value="..\u\UGDBOpenArray.pas"/>
         <UnitName Value="UGDBOpenArray"/>
-        <EditorIndex Value="19"/>
+        <EditorIndex Value="21"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -717,7 +719,7 @@
       <Unit70>
         <Filename Value="..\u\UGDBOpenArrayOfTObjLinkRecord.pas"/>
         <UnitName Value="UGDBOpenArrayOfTObjLinkRecord"/>
-        <EditorIndex Value="20"/>
+        <EditorIndex Value="22"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -736,127 +738,138 @@
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit71>
+      <Unit72>
+        <Filename Value="..\commands\gdbcommandsinterface.pas"/>
+        <UnitName Value="gdbcommandsinterface"/>
+        <EditorIndex Value="19"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2210"/>
+        <CursorPos X="61" Y="2244"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit72>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="..\u\UGDBOpenArray.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="8" Column="22" TopLine="1"/>
       </Position1>
       <Position2>
-        <Filename Value="..\u\UGDBOpenArrayOfTObjLinkRecord.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="63" Column="62" TopLine="40"/>
       </Position2>
       <Position3>
-        <Filename Value="simplecad.lpr"/>
-        <Caret Line="21" Column="1" TopLine="1"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="8" Column="17" TopLine="1"/>
       </Position3>
       <Position4>
         <Filename Value="umainform.pas"/>
-        <Caret Line="86" Column="8" TopLine="70"/>
+        <Caret Line="75" Column="59" TopLine="52"/>
       </Position4>
       <Position5>
         <Filename Value="umainform.pas"/>
-        <Caret Line="89" Column="1" TopLine="70"/>
+        <Caret Line="8" Column="22" TopLine="8"/>
       </Position5>
       <Position6>
-        <Filename Value="..\gdb\GDBWithLocalCS.pas"/>
-        <Caret Line="45" Column="30" TopLine="21"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="12" Column="3" TopLine="1"/>
       </Position6>
       <Position7>
         <Filename Value="umainform.pas"/>
-        <Caret Line="86" Column="6" TopLine="70"/>
+        <Caret Line="63" Column="8" TopLine="40"/>
       </Position7>
       <Position8>
         <Filename Value="umainform.pas"/>
-        <Caret Line="8" Column="22" TopLine="1"/>
+        <Caret Line="75" Column="56" TopLine="52"/>
       </Position8>
       <Position9>
         <Filename Value="umainform.pas"/>
-        <Caret Line="63" Column="62" TopLine="40"/>
+        <Caret Line="133" Column="54" TopLine="110"/>
       </Position9>
       <Position10>
         <Filename Value="umainform.pas"/>
-        <Caret Line="8" Column="17" TopLine="1"/>
+        <Caret Line="156" Column="54" TopLine="133"/>
       </Position10>
       <Position11>
         <Filename Value="umainform.pas"/>
-        <Caret Line="75" Column="59" TopLine="52"/>
+        <Caret Line="162" Column="57" TopLine="139"/>
       </Position11>
       <Position12>
         <Filename Value="umainform.pas"/>
-        <Caret Line="8" Column="22" TopLine="8"/>
+        <Caret Line="188" Column="54" TopLine="165"/>
       </Position12>
       <Position13>
         <Filename Value="umainform.pas"/>
-        <Caret Line="12" Column="3" TopLine="1"/>
+        <Caret Line="227" Column="54" TopLine="204"/>
       </Position13>
       <Position14>
         <Filename Value="umainform.pas"/>
-        <Caret Line="63" Column="8" TopLine="40"/>
+        <Caret Line="236" Column="62" TopLine="211"/>
       </Position14>
       <Position15>
         <Filename Value="umainform.pas"/>
-        <Caret Line="75" Column="56" TopLine="52"/>
+        <Caret Line="251" Column="24" TopLine="211"/>
       </Position15>
       <Position16>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="133" Column="54" TopLine="110"/>
+        <Filename Value="..\gdb\GDBWithLocalCS.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position16>
       <Position17>
         <Filename Value="umainform.pas"/>
-        <Caret Line="156" Column="54" TopLine="133"/>
+        <Caret Line="12" Column="19" TopLine="2"/>
       </Position17>
       <Position18>
         <Filename Value="umainform.pas"/>
-        <Caret Line="162" Column="57" TopLine="139"/>
+        <Caret Line="63" Column="36" TopLine="40"/>
       </Position18>
       <Position19>
         <Filename Value="umainform.pas"/>
-        <Caret Line="188" Column="54" TopLine="165"/>
+        <Caret Line="75" Column="33" TopLine="52"/>
       </Position19>
       <Position20>
         <Filename Value="umainform.pas"/>
-        <Caret Line="227" Column="54" TopLine="204"/>
+        <Caret Line="133" Column="31" TopLine="110"/>
       </Position20>
       <Position21>
         <Filename Value="umainform.pas"/>
-        <Caret Line="236" Column="62" TopLine="211"/>
+        <Caret Line="156" Column="31" TopLine="133"/>
       </Position21>
       <Position22>
         <Filename Value="umainform.pas"/>
-        <Caret Line="251" Column="24" TopLine="211"/>
+        <Caret Line="162" Column="34" TopLine="139"/>
       </Position22>
       <Position23>
-        <Filename Value="..\gdb\GDBWithLocalCS.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="188" Column="31" TopLine="165"/>
       </Position23>
       <Position24>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="12" Column="19" TopLine="2"/>
+        <Filename Value="..\u\UGDBOpenArray.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position24>
       <Position25>
         <Filename Value="umainform.pas"/>
-        <Caret Line="63" Column="36" TopLine="40"/>
+        <Caret Line="227" Column="31" TopLine="204"/>
       </Position25>
       <Position26>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="75" Column="33" TopLine="52"/>
+        <Filename Value="..\gdb\GDBWithLocalCS.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position26>
       <Position27>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="133" Column="31" TopLine="110"/>
+        <Filename Value="..\commands\GDBCommandsBase.pas"/>
+        <Caret Line="8" Column="24" TopLine="1"/>
       </Position27>
       <Position28>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="156" Column="31" TopLine="133"/>
+        <Filename Value="..\commands\GDBCommandsBase.pas"/>
+        <Caret Line="24" Column="122" TopLine="1"/>
       </Position28>
       <Position29>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="162" Column="34" TopLine="139"/>
+        <Filename Value="..\commands\GDBCommandsBase.pas"/>
+        <Caret Line="1660" Column="1" TopLine="1645"/>
       </Position29>
       <Position30>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="188" Column="31" TopLine="165"/>
+        <Filename Value="simplecad.lpr"/>
+        <Caret Line="11" Column="7" TopLine="1"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

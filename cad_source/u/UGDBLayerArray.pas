@@ -19,7 +19,7 @@
 unit UGDBLayerArray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
+uses zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
      gl,
      varmandef,gdbobjectsconstdef,UGDBNamedObjectsArray,StrProc;
 type

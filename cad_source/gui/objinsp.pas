@@ -1213,8 +1213,8 @@ initialization
   {$IFDEF DEBUGINITSECTION}LogOut('objinsp.initialization');{$ENDIF}
   proptreeptr:=nil;
   {Objinsp.}currpd:=nil;
-  SetGDBObjInspProc:=SetGDBObjInsp;
-  StoreAndSetGDBObjInspProc:=StoreAndSetGDBObjInsp;
+  SetGDBObjInspProc:=TSetGDBObjInsp(SetGDBObjInsp);
+  StoreAndSetGDBObjInspProc:=TStoreAndSetGDBObjInsp(StoreAndSetGDBObjInsp);
   ReStoreGDBObjInspProc:=ReStoreGDBObjInsp;
   UpdateObjInspProc:=UpdateObjInsp;
   ReturnToDefaultProc:=ReturnToDefault;

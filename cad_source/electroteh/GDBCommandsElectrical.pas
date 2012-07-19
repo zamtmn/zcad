@@ -10,7 +10,7 @@ unit GDBCommandsElectrical;
 
 interface
 uses
-  csvdocument,
+  zcadsysvars,csvdocument,
   UGDBOpenArrayOfPV,GDBBlockInsert,devices,UGDBTree,ugdbdescriptor,gdbasetypes,commandline,GDBCommandsDraw,GDBElLeader,
   plugins,
   commandlinedef,
@@ -2937,7 +2937,7 @@ begin
             gdb.GetCurrentDWG.OGLwindow1.getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
      {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('тест производительности',lp_DecPos);{$ENDIF}
      historyout('Конец теста. выходим, смотрим результаты в конце лога.');
-     quit_com('');
+     //quit_com('');
 end;
 
 procedure startup;

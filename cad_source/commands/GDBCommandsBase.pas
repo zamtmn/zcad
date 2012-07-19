@@ -21,8 +21,8 @@ unit GDBCommandsBase;
 
 interface
 uses
- TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,intftranslations,layerwnd,strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
- LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
+ zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,intftranslations,{layerwnd,}strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ LCLProc,Classes,FileUtil,Forms,Controls,ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
   //commandline,
@@ -76,13 +76,6 @@ type
                 constructor init;
                 destructor done;virtual;
             end;
-TOSModeEditor=object(GDBaseObject)
-              osm:TOSMode;(*'Snap'*)
-              trace:TTraceMode;(*'Trace'*)
-              procedure Format;virtual;
-              procedure GetState;
-             end;
-
 {Export-}
 
 
@@ -95,128 +88,21 @@ TOSModeEditor=object(GDBaseObject)
 
        MSEditor:TMSEditor;
 
-       OSModeEditor:TOSModeEditor;
-
        InfoFormVar:TInfoForm=nil;
 
        MSelectCXMenu:TmyPopupMenu=nil;
 
    function SaveAs_com(Operands:pansichar):GDBInteger;
    procedure CopyToClipboard;
-   function quit_com(Operands:pansichar):GDBInteger;
    function Regen_com(Operands:pansichar):GDBInteger;
 const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 //var DWGPageCxMenu:pzpopupmenu;
 implementation
-uses commandline,GDBPolyLine,UGDBPolyLine2DArray,GDBLWPolyLine,mainwindow,UGDBSelectedObjArray,
+uses GDBPolyLine,UGDBPolyLine2DArray,GDBLWPolyLine,{mainwindow,}UGDBSelectedObjArray,
      oglwindow,geometry;
 var
    CopyClipFile:GDBString;
-procedure  TOSModeEditor.Format;
-var
-   i,c:integer;
-   v:gdbvertex;
-
-begin
-    SysVar.dwg.DWG_OSMode^:=0;
-    if osm.kosm_inspoint then inc(SysVar.dwg.DWG_OSMode^,osm_inspoint);
-    if osm.kosm_endpoint then inc(SysVar.dwg.DWG_OSMode^,osm_endpoint);
-    if osm.kosm_midpoint then inc(SysVar.dwg.DWG_OSMode^,osm_midpoint);
-    if osm.kosm_3 then inc(SysVar.dwg.DWG_OSMode^,osm_3);
-    if osm.kosm_4 then inc(SysVar.dwg.DWG_OSMode^,osm_4);
-    if osm.kosm_center then inc(SysVar.dwg.DWG_OSMode^,osm_center);
-    if osm.kosm_quadrant then inc(SysVar.dwg.DWG_OSMode^,osm_quadrant);
-    if osm.kosm_point then inc(SysVar.dwg.DWG_OSMode^,osm_point);
-    if osm.kosm_intersection then inc(SysVar.dwg.DWG_OSMode^,osm_intersection);
-    if osm.kosm_perpendicular then inc(SysVar.dwg.DWG_OSMode^,osm_perpendicular);
-    if osm.kosm_tangent then inc(SysVar.dwg.DWG_OSMode^,osm_tangent);
-    if osm.kosm_nearest then inc(SysVar.dwg.DWG_OSMode^,osm_nearest);
-    if osm.kosm_apparentintersection then inc(SysVar.dwg.DWG_OSMode^,osm_apparentintersection);
-    if osm.kosm_paralel then inc(SysVar.dwg.DWG_OSMode^,osm_paralel);
-
-    case self.trace.Angle of
-         TTA90:c:=2;
-         TTA45:c:=4;
-         TTA30:c:=6;
-    end;
-
-  gdb.GetCurrentDWG.oglwindow1.PolarAxis.clear;
-  for i := 0 to c - 1 do
-  begin
-    v.x:=cos(pi * i / c);
-    v.y:=sin(pi * i / c);
-    v.z:=0;
-    gdb.GetCurrentDWG.oglwindow1.PolarAxis.add(@v);
-  end;
-  if self.trace.ZAxis then
-  begin
-    v.x:=0;
-    v.y:=0;
-    v.z:=1;
-    gdb.GetCurrentDWG.oglwindow1.PolarAxis.add(@v);
-  end;
-end;
-procedure TOSModeEditor.GetState;
-begin
-    if (SysVar.dwg.DWG_OSMode^ and osm_inspoint)=0 then
-                                                       osm.kosm_inspoint:=false
-                                                   else
-                                                       osm.kosm_inspoint:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_endpoint)=0 then
-                                                       osm.kosm_endpoint:=false
-                                                   else
-                                                       osm.kosm_endpoint:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_midpoint)=0 then
-                                                       osm.kosm_midpoint:=false
-                                                   else
-                                                       osm.kosm_midpoint:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_3)=0 then
-                                                       osm.kosm_3:=false
-                                                   else
-                                                       osm.kosm_3:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_4)=0 then
-                                                       osm.kosm_4:=false
-                                                   else
-                                                       osm.kosm_4:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_center)=0 then
-                                                       osm.kosm_center:=false
-                                                   else
-                                                       osm.kosm_center:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_quadrant)=0 then
-                                                       osm.kosm_quadrant:=false
-                                                   else
-                                                       osm.kosm_quadrant:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_point)=0 then
-                                                       osm.kosm_point:=false
-                                                   else
-                                                       osm.kosm_point:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_intersection)=0 then
-                                                       osm.kosm_intersection:=false
-                                                   else
-                                                       osm.kosm_intersection:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_perpendicular)=0 then
-                                                       osm.kosm_perpendicular:=false
-                                                   else
-                                                       osm.kosm_perpendicular:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_tangent)=0 then
-                                                       osm.kosm_tangent:=false
-                                                   else
-                                                       osm.kosm_tangent:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_nearest)=0 then
-                                                       osm.kosm_nearest:=false
-                                                   else
-                                                       osm.kosm_nearest:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_apparentintersection)=0 then
-                                                       osm.kosm_apparentintersection:=false
-                                                   else
-                                                       osm.kosm_apparentintersection:=true;
-    if (SysVar.dwg.DWG_OSMode^ and osm_paralel)=0 then
-                                                       osm.kosm_paralel:=false
-                                                   else
-                                                       osm.kosm_paralel:=true;
-
-end;
 constructor  TMSEditor.init;
 begin
      ou.init('multiselunit');
@@ -416,7 +302,7 @@ begin
                                      pp^.select;
                                      gdb.CurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject:=pp;
                                      end;
-     updatevisible;
+     if assigned(updatevisibleproc) then updatevisibleproc;
      gdb.CurrentDWG.OGLwindow1.SetObjInsp;
      //SetObjInsp;
      //commandmanager.executecommandsilent('MultiSelect2ObjIbsp');
@@ -521,45 +407,6 @@ else if Operands='TABLESTYLES' then
                                               SetCurrentObjDefaultProc
      //GDBobjinsp.SetCurrentObjDefault;
 end;
-function CloseDWG_com(Operands:pansichar):GDBInteger;
-var
-   poglwnd:toglwnd;
-   CurrentDWG:PTDrawing;
-begin
-  application.ProcessMessages;
-  CurrentDWG:=gdb.GetCurrentDWG;
-  _CloseDWGPage(CurrentDWG,mainformn.PageControl.ActivePage);
-  (*if CurrentDWG<>nil then
-  begin
-       if CurrentDWG.Changed then
-                                 begin
-                                      if MainFormN.MessageBox(@rsCloseDWGQuery[1],@rsWarningCaption[1],MB_YESNO)<>IDYES then exit;
-                                 end;
-       poglwnd:=CurrentDWG.OGLwindow1;
-       //mainform.PageControl.delpage(mainform.PageControl.onmouse);
-       gdb.eraseobj(CurrentDWG);
-       gdb.pack;
-       poglwnd.PDWG:=nil;
-       gdb.CurrentDWG:=nil;
-
-       poglwnd.free;
-
-       mainformn.PageControl.ActivePage.Free;
-       tobject(poglwnd):=mainformn.PageControl.ActivePage;
-
-       if poglwnd<>nil then
-       begin
-            tobject(poglwnd):=FindControlByType(poglwnd,TOGLWnd);
-            //pointer(poglwnd):=poglwnd^.FindKidsByType(typeof(TOGLWnd));
-            gdb.CurrentDWG:=poglwnd.PDWG;
-            poglwnd.GDBActivate;
-       end;
-       shared.SBTextOut('Закрыто');
-       GDBobjinsp.ReturnToDefault;
-       sharedgdb.updatevisible;
-  end;*)
-end;
-
 function CloseDWGOnMouse_com(Operands:pansichar):GDBInteger;
 var
    poglwnd:Ptoglwnd;
@@ -595,8 +442,11 @@ begin
      if gdb.currentdwg<>BlockBaseDWG then
      if gdb.GetCurrentROOT.ObjArray.Count>0 then
                                                      begin
-                                                          if MainFormN.messagebox('Чертеж уже содержит данные. Осуществить подгрузку?','QLOAD',MB_YESNO)=IDNO then
+                                                          if assigned(messageboxproc)then
+                                                          begin
+                                                          if messageboxproc('Чертеж уже содержит данные. Осуществить подгрузку?','QLOAD',MB_YESNO)=IDNO then
                                                           exit;
+                                                          end;
                                                      end;
      s:=operands;
      isload:=FileExists(utf8tosys(s));
@@ -645,7 +495,7 @@ begin
      //gdb.GetCurrentROOT.format;
      gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
      gdb.GetCurrentROOT.format;
-     updatevisible;
+     if assigned(updatevisibleproc) then updatevisibleproc;
      if gdb.currentdwg<>BlockBaseDWG then
                                          begin
                                          gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
@@ -658,36 +508,6 @@ begin
         else
         shared.ShowError('MERGE:'+format(rsUnableToOpenFile,[s]));
 end;
-
-function NextDrawint_com(Operands:pansichar):GDBInteger;
-var
-   i:integer;
-begin
-     if assigned(MainFormN.PageControl)then
-     if MainFormN.PageControl.PageCount>1 then
-     begin
-          i:=MainFormN.PageControl.ActivePageIndex+1;
-          if i=MainFormN.PageControl.PageCount
-                                              then
-                                                  i:=0;
-             MainFormN.PageControl.ActivePageIndex:=i;
-     end;
-end;
-function PrevDrawint_com(Operands:pansichar):GDBInteger;
-var
-   i:integer;
-begin
-     if assigned(MainFormN.PageControl)then
-     if MainFormN.PageControl.PageCount>1 then
-     begin
-          i:=MainFormN.PageControl.ActivePageIndex-1;
-          if i<0
-                                            then
-                                                  i:=MainFormN.PageControl.PageCount-1;
-             MainFormN.PageControl.ActivePageIndex:=i;
-     end;
-end;
-
 function Merge_com(Operands:pansichar):GDBInteger;
 var
    s: GDBString;
@@ -698,116 +518,10 @@ var
 begin
      result:=Load_merge(operands,TLOMerge);
 end;
-function newdwg_com(Operands:pansichar):GDBInteger;
-var
-   ptd:PTDrawing;
-   myts:TTabSheet;
-   oglwnd:TOGLWND;
-   tn:GDBString;
-begin
-     ptd:=gdb.CreateDWG;
-
-     gdb.AddRef(ptd^);
-
-     gdb.SetCurrentDWG(ptd);
-
-     if length(operands)=0 then
-                               operands:=@rsUnnamedWindowTitle[1];
-
-     {tf:=mainform.PageControl.addpage(Operands);
-     mainform.PageControl.selpage(mainform.PageControl.lastcreated);
-     mainform.PageControl.CxMenu:=DWGPageCxMenu;}
-
-     myts:=nil;
-
-     if not assigned(MainFormN.PageControl)then
-     begin
-          DockMaster.ShowControl('PageControl',true);
-          //DockMaster.ShowControl('PageControl',true);
-     end;
-
-
-     myts:=TTabSheet.create(MainFormN.PageControl);
-     myts.Caption:=(Operands);
-     //mainformn.DisableAutoSizing;
-     myts.Parent:=MainFormN.PageControl;
-     //mainformn.EnableAutoSizing;
-
-     //tf.align:=al_client;
-
-     oglwnd:=TOGLWnd.Create(myts);
-
-     oglwnd.AuxBuffers:=0;
-     oglwnd.StencilBits:=8;
-     //oglwnd.ColorBits:=24;
-     oglwnd.DepthBits:=24;
-
-
-
-     //--------------------------------------------------------------oglwnd.BevelOuter:=bvnone;
-
-     gdb.GetCurrentDWG.OGLwindow1:=oglwnd;
-     {gdb.GetCurrentDWG.OGLwindow1}oglwnd.PDWG:=ptd;
-     {gdb.GetCurrentDWG.OGLwindow1}oglwnd.align:=alClient;
-          //gdb.GetCurrentDWG.OGLwindow1.align:=al_client;
-     {gdb.GetCurrentDWG.OGLwindow1}oglwnd.Parent:=myts;
-     {gdb.GetCurrentDWG.OGLwindow1}oglwnd.init;{переделать из инита нужно убрать обнуление pdwg}
-     {gdb.GetCurrentDWG.OGLwindow1}oglwnd.PDWG:=ptd;
-     programlog.logoutstr('oglwnd.PDWG:=ptd;',0);
-     oglwnd.GDBActivate;
-     oglwnd._onresize(nil);
-     programlog.logoutstr('oglwnd._onresize(nil);',0);
-     oglwnd.MakeCurrent(false);
-     programlog.logoutstr('oglwnd.MakeCurrent(false);',0);
-     isOpenGLError;
-     programlog.logoutstr('isOpenGLError;',0);
-     //oglwnd.DoubleBuffered:=false;
-     oglwnd.show;
-     programlog.logoutstr('oglwnd.show;',0);
-     isOpenGLError;
-     programlog.logoutstr('isOpenGLError;',0);
-     //oglwnd.Repaint;
-     //gdb.GetCurrentDWG.OGLwindow1.initxywh('oglwnd',tf,200,72,768,596,false);
-
-     //tf.size;
-
-     //gdb.GetCurrentDWG.OGLwindow1.Show;
-
-     //GDBGetMem({$IFDEF DEBUGBUILD}'{E197C531-C543-4FAF-AF4A-37B8F278E8A2}',{$ENDIF}GDBPointer(gdb.GetCurrentDWG),sizeof(UGDBDescriptor.TDrawing));
-     //gdb.GetCurrentDWG^.init(@gdb.ProjectUnits);
-     //addfromdxf(sysvar.path.Program_Run^+'blocks\el\general\_nok.dxf',@gdb.GetCurrentDWG.ObjRoot);
-
-     MainFormN.PageControl.ActivePage:=myts;
-     programlog.logoutstr('MainFormN.PageControl.ActivePage:=myts;',0);
-     if assigned(UpdateVisibleProc) then UpdateVisibleProc;
-     programlog.logoutstr('sharedgdb.updatevisible;',0);
-     operands:=operands;
-     programlog.logoutstr('operands:=operands;???????????????',0);
-     if not fileexists(operands) then
-     begin
-     tn:=expandpath(sysvar.PATH.Template_Path^)+sysvar.PATH.Template_File^;
-     if fileExists(utf8tosys(tn)) then
-                           merge_com(@tn[1])
-                       else
-                           shared.ShowError(format(rsTemplateNotFound,[tn]));
-                           //shared.ShowError('Не найден файл шаблона "'+tn+'"');
-     end;
-     //redrawoglwnd;
-     result:=cmd_ok;
-     programlog.logoutstr('result:=cmd_ok;',0);
-     application.ProcessMessages;
-     programlog.logoutstr(' application.ProcessMessages;',0);
-     oglwnd._onresize(nil);
-     programlog.logoutstr('oglwnd._onresize(nil);',0);
-
-     //GDB.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,'DEVICE_TEST');
-     //addblockinsert(gdb.GetCurrentROOT,@gdb.GetCurrentDWG.ConstructObjRoot.ObjArray, nulvertex, 1, 0, 'DEVICE_TEST');
-     //gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
-end;
 function DeSelectAll_com(Operands:pansichar):GDBInteger;
 begin
      //redrawoglwnd;
-     updatevisible;
+     if assigned(updatevisibleproc) then updatevisibleproc;
      result:=cmd_ok;
 end;
 
@@ -842,92 +556,8 @@ begin
   until pv=nil;
 
   //redrawoglwnd;
-  updatevisible;
+  if assigned(updatevisibleproc) then updatevisibleproc;
   result:=cmd_ok;
-end;
-function Import_com(Operands:pansichar):GDBInteger;
-var
-   s: GDBString;
-   //fileext:GDBString;
-   isload:boolean;
-begin
-  if length(operands)=0 then
-                     begin
-                          mainformn.ShowAllCursors;
-                          isload:=OpenFileDialog(s,'svg',ImportFileFilter,'','Import...');
-                          mainformn.RestoreCursors;
-                          //s:=utf8tosys(s);
-                          if not isload then
-                                            begin
-                                                 result:=cmd_cancel;
-                                                 exit;
-                                            end
-                     end
-                 else
-                 begin
-                   s:=ExpandPath(operands);
-                   s:=FindInSupportPath(operands);
-                 end;
-  isload:=FileExists(utf8tosys(s));
-  if isload then
-  begin
-       newdwg_com(@s[1]);
-       gdb.GetCurrentDWG.FileName:=s;
-       import(s);
-  end
-            else
-     shared.ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
-     //shared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
-end;
-function Load_com(Operands:pansichar):GDBInteger;
-var
-   s: GDBString;
-   //fileext:GDBString;
-   isload:boolean;
-   //mem:GDBOpenArrayOfByte;
-   //pu:ptunit;
-begin
-     if length(operands)=0 then
-                        begin
-                             mainformn.ShowAllCursors;
-                             isload:=OpenFileDialog(s,'dxf',ProjectFileFilter,'',rsOpenFile);
-                             mainformn.RestoreCursors;
-                             //s:=utf8tosys(s);
-                             if not isload then
-                                               begin
-                                                    result:=cmd_cancel;
-                                                    exit;
-                                               end
-                                           else
-                                               begin
-
-                                               end;    
-
-                        end
-                    else
-                    begin
-                         if operands='QS' then
-                                              s:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^)
-                                          else
-                                              begin
-                                              s:=ExpandPath(operands);
-                                              s:=FindInSupportPath(operands);
-                                              end;
-                    end;
-     isload:=FileExists(utf8tosys(s));
-     if isload then
-     begin
-          newdwg_com(@s[1]);
-          //if operands<>'QS' then
-                                gdb.GetCurrentDWG.FileName:=s;
-          programlog.logoutstr('gdb.GetCurrentDWG.FileName:=s;',0);
-          load_merge(@s[1],tloload);
-          programlog.logoutstr('load_merge(@s[1],tloload);',0);
-          MainFormN.processfilehistory(s);
-     end
-               else
-        shared.ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
-        //shared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
 function MergeBlocks_com(Operands:pansichar):GDBInteger;
 var
@@ -960,7 +590,8 @@ begin
      filename:=ExtractFileName(s);
      mem.SaveToFile(s+'.dbpas');
      mem.done;
-     MainFormN.processfilehistory(s);
+     if assigned(ProcessFilehistoryProc) then
+      ProcessFilehistoryProc(s);
 end;
 function QSave_com(Operands:pansichar):GDBInteger;
 var s,s1:GDBString;
@@ -969,8 +600,11 @@ begin
      itautoseve:=false;
      if gdb.GetCurrentROOT.ObjArray.Count<1 then
                                                      begin
-                                                          if MainFormN.messagebox(@rsSaveEmptyDWG[1],@rsWarningCaption[1],MB_YESNO)=IDNO then
+                                                          if assigned(messageboxproc)then
+                                                          begin
+                                                          if messageboxproc(@rsSaveEmptyDWG[1],@rsWarningCaption[1],MB_YESNO)=IDNO then
                                                           exit;
+                                                          end;
                                                      end;
      if operands='QS' then
                           begin
@@ -1012,7 +646,7 @@ var //pd:^TSaveDialog;
 //   pu:ptunit;
 
 begin
-     mainformn.ShowAllCursors;
+     if assigned(ShowAllCursorsProc) then ShowAllCursorsProc;
      if SaveFileDialog(s,'dxf',ProjectFileFilter,'',rsSaveFile) then
      begin
           fileext:=uppercase(ExtractFileEXT(s));
@@ -1023,7 +657,7 @@ begin
                                      SaveDXFDPAS(s);
                                      gdb.GetCurrentDWG.FileName:=s;
                                      gdb.GetCurrentDWG.Changed:=false;
-                                     updatevisible;
+                                     if assigned(updatevisibleproc) then updatevisibleproc;
                                     (* savedxf2000(s, @GDB);
                                      pu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
                                      mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
@@ -1038,7 +672,7 @@ begin
           end;
      end;
      result:=cmd_ok;
-     mainformn.RestoreCursors;
+     if assigned(RestoreAllCursorsProc) then RestoreAllCursorsProc;
 end;
 function Cam_reset_com(Operands:pansichar):GDBInteger;
 begin
@@ -1101,20 +735,20 @@ function ChangeProjType_com(Operands:pansichar):GDBInteger;
 var
    ta:TmyAction;
 begin
-     ta:=tmyaction(MainFormN.StandartActions.ActionByName('ACN_PERSPECTIVE'));
+     //ta:=tmyaction(MainFormN.StandartActions.ActionByName('ACN_PERSPECTIVE'));
   if GDB.GetCurrentDWG.OGLwindow1.param.projtype = projparalel then
   begin
     GDB.GetCurrentDWG.OGLwindow1.param.projtype := projperspective;
-    if ta<>nil then
-                   ta.Checked:=true;
+    //if ta<>nil then
+    //               ta.Checked:=true;
 
   end
   else
     if GDB.GetCurrentDWG.OGLwindow1.param.projtype = projPerspective then
     begin
     GDB.GetCurrentDWG.OGLwindow1.param.projtype := projparalel;
-      if ta<>nil then
-                     ta.Checked:=false;
+      //if ta<>nil then
+      //               ta.Checked:=false;
     end;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
@@ -1251,7 +885,7 @@ begin
       commandmanager.executecommandend;
       //OGLwindow1.SetObjInsp;
       //redrawoglwnd;
-      updatevisible;
+      if assigned(updatevisibleProc) then updatevisibleProc;
     end;
   end
   else
@@ -1478,16 +1112,16 @@ var //i: GDBInteger;
     pv:pGDBObjEntity;
         ir:itrec;
 begin
-  MainFormN.StartLongProcess(gdb.GetCurrentROOT.ObjArray.count);
+  if assigned(StartLongProcessProc) then StartLongProcessProc(gdb.GetCurrentROOT.ObjArray.count);
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
     pv^.Format;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
-  MainFormN.ProcessLongProcess(ir.itc);
+  if assigned(ProcessLongProcessProc) then ProcessLongProcessProc(ir.itc);
   until pv=nil;
   gdb.GetCurrentROOT.getoutbound;
-  MainFormN.EndLongProcess;
+  if assigned(EndLongProcessProc) then EndLongProcessProc;
 
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
@@ -1751,9 +1385,9 @@ var //i: GDBInteger;
     ir:itrec;
     depth:integer;
 begin
-  MainFormN.StartLongProcess(gdb.GetCurrentROOT.ObjArray.count);
+  if assigned(StartLongProcessProc) then StartLongProcessProc(gdb.GetCurrentROOT.ObjArray.count);
   gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
-  MainFormN.EndLongProcess;
+  if assigned(EndLongProcessProc) then EndLongProcessProc;
 
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
@@ -2023,15 +1657,6 @@ begin
   end;
 end;
 
-function layer_cmd:GDBInteger;
-begin
-  LayerWindow:=TLayerWindow.Create(nil);
-  SetHeightControl(LayerWindow,22);
-  DOShowModal(LayerWindow);
-  Freeandnil(LayerWindow);
-  result:=cmd_ok;
-end;
-
 procedure finalize;
 begin
      //Optionswindow.done;
@@ -2130,7 +1755,8 @@ begin
                s:='Cleaned items: '+inttostr(cleaned)
            +#13#10'Added items: '+inttostr(_UpdatePO)
            +#13#10'File zcad.po must be rewriten. Confirm?';
-               if MainFormN.messagebox(@s[1],'UpdatePO',MB_YESNO)=IDNO then
+               if assigned(messageboxProc) then
+               if messageboxProc(@s[1],'UpdatePO',MB_YESNO)=IDNO then
                                                                          exit;
                po.SaveToFile(PODirectory + 'zcad.po.backup');
                actualypo.SaveToFile(PODirectory + 'zcad.po');
@@ -2138,11 +1764,6 @@ begin
           end;
      end
         else showerror('Command line swith "UpdatePO" must be set. (or not the first time running this command)');
-end;
-function quit_com(Operands:pansichar):GDBInteger;
-begin
-     //Application.QueueAsyncCall(MainFormN.asynccloseapp, 0);
-     CloseApp;
 end;
 function tw_com(Operands:pansichar):GDBInteger;
 begin
@@ -2343,12 +1964,7 @@ begin
   ms2objinsp.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@SelectOnMouseObjects_com,'SelectOnMouseObjects',CADWG,0);
   CreateCommandFastObjectPlugin(@SelectObjectByAddres_com,'SelectObjectByAddres',CADWG,0);
-  CreateCommandFastObjectPlugin(@quit_com,'Quit',0,0);
-  CreateCommandFastObjectPlugin(@newdwg_com,'NewDWG',0,0).CEndActionAttr:=CEDWGNChanged;
-  CreateCommandFastObjectPlugin(@NextDrawint_com,'NextDrawing',0,0);
-  CreateCommandFastObjectPlugin(@PrevDrawint_com,'PrevDrawing',0,0);
   CreateCommandFastObjectPlugin(@CloseDWGOnMouse_com,'CloseDWGOnMouse',CADWG,0);
-  CreateCommandFastObjectPlugin(@CloseDWG_com,'CloseDWG',CADWG,0).CEndActionAttr:=CEDWGNChanged;;
   selall:=CreateCommandFastObjectPlugin(@SelectAll_com,'SelectAll',CADWG,0);
   selall^.overlay:=true;
   selall.CEndActionAttr:=0;
@@ -2358,8 +1974,6 @@ begin
   //deselall.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@QSave_com,'QSave',CADWG,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@Merge_com,'Merge',CADWG,0);
-  CreateCommandFastObjectPlugin(@Load_com,'Load',0,0).CEndActionAttr:=CEDWGNChanged;
-  CreateCommandFastObjectPlugin(@Import_com,'Import',0,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@MergeBlocks_com,'MergeBlocks',0,0);
   CreateCommandFastObjectPlugin(@SaveAs_com,'SaveAs',CADWG,0);
   CreateCommandFastObjectPlugin(@Cam_reset_com,'Cam_Reset',CADWG,0);
@@ -2382,7 +1996,6 @@ begin
   selframecommand^.overlay:=true;
   selframecommand.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@RebuildTree_com,'RebuildTree',CADWG,0);
-  CreateCommandFastObjectPlugin(@layer_cmd,'Layer',CADWG,0);
   CreateCommandFastObjectPlugin(@undo_com,'Undo',CADWG,0).overlay:=true;
   CreateCommandFastObjectPlugin(@redo_com,'Redo',CADWG,0).overlay:=true;
 
@@ -2394,7 +2007,6 @@ begin
 
   CreateCommandFastObjectPlugin(@UpdatePO_com,'UpdatePO',0,0);
 
-  CreateCommandFastObjectPlugin(@LoadLayout_com,'LoadLayout',0,0);
   CreateCommandFastObjectPlugin(@SnapProp_com,'SnapProperties',CADWG,0).overlay:=true;
 
   CreateCommandFastObjectPlugin(@TW_com,'TextWindow',0,0).overlay:=true;

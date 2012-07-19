@@ -20,7 +20,7 @@ unit strproc;
 {$INCLUDE def.inc}
 
 interface
-uses fileutil,gdbasetypes,sysutils,sysinfo,strutils,LCLProc;
+uses zcadsysvars,fileutil,gdbasetypes,sysutils,sysinfo,strutils,LCLProc;
 function GetPredStr(var s: GDBString; substr: GDBString): GDBString;
 function ExpandPath(path:GDBString):GDBString;
 function readspace(expr: GDBString): GDBString;
@@ -57,7 +57,7 @@ var
   CodePage:TCodePage;
 implementation
 uses
-    varmandef,log;
+    {varmandef,}log;
 function MakeHash(const s: GDBString): GDBLongword;
 var
   I: Integer;

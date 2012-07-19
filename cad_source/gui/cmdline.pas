@@ -20,7 +20,7 @@ unit cmdline;
 {$INCLUDE def.inc}
 interface
 uses
- zcadstrconsts,strproc,lclproc,sysutils,gdbasetypes,
+ zcadsysvars,zcadstrconsts,strproc,lclproc,sysutils,gdbasetypes,
  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
  UDMenuWnd,gdbase, memman,UGDBDescriptor,math,commandline,varman,languade,
  UGDBTracePropArray,varmandef,

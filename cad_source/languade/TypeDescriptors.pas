@@ -19,7 +19,7 @@ unit TypeDescriptors;
 {$INCLUDE def.inc}
 
 interface
-uses log,gdbasetypes,varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,
+uses zcadsysvars,log,gdbasetypes,varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,
       UGDBOpenArrayOfPointer,UGDBOpenArrayOfObjects,strproc,sysutils;
 const
      m_procedure=1;

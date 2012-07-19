@@ -20,7 +20,7 @@ unit OGLSpecFunc;
 {$INCLUDE def.inc}
 
 interface
-uses gdbasetypes,gdbase,LCLType,
+uses zcadsysvars,gdbasetypes,gdbase,LCLType,
      gl,glu,
      {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}

@@ -40,13 +40,13 @@ type
 {EXPORT-}
 procedure WriteString_EOL(h: GDBInteger; s: GDBString);
 implementation
-constructor filestream.init;
+constructor filestream.init(bsize: GDBInteger);
 begin
   bufer := nil;
   GetMem(GDBPointer(bufer), bsize);
   bufersize := bsize;
 end;
-constructor filestream.ReadFromFile;
+constructor filestream.ReadFromFile(filename:gdbstring);
 begin
      Init(1024*1024);
      Assign(filename, fmShareDenyNone);
@@ -61,7 +61,7 @@ begin
   close;
   done;
 end;
-procedure filestream.assign;
+procedure filestream.assign(const fname: GDBString; mode: GDBLongword);
 begin
   filehandle := fileopen(fname, mode);
   if filehandle > 0 then
@@ -99,7 +99,7 @@ begin
   filepos := filepos + buferread;
   buferpos := 0;
 end;
-procedure filestream.continuebufer;
+procedure filestream.continuebufer(symbolcount:GDBInteger);
 var oldbr:GDBInteger;
 begin
   oldbr:=buferread;
@@ -123,11 +123,11 @@ begin
   result := copy(expr, i, length(expr) - i + 1);
   expr:=expr;
 end;
-function filestream.ReadString;
+function filestream.ReadString: GDBString;
 begin
      result:=readspace(readGDBString)
 end;
-function filestream.readbyte;
+function filestream.readbyte: GDBByte;
 begin
      if buferread = 0 then
                           readtobufer;
@@ -136,11 +136,11 @@ begin
      inc(currentpos);
 
 end;
-function filestream.readword;
+function filestream.readword: GDBWord;
 begin
      result:=readbyte+256*readbyte;
 end;
-function filestream.readGDBString;
+function filestream.readGDBString: GDBString;
 var
   s: {shortGDBString}GDBString {[100]};
   cr: GDBBoolean;
@@ -186,7 +186,7 @@ begin
   readGDBString := s;
 end;
 
-function filestream.readworld;
+function filestream.readworld(break, ignore: GDBString): shortString;
 var
   s: {short}GDBString;
   i:GDBInteger;
@@ -244,7 +244,7 @@ begin
   //setlength(s,i-1);
   result := s;
 end;
-function filestream.readtoparser;
+function filestream.readtoparser(break:GDBString): GDBString;
 var
   s: {short}GDBString;
   i:GDBInteger;

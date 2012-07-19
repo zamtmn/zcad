@@ -20,7 +20,8 @@ unit GDBSubordinated;
 {$INCLUDE def.inc}
 
 interface
-uses gdbobjectsconstdef,strproc,LCLProc,UGDBOpenArrayOfByte,devices,gdbase,gdbasetypes,varman,varmandef{,UGDBOpenArrayOfByte},dxflow,UBaseTypeDescriptor,sysutils,UGDBLayerArray{,strutils};
+uses gdbobjectsconstdef,strproc,LCLProc,UGDBOpenArrayOfByte,devices,gdbase,gdbasetypes,varman,varmandef,
+     dxflow,UBaseTypeDescriptor,sysutils,UGDBLayerArray{,strutils};
 type
 //Owner:PGDBObjGenericWithSubordinated;(*'Владелец'*)
 //PSelfInOwnerArray:TArrayIndex;(*'Индекс у владельца'*)
@@ -80,7 +81,7 @@ procedure CreateDBLinkProcess(pEntity:PGDBObjGenericWithSubordinated);
 procedure CreateDeviceNameSubProcess(pvn:pvardesk; const formatstr:GDBString;pEntity:PGDBObjGenericWithSubordinated);
 function GetEntName(pu:PGDBObjGenericWithSubordinated):GDBString;
 implementation
-uses UGDBDescriptor,UUnitManager,URecordDescriptor,shared,log,GDBAbstractText,DeviceBase;
+uses UGDBDescriptor,UUnitManager,URecordDescriptor,shared,log,GDBAbstractText,devicebaseabstract;
 destructor GDBObjSubordinated.done;
 begin
      inherited;

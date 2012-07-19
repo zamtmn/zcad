@@ -1,2 +1,3 @@
 ,GDBCamera
+,devicebaseabstract
 ,DeviceBase

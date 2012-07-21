@@ -1612,6 +1612,7 @@ begin
         if param.md.mouseonworkplan
         then
             begin
+                 if sysvar.DWG.DWG_SnapGrid<>nil then
                  if not sysvar.DWG.DWG_SnapGrid^ then
                  param.ospoint.worldcoord:=param.md.mouseonworkplanecoord;
                  sendcoordtocommandTraceOn({param.md.mouseonworkplanecoord}param.ospoint.worldcoord,key,nil)
@@ -1993,6 +1994,7 @@ begin
         if param.gluetocp then
         begin
           gdb.GetCurrentDWG.SelObjArray.selectcurrentcontrolpoint(key);
+          needredraw:=true;
           if (key and MZW_SHIFT) = 0 then
           begin
             param.startgluepoint:=param.nearesttcontrolpoint.pcontrolpoint;
@@ -2869,7 +2871,10 @@ begin
   result.SysLayer:=gdb.GetCurrentDWG.LayerTable.GetSystemLayer;
   result.MaxDetail:=_maxdetail;
 
-  result.DrawMode:=sysvar.dwg.DWG_DrawMode^;
+  if sysvar.dwg.DWG_DrawMode<>nil then
+                                      result.DrawMode:=sysvar.dwg.DWG_DrawMode^
+                                  else
+                                      result.DrawMode:=1;
   result.OwnerLineWeight:=-3;
   result.MaxWidth:=sysvar.RD.RD_MaxWidth^;
 end;
@@ -3118,7 +3123,10 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     LightOn;
 
     if (sysvar.DWG.DWG_SystmGeometryDraw^) then
+                                               begin
+                                               oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^+2]);
                                                gdb.GetCurrentROOT^.ObjArray.ObjTree.draw;
+                                               end;
                                            //else
                                               begin
                                               OGLSM.startrender;

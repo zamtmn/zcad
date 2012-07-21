@@ -136,7 +136,7 @@ begin
      if assigned(sysvar.dwg.DWG_CLayer) then
                                             result:=getelement(sysvar.dwg.DWG_CLayer^)
                                         else
-                                            result:=nil;
+                                            result:=getsystemlayer;
 end;
 function GDBLayerArray.addlayer;
 var

@@ -21,7 +21,7 @@ unit mainwindow;
 
 interface
 uses
-  gdbcommandsinterface,zcadsysvars,GDBBlockDef,laercombobox,ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
+  zcadsysvars,GDBBlockDef,laercombobox,ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
   ActnList,LCLType,LCLProc,strproc,log,intftranslations,toolwin,
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,

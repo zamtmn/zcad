@@ -1178,7 +1178,10 @@ else if (groupi = 9) and (ucvalues = '$CELWEIGHT') then
       outstream.TXTAddGDBStringEOL(groups);
       outstream.TXTAddGDBStringEOL('$CELWEIGHT');
       outstream.TXTAddGDBStringEOL('370');
-      outstream.TXTAddGDBStringEOL(inttostr(sysvar.DWG.DWG_CLinew^));
+      if assigned(sysvar.DWG.DWG_CLinew) then
+                                             outstream.TXTAddGDBStringEOL(inttostr(sysvar.DWG.DWG_CLinew^))
+                                         else
+                                             outstream.TXTAddGDBStringEOL(inttostr(-1));
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
     end
@@ -1187,7 +1190,10 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
       outstream.TXTAddGDBStringEOL(groups);
       outstream.TXTAddGDBStringEOL('$LWDISPLAY');
       outstream.TXTAddGDBStringEOL('290');
-      outstream.TXTAddGDBStringEOL(inttostr(sysvar.DWG.DWG_DrawMode^));
+      if assigned(sysvar.DWG.DWG_DrawMode) then
+                                               outstream.TXTAddGDBStringEOL(inttostr(sysvar.DWG.DWG_DrawMode^))
+                                           else
+                                               outstream.TXTAddGDBStringEOL(inttostr(0));
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
     end

@@ -337,8 +337,9 @@ begin
   inherited;
   if (sysvar.DWG.DWG_SystmGeometryDraw^){and(GDB.GetCurrentDWG.OGLwindow1.param.subrender=0)} then
   begin
-  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^+2]);
-  oglsm.myglbegin(GL_LINE_LOOP);
+  oglsm.glcolor3ubv(palette[{sysvar.SYS.SYS_SystmGeometryColor^+2}4]);
+  OGLSpecFunc.DrawAABB(VisibleOBJBoundingBox);
+  {oglsm.myglbegin(GL_LINE_LOOP);
      oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
      oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
      oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.LBN.Z);
@@ -359,7 +360,7 @@ begin
      oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.RTF.Z);
      oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.LBN.Z);
      oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.RTF.Z);
-  oglsm.myglend();
+  oglsm.myglend();}
   end;
 end;
 procedure GDBObjGenericSubEntry.RemoveInArray(pobjinarray:GDBInteger);

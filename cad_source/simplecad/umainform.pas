@@ -5,38 +5,46 @@ unit umainform;
 interface
 
 uses
-  LCLType, geometry, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
+  UGDBDrawingdef,LCLType, geometry, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Spin,
   {From ZCAD}
   zcadsysvars,{zcadinterface,} iodxf,varmandef, oglwindow,  UUnitManager,
-  UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDBText,GDBLine,GDBCircle,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
+  UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
 
 type
 
   { TForm1 }
 
   TForm1 = class(TForm)
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
-    Button4: TButton;
-    Button5: TButton;
-    Button6: TButton;
-    Button7: TButton;
+    BtnAddLWPolyLines1: TButton;
+    BtnAddLines: TButton;
+    BtnAddCircles: TButton;
+    BtnAdd3DpolyLines: TButton;
+    BtnSelectAll: TButton;
+    BtnRebuild: TButton;
+    BtnEraseSel: TButton;
+    BtnAddTexts: TButton;
+    BtnOpenDXF: TButton;
+    BtnSaveDXF: TButton;
     CheckBox1: TCheckBox;
+    ChkBox3D: TCheckBox;
+    Label1: TLabel;
     OpenDialog1: TOpenDialog;
     Panel1: TPanel;
     SaveDialog1: TSaveDialog;
     SpinEdit1: TSpinEdit;
     Splitter1: TSplitter;
-    procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
-    procedure Button4Click(Sender: TObject);
-    procedure Button5Click(Sender: TObject);
-    procedure Button6Click(Sender: TObject);
-    procedure Button7Click(Sender: TObject);
+    procedure BtnAdd3DpolyLinesClick(Sender: TObject);
+    procedure BtnAddLinesClick(Sender: TObject);
+    procedure BtnAddCirclesClick(Sender: TObject);
+    procedure BtnAddLWPolyLines1Click(Sender: TObject);
+    procedure BtnRebuildClick(Sender: TObject);
+    procedure BtnEraseSelClick(Sender: TObject);
+    procedure BtnAddTextsClick(Sender: TObject);
+    procedure BtnOpenDXFClick(Sender: TObject);
+    procedure BtnSaveDXFClick(Sender: TObject);
+    procedure BtnSelectAllClick(Sender: TObject);
     procedure TreeChange(Sender: TObject);
     procedure _FormCreate(Sender: TObject);
     procedure _KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -49,7 +57,8 @@ type
   end; 
 
 var
-  Form1: TForm1; 
+  Form1: TForm1;
+  stepgrid,origingrid:GDBvertex2D;
 
 implementation
 
@@ -65,7 +74,7 @@ begin
   end;
   if Key=VK_DELETE then
   begin
-       Button4Click(nil);
+       BtnEraseSelClick(nil);
        Key:=0;
   end;
 end;
@@ -77,17 +86,24 @@ end;
 
 procedure TForm1._FormCreate(Sender: TObject);
 var
-   ptd:PTDrawing;
+   ptd:PTAbstractDrawing;
    tn:GDBString;
    i:integer;
    pobj:PGDBObjEntity;
    v1,v2:gdbvertex;
 begin
+     stepgrid.x:=1;
+     stepgrid.y:=1;
+     origingrid.x:=0;
+     origingrid.y:=0;
+
+     sysvar.DWG.DWG_StepGrid:=@stepgrid;
+     sysvar.DWG.DWG_OriginGrid:=@origingrid;
      ugdbdescriptor.startup;
 
-     ptd:=gdb.CreateDWG;
+     ptd:=gdb.CreateSimpleDWG;
      gdb.AddRef(ptd^);
-     gdb.SetCurrentDWG(ptd);
+     gdb.SetCurrentDWG(pointer(ptd));
 
      oglwnd:=TOGLWnd.Create(Panel1);
      oglwnd.AuxBuffers:=0;
@@ -108,61 +124,139 @@ begin
 
      sysvar.DWG.DWG_SystmGeometryDraw^:=CheckBox1.Checked;
 end;
-
-procedure TForm1.Button1Click(Sender: TObject);
+function CreateRandomDouble(len:GDBDouble):GDBDouble;inline;
+begin
+     result:=random*len;
+end;
+function CreateRandomVertex(len,hanflen:GDBDouble):GDBVertex;
+begin
+     result.x:=CreateRandomDouble(len)-hanflen;
+     result.y:=CreateRandomDouble(len)-hanflen;
+     if Form1.ChkBox3D.Checked then
+                                   result.z:=CreateRandomDouble(len)-hanflen
+                               else
+                                   result.z:=0;
+end;
+function CreateRandomVertex2D(len,hanflen:GDBDouble):GDBVertex2D;
+begin
+     result.x:=CreateRandomDouble(len)-hanflen;
+     result.y:=CreateRandomDouble(len)-hanflen;
+end;
+procedure TForm1.BtnAddLinesClick(Sender: TObject);
 var
    ptd:PTDrawing;
    tn:GDBString;
    i:integer;
-   pobj:PGDBObjEntity;
+   pobj:PGDBObjLine;
    v1,v2:gdbvertex;
 begin
   for i:=1 to SpinEdit1.Value do
   begin
-    pobj := CreateInitObjFree(GDBLineID,nil);
-    v1:=createvertex(random(1000)-500,random(1000)-500,{random(1000)-500}0);
-    v2:=geometry.VertexAdd(v1,createvertex(random(100)-50,random(100)-50,{random(50)-25}0));
-    PGDBObjLine(pobj)^.CoordInOCS.lBegin:=v1;
-    PGDBObjLine(pobj)^.CoordInOCS.lEnd:=v2;
+    pobj := PGDBObjLine(CreateInitObjFree(GDBLineID,nil));
+    v1:=CreateRandomVertex(1000,500);
+    v2:=geometry.VertexAdd(v1,CreateRandomVertex(100,50));
+    pobj^.CoordInOCS.lBegin:=v1;
+    pobj^.CoordInOCS.lEnd:=v2;
     gdb.GetCurrentRoot^.AddMi(@pobj);
-    PGDBObjEntity(pobj)^.BuildGeometry;
-    PGDBObjEntity(pobj)^.format;
+    pobj^.BuildGeometry;
+    pobj^.format;
   end;
   gdb.GetCurrentDWG^.pObjRoot^.Format;
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
   UGDBDescriptor.redrawoglwnd;
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
+procedure TForm1.BtnAddLWPolyLines1Click(Sender: TObject);
+var
+   ptd:PTDrawing;
+   tn:GDBString;
+   i,j,vcount:integer;
+   pobj:PGDBObjLWPolyline;
+   v1,v2:gdbvertex2d;
+   lw:GLLWWidth;
+begin
+  for i:=1 to SpinEdit1.Value do
+  begin
+    pobj := PGDBObjLWPolyline(CreateInitObjFree(GDBLWPolyLineID,nil));
+    vcount:=random(8)+2;
+    v1:=CreateRandomVertex2D(1000,500);
+    for j:=1 to vcount do
+    begin
+         pobj^.Vertex2D_in_OCS_Array.Add(@v1);
+         lw.endw:=CreateRandomDouble(10);
+         lw.startw:=CreateRandomDouble(10);
+         pobj^.Width2D_in_OCS_Array.Add(@lw);
+         v1:=geometry.Vertex2DAdd(v1,CreateRandomVertex2D(100,50));
+    end;
+    if vcount>2 then
+                    pobj^.closed:=random(10)>5;
+    gdb.GetCurrentRoot^.AddMi(@pobj);
+    pobj^.BuildGeometry;
+    pobj^.format;
+  end;
+  gdb.GetCurrentDWG^.pObjRoot^.Format;
+  gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
+  UGDBDescriptor.redrawoglwnd;
+end;
+procedure TForm1.BtnAddCirclesClick(Sender: TObject);
 var
    ptd:PTDrawing;
    tn:GDBString;
    i:integer;
-   pobj:PGDBObjEntity;
+   pobj:PGDBObjCircle;
    v1,v2:gdbvertex;
 begin
   for i:=1 to SpinEdit1.Value do
   begin
-    pobj := CreateInitObjFree(GDBCircleID,nil);
-    v1:=createvertex(random(1000)-500,random(1000)-500,{random(1000)-500}0);
-    PGDBObjCircle(pobj)^.Local.P_insert:=v1;
-    PGDBObjCircle(pobj)^.Radius:=random(10)+1;
+    pobj := PGDBObjCircle(CreateInitObjFree(GDBCircleID,nil));
+    v1:=CreateRandomVertex(1000,500);
+    pobj^.Local.P_insert:=v1;
+    pobj^.Radius:=CreateRandomDouble(9.9)+0.1;
     gdb.GetCurrentRoot^.AddMi(@pobj);
-    PGDBObjEntity(pobj)^.BuildGeometry;
-    PGDBObjEntity(pobj)^.format;
+    pobj^.BuildGeometry;
+    pobj^.format;
   end;
   gdb.GetCurrentDWG^.pObjRoot^.Format;
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
   UGDBDescriptor.redrawoglwnd;
 end;
 
-procedure TForm1.Button3Click(Sender: TObject);
+procedure TForm1.BtnAdd3DpolyLinesClick(Sender: TObject);
+var
+   ptd:PTDrawing;
+   tn:GDBString;
+   i,j,vcount:integer;
+   pobj:PGDBObjPolyline;
+   v1,v2:gdbvertex;
+begin
+  for i:=1 to SpinEdit1.Value do
+  begin
+    pobj := PGDBObjPolyline(CreateInitObjFree(GDBPolyLineID,nil));
+    vcount:=random(8)+2;
+    v1:=CreateRandomVertex(1000,500);
+    for j:=1 to vcount do
+    begin
+         pobj^.AddVertex(v1);
+         v1:=geometry.VertexAdd(v1,CreateRandomVertex(100,50));
+    end;
+    if vcount>2 then
+                    pobj^.closed:=random(10)>5;
+    gdb.GetCurrentRoot^.AddMi(@pobj);
+    pobj^.BuildGeometry;
+    pobj^.format;
+  end;
+  gdb.GetCurrentDWG^.pObjRoot^.Format;
+  gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
+  UGDBDescriptor.redrawoglwnd;
+end;
+
+procedure TForm1.BtnRebuildClick(Sender: TObject);
 begin
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
      UGDBDescriptor.redrawoglwnd;
 end;
 
-procedure TForm1.Button4Click(Sender: TObject);
+procedure TForm1.BtnEraseSelClick(Sender: TObject);
 var pv:pGDBObjEntity;
     ir:itrec;
     count:integer;
@@ -187,8 +281,7 @@ begin
   gdb.GetCurrentDWG^.SelObjArray.clearallobjects;
   UGDBDescriptor.redrawoglwnd;
 end;
-
-procedure TForm1.Button5Click(Sender: TObject);
+procedure TForm1.BtnAddTextsClick(Sender: TObject);
 var
    ptd:PTDrawing;
    tn:GDBString;
@@ -207,7 +300,7 @@ begin
   for i:=1 to SpinEdit1.Value do
   begin
     pGDBObjEntity(pobj):=CreateInitObjFree(GDBTextID,nil);
-    v1:=createvertex(random(1000)-500,random(1000)-500,{random(1000)-500}0);
+    v1:=CreateRandomVertex(1000,500);
     pobj^.Local.P_insert:=v1;
     pobj^.TXTStyleIndex:=0;
     pobj^.Template:='Hello word!';
@@ -227,7 +320,7 @@ begin
   UGDBDescriptor.redrawoglwnd;
 end;
 
-procedure TForm1.Button6Click(Sender: TObject);
+procedure TForm1.BtnOpenDXFClick(Sender: TObject);
 begin
      if OpenDialog1.Execute then
      begin
@@ -237,13 +330,49 @@ begin
      end;
 end;
 
-procedure TForm1.Button7Click(Sender: TObject);
+procedure TForm1.BtnSaveDXFClick(Sender: TObject);
 begin
      if SaveDialog1.Execute then
      begin
           savedxf2000(SaveDialog1.FileName, GDB.GetCurrentDWG);
      end;
 end;
+
+procedure TForm1.BtnSelectAllClick(Sender: TObject);
+var //i: GDBInteger;
+    pv:pGDBObjEntity;
+    ir:itrec;
+    count:integer;
+begin
+  if gdb.GetCurrentROOT^.ObjArray.Count = 0 then exit;
+  GDB.GetCurrentDWG^.OGLwindow1.param.SelDesc.Selectedobjcount:=0;
+
+  count:=0;
+
+  pv:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+    inc(count);
+  pv:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
+  until pv=nil;
+
+
+  pv:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+        if count>10000 then
+                           pv^.SelectQuik
+                       else
+                           pv^.select;
+
+  pv:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
+  until pv=nil;
+
+  UGDBDescriptor.redrawoglwnd;
+  //if assigned(updatevisibleproc) then updatevisibleproc;
+
+end;
+
 
 procedure TForm1.TreeChange(Sender: TObject);
 begin

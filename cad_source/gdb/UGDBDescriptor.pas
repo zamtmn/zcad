@@ -67,23 +67,7 @@ TDWGProps=record
           end;
 PTDrawing=^TDrawing;
 TDrawing=object(TAbstractDrawing)
-           pObjRoot:PGDBObjGenericSubEntry;
-           mainObjRoot:GDBObjRoot;(*saved_to_shd*)
-           LayerTable:GDBLayerArray;(*saved_to_shd*)
-           ConstructObjRoot:GDBObjRoot;
-           SelObjArray:GDBSelectedObjArray;
-           pcamera:PGDBObjCamera;
-           OnMouseObj:GDBObjOpenArrayOfPV;
-           DWGUnits:TUnitManager;
 
-           OGLwindow1:toglwnd;
-
-           UndoStack:GDBObjOpenArrayOfUCommands;
-
-           TextStyleTable:GDBTextStyleArray;(*saved_to_shd*)
-           BlockDefArray:GDBObjBlockdefArray;(*saved_to_shd*)
-           Numerator:GDBNumerator;(*saved_to_shd*)
-           TableStyleTable:GDBTableStyleArray;(*saved_to_shd*)
            FileName:GDBString;
            Changed:GDBBoolean;
            attrib:GDBLongword;
@@ -114,6 +98,7 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
                     procedure SetCurrentDWG(PDWG:PTDrawing);
 
                     function CreateDWG:PTDrawing;
+                    function CreateSimpleDWG:PTAbstractDrawing;virtual;
                     procedure eraseobj(ObjAddr:PGDBaseObject);virtual;
 
                     procedure CopyBlock(_from,_to:PTDrawing;_source:PGDBObjBlockdef);
@@ -411,6 +396,8 @@ procedure GDBDescriptor.asociatedwgvars;
 //var
 //    DWGUnit:PTUnit;
 begin
+   if typeof(CurrentDWG^)=typeof(TDrawing) then
+   begin
    DWGUnit:=CurrentDWG.DWGUnits.findunit('DrawingVars');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_SnapGrid,'DWG_SnapGrid');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_DrawGrid,'DWG_DrawGrid');
@@ -420,6 +407,7 @@ begin
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLinew,'DWG_CLinew');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_DrawMode,'DWG_DrawMode');
+   end;
 end;
 
 procedure GDBDescriptor.SetCurrentDWG(PDWG:PTDrawing);
@@ -451,279 +439,28 @@ begin
      gdb.GetCurrentDWG.pcamera^.obj_zmin:=z;
 end;
 constructor TDrawing.init;
-var tp:GDBTextStyleProp;
+var {tp:GDBTextStyleProp;}
     ts:PTGDBTableStyle;
     cs:TGDBTableCellStyle;
+    pvd:pvardesk;
 begin
-  LayerTable.init({$IFDEF DEBUGBUILD}'{6AFCB58D-9C9B-4325-A00A-C2E8BDCBE1DD}',{$ENDIF}200);
   DWGUnits.init;
   DWGUnits.SetNextManager(num);
   DWGUnits.loadunit(expandpath('*rtl/dwg/DrawingDeviceBase.pas'),nil);
   DWGDBUnit:=DWGUnits.findunit(DrawingDeviceBaseUnitName);
   DWGUnits.loadunit(expandpath('*rtl/dwg/DrawingVars.pas'),nil);
-  DWGUnits.findunit('DrawingVars').AssignToSymbol(pcamera,'camera');
-  //pcamera^.initnul;
-  mainobjroot.initnul;
-  pObjRoot:=@mainobjroot;
-  //ConstructObjRoot.init({$IFDEF DEBUGBUILD}'{B1036F20-562D-4B17-A33A-61CF3F5F2A90} - ConstructObjRoot',{$ENDIF}1);
-  ConstructObjRoot.initnul;
-  SelObjArray.init({$IFDEF DEBUGBUILD}'{0CC3A9A3-B9C2-4FB5-BFB1-8791C261C577} - SelObjArray',{$ENDIF}65535);
-  OnMouseObj.init({$IFDEF DEBUGBUILD}'{85654C90-FF49-4272-B429-4D134913BC26} - OnMouseObj',{$ENDIF}20);
+  //DWGUnits.findunit('DrawingVars').AssignToSymbol(pcamera,'camera');
+
+  pvd:=DWGUnits.findunit('DrawingVars').InterfaceVariables.findvardesc('camera');
+  if pvd<>nil then
+                 inherited init(pvd^.data.Instance)
+             else
+                 inherited init(nil);
 
 
   Pointer(FileName):=nil;
   FileName:=rsUnnamedWindowTitle;
   Changed:=False;
-
-  TextStyleTable.init({$IFDEF DEBUGBUILD}'{146FC836-1490-4046-8B09-863722570C9F}',{$ENDIF}200);
-  tp.size:=2.5;
-  tp.oblique:=0;
-  //TextStyleTable.addstyle('Standart','normal.shp',tp);
-
-  //TextStyleTable.addstyle('R2_5','romant.shx',tp);
-  //TextStyleTable.addstyle('standart','txt.shx',tp);
-
-  BlockDefArray.init({$IFDEF DEBUGBUILD}'{D53DA395-A6A2-4FDD-842D-A52E6385E2DD}',{$ENDIF}100);
-  Numerator.init(10);
-
-  TableStyleTable.init({$IFDEF DEBUGBUILD}'{E5CE9274-01D8-4D19-AF2E-D1AB116B5737}',{$ENDIF}10);
-
-  PTempTableStyle:=TableStyleTable.AddStyle('Temp');
-
-  PTempTableStyle.rowheight:=4;
-  PTempTableStyle.textheight:=2.5;
-
-  cs.Width:=1;
-  cs.TextWidth:={cf.Width-2}0;
-  cs.CF:=TTableCellJustify.jcc;
-  PTempTableStyle.tblformat.Add(@cs);
-
-  ts:=TableStyleTable.AddStyle('Standart');
-
-  ts.rowheight:=4;
-  ts.textheight:=2.5;
-
-  cs.Width:=20;
-  cs.TextWidth:={cf.Width-2}0;
-  cs.CF:=jcc;
-  ts.tblformat.Add(@cs);
-
-  ts:=TableStyleTable.AddStyle('Spec');
-
-  ts.rowheight:=8;
-  ts.textheight:=3.5;
-
-  ts.HeadBlockName:='TBL_SPEC_HEAD';
-
-     cs.Width:=20;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=130;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={UGDBTableStyleArray.TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=60;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={UGDBTableStyleArray.TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=35;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=45;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=20;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=20;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=25;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=40;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={TCellJustify.}jcc;
-     ts.tblformat.Add(@cs);
-
-  ts:=TableStyleTable.AddStyle('ShRaspr');
-
-  ts.rowheight:=10;
-  ts.textheight:=3.5;
-
-  ts.HeadBlockName:='TBL_PSRS_HEAD';
-
-     cs.Width:=25;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=33;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=5;
-     cs.TextWidth:=cs.Width-1;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=33;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=5;
-     cs.TextWidth:=cs.Width-1;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=5;
-     cs.TextWidth:=cs.Width-1;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=17;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=13;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=25;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=13;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=23;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=13;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=16;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=12;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=12;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=35;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:={TCellJustify.}jcl;
-     ts.tblformat.Add(@cs);
-
-
-
-
-  ts:=TableStyleTable.AddStyle('KZ');
-
-  ts.rowheight:=8;
-  ts.textheight:=3.5;
-
-  ts.HeadBlockName:='TBL_KZ_HEAD';
-
-     cs.Width:=20;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=46;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=46;
-     cs.TextWidth:=cs.Width-1;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=20;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=15;
-     cs.TextWidth:=cs.Width-1;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=15;
-     cs.TextWidth:=cs.Width-1;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=15;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=40;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     {cs.Width:=25;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcm;
-     ts.tblformat.Add(@cs);}
-
-     cs.Width:=15;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=15;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=25;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-     cs.Width:=15;
-     cs.TextWidth:=cs.Width-2;
-     cs.cf:=jcc;
-     ts.tblformat.Add(@cs);
-
-
-     UndoStack.init;
 
 
   //OGLwindow1.initxywh('oglwnd',nil,200,72,768,596,false);
@@ -747,6 +484,18 @@ begin
      //self.AddRef(result^);
      currentdwg:=ptd;
 end;
+function GDBDescriptor.CreateSimpleDWG:PTAbstractDrawing;
+var
+   ptd:PTAbstractDrawing;
+begin
+     gdBGetMem({$IFDEF DEBUGBUILD}'{2A28BFB9-661F-4331-955A-C6F18DE67A19}',{$ENDIF}GDBPointer(result),sizeof(TAbstractDrawing));
+     ptd:=currentdwg;
+     currentdwg:=pointer(result);
+     result^.init(nil);//(@units);
+     //self.AddRef(result^);
+     currentdwg:=pointer(ptd);
+end;
+
 constructor GDBDescriptor.init;
 //var //tp:GDBTextStyleProp;
     //ts:PTGDBTableStyle;

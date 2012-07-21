@@ -76,7 +76,7 @@ function intercept2d(const x1, y1, x2, y2, x3, y3, x4, y4: GDBDouble): GDBBoolea
 function intercept2d2(const x11, y11, x12, y12, x21, y21, x22, y22: GDBFloat): GDBBoolean;inline;
 function intercept2dmy(const l1begin,l1end,l2begin,l2end:gdbvertex2d):intercept2dprop;//inline;
 function intercept3dmy(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;inline;
-function intercept3dmy2(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;inline;
+function intercept3dmy2(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;//inline;
 
 function intercept3d(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;inline;
 
@@ -94,6 +94,7 @@ function vertexlen2df(const x1, y1, x2, y2: GDBFloat): GDBFloat;inline;
 function NormalizeVertex(const Vector1: GDBVertex): GDBVertex;{inline;}
 function VertexMulOnSc(const Vector1:GDBVertex;sc:GDBDouble): GDBVertex;inline;
 function VertexAdd(const Vector1, Vector2: GDBVertex): GDBVertex;inline;
+function Vertex2DAdd(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;inline;
 function VertexSub(const Vector1, Vector2: GDBVertex): GDBVertex;inline;
 function MinusVertex(const Vector1: GDBVertex): GDBVertex;inline;
 function vertexlen2id(const x1, y1, x2, y2: GDBInteger): GDBDouble;inline;
@@ -1363,6 +1364,12 @@ begin
   Result.Y := Vector1.y + Vector2.y;
   Result.Z := Vector1.z + Vector2.z;
 end;
+function Vertex2DAdd(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;
+begin
+  Result.X := Vector1.x + Vector2.x;
+  Result.Y := Vector1.y + Vector2.y;
+end;
+
 function VertexSub(const Vector1, Vector2: GDBVertex): GDBVertex;
 begin
   Result.X := Vector1.x - Vector2.x;

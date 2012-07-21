@@ -61,6 +61,7 @@ uses
   GDBCommandsBase,
   GDBCommandsDB,
   GDBCommandsDraw,
+  gdbcommandsinterface,
 
   GDBCommandsElectrical,
   GDBCommandsOPS,

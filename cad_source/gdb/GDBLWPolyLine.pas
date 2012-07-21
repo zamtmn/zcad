@@ -850,10 +850,13 @@ var
   i, j, k: GDBInteger;
   dx, dy, nx, ny, l: GDBDouble;
   v2di,v2dj:PGDBVertex2D;
-  plw:PGLlwwidth;
+  plw,plw2:PGLlwwidth;
   //q2d:GDBQuad2d;
   q3d:GDBQuad3d;
+  pq3d,pq3dnext:pGDBQuad3d;
   v:GDBvertex4D;
+  v2:PGDBvertex;
+  ip,ip2:Intercept3DProp;
 begin
   //Width2D_in_OCS_Array.clear;
   Width3D_in_WCS_Array.clear;
@@ -908,6 +911,45 @@ begin
   end;
   Width2D_in_OCS_Array.Shrink;
   Width3D_in_WCS_Array.Shrink;
+
+  if closed then k:=Width3D_in_WCS_Array.count - 1
+            else k:=Width3D_in_WCS_Array.count - 2;
+  for i := 0 to k do
+  if (i<>k)or closed then
+  begin
+    if i <> Width3D_in_WCS_Array.count - 1 then j := i + 1
+                                           else j := 0;
+    plw:=PGLlwwidth(Width2D_in_OCS_Array.getelement(i));
+    plw2:=PGLlwwidth(Width2D_in_OCS_Array.getelement(j));
+    if plw.hw and plw2.hw then
+    begin
+    if plw.endw>plw2.startw then l:=plw.endw
+                            else l:=plw2.startw;
+    l:=4*l*l;
+    pq3d:=Width3D_in_WCS_Array.getelement(i);
+    pq3dnext:=Width3D_in_WCS_Array.getelement(j);
+    ip:=intercept3dmy2(pq3d^[0] ,pq3d^[1],pq3dnext^[1] ,pq3dnext^[0]);
+    ip2:=intercept3dmy2(pq3d^[3] ,pq3d^[2],pq3dnext^[2] ,pq3dnext^[3]);
+
+    if ip.isintercept and ip2.isintercept then
+    if (ip.t1>0) and (ip.t2>0) then
+    if (ip2.t1>0) and (ip2.t2>0) then
+    {if (ip.t1<2) and (ip.t2<2) then
+    if (ip2.t1<2) and (ip2.t2<2) then}
+    begin
+         v2:=Pgdbvertex(Vertex3D_in_WCS_Array.getelement(j));
+         if SqrVertexlength(v2^,ip.interceptcoord)<l then
+         if SqrVertexlength(v2^,ip2.interceptcoord)<l then
+         begin
+         pq3d^[1]:=ip.interceptcoord;
+         pq3d^[2]:=ip2.interceptcoord;
+         pq3dnext^[0]:=ip.interceptcoord;
+         pq3dnext^[3]:=ip2.interceptcoord;
+         end;
+    end;
+    end;
+
+  end;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBLWPolyline.initialization');{$ENDIF}

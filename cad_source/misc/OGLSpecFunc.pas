@@ -275,10 +275,10 @@ begin
 
      inc(bcount);
      currentmode:=mode;
-     if bcount>1 then
+     {if bcount>1 then
                      asm
-                              {int(3);}
-                     end;
+                              int(3);
+                     end;}
      pointcount:=0;
 //*)
 //    glbegin(mode)
@@ -478,17 +478,25 @@ begin
 end;
 Procedure DrawAABB(const BoundingBox:GDBBoundingBbox);
 begin
-oglsm.myglbegin(GL_LINE_LOOP);
+oglsm.myglbegin(GL_LINES{GL_LINE_LOOP});
    oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
    oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
+   {}oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
    oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
+   {}oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
    oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
+   {}oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z);
+   {}oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);
 oglsm.myglend();
-oglsm.myglbegin(GL_LINE_LOOP);
+oglsm.myglbegin(GL_LINES{GL_LINE_LOOP});
    oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
    oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
+   {}oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
    oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
+   {}oglsm.myglVertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
    oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
+   {}oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z);
+   {}oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z);
 oglsm.myglend();
 oglsm.myglbegin(GL_LINES);
    oglsm.myglVertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z);

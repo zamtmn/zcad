@@ -22,7 +22,7 @@ unit GDBCommandsBase;
 interface
 uses
  zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,intftranslations,{layerwnd,}strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
- LCLProc,Classes,FileUtil,Forms,Controls,ComCtrls,Clipbrd,lclintf,
+ LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
   //commandline,
@@ -47,7 +47,7 @@ uses
  UGDBEntTree,
   {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}{AboutWnd,HelpWnd,}memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline,
- {AnchorDocking,}dialogs,XMLPropStorage,xmlconf{,
+ {AnchorDocking,}dialogs{,
    uPSCompiler,
   uPSRuntime,
   uPSC_std,

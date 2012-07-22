@@ -45,16 +45,50 @@ var
      ImInFrustum:TInRect;
      pobj:PGDBObjEntity;
      ir:itrec;
-     v1,v2:gdbvertex;
+     v1,v2,v3:gdbvertex;
+     tx:double;
+     bb:GDBBoundingBbox;
 begin
-     //enttree.FulDraw:=random(100)<80;
+     //enttree.FulDraw:=true;
+     {вариант с  неточным расчетом - неточный}
      gdb.GetCurrentDWG^.myGluProject2(enttree.BoundingBox.LBN,v1);
      gdb.GetCurrentDWG^.myGluProject2(enttree.BoundingBox.RTF,v2);
+
+
+     {вариант с точным расчетом - медленный((
+     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.LBN.y,enttree.BoundingBox.LBN.Z),v1);
+     bb.LBN:=v1;
+     bb.RTF:=v1;
+     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.LBN.y,enttree.BoundingBox.LBN.Z),v1);
+     concatBBandPoint(bb, v1);
+     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.RTF.y,enttree.BoundingBox.LBN.Z),v1);
+     concatBBandPoint(bb, v1);
+     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.RTF.y,enttree.BoundingBox.LBN.Z),v1);
+     concatBBandPoint(bb, v1);
+
+     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.LBN.y,enttree.BoundingBox.RTF.Z),v1);
+     concatBBandPoint(bb, v1);
+     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.LBN.y,enttree.BoundingBox.RTF.Z),v1);
+     concatBBandPoint(bb, v1);
+     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.RTF.y,enttree.BoundingBox.RTF.Z),v1);
+     concatBBandPoint(bb, v1);
+     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.RTF.y,enttree.BoundingBox.RTF.Z),v1);
+     concatBBandPoint(bb, v1);
+     v1:=bb.RTF;
+     v2:=bb.LBN;}
+
      if abs((v2.x-v1.x)*(v2.y-v1.y))<10 then
-                                             enttree.FulDraw:=false
+                                            begin
+                                             //enttree.FulDraw:=false
+                                                 gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.RTF.y,enttree.BoundingBox.LBN.Z),v1);
+                                                 gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.LBN.y,enttree.BoundingBox.RTF.Z),v2);
+                                                 if abs((v2.x-v1.x)*(v2.y-v1.y))<10 then
+                                                                                        enttree.FulDraw:=false
+                                                                                    else
+                                                                                        enttree.FulDraw:=true;
+                                            end
                                          else
                                              enttree.FulDraw:=true;
-     //enttree.FulDraw:=true;
      case OwnerInFrustum of
      IREmpty:begin
                    OwnerInFrustum:=OwnerInFrustum;

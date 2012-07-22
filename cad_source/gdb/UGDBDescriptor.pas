@@ -23,7 +23,7 @@ uses
 zcadsysvars,zcadinterface,zcadstrconsts,GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,UGDBDrawingdef,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
 UGDBNumerator, gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
-gdbasetypes,sysinfo,
+gdbasetypes,sysinfo,ugdbsimpledrawing,
 GDBGenericSubEntry,
 UGDBLayerArray,
 GDBEntity,
@@ -66,21 +66,24 @@ TDWGProps=record
                 Number:GDBInteger;
           end;
 PTDrawing=^TDrawing;
-TDrawing=object(TAbstractDrawing)
+TDrawing=object(TSimpleDrawing)
 
            FileName:GDBString;
            Changed:GDBBoolean;
            attrib:GDBLongword;
-
-           function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;inline;
-           function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;inline;
-
+           UndoStack:GDBObjOpenArrayOfUCommands;
 
            constructor init(num:PTUnitManager);
            destructor done;virtual;
            function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
            function GetLastSelected:PGDBObjEntity;virtual;
+           procedure SetCurrentDWG;virtual;
+           function StoreOldCamerapPos:Pointer;virtual;
+           procedure StoreNewCamerapPos(command:Pointer);virtual;
            //procedure SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
+           procedure rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);virtual;
+           procedure PushStartMarker(CommandName:GDBString);virtual;
+           procedure PushEndMarker;virtual;
      end;
 PGDBDescriptor=^GDBDescriptor;
 GDBDescriptor=object(GDBOpenArrayOfPObjects)
@@ -95,16 +98,16 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
 
                     function GetCurrentDWG:PTDrawing;
                     procedure asociatedwgvars;
-                    procedure SetCurrentDWG(PDWG:PTDrawing);
+                    procedure SetCurrentDWG(PDWG:PTAbstractDrawing);
 
                     function CreateDWG:PTDrawing;
-                    function CreateSimpleDWG:PTAbstractDrawing;virtual;
+                    function CreateSimpleDWG:PTSimpleDrawing;virtual;
                     procedure eraseobj(ObjAddr:PGDBaseObject);virtual;
 
                     procedure CopyBlock(_from,_to:PTDrawing;_source:PGDBObjBlockdef);
                     function CopyEnt(_from,_to:PTDrawing;_source:PGDBObjEntity):PGDBObjEntity;
                     procedure AddBlockFromDBIfNeed(_to:PTDrawing;name:GDBString);
-                    procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
+                    //procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
                     function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
                     function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
                     procedure FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:GDBOpenArrayOfPObjects);
@@ -117,8 +120,6 @@ var GDB: GDBDescriptor;
     ClipboardDWG:PTDrawing;
     GDBTrash:GDBObjTrash;
     FontManager:GDBFontManager;
-    pbasefont: PGDBfont;
-    palette: gdbpalette;
 procedure CalcZ(z:GDBDouble);
 procedure RemapAll(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
 procedure startup;
@@ -215,19 +216,38 @@ end;
       undomethod.Code:=pointer(gdb.GetCurrentROOT^.GoodRemoveMiFromArray);
       undomethod.Data:=gdb.GetCurrentROOT;
  end;
+procedure TDrawing.SetCurrentDWG();
+begin
+  gdb.SetCurrentDWG(@self);
+end;
+
 function TDrawing.GetLastSelected:PGDBObjEntity;
 begin
      result:=OGLwindow1.param.SelDesc.LastSelectedObject;
 end;
-function TDrawing.myGluProject2;
+function TDrawing.StoreOldCamerapPos:Pointer;
 begin
-      objcoord:=vertexadd(objcoord,pcamera^.CamCSOffset);
-     _myGluProject(objcoord.x,objcoord.y,objcoord.z,@pcamera^.modelMatrixLCS,@pcamera^.projMatrixLCS,@pcamera^.viewport,wincoord.x,wincoord.y,wincoord.z);
+     result:=UndoStack.PushCreateTGChangeCommand(GetPcamera^.prop)
 end;
-function TDrawing.myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;
+procedure TDrawing.rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);
+var
+    tum:TUndableMethod;
 begin
-     _myGluUnProject(win.x,win.y,win.z,@pcamera^.modelMatrixLCS,@pcamera^.projMatrixLCS,@pcamera^.viewport, obj.x,obj.y,obj.z);
-     OBJ:=vertexsub(OBJ,pcamera^.CamCSOffset);
+  tmethod(tum).Code:=pointer(obj.rtmodifyonepoint);
+  tmethod(tum).Data:=obj;
+  //tum:=tundablemethod(obj^.rtmodifyonepoint);
+  with UndoStack.PushCreateTGObjectChangeCommand(rtmod,tmethod(tum))^ do
+  begin
+       comit;
+       rtmod.wc:=rtmod.point.worldcoord;
+       rtmod.dist:=nulvertex;
+       StoreUndoData(rtmod);
+  end;
+end;
+procedure TDrawing.StoreNewCamerapPos(command:Pointer);
+begin
+     if command<>nil then
+                         PTGDBCameraBasePropChangeCommand(command).ComitFromObj;
 end;
 function GDBDescriptor.FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
 var
@@ -253,138 +273,10 @@ begin
            result:=entities.iterate(ir);
      until result=nil;
 end;
-
-procedure GDBDescriptor.rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);
-var i:GDBInteger;
-    point:pcontrolpointdesc;
-    p:GDBPointer;
-    m,m2,mt:DMatrix4D;
-    t:gdbvertex;
-    tt:dvector4d;
-    rtmod:TRTModifyData;
-    tum:TUndableMethod;
-begin
-     if PSelectedObjDesc(md).pcontrolpoint^.count=0 then exit;
-     if PSelectedObjDesc(md).ptempobj=nil then
-     begin
-          PSelectedObjDesc(md).ptempobj:=obj^.Clone(nil);
-          PSelectedObjDesc(md).ptempobj^.bp.ListPos.Owner:=obj^.bp.ListPos.Owner;
-          PSelectedObjDesc(md).ptempobj.format;
-          PSelectedObjDesc(md).ptempobj.BuildGeometry;
-     end;
-     p:=obj^.beforertmodify;
-     if save then PSelectedObjDesc(md).pcontrolpoint^.SelectedCount:=0;
-     point:=PSelectedObjDesc(md).pcontrolpoint^.parray;
-     for i:=1 to PSelectedObjDesc(md).pcontrolpoint^.count do
-     begin
-          if point.selected then
-          begin
-               if save then
-                           save:=save;
-               {учет СК владельца}
-               m:=PSelectedObjDesc(md).objaddr^.getownermatrix^;
-               MatrixInvert(m);
-               t:=VectorTransform3D(dist,m);
-               {учет СК владельца}
-
-     (*          {учет своей СК  CalcObjMatrixWithoutOwner}
-               if PSelectedObjDesc(md).objaddr^.IsHaveLCS then
-               begin
-               m2:=PGDBObjWithLocalCS(PSelectedObjDesc(md).objaddr)^.CalcObjMatrixWithoutOwner;
-               //PGDBVertex(@m)^:=geometry.NulVertex;
-               MatrixInvert(m2);
-               t:=VectorTransform3D({dist}t,m2);
-
-               m2:=m;
-               end;
-               {учет своей СК}
-     *)
-               rtmod.point:=point^;
-               t:=point^.worldcoord;
-               t:=VectorTransform3D(t,m);
-               rtmod.point.worldcoord:=t;
-               //t:=VectorTransform3D(t,mt);
-               //rtmod.point.worldcoord:={point^}VectorTransform3D(point^.worldcoord,m);
-               //rtmod.point.worldcoord:={point^}VectorTransform3D(rtmod.point.worldcoord,mt);
-               mt:=m;
-
-               mt[3][0]:=0;
-               mt[3][1]:=0;
-               mt[3][2]:=0;
-
-               rtmod.dist:=VectorTransform3D(dist,mt);
-               rtmod.wc:=VectorTransform3D(wc,m);
-
-               rtmod.point.dcoord:=VectorTransform3D(rtmod.point.dcoord,mt);
-
-                   {учет своей СК  CalcObjMatrixWithoutOwner}
-                    if PSelectedObjDesc(md).objaddr^.IsHaveLCS then
-                    begin
-                    m2:=PGDBObjWithLocalCS(PSelectedObjDesc(md).objaddr)^.CalcObjMatrixWithoutOwner;
-                    MatrixInvert(m2);
-                    m2[3][0]:=0;
-                    m2[3][1]:=0;
-                    m2[3][2]:=0;
-
-                    rtmod.dist:=VectorTransform3D(rtmod.dist,m2);
-                    rtmod.wc:=VectorTransform3D(rtmod.wc,m2);
-
-                    rtmod.point.worldcoord:=VectorTransform3D(rtmod.point.worldcoord,m2);
-
-                    rtmod.point.dcoord:=VectorTransform3D(rtmod.point.dcoord,m2);
-                    end;
-
-                    {учет своей СК}
-               if save then
-                           begin
-                                if obj^.IsRTNeedModify(point,p)then
-                                                                   begin
-                                                                        tmethod(tum).Code:=pointer(obj.rtmodifyonepoint);
-                                                                        tmethod(tum).Data:=obj;
-                                                                        //tum:=tundablemethod(obj^.rtmodifyonepoint);
-                                                                        with GetCurrentDWG.UndoStack.PushCreateTGObjectChangeCommand(rtmod,tmethod(tum))^ do
-                                                                        begin
-                                                                             comit;
-                                                                             rtmod.wc:=rtmod.point.worldcoord;
-                                                                             rtmod.dist:=nulvertex;
-                                                                             StoreUndoData(rtmod);
-                                                                        end;
-                                                                        //obj^.rtmodifyonepoint(rtmod);
-                                                                   end;
-                                point.selected:=false;
-                           end
-                       else
-                           begin
-                                if PSelectedObjDesc(md).ptempobj^.IsRTNeedModify(point,p)then
-                                 PSelectedObjDesc(md).ptempobj^.rtmodifyonepoint(rtmod);
-
-                           end;
-          end;
-          inc(point);
-     end;
-     if save then
-     begin
-          //--------------(PSelectedObjDesc(md).ptempobj).rtsave(@self);
-
-          //PGDBObjGenericWithSubordinated(obj^.bp.owner)^.ImEdited({@self}obj,obj^.bp.PSelfInOwnerArray);
-          PSelectedObjDesc(md).ptempobj^.done;
-          GDBFreeMem(GDBPointer(PSelectedObjDesc(md).ptempobj));
-          PSelectedObjDesc(md).ptempobj:=nil;
-     end
-     else
-     begin
-          PSelectedObjDesc(md).ptempobj.format;
-          PSelectedObjDesc(md).ptempobj.BuildGeometry;
-          //PSelectedObjDesc(md).ptempobj.renderfeedback;
-     end;
-     obj^.afterrtmodify(p);
-end;
-
-
 function GDBDescriptor.GetCurrentROOT;
 begin
      if CurrentDWG<>nil then
-                            result:=CurrentDWG.pObjRoot
+                            result:=CurrentDWG.{pObjRoot}GetCurrentROOT
                         else
                             result:=nil;
 end;
@@ -410,10 +302,10 @@ begin
    end;
 end;
 
-procedure GDBDescriptor.SetCurrentDWG(PDWG:PTDrawing);
+procedure GDBDescriptor.SetCurrentDWG(PDWG:PTAbstractDrawing);
 begin
  commandmanager.executecommandend;
- CurrentDWG:=PDWG;
+ CurrentDWG:=PTDrawing(PDWG);
  asociatedwgvars;
 end;
 
@@ -438,6 +330,15 @@ begin
      if z>gdb.GetCurrentDWG.pcamera^.obj_zmin then
      gdb.GetCurrentDWG.pcamera^.obj_zmin:=z;
 end;
+procedure TDrawing.PushStartMarker(CommandName:GDBString);
+begin
+     self.UndoStack.PushStartMarker(CommandName);
+end;
+
+procedure TDrawing.PushEndMarker;
+begin
+      self.UndoStack.PushEndMarker;
+end;
 constructor TDrawing.init;
 var {tp:GDBTextStyleProp;}
     ts:PTGDBTableStyle;
@@ -461,6 +362,7 @@ begin
   Pointer(FileName):=nil;
   FileName:=rsUnnamedWindowTitle;
   Changed:=False;
+  UndoStack.init;
 
 
   //OGLwindow1.initxywh('oglwnd',nil,200,72,768,596,false);
@@ -484,9 +386,9 @@ begin
      //self.AddRef(result^);
      currentdwg:=ptd;
 end;
-function GDBDescriptor.CreateSimpleDWG:PTAbstractDrawing;
+function GDBDescriptor.CreateSimpleDWG:PTSimpleDrawing;
 var
-   ptd:PTAbstractDrawing;
+   ptd:PTSimpleDrawing;
 begin
      gdBGetMem({$IFDEF DEBUGBUILD}'{2A28BFB9-661F-4331-955A-C6F18DE67A19}',{$ENDIF}GDBPointer(result),sizeof(TAbstractDrawing));
      ptd:=currentdwg;

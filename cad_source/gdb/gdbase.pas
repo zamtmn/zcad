@@ -302,6 +302,8 @@ const
                      );
    ZCPHeadOffsetTableOffset=3*sizeof(word)+length(ZCPSignature)+length(ZCPCopyright)+length(ZCPComent)
                              +sizeof(ZCPHead.HiVersion)+sizeof(ZCPHead.LoVersion);
+var
+  palette: gdbpalette;
 implementation
 uses
      log;

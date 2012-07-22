@@ -79,7 +79,7 @@ begin
      PGDBVertex4D(@myfrustum[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,m1);
      PGDBVertex4D(@myfrustum[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,m1);
 
-     ProcessTree(myfrustum,infrustumactualy,visibleactualy,enttree,IRPartially);
+     ProcessTree(myfrustum,infrustumactualy,visibleactualy,enttree,IRPartially,true);
 
      self.VisibleOBJBoundingBox:=ObjArray.calcvisbb({gdb.GetCurrentDWG.pcamera^.POSCOUNT}visibleactualy);
 end;

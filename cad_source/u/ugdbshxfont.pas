@@ -53,6 +53,8 @@ GDBfont=object(GDBNamedObject)
     function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
   end;
 {EXPORT-}
+var
+   pbasefont: PGDBfont;
 implementation
 uses {math,}log;
 constructor GDBfont.initnul;

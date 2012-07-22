@@ -1816,9 +1816,9 @@ begin
   if (button and MZW_LBUTTON)<>0 then
   begin
     begin
-      gdb.GetCurrentDWG.UndoStack.PushStartMarker('Редактирование на чертеже');
+      gdb.GetCurrentDWG{.UndoStack}.PushStartMarker('Редактирование на чертеже');
       gdb.GetCurrentDWG.SelObjArray.modifyobj(dist,wc,true,pobj);
-      gdb.GetCurrentDWG.UndoStack.PushEndMarker;
+      gdb.GetCurrentDWG{.UndoStack}.PushEndMarker;
       gdb.GetCurrentDWG.SelObjArray.resprojparam;
 
 

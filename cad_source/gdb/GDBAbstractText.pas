@@ -299,7 +299,7 @@ begin
                     os_point:begin
           pdesc.worldcoord:=P_insert_in_WCS;//Local.P_insert;
           pdesc.dispcoord.x:=round(ProjP_insert.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-ProjP_insert.y);
+          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG^.OGLwindow1.param.height-ProjP_insert.y);
                              end;
                     end;
 end;

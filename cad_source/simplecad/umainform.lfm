@@ -219,6 +219,20 @@ object Form1: TForm1
     Caption = '3D(ZCoord<>0)'
     TabOrder = 14
   end
+  object BtnProcessObjects: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 744
+    Height = 32
+    Top = 216
+    Width = 199
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Process Lines'
+    OnClick = BtnProcessObjectsClick
+    TabOrder = 15
+  end
   object OpenDialog1: TOpenDialog
     DefaultExt = '.dxf'
     Filter = 'DXF File|*.dxf'

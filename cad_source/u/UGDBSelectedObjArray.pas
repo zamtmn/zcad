@@ -30,6 +30,7 @@ SelectedObjDesc=record
                       pcontrolpoint:PGDBControlPointArray;
                       ptempobj:PGDBObjEntity;
                 end;
+PGDBSelectedObjArray=^GDBSelectedObjArray;
 GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           SelectedCount:GDBInteger;
                           constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
@@ -487,7 +488,7 @@ begin
       if tdesc^.pcontrolpoint<>nil then
         if tdesc^.pcontrolpoint^.SelectedCount<>0 then
         begin
-           {tdesc^.objaddr^}gdb.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
+           {tdesc^.objaddr^}gdb.GetCurrentDWG.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
         end;
       inc(tdesc);
     end;

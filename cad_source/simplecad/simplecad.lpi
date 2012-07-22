@@ -52,7 +52,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="10" Y="10"/>
-        <UsageCount Value="108"/>
+        <UsageCount Value="115"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
@@ -65,16 +65,18 @@
         <WindowIndex Value="0"/>
         <TopLine Value="100"/>
         <CursorPos X="14" Y="125"/>
-        <UsageCount Value="108"/>
+        <UsageCount Value="115"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
         <Filename Value="..\gui\oglwindow.pas"/>
         <UnitName Value="oglwindow"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="3113"/>
-        <CursorPos X="52" Y="3128"/>
-        <UsageCount Value="45"/>
+        <TopLine Value="3279"/>
+        <CursorPos X="24" Y="3302"/>
+        <UsageCount Value="48"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit2>
       <Unit3>
@@ -83,7 +85,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="17"/>
         <CursorPos X="5" Y="42"/>
-        <UsageCount Value="36"/>
+        <UsageCount Value="35"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
@@ -92,7 +94,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="4"/>
         <CursorPos X="11" Y="29"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="1"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
@@ -101,7 +103,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="2283"/>
         <CursorPos X="7" Y="2299"/>
-        <UsageCount Value="43"/>
+        <UsageCount Value="42"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
       <Unit6>
@@ -109,7 +111,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="402"/>
         <CursorPos X="1" Y="427"/>
-        <UsageCount Value="22"/>
+        <UsageCount Value="21"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit6>
       <Unit7>
@@ -118,7 +120,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="122"/>
         <CursorPos X="67" Y="141"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="41"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
       <Unit8>
@@ -127,7 +129,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="68"/>
         <CursorPos X="17" Y="103"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="1"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit8>
       <Unit9>
@@ -136,7 +138,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="202"/>
         <CursorPos X="1" Y="247"/>
-        <UsageCount Value="36"/>
+        <UsageCount Value="35"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit9>
       <Unit10>
@@ -145,7 +147,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="265"/>
         <CursorPos X="1" Y="303"/>
-        <UsageCount Value="36"/>
+        <UsageCount Value="35"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit10>
       <Unit11>
@@ -154,7 +156,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="81"/>
         <CursorPos X="1" Y="97"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="41"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit11>
       <Unit12>
@@ -163,7 +165,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="178"/>
         <CursorPos X="1" Y="197"/>
-        <UsageCount Value="36"/>
+        <UsageCount Value="35"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit12>
       <Unit13>
@@ -175,17 +177,17 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="3" Y="51"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="41"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit13>
       <Unit14>
         <Filename Value="..\gdb\gdbase.pas"/>
         <UnitName Value="gdbase"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="204"/>
         <CursorPos X="17" Y="220"/>
-        <UsageCount Value="45"/>
+        <UsageCount Value="48"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit14>
@@ -195,7 +197,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="67"/>
         <CursorPos X="97" Y="84"/>
-        <UsageCount Value="43"/>
+        <UsageCount Value="42"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit15>
       <Unit16>
@@ -204,7 +206,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="24" Y="1"/>
-        <UsageCount Value="43"/>
+        <UsageCount Value="42"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit16>
       <Unit17>
@@ -213,7 +215,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1564"/>
         <CursorPos X="34" Y="1581"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="20"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit17>
       <Unit18>
@@ -221,7 +223,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1598"/>
         <CursorPos X="3" Y="1614"/>
-        <UsageCount Value="27"/>
+        <UsageCount Value="26"/>
       </Unit18>
       <Unit19>
         <Filename Value="C:\lazarus\lcl\forms.pp"/>
@@ -229,16 +231,16 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1774"/>
         <CursorPos X="1" Y="1786"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="27"/>
       </Unit19>
       <Unit20>
         <Filename Value="..\fileformats\iodxf.pas"/>
         <UnitName Value="iodxf"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1169"/>
         <CursorPos X="87" Y="1196"/>
-        <UsageCount Value="27"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit20>
@@ -248,7 +250,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1881"/>
         <CursorPos X="46" Y="1888"/>
-        <UsageCount Value="29"/>
+        <UsageCount Value="28"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit21>
       <Unit22>
@@ -257,7 +259,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="441"/>
         <CursorPos X="18" Y="463"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="15"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit22>
       <Unit23>
@@ -266,7 +268,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="14" Y="31"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit23>
       <Unit24>
@@ -275,7 +277,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="261"/>
         <CursorPos X="1" Y="296"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="20"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit24>
       <Unit25>
@@ -284,7 +286,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="21"/>
         <CursorPos X="53" Y="36"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="15"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit25>
       <Unit26>
@@ -293,7 +295,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="381"/>
         <CursorPos X="1" Y="404"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="20"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit26>
       <Unit27>
@@ -302,7 +304,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="192"/>
         <CursorPos X="1" Y="237"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit27>
       <Unit28>
@@ -311,7 +313,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="14" Y="23"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit28>
       <Unit29>
@@ -320,7 +322,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="27"/>
         <CursorPos X="1" Y="36"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit29>
       <Unit30>
@@ -329,7 +331,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="19"/>
         <CursorPos X="18" Y="36"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit30>
       <Unit31>
@@ -338,7 +340,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="210"/>
         <CursorPos X="80" Y="234"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit31>
       <Unit32>
@@ -347,7 +349,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="28"/>
         <CursorPos X="21" Y="47"/>
-        <UsageCount Value="15"/>
+        <UsageCount Value="14"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit32>
       <Unit33>
@@ -356,7 +358,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="14"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="13"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit33>
       <Unit34>
@@ -365,7 +367,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="28" Y="13"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="15"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit34>
       <Unit35>
@@ -374,7 +376,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="22"/>
         <CursorPos X="60" Y="32"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="15"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit35>
       <Unit36>
@@ -382,7 +384,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="931"/>
         <CursorPos X="1" Y="950"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="10"/>
       </Unit36>
       <Unit37>
         <Filename Value="..\misc\sharedgdb.pas"/>
@@ -390,7 +392,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="8"/>
         <CursorPos X="15" Y="19"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit37>
       <Unit38>
@@ -398,7 +400,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="3247"/>
         <CursorPos X="1" Y="3262"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit38>
       <Unit39>
@@ -407,7 +409,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1123"/>
         <CursorPos X="18" Y="1123"/>
-        <UsageCount Value="19"/>
+        <UsageCount Value="18"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit39>
       <Unit40>
@@ -416,7 +418,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="411"/>
         <CursorPos X="7" Y="389"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="20"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit40>
       <Unit41>
@@ -425,7 +427,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="16" Y="19"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit41>
       <Unit42>
@@ -434,7 +436,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="25"/>
         <CursorPos X="16" Y="49"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="22"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit42>
       <Unit43>
@@ -443,7 +445,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="13" Y="19"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit43>
       <Unit44>
@@ -452,7 +454,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="25"/>
         <CursorPos X="4" Y="41"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit44>
       <Unit45>
@@ -461,16 +463,18 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1734"/>
         <CursorPos X="6" Y="1750"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit45>
       <Unit46>
         <Filename Value="..\gdb\UGDBEntTree.pas"/>
         <UnitName Value="UGDBEntTree"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="78"/>
-        <CursorPos X="1" Y="85"/>
-        <UsageCount Value="12"/>
+        <CursorPos X="6" Y="80"/>
+        <UsageCount Value="15"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit46>
       <Unit47>
@@ -479,7 +483,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="179"/>
         <CursorPos X="5" Y="220"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit47>
       <Unit48>
@@ -488,7 +492,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="415"/>
         <CursorPos X="12" Y="439"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit48>
       <Unit49>
         <Filename Value="..\gdb\GDBCircle.pas"/>
@@ -496,7 +500,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="12"/>
         <CursorPos X="18" Y="35"/>
-        <UsageCount Value="19"/>
+        <UsageCount Value="18"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit49>
       <Unit50>
@@ -505,7 +509,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="25"/>
+        <UsageCount Value="24"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit50>
       <Unit51>
@@ -514,7 +518,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="114"/>
         <CursorPos X="1" Y="133"/>
-        <UsageCount Value="25"/>
+        <UsageCount Value="24"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit51>
       <Unit52>
@@ -523,7 +527,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="200"/>
         <CursorPos X="12" Y="205"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit52>
       <Unit53>
@@ -532,7 +536,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="26"/>
         <CursorPos X="32" Y="39"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit53>
       <Unit54>
@@ -541,7 +545,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="26"/>
         <CursorPos X="32" Y="42"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="20"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit54>
       <Unit55>
@@ -550,22 +554,24 @@
         <WindowIndex Value="0"/>
         <TopLine Value="5"/>
         <CursorPos X="24" Y="19"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit55>
       <Unit56>
         <Filename Value="C:\ppsrc\rtl\inc\systemh.inc"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="619"/>
-        <CursorPos X="11" Y="642"/>
-        <UsageCount Value="13"/>
+        <CursorPos X="10" Y="633"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
       </Unit56>
       <Unit57>
         <Filename Value="C:\ppsrc\rtl\inc\system.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="628"/>
         <CursorPos X="3" Y="631"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit57>
       <Unit58>
         <Filename Value="..\misc\WindowsSpecific.pas"/>
@@ -573,7 +579,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="29"/>
         <CursorPos X="10" Y="31"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit58>
       <Unit59>
@@ -582,7 +588,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="109"/>
         <CursorPos X="14" Y="132"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
       </Unit59>
       <Unit60>
         <Filename Value="..\gdb\GDBBlockInsert.pas"/>
@@ -590,7 +596,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="516"/>
         <CursorPos X="1" Y="539"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit60>
       <Unit61>
@@ -599,7 +605,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="37"/>
         <CursorPos X="27" Y="1228"/>
-        <UsageCount Value="15"/>
+        <UsageCount Value="14"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit61>
       <Unit62>
@@ -608,7 +614,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="53"/>
         <CursorPos X="7" Y="69"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit62>
       <Unit63>
@@ -617,7 +623,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="22"/>
         <CursorPos X="4" Y="38"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit63>
       <Unit64>
@@ -626,7 +632,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="2"/>
         <CursorPos X="5" Y="28"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit64>
       <Unit65>
@@ -635,7 +641,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="5" Y="27"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit65>
       <Unit66>
@@ -643,7 +649,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit66>
       <Unit67>
@@ -652,16 +658,18 @@
         <WindowIndex Value="0"/>
         <TopLine Value="100"/>
         <CursorPos X="3" Y="140"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="11"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit67>
       <Unit68>
         <Filename Value="..\misc\OGLSpecFunc.pas"/>
         <UnitName Value="OGLSpecFunc"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="92"/>
-        <CursorPos X="55" Y="104"/>
-        <UsageCount Value="13"/>
+        <TopLine Value="479"/>
+        <CursorPos X="1" Y="482"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit68>
       <Unit69>
@@ -670,7 +678,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="20"/>
         <CursorPos X="4" Y="43"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit69>
       <Unit70>
@@ -679,7 +687,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit70>
       <Unit71>
@@ -688,7 +696,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="55"/>
         <CursorPos X="20" Y="77"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit71>
       <Unit72>
@@ -697,7 +705,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="432"/>
         <CursorPos X="3" Y="462"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="15"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit72>
       <Unit73>
@@ -706,7 +714,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="16"/>
         <CursorPos X="3" Y="33"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="15"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit73>
       <Unit74>
@@ -715,7 +723,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="45"/>
         <CursorPos X="1" Y="56"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="15"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit74>
       <Unit75>
@@ -724,7 +732,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="20"/>
         <CursorPos X="61" Y="25"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="15"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit75>
       <Unit76>
@@ -733,7 +741,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="3"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="15"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit76>
       <Unit77>
@@ -742,7 +750,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="9"/>
         <CursorPos X="1" Y="28"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="15"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit77>
       <Unit78>
@@ -751,16 +759,19 @@
         <WindowIndex Value="0"/>
         <TopLine Value="64"/>
         <CursorPos X="37" Y="86"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="15"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit78>
       <Unit79>
         <Filename Value="..\gdb\GDBWithMatrix.pas"/>
         <UnitName Value="GDBWithMatrix"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="21"/>
-        <CursorPos X="26" Y="36"/>
-        <UsageCount Value="16"/>
+        <TopLine Value="73"/>
+        <CursorPos X="119" Y="84"/>
+        <UsageCount Value="19"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit79>
       <Unit80>
@@ -769,7 +780,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="10"/>
         <CursorPos X="37" Y="29"/>
-        <UsageCount Value="15"/>
+        <UsageCount Value="14"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit80>
       <Unit81>
@@ -778,7 +789,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="14"/>
         <CursorPos X="3" Y="45"/>
-        <UsageCount Value="15"/>
+        <UsageCount Value="14"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit81>
       <Unit82>
@@ -787,7 +798,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="106"/>
         <CursorPos X="14" Y="125"/>
-        <UsageCount Value="15"/>
+        <UsageCount Value="14"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit82>
       <Unit83>
@@ -795,7 +806,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="35"/>
-        <UsageCount Value="15"/>
+        <UsageCount Value="14"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit83>
       <Unit84>
@@ -804,7 +815,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="5"/>
         <CursorPos X="26" Y="29"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit84>
       <Unit85>
@@ -813,7 +824,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="217"/>
         <CursorPos X="6" Y="219"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit85>
       <Unit86>
@@ -822,7 +833,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="4"/>
         <CursorPos X="1" Y="27"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit86>
       <Unit87>
@@ -831,7 +842,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="3"/>
         <CursorPos X="1" Y="26"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit87>
       <Unit88>
@@ -841,18 +852,18 @@
         <WindowIndex Value="0"/>
         <TopLine Value="908"/>
         <CursorPos X="1" Y="918"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="19"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit88>
       <Unit89>
         <Filename Value="..\misc\geometry.pas"/>
         <UnitName Value="geometry"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="46"/>
-        <CursorPos X="28" Y="62"/>
-        <UsageCount Value="16"/>
+        <TopLine Value="1648"/>
+        <CursorPos X="77" Y="1648"/>
+        <UsageCount Value="19"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit89>
@@ -862,161 +873,158 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="25"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="11"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit90>
       <Unit91>
         <Filename Value="..\gdb\GDBGenericSubEntry.pas"/>
         <UnitName Value="GDBGenericSubEntry"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="334"/>
-        <CursorPos X="71" Y="340"/>
-        <UsageCount Value="11"/>
+        <TopLine Value="235"/>
+        <CursorPos X="54" Y="249"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit91>
       <Unit92>
         <Filename Value="C:\lazarus\lcl\include\icon.inc"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="225"/>
-        <CursorPos X="1" Y="237"/>
-        <UsageCount Value="14"/>
+        <CursorPos X="1" Y="243"/>
+        <UsageCount Value="17"/>
         <Loaded Value="True"/>
       </Unit92>
       <Unit93>
         <Filename Value="..\u\UGDBLayerArray.pas"/>
         <UnitName Value="UGDBLayerArray"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="130"/>
         <CursorPos X="38" Y="130"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit93>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
-        <Filename Value="..\fileformats\iodxf.pas"/>
-        <Caret Line="1172" Column="70" TopLine="1149"/>
+        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
+        <Caret Line="953" Column="1" TopLine="924"/>
       </Position1>
       <Position2>
-        <Filename Value="..\u\UGDBLayerArray.pas"/>
-        <Caret Line="47" Column="31" TopLine="31"/>
+        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
+        <Caret Line="934" Column="1" TopLine="924"/>
       </Position2>
       <Position3>
-        <Filename Value="..\u\UGDBLayerArray.pas"/>
-        <Caret Line="139" Column="67" TopLine="134"/>
+        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
+        <Caret Line="935" Column="1" TopLine="924"/>
       </Position3>
       <Position4>
-        <Filename Value="..\u\UGDBLayerArray.pas"/>
-        <Caret Line="46" Column="37" TopLine="30"/>
+        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
+        <Caret Line="936" Column="1" TopLine="924"/>
       </Position4>
       <Position5>
-        <Filename Value="..\u\UGDBLayerArray.pas"/>
-        <Caret Line="130" Column="38" TopLine="130"/>
+        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
+        <Caret Line="918" Column="1" TopLine="911"/>
       </Position5>
       <Position6>
-        <Filename Value="..\fileformats\iodxf.pas"/>
-        <Caret Line="1184" Column="86" TopLine="1154"/>
+        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
+        <Caret Line="934" Column="1" TopLine="911"/>
       </Position6>
       <Position7>
-        <Filename Value="..\fileformats\iodxf.pas"/>
-        <Caret Line="1185" Column="7" TopLine="1169"/>
+        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
+        <Caret Line="932" Column="1" TopLine="911"/>
       </Position7>
       <Position8>
-        <Filename Value="..\fileformats\iodxf.pas"/>
-        <Caret Line="1184" Column="89" TopLine="1169"/>
+        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
+        <Caret Line="934" Column="1" TopLine="911"/>
       </Position8>
       <Position9>
         <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="928" Column="10" TopLine="918"/>
+        <Caret Line="935" Column="1" TopLine="911"/>
       </Position9>
       <Position10>
         <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="934" Column="1" TopLine="918"/>
+        <Caret Line="936" Column="1" TopLine="911"/>
       </Position10>
       <Position11>
         <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="935" Column="1" TopLine="918"/>
+        <Caret Line="940" Column="1" TopLine="924"/>
       </Position11>
       <Position12>
         <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="936" Column="1" TopLine="918"/>
+        <Caret Line="941" Column="1" TopLine="924"/>
       </Position12>
       <Position13>
         <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="938" Column="39" TopLine="911"/>
+        <Caret Line="918" Column="1" TopLine="908"/>
       </Position13>
       <Position14>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="934" Column="1" TopLine="911"/>
+        <Filename Value="..\gdb\UGDBEntTree.pas"/>
+        <Caret Line="101" Column="30" TopLine="62"/>
       </Position14>
       <Position15>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="935" Column="1" TopLine="911"/>
+        <Filename Value="..\gui\oglwindow.pas"/>
+        <Caret Line="3128" Column="52" TopLine="3113"/>
       </Position15>
       <Position16>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="936" Column="1" TopLine="911"/>
+        <Filename Value="..\gui\oglwindow.pas"/>
+        <Caret Line="104" Column="18" TopLine="81"/>
       </Position16>
       <Position17>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="918" Column="1" TopLine="911"/>
+        <Filename Value="..\gdb\GDBGenericSubEntry.pas"/>
+        <Caret Line="340" Column="71" TopLine="334"/>
       </Position17>
       <Position18>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="953" Column="1" TopLine="924"/>
+        <Filename Value="..\gdb\GDBWithMatrix.pas"/>
+        <Caret Line="36" Column="26" TopLine="21"/>
       </Position18>
       <Position19>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="934" Column="1" TopLine="924"/>
+        <Filename Value="..\gdb\GDBWithMatrix.pas"/>
+        <Caret Line="60" Column="36" TopLine="40"/>
       </Position19>
       <Position20>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="935" Column="1" TopLine="924"/>
+        <Filename Value="..\gdb\GDBWithMatrix.pas"/>
+        <Caret Line="56" Column="38" TopLine="40"/>
       </Position20>
       <Position21>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="936" Column="1" TopLine="924"/>
+        <Filename Value="..\gdb\GDBWithMatrix.pas"/>
+        <Caret Line="60" Column="13" TopLine="47"/>
       </Position21>
       <Position22>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="918" Column="1" TopLine="911"/>
+        <Filename Value="..\gdb\GDBWithMatrix.pas"/>
+        <Caret Line="49" Column="8" TopLine="42"/>
       </Position22>
       <Position23>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="934" Column="1" TopLine="911"/>
+        <Filename Value="..\gdb\GDBWithMatrix.pas"/>
+        <Caret Line="67" Column="21" TopLine="46"/>
       </Position23>
       <Position24>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="932" Column="1" TopLine="911"/>
+        <Filename Value="..\gdb\GDBWithMatrix.pas"/>
+        <Caret Line="68" Column="40" TopLine="46"/>
       </Position24>
       <Position25>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="934" Column="1" TopLine="911"/>
+        <Filename Value="..\misc\geometry.pas"/>
+        <Caret Line="161" Column="37" TopLine="137"/>
       </Position25>
       <Position26>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="935" Column="1" TopLine="911"/>
+        <Filename Value="..\gdb\UGDBEntTree.pas"/>
+        <Caret Line="80" Column="6" TopLine="78"/>
       </Position26>
       <Position27>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="936" Column="1" TopLine="911"/>
+        <Filename Value="..\gui\oglwindow.pas"/>
+        <Caret Line="3302" Column="24" TopLine="3279"/>
       </Position27>
       <Position28>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="940" Column="1" TopLine="924"/>
+        <Filename Value="..\gdb\GDBWithMatrix.pas"/>
+        <Caret Line="86" Column="26" TopLine="40"/>
       </Position28>
       <Position29>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="941" Column="1" TopLine="924"/>
+        <Filename Value="..\gdb\GDBWithMatrix.pas"/>
+        <Caret Line="57" Column="60" TopLine="43"/>
       </Position29>
-      <Position30>
-        <Filename Value="..\gdb\GDBLWPolyLine.pas"/>
-        <Caret Line="918" Column="1" TopLine="908"/>
-      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

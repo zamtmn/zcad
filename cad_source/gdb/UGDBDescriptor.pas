@@ -72,8 +72,8 @@ TDrawing=object(TAbstractDrawing)
            Changed:GDBBoolean;
            attrib:GDBLongword;
 
-           function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;
-           function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;
+           function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;inline;
+           function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;inline;
 
 
            constructor init(num:PTUnitManager);

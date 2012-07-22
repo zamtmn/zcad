@@ -24,7 +24,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="9"/>
       <RevisionNr Value="7"/>
-      <BuildNr Value="1717"/>
+      <BuildNr Value="1727"/>
       <CharSet Value="0000"/>
       <StringTable ProductVersion="0.0.0.8"/>
     </VersionInfo>
@@ -202,29 +202,25 @@
         <PackageName Value="LCL"/>
       </Item5>
     </RequiredPackages>
-    <Units Count="142">
+    <Units Count="146">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="zcad"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="46"/>
         <CursorPos X="24" Y="64"/>
         <UsageCount Value="201"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
         <Filename Value="gui/mainwindow.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="mainwindow"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="5"/>
-        <CursorPos X="3" Y="24"/>
+        <TopLine Value="758"/>
+        <CursorPos X="31" Y="783"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
@@ -251,8 +247,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="GDBAbstractText"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="18" Y="22"/>
+        <TopLine Value="285"/>
+        <CursorPos X="54" Y="302"/>
         <UsageCount Value="204"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
@@ -269,24 +265,20 @@
         <Filename Value="languade/UUnitManager.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UUnitManager"/>
-        <EditorIndex Value="22"/>
         <WindowIndex Value="0"/>
         <TopLine Value="395"/>
         <CursorPos X="1" Y="412"/>
         <UsageCount Value="201"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit6>
       <Unit7>
         <Filename Value="languade/varman.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Varman"/>
-        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="619"/>
         <CursorPos X="1" Y="636"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
       <Unit8>
@@ -322,11 +314,10 @@
         <Filename Value="gui/oglwindow.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="oglwindow"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1906"/>
-        <CursorPos X="1" Y="1922"/>
+        <TopLine Value="79"/>
+        <CursorPos X="33" Y="5"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -372,20 +363,18 @@
         <Filename Value="u/ugdbopenarrayofucommands.pas"/>
         <UnitName Value="UGDBOpenArrayOfUCommands"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="18"/>
-        <UsageCount Value="31"/>
+        <TopLine Value="30"/>
+        <CursorPos X="1" Y="49"/>
+        <UsageCount Value="32"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit16>
       <Unit17>
         <Filename Value="commands/gdbcommandsinterface.pas"/>
         <UnitName Value="gdbcommandsinterface"/>
-        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="103"/>
         <CursorPos X="136" Y="24"/>
         <UsageCount Value="103"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit17>
       <Unit18>
@@ -419,12 +408,10 @@
         <Filename Value="languade/UObjectDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UObjectDescriptor"/>
-        <EditorIndex Value="21"/>
         <WindowIndex Value="0"/>
         <TopLine Value="483"/>
         <CursorPos X="1" Y="500"/>
         <UsageCount Value="201"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit21>
       <Unit22>
@@ -458,12 +445,10 @@
       <Unit25>
         <Filename Value="languade/zcadsysvars.pas"/>
         <UnitName Value="zcadsysvars"/>
-        <EditorIndex Value="19"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="17" Y="19"/>
+        <TopLine Value="65"/>
+        <CursorPos X="21" Y="78"/>
         <UsageCount Value="101"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit25>
       <Unit26>
@@ -471,8 +456,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="GDBEntity"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="4"/>
-        <CursorPos X="15" Y="19"/>
+        <TopLine Value="84"/>
+        <CursorPos X="30" Y="107"/>
         <UsageCount Value="200"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit26>
@@ -563,21 +548,19 @@
       <Unit36>
         <Filename Value="u/UGDBSelectedObjArray.pas"/>
         <UnitName Value="UGDBSelectedObjArray"/>
-        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="178"/>
-        <CursorPos X="1" Y="201"/>
-        <UsageCount Value="72"/>
-        <Loaded Value="True"/>
+        <TopLine Value="28"/>
+        <CursorPos X="26" Y="19"/>
+        <UsageCount Value="74"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit36>
       <Unit37>
         <Filename Value="gdb/GDBGenericSubEntry.pas"/>
         <UnitName Value="GDBGenericSubEntry"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="18" Y="23"/>
-        <UsageCount Value="58"/>
+        <TopLine Value="241"/>
+        <CursorPos X="54" Y="251"/>
+        <UsageCount Value="61"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit37>
       <Unit38>
@@ -585,8 +568,8 @@
         <UnitName Value="GDBRoot"/>
         <WindowIndex Value="0"/>
         <TopLine Value="59"/>
-        <CursorPos X="1" Y="82"/>
-        <UsageCount Value="54"/>
+        <CursorPos X="84" Y="82"/>
+        <UsageCount Value="57"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit38>
       <Unit39>
@@ -611,10 +594,10 @@
         <Filename Value="gdb/UGDBDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UGDBDescriptor"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="76"/>
-        <CursorPos X="21" Y="99"/>
+        <TopLine Value="443"/>
+        <CursorPos X="18" Y="466"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -622,18 +605,16 @@
       <Unit42>
         <Filename Value="electroteh/GDBCommandsElectrical.pas"/>
         <UnitName Value="GDBCommandsElectrical"/>
-        <EditorIndex Value="20"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="100"/>
-        <CursorPos X="72" Y="117"/>
+        <TopLine Value="2220"/>
+        <CursorPos X="42" Y="2241"/>
         <UsageCount Value="100"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit42>
       <Unit43>
         <Filename Value="gdb/GDBSubordinated.pas"/>
         <UnitName Value="GDBSubordinated"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -730,8 +711,8 @@
         <UnitName Value="UGDBOpenArrayOfPV"/>
         <WindowIndex Value="0"/>
         <TopLine Value="8"/>
-        <CursorPos X="51" Y="31"/>
-        <UsageCount Value="91"/>
+        <CursorPos X="23" Y="19"/>
+        <UsageCount Value="92"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit53>
       <Unit54>
@@ -756,15 +737,16 @@
         <Filename Value="gdb/GDBComplex.pas"/>
         <UnitName Value="GDBComplex"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="18" Y="23"/>
+        <TopLine Value="222"/>
+        <CursorPos X="93" Y="239"/>
         <UsageCount Value="88"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit56>
       <Unit57>
         <Filename Value="gdb/GDBWithLocalCS.pas"/>
         <UnitName Value="GDBWithLocalCS"/>
-        <EditorIndex Value="5"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -811,12 +793,10 @@
       <Unit62>
         <Filename Value="electroteh/GDBNet.pas"/>
         <UnitName Value="GDBNet"/>
-        <EditorIndex Value="15"/>
         <WindowIndex Value="0"/>
         <TopLine Value="100"/>
         <CursorPos X="1" Y="123"/>
         <UsageCount Value="37"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit62>
       <Unit63>
@@ -835,11 +815,11 @@
       <Unit64>
         <Filename Value="gdb/GDBWithMatrix.pas"/>
         <UnitName Value="GDBWithMatrix"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="64"/>
+        <UsageCount Value="65"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit64>
@@ -907,20 +887,18 @@
         <Filename Value="gdb/gdbase.pas"/>
         <UnitName Value="gdbase"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="254"/>
-        <CursorPos X="52" Y="279"/>
-        <UsageCount Value="31"/>
+        <TopLine Value="272"/>
+        <CursorPos X="23" Y="306"/>
+        <UsageCount Value="32"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit72>
       <Unit73>
         <Filename Value="fileformats/iodxf.pas"/>
         <UnitName Value="iodxf"/>
-        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="641"/>
         <CursorPos X="62" Y="662"/>
         <UsageCount Value="98"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit73>
       <Unit74>
@@ -987,12 +965,10 @@
       <Unit81>
         <Filename Value="misc/OGLSpecFunc.pas"/>
         <UnitName Value="OGLSpecFunc"/>
-        <EditorIndex Value="16"/>
         <WindowIndex Value="0"/>
         <TopLine Value="266"/>
         <CursorPos X="4" Y="285"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit81>
       <Unit82>
@@ -1042,8 +1018,8 @@
         <Filename Value="misc/memman.pas"/>
         <UnitName Value="memman"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="47"/>
-        <CursorPos X="1" Y="70"/>
+        <TopLine Value="171"/>
+        <CursorPos X="1" Y="194"/>
         <UsageCount Value="89"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit87>
@@ -1116,12 +1092,10 @@
       <Unit96>
         <Filename Value="fileformats/iodwg.pas"/>
         <UnitName Value="iodwg"/>
-        <EditorIndex Value="18"/>
         <WindowIndex Value="0"/>
         <TopLine Value="911"/>
         <CursorPos X="16" Y="930"/>
         <UsageCount Value="97"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit96>
       <Unit97>
@@ -1227,12 +1201,10 @@
       <Unit109>
         <Filename Value="gui/projecttreewnd.pas"/>
         <UnitName Value="projecttreewnd"/>
-        <EditorIndex Value="17"/>
         <WindowIndex Value="0"/>
         <TopLine Value="174"/>
         <CursorPos X="70" Y="193"/>
         <UsageCount Value="19"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit109>
       <Unit110>
@@ -1246,11 +1218,11 @@
       <Unit111>
         <Filename Value="gui/laercombobox.pas"/>
         <UnitName Value="laercombobox"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="581"/>
-        <CursorPos X="12" Y="594"/>
-        <UsageCount Value="33"/>
+        <TopLine Value="583"/>
+        <CursorPos X="62" Y="600"/>
+        <UsageCount Value="34"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit111>
@@ -1284,9 +1256,9 @@
         <Filename Value="u/UGDBLayerArray.pas"/>
         <UnitName Value="UGDBLayerArray"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="18" Y="22"/>
-        <UsageCount Value="30"/>
+        <TopLine Value="17"/>
+        <CursorPos X="20" Y="19"/>
+        <UsageCount Value="31"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit115>
       <Unit116>
@@ -1471,7 +1443,7 @@
         <UnitName Value="System"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2669"/>
-        <CursorPos X="1" Y="2681"/>
+        <CursorPos X="25" Y="2678"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit137>
@@ -1487,158 +1459,129 @@
       <Unit139>
         <Filename Value="commands/GDBCommandsBase.pas"/>
         <UnitName Value="GDBCommandsBase"/>
-        <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="31"/>
         <CursorPos X="41" Y="50"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit139>
       <Unit140>
         <Filename Value="devicebase/devicebaseabstract.pas"/>
         <UnitName Value="devicebaseabstract"/>
-        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="24" Y="1"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit140>
       <Unit141>
         <Filename Value="gdb/UGDBDrawingdef.pas"/>
         <UnitName Value="UGDBDrawingdef"/>
-        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="20" Y="19"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <CursorPos X="33" Y="38"/>
+        <UsageCount Value="14"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit141>
+      <Unit142>
+        <Filename Value="gdb/ugdbsimpledrawing.pas"/>
+        <UnitName Value="ugdbsimpledrawing"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="102" Y="22"/>
+        <UsageCount Value="13"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit142>
+      <Unit143>
+        <Filename Value="gdb/GDBCamera.pas"/>
+        <UnitName Value="GDBCamera"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="5"/>
+        <CursorPos X="80" Y="38"/>
+        <UsageCount Value="13"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit143>
+      <Unit144>
+        <Filename Value="u/ugdbshxfont.pas"/>
+        <UnitName Value="UGDBSHXFont"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="26"/>
+        <CursorPos X="24" Y="57"/>
+        <UsageCount Value="12"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit144>
+      <Unit145>
+        <Filename Value="u/TGChangeCommandIMPL.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="22"/>
+        <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit145>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="15" HistoryIndex="14">
       <Position1>
-        <Filename Value="gdb/UGDBDrawingdef.pas"/>
-        <Caret Line="21" Column="8" TopLine="3"/>
+        <Filename Value="gdb/ugdbsimpledrawing.pas"/>
+        <Caret Line="75" Column="92" TopLine="58"/>
       </Position1>
       <Position2>
-        <Filename Value="gdb/UGDBDrawingdef.pas"/>
-        <Caret Line="22" Column="101" TopLine="3"/>
+        <Filename Value="gui/oglwindow.pas"/>
+        <Caret Line="3122" Column="80" TopLine="3100"/>
       </Position2>
       <Position3>
-        <Filename Value="gdb/UGDBDrawingdef.pas"/>
-        <Caret Line="55" Column="1" TopLine="31"/>
+        <Filename Value="gui/oglwindow.pas"/>
+        <Caret Line="104" Column="15" TopLine="87"/>
       </Position3>
       <Position4>
-        <Filename Value="gdb/UGDBDrawingdef.pas"/>
-        <Caret Line="61" Column="104" TopLine="47"/>
+        <Filename Value="gui/oglwindow.pas"/>
+        <Caret Line="3292" Column="24" TopLine="3268"/>
       </Position4>
       <Position5>
-        <Filename Value="gdb/UGDBDescriptor.pas"/>
-        <Caret Line="81" Column="27" TopLine="77"/>
+        <Filename Value="gui/oglwindow.pas"/>
+        <Caret Line="1298" Column="22" TopLine="1281"/>
       </Position5>
       <Position6>
-        <Filename Value="gdb/GDBWithLocalCS.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="gdb/ugdbsimpledrawing.pas"/>
+        <Caret Line="102" Column="21" TopLine="93"/>
       </Position6>
       <Position7>
-        <Filename Value="gdb/GDBWithMatrix.pas"/>
-        <Caret Line="87" Column="1" TopLine="64"/>
+        <Filename Value="gdb/GDBWithLocalCS.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position7>
       <Position8>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1922" Column="1" TopLine="1905"/>
+        <Filename Value="gdb/ugdbsimpledrawing.pas"/>
+        <Caret Line="57" Column="38" TopLine="40"/>
       </Position8>
       <Position9>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1924" Column="1" TopLine="1905"/>
+        <Filename Value="gdb/ugdbsimpledrawing.pas"/>
+        <Caret Line="119" Column="5" TopLine="98"/>
       </Position9>
       <Position10>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1925" Column="1" TopLine="1917"/>
+        <Filename Value="gdb/UGDBDescriptor.pas"/>
+        <Caret Line="76" Column="25" TopLine="59"/>
       </Position10>
       <Position11>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1926" Column="1" TopLine="1917"/>
+        <Filename Value="gdb/GDBWithMatrix.pas"/>
+        <Caret Line="97" Column="33" TopLine="70"/>
       </Position11>
       <Position12>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1949" Column="1" TopLine="1937"/>
+        <Filename Value="gui/laercombobox.pas"/>
+        <Caret Line="600" Column="62" TopLine="583"/>
       </Position12>
       <Position13>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1962" Column="1" TopLine="1955"/>
+        <Filename Value="gdb/ugdbsimpledrawing.pas"/>
+        <Caret Line="440" Column="28" TopLine="18"/>
       </Position13>
       <Position14>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1975" Column="1" TopLine="1961"/>
+        <Filename Value="gdb/ugdbsimpledrawing.pas"/>
+        <Caret Line="1" Column="14" TopLine="1"/>
       </Position14>
       <Position15>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1976" Column="1" TopLine="1961"/>
+        <Filename Value="gdb/GDBWithLocalCS.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position15>
-      <Position16>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1977" Column="1" TopLine="1961"/>
-      </Position16>
-      <Position17>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1978" Column="1" TopLine="1961"/>
-      </Position17>
-      <Position18>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1979" Column="1" TopLine="1961"/>
-      </Position18>
-      <Position19>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1980" Column="1" TopLine="1961"/>
-      </Position19>
-      <Position20>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1981" Column="1" TopLine="1961"/>
-      </Position20>
-      <Position21>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1987" Column="1" TopLine="1973"/>
-      </Position21>
-      <Position22>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1988" Column="1" TopLine="1973"/>
-      </Position22>
-      <Position23>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1989" Column="1" TopLine="1973"/>
-      </Position23>
-      <Position24>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1990" Column="1" TopLine="1973"/>
-      </Position24>
-      <Position25>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1992" Column="1" TopLine="1982"/>
-      </Position25>
-      <Position26>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1996" Column="1" TopLine="1982"/>
-      </Position26>
-      <Position27>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1997" Column="1" TopLine="1982"/>
-      </Position27>
-      <Position28>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1999" Column="1" TopLine="1982"/>
-      </Position28>
-      <Position29>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="2000" Column="1" TopLine="1982"/>
-      </Position29>
-      <Position30>
-        <Filename Value="gui/oglwindow.pas"/>
-        <Caret Line="1997" Column="28" TopLine="1982"/>
-      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1661,6 +1604,11 @@
         <UseAnsiStrings Value="False"/>
       </SyntaxOptions>
     </Parsing>
+    <CodeGeneration>
+      <Optimizations>
+        <OptimizationLevel Value="3"/>
+      </Optimizations>
+    </CodeGeneration>
     <Other>
       <Verbosity>
         <ShowWarn Value="False"/>

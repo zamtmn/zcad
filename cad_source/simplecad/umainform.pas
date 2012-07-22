@@ -27,6 +27,7 @@ type
     BtnAddTexts: TButton;
     BtnOpenDXF: TButton;
     BtnSaveDXF: TButton;
+    BtnProcessObjects: TButton;
     CheckBox1: TCheckBox;
     ChkBox3D: TCheckBox;
     Label1: TLabel;
@@ -39,6 +40,7 @@ type
     procedure BtnAddLinesClick(Sender: TObject);
     procedure BtnAddCirclesClick(Sender: TObject);
     procedure BtnAddLWPolyLines1Click(Sender: TObject);
+    procedure BtnProcessObjectsClick(Sender: TObject);
     procedure BtnRebuildClick(Sender: TObject);
     procedure BtnEraseSelClick(Sender: TObject);
     procedure BtnAddTextsClick(Sender: TObject);
@@ -102,6 +104,7 @@ begin
      ugdbdescriptor.startup;
 
      ptd:=gdb.CreateSimpleDWG;
+     //ptd:=gdb.CreateDWG;
      gdb.AddRef(ptd^);
      gdb.SetCurrentDWG(pointer(ptd));
 
@@ -123,6 +126,7 @@ begin
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
 
      sysvar.DWG.DWG_SystmGeometryDraw^:=CheckBox1.Checked;
+
 end;
 function CreateRandomDouble(len:GDBDouble):GDBDouble;inline;
 begin
@@ -198,6 +202,32 @@ begin
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
   UGDBDescriptor.redrawoglwnd;
 end;
+
+procedure TForm1.BtnProcessObjectsClick(Sender: TObject);
+var //i: GDBInteger;
+    pv:pGDBObjEntity;
+    ir:itrec;
+    l,hl:double;
+begin
+  pv:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+        case pv^.vp.ID of
+        GDBLineID:begin
+                       l:=PGDBObjLine(pv)^.Length/10;
+                       hl:=l/2;
+                       PGDBObjLine(pv)^.CoordInOCS.lBegin:=geometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lBegin,CreateRandomVertex(l,hl));
+                       PGDBObjLine(pv)^.CoordInOCS.lEnd:=geometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lEnd,CreateRandomVertex(l,hl));
+                       pv^.YouChanged;
+                  end;
+        end;
+  pv:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
+  until pv=nil;
+
+
+  UGDBDescriptor.redrawoglwnd;
+end;
+
 procedure TForm1.BtnAddCirclesClick(Sender: TObject);
 var
    ptd:PTDrawing;

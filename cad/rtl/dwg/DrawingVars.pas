@@ -45,6 +45,7 @@ begin
      camera.prop.xdir.x:=-1.0;
      camera.prop.xdir.y:=0.0;
      camera.prop.xdir.z:=0.0;
+     camera.prop.zoom:=0.1;
      camera.anglx:=-3.14159265359;
      camera.angly:=-1.570796326795;
      camera.zmin:=1.0;

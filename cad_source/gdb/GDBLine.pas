@@ -307,11 +307,24 @@ procedure GDBObjLine.format;
 var m:DMatrix4D;
 begin
   if bp.ListPos.owner<>nil then
-                               m:=bp.ListPos.owner^.GetMatrix^
+                               begin
+                                    if bp.ListPos.owner^.GetHandle=H_Root then
+                                                                              begin
+                                                                                   CoordInWCS.lbegin:=CoordInOCS.lbegin;
+                                                                                   CoordInWCS.lend:=CoordInOCS.lend;
+                                                                               end
+                                                                          else
+                                                                              begin
+                                                                                    m:=bp.ListPos.owner^.GetMatrix^;
+                                                                                    CoordInWCS.lbegin:=VectorTransform3D(CoordInOCS.lbegin,m);
+                                                                                    CoordInWCS.lend:=VectorTransform3D(CoordInOCS.lend,m);
+                                                                              end;
+                               end
                            else
-                               m:=onematrix;
-  CoordInWCS.lbegin:=VectorTransform3D(CoordInOCS.lbegin,m);
-  CoordInWCS.lend:=VectorTransform3D(CoordInOCS.lend,m);
+                               begin
+                                    CoordInWCS.lbegin:=CoordInOCS.lbegin;
+                                    CoordInWCS.lend:=CoordInOCS.lend;
+                               end;
   calcbb;
   //l_1_4 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 4);
   //l_1_3 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 3);

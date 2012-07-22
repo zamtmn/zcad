@@ -479,6 +479,7 @@ SelectedObjDesc=record
                       pcontrolpoint:PGDBControlPointArray;
                       ptempobj:PGDBObjEntity;
                 end;
+PGDBSelectedObjArray=^GDBSelectedObjArray;
 GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           SelectedCount:GDBInteger;
                           constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
@@ -1178,7 +1179,7 @@ GDBObjWithMatrix=object(GDBObjEntity)
                        procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                        procedure ReCalcFromObjMatrix;virtual;abstract;
                        function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):GDBBoolean;virtual;abstract;
-                       procedure ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInRect);virtual;abstract;
+                       procedure ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInRect;OwnerFuldraw:GDBBoolean);virtual;abstract;
                  end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBWithLocalCS.pas
 PGDBObj2dprop=^GDBObj2dprop;
@@ -2606,7 +2607,53 @@ GDBNumerator=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBNumItem*)
 //Generate on C:\zcad\CAD_SOURCE\gdb\UGDBDrawingdef.pas
 PTAbstractDrawing=^TAbstractDrawing;
 TAbstractDrawing=object(GDBaseobject)
+                       //function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
+                       function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;virtual;abstract;
+                       function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;virtual;abstract;
+                       function GetPcamera:PGDBObjCamera;virtual;abstract;
+                       function GetCurrentROOT:PGDBObjGenericSubEntry;virtual;abstract;
+                       function GetConstructObjRoot:PGDBObjRoot;virtual;abstract;
+                       function GetSelObjArray:PGDBSelectedObjArray;virtual;abstract;
+                       function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;abstract;
+                       procedure RotateCameraInLocalCSXY(ux,uy:GDBDouble);virtual;abstract;
+                       procedure MoveCameraInLocalCSXY(oldx,oldy:GDBDouble;ax:gdbvertex);virtual;abstract;
+                       procedure SetCurrentDWG;virtual;abstract;
+                       function GetLayerTable:PGDBLayerArray;virtual;abstract;
+                       function StoreOldCamerapPos:Pointer;virtual;abstract;
+                       procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;
+                 end;
+//Generate on C:\zcad\CAD_SOURCE\gdb\ugdbsimpledrawing.pas
+PTSimpleDrawing=^TSimpleDrawing;
+TSimpleDrawing=object(TAbstractDrawing)
+                       UndoStack:GDBObjOpenArrayOfUCommands;
+                       pObjRoot:PGDBObjGenericSubEntry;
+                       mainObjRoot:GDBObjRoot;(*saved_to_shd*)
+                       LayerTable:GDBLayerArray;(*saved_to_shd*)
+                       ConstructObjRoot:GDBObjRoot;
+                       SelObjArray:GDBSelectedObjArray;
+                       pcamera:PGDBObjCamera;
+                       OnMouseObj:GDBObjOpenArrayOfPV;
+                       DWGUnits:TUnitManager;
+                       OGLwindow1:toglwnd;
+                       TextStyleTable:GDBTextStyleArray;(*saved_to_shd*)
+                       BlockDefArray:GDBObjBlockdefArray;(*saved_to_shd*)
+                       Numerator:GDBNumerator;(*saved_to_shd*)
+                       TableStyleTable:GDBTableStyleArray;(*saved_to_shd*)
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
+                       constructor init(pcam:PGDBObjCamera);
+                       function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;virtual;abstract;
+                       function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;virtual;abstract;
+                       function GetPcamera:PGDBObjCamera;virtual;abstract;
+                       function GetCurrentROOT:PGDBObjGenericSubEntry;virtual;abstract;
+                       function GetConstructObjRoot:PGDBObjRoot;virtual;abstract;
+                       function GetSelObjArray:PGDBSelectedObjArray;virtual;abstract;
+                       function GetLayerTable:PGDBLayerArray;virtual;abstract;
+                       function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;abstract;
+                       procedure RotateCameraInLocalCSXY(ux,uy:GDBDouble);virtual;abstract;
+                       procedure MoveCameraInLocalCSXY(oldx,oldy:GDBDouble;ax:gdbvertex);virtual;abstract;
+                       procedure SetCurrentDWG;virtual;abstract;
+                       function StoreOldCamerapPos:Pointer;virtual;abstract;
+                       procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;
                  end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\UGDBDescriptor.pas
 GDBObjTrash=object(GDBObjEntity)
@@ -2620,30 +2667,15 @@ TDWGProps=record
                 Number:GDBInteger;
           end;
 PTDrawing=^TDrawing;
-TDrawing=object(TAbstractDrawing)
-           pObjRoot:PGDBObjGenericSubEntry;
-           mainObjRoot:GDBObjRoot;(*saved_to_shd*)
-           LayerTable:GDBLayerArray;(*saved_to_shd*)
-           ConstructObjRoot:GDBObjRoot;
-           SelObjArray:GDBSelectedObjArray;
-           pcamera:PGDBObjCamera;
-           OnMouseObj:GDBObjOpenArrayOfPV;
-           DWGUnits:TUnitManager;
-           OGLwindow1:toglwnd;
-           UndoStack:GDBObjOpenArrayOfUCommands;
-           TextStyleTable:GDBTextStyleArray;(*saved_to_shd*)
-           BlockDefArray:GDBObjBlockdefArray;(*saved_to_shd*)
-           Numerator:GDBNumerator;(*saved_to_shd*)
-           TableStyleTable:GDBTableStyleArray;(*saved_to_shd*)
+TDrawing=object(TSimpleDrawing)
            FileName:GDBString;
            Changed:GDBBoolean;
            attrib:GDBLongword;
-           function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;
-           function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;
            constructor init(num:PTUnitManager);
            destructor done;virtual;abstract;
            function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
            function GetLastSelected:PGDBObjEntity;virtual;abstract;
+           procedure SetCurrentDWG;virtual;abstract;
            //procedure SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
      end;
 PGDBDescriptor=^GDBDescriptor;
@@ -2657,8 +2689,9 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
                     function GetCurrentROOT:PGDBObjGenericSubEntry;
                     function GetCurrentDWG:PTDrawing;
                     procedure asociatedwgvars;
-                    procedure SetCurrentDWG(PDWG:PTDrawing);
+                    procedure SetCurrentDWG(PDWG:PTAbstractDrawing);
                     function CreateDWG:PTDrawing;
+                    function CreateSimpleDWG:PTSimpleDrawing;virtual;abstract;
                     procedure eraseobj(ObjAddr:PGDBaseObject);virtual;abstract;
                     procedure CopyBlock(_from,_to:PTDrawing;_source:PGDBObjBlockdef);
                     function CopyEnt(_from,_to:PTDrawing;_source:PGDBObjEntity):PGDBObjEntity;

@@ -758,7 +758,7 @@ begin
        if poglwnd<>nil then
        begin
             tobject(poglwnd):=FindControlByType(poglwnd,TOGLWnd);
-            gdb.CurrentDWG:=poglwnd.PDWG;
+            gdb.CurrentDWG:=PTDrawing(poglwnd.PDWG);
             poglwnd.GDBActivate;
        end;
        shared.SBTextOut('Закрыто');
@@ -778,7 +778,7 @@ begin
   Closeddwg:=nil;
   TControl(poglwnd):=FindControlByType(TTabSheet(sender),TOGLWnd);
   if poglwnd<>nil then
-                      Closeddwg:=poglwnd.PDWG;
+                      Closeddwg:=ptdrawing(poglwnd.PDWG);
   _CloseDWGPage(ClosedDWG,Sender);
 end;
 procedure TMainFormN.PageControlMouseDown(Sender: TObject;

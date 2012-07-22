@@ -79,7 +79,7 @@ begin
      inherited;
      ConstObjArray.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy);
      ConstObjArray.ObjTree.BoundingBox:=vp.BoundingBox;
-     ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRFully);
+     ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRFully,true);
 end;
 function GDBObjComplex.InRect:TInRect;
 begin
@@ -236,7 +236,7 @@ end;
 function GDBObjComplex.CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;
 begin
      result:=ConstObjArray.calcvisible(frustum,infrustumactualy,visibleactualy);
-     ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRPartially);
+     ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRPartially,true);
 end;
 function GDBObjComplex.CalcTrueInFrustum;
 begin

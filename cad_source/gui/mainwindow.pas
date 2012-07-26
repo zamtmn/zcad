@@ -1107,6 +1107,7 @@ begin
   SetVisuaProplProc:=self.setvisualprop;
 
   UpdateVisibleProc:=UpdateVisible;
+  ProcessFilehistoryProc:=self.processfilehistory;
 
   //AutoSize:=false;
   for i:=0 to 9 do

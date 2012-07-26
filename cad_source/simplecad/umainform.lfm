@@ -1,10 +1,10 @@
 object Form1: TForm1
-  Left = 266
-  Height = 663
-  Top = 177
+  Left = 466
+  Height = 818
+  Top = 107
   Width = 943
   Caption = 'ZCAD engine demo program'
-  ClientHeight = 663
+  ClientHeight = 818
   ClientWidth = 943
   KeyPreview = True
   OnCreate = _FormCreate
@@ -13,16 +13,38 @@ object Form1: TForm1
   LCLVersion = '1.1'
   object Panel1: TPanel
     Left = 0
-    Height = 663
+    Height = 818
     Top = 0
     Width = 742
     Align = alLeft
+    BevelOuter = bvNone
     Caption = 'Panel1'
+    ClientHeight = 818
+    ClientWidth = 742
     TabOrder = 0
+    object PanelUp: TPanel
+      Left = 0
+      Height = 391
+      Top = 0
+      Width = 742
+      Align = alTop
+      BevelOuter = bvNone
+      Caption = 'PanelUp'
+      TabOrder = 0
+    end
+    object Splitter2: TSplitter
+      Cursor = crVSplit
+      Left = 0
+      Height = 1
+      Top = 391
+      Width = 742
+      Align = alTop
+      ResizeAnchor = akTop
+    end
   end
   object Splitter1: TSplitter
     Left = 742
-    Height = 663
+    Height = 818
     Top = 0
     Width = 2
   end

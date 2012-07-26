@@ -442,6 +442,7 @@ end;
 procedure TZCADLaerComboBox.B1Klac(Sender:TObject);                           // Открытие развёрнутого списка
   var
     a:TPoint;
+    h,hh:integer;
 begin
   if (PoleLista=nil) and (M1=false) then
   begin
@@ -449,8 +450,9 @@ begin
     PoleLista.Width:=Width;
     a.X:=0;
     a.Y:=B1.Parent.Height;
-    PoleLista.Left:=B1.Parent.ClientToScreen(a).X;
-    PoleLista.Top:=B1.Parent.ClientToScreen(a).Y;
+    a:=ClientToScreen(a);
+    PoleLista.Left:={B1.Parent.ClientToScreen(a).X}a.x;
+    PoleLista.Top:={B1.Parent.ClientToScreen(a).Y}a.y;
     PoleLista.BorderStyle:=bsNone;
     PoleLista.OnDeactivate:=@PLDeActivate;
     UpdateIcon;
@@ -480,7 +482,12 @@ begin
     if sListHeight>0 then
                          PoleLista.Height:=sListHeight
                      else
-                         PoleLista.Height:=LV.Items.Count*19+4;//{LV..Height*LV.Items.Count}1000;
+                         begin
+                              hh:=screen.Height-a.y-1;
+                              h:=LV.Items.Count*19+4;
+                              if h>hh then h:=hh;
+                              PoleLista.Height:=h;//{LV..Height*LV.Items.Count}1000;
+                         end;
 
     PoleLista.Show;
   end;

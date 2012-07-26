@@ -335,6 +335,18 @@ msgctxt "zcadexternal.acn_help~caption"
 msgid "Help"
 msgstr ""
 
+#: zcadexternal.acn_import~caption
+msgid "Import ..."
+msgstr ""
+
+#: zcadexternal.acn_import~hint
+msgid "Import drawing"
+msgstr ""
+
+#: zcadexternal.acn_import~textimage
+msgid "Import"
+msgstr ""
+
 #: zcadexternal.acn_inserttodrawing~caption
 msgid "Insert to drawing"
 msgstr ""
@@ -2254,6 +2266,11 @@ msgstr ""
 msgid "Writeln by Andrey M. Zubarev"
 msgstr ""
 
+#: zcadstrconsts.rsautosave
+msgctxt "zcadstrconsts.rsautosave"
+msgid "Autosave"
+msgstr ""
+
 #: zcadstrconsts.rsblockignored
 msgid "Ignored block \"%s\""
 msgstr ""
@@ -2509,6 +2526,10 @@ msgstr ""
 msgid "Not yet implemented"
 msgstr ""
 
+#: zcadstrconsts.rsopenfile
+msgid "Open file..."
+msgstr ""
+
 #: zcadstrconsts.rsprogramdb
 msgid "Program DB"
 msgstr ""
@@ -2561,6 +2582,10 @@ msgstr ""
 
 #: zcadstrconsts.rssaveemptydwg
 msgid "Drawing is empty. Sure?"
+msgstr ""
+
+#: zcadstrconsts.rssavefile
+msgid "Save file..."
 msgstr ""
 
 #: zcadstrconsts.rstemplatenotfound

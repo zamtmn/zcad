@@ -40,7 +40,7 @@ type
     TFunction__TForm=Function:TForm;
     TFunction__TComponent=Function:TComponent;
 
-    TMethod_String_=procedure (s:String);
+    TMethod_String_=procedure (s:String) of object;
 
 
     //SplashWnd

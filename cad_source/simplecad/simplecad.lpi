@@ -44,15 +44,17 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="111">
+    <Units Count="115">
       <Unit0>
         <Filename Value="simplecad.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="simplecad"/>
+        <EditorIndex Value="22"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="10" Y="10"/>
-        <UsageCount Value="124"/>
+        <UsageCount Value="126"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
@@ -65,9 +67,9 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="90"/>
-        <CursorPos X="8" Y="107"/>
-        <UsageCount Value="124"/>
+        <TopLine Value="94"/>
+        <CursorPos X="28" Y="122"/>
+        <UsageCount Value="126"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -79,7 +81,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="4098"/>
         <CursorPos X="1" Y="4115"/>
-        <UsageCount Value="53"/>
+        <UsageCount Value="54"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit2>
@@ -220,10 +222,12 @@
       </Unit17>
       <Unit18>
         <Filename Value="C:\ppsrc\rtl\objpas\classes\classesh.inc"/>
+        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1598"/>
-        <CursorPos X="3" Y="1614"/>
+        <TopLine Value="693"/>
+        <CursorPos X="15" Y="710"/>
         <UsageCount Value="26"/>
+        <Loaded Value="True"/>
       </Unit18>
       <Unit19>
         <Filename Value="C:\lazarus\lcl\forms.pp"/>
@@ -258,7 +262,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="268"/>
         <CursorPos X="1" Y="285"/>
-        <UsageCount Value="18"/>
+        <UsageCount Value="19"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit22>
@@ -358,7 +362,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit33>
@@ -419,7 +423,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="998"/>
         <CursorPos X="1" Y="1016"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit40>
@@ -435,10 +439,12 @@
       <Unit42>
         <Filename Value="..\gdb\gdbobjectsconstdef.pas"/>
         <UnitName Value="gdbobjectsconstdef"/>
+        <EditorIndex Value="18"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="25"/>
-        <CursorPos X="16" Y="49"/>
+        <TopLine Value="30"/>
+        <CursorPos X="14" Y="48"/>
         <UsageCount Value="22"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit42>
       <Unit43>
@@ -448,7 +454,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="778"/>
         <CursorPos X="1" Y="806"/>
-        <UsageCount Value="19"/>
+        <UsageCount Value="20"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit43>
@@ -464,11 +470,11 @@
       <Unit45>
         <Filename Value="..\commands\GDBCommandsDraw.pas"/>
         <UnitName Value="GDBCommandsDraw"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="19"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2294"/>
         <CursorPos X="1" Y="2320"/>
-        <UsageCount Value="19"/>
+        <UsageCount Value="20"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit45>
@@ -501,10 +507,12 @@
       <Unit49>
         <Filename Value="..\gdb\GDBCircle.pas"/>
         <UnitName Value="GDBCircle"/>
+        <EditorIndex Value="17"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="12"/>
-        <CursorPos X="18" Y="35"/>
+        <TopLine Value="16"/>
+        <CursorPos X="24" Y="35"/>
         <UsageCount Value="18"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit49>
       <Unit50>
@@ -514,7 +522,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="26"/>
+        <UsageCount Value="27"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit50>
@@ -543,7 +551,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="285"/>
         <CursorPos X="66" Y="302"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit53>
@@ -554,7 +562,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="242"/>
         <CursorPos X="1" Y="261"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit54>
@@ -619,11 +627,11 @@
       <Unit62>
         <Filename Value="..\commands\commandline.pas"/>
         <UnitName Value="commandline"/>
-        <EditorIndex Value="16"/>
+        <EditorIndex Value="24"/>
         <WindowIndex Value="0"/>
         <TopLine Value="349"/>
         <CursorPos X="1" Y="366"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit62>
@@ -880,11 +888,11 @@
       <Unit91>
         <Filename Value="..\gdb\GDBGenericSubEntry.pas"/>
         <UnitName Value="GDBGenericSubEntry"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="23"/>
         <WindowIndex Value="0"/>
         <TopLine Value="21"/>
         <CursorPos X="29" Y="38"/>
-        <UsageCount Value="18"/>
+        <UsageCount Value="19"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit91>
@@ -911,7 +919,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="118"/>
         <CursorPos X="58" Y="136"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit94>
@@ -922,17 +930,17 @@
         <WindowIndex Value="0"/>
         <TopLine Value="26"/>
         <CursorPos X="24" Y="43"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit95>
       <Unit96>
         <Filename Value="C:\lazarus\lcl\include\controlcanvas.inc"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="21"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="46"/>
+        <TopLine Value="52"/>
         <CursorPos X="1" Y="69"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit96>
       <Unit97>
@@ -1033,103 +1041,182 @@
         <WindowIndex Value="0"/>
         <TopLine Value="474"/>
         <CursorPos X="1" Y="499"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit109>
       <Unit110>
         <Filename Value="..\commands\commanddefinternal.pas"/>
         <UnitName Value="commanddefinternal"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="20"/>
         <WindowIndex Value="0"/>
         <TopLine Value="213"/>
         <CursorPos X="1" Y="241"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit110>
+      <Unit111>
+        <Filename Value="C:\lazarus\lcl\widgetset\wslclclasses.pp"/>
+        <UnitName Value="WSLCLClasses"/>
+        <EditorIndex Value="13"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="131"/>
+        <CursorPos X="1" Y="148"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit111>
+      <Unit112>
+        <Filename Value="C:\lazarus\components\opengl\openglcontext.pas"/>
+        <UnitName Value="OpenGLContext"/>
+        <EditorIndex Value="16"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="373"/>
+        <CursorPos X="1" Y="390"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit112>
+      <Unit113>
+        <Filename Value="C:\lazarus\lcl\lclclasses.pp"/>
+        <UnitName Value="LCLClasses"/>
+        <EditorIndex Value="12"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="79"/>
+        <CursorPos X="1" Y="96"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit113>
+      <Unit114>
+        <Filename Value="C:\ppsrc\rtl\objpas\classes\stringl.inc"/>
+        <EditorIndex Value="15"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1278"/>
+        <CursorPos X="3" Y="1281"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit114>
     </Units>
-    <JumpHistory Count="20" HistoryIndex="18">
+    <JumpHistory Count="30" HistoryIndex="28">
       <Position1>
-        <Filename Value="..\commands\GDBCommandsDraw.pas"/>
-        <Caret Line="2320" Column="1" TopLine="2294"/>
+        <Filename Value="..\u\UGDBOpenArray.pas"/>
+        <Caret Line="260" Column="1" TopLine="242"/>
       </Position1>
       <Position2>
-        <Filename Value="..\commands\commandline.pas"/>
-        <Caret Line="366" Column="1" TopLine="349"/>
+        <Filename Value="..\u\UGDBOpenArray.pas"/>
+        <Caret Line="261" Column="1" TopLine="242"/>
       </Position2>
       <Position3>
         <Filename Value="..\commands\commanddefinternal.pas"/>
         <Caret Line="270" Column="1" TopLine="248"/>
       </Position3>
       <Position4>
-        <Filename Value="..\commands\commandline.pas"/>
-        <Caret Line="366" Column="1" TopLine="349"/>
+        <Filename Value="..\commands\GDBCommandsDraw.pas"/>
+        <Caret Line="2320" Column="1" TopLine="2294"/>
       </Position4>
       <Position5>
         <Filename Value="..\commands\commanddefinternal.pas"/>
-        <Caret Line="270" Column="45" TopLine="248"/>
+        <Caret Line="241" Column="1" TopLine="213"/>
       </Position5>
       <Position6>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="285" Column="1" TopLine="268"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="107" Column="8" TopLine="90"/>
       </Position6>
       <Position7>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="286" Column="1" TopLine="268"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="227" Column="67" TopLine="204"/>
       </Position7>
       <Position8>
-        <Filename Value="..\commands\GDBCommandsDraw.pas"/>
-        <Caret Line="2304" Column="1" TopLine="2294"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="228" Column="100" TopLine="204"/>
       </Position8>
       <Position9>
-        <Filename Value="..\commands\commanddefinternal.pas"/>
-        <Caret Line="270" Column="30" TopLine="248"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="216" Column="16" TopLine="206"/>
       </Position9>
       <Position10>
-        <Filename Value="..\commands\commanddefinternal.pas"/>
-        <Caret Line="269" Column="1" TopLine="248"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="223" Column="20" TopLine="206"/>
       </Position10>
       <Position11>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="285" Column="1" TopLine="268"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="224" Column="46" TopLine="207"/>
       </Position11>
       <Position12>
-        <Filename Value="..\gdb\UGDBDescriptor.pas"/>
-        <Caret Line="286" Column="1" TopLine="268"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="228" Column="87" TopLine="207"/>
       </Position12>
       <Position13>
-        <Filename Value="..\u\UGDBOpenArray.pas"/>
-        <Caret Line="259" Column="1" TopLine="242"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="226" Column="97" TopLine="209"/>
       </Position13>
       <Position14>
-        <Filename Value="..\u\UGDBOpenArray.pas"/>
-        <Caret Line="260" Column="1" TopLine="242"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="131" Column="61" TopLine="112"/>
       </Position14>
       <Position15>
-        <Filename Value="..\u\UGDBOpenArray.pas"/>
-        <Caret Line="261" Column="1" TopLine="242"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="132" Column="61" TopLine="113"/>
       </Position15>
       <Position16>
-        <Filename Value="..\commands\commanddefinternal.pas"/>
-        <Caret Line="270" Column="1" TopLine="248"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="133" Column="61" TopLine="114"/>
       </Position16>
       <Position17>
-        <Filename Value="..\commands\GDBCommandsDraw.pas"/>
-        <Caret Line="2320" Column="1" TopLine="2294"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="134" Column="61" TopLine="115"/>
       </Position17>
       <Position18>
-        <Filename Value="..\commands\commanddefinternal.pas"/>
-        <Caret Line="241" Column="1" TopLine="213"/>
+        <Filename Value="C:\lazarus\lcl\widgetset\wslclclasses.pp"/>
+        <Caret Line="148" Column="1" TopLine="131"/>
       </Position18>
       <Position19>
         <Filename Value="umainform.pas"/>
-        <Caret Line="107" Column="8" TopLine="90"/>
+        <Caret Line="124" Column="30" TopLine="106"/>
       </Position19>
       <Position20>
-        <Filename Value="C:\lazarus\lcl\include\controlcanvas.inc"/>
-        <Caret Line="69" Column="1" TopLine="46"/>
+        <Filename Value="C:\lazarus\lcl\lclclasses.pp"/>
+        <Caret Line="96" Column="1" TopLine="79"/>
       </Position20>
+      <Position21>
+        <Filename Value="C:\lazarus\lcl\widgetset\wslclclasses.pp"/>
+        <Caret Line="148" Column="32" TopLine="131"/>
+      </Position21>
+      <Position22>
+        <Filename Value="C:\ppsrc\rtl\objpas\classes\stringl.inc"/>
+        <Caret Line="1281" Column="3" TopLine="1278"/>
+      </Position22>
+      <Position23>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="124" Column="30" TopLine="106"/>
+      </Position23>
+      <Position24>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="123" Column="28" TopLine="96"/>
+      </Position24>
+      <Position25>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="124" Column="28" TopLine="97"/>
+      </Position25>
+      <Position26>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="123" Column="28" TopLine="96"/>
+      </Position26>
+      <Position27>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="124" Column="28" TopLine="96"/>
+      </Position27>
+      <Position28>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="123" Column="28" TopLine="95"/>
+      </Position28>
+      <Position29>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="122" Column="28" TopLine="94"/>
+      </Position29>
+      <Position30>
+        <Filename Value="C:\lazarus\lcl\include\controlcanvas.inc"/>
+        <Caret Line="69" Column="1" TopLine="52"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

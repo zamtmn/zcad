@@ -350,6 +350,18 @@ msgctxt "zcadexternal.acn_help~caption"
 msgid "Help"
 msgstr "Справка"
 
+#: zcadexternal.acn_import~caption
+msgid "Import ..."
+msgstr "Импорт ..."
+
+#: zcadexternal.acn_import~hint
+msgid "Import drawing"
+msgstr "Импортировать чертеж"
+
+#: zcadexternal.acn_import~textimage
+msgid "Import"
+msgstr "Импорт"
+
 #: zcadexternal.acn_inserttodrawing~caption
 msgid "Insert to drawing"
 msgstr "Вставить в чертеж"
@@ -902,10 +914,11 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
+#, fuzzy
 #| msgid "Block params"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Rotate"
-msgstr "Поворот"
+msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjcircle~area
 msgctxt "zcadexternal.gdbobjcircle~area"
@@ -1189,9 +1202,10 @@ msgid "Reset camera"
 msgstr "Камера в начало"
 
 #: zcadexternal.menucommand~fuckoff
+#, fuzzy
 #| msgid "Dimensions styles (not impl)"
 msgid "Layouts (not impl)"
-msgstr "Листы (не реализовано)"
+msgstr "Стили размеров (не реализовано)"
 
 #: zcadexternal.menucommand~setobjinsp(camera)
 msgid "Camera"
@@ -2498,6 +2512,11 @@ msgstr "О программе ZCAD"
 msgid "Writeln by Andrey M. Zubarev"
 msgstr "Автор: Зубарев А.М."
 
+#: zcadstrconsts.rsautosave
+msgctxt "zcadstrconsts.rsautosave"
+msgid "Autosave"
+msgstr "Автосохранение"
+
 #: zcadstrconsts.rsblockignored
 msgid "Ignored block \"%s\""
 msgstr "Игнорирован блок \"%s\""
@@ -2754,6 +2773,10 @@ msgstr "Контекст OpenGL не создан"
 msgid "Not yet implemented"
 msgstr "Пока не реализовано"
 
+#: zcadstrconsts.rsopenfile
+msgid "Open file..."
+msgstr "Открыть файл..."
+
 #: zcadstrconsts.rsprogramdb
 msgid "Program DB"
 msgstr "БД программы"
@@ -2812,6 +2835,10 @@ msgstr "Выполняется скрипт \"%s\";"
 #: zcadstrconsts.rssaveemptydwg
 msgid "Drawing is empty. Sure?"
 msgstr "Чертеж не сохранен. Уверен?"
+
+#: zcadstrconsts.rssavefile
+msgid "Save file..."
+msgstr "Сохранить файл..."
 
 #: zcadstrconsts.rstemplatenotfound
 msgid "Template file \"%s\" not found"

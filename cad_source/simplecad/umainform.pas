@@ -33,9 +33,11 @@ type
     Label1: TLabel;
     OpenDialog1: TOpenDialog;
     Panel1: TPanel;
+    PanelUp: TPanel;
     SaveDialog1: TSaveDialog;
     SpinEdit1: TSpinEdit;
     Splitter1: TSplitter;
+    Splitter2: TSplitter;
     procedure BtnAdd3DpolyLinesClick(Sender: TObject);
     procedure BtnAddLinesClick(Sender: TObject);
     procedure BtnAddCirclesClick(Sender: TObject);
@@ -108,7 +110,7 @@ begin
      gdb.AddRef(ptd^);
      gdb.SetCurrentDWG(pointer(ptd));
 
-     oglwnd:=TOGLWnd.Create(Panel1);
+     oglwnd:=TOGLWnd.Create(PanelUp);
      oglwnd.AuxBuffers:=0;
      oglwnd.StencilBits:=8;
      oglwnd.DepthBits:=24;
@@ -118,7 +120,7 @@ begin
      gdb.GetCurrentDWG^.OGLwindow1:=oglwnd;
      oglwnd.PDWG:=ptd;
      oglwnd.align:=alClient;
-     oglwnd.Parent:=Panel1;
+     oglwnd.Parent:=PanelUp;
      oglwnd.init;
      oglwnd.PDWG:=ptd;
      oglwnd.GDBActivate;
@@ -218,6 +220,14 @@ begin
                        hl:=l/2;
                        PGDBObjLine(pv)^.CoordInOCS.lBegin:=geometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lBegin,CreateRandomVertex(l,hl));
                        PGDBObjLine(pv)^.CoordInOCS.lEnd:=geometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lEnd,CreateRandomVertex(l,hl));
+                       pv^.YouChanged;
+                  end;
+        GDBCircleID:begin
+                       l:=PGDBObjCircle(pv)^.Radius;
+                       hl:=l/2;
+                       PGDBObjCircle(pv)^.Local.P_insert:=geometry.VertexAdd(PGDBObjCircle(pv)^.Local.P_insert,CreateRandomVertex(l,hl));
+                       PGDBObjCircle(pv)^.Radius:=PGDBObjCircle(pv)^.Radius+CreateRandomDouble(l)-hl;
+                       if PGDBObjCircle(pv)^.Radius<=0 then PGDBObjCircle(pv)^.Radius:=CreateRandomDouble(9)+1;
                        pv^.YouChanged;
                   end;
         end;

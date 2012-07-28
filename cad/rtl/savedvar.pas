@@ -31,15 +31,15 @@ begin
   TEdWND_Height:=481;
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=238;
-  VIEW_ObjInspSubV:=103;
-  PATH_File0:='';
-  PATH_File1:='';
-  PATH_File2:='';
-  PATH_File3:='';
-  PATH_File4:='';
-  PATH_File5:='';
-  PATH_File6:='';
-  PATH_File7:='';
-  PATH_File8:='';
-  PATH_File9:='';
+  VIEW_ObjInspSubV:=95;
+  PATH_File0:='J:\nh\Зварыгина\Центр национальных культур\АОВ\АОВ.dxf';
+  PATH_File1:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File2:='J:\nh\Зварыгина\Центр национальных культур\АВК\АВК.dxf';
+  PATH_File3:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File4:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File5:='J:\nh\Арт-Вояж\proj.dxf';
+  PATH_File6:='J:\nh\Мурка\ШколаДУ\proj.dxf';
+  PATH_File7:='J:\nh\Мурка\поликлиника\proj.dxf';
+  PATH_File8:='J:\nh\Коробова\Осипенко\Парковка\proj.dxf';
+  PATH_File9:='J:\nh\Коробова\Муравленко\парковка\proj.dxf';
 end.

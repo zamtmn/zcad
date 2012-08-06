@@ -62,6 +62,7 @@ type
 var
   Form1: TForm1;
   stepgrid,origingrid:GDBvertex2D;
+  //rm:trestoremode;
 
 implementation
 
@@ -84,6 +85,7 @@ end;
 
 procedure TForm1._FormShow(Sender: TObject);
 begin
+    _FormCreate(nil);
     UGDBDescriptor.redrawoglwnd;
 end;
 
@@ -114,6 +116,9 @@ begin
      oglwnd.StencilBits:=8;
      oglwnd.DepthBits:=24;
 
+     //rm:=WND_Texture;
+     //sysvar.RD.RD_Restore_Mode:=@rm;
+
 
 
      gdb.GetCurrentDWG^.OGLwindow1:=oglwnd;
@@ -123,6 +128,7 @@ begin
      oglwnd.init;
      oglwnd.PDWG:=ptd;
      oglwnd.GDBActivate;
+     oglwnd._onresize(nil);
 
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
 

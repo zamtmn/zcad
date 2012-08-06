@@ -1,25 +1,24 @@
 object Form1: TForm1
-  Left = 466
-  Height = 818
-  Top = 107
+  Left = 5
+  Height = 582
+  Top = -6
   Width = 943
   Caption = 'ZCAD engine demo program'
-  ClientHeight = 818
+  ClientHeight = 582
   ClientWidth = 943
   KeyPreview = True
-  OnCreate = _FormCreate
   OnKeyDown = _KeyDown
   OnShow = _FormShow
   LCLVersion = '1.1'
   object Panel1: TPanel
     Left = 0
-    Height = 818
+    Height = 582
     Top = 0
     Width = 742
     Align = alLeft
     BevelOuter = bvNone
     Caption = 'Panel1'
-    ClientHeight = 818
+    ClientHeight = 582
     ClientWidth = 742
     TabOrder = 0
     object Splitter2: TSplitter
@@ -34,7 +33,7 @@ object Form1: TForm1
   end
   object Splitter1: TSplitter
     Left = 742
-    Height = 818
+    Height = 582
     Top = 0
     Width = 2
   end
@@ -73,10 +72,10 @@ object Form1: TForm1
     AnchorSideTop.Side = asrCenter
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 816
+    Left = 811
     Height = 28
-    Top = 547
-    Width = 127
+    Top = 546
+    Width = 132
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Rebuild tree'
     OnClick = BtnRebuildClick
@@ -87,9 +86,9 @@ object Form1: TForm1
     AnchorSideLeft.Side = asrBottom
     AnchorSideRight.Side = asrBottom
     Left = 744
-    Height = 19
+    Height = 17
     Top = 552
-    Width = 72
+    Width = 67
     Caption = 'Show tree'
     OnChange = TreeChange
     TabOrder = 5
@@ -99,10 +98,10 @@ object Form1: TForm1
     AnchorSideLeft.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 881
-    Height = 23
+    Left = 867
+    Height = 21
     Top = 0
-    Width = 62
+    Width = 76
     Anchors = [akTop, akLeft, akRight]
     MaxValue = 1000000
     MinValue = 1
@@ -185,9 +184,9 @@ object Form1: TForm1
     AnchorSideTop.Control = SpinEdit1
     AnchorSideTop.Side = asrCenter
     Left = 744
-    Height = 16
+    Height = 14
     Top = 3
-    Width = 137
+    Width = 123
     Alignment = taCenter
     Caption = 'Number of entities to add'
     Layout = tlCenter
@@ -225,9 +224,9 @@ object Form1: TForm1
     AnchorSideLeft.Control = Splitter1
     AnchorSideLeft.Side = asrBottom
     Left = 744
-    Height = 19
+    Height = 17
     Top = 529
-    Width = 104
+    Width = 96
     Caption = '3D(ZCoord<>0)'
     TabOrder = 14
   end

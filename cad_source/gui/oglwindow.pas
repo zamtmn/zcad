@@ -4280,7 +4280,7 @@ begin
                                            end
                                        else
                                            begin
-                                                shared.ShowError('wglSwapIntervalEXT not supported by your video driver. Please set the VSync in the defaul');
+                                                shared.LogError('wglSwapIntervalEXT not supported by your video driver. Please set the VSync in the defaul');
                                            end;
   end;
   {$ENDIF}

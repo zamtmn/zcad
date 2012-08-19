@@ -48,7 +48,7 @@
         <Filename Value="simplecad.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="simplecad"/>
-        <EditorIndex Value="30"/>
+        <EditorIndex Value="29"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3"/>
         <CursorPos X="1" Y="19"/>
@@ -63,8 +63,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="umainform"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="18"/>
+        <EditorIndex Value="17"/>
         <WindowIndex Value="0"/>
         <TopLine Value="110"/>
         <CursorPos X="8" Y="120"/>
@@ -225,7 +224,6 @@
         <TopLine Value="693"/>
         <CursorPos X="15" Y="710"/>
         <UsageCount Value="26"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit18>
       <Unit19>
         <Filename Value="C:\lazarus\lcl\forms.pp"/>
@@ -384,7 +382,7 @@
       </Unit35>
       <Unit36>
         <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
-        <EditorIndex Value="20"/>
+        <EditorIndex Value="19"/>
         <WindowIndex Value="0"/>
         <TopLine Value="941"/>
         <CursorPos X="1" Y="951"/>
@@ -439,7 +437,7 @@
       <Unit42>
         <Filename Value="..\gdb\gdbobjectsconstdef.pas"/>
         <UnitName Value="gdbobjectsconstdef"/>
-        <EditorIndex Value="26"/>
+        <EditorIndex Value="25"/>
         <WindowIndex Value="0"/>
         <TopLine Value="30"/>
         <CursorPos X="14" Y="48"/>
@@ -470,7 +468,7 @@
       <Unit45>
         <Filename Value="..\commands\GDBCommandsDraw.pas"/>
         <UnitName Value="GDBCommandsDraw"/>
-        <EditorIndex Value="27"/>
+        <EditorIndex Value="26"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2294"/>
         <CursorPos X="1" Y="2320"/>
@@ -509,7 +507,7 @@
       <Unit49>
         <Filename Value="..\gdb\GDBCircle.pas"/>
         <UnitName Value="GDBCircle"/>
-        <EditorIndex Value="25"/>
+        <EditorIndex Value="24"/>
         <WindowIndex Value="0"/>
         <TopLine Value="16"/>
         <CursorPos X="24" Y="35"/>
@@ -531,7 +529,7 @@
       <Unit51>
         <Filename Value="..\misc\memman.pas"/>
         <UnitName Value="memman"/>
-        <EditorIndex Value="22"/>
+        <EditorIndex Value="21"/>
         <WindowIndex Value="0"/>
         <TopLine Value="123"/>
         <CursorPos X="1" Y="133"/>
@@ -562,10 +560,11 @@
       <Unit54>
         <Filename Value="..\u\UGDBOpenArray.pas"/>
         <UnitName Value="UGDBOpenArray"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="2"/>
-        <CursorPos X="24" Y="165"/>
+        <TopLine Value="225"/>
+        <CursorPos X="1" Y="248"/>
         <UsageCount Value="23"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -585,7 +584,6 @@
         <TopLine Value="518"/>
         <CursorPos X="3" Y="541"/>
         <UsageCount Value="20"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit56>
       <Unit57>
         <Filename Value="C:\ppsrc\rtl\inc\system.inc"/>
@@ -593,7 +591,6 @@
         <TopLine Value="628"/>
         <CursorPos X="3" Y="631"/>
         <UsageCount Value="7"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit57>
       <Unit58>
         <Filename Value="..\misc\WindowsSpecific.pas"/>
@@ -633,7 +630,7 @@
       <Unit62>
         <Filename Value="..\commands\commandline.pas"/>
         <UnitName Value="commandline"/>
-        <EditorIndex Value="33"/>
+        <EditorIndex Value="32"/>
         <WindowIndex Value="0"/>
         <TopLine Value="349"/>
         <CursorPos X="1" Y="366"/>
@@ -816,7 +813,7 @@
       <Unit82>
         <Filename Value="..\languade\zcadsysvars.pas"/>
         <UnitName Value="zcadsysvars"/>
-        <EditorIndex Value="19"/>
+        <EditorIndex Value="18"/>
         <WindowIndex Value="0"/>
         <TopLine Value="47"/>
         <CursorPos X="28" Y="62"/>
@@ -898,7 +895,7 @@
       <Unit91>
         <Filename Value="..\gdb\GDBGenericSubEntry.pas"/>
         <UnitName Value="GDBGenericSubEntry"/>
-        <EditorIndex Value="32"/>
+        <EditorIndex Value="31"/>
         <WindowIndex Value="0"/>
         <TopLine Value="364"/>
         <CursorPos X="1" Y="375"/>
@@ -925,7 +922,7 @@
       <Unit94>
         <Filename Value="..\u\ugdbopenarrayofucommands.pas"/>
         <UnitName Value="UGDBOpenArrayOfUCommands"/>
-        <EditorIndex Value="17"/>
+        <EditorIndex Value="16"/>
         <WindowIndex Value="0"/>
         <TopLine Value="118"/>
         <CursorPos X="58" Y="136"/>
@@ -946,7 +943,7 @@
       </Unit95>
       <Unit96>
         <Filename Value="C:\lazarus\lcl\include\controlcanvas.inc"/>
-        <EditorIndex Value="29"/>
+        <EditorIndex Value="28"/>
         <WindowIndex Value="0"/>
         <TopLine Value="52"/>
         <CursorPos X="1" Y="69"/>
@@ -969,7 +966,7 @@
       </Unit98>
       <Unit99>
         <Filename Value="C:\lazarus\lcl\include\application.inc"/>
-        <EditorIndex Value="21"/>
+        <EditorIndex Value="20"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2163"/>
         <CursorPos X="1" Y="2173"/>
@@ -1000,7 +997,6 @@
         <TopLine Value="264"/>
         <CursorPos X="17" Y="287"/>
         <UsageCount Value="11"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit102>
       <Unit103>
         <Filename Value="C:\ppsrc\packages\fcl-image\src\fpcanvas.inc"/>
@@ -1008,7 +1004,6 @@
         <TopLine Value="29"/>
         <CursorPos X="3" Y="31"/>
         <UsageCount Value="11"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit103>
       <Unit104>
         <Filename Value="..\gdb\GDBRoot.pas"/>
@@ -1034,7 +1029,6 @@
         <TopLine Value="178"/>
         <CursorPos X="21" Y="201"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit106>
       <Unit107>
         <Filename Value="C:\ppsrc\rtl\inc\objpas.inc"/>
@@ -1042,7 +1036,6 @@
         <TopLine Value="262"/>
         <CursorPos X="12" Y="277"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit107>
       <Unit108>
         <Filename Value="..\u\TGObjectChangeCommandIMPL.inc"/>
@@ -1066,7 +1059,7 @@
       <Unit110>
         <Filename Value="..\commands\commanddefinternal.pas"/>
         <UnitName Value="commanddefinternal"/>
-        <EditorIndex Value="28"/>
+        <EditorIndex Value="27"/>
         <WindowIndex Value="0"/>
         <TopLine Value="213"/>
         <CursorPos X="1" Y="241"/>
@@ -1085,7 +1078,7 @@
       <Unit112>
         <Filename Value="C:\lazarus\components\opengl\openglcontext.pas"/>
         <UnitName Value="OpenGLContext"/>
-        <EditorIndex Value="24"/>
+        <EditorIndex Value="23"/>
         <WindowIndex Value="0"/>
         <TopLine Value="462"/>
         <CursorPos X="1" Y="472"/>
@@ -1095,7 +1088,7 @@
       <Unit113>
         <Filename Value="C:\lazarus\lcl\lclclasses.pp"/>
         <UnitName Value="LCLClasses"/>
-        <EditorIndex Value="23"/>
+        <EditorIndex Value="22"/>
         <WindowIndex Value="0"/>
         <TopLine Value="79"/>
         <CursorPos X="1" Y="96"/>
@@ -1108,7 +1101,6 @@
         <TopLine Value="1278"/>
         <CursorPos X="3" Y="1281"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit114>
       <Unit115>
         <Filename Value="..\u\UGDBOpenArrayOfPObjects.pas"/>
@@ -1124,7 +1116,7 @@
       <Unit116>
         <Filename Value="C:\lazarus\lcl\intfgraphics.pas"/>
         <UnitName Value="IntfGraphics"/>
-        <EditorIndex Value="31"/>
+        <EditorIndex Value="30"/>
         <WindowIndex Value="0"/>
         <TopLine Value="4909"/>
         <CursorPos X="1" Y="4924"/>
@@ -1154,136 +1146,135 @@
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit118>
       <Unit119>
-        <Filename Value="..\..\..\fpc-2.6.0\packages\opengl\src\gl.pp"/>
+        <Filename Value="C:\fpc-2.6.0\packages\opengl\src\gl.pp"/>
         <UnitName Value="GL"/>
-        <EditorIndex Value="16"/>
         <WindowIndex Value="0"/>
         <TopLine Value="335"/>
         <CursorPos X="12" Y="347"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit119>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="..\gui\oglwindow.pas"/>
-        <Caret Line="2773" Column="1" TopLine="2757"/>
+        <Caret Line="2774" Column="16" TopLine="2759"/>
       </Position1>
       <Position2>
         <Filename Value="..\gui\oglwindow.pas"/>
-        <Caret Line="2774" Column="16" TopLine="2759"/>
+        <Caret Line="2886" Column="1" TopLine="2876"/>
       </Position2>
       <Position3>
         <Filename Value="..\gui\oglwindow.pas"/>
-        <Caret Line="2886" Column="1" TopLine="2876"/>
+        <Caret Line="2772" Column="1" TopLine="2762"/>
       </Position3>
       <Position4>
-        <Filename Value="..\gui\oglwindow.pas"/>
-        <Caret Line="2772" Column="1" TopLine="2762"/>
+        <Filename Value="..\misc\OGLSpecFunc.pas"/>
+        <Caret Line="245" Column="1" TopLine="235"/>
       </Position4>
       <Position5>
         <Filename Value="..\misc\OGLSpecFunc.pas"/>
-        <Caret Line="245" Column="1" TopLine="235"/>
+        <Caret Line="246" Column="1" TopLine="235"/>
       </Position5>
       <Position6>
         <Filename Value="..\misc\OGLSpecFunc.pas"/>
-        <Caret Line="246" Column="1" TopLine="235"/>
+        <Caret Line="247" Column="1" TopLine="235"/>
       </Position6>
       <Position7>
         <Filename Value="..\misc\OGLSpecFunc.pas"/>
-        <Caret Line="247" Column="1" TopLine="235"/>
+        <Caret Line="255" Column="1" TopLine="245"/>
       </Position7>
       <Position8>
-        <Filename Value="..\misc\OGLSpecFunc.pas"/>
-        <Caret Line="255" Column="1" TopLine="245"/>
+        <Filename Value="..\gui\oglwindow.pas"/>
+        <Caret Line="2773" Column="1" TopLine="2762"/>
       </Position8>
       <Position9>
         <Filename Value="..\gui\oglwindow.pas"/>
-        <Caret Line="2773" Column="1" TopLine="2762"/>
+        <Caret Line="2774" Column="1" TopLine="2762"/>
       </Position9>
       <Position10>
-        <Filename Value="..\gui\oglwindow.pas"/>
-        <Caret Line="2774" Column="1" TopLine="2762"/>
+        <Filename Value="..\misc\OGLSpecFunc.pas"/>
+        <Caret Line="245" Column="1" TopLine="235"/>
       </Position10>
       <Position11>
         <Filename Value="..\misc\OGLSpecFunc.pas"/>
-        <Caret Line="245" Column="1" TopLine="235"/>
+        <Caret Line="246" Column="1" TopLine="235"/>
       </Position11>
       <Position12>
         <Filename Value="..\misc\OGLSpecFunc.pas"/>
-        <Caret Line="246" Column="1" TopLine="235"/>
+        <Caret Line="247" Column="1" TopLine="235"/>
       </Position12>
       <Position13>
         <Filename Value="..\misc\OGLSpecFunc.pas"/>
-        <Caret Line="247" Column="1" TopLine="235"/>
+        <Caret Line="249" Column="1" TopLine="235"/>
       </Position13>
       <Position14>
         <Filename Value="..\misc\OGLSpecFunc.pas"/>
-        <Caret Line="249" Column="1" TopLine="235"/>
+        <Caret Line="255" Column="1" TopLine="245"/>
       </Position14>
       <Position15>
-        <Filename Value="..\misc\OGLSpecFunc.pas"/>
-        <Caret Line="255" Column="1" TopLine="245"/>
+        <Filename Value="..\gui\oglwindow.pas"/>
+        <Caret Line="2764" Column="3" TopLine="2762"/>
       </Position15>
       <Position16>
         <Filename Value="..\gui\oglwindow.pas"/>
-        <Caret Line="2764" Column="3" TopLine="2762"/>
+        <Caret Line="2763" Column="26" TopLine="2759"/>
       </Position16>
       <Position17>
         <Filename Value="..\gui\oglwindow.pas"/>
-        <Caret Line="2763" Column="26" TopLine="2759"/>
+        <Caret Line="2764" Column="1" TopLine="2759"/>
       </Position17>
       <Position18>
-        <Filename Value="..\gui\oglwindow.pas"/>
-        <Caret Line="2764" Column="1" TopLine="2759"/>
+        <Filename Value="..\misc\OGLSpecFunc.pas"/>
+        <Caret Line="245" Column="1" TopLine="235"/>
       </Position18>
       <Position19>
         <Filename Value="..\misc\OGLSpecFunc.pas"/>
-        <Caret Line="245" Column="1" TopLine="235"/>
+        <Caret Line="246" Column="1" TopLine="235"/>
       </Position19>
       <Position20>
         <Filename Value="..\misc\OGLSpecFunc.pas"/>
-        <Caret Line="246" Column="1" TopLine="235"/>
+        <Caret Line="247" Column="1" TopLine="235"/>
       </Position20>
       <Position21>
         <Filename Value="..\misc\OGLSpecFunc.pas"/>
-        <Caret Line="247" Column="1" TopLine="235"/>
+        <Caret Line="255" Column="1" TopLine="245"/>
       </Position21>
       <Position22>
-        <Filename Value="..\misc\OGLSpecFunc.pas"/>
-        <Caret Line="255" Column="1" TopLine="245"/>
+        <Filename Value="..\gui\oglwindow.pas"/>
+        <Caret Line="2766" Column="1" TopLine="2759"/>
       </Position22>
       <Position23>
         <Filename Value="..\gui\oglwindow.pas"/>
-        <Caret Line="2766" Column="1" TopLine="2759"/>
+        <Caret Line="2767" Column="1" TopLine="2759"/>
       </Position23>
       <Position24>
         <Filename Value="..\gui\oglwindow.pas"/>
-        <Caret Line="2767" Column="1" TopLine="2759"/>
+        <Caret Line="2768" Column="1" TopLine="2759"/>
       </Position24>
       <Position25>
         <Filename Value="..\gui\oglwindow.pas"/>
-        <Caret Line="2768" Column="1" TopLine="2759"/>
+        <Caret Line="2774" Column="18" TopLine="2759"/>
       </Position25>
       <Position26>
         <Filename Value="..\gui\oglwindow.pas"/>
-        <Caret Line="2774" Column="18" TopLine="2759"/>
+        <Caret Line="165" Column="15" TopLine="155"/>
       </Position26>
       <Position27>
-        <Filename Value="..\gui\oglwindow.pas"/>
-        <Caret Line="165" Column="15" TopLine="155"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="131" Column="13" TopLine="118"/>
       </Position27>
       <Position28>
         <Filename Value="umainform.pas"/>
-        <Caret Line="131" Column="13" TopLine="118"/>
+        <Caret Line="119" Column="8" TopLine="109"/>
       </Position28>
       <Position29>
         <Filename Value="umainform.pas"/>
-        <Caret Line="119" Column="8" TopLine="109"/>
+        <Caret Line="65" Column="5" TopLine="55"/>
       </Position29>
       <Position30>
         <Filename Value="umainform.pas"/>
-        <Caret Line="65" Column="5" TopLine="55"/>
+        <Caret Line="120" Column="8" TopLine="110"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

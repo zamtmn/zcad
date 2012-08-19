@@ -288,7 +288,7 @@ var
     i:integer;
 begin
      for i := 0 to _parent.ControlCount - 1 do
-      if typeof(_parent.Controls[i]) = _class then
+      if TClass(typeof(_parent.Controls[i])) = _class then
                               begin
                                    result:=_parent.Controls[i];
                                    exit;
@@ -300,7 +300,7 @@ var
     i:integer;
 begin
      for i := 0 to _parent.ControlCount - 1 do
-      if typeof(_parent.Controls[i]) = TBitBtn then
+      if TClass(typeof(_parent.Controls[i])) = TBitBtn then
                               begin
                                    _parent.Controls[i].Height:=h;
                               end;

@@ -26,7 +26,9 @@ uses zcadsysvars,gdbasetypes,gdbase,LCLType,
      {$IFDEF WINDOWS}windows,{$ENDIF}
      log,sysutils,varmandef;
 type
-    {glu}TViewPortArray = array [0..3] of GLint;
+    {$if FPC_FULlVERSION>20600}
+    {glu}//TViewPortArray = array [0..3] of GLint;
+    {$ENDIF}
     PTViewPortArray=^TViewPortArray;
 
     TOGLContextDesk=record

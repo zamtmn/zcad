@@ -24,7 +24,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="9"/>
       <RevisionNr Value="7"/>
-      <BuildNr Value="1728"/>
+      <BuildNr Value="1729"/>
       <CharSet Value="0000"/>
       <StringTable ProductVersion="0.0.0.8"/>
     </VersionInfo>
@@ -202,22 +202,24 @@
         <PackageName Value="LCL"/>
       </Item5>
     </RequiredPackages>
-    <Units Count="146">
+    <Units Count="147">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="zcad"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="46"/>
-        <CursorPos X="24" Y="64"/>
+        <TopLine Value="79"/>
+        <CursorPos X="58" Y="101"/>
         <UsageCount Value="201"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
         <Filename Value="gui/mainwindow.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="mainwindow"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1087"/>
         <CursorPos X="31" Y="1110"/>
@@ -373,7 +375,7 @@
       <Unit17>
         <Filename Value="commands/gdbcommandsinterface.pas"/>
         <UnitName Value="gdbcommandsinterface"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="314"/>
         <CursorPos X="45" Y="337"/>
@@ -552,7 +554,7 @@
       <Unit36>
         <Filename Value="u/UGDBSelectedObjArray.pas"/>
         <UnitName Value="UGDBSelectedObjArray"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="555"/>
         <CursorPos X="1" Y="587"/>
@@ -620,6 +622,7 @@
       <Unit43>
         <Filename Value="gdb/GDBSubordinated.pas"/>
         <UnitName Value="GDBSubordinated"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
@@ -691,7 +694,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="164"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit50>
       <Unit51>
@@ -751,7 +754,7 @@
       <Unit57>
         <Filename Value="gdb/GDBWithLocalCS.pas"/>
         <UnitName Value="GDBWithLocalCS"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -852,7 +855,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="95"/>
         <CursorPos X="26" Y="118"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="10"/>
       </Unit67>
       <Unit68>
         <Filename Value="commands/GDBCommandsDraw.pas"/>
@@ -970,10 +973,12 @@
       <Unit81>
         <Filename Value="misc/OGLSpecFunc.pas"/>
         <UnitName Value="OGLSpecFunc"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="266"/>
-        <CursorPos X="4" Y="285"/>
+        <TopLine Value="9"/>
+        <CursorPos X="12" Y="30"/>
         <UsageCount Value="11"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit81>
       <Unit82>
@@ -1170,7 +1175,7 @@
       <Unit105>
         <Filename Value="misc/zcadinterface.pas"/>
         <UnitName Value="zcadinterface"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="20"/>
         <CursorPos X="52" Y="43"/>
@@ -1225,7 +1230,6 @@
       <Unit111>
         <Filename Value="gui/laercombobox.pas"/>
         <UnitName Value="laercombobox"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="445"/>
@@ -1528,8 +1532,18 @@
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit145>
+      <Unit146>
+        <Filename Value="../../ppsrc/packages/opengl/src/glu.pp"/>
+        <UnitName Value="glu"/>
+        <EditorIndex Value="8"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="68"/>
+        <CursorPos X="3" Y="91"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit146>
     </Units>
-    <JumpHistory Count="23" HistoryIndex="22">
+    <JumpHistory Count="25" HistoryIndex="24">
       <Position1>
         <Filename Value="gdb/ugdbsimpledrawing.pas"/>
         <Caret Line="75" Column="92" TopLine="58"/>
@@ -1591,37 +1605,45 @@
         <Caret Line="1" Column="1" TopLine="1"/>
       </Position15>
       <Position16>
-        <Filename Value="commands/gdbcommandsinterface.pas"/>
-        <Caret Line="24" Column="136" TopLine="103"/>
-      </Position16>
-      <Position17>
         <Filename Value="gui/mainwindow.pas"/>
         <Caret Line="1110" Column="42" TopLine="1087"/>
-      </Position17>
-      <Position18>
+      </Position16>
+      <Position17>
         <Filename Value="misc/zcadinterface.pas"/>
         <Caret Line="82" Column="4" TopLine="59"/>
+      </Position17>
+      <Position18>
+        <Filename Value="gui/mainwindow.pas"/>
+        <Caret Line="1110" Column="31" TopLine="1087"/>
       </Position18>
       <Position19>
         <Filename Value="gui/mainwindow.pas"/>
-        <Caret Line="1110" Column="31" TopLine="1087"/>
+        <Caret Line="139" Column="31" TopLine="116"/>
       </Position19>
       <Position20>
         <Filename Value="gui/mainwindow.pas"/>
-        <Caret Line="139" Column="31" TopLine="116"/>
+        <Caret Line="1110" Column="31" TopLine="1087"/>
       </Position20>
       <Position21>
-        <Filename Value="gui/mainwindow.pas"/>
-        <Caret Line="1110" Column="31" TopLine="1087"/>
+        <Filename Value="misc/zcadinterface.pas"/>
+        <Caret Line="82" Column="4" TopLine="59"/>
       </Position21>
       <Position22>
         <Filename Value="misc/zcadinterface.pas"/>
-        <Caret Line="82" Column="4" TopLine="59"/>
+        <Caret Line="43" Column="52" TopLine="20"/>
       </Position22>
       <Position23>
-        <Filename Value="misc/zcadinterface.pas"/>
-        <Caret Line="43" Column="52" TopLine="20"/>
+        <Filename Value="zcad.pas"/>
+        <Caret Line="101" Column="64" TopLine="81"/>
       </Position23>
+      <Position24>
+        <Filename Value="misc/OGLSpecFunc.pas"/>
+        <Caret Line="29" Column="31" TopLine="9"/>
+      </Position24>
+      <Position25>
+        <Filename Value="gdb/GDBSubordinated.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position25>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

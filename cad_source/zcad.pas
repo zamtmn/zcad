@@ -98,9 +98,11 @@ begin
 {$IFDEF TOTALYLOG}           programlog.logoutstr('Program compiled with {$DEFINE TOTALYLOG}',0); {$ENDIF}
 {$IFDEF PERFOMANCELOG}       programlog.logoutstr('Program compiled with {$DEFINE PERFOMANCELOG}',0); {$ENDIF}
 {$IFDEF BREACKPOINTSONERRORS}programlog.logoutstr('Program compiled with {$DEFINE BREACKPOINTSONERRORS}',0); {$ENDIF}
+                             {$if FPC_FULlVERSION>=20701}
                              programlog.logoutstr('DefaultSystemCodePage:='+inttostr(DefaultSystemCodePage),0);
                              programlog.logoutstr('DefaultUnicodeCodePage:='+inttostr(DefaultUnicodeCodePage),0);
                              programlog.logoutstr('UTF8CompareLocale:='+inttostr(UTF8CompareLocale),0);
+                             {$ENDIF}
 
   //Application_Initialize перемещен в инициализацию splashwnd чтоб показать сплэш пораньше
   //Application.Initialize;

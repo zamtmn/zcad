@@ -86,7 +86,7 @@ end;
 
 procedure TForm1._FormShow(Sender: TObject);
 begin
-    //_FormCreate(nil);
+    _FormCreate(nil);
     UGDBDescriptor.redrawoglwnd;
 end;
 
@@ -427,4 +427,4 @@ end;
 
 
 end.
-
+

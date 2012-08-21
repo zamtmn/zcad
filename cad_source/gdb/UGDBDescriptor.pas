@@ -390,7 +390,7 @@ function GDBDescriptor.CreateSimpleDWG:PTSimpleDrawing;
 var
    ptd:PTSimpleDrawing;
 begin
-     gdBGetMem({$IFDEF DEBUGBUILD}'{2A28BFB9-661F-4331-955A-C6F18DE67A19}',{$ENDIF}GDBPointer(result),sizeof(TAbstractDrawing));
+     gdBGetMem({$IFDEF DEBUGBUILD}'{2A28BFB9-661F-4331-955A-C6F18DE67A19}',{$ENDIF}GDBPointer(result),sizeof(TSimpleDrawing));
      ptd:=currentdwg;
      currentdwg:=pointer(result);
      result^.init(nil);//(@units);
@@ -448,19 +448,8 @@ begin
 end;
 destructor TDrawing.done;
 begin
+     inherited;
      undostack.done;
-     mainObjRoot.done;
-     LayerTable.FreeAndDone;
-     //ConstructObjRoot.ObjArray.FreeAndDone;
-     ConstructObjRoot.done;
-     SelObjArray.FreeAndDone;
-     DWGUnits.FreeAndDone;
-     OnMouseObj.ClearAndDone;
-     TextStyleTable.FreeAndDone;
-     BlockDefArray.FreeAndDone;
-     Numerator.FreeAndDone;
-     TableStyleTable.FreeAndDone;
-
      FileName:='';
 end;
 //procedure TDrawing.SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);

@@ -55,6 +55,7 @@ TSimpleDrawing=object(TAbstractDrawing)
 
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
                        constructor init(pcam:PGDBObjCamera);
+                       destructor done;
                        function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;virtual;
                        function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;virtual;
                        function GetPcamera:PGDBObjCamera;virtual;
@@ -294,6 +295,23 @@ function TSimpleDrawing.myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;
 begin
      _myGluUnProject(win.x,win.y,win.z,@pcamera^.modelMatrixLCS,@pcamera^.projMatrixLCS,@pcamera^.viewport, obj.x,obj.y,obj.z);
      OBJ:=vertexsub(OBJ,pcamera^.CamCSOffset);
+end;
+destructor TSimpleDrawing.done;
+begin
+     //undostack.done;
+     mainObjRoot.done;
+     LayerTable.FreeAndDone;
+     //ConstructObjRoot.ObjArray.FreeAndDone;
+     ConstructObjRoot.done;
+     SelObjArray.FreeAndDone;
+     DWGUnits.FreeAndDone;
+     OnMouseObj.ClearAndDone;
+     TextStyleTable.FreeAndDone;
+     BlockDefArray.FreeAndDone;
+     Numerator.FreeAndDone;
+     TableStyleTable.FreeAndDone;
+
+     //FileName:='';
 end;
 constructor TSimpleDrawing.init;
 var {tp:GDBTextStyleProp;}

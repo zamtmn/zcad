@@ -55,7 +55,7 @@ TSimpleDrawing=object(TAbstractDrawing)
 
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
                        constructor init(pcam:PGDBObjCamera);
-                       destructor done;
+                       destructor done;virtual;
                        function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;virtual;
                        function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;virtual;
                        function GetPcamera:PGDBObjCamera;virtual;
@@ -605,4 +605,4 @@ begin
 
 end;
 
-end.
+end.

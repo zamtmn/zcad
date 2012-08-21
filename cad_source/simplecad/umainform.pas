@@ -33,6 +33,7 @@ type
     Label1: TLabel;
     OpenDialog1: TOpenDialog;
     Panel1: TPanel;
+    PanelUp: TPanel;
     SaveDialog1: TSaveDialog;
     SpinEdit1: TSpinEdit;
     Splitter1: TSplitter;
@@ -111,7 +112,7 @@ begin
      gdb.AddRef(ptd^);
      gdb.SetCurrentDWG(pointer(ptd));
 
-     oglwnd:=TOGLWnd.Create(Panel1);
+     oglwnd:=TOGLWnd.Create(PanelUp);
      oglwnd.AuxBuffers:=0;
      oglwnd.StencilBits:=8;
      oglwnd.DepthBits:=24;
@@ -124,7 +125,7 @@ begin
      gdb.GetCurrentDWG^.OGLwindow1:=oglwnd;
      oglwnd.PDWG:=ptd;
      oglwnd.align:=alClient;
-     oglwnd.Parent:=Panel1;
+     oglwnd.Parent:=PanelUp;
      oglwnd.init;
      oglwnd.PDWG:=ptd;
      oglwnd.GDBActivate;
@@ -417,7 +418,6 @@ begin
   //if assigned(updatevisibleproc) then updatevisibleproc;
 
 end;
-
 
 procedure TForm1.TreeChange(Sender: TObject);
 begin

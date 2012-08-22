@@ -108,8 +108,8 @@ begin
      sysvar.DWG.DWG_OriginGrid:=@origingrid;
      ugdbdescriptor.startup;
 
-     //ptd:=gdb.CreateSimpleDWG;
-     ptd:=gdb.CreateDWG;
+     ptd:=gdb.CreateSimpleDWG;
+     //ptd:=gdb.CreateDWG;
      gdb.AddRef(ptd^);
      gdb.SetCurrentDWG(pointer(ptd));
 
@@ -433,4 +433,4 @@ end;
 
 
 end.
-
+

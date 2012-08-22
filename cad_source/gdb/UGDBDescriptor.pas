@@ -72,6 +72,7 @@ TDrawing=object(TSimpleDrawing)
            Changed:GDBBoolean;
            attrib:GDBLongword;
            UndoStack:GDBObjOpenArrayOfUCommands;
+           DWGUnits:TUnitManager;
 
            constructor init(num:PTUnitManager);
            destructor done;virtual;
@@ -450,6 +451,7 @@ destructor TDrawing.done;
 begin
      inherited;
      undostack.done;
+     DWGUnits.FreeAndDone;
      FileName:='';
 end;
 //procedure TDrawing.SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);

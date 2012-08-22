@@ -50,6 +50,7 @@ type
     procedure BtnSaveDXFClick(Sender: TObject);
     procedure BtnSelectAllClick(Sender: TObject);
     procedure TreeChange(Sender: TObject);
+    procedure _DestroyApp(Sender: TObject);
     procedure _FormCreate(Sender: TObject);
     procedure _KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure _FormShow(Sender: TObject);
@@ -107,8 +108,8 @@ begin
      sysvar.DWG.DWG_OriginGrid:=@origingrid;
      ugdbdescriptor.startup;
 
-     ptd:=gdb.CreateSimpleDWG;
-     //ptd:=gdb.CreateDWG;
+     //ptd:=gdb.CreateSimpleDWG;
+     ptd:=gdb.CreateDWG;
      gdb.AddRef(ptd^);
      gdb.SetCurrentDWG(pointer(ptd));
 
@@ -423,6 +424,11 @@ procedure TForm1.TreeChange(Sender: TObject);
 begin
      sysvar.DWG.DWG_SystmGeometryDraw^:=CheckBox1.Checked;
      UGDBDescriptor.redrawoglwnd;
+end;
+
+procedure TForm1._DestroyApp(Sender: TObject);
+begin
+     ugdbdescriptor.finalize;
 end;
 
 

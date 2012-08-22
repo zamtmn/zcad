@@ -7,6 +7,7 @@ object Form1: TForm1
   ClientHeight = 818
   ClientWidth = 1024
   KeyPreview = True
+  OnDestroy = _DestroyApp
   OnKeyDown = _KeyDown
   OnShow = _FormShow
   LCLVersion = '1.1'

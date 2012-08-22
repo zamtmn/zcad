@@ -83,10 +83,10 @@ object Form1: TForm1
     AnchorSideTop.Side = asrCenter
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 911
+    Left = 906
     Height = 28
-    Top = 551
-    Width = 113
+    Top = 547
+    Width = 118
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Rebuild tree'
     OnClick = BtnRebuildClick
@@ -97,9 +97,9 @@ object Form1: TForm1
     AnchorSideLeft.Side = asrBottom
     AnchorSideRight.Side = asrBottom
     Left = 834
-    Height = 26
+    Height = 19
     Top = 552
-    Width = 77
+    Width = 72
     Caption = 'Show tree'
     OnChange = TreeChange
     TabOrder = 5
@@ -109,10 +109,10 @@ object Form1: TForm1
     AnchorSideLeft.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 958
-    Height = 18
+    Left = 970
+    Height = 23
     Top = 0
-    Width = 66
+    Width = 54
     Anchors = [akTop, akLeft, akRight]
     MaxValue = 1000000
     MinValue = 1
@@ -195,9 +195,9 @@ object Form1: TForm1
     AnchorSideTop.Control = SpinEdit1
     AnchorSideTop.Side = asrCenter
     Left = 834
-    Height = 13
-    Top = 3
-    Width = 124
+    Height = 15
+    Top = 4
+    Width = 136
     Alignment = taCenter
     Caption = 'Number of entities to add'
     Layout = tlCenter
@@ -235,9 +235,9 @@ object Form1: TForm1
     AnchorSideLeft.Control = Splitter1
     AnchorSideLeft.Side = asrBottom
     Left = 834
-    Height = 26
+    Height = 19
     Top = 529
-    Width = 99
+    Width = 104
     Caption = '3D(ZCoord<>0)'
     TabOrder = 14
   end
@@ -266,4 +266,4 @@ object Form1: TForm1
     left = 976
     top = 760
   end
-end
+end

@@ -44,7 +44,6 @@ TSimpleDrawing=object(TAbstractDrawing)
                        SelObjArray:GDBSelectedObjArray;
                        pcamera:PGDBObjCamera;
                        OnMouseObj:GDBObjOpenArrayOfPV;
-                       DWGUnits:TUnitManager;
 
                        OGLwindow1:toglwnd;
 
@@ -304,7 +303,7 @@ begin
      //ConstructObjRoot.ObjArray.FreeAndDone;
      ConstructObjRoot.done;
      SelObjArray.FreeAndDone;
-     DWGUnits.FreeAndDone;
+     //DWGUnits.FreeAndDone;
      OnMouseObj.ClearAndDone;
      TextStyleTable.FreeAndDone;
      BlockDefArray.FreeAndDone;
@@ -605,4 +604,4 @@ begin
 
 end;
 
-end.
+end.

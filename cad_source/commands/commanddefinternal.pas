@@ -233,6 +233,7 @@ begin
     gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
     gdb.GetCurrentDWG.SelObjArray.clearallobjects;
     end;
+    if gdb.GetCurrentDWG.OGLwindow1<>nil then
   gdb.GetCurrentDWG.OGLwindow1.Clear0Ontrackpoint;
   if not overlay then
                      begin
@@ -241,6 +242,7 @@ begin
                           //gdb.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
                           gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
                      end;
+  if gdb.GetCurrentDWG.OGLwindow1<>nil then
   gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   gdb.GetCurrentDWG.OnMouseObj.Clear;
   //poglwnd^.md.mode := savemousemode;

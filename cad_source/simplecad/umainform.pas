@@ -10,7 +10,7 @@ uses
   StdCtrls, Spin,
   {From ZCAD}
   zcadsysvars,{zcadinterface,} iodxf,varmandef, oglwindow,  UUnitManager,
-  UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
+  UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,{URegisterObjects,}GDBEntity,GDBManager,gdbobjectsconstdef;
 
 type
 

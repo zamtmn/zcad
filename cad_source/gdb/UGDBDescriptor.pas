@@ -117,8 +117,8 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
               end;
 {EXPORT-}
 var GDB: GDBDescriptor;
-    BlockBaseDWG:PTDrawing;
-    ClipboardDWG:PTDrawing;
+    BlockBaseDWG:PTDrawing=nil;
+    ClipboardDWG:PTDrawing=nil;
     GDBTrash:GDBObjTrash;
     FontManager:GDBFontManager;
 procedure CalcZ(z:GDBDouble);
@@ -819,10 +819,16 @@ end;
 procedure finalize;
 begin
   gdb.done;
+  if BlockBaseDWG<>nil then
+  begin
   BlockBaseDWG.done;
   GDBFreemem(pointer(BlockBaseDWG));
+  end;
+  if ClipboardDWG<>nil then
+  begin
   ClipboardDWG.done;
   GDBFreemem(pointer(ClipboardDWG));
+  end;
   pbasefont:=nil;
   FontManager.FreeAndDone;
   GDBTrash.done;

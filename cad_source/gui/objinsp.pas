@@ -742,7 +742,7 @@ begin
   if sender=peditor then
   begin   //fghfgh
 
-    pdwg:=gdb.GetCurrentDWG;
+    pdwg:=ptdrawing(gdb.GetCurrentDWG);
     if pdwg<>nil then
     begin
          pdwg.OGLwindow1.param.lastonmouseobject:=nil;

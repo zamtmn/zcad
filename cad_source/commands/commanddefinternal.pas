@@ -392,7 +392,7 @@ begin
   savemousemode := gdb.GetCurrentDWG.OGLwindow1.param.md.mode;
   saveosmode := sysvar.dwg.DWG_OSMode^;
   mouseclic := 0;
-  UndoTop:=gdb.GetCurrentDWG.UndoStack.CurrentCommand;
+  UndoTop:=gdb.GetCurrentDWG.GetUndoTop{UndoStack.CurrentCommand};
 
   if (commanddata.Instance<>nil)
   and(commanddata.PTD<>nil) then

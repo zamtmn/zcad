@@ -694,6 +694,7 @@ begin
                                 visible:=0;
                                 result:=false;
                            end;
+      if self.vp.Layer<>nil then
       if not(self.vp.Layer._on) then
                            begin
                                 visible:=0;

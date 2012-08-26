@@ -77,7 +77,7 @@ TDrawing=object(TSimpleDrawing)
            constructor init(num:PTUnitManager);
            destructor done;virtual;
            function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
-           function GetLastSelected:PGDBObjEntity;virtual;
+
            procedure SetCurrentDWG;virtual;
            function StoreOldCamerapPos:Pointer;virtual;
            procedure StoreNewCamerapPos(command:Pointer);virtual;
@@ -85,10 +85,14 @@ TDrawing=object(TSimpleDrawing)
            procedure rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);virtual;
            procedure PushStartMarker(CommandName:GDBString);virtual;
            procedure PushEndMarker;virtual;
+           procedure SetFileName(NewName:GDBString);virtual;
+           function GetFileName:GDBString;virtual;
+           procedure ChangeStampt(st:GDBBoolean);virtual;
+           function GetUndoTop:TArrayIndex;virtual;
      end;
 PGDBDescriptor=^GDBDescriptor;
 GDBDescriptor=object(GDBOpenArrayOfPObjects)
-                    CurrentDWG:PTDrawing;
+                    CurrentDWG:{PTDrawing}PTSimpleDrawing;
                     ProjectUnits:TUnitManager;
                     constructor init;
                     constructor initnul;
@@ -97,17 +101,17 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
 
                     function GetCurrentROOT:PGDBObjGenericSubEntry;
 
-                    function GetCurrentDWG:PTDrawing;
+                    function GetCurrentDWG:{PTDrawing}PTSimpleDrawing;
                     procedure asociatedwgvars;
                     procedure SetCurrentDWG(PDWG:PTAbstractDrawing);
 
                     function CreateDWG:PTDrawing;
-                    function CreateSimpleDWG:PTSimpleDrawing;virtual;
+                    //function CreateSimpleDWG:PTSimpleDrawing;virtual;
                     procedure eraseobj(ObjAddr:PGDBaseObject);virtual;
 
-                    procedure CopyBlock(_from,_to:PTDrawing;_source:PGDBObjBlockdef);
-                    function CopyEnt(_from,_to:PTDrawing;_source:PGDBObjEntity):PGDBObjEntity;
-                    procedure AddBlockFromDBIfNeed(_to:PTDrawing;name:GDBString);
+                    procedure CopyBlock(_from,_to:PTSimpleDrawing;_source:PGDBObjBlockdef);
+                    function CopyEnt(_from,_to:PTSimpleDrawing;_source:PGDBObjEntity):PGDBObjEntity;
+                    procedure AddBlockFromDBIfNeed(_to:PTSimpleDrawing;name:GDBString);
                     //procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
                     function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
                     function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
@@ -122,7 +126,7 @@ var GDB: GDBDescriptor;
     GDBTrash:GDBObjTrash;
     FontManager:GDBFontManager;
 procedure CalcZ(z:GDBDouble);
-procedure RemapAll(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
+procedure RemapAll(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 procedure startup;
 procedure finalize;
 procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
@@ -134,7 +138,7 @@ implementation
  uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log,OGLSpecFunc;
 procedure redrawoglwnd;
 var
-   pdwg:PTDrawing;
+   pdwg:PTSimpleDrawing;
 begin
   isOpenGLError;
   pdwg:=gdb.GetCurrentDWG;
@@ -221,11 +225,6 @@ procedure TDrawing.SetCurrentDWG();
 begin
   gdb.SetCurrentDWG(@self);
 end;
-
-function TDrawing.GetLastSelected:PGDBObjEntity;
-begin
-     result:=OGLwindow1.param.SelDesc.LastSelectedObject;
-end;
 function TDrawing.StoreOldCamerapPos:Pointer;
 begin
      result:=UndoStack.PushCreateTGChangeCommand(GetPcamera^.prop)
@@ -289,9 +288,10 @@ procedure GDBDescriptor.asociatedwgvars;
 //var
 //    DWGUnit:PTUnit;
 begin
+   { TODO : переделать }
    if typeof(CurrentDWG^)=typeof(TDrawing) then
    begin
-   DWGUnit:=CurrentDWG.DWGUnits.findunit('DrawingVars');
+   DWGUnit:=PTDrawing(CurrentDWG).DWGUnits.findunit('DrawingVars');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_SnapGrid,'DWG_SnapGrid');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_DrawGrid,'DWG_DrawGrid');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_StepGrid,'DWG_StepGrid');
@@ -340,6 +340,24 @@ procedure TDrawing.PushEndMarker;
 begin
       self.UndoStack.PushEndMarker;
 end;
+procedure TDrawing.SetFileName(NewName:GDBString);
+begin
+     self.FileName:=NewName;
+end;
+function TDrawing.GetFileName:GDBString;
+begin
+     result:=FileName;
+end;
+
+procedure TDrawing.ChangeStampt;
+begin
+     self.Changed:=true;
+end;
+function TDrawing.GetUndoTop:TArrayIndex;
+begin
+     result:=UndoStack.CurrentCommand;
+end;
+
 constructor TDrawing.init;
 var {tp:GDBTextStyleProp;}
     ts:PTGDBTableStyle;
@@ -378,7 +396,7 @@ begin
 end;
 function GDBDescriptor.CreateDWG:PTDrawing;
 var
-   ptd:PTDrawing;
+   ptd:PTsimpleDrawing;
 begin
      gdBGetMem({$IFDEF DEBUGBUILD}'{2A28BFB9-661F-4331-955A-C6F18DE67A19}',{$ENDIF}GDBPointer(result),sizeof(TDrawing));
      ptd:=currentdwg;
@@ -387,7 +405,7 @@ begin
      //self.AddRef(result^);
      currentdwg:=ptd;
 end;
-function GDBDescriptor.CreateSimpleDWG:PTSimpleDrawing;
+(*function GDBDescriptor.CreateSimpleDWG:PTSimpleDrawing;
 var
    ptd:PTSimpleDrawing;
 begin
@@ -397,7 +415,7 @@ begin
      result^.init(nil);//(@units);
      //self.AddRef(result^);
      currentdwg:=pointer(ptd);
-end;
+end;*)
 
 constructor GDBDescriptor.init;
 //var //tp:GDBTextStyleProp;
@@ -435,7 +453,12 @@ constructor GDBDescriptor.initnul;
 begin
   //Pointer(FileName):=nil;
   //Changed:=True;
-  CurrentDWG.DWGUnits.init;
+  { TODO : переделать }
+  if typeof(CurrentDWG^)=typeof(TDrawing) then
+  begin
+  PTDrawing(CurrentDWG).DWGUnits.init;
+  end;
+  //CurrentDWG.DWGUnits.init;
   inherited initnul;
 end;
 function GDBDescriptor.AfterDeSerialize;
@@ -464,7 +487,7 @@ begin
     // gdbfreemem(pointer(currentdwg));
      ProjectUnits.done;
 end;
-procedure GDBDescriptor.AddBlockFromDBIfNeed(_to:PTDrawing;name:GDBString);
+procedure GDBDescriptor.AddBlockFromDBIfNeed(_to:PTSimpleDrawing;name:GDBString);
 var
    {_dest,}td:PGDBObjBlockdef;
    //tn:gdbstring;
@@ -479,7 +502,7 @@ begin
           CopyBlock(BlockBaseDWG,_to,td);
      end;
 end;
-function createtstylebyindex(_from,_to:PTDrawing;oldti:TArrayIndex):TArrayIndex;
+function createtstylebyindex(_from,_to:PTSimpleDrawing;oldti:TArrayIndex):TArrayIndex;
 var
    {_dest,}td:PGDBObjBlockdef;
    newti:TArrayIndex;
@@ -500,7 +523,7 @@ begin
                                    end;
       result:=_to.TextStyleTable.FindStyle(tsname);
 end;
-procedure createtstyleifneed(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
+procedure createtstyleifneed(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 var
    {_dest,}td:PGDBObjBlockdef;
    oldti,newti:TArrayIndex;
@@ -529,7 +552,7 @@ begin
                     PGDBObjText(_dest)^.TXTStyleIndex:=newti;}
                end;
 end;
-procedure createblockifneed(_from,_to:PTDrawing;_source:PGDBObjEntity);
+procedure createblockifneed(_from,_to:PTSimpleDrawing;_source:PGDBObjEntity);
 var
    {_dest,}td:PGDBObjBlockdef;
    tn:gdbstring;
@@ -599,13 +622,13 @@ begin
                                         TLOMerge);
            end;
 end;}
-procedure RemapLayer(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
+procedure RemapLayer(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 begin
      _dest.vp.Layer:=_to.LayerTable.createlayerifneed(_source.vp.Layer);
      _dest.correctsublayers(_to.LayerTable);
      //_dest.vp.Layer:=createlayerifneed(_from,_to,_source.vp.Layer);
 end;
-procedure RemapEntArray(_from,_to:PTDrawing;const _source,_dest:GDBObjEntityOpenArray);
+procedure RemapEntArray(_from,_to:PTSimpleDrawing;const _source,_dest:GDBObjEntityOpenArray);
 var
    irs,ird:itrec;
    s,d:PGDBObjEntity;
@@ -620,7 +643,7 @@ begin
   until (s=nil)or(d=nil);
 end;
 
-procedure RemapAll(_from,_to:PTDrawing;_source,_dest:PGDBObjEntity);
+procedure RemapAll(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 begin
   RemapLayer(_from,_to,_source,_dest);
   case _source.vp.ID of
@@ -639,7 +662,7 @@ begin
                                     end;
                     end;
 end;
-function GDBDescriptor.CopyEnt(_from,_to:PTDrawing;_source:PGDBObjEntity):PGDBObjEntity;
+function GDBDescriptor.CopyEnt(_from,_to:PTSimpleDrawing;_source:PGDBObjEntity):PGDBObjEntity;
 var
    tv: pGDBObjEntity;
 begin
@@ -738,7 +761,7 @@ begin
      end;
 end;
 
-procedure GDBDescriptor.CopyBlock(_from,_to:PTDrawing;_source:PGDBObjBlockdef);
+procedure GDBDescriptor.CopyBlock(_from,_to:PTSimpleDrawing;_source:PGDBObjBlockdef);
 var
    _dest{,td}:PGDBObjBlockdef;
    //tn:gdbstring;

@@ -10,7 +10,7 @@ uses
   StdCtrls, Spin,
   {From ZCAD}
   zcadsysvars,{zcadinterface,} iodxf,varmandef, oglwindow,  UUnitManager,
-  UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,{URegisterObjects,}GDBEntity,GDBManager,gdbobjectsconstdef;
+  UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,ugdbsimpledrawing,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
 
 type
 
@@ -108,7 +108,7 @@ begin
      sysvar.DWG.DWG_OriginGrid:=@origingrid;
      ugdbdescriptor.startup;
 
-     ptd:=gdb.CreateSimpleDWG;
+     ptd:={gdb.}CreateSimpleDWG;
      //ptd:=gdb.CreateDWG;
      gdb.AddRef(ptd^);
      gdb.SetCurrentDWG(pointer(ptd));

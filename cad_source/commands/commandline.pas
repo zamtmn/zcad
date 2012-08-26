@@ -67,7 +67,7 @@ procedure ParseCommand(comm:pansichar; out command,operands:GDBString);
 {procedure startup;
 procedure finalize;}
 implementation
-uses UGDBStringArray,cmdline,UGDBDescriptor,forms{,varman};
+uses ugdbsimpledrawing,UGDBStringArray,cmdline,UGDBDescriptor,forms{,varman};
 function GDBcommandmanager.GetValueHeap:GDBInteger;
 begin
      result:=varstack.vardescarray.count;
@@ -249,12 +249,12 @@ begin
 end;
 procedure GDBcommandmanager.run(pc:PCommandObjectDef;operands:GDBString);
 var
-   pd:PTDrawing;
+   pd:PTSimpleDrawing;
 begin
    pd:=gdb.GetCurrentDWG;
    if pd<>nil then
    if ((pc^.CEndActionAttr)and CEDWGNChanged)=0 then
-                                                   pd.Changed:=true;
+                                                   pd.ChangeStampt(true);
           if pcommandrunning<>nil then
                                       begin
                                            if pc^.overlay then

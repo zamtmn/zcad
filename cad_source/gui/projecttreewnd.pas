@@ -133,7 +133,7 @@ begin
                        begin
                             T_ProjectDB.Selected:=nil;
                             self.ProjectEquipmentN.DeleteChildren;
-                            BuildTreeByEQ(ProjectEquipmentN,gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
+                            BuildTreeByEQ(ProjectEquipmentN,ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
                             (*
                             ProjectEquipmentNodeN.free;
                             gdbgetmem({$IFDEF DEBUGBUILD}'{B941B71E-2BA6-4B5E-B436-633B6C8FC500}',{$ENDIF}pointer(ProjectEquipmentNode.SubNode),sizeof(TGDBTree));
@@ -333,7 +333,7 @@ begin
 
   BuildTreeByEQ(ProgramEquipmentN,DBUnit,{ProgramDBContextMenuN}{}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROGRAMDBCXMENU')){});
   if gdb.GetCurrentDWG<>nil then
-  BuildTreeByEQ(ProjectEquipmentN,gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
+  BuildTreeByEQ(ProjectEquipmentN,ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
 
 end;
 initialization

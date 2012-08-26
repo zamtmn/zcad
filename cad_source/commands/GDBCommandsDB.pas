@@ -47,7 +47,7 @@ var //t:PUserTypeDescriptor;
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
-           pu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
+           pu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
            pvd:=pu^.FindVariable('DBCounter');
            vn:=inttostr(GDBInteger(pvd.data.Instance^));
            vn:='_EQ'+dupestring('0',6-length(vn))+vn;
@@ -75,7 +75,7 @@ var //t:PUserTypeDescriptor;
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
-           pu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
+           pu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
            pdbv:=pu.InterfaceVariables.findvardescbyinst(PTTypedData(commandmanager.ContextCommandParams)^.Instance);
            if pdbv<>nil then
            begin
@@ -107,7 +107,7 @@ var //t:PUserTypeDescriptor;
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
-           pu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
+           pu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
            pdbv:=pu.InterfaceVariables.findvardescbyinst(PTTypedData(commandmanager.ContextCommandParams)^.Instance);
            if pdbv<>nil then
            begin

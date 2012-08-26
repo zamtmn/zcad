@@ -51,7 +51,7 @@ TSimpleDrawing=object(TAbstractDrawing)
                        BlockDefArray:GDBObjBlockdefArray;(*saved_to_shd*)
                        Numerator:GDBNumerator;(*saved_to_shd*)
                        TableStyleTable:GDBTableStyleArray;(*saved_to_shd*)
-
+                       function GetLastSelected:PGDBObjEntity;virtual;
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
                        constructor init(pcam:PGDBObjCamera);
                        destructor done;virtual;
@@ -72,10 +72,47 @@ TSimpleDrawing=object(TAbstractDrawing)
                        procedure rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);virtual;
                        procedure PushStartMarker(CommandName:GDBString);virtual;
                        procedure PushEndMarker;virtual;
+                       procedure SetFileName(NewName:GDBString);virtual;
+                       function GetFileName:GDBString;virtual;
+                       procedure ChangeStampt(st:GDBBoolean);virtual;
+                       function GetUndoTop:TArrayIndex;virtual;
                  end;
 {EXPORT-}
+function CreateSimpleDWG:PTSimpleDrawing;
 implementation
 uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,{commandline,}log{,OGLSpecFunc};
+function TSimpleDrawing.GetLastSelected:PGDBObjEntity;
+begin
+     result:=OGLwindow1.param.SelDesc.LastSelectedObject;
+end;
+procedure TSimpleDrawing.SetFileName(NewName:GDBString);
+begin
+
+end;
+function TSimpleDrawing.GetFileName:GDBString;
+begin
+     result:=''
+end;
+procedure TSimpleDrawing.ChangeStampt;
+begin
+
+end;
+function TSimpleDrawing.GetUndoTop:TArrayIndex;
+begin
+     result:=0;
+end;
+
+function CreateSimpleDWG:PTSimpleDrawing;
+var
+   ptd:PTSimpleDrawing;
+begin
+     gdBGetMem({$IFDEF DEBUGBUILD}'{2A28BFB9-661F-4331-955A-C6F18DE67A19}',{$ENDIF}GDBPointer(result),sizeof(TSimpleDrawing));
+     //ptd:=currentdwg;
+     //currentdwg:=pointer(result);
+     result^.init(nil);//(@units);
+     //self.AddRef(result^);
+     //currentdwg:=pointer(ptd);
+end;
 procedure TSimpleDrawing.PushStartMarker(CommandName:GDBString);
 begin
 

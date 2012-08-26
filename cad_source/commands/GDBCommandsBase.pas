@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,intftranslations,{layerwnd,}strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,intftranslations,{layerwnd,}strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -441,7 +441,7 @@ var
    mem:GDBOpenArrayOfByte;
    pu:ptunit;
 begin
-     if gdb.currentdwg<>BlockBaseDWG then
+     if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
      if gdb.GetCurrentROOT.ObjArray.Count>0 then
                                                      begin
                                                           if assigned(messageboxproc)then
@@ -460,18 +460,18 @@ begin
                                 begin
                                      //if operands<>'QS' then
                                      //                      gdb.GetCurrentDWG.FileName:=s;
-                                     if gdb.currentdwg<>BlockBaseDWG then
+                                     if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
                                                                        begin
                                                                        isOpenGLError;
                                                                        end;
                                      addfromdxf(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode);
-                                     if gdb.currentdwg<>BlockBaseDWG then
+                                     if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
                                                                        begin
                                                                        isOpenGLError;
                                                                        end;
                                      if FileExists(utf8tosys(s+'.dbpas')) then
                                      begin
-                                           pu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
+                                           pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
                                            mem.InitFromFile(s+'.dbpas');
                                            pu^.free;
                                            units.parseunit(mem,PTSimpleUnit(pu));
@@ -483,7 +483,7 @@ begin
                                           addfromdwg(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode);
                                           if FileExists(utf8tosys(s+'.dbpas')) then
                                           begin
-                                                pu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
+                                                pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
                                                 mem.InitFromFile(s+'.dbpas');
                                                 pu^.free;
                                                 units.parseunit(mem,PTSimpleUnit(pu));
@@ -498,7 +498,7 @@ begin
      gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
      gdb.GetCurrentROOT.format;
      if assigned(updatevisibleproc) then updatevisibleproc;
-     if gdb.currentdwg<>BlockBaseDWG then
+     if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
                                          begin
                                          gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
                                          isOpenGLError;
@@ -563,10 +563,10 @@ begin
 end;
 function MergeBlocks_com(Operands:pansichar):GDBInteger;
 var
-   pdwg:PTDrawing;
+   pdwg:PTSimpleDrawing;
    s:gdbstring;
 begin
-     pdwg:=GDB.CurrentDWG;
+     pdwg:=(GDB.CurrentDWG);
      GDB.CurrentDWG:=BlockBaseDWG;
 
      if length(operands)>0 then
@@ -585,7 +585,7 @@ var
 begin
      savedxf2000(s, GDB.GetCurrentDWG);
 
-     pu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
+     pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
      mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
      pu^.SavePasToMem(mem);
      filepath:=ExtractFilePath(s);
@@ -617,16 +617,16 @@ begin
                           end
                       else
                           begin
-                               if gdb.GetCurrentDWG.FileName=rsUnnamedWindowTitle then
+                               if gdb.GetCurrentDWG.GetFileName=rsUnnamedWindowTitle then
                                                                       begin
                                                                            //commandmanager.executecommandend;
                                                                            SaveAs_com('');
                                                                            exit;
                                                                       end;
-                               s1:=gdb.GetCurrentDWG.FileName;
+                               s1:=gdb.GetCurrentDWG.GetFileName;
                           end;
      if not itautoseve then
-                           gdb.GetCurrentDWG.Changed:=false;
+                           gdb.GetCurrentDWG.ChangeStampt(false);
      SaveDXFDPAS(s1);
      //savedxf2000(s1, @GDB);
      SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
@@ -657,8 +657,8 @@ begin
      else if fileext='.DXF' then
                                 begin
                                      SaveDXFDPAS(s);
-                                     gdb.GetCurrentDWG.FileName:=s;
-                                     gdb.GetCurrentDWG.Changed:=false;
+                                     gdb.GetCurrentDWG.SetFileName(s);
+                                     gdb.GetCurrentDWG.ChangeStampt(false);
                                      if assigned(updatevisibleproc) then updatevisibleproc;
                                     (* savedxf2000(s, @GDB);
                                      pu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
@@ -678,8 +678,8 @@ begin
 end;
 function Cam_reset_com(Operands:pansichar):GDBInteger;
 begin
-  gdb.GetCurrentDWG.UndoStack.PushStartMarker('Камера в начало');
-  with gdb.GetCurrentDWG.UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
+  ptdrawing(gdb.GetCurrentDWG).UndoStack.PushStartMarker('Камера в начало');
+  with ptdrawing(gdb.GetCurrentDWG).UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
   begin
   gdb.GetCurrentDWG.pcamera^.prop.point.x := 0;
   gdb.GetCurrentDWG.pcamera^.prop.point.y := 0;
@@ -701,7 +701,7 @@ begin
   gdb.GetCurrentDWG.pcamera^.prop.zoom := 0.1;
   ComitFromObj;
   end;
-  gdb.GetCurrentDWG.UndoStack.PushEndMarker;
+  ptdrawing(gdb.GetCurrentDWG).UndoStack.PushEndMarker;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
@@ -721,14 +721,14 @@ begin
                                                    prevundo:=0;
                                                    overlay:=false;
                                               end;
-  gdb.GetCurrentDWG.UndoStack.undo(prevundo,overlay);
+  ptdrawing(gdb.GetCurrentDWG).UndoStack.undo(prevundo,overlay);
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
 function Redo_com(Operands:pansichar):GDBInteger;
 begin
   gdb.GetCurrentROOT.ObjArray.DeSelect;
-  gdb.GetCurrentDWG.UndoStack.redo;
+  ptdrawing(gdb.GetCurrentDWG).UndoStack.redo;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;

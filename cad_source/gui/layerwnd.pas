@@ -5,7 +5,7 @@ unit layerwnd;
 interface
 
 uses
-  zcadsysvars,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  ugdbsimpledrawing,zcadsysvars,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Buttons, ExtCtrls, StdCtrls, Grids, ComCtrls,LCLIntf,lcltype,
 
   gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
@@ -199,7 +199,7 @@ end;
 
 procedure TLayerWindow.FormShow(Sender: TObject);
 var
-   pdwg:PTDrawing;
+   pdwg:PTSimpleDrawing;
    ir:itrec;
    plp:PGDBLayerProp;
    s:ansistring;
@@ -211,7 +211,7 @@ begin
      ListView1.OnMouseUp:=@LWMouseUp;
      ListView1.OnMouseDown:=@LWMouseDown;
      pdwg:=gdb.GetCurrentDWG;
-     if (pdwg<>nil)and(pdwg<>BlockBaseDWG) then
+     if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
      begin
        plp:=pdwg^.LayerTable.beginiterate(ir);
        if plp<>nil then

@@ -21,7 +21,7 @@ unit mainwindow;
 
 interface
 uses
-  zcadsysvars,GDBBlockDef,laercombobox,ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
+  ugdbsimpledrawing,zcadsysvars,GDBBlockDef,laercombobox,ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
   ActnList,LCLType,LCLProc,strproc,log,intftranslations,toolwin,
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
@@ -414,7 +414,7 @@ end;
 
 function TMainFormN.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean;
 var
-   cdwg:PTDrawing;
+   cdwg:PTSimpleDrawing;
    tcl:integer;
 begin
      result:=false;
@@ -453,7 +453,7 @@ end;
 
 function TMainFormN.GetLayersArray(var la:TLayerArray):boolean;
 var
-   cdwg:PTDrawing;
+   cdwg:PTSimpleDrawing;
    pcl:PGDBLayerProp;
    ir:itrec;
    counter:integer;
@@ -481,7 +481,7 @@ begin
 end;
 function TMainFormN.GetLayerProp(PLayer:Pointer;var lp:TLayerPropRecord):boolean;
 var
-   cdwg:PTDrawing;
+   cdwg:PTSimpleDrawing;
    pcl:PGDBLayerProp;
 begin
      if player=nil then
@@ -2320,7 +2320,7 @@ begin
 end;}
 procedure TMainFormN.idle;
 var
-   pdwg:PTDrawing;
+   pdwg:PTSimpleDrawing;
    rc:TDrawContext;
 begin
      done:=true;
@@ -2599,17 +2599,17 @@ var
    poglwnd:toglwnd;
    name:gdbstring;
    i:Integer;
-   pdwg:PTDrawing;
+   pdwg:PTSimpleDrawing;
 begin
    pdwg:=gdb.GetCurrentDWG;
    if assigned(mainformn)then
    begin
    mainformn.UpdateControls;
-  if (pdwg<>nil)and(pdwg<>BlockBaseDWG) then
+  if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
   begin
                                       begin
                                            mainformn.setvisualprop;
-                                           mainformn.Caption:=(('ZCad v'+sysvar.SYS.SYS_Version^+' - ['+gdb.GetCurrentDWG.FileName+']'));
+                                           mainformn.Caption:=(('ZCad v'+sysvar.SYS.SYS_Version^+' - ['+gdb.GetCurrentDWG.GetFileName+']'));
   if assigned(mainwindow.LayerBox) then
   mainwindow.LayerBox.enabled:=true;
   if assigned(mainwindow.LineWBox) then

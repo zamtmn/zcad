@@ -21,7 +21,7 @@ unit gdbcommandsinterface;
 
 interface
 uses
- GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,intftranslations,layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,intftranslations,layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -88,7 +88,7 @@ var
    CurrentDWG:PTDrawing;
 begin
   application.ProcessMessages;
-  CurrentDWG:=gdb.GetCurrentDWG;
+  CurrentDWG:=PTDrawing(gdb.GetCurrentDWG);
   _CloseDWGPage(CurrentDWG,mainformn.PageControl.ActivePage);
   (*if CurrentDWG<>nil then
   begin
@@ -283,7 +283,7 @@ begin
   if isload then
   begin
        newdwg_com(@s[1]);
-       gdb.GetCurrentDWG.FileName:=s;
+       gdb.GetCurrentDWG.SetFileName(s);
        import(s);
   end
             else
@@ -330,7 +330,7 @@ begin
      begin
           newdwg_com(@s[1]);
           //if operands<>'QS' then
-                                gdb.GetCurrentDWG.FileName:=s;
+                                gdb.GetCurrentDWG.SetFileName(s);
           programlog.logoutstr('gdb.GetCurrentDWG.FileName:=s;',0);
           load_merge(@s[1],tloload);
           programlog.logoutstr('load_merge(@s[1],tloload);',0);

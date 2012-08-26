@@ -20,7 +20,7 @@ unit GDBComplex;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
+uses ugdbsimpledrawing,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray,UGDBVisibleOpenArray,gdbEntity{,varman,varmandef},
 gl,UGDBVisibleTreeArray,UGDBEntTree,
 GDBase,UGDBDescriptor,GDBWithLocalCS,gdbobjectsconstdef{,oglwindowdef},geometry{,dxflow},memman{,GDBSubordinated,UGDBOpenArrayOfByte};
@@ -161,7 +161,7 @@ procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInte
 var
    currtime:TDateTime;
    Hour,Minute,Second,MilliSecond:word;
-   q1,q2:gdbboolean; currd:PTDrawing;
+   q1,q2:gdbboolean; currd:{PTDrawing}PTSimpleDrawing;
 begin
   currd:=gdb.GetCurrentDWG;
   if (Node.infrustum=currd.pcamera.POSCOUNT) then

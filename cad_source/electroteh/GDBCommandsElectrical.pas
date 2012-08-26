@@ -1232,13 +1232,13 @@ Procedure _Cable_com_CommandEnd(_self:GDBPointer);
 begin
   if p3dpl<>nil then
   begin
-  gdb.GetCurrentDWG.UndoStack.PushEndMarker;
+  ptdrawing(gdb.GetCurrentDWG).UndoStack.PushEndMarker;
   if p3dpl^.VertexArrayInOCS.Count<2 then
                                          begin
                                               if assigned(ReturnToDefaultProc)then
                                                                                   ReturnToDefaultProc;
                                               p3dpl^.YouDeleted;
-                                              gdb.GetCurrentDWG.UndoStack.KillLastCommand;
+                                              ptdrawing(gdb.GetCurrentDWG).UndoStack.KillLastCommand;
                                          end;
   end;
   cabcomparam.PCable:=nil;
@@ -1282,14 +1282,14 @@ begin
     p3dpl^.AddVertex(wc);
     p3dpl^.Format;
 
-    gdb.GetCurrentDWG.UndoStack.PushStartMarker('Create cable');
+    ptdrawing(gdb.GetCurrentDWG).UndoStack.PushStartMarker('Create cable');
     SetObjCreateManipulator(domethod,undomethod);
-    with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+    with ptdrawing(gdb.GetCurrentDWG).UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
     begin
          AddObject(p3dpl);
          comit;
     end;
-    gdb.GetCurrentDWG.UndoStack.PushStone;
+    ptdrawing(gdb.GetCurrentDWG).UndoStack.PushStone;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count:=0;
 
     //gdb.GetCurrentROOT.ObjArray.ObjTree.{AddObjectToNodeTree(p3dpl)}CorrectNodeTreeBB(p3dpl);
@@ -1442,7 +1442,7 @@ begin
          tmethod(domethod).Data:=p3dpl;
          tmethod(undomethod).Code:=pointer(p3dpl.DeleteVertex);
          tmethod(undomethod).Data:=p3dpl;
-         with gdb.GetCurrentDWG.UndoStack.PushCreateTGObjectChangeCommand2(polydata,tmethod(domethod),tmethod(undomethod))^ do
+         with ptdrawing(gdb.GetCurrentDWG).UndoStack.PushCreateTGObjectChangeCommand2(polydata,tmethod(domethod),tmethod(undomethod))^ do
          begin
               comit;
          end;
@@ -1843,7 +1843,7 @@ begin
                      pt^.ptablestyle:=gdb.GetCurrentDWG.TableStyleTable.getAddres('Spec');
                      pt^.tbl.cleareraseobj;
 
-  pdbu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
+  pdbu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
   currentgroup:=MainSpecContentFormat.beginiterate(ir_inscf);
   if currentgroup<>nil then
   if length(currentgroup^)>1 then
@@ -2361,7 +2361,7 @@ begin
 
 
   SetObjCreateManipulator(domethod,undomethod);
-  with gdb.GetCurrentDWG.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+  with ptdrawing(gdb.GetCurrentDWG).UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
   begin
        AddObject(pleader);
        comit;

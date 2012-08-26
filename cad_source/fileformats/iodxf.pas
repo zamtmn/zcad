@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,zcadinterface,dxfvectorialreader,svgvectorialreader,epsvectorialreader,{pdfvectorialreader,}GDBCircle,GDBArc,fpvectorial,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
+uses ugdbsimpledrawing,zcadsysvars,zcadinterface,dxfvectorialreader,svgvectorialreader,epsvectorialreader,{pdfvectorialreader,}GDBCircle,GDBArc,fpvectorial,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
   entnamindex=record
@@ -79,7 +79,7 @@ var i2:GDBInteger;
 var FOC:GDBInteger;
     phandlearray: pdxfhandlerecopenarray;
 procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
-procedure savedxf2000(name: GDBString; PDrawing:PTDrawing);
+procedure savedxf2000(name: GDBString; PDrawing:PTSimpleDrawing);
 procedure saveZCP(name: GDBString; gdb: PGDBDescriptor);
 procedure LoadZCP(name: GDBString; gdb: PGDBDescriptor);
 procedure Import(name: GDBString);
@@ -1117,7 +1117,7 @@ var
   ignoredsource:boolean;
   instyletable:boolean;
   invporttable:boolean;
-  olddwg:ptdrawing;
+  olddwg:{PTDrawing}PTSimpleDrawing;
 begin
   DecimalSeparator := '.';
   standartstylehandle:=0;
@@ -1779,7 +1779,7 @@ begin
      memorybuf.Seek(FileHeader.OffsetTable.GDB);
      fillchar(gdb^,sizeof(GDBDescriptor),0);
      sysunit.TypeName2PTD('GDBDescriptor')^.DeSerialize(gdb,SA_SAVED_TO_SHD,memorybuf,linkbyf);
-     gdb.GetCurrentDWG.FileName:=name;
+     gdb.GetCurrentDWG.SetFileName(name);
      gdb.GetCurrentROOT.correctobjects(nil,-1);
      //fillchar(FileHeader,sizeof(FileHeader),0);
      {systype.TypeName2PTD('GDBVertex')^.DeSerialize(@test,SA_SAVED_TO_SHD,memorybuf);}

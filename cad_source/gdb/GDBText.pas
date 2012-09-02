@@ -56,7 +56,7 @@ GDBObjText=object(GDBObjAbstractText)
 {Export-}
 function getsymbol(s:gdbstring; i:integer;out l:integer):word;
 implementation
-uses io,shared;
+uses {io,}shared;
 function acadvjustify(j: GDBByte): GDBByte;
 var
   t: GDBByte;

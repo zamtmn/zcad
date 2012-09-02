@@ -51,7 +51,7 @@ GDBObjMText=object(GDBObjText)
             end;
 {Export-}
 implementation
-uses io,shared,log;
+uses {io,}shared,log;
 procedure GDBObjMText.SimpleDrawGeometry;
 begin
      if self.text.count=1 then
@@ -967,4 +967,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBMtext.initialization');{$ENDIF}
-end.
+end.

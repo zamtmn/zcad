@@ -42,7 +42,7 @@ GDBObjCurve=object(GDBObj3d)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
-                 procedure RenderFeedback;virtual;
+                 procedure RenderFeedback(pcount:TActulity);virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -582,7 +582,7 @@ var pdesc:controlpointdesc;
     pv2d:pGDBvertex2d;
     pv:pGDBvertex;
 begin
-          renderfeedback;
+          renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{48F91543-AAA8-4CF7-A038-D3DDC248BE3E}',{$ENDIF}pprojpoint.count);
           pv2d:=pprojpoint^.parray;
           pv:=VertexArrayInWCS.parray;

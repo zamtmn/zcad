@@ -49,6 +49,8 @@ GDBLayerArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLayerProp*)
                     function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;
               end;
 {EXPORT-}
+var
+   DefaultErrorLayer:GDBLayerProp;
 implementation
 uses
     log;
@@ -171,4 +173,5 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBLayerArray.initialization');{$ENDIF}
+  DefaultErrorLayer.Init('DefaultErrorLayer',200,0,true,false,true,'');
 end.

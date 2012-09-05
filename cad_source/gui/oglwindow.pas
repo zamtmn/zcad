@@ -1083,7 +1083,7 @@ begin
 
   if param.lastonmouseobject<>nil then
                                       begin
-                                           PGDBObjEntity(param.lastonmouseobject)^.RenderFeedBack;
+                                           PGDBObjEntity(param.lastonmouseobject)^.RenderFeedBack(pdwg.GetPcamera^.POSCOUNT);
                                       end;
 
   Set3dmouse;
@@ -2949,7 +2949,7 @@ if (clientwidth=0)or(clientheight=0) then
     glaccum(GL_LOAD,1);
     inc(dc.subrender);
     render(PDWG.GetConstructObjRoot^,{subrender}dc);
-    PDWG.GetSelObjArray.remappoints;
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT);
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
     showcursor;
@@ -2984,7 +2984,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_AuxBuffer then
     oglsm.myglDisable(GL_DEPTH_TEST);
     inc(dc.subrender);
     render(PDWG.GetConstructObjRoot^,dc);
-    PDWG.GetSelObjArray.remappoints;
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT);
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
     showcursor;
@@ -3019,7 +3019,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_DrawPixels then
     glreadpixels(0, 0, clientwidth, clientheight, GL_BGRA_EXT{GL_RGBA}, gl_unsigned_Byte, param.pglscreen);
     inc(dc.subrender);
     render(PDWG.GetConstructObjRoot^,dc);
-    PDWG.GetSelObjArray.remappoints;
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT);
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
     showcursor;
@@ -3066,12 +3066,12 @@ else if sysvar.RD.RD_Restore_Mode^=WND_NewDraw then
     render(PDWG.GetCurrentROOT^,dc);
     dec(dc.subrender);
     inc(dc.subrender);
-    PDWG.GetSelObjArray.remappoints;
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT);
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
     showcursor;
     //param.firstdraw := false;
-    PDWG.GetSelObjArray.remappoints;
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT);
   end
 else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
   begin
@@ -3158,7 +3158,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
         //oglsm.mytotalglend;
 
 
-    PDWG.GetSelObjArray.remappoints;
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT);
     oglsm.myglDisable(GL_STENCIL_TEST);
     dc.MaxDetail:=true;
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
@@ -3417,7 +3417,7 @@ begin
                       param.lastonmouseobject:=pp;
                       repeat
                             if pp^.vp.LastCameraPos<>PDWG.Getpcamera^.POSCOUNT then
-                            pp^.RenderFeedback;
+                            pp^.RenderFeedback(PDWG.Getpcamera^.POSCOUNT);
 
 
                             pp:=PDWG.GetOnMouseObj.iterate(ir);
@@ -3483,7 +3483,7 @@ begin
                       param.lastonmouseobject:=pp;
                       repeat
                             if pp^.vp.LastCameraPos<>PDWG.Getpcamera^.POSCOUNT then
-                            pp^.RenderFeedback;
+                            pp^.RenderFeedback(PDWG.Getpcamera^.POSCOUNT);
 
 
                             pp:=PDWG.GetOnMouseObj.iterate(ir);

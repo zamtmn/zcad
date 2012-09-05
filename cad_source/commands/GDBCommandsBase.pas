@@ -841,7 +841,7 @@ begin
                         begin
                              if r<>IREmpty then
                                                begin
-                                               pv^.RenderFeedbackIFNeed;
+                                               pv^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
                                                if (button and MZW_SHIFT)=0 then
                                                                                pv^.select
                                                                            else
@@ -853,7 +853,7 @@ begin
                         begin
                              if r=IRFully then
                                               begin
-                                               pv^.RenderFeedbackIFNeed;
+                                               pv^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
                                                if (button and MZW_SHIFT)=0 then
                                                                                pv^.select
                                                                            else
@@ -1608,7 +1608,7 @@ begin
           if ((i+1) mod 4)=0 then
           begin
                p3dpl^.Format;
-               p3dpl^.RenderFeedback;
+               p3dpl^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
                gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
                if i<>pvr.Count-1 then
                p3dpl := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateInitObj(GDBPolylineID,gdb.GetCurrentROOT));
@@ -1618,7 +1618,7 @@ begin
      end;
 
      p3dpl^.Format;
-     p3dpl^.RenderFeedback;
+     p3dpl^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
      gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
      //redrawoglwnd;
 end;

@@ -39,7 +39,7 @@ GDBObjComplex=object(GDBObjWithLocalCS)
                     function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                     function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
-                    procedure renderfeedbac(infrustumactualy:TActulity);virtual;
+                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);virtual;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                     procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
@@ -299,7 +299,7 @@ begin
               end;
      end;
 end;}
-procedure GDBObjComplex.renderfeedbac(infrustumactualy:TActulity);
+procedure GDBObjComplex.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);
 //var pblockdef:PGDBObjBlockdef;
     //pvisible:PGDBObjEntity;
     //i:GDBInteger;
@@ -308,7 +308,7 @@ begin
   gdb.GetCurrentDWG^.myGluProject2(P_insert_in_WCS,ProjP_insert);
   //pdx:=PProjPoint[1].x-PProjPoint[0].x;
   //pdy:=PProjPoint[1].y-PProjPoint[0].y;
-     ConstObjArray.RenderFeedbac(infrustumactualy);
+     ConstObjArray.RenderFeedbac(infrustumactualy,pcount);
 end;
 procedure GDBObjComplex.format;
 {var pblockdef:PGDBObjBlockdef;

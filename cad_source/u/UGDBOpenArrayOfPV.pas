@@ -32,7 +32,7 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
                       procedure DrawWithattrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
                       procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                       procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                      procedure renderfeedbac(infrustumactualy:TActulity);virtual;
+                      procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);virtual;
                       function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                       function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                       function DeSelect:GDBInteger;virtual;
@@ -286,7 +286,7 @@ begin
        p:=iterate(ir);
   until p=nil;
 end;
-procedure GDBObjOpenArrayOfPV.renderfeedbac(infrustumactualy:TActulity);
+procedure GDBObjOpenArrayOfPV.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);
 var
   p:pGDBObjEntity;
       ir:itrec;
@@ -304,7 +304,7 @@ begin
        if (p^.infrustum=infrustumactualy)or(p^.Selected) then
                                             begin
                                                  {$IFDEF TOTALYLOG}programlog.logoutstr(p^.GetObjTypeName+'.renderfeedback',0);{$ENDIF}
-                                                 p^.renderfeedback;
+                                                 p^.renderfeedback(pcount);
                                             end;
        p:=iterate(ir);
   until p=nil;

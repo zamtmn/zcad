@@ -56,7 +56,7 @@ GDBObjAbstractText=object(GDBObjPlainWithOX)
                          procedure CalcObjMatrix;virtual;
                          procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                          procedure SimpleDrawGeometry;virtual;
-                         procedure RenderFeedback;virtual;
+                         procedure RenderFeedback(pcount:TActulity);virtual;
                          function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                          function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                          function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;

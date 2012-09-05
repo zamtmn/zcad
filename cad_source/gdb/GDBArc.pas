@@ -49,7 +49,7 @@ GDBObjArc=object(GDBObjPlain)
                  procedure Format;virtual;
                  procedure createpoint;virtual;
                  procedure getoutbound;virtual;
-                 procedure RenderFeedback;virtual;
+                 procedure RenderFeedback(pcount:TActulity);virtual;
                  procedure projectpoint;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
@@ -612,7 +612,7 @@ begin
                                                                                       endangle:=rr
                                                                                  end;
         format;
-        renderfeedback;
+        renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
         end;
 
 end;
@@ -631,7 +631,7 @@ begin
   pgdbobjarc(refp)^.endangle := endangle;
   pgdbobjarc(refp)^.r := r;
   pgdbobjarc(refp)^.format;
-  pgdbobjarc(refp)^.renderfeedback;
+  pgdbobjarc(refp)^.renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBArc.initialization');{$ENDIF}

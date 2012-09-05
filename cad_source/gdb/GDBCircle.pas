@@ -47,7 +47,7 @@ GDBObjCircle=object(GDBObjWithLocalCS)
                  procedure CalcObjMatrix;virtual;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
-                 procedure RenderFeedback;virtual;
+                 procedure RenderFeedback(pcount:TActulity);virtual;
                  procedure getoutbound;virtual;
                  procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure Format;virtual;

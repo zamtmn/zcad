@@ -83,8 +83,8 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure Draw(lw:GDBInteger;var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
                     procedure DrawG(lw:GDBInteger;var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
 
-                    procedure RenderFeedback;virtual;
-                    procedure RenderFeedbackIFNeed;virtual;
+                    procedure RenderFeedback(pcount:TActulity);virtual;
+                    procedure RenderFeedbackIFNeed(pcount:TActulity);virtual;
                     function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
                     function CalculateLineWeight(const DC:TDrawContext):GDBInteger;//inline;
                     procedure feedbackinrect;virtual;
@@ -113,7 +113,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                     function select:GDBBoolean;virtual;
                     function SelectQuik:GDBBoolean;virtual;
-                    procedure remapcontrolpoints(pp:PGDBControlPointArray);virtual;
+                    procedure remapcontrolpoints(pp:PGDBControlPointArray;pcount:TActulity);virtual;
                     //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                     procedure transform(const t_matrix:DMatrix4D);virtual;
@@ -260,10 +260,11 @@ begin
      vp.LineType:='';
      vp.LineTypeScale:=1;
 
-     if gdb.GetCurrentDWG<>nil then
+     {if gdb.GetCurrentDWG<>nil then
                                    vp.layer:=gdb.GetCurrentDWG.LayerTable.GetSystemLayer
                                else
-                                   vp.layer:=nil;
+                                   vp.layer:=nil;}
+     vp.layer:=@DefaultErrorLayer;
      self.PExtAttrib:=nil;
      vp.LastCameraPos:=-1;
 end;
@@ -538,13 +539,13 @@ begin
 end;
 procedure GDBObjEntity.RenderFeedbackIFNeed;
 begin
-     if vp.LastCameraPos<>gdb.GetCurrentDWG.pcamera^.POSCOUNT then
-                                                               Renderfeedback;
+     if vp.LastCameraPos<>{gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount then
+                                                               Renderfeedback(pcount);
 
 end;
 procedure GDBObjEntity.Renderfeedback;
 begin
-     vp.LastCameraPos:=gdb.GetCurrentDWG.pcamera^.POSCOUNT;
+     vp.LastCameraPos:={gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount;
   //DrawGeometry;
 end;
 
@@ -896,14 +897,14 @@ procedure GDBObjEntity.remapcontrolpoints;
 var pdesc:pcontrolpointdesc;
     i:GDBInteger;
 begin
-          if GDB.GetCurrentDWG.OGLwindow1.param.scrollmode then renderfeedback;
+          if GDB.GetCurrentDWG.OGLwindow1.param.scrollmode then renderfeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount);
           if pp.count<>0 then
           begin
                pdesc:=pp^.parray;
                for i:=0 to pp.count-1 do
                begin
                     if pdesc.pobject<>nil then
-                                              PGDBObjEntity(pdesc.pobject).RenderFeedback;
+                                              PGDBObjEntity(pdesc.pobject).RenderFeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount);
                     remaponecontrolpoint(pdesc);
                     inc(pdesc);
                end;

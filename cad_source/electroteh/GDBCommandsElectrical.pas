@@ -1071,7 +1071,7 @@ begin
   //pl^.RenderFeedback;
   if (button and MZW_LBUTTON)<>0 then
   begin
-    New_line^.RenderFeedback;
+    New_line^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
     if FirstOwner<>nil then
     begin
          if FirstOwner^.EubEntryType<>se_ElectricalWires then FirstOwner:=nil;
@@ -1448,7 +1448,7 @@ begin
          end;
           {p3dpl^.AddVertex(wc);}
           p3dpl^.Format;
-          p3dpl^.RenderFeedback;
+          p3dpl^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
           gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
     end
 else begin
@@ -1486,7 +1486,7 @@ else begin
                             pa.done;
                        end;*)
         p3dpl^.Format;
-        p3dpl^.RenderFeedback;
+        p3dpl^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
         gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
      end;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
@@ -2683,7 +2683,7 @@ begin
                  rootbytrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,net,Cable,true);
 
                  Cable^.Format;
-                 Cable^.RenderFeedback;
+                 Cable^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
                  gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(Cable);
                  end;
 
@@ -2826,7 +2826,7 @@ begin
                           segments:=rootbymultitrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,supernet,Cable,true);
 
                           Cable^.Format;
-                          Cable^.RenderFeedback;
+                          Cable^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
                           gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(Cable);
 
                           cable:=segments.beginiterate(ir_net);
@@ -2834,7 +2834,7 @@ begin
                           repeat
 
                                 Cable^.Format;
-                                Cable^.RenderFeedback;
+                                Cable^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
                                 gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(Cable);
 
                           cable:=segments.iterate(ir_net);

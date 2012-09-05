@@ -31,7 +31,7 @@ GDBObjElLeader=object(GDBObjComplex)
             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
             function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
             function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
-            procedure RenderFeedback;virtual;
+            procedure RenderFeedback(pcount:TActulity);virtual;
             procedure addcontrolpoints(tdesc:GDBPointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
@@ -545,9 +545,9 @@ procedure GDBObjElLeader.RenderFeedback;
 //    i:GDBInteger;
 begin
      inherited;
-     MainLine.RenderFeedback;
-     markline.RenderFeedback;
-     tbl.RenderFeedback;
+     MainLine.RenderFeedback(pcount);
+     markline.RenderFeedback(pcount);
+     tbl.RenderFeedback(pcount);
 end;
 function GDBObjElLeader.onmouse;
 var //t,xx,yy:GDBDouble;

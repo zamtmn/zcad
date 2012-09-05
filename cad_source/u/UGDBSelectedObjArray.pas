@@ -37,7 +37,7 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
 
                           function addobject(objnum:PGDBObjEntity):pselectedobjdesc;virtual;
                           procedure clearallobjects;virtual;
-                          procedure remappoints;virtual;
+                          procedure remappoints(pcount:TActulity);virtual;
                           procedure drawpoint;virtual;
                           procedure drawobject(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                           function getnearesttomouse:tcontrolpointdist;virtual;
@@ -69,7 +69,7 @@ begin
        for i:=0 to count-1 do
        begin
             //dec(tdesc^.objaddr^.vp.LastCameraPos);
-            tdesc^.objaddr^.Renderfeedback;
+            tdesc^.objaddr^.Renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
             inc(tdesc);
        end;
   end;
@@ -179,11 +179,11 @@ begin
        begin
             if tdesc^.objaddr<>nil then
             begin
-                 tdesc^.objaddr^.RenderFeedbackIFNeed;
+                 tdesc^.objaddr^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
             end;
             if tdesc^.ptempobj<>nil then
             begin
-                 tdesc^.ptempobj^.RenderFeedbackIFNeed;
+                 tdesc^.ptempobj^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
             end;
             inc(tdesc);
        end;
@@ -216,7 +216,7 @@ begin
        begin
             if tdesc^.pcontrolpoint<>nil then
             begin
-                 tdesc^.objaddr^.remapcontrolpoints(tdesc^.pcontrolpoint);
+                 tdesc^.objaddr^.remapcontrolpoints(tdesc^.pcontrolpoint,pcount);
             end;
             inc(tdesc);
        end;

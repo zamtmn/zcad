@@ -50,7 +50,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             procedure Format;virtual;
                             procedure FormatAfterEdit;virtual;
                             procedure restructure;virtual;
-                            procedure renderfeedbac(infrustumactualy:TActulity);virtual;
+                            procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);virtual;
                             //function select:GDBBoolean;virtual;
                             function getowner:PGDBObjSubordinated;virtual;
                             function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
@@ -530,9 +530,9 @@ end;
 procedure GDBObjGenericSubEntry.restructure;
 begin
 end;
-procedure GDBObjGenericSubEntry.renderfeedbac(infrustumactualy:TActulity);
+procedure GDBObjGenericSubEntry.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);
 begin
-  ObjArray.renderfeedbac(infrustumactualy);
+  ObjArray.renderfeedbac(infrustumactualy,pcount);
 end;
 function GDBObjGenericSubEntry.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 var //t,xx,yy:GDBDouble;

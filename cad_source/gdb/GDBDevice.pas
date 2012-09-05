@@ -37,7 +37,7 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    procedure Format;virtual;
                    procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                    procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                   procedure renderfeedbac(infrustumactualy:TActulity);virtual;
+                   procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);virtual;
                    function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                    function ReturnLastOnMouse:PGDBObjEntity;virtual;
                    function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
@@ -315,14 +315,14 @@ begin
   until p=nil;
   if not result then lstonmouse:=nil;
 end;
-procedure GDBObjDevice.renderfeedbac(infrustumactualy:TActulity);
+procedure GDBObjDevice.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);
 //var pblockdef:PGDBObjBlockdef;
     //pvisible:PGDBObjEntity;
     //i:GDBInteger;
 begin
   //if POGLWnd=nil then exit;
   inherited;
-  VarObjArray.RenderFeedbac(infrustumactualy);
+  VarObjArray.RenderFeedbac(infrustumactualy,pcount);
 end;
 procedure GDBObjDevice.DrawOnlyGeometry;
 var p:pgdbobjEntity;

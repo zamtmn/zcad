@@ -49,7 +49,7 @@ GDBObjLine=object(GDBObj3d)
                  procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure Format;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 procedure RenderFeedback;virtual;
+                 procedure RenderFeedback(pcount:TActulity);virtual;
                   function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
@@ -662,7 +662,7 @@ begin
             then
             begin
             if not assigned(pgdbobjline(pobj)^.pprojpoint) then
-                                                               pgdbobjline(pobj)^.RenderFeedback;
+                                                               pgdbobjline(pobj)^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
             if line2dintercep(pprojpoint[0].x,pprojpoint[0].y,pprojpoint[1].x,pprojpoint[1].y,   pgdbobjline(pobj)^.pprojpoint[0].x,pgdbobjline(pobj)^.pprojpoint[0].y,pgdbobjline(pobj)^.pprojpoint[1].x,pgdbobjline(pobj)^.pprojpoint[1].y,  t1,t2)
             then
                 begin
@@ -832,7 +832,7 @@ begin
           pdesc.selected:=false;
           pdesc.pobject:=nil;
 
-          renderfeedback;
+          renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
 
           pdesc.pointtype:=os_midle;
           pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);

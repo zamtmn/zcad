@@ -604,7 +604,7 @@ begin
     gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(nb);
     nb^.Visible:=0;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
-    nb^.RenderFeedback;
+    nb^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
 
 
      pb.YouDeleted;
@@ -1605,7 +1605,7 @@ begin
     gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
     pb^.Visible:=0;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
-    pb^.RenderFeedback;
+    pb^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
     pb:=nil;
     //commandmanager.executecommandend;
     //result:=1;
@@ -1937,7 +1937,7 @@ begin
     //GDBObjCircleInit(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
     //pc^.lod:=4;
     pc^.Format;
-    pc^.RenderFeedback;
+    pc^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
   end;
   result:=0;
 end;
@@ -1951,7 +1951,7 @@ begin
   pc^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
   pc^.Radius := Vertexlength(pc^.local.P_insert, wc);
   pc^.Format;
-  pc^.RenderFeedback;
+  pc^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
   if (button and MZW_LBUTTON)<>0 then
   begin
 
@@ -2022,7 +2022,7 @@ begin
   //pl^.RenderFeedback;
   if (button and MZW_LBUTTON)<>0 then
   begin
-    PCreatedGDBLine^.RenderFeedback;
+    PCreatedGDBLine^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
     if po<>nil then
     begin
     PCreatedGDBLine^.bp.ListPos.Owner:=po;
@@ -2549,7 +2549,7 @@ begin
 
     //p3dpl^.AddVertex(wc);
     p3dpl^.Format;
-    p3dpl^.RenderFeedback;
+    p3dpl^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
     //gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
     //gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
@@ -3059,7 +3059,7 @@ begin
     BLINSERT^.BuildVarGeometry;
     BLINSERT^.Format;
     BLINSERT^.Visible:=0;
-    BLINSERT^.RenderFeedback;
+    BLINSERT^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
     //BLINSERT:=nil;
     //commandmanager.executecommandend;
 

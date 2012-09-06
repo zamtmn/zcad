@@ -826,7 +826,7 @@ begin
                                   exit;
                              end;
 
-      GDB.GetCurrentDWG.OGLwindow1.param.seldesc.BigMouseFrustum:=CalcDisplaySubFrustum(x,y,w,h,gdb.getcurrentdwg.pcamera.modelMatrix,gdb.getcurrentdwg.pcamera.projMatrix);
+      GDB.GetCurrentDWG.OGLwindow1.param.seldesc.BigMouseFrustum:=CalcDisplaySubFrustum(x,y,w,h,gdb.getcurrentdwg.pcamera.modelMatrix,gdb.getcurrentdwg.pcamera.projMatrix,gdb.getcurrentdwg.pcamera.viewport);
 
       pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
       if pv<>nil then

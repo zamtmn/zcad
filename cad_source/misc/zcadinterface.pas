@@ -18,7 +18,7 @@
 unit zcadinterface;
 {$INCLUDE def.inc}
 interface
-uses varmandef,forms,classes;
+uses varmandef,forms,classes{,UGDBDrawingdef};
 const
      menutoken='MAINMENUITEM';
      popupmenutoken='POPUPMENU';
@@ -52,6 +52,9 @@ type
 
     //mainwindow
     TMessageBox=function(Text, Caption: PChar; Flags: Longint): Integer of object;
+
+    //UGDBDescriptor
+    TSetCurrentDrawing=procedure(PDWG:Pointer);//нужно завязать на UGDBDrawingdef
 var
    //SplashWnd
    SplashTextOut:TSplashTextOutProc;
@@ -85,6 +88,7 @@ var
 
    //UGDBDescriptor
    RedrawOGLWNDProc:TSimpleProcedure;
+   SetCurrentDWGProc:TSetCurrentDrawing;
 
 
 function DoShowModal(MForm:TForm): Integer;

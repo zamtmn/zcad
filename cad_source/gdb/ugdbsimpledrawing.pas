@@ -383,8 +383,10 @@ begin
 
   LayerTable.init({$IFDEF DEBUGBUILD}'{6AFCB58D-9C9B-4325-A00A-C2E8BDCBE1DD}',{$ENDIF}200);
   mainobjroot.initnul;
+  mainobjroot.vp.Layer:=LayerTable.GetSystemLayer;
   pObjRoot:=@mainobjroot;
   ConstructObjRoot.initnul;
+  ConstructObjRoot.vp.Layer:=LayerTable.GetSystemLayer;
   SelObjArray.init({$IFDEF DEBUGBUILD}'{0CC3A9A3-B9C2-4FB5-BFB1-8791C261C577} - SelObjArray',{$ENDIF}65535);
   OnMouseObj.init({$IFDEF DEBUGBUILD}'{85654C90-FF49-4272-B429-4D134913BC26} - OnMouseObj',{$ENDIF}20);
 

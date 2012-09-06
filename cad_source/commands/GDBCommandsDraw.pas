@@ -2002,8 +2002,9 @@ var po:PGDBObjSubordinated;
     domethod,undomethod:tmethod;
 begin
   result:=mclick;
-  PCreatedGDBLine^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
-  PCreatedGDBLine^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
+  {PCreatedGDBLine^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
+  PCreatedGDBLine^.vp.lineweight := sysvar.dwg.DWG_CLinew^;}
+  GDBObjSetEntityProp(PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^);
   PCreatedGDBLine^.CoordInOCS.lEnd:= wc;
   PCreatedGDBLine^.Format;
   po:=nil;

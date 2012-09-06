@@ -93,7 +93,7 @@ end;
 
 procedure TForm1._FormCreate(Sender: TObject);
 var
-   ptd:PTAbstractDrawing;
+   ptd:PTSimpleDrawing;
    tn:GDBString;
    i:integer;
    pobj:PGDBObjEntity;
@@ -112,6 +112,10 @@ begin
      //ptd:=gdb.CreateDWG;
      gdb.AddRef(ptd^);
      gdb.SetCurrentDWG(pointer(ptd));
+     for i:=1 to 10 do
+     begin
+          ptd^.LayerTable.addlayer(inttostr(i),random(255),0,true,false,true,'',TLOMerge);
+     end;
 
      oglwnd:=TOGLWnd.Create(PanelUp);
      oglwnd.AuxBuffers:=0;
@@ -150,6 +154,11 @@ begin
                                else
                                    result.z:=0;
 end;
+procedure processobj(pobj:PGDBObjEntity);
+begin
+     pobj^.vp.Layer:=gdb.GetCurrentDWG^.LayerTable.getelement(random(gdb.GetCurrentDWG^.LayerTable.Count));
+end;
+
 function CreateRandomVertex2D(len,hanflen:GDBDouble):GDBVertex2D;
 begin
      result.x:=CreateRandomDouble(len)-hanflen;
@@ -171,6 +180,7 @@ begin
     pobj^.CoordInOCS.lBegin:=v1;
     pobj^.CoordInOCS.lEnd:=v2;
     gdb.GetCurrentRoot^.AddMi(@pobj);
+    processobj(pobj);
     pobj^.BuildGeometry;
     pobj^.format;
   end;
@@ -204,6 +214,7 @@ begin
     if vcount>2 then
                     pobj^.closed:=random(10)>5;
     gdb.GetCurrentRoot^.AddMi(@pobj);
+    processobj(pobj);
     pobj^.BuildGeometry;
     pobj^.format;
   end;
@@ -260,6 +271,7 @@ begin
     pobj^.Local.P_insert:=v1;
     pobj^.Radius:=CreateRandomDouble(9.9)+0.1;
     gdb.GetCurrentRoot^.AddMi(@pobj);
+    processobj(pobj);
     pobj^.BuildGeometry;
     pobj^.format;
   end;
@@ -289,6 +301,7 @@ begin
     if vcount>2 then
                     pobj^.closed:=random(10)>5;
     gdb.GetCurrentRoot^.AddMi(@pobj);
+    processobj(pobj);
     pobj^.BuildGeometry;
     pobj^.format;
   end;
@@ -359,6 +372,7 @@ begin
     pobj^.textprop.angle:=angl*180/pi;
     pobj^.local.basis.OX:=VectorTransform3D(PGDBObjText(pobj)^.local.basis.OX,geometry.CreateAffineRotationMatrix(PGDBObjText(pobj)^.Local.basis.oz,-angl));
     gdb.GetCurrentRoot^.AddMi(@pobj);
+    processobj(pobj);
     pobj^.BuildGeometry;
     pobj^.format;
   end;

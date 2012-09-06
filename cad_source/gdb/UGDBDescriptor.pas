@@ -136,6 +136,12 @@ procedure redrawoglwnd;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log,OGLSpecFunc;
+procedure SetCurrentDWG(PDWG:pointer);
+begin
+     if gdb.GetCurrentDWG<>pdwg then
+                                    gdb.SetCurrentDWG(pdwg);
+end;
+
 procedure redrawoglwnd;
 var
    pdwg:PTSimpleDrawing;
@@ -834,6 +840,7 @@ begin
   //pbasefont:=FontManager.{FindFonf}getAddres('amgdt.shx');
   //pbasefont:=FontManager.getAddres('gothice.shx');
   gdb.init;
+  SetCurrentDWGProc:=SetCurrentDWG;
   BlockBaseDWG:=gdb.CreateDWG;
   ClipboardDWG:=gdb.CreateDWG;
   //gdb.currentdwg:=BlockBaseDWG;

@@ -1909,6 +1909,8 @@ var key: GDBByte;
 begin
   if (cxmenumgr.ismenupopup)or(ActivePopupMenu<>nil) then
                                                          exit;
+  if @SetCurrentDWGProc<>nil then
+                                SetCurrentDWGProc(pdwg);
   ActivePopupMenu:=ActivePopupMenu;
   NeedRedraw:=false;
   if ssDouble in shift then

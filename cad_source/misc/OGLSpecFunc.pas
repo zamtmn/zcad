@@ -95,7 +95,7 @@ const
 
 procedure SetDCPixelFormat(oglc:TOGLContextDesk);
 function isOpenGLError:GLenum;
-function CalcDisplaySubFrustum(const x,y,w,h:gdbdouble;const mm,pm:DMatrix4D):ClipArray;
+function CalcDisplaySubFrustum(const x,y,w,h:gdbdouble;const mm,pm:DMatrix4D;const vp:IMatrix4):ClipArray;
 //(const v: PGLdouble); stdcall;
 //procedure myglVertex3dV(V:PGDBVertex);
 procedure MyglMakeCurrent(oglc:TOGLContextDesk);
@@ -226,14 +226,14 @@ begin
                            glVertex3dv(@t);
                       end;
 end;
-function CalcDisplaySubFrustum(const x,y,w,h:gdbdouble;const mm,pm:DMatrix4D):ClipArray;
+function CalcDisplaySubFrustum(const x,y,w,h:gdbdouble;const mm,pm:DMatrix4D;const vp:IMatrix4):ClipArray;
 var
 tm: DMatrix4D;
 begin
   oglsm.myglMatrixMode(GL_Projection);
   oglsm.myglpushmatrix;
   glLoadIdentity;
-  gluPickMatrix(x,y,w,h, PTViewPortArray(@gdb.GetCurrentDWG.pcamera^.viewport)^);
+  gluPickMatrix(x,y,w,h, PTViewPortArray(@vp)^);
   glGetDoublev(GL_PROJECTION_MATRIX, @tm);
   tm := MatrixMultiply(pm, tm);
   tm := MatrixMultiply(mm, tm);

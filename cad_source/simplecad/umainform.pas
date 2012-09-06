@@ -33,6 +33,7 @@ type
     Label1: TLabel;
     OpenDialog1: TOpenDialog;
     Panel1: TPanel;
+    Panel2: TPanel;
     PanelUp: TPanel;
     SaveDialog1: TSaveDialog;
     SpinEdit1: TSpinEdit;
@@ -49,6 +50,8 @@ type
     procedure BtnOpenDXFClick(Sender: TObject);
     procedure BtnSaveDXFClick(Sender: TObject);
     procedure BtnSelectAllClick(Sender: TObject);
+    procedure Splitter2CanOffset(Sender: TObject; var NewOffset: Integer;
+      var Accept: Boolean);
     procedure TreeChange(Sender: TObject);
     procedure _DestroyApp(Sender: TObject);
     procedure _FormCreate(Sender: TObject);
@@ -106,6 +109,8 @@ begin
 
      sysvar.DWG.DWG_StepGrid:=@stepgrid;
      sysvar.DWG.DWG_OriginGrid:=@origingrid;
+     sysvar.DWG.DWG_SystmGeometryDraw^:=CheckBox1.Checked;
+
      ugdbdescriptor.startup;
 
      ptd:={gdb.}CreateSimpleDWG;
@@ -138,7 +143,38 @@ begin
 
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
 
-     sysvar.DWG.DWG_SystmGeometryDraw^:=CheckBox1.Checked;
+
+
+     ptd:={gdb.}CreateSimpleDWG;
+     //ptd:=gdb.CreateDWG;
+     gdb.AddRef(ptd^);
+     gdb.SetCurrentDWG(pointer(ptd));
+     for i:=1 to 10 do
+     begin
+          ptd^.LayerTable.addlayer(inttostr(i),random(255),0,true,false,true,'',TLOMerge);
+     end;
+
+     oglwnd:=TOGLWnd.Create(Panel2);
+     oglwnd.AuxBuffers:=0;
+     oglwnd.StencilBits:=8;
+     oglwnd.DepthBits:=24;
+
+     //rm:=WND_Texture;
+     //sysvar.RD.RD_Restore_Mode:=@rm;
+
+
+
+     gdb.GetCurrentDWG^.OGLwindow1:=oglwnd;
+     oglwnd.PDWG:=ptd;
+     oglwnd.align:=alClient;
+     oglwnd.Parent:=Panel2;
+     oglwnd.init;
+     oglwnd.PDWG:=ptd;
+     oglwnd.GDBActivate;
+     oglwnd._onresize(nil);
+
+     gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
+
 
 end;
 function CreateRandomDouble(len:GDBDouble):GDBDouble;inline;
@@ -431,6 +467,12 @@ begin
 
   UGDBDescriptor.redrawoglwnd;
   //if assigned(updatevisibleproc) then updatevisibleproc;
+
+end;
+
+procedure TForm1.Splitter2CanOffset(Sender: TObject; var NewOffset: Integer;
+  var Accept: Boolean);
+begin
 
 end;
 

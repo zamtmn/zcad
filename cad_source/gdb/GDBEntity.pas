@@ -1056,7 +1056,7 @@ begin
                        result:=true
                   end;
                      8:begin
-                          if vp.layer.name=LNSysLayerName then
+                          if {vp.layer.name=LNSysLayerName}vp.layer=@DefaultErrorLayer then
                                                    begin
                                                         name:=readmystr(f);
                                                    vp.Layer :=gdb.GetCurrentDWG.LayerTable.getAddres(name);

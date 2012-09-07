@@ -1685,6 +1685,11 @@ begin
      end
         else showerror('Command line swith "UpdatePO" must be set. (or not the first time running this command)');
 end;
+function ZoomAll_com(Operands:pansichar):GDBInteger;
+begin
+     gdb.GetCurrentDWG.OGLwindow1.ZoomAll;
+end;
+
 function tw_com(Operands:pansichar):GDBInteger;
 begin
      //Application.QueueAsyncCall(MainFormN.asynccloseapp, 0);
@@ -1925,6 +1930,8 @@ begin
   CreateCommandFastObjectPlugin(@SnapProp_com,'SnapProperties',CADWG,0).overlay:=true;
 
   CreateCommandFastObjectPlugin(@TW_com,'TextWindow',0,0).overlay:=true;
+
+  CreateCommandFastObjectPlugin(@ZoomAll_com,'ZoomAll',CADWG,0).overlay:=true;
 
   CreateCommandFastObjectPlugin(@StoreFrustum_com,'StoreFrustum',CADWG,0).overlay:=true;
   CreateCommandFastObjectPlugin(@TestScript_com,'TestScript',0,0).overlay:=true;

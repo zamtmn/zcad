@@ -843,13 +843,13 @@ msgstr ""
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+msgid "Rotate"
 msgstr ""
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
+msgid "Block params"
 msgstr ""
 
 #: zcadexternal.gdbobjcircle~area
@@ -1099,12 +1099,12 @@ msgstr ""
 
 #: zcadexternal.menucommand~fuckoff
 #, fuzzy
-msgid "Dimensions styles (not impl)"
+msgid "Layouts (not impl)"
 msgstr ""
 
 #: zcadexternal.menucommand~fuckoff
 #, fuzzy
-msgid "Layouts (not impl)"
+msgid "Dimensions styles (not impl)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(camera)
@@ -1900,7 +1900,8 @@ msgid "Background color"
 msgstr ""
 
 #: zcadexternal.trd~rd_lastcalcvisible
-msgid "Last update time"
+#, fuzzy
+msgid "Last visible calculation time"
 msgstr ""
 
 #: zcadexternal.trd~rd_lastrendertime
@@ -1908,7 +1909,8 @@ msgid "Last render time"
 msgstr ""
 
 #: zcadexternal.trd~rd_lastupdatetime
-msgid "Last visible calculation time"
+#, fuzzy
+msgid "Last update time"
 msgstr ""
 
 #: zcadexternal.trd~rd_light

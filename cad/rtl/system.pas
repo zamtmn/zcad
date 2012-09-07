@@ -380,7 +380,7 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
                       procedure DrawWithattrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                       procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                       procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
-                      procedure renderfeedbac(infrustumactualy:TActulity);virtual;abstract;
+                      procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);virtual;abstract;
                       function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
                       function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
                       function DeSelect:GDBInteger;virtual;abstract;
@@ -485,7 +485,7 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                           function addobject(objnum:PGDBObjEntity):pselectedobjdesc;virtual;abstract;
                           procedure clearallobjects;virtual;abstract;
-                          procedure remappoints;virtual;abstract;
+                          procedure remappoints(pcount:TActulity);virtual;abstract;
                           procedure drawpoint;virtual;abstract;
                           procedure drawobject(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                           function getnearesttomouse:tcontrolpointdist;virtual;abstract;
@@ -752,8 +752,8 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
             RD_BackGroundColor:PRGB;(*'Background color'*)
             RD_Restore_Mode:ptrestoremode;(*'Restore mode'*)
             RD_LastRenderTime:pGDBInteger;(*'Last render time'*)(*oi_readonly*)
-            RD_LastUpdateTime:pGDBInteger;(*'Last visible calculation time'*)(*oi_readonly*)
-            RD_LastCalcVisible:GDBInteger;(*'Last update time'*)(*oi_readonly*)
+            RD_LastUpdateTime:pGDBInteger;(*'Last update time'*)(*oi_readonly*)
+            RD_LastCalcVisible:GDBInteger;(*'Last visible calculation time'*)(*oi_readonly*)
             RD_MaxRenderTime:pGDBInteger;(*'Maximum single pass time'*)
             RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
             RD_VSync:PTVSControl;(*'VSync'*)
@@ -1063,8 +1063,8 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                     procedure Draw(lw:GDBInteger;var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                     procedure DrawG(lw:GDBInteger;var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;abstract;
-                    procedure RenderFeedback;virtual;abstract;
-                    procedure RenderFeedbackIFNeed;virtual;abstract;
+                    procedure RenderFeedback(pcount:TActulity);virtual;abstract;
+                    procedure RenderFeedbackIFNeed(pcount:TActulity);virtual;abstract;
                     function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;abstract;
                     function CalculateLineWeight(const DC:TDrawContext):GDBInteger;//inline;
                     procedure feedbackinrect;virtual;abstract;
@@ -1091,7 +1091,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                     function select:GDBBoolean;virtual;abstract;
                     function SelectQuik:GDBBoolean;virtual;abstract;
-                    procedure remapcontrolpoints(pp:PGDBControlPointArray);virtual;abstract;
+                    procedure remapcontrolpoints(pp:PGDBControlPointArray;pcount:TActulity);virtual;abstract;
                     //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                     procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
@@ -1154,7 +1154,7 @@ GDBObj3DFace=object(GDBObj3d)
                  procedure Format;virtual;abstract;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
-                 procedure RenderFeedback;virtual;abstract;
+                 procedure RenderFeedback(pcount:TActulity);virtual;abstract;
                  //function getsnap(var osp:os_record):GDBBoolean;virtual;abstract;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
@@ -1203,7 +1203,7 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                procedure CalcObjMatrix;virtual;abstract;
                function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;abstract;
                procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
-               procedure Renderfeedback;virtual;abstract;
+               procedure Renderfeedback(pcount:TActulity);virtual;abstract;
                function GetCenterPoint:GDBVertex;virtual;abstract;
                procedure createfield;virtual;abstract;
                procedure rtsave(refp:GDBPointer);virtual;abstract;
@@ -1230,7 +1230,7 @@ GDBObjSolid=object(GDBObjWithLocalCS)
                  procedure createpoint;virtual;abstract;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
-                 procedure RenderFeedback;virtual;abstract;
+                 procedure RenderFeedback(pcount:TActulity);virtual;abstract;
                  //function getsnap(var osp:os_record):GDBBoolean;virtual;abstract;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
@@ -1285,7 +1285,7 @@ GDBObjAbstractText=object(GDBObjPlainWithOX)
                          procedure CalcObjMatrix;virtual;abstract;
                          procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                          procedure SimpleDrawGeometry;virtual;abstract;
-                         procedure RenderFeedback;virtual;abstract;
+                         procedure RenderFeedback(pcount:TActulity);virtual;abstract;
                          function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
                          function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
                          function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
@@ -1318,7 +1318,7 @@ GDBObjCircle=object(GDBObjWithLocalCS)
                  procedure CalcObjMatrix;virtual;abstract;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
-                 procedure RenderFeedback;virtual;abstract;
+                 procedure RenderFeedback(pcount:TActulity);virtual;abstract;
                  procedure getoutbound;virtual;abstract;
                  procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  procedure Format;virtual;abstract;
@@ -1371,7 +1371,7 @@ GDBObjArc=object(GDBObjPlain)
                  procedure Format;virtual;abstract;
                  procedure createpoint;virtual;abstract;
                  procedure getoutbound;virtual;abstract;
-                 procedure RenderFeedback;virtual;abstract;
+                 procedure RenderFeedback(pcount:TActulity);virtual;abstract;
                  procedure projectpoint;virtual;abstract;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
                  function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;abstract;
@@ -1415,7 +1415,7 @@ GDBObjEllipse=object(GDBObjPlain)
                  procedure Format;virtual;abstract;
                  procedure createpoint;virtual;abstract;
                  procedure getoutbound;virtual;abstract;
-                 procedure RenderFeedback;virtual;abstract;
+                 procedure RenderFeedback(pcount:TActulity);virtual;abstract;
                  procedure projectpoint;virtual;abstract;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
                  function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;abstract;
@@ -1495,7 +1495,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             procedure Format;virtual;abstract;
                             procedure FormatAfterEdit;virtual;abstract;
                             procedure restructure;virtual;abstract;
-                            procedure renderfeedbac(infrustumactualy:TActulity);virtual;abstract;
+                            procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);virtual;abstract;
                             //function select:GDBBoolean;virtual;abstract;
                             function getowner:PGDBObjSubordinated;virtual;abstract;
                             function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;abstract;
@@ -1590,7 +1590,7 @@ GDBObjComplex=object(GDBObjWithLocalCS)
                     function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
                     function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
-                    procedure renderfeedbac(infrustumactualy:TActulity);virtual;abstract;
+                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);virtual;abstract;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
                     procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;abstract;
@@ -1649,7 +1649,7 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    procedure Format;virtual;abstract;
                    procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                    procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
-                   procedure renderfeedbac(infrustumactualy:TActulity);virtual;abstract;
+                   procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);virtual;abstract;
                    function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
                    function ReturnLastOnMouse:PGDBObjEntity;virtual;abstract;
                    function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;abstract;
@@ -1748,7 +1748,7 @@ GDBObjLine=object(GDBObj3d)
                  procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;abstract;
                  procedure Format;virtual;abstract;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
-                 procedure RenderFeedback;virtual;abstract;
+                 procedure RenderFeedback(pcount:TActulity);virtual;abstract;
                   function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;abstract;
                  procedure rtsave(refp:GDBPointer);virtual;abstract;
@@ -1802,7 +1802,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  destructor done;virtual;abstract;
                  function GetObjTypeName:GDBString;virtual;abstract;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
-                 procedure RenderFeedback;virtual;abstract;
+                 procedure RenderFeedback(pcount:TActulity);virtual;abstract;
                  procedure feedbackinrect;virtual;abstract;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
@@ -1881,7 +1881,7 @@ GDBObjPoint=object(GDBObj3d)
                  procedure Format;virtual;abstract;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
-                 procedure RenderFeedback;virtual;abstract;
+                 procedure RenderFeedback(pcount:TActulity);virtual;abstract;
                  function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;abstract;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
@@ -1911,7 +1911,7 @@ GDBObjCurve=object(GDBObj3d)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;abstract;
                  procedure rtsave(refp:GDBPointer);virtual;abstract;
-                 procedure RenderFeedback;virtual;abstract;
+                 procedure RenderFeedback(pcount:TActulity);virtual;abstract;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
@@ -2050,7 +2050,7 @@ GDBObjElLeader=object(GDBObjComplex)
             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;abstract;
             function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
             function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
-            procedure RenderFeedback;virtual;abstract;
+            procedure RenderFeedback(pcount:TActulity);virtual;abstract;
             procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
@@ -2625,7 +2625,6 @@ TAbstractDrawing=object(GDBaseobject)
 //Generate on C:\zcad\CAD_SOURCE\gdb\ugdbsimpledrawing.pas
 PTSimpleDrawing=^TSimpleDrawing;
 TSimpleDrawing=object(TAbstractDrawing)
-                       UndoStack:GDBObjOpenArrayOfUCommands;
                        pObjRoot:PGDBObjGenericSubEntry;
                        mainObjRoot:GDBObjRoot;(*saved_to_shd*)
                        LayerTable:GDBLayerArray;(*saved_to_shd*)
@@ -2633,14 +2632,15 @@ TSimpleDrawing=object(TAbstractDrawing)
                        SelObjArray:GDBSelectedObjArray;
                        pcamera:PGDBObjCamera;
                        OnMouseObj:GDBObjOpenArrayOfPV;
-                       DWGUnits:TUnitManager;
                        OGLwindow1:toglwnd;
                        TextStyleTable:GDBTextStyleArray;(*saved_to_shd*)
                        BlockDefArray:GDBObjBlockdefArray;(*saved_to_shd*)
                        Numerator:GDBNumerator;(*saved_to_shd*)
                        TableStyleTable:GDBTableStyleArray;(*saved_to_shd*)
+                       function GetLastSelected:PGDBObjEntity;virtual;abstract;
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
                        constructor init(pcam:PGDBObjCamera);
+                       destructor done;virtual;abstract;
                        function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;virtual;abstract;
                        function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;virtual;abstract;
                        function GetPcamera:PGDBObjCamera;virtual;abstract;
@@ -2654,6 +2654,14 @@ TSimpleDrawing=object(TAbstractDrawing)
                        procedure SetCurrentDWG;virtual;abstract;
                        function StoreOldCamerapPos:Pointer;virtual;abstract;
                        procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;
+                       procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
+                       procedure rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);virtual;abstract;
+                       procedure PushStartMarker(CommandName:GDBString);virtual;abstract;
+                       procedure PushEndMarker;virtual;abstract;
+                       procedure SetFileName(NewName:GDBString);virtual;abstract;
+                       function GetFileName:GDBString;virtual;abstract;
+                       procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
+                       function GetUndoTop:TArrayIndex;virtual;abstract;
                  end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\UGDBDescriptor.pas
 GDBObjTrash=object(GDBObjEntity)
@@ -2671,32 +2679,42 @@ TDrawing=object(TSimpleDrawing)
            FileName:GDBString;
            Changed:GDBBoolean;
            attrib:GDBLongword;
+           UndoStack:GDBObjOpenArrayOfUCommands;
+           DWGUnits:TUnitManager;
            constructor init(num:PTUnitManager);
            destructor done;virtual;abstract;
            function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
-           function GetLastSelected:PGDBObjEntity;virtual;abstract;
            procedure SetCurrentDWG;virtual;abstract;
+           function StoreOldCamerapPos:Pointer;virtual;abstract;
+           procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;
            //procedure SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
+           procedure rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);virtual;abstract;
+           procedure PushStartMarker(CommandName:GDBString);virtual;abstract;
+           procedure PushEndMarker;virtual;abstract;
+           procedure SetFileName(NewName:GDBString);virtual;abstract;
+           function GetFileName:GDBString;virtual;abstract;
+           procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
+           function GetUndoTop:TArrayIndex;virtual;abstract;
      end;
 PGDBDescriptor=^GDBDescriptor;
 GDBDescriptor=object(GDBOpenArrayOfPObjects)
-                    CurrentDWG:PTDrawing;
+                    CurrentDWG:{PTDrawing}PTSimpleDrawing;
                     ProjectUnits:TUnitManager;
                     constructor init;
                     constructor initnul;
                     destructor done;virtual;abstract;
                     function AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):integer;virtual;abstract;
                     function GetCurrentROOT:PGDBObjGenericSubEntry;
-                    function GetCurrentDWG:PTDrawing;
+                    function GetCurrentDWG:{PTDrawing}PTSimpleDrawing;
                     procedure asociatedwgvars;
                     procedure SetCurrentDWG(PDWG:PTAbstractDrawing);
                     function CreateDWG:PTDrawing;
-                    function CreateSimpleDWG:PTSimpleDrawing;virtual;abstract;
+                    //function CreateSimpleDWG:PTSimpleDrawing;virtual;abstract;
                     procedure eraseobj(ObjAddr:PGDBaseObject);virtual;abstract;
-                    procedure CopyBlock(_from,_to:PTDrawing;_source:PGDBObjBlockdef);
-                    function CopyEnt(_from,_to:PTDrawing;_source:PGDBObjEntity):PGDBObjEntity;
-                    procedure AddBlockFromDBIfNeed(_to:PTDrawing;name:GDBString);
-                    procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
+                    procedure CopyBlock(_from,_to:PTSimpleDrawing;_source:PGDBObjBlockdef);
+                    function CopyEnt(_from,_to:PTSimpleDrawing;_source:PGDBObjEntity):PGDBObjEntity;
+                    procedure AddBlockFromDBIfNeed(_to:PTSimpleDrawing;name:GDBString);
+                    //procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
                     function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
                     function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
                     procedure FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:GDBOpenArrayOfPObjects);

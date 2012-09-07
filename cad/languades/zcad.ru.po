@@ -914,10 +914,9 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#, fuzzy
-#| msgid "Block params"
+#| msgid "Rotate"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
+msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjcircle~area
@@ -1202,9 +1201,8 @@ msgid "Reset camera"
 msgstr "Камера в начало"
 
 #: zcadexternal.menucommand~fuckoff
-#, fuzzy
-#| msgid "Dimensions styles (not impl)"
-msgid "Layouts (not impl)"
+#| msgid "Layouts (not impl)"
+msgid "Dimensions styles (not impl)"
 msgstr "Стили размеров (не реализовано)"
 
 #: zcadexternal.menucommand~setobjinsp(camera)

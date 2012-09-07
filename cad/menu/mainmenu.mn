@@ -148,6 +148,8 @@ MainMenuItem View;
         Command Camera,SetObjInsp(CAMERA),none,none
         Command Object snap,SetObjInsp(OSMODE),none,none
       }
+   Separator
+   action ACN_ZOOMALL
   }
 MainMenuItem Format;
   {

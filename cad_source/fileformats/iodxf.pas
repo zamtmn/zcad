@@ -336,6 +336,8 @@ begin
                                                   i2:=i2;{$ENDIF}
         pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
         PGDBObjEntity(pobj)^.LoadFromDXF(f,@additionalunit);
+        if PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer then
+                                                                 PGDBObjEntity(pobj)^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetSystemLayer;
         correctvariableset(pobj);
         pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(@additionalunit);
         trash:=false;

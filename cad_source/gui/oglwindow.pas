@@ -1755,9 +1755,9 @@ var
 begin
   if param.projtype = PROJPerspective then
                                           begin
-                                               historyout('MBMouseDblClk: Пока только для паралельной проекции!');
+                                               historyout('ZoomAll: Пока только для паралельной проекции!');
                                           end;
-  historyout('MBMouseDblClk: Пока корректно только при виде сверху!');
+  historyout('ZoomAll: Пока корректно только при виде сверху!');
 
 
   CalcOptimalMatrix;

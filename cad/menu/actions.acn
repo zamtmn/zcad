@@ -31,6 +31,7 @@ action ACN_SHOW_PAGECONTROL,Show(PageControl),#DW,Drawings window,,
 action ACN_SHOW_COMMANDLINE,Show(CommandLine),#CL,Command line and history,,
 action ACN_SAVELAYOUT,SaveLayout,#SLay,Save window layout as default,,
 action ACN_TEXTWINDOW,TextWindow,#TW,View text window,,F2
+action ACN_ZOOMALL,ZoomAll,#ZA,Zoom All,,'Ctrl+Num +
 
 action ACN_SNAPRUNTIME,SnapProperties,#snap,Run time snap editor,,ALT+S
 

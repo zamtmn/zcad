@@ -1913,6 +1913,7 @@ procedure TOGLWnd.MouseLeave;
 begin
      param.md.mousein:=false;
      inherited;
+     draw;
 end;
 procedure TOGLWnd.MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);
 var key: GDBByte;
@@ -2253,6 +2254,7 @@ procedure TOGLWnd.showcursor;
     Tempplane:=param.mousefrustumLCS[5];
     tempplane[3]:=(tempplane[3]-param.mousefrustumLCS[4][3])/2;
     {курсор фрустума выделения}
+    if param.md.mousein then
     if (param.md.mode and MGetSelectObject) <> 0 then
     begin
     drawfrustustum(param.mousefrustumLCS);
@@ -2282,6 +2284,7 @@ procedure TOGLWnd.showcursor;
 
     param.md.mouse3dcoord:=geometry.NulVertex;}
 
+    if param.md.mousein then
     if param.md.mode <> MGetSelectObject then
     begin
     //sv1:=VertexAdd(param.md.mouse3dcoord,gdb.GetCurrentDWG.pcamera.look);
@@ -3224,7 +3227,6 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
 
         //oglsm.mytotalglend;
-
 
     showcursor;
 

@@ -540,7 +540,7 @@ begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.CalcOptimalMatrix',lp_IncPos);{$ENDIF}
   {Если нет примитивов выходим}
   //pdwg:=gdb.GetCurrentDWG;
-  self.MakeCurrent;
+  //self.MakeCurrent;
   proot:=PDWG.GetCurrentROOT;
 
   if (assigned(pdwg))and(assigned(proot))then
@@ -2907,6 +2907,7 @@ var
 begin
   //isOpenGLError;
   if not assigned(pdwg) then exit;
+  self.MakeCurrent;
   //if not assigned(GDB.GetCurrentDWG.OGLwindow1) then exit;
   foreground.r:=not(sysvar.RD.RD_BackGroundColor^.r);
   foreground.g:=not(sysvar.RD.RD_BackGroundColor^.g);

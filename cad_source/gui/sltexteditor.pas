@@ -48,7 +48,7 @@ begin
 end;
 
 initialization
-  {I sltexteditor.lrs}
+  {$I sltexteditor.lrs}
 
 end.
 

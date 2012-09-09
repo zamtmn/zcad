@@ -127,6 +127,12 @@ MainMenuItem View;
     Separator
     MenuItem View;
       {
+        MenuItem Zoom;
+           {
+            action ACN_ZOOMALL
+            action ACN_ZOOMIN
+            action ACN_ZOOMOUT
+           }
         Command Reset camera,Cam_reset,none,none
         action ACN_PERSPECTIVE
       }
@@ -148,8 +154,6 @@ MainMenuItem View;
         Command Camera,SetObjInsp(CAMERA),none,none
         Command Object snap,SetObjInsp(OSMODE),none,none
       }
-   Separator
-   action ACN_ZOOMALL
   }
 MainMenuItem Format;
   {

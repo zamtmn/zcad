@@ -1685,9 +1685,21 @@ begin
      end
         else showerror('Command line swith "UpdatePO" must be set. (or not the first time running this command)');
 end;
-function ZoomAll_com(Operands:pansichar):GDBInteger;
+function Zoom_com(Operands:pansichar):GDBInteger;
 begin
-     gdb.GetCurrentDWG.OGLwindow1.ZoomAll;
+     if uppercase(operands)='ALL' then
+                                      gdb.GetCurrentDWG.OGLwindow1.ZoomAll
+else if uppercase(operands)='IN' then
+                                     begin
+                                          gdb.GetCurrentDWG.OGLwindow1.DoMouseWheel([],1,point(0,0));
+                                          //gdb.GetCurrentDWG.OGLwindow1.DISP_ZoomFactor(sysvar.DISP.DISP_ZoomFactor^)
+                                     end
+else if uppercase(operands)='OUT' then
+                                     begin
+                                          gdb.GetCurrentDWG.OGLwindow1.DoMouseWheel([],-1,point(0,0));
+                                          //gdb.GetCurrentDWG.OGLwindow1.DISP_ZoomFactor(1/sysvar.DISP.DISP_ZoomFactor^);
+                                     end;
+     result:=cmd_ok;
 end;
 
 function tw_com(Operands:pansichar):GDBInteger;
@@ -1931,7 +1943,7 @@ begin
 
   CreateCommandFastObjectPlugin(@TW_com,'TextWindow',0,0).overlay:=true;
 
-  CreateCommandFastObjectPlugin(@ZoomAll_com,'ZoomAll',CADWG,0).overlay:=true;
+  CreateCommandFastObjectPlugin(@Zoom_com,'Zoom',CADWG,0).overlay:=true;
 
   CreateCommandFastObjectPlugin(@StoreFrustum_com,'StoreFrustum',CADWG,0).overlay:=true;
   CreateCommandFastObjectPlugin(@TestScript_com,'TestScript',0,0).overlay:=true;

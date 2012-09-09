@@ -181,10 +181,10 @@ type
     procedure addaxistootrack(var posr:os_record;const axis:GDBVertex);
 
     {LCL}
+    function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint): Boolean;override;
     protected
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);override;
     procedure MouseUp(Button: TMouseButton; Shift:TShiftState;X, Y: Integer);override;
-    function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint): Boolean;override;
     procedure EraseBackground(DC: HDC);override;
 
     procedure FormCreate(Sender: TObject);

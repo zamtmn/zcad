@@ -14,10 +14,10 @@ object sltexteditor1: Tsltexteditor1
   OnShow = shoftedform
   LCLVersion = '1.1'
   object EditField: TEdit
-    Left = 26
+    Left = 28
     Height = 18
     Top = 0
-    Width = 451
+    Width = 434
     Align = alClient
     Anchors = []
     TabOrder = 0
@@ -27,17 +27,17 @@ object sltexteditor1: Tsltexteditor1
     Left = 0
     Height = 18
     Top = 0
-    Width = 26
+    Width = 28
     Align = alLeft
     Caption = ' тест '
     Layout = tlCenter
     ParentColor = False
   end
   object OkButton: TButton
-    Left = 477
+    Left = 462
     Height = 18
     Top = 0
-    Width = 26
+    Width = 41
     Align = alRight
     AutoSize = True
     Caption = 'Ok'
@@ -45,4 +45,4 @@ object sltexteditor1: Tsltexteditor1
     ModalResult = 1
     TabOrder = 1
   end
-end
+end

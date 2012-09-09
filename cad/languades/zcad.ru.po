@@ -335,9 +335,17 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
+#: zcadexternal.acn_fakecopyclipbase~caption
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
+msgstr ""
+
+#: zcadexternal.acn_fakepaste~caption
+msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -538,6 +546,10 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
+#: zcadexternal.acn_processkz~caption
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_processkz~textimage
 msgctxt "zcadexternal.acn_processkz~textimage"
 msgid "Process external KZ"
@@ -572,6 +584,10 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
+
+#: zcadexternal.acn_remautocables~caption
+msgid ""
+msgstr ""
 
 #: zcadexternal.acn_remautocables~textimage
 msgctxt "zcadexternal.acn_remautocables~textimage"
@@ -755,6 +771,30 @@ msgctxt "zcadexternal.acn_wprev~caption"
 msgid "Previous window"
 msgstr "Предыдущее окно"
 
+#: zcadexternal.acn_zoomall~caption
+msgid "Zoom All"
+msgstr "Показать всё"
+
+#: zcadexternal.acn_zoomall~textimage
+msgid "ZA"
+msgstr ""
+
+#: zcadexternal.acn_zoomin~caption
+msgid "Zoom in"
+msgstr "Приблизить"
+
+#: zcadexternal.acn_zoomin~textimage
+msgid "Z+"
+msgstr ""
+
+#: zcadexternal.acn_zoomout~caption
+msgid "Zoom out"
+msgstr "Удалить"
+
+#: zcadexternal.acn_zoomout~textimage
+msgid "Z-"
+msgstr ""
+
 #: zcadexternal.brmode~brm_bd
 msgctxt "zcadexternal.brmode~brm_bd"
 msgid "Block and Device"
@@ -914,6 +954,7 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
+#, fuzzy
 #| msgid "Rotate"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Block params"
@@ -1201,8 +1242,9 @@ msgid "Reset camera"
 msgstr "Камера в начало"
 
 #: zcadexternal.menucommand~fuckoff
-#| msgid "Layouts (not impl)"
-msgid "Dimensions styles (not impl)"
+#, fuzzy
+#| msgid "Dimensions styles (not impl)"
+msgid "Layouts (not impl)"
 msgstr "Стили размеров (не реализовано)"
 
 #: zcadexternal.menucommand~setobjinsp(camera)
@@ -1375,6 +1417,10 @@ msgstr "Панели инструментов"
 msgctxt "zcadexternal.submenu~view"
 msgid "View"
 msgstr "Вид"
+
+#: zcadexternal.submenu~zoom
+msgid "Zoom"
+msgstr "Масштаб"
 
 #: zcadexternal.tbasicfinter~excludecable
 msgid "Exclude filter"
@@ -2088,9 +2134,10 @@ msgid "Background color"
 msgstr "Цвет фона"
 
 #: zcadexternal.trd~rd_lastcalcvisible
+#| msgid "Last update time"
 msgctxt "zcadexternal.trd~rd_lastcalcvisible"
-msgid "Last update time"
-msgstr "Время обновления"
+msgid "Last visible calculation time"
+msgstr "Время расчета видимости"
 
 #: zcadexternal.trd~rd_lastrendertime
 msgctxt "zcadexternal.trd~rd_lastrendertime"
@@ -2098,10 +2145,10 @@ msgid "Last render time"
 msgstr "Время рендера"
 
 #: zcadexternal.trd~rd_lastupdatetime
-#| msgid "Last update time"
+#| msgid "Last visible calculation time"
 msgctxt "zcadexternal.trd~rd_lastupdatetime"
-msgid "Last visible calculation time"
-msgstr "Время расчета видимости"
+msgid "Last update time"
+msgstr "Время обновления"
 
 #: zcadexternal.trd~rd_light
 msgctxt "zcadexternal.trd~rd_light"

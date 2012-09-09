@@ -697,6 +697,30 @@ msgstr ""
 msgid "Previous window"
 msgstr ""
 
+#: zcadexternal.acn_zoomall~caption
+msgid "Zoom All"
+msgstr ""
+
+#: zcadexternal.acn_zoomall~textimage
+msgid "ZA"
+msgstr ""
+
+#: zcadexternal.acn_zoomin~caption
+msgid "Zoom in"
+msgstr ""
+
+#: zcadexternal.acn_zoomin~textimage
+msgid "Z+"
+msgstr ""
+
+#: zcadexternal.acn_zoomout~caption
+msgid "Zoom out"
+msgstr ""
+
+#: zcadexternal.acn_zoomout~textimage
+msgid "Z-"
+msgstr ""
+
 #: zcadexternal.brmode~brm_bd
 msgctxt "zcadexternal.brmode~brm_bd"
 msgid "Block and Device"
@@ -1099,12 +1123,12 @@ msgstr ""
 
 #: zcadexternal.menucommand~fuckoff
 #, fuzzy
-msgid "Layouts (not impl)"
+msgid "Dimensions styles (not impl)"
 msgstr ""
 
 #: zcadexternal.menucommand~fuckoff
 #, fuzzy
-msgid "Dimensions styles (not impl)"
+msgid "Layouts (not impl)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(camera)
@@ -1260,6 +1284,10 @@ msgstr ""
 #: zcadexternal.submenu~view
 msgctxt "zcadexternal.submenu~view"
 msgid "View"
+msgstr ""
+
+#: zcadexternal.submenu~zoom
+msgid "Zoom"
 msgstr ""
 
 #: zcadexternal.tbasicfinter~excludecable

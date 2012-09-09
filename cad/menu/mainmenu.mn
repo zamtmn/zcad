@@ -31,6 +31,10 @@ Panel Standart;
     action ACN_UNDO
     action ACN_REDO
     Separator
+    action ACN_ZOOMIN
+    action ACN_ZOOMOUT
+    action ACN_ZOOMALL
+    Separator
     action ACN_REGEN
     button OPS_Sensor_Mark,#++,Numbering sensors on the plan
     Separator
@@ -129,9 +133,9 @@ MainMenuItem View;
       {
         MenuItem Zoom;
            {
-            action ACN_ZOOMALL
             action ACN_ZOOMIN
             action ACN_ZOOMOUT
+            action ACN_ZOOMALL
            }
         Command Reset camera,Cam_reset,none,none
         action ACN_PERSPECTIVE

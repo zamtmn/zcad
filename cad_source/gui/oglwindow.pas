@@ -188,6 +188,8 @@ type
     procedure EraseBackground(DC: HDC);override;
 
     procedure FormCreate(Sender: TObject);
+    procedure MouseEnter;override;
+    procedure MouseLeave;override;
 
   end;
 const maxgrid=100;
@@ -1657,7 +1659,8 @@ end;
 procedure TOGLWnd.sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);
 begin
      if commandmanager.pcommandrunning<>nil then
-     commandmanager.pcommandrunning^.MouseMoveCallback(coord,param.md.mouse,key,pos);
+     if commandmanager.pcommandrunning.IsRTECommand then
+        commandmanager.pcommandrunning^.MouseMoveCallback(coord,param.md.mouse,key,pos);
 
      if (key and MZW_LBUTTON)<>0 then
      if commandmanager.pcommandrunning<>nil then
@@ -1901,7 +1904,16 @@ begin
                          end;
 
 end;
-
+procedure TOGLWnd.MouseEnter;
+begin
+     param.md.mousein:=true;
+     inherited;
+end;
+procedure TOGLWnd.MouseLeave;
+begin
+     param.md.mousein:=false;
+     inherited;
+end;
 procedure TOGLWnd.MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);
 var key: GDBByte;
     NeedRedraw:boolean;
@@ -2094,6 +2106,8 @@ begin
   pucommand:=PDWG^.StoreOldCamerapPos;
   begin
         CalcOptimalMatrix;
+        if not param.md.mousein then
+                                    mouseunproject(clientwidth div 2, clientheight div 2);
         glx1 := param.md.mouseray.lbegin.x;
         gly1 := param.md.mouseray.lbegin.y;
         if param.projtype = ProjParalel then
@@ -2109,7 +2123,10 @@ begin
         end;
 
         CalcOptimalMatrix;
-        mouseunproject(param.md.mouse.x, clientheight-param.md.mouse.y);
+        if param.md.mousein then
+                                mouseunproject(param.md.mouse.x, clientheight-param.md.mouse.y)
+                            else
+                                mouseunproject(clientwidth div 2, clientheight div 2);
         if param.projtype = ProjParalel then
         begin
         PDWG.Getpcamera^.prop.point.x := PDWG.Getpcamera^.prop.point.x - (glx1 - param.md.mouseray.lbegin.x);
@@ -4152,6 +4169,7 @@ begin
   param.md.workplane{.normal.z}[2] := {sqrt(0.9)}1;
   param.md.workplane{.d}[3] := 0;
   param.scrollmode:=false;
+  param.md.mousein:=false;
   param.processObjConstruct:=false;
   //UGDBDescriptor.POGLWnd := @param;
 

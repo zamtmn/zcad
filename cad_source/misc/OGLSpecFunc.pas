@@ -322,6 +322,12 @@ procedure TOGLStateManager.myglDisable(const cap: GLenum);
 begin
      mytotalglend;
      glDisable(cap);
+     case cap of
+                GL_LINE_STIPPLE:begin
+                                     _LineStipplefactor:=-1;
+                                     _LineStipplepattern:=0;
+                                end;
+     end;
 end;
 procedure TOGLStateManager.myglPointSize(const size: GLfloat);
 begin

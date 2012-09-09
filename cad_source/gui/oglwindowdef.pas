@@ -39,6 +39,7 @@ type
     mouseonworkplanecoord: GDBvertex;
     mouse3dcoord: GDBvertex;
     mouseonworkplan: GDBBoolean;
+    mousein: GDBBoolean;
   end;
 
   PSelectiondesc = ^Selectiondesc;

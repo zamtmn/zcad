@@ -47,6 +47,7 @@ type
     destructor done;virtual;
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
     function GetObjTypeName:GDBString;virtual;
+    function IsRTECommand:GDBBoolean;virtual;
   end;
   CommandFastObjectDef = object(CommandObjectDef)
     procedure CommandInit; virtual;abstract;
@@ -62,6 +63,7 @@ type
     function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    function IsRTECommand:GDBBoolean;virtual;
   end;
   pGDBcommandmanagerDef=^GDBcommandmanagerDef;
   GDBcommandmanagerDef=object(GDBOpenArrayOfPObjects)
@@ -76,6 +78,10 @@ type
 {Export-}
 implementation
 //uses oglwindow;
+function CommandObjectDef.IsRTECommand:GDBBoolean;
+begin
+     result:=false;
+end;
 function CommandObjectDef.GetObjTypeName;
 begin
      //pointer(result):=typeof(testobj);
@@ -109,6 +115,10 @@ begin
                              result:=0
                          else
                              result:=0;
+end;
+function CommandRTEdObjectDef.IsRTECommand:GDBBoolean;
+begin
+     result:=true;
 end;
 procedure CommandRTEdObjectDef.CommandContinue;
 begin

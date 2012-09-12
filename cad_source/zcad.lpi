@@ -529,7 +529,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="144"/>
         <CursorPos X="9" Y="158"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit33>
       <Unit34>
@@ -1600,6 +1600,7 @@
       <Unit155>
         <Filename Value="u/UGDBFontManager.pas"/>
         <UnitName Value="UGDBFontManager"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="66"/>
@@ -1627,7 +1628,6 @@
       <Unit158>
         <Filename Value="gdb/GDBMText.pas"/>
         <UnitName Value="GDBMText"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="889"/>
@@ -1640,123 +1640,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="709" Column="1" TopLine="672"/>
+        <Caret Line="710" Column="1" TopLine="672"/>
       </Position1>
       <Position2>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="710" Column="1" TopLine="672"/>
+        <Caret Line="709" Column="1" TopLine="672"/>
       </Position2>
       <Position3>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="709" Column="1" TopLine="672"/>
+        <Caret Line="710" Column="1" TopLine="672"/>
       </Position3>
       <Position4>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="710" Column="1" TopLine="672"/>
+        <Caret Line="709" Column="1" TopLine="672"/>
       </Position4>
       <Position5>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="709" Column="1" TopLine="672"/>
+        <Caret Line="710" Column="1" TopLine="672"/>
       </Position5>
       <Position6>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="710" Column="1" TopLine="672"/>
+        <Caret Line="709" Column="1" TopLine="672"/>
       </Position6>
       <Position7>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="709" Column="1" TopLine="672"/>
+        <Caret Line="710" Column="1" TopLine="672"/>
       </Position7>
       <Position8>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="710" Column="1" TopLine="672"/>
+        <Caret Line="712" Column="1" TopLine="674"/>
       </Position8>
       <Position9>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="712" Column="1" TopLine="674"/>
+        <Caret Line="714" Column="1" TopLine="676"/>
       </Position9>
       <Position10>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="714" Column="1" TopLine="676"/>
+        <Caret Line="715" Column="1" TopLine="678"/>
       </Position10>
       <Position11>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="715" Column="1" TopLine="678"/>
+        <Caret Line="717" Column="1" TopLine="680"/>
       </Position11>
       <Position12>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="717" Column="1" TopLine="680"/>
+        <Caret Line="720" Column="1" TopLine="683"/>
       </Position12>
       <Position13>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="720" Column="1" TopLine="683"/>
+        <Caret Line="721" Column="1" TopLine="684"/>
       </Position13>
       <Position14>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="721" Column="1" TopLine="684"/>
+        <Caret Line="723" Column="1" TopLine="686"/>
       </Position14>
       <Position15>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="723" Column="1" TopLine="686"/>
+        <Caret Line="733" Column="1" TopLine="711"/>
       </Position15>
       <Position16>
-        <Filename Value="fileformats/io.pas"/>
-        <Caret Line="733" Column="1" TopLine="711"/>
+        <Filename Value="u/UGDBOpenArrayOfByte.pas"/>
+        <Caret Line="205" Column="1" TopLine="182"/>
       </Position16>
       <Position17>
         <Filename Value="u/UGDBOpenArrayOfByte.pas"/>
-        <Caret Line="205" Column="1" TopLine="182"/>
+        <Caret Line="206" Column="1" TopLine="182"/>
       </Position17>
       <Position18>
-        <Filename Value="u/UGDBOpenArrayOfByte.pas"/>
-        <Caret Line="206" Column="1" TopLine="182"/>
+        <Filename Value="fileformats/io.pas"/>
+        <Caret Line="157" Column="1" TopLine="135"/>
       </Position18>
       <Position19>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="157" Column="1" TopLine="135"/>
+        <Caret Line="158" Column="1" TopLine="135"/>
       </Position19>
       <Position20>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="158" Column="1" TopLine="135"/>
+        <Caret Line="159" Column="1" TopLine="135"/>
       </Position20>
       <Position21>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="159" Column="1" TopLine="135"/>
+        <Caret Line="160" Column="1" TopLine="135"/>
       </Position21>
       <Position22>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="160" Column="1" TopLine="135"/>
+        <Caret Line="161" Column="1" TopLine="135"/>
       </Position22>
       <Position23>
-        <Filename Value="fileformats/io.pas"/>
-        <Caret Line="161" Column="1" TopLine="135"/>
-      </Position23>
-      <Position24>
         <Filename Value="u/UGDBFontManager.pas"/>
         <Caret Line="87" Column="65" TopLine="66"/>
+      </Position23>
+      <Position24>
+        <Filename Value="fileformats/io.pas"/>
+        <Caret Line="754" Column="12" TopLine="746"/>
       </Position24>
       <Position25>
         <Filename Value="fileformats/io.pas"/>
-        <Caret Line="754" Column="12" TopLine="746"/>
+        <Caret Line="670" Column="11" TopLine="647"/>
       </Position25>
       <Position26>
-        <Filename Value="fileformats/io.pas"/>
-        <Caret Line="670" Column="11" TopLine="647"/>
+        <Filename Value="u/ugdbshxfont.pas"/>
+        <Caret Line="49" Column="18" TopLine="26"/>
       </Position26>
       <Position27>
         <Filename Value="u/ugdbshxfont.pas"/>
-        <Caret Line="49" Column="18" TopLine="26"/>
+        <Caret Line="84" Column="12" TopLine="73"/>
       </Position27>
       <Position28>
         <Filename Value="u/ugdbshxfont.pas"/>
-        <Caret Line="84" Column="12" TopLine="73"/>
+        <Caret Line="42" Column="5" TopLine="19"/>
       </Position28>
       <Position29>
-        <Filename Value="u/ugdbshxfont.pas"/>
-        <Caret Line="42" Column="5" TopLine="19"/>
-      </Position29>
-      <Position30>
         <Filename Value="u/UGDBFontManager.pas"/>
         <Caret Line="79" Column="1" TopLine="66"/>
+      </Position29>
+      <Position30>
+        <Filename Value="gdb/GDBMText.pas"/>
+        <Caret Line="911" Column="1" TopLine="889"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -1799,22 +1799,6 @@
     <LCLWidgetType Value="win32"/>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="2">
-      <Item1>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="gdb/GDBMText.pas"/>
-        <Line Value="911"/>
-      </Item1>
-      <Item2>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="u/UGDBFontManager.pas"/>
-        <Line Value="79"/>
-      </Item2>
-    </BreakPoints>
     <Watches Count="4">
       <Item1>
         <Expression Value="ppointer(198740120)^"/>

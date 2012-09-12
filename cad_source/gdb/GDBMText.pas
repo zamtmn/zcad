@@ -117,7 +117,7 @@ begin
                                begin
                                  if pswp.str[1]=' ' then
                                                          l:=l;
-                               sym:=getsymbol(pswp.str,1,l);
+                               sym:=getsymbol(pswp.str,1,l,pgdbfont(pfont)^.unicode);
                                psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym);
                                pswp^.x:= 0-psyminfo.SymMinX{*textprop.size};
                                end
@@ -163,7 +163,7 @@ begin
   currline := '';
   maxlinewidth := (width / textprop.size) / textprop.wfactor;
   repeat
-    sym:=getsymbol(content,currsymbol,l);
+    sym:=getsymbol(content,currsymbol,l,pgdbfont(pfont)^.unicode);
     psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym);
     if newline then
                    begin
@@ -681,7 +681,7 @@ begin
   while i<=length(pswp^.str) do
   begin
     m1:=matr;
-    sym:=getsymbol(pswp^.str{[i]},i,l);
+    sym:=getsymbol(pswp^.str{[i]},i,l,pgdbfont(pfont)^.unicode);
     if {pswp^.str[i]}sym={#}1 then
     begin
          ispl:=not(ispl);
@@ -967,4 +967,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBMtext.initialization');{$ENDIF}
-end.
+end.

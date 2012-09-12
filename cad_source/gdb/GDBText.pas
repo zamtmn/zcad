@@ -54,7 +54,7 @@ GDBObjText=object(GDBObjAbstractText)
                  function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit):GDBBoolean;virtual;
            end;
 {Export-}
-function getsymbol(s:gdbstring; i:integer;out l:integer):word;
+function getsymbol(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 implementation
 uses {io,}shared;
 function acadvjustify(j: GDBByte): GDBByte;
@@ -211,7 +211,7 @@ begin
    while i<=length(content) do
   //for i:=1 to length(content) do
   begin
-    sym:=getsymbol(content,i,l);
+    sym:=getsymbol(content,i,l,PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.unicode);
     //psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(content[i])));
     psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(sym);
     obj_width:=obj_width+psyminfo.NextSymX;
@@ -519,7 +519,7 @@ begin
       end;
     end;
   end;
-function getsymbol(s:gdbstring; i:integer;out l:integer):word;
+function getsymbol(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 var
    ts:gdbstring;
    code:integer;
@@ -582,7 +582,10 @@ begin
      end;
 
      l:=1;
-     result:=ach2uch(ord(s[i]));
+     if fontunicode then
+                        result:=ach2uch(ord(s[i]))
+                    else
+                        result:=ord(s[i]);
 end;
 
 procedure GDBObjText.createpoint;
@@ -624,7 +627,7 @@ begin
   i := 1;
   while i <= length(content) do
   begin
-    sym:=getsymbol(content,i,l);
+    sym:=getsymbol(content,i,l,pgdbfont(pfont)^.unicode);
     if {content[i]}sym={#}1 then
     begin
          ispl:=not(ispl);

@@ -1123,12 +1123,12 @@ msgstr ""
 
 #: zcadexternal.menucommand~fuckoff
 #, fuzzy
-msgid "Dimensions styles (not impl)"
+msgid "Layouts (not impl)"
 msgstr ""
 
 #: zcadexternal.menucommand~fuckoff
 #, fuzzy
-msgid "Layouts (not impl)"
+msgid "Dimensions styles (not impl)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(camera)

@@ -30,6 +30,7 @@ GDBEntity,
 UGDBSelectedObjArray,
 UGDBTextStyleArray,
 UGDBFontManager,
+ugdbltypearray,
 GDBCamera,
 UGDBOpenArrayOfPV,
 GDBRoot,UGDBSHXFont,
@@ -125,6 +126,7 @@ var GDB: GDBDescriptor;
     ClipboardDWG:PTDrawing=nil;
     GDBTrash:GDBObjTrash;
     FontManager:GDBFontManager;
+    LtypeManager:GDBLtypeArray;
 procedure CalcZ(z:GDBDouble);
 procedure RemapAll(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 procedure startup;
@@ -819,6 +821,7 @@ procedure startup;
 begin
   RedrawOGLWNDProc:=RedrawOGLWND;
   FontManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
+  LTypeManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
 
   //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\times.shx');
   //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\GENISO.SHX');
@@ -827,6 +830,8 @@ begin
   //FromDirIterator({sysparam.programpath+'fonts/'}'C:\Program Files\AutoCAD 2010\Fonts\','*.shx','',addf,nil);
 
   FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,sysvar.SYS.SYS_AlternateFont^));
+  FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,'ltypeshp.shx'));
+  LTypeManager.LoadFromFile(FindInPaths(sysvar.PATH.Support_Path^,'acad.lin'),TLOLoad);
   pbasefont:=FontManager.getAddres(sysvar.SYS.SYS_AlternateFont^);
   if pbasefont=nil then
                        shared.FatalError('Альтернативный шрифт "'+sysvar.SYS.SYS_AlternateFont^+
@@ -861,6 +866,7 @@ begin
   end;
   pbasefont:=nil;
   FontManager.FreeAndDone;
+  LTypeManager.FreeAndDone;
   GDBTrash.done;
 end;
 begin

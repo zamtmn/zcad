@@ -276,9 +276,17 @@ function GetPredStr(var s: GDBString; substr: GDBString): GDBString;
 var i, c,a: GDBInteger;
 begin
   i:=pos(substr,s);
-  result:=copy(s,1,i-1);
-  i:=i+length(substr);
-  s:=copy(s,i,length(s)-i+1);
+  if i<>0 then
+             begin
+                  result:=copy(s,1,i-1);
+                  i:=i+length(substr);
+                  s:=copy(s,i,length(s)-i+1);
+             end
+          else
+             begin
+                  result:=s;
+                  s:='';
+             end;
 end;
 function ExpandPath(path:GDBString):GDBString;
 begin

@@ -80,6 +80,8 @@ begin
       symbolinfo[i].addr:=0;
       symbolinfo[i].size:=0;
      end;
+     self.u:=1;
+     self.h:=1;
      unicode:=false;
      SHXdata.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1024);
      unisymbolinfo.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1000,sizeof(GDBUNISymbolInfo));

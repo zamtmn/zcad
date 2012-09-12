@@ -340,7 +340,14 @@ else if Operands='CURRENT' then
                                      end
                                  else
                                      begin
-                                          ShowError('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL, try find selected in DRAWING...');
+                                          ShowError('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL, try SetObjInsp(SELECTED)...');
+                                     end;
+                                 SysVar.DWG.DWG_SelectedObjToInsp^:=false;
+                            end
+else if Operands='SELECTED' then
+                            begin
+                                     begin
+                                          //ShowError('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL, try find selected in DRAWING...');
                                           pp:=gdb.GetCurrentROOT.objarray.beginiterate(ir);
                                           if pp<>nil then
                                          begin

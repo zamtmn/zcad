@@ -160,7 +160,7 @@ begin
                        end;
              IsCreated:
                        begin
-                            if uppercase(name)='DEFPOINTS' then
+                            if uppercase(name)=LNSysDefpoints then
                                                                p^.init(Name,Color,LW,oo,ll,false,d)
                             else
                             p^.init(Name,Color,LW,oo,ll,pp,d);

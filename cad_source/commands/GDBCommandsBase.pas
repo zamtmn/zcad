@@ -618,7 +618,7 @@ begin
      if operands='QS' then
                           begin
                                s1:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^);
-                               s:='rsAutoSave: '''+s1+'''';
+                               s:=rsAutoSave+': '''+s1+'''';
                                historyout(pansichar(s));
                                itautoseve:=true;
                           end

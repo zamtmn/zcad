@@ -96,6 +96,7 @@ begin
                                 result:=copy(s,2,j-2);
                                 s:=copy(s,j+1,length(s)-j);
                                 GetPredStr(s,',');
+                                result:='0';
                            end
                        else
                            result:=GetPredStr(s,',');

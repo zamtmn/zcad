@@ -336,7 +336,7 @@ begin
                                                   i2:=i2;{$ENDIF}
         pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
         PGDBObjEntity(pobj)^.LoadFromDXF(f,@additionalunit);
-        if PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer then
+        if (PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer)or(PGDBObjEntity(pobj)^.vp.Layer=nil) then
                                                                  PGDBObjEntity(pobj)^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetSystemLayer;
         correctvariableset(pobj);
         pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(@additionalunit);
@@ -764,8 +764,15 @@ begin
                             while byt <> 0 do
                             begin
                               s := f.readGDBString;
+                              programlog.LogOutStr(s,0);
                               byt := strtoint(s);
                               s := f.readGDBString;
+                              if (byt=0)and(s='VPORT')then
+                              begin
+                                    byt := -100;
+                                    active:=false;
+                              end;
+                              programlog.LogOutStr(s,0);
                               case byt of
                                 2:
                                   begin

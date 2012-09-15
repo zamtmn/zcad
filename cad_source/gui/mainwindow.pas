@@ -585,12 +585,33 @@ function IsRealyQuit:GDBBoolean;
 var
    pint:PGDBInteger;
    mem:GDBOpenArrayOfByte;
+   i:integer;
+   poglwnd:TOGLWnd;
 begin
-     result:=true;
+     result:=false;
+     if MainFormN.PageControl<>nil then
+     begin
+          for i:=0 to MainFormN.PageControl.PageCount-1 do
+          begin
+               TControl(poglwnd):=FindControlByType(TTabSheet(MainFormN.PageControl.Pages[i]),TOGLWnd);
+               if poglwnd<>nil then
+                                   begin
+                                        if poglwnd.PDWG.GetChangeStampt then
+                                                                            begin
+                                                                                 result:=true;
+                                                                                 system.break;
+                                                                            end;
+                                   end;
+          end;
+
+     end;
      if gdb.GetCurrentDWG<>nil then
      begin
-     //if dialogs.messagebox('Закрыть программу?','QUIT',MB_YESNO)=IDYES then
-     if MainFormN.messagebox(@rsQuitQuery[1],@rsQuitCaption[1],MB_YESNO or MB_ICONQUESTION)=IDYES then
+     if not result then
+                       i:=MainFormN.messagebox(@rsQuitQuery[1],@rsQuitCaption[1],MB_YESNO or MB_ICONQUESTION)
+                   else
+                       i:=IDYES;
+     if i=IDYES then
      begin
           result:=true;
 

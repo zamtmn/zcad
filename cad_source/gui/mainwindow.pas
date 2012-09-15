@@ -109,7 +109,8 @@ type
                     procedure ShowAllCursors;
                     procedure RestoreCursors;
                     //function DOShowModal(MForm:TForm): Integer;
-                    procedure CloseDWGPage(Sender: TObject);
+                    procedure CloseDWGPageInterf(Sender: TObject);
+                    function CloseDWGPage(Sender: TObject):integer;
 
                     procedure PageControlMouseDown(Sender: TObject;Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 
@@ -161,7 +162,7 @@ type
 procedure UpdateVisible;
 function getoglwndparam: GDBPointer; export;
 function LoadLayout_com(Operands:pansichar):GDBInteger;
-procedure _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject);
+function _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject):Integer;
 {procedure startup;
 procedure finalize;}
 var
@@ -675,8 +676,31 @@ begin
 *)
      result:=0;
      if IsRealyQuit then
-                        application.terminate;
+     begin
+          if MainFormN.PageControl<>nil then
+          begin
+               while MainFormN.PageControl.ActivePage<>nil do
+               begin
+                    //MainFormN.PageControl.ActivePage.Destroy;
+                    if MainFormN.CloseDWGPage(MainFormN.PageControl.ActivePage)=IDNO then
+                                                                                             exit;
+               end;
+          end;
+          application.terminate;
+     end;
 end;
+{var
+   poglwnd:toglwnd;
+   ClosedDWG:PTDrawing;
+   i:integer;
+begin
+  //application.ProcessMessages;
+  Closeddwg:=nil;
+  TControl(poglwnd):=FindControlByType(TTabSheet(sender),TOGLWnd);
+  if poglwnd<>nil then
+                      Closeddwg:=ptdrawing(poglwnd.PDWG);
+  _CloseDWGPage(ClosedDWG,Sender);
+end;}
 procedure TMainFormN.asynccloseapp(Data: PtrInt);
 begin
       CloseApp;
@@ -731,7 +755,7 @@ begin
      PreferredWidth:=0;
      PreferredHeight:=0;
 end;
-procedure _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject);
+function _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject):Integer;
 var
    poglwnd:toglwnd;
    i:integer;
@@ -739,11 +763,14 @@ var
 begin
   if ClosedDWG<>nil then
   begin
+       result:=IDYES;
        if ClosedDWG.Changed then
                                  begin
                                       s:=format(rsCloseDWGQuery,[ClosedDWG.FileName]);
-                                      if MainFormN.MessageBox(@s[1],@rsWarningCaption[1],MB_YESNO)<>IDYES then exit;
+                                      result:=MainFormN.MessageBox(@s[1],@rsWarningCaption[1],MB_YESNO);
+                                      if result<>IDYES then exit;
                                  end;
+       commandmanager.executecommandtotalend;
        poglwnd:=ClosedDWG.OGLwindow1;
        gdb.eraseobj(ClosedDWG);
        gdb.pack;
@@ -767,8 +794,12 @@ begin
        if assigned(UpdateVisibleProc) then UpdateVisibleProc;
   end;
 end;
+procedure TMainFormN.CloseDWGPageInterf(Sender: TObject);
+begin
+     CloseDWGPage(Sender);
+end;
 
-procedure TMainFormN.CloseDWGPage(Sender: TObject);
+function TMainFormN.CloseDWGPage(Sender: TObject):integer;
 var
    poglwnd:toglwnd;
    ClosedDWG:PTDrawing;
@@ -779,7 +810,7 @@ begin
   TControl(poglwnd):=FindControlByType(TTabSheet(sender),TOGLWnd);
   if poglwnd<>nil then
                       Closeddwg:=ptdrawing(poglwnd.PDWG);
-  _CloseDWGPage(ClosedDWG,Sender);
+  result:=_CloseDWGPage(ClosedDWG,Sender);
 end;
 procedure TMainFormN.PageControlMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -853,7 +884,7 @@ begin
       PageControl.{OnPageChanged}OnChange:=ChangedDWGTabCtrl;
       PageControl.BorderWidth:=0;
       PageControl.Options:=[nboShowCloseButtons];
-      PageControl.OnCloseTabClicked:=CloseDWGPage;
+      PageControl.OnCloseTabClicked:=CloseDWGPageInterf;
       PageControl.OnMouseDown:=PageControlMouseDown;
 
    AControl:=MainPanel;

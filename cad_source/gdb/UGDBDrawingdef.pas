@@ -35,9 +35,10 @@ TAbstractDrawing=object(GDBaseobject)
                        procedure MoveCameraInLocalCSXY(oldx,oldy:GDBDouble;ax:gdbvertex);virtual;abstract;
                        procedure SetCurrentDWG;virtual;abstract;
                        function GetLayerTable:PGDBLayerArray;virtual;abstract;
+                       function GetChangeStampt:GDBBoolean;virtual;abstract;
                        function StoreOldCamerapPos:Pointer;virtual;abstract;
                        procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;
                  end;
 {EXPORT-}
 implementation
-end.
+end.

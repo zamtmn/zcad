@@ -284,7 +284,7 @@ begin
   begin
        newdwg_com(@s[1]);
        gdb.GetCurrentDWG.SetFileName(s);
-       import(s);
+       import(s,gdb.GetCurrentDWG^);
   end
             else
      shared.ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));

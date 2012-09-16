@@ -462,7 +462,7 @@ begin
      if isload then
      begin
           fileext:=uppercase(ExtractFileEXT(s));
-          if fileext='.ZCP' then LoadZCP(s, @GDB)
+          if fileext='.ZCP' then LoadZCP(s, {@GDB}gdb.GetCurrentDWG^)
      else if fileext='.DXF' then
                                 begin
                                      //if operands<>'QS' then
@@ -471,7 +471,7 @@ begin
                                                                        begin
                                                                        isOpenGLError;
                                                                        end;
-                                     addfromdxf(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode);
+                                     addfromdxf(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode,gdb.GetCurrentDWG^);
                                      if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
                                                                        begin
                                                                        isOpenGLError;
@@ -590,7 +590,7 @@ var
    pu:ptunit;
    filepath,filename{,fileext}:GDBString;
 begin
-     savedxf2000(s, GDB.GetCurrentDWG);
+     savedxf2000(s, GDB.GetCurrentDWG^);
 
      pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
      mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
@@ -660,7 +660,7 @@ begin
      begin
           fileext:=uppercase(ExtractFileEXT(s));
           if fileext='.ZCP' then
-                                saveZCP(s, @GDB)
+                                saveZCP(s, gdb.GetCurrentDWG^)
      else if fileext='.DXF' then
                                 begin
                                      SaveDXFDPAS(s);
@@ -1155,7 +1155,7 @@ begin
                               +inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)
                               +'.dxf';
      CopyClipFile:=s;
-     savedxf2000(s, {GDB.GetCurrentDWG}ClipboardDWG);
+     savedxf2000(s, {GDB.GetCurrentDWG}ClipboardDWG^);
      setlength(suni,length(s)*2+2);
      fillchar(suni[1],length(suni),0);
      s:=s+#0;

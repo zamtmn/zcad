@@ -870,7 +870,7 @@ var
   pb:PGDBObjBlockdef;
 begin
   pb:=gdb.GetCurrentDWG.BlockDefArray.create(s);
-  addfromdxf(sysparam.programpath+'block\'+s+'.dxf',pb,tlomerge);
+  addfromdxf(sysparam.programpath+'block\'+s+'.dxf',pb,tlomerge,gdb.GetCurrentDWG^);
 end;
 initialization
 begin

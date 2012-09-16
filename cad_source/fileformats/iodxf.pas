@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses ugdbsimpledrawing,zcadsysvars,zcadinterface,dxfvectorialreader,svgvectorialreader,epsvectorialreader,{pdfvectorialreader,}GDBCircle,GDBArc,fpvectorial,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, UGDBDescriptor,gdbobjectsconstdef,
+uses ugdbsimpledrawing,zcadsysvars,zcadinterface,dxfvectorialreader,svgvectorialreader,epsvectorialreader,{pdfvectorialreader,}GDBCircle,GDBArc,fpvectorial,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
   entnamindex=record
@@ -78,11 +78,11 @@ var i2:GDBInteger;
 {$ENDIF}
 var FOC:GDBInteger;
     phandlearray: pdxfhandlerecopenarray;
-procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
-procedure savedxf2000(name: GDBString; PDrawing:PTSimpleDrawing);
-procedure saveZCP(name: GDBString; gdb: PGDBDescriptor);
-procedure LoadZCP(name: GDBString; gdb: PGDBDescriptor);
-procedure Import(name: GDBString);
+procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure savedxf2000(name: GDBString; {PDrawing:PTSimpleDrawing}var drawing:TSimpleDrawing);
+procedure saveZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
+procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
+procedure Import(name: GDBString;var drawing:TSimpleDrawing);
 implementation
 uses GDBLine,GDBBlockDef,UGDBLayerArray,varmandef;
 function dxfhandlearraycreate(col: GDBInteger): GDBPointer;
@@ -304,7 +304,7 @@ begin
         end;
 end;
 
-procedure addentitiesfromdxf(var f: GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjSubordinated);
+procedure addentitiesfromdxf(var f: GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjSubordinated;var drawing:TSimpleDrawing);
 var
 //  byt,LayerColor: GDBInteger;
   s{, sname, sx1, sy1, sz1,scode,LayerName}: GDBString;
@@ -337,7 +337,7 @@ begin
         pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
         PGDBObjEntity(pobj)^.LoadFromDXF(f,@additionalunit);
         if (PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer)or(PGDBObjEntity(pobj)^.vp.Layer=nil) then
-                                                                 PGDBObjEntity(pobj)^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetSystemLayer;
+                                                                 PGDBObjEntity(pobj)^.vp.Layer:={gdb.GetCurrentDWG}drawing.LayerTable.GetSystemLayer;
         correctvariableset(pobj);
         pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(@additionalunit);
         trash:=false;
@@ -437,7 +437,7 @@ begin
   end;
   additionalunit.done;
 end;
-procedure addfromdxf12(var f:GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjSubordinated;LoadMode:TLoadOpt);
+procedure addfromdxf12(var f:GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjSubordinated;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
   {byt,}LayerColor: GDBInteger;
   s, sname{, sx1, sy1, sz1},scode,LayerName: GDBString;
@@ -475,7 +475,7 @@ begin
               end;{case}
         until GroupCode=0;
         {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer '+LayerName,0);{$ENDIF}
-        gdb.GetCurrentDWG.LayerTable.addlayer(LayerName,LayerColor,-3,true,false,true,'',TLOLoad);
+        {gdb.GetCurrentDWG}drawing.LayerTable.addlayer(LayerName,LayerColor,-3,true,false,true,'',TLOLoad);
       until sname=dxfName_ENDTAB;
       {$IFDEF TOTALYLOG}programlog.logoutstr('end; {layer table}',lp_DecPos);{$ENDIF}
     end
@@ -492,9 +492,9 @@ begin
           end
           else
           begin
-            tp := gdb.GetCurrentDWG.BlockDefArray.create(s);
+            tp := {gdb.GetCurrentDWG}drawing.BlockDefArray.create(s);
             programlog.logoutstr('Found block '+s+';',lp_IncPos);
-            {addfromdxf12}addentitiesfromdxf(f, 'ENDBLK',tp);
+            {addfromdxf12}addentitiesfromdxf(f, 'ENDBLK',tp,drawing);
             programlog.logoutstr('end; {block '+s+'}',lp_DecPos);
           end;
         sname := f.readGDBString;
@@ -505,13 +505,13 @@ begin
     else if s = 'ENTITIES' then
     begin
          {$IFDEF TOTALYLOG}programlog.logoutstr('Found entities section',lp_IncPos);{$ENDIF}
-         addentitiesfromdxf(f, 'EOF',owner);;
+         addentitiesfromdxf(f, 'EOF',owner,drawing);;
          {$IFDEF TOTALYLOG}programlog.logoutstr('end {entities section}',lp_DecPos);{$ENDIF}
     end;
   end;
   {$IFDEF TOTALYLOG}programlog.logoutstr('end; {AddFromDXF12}',lp_decPos);{$ENDIF}
 end;
-procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
+procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
   byt: GDBInteger;
   error,flags: GDBInteger;
@@ -659,10 +659,10 @@ begin
                       end;
                     end;
                     if llw='' then llw:='-1';
-                    player:=gdb.GetCurrentDWG.LayerTable.addlayer(lname, abs(strtoint(lcolor)), strtoint(llw),oo,ll,pp,desk,LoadMode);
+                    player:={gdb.GetCurrentDWG}drawing.LayerTable.addlayer(lname, abs(strtoint(lcolor)), strtoint(llw),oo,ll,pp,desk,LoadMode);
                     if uppercase(lname)=uppercase(clayer)then
                                                              if sysvar.DWG.DWG_CLayer<>nil then
-                                                                                               sysvar.DWG.DWG_CLayer^:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(player);
+                                                                                               sysvar.DWG.DWG_CLayer^:={gdb.GetCurrentDWG}drawing.LayerTable.GetIndexByPointer(player);
                     llw:='';
                     {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer '+lname,0);{$ENDIF}
                   end;
@@ -729,13 +729,13 @@ begin
                         end;
                         if (flags and 1)=0 then
                         begin
-                        if gdb.GetCurrentDWG.TextStyleTable.FindStyle(tstyle.Name)<>-1 then
+                        if {gdb.GetCurrentDWG}drawing.TextStyleTable.FindStyle(tstyle.Name)<>-1 then
                         begin
                           if LoadMode=TLOLoad then
-                                                  gdb.GetCurrentDWG.TextStyleTable.setstyle(tstyle.Name,lname,tstyle.prop);
+                                                  {gdb.GetCurrentDWG}drawing.TextStyleTable.setstyle(tstyle.Name,lname,tstyle.prop);
                         end
                            else
-                               gdb.GetCurrentDWG.TextStyleTable.addstyle(tstyle.Name,lname,tstyle.prop);
+                               {gdb.GetCurrentDWG}drawing.TextStyleTable.addstyle(tstyle.Name,lname,tstyle.prop);
                         end;
                         {$IFDEF TOTALYLOG}programlog.logoutstr('Found style '+tstyle.Name,0);{$ENDIF}
                       end;
@@ -785,20 +785,20 @@ begin
                                   begin
                                        if LoadMode=TLOLoad then
                                        if active then
-                                       if gdb.GetCurrentDWG<>nil then
-                                       if gdb.GetCurrentDWG.pcamera<>nil then
+                                       if {gdb.GetCurrentDWG}@drawing<>nil then
+                                       if {gdb.GetCurrentDWG}drawing.pcamera<>nil then
                                        begin
-                                            gdb.GetCurrentDWG.pcamera.prop.point.x:=-strtofloat(s);
+                                            {gdb.GetCurrentDWG}drawing.pcamera.prop.point.x:=-strtofloat(s);
                                        end;
                                    end;
                                 22:
                                   begin
                                        if LoadMode=TLOLoad then
                                        if active then
-                                       if gdb.GetCurrentDWG<>nil then
-                                       if gdb.GetCurrentDWG.pcamera<>nil then
+                                       if {gdb.GetCurrentDWG}@drawing<>nil then
+                                       if {gdb.GetCurrentDWG}drawing.pcamera<>nil then
                                        begin
-                                            gdb.GetCurrentDWG.pcamera.prop.point.y:=-strtofloat(s);
+                                            {gdb.GetCurrentDWG}drawing.pcamera.prop.point.y:=-strtofloat(s);
                                        end;
                                    end;
                                 13:
@@ -841,37 +841,37 @@ begin
                                   begin
                                        if LoadMode=TLOLoad then
                                        if active then
-                                       if gdb.GetCurrentDWG<>nil then
-                                       if gdb.GetCurrentDWG.pcamera<>nil then
-                                       if gdb.GetCurrentDWG.OGLwindow1<>nil then
+                                       if {gdb.GetCurrentDWG}@drawing<>nil then
+                                       if{gdb.GetCurrentDWG}drawing.pcamera<>nil then
+                                       if {gdb.GetCurrentDWG}drawing.OGLwindow1<>nil then
                                        begin
-                                            gdb.GetCurrentDWG.pcamera.prop.zoom:=(strtofloat(s)/gdb.GetCurrentDWG.OGLwindow1.ClientHeight);
+                                            {gdb.GetCurrentDWG}drawing.pcamera.prop.zoom:=(strtofloat(s)/{gdb.GetCurrentDWG}drawing.OGLwindow1.ClientHeight);
                                        end;
                                    end;
                                 41:
                                   begin
                                        if LoadMode=TLOLoad then
                                        if active then
-                                       if gdb.GetCurrentDWG<>nil then
-                                       if gdb.GetCurrentDWG.pcamera<>nil then
-                                       if gdb.GetCurrentDWG.OGLwindow1<>nil then
+                                       if {gdb.GetCurrentDWG}@drawing<>nil then
+                                       if {gdb.GetCurrentDWG}drawing.pcamera<>nil then
+                                       if {gdb.GetCurrentDWG}drawing.OGLwindow1<>nil then
                                        begin
-                                            if gdb.GetCurrentDWG.OGLwindow1.ClientHeight*strtofloat(s)>gdb.GetCurrentDWG.OGLwindow1.ClientWidth then
-                                            gdb.GetCurrentDWG.pcamera.prop.zoom:=gdb.GetCurrentDWG.pcamera.prop.zoom*strtofloat(s)*gdb.GetCurrentDWG.OGLwindow1.ClientHeight/gdb.GetCurrentDWG.OGLwindow1.ClientWidth;
+                                            if {gdb.GetCurrentDWG}drawing.OGLwindow1.ClientHeight*strtofloat(s)>{gdb.GetCurrentDWG}drawing.OGLwindow1.ClientWidth then
+                                            {gdb.GetCurrentDWG}drawing.pcamera.prop.zoom:={gdb.GetCurrentDWG}drawing.pcamera.prop.zoom*strtofloat(s)*{gdb.GetCurrentDWG}drawing.OGLwindow1.ClientHeight/{gdb.GetCurrentDWG}drawing.OGLwindow1.ClientWidth;
                                        end;
                                    end;
                                 71:
                                   begin
                                        if LoadMode=TLOLoad then
                                        if active then
-                                       if gdb.GetCurrentDWG<>nil then
-                                       if gdb.GetCurrentDWG.OGLwindow1<>nil then
+                                       if {gdb.GetCurrentDWG}@drawing<>nil then
+                                       if {gdb.GetCurrentDWG}drawing.OGLwindow1<>nil then
                                        begin
                                             flags:=strtoint(s);
                                             if (flags and 1)<>0 then
-                                                          gdb.GetCurrentDWG.OGLwindow1.param.projtype:=PROJPerspective
+                                                          {gdb.GetCurrentDWG}drawing.OGLwindow1.param.projtype:=PROJPerspective
                                                       else
-                                                          gdb.GetCurrentDWG.OGLwindow1.param.projtype:=PROJParalel;
+                                                          {gdb.GetCurrentDWG}drawing.OGLwindow1.param.projtype:=PROJParalel;
                                        end;
                                   end;
                                 75:
@@ -912,7 +912,7 @@ begin
       begin
         {$IFDEF TOTALYLOG}programlog.logoutstr('Found entities section',lp_IncPos);{$ENDIF}
         //inc(foc);
-        {addfromdxf12}addentitiesfromdxf(f, dxfName_ENDSEC,owner);
+        {addfromdxf12}addentitiesfromdxf(f, dxfName_ENDSEC,owner,drawing);
         owner.ObjArray.pack;
         owner.correctobjects(nil,0);
         //inc(foc);
@@ -932,7 +932,7 @@ begin
                 while (s <> 'ENDBLK') do
                   s := f.readGDBString;
               end
-              else if gdb.GetCurrentDWG.BlockDefArray.getindex(pointer(@s[1]))>=0 then
+              else if {gdb.GetCurrentDWG}drawing.BlockDefArray.getindex(pointer(@s[1]))>=0 then
                                begin
                                     //programlog.logoutstr('Ignored double definition block '+s+';',lp_OldPos);
                                     shared.HistoryOutStr(format(rsDoubleBlockIgnored,[s]));
@@ -945,7 +945,7 @@ begin
                    if s='DEVICE_PS_AR2' then
                                   s:=s;
 
-                tp := gdb.GetCurrentDWG.BlockDefArray.create(s);
+                tp := {gdb.GetCurrentDWG}drawing.BlockDefArray.create(s);
                 programlog.logoutstr('Found block '+s+';',lp_IncPos);
                    //addfromdxf12(f, GDBPointer(GDB.pgdbblock^.blockarray[GDB.pgdbblock^.count].ppa),@tp^.Entities, 'ENDBLK');
                 while (s <> ' 30') and (s <> '30') do
@@ -968,7 +968,7 @@ begin
                 s := f.readGDBString;
                 tp^.Base.z := strtofloat(s);
                 inc(foc);
-                AddEntitiesFromDXF(f,'ENDBLK',tp);
+                AddEntitiesFromDXF(f,'ENDBLK',tp,drawing);
                 dec(foc);
                 if tp^.name='TX' then
                                                            tp.name:=tp.name;
@@ -983,7 +983,7 @@ begin
             s := f.readGDBString;
           until (s = dxfName_ENDSEC);
           {$IFDEF TOTALYLOG}programlog.logoutstr('end; {block table}',lp_DecPos);{$ENDIF}
-          gdb.GetCurrentDWG.BlockDefArray.Format;
+          {gdb.GetCurrentDWG}drawing.BlockDefArray.Format;
         end;
 
     s := s;
@@ -994,7 +994,7 @@ begin
   {$IFDEF TOTALYLOG}programlog.logoutstr('end; {AddFromDXF2000}',lp_decPos);{$ENDIF}
 end;
 
-procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt);
+procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
   f: GDBOpenArrayOfByte;
   s,s1,s2: GDBString;
@@ -1029,23 +1029,23 @@ begin
                                1009:begin
                                          shared.HistoryOutStr(format(rsFileFormat,['DXF12 ('+s+')']));
                                          gotodxf(f, 0, dxfName_ENDSEC);
-                                         addfromdxf12(f,'EOF',owner,loadmode);
+                                         addfromdxf12(f,'EOF',owner,loadmode,drawing);
                                     end;
                                1015:begin
                                          shared.HistoryOutStr(format(rsFileFormat,['DXF2000 ('+s+')']));
-                                         addfromdxf2000(f,'EOF',owner,loadmode)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing)
                                     end;
                                1018:begin
                                          shared.HistoryOutStr(format(rsFileFormat,['DXF2004 ('+s+')']));
-                                         addfromdxf2000(f,'EOF',owner,loadmode)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing)
                                     end;
                                1021:begin
                                          shared.HistoryOutStr(format(rsFileFormat,['DXF2007 ('+s+')']));
-                                         addfromdxf2000(f,'EOF',owner,loadmode)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing)
                                     end;
                                1024:begin
                                          shared.HistoryOutStr(format(rsFileFormat,['DXF2010 ('+s+')']));
-                                         addfromdxf2000(f,'EOF',owner,loadmode)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing)
                                     end;
                                else
                                        begin
@@ -1130,14 +1130,16 @@ var
 begin
   DecimalSeparator := '.';
   standartstylehandle:=0;
-  olddwg:=gdb.GetCurrentDWG;
-  gdb.SetCurrentDWG(pdrawing);
+  olddwg:={gdb.GetCurrentDWG}@drawing;
+  if @SetCurrentDWGProc<>nil
+                            then SetCurrentDWGProc(@drawing);
+  //gdb.SetCurrentDWG(pdrawing);
   //--------------------------outstream := FileCreate(name);
   outstream.init({$IFDEF DEBUGBUILD}'{51453949-893A-49C2-9588-42B25346D071}',{$ENDIF}10*1024*1024);
   //--------------------------if outstream>0 then
   begin
     if assigned(StartLongProcessProc)then
-  StartLongProcessProc(pdrawing^.pObjRoot^.ObjArray.Count);
+  StartLongProcessProc({p}drawing.pObjRoot^.ObjArray.Count);
   phandlea := dxfhandlearraycreate(10000);
   pushhandle(phandlea,0,0);
   templatefile.InitFromFile(sysparam.programpath + 'components/empty.dxf');
@@ -1178,7 +1180,7 @@ else if (groupi = 9) and (ucvalues = '$CLAYER') then
       outstream.TXTAddGDBStringEOL(groups);
       outstream.TXTAddGDBStringEOL('$CLAYER');
       outstream.TXTAddGDBStringEOL('8');
-      outstream.TXTAddGDBStringEOL(gdb.GetCurrentDWG.LayerTable.GetCurrentLayer.Name);
+      outstream.TXTAddGDBStringEOL({gdb.GetCurrentDWG}drawing.LayerTable.GetCurrentLayer.Name);
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
     end
@@ -1259,7 +1261,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
           outstream.TXTAddGDBStringEOL(values);
           //WriteString_EOL(outstream, values);
           //historyoutstr('Entities start here_______________________________________________________');
-          saveentitiesdxf2000(@pdrawing^.pObjRoot^.ObjArray, outstream, handle);
+          saveentitiesdxf2000(@{p}drawing.pObjRoot^.ObjArray, outstream, handle);
         end
         else
           if (groupi = 2) and (values = 'BLOCKS') then
@@ -1274,8 +1276,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
             if (inblocksec) and ((groupi = 0) and (values = dxfName_ENDSEC)) then
             begin
               //historyoutstr('Blockdefs start here_______________________________________________________');
-              if pdrawing^.BlockDefArray.count>0 then
-              for i := 0 to pdrawing^.BlockDefArray.count - 1 do
+              if {p}drawing.BlockDefArray.count>0 then
+              for i := 0 to {p}drawing.BlockDefArray.count - 1 do
               begin
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                 outstream.TXTAddGDBStringEOL('BLOCK');
@@ -1289,21 +1291,21 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                 outstream.TXTAddGDBStringEOL('AcDbBlockBegin');
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
-                outstream.TXTAddGDBStringEOL(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].name);
+                outstream.TXTAddGDBStringEOL(PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].name);
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
                 outstream.TXTAddGDBStringEOL('2');
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(10));
-                outstream.TXTAddGDBStringEOL(floattostr(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].base.x));
+                outstream.TXTAddGDBStringEOL(floattostr(PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].base.x));
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(20));
-                outstream.TXTAddGDBStringEOL(floattostr(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].base.y));
+                outstream.TXTAddGDBStringEOL(floattostr(PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].base.y));
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(30));
-                outstream.TXTAddGDBStringEOL(floattostr(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].base.z));
+                outstream.TXTAddGDBStringEOL(floattostr(PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].base.z));
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(3));
-                outstream.TXTAddGDBStringEOL(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].name);
+                outstream.TXTAddGDBStringEOL(PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].name);
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(1));
                 outstream.TXTAddGDBStringEOL('');
 
-                saveentitiesdxf2000(@PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].ObjArray, outstream, handle);
+                saveentitiesdxf2000(@PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].ObjArray, outstream, handle);
 
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                 outstream.TXTAddGDBStringEOL('ENDBLK');
@@ -1370,12 +1372,12 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                outstream.TXTAddGDBStringEOL(dxfGroupCode(21));
                outstream.TXTAddGDBStringEOL('1.0');
 
-               if gdb.GetCurrentDWG.OGLwindow1<>nil then
+               if {gdb.GetCurrentDWG}drawing.OGLwindow1<>nil then
                                                         begin
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(12));
-                                                             outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.param.CPoint.x));
+                                                             outstream.TXTAddGDBStringEOL(floattostr({gdb.GetCurrentDWG}drawing.OGLwindow1.param.CPoint.x));
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(22));
-                                                             outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.param.CPoint.y));
+                                                             outstream.TXTAddGDBStringEOL(floattostr({gdb.GetCurrentDWG}drawing.OGLwindow1.param.CPoint.y));
                                                         end
                                                     else
                                                         begin
@@ -1397,11 +1399,11 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                outstream.TXTAddGDBStringEOL(dxfGroupCode(25));
                outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_StepGrid^.y));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(16));
-               outstream.TXTAddGDBStringEOL(floattostr(-gdb.GetCurrentDWG.pcamera.prop.look.x));
+               outstream.TXTAddGDBStringEOL(floattostr(-{gdb.GetCurrentDWG}drawing.pcamera.prop.look.x));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(26));
-               outstream.TXTAddGDBStringEOL(floattostr(-gdb.GetCurrentDWG.pcamera.prop.look.y));
+               outstream.TXTAddGDBStringEOL(floattostr(-{gdb.GetCurrentDWG}drawing.pcamera.prop.look.y));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(36));
-               outstream.TXTAddGDBStringEOL(floattostr(-gdb.GetCurrentDWG.pcamera.prop.look.z));
+               outstream.TXTAddGDBStringEOL(floattostr(-{gdb.GetCurrentDWG}drawing.pcamera.prop.look.z));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(17));
                outstream.TXTAddGDBStringEOL(floattostr({-gdb.GetCurrentDWG.pcamera.prop.point.x}0));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(27));
@@ -1409,13 +1411,13 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                outstream.TXTAddGDBStringEOL(dxfGroupCode(37));
                outstream.TXTAddGDBStringEOL(floattostr({-gdb.GetCurrentDWG.pcamera.prop.point.z}0));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(40));
-               if gdb.GetCurrentDWG.OGLwindow1<>nil then
-                                                        outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.param.ViewHeight))
+               if {gdb.GetCurrentDWG}drawing.OGLwindow1<>nil then
+                                                        outstream.TXTAddGDBStringEOL(floattostr({gdb.GetCurrentDWG}drawing.OGLwindow1.param.ViewHeight))
                                                     else
                                                         outstream.TXTAddGDBStringEOL(inttostr(500));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(41));
-               if gdb.GetCurrentDWG.OGLwindow1<>nil then
-                                                        outstream.TXTAddGDBStringEOL(floattostr(gdb.GetCurrentDWG.OGLwindow1.ClientWidth/gdb.GetCurrentDWG.OGLwindow1.ClientHeight))
+               if {gdb.GetCurrentDWG}drawing.OGLwindow1<>nil then
+                                                        outstream.TXTAddGDBStringEOL(floattostr({gdb.GetCurrentDWG}drawing.OGLwindow1.ClientWidth/{gdb.GetCurrentDWG}drawing.OGLwindow1.ClientHeight))
                                                     else
                                                         outstream.TXTAddGDBStringEOL(inttostr(1));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(42));
@@ -1497,9 +1499,9 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
             else if (inblocktable) and ((groupi = 0) and (values = dxfName_ENDTAB)) then
             begin
               inblocktable := false;
-              if pdrawing^.BlockDefArray.count>0 then
+              if {p}drawing.BlockDefArray.count>0 then
 
-              for i := 0 to pdrawing^.BlockDefArray.count - 1 do
+              for i := 0 to {p}drawing.BlockDefArray.count - 1 do
               begin
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                 outstream.TXTAddGDBStringEOL(dxfName_BLOCK_RECORD);
@@ -1511,7 +1513,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                 outstream.TXTAddGDBStringEOL('AcDbBlockTableRecord');
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
-                outstream.TXTAddGDBStringEOL(PBlockdefArray(pdrawing^.BlockDefArray.parray)^[i].name);
+                outstream.TXTAddGDBStringEOL(PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].name);
 
               end;
               outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
@@ -1523,7 +1525,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
               begin
                 inlayertable := false;
                 ignoredsource:=false;
-                for i := 0 to gdb.GetCurrentDWG.layertable.count - 1 do
+                for i := 0 to {gdb.GetCurrentDWG}drawing.layertable.count - 1 do
                 begin
                   //if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name <> '0' then
                   begin
@@ -1537,40 +1539,40 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                     outstream.TXTAddGDBStringEOL('AcDbLayerTableRecord');
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
-                    outstream.TXTAddGDBStringEOL(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name);
+                    outstream.TXTAddGDBStringEOL(PGDBLayerPropArray({gdb.GetCurrentDWG}drawing.layertable.parray)^[i].name);
                     attr:=0;
-                    if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i]._lock then
+                    if PGDBLayerPropArray({gdb.GetCurrentDWG}drawing.layertable.parray)^[i]._lock then
                                                                                              attr:=attr + 4;
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
                     outstream.TXTAddGDBStringEOL(inttostr(attr));
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(62));
-                    if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i]._on
+                    if PGDBLayerPropArray({gdb.GetCurrentDWG}drawing.layertable.parray)^[i]._on
                      then
-                         outstream.TXTAddGDBStringEOL(inttostr(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].color))
+                         outstream.TXTAddGDBStringEOL(inttostr(PGDBLayerPropArray({gdb.GetCurrentDWG}drawing.layertable.parray)^[i].color))
                      else
-                         outstream.TXTAddGDBStringEOL(inttostr(-PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].color));
+                         outstream.TXTAddGDBStringEOL(inttostr(-PGDBLayerPropArray({gdb.GetCurrentDWG}drawing.layertable.parray)^[i].color));
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(6));
                     outstream.TXTAddGDBStringEOL('Continuous');
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(290));
-                    if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i]._print then
+                    if PGDBLayerPropArray({gdb.GetCurrentDWG}drawing.layertable.parray)^[i]._print then
                     //if uppercase(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name) <> 'DEFPOINTS' then
                       outstream.TXTAddGDBStringEOL('1')
                     else
                       outstream.TXTAddGDBStringEOL('0');
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(370));
-                    outstream.TXTAddGDBStringEOL(inttostr(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].lineweight));
+                    outstream.TXTAddGDBStringEOL(inttostr(PGDBLayerPropArray({gdb.GetCurrentDWG}drawing.layertable.parray)^[i].lineweight));
                     //WriteString_EOL(outstream, '-3');
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(390));
                     outstream.TXTAddGDBStringEOL(inttohex(plottablefansdle,0));
 
-                    if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].desk<>''then
+                    if PGDBLayerPropArray({gdb.GetCurrentDWG}drawing.layertable.parray)^[i].desk<>''then
                     begin
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(1001));
                          outstream.TXTAddGDBStringEOL('AcAecLayerStandard');
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(1000));
                          outstream.TXTAddGDBStringEOL('');
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(1000));
-                         outstream.TXTAddGDBStringEOL(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].desk);
+                         outstream.TXTAddGDBStringEOL(PGDBLayerPropArray({gdb.GetCurrentDWG}drawing.layertable.parray)^[i].desk);
                     end;
                   end;
                 end;
@@ -1584,14 +1586,14 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
               begin
                 instyletable := false;
                 ignoredsource:=false;
-                for i := 0 to gdb.GetCurrentDWG.TextStyleTable.count - 1 do
+                for i := 0 to {gdb.GetCurrentDWG}drawing.TextStyleTable.count - 1 do
                 begin
                   //if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name <> '0' then
                   begin
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                     outstream.TXTAddGDBStringEOL(dxfName_Style);
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
-                    if uppercase(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.name)<>TSNStandardStyleName then
+                    if uppercase(PGDBTextStyle({gdb.GetCurrentDWG}drawing.TextStyleTable.getelement(i))^.name)<>TSNStandardStyleName then
                     begin
                     outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                     inc(handle);
@@ -1604,18 +1606,18 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                     outstream.TXTAddGDBStringEOL('AcDbTextStyleTableRecord');
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
-                    outstream.TXTAddGDBStringEOL(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.name);
+                    outstream.TXTAddGDBStringEOL(PGDBTextStyle({gdb.GetCurrentDWG}drawing.TextStyleTable.getelement(i))^.name);
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
                     outstream.TXTAddGDBStringEOL('0');
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(40));
-                    outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.prop.size));
+                    outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle({gdb.GetCurrentDWG}drawing.TextStyleTable.getelement(i))^.prop.size));
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(41));
-                    outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.prop.wfactor));
+                    outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle({gdb.GetCurrentDWG}drawing.TextStyleTable.getelement(i))^.prop.wfactor));
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(50));
-                    outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.prop.oblique));
+                    outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle({gdb.GetCurrentDWG}drawing.TextStyleTable.getelement(i))^.prop.oblique));
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(71));
                     outstream.TXTAddGDBStringEOL('0');
@@ -1624,7 +1626,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                     outstream.TXTAddGDBStringEOL('2.5');
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(3));
-                    outstream.TXTAddGDBStringEOL(PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(i))^.dxfname);
+                    outstream.TXTAddGDBStringEOL(PGDBTextStyle({gdb.GetCurrentDWG}drawing.TextStyleTable.getelement(i))^.dxfname);
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(4));
                     outstream.TXTAddGDBStringEOL('');
@@ -1714,9 +1716,11 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
 
   end;
   outstream.done;
-  gdb.SetCurrentDWG(olddwg);
+  if @SetCurrentDWGProc<>nil
+                           then SetCurrentDWGProc(olddwg);
+  //gdb.SetCurrentDWG(olddwg);
 end;
-procedure SaveZCP(name: GDBString; gdb: PGDBDescriptor);
+procedure SaveZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
 var
 //  memsize:longint;
 //  objcount:GDBInteger;
@@ -1765,7 +1769,7 @@ begin
      memorybuf.done;
      linkbyf.done;
 end;
-procedure LoadZCP(name: GDBString; gdb: PGDBDescriptor);
+procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
 var
 //  objcount:GDBInteger;
 //  pmem,tmem:GDBPointer;
@@ -1776,6 +1780,7 @@ var
 //  test:gdbvertex;
   linkbyf:PGDBOpenArrayOfTObjLinkRecord;
 begin
+     (*
      FileHeader:=NULZCPHeader;
      memorybuf.InitFromFile(name);
      sysunit.TypeName2PTD('ZCPHeader')^.DeSerialize(@FileHeader,SA_SAVED_TO_SHD,memorybuf,nil);
@@ -1816,7 +1821,7 @@ begin
      end;
      fileclose(infile);*)
 end;
-procedure Import(name: GDBString);
+procedure Import(name: GDBString;var drawing:TSimpleDrawing);
 var
   Vec: TvVectorialDocument;
   source:TvVectorialPage;
@@ -1841,7 +1846,7 @@ begin
            pgdbobjCircle(pobj).Radius:=TvCircle(CurEntity).Radius;
            pgdbobjCircle(pobj).Local.P_insert.x:=TvCircle(CurEntity).x;
            pgdbobjCircle(pobj).Local.P_insert.y:=TvCircle(CurEntity).y;
-           gdb.GetCurrentRoot.AddMi(@pobj);
+           drawing{gdb}.GetCurrentRoot.AddMi(@pobj);
            PGDBObjEntity(pobj)^.BuildGeometry;
            PGDBObjEntity(pobj)^.format;
       end
@@ -1853,7 +1858,7 @@ begin
            pgdbobjArc(pobj).Local.P_insert.y:=TvCircularArc(CurEntity).y;
            pgdbobjArc(pobj).StartAngle:=TvCircularArc(CurEntity).StartAngle*pi/180;
            pgdbobjArc(pobj).EndAngle:=TvCircularArc(CurEntity).EndAngle*pi/180;
-           gdb.GetCurrentRoot.AddMi(@pobj);
+           drawing{gdb}.GetCurrentRoot.AddMi(@pobj);
            PGDBObjEntity(pobj)^.BuildGeometry;
            PGDBObjEntity(pobj)^.format;
       end
@@ -1877,7 +1882,7 @@ begin
            PosX := Cur2DSegment.X;
            PosY := Cur2DSegment.Y;
            PGDBObjLine(pobj).CoordInOCS.lEnd:=createvertex(PosX,PosY,0);
-           gdb.GetCurrentRoot.AddMi(@pobj);
+           drawing{gdb}.GetCurrentRoot.AddMi(@pobj);
            PGDBObjEntity(pobj)^.BuildGeometry;
            PGDBObjEntity(pobj)^.format;
         end;

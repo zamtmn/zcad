@@ -89,6 +89,7 @@ TDrawing=object(TSimpleDrawing)
            procedure SetFileName(NewName:GDBString);virtual;
            function GetFileName:GDBString;virtual;
            procedure ChangeStampt(st:GDBBoolean);virtual;
+           function GetChangeStampt:GDBBoolean;virtual;
            function GetUndoTop:TArrayIndex;virtual;
      end;
 PGDBDescriptor=^GDBDescriptor;
@@ -359,8 +360,13 @@ end;
 
 procedure TDrawing.ChangeStampt;
 begin
-     self.Changed:=true;
+     self.Changed:={true}st;
 end;
+function TDrawing.GetChangeStampt:GDBBoolean;
+begin
+     result:=self.Changed;
+end;
+
 function TDrawing.GetUndoTop:TArrayIndex;
 begin
      result:=UndoStack.CurrentCommand;

@@ -29,6 +29,7 @@ const
      DefaultSHXY=0;
 type
 {EXPORT+}
+PTDashInfo=^TDashInfo;
 TDashInfo=(TDIDash,TDIText,TDIShape);
 TAngleDir=(TACAbs,TACRel,TACUpRight);
 BasicSHXDashProp=object(GDBaseObject)

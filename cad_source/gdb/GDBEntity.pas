@@ -1034,8 +1034,8 @@ begin
   if vp.lineweight<>-1 then dxfGDBIntegerout(outhandle,370,vp.lineweight);
   if dbname<>'' then
                     dxfGDBStringout(outhandle,100,dbname);
-  {if vp.LineType<>'' then dxfGDBStringout(outhandle,6,vp.LineType);
-  if vp.LineTypeScale<>1 then dxfGDBDoubleout(outhandle,48,vp.LineTypeScale);}
+  if vp.LineType<>'' then dxfGDBStringout(outhandle,6,vp.LineType);
+  if vp.LineTypeScale<>1 then dxfGDBDoubleout(outhandle,48,vp.LineTypeScale);
 end;
 function GDBObjEntity.IsHaveObjXData:GDBBoolean;
 begin

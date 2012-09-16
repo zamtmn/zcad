@@ -36,6 +36,7 @@ const
   dxfName_ENDSEC='ENDSEC';
   dxfName_Layer='LAYER';
   dxfName_Style='STYLE';
+  dxfName_LType='LTYPE';
 
 
 

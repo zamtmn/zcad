@@ -24,7 +24,7 @@ UGDBNumerator, gdbase,varmandef,varman,
 sysutils, memman, geometry, {gdbobjectsconstdef,}
 gdbasetypes,sysinfo,
 GDBGenericSubEntry,
-UGDBLayerArray,
+UGDBLayerArray,ugdbltypearray,
 GDBEntity,
 UGDBSelectedObjArray,
 UGDBTextStyleArray,
@@ -51,6 +51,7 @@ TSimpleDrawing=object(TAbstractDrawing)
                        BlockDefArray:GDBObjBlockdefArray;(*saved_to_shd*)
                        Numerator:GDBNumerator;(*saved_to_shd*)
                        TableStyleTable:GDBTableStyleArray;(*saved_to_shd*)
+                       LTypeStyleTable:GDBLtypeArray;
                        function GetLastSelected:PGDBObjEntity;virtual;
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
                        constructor init(pcam:PGDBObjCamera);
@@ -346,6 +347,7 @@ begin
      BlockDefArray.FreeAndDone;
      Numerator.FreeAndDone;
      TableStyleTable.FreeAndDone;
+     LTypeStyleTable.FreeAndDone;
 
      //FileName:='';
 end;
@@ -394,6 +396,7 @@ begin
   //ConstructObjRoot.init({$IFDEF DEBUGBUILD}'{B1036F20-562D-4B17-A33A-61CF3F5F2A90} - ConstructObjRoot',{$ENDIF}1);
 
   TextStyleTable.init({$IFDEF DEBUGBUILD}'{146FC836-1490-4046-8B09-863722570C9F}',{$ENDIF}200);
+  LTypeStyleTable.init({$IFDEF DEBUGBUILD}'{2BF47561-AEBD-4159-BF98-FCBA81DAD595}',{$ENDIF}100);
   //tp.size:=2.5;
   //tp.oblique:=0;
 

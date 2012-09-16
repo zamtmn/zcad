@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses ugdbsimpledrawing,zcadsysvars,zcadinterface,dxfvectorialreader,svgvectorialreader,epsvectorialreader,{pdfvectorialreader,}GDBCircle,GDBArc,fpvectorial,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
+uses UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,dxfvectorialreader,svgvectorialreader,epsvectorialreader,{pdfvectorialreader,}GDBCircle,GDBArc,fpvectorial,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
   entnamindex=record
@@ -528,6 +528,9 @@ var
 
   clayer:GDBString;
   player:PGDBLayerProp;
+  pltypeprop:PGDBLtypeProp;
+  dashinfo:TDashInfo;
+  TempDouble:GDBDouble;
 begin
   blockload:=false;
   nulisread:=false;
@@ -670,9 +673,63 @@ begin
           //gotodxf(f, 0, dxfName_ENDTAB);
                 end
                 else
-                  if s = 'LTYPE' then
+                  if s = dxfName_LType then
                   begin
-                    gotodxf(f, 0, dxfName_ENDTAB);
+                    //gotodxf(f, 0, dxfName_ENDTAB);
+                    {$IFDEF TOTALYLOG}programlog.logoutstr('Found line type table',lp_IncPos);{$ENDIF}
+                    if GoToDXForENDTAB(f, 0, dxfName_LType) then
+                    begin
+                         while s = dxfName_LType do
+                         begin
+                              pltypeprop:=nil;
+                              byt := 2;
+                              while byt <> 0 do
+                              begin
+                              s := f.readGDBString;
+                              byt := strtoint(s);
+                              s := f.readGDBString;
+                              case byt of
+                              2:
+                                begin
+                                  case drawing.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
+                                               IsFounded:
+                                                         begin
+                                                              if LoadMode=TLOLoad then
+                                                              begin
+                                                              end;
+                                                         end;
+                                               IsCreated:
+                                                         begin
+                                                              pltypeprop^.init(s);
+                                                         end;
+                                               IsError:
+                                                         begin
+                                                         end;
+                                       end;
+                                end;
+                              3:
+                                begin
+                                     if pltypeprop<>nil then
+                                                       pltypeprop^.desk:=s;
+                                end;
+                              40:
+                                begin
+                                     pltypeprop^.len:=strtofloat(s);
+                                end;
+                              49:
+                                 begin
+                                      if pltypeprop<>nil then
+                                      begin
+                                           dashinfo:=TDIDash;
+                                           TempDouble:=strtofloat(s);
+                                           pltypeprop^.dasharray.Add(@dashinfo);
+                                           pltypeprop^.strokesarray.Add(@TempDouble);
+                                      end;
+                                 end;
+                              end;
+                              end;
+                         end;
+                    end;
                   end
                   else
                     if s = dxfName_Style then
@@ -1121,12 +1178,16 @@ var
   groupi, valuei, intable,attr: GDBInteger;
   handle,lasthandle,vporttablehandle,plottablefansdle,standartstylehandle,i{,cod}: GDBInteger;
   phandlea: pdxfhandlerecopenarray;
-  inlayertable, inblocksec, inblocktable: GDBBoolean;
+  inlayertable, inblocksec, inblocktable, inlttypetable: GDBBoolean;
   handlepos:integer;
   ignoredsource:boolean;
   instyletable:boolean;
   invporttable:boolean;
   olddwg:{PTDrawing}PTSimpleDrawing;
+  pltp:PGDBLtypeProp;
+  ir,ir2,ir3,ir4,ir5:itrec;
+  TDI:PTDashInfo;
+  PStroke:PGDBDouble;
 begin
   DecimalSeparator := '.';
   standartstylehandle:=0;
@@ -1150,6 +1211,7 @@ begin
   instyletable := false;
   ignoredsource:=false;
   invporttable:=false;
+  inlttypetable:=false;
   while templatefile.notEOF do
   begin
     if  (templatefile.count-templatefile.ReadPos)<10
@@ -1582,6 +1644,62 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
 
 
             else
+              if (inlttypetable) and ((groupi = 0) and (values = dxfName_ENDTAB)) then
+              begin
+                   inlttypetable := false;
+                   ignoredsource:=false;
+                   pltp:=drawing.LTypeStyleTable.beginiterate(ir);
+                   if pltp<>nil then
+                   repeat
+                         outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
+                         outstream.TXTAddGDBStringEOL(dxfName_LTYPE);
+                         outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
+                         outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
+                         inc(handle);
+                         outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+                         outstream.TXTAddGDBStringEOL(dxfName_AcDbSymbolTableRecord);
+                         outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+                         outstream.TXTAddGDBStringEOL('AcDbLinetypeTableRecord');
+                         outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
+                         outstream.TXTAddGDBStringEOL(pltp^.Name);
+                         outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
+                         outstream.TXTAddGDBStringEOL('0');
+                         outstream.TXTAddGDBStringEOL(dxfGroupCode(3));
+                         outstream.TXTAddGDBStringEOL(pltp^.desk);
+                         outstream.TXTAddGDBStringEOL(dxfGroupCode(72));
+                         outstream.TXTAddGDBStringEOL('65');
+                         i:=pltp^.strokesarray.GetRealCount;
+                         outstream.TXTAddGDBStringEOL(dxfGroupCode(73));
+                         outstream.TXTAddGDBStringEOL(inttostr(i));
+                         outstream.TXTAddGDBStringEOL(dxfGroupCode(40));
+                         outstream.TXTAddGDBStringEOL(floattostr(pltp^.len));
+                         if i>0 then
+                         begin
+                              TDI:=pltp^.dasharray.beginiterate(ir2);
+                              PStroke:=pltp^.strokesarray.beginiterate(ir3);
+                              if PStroke<>nil then
+                              repeat
+                                    case TDI^ of
+                                                TDIDash:begin
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(49));
+                                                             outstream.TXTAddGDBStringEOL(floattostr(PStroke^));
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(74));
+                                                             outstream.TXTAddGDBStringEOL('0');
+                                                        end;
+                                    end;
+                                    TDI:=pltp^.dasharray.iterate(ir2);
+                                    PStroke:=pltp^.strokesarray.iterate(ir3);
+                              until PStroke=nil;
+
+                         end;
+
+
+                         pltp:=drawing.LTypeStyleTable.iterate(ir);
+                   until pltp=nil;
+                   outstream.TXTAddGDBStringEOL(groups);
+                   outstream.TXTAddGDBStringEOL(values);
+              end
+            else
               if (instyletable) and ((groupi = 0) and (values = dxfName_ENDTAB)) then
               begin
                 instyletable := false;
@@ -1660,6 +1778,10 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                   begin
                     instyletable := true;
                   end
+                  else if (groupi = 2) and (values = dxfName_LType) then
+                  begin
+                    inlttypetable := true;
+                  end
                   else if (groupi = 2) and (values = 'VPORT') then
                   begin
                     invporttable := true;
@@ -1673,6 +1795,10 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                     IgnoredSource := true;
                   end
               else if (groupi = 0) and (values = dxfName_Style)and instyletable then
+                  begin
+                    IgnoredSource := true;
+                  end
+              else if (groupi = 0) and (values = dxfName_LType)and inlttypetable then
                   begin
                     IgnoredSource := true;
                   end

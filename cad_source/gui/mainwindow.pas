@@ -605,10 +605,15 @@ begin
           end;
 
      end;
-     if gdb.GetCurrentDWG<>nil then
+     //if gdb.GetCurrentDWG<>nil then
      begin
      if not result then
-                       i:=MainFormN.messagebox(@rsQuitQuery[1],@rsQuitCaption[1],MB_YESNO or MB_ICONQUESTION)
+                       begin
+                       if gdb.GetCurrentDWG<>nil then
+                                                     i:=MainFormN.messagebox(@rsQuitQuery[1],@rsQuitCaption[1],MB_YESNO or MB_ICONQUESTION)
+                                                 else
+                                                     i:=IDYES;
+                       end
                    else
                        i:=IDYES;
      if i=IDYES then

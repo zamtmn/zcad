@@ -47,6 +47,8 @@ function ConvertFromDxfString(str:GDBString):GDBString;
 function ConvertToDxfString(str:GDBString):GDBString;
 function MakeHash(const s: GDBString): GDBLongword;
 
+procedure KillString(var str:GDBString);inline;
+
 type
   TCodePage=(CP_utf8,CP_win);
 
@@ -58,6 +60,11 @@ var
 implementation
 uses
     {varmandef,}log;
+procedure KillString(var str:GDBString);inline;
+begin
+     GDBPointer(str):=nil;
+end;
+
 function MakeHash(const s: GDBString): GDBLongword;
 var
   I: Integer;

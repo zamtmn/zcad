@@ -20,18 +20,54 @@ unit ugdbltypearray;
 {$INCLUDE def.inc}
 interface
 uses Classes,UGDBStringArray,UGDBOpenArrayOfData,zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
-     gl,
-     varmandef,gdbobjectsconstdef,UGDBNamedObjectsArray,StrProc;
+     gl,UGDBTextStyleArray,UGDBSHXFont,UGDBOpenArrayOfObjects,
+     varmandef,gdbobjectsconstdef,UGDBNamedObjectsArray,StrProc,shared;
+const
+     DefaultSHXHeight=1;
+     DefaultSHXAngle=0;
+     DefaultSHXX=0;
+     DefaultSHXY=0;
 type
 {EXPORT+}
+TDashInfo=(TDIDash,TDIText,TDIShape);
+TAngleDir=(TACAbs,TACRel,TACUpRight);
+BasicSHXDashProp=object(GDBaseObject)
+                Height,Angle,X,Y:GDBDouble;
+                AD:TAngleDir;
+                constructor initnul;
+          end;
+TextProp=object(BasicSHXDashProp)
+                Text,Style:GDBString;
+                PStyle:PGDBTextStyle;
+                PFont:PGDBfont;
+                constructor initnul;
+                destructor done;virtual;
+          end;
+ShapeProp=object(BasicSHXDashProp)
+                SymbolName,FontName:GDBString;
+                PFont:PGDBfont;
+                Psymbol:PGDBsymdolinfo;
+                constructor initnul;
+                destructor done;virtual;
+          end;
+GDBDashInfoArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=TDashInfo*)
+               end;
 GDBDoubleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBDouble*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                constructor initnul;
+               end;
+GDBShapePropArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=ShapeProp*)
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+               end;
+GDBTextPropArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=TextProp*)
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                end;
 PGDBLtypeProp=^GDBLtypeProp;
 GDBLtypeProp=object(GDBNamedObject)
                len:GDBDouble;(*'Length'*)
+               dasharray:GDBDashInfoArray;(*'DashInfo array'*)
                strokesarray:GDBDoubleArray;(*'Strokes array'*)
+               shapearray:GDBShapePropArray;(*'Shape array'*)
+               Textarray:GDBTextPropArray;(*'Text array'*)
                desk:GDBAnsiString;(*'Description'*)
                constructor init(n:GDBString);
                destructor done;virtual;
@@ -60,11 +96,17 @@ begin
      inherited;
      len:=0;
      pointer(desk):=nil;
+     dasharray.init(10,sizeof(TDashInfo));
      strokesarray.init(10);
+     shapearray.init(10);
+     Textarray.init(10);
 end;
 destructor GDBLtypeProp.done;
 begin
+     dasharray.done;
      strokesarray.done;
+     shapearray.done;
+     Textarray.done;
      inherited;
 end;
 
@@ -77,6 +119,45 @@ begin
   inherited initnul;
   size:=sizeof(GDBLtypeProp);
 end;
+constructor TextProp.initnul;
+begin
+     killstring(Text);
+     killstring(Style);
+     PStyle:=nil;
+     PFont:=nil;
+     inherited;
+end;
+destructor TextProp.done;
+begin
+     Text:='';
+     Text:='';
+     PStyle:=nil;
+     PFont:=nil;
+end;
+constructor BasicSHXDashProp.initnul;
+begin
+     Height:=DefaultSHXHeight;
+     Angle:=DefaultSHXAngle;
+     X:=DefaultSHXX;
+     Y:=DefaultSHXY;
+     AD:=TACRel;
+end;
+constructor ShapeProp.initnul;
+begin
+     killstring(SymbolName);
+     killstring(FontName);
+     PFont:=nil;
+     Psymbol:=nil;
+     inherited;
+end;
+destructor ShapeProp.done;
+begin
+     SymbolName:='';
+     FontName:='';
+     PFont:=nil;
+     Psymbol:=nil;
+end;
+
 procedure GDBLtypeArray.LoadFromFile(fname:GDBString;lm:TLoadOpt);
 var
    strings:TStringList=nil;
@@ -85,7 +166,7 @@ var
    WhatNeed:TSeek;
    LTName,LTDesk,LTClass:GDBString;
    p:PGDBLtypeProp;
-function GetStr(var s: String): String;
+function GetStr(var s: String; out dinfo:TDashInfo): String;
 var j:integer;
 begin
      if length(s)>0 then
@@ -96,29 +177,98 @@ begin
                                 result:=copy(s,2,j-2);
                                 s:=copy(s,j+1,length(s)-j);
                                 GetPredStr(s,',');
-                                result:='0';
+                                dinfo:=TDIText;
                            end
                        else
+                           begin
                            result:=GetPredStr(s,',');
+                           dinfo:=TDIDash;
+                           end;
      end
      else
         result:='';
 end;
-
 procedure CreateLineTypeFrom(var LT:GDBString;pltprop:PGDBLtypeProp);
 var
-   element:String;
+   element,subelement,text_shape,font_style,paramname:String;
    j:integer;
    stroke:GDBDouble;
+   dinfo:TDashInfo;
+   SP:ShapeProp;
+   TP:TextProp;
+procedure GetParam(var SHXDashProp:BasicSHXDashProp);
+begin
+  subelement:=GetPredStr(element,',');
+  while subelement<>'' do
+  begin
+       paramname:=Uppercase(GetPredStr(subelement,'='));
+       stroke:=strtofloat(subelement);
+       if paramname='X' then
+                            SP.X:=stroke
+  else if paramname='Y' then
+                            SP.Y:=stroke
+  else if paramname='S' then
+                            SP.Height:=stroke
+  else if paramname='A' then
+                            begin
+                                 SP.Angle:=stroke;
+                                 SP.AD:=TACAbs;
+                            end
+  else if paramname='R' then
+                            begin
+                                 SP.Angle:=stroke;
+                                 SP.AD:=TACRel;
+                            end
+  else if paramname='U' then
+                            begin
+                                 SP.Angle:=stroke;
+                                 SP.AD:=TACUpRight;
+                            end
+  else shared.ShowError('CreateLineTypeFrom: unknow value "'+paramname+'"');
+       subelement:=GetPredStr(element,',');
+  end;
+end;
 begin
      pltprop^.init(LTName);
-     element:=GetStr(LT);
+     element:=GetStr(LT,dinfo);
      while element<>'' do
      begin
-          stroke:=strtofloat(element);
-          pltprop.len:=pltprop.len+abs(stroke);
-          pltprop^.strokesarray.add(@stroke);
-          element:=GetStr(LT);
+          case dinfo of
+                       TDIDash:begin
+                                    stroke:=strtofloat(element);
+                                    pltprop.len:=pltprop.len+abs(stroke);
+                                    pltprop^.strokesarray.add(@stroke);
+                               end;
+                       TDIText:begin
+                                    j:=pos('"',element);
+                                    if j>0 then
+                                               begin
+                                                    TP.initnul;
+                                                    TP.Text:=GetPredStr(element,',');
+                                                    TP.Style:=GetPredStr(element,',');
+                                                    GetParam(TP);
+                                                    pltprop^.Textarray.add(@TP);
+                                                    killstring(TP.Text);
+                                                    killstring(TP.Style);
+                                                    TP.done;
+                                               end
+                                           else
+                                               begin
+                                                    dinfo:=TDIShape;
+                                                    SP.initnul;
+                                                    SP.SymbolName:=GetPredStr(element,',');
+                                                    SP.FontName:=GetPredStr(element,',');
+                                                    GetParam(SP);
+                                                    pltprop^.shapearray.add(@SP);
+                                                    killstring(SP.SymbolName);
+                                                    killstring(SP.FontName);
+                                                    SP.done;
+                                               end;
+                               end;
+
+          end;
+          pltprop^.dasharray.Add(@dinfo);
+          element:=GetStr(LT,dinfo);
      end;
 end;
 
@@ -183,11 +333,15 @@ constructor GDBDoubleArray.init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:G
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(gdbdouble));
 end;
-constructor GDBDoubleArray.initnul;
+constructor GDBShapePropArray.init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 begin
-  inherited initnul;
-  size:=sizeof(gdbdouble);
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(ShapeProp));
 end;
+constructor GDBTextPropArray.init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+begin
+  inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(TextProp));
+end;
+
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('ugdbltypearray.initialization');{$ENDIF}
 end.

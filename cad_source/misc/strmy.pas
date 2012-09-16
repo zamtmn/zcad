@@ -32,7 +32,6 @@ function strtohex(s:GDBString): GDBString;
 function parse(template, str:GDBString; GDBStringarray:PGDBGDBStringArray;mode:GDBBoolean;lexema:pshortString; var position:GDBInteger):GDBBoolean;
 function runparser(template:GDBString;var str:GDBString; out parsed:GDBBoolean):PGDBGDBStringArray;
 function IsParsed(template:GDBString;var str:GDBString; out strins:PGDBGDBStringArray):boolean;
-procedure KillString(var str:GDBString);
 const maxlexem=16;
 
 const str_empty='**EMPTY STRING**';
@@ -60,10 +59,6 @@ const str_empty='**EMPTY STRING**';
 
 implementation
 uses varmandef,log{,URecordDescriptor};
-procedure KillString(var str:GDBString);
-begin
-     GDBPointer(str):=nil;
-end;
 function findlexem(s:GDBString):GDBString;
 var
    i:GDBInteger;

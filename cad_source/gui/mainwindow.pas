@@ -2291,9 +2291,14 @@ begin
      if assigned(cmdedit) then
                               comtext:=cmdedit.text;
      if comtext='' then
+     begin
      if assigned(gdb.GetCurrentDWG) then
      if assigned(gdb.GetCurrentDWG.OGLwindow1)then
                     gdb.GetCurrentDWG.OGLwindow1.myKeyPress(tempkey,shift);
+     end
+     else
+         if key=VK_ESCAPE then
+                              cmdedit.text:='';
      if tempkey<>0 then
      begin
         if (tempkey=VK_TAB)and(shift=[ssctrl,ssShift]) then

@@ -2172,6 +2172,7 @@ begin
                (scCtrl or VK_Z),
                (scCtrl or scShift or VK_Z),
                 VK_DELETE,
+                VK_HOME,VK_END,
                 VK_BACK,
                 VK_LEFT,
                 VK_RIGHT,

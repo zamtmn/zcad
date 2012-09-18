@@ -34,6 +34,10 @@ action ACN_TEXTWINDOW,TextWindow,#TW,View text window,,F2
 action ACN_ZOOMALL,Zoom(ALL),zoomall.bmp,Zoom All,,HOME
 action ACN_ZOOMIN,Zoom(IN),zoomin.bmp,Zoom in,,PGUP
 action ACN_ZOOMOUT,Zoom(OUT),zoomout.bmp,Zoom out,,PGDN
+action ACN_PANLEFT,Pan(LEFT),panleft.bmp,Pan left,,LEFT
+action ACN_PANRIGHT,Pan(RIGHT),panright.bmp,Pan right,,RIGHT
+action ACN_PANUP,Pan(UP),panup.bmp,Pan up,,UP
+action ACN_PANDOWN,Pan(DOWN),pandown.bmp,Pan down,,DOWN
 
 action ACN_SNAPRUNTIME,SnapProperties,#snap,Run time snap editor,,ALT+S
 

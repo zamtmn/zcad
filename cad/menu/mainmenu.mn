@@ -34,6 +34,10 @@ Panel Standart;
     action ACN_ZOOMIN
     action ACN_ZOOMOUT
     action ACN_ZOOMALL
+    action ACN_PANUP
+    action ACN_PANDOWN
+    action ACN_PANLEFT
+    action ACN_PANRIGHT
     Separator
     action ACN_REGEN
     button OPS_Sensor_Mark,#++,Numbering sensors on the plan
@@ -136,6 +140,13 @@ MainMenuItem View;
             action ACN_ZOOMIN
             action ACN_ZOOMOUT
             action ACN_ZOOMALL
+           }
+        MenuItem Pan;
+           {
+            action ACN_PANUP
+            action ACN_PANDOWN
+            action ACN_PANLEFT
+            action ACN_PANRIGHT
            }
         Command Reset camera,Cam_reset,none,none
         action ACN_PERSPECTIVE

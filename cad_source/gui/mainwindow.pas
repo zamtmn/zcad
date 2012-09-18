@@ -2173,6 +2173,7 @@ begin
                (scCtrl or scShift or VK_Z),
                 VK_DELETE,
                 VK_HOME,VK_END,
+                VK_PRIOR,VK_NEXT,//=PGUP,PGDN
                 VK_BACK,
                 VK_LEFT,
                 VK_RIGHT,

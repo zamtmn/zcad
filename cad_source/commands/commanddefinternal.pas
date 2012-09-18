@@ -234,6 +234,7 @@ begin
     gdb.GetCurrentDWG.SelObjArray.clearallobjects;
     end;
     if gdb.GetCurrentDWG.OGLwindow1<>nil then
+    if not overlay then
   gdb.GetCurrentDWG.OGLwindow1.Clear0Ontrackpoint;
   if not overlay then
                      begin

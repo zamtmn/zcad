@@ -1708,6 +1708,31 @@ else if uppercase(operands)='OUT' then
                                      end;
      result:=cmd_ok;
 end;
+function Pan_com(Operands:pansichar):GDBInteger;
+const
+     pix=50;
+var x,y:integer;
+begin
+     x:=gdb.GetCurrentDWG.OGLwindow1.ClientWidth div 2;
+     y:=gdb.GetCurrentDWG.OGLwindow1.ClientHeight div 2;
+     if uppercase(operands)='LEFT' then
+                                      gdb.GetCurrentDWG.OGLwindow1.PanScreen(x,y,x+pix,y)
+else if uppercase(operands)='RIGHT' then
+                                     begin
+                                          gdb.GetCurrentDWG.OGLwindow1.PanScreen(x,y,x-pix,y)
+                                     end
+else if uppercase(operands)='UP' then
+                                          begin
+                                               gdb.GetCurrentDWG.OGLwindow1.PanScreen(x,y,x,y+pix)
+                                          end
+else if uppercase(operands)='DOWN' then
+                                     begin
+                                          gdb.GetCurrentDWG.OGLwindow1.PanScreen(x,y,x,y-pix)
+                                     end;
+     gdb.GetCurrentDWG.OGLwindow1.RestoreMouse;
+     result:=cmd_ok;
+end;
+
 
 function tw_com(Operands:pansichar):GDBInteger;
 begin
@@ -1951,6 +1976,7 @@ begin
   CreateCommandFastObjectPlugin(@TW_com,'TextWindow',0,0).overlay:=true;
 
   CreateCommandFastObjectPlugin(@Zoom_com,'Zoom',CADWG,0).overlay:=true;
+  CreateCommandFastObjectPlugin(@Pan_com,'Pan',CADWG,0).overlay:=true;
 
   CreateCommandFastObjectPlugin(@StoreFrustum_com,'StoreFrustum',CADWG,0).overlay:=true;
   CreateCommandFastObjectPlugin(@TestScript_com,'TestScript',0,0).overlay:=true;

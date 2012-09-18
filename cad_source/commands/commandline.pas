@@ -187,12 +187,26 @@ begin
      busy:=false;
 end;
 procedure GDBcommandmanager.sendpoint2command;
+var
+   p:PCommandRTEdObjectDef;
+   ir:itrec;
 begin
      if pcommandrunning <> nil then
+     if pcommandrunning.IsRTECommand then
      begin
           pcommandrunning^.MouseMoveCallback(p3d,p2d,mode,osp);
      end;
      //clearotrack;
+        p:=CommandsStack.beginiterate(ir);
+        if p<>nil then
+        repeat
+              if p^.IsRTECommand then
+                                                       begin
+                                                            (p)^.MouseMoveCallback(p3d,p2d,mode,osp);
+                                                       end;
+
+              p:=CommandsStack.iterate(ir);
+        until p=nil;
 end;
 procedure GDBcommandmanager.cleareraseobj;
 var p:PCommandObjectDef;

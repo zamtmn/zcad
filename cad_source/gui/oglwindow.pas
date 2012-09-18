@@ -1681,13 +1681,13 @@ end;
 procedure TOGLWnd.sendcoordtocommand(coord:GDBVertex;key: GDBByte);
 begin
      if key=MZW_LBUTTON then param.lastpoint:=coord;
-     commandmanager.pcommandrunning^.MouseMoveCallback(coord, param.md.mouse, key,nil);
+     commandmanager.sendpoint2command(coord, param.md.mouse, key,nil);
 end;
 procedure TOGLWnd.sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);
 begin
-     if commandmanager.pcommandrunning<>nil then
-     if commandmanager.pcommandrunning.IsRTECommand then
-        commandmanager.pcommandrunning^.MouseMoveCallback(coord,param.md.mouse,key,pos);
+     //if commandmanager.pcommandrunning<>nil then
+     //if commandmanager.pcommandrunning.IsRTECommand then
+        commandmanager.sendpoint2command(coord,param.md.mouse,key,pos);
 
      if (key and MZW_LBUTTON)<>0 then
      if commandmanager.pcommandrunning<>nil then

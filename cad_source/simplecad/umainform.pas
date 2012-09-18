@@ -421,7 +421,7 @@ procedure TForm1.BtnOpenDXFClick(Sender: TObject);
 begin
      if OpenDialog1.Execute then
      begin
-          addfromdxf(OpenDialog1.FileName,@gdb.GetCurrentDWG^.pObjRoot^,TLOLoad);
+          addfromdxf(OpenDialog1.FileName,@gdb.GetCurrentDWG^.pObjRoot^,TLOLoad,gdb.GetCurrentDWG^);
           gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
           UGDBDescriptor.redrawoglwnd;
      end;
@@ -431,7 +431,7 @@ procedure TForm1.BtnSaveDXFClick(Sender: TObject);
 begin
      if SaveDialog1.Execute then
      begin
-          savedxf2000(SaveDialog1.FileName, GDB.GetCurrentDWG);
+          savedxf2000(SaveDialog1.FileName, GDB.GetCurrentDWG^);
      end;
 end;
 
@@ -489,4 +489,4 @@ end;
 
 
 end.
-
+

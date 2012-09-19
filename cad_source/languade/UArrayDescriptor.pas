@@ -48,7 +48,7 @@ begin
      PAID:=Indexs.beginiterate(ir);
      if paid<>nil then
                      repeat
-                           for i:=paid^.IndexMin to paid^.IndexMin+paid^.IndexCount do
+                           for i:=paid^.IndexMin to paid^.IndexMin+paid^.IndexCount-1 do
                            begin
                                 if i<>paid^.IndexMin then
                                                          begin

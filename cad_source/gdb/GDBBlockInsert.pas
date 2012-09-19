@@ -39,7 +39,7 @@ GDBObjBlockInsert=object(GDBObjComplex)
                      procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;
                      function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
 
-                     procedure SaveToDXF(var handle:longint; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                     procedure SaveToDXF(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                      procedure CalcObjMatrix;virtual;
                      function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
                      function Clone(own:GDBPointer):PGDBObjEntity;virtual;
@@ -732,7 +732,7 @@ else if not dxfGDBStringload(f,2,byt,name)then s := f.readgdbstring;
       index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
       //format;
 end;
-procedure GDBObjBlockInsert.SaveToDXF(var handle: longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);
+procedure GDBObjBlockInsert.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);
 //var
   //i, j: GDBInteger;
   //hv, vv: GDBByte;

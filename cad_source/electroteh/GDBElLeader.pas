@@ -42,13 +42,13 @@ GDBObjElLeader=object(GDBObjComplex)
 
             constructor initnul;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-            procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-            procedure DXFOut(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+            procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+            procedure DXFOut(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
             function GetObjTypeName:GDBString;virtual;
             function ReturnLastOnMouse:PGDBObjEntity;virtual;
             function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
             function DeSelect:GDBInteger;virtual;
-            procedure SaveToDXFFollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+            procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
             function InRect:TInRect;virtual;
 
             destructor done;virtual;

@@ -36,7 +36,7 @@ GDBObjText=object(GDBObjAbstractText)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;
-                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure CalcGabarit;virtual;
                  procedure getoutbound;virtual;
                  procedure Format;virtual;
@@ -774,7 +774,7 @@ begin
                      end;
      until i<=0;
 end;
-procedure GDBObjText.SaveToDXF(var handle: longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);
+procedure GDBObjText.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);
 var
   hv, vv,bw: GDBByte;
   tv:gdbvertex;

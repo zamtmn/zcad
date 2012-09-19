@@ -46,7 +46,7 @@ GDBObjTable=object(GDBObjComplex)
             destructor done;virtual;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;
             procedure Build;virtual;
-            procedure SaveToDXFFollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+            procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
             procedure ReCalcFromObjMatrix;virtual;
             end;
 {EXPORT-}

@@ -51,7 +51,7 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    procedure BuildGeometry;virtual;
                    procedure BuildVarGeometry;virtual;
 
-                   procedure SaveToDXFFollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                   procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                    procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                    function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
                    //procedure select;virtual;

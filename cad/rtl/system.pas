@@ -521,6 +521,17 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           //destructor done;virtual;abstract;
                           //function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;abstract;
                     end;
+//Generate on C:\zcad\CAD_SOURCE\zgl\uzglline3darray.pas
+ZGLLine3DArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex*)
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                constructor initnul;
+                {function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
+                function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;abstract;
+                function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;}abstract;
+                procedure DrawGeometry;virtual;abstract;
+                {procedure DrawGeometry2;virtual;abstract;
+                procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;}abstract;
+             end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBOpenArrayOfByte.pas
 PGDBOpenArrayOfByte=^GDBOpenArrayOfByte;
 GDBOpenArrayOfByte=object(GDBOpenArray)
@@ -666,6 +677,68 @@ GDBLayerArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLayerProp*)
                     function GetCurrentLayer:PGDBLayerProp;
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
                     function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;
+              end;
+//Generate on C:\zcad\CAD_SOURCE\u\ugdbltypearray.pas
+PTDashInfo=^TDashInfo;
+TDashInfo=(TDIDash,TDIText,TDIShape);
+TAngleDir=(TACAbs,TACRel,TACUpRight);
+shxprop=record
+                Height,Angle,X,Y:GDBDouble;
+                AD:TAngleDir;
+                PStyle:PGDBTextStyle;
+        end;
+BasicSHXDashProp=object(GDBaseObject)
+                param:shxprop;
+                constructor initnul;
+          end;
+PTextProp=^TextProp;
+TextProp=object(BasicSHXDashProp)
+                Text,Style:GDBString;
+                //PFont:PGDBfont;
+                constructor initnul;
+                destructor done;virtual;abstract;
+          end;
+PShapeProp=^ShapeProp;
+ShapeProp=object(BasicSHXDashProp)
+                SymbolName,FontName:GDBString;
+                Psymbol:PGDBsymdolinfo;
+                constructor initnul;
+                destructor done;virtual;abstract;
+          end;
+GDBDashInfoArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=TDashInfo*)
+               end;
+GDBDoubleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBDouble*)
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+               end;
+GDBShapePropArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=ShapeProp*)
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+               end;
+GDBTextPropArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=TextProp*)
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+               end;
+PGDBLtypeProp=^GDBLtypeProp;
+GDBLtypeProp=object(GDBNamedObject)
+               len:GDBDouble;(*'Length'*)
+               dasharray:GDBDashInfoArray;(*'DashInfo array'*)
+               strokesarray:GDBDoubleArray;(*'Strokes array'*)
+               shapearray:GDBShapePropArray;(*'Shape array'*)
+               Textarray:GDBTextPropArray;(*'Text array'*)
+               desk:GDBAnsiString;(*'Description'*)
+               constructor init(n:GDBString);
+               destructor done;virtual;abstract;
+             end;
+PGDBLtypePropArray=^GDBLtypePropArray;
+GDBLtypePropArray=array [0..0] of GDBLtypeProp;
+PGDBLtypeArray=^GDBLtypeArray;
+GDBLtypeArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLtypeProp*)
+                    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                    constructor initnul;
+                    procedure LoadFromFile(fname:GDBString;lm:TLoadOpt);
+                    {function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;abstract;
+                    function GetSystemLayer:PGDBLayerProp;
+                    function GetCurrentLayer:PGDBLayerProp;
+                    function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
+                    function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;}
               end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBTableStyleArray.pas
 TTableCellJustify=(jcl(*'TopLeft'*),
@@ -1030,7 +1103,7 @@ PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=record
                       Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
                       LineWeight:GDBShortint;(*'Line weight'*)(*saved_to_shd*)
-                      LineType:GDBString;(*'Line type'*)(*saved_to_shd*)
+                      LineType:{GDBString}PGDBLtypeProp;(*'Line type'*)(*saved_to_shd*)
                       LineTypeScale:GDBDouble;(*'Line type scale'*)(*saved_to_shd*)
                       ID:TObjID;(*'Object type'*)(*oi_readonly*)
                       BoundingBox:GDBBoundingBbox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
@@ -1745,6 +1818,8 @@ GDBObjLine=object(GDBObj3d)
                  Length:GDBDouble;(*'Length'*)
                  Length_2:GDBDouble;(*'Sqrt length'*)(*hidden_in_objinsp*)
                  dir:GDBvertex;(*'Direction'*)(*hidden_in_objinsp*)
+                 {testing LineTypes...}
+                 Lines:GDBPointer;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
@@ -1781,6 +1856,8 @@ GDBObjLine=object(GDBObj3d)
                   procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
                   function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;abstract;
                   function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;abstract;
+                  {testing LineTypes...}
+                  procedure CreateLTYPE;virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBLWPolyLine.pas
 PGDBObjLWPolyline=^GDBObjLWpolyline;
@@ -2671,68 +2748,6 @@ TSimpleDrawing=object(TAbstractDrawing)
                        procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
                        function GetUndoTop:TArrayIndex;virtual;abstract;
                  end;
-//Generate on C:\zcad\CAD_SOURCE\u\ugdbltypearray.pas
-PTDashInfo=^TDashInfo;
-TDashInfo=(TDIDash,TDIText,TDIShape);
-TAngleDir=(TACAbs,TACRel,TACUpRight);
-shxprop=record
-                Height,Angle,X,Y:GDBDouble;
-                AD:TAngleDir;
-                PStyle:PGDBTextStyle;
-        end;
-BasicSHXDashProp=object(GDBaseObject)
-                param:shxprop;
-                constructor initnul;
-          end;
-PTextProp=^TextProp;
-TextProp=object(BasicSHXDashProp)
-                Text,Style:GDBString;
-                //PFont:PGDBfont;
-                constructor initnul;
-                destructor done;virtual;abstract;
-          end;
-PShapeProp=^ShapeProp;
-ShapeProp=object(BasicSHXDashProp)
-                SymbolName,FontName:GDBString;
-                Psymbol:PGDBsymdolinfo;
-                constructor initnul;
-                destructor done;virtual;abstract;
-          end;
-GDBDashInfoArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=TDashInfo*)
-               end;
-GDBDoubleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBDouble*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-               end;
-GDBShapePropArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=ShapeProp*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-               end;
-GDBTextPropArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=TextProp*)
-                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-               end;
-PGDBLtypeProp=^GDBLtypeProp;
-GDBLtypeProp=object(GDBNamedObject)
-               len:GDBDouble;(*'Length'*)
-               dasharray:GDBDashInfoArray;(*'DashInfo array'*)
-               strokesarray:GDBDoubleArray;(*'Strokes array'*)
-               shapearray:GDBShapePropArray;(*'Shape array'*)
-               Textarray:GDBTextPropArray;(*'Text array'*)
-               desk:GDBAnsiString;(*'Description'*)
-               constructor init(n:GDBString);
-               destructor done;virtual;abstract;
-             end;
-PGDBLtypePropArray=^GDBLtypePropArray;
-GDBLtypePropArray=array [0..0] of GDBLtypeProp;
-PGDBLtypeArray=^GDBLtypeArray;
-GDBLtypeArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLtypeProp*)
-                    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                    constructor initnul;
-                    procedure LoadFromFile(fname:GDBString;lm:TLoadOpt);
-                    {function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;abstract;
-                    function GetSystemLayer:PGDBLayerProp;
-                    function GetCurrentLayer:PGDBLayerProp;
-                    function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
-                    function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;}
-              end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\UGDBDescriptor.pas
 GDBObjTrash=object(GDBObjEntity)
                  function GetHandle:GDBPlatformint;virtual;abstract;

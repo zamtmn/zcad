@@ -16,6 +16,7 @@ C:\zcad\CAD_SOURCE\u\UGDBPolyPoint2DArray.pas
 C:\zcad\CAD_SOURCE\u\UGDBPolyPoint3DArray.pas
 C:\zcad\CAD_SOURCE\u\UGDBSelectedObjArray.pas
 C:\zcad\CAD_SOURCE\u\UGDBStringArray.pas
+C:\zcad\CAD_SOURCE\zgl\uzglline3darray.pas
 C:\zcad\CAD_SOURCE\u\UGDBOpenArrayOfByte.pas
 C:\zcad\CAD_SOURCE\u\UGDBSHXFont.pas
 C:\zcad\CAD_SOURCE\u\UGDBTextStyleArray.pas
@@ -24,6 +25,7 @@ C:\zcad\CAD_SOURCE\u\UGDBVectorSnapArray.pas
 C:\zcad\CAD_SOURCE\u\UGDBLineWidthArray.pas
 C:\zcad\CAD_SOURCE\u\UGDBNamedObjectsArray.pas
 C:\zcad\CAD_SOURCE\u\UGDBLayerArray.pas
+C:\zcad\CAD_SOURCE\u\ugdbltypearray.pas
 C:\zcad\CAD_SOURCE\u\UGDBTableStyleArray.pas
 C:\zcad\CAD_SOURCE\u\UGDBTable.pas
 C:\zcad\CAD_SOURCE\languade\zcadsysvars.pas
@@ -77,7 +79,6 @@ C:\zcad\CAD_SOURCE\languade\UUnitManager.pas
 C:\zcad\CAD_SOURCE\u\UGDBNumerator.pas
 C:\zcad\CAD_SOURCE\gdb\UGDBDrawingdef.pas
 C:\zcad\CAD_SOURCE\gdb\ugdbsimpledrawing.pas
-C:\zcad\CAD_SOURCE\u\ugdbltypearray.pas
 C:\zcad\CAD_SOURCE\gdb\UGDBDescriptor.pas
 C:\zcad\CAD_SOURCE\commands\GDBCommandsBase.pas
 C:\zcad\CAD_SOURCE\electroteh\GDBCommandsOPS.pas

@@ -58,7 +58,7 @@ GDBObjCurve=object(GDBObj3d)
 
                  procedure AddVertex(Vertex:GDBVertex);virtual;
 
-                 procedure SaveToDXFfollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
                  procedure feedbackinrect;virtual;

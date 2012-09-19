@@ -406,6 +406,11 @@ else if Operands='NUMERATORS' then
                                  If assigned(SetGDBObjInspProc)then
                                  SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBNumerator'),@gdb.GetCurrentDWG.Numerator);
                             end
+else if Operands='LINETYPESTYLES' then
+                            begin
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBLtypeArray'),@gdb.GetCurrentDWG.LTypeStyleTable);
+                            end
 else if Operands='TABLESTYLES' then
                             begin
                                  If assigned(SetGDBObjInspProc)then

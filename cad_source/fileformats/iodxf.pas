@@ -15,16 +15,20 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-
+{$MODE OBJFPC}
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,dxfvectorialreader,svgvectorialreader,epsvectorialreader,{pdfvectorialreader,}GDBCircle,GDBArc,fpvectorial,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
+uses gmap,gutil,UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,dxfvectorialreader,svgvectorialreader,epsvectorialreader,{pdfvectorialreader,}GDBCircle,GDBArc,fpvectorial,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
+  TDWGHandle=ptruint;
   entnamindex=record
                     entname:GDBString;
               end;
+     lessppi=specialize TLess<pointer>;
+     mappDWGHi=specialize TMap<pointer,TDWGHandle, lessppi>;
+
 const
      acadentignoredcol=1;
      ignorenamtable:array[1..acadentignoredcol]of entnamindex=
@@ -63,7 +67,7 @@ const
                 );
 type
   dxfhandlerec = record
-    old, nev: ptruint;
+    old, nev: TDWGHandle;
   end;
   dxfhandlerecarray = array[0..300] of dxfhandlerec;
   pdxfhandlerecopenarray = ^dxfhandlerecopenarray;
@@ -267,37 +271,37 @@ begin
      //if (pobj.vp.ID=GDBBlockInsertID)or
      //   (pobj.vp.ID=GDBCableID) then
         begin
-             if pobj.ou.FindVariable('GC_HeadDevice')<>nil then
-             if pobj.ou.FindVariable('GC_Metric')=nil then
+             if pobj^.ou.FindVariable('GC_HeadDevice')<>nil then
+             if pobj^.ou.FindVariable('GC_Metric')=nil then
              begin
-                  pobj.ou.setvardesc(vd,'GC_Metric','','GDBString');
-                  pobj.ou.InterfaceVariables.createvariable(vd.name,vd);
+                  pobj^.ou.setvardesc(vd,'GC_Metric','','GDBString');
+                  pobj^.ou.InterfaceVariables.createvariable(vd.name,vd);
              end;
 
-             if pobj.ou.FindVariable('GC_HDGroup')<>nil then
-             if pobj.ou.FindVariable('GC_HDGroupTemplate')=nil then
+             if pobj^.ou.FindVariable('GC_HDGroup')<>nil then
+             if pobj^.ou.FindVariable('GC_HDGroupTemplate')=nil then
              begin
-                  pobj.ou.setvardesc(vd,'GC_HDGroupTemplate','Шаблон группы','GDBString');
-                  pobj.ou.InterfaceVariables.createvariable(vd.name,vd);
+                  pobj^.ou.setvardesc(vd,'GC_HDGroupTemplate','Шаблон группы','GDBString');
+                  pobj^.ou.InterfaceVariables.createvariable(vd.name,vd);
              end;
-             if pobj.ou.FindVariable('GC_HeadDevice')<>nil then
-             if pobj.ou.FindVariable('GC_HeadDeviceTemplate')=nil then
+             if pobj^.ou.FindVariable('GC_HeadDevice')<>nil then
+             if pobj^.ou.FindVariable('GC_HeadDeviceTemplate')=nil then
              begin
-                  pobj.ou.setvardesc(vd,'GC_HeadDeviceTemplate','Шаблон головного устройства','GDBString');
-                  pobj.ou.InterfaceVariables.createvariable(vd.name,vd);
+                  pobj^.ou.setvardesc(vd,'GC_HeadDeviceTemplate','Шаблон головного устройства','GDBString');
+                  pobj^.ou.InterfaceVariables.createvariable(vd.name,vd);
              end;
 
-             if pobj.ou.FindVariable('GC_HDShortName')<>nil then
-             if pobj.ou.FindVariable('GC_HDShortNameTemplate')=nil then
+             if pobj^.ou.FindVariable('GC_HDShortName')<>nil then
+             if pobj^.ou.FindVariable('GC_HDShortNameTemplate')=nil then
              begin
-                  pobj.ou.setvardesc(vd,'GC_HDShortNameTemplate','Шаблон короткого имени головного устройства','GDBString');
-                  pobj.ou.InterfaceVariables.createvariable(vd.name,vd);
+                  pobj^.ou.setvardesc(vd,'GC_HDShortNameTemplate','Шаблон короткого имени головного устройства','GDBString');
+                  pobj^.ou.InterfaceVariables.createvariable(vd.name,vd);
              end;
-             if pobj.ou.FindVariable('GC_Metric')<>nil then
-             if pobj.ou.FindVariable('GC_InGroup_Metric')=nil then
+             if pobj^.ou.FindVariable('GC_Metric')<>nil then
+             if pobj^.ou.FindVariable('GC_InGroup_Metric')=nil then
              begin
-                  pobj.ou.setvardesc(vd,'GC_InGroup_Metric','Метрика нумерации в группе','GDBString');
-                  pobj.ou.InterfaceVariables.createvariable(vd.name,vd);
+                  pobj^.ou.setvardesc(vd,'GC_InGroup_Metric','Метрика нумерации в группе','GDBString');
+                  pobj^.ou.InterfaceVariables.createvariable(vd.name,vd);
              end;
 
 
@@ -344,20 +348,20 @@ begin
         if postobj=nil  then
                             begin
                                 newowner:=owner;
-                                if PGDBObjEntity(pobj).PExtAttrib<>nil then
+                                if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
                                 begin
-                                     if PGDBObjEntity(pobj).PExtAttrib.Handle>200 then
-                                                                                      pushhandle(phandlearray,PGDBObjEntity(pobj).PExtAttrib.Handle,GDBPlatformint(pobj));
-                                     if PGDBObjEntity(pobj).PExtAttrib.OwnerHandle>200 then
-                                                                                      newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj).PExtAttrib.OwnerHandle));
-                                     if PGDBObjEntity(pobj).PExtAttrib.OwnerHandle=h_trash then
+                                     if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
+                                                                                      pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,GDBPlatformint(pobj));
+                                     if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
+                                                                                      newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle));
+                                     if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle=h_trash then
                                                                                       trash:=true;
 
 
                                 end;
                                 if newowner=nil then
                                                     begin
-                                                         historyoutstr('Warning! OwnerHandle $'+inttohex(PGDBObjEntity(pobj).PExtAttrib.OwnerHandle,8)+' not found');
+                                                         historyoutstr('Warning! OwnerHandle $'+inttohex(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle,8)+' not found');
                                                          newowner:=owner;
                                                     end;
 
@@ -372,7 +376,7 @@ begin
 
                                 if not trash then
                                 begin
-                                 newowner.AddMi(@pobj);
+                                 newowner^.AddMi(@pobj);
                                  if foc=0 then
                                               PGDBObjEntity(pobj)^.BuildGeometry;
                                  if foc=0 then
@@ -381,7 +385,7 @@ begin
                                 end
                                    else
                                        begin
-                                 pobj.done;
+                                 pobj^.done;
                                  GDBFreeMem(pointer(pobj));
 
                                        end;
@@ -390,17 +394,17 @@ begin
                         else
                             begin
                                 newowner:=owner;
-                                if PGDBObjEntity(pobj).PExtAttrib<>nil then
+                                if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
                                 begin
-                                     if PGDBObjEntity(pobj).PExtAttrib.OwnerHandle>200 then
-                                                                                      newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj).PExtAttrib.OwnerHandle));
+                                     if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
+                                                                                      newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle));
                                 end;
                                 if newowner<>nil then
                                 begin
-                                if PGDBObjEntity(pobj).PExtAttrib<>nil then
+                                if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
                                 begin
-                                     if PGDBObjEntity(pobj).PExtAttrib.Handle>200 then
-                                                                                      pushhandle(phandlearray,PGDBObjEntity(pobj).PExtAttrib.Handle,GDBPlatformint(postobj));
+                                     if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
+                                                                                      pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,GDBPlatformint(postobj));
                                 end;
                                 if newowner=pointer($ffffffff) then
                                                            newowner:=newowner;
@@ -412,9 +416,9 @@ begin
                                      postobj^.transform(m4);
                                 end;
 
-                                 newowner.AddMi(@postobj);
-                                 pobj.OU.CopyTo(@PGDBObjEntity(postobj)^.ou);
-                                 pobj.done;
+                                 newowner^.AddMi(@postobj);
+                                 pobj^.OU.CopyTo(@PGDBObjEntity(postobj)^.ou);
+                                 pobj^.done;
                                  GDBFreeMem(pointer(pobj));
                                  if foc=0 then
                                               PGDBObjEntity(postobj)^.BuildGeometry;
@@ -513,7 +517,7 @@ begin
 end;
 procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
-  byt: GDBInteger;
+  byt,ti: GDBInteger;
   error,flags: GDBInteger;
   s, sname, lname, lcolor, llw,desk: String;
   tp: PGDBObjBlockdef;
@@ -521,6 +525,7 @@ var
   blockload:boolean;
 
   tstyle:GDBTextStyle;
+  ptstyle:PGDBTextStyle;
 
   active:boolean;
 
@@ -531,6 +536,13 @@ var
   pltypeprop:PGDBLtypeProp;
   dashinfo:TDashInfo;
   TempDouble:GDBDouble;
+  BShapeProp:BasicSHXDashProp;
+  //di:TDashInfo;
+  shapenumber,stylehandle:integer;
+  txtstr:string;
+  PSP:PShapeProp;
+  DWGHandle:TDWGHandle;
+  ir,ir2:itrec;
 begin
   blockload:=false;
   nulisread:=false;
@@ -677,6 +689,7 @@ begin
                   begin
                     //gotodxf(f, 0, dxfName_ENDTAB);
                     {$IFDEF TOTALYLOG}programlog.logoutstr('Found line type table',lp_IncPos);{$ENDIF}
+                    dashinfo:=TDIDash;
                     if GoToDXForENDTAB(f, 0, dxfName_LType) then
                     begin
                          while s = dxfName_LType do
@@ -701,6 +714,7 @@ begin
                                                IsCreated:
                                                          begin
                                                               pltypeprop^.init(s);
+                                                              dashinfo:=TDIDash;
                                                          end;
                                                IsError:
                                                          begin
@@ -720,12 +734,56 @@ begin
                                  begin
                                       if pltypeprop<>nil then
                                       begin
+                                      case dashinfo of
+                                      TDIShape:begin
+                                                    pointer(psp):=pltypeprop^.shapearray.CreateObject;
+                                                    psp^.initnul;
+                                                    psp^.param:=BShapeProp.param;
+                                                    psp^.Psymbol:=pointer(shapenumber);
+                                                    psp^.param.PStyle:=pointer(stylehandle);
+                                                    pltypeprop^.dasharray.Add(@dashinfo);
+                                               end;
+                                      end;
                                            dashinfo:=TDIDash;
                                            TempDouble:=strtofloat(s);
                                            pltypeprop^.dasharray.Add(@dashinfo);
                                            pltypeprop^.strokesarray.Add(@TempDouble);
                                       end;
                                  end;
+                              74:begin
+                                      flags:=strtoint(s);
+                                      if (flags and 1)>0 then
+                                                             BShapeProp.param.AD:=BShapeProp.param.AD.TACAbs
+                                                         else
+                                                             BShapeProp.param.AD:=BShapeProp.param.AD.TACRel;
+                                      if (flags and 2)>0 then
+                                                             dashinfo:=TDIText;
+                                      if (flags and 4)>0 then
+                                                             dashinfo:=TDIShape;
+
+                                 end;
+                              75:begin
+                                      shapenumber:=strtoint(s);//    drtyrty
+                                 end;
+                             340:begin
+                                      if pltypeprop<>nil then
+                                                             stylehandle:=strtoint('$'+s);
+                                 end;
+                             46:begin
+                                     BShapeProp.param.Height:=strtofloat(s);
+                                end;
+                             50:begin
+                                     BShapeProp.param.Angle:=strtofloat(s);
+                                end;
+                             44:begin
+                                     BShapeProp.param.X:=strtofloat(s);
+                                end;
+                             45:begin
+                                     BShapeProp.param.Y:=strtofloat(s);
+                                end;
+                             9:begin
+                                     txtstr:=s;
+                                end;
                               end;
                               end;
                          end;
@@ -747,6 +805,7 @@ begin
                         tstyle.pfont:=nil;
                         tstyle.prop.oblique:=0;
                         tstyle.prop.size:=1;
+                        DWGHandle:=0;
 
                         byt := 2;
 
@@ -760,6 +819,10 @@ begin
                               begin
                                 tstyle.name := s;
                               end;
+                            5:begin
+                                   DWGHandle:=strtoint('$'+s)
+                              end;
+
                             40:
                               begin
                                 tstyle.prop.size:=strtofloat(s);
@@ -784,17 +847,52 @@ begin
                                end;
                           end;
                         end;
+                        ti:=-1;
                         if (flags and 1)=0 then
                         begin
-                        if {gdb.GetCurrentDWG}drawing.TextStyleTable.FindStyle(tstyle.Name)<>-1 then
+                        if {gdb.GetCurrentDWG}drawing.TextStyleTable.FindStyle(tstyle.Name,false)<>-1 then
                         begin
                           if LoadMode=TLOLoad then
-                                                  {gdb.GetCurrentDWG}drawing.TextStyleTable.setstyle(tstyle.Name,lname,tstyle.prop);
+                                                  {gdb.GetCurrentDWG}ti:=drawing.TextStyleTable.setstyle(tstyle.Name,lname,tstyle.prop,false);
                         end
                            else
-                               {gdb.GetCurrentDWG}drawing.TextStyleTable.addstyle(tstyle.Name,lname,tstyle.prop);
+                               {gdb.GetCurrentDWG}ti:=drawing.TextStyleTable.addstyle(tstyle.Name,lname,tstyle.prop,false);
+                        end
+                        else
+                            begin
+                              if {gdb.GetCurrentDWG}drawing.TextStyleTable.FindStyle(lname,true)<>-1 then
+                              begin
+                                if LoadMode=TLOLoad then
+                                                        {gdb.GetCurrentDWG}ti:=drawing.TextStyleTable.setstyle(lname,lname,tstyle.prop,true);
+                              end
+                                 else
+                                     {gdb.GetCurrentDWG}ti:=drawing.TextStyleTable.addstyle(lname,lname,tstyle.prop,true);
+                            end;
+                        if ti<>-1 then
+                        begin
+                             ptstyle:=drawing.TextStyleTable.getelement(ti);
+                             pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
+                             if pltypeprop<>nil then
+                             repeat
+                                   PSP:=pltypeprop^.shapearray.beginiterate(ir2);
+                                   if PSP<>nil then
+                                   repeat
+                                         if psp^.param.PStyle=pointer(DWGHandle) then
+                                         begin
+                                            psp^.param.PStyle:=ptstyle;
+                                            psp^.FontName:=ptstyle^.dxfname;
+                                            psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.Psymbol));
+                                            psp^.SymbolName:=psp^.Psymbol^.Name;
+                                         end;
+
+                                         PSP:=pltypeprop^.shapearray.iterate(ir2);
+                                   until PSP=nil;
+
+                                   pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
+                             until pltypeprop=nil;
                         end;
                         {$IFDEF TOTALYLOG}programlog.logoutstr('Found style '+tstyle.Name,0);{$ENDIF}
+                        tstyle.Name:='';
                       end;
                       {$IFDEF TOTALYLOG}programlog.logoutstr('end; {style table}',lp_DecPos);{$ENDIF}
               //gotodxf(f, 0, dxfName_ENDTAB);
@@ -845,7 +943,7 @@ begin
                                        if {gdb.GetCurrentDWG}@drawing<>nil then
                                        if {gdb.GetCurrentDWG}drawing.pcamera<>nil then
                                        begin
-                                            {gdb.GetCurrentDWG}drawing.pcamera.prop.point.x:=-strtofloat(s);
+                                            {gdb.GetCurrentDWG}drawing.pcamera^.prop.point.x:=-strtofloat(s);
                                        end;
                                    end;
                                 22:
@@ -855,7 +953,7 @@ begin
                                        if {gdb.GetCurrentDWG}@drawing<>nil then
                                        if {gdb.GetCurrentDWG}drawing.pcamera<>nil then
                                        begin
-                                            {gdb.GetCurrentDWG}drawing.pcamera.prop.point.y:=-strtofloat(s);
+                                            {gdb.GetCurrentDWG}drawing.pcamera^.prop.point.y:=-strtofloat(s);
                                        end;
                                    end;
                                 13:
@@ -902,7 +1000,7 @@ begin
                                        if{gdb.GetCurrentDWG}drawing.pcamera<>nil then
                                        if {gdb.GetCurrentDWG}drawing.OGLwindow1<>nil then
                                        begin
-                                            {gdb.GetCurrentDWG}drawing.pcamera.prop.zoom:=(strtofloat(s)/{gdb.GetCurrentDWG}drawing.OGLwindow1.ClientHeight);
+                                            {gdb.GetCurrentDWG}drawing.pcamera^.prop.zoom:=(strtofloat(s)/{gdb.GetCurrentDWG}drawing.OGLwindow1.ClientHeight);
                                        end;
                                    end;
                                 41:
@@ -914,7 +1012,7 @@ begin
                                        if {gdb.GetCurrentDWG}drawing.OGLwindow1<>nil then
                                        begin
                                             if {gdb.GetCurrentDWG}drawing.OGLwindow1.ClientHeight*strtofloat(s)>{gdb.GetCurrentDWG}drawing.OGLwindow1.ClientWidth then
-                                            {gdb.GetCurrentDWG}drawing.pcamera.prop.zoom:={gdb.GetCurrentDWG}drawing.pcamera.prop.zoom*strtofloat(s)*{gdb.GetCurrentDWG}drawing.OGLwindow1.ClientHeight/{gdb.GetCurrentDWG}drawing.OGLwindow1.ClientWidth;
+                                            {gdb.GetCurrentDWG}drawing.pcamera^.prop.zoom:={gdb.GetCurrentDWG}drawing.pcamera^.prop.zoom*strtofloat(s)*{gdb.GetCurrentDWG}drawing.OGLwindow1.ClientHeight/{gdb.GetCurrentDWG}drawing.OGLwindow1.ClientWidth;
                                        end;
                                    end;
                                 71:
@@ -970,8 +1068,8 @@ begin
         {$IFDEF TOTALYLOG}programlog.logoutstr('Found entities section',lp_IncPos);{$ENDIF}
         //inc(foc);
         {addfromdxf12}addentitiesfromdxf(f, dxfName_ENDSEC,owner,drawing);
-        owner.ObjArray.pack;
-        owner.correctobjects(nil,0);
+        owner^.ObjArray.pack;
+        owner^.correctobjects(nil,0);
         //inc(foc);
         {$IFDEF TOTALYLOG}programlog.logoutstr('end {entities section}',lp_DecPos);{$ENDIF}
       end
@@ -1028,7 +1126,7 @@ begin
                 AddEntitiesFromDXF(f,'ENDBLK',tp,drawing);
                 dec(foc);
                 if tp^.name='TX' then
-                                                           tp.name:=tp.name;
+                                                           tp^.name:=tp^.name;
                 tp^.LoadFromDXF(f,nil);
                 blockload:=true;
                 programlog.logoutstr('end block;',lp_DecPos);
@@ -1145,7 +1243,7 @@ begin
   end;
   if assigned(EndLongProcessProc)then
     EndLongProcessProc;
-  owner.calcbb;
+  owner^.calcbb;
   GDBFreeMem(GDBPointer(phandlearray));
   end
      else
@@ -1170,13 +1268,13 @@ begin
      until pv=nil;
 end;
 
-procedure savedxf2000;
+procedure savedxf2000(name: GDBString; var drawing:TSimpleDrawing);
 var
   templatefile: GDBOpenArrayOfByte;
   outstream: {GDBInteger}GDBOpenArrayOfByte;
   groups, values, ucvalues: GDBString;
   groupi, valuei, intable,attr: GDBInteger;
-  handle,lasthandle,vporttablehandle,plottablefansdle,standartstylehandle,i{,cod}: GDBInteger;
+  temphandle,handle,lasthandle,vporttablehandle,plottablefansdle,standartstylehandle,i{,cod}: GDBInteger;
   phandlea: pdxfhandlerecopenarray;
   inlayertable, inblocksec, inblocktable, inlttypetable: GDBBoolean;
   handlepos:integer;
@@ -1188,7 +1286,14 @@ var
   ir,ir2,ir3,ir4,ir5:itrec;
   TDI:PTDashInfo;
   PStroke:PGDBDouble;
+  PSP:PShapeProp;
+
+  Handle2pointer:mappDWGHi;
+  HandleIterator:mappDWGHi.TIterator;
+  DWGHandle:TDWGHandle;
+  laststrokewrited:boolean;
 begin
+  Handle2pointer:=mappDWGHi.Create;
   DecimalSeparator := '.';
   standartstylehandle:=0;
   olddwg:={gdb.GetCurrentDWG}@drawing;
@@ -1242,7 +1347,7 @@ else if (groupi = 9) and (ucvalues = '$CLAYER') then
       outstream.TXTAddGDBStringEOL(groups);
       outstream.TXTAddGDBStringEOL('$CLAYER');
       outstream.TXTAddGDBStringEOL('8');
-      outstream.TXTAddGDBStringEOL({gdb.GetCurrentDWG}drawing.LayerTable.GetCurrentLayer.Name);
+      outstream.TXTAddGDBStringEOL({gdb.GetCurrentDWG}drawing.LayerTable.GetCurrentLayer^.Name);
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
     end
@@ -1461,11 +1566,11 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                outstream.TXTAddGDBStringEOL(dxfGroupCode(25));
                outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_StepGrid^.y));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(16));
-               outstream.TXTAddGDBStringEOL(floattostr(-{gdb.GetCurrentDWG}drawing.pcamera.prop.look.x));
+               outstream.TXTAddGDBStringEOL(floattostr(-{gdb.GetCurrentDWG}drawing.pcamera^.prop.look.x));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(26));
-               outstream.TXTAddGDBStringEOL(floattostr(-{gdb.GetCurrentDWG}drawing.pcamera.prop.look.y));
+               outstream.TXTAddGDBStringEOL(floattostr(-{gdb.GetCurrentDWG}drawing.pcamera^.prop.look.y));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(36));
-               outstream.TXTAddGDBStringEOL(floattostr(-{gdb.GetCurrentDWG}drawing.pcamera.prop.look.z));
+               outstream.TXTAddGDBStringEOL(floattostr(-{gdb.GetCurrentDWG}drawing.pcamera^.prop.look.z));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(17));
                outstream.TXTAddGDBStringEOL(floattostr({-gdb.GetCurrentDWG.pcamera.prop.point.x}0));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(27));
@@ -1677,19 +1782,65 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                          begin
                               TDI:=pltp^.dasharray.beginiterate(ir2);
                               PStroke:=pltp^.strokesarray.beginiterate(ir3);
+                              PSP:=pltp^.shapearray.beginiterate(ir4);
+                              laststrokewrited:=false;
                               if PStroke<>nil then
                               repeat
                                     case TDI^ of
                                                 TDIDash:begin
+                                                             if laststrokewrited then
+                                                                                     begin
+                                                                                     outstream.TXTAddGDBStringEOL(dxfGroupCode(74));
+                                                                                     outstream.TXTAddGDBStringEOL('0');
+                                                                                     end;
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(49));
                                                              outstream.TXTAddGDBStringEOL(floattostr(PStroke^));
+                                                             {outstream.TXTAddGDBStringEOL(dxfGroupCode(74));
+                                                             outstream.TXTAddGDBStringEOL('0');}
+                                                             PStroke:=pltp^.strokesarray.iterate(ir3);
+                                                             laststrokewrited:=true;
+                                                        end;
+                                               TDIShape:begin
+                                                             {outstream.TXTAddGDBStringEOL(dxfGroupCode(49));
+                                                             outstream.TXTAddGDBStringEOL(floattostr(PStroke^));}
+                                                             laststrokewrited:=false;
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(74));
-                                                             outstream.TXTAddGDBStringEOL('0');
+                                                             outstream.TXTAddGDBStringEOL('4');
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(75));
+                                                             outstream.TXTAddGDBStringEOL(inttostr(PSP^.Psymbol^.number));
+
+                                                             //DWGHandle:=0;
+                                                             HandleIterator:=Handle2pointer.Find(PSP^.param.PStyle);
+                                                             if  HandleIterator=nil then
+                                                                                        begin
+                                                                                             Handle2pointer.Insert(PSP^.param.PStyle,handle);
+                                                                                             temphandle:=handle;
+                                                                                             inc(handle);
+                                                                                        end
+                                                                                    else
+                                                                                        begin
+                                                                                             temphandle:=HandleIterator.GetValue;
+                                                                                        end;
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
+                                                             outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(46));
+                                                             outstream.TXTAddGDBStringEOL(floattostr(PSP^.param.Height));
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(50));
+                                                             outstream.TXTAddGDBStringEOL(floattostr(PSP^.param.Angle));
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(44));
+                                                             outstream.TXTAddGDBStringEOL(floattostr(PSP^.param.X));
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(45));
+                                                             outstream.TXTAddGDBStringEOL(floattostr(PSP^.param.Y));
+                                                             PSP:=pltp^.shapearray.iterate(ir4);
                                                         end;
                                     end;
                                     TDI:=pltp^.dasharray.iterate(ir2);
-                                    PStroke:=pltp^.strokesarray.iterate(ir3);
-                              until PStroke=nil;
+                              until {PStroke}TDI=nil;
+                              if laststrokewrited then
+                                                       begin
+                                                       outstream.TXTAddGDBStringEOL(dxfGroupCode(74));
+                                                       outstream.TXTAddGDBStringEOL('0');
+                                                       end;
 
                          end;
 
@@ -1704,14 +1855,64 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
               begin
                 instyletable := false;
                 ignoredsource:=false;
-                for i := 0 to {gdb.GetCurrentDWG}drawing.TextStyleTable.count - 1 do
+                for i := 0 to drawing.TextStyleTable.count - 1 do
                 begin
                   //if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name <> '0' then
+                  if PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.UsedInLTYPE then
+                  begin
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
+                  outstream.TXTAddGDBStringEOL(dxfName_Style);
+                  HandleIterator:=Handle2pointer.Find(drawing.TextStyleTable.getelement(i));
+                                                                               if  HandleIterator=nil then
+                                                                                                          begin
+                                                                                                               //Handle2pointer.Insert(PSP^.param.PStyle,handle);
+                                                                                                               temphandle:=handle;
+                                                                                                               inc(handle);
+                                                                                                          end
+                                                                                                      else
+                                                                                                          begin
+                                                                                                               temphandle:=HandleIterator.GetValue;
+                                                                                                          end;
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
+                  outstream.TXTAddGDBStringEOL(inttohex({handle}temphandle, 0));
+                  inc(handle);
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+                  outstream.TXTAddGDBStringEOL(dxfName_AcDbSymbolTableRecord);
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+                  outstream.TXTAddGDBStringEOL('AcDbTextStyleTableRecord');
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
+                  outstream.TXTAddGDBStringEOL('');
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
+                  outstream.TXTAddGDBStringEOL('1');
+
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(40));
+                  outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle({gdb.GetCurrentDWG}drawing.TextStyleTable.getelement(i))^.prop.size));
+
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(41));
+                  outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle({gdb.GetCurrentDWG}drawing.TextStyleTable.getelement(i))^.prop.wfactor));
+
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(50));
+                  outstream.TXTAddGDBStringEOL(floattostr(PGDBTextStyle({gdb.GetCurrentDWG}drawing.TextStyleTable.getelement(i))^.prop.oblique));
+
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(71));
+                  outstream.TXTAddGDBStringEOL('0');
+
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(42));
+                  outstream.TXTAddGDBStringEOL('2.5');
+
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(3));
+                  outstream.TXTAddGDBStringEOL(PGDBTextStyle({gdb.GetCurrentDWG}drawing.TextStyleTable.getelement(i))^.dxfname);
+
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(4));
+                  outstream.TXTAddGDBStringEOL('');
+
+                  end
+                  else
                   begin
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                     outstream.TXTAddGDBStringEOL(dxfName_Style);
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
-                    if uppercase(PGDBTextStyle({gdb.GetCurrentDWG}drawing.TextStyleTable.getelement(i))^.name)<>TSNStandardStyleName then
+                    if uppercase(PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.name)<>TSNStandardStyleName then
                     begin
                     outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                     inc(handle);
@@ -1844,6 +2045,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
   outstream.done;
   if @SetCurrentDWGProc<>nil
                            then SetCurrentDWGProc(olddwg);
+  Handle2pointer.Destroy;
   //gdb.SetCurrentDWG(olddwg);
 end;
 procedure SaveZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
@@ -1863,7 +2065,7 @@ begin
      s:=NULZCPHeader;
      zcpmode:=zcptxt;
      sub:=0;
-     sysunit.TypeName2PTD('ZCPHeader')^.Serialize(@ZCPHead,SA_SAVED_TO_SHD,memorybuf,linkbyf,sub);
+     sysunit^.TypeName2PTD('ZCPHeader')^.Serialize(@ZCPHead,SA_SAVED_TO_SHD,memorybuf,linkbyf,sub);
 
      PTZCPOffsetTable(memorybuf^.getelement(ZCPHeadOffsetTableOffset))^.GDB:=memorybuf^.Count;
 
@@ -1892,8 +2094,8 @@ begin
      outfile:=FileCreate(UTF8ToSys(name+'remap'));
      FileWrite(outfile,linkbyf^.parray^,linkbyf^.Count*linkbyf^.Size);
      fileclose(outfile);
-     memorybuf.done;
-     linkbyf.done;
+     memorybuf^.done;
+     linkbyf^.done;
 end;
 procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
 var
@@ -1945,7 +2147,7 @@ begin
           end;
           FileRead(infile,header,sizeof(shdblockheader));
      end;
-     fileclose(infile);*)
+     fileclose(infile);*)*)
 end;
 procedure Import(name: GDBString;var drawing:TSimpleDrawing);
 var
@@ -1969,22 +2171,22 @@ begin
       if CurEntity is TvCircle then
       begin
            pobj := CreateInitObjFree(GDBCircleID,nil);
-           pgdbobjCircle(pobj).Radius:=TvCircle(CurEntity).Radius;
-           pgdbobjCircle(pobj).Local.P_insert.x:=TvCircle(CurEntity).x;
-           pgdbobjCircle(pobj).Local.P_insert.y:=TvCircle(CurEntity).y;
-           drawing{gdb}.GetCurrentRoot.AddMi(@pobj);
+           pgdbobjCircle(pobj)^.Radius:=TvCircle(CurEntity).Radius;
+           pgdbobjCircle(pobj)^.Local.P_insert.x:=TvCircle(CurEntity).x;
+           pgdbobjCircle(pobj)^.Local.P_insert.y:=TvCircle(CurEntity).y;
+           drawing{gdb}.GetCurrentRoot^.AddMi(@pobj);
            PGDBObjEntity(pobj)^.BuildGeometry;
            PGDBObjEntity(pobj)^.format;
       end
  else if CurEntity is TvCircularArc then
       begin
            pobj := CreateInitObjFree(GDBArcID,nil);
-           pgdbobjArc(pobj).R:=TvCircularArc(CurEntity).Radius;
-           pgdbobjArc(pobj).Local.P_insert.x:=TvCircularArc(CurEntity).x;
-           pgdbobjArc(pobj).Local.P_insert.y:=TvCircularArc(CurEntity).y;
-           pgdbobjArc(pobj).StartAngle:=TvCircularArc(CurEntity).StartAngle*pi/180;
-           pgdbobjArc(pobj).EndAngle:=TvCircularArc(CurEntity).EndAngle*pi/180;
-           drawing{gdb}.GetCurrentRoot.AddMi(@pobj);
+           pgdbobjArc(pobj)^.R:=TvCircularArc(CurEntity).Radius;
+           pgdbobjArc(pobj)^.Local.P_insert.x:=TvCircularArc(CurEntity).x;
+           pgdbobjArc(pobj)^.Local.P_insert.y:=TvCircularArc(CurEntity).y;
+           pgdbobjArc(pobj)^.StartAngle:=TvCircularArc(CurEntity).StartAngle*pi/180;
+           pgdbobjArc(pobj)^.EndAngle:=TvCircularArc(CurEntity).EndAngle*pi/180;
+           drawing{gdb}.GetCurrentRoot^.AddMi(@pobj);
            PGDBObjEntity(pobj)^.BuildGeometry;
            PGDBObjEntity(pobj)^.format;
       end
@@ -2004,11 +2206,11 @@ begin
         st2DLineWithPen,st2DLine, st3DLine:
         begin
            pobj := CreateInitObjFree(GDBLineID,nil);
-           PGDBObjLine(pobj).CoordInOCS.lBegin:=createvertex(PosX,PosY,0);
+           PGDBObjLine(pobj)^.CoordInOCS.lBegin:=createvertex(PosX,PosY,0);
            PosX := Cur2DSegment.X;
            PosY := Cur2DSegment.Y;
-           PGDBObjLine(pobj).CoordInOCS.lEnd:=createvertex(PosX,PosY,0);
-           drawing{gdb}.GetCurrentRoot.AddMi(@pobj);
+           PGDBObjLine(pobj)^.CoordInOCS.lEnd:=createvertex(PosX,PosY,0);
+           drawing{gdb}.GetCurrentRoot^.AddMi(@pobj);
            PGDBObjEntity(pobj)^.BuildGeometry;
            PGDBObjEntity(pobj)^.format;
         end;

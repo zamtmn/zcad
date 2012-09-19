@@ -42,7 +42,7 @@ implementation
 uses
     shared;
 
-function createsymbol(pf:PGDBfont;symbol:GDBInteger;pshxdata:pbyte;{var pdata:pbyte;}datalen:integer;unicode:boolean):GDBInteger;
+function createsymbol(pf:PGDBfont;symbol:GDBInteger;pshxdata:pbyte;{var pdata:pbyte;}datalen:integer;unicode:boolean;symname:gdbstring):GDBInteger;
 var
   {temp,}psubsymbol:PGDBByte;
   ppolycount:longint;
@@ -663,6 +663,8 @@ begin
                                                           psyminfo.SymMinX:=0;
             if symbol=42 then
                              symbol:=symbol;
+            psyminfo^.Name:=symname;
+            psyminfo^.Number:=symbol;
 
             result:=inccounter;
           end;
@@ -726,11 +728,12 @@ begin
                               pf^.h:=memorybuf.readbyte;
                               pf^.u:=memorybuf.readbyte;
                               memorybuf.readbyte;
+                              line:='';
                          end
                      else
                          begin
                               {$IFDEF TOTALYLOG}programlog.logoutstr('symbol '+inttostr(symnum),lp_IncPos);{$ENDIF}
-                              dataread:=createsymbol(pf,symnum,memorybuf.GetCurrentReadAddres,{pdata,}datalen+1,false);
+                              dataread:=createsymbol(pf,symnum,memorybuf.GetCurrentReadAddres,{pdata,}datalen+1,false,line);
                               memorybuf.jump({datalen}dataread);
                               {$IFDEF TOTALYLOG}programlog.logoutstr('end',lp_DecPos);{$ENDIF}
                          end;
@@ -802,7 +805,7 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
                          test:=test;
          //if (*pf^.GetOrCreateSymbolInfo(test)^.{ .symbo linfo[test].}addr=0*)symnum<2560000 then
          {$IFDEF TOTALYLOG}programlog.logoutstr('symbol '+inttostr(symnum),lp_IncPos);{$ENDIF}
-         {if symnum<256 then }dataread:=createsymbol(pf,test{symnum},memorybuf.GetCurrentReadAddres,{pdata,}datalen+1,true);
+         {if symnum<256 then }dataread:=createsymbol(pf,test{symnum},memorybuf.GetCurrentReadAddres,{pdata,}datalen+1,true,line);
          {$IFDEF TOTALYLOG}programlog.logoutstr('end',lp_DecPos);{$ENDIF}
          //                                                                 else
          //                                                                     pf:=pf;

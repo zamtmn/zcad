@@ -36,14 +36,15 @@ PGDBTextStyleProp=^GDBTextStyleProp;
     dxfname: GDBAnsiString;(*saved_to_shd*)
     pfont: PGDBfont;
     prop:GDBTextStyleProp;(*saved_to_shd*)
+    UsedInLTYPE:GDBBoolean;
   end;
 GDBTextStyleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
 
-                    function addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp):GDBInteger;
-                    function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp):GDBInteger;
-                    function FindStyle(StyleName:GDBString):GDBInteger;
+                    function addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):GDBInteger;
+                    function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):GDBInteger;
+                    function FindStyle(StyleName:GDBString;ult:GDBBoolean):GDBInteger;
                     procedure freeelement(p:GDBPointer);virtual;
               end;
 {EXPORT-}
@@ -93,7 +94,7 @@ begin
       exit;
     end;
 end;}
-function GDBTextStyleArray.setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp):GDBInteger;
+function GDBTextStyleArray.setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):GDBInteger;
 var ts:GDBTextStyle;
     ff:gdbstring;
     ps:PGDBTextStyle;
@@ -101,6 +102,7 @@ var ts:GDBTextStyle;
 begin
   ts.name:=stylename;
   ts.dxfname:=FontFile;
+  ts.UsedInLTYPE:=USedInLT;
 
   if pos('.',FontFile)=0 then
                              FontFile:=FontFile+'.shx';
@@ -117,18 +119,19 @@ begin
   //if ts.pfont=nil then ts.pfont:=FontManager.getAddres('normal.shx');
   ts.prop:=tp;
   //result:=add(@ts);
-  ps:=getelement(FindStyle(StyleName));
+  ps:=getelement(FindStyle(StyleName,USedInLT));
   ps^:=ts;
   //pointer(ts.name):=nil;
   //pointer(ts.dxfname):=nil;
 end;
-function GDBTextStyleArray.addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp):GDBInteger;
+function GDBTextStyleArray.addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):GDBInteger;
 var ts:GDBTextStyle;
     ff:gdbstring;
     //p:GDBPointer;
 begin
   ts.name:=stylename;
   ts.dxfname:=FontFile;
+  ts.UsedInLTYPE:=USedInLT;
 
   if pos('.',FontFile)=0 then
                              FontFile:=FontFile+'.shx';
@@ -159,7 +162,7 @@ begin
   pts:=parray;
   for i:=0 to count-1 do
   begin
-       if uppercase(pts^.name)=stylename then begin
+       if (uppercase(pts^.name)=stylename)and(pts^.UsedInLTYPE=ult) then begin
                                        result:=i;
                                        exit;
                                   end;

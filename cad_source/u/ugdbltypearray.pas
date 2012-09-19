@@ -42,6 +42,7 @@ BasicSHXDashProp=object(GDBaseObject)
                 param:shxprop;
                 constructor initnul;
           end;
+PTextProp=^TextProp;
 TextProp=object(BasicSHXDashProp)
                 Text,Style:GDBString;
                 //PFont:PGDBfont;

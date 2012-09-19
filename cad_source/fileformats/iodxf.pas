@@ -541,6 +541,7 @@ var
   shapenumber,stylehandle:integer;
   txtstr:string;
   PSP:PShapeProp;
+  PTP:PTextProp;
   DWGHandle:TDWGHandle;
   ir,ir2:itrec;
 begin
@@ -743,6 +744,15 @@ begin
                                                     psp^.param.PStyle:=pointer(stylehandle);
                                                     pltypeprop^.dasharray.Add(@dashinfo);
                                                end;
+                                      TDIText:begin
+                                                    pointer(ptp):=pltypeprop^.Textarray.CreateObject;
+                                                    ptp^.initnul;
+                                                    ptp^.param:=BShapeProp.param;
+                                                    ptp^.Text:=txtstr;
+                                                    //ptp^.Style:=;
+                                                    ptp^.param.PStyle:=pointer(stylehandle);
+                                                    pltypeprop^.dasharray.Add(@dashinfo);
+                                               end;
                                       end;
                                            dashinfo:=TDIDash;
                                            TempDouble:=strtofloat(s);
@@ -763,7 +773,7 @@ begin
 
                                  end;
                               75:begin
-                                      shapenumber:=strtoint(s);//    drtyrty
+                                      shapenumber:=strtoint(s);//
                                  end;
                              340:begin
                                       if pltypeprop<>nil then
@@ -887,6 +897,20 @@ begin
 
                                          PSP:=pltypeprop^.shapearray.iterate(ir2);
                                    until PSP=nil;
+
+                                   PTP:=pltypeprop^.Textarray.beginiterate(ir2);
+                                   if PTP<>nil then
+                                   repeat
+                                         if pTp^.param.PStyle=pointer(DWGHandle) then
+                                         begin
+                                            pTp^.param.PStyle:=ptstyle;
+                                            {pTp^.FontName:=ptstyle^.dxfname;
+                                            pTp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(pTp^.Psymbol));
+                                            pTp^.SymbolName:=pTp^.Psymbol^.Name;}
+                                         end;
+
+                                         PTP:=pltypeprop^.Textarray.iterate(ir2);
+                                   until PTP=nil;
 
                                    pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
                              until pltypeprop=nil;
@@ -1287,6 +1311,8 @@ var
   TDI:PTDashInfo;
   PStroke:PGDBDouble;
   PSP:PShapeProp;
+  PTP:PTextProp;
+  p:pointer;
 
   Handle2pointer:mappDWGHi;
   HandleIterator:mappDWGHi.TIterator;
@@ -1417,8 +1443,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
         end;
         if inlayertable and (groupi=390) then
                                              plottablefansdle:=lasthandle;  {поймать плоттабле}
-        if instyletable and (groupi=5) then
-                                             standartstylehandle:=lasthandle;{intable;}  {поймать standart}
+        {if instyletable and (groupi=5) then
+                                             standartstylehandle:=lasthandle;{intable;}  {поймать standart}}
       end
       else
         if (groupi = 2) and (values = 'ENTITIES') then
@@ -1783,6 +1809,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                               TDI:=pltp^.dasharray.beginiterate(ir2);
                               PStroke:=pltp^.strokesarray.beginiterate(ir3);
                               PSP:=pltp^.shapearray.beginiterate(ir4);
+                              PTP:=pltp^.textarray.beginiterate(ir5);
                               laststrokewrited:=false;
                               if PStroke<>nil then
                               repeat
@@ -1801,15 +1828,12 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                              laststrokewrited:=true;
                                                         end;
                                                TDIShape:begin
-                                                             {outstream.TXTAddGDBStringEOL(dxfGroupCode(49));
-                                                             outstream.TXTAddGDBStringEOL(floattostr(PStroke^));}
                                                              laststrokewrited:=false;
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(74));
                                                              outstream.TXTAddGDBStringEOL('4');
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(75));
                                                              outstream.TXTAddGDBStringEOL(inttostr(PSP^.Psymbol^.number));
 
-                                                             //DWGHandle:=0;
                                                              HandleIterator:=Handle2pointer.Find(PSP^.param.PStyle);
                                                              if  HandleIterator=nil then
                                                                                         begin
@@ -1832,6 +1856,43 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(45));
                                                              outstream.TXTAddGDBStringEOL(floattostr(PSP^.param.Y));
                                                              PSP:=pltp^.shapearray.iterate(ir4);
+                                                        end;
+                                               TDIText:begin
+                                                             laststrokewrited:=false;
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(74));
+                                                             outstream.TXTAddGDBStringEOL('2');
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(75));
+                                                             outstream.TXTAddGDBStringEOL('0');
+
+                                                             //if uppercase(PTP^.param.PStyle^.name)<>TSNStandardStyleName then
+                                                             begin
+                                                             HandleIterator:=Handle2pointer.Find(PTP^.param.PStyle);
+                                                             if  HandleIterator=nil then
+                                                                                        begin
+                                                                                             Handle2pointer.Insert(PTP^.param.PStyle,handle);
+                                                                                             temphandle:=handle;
+                                                                                             inc(handle);
+                                                                                        end
+                                                                                    else
+                                                                                        begin
+                                                                                             temphandle:=HandleIterator.GetValue;
+                                                                                        end;
+                                                             end;
+                                                             {else
+                                                                 temphandle:=standartstylehandle;}
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
+                                                             outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(46));
+                                                             outstream.TXTAddGDBStringEOL(floattostr(PTP^.param.Height));
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(50));
+                                                             outstream.TXTAddGDBStringEOL(floattostr(PTP^.param.Angle));
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(44));
+                                                             outstream.TXTAddGDBStringEOL(floattostr(PTP^.param.X));
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(45));
+                                                             outstream.TXTAddGDBStringEOL(floattostr(PTP^.param.Y));
+                                                             outstream.TXTAddGDBStringEOL(dxfGroupCode(9));
+                                                             outstream.TXTAddGDBStringEOL(PTP^.TEXT);
+                                                             PTP:=pltp^.textarray.iterate(ir4);
                                                         end;
                                     end;
                                     TDI:=pltp^.dasharray.iterate(ir2);
@@ -1862,6 +1923,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                   begin
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                   outstream.TXTAddGDBStringEOL(dxfName_Style);
+                  p:=drawing.TextStyleTable.getelement(i);
                   HandleIterator:=Handle2pointer.Find(drawing.TextStyleTable.getelement(i));
                                                                                if  HandleIterator=nil then
                                                                                                           begin
@@ -1912,13 +1974,26 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                     outstream.TXTAddGDBStringEOL(dxfName_Style);
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
-                    if uppercase(PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.name)<>TSNStandardStyleName then
+                    //if uppercase(PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.name)<>TSNStandardStyleName then
                     begin
-                    outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
-                    inc(handle);
-                    end
-                    else
-                        outstream.TXTAddGDBStringEOL(inttohex(standartstylehandle, 0));
+                    p:=drawing.TextStyleTable.getelement(i);
+                    HandleIterator:=Handle2pointer.Find(p);
+                                                                                 if  HandleIterator=nil then
+                                                                                                            begin
+                                                                                                                 //Handle2pointer.Insert(PSP^.param.PStyle,handle);
+                                                                                                                 temphandle:=handle;
+                                                                                                                 inc(handle);
+                                                                                                            end
+                                                                                                        else
+                                                                                                            begin
+                                                                                                                 temphandle:=HandleIterator.GetValue;
+                                                                                                            end;
+
+                    outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
+                    //inc(handle);
+                    end;
+                    {else
+                        outstream.TXTAddGDBStringEOL(inttohex(standartstylehandle, 0));}
 
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                     outstream.TXTAddGDBStringEOL(dxfName_AcDbSymbolTableRecord);

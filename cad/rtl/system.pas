@@ -559,6 +559,8 @@ GDBsymdolinfo=record
     addr: GDBInteger;
     size: GDBWord;
     NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: GDBDouble;
+    Name:GDBString;
+    Number:GDBInteger;
   end;
 PGDBUNISymbolInfo=^GDBUNISymbolInfo;
 GDBUNISymbolInfo=record
@@ -2682,6 +2684,7 @@ BasicSHXDashProp=object(GDBaseObject)
                 param:shxprop;
                 constructor initnul;
           end;
+PTextProp=^TextProp;
 TextProp=object(BasicSHXDashProp)
                 Text,Style:GDBString;
                 //PFont:PGDBfont;

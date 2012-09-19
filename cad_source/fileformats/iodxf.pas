@@ -22,8 +22,7 @@ interface
 uses gmap,gutil,UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,dxfvectorialreader,svgvectorialreader,epsvectorialreader,{pdfvectorialreader,}GDBCircle,GDBArc,fpvectorial,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
-  TDWGHandle=ptruint;
-  entnamindex=record
+   entnamindex=record
                     entname:GDBString;
               end;
      lessppi=specialize TLess<pointer>;
@@ -342,6 +341,8 @@ begin
         PGDBObjEntity(pobj)^.LoadFromDXF(f,@additionalunit);
         if (PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer)or(PGDBObjEntity(pobj)^.vp.Layer=nil) then
                                                                  PGDBObjEntity(pobj)^.vp.Layer:={gdb.GetCurrentDWG}drawing.LayerTable.GetSystemLayer;
+        if (PGDBObjEntity(pobj)^.vp.LineType=nil) then
+                                                      PGDBObjEntity(pobj)^.vp.LineType:=drawing.LTypeStyleTable.getAddres('ByLayer');
         correctvariableset(pobj);
         pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(@additionalunit);
         trash:=false;
@@ -538,7 +539,7 @@ var
   TempDouble:GDBDouble;
   BShapeProp:BasicSHXDashProp;
   //di:TDashInfo;
-  shapenumber,stylehandle:integer;
+  shapenumber,stylehandle:TDWGHandle;
   txtstr:string;
   PSP:PShapeProp;
   PTP:PTextProp;
@@ -777,7 +778,7 @@ begin
                                  end;
                              340:begin
                                       if pltypeprop<>nil then
-                                                             stylehandle:=strtoint('$'+s);
+                                                             stylehandle:=strtoint64('$'+s);
                                  end;
                              46:begin
                                      BShapeProp.param.Height:=strtofloat(s);
@@ -830,7 +831,7 @@ begin
                                 tstyle.name := s;
                               end;
                             5:begin
-                                   DWGHandle:=strtoint('$'+s)
+                                   DWGHandle:=strtoint64('$'+s)
                               end;
 
                             40:
@@ -1275,7 +1276,7 @@ begin
   f.done;
   programlog.logoutstr('end; {AddFromDXF}',lp_DecPos);
 end;
-procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outhandle:{GDBInteger}GDBOpenArrayOfByte; var handle: GDBInteger);
+procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outhandle:{GDBInteger}GDBOpenArrayOfByte; var handle: TDWGHandle);
 var
 //  i:GDBInteger;
   pv:pgdbobjEntity;
@@ -1298,7 +1299,7 @@ var
   outstream: {GDBInteger}GDBOpenArrayOfByte;
   groups, values, ucvalues: GDBString;
   groupi, valuei, intable,attr: GDBInteger;
-  temphandle,handle,lasthandle,vporttablehandle,plottablefansdle,standartstylehandle,i{,cod}: GDBInteger;
+  temphandle,handle,lasthandle,vporttablehandle,plottablefansdle,standartstylehandle,i{,cod}: TDWGHandle;
   phandlea: pdxfhandlerecopenarray;
   inlayertable, inblocksec, inblocktable, inlttypetable: GDBBoolean;
   handlepos:integer;

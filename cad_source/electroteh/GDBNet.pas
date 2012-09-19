@@ -39,9 +39,9 @@ GDBObjNet=object(GDBObjConnected)
 
                  function GetNearestLine(const point:GDBVertex):PGDBObjEntity;
 
-                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                 procedure SaveToDXFfollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
 
                  destructor done;virtual;
                  procedure FormatAfterDXFLoad;virtual;
@@ -184,7 +184,7 @@ begin
      dxfGDBStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
      dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToNet));
 end;
-procedure GDBObjNet.SaveToDXFfollow(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);
+procedure GDBObjNet.SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);
 var pobj:PGDBObjEntity;
     ir:itrec;
 begin

@@ -281,6 +281,7 @@ GDBArrayVertex=array[0..0] of GDBvertex;
                 end;
 FreeElProc=procedure (p:GDBPointer);
 {EXPORT-}
+TDWGHandle=ptruint;
 const
   empty_GDBString='Empty GDBString';
   arccount: GDBWord=16;

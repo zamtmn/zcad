@@ -20,7 +20,8 @@ unit GDBLine;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,UGDBOpenArrayOfPObjects,UGDBDescriptor,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
+uses {testing LineTypes...}uzglline3darray,ugdbltypearray,
+     zcadsysvars,UGDBOpenArrayOfPObjects,UGDBDescriptor,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman{,shared},OGLSpecFunc;
 type
@@ -42,11 +43,14 @@ GDBObjLine=object(GDBObj3d)
                  Length_2:GDBDouble;(*'Sqrt length'*)(*hidden_in_objinsp*)
                  dir:GDBvertex;(*'Direction'*)(*hidden_in_objinsp*)
 
+                 {testing LineTypes...}
+                 Lines:{-}ZGLLine3DArray{/GDBPointer/};
+
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;
 
-                 procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure Format;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  procedure RenderFeedback(pcount:TActulity);virtual;
@@ -82,6 +86,9 @@ GDBObjLine=object(GDBObj3d)
                   function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
 
                   function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
+
+                  {testing LineTypes...}
+                  procedure CreateLTYPE;virtual;
            end;
 {Export-}
 ptlinertmodify=^tlinertmodify;
@@ -90,6 +97,111 @@ tlinertmodify=record
                 end;
 implementation
 uses GDBElLeader,GDBNet,log;
+procedure GDBObjLine.CreateLTYPE;
+var
+    scale:GDBDouble;
+    num,d:GDBDouble;
+    tv,tv2,tv3:GDBVertex;
+    i:integer;
+
+    ir,ir2,ir3,ir4,ir5:itrec;
+    TDI:PTDashInfo;
+    PStroke:PGDBDouble;
+    PSP:PShapeProp;
+    PTP:PTextProp;
+    firstloop,scissorstart:boolean;
+
+procedure SetUnLTyped;
+begin
+  lines.Add(@CoordInWCS.lBegin);
+  lines.Add(@CoordInWCS.lEnd);
+end;
+begin
+     Lines.Clear;
+     if (vp.LineType=nil) or (vp.LineType.dasharray.Count=0) then
+     begin
+          SetUnLTyped;
+     end
+     else
+     begin
+          scale:=1*vp.LineTypeScale;
+          num:=Length/(scale*vp.LineType.len);
+          if num<1 then
+                       SetUnLTyped
+          else
+          begin
+               d:=(Length-(scale*vp.LineType.len)*trunc(num))/2;
+               if d>eps then
+               begin
+                    d:=d/Length;
+                    tv2:=geometry.VertexMulOnSc(dir,d);
+                    tv:=geometry.VertexSub(CoordInWCS.lEnd,tv2);
+
+                    PStroke:=vp.LineType^.strokesarray.beginiterate(ir3);
+                    tv3:=geometry.VertexMulOnSc(dir,(scale*abs(PStroke^/2))/length);
+                    tv:=geometry.VertexSub(tv,tv3);
+
+                    lines.Add(@tv);
+                    lines.Add(@CoordInWCS.lEnd);
+
+                    tv:=geometry.VertexAdd(CoordInWCS.lBegin,tv2);
+
+                    PStroke:=vp.LineType^.strokesarray.beginiterate(ir3);
+                    tv3:=geometry.VertexMulOnSc(dir,(scale*abs(PStroke^/2))/length);
+                    tv:=geometry.VertexSub(tv,tv3);
+                    if (SqrOneVertexlength(tv3))<(SqrOneVertexlength(tv2)) then
+                    begin
+                       scissorstart:=false;
+                       lines.Add(@CoordInWCS.lBegin);
+                       lines.Add(@tv);
+                    end
+                    else
+                       scissorstart:=true;
+                    firstloop:=true;
+
+                    for i:=1 to trunc(num) do
+                    begin
+                                  TDI:=vp.LineType^.dasharray.beginiterate(ir2);
+                                  PStroke:=vp.LineType^.strokesarray.beginiterate(ir3);
+                                  PSP:=vp.LineType^.shapearray.beginiterate(ir4);
+                                  PTP:=vp.LineType^.textarray.beginiterate(ir5);
+                                  //laststrokewrited:=false;
+                                  if PStroke<>nil then
+                                  repeat
+                                        case TDI^ of
+                                                    TDIDash:begin
+                                                                 if PStroke^<>0 then
+                                                                 begin
+                                                                      tv2:=geometry.VertexMulOnSc(dir,(scale*abs(PStroke^))/length);
+                                                                      tv2:=geometry.VertexAdd(tv,tv2);
+                                                                      if PStroke^>0 then
+                                                                      begin
+                                                                           if scissorstart and firstloop then
+                                                                               lines.Add(@CoordInWCS.lBegin)
+                                                                           else
+                                                                               lines.Add(@tv);
+
+                                                                      lines.Add(@tv2);
+                                                                      end;
+                                                                      tv:=tv2;
+                                                                      firstloop:=false;
+                                                                 end;
+                                                                 PStroke:=vp.LineType^.strokesarray.iterate(ir3);
+                                                                 //laststrokewrited:=true;
+                                                            end;
+                                        end;
+                                        TDI:=vp.LineType^.dasharray.iterate(ir2);
+                                  until {PStroke}TDI=nil;
+
+                    end;
+               end
+               else
+                   SetUnLTyped;
+
+          end;
+     end;
+end;
+
 function GDBObjLine.GetTangentInPoint(point:GDBVertex):GDBVertex;
 begin
      result:=normalizevertex(dir);
@@ -274,6 +386,7 @@ begin
   CoordInOCS.lBegin := NulVertex;
   CoordInOCS.lEnd := NulVertex;
   PProjPoint:=nil;
+  Lines.init(100);
 end;
 constructor GDBObjLine.init;
 begin
@@ -282,6 +395,7 @@ begin
   CoordInOCS.lBegin := p1;
   CoordInOCS.lEnd := p2;
   PProjPoint:=nil;
+  Lines.init(100);
   //format;
 end;
 procedure GDBObjLine.LoadFromDXF;
@@ -336,6 +450,8 @@ begin
   dir.x:=CoordInWCS.lend.x-CoordInWCS.lbegin.x;
   dir.y:=CoordInWCS.lend.y-CoordInWCS.lbegin.y;
   dir.z:=CoordInWCS.lend.z-CoordInWCS.lbegin.z;
+
+  createLTYPE;
 
   //self.RenderFeedbackIFNeed;
 end;
@@ -430,7 +546,8 @@ begin
 end;
 procedure GDBObjLine.DrawGeometry;
 begin
-  //exit;
+  Lines.DrawGeometry;
+  exit;
   oglsm.myglbegin(GL_lines);
   oglsm.myglVertex3dV(@CoordInWCS.lBegin);
   oglsm.myglVertex3dV(@CoordInWCS.lEnd);

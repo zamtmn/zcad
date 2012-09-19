@@ -19,7 +19,7 @@
 unit GDBEntity;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
+uses ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
      {UGDBPolyPoint2DArray,}varman,varmandef,
      gl,
      GDBase,gdbobjectsconstdef,
@@ -41,7 +41,7 @@ PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=record
                       Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
                       LineWeight:GDBShortint;(*'Line weight'*)(*saved_to_shd*)
-                      LineType:GDBString;(*'Line type'*)(*saved_to_shd*)
+                      LineType:{GDBString}PGDBLtypeProp;(*'Line type'*)(*saved_to_shd*)
                       LineTypeScale:GDBDouble;(*'Line type scale'*)(*saved_to_shd*)
                       ID:TObjID;(*'Object type'*)(*oi_readonly*)
                       BoundingBox:GDBBoundingBbox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
@@ -56,7 +56,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     destructor done;virtual;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                    procedure SaveToDXFObjPrefix(var handle:longint;var  outhandle:{GDBInteger}GDBOpenArrayOfByte;entname,dbname:GDBString);
+                    procedure SaveToDXFObjPrefix(var handle:TDWGHandle;var  outhandle:{GDBInteger}GDBOpenArrayOfByte;entname,dbname:GDBString);
                     function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit):GDBBoolean;
                     function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
@@ -67,9 +67,9 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function AddExtAttrib:PTExtAttrib;
                     function CopyExtAttrib:PTExtAttrib;
                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
-                    procedure SaveToDXF(var handle:longint;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                    procedure DXFOut(var handle:longint; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                    procedure SaveToDXFfollow(var handle:longint; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                    procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                    procedure DXFOut(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                    procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                     procedure SaveToDXFPostProcess(var handle:{GDBInteger}GDBOpenArrayOfByte);
                     procedure Format;virtual;
                     procedure FormatAfterEdit;virtual;
@@ -257,7 +257,7 @@ begin
      Selected := false;
      self.Visible:=0;
      vp.lineweight:=-1;
-     vp.LineType:='';
+     vp.LineType:={''}nil;
      vp.LineTypeScale:=1;
 
      {if gdb.GetCurrentDWG<>nil then
@@ -431,7 +431,7 @@ begin
   //vp.ID := 0;
   vp.Layer := layeraddres;
   vp.LineWeight := LW;
-  vp.LineType:='';
+  vp.LineType:={''}nil;
   vp.LineTypeScale:=1;
   bp.ListPos.owner:=own;
 end;
@@ -813,7 +813,7 @@ begin
      inherited;
      if PExtAttrib<>nil then
                             gdbfreemem(pointer(PExtAttrib));
-     vp.LineType:='';
+     vp.LineType:={''}nil;
 
 end;
 
@@ -1034,7 +1034,7 @@ begin
   if vp.lineweight<>-1 then dxfGDBIntegerout(outhandle,370,vp.lineweight);
   if dbname<>'' then
                     dxfGDBStringout(outhandle,100,dbname);
-  if vp.LineType<>'' then dxfGDBStringout(outhandle,6,vp.LineType);
+  if vp.LineType<>{''}nil then dxfGDBStringout(outhandle,6,vp.LineType^.Name);
   if vp.LineTypeScale<>1 then dxfGDBDoubleout(outhandle,48,vp.LineTypeScale);
 end;
 function GDBObjEntity.IsHaveObjXData:GDBBoolean;
@@ -1052,7 +1052,8 @@ begin
      result:=false;
      case dxfcod of
                 6:begin
-                       vp.LineType:=readmystr(f);
+                       //vp.LineType:=readmystr(f);
+                       vp.LineType:=gdb.GetCurrentDWG.LTypeStyleTable.getAddres(readmystr(f));
                        result:=true
                   end;
                      8:begin

@@ -32,21 +32,25 @@ type
 PTDashInfo=^TDashInfo;
 TDashInfo=(TDIDash,TDIText,TDIShape);
 TAngleDir=(TACAbs,TACRel,TACUpRight);
-BasicSHXDashProp=object(GDBaseObject)
+shxprop=record
                 Height,Angle,X,Y:GDBDouble;
                 AD:TAngleDir;
+                PStyle:PGDBTextStyle;
+        end;
+
+BasicSHXDashProp=object(GDBaseObject)
+                param:shxprop;
                 constructor initnul;
           end;
 TextProp=object(BasicSHXDashProp)
                 Text,Style:GDBString;
-                PStyle:PGDBTextStyle;
-                PFont:PGDBfont;
+                //PFont:PGDBfont;
                 constructor initnul;
                 destructor done;virtual;
           end;
+PShapeProp=^ShapeProp;
 ShapeProp=object(BasicSHXDashProp)
                 SymbolName,FontName:GDBString;
-                PFont:PGDBfont;
                 Psymbol:PGDBsymdolinfo;
                 constructor initnul;
                 destructor done;virtual;
@@ -124,30 +128,30 @@ constructor TextProp.initnul;
 begin
      killstring(Text);
      killstring(Style);
-     PStyle:=nil;
-     PFont:=nil;
+     param.PStyle:=nil;
+     //param.PFont:=nil;
      inherited;
 end;
 destructor TextProp.done;
 begin
      Text:='';
      Text:='';
-     PStyle:=nil;
-     PFont:=nil;
+     param.PStyle:=nil;
+     //PFont:=nil;
 end;
 constructor BasicSHXDashProp.initnul;
 begin
-     Height:=DefaultSHXHeight;
-     Angle:=DefaultSHXAngle;
-     X:=DefaultSHXX;
-     Y:=DefaultSHXY;
-     AD:=TACRel;
+     param.Height:=DefaultSHXHeight;
+     param.Angle:=DefaultSHXAngle;
+     param.X:=DefaultSHXX;
+     param.Y:=DefaultSHXY;
+     param.AD:=TACRel;
+     param.PStyle:=nil;
 end;
 constructor ShapeProp.initnul;
 begin
      killstring(SymbolName);
      killstring(FontName);
-     PFont:=nil;
      Psymbol:=nil;
      inherited;
 end;
@@ -155,7 +159,6 @@ destructor ShapeProp.done;
 begin
      SymbolName:='';
      FontName:='';
-     PFont:=nil;
      Psymbol:=nil;
 end;
 
@@ -205,25 +208,25 @@ begin
        paramname:=Uppercase(GetPredStr(subelement,'='));
        stroke:=strtofloat(subelement);
        if paramname='X' then
-                            SP.X:=stroke
+                            SP.param.X:=stroke
   else if paramname='Y' then
-                            SP.Y:=stroke
+                            SP.param.Y:=stroke
   else if paramname='S' then
-                            SP.Height:=stroke
+                            SP.param.Height:=stroke
   else if paramname='A' then
                             begin
-                                 SP.Angle:=stroke;
-                                 SP.AD:=TACAbs;
+                                 SP.param.Angle:=stroke;
+                                 SP.param.AD:=TACAbs;
                             end
   else if paramname='R' then
                             begin
-                                 SP.Angle:=stroke;
-                                 SP.AD:=TACRel;
+                                 SP.param.Angle:=stroke;
+                                 SP.param.AD:=TACRel;
                             end
   else if paramname='U' then
                             begin
-                                 SP.Angle:=stroke;
-                                 SP.AD:=TACUpRight;
+                                 SP.param.Angle:=stroke;
+                                 SP.param.AD:=TACUpRight;
                             end
   else shared.ShowError('CreateLineTypeFrom: unknow value "'+paramname+'"');
        subelement:=GetPredStr(element,',');

@@ -19,7 +19,7 @@
 unit UGDBSHXFont;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
 type
 {EXPORT+}
 PGDBsymdolinfo=^GDBsymdolinfo;
@@ -27,6 +27,8 @@ GDBsymdolinfo=record
     addr: GDBInteger;
     size: GDBWord;
     NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: GDBDouble;
+    Name:GDBString;
+    Number:GDBInteger;
   end;
 PGDBUNISymbolInfo=^GDBUNISymbolInfo;
 GDBUNISymbolInfo=record
@@ -154,6 +156,7 @@ begin
                                  usi.symbolinfo.size:=0;
                                  usi.symbolinfo.w:=0;
                                  usi.symbolinfo.SymMinY:=0;
+                                 killstring(usi.symbolinfo.Name);
                                  unisymbolinfo.Add(@usi);
 
                                  result:=@(PGDBUNISymbolInfo(unisymbolinfo.getelement(unisymbolinfo.Count-1))^.symbolinfo);

@@ -179,6 +179,7 @@ MainMenuItem Format;
         Command Styles,SetObjInsp(TSTYLES),none,none
 	Command Fonts,SetObjInsp(FONTS),none,none
       }
+    Command Line type styles,SetObjInsp(LINETYPESTYLES),none,none
     Command Table styles,SetObjInsp(TABLESTYLES),none,none
     Command Numerators,SetObjInsp(NUMERATORS),none,none
     Command Dimensions styles (not impl),fuckoff,none,none

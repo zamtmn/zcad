@@ -596,13 +596,14 @@ PGDBTextStyleProp=^GDBTextStyleProp;
     dxfname: GDBAnsiString;(*saved_to_shd*)
     pfont: PGDBfont;
     prop:GDBTextStyleProp;(*saved_to_shd*)
+    UsedInLTYPE:GDBBoolean;
   end;
 GDBTextStyleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
-                    function addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp):GDBInteger;
-                    function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp):GDBInteger;
-                    function FindStyle(StyleName:GDBString):GDBInteger;
+                    function addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):GDBInteger;
+                    function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):GDBInteger;
+                    function FindStyle(StyleName:GDBString;ult:GDBBoolean):GDBInteger;
                     procedure freeelement(p:GDBPointer);virtual;abstract;
               end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBXYZWStringArray.pas
@@ -1570,7 +1571,7 @@ GDBObjBlockdefArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBObjBlockdef*)
                       constructor initnul;
                       function getindex(name:pansichar):GDBInteger;virtual;abstract;
                       function getblockdef(name:GDBString):PGDBObjBlockdef;virtual;abstract;
-                      function loadblock(filename,bname:pansichar):GDBInteger;virtual;abstract;
+                      function loadblock(filename,bname:pansichar;pdrawing:GDBPointer):GDBInteger;virtual;abstract;
                       function create(name:GDBString):PGDBObjBlockdef;virtual;abstract;
                       procedure freeelement(p:GDBPointer);virtual;abstract;
                       procedure Format;virtual;abstract;
@@ -2157,6 +2158,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     destructor done;virtual;abstract;
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
     function GetObjTypeName:GDBString;virtual;abstract;
+    function IsRTECommand:GDBBoolean;virtual;abstract;
   end;
   CommandFastObjectDef = object(CommandObjectDef)
     procedure CommandInit; virtual;abstract;
@@ -2172,6 +2174,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
+    function IsRTECommand:GDBBoolean;virtual;abstract;
   end;
   pGDBcommandmanagerDef=^GDBcommandmanagerDef;
   GDBcommandmanagerDef=object(GDBOpenArrayOfPObjects)
@@ -2483,6 +2486,7 @@ GDBtracepropArray=object(GDBOpenArrayOfData)
     mouseonworkplanecoord: GDBvertex;
     mouse3dcoord: GDBvertex;
     mouseonworkplan: GDBBoolean;
+    mousein: GDBBoolean;
   end;
   PSelectiondesc = ^Selectiondesc;
   Selectiondesc = record
@@ -2619,6 +2623,7 @@ TAbstractDrawing=object(GDBaseobject)
                        procedure MoveCameraInLocalCSXY(oldx,oldy:GDBDouble;ax:gdbvertex);virtual;abstract;
                        procedure SetCurrentDWG;virtual;abstract;
                        function GetLayerTable:PGDBLayerArray;virtual;abstract;
+                       function GetChangeStampt:GDBBoolean;virtual;abstract;
                        function StoreOldCamerapPos:Pointer;virtual;abstract;
                        procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;
                  end;
@@ -2637,6 +2642,7 @@ TSimpleDrawing=object(TAbstractDrawing)
                        BlockDefArray:GDBObjBlockdefArray;(*saved_to_shd*)
                        Numerator:GDBNumerator;(*saved_to_shd*)
                        TableStyleTable:GDBTableStyleArray;(*saved_to_shd*)
+                       LTypeStyleTable:GDBLtypeArray;
                        function GetLastSelected:PGDBObjEntity;virtual;abstract;
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
                        constructor init(pcam:PGDBObjCamera);
@@ -2663,6 +2669,67 @@ TSimpleDrawing=object(TAbstractDrawing)
                        procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
                        function GetUndoTop:TArrayIndex;virtual;abstract;
                  end;
+//Generate on C:\zcad\CAD_SOURCE\u\ugdbltypearray.pas
+PTDashInfo=^TDashInfo;
+TDashInfo=(TDIDash,TDIText,TDIShape);
+TAngleDir=(TACAbs,TACRel,TACUpRight);
+shxprop=record
+                Height,Angle,X,Y:GDBDouble;
+                AD:TAngleDir;
+                PStyle:PGDBTextStyle;
+        end;
+BasicSHXDashProp=object(GDBaseObject)
+                param:shxprop;
+                constructor initnul;
+          end;
+TextProp=object(BasicSHXDashProp)
+                Text,Style:GDBString;
+                //PFont:PGDBfont;
+                constructor initnul;
+                destructor done;virtual;abstract;
+          end;
+PShapeProp=^ShapeProp;
+ShapeProp=object(BasicSHXDashProp)
+                SymbolName,FontName:GDBString;
+                Psymbol:PGDBsymdolinfo;
+                constructor initnul;
+                destructor done;virtual;abstract;
+          end;
+GDBDashInfoArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=TDashInfo*)
+               end;
+GDBDoubleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBDouble*)
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+               end;
+GDBShapePropArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=ShapeProp*)
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+               end;
+GDBTextPropArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=TextProp*)
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+               end;
+PGDBLtypeProp=^GDBLtypeProp;
+GDBLtypeProp=object(GDBNamedObject)
+               len:GDBDouble;(*'Length'*)
+               dasharray:GDBDashInfoArray;(*'DashInfo array'*)
+               strokesarray:GDBDoubleArray;(*'Strokes array'*)
+               shapearray:GDBShapePropArray;(*'Shape array'*)
+               Textarray:GDBTextPropArray;(*'Text array'*)
+               desk:GDBAnsiString;(*'Description'*)
+               constructor init(n:GDBString);
+               destructor done;virtual;abstract;
+             end;
+PGDBLtypePropArray=^GDBLtypePropArray;
+GDBLtypePropArray=array [0..0] of GDBLtypeProp;
+PGDBLtypeArray=^GDBLtypeArray;
+GDBLtypeArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLtypeProp*)
+                    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                    constructor initnul;
+                    procedure LoadFromFile(fname:GDBString;lm:TLoadOpt);
+                    {function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;abstract;
+                    function GetSystemLayer:PGDBLayerProp;
+                    function GetCurrentLayer:PGDBLayerProp;
+                    function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
+                    function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;}
+              end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\UGDBDescriptor.pas
 GDBObjTrash=object(GDBObjEntity)
                  function GetHandle:GDBPlatformint;virtual;abstract;
@@ -2694,6 +2761,7 @@ TDrawing=object(TSimpleDrawing)
            procedure SetFileName(NewName:GDBString);virtual;abstract;
            function GetFileName:GDBString;virtual;abstract;
            procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
+           function GetChangeStampt:GDBBoolean;virtual;abstract;
            function GetUndoTop:TArrayIndex;virtual;abstract;
      end;
 PGDBDescriptor=^GDBDescriptor;

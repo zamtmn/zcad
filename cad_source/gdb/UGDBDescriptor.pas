@@ -528,14 +528,14 @@ var
 begin
                     poldstyle:=PGDBTextStyle(_from.TextStyleTable.getelement(oldti));
                     tsname:=poldstyle^.name;
-                    newti:=_to.TextStyleTable.FindStyle(tsname);
+                    newti:=_to.TextStyleTable.FindStyle(tsname,poldstyle^.UsedInLTYPE);
                     if newti<0 then
                                    begin
-                                        newti:=_to.TextStyleTable.addstyle(poldstyle.name,poldstyle.pfont.Name,poldstyle.prop);
+                                        newti:=_to.TextStyleTable.addstyle(poldstyle.name,poldstyle.pfont.Name,poldstyle.prop,poldstyle.UsedInLTYPE);
                                         pnevstyle:=PGDBTextStyle(_to.TextStyleTable.getelement(newti));
                                         pnevstyle^:=poldstyle^;
                                    end;
-      result:=_to.TextStyleTable.FindStyle(tsname);
+      result:=_to.TextStyleTable.FindStyle(tsname,poldstyle^.UsedInLTYPE);
 end;
 procedure createtstyleifneed(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 var

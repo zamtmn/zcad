@@ -139,10 +139,11 @@ procedure redrawoglwnd;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log,OGLSpecFunc;
-procedure SetCurrentDWG(PDWG:pointer);
+function SetCurrentDWG(PDWG:pointer):pointer;
 begin
-     if gdb.GetCurrentDWG<>pdwg then
-                                    gdb.SetCurrentDWG(pdwg);
+     result:=gdb.GetCurrentDWG;
+     if result<>pdwg then
+                         gdb.SetCurrentDWG(pdwg);
 end;
 
 procedure redrawoglwnd;
@@ -642,6 +643,12 @@ begin
      _dest.correctsublayers(_to.LayerTable);
      //_dest.vp.Layer:=createlayerifneed(_from,_to,_source.vp.Layer);
 end;
+procedure RemapLStyle(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
+begin
+     _dest.vp.LineType:=_to.LTypeStyleTable.createltypeifneed(_source.vp.LineType);
+     //_dest.correctsublayers(_to.LayerTable);
+     //_dest.vp.Layer:=createlayerifneed(_from,_to,_source.vp.Layer);
+end;
 procedure RemapEntArray(_from,_to:PTSimpleDrawing;const _source,_dest:GDBObjEntityOpenArray);
 var
    irs,ird:itrec;
@@ -660,6 +667,7 @@ end;
 procedure RemapAll(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 begin
   RemapLayer(_from,_to,_source,_dest);
+  RemapLStyle(_from,_to,_source,_dest);
   case _source.vp.ID of
                         GDBElLeaderID,gdbtableid:begin
                                            createtstylebyindex(_from,_to,0);

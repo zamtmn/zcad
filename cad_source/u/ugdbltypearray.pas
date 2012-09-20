@@ -85,6 +85,7 @@ GDBLtypeArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLtypeProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     procedure LoadFromFile(fname:GDBString;lm:TLoadOpt);
+                    function createltypeifneed(_source:PGDBLtypeProp):PGDBLtypeProp;
                     {function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
                     function GetSystemLayer:PGDBLayerProp;
                     function GetCurrentLayer:PGDBLayerProp;
@@ -161,6 +162,30 @@ begin
      SymbolName:='';
      FontName:='';
      Psymbol:=nil;
+end;
+function GDBLtypeArray.createltypeifneed(_source:PGDBLtypeProp):PGDBLtypeProp;
+begin
+             result:=nil;
+             if _source<>nil then
+             begin
+             result:=getAddres(_source.Name);
+             if result=nil then
+             begin
+                  if _source<>nil then
+                  begin
+                       if AddItem(_source.Name,result)=IsCreated then
+                       begin
+                       result.init(_source.Name);
+                       result.len:=_source.len;
+                       _source.dasharray.copyto(@result.dasharray);
+                       _source.strokesarray.copyto(@result.strokesarray);
+                       //_source.shapearray.copyto(@result.shapearray);
+                       //_source.Textarray.copyto(@result.Textarray);
+                       result.desk:=_source.desk;
+                       end;
+                  end;
+             end;
+             end;
 end;
 
 procedure GDBLtypeArray.LoadFromFile(fname:GDBString;lm:TLoadOpt);

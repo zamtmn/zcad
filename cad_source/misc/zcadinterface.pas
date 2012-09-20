@@ -54,7 +54,7 @@ type
     TMessageBox=function(Text, Caption: PChar; Flags: Longint): Integer of object;
 
     //UGDBDescriptor
-    TSetCurrentDrawing=procedure(PDWG:Pointer);//нужно завязать на UGDBDrawingdef
+    TSetCurrentDrawing=function(PDWG:Pointer):Pointer;//нужно завязать на UGDBDrawingdef
 var
    //SplashWnd
    SplashTextOut:TSplashTextOutProc;

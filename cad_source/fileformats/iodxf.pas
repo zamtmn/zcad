@@ -711,7 +711,9 @@ begin
                                                          begin
                                                               if LoadMode=TLOLoad then
                                                               begin
-                                                              end;
+                                                              end
+                                                              else
+                                                                  pltypeprop:=nil;
                                                          end;
                                                IsCreated:
                                                          begin
@@ -730,6 +732,7 @@ begin
                                 end;
                               40:
                                 begin
+                                     if pltypeprop<>nil then
                                      pltypeprop^.len:=strtofloat(s);
                                 end;
                               49:
@@ -761,7 +764,8 @@ begin
                                            pltypeprop^.strokesarray.Add(@TempDouble);
                                       end;
                                  end;
-                              74:begin
+                              74:if pltypeprop<>nil then
+                                 begin
                                       flags:=strtoint(s);
                                       if (flags and 1)>0 then
                                                              BShapeProp.param.AD:=BShapeProp.param.AD.TACAbs
@@ -792,7 +796,7 @@ begin
                              45:begin
                                      BShapeProp.param.Y:=strtofloat(s);
                                 end;
-                             9:begin
+                             9:begin if pltypeprop<>nil then
                                      txtstr:=s;
                                 end;
                               end;
@@ -1323,9 +1327,9 @@ begin
   Handle2pointer:=mappDWGHi.Create;
   DecimalSeparator := '.';
   standartstylehandle:=0;
-  olddwg:={gdb.GetCurrentDWG}@drawing;
+  olddwg:=nil;//{gdb.GetCurrentDWG}@drawing;
   if @SetCurrentDWGProc<>nil
-                            then SetCurrentDWGProc(@drawing);
+                            then olddwg:=SetCurrentDWGProc(@drawing);
   //gdb.SetCurrentDWG(pdrawing);
   //--------------------------outstream := FileCreate(name);
   outstream.init({$IFDEF DEBUGBUILD}'{51453949-893A-49C2-9588-42B25346D071}',{$ENDIF}10*1024*1024);
@@ -1917,6 +1921,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
               begin
                 instyletable := false;
                 ignoredsource:=false;
+                if drawing.TextStyleTable.count>0 then
                 for i := 0 to drawing.TextStyleTable.count - 1 do
                 begin
                   //if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name <> '0' then
@@ -2120,7 +2125,9 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
   end;
   outstream.done;
   if @SetCurrentDWGProc<>nil
-                           then SetCurrentDWGProc(olddwg);
+                           then
+                               if olddwg<>nil then
+                                                  SetCurrentDWGProc(olddwg);
   Handle2pointer.Destroy;
   //gdb.SetCurrentDWG(olddwg);
 end;

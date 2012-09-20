@@ -39,6 +39,7 @@ type
     CStartAttrEnableAttr:TCStartAttr;(*hidden_in_objinsp*)
     CStartAttrDisableAttr:TCStartAttr;(*hidden_in_objinsp*)
     CEndActionAttr:TCEndAttr;(*hidden_in_objinsp*)
+    pdwg:GDBPointer;
     procedure CommandStart(Operands:pansichar); virtual; abstract;
     procedure CommandEnd; virtual; abstract;
     procedure CommandCancel; virtual; abstract;

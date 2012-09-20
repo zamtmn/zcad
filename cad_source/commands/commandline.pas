@@ -191,6 +191,7 @@ var
    p:PCommandRTEdObjectDef;
    ir:itrec;
 begin
+     if pcommandrunning^.pdwg=gdb.GetCurrentDWG then
      if pcommandrunning <> nil then
      if pcommandrunning.IsRTECommand then
      begin
@@ -200,6 +201,7 @@ begin
         p:=CommandsStack.beginiterate(ir);
         if p<>nil then
         repeat
+              if p^.pdwg=gdb.GetCurrentDWG then
               if p^.IsRTECommand then
                                                        begin
                                                             (p)^.MouseMoveCallback(p3d,p2d,mode,osp);
@@ -285,6 +287,7 @@ begin
                                                               self.executecommandtotalend;
                                       end;
           pcommandrunning := pointer(pc);
+          pcommandrunning^.pdwg:=pd;
           pcommandrunning^.CommandStart(pansichar(operands));
 end;
 function GDBcommandmanager.execute(const comm:pansichar;silent:GDBBoolean): GDBInteger;

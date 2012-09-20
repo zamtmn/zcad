@@ -20,7 +20,7 @@ unit GDBLine;
 {$INCLUDE def.inc}
 
 interface
-uses {testing LineTypes...}uzglline3darray,ugdbltypearray,
+uses {testing LineTypes...}uzglline3darray,uzglpoint3darray,ugdbltypearray,
      zcadsysvars,UGDBOpenArrayOfPObjects,UGDBDescriptor,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman{,shared},OGLSpecFunc;
@@ -44,7 +44,8 @@ GDBObjLine=object(GDBObj3d)
                  dir:GDBvertex;(*'Direction'*)(*hidden_in_objinsp*)
 
                  {testing LineTypes...}
-                 Lines:{-}ZGLLine3DArray{/GDBPointer/};
+                 Lines:ZGLLine3DArray;
+                 Points:ZGLpoint3DArray;
 
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -118,6 +119,7 @@ begin
 end;
 begin
      Lines.Clear;
+     Points.Clear;
      if (vp.LineType=nil) or (vp.LineType.dasharray.Count=0) then
      begin
           SetUnLTyped;
@@ -185,7 +187,9 @@ begin
                                                                       end;
                                                                       tv:=tv2;
                                                                       firstloop:=false;
-                                                                 end;
+                                                                 end
+                                                                    else
+                                                                        points.Add(@tv);
                                                                  PStroke:=vp.LineType^.strokesarray.iterate(ir3);
                                                                  //laststrokewrited:=true;
                                                             end;
@@ -387,6 +391,7 @@ begin
   CoordInOCS.lEnd := NulVertex;
   PProjPoint:=nil;
   Lines.init(100);
+  Points.init(100);
 end;
 constructor GDBObjLine.init;
 begin
@@ -396,6 +401,7 @@ begin
   CoordInOCS.lEnd := p2;
   PProjPoint:=nil;
   Lines.init(100);
+  Points.init(100);
   //format;
 end;
 procedure GDBObjLine.LoadFromDXF;
@@ -416,6 +422,8 @@ begin
      if PProjPoint<>nil then
                             GDBFreeMem(GDBPointer(PProjPoint));
      inherited done;
+     Lines.done;
+     Points.done;
 end;
 procedure GDBObjLine.format;
 var m:DMatrix4D;
@@ -547,6 +555,7 @@ end;
 procedure GDBObjLine.DrawGeometry;
 begin
   Lines.DrawGeometry;
+  Points.DrawGeometry;
   exit;
   oglsm.myglbegin(GL_lines);
   oglsm.myglVertex3dV(@CoordInWCS.lBegin);
@@ -826,6 +835,8 @@ var tvo: PGDBObjLine;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{5A1B005F-39F1-431B-B65E-0C532AEFA5D0}-GDBObjLine.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjLine));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, CoordInOCS.lBegin, CoordInOCS.lEnd);
+  tvo^.vp.LineType:=vp.LineType;
+  tvo^.vp.LineTypeScale:=vp.LineTypeScale;
   tvo^.CoordInOCS.lBegin.y := tvo^.CoordInOCS.lBegin.y;
   tvo^.bp.ListPos.Owner:=own;
   //tvo^.format;

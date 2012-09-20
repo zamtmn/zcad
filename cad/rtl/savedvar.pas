@@ -33,13 +33,13 @@ begin
   VIEW_ObjInspV:=238;
   VIEW_ObjInspSubV:=95;
   PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File1:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File2:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File3:='J:\nh\Алферов\тбменьбройлер\OPS.dxf';
-  PATH_File4:='D:\Stas\original1.dxf';
-  PATH_File5:='C:\zcad\cad\sample\test_dxf\teapot.dxf';
-  PATH_File6:='J:\nh\Коробова\Голышева\proj.dxf';
-  PATH_File7:='J:\nh\Коробова\Рижская\proj.dxf';
-  PATH_File8:='J:\nh\Коробова\Олимпийская\proj.dxf';
-  PATH_File9:='J:\nh\Фарит\Свалка\Утилизация\proj.dxf';
+  PATH_File1:='C:\zcad\cad\sample\zigzag.dxf';
+  PATH_File2:='C:\zcad\cad\sample\lttest.dxf';
+  PATH_File3:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File4:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File5:='C:\zcad\cad\sample\text.dxf';
+  PATH_File6:='E:\CAD_XDXF\test2000\agregat.dxf';
+  PATH_File7:='J:\nh\Рыков Иван Васильевич\УРАРТУ\АОВ2\aob2.dxf';
+  PATH_File8:='J:\nh\Рыков Иван Васильевич\УРАРТУ\АОВ\proj.dxf';
+  PATH_File9:='C:\zcad\cad\sample\test_dxf\teapot.dxf';
 end.

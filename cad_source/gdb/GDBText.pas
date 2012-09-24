@@ -41,7 +41,7 @@ GDBObjText=object(GDBObjAbstractText)
                  procedure getoutbound;virtual;
                  procedure Format;virtual;
                  procedure createpoint;virtual;
-                 procedure CreateSymbol(_symbol:GDBInteger;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:GDBInteger);
+                 //procedure CreateSymbol(_symbol:GDBInteger;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:GDBInteger);
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  destructor done;virtual;
@@ -361,7 +361,7 @@ begin
        PProjoutbound^.init({$IFDEF DEBUGBUILD}'{AB29B448-057C-4018-BC57-E8C67A3765AF}',{$ENDIF}4);
   end;
 end;
-procedure GDBObjText.CreateSymbol(_symbol:GDBInteger;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:GDBInteger);
+(*procedure GDBObjText.CreateSymbol(_symbol:GDBInteger;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:GDBInteger);
 var
   psymbol: GDBPointer;
   i, j, k: GDBInteger;
@@ -518,7 +518,7 @@ begin
           end;
       end;
     end;
-  end;
+  end;*)
 function getsymbol(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 var
    ts:gdbstring;
@@ -646,7 +646,7 @@ begin
     end
     else
     begin
-      CreateSymbol({ord(content[i])}sym,matr,minx,miny,maxx,maxy,pfont,ln);
+      pfont^.CreateSymbol(Vertex3D_in_WCS_Array,sym,objmatrix,matr,minx,miny,maxx,maxy,{pfont,}ln);
 
     end;
       //FillChar(m1, sizeof(DMatrix4D), 0);

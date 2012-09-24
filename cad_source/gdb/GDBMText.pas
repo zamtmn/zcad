@@ -723,7 +723,7 @@ begin
     begin
     //matr:=matrixmultiply(matr,objmatrix);
 
-      CreateSymbol({ord(pswp^.str[i])}sym,matr,minx,miny,maxx,maxy,pfont,ln);
+      pfont.CreateSymbol(Vertex3D_in_WCS_Array,sym,objmatrix,matr,minx,miny,maxx,maxy,ln);
 
       matr:=m1;
       FillChar(m1, sizeof(DMatrix4D), 0);

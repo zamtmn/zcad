@@ -20,7 +20,7 @@ unit GDBLine;
 {$INCLUDE def.inc}
 
 interface
-uses {testing LineTypes...}uzglline3darray,uzglpoint3darray,ugdbltypearray,
+uses {testing LineTypes...}UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,ugdbltypearray,UGDBSHXFont,
      zcadsysvars,UGDBOpenArrayOfPObjects,UGDBDescriptor,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman{,shared},OGLSpecFunc;
@@ -46,6 +46,7 @@ GDBObjLine=object(GDBObj3d)
                  {testing LineTypes...}
                  Lines:ZGLLine3DArray;
                  Points:ZGLpoint3DArray;
+                 SHX:GDBPolyPoint3DArray;
 
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -101,9 +102,9 @@ uses GDBElLeader,GDBNet,log;
 procedure GDBObjLine.CreateLTYPE;
 var
     scale:GDBDouble;
-    num,d:GDBDouble;
+    num,d,a:GDBDouble;
     tv,tv2,tv3:GDBVertex;
-    i:integer;
+    i,j:integer;
 
     ir,ir2,ir3,ir4,ir5:itrec;
     TDI:PTDashInfo;
@@ -111,6 +112,10 @@ var
     PSP:PShapeProp;
     PTP:PTextProp;
     firstloop,scissorstart:boolean;
+    mrot,mentrot,mminusrot,madd,mminusadd,mtrans,mscale,objmatrix,matr:dmatrix4d;
+    minx,miny,maxx,maxy:GDBDouble;
+    //lp,tv:gdbvertex;
+    //i:integer;
 
 procedure SetUnLTyped;
 begin
@@ -120,6 +125,7 @@ end;
 begin
      Lines.Clear;
      Points.Clear;
+     shx.clear;
      if (vp.LineType=nil) or (vp.LineType.dasharray.Count=0) then
      begin
           SetUnLTyped;
@@ -193,6 +199,52 @@ begin
                                                                  PStroke:=vp.LineType^.strokesarray.iterate(ir3);
                                                                  //laststrokewrited:=true;
                                                             end;
+                                                    TDIShape:begin
+                                                                  { TODO : убрать двойное преобразование номера символа }
+                                                                 a:=Vertexangle(CreateVertex2D(CoordInWCS.lBegin.x,CoordInWCS.lBegin.y),CreateVertex2D(CoordInWCS.lEnd.x,CoordInWCS.lEnd.y));
+                                                                 //a:=0;
+                                                                 mrot:=CreateRotationMatrixZ(Sin(PSP^.param.Angle*pi/180{+a}), Cos(PSP^.param.Angle*pi/180{+a}));
+                                                                 mentrot:=CreateRotationMatrixZ(Sin(a), Cos(a));
+                                                                 madd:=geometry.CreateTranslationMatrix(createvertex(PSP^.param.x*scale,PSP^.param.y*scale,0));
+                                                                 mminusadd:=geometry.CreateTranslationMatrix(createvertex(-PSP^.param.x*scale,PSP^.param.y*scale,0));
+                                                                 mtrans:=CreateTranslationMatrix(createvertex(tv.x,tv.y,tv.z));
+                                                                 mscale:=CreateScaleMatrix(geometry.createvertex(PSP^.param.Height*scale,PSP^.param.Height*scale,PSP^.param.Height*scale));
+                                                                 objmatrix:=onematrix;
+                                                                 objmatrix:=MatrixMultiply(objmatrix,mscale);
+                                                                 objmatrix:=MatrixMultiply(objmatrix,mrot);
+                                                                 objmatrix:=MatrixMultiply(objmatrix,madd);
+                                                                 objmatrix:=MatrixMultiply(objmatrix,mentrot);
+                                                                 objmatrix:=MatrixMultiply(objmatrix,mtrans);
+                                                                  matr     :=onematrix;
+                                                                  PSP^.param.PStyle.pfont.CreateSymbol(shx,PSP.Psymbol.Number,objmatrix,matr,minx,miny,maxx,maxy,1);
+                                                                  PSP:=vp.LineType^.shapearray.iterate(ir4);
+                                                             end;
+                                                    TDIText:begin
+                                                                  { TODO : убрать двойное преобразование номера символа }
+                                                                 a:=Vertexangle(CreateVertex2D(CoordInWCS.lBegin.x,CoordInWCS.lBegin.y),CreateVertex2D(CoordInWCS.lEnd.x,CoordInWCS.lEnd.y));
+                                                                 //a:=0;
+                                                                 mrot:=CreateRotationMatrixZ(Sin(PTP^.param.Angle*pi/180{+a}), Cos(PTP^.param.Angle*pi/180{+a}));
+                                                                 mentrot:=CreateRotationMatrixZ(Sin(a), Cos(a));
+                                                                 madd:=geometry.CreateTranslationMatrix(createvertex(PTP^.param.x*scale,PTP^.param.y*scale,0));
+                                                                 mminusadd:=geometry.CreateTranslationMatrix(createvertex(-PTP^.param.x*scale,PTP^.param.y*scale,0));
+                                                                 mtrans:=CreateTranslationMatrix(createvertex(tv.x,tv.y,tv.z));
+                                                                 mscale:=CreateScaleMatrix(geometry.createvertex(PTP^.param.Height*scale,PTP^.param.Height*scale,PTP^.param.Height*scale));
+                                                                 objmatrix:=onematrix;
+                                                                 objmatrix:=MatrixMultiply(objmatrix,mscale);
+                                                                 objmatrix:=MatrixMultiply(objmatrix,mrot);
+                                                                 objmatrix:=MatrixMultiply(objmatrix,madd);
+                                                                 objmatrix:=MatrixMultiply(objmatrix,mentrot);
+                                                                 objmatrix:=MatrixMultiply(objmatrix,mtrans);
+                                                                  matr     :=onematrix;
+                                                                  for j:=1 to (system.length(PTP^.Text)) do
+                                                                  begin
+                                                                  PTP^.param.PStyle.pfont.CreateSymbol(shx,byte(PTP^.Text[j]),objmatrix,matr,minx,miny,maxx,maxy,1);
+                                                                  matr[3, 0] := matr[3, 0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j])).NextSymX;
+
+                                                                  end;
+                                                                  PTP:=vp.LineType^.textarray.iterate(ir5);
+                                                             end;
+                                                    //pfont^.CreateSymbol(Vertex3D_in_WCS_Array,sym,objmatrix,matr,minx,miny,maxx,maxy,{pfont,}ln);
                                         end;
                                         TDI:=vp.LineType^.dasharray.iterate(ir2);
                                   until {PStroke}TDI=nil;
@@ -392,6 +444,7 @@ begin
   PProjPoint:=nil;
   Lines.init(100);
   Points.init(100);
+  SHX.init(100);
 end;
 constructor GDBObjLine.init;
 begin
@@ -402,6 +455,7 @@ begin
   PProjPoint:=nil;
   Lines.init(100);
   Points.init(100);
+  SHX.init(100);
   //format;
 end;
 procedure GDBObjLine.LoadFromDXF;
@@ -424,6 +478,7 @@ begin
      inherited done;
      Lines.done;
      Points.done;
+     SHX.done;
 end;
 procedure GDBObjLine.format;
 var m:DMatrix4D;
@@ -556,6 +611,7 @@ procedure GDBObjLine.DrawGeometry;
 begin
   Lines.DrawGeometry;
   Points.DrawGeometry;
+  shx.DrawGeometry;
   exit;
   oglsm.myglbegin(GL_lines);
   oglsm.myglVertex3dV(@CoordInWCS.lBegin);

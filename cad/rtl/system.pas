@@ -1061,6 +1061,17 @@ ZGLLine3DArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex*)
 ZGLPoint3DArray=object(ZGLLine3DArray)(*OpenArrayOfData=GDBVertex*)
                 procedure DrawGeometry;virtual;abstract;
              end;
+//Generate on C:\zcad\cad_source\zgl\uzglgeometry.pas
+ZGLGeometry=object(GDBaseObject)
+                                 Lines:ZGLLine3DArray;
+                                 Points:ZGLpoint3DArray;
+                                 SHX:GDBPolyPoint3DArray;
+                procedure DrawGeometry;virtual;abstract;
+                procedure Clear;virtual;abstract;
+                constructor init;
+                destructor done;virtual;abstract;
+                procedure DrawLine(const CoordInWCS:GDBLineProp; const vp:GDBObjVisualProp);virtual;abstract;
+             end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBSubordinated.pas
 PGDBObjSubordinated=^GDBObjSubordinated;
 PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
@@ -1106,16 +1117,7 @@ GDBObjSubordinated=object(GDBObjGenericWithSubordinated)
                          function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;abstract;
                          destructor done;virtual;abstract;
          end;
-//Generate on C:\zcad\CAD_SOURCE\gdb\GDBEntity.pas
-PTExtAttrib=^TExtAttrib;
-TExtAttrib=record
-                 FreeObject:GDBBoolean;
-                 OwnerHandle:GDBQWord;
-                 Handle:GDBQWord;
-                 Upgrade:GDBLongword;
-                 ExtAttrib2:GDBBoolean;
-           end;
-PGDBObjEntity=^GDBObjEntity;
+//Generate on C:\zcad\CAD_SOURCE\gdb\gdbvisualprop.pas
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=record
                       Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
@@ -1126,12 +1128,23 @@ GDBObjVisualProp=record
                       BoundingBox:GDBBoundingBbox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       LastCameraPos:TActulity;(*oi_readonly*)
                  end;
+//Generate on C:\zcad\CAD_SOURCE\gdb\GDBEntity.pas
+PTExtAttrib=^TExtAttrib;
+TExtAttrib=record
+                 FreeObject:GDBBoolean;
+                 OwnerHandle:GDBQWord;
+                 Handle:GDBQWord;
+                 Upgrade:GDBLongword;
+                 ExtAttrib2:GDBBoolean;
+           end;
+PGDBObjEntity=^GDBObjEntity;
 GDBObjEntity=object(GDBObjSubordinated)
                     vp:GDBObjVisualProp;(*'General'*)(*saved_to_shd*)
                     Selected:GDBBoolean;(*'Selected'*)(*hidden_in_objinsp*)
                     Visible:TActulity;(*'Visible'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     infrustum:TActulity;(*'In frustum'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     PExtAttrib:PTExtAttrib;(*hidden_in_objinsp*)
+                    Geom:ZGLGeometry;
                     destructor done;virtual;abstract;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -1835,10 +1848,7 @@ GDBObjLine=object(GDBObj3d)
                  Length:GDBDouble;(*'Length'*)
                  Length_2:GDBDouble;(*'Sqrt length'*)(*hidden_in_objinsp*)
                  dir:GDBvertex;(*'Direction'*)(*hidden_in_objinsp*)
-                 {testing LineTypes...}
-                 Lines:ZGLLine3DArray;
-                 Points:ZGLpoint3DArray;
-                 SHX:GDBPolyPoint3DArray;
+                 //Geom2:ZGLGeometry;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
@@ -1875,8 +1885,6 @@ GDBObjLine=object(GDBObj3d)
                   procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
                   function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;abstract;
                   function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;abstract;
-                  {testing LineTypes...}
-                  procedure CreateLTYPE;virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBLWPolyLine.pas
 PGDBObjLWPolyline=^GDBObjLWpolyline;

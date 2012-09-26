@@ -40,8 +40,8 @@ GDBObjLine=object(GDBObj3d)
                  CoordInWCS:GDBLineProp;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)
                  Length:GDBDouble;(*'Length'*)
-                 Length_2:GDBDouble;(*'Sqrt length'*)(*hidden_in_objinsp*)
-                 dir:GDBvertex;(*'Direction'*)(*hidden_in_objinsp*)
+                 //Length_2:GDBDouble;(*'Sqrt length'*)(*hidden_in_objinsp*)
+                 //dir:GDBvertex;(*'Direction'*)(*hidden_in_objinsp*)
 
                  //Geom2:ZGLGeometry;
 
@@ -95,7 +95,7 @@ implementation
 uses GDBElLeader,GDBNet,log;
 function GDBObjLine.GetTangentInPoint(point:GDBVertex):GDBVertex;
 begin
-     result:=normalizevertex(dir);
+     result:=normalizevertex(VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin));
 end;
 function GDBObjLine.FromDXFPostProcessBeforeAdd;
 var
@@ -164,9 +164,10 @@ begin
      end;
 end;
 procedure GDBObjLine.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
-var tv:gdbvertex;
+var tv,dir:gdbvertex;
 begin
      processaxis(posr,dir);
+     dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
      //posr.arrayworldaxis.Add(@dir);
      tv:=geometry.vectordot(dir,zwcs);
      processaxis(posr,tv);
@@ -235,7 +236,7 @@ begin
 end;
 var t1,t2,a1,a2:GDBDouble;
     q:GDBBoolean;
-    w,u:gdbvertex;
+    w,u,dir:gdbvertex;
 begin
      result:=false;
      if length<pl^.length then
@@ -243,6 +244,7 @@ begin
           result:=pl^.jointoline(@self);
           exit;
      end;
+     dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
      u:=NormalizeVertex(dir);
      w:=VertexSub(pl.coordinwcs.lbegin,coordinwcs.lbegin);
      t1:=(scalardot(w,dir))/SqrOneVertexlength(dir);
@@ -335,10 +337,10 @@ begin
   //l_2_3 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 2 / 3);
   //l_3_4 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 3 / 4);
   length := Vertexlength(CoordInWCS.lbegin, CoordInWCS.lend);
-  length_2:=length*length;
-  dir.x:=CoordInWCS.lend.x-CoordInWCS.lbegin.x;
-  dir.y:=CoordInWCS.lend.y-CoordInWCS.lbegin.y;
-  dir.z:=CoordInWCS.lend.z-CoordInWCS.lbegin.z;
+  //length_2:=length*length;
+  //dir.x:=CoordInWCS.lend.x-CoordInWCS.lbegin.x;
+  //dir.y:=CoordInWCS.lend.y-CoordInWCS.lbegin.y;
+  //dir.z:=CoordInWCS.lend.z-CoordInWCS.lbegin.z;
 
   Geom.DrawLine(CoordInWCS,vp);
 
@@ -490,7 +492,7 @@ begin
 end;
 function GDBObjLine.getsnap;
 var t,d,e:GDBDouble;
-    tv,n,v:gdbvertex;
+    tv,n,v,dir:gdbvertex;
 begin
      if onlygetsnapcount=9 then
      begin
@@ -498,6 +500,7 @@ begin
           exit;
      end;
      result:=true;
+     dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
      case onlygetsnapcount of
      0:begin
             if (sysvar.dwg.DWG_OSMode^ and osm_endpoint)<>0
@@ -575,7 +578,7 @@ begin
             begin
             tv:=vectordot(dir,GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir);
             t:= -((CoordInWCS.lbegin.x-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.x)*dir.x+(CoordInWCS.lbegin.y-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.y)*dir.y+(CoordInWCS.lbegin.z-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.z)*dir.z)/
-                 ({sqr(dir.x)+sqr(dir.y)+sqr(dir.z)}length_2);
+                 ({sqr(dir.x)+sqr(dir.y)+sqr(dir.z)}SqrVertexlength(self.CoordInWCS.lBegin,self.CoordInWCS.lEnd){length_2});
             if (t>=0) and (t<=1)
             then
             begin
@@ -654,7 +657,7 @@ begin
 end;
 function GDBObjLine.getintersect;
 var t1,t2,dist:GDBDouble;
-    tv1,tv2{,d},e:gdbvertex;
+    tv1,tv2,dir,dir2,e:gdbvertex;
 begin
      if (onlygetsnapcount=1)or(pobj^.vp.id<>gdblineid) then
      begin
@@ -672,12 +675,14 @@ begin
             if line2dintercep(pprojpoint[0].x,pprojpoint[0].y,pprojpoint[1].x,pprojpoint[1].y,   pgdbobjline(pobj)^.pprojpoint[0].x,pgdbobjline(pobj)^.pprojpoint[0].y,pgdbobjline(pobj)^.pprojpoint[1].x,pgdbobjline(pobj)^.pprojpoint[1].y,  t1,t2)
             then
                 begin
+                     dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
+                     dir2:=VertexSub(pgdbobjline(pobj)^.CoordInWCS.lEnd,pgdbobjline(pobj)^.CoordInWCS.lBegin);
                      tv1.x:=CoordInWCS.lbegin.x+dir.x*t1;
                      tv1.y:=CoordInWCS.lbegin.y+dir.y*t1;
                      tv1.z:=CoordInWCS.lbegin.z+dir.z*t1;
-                     tv2.x:=pgdbobjline(pobj)^.CoordInWCS.lbegin.x+pgdbobjline(pobj)^.dir.x*t2;
-                     tv2.y:=pgdbobjline(pobj)^.CoordInWCS.lbegin.y+pgdbobjline(pobj)^.dir.y*t2;
-                     tv2.z:=pgdbobjline(pobj)^.CoordInWCS.lbegin.z+pgdbobjline(pobj)^.dir.z*t2;
+                     tv2.x:=pgdbobjline(pobj)^.CoordInWCS.lbegin.x+dir2.x*t2;
+                     tv2.y:=pgdbobjline(pobj)^.CoordInWCS.lbegin.y+dir2.y*t2;
+                     tv2.z:=pgdbobjline(pobj)^.CoordInWCS.lbegin.z+dir2.z*t2;
                      dist:=Vertexlength(tv1,tv2);
                      if dist<bigeps
                      then

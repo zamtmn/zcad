@@ -400,15 +400,15 @@ begin
 
      if pdev=nil then
      begin
-     tv:=geometry.vectordot(mainline.dir,Local.basis.OZ);
+     tv:=geometry.vectordot(VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin),Local.basis.OZ);
      tv:=geometry.NormalizeVertex(tv);
      tv:=geometry.VertexMulOnSc(tv,scale);
 
      if pcable<>nil then
                         begin
                              tv2:=GetDirInPoint(pcable^.VertexArrayInWCS,mainline.CoordInWCS.lBegin,false);
-                             tv3:=geometry.vectordot(tv2,mainline.dir);
-                             if {tv3.z}scalardot(tv2,mainline.dir)>0 then
+                             tv3:=geometry.vectordot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin));
+                             if {tv3.z}scalardot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin))>0 then
                                             tv2:=geometry.vectordot(tv2,Local.basis.OZ)
                                         else
                                             tv2:=geometry.vectordot(Local.basis.OZ,tv2);
@@ -435,9 +435,9 @@ begin
      MarkLine.Format;
 
      tbl.Local.P_insert:=mainline.CoordInOCS.lEnd;
-     if mainline.dir.x<=0 then
+     if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
                             tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w;
-     if mainline.dir.y>=0 then
+     if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).y>=0 then
                             tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
      tbl.Format;
      ConstObjArray.cleareraseobj;
@@ -463,7 +463,7 @@ begin
           ptext.Local.P_insert:=tbl.Local.P_insert;
           ptext.Local.P_insert.y:=ptext.Local.P_insert.y+1.5*scale;
           ptext.textprop.justify:=jsbl;
-          if mainline.dir.x<=0 then
+          if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
                                    begin
                                    ptext.Local.P_insert.x:= ptext.Local.P_insert.x+tbl.w;
                                    ptext.textprop.justify:=jsbr;
@@ -482,7 +482,7 @@ begin
           pl.CoordInOCS.lBegin:=ptext.Local.P_insert;
           pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
           pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
-          if mainline.dir.x>0 then
+          if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x>0 then
                                    pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x+ptext.obj_width*ptext.textprop.size*0.7
                                else
                                    pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x-ptext.obj_width*ptext.textprop.size*0.7;

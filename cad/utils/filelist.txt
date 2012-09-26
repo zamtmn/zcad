@@ -31,6 +31,8 @@ C:\zcad\CAD_SOURCE\u\UGDBTable.pas
 C:\zcad\CAD_SOURCE\languade\zcadsysvars.pas
 C:\zcad\CAD_SOURCE\languade\varmandef.pas
 C:\zcad\CAD_SOURCE\languade\varman.pas
+C:\zcad\cad_source\zgl\uzglline3darray.pas
+C:\zcad\cad_source\zgl\uzglpoint3darray.pas
 C:\zcad\CAD_SOURCE\gdb\GDBSubordinated.pas
 C:\zcad\CAD_SOURCE\gdb\GDBEntity.pas
 C:\zcad\CAD_SOURCE\gdb\GDB3d.pas

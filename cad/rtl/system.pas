@@ -1046,6 +1046,21 @@ TUnit=object(TSimpleUnit)
             destructor done;virtual;abstract;
             procedure free;virtual;abstract;
       end;
+//Generate on C:\zcad\cad_source\zgl\uzglline3darray.pas
+ZGLLine3DArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex*)
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                constructor initnul;
+                {function onpoint(p:gdbvertex;closed:GDBBoolean):gdbboolean;
+                function onmouse(const mf:ClipArray;const closed:GDBBoolean):GDBBoolean;virtual;abstract;
+                function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;}abstract;
+                procedure DrawGeometry;virtual;abstract;
+                {procedure DrawGeometry2;virtual;abstract;
+                procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;}abstract;
+             end;
+//Generate on C:\zcad\cad_source\zgl\uzglpoint3darray.pas
+ZGLPoint3DArray=object(ZGLLine3DArray)(*OpenArrayOfData=GDBVertex*)
+                procedure DrawGeometry;virtual;abstract;
+             end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBSubordinated.pas
 PGDBObjSubordinated=^GDBObjSubordinated;
 PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;

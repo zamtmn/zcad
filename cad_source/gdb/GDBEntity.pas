@@ -19,7 +19,7 @@
 unit GDBEntity;
 {$INCLUDE def.inc}
 interface
-uses ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
+uses gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
      {UGDBPolyPoint2DArray,}varman,varmandef,
      gl,
      GDBase,gdbobjectsconstdef,
@@ -37,22 +37,13 @@ TExtAttrib=record
                  ExtAttrib2:GDBBoolean;
            end;
 PGDBObjEntity=^GDBObjEntity;
-PGDBObjVisualProp=^GDBObjVisualProp;
-GDBObjVisualProp=record
-                      Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
-                      LineWeight:GDBShortint;(*'Line weight'*)(*saved_to_shd*)
-                      LineType:{GDBString}PGDBLtypeProp;(*'Line type'*)(*saved_to_shd*)
-                      LineTypeScale:GDBDouble;(*'Line type scale'*)(*saved_to_shd*)
-                      ID:TObjID;(*'Object type'*)(*oi_readonly*)
-                      BoundingBox:GDBBoundingBbox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
-                      LastCameraPos:TActulity;(*oi_readonly*)
-                 end;
 GDBObjEntity=object(GDBObjSubordinated)
                     vp:GDBObjVisualProp;(*'General'*)(*saved_to_shd*)
                     Selected:GDBBoolean;(*'Selected'*)(*hidden_in_objinsp*)
                     Visible:TActulity;(*'Visible'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     infrustum:TActulity;(*'In frustum'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     PExtAttrib:PTExtAttrib;(*hidden_in_objinsp*)
+                    Geom:ZGLGeometry;
                     destructor done;virtual;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -434,12 +425,14 @@ begin
   vp.LineType:={''}nil;
   vp.LineTypeScale:=1;
   bp.ListPos.owner:=own;
+  geom.init;
 end;
 constructor GDBObjEntity.initnul;
 begin
      createfield;
      if owner<>nil then
                        bp.ListPos.owner:=owner;
+     geom.init;
 end;
 procedure GDBObjEntity.DrawWithOutAttrib;
 var lw: GDBInteger;
@@ -814,7 +807,7 @@ begin
      if PExtAttrib<>nil then
                             gdbfreemem(pointer(PExtAttrib));
      vp.LineType:={''}nil;
-
+     geom.done;
 end;
 
 procedure GDBObjEntity.rtsave;

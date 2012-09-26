@@ -8,7 +8,7 @@ unit GDBNet;
 {$INCLUDE def.inc}
 
 interface
-Uses zcadsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,{GDBGenericSubEntry,}UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
+Uses gdbvisualprop,zcadsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,{GDBGenericSubEntry,}UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
 gl,
 memman,GDBSubordinated,OGLSpecFunc,uunitmanager,shared,sysutils,UGDBOpenArrayOfPObjects;
 const

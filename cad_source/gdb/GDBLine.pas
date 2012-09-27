@@ -342,13 +342,19 @@ begin
   //dir.y:=CoordInWCS.lend.y-CoordInWCS.lbegin.y;
   //dir.z:=CoordInWCS.lend.z-CoordInWCS.lbegin.z;
 
-  Geom.DrawLine(CoordInWCS,vp);
+  Geom.Clear;
+  Geom.DrawLine(CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
 
   //self.RenderFeedbackIFNeed;
 end;
 function GDBObjLine.CalcInFrustum;
 var i:GDBInteger;
 begin
+      if CalcAABBInFrustum(vp.BoundingBox,frustum)<>IREmpty then
+                                                                                  result:=true
+                                                                              else
+                                                                                  result:=false;
+      exit;
       result:=true;
       for i:=0 to 5 do
       begin
@@ -436,13 +442,29 @@ begin
     }
 end;
 procedure GDBObjLine.DrawGeometry;
+var
+  templod:gdbdouble;
 begin
-  geom.DrawGeometry;
-  exit;
+  inherited;
+  if (selected)or(dc.selected) then
+                     geom.DrawNiceGeometry
+                 else
+                     begin
+                     geom.DrawGeometry;
+                     exit;
+                     end;
+  if vp.LineType<>nil then
+     if vp.LineType.h>0 then
+  begin
+  templod:=(vp.LineType.h)/(GDB.GetCurrentDWG.pcamera.prop.zoom);
+  if templod<0.3 then
+     begin
   oglsm.myglbegin(GL_lines);
   oglsm.myglVertex3dV(@CoordInWCS.lBegin);
   oglsm.myglVertex3dV(@CoordInWCS.lEnd);
   oglsm.myglend;
+     end;
+  end;
 
   {oglsm.myglbegin(GL_points);
   myglVertex3dV(@CoordInWCS.lBegin);

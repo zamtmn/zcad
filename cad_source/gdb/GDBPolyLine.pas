@@ -84,9 +84,29 @@ begin
      result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,closed);
 end;
 procedure GDBObjPolyline.Format;
+var //i,j: GDBInteger;
+    ptv,ptvprev,ptvfisrt: pgdbvertex;
+    tv:gdbvertex;
+    vs:VectorSnap;
+        ir:itrec;
 begin
   FormatWithoutSnapArray;
   //-------------BuildSnapArray(VertexArrayInWCS,snaparray,Closed);
+  Geom.Clear;
+  if VertexArrayInWCS.Count>1 then
+  begin
+  ptv:=VertexArrayInWCS.beginiterate(ir);
+  ptvfisrt:=ptv;
+  if ptv<>nil then
+  repeat
+        ptvprev:=ptv;
+        ptv:=VertexArrayInWCS.iterate(ir);
+        if ptv<>nil then
+                        Geom.DrawLine(ptv^,ptvprev^,vp);
+  until ptv=nil;
+  if closed then
+                Geom.DrawLine(ptvprev^,ptvfisrt^,vp);
+  end;
 end;
 
 function GDBObjPolyline.FromDXFPostProcessBeforeAdd;
@@ -141,7 +161,8 @@ end;
 
 procedure GDBObjPolyline.DrawGeometry;
 begin
-     vertexarrayInWCS.DrawGeometryWClosed(closed);
+     //vertexarrayInWCS.DrawGeometryWClosed(closed);
+     self.Geom.DrawGeometry;
 {  if closed then oglsm.myglbegin(GL_line_loop)
             else oglsm.myglbegin(GL_line_strip);
   vertexarrayInWCS.iterategl(@myglVertex3dv);

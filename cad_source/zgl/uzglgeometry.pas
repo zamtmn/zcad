@@ -28,14 +28,15 @@ ZGLGeometry=object(GDBaseObject)
                                  Points:ZGLpoint3DArray;
                                  SHX:GDBPolyPoint3DArray;
                 procedure DrawGeometry;virtual;
+                 procedure DrawNiceGeometry;virtual;
                 procedure Clear;virtual;
                 constructor init;
                 destructor done;virtual;
-                procedure DrawLine(const CoordInWCS:GDBLineProp; const vp:GDBObjVisualProp);virtual;
+                procedure DrawLine(const p1,p2:GDBVertex; const vp:GDBObjVisualProp);virtual;
              end;
 {Export-}
 implementation
-procedure ZGLGeometry.DrawLine;
+procedure ZGLGeometry.DrawLine(const p1,p2:GDBVertex; const vp:GDBObjVisualProp);
 var
     scale,length:GDBDouble;
     num,d,a:GDBDouble;
@@ -56,22 +57,23 @@ var
 
 procedure SetUnLTyped;
 begin
-  lines.Add(@CoordInWCS.lBegin);
-  lines.Add(@CoordInWCS.lEnd);
+  lines.Add(@p1);
+  lines.Add(@p2);
 end;
 begin
-     Clear;
+     //Clear;
      if (vp.LineType=nil) or (vp.LineType.dasharray.Count=0) then
      begin
           SetUnLTyped;
      end
      else
      begin
-          length := Vertexlength(CoordInWCS.lbegin, CoordInWCS.lend);
+          length := Vertexlength(p1,p2);
 
-          dir.x:=CoordInWCS.lend.x-CoordInWCS.lbegin.x;
-          dir.y:=CoordInWCS.lend.y-CoordInWCS.lbegin.y;
-          dir.z:=CoordInWCS.lend.z-CoordInWCS.lbegin.z;
+          dir:=geometry.VertexSub(p2,p1);
+          dir.x:=p2.x-p1.x;
+          dir.y:=p2.y-p1.y;
+          dir.z:=p2.z-p1.z;
 
           scale:=1*vp.LineTypeScale;
           num:=Length/(scale*vp.LineType.len);
@@ -84,16 +86,16 @@ begin
                begin
                     d:=d/Length;
                     tv2:=VertexMulOnSc(dir,d);
-                    tv:=VertexSub(CoordInWCS.lEnd,tv2);
+                    tv:=VertexSub(p2,tv2);
 
                     PStroke:=vp.LineType^.strokesarray.beginiterate(ir3);
                     tv3:=VertexMulOnSc(dir,(scale*abs(PStroke^/2))/length);
                     tv:=VertexSub(tv,tv3);
 
                     lines.Add(@tv);
-                    lines.Add(@CoordInWCS.lEnd);
+                    lines.Add(@p2);
 
-                    tv:=VertexAdd(CoordInWCS.lBegin,tv2);
+                    tv:=VertexAdd(p1,tv2);
 
                     PStroke:=vp.LineType^.strokesarray.beginiterate(ir3);
                     tv3:=geometry.VertexMulOnSc(dir,(scale*abs(PStroke^/2))/length);
@@ -101,7 +103,7 @@ begin
                     if (SqrOneVertexlength(tv3))<(SqrOneVertexlength(tv2)) then
                     begin
                        scissorstart:=false;
-                       lines.Add(@CoordInWCS.lBegin);
+                       lines.Add(@p1);
                        lines.Add(@tv);
                     end
                     else
@@ -126,7 +128,7 @@ begin
                                                                       if PStroke^>0 then
                                                                       begin
                                                                            if scissorstart and firstloop then
-                                                                               lines.Add(@CoordInWCS.lBegin)
+                                                                               lines.Add(@p1)
                                                                            else
                                                                                lines.Add(@tv);
 
@@ -142,7 +144,7 @@ begin
                                                             end;
                                                     TDIShape:begin
                                                                   { TODO : убрать двойное преобразование номера символа }
-                                                                 a:=Vertexangle(CreateVertex2D(CoordInWCS.lBegin.x,CoordInWCS.lBegin.y),CreateVertex2D(CoordInWCS.lEnd.x,CoordInWCS.lEnd.y));
+                                                                 a:=Vertexangle(CreateVertex2D(p1.x,p1.y),CreateVertex2D(p2.x,p2.y));
                                                                  //a:=0;
                                                                  mrot:=CreateRotationMatrixZ(Sin(PSP^.param.Angle*pi/180{+a}), Cos(PSP^.param.Angle*pi/180{+a}));
                                                                  mentrot:=CreateRotationMatrixZ(Sin(a), Cos(a));
@@ -157,12 +159,16 @@ begin
                                                                  objmatrix:=MatrixMultiply(objmatrix,mentrot);
                                                                  objmatrix:=MatrixMultiply(objmatrix,mtrans);
                                                                   matr     :=onematrix;
+                                                                  minx:=0;
+                                                                  miny:=0;
+                                                                  maxx:=0;
+                                                                  maxy:=0;
                                                                   PSP^.param.PStyle.pfont.CreateSymbol(shx,PSP.Psymbol.Number,objmatrix,matr,minx,miny,maxx,maxy,1);
                                                                   PSP:=vp.LineType^.shapearray.iterate(ir4);
                                                              end;
                                                     TDIText:begin
                                                                   { TODO : убрать двойное преобразование номера символа }
-                                                                 a:=Vertexangle(CreateVertex2D(CoordInWCS.lBegin.x,CoordInWCS.lBegin.y),CreateVertex2D(CoordInWCS.lEnd.x,CoordInWCS.lEnd.y));
+                                                                 a:=Vertexangle(CreateVertex2D(p1.x,p1.y),CreateVertex2D(p2.x,p2.y));
                                                                  //a:=0;
                                                                  mrot:=CreateRotationMatrixZ(Sin(PTP^.param.Angle*pi/180{+a}), Cos(PTP^.param.Angle*pi/180{+a}));
                                                                  mentrot:=CreateRotationMatrixZ(Sin(a), Cos(a));
@@ -203,7 +209,14 @@ procedure ZGLGeometry.drawgeometry;
 begin
   Lines.DrawGeometry;
   Points.DrawGeometry;
+  //shx.DrawNiceGeometry;
   shx.DrawGeometry;
+end;
+procedure ZGLGeometry.drawNicegeometry;
+begin
+  Lines.DrawGeometry;
+  Points.DrawGeometry;
+  shx.DrawNiceGeometry;
 end;
 procedure ZGLGeometry.Clear;
 begin

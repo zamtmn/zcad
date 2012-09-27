@@ -469,6 +469,7 @@ PGDBPolyPoint3DArray=^GDBPolyPoint3DArray;
 GDBPolyPoint3DArray=object(GDBOpenArrayOfData)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       procedure DrawGeometry;virtual;abstract;
+                      procedure DrawNiceGeometry;virtual;abstract;
                       procedure SimpleDrawGeometry(const num:integer);virtual;abstract;
                       function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;abstract;
                 end;
@@ -720,6 +721,7 @@ GDBTextPropArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=TextProp*)
 PGDBLtypeProp=^GDBLtypeProp;
 GDBLtypeProp=object(GDBNamedObject)
                len:GDBDouble;(*'Length'*)
+               h:GDBDouble;(*'Height'*)
                dasharray:GDBDashInfoArray;(*'DashInfo array'*)
                strokesarray:GDBDoubleArray;(*'Strokes array'*)
                shapearray:GDBShapePropArray;(*'Shape array'*)
@@ -727,6 +729,7 @@ GDBLtypeProp=object(GDBNamedObject)
                desk:GDBAnsiString;(*'Description'*)
                constructor init(n:GDBString);
                destructor done;virtual;abstract;
+               procedure Format;
              end;
 PGDBLtypePropArray=^GDBLtypePropArray;
 GDBLtypePropArray=array [0..0] of GDBLtypeProp;
@@ -1067,10 +1070,11 @@ ZGLGeometry=object(GDBaseObject)
                                  Points:ZGLpoint3DArray;
                                  SHX:GDBPolyPoint3DArray;
                 procedure DrawGeometry;virtual;abstract;
+                 procedure DrawNiceGeometry;virtual;abstract;
                 procedure Clear;virtual;abstract;
                 constructor init;
                 destructor done;virtual;abstract;
-                procedure DrawLine(const CoordInWCS:GDBLineProp; const vp:GDBObjVisualProp);virtual;abstract;
+                procedure DrawLine(const p1,p2:GDBVertex; const vp:GDBObjVisualProp);virtual;abstract;
              end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBSubordinated.pas
 PGDBObjSubordinated=^GDBObjSubordinated;
@@ -1846,8 +1850,8 @@ GDBObjLine=object(GDBObj3d)
                  CoordInWCS:GDBLineProp;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)
                  Length:GDBDouble;(*'Length'*)
-                 Length_2:GDBDouble;(*'Sqrt length'*)(*hidden_in_objinsp*)
-                 dir:GDBvertex;(*'Direction'*)(*hidden_in_objinsp*)
+                 //Length_2:GDBDouble;(*'Sqrt length'*)(*hidden_in_objinsp*)
+                 //dir:GDBvertex;(*'Direction'*)(*hidden_in_objinsp*)
                  //Geom2:ZGLGeometry;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);

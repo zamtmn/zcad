@@ -28,6 +28,7 @@ PGDBPolyPoint3DArray=^GDBPolyPoint3DArray;
 GDBPolyPoint3DArray=object(GDBOpenArrayOfData)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       procedure DrawGeometry;virtual;
+                      procedure DrawNiceGeometry;virtual;
                       procedure SimpleDrawGeometry(const num:integer);virtual;
                       function CalcTrueInFrustum(frustum:ClipArray):TInRect;virtual;
                 end;
@@ -175,7 +176,7 @@ constructor GDBPolyPoint3DArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBPolyVertex3D));
 end;
-{procedure GDBPolyPoint3DArray.drawgeometry;
+procedure GDBPolyPoint3DArray.drawnicegeometry;
 var p:PGDBPolyVertex3D;
     counter:GDBInteger;
     i:GDBInteger;
@@ -191,25 +192,25 @@ begin
               if p^.count=0 then
                                 begin
                                      if counter=0 then
-                                                      myglbegin(GL_LINES)
+                                                      oglsm.myglbegin(GL_LINES)
                                 end
                               else
                                   begin
-                                       if counter<0 then myglend;
-                                       myglbegin(GL_LINE_STRIP);
+                                       if counter<0 then oglsm.myglend;
+                                       oglsm.myglbegin(GL_LINE_STRIP);
                                        counter:=p^.count;
                                   end;
          end;
-     glvertex3dv(@p^.coord);
+     oglsm.myglvertex3dv(@p^.coord);
      inc(p);
      dec(counter);
      if (counter=0)then
                        begin
-                            myglend;
+                            oglsm.myglend;
                        end;
   end;
-  myglend;
-end;}
+  oglsm.myglend;
+end;
 {procedure GDBPolyPoint3DArray.drawgeometry;
 var i,emptycount,counter:GDBInteger;
     d:GDBDouble;

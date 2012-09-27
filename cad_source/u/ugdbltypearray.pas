@@ -70,6 +70,7 @@ GDBTextPropArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=TextProp*)
 PGDBLtypeProp=^GDBLtypeProp;
 GDBLtypeProp=object(GDBNamedObject)
                len:GDBDouble;(*'Length'*)
+               h:GDBDouble;(*'Height'*)
                dasharray:GDBDashInfoArray;(*'DashInfo array'*)
                strokesarray:GDBDoubleArray;(*'Strokes array'*)
                shapearray:GDBShapePropArray;(*'Shape array'*)
@@ -77,6 +78,7 @@ GDBLtypeProp=object(GDBNamedObject)
                desk:GDBAnsiString;(*'Description'*)
                constructor init(n:GDBString);
                destructor done;virtual;
+               procedure Format;
              end;
 PGDBLtypePropArray=^GDBLtypePropArray;
 GDBLtypePropArray=array [0..0] of GDBLtypeProp;
@@ -98,6 +100,37 @@ uses
     log;
 type
     TSeek=(TSeekInterface,TSeekImplementation);
+procedure GDBLtypeProp.format;
+var
+   PSP:PShapeProp;
+   PTP:PTextProp;
+   ir,ir2:itrec;
+   sh:double;
+begin
+    h:=0;
+    PSP:=shapearray.beginiterate(ir2);
+                                       if PSP<>nil then
+                                       repeat
+                                             sh:=abs(psp^.Psymbol.SymMaxY*psp^.param.Height);
+                                             if h<sh then
+                                                         h:=sh;
+                                             sh:=abs(psp^.Psymbol.SymMinY*psp^.param.Height);
+                                             if h<sh then
+                                                         h:=sh;
+                                             PSP:=shapearray.iterate(ir2);
+                                       until PSP=nil;
+
+                                       {PTP:=pltypeprop^.Textarray.beginiterate(ir2);
+                                       if PTP<>nil then
+                                       repeat
+                                             if pTp^.param.PStyle=pointer(DWGHandle) then
+                                             begin
+                                                pTp^.param.PStyle:=ptstyle;
+                                             end;
+
+                                             PTP:=pltypeprop^.Textarray.iterate(ir2);
+                                       until PTP=nil;}
+end;
 constructor GDBLtypeProp.init(n:GDBString);
 begin
      inherited;

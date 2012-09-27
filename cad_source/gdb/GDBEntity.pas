@@ -710,19 +710,25 @@ end;
 
 procedure GDBObjEntity.correctbb;
 var cv:gdbvertex;
+    d:double;
 const minoffsetstart=0.5;
       basedist=100;
       onedivbasedist=1/basedist;
 begin
-     cv:=VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
+     {cv:=VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
      cv:=VertexMulOnSc(cv,onedivbasedist);
      if cv.x<minoffsetstart then
                                 cv.x:=minoffsetstart;
      if cv.y<minoffsetstart then
                                 cv.y:=minoffsetstart;
      if cv.z<minoffsetstart then
-                                cv.z:=minoffsetstart;
-
+                                cv.z:=minoffsetstart;}
+     if vp.LineType<>nil then
+     begin
+     d:=vp.LineTypeScale*vp.LineType.h;
+     cv:=createvertex(d,d,d);
+     end
+        else cv:=nulvertex;
      vp.BoundingBox.LBN:=VertexSUB(vp.BoundingBox.LBN,cv);
      vp.BoundingBox.RTF:=VertexAdd(vp.BoundingBox.RTF,cv);
 end;

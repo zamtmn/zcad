@@ -923,6 +923,12 @@ begin
                         {$IFDEF TOTALYLOG}programlog.logoutstr('Found style '+tstyle.Name,0);{$ENDIF}
                         tstyle.Name:='';
                       end;
+                      pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
+                                                   if pltypeprop<>nil then
+                                                   repeat
+                                                         pltypeprop^.Format;
+                                                         pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
+                                                   until pltypeprop=nil;
                       {$IFDEF TOTALYLOG}programlog.logoutstr('end; {style table}',lp_DecPos);{$ENDIF}
               //gotodxf(f, 0, dxfName_ENDTAB);
                     end

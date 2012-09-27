@@ -106,6 +106,8 @@ var
    PTP:PTextProp;
    ir,ir2:itrec;
    sh:double;
+   i:integer;
+   Psymbol:PGDBsymdolinfo;
 begin
     h:=0;
     PSP:=shapearray.beginiterate(ir2);
@@ -119,17 +121,25 @@ begin
                                                          h:=sh;
                                              PSP:=shapearray.iterate(ir2);
                                        until PSP=nil;
+   PTP:=textarray.beginiterate(ir2);
+                                      if PTP<>nil then
+                                      repeat
+                                            for i:=1 to length(PTP^.Text) do
+                                            begin
+                                                 if PTP^.param.PStyle<>nil then
+                                                 begin
+                                                 Psymbol:=PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[i]));
+                                                 sh:=abs(Psymbol.SymMaxY*PTP^.param.Height);
+                                                 if h<sh then
+                                                             h:=sh;
+                                                 sh:=abs(Psymbol.SymMinY*PTP^.param.Height);
+                                                 if h<sh then
+                                                             h:=sh;
+                                                 end;
+                                            end;
+                                            PTP:=textarray.iterate(ir2);
+                                      until PTP=nil;
 
-                                       {PTP:=pltypeprop^.Textarray.beginiterate(ir2);
-                                       if PTP<>nil then
-                                       repeat
-                                             if pTp^.param.PStyle=pointer(DWGHandle) then
-                                             begin
-                                                pTp^.param.PStyle:=ptstyle;
-                                             end;
-
-                                             PTP:=pltypeprop^.Textarray.iterate(ir2);
-                                       until PTP=nil;}
 end;
 constructor GDBLtypeProp.init(n:GDBString);
 begin

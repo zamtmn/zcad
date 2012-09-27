@@ -456,7 +456,7 @@ begin
   if vp.LineType<>nil then
      if vp.LineType.h>0 then
   begin
-  templod:=(vp.LineType.h*vp.LineTypeScale)/(GDB.GetCurrentDWG.pcamera.prop.zoom);
+  templod:=(vp.LineType.h*vp.LineTypeScale*SysVar.dwg.DWG_LTScale^)/(GDB.GetCurrentDWG.pcamera.prop.zoom);
   if templod<3 then
      begin
   oglsm.myglbegin(GL_lines);

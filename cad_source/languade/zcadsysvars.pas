@@ -117,6 +117,7 @@ type
              DWG_PolarMode:PGDBInteger;(*'Polar tracking mode'*)
              DWG_CLayer:PGDBInteger;(*'Current layer'*)
              DWG_CLinew:PGDBInteger;(*'Current line weigwt'*)
+             DWG_LTScale:PGDBDouble;(*'Drawing line type scale'*)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
              DWG_SystmGeometryDraw:PGDBBoolean;

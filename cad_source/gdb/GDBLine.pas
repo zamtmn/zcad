@@ -166,8 +166,8 @@ end;
 procedure GDBObjLine.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 var tv,dir:gdbvertex;
 begin
-     processaxis(posr,dir);
      dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
+     processaxis(posr,dir);
      //posr.arrayworldaxis.Add(@dir);
      tv:=geometry.vectordot(dir,zwcs);
      processaxis(posr,tv);
@@ -456,8 +456,8 @@ begin
   if vp.LineType<>nil then
      if vp.LineType.h>0 then
   begin
-  templod:=(vp.LineType.h)/(GDB.GetCurrentDWG.pcamera.prop.zoom);
-  if templod<0.3 then
+  templod:=(vp.LineType.h*vp.LineTypeScale)/(GDB.GetCurrentDWG.pcamera.prop.zoom);
+  if templod<3 then
      begin
   oglsm.myglbegin(GL_lines);
   oglsm.myglVertex3dV(@CoordInWCS.lBegin);

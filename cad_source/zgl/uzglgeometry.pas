@@ -19,7 +19,7 @@
 unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
-uses geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,ugdbltypearray,UGDBSHXFont,sysutils,gdbase,memman,log,
+uses zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,ugdbltypearray,UGDBSHXFont,sysutils,gdbase,memman,log,
      gdbasetypes;
 type
 {Export+}
@@ -75,7 +75,7 @@ begin
           dir.y:=p2.y-p1.y;
           dir.z:=p2.z-p1.z;
 
-          scale:=1*vp.LineTypeScale;
+          scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;
           num:=Length/(scale*vp.LineType.len);
           if num<1 then
                        SetUnLTyped

@@ -725,7 +725,10 @@ begin
                                 cv.z:=minoffsetstart;}
      if vp.LineType<>nil then
      begin
-     d:=vp.LineTypeScale*vp.LineType.h;
+          if SysVar.dwg.DWG_LTScale<>nil then
+                                             d:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale*vp.LineType.h
+                                         else
+                                             d:=vp.LineTypeScale*vp.LineType.h;
      cv:=createvertex(d,d,d);
      end
         else cv:=nulvertex;

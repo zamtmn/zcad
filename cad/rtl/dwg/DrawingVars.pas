@@ -14,6 +14,7 @@ var
 
   DWG_StepGrid:GDBvertex2D;
   DWG_OriginGrid:GDBvertex2D;
+  DWG_LTScale:GDBDouble;
 
 
    Developer:GDBString;
@@ -55,6 +56,8 @@ begin
 
      DWGProps.Name:='Схема электрическая принципиальная';
      DWGProps.Number:=100;
+
+     DWG_LTScale:=1;
 
      Developer:='Зубарев';
 end.

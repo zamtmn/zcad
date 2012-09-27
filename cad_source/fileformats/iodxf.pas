@@ -234,6 +234,14 @@ else if (byt = 9) and (s = '$LWDISPLAY') then
                                                if sysvar.DWG.DWG_DrawMode<>nil then
                                                sysvar.DWG.DWG_DrawMode^ := strtoint(s);
                                           end
+else if (byt = 9) and (s = '$LTSCALE') then
+                                          begin
+                                               s := f.readGDBString;
+                                               s := f.readGDBString;
+                                               if LoadMode=TLOLoad then
+                                               if sysvar.DWG.DWG_LTScale<>nil then
+                                               sysvar.DWG.DWG_LTScale^ := strtofloat(s);
+                                          end
 else if (byt = 0) and (s = dxfName_ENDSEC) then
                                               exit;
   end;
@@ -1397,6 +1405,18 @@ else if (groupi = 9) and (ucvalues = '$CELWEIGHT') then
                                              outstream.TXTAddGDBStringEOL(inttostr(sysvar.DWG.DWG_CLinew^))
                                          else
                                              outstream.TXTAddGDBStringEOL(inttostr(-1));
+      groups := templatefile.readGDBString;
+      values := templatefile.readGDBString;
+    end
+else if (groupi = 9) and (ucvalues = '$LTSCALE') then
+    begin
+      outstream.TXTAddGDBStringEOL(groups);
+      outstream.TXTAddGDBStringEOL('$LTSCALE');
+      outstream.TXTAddGDBStringEOL('40');
+      if assigned(sysvar.DWG.DWG_LTScale) then
+                                             outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_LTScale^))
+                                         else
+                                             outstream.TXTAddGDBStringEOL(floattostr(1.0));
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
     end

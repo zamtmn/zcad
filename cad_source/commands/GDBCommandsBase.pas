@@ -1713,6 +1713,11 @@ else if uppercase(operands)='OUT' then
                                      end;
      result:=cmd_ok;
 end;
+function SetCamera_com(Operands:pansichar):GDBInteger;
+begin
+     gdb.GetCurrentDWG.OGLwindow1.RotTo;
+     result:=cmd_ok;
+end;
 function Pan_com(Operands:pansichar):GDBInteger;
 const
      pix=50;
@@ -1982,6 +1987,7 @@ begin
 
   CreateCommandFastObjectPlugin(@Zoom_com,'Zoom',CADWG,0).overlay:=true;
   CreateCommandFastObjectPlugin(@Pan_com,'Pan',CADWG,0).overlay:=true;
+  CreateCommandFastObjectPlugin(@SetCamera_com,'z',CADWG,0).overlay:=true;
 
   CreateCommandFastObjectPlugin(@StoreFrustum_com,'StoreFrustum',CADWG,0).overlay:=true;
   CreateCommandFastObjectPlugin(@TestScript_com,'TestScript',0,0).overlay:=true;

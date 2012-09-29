@@ -645,7 +645,17 @@ begin
      //_dest.vp.Layer:=createlayerifneed(_from,_to,_source.vp.Layer);
 end;
 procedure RemapLStyle(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
+var p:GDBPointer;
+    ir:itrec;
+    psp:PShapeProp;
+    sp:ShapeProp;
 begin
+  psp:=_source.vp.LineType.shapearray.beginiterate(ir);
+  if psp<>nil then
+  repeat
+        _to.TextStyleTable.addstyle(psp^.param.PStyle.name,psp^.param.PStyle.pfont.Name,psp^.param.PStyle.prop,psp^.param.PStyle.UsedInLTYPE);
+        psp:=_source.vp.LineType.shapearray.iterate(ir);
+  until psp=nil;
      _dest.vp.LineType:=_to.LTypeStyleTable.createltypeifneed(_source.vp.LineType);
      //_dest.correctsublayers(_to.LayerTable);
      //_dest.vp.Layer:=createlayerifneed(_from,_to,_source.vp.Layer);

@@ -1856,6 +1856,8 @@ begin
   end;{}
   //----ComitFromObj;
   PDWG^.StoreNewCamerapPos(pucommand);
+  if sysvar.RD.RD_LastRenderTime^<30 then
+                                        sleep(30-sysvar.RD.RD_LastRenderTime^);
   end;
   calcgrid;
 

@@ -87,7 +87,7 @@ GDBLtypeArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLtypeProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     procedure LoadFromFile(fname:GDBString;lm:TLoadOpt);
-                    function createltypeifneed(_source:PGDBLtypeProp):PGDBLtypeProp;
+                    function createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
                     {function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
                     function GetSystemLayer:PGDBLayerProp;
                     function GetCurrentLayer:PGDBLayerProp;
@@ -206,11 +206,14 @@ begin
      FontName:='';
      Psymbol:=nil;
 end;
-function GDBLtypeArray.createltypeifneed(_source:PGDBLtypeProp):PGDBLtypeProp;
+function GDBLtypeArray.createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
 var p:GDBPointer;
     ir:itrec;
     psp:PShapeProp;
     sp:ShapeProp;
+    ptp:PTextProp;
+    tp:TextProp;
+    i:integer;
 begin
              result:=nil;
              if _source<>nil then
@@ -232,11 +235,29 @@ begin
                        repeat
                              sp.initnul;
                              sp:=psp^;
+                             i:=_DestTextStyleTable.FindStyle(sp.param.PStyle^.name,sp.param.PStyle^.UsedInLTYPE);
+                             sp.param.PStyle:=_DestTextStyleTable.getelement(i);
+                             sp.Psymbol:=sp.param.PStyle.pfont.GetOrCreateSymbolInfo(sp.Psymbol.Number);
                              result.shapearray.add(@sp);
                              pointer(sp.SymbolName):=nil;
                              pointer(sp.FontName):=nil;
                              psp:=_source.shapearray.iterate(ir);
                        until psp=nil;
+                       ptp:=_source.textarray.beginiterate(ir);
+                       if ptp<>nil then
+                       repeat
+                             tp.initnul;
+                             tp:=ptp^;
+                             i:=_DestTextStyleTable.FindStyle(tp.param.PStyle^.name,tp.param.PStyle^.UsedInLTYPE);
+                             tp.param.PStyle:=_DestTextStyleTable.getelement(i);
+                             //tp.Psymbol:=tp.param.PStyle.pfont.GetOrCreateSymbolInfo(tp.Psymbol.Number);
+                             result.textarray.add(@tp);
+                             //pointer(tp.SymbolName):=nil;
+                             //pointer(tp.FontName):=nil;
+                             pointer(tp.Text):=nil;
+                             pointer(tp.Style):=nil;
+                             ptp:=_source.textarray.iterate(ir);
+                       until ptp=nil;
                        //_source.Textarray.copyto(@result.Textarray);
                        result.desk:=_source.desk;
                        end;
@@ -431,4 +452,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('ugdbltypearray.initialization');{$ENDIF}
-end.
+end.

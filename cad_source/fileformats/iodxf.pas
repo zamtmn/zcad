@@ -873,7 +873,8 @@ begin
                         ti:=-1;
                         if (flags and 1)=0 then
                         begin
-                        if {gdb.GetCurrentDWG}drawing.TextStyleTable.FindStyle(tstyle.Name,false)<>-1 then
+                        ti:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
+                        if {gdb.GetCurrentDWG}ti<>-1 then
                         begin
                           if LoadMode=TLOLoad then
                                                   {gdb.GetCurrentDWG}ti:=drawing.TextStyleTable.setstyle(tstyle.Name,lname,tstyle.prop,false);

@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfObjects;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,UGDBOpenArrayOfdata,
+uses gdbasetypes,UGDBOpenArrayOfData,
      gdbase,memman;
 type
 {Export+}
@@ -93,4 +93,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayofObjects.initialization');{$ENDIF}
-end.
+end.

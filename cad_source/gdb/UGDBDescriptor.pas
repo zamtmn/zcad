@@ -648,7 +648,9 @@ procedure RemapLStyle(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 var p:GDBPointer;
     ir:itrec;
     psp:PShapeProp;
+    ptp:PTextProp;
     sp:ShapeProp;
+    tp:TextProp;
 begin
   psp:=_source.vp.LineType.shapearray.beginiterate(ir);
   if psp<>nil then
@@ -656,7 +658,13 @@ begin
         _to.TextStyleTable.addstyle(psp^.param.PStyle.name,psp^.param.PStyle.pfont.Name,psp^.param.PStyle.prop,psp^.param.PStyle.UsedInLTYPE);
         psp:=_source.vp.LineType.shapearray.iterate(ir);
   until psp=nil;
-     _dest.vp.LineType:=_to.LTypeStyleTable.createltypeifneed(_source.vp.LineType);
+  ptp:=_source.vp.LineType.textarray.beginiterate(ir);
+  if ptp<>nil then
+  repeat
+        _to.TextStyleTable.addstyle(ptp^.param.PStyle.name,ptp^.param.PStyle.pfont.Name,ptp^.param.PStyle.prop,ptp^.param.PStyle.UsedInLTYPE);
+        ptp:=_source.vp.LineType.textarray.iterate(ir);
+  until ptp=nil;
+     _dest.vp.LineType:=_to.LTypeStyleTable.createltypeifneed(_source.vp.LineType,_to.TextStyleTable);
      //_dest.correctsublayers(_to.LayerTable);
      //_dest.vp.Layer:=createlayerifneed(_from,_to,_source.vp.Layer);
 end;

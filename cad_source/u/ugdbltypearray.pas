@@ -207,6 +207,10 @@ begin
      Psymbol:=nil;
 end;
 function GDBLtypeArray.createltypeifneed(_source:PGDBLtypeProp):PGDBLtypeProp;
+var p:GDBPointer;
+    ir:itrec;
+    psp:PShapeProp;
+    sp:ShapeProp;
 begin
              result:=nil;
              if _source<>nil then
@@ -223,6 +227,16 @@ begin
                        _source.dasharray.copyto(@result.dasharray);
                        _source.strokesarray.copyto(@result.strokesarray);
                        //_source.shapearray.copyto(@result.shapearray);
+                       psp:=_source.shapearray.beginiterate(ir);
+                       if psp<>nil then
+                       repeat
+                             sp.initnul;
+                             sp:=psp^;
+                             result.shapearray.add(@sp);
+                             pointer(sp.SymbolName):=nil;
+                             pointer(sp.FontName):=nil;
+                             psp:=_source.shapearray.iterate(ir);
+                       until psp=nil;
                        //_source.Textarray.copyto(@result.Textarray);
                        result.desk:=_source.desk;
                        end;

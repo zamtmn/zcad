@@ -80,6 +80,11 @@ GDBvertex=record
                 y:GDBDouble;(*saved_to_shd*)
                 z:GDBDouble;(*saved_to_shd*)
           end;
+PGDBQuaternion=^GDBQuaternion;
+GDBQuaternion=record
+   ImagPart: GDBvertex;
+   RealPart: GDBDouble;
+              end;
 GDBBasis=record
                 ox:GDBvertex;(*'OX Axis'*)(*saved_to_shd*)
                 oy:GDBvertex;(*'OY Axis'*)(*saved_to_shd*)

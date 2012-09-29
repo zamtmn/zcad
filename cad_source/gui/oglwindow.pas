@@ -178,6 +178,7 @@ type
     procedure _onFastMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
     procedure asynczoomall(Data: PtrInt);
     procedure ZoomAll;
+    procedure RotTo;
     procedure myKeyPress(var Key: Word; Shift: TShiftState);
 
     procedure addaxistootrack(var posr:os_record;const axis:GDBVertex);
@@ -1775,7 +1776,7 @@ begin
 end;
 procedure TOGLWnd.ZoomAll;
 const
-     steps=5;
+     steps=10;
 var
   tpz,tzoom: GDBDouble;
   fv1,tp,wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex;
@@ -1864,6 +1865,68 @@ begin
   draw;
 
   end;
+end;
+procedure TOGLWnd.RotTo;
+const
+     steps=10;
+var
+  tpz,tzoom: GDBDouble;
+  fv1,tp,wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex;
+  camerapos,target:GDBVertex;
+  i:integer;
+  pucommand:pointer;
+  q1,q2,q:GDBQuaternion;
+  pcam:PGDBBaseCamera;
+
+  mat1,mat2,mat : DMatrix4D;
+begin
+  pcam:=PDWG.Getpcamera;
+  mat1:=CreateMatrixFromBasis(pcam.prop.xdir,pcam.prop.ydir,pcam.prop.look);
+  mat2:=CreateMatrixFromBasis(createvertex(-1,0,0),createvertex(0,1,0),createvertex(0,0,-1));
+
+  q1:=QuaternionFromMatrix(mat1);
+  q2:=QuaternionFromMatrix(mat2);
+  pucommand:=PDWG^.StoreOldCamerapPos;
+  for i:=1 to steps do
+  begin
+  q:=QuaternionSlerp(q1,q2,i/steps);
+  mat:=QuaternionToMatrix(q);
+  CreateBasisFromMatrix(mat,pcam.prop.xdir,pcam.prop.ydir,pcam.prop.look);
+
+  //PDWG.Getpcamera^.prop.point:=vertexadd(camerapos,geometry.VertexMulOnSc(target,i/steps));
+  //PDWG.Getpcamera^.prop.zoom:=PDWG.Getpcamera^.prop.zoom+tzoom{*i}/steps;
+  param.firstdraw := true;
+  PDWG.Getpcamera^.NextPosition;
+  //RestoreMouse;
+  {}CalcOptimalMatrix;
+  mouseunproject(param.md.mouse.x,param.md.mouse.y);
+  reprojectaxis;
+  PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,PDWG.GetCurrentRoot.ObjArray.ObjTree);
+  PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT);
+  _onMouseMove(nil,[],param.md.mouse.x,param.md.mouse.y);
+  if i=steps then
+    begin
+  if param.seldesc.MouseFrameON then
+  begin
+    pdwg.myGluProject2(param.seldesc.Frame13d,
+               fv1);
+    param.seldesc.Frame1.x := round(fv1.x);
+    param.seldesc.Frame1.y := clientheight - round(fv1.y);
+    if param.seldesc.Frame1.x < 0 then param.seldesc.Frame1.x := 0
+    else if param.seldesc.Frame1.x > (clientwidth - 1) then param.seldesc.Frame1.x := clientwidth - 1;
+    if param.seldesc.Frame1.y < 0 then param.seldesc.Frame1.y := 1
+    else if param.seldesc.Frame1.y > (clientheight - 1) then param.seldesc.Frame1.y := clientheight - 1;
+  end;
+  end;{}
+  //----ComitFromObj;
+  PDWG^.StoreNewCamerapPos(pucommand);
+  if sysvar.RD.RD_LastRenderTime^<30 then
+                                        sleep(30-sysvar.RD.RD_LastRenderTime^);
+  end;
+  calcgrid;
+
+  draw;
+
 end;
 procedure TOGLWnd.asynczoomall(Data: PtrInt);
 begin

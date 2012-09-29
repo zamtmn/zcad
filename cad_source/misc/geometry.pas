@@ -34,6 +34,9 @@ const
                                 (0, 2, 0, 0),
                                 (0, 0, 2, 0),
                                 (0, 0, 0, 2));
+        IdentityQuaternion: GDBQuaternion = (ImagPart:(x:0;y:0;z:0); RealPart: 1);
+      EPSILON  : Single = 1e-40;
+      EPSILON2 : Single = 1e-30;
       eps=1e-14;
       sqreps=1e-7;
       bigeps=1e-10;
@@ -163,6 +166,12 @@ function CalcAABBInFrustum (const AABB:GDBBoundingBbox; const frustum:ClipArray)
 function GetXfFromZ(oz:GDBVertex):GDBVertex;
 
 function MatrixDeterminant(M: DMatrix4D): GDBDouble;
+function CreateMatrixFromBasis(const ox,oy,oz:GDBVertex):DMatrix4D;
+procedure CreateBasisFromMatrix(const m:DMatrix4D;out ox,oy,oz:GDBVertex);
+
+function QuaternionFromMatrix(const mat : DMatrix4D) : GDBQuaternion;
+function QuaternionSlerp(const source, dest: GDBQuaternion; const t: GDBDouble): GDBQuaternion;
+function QuaternionToMatrix(quat : GDBQuaternion) :  DMatrix4D;
 
 var WorldMatrix{,CurrentCS}:DMatrix4D;
     wx:PGDBVertex;
@@ -1746,6 +1755,152 @@ begin
       and(((b1.z+b2.z)-dist.z)>-eps) then
                                  result:=true
 end;
+function CreateMatrixFromBasis(const ox,oy,oz:GDBVertex):DMatrix4D;
+begin
+     result:=onematrix;
+     PGDBVertex(@result[0])^:=ox;
+     PGDBVertex(@result[1])^:=oy;
+     PGDBVertex(@result[2])^:=oz;
+end;
+procedure CreateBasisFromMatrix(const m:DMatrix4D;out ox,oy,oz:GDBVertex);
+begin
+     ox:=PGDBVertex(@m[0])^;
+     oy:=PGDBVertex(@m[1])^;
+     oz:=PGDBVertex(@m[2])^;
+end;
+function QuaternionMagnitude(const q : GDBQuaternion) : GDBDouble;
+begin
+   Result:=Sqrt(SqrOneVertexlength(q.ImagPart)+Sqr(q.RealPart));
+end;
+procedure NormalizeQuaternion(var q : GDBQuaternion);
+var
+   m, f : GDBDouble;
+begin
+   m:=QuaternionMagnitude(q);
+   if m>EPSILON2 then begin
+      f:=1/m;
+      q.ImagPart:=VertexMulOnSc(q.ImagPart, f);
+      q.RealPart:=q.RealPart*f;
+   end else q:=IdentityQuaternion;
+end;
+function QuaternionFromMatrix(const mat : DMatrix4D) : GDBQuaternion;
+// the matrix must be a rotation matrix!
+var
+   traceMat, s, invS : Double;
+begin
+   traceMat := 1 + mat[0,0] + mat[1,1] + mat[2,2];
+   if traceMat>EPSILON2 then begin
+      s:=Sqrt(traceMat)*2;
+      invS:=1/s;
+      Result.ImagPart.x:=(mat[1,2]-mat[2,1])*invS;
+      Result.ImagPart.y:=(mat[2,0]-mat[0,2])*invS;
+      Result.ImagPart.z:=(mat[0,1]-mat[1,0])*invS;
+      Result.RealPart   :=0.25*s;
+   end else if (mat[0,0]>mat[1,1]) and (mat[0,0]>mat[2,2]) then begin  // Row 0:
+      s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat[0,0]-mat[1,1]-mat[2,2]))*2;
+      invS:=1/s;
+      Result.ImagPart.x:=0.25*s;
+      Result.ImagPart.y:=(mat[0,1]+mat[1,0])*invS;
+      Result.ImagPart.z:=(mat[2,0]+mat[0,2])*invS;
+      Result.RealPart   :=(mat[1,2]-mat[2,1])*invS;
+   end else if (mat[1,1]>mat[2,2]) then begin  // Row 1:
+      s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat[1,1]-mat[0,0]-mat[2,2]))*2;
+      invS:=1/s;
+      Result.ImagPart.x:=(mat[0,1]+mat[1,0])*invS;
+      Result.ImagPart.y:=0.25*s;
+      Result.ImagPart.z:=(mat[1,2]+mat[2,1])*invS;
+      Result.RealPart   :=(mat[2,0]-mat[0,2])*invS;
+   end else begin  // Row 2:
+      s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat[2,2]-mat[0,0]-mat[1,1]))*2;
+      invS:=1/s;
+      Result.ImagPart.x:=(mat[2,0]+mat[0,2])*invS;
+      Result.ImagPart.y:=(mat[1,2]+mat[2,1])*invS;
+      Result.ImagPart.z:=0.25*s;
+      Result.RealPart   :=(mat[0,1]-mat[1,0])*invS;
+   end;
+   NormalizeQuaternion(Result);
+end;
+function QuaternionSlerp(const source, dest: GDBQuaternion; const t: GDBDouble): GDBQuaternion;
+var
+   to1: array[0..4] of Single;
+   omega, cosom, sinom, scale0, scale1: Extended;
+// t goes from 0 to 1
+// absolute rotations
+begin
+   // calc cosine
+   cosom:= source.ImagPart.x*dest.ImagPart.x
+          +source.ImagPart.y*dest.ImagPart.y
+          +source.ImagPart.z*dest.ImagPart.z
+	       +source.RealPart   *dest.RealPart;
+   // adjust signs (if necessary)
+   if cosom<0 then begin
+      cosom := -cosom;
+      to1[0] := - dest.ImagPart.x;
+      to1[1] := - dest.ImagPart.y;
+      to1[2] := - dest.ImagPart.z;
+      to1[3] := - dest.RealPart;
+   end else begin
+      to1[0] := dest.ImagPart.x;
+      to1[1] := dest.ImagPart.y;
+      to1[2] := dest.ImagPart.z;
+      to1[3] := dest.RealPart;
+   end;
+   // calculate coefficients
+   if ((1.0-cosom)>EPSILON2) then begin // standard case (slerp)
+      omega:={VectorGeometry.}ArcCos(cosom);
+      sinom:=1/Sin(omega);
+      scale0:=Sin((1.0-t)*omega)*sinom;
+      scale1:=Sin(t*omega)*sinom;
+   end else begin // "from" and "to" quaternions are very close
+	          //  ... so we can do a linear interpolation
+      scale0:=1.0-t;
+      scale1:=t;
+   end;
+   // calculate final values
+   Result.ImagPart.x := scale0 * source.ImagPart.x + scale1 * to1[0];
+   Result.ImagPart.y := scale0 * source.ImagPart.y + scale1 * to1[1];
+   Result.ImagPart.z := scale0 * source.ImagPart.z + scale1 * to1[2];
+   Result.RealPart := scale0 * source.RealPart + scale1 * to1[3];
+   NormalizeQuaternion(Result);
+end;
+function QuaternionToMatrix(quat : GDBQuaternion) :  DMatrix4D;
+var
+   w, x, y, z, xx, xy, xz, xw, yy, yz, yw, zz, zw: GDBDouble;
+begin
+   result:=onematrix;
+   NormalizeQuaternion(quat);
+   w := quat.RealPart;
+   x := quat.ImagPart.x;
+   y := quat.ImagPart.y;
+   z := quat.ImagPart.z;
+   xx := x * x;
+   xy := x * y;
+   xz := x * z;
+   xw := x * w;
+   yy := y * y;
+   yz := y * z;
+   yw := y * w;
+   zz := z * z;
+   zw := z * w;
+   Result[0, 0] := 1 - 2 * ( yy + zz );
+   Result[1, 0] :=     2 * ( xy - zw );
+   Result[2, 0] :=     2 * ( xz + yw );
+   Result[3, 0] := 0;
+   Result[0, 1] :=     2 * ( xy + zw );
+   Result[1, 1] := 1 - 2 * ( xx + zz );
+   Result[2, 1] :=     2 * ( yz - xw );
+   Result[3, 1] := 0;
+   Result[0, 2] :=     2 * ( xz - yw );
+   Result[1, 2] :=     2 * ( yz + xw );
+   Result[2, 2] := 1 - 2 * ( xx + yy );
+   Result[3, 2] := 0;
+   Result[0, 3] := 0;
+   Result[1, 3] := 0;
+   Result[2, 3] := 0;
+   Result[3, 3] := 1;
+end;
+
+
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('geometry.initialization');{$ENDIF}
      WorldMatrix:=oneMatrix;

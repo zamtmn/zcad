@@ -131,6 +131,8 @@ type
     mousefrustum,mousefrustumLCS:ClipArray;
     ShowDebugFrustum:GDBBoolean;
     debugfrustum:ClipArray;
+    ShowDebugBoundingBbox:GDBBoolean;
+    DebugBoundingBbox:GDBBoundingBbox;
     processObjConstruct:GDBBoolean;
   end;
 {Export-}

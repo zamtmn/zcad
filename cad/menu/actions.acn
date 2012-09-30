@@ -38,6 +38,16 @@ action ACN_PANLEFT,Pan(LEFT),panleft.bmp,Pan left,,LEFT
 action ACN_PANRIGHT,Pan(RIGHT),panright.bmp,Pan right,,RIGHT
 action ACN_PANUP,Pan(UP),panup.bmp,Pan up,,UP
 action ACN_PANDOWN,Pan(DOWN),pandown.bmp,Pan down,,DOWN
+action ACN_VIEWTOP,View(TOP),top.bmp,View top,,
+action ACN_VIEWDOWN,View(BOTTOM),bottom.bmp,View bottom,,
+action ACN_VIEWLEFT,View(LEFT),left.bmp,View left,,
+action ACN_VIEWRIGHT,View(RIGHT),right.bmp,View right,,
+action ACN_VIEWSEISO,View(SEISO),isose.bmp,View SE isometric,,
+action ACN_VIEWNEISO,View(NEISO),isone.bmp,View NE isometric,,
+action ACN_VIEWSWISO,View(SWISO),isosw.bmp,View SW isometric,,
+action ACN_VIEWNWISO,View(NWISO),isonw.bmp,View NW isometric,,
+
+
 
 action ACN_SNAPRUNTIME,SnapProperties,#snap,Run time snap editor,,ALT+S
 

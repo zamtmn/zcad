@@ -1713,9 +1713,87 @@ else if uppercase(operands)='OUT' then
                                      end;
      result:=cmd_ok;
 end;
-function SetCamera_com(Operands:pansichar):GDBInteger;
+function view_com(Operands:pansichar):GDBInteger;
+var
+   s:string;
+   ox,oy,oz:gdbvertex;
+   m:DMatrix4D;
+   recognized:boolean;
 begin
-     gdb.GetCurrentDWG.OGLwindow1.RotTo;
+     s:=uppercase(operands);
+     ox:=createvertex(-1,0,0);
+     oy:=createvertex(0,1,0);
+     oz:=geometry.CrossVertex(ox,oy);
+     recognized:=true;
+     if s='TOP' then
+                    begin
+                         //gdb.GetCurrentDWG.OGLwindow1.RotTo(createvertex(-1,0,0),createvertex(0,1,0),createvertex(0,0,-1))
+                         ox:=createvertex(-1,0,0);
+                         oy:=createvertex(0,1,0);
+                    end
+else if s='BOTTOM' then
+                       begin
+                             //gdb.GetCurrentDWG.OGLwindow1.RotTo(createvertex(1,0,0),createvertex(0,1,0),createvertex(0,0,1))
+                             ox:=createvertex(1,0,0);
+                             oy:=createvertex(0,1,0);
+                       end
+else if s='LEFT' then
+                       begin
+                             //gdb.GetCurrentDWG.OGLwindow1.RotTo(createvertex(0,0,-1),createvertex(0,1,0),createvertex(1,0,0))
+                             ox:=createvertex(0,0,-1);
+                             oy:=createvertex(0,1,0);
+                       end
+else if s='RIGHT' then
+                       begin
+                            //gdb.GetCurrentDWG.OGLwindow1.RotTo(createvertex(0,0,1),createvertex(0,1,0),createvertex(-1,0,0))
+                            ox:=createvertex(0,0,1);
+                            oy:=createvertex(0,1,0);
+                       end
+else if s='NEISO' then
+                      begin
+                           ox:=createvertex(1,0,0);
+                           oy:=createvertex(0,1,0);
+                           m:=geometry.MatrixMultiply(CreateRotationMatrixX(sin(pi/2+pi/6),cos(pi/2+pi/6)),
+                                                      CreateRotationMatrixZ(sin(-pi/4),cos(-pi/4)));
+                           ox:=VectorTransform3D(ox,m);
+                           oy:=VectorTransform3D(oy,m);
+                      end
+else if s='SEISO' then
+                      begin
+                           ox:=createvertex(1,0,0);
+                           oy:=createvertex(0,1,0);
+
+                           m:=geometry.MatrixMultiply(CreateRotationMatrixX(sin(pi/2+pi/6),cos(pi/2+pi/6)),
+                                                      CreateRotationMatrixZ(sin(pi+pi/4),cos(pi+pi/4)));
+                           ox:=VectorTransform3D(ox,m);
+                           oy:=VectorTransform3D(oy,m);
+                      end
+else if s='NWISO' then
+                      begin
+                           ox:=createvertex(1,0,0);
+                           oy:=createvertex(0,1,0);
+
+                           m:=geometry.MatrixMultiply(CreateRotationMatrixX(sin(pi/2+pi/6),cos(pi/2+pi/6)),
+                                                      CreateRotationMatrixZ(sin({pi+}pi/4),cos({pi+}pi/4)));
+                           ox:=VectorTransform3D(ox,m);
+                           oy:=VectorTransform3D(oy,m);
+                      end
+else if s='SWISO' then
+                      begin
+                           ox:=createvertex(1,0,0);
+                           oy:=createvertex(0,1,0);
+
+                           m:=geometry.MatrixMultiply(CreateRotationMatrixX(sin(pi/2+pi/6),cos(pi/2+pi/6)),
+                                                      CreateRotationMatrixZ(sin(pi-pi/4),cos(pi-pi/4)));
+                           ox:=VectorTransform3D(ox,m);
+                           oy:=VectorTransform3D(oy,m);
+                      end
+else recognized:=false;
+if recognized then
+                   begin
+                        oz:=geometry.CrossVertex(ox,oy);
+                        gdb.GetCurrentDWG.OGLwindow1.RotTo(ox,oy,oz);
+                   end;
      result:=cmd_ok;
 end;
 function Pan_com(Operands:pansichar):GDBInteger;
@@ -1987,7 +2065,7 @@ begin
 
   CreateCommandFastObjectPlugin(@Zoom_com,'Zoom',CADWG,0).overlay:=true;
   CreateCommandFastObjectPlugin(@Pan_com,'Pan',CADWG,0).overlay:=true;
-  CreateCommandFastObjectPlugin(@SetCamera_com,'z',CADWG,0).overlay:=true;
+  CreateCommandFastObjectPlugin(@view_com,'View',CADWG,0).overlay:=true;
 
   CreateCommandFastObjectPlugin(@StoreFrustum_com,'StoreFrustum',CADWG,0).overlay:=true;
   CreateCommandFastObjectPlugin(@TestScript_com,'TestScript',0,0).overlay:=true;

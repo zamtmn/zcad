@@ -1783,6 +1783,7 @@ var
   camerapos,target:GDBVertex;
   i:integer;
   pucommand:pointer;
+  proot:PGDBObjGenericSubEntry;
 begin
   if param.projtype = PROJPerspective then
                                           begin
@@ -1793,32 +1794,59 @@ begin
 
   CalcOptimalMatrix;
 
-
+  proot:=pdwg.GetCurrentROOT;
   dcsLBN:=InfinityVertex;
   dcsRTF:=MinusInfinityVertex;
   wcsLBN:=InfinityVertex;
   wcsRTF:=MinusInfinityVertex;
-  tp:=ProjectPoint(pdwg.GetCurrentROOT.vp.BoundingBox.LBN.x,pdwg.GetCurrentROOT.vp.BoundingBox.LBN.y,pdwg.GetCurrentROOT.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(pdwg.GetCurrentROOT.vp.BoundingBox.RTF.x,pdwg.GetCurrentROOT.vp.BoundingBox.LBN.y,pdwg.GetCurrentROOT.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(pdwg.GetCurrentROOT.vp.BoundingBox.RTF.x,pdwg.GetCurrentROOT.vp.BoundingBox.RTF.y,pdwg.GetCurrentROOT.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(pdwg.GetCurrentROOT.vp.BoundingBox.LBN.x,pdwg.GetCurrentROOT.vp.BoundingBox.RTF.y,pdwg.GetCurrentROOT.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(pdwg.GetCurrentROOT.vp.BoundingBox.LBN.x,pdwg.GetCurrentROOT.vp.BoundingBox.LBN.y,pdwg.GetCurrentROOT.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(pdwg.GetCurrentROOT.vp.BoundingBox.RTF.x,pdwg.GetCurrentROOT.vp.BoundingBox.LBN.y,pdwg.GetCurrentROOT.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(pdwg.GetCurrentROOT.vp.BoundingBox.RTF.x,pdwg.GetCurrentROOT.vp.BoundingBox.RTF.y,pdwg.GetCurrentROOT.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(pdwg.GetCurrentROOT.vp.BoundingBox.LBN.x,pdwg.GetCurrentROOT.vp.BoundingBox.RTF.y,pdwg.GetCurrentROOT.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  tp:=ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  tp:=ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  tp:=ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  tp:=ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  tp:=ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  tp:=ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  tp:=ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  tp:=ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
 
+  dcsLBN.z:=0;
+  dcsRTF.z:=0;
+  pdwg.myGluUnProject(dcsLBN,wcsLBN);
+  pdwg.myGluUnProject(dcsRTF,wcsRTF);
+
+     if wcsRTF.x<wcsLBN.x then
+                              begin
+                                   tpz:=wcsLBN.x;
+                                   wcsLBN.x:=wcsRTF.x;
+                                   wcsRTF.x:=tpz;
+                              end;
+     if wcsRTF.y<wcsLBN.y then
+                              begin
+                              tpz:=wcsLBN.y;
+                              wcsLBN.y:=wcsRTF.y;
+                              wcsRTF.y:=tpz;
+                              end;
+     if wcsRTF.z<wcsLBN.z then
+                              begin
+                              tpz:=wcsLBN.z;
+                              wcsLBN.z:=wcsRTF.z;
+                              wcsRTF.z:=tpz;
+                              end;
+     param.DebugBoundingBbox.LBN:=wcsLBN;
+     param.DebugBoundingBbox.RTF:=wcsRTF;
+     param.ShowDebugBoundingBbox:=true;
   if (abs(wcsRTF.x-wcsLBN.x)<eps)and(abs(wcsRTF.y-wcsLBN.y)<eps) then
                                                                     begin
                                                                          historyout('MBMouseDblClk: Пустой чертеж?');
                                                                          exit;
                                                                     end;
 
-  target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),pdwg.Getpcamera^.prop.point.z);
+  //target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),pdwg.Getpcamera^.prop.point.z);
+  target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),-(wcsLBN.z+(wcsRTF.z-wcsLBN.z)/2));
   camerapos:=pdwg.Getpcamera^.prop.point;
   target:=vertexsub(target,camerapos);
 
-  tzoom:=(wcsRTF.x-wcsLBN.x)/clientwidth;
-  tpz:=(wcsRTF.y-wcsLBN.y)/clientheight;
+  tzoom:=abs((wcsRTF.x-wcsLBN.x){*pdwg.GetPcamera.prop.xdir.x}/clientwidth);
+  tpz:=abs((wcsRTF.y-wcsLBN.y){*pdwg.GetPcamera.prop.ydir.y}/clientheight);
 
   //-------with gdb.GetCurrentDWG.UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
   pucommand:=PDWG^.StoreOldCamerapPos;
@@ -2343,6 +2371,8 @@ procedure TOGLWnd.showcursor;
 
     if param.ShowDebugFrustum then
                             drawfrustustum(param.debugfrustum);
+    if param.ShowDebugBoundingBbox then
+                                DrawAABB(param.DebugBoundingBbox);
 
     Tempplane:=param.mousefrustumLCS[5];
     tempplane[3]:=(tempplane[3]-param.mousefrustumLCS[4][3])/2;
@@ -4267,6 +4297,8 @@ begin
   param.scrollmode:=false;
   param.md.mousein:=false;
   param.processObjConstruct:=false;
+  param.ShowDebugBoundingBbox:=false;
+  param.ShowDebugFrustum:=false;
   //UGDBDescriptor.POGLWnd := @param;
 
   {gdb.GetCurrentDWG.pcamera.initnul;

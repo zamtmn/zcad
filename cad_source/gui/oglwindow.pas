@@ -178,7 +178,7 @@ type
     procedure _onFastMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
     procedure asynczoomall(Data: PtrInt);
     procedure ZoomAll;
-    procedure RotTo;
+    procedure RotTo(x0,y0,z0:GDBVertex);
     procedure myKeyPress(var Key: Word; Shift: TShiftState);
 
     procedure addaxistootrack(var posr:os_record;const axis:GDBVertex);
@@ -1866,7 +1866,7 @@ begin
 
   end;
 end;
-procedure TOGLWnd.RotTo;
+procedure TOGLWnd.RotTo(x0,y0,z0:GDBVertex);
 const
      steps=10;
 var
@@ -1882,7 +1882,7 @@ var
 begin
   pcam:=PDWG.Getpcamera;
   mat1:=CreateMatrixFromBasis(pcam.prop.xdir,pcam.prop.ydir,pcam.prop.look);
-  mat2:=CreateMatrixFromBasis(createvertex(-1,0,0),createvertex(0,1,0),createvertex(0,0,-1));
+  mat2:=CreateMatrixFromBasis(x0,y0,z0);
 
   q1:=QuaternionFromMatrix(mat1);
   q2:=QuaternionFromMatrix(mat2);

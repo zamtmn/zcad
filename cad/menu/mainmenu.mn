@@ -31,14 +31,6 @@ Panel Standart;
     action ACN_UNDO
     action ACN_REDO
     Separator
-    action ACN_ZOOMIN
-    action ACN_ZOOMOUT
-    action ACN_ZOOMALL
-    action ACN_PANUP
-    action ACN_PANDOWN
-    action ACN_PANLEFT
-    action ACN_PANRIGHT
-    Separator
     action ACN_REGEN
     button OPS_Sensor_Mark,#++,Numbering sensors on the plan
     Separator
@@ -382,6 +374,9 @@ MainMenuItem Settings;
   {
     action ACN_OPTIONS
     action ACN_SAVEOPTIONS
+    Separator
+    action ACN_DOCKOPT
+    action ACN_SAVELAYOUT
   }
 MainMenuItem Window;
   {

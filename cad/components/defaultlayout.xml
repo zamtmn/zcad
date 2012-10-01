@@ -8,8 +8,8 @@
             <Rect Right="1920" Bottom="1080"/>
           </WorkArea>
         </Bounds>
-        <Item1 Name="AnchorDockSite10" Type="Layout" ChildCount="17">
-          <Bounds Top="35" Width="1236" Height="809" SplitterPos="31"/>
+        <Item1 Name="AnchorDockSite10" Type="Layout" ChildCount="19">
+          <Bounds Top="35" Width="1236" Height="809" SplitterPos="30"/>
           <Anchors Align="Bottom"/>
           <Item1 Name="PageControl" Type="Control">
             <Bounds Left="242" Width="966" Height="709"/>
@@ -67,8 +67,8 @@
             <Bounds Top="778" Width="1236" Height="4"/>
           </Item14>
           <Item15 Name="Status" Type="Control">
-            <Bounds Top="782" Width="1236" Height="27"/>
-            <Anchors Top="AnchorDockSplitter8"/>
+            <Bounds Top="782" Width="638" Height="27"/>
+            <Anchors Top="AnchorDockSplitter8" Right="AnchorDockSplitter10"/>
           </Item15>
           <Item16 Name="AnchorDockSplitter9" Type="SplitterHorizontal">
             <Bounds Top="22" Width="238" Height="4"/>
@@ -78,6 +78,14 @@
             <Bounds Width="238" Height="22"/>
             <Anchors Right="AnchorDockSplitter2" Bottom="AnchorDockSplitter9"/>
           </Item17>
+          <Item18 Name="AnchorDockSplitter10" Type="SplitterVertical">
+            <Bounds Top="782" Left="638" Width="4" Height="27"/>
+            <Anchors Top="AnchorDockSplitter8"/>
+          </Item18>
+          <Item19 Name="View" Type="Control">
+            <Bounds Top="782" Left="642" Width="594" Height="27"/>
+            <Anchors Top="AnchorDockSplitter8" Left="AnchorDockSplitter10"/>
+          </Item19>
         </Item1>
       </Item1>
     </Nodes>

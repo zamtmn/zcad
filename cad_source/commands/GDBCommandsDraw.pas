@@ -1109,8 +1109,8 @@ begin
   gdb.GetCurrentDWG.pcamera.getfrustum(@cdwg.pcamera^.modelMatrix,   @cdwg.pcamera^.projMatrix,   cdwg.pcamera^.clip,   cdwg.pcamera^.frustum);
   //_frustum:=calcfrustum(@_clip);
   gdb.GetCurrentDWG.OGLwindow1.param.firstdraw := TRUE;
-  cdwg.OGLwindow1.param.debugfrustum:=cdwg.pcamera^.frustum;
-  cdwg.OGLwindow1.param.ShowDebugFrustum:=true;
+  //cdwg.OGLwindow1.param.debugfrustum:=cdwg.pcamera^.frustum;
+  //cdwg.OGLwindow1.param.ShowDebugFrustum:=true;
   dc:=cdwg.OGLwindow1.CreateRC(true);
   dc.DrawMode:=1;
   gdb.GetCurrentROOT.CalcVisibleByTree(cdwg.pcamera^.frustum{calcfrustum(@_clip)},cdwg.pcamera.POSCOUNT,cdwg.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjArray.ObjTree);

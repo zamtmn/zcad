@@ -391,7 +391,7 @@ begin
   begin
        tp.size:=2.5;
        tp.oblique:=0;
-       gdb.GetCurrentDWG^.TextStyleTable.addstyle('standart','txt.shx',tp);
+       gdb.GetCurrentDWG^.TextStyleTable.addstyle('standart','txt.shx',tp,false);
   end;
   for i:=1 to SpinEdit1.Value do
   begin
@@ -489,4 +489,4 @@ end;
 
 
 end.
-
+

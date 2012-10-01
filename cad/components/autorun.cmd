@@ -22,7 +22,7 @@ MergeBlocks(_spds.dxf)
 ;Load(*sample\test_dxf\teapot.dxf)
 ;Load(*sample\test_dxf\em.dxf)
 ;Load(*autosave\autosave.dxf)
-Load(*sample\zigzag.dxf)
+;Load(*sample\zigzag.dxf)
 
 ;-----------------------------------
 ;Показ окна "О программе" при старте

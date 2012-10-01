@@ -44,25 +44,25 @@ type
                   end;
     TmyPopupMenu = class (TPopupMenu)
                    end;
-    TmyToolButton=class(TToolButton)
+    {TmyToolButton=class(TToolButton)
                   protected
                                  procedure CalculatePreferredSize(
                                                   var PreferredWidth, PreferredHeight: integer;
                                                   WithThemeSpace: Boolean); override;
-                  end;
-    TmyCommandToolButton=class(TmyToolButton)
+                  end;}
+    TmyCommandToolButton=class({Tmy}TToolButton)
                   public
                   FCommand:String;{**<Command to manager commands}
                   protected procedure Click; override;
                   end;
-    TmyVariableToolButton=class(TmyToolButton)
+    TmyVariableToolButton=class({Tmy}TToolButton)
                   public
                   FVariable:String;{**<Command to manager commands}
                   FBufer:DWord;
                   procedure AssignToVar(varname:string);
                   protected procedure Click; override;
                   end;
-    TmyProcToolButton=class(TmyToolButton)
+    TmyProcToolButton=class({Tmy}TToolButton)
                   public
                   FProc:TButtonProc;
                   FMethod:TButtonMethod;
@@ -360,7 +360,7 @@ begin
      inherited;
      ChangePage(ActivePageIndex);
 end;}
-procedure TmyToolButton.CalculatePreferredSize(
+{procedure TmyToolButton.CalculatePreferredSize(
                  var PreferredWidth, PreferredHeight: integer;
                  WithThemeSpace: Boolean);
 var
@@ -388,7 +388,7 @@ begin
                                          PreferredHeight:=temp;
                                     end;
                                end;
-end;
+end;}
 
 procedure TmyVariableToolButton.AssignToVar(varname:string);
 var

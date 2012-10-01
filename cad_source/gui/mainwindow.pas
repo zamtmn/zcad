@@ -1560,7 +1560,7 @@ begin
                      if uppercase(line)='SEPARATOR' then
                                          begin
                                          buttonpos:=buttonpos+3;
-                                         TToolButton(b):=TmyToolButton.Create(tb);
+                                         TToolButton(b):={Tmy}TToolButton.Create(tb);
                                          b.Style:=
                                          tbsDivider;
                                           AddToBar(tb,b);

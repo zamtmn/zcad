@@ -2355,6 +2355,7 @@ procedure TOGLWnd.showcursor;
     LPTime:Tdatetime;
 
     i2d,i2dresult:intercept2dprop;
+    td,td2,td22:gdbdouble;
 
 
   begin
@@ -2884,23 +2885,42 @@ procedure TOGLWnd.showcursor;
     CalcOptimalMatrix;
     if param.cslen<>0 then {переделать}
     begin
+    td:=100/param.cslen;
+    td2:=td/5;
+    td22:=td2/3;
     oglsm.myglbegin(GL_lines);
     oglsm.glColor3ub(255, 0, 0);
     oglsm.myglVertex3d(param.CSIconCoord);
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + 100/param.cslen, param.CSIconCoord.y , param.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td, param.CSIconCoord.y , param.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td, param.CSIconCoord.y , param.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td-td2, param.CSIconCoord.y-td22 , param.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td, param.CSIconCoord.y , param.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td-td2, param.CSIconCoord.y+td22 , param.CSIconCoord.z));
     oglsm.glColor3ub(0, 255, 0);
     oglsm.myglVertex3d(param.CSIconCoord);
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y + 100/param.cslen, param.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y + td, param.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y + td, param.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x-td22, param.CSIconCoord.y + td-td2, param.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y + td, param.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x+td22, param.CSIconCoord.y + td-td2, param.CSIconCoord.z));
     oglsm.glColor3ub(0, 0, 255);
     oglsm.myglVertex3d(param.CSIconCoord);
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y, param.CSIconCoord.z + 100/param.cslen));
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y, param.CSIconCoord.z + td));
     oglsm.myglend;
+    if IsVectorNul(vectordot(pdwg.GetPcamera.prop.look,ZWCS)) then
+    begin
+    oglsm.glColor3ub(255, 255, 255);
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td2, param.CSIconCoord.y , param.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td2, param.CSIconCoord.y+ td2 , param.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td2, param.CSIconCoord.y+ td2 , param.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y+ td2 , param.CSIconCoord.z));
     end;
     end;
     //oglsm.mytotalglend;
     //isOpenGLError;
     oglsm.myglDisable(GL_COLOR_LOGIC_OP);
   end;
+end;
 procedure TOGLWnd.SaveBuffers;
   var
     scrx,scry,texture{,e}:integer;

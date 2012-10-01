@@ -1831,9 +1831,9 @@ begin
                               wcsLBN.z:=wcsRTF.z;
                               wcsRTF.z:=tpz;
                               end;
-     param.DebugBoundingBbox.LBN:=wcsLBN;
-     param.DebugBoundingBbox.RTF:=wcsRTF;
-     param.ShowDebugBoundingBbox:=true;
+     //param.DebugBoundingBbox.LBN:=wcsLBN;
+     //param.DebugBoundingBbox.RTF:=wcsRTF;
+     //param.ShowDebugBoundingBbox:=true;
   if (abs(wcsRTF.x-wcsLBN.x)<eps)and(abs(wcsRTF.y-wcsLBN.y)<eps) then
                                                                     begin
                                                                          historyout('MBMouseDblClk: Пустой чертеж?');

@@ -2723,11 +2723,16 @@ begin
       end;
   end;
 end;
+function DockingOptions_com(Operands:pansichar):GDBInteger;
+begin
+     ShowAnchorDockOptions(DockMaster);
+end;
 initialization
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('mainwindow.initialization');{$ENDIF}
   //DockMaster:= TAnchorDockMaster.Create(nil);
   CreateCommandFastObjectPlugin(pointer($100),'GetAV',0,0);
+  CreateCommandFastObjectPlugin(@DockingOptions_com,'DockingOptions',0,0);
 end
 finalization
 begin

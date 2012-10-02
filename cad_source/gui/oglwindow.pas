@@ -544,6 +544,7 @@ begin
   {Если нет примитивов выходим}
   //pdwg:=gdb.GetCurrentDWG;
   //self.MakeCurrent;
+  if pdwg=nil then exit;
   proot:=PDWG.GetCurrentROOT;
 
   if (assigned(pdwg))and(assigned(proot))then

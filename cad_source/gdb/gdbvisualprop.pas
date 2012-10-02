@@ -35,6 +35,7 @@ GDBObjVisualProp=record
                       ID:TObjID;(*'Object type'*)(*oi_readonly*)
                       BoundingBox:GDBBoundingBbox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       LastCameraPos:TActulity;(*oi_readonly*)
+                      color:GDBInteger;
                  end;
 {Export-}
 implementation

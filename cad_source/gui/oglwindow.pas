@@ -3082,6 +3082,7 @@ begin
                                   else
                                       result.DrawMode:=1;
   result.OwnerLineWeight:=-3;
+  result.OwnerColor:=ClWhite;
   result.MaxWidth:=sysvar.RD.RD_MaxWidth^;
 end;
 

@@ -173,6 +173,7 @@ TDrawContext=record
                    MaxDetail:GDBBoolean;
                    DrawMode:GDBInteger;
                    OwnerLineWeight:GDBSmallInt;
+                   OwnerColor:GDBInteger;
                    MaxWidth:GDBInteger;
              end;
 

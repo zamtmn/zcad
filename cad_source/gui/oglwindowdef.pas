@@ -101,12 +101,20 @@ type
     otrackarray: array[0..3] of os_record;
     total, current: GDBInteger;
   end;
+  CSIcon=record
+               CSIconCoord: GDBvertex;
+               CSIconX,CSIconY,CSIconZ: GDBvertex;
+               CSX, CSY, CSZ: GDBvertex2DI;
+               AxisLen:GDBDouble;
+         end;
+
   POGLWndtype = ^OGLWndtype;
   OGLWndtype = record
     polarlinetrace: GDBInteger;
     pointnum, axisnum: GDBInteger;
-    CSIconCoord: GDBvertex;
-    CSX, CSY, CSZ: GDBvertex2DI;
+    CSIcon:CSIcon;
+    //CSIconCoord: GDBvertex;
+    //CSX, CSY, CSZ: GDBvertex2DI;
     BLPoint,CPoint,TRPoint:GDBvertex2D;
     ViewHeight:GDBDouble;
     projtype: GDBInteger;
@@ -122,7 +130,7 @@ type
     otracktimerwork: GDBInteger;
     scrollmode:GDBBoolean;
     lastcp3dpoint,lastpoint: GDBVertex;
-    cslen:GDBDouble;
+    //cslen:GDBDouble;
     lastonmouseobject:GDBPointer;
     nearesttcontrolpoint:tcontrolpointdist;
     startgluepoint:pcontrolpointdesc;

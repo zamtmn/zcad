@@ -91,6 +91,11 @@ GDBvertex=record
                 y:GDBDouble;(*saved_to_shd*)
                 z:GDBDouble;(*saved_to_shd*)
           end;
+PGDBQuaternion=^GDBQuaternion;
+GDBQuaternion=record
+   ImagPart: GDBvertex;
+   RealPart: GDBDouble;
+              end;
 GDBBasis=record
                 ox:GDBvertex;(*'OX Axis'*)(*saved_to_shd*)
                 oy:GDBvertex;(*'OY Axis'*)(*saved_to_shd*)
@@ -738,7 +743,7 @@ GDBLtypeArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLtypeProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     procedure LoadFromFile(fname:GDBString;lm:TLoadOpt);
-                    function createltypeifneed(_source:PGDBLtypeProp):PGDBLtypeProp;
+                    function createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
                     {function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;abstract;
                     function GetSystemLayer:PGDBLayerProp;
                     function GetCurrentLayer:PGDBLayerProp;
@@ -871,7 +876,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
              DWG_PolarMode:PGDBInteger;(*'Polar tracking mode'*)
              DWG_CLayer:PGDBInteger;(*'Current layer'*)
              DWG_CLinew:PGDBInteger;(*'Current line weigwt'*)
-             DWG_LTscale:PGDBDouble;(*'Drawing line type scale'*)
+             DWG_LTScale:PGDBDouble;(*'Drawing line type scale'*)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
              DWG_SystmGeometryDraw:PGDBBoolean;
@@ -1132,6 +1137,7 @@ GDBObjVisualProp=record
                       ID:TObjID;(*'Object type'*)(*oi_readonly*)
                       BoundingBox:GDBBoundingBbox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       LastCameraPos:TActulity;(*oi_readonly*)
+                      color:GDBInteger;
                  end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBEntity.pas
 PTExtAttrib=^TExtAttrib;
@@ -2658,12 +2664,19 @@ type
     otrackarray: array[0..3] of os_record;
     total, current: GDBInteger;
   end;
+  CSIcon=record
+               CSIconCoord: GDBvertex;
+               CSIconX,CSIconY,CSIconZ: GDBvertex;
+               CSX, CSY, CSZ: GDBvertex2DI;
+               AxisLen:GDBDouble;
+         end;
   POGLWndtype = ^OGLWndtype;
   OGLWndtype = record
     polarlinetrace: GDBInteger;
     pointnum, axisnum: GDBInteger;
-    CSIconCoord: GDBvertex;
-    CSX, CSY, CSZ: GDBvertex2DI;
+    CSIcon:CSIcon;
+    //CSIconCoord: GDBvertex;
+    //CSX, CSY, CSZ: GDBvertex2DI;
     BLPoint,CPoint,TRPoint:GDBvertex2D;
     ViewHeight:GDBDouble;
     projtype: GDBInteger;
@@ -2679,7 +2692,7 @@ type
     otracktimerwork: GDBInteger;
     scrollmode:GDBBoolean;
     lastcp3dpoint,lastpoint: GDBVertex;
-    cslen:GDBDouble;
+    //cslen:GDBDouble;
     lastonmouseobject:GDBPointer;
     nearesttcontrolpoint:tcontrolpointdist;
     startgluepoint:pcontrolpointdesc;
@@ -2688,6 +2701,8 @@ type
     mousefrustum,mousefrustumLCS:ClipArray;
     ShowDebugFrustum:GDBBoolean;
     debugfrustum:ClipArray;
+    ShowDebugBoundingBbox:GDBBoolean;
+    DebugBoundingBbox:GDBBoundingBbox;
     processObjConstruct:GDBBoolean;
   end;
 //Generate on C:\zcad\CAD_SOURCE\languade\UUnitManager.pas

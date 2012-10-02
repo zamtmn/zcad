@@ -258,6 +258,7 @@ begin
      vp.layer:=@DefaultErrorLayer;
      self.PExtAttrib:=nil;
      vp.LastCameraPos:=-1;
+     vp.color:=ClByLayer;
 end;
 function GDBObjEntity.CalcOwner(own:GDBPointer):GDBPointer;
 begin
@@ -1033,6 +1034,8 @@ begin
   inc(handle);
   dxfGDBStringout(outhandle,100,dxfName_AcDbEntity);
   dxfGDBStringout(outhandle,8,vp.layer^.name);
+  if vp.color<>ClByLayer then
+                             dxfGDBStringout(outhandle,62,inttostr(vp.color));
   if vp.lineweight<>-1 then dxfGDBIntegerout(outhandle,370,vp.lineweight);
   if dbname<>'' then
                     dxfGDBStringout(outhandle,100,dbname);
@@ -1072,6 +1075,10 @@ begin
                      end;
                     48:begin
                             vp.LineTypeScale :=readmystrtodouble(f);
+                            result:=true
+                       end;
+                    62:begin
+                            vp.color:=readmystrtoint(f);
                             result:=true
                        end;
                  370:begin

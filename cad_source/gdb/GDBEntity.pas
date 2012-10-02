@@ -452,6 +452,14 @@ end;
 procedure GDBObjEntity.DrawWithAttrib;
 var lw: GDBInteger;
   sel,_selected: GDBBoolean;
+procedure SetEntColor(color:integer);inline;
+begin
+  if color<>7 then
+                  oglsm.glcolor3ubv(palette[color])
+              else
+                  oglsm.glcolor3ubv(foreground);
+end;
+
 begin
   //if visible<>dc.visibleactualy then
   //                               exit;
@@ -478,31 +486,40 @@ begin
   if (dc.subrender = 0)
       then
           begin
-                                                    if vp.layer^.color<>7 then
-                                                                              oglsm.glcolor3ubv(palette[vp.layer^.color])
-                                                                          else
-                                                                              begin
-                                                                                   oglsm.glcolor3ubv(foreground);
-                                                                              end;
+               case vp.color of
+                               ClByLayer:
+                                         SetEntColor(vp.layer^.color);
+                               ClByBlock:
+                                         SetEntColor(dc.ownercolor);
+                               else
+                                   SetEntColor(vp.color);
+
+               end;
           end
       else
-          if (vp.layer{^.name} <> {LNSysLayerName}dc.SysLayer) then
-                                                    begin
-                                                    if vp.layer^.color<>7 then
-                                                                              oglsm.glcolor3ubv(palette[vp.layer^.color])
-                                                                          else
-                                                                              begin
-                                                                                   oglsm.glcolor3ubv(foreground);
-                                                                              end;
-                                                    end
+          if (vp.layer<>dc.SysLayer) then
+                                         begin
+                                              case vp.color of
+                                                              ClByLayer:
+                                                                        SetEntColor(vp.layer^.color);
+                                                              ClByBlock:
+                                                                        SetEntColor(dc.ownercolor);
+                                                              else
+                                                                  SetEntColor(vp.color);
+
+                                              end;
+                                         end
                                                 else
                                                     begin
-                                                    if bp.ListPos.owner.getlayer^.color<>7 then
-                                                                              oglsm.glcolor3ubv(palette[bp.ListPos.owner.getlayer^.color])
-                                                                          else
-                                                                              begin
-                                                                                   oglsm.glcolor3ubv(foreground);
-                                                                              end;
+                                                              case vp.color of
+                                                                              ClByLayer:
+                                                                                        SetEntColor(bp.ListPos.owner.getlayer^.color);
+                                                                              ClByBlock:
+                                                                                        SetEntColor(dc.ownercolor);
+                                                                              else
+                                                                                  SetEntColor(vp.color);
+
+                                                              end;
                                                     end;
   Draw(lw,dc{visibleactualy,subrender});
   //if selected or ((bp.ListPos.owner <> nil) and (bp.ListPos.owner^.isselected)) then

@@ -170,6 +170,7 @@ const {as_normal=0;
   UD_LineToNet=2;
   ClByBlock=0;
   ClByLayer=256;
+  ClWhite=7;
 implementation
 
 end.

@@ -591,6 +591,14 @@ begin
   tbb2:=pdwg.GetConstructObjRoot.vp.BoundingBox;
   ConcatBB(tbb,tbb2);
   end;
+  {if param.CSIcon.AxisLen>eps then
+  begin
+  concatBBandPoint(tbb,param.CSIcon.CSIconCoord);
+  concatBBandPoint(tbb,param.CSIcon.CSIconX);
+  concatBBandPoint(tbb,param.CSIcon.CSIconY);
+  concatBBandPoint(tbb,param.CSIcon.CSIconZ);
+  end;}
+
 
   if IsBBNul(tbb) then
   begin
@@ -872,46 +880,54 @@ begin
      param.ViewHeight:=cav.y-param.BLPoint.y;
 
 
-     pdwg^.myGluProject2(NulVertex,param.CSIconCoord);
+     pdwg^.myGluProject2(NulVertex,param.CSIcon.CSIconCoord);
 
-     if (param.CSIconCoord.x>0)and(param.CSIconCoord.y>0)and(param.CSIconCoord.x<clientwidth)and(param.CSIconCoord.y<clientheight)
+     if (param.CSIcon.CSIconCoord.x>0)and(param.CSIcon.CSIconCoord.y>0)and(param.CSIcon.CSIconCoord.x<clientwidth)and(param.CSIcon.CSIconCoord.y<clientheight)
      then
      begin
           pdwg^.myGluProject2(x_Y_zVertex,
                                   cav);
-          cav.x:=param.CSIconCoord.x-cav.x;
-          cav.y:=param.CSIconCoord.y-cav.y;
-          param.cslen:=sqrt(cav.x*cav.x+cav.y*cav.y);
-          param.CSIconCoord.x:=0;
-          param.CSIconCoord.y:=0;
-          param.CSIconCoord.z:=0;
+          cav.x:=param.CSIcon.CSIconCoord.x-cav.x;
+          cav.y:=param.CSIcon.CSIconCoord.y-cav.y;
+          param.CSIcon.axislen:=sqrt(cav.x*cav.x+cav.y*cav.y);
+          param.CSIcon.CSIconCoord.x:=0;
+          param.CSIcon.CSIconCoord.y:=0;
+          param.CSIcon.CSIconCoord.z:=0;
      end
      else
      begin
      pdwg^.myGluUnProject(createvertex(40, 40, 0.1),
-                                 param.CSIconCoord);
-          pdwg^.myGluProject2(CreateVertex(param.CSIconCoord.x,param.CSIconCoord.y+1,param.CSIconCoord.z),
+                                 param.CSIcon.CSIconCoord);
+          pdwg^.myGluProject2(CreateVertex(param.CSIcon.CSIconCoord.x,param.CSIcon.CSIconCoord.y+1,param.CSIcon.CSIconCoord.z),
 
                      cav);
           cav.x:=40-cav.x;
           cav.y:=40-cav.y;
-          param.cslen:=sqrt(cav.x*cav.x+cav.y*cav.y);
+          param.CSIcon.axislen:=sqrt(cav.x*cav.x+cav.y*cav.y);
 
      end;
+     if param.CSIcon.axislen>eps then
+                                     param.CSIcon.axislen:=100/param.CSIcon.axislen;
+     param.CSIcon.CSIconX:=param.CSIcon.CSIconCoord;
+     param.CSIcon.CSIconX.x:=param.CSIcon.CSIconX.x+param.CSIcon.axislen;
+     param.CSIcon.CSIconY:=param.CSIcon.CSIconCoord;
+     param.CSIcon.CSIconY.y:=param.CSIcon.CSIconY.y+param.CSIcon.axislen;
+     param.CSIcon.CSIconZ:=param.CSIcon.CSIconCoord;
+     param.CSIcon.CSIconZ.z:=param.CSIcon.CSIconZ.z+param.CSIcon.axislen;
 
 
-     pdwg^.myGluProject2(CreateVertex(param.CSIconCoord.x + sizeaxis * pdwg.getpcamera^.prop.zoom, param.CSIconCoord.y, param.CSIconCoord.z),
+     pdwg^.myGluProject2(CreateVertex(param.CSIcon.CSIconCoord.x + sizeaxis * pdwg.getpcamera^.prop.zoom, param.CSIcon.CSIconCoord.y, param.CSIcon.CSIconCoord.z),
                 CAV);
-     param.csx.x := round(cav.x);
-     param.csx.y := round(cav.y);
-     pdwg^.myGluProject2(CreateVertex(param.CSIconCoord.x, param.CSIconCoord.y + sizeaxis * pdwg.getpcamera^.prop.zoom, param.CSIconCoord.z),
+     param.CSIcon.csx.x := round(cav.x);
+     param.CSIcon.csx.y := round(cav.y);
+     pdwg^.myGluProject2(CreateVertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y + sizeaxis * pdwg.getpcamera^.prop.zoom, param.CSIcon.CSIconCoord.z),
                 CAV);
-     param.csy.x := round(cav.x);
-     param.csy.y := round(cav.y);
-     pdwg^.myGluProject2(CreateVertex(param.CSIconCoord.x, param.CSIconCoord.y, param.CSIconCoord.z + sizeaxis * pdwg.getpcamera^.prop.zoom),
+     param.CSIcon.csy.x := round(cav.x);
+     param.CSIcon.csy.y := round(cav.y);
+     pdwg^.myGluProject2(CreateVertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y, param.CSIcon.CSIconCoord.z + sizeaxis * pdwg.getpcamera^.prop.zoom),
                 CAV);
-     param.csz.x := round(cav.x);
-     param.csz.y := round(cav.y);
+     param.CSIcon.csz.x := round(cav.x);
+     param.CSIcon.csz.y := round(cav.y);
 
      param.md.WPPointLU:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum[0],pdwg.getpcamera.frustum[3],param.md.workplane);
      param.md.WPPointUR:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum[3],pdwg.getpcamera.frustum[1],param.md.workplane);
@@ -2554,15 +2570,15 @@ procedure TOGLWnd.showcursor;
     oglsm.myglpopmatrix;
     oglsm.glColor3ub(0, 100, 100);
     oglsm.myglpushmatrix;
-    gltranslated(param.csx.x + 2, -clientheight + param.csx.y - 10, 0);
+    gltranslated(param.CSIcon.csx.x + 2, -clientheight + param.CSIcon.csx.y - 10, 0);
     textwrite('X');
     oglsm.myglpopmatrix;
     oglsm.myglpushmatrix;
-    gltranslated(param.csy.x + 2, -clientheight + param.csy.y - 10, 0);
+    gltranslated(param.CSIcon.csy.x + 2, -clientheight + param.CSIcon.csy.y - 10, 0);
     textwrite('Y');
     oglsm.myglpopmatrix;
     oglsm.myglpushmatrix;
-    gltranslated(param.csz.x + 2, -clientheight + param.csz.y - 10, 0);
+    gltranslated(param.CSIcon.csz.x + 2, -clientheight + param.CSIcon.csz.y - 10, 0);
     textwrite('Z');
     oglsm.myglpopmatrix;
     glLoadIdentity;
@@ -2883,37 +2899,49 @@ procedure TOGLWnd.showcursor;
     oglsm.myglDisable(GL_LIGHTING);
 }
     CalcOptimalMatrix;
-    if param.cslen<>0 then {переделать}
+    if param.CSIcon.axislen<>0 then {переделать}
     begin
-    td:=100/param.cslen;
+    td:=param.CSIcon.axislen;
     td2:=td/5;
     td22:=td2/3;
     oglsm.myglbegin(GL_lines);
     oglsm.glColor3ub(255, 0, 0);
-    oglsm.myglVertex3d(param.CSIconCoord);
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td, param.CSIconCoord.y , param.CSIconCoord.z));
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td, param.CSIconCoord.y , param.CSIconCoord.z));
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td-td2, param.CSIconCoord.y-td22 , param.CSIconCoord.z));
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td, param.CSIconCoord.y , param.CSIconCoord.z));
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td-td2, param.CSIconCoord.y+td22 , param.CSIconCoord.z));
+
+    oglsm.myglVertex3d(param.CSIcon.CSIconCoord);
+    oglsm.myglVertex3d(param.CSIcon.CSIconX);
+
+    oglsm.myglVertex3d(param.CSIcon.CSIconX);
+    oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y-td22 , param.CSIcon.CSIconCoord.z));
+
+    oglsm.myglVertex3d(param.CSIcon.CSIconX);
+    oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y+td22 , param.CSIcon.CSIconCoord.z));
+
     oglsm.glColor3ub(0, 255, 0);
-    oglsm.myglVertex3d(param.CSIconCoord);
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y + td, param.CSIconCoord.z));
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y + td, param.CSIconCoord.z));
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x-td22, param.CSIconCoord.y + td-td2, param.CSIconCoord.z));
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y + td, param.CSIconCoord.z));
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x+td22, param.CSIconCoord.y + td-td2, param.CSIconCoord.z));
+
+    oglsm.myglVertex3d(param.CSIcon.CSIconCoord);
+    oglsm.myglVertex3d(param.CSIcon.CSIconY);
+
+    oglsm.myglVertex3d(param.CSIcon.CSIconY);
+    oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x-td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z));
+
+    oglsm.myglVertex3d(param.CSIcon.CSIconY);
+    oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x+td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z));
+
     oglsm.glColor3ub(0, 0, 255);
-    oglsm.myglVertex3d(param.CSIconCoord);
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y, param.CSIconCoord.z + td));
+
+    oglsm.myglVertex3d(param.CSIcon.CSIconCoord);
+    oglsm.myglVertex3d(param.CSIcon.CSIconZ);
+
     oglsm.myglend;
     if IsVectorNul(vectordot(pdwg.GetPcamera.prop.look,ZWCS)) then
     begin
+    oglsm.myglbegin(GL_lines);
     oglsm.glColor3ub(255, 255, 255);
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td2, param.CSIconCoord.y , param.CSIconCoord.z));
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td2, param.CSIconCoord.y+ td2 , param.CSIconCoord.z));
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x + td2, param.CSIconCoord.y+ td2 , param.CSIconCoord.z));
-    oglsm.myglVertex3d(createvertex(param.CSIconCoord.x, param.CSIconCoord.y+ td2 , param.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y , param.CSIcon.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z));
+    oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z));
+    oglsm.myglend;
     end;
     end;
     //oglsm.mytotalglend;

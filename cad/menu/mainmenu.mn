@@ -1,7 +1,11 @@
 Panel OIButtons;
   {
     action ACN_SNAPRUNTIME
+    Separator
     action ACN_El_FIND
+    Separator
+    action ACN_OBJVARMAN
+    action ACN_MULTIOBJVARMAN
   }
 Panel Status;
   {
@@ -97,8 +101,6 @@ Panel Misc;
     action ACN_PLACESMOKEDETECTORORTO
     action ACN_SENSORMARK
     action ACN_ORTODEVPLACE
-    action ACN_OBJVARMAN
-    action ACN_MULTIOBJVARMAN
     action ACN_ADDTOOWNER
     button InsertTestTable,spec.bmp,*DEBUG*Вставить таблицу
     button SetObjInsp(CURRENT),#FIX,*DEBUG*Фиксировать выделенный объект в инспекторе

@@ -21,7 +21,7 @@ unit mainwindow;
 
 interface
 uses
-  ugdbsimpledrawing,zcadsysvars,GDBBlockDef,laercombobox,ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
+  ugdbsimpledrawing,zcadsysvars,GDBBlockDef,layercombobox,ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
   ActnList,LCLType,LCLProc,strproc,log,intftranslations,toolwin,
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
@@ -170,7 +170,7 @@ var
   //MainForm: TMainForm;
   uGeneralTimer:cardinal;
   GeneralTime:GDBInteger;
-  LayerBox:{TComboBox}TZCADLaerComboBox;
+  LayerBox:{TComboBox}TZCADLayerComboBox;
   LineWBox:TComboBox;
   LayoutBox:TComboBox;
   LPTime:Tdatetime;
@@ -1495,7 +1495,7 @@ begin
                           val(bc,w,code);
                           if assigned(LayerBox) then
                                                     shared.ShowError(format(rsReCreating,['LAYERCOMBOBOX']));
-                          LayerBox:={TComboBox}TZCADLaerComboBox.Create(tb);
+                          LayerBox:={TComboBox}TZCADLayerComboBox.Create(tb);
                           IconList.GetBitmap(II_LayerOn,LayerBox.Glyph_OnOff_ON);
                           IconList.GetBitmap(II_LayerOff,LayerBox.Glyph_OnOff_OFF);
                           IconList.GetBitmap(II_LayerFreze,LayerBox.Glyph_Freze_ON);

@@ -585,6 +585,17 @@ begin
   ProjectPoint2(proot.VisibleOBJBoundingBox.LBN.x,proot.VisibleOBJBoundingBox.RTF.y,proot.VisibleOBJBoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);}
 
   tbb:=proot.vp.BoundingBox;
+
+  if IsBBNul(tbb) then
+  begin
+       {tbb.LBN:=geometry.VertexAdd(pdwg.getpcamera^.prop.point,MinusOneVertex);
+       tbb.RTF:=geometry.VertexAdd(pdwg.getpcamera^.prop.point,OneVertex);}
+       concatBBandPoint(tbb,param.CSIcon.CSIconCoord);
+       concatBBandPoint(tbb,param.CSIcon.CSIconX);
+       concatBBandPoint(tbb,param.CSIcon.CSIconY);
+       concatBBandPoint(tbb,param.CSIcon.CSIconZ);
+  end;
+
   if pdwg.GetConstructObjRoot.ObjArray.Count>0 then
                        begin
   pdwg.GetConstructObjRoot.calcbb;
@@ -604,6 +615,14 @@ begin
   begin
        tbb.LBN:=geometry.VertexAdd(pdwg.getpcamera^.prop.point,MinusOneVertex);
        tbb.RTF:=geometry.VertexAdd(pdwg.getpcamera^.prop.point,OneVertex);
+  end;
+
+  //if param.CSIcon.AxisLen>eps then
+  begin
+  //concatBBandPoint(tbb,param.CSIcon.CSIconCoord);
+  //concatBBandPoint(tbb,param.CSIcon.CSIconX);
+  //concatBBandPoint(tbb,param.CSIcon.CSIconY);
+  //concatBBandPoint(tbb,param.CSIcon.CSIconZ);
   end;
 
   LBN:=tbb.LBN;
@@ -1754,10 +1773,13 @@ begin
         for j := 0 to {maxgrid}round(param.md.WPPointUR.y) do
         begin
           oglsm.myglVertex3d({createvertex(i,j,0)}v1);
-          v1:=vertexadd(v1,param.md.WPPointLU);
+          //v1:=vertexadd(v1,param.md.WPPointLU);
+          //v1.x:=v1.x+sysvar.DWG.DWG_StepGrid.x;
+          v1.y:=v1.y+sysvar.DWG.DWG_StepGrid.y;
           inc(pg);
         end;
-        v:=vertexadd(v,param.md.WPPointRB);
+        //v:=vertexadd(v,param.md.WPPointRB);
+        v.x:=v1.x-sysvar.DWG.DWG_StepGrid.x;
   end;
   oglsm.myglend;
   end;
@@ -2898,6 +2920,7 @@ procedure TOGLWnd.showcursor;
     glLoadIdentity;
     oglsm.myglDisable(GL_LIGHTING);
 }
+    oglsm.myglDisable(GL_COLOR_LOGIC_OP);
     CalcOptimalMatrix;
     if param.CSIcon.axislen<>0 then {переделать}
     begin
@@ -2946,7 +2969,7 @@ procedure TOGLWnd.showcursor;
     end;
     //oglsm.mytotalglend;
     //isOpenGLError;
-    oglsm.myglDisable(GL_COLOR_LOGIC_OP);
+    //oglsm.myglDisable(GL_COLOR_LOGIC_OP);
   end;
 end;
 procedure TOGLWnd.SaveBuffers;
@@ -4266,7 +4289,7 @@ begin
   //isOpenGLError;
 
   delmyscrbuf;
-
+  calcoptimalmatrix;
   calcgrid;
 
   {переделать}//inherited size{(fwSizeType,nWidth,nHeight)};
@@ -4347,6 +4370,11 @@ begin
   param.processObjConstruct:=false;
   param.ShowDebugBoundingBbox:=false;
   param.ShowDebugFrustum:=false;
+  param.CSIcon.AxisLen:=0;
+  param.CSIcon.CSIconCoord:=nulvertex;
+  param.CSIcon.CSIconX:=nulvertex;
+  param.CSIcon.CSIconY:=nulvertex;
+  param.CSIcon.CSIconZ:=nulvertex;
   //UGDBDescriptor.POGLWnd := @param;
 
   {gdb.GetCurrentDWG.pcamera.initnul;

@@ -203,6 +203,7 @@ RGB=record
           g:GDBByte;(*'Green'*)
           b:GDBByte;(*'Blue'*)
           a:GDBByte;(*'Alpha'*)
+          name:GDBString;
     end;
 GDBPalette=array[0..255] of RGB;
 PGDBNamedObject=^GDBNamedObject;

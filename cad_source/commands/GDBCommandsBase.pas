@@ -947,6 +947,21 @@ begin
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
+function SelObjChangeColorToCurrent_com:GDBInteger;
+var pv:pGDBObjEntity;
+    ir:itrec;
+begin
+  if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
+  pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+    if pv^.Selected then pv^.vp.color:=sysvar.dwg.DWG_CColor^ ;
+  pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+  until pv=nil;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  result:=cmd_ok;
+end;
+
 function SelObjChangeLWToCurrent_com:GDBInteger;
 var pv:pGDBObjEntity;
     ir:itrec;
@@ -2046,6 +2061,7 @@ begin
   CreateCommandFastObjectPlugin(@ChangeProjType_com,'ChangeProjType',CADWG,0);
   CreateCommandFastObjectPlugin(@SelObjChangeLayerToCurrent_com,'SelObjChangeLayerToCurrent',CADWG,0);
   CreateCommandFastObjectPlugin(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);
+  CreateCommandFastObjectPlugin(@SelObjChangeColorToCurrent_com,'SelObjChangeColorToCurrent',CADWG,0);
   CreateCommandFastObjectPlugin(@MemSummary_com,'MeMSummary',0,0);
   selframecommand:=CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,@FrameEdit_com_Command_End,nil,nil,@FrameEdit_com_BeforeClick,@FrameEdit_com_AfterClick,nil,nil,'SelectFrame',0,0);
   selframecommand^.overlay:=true;
@@ -2055,7 +2071,7 @@ begin
   CreateCommandFastObjectPlugin(@redo_com,'Redo',CADWG,0).overlay:=true;
 
   CreateCommandRTEdObjectPlugin(@polytest_com_CommandStart,nil,nil,nil,@polytest_com_BeforeClick,@polytest_com_BeforeClick,nil,nil,'PolyTest',0,0);
-  CreateCommandFastObjectPlugin(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);
+  //CreateCommandFastObjectPlugin(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);
   CreateCommandFastObjectPlugin(@PolyDiv_com,'PolyDiv',CADWG,0).CEndActionAttr:=CEDeSelect;
   CreateCommandFastObjectPlugin(@UpdatePO_com,'UpdatePO',0,0);
 

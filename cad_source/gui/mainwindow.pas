@@ -34,7 +34,7 @@ uses
   commanddefinternal,commandline,{zmainforms,}memman,UGDBNamedObjectsArray,
   {ZGUIArrays,}{ZBasicVisible,}{ZEditsWithVariable,}{ZTabControlsGeneric,}shared,{ZPanelsWithSplit,}{ZGUIsCT,}{ZstaticsText,}{UZProcessBar,}strmy{,strutils},{ZPanelsGeneric,}
   graphics,
-  AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr{,xmlconf},zcadinterface;
+  AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr{,xmlconf},zcadinterface,colorwnd;
 type
   TmyAnchorDockHeader = class(TAnchorDockHeader)
                         protected
@@ -75,6 +75,8 @@ type
                                                State: TOwnerDrawState);}
                     procedure LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                                State: TOwnerDrawState);
+                    procedure ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+                                                                   State: TOwnerDrawState);
                     function findtoolbatdesk(tbn:string):string;
                     procedure CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
                     procedure CreateHTPB(tb:TToolBar);
@@ -127,6 +129,7 @@ type
 
                     procedure ChangeCLayer(Sender:Tobject);
                     procedure ChangeCLineW(Sender:Tobject);
+                    procedure ChangeCColor(Sender:Tobject);
 
                     procedure ChangeLayout(Sender:Tobject);
 
@@ -171,7 +174,7 @@ var
   uGeneralTimer:cardinal;
   GeneralTime:GDBInteger;
   LayerBox:{TComboBox}TZCADLayerComboBox;
-  LineWBox:TComboBox;
+  LineWBox,ColorBox:TComboBox;
   LayoutBox:TComboBox;
   LPTime:Tdatetime;
   oldlongprocess:integer;
@@ -374,6 +377,7 @@ begin
                                     //LayerBox.ItemIndex:=getsortedindex(gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(layer));
                                end;
       end;
+      ColorBox.Invalidate;
 end;
 procedure TMainFormN.addoneobject;
 //const //pusto=-1000;
@@ -1387,20 +1391,70 @@ const
 begin
     if gdb.GetCurrentDWG=nil then
      exit;
-
-    s:=LinewBox.Items[index];
+    s:=TComboBox(Control).Items[index];
     ARect.Left:=ARect.Left+2;
-    if (index>2)and(index<LinewBox.Items.Count-1) then
+    if (index>2)and(index<TComboBox(Control).Items.Count-1) then
      begin
           y:=(index-3);
           if y>10 then
                                                y:=10;
-          LinewBox.canvas.Pen.Width:=y;//div 10;
+          TComboBox(Control).canvas.Pen.Width:=y;//div 10;
           y:=(ARect.Top+ARect.Bottom)div 2;
-          LinewBox.canvas.Line(ARect.Left,y,ARect.Left+ll,y);
+          TComboBox(Control).canvas.Line(ARect.Left,y,ARect.Left+ll,y);
           ARect.Left:=ARect.Left+ll+5;
      end;
-    DrawText(LinewBox.canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
+    DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
+end;
+procedure TMainFormN.ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+  State: TOwnerDrawState);
+var
+   plp:PGDBLayerProp;
+   Dest: PChar;
+   y:integer;
+   textrect:TRect;
+const
+     cellsize=13;
+     textoffset=cellsize+5;
+begin
+    if (gdb.GetCurrentDWG=nil)or(sysvar.DWG.DWG_CColor=nil) then
+     exit;
+    begin
+    if (odComboBoxEdit in State) then
+    begin
+         index:=sysvar.DWG.DWG_CColor^;
+         if index>0 then inc(index);
+         if index=256+1 then index:=1;
+    end;
+    if (index<9)or(not(odComboBoxEdit in State)) then
+                   s:=TComboBox(Control).Items[index]
+               else
+                   s:=format(rsColorNum,[index-1]);
+    ARect.Left:=ARect.Left+2;
+    textrect:=ARect;
+    if (index<>TComboBox(Control).Items.Count-1)or(odComboBoxEdit in State) then
+     begin
+          textrect.Left:=textrect.Left+textoffset;
+          DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_VCENTER);
+
+          if index>1 then
+                         begin
+                              index:=index-1;
+                              TComboBox(Control).canvas.Brush.Color:=RGBToColor(palette[index].r,palette[index].g,palette[index].b);
+                         end
+                     else
+                         TComboBox(Control).canvas.Brush.Color:=clWhite;
+          y:=(ARect.Top+ARect.Bottom-cellsize)div 2;
+          TComboBox(Control).canvas.Rectangle(ARect.Left,y,ARect.Left+cellsize,y+cellsize);
+          if index=7 then
+                                   begin
+                                        index:=index-1;
+                                        TComboBox(Control).canvas.Brush.Color:=clBlack;
+                                        TComboBox(Control).canvas.Polygon([point(ARect.Left,y),point(ARect.Left+cellsize-1,y),point(ARect.Left+cellsize-1,y+cellsize-1)]);
+                                   end
+     end
+    else
+    DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
+    end;
 end;
 
 procedure TMainFormN.CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
@@ -1556,6 +1610,43 @@ begin
                           LineWbox.AutoSize:=false;
                           LineWbox.OnMouseLeave:=self.setnormalfocus;
                            AddToBar(tb,LineWBox);
+                     end;
+                     if uppercase(line)='COLORCOMBOBOX' then
+                     begin
+                          bc := f.readstring(',','');
+                          ts := f.readstring(';','');
+                          val(bc,w,code);
+                          if assigned(ColorBox) then
+                                                    shared.ShowError(format(rsReCreating,['COLORCOMBOBOX']));
+                          ColorBox:=TComboBox.Create(tb);
+                          ColorBox.Style:=csOwnerDrawFixed;
+                          ColorBox.OnDrawItem:=ColorBoxDrawItem;
+                          if code=0 then
+                                        ColorBox.Width:=w;
+                          if ts<>''then
+                          begin
+                               ts:=InterfaceTranslate('hint_panel~COLORCOMBOBOX',ts);
+                               ColorBox.hint:=(ts);
+                               ColorBox.ShowHint:=true;
+                          end;
+                          ColorBox.Clear;
+                          ColorBox.readonly:=true;
+                          ColorBox.items.Add(rsByBlock);
+                          ColorBox.items.Add(rsByLayer);
+                          for i := 1 to 7 do
+                          begin
+                               if palette[i].name<>'' then
+                                                          ts:=InterfaceTranslate('rgbcolorname~'+palette[i].name,palette[i].name)
+                                                      else
+                                                          ts:='';
+                               ColorBox.items.Add(ts);
+                          end;
+                          ColorBox.items.Add(rsSelectColor);
+                          ColorBox.ItemIndex:=0;
+                          ColorBox.OnChange:=ChangeCColor;
+                          ColorBox.AutoSize:=false;
+                          ColorBox.OnMouseLeave:=self.setnormalfocus;
+                          AddToBar(tb,ColorBox);
                      end;
                      if uppercase(line)='SEPARATOR' then
                                          begin
@@ -2445,6 +2536,49 @@ begin
                                 HistoryLine.SelLength:=2;
                            end;
 end;
+procedure  TMainFormN.ChangeCColor(Sender:Tobject);
+var
+   ColorIndex,CColorSave:Integer;
+   mr:integer;
+begin
+     ColorIndex:=ColorBox.ItemIndex;
+     if ColorIndex=ColorBox.Items.Count-1 then
+                                              begin
+                                                   Application.CreateForm(TColorSelectWND, ColorSelectWND);
+                                                   ShowAllCursors;
+                                                   mr:=ColorSelectWND.showmodal;
+                                                   if mr=mrOk then
+                                                                  ColorIndex:=ColorSelectWND.ColorInfex
+                                                              else
+                                                                  ColorIndex:=-1;
+                                                   RestoreCursors;
+                                                   ColorSelectWND.destroy;
+                                              end
+                                          else
+                                              begin
+                                                   if ColorIndex=1 then
+                                                                       colorindex:=256
+                                                   else if ColorIndex<>0 then
+                                                                             dec(colorindex);
+                                              end;
+     if colorindex<0 then
+                         exit;
+     if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
+     then
+     begin
+          SysVar.dwg.DWG_CColor^:=ColorIndex;
+     end
+     else
+     begin
+          CColorSave:=SysVar.dwg.DWG_CColor^;
+          SysVar.dwg.DWG_CColor^:=ColorIndex;
+          commandmanager.ExecuteCommand('SelObjChangeColorToCurrent');
+          SysVar.dwg.DWG_CColor^:=CColorSave;
+          setvisualprop;
+     end;
+     setnormalfocus(nil);
+end;
+
 procedure  TMainFormN.ChangeCLineW(Sender:Tobject);
 var tcl:GDBInteger;
 begin
@@ -2678,6 +2812,9 @@ begin
   mainwindow.LayerBox.enabled:=true;
   if assigned(mainwindow.LineWBox) then
   mainwindow.LineWBox.enabled:=true;
+  if assigned(mainwindow.ColorBox) then
+  mainwindow.ColorBox.enabled:=true;
+
   for i:=0 to MainFormN.PageControl.PageCount-1 do
     begin
          tobject(poglwnd):=FindControlByType(MainFormN.PageControl.Pages[i]{.PageControl},TOGLwnd);
@@ -2720,6 +2857,8 @@ begin
            mainwindow.LayerBox.enabled:=false;
            if assigned(mainwindow.LineWBox)then
            mainwindow.LineWBox.enabled:=false;
+           if assigned(mainwindow.ColorBox) then
+           mainwindow.ColorBox.enabled:=false;
       end;
   end;
 end;

@@ -135,6 +135,8 @@ resourcestring
   rsByLayer='ByLayer';
   rsByBlock='ByBlock';
   rsDefault='Default';
+  rsSelectColor='Select color...';
+  rsColorNum='Color %d';
   rsEmpty='Empty';
   rsmm='mm';
   rscompiledtimemsg='Done.  %s second';

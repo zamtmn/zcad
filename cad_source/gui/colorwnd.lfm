@@ -6,15 +6,8 @@ object ColorSelectWND: TColorSelectWND
   Caption = 'Form1'
   ClientHeight = 238
   ClientWidth = 388
+  OnShow = _onshow
   LCLVersion = '1.1'
-  object ColorBox1: TColorBox
-    Left = 72
-    Height = 24
-    Top = 33
-    Width = 146
-    ItemHeight = 16
-    TabOrder = 0
-  end
   object ButtonPanel1: TButtonPanel
     Left = 6
     Height = 34
@@ -28,7 +21,25 @@ object ColorSelectWND: TColorSelectWND
     CloseButton.DefaultCaption = True
     CancelButton.Name = 'CancelButton'
     CancelButton.DefaultCaption = True
-    TabOrder = 1
+    TabOrder = 0
     ShowButtons = [pbOK, pbCancel, pbHelp]
+  end
+  object Label1: TLabel
+    Left = 45
+    Height = 15
+    Top = 39
+    Width = 92
+    Caption = 'Not implement (('
+    ParentColor = False
+  end
+  object SpinEdit1: TSpinEdit
+    Left = 57
+    Height = 23
+    Top = 104
+    Width = 142
+    MaxValue = 256
+    OnChange = testsetcolor
+    TabOrder = 1
+    Value = 111
   end
 end

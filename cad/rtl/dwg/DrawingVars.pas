@@ -7,6 +7,7 @@ var
 
    DWG_CLayer:GDBInteger;
    DWG_CLinew:GDBInteger;
+   DWG_CColor:GDBInteger;
 
    DWG_DrawGrid:GDBBoolean;
    DWG_SnapGrid:GDBBoolean;
@@ -31,6 +32,7 @@ begin
 
   DWG_CLayer:=0;
   DWG_CLinew:=-1;
+  DWG_CColor:=256;
 
      camera.initnul;
      camera.fovy:=35.0;

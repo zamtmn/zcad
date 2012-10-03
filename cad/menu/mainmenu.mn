@@ -30,6 +30,7 @@ Panel Standart;
     Separator
     action ACN_LAYER
     layercombobox 200,Layer selection
+    colorcombobox 100,Color selection
     linewcombobox 100,Line weight selection
     Separator
     action ACN_UNDO

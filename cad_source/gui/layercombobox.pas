@@ -248,6 +248,8 @@ constructor TZCADLayerComboBox.Create(AOwner:TComponent);                      /
     Size:TSize;
 begin
   inherited Create(AOwner);
+  BorderWidth:=0;
+  BorderStyle:=bsnone;
   M1:=false;
   SetLength(MyItems,0);
   BM:=TBitMap.Create;
@@ -277,18 +279,9 @@ begin
   sGlyph_Lock_OFF:=TBitmap.Create;
   sListHeight:=-1;
   sItemIndex:=-1;
-  CP1:=TControlPole.Create(self);
-  CP1.Parent:=self;
-  CP1.Align:=alClient;
-  CP1.BorderSpacing.Right:=26;
-  CP1.IL:=IL;
-  CP1.Index:=-1;
-  CP1.OnClick:=@B1Klac;
-  inherited Width:=120;
-  inherited Height:=26;
   B1:=TBitBtn.Create(self);
   B1.Parent:=self;
-  B1.Anchors:=[akTop,akRight,akBottom];
+  {B1.Anchors:=[akTop,akRight,akBottom];
   B1.AnchorSideTop.Control:=Self;
   B1.AnchorSideRight.Control:=Self;
   B1.AnchorSideRight.Side:=asrBottom;
@@ -296,8 +289,19 @@ begin
   B1.AnchorSideBottom.Side:=asrBottom;
   B1.BorderSpacing.Top:=0;
   B1.BorderSpacing.Right:=0;
-  B1.BorderSpacing.Bottom:=0;
+  B1.BorderSpacing.Bottom:=0;}
+  B1.Align:=alRight;
   B1.Width:=26;
+  CP1:=TControlPole.Create(self);
+  CP1.Parent:=self;
+  CP1.Align:=alClient;
+  //CP1.BorderSpacing.Right:=26;
+  CP1.IL:=IL;
+  CP1.Index:=-1;
+  CP1.OnClick:=@B1Klac;
+  //inherited Width:=120;
+  //inherited Height:=100;
+  //self.AutoSize:=true;
   Details:=ThemeServices.GetElementDetails({ttGlyphClosed}tcDropDownButtonNormal);
   Size:=ThemeServices.GetDetailSize(Details);
   BM.Width:=Size.cx;

@@ -213,6 +213,7 @@ RGB=record
           g:GDBByte;(*'Green'*)
           b:GDBByte;(*'Blue'*)
           a:GDBByte;(*'Alpha'*)
+          name:GDBString;
     end;
 GDBPalette=array[0..255] of RGB;
 PGDBNamedObject=^GDBNamedObject;
@@ -877,6 +878,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
              DWG_PolarMode:PGDBInteger;(*'Polar tracking mode'*)
              DWG_CLayer:PGDBInteger;(*'Current layer'*)
              DWG_CLinew:PGDBInteger;(*'Current line weigwt'*)
+             DWG_CColor:PGDBInteger;(*'Current color'*)
              DWG_LTScale:PGDBDouble;(*'Drawing line type scale'*)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)

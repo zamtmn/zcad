@@ -242,6 +242,14 @@ else if (byt = 9) and (s = '$LTSCALE') then
                                                if sysvar.DWG.DWG_LTScale<>nil then
                                                sysvar.DWG.DWG_LTScale^ := strtofloat(s);
                                           end
+else if (byt = 9) and (s = '$CECOLOR') then
+                                          begin
+                                               s := f.readGDBString;
+                                               s := f.readGDBString;
+                                               if LoadMode=TLOLoad then
+                                               if sysvar.DWG.DWG_CColor<>nil then
+                                               sysvar.DWG.DWG_CColor^ := strtoint(s);
+                                          end
 else if (byt = 0) and (s = dxfName_ENDSEC) then
                                               exit;
   end;
@@ -1418,6 +1426,18 @@ else if (groupi = 9) and (ucvalues = '$LTSCALE') then
                                              outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_LTScale^))
                                          else
                                              outstream.TXTAddGDBStringEOL(floattostr(1.0));
+      groups := templatefile.readGDBString;
+      values := templatefile.readGDBString;
+    end
+else if (groupi = 9) and (ucvalues = '$CECOLOR') then
+    begin
+      outstream.TXTAddGDBStringEOL(groups);
+      outstream.TXTAddGDBStringEOL('$CECOLOR');
+      outstream.TXTAddGDBStringEOL('62');
+      if assigned(sysvar.DWG.DWG_CColor) then
+                                             outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_CColor^))
+                                         else
+                                             outstream.TXTAddGDBStringEOL(floattostr(256));
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
     end

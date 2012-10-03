@@ -9,6 +9,31 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: colorselectwnd.button1.caption
+msgctxt "colorselectwnd.button1.caption"
+msgid "Button1"
+msgstr ""
+
+#: colorselectwnd.caption
+msgctxt "colorselectwnd.caption"
+msgid "Form1"
+msgstr ""
+
+#: tcolorselectwnd.caption
+msgctxt "tcolorselectwnd.caption"
+msgid "Form1"
+msgstr ""
+
+#: tform1.button1.caption
+msgctxt "tform1.button1.caption"
+msgid "Button1"
+msgstr ""
+
+#: tform1.caption
+msgctxt "tform1.caption"
+msgid "Form1"
+msgstr ""
+
 #: tlayerwindow.buttonapplyclose.caption
 msgid "Apply and close"
 msgstr "Применить и закрыть"
@@ -325,6 +350,14 @@ msgctxt "zcadexternal.acn_deselectall~textimage"
 msgid "DSA"
 msgstr ""
 
+#: zcadexternal.acn_dockopt~caption
+msgid "Docking options"
+msgstr ""
+
+#: zcadexternal.acn_dockopt~textimage
+msgid "DO"
+msgstr ""
+
 #: zcadexternal.acn_el_find~caption
 msgctxt "zcadexternal.acn_el_find~caption"
 msgid "Find device"
@@ -500,6 +533,22 @@ msgstr "Расстановка устройств"
 msgctxt "zcadexternal.acn_ortodevplace~hint"
 msgid "Device placement"
 msgstr "Расстановка устройств"
+
+#: zcadexternal.acn_pandown~caption
+msgid "Pan down"
+msgstr ""
+
+#: zcadexternal.acn_panleft~caption
+msgid "Pan left"
+msgstr ""
+
+#: zcadexternal.acn_panright~caption
+msgid "Pan right"
+msgstr ""
+
+#: zcadexternal.acn_panup~caption
+msgid "Pan up"
+msgstr ""
 
 #: zcadexternal.acn_paste~caption
 msgctxt "zcadexternal.acn_paste~caption"
@@ -751,6 +800,38 @@ msgctxt "zcadexternal.acn_undo~caption"
 msgid "Undo"
 msgstr "Отменить"
 
+#: zcadexternal.acn_viewdown~caption
+msgid "View bottom"
+msgstr ""
+
+#: zcadexternal.acn_viewleft~caption
+msgid "View left"
+msgstr ""
+
+#: zcadexternal.acn_viewneiso~caption
+msgid "View NE isometric"
+msgstr ""
+
+#: zcadexternal.acn_viewnwiso~caption
+msgid "View NW isometric"
+msgstr ""
+
+#: zcadexternal.acn_viewright~caption
+msgid "View right"
+msgstr ""
+
+#: zcadexternal.acn_viewseiso~caption
+msgid "View SE isometric"
+msgstr ""
+
+#: zcadexternal.acn_viewswiso~caption
+msgid "View SW isometric"
+msgstr ""
+
+#: zcadexternal.acn_viewtop~caption
+msgid "View top"
+msgstr ""
+
 #: zcadexternal.acn_wire~caption
 msgctxt "zcadexternal.acn_wire~caption"
 msgid "Draw net\\trace"
@@ -775,25 +856,13 @@ msgstr "Предыдущее окно"
 msgid "Zoom All"
 msgstr "Показать всё"
 
-#: zcadexternal.acn_zoomall~textimage
-msgid "ZA"
-msgstr ""
-
 #: zcadexternal.acn_zoomin~caption
 msgid "Zoom in"
 msgstr "Приблизить"
 
-#: zcadexternal.acn_zoomin~textimage
-msgid "Z+"
-msgstr ""
-
 #: zcadexternal.acn_zoomout~caption
 msgid "Zoom out"
 msgstr "Удалить"
-
-#: zcadexternal.acn_zoomout~textimage
-msgid "Z-"
-msgstr ""
 
 #: zcadexternal.brmode~brm_bd
 msgctxt "zcadexternal.brmode~brm_bd"
@@ -907,6 +976,37 @@ msgctxt "zcadexternal.gdblineprop~lend"
 msgid "End"
 msgstr "Конец"
 
+#: zcadexternal.gdbltypeprop~dasharray
+msgid "DashInfo array"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~desk
+msgctxt "zcadexternal.gdbltypeprop~desk"
+msgid "Description"
+msgstr "Описание"
+
+#: zcadexternal.gdbltypeprop~h
+msgctxt "zcadexternal.gdbltypeprop~h"
+msgid "Height"
+msgstr "Высота"
+
+#: zcadexternal.gdbltypeprop~len
+msgctxt "zcadexternal.gdbltypeprop~len"
+msgid "Length"
+msgstr "Длина"
+
+#: zcadexternal.gdbltypeprop~shapearray
+msgid "Shape array"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~strokesarray
+msgid "Strokes array"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~textarray
+msgid "Text array"
+msgstr ""
+
 #: zcadexternal.gdbnamedobject~name
 msgctxt "zcadexternal.gdbnamedobject~name"
 msgid "Name"
@@ -955,9 +1055,9 @@ msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
-#| msgid "Rotate"
+#| msgid "Block params"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+msgid "Rotate"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjcircle~area
@@ -1015,20 +1115,10 @@ msgctxt "zcadexternal.gdbobjline~coordinwcs"
 msgid "Coordinates WCS"
 msgstr "Координаты в WCS"
 
-#: zcadexternal.gdbobjline~dir
-msgctxt "zcadexternal.gdbobjline~dir"
-msgid "Direction"
-msgstr "Направление"
-
 #: zcadexternal.gdbobjline~length
 msgctxt "zcadexternal.gdbobjline~length"
 msgid "Length"
 msgstr "Длина"
-
-#: zcadexternal.gdbobjline~length_2
-msgctxt "zcadexternal.gdbobjline~length_2"
-msgid "Sqrt length"
-msgstr "Квадрат длины"
 
 #: zcadexternal.gdbobjline~pprojpoint
 msgctxt "zcadexternal.gdbobjline~pprojpoint"
@@ -1175,6 +1265,10 @@ msgctxt "zcadexternal.gdbsysvariable~view"
 msgid "View"
 msgstr "Вид"
 
+#: zcadexternal.hint_panel~colorcombobox
+msgid "Color selection"
+msgstr ""
+
 #: zcadexternal.hint_panel~dwg_additionalgrips
 msgctxt "zcadexternal.hint_panel~dwg_additionalgrips"
 msgid "On/Off Additional grips"
@@ -1245,7 +1339,7 @@ msgstr "Камера в начало"
 #, fuzzy
 #| msgid "Layouts (not impl)"
 msgid "Dimensions styles (not impl)"
-msgstr "Стили размеров (не реализовано)"
+msgstr "Листы (не реализовано)"
 
 #: zcadexternal.menucommand~setobjinsp(camera)
 msgid "Camera"
@@ -1259,6 +1353,10 @@ msgstr "Шрифты"
 #: zcadexternal.menucommand~setobjinsp(layers)
 msgid "Layers"
 msgstr "Слои"
+
+#: zcadexternal.menucommand~setobjinsp(linetypestyles)
+msgid "Line type styles"
+msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(numerators)
 msgid "Numerators"
@@ -1370,6 +1468,38 @@ msgctxt "zcadexternal.menu~window"
 msgid "Window"
 msgstr "Окно"
 
+#: zcadexternal.rgbcolorname~blue
+msgctxt "zcadexternal.rgbcolorname~blue"
+msgid "Blue"
+msgstr "Синий"
+
+#: zcadexternal.rgbcolorname~cyan
+msgctxt "zcadexternal.rgbcolorname~cyan"
+msgid "Cyan"
+msgstr "Голубой"
+
+#: zcadexternal.rgbcolorname~green
+msgctxt "zcadexternal.rgbcolorname~green"
+msgid "Green"
+msgstr "Зеленый"
+
+#: zcadexternal.rgbcolorname~magenta
+msgid "Magenta"
+msgstr "Пурпурный"
+
+#: zcadexternal.rgbcolorname~red
+msgctxt "zcadexternal.rgbcolorname~red"
+msgid "Red"
+msgstr "Красный"
+
+#: zcadexternal.rgbcolorname~white
+msgid "White"
+msgstr "Белый"
+
+#: zcadexternal.rgbcolorname~yellow
+msgid "Yellow"
+msgstr "Желтый"
+
 #: zcadexternal.rgb~a
 msgctxt "zcadexternal.rgb~a"
 msgid "Alpha"
@@ -1397,6 +1527,10 @@ msgstr "Блок/Устройство"
 #: zcadexternal.submenu~inspector
 msgid "Inspector"
 msgstr "Инспектор"
+
+#: zcadexternal.submenu~pan
+msgid "Pan"
+msgstr ""
 
 #: zcadexternal.submenu~show window
 msgctxt "zcadexternal.submenu~show window"
@@ -1644,6 +1778,10 @@ msgstr "Режим черчения?"
 msgctxt "zcadexternal.tdwg~dwg_editinsubentry"
 msgid "SubEntities edit"
 msgstr "Редактирование составных объектов"
+
+#: zcadexternal.tdwg~dwg_ltscale
+msgid "Drawing line type scale"
+msgstr ""
 
 #: zcadexternal.tdwg~dwg_osmode
 msgctxt "zcadexternal.tdwg~dwg_osmode"
@@ -2690,6 +2828,10 @@ msgstr "Примитивы должны быть выбраны до запус�
 msgid "Select or specify the parameters entity!"
 msgstr "Выбери или укажи в параметрах примитив"
 
+#: zcadstrconsts.rscolornum
+msgid "Color %d"
+msgstr ""
+
 #: zcadstrconsts.rscommandlinewndname
 msgctxt "zcadstrconsts.rscommandlinewndname"
 msgid "Command line"
@@ -2884,6 +3026,10 @@ msgstr "Чертеж не сохранен. Уверен?"
 #: zcadstrconsts.rssavefile
 msgid "Save file..."
 msgstr "Сохранить файл..."
+
+#: zcadstrconsts.rsselectcolor
+msgid "Select color..."
+msgstr "Выбор цвета..."
 
 #: zcadstrconsts.rstemplatenotfound
 msgid "Template file \"%s\" not found"

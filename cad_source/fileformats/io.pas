@@ -847,20 +847,21 @@ begin
       line:=f.readGDBString;
       if (line[1]<>';')and(line[1]<>'') then
         begin
-          sub:=Copy(line,1,3);
+          sub:=GetPredStr(line,'=');
+          //sub:=Copy(line,1,3);
           val(sub,i,code);
-          line:=Copy(line,5,length(line)-4);
-          poz:=Pos(',',line);
-          sub:=Copy(line,1,poz-1);
+
+          sub:=GetPredStr(line,',');
           val(sub,palette[i].r,code);
-          line:=Copy(line,poz+1,length(line)-poz);
-          poz:=Pos(',',line);
-          sub:=Copy(line,1,poz-1);
+
+          sub:=GetPredStr(line,',');
           val(sub,palette[i].g,code);
-          line:=Copy(line,poz+1,length(line)-poz);
-          sub:=Copy(line,1,length(line));
+
+          sub:=GetPredStr(line,':');
           val(sub,palette[i].b,code);
           palette[i].a:=255;
+          if line<>'' then
+                          palette[i].name:=line;
         end;
     end;
   //f.close;

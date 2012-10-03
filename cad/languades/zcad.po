@@ -1,6 +1,31 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
+#: colorselectwnd.button1.caption
+msgctxt "ColorSelectWND.BUTTON1.CAPTION"
+msgid "Button1"
+msgstr ""
+
+#: colorselectwnd.caption
+msgctxt "ColorSelectWND.CAPTION"
+msgid "Form1"
+msgstr ""
+
+#: tcolorselectwnd.caption
+msgctxt "TCOLORSELECTWND.CAPTION"
+msgid "Form1"
+msgstr ""
+
+#: tform1.button1.caption
+msgctxt "tform1.button1.caption"
+msgid "Button1"
+msgstr ""
+
+#: tform1.caption
+msgctxt "tform1.caption"
+msgid "Form1"
+msgstr ""
+
 #: tlayerwindow.buttonapplyclose.caption
 msgid "Apply and close"
 msgstr ""
@@ -302,6 +327,14 @@ msgstr ""
 msgid "DSA"
 msgstr ""
 
+#: zcadexternal.acn_dockopt~caption
+msgid "Docking options"
+msgstr ""
+
+#: zcadexternal.acn_dockopt~textimage
+msgid "DO"
+msgstr ""
+
 #: zcadexternal.acn_el_find~caption
 msgid "Find device"
 msgstr ""
@@ -460,6 +493,22 @@ msgstr ""
 #: zcadexternal.acn_ortodevplace~hint
 msgctxt "zcadexternal.acn_ortodevplace~hint"
 msgid "Device placement"
+msgstr ""
+
+#: zcadexternal.acn_pandown~caption
+msgid "Pan down"
+msgstr ""
+
+#: zcadexternal.acn_panleft~caption
+msgid "Pan left"
+msgstr ""
+
+#: zcadexternal.acn_panright~caption
+msgid "Pan right"
+msgstr ""
+
+#: zcadexternal.acn_panup~caption
+msgid "Pan up"
 msgstr ""
 
 #: zcadexternal.acn_paste~caption
@@ -679,6 +728,38 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
+#: zcadexternal.acn_viewdown~caption
+msgid "View bottom"
+msgstr ""
+
+#: zcadexternal.acn_viewleft~caption
+msgid "View left"
+msgstr ""
+
+#: zcadexternal.acn_viewneiso~caption
+msgid "View NE isometric"
+msgstr ""
+
+#: zcadexternal.acn_viewnwiso~caption
+msgid "View NW isometric"
+msgstr ""
+
+#: zcadexternal.acn_viewright~caption
+msgid "View right"
+msgstr ""
+
+#: zcadexternal.acn_viewseiso~caption
+msgid "View SE isometric"
+msgstr ""
+
+#: zcadexternal.acn_viewswiso~caption
+msgid "View SW isometric"
+msgstr ""
+
+#: zcadexternal.acn_viewtop~caption
+msgid "View top"
+msgstr ""
+
 #: zcadexternal.acn_wire~caption
 msgctxt "zcadexternal.acn_wire~caption"
 msgid "Draw net\\trace"
@@ -701,24 +782,12 @@ msgstr ""
 msgid "Zoom All"
 msgstr ""
 
-#: zcadexternal.acn_zoomall~textimage
-msgid "ZA"
-msgstr ""
-
 #: zcadexternal.acn_zoomin~caption
 msgid "Zoom in"
 msgstr ""
 
-#: zcadexternal.acn_zoomin~textimage
-msgid "Z+"
-msgstr ""
-
 #: zcadexternal.acn_zoomout~caption
 msgid "Zoom out"
-msgstr ""
-
-#: zcadexternal.acn_zoomout~textimage
-msgid "Z-"
 msgstr ""
 
 #: zcadexternal.brmode~brm_bd
@@ -823,6 +892,37 @@ msgstr ""
 msgid "End"
 msgstr ""
 
+#: zcadexternal.gdbltypeprop~dasharray
+msgid "DashInfo array"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~desk
+msgctxt "zcadexternal.gdbltypeprop~desk"
+msgid "Description"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~h
+msgctxt "zcadexternal.gdbltypeprop~h"
+msgid "Height"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~len
+msgctxt "zcadexternal.gdbltypeprop~len"
+msgid "Length"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~shapearray
+msgid "Shape array"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~strokesarray
+msgid "Strokes array"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~textarray
+msgid "Text array"
+msgstr ""
+
 #: zcadexternal.gdbnamedobject~name
 msgctxt "zcadexternal.gdbnamedobject~name"
 msgid "Name"
@@ -867,13 +967,13 @@ msgstr ""
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
+msgid "Block params"
 msgstr ""
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+msgid "Rotate"
 msgstr ""
 
 #: zcadexternal.gdbobjcircle~area
@@ -925,17 +1025,9 @@ msgctxt "zcadexternal.gdbobjline~coordinwcs"
 msgid "Coordinates WCS"
 msgstr ""
 
-#: zcadexternal.gdbobjline~dir
-msgid "Direction"
-msgstr ""
-
 #: zcadexternal.gdbobjline~length
 msgctxt "zcadexternal.gdbobjline~length"
 msgid "Length"
-msgstr ""
-
-#: zcadexternal.gdbobjline~length_2
-msgid "Sqrt length"
 msgstr ""
 
 #: zcadexternal.gdbobjline~pprojpoint
@@ -1063,6 +1155,10 @@ msgctxt "zcadexternal.gdbsysvariable~view"
 msgid "View"
 msgstr ""
 
+#: zcadexternal.hint_panel~colorcombobox
+msgid "Color selection"
+msgstr ""
+
 #: zcadexternal.hint_panel~dwg_additionalgrips
 msgid "On/Off Additional grips"
 msgstr ""
@@ -1142,6 +1238,10 @@ msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(layers)
 msgid "Layers"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(linetypestyles)
+msgid "Line type styles"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(numerators)
@@ -1244,19 +1344,53 @@ msgstr ""
 msgid "Window"
 msgstr ""
 
+#: zcadexternal.rgbcolorname~blue
+msgctxt "zcadexternal.rgbcolorname~blue"
+msgid "Blue"
+msgstr ""
+
+#: zcadexternal.rgbcolorname~cyan
+msgid "Cyan"
+msgstr ""
+
+#: zcadexternal.rgbcolorname~green
+msgctxt "zcadexternal.rgbcolorname~green"
+msgid "Green"
+msgstr ""
+
+#: zcadexternal.rgbcolorname~magenta
+msgid "Magenta"
+msgstr ""
+
+#: zcadexternal.rgbcolorname~red
+msgctxt "zcadexternal.rgbcolorname~red"
+msgid "Red"
+msgstr ""
+
+#: zcadexternal.rgbcolorname~white
+msgid "White"
+msgstr ""
+
+#: zcadexternal.rgbcolorname~yellow
+msgid "Yellow"
+msgstr ""
+
 #: zcadexternal.rgb~a
 msgid "Alpha"
 msgstr ""
 
 #: zcadexternal.rgb~b
+msgctxt "zcadexternal.rgb~b"
 msgid "Blue"
 msgstr ""
 
 #: zcadexternal.rgb~g
+msgctxt "zcadexternal.rgb~g"
 msgid "Green"
 msgstr ""
 
 #: zcadexternal.rgb~r
+msgctxt "zcadexternal.rgb~r"
 msgid "Red"
 msgstr ""
 
@@ -1266,6 +1400,10 @@ msgstr ""
 
 #: zcadexternal.submenu~inspector
 msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.submenu~pan
+msgid "Pan"
 msgstr ""
 
 #: zcadexternal.submenu~show window
@@ -1279,6 +1417,11 @@ msgstr ""
 
 #: zcadexternal.submenu~toolbars
 msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.submenu~view
+msgctxt "zcadexternal.submenu~view"
+msgid "View"
 msgstr ""
 
 #: zcadexternal.submenu~view
@@ -1477,6 +1620,10 @@ msgstr ""
 
 #: zcadexternal.tdwg~dwg_editinsubentry
 msgid "SubEntities edit"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_ltscale
+msgid "Drawing line type scale"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_osmode
@@ -2145,6 +2292,7 @@ msgid "TopRight"
 msgstr ""
 
 #: zcadexternal.ttextinsertparams~h
+msgctxt "zcadexternal.ttextinsertparams~h"
 msgid "Height"
 msgstr ""
 
@@ -2428,6 +2576,10 @@ msgstr ""
 msgid "Select or specify the parameters entity!"
 msgstr ""
 
+#: zcadstrconsts.rscolornum
+msgid "Color %d"
+msgstr ""
+
 #: zcadstrconsts.rscommandlinewndname
 msgctxt "zcadstrconsts.rscommandlinewndname"
 msgid "Command line"
@@ -2616,6 +2768,10 @@ msgstr ""
 
 #: zcadstrconsts.rssavefile
 msgid "Save file..."
+msgstr ""
+
+#: zcadstrconsts.rsselectcolor
+msgid "Select color..."
 msgstr ""
 
 #: zcadstrconsts.rstemplatenotfound

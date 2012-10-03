@@ -35,7 +35,14 @@ uses
   {ZGUIArrays,}{ZBasicVisible,}{ZEditsWithVariable,}{ZTabControlsGeneric,}shared,{ZPanelsWithSplit,}{ZGUIsCT,}{ZstaticsText,}{UZProcessBar,}strmy{,strutils},{ZPanelsGeneric,}
   graphics,
   AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr{,xmlconf},zcadinterface,colorwnd;
+const
+     ColorBoxDifferent=258;
+     ColorBoxSelColor=257;
 type
+  TInterfaceVars=record
+                           CColor:integer;
+                     end;
+
   TmyAnchorDockHeader = class(TAnchorDockHeader)
                         protected
                                  procedure Paint; override;
@@ -169,6 +176,7 @@ function _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject):Integer;
 {procedure startup;
 procedure finalize;}
 var
+  IVars:TInterfaceVars;
   MainFormN: TMainFormN;
   //MainForm: TMainForm;
   uGeneralTimer:cardinal;
@@ -320,6 +328,7 @@ const pusto=-1000;
       different=-10001;
       ldifferent=pointer(1);
 var lw:GDBInteger;
+    color:GDBInteger;
     layer:pgdblayerprop;
     //i,se:GDBInteger;
     pv:{pgdbobjEntity}PSelectedObjDesc;
@@ -334,12 +343,14 @@ begin
                                        else LinewBox.ItemIndex:=((sysvar.dwg.DWG_CLinew^ div 10)+3);
            {if assigned(LayerBox) then
            LayerBox.ItemIndex:=getsortedindex(SysVar.dwg.DWG_CLayer^);}
+           IVars.CColor:=sysvar.dwg.DWG_CColor^;
       end
   else
       begin
            //se:=param.seldesc.Selectedobjcount;
            lw:=pusto;
            layer:=lpusto;
+           color:=pusto;
            pv:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
            //pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
            if pv<>nil then
@@ -353,10 +364,11 @@ begin
                                       else if lw<> pv^.objaddr^.vp.LineWeight then lw:=different;
                          if layer=lpusto then layer:=pv^.objaddr^.vp.layer
                                       else if layer<> pv^.objaddr^.vp.layer then layer:=ldifferent;
+                         if color=pusto then color:=pv^.objaddr^.vp.color
+                                        else if color<> pv^.objaddr^.vp.color then color:=different;
                     end;
-                if (layer=ldifferent)and(lw=different) then system.Break;
+                if (layer=ldifferent)and(lw=different)and(color=different) then system.Break;
            end;
-           //pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
            pv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
            until pv=nil;
            if lw<>pusto then
@@ -376,6 +388,14 @@ begin
                                begin
                                     //LayerBox.ItemIndex:=getsortedindex(gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(layer));
                                end;
+           if color<>pusto then
+           if color=different then
+                                  ivars.CColor:=ColorBoxDifferent
+                           else
+                               begin
+                                    ivars.CColor:=color;
+                               end;
+
       end;
       ColorBox.Invalidate;
 end;
@@ -401,6 +421,7 @@ begin
            {if assigned(LayerBox)then
            LayerBox.ItemIndex:=getsortedindex((layer));//(layer);    xcvxcv}
            gdb.GetCurrentDWG.OGLwindow1.SelectedObjectsPLayer:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.layer;
+           ivars.CColor:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.color;
       end
   else
       begin
@@ -414,6 +435,9 @@ begin
                    else lw:=(lw div 10)+3;
            if assigned(LinewBox)then
            if LinewBox.ItemIndex<>lw then LinewBox.ItemIndex:=(LinewBox.Items.Count-1);
+
+           if ivars.CColor<>PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.color then
+              ivars.CColor:=ColorBoxDifferent;
       end;
 end;
 
@@ -1420,25 +1444,32 @@ begin
      exit;
     begin
     if (odComboBoxEdit in State) then
-    begin
-         index:=sysvar.DWG.DWG_CColor^;
-         if index>0 then inc(index);
-         if index=256+1 then index:=1;
+                                      begin
+                                           index:=IVars.CColor;
+                                      end
+                                 else
+                                     index:=integer(tcombobox(Control).items.Objects[Index]);
+    case index of
+                 0:
+                   s:=rsByBlock;
+               256:
+                   s:=rsByLayer;
+            1..255:
+                   s:=palette[index].name;
+  ColorBoxSelColor:
+                   s:=rsSelectColor;
+ ColorBoxDifferent:
+                   s:=rsDifferent;
     end;
-    if (index<9)or(not(odComboBoxEdit in State)) then
-                   s:=TComboBox(Control).Items[index]
-               else
-                   s:=format(rsColorNum,[index-1]);
     ARect.Left:=ARect.Left+2;
     textrect:=ARect;
-    if (index<>TComboBox(Control).Items.Count-1)or(odComboBoxEdit in State) then
+    if index<ColorBoxSelColor then
      begin
           textrect.Left:=textrect.Left+textoffset;
           DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_VCENTER);
 
-          if index>1 then
+          if index in [1..255] then
                          begin
-                              index:=index-1;
                               TComboBox(Control).canvas.Brush.Color:=RGBToColor(palette[index].r,palette[index].g,palette[index].b);
                          end
                      else
@@ -1446,11 +1477,10 @@ begin
           y:=(ARect.Top+ARect.Bottom-cellsize)div 2;
           TComboBox(Control).canvas.Rectangle(ARect.Left,y,ARect.Left+cellsize,y+cellsize);
           if index=7 then
-                                   begin
-                                        index:=index-1;
-                                        TComboBox(Control).canvas.Brush.Color:=clBlack;
-                                        TComboBox(Control).canvas.Polygon([point(ARect.Left,y),point(ARect.Left+cellsize-1,y),point(ARect.Left+cellsize-1,y+cellsize-1)]);
-                                   end
+                         begin
+                              TComboBox(Control).canvas.Brush.Color:=clBlack;
+                              TComboBox(Control).canvas.Polygon([point(ARect.Left,y),point(ARect.Left+cellsize-1,y),point(ARect.Left+cellsize-1,y+cellsize-1)]);
+                          end
      end
     else
     DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
@@ -1631,17 +1661,14 @@ begin
                           end;
                           ColorBox.Clear;
                           ColorBox.readonly:=true;
-                          ColorBox.items.Add(rsByBlock);
-                          ColorBox.items.Add(rsByLayer);
+                          ColorBox.items.AddObject(rsByBlock,TObject(0));
+                          ColorBox.items.AddObject(rsByLayer,TObject(256));
                           for i := 1 to 7 do
                           begin
-                               if palette[i].name<>'' then
-                                                          ts:=InterfaceTranslate('rgbcolorname~'+palette[i].name,palette[i].name)
-                                                      else
-                                                          ts:='';
-                               ColorBox.items.Add(ts);
+                               ts:=palette[i].name;
+                               ColorBox.items.AddObject(ts,TObject(i));
                           end;
-                          ColorBox.items.Add(rsSelectColor);
+                          ColorBox.items.AddObject(rsSelectColor,TObject(ColorBoxSelColor));
                           ColorBox.ItemIndex:=0;
                           ColorBox.OnChange:=ChangeCColor;
                           ColorBox.AutoSize:=false;
@@ -2536,31 +2563,38 @@ begin
                                 HistoryLine.SelLength:=2;
                            end;
 end;
+procedure AddToComboIfNeed(cb:tcombobox;name:string;obj:TObject);
+var
+   i:integer;
+begin
+     for i:=0 to cb.Items.Count do
+       if cb.Items.Objects[i]=obj then
+                                      exit;
+     cb.items.InsertObject(cb.items.Count-1,name,obj);
+end;
+
 procedure  TMainFormN.ChangeCColor(Sender:Tobject);
 var
-   ColorIndex,CColorSave:Integer;
+   ColorIndex,CColorSave,index:Integer;
    mr:integer;
 begin
-     ColorIndex:=ColorBox.ItemIndex;
-     if ColorIndex=ColorBox.Items.Count-1 then
+     index:=tcombobox(Sender).ItemIndex;
+     ColorIndex:=integer(tcombobox(Sender).items.Objects[index]);
+     if ColorIndex=ColorBoxSelColor then
+                           begin
+                               Application.CreateForm(TColorSelectWND, ColorSelectWND);
+                               ShowAllCursors;
+                               mr:=ColorSelectWND.showmodal;
+                               if mr=mrOk then
                                               begin
-                                                   Application.CreateForm(TColorSelectWND, ColorSelectWND);
-                                                   ShowAllCursors;
-                                                   mr:=ColorSelectWND.showmodal;
-                                                   if mr=mrOk then
-                                                                  ColorIndex:=ColorSelectWND.ColorInfex
-                                                              else
-                                                                  ColorIndex:=-1;
-                                                   RestoreCursors;
-                                                   ColorSelectWND.destroy;
+                                              ColorIndex:=ColorSelectWND.ColorInfex;
+                                              AddToComboIfNeed(tcombobox(Sender),palette[ColorIndex].name,TObject(ColorIndex));
                                               end
                                           else
-                                              begin
-                                                   if ColorIndex=1 then
-                                                                       colorindex:=256
-                                                   else if ColorIndex<>0 then
-                                                                             dec(colorindex);
-                                              end;
+                                              ColorIndex:=-1;
+                               RestoreCursors;
+                               ColorSelectWND.destroy;
+                           end;
      if colorindex<0 then
                          exit;
      if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
@@ -2574,8 +2608,8 @@ begin
           SysVar.dwg.DWG_CColor^:=ColorIndex;
           commandmanager.ExecuteCommand('SelObjChangeColorToCurrent');
           SysVar.dwg.DWG_CColor^:=CColorSave;
-          setvisualprop;
      end;
+     setvisualprop;
      setnormalfocus(nil);
 end;
 

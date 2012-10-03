@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, Buttons, ColorBox, ButtonPanel;
+  StdCtrls, Buttons, ColorBox, ButtonPanel, Spin;
 
 type
 
@@ -14,7 +14,10 @@ type
 
   TColorSelectWND = class(TForm)
     ButtonPanel1: TButtonPanel;
-    ColorBox1: TColorBox;
+    Label1: TLabel;
+    SpinEdit1: TSpinEdit;
+    procedure testsetcolor(Sender: TObject);
+    procedure _onshow(Sender: TObject);
   private
     { private declarations }
   public
@@ -26,6 +29,18 @@ var
   ColorSelectWND: TColorSelectWND;
 
 implementation
+
+{ TColorSelectWND }
+
+procedure TColorSelectWND.testsetcolor(Sender: TObject);
+begin
+     ColorInfex:=SpinEdit1.Value;
+end;
+
+procedure TColorSelectWND._onshow(Sender: TObject);
+begin
+     testsetcolor(nil);
+end;
 
 initialization
   {$I colorwnd.lrs}

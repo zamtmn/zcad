@@ -19,7 +19,7 @@
 unit io;
 {$INCLUDE def.inc}
 interface
-uses UGDBSHXFont,strproc,FileUtil,LCLProc,GDBBlockDef,math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,GDBManager,iodxf,memman,UGDBDescriptor,gdbobjectsconstdef;
+uses zcadstrconsts,intftranslations,UGDBSHXFont,strproc,FileUtil,LCLProc,GDBBlockDef,math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,GDBManager,iodxf,memman,UGDBDescriptor,gdbobjectsconstdef;
 const
   IgnoreSHP='() '#13;
   BreakSHP='*,'#10;
@@ -861,7 +861,9 @@ begin
           val(sub,palette[i].b,code);
           palette[i].a:=255;
           if line<>'' then
-                          palette[i].name:=line;
+                          palette[i].name:=InterfaceTranslate('rgbcolorname~'+line,line)
+                      else
+                          palette[i].name:=format(rsColorNum,[i]);
         end;
     end;
   //f.close;

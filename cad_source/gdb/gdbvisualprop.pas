@@ -29,7 +29,7 @@ type
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=record
                       Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
-                      LineWeight:GDBShortint;(*'Line weight'*)(*saved_to_shd*)
+                      LineWeight:GDBSmallint;(*'Line weight'*)(*saved_to_shd*)
                       LineType:{GDBString}PGDBLtypeProp;(*'Line type'*)(*saved_to_shd*)
                       LineTypeScale:GDBDouble;(*'Line type scale'*)(*saved_to_shd*)
                       ID:TObjID;(*'Object type'*)(*oi_readonly*)

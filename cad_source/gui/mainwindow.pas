@@ -1665,7 +1665,8 @@ begin
                           end;}
                           for i := low(lwarray) to high(lwarray) do
                           begin
-                          s:=floattostr(lwarray[i]/100) + ' '+rsmm;
+                          //s:=floattostr(lwarray[i]/100) + ' '+rsmm;
+                          s:=FloatToStrF(lwarray[i]/100),ffGeneral);
                                LineWbox.items.AddObject(s,TObject(lwarray[i]+3));
                                //LineWbox.items.Add(s);
                           end;
@@ -1674,6 +1675,7 @@ begin
                           LineWbox.OnChange:=ChangeCLineW;
                           LineWbox.AutoSize:=false;
                           LineWbox.OnMouseLeave:=self.setnormalfocus;
+                          LineWbox.DropDownCount:=50;
                            AddToBar(tb,LineWBox);
                      end;
                      if uppercase(line)='COLORCOMBOBOX' then
@@ -1706,8 +1708,9 @@ begin
                           ColorBox.items.AddObject(rsSelectColor,TObject(ColorBoxSelColor));
                           ColorBox.ItemIndex:=0;
                           ColorBox.OnChange:=ChangeCColor;
-                          ColorBox.AutoSize:=false;
+                          ColorBox.AutoSize:={false}true;
                           ColorBox.OnMouseLeave:=self.setnormalfocus;
+                          ColorBox.DropDownCount:=50;
                           AddToBar(tb,ColorBox);
                      end;
                      if uppercase(line)='SEPARATOR' then

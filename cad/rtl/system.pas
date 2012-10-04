@@ -1134,7 +1134,7 @@ GDBObjSubordinated=object(GDBObjGenericWithSubordinated)
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=record
                       Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
-                      LineWeight:GDBShortint;(*'Line weight'*)(*saved_to_shd*)
+                      LineWeight:GDBSmallint;(*'Line weight'*)(*saved_to_shd*)
                       LineType:{GDBString}PGDBLtypeProp;(*'Line type'*)(*saved_to_shd*)
                       LineTypeScale:GDBDouble;(*'Line type scale'*)(*saved_to_shd*)
                       ID:TObjID;(*'Object type'*)(*oi_readonly*)
@@ -1253,6 +1253,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure CalcObjMatrix;virtual;abstract;
                     procedure ReCalcFromObjMatrix;virtual;abstract;
                     procedure correctsublayers(var la:GDBLayerArray);virtual;abstract;
+                    procedure CopyVPto(var toObj:GDBObjEntity);virtual;abstract;
               end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDB3d.pas
 GDBObj3d=object(GDBObjEntity)

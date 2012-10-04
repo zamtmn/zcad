@@ -38,10 +38,11 @@ uses
 const
      ColorBoxDifferent=258;
      ColorBoxSelColor=257;
+     lwarray:array [1..24] of integer=(0,5,9,13,15,18,20,25,30,35,40,50,53,60,70,80,90,100,106,120,140,158,200,211);
 type
   TInterfaceVars=record
-                           CColor:integer;
-                     end;
+                       CColor,CLWeight:GDBInteger;
+                 end;
 
   TmyAnchorDockHeader = class(TAnchorDockHeader)
                         protected
@@ -344,6 +345,7 @@ begin
            {if assigned(LayerBox) then
            LayerBox.ItemIndex:=getsortedindex(SysVar.dwg.DWG_CLayer^);}
            IVars.CColor:=sysvar.dwg.DWG_CColor^;
+           IVars.CLWeight:=sysvar.dwg.DWG_CLinew^+2;
       end
   else
       begin
@@ -374,11 +376,10 @@ begin
            if lw<>pusto then
            if assigned(LinewBox)then
            if lw=different then
-                               LinewBox.ItemIndex:=(LinewBox.Items.Count-1)
+                               ivars.CLWeight:=ColorBoxDifferent
                            else
                                begin
-                                    if lw<0 then LinewBox.ItemIndex:=(lw+3)
-                                            else LinewBox.ItemIndex:=((lw div 10)+3)
+                                    ivars.CLWeight:=lw+3
                                end;
            if layer<>lpusto then
            if assigned(LayerBox)then
@@ -398,6 +399,7 @@ begin
 
       end;
       ColorBox.Invalidate;
+      LineWBox.Invalidate;
 end;
 procedure TMainFormN.addoneobject;
 //const //pusto=-1000;
@@ -1409,22 +1411,44 @@ procedure TMainFormN.LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARec
 var
    plp:PGDBLayerProp;
    Dest: PChar;
-   y:integer;
+   y,pw:integer;
 const
      ll=30;
 begin
     if gdb.GetCurrentDWG=nil then
-     exit;
-    s:=TComboBox(Control).Items[index];
+                                 exit;
+    if (odComboBoxEdit in State) then
+                                      begin
+                                           index:=IVars.CLWeight;
+                                      end
+                                 else
+                                     index:=integer(tcombobox(Control).items.Objects[Index]);
+   case index of
+                0:
+                  s:=rsDefault;
+                1:
+                  s:=rsByBlock;
+                2:
+                  s:=rsByLayer;
+ColorBoxDifferent:
+                  s:=rsDifferent;
+                else
+                    begin
+                         s:=floattostr((index-3)/100) + ' '+rsmm;
+                    end;
+   end;
     ARect.Left:=ARect.Left+2;
-    if (index>2)and(index<TComboBox(Control).Items.Count-1) then
+    if (index>2)and(index<ColorBoxDifferent) then
      begin
-          y:=(index-3);
-          if y>10 then
-                                               y:=10;
-          TComboBox(Control).canvas.Pen.Width:=y;//div 10;
+          pw:=(index-3) div 10;
+          if pw>12 then
+                      pw:=12;
+          TComboBox(Control).canvas.Pen.Width:=pw;
+          TComboBox(Control).canvas.Pen.Style:=psSolid;
+          TComboBox(Control).canvas.Pen.EndCap:=pecFlat;
+          pw:=pw div 2{+1};
           y:=(ARect.Top+ARect.Bottom)div 2;
-          TComboBox(Control).canvas.Line(ARect.Left,y,ARect.Left+ll,y);
+          TComboBox(Control).canvas.Line(ARect.Left{+pw},y,ARect.Left+ll{-pw},y);
           ARect.Left:=ARect.Left+ll+5;
      end;
     DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
@@ -1627,15 +1651,26 @@ begin
                           end;
                           LineWbox.Clear;
                           LineWbox.readonly:=true;
-                          LineWbox.items.Add(rsdefault);
-                          LineWbox.items.Add(rsByBlock);
-                          LineWbox.items.Add(rsByLayer);
-                          for i := 0 to 20 do
+                          //LineWbox.items.Add(rsdefault);
+                          //LineWbox.items.Add(rsByBlock);
+                          LineWbox.items.AddObject(rsByLayer,TObject(1));
+                          LineWbox.items.AddObject(rsByBlock,TObject(0));
+                          LineWbox.items.AddObject(rsdefault,TObject(2));
+                          //LineWbox.items.Add(rsByLayer);
+                          {for i := 0 to 20 do
                           begin
                           s:=floattostr(i / 10) + ' '+rsmm;
-                               LineWbox.items.Add((s));
+                               LineWbox.items.AddObject(s,TObject(I*10+2));
+                               //LineWbox.items.Add(s);
+                          end;}
+                          for i := low(lwarray) to high(lwarray) do
+                          begin
+                          s:=floattostr(lwarray[i]/100) + ' '+rsmm;
+                               LineWbox.items.AddObject(s,TObject(lwarray[i]+3));
+                               //LineWbox.items.Add(s);
                           end;
-                          LineWbox.items.Add(rsDifferent);
+
+                          //LineWbox.items.Add(rsDifferent);
                           LineWbox.OnChange:=ChangeCLineW;
                           LineWbox.AutoSize:=false;
                           LineWbox.OnMouseLeave:=self.setnormalfocus;
@@ -2614,41 +2649,25 @@ begin
 end;
 
 procedure  TMainFormN.ChangeCLineW(Sender:Tobject);
-var tcl:GDBInteger;
+var tcl,index:GDBInteger;
 begin
+  index:=tcombobox(Sender).ItemIndex;
+  index:=integer(tcombobox(Sender).items.Objects[index])-3;
   if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
   then
   begin
-  if LineWBox.ItemIndex = linewbox.Items.Count-1 then
-                                                     begin
-                                                          if SysVar.dwg.DWG_CLinew^<0 then linewbox.ItemIndex:=(SysVar.dwg.DWG_CLinew^+3)
-                                                                              else linewbox.ItemIndex:=(SysVar.dwg.DWG_CLinew^ div 10+3);
-                                                     end
-                                                 else
-                                                     begin
-                                                          SysVar.dwg.DWG_CLinew^ := linewbox.ItemIndex;
-                                                          SysVar.dwg.DWG_CLinew^:=SysVar.dwg.DWG_CLinew^-3;
-                                                          if SysVar.dwg.DWG_CLinew^>0 then SysVar.dwg.DWG_CLinew^:=SysVar.dwg.DWG_CLinew^*10;
-                                                     end;
+      SysVar.dwg.DWG_CLinew^:=index;
   end
   else
   begin
-       if linewbox.ItemIndex = linewbox.Items.Count-1
-           then
-           begin
-                setvisualprop;
-           end
-           else
            begin
                 tcl:=SysVar.dwg.DWG_CLinew^;
-                SysVar.dwg.DWG_CLinew^:=linewbox.ItemIndex;
-                SysVar.dwg.DWG_CLinew^:=SysVar.dwg.DWG_CLinew^-3;
-                if SysVar.dwg.DWG_CLinew^>0 then SysVar.dwg.DWG_CLinew^:=SysVar.dwg.DWG_CLinew^*10;
+                SysVar.dwg.DWG_CLinew^:=index;
                 commandmanager.ExecuteCommand('SelObjChangeLWToCurrent');
                 SysVar.dwg.DWG_CLinew^:=tcl;
-                setvisualprop;
            end;
   end;
+  setvisualprop;
   setnormalfocus(nil);
 end;
 

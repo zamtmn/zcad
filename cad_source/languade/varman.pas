@@ -877,8 +877,11 @@ begin
                           end;
            end;{case}
            if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
-           if (line='')or(count=200) then
-                                                             line := f.readtoparser(';')
+           if (line='')or(count=300) then
+                                         begin
+                                              line := f.readtoparser(';');
+                                              count:=0;
+                                         end
                                                          else
                                                              begin
                                                                   inc(count);

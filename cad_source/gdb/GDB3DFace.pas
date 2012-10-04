@@ -336,6 +336,7 @@ var tvo: PGDBObj3DFace;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{1C6F0445-7339-449A-BDEB-7D38A46FD910}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObj3DFace));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, nulvertex);
+  CopyVPto(tvo^);
   tvo^.bp.ListPos.Owner:=own;
   tvo^.PInOCS:=PInOCS;
   tvo^.PInWCS:=PInWCS;

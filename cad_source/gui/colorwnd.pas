@@ -15,6 +15,7 @@ type
   TColorSelectWND = class(TForm)
     ButtonPanel1: TButtonPanel;
     Label1: TLabel;
+    Label2: TLabel;
     SpinEdit1: TSpinEdit;
     procedure testsetcolor(Sender: TObject);
     procedure _onshow(Sender: TObject);

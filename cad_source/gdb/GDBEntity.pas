@@ -148,12 +148,21 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure CalcObjMatrix;virtual;
                     procedure ReCalcFromObjMatrix;virtual;
                     procedure correctsublayers(var la:GDBLayerArray);virtual;
+                    procedure CopyVPto(var toObj:GDBObjEntity);virtual;
               end;
 {Export-}
 var onlygetsnapcount:GDBInteger;
     ForeGround:RGB;
 implementation
 uses UGDBEntTree,GDBGenericSubEntry,UGDBDescriptor,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+
+procedure GDBObjEntity.CopyVPto(var toObj:GDBObjEntity);
+begin
+  toObj.vp.LineType:=vp.LineType;
+  toObj.vp.LineTypeScale:=vp.LineTypeScale;
+  toObj.vp.color:=vp.color;
+end;
+
 procedure GDBObjEntity.correctsublayers(var la:GDBLayerArray);
 begin
 

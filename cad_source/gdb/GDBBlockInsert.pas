@@ -492,7 +492,8 @@ begin
   tvo^.init({bp.owner}own,vp.Layer, vp.LineWeight);
   tvo^.scale:=scale;
   tvo^.vp.id := GDBBlockInsertID;
-  tvo^.vp.layer :=vp.layer;
+  //tvo^.vp.layer :=vp.layer;
+  CopyVPto(tvo^);
   GDBPointer(tvo^.name) := nil;
   tvo^.name := name;
   tvo^.pattrib := nil;

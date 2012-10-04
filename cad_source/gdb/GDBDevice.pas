@@ -248,7 +248,8 @@ begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{F9D41F4A-1E80-4D3A-9DD1-D0037EFCA988}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjDevice));
   tvo^.init({bp.owner}own,vp.Layer, vp.LineWeight);
   tvo^.vp.id :=GDBDeviceID;
-  tvo^.vp.layer :=vp.layer;
+  //tvo^.vp.layer :=vp.layer;
+  CopyVPto(tvo^);
   GDBPointer(tvo^.name) := nil;
   tvo^.name := name;
   tvo^.pattrib := nil;

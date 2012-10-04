@@ -412,6 +412,7 @@ begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{0238E343-798C-4E03-9518-0F251F8F4F80}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjCircle));
   tvo^.init(CalcOwner(own),vp.Layer, vp.LineWeight, Local.p_insert, Radius);
   tvo^.local:=local;
+  CopyVPto(tvo^);
   //tvo^.format;
   result := tvo;
 end;

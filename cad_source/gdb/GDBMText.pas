@@ -845,7 +845,8 @@ var tvo: PGDBObjMtext;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{599A7E9B-3DA5-4715-8DFC-0957E8B6FCBF}',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjMText));
   tvo^.initnul(own);
-  tvo^.vp:=vp;
+  //tvo^.vp:=vp;
+  CopyVPto(tvo^);
   tvo^.Local:=local;
   tvo^.Textprop:=textprop;
   tvo^.template:=template;

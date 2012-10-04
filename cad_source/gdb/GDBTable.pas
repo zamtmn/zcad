@@ -132,7 +132,8 @@ begin
   tvo^.h:=h;
 
   tvo^.vp.id := GDBTableID;
-  tvo^.vp.layer :=vp.layer;
+  //tvo^.vp.layer :=vp.layer;
+  CopyVPto(tvo^);
   tvo^.Local.p_insert := Local.p_insert;
   tvo^.Local := Local;
   tvo^.bp.ListPos.Owner:=own;

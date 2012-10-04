@@ -1,18 +1,18 @@
 object ColorSelectWND: TColorSelectWND
   Left = 586
-  Height = 238
+  Height = 164
   Top = 284
-  Width = 388
+  Width = 335
   Caption = 'Form1'
-  ClientHeight = 238
-  ClientWidth = 388
+  ClientHeight = 164
+  ClientWidth = 335
   OnShow = _onshow
   LCLVersion = '1.1'
   object ButtonPanel1: TButtonPanel
     Left = 6
     Height = 34
-    Top = 198
-    Width = 376
+    Top = 124
+    Width = 323
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'
@@ -25,21 +25,48 @@ object ColorSelectWND: TColorSelectWND
     ShowButtons = [pbOK, pbCancel, pbHelp]
   end
   object Label1: TLabel
-    Left = 45
-    Height = 15
-    Top = 39
-    Width = 92
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = Owner
+    AnchorSideTop.Side = asrCenter
+    Left = 57
+    Height = 40
+    Top = 43
+    Width = 220
+    Anchors = [akLeft]
     Caption = 'Not implement (('
+    Font.Height = 40
     ParentColor = False
+    ParentFont = False
   end
   object SpinEdit1: TSpinEdit
-    Left = 57
+    AnchorSideTop.Control = ButtonPanel1
+    AnchorSideRight.Control = ButtonPanel1
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = ButtonPanel1
+    Left = 275
     Height = 23
-    Top = 104
-    Width = 142
+    Top = 95
+    Width = 54
+    Anchors = [akRight, akBottom]
     MaxValue = 256
     OnChange = testsetcolor
     TabOrder = 1
     Value = 111
+  end
+  object Label2: TLabel
+    AnchorSideTop.Control = SpinEdit1
+    AnchorSideRight.Control = SpinEdit1
+    AnchorSideBottom.Control = SpinEdit1
+    AnchorSideBottom.Side = asrCenter
+    Left = 8
+    Height = 21
+    Top = 95
+    Width = 267
+    Alignment = taRightJustify
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Caption = 'Color number:'
+    Layout = tlCenter
+    ParentColor = False
   end
 end

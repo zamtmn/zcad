@@ -425,6 +425,7 @@ var tpo: PGDBObjLWPolyline;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{8F88CAFB-14F3-4F33-96B5-F493DB8B28B7}',{$ENDIF}GDBPointer(tpo), sizeof(GDBObjLWPolyline));
   tpo^.init({bp.owner}own,vp.Layer, vp.LineWeight,closed);
+  CopyVPto(tpo^);
   tpo^.Local:=local;
   //tpo^.vertexarray.init({$IFDEF DEBUGBUILD}'{90423E18-2ABF-48A8-8E0E-5D08A9E54255}',{$ENDIF}1000);
   p:=Vertex2D_in_OCS_Array.PArray;

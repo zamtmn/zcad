@@ -19,6 +19,9 @@ Panel Status;
     variable DWG_PolarMode,polar.bmp,Polar tracking
     variable DWG_HelpGeometryDraw,#AG,Auxiliary graphics (connectivity, direction, etc.)
     variable DWG_SystmGeometryDraw,#SG,System graphics (size, communication, etc. for debugging)
+    layercombobox 200,Layer selection
+    colorcombobox 100,Color selection
+    linewcombobox 100,Line weight selection
   }
 Panel Standart;
   {
@@ -29,9 +32,6 @@ Panel Standart;
     action ACN_PRINT
     Separator
     action ACN_LAYER
-    layercombobox 200,Layer selection
-    colorcombobox 100,Color selection
-    linewcombobox 100,Line weight selection
     Separator
     action ACN_UNDO
     action ACN_REDO
@@ -209,8 +209,8 @@ MainMenuItem Format;
     Command Line type styles,SetObjInsp(LINETYPESTYLES),none,none
     Command Table styles,SetObjInsp(TABLESTYLES),none,none
     Command Numerators,SetObjInsp(NUMERATORS),none,none
-    Command Dimensions styles (not impl),fuckoff,none,none
-    Command Layouts (not impl),fuckoff,none,none
+    Command Dimensions styles (not impl),fuckoff1,none,none
+    Command Layouts (not impl),fuckoff2,none,none
   }
 MainMenuItem Draw;
   {

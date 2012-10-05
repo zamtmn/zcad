@@ -16,6 +16,16 @@ msgctxt "TCOLORSELECTWND.CAPTION"
 msgid "Form1"
 msgstr ""
 
+#: tcolorselectwnd.label1.caption
+msgctxt "tcolorselectwnd.label1.caption"
+msgid "Not implement (("
+msgstr ""
+
+#: tcolorselectwnd.label2.caption
+msgctxt "TCOLORSELECTWND.LABEL2.CAPTION"
+msgid "Color number:"
+msgstr ""
+
 #: tform1.button1.caption
 msgctxt "tform1.button1.caption"
 msgid "Button1"
@@ -967,13 +977,13 @@ msgstr ""
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+msgid "Rotate"
 msgstr ""
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
+msgid "Block params"
 msgstr ""
 
 #: zcadexternal.gdbobjcircle~area
@@ -1156,6 +1166,7 @@ msgid "View"
 msgstr ""
 
 #: zcadexternal.hint_panel~colorcombobox
+msgctxt "zcadexternal.hint_panel~colorcombobox"
 msgid "Color selection"
 msgstr ""
 
@@ -1197,10 +1208,12 @@ msgid "System graphics (size, communication, etc. for debugging)"
 msgstr ""
 
 #: zcadexternal.hint_panel~layercombobox
+msgctxt "zcadexternal.hint_panel~layercombobox"
 msgid "Layer selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~linewcombobox
+msgctxt "zcadexternal.hint_panel~linewcombobox"
 msgid "Line weight selection"
 msgstr ""
 
@@ -1217,14 +1230,12 @@ msgstr ""
 msgid "Reset camera"
 msgstr ""
 
-#: zcadexternal.menucommand~fuckoff
-#, fuzzy
-msgid "Layouts (not impl)"
+#: zcadexternal.menucommand~fuckoff1
+msgid "Dimensions styles (not impl)"
 msgstr ""
 
-#: zcadexternal.menucommand~fuckoff
-#, fuzzy
-msgid "Dimensions styles (not impl)"
+#: zcadexternal.menucommand~fuckoff2
+msgid "Layouts (not impl)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(camera)
@@ -1606,12 +1617,20 @@ msgstr ""
 msgid "Additional grips"
 msgstr ""
 
+#: zcadexternal.tdwg~dwg_ccolor
+msgid "Current color"
+msgstr ""
+
 #: zcadexternal.tdwg~dwg_clayer
 msgid "Current layer"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_clinew
 msgid "Current line weigwt"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_drawgrid
+msgid "Show grid"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_drawmode
@@ -1622,8 +1641,16 @@ msgstr ""
 msgid "SubEntities edit"
 msgstr ""
 
+#: zcadexternal.tdwg~dwg_helpgeometrydraw
+msgid "Help geometry"
+msgstr ""
+
 #: zcadexternal.tdwg~dwg_ltscale
 msgid "Drawing line type scale"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_origingrid
+msgid "Grid origin"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_osmode
@@ -1635,7 +1662,20 @@ msgid "Polar tracking mode"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_selectedobjtoinsp
-msgid "SelectedObjToInsp"
+#, fuzzy
+msgid "Selected object to inspector"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_snapgrid
+msgid "Stap to grid"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_stepgrid
+msgid "Grid step"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_systmgeometrydraw
+msgid "System geometry"
 msgstr ""
 
 #: zcadexternal.telcablecomparam~pcable
@@ -2598,6 +2638,10 @@ msgstr ""
 #: zcadstrconsts.rscompiledtimemsg
 msgctxt "zcadstrconsts.rscompiledtimemsg"
 msgid "Done.  %s second"
+msgstr ""
+
+#: zcadstrconsts.rscurrentlayeroff
+msgid "The current layer is turned off"
 msgstr ""
 
 #: zcadstrconsts.rsdefault

@@ -2638,6 +2638,7 @@ begin
      ColorIndex:=integer(tcombobox(Sender).items.Objects[index]);
      if ColorIndex=ColorBoxSelColor then
                            begin
+                               if not assigned(ColorSelectWND)then
                                Application.CreateForm(TColorSelectWND, ColorSelectWND);
                                ShowAllCursors;
                                mr:=ColorSelectWND.showmodal;
@@ -2649,7 +2650,7 @@ begin
                                           else
                                               ColorIndex:=-1;
                                RestoreCursors;
-                               ColorSelectWND.destroy;
+                               freeandnil(ColorSelectWND);
                            end;
      if colorindex<0 then
                          exit;

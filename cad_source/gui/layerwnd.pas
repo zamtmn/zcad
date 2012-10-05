@@ -5,7 +5,7 @@ unit layerwnd;
 interface
 
 uses
-  ugdbsimpledrawing,zcadsysvars,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Buttons, ExtCtrls, StdCtrls, Grids, ComCtrls,LCLIntf,lcltype,
 
   gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
@@ -98,6 +98,7 @@ end;
 procedure TLayerWindow.Process(ListItem:TListItem;SubItem:Integer);
 var
    pos,si: integer;
+   mr:integer;
 begin
      {if SubItem>0 then
                   ListItem.SubItemImages[SubItem-1]:=3
@@ -112,6 +113,8 @@ begin
                    ListItem.ImageIndex:=II_Ok;
                    CurrentLayer.ImageIndex:=-1;
                    CurrentLayer:=ListItem;
+                   if not PGDBLayerProp(ListItem.Data)^._on then
+                                                                 MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
                    changedstamp:=true;
                    end;
             end;
@@ -120,7 +123,10 @@ begin
                    if PGDBLayerProp(ListItem.Data)^._on then
                                     ListItem.SubItemImages[1]:=II_LayerOn
                                 else
+                                    begin
                                     ListItem.SubItemImages[1]:=II_LayerOff;
+                                    MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
+                                    end;
                     changedstamp:=true;
              end;
            3:begin
@@ -130,6 +136,18 @@ begin
                                 else
                                     ListItem.SubItemImages[3]:=II_LayerUnLock;
                     changedstamp:=true;
+             end;
+           4:begin
+                if not assigned(ColorSelectWND)then
+                Application.CreateForm(TColorSelectWND, ColorSelectWND);
+                mr:=DoShowModal(ColorSelectWND);
+                if mr=mrOk then
+                               begin
+                                    PGDBLayerProp(ListItem.Data)^.color:=ColorSelectWND.ColorInfex;
+                                    ListItem.SubItems[4]:=inttostr(ColorSelectWND.ColorInfex);
+                               end;
+                freeandnil(ColorSelectWND);
+                changedstamp:=true;
              end;
            7:begin
                    PGDBLayerProp(ListItem.Data)^._print:=not PGDBLayerProp(ListItem.Data)^._print;

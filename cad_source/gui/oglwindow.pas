@@ -2232,7 +2232,7 @@ begin
           end;
         end;
         end;
-
+        needredraw:=true;
     end
     else
     begin
@@ -2246,6 +2246,7 @@ begin
             commandmanager.ExecuteCommandSilent('SelectFrame');
             sendmousecoord(MZW_LBUTTON);
           end;
+      needredraw:=true;
     end;
     If assigned(UpdateObjInspProc)then
     UpdateObjInspProc;

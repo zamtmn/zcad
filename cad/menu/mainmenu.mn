@@ -19,9 +19,6 @@ Panel Status;
     variable DWG_PolarMode,polar.bmp,Polar tracking
     variable DWG_HelpGeometryDraw,#AG,Auxiliary graphics (connectivity, direction, etc.)
     variable DWG_SystmGeometryDraw,#SG,System graphics (size, communication, etc. for debugging)
-    layercombobox 200,Layer selection
-    colorcombobox 100,Color selection
-    linewcombobox 100,Line weight selection
   }
 Panel Standart;
   {
@@ -32,6 +29,9 @@ Panel Standart;
     action ACN_PRINT
     Separator
     action ACN_LAYER
+    layercombobox 200,Layer selection
+    colorcombobox 100,Color selection
+    linewcombobox 100,Line weight selection
     Separator
     action ACN_UNDO
     action ACN_REDO

@@ -50,7 +50,7 @@ action ACN_VIEWNWISO,View(NWISO),isonw.bmp,View NW isometric,,
 
 
 
-action ACN_SNAPRUNTIME,SnapProperties,#snap,Run time snap editor,,ALT+S
+action ACN_SNAPRUNTIME,SnapProperties,magnet.bmp,Run time snap editor,,ALT+S
 
 action ACN_LAYER,Layer,layer.bmp,Layers ...,Layers properties manager,
 

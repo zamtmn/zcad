@@ -31,7 +31,7 @@ begin
 
 
   DWG_CLayer:=0;
-  DWG_CLinew:=-2;
+  DWG_CLinew:=-1;
   DWG_CColor:=256;
 
      camera.initnul;

@@ -42,6 +42,7 @@ const
 type
   TInterfaceVars=record
                        CColor,CLWeight:GDBInteger;
+                       CLayer:PGDBLayerProp;
                  end;
 
   TmyAnchorDockHeader = class(TAnchorDockHeader)
@@ -345,7 +346,8 @@ begin
            {if assigned(LayerBox) then
            LayerBox.ItemIndex:=getsortedindex(SysVar.dwg.DWG_CLayer^);}
            IVars.CColor:=sysvar.dwg.DWG_CColor^;
-           IVars.CLWeight:=sysvar.dwg.DWG_CLinew^+2;
+           IVars.CLWeight:=sysvar.dwg.DWG_CLinew^+3;
+           ivars.CLayer:=gdb.GetCurrentDWG.LayerTable.getelement(sysvar.dwg.DWG_CLayer^);
       end
   else
       begin
@@ -374,7 +376,6 @@ begin
            pv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
            until pv=nil;
            if lw<>pusto then
-           if assigned(LinewBox)then
            if lw=different then
                                ivars.CLWeight:=ColorBoxDifferent
                            else
@@ -382,12 +383,11 @@ begin
                                     ivars.CLWeight:=lw+3
                                end;
            if layer<>lpusto then
-           if assigned(LayerBox)then
            if layer=ldifferent then
-                                  LayerBox.ItemIndex:=(LayerBox.ItemsCount-1)
-                           else
+                                  ivars.CLayer:=nil
+                               else
                                begin
-                                    //LayerBox.ItemIndex:=getsortedindex(gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(layer));
+                                    ivars.CLayer:=layer;
                                end;
            if color<>pusto then
            if color=different then
@@ -398,8 +398,7 @@ begin
                                end;
 
       end;
-      ColorBox.Invalidate;
-      LineWBox.Invalidate;
+      UpdateControls;
 end;
 procedure TMainFormN.addoneobject;
 //const //pusto=-1000;
@@ -422,15 +421,15 @@ begin
            end;
            {if assigned(LayerBox)then
            LayerBox.ItemIndex:=getsortedindex((layer));//(layer);    xcvxcv}
-           gdb.GetCurrentDWG.OGLwindow1.SelectedObjectsPLayer:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.layer;
+           //gdb.GetCurrentDWG.OGLwindow1.SelectedObjectsPLayer:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.layer;
            ivars.CColor:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.color;
       end
   else
       begin
            if assigned(LayerBox)then
            begin
-                if gdb.GetCurrentDWG.OGLwindow1.SelectedObjectsPLayer<>PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.layer then
-                   gdb.GetCurrentDWG.OGLwindow1.SelectedObjectsPLayer:=nil;
+                //if gdb.GetCurrentDWG.OGLwindow1.SelectedObjectsPLayer<>PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.layer then
+                //   gdb.GetCurrentDWG.OGLwindow1.SelectedObjectsPLayer:=nil;
            end;
            //if LayerBox.ItemIndex<>getsortedindex((layer)) then LayerBox.ItemIndex:=(LayerBox.ItemsCount-1);
            if lw<0 then lw:=lw+3
@@ -461,6 +460,7 @@ begin
                                 begin
                                           if assigned(sysvar.dwg.DWG_CLayer) then
                                             sysvar.dwg.DWG_CLayer^:=cdwg^.LayerTable.GetIndexByPointer(Player);
+                                          setvisualprop;
                                 end
                                 else
                                 begin
@@ -523,7 +523,14 @@ begin
                             begin
                                  if assigned(cdwg^.OGLwindow1) then
                                  begin
-                                 pcl:=cdwg^.LayerTable.GetCurrentLayer;
+                                      if IVars.CLayer<>nil then
+                                      begin
+                                           setlayerstate(IVars.CLayer,lp);
+                                           result:=true;
+                                      end
+                                      else
+                                          lp.Name:=rsDifferent;
+                                 {pcl:=cdwg^.LayerTable.GetCurrentLayer;
                                  if cdwg^.OGLwindow1.param.seldesc.Selectedobjcount=0 then
                                  begin
                                  if pcl<>nil then
@@ -534,12 +541,12 @@ begin
                                  end
                                  else
                                      begin
-                                          if cdwg^.OGLwindow1.SelectedObjectsPLayer<>nil then
+                                          if IVars.CLayer<>nil then
                                           begin
-                                               setlayerstate(cdwg^.OGLwindow1.SelectedObjectsPLayer,lp);
+                                               setlayerstate(IVars.CLayer,lp);
                                                result:=true;
                                           end;
-                                     end;
+                                     end;}
                                 end;
                             end;
 
@@ -1449,7 +1456,6 @@ ColorBoxDifferent:
           pw:=pw div 2{+1};
           y:=(ARect.Top+ARect.Bottom)div 2;
           TComboBox(Control).canvas.Line(ARect.Left,y,ARect.Left+ll,y);
-          TComboBox(Control).canvas.Rectangle(ARect.Left,y,ARect.Left+ll,y+ll);
           ARect.Left:=ARect.Left+ll+5;
      end;
     DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
@@ -1654,9 +1660,9 @@ begin
                           LineWbox.readonly:=true;
                           //LineWbox.items.Add(rsdefault);
                           //LineWbox.items.Add(rsByBlock);
-                          LineWbox.items.AddObject(rsByLayer,TObject(1));
-                          LineWbox.items.AddObject(rsByBlock,TObject(0));
-                          LineWbox.items.AddObject(rsdefault,TObject(2));
+                          LineWbox.items.AddObject(rsByLayer,TObject({1}2));
+                          LineWbox.items.AddObject(rsByBlock,TObject({0}1));
+                          LineWbox.items.AddObject(rsdefault,TObject({2}0));
                           //LineWbox.items.Add(rsByLayer);
                           {for i := 0 to 20 do
                           begin
@@ -2286,7 +2292,9 @@ begin
      begin
           TmyVariableToolButton(updatesbytton[i]).AssignToVar(TmyVariableToolButton(updatesbytton[i]).FVariable);
      end;
-
+     ColorBox.Invalidate;
+     LineWBox.Invalidate;
+     LayerBox.Invalidate;
 end;
 
 procedure  TMainFormN.ChangedDWGTabCtrl(Sender: TObject);

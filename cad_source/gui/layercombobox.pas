@@ -65,7 +65,7 @@ type
     property BackgroundColor:TColor read sBackgroundColor write SetBackgroundColor;
   end;
 
-  TZCADLayerComboBox=class(TWinControl)                                        // Компонент TZCADLayerComboBox
+  TZCADLayerComboBox=class({TWinControl}TCustomPanel)                                        // Компонент TZCADLayerComboBox
   private
     MyItems:TLayerArray;
     M1:boolean; // Маркер
@@ -184,7 +184,7 @@ begin
         //IL.Draw(Canvas,1,(h-16) div 2,1,gdeNormal);
         //IL.Draw(Canvas,18,(h-16) div 2,2,gdeNormal);
         //IL.Draw(Canvas,35,(h-16) div 2,4,gdeNormal);
-        //TextOut(56,(h div 2)-(TextHeight('Слой не выбран...') div 2),'Слой не выбран...');
+        TextOut(56,(h div 2)-(TextHeight(lp.Name) div 2),lp.Name);
       end
       else
       begin
@@ -195,10 +195,10 @@ begin
       end;
       if sBorderVisible=true then
       begin
-        Line (0,0,0,h-1);
+        {Line (0,0,0,h-1);
         Line (0,0,w-1,0);
         Line (w-1,0,w-1,h-1);
-        Line (0,h-1,w-1,h-1);
+        Line (0,h-1,w-1,h-1);}
       end;
       Unlock;
     end;
@@ -249,7 +249,9 @@ constructor TZCADLayerComboBox.Create(AOwner:TComponent);                      /
 begin
   inherited Create(AOwner);
   BorderWidth:=0;
-  BorderStyle:=bsnone;
+  {self.BevelOuter:=bvLowered;
+  self.BevelWidth:=2;}
+  //BorderStyle:=bsnone;
   M1:=false;
   SetLength(MyItems,0);
   BM:=TBitMap.Create;
@@ -450,8 +452,10 @@ procedure TZCADLayerComboBox.B1Klac(Sender:TObject);                           /
 begin
   if (PoleLista=nil) and (M1=false) then
   begin
-    PoleLista:=TForm.Create(self);
+    PoleLista:=TForm.Create(nil);
     PoleLista.Width:=Width;
+    //PoleLista.Show;
+    //exit;
     a.X:=0;
     a.Y:=B1.Parent.Height;
     a:=ClientToScreen(a);
@@ -461,6 +465,7 @@ begin
     PoleLista.OnDeactivate:=@PLDeActivate;
     UpdateIcon;
     LV:=TListView.Create(PoleLista);
+    LV.BorderStyle:=bsSingle;
     LV.Parent:=PoleLista;
     LV.Font:=CP1.Font;
     LV.Align:=alClient;

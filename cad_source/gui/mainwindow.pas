@@ -78,7 +78,7 @@ type
                     toolbars:tstringlist;
                     IconList: TImageList;
 
-                    updatesbytton:tlist;
+                    updatesbytton,updatescontrols:tlist;
 
                     {procedure LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                                State: TOwnerDrawState);}
@@ -1218,6 +1218,7 @@ begin
        FileHistory[i]:=TmyAction.Create(self);
   end;
   updatesbytton:=tlist.Create;
+  updatescontrols:=tlist.Create;
 
   CursorOn:=ShowAllCursors;
   CursorOff:=RestoreCursors;
@@ -1617,8 +1618,8 @@ begin
                           bc := f.readstring(',','');
                           ts := f.readstring(';','');
                           val(bc,w,code);
-                          if assigned(LayerBox) then
-                                                    shared.ShowError(format(rsReCreating,['LAYERCOMBOBOX']));
+                          {if assigned(LayerBox) then
+                                                    shared.ShowError(format(rsReCreating,['LAYERCOMBOBOX']));}
                           LayerBox:={TComboBox}TZCADLayerComboBox.Create(tb);
                           IconList.GetBitmap(II_LayerOn,LayerBox.Glyph_OnOff_ON);
                           IconList.GetBitmap(II_LayerOff,LayerBox.Glyph_OnOff_OFF);
@@ -1646,14 +1647,15 @@ begin
                           LayerBox.AutoSize:=false;
                           {LayerBox.OnMouseLeave:=self.setnormalfocus;}
                           AddToBar(tb,LayerBox);
+                          updatescontrols.Add(LayerBox);
                      end;
                      if uppercase(line)='LINEWCOMBOBOX' then
                      begin
                           bc := f.readstring(',','');
                           ts := f.readstring(';','');
                           val(bc,w,code);
-                          if assigned(LineWBox) then
-                                                    shared.ShowError(format(rsReCreating,['LINEWCOMBOBOX']));
+                          {if assigned(LineWBox) then
+                                                    shared.ShowError(format(rsReCreating,['LINEWCOMBOBOX']));}
                           LineWBox:=TComboBox.Create(tb);
                           LineWBox.Style:=csOwnerDrawFixed;
                           LineWBox.OnDrawItem:=LineWBoxDrawItem;
@@ -1693,14 +1695,15 @@ begin
                           LineWbox.OnMouseLeave:=self.setnormalfocus;
                           LineWbox.DropDownCount:=50;
                            AddToBar(tb,LineWBox);
+                           updatescontrols.Add(LineWBox);
                      end;
                      if uppercase(line)='COLORCOMBOBOX' then
                      begin
                           bc := f.readstring(',','');
                           ts := f.readstring(';','');
                           val(bc,w,code);
-                          if assigned(ColorBox) then
-                                                    shared.ShowError(format(rsReCreating,['COLORCOMBOBOX']));
+                          {if assigned(ColorBox) then
+                                                    shared.ShowError(format(rsReCreating,['COLORCOMBOBOX']));}
                           ColorBox:=TComboBox.Create(tb);
                           ColorBox.Style:=csOwnerDrawFixed;
                           ColorBox.OnDrawItem:=ColorBoxDrawItem;
@@ -1728,6 +1731,7 @@ begin
                           ColorBox.OnMouseLeave:=self.setnormalfocus;
                           ColorBox.DropDownCount:=50;
                           AddToBar(tb,ColorBox);
+                          updatescontrols.Add(ColorBox);
                      end;
                      if uppercase(line)='SEPARATOR' then
                                          begin
@@ -2301,9 +2305,11 @@ begin
      begin
           TmyVariableToolButton(updatesbytton[i]).AssignToVar(TmyVariableToolButton(updatesbytton[i]).FVariable);
      end;
-     ColorBox.Invalidate;
-     LineWBox.Invalidate;
-     LayerBox.Invalidate;
+     if assigned(updatescontrols) then
+     for i:=0 to updatescontrols.Count-1 do
+     begin
+          TComboBox(updatescontrols[i]).Invalidate;
+     end;
 end;
 
 procedure  TMainFormN.ChangedDWGTabCtrl(Sender: TObject);
@@ -2323,6 +2329,7 @@ begin
     DockMaster.CloseAll;
     freeandnil(toolbars);
     freeandnil(updatesbytton);
+    freeandnil(updatescontrols);
      inherited;
 end;
 function IsEditableShortCut(var Message: TLMKey):boolean;

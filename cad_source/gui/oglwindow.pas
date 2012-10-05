@@ -87,7 +87,7 @@ type
     FastMMShift: TShiftState;
     FastMMX,FastMMY: Integer;
 
-    SelectedObjectsPLayer:PGDBLayerProp;
+    //SelectedObjectsPLayer:PGDBLayerProp;
 
     //procedure keydown(var Key: GDBWord; Shift: TShiftState);
     //procedure dock(Sender: TObject; Source: TDragDockObject; X, Y: GDBInteger;State: TDragState; var Accept: GDBBoolean);
@@ -257,7 +257,6 @@ procedure TOGLWnd.init;
 begin
      //ControlStyle:=ControlStyle+[csNeedsBorderPaint];
      //FCompStyle:=csNonLCL;
-  SelectedObjectsPLayer:=nil;
   sh:=0;
 
   self.Hint:=inttostr(random(100));

@@ -136,7 +136,7 @@ type
                     //procedure KeyPress(var Key: char);override;
                     procedure myKeyPress(Sender: TObject; var Key: Word; Shift: TShiftState);
 
-                    procedure ChangeCLayer(Sender:Tobject);
+                    //procedure ChangeCLayer(Sender:Tobject);
                     procedure ChangeCLineW(Sender:Tobject);
                     procedure ChangeCColor(Sender:Tobject);
 
@@ -447,9 +447,16 @@ var
    cdwg:PTSimpleDrawing;
    tcl:integer;
 begin
+     CDWG:=GDB.GetCurrentDWG;
      result:=false;
      case numprop of
-                    0:PGDBLayerProp(PLayer)^._on:=not(PGDBLayerProp(PLayer)^._on);
+                    0:begin
+                           PGDBLayerProp(PLayer)^._on:=not(PGDBLayerProp(PLayer)^._on);
+                           if PLayer=cdwg^.LayerTable.GetCurrentLayer then
+                           if not PGDBLayerProp(PLayer)^._on then
+                                                                 MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
+
+                      end;
                     {1:;}
                     2:PGDBLayerProp(PLayer)^._lock:=not(PGDBLayerProp(PLayer)^._lock);
                     3:begin
@@ -460,6 +467,8 @@ begin
                                 begin
                                           if assigned(sysvar.dwg.DWG_CLayer) then
                                             sysvar.dwg.DWG_CLayer^:=cdwg^.LayerTable.GetIndexByPointer(Player);
+                                          if not PGDBLayerProp(PLayer)^._on then
+                                                                            MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
                                           setvisualprop;
                                 end
                                 else
@@ -1632,7 +1641,7 @@ begin
                                LayerBox.hint:=(ts);
                                LayerBox.ShowHint:=true;
                           end;
-                          LayerBox.OnChange:=ChangeCLayer;
+                          //LayerBox.OnChange:=ChangeCLayer;
                           {LayerBox.ReadOnly:=true;}
                           LayerBox.AutoSize:=false;
                           {LayerBox.OnMouseLeave:=self.setnormalfocus;}
@@ -2693,7 +2702,7 @@ begin
 
 end;}
 
-procedure TMainFormN.ChangeCLayer(Sender:Tobject);
+(*procedure TMainFormN.ChangeCLayer(Sender:Tobject);
 var tcl:GDBInteger;
 begin
   if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
@@ -2724,7 +2733,7 @@ begin
            end;
   end;
   setnormalfocus(nil);
-end;
+end;*)
 procedure TMainFormN.GeneralTick(Sender: TObject);//(uID, msg: UINT; dwUse, dw1, dw2: DWord); stdcall;
 begin
      if sysvar.SYS.SYS_RunTime<>nil then

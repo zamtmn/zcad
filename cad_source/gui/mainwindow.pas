@@ -1434,7 +1434,7 @@ ColorBoxDifferent:
                   s:=rsDifferent;
                 else
                     begin
-                         s:=floattostr((index-3)/100) + ' '+rsmm;
+                         s:=FloatToStrF((index-3)/100,ffFixed,4,2) + ' '+rsmm;
                     end;
    end;
     ARect.Left:=ARect.Left+2;
@@ -1448,7 +1448,8 @@ ColorBoxDifferent:
           TComboBox(Control).canvas.Pen.EndCap:=pecFlat;
           pw:=pw div 2{+1};
           y:=(ARect.Top+ARect.Bottom)div 2;
-          TComboBox(Control).canvas.Line(ARect.Left{+pw},y,ARect.Left+ll{-pw},y);
+          TComboBox(Control).canvas.Line(ARect.Left,y,ARect.Left+ll,y);
+          TComboBox(Control).canvas.Rectangle(ARect.Left,y,ARect.Left+ll,y+ll);
           ARect.Left:=ARect.Left+ll+5;
      end;
     DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
@@ -1666,7 +1667,7 @@ begin
                           for i := low(lwarray) to high(lwarray) do
                           begin
                           //s:=floattostr(lwarray[i]/100) + ' '+rsmm;
-                          s:=FloatToStrF(lwarray[i]/100),ffGeneral);
+                          s:=FloatToStrF(lwarray[i]/100,ffFixed,4,4);
                                LineWbox.items.AddObject(s,TObject(lwarray[i]+3));
                                //LineWbox.items.Add(s);
                           end;

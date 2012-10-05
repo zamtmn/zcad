@@ -27,7 +27,7 @@ type
   end;
 
 var
-  ColorSelectWND: TColorSelectWND;
+  ColorSelectWND: TColorSelectWND=nil;
 
 implementation
 

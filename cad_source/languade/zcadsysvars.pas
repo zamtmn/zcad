@@ -121,13 +121,13 @@ type
              DWG_LTScale:PGDBDouble;(*'Drawing line type scale'*)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
-             DWG_SystmGeometryDraw:PGDBBoolean;
-             DWG_HelpGeometryDraw:PGDBBoolean;
-             DWG_StepGrid:PGDBvertex2D;
-             DWG_OriginGrid:PGDBvertex2D;
-             DWG_DrawGrid:PGDBBoolean;
-             DWG_SnapGrid:PGDBBoolean;
-             DWG_SelectedObjToInsp:PGDBBoolean;(*'SelectedObjToInsp'*)
+             DWG_SystmGeometryDraw:PGDBBoolean;(*'System geometry'*)
+             DWG_HelpGeometryDraw:PGDBBoolean;(*'Help geometry'*)
+             DWG_StepGrid:PGDBvertex2D;(*'Grid step'*)
+             DWG_OriginGrid:PGDBvertex2D;(*'Grid origin'*)
+             DWG_DrawGrid:PGDBBoolean;(*'Show grid'*)
+             DWG_SnapGrid:PGDBBoolean;(*'Stap to grid'*)
+             DWG_SelectedObjToInsp:PGDBBoolean;(*'Selected object to inspector'*)
        end;
   TLayerControls=record
                        DSGN_LC_Net:PTLayerControl;(*'Nets'*)

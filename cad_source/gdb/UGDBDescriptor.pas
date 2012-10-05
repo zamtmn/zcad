@@ -653,6 +653,8 @@ var p:GDBPointer;
     sp:ShapeProp;
     tp:TextProp;
 begin
+  if _source.vp.LineType=nil then
+                                 exit;
   psp:=_source.vp.LineType.shapearray.beginiterate(ir);
   if psp<>nil then
   repeat

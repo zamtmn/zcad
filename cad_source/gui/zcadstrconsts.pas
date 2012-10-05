@@ -97,6 +97,7 @@ resourcestring
   rsLayerDefpaontsCanNotBePrinted='Layer DEFPOINTS can not be printed';
   rsQuitQuery='Do yo want to quit ZCAD?';
   rsCloseDWGQuery='Drawing "%s" not saved. Close?';
+  rsCurrentLayerOff='The current layer is turned off';
   rsSaveEmptyDWG='Drawing is empty. Sure?';
   rsBlockIgnored='Ignored block "%s"';
   rsDoubleBlockIgnored='Ignored double definition block "%s"';

@@ -1175,6 +1175,7 @@ msgid "On/Off Additional grips"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_drawgrid
+msgctxt "zcadexternal.hint_panel~dwg_drawgrid"
 msgid "Show grid"
 msgstr ""
 
@@ -1630,6 +1631,7 @@ msgid "Current line weigwt"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_drawgrid
+msgctxt "zcadexternal.tdwg~dwg_drawgrid"
 msgid "Show grid"
 msgstr ""
 

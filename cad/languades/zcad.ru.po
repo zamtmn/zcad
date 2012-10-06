@@ -793,35 +793,35 @@ msgstr "Отменить"
 
 #: zcadexternal.acn_viewdown~caption
 msgid "View bottom"
-msgstr ""
+msgstr "Вид снизу"
 
 #: zcadexternal.acn_viewleft~caption
 msgid "View left"
-msgstr ""
+msgstr "Вид слева"
 
 #: zcadexternal.acn_viewneiso~caption
 msgid "View NE isometric"
-msgstr ""
+msgstr "NE изометрия"
 
 #: zcadexternal.acn_viewnwiso~caption
 msgid "View NW isometric"
-msgstr ""
+msgstr "NW изометрия"
 
 #: zcadexternal.acn_viewright~caption
 msgid "View right"
-msgstr ""
+msgstr "Вид справа"
 
 #: zcadexternal.acn_viewseiso~caption
 msgid "View SE isometric"
-msgstr ""
+msgstr "SE изометрия"
 
 #: zcadexternal.acn_viewswiso~caption
 msgid "View SW isometric"
-msgstr ""
+msgstr "SW изометрия"
 
 #: zcadexternal.acn_viewtop~caption
 msgid "View top"
-msgstr ""
+msgstr "Вид сверху"
 
 #: zcadexternal.acn_wire~caption
 msgctxt "zcadexternal.acn_wire~caption"
@@ -1040,12 +1040,12 @@ msgstr ""
 #: zcadexternal.gdbobjblockdef~blockdesc
 msgctxt "zcadexternal.gdbobjblockdef~blockdesc"
 msgid "Block params"
-msgstr ""
+msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Block params"
-msgstr ""
+msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjcircle~area
 msgctxt "zcadexternal.gdbobjcircle~area"
@@ -1254,7 +1254,7 @@ msgstr "Вид"
 
 #: zcadexternal.hint_panel~colorcombobox
 msgid "Color selection"
-msgstr ""
+msgstr "Выбор цвета"
 
 #: zcadexternal.hint_panel~dwg_additionalgrips
 msgctxt "zcadexternal.hint_panel~dwg_additionalgrips"
@@ -1346,7 +1346,7 @@ msgstr "Слои"
 
 #: zcadexternal.menucommand~setobjinsp(linetypestyles)
 msgid "Line type styles"
-msgstr ""
+msgstr "Стили линий"
 
 #: zcadexternal.menucommand~setobjinsp(numerators)
 msgid "Numerators"
@@ -1751,7 +1751,7 @@ msgstr "Дополнительные ручки"
 
 #: zcadexternal.tdwg~dwg_ccolor
 msgid "Current color"
-msgstr ""
+msgstr "Текущий цвет"
 
 #: zcadexternal.tdwg~dwg_clayer
 msgctxt "zcadexternal.tdwg~dwg_clayer"
@@ -1775,7 +1775,7 @@ msgstr "Редактирование составных объектов"
 
 #: zcadexternal.tdwg~dwg_ltscale
 msgid "Drawing line type scale"
-msgstr ""
+msgstr "Масштаб типов линий чертжа"
 
 #: zcadexternal.tdwg~dwg_osmode
 msgctxt "zcadexternal.tdwg~dwg_osmode"

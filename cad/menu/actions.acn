@@ -47,6 +47,8 @@ action ACN_VIEWSEISO,View(SEISO),isose.bmp,View SE isometric,,
 action ACN_VIEWNEISO,View(NEISO),isone.bmp,View NE isometric,,
 action ACN_VIEWSWISO,View(SWISO),isosw.bmp,View SW isometric,,
 action ACN_VIEWNWISO,View(NWISO),isonw.bmp,View NW isometric,,
+action ACN_VIEWRL,View(RL),#RL,Rotate camera left,,CTRL+LEFT
+action ACN_VIEWRR,View(RR),#RR,Rotate camera right,,CTRL+RIGHT
 
 
 

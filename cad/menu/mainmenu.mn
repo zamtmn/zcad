@@ -64,6 +64,9 @@ Panel View;
     action ACN_VIEWSEISO
     action ACN_VIEWNEISO
     action ACN_VIEWNWISO
+    Separator
+    action ACN_VIEWRL
+    action ACN_VIEWRR
   }
 Panel Quick;
   {
@@ -157,10 +160,14 @@ MainMenuItem View;
             action ACN_VIEWDOWN
             action ACN_VIEWLEFT
             action ACN_VIEWRIGHT
+            Separator
             action ACN_VIEWSWISO
             action ACN_VIEWSEISO
             action ACN_VIEWNEISO
             action ACN_VIEWNWISO
+            Separator
+            action ACN_VIEWRL
+            action ACN_VIEWRR
            }
         MenuItem Zoom;
            {

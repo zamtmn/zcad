@@ -1922,10 +1922,10 @@ begin
   end;
   end;{}
   //----ComitFromObj;
-  PDWG^.StoreNewCamerapPos(pucommand);
   if sysvar.RD.RD_LastRenderTime^<30 then
                                         sleep(30-sysvar.RD.RD_LastRenderTime^);
   end;
+  PDWG^.StoreNewCamerapPos(pucommand);
   calcgrid;
 
   draw;
@@ -1985,10 +1985,14 @@ begin
   end;
   end;{}
   //----ComitFromObj;
-  PDWG^.StoreNewCamerapPos(pucommand);
+
   if sysvar.RD.RD_LastRenderTime^<30 then
                                         sleep(30-sysvar.RD.RD_LastRenderTime^);
   end;
+  pcam.prop.xdir:=x0;
+  pcam.prop.ydir:=y0;
+  pcam.prop.look:=z0;
+  PDWG^.StoreNewCamerapPos(pucommand);
   calcgrid;
 
   draw;

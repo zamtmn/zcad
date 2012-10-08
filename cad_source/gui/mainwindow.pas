@@ -1487,7 +1487,8 @@ begin
                                       end
                                  else
                                      index:=integer(tcombobox(Control).items.Objects[Index]);
-    case index of
+    s:=GetColorNameFromIndex(index);
+    {case index of
                  0:
                    s:=rsByBlock;
                256:
@@ -1498,7 +1499,7 @@ begin
                    s:=rsSelectColor;
  ColorBoxDifferent:
                    s:=rsDifferent;
-    end;
+    end;}
     ARect.Left:=ARect.Left+2;
     textrect:=ARect;
     if index<ColorBoxSelColor then

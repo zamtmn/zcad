@@ -39,7 +39,6 @@ object Form1: TForm1
       Top = 336
       Width = 824
       Align = alTop
-      OnCanOffset = Splitter2CanOffset
       ResizeAnchor = akTop
     end
     object Panel2: TPanel
@@ -136,7 +135,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 834
     Height = 37
-    Top = 296
+    Top = 360
     Width = 190
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Erase Selected'
@@ -164,7 +163,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 834
     Height = 35
-    Top = 385
+    Top = 449
     Width = 190
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Open DXF'
@@ -178,7 +177,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 834
     Height = 32
-    Top = 424
+    Top = 488
     Width = 190
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Save DXF'
@@ -192,7 +191,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 834
     Height = 32
-    Top = 264
+    Top = 328
     Width = 190
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Select All'
@@ -258,12 +257,40 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 834
     Height = 32
-    Top = 216
+    Top = 200
     Width = 190
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Process Lines'
     OnClick = BtnProcessObjectsClick
     TabOrder = 15
+  end
+  object BtnProcessObjects1: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 834
+    Height = 32
+    Top = 232
+    Width = 190
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Off entity layer'
+    OnClick = OffEntLayerClick
+    TabOrder = 16
+  end
+  object BtnProcessObjects2: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 834
+    Height = 32
+    Top = 264
+    Width = 190
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'On all layer'
+    OnClick = OnAllLayerClick
+    TabOrder = 17
   end
   object OpenDialog1: TOpenDialog
     DefaultExt = '.dxf'

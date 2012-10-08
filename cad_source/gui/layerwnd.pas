@@ -43,6 +43,8 @@ type
                           Shift: TShiftState; X, Y: Integer);
     procedure LWMouseDown(Sender: TObject; Button: TMouseButton;
                           Shift: TShiftState; X, Y: Integer);
+    procedure onCDSubItem(Sender: TCustomListView; Item: TListItem;
+      SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
     procedure ProcessClick(ListItem:TListItem;SubItem:Integer);
     procedure Process(ListItem:TListItem;SubItem:Integer);
   private
@@ -144,7 +146,7 @@ begin
                 if mr=mrOk then
                                begin
                                     PGDBLayerProp(ListItem.Data)^.color:=ColorSelectWND.ColorInfex;
-                                    ListItem.SubItems[4]:=inttostr(ColorSelectWND.ColorInfex);
+                                    ListItem.SubItems[4]:=GetColorNameFromIndex(ColorSelectWND.ColorInfex);
                                end;
                 freeandnil(ColorSelectWND);
                 changedstamp:=true;
@@ -206,6 +208,57 @@ procedure TLayerWindow.LWMouseDown(Sender: TObject; Button: TMouseButton;
 begin
      GetListItem(ListView1,x,y,MouseDownItem,MouseDownSubItem);
 end;
+
+procedure TLayerWindow.onCDSubItem(Sender: TCustomListView; Item: TListItem;
+  SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
+var
+   colorindex:integer;
+   s:string;
+   plp:PGDBLayerProp;
+   Dest: PChar;
+   y,i:integer;
+   textrect:TRect;
+   ARect: TRect;
+const
+     cellsize=13;
+     textoffset=cellsize+5;
+begin
+     if SubItem=5 then
+                      begin
+                           DefaultDraw:=false;
+                           colorindex:=PGDBLayerProp(Item.Data)^.color;
+                           s:=GetColorNameFromIndex(colorindex);
+
+                           ARect := Item.DisplayRectSubItem( SubItem,drIcon);
+                           textrect := Item.DisplayRectSubItem( SubItem,drLabel);
+                           //ARect.Left:=ARect.Left+2;
+                           //textrect:=ARect;
+                           if colorindex in [1..255] then
+                            begin
+                                 textrect.Left:=textrect.Left+textoffset;
+                                 DrawText(TCustomListView(sender).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_VCENTER);
+
+                                 if colorindex in [1..255] then
+                                                begin
+                                                     TCustomListView(sender).canvas.Brush.Color:=RGBToColor(palette[colorindex].r,palette[colorindex].g,palette[colorindex].b);
+                                                end
+                                            else
+                                                TCustomListView(sender).canvas.Brush.Color:=clWhite;
+                                 y:=(ARect.Top+ARect.Bottom-cellsize)div 2;
+                                 TCustomListView(sender).canvas.Rectangle(ARect.Left,y,ARect.Left+cellsize,y+cellsize);
+                                 if colorindex=7 then
+                                                begin
+                                                     TCustomListView(sender).canvas.Brush.Color:=clBlack;
+                                                     TCustomListView(sender).canvas.Polygon([point(ARect.Left,y),point(ARect.Left+cellsize-1,y),point(ARect.Left+cellsize-1,y+cellsize-1)]);
+                                                 end
+                            end
+                           else
+                           DrawText(TCustomListView(sender).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_VCENTER)
+                           end
+                  else
+                      DefaultDraw:=true;
+end;
+
 procedure TLayerWindow.LWMouseUp(Sender: TObject; Button: TMouseButton;
                           Shift: TShiftState; X, Y: Integer);
 var
@@ -258,7 +311,7 @@ begin
             li.SubItems.Add('');
             li.SubItems.Add('');
             li.SubItems.Add('');
-            li.SubItems.Add(inttostr(plp^.color));
+            li.SubItems.Add(GetColorNameFromIndex(plp^.color));
             li.SubItems.Add('Continuous');
             li.SubItems.Add(GetLWNameFromLW(plp^.lineweight));
             li.SubItems.Add('');

@@ -5,7 +5,7 @@ unit layerwnd;
 interface
 
 uses
-  colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Buttons, ExtCtrls, StdCtrls, Grids, ComCtrls,LCLIntf,lcltype,
 
   gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
@@ -149,6 +149,18 @@ begin
                 freeandnil(ColorSelectWND);
                 changedstamp:=true;
              end;
+           6:begin
+                if not assigned(LineWeightSelectWND)then
+                Application.CreateForm(TLineWeightSelectWND, LineWeightSelectWND);
+                mr:=DoShowModal(LineWeightSelectWND);
+                if mr=mrOk then
+                               begin
+                                    PGDBLayerProp(ListItem.Data)^.lineweight:=LineWeightSelectWND.SelectedLW;
+                                    ListItem.SubItems[6]:=GetLWNameFromLW(LineWeightSelectWND.SelectedLW);
+                               end;
+                freeandnil(LineWeightSelectWND);
+                changedstamp:=true;
+             end;
            7:begin
                    PGDBLayerProp(ListItem.Data)^._print:=not PGDBLayerProp(ListItem.Data)^._print;
                    if uppercase(PGDBLayerProp(ListItem.Data)^.Name)=LNSysDefpoints then
@@ -248,7 +260,7 @@ begin
             li.SubItems.Add('');
             li.SubItems.Add(inttostr(plp^.color));
             li.SubItems.Add('Continuous');
-            li.SubItems.Add(inttostr(plp^.lineweight));
+            li.SubItems.Add(GetLWNameFromLW(plp^.lineweight));
             li.SubItems.Add('');
             li.SubItems.Add(strproc.Tria_AnsiToUtf8(plp^.desk));
             if plp^._on then

@@ -67,6 +67,8 @@ Panel View;
     Separator
     action ACN_VIEWRL
     action ACN_VIEWRR
+    action ACN_VIEWRU
+    action ACN_VIEWRD
   }
 Panel Quick;
   {
@@ -168,6 +170,8 @@ MainMenuItem View;
             Separator
             action ACN_VIEWRL
             action ACN_VIEWRR
+            action ACN_VIEWRU
+            action ACN_VIEWRD
            }
         MenuItem Zoom;
            {

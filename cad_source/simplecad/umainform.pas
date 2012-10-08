@@ -5,7 +5,7 @@ unit umainform;
 interface
 
 uses
-  UGDBDrawingdef,LCLType, geometry, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
+  UGDBLayerArray,UGDBDrawingdef,LCLType, geometry, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Spin,
   {From ZCAD}
@@ -21,6 +21,8 @@ type
     BtnAddLines: TButton;
     BtnAddCircles: TButton;
     BtnAdd3DpolyLines: TButton;
+    BtnProcessObjects1: TButton;
+    BtnProcessObjects2: TButton;
     BtnSelectAll: TButton;
     BtnRebuild: TButton;
     BtnEraseSel: TButton;
@@ -50,8 +52,8 @@ type
     procedure BtnOpenDXFClick(Sender: TObject);
     procedure BtnSaveDXFClick(Sender: TObject);
     procedure BtnSelectAllClick(Sender: TObject);
-    procedure Splitter2CanOffset(Sender: TObject; var NewOffset: Integer;
-      var Accept: Boolean);
+    procedure OffEntLayerClick(Sender: TObject);
+    procedure OnAllLayerClick(Sender: TObject);
     procedure TreeChange(Sender: TObject);
     procedure _DestroyApp(Sender: TObject);
     procedure _FormCreate(Sender: TObject);
@@ -470,11 +472,43 @@ begin
 
 end;
 
-procedure TForm1.Splitter2CanOffset(Sender: TObject; var NewOffset: Integer;
-  var Accept: Boolean);
+procedure TForm1. OffEntLayerClick(Sender: TObject);
 begin
-
+  begin
+       if GDB.GetCurrentDWG^.OGLwindow1.param.SelDesc.Selectedobjcount=1 then
+       begin
+            if GDB.GetCurrentDWG^.OGLwindow1.param.SelDesc.LastSelectedObject<>nil then
+            begin
+                 pGDBObjEntity(GDB.GetCurrentDWG^.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.Layer^._on:=false;
+                 pGDBObjEntity(GDB.GetCurrentDWG^.OGLwindow1.param.SelDesc.LastSelectedObject)^.DeSelect;
+            end;
+            UGDBDescriptor.redrawoglwnd;
+       end
+       else
+           application.MessageBox('Must be selected one entity','??',ID_OK);
+  end;
 end;
+
+procedure TForm1.OnAllLayerClick(Sender: TObject);
+var
+   ptd:PTSimpleDrawing;
+   ir:itrec;
+   plp:PGDBLayerProp;
+begin
+  ptd:=gdb.GetCurrentDWG;
+  if ptd<>nil then
+  begin
+  plp:=ptd^.LayerTable.beginiterate(ir);
+  if plp<>nil then
+  repeat
+        plp^._on:=true;
+  plp:=ptd^.LayerTable.iterate(ir);
+  until plp=nil;
+  UGDBDescriptor.redrawoglwnd;
+  end;
+end;
+
+
 
 procedure TForm1.TreeChange(Sender: TObject);
 begin

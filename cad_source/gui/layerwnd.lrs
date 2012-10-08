@@ -65,6 +65,6 @@ LazarusResources.Add('TLayerWindow','FORMDATA',[
   +'oSize'#9#7'Caption'#6#11'Line weight'#5'Width'#2'I'#0#1#7'Caption'#6#4'Plot'
   +#0#1#8'AutoSize'#9#7'Caption'#6#11'Description'#5'Width'#2'H'#0#0#11'MultiSe'
   +'lect'#9#8'ReadOnly'#9#9'RowSelect'#9#8'SortType'#7#6'stText'#8'TabOrder'#2#5
-  ,#9'ViewStyle'#7#8'vsReport'#8'OnChange'#7#15'ListView1Change'#12'OnSelectIte'
-  +'m'#7#19'ListView1SelectItem'#0#0#0
+  ,#9'ViewStyle'#7#8'vsReport'#8'OnChange'#7#15'ListView1Change'#19'OnCustomDra'
+  +'wSubItem'#7#11'onCDSubItem'#12'OnSelectItem'#7#19'ListView1SelectItem'#0#0#0
 ]);

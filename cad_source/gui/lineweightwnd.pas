@@ -3,7 +3,7 @@ unit lineweightwnd;
 interface
 
 uses
-  zcadstrconsts,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  gdbase,zcadstrconsts,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ButtonPanel, StdCtrls, types, lclintf,lcltype;
 
 type
@@ -32,6 +32,7 @@ var
   LineWeightSelectWND: TLineWeightSelectWND=nil;
   function GetLWNameFromN(num:integer):String;
   function GetLWNameFromLW(lw:integer):String;
+  function GetColorNameFromIndex(index:integer):String;
 implementation
 
 function GetLWNameFromN(num:integer):String;
@@ -54,6 +55,21 @@ ColorBoxDifferent-3:
                        result:=FloatToStrF(lw/100,ffFixed,4,2) + ' '+rsmm;;
                   end;
  end;
+end;
+function GetColorNameFromIndex(index:integer):String;
+begin
+case index of
+             0:
+               result:=rsByBlock;
+           256:
+               result:=rsByLayer;
+        1..255:
+               result:=palette[index].name;
+ColorBoxSelColor:
+               result:=rsSelectColor;
+ColorBoxDifferent:
+               result:=rsDifferent;
+end;
 end;
 
 { TLineWeightSelectWND }

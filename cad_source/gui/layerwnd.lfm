@@ -214,6 +214,7 @@ object LayerWindow: TLayerWindow
     TabOrder = 5
     ViewStyle = vsReport
     OnChange = ListView1Change
+    OnCustomDrawSubItem = onCDSubItem
     OnSelectItem = ListView1SelectItem
   end
 end

@@ -21,7 +21,7 @@ unit mainwindow;
 
 interface
 uses
-  ugdbsimpledrawing,zcadsysvars,GDBBlockDef,layercombobox,ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
+  lineweightwnd,ugdbsimpledrawing,zcadsysvars,GDBBlockDef,layercombobox,ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
   ActnList,LCLType,LCLProc,strproc,log,intftranslations,toolwin,
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
@@ -35,10 +35,6 @@ uses
   {ZGUIArrays,}{ZBasicVisible,}{ZEditsWithVariable,}{ZTabControlsGeneric,}shared,{ZPanelsWithSplit,}{ZGUIsCT,}{ZstaticsText,}{UZProcessBar,}strmy{,strutils},{ZPanelsGeneric,}
   graphics,
   AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr{,xmlconf},zcadinterface,colorwnd;
-const
-     ColorBoxDifferent=258;
-     ColorBoxSelColor=257;
-     lwarray:array [1..24] of integer=(0,5,9,13,15,18,20,25,30,35,40,50,53,60,70,80,90,100,106,120,140,158,200,211);
 type
   TInterfaceVars=record
                        CColor,CLWeight:GDBInteger;
@@ -1440,7 +1436,8 @@ begin
                                       end
                                  else
                                      index:=integer(tcombobox(Control).items.Objects[Index]);
-   case index of
+   s:=GetLWNameFromLW(index-3);
+{   case index of
                 0:
                   s:=rsDefault;
                 1:
@@ -1451,9 +1448,9 @@ ColorBoxDifferent:
                   s:=rsDifferent;
                 else
                     begin
-                         s:=FloatToStrF((index-3)/100,ffFixed,4,2) + ' '+rsmm;
+                         s:=GetLWNameFromLW(index-3);//FloatToStrF((index-3)/100,ffFixed,4,2) + ' '+rsmm;
                     end;
-   end;
+   end;}
     ARect.Left:=ARect.Left+2;
     if (index>2)and(index<ColorBoxDifferent) then
      begin
@@ -1671,9 +1668,9 @@ begin
                           LineWbox.readonly:=true;
                           //LineWbox.items.Add(rsdefault);
                           //LineWbox.items.Add(rsByBlock);
-                          LineWbox.items.AddObject(rsByLayer,TObject({1}2));
-                          LineWbox.items.AddObject(rsByBlock,TObject({0}1));
-                          LineWbox.items.AddObject(rsdefault,TObject({2}0));
+                          LineWbox.items.AddObject(rsByLayer,TObject(2));
+                          LineWbox.items.AddObject(rsByBlock,TObject(1));
+                          LineWbox.items.AddObject(rsdefault,TObject(0));
                           //LineWbox.items.Add(rsByLayer);
                           {for i := 0 to 20 do
                           begin
@@ -1684,7 +1681,7 @@ begin
                           for i := low(lwarray) to high(lwarray) do
                           begin
                           //s:=floattostr(lwarray[i]/100) + ' '+rsmm;
-                          s:=FloatToStrF(lwarray[i]/100,ffFixed,4,4);
+                          s:=GetLWNameFromN(i);
                                LineWbox.items.AddObject(s,TObject(lwarray[i]+3));
                                //LineWbox.items.Add(s);
                           end;

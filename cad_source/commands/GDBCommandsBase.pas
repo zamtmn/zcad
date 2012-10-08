@@ -1810,11 +1810,6 @@ else if s='RL' then
                            oy:=gdb.GetCurrentDWG.GetPcamera^.prop.ydir;
                            ox:=VectorTransform3D(ox,m);
                            oy:=VectorTransform3D(oy,m);
-                           oz:=geometry.CrossVertex(ox,oy);
-                           {if geometry.IsVectorNul(vertexadd(oz,gdb.GetCurrentDWG.GetPcamera^.prop.look)) then
-                           begin
-                                oy:=geometry.VertexMulOnSc(oy,-1);
-                           end;}
                       end
 else if s='RR' then
                       begin
@@ -1823,12 +1818,22 @@ else if s='RR' then
                            oy:=gdb.GetCurrentDWG.GetPcamera^.prop.ydir;
                            ox:=VectorTransform3D(ox,m);
                            oy:=VectorTransform3D(oy,m);
-                           oz:=geometry.CrossVertex(ox,oy);
-                           {if geometry.IsVectorNul(vertexadd(oz,gdb.GetCurrentDWG.GetPcamera^.prop.look)) then
-                           begin
-                                oy:=geometry.VertexMulOnSc(oy,-1);
-                           end;}
-
+                      end
+else if s='RU' then
+                      begin
+                           m:=CreateAffineRotationMatrix(gdb.GetCurrentDWG.GetPcamera^.prop.xdir,-45*pi/180);
+                           ox:=gdb.GetCurrentDWG.GetPcamera^.prop.xdir;
+                           oy:=gdb.GetCurrentDWG.GetPcamera^.prop.ydir;
+                           ox:=VectorTransform3D(ox,m);
+                           oy:=VectorTransform3D(oy,m);
+                      end
+else if s='RD' then
+                      begin
+                           m:=CreateAffineRotationMatrix(gdb.GetCurrentDWG.GetPcamera^.prop.xdir,45*pi/180);
+                           ox:=gdb.GetCurrentDWG.GetPcamera^.prop.xdir;
+                           oy:=gdb.GetCurrentDWG.GetPcamera^.prop.ydir;
+                           ox:=VectorTransform3D(ox,m);
+                           oy:=VectorTransform3D(oy,m);
                       end
 
 else recognized:=false;

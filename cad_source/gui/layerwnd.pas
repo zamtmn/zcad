@@ -212,7 +212,7 @@ end;
 procedure TLayerWindow.onCDSubItem(Sender: TCustomListView; Item: TListItem;
   SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
 var
-   colorindex:integer;
+   colorindex,ll:integer;
    s:string;
    plp:PGDBLayerProp;
    Dest: PChar;
@@ -255,6 +255,20 @@ begin
                            else
                            DrawText(TCustomListView(sender).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_VCENTER)
                            end
+else if SubItem=7 then
+                      begin
+                           DefaultDraw:=false;
+                           colorindex:=PGDBLayerProp(Item.Data)^.lineweight;
+                           ARect := Item.DisplayRectSubItem( SubItem,drBounds);
+
+                           s:=GetLWNameFromLW(colorindex);
+                           if colorindex<0 then
+                                      ll:=0
+                                  else
+                                      ll:=30;
+                            //ARect.Left:=ARect.Left+2;
+                            drawLW(TCustomListView(sender).canvas,ARect,ll,(colorindex) div 10,s);
+                       end
                   else
                       DefaultDraw:=true;
 end;

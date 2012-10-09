@@ -1424,9 +1424,7 @@ procedure TMainFormN.LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARec
 var
    plp:PGDBLayerProp;
    Dest: PChar;
-   y,pw:integer;
-const
-     ll=30;
+   y,pw,ll:integer;
 begin
     if gdb.GetCurrentDWG=nil then
                                  exit;
@@ -1437,35 +1435,12 @@ begin
                                  else
                                      index:=integer(tcombobox(Control).items.Objects[Index]);
    s:=GetLWNameFromLW(index-3);
-{   case index of
-                0:
-                  s:=rsDefault;
-                1:
-                  s:=rsByBlock;
-                2:
-                  s:=rsByLayer;
-ColorBoxDifferent:
-                  s:=rsDifferent;
-                else
-                    begin
-                         s:=GetLWNameFromLW(index-3);//FloatToStrF((index-3)/100,ffFixed,4,2) + ' '+rsmm;
-                    end;
-   end;}
+   if index<3 then
+              ll:=0
+          else
+              ll:=30;
     ARect.Left:=ARect.Left+2;
-    if (index>2)and(index<ColorBoxDifferent) then
-     begin
-          pw:=(index-3) div 10;
-          if pw>12 then
-                      pw:=12;
-          TComboBox(Control).canvas.Pen.Width:=pw;
-          TComboBox(Control).canvas.Pen.Style:=psSolid;
-          TComboBox(Control).canvas.Pen.EndCap:=pecFlat;
-          pw:=pw div 2{+1};
-          y:=(ARect.Top+ARect.Bottom)div 2;
-          TComboBox(Control).canvas.Line(ARect.Left,y,ARect.Left+ll,y);
-          ARect.Left:=ARect.Left+ll+5;
-     end;
-    DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
+    drawLW(TComboBox(Control).canvas,ARect,ll,(index-3) div 10,s);
 end;
 procedure TMainFormN.ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: TOwnerDrawState);
@@ -1645,6 +1620,7 @@ begin
                           LayerBox.AutoSize:=false;
                           {LayerBox.OnMouseLeave:=self.setnormalfocus;}
                           AddToBar(tb,LayerBox);
+                          LayerBox.Height:=10;
                           updatescontrols.Add(LayerBox);
                      end;
                      if uppercase(line)='LINEWCOMBOBOX' then
@@ -1692,6 +1668,7 @@ begin
                           LineWbox.AutoSize:=false;
                           LineWbox.OnMouseLeave:=self.setnormalfocus;
                           LineWbox.DropDownCount:=50;
+                          LineWbox.ItemHeight:=16;
                            AddToBar(tb,LineWBox);
                            updatescontrols.Add(LineWBox);
                      end;
@@ -1728,6 +1705,7 @@ begin
                           ColorBox.AutoSize:={false}true;
                           ColorBox.OnMouseLeave:=self.setnormalfocus;
                           ColorBox.DropDownCount:=50;
+                          ColorBox.ItemHeight:=16;
                           AddToBar(tb,ColorBox);
                           updatescontrols.Add(ColorBox);
                      end;

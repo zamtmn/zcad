@@ -185,9 +185,8 @@ object LayerWindow: TLayerWindow
         Width = 37
       end    
       item
-        AutoSize = True
         Caption = 'Color'
-        Width = 41
+        Width = 61
       end    
       item
         AutoSize = True
@@ -195,9 +194,8 @@ object LayerWindow: TLayerWindow
         Width = 60
       end    
       item
-        AutoSize = True
         Caption = 'Line weight'
-        Width = 73
+        Width = 100
       end    
       item
         Caption = 'Plot'

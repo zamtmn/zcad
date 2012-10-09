@@ -406,14 +406,14 @@ end;
 
 procedure TZCADLayerComboBox.SetHeight(AValue:integer);                        // Задаёт значение параметра высоты
 begin
-  if AValue<18 then AValue:=18;
+  {if AValue<18 then AValue:=18;}
   inherited Height:=AValue;
   CP1.Invalidate;
 end;
 
 procedure TZCADLayerComboBox.SetWidth(AValue:integer);                         // Задаёт значение параметра ширины
 begin
-  if AValue<120 then AValue:=120;
+  {if AValue<120 then AValue:=120;}
   inherited Width:=AValue;
   CP1.Invalidate;
 end;

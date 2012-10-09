@@ -33,6 +33,7 @@ var
   function GetLWNameFromN(num:integer):String;
   function GetLWNameFromLW(lw:integer):String;
   function GetColorNameFromIndex(index:integer):String;
+  procedure drawLW(canvas:TCanvas;ARect: TRect;ll,lw: Integer;s:string);
 implementation
 
 function GetLWNameFromN(num:integer):String;
@@ -86,16 +87,36 @@ begin
      end;
      ListBox1.ItemIndex:=0;
 end;
+procedure drawLW(canvas:TCanvas;ARect: TRect;ll,lw: Integer;s:string);
+var
+  y:integer;
+  oldw:Integer;
+begin
+  if ll>0 then
+   begin
+        if lw>12 then
+                    lw:=12;
+        oldw:=canvas.Pen.Width;
+        canvas.Pen.Width:=lw;
+        canvas.Pen.Style:=psSolid;
+        canvas.Pen.EndCap:=pecFlat;
+        lw:=lw div 2;
+        y:=(ARect.Top+ARect.Bottom)div 2;
+        canvas.Line(ARect.Left,y,ARect.Left+ll,y);
+        canvas.Pen.Width:=oldw;
+        ARect.Left:=ARect.Left+ll+5;
+   end;
+  DrawText(canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
+end;
 
 procedure TLineWeightSelectWND._onDrawItem(Control: TWinControl;
   Index: Integer; ARect: TRect; State: TOwnerDrawState);
 var
   s:string;
-  y,pw:integer;
-const
-    ll=120;
+  y,pw,ll:integer;
 begin
  index:=integer(TListBox(Control).items.Objects[Index]);
+ ll:=0;
  case index of
               0:
                 s:=rsDefault;
@@ -108,23 +129,11 @@ begin
               else
                   begin
                        s:=GetLWNameFromLW(index-3);
+                       ll:=120;
                   end;
  end;
   ARect.Left:=ARect.Left+2;
-  if (index>2){and(index<ColorBoxDifferent)} then
-   begin
-        pw:=(index-3) div 10;
-        if pw>12 then
-                    pw:=12;
-        TListBox(Control).canvas.Pen.Width:=pw;
-        TListBox(Control).canvas.Pen.Style:=psSolid;
-        TListBox(Control).canvas.Pen.EndCap:=pecFlat;
-        pw:=pw div 2;
-        y:=(ARect.Top+ARect.Bottom)div 2;
-        TListBox(Control).canvas.Line(ARect.Left,y,ARect.Left+ll,y);
-        ARect.Left:=ARect.Left+ll+5;
-   end;
-  DrawText(TListBox(Control).canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
+  drawLW(TListBox(Control).canvas,ARect,ll,(index-3) div 10,s);
 end;
 
 procedure TLineWeightSelectWND._onSelChg(Sender: TObject; User: boolean);

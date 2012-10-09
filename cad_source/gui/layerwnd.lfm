@@ -1,7 +1,7 @@
 object LayerWindow: TLayerWindow
-  Left = 386
+  Left = 230
   Height = 588
-  Top = 142
+  Top = 172
   Width = 800
   ActiveControl = B1
   Caption = 'LayerWindow'

@@ -229,6 +229,12 @@ begin
                            colorindex:=PGDBLayerProp(Item.Data)^.color;
                            s:=GetColorNameFromIndex(colorindex);
 
+                           ARect := Item.DisplayRectSubItem( SubItem,drSelectBounds);
+                           if (cdsSelected in state)or(cdsMarked in state) then
+                                            begin
+                                            TCustomListView(sender).canvas.Brush.Color:=clHighlight;
+                                            TCustomListView(sender).canvas.FillRect(ARect);
+                                            end;
                            ARect := Item.DisplayRectSubItem( SubItem,drIcon);
                            textrect := Item.DisplayRectSubItem( SubItem,drLabel);
                            //ARect.Left:=ARect.Left+2;
@@ -258,6 +264,12 @@ begin
 else if SubItem=7 then
                       begin
                            DefaultDraw:=false;
+                           ARect := Item.DisplayRectSubItem( SubItem,drSelectBounds);
+                           if cdsSelected in state then
+                           begin
+                           TCustomListView(sender).canvas.Brush.Color:=clHighlight;
+                           TCustomListView(sender).canvas.FillRect(ARect);
+                           end;
                            colorindex:=PGDBLayerProp(Item.Data)^.lineweight;
                            ARect := Item.DisplayRectSubItem( SubItem,drBounds);
 

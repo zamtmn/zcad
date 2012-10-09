@@ -1428,6 +1428,7 @@ var
 begin
     if gdb.GetCurrentDWG=nil then
                                  exit;
+    TComboBox(Control).canvas.FillRect(ARect);
     if (odComboBoxEdit in State) then
                                       begin
                                            index:=IVars.CLWeight;
@@ -1435,7 +1436,7 @@ begin
                                  else
                                      index:=integer(tcombobox(Control).items.Objects[Index]);
    s:=GetLWNameFromLW(index-3);
-   if index<3 then
+   if (index<4)or(index=ColorBoxDifferent) then
               ll:=0
           else
               ll:=30;
@@ -1456,6 +1457,7 @@ begin
     if (gdb.GetCurrentDWG=nil)or(sysvar.DWG.DWG_CColor=nil) then
      exit;
     begin
+    TComboBox(Control).canvas.FillRect(ARect);
     if (odComboBoxEdit in State) then
                                       begin
                                            index:=IVars.CColor;

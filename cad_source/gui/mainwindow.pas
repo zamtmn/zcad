@@ -1426,10 +1426,13 @@ var
    Dest: PChar;
    y,pw,ll:integer;
 begin
+  //y:=(ARect.Top+ARect.Bottom)div 2;
+  //TComboBox(Control).canvas.Rectangle(ARect.Left,y,ARect.Left+10,y+10);
+  //TComboBox(Control).canvas.Line(ARect.Left,y,ARect.Left+ll,y);
     if gdb.GetCurrentDWG=nil then
                                  exit;
     TComboBox(Control).canvas.FillRect(ARect);
-    if (odComboBoxEdit in State) then
+    if {(odComboBoxEdit in State)}not TComboBox(Control).DroppedDown then
                                       begin
                                            index:=IVars.CLWeight;
                                       end
@@ -1458,7 +1461,7 @@ begin
      exit;
     begin
     TComboBox(Control).canvas.FillRect(ARect);
-    if (odComboBoxEdit in State) then
+    if {(odComboBoxEdit in State)}not TComboBox(Control).DroppedDown then
                                       begin
                                            index:=IVars.CColor;
                                       end

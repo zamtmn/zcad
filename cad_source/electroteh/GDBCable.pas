@@ -79,8 +79,12 @@ var
     //ptv:pgdbvertex;
     ir_inNodeArray:itrec;
     ptn1,ptn2:PTNodeProp;
+    pl:PGDBLayerProp;
 begin
+  pl:=vp.Layer;
+  vp.Layer:=gdb.GetCurrentDWG.LayerTable.getAddres('SYS_METRIC');
   inherited;
+  vp.Layer:=pl;
   ptn2:=NodePropArray.beginiterate(ir_inNodeArray);
   ptn1:=NodePropArray.iterate(ir_inNodeArray);
   if ptn1<>nil then

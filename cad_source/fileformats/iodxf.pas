@@ -1328,7 +1328,7 @@ var
   groupi, valuei, intable,attr: GDBInteger;
   temphandle,handle,lasthandle,vporttablehandle,plottablefansdle,standartstylehandle,i{,cod}: TDWGHandle;
   phandlea: pdxfhandlerecopenarray;
-  inlayertable, inblocksec, inblocktable, inlttypetable: GDBBoolean;
+  inlayertable, inblocksec, inblocktable, inlttypetable, indimstyletable: GDBBoolean;
   handlepos:integer;
   ignoredsource:boolean;
   instyletable:boolean;
@@ -1371,6 +1371,7 @@ begin
   ignoredsource:=false;
   invporttable:=false;
   inlttypetable:=false;
+  indimstyletable:=false;
   while templatefile.notEOF do
   begin
     if  (templatefile.count-templatefile.ReadPos)<10
@@ -1831,6 +1832,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
               begin
                    inlttypetable := false;
                    ignoredsource:=false;
+                   temphandle:=handle-1;
                    pltp:=drawing.LTypeStyleTable.beginiterate(ir);
                    if pltp<>nil then
                    repeat
@@ -1839,6 +1841,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                          outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                          inc(handle);
+                         outstream.TXTAddGDBStringEOL(dxfGroupCode(333));
+                         outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                          outstream.TXTAddGDBStringEOL(dxfName_AcDbSymbolTableRecord);
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
@@ -1964,6 +1968,68 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                    outstream.TXTAddGDBStringEOL(values);
               end
             else
+              if (indimstyletable) and ((groupi = 0) and (values = dxfName_ENDTAB)) then
+              begin
+                indimstyletable:=false;
+                ignoredsource:=false;
+
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
+                outstream.TXTAddGDBStringEOL('DIMSTYLE');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(105));
+                outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
+                inc(handle);
+
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(330));
+                outstream.TXTAddGDBStringEOL(inttohex(handle-3, 0));
+
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+                outstream.TXTAddGDBStringEOL('AcDbSymbolTableRecord');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+                outstream.TXTAddGDBStringEOL('AcDbDimStyleTableRecord');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
+                outstream.TXTAddGDBStringEOL('Standard');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
+                outstream.TXTAddGDBStringEOL('0');
+                outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
+
+                p:=drawing.TextStyleTable.getelement(drawing.TextStyleTable.FindStyle('Standard',false));
+                HandleIterator:=Handle2pointer.Find(p);
+                                                                             if  HandleIterator=nil then
+                                                                                        begin
+                                                                                             Handle2pointer.Insert(p,handle);
+                                                                                             temphandle:=handle;
+                                                                                             inc(handle);
+                                                                                        end
+                                                                                    else
+                                                                                        begin
+                                                                                             temphandle:=HandleIterator.GetValue;
+                                                                                        end;
+
+                outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
+
+                outstream.TXTAddGDBStringEOL(groups);
+                outstream.TXTAddGDBStringEOL(values);
+{0
+DIMSTYLE
+105
+2EE
+330
+2ED
+100
+AcDbSymbolTableRecord
+100
+AcDbDimStyleTableRecord
+  2
+Standard
+ 70
+     0
+340
+2DC
+  0
+ENDTAB}
+
+              end
+            else
               if (instyletable) and ((groupi = 0) and (values = dxfName_ENDTAB)) then
               begin
                 instyletable := false;
@@ -1980,7 +2046,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                   HandleIterator:=Handle2pointer.Find(drawing.TextStyleTable.getelement(i));
                                                                                if  HandleIterator=nil then
                                                                                                           begin
-                                                                                                               //Handle2pointer.Insert(PSP^.param.PStyle,handle);
+                                                                                                               Handle2pointer.Insert(p,handle);
                                                                                                                temphandle:=handle;
                                                                                                                inc(handle);
                                                                                                           end
@@ -2033,7 +2099,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                     HandleIterator:=Handle2pointer.Find(p);
                                                                                  if  HandleIterator=nil then
                                                                                                             begin
-                                                                                                                 //Handle2pointer.Insert(PSP^.param.PStyle,handle);
+                                                                                                                 Handle2pointer.Insert(p,handle);
                                                                                                                  temphandle:=handle;
                                                                                                                  inc(handle);
                                                                                                             end
@@ -2111,6 +2177,10 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                   begin
                     inlttypetable := true;
                   end
+                  else if (groupi = 2) and (values = 'DIMSTYLE') then
+                  begin
+                    indimstyletable := true;
+                  end
                   else if (groupi = 2) and (values = 'VPORT') then
                   begin
                     invporttable := true;
@@ -2128,6 +2198,10 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                     IgnoredSource := true;
                   end
               else if (groupi = 0) and (values = dxfName_LType)and inlttypetable then
+                  begin
+                    IgnoredSource := true;
+                  end
+              else if (groupi = 0) and (values = 'DIMSTYLE')and indimstyletable then
                   begin
                     IgnoredSource := true;
                   end

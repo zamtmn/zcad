@@ -5,7 +5,7 @@ unit layerwnd;
 interface
 
 uses
-  lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Buttons, ExtCtrls, StdCtrls, Grids, ComCtrls,LCLIntf,lcltype,
 
   gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
@@ -208,7 +208,6 @@ procedure TLayerWindow.LWMouseDown(Sender: TObject; Button: TMouseButton;
 begin
      GetListItem(ListView1,x,y,MouseDownItem,MouseDownSubItem);
 end;
-
 procedure TLayerWindow.onCDSubItem(Sender: TCustomListView; Item: TListItem;
   SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
 var
@@ -228,13 +227,16 @@ begin
                            DefaultDraw:=false;
                            colorindex:=PGDBLayerProp(Item.Data)^.color;
                            s:=GetColorNameFromIndex(colorindex);
-
+                           //programlog.LogOutStr('onCDSubItem.state='+inttostr(pword(@state)^),0);
                            ARect := Item.DisplayRectSubItem( SubItem,drSelectBounds);
-                           if (cdsSelected in state)or(cdsMarked in state) then
+                           if ((cdsSelected in state)or(Item = Sender.Selected))and(not(cdsHot in state)) then
                                             begin
                                             TCustomListView(sender).canvas.Brush.Color:=clHighlight;
+                                            TCustomListView(sender).canvas.Font.Color:=clHighlightText;
                                             TCustomListView(sender).canvas.FillRect(ARect);
-                                            end;
+                                            end
+                           else
+                           TCustomListView(sender).canvas.FillRect(ARect);
                            ARect := Item.DisplayRectSubItem( SubItem,drIcon);
                            textrect := Item.DisplayRectSubItem( SubItem,drLabel);
                            //ARect.Left:=ARect.Left+2;
@@ -265,9 +267,10 @@ else if SubItem=7 then
                       begin
                            DefaultDraw:=false;
                            ARect := Item.DisplayRectSubItem( SubItem,drSelectBounds);
-                           if cdsSelected in state then
+                           if ((cdsSelected in state)or(Item = Sender.Selected))and(not(cdsHot in state)) then
                            begin
                            TCustomListView(sender).canvas.Brush.Color:=clHighlight;
+                           TCustomListView(sender).canvas.Font.Color:=clHighlightText;
                            TCustomListView(sender).canvas.FillRect(ARect);
                            end;
                            colorindex:=PGDBLayerProp(Item.Data)^.lineweight;

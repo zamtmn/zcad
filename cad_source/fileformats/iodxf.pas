@@ -1326,7 +1326,7 @@ var
   outstream: {GDBInteger}GDBOpenArrayOfByte;
   groups, values, ucvalues: GDBString;
   groupi, valuei, intable,attr: GDBInteger;
-  temphandle,handle,lasthandle,vporttablehandle,plottablefansdle,standartstylehandle,i{,cod}: TDWGHandle;
+  temphandle,temphandle2,handle,lasthandle,vporttablehandle,plottablefansdle,{standartstylehandle,}i{,cod}: TDWGHandle;
   phandlea: pdxfhandlerecopenarray;
   inlayertable, inblocksec, inblocktable, inlttypetable, indimstyletable: GDBBoolean;
   handlepos:integer;
@@ -1349,7 +1349,7 @@ var
 begin
   Handle2pointer:=mappDWGHi.Create;
   DecimalSeparator := '.';
-  standartstylehandle:=0;
+  //standartstylehandle:=0;
   olddwg:=nil;//{gdb.GetCurrentDWG}@drawing;
   if @SetCurrentDWGProc<>nil
                             then olddwg:=SetCurrentDWGProc(@drawing);
@@ -1841,7 +1841,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                          outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
                          inc(handle);
-                         outstream.TXTAddGDBStringEOL(dxfGroupCode(333));
+                         outstream.TXTAddGDBStringEOL(dxfGroupCode(330));
                          outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                          outstream.TXTAddGDBStringEOL(dxfName_AcDbSymbolTableRecord);
@@ -1976,8 +1976,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                 outstream.TXTAddGDBStringEOL('DIMSTYLE');
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(105));
-                outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
-                inc(handle);
+                outstream.TXTAddGDBStringEOL(inttohex(handle-1, 0));
+                //inc(handle);
 
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(330));
                 outstream.TXTAddGDBStringEOL(inttohex(handle-3, 0));
@@ -2034,6 +2034,7 @@ ENDTAB}
               begin
                 instyletable := false;
                 ignoredsource:=false;
+                temphandle2:=handle-2;
                 if drawing.TextStyleTable.count>0 then
                 for i := 0 to drawing.TextStyleTable.count - 1 do
                 begin
@@ -2057,6 +2058,8 @@ ENDTAB}
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                   outstream.TXTAddGDBStringEOL(inttohex({handle}temphandle, 0));
                   inc(handle);
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(330));
+                  outstream.TXTAddGDBStringEOL(inttohex(temphandle2, 0));
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                   outstream.TXTAddGDBStringEOL(dxfName_AcDbSymbolTableRecord);
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
@@ -2113,7 +2116,8 @@ ENDTAB}
                     end;
                     {else
                         outstream.TXTAddGDBStringEOL(inttohex(standartstylehandle, 0));}
-
+                  outstream.TXTAddGDBStringEOL(dxfGroupCode(330));
+                  outstream.TXTAddGDBStringEOL(inttohex(temphandle2, 0));
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                     outstream.TXTAddGDBStringEOL(dxfName_AcDbSymbolTableRecord);
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(100));

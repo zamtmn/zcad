@@ -115,6 +115,11 @@ var
   s:string;
   y,pw,ll:integer;
 begin
+  if (odSelected in state){or(Item = Sender.Selected)} then
+                   begin
+                   TListBox(Control).canvas.Brush.Color:=clHighlight;
+                   end;
+  TListBox(Control).canvas.FillRect(ARect);
  index:=integer(TListBox(Control).items.Objects[Index]);
  ll:=0;
  case index of

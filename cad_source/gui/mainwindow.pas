@@ -1670,10 +1670,10 @@ begin
 
                           //LineWbox.items.Add(rsDifferent);
                           LineWbox.OnChange:=ChangeCLineW;
-                          LineWbox.AutoSize:=false;
+                          LineWbox.AutoSize:={false}true;
                           LineWbox.OnMouseLeave:=self.setnormalfocus;
                           LineWbox.DropDownCount:=50;
-                          LineWbox.ItemHeight:=16;
+                          //LineWbox.ItemHeight:=16;
                            AddToBar(tb,LineWBox);
                            updatescontrols.Add(LineWBox);
                      end;
@@ -1710,7 +1710,7 @@ begin
                           ColorBox.AutoSize:={false}true;
                           ColorBox.OnMouseLeave:=self.setnormalfocus;
                           ColorBox.DropDownCount:=50;
-                          ColorBox.ItemHeight:=16;
+                          //ColorBox.ItemHeight:=16;
                           AddToBar(tb,ColorBox);
                           updatescontrols.Add(ColorBox);
                      end;

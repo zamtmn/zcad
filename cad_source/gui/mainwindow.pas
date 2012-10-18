@@ -1334,8 +1334,50 @@ end;
 
 
 procedure MainForm.CreateStandartInterface;
+var
+  action: tmyaction;
+  TempForm:TForm;
+  pint:PGDBInteger;
 begin
   self.SetBounds(10,10,800,500);
+
+  ToolBarU:=TToolBar.Create(self);
+  ToolBarU.Align:=alTop;
+  ToolBarU.AutoSize:=true;
+  ToolBarU.ShowCaptions:=true;
+  ToolBarU.Parent:=self;
+  ToolBarU.EdgeBorders:=[ebTop, ebBottom, ebLeft, ebRight];
+  self.CreateToolbarFromDesk(ToolBarU, 'STANDART', self.findtoolbatdesk('STANDART'));
+  action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_STANDART'));
+  if assigned(action) then
+                          begin
+                               action.Enabled:=false;
+                               action.Checked:=true;
+                               action.pfoundcommand:=nil;
+                               action.command:='';
+                               action.options:='';
+                          end;
+
+
+  TempForm:=CreateObjInspInstanceProc;
+  TempForm.Create(Application);
+                 TempForm.Caption:=rsGDBObjInspWndName;
+                 TempForm.Parent:=self;
+                 TempForm.Align:=alLeft;
+                 TempForm.Show;
+                 if assigned(SetGDBObjInspProc)then
+                 SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
+                 if assigned(SetCurrentObjDefaultProc)then
+                                                          SetCurrentObjDefaultProc;
+                 {pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+                 if assigned(SetNameColWidthProc)then
+                                                    SetNameColWidthProc(TempForm.Width div 2);
+                 pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
+                 if assigned(pint)then
+                                      if assigned(SetNameColWidthProc)then
+                                      SetNameColWidthProc(pint^);//TempForm.namecol:=pint^;}
+
+
 
   MainPanel:=Tpanel.Create(Application);
   MainPanel.parent:=self;
@@ -1778,7 +1820,7 @@ begin
            end;
 
            until not(f.ReadPos<f.count);
-           if tbname='STANDART' then
+           if (tbname='STANDART')and(not sysparam.standartinterface) then
                        begin
                             if assigned(LayoutBox) then
                                                       shared.ShowError(format(rsReCreating,['LAYOUTBOX']));

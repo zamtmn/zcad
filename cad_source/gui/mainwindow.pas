@@ -53,9 +53,9 @@ type
 
   TFileHistory=Array [0..9] of {TmyMenuItem}TmyAction;
 
-  { TMainFormN }
+  { MainForm }
 
-  TMainFormN = class(TFreedForm)
+  MainForm = class(TFreedForm)
                     ToolBarU{,ToolBarR}:TToolBar;
                     //ToolBarD: TToolBar;
                     //ObjInsp,
@@ -130,6 +130,12 @@ type
                     //hToolTip: HWND;
 
                     //procedure KeyPress(var Key: char);override;
+                    procedure CreateAnchorDockingInterface;
+                    procedure CreateStandartInterface;
+                    procedure CreateInterfaceLists;
+                    procedure InitSystemCalls;
+                    procedure LoadActions;
+                    procedure LoadIcons;
                     procedure myKeyPress(Sender: TObject; var Key: Word; Shift: TShiftState);
 
                     //procedure ChangeCLayer(Sender:Tobject);
@@ -175,8 +181,8 @@ function _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject):Integer;
 procedure finalize;}
 var
   IVars:TInterfaceVars;
-  MainFormN: TMainFormN;
-  //MainForm: TMainForm;
+  MainFormN: MainForm;
+  //MainForm: MainForm;
   uGeneralTimer:cardinal;
   GeneralTime:GDBInteger;
   LayerBox:{TComboBox}TZCADLayerComboBox;
@@ -320,7 +326,7 @@ begin
      lp.Name:=player.Name;
      lp.PLayer:=player;;
 end;
-procedure TMainFormN.setvisualprop;
+procedure MainForm.setvisualprop;
 const pusto=-1000;
       lpusto=pointer(0);
       different=-10001;
@@ -396,7 +402,7 @@ begin
       end;
       UpdateControls;
 end;
-procedure TMainFormN.addoneobject;
+procedure MainForm.addoneobject;
 //const //pusto=-1000;
       //different=-10001;
 var lw,layer:GDBInteger;
@@ -438,7 +444,7 @@ begin
       end;
 end;
 
-function TMainFormN.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean;
+function MainForm.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean;
 var
    cdwg:PTSimpleDrawing;
    tcl:integer;
@@ -487,7 +493,7 @@ begin
                        end;
 end;
 
-function TMainFormN.GetLayersArray(var la:TLayerArray):boolean;
+function MainForm.GetLayersArray(var la:TLayerArray):boolean;
 var
    cdwg:PTSimpleDrawing;
    pcl:PGDBLayerProp;
@@ -515,7 +521,7 @@ begin
          end;
      end;
 end;
-function TMainFormN.GetLayerProp(PLayer:Pointer;var lp:TLayerPropRecord):boolean;
+function MainForm.GetLayerProp(PLayer:Pointer;var lp:TLayerPropRecord):boolean;
 var
    cdwg:PTSimpleDrawing;
    pcl:PGDBLayerProp;
@@ -564,7 +570,7 @@ begin
 
 end;
 
-function TMainFormN.findtoolbatdesk(tbn:string):string;
+function MainForm.findtoolbatdesk(tbn:string):string;
 var i:integer;
     debs:string;
 begin
@@ -580,7 +586,7 @@ begin
      end;
 end;
 
-procedure TMainFormN.processfilehistory(filename:GDBString);
+procedure MainForm.processfilehistory(filename:GDBString);
 var i,j,k:integer;
     pstr,pstrnext:PGDBString;
     //pvarfirst:pvardesk;
@@ -769,7 +775,7 @@ begin
                       Closeddwg:=ptdrawing(poglwnd.PDWG);
   _CloseDWGPage(ClosedDWG,Sender);
 end;}
-procedure TMainFormN.asynccloseapp(Data: PtrInt);
+procedure MainForm.asynccloseapp(Data: PtrInt);
 begin
       CloseApp;
      //commandmanager.executecommand('Quit');
@@ -777,13 +783,13 @@ begin
      //                        application.terminate;
 end;
 
-procedure TMainFormN.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+procedure MainForm.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
      CloseAction:=caNone;
      Application.QueueAsyncCall(asynccloseapp, 0);
 end;
 
-procedure TMainFormN.draw;
+procedure MainForm.draw;
 begin
      update;
 end;
@@ -815,7 +821,7 @@ begin
     Dlg.Free;
   end;
 end;
-procedure TMainFormN.GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
+procedure MainForm.GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
                                Raw: boolean = false;
                                WithThemeSpace: boolean = true);
 begin
@@ -862,12 +868,12 @@ begin
        if assigned(UpdateVisibleProc) then UpdateVisibleProc;
   end;
 end;
-procedure TMainFormN.CloseDWGPageInterf(Sender: TObject);
+procedure MainForm.CloseDWGPageInterf(Sender: TObject);
 begin
      CloseDWGPage(Sender);
 end;
 
-function TMainFormN.CloseDWGPage(Sender: TObject):integer;
+function MainForm.CloseDWGPage(Sender: TObject):integer;
 var
    poglwnd:toglwnd;
    ClosedDWG:PTDrawing;
@@ -880,7 +886,7 @@ begin
                       Closeddwg:=ptdrawing(poglwnd.PDWG);
   result:=_CloseDWGPage(ClosedDWG,Sender);
 end;
-procedure TMainFormN.PageControlMouseDown(Sender: TObject;
+procedure MainForm.PageControlMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var //TS: TsTabSheet;
      i: integer;
@@ -891,7 +897,7 @@ begin
   if (Sender is TPageControl) then
                                   CloseDWGPage((Sender as TPageControl).Pages[I]);
 end;
-procedure TMainFormN.DockMasterCreateControl(Sender: TObject; aName: string; var
+procedure MainForm.DockMasterCreateControl(Sender: TObject; aName: string; var
   AControl: TControl; DoDisableAutoSizing: boolean);
 var
   i:integer;
@@ -1164,7 +1170,7 @@ begin
   end;
   //result:=cmd_ok;
 end;
-procedure TMainFormN.setnormalfocus;
+procedure MainForm.setnormalfocus(Sender: TObject);
 begin
      if assigned(cmdedit) then
      if cmdedit.Enabled then
@@ -1187,15 +1193,8 @@ begin
   result:=iconlist.Add(bmp,nil);
   freeandnil(bmp);
 end;
-
-procedure TMainFormN.FormCreate(Sender: TObject);
-var
-  i:integer;
-  pint:PGDBInteger;
-  action:tmyaction;
-  bmp:TPortableNetworkGraphic;
+procedure MainForm.InitSystemCalls;
 begin
-
   ShowAllCursorsProc:=self.ShowAllCursors;
   RestoreAllCursorsProc:=self.RestoreCursors;
   StartLongProcessProc:=self.StartLongProcess;
@@ -1204,81 +1203,85 @@ begin
   messageboxproc:=self.MessageBox;
   AddOneObjectProc:=self.addoneobject;
   SetVisuaProplProc:=self.setvisualprop;
-
   UpdateVisibleProc:=UpdateVisible;
   ProcessFilehistoryProc:=self.processfilehistory;
+  CursorOn:=ShowAllCursors;
+  CursorOff:=RestoreCursors;
+end;
 
-  //AutoSize:=false;
+procedure MainForm.LoadActions;
+var
+   i:integer;
+begin
+  StandartActions:=TmyActionList.Create(self);
+  if not assigned(StandartActions.Images) then
+                             StandartActions.Images:=TImageList.Create(
+                               StandartActions);
+  StandartActions.brocenicon:=StandartActions.LoadImage(sysparam.programpath+
+  'menu/BMP/noimage.bmp');
+  StandartActions.LoadFromACNFile(sysparam.programpath+'menu/actions.acn');
+  StandartActions.LoadFromACNFile(sysparam.programpath+'menu/electrotech.acn');
+  StandartActions.OnUpdate:=ActionUpdate;
+
   for i:=0 to 9 do
   begin
        FileHistory[i]:=TmyAction.Create(self);
   end;
-  updatesbytton:=tlist.Create;
-  updatescontrols:=tlist.Create;
+end;
 
-  CursorOn:=ShowAllCursors;
-  CursorOff:=RestoreCursors;
+procedure MainForm.LoadIcons;
+begin
   iconlist:=timagelist.Create(self);
 
-  II_Plus:=loadicon(iconlist,sysparam.programpath+'images/plus.png');
-  II_Minus:=loadicon(iconlist,sysparam.programpath+'images/minus.png');
-  II_Ok:=loadicon(iconlist,sysparam.programpath+'images/ok.png');
-  II_LayerOff:=loadicon(iconlist,sysparam.programpath+'images/off.png');
-  II_LayerOn:=loadicon(iconlist,sysparam.programpath+'images/on.png');
-  II_LayerUnPrint:=loadicon(iconlist,sysparam.programpath+'images/unprint.png');
-  II_LayerPrint:=loadicon(iconlist,sysparam.programpath+'images/print.png');
-  II_LayerUnLock:=loadicon(iconlist,sysparam.programpath+'images/unlock.png');
-  II_LayerLock:=loadicon(iconlist,sysparam.programpath+'images/lock.png');
-  II_LayerFreze:=loadicon(iconlist,sysparam.programpath+'images/freze.png');
-  II_LayerUnFreze:=loadicon(iconlist,sysparam.programpath+'images/unfreze.png');
+  II_Plus:=loadicon(iconlist, sysparam.programpath+'images/plus.png');
+  II_Minus:=loadicon(iconlist, sysparam.programpath+'images/minus.png');
+  II_Ok:=loadicon(iconlist, sysparam.programpath+'images/ok.png');
+  II_LayerOff:=loadicon(iconlist, sysparam.programpath+'images/off.png');
+  II_LayerOn:=loadicon(iconlist, sysparam.programpath+'images/on.png');
+  II_LayerUnPrint:=loadicon(iconlist, sysparam.programpath+'images/unprint.png');
+  II_LayerPrint:=loadicon(iconlist, sysparam.programpath+'images/print.png');
+  II_LayerUnLock:=loadicon(iconlist, sysparam.programpath+'images/unlock.png');
+  II_LayerLock:=loadicon(iconlist, sysparam.programpath+'images/lock.png');
+  II_LayerFreze:=loadicon(iconlist, sysparam.programpath+'images/freze.png');
+  II_LayerUnFreze:=loadicon(iconlist, sysparam.programpath+'images/unfreze.png');
+end;
 
+procedure MainForm.CreateInterfaceLists;
+begin
+  updatesbytton:=tlist.Create;
+  updatescontrols:=tlist.Create;
+end;
 
-  //iconlist.
-  self.SetBounds(0,0,800,44);
+procedure MainForm.CreateAnchorDockingInterface;
+var
+  action: tmyaction;
+begin
+  self.SetBounds(0, 0, 800, 44);
   DockMaster.HeaderClass:=TmyAnchorDockHeader;
   DockMaster.SplitterClass:=TmyAnchorDockSplitter;
   DockMaster.ManagerClass:=TMyAnchorDockManager;
   DockMaster.OnCreateControl:={@}DockMasterCreateControl;
-
-  DockMaster.MakeDockSite(Self,[akTop,akBottom,akLeft,akRight],admrpChild{admrpNone},{true}false);
-
-  toolbars:=tstringlist.Create;
-
+  DockMaster.MakeDockSite(Self, [akTop, akBottom, akLeft, akRight], admrpChild
+    {admrpNone}, {true}false);
   if DockManager is TAnchorDockManager then
   begin
     //aManager:=TAnchorDockManager(AForm.DockManager);
     //TAnchorDockManager(DockManager).PreferredSiteSizeAsSiteMinimum:={false}true;
-       //DockMaster.HideHeaderCaptionFloatingControl:=false;
+    //DockMaster.HideHeaderCaptionFloatingControl:=false;
        DockMaster.OnShowOptions:={@}ShowAnchorDockOptions;
-       //TAnchorDockManager(self.DockManager).PreferredSiteSizeAsSiteMinimum:=false;
-       //TAnchorDockManager(self)
-       //self.DockSite:=true;
-       //DockMaster.ShowHeaderCaption:=false;
-
-        //self.AutoSize:=false;
-
+    //TAnchorDockManager(self.DockManager).PreferredSiteSizeAsSiteMinimum:=false;
+    //TAnchorDockManager(self)
+    //self.DockSite:=true;
+    //DockMaster.ShowHeaderCaption:=false;
+    //self.AutoSize:=false;
   end;
-   self.onclose:=self.FormClose;
-
-   StandartActions:=TmyActionList.Create(self);
-   if not assigned(StandartActions.Images) then
-                              StandartActions.Images:=TImageList.Create(StandartActions);
-   StandartActions.brocenicon:=StandartActions.LoadImage(sysparam.programpath+'menu/BMP/noimage.bmp');
-   StandartActions.LoadFromACNFile(sysparam.programpath+'menu/actions.acn');
-   StandartActions.LoadFromACNFile(sysparam.programpath+'menu/electrotech.acn');
-   StandartActions.OnUpdate:=ActionUpdate;
-
-   toolbars.Sorted:=true;
-   loadpanels(sysparam.programpath+'menu/mainmenu.mn');
-  if not sysparam.noloadlayout then
+   if not sysparam.noloadlayout then
                                     LoadLayout_com('');
 
    //self.AutoSize:=false;
    //self.BorderStyle:=bsNone;
 
    //WindowState:=wsMaximized;
-   onkeydown:=mykeypress;
-   KeyPreview:=true;
 
    {ToolBarD:=TToolBar.Create(self);
    ToolBarD.Height:=18;
@@ -1295,9 +1298,9 @@ begin
    //DockMaster.ShowControl('ToolBarU',true);
   if sysparam.noloadlayout then
   begin
-       DockMaster.ShowControl('CommandLine',true);
-       DockMaster.ShowControl('ObjectInspector',true);
-       DockMaster.ShowControl('PageControl',true);
+       DockMaster.ShowControl('CommandLine', true);
+       DockMaster.ShowControl('ObjectInspector', true);
+       DockMaster.ShowControl('PageControl', true);
   end;
 
    ToolBarU:=TToolBar.Create(self);
@@ -1305,8 +1308,9 @@ begin
    ToolBarU.AutoSize:=true;
    ToolBarU.ShowCaptions:=true;
    ToolBarU.Parent:=self;
-   ToolBarU.EdgeBorders:=[ebTop, ebBottom,ebLeft,ebRight];
-   self.CreateToolbarFromDesk(ToolBarU,'STANDART',self.findtoolbatdesk('STANDART'));
+   ToolBarU.EdgeBorders:=[ebTop, ebBottom, ebLeft, ebRight];
+   self.CreateToolbarFromDesk(ToolBarU, 'STANDART', self.findtoolbatdesk('STAND'
+     +'ART'));
    action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_STANDART'));
    if assigned(action) then
                            begin
@@ -1317,11 +1321,6 @@ begin
                                 action.options:='';
                            end;
 
-   application.OnIdle:=self.idle;
-   SystemTimer:=TTimer.Create(self);
-   SystemTimer.Interval:=1000;
-   SystemTimer.Enabled:=true;
-   SystemTimer.OnTimer:=self.generaltick;
 
    //self.DisableAutoSizing;
 
@@ -1331,17 +1330,68 @@ begin
    tf.show;}
 
    //TAnchorDockManager(self.DockManager).PreferredSiteSizeAsSiteMinimum:=true;
-
 end;
 
-procedure TMainFormN.AfterConstruction;
+
+procedure MainForm.CreateStandartInterface;
+begin
+  self.SetBounds(10,10,800,500);
+
+  MainPanel:=Tpanel.Create(Application);
+  MainPanel.parent:=self;
+  MainPanel.Align:=alClient;
+  MainPanel.Caption:=rsDrawingWindowWndName;
+  MainPanel.BorderWidth:=0;
+
+  PageControl:=TmyPageControl.Create(MainPanel);
+  PageControl.Constraints.MinHeight:=32;
+  PageControl.Parent:=MainPanel;
+  PageControl.Align:=alClient;
+  PageControl.OnChange:=ChangedDWGTabCtrl;
+  PageControl.BorderWidth:=0;
+  PageControl.Options:=[nboShowCloseButtons];
+  PageControl.OnCloseTabClicked:=CloseDWGPageInterf;
+  PageControl.OnMouseDown:=PageControlMouseDown;
+end;
+
+
+procedure MainForm.FormCreate(Sender: TObject);
+var
+  i:integer;
+  pint:PGDBInteger;
+  bmp:TPortableNetworkGraphic;
+begin
+  self.onclose:=self.FormClose;
+  self.onkeydown:=self.mykeypress;
+  self.KeyPreview:=true;
+  application.OnIdle:=self.idle;
+  SystemTimer:=TTimer.Create(self);
+  SystemTimer.Interval:=1000;
+  SystemTimer.Enabled:=true;
+  SystemTimer.OnTimer:=self.generaltick;
+
+  InitSystemCalls;
+  LoadIcons;
+  LoadActions;
+  toolbars:=tstringlist.Create;
+  toolbars.Sorted:=true;
+  CreateInterfaceLists;
+  loadpanels(sysparam.programpath+'menu/mainmenu.mn');
+
+  if sysparam.standartinterface then
+                                    CreateStandartInterface
+                                else
+                                    CreateAnchorDockingInterface;
+end;
+
+procedure MainForm.AfterConstruction;
 
 begin
     name:='MainForm';
     oncreate:=FormCreate;
     inherited;
 end;
-procedure TMainFormN.SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
+procedure MainForm.SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
 var
     bmp:TBitmap;
 begin
@@ -1386,7 +1436,7 @@ begin
                                                    end;
     b.Parent:=tb;
 end;
-{procedure TMainFormN.LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+{procedure MainForm.LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: TOwnerDrawState);
 var
    plp:PGDBLayerProp;
@@ -1419,7 +1469,7 @@ begin
     DrawText(LayerBox.canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
 end;}
 
-procedure TMainFormN.LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+procedure MainForm.LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: TOwnerDrawState);
 var
    plp:PGDBLayerProp;
@@ -1446,7 +1496,7 @@ begin
     ARect.Left:=ARect.Left+2;
     drawLW(TComboBox(Control).canvas,ARect,ll,(index-3) div 10,s);
 end;
-procedure TMainFormN.ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+procedure MainForm.ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: TOwnerDrawState);
 var
    plp:PGDBLayerProp;
@@ -1506,7 +1556,7 @@ begin
     end;
 end;
 
-procedure TMainFormN.CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
+procedure MainForm.CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
 var
     f:GDBOpenArrayOfByte;
     line,ts,{bn,}bc{,bh}:GDBString;
@@ -1673,7 +1723,7 @@ begin
                           LineWbox.AutoSize:={false}true;
                           LineWbox.OnMouseLeave:=self.setnormalfocus;
                           LineWbox.DropDownCount:=50;
-                          //LineWbox.ItemHeight:=16;
+                          LineWbox.ItemHeight:=16;
                            AddToBar(tb,LineWBox);
                            updatescontrols.Add(LineWBox);
                      end;
@@ -1710,7 +1760,7 @@ begin
                           ColorBox.AutoSize:={false}true;
                           ColorBox.OnMouseLeave:=self.setnormalfocus;
                           ColorBox.DropDownCount:=50;
-                          //ColorBox.ItemHeight:=16;
+                          ColorBox.ItemHeight:=16;
                           AddToBar(tb,ColorBox);
                           updatescontrols.Add(ColorBox);
                      end;
@@ -1760,7 +1810,7 @@ begin
      s:=ExtractFileName(filename);
      LayoutBox.AddItem(copy(s,1,length(s)-4),nil);
 end;
-procedure TMainFormN.CreateLayoutbox(tb:TToolBar);
+procedure MainForm.CreateLayoutbox(tb:TToolBar);
 var
     s:string;
 begin
@@ -1774,7 +1824,7 @@ begin
   LayoutBox.ItemIndex:=LayoutBox.Items.IndexOf(copy(s,1,length(s)-4));
 
 end;
-procedure TMainFormN.ChangeLayout(Sender:Tobject);
+procedure MainForm.ChangeLayout(Sender:Tobject);
 var
     s:string;
 begin
@@ -1798,7 +1848,7 @@ begin
       filename:=utf8tosys(sysparam.programpath+'components/'+{'defaultlayout.xml'}s);*)
 end;
 
-procedure TMainFormN.loadpanels(pf:GDBString);
+procedure MainForm.loadpanels(pf:GDBString);
 var
     f:GDBOpenArrayOfByte;
     line,ts,{bn,}bc{,bh}:GDBString;
@@ -2020,7 +2070,7 @@ begin
   //f.close;
   f.done;
 end;
-procedure TMainFormN.loadmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
+procedure MainForm.loadmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
 var
     pmenuitem:TmyMenuItem;
     ppopupmenu:TMenuItem;
@@ -2045,7 +2095,7 @@ begin
            loadsubmenu(f,ppopupmenu,line);
 
 end;
-procedure TMainFormN.loadpopupmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
+procedure MainForm.loadpopupmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
 var
     pmenuitem:TmyMenuItem;
     ppopupmenu:TmyPopupMenu;
@@ -2073,7 +2123,7 @@ begin
            cxmenumgr.RegisterLCLMenu(ppopupmenu)
 
 end;
-procedure TMainFormN.setmainmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
+procedure MainForm.setmainmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
 var
     pmenu:TMainMenu;
 begin
@@ -2082,7 +2132,7 @@ begin
      self.Menu:=pmenu;
 end;
 
-procedure TMainFormN.createmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
+procedure MainForm.createmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
 var
     pmenuitem:TmyMenuItem;
     ppopupmenu:TMenuItem;
@@ -2124,7 +2174,7 @@ begin
 
 end;
 
-procedure TMainFormN.loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
+procedure MainForm.loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
 var
     pmenuitem:TmyMenuItem;
     pm1:TMenuItem;
@@ -2277,7 +2327,7 @@ begin
            end;
            //ppopupmenu.addto(pm);
 end;
-procedure TMainFormN.UpdateControls;
+procedure MainForm.UpdateControls;
 var
     i:integer;
 begin
@@ -2293,7 +2343,7 @@ begin
      end;
 end;
 
-procedure  TMainFormN.ChangedDWGTabCtrl(Sender: TObject);
+procedure  MainForm.ChangedDWGTabCtrl(Sender: TObject);
 var
    ogl:TOGlwnd;
 begin
@@ -2302,7 +2352,7 @@ begin
                           OGL.GDBActivate;
 end;
 
-destructor TMainFormN.Destroy;
+destructor MainForm.Destroy;
 begin
     {if layerbox<>nil then
                          layerbox.Items.Clear;}
@@ -2349,7 +2399,7 @@ begin
      end;
 
 end;
-procedure TMainFormN.ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
+procedure MainForm.ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
 var
    IsEditableFocus:boolean;
    IsCommandNotEmpty:boolean;
@@ -2398,7 +2448,7 @@ begin
      end;
 end;
 
-function TMainFormN.IsShortcut(var Message: TLMKey): boolean;
+function MainForm.IsShortcut(var Message: TLMKey): boolean;
 var
    IsEditableFocus:boolean;
    IsCommandNotEmpty:boolean;
@@ -2419,8 +2469,8 @@ begin
        else result:=inherited IsShortcut(Message)
 end;
 
-procedure TMainFormN.myKeyPress{(var Key: char)}(Sender: TObject; var Key: Word; Shift: TShiftState);
-//procedure TMainForm.Pre_Char;
+procedure MainForm.myKeyPress{(var Key: char)}(Sender: TObject; var Key: Word; Shift: TShiftState);
+//procedure MainForm.Pre_Char;
 var
    ccg:char;
    tempkey:word;
@@ -2513,7 +2563,7 @@ begin
                       key:=0;
 end;
 
-procedure TMainFormN.CreateHTPB(tb:TToolBar);
+procedure MainForm.CreateHTPB(tb:TToolBar);
 begin
   ProcessBar:=TProgressBar.create(tb); //.initxywh('?', @Pdownpanel, 0,
     //0, 400, statusbarclientheight, false);
@@ -2539,12 +2589,12 @@ begin
   HintText.Parent:=tb;
 end;
 
-{procedure TMainForm.close;
+{procedure MainForm.close;
 begin
      destroywindow(self.handle);
      commandmanager.executecommand('Quit');
 end;}
-procedure TMainFormN.idle;
+procedure MainForm.idle(Sender: TObject; var Done: Boolean);
 var
    pdwg:PTSimpleDrawing;
    rc:TDrawContext;
@@ -2617,7 +2667,7 @@ begin
      cb.items.InsertObject(cb.items.Count-1,name,obj);
 end;
 
-procedure  TMainFormN.ChangeCColor(Sender:Tobject);
+procedure  MainForm.ChangeCColor(Sender:Tobject);
 var
    ColorIndex,CColorSave,index:Integer;
    mr:integer;
@@ -2658,7 +2708,7 @@ begin
      setnormalfocus(nil);
 end;
 
-procedure  TMainFormN.ChangeCLineW(Sender:Tobject);
+procedure  MainForm.ChangeCLineW(Sender:Tobject);
 var tcl,index:GDBInteger;
 begin
   index:=tcombobox(Sender).ItemIndex;
@@ -2681,17 +2731,17 @@ begin
   setnormalfocus(nil);
 end;
 
-{procedure TMainFormN.idle(Sender: TObject; var Done: Boolean);
+{procedure MainForm.idle(Sender: TObject; var Done: Boolean);
 begin
 
 end;
 
-procedure TMainFormN.ReloadLayer(plt: PGDBNamedObjectsArray);
+procedure MainForm.ReloadLayer(plt: PGDBNamedObjectsArray);
 begin
 
 end;}
 
-(*procedure TMainFormN.ChangeCLayer(Sender:Tobject);
+(*procedure MainForm.ChangeCLayer(Sender:Tobject);
 var tcl:GDBInteger;
 begin
   if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
@@ -2723,7 +2773,7 @@ begin
   end;
   setnormalfocus(nil);
 end;*)
-procedure TMainFormN.GeneralTick(Sender: TObject);//(uID, msg: UINT; dwUse, dw1, dw2: DWord); stdcall;
+procedure MainForm.GeneralTick(Sender: TObject);//(uID, msg: UINT; dwUse, dw1, dw2: DWord); stdcall;
 begin
      if sysvar.SYS.SYS_RunTime<>nil then
      begin
@@ -2733,7 +2783,7 @@ begin
           //sendmessageA(mainwindow.MainForm.handle,wm_user,0,0);
      end;
 end;
-procedure TMainFormN.StartLongProcess(total:integer);
+procedure MainForm.StartLongProcess(total:integer);
 begin
      LPTime:=now;
 
@@ -2749,7 +2799,7 @@ begin
   oldlongprocess:=0;
      end;
 end;
-procedure TMainFormN.ProcessLongProcess(current:integer);
+procedure MainForm.ProcessLongProcess(current:integer);
 var
     pos:integer;
 begin
@@ -2765,33 +2815,33 @@ begin
           end;
      end;
 end;
-{function TMainFormN.DOShowModal(MForm:TForm): Integer;
+{function MainForm.DOShowModal(MForm:TForm): Integer;
 begin
      ShowAllCursors;
      result:=MForm.ShowModal;
      RestoreCursors;
 end;}
-function TMainFormN.MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
+function MainForm.MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
 begin
      ShowAllCursors;
      result:=application.MessageBox(Text, Caption,Flags);
      RestoreCursors;
 end;
-procedure TMainFormN.ShowAllCursors;
+procedure MainForm.ShowAllCursors;
 begin
      if gdb.GetCurrentDWG<>nil then
      if gdb.GetCurrentDWG.OGLwindow1<>nil then
      gdb.GetCurrentDWG.OGLwindow1.Cursor:=crDefault;
 end;
 
-procedure TMainFormN.RestoreCursors;
+procedure MainForm.RestoreCursors;
 begin
      if gdb.GetCurrentDWG<>nil then
      if gdb.GetCurrentDWG.OGLwindow1<>nil then
      gdb.GetCurrentDWG.OGLwindow1.Cursor:=crNone;
 end;
 
-procedure TMainFormN.Say(word:gdbstring);
+procedure MainForm.Say(word:gdbstring);
 begin
      if sysvar.SYS.SYS_IsHistoryLineCreated^ then
      begin
@@ -2803,7 +2853,7 @@ begin
           //application.ProcessMessages;
      end;
 end;
-procedure TMainFormN.EndLongProcess;
+procedure MainForm.EndLongProcess;
 var
    Time:Tdatetime;
    ts:GDBSTRING;
@@ -2822,7 +2872,7 @@ begin
     //say(format(rscompiledtimemsg,[ts]));
     shared.HistoryOutStr(format(rscompiledtimemsg,[ts]));
 end;
-procedure TMainFormN.ReloadLayer;
+procedure MainForm.ReloadLayer(plt: PGDBNamedObjectsArray);
 var
   //i: GDBInteger;
   ir:itrec;

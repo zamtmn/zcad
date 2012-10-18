@@ -26,7 +26,7 @@ type tsysparam=record
                      temppath: GDBString;
                      screenx,screeny:GDBInteger;
                      ver:TmyFileVersionInfo;
-                     nosplash,noloadlayout,updatepo:GDBBoolean;
+                     nosplash,noloadlayout,updatepo,standartinterface:GDBBoolean;
               end;
 var
   sysparam: tsysparam;
@@ -49,6 +49,8 @@ begin
                                                    sysparam.nosplash:=true;
             if (param='NOLOADLAYOUT')or(param='NLL')then
                                                                sysparam.noloadlayout:=true;
+            if (param='STANDARTINTERFACE')or(param='SI')then
+                                                               sysparam.standartinterface:=true;
             if (param='UPDATEPO')then
                                                                sysparam.updatepo:=true;
        end;
@@ -79,4 +81,4 @@ begin
      ProcessParanstr;
      //sysparam.verstr:=Format('%d.%d.%d.%d SVN: %s',[sysparam.ver.major,sysparam.ver.minor,sysparam.ver.release,sysparam.ver.build,RevisionStr]);
 end;
-end.
+end.

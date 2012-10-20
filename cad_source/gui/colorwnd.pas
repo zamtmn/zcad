@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, Buttons, ColorBox, ButtonPanel, Spin, ExtCtrls,math,
+  StdCtrls, Buttons, ColorBox, ButtonPanel, Spin, ExtCtrls, ComCtrls,math,
   gdbase;
 
 type
@@ -24,7 +24,9 @@ type
     evenpalette: TPaintBox;
     mainpalette: TPaintBox;
     graypalette: TPaintBox;
+    PageControl1: TPageControl;
     SpinEdit1: TSpinEdit;
+    TabSheet1: TTabSheet;
     procedure EvenMDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure EvenPalettePaint(Sender: TObject);

@@ -111,7 +111,7 @@ begin
   ugdbdescriptor.startup;
 
   //создание окна программы
-  Application.CreateForm(TMainFormN, MainFormN);
+  Application.CreateForm(MainForm, MainFormN);
   MainFormN.show;
   {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
                                                   sysvar.SYS.SYS_IsHistoryLineCreated^:=true;}

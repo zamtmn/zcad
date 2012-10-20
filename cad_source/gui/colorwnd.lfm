@@ -1,18 +1,19 @@
 object ColorSelectWND: TColorSelectWND
-  Left = 646
-  Height = 164
-  Top = 313
-  Width = 335
+  Left = 575
+  Height = 440
+  Top = 286
+  Width = 788
   Caption = 'Form1'
-  ClientHeight = 164
-  ClientWidth = 335
+  ClientHeight = 440
+  ClientWidth = 788
+  OnResize = resize
   OnShow = _onshow
   LCLVersion = '1.1'
   object ButtonPanel1: TButtonPanel
     Left = 6
     Height = 34
-    Top = 124
-    Width = 323
+    Top = 400
+    Width = 776
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'
@@ -24,29 +25,14 @@ object ColorSelectWND: TColorSelectWND
     TabOrder = 0
     ShowButtons = [pbOK, pbCancel, pbHelp]
   end
-  object Label1: TLabel
-    AnchorSideLeft.Control = Owner
-    AnchorSideLeft.Side = asrCenter
-    AnchorSideTop.Control = Owner
-    AnchorSideTop.Side = asrCenter
-    Left = 57
-    Height = 40
-    Top = 43
-    Width = 220
-    Anchors = [akLeft]
-    Caption = 'Not implement (('
-    Font.Height = 40
-    ParentColor = False
-    ParentFont = False
-  end
   object SpinEdit1: TSpinEdit
     AnchorSideTop.Control = ButtonPanel1
     AnchorSideRight.Control = ButtonPanel1
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonPanel1
-    Left = 275
-    Height = 23
-    Top = 95
+    Left = 728
+    Height = 22
+    Top = 372
     Width = 54
     Anchors = [akRight, akBottom]
     MaxValue = 256
@@ -55,18 +41,84 @@ object ColorSelectWND: TColorSelectWND
     Value = 111
   end
   object Label2: TLabel
+    AnchorSideLeft.Control = Label3
+    AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = SpinEdit1
     AnchorSideRight.Control = SpinEdit1
     AnchorSideBottom.Control = SpinEdit1
     AnchorSideBottom.Side = asrCenter
-    Left = 8
+    Left = 67
     Height = 21
-    Top = 95
-    Width = 267
+    Top = 372
+    Width = 661
     Alignment = taRightJustify
     Anchors = [akTop, akLeft, akRight, akBottom]
     Caption = 'Color number:'
     Layout = tlCenter
     ParentColor = False
   end
-end
+  object oddpalette: TPaintBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 0
+    Height = 152
+    Top = 0
+    Width = 788
+    Anchors = [akTop, akLeft, akRight]
+    OnMouseDown = OddMDown
+    OnPaint = OddPalettePaint
+  end
+  object evenpalette: TPaintBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 0
+    Height = 78
+    Top = 168
+    Width = 788
+    Anchors = [akLeft, akRight]
+    BorderSpacing.Top = 10
+    BorderSpacing.Bottom = 10
+    OnMouseDown = EvenMDown
+    OnPaint = EvenPalettePaint
+  end
+  object mainpalette: TPaintBox
+    AnchorSideLeft.Control = Owner
+    Left = 0
+    Height = 58
+    Top = 261
+    Width = 324
+    Anchors = [akLeft]
+    OnMouseDown = mainMdown
+    OnPaint = MainPalettePaint
+  end
+  object graypalette: TPaintBox
+    AnchorSideLeft.Control = Owner
+    Left = 0
+    Height = 48
+    Top = 319
+    Width = 322
+    Anchors = [akLeft]
+    OnMouseDown = grayMDown
+    OnPaint = GrayGeometryPaint
+  end
+  object Label3: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = SpinEdit1
+    AnchorSideRight.Control = SpinEdit1
+    AnchorSideBottom.Control = SpinEdit1
+    AnchorSideBottom.Side = asrCenter
+    Left = 0
+    Height = 21
+    Top = 372
+    Width = 67
+    Alignment = taRightJustify
+    Anchors = [akTop, akLeft, akBottom]
+    Caption = 'Color number:'
+    Layout = tlCenter
+    ParentColor = False
+  end
+end

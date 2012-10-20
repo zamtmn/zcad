@@ -141,6 +141,7 @@ type
                     //procedure ChangeCLayer(Sender:Tobject);
                     procedure ChangeCLineW(Sender:Tobject);
                     procedure ChangeCColor(Sender:Tobject);
+                    procedure DropDownColor(Sender:Tobject);
 
                     procedure ChangeLayout(Sender:Tobject);
 
@@ -191,6 +192,7 @@ var
   LPTime:Tdatetime;
   oldlongprocess:integer;
   tf:tform;
+  OLDColor:integer;
   //DockMaster:  TAnchorDockMaster = nil;
 
   //imagesindex
@@ -1799,6 +1801,7 @@ begin
                           ColorBox.items.AddObject(rsSelectColor,TObject(ColorBoxSelColor));
                           ColorBox.ItemIndex:=0;
                           ColorBox.OnChange:=ChangeCColor;
+                          ColorBox.OnDropDown:=DropDownColor;
                           ColorBox.AutoSize:={false}true;
                           ColorBox.OnMouseLeave:=self.setnormalfocus;
                           ColorBox.DropDownCount:=50;
@@ -2703,10 +2706,14 @@ procedure AddToComboIfNeed(cb:tcombobox;name:string;obj:TObject);
 var
    i:integer;
 begin
-     for i:=0 to cb.Items.Count do
+     for i:=0 to cb.Items.Count-1 do
        if cb.Items.Objects[i]=obj then
                                       exit;
      cb.items.InsertObject(cb.items.Count-1,name,obj);
+end;
+procedure MainForm.DropDownColor(Sender:Tobject);
+begin
+     OldColor:=tcombobox(Sender).ItemIndex;
 end;
 
 procedure  MainForm.ChangeCColor(Sender:Tobject);
@@ -2726,9 +2733,13 @@ begin
                                               begin
                                               ColorIndex:=ColorSelectWND.ColorInfex;
                                               AddToComboIfNeed(tcombobox(Sender),palette[ColorIndex].name,TObject(ColorIndex));
+                                              tcombobox(Sender).ItemIndex:=tcombobox(Sender).Items.Count-2;
                                               end
                                           else
-                                              ColorIndex:=-1;
+                                              begin
+                                                   tcombobox(Sender).ItemIndex:=OldColor;
+                                                   ColorIndex:=-1;
+                                              end;
                                RestoreCursors;
                                freeandnil(ColorSelectWND);
                            end;

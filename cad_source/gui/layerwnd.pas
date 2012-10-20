@@ -218,25 +218,30 @@ var
    y,i:integer;
    textrect:TRect;
    ARect: TRect;
+   BrushColor,FontColor:TColor;
 const
      cellsize=13;
      textoffset=cellsize+5;
 begin
+     BrushColor:=TCustomListView(sender).canvas.Brush.Color;
+     FontColor:=TCustomListView(sender).canvas.Font.Color;
      if SubItem=5 then
                       begin
                            DefaultDraw:=false;
                            colorindex:=PGDBLayerProp(Item.Data)^.color;
                            s:=GetColorNameFromIndex(colorindex);
                            //programlog.LogOutStr('onCDSubItem.state='+inttostr(pword(@state)^),0);
-                           ARect := Item.DisplayRectSubItem( SubItem,drSelectBounds);
-                           if ((cdsSelected in state)or(Item = Sender.Selected))and(not(cdsHot in state)) then
+                           ARect := Item.DisplayRectSubItem( SubItem,{drSelectBounds}drBounds{drLabel});
+                           if ((cdsSelected in state)or(Item = Sender.Selected)){and(not(cdsHot in state))} then
                                             begin
                                             TCustomListView(sender).canvas.Brush.Color:=clHighlight;
                                             TCustomListView(sender).canvas.Font.Color:=clHighlightText;
-                                            TCustomListView(sender).canvas.FillRect(ARect);
-                                            end
-                           else
+                                            end;
+
+                           //else
+                           {$IFNDEF LCLGTK2}
                            TCustomListView(sender).canvas.FillRect(ARect);
+                           {$ENDIF}
                            ARect := Item.DisplayRectSubItem( SubItem,drIcon);
                            textrect := Item.DisplayRectSubItem( SubItem,drLabel);
                            //ARect.Left:=ARect.Left+2;
@@ -266,15 +271,17 @@ begin
 else if SubItem=7 then
                       begin
                            DefaultDraw:=false;
-                           ARect := Item.DisplayRectSubItem( SubItem,drSelectBounds);
-                           if ((cdsSelected in state)or(Item = Sender.Selected))and(not(cdsHot in state)) then
+                           ARect := Item.DisplayRectSubItem( SubItem,{drSelectBounds}drLabel);
+                           if ((cdsSelected in state)or(Item = Sender.Selected)){and(not(cdsHot in state))} then
                            begin
                            TCustomListView(sender).canvas.Brush.Color:=clHighlight;
                            TCustomListView(sender).canvas.Font.Color:=clHighlightText;
-                           TCustomListView(sender).canvas.FillRect(ARect);
                            end;
+                           {$IFNDEF LCLGTK2}
+                           TCustomListView(sender).canvas.FillRect(ARect);
+                           {$ENDIF}
                            colorindex:=PGDBLayerProp(Item.Data)^.lineweight;
-                           ARect := Item.DisplayRectSubItem( SubItem,drBounds);
+                           ARect := Item.DisplayRectSubItem( SubItem,{drBounds}drBounds);
 
                            s:=GetLWNameFromLW(colorindex);
                            if colorindex<0 then
@@ -286,6 +293,9 @@ else if SubItem=7 then
                        end
                   else
                       DefaultDraw:=true;
+      TCustomListView(sender).canvas.Brush.Color:=BrushColor;
+      TCustomListView(sender).canvas.Font.Color:=FontColor;
+
 end;
 
 procedure TLayerWindow.LWMouseUp(Sender: TObject; Button: TMouseButton;

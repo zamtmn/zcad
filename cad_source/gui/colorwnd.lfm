@@ -1,19 +1,19 @@
 object ColorSelectWND: TColorSelectWND
   Left = 714
-  Height = 696
+  Height = 470
   Top = 200
-  Width = 883
+  Width = 632
   Caption = 'Form1'
-  ClientHeight = 696
-  ClientWidth = 883
+  ClientHeight = 470
+  ClientWidth = 632
   OnResize = resize
   OnShow = _onshow
   LCLVersion = '1.1'
   object ButtonPanel1: TButtonPanel
     Left = 6
     Height = 34
-    Top = 656
-    Width = 871
+    Top = 430
+    Width = 620
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'
@@ -27,17 +27,17 @@ object ColorSelectWND: TColorSelectWND
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 650
+    Height = 424
     Top = 0
-    Width = 883
+    Width = 632
     ActivePage = TabSheet1
     Align = alClient
     TabIndex = 0
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'TabSheet1'
-      ClientHeight = 623
-      ClientWidth = 875
+      ClientHeight = 396
+      ClientWidth = 624
       object oddpalette: TPaintBox
         AnchorSideLeft.Control = TabSheet1
         AnchorSideTop.Control = Owner
@@ -46,7 +46,7 @@ object ColorSelectWND: TColorSelectWND
         Left = 0
         Height = 152
         Top = 0
-        Width = 875
+        Width = 624
         Anchors = [akTop, akLeft, akRight]
         OnMouseDown = OddMDown
         OnPaint = OddPalettePaint
@@ -58,8 +58,8 @@ object ColorSelectWND: TColorSelectWND
         AnchorSideRight.Side = asrBottom
         Left = 0
         Height = 78
-        Top = 282
-        Width = 875
+        Top = 165
+        Width = 624
         Anchors = [akLeft, akRight]
         BorderSpacing.Top = 10
         BorderSpacing.Bottom = 10
@@ -70,7 +70,7 @@ object ColorSelectWND: TColorSelectWND
         AnchorSideLeft.Control = TabSheet1
         Left = 0
         Height = 58
-        Top = 493
+        Top = 303
         Width = 324
         Anchors = [akLeft]
         OnMouseDown = mainMdown
@@ -80,7 +80,7 @@ object ColorSelectWND: TColorSelectWND
         AnchorSideLeft.Control = TabSheet1
         Left = 0
         Height = 48
-        Top = 405
+        Top = 249
         Width = 322
         Anchors = [akLeft]
         OnMouseDown = grayMDown
@@ -94,8 +94,8 @@ object ColorSelectWND: TColorSelectWND
         AnchorSideBottom.Side = asrCenter
         Left = 0
         Height = 22
-        Top = 601
-        Width = 67
+        Top = 373
+        Width = 77
         Alignment = taRightJustify
         Anchors = [akTop, akLeft, akBottom]
         Caption = 'Color number:'
@@ -111,8 +111,8 @@ object ColorSelectWND: TColorSelectWND
         AnchorSideBottom.Side = asrCenter
         Left = 67
         Height = 22
-        Top = 601
-        Width = 754
+        Top = 373
+        Width = 503
         Alignment = taRightJustify
         Anchors = [akTop, akLeft, akRight, akBottom]
         Caption = 'Color number:'
@@ -124,9 +124,9 @@ object ColorSelectWND: TColorSelectWND
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = TabSheet1
         AnchorSideBottom.Side = asrBottom
-        Left = 821
-        Height = 22
-        Top = 601
+        Left = 570
+        Height = 23
+        Top = 373
         Width = 54
         Anchors = [akRight, akBottom]
         MaxValue = 256
@@ -136,4 +136,4 @@ object ColorSelectWND: TColorSelectWND
       end
     end
   end
-end
+end

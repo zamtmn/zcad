@@ -142,6 +142,7 @@ type
                     procedure ChangeCLineW(Sender:Tobject);
                     procedure ChangeCColor(Sender:Tobject);
                     procedure DropDownColor(Sender:Tobject);
+                     procedure DropUpColor(Sender:Tobject);
 
                     procedure ChangeLayout(Sender:Tobject);
 
@@ -1764,6 +1765,8 @@ begin
 
                           //LineWbox.items.Add(rsDifferent);
                           LineWbox.OnChange:=ChangeCLineW;
+                          LineWbox.OnDropDown:=DropDownColor;
+                          LineWbox.OnCloseUp:=DropUpColor;
                           LineWbox.AutoSize:={false}true;
                           LineWbox.OnMouseLeave:=self.setnormalfocus;
                           LineWbox.DropDownCount:=50;
@@ -1802,6 +1805,7 @@ begin
                           ColorBox.ItemIndex:=0;
                           ColorBox.OnChange:=ChangeCColor;
                           ColorBox.OnDropDown:=DropDownColor;
+                          ColorBox.OnCloseUp:=DropUpColor;
                           ColorBox.AutoSize:={false}true;
                           ColorBox.OnMouseLeave:=self.setnormalfocus;
                           ColorBox.DropDownCount:=50;
@@ -2714,6 +2718,12 @@ end;
 procedure MainForm.DropDownColor(Sender:Tobject);
 begin
      OldColor:=tcombobox(Sender).ItemIndex;
+     tcombobox(Sender).ItemIndex:=-1;
+end;
+procedure MainForm.DropUpColor(Sender:Tobject);
+begin
+     if tcombobox(Sender).ItemIndex=-1 then
+                                           tcombobox(Sender).ItemIndex:=OldColor;
 end;
 
 procedure  MainForm.ChangeCColor(Sender:Tobject);

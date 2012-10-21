@@ -89,7 +89,7 @@ begin
                                    end
                                else
                                    begin
-                                   canvas.Pen.Color:=clBackground;
+                                   canvas.Pen.Color:={clBackground}clBtnFace;
                                    end;
           xcoord:=startx+x*dx;
           ycoord:=starty+y*dy;
@@ -150,6 +150,7 @@ begin
      graypalette.width:=GrayGeometry.dx*6;
      graypalette.Height:=grayGeometry.dy*2;
 
+     caption:=inttostr(width)+' '+inttostr(height);
 end;
 
 procedure TColorSelectWND.EvenPalettePaint(Sender: TObject);
@@ -207,4 +208,4 @@ initialization
   {$I colorwnd.lrs}
 
 end.
-
+

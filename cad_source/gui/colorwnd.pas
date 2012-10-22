@@ -150,7 +150,7 @@ begin
      graypalette.width:=GrayGeometry.dx*6;
      graypalette.Height:=grayGeometry.dy*2;
 
-     caption:=inttostr(width)+' '+inttostr(height);
+     caption:=inttostr(clientwidth)+' '+inttostr(clientheight);
 end;
 
 procedure TColorSelectWND.EvenPalettePaint(Sender: TObject);

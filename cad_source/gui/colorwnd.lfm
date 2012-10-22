@@ -6,6 +6,8 @@ object ColorSelectWND: TColorSelectWND
   Caption = 'Form1'
   ClientHeight = 470
   ClientWidth = 632
+  Constraints.MinHeight = 470
+  Constraints.MinWidth = 632
   OnResize = resize
   OnShow = _onshow
   LCLVersion = '1.1'

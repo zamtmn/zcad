@@ -142,7 +142,12 @@ begin
            4:begin
                 if not assigned(ColorSelectWND)then
                 Application.CreateForm(TColorSelectWND, ColorSelectWND);
-                mr:=DoShowModal(ColorSelectWND);
+                //mr:=DoShowModal(ColorSelectWND);
+                if assigned(ShowAllCursorsProc) then
+                                                    ShowAllCursorsProc;
+                mr:=ColorSelectWND.run(PGDBLayerProp(ListItem.Data)^.color,false);
+                if assigned(RestoreAllCursorsProc) then
+                                                    RestoreAllCursorsProc;
                 if mr=mrOk then
                                begin
                                     PGDBLayerProp(ListItem.Data)^.color:=ColorSelectWND.ColorInfex;
@@ -154,7 +159,11 @@ begin
            6:begin
                 if not assigned(LineWeightSelectWND)then
                 Application.CreateForm(TLineWeightSelectWND, LineWeightSelectWND);
-                mr:=DoShowModal(LineWeightSelectWND);
+                if assigned(ShowAllCursorsProc) then
+                                                    ShowAllCursorsProc;
+                mr:={DoShowModal}(LineWeightSelectWND.run(PGDBLayerProp(ListItem.Data)^.lineweight,false));
+                if assigned(RestoreAllCursorsProc) then
+                                                    RestoreAllCursorsProc;
                 if mr=mrOk then
                                begin
                                     PGDBLayerProp(ListItem.Data)^.lineweight:=LineWeightSelectWND.SelectedLW;

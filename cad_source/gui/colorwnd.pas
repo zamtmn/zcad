@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, Buttons, ColorBox, ButtonPanel, Spin, ExtCtrls, ComCtrls,math,
-  gdbase;
+  gdbase,zcadstrconsts;
 
 type
   ColorGeometry=record
@@ -17,6 +17,8 @@ type
   { TColorSelectWND }
 
   TColorSelectWND = class(TForm)
+    ByBlock: TBitBtn;
+    ByLayer: TBitBtn;
     ButtonPanel1: TButtonPanel;
     Label2: TLabel;
     Label3: TLabel;
@@ -27,6 +29,8 @@ type
     PageControl1: TPageControl;
     SpinEdit1: TSpinEdit;
     TabSheet1: TTabSheet;
+    procedure ByBlockCLC(Sender: TObject);
+    procedure ByLayerCLC(Sender: TObject);
     procedure EvenMDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure EvenPalettePaint(Sender: TObject);
@@ -41,7 +45,9 @@ type
     procedure OddPalettePaint(Sender: TObject);
     procedure resize(Sender: TObject);
     procedure testsetcolor(Sender: TObject);
+    procedure _onCreate(Sender: TObject);
     procedure _onshow(Sender: TObject);
+    function run(ci:integer;showBy:boolean):integer;
   private
     { private declarations }
     EvenGeometry,OddGeometry,MainGeometry,GrayGeometry:ColorGeometry;
@@ -63,15 +69,58 @@ implementation
 { TColorSelectWND }
 
 procedure TColorSelectWND.testsetcolor(Sender: TObject);
+var
+  s:string;
 begin
      ColorInfex:=SpinEdit1.Value;
      oddpalette.invalidate;
      evenpalette.invalidate;
      mainpalette.invalidate;
      graypalette.invalidate;
-     label3.Caption:='#'+inttostr(ColorInfex)+' (Red='+inttostr(palette[ColorInfex].r)+'Green='+inttostr(palette[ColorInfex].g)+'Blue='+inttostr(palette[ColorInfex].b)+')';
+     s:='#'+inttostr(ColorInfex)+' ';
+     Case ColorInfex of
+                       256:
+                           s:=s+rsByLayer;
+                       0:
+                           s:=s+rsByBlock;
+                       else
+                           s:=s+'(Red='+inttostr(palette[ColorInfex].r)+' Green='+inttostr(palette[ColorInfex].g)+' Blue='+inttostr(palette[ColorInfex].b)+')';
+     end;
+     if ColorInfex=0 then
+                         ByBlock.Caption:=rsByBlock+'(*)'
+                     else
+                         ByBlock.Caption:=rsByBlock;
+     if ColorInfex=256 then
+                         ByLayer.Caption:=rsByLayer+'(*)'
+                     else
+                         ByLayer.Caption:=rsByLayer;
+     label3.Caption:=s;
 end;
 
+procedure TColorSelectWND._onCreate(Sender: TObject);
+begin
+     ByBlock.Caption:=rsByBlock;
+     ByLayer.Caption:=rsByLayer;
+end;
+function TColorSelectWND.run(ci:integer;showBy:boolean):integer;
+begin
+     SpinEdit1.Value:=ci;
+     if showBy then
+                   begin
+                        ByBlock.Visible:=true;
+                        ByLayer.Visible:=true;
+                        self.SpinEdit1.MaxValue:=256;
+                        self.SpinEdit1.MinValue:=0;
+                   end
+               else
+                   begin
+                        ByBlock.Visible:=false;
+                        ByLayer.Visible:=false;
+                        self.SpinEdit1.MaxValue:=255;
+                        self.SpinEdit1.MinValue:=1;
+                   end;
+     result:=showmodal;
+end;
 procedure TColorSelectWND.PalettePainter(canvas:Tcanvas; StartIndex,IncIndex,startx,starty,dx,dy,cx,cy:integer);
 var
   x,y,xcoord,ycoord,cindex:integer;
@@ -187,6 +236,16 @@ begin
      SpinEdit1.Value:=getImdexByXY(x,y,10,2,24,5,evenGeometry);
 end;
 
+procedure TColorSelectWND.ByBlockCLC(Sender: TObject);
+begin
+     SpinEdit1.Value:=0
+end;
+
+procedure TColorSelectWND.ByLayerCLC(Sender: TObject);
+begin
+     SpinEdit1.Value:=256
+end;
+
 procedure TColorSelectWND.mainMdown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
@@ -208,4 +267,4 @@ initialization
   {$I colorwnd.lrs}
 
 end.
-
+

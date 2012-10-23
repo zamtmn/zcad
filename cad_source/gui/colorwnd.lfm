@@ -8,6 +8,7 @@ object ColorSelectWND: TColorSelectWND
   ClientWidth = 632
   Constraints.MinHeight = 470
   Constraints.MinWidth = 632
+  OnCreate = _onCreate
   OnResize = resize
   OnShow = _onshow
   LCLVersion = '1.1'
@@ -38,7 +39,7 @@ object ColorSelectWND: TColorSelectWND
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'TabSheet1'
-      ClientHeight = 396
+      ClientHeight = 443
       ClientWidth = 624
       object oddpalette: TPaintBox
         AnchorSideLeft.Control = TabSheet1
@@ -60,7 +61,7 @@ object ColorSelectWND: TColorSelectWND
         AnchorSideRight.Side = asrBottom
         Left = 0
         Height = 78
-        Top = 165
+        Top = 190
         Width = 624
         Anchors = [akLeft, akRight]
         BorderSpacing.Top = 10
@@ -72,8 +73,8 @@ object ColorSelectWND: TColorSelectWND
         AnchorSideLeft.Control = TabSheet1
         Left = 0
         Height = 58
-        Top = 303
-        Width = 324
+        Top = 282
+        Width = 452
         Anchors = [akLeft]
         OnMouseDown = mainMdown
         OnPaint = MainPalettePaint
@@ -82,8 +83,8 @@ object ColorSelectWND: TColorSelectWND
         AnchorSideLeft.Control = TabSheet1
         Left = 0
         Height = 48
-        Top = 249
-        Width = 322
+        Top = 362
+        Width = 452
         Anchors = [akLeft]
         OnMouseDown = grayMDown
         OnPaint = GrayGeometryPaint
@@ -96,8 +97,8 @@ object ColorSelectWND: TColorSelectWND
         AnchorSideBottom.Side = asrCenter
         Left = 0
         Height = 22
-        Top = 373
-        Width = 77
+        Top = 421
+        Width = 67
         Alignment = taRightJustify
         Anchors = [akTop, akLeft, akBottom]
         Caption = 'Color number:'
@@ -111,10 +112,10 @@ object ColorSelectWND: TColorSelectWND
         AnchorSideRight.Control = SpinEdit1
         AnchorSideBottom.Control = SpinEdit1
         AnchorSideBottom.Side = asrCenter
-        Left = 67
+        Left = 500
         Height = 22
-        Top = 373
-        Width = 503
+        Top = 421
+        Width = 70
         Alignment = taRightJustify
         Anchors = [akTop, akLeft, akRight, akBottom]
         Caption = 'Color number:'
@@ -127,8 +128,8 @@ object ColorSelectWND: TColorSelectWND
         AnchorSideBottom.Control = TabSheet1
         AnchorSideBottom.Side = asrBottom
         Left = 570
-        Height = 23
-        Top = 373
+        Height = 22
+        Top = 421
         Width = 54
         Anchors = [akRight, akBottom]
         MaxValue = 256
@@ -136,6 +137,38 @@ object ColorSelectWND: TColorSelectWND
         TabOrder = 0
         Value = 111
       end
+      object ByBlock: TBitBtn
+        AnchorSideLeft.Control = mainpalette
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = mainpalette
+        AnchorSideRight.Control = TabSheet1
+        AnchorSideRight.Side = asrBottom
+        Left = 502
+        Height = 32
+        Top = 282
+        Width = 122
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 50
+        Caption = '??ByBlock'
+        OnClick = ByBlockCLC
+        TabOrder = 1
+      end
+      object ByLayer: TBitBtn
+        AnchorSideLeft.Control = ByBlock
+        AnchorSideTop.Control = ByBlock
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TabSheet1
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Side = asrCenter
+        Left = 502
+        Height = 32
+        Top = 314
+        Width = 122
+        Anchors = [akTop, akLeft, akRight]
+        Caption = '??ByLayer'
+        OnClick = ByLayerCLC
+        TabOrder = 2
+      end
     end
   end
-end
+end

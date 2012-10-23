@@ -17,6 +17,7 @@ type
     procedure _onDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
       State: TOwnerDrawState);
     procedure _onSelChg(Sender: TObject; User: boolean);
+    function run(clw:integer;showBy:boolean):integer;
   private
     { private declarations }
   public
@@ -76,16 +77,16 @@ end;
 { TLineWeightSelectWND }
 
 procedure TLineWeightSelectWND._oncreate(Sender: TObject);
-var i:integer;
+//var i:integer;
 begin
-     ListBox1.items.AddObject(rsByLayer,TObject(2));
+     {ListBox1.items.AddObject(rsByLayer,TObject(2));
      ListBox1.items.AddObject(rsByBlock,TObject(1));
      ListBox1.items.AddObject(rsdefault,TObject(0));
      for i := low(lwarray) to high(lwarray) do
      begin
           ListBox1.items.AddObject(GetLWNameFromN(i),TObject(lwarray[i]+3));
      end;
-     ListBox1.ItemIndex:=0;
+     ListBox1.ItemIndex:=0;}
 end;
 procedure drawLW(canvas:TCanvas;ARect: TRect;ll,lw: Integer;s:string);
 var
@@ -145,9 +146,34 @@ procedure TLineWeightSelectWND._onSelChg(Sender: TObject; User: boolean);
 begin
      SelectedLW:=integer(ListBox1.items.Objects[ListBox1.ItemIndex])-3;
 end;
+function TLineWeightSelectWND.run(clw:integer;showBy:boolean):integer;
+var i:integer;
+begin
+     if showBy then
+     begin
+     ListBox1.items.AddObject(rsByLayer,TObject(2));
+     ListBox1.items.AddObject(rsByBlock,TObject(1));
+     end;
+     ListBox1.items.AddObject(rsdefault,TObject(0));
+     for i := low(lwarray) to high(lwarray) do
+     begin
+          ListBox1.items.AddObject(GetLWNameFromN(i),TObject(lwarray[i]+3));
+     end;
+     ListBox1.ItemIndex:=0;
+     clw:=clw+3;
+     for i := 0 to ListBox1.items.Count-1 do
+     begin
+          if ListBox1.items.Objects[i]=tobject(clw) then
+          begin
+               ListBox1.ItemIndex:=i;
+               system.break;
+          end;
+     end;
+     result:=showmodal;
+end;
 
 initialization
   {$I lineweightwnd.lrs}
 
 end.
-
+

@@ -2738,7 +2738,7 @@ begin
                                if not assigned(ColorSelectWND)then
                                Application.CreateForm(TColorSelectWND, ColorSelectWND);
                                ShowAllCursors;
-                               mr:=ColorSelectWND.showmodal;
+                               mr:=ColorSelectWND.run(SysVar.dwg.DWG_CColor^,true){showmodal};
                                if mr=mrOk then
                                               begin
                                               ColorIndex:=ColorSelectWND.ColorInfex;

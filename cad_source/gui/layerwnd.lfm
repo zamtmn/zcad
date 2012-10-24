@@ -1,7 +1,7 @@
 object LayerWindow: TLayerWindow
-  Left = 230
+  Left = 234
   Height = 588
-  Top = 172
+  Top = 176
   Width = 800
   ActiveControl = B1
   Caption = 'LayerWindow'
@@ -163,7 +163,7 @@ object LayerWindow: TLayerWindow
       item
         AutoSize = True
         Caption = 'Status'
-        Width = 100
+        Width = 786
       end    
       item
         Caption = 'Name'
@@ -172,17 +172,17 @@ object LayerWindow: TLayerWindow
       item
         AutoSize = True
         Caption = 'On'
-        Width = 100
+        Width = 28
       end    
       item
         AutoSize = True
         Caption = 'Freze'
-        Width = 100
+        Width = 39
       end    
       item
         AutoSize = True
         Caption = 'Lock'
-        Width = 100
+        Width = 37
       end    
       item
         Caption = 'Color'
@@ -191,7 +191,7 @@ object LayerWindow: TLayerWindow
       item
         AutoSize = True
         Caption = 'Line type'
-        Width = 100
+        Width = 60
       end    
       item
         Caption = 'Line weight'
@@ -203,7 +203,7 @@ object LayerWindow: TLayerWindow
       item
         AutoSize = True
         Caption = 'Description'
-        Width = 100
+        Width = 72
       end>
     MultiSelect = True
     ReadOnly = True

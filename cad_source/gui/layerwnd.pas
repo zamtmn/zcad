@@ -47,11 +47,16 @@ type
       SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
     procedure ProcessClick(ListItem:TListItem;SubItem:Integer);
     procedure Process(ListItem:TListItem;SubItem:Integer);
+    procedure Notify(Sender: TObject;Command:TMyNotifyCommand); virtual;
+    procedure asyncfreeeditor(Data: PtrInt);
+    procedure freeeditor;
+    procedure UpdateItem(Item: TListItem);
   private
     MouseDownItem:TListItem;
     MouseDownSubItem: Integer;
     changedstamp:boolean;
     PEditor:TPropEditor;
+    EditedItem:TListItem;
     { private declarations }
   public
     { public declarations }
@@ -193,11 +198,53 @@ begin
                   Inc (Si);
                   Inc (Pos, ListView1.Columns.Items[si].Width);
                 end;
-                si:=ListItem.DisplayRect(drSelectBounds).Bottom-ListItem.DisplayRect(drSelectBounds).Top-1;
-                PEditor:=GDBAnsiStringDescriptorObj.CreateEditor(self.ListView1,pos,ListItem.Top{Position.y},ListView1.Columns.Items[SubItem+1].Width,si,@PGDBLayerProp(ListItem.Data)^.desk,nil);
+                si:=ListItem.DisplayRect(drBounds).Bottom-ListItem.DisplayRect(drBounds).Top-1;
+                if peditor<>nil then
+                begin
+                     Application.RemoveAsyncCalls(self);
+                     freeeditor;
+                end;
+                PEditor:=GDBAnsiStringDescriptorObj.CreateEditor(self.ListView1,pos,ListItem.Top,ListView1.Columns.Items[SubItem+1].Width,si,@PGDBLayerProp(ListItem.Data)^.desk,nil,true);
+                PEditor.geteditor.SetFocus;
+                PEditor.OwnerNotify:=@Notify;
+                EditedItem:=ListItem;
              end;
      end;
 end;
+procedure TLayerWindow.Notify(Sender: TObject;Command:TMyNotifyCommand);
+var
+   pld:GDBPointer;
+   pdwg:PTDrawing;
+begin
+  if sender=PEditor then
+  begin
+    pld:=peditor.PInstance;
+    if Command=TMNC_EditingDone then
+                                    begin
+                                    Application.QueueAsyncCall(@asyncfreeeditor,0);
+                                    end;
+  end;
+end;
+procedure TLayerWindow.asyncfreeeditor(Data: PtrInt);
+begin
+  if peditor<>nil then
+  begin
+       freeeditor;
+  end;
+end;
+procedure TLayerWindow.freeeditor;
+begin
+  //if peditor<>nil then
+  begin
+       freeandnil(peditor);
+       ListView1.BeginUpdate;
+       UpdateItem(EditedItem);
+       ListView1.EndUpdate;
+       EditedItem:=nil;
+  end;
+end;
+
+
 procedure TLayerWindow.ProcessClick(ListItem:TListItem;SubItem:Integer);
 var i:integer;
 begin
@@ -239,9 +286,8 @@ begin
                            DefaultDraw:=false;
                            colorindex:=PGDBLayerProp(Item.Data)^.color;
                            s:=GetColorNameFromIndex(colorindex);
-                           //programlog.LogOutStr('onCDSubItem.state='+inttostr(pword(@state)^),0);
-                           ARect := Item.DisplayRectSubItem( SubItem,{drSelectBounds}drBounds{drLabel});
-                           if ((cdsSelected in state)or(Item = Sender.Selected)){and(not(cdsHot in state))} then
+                           //programlog.LogOutStr(inttostr(plongword(@State)^),0);
+                           if ((cdsSelected in state)or(Item = Sender.Selected))and(Sender.Focused) then
                                             begin
                                             TCustomListView(sender).canvas.Brush.Color:=clHighlight;
                                             TCustomListView(sender).canvas.Font.Color:=clHighlightText;
@@ -249,6 +295,7 @@ begin
 
                            //else
                            {$IFNDEF LCLGTK2}
+                           ARect := Item.DisplayRectSubItem( SubItem,drBounds);
                            TCustomListView(sender).canvas.FillRect(ARect);
                            {$ENDIF}
                            ARect := Item.DisplayRectSubItem( SubItem,drIcon);
@@ -258,8 +305,8 @@ begin
                            if colorindex in [1..255] then
                             begin
                                  textrect.Left:=textrect.Left+textoffset;
-                                 DrawText(TCustomListView(sender).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_VCENTER);
-
+                                 //DrawText(TCustomListView(sender).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_BOTTOM);
+                                 TCustomListView(sender).canvas.TextRect(textrect,textrect.Left,textrect.top,s);
                                  if colorindex in [1..255] then
                                                 begin
                                                      TCustomListView(sender).canvas.Brush.Color:=RGBToColor(palette[colorindex].r,palette[colorindex].g,palette[colorindex].b);
@@ -275,22 +322,22 @@ begin
                                                  end
                             end
                            else
-                           DrawText(TCustomListView(sender).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_VCENTER)
+                           DrawText(TCustomListView(sender).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_BOTTOM);
                            end
 else if SubItem=7 then
                       begin
                            DefaultDraw:=false;
-                           ARect := Item.DisplayRectSubItem( SubItem,{drSelectBounds}drLabel);
-                           if ((cdsSelected in state)or(Item = Sender.Selected)){and(not(cdsHot in state))} then
+                           if ((cdsSelected in state)or(Item = Sender.Selected))and(Sender.Focused) then
                            begin
                            TCustomListView(sender).canvas.Brush.Color:=clHighlight;
                            TCustomListView(sender).canvas.Font.Color:=clHighlightText;
                            end;
                            {$IFNDEF LCLGTK2}
+                           ARect := Item.DisplayRectSubItem( SubItem,drBounds);
                            TCustomListView(sender).canvas.FillRect(ARect);
                            {$ENDIF}
                            colorindex:=PGDBLayerProp(Item.Data)^.lineweight;
-                           ARect := Item.DisplayRectSubItem( SubItem,{drBounds}drBounds);
+                           ARect := Item.DisplayRectSubItem( SubItem,drBounds);
 
                            s:=GetLWNameFromLW(colorindex);
                            if colorindex<0 then
@@ -327,6 +374,46 @@ begin
      MouseDownItem:=nil;
      MouseDownSubItem:=-1;
 end;
+procedure TLayerWindow.UpdateItem(Item: TListItem);
+var
+   pdwg:PTSimpleDrawing;
+   ir:itrec;
+   plp:PGDBLayerProp;
+   s:ansistring;
+begin
+     pdwg:=gdb.GetCurrentDWG;
+     plp:=Item.Data;
+     Item.SubItems.Clear;
+     if plp=pdwg^.LayerTable.GetCurrentLayer then
+                                                             begin
+                                                             Item.ImageIndex:=2;
+                                                             CurrentLayer:=Item;
+                                                             end;
+                 Item.SubItems.Add(strproc.Tria_AnsiToUtf8(plp^.GetName));
+                 Item.SubItems.Add('');
+                 Item.SubItems.Add('');
+                 Item.SubItems.Add('');
+                 Item.SubItems.Add(GetColorNameFromIndex(plp^.color));
+                 Item.SubItems.Add('Continuous');
+                 Item.SubItems.Add(GetLWNameFromLW(plp^.lineweight));
+                 Item.SubItems.Add('');
+                 Item.SubItems.Add(strproc.Tria_AnsiToUtf8(plp^.desk));
+                 if plp^._on then
+                                 Item.SubItemImages[1]:=II_LayerOn
+                             else
+                                 Item.SubItemImages[1]:=II_LayerOff;
+
+                 Item.SubItemImages[2]:=10;
+
+                 if plp^._lock then
+                                 Item.SubItemImages[3]:=II_LayerLock
+                             else
+                                 Item.SubItemImages[3]:=II_LayerUnLock;
+                 if plp^._print then
+                                 Item.SubItemImages[7]:=II_LayerPrint
+                             else
+                                 Item.SubItemImages[7]:=II_LayerUnPrint;
+end;
 
 procedure TLayerWindow.FormShow(Sender: TObject);
 var
@@ -350,36 +437,8 @@ begin
             li:=ListView1.Items.Add;
 
             li.Data:=plp;
-            if plp=pdwg^.LayerTable.GetCurrentLayer then
-                                                        begin
-                                                        li.ImageIndex:=2;
-                                                        CurrentLayer:=li;
-                                                        end;
-            li.SubItems.Add(strproc.Tria_AnsiToUtf8(plp^.GetName));
-            li.SubItems.Add('');
-            li.SubItems.Add('');
-            li.SubItems.Add('');
-            li.SubItems.Add(GetColorNameFromIndex(plp^.color));
-            li.SubItems.Add('Continuous');
-            li.SubItems.Add(GetLWNameFromLW(plp^.lineweight));
-            li.SubItems.Add('');
-            li.SubItems.Add(strproc.Tria_AnsiToUtf8(plp^.desk));
-            if plp^._on then
-                            li.SubItemImages[1]:=II_LayerOn
-                        else
-                            li.SubItemImages[1]:=II_LayerOff;
 
-            li.SubItemImages[2]:=10;
-
-            if plp^._lock then
-                            li.SubItemImages[3]:=II_LayerLock
-                        else
-                            li.SubItemImages[3]:=II_LayerUnLock;
-            if plp^._print then
-                            li.SubItemImages[7]:=II_LayerPrint
-                        else
-                            li.SubItemImages[7]:=II_LayerUnPrint;
-
+            UpdateItem(li);
 
             //s:=plp^.GetFullName;
             //ListView1.Items.Add(li);

@@ -31,7 +31,7 @@ EnumDescriptor=object(TUserTypeDescriptor)
                      constructor init(size:GDBInteger;tname:string;pu:pointer);
                      procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
                      function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
-                     function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
+                     function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TPropEditor;virtual;
                      function GetNumberInArrays(addr:GDBPointer;out number:GDBLongword):GDBBoolean;virtual;
                      function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                      function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
@@ -200,7 +200,7 @@ var
     number:longword;
     p:pgdbstring;
 begin
-     propeditor:=TPropEditor.Create(theowner,PInstance,@self);
+     propeditor:=TPropEditor.Create(theowner,PInstance,@self,FreeOnLostFocus);
      cbedit:=TComboBox.Create(propeditor);
      cbedit.SetBounds(x,y,w,h);
      cbedit.Text:=GetValueAsString(pinstance);

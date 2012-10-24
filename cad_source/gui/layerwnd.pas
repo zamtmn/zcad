@@ -305,8 +305,9 @@ begin
                            if colorindex in [1..255] then
                             begin
                                  textrect.Left:=textrect.Left+textoffset;
-                                 //DrawText(TCustomListView(sender).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_BOTTOM);
-                                 TCustomListView(sender).canvas.TextRect(textrect,textrect.Left,textrect.top,s);
+                                 DrawText(TCustomListView(sender).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_SINGLELINE or DT_VCENTER);
+                                 //TCustomListView(sender).canvas.TextRect(textrect,textrect.Left,0,s,estilo);
+                                 //TCustomListView(Sender).Canvas.TextRect(Retang,Retang.Left,0,Item.SubItems[4],estilo);
                                  if colorindex in [1..255] then
                                                 begin
                                                      TCustomListView(sender).canvas.Brush.Color:=RGBToColor(palette[colorindex].r,palette[colorindex].g,palette[colorindex].b);
@@ -322,7 +323,8 @@ begin
                                                  end
                             end
                            else
-                           DrawText(TCustomListView(sender).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_BOTTOM);
+                           DrawText(TCustomListView(sender).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_SINGLELINE or DT_VCENTER);
+                           //TCustomListView(sender).canvas.TextRect(textrect,textrect.Left,0,s,estilo);
                            end
 else if SubItem=7 then
                       begin

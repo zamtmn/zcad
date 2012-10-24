@@ -326,7 +326,7 @@ begin
      lp.OnOff:=player^._on;
      lp.Freze:=false;
      lp.Lock:=player^._lock;
-     lp.Name:=player.Name;
+     lp.Name:=Tria_AnsiToUtf8(player.Name);
      lp.PLayer:=player;;
 end;
 procedure MainForm.setvisualprop;
@@ -1580,7 +1580,7 @@ begin
     if index<ColorBoxSelColor then
      begin
           textrect.Left:=textrect.Left+textoffset;
-          DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_VCENTER);
+          DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_SINGLELINE or DT_VCENTER);
 
           if index in [1..255] then
                          begin
@@ -1597,7 +1597,7 @@ begin
                           end
      end
     else
-    DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
+    DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_SINGLELINE or DT_VCENTER)
     end;
 end;
 

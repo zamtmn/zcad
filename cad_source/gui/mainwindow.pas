@@ -59,7 +59,7 @@ type
                     ToolBarU{,ToolBarR}:TToolBar;
                     //ToolBarD: TToolBar;
                     //ObjInsp,
-                    MainPanel:{TForm}TPanel;
+                    MainPanel:TForm{TPanel};
                     FToolBar{,MainPanelU}:TToolButtonForm;
                     //MainPanelD:TCLine;
                     //SplitterV,SplitterH: TSplitter;
@@ -154,7 +154,7 @@ type
                     procedure asynccloseapp(Data: PtrInt);
 
                     procedure processfilehistory(filename:GDBString);
-
+                    function CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
                     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
   AControl: TControl; DoDisableAutoSizing: boolean);
 
@@ -900,6 +900,124 @@ begin
   if (Sender is TPageControl) then
                                   CloseDWGPage((Sender as TPageControl).Pages[I]);
 end;
+function MainForm.CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
+var
+  i:integer;
+  pint:PGDBInteger;
+  TB:TToolBar;
+  tbdesk:string;
+  ta:TmyAction;
+  TempForm:TForm;
+begin
+  ta:=tmyaction(self.StandartActions.ActionByName('ACN_Show_'+aname));
+  if ta<>nil then
+                 ta.Checked:=true;
+
+// if the form does not yet exist, create it
+if aName='PageControl' then
+begin
+MainPanel:=Tform{Tpanel}(Tform.NewInstance);
+if DoDisableAlign then
+MainPanel.DisableAlign;
+MainPanel.Create(Application);
+MainPanel.SetBounds(200,200,600,500);
+MainPanel.Caption:=rsDrawingWindowWndName;
+MainPanel.BorderWidth:=0;
+PageControl:=TmyPageControl.Create(MainPanel{Application});
+PageControl.Constraints.MinHeight:=32;
+PageControl.Parent:=MainPanel;
+PageControl.Align:=alClient;
+PageControl.{OnPageChanged}OnChange:=ChangedDWGTabCtrl;
+PageControl.BorderWidth:=0;
+PageControl.Options:=[nboShowCloseButtons];
+PageControl.OnCloseTabClicked:=CloseDWGPageInterf;
+PageControl.OnMouseDown:=PageControlMouseDown;
+result:=MainPanel;
+result.Name:=aname;
+end
+else if aName='CommandLine' then
+begin
+CLine:=TCLine(TCLine.NewInstance);
+CLine.FormStyle:=fsStayOnTop;
+if DoDisableAlign then
+CLine.DisableAlign;
+CLine.Create(Application);
+CLine.SetBounds(200,100,600,100);
+CLine.Caption:=rsCommandLineWndName;
+CLine.Align:=alBottom;
+pint:=SavedUnit.FindValue('VIEW_CommandLineH');
+result:=CLine;
+
+result.Name:=aname;
+end
+else if aName='ObjectInspector' then
+begin
+  if assigned(CreateObjInspInstanceProc)then
+  begin
+  TempForm:=CreateObjInspInstanceProc;
+  if DoDisableAlign then
+  TempForm.DisableAlign;
+  TempForm.Create(Application);
+  TempForm.Caption:=rsGDBObjInspWndName;
+  TempForm.SetBounds(0,100,200,600);
+  if assigned(SetGDBObjInspProc)then
+  SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
+  if assigned(SetCurrentObjDefaultProc)then
+                                           SetCurrentObjDefaultProc;
+  pint:=SavedUnit.FindValue('VIEW_ObjInspV');
+  if assigned(SetNameColWidthProc)then
+                                     SetNameColWidthProc(TempForm.Width div 2);
+  pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
+  if assigned(pint)then
+                       if assigned(SetNameColWidthProc)then
+                       SetNameColWidthProc(pint^);//TempForm.namecol:=pint^;
+  result:=TempForm;
+
+  result.Name:=aname;
+  end;
+end
+else
+begin
+tbdesk:=self.findtoolbatdesk(aName);
+if tbdesk=''then
+          shared.ShowError(format(rsToolBarNotFound,[aName]));
+FToolBar:=TToolButtonForm(TToolButtonForm.NewInstance);
+if DoDisableAlign then
+FToolBar.DisableAlign;
+FToolBar.Create(Application);
+FToolBar.Caption:='';
+FToolBar.SetBounds(100,64,500,26);
+
+TB:=TToolBar.Create(application);
+TB.Align:=alclient;
+if aName<>'Status' then
+TB.EdgeBorders:=[];
+TB.ShowCaptions:=true;
+TB.Parent:=ftoolbar;
+
+if aName='ToolBarR' then
+begin
+//ToolBarR:=tb;
+end;
+if aName='ToolBarU' then
+begin
+//ToolBarU:=tb;
+end;
+if aName='Status' then
+begin
+//ToolBarD:=tb;
+CreateHTPB(tb);
+end;
+CreateToolbarFromDesk(tb,aName,tbdesk);
+
+result:=FToolBar;
+
+result.Name:=aname;
+FToolBar.Caption:='';
+end;
+
+end;
+
 procedure MainForm.DockMasterCreateControl(Sender: TObject; aName: string; var
   AControl: TControl; DoDisableAutoSizing: boolean);
 var
@@ -936,162 +1054,9 @@ begin
       AControl.DisableAutoSizing;
     exit;
   end;
-
-                 ta:=tmyaction(self.StandartActions.ActionByName('ACN_Show_'+aname));
-               if ta<>nil then
-                              ta.Checked:=true;
-
-  // if the form does not yet exist, create it
-  if aName='PageControl' then
-  begin
-       MainPanel:={Tform}Tpanel(Tform.NewInstance);
-       //MainPanel.FormStyle:=fsStayOnTop;
-       MainPanel.DisableAlign;
-       MainPanel.Create(Application);
-       MainPanel.SetBounds(200,200,600,500);
-   //MainPanel:={TPanel}Tform.create(application);
-   MainPanel.Caption:=rsDrawingWindowWndName;
-   MainPanel.BorderWidth:=0;
-   //MainPanel.Parent:=self;
-   //mainpanel.show;
-  PageControl:=TmyPageControl.Create(MainPanel{Application});
-      PageControl.Constraints.MinHeight:=32;
-      PageControl.Parent:=MainPanel;
-      PageControl.Align:=alClient;
-      PageControl.{OnPageChanged}OnChange:=ChangedDWGTabCtrl;
-      PageControl.BorderWidth:=0;
-      PageControl.Options:=[nboShowCloseButtons];
-      PageControl.OnCloseTabClicked:=CloseDWGPageInterf;
-      PageControl.OnMouseDown:=PageControlMouseDown;
-
-   AControl:=MainPanel;
-   AControl.Name:=aname;
-   //Acontrol.Caption:=caption;
-               if not DoDisableAutoSizing then
-                                            Acontrol.EnableAutoSizing;
-  end
-  else if aName='CommandLine' then
-  begin
-        CLine:=TCLine(TCLine.NewInstance);
-        CLine.FormStyle:=fsStayOnTop;
-        CLine.DisableAlign;
-        CLine.Create(Application);
-        CLine.SetBounds(200,100,600,100);
-        //CLine.Caption:=Title;
-       //CLine:=TCLine.create({MainPanel}application);
-       //CLine.Parent:=MainPanel;
-       CLine.Caption:=rsCommandLineWndName;
-       CLine.Align:=alBottom;
-       pint:=SavedUnit.FindValue('VIEW_CommandLineH');
-       {if assigned(pint)then
-                            Cline.Height:=pint^;}
-       AControl:=CLine;
-
-       AControl.Name:=aname;
-       //Acontrol.Caption:=caption;
-                   if not DoDisableAutoSizing then
-                                                Acontrol.EnableAutoSizing;
-
-  end
-  else if aName='ObjectInspector' then
-            begin
-               if assigned(CreateObjInspInstanceProc)then
-               begin
-               TempForm:=CreateObjInspInstanceProc;
-               TempForm.DisableAlign;
-               TempForm.Create(Application);
-               TempForm.Caption:=rsGDBObjInspWndName;
-               TempForm.SetBounds(0,100,200,600);
-
-               //if assigned(ACN_Show_ObjectInspector) then
-               //                                 ACN_ShowObjInsp.Checked:=true;
-
-
-               //TempForm.FormStyle:=fsStayOnTop;
-               //TempForm.Caption:=Title;
-               //TempForm:=TGDBObjInsp.create({self}application);
-               //TempForm.BorderStyle:=bsSingle;
-
-               //TempForm.Align:=alLeft;
-               //TempForm.BorderStyle:=bssizetoolwin;
-               if assigned(SetGDBObjInspProc)then
-               SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
-               if assigned(SetCurrentObjDefaultProc)then
-                                                        SetCurrentObjDefaultProc;
-               //{TempForm.}ReturnToDefault;
-
-               pint:=SavedUnit.FindValue('VIEW_ObjInspV');
-               {if assigned(pint)then
-                                    TempForm.Width:=pint^;}
-               if assigned(SetNameColWidthProc)then
-               //TempForm.namecol:=TempForm.Width div 2;
-                                                  SetNameColWidthProc(TempForm.Width div 2);
-               pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
-               if assigned(pint)then
-                                    if assigned(SetNameColWidthProc)then
-                                    SetNameColWidthProc(pint^);//TempForm.namecol:=pint^;
-
-               //TempForm.Parent:=self;
-               //  TempForm.show;
-               AControl:=TempForm;
-
-               AControl.Name:=aname;
-               //Acontrol.Caption:=caption;
-
-                   if not DoDisableAutoSizing then
-                                                Acontrol.EnableAutoSizing;
-               end;
-               //Acontrol.BoundsRect:=NewBounds;
-          end
-  else //if copy(aName,1,7)='ToolBar' then
-  begin
-       tbdesk:=self.findtoolbatdesk(aName);
-       if tbdesk=''then
-                       shared.ShowError(format(rsToolBarNotFound,[aName]));
-       FToolBar:=TToolButtonForm(TToolButtonForm.NewInstance);
-       //FToolBar.FormStyle:=fsStayOnTop;
-       FToolBar.DisableAlign;
-       FToolBar.Create(Application);
-       //FToolBar.Caption:=aName;
-       FToolBar.Caption:='';
-       //FToolBar.BevelInner:=bvnone;
-       FToolBar.SetBounds(100,64,500,26);
-       //FToolBar.AutoSize:=false;
-
-       TB:=TToolBar.Create(application);
-       TB.Align:={alRight}alclient;
-       //TB.AutoSize:=false;
-       //TB.Width:=ToolBarU.Height;
-       if aName<>'Status' then
-       TB.EdgeBorders:=[];
-       TB.ShowCaptions:=true;
-       //TB.Wrapable:=true;
-       TB.Parent:=ftoolbar;
-
-       if aName='ToolBarR' then
-       begin
-            //ToolBarR:=tb;
-       end;
-       if aName='ToolBarU' then
-       begin
-            //ToolBarU:=tb;
-       end;
-       if aName='Status' then
-       begin
-            //ToolBarD:=tb;
-            CreateHTPB(tb);
-       end;
-       CreateToolbarFromDesk(tb,aName,tbdesk);
-
-       AControl:=FToolBar;
-
-       AControl.Name:=aname;
-       FToolBar.Caption:='';
-       //Acontrol.Caption:=caption;
-           if not DoDisableAutoSizing then
-                                        Acontrol.EnableAutoSizing;
-
-  end;
+  aControl:=CreateZCADControl(aName,true);
+  if not DoDisableAutoSizing then
+                               Acontrol.EnableAutoSizing;
 end;
 
 procedure LoadLayoutFromFile(Filename: string);
@@ -1342,9 +1307,11 @@ var
   TempForm:TForm;
   pint:PGDBInteger;
 begin
-  self.SetBounds(10,10,800,500);
+  self.SetBounds(0,0,sysparam.screenx-100,sysparam.screeny-100);
 
-  ToolBarU:=TToolBar.Create(self);
+  //self.DisableAlign;
+
+  {ToolBarU:=TToolBar.Create(self);
   ToolBarU.Align:=alTop;
   ToolBarU.AutoSize:=true;
   ToolBarU.ShowCaptions:=true;
@@ -1359,44 +1326,43 @@ begin
                                action.pfoundcommand:=nil;
                                action.command:='';
                                action.options:='';
-                          end;
+                          end;}
+  TempForm:=TForm(CreateZCADControl('Standart'));
+  TempForm.BorderStyle:=bsnone;
+  TempForm.Parent:=self;
+  TempForm.Align:=alTop;
+  TempForm.Show;
 
+  TempForm:=TForm(CreateZCADControl('PageControl'));
+  TempForm.BorderStyle:=bsnone;
+  TempForm.Parent:=self;
+  TempForm.Align:=alClient;
+  TempForm.Show;
 
-  TempForm:=CreateObjInspInstanceProc;
-  TempForm.Create(Application);
-                 TempForm.Caption:=rsGDBObjInspWndName;
-                 TempForm.Parent:=self;
-                 TempForm.Align:=alLeft;
-                 TempForm.Show;
-                 if assigned(SetGDBObjInspProc)then
-                 SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
-                 if assigned(SetCurrentObjDefaultProc)then
-                                                          SetCurrentObjDefaultProc;
-                 {pint:=SavedUnit.FindValue('VIEW_ObjInspV');
-                 if assigned(SetNameColWidthProc)then
-                                                    SetNameColWidthProc(TempForm.Width div 2);
-                 pint:=SavedUnit.FindValue('VIEW_ObjInspSubV');
-                 if assigned(pint)then
-                                      if assigned(SetNameColWidthProc)then
-                                      SetNameColWidthProc(pint^);//TempForm.namecol:=pint^;}
+  TempForm:=TForm(CreateZCADControl('ObjectInspector'));
+  TempForm.Parent:=self;
+  TempForm.Align:=alLeft;
+  TempForm.Show;
 
+  TempForm:=TForm(CreateZCADControl('CommandLine'));
+  TempForm.BorderStyle:=bsnone;
+  TempForm.Parent:=self;
+  TempForm.Align:=alBottom;
+  TempForm.Show;
 
+  TempForm:=TForm(CreateZCADControl('Draw'));
+  TempForm.BorderStyle:=bsnone;
+  TempForm.Parent:=self;
+  TempForm.Align:=alRight;
+  TempForm.Show;
 
-  MainPanel:=Tpanel.Create(Application);
-  MainPanel.parent:=self;
-  MainPanel.Align:=alClient;
-  MainPanel.Caption:=rsDrawingWindowWndName;
-  MainPanel.BorderWidth:=0;
+  TempForm:=TForm(CreateZCADControl('Status'));
+  TempForm.BorderStyle:=bsnone;
+  TempForm.Parent:={self}CLine;
+  TempForm.Align:=alBottom;
+  TempForm.Show;
 
-  PageControl:=TmyPageControl.Create(MainPanel);
-  PageControl.Constraints.MinHeight:=32;
-  PageControl.Parent:=MainPanel;
-  PageControl.Align:=alClient;
-  PageControl.OnChange:=ChangedDWGTabCtrl;
-  PageControl.BorderWidth:=0;
-  PageControl.Options:=[nboShowCloseButtons];
-  PageControl.OnCloseTabClicked:=CloseDWGPageInterf;
-  PageControl.OnMouseDown:=PageControlMouseDown;
+  //self.EnableAlign;
 end;
 
 

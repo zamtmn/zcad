@@ -73,10 +73,11 @@ var
   s:string;
 begin
      ColorInfex:=SpinEdit1.Value;
-     oddpalette.invalidate;
-     evenpalette.invalidate;
-     mainpalette.invalidate;
-     graypalette.invalidate;
+     {oddpalette.Repaint;
+     evenpalette.Repaint;
+     mainpalette.Repaint;
+     graypalette.Repaint;}
+     repaint;
      s:='#'+inttostr(ColorInfex)+' ';
      Case ColorInfex of
                        256:
@@ -267,4 +268,4 @@ initialization
   {$I colorwnd.lrs}
 
 end.
-
+

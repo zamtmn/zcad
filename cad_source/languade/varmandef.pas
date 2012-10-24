@@ -99,9 +99,11 @@ TPropEditor=class(TComponent)
                  PInstance:GDBPointer;
                  PTD:PUserTypeDescriptor;
                  OwnerNotify:TMyNotifyProc;
-                 constructor Create(AOwner:TComponent;_PInstance:GDBPointer;_PTD:PUserTypeDescriptor);
+                 fFreeOnLostFocus:boolean;
+                 constructor Create(AOwner:TComponent;_PInstance:GDBPointer;_PTD:PUserTypeDescriptor;FreeOnLostFocus:boolean);
                  procedure EditingDone(Sender: TObject);
                  procedure EditingProcess(Sender: TObject);
+                 procedure ExitEdit(Sender: TObject);
                  procedure keyPress(Sender: TObject; var Key: char);
                  function geteditor:TWinControl;
             end;
@@ -116,7 +118,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          Collapsed:GDBBoolean;
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
                          procedure _init(size:GDBInteger;tname:string;pu:pointer);
-                         function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
+                         function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TPropEditor;virtual;
                          procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;abstract;
                          function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
                          function SerializePreProcess(Value:GDBString;sub:integer):GDBString;virtual;
@@ -211,11 +213,12 @@ var
 implementation
 uses log;
 
-constructor TPropEditor.Create(AOwner:TComponent;_PInstance:GDBPointer;_PTD:PUserTypeDescriptor);
+constructor TPropEditor.Create(AOwner:TComponent;_PInstance:GDBPointer;_PTD:PUserTypeDescriptor;FreeOnLostFocus:boolean);
 begin
      inherited create(AOwner);
      PInstance:=_PInstance;
      PTD:=_PTD;
+     fFreeOnLostFocus:=FreeOnLostFocus;
 end;
 function TPropEditor.geteditor:TWinControl;
 begin
@@ -246,6 +249,11 @@ begin
                                         ptd.SetValueFromString(PInstance,tedit(sender).text);
                                         OwnerNotify(self,TMNC_EditingProcess);
                                   end;
+end;
+procedure TPropEditor.ExitEdit(Sender: TObject);
+begin
+     if fFreeOnLostFocus then
+                             EditingDone(self.geteditor);
 end;
 
 procedure UserTypeDescriptor.IncAddr;

@@ -924,7 +924,7 @@ begin
       //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
       ppropcurrentedit:=pp;
     end;
-    PEditor:=pp^.PTypeManager^.CreateEditor(@self,{namecol-6}pp^.x1,{my}pp^.y1,{clientwidth-namecol+3}pp^.x2-pp^.x1,{rowh}pp^.y2-pp^.y1,pp^.valueAddres,nil);
+    PEditor:=pp^.PTypeManager^.CreateEditor(@self,{namecol-6}pp^.x1,{my}pp^.y1,{clientwidth-namecol+3}pp^.x2-pp^.x1,{rowh}pp^.y2-pp^.y1,pp^.valueAddres,nil,false);
     if PEditor<>nil then
     begin
       //-----------------------------------------------------------------PEditor^.show;
@@ -1008,7 +1008,7 @@ begin
             until pobj=nil;
             vsa.sort;
        end;
-       PEditor:=pp^.PTypeManager^.CreateEditor(self,{namecol-6}pp^.x1,{my}pp^.y1,{clientwidth-namecol+3}pp^.x2-pp^.x1,{rowh}pp^.y2-pp^.y1,pp^.valueAddres,@vsa);
+       PEditor:=pp^.PTypeManager^.CreateEditor(self,{namecol-6}pp^.x1,{my}pp^.y1,{clientwidth-namecol+3}pp^.x2-pp^.x1,{rowh}pp^.y2-pp^.y1,pp^.valueAddres,@vsa,false);
        vsa.done;
        if assigned(PEditor){<>nil} then
        begin

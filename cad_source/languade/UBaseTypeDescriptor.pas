@@ -29,7 +29,7 @@ BaseTypeDescriptor=object(TUserTypeDescriptor)
                          function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                          function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                          function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
-                         function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
+                         function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TPropEditor;virtual;
                          procedure EditorChange(Sender:TObject);
                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
                    end;
@@ -37,7 +37,7 @@ GDBBooleanDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
-                          function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
+                          function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TPropEditor;virtual;
                           procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
                     end;
 GDBShortintDescriptor=object(BaseTypeDescriptor)
@@ -108,7 +108,7 @@ GDBPointerDescriptor=object(BaseTypeDescriptor)
 TEnumDataDescriptor=object(BaseTypeDescriptor)
                      constructor init;
                      procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
-                     function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray):TPropEditor;virtual;
+                     function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TPropEditor;virtual;
                      function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                      procedure SetValueFromString(PInstance:GDBPointer;_Value:GDBstring);virtual;
                      function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
@@ -254,13 +254,16 @@ begin
      result:=nil;
      if (psa=nil)or(psa^.count=0) then
                          begin
-                               propeditor:=TPropEditor.Create(theowner,PInstance,@self);
+                               propeditor:=TPropEditor.Create(theowner,PInstance,@self,FreeOnLostFocus);
 
                                edit:=TEdit.Create(propeditor);
+                               edit.AutoSize:=false;
                                edit.SetBounds(x,y,w,h);
                                edit.Text:=GetValueAsString(pinstance);
                                //edit.OnEditingDone:=propeditor.EditingDone;
                                edit.OnKeyPress:=propeditor.keyPress;
+                               edit.OnChange:=propeditor.EditingProcess;
+                               edit.OnExit:=propeditor.ExitEdit;
                                edit.Parent:=theowner;
 
                                result:=propeditor;
@@ -274,13 +277,15 @@ begin
                          end
                      else
                          begin
-                              propeditor:=TPropEditor.Create(theowner,PInstance,@self);
+                              propeditor:=TPropEditor.Create(theowner,PInstance,@self,FreeOnLostFocus);
                               cbedit:=TComboBox.Create(propeditor);
+                              cbedit.AutoSize:=false;
                               cbedit.SetBounds(x,y,w,h);
                               cbedit.Text:=GetValueAsString(pinstance);
                               //cbedit.OnEditingDone:=propeditor.EditingDone;
                               cbedit.OnKeyPress:=propeditor.keyPress;
                               cbedit.OnChange:=propeditor.EditingProcess;
+                              cbedit.OnExit:=propeditor.ExitEdit;
 
                               cbedit.Parent:=theowner;
                               result:=propeditor;
@@ -350,7 +355,7 @@ begin
      result:=nil;
 
 
-     propeditor:=TPropEditor.Create(theowner,PInstance,@self);
+     propeditor:=TPropEditor.Create(theowner,PInstance,@self,FreeOnLostFocus);
      cbedit:=TComboBox.Create(propeditor);
      cbedit.SetBounds(x,y,w,h);
      cbedit.Text:=GetValueAsString(pinstance);
@@ -759,7 +764,7 @@ var
     number:longword;
     p:pgdbstring;
 begin
-     propeditor:=TPropEditor.Create(theowner,PInstance,@self);
+     propeditor:=TPropEditor.Create(theowner,PInstance,@self,FreeOnLostFocus);
      cbedit:=TComboBox.Create(propeditor);
      cbedit.SetBounds(x,y,w,h);
      cbedit.Text:=GetValueAsString(pinstance);

@@ -366,6 +366,10 @@ MainMenuItem Plan;
       }
    Command Расстоновка блоков массивом,OrtoDevPlace,none,none
   }
+MainMenuItem Info;
+  {
+    action ACN_DIST
+  }
 MainMenuItem Model;
   {
     Command Менеджер кабелей,EL_CableMan,none,none
@@ -481,5 +485,5 @@ PopUpMenu NONSELECTEDENTSCXMENU;
     Separator
     action ACN_SELECTALL
   }
-CreateMenu MainMenu File,Edit,View,Format,Draw,Modify,Schematic,Plan,Model,Settings,Window,Help,__Debug,__DB;
+CreateMenu MainMenu File,Edit,View,Format,Draw,Modify,Schematic,Plan,Info,Model,Settings,Window,Help,__Debug,__DB;
 SetMainMenu MainMenu;

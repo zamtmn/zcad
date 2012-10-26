@@ -97,3 +97,5 @@ action ACN_INSERTTODRAWING,Insert2,#ITD,Insert to drawing,,
 action ACN_COPYVARNAMETOCLIP,ObjInspCopyToClip(VAR),#CVN,Copy var name,,
 action ACN_COPYLINKTOVARTOCLIP,ObjInspCopyToClip(LVAR),#CLV,Copy link to var,,
 action ACN_COPYVALUETOCLIP,ObjInspCopyToClip(VALUE),#CVL,Copy value,,
+
+action ACN_DIST,Dist,dist.bmp,Distance,,

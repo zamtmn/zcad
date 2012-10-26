@@ -42,7 +42,8 @@ implementation
 uses GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,Varman,projecttreewnd,oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
 var
    c1,c2:integer;
-   point:gdbvertex;
+   distlen:gdbdouble;
+   oldpoint,point:gdbvertex;
 function Line_com_CommandStart(operands:pansichar):GDBInteger;
 begin
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
@@ -104,11 +105,47 @@ begin
   oglsm.myglend;
 end;
 
+function Dist_com_CommandStart(operands:pansichar):GDBInteger;
+begin
+     c1:=commandmanager.GetValueHeap;
+     c2:=-1;
+     commandmanager.executecommandsilent('Get3DPoint(Первая точка:)');
+     distlen:=0;
+end;
+procedure Dist_com_CommandCont;
+var
+   cs:integer;
+   vd:vardesk;
+   len:gdbdouble;
+begin
+     cs:=commandmanager.GetValueHeap;
+     if cs=c1 then
+     begin
+          commandmanager.executecommandend;
+          exit;
+     end;
+     vd:=commandmanager.PopValue;
+     point:=pgdbvertex(vd.data.Instance)^;
+     //c1:=cs;
+     c1:=commandmanager.GetValueHeap;
+     if c2<>-1 then
+                   begin
+                        len:=geometry.Vertexlength(point,oldpoint);
+                        distlen:=distlen+len;
+                        HistoryOutStr('Длина отрезка: '+floattostr(len)+' Суммарная длина: '+floattostr(distlen))
+                   end;
+     c2:=cs;
+     oldpoint:=point;
+     commandmanager.executecommandsilent('Get3DPoint(Следующая точка:)');
+end;
+
 procedure startup;
 begin
   CreateCommandRTEdObjectPlugin(@Line_com_CommandStart,nil,nil,nil,@Line_com_BeforeClick,nil,nil,nil,'Get3DPoint',0,0).overlay:=true;
   CreateCommandRTEdObjectPlugin(@Line_com_CommandStart,nil,nil,nil,@Line_com_BeforeClick,nil,@DrawRect,nil,'Get3DPoint_DrawRect',0,0).overlay:=true;
   CreateCommandRTEdObjectPlugin(@Rect_com_CommandStart,nil,nil,nil,nil,nil,nil,@Rect_com_CommandCont,'GetRect',0,0).overlay:=true;
+
+  CreateCommandRTEdObjectPlugin(@Dist_com_CommandStart,nil,nil,nil,nil,nil,nil,@Dist_com_CommandCont,'Dist',0,0){.overlay:=true};
 end;
 procedure Finalize;
 begin

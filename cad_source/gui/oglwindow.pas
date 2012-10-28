@@ -3584,7 +3584,7 @@ begin
        if pp^.visible=PDWG.Getpcamera.VISCOUNT then
        begin
        inc(_visible);
-       if pp^.isonmouse(PDWG.GetOnMouseObj^)
+       if pp^.isonmouse(PDWG.GetOnMouseObj^,param.mousefrustum)
        then
            begin
                 inc(_isonmouse);

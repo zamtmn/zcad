@@ -305,7 +305,7 @@ begin
   p:=VarObjArray.beginiterate(ir);
   if p<>nil then
   repeat
-       ot:=p^.isonmouse(popa);
+       ot:=p^.isonmouse(popa,mf);
        if ot then
                  begin
                       lstonmouse:=p^.ReturnLastOnMouse;

@@ -16,7 +16,7 @@ begin
    BTY_TreeCoord:='PLAN_OPS_PSSENSORS_UNCAT';
    Device_Type:=TDT_SensorPS;
    NMO_Template:='@@[GC_HDShortName]@@[NMO_BaseName]@@[GC_HDGroup].@@[GC_NumberInGroup]';
-   EL_Cab_AddLength:=0.1;
+   EL_Cab_AddLength:=0.5;
    AmountI:=1;
 
 

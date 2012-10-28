@@ -24,7 +24,7 @@ begin
    BTY_TreeCoord:='PLAN_OPS_Прибор ОПС';
    Device_Type:=TDT_PriborOPS;
    NMO_Template:='@@[NMO_BaseName]@@[NMO_Prefix]@@[NMO_Suffix]';
-   EL_Cab_AddLength:=1;
+   EL_Cab_AddLength:=1.0;
 
    NMO_Prefix:='';
    NMO_BaseName:='ARK';

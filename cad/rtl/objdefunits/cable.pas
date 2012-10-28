@@ -24,10 +24,9 @@ begin
    Amount:=0.0;
    LENGTH_RoundTo:=0;
    LENGTH_Add:=4.0;
-   LENGTH_KReserve:=1.0;
+   LENGTH_KReserve:=1.3;
    Segment:=0;
    LENGTH_Scale:=0.1;
-   NMO_Name:='unnamed';
    CABLE_Material:='не задан ??;
    CABLE_WireCount:=0;
 

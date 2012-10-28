@@ -117,8 +117,8 @@ begin
   RD_MaxRenderTime:=0;
   RD_Light:=False;
   RD_VSync:=TVSOff;
-  SAVE_Auto_Interval:=300;
-  SAVE_Auto_Current_Interval:=300;
+  SAVE_Auto_Interval:=900;
+  SAVE_Auto_Current_Interval:=900;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';
   SAVE_Auto_On:=True;
   SYS_RunTime:=18;

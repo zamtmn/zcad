@@ -24,7 +24,7 @@ begin
    BTY_TreeCoord:='PLAN_OPS_С2000-АР1';
    Device_Type:=TDT_PriborOPS;
    NMO_Template:='@@[NMO_Prefix]@@[GC_HDGroup]@@[NMO_BaseName]-@@[NMO_Suffix]';
-   EL_Cab_AddLength:=0.1;
+   EL_Cab_AddLength:=1.0;
 
    NMO_Prefix:='';
    NMO_BaseName:='AU1';

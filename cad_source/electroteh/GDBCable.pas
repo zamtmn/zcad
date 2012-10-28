@@ -40,6 +40,7 @@ GDBObjCable=object(GDBObjCurve)
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function GetObjTypeName:GDBString;virtual;
                  procedure Format;virtual;
+                 procedure FormatFast;virtual;
                  procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
@@ -205,6 +206,24 @@ begin
      CreateDBLinkProcess(pCable);
 
 
+end;
+procedure GDBObjCable.FormatFast;
+var
+   ptvnext:pgdbvertex;
+   ir_inVertexArray:itrec;
+   np:TNodeProp;
+begin
+     np.DevLink:=nil;
+     inherited format;
+     NodePropArray.clear;
+     ptvnext:=vertexarrayInWCS.beginiterate(ir_inVertexArray);
+     if ptvnext<>nil then
+     repeat
+           np.NextP:=ptvnext^;
+           np.PrevP:=ptvnext^;
+           ptvnext:=vertexarrayInWCS.iterate(ir_inVertexArray);
+           NodePropArray.Add(@np);
+     until ptvnext=nil;
 end;
 
 procedure GDBObjCable.Format;

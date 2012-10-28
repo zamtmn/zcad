@@ -63,6 +63,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                     procedure SaveToDXFPostProcess(var handle:{GDBInteger}GDBOpenArrayOfByte);
                     procedure Format;virtual;
+                    procedure FormatFast;virtual;
                     procedure FormatAfterEdit;virtual;
 
                     procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
@@ -571,6 +572,10 @@ end;
 
 procedure GDBObjEntity.format;
 begin
+end;
+procedure GDBObjEntity.FormatFast;
+begin
+     format;
 end;
 procedure GDBObjEntity.FormatAfterEdit;
 begin

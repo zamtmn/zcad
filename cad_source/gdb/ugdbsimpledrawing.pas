@@ -19,7 +19,7 @@
 unit ugdbsimpledrawing;
 interface
 uses //gdbase,gdbasetypes,
-GDBWithLocalCS,UGDBDrawingdef,zcadsysvars,{zcadinterface,}{zcadstrconsts,}{GDBWithLocalCS,}{UGDBOpenArrayOfUCommands,}strproc,{GDBBlockDef,}UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
+gdbobjectsconstdef,GDBWithLocalCS,UGDBDrawingdef,zcadsysvars,{zcadinterface,}{zcadstrconsts,}{GDBWithLocalCS,}{UGDBOpenArrayOfUCommands,}strproc,{GDBBlockDef,}UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
 UGDBNumerator, gdbase,varmandef,varman,
 sysutils, memman, geometry, {gdbobjectsconstdef,}
 gdbasetypes,sysinfo,
@@ -144,7 +144,7 @@ begin
      begin
           PSelectedObjDesc(md).ptempobj:=obj^.Clone(nil);
           PSelectedObjDesc(md).ptempobj^.bp.ListPos.Owner:=obj^.bp.ListPos.Owner;
-          PSelectedObjDesc(md).ptempobj.format;
+          PSelectedObjDesc(md).ptempobj.{format}FormatFast;
           PSelectedObjDesc(md).ptempobj.BuildGeometry;
      end;
      p:=obj^.beforertmodify;
@@ -250,7 +250,7 @@ begin
      end
      else
      begin
-          PSelectedObjDesc(md).ptempobj.format;
+          PSelectedObjDesc(md).ptempobj.FormatFast;
           PSelectedObjDesc(md).ptempobj.BuildGeometry;
           //PSelectedObjDesc(md).ptempobj.renderfeedback;
      end;

@@ -24,7 +24,7 @@ GDBObjNet=object(GDBObjConnected)
                  function EubEntryType:GDBInteger;virtual;
                  function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
                  procedure restructure;virtual;
-                 function DeSelect:GDBInteger;virtual;
+                 function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
                  function BuildGraf:GDBInteger;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function EraseMi(pobj:pgdbobjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
@@ -266,8 +266,8 @@ begin
 end;
 function GDBObjNet.DeSelect;
 begin
-     inherited deselect;
-     ObjArray.DeSelect;
+     inherited deselect(SelObjArray,SelectedObjCount);
+     ObjArray.DeSelect(SelObjArray,SelectedObjCount);
 
 end;
 function GDBObjNet.BuildGraf:GDBInteger;

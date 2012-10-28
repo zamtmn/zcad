@@ -79,7 +79,6 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure RenderFeedbackIFNeed(pcount:TActulity);virtual;
                     function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
                     function CalculateLineWeight(const DC:TDrawContext):GDBInteger;//inline;
-                    procedure feedbackinrect;virtual;
                     function InRect:TInRect;virtual;
                     function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                     function CalcOwner(own:GDBPointer):GDBPointer;virtual;
@@ -91,7 +90,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure correctbb;virtual;
                     procedure calcbb;virtual;
                     procedure DrawBB;
-                    function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
+                    function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
 
                     function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                     function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
@@ -103,9 +102,9 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function getintersect(var osp:os_record;pobj:PGDBObjEntity):GDBBoolean;virtual;
                     procedure higlight;virtual;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
-                    function select:GDBBoolean;virtual;
+                    function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;
                     function SelectQuik:GDBBoolean;virtual;
-                    procedure remapcontrolpoints(pp:PGDBControlPointArray;pcount:TActulity);virtual;
+                    procedure remapcontrolpoints(pp:PGDBControlPointArray;pcount:TActulity;ScrollMode:GDBBoolean);virtual;
                     //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                     procedure transform(const t_matrix:DMatrix4D);virtual;
@@ -120,7 +119,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function getownermatrix:PDMatrix4D;virtual;
                     function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
                     function ReturnLastOnMouse:PGDBObjEntity;virtual;
-                    function DeSelect:GDBInteger;virtual;
+                    function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
                     function YouDeleted:GDBInteger;virtual;
                     procedure YouChanged;virtual;
                     function GetObjTypeName:GDBString;virtual;
@@ -133,10 +132,10 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function IsHaveGRIPS:GDBBoolean;virtual;
                     function GetLayer:PGDBLayerProp;virtual;
                     function GetCenterPoint:GDBVertex;virtual;
-                    procedure SetInFrustum(infrustumactualy:TActulity);virtual;
-                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
-                    procedure SetNotInFrustum(infrustumactualy:TActulity);virtual;
-                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
+                    procedure SetInFrustum(infrustumactualy:TActulity;var totalobj,infrustumobj:GDBInteger);virtual;
+                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger);virtual;
+                    procedure SetNotInFrustum(infrustumactualy:TActulity;var totalobj,infrustumobj:GDBInteger);virtual;
+                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                     function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                     procedure BuildGeometry;virtual;
@@ -589,14 +588,14 @@ procedure GDBObjEntity.SetInFrustum;
 begin
      //result:=infrustum;
      infrustum:=infrustumactualy;
-     inc(gdb.GetCurrentDWG.pcamera^.totalobj);
-     inc(gdb.GetCurrentDWG.pcamera^.infrustum);
+     inc({gdb.GetCurrentDWG.pcamera^.}totalobj);
+     inc({gdb.GetCurrentDWG.pcamera^.}infrustumobj);
 end;
 procedure GDBObjEntity.SetNotInFrustum;
 begin
      //result:=infrustum;
      //infrustum:=false;
-     inc(gdb.GetCurrentDWG.pcamera^.totalobj);
+     inc({gdb.GetCurrentDWG.pcamera^.}totalobj);
 end;
 procedure GDBObjEntity.DXFOut;
 begin
@@ -710,13 +709,13 @@ begin
       visible:=visibleactualy;
       result:=true;
       //inc(gdb.GetCurrentDWG.pcamera^.totalobj);
-      if CalcInFrustum(frustum,infrustumactualy,visibleactualy) then
+      if CalcInFrustum(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj) then
                            begin
-                                setinfrustum(infrustumactualy);
+                                setinfrustum(infrustumactualy,totalobj,infrustumobj);
                            end
                        else
                            begin
-                                setnotinfrustum(infrustumactualy);
+                                setnotinfrustum(infrustumactualy,totalobj,infrustumobj);
                                 visible:=0;
                                 result:=false;
                            end;
@@ -805,24 +804,6 @@ function GDBObjEntity.onmouse;
 begin
      result:=false;
 end;
-procedure GDBObjEntity.feedbackinrect;
-begin
-     if GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameInverse
-     then
-     begin
-          if inrect<>IREmpty then
-              begin
-                   select;
-              end;
-     end
-     else
-     begin
-          if inrect=IRFully then
-              begin
-                   select;
-              end;
-     end;
-end;
 function GDBObjEntity.InRect:TInRect;
 begin
      result:=IREmpty;
@@ -893,7 +874,7 @@ begin
      if result then
      begin
           //selected:=true;
-          tdesc:=gdb.GetCurrentDWG.SelObjArray.addobject(@self);
+          tdesc:={gdb.GetCurrentDWG.}PGDBSelectedObjArray(SelObjArray)^.addobject(@self);
           if tdesc<>nil then
           if IsHaveGRIPS then
           begin
@@ -901,7 +882,7 @@ begin
           addcontrolpoints(tdesc);
           end;
           bp.ListPos.Owner.ImSelected(@self,bp.ListPos.SelfIndex);
-          inc(GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
+          inc({GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.}Selectedobjcount);
 
      end;
      end;
@@ -912,26 +893,26 @@ var tdesc:pselectedobjdesc;
 begin
      if selected then
      begin
-          tdesc:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
+          tdesc:={gdb.GetCurrentDWG.}PGDBSelectedObjArray(SelObjArray)^.beginiterate(ir);
           if tdesc<>nil then
           repeat
                 if tdesc^.objaddr=@self then
                                             begin
-                                                 gdb.GetCurrentDWG.SelObjArray.freeelement(tdesc);
-                                                 {tdesc:=}gdb.GetCurrentDWG.SelObjArray.deleteelementbyp(tdesc);
+                                                 {gdb.GetCurrentDWG.}PGDBSelectedObjArray(SelObjArray)^.freeelement(tdesc);
+                                                 {gdb.GetCurrentDWG.}PGDBSelectedObjArray(SelObjArray)^.deleteelementbyp(tdesc);
                                             end;
 
-                tdesc:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
+                tdesc:={gdb.GetCurrentDWG.}PGDBSelectedObjArray(SelObjArray)^.iterate(ir);
           until tdesc=nil;
           Selected:=false;
-          dec(GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
+          dec({GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.}Selectedobjcount);
      end;
 end;
 procedure GDBObjEntity.remapcontrolpoints;
 var pdesc:pcontrolpointdesc;
     i:GDBInteger;
 begin
-          if GDB.GetCurrentDWG.OGLwindow1.param.scrollmode then renderfeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount);
+          if ScrollMode then renderfeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount);
           if pp.count<>0 then
           begin
                pdesc:=pp^.parray;

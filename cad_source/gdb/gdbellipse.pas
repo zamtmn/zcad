@@ -62,7 +62,7 @@ GDBObjEllipse=object(GDBObjPlain)
                  procedure rtsave(refp:GDBPointer);virtual;
                  destructor done;virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
+                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                  function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;

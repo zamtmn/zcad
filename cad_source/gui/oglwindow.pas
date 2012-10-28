@@ -1067,9 +1067,9 @@ begin
 
   //param.zoommode := true;
   //param.scrollmode:=true;
-  pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree);
+  pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum);
   //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
-  pdwg.GetCurrentROOT.calcvisible(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT);
+  pdwg.GetCurrentROOT.calcvisible(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum);
   pdwg.GetSelObjArray.RenderFeedBack;
 
   calcmousefrustum;
@@ -1291,11 +1291,11 @@ begin
        //gdb.GetCurrentDWG.Changed:=true;
        //-------------CalcOptimalMatrix;
        lptime:=now();
-       pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree);
+       pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum);
        lptime:=now()-LPTime;
        sysvar.RD.RD_LastCalcVisible:=round(lptime*10e7);
        //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT);
-       pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT);
+       pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum);
   end;
 
 end;
@@ -1357,9 +1357,9 @@ begin
       calcgrid;
       //-------------------CalcOptimalMatrix;
 
-      pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree);
+      pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum);
       //gdb.GetCurrentROOT.calcalcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT);
-      pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT);
+      pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum);
     end
     else
       if ssMiddle in shift then     {MK_Control}
@@ -1504,11 +1504,11 @@ end;
      //GDBobjinsp23.reread;
   //CalcOptimalMatrix;
   CalcOptimalMatrix;
-  pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT);
+  pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum);
 
   //gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.OGLwindow1.param.mousefrustum);
 
-  pdwg.GetSelObjArray.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT);
+  pdwg.GetSelObjArray.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum);
   Set3dmouse;
 
 
@@ -1904,8 +1904,8 @@ begin
   {}CalcOptimalMatrix;
   mouseunproject(param.md.mouse.x,param.md.mouse.y);
   reprojectaxis;
-  PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,PDWG.GetCurrentRoot.ObjArray.ObjTree);
-  PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT);
+  PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,PDWG.GetCurrentRoot.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum);
+  PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum);
   _onMouseMove(nil,[],param.md.mouse.x,param.md.mouse.y);
   if i=steps then
     begin
@@ -1967,8 +1967,8 @@ begin
   {}CalcOptimalMatrix;
   mouseunproject(param.md.mouse.x,param.md.mouse.y);
   reprojectaxis;
-  PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,PDWG.GetCurrentRoot.ObjArray.ObjTree);
-  PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT);
+  PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,PDWG.GetCurrentRoot.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum);
+  PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum);
   _onMouseMove(nil,[],param.md.mouse.x,param.md.mouse.y);
   if i=steps then
     begin
@@ -2209,7 +2209,7 @@ begin
                if (key and MZW_SHIFT)=0
                then
                    begin
-                        if PGDBObjEntity(param.SelDesc.OnMouseObject)^.select then
+                        if PGDBObjEntity(param.SelDesc.OnMouseObject)^.select(PDWG^.GetSelObjArray,param.SelDesc.Selectedobjcount) then
                           begin
                         param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
                         if assigned(addoneobjectproc) then addoneobjectproc;
@@ -2219,7 +2219,7 @@ begin
                    end
                else
                    begin
-                        PGDBObjEntity(param.SelDesc.OnMouseObject)^.DeSelect;
+                        PGDBObjEntity(param.SelDesc.OnMouseObject)^.DeSelect(PDWG^.GetSelObjArray,param.SelDesc.Selectedobjcount);
                         param.SelDesc.LastSelectedObject := nil;
                         //addoneobject;
                         SetObjInsp;
@@ -3173,7 +3173,7 @@ if (clientwidth=0)or(clientheight=0) then
     glaccum(GL_LOAD,1);
     inc(dc.subrender);
     render(PDWG.GetConstructObjRoot^,{subrender}dc);
-    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT);
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode);
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
     showcursor;
@@ -3208,7 +3208,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_AuxBuffer then
     oglsm.myglDisable(GL_DEPTH_TEST);
     inc(dc.subrender);
     render(PDWG.GetConstructObjRoot^,dc);
-    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT);
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode);
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
     showcursor;
@@ -3243,7 +3243,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_DrawPixels then
     glreadpixels(0, 0, clientwidth, clientheight, GL_BGRA_EXT{GL_RGBA}, gl_unsigned_Byte, param.pglscreen);
     inc(dc.subrender);
     render(PDWG.GetConstructObjRoot^,dc);
-    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT);
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode);
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
     showcursor;
@@ -3290,12 +3290,12 @@ else if sysvar.RD.RD_Restore_Mode^=WND_NewDraw then
     render(PDWG.GetCurrentROOT^,dc);
     dec(dc.subrender);
     inc(dc.subrender);
-    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT);
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode);
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
     showcursor;
     //param.firstdraw := false;
-    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT);
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode);
   end
 else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
   begin
@@ -3382,7 +3382,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
         //oglsm.mytotalglend;
 
 
-    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT);
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode);
     oglsm.myglDisable(GL_STENCIL_TEST);
     dc.MaxDetail:=true;
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
@@ -4560,7 +4560,7 @@ begin
         ClearOntrackpoint;
         if commandmanager.pcommandrunning=nil then
           begin
-          PDWG.GetCurrentROOT.ObjArray.DeSelect;
+          PDWG.GetCurrentROOT.ObjArray.DeSelect(PDWG^.GetSelObjArray,param.SelDesc.Selectedobjcount);
           param.SelDesc.LastSelectedObject := nil;
           param.SelDesc.OnMouseObject := nil;
           param.seldesc.Selectedobjcount:=0;

@@ -301,7 +301,7 @@ begin
      val(Operands,GDBPlatforumint(pp),code);
      if (code=0)and(assigned(pp))then
                                      begin
-                                     pp^.select;
+                                     pp^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
                                      gdb.CurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject:=pp;
                                      end;
      if assigned(updatevisibleproc) then updatevisibleproc;
@@ -564,7 +564,7 @@ begin
         if count>10000 then
                            pv^.SelectQuik//:=true
                        else
-                           pv^.select;
+                           pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
 
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
@@ -722,7 +722,7 @@ var
    prevundo:integer;
    overlay:GDBBoolean;
 begin
-  gdb.GetCurrentROOT.ObjArray.DeSelect;
+  gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
   if commandmanager.CommandsStack.Count>0 then
                                               begin
                                                    prevundo:=pCommandRTEdObject(ppointer(commandmanager.CommandsStack.getelement(commandmanager.CommandsStack.Count-1))^)^.UndoTop;
@@ -739,7 +739,7 @@ begin
 end;
 function Redo_com(Operands:pansichar):GDBInteger;
 begin
-  gdb.GetCurrentROOT.ObjArray.DeSelect;
+  gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
   ptdrawing(gdb.GetCurrentDWG).UndoStack.redo;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
@@ -855,9 +855,9 @@ begin
                                                begin
                                                pv^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
                                                if (button and MZW_SHIFT)=0 then
-                                                                               pv^.select
+                                                                               pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount)
                                                                            else
-                                                                               pv^.deselect;
+                                                                               pv^.deselect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
                                                GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject:=pv;
                                                end;
                         end
@@ -867,9 +867,9 @@ begin
                                               begin
                                                pv^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
                                                if (button and MZW_SHIFT)=0 then
-                                                                               pv^.select
+                                                                               pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount)
                                                                            else
-                                                                               pv^.deselect;
+                                                                               pv^.deselect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
                                                GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject:=pv;
                                               end;
                         end

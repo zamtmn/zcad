@@ -61,7 +61,6 @@ GDBObjCurve=object(GDBObj3d)
                  procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
-                 procedure feedbackinrect;virtual;
 
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
@@ -190,13 +189,6 @@ end;
 function GDBObjCurve.CalcTrueInFrustum;
 begin
       result:=VertexArrayInWCS.CalcTrueInFrustum(frustum);
-end;
-procedure GDBObjCurve.feedbackinrect;
-begin
-     //exit;
-     if pprojpoint<>nil then
-     if pprojpoint.inrect then
-                              select;
 end;
 procedure GDBObjCurve.SaveToDXFFollow;
 var

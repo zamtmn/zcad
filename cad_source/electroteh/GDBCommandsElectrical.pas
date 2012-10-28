@@ -1952,7 +1952,7 @@ begin
                     begin
                     CurrentObj:=pointer(ptn^.DevLink^.bp.ListPos.owner);
                     if CurrentObj<>nil then
-                                           CurrentObj^.select;
+                                           CurrentObj^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
                     end;
 
                     ptn:=PGDBObjCable(pv)^.NodePropArray.iterate(irnpa);
@@ -2153,7 +2153,7 @@ begin
      if assigned(SetGDBObjInspProc)then
   SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pfindcom);
   gdb.GetCurrentDWG.SelObjArray.clearallobjects;
-  gdb.GetCurrentROOT.ObjArray.DeSelect;
+  gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
   result:=cmd_ok;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
 end;
@@ -2169,7 +2169,7 @@ var pv,pvlast:pGDBObjEntity;
     findvarvalue:gdbboolean;
 begin
   gdb.GetCurrentDWG.SelObjArray.clearallobjects;
-  gdb.GetCurrentROOT.ObjArray.DeSelect;
+  gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
    case FindDeviceParam.FindType of
       tft_obozn:begin
                      varname:=('NMO_Name');
@@ -2214,7 +2214,7 @@ begin
 
                if findvarvalue then
                begin
-                  pv^.select;
+                  pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
                   pvlast:=pv;
                   inc(count);
                end;

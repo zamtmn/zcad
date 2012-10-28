@@ -95,7 +95,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                     function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
 
-                    function isonmouse(var popa:GDBOpenArrayOfPObjects):GDBBoolean;virtual;
+                    function isonmouse(var popa:GDBOpenArrayOfPObjects;mousefrustum:ClipArray):GDBBoolean;virtual;
                     procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
                     function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
                     procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;
@@ -788,7 +788,7 @@ end;
 function GDBObjEntity.isonmouse;
 begin
      if IsActualy then
-                          result:=onmouse(popa,GDB.GetCurrentDWG.OGLwindow1.param.mousefrustum)
+                          result:=onmouse(popa,{GDB.GetCurrentDWG.OGLwindow1.param.}mousefrustum)
                       else
                           result:=false;
 end;

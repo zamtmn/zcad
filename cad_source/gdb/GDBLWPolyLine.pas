@@ -50,7 +50,6 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  function GetObjTypeName:GDBString;virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure RenderFeedback(pcount:TActulity);virtual;
-                 procedure feedbackinrect;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -406,16 +405,6 @@ begin
                inc(pv);
                inc(pv2d);
           end;
-end;
-procedure GDBObjLWpolyline.feedbackinrect;
-begin
-     if pprojpoint<>nil then
-     if pprojpoint.inrect then
-                              begin
-                              pprojpoint.inrect;
-                              pprojpoint.inrect;
-                              select;
-                              end;
 end;
 function GDBObjLWpolyline.Clone;
 var tpo: PGDBObjLWPolyline;

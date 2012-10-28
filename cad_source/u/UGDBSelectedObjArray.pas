@@ -37,7 +37,7 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
 
                           function addobject(objnum:PGDBObjEntity):pselectedobjdesc;virtual;
                           procedure clearallobjects;virtual;
-                          procedure remappoints(pcount:TActulity);virtual;
+                          procedure remappoints(pcount:TActulity;ScrollMode:GDBBoolean);virtual;
                           procedure drawpoint;virtual;
                           procedure drawobject(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                           function getnearesttomouse:tcontrolpointdist;virtual;
@@ -53,7 +53,7 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
 
                           procedure drawobj(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                           procedure freeelement(p:GDBPointer);virtual;
-                          function calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
+                          function calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
                           procedure resprojparam;
                     end;
 {EXPORT-}
@@ -216,7 +216,7 @@ begin
        begin
             if tdesc^.pcontrolpoint<>nil then
             begin
-                 tdesc^.objaddr^.remapcontrolpoints(tdesc^.pcontrolpoint,pcount);
+                 tdesc^.objaddr^.remapcontrolpoints(tdesc^.pcontrolpoint,pcount,ScrollMode);
             end;
             inc(tdesc);
        end;
@@ -544,7 +544,7 @@ begin
       if tdesc^.ptempobj<>nil then
                                   begin
                                   //tdesc^.ptempobj^.getoutbound;
-                                  tdesc^.ptempobj^.calcvisible(frustum,infrustumactualy,visibleactualy);
+                                  tdesc^.ptempobj^.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj);
                                   end;
       inc(tdesc);
     end;

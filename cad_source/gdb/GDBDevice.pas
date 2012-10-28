@@ -33,7 +33,7 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                    constructor initnul;
                    destructor done;virtual;
-                   function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
+                   function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
                    procedure Format;virtual;
                    procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                    procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -41,7 +41,7 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                    function ReturnLastOnMouse:PGDBObjEntity;virtual;
                    function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
-                   function DeSelect:GDBInteger;virtual;
+                   function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
                    //function GetDeviceType:TDeviceType;virtual;
                    procedure getoutbound;virtual;
 
@@ -55,7 +55,7 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                    function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
                    //procedure select;virtual;
-                   procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity);virtual;
+                   procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger);virtual;
                    procedure addcontrolpoints(tdesc:GDBPointer);virtual;
 
                    function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
@@ -140,8 +140,8 @@ end;
 
 procedure GDBObjDevice.SetInFrustumFromTree;
 begin
-     inherited SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy);
-     VarObjArray.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy);
+     inherited SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj);
+     VarObjArray.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj);
 end;
 function GDBObjDevice.AddMi;
 begin
@@ -225,8 +225,8 @@ end;}
 function GDBObjDevice.CalcInFrustum;
 var a:boolean;
 begin
-     result:=inherited CalcInFrustum(frustum,infrustumactualy,visibleactualy);
-     a:=VarObjArray.calcvisible(frustum,infrustumactualy,visibleactualy);
+     result:=inherited CalcInFrustum(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj);
+     a:=VarObjArray.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj);
      result:=result or a;
 end;
 procedure GDBObjDevice.getoutbound;
@@ -271,8 +271,8 @@ begin
 end;
 function GDBObjDevice.DeSelect;
 begin
-     inherited deselect;
-     VarObjArray.DeSelect;
+     inherited deselect(SelObjArray,SelectedObjCount);
+     VarObjArray.DeSelect(SelObjArray,SelectedObjCount);
      //lstonmouse:=nil;
 end;
 function GDBObjDevice.ImEdited;

@@ -25,6 +25,25 @@ uses zcadsysvars,gdbasetypes,gdbase,LCLType,
      {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}
      log,sysutils,varmandef;
+const ls = $AAAA;
+      ps:array [0..31] of LONGWORD=(
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC,
+                                   $33333333,$33333333,
+                                   $CCCCCCCC,$CCCCCCCC
+                                  );
 type
     {$if FPC_FULlVERSION>20600}
     {glu}//TViewPortArray = array [0..3] of GLint;

@@ -904,7 +904,7 @@ begin
            isweght:=false;
            isobjtype:=false;
            if pobj.selected then
-                                pobj.DeSelect;
+                                pobj.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
 
            islayer:=layers.IsObjExist(pobj.vp.Layer);
 
@@ -945,7 +945,7 @@ begin
                                                  begin
                                                       select:=select and isobjtype;
                                                  end;
-           if select then pobj^.select;
+           if select then pobj^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
 
            end;
 
@@ -1113,7 +1113,7 @@ begin
   //cdwg.OGLwindow1.param.ShowDebugFrustum:=true;
   dc:=cdwg.OGLwindow1.CreateRC(true);
   dc.DrawMode:=1;
-  gdb.GetCurrentROOT.CalcVisibleByTree(cdwg.pcamera^.frustum{calcfrustum(@_clip)},cdwg.pcamera.POSCOUNT,cdwg.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjArray.ObjTree);
+  gdb.GetCurrentROOT.CalcVisibleByTree(cdwg.pcamera^.frustum{calcfrustum(@_clip)},cdwg.pcamera.POSCOUNT,cdwg.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjArray.ObjTree,cdwg.pcamera^.totalobj,cdwg.pcamera^.infrustum);
   //gdb.GetCurrentDWG.OGLwindow1.draw;
   prn.startrender;
   gdb.GetCurrentDWG.OGLwindow1.treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,0,{0}dc);
@@ -1729,12 +1729,12 @@ begin
   repeat
     if pv^.Selected then
                         begin
-                             pv^.deselect;
+                             pv^.deselect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
                              inc(count);
                         end
                     else
                         begin
-                          pv^.select;
+                          pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
                           inc(count);
                         end;
 
@@ -3004,7 +3004,7 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
           if assigned(SetGDBObjInspProc)then
           SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pbeditcom);
           gdb.GetCurrentDWG.SelObjArray.clearallobjects;
-          gdb.GetCurrentROOT.ObjArray.DeSelect;
+          gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
           result:=cmd_ok;
           if assigned(redrawoglwndproc) then redrawoglwndproc;
           if tn<>'' then
@@ -3024,7 +3024,7 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
   if assigned(SetGDBObjInspProc)then
   SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pbeditcom);
   gdb.GetCurrentDWG.SelObjArray.clearallobjects;
-  gdb.GetCurrentROOT.ObjArray.DeSelect;
+  gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
   result:=cmd_ok;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
 end;

@@ -33,9 +33,9 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
                       procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                       procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                       procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);virtual;
-                      function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity):GDBBoolean;virtual;
+                      function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
                       function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
-                      function DeSelect:GDBInteger;virtual;
+                      function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
                       function CreateObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;virtual;
                       function CreateInitObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;virtual;
                       function calcbb:GDBBoundingBbox;
@@ -258,7 +258,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       p^.DeSelect;
+       p^.DeSelect(SelObjArray,SelectedObjCount);
        p:=iterate(ir);
   until p=nil;
 end;
@@ -370,7 +370,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       q:=p^.calcvisible(frustum,infrustumactualy,visibleactualy);
+       q:=p^.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj);
        result:=result or q;
        p:=iterate(ir);
   until p=nil;

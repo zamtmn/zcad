@@ -227,7 +227,7 @@ begin
     if (self.CEndActionAttr and CEDeSelect)<>0 then
     //if (@self<>pfindcom)and(@self<>@OnDrawingEd)and(@self<>selframecommand)and(@self<>ms2objinsp)and(@self<>csel)and(@self<>selall) then
     begin
-    gdb.GetCurrentROOT.ObjArray.DeSelect;
+    gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
     gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject := nil;
     gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.OnMouseObject := nil;
     gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
@@ -257,7 +257,7 @@ begin
     if (self.CEndActionAttr and CEDeSelect)<>0 then
     //if (@self<>pfindcom)and(@self<>@OnDrawingEd)and(@self<>selframecommand) then
     begin
-    gdb.GetCurrentROOT.ObjArray.DeSelect;
+    gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
     gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject := nil;
     gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.OnMouseObject := nil;
     gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;

@@ -35,25 +35,6 @@ GDBCamera,
 UGDBOpenArrayOfPV,
 GDBRoot,UGDBSHXFont,
 OGLWindow,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray;
-const ls = $AAAA;
-      ps:array [0..31] of LONGWORD=(
-                                   $33333333,$33333333,
-                                   $CCCCCCCC,$CCCCCCCC,
-                                   $33333333,$33333333,
-                                   $CCCCCCCC,$CCCCCCCC,
-                                   $33333333,$33333333,
-                                   $CCCCCCCC,$CCCCCCCC,
-                                   $33333333,$33333333,
-                                   $CCCCCCCC,$CCCCCCCC,
-                                   $33333333,$33333333,
-                                   $CCCCCCCC,$CCCCCCCC,
-                                   $33333333,$33333333,
-                                   $CCCCCCCC,$CCCCCCCC,
-                                   $33333333,$33333333,
-                                   $CCCCCCCC,$CCCCCCCC,
-                                   $33333333,$33333333,
-                                   $CCCCCCCC,$CCCCCCCC
-                                  );
 type
 {EXPORT+}
 GDBObjTrash=object(GDBObjEntity)
@@ -159,9 +140,9 @@ begin
   pdwg.OGLwindow1.CalcOptimalMatrix;
   pdwg.pcamera^.totalobj:=0;
   pdwg.pcamera^.infrustum:=0;
-  gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjArray.ObjTree);
+  gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjArray.ObjTree,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum);
   //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
-  pdwg.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
+  pdwg.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum);
   pdwg.OGLwindow1.calcgrid;
   pdwg.OGLwindow1.draw;
   end;

@@ -19,8 +19,8 @@
 unit GDBCircle;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray,UGDBPoint3DArray{, UGDBPolyPoint3DArray,UGDBPolyPoint2DArray},UGDBOpenArrayOfByte,varman,varmandef,
-gl,
+uses GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray,UGDBPoint3DArray{, UGDBPolyPoint3DArray,UGDBPolyPoint2DArray},UGDBOpenArrayOfByte,varman,varmandef,
+gl,ugdbltypearray,
 GDBase,UGDBDescriptor,GDBWithLocalCS,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman{,OGLSpecFunc};
 type
 //PProjPoint:PGDBPolyPoint2DArray;
@@ -42,12 +42,12 @@ GDBObjCircle=object(GDBObjWithLocalCS)
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;RR:GDBDouble);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray);virtual;
 
                  procedure CalcObjMatrix;virtual;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
-                 procedure RenderFeedback(pcount:TActulity);virtual;
+                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                  procedure getoutbound;virtual;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure Format;virtual;
@@ -306,26 +306,26 @@ begin
   until pvertex=nil;
 end;
 procedure GDBObjCircle.Renderfeedback;
-var pm:DMatrix4D;
+var //pm:DMatrix4D;
     tv:GDBvertex;
     d:GDBDouble;
 begin
            //myGluProject(Local.p_insert.x,Local.p_insert.y,Local.p_insert.z,@POGLWnd^.pcamera^.modelMatrix,@POGLWnd^.pcamera^.projMatrix,@POGLWnd^.pcamera^.viewport,ProjP_insert.x,ProjP_insert.y,ProjP_insert.z);
-           gdb.GetCurrentDWG^.myGluProject2(P_insert_in_WCS,ProjP_insert);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(P_insert_in_WCS,ProjP_insert);
            pprojoutbound^.clear;
-           pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
-           gdb.GetCurrentDWG^.myGluProject2(outbound[0],tv);
+           //pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[0],tv);
            pprojoutbound^.addgdbvertex(tv);
-           gdb.GetCurrentDWG^.myGluProject2(outbound[1],tv);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[1],tv);
            pprojoutbound^.addgdbvertex(tv);
-           gdb.GetCurrentDWG^.myGluProject2(outbound[2],tv);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[2],tv);
            pprojoutbound^.addgdbvertex(tv);
-           gdb.GetCurrentDWG^.myGluProject2(outbound[3],tv);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[3],tv);
            pprojoutbound^.addlastgdbvertex(tv);
-           gdb.GetCurrentDWG^.myGluProject2(q0,pq0);
-           gdb.GetCurrentDWG^.myGluProject2(q1,pq1);
-           gdb.GetCurrentDWG^.myGluProject2(q2,pq2);
-           gdb.GetCurrentDWG^.myGluProject2(q3,pq3);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q0,pq0);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q1,pq1);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q2,pq2);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q3,pq3);
            if pprojoutbound^.count<4 then
            begin
             lod:=4;
@@ -397,7 +397,7 @@ begin
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu) then
+    if not LoadFromDXFObjShared(f,byt,ptu,LayerArray,LTArray) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
     if not dxfGDBDoubleload(f,40,byt,Radius) then s := f.readgdbstring;
     byt:=readmystrtoint(f);
@@ -605,27 +605,27 @@ begin
                     os_center:begin
           pdesc.worldcoord:=P_insert_in_WCS;
           pdesc.dispcoord.x:=round(ProjP_insert.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-ProjP_insert.y);
+          pdesc.dispcoord.y:=round(ProjP_insert.y);
                              end;
                     os_q0:begin
           pdesc.worldcoord:=q0;
           pdesc.dispcoord.x:=round(Pq0.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-Pq0.y);
+          pdesc.dispcoord.y:=round(Pq0.y);
                              end;
                     os_q1:begin
           pdesc.worldcoord:=q1;
           pdesc.dispcoord.x:=round(Pq1.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-Pq1.y);
+          pdesc.dispcoord.y:=round(Pq1.y);
                              end;
                     os_q2:begin
           pdesc.worldcoord:=q2;
           pdesc.dispcoord.x:=round(Pq2.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-Pq2.y);
+          pdesc.dispcoord.y:=round(Pq2.y);
                              end;
                     os_q3:begin
           pdesc.worldcoord:=q3;
           pdesc.dispcoord.x:=round(Pq3.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-Pq3.y);
+          pdesc.dispcoord.y:=round(Pq3.y);
                              end;
                     end;
 end;
@@ -638,31 +638,31 @@ begin
           pdesc.pointtype:=os_center;
           pdesc.worldcoord:=Local.p_insert;
           pdesc.dispcoord.x:=round(ProjP_insert.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-ProjP_insert.y);
+          pdesc.dispcoord.y:=round(ProjP_insert.y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_q0;
           pdesc.worldcoord:=q0;
           pdesc.dispcoord.x:=round(Pq0.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-Pq0.y);
+          pdesc.dispcoord.y:=round(Pq0.y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_q1;
           pdesc.worldcoord:=q1;
           pdesc.dispcoord.x:=round(Pq1.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-Pq1.y);
+          pdesc.dispcoord.y:=round(Pq1.y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_q2;
           pdesc.worldcoord:=q2;
           pdesc.dispcoord.x:=round(Pq2.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-Pq2.y);
+          pdesc.dispcoord.y:=round(Pq2.y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_q3;
           pdesc.worldcoord:=q3;
           pdesc.dispcoord.x:=round(Pq3.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-Pq3.y);
+          pdesc.dispcoord.y:=round(Pq3.y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 end;
 function GDBObjCircle.beforertmodify;

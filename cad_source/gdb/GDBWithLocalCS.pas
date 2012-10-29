@@ -20,8 +20,8 @@ unit GDBWithLocalCS;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,OGLSpecFunc,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,GDBWithMatrix,
-gl,
+uses GDBCamera,zcadsysvars,OGLSpecFunc,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,GDBWithMatrix,
+gl,ugdbltypearray,
 GDBase,{gDBDescriptor,gdbobjectsconstdef,oglwindowdef,}geometry,dxflow,sysutils,memman,GDBSubordinated,UGDBLayerArray{,GDBGenericSubEntry};
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};
@@ -42,13 +42,13 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;
                procedure SaveToDXFObjPostfix(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
-               function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit):GDBBoolean;
+               function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray):GDBBoolean;
 
                procedure Format;virtual;
                procedure CalcObjMatrix;virtual;
                function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
                procedure transform(const t_matrix:DMatrix4D);virtual;
-               procedure Renderfeedback(pcount:TActulity);virtual;
+               procedure Renderfeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                function GetCenterPoint:GDBVertex;virtual;
                procedure createfield;virtual;
 
@@ -60,7 +60,7 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
          end;
 {EXPORT-}
 implementation
-uses UGDBDescriptor,log;
+uses {UGDBDescriptor,}log;
 function GDBObjWithLocalCS.IsHaveLCS:GDBBoolean;
 begin
      result:=true;
@@ -141,7 +141,7 @@ procedure GDBObjWithLocalCS.Renderfeedback;
 //    tv:GDBvertex;
 begin
            inherited;
-           gdb.GetCurrentDWG^.myGluProject2(P_insert_in_WCS,ProjP_insert);
+           ProjectProc(P_insert_in_WCS,ProjP_insert);
            if pprojoutbound<>nil then pprojoutbound^.clear;
 end;
 constructor GDBObjWithLocalCS.initnul;
@@ -284,7 +284,7 @@ end;
 function GDBObjWithLocalCS.LoadFromDXFObjShared;
 //var s:GDBString;
 begin
-     result:=inherited LoadFromDXFObjShared(f,dxfcod,ptu);
+     result:=inherited LoadFromDXFObjShared(f,dxfcod,ptu,LayerArray,LTArray);
      if not result then result:=dxfvertexload(f,210,dxfcod,Local.basis.oz);
 end;
 destructor GDBObjWithLocalCS.done;

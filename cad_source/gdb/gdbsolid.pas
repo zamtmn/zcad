@@ -19,9 +19,9 @@ unit GDBSolid;
 {$INCLUDE def.inc}
 
 interface
-uses GDBWithLocalCS,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
-gl,
-GDBase,UGDBDescriptor,gdbobjectsconstdef{,oglwindowdef,dxflow},memman,OGLSpecFunc;
+uses GDBCamera,GDBWithLocalCS,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
+gl,ugdbltypearray,
+GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef{,dxflow},memman,OGLSpecFunc;
 type
 {Export+}
 PGDBObjSolid=^GDBObjSolid;
@@ -35,14 +35,14 @@ GDBObjSolid=object(GDBObjWithLocalCS)
                  //ProjPoint:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray);virtual;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure Format;virtual;
                  procedure createpoint;virtual;
 
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
-                 procedure RenderFeedback(pcount:TActulity);virtual;
+                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                  //function getsnap(var osp:os_record):GDBBoolean;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
@@ -129,7 +129,7 @@ begin
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu) then
+    if not LoadFromDXFObjShared(f,byt,ptu,LayerArray,LTArray) then
        if not dxfvertexload(f,10,byt,PInOCS[0]) then
           if not dxfvertexload(f,11,byt,PInOCS[1]) then
           if not dxfvertexload(f,12,byt,PInOCS[2]) then
@@ -251,15 +251,15 @@ begin
       end;
 end;
 procedure GDBObjSolid.RenderFeedback;
-var pm:DMatrix4D;
+var //pm:DMatrix4D;
     tv:GDBvertex;
 begin
            inherited;
-           pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
-           gdb.GetCurrentDWG^.myGluProject2(PInWCS[0],PInDCS[0]);
-           gdb.GetCurrentDWG^.myGluProject2(PInWCS[1],PInDCS[1]);
-           gdb.GetCurrentDWG^.myGluProject2(PInWCS[2],PInDCS[2]);
-           gdb.GetCurrentDWG^.myGluProject2(PInWCS[3],PInDCS[3]);
+           //pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
+           ProjectProc(PInWCS[0],PInDCS[0]);
+           ProjectProc(PInWCS[1],PInDCS[1]);
+           ProjectProc(PInWCS[2],PInDCS[2]);
+           ProjectProc(PInWCS[3],PInDCS[3]);
 end;
 
 {function GDBObjSolid.getsnap;
@@ -313,7 +313,7 @@ begin
      vertexnumber:=abs(pdesc^.pointtype-os_polymin);
      pdesc.worldcoord:=PInWCS[vertexnumber];
      pdesc.dispcoord.x:=round(PInDCS[vertexnumber].x);
-     pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PInDCS[vertexnumber].y);
+     pdesc.dispcoord.y:=round(PInDCS[vertexnumber].y);
 
 end;
 
@@ -330,7 +330,7 @@ begin
           pdesc.pointtype:=os_polymin-i;
           pdesc.worldcoord:=PInWCS[i];
           pdesc.dispcoord.x:=round(PInDCS[i].x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PInDCS[i].y);
+          pdesc.dispcoord.y:=round(PInDCS[i].y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
           end;
 end;

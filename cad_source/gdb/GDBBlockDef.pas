@@ -18,23 +18,11 @@
 unit GDBBlockDef;
 {$INCLUDE def.inc}
 interface
-uses {UGDBDrawingdef,}dxflow,UGDBOpenArrayOfByte,gdbasetypes,{UGDBVisibleOpenArray,}GDBEntity{,UGDBControlPointArray,UGDBOpenArrayOfData, oglwindowdef},sysutils,gdbase,memman, geometry,
-     gl,
+uses dxflow,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,memman, geometry,
+     gl,UGDBLayerArray,ugdbltypearray,
      zcadstrconsts,varmandef,gdbobjectsconstdef,GDBGenericSubEntry,GDBSubordinated,varman;
 type
 {Export+}
-TShapeBorder=(SB_Owner,SB_Self,SB_Empty);
-TShapeClass=(SC_Connector,SC_Terminal,SC_Graphix,SC_Unknown);
-TShapeGroup=(SG_El_Sch,SG_Cable_Sch,SG_Plan,SG_Unknown);
-
-TBlockType=(BT_Connector,BT_Unknown);
-TBlockBorder=(BB_Owner,BB_Self,BB_Empty);
-TBlockGroup=(BG_El_Device,BG_Unknown);
-TBlockDesc=record
-                 BType:TBlockType;(*'Block type'*)
-                 BBorder:TBlockBorder;(*'Border'*)
-                 BGroup:TBlockGroup;(*'Block group'*)
-           end;
 PGDBObjBlockdef=^GDBObjBlockdef;
 GDBObjBlockdef=object(GDBObjGenericSubEntry)
                      Name:GDBString;(*saved_to_shd*)
@@ -46,7 +34,7 @@ GDBObjBlockdef=object(GDBObjGenericSubEntry)
                      constructor init(_name:GDBString);
                      procedure format;virtual;
                      function FindVariable(varname:GDBString):pvardesk;virtual;
-                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;
+                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray);virtual;
                      function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit):GDBBoolean;virtual;
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;
@@ -56,7 +44,7 @@ GDBObjBlockdef=object(GDBObjGenericSubEntry)
                end;
 {Export-}
 implementation
-uses iodxf{,UGDBDescriptor},UUnitManager,shared,log;
+uses iodxf{,UGDBDescriptor},UUnitManager,shared,log,GDBEntity;
 function GDBObjBlockdef.GetType:GDBPlatformint;
 begin
      result:=1;
@@ -158,7 +146,7 @@ begin
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu) then
+    if not LoadFromDXFObjShared(f,byt,ptu,LayerArray,LTArray) then
                                            s:=f.ReadGDBString;
     byt:=readmystrtoint(f);
   end;

@@ -21,7 +21,7 @@ unit GDBMText;
 
 interface
 uses strproc,UGDBSHXFont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,gdbasetypes,gdbEntity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
-gl,
+gl,ugdbltypearray,
 GDBase,UGDBDescriptor,GDBText,gdbobjectsconstdef,geometry,dxflow,strmy,math,memman,GDBSubordinated,UGDBTextStyleArray;
 const maxdxfmtextlen=250;
 type
@@ -35,7 +35,7 @@ GDBObjMText=object(GDBObjText)
                  text:XYZWGDBGDBStringArray;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte;wi,l:GDBDouble);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;
+                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray);virtual;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure CalcGabarit;virtual;
                  //procedure getoutbound;virtual;
@@ -876,7 +876,7 @@ begin
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu) then
+    if not LoadFromDXFObjShared(f,byt,ptu,LayerArray,LTArray) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
     if not dxfvertexload(f,11,byt,ux) then
     if not dxfGDBDoubleload(f,40,byt,textprop.size) then

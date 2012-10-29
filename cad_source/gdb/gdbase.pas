@@ -175,6 +175,8 @@ TDrawContext=record
                    OwnerLineWeight:GDBSmallInt;
                    OwnerColor:GDBInteger;
                    MaxWidth:GDBInteger;
+                   ScrollMode:GDBBoolean;
+                   Zoom:GDBDouble;
              end;
 
 PGDBBaseCamera=^GDBBaseCamera;
@@ -286,6 +288,18 @@ GDBArrayVertex=array[0..0] of GDBvertex;
                       Enabled:GDBBoolean;(*'Enabled'*)
                       LayerName:GDBString;(*'Layer name'*)
                 end;
+  TShapeBorder=(SB_Owner,SB_Self,SB_Empty);
+  TShapeClass=(SC_Connector,SC_Terminal,SC_Graphix,SC_Unknown);
+  TShapeGroup=(SG_El_Sch,SG_Cable_Sch,SG_Plan,SG_Unknown);
+
+  TBlockType=(BT_Connector,BT_Unknown);
+  TBlockBorder=(BB_Owner,BB_Self,BB_Empty);
+  TBlockGroup=(BG_El_Device,BG_Unknown);
+  TBlockDesc=record
+                   BType:TBlockType;(*'Block type'*)
+                   BBorder:TBlockBorder;(*'Border'*)
+                   BGroup:TBlockGroup;(*'Block group'*)
+             end;
 FreeElProc=procedure (p:GDBPointer);
 {EXPORT-}
 TDWGHandle=ptruint;

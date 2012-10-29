@@ -19,9 +19,8 @@
 unit UGDBObjBlockdefArray;
 {$INCLUDE def.inc}
 interface
-uses strproc,GDBBlockDef{,dxflow,UGDBOpenArrayOfByte}{,UGDBVisibleOpenArray,GDBEntity,UGDBControlPointArray},UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase,memman, geometry,
-     gl,gdbasetypes
-     {varmandef,gdbobjectsconstdef,GDBGenericSubEntry,GDBSubordinated,varman};
+uses strproc,GDBBlockDef,UGDBOpenArrayOfData,sysutils,gdbase,memman, geometry,
+     gl,gdbasetypes;
 type
 {Export+}
 PGDBObjBlockdefArray=^GDBObjBlockdefArray;

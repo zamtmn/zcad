@@ -354,7 +354,7 @@ begin
         {$IFDEF DEBUGBUILD}inc(i2);if i2=4349 then
                                                   i2:=i2;{$ENDIF}
         pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
-        PGDBObjEntity(pobj)^.LoadFromDXF(f,@additionalunit);
+        PGDBObjEntity(pobj)^.LoadFromDXF(f,@additionalunit,drawing.LayerTable,drawing.LTypeStyleTable);
         if (PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer)or(PGDBObjEntity(pobj)^.vp.Layer=nil) then
                                                                  PGDBObjEntity(pobj)^.vp.Layer:={gdb.GetCurrentDWG}drawing.LayerTable.GetSystemLayer;
         if (PGDBObjEntity(pobj)^.vp.LineType=nil) then
@@ -1179,7 +1179,7 @@ begin
                 dec(foc);
                 if tp^.name='TX' then
                                                            tp^.name:=tp^.name;
-                tp^.LoadFromDXF(f,nil);
+                tp^.LoadFromDXF(f,nil,drawing.LayerTable,drawing.LTypeStyleTable);
                 blockload:=true;
                 programlog.logoutstr('end block;',lp_DecPos);
                 sname:='##'

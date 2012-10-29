@@ -20,10 +20,10 @@ unit GDBComplex;
 {$INCLUDE def.inc}
 
 interface
-uses ugdbsimpledrawing,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
+uses GDBCamera,ugdbsimpledrawing,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray,UGDBVisibleOpenArray,gdbEntity{,varman,varmandef},
 gl,UGDBVisibleTreeArray,UGDBEntTree,
-GDBase,UGDBDescriptor,GDBWithLocalCS,gdbobjectsconstdef{,oglwindowdef},geometry{,dxflow},memman{,GDBSubordinated,UGDBOpenArrayOfByte};
+GDBase,UGDBDescriptor,GDBWithLocalCS,gdbobjectsconstdef,oglwindowdef,geometry{,dxflow},memman{,GDBSubordinated,UGDBOpenArrayOfByte};
 type
 {EXPORT+}
 PGDBObjComplex=^GDBObjComplex;
@@ -39,7 +39,7 @@ GDBObjComplex=object(GDBObjWithLocalCS)
                     function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                     function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
-                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);virtual;
+                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                     procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
@@ -123,13 +123,13 @@ begin
                                   begin
                                   pdesc.worldcoord:=self.P_insert_in_WCS;// Local.P_insert;
                                   pdesc.dispcoord.x:=round(ProjP_insert.x);
-                                  pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-ProjP_insert.y);
+                                  pdesc.dispcoord.y:=round(ProjP_insert.y);
                                   end
                                   else
                                   begin
                                   pdesc.worldcoord:=PGDBObjComplex(pdesc.pobject).P_insert_in_WCS;// Local.P_insert;
                                   pdesc.dispcoord.x:=round(PGDBObjComplex(pdesc.pobject).ProjP_insert.x);
-                                  pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PGDBObjComplex(pdesc.pobject).ProjP_insert.y);
+                                  pdesc.dispcoord.y:=round(PGDBObjComplex(pdesc.pobject).ProjP_insert.y);
                                   pdesc.dcoord:=vertexsub(PGDBObjComplex(pdesc.pobject).P_insert_in_WCS,P_insert_in_WCS);
                                   end
 
@@ -146,7 +146,7 @@ begin
           pdesc.pobject:=nil;
           pdesc.worldcoord:=self.P_insert_in_WCS;// Local.P_insert;
           pdesc.dispcoord.x:=round(ProjP_insert.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-ProjP_insert.y);
+          pdesc.dispcoord.y:=round(ProjP_insert.y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 end;
 procedure GDBObjComplex.DrawOnlyGeometry;
@@ -299,7 +299,7 @@ begin
               end;
      end;
 end;}
-procedure GDBObjComplex.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);
+procedure GDBObjComplex.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);
 //var pblockdef:PGDBObjBlockdef;
     //pvisible:PGDBObjEntity;
     //i:GDBInteger;
@@ -308,7 +308,7 @@ begin
   gdb.GetCurrentDWG^.myGluProject2(P_insert_in_WCS,ProjP_insert);
   //pdx:=PProjPoint[1].x-PProjPoint[0].x;
   //pdy:=PProjPoint[1].y-PProjPoint[0].y;
-     ConstObjArray.RenderFeedbac(infrustumactualy,pcount);
+     ConstObjArray.RenderFeedbac(infrustumactualy,pcount,camera,ProjectProc);
 end;
 procedure GDBObjComplex.format;
 {var pblockdef:PGDBObjBlockdef;

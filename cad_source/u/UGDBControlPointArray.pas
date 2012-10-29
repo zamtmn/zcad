@@ -85,9 +85,9 @@ begin
   if count<>0 then
   begin
        point:=parray;
-       for i:=0 to count-1 do
+       for i:=0 to count-1 do           { TODO 1 -ozamtmn -c1 : Переделать нахуй без GDB }
        begin
-            d := (vertexlen2id(GDB.GetCurrentDWG.OGLwindow1.param.md.mouse.x, GDB.GetCurrentDWG.OGLwindow1.param.md.mouse.y,point^.dispcoord.x,point^.dispcoord.y));
+            d := (vertexlen2id(GDB.GetCurrentDWG.OGLwindow1.param.md.mouse.x,GDB.GetCurrentDWG.OGLwindow1.param.height-GDB.GetCurrentDWG.OGLwindow1.param.md.mouse.y,point^.dispcoord.x,point^.dispcoord.y));
             if d < td.disttomouse then
                                       begin
                                            td.disttomouse:=round(d);
@@ -109,7 +109,7 @@ begin
        for i:=1 to count do
        begin
             if (GDB.GetCurrentDWG.OGLwindow1.param.md.mouseglue.x=point^.dispcoord.x)and
-               (GDB.GetCurrentDWG.OGLwindow1.param.md.mouseglue.y=point^.dispcoord.y)
+               (GDB.GetCurrentDWG.OGLwindow1.param.md.mouseglue.y=GDB.GetCurrentDWG.OGLwindow1.param.height-point^.dispcoord.y)
             then
             begin
             if (key and 128)<>0 then point.selected:=not point.selected

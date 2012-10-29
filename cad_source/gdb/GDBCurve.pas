@@ -20,7 +20,7 @@ unit GDBCurve;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,UGDBOpenArrayOfPObjects,UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes{,GDBGenericSubEntry},UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBPolyLine2DArray,UGDBPoint3DArray{,UGDBOpenArrayOfByte,varman},varmandef,
+uses GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes{,GDBGenericSubEntry},UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBPolyLine2DArray,UGDBPoint3DArray{,UGDBOpenArrayOfByte,varman},varmandef,
 gl,
 GDBase,geometry,UGDBDescriptor,gdbobjectsconstdef,oglwindowdef,math,dxflow,sysutils,memman{,OGLSpecFunc},GDBSubordinated;
 type
@@ -42,7 +42,7 @@ GDBObjCurve=object(GDBObj3d)
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
-                 procedure RenderFeedback(pcount:TActulity);virtual;
+                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -522,7 +522,7 @@ begin
                     ptpv:=VertexArrayInWCS.parray;
                     for i:=0 to VertexArrayInWCS.count-1 do
                     begin
-                         gdb.GetCurrentDWG^.myGluProject2(ptpv^,tv);
+                         {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(ptpv^,tv);
                          tpv.x:=tv.x;
                          tpv.y:=tv.y;
                          PprojPoint^.add(@tpv);
@@ -566,7 +566,7 @@ begin
      vertexnumber:=abs(pdesc^.pointtype-os_polymin);
      pdesc.worldcoord:=PGDBArrayVertex(VertexArrayInWCS.parray)^[vertexnumber];
      pdesc.dispcoord.x:=round(PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].x);
-     pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.height-PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].y);
+     pdesc.dispcoord.y:=round(PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].y);
 end;
 procedure GDBObjCurve.addcontrolpoints;
 var pdesc:controlpointdesc;
@@ -574,7 +574,7 @@ var pdesc:controlpointdesc;
     pv2d:pGDBvertex2d;
     pv:pGDBvertex;
 begin
-          renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+          //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{48F91543-AAA8-4CF7-A038-D3DDC248BE3E}',{$ENDIF}pprojpoint.count);
           pv2d:=pprojpoint^.parray;
           pv:=VertexArrayInWCS.parray;
@@ -586,7 +586,7 @@ begin
                pdesc.pointtype:=os_polymin-i;
                pdesc.worldcoord:=pv^;
                pdesc.dispcoord.x:=round(pv2d^.x);
-               pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.height-pv2d.y);
+               pdesc.dispcoord.y:=round({GDB.GetCurrentDWG.OGLwindow1.height-}pv2d.y);
                PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
                inc(pv);
                inc(pv2d);

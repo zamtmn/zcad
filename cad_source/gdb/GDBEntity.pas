@@ -19,7 +19,7 @@
 unit GDBEntity;
 {$INCLUDE def.inc}
 interface
-uses gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
+uses GDBCamera,gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
      {UGDBPolyPoint2DArray,}varman,varmandef,
      gl,
      GDBase,gdbobjectsconstdef,
@@ -27,6 +27,7 @@ uses gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBContr
 type
 //Owner:{-}PGDBObjEntity{/GDBPointer/};(*'Владелец'*)
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
+GDBProjectProc=function (objcoord:GDBVertex; out wincoord:GDBVertex):Integer of object;
 {Export+}
 PTExtAttrib=^TExtAttrib;
 TExtAttrib=record
@@ -48,7 +49,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
                     procedure SaveToDXFObjPrefix(var handle:TDWGHandle;var  outhandle:{GDBInteger}GDBOpenArrayOfByte;entname,dbname:GDBString);
-                    function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit):GDBBoolean;
+                    function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray):GDBBoolean;
                     function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
                     function IsHaveObjXData:GDBBoolean;virtual;
@@ -57,7 +58,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure createfield;virtual;
                     function AddExtAttrib:PTExtAttrib;
                     function CopyExtAttrib:PTExtAttrib;
-                    procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;abstract;
+                    procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray);virtual;abstract;
                     procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                     procedure DXFOut(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                     procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
@@ -75,8 +76,8 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure Draw(lw:GDBInteger;var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
                     procedure DrawG(lw:GDBInteger;var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
 
-                    procedure RenderFeedback(pcount:TActulity);virtual;
-                    procedure RenderFeedbackIFNeed(pcount:TActulity);virtual;
+                    procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
+                    procedure RenderFeedbackIFNeed(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                     function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
                     function CalculateLineWeight(const DC:TDrawContext):GDBInteger;//inline;
                     function InRect:TInRect;virtual;
@@ -104,7 +105,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                     function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;
                     function SelectQuik:GDBBoolean;virtual;
-                    procedure remapcontrolpoints(pp:PGDBControlPointArray;pcount:TActulity;ScrollMode:GDBBoolean);virtual;
+                    procedure remapcontrolpoints(pp:PGDBControlPointArray;pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                     //procedure rtmodify(md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                     procedure transform(const t_matrix:DMatrix4D);virtual;
@@ -154,7 +155,7 @@ GDBObjEntity=object(GDBObjSubordinated)
 var onlygetsnapcount:GDBInteger;
     ForeGround:RGB;
 implementation
-uses UGDBEntTree,GDBGenericSubEntry,UGDBDescriptor,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+uses {UGDBEntTree,}GDBGenericSubEntry,{UGDBDescriptor,}UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
 
 procedure GDBObjEntity.CopyVPto(var toObj:GDBObjEntity);
 begin
@@ -560,7 +561,7 @@ end;
 procedure GDBObjEntity.RenderFeedbackIFNeed;
 begin
      if vp.LastCameraPos<>{gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount then
-                                                               Renderfeedback(pcount);
+                                                               Renderfeedback(pcount,camera,ProjectProc);
 
 end;
 procedure GDBObjEntity.Renderfeedback;
@@ -912,14 +913,14 @@ procedure GDBObjEntity.remapcontrolpoints;
 var pdesc:pcontrolpointdesc;
     i:GDBInteger;
 begin
-          if ScrollMode then renderfeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount);
+          if ScrollMode then renderfeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount,camera,ProjectProc);
           if pp.count<>0 then
           begin
                pdesc:=pp^.parray;
                for i:=0 to pp.count-1 do
                begin
                     if pdesc.pobject<>nil then
-                                              PGDBObjEntity(pdesc.pobject).RenderFeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount);
+                                              PGDBObjEntity(pdesc.pobject).RenderFeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount,camera,ProjectProc);
                     remaponecontrolpoint(pdesc);
                     inc(pdesc);
                end;
@@ -1070,14 +1071,14 @@ begin
      case dxfcod of
                 6:begin
                        //vp.LineType:=readmystr(f);
-                       vp.LineType:=gdb.GetCurrentDWG.LTypeStyleTable.getAddres(readmystr(f));
+                       vp.LineType:=LTArray.getAddres(readmystr(f));
                        result:=true
                   end;
                      8:begin
                           if {vp.layer.name=LNSysLayerName}vp.layer=@DefaultErrorLayer then
                                                    begin
                                                         name:=readmystr(f);
-                                                   vp.Layer :=gdb.GetCurrentDWG.LayerTable.getAddres(name);
+                                                   vp.Layer :=LayerArray.getAddres(name);
                                                    if vp.Layer=nil then
                                                                         vp.Layer:=vp.Layer;
                                                    end
@@ -1140,7 +1141,7 @@ begin
                                                                                end;
                                                          if Name='_LAYER' then
                                                                                begin
-                                                                                    vp.Layer:=gdb.GetCurrentDWG.LayerTable.getAddres(value);
+                                                                                    vp.Layer:=LayerArray.getAddres(value);
                                                                                end;
 
                                                     //else

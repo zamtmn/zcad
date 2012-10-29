@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfPV;
 {$INCLUDE def.inc}
 interface
-uses log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
+uses GDBEntity,GDBCamera,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
      gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman,GDBSubordinated;
 type
 {PGDBObjEntityArray=^GDBObjEntityArray;
@@ -32,7 +32,7 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
                       procedure DrawWithattrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
                       procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                       procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                      procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);virtual;
+                      procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                       function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
                       function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                       function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
@@ -50,7 +50,7 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
                 end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}GDBManager,GDBEntity,varmandef;
+uses {UGDBDescriptor,}GDBManager,{GDBEntity,}varmandef;
 function GDBObjOpenArrayOfPV.FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;
 var
    pvisible:PGDBObjEntity;
@@ -286,7 +286,7 @@ begin
        p:=iterate(ir);
   until p=nil;
 end;
-procedure GDBObjOpenArrayOfPV.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);
+procedure GDBObjOpenArrayOfPV.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);
 var
   p:pGDBObjEntity;
       ir:itrec;
@@ -304,7 +304,7 @@ begin
        if (p^.infrustum=infrustumactualy)or(p^.Selected) then
                                             begin
                                                  {$IFDEF TOTALYLOG}programlog.logoutstr(p^.GetObjTypeName+'.renderfeedback',0);{$ENDIF}
-                                                 p^.renderfeedback(pcount);
+                                                 p^.renderfeedback(pcount,camera,ProjectProc);
                                             end;
        p:=iterate(ir);
   until p=nil;

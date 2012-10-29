@@ -19,9 +19,9 @@ unit GDBAbstractText;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,languade,UGDBOpenArrayOfPObjects,{GDBEntity,}strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},UGDBPolyPoint3DArray{,varman},varmandef,
+uses GDBEntity,GDBCamera,zcadsysvars,languade,UGDBOpenArrayOfPObjects,{GDBEntity,}strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},UGDBPolyPoint3DArray{,varman},varmandef,
 gl,
-GDBase,UGDBDescriptor,gdbobjectsconstdef{,oglwindowdef},geometry{,dxflow,strmy},math{,GDBPlain},OGLSpecFunc{,GDBGenericSubEntry};
+GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef,geometry{,dxflow,strmy},math{,GDBPlain},OGLSpecFunc{,GDBGenericSubEntry};
 type
 //jstm(*'TopCenter'*)=2,
 {EXPORT+}
@@ -56,7 +56,7 @@ GDBObjAbstractText=object(GDBObjPlainWithOX)
                          procedure CalcObjMatrix;virtual;
                          procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                          procedure SimpleDrawGeometry;virtual;
-                         procedure RenderFeedback(pcount:TActulity);virtual;
+                         procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                          function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
                          function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                          function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
@@ -299,7 +299,7 @@ begin
                     os_point:begin
           pdesc.worldcoord:=P_insert_in_WCS;//Local.P_insert;
           pdesc.dispcoord.x:=round(ProjP_insert.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG^.OGLwindow1.param.height-ProjP_insert.y);
+          pdesc.dispcoord.y:=round(ProjP_insert.y);
                              end;
                     end;
 end;
@@ -312,7 +312,7 @@ begin
           pdesc.pointtype:=os_point;
           pdesc.worldcoord:=P_insert_in_WCS;//Local.P_insert;
           pdesc.dispcoord.x:=round(ProjP_insert.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-ProjP_insert.y);
+          pdesc.dispcoord.y:=round(ProjP_insert.y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 end;
 function GDBObjAbstractText.InRect;
@@ -478,20 +478,20 @@ begin
       result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum);
 end;
 procedure GDBObjAbstractText.Renderfeedback;
-var pm:DMatrix4D;
+var //pm:DMatrix4D;
     tv:GDBvertex;
 begin
            inherited;
            //myGluProject(Local.p_insert.x,Local.p_insert.y,Local.p_insert.z,@gdb.pcamera^.modelMatrix,@gdb.pcamera^.projMatrix,@gdb.pcamera^.viewport,ProjP_insert.x,ProjP_insert.y,ProjP_insert.z);
            //pprojoutbound^.clear;
-           pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
-           gdb.GetCurrentDWG^.myGluProject2(outbound[0],tv);
+           //pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[0],tv);
            pprojoutbound^.addgdbvertex(tv);
-           gdb.GetCurrentDWG^.myGluProject2(outbound[1],tv);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[1],tv);
            pprojoutbound^.addgdbvertex(tv);
-           gdb.GetCurrentDWG^.myGluProject2(outbound[2],tv);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[2],tv);
            pprojoutbound^.addgdbvertex(tv);
-           gdb.GetCurrentDWG^.myGluProject2(outbound[3],tv);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[3],tv);
            pprojoutbound^.addlastgdbvertex(tv);
            //if (pprojoutbound^.count<4) then visible:=false;
            {if (projoutbound[0].x=projoutbound[1].x) and (projoutbound[0].y=projoutbound[1].y) then visible:=false;
@@ -569,11 +569,11 @@ begin
   //exit;
   //oglsm.myglpointsize(1);
   dc.subrender := dc.subrender + 1;
-  if {true//}(((not GDB.GetCurrentDWG.OGLwindow1.param.scrollmode)or(not sysvar.RD.RD_PanObjectDegradation^)) {and (lod=0)})
+  if {true//}(((not {GDB.GetCurrentDWG.OGLwindow1.param.scrollmode}dc.scrollmode)or(not sysvar.RD.RD_PanObjectDegradation^)) {and (lod=0)})
   then
       begin
            templod:=sqrt(objmatrix[0,0]*objmatrix[0,0]+objmatrix[1,1]*objmatrix[1,1]+objmatrix[2,2]*objmatrix[2,2]);
-           templod:=(templod*self.textprop.size)/(GDB.GetCurrentDWG.pcamera.prop.zoom{*GDB.GetCurrentDWG.pcamera.prop.zoom});
+           templod:=(templod*self.textprop.size)/({GDB.GetCurrentDWG.pcamera.prop}dc.zoom{*GDB.GetCurrentDWG.pcamera.prop.zoom});
            //_lod:=round({self.textprop.size/}10*GDB.GetCurrentDWG.pcamera.prop.zoom*GDB.GetCurrentDWG.pcamera.prop.zoom+1);
            if ({(self.textprop.size/GDB.GetCurrentDWG.pcamera.prop.zoom)}templod>1.5{0.04}{0.2})or(dc.maxdetail) then
                                                                                    //Vertex3D_in_WCS_Array.simpledrawgeometry({_lod}3)

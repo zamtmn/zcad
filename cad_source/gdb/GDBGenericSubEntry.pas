@@ -20,7 +20,7 @@ unit GDBGenericSubEntry;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,UGDBLayerArray,UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
+uses GDBCamera,zcadsysvars,UGDBLayerArray,UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
 gl,
 geometry{,GDB3d},{UGDBVisibleOpenArray,}gdbEntity,gdbobjectsconstdef,varmandef,memman,UGDBEntTree;
 type
@@ -50,7 +50,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             procedure Format;virtual;
                             procedure FormatAfterEdit;virtual;
                             procedure restructure;virtual;
-                            procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);virtual;
+                            procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                             //function select:GDBBoolean;virtual;
                             function getowner:PGDBObjSubordinated;virtual;
                             function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
@@ -93,7 +93,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                       end;
 {Export-}
 implementation
-uses UGDBDescriptor,OGLSpecFunc,log;
+uses {UGDBDescriptor,}OGLSpecFunc,log;
 {function GDBObjGenericSubEntry.SubMi;
 begin
      //pobj^.bp.PSelfInOwnerArray:=ObjArray.getelement(ObjArray.add(pobj));
@@ -530,9 +530,9 @@ end;
 procedure GDBObjGenericSubEntry.restructure;
 begin
 end;
-procedure GDBObjGenericSubEntry.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);
+procedure GDBObjGenericSubEntry.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);
 begin
-  ObjArray.renderfeedbac(infrustumactualy,pcount);
+  ObjArray.renderfeedbac(infrustumactualy,pcount,camera,ProjectProc);
 end;
 function GDBObjGenericSubEntry.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 var //t,xx,yy:GDBDouble;

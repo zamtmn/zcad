@@ -18,9 +18,9 @@
 unit gdbellipse;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,GDBWithLocalCS,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
-gl,
-GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain{,OGLSpecFunc};
+uses GDBCamera,zcadsysvars,GDBWithLocalCS,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
+gl,ugdbltypearray,
+GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain{,OGLSpecFunc};
 type
 {Export+}
   ptEllipsertmodify=^tEllipsertmodify;
@@ -41,7 +41,7 @@ GDBObjEllipse=object(GDBObjPlain)
                  pq0,pq1,pq2:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;{RR,}S,E:GDBDouble;majaxis:GDBVertex);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray);virtual;
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -51,7 +51,7 @@ GDBObjEllipse=object(GDBObjPlain)
                  procedure Format;virtual;
                  procedure createpoint;virtual;
                  procedure getoutbound;virtual;
-                 procedure RenderFeedback(pcount:TActulity);virtual;
+                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                  procedure projectpoint;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
@@ -371,24 +371,24 @@ begin
   Vertex3D_in_WCS_Array.Shrink;
 end;
 procedure GDBObjEllipse.Renderfeedback;
-var pm:DMatrix4D;
+var //pm:DMatrix4D;
     tv:GDBvertex;
     d:GDBDouble;
 begin
-           gdb.GetCurrentDWG^.myGluProject2(Local.p_insert,ProjP_insert);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(Local.p_insert,ProjP_insert);
            pprojoutbound^.clear;
-           pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
-           gdb.GetCurrentDWG^.myGluProject2(outbound[0],tv);
+           //pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[0],tv);
            pprojoutbound^.addgdbvertex(tv);
-           gdb.GetCurrentDWG^.myGluProject2(outbound[1],tv);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[1],tv);
            pprojoutbound^.addgdbvertex(tv);
-           gdb.GetCurrentDWG^.myGluProject2(outbound[2],tv);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[2],tv);
            pprojoutbound^.addgdbvertex(tv);
-           gdb.GetCurrentDWG^.myGluProject2(outbound[3],tv);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[3],tv);
            pprojoutbound^.addlastgdbvertex(tv);
-           gdb.GetCurrentDWG^.myGluProject2(q0,pq0);
-           gdb.GetCurrentDWG^.myGluProject2(q1,pq1);
-           gdb.GetCurrentDWG^.myGluProject2(q2,pq2);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q0,pq0);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q1,pq1);
+           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q2,pq2);
            if pprojoutbound^.count<4 then
            begin
             lod:=4;
@@ -468,7 +468,7 @@ begin
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu) then
+    if not LoadFromDXFObjShared(f,byt,ptu,LayerArray,LTArray) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
     if not dxfvertexload(f,11,byt,MajorAxis) then
     if not dxfGDBDoubleload(f,40,byt,ratio) then
@@ -502,17 +502,17 @@ begin
                     os_begin:begin
           pdesc.worldcoord:=q0;
           pdesc.dispcoord.x:=round(Pq0.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-Pq0.y);
+          pdesc.dispcoord.y:=round(Pq0.y);
                              end;
                     os_midle:begin
           pdesc.worldcoord:=q1;
           pdesc.dispcoord.x:=round(Pq1.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-Pq1.y);
+          pdesc.dispcoord.y:=round(Pq1.y);
                              end;
                     os_end:begin
           pdesc.worldcoord:=q2;
           pdesc.dispcoord.x:=round(Pq2.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-Pq2.y);
+          pdesc.dispcoord.y:=round(Pq2.y);
                              end;
                     end;
 end;
@@ -526,19 +526,19 @@ begin
           pdesc.pointtype:=os_begin;
           pdesc.worldcoord:=q0;
           pdesc.dispcoord.x:=round(Pq0.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-Pq0.y);
+          pdesc.dispcoord.y:=round(Pq0.y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_midle;
           pdesc.worldcoord:=q1;
           pdesc.dispcoord.x:=round(Pq1.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-Pq1.y);
+          pdesc.dispcoord.y:=round(Pq1.y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_end;
           pdesc.worldcoord:=q1;
           pdesc.dispcoord.x:=round(Pq2.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-Pq2.y);
+          pdesc.dispcoord.y:=round(Pq2.y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 end;
 function GDBObjEllipse.getsnap;
@@ -664,7 +664,7 @@ begin
                                                                                       endangle:=rrr
                                                                                  end;
         format;
-        renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+        //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
         end;
 
 end;
@@ -690,7 +690,7 @@ begin
   PGDBObjEllipse(refp)^.RR:=RR;
   PGDBObjEllipse(refp)^.MajorAxis:=MajorAxis;
   PGDBObjEllipse(refp)^.Ratio:=Ratio;   PGDBObjEllipse(refp)^.format;
-  PGDBObjEllipse(refp)^.renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+  //PGDBObjEllipse(refp)^.renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBArc.initialization');{$ENDIF}

@@ -1076,7 +1076,7 @@ begin
 
   if param.lastonmouseobject<>nil then
                                       begin
-                                           PGDBObjEntity(param.lastonmouseobject)^.RenderFeedBack(pdwg.GetPcamera^.POSCOUNT);
+                                           PGDBObjEntity(param.lastonmouseobject)^.RenderFeedBack(pdwg.GetPcamera^.POSCOUNT,pdwg^.GetPcamera^, pdwg^.myGluProject2);
                                       end;
 
   Set3dmouse;
@@ -1386,6 +1386,7 @@ end;
     else begin
       param.gluetocp := true;
       param.md.mouseglue := param.nearesttcontrolpoint.pcontrolpoint^.dispcoord;
+      param.md.mouseglue.y:=clientheight-param.md.mouseglue.y;
     end;
   end
   else param.md.mouseglue := param.md.mouse;
@@ -3089,6 +3090,8 @@ begin
   result.OwnerLineWeight:=-3;
   result.OwnerColor:=ClWhite;
   result.MaxWidth:=sysvar.RD.RD_MaxWidth^;
+  result.ScrollMode:=param.scrollmode;
+  result.Zoom:=PDWG.GetPcamera.prop.zoom;
 end;
 
 procedure TOGLWnd.draw;
@@ -3173,7 +3176,7 @@ if (clientwidth=0)or(clientheight=0) then
     glaccum(GL_LOAD,1);
     inc(dc.subrender);
     render(PDWG.GetConstructObjRoot^,{subrender}dc);
-    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode);
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode,PDWG.GetPcamera^,PDWG^.myGluProject2);
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
     showcursor;
@@ -3208,7 +3211,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_AuxBuffer then
     oglsm.myglDisable(GL_DEPTH_TEST);
     inc(dc.subrender);
     render(PDWG.GetConstructObjRoot^,dc);
-    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode);
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode,PDWG.GetPcamera^,PDWG^.myGluProject2);
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
     showcursor;
@@ -3243,7 +3246,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_DrawPixels then
     glreadpixels(0, 0, clientwidth, clientheight, GL_BGRA_EXT{GL_RGBA}, gl_unsigned_Byte, param.pglscreen);
     inc(dc.subrender);
     render(PDWG.GetConstructObjRoot^,dc);
-    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode);
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode,PDWG.GetPcamera^,PDWG^.myGluProject2);
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
     showcursor;
@@ -3290,12 +3293,12 @@ else if sysvar.RD.RD_Restore_Mode^=WND_NewDraw then
     render(PDWG.GetCurrentROOT^,dc);
     dec(dc.subrender);
     inc(dc.subrender);
-    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode);
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode,PDWG.GetPcamera^,PDWG^.myGluProject2);
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
     showcursor;
     //param.firstdraw := false;
-    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode);
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode,PDWG.GetPcamera^,PDWG^.myGluProject2);
   end
 else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
   begin
@@ -3382,7 +3385,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
         //oglsm.mytotalglend;
 
 
-    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode);
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode,PDWG.GetPcamera^,PDWG^.myGluProject2);
     oglsm.myglDisable(GL_STENCIL_TEST);
     dc.MaxDetail:=true;
     PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
@@ -3640,7 +3643,7 @@ begin
                       param.lastonmouseobject:=pp;
                       repeat
                             if pp^.vp.LastCameraPos<>PDWG.Getpcamera^.POSCOUNT then
-                            pp^.RenderFeedback(PDWG.Getpcamera^.POSCOUNT);
+                            pp^.RenderFeedback(PDWG.Getpcamera^.POSCOUNT,PDWG.Getpcamera^,PDWG.myGluProject2);
 
 
                             pp:=PDWG.GetOnMouseObj.iterate(ir);
@@ -3706,7 +3709,7 @@ begin
                       param.lastonmouseobject:=pp;
                       repeat
                             if pp^.vp.LastCameraPos<>PDWG.Getpcamera^.POSCOUNT then
-                            pp^.RenderFeedback(PDWG.Getpcamera^.POSCOUNT);
+                            pp^.RenderFeedback(PDWG.Getpcamera^.POSCOUNT,PDWG.Getpcamera^,PDWG.myGluProject2);
 
 
                             pp:=PDWG.GetOnMouseObj.iterate(ir);

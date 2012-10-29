@@ -19,7 +19,7 @@
 unit UGDBSelectedObjArray;
 {$INCLUDE def.inc}
 interface
-uses {GDBWithLocalCS,}GDBWithMatrix,GDBEntity,UGDBControlPointArray,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
+uses GDBCamera,{GDBWithLocalCS,}GDBWithMatrix,GDBEntity,UGDBControlPointArray,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
      gl,
      gdbasetypes{,varmandef,gdbobjectsconstdef},memman,OGLSpecFunc;
 type
@@ -37,7 +37,7 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
 
                           function addobject(objnum:PGDBObjEntity):pselectedobjdesc;virtual;
                           procedure clearallobjects;virtual;
-                          procedure remappoints(pcount:TActulity;ScrollMode:GDBBoolean);virtual;
+                          procedure remappoints(pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                           procedure drawpoint;virtual;
                           procedure drawobject(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                           function getnearesttomouse:tcontrolpointdist;virtual;
@@ -69,7 +69,7 @@ begin
        for i:=0 to count-1 do
        begin
             //dec(tdesc^.objaddr^.vp.LastCameraPos);
-            tdesc^.objaddr^.Renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+            tdesc^.objaddr^.Renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG.myGluProject2);
             inc(tdesc);
        end;
   end;
@@ -179,11 +179,11 @@ begin
        begin
             if tdesc^.objaddr<>nil then
             begin
-                 tdesc^.objaddr^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+                 tdesc^.objaddr^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
             end;
             if tdesc^.ptempobj<>nil then
             begin
-                 tdesc^.ptempobj^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+                 tdesc^.ptempobj^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
             end;
             inc(tdesc);
        end;
@@ -216,7 +216,7 @@ begin
        begin
             if tdesc^.pcontrolpoint<>nil then
             begin
-                 tdesc^.objaddr^.remapcontrolpoints(tdesc^.pcontrolpoint,pcount,ScrollMode);
+                 tdesc^.objaddr^.remapcontrolpoints(tdesc^.pcontrolpoint,pcount,ScrollMode,camera,ProjectProc);
             end;
             inc(tdesc);
        end;

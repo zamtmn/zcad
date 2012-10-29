@@ -20,9 +20,9 @@ unit GDBPoint;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
-gl,
-GDBase,UGDBDescriptor,gdbobjectsconstdef,oglwindowdef,geometry{,dxflow},memman,OGLSpecFunc;
+uses GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
+gl,ugdbltypearray,
+GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef,geometry{,dxflow},memman,OGLSpecFunc;
 type
 {Export+}
 PGDBObjPoint=^GDBObjPoint;
@@ -32,12 +32,12 @@ GDBObjPoint=object(GDBObj3d)
                  ProjPoint:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray);virtual;
                  procedure Format;virtual;
 
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
-                 procedure RenderFeedback(pcount:TActulity);virtual;
+                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                  function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
@@ -110,7 +110,7 @@ begin
       8:
         begin
           layername := f.readgdbstring;
-          vp.Layer := gdb.GetCurrentDWG.LayerTable.getaddres(layername);
+          vp.Layer := {gdb.GetCurrentDWG.LayerTable}LayerArray.getaddres(layername);
               //layername:=GDBPointer(s);
         end;
       10:
@@ -171,7 +171,7 @@ begin
 end;
 procedure GDBObjPoint.RenderFeedback;
 begin
-  gdb.GetCurrentDWG^.myGluProject2(P_insertInWCS,ProjPoint);
+  ProjectProc(P_insertInWCS,ProjPoint);
 end;
 function GDBObjPoint.getsnap;
 //var t,d,e:GDBDouble;
@@ -233,7 +233,7 @@ begin
                     os_point:begin
           pdesc.worldcoord:=P_insertInOCS;
           pdesc.dispcoord.x:=round(ProjPoint.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-ProjPoint.y);
+          pdesc.dispcoord.y:=round(ProjPoint.y);
                              end;
                     end;
 end;
@@ -247,7 +247,7 @@ begin
           pdesc.pointtype:=os_point;
           pdesc.worldcoord:=P_insertInOCS;
           pdesc.dispcoord.x:=round(ProjPoint.x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-ProjPoint.y);
+          pdesc.dispcoord.y:=round(ProjPoint.y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 end;
 procedure GDBObjPoint.rtmodifyonepoint(const rtmod:TRTModifyData);

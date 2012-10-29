@@ -20,8 +20,8 @@ unit GDBLWPolyLine;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBOpenArrayOfPObjects,oglwindowdef,GDBCurve,UGDBVectorSnapArray,geometry,UGDBLayerArray,GDBEntity,memman,gdbasetypes,UGDBPoint3DArray,UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,varman,varmandef,
-gl,
+uses GDBCamera,UGDBOpenArrayOfPObjects,oglwindowdef,GDBCurve,UGDBVectorSnapArray,geometry,UGDBLayerArray,GDBEntity,memman,gdbasetypes,UGDBPoint3DArray,UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,varman,varmandef,
+gl,ugdbltypearray,
 GDBase,UGDBDescriptor,GDBWithLocalCS,gdbobjectsconstdef,math,dxflow,sysutils,UGDBLineWidthArray,OGLSpecFunc;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
@@ -37,7 +37,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  Square:GDBdouble;(*'Oriented area'*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul;
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;
+                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray);virtual;
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -49,7 +49,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  destructor done;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-                 procedure RenderFeedback(pcount:TActulity);virtual;
+                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -380,7 +380,7 @@ begin
      vertexnumber:=abs(pdesc^.pointtype-os_polymin);
      pdesc.worldcoord:=PGDBArrayVertex(Vertex3D_in_WCS_Array.parray)^[vertexnumber];
      pdesc.dispcoord.x:=round(PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].x);
-     pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].y);
+     pdesc.dispcoord.y:=round(PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].y);
 end;
 procedure GDBObjLWpolyline.AddControlpoints;
 var pdesc:controlpointdesc;
@@ -388,7 +388,7 @@ var pdesc:controlpointdesc;
     pv2d:pGDBvertex2d;
     pv:pGDBvertex;
 begin
-          renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+          //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{48F91543-AAA8-4CF7-A038-D3DDC248BE3E}',{$ENDIF}pprojpoint.count);
           pv2d:=pprojpoint^.parray;
           pv:=Vertex3D_in_WCS_Array.parray;
@@ -400,7 +400,7 @@ begin
                pdesc.pointtype:=os_polymin-i;
                pdesc.worldcoord:=pv^;
                pdesc.dispcoord.x:=round(pv2d^.x);
-               pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-pv2d.y);
+               pdesc.dispcoord.y:=round(pv2d.y);
                PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
                inc(pv);
                inc(pv2d);

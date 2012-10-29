@@ -604,7 +604,7 @@ begin
     gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(nb);
     nb^.Visible:=0;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
-    nb^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+    nb^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
 
 
      pb.YouDeleted;
@@ -1605,7 +1605,7 @@ begin
     gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
     pb^.Visible:=0;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
-    pb^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+    pb^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
     pb:=nil;
     //commandmanager.executecommandend;
     //result:=1;
@@ -1937,7 +1937,7 @@ begin
     //GDBObjCircleInit(pc,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
     //pc^.lod:=4;
     pc^.Format;
-    pc^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+    pc^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
   end;
   result:=0;
 end;
@@ -1951,7 +1951,7 @@ begin
   pc^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
   pc^.Radius := Vertexlength(pc^.local.P_insert, wc);
   pc^.Format;
-  pc^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+  pc^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
   if (button and MZW_LBUTTON)<>0 then
   begin
 
@@ -2023,7 +2023,7 @@ begin
   //pl^.RenderFeedback;
   if (button and MZW_LBUTTON)<>0 then
   begin
-    PCreatedGDBLine^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+    PCreatedGDBLine^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
     if po<>nil then
     begin
     PCreatedGDBLine^.bp.ListPos.Owner:=po;
@@ -2550,7 +2550,7 @@ begin
 
     //p3dpl^.AddVertex(wc);
     p3dpl^.Format;
-    p3dpl^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+    p3dpl^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
     //gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
     //gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     result:=1;
@@ -3060,7 +3060,7 @@ begin
     BLINSERT^.BuildVarGeometry;
     BLINSERT^.Format;
     BLINSERT^.Visible:=0;
-    BLINSERT^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+    BLINSERT^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
     //BLINSERT:=nil;
     //commandmanager.executecommandend;
 

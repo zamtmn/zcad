@@ -8,10 +8,10 @@ unit GDBElLeader;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
+uses GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 gl,
-GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef{,oglwindowdef},dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
+GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
 type
 {EXPORT+}
 PGDBObjElLeader=^GDBObjElLeader;
@@ -31,7 +31,7 @@ GDBObjElLeader=object(GDBObjComplex)
             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
             function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
             function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
-            procedure RenderFeedback(pcount:TActulity);virtual;
+            procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
             procedure addcontrolpoints(tdesc:GDBPointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
@@ -545,9 +545,9 @@ procedure GDBObjElLeader.RenderFeedback;
 //    i:GDBInteger;
 begin
      inherited;
-     MainLine.RenderFeedback(pcount);
-     markline.RenderFeedback(pcount);
-     tbl.RenderFeedback(pcount);
+     MainLine.RenderFeedback(pcount,camera,ProjectProc);
+     markline.RenderFeedback(pcount,camera,ProjectProc);
+     tbl.RenderFeedback(pcount,camera,ProjectProc);
 end;
 function GDBObjElLeader.onmouse;
 var //t,xx,yy:GDBDouble;

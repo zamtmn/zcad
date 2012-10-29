@@ -20,9 +20,9 @@ unit GDBDevice;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
+uses GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
 gl,OGLSpecFunc,uunitmanager{,shared},
-memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray,UGDBDescriptor{,UGDBLayerArray,oglwindowdef};
+memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray,UGDBDescriptor{,UGDBLayerArray},oglwindowdef;
 
 type
 {EXPORT+}
@@ -37,7 +37,7 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    procedure Format;virtual;
                    procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                    procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                   procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);virtual;
+                   procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                    function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                    function ReturnLastOnMouse:PGDBObjEntity;virtual;
                    function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
@@ -130,7 +130,7 @@ begin
                pdesc.dcoord:=vertexsub(PGDBObjDevice(pv).P_insert_in_WCS,P_insert_in_WCS);
                pdesc.worldcoord:=PGDBObjDevice(pv).P_insert_in_WCS;
                pdesc.dispcoord.x:=round(PGDBObjDevice(pv).ProjP_insert.x);
-               pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PGDBObjDevice(pv).ProjP_insert.y);
+               pdesc.dispcoord.y:=round(PGDBObjDevice(pv).ProjP_insert.y);
                PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
                end;
               pv:=VarObjArray.iterate(ir);
@@ -316,14 +316,14 @@ begin
   until p=nil;
   if not result then lstonmouse:=nil;
 end;
-procedure GDBObjDevice.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity);
+procedure GDBObjDevice.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);
 //var pblockdef:PGDBObjBlockdef;
     //pvisible:PGDBObjEntity;
     //i:GDBInteger;
 begin
   //if POGLWnd=nil then exit;
   inherited;
-  VarObjArray.RenderFeedbac(infrustumactualy,pcount);
+  VarObjArray.RenderFeedbac(infrustumactualy,pcount,camera,ProjectProc);
 end;
 procedure GDBObjDevice.DrawOnlyGeometry;
 var p:pgdbobjEntity;

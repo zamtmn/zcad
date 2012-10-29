@@ -20,10 +20,10 @@ unit GDBLine;
 {$INCLUDE def.inc}
 
 interface
-uses uzglgeometry,{testing LineTypes...}UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,ugdbltypearray,UGDBSHXFont,
+uses GDBCamera,uzglgeometry,{testing LineTypes...}UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,ugdbltypearray,UGDBSHXFont,
      zcadsysvars,UGDBOpenArrayOfPObjects,UGDBDescriptor,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
-GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman{,shared},OGLSpecFunc;
+GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,shared,OGLSpecFunc;
 type
                  {l_1_4:GDBvertex;(*hidden_in_objinsp*)
                  l_1_3:GDBvertex;(*hidden_in_objinsp*)
@@ -47,12 +47,12 @@ GDBObjLine=object(GDBObj3d)
 
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit);virtual;
+                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray);virtual;
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure Format;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 procedure RenderFeedback(pcount:TActulity);virtual;
+                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                   function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
@@ -296,7 +296,7 @@ begin
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu) then
+    if not LoadFromDXFObjShared(f,byt,ptu,LayerArray,LTArray) then
        if not dxfvertexload(f,10,byt,CoordInOCS.lBegin) then
           if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then s := f.readGDBSTRING;
     byt:=readmystrtoint(f);
@@ -693,7 +693,12 @@ begin
             then
             begin
             if not assigned(pgdbobjline(pobj)^.pprojpoint) then
-                                                               pgdbobjline(pobj)^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+                                                               begin
+                                                               //pgdbobjline(pobj)^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
+                                                               shared.ShowError('Че за херня? для линии с которой считается пересечение оказывается еще не расчитаны дисплейные координаты...');
+                                                               osp.ostype:=os_none;
+                                                               exit;
+                                                               end;
             if line2dintercep(pprojpoint[0].x,pprojpoint[0].y,pprojpoint[1].x,pprojpoint[1].y,   pgdbobjline(pobj)^.pprojpoint[0].x,pgdbobjline(pobj)^.pprojpoint[0].y,pgdbobjline(pobj)^.pprojpoint[1].x,pgdbobjline(pobj)^.pprojpoint[1].y,  t1,t2)
             then
                 begin
@@ -844,17 +849,17 @@ begin
                     os_begin:begin
                                   pdesc.worldcoord:=CoordInWCS.lbegin;
                                   pdesc.dispcoord.x:=round(PProjPoint[0].x);
-                                  pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PProjPoint[0].y);
+                                  pdesc.dispcoord.y:=round(PProjPoint[0].y);
                              end;
                     os_end:begin
                                 pdesc.worldcoord:=CoordInWCS.lend;
                                 pdesc.dispcoord.x:=round(PProjPoint[1].x);
-                                pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PProjPoint[1].y);
+                                pdesc.dispcoord.y:=round(PProjPoint[1].y);
                              end;
                     os_midle:begin
                                   pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
                                   pdesc.dispcoord.x:=round(PProjPoint[4].x);
-                                  pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PProjPoint[4].y);
+                                  pdesc.dispcoord.y:=round(PProjPoint[4].y);
                              end;
                     end;
 end;
@@ -866,24 +871,24 @@ begin
           pdesc.selected:=false;
           pdesc.pobject:=nil;
 
-          renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT);
+          //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
 
           pdesc.pointtype:=os_midle;
           pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
           pdesc.dispcoord.x:=round(PProjPoint[4].x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PProjPoint[4].y);
+          pdesc.dispcoord.y:=round(PProjPoint[4].y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_begin;
           pdesc.worldcoord:=CoordInWCS.lbegin;
           pdesc.dispcoord.x:=round(PProjPoint[0].x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PProjPoint[0].y);
+          pdesc.dispcoord.y:=round(PProjPoint[0].y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_end;
           pdesc.worldcoord:=CoordInWCS.lend;
           pdesc.dispcoord.x:=round(PProjPoint[1].x);
-          pdesc.dispcoord.y:=round(GDB.GetCurrentDWG.OGLwindow1.param.height-PProjPoint[1].y);
+          pdesc.dispcoord.y:=round(PProjPoint[1].y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 end;
 function GDBObjLine.InRect;

@@ -79,7 +79,7 @@ begin
   if Key=VK_ESCAPE then
   begin
        gdb.GetCurrentDWG^.SelObjArray.clearallobjects;
-       gdb.GetCurrentROOT^.ObjArray.DeSelect;
+       gdb.GetCurrentROOT^.ObjArray.DeSelect(gdb.GetCurrentDWG^.GetSelObjArray,gdb.GetCurrentDWG^.OGLwindow1.param.SelDesc.Selectedobjcount);
        UGDBDescriptor.redrawoglwnd;
        Key:=0;
   end;
@@ -462,7 +462,7 @@ begin
         if count>10000 then
                            pv^.SelectQuik
                        else
-                           pv^.select;
+                           pv^.select(gdb.GetCurrentDWG^.GetSelObjArray,gdb.GetCurrentDWG^.OGLwindow1.param.SelDesc.Selectedobjcount);
 
   pv:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
   until pv=nil;
@@ -480,7 +480,7 @@ begin
             if GDB.GetCurrentDWG^.OGLwindow1.param.SelDesc.LastSelectedObject<>nil then
             begin
                  pGDBObjEntity(GDB.GetCurrentDWG^.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.Layer^._on:=false;
-                 pGDBObjEntity(GDB.GetCurrentDWG^.OGLwindow1.param.SelDesc.LastSelectedObject)^.DeSelect;
+                 pGDBObjEntity(GDB.GetCurrentDWG^.OGLwindow1.param.SelDesc.LastSelectedObject)^.DeSelect(gdb.GetCurrentDWG^.GetSelObjArray,gdb.GetCurrentDWG^.OGLwindow1.param.SelDesc.Selectedobjcount);
             end;
             UGDBDescriptor.redrawoglwnd;
        end

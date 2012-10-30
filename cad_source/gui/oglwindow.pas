@@ -3080,6 +3080,7 @@ begin
   result.Selected:=false;
   result.VisibleActualy:=PDWG.Getpcamera.POSCOUNT;
   result.InfrustumActualy:=PDWG.Getpcamera.POSCOUNT;
+  result.DRAWCOUNT:=PDWG.Getpcamera.DRAWCOUNT;
   result.SysLayer:=PDWG.GetLayerTable.GetSystemLayer;
   result.MaxDetail:=_maxdetail;
 
@@ -4156,7 +4157,7 @@ begin
      repeat
      begin
        pv.startsnap(osp,pdata);
-       while pv.getsnap(osp,pdata) do
+       while pv.getsnap(osp,pdata,param,pdwg.myGluProject2) do
        begin
             if osp.ostype<>os_none then
             begin
@@ -4212,7 +4213,7 @@ begin
   if pv<>pv2 then
   begin
        pv.startsnap(osp,pdata);
-       while pv.getintersect(osp,pv2) do
+       while pv.getintersect(osp,pv2,param,PDWG.myGluProject2) do
        begin
             if osp.ostype<>os_none then
             begin

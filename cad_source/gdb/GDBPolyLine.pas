@@ -34,7 +34,7 @@ GDBObjPolyline=object(GDBObjCurve)
 
                  procedure Format;virtual;
                  procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
-                 function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -81,7 +81,7 @@ begin
 end;
 function GDBObjPolyline.getsnap;
 begin
-     result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,closed);
+     result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,closed,param,ProjectProc);
 end;
 procedure GDBObjPolyline.Format;
 var //i,j: GDBInteger;

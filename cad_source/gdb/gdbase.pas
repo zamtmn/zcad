@@ -167,6 +167,7 @@ TObjID=GDBWord;
 TDrawContext=record
                    VisibleActualy:TActulity;
                    InfrustumActualy:TActulity;
+                   DRAWCOUNT:TActulity;
                    Subrender:GDBInteger;
                    Selected:GDBBoolean;
                    SysLayer:GDBPointer;
@@ -193,7 +194,7 @@ GDBBaseCamera=object(GDBaseObject)
                 infrustum:GDBInteger;
                 obj_zmax,obj_zmin:GDBDouble;
                 DRAWNOTEND:GDBBoolean;
-                DRAWCOUNT:GDBInteger;
+                DRAWCOUNT:TActulity;
                 POSCOUNT:TActulity;
                 VISCOUNT:TActulity;
                 CamCSOffset:GDBvertex;

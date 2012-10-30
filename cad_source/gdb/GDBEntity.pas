@@ -80,7 +80,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure RenderFeedbackIFNeed(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                     function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
                     function CalculateLineWeight(const DC:TDrawContext):GDBInteger;//inline;
-                    function InRect:TInRect;virtual;
+                    //function InRect:TInRect;virtual;
                     function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                     function CalcOwner(own:GDBPointer):GDBPointer;virtual;
                     procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
@@ -98,9 +98,9 @@ GDBObjEntity=object(GDBObjSubordinated)
 
                     function isonmouse(var popa:GDBOpenArrayOfPObjects;mousefrustum:ClipArray):GDBBoolean;virtual;
                     procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
-                    function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
+                    function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
                     procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;
-                    function getintersect(var osp:os_record;pobj:PGDBObjEntity):GDBBoolean;virtual;
+                    function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
                     procedure higlight;virtual;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                     function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;
@@ -805,10 +805,10 @@ function GDBObjEntity.onmouse;
 begin
      result:=false;
 end;
-function GDBObjEntity.InRect:TInRect;
+{function GDBObjEntity.InRect:TInRect;
 begin
      result:=IREmpty;
-end;
+end;}
 
 function GDBObjEntity.Clone;
 //var tvo: PGDBObjEntity;

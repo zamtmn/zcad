@@ -49,7 +49,7 @@ GDBObjElLeader=object(GDBObjComplex)
             function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
             function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
             procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-            function InRect:TInRect;virtual;
+            //function InRect:TInRect;virtual;
 
             destructor done;virtual;
 
@@ -112,7 +112,7 @@ begin
   tv:=vectortransform(tv,t_matrix);
   MainLine.CoordInOCS.lend:=pgdbvertex(@tv)^;
 end;
-function GDBObjElLeader.InRect;
+{function GDBObjElLeader.InRect;
 var
    MainLineTInRect:TInRect;
    MarkLineTInRect:TInRect;
@@ -131,7 +131,7 @@ else if (inh=IRPartially)or(MainLineTInRect=IRPartially)or(MarkLineTInRect=IRPar
 else
    result:=IREmpty
 
-end;
+end;}
 function GDBObjElLeader.ImSelected;
 begin
      {select;}selected:=true;

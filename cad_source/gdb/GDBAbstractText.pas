@@ -60,7 +60,7 @@ GDBObjAbstractText=object(GDBObjPlainWithOX)
                          function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
                          function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                          function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
-                         function InRect:TInRect;virtual;
+                         //function InRect:TInRect;virtual;
                          procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                          procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                          procedure ReCalcFromObjMatrix;virtual;
@@ -315,7 +315,7 @@ begin
           pdesc.dispcoord.y:=round(ProjP_insert.y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 end;
-function GDBObjAbstractText.InRect;
+(*function GDBObjAbstractText.InRect;
 //var i:GDBInteger;
 //    ptpv:PGDBPolyVertex2D;
 begin
@@ -332,7 +332,7 @@ begin
           exit;
      end;}
      result:=IREmpty;
-end;
+end;*)
 function GDBObjAbstractText.onmouse;
 var //i,counter:GDBInteger;
     //d:GDBDouble;

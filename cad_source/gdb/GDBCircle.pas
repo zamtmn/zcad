@@ -21,7 +21,7 @@ unit GDBCircle;
 interface
 uses GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray,UGDBPoint3DArray{, UGDBPolyPoint3DArray,UGDBPolyPoint2DArray},UGDBOpenArrayOfByte,varman,varmandef,
 gl,ugdbltypearray,
-GDBase,UGDBDescriptor,GDBWithLocalCS,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman{,OGLSpecFunc};
+GDBase,GDBWithLocalCS,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman{,OGLSpecFunc};
 type
 //PProjPoint:PGDBPolyPoint2DArray;
 //PProjPoint:{-}PGDBPolyPoint2DArray{/GDBPointer/};
@@ -59,8 +59,8 @@ GDBObjCircle=object(GDBObjWithLocalCS)
                  procedure projectpoint;virtual;
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  //procedure higlight;virtual;
-                 function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
-                 function InRect:TInRect;virtual;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
+                 //function InRect:TInRect;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  function beforertmodify:GDBPointer;virtual;
@@ -563,8 +563,8 @@ begin
             plane:=PlaneFrom3Pont(q0,q1,q2);
             Normalizeplane(plane);
             if
-            PointOfLinePlaneIntersect(GDB.GetCurrentDWG.OGLwindow1.param.md.mouseraywithoutOS.lbegin,
-                                      GDB.GetCurrentDWG.OGLwindow1.param.md.mouseraywithoutOS.dir,
+            PointOfLinePlaneIntersect({GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseraywithoutOS.lbegin,
+                                      {GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseraywithoutOS.dir,
                                       plane,tv)
             then
             begin
@@ -572,7 +572,7 @@ begin
                  n:=geometry.NormalizeVertex(n);
                  n:=geometry.VertexMulOnSc(n,radius);
                  osp.worldcoord:=geometry.VertexAdd(P_insert_in_WCS,n);
-                 gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,tv);
+                 {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,tv);
                  osp.dispcoord:=tv;
                  osp.ostype:=os_nearest;
             end;
@@ -582,7 +582,7 @@ begin
      end;
      inc(onlygetsnapcount);
 end;
-function GDBObjCircle.InRect;
+(*function GDBObjCircle.InRect;
 //var i:GDBInteger;
 //    ptpv:PGDBPolyVertex2D;
 begin
@@ -598,7 +598,7 @@ begin
           exit;
      end;
      result:=IREmpty;}
-end;
+end;*)
 procedure GDBObjCircle.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin
                     case pdesc^.pointtype of

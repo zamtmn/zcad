@@ -46,7 +46,7 @@ GDBObjComplex=object(GDBObjWithLocalCS)
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                     procedure Format;virtual;
                     //procedure feedbackinrect;virtual;
-                    function InRect:TInRect;virtual;
+                    //function InRect:TInRect;virtual;
                     //procedure Draw(lw:GDBInteger);virtual;
                     procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger);virtual;
                     function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
@@ -81,10 +81,10 @@ begin
      ConstObjArray.ObjTree.BoundingBox:=vp.BoundingBox;
      ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRFully,true,totalobj,infrustumobj);
 end;
-function GDBObjComplex.InRect:TInRect;
+{function GDBObjComplex.InRect:TInRect;
 begin
      result:=ConstObjArray.InRect;
-end;
+end;}
 procedure GDBObjComplex.rtmodifyonepoint;
 var m:DMatrix4D;
 begin

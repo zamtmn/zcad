@@ -22,7 +22,7 @@ unit GDBCurve;
 interface
 uses GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes{,GDBGenericSubEntry},UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBPolyLine2DArray,UGDBPoint3DArray{,UGDBOpenArrayOfByte,varman},varmandef,
 gl,
-GDBase,geometry,UGDBDescriptor,gdbobjectsconstdef,oglwindowdef,math,dxflow,sysutils,memman{,OGLSpecFunc},GDBSubordinated;
+GDBase,geometry,gdbobjectsconstdef,oglwindowdef,math,dxflow,sysutils,memman{,OGLSpecFunc},GDBSubordinated;
 type
 //------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}
@@ -48,7 +48,7 @@ GDBObjCurve=object(GDBObj3d)
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
-                 function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
                  procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;
                  procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;
 
@@ -69,7 +69,7 @@ GDBObjCurve=object(GDBObj3d)
            end;
 {Export-}
 procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:GDBBoolean);
-function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:GDBBoolean):GDBBoolean;
+function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:GDBBoolean; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;
 procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record;const processaxis:taddotrac;const closed:GDBBoolean);
 function GetDirInPoint(const VertexArrayInWCS:GDBPoint3dArray;point:GDBVertex;closed:GDBBoolean):GDBVertex;
 implementation
@@ -624,7 +624,7 @@ begin
 
 end;
 *)
-function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:GDBBoolean):GDBBoolean;
+function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:GDBBoolean; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;
 const pnum=8;
 var t,d,e:GDBDouble;
     tv,n,v,dir:gdbvertex;
@@ -661,7 +661,7 @@ begin
                 begin
                 ///PVectotSnap(snaparray.getelement(vertexnum))^
                 osp.worldcoord:=PVectotSnap(snaparray.getelement(vertexnum))^.l_1_4;// PGDBArrayVertex(vertexarray.parray)^[vertexnum];
-                gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
+                {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,osp.dispcoord);
                 //pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
                 osp.ostype:=os_1_4;
                 end;
@@ -672,7 +672,7 @@ begin
                 begin
                 ///PVectotSnap(snaparray.getelement(vertexnum))^
                 osp.worldcoord:=PVectotSnap(snaparray.getelement(vertexnum))^.l_1_3;// PGDBArrayVertex(vertexarray.parray)^[vertexnum];
-                gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
+                {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,osp.dispcoord);
                 //pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
                 osp.ostype:=os_1_3;
                 end;
@@ -682,7 +682,7 @@ begin
                 begin
                 ///PVectotSnap(snaparray.getelement(vertexnum))^
                 osp.worldcoord:=PVectotSnap(snaparray.getelement(vertexnum))^.l_1_2;// PGDBArrayVertex(vertexarray.parray)^[vertexnum];
-                gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
+                {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,osp.dispcoord);
                 //pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
                 osp.ostype:=os_midle;
                 end;
@@ -692,7 +692,7 @@ begin
                 begin
                 ///PVectotSnap(snaparray.getelement(vertexnum))^
                 osp.worldcoord:=PVectotSnap(snaparray.getelement(vertexnum))^.l_2_3;// PGDBArrayVertex(vertexarray.parray)^[vertexnum];
-                gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
+                {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,osp.dispcoord);
                 //pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
                 osp.ostype:=os_2_3;
                 end;
@@ -703,7 +703,7 @@ begin
                 begin
                 ///PVectotSnap(snaparray.getelement(vertexnum))^
                 osp.worldcoord:=PVectotSnap(snaparray.getelement(vertexnum))^.l_3_4;// PGDBArrayVertex(vertexarray.parray)^[vertexnum];
-                gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
+                {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,osp.dispcoord);
                 //pgdbvertex2d(@osp.dispcoord)^:=PGDBArrayVertex2D(PProjPoint.parray)^[vertexnum];
                 osp.ostype:=os_3_4;
                 end;
@@ -722,8 +722,8 @@ begin
                                                pv2:=VertexArrayInWCS.getelement(0);
                                           end;
                         dir:=geometry.VertexSub(pv2^,pv1^);
-                        tv:=vectordot(dir,GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir);
-                        t:= -((pv1.x-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.x)*dir.x+(pv1.y-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.y)*dir.y+(pv1.z-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.z)*dir.z)/
+                        tv:=vectordot(dir,{GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.dir);
+                        t:= -((pv1.x-{GDB.GetCurrentDWG.OGLwindow1.}param.lastpoint.x)*dir.x+(pv1.y-{GDB.GetCurrentDWG.OGLwindow1.}param.lastpoint.y)*dir.y+(pv1.z-{GDB.GetCurrentDWG.OGLwindow1.}param.lastpoint.z)*dir.z)/
                              ({sqr(dir.x)+sqr(dir.y)+sqr(dir.z)}SqrVertexlength(pv2^,pv1^));
                         if (t>=0) and (t<=1)
                         then
@@ -731,7 +731,7 @@ begin
                               osp.worldcoord.x:=pv1^.x+t*dir.x;
                               osp.worldcoord.y:=pv1^.y+t*dir.y;
                               osp.worldcoord.z:=pv1^.z+t*dir.z;
-                              gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,tv);
+                              {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,tv);
                               osp.dispcoord:=tv;
                               osp.ostype:=os_perpendicular;
                         end
@@ -752,12 +752,12 @@ begin
                                                pv2:=VertexArrayInWCS.getelement(0);
                                           end;
             dir:=geometry.VertexSub(pv2^,pv1^);
-            tv:=vectordot(dir,GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir);
-            n:=vectordot(GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir,tv);
+            tv:=vectordot(dir,{GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.dir);
+            n:=vectordot({GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.dir,tv);
             n:=NormalizeVertex(n);
-            v.x:=GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.lbegin.x-pv1^.x;
-            v.y:=GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.lbegin.y-pv1^.y;
-            v.z:=GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.lbegin.z-pv1^.z;
+            v.x:={GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.lbegin.x-pv1^.x;
+            v.y:={GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.lbegin.y-pv1^.y;
+            v.z:={GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.lbegin.z-pv1^.z;
             d:=scalardot(n,v);
             e:=scalardot(n,dir);
             if e<eps then osp.ostype:=os_none
@@ -773,7 +773,7 @@ begin
                                                       osp.worldcoord.x:=pv1^.x+t*dir.x;
                                                       osp.worldcoord.y:=pv1^.y+t*dir.y;
                                                       osp.worldcoord.z:=pv1^.z+t*dir.z;
-                                                      gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,tv);
+                                                      {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,tv);
                                                       osp.dispcoord:=tv;
                                                       osp.ostype:=os_nearest;
                                                end;
@@ -811,7 +811,7 @@ var t,d,e:GDBDouble;
     pv1:PGDBVertex;
     pv2:PGDBVertex;
 begin
-     result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,false);
+     result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,false,param,ProjectProc);
 (*
      if onlygetsnapcount=VertexArrayInWCS.count*pnum then
      begin

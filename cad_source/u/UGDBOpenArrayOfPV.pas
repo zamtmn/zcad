@@ -44,7 +44,7 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
                       function getonlyoutbound:GDBBoundingBbox;
                       procedure Format;virtual;
                       procedure FormatAfterEdit;virtual;
-                      function InRect:TInRect;virtual;
+                      //function InRect:TInRect;virtual;
                       function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                       function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;virtual;
                 end;
@@ -99,7 +99,7 @@ begin
 
 end;
 
-function GDBObjOpenArrayOfPV.inrect;
+{function GDBObjOpenArrayOfPV.inrect;
 var pobj:pGDBObjEntity;
     ir:itrec;
     fr:TInRect;
@@ -125,7 +125,7 @@ begin
                result:=IRFully
            else
                result:=IREmpty;
-end;
+end;}
 function GDBObjOpenArrayOfPV.calcbb:GDBBoundingBbox;
 var pobj:pGDBObjEntity;
     ir:itrec;

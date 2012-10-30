@@ -21,7 +21,7 @@ unit GDBLine;
 
 interface
 uses GDBCamera,uzglgeometry,{testing LineTypes...}UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,ugdbltypearray,UGDBSHXFont,
-     zcadsysvars,UGDBOpenArrayOfPObjects,UGDBDescriptor,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
+     zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
 gl,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,shared,OGLSpecFunc;
 type
@@ -60,9 +60,9 @@ GDBObjLine=object(GDBObj3d)
                   function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                   function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  //procedure feedbackinrect;virtual;
-                 function InRect:TInRect;virtual;
-                  function getsnap(var osp:os_record; var pdata:GDBPointer):GDBBoolean;virtual;
-                  function getintersect(var osp:os_record;pobj:PGDBObjEntity):GDBBoolean;virtual;
+                 //function InRect:TInRect;virtual;
+                  function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
+                  function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
                 destructor done;virtual;
                  procedure addcontrolpoints(tdesc:GDBPointer);virtual;
                   function beforertmodify:GDBPointer;virtual;
@@ -598,8 +598,8 @@ begin
             if (sysvar.dwg.DWG_OSMode^ and osm_perpendicular)<>0
             then
             begin
-            tv:=vectordot(dir,GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir);
-            t:= -((CoordInWCS.lbegin.x-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.x)*dir.x+(CoordInWCS.lbegin.y-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.y)*dir.y+(CoordInWCS.lbegin.z-GDB.GetCurrentDWG.OGLwindow1.param.lastpoint.z)*dir.z)/
+            tv:=vectordot(dir,{GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.dir);
+            t:= -((CoordInWCS.lbegin.x-{GDB.GetCurrentDWG.OGLwindow1.}param.lastpoint.x)*dir.x+(CoordInWCS.lbegin.y-{GDB.GetCurrentDWG.OGLwindow1.}param.lastpoint.y)*dir.y+(CoordInWCS.lbegin.z-{GDB.GetCurrentDWG.OGLwindow1.}param.lastpoint.z)*dir.z)/
                  ({sqr(dir.x)+sqr(dir.y)+sqr(dir.z)}SqrVertexlength(self.CoordInWCS.lBegin,self.CoordInWCS.lEnd){length_2});
             if (t>=0) and (t<=1)
             then
@@ -607,7 +607,7 @@ begin
             osp.worldcoord.x:=CoordInWCS.lbegin.x+t*dir.x;
             osp.worldcoord.y:=CoordInWCS.lbegin.y+t*dir.y;
             osp.worldcoord.z:=CoordInWCS.lbegin.z+t*dir.z;
-            gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,tv);
+            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,tv);
             osp.dispcoord:=tv;
             osp.ostype:=os_perpendicular;
             end
@@ -619,12 +619,12 @@ begin
             if (sysvar.dwg.DWG_OSMode^ and osm_nearest)<>0
             then
             begin
-            tv:=vectordot(dir,GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir);
-            n:=vectordot(GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.dir,tv);
+            tv:=vectordot(dir,{GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.dir);
+            n:=vectordot({GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.dir,tv);
             n:=NormalizeVertex(n);
-            v.x:=GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.lbegin.x-CoordInWCS.lbegin.x;
-            v.y:=GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.lbegin.y-CoordInWCS.lbegin.y;
-            v.z:=GDB.GetCurrentDWG.OGLwindow1.param.md.mouseray.lbegin.z-CoordInWCS.lbegin.z;
+            v.x:={GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.lbegin.x-CoordInWCS.lbegin.x;
+            v.y:={GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.lbegin.y-CoordInWCS.lbegin.y;
+            v.z:={GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.lbegin.z-CoordInWCS.lbegin.z;
             d:=scalardot(n,v);
             e:=scalardot(n,dir);
             if e<eps then osp.ostype:=os_none
@@ -640,7 +640,7 @@ begin
             osp.worldcoord.x:=CoordInWCS.lbegin.x+t*dir.x;
             osp.worldcoord.y:=CoordInWCS.lbegin.y+t*dir.y;
             osp.worldcoord.z:=CoordInWCS.lbegin.z+t*dir.z;
-            gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,tv);
+            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,tv);
             osp.dispcoord:=tv;
             osp.ostype:=os_nearest;
                                                end;
@@ -718,7 +718,7 @@ begin
                               then
                               begin
                               osp.worldcoord:=tv1;
-                              gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
+                              {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,osp.dispcoord);
                               osp.ostype:=os_intersection;
                               end
                               else osp.ostype:=os_none;
@@ -730,7 +730,7 @@ begin
                               begin
                               osp.worldcoord:=tv1;
                               line2dintercep(pprojpoint[0].x,pprojpoint[0].y,pprojpoint[1].x,pprojpoint[1].y,   pgdbobjline(pobj)^.pprojpoint[0].x,pgdbobjline(pobj)^.pprojpoint[0].y,pgdbobjline(pobj)^.pprojpoint[1].x,pgdbobjline(pobj)^.pprojpoint[1].y,  t1,t2);
-                              gdb.GetCurrentDWG^.myGluProject2(osp.worldcoord,osp.dispcoord);
+                              {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,osp.dispcoord);
                               osp.ostype:=os_apparentintersection;
                               end
                               else osp.ostype:=os_none;
@@ -891,7 +891,7 @@ begin
           pdesc.dispcoord.y:=round(PProjPoint[1].y);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 end;
-function GDBObjLine.InRect;
+{function GDBObjLine.InRect;
 begin
      result:=IREmpty;
      if pprojpoint=nil then
@@ -912,7 +912,7 @@ begin
           begin
                result:=IRPartially;
           end
-end;
+end;}
 
 procedure GDBObjLine.transform;
 var tv:GDBVertex4D;

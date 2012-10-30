@@ -32,7 +32,7 @@ GDBObjBlockdefArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBObjBlockdef*)
 
                       function getindex(name:pansichar):GDBInteger;virtual;
                       function getblockdef(name:GDBString):PGDBObjBlockdef;virtual;
-                      function loadblock(filename,bname:pansichar;pdrawing:GDBPointer):GDBInteger;virtual;
+                      //function loadblock(filename,bname:pansichar;pdrawing:GDBPointer):GDBInteger;virtual;
                       function create(name:GDBString):PGDBObjBlockdef;virtual;
                       procedure freeelement(p:GDBPointer);virtual;
                       procedure Format;virtual;
@@ -40,7 +40,7 @@ GDBObjBlockdefArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBObjBlockdef*)
                     end;
 {Export-}
 implementation
-uses iodxf{,UGDBDescriptor},UUnitManager{,shared},log,ugdbsimpledrawing;
+uses iodxf{,UGDBDescriptor},UUnitManager{,shared},log{,ugdbsimpledrawing};
 procedure GDBObjBlockdefArray.Grow;
 var
   p:PGDBObjBlockdef;
@@ -127,18 +127,14 @@ begin
        p:=iterate(ir);
   until p=nil;
 end;
-function GDBObjBlockdefArray.loadblock;
+{function GDBObjBlockdefArray.loadblock;
 var bc:GDBInteger;
 begin
   bc := count;
   inc(count);
   PBlockdefArray(parray)[bc].init(extractfilename(bname));
-  //PBlockdefArray(parray)[bc].ObjArray.init({$IFDEF DEBUGBUILD}'{05A3A2D5-15BD-416E-B7D3-B42D53A3C6DE}',{$ENDIF}1000);
   addfromdxf(filename,@PBlockdefArray(parray)[bc],tlomerge,PTSimpleDrawing(pdrawing)^);
-  //GDBPointer(PBlockdefArray(parray)[bc].name) := nil;
-  //PBlockdefArray(parray)[bc].name :=extractfilename(bname);
-  //GDB.pgdbblock^.blockarray[bc].ppa := remapmememblock(GDB.pgdbblock^.blockarray[bc].ppa, GDB.pgdbblock^.blockarray[bc].ppa^.count * sizeof(GDBproperty) + sizeof(GDBWord));end;
-end;
+end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UObjBlockdefArray.initialization');{$ENDIF}
 end.

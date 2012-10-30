@@ -18,9 +18,9 @@
 unit GDBBlockDef;
 {$INCLUDE def.inc}
 interface
-uses dxflow,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,memman, geometry,
+uses UGDBVisibleOpenArray,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,memman, geometry,
      gl,UGDBLayerArray,ugdbltypearray,
-     zcadstrconsts,varmandef,gdbobjectsconstdef,GDBGenericSubEntry,GDBSubordinated,varman;
+     zcadstrconsts,varmandef,gdbobjectsconstdef,GDBGenericSubEntry,varman;
 type
 {Export+}
 PGDBObjBlockdef=^GDBObjBlockdef;

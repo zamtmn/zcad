@@ -23,6 +23,7 @@ interface
 uses zcadstrconsts,gdbase,{ogltypes,}gdbasetypes,geometry;
 
 type
+GDBProjectProc=function (objcoord:GDBVertex; out wincoord:GDBVertex):Integer of object;
 {REGISTEROBJECTTYPE GDBObjCamera}
 {EXPORT+}
 PGDBObjCamera=^GDBObjCamera;

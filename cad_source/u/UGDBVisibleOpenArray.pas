@@ -19,7 +19,7 @@
 unit UGDBVisibleOpenArray;
 {$INCLUDE def.inc}
 interface
-uses {UGDBOpenArray,}gdbasetypes{,math},UGDBOpenArrayOfPV,{,UGDBOpenArray,oglwindowdef}sysutils,gdbase, geometry,
+uses GDBCamera,{UGDBOpenArray,}gdbasetypes{,math},UGDBOpenArrayOfPV,{,UGDBOpenArray,oglwindowdef}sysutils,gdbase, geometry,
      gl,
      {varmandef,gdbobjectsconstdef,}memman;
 type
@@ -31,7 +31,7 @@ GDBObjEntityOpenArray=object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
                       function copytowithoutcorrect(source:PGDBObjEntityOpenArray):GDBInteger;virtual;
                       function deliteminarray(p:GDBInteger):GDBInteger;virtual;
                       function cloneentityto(PEA:PGDBObjEntityOpenArray;own:GDBPointer):GDBInteger;virtual;
-                      procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger);virtual;
+                      procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc);virtual;
 
                 end;
 {Export-}
@@ -49,7 +49,7 @@ begin
      pobj:=beginiterate(ir);
      if pobj<>nil then
      repeat
-           pobj^.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj);
+           pobj^.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc);
            pobj:=iterate(ir);
      until pobj=nil;
 end;

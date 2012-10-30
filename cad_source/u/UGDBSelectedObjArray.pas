@@ -53,7 +53,7 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
 
                           procedure drawobj(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                           procedure freeelement(p:GDBPointer);virtual;
-                          function calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
+                          function calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
                           procedure resprojparam;
                     end;
 {EXPORT-}
@@ -544,7 +544,7 @@ begin
       if tdesc^.ptempobj<>nil then
                                   begin
                                   //tdesc^.ptempobj^.getoutbound;
-                                  tdesc^.ptempobj^.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj);
+                                  tdesc^.ptempobj^.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc);
                                   end;
       inc(tdesc);
     end;

@@ -224,9 +224,24 @@ begin
      pointer(fontfile):=nil;
 end;
 destructor GDBfont.done;
+var i:integer;
+    pobj:PGDBUNISymbolInfo;
+    ir:itrec;
+
+
 begin
      fontfile:='';
      Internalname:='';
+     for i:=0 to 255 do
+     begin
+      symbolinfo[i].Name:='';
+     end;
+          pobj:=unisymbolinfo.beginiterate(ir);
+          if pobj<>nil then
+          repeat
+                pobj^.symbolinfo.Name:='';
+                pobj:=unisymbolinfo.iterate(ir);
+          until pobj=nil;
      SHXdata.done;
      unisymbolinfo.{FreeAnd}Done;
      inherited;

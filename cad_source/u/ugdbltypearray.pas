@@ -155,8 +155,8 @@ destructor GDBLtypeProp.done;
 begin
      dasharray.done;
      strokesarray.done;
-     shapearray.done;
-     Textarray.done;
+     shapearray.freeanddone;
+     Textarray.freeanddone;
      inherited;
 end;
 
@@ -180,7 +180,7 @@ end;
 destructor TextProp.done;
 begin
      Text:='';
-     Text:='';
+     Style:='';
      param.PStyle:=nil;
      //PFont:=nil;
 end;
@@ -452,4 +452,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('ugdbltypearray.initialization');{$ENDIF}
-end.
+end.

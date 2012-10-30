@@ -19,19 +19,31 @@ msgctxt "colorselectwnd.caption"
 msgid "Form1"
 msgstr ""
 
+#: tcolorselectwnd.byblock.caption
+msgid "??ByBlock"
+msgstr ""
+
+#: tcolorselectwnd.bylayer.caption
+msgid "??ByLayer"
+msgstr ""
+
 #: tcolorselectwnd.caption
 msgctxt "tcolorselectwnd.caption"
 msgid "Form1"
 msgstr ""
 
-#: tcolorselectwnd.label1.caption
-msgctxt "tcolorselectwnd.label1.caption"
-msgid "Not implement (("
-msgstr ""
-
 #: tcolorselectwnd.label2.caption
 msgctxt "tcolorselectwnd.label2.caption"
 msgid "Color number:"
+msgstr ""
+
+#: tcolorselectwnd.label3.caption
+msgctxt "tcolorselectwnd.label3.caption"
+msgid "Color number:"
+msgstr ""
+
+#: tcolorselectwnd.tabsheet1.caption
+msgid "TabSheet1"
 msgstr ""
 
 #: tform1.button1.caption
@@ -378,9 +390,17 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
+#: zcadexternal.acn_fakecopyclipbase~caption
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
+msgstr ""
+
+#: zcadexternal.acn_fakepaste~caption
+msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -597,6 +617,10 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
+#: zcadexternal.acn_processkz~caption
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_processkz~textimage
 msgctxt "zcadexternal.acn_processkz~textimage"
 msgid "Process external KZ"
@@ -631,6 +655,10 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
+
+#: zcadexternal.acn_remautocables~caption
+msgid ""
+msgstr ""
 
 #: zcadexternal.acn_remautocables~textimage
 msgid "Remove auto cables"
@@ -1043,6 +1071,8 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
+#, fuzzy
+#| msgid "Rotate"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Block params"
 msgstr "Параметры блока"
@@ -1262,6 +1292,7 @@ msgid "On/Off Additional grips"
 msgstr "Вкл./Выкл. добавочных ручек"
 
 #: zcadexternal.hint_panel~dwg_drawgrid
+msgctxt "zcadexternal.hint_panel~dwg_drawgrid"
 msgid "Show grid"
 msgstr "Показать сетку"
 
@@ -1763,6 +1794,11 @@ msgctxt "zcadexternal.tdwg~dwg_clinew"
 msgid "Current line weigwt"
 msgstr "Текущий вес линии"
 
+#: zcadexternal.tdwg~dwg_drawgrid
+msgctxt "zcadexternal.tdwg~dwg_drawgrid"
+msgid "Show grid"
+msgstr "Показать сетку"
+
 #: zcadexternal.tdwg~dwg_drawmode
 msgctxt "zcadexternal.tdwg~dwg_drawmode"
 msgid "Draw mode?"
@@ -1773,9 +1809,17 @@ msgctxt "zcadexternal.tdwg~dwg_editinsubentry"
 msgid "SubEntities edit"
 msgstr "Редактирование составных объектов"
 
+#: zcadexternal.tdwg~dwg_helpgeometrydraw
+msgid "Help geometry"
+msgstr ""
+
 #: zcadexternal.tdwg~dwg_ltscale
 msgid "Drawing line type scale"
 msgstr "Масштаб типов линий чертжа"
+
+#: zcadexternal.tdwg~dwg_origingrid
+msgid "Grid origin"
+msgstr ""
 
 #: zcadexternal.tdwg~dwg_osmode
 msgctxt "zcadexternal.tdwg~dwg_osmode"
@@ -1789,7 +1833,19 @@ msgstr "Режим полярной трассировки"
 
 #: zcadexternal.tdwg~dwg_selectedobjtoinsp
 msgctxt "zcadexternal.tdwg~dwg_selectedobjtoinsp"
-msgid "SelectedObjToInsp"
+msgid "Selected object to inspector"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_snapgrid
+msgid "Stap to grid"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_stepgrid
+msgid "Grid step"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_systmgeometrydraw
+msgid "System geometry"
 msgstr ""
 
 #: zcadexternal.telcablecomparam~pcable

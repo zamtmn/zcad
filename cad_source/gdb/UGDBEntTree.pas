@@ -64,7 +64,45 @@ const
   //_InNodeCount=10;
   _NodeDepth=16;
 function createtree(var entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
+procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInteger});
 implementation
+uses ugdbsimpledrawing,ugdbdescriptor;
+procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInteger});
+var
+   currtime:TDateTime;
+   Hour,Minute,Second,MilliSecond:word;
+   q1,q2:gdbboolean; currd:{PTDrawing}PTSimpleDrawing;
+begin
+  currd:=gdb.GetCurrentDWG;
+  if (Node.infrustum=currd.pcamera.POSCOUNT) then
+  begin
+       if node.FulDraw then
+       if (Node.FulDraw)or(Node.nul.count=0) then
+       begin
+       if assigned(node.pminusnode)then
+                                       if (node.minusdrawpos<>currd.pcamera.DRAWCOUNT)or(dc.MaxDetail) then
+                                       begin
+                                            treerender(node.pminusnode^,dc);
+                                            node.minusdrawpos:=currd.pcamera.DRAWCOUNT
+                                       end;
+       if assigned(node.pplusnode)then
+                                      if (node.plusdrawpos<>currd.pcamera.DRAWCOUNT)or(dc.MaxDetail) then
+                                      begin
+                                       treerender(node.pplusnode^,dc);
+                                           node.plusdrawpos:=currd.pcamera.DRAWCOUNT
+                                      end;
+       end;
+       //if (node.FulDraw) then
+       begin
+            if (node.FulDraw)or(dc.MaxDetail) then
+        Node.nul.DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
+        node.nuldrawpos:=currd.pcamera.DRAWCOUNT;
+       end;
+  end;
+  //Node.drawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;
+
+  //root.DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT);
+end;
 function TEntTreeNode.CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;
 begin
      ConcatBB(BoundingBox,pobj^.vp.BoundingBox);

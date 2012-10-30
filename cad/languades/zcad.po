@@ -11,19 +11,31 @@ msgctxt "ColorSelectWND.CAPTION"
 msgid "Form1"
 msgstr ""
 
+#: tcolorselectwnd.byblock.caption
+msgid "??ByBlock"
+msgstr ""
+
+#: tcolorselectwnd.bylayer.caption
+msgid "??ByLayer"
+msgstr ""
+
 #: tcolorselectwnd.caption
 msgctxt "TCOLORSELECTWND.CAPTION"
 msgid "Form1"
 msgstr ""
 
-#: tcolorselectwnd.label1.caption
-msgctxt "tcolorselectwnd.label1.caption"
-msgid "Not implement (("
-msgstr ""
-
 #: tcolorselectwnd.label2.caption
 msgctxt "TCOLORSELECTWND.LABEL2.CAPTION"
 msgid "Color number:"
+msgstr ""
+
+#: tcolorselectwnd.label3.caption
+msgctxt "TCOLORSELECTWND.LABEL3.CAPTION"
+msgid "Color number:"
+msgstr ""
+
+#: tcolorselectwnd.tabsheet1.caption
+msgid "TabSheet1"
 msgstr ""
 
 #: tform1.button1.caption

@@ -93,7 +93,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                       end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}OGLSpecFunc,log;
+uses OGLSpecFunc,log;
 {function GDBObjGenericSubEntry.SubMi;
 begin
      //pobj^.bp.PSelfInOwnerArray:=ObjArray.getelement(ObjArray.add(pobj));

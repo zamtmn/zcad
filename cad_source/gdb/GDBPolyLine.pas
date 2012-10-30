@@ -22,7 +22,7 @@ unit GDBPolyLine;
 interface
 uses UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
 gl,ugdbltypearray,
-GDBase{,UGDBDescriptor},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman{,OGLSpecFunc};
+GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman{,OGLSpecFunc};
 type
 {Export+}
 PGDBObjPolyline=^GDBObjPolyline;

@@ -492,7 +492,7 @@ begin
                          PoleLista.Height:=sListHeight
                      else
                          begin
-                              hh:=screen.Height-a.y-1;
+                              hh:=screen.WorkAreaHeight-a.y-1;
                               h:=LV.Items.Count*19+4;
                               if h>hh then h:=hh;
                               PoleLista.Height:=h;//{LV..Height*LV.Items.Count}1000;

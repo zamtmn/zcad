@@ -60,7 +60,7 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
          end;
 {EXPORT-}
 implementation
-uses {UGDBDescriptor,}log;
+uses log;
 function GDBObjWithLocalCS.IsHaveLCS:GDBBoolean;
 begin
      result:=true;

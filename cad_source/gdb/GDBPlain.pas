@@ -34,7 +34,6 @@ GDBObjPlain=object(GDBObjWithLocalCS)
 implementation
 uses
     log;
-//uses UGDBDescriptor;
 procedure GDBObjPlain.DrawGeometry;
 var
   p: GDBVertex;

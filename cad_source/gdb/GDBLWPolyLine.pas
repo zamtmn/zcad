@@ -22,7 +22,7 @@ unit GDBLWPolyLine;
 interface
 uses GDBCamera,UGDBOpenArrayOfPObjects,oglwindowdef,GDBCurve,UGDBVectorSnapArray,geometry,UGDBLayerArray,GDBEntity,memman,gdbasetypes,UGDBPoint3DArray,UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,varman,varmandef,
 gl,ugdbltypearray,
-GDBase,UGDBDescriptor,GDBWithLocalCS,gdbobjectsconstdef,math,dxflow,sysutils,UGDBLineWidthArray,OGLSpecFunc;
+GDBase,GDBWithLocalCS,gdbobjectsconstdef,math,dxflow,sysutils,UGDBLineWidthArray,OGLSpecFunc;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}
@@ -609,7 +609,7 @@ begin
       8:
         begin
           s := f.readGDBString;
-          vp.Layer := gdb.GetCurrentDWG.LayerTable.getAddres(s);
+          vp.Layer := LayerArray.getAddres(s);
         end;
       90:
         begin
@@ -827,7 +827,7 @@ begin
                     ptpv:=Vertex3D_in_WCS_Array.parray;
                     for i:=0 to Vertex3D_in_WCS_Array.count-1 do
                     begin
-                         gdb.GetCurrentDWG^.myGluProject2(ptpv^,tv);
+                         ProjectProc(ptpv^,tv);
                          tpv.x:=tv.x;
                          tpv.y:=tv.y;
                          PprojPoint^.add(@tpv);

@@ -23,7 +23,7 @@ interface
 uses GDBCamera,ugdbsimpledrawing,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray,UGDBVisibleOpenArray,gdbEntity{,varman,varmandef},
 gl,UGDBVisibleTreeArray,UGDBEntTree,
-GDBase,UGDBDescriptor,GDBWithLocalCS,gdbobjectsconstdef,oglwindowdef,geometry{,dxflow},memman{,GDBSubordinated,UGDBOpenArrayOfByte};
+GDBase,GDBWithLocalCS,gdbobjectsconstdef,oglwindowdef,geometry{,dxflow},memman{,GDBSubordinated,UGDBOpenArrayOfByte};
 type
 {EXPORT+}
 PGDBObjComplex=^GDBObjComplex;
@@ -156,44 +156,6 @@ begin
   dec(dc.subrender);
   //inherited;
 end;
-
-procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInteger});
-var
-   currtime:TDateTime;
-   Hour,Minute,Second,MilliSecond:word;
-   q1,q2:gdbboolean; currd:{PTDrawing}PTSimpleDrawing;
-begin
-  currd:=gdb.GetCurrentDWG;
-  if (Node.infrustum=currd.pcamera.POSCOUNT) then
-  begin
-       if node.FulDraw then
-       if (Node.FulDraw)or(Node.nul.count=0) then
-       begin
-       if assigned(node.pminusnode)then
-                                       if (node.minusdrawpos<>currd.pcamera.DRAWCOUNT)or(dc.MaxDetail) then
-                                       begin
-                                            treerender(node.pminusnode^,dc);
-                                            node.minusdrawpos:=currd.pcamera.DRAWCOUNT
-                                       end;
-       if assigned(node.pplusnode)then
-                                      if (node.plusdrawpos<>currd.pcamera.DRAWCOUNT)or(dc.MaxDetail) then
-                                      begin
-                                       treerender(node.pplusnode^,dc);
-                                           node.plusdrawpos:=currd.pcamera.DRAWCOUNT
-                                      end;
-       end;
-       //if (node.FulDraw) then
-       begin
-            if (node.FulDraw)or(dc.MaxDetail) then
-        Node.nul.DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
-        node.nuldrawpos:=currd.pcamera.DRAWCOUNT;
-       end;
-  end;
-  //Node.drawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;
-
-  //root.DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT);
-end;
-
 procedure GDBObjComplex.DrawGeometry;
 var
    oldlw:gdbsmallint;
@@ -305,7 +267,7 @@ procedure GDBObjComplex.renderfeedbac(infrustumactualy:TActulity;pcount:TActulit
     //i:GDBInteger;
 begin
   //if POGLWnd=nil then exit;
-  gdb.GetCurrentDWG^.myGluProject2(P_insert_in_WCS,ProjP_insert);
+  {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(P_insert_in_WCS,ProjP_insert);
   //pdx:=PProjPoint[1].x-PProjPoint[0].x;
   //pdy:=PProjPoint[1].y-PProjPoint[0].y;
      ConstObjArray.RenderFeedbac(infrustumactualy,pcount,camera,ProjectProc);

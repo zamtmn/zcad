@@ -21,7 +21,7 @@ unit GDBSolid;
 interface
 uses GDBCamera,GDBWithLocalCS,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 gl,ugdbltypearray,
-GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef{,dxflow},memman,OGLSpecFunc;
+GDBase,gdbobjectsconstdef,oglwindowdef{,dxflow},memman,OGLSpecFunc;
 type
 {Export+}
 PGDBObjSolid=^GDBObjSolid;

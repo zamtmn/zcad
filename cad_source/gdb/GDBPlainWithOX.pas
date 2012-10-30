@@ -34,7 +34,6 @@ GDBObjPlainWithOX=object(GDBObjPlain)
 implementation
 uses
     log;
-//uses UGDBDescriptor;
 procedure GDBObjPlainWithOX.CalcObjMatrix;
 var rotmatr,dispmatr:DMatrix4D;
 begin

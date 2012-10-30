@@ -22,7 +22,7 @@ unit GDBPoint;
 interface
 uses GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 gl,ugdbltypearray,
-GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef,geometry{,dxflow},memman,OGLSpecFunc;
+GDBase,gdbobjectsconstdef,oglwindowdef,geometry{,dxflow},memman,OGLSpecFunc;
 type
 {Export+}
 PGDBObjPoint=^GDBObjPoint;

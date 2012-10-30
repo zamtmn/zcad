@@ -44,7 +44,7 @@ GDBObjBlockdef=object(GDBObjGenericSubEntry)
                end;
 {Export-}
 implementation
-uses iodxf{,UGDBDescriptor},UUnitManager,shared,log,GDBEntity;
+uses iodxf,UUnitManager,shared,log,GDBEntity;
 function GDBObjBlockdef.GetType:GDBPlatformint;
 begin
      result:=1;

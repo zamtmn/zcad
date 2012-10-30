@@ -155,7 +155,7 @@ GDBObjEntity=object(GDBObjSubordinated)
 var onlygetsnapcount:GDBInteger;
     ForeGround:RGB;
 implementation
-uses {UGDBEntTree,}GDBGenericSubEntry,{UGDBDescriptor,}UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+uses {UGDBEntTree,}GDBGenericSubEntry,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
 
 procedure GDBObjEntity.CopyVPto(var toObj:GDBObjEntity);
 begin

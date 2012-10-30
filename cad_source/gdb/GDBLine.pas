@@ -144,7 +144,7 @@ begin
                  end;
     UD_LineToNet:begin
                       GDBGetMem({$IFDEF DEBUGBUILD}'{2D9DEF3C-7BC8-43F0-AA83-37B5F9517A0D}',{$ENDIF}pointer(pnet),sizeof(GDBObjNet));
-                      pnet^.initnul(gdb.GetCurrentROOT);
+                      pnet^.initnul({gdb.GetCurrentROOT}self.bp.ListPos.Owner);
                       //pleader.MainLine.CoordInOCS:=CoordInOCS;
                       pnet.vp.Layer:=vp.Layer;
                       pnet.vp.LineWeight:=vp.LineWeight;
@@ -456,7 +456,7 @@ begin
   if vp.LineType<>nil then
      if vp.LineType.h>0 then
   begin
-  templod:=(vp.LineType.h*vp.LineTypeScale*SysVar.dwg.DWG_LTScale^)/(GDB.GetCurrentDWG.pcamera.prop.zoom);
+  templod:=(vp.LineType.h*vp.LineTypeScale*SysVar.dwg.DWG_LTScale^)/({GDB.GetCurrentDWG.pcamera.prop}dc.zoom);
   if templod<3 then
      begin
   oglsm.myglbegin(GL_lines);
@@ -484,19 +484,19 @@ begin
   end;}
   if PProjPoint=nil then GDBGetMem({$IFDEF DEBUGBUILD}'{BC97B497-84C4-4E1D-9A61-26CA379F29A7}',{$ENDIF}GDBPointer(pprojpoint),sizeof(GDBLineProj));
 
-  gdb.GetCurrentDWG^.myGluProject2(CoordInWCS.lbegin,tv);
+  ProjectProc(CoordInWCS.lbegin,tv);
   pprojpoint^[0]:=pGDBvertex2D(@tv)^;
-  gdb.GetCurrentDWG^.myGluProject2(CoordInWCS.lEnd,tv);
+  ProjectProc(CoordInWCS.lEnd,tv);
   pprojpoint^[1]:=pGDBvertex2D(@tv)^;
-  gdb.GetCurrentDWG^.myGluProject2(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 4),tv);
+  ProjectProc(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 4),tv);
   pprojpoint^[2]:=pGDBvertex2D(@tv)^;
-  gdb.GetCurrentDWG^.myGluProject2(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 3),tv);
+  ProjectProc(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 3),tv);
   pprojpoint^[3]:=pGDBvertex2D(@tv)^;
-  gdb.GetCurrentDWG^.myGluProject2(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2),tv);
+  ProjectProc(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2),tv);
   pprojpoint^[4]:=pGDBvertex2D(@tv)^;
-  gdb.GetCurrentDWG^.myGluProject2(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 2 / 3),tv);
+  ProjectProc(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 2 / 3),tv);
   pprojpoint^[5]:=pGDBvertex2D(@tv)^;
-  gdb.GetCurrentDWG^.myGluProject2(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 3 / 4),tv);
+  ProjectProc(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 3 / 4),tv);
   pprojpoint^[6]:=pGDBvertex2D(@tv)^;
 
   {ptv:=@CoordInWCS.lbegin;

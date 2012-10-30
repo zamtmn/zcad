@@ -317,10 +317,11 @@ begin
 
   dw:=OPSPlaceSmokeDetectorOrtoParam.NDW/OPSPlaceSmokeDetectorOrtoParam.Scale;
   dd:=OPSPlaceSmokeDetectorOrtoParam.NDD/OPSPlaceSmokeDetectorOrtoParam.Scale;
-  if gdb.GetCurrentDWG.BlockDefArray.getindex(@sdname[1])<0 then
+  {if gdb.GetCurrentDWG.BlockDefArray.getindex(@sdname[1])<0 then
                                                          begin
-                                                              gdb.GetCurrentDWG.BlockDefArray.loadblock(pansichar(sysinfo.sysparam.programpath+'blocks\ops\'+sdname+'.dxf'),@sdname[1],gdb.GetCurrentDWG)
-                                                         end;
+                                                              sdname:=sdname;
+                                                              //gdb.GetCurrentDWG.BlockDefArray.loadblock(pansichar(sysinfo.sysparam.programpath+'blocks\ops\'+sdname+'.dxf'),@sdname[1],gdb.GetCurrentDWG)
+                                                         end;}
   result:=mclick;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
   pl := pointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));

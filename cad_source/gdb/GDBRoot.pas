@@ -21,7 +21,7 @@ unit GDBRoot;
 
 interface
 Uses
-   OGLSpecFunc, gl,UGDBEntTree,{UGDBVisibleTreeArray,UGDBOpenArrayOfPV,}
+   GDBCamera,OGLSpecFunc, gl,UGDBEntTree,{UGDBVisibleTreeArray,UGDBOpenArrayOfPV,}
 devices,gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry,uunitmanager{,shared};
 type
 {Export+}
@@ -41,8 +41,8 @@ GDBObjRoot=object(GDBObjGenericSubEntry)
 
                  function GetMatrix:PDMatrix4D;virtual;
                  procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
-                 function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
-                 function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
+                 function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
+                 function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
                  procedure calcbb;virtual;
                  function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
            end;
@@ -65,7 +65,7 @@ begin
      vp.BoundingBox.LBN:=VectorTransform3D(vp.BoundingBox.LBN,ObjMatrix);
      vp.BoundingBox.RTF:=VectorTransform3D(vp.BoundingBox.RTF,ObjMatrix);
 end;
-function GDBObjRoot.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:GDBInteger):GDBBoolean;
+function GDBObjRoot.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc):GDBBoolean;
 var
    myfrustum:ClipArray;
    m1:DMatrix4D;
@@ -79,7 +79,7 @@ begin
      PGDBVertex4D(@myfrustum[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,m1);
      PGDBVertex4D(@myfrustum[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,m1);
 
-     ProcessTree(myfrustum,infrustumactualy,visibleactualy,enttree,IRPartially,true,totalobj,infrustumobj);
+     ProcessTree(myfrustum,infrustumactualy,visibleactualy,enttree,IRPartially,true,totalobj,infrustumobj,ProjectProc);
 
      self.VisibleOBJBoundingBox:=ObjArray.calcvisbb({gdb.GetCurrentDWG.pcamera^.POSCOUNT}{visibleactualy}infrustumactualy);
 end;
@@ -100,7 +100,7 @@ begin
      PGDBVertex4D(@myfrustum[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,m1);
      PGDBVertex4D(@myfrustum[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,m1);
 
-     inherited CalcInFrustum(myfrustum,infrustumactualy,visibleactualy,totalobj,infrustumobj);
+     inherited CalcInFrustum(myfrustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc);
 end;
 procedure GDBObjRoot.DrawWithAttrib;
 begin

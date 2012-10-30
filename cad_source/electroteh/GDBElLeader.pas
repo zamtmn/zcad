@@ -28,7 +28,7 @@ GDBObjElLeader=object(GDBObjComplex)
             procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
             procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
             procedure getoutbound;virtual;
-            function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
+            function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
             function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
             function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
             procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
@@ -55,8 +55,8 @@ GDBObjElLeader=object(GDBObjComplex)
 
             procedure transform(const t_matrix:DMatrix4D);virtual;
             procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-            procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger);virtual;
-            function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger):GDBBoolean;virtual;
+            procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc);virtual;
+            function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
             end;
 {EXPORT-}
 implementation
@@ -68,9 +68,9 @@ function GDBObjElLeader.calcvisible;
 begin
       visible:=visibleactualy;
       result:=false;
-      result:=result or MainLine.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj);
-      result:=result or MarkLine.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj);
-      result:=result or Tbl.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj);
+      result:=result or MainLine.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc);
+      result:=result or MarkLine.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc);
+      result:=result or Tbl.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc);
       if result then
                            begin
                                 setinfrustum(infrustumactualy,totalobj,infrustumobj);
@@ -90,9 +90,9 @@ end;
 procedure GDBObjElLeader.SetInFrustumFromTree;
 begin
      inherited;
-            MainLine.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj);
-            MarkLine.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj);
-            Tbl.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj);
+            MainLine.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc);
+            MarkLine.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc);
+            Tbl.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc);
 end;
 procedure GDBObjElLeader.TransformAt;
 begin
@@ -570,11 +570,11 @@ function GDBObjElLeader.CalcInFrustum;
 var a:boolean;
 begin
      result:=false;
-     a:=(inherited CalcInFrustum(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj));
+     a:=(inherited CalcInFrustum(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc));
      result:=result or a;
-     a:=(MainLine.CalcInFrustum(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj));
+     a:=(MainLine.CalcInFrustum(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc));
      result:=result or a;
-     a:=(tbl.CalcInFrustum(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj));
+     a:=(tbl.CalcInFrustum(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc));
      result:=result or a;
 end;
 function GDBObjElLeader.CalcTrueInFrustum;

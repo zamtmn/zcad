@@ -233,7 +233,10 @@ begin
                        else
                            begin
                                 if PSelectedObjDesc(md).ptempobj^.IsRTNeedModify(point,p)then
-                                 PSelectedObjDesc(md).ptempobj^.rtmodifyonepoint(rtmod);
+                                begin
+                                     PSelectedObjDesc(md).ptempobj^.SetFromClone(obj);
+                                     PSelectedObjDesc(md).ptempobj^.rtmodifyonepoint(rtmod);
+                                end;
 
                            end;
           end;

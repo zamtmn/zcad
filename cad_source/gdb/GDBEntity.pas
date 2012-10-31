@@ -81,6 +81,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function CalculateLineWeight(const DC:TDrawContext):GDBInteger;//inline;
                     //function InRect:TInRect;virtual;
                     function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                    procedure SetFromClone(_clone:PGDBObjEntity);virtual;
                     function CalcOwner(own:GDBPointer):GDBPointer;virtual;
                     procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                     procedure rtsave(refp:GDBPointer);virtual;
@@ -808,7 +809,9 @@ end;
 begin
      result:=IREmpty;
 end;}
-
+procedure GDBObjEntity.SetFromClone(_clone:PGDBObjEntity);
+begin
+end;
 function GDBObjEntity.Clone;
 //var tvo: PGDBObjEntity;
 begin

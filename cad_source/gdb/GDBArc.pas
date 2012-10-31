@@ -56,6 +56,7 @@ GDBObjArc=object(GDBObjPlain)
                  function beforertmodify:GDBPointer;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
+                 procedure SetFromClone(_clone:PGDBObjEntity);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:GDBPointer);virtual;
                  destructor done;virtual;
@@ -547,11 +548,19 @@ function GDBObjARC.IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):B
 begin
      result:=true;
 end;
+procedure GDBObjARC.SetFromClone(_clone:PGDBObjEntity);
+begin
+     q0:=PGDBObjARC(_clone)^.q0;
+     q1:=PGDBObjARC(_clone)^.q1;
+     q2:=PGDBObjARC(_clone)^.q2;
+end;
+
 procedure GDBObjARC.rtmodifyonepoint(const rtmod:TRTModifyData);
 var a,b,c,d,e,f,g,p_x,p_y,rr:GDBDouble;
     tv:gdbvertex2d;
     ptdata:tarcrtmodify;
 begin
+     //rtmod.point.pobject:=;
      ptdata.p1.x:=q0.x;
      ptdata.p1.y:=q0.y;
      ptdata.p2.x:=q1.x;

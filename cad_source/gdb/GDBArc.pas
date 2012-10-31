@@ -65,10 +65,53 @@ GDBObjArc=object(GDBObjPlain)
                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                  procedure ReCalcFromObjMatrix;virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
+                 //function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
+                 procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
+                 function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
            end;
 {EXPORT-}
 implementation
 uses log;
+{function GDBObjARC.GetTangentInPoint(point:GDBVertex):GDBVertex;
+var
+   m1:DMatrix4D;
+   td,td2,td3,slbegin,slend,t1,t2,llbegin_x2,llbegin_y2,llend_x2,llend_y2:double;
+   llbegin,llend:gdbvertex;
+begin
+     m1:=GetMatrix^;
+     MatrixInvert(m1);
+     result:=VectorTransform3D(point,m1);
+     result:=normalizevertex(result);
+end;}
+function GDBObjARC.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
+begin
+     if Vertex3D_in_WCS_Array.onpoint(point,false) then
+                                                                                  begin
+                                                                                    result:=true;
+                                                                                    objects.AddRef(self);
+                                                                                  end
+                                                                                else
+                                                                                    result:=false;
+end;
+
+procedure GDBObjARC.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
+var
+   m1:DMatrix4D;
+   td,td2,td3,slbegin,slend,t1,t2,llbegin_x2,llbegin_y2,llend_x2,llend_y2:double;
+   dir,tv:gdbvertex;
+begin
+     m1:=GetMatrix^;
+     MatrixInvert(m1);
+     dir:=VectorTransform3D(posr.worldcoord,m1);
+
+     processaxis(posr,dir);
+     //posr.arrayworldaxis.Add(@dir);
+     tv:=geometry.vectordot(dir,zwcs);
+     processaxis(posr,tv);
+     //posr.arrayworldaxis.Add(@tv);
+
+end;
+
 procedure GDBObjARC.transform;
 var tv,tv2:GDBVertex;
     a:gdbdouble;

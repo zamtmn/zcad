@@ -4011,6 +4011,8 @@ begin
        if pt<>nil then
        begin
        repeat
+            if pt^.trace then
+            begin
             pobj:=PDWG.GetOnMouseObj.beginiterate(ir);
             if pobj<>nil then
             repeat
@@ -4021,7 +4023,7 @@ begin
                    PDWG.myGluProject2(ip.interceptcoord,temp);
                   currentontracdist:=vertexlen2df(temp.x, temp.y,param.md.glmouse.x,param.md.glmouse.y);
                   if currentontracdist<lastontracdist then
-                  if currentontracdist<sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1 then
+                  //if currentontracdist<sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1 then
                   begin
                   param.ospoint.worldcoord := ip.interceptcoord;
                   param.ospoint.dispcoord := temp;
@@ -4034,6 +4036,7 @@ begin
 
                   pobj:=PDWG.GetOnMouseObj.iterate(ir);
             until pobj=nil;
+            end;
             pt:=param.ontrackarray.otrackarray[i].arraydispaxis.iterate(ir2);
       until pt=nil;
        end;

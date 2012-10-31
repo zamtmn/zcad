@@ -111,7 +111,7 @@ end;
 function GDBObjCircle.IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;
 var
    m1:DMatrix4D;
-   td,slbegin,slend:double;
+   td,td2,td3,slbegin,slend,t1,t2,llbegin_x2,llbegin_y2,llend_x2,llend_y2:double;
    llbegin,llend:gdbvertex;
 begin
      m1:=GetMatrix^;
@@ -121,7 +121,38 @@ begin
      if (abs(lbegin.z)<eps)and(abs(lend.z)<eps)
         then
             begin
-                 td:=distance2piece(NulVertex,llbegin,llend);
+                 slbegin:=SqrOneVertexlength(llbegin);
+                 slend:=SqrOneVertexlength(llend);
+
+                 llbegin_x2:=llbegin.x*llbegin.x;
+                 llbegin_y2:=llbegin.y*llbegin.y;
+                 llend_x2:=llend.x*llend.x;
+                 llend_y2:=llend.y*llend.y;
+                 td3:=llbegin_x2+llbegin_y2-2*llbegin.x*llend.x+llend_x2-2*llbegin.y*llend.y+llend_y2;
+                 if abs(td3)>eps then
+                 begin
+                 td:=llbegin_x2+llbegin_y2-llbegin.x*llend.x-llbegin.y*llend.y;
+                 td2:=(llbegin_x2+llbegin_y2-2*llbegin.x*llend.x+llend_x2-llbegin_y2*llend_x2-2*llbegin.y*llend.y+2*llbegin.x*llbegin.y*llend.x*llend.y+llend_y2-llbegin_x2*llend_y2);
+                 td2:=sqrt(td2);
+                 t1:=(td+td2)/td3;
+                 t2:=(td-td2)/td3;
+                 result.isintercept:=true;
+                 if abs(1-abs(t1))<abs(1-abs(t2)) then
+                 begin
+                 result.t1:=t1;
+                 result.interceptcoord:=Vertexmorph(lbegin,lend,result.t1);
+                 end
+                 else
+                 begin
+                 result.t1:=t2;
+                 result.interceptcoord:=Vertexmorph(lbegin,lend,result.t1);
+                 end
+
+                 end
+                    else
+                        result.isintercept:=false;
+
+                 {td:=distance2piece(NulVertex,llbegin,llend);
                  if td<=1 then
                               begin
                                    td:=Vertexlength(llbegin,llend);
@@ -146,7 +177,7 @@ begin
 
                               end
                           else
-                              result.isintercept:=false;
+                              result.isintercept:=false;}
             end
         else
             result.isintercept:=false;

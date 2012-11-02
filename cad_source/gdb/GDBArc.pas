@@ -517,20 +517,20 @@ begin
 
           pdesc.pointtype:=os_begin;
           pdesc.worldcoord:=q0;
-          pdesc.dispcoord.x:=round(Pq0.x);
-          pdesc.dispcoord.y:=round(Pq0.y);
+          {pdesc.dispcoord.x:=round(Pq0.x);
+          pdesc.dispcoord.y:=round(Pq0.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_midle;
           pdesc.worldcoord:=q1;
-          pdesc.dispcoord.x:=round(Pq1.x);
-          pdesc.dispcoord.y:=round(Pq1.y);
+          {pdesc.dispcoord.x:=round(Pq1.x);
+          pdesc.dispcoord.y:=round(Pq1.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_end;
           pdesc.worldcoord:=q1;
-          pdesc.dispcoord.x:=round(Pq2.x);
-          pdesc.dispcoord.y:=round(Pq2.y);
+          {pdesc.dispcoord.x:=round(Pq2.x);
+          pdesc.dispcoord.y:=round(Pq2.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 end;
 function GDBObjARC.getsnap;
@@ -601,9 +601,16 @@ end;
 procedure GDBObjARC.rtmodifyonepoint(const rtmod:TRTModifyData);
 var a,b,c,d,e,f,g,p_x,p_y,rr:GDBDouble;
     tv:gdbvertex2d;
+    tv3d:gdbvertex;
     ptdata:tarcrtmodify;
+    m1:DMatrix4D;
 begin
      //rtmod.point.pobject:=;
+     tv3d:=VertexAdd(rtmod.point.worldcoord,rtmod.dist);
+     //m1:=GetMatrix^;
+     //MatrixInvert(m1);
+     //tv3d:=VectorTransform3D(tv3d,m1);
+
      ptdata.p1.x:=q0.x;
      ptdata.p1.y:=q0.y;
      ptdata.p2.x:=q1.x;
@@ -613,16 +620,16 @@ begin
 
           case rtmod.point.pointtype of
                os_begin:begin
-                             ptdata.p1.x:=q0.x+rtmod.dist.x;
-                             ptdata.p1.y:=q0.y+rtmod.dist.y;
+                             ptdata.p1.x:={q0.x+rtmod.dist}tv3d.x;
+                             ptdata.p1.y:={q0.y+rtmod.dist}tv3d.y;
                         end;
                os_midle:begin
-                             ptdata.p2.x:=q1.x+rtmod.dist.x;
-                             ptdata.p2.y:=q1.y+rtmod.dist.y;
+                             ptdata.p2.x:={q1.x+rtmod.dist}tv3d.x;
+                             ptdata.p2.y:={q1.y+rtmod.dist}tv3d.y;
                       end;
                os_end:begin
-                             ptdata.p3.x:=q2.x+rtmod.dist.x;
-                             ptdata.p3.y:=q2.y+rtmod.dist.y;
+                             ptdata.p3.x:={q2.x+rtmod.dist}tv3d.x;
+                             ptdata.p3.y:={q2.y+rtmod.dist}tv3d.y;
                         end;
           end;
         A:= ptdata.p2.x - ptdata.p1.x;

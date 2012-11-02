@@ -145,8 +145,8 @@ begin
           pdesc.pointtype:=os_point;
           pdesc.pobject:=nil;
           pdesc.worldcoord:=self.P_insert_in_WCS;// Local.P_insert;
-          pdesc.dispcoord.x:=round(ProjP_insert.x);
-          pdesc.dispcoord.y:=round(ProjP_insert.y);
+          {pdesc.dispcoord.x:=round(ProjP_insert.x);
+          pdesc.dispcoord.y:=round(ProjP_insert.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 end;
 procedure GDBObjComplex.DrawOnlyGeometry;

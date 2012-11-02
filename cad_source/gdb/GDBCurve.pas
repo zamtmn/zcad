@@ -575,21 +575,21 @@ var pdesc:controlpointdesc;
     pv:pGDBvertex;
 begin
           //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{48F91543-AAA8-4CF7-A038-D3DDC248BE3E}',{$ENDIF}pprojpoint.count);
-          pv2d:=pprojpoint^.parray;
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{48F91543-AAA8-4CF7-A038-D3DDC248BE3E}',{$ENDIF}{pprojpoint}VertexArrayInWCS.count);
+          {pv2d:=pprojpoint^.parray;}
           pv:=VertexArrayInWCS.parray;
           pdesc.selected:=false;
           pdesc.pobject:=nil;
 
-          for i:=0 to pprojpoint.count-1 do
+          for i:=0 to {pprojpoint}VertexArrayInWCS.count-1 do
           begin
                pdesc.pointtype:=os_polymin-i;
                pdesc.worldcoord:=pv^;
-               pdesc.dispcoord.x:=round(pv2d^.x);
-               pdesc.dispcoord.y:=round({GDB.GetCurrentDWG.OGLwindow1.height-}pv2d.y);
+               (*pdesc.dispcoord.x:=round(pv2d^.x);
+               pdesc.dispcoord.y:=round({GDB.GetCurrentDWG.OGLwindow1.height-}pv2d.y);*)
                PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
                inc(pv);
-               inc(pv2d);
+               {inc(pv2d);}
           end;
 end;
 (*

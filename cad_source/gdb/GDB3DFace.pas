@@ -316,8 +316,8 @@ begin
           pdesc.selected:=false;
           pdesc.pointtype:=os_polymin-i;
           pdesc.worldcoord:=PInWCS[i];
-          pdesc.dispcoord.x:=round(PInDCS[i].x);
-          pdesc.dispcoord.y:=round(PInDCS[i].y);
+          {pdesc.dispcoord.x:=round(PInDCS[i].x);
+          pdesc.dispcoord.y:=round(PInDCS[i].y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
           end;
 end;

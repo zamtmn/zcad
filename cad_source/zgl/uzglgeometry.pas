@@ -232,9 +232,9 @@ SHX.init(100);
 end;
 destructor ZGLGeometry.done;
 begin
-Lines.init(100);
-Points.init(100);
-SHX.init(100);
+Lines.done;
+Points.done;
+SHX.done;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBPoint3DArray.initialization');{$ENDIF}

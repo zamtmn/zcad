@@ -525,20 +525,20 @@ begin
 
           pdesc.pointtype:=os_begin;
           pdesc.worldcoord:=q0;
-          pdesc.dispcoord.x:=round(Pq0.x);
-          pdesc.dispcoord.y:=round(Pq0.y);
+          {pdesc.dispcoord.x:=round(Pq0.x);
+          pdesc.dispcoord.y:=round(Pq0.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_midle;
           pdesc.worldcoord:=q1;
-          pdesc.dispcoord.x:=round(Pq1.x);
-          pdesc.dispcoord.y:=round(Pq1.y);
+          {pdesc.dispcoord.x:=round(Pq1.x);
+          pdesc.dispcoord.y:=round(Pq1.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_end;
           pdesc.worldcoord:=q1;
-          pdesc.dispcoord.x:=round(Pq2.x);
-          pdesc.dispcoord.y:=round(Pq2.y);
+          {pdesc.dispcoord.x:=round(Pq2.x);
+          pdesc.dispcoord.y:=round(Pq2.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 end;
 function GDBObjEllipse.getsnap;

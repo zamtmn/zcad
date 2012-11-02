@@ -129,8 +129,8 @@ begin
                pdesc.pobject:=pv;
                pdesc.dcoord:=vertexsub(PGDBObjDevice(pv).P_insert_in_WCS,P_insert_in_WCS);
                pdesc.worldcoord:=PGDBObjDevice(pv).P_insert_in_WCS;
-               pdesc.dispcoord.x:=round(PGDBObjDevice(pv).ProjP_insert.x);
-               pdesc.dispcoord.y:=round(PGDBObjDevice(pv).ProjP_insert.y);
+               {pdesc.dispcoord.x:=round(PGDBObjDevice(pv).ProjP_insert.x);
+               pdesc.dispcoord.y:=round(PGDBObjDevice(pv).ProjP_insert.y);}
                PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
                end;
               pv:=VarObjArray.iterate(ir);

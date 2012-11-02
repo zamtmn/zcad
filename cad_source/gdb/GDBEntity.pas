@@ -915,7 +915,8 @@ procedure GDBObjEntity.remapcontrolpoints;
 var pdesc:pcontrolpointdesc;
     i:GDBInteger;
 begin
-          if ScrollMode then renderfeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount,camera,ProjectProc);
+          { TODO : В примитивах нахуй ненужна проекция точек, убрать это хозяйство }
+          {if ScrollMode then }renderfeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount,camera,ProjectProc);
           if pp.count<>0 then
           begin
                pdesc:=pp^.parray;

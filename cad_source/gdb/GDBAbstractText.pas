@@ -311,8 +311,8 @@ begin
           pdesc.pobject:=nil;
           pdesc.pointtype:=os_point;
           pdesc.worldcoord:=P_insert_in_WCS;//Local.P_insert;
-          pdesc.dispcoord.x:=round(ProjP_insert.x);
-          pdesc.dispcoord.y:=round(ProjP_insert.y);
+          {pdesc.dispcoord.x:=round(ProjP_insert.x);
+          pdesc.dispcoord.y:=round(ProjP_insert.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 end;
 (*function GDBObjAbstractText.InRect;

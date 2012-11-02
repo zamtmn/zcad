@@ -668,32 +668,32 @@ begin
           pdesc.pobject:=nil;
           pdesc.pointtype:=os_center;
           pdesc.worldcoord:=Local.p_insert;
-          pdesc.dispcoord.x:=round(ProjP_insert.x);
-          pdesc.dispcoord.y:=round(ProjP_insert.y);
+          {pdesc.dispcoord.x:=round(ProjP_insert.x);
+          pdesc.dispcoord.y:=round(ProjP_insert.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_q0;
           pdesc.worldcoord:=q0;
-          pdesc.dispcoord.x:=round(Pq0.x);
-          pdesc.dispcoord.y:=round(Pq0.y);
+          {pdesc.dispcoord.x:=round(Pq0.x);
+          pdesc.dispcoord.y:=round(Pq0.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_q1;
           pdesc.worldcoord:=q1;
-          pdesc.dispcoord.x:=round(Pq1.x);
-          pdesc.dispcoord.y:=round(Pq1.y);
+          {pdesc.dispcoord.x:=round(Pq1.x);
+          pdesc.dispcoord.y:=round(Pq1.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_q2;
           pdesc.worldcoord:=q2;
-          pdesc.dispcoord.x:=round(Pq2.x);
-          pdesc.dispcoord.y:=round(Pq2.y);
+          {pdesc.dispcoord.x:=round(Pq2.x);
+          pdesc.dispcoord.y:=round(Pq2.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_q3;
           pdesc.worldcoord:=q3;
-          pdesc.dispcoord.x:=round(Pq3.x);
-          pdesc.dispcoord.y:=round(Pq3.y);
+          {pdesc.dispcoord.x:=round(Pq3.x);
+          pdesc.dispcoord.y:=round(Pq3.y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 end;
 function GDBObjCircle.beforertmodify;

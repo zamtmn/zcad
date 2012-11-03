@@ -18,7 +18,7 @@
 unit GDBArc;
 {$INCLUDE def.inc}
 interface
-uses GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses GDBWithLocalCS,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
 gl,ugdbltypearray,
 GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain{,OGLSpecFunc};
 type
@@ -68,6 +68,7 @@ GDBObjArc=object(GDBObjPlain)
                  //function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
+                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
            end;
 {EXPORT-}
 implementation
@@ -83,6 +84,21 @@ begin
      result:=VectorTransform3D(point,m1);
      result:=normalizevertex(result);
 end;}
+procedure GDBObjARC.TransformAt;
+var
+    tv:GDBVertex4D;
+begin
+    objmatrix:=geometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
+
+    tv:=PGDBVertex4D(@t_matrix[3])^;
+    PGDBVertex4D(@t_matrix[3])^:=NulVertex4D;
+    //MajorAxis:=VectorTransform3D(PGDBObjEllipse(p)^.MajorAxis,t_matrix^);
+    PGDBVertex4D(@t_matrix[3])^:=tv;
+
+     {Local.oz:=PGDBVertex(@objmatrix[2])^;
+
+     Local.p_insert:=PGDBVertex(@objmatrix[3])^;}ReCalcFromObjMatrix;
+end;
 function GDBObjARC.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 begin
      if Vertex3D_in_WCS_Array.onpoint(point,false) then
@@ -113,7 +129,7 @@ begin
 end;
 
 procedure GDBObjARC.transform;
-var tv,tv2:GDBVertex;
+var tv,tv2:GDBVertex4D;
     a:gdbdouble;
 begin
 
@@ -134,7 +150,15 @@ begin
   endangle:=endangle+arccos(scalardot(PGDBVertex(@t_matrix[0])^,XWCS)/(geometry.oneVertexlength(PGDBVertex(@t_matrix[0])^)));}
 
 
+  {inherited;}
   inherited;
+
+  tv2:=PGDBVertex4D(@t_matrix[3])^;
+  PGDBVertex4D(@t_matrix[3])^:=NulVertex4D;
+  //MajorAxis:=VectorTransform3D(MajorAxis,t_matrix);
+  PGDBVertex4D(@t_matrix[3])^:=tv2;
+
+  ReCalcFromObjMatrix;
 
 
 end;
@@ -273,49 +297,104 @@ begin
   createpoint;
 end;
 procedure GDBObjARC.getoutbound;
-var //tv,tv2:GDBVertex;
-    t,b,l,rr,n,f:GDBDouble;
-    i:integer;
+function getQuadrant(a:GDBDouble):integer;
+{
+2|1
+---
+3|4
+}
 begin
-  outbound[0]:=VectorTransform3d(CreateVertex(-1,1,0),objMatrix);
-  outbound[1]:=VectorTransform3d(CreateVertex(1,1,0),objMatrix);
-  outbound[2]:=VectorTransform3d(CreateVertex(1,-1,0),objMatrix);
-  outbound[3]:=VectorTransform3d(CreateVertex(-1,-1,0),objMatrix);
+      if a<pi/2 then
+                    result:=0
+    else
+      if a<pi then
+                    result:=1
+    else
+      if a<3*pi/2 then
+                    result:=2
+    else
+                    result:=3
+end;
+function AxisIntersect(q1,q2:integer):integer;
+{
+  2
+ 2|1
+4---1
+ 3|4
+  8
+}
+begin
+     result:=0;
+     while q1<>q2 do
+     begin
+          inc(q1);
+          //if q1=4 then q1:=0;
+          q1:=q1 and 3;
+          result:=result or (1 shl q1);
+     end;
+end;
+var
+    sx,sy,ex,ey,minx,miny,maxx,maxy:GDBDouble;
+    i,sq,eq,q:integer;
+begin
+  vp.BoundingBox:=CreateBBFrom2Point(q0,q2);
+  //concatBBandPoint(vp.BoundingBox,q1);
+         sq:=getQuadrant(self.StartAngle);
+         eq:=getQuadrant(self.EndAngle);
+         q:=AxisIntersect(sq,eq);
+         if (self.StartAngle>self.EndAngle)and(q=0) then
+                                              q:=q xor 15;
+         sx:=cos(self.StartAngle);
+         sy:=sin(self.StartAngle);
+         ex:=cos(self.EndAngle);
+         ey:=sin(self.EndAngle);
+         if sx>ex then
+                      begin
+                           minx:=ex;
+                           maxx:=sx
+                      end
+                  else
+                      begin
+                           minx:=sx;
+                           maxx:=ex
+                      end;
+         if sy>ey then
+                      begin
+                           miny:=ey;
+                           maxy:=sy
+                      end
+                  else
+                      begin
+                           miny:=sy;
+                           maxy:=ey
+                      end;
+  if (q and 1)>0 then
+                     begin
+                     concatBBandPoint(vp.BoundingBox,vertexadd(P_insert_in_WCS,VertexMulOnSc(local.Basis.ox,r)));
+                     maxx:=1;
+                     end;
+  if (q and 4)>0 then
+                     begin
+                     concatBBandPoint(vp.BoundingBox,vertexadd(P_insert_in_WCS,VertexMulOnSc(local.Basis.ox,-r)));
+                     minx:=-1;
+                     end;
+  if (q and 2)>0 then
+                     begin
+                     concatBBandPoint(vp.BoundingBox,vertexadd(P_insert_in_WCS,VertexMulOnSc(local.Basis.oy,r)));
+                     maxy:=1;
+                     end;
+  if (q and 8)>0 then
+                     begin
+                     concatBBandPoint(vp.BoundingBox,vertexadd(P_insert_in_WCS,VertexMulOnSc(local.Basis.oy,-r)));
+                     miny:=-1;
+                     end;
 
-  {outbound[0]:=VectorTransform3d(CreateVertex(cos(startangle),sin(startangle),0),objMatrix);
-  outbound[1]:=VectorTransform3d(CreateVertex(cos(endangle),sin(endangle),0),objMatrix);
-  tv:=vertexsub(pgdbvertex(@outbound[1])^,pgdbvertex(@outbound[0])^);
-  t:=tv.x;
-  tv.x:=tv.y;
-  tv.y:=t;
-  outbound[2]:=vertexadd(outbound[1],tv);
-  outbound[3]:=vertexadd(outbound[0],tv);}
+         outbound[0]:=VectorTransform3d(CreateVertex(minx,maxy,0),objMatrix);
+         outbound[1]:=VectorTransform3d(CreateVertex(maxx,maxy,0),objMatrix);
+         outbound[2]:=VectorTransform3d(CreateVertex(maxx,miny,0),objMatrix);
+         outbound[3]:=VectorTransform3d(CreateVertex(minx,miny,0),objMatrix);
 
 
-  l:=outbound[0].x;
-  rr:=outbound[0].x;
-  t:=outbound[0].y;
-  b:=outbound[0].y;
-  n:=outbound[0].z;
-  f:=outbound[0].z;
-  for i:=1 to 3 do
-  begin
-  if outbound[i].x<l then
-                         l:=outbound[i].x;
-  if outbound[i].x>rr then
-                         rr:=outbound[i].x;
-  if outbound[i].y<b then
-                         b:=outbound[i].y;
-  if outbound[i].y>t then
-                         t:=outbound[i].y;
-  if outbound[i].z<n then
-                         n:=outbound[i].z;
-  if outbound[i].z>f then
-                         f:=outbound[i].z;
-  end;
-
-  vp.BoundingBox.LBN:=CreateVertex(l,B,n);
-  vp.BoundingBox.RTF:=CreateVertex(rr,T,f);
   if PProjoutbound=nil then
   begin
        GDBGetMem({$IFDEF DEBUGBUILD}'{B9B13A5B-467C-4E8A-B4BD-6F54713EBC0D}',{$ENDIF}GDBPointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));

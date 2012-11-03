@@ -19,7 +19,7 @@
 unit UObjectDescriptor;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfObjects,log,ugdbopenarray,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
+uses zcadsysvars,UGDBOpenArrayOfObjects,log,ugdbopenarray,URecordDescriptor,UGDBOpenArrayOfByte,sysutils,
      UBaseTypeDescriptor,gdbobjectsconstdef,UGDBOpenArrayOfTObjLinkRecord,TypeDescriptors,
      UGDBOpenArrayOfPointer,UGDBOpenArrayOfData,gdbasetypes,varmandef,gdbase{,UGDBStringArray},memman,strproc;
 type
@@ -582,7 +582,6 @@ begin
            pp:=Properties.iterate(ir);
      until pp=nil;
 
-
      if bmode<>property_build then exit;
 
      //-------------------------ownerattrib:=ownerattrib or FA_READONLY;
@@ -658,6 +657,9 @@ begin
         end;
         if LincedObjects then
         begin
+             if assigned(sysvar.MISC.ShowHiddenFieldInObjInsp) then
+             if not sysvar.MISC.ShowHiddenFieldInObjInsp^ then
+                                                                exit;
              p:=PGDBOpenArray(baddr)^.beginiterate(ir);
              pcol:=colarray.beginiterate(ir2);
              if p<>nil then

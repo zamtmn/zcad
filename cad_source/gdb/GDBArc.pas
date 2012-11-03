@@ -370,22 +370,26 @@ begin
                       end;
   if (q and 1)>0 then
                      begin
-                     concatBBandPoint(vp.BoundingBox,vertexadd(P_insert_in_WCS,VertexMulOnSc(local.Basis.ox,r)));
+                     concatBBandPoint(vp.BoundingBox,VectorTransform3d(CreateVertex(1,0,0),objMatrix));
+                     //concatBBandPoint(vp.BoundingBox,vertexadd(P_insert_in_WCS,VertexMulOnSc(local.Basis.ox,r)));
                      maxx:=1;
                      end;
   if (q and 4)>0 then
                      begin
-                     concatBBandPoint(vp.BoundingBox,vertexadd(P_insert_in_WCS,VertexMulOnSc(local.Basis.ox,-r)));
+                     concatBBandPoint(vp.BoundingBox,VectorTransform3d(CreateVertex(-1,0,0),objMatrix));
+                     //concatBBandPoint(vp.BoundingBox,vertexadd(P_insert_in_WCS,VertexMulOnSc(local.Basis.ox,-r)));
                      minx:=-1;
                      end;
   if (q and 2)>0 then
                      begin
-                     concatBBandPoint(vp.BoundingBox,vertexadd(P_insert_in_WCS,VertexMulOnSc(local.Basis.oy,r)));
+                     concatBBandPoint(vp.BoundingBox,VectorTransform3d(CreateVertex(0,1,0),objMatrix));
+                     //concatBBandPoint(vp.BoundingBox,vertexadd(P_insert_in_WCS,VertexMulOnSc(local.Basis.oy,r)));
                      maxy:=1;
                      end;
   if (q and 8)>0 then
                      begin
-                     concatBBandPoint(vp.BoundingBox,vertexadd(P_insert_in_WCS,VertexMulOnSc(local.Basis.oy,-r)));
+                     concatBBandPoint(vp.BoundingBox,VectorTransform3d(CreateVertex(0,-1,0),objMatrix));
+                     //concatBBandPoint(vp.BoundingBox,vertexadd(P_insert_in_WCS,VertexMulOnSc(local.Basis.oy,-r)));
                      miny:=-1;
                      end;
 

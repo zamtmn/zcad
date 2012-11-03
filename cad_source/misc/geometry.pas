@@ -130,7 +130,9 @@ function CreateReflectionMatrix(plane:DVector4D): DMatrix4D;
 function CreateVertex(const x,y,z:GDBDouble):GDBVertex;inline;
 function CreateVertex2D(const x,y:GDBDouble):GDBVertex2D;inline;
 function IsPointInBB(const point:GDBvertex; var fistbb:GDBBoundingBbox):GDBBoolean;inline;
+function CreateBBFrom2Point(const p1,p2:GDBvertex):GDBBoundingBbox;
 procedure ConcatBB(var fistbb:GDBBoundingBbox;const secbb:GDBBoundingBbox);inline;
+procedure concatBBandPoint(var fistbb:GDBBoundingBbox;const point:GDBvertex);inline;
 function IsBBNul(const bb:GDBBoundingBbox):boolean;inline;
 function boundingintersect(const bb1,bb2:GDBBoundingBbox):GDBBoolean;inline;
 procedure MatrixInvert(var M: DMatrix4D);inline;
@@ -155,8 +157,6 @@ function PointOf3PlaneIntersect(const P1,P2,P3:DVector4D):GDBVertex;inline;
 function PointOfLinePlaneIntersect(const p1,d:GDBVertex;const plane:DVector4D;out point :GDBVertex):GDBBoolean;{inline;}
 function PlaneFrom3Pont(const P1,P2,P3:GDBVertex):DVector4D;inline;
 procedure NormalizePlane(var plane:DVector4D);{inline;}
-
-procedure concatBBandPoint(var fistbb:GDBBoundingBbox;const point:GDBvertex);inline;
 
 function CalcTrueInFrustum (const lbegin,lend:GDBvertex; const frustum:ClipArray):TINRect;inline;
 function CalcPointTrueInFrustum (const lbegin:GDBvertex; const frustum:ClipArray):TInRect;
@@ -1664,6 +1664,43 @@ begin
   if fistbb.RTF.y<point.y then fistbb.RTF.y:=point.y;
   if fistbb.RTF.z<point.z then fistbb.RTF.z:=point.z;
 
+end;
+function CreateBBFrom2Point(const p1,p2:GDBvertex):GDBBoundingBbox;
+var
+    t,b,l,r,n,f:GDBDouble;
+begin
+  if p1.x<p2.x then
+                                               begin
+                                                    l:=p1.x;
+                                                    r:=p2.x;
+                                               end
+                                           else
+                                               begin
+                                                    l:=p2.x;
+                                                    r:=p1.x;
+                                               end;
+  if p1.y<p2.y then
+                                               begin
+                                                    b:=p1.y;
+                                                    t:=p2.y;
+                                               end
+                                           else
+                                               begin
+                                                    b:=p2.y;
+                                                    t:=p1.y;
+                                               end;
+  if p1.z<p2.z then
+                                               begin
+                                                    n:=p1.z;
+                                                    f:=p2.z;
+                                               end
+                                           else
+                                               begin
+                                                    n:=p2.z;
+                                                    f:=p1.z;
+                                               end;
+  result.LBN:=CreateVertex(l,B,n);
+  result.RTF:=CreateVertex(r,T,f);
 end;
 procedure ConcatBB(var fistbb:GDBBoundingBbox;const secbb:GDBBoundingBbox);
 begin

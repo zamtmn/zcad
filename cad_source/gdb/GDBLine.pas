@@ -181,38 +181,7 @@ procedure GDBObjLine.getoutbound;
 var //tv,tv2:GDBVertex4D;
     t,b,l,r,n,f:GDBDouble;
 begin
-  if CoordInWCS.lbegin.x<CoordInWCS.lend.x then
-                                               begin
-                                                    l:=CoordInWCS.lbegin.x;
-                                                    r:=CoordInWCS.lend.x;
-                                               end
-                                           else
-                                               begin
-                                                    l:=CoordInWCS.lend.x;
-                                                    r:=CoordInWCS.lbegin.x;
-                                               end;
-  if CoordInWCS.lbegin.y<CoordInWCS.lend.y then
-                                               begin
-                                                    b:=CoordInWCS.lbegin.y;
-                                                    t:=CoordInWCS.lend.y;
-                                               end
-                                           else
-                                               begin
-                                                    b:=CoordInWCS.lend.y;
-                                                    t:=CoordInWCS.lbegin.y;
-                                               end;
-  if CoordInWCS.lbegin.z<CoordInWCS.lend.z then
-                                               begin
-                                                    n:=CoordInWCS.lbegin.z;
-                                                    f:=CoordInWCS.lend.z;
-                                               end
-                                           else
-                                               begin
-                                                    n:=CoordInWCS.lend.z;
-                                                    f:=CoordInWCS.lbegin.z;
-                                               end;
-  vp.BoundingBox.LBN:=CreateVertex(l,B,n);
-  vp.BoundingBox.RTF:=CreateVertex(r,T,f);
+     vp.BoundingBox:=CreateBBFrom2Point(CoordInWCS.lBegin,CoordInWCS.lEnd);
 end;
 function GDBObjLine.GetCenterPoint;
 begin

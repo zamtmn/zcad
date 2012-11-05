@@ -30,6 +30,8 @@ var
 
 implementation
 
+{$R *.lfm}
+
 { Tsltexteditor1 }
 
 procedure Tsltexteditor1.shoftedform(Sender: TObject);
@@ -47,9 +49,5 @@ begin
                           end;
 end;
 
-initialization
-  {I sltexteditor.lrs}
-  {$R *.lfm}
-
 end.
-
+

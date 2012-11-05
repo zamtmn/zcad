@@ -265,7 +265,8 @@ begin
 end;
 
 initialization
-  {$I colorwnd.lrs}
+  {I colorwnd.lrs}
+  {$R *.lfm}
 
 end.
 

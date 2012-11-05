@@ -495,7 +495,8 @@ begin
 end;
 
 initialization
-  {$I layerwnd.lrs}
+  {I layerwnd.lrs}
+  {$R *.lfm}
 
 end.
 

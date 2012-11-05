@@ -173,7 +173,8 @@ begin
 end;
 
 initialization
-  {$I lineweightwnd.lrs}
+  {I lineweightwnd.lrs}
+  {$R *.lfm}
 
 end.
 

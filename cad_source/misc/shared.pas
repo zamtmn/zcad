@@ -141,7 +141,7 @@ begin
      s:=(s);
      if  assigned(CursorOn) then
                                 CursorOn;
-     Application.MessageBox(@s[1],0,MB_OK);
+     Application.MessageBox(@s[1],'',MB_OK);
      if  assigned(CursorOff) then
                                 CursorOff;
 
@@ -167,7 +167,7 @@ begin
      ts:=(errstr);
      if  assigned(CursorOn) then
                                 CursorOn;
-     Application.MessageBox(@ts[1],0,MB_ICONERROR);
+     Application.MessageBox(@ts[1],'',MB_ICONERROR);
      if  assigned(CursorOff) then
                                 CursorOff;
 end;

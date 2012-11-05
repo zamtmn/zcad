@@ -12,6 +12,7 @@
       <MainUnit Value="0"/>
       <Title Value="zcad"/>
       <UseAppBundle Value="False"/>
+      <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
       <Icon Value="0"/>
     </General>
@@ -24,7 +25,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="9"/>
       <RevisionNr Value="7"/>
-      <BuildNr Value="1906"/>
+      <BuildNr Value="1908"/>
       <CharSet Value="0000"/>
       <StringTable ProductVersion="0.0.0.8"/>
     </VersionInfo>
@@ -43,9 +44,9 @@
             <Filename Value="../cad/zcad"/>
           </Target>
           <SearchPaths>
-            <IncludeFiles Value="u;gdb;commands;gui;devicebase;languade;electroteh;zgl;$(ProjOutDir);../cad;other;fileformats;misc"/>
-            <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;../cad;other;fileformats;misc"/>
-            <UnitOutputDirectory Value="dcu"/>
+            <IncludeFiles Value="u;../cad;$(ProjOutDir)"/>
+            <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;misc;fileformats;../cad"/>
+            <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
             <Style Value="1"/>
@@ -58,7 +59,7 @@
             </SyntaxOptions>
           </Parsing>
           <CodeGeneration>
-            <TargetCPU Value="arm"/>
+            <TargetOS Value="linux"/>
           </CodeGeneration>
           <Other>
             <Verbosity>
@@ -89,9 +90,9 @@
             <Filename Value="../cad/zcad"/>
           </Target>
           <SearchPaths>
-            <IncludeFiles Value="u;gdb;commands;gui;devicebase;languade;electroteh;zgl;$(ProjOutDir);other;../cad"/>
-            <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;../cad"/>
-            <UnitOutputDirectory Value="dcu"/>
+            <IncludeFiles Value="u;../cad;$(ProjOutDir)"/>
+            <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;misc;fileformats;../cad"/>
+            <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
             <Style Value="1"/>
@@ -134,9 +135,9 @@
             <Filename Value="../cad/zcad"/>
           </Target>
           <SearchPaths>
-            <IncludeFiles Value="u;gdb;commands;gui;devicebase;languade;electroteh;zgl;$(ProjOutDir);other;../cad"/>
-            <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;../cad"/>
-            <UnitOutputDirectory Value="dcu"/>
+            <IncludeFiles Value="u;../cad;$(ProjOutDir)"/>
+            <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;misc;fileformats;../cad"/>
+            <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
             <Style Value="1"/>
@@ -359,9 +360,9 @@
       <Filename Value="../cad/zcad"/>
     </Target>
     <SearchPaths>
-      <IncludeFiles Value="u;gdb;commands;gui;devicebase;languade;electroteh;zgl;$(ProjOutDir);../cad;other;../../pascalscript/Source;fileformats;misc"/>
-      <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;../cad;other;fileformats;misc"/>
-      <UnitOutputDirectory Value="dcu"/>
+      <IncludeFiles Value="u;../cad;$(ProjOutDir)"/>
+      <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;misc;fileformats;../cad"/>
+      <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>
       <Style Value="1"/>
@@ -373,6 +374,9 @@
         <UseAnsiStrings Value="False"/>
       </SyntaxOptions>
     </Parsing>
+    <CodeGeneration>
+      <TargetOS Value="win32"/>
+    </CodeGeneration>
     <Other>
       <Verbosity>
         <ShowWarn Value="False"/>
@@ -401,4 +405,4 @@
       </Item2>
     </Exceptions>
   </Debugging>
-</CONFIG>
+</CONFIG>

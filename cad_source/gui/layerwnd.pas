@@ -67,6 +67,9 @@ var
 
 implementation
 uses mainwindow;
+
+{$R *.lfm}
+
 { TLayerWindow }
 
 procedure TLayerWindow.FormCreate(Sender: TObject); // Процедура выполняется при отрисовке окна
@@ -493,10 +496,6 @@ procedure TLayerWindow.FormClose(Sender: TObject; var CloseAction: TCloseAction
 begin
      Aply(nil);
 end;
-
-initialization
-  {I layerwnd.lrs}
-  {$R *.lfm}
 
 end.
 

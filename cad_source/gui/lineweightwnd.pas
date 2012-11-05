@@ -37,6 +37,8 @@ var
   procedure drawLW(canvas:TCanvas;ARect: TRect;ll,lw: Integer;s:string);
 implementation
 
+{$R *.lfm}
+
 function GetLWNameFromN(num:integer):String;
 begin
      result:=FloatToStrF(lwarray[num]/100,ffFixed,4,2) + ' '+rsmm;
@@ -172,9 +174,5 @@ begin
      result:=showmodal;
 end;
 
-initialization
-  {I lineweightwnd.lrs}
-  {$R *.lfm}
-
 end.
-
+

@@ -66,6 +66,8 @@ const
 
 implementation
 
+{$R *.lfm}
+
 { TColorSelectWND }
 
 procedure TColorSelectWND.testsetcolor(Sender: TObject);
@@ -264,9 +266,5 @@ begin
      testsetcolor(nil);
 end;
 
-initialization
-  {I colorwnd.lrs}
-  {$R *.lfm}
-
 end.
-
+

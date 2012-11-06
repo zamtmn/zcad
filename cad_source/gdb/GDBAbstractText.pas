@@ -572,10 +572,12 @@ begin
   if {true//}(((not {GDB.GetCurrentDWG.OGLwindow1.param.scrollmode}dc.scrollmode)or(not sysvar.RD.RD_PanObjectDegradation^)) {and (lod=0)})
   then
       begin
-           templod:=sqrt(objmatrix[0,0]*objmatrix[0,0]+objmatrix[1,1]*objmatrix[1,1]+objmatrix[2,2]*objmatrix[2,2]);
+           (*templod:=sqrt(objmatrix[0,0]*objmatrix[0,0]+objmatrix[1,1]*objmatrix[1,1]+objmatrix[2,2]*objmatrix[2,2]);
            templod:=(templod*self.textprop.size)/({GDB.GetCurrentDWG.pcamera.prop}dc.zoom{*GDB.GetCurrentDWG.pcamera.prop.zoom});
            //_lod:=round({self.textprop.size/}10*GDB.GetCurrentDWG.pcamera.prop.zoom*GDB.GetCurrentDWG.pcamera.prop.zoom+1);
-           if ({(self.textprop.size/GDB.GetCurrentDWG.pcamera.prop.zoom)}templod>1.5{0.04}{0.2})or(dc.maxdetail) then
+           if ({(self.textprop.size/GDB.GetCurrentDWG.pcamera.prop.zoom)}templod>1.5{0.04}{0.2})or(dc.maxdetail) then*)
+           if CanSimplyDraw(DC,self.textprop.size,1.5) then
+
                                                                                    //Vertex3D_in_WCS_Array.simpledrawgeometry({_lod}3)
                                                                                    //simpledrawgeometry
                                                                                    Vertex3D_in_WCS_Array.drawgeometry

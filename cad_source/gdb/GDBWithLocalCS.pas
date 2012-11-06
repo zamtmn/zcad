@@ -57,10 +57,24 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                procedure higlight;virtual;
                procedure ReCalcFromObjMatrix;virtual;
                function IsHaveLCS:GDBBoolean;virtual;
+               function CanSimplyDraw(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;//inline;
          end;
 {EXPORT-}
 implementation
 uses log;
+function GDBObjWithLocalCS.CanSimplyDraw(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;
+var
+   templod:GDBDouble;
+begin
+     if dc.maxdetail then
+                         exit(true);
+  templod:=sqrt(objmatrix[0,0]*objmatrix[0,0]+objmatrix[1,1]*objmatrix[1,1]+objmatrix[2,2]*objmatrix[2,2]);
+  templod:=(templod*ParamSize)/(dc.zoom);
+  if templod>TargetSize then
+                            exit(true)
+                        else
+                            exit(false);
+end;
 function GDBObjWithLocalCS.IsHaveLCS:GDBBoolean;
 begin
      result:=true;

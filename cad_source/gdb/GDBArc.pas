@@ -18,7 +18,7 @@
 unit GDBArc;
 {$INCLUDE def.inc}
 interface
-uses GDBWithLocalCS,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses math,OGLSpecFunc,GDBWithLocalCS,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
 gl,ugdbltypearray,
 GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain{,OGLSpecFunc};
 type
@@ -496,8 +496,9 @@ begin
            end;
 end;
 procedure GDBObjARC.DrawGeometry;
-//var
+var
 //  i: GDBInteger;
+    simply:GDBBoolean;
 begin
   {oglsm.myglpushmatrix;
   glscaledf(r, r, 1);
@@ -519,7 +520,30 @@ begin
   if dc.selected then
                      Vertex3D_in_WCS_Array.drawgeometry2
                  else
-                     Vertex3D_in_WCS_Array.drawgeometry;
+                     begin
+                           {if endangle>startangle then
+                                                      angle:=endangle-startangle
+                                                  else
+                                                      angle:=2*pi-(startangle-endangle);}
+                           if angle>pi then
+                                           begin
+                                               simply:=CanSimplyDraw(DC,1,5)
+                                            end
+                                       else begin
+                                               simply:=CanSimplyDraw(DC,sin(angle/2)*tan(angle/4),5)
+                                            end;
+                         if simply then
+                                                      Vertex3D_in_WCS_Array.drawgeometry
+                                                        else
+                                                            begin
+                                                                 oglsm.myglbegin(GL_lines);
+                                                                 oglsm.myglVertex3dV(@q0);
+                                                                 oglsm.myglVertex3dV(@q1);
+                                                                 oglsm.myglVertex3dV(@q1);
+                                                                 oglsm.myglVertex3dV(@q2);
+                                                                 oglsm.myglend;
+                                                            end;
+                     end;
   //myglbegin(gl_points);
   //ppoint.iterategl(@glvertex2dv);
   //myglend;

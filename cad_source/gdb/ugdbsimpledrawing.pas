@@ -17,6 +17,7 @@
 }
 
 unit ugdbsimpledrawing;
+{$INCLUDE def.inc}
 interface
 uses //gdbase,gdbasetypes,
 gdbobjectsconstdef,GDBWithLocalCS,UGDBDrawingdef,zcadsysvars,{zcadinterface,}{zcadstrconsts,}{GDBWithLocalCS,}{UGDBOpenArrayOfUCommands,}strproc,{GDBBlockDef,}UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
@@ -362,7 +363,7 @@ begin
   pcamera:=pcam;
   if pcamera=nil then
                      begin
-                     GDBGetMem(pcamera, sizeof(GDBObjCamera));
+                     GDBGetMem({$IFDEF DEBUGBUILD}'{4B7A0493-E8D6-4F24-BB70-C9C246A351BA}',{$ENDIF}pcamera, sizeof(GDBObjCamera));
                      pcamera^.initnul;
 
                        pcamera.fovy:=35.0;
@@ -649,4 +650,4 @@ begin
 
 end;
 
-end.
+end.

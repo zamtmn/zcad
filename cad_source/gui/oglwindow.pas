@@ -23,7 +23,7 @@ interface
 
 uses
 
-   zcadsysvars,UGDBLayerArray,zcadstrconsts,ucxmenumgr,GLext,
+   GDBCamera,zcadsysvars,UGDBLayerArray,zcadstrconsts,ucxmenumgr,GLext,
   {$IFDEF LCLGTK2}
   //x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
@@ -538,6 +538,8 @@ var ccsLBN,ccsRTF:GDBVertex;
     tbb,tbb2:GDBBoundingBbox;
     //pdwg:PTDrawing;
     proot:PGDBObjGenericSubEntry;
+    pcamera:PGDBObjCamera;
+    td:GDBDouble;
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.CalcOptimalMatrix',lp_IncPos);{$ENDIF}
   {Если нет примитивов выходим}
@@ -545,13 +547,14 @@ begin
   //self.MakeCurrent;
   if pdwg=nil then exit;
   proot:=PDWG.GetCurrentROOT;
+  pcamera:=pdwg.getpcamera;
 
-  if (assigned(pdwg))and(assigned(proot))then
+  if (assigned(pdwg))and(assigned(proot))and(assigned(pcamera))then
   begin
-  pdwg.GetPcamera^.modelMatrix:=lookat(pdwg.GetPcamera^.prop.point,
-                                               pdwg.GetPcamera^.prop.xdir,
-                                               pdwg.GetPcamera^.prop.ydir,
-                                               pdwg.GetPcamera^.prop.look,@onematrix);
+  Pcamera^.modelMatrix:=lookat(Pcamera^.prop.point,
+                                               Pcamera^.prop.xdir,
+                                               Pcamera^.prop.ydir,
+                                               Pcamera^.prop.look,@onematrix);
   //glGetDoublev(GL_MODELVIEW_MATRIX, @pdwg.pcamera^.modelMatrix);
 
   {pdwg.pcamera^.modelMatrix[0][0]:=pdwg.pcamera^.modelMatrix[0][0]/1e5;
@@ -588,8 +591,8 @@ begin
 
   if IsBBNul(tbb) then
   begin
-       {tbb.LBN:=geometry.VertexAdd(pdwg.getpcamera^.prop.point,MinusOneVertex);
-       tbb.RTF:=geometry.VertexAdd(pdwg.getpcamera^.prop.point,OneVertex);}
+       {tbb.LBN:=geometry.VertexAdd(pdwg.tpcamera^.prop.point,MinusOneVertex);
+       tbb.RTF:=geometry.VertexAdd(pdwg.tpcamera^.prop.point,OneVertex);}
        concatBBandPoint(tbb,param.CSIcon.CSIconCoord);
        concatBBandPoint(tbb,param.CSIcon.CSIconX);
        concatBBandPoint(tbb,param.CSIcon.CSIconY);
@@ -613,8 +616,8 @@ begin
 
   if IsBBNul(tbb) then
   begin
-       tbb.LBN:=geometry.VertexAdd(pdwg.getpcamera^.prop.point,MinusOneVertex);
-       tbb.RTF:=geometry.VertexAdd(pdwg.getpcamera^.prop.point,OneVertex);
+       tbb.LBN:=geometry.VertexAdd(pcamera^.prop.point,MinusOneVertex);
+       tbb.RTF:=geometry.VertexAdd(pcamera^.prop.point,OneVertex);
   end;
 
   //if param.CSIcon.AxisLen>eps then
@@ -628,27 +631,30 @@ begin
   LBN:=tbb.LBN;
   RTF:=tbb.RTF;
 
-  ProjectPoint2(LBN.x,LBN.y,LBN.Z,pdwg.getpcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,LBN.y,LBN.Z,pdwg.getpcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,RTF.y,LBN.Z,pdwg.getpcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(LBN.x,RTF.y,LBN.Z,pdwg.getpcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(LBN.x,LBN.y,RTF.Z,pdwg.getpcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,LBN.y,RTF.Z,pdwg.getpcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,RTF.y,RTF.Z,pdwg.getpcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(LBN.x,RTF.y,RTF.Z,pdwg.getpcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,LBN.y,LBN.Z,pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,LBN.y,LBN.Z,pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,RTF.y,LBN.Z,pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,RTF.y,LBN.Z,pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,LBN.y,RTF.Z,pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,LBN.y,RTF.Z,pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,RTF.y,RTF.Z,pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,RTF.y,RTF.Z,pcamera^.modelMatrix,ccsLBN,ccsRTF);
 
   ccsLBN.z:=-ccsLBN.z;
   ccsRTF.z:=-ccsRTF.z;
-
+  td:=(ccsRTF.z-ccsLBN.z)/100;
+  ccsLBN.z:=ccsLBN.z-td;
+  ccsRTF.z:=ccsRTF.z+td;
   if (ccsLBN.z-ccsRTF.z)<eps then
                                  begin
                                       ccsLBN.z:=ccsLBN.z+1;
                                       ccsRTF.z:=ccsRTF.z-1;
                                  end;
-  pdwg.getpcamera^.obj_zmAx:=ccsLBN.z;
-  pdwg.getpcamera^.obj_zmin:=ccsRTF.z;
-  pdwg.getpcamera^.zmax:=pdwg.getpcamera^.obj_zmAx;
-  pdwg.getpcamera^.zmin:=pdwg.getpcamera^.obj_zmin;
+  pcamera^.obj_zmAx:=ccsLBN.z;
+  pcamera^.obj_zmin:=ccsRTF.z;
+  pcamera^.zmax:=pcamera^.obj_zmAx;
+  pcamera^.zmin:=pcamera^.obj_zmin;
+
 
   {if pdwg.pcamera^.zmax>10000 then
                                                 pdwg.pcamera^.zmax:=100000;
@@ -658,25 +664,25 @@ begin
 
   if param.projtype = PROJPerspective then
   begin
-       if pdwg.getpcamera^.zmin<pdwg.getpcamera^.zmax/10000 then
-                                                  pdwg.getpcamera^.zmin:=pdwg.getpcamera^.zmax/10000;
-       if pdwg.getpcamera^.zmin<10 then
-                                                  pdwg.getpcamera^.zmin:=10;
-       if pdwg.getpcamera^.zmax<pdwg.getpcamera^.zmin then
-                                                  pdwg.getpcamera^.zmax:=1000;
+       if pcamera^.zmin<pcamera^.zmax/10000 then
+                                                  pcamera^.zmin:=pcamera^.zmax/10000;
+       if pcamera^.zmin<10 then
+                                                  pcamera^.zmin:=10;
+       if pcamera^.zmax<pcamera^.zmin then
+                                                  pcamera^.zmax:=1000;
   end;
 
 
 
   if param.projtype = ProjParalel then
                                       begin
-                                      pdwg.getpcamera^.projMatrix:=ortho(-clientwidth*pdwg.getpcamera^.prop.zoom/2,clientwidth*pdwg.getpcamera^.prop.zoom/2,
-                                                                                 -clientheight*pdwg.getpcamera^.prop.zoom/2,clientheight*pdwg.getpcamera^.prop.zoom/2,
-                                                                                 pdwg.getpcamera^.zmin, pdwg.getpcamera^.zmax,@onematrix);
+                                      pcamera^.projMatrix:=ortho(-clientwidth*pcamera^.prop.zoom/2,clientwidth*pcamera^.prop.zoom/2,
+                                                                                 -clientheight*pcamera^.prop.zoom/2,clientheight*pcamera^.prop.zoom/2,
+                                                                                 pcamera^.zmin, pcamera^.zmax,@onematrix);
                                       end
                                   else
                                       BEGIN
-                                           pdwg.getpcamera^.projMatrix:=Perspective(pdwg.getpcamera^.fovy, Width / Height, pdwg.getpcamera^.zmin, pdwg.getpcamera^.zmax,@onematrix);
+                                           pcamera^.projMatrix:=Perspective(pcamera^.fovy, Width / Height, pcamera^.zmin, pcamera^.zmax,@onematrix);
   //glGetDoublev(GL_PROJECTION_MATRIX, @pdwg.pcamera^.projMatrix);
                                       end;
 
@@ -685,25 +691,25 @@ begin
 
 
 
-  pdwg.getpcamera^.CamCSOffset:=NulVertex;
-  pdwg.getpcamera^.CamCSOffset.z:=(pdwg.getpcamera^.zmax+pdwg.getpcamera^.zmin)/2;
-  pdwg.getpcamera^.CamCSOffset.z:=(pdwg.getpcamera^.zmin);
+  pcamera^.CamCSOffset:=NulVertex;
+  pcamera^.CamCSOffset.z:=(pcamera^.zmax+pcamera^.zmin)/2;
+  pcamera^.CamCSOffset.z:=(pcamera^.zmin);
 
 
-  tm:=pdwg.getpcamera^.modelMatrix;
+  tm:=pcamera^.modelMatrix;
   //MatrixInvert(tm);
-  pdwg.getpcamera^.CamCSOffset:=geometry.VectorTransform3D(pdwg.getpcamera^.CamCSOffset,tm);
-  pdwg.getpcamera^.CamCSOffset:=pdwg.getpcamera^.prop.point;
+  pcamera^.CamCSOffset:=geometry.VectorTransform3D(pcamera^.CamCSOffset,tm);
+  pcamera^.CamCSOffset:=pcamera^.prop.point;
 
   {получение центра виевфрустума}
   tm:=geometry.CreateTranslationMatrix({minusvertex(pdwg.pcamera^.CamCSOffset)}nulvertex);
 
   //pdwg.pcamera^.modelMatrixLCS:=tm;
-  pdwg.getpcamera^.modelMatrixLCS:=lookat({vertexsub(pdwg.pcamera^.prop.point,pdwg.pcamera^.CamCSOffset)}nulvertex,
-                                               pdwg.getpcamera^.prop.xdir,
-                                               pdwg.getpcamera^.prop.ydir,
-                                               pdwg.getpcamera^.prop.look,{@tm}@onematrix);
-  pdwg.getpcamera^.modelMatrixLCS:=geometry.MatrixMultiply(tm,pdwg.getpcamera^.modelMatrixLCS);
+  pcamera^.modelMatrixLCS:=lookat({vertexsub(pdwg.pcamera^.prop.point,pdwg.pcamera^.CamCSOffset)}nulvertex,
+                                               pcamera^.prop.xdir,
+                                               pcamera^.prop.ydir,
+                                               pcamera^.prop.look,{@tm}@onematrix);
+  pcamera^.modelMatrixLCS:=geometry.MatrixMultiply(tm,pcamera^.modelMatrixLCS);
   ccsLBN:=InfinityVertex;
   ccsRTF:=MinusInfinityVertex;
   tbb:=proot.VisibleOBJBoundingBox;
@@ -716,9 +722,9 @@ begin
   if not IsBBNul(tbb) then
   begin
         LBN:=tbb.LBN;
-        LBN:=vertexadd(LBN,pdwg.getpcamera^.CamCSOffset);
+        LBN:=vertexadd(LBN,pcamera^.CamCSOffset);
         RTF:=tbb.RTF;
-        RTF:=vertexadd(RTF,pdwg.getpcamera^.CamCSOffset);
+        RTF:=vertexadd(RTF,pcamera^.CamCSOffset);
   end
   else
   begin
@@ -727,17 +733,19 @@ begin
        RTF:=geometry.VertexMulOnSc(OneVertex,100);
        //RTF:=vertexadd(RTF,pdwg.pcamera^.CamCSOffset);
   end;
-  ProjectPoint2(LBN.x,LBN.y,LBN.Z,pdwg.getpcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,LBN.y,LBN.Z,pdwg.getpcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,RTF.y,LBN.Z,pdwg.getpcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
-  ProjectPoint2(LBN.x,RTF.y,LBN.Z,pdwg.getpcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
-  ProjectPoint2(LBN.x,LBN.y,RTF.Z,pdwg.getpcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,LBN.y,RTF.Z,pdwg.getpcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
-  ProjectPoint2(RTF.x,RTF.y,RTF.Z,pdwg.getpcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
-  ProjectPoint2(LBN.x,RTF.y,RTF.Z,pdwg.getpcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,LBN.y,LBN.Z,pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,LBN.y,LBN.Z,pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,RTF.y,LBN.Z,pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,RTF.y,LBN.Z,pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,LBN.y,RTF.Z,pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,LBN.y,RTF.Z,pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(RTF.x,RTF.y,RTF.Z,pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
+  ProjectPoint2(LBN.x,RTF.y,RTF.Z,pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
   ccsLBN.z:=-ccsLBN.z;
   ccsRTF.z:=-ccsRTF.z;
-
+  td:=(ccsRTF.z-ccsLBN.z)/100;
+  ccsLBN.z:=ccsLBN.z-td;
+  ccsRTF.z:=ccsRTF.z+td;
   if (ccsLBN.z-ccsRTF.z)<eps then
                                  begin
                                       if abs(ccsLBN.z)>eps then
@@ -751,46 +759,45 @@ begin
                                       ccsRTF.z:=-1;
                                       end
                                  end;
-  pdwg.getpcamera^.obj_zmAx:=ccsLBN.z;
-  pdwg.getpcamera^.obj_zmin:=ccsRTF.z;
-  pdwg.getpcamera^.zmaxLCS:=pdwg.getpcamera^.obj_zmAx;
-  pdwg.getpcamera^.zminLCS:=pdwg.getpcamera^.obj_zmin;
+  pcamera^.obj_zmAx:=ccsLBN.z;
+  pcamera^.obj_zmin:=ccsRTF.z;
+  pcamera^.zmaxLCS:=pcamera^.obj_zmAx;
+  pcamera^.zminLCS:=pcamera^.obj_zmin;
 
 
   if param.projtype = PROJPerspective then
   begin
-       if pdwg.getpcamera^.zminLCS<pdwg.getpcamera^.zmaxLCS/10000 then
-                                                  pdwg.getpcamera^.zminLCS:=pdwg.getpcamera^.zmaxLCS/10000;
-       if pdwg.getpcamera^.zminLCS<10 then
-                                                  pdwg.getpcamera^.zminLCS:=10;
-       if pdwg.getpcamera^.zmaxLCS<pdwg.getpcamera^.zminLCS then
-                                                  pdwg.getpcamera^.zmaxLCS:=1000;
+       if pcamera^.zminLCS<pcamera^.zmaxLCS/10000 then
+                                                  pcamera^.zminLCS:=pcamera^.zmaxLCS/10000;
+       if pcamera^.zminLCS<10 then
+                                                  pcamera^.zminLCS:=10;
+       if pcamera^.zmaxLCS<pcamera^.zminLCS then
+                                                  pcamera^.zmaxLCS:=1000;
   end;
 
-  pdwg.getpcamera^.zminLCS:=pdwg.getpcamera^.zminLCS;//-pdwg.pcamera^.CamCSOffset.z;
-  pdwg.getpcamera^.zmaxLCS:=pdwg.getpcamera^.zmaxLCS;//+pdwg.pcamera^.CamCSOffset.z;
-
+  pcamera^.zminLCS:=pcamera^.zminLCS;//-pdwg.pcamera^.CamCSOffset.z;
+  pcamera^.zmaxLCS:=pcamera^.zmaxLCS;//+pdwg.pcamera^.CamCSOffset.z;
 
   //glLoadIdentity;
   //pdwg.pcamera^.projMatrix:=onematrix;
   if param.projtype = ProjParalel then
                                       begin
-                                      pdwg.getpcamera^.projMatrixLCS:=ortho(-clientwidth*pdwg.getpcamera^.prop.zoom/2,clientwidth*pdwg.getpcamera^.prop.zoom/2,
-                                                                                 -clientheight*pdwg.getpcamera^.prop.zoom/2,clientheight*pdwg.getpcamera^.prop.zoom/2,
-                                                                                 pdwg.getpcamera^.zminLCS, pdwg.getpcamera^.zmaxLCS,@onematrix);
+                                      pcamera^.projMatrixLCS:=ortho(-clientwidth*pcamera^.prop.zoom/2,clientwidth*pcamera^.prop.zoom/2,
+                                                                                 -clientheight*pcamera^.prop.zoom/2,clientheight*pcamera^.prop.zoom/2,
+                                                                                 pcamera^.zminLCS, pcamera^.zmaxLCS,@onematrix);
                                       end
                                   else
                                       BEGIN
-                                           pdwg.getpcamera^.projMatrixLCS:=Perspective(pdwg.getpcamera^.fovy, Width / Height, pdwg.getpcamera^.zminLCS, pdwg.getpcamera^.zmaxLCS,@onematrix);
+                                           pcamera^.projMatrixLCS:=Perspective(pcamera^.fovy, Width / Height, pcamera^.zminLCS, pcamera^.zmaxLCS,@onematrix);
   //glGetDoublev(GL_PROJECTION_MATRIX, @pdwg.pcamera^.projMatrix);
                                       end;
   if param.projtype = ProjParalel then
                                       begin
                                            //OGLSpecFunc.CurrentCamCSOffset:=pdwg.pcamera^.CamCSOffset;
-                                           if geometry.oneVertexlength(pdwg.getpcamera^.CamCSOffset)>1000000 then
+                                           if geometry.oneVertexlength(pcamera^.CamCSOffset)>1000000 then
                                            begin
-                                                OGLSpecFunc.CurrentCamCSOffset:=pdwg.getpcamera^.CamCSOffset;
-                                            OGLSpecFunc.notuseLCS:=pdwg.getpcamera^.notuseLCS;
+                                                OGLSpecFunc.CurrentCamCSOffset:=pcamera^.CamCSOffset;
+                                            OGLSpecFunc.notuseLCS:=pcamera^.notuseLCS;
                                            end
                                            else OGLSpecFunc.notuseLCS:=true;
                                       end
@@ -800,25 +807,23 @@ begin
                                       end;
   if OGLSpecFunc.notuseLCS then
   begin
-        pdwg.getpcamera^.projMatrixLCS:=pdwg.getpcamera^.projMatrix;
-        pdwg.getpcamera^.modelMatrixLCS:=pdwg.getpcamera^.modelMatrix;
-        pdwg.getpcamera^.frustumLCS:=pdwg.getpcamera^.frustum;
-        pdwg.getpcamera^.CamCSOffset:=NulVertex;
+        pcamera^.projMatrixLCS:=pcamera^.projMatrix;
+        pcamera^.modelMatrixLCS:=pcamera^.modelMatrix;
+        pcamera^.frustumLCS:=pcamera^.frustum;
+        pcamera^.CamCSOffset:=NulVertex;
         OGLSpecFunc.CurrentCamCSOffset:=nulvertex;
   end;
 
-
-  SetOGLMatrix;
 
   if {pdwg.pcamera^.notuseLCS}OGLSpecFunc.notuseLCS then
   begin
-        pdwg.getpcamera^.projMatrixLCS:=pdwg.getpcamera^.projMatrix;
-        pdwg.getpcamera^.modelMatrixLCS:=pdwg.getpcamera^.modelMatrix;
-        pdwg.getpcamera^.frustumLCS:=pdwg.getpcamera^.frustum;
-        pdwg.getpcamera^.CamCSOffset:=NulVertex;
+        pcamera^.projMatrixLCS:=pcamera^.projMatrix;
+        pcamera^.modelMatrixLCS:=pcamera^.modelMatrix;
+        pcamera^.frustumLCS:=pcamera^.frustum;
+        pcamera^.CamCSOffset:=NulVertex;
         OGLSpecFunc.CurrentCamCSOffset:=nulvertex;
   end;
-
+  SetOGLMatrix;
   end;
     {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.CalcOptimalMatrix----{end}',lp_DecPos);{$ENDIF}
   //gdb.GetCurrentDWG.pcamera.getfrustum(@gdb.GetCurrentDWG.pcamera^.modelMatrixLCS,@gdb.GetCurrentDWG.pcamera^.projMatrixLCS,gdb.GetCurrentDWG.pcamera^.clipLCS,gdb.GetCurrentDWG.pcamera^.frustumLCS);

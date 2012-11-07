@@ -203,6 +203,9 @@ begin
 
           end;
      end;
+     Lines.Shrink;
+     Points.Shrink;
+     shx.Shrink;
 end;
 
 procedure ZGLGeometry.drawgeometry;
@@ -226,9 +229,9 @@ begin
 end;
 constructor ZGLGeometry.init;
 begin
-Lines.init(100);
-Points.init(100);
-SHX.init(100);
+Lines.init({$IFDEF DEBUGBUILD}'{261A56E9-FC91-4A6D-A534-695778390843}',{$ENDIF}100);
+Points.init({$IFDEF DEBUGBUILD}'{AF4B3440-50B5-4482-A2B7-D38DDE4EC731}',{$ENDIF}100);
+SHX.init({$IFDEF DEBUGBUILD}'{93201215-874A-4FC5-8062-103AF05AD930}',{$ENDIF}100);
 end;
 destructor ZGLGeometry.done;
 begin
@@ -239,4 +242,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBPoint3DArray.initialization');{$ENDIF}
 end.
-
+

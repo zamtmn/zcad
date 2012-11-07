@@ -1038,7 +1038,7 @@ begin
      decompsize:=-1;
      if pdecompdata=nil then
                             begin
-                            GDBGetMem(result,usize);
+                            GDBGetMem({$IFDEF DEBUGBUILD}'{87747A59-156F-4B1B-AD65-AEEB46995B6A}',{$ENDIF}result,usize);
                             pdecompdata:=result;
                             end
                          else
@@ -1212,7 +1212,7 @@ begin
      end;
      shared.HistoryOutStr('Prepare AcDb:AcDbObjects section');
      objinfo:=FindInfoByType(siarray,SECTION_DBOBJECTS);
-     GDBGetMem(objsection,objinfo^.MaxDecompressedSize*objinfo^.NumberOfSectionsThisType);
+     GDBGetMem({$IFDEF DEBUGBUILD}'{A87A6634-F384-4414-8C8E-AD03866EE4E8}',{$ENDIF}objsection,objinfo^.MaxDecompressedSize*objinfo^.NumberOfSectionsThisType);
       bc.setto(f.PArray,f.size);
      for i:=0 to objinfo^.NumberOfSectionsThisType-1 do
        begin
@@ -1425,4 +1425,4 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodwg.initialization');{$ENDIF}
-end.
+end.

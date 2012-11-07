@@ -611,6 +611,9 @@ begin
           s := f.readGDBString;
           vp.Layer := LayerArray.getAddres(s);
         end;
+      62:begin
+              vp.color:=readmystrtoint(f);
+         end;
       90:
         begin
           s := f.readGDBstring;

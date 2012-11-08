@@ -475,6 +475,7 @@ procedure GDBObjLWpolyline.DrawGeometry;
 var i,ie: GDBInteger;
     q3d:PGDBQuad3d;
     plw:PGLlwwidth;
+    v:gdbvertex;
 begin
   {glPolygonMode(GL_FRONT_AND_BACK, GL_fill);
   if closed then
@@ -526,6 +527,17 @@ begin
               else myglbegin(GL_LINE_STRIP);
     Vertex3D_in_WCS_Array.iterategl(@myglVertex3dv);
     myglend();}
+    v:=geometry.VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
+
+    if not CanSimplyDraw(DC,geometry.oneVertexlength(v),5) then
+           begin
+                q3d:=Width3D_in_WCS_Array.parray;
+                oglsm.myglbegin(GL_Lines);
+                oglsm.myglVertex3dv(@q3d^[0]);
+                oglsm.myglVertex3dv(@q3d^[1]);
+                oglsm.myglend();
+                exit;
+           end;
 
     if closed then ie:=Width3D_in_WCS_Array.count - 1
               else ie:=Width3D_in_WCS_Array.count - 2;

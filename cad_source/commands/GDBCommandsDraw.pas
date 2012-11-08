@@ -1113,7 +1113,7 @@ begin
   //cdwg.OGLwindow1.param.ShowDebugFrustum:=true;
   dc:=cdwg.OGLwindow1.CreateRC(true);
   dc.DrawMode:=1;
-  gdb.GetCurrentROOT.CalcVisibleByTree(cdwg.pcamera^.frustum{calcfrustum(@_clip)},cdwg.pcamera.POSCOUNT,cdwg.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjArray.ObjTree,cdwg.pcamera^.totalobj,cdwg.pcamera^.infrustum,cdwg^.myGluProject2);
+  gdb.GetCurrentROOT.CalcVisibleByTree(cdwg.pcamera^.frustum{calcfrustum(@_clip)},cdwg.pcamera.POSCOUNT,cdwg.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjArray.ObjTree,cdwg.pcamera^.totalobj,cdwg.pcamera^.infrustum,cdwg^.myGluProject2,cdwg.pcamera.prop.zoom);
   //gdb.GetCurrentDWG.OGLwindow1.draw;
   prn.startrender;
   gdb.GetCurrentDWG.OGLwindow1.treerender(gdb.GetCurrentROOT^.ObjArray.ObjTree,0,{0}dc);

@@ -39,7 +39,7 @@ GDBObjWithMatrix=object(GDBObjEntity)
 {EXPORT-}
 implementation
 uses
-    log;
+    log,zcadsysvars;
 procedure GDBObjWithMatrix.ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInRect;OwnerFuldraw:GDBBoolean;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble);
 var
      ImInFrustum:TInRect;
@@ -91,7 +91,7 @@ begin
                                              enttree.FulDraw:=true;}
      v1:=geometry.VertexSub(enttree.BoundingBox.RTF,enttree.BoundingBox.LBN);
      tx:=geometry.oneVertexlength(v1);
-     if tx/zoom<5 then
+     if tx/zoom<{5}sysvar.debug.renderdeb.middlepoint.x then
                                                                                         enttree.FulDraw:=false
                                                                                     else
                                                                                         enttree.FulDraw:=true;

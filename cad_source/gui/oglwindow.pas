@@ -207,6 +207,7 @@ var
 
   uEventIDtimer:cardinal;
   tick:cardinal;
+  dt:integer;
   fps:single;
   gridarray:array [0..maxgrid,0..maxgrid] of GDBvertex2S;
   InfoForm:TInfoForm=nil;
@@ -3492,6 +3493,18 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
                                               log.programlog.LogOutStrFast('ReDraw time='+inttostr(sysvar.RD.RD_LastUpdateTime^),0);
   {$ENDIF}
   //title:=title+fpss;
+  if param.firstdraw then
+  begin
+  dt:=sysvar.RD.RD_LastRenderTime^-30;
+  if dt<0 then
+                                         sysvar.debug.renderdeb.middlepoint.x:=sysvar.debug.renderdeb.middlepoint.x+{0.5}dt/10
+                                     else
+                                         sysvar.debug.renderdeb.middlepoint.x:=sysvar.debug.renderdeb.middlepoint.x+{0.5}dt/10;
+  if sysvar.debug.renderdeb.middlepoint.x>10 then
+                                                 sysvar.debug.renderdeb.middlepoint.x:=10;
+  if sysvar.debug.renderdeb.middlepoint.x<0 then
+                                                 sysvar.debug.renderdeb.middlepoint.x:=0;
+  end;
   param.firstdraw := false;
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.draw---{end}',lp_DecPos);{$ENDIF}
 end;

@@ -167,28 +167,25 @@ end;
 function mystrtoint(s:GDBString):GDBInteger;
 var code:GDBInteger;
 begin
-     //result:=0;
      val(s,result,code);
      if code<>0 then
                     result:=0;
 end;
 function readmystrtoint(var f:GDBOpenArrayOfByte):GDBInteger;
 var code:GDBInteger;
-    s:GDBString;
+    //s:GDBString;
 begin
-     //result:=0;
-     s := f.readGDBSTRING;
-     val(s,result,code);
+     //s := f.readGDBSTRING;
+     val({s}f.readGDBSTRING,result,code);
      if code<>0 then
                     result:=0;
 end;
 function readmystrtodouble(var f:GDBOpenArrayOfByte):GDBDouble;
 var code:GDBInteger;
-    s:GDBString;
+    //s:GDBString;
 begin
-     //result:=0;
-     s := f.readGDBSTRING;
-     val(s,result,code);
+     //s := f.readGDBSTRING;
+     val({s}f.readGDBSTRING,result,code);
      if code<>0 then
                     result:=0;
 end;

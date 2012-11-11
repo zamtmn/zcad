@@ -91,7 +91,7 @@ begin
                                              enttree.FulDraw:=true;}
      v1:=geometry.VertexSub(enttree.BoundingBox.RTF,enttree.BoundingBox.LBN);
      tx:=geometry.oneVertexlength(v1);
-     if tx/zoom<{5}sysvar.debug.renderdeb.middlepoint.x then
+     if tx/zoom<SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor then
                                                                                         enttree.FulDraw:=false
                                                                                     else
                                                                                         enttree.FulDraw:=true;

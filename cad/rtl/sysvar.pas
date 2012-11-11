@@ -46,6 +46,9 @@ var
   RD_MaxRenderTime:GDBInteger;
   RD_Light:GDBBoolean;
   RD_VSync:TVSControl;
+  RD_ID_Enabled:GDBBoolean;
+  RD_ID_MaxDegradationFactor:GDBDouble;
+  RD_ID_PrefferedRenderTime:GDBInteger;
   SAVE_Auto_Interval:GDBInteger;
   SAVE_Auto_Current_Interval:GDBInteger;
   SAVE_Auto_FileName:GDBString;
@@ -117,6 +120,9 @@ begin
   RD_MaxRenderTime:=0;
   RD_Light:=False;
   RD_VSync:=TVSOff;
+  RD_ID_Enabled:=true;
+  RD_ID_MaxDegradationFactor:=15;
+  RD_ID_PrefferedRenderTime:=20;
   SAVE_Auto_Interval:=900;
   SAVE_Auto_Current_Interval:=900;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';

@@ -3494,16 +3494,17 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
   {$ENDIF}
   //title:=title+fpss;
   if param.firstdraw then
+  if   SysVar.RD.RD_ImageDegradation.RD_ID_Enabled^ then
   begin
-  dt:=sysvar.RD.RD_LastRenderTime^-30;
+  dt:=sysvar.RD.RD_LastRenderTime^-SysVar.RD.RD_ImageDegradation.RD_ID_PrefferedRenderTime^;
   if dt<0 then
-                                         sysvar.debug.renderdeb.middlepoint.x:=sysvar.debug.renderdeb.middlepoint.x+{0.5}dt/10
+                                         SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor+{0.5}dt/5
                                      else
-                                         sysvar.debug.renderdeb.middlepoint.x:=sysvar.debug.renderdeb.middlepoint.x+{0.5}dt/10;
-  if sysvar.debug.renderdeb.middlepoint.x>10 then
-                                                 sysvar.debug.renderdeb.middlepoint.x:=10;
-  if sysvar.debug.renderdeb.middlepoint.x<0 then
-                                                 sysvar.debug.renderdeb.middlepoint.x:=0;
+                                         SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor+{0.5}dt/10;
+  if SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor>SysVar.RD.RD_ImageDegradation.RD_ID_MaxDegradationFactor^ then
+                                                 SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=SysVar.RD.RD_ImageDegradation.RD_ID_MaxDegradationFactor^;
+  if SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor<0 then
+                                                 SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=0;
   end;
   param.firstdraw := false;
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.draw---{end}',lp_DecPos);{$ENDIF}

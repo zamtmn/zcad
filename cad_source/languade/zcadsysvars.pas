@@ -68,6 +68,12 @@ type
                 TVSOff(*'Off'*),
                 TVSDefault(*'Default'*)
              );
+  TImageDegradation=record
+                          RD_ID_Enabled:PGDBBoolean;(*'Enabled'*)
+                          RD_ID_CurrentDegradationFactor:GDBDouble;(*'Current degradation factor'*)(*oi_readonly*)
+                          RD_ID_MaxDegradationFactor:PGDBDouble;(*'Max degradation factor'*)
+                          RD_ID_PrefferedRenderTime:PGDBInteger;(*'Preffered rendertime'*)
+                      end;
   trd=record
             RD_Renderer:PGDBString;(*'Device'*)(*oi_readonly*)
             RD_Version:PGDBString;(*'Version'*)(*oi_readonly*)
@@ -84,8 +90,9 @@ type
             RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
             RD_VSync:PTVSControl;(*'VSync'*)
             RD_Light:PGDBBoolean;(*'Light'*)
-            RD_PanObjectDegradation:PGDBBoolean;(*'Degradation while pan'*)
             RD_LineSmooth:PGDBBoolean;(*'Line smoth'*)
+            RD_ImageDegradation:TImageDegradation;(*'Image degradation'*)
+            RD_PanObjectDegradation:PGDBBoolean;(*'Degradation while pan'*)
       end;
   tsave=record
               SAVE_Auto_On:PGDBBoolean;(*'Autosave'*)

@@ -793,6 +793,10 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_LastUpdateTime,'RD_LastUpdateTime');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxRenderTime,'RD_MaxRenderTime');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_Light,'RD_Light');
+  SysVarUnit.AssignToSymbol(SysVar.RD.RD_ImageDegradation.RD_ID_Enabled,'RD_ID_Enabled');
+  SysVarUnit.AssignToSymbol(SysVar.RD.RD_ImageDegradation.RD_ID_MaxDegradationFactor,'RD_ID_MaxDegradationFactor');
+  SysVarUnit.AssignToSymbol(SysVar.RD.RD_ImageDegradation.RD_ID_PrefferedRenderTime,'RD_ID_PrefferedRenderTime');
+  SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=0;
 
   SysVarUnit.AssignToSymbol(SysVar.SAVE.SAVE_Auto_Current_Interval,'SAVE_Auto_Current_Interval');
   SysVarUnit.AssignToSymbol(SysVar.SAVE.SAVE_Auto_Interval,'SAVE_Auto_Interval');

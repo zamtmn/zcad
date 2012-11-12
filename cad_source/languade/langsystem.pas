@@ -20,7 +20,12 @@ unit langsystem;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes{,varman},varmandef,memman,UBaseTypeDescriptor;
+type
+    TTypesArray=array of pointer;
+var
+   foneGDBInteger,foneGDBDouble:TTypesArray;
 const
+
   basicoperatorcount = 5;
   basicfunctioncount = 1;
   basicoperatorparamcount = 26;
@@ -30,9 +35,7 @@ const
   foneuGDBByte = #9;
   foneGDBWord = #10;
   foneuGDBWord = #11;
-  foneGDBInteger = #12;
   foneuGDBInteger = #13;
-  foneGDBDouble = #14;
   foneGDBString = #15;
 type
   operandstack = record
@@ -58,7 +61,7 @@ type
   end;
   functiontype = record
     name: GDBString;
-    param: GDBString;
+    param: {GDBString}TTypesArray;
     addr: basicfunction;
   end;
 
@@ -152,13 +155,11 @@ const
     , (name: '*'; param: @GDBIntegerDescriptorObj; hparam: @GDBDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_mul_TGDBDouble)
     , (name: '*'; param: @GDBDoubleDescriptorObj; hparam: @GDBDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_mul_TGDBDouble)
     );
+type
+TFunctionTypeArray=array of functiontype;
 
-    {GDBEnumDataDescriptorObj}
-  basicfunctionparam: array[1..basicfunctionparamcount] of functiontype =
-  (
-    (name: 'cos'; param: foneGDBInteger; addr: {$IFDEF FPC}@{$ENDIF}Cos_TGDBInteger)
-
-    );
+var
+  basicfunctionparam: TFunctionTypeArray;
 
 implementation
 uses UEnumDescriptor,log;
@@ -172,14 +173,17 @@ begin
   result.data.Instance:=nil;
   result.data.PTD:=nil;
 end;
-function funcstackequalGDBString(str: GDBString; opstack: operandstack): GDBBoolean;
-//var
-//  i: GDBInteger;
+function funcstackequalGDBString(str: TTypesArray; opstack: operandstack): GDBBoolean;
+var
+  i: GDBInteger;
 begin
-  {result := true;
+  result := true;
   for i := 1 to opstack.count do
-    if GDBByte(str[i]) <> opstack.stack[i].vartypecustom then}
-      result := false;
+    if str[i-1]<>opstack.stack[i].data.PTD then
+                                             begin
+                                                  result := false;
+                                                  exit;
+                                             end;
 end;
 
 function findbasicfunction(name: GDBString; opstack: operandstack): GDBInteger;
@@ -187,7 +191,7 @@ var
   i{, j}: GDBInteger;
 begin
   result := 0;
-  for i := 1 to basicfunctionparamcount do
+  for i :=low(basicfunctionparam) to high(basicfunctionparam) do
   begin
     if name = basicfunctionparam[i].name then
     begin
@@ -224,13 +228,25 @@ function Cos_TGDBInteger(var stack: operandstack): vardesk;
 var
   r: vardesk;
 begin
-  pGDBInteger(r.data.Instance) := nil;
+  pGDBDouble(r.data.Instance) := nil;
   r.data.ptd:=@GDBDoubleDescriptorObj;
   r.name := '';
   GDBGetMem({$IFDEF DEBUGBUILD}'{EF01E8D1-A060-4C72-B5A1-894B5AD95E65}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
   pdouble(r.data.Instance)^ := cos(pGDBInteger(stack.stack[1].data.Instance)^);
   result := r;
 end;
+function Cos_TGDBDouble(var stack: operandstack): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBDouble(r.data.Instance) := nil;
+  r.data.ptd:=@GDBDoubleDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{EF01E8D1-A060-4C72-B5A1-894B5AD95E65}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+  pdouble(r.data.Instance)^ := cos(pGDBDouble(stack.stack[1].data.Instance)^);
+  result := r;
+end;
+
 
 function TGDBBoolean_let_TGDBBoolean(var rez, hrez: vardesk): vardesk;
 var
@@ -369,10 +385,10 @@ var
   r: vardesk;
 begin
   pGDBInteger(r.data.Instance) := nil;
-  r.data.ptd:=@GDBIntegerDescriptorObj;
+  r.data.ptd:=@GDBDoubleDescriptorObj;
   r.name := '';
-  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,GDBIntegerDescriptorObj.SizeInGDBBytes);
-  pGDBInteger(r.data.Instance)^ := pGDBInteger(rez.data.Instance)^*pGDBInteger(hrez.data.Instance)^;
+  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+  pGDBDouble(r.data.Instance)^ := pGDBDouble(rez.data.Instance)^*pGDBInteger(hrez.data.Instance)^;
   result := r;
 end;
 function TGDBInteger_mul_TGDBDouble(var rez, hrez: vardesk): vardesk;
@@ -583,8 +599,18 @@ begin
     end
   end
 end;
-
+var
+  tv,tv1:functiontype;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('langsystem.initialization');{$ENDIF}
+     foneGDBInteger:=TTypesArray.create(@GDBIntegerDescriptorObj);
+     foneGDBDouble:=TTypesArray.create(@GDBDoubleDescriptorObj);
+     tv.name:='cos';tv.param:=foneGDBInteger;tv.addr:=Cos_TGDBInteger;
+     tv1.name:='cos';tv1.param:=foneGDBDouble;tv1.addr:=Cos_TGDBDouble;
+     basicfunctionparam:=TFunctionTypeArray.create(tv,tv1);
+     (*  basicfunctionparam: array of functiontype =
+  (
+    (name: 'cos'; param: {foneGDBInteger}nil; addr: {$IFDEF FPC}@{$ENDIF}Cos_TGDBInteger)
 
+    ); *)
 end.

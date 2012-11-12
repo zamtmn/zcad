@@ -23,7 +23,7 @@ uses gdbasetypes{,varman},varmandef,memman,UBaseTypeDescriptor;
 const
   basicoperatorcount = 5;
   basicfunctioncount = 1;
-  basicoperatorparamcount = 12;
+  basicoperatorparamcount = 26;
   basicfunctionparamcount = 1;
   foneGDBBoolean = #7;
   foneGDBByte = #8;
@@ -72,14 +72,30 @@ procedure initoperandstack(out opstac: operandstack);
 
 function Tnothing_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TGDBInteger_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TGDBDouble_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TGDBInteger_plus_TGDBDouble(var rez, hrez: vardesk): vardesk;
+function TGDBDouble_plus_TGDBDouble(var rez, hrez: vardesk): vardesk;
 function Tnothing_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function Tnothing_minus_TGDBDouble(var rez, hrez: vardesk): vardesk;
 function TGDBInteger_mul_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TGDBInteger_div_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TGDBInteger_div_TGDBDouble(var rez, hrez: vardesk): vardesk;
+function TGDBDouble_div_TGDBDouble(var rez, hrez: vardesk): vardesk;
+function TGDBDouble_div_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TGDBDouble_let_TGDBDouble(var rez, hrez: vardesk): vardesk;
 function TGDBInteger_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TGDBString_let_TGDBString(var rez, hrez: vardesk): vardesk;
 function TGDBByte_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 function TGDBBoolean_let_TGDBBoolean(var rez, hrez: vardesk): vardesk;
+
+function TGDBInteger_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TGDBInteger_minus_TGDBDouble(var rez, hrez: vardesk): vardesk;
+function TGDBDouble_minus_TGDBDouble(var rez, hrez: vardesk): vardesk;
+function TGDBDouble_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
+
+function TGDBDouble_mul_TGDBInteger(var rez, hrez: vardesk): vardesk;
+function TGDBInteger_mul_TGDBDouble(var rez, hrez: vardesk): vardesk;
+function TGDBDouble_mul_TGDBDouble(var rez, hrez: vardesk): vardesk;
 
 function TGDBDouble_let_TGDBInteger(var rez, hrez: vardesk): vardesk;
 
@@ -121,7 +137,20 @@ const
     , (name: ':='; param: @GDBBooleanDescriptorOdj; hparam: @GDBBooleanDescriptorOdj; addr: {$IFDEF FPC}@{$ENDIF}TGDBBoolean_let_TGDBBoolean)
     , (name: ':='; param: @GDBEnumDataDescriptorObj; hparam: @GDBEnumDataDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TEnum_let_TIdentificator)
     , (name: ':='; param: @GDBDoubleDescriptorObj; hparam: @GDBIntegerDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_let_TGDBInteger)
-
+    , (name: '/'; param: @GDBIntegerDescriptorObj; hparam: @GDBIntegerDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_div_TGDBInteger)
+    , (name: '/'; param: @GDBDoubleDescriptorObj; hparam: @GDBIntegerDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_div_TGDBInteger)
+    , (name: '/'; param: @GDBIntegerDescriptorObj; hparam: @GDBDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_div_TGDBDouble)
+    , (name: '/'; param: @GDBDoubleDescriptorObj; hparam: @GDBDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_div_TGDBDouble)
+    , (name: '+'; param: @GDBDoubleDescriptorObj; hparam: @GDBIntegerDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_plus_TGDBInteger)
+    , (name: '+'; param: @GDBIntegerDescriptorObj; hparam: @GDBDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_plus_TGDBDouble)
+    , (name: '+'; param: @GDBDoubleDescriptorObj; hparam: @GDBDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_plus_TGDBDouble)
+    , (name: '-'; param: @GDBIntegerDescriptorObj; hparam: @GDBIntegerDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_minus_TGDBInteger)
+    , (name: '-'; param: @GDBIntegerDescriptorObj; hparam: @GDBDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_minus_TGDBDouble)
+    , (name: '-'; param: @GDBDoubleDescriptorObj; hparam: @GDBDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_minus_TGDBDouble)
+    , (name: '-'; param: @GDBDoubleDescriptorObj; hparam: @GDBIntegerDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_minus_TGDBInteger)
+    , (name: '*'; param: @GDBDoubleDescriptorObj; hparam: @GDBIntegerDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_mul_TGDBInteger)
+    , (name: '*'; param: @GDBIntegerDescriptorObj; hparam: @GDBDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBInteger_mul_TGDBDouble)
+    , (name: '*'; param: @GDBDoubleDescriptorObj; hparam: @GDBDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TGDBDouble_mul_TGDBDouble)
     );
 
     {GDBEnumDataDescriptorObj}
@@ -291,6 +320,83 @@ begin
   //result := r;
   //GDBPointer(r.data.Instance^):=nil;
 end;
+function TGDBInteger_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBInteger(r.data.Instance) := nil;
+  r.data.ptd:=@GDBIntegerDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,GDBIntegerDescriptorObj.SizeInGDBBytes);
+  pGDBInteger(r.data.Instance)^ := pGDBInteger(rez.data.Instance)^-pGDBInteger(hrez.data.Instance)^;
+  result := r;
+end;
+function TGDBInteger_minus_TGDBDouble(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBInteger(r.data.Instance) := nil;
+  r.data.ptd:=@GDBDoubleDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+  PGDBDouble(r.data.Instance)^ := PGDBInteger(rez.data.Instance)^-PGDBDouble(hrez.data.Instance)^;
+  result := r;
+end;
+function TGDBDouble_minus_TGDBDouble(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBInteger(r.data.Instance) := nil;
+  r.data.ptd:=@GDBDoubleDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+  PGDBDouble(r.data.Instance)^ := PGDBDouble(rez.data.Instance)^-PGDBDouble(hrez.data.Instance)^;
+  result := r;
+end;
+function TGDBDouble_minus_TGDBInteger(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBInteger(r.data.Instance) := nil;
+  r.data.ptd:=@GDBDoubleDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+  PGDBDouble(r.data.Instance)^ := PGDBDouble(rez.data.Instance)^-PGDBInteger(hrez.data.Instance)^;
+  result := r;
+end;
+function TGDBDouble_mul_TGDBInteger(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBInteger(r.data.Instance) := nil;
+  r.data.ptd:=@GDBIntegerDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,GDBIntegerDescriptorObj.SizeInGDBBytes);
+  pGDBInteger(r.data.Instance)^ := pGDBInteger(rez.data.Instance)^*pGDBInteger(hrez.data.Instance)^;
+  result := r;
+end;
+function TGDBInteger_mul_TGDBDouble(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBDouble(r.data.Instance) := nil;
+  r.data.ptd:=@GDBDoubleDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+  pGDBDouble(r.data.Instance)^ := pGDBInteger(rez.data.Instance)^ * pGDBDouble(hrez.data.Instance)^;
+  result := r;
+end;
+function TGDBDouble_mul_TGDBDouble(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBDouble(r.data.Instance) := nil;
+  r.data.ptd:=@GDBDoubleDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+  pGDBDouble(r.data.Instance)^ := pGDBDouble(rez.data.Instance)^ * pGDBDouble(hrez.data.Instance)^;
+  result := r;
+end;
 function TGDBInteger_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
@@ -300,6 +406,39 @@ begin
   r.name := '';
   GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,GDBIntegerDescriptorObj.SizeInGDBBytes);
   pGDBInteger(r.data.Instance)^ := pGDBInteger(rez.data.Instance)^+pGDBInteger(hrez.data.Instance)^;
+  result := r;
+end;
+function TGDBDouble_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBInteger(r.data.Instance) := nil;
+  r.data.ptd:=@GDBDoubleDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+  PGDBDouble(r.data.Instance)^ := PGDBDouble(rez.data.Instance)^+PGDBInteger(hrez.data.Instance)^;
+  result := r;
+end;
+function TGDBInteger_plus_TGDBDouble(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBInteger(r.data.Instance) := nil;
+  r.data.ptd:=@GDBDoubleDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+  PGDBDouble(r.data.Instance)^ := PGDBInteger(rez.data.Instance)^+PGDBDouble(hrez.data.Instance)^;
+  result := r;
+end;
+function TGDBDouble_plus_TGDBDouble(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBInteger(r.data.Instance) := nil;
+  r.data.ptd:=@GDBDoubleDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{9E62203B-EF07-4775-A646-1030CA029C38}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+  PGDBDouble(r.data.Instance)^ := PGDBDouble(rez.data.Instance)^+PGDBDouble(hrez.data.Instance)^;
   result := r;
 end;
 function Tnothing_plus_TGDBInteger(var rez, hrez: vardesk): vardesk;
@@ -322,7 +461,7 @@ begin
   r.data.ptd:=@GDBDoubleDescriptorObj;
   r.name := '';
   GDBGetMem({$IFDEF DEBUGBUILD}'{31E6BE51-DA49-4ECC-9B63-43F3CCA367AD}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
-  pdouble(r.data.Instance)^ := -(pdouble(hrez.data.Instance)^);
+  PGDBDouble(r.data.Instance)^ := -(pdouble(hrez.data.Instance)^);
   result := r;
 end;
 
@@ -349,6 +488,52 @@ begin
   pGDBInteger(r.data.Instance)^ := pGDBInteger(rez.data.Instance)^ * pGDBInteger(hrez.data.Instance)^;
   result := r;
 end;
+function TGDBInteger_div_TGDBInteger(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBDouble(r.data.Instance) := nil;
+  r.data.ptd:=@GDBDoubleDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+  pGDBDouble(r.data.Instance)^ := pGDBInteger(rez.data.Instance)^ / pGDBInteger(hrez.data.Instance)^;
+  result := r;
+end;
+function TGDBInteger_div_TGDBDouble(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBDouble(r.data.Instance) := nil;
+  r.data.ptd:=@GDBDoubleDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+  pGDBDouble(r.data.Instance)^ := pGDBInteger(rez.data.Instance)^ / pGDBDouble(hrez.data.Instance)^;
+  result := r;
+end;
+function TGDBDouble_div_TGDBDouble(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBDouble(r.data.Instance) := nil;
+  r.data.ptd:=@GDBDoubleDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+  pGDBDouble(r.data.Instance)^ := pGDBDouble(rez.data.Instance)^ / pGDBDouble(hrez.data.Instance)^;
+  result := r;
+end;
+function TGDBDouble_div_TGDBInteger(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  pGDBDouble(r.data.Instance) := nil;
+  r.data.ptd:=@GDBDoubleDescriptorObj;
+  r.name := '';
+  GDBGetMem({$IFDEF DEBUGBUILD}'{7A416715-3850-4B76-B2E6-F5FE45C775F8}',{$ENDIF}r.data.Instance,GDBDoubleDescriptorObj.SizeInGDBBytes);
+  pGDBDouble(r.data.Instance)^ := pGDBDouble(rez.data.Instance)^ / pGDBInteger(hrez.data.Instance)^;
+  result := r;
+end;
+
+
 
 function itbasicoperator(expr: GDBString): GDBInteger;
 var

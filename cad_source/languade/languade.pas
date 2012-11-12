@@ -47,8 +47,8 @@ begin
   dec(i);
   if i <> length(expr) then
   begin
-    s := copy(expr, 1, i - 1);
-    expr := copy(expr, i, length(expr) - i + 1);
+    s := copy(expr, 1, i{ - 1});
+    expr := copy(expr, i+1, length(expr) - i + 1);
   end
   else
   begin
@@ -196,7 +196,11 @@ begin
               result := ':=';
               expr := copy(expr, 3, length(expr) - 2);
             end
-
+          else
+              begin
+              result:=expr;
+              expr:='';
+              end;
 end;
 
 procedure setvar(var vd: vardesk; value: GDBString);
@@ -451,7 +455,9 @@ begin
                       createGDBIntegervar(hrez, s)
                     else
                       if itreal(s) then
-                        createrealvar(hrez, s);
+                        createrealvar(hrez, s)
+                      else
+                          hrez:=evaluate(s,_unit);
           //oiuoiu
                   operatoptype := findbasicoperator(basicoperatorname[operatorname].name, rez{.data.ptd}, hrez{.data.ptd});
                   if operatoptype <> 0 then

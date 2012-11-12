@@ -599,11 +599,15 @@ begin
       end
   else
   begin
-       oglsm.myglbegin(gl_line_loop);
+       oglsm.myglbegin(gl_lines{_loop});
        oglsm.myglvertex3dv(@outbound[0]);
        oglsm.myglvertex3dv(@outbound[1]);
+       oglsm.myglvertex3dv(@outbound[1]);
+       oglsm.myglvertex3dv(@outbound[2]);
        oglsm.myglvertex3dv(@outbound[2]);
        oglsm.myglvertex3dv(@outbound[3]);
+       oglsm.myglvertex3dv(@outbound[3]);
+       oglsm.myglvertex3dv(@outbound[0]);
        oglsm.myglend;
   end;
   dc.subrender := dc.subrender - 1;

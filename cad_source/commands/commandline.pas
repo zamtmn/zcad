@@ -191,8 +191,8 @@ var
    p:PCommandRTEdObjectDef;
    ir:itrec;
 begin
-     if pcommandrunning^.pdwg=gdb.GetCurrentDWG then
      if pcommandrunning <> nil then
+     if pcommandrunning^.pdwg=gdb.GetCurrentDWG then
      if pcommandrunning.IsRTECommand then
      begin
           pcommandrunning^.MouseMoveCallback(p3d,p2d,mode,osp);

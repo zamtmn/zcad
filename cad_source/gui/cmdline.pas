@@ -323,6 +323,8 @@ var code,ch: GDBInteger;
   s,xx,yy,zz,expr:GDBString;
   tv:gdbvertex;
   parseresult:PGDBGDBStringArray;
+  cmd,subexpr,superexpr:string;
+  parsed:gdbboolean;
 begin
     ch:=ord(key);
     if ord(key)=13 then
@@ -334,6 +336,7 @@ begin
       // expr:=expr;
       val(CmdEdit.text, len, code);
       //code:=1;
+      cmd:=FindAlias(CmdEdit.text,';','=');
       if code = 0 then
       begin
       if assigned(gdb.GetCurrentDWG) then
@@ -361,25 +364,70 @@ begin
                                               v.data.Instance:=v.data.Instance;
                                               historyoutstr(Format(rsExprOutText,[expr,s]));
                                          end
-      else if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0'_softspace'#0'=,_realnumber'#0,expr,parseresult)then
-      begin
-            gdb.GetCurrentDWG.OGLwindow1.sendcoordtocommandTraceOn(geometry.CreateVertex(strtodouble(parseresult^.getGDBString(0)),
-                                                                                         strtodouble(parseresult^.getGDBString(1)),
-                                                                                         strtodouble(parseresult^.getGDBString(2))),MZW_LBUTTON,nil);
-            if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
-      end
-      else if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0,expr,parseresult)then
-      begin
-            gdb.GetCurrentDWG.OGLwindow1.sendcoordtocommandTraceOn(geometry.CreateVertex(strtodouble(parseresult^.getGDBString(0)),
-                                                                                         strtodouble(parseresult^.getGDBString(1)),
-                                                                                         0),MZW_LBUTTON,nil);
-            if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
-      end
-      else
+      else if commandmanager.FindCommand(uppercase(cmd))<>nil then
           begin
-               CmdEdit.text:=FindAlias(CmdEdit.text,';','=');
-               commandmanager.executecommand(GDBPointer(CmdEdit.text));
-          end;
+               //CmdEdit.text:=FindAlias(CmdEdit.text,';','=');
+               commandmanager.executecommand(GDBPointer(Cmd));
+          end
+      else begin
+           cmd:=CmdEdit.text;
+           superexpr:='';
+           repeat
+           subexpr:=GetPredStr(cmd,',');
+           v:=evaluate(subexpr,SysUnit);
+           parsed:=v.data.Instance<>nil;
+           if parsed then
+           begin
+           s:=v.data.ptd^.GetValueAsString(v.data.Instance);
+           if superexpr='' then
+                               superexpr:=s
+                           else
+                               superexpr:=superexpr+','+s
+           end;
+           until (cmd='')or(not parsed);
+           if parsed then
+           begin
+           historyoutstr(Format(rsExprOutText,[CmdEdit.text,superexpr]));
+           if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0'_softspace'#0'=,_realnumber'#0,superexpr,parseresult)then
+           begin
+                 if gdb.GetCurrentDWG<>nil then
+                 if gdb.GetCurrentDWG.OGLwindow1<>nil then
+                 gdb.GetCurrentDWG.OGLwindow1.sendcoordtocommandTraceOn(geometry.CreateVertex(strtodouble(parseresult^.getGDBString(0)),
+                                                                                              strtodouble(parseresult^.getGDBString(1)),
+                                                                                              strtodouble(parseresult^.getGDBString(2))),MZW_LBUTTON,nil);
+                 if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+           end
+           else if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0,superexpr,parseresult)then
+           begin
+                 if gdb.GetCurrentDWG<>nil then
+                 if gdb.GetCurrentDWG.OGLwindow1<>nil then
+                 gdb.GetCurrentDWG.OGLwindow1.sendcoordtocommandTraceOn(geometry.CreateVertex(strtodouble(parseresult^.getGDBString(0)),
+                                                                                              strtodouble(parseresult^.getGDBString(1)),
+                                                                                              0),MZW_LBUTTON,nil);
+                 if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+           end
+           else if IsParsed('_realnumber'#0'_softspace'#0,superexpr,parseresult)then
+           begin
+                 if gdb.GetCurrentDWG<>nil then
+                 if gdb.GetCurrentDWG.OGLwindow1<>nil then
+                 if gdb.GetCurrentDWG.OGLwindow1.param.polarlinetrace = 1 then
+                 begin
+
+                 tv:=pgdbvertex(gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.OGLwindow1.param.pointnum].arrayworldaxis.getelement(gdb.GetCurrentDWG.OGLwindow1.param.axisnum))^;
+                 tv:=geometry.normalizevertex(tv);
+                 temp.x := gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.OGLwindow1.param.pointnum].worldcoord.x + strtodouble(parseresult^.getGDBString(0)) * tv.x * sign(ptraceprop(gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.OGLwindow1.param.pointnum].arraydispaxis.getelement(gdb.GetCurrentDWG.OGLwindow1.param.axisnum)).tmouse);
+                 temp.y := gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.OGLwindow1.param.pointnum].worldcoord.y + strtodouble(parseresult^.getGDBString(0)) * tv.y * sign(ptraceprop(gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.OGLwindow1.param.pointnum].arraydispaxis.getelement(gdb.GetCurrentDWG.OGLwindow1.param.axisnum)).tmouse);
+                 temp.z := gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.OGLwindow1.param.pointnum].worldcoord.z + strtodouble(parseresult^.getGDBString(0)) * tv.z * sign(ptraceprop(gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.OGLwindow1.param.pointnum].arraydispaxis.getelement(gdb.GetCurrentDWG.OGLwindow1.param.axisnum)).tmouse);
+
+                 gdb.GetCurrentDWG.OGLwindow1.sendcoordtocommandTraceOn(temp,MZW_LBUTTON,nil);
+                 end;
+
+                 if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;
+           end
+           end
+              else
+                  shared.ShowError('Unable to parse line "'+subexpr+'"');
+      end;
     end;
     CmdEdit.text:='';
     key:=#0;

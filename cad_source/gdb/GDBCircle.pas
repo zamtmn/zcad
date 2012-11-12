@@ -396,7 +396,7 @@ begin
                               Vertex3D_in_WCS_Array.drawgeometry2
                           else
                               begin
-                                   if CanSimplyDraw(DC,{self.radius}1,6) then
+                                   if CanSimplyDrawInOCS(DC,{self.radius}1,6) then
                                                              Vertex3D_in_WCS_Array.drawgeometry
                                                          else
                                                              begin

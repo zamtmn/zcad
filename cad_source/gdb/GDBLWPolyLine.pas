@@ -529,7 +529,7 @@ begin
     myglend();}
     v:=geometry.VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
 
-    if not CanSimplyDraw(DC,geometry.oneVertexlength(v),5) then
+    if not CanSimplyDrawInWCS(DC,geometry.oneVertexlength(v),5) then
            begin
                 q3d:=Width3D_in_WCS_Array.parray;
                 oglsm.myglbegin(GL_Lines);

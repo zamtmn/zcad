@@ -102,6 +102,9 @@ type
                            procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
                            procedure startrender;virtual;//inline;
                            procedure endrender;virtual;//inline;
+                           {$IFDEF SINGLEPRECISIONGEOMETRY}
+                           procedure glVertex3dv(const v: PGDBVertex);inline;
+                           {$ENDIF}
     end;
 
 var
@@ -194,6 +197,17 @@ begin
     if pointcount<>0 then
                           sysvar.debug.renderdeb.middlepoint:=geometry.VertexMulOnSc(middlepoint,1/pointcount);
 end;
+{$IFDEF SINGLEPRECISIONGEOMETRY}
+procedure TOGLStateManager.glVertex3dv(const v: PGDBVertex);
+var
+   t:GDBvertex3S;
+begin
+     t.x:=v.x;
+     t.y:=v.y;
+     t.z:=v.z;
+     glVertex3fv(@t);
+end;
+{$ENDIF}
 procedure TOGLStateManager.myglVertex3dV;
 var t:gdbvertex;
 begin

@@ -133,6 +133,8 @@ begin
                  begin
                  td:=llbegin_x2+llbegin_y2-llbegin.x*llend.x-llbegin.y*llend.y;
                  td2:=(llbegin_x2+llbegin_y2-2*llbegin.x*llend.x+llend_x2-llbegin_y2*llend_x2-2*llbegin.y*llend.y+2*llbegin.x*llbegin.y*llend.x*llend.y+llend_y2-llbegin_x2*llend_y2);
+                 if td2>0 then
+                 begin
                  td2:=sqrt(td2);
                  t1:=(td+td2)/td3;
                  t2:=(td-td2)/td3;
@@ -147,7 +149,9 @@ begin
                  result.t1:=t2;
                  result.interceptcoord:=Vertexmorph(lbegin,lend,result.t1);
                  end
-
+                 end
+                    else
+                        result.isintercept:=false;
                  end
                     else
                         result.isintercept:=false;

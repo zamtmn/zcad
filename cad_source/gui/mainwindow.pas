@@ -65,6 +65,7 @@ type
                     //SplitterV,SplitterH: TSplitter;
 
                     PageControl:TmyPageControl;
+                    HScrollBar,VScrollBar:TScrollBar;
 
                     //MainMenu:TMenu;
                     StandartActions:TmyActionList;
@@ -120,6 +121,7 @@ type
                     function CloseDWGPage(Sender: TObject):integer;
 
                     procedure PageControlMouseDown(Sender: TObject;Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+                    procedure correctscrollbars;
 
 
                     private
@@ -169,6 +171,9 @@ type
 
                     procedure setvisualprop;
                     procedure addoneobject;
+
+                    procedure _scroll(Sender: TObject; ScrollCode: TScrollCode;
+                           var ScrollPos: Integer);
 
                end;
   TMyAnchorDockManager = class(TAnchorDockManager)
@@ -923,6 +928,19 @@ MainPanel.Create(Application);
 MainPanel.SetBounds(200,200,600,500);
 MainPanel.Caption:=rsDrawingWindowWndName;
 MainPanel.BorderWidth:=0;
+
+HScrollBar:=TScrollBar.create(MainPanel);
+HScrollBar.Align:=albottom;
+HScrollBar.Parent:=MainPanel;
+HScrollBar.kind:=sbHorizontal;
+HScrollBar.OnScroll:=_scroll;
+
+VScrollBar:=TScrollBar.create(MainPanel);
+VScrollBar.Align:=alright;
+VScrollBar.Parent:=MainPanel;
+VScrollBar.kind:=sbVertical;
+VScrollBar.OnScroll:=_scroll;
+
 PageControl:=TmyPageControl.Create(MainPanel{Application});
 PageControl.Constraints.MinHeight:=32;
 PageControl.Parent:=MainPanel;
@@ -2929,6 +2947,55 @@ begin
   layerbox.ItemIndex:=(SysVar.dwg.DWG_CLayer^);
   //layerbox.Sorted:=true;
 end;
+procedure MainForm._scroll(Sender: TObject; ScrollCode: TScrollCode;var ScrollPos: Integer);
+var
+   pdwg:PTSimpleDrawing;
+   nevpos:gdbvertex;
+begin
+  pdwg:=gdb.GetCurrentDWG;
+  if pdwg<>nil then
+  if pdwg.OGLwindow1<>nil then begin
+     nevpos:=PDWG.Getpcamera^.prop.point;
+     if sender=HScrollBar then
+     begin
+          nevpos.x:=-ScrollPos;
+     end
+else if sender=VScrollBar then
+     begin
+          nevpos.y:=-(VScrollBar.Min+VScrollBar.Max-VScrollBar.PageSize-ScrollPos);
+     end;
+     pdwg.OGLwindow1.SetCameraPosZoom(nevpos,PDWG.Getpcamera^.prop.zoom,true);
+     pdwg.OGLwindow1.draw;
+  end;
+end;
+
+procedure MainForm.correctscrollbars;
+var
+   poglwnd:toglwnd;
+   name:gdbstring;
+   i:Integer;
+   pdwg:PTSimpleDrawing;
+   BB:GDBBoundingBbox;
+   size,min,max,position:integer;
+begin
+  pdwg:=gdb.GetCurrentDWG;
+  if pdwg<>nil then
+  if pdwg.OGLwindow1<>nil then begin
+  bb:=pdwg.GetCurrentROOT.vp.BoundingBox;
+  size:=round(pdwg.OGLwindow1.ClientWidth*pdwg.GetPcamera^.prop.zoom);
+  position:=round(-pdwg.GetPcamera^.prop.point.x);
+  min:=round(bb.LBN.x+size/2);
+  max:=round(bb.RTF.x+size/2);
+  MainFormN.HScrollBar.SetParams(position,min,max,size);
+
+  size:=round(pdwg.OGLwindow1.ClientHeight*pdwg.GetPcamera^.prop.zoom);
+  min:=round(bb.LBN.y+size/2);
+  max:=round(bb.RTF.y+size/2);
+  position:=round((bb.LBN.y+bb.RTF.y+pdwg.GetPcamera^.prop.point.y));
+  MainFormN.VScrollBar.SetParams(position,min,max,size);
+  end;
+end;
+
 function getoglwndparam: GDBPointer; export;
 begin
   result := addr(gdb.GetCurrentDWG.OGLwindow1.param);
@@ -2940,11 +3007,14 @@ var
    name:gdbstring;
    i:Integer;
    pdwg:PTSimpleDrawing;
+   BB:GDBBoundingBbox;
+   size,min,max,position:integer;
 begin
    pdwg:=gdb.GetCurrentDWG;
    if assigned(mainformn)then
    begin
-   mainformn.UpdateControls;
+   MainFormN.UpdateControls;
+   MainFormN.correctscrollbars;
   if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
   begin
                                       begin
@@ -2956,6 +3026,16 @@ begin
   mainwindow.LineWBox.enabled:=true;
   if assigned(mainwindow.ColorBox) then
   mainwindow.ColorBox.enabled:=true;
+  if assigned(MainFormN.HScrollBar) then
+  begin
+  MainFormN.HScrollBar.enabled:=true;
+  MainFormN.correctscrollbars;
+  end;
+  if assigned(MainFormN.VScrollBar) then
+  begin
+  MainFormN.VScrollBar.enabled:=true;
+  end;
+
 
   for i:=0 to MainFormN.PageControl.PageCount-1 do
     begin
@@ -3001,6 +3081,10 @@ begin
            mainwindow.LineWBox.enabled:=false;
            if assigned(mainwindow.ColorBox) then
            mainwindow.ColorBox.enabled:=false;
+           if assigned(MainFormN.HScrollBar) then
+           MainFormN.HScrollBar.enabled:=false;
+           if assigned(MainFormN.VScrollBar) then
+           MainFormN.VScrollBar.enabled:=false;
       end;
   end;
 end;

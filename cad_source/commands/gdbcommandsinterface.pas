@@ -186,6 +186,7 @@ begin
      //tf.align:=al_client;
 
      oglwnd:=TOGLWnd.Create(myts);
+     oglwnd.onCameraChanged:=MainFormN.correctscrollbars;
 
      oglwnd.AuxBuffers:=0;
      oglwnd.StencilBits:=8;

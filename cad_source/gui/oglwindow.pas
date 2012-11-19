@@ -60,6 +60,7 @@ const
 type
   tmyscrbuf = array [0..maxmybufer] of GLuint;
   PTOGLWnd = ^TOGLWnd;
+  TCameraChangedNotify=procedure of object;
 
   { TOGLWnd }
 
@@ -86,6 +87,7 @@ type
 
     FastMMShift: TShiftState;
     FastMMX,FastMMY: Integer;
+    onCameraChanged:TCameraChangedNotify;
 
     //SelectedObjectsPLayer:PGDBLayerProp;
 
@@ -178,6 +180,7 @@ type
     procedure _onFastMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
     procedure asynczoomall(Data: PtrInt);
     procedure ZoomAll;
+    procedure SetCameraPosZoom(_pos:gdbvertex;_zoom:gdbdouble;finalcalk:gdbboolean);
     procedure RotTo(x0,y0,z0:GDBVertex);
     procedure myKeyPress(var Key: Word; Shift: TShiftState);
 
@@ -193,6 +196,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure MouseEnter;override;
     procedure MouseLeave;override;
+    procedure doCameraChanged;
 
   end;
 const maxgrid=100;
@@ -1366,11 +1370,13 @@ begin
       pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
       //gdb.GetCurrentROOT.calcalcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT);
       pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+      doCameraChanged;
     end
     else
       if ssMiddle in shift then     {MK_Control}
 begin
       PanScreen(param.md.mouse.x,param.md.mouse.y,X,Y{,glmcoord1});
+      doCameraChanged;
 end;
 
   param.md.mouse.y := y;
@@ -1903,18 +1909,33 @@ begin
 
   for i:=1 to steps do
   begin
-  PDWG.Getpcamera^.prop.point:=vertexadd(camerapos,geometry.VertexMulOnSc(target,i/steps));
-  PDWG.Getpcamera^.prop.zoom:=PDWG.Getpcamera^.prop.zoom+tzoom{*i}/steps;
-  param.firstdraw := true;
-  PDWG.Getpcamera^.NextPosition;
-  //RestoreMouse;
-  {}CalcOptimalMatrix;
-  mouseunproject(param.md.mouse.x,param.md.mouse.y);
-  reprojectaxis;
-  PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,PDWG.GetCurrentRoot.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
-  PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
-  _onMouseMove(nil,[],param.md.mouse.x,param.md.mouse.y);
-  if i=steps then
+  SetCameraPosZoom(vertexadd(camerapos,geometry.VertexMulOnSc(target,i/steps)),PDWG.Getpcamera^.prop.zoom+tzoom{*i}/steps,i=steps);
+  if sysvar.RD.RD_LastRenderTime^<30 then
+                                        sleep(30-sysvar.RD.RD_LastRenderTime^);
+  end;
+  PDWG^.StoreNewCamerapPos(pucommand);
+  calcgrid;
+
+  draw;
+  doCameraChanged;
+  end;
+end;
+procedure TOGLWnd.SetCameraPosZoom(_pos:gdbvertex;_zoom:gdbdouble;finalcalk:gdbboolean);
+var
+  fv1: GDBVertex;
+begin
+    PDWG.Getpcamera^.prop.point:=_pos;
+    PDWG.Getpcamera^.prop.zoom:=_zoom;
+    param.firstdraw := true;
+    PDWG.Getpcamera^.NextPosition;
+
+    CalcOptimalMatrix;
+    mouseunproject(param.md.mouse.x,param.md.mouse.y);
+    reprojectaxis;
+    PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,PDWG.GetCurrentRoot.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+    PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+
+  if finalcalk then
     begin
   if param.seldesc.MouseFrameON then
   begin
@@ -1927,18 +1948,10 @@ begin
     if param.seldesc.Frame1.y < 0 then param.seldesc.Frame1.y := 1
     else if param.seldesc.Frame1.y > (clientheight - 1) then param.seldesc.Frame1.y := clientheight - 1;
   end;
-  end;{}
-  //----ComitFromObj;
-  if sysvar.RD.RD_LastRenderTime^<30 then
-                                        sleep(30-sysvar.RD.RD_LastRenderTime^);
   end;
-  PDWG^.StoreNewCamerapPos(pucommand);
-  calcgrid;
-
-  draw;
-
-  end;
+  _onMouseMove(nil,[],param.md.mouse.x,param.md.mouse.y);
 end;
+
 procedure TOGLWnd.RotTo(x0,y0,z0:GDBVertex);
 const
      steps=10;
@@ -2079,6 +2092,11 @@ begin
      param.md.mousein:=true;
      inherited;
 end;
+procedure TOGLWnd.doCameraChanged;
+begin
+     if assigned(onCameraChanged) then onCameraChanged;
+end;
+
 procedure TOGLWnd.MouseLeave;
 begin
      param.md.mousein:=false;
@@ -2307,6 +2325,7 @@ begin
         PDWG^.StoreNewCamerapPos(pucommand);
         //ComitFromObj;
   end;
+  doCameraChanged;
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DISP_ZoomFactor----{end}',lp_decPos);{$ENDIF}
 end;
 procedure TOGLWnd.MouseUp(Button: TMouseButton; Shift:TShiftState;X, Y: Integer);

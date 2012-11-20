@@ -2964,7 +2964,7 @@ begin
      end
 else if sender=VScrollBar then
      begin
-          nevpos.y:=-(VScrollBar.Min+VScrollBar.Max-VScrollBar.PageSize-ScrollPos);
+          nevpos.y:=-(VScrollBar.Min+VScrollBar.Max{-VScrollBar.PageSize}-ScrollPos);
      end;
      pdwg.OGLwindow1.SetCameraPosZoom(nevpos,PDWG.Getpcamera^.prop.zoom,true);
      pdwg.OGLwindow1.draw;
@@ -2987,12 +2987,14 @@ begin
   size:=round(pdwg.OGLwindow1.ClientWidth*pdwg.GetPcamera^.prop.zoom);
   position:=round(-pdwg.GetPcamera^.prop.point.x);
   min:=round(bb.LBN.x+size/2);
-  max:=round(bb.RTF.x+size/2);
+  max:=round(bb.RTF.x-size/2);
+  if max<min then max:=min;
   MainFormN.HScrollBar.SetParams(position,min,max,size);
 
   size:=round(pdwg.OGLwindow1.ClientHeight*pdwg.GetPcamera^.prop.zoom);
   min:=round(bb.LBN.y+size/2);
-  max:=round(bb.RTF.y+size/2);
+  max:=round(bb.RTF.y-size/2);
+  if max<min then max:=min;
   position:=round((bb.LBN.y+bb.RTF.y+pdwg.GetPcamera^.prop.point.y));
   MainFormN.VScrollBar.SetParams(position,min,max,size);
   end;

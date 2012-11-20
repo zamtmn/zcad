@@ -931,15 +931,17 @@ MainPanel.BorderWidth:=0;
 
 HScrollBar:=TScrollBar.create(MainPanel);
 HScrollBar.Align:=albottom;
-HScrollBar.Parent:=MainPanel;
 HScrollBar.kind:=sbHorizontal;
 HScrollBar.OnScroll:=_scroll;
+HScrollBar.Enabled:=false;
+HScrollBar.Parent:=MainPanel;
 
 VScrollBar:=TScrollBar.create(MainPanel);
 VScrollBar.Align:=alright;
-VScrollBar.Parent:=MainPanel;
 VScrollBar.kind:=sbVertical;
 VScrollBar.OnScroll:=_scroll;
+VScrollBar.Enabled:=false;
+VScrollBar.Parent:=MainPanel;
 
 PageControl:=TmyPageControl.Create(MainPanel{Application});
 PageControl.Constraints.MinHeight:=32;

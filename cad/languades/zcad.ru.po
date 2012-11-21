@@ -372,6 +372,10 @@ msgctxt "zcadexternal.acn_deselectall~textimage"
 msgid "DSA"
 msgstr ""
 
+#: zcadexternal.acn_dist~caption
+msgid "Distance"
+msgstr ""
+
 #: zcadexternal.acn_dockopt~caption
 msgid "Docking options"
 msgstr "Параметры стыковки окон"
@@ -390,17 +394,9 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
-#: zcadexternal.acn_fakecopyclipbase~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
-msgstr ""
-
-#: zcadexternal.acn_fakepaste~caption
-msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -617,10 +613,6 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
-#: zcadexternal.acn_processkz~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_processkz~textimage
 msgctxt "zcadexternal.acn_processkz~textimage"
 msgid "Process external KZ"
@@ -655,10 +647,6 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
-
-#: zcadexternal.acn_remautocables~caption
-msgid ""
-msgstr ""
 
 #: zcadexternal.acn_remautocables~textimage
 msgid "Remove auto cables"
@@ -794,11 +782,6 @@ msgctxt "zcadexternal.acn_snapruntime~caption"
 msgid "Run time snap editor"
 msgstr "Редактор привязок"
 
-#: zcadexternal.acn_snapruntime~textimage
-msgctxt "zcadexternal.acn_snapruntime~textimage"
-msgid "snap"
-msgstr ""
-
 #: zcadexternal.acn_textwindow~caption
 msgctxt "zcadexternal.acn_textwindow~caption"
 msgid "View text window"
@@ -835,9 +818,41 @@ msgstr "NE изометрия"
 msgid "View NW isometric"
 msgstr "NW изометрия"
 
+#: zcadexternal.acn_viewrd~caption
+msgid "Rotate camera down"
+msgstr ""
+
+#: zcadexternal.acn_viewrd~textimage
+msgid "RD"
+msgstr ""
+
 #: zcadexternal.acn_viewright~caption
 msgid "View right"
 msgstr "Вид справа"
+
+#: zcadexternal.acn_viewrl~caption
+msgid "Rotate camera left"
+msgstr ""
+
+#: zcadexternal.acn_viewrl~textimage
+msgid "RL"
+msgstr ""
+
+#: zcadexternal.acn_viewrr~caption
+msgid "Rotate camera right"
+msgstr ""
+
+#: zcadexternal.acn_viewrr~textimage
+msgid "RR"
+msgstr ""
+
+#: zcadexternal.acn_viewru~caption
+msgid "Rotate camera up"
+msgstr ""
+
+#: zcadexternal.acn_viewru~textimage
+msgid "RU"
+msgstr ""
 
 #: zcadexternal.acn_viewseiso~caption
 msgid "View SE isometric"
@@ -1071,11 +1086,10 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#, fuzzy
-#| msgid "Rotate"
+#| msgid "Block params"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
-msgstr "Параметры блока"
+msgid "Rotate"
+msgstr "Поворот"
 
 #: zcadexternal.gdbobjcircle~area
 msgctxt "zcadexternal.gdbobjcircle~area"
@@ -1252,6 +1266,10 @@ msgctxt "zcadexternal.gdbsysvariable~dwg"
 msgid "Drawing"
 msgstr "Черчение"
 
+#: zcadexternal.gdbsysvariable~intf
+msgid "Interface"
+msgstr "Интерфейс"
+
 #: zcadexternal.gdbsysvariable~misc
 msgctxt "zcadexternal.gdbsysvariable~misc"
 msgid "Miscellaneous"
@@ -1425,6 +1443,10 @@ msgstr "Формат"
 msgctxt "zcadexternal.menu~help"
 msgid "Help"
 msgstr "Справка"
+
+#: zcadexternal.menu~info
+msgid "Info"
+msgstr "Информация"
 
 #: zcadexternal.menu~model
 msgctxt "zcadexternal.menu~model"
@@ -1922,6 +1944,23 @@ msgctxt "zcadexternal.tforcresult~isfounded"
 msgid "IsFounded"
 msgstr ""
 
+#: zcadexternal.timagedegradation~rd_id_currentdegradationfactor
+msgid "Current degradation factor"
+msgstr "Текущее ухудшение чертежа"
+
+#: zcadexternal.timagedegradation~rd_id_enabled
+msgctxt "zcadexternal.timagedegradation~rd_id_enabled"
+msgid "Enabled"
+msgstr "Включено"
+
+#: zcadexternal.timagedegradation~rd_id_maxdegradationfactor
+msgid "Max degradation factor"
+msgstr "Максимальное ухудшение чертежа"
+
+#: zcadexternal.timagedegradation~rd_id_prefferedrendertime
+msgid "Preffered rendertime"
+msgstr "Порог времени рендера"
+
 #: zcadexternal.timode~tim_mtext
 msgctxt "zcadexternal.timode~tim_mtext"
 msgid "MText"
@@ -1942,6 +1981,10 @@ msgctxt "zcadexternal.tinserttype~tit_device"
 msgid "Device"
 msgstr "Устройство"
 
+#: zcadexternal.tinterface~intf_showscrollbars
+msgid "Show scroll bars"
+msgstr "Показывать полосы прокрутки"
+
 #: zcadexternal.tlayercontrols~dsgn_lc_cable
 #| msgid "Cable"
 msgctxt "zcadexternal.tlayercontrols~dsgn_lc_cable"
@@ -1958,6 +2001,7 @@ msgid "Nets"
 msgstr "Цепи-трассы"
 
 #: zcadexternal.tlayercontrol~enabled
+msgctxt "zcadexternal.tlayercontrol~enabled"
 msgid "Enabled"
 msgstr "Включено"
 
@@ -2320,6 +2364,10 @@ msgstr "Масштабировать"
 msgctxt "zcadexternal.trd~rd_backgroundcolor"
 msgid "Background color"
 msgstr "Цвет фона"
+
+#: zcadexternal.trd~rd_imagedegradation
+msgid "Image degradation"
+msgstr ""
 
 #: zcadexternal.trd~rd_lastcalcvisible
 #| msgid "Last update time"

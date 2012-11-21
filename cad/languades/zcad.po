@@ -349,6 +349,10 @@ msgstr ""
 msgid "DSA"
 msgstr ""
 
+#: zcadexternal.acn_dist~caption
+msgid "Distance"
+msgstr ""
+
 #: zcadexternal.acn_dockopt~caption
 msgid "Docking options"
 msgstr ""
@@ -730,10 +734,6 @@ msgstr ""
 msgid "Run time snap editor"
 msgstr ""
 
-#: zcadexternal.acn_snapruntime~textimage
-msgid "snap"
-msgstr ""
-
 #: zcadexternal.acn_textwindow~caption
 msgid "View text window"
 msgstr ""
@@ -766,8 +766,40 @@ msgstr ""
 msgid "View NW isometric"
 msgstr ""
 
+#: zcadexternal.acn_viewrd~caption
+msgid "Rotate camera down"
+msgstr ""
+
+#: zcadexternal.acn_viewrd~textimage
+msgid "RD"
+msgstr ""
+
 #: zcadexternal.acn_viewright~caption
 msgid "View right"
+msgstr ""
+
+#: zcadexternal.acn_viewrl~caption
+msgid "Rotate camera left"
+msgstr ""
+
+#: zcadexternal.acn_viewrl~textimage
+msgid "RL"
+msgstr ""
+
+#: zcadexternal.acn_viewrr~caption
+msgid "Rotate camera right"
+msgstr ""
+
+#: zcadexternal.acn_viewrr~textimage
+msgid "RR"
+msgstr ""
+
+#: zcadexternal.acn_viewru~caption
+msgid "Rotate camera up"
+msgstr ""
+
+#: zcadexternal.acn_viewru~textimage
+msgid "RU"
 msgstr ""
 
 #: zcadexternal.acn_viewseiso~caption
@@ -989,13 +1021,13 @@ msgstr ""
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
+msgid "Block params"
 msgstr ""
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+msgid "Rotate"
 msgstr ""
 
 #: zcadexternal.gdbobjcircle~area
@@ -1150,6 +1182,10 @@ msgstr ""
 
 #: zcadexternal.gdbsysvariable~dwg
 msgid "Drawing"
+msgstr ""
+
+#: zcadexternal.gdbsysvariable~intf
+msgid "Interface"
 msgstr ""
 
 #: zcadexternal.gdbsysvariable~misc
@@ -1309,6 +1345,10 @@ msgstr ""
 #: zcadexternal.menu~help
 msgctxt "zcadexternal.menu~help"
 msgid "Help"
+msgstr ""
+
+#: zcadexternal.menu~info
+msgid "Info"
 msgstr ""
 
 #: zcadexternal.menu~model
@@ -1763,6 +1803,23 @@ msgstr ""
 msgid "IsFounded"
 msgstr ""
 
+#: zcadexternal.timagedegradation~rd_id_currentdegradationfactor
+msgid "Current degradation factor"
+msgstr ""
+
+#: zcadexternal.timagedegradation~rd_id_enabled
+msgctxt "zcadexternal.timagedegradation~rd_id_enabled"
+msgid "Enabled"
+msgstr ""
+
+#: zcadexternal.timagedegradation~rd_id_maxdegradationfactor
+msgid "Max degradation factor"
+msgstr ""
+
+#: zcadexternal.timagedegradation~rd_id_prefferedrendertime
+msgid "Preffered rendertime"
+msgstr ""
+
 #: zcadexternal.timode~tim_mtext
 msgid "MText"
 msgstr ""
@@ -1782,6 +1839,10 @@ msgctxt "zcadexternal.tinserttype~tit_device"
 msgid "Device"
 msgstr ""
 
+#: zcadexternal.tinterface~intf_showscrollbars
+msgid "Show scroll bars"
+msgstr ""
+
 #: zcadexternal.tlayercontrols~dsgn_lc_cable
 #, fuzzy
 msgctxt "zcadexternal.tlayercontrols~dsgn_lc_cable"
@@ -1798,6 +1859,7 @@ msgid "Nets"
 msgstr ""
 
 #: zcadexternal.tlayercontrol~enabled
+msgctxt "zcadexternal.tlayercontrol~enabled"
 msgid "Enabled"
 msgstr ""
 
@@ -2126,6 +2188,10 @@ msgstr ""
 
 #: zcadexternal.trd~rd_backgroundcolor
 msgid "Background color"
+msgstr ""
+
+#: zcadexternal.trd~rd_imagedegradation
+msgid "Image degradation"
 msgstr ""
 
 #: zcadexternal.trd~rd_lastcalcvisible

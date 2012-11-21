@@ -3034,10 +3034,20 @@ begin
   begin
   MainFormN.HScrollBar.enabled:=true;
   MainFormN.correctscrollbars;
+  if assigned(sysvar.INTF.INTF_ShowScrollBars) then
+  if sysvar.INTF.INTF_ShowScrollBars^ then
+                                       MainFormN.HScrollBar.Show
+                                   else
+                                       MainFormN.HScrollBar.Hide;
   end;
   if assigned(MainFormN.VScrollBar) then
   begin
   MainFormN.VScrollBar.enabled:=true;
+  if assigned(sysvar.INTF.INTF_ShowScrollBars) then
+  if sysvar.INTF.INTF_ShowScrollBars^ then
+                                       MainFormN.VScrollBar.Show
+                                   else
+                                       MainFormN.VScrollBar.Hide;
   end;
 
 
@@ -3086,9 +3096,25 @@ begin
            if assigned(mainwindow.ColorBox) then
            mainwindow.ColorBox.enabled:=false;
            if assigned(MainFormN.HScrollBar) then
+           begin
            MainFormN.HScrollBar.enabled:=false;
+           if assigned(sysvar.INTF.INTF_ShowScrollBars) then
+           if sysvar.INTF.INTF_ShowScrollBars^ then
+
+                                       MainFormN.HScrollBar.Show
+                                   else
+                                       MainFormN.HScrollBar.Hide;
+
+           end;
            if assigned(MainFormN.VScrollBar) then
+           begin
            MainFormN.VScrollBar.enabled:=false;
+           if assigned(sysvar.INTF.INTF_ShowScrollBars) then
+           if sysvar.INTF.INTF_ShowScrollBars^ then
+                                       MainFormN.VScrollBar.Show
+                                   else
+                                       MainFormN.VScrollBar.Hide;
+           end;
       end;
   end;
 end;

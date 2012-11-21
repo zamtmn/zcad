@@ -763,6 +763,8 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.VIEW.VIEW_HistoryLineVisible,'VIEW_HistoryLineVisible');
   SysVarUnit.AssignToSymbol(SysVar.VIEW.VIEW_ObjInspVisible,'VIEW_ObjInspVisible');
 
+  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ShowScrollBars,'INTF_ShowScrollBars');
+
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_PanObjectDegradation,'RD_PanObjectDegradation');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_UseStencil,'RD_UseStencil');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_VSync,'RD_VSync');

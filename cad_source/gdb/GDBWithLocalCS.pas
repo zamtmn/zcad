@@ -57,8 +57,7 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                procedure higlight;virtual;
                procedure ReCalcFromObjMatrix;virtual;
                function IsHaveLCS:GDBBoolean;virtual;
-               function CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;//inline;
-               function CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;//inline;
+               function CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
          end;
 {EXPORT-}
 implementation
@@ -71,18 +70,6 @@ begin
                          exit(true);
   templod:=sqrt(objmatrix[0,0]*objmatrix[0,0]+objmatrix[1,1]*objmatrix[1,1]+objmatrix[2,2]*objmatrix[2,2]);
   templod:=(templod*ParamSize)/(dc.zoom);
-  if templod>TargetSize then
-                            exit(true)
-                        else
-                            exit(false);
-end;
-function GDBObjWithLocalCS.CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;
-var
-   templod:GDBDouble;
-begin
-     if dc.maxdetail then
-                         exit(true);
-  templod:=(ParamSize)/(dc.zoom);
   if templod>TargetSize then
                             exit(true)
                         else

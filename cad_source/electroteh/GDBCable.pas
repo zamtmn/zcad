@@ -518,6 +518,7 @@ begin
   end;
   oglsm.myglend;
   if SysVar.DWG.DWG_HelpGeometryDraw^ then
+  if CanSimplyDrawInWCS(DC,SysVar.DSGN.DSGN_HelpScale^,1) then
   begin
   notfirst:=false;
   ptn2:=NodePropArray.beginiterate(ir_inNodeArray);

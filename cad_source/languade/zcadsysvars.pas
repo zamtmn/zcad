@@ -157,6 +157,9 @@ type
               PMenuProjType,PMenuCommandLine,PMenuHistoryLine,PMenuDebugObjInsp:pGDBPointer;
               ShowHiddenFieldInObjInsp:PGDBBoolean;(*'Show hidden fields'*)
         end;
+  tinterface=record
+              INTF_ShowScrollBars:PGDBBoolean;(*'Show scroll bars'*)
+             end;
   tdisp=record
              DISP_ZoomFactor:PGDBDouble;(*'Mouse wheel scale factor'*)
              DISP_OSSize:PGDBDouble;(*'Snap aperture size'*)
@@ -174,6 +177,7 @@ type
     SAVE:tsave;(*'Saving'*)
     DWG:tdwg;(*'Drawing'*)
     DSGN:tdesigning;(*'Design'*)
+    INTF:tinterface;(*'Interface'*)
     VIEW:tview;(*'View'*)
     MISC:tmisc;(*'Miscellaneous'*)
     debug:tdebug;(*'Debug'*)

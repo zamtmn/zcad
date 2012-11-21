@@ -15,6 +15,7 @@ var
   DSGN_LCNet:TLayerControl;
   DSGN_LCCable:TLayerControl;
   DSGN_LCLeader:TLayerControl;
+  INTF_ShowScrollBars:GDBBoolean;
   VIEW_CommandLineVisible:GDBBoolean;
   VIEW_HistoryLineVisible:GDBBoolean;
   VIEW_ObjInspVisible:GDBBoolean;
@@ -86,6 +87,7 @@ begin
   DSGN_LCCable.LayerName:='EL_KABLE';
   DSGN_LCLeader.Enabled:=true;
   DSGN_LCLeader.LayerName:='TEXT';
+  INTF_ShowScrollBars:=true;
   VIEW_CommandLineVisible:=True;
   VIEW_HistoryLineVisible:=True;
   VIEW_ObjInspVisible:=True;

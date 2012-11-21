@@ -931,6 +931,9 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
               PMenuProjType,PMenuCommandLine,PMenuHistoryLine,PMenuDebugObjInsp:pGDBPointer;
               ShowHiddenFieldInObjInsp:PGDBBoolean;(*'Show hidden fields'*)
         end;
+  tinterface=record
+              INTF_ShowScrollBars:PGDBBoolean;(*'Show scroll bars'*)
+             end;
   tdisp=record
              DISP_ZoomFactor:PGDBDouble;(*'Mouse wheel scale factor'*)
              DISP_OSSize:PGDBDouble;(*'Snap aperture size'*)
@@ -948,6 +951,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
     SAVE:tsave;(*'Saving'*)
     DWG:tdwg;(*'Drawing'*)
     DSGN:tdesigning;(*'Design'*)
+    INTF:tinterface;(*'Interface'*)
     VIEW:tview;(*'View'*)
     MISC:tmisc;(*'Miscellaneous'*)
     debug:tdebug;(*'Debug'*)
@@ -1354,7 +1358,8 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                procedure higlight;virtual;abstract;
                procedure ReCalcFromObjMatrix;virtual;abstract;
                function IsHaveLCS:GDBBoolean;virtual;abstract;
-               function CanSimplyDraw(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;//inline;
+               function CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;//inline;
+               function CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;//inline;
          end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBSolid.pas
 PGDBObjSolid=^GDBObjSolid;

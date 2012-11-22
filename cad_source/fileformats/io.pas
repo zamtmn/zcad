@@ -165,9 +165,9 @@ begin
             x:=0;
             y:=0;
             ymin:=infinity;
-            ymax:=-infinity;
+            ymax:=NegInfinity;
             xmin:=infinity;
-            xmax:=-infinity;
+            xmax:=NegInfinity;
             while pshxdata^<>0 do
               begin
                 {$IFDEF TOTALYLOG}programlog.logoutstr('shx command '+inttohex(pshxdata^,2),0);{$ENDIF}
@@ -653,7 +653,7 @@ begin
             {pf^.symbo linfo[symbol]}psyminfo.SymMinY:=ymin;
                                      if symbol=32 then
                                                       symbol:=symbol;
-                                    if xmax<>-infinity then
+                                    if xmax<>NegInfinity then
                                                            psyminfo.SymMaxX:=Xmax
                                                        else
                                                            psyminfo.SymMaxX:=psyminfo.NextSymX;

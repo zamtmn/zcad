@@ -47,7 +47,7 @@ const
       x_Y_zVertex:GDBVertex=(x:0;y:1;z:0);
       _X_yzVertex:GDBVertex=(x:1;y:0;z:0);
       MinusOneVertex:GDBVertex=(x:-1;y:-1;z:-1);
-      MinusInfinityVertex:GDBVertex=(x:-Infinity;y:-Infinity;z:-Infinity);
+      MinusInfinityVertex:GDBVertex=(x:NegInfinity;y:NegInfinity;z:NegInfinity);
       InfinityVertex:GDBVertex=(x:Infinity;y:Infinity;z:Infinity);
       NulVertex4D:GDBVertex4d=(x:0;y:0;z:0;w:1);
       NulVector4D:DVector4D=(0,0,0,0);

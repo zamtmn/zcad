@@ -304,7 +304,7 @@ begin
                                                                                         begin
                                                                                         I3DPPrev.t1:=Infinity;
                                                                                         I3DPPrev.isintercept:=false;
-                                                                                        I3DPNext.t1:=-Infinity;
+                                                                                        I3DPNext.t1:=NegInfinity;
                                                                                         I3DPNext.isintercept:=false;
                                                                                         ptd:=CurrentSubObj;
                                                                                         if CurrentSubObj.BlockDesc.BBorder=BB_owner then

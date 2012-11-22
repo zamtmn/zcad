@@ -220,9 +220,9 @@ begin
   l:=Infinity;
   b:=Infinity;
   n:=Infinity;
-  r:=-Infinity;
-  t:=-Infinity;
-  f:=-Infinity;
+  r:=NegInfinity;
+  t:=NegInfinity;
+  f:=NegInfinity;
   ptv:=VertexArrayInWCS.beginiterate(ir);
   if ptv<>nil then
   begin

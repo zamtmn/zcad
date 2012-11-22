@@ -293,9 +293,9 @@ begin
   l:=Infinity;
   b:=Infinity;
   n:=Infinity;
-  r:=-Infinity;
-  t:=-Infinity;
-  f:=-Infinity;
+  r:=NegInfinity;
+  t:=NegInfinity;
+  f:=NegInfinity;
   ptv:=Vertex3D_in_WCS_Array.beginiterate(ir);
   if ptv<>nil then
   begin

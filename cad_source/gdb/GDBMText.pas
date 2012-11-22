@@ -643,8 +643,8 @@ begin
 
   minx:=+infinity;
   miny:=+infinity;
-  maxx:=-infinity;
-  maxy:=-infinity;
+  maxx:=NegInfinity;
+  maxy:=NegInfinity;
   {minx:=+10000000;
   miny:=+10000000;
   maxx:=-10000000;

@@ -619,8 +619,8 @@ begin
 
   minx:=+infinity;
   miny:=+infinity;
-  maxx:=-infinity;
-  maxy:=-infinity;
+  maxx:=NegInfinity;
+  maxy:=NegInfinity;//-infinity;
 
   matr:=matrixmultiply(DrawMatrix,objmatrix);
   matr:=DrawMatrix;

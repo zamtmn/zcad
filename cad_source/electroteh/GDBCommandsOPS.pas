@@ -297,7 +297,7 @@ begin
   SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pco);
   //ZWinManager.ShowZObject(pp);
 end;
-function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: byte;mclick:integer): integer;
+function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): integer;
 begin
   result:=mclick;
   if (button and MZW_LBUTTON)<>0 then

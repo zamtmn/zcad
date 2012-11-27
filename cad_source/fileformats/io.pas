@@ -537,7 +537,7 @@ begin
                       incpshxdata;
                       incpshxdata;
                       incpshxdata;
-                      incpshxdata;
+                      //incpshxdata;
                       {line:=f.readworld(breakshp,ignoreshp);
                       line:=f.readworld(breakshp,ignoreshp);
                       line:=f.readworld(breakshp,ignoreshp);
@@ -661,7 +661,7 @@ begin
                                                           psyminfo.SymMinX:=Xmin
                                                       else
                                                           psyminfo.SymMinX:=0;
-            if symbol=42 then
+            if symbol=166 then
                              symbol:=symbol;
             psyminfo^.Name:=symname;
             psyminfo^.Number:=symbol;

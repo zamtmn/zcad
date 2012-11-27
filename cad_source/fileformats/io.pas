@@ -50,7 +50,7 @@ var
   baselen,ymin,ymax,xmin,xmax,x,y,x1,y1,xb,yb,r,startangle,angle,normal,hordlen,tgl:fontfloat;
   stack:array[0..4,0..1] of fontfloat;
   tr:array[1..3,0..1] of fontfloat;
-  hi,lo,byt,byt2:GDBByte;
+  hi,lo,byt,byt2,startoffset,endoffset:GDBByte;
   subsymbol:GDBInteger;
   int:GDBInteger;
   dx,dy:GDBShortint;
@@ -129,27 +129,17 @@ begin
                                         ymin:=tr[2,1];}
                                     end;
 
-         pf^.SHXdata.AddByteByVal(GDBLineID);//---------------------pGDBByte(pdata)^:=GDBLineID;
-         //---------------------inc(pdata,sizeof(GDBLineID));
-         pf^.SHXdata.AddFontFloat(@tr[1,0]);//---------------------pfontfloat(pdata)^:=tr[1,0];
-         //---------------------inc(pdata,sizeof(fontfloat));
-         pf^.SHXdata.AddFontFloat(@tr[1,1]);//---------------------pfontfloat(pdata)^:=tr[1,1];
-         //---------------------inc(pdata,sizeof(fontfloat));
-         pf^.SHXdata.AddFontFloat(@tr[3,0]);//---------------------pfontfloat(pdata)^:=tr[3,0];
-         //---------------------inc(pdata,sizeof(fontfloat));
-         pf^.SHXdata.AddFontFloat(@tr[3,1]);//---------------------pfontfloat(pdata)^:=tr[3,1];
-         //---------------------inc(pdata,sizeof(fontfloat));
+         pf^.SHXdata.AddByteByVal(GDBLineID);
+         pf^.SHXdata.AddFontFloat(@tr[1,0]);
+         pf^.SHXdata.AddFontFloat(@tr[1,1]);
+         pf^.SHXdata.AddFontFloat(@tr[3,0]);
+         pf^.SHXdata.AddFontFloat(@tr[3,1]);
          inc(sizeshx);
-         pf^.SHXdata.AddByteByVal(GDBLineID);//---------------------pGDBByte(pdata)^:=GDBLineID;
-         //---------------------inc(pdata,sizeof(GDBLineID));
-         pf^.SHXdata.AddFontFloat(@tr[3,0]);//---------------------pfontfloat(pdata)^:=tr[3,0];
-         //---------------------inc(pdata,sizeof(fontfloat));
-         pf^.SHXdata.AddFontFloat(@tr[3,1]);//---------------------pfontfloat(pdata)^:=tr[3,1];
-         //---------------------inc(pdata,sizeof(fontfloat));
-         pf^.SHXdata.AddFontFloat(@tr[2,0]);//---------------------pfontfloat(pdata)^:=tr[2,0];
-         //---------------------inc(pdata,sizeof(fontfloat));
-         pf^.SHXdata.AddFontFloat(@tr[2,1]);//---------------------pfontfloat(pdata)^:=tr[2,1];
-         //---------------------inc(pdata,sizeof(fontfloat));
+         pf^.SHXdata.AddByteByVal(GDBLineID);
+         pf^.SHXdata.AddFontFloat(@tr[3,0]);
+         pf^.SHXdata.AddFontFloat(@tr[3,1]);;
+         pf^.SHXdata.AddFontFloat(@tr[2,0]);
+         pf^.SHXdata.AddFontFloat(@tr[2,1]);
          inc(sizeshx);
        end;
 end;
@@ -470,16 +460,6 @@ begin
                     begin
                          incpshxdata;
                          r:=pshxdata^*baselen;
-                         {line:=f.readworld(breakshp,ignoreshp);
-                      if line[1]='-' then
-                        begin
-                          line:=copy(line,2,length(line)-1);
-                          angle:=-1;
-                        end
-                      else
-                        angle:=1;
-                      line:='$'+line;
-                      byt:=strtoint(line);}
                       incpshxdata;
                       byt:=pshxdata^;
                       hi:=byt div 16;
@@ -492,17 +472,13 @@ begin
                       xb:=x-r*cos(startangle);
                       yb:=y-r*sin(startangle);
 
-                      pf^.SHXdata.AddByteByVal(GDBPolylineID);//---------------------pGDBByte(pdata)^:=GDBPolylineID;
-                      //---------------------inc(pdata,sizeof(GDBPolylineID));
+                      pf^.SHXdata.AddByteByVal(GDBPolylineID);
                       ppolycount:=pf^.SHXdata.Count;
-                      {ppolycount:=}pf^.SHXdata.AllocData(sizeof(GDBWord));//---------------------ppolycount:=pointer(pdata);
-                      //---------------------inc(pdata,sizeof(GDBWord));
+                      pf^.SHXdata.AllocData(sizeof(GDBWord));
                       inc(sizeshx);
                       sizeshp:=1;
-                      pf^.SHXdata.AddFontFloat(@x);//---------------------pfontfloat(pdata)^:=x;
-                      //---------------------inc(pdata,sizeof(fontfloat));
-                      pf^.SHXdata.AddFontFloat(@y);//---------------------pfontfloat(pdata)^:=y;
-                      //---------------------inc(pdata,sizeof(fontfloat));
+                      pf^.SHXdata.AddFontFloat(@x);
+                      pf^.SHXdata.AddFontFloat(@y);
                       x1:=0;
                       y1:=0;
                       for i:=1 to arccount do
@@ -512,38 +488,65 @@ begin
                           if draw then
                             begin
                                          ProcessMinMax(x1,y1);
-                              {if y1>ymax then
-                                ymax:=y1;
-                              if y1<ymin then
-                                ymin:=y1;}
-                              pf^.SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
-                              //---------------------inc(pdata,sizeof(fontfloat));
-                              pf^.SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
-                              //---------------------inc(pdata,sizeof(fontfloat));
+                              pf^.SHXdata.AddFontFloat(@x1);
+                              pf^.SHXdata.AddFontFloat(@y1);
                               inc(sizeshp);
                             end;
                         end;
                       x:=x1;
                       y:=y1;
-                      pGDBWord({ppolycount}pf^.SHXdata.getelement(ppolycount))^:=sizeshp;
-
-                                                                                        {line:=f.readworld(breakshp,ignoreshp);
-                                                                                        line:=f.readworld(breakshp,ignoreshp);}
+                      pGDBWord(pf^.SHXdata.getelement(ppolycount))^:=sizeshp;
                     end;
                   011:
                     begin
                       incpshxdata;
+                      startoffset:=pshxdata^;
                       incpshxdata;
+                      endoffset:=pshxdata^;
+                      if (startoffset<>0)or(startoffset<>0)then
+                                                               startoffset:=startoffset;
                       incpshxdata;
+                      r:=100*pshxdata^*baselen;
+
                       incpshxdata;
-                      incpshxdata;
-                      //incpshxdata;
-                      {line:=f.readworld(breakshp,ignoreshp);
-                      line:=f.readworld(breakshp,ignoreshp);
-                      line:=f.readworld(breakshp,ignoreshp);
-                      line:=f.readworld(breakshp,ignoreshp);
-                      line:=f.readworld(breakshp,ignoreshp);
-                      line:=f.readworld(breakshp,ignoreshp);}
+                      r:=r+pshxdata^*baselen;
+                   incpshxdata;
+                   byt:=pshxdata^;
+                   hi:=byt div 16;
+                   lo:=byt and $0F;
+                   if lo=0 then
+                     angle:=2*pi
+                   else
+                     angle:=sign(Shortint(byt))*lo*pi/4;
+                   angle:=angle-endoffset/256*45*pi/180;
+                   startangle:=hi*pi/4+startoffset/256*45*pi/180;
+                   xb:=x-r*cos(startangle);
+                   yb:=y-r*sin(startangle);
+
+                   pf^.SHXdata.AddByteByVal(GDBPolylineID);
+                   ppolycount:=pf^.SHXdata.Count;
+                   pf^.SHXdata.AllocData(sizeof(GDBWord));
+                   inc(sizeshx);
+                   sizeshp:=1;
+                   pf^.SHXdata.AddFontFloat(@x);
+                   pf^.SHXdata.AddFontFloat(@y);
+                   x1:=0;
+                   y1:=0;
+                   for i:=1 to arccount do
+                     begin
+                       x1:=xb+r*cos(startangle+i/arccount*angle);
+                       y1:=yb+r*sin(startangle+i/arccount*angle);
+                       if draw then
+                         begin
+                                      ProcessMinMax(x1,y1);
+                           pf^.SHXdata.AddFontFloat(@x1);
+                           pf^.SHXdata.AddFontFloat(@y1);
+                           inc(sizeshp);
+                         end;
+                     end;
+                   x:=x1;
+                   y:=y1;
+                   pGDBWord(pf^.SHXdata.getelement(ppolycount))^:=sizeshp;
                     end;
                   012:
                     begin

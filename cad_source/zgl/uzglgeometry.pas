@@ -77,7 +77,7 @@ begin
 
           scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;
           num:=Length/(scale*vp.LineType.len);
-          if num<1 then
+          if (num<1)or(num>1000) then
                        SetUnLTyped
           else
           begin
@@ -242,4 +242,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBPoint3DArray.initialization');{$ENDIF}
 end.
-
+

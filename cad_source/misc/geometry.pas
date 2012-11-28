@@ -173,6 +173,8 @@ function QuaternionFromMatrix(const mat : DMatrix4D) : GDBQuaternion;
 function QuaternionSlerp(const source, dest: GDBQuaternion; const t: GDBDouble): GDBQuaternion;
 function QuaternionToMatrix(quat : GDBQuaternion) :  DMatrix4D;
 
+function GetArcParamFrom3Point2D(Const PointData:tarcrtmodify;out ad:TArcData):GDBBoolean;
+
 var WorldMatrix{,CurrentCS}:DMatrix4D;
     wx:PGDBVertex;
     wy:PGDBVertex;
@@ -1935,6 +1937,54 @@ begin
    Result[1, 3] := 0;
    Result[2, 3] := 0;
    Result[3, 3] := 1;
+end;
+function GetArcParamFrom3Point2D(Const PointData:tarcrtmodify;out ad:TArcData):GDBBoolean;
+var a,b,c,d,e,f,g,rr:GDBDouble;
+    tv:gdbvertex2d;
+    tv3d:gdbvertex;
+begin
+  A:= PointData.p2.x - PointData.p1.x;
+  B:= PointData.p2.y - PointData.p1.y;
+  C:= PointData.p3.x - PointData.p1.x;
+  D:= PointData.p3.y - PointData.p1.y;
+
+  E:= A*(PointData.p1.x + PointData.p2.x) + B*(PointData.p1.y + PointData.p2.y);
+  F:= C*(PointData.p1.x + PointData.p3.x) + D*(PointData.p1.y + PointData.p3.y);
+
+  G:= 2*(A*(PointData.p3.y - PointData.p2.y)-B*(PointData.p3.x - PointData.p2.x));
+  if abs(g)>eps then
+  begin
+    result:=true;
+  ad.p.x:= (D*E - B*F) / G;
+  ad.p.y:= (A*F - C*E) / G;
+  {rr}ad.r:= sqrt(sqr(PointData.p1.x - ad.p.x) + sqr(PointData.p1.y - ad.p.y));
+  //ad.r:=rr;
+  {Local.p_insert.x:=p_x;
+  Local.p_insert.y:=p_y;
+  Local.p_insert.z:=0;}
+  tv.x:=ad.p.x;
+  tv.y:=ad.p.y;
+  ad.startangle:=vertexangle(tv,PointData.p1);
+  ad.endangle:=vertexangle(tv,PointData.p3);
+  if ad.startangle>ad.endangle then
+  begin
+                                                                                rr:=ad.startangle;
+                                                                                ad.startangle:=ad.endangle;
+                                                                                ad.endangle:=rr
+  end;
+  rr:=vertexangle(tv,PointData.p2);
+  if (rr>ad.startangle) and (rr<ad.endangle) then
+                                                                           begin
+                                                                           end
+                                                                       else
+                                                                           begin
+                                                                                rr:=ad.startangle;
+                                                                                ad.startangle:=ad.endangle;
+                                                                                ad.endangle:=rr
+                                                                           end;
+  end
+  else
+      result:=false;
 end;
 
 

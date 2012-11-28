@@ -155,6 +155,14 @@ GDBray=record
 GDBPiece=record
              lbegin,dir,lend:GDBvertex;
        end;
+ptarcrtmodify=^tarcrtmodify;
+tarcrtmodify=record
+                      p1,p2,p3:GDBVertex2d;
+                end;
+TArcData=record
+               r,startangle,endangle:gdbdouble;
+               p:GDBvertex2D;
+end;
 GDBCameraBaseProp=record
                         point:GDBvertex;
                         look:GDBvertex;

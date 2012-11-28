@@ -19,7 +19,7 @@
 unit io;
 {$INCLUDE def.inc}
 interface
-uses zcadstrconsts,intftranslations,UGDBSHXFont,strproc,FileUtil,LCLProc,GDBBlockDef,math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,GDBManager,iodxf,memman,UGDBDescriptor,gdbobjectsconstdef;
+uses geometry,zcadstrconsts,intftranslations,UGDBSHXFont,strproc,FileUtil,LCLProc,GDBBlockDef,math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,GDBManager,iodxf,memman,UGDBDescriptor,gdbobjectsconstdef;
 const
   IgnoreSHP='() '#13;
   BreakSHP='*,'#10;
@@ -49,7 +49,7 @@ var
   i,j,poz,code,sizeshp,sizeshx,stackheap:GDBInteger;
   baselen,ymin,ymax,xmin,xmax,x,y,x1,y1,xb,yb,r,startangle,angle,normal,hordlen,tgl:fontfloat;
   stack:array[0..4,0..1] of fontfloat;
-  tr:array[1..3,0..1] of fontfloat;
+  tr:{array[1..3,0..1] of fontfloat}tarcrtmodify;
   hi,lo,byt,byt2,startoffset,endoffset:GDBByte;
   subsymbol:GDBInteger;
   int:GDBInteger;
@@ -77,15 +77,19 @@ begin
      inc(inccounter);
 end;
 procedure createarc;
+var
+  tf:fontfloat;
+  ad:TArcData;
+  j:integer;
 begin
      {ine:=f.readworld(breakshp,ignoreshp);
      dx:=strtoint(line);
      line:=f.readworld(breakshp,ignoreshp);
      dy:=strtoint(line);}
-     tr[1,0]:=x;
-     tr[1,1]:=y;
-     tr[2,0]:=x+dx*baselen;
-     tr[2,1]:=y+dy*baselen;
+     tr.p1.x{[1,0]}:=x;
+     tr.p1.y{[1,1]}:=y;
+     tr.p3.x{[2,0]}:=x+dx*baselen;
+     tr.p3.y{[2,1]}:=y+dy*baselen;
      x1:=dx*baselen;
      y1:=dy*baselen;
      hordlen:=sqrt(sqr(x1)+sqr(y1));
@@ -104,17 +108,18 @@ begin
      {line:=f.readworld(breakshp,ignoreshp);
      int:=strtoint(line);}
      normal:=-int*hordlen/2/127;
-     tr[3,0]:=x+x1*normal;
-     tr[3,1]:=y+y1*normal;
-     x:=tr[2,0];
-     y:=tr[2,1];
+     tr.p2.x{[3,0]}:=x+x1*normal;
+     tr.p2.y{[3,1]}:=y+y1*normal;
      if draw then
        begin
 
                                     begin
-                                         ProcessMinMax(tr[1,0],tr[1,1]);
+                                         ProcessMinMax(tr.p1.x,tr.p1.y);
+                                         ProcessMinMax(tr.p2.x,tr.p2.y);
+                                         ProcessMinMax(tr.p3.x,tr.p3.y);
+                                         {ProcessMinMax(tr[1,0],tr[1,1]);
                                          ProcessMinMax(tr[2,0],tr[2,1]);
-                                         ProcessMinMax(tr[3,0],tr[3,1]);
+                                         ProcessMinMax(tr[3,0],tr[3,1]);}
                                       {if tr[1,1]>ymax then
                                         ymax:=tr[1,1];
                                       if tr[1,1]<ymin then
@@ -128,20 +133,62 @@ begin
                                       if tr[2,1]<ymin then
                                         ymin:=tr[2,1];}
                                     end;
-
+         if GetArcParamFrom3Point2D(tr,ad) then
+                 begin
+                 startangle:=ad.startangle;
+                 angle:=ad.endangle-ad.startangle;
+                 if angle<0 then angle := 2*pi+angle;
+                 pf^.SHXdata.AddByteByVal(GDBPolylineID);
+                 ppolycount:=pf^.SHXdata.Count;
+                 pf^.SHXdata.AllocData(sizeof(GDBWord));
+                 inc(sizeshx);
+                 sizeshp:=0;
+                 {tf:=tr.p1.x;
+                 pf^.SHXdata.AddFontFloat(@tf);
+                 tf:=tr.p1.y;
+                 pf^.SHXdata.AddFontFloat(@tf);}
+                 for j:=0 to arccount do
+                   begin
+                     x1:=ad.p.x+(ad.r)*cos(startangle+j/arccount*angle);
+                     y1:=ad.p.y+(ad.r)*sin(startangle+j/arccount*angle);
+                     if draw then
+                       begin
+                                    ProcessMinMax(x1,y1);
+                         pf^.SHXdata.AddFontFloat(@x1);
+                         pf^.SHXdata.AddFontFloat(@y1);
+                         inc(sizeshp);
+                       end;
+                   end;
+                   {x:=x1;
+                   y:=y1;}
+                   pGDBWord(pf^.SHXdata.getelement(ppolycount))^:=sizeshp;
+                 end
+         else
+         begin
          pf^.SHXdata.AddByteByVal(GDBLineID);
-         pf^.SHXdata.AddFontFloat(@tr[1,0]);
-         pf^.SHXdata.AddFontFloat(@tr[1,1]);
-         pf^.SHXdata.AddFontFloat(@tr[3,0]);
-         pf^.SHXdata.AddFontFloat(@tr[3,1]);
+         tf:=tr.p1.x;
+         pf^.SHXdata.AddFontFloat(@tf);
+         tf:=tr.p1.y;
+         pf^.SHXdata.AddFontFloat(@tf);
+         tf:=tr.p3.x;
+         pf^.SHXdata.AddFontFloat(@tf);
+         tf:=tr.p3.y;
+         pf^.SHXdata.AddFontFloat(@tf);
          inc(sizeshx);
-         pf^.SHXdata.AddByteByVal(GDBLineID);
-         pf^.SHXdata.AddFontFloat(@tr[3,0]);
-         pf^.SHXdata.AddFontFloat(@tr[3,1]);;
-         pf^.SHXdata.AddFontFloat(@tr[2,0]);
-         pf^.SHXdata.AddFontFloat(@tr[2,1]);
-         inc(sizeshx);
+         {pf^.SHXdata.AddByteByVal(GDBLineID);
+         tf:=tr.p2.x;
+         pf^.SHXdata.AddFontFloat(@tf);
+         tf:=tr.p2.y;
+         pf^.SHXdata.AddFontFloat(@tf);
+         tf:=tr.p3.x;
+         pf^.SHXdata.AddFontFloat(@tf);
+         tf:=tr.p3.y;
+         pf^.SHXdata.AddFontFloat(@tf);
+         inc(sizeshx);}
+         end;
        end;
+       x:=tr.p3.x{[2,0]};
+       y:=tr.p3.y{[2,1]};
 end;
 begin
             inccounter:=0;
@@ -518,8 +565,8 @@ begin
                      angle:=2*pi
                    else
                      angle:=sign(Shortint(byt))*lo*pi/4;
-                   angle:=angle-endoffset/256*45*pi/180;
-                   startangle:=hi*pi/4+startoffset/256*45*pi/180;
+                   angle:=angle-sign(Shortint(byt))*endoffset/256*45*pi/180-sign(Shortint(byt))*startoffset/256*45*pi/180;
+                   startangle:=hi*pi/4+sign(Shortint(byt))*startoffset/256*45*pi/180;
                    xb:=x-r*cos(startangle);
                    yb:=y-r*sin(startangle);
 

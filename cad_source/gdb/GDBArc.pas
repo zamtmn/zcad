@@ -23,10 +23,6 @@ gl,ugdbltypearray,
 GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain{,OGLSpecFunc};
 type
 {Export+}
-  ptarcrtmodify=^tarcrtmodify;
-  tarcrtmodify=record
-                        p1,p2,p3:GDBVertex2d;
-                  end;
 PGDBObjArc=^GDBObjARC;
 GDBObjArc=object(GDBObjPlain)
                  R:GDBDouble;(*saved_to_shd*)
@@ -711,6 +707,7 @@ var a,b,c,d,e,f,g,p_x,p_y,rr:GDBDouble;
     tv3d:gdbvertex;
     ptdata:tarcrtmodify;
     m1:DMatrix4D;
+    ad:TArcData;
 begin
      //rtmod.point.pobject:=;
      tv3d:=VertexAdd(rtmod.point.worldcoord,rtmod.dist);
@@ -739,7 +736,17 @@ begin
                              ptdata.p3.y:={q2.y+rtmod.dist}tv3d.y;
                         end;
           end;
-        A:= ptdata.p2.x - ptdata.p1.x;
+        if GetArcParamFrom3Point2D(ptdata,ad) then
+        begin
+              Local.p_insert.x:=ad.p.x;
+              Local.p_insert.y:=ad.p.y;
+              Local.p_insert.z:=0;
+              startangle:=ad.startangle;
+              endangle:=ad.endangle;
+              r:=ad.r;
+              format;
+        end;
+        {A:= ptdata.p2.x - ptdata.p1.x;
         B:= ptdata.p2.y - ptdata.p1.y;
         C:= ptdata.p3.x - ptdata.p1.x;
         D:= ptdata.p3.y - ptdata.p1.y;
@@ -779,7 +786,7 @@ begin
                                                                                  end;
         format;
         //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
-        end;
+        end;}
 
 end;
 function GDBObjARC.Clone;

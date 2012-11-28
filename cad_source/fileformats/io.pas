@@ -553,7 +553,7 @@ begin
                       if (startoffset<>0)or(startoffset<>0)then
                                                                startoffset:=startoffset;
                       incpshxdata;
-                      r:=100*pshxdata^*baselen;
+                      r:=256*pshxdata^*baselen;
 
                       incpshxdata;
                       r:=r+pshxdata^*baselen;
@@ -562,11 +562,11 @@ begin
                    hi:=byt div 16;
                    lo:=byt and $0F;
                    if lo=0 then
-                     angle:=2*pi
-                   else
-                     angle:=sign(Shortint(byt))*lo*pi/4;
-                   angle:=angle-sign(Shortint(byt))*endoffset/256*45*pi/180-sign(Shortint(byt))*startoffset/256*45*pi/180;
-                   startangle:=hi*pi/4+sign(Shortint(byt))*startoffset/256*45*pi/180;
+                               angle:=2*pi
+                           else
+                               angle:=sign(Shortint(byt))*lo*pi/4;
+                   angle:=angle-sign(Shortint(byt))*pi/180*{round}((endoffset+startoffset)/256*45); { TODO : symbol & wrong in isocp.shx, see errors\5.dxf }
+                   startangle:=hi*pi/4+sign(Shortint(byt))*pi/180*{round}(startoffset/256*45);
                    xb:=x-r*cos(startangle);
                    yb:=y-r*sin(startangle);
 
@@ -585,10 +585,10 @@ begin
                        y1:=yb+r*sin(startangle+i/arccount*angle);
                        if draw then
                          begin
-                                      ProcessMinMax(x1,y1);
-                           pf^.SHXdata.AddFontFloat(@x1);
-                           pf^.SHXdata.AddFontFloat(@y1);
-                           inc(sizeshp);
+                              ProcessMinMax(x1,y1);
+                              pf^.SHXdata.AddFontFloat(@x1);
+                              pf^.SHXdata.AddFontFloat(@y1);
+                              inc(sizeshp);
                          end;
                      end;
                    x:=x1;

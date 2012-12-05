@@ -353,6 +353,14 @@ begin
           gdb.GetCurrentDWG.OGLwindow1.sendcoordtocommandTraceOn(temp,MZW_LBUTTON,nil);
           //commandmanager.sendpoint2command(temp, poglwnd.md.mouse, 1,nil);
           //OGLwindow1.param.lastpoint:=temp;
+        end
+        else
+        begin
+             if commandmanager.pcommandrunning<>nil then
+             begin
+                  commandmanager.PushValue('','GDBDouble',@len);
+                  commandmanager.pcommandrunning.CommandContinue;
+             end;
         end;
       end
       end

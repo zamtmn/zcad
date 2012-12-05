@@ -184,6 +184,8 @@ type
 
   rotate_com = object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
+    procedure CommandContinue; virtual;
+    procedure rot(a:GDBDouble; button: GDBByte);
   end;
   scale_com = object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
@@ -2291,10 +2293,79 @@ begin
       commandmanager.executecommandend;
    end;
 end;
+procedure rotate_com.CommandContinue;
+var v1:vardesk;
+    td:gdbdouble;
+begin
+   if (commandmanager.GetValueHeap{-vs})>0 then
+   begin
+   v1:=commandmanager.PopValue;
+   td:=Pgdbdouble(v1.data.Instance)^*pi/180;
+   rot(td,MZW_LBUTTON);
+   end;
+end;
+
+procedure rotate_com.rot(a:GDBDouble; button: GDBByte);
+var
+    dispmatr,im,rotmatr:DMatrix4D;
+    ir:itrec;
+    pcd:PTCopyObjectDesc;
+    v1,v2:GDBVertex2d;
+    m:tmethod;
+begin
+  dispmatr:=geometry.CreateTranslationMatrix(createvertex(-t3dp.x,-t3dp.y,-t3dp.z));
+  rotmatr:=geometry.CreateRotationMatrixZ(sin(a),cos(a));
+  rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
+  dispmatr:=geometry.CreateTranslationMatrix(createvertex(t3dp.x,t3dp.y,t3dp.z));
+  dispmatr:=geometry.MatrixMultiply(rotmatr,dispmatr);
+
+if (button and MZW_LBUTTON)=0 then
+                 begin
+                      //gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=dispmatr;
+                      gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=dispmatr;
+                       {pcd:=pcoa^.beginiterate(ir);
+                       if pcd<>nil then
+                       repeat
+                            pcd.clone^.TransformAt(pcd.obj,@dispmatr);
+                            pcd.clone^.format;
+                            pcd:=pcoa^.iterate(ir);
+                       until pcd=nil;}
+                 end
+            else
+                begin
+                  im:=dispmatr;
+                  geometry.MatrixInvert(im);
+                  ptdrawing(GDB.GetCurrentDWG).UndoStack.PushStartMarker('Rotate');
+                  with ptdrawing(GDB.GetCurrentDWG).UndoStack.PushCreateTGMultiObjectChangeCommand(dispmatr,im,pcoa^.Count)^ do
+                  begin
+                   pcd:=pcoa^.beginiterate(ir);
+                  if pcd<>nil then
+                  repeat
+                      m.Data:=pcd.obj;
+                      m.Code:=pointer(pcd.obj^.Transform);
+                      AddMethod(m);
+
+                      dec(pcd.obj.vp.LastCameraPos);
+                      //pcd.obj^.Format;
+
+                      pcd:=pcoa^.iterate(ir);
+                  until pcd=nil;
+                  comit;
+                  end;
+                  ptdrawing(GDB.GetCurrentDWG).UndoStack.PushEndMarker;
+                end;
+if (button and MZW_LBUTTON)<>0 then
+begin
+gdb.GetCurrentROOT.FormatAfterEdit;
+gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+commandend;
+commandmanager.executecommandend;
+end;
+
+end;
 
 function rotate_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
-var //i:GDBInteger;
-    //dist:gdbvertex;
+var
     dispmatr,im,rotmatr:DMatrix4D;
     ir:itrec;
     pcd:PTCopyObjectDesc;
@@ -2308,60 +2379,9 @@ begin
       v1.y:=t3dp.y;
       a:=geometry.Vertexangle(v1,v2);
 
+      rot(a,button);
+
       //dispmatr:=onematrix;
-      dispmatr:=geometry.CreateTranslationMatrix(createvertex(-t3dp.x,-t3dp.y,-t3dp.z));
-      rotmatr:=geometry.CreateRotationMatrixZ(sin(a),cos(a));
-      rotmatr:=geometry.MatrixMultiply(dispmatr,rotmatr);
-      dispmatr:=geometry.CreateTranslationMatrix(createvertex(t3dp.x,t3dp.y,t3dp.z));
-      dispmatr:=geometry.MatrixMultiply(rotmatr,dispmatr);
-
-   if button<>1 then
-                     begin
-                          //gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=dispmatr;
-                           pcd:=pcoa^.beginiterate(ir);
-                           if pcd<>nil then
-                           repeat
-                                pcd.clone^.TransformAt(pcd.obj,@dispmatr);
-                                pcd.clone^.format;
-                                {if button = 1 then
-                                                  begin
-                                                  pcd.clone^.rtsave(pcd.obj);
-                                                  pcd.obj^.Format;
-                                                  end;}
-
-                                pcd:=pcoa^.iterate(ir);
-                           until pcd=nil;
-                     end
-                else
-                    begin
-                      im:=dispmatr;
-                      geometry.MatrixInvert(im);
-                      ptdrawing(GDB.GetCurrentDWG).UndoStack.PushStartMarker('Rotate');
-                      with ptdrawing(GDB.GetCurrentDWG).UndoStack.PushCreateTGMultiObjectChangeCommand(dispmatr,im,pcoa^.Count)^ do
-                      begin
-                       pcd:=pcoa^.beginiterate(ir);
-                      if pcd<>nil then
-                      repeat
-                          m.Data:=pcd.obj;
-                          m.Code:=pointer(pcd.obj^.Transform);
-                          AddMethod(m);
-
-                          dec(pcd.obj.vp.LastCameraPos);
-                          //pcd.obj^.Format;
-
-                          pcd:=pcoa^.iterate(ir);
-                      until pcd=nil;
-                      comit;
-                      end;
-                      ptdrawing(GDB.GetCurrentDWG).UndoStack.PushEndMarker;
-                    end;
-  if (button and MZW_LBUTTON)<>0 then
-  begin
-   gdb.GetCurrentROOT.FormatAfterEdit;
-   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
-   commandend;
-   commandmanager.executecommandend;
-  end;
 end;
 function scale_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 var //i:GDBInteger;

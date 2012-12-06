@@ -166,6 +166,14 @@ GDBray=record
 GDBPiece=record
              lbegin,dir,lend:GDBvertex;
        end;
+ptarcrtmodify=^tarcrtmodify;
+tarcrtmodify=record
+                      p1,p2,p3:GDBVertex2d;
+                end;
+TArcData=record
+               r,startangle,endangle:gdbdouble;
+               p:GDBvertex2D;
+end;
 GDBCameraBaseProp=record
                         point:GDBvertex;
                         look:GDBvertex;
@@ -1280,6 +1288,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure ReCalcFromObjMatrix;virtual;abstract;
                     procedure correctsublayers(var la:GDBLayerArray);virtual;abstract;
                     procedure CopyVPto(var toObj:GDBObjEntity);virtual;abstract;
+                    function CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
               end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDB3d.pas
 GDBObj3d=object(GDBObjEntity)
@@ -1358,8 +1367,7 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                procedure higlight;virtual;abstract;
                procedure ReCalcFromObjMatrix;virtual;abstract;
                function IsHaveLCS:GDBBoolean;virtual;abstract;
-               function CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;//inline;
-               function CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;//inline;
+               function CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
          end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBSolid.pas
 PGDBObjSolid=^GDBObjSolid;
@@ -1495,10 +1503,6 @@ GDBObjCircle=object(GDBObjWithLocalCS)
                  function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBArc.pas
-  ptarcrtmodify=^tarcrtmodify;
-  tarcrtmodify=record
-                        p1,p2,p3:GDBVertex2d;
-                  end;
 PGDBObjArc=^GDBObjARC;
 GDBObjArc=object(GDBObjPlain)
                  R:GDBDouble;(*saved_to_shd*)
@@ -2293,6 +2297,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     CStartAttrDisableAttr:TCStartAttr;(*hidden_in_objinsp*)
     CEndActionAttr:TCEndAttr;(*hidden_in_objinsp*)
     pdwg:GDBPointer;(*hidden_in_objinsp*)
+    NotUseCommandLine:GDBBoolean;(*hidden_in_objinsp*)
     procedure CommandStart(Operands:pansichar); virtual; abstract;
     procedure CommandEnd; virtual; abstract;
     procedure CommandCancel; virtual; abstract;
@@ -2508,6 +2513,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
     function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;abstract;
     function Move(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
+    procedure showprompt(mklick:integer);virtual;abstract;
   end;
   copy_com = object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
@@ -2519,9 +2525,15 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
   end;
   rotate_com = object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
+    procedure CommandContinue; virtual;abstract;
+    procedure rot(a:GDBDouble; button: GDBByte);
+    procedure showprompt(mklick:integer);virtual;abstract;
   end;
   scale_com = object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;abstract;
+    procedure scale(a:GDBDouble; button: GDBByte);
+    procedure showprompt(mklick:integer);virtual;abstract;
+    procedure CommandContinue; virtual;abstract;
   end;
   copybase_com = object(CommandRTEdObject)
     procedure CommandStart(Operands:pansichar); virtual;abstract;

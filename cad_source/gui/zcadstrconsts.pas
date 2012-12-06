@@ -74,6 +74,7 @@ resourcestring
   rscmBasePoint='Base point:';
   rscmNewBasePoint='New base point:';
   rscmPickOrEnterAngle='Pick or enter angle:';
+  rscmPickOrEnterScale='Pick or enter scale:';
   rscmInsertPoint='Insert point:';
   rscmCenterPointCircle='Center point for circle:';
   rscmPointOnCircle='Point on a circle:';

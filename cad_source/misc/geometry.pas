@@ -81,7 +81,7 @@ function intercept2dmy(const l1begin,l1end,l2begin,l2end:gdbvertex2d):intercept2
 function intercept3dmy(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;inline;
 function intercept3dmy2(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;//inline;
 
-function intercept3d(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;inline;
+function intercept3d(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;//inline;
 
 function pointinquad2d(const x1, y1, x2, y2, xp, yp: GDBFloat): GDBBoolean;inline;
 function Vertexlength(const Vector1, Vector2: GDBVertex): GDBDouble;{inline;}
@@ -1557,7 +1557,7 @@ begin
    d2121:= p21.x * p21.x + p21.y * p21.y + p21.z * p21.z;
 
    denom:= d2121 * d4343 - d4321 * d4321;
-   if (ABS(denom) < EPS)  then exit;
+   if (ABS(denom) < {EPS}sqreps)  then exit;
    numer:= d1343 * d4321 - d1321 * d4343;
 
    result.t1:=numer/denom;

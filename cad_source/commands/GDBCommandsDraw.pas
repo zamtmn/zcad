@@ -172,6 +172,7 @@ type
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
     function Move(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
+    procedure showprompt(mklick:integer);virtual;
   end;
   copy_com = object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
@@ -186,6 +187,7 @@ type
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     procedure CommandContinue; virtual;
     procedure rot(a:GDBDouble; button: GDBByte);
+    procedure showprompt(mklick:integer);virtual;
   end;
   scale_com = object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
@@ -2082,6 +2084,14 @@ begin
   CommandName := 'Move';
   CommandGDBString := '';
 end;}
+procedure Move_com.showprompt(mklick:integer);
+begin
+     case mklick of
+     0:historyoutstr(rscmBasePoint);
+     1:historyoutstr(rscmNewBasePoint);
+     end;
+end;
+
 procedure Move_com.CommandStart;
 var //i: GDBInteger;
   tv,pobj: pGDBObjEntity;
@@ -2105,7 +2115,7 @@ begin
   begin
   inherited CommandStart('');
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  historyoutstr(rscmBasePoint);
+  showprompt(0);
 
    GDBGetMem({$IFDEF DEBUGBUILD}'{7702D93A-064E-4935-BFB5-DFDDBAFF9A93}',{$ENDIF}GDBPointer(pcoa),sizeof(GDBOpenArrayOfData));
    pcoa^.init({$IFDEF DEBUGBUILD}'{379DC609-F39E-42E5-8E79-6D15F8630061}',{$ENDIF}counter,sizeof(TCopyObjectDesc));
@@ -2154,7 +2164,9 @@ function Move_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;o
 begin
   t3dp:=wc;
   result:=0;
- end;
+  if (button and MZW_LBUTTON)<>0 then
+                                     showprompt(1);
+end;
 function Move_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
 var
     dist:gdbvertex;
@@ -2304,7 +2316,13 @@ begin
    rot(td,MZW_LBUTTON);
    end;
 end;
-
+procedure rotate_com.showprompt(mklick:integer);
+begin
+     case mklick of
+     0:inherited;
+     1:historyoutstr(rscmPickOrEnterAngle);
+     end;
+end;
 procedure rotate_com.rot(a:GDBDouble; button: GDBByte);
 var
     dispmatr,im,rotmatr:DMatrix4D;
@@ -3115,6 +3133,7 @@ begin
   mirror.commanddata.PTD:=SysUnit.TypeName2PTD('TMirrorParam');
   move.init('Move',0,0);
   rotate.init('Rotate',0,0);
+  rotate.NotUseCommandLine:=false;
   scale.init('Scale',0,0);
   copybase.init('CopyBase',0,0);
   PasteClip.init('PasteClip',0,0);

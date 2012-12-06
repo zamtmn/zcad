@@ -58,6 +58,7 @@ type
                           function PopValue:vardesk;virtual;
                           function GetValue:vardesk;virtual;
                           function GetValueHeap:GDBInteger;
+                          function CurrentCommandNotUseCommandLine:GDBBoolean;
                           procedure PrepairVarStack;
                     end;
 var commandmanager:GDBcommandmanager;
@@ -71,6 +72,13 @@ uses ugdbsimpledrawing,UGDBStringArray,cmdline,UGDBDescriptor,forms{,varman};
 function GDBcommandmanager.GetValueHeap:GDBInteger;
 begin
      result:=varstack.vardescarray.count;
+end;
+function GDBcommandmanager.CurrentCommandNotUseCommandLine:GDBBoolean;
+begin
+     if pcommandrunning<>nil then
+                                 result:=pcommandrunning.NotUseCommandLine
+                             else
+                                 result:=true;
 end;
 
 procedure GDBcommandmanager.PushValue(varname,vartype:GDBString;instance:GDBPointer);

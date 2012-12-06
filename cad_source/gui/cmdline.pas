@@ -342,7 +342,7 @@ begin
       if assigned(gdb.GetCurrentDWG) then
       if assigned(gdb.GetCurrentDWG.OGLwindow1) then
       begin
-        if gdb.GetCurrentDWG.OGLwindow1.param.polarlinetrace = 1 then
+        if (gdb.GetCurrentDWG.OGLwindow1.param.polarlinetrace = 1)and commandmanager.CurrentCommandNotUseCommandLine then
         begin
           tv:=pgdbvertex(gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.otrackarray[gdb.GetCurrentDWG.OGLwindow1.param.pointnum].arrayworldaxis.getelement(gdb.GetCurrentDWG.OGLwindow1.param.axisnum))^;
           tv:=geometry.normalizevertex(tv);

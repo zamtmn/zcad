@@ -40,6 +40,7 @@ type
     CStartAttrDisableAttr:TCStartAttr;(*hidden_in_objinsp*)
     CEndActionAttr:TCEndAttr;(*hidden_in_objinsp*)
     pdwg:GDBPointer;(*hidden_in_objinsp*)
+    NotUseCommandLine:GDBBoolean;(*hidden_in_objinsp*)
     procedure CommandStart(Operands:pansichar); virtual; abstract;
     procedure CommandEnd; virtual; abstract;
     procedure CommandCancel; virtual; abstract;
@@ -95,6 +96,7 @@ begin
   CStartAttrDisableAttr:=DA;
   overlay:=false;
   CEndActionAttr:=CEDeSelect;
+  NotUseCommandLine:=true;
 end;
 
 destructor CommandObjectDef.done;

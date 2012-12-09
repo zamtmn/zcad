@@ -51,6 +51,7 @@ GDBObjLine=object(GDBObj3d)
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure Format;virtual;
+                 procedure CalcGeometry;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                   function Clone(own:GDBPointer):PGDBObjEntity;virtual;
@@ -277,28 +278,34 @@ begin
                             GDBFreeMem(GDBPointer(PProjPoint));
      inherited done;
 end;
+procedure GDBObjLine.CalcGeometry;
+var m:DMatrix4D;
+begin
+     if bp.ListPos.owner<>nil then
+                                    begin
+                                         if bp.ListPos.owner^.GetHandle=H_Root then
+                                                                                   begin
+                                                                                        CoordInWCS.lbegin:=CoordInOCS.lbegin;
+                                                                                        CoordInWCS.lend:=CoordInOCS.lend;
+                                                                                    end
+                                                                               else
+                                                                                   begin
+                                                                                         m:=bp.ListPos.owner^.GetMatrix^;
+                                                                                         CoordInWCS.lbegin:=VectorTransform3D(CoordInOCS.lbegin,m);
+                                                                                         CoordInWCS.lend:=VectorTransform3D(CoordInOCS.lend,m);
+                                                                                   end;
+                                    end
+                                else
+                                    begin
+                                         CoordInWCS.lbegin:=CoordInOCS.lbegin;
+                                         CoordInWCS.lend:=CoordInOCS.lend;
+                                    end;
+end;
+
 procedure GDBObjLine.format;
 var m:DMatrix4D;
 begin
-  if bp.ListPos.owner<>nil then
-                               begin
-                                    if bp.ListPos.owner^.GetHandle=H_Root then
-                                                                              begin
-                                                                                   CoordInWCS.lbegin:=CoordInOCS.lbegin;
-                                                                                   CoordInWCS.lend:=CoordInOCS.lend;
-                                                                               end
-                                                                          else
-                                                                              begin
-                                                                                    m:=bp.ListPos.owner^.GetMatrix^;
-                                                                                    CoordInWCS.lbegin:=VectorTransform3D(CoordInOCS.lbegin,m);
-                                                                                    CoordInWCS.lend:=VectorTransform3D(CoordInOCS.lend,m);
-                                                                              end;
-                               end
-                           else
-                               begin
-                                    CoordInWCS.lbegin:=CoordInOCS.lbegin;
-                                    CoordInWCS.lend:=CoordInOCS.lend;
-                               end;
+  calcgeometry;
   calcbb;
   //l_1_4 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 4);
   //l_1_3 := Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 3);

@@ -387,7 +387,8 @@ begin
                                 begin
                                      m4:=PGDBObjEntity(newowner)^.getmatrix^;
                                      MatrixInvert(m4);
-                                     pobj^.Format;
+                                     //pobj^.Format;
+                                     pobj^.CalcObjMatrix;
                                      pobj^.transform(m4);
                                 end;
 
@@ -397,7 +398,8 @@ begin
                                  if foc=0 then
                                               PGDBObjEntity(pobj)^.BuildGeometry;
                                  if foc=0 then
-                                              PGDBObjEntity(pobj)^.format;
+                                              //PGDBObjEntity(pobj)^.format;
+                                              PGDBObjEntity(pobj)^.FormatAfterDXFLoad;
                                  if foc=0 then PGDBObjEntity(pobj)^.FromDXFPostProcessAfterAdd;
                                 end
                                    else
@@ -440,7 +442,10 @@ begin
                                  if foc=0 then
                                               PGDBObjEntity(postobj)^.BuildGeometry;
                                  if foc=0 then
-                                              PGDBObjEntity(postobj)^.FormatAfterDXFLoad;
+                                              begin
+                                                //PGDBObjEntity(postobj)^.Format;
+                                                PGDBObjEntity(postobj)^.FormatAfterDXFLoad;
+                                              end;
                                  if foc=0 then PGDBObjEntity(postobj)^.FromDXFPostProcessAfterAdd;
                                 end
                                    //else

@@ -51,6 +51,7 @@ GDBObjComplex=object(GDBObjWithLocalCS)
                     procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble);virtual;
                     function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                     procedure BuildGeometry;virtual;
+                    procedure FormatAfterDXFLoad;virtual;
               end;
 {EXPORT-}
 implementation
@@ -203,6 +204,20 @@ end;
 function GDBObjComplex.CalcTrueInFrustum;
 begin
       result:=ConstObjArray.CalcTrueInFrustum(frustum,visibleactualy);
+end;
+procedure GDBObjComplex.FormatAfterDXFLoad;
+var
+    p:pgdbobjEntity;
+    ir:itrec;
+begin
+     //BuildGeometry;
+  p:=ConstObjArray.beginiterate(ir);
+  if p<>nil then
+  repeat
+       p^.FormatAfterDXFLoad;
+       p:=ConstObjArray.iterate(ir);
+  until p=nil;
+  inherited;
 end;
 
 function GDBObjComplex.onmouse;

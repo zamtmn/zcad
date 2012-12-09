@@ -48,6 +48,7 @@ GDBObjGenericWithSubordinated=object(GDBaseObject)
                                     function GetType:GDBPlatformint;virtual;
                                     function IsSelected:GDBBoolean;virtual;abstract;
                                     procedure FormatAfterDXFLoad;virtual;
+                                    procedure CalcGeometry;virtual;
 
                                     procedure Build;virtual;
 
@@ -179,8 +180,15 @@ begin
 end;
 procedure GDBObjGenericWithSubordinated.FormatAfterDXFLoad;
 begin
-     format;
+     //format;
+     //CalcObjMatrix;
+     //calcbb;
 end;
+procedure GDBObjGenericWithSubordinated.CalcGeometry;
+begin
+
+end;
+
 procedure extractvarfromdxfstring(_Value:GDBString;out vn,vt,vv,vun:GDBString);
 var i:integer;
 begin

@@ -151,12 +151,20 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure correctsublayers(var la:GDBLayerArray);virtual;
                     procedure CopyVPto(var toObj:GDBObjEntity);virtual;
                     function CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
+                    procedure FormatAfterDXFLoad;virtual;
               end;
 {Export-}
 var onlygetsnapcount:GDBInteger;
     ForeGround:RGB;
 implementation
 uses {UGDBEntTree,}GDBGenericSubEntry,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+procedure GDBObjEntity.FormatAfterDXFLoad;
+begin
+     //format;
+     CalcObjMatrix;
+     CalcGeometry;
+     calcbb;
+end;
 
 function GDBObjEntity.CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;
 var

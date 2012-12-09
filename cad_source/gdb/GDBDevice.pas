@@ -60,6 +60,7 @@ GDBObjDevice=object(GDBObjBlockInsert)
 
                    function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
                    procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
+                   procedure FormatAfterDXFLoad;virtual;
              end;
 {EXPORT-}
 implementation
@@ -496,6 +497,31 @@ begin
           VarObjArray.Shrink;
           self.BlockDesc:=pblockdef.BlockDesc;
      end;
+end;
+procedure GDBObjDevice.FormatAfterDXFLoad;
+var
+    p:pgdbobjEntity;
+    ir:itrec;
+    pblockdef:PGDBObjBlockdef;
+begin
+  //BuildVarGeometry;
+  inherited;
+  p:=VarObjArray.beginiterate(ir);
+  if p<>nil then
+  repeat
+       p^.FormatAfterDXFLoad;
+       p:=VarObjArray.iterate(ir);
+  until p=nil;
+  {index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
+  assert((index>=0) and (index<gdb.GetCurrentDWG.BlockDefArray.count), 'Неверный индекс блока');
+  pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
+  self.BlockDesc:=pblockdef.BlockDesc;
+  calcobjmatrix;
+  CreateDeviceNameProcess(@self);}
+  ConstObjArray.Format;
+  VarObjArray.Format;
+  calcbb;
+  //format;
 end;
 
 constructor GDBObjDevice.initnul;

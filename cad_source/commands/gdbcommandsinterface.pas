@@ -187,11 +187,12 @@ begin
 
      oglwnd:=TOGLWnd.Create(myts);
      oglwnd.onCameraChanged:=MainFormN.correctscrollbars;
-
+     {$if FPC_FULlVERSION>=20701}
      oglwnd.AuxBuffers:=0;
      oglwnd.StencilBits:=8;
      //oglwnd.ColorBits:=24;
      oglwnd.DepthBits:=24;
+     {$ENDIF}
 
 
 

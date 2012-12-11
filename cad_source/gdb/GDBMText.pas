@@ -964,6 +964,7 @@ begin
   dxfGDBStringout(outhandle,7,PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.name);
   SaveToDXFObjPostfix(outhandle);
   dxfvertexout(outhandle,11,Local.basis.ox);
+  dxfGDBIntegerout(outhandle,73,2);
   dxfGDBDoubleout(outhandle,44,3 * linespace / (5 * textprop.size));
 end;
 begin

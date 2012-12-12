@@ -647,10 +647,10 @@ begin
 
   ccsLBN.z:=-ccsLBN.z;
   ccsRTF.z:=-ccsRTF.z;
-  td:=(ccsRTF.z-ccsLBN.z)/100;
+  td:=(ccsRTF.z-ccsLBN.z)/20;
   ccsLBN.z:=ccsLBN.z-td;
   ccsRTF.z:=ccsRTF.z+td;
-  if (ccsLBN.z-ccsRTF.z)<eps then
+  if (ccsLBN.z-ccsRTF.z)<sqreps then
                                  begin
                                       ccsLBN.z:=ccsLBN.z+1;
                                       ccsRTF.z:=ccsRTF.z-1;
@@ -748,10 +748,10 @@ begin
   ProjectPoint2(LBN.x,RTF.y,RTF.Z,pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
   ccsLBN.z:=-ccsLBN.z;
   ccsRTF.z:=-ccsRTF.z;
-  td:=(ccsRTF.z-ccsLBN.z)/100;
+  td:=(ccsRTF.z-ccsLBN.z)/20;
   ccsLBN.z:=ccsLBN.z-td;
   ccsRTF.z:=ccsRTF.z+td;
-  if (ccsLBN.z-ccsRTF.z)<eps then
+  if (ccsLBN.z-ccsRTF.z)<sqreps then
                                  begin
                                       if abs(ccsLBN.z)>eps then
                                       begin

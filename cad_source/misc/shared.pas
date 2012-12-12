@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -19,7 +19,7 @@
 unit shared;
 {$INCLUDE def.inc}
 interface
-uses LCLtype,zcadstrconsts,gdbasetypes,strutils,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,lclproc,Masks;
+uses {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}zcadstrconsts,gdbasetypes,strutils,Classes, SysUtils, {$IFNDEF DELPHI}fileutil,{$ENDIF}{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls{$IFNDEF DELPHI},LCLProc{$ENDIF},Masks;
 
 type
 TFromDirIterator=procedure (filename:GDBString);
@@ -108,8 +108,10 @@ begin
                                             utflen:=utflen+{UTF8}Length(a)
                                         else
                                             utflen:=2+utflen+{UTF8}Length(a);
+          {$IFNDEF DELPHI}
           HistoryLine.Append(a);
           CWMemo.Append(a);
+          {$ENDIF}
           //application.ProcessMessages;
 
           //HistoryLine.SelStart:=utflen{HistoryLine.GetTextLen};
@@ -189,10 +191,10 @@ begin
      //fn:={systoutf8}(systoutf8{Tria_AnsiToUtf8}(path)+systoutf8(s));
 
      (*попытка закостылить*)
-     if NeedRTLAnsi and (not IsASCII(path)) then
-        fn:=Tria_AnsiToUtf8(path)+systoutf8(s)
-     else
-         fn:=path+systoutf8(s);
+     {$IFNDEF DELPHI}if NeedRTLAnsi and (not IsASCII(path)) then{$ENDIF}
+        fn:=Tria_AnsiToUtf8(path){$IFNDEF DELPHI}+systoutf8(s){$ELSE};{$ENDIF}
+     {$IFNDEF DELPHI}else
+         fn:=path+systoutf8(s);{$ENDIF}
      //fn:=fn+systoutf8(s);
      (*конец попытки*)
 

@@ -61,7 +61,7 @@ procedure LogOut(s:GDBString);
 var programlog:tlog;
 implementation
 uses
-    UGDBOpenArrayOfByte,UGDBOpenArrayOfData,strutils,sysutils,fileutil;
+    UGDBOpenArrayOfByte,UGDBOpenArrayOfData,strutils,sysutils{$IFNDEF DELPHI},fileutil{$ENDIF};
 var
     PerfomaneBuf:GDBOpenArrayOfByte;
     TimeBuf:GDBOpenArrayOfData;
@@ -72,12 +72,12 @@ var
 begin
      if assigned(SplashTextOut) then
                                    SplashTextOut(s,true);
-     logname:=SysToUTF8(ExtractFilePath(paramstr(0)))+filelog+'hard';
+     logname:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)))+filelog+'hard';
      FileHandle:=0;
-     if not fileexists(utf8tosys(logname)) then
-                                   FileHandle:=FileCreate(UTF8ToSys(logname))
+     if not fileexists({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(logname)) then
+                                   FileHandle:=FileCreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(logname))
                                 else
-                                    FileHandle := FileOpen(UTF8ToSys(logname), fmOpenWrite);
+                                    FileHandle := FileOpen({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(logname), fmOpenWrite);
      FileSeek(FileHandle, 0, 2);
 
         s:=s+#13#10;
@@ -133,7 +133,7 @@ begin
 end;
 procedure tlog.OpenLog;
 begin
-  FileHandle := FileOpen(UTF8ToSys(logfilename), fmOpenWrite);
+  FileHandle := FileOpen({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(logfilename), fmOpenWrite);
   FileSeek(FileHandle, 0, 2);
 end;
 
@@ -144,7 +144,7 @@ begin
 end;
 procedure tlog.CreateLog;
 begin
-  FileHandle:=FileCreate(UTF8ToSys(logfilename){,fmOpenWrite});
+  FileHandle:=FileCreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(logfilename){,fmOpenWrite});
   CloseLog;
 end;
 {procedure tlog.logout;

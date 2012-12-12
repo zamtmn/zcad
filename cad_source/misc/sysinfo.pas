@@ -58,7 +58,7 @@ end;
 Procedure getsysinfo;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('sysinfo.getsysinfo');{$ENDIF}
-     sysparam.programpath:=SysToUTF8(ExtractFilePath(paramstr(0)));
+     sysparam.programpath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)));
      sysparam.screenx:={GetSystemMetrics(SM_CXSCREEN)}Screen.Width;
      sysparam.screeny:={GetSystemMetrics(SM_CYSCREEN)}Screen.Height;
      //sysparam.temppath:=GetEnvironmentVariable('TEMP');

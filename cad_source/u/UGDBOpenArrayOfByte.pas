@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfByte;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,sysutils,UGDBOpenArray,gdbase,fileutil,shared;
+uses gdbasetypes,sysutils,UGDBOpenArray,gdbase,{$IFNDEF DELPHI}fileutil,{$ENDIF}shared;
 const
      breacer=[#13,#10,' '];
   eol: GDBString=#13 + #10;
@@ -284,7 +284,7 @@ constructor GDBOpenArrayOfByte.InitFromFile;
 var infile,filelength:GDBInteger;
 begin
      //StringToWideChar(filename)
-     infile:=fileopen(UTF8ToSys(FileName),fmShareDenyNone);
+     infile:=fileopen({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(FileName),fmShareDenyNone);
      if infile<=0 then
                       shared.ShowError('Не могу открыть файл "'+FileName+'"')
      else
@@ -304,7 +304,7 @@ end;
 function GDBOpenArrayOfByte.SaveToFile;
 var infile:GDBInteger;
 begin
-     infile:=filecreate(UTF8ToSys(ExpandPath(FileName)));
+     infile:=filecreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(ExpandPath(FileName)));
      if infile>0 then
                      begin
                            FileWrite(InFile,parray^,count);

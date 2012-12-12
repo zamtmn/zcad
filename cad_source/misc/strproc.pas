@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -20,7 +20,7 @@ unit strproc;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,fileutil,gdbasetypes,sysutils,sysinfo,strutils,LCLProc;
+uses zcadsysvars,{$IFNDEF DELPHI}fileutil,{$ENDIF}gdbasetypes,sysutils,sysinfo,strutils{$IFNDEF DELPHI},LCLProc{$ENDIF};
 function GetPredStr(var s: GDBString; substr: GDBString): GDBString;
 function ExpandPath(path:GDBString):GDBString;
 function readspace(expr: GDBString): GDBString;
@@ -77,12 +77,12 @@ end;
 function ConvertFromDxfString(str:GDBString):GDBString;
 begin
      result:=Tria_AnsiToUtf8(str);
-     result:=StringsReplace(result, ['\P'],[LineEnding],[rfReplaceAll,rfIgnoreCase]);
+     {$IFNDEF DELPHI}result:=StringsReplace(result, ['\P'],[LineEnding],[rfReplaceAll,rfIgnoreCase]);{$ENDIF}
 end;
 
 function ConvertToDxfString(str:GDBString):GDBString;
 begin
-     result:=StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]);
+     {$IFNDEF DELPHI}result:=StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]);{$ENDIF}
      result:=Tria_Utf8ToAnsi(result);
 end;
 
@@ -90,9 +90,9 @@ function FindInSupportPath(FileName:GDBString):GDBString;
 var
    s,ts:gdbstring;
 begin
-     log.programlog.LogOutStr(utf8tosys(FileName),0);
+     log.programlog.LogOutStr({$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName),0);
      FileName:=ExpandPath(FileName);
-     if FileExists(utf8tosys(FileName)) then
+     if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)) then
                                  begin
                                       result:=FileName;
                                       exit;
@@ -112,7 +112,7 @@ begin
      repeat
            GetPartOfPath(ts,s,'|');
            ts:=ExpandPath(ts)+FileName;
-            if FileExists(utf8tosys(ts)) then
+            if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
                                  begin
                                       result:=ts;
                                       exit;
@@ -126,7 +126,7 @@ var
    s,ts:gdbstring;
 begin
      FileName:=ExpandPath(FileName);
-     if FileExists(utf8tosys(FileName)) then
+     if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)) then
                                  begin
                                       result:=FileName;
                                       exit;
@@ -145,7 +145,7 @@ begin
      repeat
            GetPartOfPath(ts,s,'|');
            ts:=ExpandPath(ts)+FileName;
-            if FileExists(utf8tosys(ts)) then
+            if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
                                  begin
                                       result:=ts;
                                       exit;
@@ -173,6 +173,7 @@ end;
 function uch2ach(uch:word):byte;
 var s:gdbstring;
 begin
+     {$IFNDEF DELPHI}
      if uch=$412 then
                      uch:=uch;
      if uch=44064 then
@@ -188,14 +189,16 @@ begin
      //WideCharToMultiByte(CP_ACP,0,@uch, 1, @result, 1, nil, nil);
      if result=194 then
                      uch:=uch;
+     {$ENDIF}
 {$IFDEF TOTALYLOG}programlog.logoutstr(inttohex(uch,4)+'='+inttostr(result),0);{$ENDIF}
 
 end;
 function ach2uch(ach:byte):word;
 var s:gdbstring;
-    tstr:UTF16String;
+    {$IFNDEF DELPHI}tstr:UTF16String;{$ENDIF}
     CharLen: integer;
 begin
+    {$IFNDEF DELPHI}
      {if ach<127 then
                     begin
                     result:=ach;
@@ -213,6 +216,7 @@ begin
      //WideCharToMultiByte(CP_ACP,0,@uch, 1, @result, 1, nil, nil);
      //if result=194 then
      //                uch:=uch;
+     {$ENDIF}
 end;
 function GetDigitCount(str1:GDBString):GDBInteger;
 begin
@@ -303,7 +307,7 @@ else if path[1]='*' then
                     result:=sysparam.programpath+copy(path,2,length(path)-1)
 else result:=path;
 result:=StringReplace(result,'/', PathDelim,[rfReplaceAll, rfIgnoreCase]);
-if DirectoryExists(utf8tosys(result)) then
+if DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
   if (result[length(result)]<>{'/'}PathDelim)
   //or (result[length(result)]<>'\')
   then
@@ -373,7 +377,7 @@ begin
         #140: Result[j]:=#141; //
         #142: Result[j]:=#161; //¡
         #143: Result[j]:=#143; //
-        #144..#191:begin
+        #144{$IFNDEF DELPHI}..#191{$ENDIF}:begin
           n:=ord(s[i]);
           Result[j]:=Char(n+48);//'À'..'ï'
                    end;

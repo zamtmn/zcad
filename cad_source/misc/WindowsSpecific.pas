@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -20,7 +20,7 @@ unit WindowsSpecific;
 {$INCLUDE def.inc}
 interface
 uses zcadstrconsts,gdbasetypes, gdbase,sysutils,strproc,
-     LResources,Dialogs,FileUtil;
+     {$IFNDEF DELPHI}LResources,{$ENDIF}Dialogs{$IFNDEF DELPHI},FileUtil{$ENDIF};
 const
     ImportFileFilter: GDBString = 'PDF files (*.pdf)|*.pdf|PostScript files (*.ps)|*.ps|SVG files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|EPS files (*.eps)|*.eps';
     ProjectFileFilter: GDBString = 'DXF files (*.dxf)|*.dxf|AutoCAD DWG files (*.dwg)|*.dwg|ZCAD ZCP files (*.zcp)|*.zcp|All files (*.*)|*.*';
@@ -35,7 +35,7 @@ implementation
 uses log;
 var
    lpCustFilter: array[0..255] of char = '';
-   nFilterIndex: DWord = 0;
+   nFilterIndex: Integer = 0;
    szFile: array[0..2048] of char = '';
    szFileTitle: array[0..255] of char;
    szCurrentDir: array[0..1024] of char = '';
@@ -96,7 +96,7 @@ var
 
   i: Integer;
   //Version: TFileVersionInfo;
-  MyFile, MyVersion,ts: String;
+  MyFile, MyVersion,ts: GDBString;
 
 begin
      result.build:=0;

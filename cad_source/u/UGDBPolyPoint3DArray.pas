@@ -20,7 +20,7 @@ unit UGDBPolyPoint3DArray;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
-     gl,
+     {$IFNDEF DELPHI}gl,{$ENDIF}
      {varmandef,}OGLSpecFunc;
 type
 {Export+}

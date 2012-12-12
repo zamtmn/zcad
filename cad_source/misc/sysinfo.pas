@@ -19,7 +19,7 @@
 unit SysInfo;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,Forms,gdbase,fileutil;
+uses gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF};
 {$INCLUDE revision.inc}
 type tsysparam=record
                      programpath: GDBString;
@@ -62,7 +62,7 @@ begin
      sysparam.screenx:={GetSystemMetrics(SM_CXSCREEN)}Screen.Width;
      sysparam.screeny:={GetSystemMetrics(SM_CYSCREEN)}Screen.Height;
      //sysparam.temppath:=GetEnvironmentVariable('TEMP');
-     sysparam.temppath:=gettempdir;
+     {$IFNDEF DELPHI}sysparam.temppath:=gettempdir;{$ENDIF}
      if (sysparam.temppath[length(sysparam.temppath)]<>PathDelim)
       then
           sysparam.temppath:=sysparam.temppath+PathDelim;

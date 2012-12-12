@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -135,7 +135,7 @@ procedure ConcatBB(var fistbb:GDBBoundingBbox;const secbb:GDBBoundingBbox);inlin
 procedure concatBBandPoint(var fistbb:GDBBoundingBbox;const point:GDBvertex);inline;
 function IsBBNul(const bb:GDBBoundingBbox):boolean;inline;
 function boundingintersect(const bb1,bb2:GDBBoundingBbox):GDBBoolean;inline;
-procedure MatrixInvert(var M: DMatrix4D);inline;
+procedure MatrixInvert(var M: DMatrix4D);//inline;
 function vectordot(const v1,v2:GDBVertex):GDBVertex;inline;
 function scalardot(const v1,v2:GDBVertex):GDBDouble;//inline;
 function vertexeq(const v1,v2:gdbvertex):GDBBoolean;inline;
@@ -158,7 +158,7 @@ function PointOfLinePlaneIntersect(const p1,d:GDBVertex;const plane:DVector4D;ou
 function PlaneFrom3Pont(const P1,P2,P3:GDBVertex):DVector4D;inline;
 procedure NormalizePlane(var plane:DVector4D);{inline;}
 
-function CalcTrueInFrustum (const lbegin,lend:GDBvertex; const frustum:ClipArray):TINRect;inline;
+function CalcTrueInFrustum (const lbegin,lend:GDBvertex; const frustum:ClipArray):TINRect;//inline;
 function CalcPointTrueInFrustum (const lbegin:GDBvertex; const frustum:ClipArray):TInRect;
 function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:ClipArray):TINRect;inline;
 function CalcAABBInFrustum (const AABB:GDBBoundingBbox; const frustum:ClipArray):TINRect;{inline;}

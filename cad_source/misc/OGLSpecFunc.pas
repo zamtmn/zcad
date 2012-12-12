@@ -20,8 +20,8 @@ unit OGLSpecFunc;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,gdbasetypes,gdbase,LCLType,
-     gl,glu,
+uses zcadsysvars,gdbasetypes,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
+     {$IFNDEF DELPHI}gl,glu,{$ELSE}opengl,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}
      log,sysutils,varmandef;
@@ -45,8 +45,10 @@ const ls = $AAAA;
                                    $CCCCCCCC,$CCCCCCCC
                                   );
 type
-    {$if FPC_FULlVERSION>20600}
+    {$IFNDEF DELPHI}
+    {if FPC_FULlVERSION>20600}
     {glu}//TViewPortArray = array [0..3] of GLint;
+    {ENDIF}
     {$ENDIF}
     PTViewPortArray=^TViewPortArray;
 

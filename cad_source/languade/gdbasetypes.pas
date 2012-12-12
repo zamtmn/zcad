@@ -20,6 +20,11 @@ unit gdbasetypes;
 {$INCLUDE def.inc}
 interface
 type
+{$IFDEF DELPHI}
+QWord=UInt64;
+PtrInt={Pointer}Cardinal;
+PtrUInt={Pointer}LongWord;
+{$ENDIF}
 {EXPORT+}
 PGDBDouble=^GDBDouble;
 {-}GDBDouble=double;{//}

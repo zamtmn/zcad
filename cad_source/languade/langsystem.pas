@@ -30,13 +30,13 @@ const
   basicfunctioncount = 1;
   basicoperatorparamcount = 26;
   basicfunctionparamcount = 1;
-  foneGDBBoolean = #7;
+  {foneGDBBoolean = #7;
   foneGDBByte = #8;
   foneuGDBByte = #9;
   foneGDBWord = #10;
   foneuGDBWord = #11;
   foneuGDBInteger = #13;
-  foneGDBString = #15;
+  foneGDBString = #15;}
 type
   operandstack = record
     count: GDBByte;
@@ -622,9 +622,4 @@ begin
      basicfunctionparam[0]:=tv;
      basicfunctionparam[1]:=tv1;
      {$ENDIF}
-     (*  basicfunctionparam: array of functiontype =
-  (
-    (name: 'cos'; param: {foneGDBInteger}nil; addr: {$IFDEF FPC}@{$ENDIF}Cos_TGDBInteger)
-
-    ); *)
 end.

@@ -130,7 +130,7 @@ begin
      pvnt^.attrib:=pvnt^.attrib or (vda_RO);
      if (pvn<>nil)and(pvnt<>nil) then
      begin
-          pdbu:=ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
+          pdbu:=gdb.GetCurrentDWG.GetDWGUnits^.findunit(DrawingDeviceBaseUnitName);
           pdbv:=pdbu^.FindVariable(pstring(pvn.data.Instance)^);
           if pdbv<>nil then
                            pstring(pvnt.data.Instance)^:=PDbBaseObject(pdbv.data.Instance)^.Name

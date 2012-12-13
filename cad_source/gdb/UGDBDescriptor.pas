@@ -72,6 +72,7 @@ TDrawing=object(TSimpleDrawing)
            procedure ChangeStampt(st:GDBBoolean);virtual;
            function GetChangeStampt:GDBBoolean;virtual;
            function GetUndoTop:TArrayIndex;virtual;
+           function GetDWGUnits:PTUnitManager;virtual;
      end;
 PGDBDescriptor=^GDBDescriptor;
 GDBDescriptor=object(GDBOpenArrayOfPObjects)
@@ -355,7 +356,10 @@ function TDrawing.GetUndoTop:TArrayIndex;
 begin
      result:=UndoStack.CurrentCommand;
 end;
-
+function TDrawing.GetDWGUnits:PTUnitManager;
+begin
+     result:=@DWGUnits;
+end;
 constructor TDrawing.init;
 var {tp:GDBTextStyleProp;}
     ts:PTGDBTableStyle;

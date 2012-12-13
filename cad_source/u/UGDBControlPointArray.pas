@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -20,7 +20,8 @@ unit UGDBControlPointArray;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
-     gl,memman;
+     {$IFNDEF DELPHI}gl,{$ELSE}opengl,{$ENDIF}
+     memman;
 type
 {Export+}
 PGDBControlPointArray=^GDBControlPointArray;

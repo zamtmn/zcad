@@ -21,7 +21,7 @@ unit gdbvisualprop;
 interface
 uses log,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
      {UGDBPolyPoint2DArray,}varman,varmandef,
-     gl,
+     {$IFNDEF DELPHI}gl,glu,{$ELSE}opengl,{$ENDIF}
      GDBase,gdbobjectsconstdef,
      oglwindowdef,geometry,dxflow,sysutils,memman,OGLSpecFunc,UGDBOpenArrayOfByte,UGDBLayerArray,UGDBOpenArrayOfPObjects;
 type

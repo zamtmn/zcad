@@ -50,6 +50,9 @@ type
     {glu}//TViewPortArray = array [0..3] of GLint;
     {ENDIF}
     {$ENDIF}
+    {$IFDEF DELPHI}
+    TViewPortArray = array [0..3] of GLint;
+    {$ENDIF}
     PTViewPortArray=^TViewPortArray;
 
     TOGLContextDesk=record
@@ -76,7 +79,7 @@ type
                            _LineStipplefactor: GLint;
                            _LineStipplepattern: GLushort;
 
-                           _colour:rgb;
+                           _colour:gdbase.RGB;
 
                            procedure myglbegin(mode:GLenum);inline;
                            procedure myglend;inline;
@@ -95,7 +98,7 @@ type
                            constructor init;
 
                            procedure glcolor3ub(const red, green, blue: GLubyte);virtual;//inline;
-                           procedure glColor3ubv(const v: rgb);virtual;//inline;
+                           procedure glColor3ubv(const v: gdbase.RGB);virtual;//inline;
 
                            procedure myglNormal3dV(const V:PGDBVertex);inline;
                            //procedure myglColor3ub(const red, green, blue: GLubyte);inline;

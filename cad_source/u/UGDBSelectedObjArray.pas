@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -20,7 +20,7 @@ unit UGDBSelectedObjArray;
 {$INCLUDE def.inc}
 interface
 uses GDBCamera,{GDBWithLocalCS,}GDBWithMatrix,GDBEntity,UGDBControlPointArray,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
-     gl,
+     {$IFNDEF DELPHI}gl,glu,{$ELSE}opengl,{$ENDIF}
      gdbasetypes{,varmandef,gdbobjectsconstdef},memman,OGLSpecFunc;
 type
 {Export+}

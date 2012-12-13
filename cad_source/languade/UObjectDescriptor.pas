@@ -56,7 +56,7 @@ ObjectDescriptor=object(RecordDescriptor)
                        procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
                  end;
 implementation
-uses {ZBasicVisible,}varman{,UGDBDescriptor}{,shared},lineinfo;
+uses varman{$IFNDEF DELPHI},lineinfo{$ENDIF};
 procedure ObjectDescriptor.AddProperty(var pd:PropertyDescriptor);
 begin
      Properties.add(@pd);

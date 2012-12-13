@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -20,7 +20,7 @@ unit intftranslations;
 {$INCLUDE def.inc}
 
 interface
-uses strproc,lclproc,gettext,translations,sysinfo,sysutils,fileutil,log,forms,LResources,Classes, typinfo;
+uses strproc{$IFNDEF DELPHI},LCLProc,gettext,translations,fileutil,LResources{$ENDIF},sysinfo,sysutils,log,forms,Classes, typinfo;
 
 type
     TmyPOFile = class(TPOFile)

@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -279,7 +279,9 @@ begin
                          begin
                               propeditor:=TPropEditor.Create(theowner,PInstance,@self,FreeOnLostFocus);
                               cbedit:=TComboBox.Create(propeditor);
+                              {$IFNDEF DELPHI}
                               cbedit.AutoSize:=false;
+                              {$ENDIF}
                               cbedit.SetBounds(x,y,w,h);
                               cbedit.Text:=GetValueAsString(pinstance);
                               //cbedit.OnEditingDone:=propeditor.EditingDone;
@@ -307,7 +309,9 @@ begin
                                           //PZComboEdBoxWithProc(result).AddLine(pansichar(ps^));
                                           ps:=psa^.iterate(ir);
                                      until ps=nil;
+                               {$IFNDEF DELPHI}
                                cbedit.AutoSelect:=true;
+                               {$ENDIF}
                                //cbedit.DroppedDown:=true;
                                (*
                                //PZComboEdBoxWithProc(result).setitem(0);
@@ -362,7 +366,9 @@ begin
      //cbedit.OnEditingDone:=propeditor.EditingDone;
      //cbedit.OnKeyPress:=propeditor.keyPress;
      cbedit.OnChange:=propeditor.EditingProcess;
+     {$IFNDEF DELPHI}
      cbedit.ReadOnly:=true;
+     {$ENDIF}
 
      cbedit.Items.Add('True');
      cbedit.Items.Add('False');
@@ -450,7 +456,7 @@ var
      error:integer;
 begin
      if TryStrToQWord(value,qw) then
-                    PGDBQWord(pinstance)^:=qw;
+                                   PGDBQWord(pinstance)^:=qw;
 end;
 
 constructor GDBFloatDescriptor.init;

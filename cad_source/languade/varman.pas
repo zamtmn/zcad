@@ -23,7 +23,7 @@ interface
 uses
   {RegCnownTypes,}UGDBOpenArrayOfPointer,SysUtils,UBaseTypeDescriptor,
   gdbasetypes, shared,gdbase,UGDBOpenArrayOfByte,UGDBStringArray,varmandef,sysinfo,
-  log,memman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,strproc,intftranslations;
+  log,memman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,strproc{$IFNDEF DELPHI},intftranslations{$ENDIF};
 type
     td=record
              template:GDBString;

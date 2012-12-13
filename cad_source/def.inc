@@ -9,7 +9,7 @@
 {$IFDEF VER190}{$DEFINE DELPHI}error here{$ENDIF}
 {$IFDEF VER200}{$DEFINE DELPHI}{$ENDIF}
 {$IFDEF VER210}{$DEFINE DELPHI}error here{$ENDIF}
-{$IFDEF VER220}{$DEFINE DELPHI}error here{$ENDIF}
+{$IFDEF VER220}{$DEFINE DELPHI}{$ENDIF}{delphi xe}
 
 {$IFDEF DELPHI}
                {$A1}
@@ -23,6 +23,10 @@
             {SMARTLINK+}
             {$Z1}
             {IMPLICITEXCEPTIONS OFF}
+{IF FPC_FULlVERSION>=20701}
+{$modeswitch systemcodepage-}
+{ENDIF}
+
 {$ENDIF}
 {DEFINE REPORTMMEMORYLEAKS}
 {DEFINE DEBUGBUILD}

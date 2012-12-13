@@ -32,7 +32,7 @@ uses
   GLWin32WGLContext,
   {$ENDIF}
 
-  UGDBDrawingdef,UGDBOpenArrayOfPV,UGDBSHXFont,LCLType,InterfaceBase,
+  ugdbabstractdrawing,UGDBOpenArrayOfPV,UGDBSHXFont,LCLType,InterfaceBase,
   umytreenode,menus,Classes,{ SysUtils,} FileUtil,{ LResources,LMessages,} Forms,
   {stdctrls,} ExtCtrls, {ComCtrls,}{Toolwin,} Controls, {Graphics, Dialogs,}
   GDBGenericSubEntry,gdbasetypes,{Windows,}sysutils,

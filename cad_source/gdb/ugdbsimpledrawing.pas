@@ -20,7 +20,7 @@ unit ugdbsimpledrawing;
 {$INCLUDE def.inc}
 interface
 uses //gdbase,gdbasetypes,
-gdbobjectsconstdef,GDBWithLocalCS,UGDBDrawingdef,zcadsysvars,{zcadinterface,}{zcadstrconsts,}{GDBWithLocalCS,}{UGDBOpenArrayOfUCommands,}strproc,{GDBBlockDef,}UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
+gdbobjectsconstdef,GDBWithLocalCS,ugdbabstractdrawing,zcadsysvars,{zcadinterface,}{zcadstrconsts,}{GDBWithLocalCS,}{UGDBOpenArrayOfUCommands,}strproc,{GDBBlockDef,}UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
 UGDBNumerator, gdbase,varmandef,varman,
 sysutils, memman, geometry, {gdbobjectsconstdef,}
 gdbasetypes,sysinfo,

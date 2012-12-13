@@ -5,7 +5,7 @@ unit umainform;
 interface
 
 uses
-  UGDBLayerArray,UGDBDrawingdef,LCLType, geometry, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
+  UGDBLayerArray,ugdbabstractdrawing,LCLType, geometry, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Spin,
   {From ZCAD}

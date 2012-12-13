@@ -823,8 +823,8 @@ begin
                //pvisible2:=nil;
                                       begin
                                           pvisible2^.correctobjects(_dest,ir.itc);
-                                          pvisible2^.format;
-                                          pvisible2.BuildGeometry;
+                                          pvisible2^.FormatEntity(_to^);
+                                          pvisible2.BuildGeometry(_to^);
                                           _dest.ObjArray.add(@pvisible2);
                                      end;
           pvisible:=_source.ObjArray.iterate(ir);

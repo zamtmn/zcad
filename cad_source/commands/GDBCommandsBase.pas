@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}{layerwnd,}strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}{layerwnd,}strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -508,7 +508,7 @@ begin
      //gdb.GetCurrentROOT.sddf
      //gdb.GetCurrentROOT.format;
      gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
-     gdb.GetCurrentROOT.format;
+     gdb.GetCurrentROOT.FormatEntity(gdb.GetCurrentDWG^);
      if assigned(updatevisibleproc) then updatevisibleproc;
      if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
                                          begin
@@ -1128,12 +1128,14 @@ function Regen_com(Operands:pansichar):GDBInteger;
 var //i: GDBInteger;
     pv:pGDBObjEntity;
         ir:itrec;
+    drawing:PTDrawingDef;
 begin
   if assigned(StartLongProcessProc) then StartLongProcessProc(gdb.GetCurrentROOT.ObjArray.count);
+  drawing:=gdb.GetCurrentDwg;
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
-    pv^.Format;
+    pv^.FormatEntity(drawing^);
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   if assigned(ProcessLongProcessProc) then ProcessLongProcessProc(ir.itc);
   until pv=nil;

@@ -20,7 +20,7 @@ unit GDBGenericSubEntry;
 {$INCLUDE def.inc}
 
 interface
-uses GDBCamera,zcadsysvars,UGDBLayerArray,UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
+uses ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBLayerArray,UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
 gl,
 geometry{,GDB3d},{UGDBVisibleOpenArray,}gdbEntity,gdbobjectsconstdef,varmandef,memman,UGDBEntTree;
 type
@@ -47,7 +47,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
                             function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
-                            procedure Format;virtual;
+                            procedure FormatEntity(const drawing:TDrawingDef);virtual;
                             procedure FormatAfterEdit;virtual;
                             procedure restructure;virtual;
                             procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
@@ -508,10 +508,10 @@ procedure GDBObjGenericSubEntry.getonlyoutbound;
 begin
      vp.BoundingBox:=ObjArray.getonlyoutbound;
 end;
-procedure GDBObjGenericSubEntry.format;
+procedure GDBObjGenericSubEntry.FormatEntity(const drawing:TDrawingDef);
 begin
-  inherited format;
-  ObjArray.Format;
+  inherited FormatEntity(drawing);
+  ObjArray.FormatEntity(drawing);
   calcbb;
   restructure;
 end;

@@ -8,7 +8,7 @@ unit GDBElLeader;
 {$INCLUDE def.inc}
 
 interface
-uses GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
+uses ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 gl,
 GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
@@ -37,7 +37,7 @@ GDBObjElLeader=object(GDBObjComplex)
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
             function beforertmodify:GDBPointer;virtual;
             function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;
-            procedure Format;virtual;
+            procedure FormatEntity(const drawing:TDrawingDef);virtual;
             function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
 
             constructor initnul;
@@ -223,7 +223,7 @@ begin
      //bp.owner^.ImEdited(@self,bp.PSelfInOwnerArray);
      //ObjCasheArray.addnodouble(@pobj);
 end;
-procedure GDBObjElLeader.format;
+procedure GDBObjElLeader.FormatEntity(const drawing:TDrawingDef);
 var
    pl:pgdbobjline;
    tv,tv2,tv3:gdbvertex;
@@ -250,7 +250,7 @@ begin
      //pobj:=nil;
      sta.init(10);
      mainline.vp.Layer:=vp.Layer;
-     mainline.format;
+     mainline.FormatEntity(drawing);
 
      pcable:=nil;
 
@@ -395,7 +395,7 @@ begin
                  else
                      PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=SysVar.DSGN.DSGN_LeaderDefaultWidth^;
      tbl.vp.Layer:=vp.Layer;
-     tbl.Build;
+     tbl.Build(drawing);
 
 
      if pdev=nil then
@@ -432,14 +432,14 @@ begin
      MarkLine.CoordInOCS.lBegin:=VertexSub(MainLine.CoordInOCS.lBegin,tv);
      MarkLine.CoordInOCS.lEnd:=VertexAdd(MainLine.CoordInOCS.lBegin,tv);
 
-     MarkLine.Format;
+     MarkLine.FormatEntity(drawing);;
 
      tbl.Local.P_insert:=mainline.CoordInOCS.lEnd;
      if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
                             tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w;
      if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).y>=0 then
                             tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
-     tbl.Format;
+     tbl.FormatEntity(drawing);;
      ConstObjArray.cleareraseobj;
      if pdev<>nil then
      begin
@@ -469,14 +469,14 @@ begin
                                    ptext.textprop.justify:=jsbr;
                                    end;
           ptext.textprop.size:=2.5*scale;
-          ptext.Format;
+          ptext.FormatEntity(drawing);;
           pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
           pl.vp.Layer:=vp.Layer;
           pl.CoordInOCS.lBegin:=ptext.Local.P_insert;
           pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
           pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
           pl.CoordInOCS.lEnd.y:=pl.CoordInOCS.lEnd.y-1*scale;
-          pl.Format;
+          pl.FormatEntity(drawing);
           pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
           pl.vp.Layer:=vp.Layer;
           pl.CoordInOCS.lBegin:=ptext.Local.P_insert;
@@ -486,7 +486,7 @@ begin
                                    pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x+ptext.obj_width*ptext.textprop.size*0.7
                                else
                                    pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x-ptext.obj_width*ptext.textprop.size*0.7;
-          pl.Format;
+          pl.FormatEntity(drawing);
           end;
 
      end;
@@ -494,7 +494,7 @@ begin
 
      CodePage:=TCP;
      objects.ClearAndDone;
-     buildgeometry;
+     buildgeometry(drawing);
 end;
 function GDBObjElLeader.select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;
 var tdesc:pselectedobjdesc;

@@ -19,7 +19,7 @@
 unit GDBEntity;
 {$INCLUDE def.inc}
 interface
-uses GDBCamera,gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
+uses ugdbdrawingdef,GDBCamera,gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
      {UGDBPolyPoint2DArray,}varman,varmandef,
      {$IFNDEF DELPHI}gl,glu,{$ELSE}opengl,{$ENDIF}
      GDBase,gdbobjectsconstdef,
@@ -57,14 +57,14 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure createfield;virtual;
                     function AddExtAttrib:PTExtAttrib;
                     function CopyExtAttrib:PTExtAttrib;
-                    procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray);virtual;abstract;
+                    procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray{ TODO 1111 : Убрать нахуй }:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;abstract;
                     procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                     procedure DXFOut(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                     procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                     procedure SaveToDXFPostProcess(var handle:{GDBInteger}GDBOpenArrayOfByte);
-                    procedure Format;virtual;
-                    //procedure FormatEntity(drawing:PTAbstractDrawing);virtual;
-                    procedure FormatFast;virtual;
+                    procedure Format;virtual;abstract;
+                    procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                    procedure FormatFast(const drawing:TDrawingDef);virtual;
                     procedure FormatAfterEdit;virtual;
 
                     procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
@@ -140,7 +140,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
                     function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                     function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
-                    procedure BuildGeometry;virtual;
+                    procedure BuildGeometry(const drawing:TDrawingDef);virtual;
                     procedure AddOnTrackAxis(var posr:os_record; const processaxis:taddotrac);virtual;
 
                     function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
@@ -152,7 +152,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure correctsublayers(var la:GDBLayerArray);virtual;
                     procedure CopyVPto(var toObj:GDBObjEntity);virtual;
                     function CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
-                    procedure FormatAfterDXFLoad;virtual;
+                    procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
               end;
 {Export-}
 var onlygetsnapcount:GDBInteger;
@@ -593,13 +593,17 @@ begin
   //DrawGeometry;
 end;
 
-procedure GDBObjEntity.format;
+{procedure GDBObjEntity.format;
 begin
-end;
+end;}
 procedure GDBObjEntity.FormatFast;
 begin
      format;
 end;
+procedure GDBObjEntity.FormatEntity(const drawing:TDrawingDef);
+begin
+end;
+
 procedure GDBObjEntity.FormatAfterEdit;
 begin
      format;

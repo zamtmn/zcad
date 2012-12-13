@@ -8,7 +8,7 @@ unit GDBNet;
 {$INCLUDE def.inc}
 
 interface
-Uses gdbvisualprop,zcadsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,{GDBGenericSubEntry,}UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
+Uses ugdbdrawingdef,gdbvisualprop,zcadsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,{GDBGenericSubEntry,}UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
 gl,
 memman,GDBSubordinated,OGLSpecFunc,uunitmanager,shared,sysutils,UGDBOpenArrayOfPObjects;
 const
@@ -31,7 +31,7 @@ GDBObjNet=object(GDBObjConnected)
                  function CalcNewName(Net1,Net2:PGDBObjNet):GDBInteger;
                  procedure connectedtogdb;virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 procedure Format;virtual;
+                 procedure FormatEntity(const drawing:TDrawingDef);virtual;
                  procedure DelSelectedSubitem;virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
@@ -44,7 +44,7 @@ GDBObjNet=object(GDBObjConnected)
                  procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
 
                  destructor done;virtual;
-                 procedure FormatAfterDXFLoad;virtual;
+                 procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
                  function IsHaveGRIPS:GDBBoolean;virtual;
            end;
 {Export-}
@@ -148,7 +148,7 @@ begin
           until pl=nil;
      end;
 end;
-procedure GDBObjNet.Format;
+procedure GDBObjNet.FormatEntity(const drawing:TDrawingDef);
 begin
      CreateDeviceNameProcess(@self);
      inherited;

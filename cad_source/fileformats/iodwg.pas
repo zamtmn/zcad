@@ -1379,7 +1379,7 @@ begin
                              PGDBObjLine(pobj)^.CoordInOCS.lBegin:=v1;
                              PGDBObjLine(pobj)^.CoordInOCS.lEnd:=v2;
                              gdb.GetCurrentRoot^.AddMi(@pobj);
-                             PGDBObjEntity(pobj)^.BuildGeometry;
+                             PGDBObjEntity(pobj)^.BuildGeometry(gdb.GetCurrentDWG^);
                              PGDBObjEntity(pobj)^.format;
                              end;
               end;
@@ -1425,4 +1425,4 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodwg.initialization');{$ENDIF}
-end.
+end.

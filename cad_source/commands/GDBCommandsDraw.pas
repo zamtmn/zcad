@@ -597,8 +597,8 @@ begin
     PGDBObjEntity(nb)^.FromDXFPostProcessAfterAdd;
 
     nb^.CalcObjMatrix;
-    nb^.BuildGeometry;
-    nb^.BuildVarGeometry;
+    nb^.BuildGeometry(gdb.GetCurrentDWG^);
+    nb^.BuildVarGeometry(gdb.GetCurrentDWG^);
 
     if BlockReplaceParams.SaveVariables then
     begin
@@ -804,8 +804,8 @@ begin
            pvisible^.transform(m);
            //pvisible^.correctobjects(powner,{pblockdef.ObjArray.getelement(i)}i);
            powner^.objmatrix:=m2;
-           pvisible^.format;
-           pvisible.BuildGeometry;
+           pvisible^.formatentity(gdb.GetCurrentDWG^);
+           pvisible.BuildGeometry(gdb.GetCurrentDWG^);
            powner^.VarObjArray.add(@pvisible);
            pobj^.YouDeleted;
            end;
@@ -1339,7 +1339,7 @@ begin
                 if tv.IsHaveLCS then
                                     PGDBObjWithLocalCS(tv)^.CalcObjMatrix;
                 tv.transform(dispmatr);
-                tv.build;
+                tv.build(gdb.GetCurrentDWG^);
                 tv.YouChanged;
 
                 SetObjCreateManipulator(domethod,undomethod);
@@ -1606,9 +1606,9 @@ begin
     //gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(pb));
     PGDBObjEntity(pb)^.FromDXFPostProcessAfterAdd;
     pb^.CalcObjMatrix;
-    pb^.BuildGeometry;
-    pb^.BuildVarGeometry;
-    pb^.Format;
+    pb^.BuildGeometry(gdb.GetCurrentDWG^);
+    pb^.BuildVarGeometry(gdb.GetCurrentDWG^);
+    pb^.FormatEntity(gdb.GetCurrentDWG^);
     gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
     pb^.Visible:=0;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
@@ -1655,9 +1655,9 @@ begin
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.add(addr(pb));
     //PGDBObjEntity(pb)^.FromDXFPostProcessAfterAdd;
     pb^.CalcObjMatrix;
-    pb^.BuildGeometry;
-    pb^.BuildVarGeometry;
-    pb^.Format;
+    pb^.BuildGeometry(gdb.GetCurrentDWG^);
+    pb^.BuildVarGeometry(gdb.GetCurrentDWG^);
+    pb^.FormatEntity(gdb.GetCurrentDWG^);
     //gdb.GetCurrentDWG.ConstructObjRoot.Count := 0;
     //pb^.RenderFeedback;
   end;
@@ -2000,7 +2000,7 @@ begin
     PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
     GDBObjSetLineProp(PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, wc, wc);
     //GDBObjLineInit(gdb.GetCurrentROOT,PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, wc);
-    PCreatedGDBLine^.Format;
+    PCreatedGDBLine^.FormatEntity(gdb.GetCurrentDWG^);
   end
 end;
 
@@ -2013,7 +2013,7 @@ begin
   PCreatedGDBLine^.vp.lineweight := sysvar.dwg.DWG_CLinew^;}
   GDBObjSetEntityProp(PCreatedGDBLine,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^);
   PCreatedGDBLine^.CoordInOCS.lEnd:= wc;
-  PCreatedGDBLine^.Format;
+  PCreatedGDBLine^.FormatEntity(gdb.GetCurrentDWG^);
   po:=nil;
   if osp<>nil then
   begin
@@ -2999,8 +2999,8 @@ begin
       end;
   end;
 
-  pt^.Build;
-  pt^.Format;
+  pt^.Build(gdb.GetCurrentDWG^);
+  pt^.FormatEntity(gdb.GetCurrentDWG^);
 
   //gdb.GetCurrentROOT.getoutbound;
   //redrawoglwnd;
@@ -3120,9 +3120,9 @@ begin
     gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(addr(BLINSERT));
     PGDBObjEntity(BLINSERT)^.FromDXFPostProcessAfterAdd;
     BLINSERT^.CalcObjMatrix;
-    BLINSERT^.BuildGeometry;
-    BLINSERT^.BuildVarGeometry;
-    BLINSERT^.Format;
+    BLINSERT^.BuildGeometry(gdb.GetCurrentDWG^);
+    BLINSERT^.BuildVarGeometry(gdb.GetCurrentDWG^);
+    BLINSERT^.FormatEntity(gdb.GetCurrentDWG^);
     BLINSERT^.Visible:=0;
     BLINSERT^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
     //BLINSERT:=nil;

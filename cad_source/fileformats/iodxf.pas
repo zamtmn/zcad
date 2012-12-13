@@ -354,7 +354,7 @@ begin
         {$IFDEF DEBUGBUILD}inc(i2);if i2=4349 then
                                                   i2:=i2;{$ENDIF}
         pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
-        PGDBObjEntity(pobj)^.LoadFromDXF(f,@additionalunit,drawing.LayerTable,drawing.LTypeStyleTable);
+        PGDBObjEntity(pobj)^.LoadFromDXF(f,@additionalunit,drawing.LayerTable,drawing.LTypeStyleTable,drawing);
         if (PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer)or(PGDBObjEntity(pobj)^.vp.Layer=nil) then
                                                                  PGDBObjEntity(pobj)^.vp.Layer:={gdb.GetCurrentDWG}drawing.LayerTable.GetSystemLayer;
         if (PGDBObjEntity(pobj)^.vp.LineType=nil) then
@@ -396,10 +396,10 @@ begin
                                 begin
                                  newowner^.AddMi(@pobj);
                                  if foc=0 then
-                                              PGDBObjEntity(pobj)^.BuildGeometry;
+                                              PGDBObjEntity(pobj)^.BuildGeometry(drawing);
                                  if foc=0 then
                                               //PGDBObjEntity(pobj)^.format;
-                                              PGDBObjEntity(pobj)^.FormatAfterDXFLoad;
+                                              PGDBObjEntity(pobj)^.FormatAfterDXFLoad(drawing);
                                  if foc=0 then PGDBObjEntity(pobj)^.FromDXFPostProcessAfterAdd;
                                 end
                                    else
@@ -431,7 +431,7 @@ begin
                                 begin
                                      m4:=PGDBObjEntity(newowner)^.getmatrix^;
                                      MatrixInvert(m4);
-                                     postobj^.Format;
+                                     postobj^.FormatEntity(drawing);
                                      postobj^.transform(m4);
                                 end;
 
@@ -440,11 +440,11 @@ begin
                                  pobj^.done;
                                  GDBFreeMem(pointer(pobj));
                                  if foc=0 then
-                                              PGDBObjEntity(postobj)^.BuildGeometry;
+                                              PGDBObjEntity(postobj)^.BuildGeometry(drawing);
                                  if foc=0 then
                                               begin
                                                 //PGDBObjEntity(postobj)^.Format;
-                                                PGDBObjEntity(postobj)^.FormatAfterDXFLoad;
+                                                PGDBObjEntity(postobj)^.FormatAfterDXFLoad(drawing);
                                               end;
                                  if foc=0 then PGDBObjEntity(postobj)^.FromDXFPostProcessAfterAdd;
                                 end
@@ -1184,7 +1184,7 @@ begin
                 dec(foc);
                 if tp^.name='TX' then
                                                            tp^.name:=tp^.name;
-                tp^.LoadFromDXF(f,nil,drawing.LayerTable,drawing.LTypeStyleTable);
+                tp^.LoadFromDXF(f,nil,drawing.LayerTable,drawing.LTypeStyleTable,drawing);
                 blockload:=true;
                 programlog.logoutstr('end block;',lp_DecPos);
                 sname:='##'
@@ -2388,7 +2388,7 @@ begin
            pgdbobjCircle(pobj)^.Local.P_insert.x:=TvCircle(CurEntity).x;
            pgdbobjCircle(pobj)^.Local.P_insert.y:=TvCircle(CurEntity).y;
            drawing{gdb}.GetCurrentRoot^.AddMi(@pobj);
-           PGDBObjEntity(pobj)^.BuildGeometry;
+           PGDBObjEntity(pobj)^.BuildGeometry(drawing);
            PGDBObjEntity(pobj)^.format;
       end
  else if CurEntity is TvCircularArc then
@@ -2400,7 +2400,7 @@ begin
            pgdbobjArc(pobj)^.StartAngle:=TvCircularArc(CurEntity).StartAngle*pi/180;
            pgdbobjArc(pobj)^.EndAngle:=TvCircularArc(CurEntity).EndAngle*pi/180;
            drawing{gdb}.GetCurrentRoot^.AddMi(@pobj);
-           PGDBObjEntity(pobj)^.BuildGeometry;
+           PGDBObjEntity(pobj)^.BuildGeometry(drawing);
            PGDBObjEntity(pobj)^.format;
       end
   else if CurEntity is fpvectorial.TPath then
@@ -2424,7 +2424,7 @@ begin
            PosY := Cur2DSegment.Y;
            PGDBObjLine(pobj)^.CoordInOCS.lEnd:=createvertex(PosX,PosY,0);
            drawing{gdb}.GetCurrentRoot^.AddMi(@pobj);
-           PGDBObjEntity(pobj)^.BuildGeometry;
+           PGDBObjEntity(pobj)^.BuildGeometry(drawing);
            PGDBObjEntity(pobj)^.format;
         end;
         end;

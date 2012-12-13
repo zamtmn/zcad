@@ -20,7 +20,7 @@ unit GDBComplex;
 {$INCLUDE def.inc}
 
 interface
-uses GDBCamera,ugdbsimpledrawing,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
+uses ugdbdrawingdef,GDBCamera,ugdbsimpledrawing,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray,UGDBVisibleOpenArray,gdbEntity{,varman,varmandef},
 gl,UGDBVisibleTreeArray,UGDBEntTree,
 GDBase,GDBWithLocalCS,gdbobjectsconstdef,oglwindowdef,geometry{,dxflow},memman{,GDBSubordinated,UGDBOpenArrayOfByte};
@@ -44,14 +44,14 @@ GDBObjComplex=object(GDBObjWithLocalCS)
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                     procedure rtedit(refp:GDBPointer;mode:GDBFloat;dist,wc:gdbvertex);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                    procedure Format;virtual;
+                    procedure FormatEntity(const drawing:TDrawingDef);virtual;
                     //procedure feedbackinrect;virtual;
                     //function InRect:TInRect;virtual;
                     //procedure Draw(lw:GDBInteger);virtual;
                     procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble);virtual;
                     function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
-                    procedure BuildGeometry;virtual;
-                    procedure FormatAfterDXFLoad;virtual;
+                    procedure BuildGeometry(const drawing:TDrawingDef);virtual;
+                    procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
               end;
 {EXPORT-}
 implementation
@@ -214,7 +214,7 @@ begin
   p:=ConstObjArray.beginiterate(ir);
   if p<>nil then
   repeat
-       p^.FormatAfterDXFLoad;
+       p^.FormatAfterDXFLoad(drawing);
        p:=ConstObjArray.iterate(ir);
   until p=nil;
   inherited;
@@ -287,7 +287,7 @@ begin
   //pdy:=PProjPoint[1].y-PProjPoint[0].y;
      ConstObjArray.RenderFeedbac(infrustumactualy,pcount,camera,ProjectProc);
 end;
-procedure GDBObjComplex.format;
+procedure GDBObjComplex.FormatEntity(const drawing:TDrawingDef);
 {var pblockdef:PGDBObjBlockdef;
     pvisible,pvisible2:PGDBObjEntity;
     i:GDBInteger;
@@ -297,9 +297,9 @@ procedure GDBObjComplex.format;
     po:pgdbobjgenericsubentry;}
 begin
      calcobjmatrix;
-     ConstObjArray.Format;
+     ConstObjArray.FormatEntity(drawing);
      calcbb;
-     self.BuildGeometry;
+     self.BuildGeometry(drawing);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBComplex.initialization');{$ENDIF}

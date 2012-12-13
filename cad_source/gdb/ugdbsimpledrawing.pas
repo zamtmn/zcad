@@ -151,8 +151,8 @@ begin
      begin
           PSelectedObjDesc(md).ptempobj:=obj^.Clone(nil);
           PSelectedObjDesc(md).ptempobj^.bp.ListPos.Owner:=obj^.bp.ListPos.Owner;
-          PSelectedObjDesc(md).ptempobj.{format}FormatFast;
-          PSelectedObjDesc(md).ptempobj.BuildGeometry;
+          PSelectedObjDesc(md).ptempobj.{format}FormatFast(self);
+          PSelectedObjDesc(md).ptempobj.BuildGeometry(self);
      end;
      p:=obj^.beforertmodify;
      if save then PSelectedObjDesc(md).pcontrolpoint^.SelectedCount:=0;
@@ -260,8 +260,8 @@ begin
      end
      else
      begin
-          PSelectedObjDesc(md).ptempobj.FormatFast;
-          PSelectedObjDesc(md).ptempobj.BuildGeometry;
+          PSelectedObjDesc(md).ptempobj.FormatFast(self);
+          PSelectedObjDesc(md).ptempobj.BuildGeometry(self);
           //PSelectedObjDesc(md).ptempobj.renderfeedback;
      end;
      obj^.afterrtmodify(p);

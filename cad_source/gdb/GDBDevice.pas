@@ -20,7 +20,7 @@ unit GDBDevice;
 {$INCLUDE def.inc}
 
 interface
-uses GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
+uses ugdbdrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
 gl,OGLSpecFunc,uunitmanager{,shared},
 memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray,UGDBDescriptor{,UGDBLayerArray},oglwindowdef;
 
@@ -34,7 +34,7 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    constructor initnul;
                    destructor done;virtual;
                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
-                   procedure Format;virtual;
+                   procedure FormatEntity(const drawing:TDrawingDef);virtual;
                    procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                    procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
@@ -48,8 +48,8 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    //function AssignToVariable(pv:pvardesk):GDBInteger;virtual;
                    function GetObjTypeName:GDBString;virtual;
 
-                   procedure BuildGeometry;virtual;
-                   procedure BuildVarGeometry;virtual;
+                   procedure BuildGeometry(const drawing:TDrawingDef);virtual;
+                   procedure BuildVarGeometry(const drawing:TDrawingDef);virtual;
 
                    procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                    procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
@@ -60,7 +60,7 @@ GDBObjDevice=object(GDBObjBlockInsert)
 
                    function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
                    procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
-                   procedure FormatAfterDXFLoad;virtual;
+                   procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
              end;
 {EXPORT-}
 implementation
@@ -401,10 +401,10 @@ begin
                                      begin
                                           pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
                                           pvisible^.format;
-                                          pvisible.BuildGeometry;
+                                          pvisible.BuildGeometry(drawing);
                                           if pvisible^.vp.ID=GDBDeviceID then
                                           begin
-                                                                             PGDBObjDevice(pvisible)^.BuildVarGeometry;
+                                                                             PGDBObjDevice(pvisible)^.BuildVarGeometry(drawing);
                                                                              //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
                                           end;
                                           VarObjArray.add(@pvisible);
@@ -415,10 +415,10 @@ begin
                                           pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
                                           pvisible2^.FromDXFPostProcessBeforeAdd(nil);
                                           pvisible2^.format;
-                                          pvisible2.BuildGeometry;
+                                          pvisible2.BuildGeometry(drawing);
                                           if pvisible2^.vp.ID=GDBDeviceID then
                                           begin
-                                                                              PGDBObjDevice(pvisible2)^.BuildVarGeometry;
+                                                                              PGDBObjDevice(pvisible2)^.BuildVarGeometry(drawing);
                                                                               //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
                                           end;
                                           VarObjArray.add(@pvisible2);
@@ -455,7 +455,7 @@ begin
                                      begin
                                          pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
                                          pvisible^.format;
-                                        pvisible.BuildGeometry;
+                                        pvisible.BuildGeometry(drawing);
                                         ConstObjArray.add(@pvisible)
 
                                      end
@@ -464,7 +464,7 @@ begin
                                          pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
                                          pvisible2^.FromDXFPostProcessBeforeAdd(nil);
                                          pvisible2^.format;
-                                        pvisible2.BuildGeometry;
+                                        pvisible2.BuildGeometry(drawing);
                                         ConstObjArray.add(@pvisible2)
                                     end;
           end;
@@ -509,7 +509,7 @@ begin
   p:=VarObjArray.beginiterate(ir);
   if p<>nil then
   repeat
-       p^.FormatAfterDXFLoad;
+       p^.FormatAfterDXFLoad(drawing);
        p:=VarObjArray.iterate(ir);
   until p=nil;
   {index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
@@ -518,8 +518,8 @@ begin
   self.BlockDesc:=pblockdef.BlockDesc;
   calcobjmatrix;
   CreateDeviceNameProcess(@self);}
-  ConstObjArray.Format;
-  VarObjArray.Format;
+  ConstObjArray.FormatEntity(drawing);
+  VarObjArray.FormatEntity(drawing);
   calcbb;
   //format;
 end;
@@ -534,7 +534,7 @@ begin
   //DGroup:=DG_Unknown;
   //uunitmanager.units.loadunit(expandpath('*blocks\el\device_plan.pas'),@ou);
 end;
-procedure GDBObjDevice.Format;
+procedure GDBObjDevice.FormatEntity(const drawing:TDrawingDef);
 var pvn,{pvnt,}pvp,pvphase,pvi,pvcos:pvardesk;
     volt:TVoltage;
     calcip:TCalcIP;
@@ -610,8 +610,8 @@ begin
           //ConstObjArray.Shrink;
           //VarObjArray.Shrink;
 
-          ConstObjArray.Format;
-          VarObjArray.Format;
+          ConstObjArray.FormatEntity(drawing);
+          VarObjArray.FormatEntity(drawing);
      self.lstonmouse:=nil;
      calcbb;
 end;

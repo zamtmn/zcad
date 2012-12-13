@@ -19,7 +19,7 @@ unit GDBBlockInsert;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBLayerArray{,UGDBLayerArray},math,gdbasetypes,GDBComplex,{GDBGenericSubEntry,}SysInfo,sysutils,
+uses ugdbdrawingdef,UGDBLayerArray{,UGDBLayerArray},math,gdbasetypes,GDBComplex,{GDBGenericSubEntry,}SysInfo,sysutils,
 {UGDBOpenArrayOfPV,}UGDBObjBlockdefArray{,UGDBSelectedObjArray,UGDBVisibleOpenArray},gdbEntity,varman{,varmandef},
 gl,UGDBEntTree,ugdbltypearray,GDBBlockDef,
 GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBSubordinated,UGDBOpenArrayOfByte;
@@ -36,7 +36,7 @@ GDBObjBlockInsert=object(GDBObjComplex)
                      BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
                      constructor initnul;
                      constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
-                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray);virtual;
+                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;
                      function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
 
                      procedure SaveToDXF(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
@@ -48,15 +48,15 @@ GDBObjBlockInsert=object(GDBObjComplex)
                      destructor done;virtual;
                      function GetObjTypeName:GDBString;virtual;
                      procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
-                     procedure BuildGeometry;virtual;
-                     procedure BuildVarGeometry;virtual;
+                     procedure BuildGeometry(const drawing:TDrawingDef);virtual;
+                     procedure BuildVarGeometry(const drawing:TDrawingDef);virtual;
 
                      procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                      procedure ReCalcFromObjMatrix;virtual;
                      procedure rtsave(refp:GDBPointer);virtual;
 
                      procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-                     procedure Format;virtual;
+                     procedure FormatEntity(const drawing:TDrawingDef);virtual;
 
                      function getrot:GDBDouble;virtual;
                      procedure setrot(r:GDBDouble);virtual;
@@ -283,7 +283,7 @@ begin
      result:=arccos((objmatrix[0,0])/geometry.oneVertexlength(PGDBVertex(@objmatrix[0])^))*180/pi
 end;
 
-procedure GDBObjBlockInsert.Format;
+procedure GDBObjBlockInsert.FormatEntity(const drawing:TDrawingDef);
 begin
      inherited;
 end;
@@ -539,7 +539,7 @@ begin
 
           if not PBlockDefArray(gdb.GetCurrentDWG.BlockDefArray.parray)^[index].Formated then
                                                                                begin
-                                                                                PBlockDefArray(gdb.GetCurrentDWG.BlockDefArray.parray)^[index].format;
+                                                                                PBlockDefArray(gdb.GetCurrentDWG.BlockDefArray.parray)^[index].FormatEntity(drawing);
                                                                                end;
           ConstObjArray.cleareraseobj;
           mainowner:=getmainowner;
@@ -561,15 +561,15 @@ begin
                if pvisible2=nil then
                                      begin
                                           pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
-                                          pvisible^.format;
-                                          pvisible.BuildGeometry;
+                                          pvisible^.FormatEntity(drawing);
+                                          pvisible.BuildGeometry(drawing);
                                           ConstObjArray.add(@pvisible);
                                      end
                                  else
                                      begin
                                           pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
-                                          pvisible2^.format;
-                                          pvisible.BuildGeometry;
+                                          pvisible2^.FormatEntity(drawing);
+                                          pvisible.BuildGeometry(drawing);
                                           ConstObjArray.add(@pvisible2);
                                      end;
           end;

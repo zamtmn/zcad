@@ -20,7 +20,7 @@ unit GDBSubordinated;
 {$INCLUDE def.inc}
 
 interface
-uses gdbobjectsconstdef,strproc{$IFNDEF DELPHI},LCLProc{$ENDIF},UGDBOpenArrayOfByte,devices,gdbase,gdbasetypes,varman,varmandef,
+uses ugdbdrawingdef,gdbobjectsconstdef,strproc{$IFNDEF DELPHI},LCLProc{$ENDIF},UGDBOpenArrayOfByte,devices,gdbase,gdbasetypes,varman,varmandef,
      dxflow,UBaseTypeDescriptor,sysutils,UGDBLayerArray{,strutils};
 type
 //Owner:PGDBObjGenericWithSubordinated;(*'Владелец'*)
@@ -47,10 +47,10 @@ GDBObjGenericWithSubordinated=object(GDBaseObject)
                                     function GetHandle:GDBPlatformint;virtual;
                                     function GetType:GDBPlatformint;virtual;
                                     function IsSelected:GDBBoolean;virtual;abstract;
-                                    procedure FormatAfterDXFLoad;virtual;
+                                    procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
                                     procedure CalcGeometry;virtual;
 
-                                    procedure Build;virtual;
+                                    procedure Build(const drawing:TDrawingDef);virtual;
 
 
 end;

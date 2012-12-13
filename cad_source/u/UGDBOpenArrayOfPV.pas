@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfPV;
 {$INCLUDE def.inc}
 interface
-uses GDBEntity,GDBCamera,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
+uses ugdbdrawingdef,GDBEntity,GDBCamera,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
      gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman,GDBSubordinated;
 type
 {PGDBObjEntityArray=^GDBObjEntityArray;
@@ -42,7 +42,8 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
                       function calcvisbb(infrustumactualy:TActulity):GDBBoundingBbox;
                       function getoutbound:GDBBoundingBbox;
                       function getonlyoutbound:GDBBoundingBbox;
-                      procedure Format;virtual;
+                      procedure Format;virtual;abstract;
+                      procedure FormatEntity(const drawing:TDrawingDef);virtual;
                       procedure FormatAfterEdit;virtual;
                       //function InRect:TInRect;virtual;
                       function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
@@ -262,7 +263,7 @@ begin
        p:=iterate(ir);
   until p=nil;
 end;
-procedure GDBObjOpenArrayOfPV.format;
+procedure GDBObjOpenArrayOfPV.FormatEntity;
 var
   p:pGDBObjEntity;
       ir:itrec;
@@ -270,7 +271,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       p^.format;
+       p^.FormatEntity(drawing);;
        p:=iterate(ir);
   until p=nil;
 end;

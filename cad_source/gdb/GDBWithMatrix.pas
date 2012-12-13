@@ -20,7 +20,7 @@ unit GDBWithMatrix;
 {$INCLUDE def.inc}
 
 interface
-uses GDBCamera, GDBEntity,gdbase,gdbasetypes,geometry,GDBSubordinated,UGDBEntTree;
+uses ugdbdrawingdef, GDBCamera, GDBEntity,gdbase,gdbasetypes,geometry,GDBSubordinated,UGDBEntTree;
 type
 {EXPORT+}
 PGDBObjWithMatrix=^GDBObjWithMatrix;
@@ -29,7 +29,7 @@ GDBObjWithMatrix=object(GDBObjEntity)
                        constructor initnul(owner:PGDBObjGenericWithSubordinated);
                        function GetMatrix:PDMatrix4D;virtual;
                        procedure CalcObjMatrix;virtual;
-                       procedure Format;virtual;
+                       procedure FormatEntity(const drawing:TDrawingDef);virtual;
                        procedure createfield;virtual;
                        procedure transform(const t_matrix:DMatrix4D);virtual;
                        procedure ReCalcFromObjMatrix;virtual;abstract;
@@ -182,7 +182,7 @@ procedure GDBObjWithMatrix.CalcObjMatrix;
 begin
      ObjMatrix:=OneMatrix;
 end;
-procedure GDBObjWithMatrix.Format;
+procedure GDBObjWithMatrix.FormatEntity(const drawing:TDrawingDef);
 begin
      CalcObjMatrix;
 end;

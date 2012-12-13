@@ -20,7 +20,7 @@ unit GDBTable;
 {$INCLUDE def.inc}
 
 interface
-uses strproc,UGDBOpenArrayOfByte,UGDBTableStyleArray,GDBLine{,math},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils,UGDBTable,UGDBStringArray,GDBMTEXT{,UGDBOpenArrayOfData},
+uses ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,UGDBTableStyleArray,GDBLine{,math},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils,UGDBTable,UGDBStringArray,GDBMTEXT{,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,UGDBSelectedObjArray,UGDBVisibleOpenArray,}gdbEntity{,varman,varmandef},
 gl,
 GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef{,oglwindowdef},geometry,dxflow,memman{,GDBSubordinated,UGDBOpenArrayOfByte};
@@ -45,7 +45,7 @@ GDBObjTable=object(GDBObjComplex)
             constructor initnul;
             destructor done;virtual;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-            procedure Build;virtual;
+            procedure Build(const drawing:TDrawingDef);virtual;
             procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
             procedure ReCalcFromObjMatrix;virtual;
             end;
@@ -200,7 +200,7 @@ ConstObjArray.cleareraseobj;
                                                    pgdbmtext.Local.P_insert.x:=(x-scale)+pcf^.Width*scale;
                                               end;
                            end;
-                           pgdbmtext.Format;
+                           pgdbmtext.FormatEntity(drawing);;
                            ycurrcount:=pgdbmtext^.text.Count;
                            end;
                            if ycurrcount>ycount then
@@ -239,7 +239,7 @@ ConstObjArray.cleareraseobj;
            pl^.CoordInOCS.lEnd.x:=xw{*scale};
            pl^.CoordInOCS.lEnd.y:=-({ccount+}i)*PTableStyle^.rowheight*scale;
            pl^.vp.Layer:=vp.Layer;
-           pl^.Format;
+           pl^.FormatEntity(drawing);;
            end;
      if xcount<PTableStyle^.tblformat.Count then
                                    xcount:=PTableStyle^.tblformat.Count;
@@ -253,7 +253,7 @@ ConstObjArray.cleareraseobj;
            pl^.CoordInOCS.lEnd.x:=x*scale;
            pl^.CoordInOCS.lEnd.y:=-(ccount)*PTableStyle^.rowheight*scale;
            pl^.vp.Layer:=vp.Layer;
-           pl^.Format;
+           pl^.FormatEntity(drawing);
 
 
            x:=x+pcf^.Width;
@@ -270,7 +270,7 @@ ConstObjArray.cleareraseobj;
      pl^.CoordInOCS.lEnd.x:=x*scale;
      pl^.CoordInOCS.lEnd.y:=-(ccount)*PTableStyle^.rowheight*scale;
      pl^.vp.Layer:=vp.Layer;
-     pl^.Format;
+     pl^.FormatEntity(drawing);
 
      h:=(ccount)*PTableStyle^.rowheight*scale;
      w:=x*scale;
@@ -283,9 +283,9 @@ ConstObjArray.cleareraseobj;
           pgdbins^.scale.y:=scale;
           pgdbins^.scale.z:=scale;
           pgdbins^.vp.Layer:=vp.Layer;
-          pgdbins^.BuildGeometry;
+          pgdbins^.BuildGeometry(drawing);
      end;
-     BuildGeometry;
+     BuildGeometry(drawing);
 end;
 constructor GDBObjTable.initnul;
 //var
@@ -306,7 +306,10 @@ begin
      tbl.init({$IFDEF DEBUGBUILD}'{C6EE9076-623F-4D7A-A355-122C6271B9ED}',{$ENDIF}9,20);
      ptablestyle:=gdb.GetCurrentDWG.TableStyleTable.getAddres('Standart');
      scale:=1;
-     build;
+
+     //build();
+
+
      //tblformat.init({$IFDEF DEBUGBUILD}'{9616C423-CF78-45A4-9244-62F2821332D2}',{$ENDIF}25,sizeof(TGDBTableItemFormat));
 
 end;

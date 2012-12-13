@@ -318,8 +318,8 @@ begin
   //pb^.ObjArray.init(1000);
   pb^.CalcObjMatrix;
   pb.setrot(angle);
-  pb^.BuildGeometry;
-  pb^.BuildVarGeometry;
+  pb^.BuildGeometry(gdb.GetCurrentDWG^);
+  pb^.BuildVarGeometry(gdb.GetCurrentDWG^);
   pb^.format;
   gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
   //own.AddObjectToObjArray(addr(pb));

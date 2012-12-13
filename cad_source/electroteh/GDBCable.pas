@@ -8,7 +8,7 @@ unit GDBCable;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,UGDBOpenArrayOfByte,UGDBLayerArray{,UGDBObjBlockdefArray},UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,varman},varmandef,
+uses ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfByte,UGDBLayerArray{,UGDBObjBlockdefArray},UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,varman},varmandef,
 gl,
 GDBase{,GDBLINE},GDBHelpObj,UGDBDescriptor,gdbobjectsconstdef{,oglwindowdef},dxflow,sysutils,memman,OGLSpecFunc, GDBSubordinated,GDBDEvICE;
 type
@@ -39,8 +39,8 @@ GDBObjCable=object(GDBObjCurve)
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function GetObjTypeName:GDBString;virtual;
-                 procedure Format;virtual;
-                 procedure FormatFast;virtual;
+                 procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                 procedure FormatFast(const drawing:TDrawingDef);virtual;
                  procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
@@ -214,7 +214,7 @@ var
    np:TNodeProp;
 begin
      np.DevLink:=nil;
-     inherited format;
+     inherited FormatEntity(drawing);
      NodePropArray.clear;
      ptvnext:=vertexarrayInWCS.beginiterate(ir_inVertexArray);
      if ptvnext<>nil then
@@ -226,7 +226,7 @@ begin
      until ptvnext=nil;
 end;
 
-procedure GDBObjCable.Format;
+procedure GDBObjCable.FormatEntity(const drawing:TDrawingDef);
 var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
     currentobj,CurrentSubObj,CurrentSubObj2,ptd:PGDBObjDevice;
     devpoint,{cabpoint,}tp,tp2,tp3,_XWCS,_YWCS,_ZWCS:GDBVertex;
@@ -401,7 +401,7 @@ begin
                                          l:=l+pgdbdouble(pvd^.data.Instance)^;
                                     end;
                     inc(count);
-                    CurrentObj^.Format;
+                    CurrentObj^.FormatEntity(drawing);
                     CurrentObj^.getoutbound;
                     CurrentObj^.calcbb;
                     end;

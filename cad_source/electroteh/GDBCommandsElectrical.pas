@@ -228,8 +228,8 @@ begin
           pointer(pgdbins):=gdb.CurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBBlockInsertID,@gdb.CurrentDWG.ConstructObjRoot);
           pgdbins^.name:=bname;
           pgdbins^.Local.P_insert:=p;
-          pgdbins^.BuildGeometry;
-          pgdbins^.Format;
+          pgdbins^.BuildGeometry(gdb.GetCurrentDWG^);
+          pgdbins^.FormatEntity(gdb.GetCurrentDWG^);
 
           //pointer(ptext):=gdb.CurrentDWG.ConstructObjRoot.ObjArray.CreateInitObj(GDBMtextID,@gdb.CurrentDWG.ConstructObjRoot);
 
@@ -238,7 +238,7 @@ begin
           ptext:=pointer(CreateObjFree(GDBMtextID));
           ptext^.init(@gdb.CurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,obozn,CreateVertex(p.x+pbdef.vp.BoundingBox.LBN.x-1,p.y,p.z),2.5,0,0.65,90,jsbc,1,1);
           gdb.CurrentDWG.ConstructObjRoot.ObjArray.add(@ptext);
-          ptext^.Format;
+          ptext^.FormatEntity(gdb.GetCurrentDWG^);
           end;
 
 end;
@@ -968,8 +968,8 @@ begin
 
 
               gdb.CurrentDWG.ConstructObjRoot.ObjArray.add(@pt);
-              pt^.Build;
-              pt^.Format;
+              pt^.Build(gdb.GetCurrentDWG^);
+              pt^.FormatEntity(gdb.GetCurrentDWG^);
               end;
 
          end;
@@ -1716,8 +1716,8 @@ begin
   until pv=nil;
 
   gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@pt);
-  pt^.Build;
-  pt^.Format;
+  pt^.Build(gdb.GetCurrentDWG^);
+  pt^.FormatEntity(gdb.GetCurrentDWG^);
   end;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   FileClose(handle);
@@ -1923,8 +1923,8 @@ begin
   until currentgroup=nil;
 
   gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@pt);
-  pt^.Build;
-  pt^.Format;
+  pt^.Build(gdb.GetCurrentDWG^);
+  pt^.FormatEntity(gdb.GetCurrentDWG^);
 
 
   if assigned(redrawoglwndproc) then redrawoglwndproc;

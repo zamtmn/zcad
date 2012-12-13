@@ -18,7 +18,7 @@
 unit GDBBlockDef;
 {$INCLUDE def.inc}
 interface
-uses UGDBVisibleOpenArray,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,memman, geometry,
+uses ugdbdrawingdef,UGDBVisibleOpenArray,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,memman, geometry,
      gl,UGDBLayerArray,ugdbltypearray,
      zcadstrconsts,varmandef,gdbobjectsconstdef,GDBGenericSubEntry,varman;
 type
@@ -32,9 +32,9 @@ GDBObjBlockdef=object(GDBObjGenericSubEntry)
                      BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
                      constructor initnul(owner:PGDBObjGenericWithSubordinated);
                      constructor init(_name:GDBString);
-                     procedure format;virtual;
+                     procedure FormatEntity(const drawing:TDrawingDef);virtual;
                      function FindVariable(varname:GDBString):pvardesk;virtual;
-                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray);virtual;
+                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;
                      function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit):GDBBoolean;virtual;
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;
@@ -177,7 +177,7 @@ function GDBObjBlockdef.FindVariable;
 begin
      result:=nil;//ou.FindVariable(varname);
 end;
-procedure GDBObjBlockdef.format;
+procedure GDBObjBlockdef.FormatEntity(const drawing:TDrawingDef);
 var
   p:pgdbobjEntity;
       ir:itrec;
@@ -186,8 +186,8 @@ begin
   if p<>nil then
   repeat
        //programlog.LogOutStr('format entity '+inttostr(ir.itc),lp_OldPos);
-       p^.format;
-       p^.BuildGeometry;
+       p^.formatEntity(drawing);
+       p^.BuildGeometry(drawing);
        p^.FromDXFPostProcessAfterAdd;
        p:=ObjArray.iterate(ir);
   until p=nil;

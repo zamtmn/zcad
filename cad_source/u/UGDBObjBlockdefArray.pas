@@ -19,7 +19,7 @@
 unit UGDBObjBlockdefArray;
 {$INCLUDE def.inc}
 interface
-uses strproc,GDBBlockDef,UGDBOpenArrayOfData,sysutils,gdbase,memman, geometry,
+uses ugdbdrawingdef,strproc,GDBBlockDef,UGDBOpenArrayOfData,sysutils,gdbase,memman, geometry,
      gl,gdbasetypes;
 type
 {Export+}
@@ -35,7 +35,7 @@ GDBObjBlockdefArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBObjBlockdef*)
                       //function loadblock(filename,bname:pansichar;pdrawing:GDBPointer):GDBInteger;virtual;
                       function create(name:GDBString):PGDBObjBlockdef;virtual;
                       procedure freeelement(p:GDBPointer);virtual;
-                      procedure Format;virtual;
+                      procedure FormatEntity(const drawing:TDrawingDef);virtual;
                       procedure Grow;virtual;
                     end;
 {Export-}
@@ -93,7 +93,7 @@ begin
                                                                    result := i;
                         end;
 end;
-procedure GDBObjBlockdefArray.format;
+procedure GDBObjBlockdefArray.FormatEntity(const drawing:TDrawingDef);
 var
   p:PGDBObjBlockdef;
       ir:itrec;
@@ -105,7 +105,7 @@ begin
                             p^.Name:=p^.Name;
 
        programlog.LogOutStr('GDBObjBlockdefArray.format; '+p^.name,lp_OldPos);
-       p^.format;
+       p^.FormatEntity(drawing);
        p:=iterate(ir);
   until p=nil;
 end;

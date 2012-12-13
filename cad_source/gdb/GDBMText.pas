@@ -20,7 +20,7 @@ unit GDBMText;
 {$INCLUDE def.inc}
 
 interface
-uses strproc,UGDBSHXFont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,gdbasetypes,gdbEntity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses ugdbdrawingdef,strproc,UGDBSHXFont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,gdbasetypes,gdbEntity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
 gl,ugdbltypearray,
 GDBase,UGDBDescriptor,GDBText,gdbobjectsconstdef,geometry,dxflow,strmy,math,memman,GDBSubordinated,UGDBTextStyleArray;
 const maxdxfmtextlen=250;
@@ -35,11 +35,11 @@ GDBObjMText=object(GDBObjText)
                  text:XYZWGDBGDBStringArray;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte;wi,l:GDBDouble);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray);virtual;
+                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                  procedure CalcGabarit;virtual;
                  //procedure getoutbound;virtual;
-                 procedure Format;virtual;
+                 procedure FormatEntity(const drawing:TDrawingDef);virtual;
                  procedure createpoint;virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
@@ -95,7 +95,7 @@ begin
   text.init(10);
   format;
 end;
-procedure GDBObjMText.format;
+procedure GDBObjMText.FormatEntity(const drawing:TDrawingDef);
 var
   canbreak: GDBBoolean;
   currsymbol, lastbreak, lastcanbreak, i: GDBInteger;
@@ -909,7 +909,7 @@ begin
   //text.init(10);
   //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{60EB8545-4D59-48BF-9489-41979066A13F}',{$ENDIF}100);
   PProjoutbound:=nil;
-  format;
+  //format;
 end;
 function z2dxfmtext(s:gdbstring;var ul:boolean):gdbstring;
 var i:GDBInteger;

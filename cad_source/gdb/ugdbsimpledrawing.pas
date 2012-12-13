@@ -78,11 +78,17 @@ TSimpleDrawing=object(TAbstractDrawing)
                        function GetFileName:GDBString;virtual;
                        procedure ChangeStampt(st:GDBBoolean);virtual;
                        function GetUndoTop:TArrayIndex;virtual;
+                       function GetDWGUnits:PTUnitManager;virtual;
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 implementation
 uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,{commandline,}log{,OGLSpecFunc};
+function TSimpleDrawing.GetDWGUnits:PTUnitManager;
+begin
+     result:=nil;
+end;
+
 function TSimpleDrawing.GetLastSelected:PGDBObjEntity;
 begin
      result:=OGLwindow1.param.SelDesc.LastSelectedObject;
@@ -650,4 +656,4 @@ begin
 
 end;
 
-end.
+end.

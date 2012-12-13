@@ -18,11 +18,11 @@
 
 unit ugdbabstractdrawing;
 interface
-uses gdbase,gdbasetypes,GDBCamera,GDBGenericSubEntry,GDBRoot,UGDBSelectedObjArray,UGDBLayerArray,UGDBOpenArrayOfPV;
+uses ugdbdrawingdef,gdbase,gdbasetypes,GDBCamera,GDBGenericSubEntry,GDBRoot,UGDBSelectedObjArray,UGDBLayerArray,UGDBOpenArrayOfPV;
 type
 {EXPORT+}
 PTAbstractDrawing=^TAbstractDrawing;
-TAbstractDrawing=object(GDBaseobject)
+TAbstractDrawing=object(TDrawingDef)
                        //function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
                        function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;virtual;abstract;
                        function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;virtual;abstract;
@@ -34,7 +34,6 @@ TAbstractDrawing=object(GDBaseobject)
                        procedure RotateCameraInLocalCSXY(ux,uy:GDBDouble);virtual;abstract;
                        procedure MoveCameraInLocalCSXY(oldx,oldy:GDBDouble;ax:gdbvertex);virtual;abstract;
                        procedure SetCurrentDWG;virtual;abstract;
-                       function GetLayerTable:PGDBLayerArray;virtual;abstract;
                        function GetChangeStampt:GDBBoolean;virtual;abstract;
                        function StoreOldCamerapPos:Pointer;virtual;abstract;
                        procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;

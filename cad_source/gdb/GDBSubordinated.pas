@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -20,7 +20,7 @@ unit GDBSubordinated;
 {$INCLUDE def.inc}
 
 interface
-uses gdbobjectsconstdef,strproc,LCLProc,UGDBOpenArrayOfByte,devices,gdbase,gdbasetypes,varman,varmandef,
+uses gdbobjectsconstdef,strproc{$IFNDEF DELPHI},LCLProc{$ENDIF},UGDBOpenArrayOfByte,devices,gdbase,gdbasetypes,varman,varmandef,
      dxflow,UBaseTypeDescriptor,sysutils,UGDBLayerArray{,strutils};
 type
 //Owner:PGDBObjGenericWithSubordinated;(*'Владелец'*)

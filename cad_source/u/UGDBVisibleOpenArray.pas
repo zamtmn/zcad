@@ -20,7 +20,7 @@ unit UGDBVisibleOpenArray;
 {$INCLUDE def.inc}
 interface
 uses GDBCamera,{UGDBOpenArray,}gdbasetypes{,math},UGDBOpenArrayOfPV,{,UGDBOpenArray,oglwindowdef}sysutils,gdbase, geometry,
-     gl,
+     {$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
      {varmandef,gdbobjectsconstdef,}memman;
 type
 {Export+}

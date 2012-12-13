@@ -78,7 +78,7 @@ GDBLtypeProp=object(GDBNamedObject)
                desk:GDBAnsiString;(*'Description'*)
                constructor init(n:GDBString);
                destructor done;virtual;
-               procedure Format;
+               procedure Format;virtual;
              end;
 PGDBLtypePropArray=^GDBLtypePropArray;
 GDBLtypePropArray=array [0..0] of GDBLtypeProp;
@@ -223,7 +223,7 @@ begin
              begin
                   if _source<>nil then
                   begin
-                       if AddItem(_source.Name,result)=IsCreated then
+                       if AddItem(_source.Name,pointer(result))=IsCreated then
                        begin
                        result.init(_source.Name);
                        result.len:=_source.len;
@@ -268,13 +268,13 @@ end;
 
 procedure GDBLtypeArray.LoadFromFile(fname:GDBString;lm:TLoadOpt);
 var
-   strings:TStringList=nil;
+   strings:TStringList{=nil};
    line:GDBString;
    i:integer;
    WhatNeed:TSeek;
    LTName,LTDesk,LTClass:GDBString;
    p:PGDBLtypeProp;
-function GetStr(var s: String; out dinfo:TDashInfo): String;
+function GetStr(var s: GDBString; out dinfo:TDashInfo): String;
 var j:integer;
 begin
      if length(s)>0 then
@@ -298,7 +298,7 @@ begin
 end;
 procedure CreateLineTypeFrom(var LT:GDBString;pltprop:PGDBLtypeProp);
 var
-   element,subelement,text_shape,font_style,paramname:String;
+   element,subelement,text_shape,font_style,paramname:GDBString;
    j:integer;
    stroke:GDBDouble;
    dinfo:TDashInfo;

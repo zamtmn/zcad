@@ -22,7 +22,7 @@ unit mainwindow;
 interface
 uses
   lineweightwnd,ugdbsimpledrawing,zcadsysvars,GDBBlockDef,layercombobox,ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
-  ActnList,LCLType,LCLProc,strproc,log,intftranslations,toolwin,
+  ActnList,LCLType,LCLProc,strproc,log,{$IFNDEF DELPHI}intftranslations,{$ENDIF}toolwin,
   umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Controls, {Graphics, Dialogs,}
   gdbasetypes,SysInfo, oglwindow, io,
   gdbase, languade,geometry,

@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -20,7 +20,7 @@ unit UGDBLayerArray;
 {$INCLUDE def.inc}
 interface
 uses zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
-     gl,
+     {$IFNDEF DELPHI}gl,glu,{$ELSE}opengl,{$ENDIF}
      varmandef,gdbobjectsconstdef,UGDBNamedObjectsArray,StrProc;
 type
 {EXPORT+}

@@ -20,7 +20,7 @@ unit UGDBNamedObjectsArray;
 {$INCLUDE def.inc}
 interface
 uses {,UGDBOpenArray}UGDBOpenArrayOfObjects{,oglwindowdef},sysutils,gdbase, geometry,
-     gl,
+     {$IFNDEF DELPHI}gl,{$ELSE}opengl,{$ENDIF}
      {varmandef,gdbobjectsconstdef}gdbasetypes;
 type
 {EXPORT+}

@@ -131,7 +131,7 @@ begin
 
   vp.Layer:=pl;
 end;
-procedure CreateCableNameProcess(pCable:PGDBObjCable);
+procedure CreateCableNameProcess(pCable:PGDBObjCable;const drawing:TDrawingDef);
 var
    pvn,pvnt:pvardesk;
    ptn:PTNodeProp;
@@ -203,7 +203,7 @@ begin
                         s:='';
      CreateDeviceNameSubProcess(pvn,s,pCable);
 
-     CreateDBLinkProcess(pCable);
+     CreateDBLinkProcess(pCable,drawing);
 
 
 end;
@@ -370,7 +370,7 @@ begin
 
 
 
-  CreateCableNameProcess(@self);
+  CreateCableNameProcess(@self,drawing);
 
 
   l:=0;

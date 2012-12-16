@@ -19,20 +19,20 @@
 unit GDBConnected;
 {$INCLUDE def.inc}
 interface
-Uses GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV};
+Uses GDBEntity,GDBGenericSubEntry,UGDBOpenArrayOfPV;
 type
 {Export+}
 PGDBObjConnected=^GDBObjConnected;
 GDBObjConnected=object(GDBObjGenericSubEntry)
-                      procedure addtoconnect(pobj:pgdbobjEntity);virtual;
-                      procedure connectedtogdb;virtual;abstract;
+                      procedure addtoconnect(pobj:pgdbobjEntity;var ConnectedArray:GDBObjOpenArrayOfPV);virtual;
+                      procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry);virtual;abstract;
                 end;
 {Export-}
 implementation
-uses UGDBDescriptor,log;
-procedure GDBObjConnected.addtoconnect(pobj:pgdbobjEntity);
+uses {UGDBDescriptor,}log;
+procedure GDBObjConnected.addtoconnect(pobj:pgdbobjEntity;var ConnectedArray:GDBObjOpenArrayOfPV);
 begin
-     gdb.GetCurrentROOT.ObjToConnectedArray.addnodouble(@pobj);
+     ConnectedArray.{gdb.GetCurrentROOT.ObjToConnectedArray.}addnodouble(@pobj);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBConnected.initialization');{$ENDIF}

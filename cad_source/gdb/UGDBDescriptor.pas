@@ -34,15 +34,9 @@ ugdbltypearray,
 GDBCamera,
 UGDBOpenArrayOfPV,
 GDBRoot,UGDBSHXFont,
-OGLWindow,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray;
+OGLWindow,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,ugdbtrash;
 type
 {EXPORT+}
-GDBObjTrash=object(GDBObjEntity)
-                 function GetHandle:GDBPlatformint;virtual;
-                 function GetMatrix:PDMatrix4D;virtual;
-                 constructor initnul;
-                 destructor done;virtual;
-           end;
 TDWGProps=record
                 Name:GDBString;
                 Number:GDBInteger;
@@ -136,7 +130,7 @@ begin
   pdwg:=gdb.GetCurrentDWG;
   if pdwg<>nil then
   begin
-       gdb.GetCurrentRoot.FormatAfterEdit;
+       gdb.GetCurrentRoot.FormatAfterEdit(pdwg^);
   pdwg.OGLwindow1.param.firstdraw := TRUE;
   pdwg.OGLwindow1.CalcOptimalMatrix;
   pdwg.pcamera^.totalobj:=0;
@@ -302,21 +296,6 @@ begin
  commandmanager.executecommandend;
  CurrentDWG:=PTDrawing(PDWG);
  asociatedwgvars;
-end;
-
-function GDBObjTrash.GetHandle;
-begin
-     result:=H_Trash;
-end;
-function GDBObjTrash.GetMatrix;
-begin
-     result:=@onematrix;
-end;
-constructor GDBObjTrash.initnul;
-begin
-end;
-destructor GDBObjTrash.done;
-begin
 end;
 procedure CalcZ(z:GDBDouble);
 begin

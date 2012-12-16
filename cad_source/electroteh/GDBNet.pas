@@ -8,7 +8,7 @@ unit GDBNet;
 {$INCLUDE def.inc}
 
 interface
-Uses ugdbdrawingdef,gdbvisualprop,zcadsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,{GDBGenericSubEntry,}UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
+Uses UGDBLayerArray,GDBGenericSubEntry,ugdbdrawingdef,gdbvisualprop,zcadsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,{GDBGenericSubEntry,}UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
 gl,
 memman,GDBSubordinated,OGLSpecFunc,uunitmanager,shared,sysutils,UGDBOpenArrayOfPObjects;
 const
@@ -23,13 +23,13 @@ GDBObjNet=object(GDBObjConnected)
                  function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
                  function EubEntryType:GDBInteger;virtual;
                  function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
-                 procedure restructure;virtual;
+                 procedure restructure(const drawing:TDrawingDef);virtual;
                  function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
                  function BuildGraf:GDBInteger;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function EraseMi(pobj:pgdbobjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
                  function CalcNewName(Net1,Net2:PGDBObjNet):GDBInteger;
-                 procedure connectedtogdb;virtual;
+                 procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry);virtual;
                  function GetObjTypeName:GDBString;virtual;
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;
                  procedure DelSelectedSubitem;virtual;
@@ -49,7 +49,7 @@ GDBObjNet=object(GDBObjConnected)
            end;
 {Export-}
 implementation
-uses GDBLine,ugdbdescriptor,GDBManager,dxflow,math,oglwindow,log;
+uses GDBLine,{ugdbdescriptor,}GDBManager,dxflow,math,oglwindow,log;
 function GDBObjNet.IsHaveGRIPS:GDBBoolean;
 begin
      result:=false;
@@ -150,7 +150,7 @@ begin
 end;
 procedure GDBObjNet.FormatEntity(const drawing:TDrawingDef);
 begin
-     CreateDeviceNameProcess(@self);
+     CreateDeviceNameProcess(@self,drawing);
      inherited;
      if self.ObjArray.Count=0 then
                                   begin
@@ -168,7 +168,7 @@ begin
      begin
           tvp:=pobj^.vp;
           pobj^.vp:=vp;
-          pobj.bp.ListPos.Owner:=gdb.GetCurrentROOT;
+          pobj.bp.ListPos.Owner:=self.GetMainOwner;{ gdb.GetCurrentROOT;}
           pobj.SaveToDXF(handle,outhandle);
           pobj.bp.ListPos.Owner:=@self;
           pobj^.vp:=tvp;
@@ -238,7 +238,7 @@ begin
                              glVertex3dV(@(tgf^.point));
                              oglsm.myglend;
                              end;
-                             gdb.GetCurrentDWG.OGLwindow1.pushmatrix;
+    (*                         gdb.GetCurrentDWG.OGLwindow1.pushmatrix;
 
 
     oglsm.myglMatrixMode(GL_PROJECTION);
@@ -255,7 +255,7 @@ begin
                              textwrite(inttostr(i)+':'+inttostr(tgf^.linkcount)+':'+inttostr(tgf^.connected));
                              gdb.GetCurrentDWG.OGLwindow1.popmatrix;
                              //end;
-
+     *)
      inc(tgf);
      inc(i);
      end;
@@ -347,7 +347,7 @@ var CurrentNet:PGDBObjNet;
     p:pointer;
 begin
      format;
-     CurrentNet:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+     CurrentNet:=ConnectedArea.ObjArray.beginiterate(ir);
      if (currentnet<>nil) then
      repeat
            p:=@self;
@@ -391,7 +391,7 @@ begin
                      until pmyline=nil
                 end;
            end;
-           CurrentNet:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+           CurrentNet:=ConnectedArea.ObjArray.iterate(ir);
      until CurrentNet=nil;
 end;
 procedure GDBObjNet.restructure;
@@ -436,7 +436,7 @@ begin
                                      pl^.CoordInOCS.lbegin:=ip.interceptcoord;
                                      pl^.Format;
                                      tpl:=GDBPointer(CreateObjFree(GDBLineID));
-                                     GDBObjLineInit(@self,tpl,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, tv,ip.interceptcoord);
+                                     GDBObjLineInit(@self,tpl,drawing.GetLayerTable^.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, tv,ip.interceptcoord);
                                      objarray.add(addr(tpl));
                                      {tpl := GDBPointer(self.ObjArray.CreateObj(GDBLineID,@self));
                                      GDBObjLineInit(@self,tpl, sysvar.DWG_CLayer^, sysvar.DWG_CLinew^, tv,ip.interceptcoord);}
@@ -449,7 +449,7 @@ begin
                                      pl2^.CoordInOCS.lbegin:=ip.interceptcoord;
                                      pl2^.Format;
                                      tpl:=GDBPointer(CreateObjFree(GDBLineID));
-                                     GDBObjLineInit(@self,tpl,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, tv,ip.interceptcoord);
+                                     GDBObjLineInit(@self,tpl,drawing.GetLayerTable^.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, tv,ip.interceptcoord);
                                      objarray.add(addr(tpl));
                                      {tpl := GDBPointer(self.ObjArray.CreateObj(GDBLineID,@self));
                                      GDBObjLineInit(@self,tpl, sysvar.DWG_CLayer^, sysvar.DWG_CLinew^, tv,ip.interceptcoord);}
@@ -475,7 +475,8 @@ begin
           TempNet^.initnul(nil);
           ou.CopyTo(@tempnet.ou);
           //TempNet^.name:=name;
-          gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@TempNet);
+          PGDBObjGenericSubEntry(GetMainOwner)^
+          {gdb.GetCurrentROOT}.AddObjectToObjArray{ObjArray.add}(@TempNet);
           //gdb.GetCurrentDWG.ObjRoot.ObjCasheArray.addnodouble(@TempNet);
           ti.init({$IFDEF DEBUGBUILD}'{B106F951-AEAB-43B9-B0B9-B18827EACFE5}',{$ENDIF}100){%H-};
           for i:=0 to self.graf.Count-1 do
@@ -509,7 +510,7 @@ begin
           //self.correctobjects(pointer(bp.Owner),bp.PSelfInOwnerArray);
           //format;
           TempNet^.Format;
-          TempNet^.addtoconnect(tempnet);
+          TempNet^.addtoconnect(tempnet,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray{gdb.GetCurrentROOT.ObjToConnectedArray});
           ti.Clear;
           ti.done;
      end;
@@ -526,7 +527,7 @@ constructor GDBObjNet.initnul;
 begin
      inherited initnul(owner);
      //GDBPointer(name):=nil;
-     self.vp.layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer {getaddres('EL_WIRES')};
+     self.vp.layer:=@DefaultErrorLayer;// gdb.GetCurrentDWG.LayerTable.GetCurrentLayer {getaddres('EL_WIRES')};
      vp.ID := GDBNetID;
      graf.init(10000);
      riserarray.init({$IFDEF DEBUGBUILD}'{6D2E18F8-2C19-45B8-A12A-025849ABCDC2}',{$ENDIF}100);

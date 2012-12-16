@@ -16,17 +16,38 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ugdbdrawingdef;
+unit ugdbtrash;
+{$INCLUDE def.inc}
 interface
-uses gdbase,gdbasetypes,UGDBLayerArray,UUnitManager;
+uses
+gdbase,GDBasetypes,GDBEntity,gdbobjectsconstdef,geometry;
 type
 {EXPORT+}
-PTDrawingDef=^TDrawingDef;
-TDrawingDef=object(GDBaseobject)
-                       function GetLayerTable:PGDBLayerArray;virtual;abstract;
-                       function GetDWGUnits:PTUnitManager;virtual;abstract;
-                       function GetCurrentRootSimple:GDBPointer;virtual;abstract;
-                 end;
+GDBObjTrash=object(GDBObjEntity)
+                 function GetHandle:GDBPlatformint;virtual;
+                 function GetMatrix:PDMatrix4D;virtual;
+                 constructor initnul;
+                 destructor done;virtual;
+            end;
 {EXPORT-}
+var
+    GDBTrash:GDBObjTrash;
 implementation
+ uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log,OGLSpecFunc;
+function GDBObjTrash.GetHandle;
+begin
+     result:=H_Trash;
+end;
+function GDBObjTrash.GetMatrix;
+begin
+     result:=@onematrix;
+end;
+constructor GDBObjTrash.initnul;
+begin
+end;
+destructor GDBObjTrash.done;
+begin
+end;
+begin
+  {$IFDEF DEBUGINITSECTION}LogOut('ugdbtrash.initialization');{$ENDIF}
 end.

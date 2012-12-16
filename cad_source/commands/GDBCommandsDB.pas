@@ -121,7 +121,7 @@ begin
                                                if pvd<>nil then
                                                begin
                                                     PGDBString(pvd^.data.Instance)^:=pdbv^.name;
-                                                    CreateDBLinkProcess(pv);
+                                                    CreateDBLinkProcess(pv,gdb.GetCurrentDWG^);
                                                     inc(c);
                                                end;
                                           end;

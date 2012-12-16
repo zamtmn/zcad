@@ -77,12 +77,12 @@ GDBObjSubordinated=object(GDBObjGenericWithSubordinated)
 
          end;
 {EXPORT-}
-procedure CreateDeviceNameProcess(pEntity:PGDBObjGenericWithSubordinated);
-procedure CreateDBLinkProcess(pEntity:PGDBObjGenericWithSubordinated);
+procedure CreateDeviceNameProcess(pEntity:PGDBObjGenericWithSubordinated;const drawing:TDrawingDef);
+procedure CreateDBLinkProcess(pEntity:PGDBObjGenericWithSubordinated;const drawing:TDrawingDef);
 procedure CreateDeviceNameSubProcess(pvn:pvardesk; const formatstr:GDBString;pEntity:PGDBObjGenericWithSubordinated);
 function GetEntName(pu:PGDBObjGenericWithSubordinated):GDBString;
 implementation
-uses UGDBDescriptor,UUnitManager,URecordDescriptor,shared,log,GDBAbstractText,devicebaseabstract;
+uses {UGDBDescriptor,}UUnitManager,URecordDescriptor,shared,log,GDBAbstractText,devicebaseabstract;
 destructor GDBObjSubordinated.done;
 begin
      inherited;
@@ -119,7 +119,7 @@ begin
      end;
 
 end;
-procedure CreateDBLinkProcess(pEntity:PGDBObjGenericWithSubordinated);
+procedure CreateDBLinkProcess(pEntity:PGDBObjGenericWithSubordinated;const drawing:TDrawingDef);
 var
    pvn,pvnt,pdbv:pvardesk;
    pdbu:ptunit;
@@ -130,7 +130,7 @@ begin
      pvnt^.attrib:=pvnt^.attrib or (vda_RO);
      if (pvn<>nil)and(pvnt<>nil) then
      begin
-          pdbu:=gdb.GetCurrentDWG.GetDWGUnits^.findunit(DrawingDeviceBaseUnitName);
+          pdbu:={gdb.GetCurrentDWG}drawing.GetDWGUnits^.findunit(DrawingDeviceBaseUnitName);
           pdbv:=pdbu^.FindVariable(pstring(pvn.data.Instance)^);
           if pdbv<>nil then
                            pstring(pvnt.data.Instance)^:=PDbBaseObject(pdbv.data.Instance)^.Name
@@ -138,7 +138,7 @@ begin
                            pstring(pvnt.data.Instance)^:='Error!!!'
      end;
 end;
-procedure CreateDeviceNameProcess(pEntity:PGDBObjGenericWithSubordinated);
+procedure CreateDeviceNameProcess(pEntity:PGDBObjGenericWithSubordinated;const drawing:TDrawingDef);
 var
    pvn,pvnt,pdbv:pvardesk;
    pdbu:ptunit;
@@ -149,7 +149,7 @@ begin
      if (pvnt<>nil) then
      CreateDeviceNameSubProcess(pvn,pstring(pvnt^.data.Instance)^,pEntity);
 
-     CreateDBLinkProcess(pentity);
+     CreateDBLinkProcess(pentity,drawing);
 end;
 function GetEntName(pu:PGDBObjGenericWithSubordinated):GDBString;
 var
@@ -380,7 +380,7 @@ end;
 procedure GDBObjSubordinated.createfield;
 begin
      inherited;
-     bp.ListPos.owner:=gdb.GetCurrentROOT;
+     bp.ListPos.owner:={gdb.GetCurrentROOT}nil;
      bp.ListPos.SelfIndex:=-1{nil};
 end;
 procedure GDBObjGenericWithSubordinated.createfield;

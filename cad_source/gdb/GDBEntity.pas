@@ -65,7 +65,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure Format;virtual;abstract;
                     procedure FormatEntity(const drawing:TDrawingDef);virtual;
                     procedure FormatFast(const drawing:TDrawingDef);virtual;
-                    procedure FormatAfterEdit;virtual;
+                    procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;
 
                     procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
                     procedure DrawWithOutAttrib({visibleactualy:TActulity;}var DC:TDrawContext{subrender:GDBInteger});virtual;

@@ -397,12 +397,12 @@ begin //TTC_MNotUndableIfOverlay
 end;
 procedure TMarkerCommand.UnDo;
 begin
-     gdb.GetCurrentROOT^.FormatAfterEdit;
+     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
 end;
 
 procedure TMarkerCommand.Comit;
 begin
-     gdb.GetCurrentROOT^.FormatAfterEdit;
+     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
 end;
 
 constructor TMarkerCommand.init(_name:GDBString;_index:TArrayIndex);
@@ -541,7 +541,7 @@ begin
                     else
                         shared.ShowError(rscmNoCTUSE)
          end;
-     gdb.GetCurrentROOT^.FormatAfterEdit;
+     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
 end;
 procedure GDBObjOpenArrayOfUCommands.redo;
 var
@@ -575,7 +575,7 @@ begin
      end
      else
          shared.ShowError(rscmNoCTR);
-     gdb.GetCurrentROOT^.FormatAfterEdit;
+     gdb.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
 end;
 
 constructor GDBObjOpenArrayOfUCommands.init;

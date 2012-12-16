@@ -44,7 +44,7 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
                       function getonlyoutbound:GDBBoundingBbox;
                       procedure Format;virtual;abstract;
                       procedure FormatEntity(const drawing:TDrawingDef);virtual;
-                      procedure FormatAfterEdit;virtual;
+                      procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;
                       //function InRect:TInRect;virtual;
                       function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                       function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;virtual;
@@ -283,7 +283,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       p^.formatafteredit;
+       p^.formatafteredit(drawing);
        p:=iterate(ir);
   until p=nil;
 end;

@@ -21,7 +21,7 @@ unit GDBRoot;
 
 interface
 Uses
-   GDBCamera,OGLSpecFunc, gl,UGDBEntTree,{UGDBVisibleTreeArray,UGDBOpenArrayOfPV,}
+   ugdbdrawingdef,GDBCamera,OGLSpecFunc, gl,UGDBEntTree,{UGDBVisibleTreeArray,UGDBOpenArrayOfPV,}
 devices,gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry,uunitmanager{,shared};
 type
 {Export+}
@@ -30,7 +30,7 @@ GDBObjRoot=object(GDBObjGenericSubEntry)
                  constructor initnul;
                  destructor done;virtual;
                  //function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
-                 procedure FormatAfterEdit;virtual;
+                 procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;
                  function AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):integer;virtual;
                  function getowner:PGDBObjSubordinated;virtual;
                  function GetMainOwner:PGDBObjSubordinated;virtual;
@@ -178,7 +178,7 @@ var pobj:PGDBObjConnected;
 begin
 
      //inherited formatafteredit;
-       ObjCasheArray.Formatafteredit;
+       ObjCasheArray.Formatafteredit(drawing);
 
        p:=ObjCasheArray.beginiterate(ir);
        if p<>nil then
@@ -198,7 +198,7 @@ begin
      pobj:=self.ObjToConnectedArray.beginiterate(ir);
      if pobj<>nil then
      repeat
-           pobj^.connectedtogdb;
+           pobj^.connectedtogdb(@self);
 
            pobj:=self.ObjToConnectedArray.iterate(ir);
      until pobj=nil;

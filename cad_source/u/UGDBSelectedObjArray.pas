@@ -494,7 +494,7 @@ begin
     end;
   end;
   if save then
-              gdb.GetCurrentROOT.FormatAfterEdit;
+              gdb.GetCurrentROOT.FormatAfterEdit(gdb.GetCurrentDWG^);
 
 end;
 procedure GDBSelectedObjArray.freeclones;

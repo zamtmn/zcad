@@ -61,6 +61,7 @@ TSimpleDrawing=object(TAbstractDrawing)
                        function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;virtual;
                        function GetPcamera:PGDBObjCamera;virtual;
                        function GetCurrentROOT:PGDBObjGenericSubEntry;virtual;
+                       function GetCurrentRootSimple:GDBPointer;virtual;
                        function GetConstructObjRoot:PGDBObjRoot;virtual;
                        function GetSelObjArray:PGDBSelectedObjArray;virtual;
                        function GetLayerTable:PGDBLayerArray;virtual;
@@ -323,6 +324,10 @@ end;
 function TSimpleDrawing.GetConstructObjRoot:PGDBObjRoot;
 begin
      result:=@ConstructObjRoot;
+end;
+function TSimpleDrawing.GetCurrentRootSimple:GDBPointer;
+begin
+     result:=self.pObjRoot;
 end;
 
 function TSimpleDrawing.GetCurrentROOT:PGDBObjGenericSubEntry;

@@ -2223,7 +2223,7 @@ begin
 
    gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
    gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
-   gdb.GetCurrentROOT.FormatAfterEdit;
+   gdb.GetCurrentROOT.FormatAfterEdit(gdb.GetCurrentDWG^);
 
    commandmanager.executecommandend;
   end;
@@ -2377,7 +2377,7 @@ if (button and MZW_LBUTTON)=0 then
                 end;
 if (button and MZW_LBUTTON)<>0 then
 begin
-gdb.GetCurrentROOT.FormatAfterEdit;
+gdb.GetCurrentROOT.FormatAfterEdit(gdb.GetCurrentDWG^);
 gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 commandend;
 commandmanager.executecommandend;
@@ -2494,7 +2494,7 @@ if (button and MZW_LBUTTON)=0 then
 
 if (button and MZW_LBUTTON)<>0 then
 begin
-gdb.GetCurrentROOT.FormatAfterEdit;
+gdb.GetCurrentROOT.FormatAfterEdit(gdb.GetCurrentDWG^);
 gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 commandend;
 commandmanager.executecommandend;
@@ -2837,7 +2837,7 @@ begin
 
                                                   //p3dpl^.vertexarrayinocs.deleteelement(PEProp.nearestvertex);
                                                   p3dpl^.YouChanged;
-                                                  gdb.GetCurrentROOT.FormatAfterEdit;
+                                                  gdb.GetCurrentROOT.FormatAfterEdit(gdb.GetCurrentDWG^);
                                                   //p3dpl^.Format;
                                                   if assigned(redrawoglwndproc) then redrawoglwndproc;
                                              end
@@ -2865,7 +2865,7 @@ begin
 
                                                                          //p3dpl^.vertexarrayinocs.InsertElement(PEProp.nearestline,PEProp.dir,@wc);
                                                                          p3dpl^.YouChanged;
-                                                                         gdb.GetCurrentROOT.FormatAfterEdit;
+                                                                         gdb.GetCurrentROOT.FormatAfterEdit(gdb.GetCurrentDWG^);
                                                                          //p3dpl^.Format;
                                                                          if assigned(redrawoglwndproc) then redrawoglwndproc;
                                                                          PEProp.setpoint:=false;

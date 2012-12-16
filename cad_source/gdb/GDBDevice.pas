@@ -548,7 +548,7 @@ begin
           index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
           assert((index>=0) and (index<gdb.GetCurrentDWG.BlockDefArray.count), 'Неверный индекс блока');
 
-          CreateDeviceNameProcess(@self);
+          CreateDeviceNameProcess(@self,drawing);
 
           pvn:=ou.FindVariable('Device_Type');
           if pvn<>nil then

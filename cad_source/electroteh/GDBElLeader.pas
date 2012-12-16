@@ -8,10 +8,10 @@ unit GDBElLeader;
 {$INCLUDE def.inc}
 
 interface
-uses ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
+uses GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 gl,
-GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
+GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
 type
 {EXPORT+}
 PGDBObjElLeader=^GDBObjElLeader;
@@ -156,7 +156,7 @@ begin
 end;
 procedure GDBObjElLeader.SaveToDXF;
 begin
-  MainLine.bp.ListPos.Owner:=gdb.GetCurrentROOT;
+  MainLine.bp.ListPos.Owner:={gdb.GetCurrentROOT}self.GetMainOwner;
   MainLine.SaveToDXF(handle,outhandle);
   dxfGDBStringout(outhandle,1001,'DSTP_XDATA');
   dxfGDBStringout(outhandle,1002,'{');
@@ -256,7 +256,7 @@ begin
 
      objects.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}100);
 
-     if gdb.GetCurrentROOT.FindObjectsInPoint(mainline.CoordInWCS.lBegin,Objects) then
+     if PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}FindObjectsInPoint(mainline.CoordInWCS.lBegin,Objects) then
      begin
           pobj:=objects.beginiterate(ir);
           if pobj<>nil then
@@ -283,7 +283,7 @@ begin
      end;
      if pdev=nil then
      begin
-     pobj:=gdb.GetCurrentROOT.ObjArray{objects}.beginiterate(ir);
+     pobj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}ObjArray{objects}.beginiterate(ir);
      if pobj<>nil then
      repeat
            if pobj^.vp.ID=GDBCableID then
@@ -319,14 +319,14 @@ begin
                 end;
                 end;
            end;
-           pobj:=gdb.GetCurrentROOT.ObjArray{objects}.iterate(ir);
+           pobj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}ObjArray{objects}.iterate(ir);
            until pobj=nil;
      end;
            if pdev<>nil then
            begin
                 sta.free;
                 //sta.clear;
-           pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+           pobj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}ObjArray.beginiterate(ir);
            if pobj<>nil then
            repeat
                  if pobj^.vp.ID=GDBCableID then
@@ -352,7 +352,7 @@ begin
                       until ptn=nil;
                       end;
                  end;
-                 pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+                 pobj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}ObjArray.iterate(ir);
            until pobj=nil;
            end;
 
@@ -506,12 +506,14 @@ begin
      if result then
      begin
           selected:=true;
-          tdesc:=gdb.GetCurrentDWG.SelObjArray.addobject(@{mainline}self);
+          //tdesc:=gdb.GetCurrentDWG.SelObjArray.addobject(@{mainline}self);
+          tdesc:={gdb.GetCurrentDWG.}PGDBSelectedObjArray(SelObjArray)^.addobject(@self);
           if tdesc<>nil then
           begin
           GDBGetMem({$IFDEF DEBUGBUILD}'{B50BE8C9-E00A-40C0-A051-230877BD3A56}',{$ENDIF}GDBPointer(tdesc^.pcontrolpoint),sizeof(GDBControlPointArray));
           mainline.addcontrolpoints(tdesc);
-          inc(GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
+          //inc(GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
+          inc({GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.}Selectedobjcount);
           end;
      end;
      end;
@@ -697,11 +699,11 @@ begin
      //MarkLine.Format;
 
      tbl.initnul;
-     tbl.ptablestyle:=gdb.GetCurrentDWG.TableStyleTable.getAddres('Temp');
+     {tbl.ptablestyle:=gdb.GetCurrentDWG.TableStyleTable.getAddres('Temp');
      if twidth>0 then
                      PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=twidth
                  else
-                     PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=SysVar.DSGN.DSGN_LeaderDefaultWidth^;
+                     PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=SysVar.DSGN.DSGN_LeaderDefaultWidth^;}
      tbl.bp.ListPos.Owner:=@self;
      //tbl.Format;
 end;

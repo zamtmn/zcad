@@ -48,8 +48,8 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
                             function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                             procedure FormatEntity(const drawing:TDrawingDef);virtual;
-                            procedure FormatAfterEdit;virtual;
-                            procedure restructure;virtual;
+                            procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;
+                            procedure restructure(const drawing:TDrawingDef);virtual;
                             procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                             //function select:GDBBoolean;virtual;
                             function getowner:PGDBObjSubordinated;virtual;
@@ -513,7 +513,7 @@ begin
   inherited FormatEntity(drawing);
   ObjArray.FormatEntity(drawing);
   calcbb;
-  restructure;
+  restructure(drawing);
 end;
 procedure GDBObjGenericSubEntry.formatafteredit;
 var
@@ -521,11 +521,11 @@ var
       ir:itrec;
 
 begin
-  ObjCasheArray.Formatafteredit;
+  ObjCasheArray.Formatafteredit(drawing);
 
   ObjCasheArray.clear;
   calcbb;
-  restructure;
+  restructure(drawing);
 end;
 procedure GDBObjGenericSubEntry.restructure;
 begin

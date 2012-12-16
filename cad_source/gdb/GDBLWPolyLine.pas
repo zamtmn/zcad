@@ -605,6 +605,7 @@ begin
   hlGDBWord:=0;
   numv:=0;
   vp.id:=GDBLWPolylineID;
+  bp.ListPos.owner:=@drawing;
   local.p_insert:={w0^}PGDBVertex(@bp.ListPos.owner^.GetMatrix^[3])^;
   closed := false;
   Width2D_in_OCS_Array.createarray;

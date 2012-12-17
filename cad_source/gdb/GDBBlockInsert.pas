@@ -68,7 +68,7 @@ GDBObjBlockInsert=object(GDBObjComplex)
 {Export-}
 implementation
 uses {GDBNet,}GDBDevice{,GDBTEXT},log;
-Procedure QDUDecomposition (const m:DMatrix4D; out kQ:DMatrix3D;out kD,kU:DVector3D);
+(*Procedure QDUDecomposition (const m:DMatrix4D; out kQ:DMatrix3D;out kD,kU:DVector3D);
 var
    fInvLength,fDot,fDet,fInvD0:GDBDouble;
    kR:DMatrix3D;
@@ -176,7 +176,7 @@ begin
         kU[0] := kR[0][1]*fInvD0;
         kU[1] := kR[0][2]*fInvD0;
         kU[2] := kR[1][2]/kD[1];
-end;
+end;*)
 
 procedure GDBObjBlockInsert.ReCalcFromObjMatrix;
 var

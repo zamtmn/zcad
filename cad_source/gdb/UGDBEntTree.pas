@@ -44,7 +44,7 @@ type
                             infrustum:TActulity;
                             nuldrawpos,minusdrawpos,plusdrawpos:TActulity;
                             constructor initnul;
-                            destructor done;
+                            destructor done;virtual;
                             procedure draw;
                             procedure drawonlyself;
                             procedure ClearSub;
@@ -59,7 +59,7 @@ TTestTreeNode=Object(GDBaseObject)
                     plane:DVector4D;
                     nul,plus,minus:GDBObjEntityOpenArray;
                     constructor initnul(InNodeCount:integer);
-                    destructor done;
+                    destructor done;virtual;
               end;
 TTestTreeArray=array [0..2] of TTestTreeNode;
 const

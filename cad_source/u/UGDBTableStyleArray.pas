@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -20,7 +20,7 @@ unit UGDBTableStyleArray;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
-     gl,
+     {$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
      {varmandef,gdbobjectsconstdef,}UGDBNamedObjectsArray,UGDBOpenArrayOfData;
 type
 {TCellJustify=(jcl(*'ВерхЛево'*),
@@ -46,6 +46,7 @@ TGDBTableStyle=object(GDBNamedObject)
                      constructor Init(n:GDBString);
                      destructor Done;virtual;
                end;
+PGDBTableStyleArray=^GDBTableStyleArray;
 GDBTableStyleArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=TGDBTableStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;

@@ -20,7 +20,8 @@ unit GDB3DFace;
 
 interface
 uses ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
-gl,ugdbltypearray,
+{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
+ugdbltypearray,
 GDBase,gdbobjectsconstdef,oglwindowdef{,dxflow},memman,OGLSpecFunc;
 type
 {Export+}

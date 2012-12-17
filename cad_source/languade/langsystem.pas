@@ -603,23 +603,23 @@ var
   tv,tv1:functiontype;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('langsystem.initialization');{$ENDIF}
-     {$if FPC_FULlVERSION>=20701}
-     foneGDBInteger:=TTypesArray.create(@GDBIntegerDescriptorObj);
-     {$ELSE}
+     {if FPC_FULlVERSION>=20701}
+     //foneGDBInteger:=TTypesArray.create(@GDBIntegerDescriptorObj);
+     {ELSE}
      setlength(foneGDBInteger,1);foneGDBInteger[0]:=@GDBIntegerDescriptorObj;
-     {$ENDIF}
-     {$if FPC_FULlVERSION>=20701}
-     foneGDBDouble:=TTypesArray.create(@GDBDoubleDescriptorObj);
-     {$ELSE}
+     {ENDIF}
+     {if FPC_FULlVERSION>=20701}
+     //foneGDBDouble:=TTypesArray.create(@GDBDoubleDescriptorObj);
+     {ELSE}
      setlength(foneGDBDouble,1);foneGDBDouble[0]:=@GDBDoubleDescriptorObj;
-     {$ENDIF}
+     {ENDIF}
      tv.name:='cos';tv.param:=foneGDBInteger;tv.addr:=Cos_TGDBInteger;
      tv1.name:='cos';tv1.param:=foneGDBDouble;tv1.addr:=Cos_TGDBDouble;
-     {$if FPC_FULlVERSION>=20701}
-     basicfunctionparam:=TFunctionTypeArray.create(tv,tv1);
-     {$ELSE}
+     {if FPC_FULlVERSION>=20701}
+     //basicfunctionparam:=TFunctionTypeArray.create(tv,tv1);
+     {ELSE}
      setlength(basicfunctionparam,2);
      basicfunctionparam[0]:=tv;
      basicfunctionparam[1]:=tv1;
-     {$ENDIF}
+     {ENDIF}
 end.

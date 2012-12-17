@@ -317,7 +317,7 @@ begin
      if AutoProcessGDB then
                            PGDBObjEntity(undomethod.Data)^.YouChanged(gdb.GetCurrentDWG^)
                        else
-                           PGDBObjEntity(undomethod.Data)^.format;
+                           PGDBObjEntity(undomethod.Data)^.formatEntity(gdb.GetCurrentDWG^);
 end;
 
 procedure TGObjectChangeCommand2.Comit;
@@ -328,7 +328,7 @@ begin
      if AutoProcessGDB then
                            PGDBObjEntity(undomethod.Data)^.YouChanged(gdb.GetCurrentDWG^)
                        else
-                           PGDBObjEntity(undomethod.Data)^.format;
+                           PGDBObjEntity(undomethod.Data)^.formatEntity(gdb.GetCurrentDWG^);
 end;
 
 constructor TGChangeCommand.Assign(var data:_T);

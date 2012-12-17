@@ -5,7 +5,7 @@ unit umainform;
 interface
 
 uses
-  UGDBLayerArray,ugdbabstractdrawing,LCLType, geometry, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
+  gdbentityfactory,UGDBLayerArray,ugdbabstractdrawing,LCLType, geometry, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Spin,
   {From ZCAD}
@@ -219,10 +219,10 @@ begin
     pobj^.CoordInOCS.lEnd:=v2;
     gdb.GetCurrentRoot^.AddMi(@pobj);
     processobj(pobj);
-    pobj^.BuildGeometry;
-    pobj^.format;
+    pobj^.BuildGeometry(gdb.GetCurrentDWG^);
+    pobj^.formatEntity(gdb.GetCurrentDWG^);
   end;
-  gdb.GetCurrentDWG^.pObjRoot^.Format;
+  gdb.GetCurrentDWG^.pObjRoot^.FormatEntity(gdb.GetCurrentDWG^);
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
   UGDBDescriptor.redrawoglwnd;
 end;
@@ -253,10 +253,10 @@ begin
                     pobj^.closed:=random(10)>5;
     gdb.GetCurrentRoot^.AddMi(@pobj);
     processobj(pobj);
-    pobj^.BuildGeometry;
-    pobj^.format;
+    pobj^.BuildGeometry(gdb.GetCurrentDWG^);
+    pobj^.formatEntity(gdb.GetCurrentDWG^);
   end;
-  gdb.GetCurrentDWG^.pObjRoot^.Format;
+  gdb.GetCurrentDWG^.pObjRoot^.FormatEntity(gdb.GetCurrentDWG^);
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
   UGDBDescriptor.redrawoglwnd;
 end;
@@ -276,7 +276,7 @@ begin
                        hl:=l/2;
                        PGDBObjLine(pv)^.CoordInOCS.lBegin:=geometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lBegin,CreateRandomVertex(l,hl));
                        PGDBObjLine(pv)^.CoordInOCS.lEnd:=geometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lEnd,CreateRandomVertex(l,hl));
-                       pv^.YouChanged;
+                       pv^.YouChanged(gdb.GetCurrentDWG^);
                   end;
         GDBCircleID:begin
                        l:=PGDBObjCircle(pv)^.Radius;
@@ -284,7 +284,7 @@ begin
                        PGDBObjCircle(pv)^.Local.P_insert:=geometry.VertexAdd(PGDBObjCircle(pv)^.Local.P_insert,CreateRandomVertex(l,hl));
                        PGDBObjCircle(pv)^.Radius:=PGDBObjCircle(pv)^.Radius+CreateRandomDouble(l)-hl;
                        if PGDBObjCircle(pv)^.Radius<=0 then PGDBObjCircle(pv)^.Radius:=CreateRandomDouble(9)+1;
-                       pv^.YouChanged;
+                       pv^.YouChanged(gdb.GetCurrentDWG^);
                   end;
         end;
   pv:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
@@ -310,10 +310,10 @@ begin
     pobj^.Radius:=CreateRandomDouble(9.9)+0.1;
     gdb.GetCurrentRoot^.AddMi(@pobj);
     processobj(pobj);
-    pobj^.BuildGeometry;
-    pobj^.format;
+    pobj^.BuildGeometry(gdb.GetCurrentDWG^);
+    pobj^.formatEntity(gdb.GetCurrentDWG^);
   end;
-  gdb.GetCurrentDWG^.pObjRoot^.Format;
+  gdb.GetCurrentDWG^.pObjRoot^.FormatEntity(gdb.GetCurrentDWG^);
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
   UGDBDescriptor.redrawoglwnd;
 end;
@@ -340,10 +340,10 @@ begin
                     pobj^.closed:=random(10)>5;
     gdb.GetCurrentRoot^.AddMi(@pobj);
     processobj(pobj);
-    pobj^.BuildGeometry;
-    pobj^.format;
+    pobj^.BuildGeometry(gdb.GetCurrentDWG^);
+    pobj^.formatEntity(gdb.GetCurrentDWG^);
   end;
-  gdb.GetCurrentDWG^.pObjRoot^.Format;
+  gdb.GetCurrentDWG^.pObjRoot^.FormatEntity(gdb.GetCurrentDWG^);
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
   UGDBDescriptor.redrawoglwnd;
 end;
@@ -411,10 +411,10 @@ begin
     pobj^.local.basis.OX:=VectorTransform3D(PGDBObjText(pobj)^.local.basis.OX,geometry.CreateAffineRotationMatrix(PGDBObjText(pobj)^.Local.basis.oz,-angl));
     gdb.GetCurrentRoot^.AddMi(@pobj);
     processobj(pobj);
-    pobj^.BuildGeometry;
-    pobj^.format;
+    pobj^.BuildGeometry(gdb.GetCurrentDWG^);
+    pobj^.formatEntity(gdb.GetCurrentDWG^);
   end;
-  gdb.GetCurrentDWG^.pObjRoot^.Format;
+  gdb.GetCurrentDWG^.pObjRoot^.FormatEntity(gdb.GetCurrentDWG^);
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
   UGDBDescriptor.redrawoglwnd;
 end;

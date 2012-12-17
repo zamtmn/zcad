@@ -66,6 +66,7 @@ TSimpleDrawing=object(TAbstractDrawing)
                        function GetConstructObjRoot:PGDBObjRoot;virtual;
                        function GetSelObjArray:PGDBSelectedObjArray;virtual;
                        function GetLayerTable:PGDBLayerArray;virtual;
+                       function GetTableStyleTable:PGDBTableStyleArray;virtual;
                        function GetTextStyleTable:PGDBTextStyleArray;virtual;
                        function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;
                        procedure RotateCameraInLocalCSXY(ux,uy:GDBDouble);virtual;
@@ -284,6 +285,10 @@ end;
 function TSimpleDrawing.GetLayerTable:PGDBLayerArray;
 begin
      result:=@LayerTable;
+end;
+function TSimpleDrawing.GetTableStyleTable:PGDBTableStyleArray;
+begin
+     result:=@TableStyleTable;
 end;
 function TSimpleDrawing.GetTextStyleTable:PGDBTextStyleArray;
 begin

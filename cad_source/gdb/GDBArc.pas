@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -19,7 +19,8 @@ unit GDBArc;
 {$INCLUDE def.inc}
 interface
 uses ugdbdrawingdef,math,OGLSpecFunc,GDBWithLocalCS,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
-gl,ugdbltypearray,
+{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
+ugdbltypearray,
 GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain{,OGLSpecFunc};
 type
 {Export+}
@@ -804,7 +805,7 @@ begin
   pgdbobjarc(refp)^.startangle := startangle;
   pgdbobjarc(refp)^.endangle := endangle;
   pgdbobjarc(refp)^.r := r;
-  pgdbobjarc(refp)^.format;
+  //pgdbobjarc(refp)^.format;
   //pgdbobjarc(refp)^.renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
 end;
 begin

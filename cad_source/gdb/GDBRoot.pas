@@ -21,7 +21,9 @@ unit GDBRoot;
 
 interface
 Uses
-   ugdbdrawingdef,GDBCamera,OGLSpecFunc, gl,UGDBEntTree,{UGDBVisibleTreeArray,UGDBOpenArrayOfPV,}
+   ugdbdrawingdef,GDBCamera,OGLSpecFunc,
+   {$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
+   UGDBEntTree,{UGDBVisibleTreeArray,UGDBOpenArrayOfPV,}
 devices,gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry,uunitmanager{,shared};
 type
 {Export+}

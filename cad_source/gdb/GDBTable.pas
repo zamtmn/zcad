@@ -95,9 +95,9 @@ begin
          pvc^.bp.ListPos.Owner:=@self;
          self.ObjMatrix:=onematrix;
          if pvc^.IsHaveLCS then
-                               pvc^.Format;
+                               pvc^.FormatEntity(drawing);
          pvc^.transform(m4);
-         pvc^.Format;
+         pvc^.FormatEntity(drawing);
 
          if bp.ListPos.Owner<>@GDBTrash then
                                     pvc^.bp.ListPos.Owner:=drawing.GetCurrentRootSimple// gdb.GetCurrentROOT //@GDBTrash;

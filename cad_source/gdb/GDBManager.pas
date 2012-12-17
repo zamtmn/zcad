@@ -204,7 +204,7 @@ begin
   pb.setrot(angle);
   pb^.BuildGeometry(gdb.GetCurrentDWG^);
   pb^.BuildVarGeometry(gdb.GetCurrentDWG^);
-  pb^.format;
+  pb^.formatEntity(gdb.GetCurrentDWG^);
   gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
   //own.AddObjectToObjArray(addr(pb));
   result:=pb;

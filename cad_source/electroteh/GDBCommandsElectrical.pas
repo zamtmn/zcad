@@ -252,7 +252,7 @@ begin
      pl:=pointer(CreateObjFree(GDBLineID));
      pl^.init(@gdb.CurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,p1,p2);
      gdb.CurrentDWG.ConstructObjRoot.ObjArray.add(@pl);
-     pl^.Format;
+     pl^.Formatentity(gdb.GetCurrentDWG^);
      if pcabledesk<>nil then
      begin
           v:=vertexsub(p1,p2);
@@ -275,12 +275,12 @@ begin
           ptext:=pointer(CreateObjFree(GDBMtextID));
           ptext^.init(@gdb.CurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,GetCableMaterial(pcabledesk)+' L='+floattostr(pcabledesk^.length)+'м',vertexadd(Vertexmorph(p1,p2,0.5),v),2.5,0,0.65,a,jsbc,vertexlength(p1,p2),1);
           gdb.CurrentDWG.ConstructObjRoot.ObjArray.add(@ptext);
-          ptext^.Format;
+          ptext^.Formatentity(gdb.GetCurrentDWG^);
 
           ptext:=pointer(CreateObjFree(GDBMtextID));
           ptext^.init(@gdb.CurrentDWG.ConstructObjRoot,gdb.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,pcabledesk^.Name,vertexsub(Vertexmorph(p1,p2,0.5),v),2.5,0,0.65,a,jstm,vertexlength(p1,p2),1);
           gdb.CurrentDWG.ConstructObjRoot.ObjArray.add(@ptext);
-          ptext^.Format;
+          ptext^.Formatentity(gdb.GetCurrentDWG^);
 
      end;
      
@@ -1029,7 +1029,7 @@ begin
     Prompt('Вторая точка:');
     New_line := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
     GDBObjLineInit(gdb.GetCurrentROOT,New_line,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,wc,wc);
-    New_line^.Format;
+    New_line^.Formatentity(gdb.GetCurrentDWG^);
   end
 end;
 
@@ -1046,7 +1046,7 @@ begin
   gdb.standardization(New_line,GDBNetID);
   New_line^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
   New_line.CoordInOCS.lEnd:= wc;
-  New_line^.Format;
+  New_line^.Formatentity(gdb.GetCurrentDWG^);
   //po:=nil;
   if (button and MZW_LBUTTON)<>0 then
                                      button:=button;
@@ -1062,7 +1062,7 @@ begin
        if (PGDBObjEntity(osp^.PGDBObject)<>nil)and(osp^.PGDBObject<>SecondOwner)
        then
        begin
-            PGDBObjEntity(osp^.PGDBObject)^.format;
+            PGDBObjEntity(osp^.PGDBObject)^.formatentity(gdb.GetCurrentDWG^);
             historyout(GDBPointer(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ','')));
             po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
             //SecondOwner:=GDBPointer(po);
@@ -1102,7 +1102,7 @@ begin
                  //TempNet^.name:=gdb.numerator.getnamenumber(el_unname_prefix);
                  New_line^.bp.ListPos.Owner:=TempNet;
                  TempNet^.ObjArray.add(addr(New_line));
-                 TempNet^.Format;
+                 TempNet^.Formatentity(gdb.GetCurrentDWG^);
                  gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@TempNet);
                  firstowner:=TempNet;
                  mode:=-1;
@@ -1110,7 +1110,7 @@ begin
           1:begin
                  New_line^.bp.ListPos.Owner:=FirstOwner;
                  FirstOwner^.ObjArray.add(addr(New_line));
-                 FirstOwner^.Format;
+                 FirstOwner^.Formatentity(gdb.GetCurrentDWG^);
                  mode:=-1;
             end;
           2:begin
@@ -1130,7 +1130,7 @@ begin
 
                  New_line^.bp.ListPos.Owner:=FirstOwner;
                  FirstOwner^.ObjArray.add(addr(New_line));
-                 FirstOwner^.Format;
+                 FirstOwner^.Formatentity(gdb.GetCurrentDWG^);
                  mode:=-1;
 
                  SecondOwner^.YouDeleted;
@@ -1280,7 +1280,7 @@ begin
     //gdb.GetCurrentDWG.ObjRoot.ObjArray.add(addr(p3dpl));
     //GDBobjinsp.setptr(SysUnit.TypeName2PTD('GDBObjCable'),p3dpl);
     p3dpl^.AddVertex(wc);
-    p3dpl^.Format;
+    p3dpl^.Formatentity(gdb.GetCurrentDWG^);
 
     ptdrawing(gdb.GetCurrentDWG).UndoStack.PushStartMarker('Create cable');
     SetObjCreateManipulator(domethod,undomethod);
@@ -1447,7 +1447,7 @@ begin
               comit;
          end;
           {p3dpl^.AddVertex(wc);}
-          p3dpl^.Format;
+          p3dpl^.Formatentity(gdb.GetCurrentDWG^);
           p3dpl^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
           gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
     end
@@ -1485,7 +1485,7 @@ else begin
                                                            p3dpl^.AddVertex(wc);
                             pa.done;
                        end;*)
-        p3dpl^.Format;
+        p3dpl^.Formatentity(gdb.GetCurrentDWG^);
         p3dpl^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
         gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
      end;
@@ -2054,7 +2054,7 @@ begin
     if pv^.vp.ID=GDBCableID then
     begin
          PGDBObjCable(pv)^.VertexArrayInOCS.invert;
-         pv^.Format;
+         pv^.Formatentity(gdb.GetCurrentDWG^);
          historyoutstr('Направление изменено');
     end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
@@ -2304,7 +2304,7 @@ begin
                        pvl:=pv^.ou.FindVariable('CableLength');
                        if pvl<>nil then
                                        pgdbdouble(pvl^.data.Instance)^:=pcd^.length;}
-                       pv^.Format;
+                       pv^.Formatentity(gdb.GetCurrentDWG^);
                    end
                       else
                           historyoutstr('Кабель "'+pstring(pvn^.data.Instance)^+'" на плане не найден');
@@ -2328,14 +2328,14 @@ begin
   PCreatedGDBLine^.vp.Layer :=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
   PCreatedGDBLine^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
   PCreatedGDBLine^.CoordInOCS.lEnd:= wc;
-  PCreatedGDBLine^.Format;
+  PCreatedGDBLine^.Formatentity(gdb.GetCurrentDWG^);
   //po:=nil;
   if osp<>nil then
   begin
        if (PGDBObjEntity(osp^.PGDBObject)<>nil)and(osp^.PGDBObject<>pold)
        then
        begin
-            PGDBObjEntity(osp^.PGDBObject)^.format;
+            PGDBObjEntity(osp^.PGDBObject)^.formatentity(gdb.GetCurrentDWG^);
             //PGDBObjEntity(osp^.PGDBObject)^.ObjToGDBString('Found: ','');
             historyout(GDBPointer(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ','')));
             //po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
@@ -2368,7 +2368,7 @@ begin
   end;
 
   //gdb.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@pleader);
-  pleader^.Format;
+  pleader^.Formatentity(gdb.GetCurrentDWG^);
   //pleader.BuildGeometry;
 
     end;
@@ -2682,7 +2682,7 @@ begin
 
                  rootbytrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,net,Cable,true);
 
-                 Cable^.Format;
+                 Cable^.Formatentity(gdb.GetCurrentDWG^);
                  Cable^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
                  gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(Cable);
                  end;
@@ -2765,7 +2765,7 @@ begin
                                                                 begin
                                                                      pgdbdouble(vd^.data.Instance)^:=abs(pgdbdouble(pvn^.data.Instance)^-pgdbdouble(pvn2^.data.Instance)^);
                                                                 end;
-                                                                New_line^.Format;
+                                                                New_line^.Formatentity(gdb.GetCurrentDWG^);
                                                                 //New_line.bp.ListPos.Owner^.RemoveInArray(New_line.bp.ListPos.SelfIndex);
                                                                 supernet^.ObjArray.add(addr(New_line));
                                                                 //log.LogOut('supernet^.ObjArray.add(addr(New_line)); Примитивов в графе: '+inttostr(supernet^.objarray.count));
@@ -2825,7 +2825,7 @@ begin
 
                           segments:=rootbymultitrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,supernet,Cable,true);
 
-                          Cable^.Format;
+                          Cable^.Formatentity(gdb.GetCurrentDWG^);
                           Cable^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
                           gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(Cable);
 
@@ -2833,7 +2833,7 @@ begin
                           if (cable<>nil) then
                           repeat
 
-                                Cable^.Format;
+                                Cable^.Formatentity(gdb.GetCurrentDWG^);
                                 Cable^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
                                 gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(Cable);
 

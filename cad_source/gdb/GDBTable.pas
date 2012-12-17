@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -22,7 +22,6 @@ unit GDBTable;
 interface
 uses ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,UGDBTableStyleArray,GDBLine{,math},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils,UGDBTable,UGDBStringArray,GDBMTEXT{,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,UGDBSelectedObjArray,UGDBVisibleOpenArray,}gdbEntity{,varman,varmandef},
-gl,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef{,oglwindowdef},geometry,dxflow,memman{,GDBSubordinated,UGDBOpenArrayOfByte};
 //jcm(*'TopMiddle'*),
 type

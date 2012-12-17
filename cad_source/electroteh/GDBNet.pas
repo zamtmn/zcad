@@ -1,4 +1,4 @@
-(*----------------------------------------------------------------------------*)
+﻿(*----------------------------------------------------------------------------*)
 (*                  Copyright (c) 2004-2010 Antrey Zubarev                    *)
 (*----------------------------------------------------------------------------*)
 {
@@ -9,7 +9,6 @@ unit GDBNet;
 
 interface
 Uses UGDBLayerArray,GDBGenericSubEntry,ugdbdrawingdef,gdbvisualprop,zcadsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,{GDBGenericSubEntry,}UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
-gl,
 memman,GDBSubordinated,OGLSpecFunc,uunitmanager,shared,sysutils,UGDBOpenArrayOfPObjects;
 const
      UNNAMEDNET='NET';
@@ -234,7 +233,7 @@ begin
      if tgf^.linkcount>2 then
                              begin
                              oglsm.myglbegin(GL_points);
-                             glVertex3dV(@(tgf^.point));
+                             {glVertex3dV}oglsm.myglVertex3dV(@tgf^.point);
                              oglsm.myglend;
                              end;
     (*                         gdb.GetCurrentDWG.OGLwindow1.pushmatrix;

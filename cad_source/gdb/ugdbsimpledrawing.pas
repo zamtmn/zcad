@@ -20,7 +20,7 @@ unit ugdbsimpledrawing;
 {$INCLUDE def.inc}
 interface
 uses //gdbase,gdbasetypes,
-gdbobjectsconstdef,GDBWithLocalCS,ugdbabstractdrawing,zcadsysvars,{zcadinterface,}{zcadstrconsts,}{GDBWithLocalCS,}{UGDBOpenArrayOfUCommands,}strproc,{GDBBlockDef,}UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
+{gdbobjectsconstdef,}GDBWithLocalCS,ugdbabstractdrawing,zcadsysvars,{zcadinterface,}{zcadstrconsts,}{GDBWithLocalCS,}{UGDBOpenArrayOfUCommands,}strproc,{GDBBlockDef,}UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
 UGDBNumerator, gdbase,varmandef,varman,
 sysutils, memman, geometry, {gdbobjectsconstdef,}
 gdbasetypes,sysinfo,
@@ -66,6 +66,7 @@ TSimpleDrawing=object(TAbstractDrawing)
                        function GetConstructObjRoot:PGDBObjRoot;virtual;
                        function GetSelObjArray:PGDBSelectedObjArray;virtual;
                        function GetLayerTable:PGDBLayerArray;virtual;
+                       function GetLTypeTable:PGDBLtypeArray;virtual;
                        function GetTableStyleTable:PGDBTableStyleArray;virtual;
                        function GetTextStyleTable:PGDBTextStyleArray;virtual;
                        function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;
@@ -285,6 +286,10 @@ end;
 function TSimpleDrawing.GetLayerTable:PGDBLayerArray;
 begin
      result:=@LayerTable;
+end;
+function TSimpleDrawing.GetLTypeTable:PGDBLtypeArray;
+begin
+     result:=@LTypeStyleTable;
 end;
 function TSimpleDrawing.GetTableStyleTable:PGDBTableStyleArray;
 begin

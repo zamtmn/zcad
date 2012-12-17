@@ -20,13 +20,12 @@ unit UGDBOutbound2DIArray;
 {$INCLUDE def.inc}
 interface
 uses zcadsysvars,gdbasetypes,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
      varmandef,OGLSpecFunc;
 type
 {Export+}
 PGDBOOutbound2DIArray=^GDBOOutbound2DIArray;
 GDBOOutbound2DIArray=object(GDBOpenArrayOfData)
-                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                      constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       procedure DrawGeometry;virtual;
                       procedure addpoint(point:GDBvertex2DI);virtual;
                       procedure addlastpoint(point:GDBvertex2DI);virtual;
@@ -91,7 +90,7 @@ begin
   case count of
                1:begin
                       oglsm.myglbegin(GL_POINTS);
-                      glvertex2iv(@PGDBvertex2DIArray(parray)^[0]);
+                      oglsm.myglvertex2iv(@PGDBvertex2DIArray(parray)^[0]);
                       oglsm.myglend;
                  end;
                else
@@ -100,7 +99,7 @@ begin
                     oglsm.myglbegin(GL_line_loop);
                     for i:=1 to count do
                     begin
-                      glvertex2iv(@p^);
+                      oglsm.myglvertex2iv(@p^);
                       inc(p);
                     end;
                     oglsm.myglend;

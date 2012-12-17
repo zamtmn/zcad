@@ -20,7 +20,6 @@ unit UGDBControlPointArray;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
-     {$IFNDEF DELPHI}gl,{$ELSE}opengl,{$ENDIF}
      memman;
 type
 {Export+}

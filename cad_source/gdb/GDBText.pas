@@ -22,7 +22,6 @@ unit GDBText;
 interface
 uses
 ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,sysutils,UGDBSHXFont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
 ugdbltypearray,
 GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef,geometry,dxflow,strmy,math,memman,log,GDBSubordinated,UGDBTextStyleArray;
 type
@@ -36,7 +35,7 @@ GDBObjText=object(GDBObjAbstractText)
                  obj_height,obj_width,obj_y:GDBDouble;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  procedure getoutbound;virtual;
@@ -843,7 +842,7 @@ begin
   textbackward:=0;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,LayerArray,LTArray) then
+    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
        if not dxfvertexload(f,10,byt,Local.P_insert) then
           if dxfvertexload(f,11,byt,P_drawInOCS) then
                                                      doublepoint := true

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, Buttons, ColorBox, ButtonPanel, Spin, ExtCtrls, ComCtrls,math,
+  StdCtrls, Buttons, {ColorBox,} ButtonPanel, Spin, ExtCtrls, ComCtrls,math,
   gdbase,zcadstrconsts;
 
 type
@@ -267,4 +267,4 @@ begin
 end;
 
 end.
-
+

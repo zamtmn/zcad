@@ -22,7 +22,6 @@ unit GDBLine;
 interface
 uses ugdbdrawingdef,GDBCamera,uzglgeometry,{testing LineTypes...}UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,ugdbltypearray,UGDBSHXFont,
      zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,{$ENDIF}
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,shared,OGLSpecFunc;
 type
                  {l_1_4:GDBvertex;(*hidden_in_objinsp*)
@@ -47,7 +46,7 @@ GDBObjLine=object(GDBObj3d)
 
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;
@@ -266,7 +265,7 @@ begin
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,LayerArray,LTArray) then
+    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
        if not dxfvertexload(f,10,byt,CoordInOCS.lBegin) then
           if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then s := f.readGDBSTRING;
     byt:=readmystrtoint(f);

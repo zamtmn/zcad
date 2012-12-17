@@ -44,6 +44,17 @@ const ls = $AAAA;
                                    $33333333,$33333333,
                                    $CCCCCCCC,$CCCCCCCC
                                   );
+      GL_lines={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_lines;
+      GL_LINE_STRIP={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_LINE_STRIP;
+      GL_line_loop={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_line_loop;
+      GL_POINT_SMOOTH={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_POINT_SMOOTH;
+      GL_LINE_SMOOTH={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_LINE_SMOOTH;
+      GL_points={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_points;
+      GL_TRIANGLES={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_TRIANGLES;
+      GL_QUADS={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_QUADS;
+      GL_ALWAYS={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_ALWAYS;
+      GL_LINE_STIPPLE={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_LINE_STIPPLE;
+      GL_POLYGON_STIPPLE={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_POLYGON_STIPPLE;
 type
     {$IFNDEF DELPHI}
     {if FPC_FULlVERSION>20600}
@@ -78,6 +89,7 @@ type
 
                            _LineStipplefactor: GLint;
                            _LineStipplepattern: GLushort;
+                           _ppolygonpattern:pointer;
 
                            _colour:gdbase.RGB;
 
@@ -93,8 +105,10 @@ type
                            procedure myglLogicOp(const opcode: GLenum);inline;
                            procedure myglPushMatrix;virtual;//inline;
                            procedure myglPopMatrix;virtual;//inline;
+                           procedure myglMultMatrixD(const matrix:DMatrix4D);virtual;//inline;
                            procedure myglMatrixMode(const mode: GLenum);inline;
                            procedure myglLineStipple(const factor: GLint; const pattern: GLushort);inline;
+                           procedure myglPolygonStipple(const ppattern:pointer);inline;
                            constructor init;
 
                            procedure glcolor3ub(const red, green, blue: GLubyte);virtual;//inline;
@@ -103,6 +117,9 @@ type
                            procedure myglNormal3dV(const V:PGDBVertex);inline;
                            //procedure myglColor3ub(const red, green, blue: GLubyte);inline;
                            procedure myglVertex3d(const V:GDBVertex);virtual;//inline;
+                           procedure myglVertex2DwoLCS(const x,y:GDBDouble);virtual;//inline;
+                           procedure myglvertex2dv(const V:GDBPointer);virtual;//inline;
+                           procedure myglvertex2iv(const V:GDBPointer);virtual;//inline;
                            procedure myglVertex(const x,y,z:GDBDouble);virtual;//inline;
                            procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
                            procedure startrender;virtual;//inline;
@@ -213,6 +230,37 @@ begin
      glVertex3fv(@t);
 end;
 {$ENDIF}
+procedure TOGLStateManager.myglvertex2iv(const V:GDBPointer);
+var t:gdbvertex;
+begin
+     {$IFDEF DEBUGCOUNTGEOMETRY}
+     //processpoint(v^);
+     inc(pointcount);
+     {$ENDIF}
+     if notuseLCS then
+                      glVertex2iV(pointer(v))
+                  else
+                      begin
+                           t:=vertexadd(createvertex(pGDBvertex2DI(v)^.x,pGDBvertex2DI(v)^.y,0),CurrentCamCSOffset);
+                           glVertex3dV(@t);
+                      end;
+end;
+procedure TOGLStateManager.myglvertex2dv(const V:Pointer);
+var t:gdbvertex;
+begin
+     {$IFDEF DEBUGCOUNTGEOMETRY}
+     //processpoint(v^);
+     inc(pointcount);
+     {$ENDIF}
+     if notuseLCS then
+                      glVertex2dV(pointer(v))
+                  else
+                      begin
+                           t:=vertexadd(createvertex(pgdbvertex2d(v)^.x,pgdbvertex2d(v)^.y,0),CurrentCamCSOffset);
+                           glVertex3dV(@t);
+                      end;
+end;
+
 procedure TOGLStateManager.myglVertex3dV;
 var t:gdbvertex;
 begin
@@ -231,6 +279,10 @@ end;
 procedure TOGLStateManager.myglNormal3dV(const V:PGDBVertex);{$IFNDEF DELPHI}inline;{$ENDIF}
 begin
      glNormal3dV(pointer(v))
+end;
+procedure TOGLStateManager.myglVertex2dwoLCS(const x,y:GDBDouble);
+begin
+     glVertex2d(x,y)
 end;
 
 procedure TOGLStateManager.myglVertex3d;
@@ -438,7 +490,17 @@ begin
               _LineStipplepattern:=pattern;
          end;
 end;
-
+procedure TOGLStateManager.myglPolygonStipple(const ppattern:pointer);
+begin
+     if
+     (_ppolygonpattern<>ppattern)
+     then
+         begin
+              mytotalglend;
+              glPolygonStipple(ppattern);
+              _ppolygonpattern:=ppattern;
+         end;
+end;
 procedure TOGLStateManager.myglPushMatrix;
 begin
      mytotalglend;
@@ -449,6 +511,10 @@ procedure TOGLStateManager.myglPopMatrix;
 begin
      mytotalglend;
      glPopMatrix;
+end;
+procedure TOGLStateManager.myglMultMatrixD(const matrix:DMatrix4D);
+begin
+     glmultmatrixd(@matrix);
 end;
 procedure TOGLStateManager.myglMatrixMode(const mode: GLenum);
 begin
@@ -482,6 +548,7 @@ begin
      _colour.r:=255;
      _colour.g:=255;
      _colour.b:=255;
+     _ppolygonpattern:=nil;
 
 end;
 

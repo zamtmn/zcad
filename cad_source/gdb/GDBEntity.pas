@@ -21,7 +21,6 @@ unit GDBEntity;
 interface
 uses ugdbdrawingdef,GDBCamera,gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
      {UGDBPolyPoint2DArray,}varman,varmandef,
-     {$IFNDEF DELPHI}gl,glu,{$ELSE}opengl,{$ENDIF}
      GDBase,gdbobjectsconstdef,
      oglwindowdef,geometry,dxflow,sysutils,memman,OGLSpecFunc,UGDBOpenArrayOfByte,UGDBLayerArray,UGDBOpenArrayOfPObjects;
 type
@@ -48,7 +47,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
                     procedure SaveToDXFObjPrefix(var handle:TDWGHandle;var  outhandle:{GDBInteger}GDBOpenArrayOfByte;entname,dbname:GDBString);
-                    function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray):GDBBoolean;
+                    function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit;const drawing:TDrawingDef):GDBBoolean;
                     function FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
                     function IsHaveObjXData:GDBBoolean;virtual;
@@ -57,7 +56,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure createfield;virtual;
                     function AddExtAttrib:PTExtAttrib;
                     function CopyExtAttrib:PTExtAttrib;
-                    procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray{ TODO 1111 : Убрать нахуй }:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;abstract;
+                    procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;abstract;
                     procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                     procedure DXFOut(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                     procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
@@ -513,7 +512,7 @@ begin
                                                                          oglsm.myglEnable(GL_LINE_STIPPLE);
                                                                          sel := true;
 
-                                                                         glPolygonStipple(@ps);
+                                                                         oglsm.myglPolygonStipple(@ps);
                                                                          oglsm.myglEnable(GL_POLYGON_STIPPLE);
                                                                     end;
   if (dc.subrender = 0)
@@ -1101,14 +1100,14 @@ begin
      case dxfcod of
                 6:begin
                        //vp.LineType:=readmystr(f);
-                       vp.LineType:=LTArray.getAddres(readmystr(f));
+                       vp.LineType:=drawing.GetLTypeTable.getAddres(readmystr(f));
                        result:=true
                   end;
                      8:begin
                           if {vp.layer.name=LNSysLayerName}vp.layer=@DefaultErrorLayer then
                                                    begin
                                                         name:=readmystr(f);
-                                                   vp.Layer :=LayerArray.getAddres(name);
+                                                   vp.Layer :=drawing.getlayertable.getAddres(name);
                                                    if vp.Layer=nil then
                                                                         vp.Layer:=vp.Layer;
                                                    end
@@ -1149,7 +1148,9 @@ begin
                                                                                  end;}
                                                          if Name='_OWNERHANDLE' then
                                                                                  begin
+                                                                                      {$IFNDEF DELPHI}
                                                                                       if not TryStrToQWord('$'+value,self.AddExtAttrib^.OwnerHandle)then
+                                                                                      {$ENDIF}
                                                                                       begin
                                                                                            //нужно залупиться
                                                                                       end;
@@ -1158,8 +1159,9 @@ begin
                                                                                  end;
                                                          if Name='_HANDLE' then
                                                                                begin
-
+                                                                                    {$IFNDEF DELPHI}
                                                                                     if not TryStrToQWord('$'+value,self.AddExtAttrib^.Handle)then
+                                                                                    {$ENDIF}
                                                                                     begin
                                                                                          //нужно залупиться
                                                                                     end;
@@ -1171,7 +1173,7 @@ begin
                                                                                end;
                                                          if Name='_LAYER' then
                                                                                begin
-                                                                                    vp.Layer:=LayerArray.getAddres(value);
+                                                                                    vp.Layer:=drawing.getlayertable.getAddres(value);
                                                                                end;
 
                                                     //else

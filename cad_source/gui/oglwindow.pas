@@ -28,10 +28,6 @@ uses
   //x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
   {$ENDIF}
-  {$IFDEF WINDOWS}
-  GLWin32WGLContext,
-  {$ENDIF}
-
   ugdbabstractdrawing,UGDBOpenArrayOfPV,UGDBSHXFont,
   {$IFNDEF DELPHI}LCLType,InterfaceBase,FileUtil,{$ENDIF}
   {umytreenode,}menus,Classes,Forms,
@@ -64,7 +60,7 @@ type
 
   { TOGLWnd }
 
-  TOGLWnd = class({TPanel}TOpenGLControl)
+  TOGLWnd = class({TPanel}{$IFNDEF DELPHI}TOpenGLControl{$ELSE}TPanel{$ENDIF})
   private
     OGLContext:TOGLContextDesk;
     {hrc:thandle;
@@ -194,11 +190,11 @@ type
     protected
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);override;
     procedure MouseUp(Button: TMouseButton; Shift:TShiftState;X, Y: Integer);override;
-    procedure EraseBackground(DC: HDC);override;
+    procedure EraseBackground(DC: HDC);{$IFNDEF DELPHI}override;{$ENDIF}
 
     procedure FormCreate(Sender: TObject);
-    procedure MouseEnter;override;
-    procedure MouseLeave;override;
+    procedure MouseEnter;{$IFNDEF DELPHI}override;{$ENDIF}
+    procedure MouseLeave;{$IFNDEF DELPHI}override;{$ENDIF}
     procedure doCameraChanged;
 
   end;
@@ -270,8 +266,7 @@ begin
   self.Hint:=inttostr(random(100));
   self.ShowHint:=true;
 
-
-     onpaint:=mypaint;
+     {$IFNDEF DELPHI}onpaint:=mypaint;{$ENDIF};
      //Application.AddOnIdleHandler(mypaint2);
      //=====-----------------------------------------------------------------------------------------
      //onmousemove:=_onMouseMove;
@@ -2074,7 +2069,7 @@ begin
      sltexteditor1.caption:=(rsTextEditor);
 
      sltexteditor1.helptext.Caption:=rsTextEdCaption;
-     sltexteditor1.EditField.Caption:=astring;
+     sltexteditor1.EditField.TEXT:=astring;
 
      modalresult:=DOShowModal(sltexteditor1);
 
@@ -2119,13 +2114,15 @@ begin
   //                                                       exit;
   if @SetCurrentDWGProc<>nil then
                                 SetCurrentDWGProc(pdwg);
-  ActivePopupMenu:=ActivePopupMenu;
+  //ActivePopupMenu:=ActivePopupMenu;
   NeedRedraw:=false;
   if ssDouble in shift then
                            begin
                                 if mbMiddle=button then
                                   begin
+                                       {$IFNDEF DELPHI}
                                        Application.QueueAsyncCall(asynczoomall, 0);
+                                       {$ENDIF}
                                        //Pre_MBMouseDblClk(Button,Shift,X, Y);
                                        {exclude(shift,ssdouble);
                                        exclude(shift,ssMiddle);}

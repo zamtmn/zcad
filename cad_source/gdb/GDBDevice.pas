@@ -21,9 +21,8 @@ unit GDBDevice;
 
 interface
 uses ugdbdrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
 OGLSpecFunc,uunitmanager{,shared},
-memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray{,UGDBDescriptor}{,UGDBLayerArray},oglwindowdef;
+memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray{,UGDBDescriptor}{,UGDBLayerArray,oglwindowdef};
 
 type
 {EXPORT+}
@@ -342,9 +341,9 @@ begin
   if p<>nil then
   repeat
         oglsm.myglbegin(GL_lines);
-        glVertex3dV(@self.P_insert_in_WCS);
+        oglsm.myglVertex3dV(@self.P_insert_in_WCS);
         v:=p^.getcenterpoint;
-        glVertex3dV(@v);
+        oglsm.myglVertex3dV(@v);
         oglsm.myglend;
        p:=VarObjArray.iterate(ir);
   until p=nil;
@@ -370,9 +369,9 @@ begin
   if p<>nil then
   repeat
         oglsm.myglbegin(GL_lines);
-        glVertex3dV(@self.P_insert_in_WCS);
+        oglsm.myglVertex3dV(@self.P_insert_in_WCS);
         v:=p^.getcenterpoint;
-        glVertex3dV(@v);
+        oglsm.myglVertex3dV(@v);
         oglsm.myglend;
        p:=VarObjArray.iterate(ir);
   until p=nil;

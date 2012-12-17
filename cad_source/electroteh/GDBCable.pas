@@ -9,7 +9,6 @@ unit GDBCable;
 
 interface
 uses GDBGenericSubEntry,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfByte,UGDBLayerArray{,UGDBObjBlockdefArray},UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,varman},varmandef,
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
 GDBase{,GDBLINE},GDBHelpObj,{UGDBDescriptor,}gdbobjectsconstdef{,oglwindowdef},dxflow,sysutils,memman,OGLSpecFunc, GDBSubordinated,GDBDEvICE;
 type
 {Повторное описание типа в Cableы}

@@ -19,7 +19,6 @@ unit gdbellipse;
 {$INCLUDE def.inc}
 interface
 uses ugdbdrawingdef,GDBCamera,zcadsysvars,GDBWithLocalCS,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
 ugdbltypearray,
 GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain{,OGLSpecFunc};
 type
@@ -42,7 +41,7 @@ GDBObjEllipse=object(GDBObjPlain)
                  pq0,pq1,pq2:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;{RR,}S,E:GDBDouble;majaxis:GDBVertex);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -469,7 +468,7 @@ begin
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,LayerArray,LTArray) then
+    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
     if not dxfvertexload(f,11,byt,MajorAxis) then
     if not dxfGDBDoubleload(f,40,byt,ratio) then

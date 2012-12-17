@@ -20,7 +20,6 @@ unit UGDBPolyPoint2DArray;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
      {varmandef,}OGLSpecFunc;
 type
 {Export+}
@@ -54,13 +53,13 @@ begin
   begin
   oglsm.myglbegin(GL_LINES);
   p:=parray;
-  glvertex2dv(@p^.coord);
+  oglsm.myglvertex2dv(@p^.coord);
   inc(p);
   for i:=0 to count-2 do
   begin
-          glvertex2dv(@p^.coord);
+          oglsm.myglvertex2dv(@p^.coord);
           if p^.count<0 then
-                            glvertex2dv(@p^.coord);
+                            oglsm.myglvertex2dv(@p^.coord);
      inc(p);
   end;
   oglsm.myglend;

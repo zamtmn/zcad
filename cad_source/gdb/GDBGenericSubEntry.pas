@@ -21,7 +21,6 @@ unit GDBGenericSubEntry;
 
 interface
 uses ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBLayerArray,UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
 geometry{,GDB3d},{UGDBVisibleOpenArray,}gdbEntity,gdbobjectsconstdef,varmandef,memman,UGDBEntTree;
 type
 //GDBObjGenericSubEntry=object(GDBObjWithLocalCS)
@@ -126,8 +125,8 @@ begin
 end;
 function GDBObjGenericSubEntry.FindObjectsInPointSlow(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
 var
-    minus:gdbboolean=false;
-    plus:gdbboolean=false;
+    minus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
+    plus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
     pobj:PGDBObjEntity;
     ir:itrec;
 begin
@@ -149,8 +148,8 @@ end;
 
 function GDBObjGenericSubEntry.FindObjectsInPointInNode(const point:GDBVertex;const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
 var
-    minus:gdbboolean=false;
-    plus:gdbboolean=false;
+    minus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
+    plus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
     pobj:PGDBObjEntity;
     ir:itrec;
 begin

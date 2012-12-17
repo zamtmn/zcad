@@ -20,7 +20,6 @@ unit UGDBTableStyleArray;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
-     {$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
      {varmandef,gdbobjectsconstdef,}UGDBNamedObjectsArray,UGDBOpenArrayOfData;
 type
 {TCellJustify=(jcl(*'ВерхЛево'*),

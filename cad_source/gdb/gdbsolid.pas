@@ -20,9 +20,8 @@ unit GDBSolid;
 
 interface
 uses ugdbdrawingdef,GDBCamera,GDBWithLocalCS,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
 ugdbltypearray,
-GDBase,gdbobjectsconstdef,oglwindowdef{,dxflow},memman,OGLSpecFunc;
+GDBase,gdbobjectsconstdef{,oglwindowdef,dxflow},memman,OGLSpecFunc;
 type
 {Export+}
 PGDBObjSolid=^GDBObjSolid;
@@ -36,7 +35,7 @@ GDBObjSolid=object(GDBObjWithLocalCS)
                  //ProjPoint:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;
                  procedure createpoint;virtual;
@@ -130,7 +129,7 @@ begin
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,LayerArray,LTArray) then
+    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
        if not dxfvertexload(f,10,byt,PInOCS[0]) then
           if not dxfvertexload(f,11,byt,PInOCS[1]) then
           if not dxfvertexload(f,12,byt,PInOCS[2]) then

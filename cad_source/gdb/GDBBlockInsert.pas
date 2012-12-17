@@ -21,7 +21,6 @@ unit GDBBlockInsert;
 interface
 uses ugdbdrawingdef,UGDBLayerArray{,UGDBLayerArray},math,gdbasetypes,GDBComplex,{GDBGenericSubEntry,}SysInfo,sysutils,
 {UGDBOpenArrayOfPV,}UGDBObjBlockdefArray{,UGDBSelectedObjArray,UGDBVisibleOpenArray},gdbEntity,varman{,varmandef},
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
 UGDBEntTree,ugdbltypearray,GDBBlockDef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBSubordinated,UGDBOpenArrayOfByte;
 const zcadmetric='!!ZMODIFIER:';
@@ -37,7 +36,7 @@ GDBObjBlockInsert=object(GDBObjComplex)
                      BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
                      constructor initnul;
                      constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
-                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;
+                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
                      function FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
 
                      procedure SaveToDXF(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
@@ -602,7 +601,7 @@ begin
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
-     if not LoadFromDXFObjShared(f,byt,ptu,LayerArray,LTArray) then
+     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
      if not dxfvertexload(f,10,byt,Local.P_insert) then
      if not dxfvertexload1(f,41,byt,scale) then
      if not dxfGDBDoubleload(f,50,byt,rotate) then

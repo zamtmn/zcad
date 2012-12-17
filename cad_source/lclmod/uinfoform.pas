@@ -21,7 +21,7 @@ unit uinfoform;
 interface
 
 uses
-  zcadinterface,commandlinedef,ExtCtrls,
+  {zcadinterface,}commandlinedef,ExtCtrls,
   {$IFNDEF DELPHI}lclproc,{$ENDIF}
   Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,fileutil,ButtonPanel,{$ENDIF}Buttons,
   {strutils,}{$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
@@ -29,7 +29,9 @@ type
   TButtonMethod=procedure({Sender:pointer;}pdata:{GDBPointer}GDBPlatformint)of object;
   TButtonProc=procedure(pdata:GDBPointer);
   TDialogForm=class(tform)
+                         {$IFNDEF DELPHI}
                          DialogPanel: TButtonPanel;
+                         {$ENDIF}
                          public
                          procedure AfterConstruction;override;
                     end;
@@ -54,26 +56,30 @@ begin
      self.Height:=sysparam.screeny div 2;
      self.Position:=poScreenCenter;
      self.BorderStyle:=bsSizeToolWin;
+     {$IFNDEF DELPHI}
      DialogPanel:=TButtonPanel.create(self);
      DialogPanel.ShowButtons:=[pbOK, pbCancel];
      DialogPanel.Align:=alBottom;
      DialogPanel.Parent:=self;
+     {$ENDIF}
 end;
 procedure TInfoForm.AfterConstruction;
 begin
      inherited;
      self.Position:=poDesigned;
      Memo:=TMemo.create(self);
-     Memo.ScrollBars:=ssAutoBoth;
+     {$IFNDEF DELPHI}Memo.ScrollBars:=ssAutoBoth;{$ENDIF}
      Memo.Align:=alClient;
      Memo.Parent:=self;
 end;
 procedure TmyProcToolButton.Click;
 begin
+     {$IFNDEF DELPHI}
      if assigned(FProc) then
                             FProc(PPata);
      if assigned(FMethod) then
                             Application.QueueAsyncCall(FMethod,GDBPlatformint(PPata));
+     {$ENDIF}
 end;
 initialization
 {$IFDEF DEBUGINITSECTION}LogOut('uinfoform.initialization');{$ENDIF}

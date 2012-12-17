@@ -51,7 +51,7 @@ uses
   //gdbase,
   //splashwnd,
   projecttreewnd,
-  ugdbabstractdrawing,
+  //ugdbabstractdrawing,
   sysutils,
 
 
@@ -67,7 +67,7 @@ uses
   GDBCommandsOPS,
   cmdline,
   plugins,
-  layerwnd,
+  //layerwnd,
   zcadstrconsts,
   Objinsp,
   mainwindow;

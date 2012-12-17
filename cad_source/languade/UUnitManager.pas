@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -527,7 +527,7 @@ begin
                                                   if parseerror then
                                                                     begin
                                                                          enumodj.user:=parseresult^.getGDBString(0);
-                                                                         enumodj.user:=InterfaceTranslate(typename+'~'+enumodj.source,enumodj.user);
+                                                                         {$IFNDEF DELPHI}enumodj.user:=InterfaceTranslate(typename+'~'+enumodj.source,enumodj.user);{$ENDIF}
                                                                     end
                                                                 else enumodj.user:=enumodj.source;
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;

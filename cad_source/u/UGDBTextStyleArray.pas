@@ -20,7 +20,7 @@ unit UGDBTextStyleArray;
 {$INCLUDE def.inc}
 interface
 uses UGDBFontManager,zcadsysvars,gdbasetypes,SysInfo,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
-     {$IFNDEF DELPHI}gl,{$ENDIF}strproc,varmandef,shared,UGDBSHXFont,zcadstrconsts;
+     strproc,varmandef,shared,UGDBSHXFont,zcadstrconsts;
 type
   //ptextstyle = ^textstyle;
 {EXPORT+}

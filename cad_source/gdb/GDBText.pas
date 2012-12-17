@@ -23,7 +23,7 @@ interface
 uses
 ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,sysutils,UGDBSHXFont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
 gl,ugdbltypearray,
-GDBase,UGDBDescriptor,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,strmy,math,memman,log,GDBSubordinated,UGDBTextStyleArray;
+GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef,geometry,dxflow,strmy,math,memman,log,GDBSubordinated,UGDBTextStyleArray;
 type
 {Export+}
 PGDBObjText=^GDBObjText;
@@ -36,11 +36,11 @@ GDBObjText=object(GDBObjAbstractText)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                 procedure CalcGabarit;virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                 procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  procedure getoutbound;virtual;
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;
-                 procedure createpoint;virtual;
+                 procedure createpoint(const drawing:TDrawingDef);virtual;
                  //procedure CreateSymbol(_symbol:GDBInteger;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;pfont:pgdbfont;ln:GDBInteger);
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
@@ -124,7 +124,7 @@ begin
   if content='' then content:=str_empty;
   lod:=0;
   P_drawInOCS:=NulVertex;
-  CalcGabarit;
+  CalcGabarit(drawing);
   if textprop.justify = 0 then textprop.justify := 1;
   case textprop.justify of
     1:
@@ -192,7 +192,7 @@ begin
     if content='' then content:=str_empty;
     calcobjmatrix;
     //getoutbound;
-    createpoint;
+    createpoint(drawing);
     calcbb;
 
     //P_InsertInWCS:=VectorTransform3D(local.P_insert,vp.owner^.GetMatrix^);
@@ -211,9 +211,9 @@ begin
    while i<=length(content) do
   //for i:=1 to length(content) do
   begin
-    sym:=getsymbol(content,i,l,PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.unicode);
+    sym:=getsymbol(content,i,l,PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont^.unicode);
     //psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(content[i])));
-    psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(sym);
+    psyminfo:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(sym);
     obj_width:=obj_width+psyminfo.NextSymX;
     if psyminfo.SymMaxY>obj_height then obj_height:=psyminfo.SymMaxY;
     if psyminfo.SymMinY<obj_y then obj_y:=psyminfo.SymMinY;
@@ -611,7 +611,7 @@ var
   sym:word;
 begin
   ln:=1;
-  pfont:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont;
+  pfont:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont;
 
   ispl:=false;
   pl.init({$IFDEF DEBUGBUILD}'{AC324582-5E55-4290-8017-44B8C675198A}',{$ENDIF}10);
@@ -775,7 +775,7 @@ begin
                      end;
      until i<=0;
 end;
-procedure GDBObjText.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);
+procedure GDBObjText.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);
 var
   hv, vv,bw: GDBByte;
   tv:gdbvertex;
@@ -810,7 +810,7 @@ begin
                              bw:=bw+2;
   if bw<>0 then
                dxfGDBIntegerout(outhandle,71,bw);
-  dxfGDBStringout(outhandle,7,PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.name);
+  dxfGDBStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.name);
 
   SaveToDXFObjPostfix(outhandle);
 
@@ -854,7 +854,7 @@ else if dxfGDBDoubleload(f,51,byt,textprop.oblique) then
                                                         textprop.oblique:=textprop.oblique
 else if     dxfGDBStringload(f,7,byt,style)then
                                              begin
-                                                  TXTStyleIndex :=gdb.GetCurrentDWG.TextStyleTable.FindStyle(Style,false);
+                                                  TXTStyleIndex :={gdb.GetCurrentDWG}drawing.GetTextStyleTable^.FindStyle(Style,false);
                                                   if TXTStyleIndex=-1 then
                                                                       TXTStyleIndex:=0;
                                              end

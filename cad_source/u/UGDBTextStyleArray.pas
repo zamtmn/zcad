@@ -19,7 +19,7 @@
 unit UGDBTextStyleArray;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,gdbasetypes,SysInfo,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
+uses UGDBFontManager,zcadsysvars,gdbasetypes,SysInfo,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
      {$IFNDEF DELPHI}gl,{$ENDIF}strproc,varmandef,shared,UGDBSHXFont,zcadstrconsts;
 type
   //ptextstyle = ^textstyle;
@@ -38,6 +38,7 @@ PGDBTextStyleProp=^GDBTextStyleProp;
     prop:GDBTextStyleProp;(*saved_to_shd*)
     UsedInLTYPE:GDBBoolean;
   end;
+PGDBTextStyleArray=^GDBTextStyleArray;
 GDBTextStyleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
@@ -49,7 +50,7 @@ GDBTextStyleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
               end;
 {EXPORT-}
 implementation
-uses UGDBDescriptor,io,log;
+uses {UGDBDescriptor,}{io,}log;
 procedure GDBTextStyleArray.freeelement;
 begin
   PGDBTextStyle(p).name:='';

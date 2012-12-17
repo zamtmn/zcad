@@ -33,13 +33,13 @@ GDBOOutbound2DIArray=object(GDBOpenArrayOfData)
                       procedure addgdbvertex(point:GDBvertex);virtual;
                       procedure addlastgdbvertex(point:GDBvertex);virtual;
                       procedure clear;virtual;
-                      function onmouse:GDBInteger;virtual;
-                      function InRect:TInRect;virtual;
+                      function onmouse(mc:GDBvertex2DI):GDBInteger;virtual;
+                      function InRect(Frame1, Frame2: GDBvertex2DI):TInRect;virtual;
                       function perimetr:GDBDouble;virtual;
                 end;
 {Export-}
 implementation
-uses UGDBDescriptor,log;
+uses {UGDBDescriptor,}log;
 constructor GDBOOutbound2DIArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBvertex2DI));
@@ -118,11 +118,11 @@ begin
           p:=PGDBVertex2DI(parray);
           if count=1 then
           begin
-               if pointinquad2d(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x,
-                                GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y,
+               if pointinquad2d(Frame1.x,
+                                Frame1.y,
 
-                                GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x,
-                                GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y,
+                                Frame2.x,
+                                Frame2.y,
                                 p^.x,p.y)
                                                           then result:=IRFully;
           end
@@ -130,10 +130,10 @@ begin
           begin
                for i:=0 to count-1 do
                begin
-                    if not pointinquad2d(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x,
-                                         GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y,
-                                         GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x,
-                                         GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y,
+                    if not pointinquad2d(Frame1.x,
+                                         Frame1.y,
+                                         Frame2.x,
+                                         Frame2.y,
                                          p^.x,p.y)
                                                                    then exit;
                     inc(p);
@@ -166,7 +166,7 @@ begin
   result:=0;
   case count of
                1:begin
-                      if distance2point_2(PGDBvertex2DIArray(parray)^[0],GDB.GetCurrentDWG.OGLwindow1.param.md.glmouse)<DISP_CursorSize_2 then
+                      if distance2point_2(PGDBvertex2DIArray(parray)^[0],mc)<DISP_CursorSize_2 then
                       begin
                            result:=2;
                            exit;
@@ -175,7 +175,7 @@ begin
                2:begin
                       p:=parray;
                       inc(p);
-                      if distance2piece_2(GDB.GetCurrentDWG.OGLwindow1.param.md.glmouse,PGDBvertex2DIArray(parray)^[0],p^)<DISP_CursorSize_2
+                      if distance2piece_2(mc,PGDBvertex2DIArray(parray)^[0],p^)<DISP_CursorSize_2
                       then
                       begin
                            result:=2;
@@ -198,18 +198,18 @@ begin
      PGDBvertex2DIArray(parray)^[i].y-PGDBvertex2DIArray(parray)^[i].x*
      PGDBvertex2DIArray(parray)^[j].y;}
   t1:=PGDBvertex2DIArray(parray)^[i].x;
-  t2:=GDB.GetCurrentDWG.OGLwindow1.param.md.glmouse.y;
+  t2:=mc.y;
   d:=t1*t2;
-  t1:=GDB.GetCurrentDWG.OGLwindow1.param.md.glmouse.x;
+  t1:=mc.x;
   t2:=PGDBvertex2DIArray(parray)^[j].y;
   d:=d+t1*t2;
   t1:=PGDBvertex2DIArray(parray)^[j].x;
   t2:=PGDBvertex2DIArray(parray)^[i].y;
   d:=d+t1*t2;
   t1:=PGDBvertex2DIArray(parray)^[j].x;
-  t2:=GDB.GetCurrentDWG.OGLwindow1.param.md.glmouse.y;
+  t2:=mc.y;
   d:=d-t1*t2;
-  t1:=GDB.GetCurrentDWG.OGLwindow1.param.md.glmouse.x;
+  t1:=mc.x;
   t2:=PGDBvertex2DIArray(parray)^[i].y;
   d:=d-t1*t2;
   t1:=PGDBvertex2DIArray(parray)^[i].x;

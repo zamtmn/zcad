@@ -23,7 +23,7 @@ interface
 
 uses
 
-   GDBCamera,zcadsysvars,UGDBLayerArray,zcadstrconsts,ucxmenumgr,GLext,
+   uinfoform,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBLayerArray,zcadstrconsts,{ucxmenumgr,}GLext,
   {$IFDEF LCLGTK2}
   //x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
@@ -33,10 +33,10 @@ uses
   {$ENDIF}
 
   ugdbabstractdrawing,UGDBOpenArrayOfPV,UGDBSHXFont,LCLType,InterfaceBase,
-  umytreenode,menus,Classes,{ SysUtils,} FileUtil,{ LResources,LMessages,} Forms,
-  {stdctrls,} ExtCtrls, {ComCtrls,}{Toolwin,} Controls, {Graphics, Dialogs,}
-  GDBGenericSubEntry,gdbasetypes,{Windows,}sysutils,
-  gl,glu,{glx,}OpenGLContext,
+  {umytreenode,}menus,Classes,FileUtil,Forms,
+  ExtCtrls,Controls,
+  GDBGenericSubEntry,gdbasetypes,sysutils,
+  gl,glu,OpenGLContext,
   Math,gdbase,varmandef,varman,UUnitManager,
   oglwindowdef,UGDBSelectedObjArray,
 
@@ -46,11 +46,10 @@ uses
   zglline3d,
 
   sysinfo,
-  //strmy,
   UGDBVisibleOpenArray,
   UGDBPoint3DArray,
-  strproc,{GDBCamera,UGDBOpenArrayOfPV,}OGLSpecFunc{,zoglforms,ZEditsWithProcedure,ZComboBoxsWithProc,ZStaticSText}{,zbasicvisible},memman,
-  log{,zguisct}{,TypeDescriptors,UGDBOpenArrayOfByte,ZTabControlsGeneric},UGDBEntTree,sltexteditor;
+  strproc,OGLSpecFunc,memman,
+  log,UGDBEntTree,sltexteditor;
 const
 
   ontracdist=10;
@@ -88,6 +87,9 @@ type
     FastMMShift: TShiftState;
     FastMMX,FastMMY: Integer;
     onCameraChanged:TCameraChangedNotify;
+    ShowCXMenu:procedure of object;
+    MainMouseMove:procedure of object;
+    MainMouseDown:function:boolean of object;
 
     //SelectedObjectsPLayer:PGDBLayerProp;
 
@@ -223,11 +225,11 @@ var
 procedure finalize;}
 function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
 procedure textwrite(s: GDBString);
-procedure RunTextEditor(Pobj:GDBPointer);
+procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
 //function getsortedindex(cl:integer):integer;
 implementation
-uses {mainwindow,}UGDBTracePropArray,GDBEntity,io,geometry,gdbobjectsconstdef,{UGDBDescriptor,}zcadinterface,
-     shared,cmdline,GDBText;
+uses {mainwindow,}UGDBTracePropArray,GDBEntity,{io,}geometry,gdbobjectsconstdef,{UGDBDescriptor,}zcadinterface,
+     shared,{cmdline,}GDBText;
 procedure creategrid;
 var i,j:GDBInteger;
 begin
@@ -1080,7 +1082,7 @@ begin
   pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
   //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
   pdwg.GetCurrentROOT.calcvisible(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
-  pdwg.GetSelObjArray.RenderFeedBack;
+  pdwg.GetSelObjArray.RenderFeedBack(pdwg^.GetPcamera^.POSCOUNT,pdwg^.GetPcamera^,pdwg^.myGluProject2);
 
   calcmousefrustum;
 
@@ -1200,7 +1202,7 @@ begin
 
   if param.SelDesc.Selectedobjcount>1 then
     begin
-       commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp');
+       commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',pdwg);
     end
   else
   begin
@@ -1329,7 +1331,8 @@ begin
   //if   (param.md.mouse.y=y)and(param.md.mouse.x=x)then
   //                                                    exit;
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove',lp_IncPos);{$ENDIF}
-  cxmenumgr.reset;
+  if assigned(mainmousemove)then
+                                mainmousemove;
   KillOHintTimer(self);
   SetOHintTimer(self);
   currentmousemovesnaptogrid:=false;
@@ -1389,7 +1392,7 @@ end;
 
   if (param.md.mode and MGetControlpoint) <> 0 then
   begin
-    param.nearesttcontrolpoint:=pdwg.GetSelObjArray.getnearesttomouse;
+    param.nearesttcontrolpoint:=pdwg.GetSelObjArray.getnearesttomouse(param.md.mouse.x,param.height-param.md.mouse.y);
     if (param.nearesttcontrolpoint.pcontrolpoint = nil) or (param.nearesttcontrolpoint.disttomouse > 2 * sysvar.DISP.DISP_CursorSize^) then
     begin
       param.md.mouseglue := param.md.mouse;
@@ -1730,13 +1733,13 @@ end;
 procedure TOGLWnd.sendcoordtocommand(coord:GDBVertex;key: GDBByte);
 begin
      if key=MZW_LBUTTON then param.lastpoint:=coord;
-     commandmanager.sendpoint2command(coord, param.md.mouse, key,nil);
+     commandmanager.sendpoint2command(coord, param.md.mouse, key,nil,pdwg^);
 end;
 procedure TOGLWnd.sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);
 begin
      //if commandmanager.pcommandrunning<>nil then
      //if commandmanager.pcommandrunning.IsRTECommand then
-        commandmanager.sendpoint2command(coord,param.md.mouse,key,pos);
+        commandmanager.sendpoint2command(coord,param.md.mouse,key,pos,pdwg^);
 
      if (key and MZW_LBUTTON)<>0 then
      if commandmanager.pcommandrunning<>nil then
@@ -2022,7 +2025,7 @@ procedure TOGLWnd.asynczoomall(Data: PtrInt);
 begin
      ZoomAll();
 end;
-procedure RunTextEditor(Pobj:GDBPointer);
+procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
 var
    op:gdbstring;
    size,modalresult:integer;
@@ -2081,7 +2084,7 @@ begin
      end;
      if modalresult=MrOk then
                          begin
-                              PGDBObjText(pobj)^.YouChanged;
+                              PGDBObjText(pobj)^.YouChanged(drawing);
                               //gdb.GetCurrentROOT.FormatAfterEdit;
                               if assigned(redrawoglwndproc) then redrawoglwndproc;
                          end;
@@ -2106,10 +2109,13 @@ end;
 procedure TOGLWnd.MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);
 var key: GDBByte;
     NeedRedraw:boolean;
-    menu:TmyPopupMenu;
+    //menu:TmyPopupMenu;
 begin
-  if (cxmenumgr.ismenupopup)or(ActivePopupMenu<>nil) then
-                                                         exit;
+  if assigned(MainmouseDown)then
+  if mainmousedown then
+                       exit;
+  //if (cxmenumgr.ismenupopup)or(ActivePopupMenu<>nil) then
+  //                                                       exit;
   if @SetCurrentDWGProc<>nil then
                                 SetCurrentDWGProc(pdwg);
   ActivePopupMenu:=ActivePopupMenu;
@@ -2131,7 +2137,7 @@ begin
                                          if (PGDBObjEntity(param.SelDesc.OnMouseObject).vp.ID=GDBtextID)
                                          or (PGDBObjEntity(param.SelDesc.OnMouseObject).vp.ID=GDBMTextID) then
                                            begin
-                                                 RunTextEditor(param.SelDesc.OnMouseObject);
+                                                 RunTextEditor(param.SelDesc.OnMouseObject,self.PDWG^);
                                            end;
                                        exit;
                                   end;
@@ -2139,15 +2145,8 @@ begin
                            end;
   if ssRight in shift then
                            begin
-                                menu:=nil;
-                                if param.SelDesc.Selectedobjcount>0 then
-                                                                        menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'SELECTEDENTSCXMENU'))
-                                                                    else
-                                                                        menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'NONSELECTEDENTSCXMENU'));
-                                if menu<>nil then
-                                begin
-                                     menu.PopUp;
-                                end;
+                                if assigned(ShowCXMenu)then
+                                                           ShowCXMenu;
                                 exit;
                            end;
   (*if PDWG<>pointer(gdb.GetCurrentDWG) then
@@ -2184,12 +2183,12 @@ begin
 
         if param.gluetocp then
         begin
-          PDWG.GetSelObjArray.selectcurrentcontrolpoint(key);
+          PDWG.GetSelObjArray.selectcurrentcontrolpoint(key,param.md.mouseglue.x,param.md.mouseglue.y,param.height);
           needredraw:=true;
           if (key and MZW_SHIFT) = 0 then
           begin
             param.startgluepoint:=param.nearesttcontrolpoint.pcontrolpoint;
-            commandmanager.ExecuteCommandSilent('OnDrawingEd');
+            commandmanager.ExecuteCommandSilent('OnDrawingEd',pdwg);
             //param.lastpoint:=param.nearesttcontrolpoint.pcontrolpoint^.worldcoord;
             //sendmousecoord{wop}(key);  bnmbnm
             if commandmanager.pcommandrunning <> nil then
@@ -2208,7 +2207,7 @@ begin
           //getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
           if (key and MZW_CONTROL)<>0 then
           begin
-               commandmanager.ExecuteCommandSilent('SelectOnMouseObjects');
+               commandmanager.ExecuteCommandSilent('SelectOnMouseObjects',pdwg);
           end
           else
           begin
@@ -2256,7 +2255,7 @@ begin
           else if ((param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then
           begin
           { TODO : Добавить возможность выбора объектов без секрамки во время выполнения команды }
-            commandmanager.ExecuteCommandSilent('SelectFrame');
+            commandmanager.ExecuteCommandSilent('SelectFrame',pdwg);
             sendmousecoord(MZW_LBUTTON);
           end;
         end;
@@ -2272,7 +2271,7 @@ begin
       end
       else if ((param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then
           begin
-            commandmanager.ExecuteCommandSilent('SelectFrame');
+            commandmanager.ExecuteCommandSilent('SelectFrame',pdwg);
             sendmousecoord(MZW_LBUTTON);
           end;
       needredraw:=true;
@@ -4647,12 +4646,12 @@ begin
       end}
  else if Key = VK_RETURN then
       begin
-           commandmanager.executelastcommad;
+           commandmanager.executelastcommad(pdwg);
            Key:=00;
       end
  else if (Key=VK_V)and(shift=[ssctrl]) then
                     begin
-                         commandmanager.executecommand('PasteClip');
+                         commandmanager.executecommand('PasteClip',pdwg);
                          key:=00;
                     end
  (*else if (Key=VK_TAB)and(shift=[ssctrl,ssShift]) then
@@ -4811,6 +4810,6 @@ end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('oglwindow.initialization');{$ENDIF}
   creategrid;
-  readpalette;
+  //readpalette;
 end.
 

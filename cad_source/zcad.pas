@@ -51,7 +51,7 @@ uses
   //gdbase,
   //splashwnd,
   projecttreewnd,
-  UGDBDrawingdef,
+  ugdbabstractdrawing,
   sysutils,
 
 
@@ -102,6 +102,7 @@ begin
                              programlog.logoutstr('DefaultSystemCodePage:='+inttostr(DefaultSystemCodePage),0);
                              programlog.logoutstr('DefaultUnicodeCodePage:='+inttostr(DefaultUnicodeCodePage),0);
                              programlog.logoutstr('UTF8CompareLocale:='+inttostr(UTF8CompareLocale),0);
+                             {$modeswitch systemcodepage}
                              {$ENDIF}
 
   //Application_Initialize перемещен в инициализацию splashwnd чтоб показать сплэш пораньше
@@ -118,7 +119,7 @@ begin
   historyoutstr(format(rsZCADStarted,[sysvar.SYS.SYS_Version^]));
   gdbplugins.loadplugins(sysparam.programpath+'PLUGINS\');
 
-  SplashWindow.TXTOut('Выполнение *components\autorun.cmd',false);commandmanager.executefile('*components/autorun.cmd');
+  SplashWindow.TXTOut('Выполнение *components\autorun.cmd',false);commandmanager.executefile('*components/autorun.cmd',gdb.GetCurrentDWG);
   //убираем срлэш
   removesplash;
 

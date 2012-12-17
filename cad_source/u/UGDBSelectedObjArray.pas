@@ -21,7 +21,7 @@ unit UGDBSelectedObjArray;
 interface
 uses GDBCamera,{GDBWithLocalCS,}GDBWithMatrix,GDBEntity,UGDBControlPointArray,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
      {$IFNDEF DELPHI}gl,glu,{$ELSE}opengl,{$ENDIF}
-     gdbasetypes{,varmandef,gdbobjectsconstdef},memman,OGLSpecFunc;
+     gdbasetypes{,varmandef,gdbobjectsconstdef},memman,OGLSpecFunc,ugdbdrawingdef;
 type
 {Export+}
 PSelectedObjDesc=^SelectedObjDesc;
@@ -40,11 +40,11 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           procedure remappoints(pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                           procedure drawpoint;virtual;
                           procedure drawobject(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                          function getnearesttomouse:tcontrolpointdist;virtual;
-                          procedure selectcurrentcontrolpoint(key:GDBByte);virtual;
-                          procedure RenderFeedBack;virtual;
+                          function getnearesttomouse(mx,my:integer):tcontrolpointdist;virtual;
+                          procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;
+                          procedure RenderFeedBack(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                           //destructor done;virtual;
-                          procedure modifyobj(dist,wc:gdbvertex;save:GDBBoolean;pconobj:pgdbobjEntity);virtual;
+                          procedure modifyobj(dist,wc:gdbvertex;save:GDBBoolean;pconobj:pgdbobjEntity;var drawing:TDrawingDef);virtual;
                           procedure freeclones;
                           procedure Transform(dispmatr:DMatrix4D);
                           procedure SetRotate(minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
@@ -54,11 +54,11 @@ GDBSelectedObjArray=object(GDBOpenArrayOfData)
                           procedure drawobj(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                           procedure freeelement(p:GDBPointer);virtual;
                           function calcvisible(frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
-                          procedure resprojparam;
+                          procedure resprojparam(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);
                     end;
 {EXPORT-}
 implementation
-uses {oglwindow,}ugdbdescriptor,log;
+uses {oglwindow,}{ugdbdescriptor,}ugdbsimpledrawing,GDBGenericSubEntry,log;
 procedure GDBSelectedObjArray.resprojparam;
 var tdesc:pselectedobjdesc;
     i:GDBInteger;
@@ -69,7 +69,7 @@ begin
        for i:=0 to count-1 do
        begin
             //dec(tdesc^.objaddr^.vp.LastCameraPos);
-            tdesc^.objaddr^.Renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG.myGluProject2);
+            tdesc^.objaddr^.Renderfeedback(pcount,camera,ProjectProc);
             inc(tdesc);
        end;
   end;
@@ -179,11 +179,11 @@ begin
        begin
             if tdesc^.objaddr<>nil then
             begin
-                 tdesc^.objaddr^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
+                 tdesc^.objaddr^.RenderFeedbackIFNeed(pcount,camera,ProjectProc);
             end;
             if tdesc^.ptempobj<>nil then
             begin
-                 tdesc^.ptempobj^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
+                 tdesc^.ptempobj^.RenderFeedbackIFNeed(pcount,camera,ProjectProc);
             end;
             inc(tdesc);
        end;
@@ -235,7 +235,7 @@ begin
     tdesc:=parray;
     for i := 0 to count - 1 do
     begin
-      if tdesc^.pcontrolpoint<>nil then tdesc^.pcontrolpoint^.getnearesttomouse(td);
+      if tdesc^.pcontrolpoint<>nil then tdesc^.pcontrolpoint^.getnearesttomouse(td,mx,my);
       inc(tdesc);
     end;
   end;
@@ -488,13 +488,13 @@ begin
       if tdesc^.pcontrolpoint<>nil then
         if tdesc^.pcontrolpoint^.SelectedCount<>0 then
         begin
-           {tdesc^.objaddr^}gdb.GetCurrentDWG.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
+           {tdesc^.objaddr^}PTSimpleDrawing(@drawing)^{gdb.GetCurrentDWG}.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
         end;
       inc(tdesc);
     end;
   end;
   if save then
-              gdb.GetCurrentROOT.FormatAfterEdit(gdb.GetCurrentDWG^);
+              PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FormatAfterEdit({gdb.GetCurrentDWG^}drawing);
 
 end;
 procedure GDBSelectedObjArray.freeclones;
@@ -583,7 +583,7 @@ begin
     tdesc:=parray;
     for i := 0 to count - 1 do
     begin
-      if tdesc^.pcontrolpoint<>nil then tdesc^.pcontrolpoint^.selectcurrentcontrolpoint(key);
+      if tdesc^.pcontrolpoint<>nil then tdesc^.pcontrolpoint^.selectcurrentcontrolpoint(key,mx,my,h);
       SelectedCount:=SelectedCount+tdesc^.pcontrolpoint^.SelectedCount;
       inc(tdesc);
     end;

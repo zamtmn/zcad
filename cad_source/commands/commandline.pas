@@ -19,9 +19,9 @@
 unit commandline;
 {$INCLUDE def.inc}
 interface
-uses zcadstrconsts,umytreenode,sysinfo,strproc,UGDBOpenArrayOfPointer,
+uses UDMenuWnd,uinfoform,zcadstrconsts,{umytreenode,}sysinfo,strproc,UGDBOpenArrayOfPointer,
      gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
-     memman,shared,log,varmandef,varman;
+     memman,shared,log,varmandef,varman,ugdbdrawingdef,zcadinterface;
 const
      tm:tmethod=(Code:nil;Data:nil);
      nullmethod:{tmethod}TButtonMethod=nil;
@@ -34,17 +34,18 @@ type
                           ContextCommandParams:GDBPointer;
                           busy:GDBBoolean;
                           varstack:tvarstack;
+                          DMenu:TDMenuWnd;
                           constructor init(m:GDBInteger);
-                          function execute(const comm:pansichar;silent:GDBBoolean): GDBInteger;virtual;
-                          function executecommand(const comm:pansichar): GDBInteger;virtual;
-                          function executecommandsilent(const comm:pansichar): GDBInteger;virtual;
+                          function execute(const comm:pansichar;silent:GDBBoolean;pdrawing:PTDrawingDef): GDBInteger;virtual;
+                          function executecommand(const comm:pansichar;pdrawing:PTDrawingDef): GDBInteger;virtual;
+                          function executecommandsilent(const comm:pansichar;pdrawing:PTDrawingDef): GDBInteger;virtual;
                           procedure executecommandend;virtual;
                           procedure executecommandtotalend;virtual;
-                          procedure executefile(fn:GDBString);virtual;
-                          function executelastcommad: GDBInteger;virtual;
-                          procedure sendpoint2command(p3d:gdbvertex; p2d:gdbvertex2di; mode:GDBByte;osp:pos_record);virtual;
+                          procedure executefile(fn:GDBString;pdrawing:PTDrawingDef);virtual;
+                          function executelastcommad(pdrawing:PTDrawingDef): GDBInteger;virtual;
+                          procedure sendpoint2command(p3d:gdbvertex; p2d:gdbvertex2di; mode:GDBByte;osp:pos_record;const drawing:TDrawingDef);virtual;
                           procedure CommandRegister(pc:PCommandObjectDef);virtual;
-                          procedure run(pc:PCommandObjectDef;operands:GDBString);virtual;
+                          procedure run(pc:PCommandObjectDef;operands:GDBString;pdrawing:PTDrawingDef);virtual;
                           destructor done;virtual;
                           procedure cleareraseobj;virtual;
                           procedure DMShow;
@@ -63,12 +64,12 @@ type
                     end;
 var commandmanager:GDBcommandmanager;
 function getcommandmanager:GDBPointer;export;
-function GetCommandContext:TCStartAttr;
+function GetCommandContext(pdrawing:PTDrawingDef):TCStartAttr;
 procedure ParseCommand(comm:pansichar; out command,operands:GDBString);
 {procedure startup;
 procedure finalize;}
 implementation
-uses ugdbsimpledrawing,UGDBStringArray,cmdline,UGDBDescriptor,forms{,varman};
+uses ugdbsimpledrawing,UGDBStringArray,{cmdline,}{UGDBDescriptor,}forms{,varman};
 function GDBcommandmanager.GetValueHeap:GDBInteger;
 begin
      result:=varstack.vardescarray.count;
@@ -118,24 +119,24 @@ begin
 end;
 procedure GDBcommandmanager.DMShow;
 begin
-     if assigned(cline) then
-     if assigned(CLine.DMenu) then
+     //if assigned(cline) then
+     if assigned({CLine.}DMenu) then
      begin
      //CLine.DMenu.ajustsize;
-     CLine.DMenu.Show;
+     {CLine.}DMenu.Show;
      end;
 end;
 procedure GDBcommandmanager.DMHide;
 begin
-     if assigned(cline) then
-     if assigned(CLine.DMenu) then
-     CLine.DMenu.Hide;
+     //if assigned(cline) then
+     if assigned({CLine.}DMenu) then
+     {CLine.}DMenu.Hide;
 end;
 procedure GDBcommandmanager.DMClear;
 begin
-     if assigned(cline) then
-     if assigned(CLine.DMenu) then
-     CLine.DMenu.clear;
+     //if assigned(cline) then
+     if assigned({CLine.}DMenu) then
+     {CLine.}DMenu.clear;
 end;
 {procedure GDBcommandmanager.DMAddProcedure(Text,HText:GDBString;proc:TonClickProc);
 begin
@@ -145,16 +146,16 @@ begin
 end;}
 procedure GDBcommandmanager.DMAddProcedure;
 begin
-     if assigned(cline) then
-     if assigned(CLine.DMenu) then
-     CLine.DMenu.AddProcedure(Text,HText,FProc);
+     //if assigned(cline) then
+     if assigned({CLine.}DMenu) then
+     {CLine.}DMenu.AddProcedure(Text,HText,FProc);
 end;
 
 procedure GDBcommandmanager.DMAddMethod;
 begin
-     if assigned(cline) then
-     if assigned(CLine.DMenu) then
-     CLine.DMenu.AddMethod(Text,HText,FMethod);
+     //if assigned(cline) then
+     if assigned({CLine.}DMenu) then
+     {CLine.}DMenu.AddMethod(Text,HText,FMethod);
 end;
 
 
@@ -180,11 +181,11 @@ begin
   if p<>nil then
   repeat
         if (uppercase(pGDBString(p)^)<>'ABOUT')then
-                                                    execute(pointer(pGDBString(p)^),false)
+                                                    execute(pointer(pGDBString(p)^),false,pdrawing)
                                                 else
                                                     begin
                                                          if not sysparam.nosplash then
-                                                                                      execute(pointer(pGDBString(p)^),false)
+                                                                                      execute(pointer(pGDBString(p)^),false,pdrawing)
                                                     end;
         p:=sa.iterate(ir);
   until p=nil;
@@ -200,7 +201,7 @@ var
    ir:itrec;
 begin
      if pcommandrunning <> nil then
-     if pcommandrunning^.pdwg=gdb.GetCurrentDWG then
+     if pcommandrunning^.pdwg={gdb.GetCurrentDWG}@drawing then
      if pcommandrunning.IsRTECommand then
      begin
           pcommandrunning^.MouseMoveCallback(p3d,p2d,mode,osp);
@@ -209,7 +210,7 @@ begin
         p:=CommandsStack.beginiterate(ir);
         if p<>nil then
         repeat
-              if p^.pdwg=gdb.GetCurrentDWG then
+              if p^.pdwg={gdb.GetCurrentDWG}@drawing then
               if p^.IsRTECommand then
                                                        begin
                                                             (p)^.MouseMoveCallback(p3d,p2d,mode,osp);
@@ -231,10 +232,10 @@ begin
   until p=nil;
   count:=0;
 end;
-function GetCommandContext:TCStartAttr;
+function GetCommandContext(pdrawing:PTDrawingDef):TCStartAttr;
 begin
      result:=0;
-     if gdb.GetCurrentDWG<>nil then
+     if {gdb.GetCurrentDWG}pdrawing<>nil then
                                    result:=result or CADWG;
 
 end;
@@ -271,11 +272,11 @@ begin
    until p=nil;
    result:=nil;
 end;
-procedure GDBcommandmanager.run(pc:PCommandObjectDef;operands:GDBString);
+procedure GDBcommandmanager.run(pc:PCommandObjectDef;operands:GDBString;pdrawing:PTDrawingDef);
 var
    pd:PTSimpleDrawing;
 begin
-   pd:=gdb.GetCurrentDWG;
+   pd:={gdb.GetCurrentDWG}PTSimpleDrawing(pdrawing);
    if pd<>nil then
    if ((pc^.CEndActionAttr)and CEDWGNChanged)=0 then
                                                    pd.ChangeStampt(true);
@@ -298,7 +299,7 @@ begin
           pcommandrunning^.pdwg:=pd;
           pcommandrunning^.CommandStart(pansichar(operands));
 end;
-function GDBcommandmanager.execute(const comm:pansichar;silent:GDBBoolean): GDBInteger;
+function GDBcommandmanager.execute(const comm:pansichar;silent:GDBBoolean;pdrawing:PTDrawingDef): GDBInteger;
 var i,p1,p2: GDBInteger;
     command,operands:GDBString;
     cc:TCStartAttr;
@@ -315,7 +316,7 @@ begin
   if pfoundcommand<>nil then
   begin
     begin
-      cc:=GetCommandContext;
+      cc:=GetCommandContext(pdrawing);
       if ((cc xor pfoundcommand^.CStartAttrEnableAttr)and pfoundcommand^.CStartAttrEnableAttr)=0
       then
           begin
@@ -330,10 +331,12 @@ begin
                         lastcommand := command;
                         end;
 
-          run(pfoundcommand,operands);
+          run(pfoundcommand,operands,pdrawing);
           if pcommandrunning<>nil then
-                                      if assigned(CLine) then
-                                      CLine.SetMode(CLCOMMANDRUN);
+                                      //if assigned(CLine) then
+                                      //CLine.SetMode(CLCOMMANDRUN);
+                                      if assigned(SetCommandLineMode) then
+                                      SetCommandLineMode(CLCOMMANDRUN);
           end
      else
          begin
@@ -346,17 +349,17 @@ begin
   command:='';
   operands:='';
 end;
-function GDBcommandmanager.executecommand(const comm:pansichar): GDBInteger;
+function GDBcommandmanager.executecommand(const comm:pansichar;pdrawing:PTDrawingDef): GDBInteger;
 begin
      if not busy then
-                     result:=execute(comm,false)
+                     result:=execute(comm,false,pdrawing)
                  else
                      shared.ShowError(rsCommandNRInC);
 end;
 function GDBcommandmanager.executecommandsilent{(const comm:pansichar): GDBInteger};
 begin
      if not busy then
-     result:=execute(comm,true);
+     result:=execute(comm,true,pdrawing);
 end;
 procedure GDBcommandmanager.PrepairVarStack;
 var
@@ -390,8 +393,10 @@ begin
   if temp<>nil then
                    temp^.CommandEnd;
   if pcommandrunning=nil then
-  if assigned(cline) then
-                   CLine.SetMode(CLCOMMANDREDY);
+  //if assigned(cline) then
+  //                 CLine.SetMode(CLCOMMANDREDY);
+  if assigned(SetCommandLineMode) then
+                   SetCommandLineMode(CLCOMMANDREDY);
   if self.CommandsStack.Count>0 then
                                     begin
                                          pcommandrunning:=ppointer(CommandsStack.getelement(CommandsStack.Count-1))^;
@@ -420,20 +425,31 @@ begin
   if temp<>nil then
                    temp^.CommandEnd;
   if pcommandrunning=nil then
-                             if assigned(CLine)then
-                             CLine.SetMode(CLCOMMANDREDY);
+                             //if assigned(CLine)then
+                             //CLine.SetMode(CLCOMMANDREDY);
+                             if assigned(SetCommandLineMode) then
+                             SetCommandLineMode(CLCOMMANDREDY);
   CommandsStack.Clear;
   ContextCommandParams:=nil;
 end;
-function GDBcommandmanager.executelastcommad: GDBInteger;
+function GDBcommandmanager.executelastcommad(pdrawing:PTDrawingDef): GDBInteger;
 begin
-  result:=executecommand(@lastcommand[1]);
+  result:=executecommand(@lastcommand[1],pdrawing);
 end;
 constructor GDBcommandmanager.init;
+var
+      pint:PGDBInteger;
 begin
   inherited init({$IFDEF DEBUGBUILD}'{8B10F808-46AD-4EF1-BCDD-55B74D27187B}',{$ENDIF}m);
   CommandsStack.init({$IFDEF DEBUGBUILD}'{8B10F808-46AD-4EF1-BCDD-55B74D27187B}',{$ENDIF}10);
   varstack.init;
+  DMenu:=TDMenuWnd.Create(application);
+  pint:=SavedUnit.FindValue('DMenuX');
+  if assigned(pint)then
+                       DMenu.Left:=pint^;
+  pint:=SavedUnit.FindValue('DMenuY');
+  if assigned(pint)then
+                       DMenu.Top:=pint^;
 end;
 procedure GDBcommandmanager.CommandRegister(pc:PCommandObjectDef);
 begin

@@ -188,7 +188,7 @@ begin
   repeat
         TCangeMethod(UnDoData)(p^);
         if FreeArray then
-                             PGDBObjEntity(p)^.YouChanged;
+                             PGDBObjEntity(p)^.YouChanged(gdb.GetCurrentDWG^);
        p:=ObjArray.iterate(ir);
   until p=nil;
   FreeArray:=not FreeArray;
@@ -206,7 +206,7 @@ begin
   repeat
         TCangeMethod(DoData)(p^);
         if FreeArray then
-                             PGDBObjEntity(p)^.YouChanged;
+                             PGDBObjEntity(p)^.YouChanged(gdb.GetCurrentDWG^);
        p:=ObjArray.iterate(ir);
   until p=nil;
   FreeArray:=not FreeArray;
@@ -244,7 +244,7 @@ begin
   if p<>nil then
   repeat
         TCangeMethod(p^)(UnDoData);
-        PGDBObjEntity(p^.Data)^.YouChanged;
+        PGDBObjEntity(p^.Data)^.YouChanged(gdb.GetCurrentDWG^);
         //PGDBObjSubordinated(p^.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(p^.Data),PGDBObjSubordinated(p^.Data)^.bp.PSelfInOwnerArray);
 
        p:=ObjArray.iterate(ir);
@@ -262,7 +262,7 @@ begin
   if p<>nil then
   repeat
         TCangeMethod(p^)(DoData);
-        PGDBObjEntity(p^.Data)^.YouChanged;
+        PGDBObjEntity(p^.Data)^.YouChanged(gdb.GetCurrentDWG^);
         //PGDBObjSubordinated(p^.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(p^.Data),PGDBObjSubordinated(p^.Data)^.bp.PSelfInOwnerArray);
 
        p:=ObjArray.iterate(ir);
@@ -290,7 +290,7 @@ type
     TCangeMethod=procedure(const data:_T)of object;
 begin
      TCangeMethod(method)(UnDoData);
-     PGDBObjEntity(method.Data)^.YouChanged;
+     PGDBObjEntity(method.Data)^.YouChanged(gdb.GetCurrentDWG^);
      //PGDBObjSubordinated(method.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(method.Data),PGDBObjSubordinated(method.Data)^.bp.PSelfInOwnerArray);
 end;
 procedure TGObjectChangeCommand.Comit;
@@ -298,7 +298,7 @@ type
     TCangeMethod=procedure(const data:_T)of object;
 begin
      TCangeMethod(method)(DoData);
-     PGDBObjEntity(method.Data)^.YouChanged;
+     PGDBObjEntity(method.Data)^.YouChanged(gdb.GetCurrentDWG^);
      //PGDBObjSubordinated(method.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(method.Data),PGDBObjSubordinated(method.Data)^.bp.PSelfInOwnerArray);
 end;
 constructor TGObjectChangeCommand2.Assign(var _dodata:_T;_domethod,_undomethod:tmethod);
@@ -315,7 +315,7 @@ type
 begin
      TCangeMethod(undomethod)(Data);
      if AutoProcessGDB then
-                           PGDBObjEntity(undomethod.Data)^.YouChanged
+                           PGDBObjEntity(undomethod.Data)^.YouChanged(gdb.GetCurrentDWG^)
                        else
                            PGDBObjEntity(undomethod.Data)^.format;
 end;
@@ -326,7 +326,7 @@ type
 begin
      TCangeMethod(domethod)(Data);
      if AutoProcessGDB then
-                           PGDBObjEntity(undomethod.Data)^.YouChanged
+                           PGDBObjEntity(undomethod.Data)^.YouChanged(gdb.GetCurrentDWG^)
                        else
                            PGDBObjEntity(undomethod.Data)^.format;
 end;

@@ -29,12 +29,12 @@ GDBPolyPoint2DArray=object(GDBOpenArrayOfData)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 
                       procedure DrawGeometry;virtual;
-                      function InRect:TInRect;virtual;
+                      function InRect(Frame1, Frame2: GDBvertex2DI):TInRect;virtual;
                       procedure freeelement(p:GDBPointer);virtual;
                 end;
 {Export-}
 implementation
-uses UGDBDescriptor,log;
+uses {UGDBDescriptor,}log;
 procedure GDBPolyPoint2DArray.freeelement;
 begin
 end;
@@ -128,14 +128,14 @@ begin
           pp:=p;
           inc(p);
           dec(i);
-          if pointinquad2d(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, p.coord.x,p.coord.y)
+          if pointinquad2d(Frame1.x, Frame1.y, Frame2.x, Frame2.y, p.coord.x,p.coord.y)
           then
           begin
                result := IRPartially;
                exit;
           end
           else
-          if pointinquad2d(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, pp.coord.x,pp.coord.y)
+          if pointinquad2d(Frame1.x, Frame1.y, Frame2.x, Frame2.y, pp.coord.x,pp.coord.y)
           then
           begin
                result := IRPartially;
@@ -143,10 +143,10 @@ begin
           end
           else
           if
-          intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
-       or intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
-       or intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
-       or intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
+          intercept2d2(Frame1.x, Frame1.y, Frame2.x, Frame1.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
+       or intercept2d2(Frame2.x, Frame1.y, Frame2.x, Frame2.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
+       or intercept2d2(Frame2.x, Frame2.y, Frame1.x, Frame2.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
+       or intercept2d2(Frame1.x, Frame2.y, Frame1.x, Frame1.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
           then
           begin
                result := IRPartially;
@@ -162,7 +162,7 @@ begin
           inc(p);
           dec(i);
           dec(counter);
-          if pointinquad2d(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, pp.coord.x,pp.coord.y)
+          if pointinquad2d(Frame1.x, Frame1.y, Frame2.x, Frame2.y, pp.coord.x,pp.coord.y)
           then
           begin
                result := IRPartially;
@@ -170,10 +170,10 @@ begin
           end
           else
           if
-          intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
-       or intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
-       or intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
-       or intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
+          intercept2d2(Frame1.x, Frame1.y, Frame2.x, Frame1.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
+       or intercept2d2(Frame2.x, Frame1.y, Frame2.x, Frame2.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
+       or intercept2d2(Frame2.x, Frame2.y, Frame1.x, Frame2.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
+       or intercept2d2(Frame1.x, Frame2.y, Frame1.x, Frame1.y, p.coord.x,p.coord.y,pp.coord.x,pp.coord.y)
           then
           begin
                result := IRPartially;

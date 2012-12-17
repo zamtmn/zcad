@@ -62,9 +62,11 @@ TSimpleDrawing=object(TAbstractDrawing)
                        function GetPcamera:PGDBObjCamera;virtual;
                        function GetCurrentROOT:PGDBObjGenericSubEntry;virtual;
                        function GetCurrentRootSimple:GDBPointer;virtual;
+                       function GetBlockDefArraySimple:GDBPointer;virtual;
                        function GetConstructObjRoot:PGDBObjRoot;virtual;
                        function GetSelObjArray:PGDBSelectedObjArray;virtual;
                        function GetLayerTable:PGDBLayerArray;virtual;
+                       function GetTextStyleTable:PGDBTextStyleArray;virtual;
                        function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;
                        procedure RotateCameraInLocalCSXY(ux,uy:GDBDouble);virtual;
                        procedure MoveCameraInLocalCSXY(oldx,oldy:GDBDouble;ax:gdbvertex);virtual;
@@ -84,7 +86,7 @@ TSimpleDrawing=object(TAbstractDrawing)
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 implementation
-uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,{commandline,}log{,OGLSpecFunc};
+uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, {GDBManager,}shared,{commandline,}log{,OGLSpecFunc};
 function TSimpleDrawing.GetDWGUnits:PTUnitManager;
 begin
      result:=nil;
@@ -135,7 +137,7 @@ end;
 procedure TSimpleDrawing.rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);
 begin
      obj^.rtmodifyonepoint(rtmod);
-     obj^.YouChanged;
+     obj^.YouChanged(self);
 end;
 procedure TSimpleDrawing.rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);
 var i:GDBInteger;
@@ -283,6 +285,11 @@ function TSimpleDrawing.GetLayerTable:PGDBLayerArray;
 begin
      result:=@LayerTable;
 end;
+function TSimpleDrawing.GetTextStyleTable:PGDBTextStyleArray;
+begin
+     result:=@TextStyleTable;
+end;
+
 procedure TSimpleDrawing.SetCurrentDWG;
 begin
 
@@ -329,7 +336,10 @@ function TSimpleDrawing.GetCurrentRootSimple:GDBPointer;
 begin
      result:=self.pObjRoot;
 end;
-
+function TSimpleDrawing.GetBlockDefArraySimple:GDBPointer;
+begin
+     result:=@self.BlockDefArray;
+end;
 function TSimpleDrawing.GetCurrentROOT:PGDBObjGenericSubEntry;
 begin
      result:=self.pObjRoot;

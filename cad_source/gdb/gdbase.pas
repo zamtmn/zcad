@@ -310,6 +310,7 @@ GDBArrayVertex=array[0..0] of GDBvertex;
                    BGroup:TBlockGroup;(*'Block group'*)
              end;
 FreeElProc=procedure (p:GDBPointer);
+TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
 {EXPORT-}
 TDWGHandle=ptruint;
 const

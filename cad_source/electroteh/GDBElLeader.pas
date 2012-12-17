@@ -38,17 +38,17 @@ GDBObjElLeader=object(GDBObjComplex)
             function beforertmodify:GDBPointer;virtual;
             function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;
             procedure FormatEntity(const drawing:TDrawingDef);virtual;
-            function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
+            function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
 
             constructor initnul;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;
-            procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-            procedure DXFOut(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+            procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+            procedure DXFOut(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
             function GetObjTypeName:GDBString;virtual;
             function ReturnLastOnMouse:PGDBObjEntity;virtual;
             function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
             function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
-            procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+            procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
             //function InRect:TInRect;virtual;
 
             destructor done;virtual;
@@ -150,14 +150,14 @@ begin
 end;
 procedure GDBObjElLeader.DXFOut;
 begin
-     SaveToDXF(handle, outhandle);
+     SaveToDXF(handle, outhandle,drawing);
      //SaveToDXFPostProcess(outhandle);
-     SaveToDXFFollow(handle, outhandle);
+     SaveToDXFFollow(handle, outhandle,drawing);
 end;
 procedure GDBObjElLeader.SaveToDXF;
 begin
   MainLine.bp.ListPos.Owner:={gdb.GetCurrentROOT}self.GetMainOwner;
-  MainLine.SaveToDXF(handle,outhandle);
+  MainLine.SaveToDXF(handle,outhandle,drawing);
   dxfGDBStringout(outhandle,1001,'DSTP_XDATA');
   dxfGDBStringout(outhandle,1002,'{');
   dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
@@ -168,12 +168,12 @@ begin
   MainLine.bp.ListPos.Owner:=@self;
 
   MarkLine.bp.ListPos.Owner:=@gdbtrash;
-  MarkLine.SaveToDXF(handle,outhandle);
+  MarkLine.SaveToDXF(handle,outhandle,drawing);
   MarkLine.SaveToDXFPostProcess(outhandle);
   MarkLine.bp.ListPos.Owner:=@self;
 
   tbl.bp.ListPos.Owner:=@gdbtrash;
-  tbl.SaveToDXFFollow(handle,outhandle);
+  tbl.SaveToDXFFollow(handle,outhandle,drawing);
   tbl.bp.ListPos.Owner:=@self;
 end;
 procedure GDBObjElLeader.SaveToDXFFollow;
@@ -202,9 +202,9 @@ begin
          pvc^.transform(m4);
          pvc^.Format;
 
-              pvc^.SaveToDXF(handle, outhandle);
+              pvc^.SaveToDXF(handle, outhandle,drawing);
               pvc^.SaveToDXFPostProcess(outhandle);
-              pvc^.SaveToDXFFollow(handle, outhandle);
+              pvc^.SaveToDXFFollow(handle, outhandle,drawing);
 
 
          pvc^.done;
@@ -218,8 +218,8 @@ function GDBObjElLeader.ImEdited;
 //var t:gdbinteger;
 begin
      //format;
-     inherited imedited (pobj,pobjinarray);
-     YouChanged;
+     inherited imedited (pobj,pobjinarray,drawing);
+     YouChanged(drawing);
      //bp.owner^.ImEdited(@self,bp.PSelfInOwnerArray);
      //ObjCasheArray.addnodouble(@pobj);
 end;

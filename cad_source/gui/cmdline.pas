@@ -24,14 +24,13 @@ uses
  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
  UDMenuWnd,gdbase, memman,UGDBDescriptor,math,commandline,varman,languade,
  UGDBTracePropArray,varmandef,
- geometry,shared,UGDBStringArray;
+ geometry,shared,UGDBStringArray,zcadinterface;
 
 const
      cheight=18;
      commandsuffix='>';
      commandprefix=' ';
 type
-  TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
   TCWindow = class(TForm)
     private
     procedure AfterConstruction; override;
@@ -44,7 +43,7 @@ type
     prompttext:ansistring;
   public
 
-    DMenu:TDMenuWnd;
+    //DMenu:TDMenuWnd;
     utfpresent:boolean;
     utflen:integer;
     aliases:GDBGDBStringArray;
@@ -212,16 +211,17 @@ begin
     aliases.init(100);
     aliases.loadfromfile(expandpath('*menu/default.cla'));
 
-    DMenu:=TDMenuWnd.Create(self);//'DisplayMenu',@MainForm,200,100,10,10,false);
+    //DMenu:=TDMenuWnd.Create(self);
 
-    pint:=SavedUnit.FindValue('DMenuX');
+    {pint:=SavedUnit.FindValue('DMenuX');
     if assigned(pint)then
                          DMenu.Left:=pint^;
     pint:=SavedUnit.FindValue('DMenuY');
     if assigned(pint)then
-                         DMenu.Top:=pint^;
+                         DMenu.Top:=pint^;}
     CWindow:=TCWindow.Create(application);
     //CWindow.Show;
+    SetCommandLineMode:=self.SetMode;
 end;
 destructor TCLine.Destroy;
 begin
@@ -375,7 +375,7 @@ begin
       else if commandmanager.FindCommand(uppercase(cmd))<>nil then
           begin
                //CmdEdit.text:=FindAlias(CmdEdit.text,';','=');
-               commandmanager.executecommand(GDBPointer(Cmd));
+               commandmanager.executecommand(GDBPointer(Cmd),gdb.GetCurrentDWG);
           end
       else begin
            cmd:=CmdEdit.text;

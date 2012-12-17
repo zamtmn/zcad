@@ -61,7 +61,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             function GoodRemoveMiFromArray(const obj:GDBObjEntity):GDBInteger;virtual;
                             {function SubMi(pobj:pGDBObjEntity):GDBInteger;virtual;}
                             function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
-                            function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
+                            function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
                             function ReturnLastOnMouse:PGDBObjEntity;virtual;
                             procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
                             destructor done;virtual;

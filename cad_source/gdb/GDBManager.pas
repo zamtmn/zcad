@@ -21,7 +21,7 @@ unit GDBManager;
 
 
 interface
-uses zcadsysvars,gdbellipse,GDB3DFace,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
+uses gdbentityfactory,zcadsysvars,gdbellipse,GDB3DFace,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
      UGDBDescriptor,varmandef,gdbobjectsconstdef,
      UGDBVisibleOpenArray,GDBGenericSubEntry,gdbEntity,GDBCable,GDBDevice,
      GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMText,GDBLine,
@@ -44,8 +44,6 @@ function getgdb: GDBPointer; export;
 //procedure GDBFreeMemGDBObject(source:PGDBproperty);export;
 //procedure GDBGetMemGDBObject(source:PGDBproperty);export;
 function GetSelOjbj:TSelObjDesk;
-function CreateInitObjFree(t:GDBByte;owner:PGDBObjGenericSubEntry):PGDBObjEntity;export;
-function CreateObjFree(t: GDBByte): PGDBObjEntity;export;
 procedure GDBObjSetEntityProp(var pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;color:GDBInteger;LW: GDBSmallint); export;
 procedure GDBObjSetLineProp(var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;color:GDBInteger;LW: GDBSmallint; p1, p2: GDBvertex); export;
 procedure GDBObjLineInit(own:PGDBObjGenericSubEntry;var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LW: GDBSmallint; p1, p2: GDBvertex); export;
@@ -105,120 +103,6 @@ end;
 procedure GDBObjCircleInit(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble);
 begin
   pobjcircle^.init(gdb.GetCurrentROOT,layeraddres, LW, p, rr);
-end;
-function CreateInitObjFree(t:GDBByte;owner:PGDBObjGenericSubEntry): PGDBObjEntity;export;
-var temp: PGDBObjEntity;
-begin
-  temp := nil;
-  case t of
-    GDBLineID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.line}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjLine));
-        pgdbobjline(temp).initnul(owner);
-      end;
-    GDBTextID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.text}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjText));
-        pgdbobjtext(temp).initnul(owner);
-      end;
-    GDBMTextID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.mtext}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjMText));
-        pgdbobjMtext(temp).initnul(owner);
-      end;
-    GDBPolylineID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.polyline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjpolyline));
-        pgdbobjpolyline(temp).initnul(owner);
-      end;
-    GDBArcID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.arc}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjArc));
-        pgdbobjArc(temp).initnul;
-      end;
-    GDBCircleID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.circle}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjCircle));
-        pgdbobjCircle(temp).initnul;
-      end;
-    GDBlwpolylineID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.lwpolyline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjlwpolyline));
-        pgdbobjLWPolyLine(temp).initnul;
-      end;
-    GDBPointID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.point}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjpoint));
-        pgdbobjpoint(temp).initnul(owner);
-      end;
-    GDBBlockInsertID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.blockinsert}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjBlockinsert));
-        pgdbobjblockinsert(temp).initnul;
-        pgdbobjblockinsert(temp).bp.ListPos.Owner:=owner;
-      end;
-    GDBDeviceID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.device}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjDevice));
-        pgdbobjdevice(temp).initnul;
-        pgdbobjdevice(temp).bp.ListPos.Owner:=owner;
-      end;
-    GDBCableID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.cable}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjDevice));
-        pgdbobjcable(temp).initnul(owner);
-        pgdbobjcable(temp).bp.ListPos.Owner:=owner;
-      end;
-    GDB3DfaceID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.3DFace}',{$ENDIF}GDBPointer(temp), sizeof(GDBObj3DFace));
-        pGDBObj3DFace(temp).initnul(owner);
-        pGDBObj3DFace(temp).bp.ListPos.Owner:=owner;
-      end;
-    GDBSolidID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Solid}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjSolid));
-        pGDBObjSolid(temp).initnul(owner);
-        pGDBObjSolid(temp).bp.ListPos.Owner:=owner;
-      end;
-    GDBEllipseID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Ellipse}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjEllipse));
-        PGDBObjEllipse(temp).initnul{(owner)};
-        PGDBObjEllipse(temp).bp.ListPos.Owner:=owner;
-      end
-  end;
-  result := temp;
-end;
-function CreateObjFree(t:GDBByte): PGDBObjEntity;export;
-var temp: PGDBObjEntity;
-begin
-  temp := nil;
-  case t of
-    GDBLineID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.line}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjLine));
-      end;
-    GDBTextID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.text}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjText));
-      end;
-    GDBMTextID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.mtext}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjMText));
-      end;
-    GDBPolylineID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.polyline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjpolyline));
-      end;
-    GDBCableID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.cable}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjCable));
-      end;
-    GDBArcID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.arc}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjArc));
-      end;
-    GDBCircleID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.circle}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjCircle));
-      end;
-    GDBlwpolylineID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.lwpolyline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjlwpolyline));
-      end;
-    GDBPointID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.point}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjpoint));
-      end;
-    GDBBlockInsertID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.blockinsert}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjBlockinsert));
-      end;
-    GDBDeviceID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.device}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjDevice));
-      end;
-    GDBEllipseID: begin
-        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.Ellipse}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjEllipse));
-      end
-  end;
-  result := temp;
 end;
 function getgdb: GDBPointer; export;
 begin

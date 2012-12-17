@@ -19,7 +19,7 @@
 unit commandlinedef;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,gdbase{,UGDBOpenArrayOfPointer},oglwindowdef,log,UGDBOpenArrayOfPObjects;
+uses gdbasetypes,gdbase{,UGDBOpenArrayOfPointer},oglwindowdef,log,UGDBOpenArrayOfPObjects,ugdbdrawingdef;
 const
      CADWG=1;
      CEDeSelect=1;
@@ -71,10 +71,10 @@ type
   GDBcommandmanagerDef=object(GDBOpenArrayOfPObjects)
                                   lastcommand:GDBString;
                                   pcommandrunning:PCommandRTEdObjectDef;
-                                  function executecommand(const comm:pansichar): GDBInteger;virtual;abstract;
+                                  function executecommand(const comm:pansichar;pdrawing:PTDrawingDef): GDBInteger;virtual;abstract;
                                   procedure executecommandend;virtual;abstract;
-                                  function executelastcommad: GDBInteger;virtual;abstract;
-                                  procedure sendpoint2command(p3d:gdbvertex; p2d:gdbvertex2di; mode:GDBByte;osp:pos_record);virtual;abstract;
+                                  function executelastcommad(pdrawing:PTDrawingDef): GDBInteger;virtual;abstract;
+                                  procedure sendpoint2command(p3d:gdbvertex; p2d:gdbvertex2di; mode:GDBByte;osp:pos_record;const drawing:TDrawingDef);virtual;abstract;
                                   procedure CommandRegister(pc:PCommandObjectDef);virtual;abstract;
                              end;
 {Export-}

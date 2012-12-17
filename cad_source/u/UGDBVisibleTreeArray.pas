@@ -36,7 +36,7 @@ GDBObjEntityTreeArray=object(GDBObjEntityOpenArray)(*OpenArrayOfPObj*)
                       end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}GDBManager,log;
+uses {UGDBDescriptor,}{GDBManager,}log;
 procedure GDBObjEntityTreeArray.RemoveFromTree(p:PGDBObjEntity);
 begin
      PTEntTreeNode(p^.bp.TreePos.Owner).nul.deliteminarray(p^.bp.TreePos.SelfIndex);

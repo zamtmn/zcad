@@ -22,7 +22,7 @@ interface
 uses ugdbdrawingdef,UGDBLayerArray{,UGDBLayerArray},math,gdbasetypes,GDBComplex,{GDBGenericSubEntry,}SysInfo,sysutils,
 {UGDBOpenArrayOfPV,}UGDBObjBlockdefArray{,UGDBSelectedObjArray,UGDBVisibleOpenArray},gdbEntity,varman{,varmandef},
 gl,UGDBEntTree,ugdbltypearray,GDBBlockDef,
-GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBSubordinated,UGDBOpenArrayOfByte;
+GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBSubordinated,UGDBOpenArrayOfByte;
 const zcadmetric='!!ZMODIFIER:';
 type
 {Export+}
@@ -37,9 +37,9 @@ GDBObjBlockInsert=object(GDBObjComplex)
                      constructor initnul;
                      constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                      procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;
-                     function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
+                     function FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
 
-                     procedure SaveToDXF(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                     procedure SaveToDXF(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                      procedure CalcObjMatrix;virtual;
                      function getosnappoint(ostype:GDBFloat):gdbvertex;virtual;
                      function Clone(own:GDBPointer):PGDBObjEntity;virtual;
@@ -391,7 +391,8 @@ begin
      if self.PExtAttrib^.Upgrade>0 then
        isdevice:=true;
 
-     index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
+     //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
+     index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
      result:=nil;
      //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
      (*if pos('EL_WIRE_',uppercase(name))=1 then
@@ -473,7 +474,8 @@ else*) if (pos(DevicePrefix,uppercase(name))=1)or isdevice then
           //TempDevice^..:=PGDBObjWithLocalCS(@self)^;
           //TempDevice^.bp.Owner:=bp.Owner;
           TempDevice^.name:=copy(name,8,length(name)-7);
-          TempDevice^.index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(copy(name,8,length(name)-7)));
+          //TempDevice^.index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(copy(name,8,length(name)-7)));
+          TempDevice^.index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(copy(name,8,length(name)-7)));
           //bp.Owner^.addmi(@TempDevice);
           //gdb.ObjRoot.ObjArray.add(@TempDevice);
           //TempDevice^.Format;
@@ -518,8 +520,10 @@ var pblockdef:PGDBObjBlockdef;
     //i:GDBInteger;
     //varobject:gdbboolean;
 begin
-     index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
-     pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
+     //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
+     index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
+     //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
+     pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getelement(index);
      pblockdef^.ou.copyto(@ou);
 end;
 procedure GDBObjBlockInsert.BuildGeometry;
@@ -532,14 +536,15 @@ var pblockdef:PGDBObjBlockdef;
 begin
           if name='' then
                          name:='_error_here';
-          index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
+          //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
+          index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
           if index<0 then
                          index:=index;
-          assert((index>=0) and (index<gdb.GetCurrentDWG.BlockDefArray.count), 'Неверный индекс блока');
+          assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), 'Неверный индекс блока');
 
-          if not PBlockDefArray(gdb.GetCurrentDWG.BlockDefArray.parray)^[index].Formated then
+          if not PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].Formated then
                                                                                begin
-                                                                                PBlockDefArray(gdb.GetCurrentDWG.BlockDefArray.parray)^[index].FormatEntity(drawing);
+                                                                                PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].FormatEntity(drawing);
                                                                                end;
           ConstObjArray.cleareraseobj;
           mainowner:=getmainowner;
@@ -549,7 +554,8 @@ begin
                                                 exit;
                                                 end;
 
-          pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
+          //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
+          pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getelement(index);
           if pblockdef.ObjArray.count>0 then
           begin
 
@@ -557,7 +563,7 @@ begin
           begin
                pvisible:=GDBPointer(pblockdef.ObjArray.getelement(i)^);
                pvisible:=pvisible^.Clone(@self);
-               pvisible2:=pgdbobjEntity(pvisible.FromDXFPostProcessBeforeAdd(nil));
+               pvisible2:=pgdbobjEntity(pvisible.FromDXFPostProcessBeforeAdd(nil,drawing));
                if pvisible2=nil then
                                      begin
                                           pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
@@ -730,10 +736,11 @@ else if not dxfGDBStringload(f,2,byt,name)then s := f.readgdbstring;
       if name='EL_LIGHT_SWIITH' then
                                         name:=name;
       programlog.LogOutStr('GDBBlockInsert.LoadFromDXF '+name,0);
-      index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
+      //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
+      index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
       //format;
 end;
-procedure GDBObjBlockInsert.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);
+procedure GDBObjBlockInsert.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);
 //var
   //i, j: GDBInteger;
   //hv, vv: GDBByte;

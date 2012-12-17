@@ -20,7 +20,7 @@ unit UDMenuWnd;
 {$INCLUDE def.inc}
 interface
 uses
- ComCtrls,umytreenode,gdbase,Controls,{stdctrl,}Forms,memman,gdbasetypes{,ZButtonsGeneric,ZBAsicVisible,ZGUIsCT};
+ uinfoform,ComCtrls,{umytreenode,}gdbase,Controls,{stdctrl,}Forms,memman,gdbasetypes{,ZButtonsGeneric,ZBAsicVisible,ZGUIsCT};
 type
   DMMethod=procedure(sender:GDBPointer) of object;
   //PTDMenuWnd=^TDMenuWnd;

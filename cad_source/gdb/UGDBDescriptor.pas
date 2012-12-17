@@ -67,6 +67,7 @@ TDrawing=object(TSimpleDrawing)
            function GetChangeStampt:GDBBoolean;virtual;
            function GetUndoTop:TArrayIndex;virtual;
            function GetDWGUnits:PTUnitManager;virtual;
+           procedure AddBlockFromDBIfNeed(name:GDBString);virtual;
      end;
 PGDBDescriptor=^GDBDescriptor;
 GDBDescriptor=object(GDBOpenArrayOfPObjects)
@@ -101,8 +102,7 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
 var GDB: GDBDescriptor;
     BlockBaseDWG:PTDrawing=nil;
     ClipboardDWG:PTDrawing=nil;
-    GDBTrash:GDBObjTrash;
-    FontManager:GDBFontManager;
+    //GDBTrash:GDBObjTrash;
     LtypeManager:GDBLtypeArray;
 procedure CalcZ(z:GDBDouble);
 procedure RemapAll(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
@@ -339,6 +339,11 @@ function TDrawing.GetDWGUnits:PTUnitManager;
 begin
      result:=@DWGUnits;
 end;
+procedure TDrawing.AddBlockFromDBIfNeed(name:GDBString);
+begin
+     gdb.AddBlockFromDBIfNeed(@self,name);
+end;
+
 constructor TDrawing.init;
 var {tp:GDBTextStyleProp;}
     ts:PTGDBTableStyle;
@@ -820,17 +825,8 @@ end;
 procedure startup;
 begin
   RedrawOGLWNDProc:=RedrawOGLWND;
-  FontManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
   LTypeManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
 
-  //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\times.shx');
-  //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\GENISO.SHX');
-  //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\amgdt.shx');
-
-  //FromDirIterator({sysparam.programpath+'fonts/'}'C:\Program Files\AutoCAD 2010\Fonts\','*.shx','',addf,nil);
-
-  FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,sysvar.SYS.SYS_AlternateFont^));
-  FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,'ltypeshp.shx'));
   LTypeManager.LoadFromFile(FindInPaths(sysvar.PATH.Support_Path^,'acad.lin'),TLOLoad);
   pbasefont:=FontManager.getAddres(sysvar.SYS.SYS_AlternateFont^);
   if pbasefont=nil then
@@ -865,7 +861,6 @@ begin
   GDBFreemem(pointer(ClipboardDWG));
   end;
   pbasefont:=nil;
-  FontManager.FreeAndDone;
   LTypeManager.FreeAndDone;
   GDBTrash.done;
 end;

@@ -21,7 +21,6 @@ unit GDBPoint;
 
 interface
 uses ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
 ugdbltypearray,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry{,dxflow},memman,OGLSpecFunc;
 type
@@ -33,7 +32,7 @@ GDBObjPoint=object(GDBObj3d)
                  ProjPoint:GDBvertex;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;
 
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -111,7 +110,7 @@ begin
       8:
         begin
           layername := f.readgdbstring;
-          vp.Layer := {gdb.GetCurrentDWG.LayerTable}LayerArray.getaddres(layername);
+          vp.Layer := {gdb.GetCurrentDWG.LayerTable}drawing.GetLayerTable.getaddres(layername);
               //layername:=GDBPointer(s);
         end;
       10:
@@ -149,10 +148,10 @@ begin
   glVertex3dV(@P_insertInWCS);
   myglend;}
   oglsm.myglbegin(GL_LINES);
-  glVertex3d(P_insertInWCS.x-0.5,P_insertInWCS.y-0.5,P_insertInWCS.z);
-  glVertex3d(P_insertInWCS.x+0.5,P_insertInWCS.y+0.5,P_insertInWCS.z);
-  glVertex3d(P_insertInWCS.x-0.5,P_insertInWCS.y+0.5,P_insertInWCS.z);
-  glVertex3d(P_insertInWCS.x+0.5,P_insertInWCS.y-0.5,P_insertInWCS.z);
+  oglsm.myglVertex(P_insertInWCS.x-0.5,P_insertInWCS.y-0.5,P_insertInWCS.z);
+  oglsm.myglVertex(P_insertInWCS.x+0.5,P_insertInWCS.y+0.5,P_insertInWCS.z);
+  oglsm.myglVertex(P_insertInWCS.x-0.5,P_insertInWCS.y+0.5,P_insertInWCS.z);
+  oglsm.myglVertex(P_insertInWCS.x+0.5,P_insertInWCS.y-0.5,P_insertInWCS.z);
   oglsm.myglend;
   inherited;
 end;

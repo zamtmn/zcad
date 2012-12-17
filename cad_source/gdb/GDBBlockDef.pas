@@ -19,7 +19,6 @@ unit GDBBlockDef;
 {$INCLUDE def.inc}
 interface
 uses ugdbdrawingdef,UGDBVisibleOpenArray,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,memman, geometry,
-     {$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
      UGDBLayerArray,ugdbltypearray,
      zcadstrconsts,varmandef,gdbobjectsconstdef,GDBGenericSubEntry,varman;
 type
@@ -35,7 +34,7 @@ GDBObjBlockdef=object(GDBObjGenericSubEntry)
                      constructor init(_name:GDBString);
                      procedure FormatEntity(const drawing:TDrawingDef);virtual;
                      function FindVariable(varname:GDBString):pvardesk;virtual;
-                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;
+                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
                      function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit):GDBBoolean;virtual;
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;
@@ -147,7 +146,7 @@ begin
   byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,LayerArray,LTArray) then
+    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
                                            s:=f.ReadGDBString;
     byt:=readmystrtoint(f);
   end;

@@ -21,7 +21,6 @@ unit GDBLWPolyLine;
 
 interface
 uses ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,oglwindowdef,GDBCurve,UGDBVectorSnapArray,geometry,UGDBLayerArray,GDBEntity,memman,gdbasetypes,UGDBPoint3DArray,UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,varman,varmandef,
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
 ugdbltypearray,
 GDBase,GDBWithLocalCS,gdbobjectsconstdef,math,dxflow,sysutils,UGDBLineWidthArray,OGLSpecFunc;
 type
@@ -38,7 +37,7 @@ GDBObjLWPolyline=object(GDBObjWithLocalCS)
                  Square:GDBdouble;(*'Oriented area'*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul;
-                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
@@ -606,8 +605,11 @@ begin
   hlGDBWord:=0;
   numv:=0;
   vp.id:=GDBLWPolylineID;
-  bp.ListPos.owner:=@drawing;
-  local.p_insert:={w0^}PGDBVertex(@bp.ListPos.owner^.GetMatrix^[3])^;
+  //bp.ListPos.owner:=@drawing;
+  if bp.ListPos.owner<>nil then
+                               local.p_insert:={w0^}PGDBVertex(@bp.ListPos.owner^.GetMatrix^[3])^
+                           else
+                               local.P_insert:=nulvertex;;
   closed := false;
   Width2D_in_OCS_Array.createarray;
   (*Vertex2D_in_OCS_Array.init({$IFDEF DEBUGBUILD}'{270E17CA-8FFF-43B8-A6FB-E553C47023F1}',{$ENDIF}1000,closed);
@@ -623,7 +625,7 @@ begin
       8:
         begin
           s := f.readGDBString;
-          vp.Layer := LayerArray.getAddres(s);
+          vp.Layer :=drawing.getlayertable.getAddres(s);
         end;
       62:begin
               vp.color:=readmystrtoint(f);

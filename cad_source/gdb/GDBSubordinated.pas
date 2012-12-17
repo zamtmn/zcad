@@ -214,6 +214,7 @@ begin
 end;
 function ansitoutf8ifneed(var s:GDBString):boolean;
 begin
+     {$IFNDEF DELPHI}
      if FindInvalidUTF8Character(@s[1],length(s),false)<>-1
         then
             begin
@@ -222,6 +223,7 @@ begin
              result:=true;
             end
         else
+        {$ENDIF}
             result:=false;
 end;
 procedure OldVersVarRename(var vn,vt,vv,vun:GDBString);

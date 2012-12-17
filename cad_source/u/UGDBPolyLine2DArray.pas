@@ -20,7 +20,6 @@ unit UGDBPolyLine2DArray;
 {$INCLUDE def.inc}
 interface
 uses zcadsysvars,gdbasetypes,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
      varmandef,OGLSpecFunc;
 type
 {Export+}
@@ -168,7 +167,7 @@ begin
   //p:=parray;
   //counter:=0;
   oglsm.myglbegin(GL_LINE_STRIP);
-  iterategl(@glvertex2dv);
+  iterategl(oglsm.myglvertex2dv);
   oglsm.myglend;
 end;
 function GDBPolyline2DArray.inrect;

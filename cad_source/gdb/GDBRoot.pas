@@ -22,7 +22,6 @@ unit GDBRoot;
 interface
 Uses
    ugdbdrawingdef,GDBCamera,OGLSpecFunc,
-   {$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
    UGDBEntTree,{UGDBVisibleTreeArray,UGDBOpenArrayOfPV,}
 devices,gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry,uunitmanager{,shared};
 type
@@ -107,7 +106,7 @@ end;
 procedure GDBObjRoot.DrawWithAttrib;
 begin
      oglsm.myglpushmatrix;
-     glmultmatrixd(@objmatrix);
+     oglsm.myglMultMatrixD(objmatrix);
      inherited;//self.ObjArray.DrawWithattrib;
      oglsm.myglpopmatrix;
 

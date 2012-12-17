@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{$MODE OBJFPC}
+{MODE OBJFPC}
 unit iodxf;
 {$INCLUDE def.inc}
 interface
@@ -25,8 +25,10 @@ type
    entnamindex=record
                     entname:GDBString;
               end;
-     lessppi=specialize TLess<pointer>;
-     mappDWGHi=specialize TMap<pointer,TDWGHandle, lessppi>;
+     {$IFNDEF DELPHI}
+     lessppi={specialize }TLess<pointer>;
+     mappDWGHi={specialize }TMap<pointer,TDWGHandle, lessppi>;
+     {$ENDIF}
 
 const
      acadentignoredcol=1;
@@ -354,7 +356,7 @@ begin
         {$IFDEF DEBUGBUILD}inc(i2);if i2=4349 then
                                                   i2:=i2;{$ENDIF}
         pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
-        PGDBObjEntity(pobj)^.LoadFromDXF(f,@additionalunit,drawing.LayerTable,drawing.LTypeStyleTable,drawing);
+        PGDBObjEntity(pobj)^.LoadFromDXF(f,@additionalunit,drawing);
         if (PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer)or(PGDBObjEntity(pobj)^.vp.Layer=nil) then
                                                                  PGDBObjEntity(pobj)^.vp.Layer:={gdb.GetCurrentDWG}drawing.LayerTable.GetSystemLayer;
         if (PGDBObjEntity(pobj)^.vp.LineType=nil) then
@@ -1184,7 +1186,7 @@ begin
                 dec(foc);
                 if tp^.name='TX' then
                                                            tp^.name:=tp^.name;
-                tp^.LoadFromDXF(f,nil,drawing.LayerTable,drawing.LTypeStyleTable,drawing);
+                tp^.LoadFromDXF(f,nil,drawing);
                 blockload:=true;
                 programlog.logoutstr('end block;',lp_DecPos);
                 sname:='##'
@@ -1502,7 +1504,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
         if inlayertable and (groupi=390) then
                                              plottablefansdle:=lasthandle;  {поймать плоттабле}
         {if instyletable and (groupi=5) then
-                                             standartstylehandle:=lasthandle;{intable;}  {поймать standart}}
+                                             standartstylehandle:=lasthandle;{intable;}  {поймать standart}
       end
       else
         if (groupi = 2) and (values = 'ENTITIES') then
@@ -2360,7 +2362,7 @@ begin
           end;
           FileRead(infile,header,sizeof(shdblockheader));
      end;
-     fileclose(infile);*)*)
+     fileclose(infile);*)
 end;
 procedure Import(name: GDBString;var drawing:TSimpleDrawing);
 var

@@ -21,7 +21,6 @@ unit UGDBEntTree;
 interface
 uses
     {math,}graphics,
-    {$IFNDEF DELPHI}gl,{$ELSE}opengl,{$ENDIF}
     geometry,UGDBVisibleOpenArray,GDBEntity,gdbase,gdbasetypes,log,memman,OGLSpecFunc;
 type
 {EXPORT+}
@@ -151,12 +150,12 @@ begin
      if assigned(pplusnode) then
                                 begin
                                      pplusnode^.done;
-                                     gdbfreemem(pplusnode);
+                                     gdbfreemem(pointer(pplusnode));
                                 end;
      if assigned(pminusnode) then
                                 begin
                                      pminusnode^.done;
-                                     gdbfreemem(pminusnode);
+                                     gdbfreemem(pointer(pminusnode));
                                 end;
 end;
 procedure TEntTreeNode.Clear;

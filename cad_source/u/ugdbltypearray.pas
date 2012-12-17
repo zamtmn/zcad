@@ -20,8 +20,8 @@ unit ugdbltypearray;
 {$INCLUDE def.inc}
 interface
 uses Classes,UGDBStringArray,UGDBOpenArrayOfData,zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
-     {$IFNDEF DELPHI}gl,{$ENDIF}UGDBTextStyleArray,UGDBSHXFont,UGDBOpenArrayOfObjects,
-     varmandef,gdbobjectsconstdef,UGDBNamedObjectsArray,StrProc,shared;
+     UGDBTextStyleArray,UGDBSHXFont,UGDBOpenArrayOfObjects,
+     varmandef,{gdbobjectsconstdef,}UGDBNamedObjectsArray,StrProc,shared;
 const
      DefaultSHXHeight=1;
      DefaultSHXAngle=0;
@@ -452,4 +452,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('ugdbltypearray.initialization');{$ENDIF}
-end.
+end.

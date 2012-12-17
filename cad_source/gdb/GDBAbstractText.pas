@@ -20,8 +20,7 @@ unit GDBAbstractText;
 
 interface
 uses GDBEntity,GDBCamera,zcadsysvars,languade,UGDBOpenArrayOfPObjects,{GDBEntity,}strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},UGDBPolyPoint3DArray{,varman},varmandef,
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
-GDBase,gdbobjectsconstdef,oglwindowdef,geometry{,dxflow,strmy},math{,GDBPlain},OGLSpecFunc{,GDBGenericSubEntry};
+GDBase,gdbobjectsconstdef,{oglwindowdef,}geometry{,dxflow,strmy},math{,GDBPlain},OGLSpecFunc{,GDBGenericSubEntry};
 type
 //jstm(*'TopCenter'*)=2,
 {EXPORT+}

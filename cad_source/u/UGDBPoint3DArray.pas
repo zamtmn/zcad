@@ -20,7 +20,6 @@ unit UGDBPoint3DArray;
 {$INCLUDE def.inc}
 interface
 uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,{$ENDIF}
 geometry;
 type
 {Export+}

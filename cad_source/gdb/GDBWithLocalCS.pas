@@ -21,7 +21,6 @@ unit GDBWithLocalCS;
 
 interface
 uses ugdbdrawingdef,GDBCamera,zcadsysvars,OGLSpecFunc,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,GDBWithMatrix,
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
 ugdbltypearray,
 GDBase,{gDBDescriptor,gdbobjectsconstdef,oglwindowdef,}geometry,dxflow,sysutils,memman,GDBSubordinated,UGDBLayerArray{,GDBGenericSubEntry};
 type
@@ -43,7 +42,7 @@ GDBObjWithLocalCS=object(GDBObjWithMatrix)
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;
                procedure SaveToDXFObjPostfix(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
-               function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray):GDBBoolean;
+               function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit;const drawing:TDrawingDef):GDBBoolean;
 
                procedure FormatEntity(const drawing:TDrawingDef);virtual;
                procedure CalcObjMatrix;virtual;
@@ -111,10 +110,10 @@ procedure GDBObjWithLocalCS.higlight;
 begin
   oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^]);
   oglsm.myglbegin(GL_lines);
-  glVertex2d(ProjP_insert.x-10,ProjP_insert.y);
-  glVertex2d(ProjP_insert.x+10,ProjP_insert.y);
-  glVertex2d(ProjP_insert.x,ProjP_insert.y-10);
-  glVertex2d(ProjP_insert.x,ProjP_insert.y+10);
+  oglsm.myglVertex2dwoLCS(ProjP_insert.x-10,ProjP_insert.y);
+  oglsm.myglVertex2dwoLCS(ProjP_insert.x+10,ProjP_insert.y);
+  oglsm.myglVertex2dwoLCS(ProjP_insert.x,ProjP_insert.y-10);
+  oglsm.myglVertex2dwoLCS(ProjP_insert.x,ProjP_insert.y+10);
   oglsm.myglend;
   if PProjOutBound<>nil then PProjOutBound.DrawGeometry;
 
@@ -299,7 +298,7 @@ end;
 function GDBObjWithLocalCS.LoadFromDXFObjShared;
 //var s:GDBString;
 begin
-     result:=inherited LoadFromDXFObjShared(f,dxfcod,ptu,LayerArray,LTArray);
+     result:=inherited LoadFromDXFObjShared(f,dxfcod,ptu,drawing);
      if not result then result:=dxfvertexload(f,210,dxfcod,Local.basis.oz);
 end;
 destructor GDBObjWithLocalCS.done;

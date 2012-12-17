@@ -21,7 +21,6 @@ unit GDBPlain;
 
 interface
 uses
-{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
  {GDBEntity,}zcadsysvars,geometry,GDBWithLocalCS,gdbase,gdbasetypes,varmandef,OGLSpecFunc{,GDBEntity};
 type
 {EXPORT+}

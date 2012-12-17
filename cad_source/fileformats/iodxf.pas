@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses gdbentityfactory,gmap,gutil,UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,dxfvectorialreader,svgvectorialreader,epsvectorialreader,{pdfvectorialreader,}GDBCircle,GDBArc,fpvectorial,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, {GDBManager,} {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
+uses gdbentityfactory,{$IFNDEF DELPHI}gmap,gutil,dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,{pdfvectorialreader,}GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, {GDBManager,} {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
    entnamindex=record
@@ -2389,7 +2389,7 @@ begin
            pgdbobjCircle(pobj)^.Local.P_insert.y:=TvCircle(CurEntity).y;
            drawing{gdb}.GetCurrentRoot^.AddMi(@pobj);
            PGDBObjEntity(pobj)^.BuildGeometry(drawing);
-           PGDBObjEntity(pobj)^.format;
+           PGDBObjEntity(pobj)^.formatEntity(drawing);
       end
  else if CurEntity is TvCircularArc then
       begin
@@ -2401,7 +2401,7 @@ begin
            pgdbobjArc(pobj)^.EndAngle:=TvCircularArc(CurEntity).EndAngle*pi/180;
            drawing{gdb}.GetCurrentRoot^.AddMi(@pobj);
            PGDBObjEntity(pobj)^.BuildGeometry(drawing);
-           PGDBObjEntity(pobj)^.format;
+           PGDBObjEntity(pobj)^.formatEntity(drawing);
       end
   else if CurEntity is fpvectorial.TPath then
       begin
@@ -2425,7 +2425,7 @@ begin
            PGDBObjLine(pobj)^.CoordInOCS.lEnd:=createvertex(PosX,PosY,0);
            drawing{gdb}.GetCurrentRoot^.AddMi(@pobj);
            PGDBObjEntity(pobj)^.BuildGeometry(drawing);
-           PGDBObjEntity(pobj)^.format;
+           PGDBObjEntity(pobj)^.formatEntity(drawing);
         end;
         end;
       end;

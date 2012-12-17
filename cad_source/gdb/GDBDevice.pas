@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -21,7 +21,8 @@ unit GDBDevice;
 
 interface
 uses ugdbdrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
-gl,OGLSpecFunc,uunitmanager{,shared},
+{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
+OGLSpecFunc,uunitmanager{,shared},
 memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray{,UGDBDescriptor}{,UGDBLayerArray},oglwindowdef;
 
 type
@@ -179,9 +180,9 @@ begin
 
          self.ObjMatrix:=onematrix;
          if pvc^.IsHaveLCS then
-                               pvc^.Format;
+                               pvc^.FormatEntity(drawing);
          pvc^.transform(m4);
-         pvc^.Format;
+         pvc^.FormatEntity(drawing);
 
 
          //pvc^.DXFOut(handle, outhandle);
@@ -402,7 +403,7 @@ begin
                if pvisible2=nil then
                                      begin
                                           pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
-                                          pvisible^.format;
+                                          pvisible^.formatEntity(drawing);
                                           pvisible.BuildGeometry(drawing);
                                           if pvisible^.vp.ID=GDBDeviceID then
                                           begin
@@ -416,7 +417,7 @@ begin
                                      begin
                                           pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
                                           pvisible2^.FromDXFPostProcessBeforeAdd(nil,drawing);
-                                          pvisible2^.format;
+                                          pvisible2^.formatEntity(drawing);
                                           pvisible2.BuildGeometry(drawing);
                                           if pvisible2^.vp.ID=GDBDeviceID then
                                           begin
@@ -443,7 +444,7 @@ begin
      exit;
      begin
           if not PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].Formated then
-                                                                               PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].format;
+                                                                               PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].formatEntity(drawing);
           //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
           index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
           assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), 'Неверный индекс блока');
@@ -458,7 +459,7 @@ begin
                if pvisible2=nil then
                                      begin
                                          pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
-                                         pvisible^.format;
+                                         pvisible^.formatEntity(drawing);
                                         pvisible.BuildGeometry(drawing);
                                         ConstObjArray.add(@pvisible)
 
@@ -467,7 +468,7 @@ begin
                                      begin
                                          pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
                                          pvisible2^.FromDXFPostProcessBeforeAdd(nil,drawing);
-                                         pvisible2^.format;
+                                         pvisible2^.formatEntity(drawing);
                                         pvisible2.BuildGeometry(drawing);
                                         ConstObjArray.add(@pvisible2)
                                     end;

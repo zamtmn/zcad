@@ -598,7 +598,7 @@ begin
 end;}
 procedure GDBObjEntity.FormatFast;
 begin
-     format;
+     FormatEntity(drawing);
 end;
 procedure GDBObjEntity.FormatEntity(const drawing:TDrawingDef);
 begin
@@ -606,7 +606,7 @@ end;
 
 procedure GDBObjEntity.FormatAfterEdit;
 begin
-     format;
+     formatentity(drawing);
      //AddObjectToObjArray
 end;
 procedure GDBObjEntity.higlight;

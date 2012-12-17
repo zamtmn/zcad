@@ -21,7 +21,7 @@ unit GDBPlainWithOX;
 
 interface
 uses GDBPlain{,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte}{,varmandef,GDBWithMatrix},
-gl,
+{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
 GDBase,{gDBDescriptor,gdbobjectsconstdef,oglwindowdef,}geometry{,dxflow},sysutils,memman{,GDBSubordinated};
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};

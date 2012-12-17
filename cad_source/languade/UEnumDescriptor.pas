@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -207,7 +207,9 @@ begin
      //cbedit.OnEditingDone:=propeditor.EditingDone;
      //cbedit.OnKeyPress:=propeditor.keyPress;
      cbedit.OnChange:=propeditor.EditingProcess;
+     {$IFNDEF DELPHI}
      cbedit.ReadOnly:=true;
+     {$ENDIF}
 
                              p:=UserValue.beginiterate(ir);
                              if p<>nil then

@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -791,7 +791,9 @@ begin
                       pf:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1));
                       if fieldtype='Paths' then
                                           fieldtype:=fieldtype;
+                      {$IFNDEF DELPHI}
                       fieldtype:=InterfaceTranslate(ptd.TypeName+'~'+pf^.base.ProgramName,fieldtype);
+                      {$ENDIF}
                       getlastfirld.username:={parseresult^.getGDBString(0)}fieldtype;
                       //fieldtype:=parseresult^.getGDBString(0);
                     end;

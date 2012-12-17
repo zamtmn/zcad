@@ -19,7 +19,8 @@ unit GDBBlockDef;
 {$INCLUDE def.inc}
 interface
 uses ugdbdrawingdef,UGDBVisibleOpenArray,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,memman, geometry,
-     gl,UGDBLayerArray,ugdbltypearray,
+     {$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
+     UGDBLayerArray,ugdbltypearray,
      zcadstrconsts,varmandef,gdbobjectsconstdef,GDBGenericSubEntry,varman;
 type
 {Export+}

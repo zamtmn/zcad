@@ -139,7 +139,7 @@ begin
                           begin
                                pvdmy.data.PTD.CopyInstanceTo(pvd.data.Instance,pvdmy.data.Instance);
 
-                               pv^.Format;
+                               pv^.Formatentity(gdb.GetCurrentDWG^);
                           end;
 
                    end;
@@ -928,7 +928,7 @@ begin
     if pv^.Selected then
                         begin
                              pv^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
-                             pv^.Format;
+                             pv^.Formatentity(gdb.GetCurrentDWG^);
                         end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
@@ -939,7 +939,7 @@ begin
              if psv.objaddr^.Selected then
                                           begin
                                                psv.objaddr^.vp.Layer:=gdb.GetCurrentDWG.LayerTable.GetCurrentLayer;
-                                               psv.objaddr^.Format;
+                                               psv.objaddr^.Formatentity(gdb.GetCurrentDWG^);
                                           end;
        psv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
        until psv=nil;
@@ -1253,7 +1253,7 @@ begin
           begin
               if pobj.selected then
               begin
-                gdb.CopyEnt(gdb.GetCurrentDWG,ClipboardDWG,pobj).Format;
+                gdb.CopyEnt(gdb.GetCurrentDWG,ClipboardDWG,pobj).Formatentity(gdb.GetCurrentDWG^);
               end;
           end;
           pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
@@ -1636,7 +1636,7 @@ begin
 
           if ((i+1) mod 4)=0 then
           begin
-               p3dpl^.Format;
+               p3dpl^.Formatentity(gdb.GetCurrentDWG^);
                p3dpl^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
                gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
                if i<>pvr.Count-1 then
@@ -1646,7 +1646,7 @@ begin
           inc(i);
      end;
 
-     p3dpl^.Format;
+     p3dpl^.Formatentity(gdb.GetCurrentDWG^);
      p3dpl^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
      gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(p3dpl);
      //redrawoglwnd;

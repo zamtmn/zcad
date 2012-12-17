@@ -22,7 +22,8 @@ unit GDBComplex;
 interface
 uses ugdbdrawingdef,GDBCamera,ugdbsimpledrawing,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray,UGDBVisibleOpenArray,gdbEntity{,varman,varmandef},
-gl,UGDBVisibleTreeArray,UGDBEntTree,
+{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
+UGDBVisibleTreeArray,UGDBEntTree,
 GDBase,GDBWithLocalCS,gdbobjectsconstdef,oglwindowdef,geometry{,dxflow},memman{,GDBSubordinated,UGDBOpenArrayOfByte};
 type
 {EXPORT+}

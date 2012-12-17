@@ -21,7 +21,8 @@ unit GDBWithLocalCS;
 
 interface
 uses ugdbdrawingdef,GDBCamera,zcadsysvars,OGLSpecFunc,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,GDBWithMatrix,
-gl,ugdbltypearray,
+{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
+ugdbltypearray,
 GDBase,{gDBDescriptor,gdbobjectsconstdef,oglwindowdef,}geometry,dxflow,sysutils,memman,GDBSubordinated,UGDBLayerArray{,GDBGenericSubEntry};
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};

@@ -309,7 +309,7 @@ begin
 
   pobj^.Transform(plusd);
   PGDBObjWithMatrix(pobj)^.ReCalcFromObjMatrix;
-  PGDBObjWithMatrix(pobj)^.Format;
+  //PGDBObjWithMatrix(pobj)^.FormatEntity(gdb.GetCurrentDWG^);
 end;
 
 (*procedure processobject(pobj:PGDBObjEntity;minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
@@ -436,7 +436,7 @@ begin
         if tdesc^.pcontrolpoint^.SelectedCount<>0 then
         begin
              tdesc^.ptempobj^.Transform(dispmatr);
-             tdesc^.ptempobj^.Format;
+             //tdesc^.ptempobj^.Format;
 
              //tdesc^.objaddr^.Transform{At}(dispmatr);
              //tdesc^.objaddr^.Format;
@@ -461,7 +461,7 @@ begin
         //if tdesc^.pcontrolpoint^.SelectedCount<>0 then
         begin
              tdesc^.objaddr^.Transform(dispmatr);
-             tdesc^.objaddr^.Format;
+             //tdesc^.objaddr^.Format;
 
              //tdesc^.objaddr^.Transform{At}(dispmatr);
              //tdesc^.objaddr^.Format;

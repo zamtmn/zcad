@@ -426,7 +426,7 @@ begin
   if CurrentDWG<>nil then
   begin
        CurrentDWG.init(@ProjectUnits);
-       CurrentDWG.pObjRoot^.Format;
+       CurrentDWG.pObjRoot^.FormatEntity(CurrentDWG^);
        //addfromdxf(sysvar.path.Program_Run^+'blocks\el\general\_connector.dxf',@CurrentDWG.ObjRoot);
        //addfromdxf(sysvar.path.Program_Run^+'blocks\el\general\_nok.dxf',@CurrentDWG.ObjRoot);
        //addfromdxf(sysvar.path.Program_Run^+'blocks\el\general\_OPS.dxf',@CurrentDWG.ObjRoot);

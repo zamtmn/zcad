@@ -171,17 +171,17 @@ begin
                                    _colour.r:=red;
                                    _colour.g:=green;
                                    _colour.b:=blue;
-                                   gl.glColor3ubv(@_colour);
+                                   {$IFNDEF DELPHI}gl{$ELSE}opengl{$ENDIF}.glColor3ubv(@_colour);
                               end;
 end;
 
-procedure TOGLStateManager.glColor3ubv(const v: rgb);
+procedure TOGLStateManager.glColor3ubv(const v: gdbase.rgb);
 begin
      if (v.r<>_colour.r)
      or (v.g<>_colour.g)
      or (v.b<>_colour.b)then
                               begin
-                                   gl.glColor3ubv(@v);
+                                   {$IFNDEF DELPHI}gl{$ELSE}opengl{$ENDIF}.glColor3ubv(@v);
                                    _colour:=v;
                               end;
 end;
@@ -228,7 +228,7 @@ begin
                            glVertex3dV(@t);
                       end;
 end;
-procedure TOGLStateManager.myglNormal3dV(const V:PGDBVertex);inline;
+procedure TOGLStateManager.myglNormal3dV(const V:PGDBVertex);{$IFNDEF DELPHI}inline;{$ENDIF}
 begin
      glNormal3dV(pointer(v))
 end;
@@ -271,7 +271,7 @@ begin
   oglsm.myglMatrixMode(GL_Projection);
   oglsm.myglpushmatrix;
   glLoadIdentity;
-  gluPickMatrix(x,y,w,h, PTViewPortArray(@vp)^);
+  gluPickMatrix(x,y,w,h,{$IFNDEF DELPHI}PTViewPortArray(@vp)^{$ELSE}@vp{$ENDIF});
   glGetDoublev(GL_PROJECTION_MATRIX, @tm);
   tm := MatrixMultiply(pm, tm);
   tm := MatrixMultiply(mm, tm);
@@ -468,7 +468,7 @@ begin
 
      _myglStencilfunc:=maxint;
      _myglStencilref:=-1;
-     _myglStencilmask:=-1;
+     _myglStencilmask:={-1}0;
 
      _myglStencilfail:=maxint;
      _myglStencilzfail:=maxint;

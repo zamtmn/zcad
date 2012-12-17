@@ -1,13 +1,13 @@
 unit sltexteditor;
-
-{$mode delphi}
+{$INCLUDE def.inc}
 
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls,
-  LCLType;
+  Classes, SysUtils,
+  {$IFNDEF DELPHI}FileUtil, LResources,LCLType,{$ENDIF}
+   Forms, Controls, Graphics, Dialogs,
+  StdCtrls;
 
 type
 
@@ -42,11 +42,13 @@ end;
 procedure Tsltexteditor1.KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
+{$IFNDEF DELPHI}
      if key=VK_ESCAPE then
                           begin
                           key:=0;
                           close;
                           end;
+{$ENDIF}
 end;
 
 end.

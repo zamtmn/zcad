@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -19,7 +19,8 @@ unit gdbellipse;
 {$INCLUDE def.inc}
 interface
 uses ugdbdrawingdef,GDBCamera,zcadsysvars,GDBWithLocalCS,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
-gl,ugdbltypearray,
+{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
+ugdbltypearray,
 GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain{,OGLSpecFunc};
 type
 {Export+}
@@ -689,7 +690,8 @@ begin
   PGDBObjEllipse(refp)^.endangle := endangle;
   PGDBObjEllipse(refp)^.RR:=RR;
   PGDBObjEllipse(refp)^.MajorAxis:=MajorAxis;
-  PGDBObjEllipse(refp)^.Ratio:=Ratio;   PGDBObjEllipse(refp)^.format;
+  PGDBObjEllipse(refp)^.Ratio:=Ratio;
+  //PGDBObjEllipse(refp)^.format;
   //PGDBObjEllipse(refp)^.renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
 end;
 begin

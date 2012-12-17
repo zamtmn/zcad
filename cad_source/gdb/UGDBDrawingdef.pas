@@ -18,13 +18,14 @@
 
 unit ugdbdrawingdef;
 interface
-uses gdbase,gdbasetypes,UGDBLayerArray,UGDBTextStyleArray,UUnitManager;
+uses gdbase,gdbasetypes,UGDBLayerArray,UGDBTextStyleArray,UUnitManager,UGDBTableStyleArray;
 type
 {EXPORT+}
 PTDrawingDef=^TDrawingDef;
 TDrawingDef=object(GDBaseobject)
                        function GetLayerTable:PGDBLayerArray;virtual;abstract;
                        function GetTextStyleTable:PGDBTextStyleArray;virtual;abstract;
+                       function GetTableStyleTable:PGDBTableStyleArray;virtual;abstract;
                        function GetDWGUnits:PTUnitManager;virtual;abstract;
                        procedure AddBlockFromDBIfNeed(name:GDBString);virtual;abstract;
                        function GetCurrentRootSimple:GDBPointer;virtual;abstract;

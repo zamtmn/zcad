@@ -21,7 +21,7 @@ unit GDBCurve;
 
 interface
 uses ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBOpenArrayOfByte,UGDBLayerArray,gdbasetypes{,GDBGenericSubEntry},UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBPolyLine2DArray,UGDBPoint3DArray{,UGDBOpenArrayOfByte,varman},varmandef,
-gl,
+{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
 GDBase,geometry,gdbobjectsconstdef,oglwindowdef,math,dxflow,sysutils,memman{,OGLSpecFunc},GDBSubordinated;
 type
 //------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
@@ -468,7 +468,7 @@ begin
       inc(p)
   end;
   //tpo^.snaparray:=nil;
-  tpo^.format;
+  //tpo^.format;
   result := tpo;
 end;
 procedure GDBObjCurve.rtedit;
@@ -498,7 +498,7 @@ begin
       inc(pold);
       inc(p);
   end;
-  pgdbobjcurve(refp)^.format;
+  //pgdbobjcurve(refp)^.format;
 end;
 procedure GDBObjCurve.Renderfeedback;
 var tv:GDBvertex;

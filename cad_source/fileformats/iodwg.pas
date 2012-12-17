@@ -1380,7 +1380,7 @@ begin
                              PGDBObjLine(pobj)^.CoordInOCS.lEnd:=v2;
                              gdb.GetCurrentRoot^.AddMi(@pobj);
                              PGDBObjEntity(pobj)^.BuildGeometry(gdb.GetCurrentDWG^);
-                             PGDBObjEntity(pobj)^.format;
+                             PGDBObjEntity(pobj)^.formatEntity(gdb.GetCurrentDWG^);
                              end;
               end;
 

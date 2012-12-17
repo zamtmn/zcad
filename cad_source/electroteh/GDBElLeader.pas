@@ -198,9 +198,9 @@ begin
          pvc^.bp.ListPos.Owner:=@gdbtrash;
          self.ObjMatrix:=onematrix;
          if pvc^.IsHaveLCS then
-                               pvc^.Format;
+                               pvc^.Formatentity(drawing);
          pvc^.transform(m4);
-         pvc^.Format;
+         pvc^.Formatentity(drawing);
 
               pvc^.SaveToDXF(handle, outhandle,drawing);
               pvc^.SaveToDXFPostProcess(outhandle);
@@ -244,6 +244,7 @@ var
    Objects:GDBObjOpenArrayOfPV;
 
 begin
+     tbl.ptablestyle:=drawing.GetTableStyleTable^.getAddres('Temp');
      TCP:=CodePage;
      CodePage:=CP_win;
      pdev:=nil;

@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -23,7 +23,7 @@ interface
 
 uses
 
-   uinfoform,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBLayerArray,zcadstrconsts,{ucxmenumgr,}GLext,
+   uinfoform,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBLayerArray,zcadstrconsts,{ucxmenumgr,}
   {$IFDEF LCLGTK2}
   //x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
@@ -32,11 +32,12 @@ uses
   GLWin32WGLContext,
   {$ENDIF}
 
-  ugdbabstractdrawing,UGDBOpenArrayOfPV,UGDBSHXFont,LCLType,InterfaceBase,
-  {umytreenode,}menus,Classes,FileUtil,Forms,
+  ugdbabstractdrawing,UGDBOpenArrayOfPV,UGDBSHXFont,
+  {$IFNDEF DELPHI}LCLType,InterfaceBase,FileUtil,{$ENDIF}
+  {umytreenode,}menus,Classes,Forms,
   ExtCtrls,Controls,
   GDBGenericSubEntry,gdbasetypes,sysutils,
-  gl,glu,OpenGLContext,
+  {$IFNDEF DELPHI}GLext,gl,glu,OpenGLContext,{$ELSE}opengl,windows,{$ENDIF}
   Math,gdbase,varmandef,varman,UUnitManager,
   oglwindowdef,UGDBSelectedObjArray,
 

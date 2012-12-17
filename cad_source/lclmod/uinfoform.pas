@@ -21,7 +21,9 @@ unit uinfoform;
 interface
 
 uses
-  zcadinterface,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,ButtonPanel,Buttons,
+  zcadinterface,commandlinedef,ExtCtrls,
+  {$IFNDEF DELPHI}lclproc,{$ENDIF}
+  Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,fileutil,ButtonPanel,{$ENDIF}Buttons,
   {strutils,}{$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
 type
   TButtonMethod=procedure({Sender:pointer;}pdata:{GDBPointer}GDBPlatformint)of object;
@@ -41,7 +43,6 @@ type
                 FProc:TButtonProc;
                 FMethod:TButtonMethod;
                 PPata:GDBPointer;
-                //procedure AssignToVar(varname:string);
                 protected procedure Click; override;
                 end;
 implementation
@@ -49,17 +50,12 @@ uses log;
 procedure TDialogForm.AfterConstruction;
 begin
      inherited;
-     //self.BorderIcons:=[biMinimize,biMaximize];
      self.Width:=sysparam.screenx div 2;
      self.Height:=sysparam.screeny div 2;
      self.Position:=poScreenCenter;
      self.BorderStyle:=bsSizeToolWin;
      DialogPanel:=TButtonPanel.create(self);
-     {DialogPanel.HelpButton.Visible:=false;
-     DialogPanel.CloseButton.Visible:=false;
-     DialogPanel.CancelButton.Visible:=True;
-     DialogPanel.OkButton.Visible:=True;}
-     DialogPanel.ShowButtons:=[pbOK, pbCancel{, pbClose, pbHelp}];
+     DialogPanel.ShowButtons:=[pbOK, pbCancel];
      DialogPanel.Align:=alBottom;
      DialogPanel.Parent:=self;
 end;
@@ -77,8 +73,7 @@ begin
      if assigned(FProc) then
                             FProc(PPata);
      if assigned(FMethod) then
-                            Application.QueueAsyncCall({MainFormN.asynccloseapp}FMethod,GDBPlatformint(PPata));
-                            //FMethod(@self,PPata);
+                            Application.QueueAsyncCall(FMethod,GDBPlatformint(PPata));
 end;
 initialization
 {$IFDEF DEBUGINITSECTION}LogOut('uinfoform.initialization');{$ENDIF}

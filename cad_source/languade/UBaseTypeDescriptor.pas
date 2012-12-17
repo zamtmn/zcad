@@ -455,8 +455,10 @@ var
      qw:GDBQWord;
      error:integer;
 begin
+     {$IFNDEF DELPHI}
      if TryStrToQWord(value,qw) then
                                    PGDBQWord(pinstance)^:=qw;
+     {$ENDIF}
 end;
 
 constructor GDBFloatDescriptor.init;
@@ -777,7 +779,9 @@ begin
      //cbedit.OnEditingDone:=propeditor.EditingDone;
      //cbedit.OnKeyPress:=propeditor.keyPress;
      cbedit.OnChange:=propeditor.EditingProcess;
+     {$IFNDEF DELPHI}
      cbedit.ReadOnly:=true;
+     {$ENDIF}
 
                              p:=PTEnumData(Pinstance)^.Enums.beginiterate(ir);
                              if p<>nil then

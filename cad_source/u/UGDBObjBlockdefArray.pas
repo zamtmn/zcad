@@ -20,7 +20,8 @@ unit UGDBObjBlockdefArray;
 {$INCLUDE def.inc}
 interface
 uses ugdbdrawingdef,strproc,GDBBlockDef,UGDBOpenArrayOfData,sysutils,gdbase,memman, geometry,
-     gl,gdbasetypes;
+     {$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
+     gdbasetypes;
 type
 {Export+}
 PGDBObjBlockdefArray=^GDBObjBlockdefArray;

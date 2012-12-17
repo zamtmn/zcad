@@ -433,7 +433,7 @@ begin
                                 begin
                                      tv:=pl^.CoordInOCS.lbegin;
                                      pl^.CoordInOCS.lbegin:=ip.interceptcoord;
-                                     pl^.Format;
+                                     pl^.Formatentity(drawing);
                                      //tpl:=GDBPointer(CreateObjFree(GDBLineID));
                                      {выдрано из CreateObjFree для отвязки от GDBManager}
                                      GDBGetMem({$IFDEF DEBUGBUILD}'{Net.CreateObjFree.line}',{$ENDIF}GDBPointer(tpl), sizeof(GDBObjLine));
@@ -516,7 +516,7 @@ begin
           self.ObjArray.pack;
           //self.correctobjects(pointer(bp.Owner),bp.PSelfInOwnerArray);
           //format;
-          TempNet^.Format;
+          TempNet^.Formatentity(drawing);
           TempNet^.addtoconnect(tempnet,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray{gdb.GetCurrentROOT.ObjToConnectedArray});
           ti.Clear;
           ti.done;

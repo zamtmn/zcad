@@ -21,7 +21,7 @@ unit GDBGenericSubEntry;
 
 interface
 uses ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBLayerArray,UGDBOpenArrayOfPObjects,UGDBVisibleTreeArray,UGDBOpenArrayOfPV,gdbasetypes,{GDBWithLocalCS,}GDBWithMatrix,GDBSubordinated,gdbase,
-gl,
+{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
 geometry{,GDB3d},{UGDBVisibleOpenArray,}gdbEntity,gdbobjectsconstdef,varmandef,memman,UGDBEntTree;
 type
 //GDBObjGenericSubEntry=object(GDBObjWithLocalCS)

@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -21,7 +21,8 @@ unit GDBLWPolyLine;
 
 interface
 uses ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,oglwindowdef,GDBCurve,UGDBVectorSnapArray,geometry,UGDBLayerArray,GDBEntity,memman,gdbasetypes,UGDBPoint3DArray,UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,varman,varmandef,
-gl,ugdbltypearray,
+{$IFNDEF DELPHI}gl,{$ELSE}opengl,windows,{$ENDIF}
+ugdbltypearray,
 GDBase,GDBWithLocalCS,gdbobjectsconstdef,math,dxflow,sysutils,UGDBLineWidthArray,OGLSpecFunc;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)

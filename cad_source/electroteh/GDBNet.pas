@@ -22,7 +22,7 @@ GDBObjNet=object(GDBObjConnected)
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
                  function EubEntryType:GDBInteger;virtual;
-                 function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
+                 function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
                  procedure restructure(const drawing:TDrawingDef);virtual;
                  function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
                  function BuildGraf:GDBInteger;virtual;
@@ -39,9 +39,9 @@ GDBObjNet=object(GDBObjConnected)
 
                  function GetNearestLine(const point:GDBVertex):PGDBObjEntity;
 
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
 
                  destructor done;virtual;
                  procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
@@ -49,7 +49,7 @@ GDBObjNet=object(GDBObjConnected)
            end;
 {Export-}
 implementation
-uses GDBLine,{ugdbdescriptor,}GDBManager,dxflow,math,oglwindow,log;
+uses GDBLine,{ugdbdescriptor,}{GDBManager,}dxflow,math,oglwindow,log;
 function GDBObjNet.IsHaveGRIPS:GDBBoolean;
 begin
      result:=false;
@@ -84,8 +84,7 @@ begin
       if pv<>nil then
       repeat
             pv^.Transform(t_matrix);
-            pv^.YouChanged;
-            //pv^.Format;
+            //pv^.YouChanged;{убраное проверить}
       pv:=ObjArray.iterate(ir);
       until pv=nil;
 end;
@@ -169,7 +168,7 @@ begin
           tvp:=pobj^.vp;
           pobj^.vp:=vp;
           pobj.bp.ListPos.Owner:=self.GetMainOwner;{ gdb.GetCurrentROOT;}
-          pobj.SaveToDXF(handle,outhandle);
+          pobj.SaveToDXF(handle,outhandle,drawing);
           pobj.bp.ListPos.Owner:=@self;
           pobj^.vp:=tvp;
      end;
@@ -184,16 +183,16 @@ begin
      dxfGDBStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
      dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToNet));
 end;
-procedure GDBObjNet.SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);
+procedure GDBObjNet.SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);
 var pobj:PGDBObjEntity;
     ir:itrec;
 begin
      pobj:=self.ObjArray.beginiterate(ir);
      if pobj<>nil then
      repeat
-           pobj^.SaveToDXF(handle,outhandle);
+           pobj^.SaveToDXF(handle,outhandle,drawing);
            pobj^.SaveToDXFPostProcess(outhandle);
-           pobj^.SaveToDXFFollow(handle, outhandle);
+           pobj^.SaveToDXFFollow(handle, outhandle,drawing);
 
            pobj:=self.ObjArray.iterate(ir);
      until pobj=nil;
@@ -435,8 +434,12 @@ begin
                                      tv:=pl^.CoordInOCS.lbegin;
                                      pl^.CoordInOCS.lbegin:=ip.interceptcoord;
                                      pl^.Format;
-                                     tpl:=GDBPointer(CreateObjFree(GDBLineID));
-                                     GDBObjLineInit(@self,tpl,drawing.GetLayerTable^.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, tv,ip.interceptcoord);
+                                     //tpl:=GDBPointer(CreateObjFree(GDBLineID));
+                                     {выдрано из CreateObjFree для отвязки от GDBManager}
+                                     GDBGetMem({$IFDEF DEBUGBUILD}'{Net.CreateObjFree.line}',{$ENDIF}GDBPointer(tpl), sizeof(GDBObjLine));
+                                     //GDBObjLineInit(@self,tpl,drawing.GetLayerTable^.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, tv,ip.interceptcoord);
+                                     {выдрано из GDBObjLineInit для отвязки от GDBManager}
+                                     tpl^.init(@self,drawing.GetLayerTable^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,tv,ip.interceptcoord);
                                      objarray.add(addr(tpl));
                                      {tpl := GDBPointer(self.ObjArray.CreateObj(GDBLineID,@self));
                                      GDBObjLineInit(@self,tpl, sysvar.DWG_CLayer^, sysvar.DWG_CLinew^, tv,ip.interceptcoord);}
@@ -448,8 +451,12 @@ begin
                                      tv:=pl2^.CoordInOCS.lbegin;
                                      pl2^.CoordInOCS.lbegin:=ip.interceptcoord;
                                      pl2^.Format;
-                                     tpl:=GDBPointer(CreateObjFree(GDBLineID));
-                                     GDBObjLineInit(@self,tpl,drawing.GetLayerTable^.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, tv,ip.interceptcoord);
+                                     //tpl:=GDBPointer(CreateObjFree(GDBLineID));
+                                     {выдрано из CreateObjFree для отвязки от GDBManager}
+                                     GDBGetMem({$IFDEF DEBUGBUILD}'{Net.CreateObjFree.line}',{$ENDIF}GDBPointer(tpl), sizeof(GDBObjLine));
+                                     //GDBObjLineInit(@self,tpl,drawing.GetLayerTable^.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, tv,ip.interceptcoord);
+                                     {выдрано из GDBObjLineInit для отвязки от GDBManager}
+                                     tpl^.init(@self,drawing.GetLayerTable^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,tv,ip.interceptcoord);
                                      objarray.add(addr(tpl));
                                      {tpl := GDBPointer(self.ObjArray.CreateObj(GDBLineID,@self));
                                      GDBObjLineInit(@self,tpl, sysvar.DWG_CLayer^, sysvar.DWG_CLinew^, tv,ip.interceptcoord);}
@@ -518,10 +525,10 @@ end;
 function GDBObjNet.ImEdited;
 begin
      //pobj^.format;
-     inherited ImEdited(pobj,pobjinarray);
-     YouChanged;
+     inherited ImEdited(pobj,pobjinarray,drawing);
+     YouChanged(drawing);
      //PGDBObjGenericSubEntry(bp.owner)^.ImEdited(@self,bp.PSelfInOwnerArray);
-     addtoconnect(@self);
+     addtoconnect(@self,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
 end;
 constructor GDBObjNet.initnul;
 begin

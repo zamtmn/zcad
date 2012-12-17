@@ -31,13 +31,13 @@ GDBControlPointArray=object(GDBOpenArrayOfData)
 
                            destructor done;virtual;
                            procedure draw;virtual;
-                           procedure getnearesttomouse(var td:tcontrolpointdist);virtual;
-                           procedure selectcurrentcontrolpoint(key:GDBByte);virtual;
+                           procedure getnearesttomouse(var td:tcontrolpointdist;mx,my:integer);virtual;
+                           procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;
                            procedure freeelement(p:GDBPointer);virtual;
                      end;
 {Export-}
 implementation
-uses UGDBDescriptor,OGLSpecFunc,log;
+uses {UGDBDescriptor,}OGLSpecFunc,log;
 procedure GDBControlPointArray.freeelement;
 begin
   pcontrolpointdesc(p):=pcontrolpointdesc(p);
@@ -88,7 +88,8 @@ begin
        point:=parray;
        for i:=0 to count-1 do           { TODO 1 -ozamtmn -c1 : Переделать нахуй без GDB }
        begin
-            d := (vertexlen2id(GDB.GetCurrentDWG.OGLwindow1.param.md.mouse.x,GDB.GetCurrentDWG.OGLwindow1.param.height-GDB.GetCurrentDWG.OGLwindow1.param.md.mouse.y,point^.dispcoord.x,point^.dispcoord.y));
+            //d := (vertexlen2id(GDB.GetCurrentDWG.OGLwindow1.param.md.mouse.x,GDB.GetCurrentDWG.OGLwindow1.param.height-GDB.GetCurrentDWG.OGLwindow1.param.md.mouse.y,point^.dispcoord.x,point^.dispcoord.y));
+            d := (vertexlen2id(mx,my,point^.dispcoord.x,point^.dispcoord.y));
             if d < td.disttomouse then
                                       begin
                                            td.disttomouse:=round(d);
@@ -109,8 +110,10 @@ begin
        point:=parray;
        for i:=1 to count do
        begin
-            if (GDB.GetCurrentDWG.OGLwindow1.param.md.mouseglue.x=point^.dispcoord.x)and
-               (GDB.GetCurrentDWG.OGLwindow1.param.md.mouseglue.y=GDB.GetCurrentDWG.OGLwindow1.param.height-point^.dispcoord.y)
+            //if (GDB.GetCurrentDWG.OGLwindow1.param.md.mouseglue.x=point^.dispcoord.x)and
+            //   (GDB.GetCurrentDWG.OGLwindow1.param.md.mouseglue.y=GDB.GetCurrentDWG.OGLwindow1.param.height-point^.dispcoord.y)
+            if (mx=point^.dispcoord.x)and
+               (my=h-point^.dispcoord.y)
             then
             begin
             if (key and 128)<>0 then point.selected:=not point.selected

@@ -36,7 +36,7 @@ GDBObjEntityOpenArray=object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
                 end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}GDBManager,log,GDBEntity;
+uses {UGDBDescriptor,}{GDBManager,}log,GDBEntity;
 type
 //objvizarray = array[0..0] of PGDBObjEntity;
 //pobjvizarray = ^objvizarray;

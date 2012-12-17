@@ -49,7 +49,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
                     procedure SaveToDXFObjPrefix(var handle:TDWGHandle;var  outhandle:{GDBInteger}GDBOpenArrayOfByte;entname,dbname:GDBString);
                     function LoadFromDXFObjShared(var f:GDBOpenArrayOfByte;dxfcod:GDBInteger;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray):GDBBoolean;
-                    function FromDXFPostProcessBeforeAdd(ptu:PTUnit):PGDBObjSubordinated;virtual;
+                    function FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
                     function IsHaveObjXData:GDBBoolean;virtual;
 
@@ -58,9 +58,9 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function AddExtAttrib:PTExtAttrib;
                     function CopyExtAttrib:PTExtAttrib;
                     procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray{ TODO 1111 : Убрать нахуй }:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;abstract;
-                    procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                    procedure DXFOut(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                    procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                    procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                    procedure DXFOut(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                    procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                     procedure SaveToDXFPostProcess(var handle:{GDBInteger}GDBOpenArrayOfByte);
                     procedure Format;virtual;abstract;
                     procedure FormatEntity(const drawing:TDrawingDef);virtual;
@@ -123,7 +123,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function ReturnLastOnMouse:PGDBObjEntity;virtual;
                     function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
                     function YouDeleted:GDBInteger;virtual;
-                    procedure YouChanged;virtual;
+                    procedure YouChanged(const drawing:TDrawingDef);virtual;
                     function GetObjTypeName:GDBString;virtual;
                     function GetObjType:GDBWord;virtual;
                     procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
@@ -381,7 +381,7 @@ begin
 end;
 procedure GDBObjEntity.YouChanged;
 begin
-     PGDBObjGenericWithSubordinated(bp.ListPos.owner)^.ImEdited(@self,bp.ListPos.SelfIndex);
+     PGDBObjGenericWithSubordinated(bp.ListPos.owner)^.ImEdited(@self,bp.ListPos.SelfIndex,drawing);
 end;
 function GDBObjEntity.ReturnLastOnMouse;
 begin
@@ -627,9 +627,9 @@ begin
 end;
 procedure GDBObjEntity.DXFOut;
 begin
-     SaveToDXF(handle, outhandle);
+     SaveToDXF(handle, outhandle,drawing);
      SaveToDXFPostProcess(outhandle);
-     SaveToDXFFollow(handle, outhandle);
+     SaveToDXFFollow(handle, outhandle,drawing);
 end;
 procedure GDBObjEntity.SaveToDXF;
 begin

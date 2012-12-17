@@ -174,6 +174,9 @@ type
 
                     procedure _scroll(Sender: TObject; ScrollCode: TScrollCode;
                            var ScrollPos: Integer);
+                    procedure ShowCXMenu;
+                    procedure MainMouseMove;
+                    function MainMouseDown:GDBBoolean;
 
                end;
   TMyAnchorDockManager = class(TAnchorDockManager)
@@ -485,7 +488,7 @@ begin
                                 begin
                                        tcl:=SysVar.dwg.DWG_CLayer^;
                                        SysVar.dwg.DWG_CLayer^:=cdwg^.LayerTable.GetIndexByPointer(Player);
-                                       commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent');
+                                       commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent',gdb.GetCurrentDWG);
                                        SysVar.dwg.DWG_CLayer^:=tcl;
                                        {gdb.GetCurrentDWG.OGLwindow1.}setvisualprop;
                                 end;
@@ -681,10 +684,10 @@ begin
           begin
                pint:=SavedUnit.FindValue('DMenuX');
                if assigned(pint)then
-                                    pint^:=CLine.DMenu.Left;
+                                    pint^:=commandmanager.DMenu.Left;
                pint:=SavedUnit.FindValue('DMenuY');
                if assigned(pint)then
-                                    pint^:=CLine.DMenu.Top;
+                                    pint^:=commandmanager.DMenu.Top;
 
           pint:=SavedUnit.FindValue('VIEW_CommandLineH');
           if assigned(pint)then
@@ -2472,7 +2475,7 @@ begin
 *)
      if assigned(TmyAction(AAction).pfoundcommand) then
      begin
-     if ((GetCommandContext xor TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)and TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)<>0
+     if ((GetCommandContext(gdb.GetCurrentDWG) xor TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)and TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)<>0
           then
               _disabled:=true;
 
@@ -2560,7 +2563,7 @@ begin
                                       if assigned(PageControl)then
                                          if PageControl.PageCount>1 then
                                          begin
-                                              commandmanager.executecommandsilent('PrevDrawing');
+                                              commandmanager.executecommandsilent('PrevDrawing',gdb.GetCurrentDWG);
                                               tempkey:=00;
                                          end;
                                  end
@@ -2569,7 +2572,7 @@ begin
                                       if assigned(PageControl)then
                                          if PageControl.PageCount>1 then
                                          begin
-                                              commandmanager.executecommandsilent('NextDrawing');
+                                              commandmanager.executecommandsilent('NextDrawing',gdb.GetCurrentDWG);
                                               tempkey:=00;
                                          end;
                                  end
@@ -2665,7 +2668,7 @@ begin
      if (pdwg)<>nil then
      if (pdwg.OGLwindow1.param.SelDesc.Selectedobjcount=0) then
      begin
-          commandmanager.executecommandsilent('QSave(QS)');
+          commandmanager.executecommandsilent('QSave(QS)',gdb.GetCurrentDWG);
           SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
      end;
      date:=sysutils.date;
@@ -2750,7 +2753,7 @@ begin
      begin
           CColorSave:=SysVar.dwg.DWG_CColor^;
           SysVar.dwg.DWG_CColor^:=ColorIndex;
-          commandmanager.ExecuteCommand('SelObjChangeColorToCurrent');
+          commandmanager.ExecuteCommand('SelObjChangeColorToCurrent',gdb.GetCurrentDWG);
           SysVar.dwg.DWG_CColor^:=CColorSave;
      end;
      setvisualprop;
@@ -2772,7 +2775,7 @@ begin
            begin
                 tcl:=SysVar.dwg.DWG_CLinew^;
                 SysVar.dwg.DWG_CLinew^:=index;
-                commandmanager.ExecuteCommand('SelObjChangeLWToCurrent');
+                commandmanager.ExecuteCommand('SelObjChangeLWToCurrent',gdb.GetCurrentDWG);
                 SysVar.dwg.DWG_CLinew^:=tcl;
            end;
   end;
@@ -2949,6 +2952,33 @@ begin
   layerbox.ItemIndex:=(SysVar.dwg.DWG_CLayer^);
   //layerbox.Sorted:=true;
 end;
+procedure MainForm.MainMouseMove;
+begin
+     cxmenumgr.reset;
+end;
+function MainForm.MainMouseDown:GDBBoolean;
+begin
+     if (cxmenumgr.ismenupopup)or(ActivePopupMenu<>nil) then
+                                                            result:=true
+                                                        else
+                                                            result:=false;
+end;
+
+procedure MainForm.ShowCXMenu;
+var
+  menu:TmyPopupMenu;
+begin
+  menu:=nil;
+                                  if gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount>0 then
+                                                                          menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'SELECTEDENTSCXMENU'))
+                                                                      else
+                                                                          menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'NONSELECTEDENTSCXMENU'));
+                                  if menu<>nil then
+                                  begin
+                                       menu.PopUp;
+                                  end;
+end;
+
 procedure MainForm._scroll(Sender: TObject; ScrollCode: TScrollCode;var ScrollPos: Integer);
 var
    pdwg:PTSimpleDrawing;

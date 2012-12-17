@@ -137,7 +137,7 @@ var
    middlepoint:GDBVertex;
 implementation
 uses
-    UGDBDescriptor,geometry;
+    {UGDBDescriptor,}geometry;
 procedure MywglCreateContext(var oglc:TOGLContextDesk);
 begin
      //oglc.hrc := wglCreateContext(oglc.DC);

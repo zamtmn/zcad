@@ -22,7 +22,7 @@ unit GDBMText;
 interface
 uses ugdbdrawingdef,strproc,UGDBSHXFont,GDBAbstractText,UGDBPoint3DArray,UGDBLayerArray,SysUtils,gdbasetypes,gdbEntity,UGDBXYZWStringArray,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
 gl,ugdbltypearray,
-GDBase,UGDBDescriptor,GDBText,gdbobjectsconstdef,geometry,dxflow,strmy,math,memman,GDBSubordinated,UGDBTextStyleArray;
+GDBase,{UGDBDescriptor,}GDBText,gdbobjectsconstdef,geometry,dxflow,strmy,math,memman,GDBSubordinated,UGDBTextStyleArray;
 const maxdxfmtextlen=250;
 type
 //procedure CalcObjMatrix;virtual;
@@ -36,11 +36,11 @@ GDBObjMText=object(GDBObjText)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte;wi,l:GDBDouble);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;var LayerArray:GDBLayerArray;var LTArray:GDBLtypeArray;const drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                 procedure CalcGabarit;virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                 procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  //procedure getoutbound;virtual;
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;
-                 procedure createpoint;virtual;
+                 procedure createpoint(const drawing:TDrawingDef);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  destructor done;virtual;
@@ -125,9 +125,9 @@ begin
                                pswp^.x:= 0;
 end;
 begin
-  textprop.wfactor:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.prop.wfactor;
-  textprop.oblique:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.prop.oblique;
-  pfont:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont;
+  textprop.wfactor:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.prop.wfactor;
+  textprop.oblique:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.prop.oblique;
+  pfont:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont;
   TCP:=CodePage;
   CodePage:=CP_win;
   if template='' then
@@ -466,10 +466,10 @@ begin
       end;
   end;
     calcobjmatrix;
-    CalcGabarit;
+    CalcGabarit(drawing);
     //getoutbound;
     calcbb;
-    createpoint;
+    createpoint(drawing);
 end;
 procedure GDBObjMText.CalcGabarit;
 var
@@ -636,7 +636,7 @@ var
   sym:word;
 begin
   ln:=0;
-  pfont:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont;
+  pfont:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont;
   pl.init({$IFDEF DEBUGBUILD}'{E44FB0DD-3556-4279-8845-5EA005F302DB}',{$ENDIF}10);
   ispl:=false;
   Vertex3D_in_WCS_Array.clear;
@@ -890,7 +890,7 @@ begin
 
     else if     dxfGDBStringload(f,7,byt,style)then
                                                  begin
-                                                      TXTStyleIndex :=gdb.GetCurrentDWG.TextStyleTable.FindStyle(Style,false);
+                                                      TXTStyleIndex :={gdb.GetCurrentDWG}drawing.GetTextStyleTable^.FindStyle(Style,false);
                                                       if TXTStyleIndex=-1 then
                                                                           TXTStyleIndex:=0;
                                                  end
@@ -928,7 +928,7 @@ begin
                      end;
      until i<=0;
 end;
-procedure GDBObjMText.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);
+procedure GDBObjMText.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);
 var
 //  i, j: GDBInteger;
   bw: GDBByte;
@@ -961,7 +961,7 @@ begin
     end;
     dxfGDBStringout(outhandle,3,z2dxfmtext(s,ul));
   end;
-  dxfGDBStringout(outhandle,7,PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.name);
+  dxfGDBStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.name);
   SaveToDXFObjPostfix(outhandle);
   dxfvertexout(outhandle,11,Local.basis.ox);
   dxfGDBIntegerout(outhandle,73,2);

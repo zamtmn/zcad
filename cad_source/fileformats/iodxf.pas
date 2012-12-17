@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses gmap,gutil,UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,dxfvectorialreader,svgvectorialreader,epsvectorialreader,{pdfvectorialreader,}GDBCircle,GDBArc,fpvectorial,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, GDBManager, {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
+uses gdbentityfactory,gmap,gutil,UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,dxfvectorialreader,svgvectorialreader,epsvectorialreader,{pdfvectorialreader,}GDBCircle,GDBArc,fpvectorial,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,fileutil,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, {GDBManager,} {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
    entnamindex=record
@@ -360,7 +360,7 @@ begin
         if (PGDBObjEntity(pobj)^.vp.LineType=nil) then
                                                       PGDBObjEntity(pobj)^.vp.LineType:=drawing.LTypeStyleTable.getAddres('ByLayer');
         correctvariableset(pobj);
-        pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(@additionalunit);
+        pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(@additionalunit,drawing);
         trash:=false;
         if postobj=nil  then
                             begin
@@ -1308,7 +1308,7 @@ begin
   f.done;
   programlog.logoutstr('end; {AddFromDXF}',lp_DecPos);
 end;
-procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outhandle:{GDBInteger}GDBOpenArrayOfByte; var handle: TDWGHandle);
+procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outhandle:{GDBInteger}GDBOpenArrayOfByte; var handle: TDWGHandle;const drawing:TSimpleDrawing);
 var
 //  i:GDBInteger;
   pv:pgdbobjEntity;
@@ -1320,7 +1320,7 @@ begin
      repeat
           if assigned(ProcessLongProcessProc)then
                                                  ProcessLongProcessProc(ir.itc);
-          pv^.DXFOut(handle, outhandle);
+          pv^.DXFOut(handle, outhandle,drawing);
      pv:=pva^.iterate(ir);
      until pv=nil;
 end;
@@ -1512,7 +1512,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
           outstream.TXTAddGDBStringEOL(values);
           //WriteString_EOL(outstream, values);
           //historyoutstr('Entities start here_______________________________________________________');
-          saveentitiesdxf2000(@{p}drawing.pObjRoot^.ObjArray, outstream, handle);
+          saveentitiesdxf2000(@{p}drawing.pObjRoot^.ObjArray, outstream, handle,drawing);
         end
         else
           if (groupi = 2) and (values = 'BLOCKS') then
@@ -1556,7 +1556,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(1));
                 outstream.TXTAddGDBStringEOL('');
 
-                saveentitiesdxf2000(@PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].ObjArray, outstream, handle);
+                saveentitiesdxf2000(@PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].ObjArray, outstream, handle,drawing);
 
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                 outstream.TXTAddGDBStringEOL('ENDBLK');

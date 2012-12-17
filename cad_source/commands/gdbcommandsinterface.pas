@@ -187,6 +187,9 @@ begin
 
      oglwnd:=TOGLWnd.Create(myts);
      oglwnd.onCameraChanged:=MainFormN.correctscrollbars;
+     oglwnd.ShowCXMenu:=MainFormN.ShowCXMenu;
+     oglwnd.MainMouseMove:=MainFormN.MainMouseMove;
+     oglwnd.MainMouseDown:=MainFormN.MainMouseDown;
      {$if FPC_FULlVERSION>=20701}
      oglwnd.AuxBuffers:=0;
      oglwnd.StencilBits:=8;

@@ -20,10 +20,10 @@ unit GDBTable;
 {$INCLUDE def.inc}
 
 interface
-uses ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,UGDBTableStyleArray,GDBLine{,math},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils,UGDBTable,UGDBStringArray,GDBMTEXT{,UGDBOpenArrayOfData},
+uses ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,UGDBTableStyleArray,GDBLine{,math},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils,UGDBTable,UGDBStringArray,GDBMTEXT{,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,UGDBSelectedObjArray,UGDBVisibleOpenArray,}gdbEntity{,varman,varmandef},
 gl,
-GDBase,UGDBDescriptor{,GDBWithLocalCS},gdbobjectsconstdef{,oglwindowdef},geometry,dxflow,memman{,GDBSubordinated,UGDBOpenArrayOfByte};
+GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef{,oglwindowdef},geometry,dxflow,memman{,GDBSubordinated,UGDBOpenArrayOfByte};
 //jcm(*'TopMiddle'*),
 type
 {TTableCellJustify=(jcl(*'TopLeft'*),
@@ -46,7 +46,7 @@ GDBObjTable=object(GDBObjComplex)
             destructor done;virtual;
             function Clone(own:GDBPointer):PGDBObjEntity;virtual;
             procedure Build(const drawing:TDrawingDef);virtual;
-            procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+            procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
             procedure ReCalcFromObjMatrix;virtual;
             end;
 {EXPORT-}
@@ -100,16 +100,16 @@ begin
          pvc^.Format;
 
          if bp.ListPos.Owner<>@GDBTrash then
-                                    pvc^.bp.ListPos.Owner:=gdb.GetCurrentROOT //@GDBTrash;
+                                    pvc^.bp.ListPos.Owner:=drawing.GetCurrentRootSimple// gdb.GetCurrentROOT //@GDBTrash;
                                 else
                                     pvc^.bp.ListPos.Owner:=@GDBTrash;
 
 
          //pvc^.DXFOut(handle, outhandle);
 
-              pvc^.SaveToDXF(handle, outhandle);
+              pvc^.SaveToDXF(handle, outhandle,drawing);
               pvc^.SaveToDXFPostProcess(outhandle);
-              pvc^.SaveToDXFFollow(handle, outhandle);
+              pvc^.SaveToDXFFollow(handle, outhandle,drawing);
 
 
          pvc^.done;
@@ -276,7 +276,8 @@ ConstObjArray.cleareraseobj;
      w:=x*scale;
      if self.PTableStyle.HeadBlockName<>'' then
      begin
-          GDB.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,PTableStyle.HeadBlockName);
+          //GDB.AddBlockFromDBIfNeed(gdb.GetCurrentDWG@drawing,PTableStyle.HeadBlockName);
+          drawing.AddBlockFromDBIfNeed(PTableStyle.HeadBlockName);
           pointer(pgdbins):=self.ConstObjArray.CreateInitObj(GDBBlockInsertID,@self);
           pgdbins^.name:=self.PTableStyle.HeadBlockName;
           pgdbins^.scale.x:=scale;
@@ -304,7 +305,7 @@ begin
      vp.ID:=GDBTableID;
 
      tbl.init({$IFDEF DEBUGBUILD}'{C6EE9076-623F-4D7A-A355-122C6271B9ED}',{$ENDIF}9,20);
-     ptablestyle:=gdb.GetCurrentDWG.TableStyleTable.getAddres('Standart');
+     //ptablestyle:=gdb.GetCurrentDWG.TableStyleTable.getAddres('Standart');{проверить}
      scale:=1;
 
      //build();

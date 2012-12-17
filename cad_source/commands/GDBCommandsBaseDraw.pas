@@ -66,7 +66,7 @@ function Rect_com_CommandStart(operands:pansichar):GDBInteger;
 begin
      c1:=commandmanager.GetValueHeap;
      c2:=-1;
-     commandmanager.executecommandsilent('Get3DPoint(Первая точка:)');
+     commandmanager.executecommandsilent('Get3DPoint(Первая точка:)',gdb.GetCurrentDWG);
 end;
 procedure Rect_com_CommandCont;
 begin
@@ -80,7 +80,7 @@ begin
      if c1=c2 then
                   commandmanager.executecommandend
               else
-                  commandmanager.executecommandsilent('Get3DPoint_DrawRect(Вторая точка:)');
+                  commandmanager.executecommandsilent('Get3DPoint_DrawRect(Вторая точка:)',gdb.GetCurrentDWG);
 end;
 function DrawRect(mclick:GDBInteger):GDBInteger;
 var
@@ -109,7 +109,7 @@ function Dist_com_CommandStart(operands:pansichar):GDBInteger;
 begin
      c1:=commandmanager.GetValueHeap;
      c2:=-1;
-     commandmanager.executecommandsilent('Get3DPoint(Первая точка:)');
+     commandmanager.executecommandsilent('Get3DPoint(Первая точка:)',gdb.GetCurrentDWG);
      distlen:=0;
 end;
 procedure Dist_com_CommandCont;
@@ -136,7 +136,7 @@ begin
                    end;
      c2:=cs;
      oldpoint:=point;
-     commandmanager.executecommandsilent('Get3DPoint(Следующая точка:)');
+     commandmanager.executecommandsilent('Get3DPoint(Следующая точка:)',gdb.GetCurrentDWG);
 end;
 
 procedure startup;

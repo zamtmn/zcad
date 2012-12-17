@@ -33,7 +33,7 @@ GDBObjTrash=object(GDBObjEntity)
 var
     GDBTrash:GDBObjTrash;
 implementation
- uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log,OGLSpecFunc;
+ uses log;
 function GDBObjTrash.GetHandle;
 begin
      result:=H_Trash;

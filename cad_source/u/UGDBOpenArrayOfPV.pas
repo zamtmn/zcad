@@ -51,7 +51,7 @@ GDBObjOpenArrayOfPV=object(GDBOpenArrayOfPObjects)
                 end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}GDBManager,{GDBEntity,}varmandef;
+uses {UGDBDescriptor,}{GDBManager,}{GDBEntity,}gdbentityfactory,varmandef;
 function GDBObjOpenArrayOfPV.FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjSubordinated;
 var
    pvisible:PGDBObjEntity;

@@ -21,11 +21,9 @@ unit umytreenode;
 interface
 
 uses
-  zcadinterface,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,ButtonPanel,Buttons,
+  uinfoform,zcadinterface,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,ButtonPanel,Buttons,
   {strutils,}{$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
 type
-    TButtonProc=procedure(pdata:GDBPointer);
-    TButtonMethod=procedure({Sender:pointer;}pdata:{GDBPointer}GDBPlatformint)of object;
     TmyAction=class(TAction)
                    public
                    command,options,imgstr:string;
@@ -60,14 +58,6 @@ type
                   FVariable:String;{**<Command to manager commands}
                   FBufer:DWord;
                   procedure AssignToVar(varname:string);
-                  protected procedure Click; override;
-                  end;
-    TmyProcToolButton=class({Tmy}TToolButton)
-                  public
-                  FProc:TButtonProc;
-                  FMethod:TButtonMethod;
-                  PPata:GDBPointer;
-                  //procedure AssignToVar(varname:string);
                   protected procedure Click; override;
                   end;
     {**Modified TMenuItem}
@@ -107,10 +97,6 @@ type
                          public
                          constructor myCreate(TheOwner: TComponent; _var:Pointer);
                     end;
-  TDialogForm = class(tform)
-                         DialogPanel: TButtonPanel;
-                         procedure AfterConstruction; override;
-                    end;
   TToolButtonForm = class(tform{tpanel})
                          procedure AfterConstruction; override;
                          //public
@@ -118,10 +104,6 @@ type
                          //                               Raw: boolean = false;
                          //                               WithThemeSpace: boolean = true); override;
 
-                    end;
-  TInfoForm = class(TDialogForm)
-                         Memo: TMemo;
-                         procedure AfterConstruction; override;
                     end;
   TmyPageControl=class(TPageControl)
                  procedure ChangePage(NewPage:Integer);virtual;
@@ -139,7 +121,7 @@ procedure SetHeightControl(_parent:TWinControl;h:integer);
 //var
 //   ACN_ShowObjInsp:TmyAction=nil;
 implementation
-uses commandline,log;
+uses commandline,log,ugdbdescriptor;
 procedure TmyAction.SetCommand(_Caption,_Command,_Options:TTranslateString);
 begin
      command:=_Command;
@@ -159,7 +141,7 @@ begin
      {if assigned(pfoundcommand)then
 
                                else}
-                                   commandmanager.executecommand(@s[1]);
+                                   commandmanager.executecommand(@s[1],gdb.GetCurrentDWG);
      result:=true;
 end;
 procedure TmyActionList.AddMyAction(Action:TmyAction);
@@ -324,34 +306,6 @@ begin
      {PreferredWidth:=18;
      PreferredHeight:=18}
 end;*)
-procedure TDialogForm.AfterConstruction;
-begin
-     inherited;
-     //self.BorderIcons:=[biMinimize,biMaximize];
-     self.Width:=sysparam.screenx div 2;
-     self.Height:=sysparam.screeny div 2;
-     self.Position:=poScreenCenter;
-     self.BorderStyle:=bsSizeToolWin;
-     DialogPanel:=TButtonPanel.create(self);
-     {DialogPanel.HelpButton.Visible:=false;
-     DialogPanel.CloseButton.Visible:=false;
-     DialogPanel.CancelButton.Visible:=True;
-     DialogPanel.OkButton.Visible:=True;}
-     DialogPanel.ShowButtons:=[pbOK, pbCancel{, pbClose, pbHelp}];
-     DialogPanel.Align:=alBottom;
-     DialogPanel.Parent:=self;
-end;
-procedure TInfoForm.AfterConstruction;
-begin
-     inherited;
-     self.Position:=poDesigned;
-     Memo:=TMemo.create(self);
-     Memo.ScrollBars:=ssAutoBoth;
-     Memo.Align:=alClient;
-     Memo.Parent:=self;
-end;
-
-
 procedure TmyPageControl.ChangePage(NewPage:Integer);
 begin
 end;
@@ -422,16 +376,6 @@ begin
         else
             enabled:=false;
 end;
-procedure TmyProcToolButton.Click;
-//var
-//   pvd:pvardesk;
-begin
-     if assigned(FProc) then
-                            FProc(PPata);
-     if assigned(FMethod) then
-                            Application.QueueAsyncCall({MainFormN.asynccloseapp}FMethod,GDBPlatformint(PPata));
-                            //FMethod(@self,PPata);
-end;
 procedure TmyVariableToolButton.Click;
 var
    pvd:pvardesk;
@@ -478,16 +422,16 @@ end;
 procedure TmyCommandToolButton.click;
 begin
      if action=nil then
-                       commandmanager.executecommand(@Fcommand[1]);
+                       commandmanager.executecommand(@Fcommand[1],gdb.GetCurrentDWG);
      inherited;
 end;
 
 procedure TmyMenuItem.Click;
 begin
      if fsilent then
-                    commandmanager.executecommandsilent(@Fcommand[1])
+                    commandmanager.executecommandsilent(@Fcommand[1],gdb.GetCurrentDWG)
                 else
-                    commandmanager.executecommand(@Fcommand[1]);
+                    commandmanager.executecommand(@Fcommand[1],gdb.GetCurrentDWG);
      inherited;
 end;
 procedure TmyMenuItem.SetCommand(_Caption,_Command:TTranslateString);

@@ -8,9 +8,9 @@ unit GDBCable;
 {$INCLUDE def.inc}
 
 interface
-uses ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfByte,UGDBLayerArray{,UGDBObjBlockdefArray},UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,varman},varmandef,
+uses GDBGenericSubEntry,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfByte,UGDBLayerArray{,UGDBObjBlockdefArray},UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,varman},varmandef,
 gl,
-GDBase{,GDBLINE},GDBHelpObj,UGDBDescriptor,gdbobjectsconstdef{,oglwindowdef},dxflow,sysutils,memman,OGLSpecFunc, GDBSubordinated,GDBDEvICE;
+GDBase{,GDBLINE},GDBHelpObj,{UGDBDescriptor,}gdbobjectsconstdef{,oglwindowdef},dxflow,sysutils,memman,OGLSpecFunc, GDBSubordinated,GDBDEvICE;
 type
 {Повторное описание типа в Cableы}
   PTCableType=^TCableType;
@@ -42,8 +42,8 @@ GDBObjCable=object(GDBObjCurve)
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;
                  procedure FormatFast(const drawing:TDrawingDef);virtual;
                  procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
-                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
 
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
 
@@ -83,7 +83,7 @@ var
     pl:PGDBLayerProp;
 begin
   pl:=vp.Layer;
-  vp.Layer:=gdb.GetCurrentDWG.LayerTable.getAddres('SYS_METRIC');
+  vp.Layer:=drawing.GetLayerTable^.{gdb.GetCurrentDWG.LayerTable.}getAddres('SYS_METRIC');
   inherited;
   vp.Layer:=pl;
   ptn2:=NodePropArray.beginiterate(ir_inNodeArray);
@@ -122,7 +122,7 @@ var
     pl:PGDBLayerProp;
 begin
   pl:=vp.Layer;
-  vp.Layer:=gdb.GetCurrentDWG.LayerTable.getAddres('SYS_METRIC');
+  vp.Layer:=drawing.GetLayerTable^.{gdb.GetCurrentDWG.LayerTable.}getAddres('SYS_METRIC');
 
   SaveToDXFObjPrefix(handle,outhandle,'POLYLINE','AcDb3dPolyline');
   dxfGDBIntegerout(outhandle,66,1);
@@ -242,7 +242,7 @@ var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
 begin
   inherited;
   calcbb;
-  psldb:=gdb.GetCurrentDWG.LayerTable.getAddres('SYS_DEVICE_BORDER');
+  psldb:=drawing.GetLayerTable^.{gdb.GetCurrentDWG.LayerTable.}getAddres('SYS_DEVICE_BORDER');
 
   //CreateDeviceNameProcess(@self);
 
@@ -274,7 +274,7 @@ begin
   end;
   //ptnfirst:=NodePropArray.getelement(0);
   //ptnlast:=NodePropArray.getelement(vertexarrayInWCS.Count-1);
-  CurrentObj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir_inGDB);
+  CurrentObj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}ObjArray.beginiterate(ir_inGDB);
   if (CurrentObj<>nil) then
      repeat
            if (CurrentObj<>@self)and(CurrentObj^.vp.ID=GDBDeviceID) then
@@ -365,7 +365,7 @@ begin
                 end;
 
            end;
-           CurrentObj:=gdb.GetCurrentROOT.ObjArray.iterate(ir_inGDB);
+           CurrentObj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}ObjArray.iterate(ir_inGDB);
      until CurrentObj=nil;
 
 
@@ -517,7 +517,7 @@ begin
   until ptn1=nil;
   end;
   oglsm.myglend;
-  if SysVar.DWG.DWG_HelpGeometryDraw^ then
+  {if SysVar.DWG.DWG_HelpGeometryDraw^ then
   if CanSimplyDrawInWCS(DC,SysVar.DSGN.DSGN_HelpScale^,1) then
   begin
   notfirst:=false;
@@ -565,7 +565,7 @@ begin
        oglsm.myglvertex3dv(@str23);
        oglsm.myglend;
   end;
-  end;
+  end;}
   drawbb;
 end;
 begin

@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,
@@ -586,7 +586,7 @@ begin
     //nb^.
     //GDBObjCircleInit(pc,gdb.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
     //pc^.lod:=4;
-    tb:=pointer(nb^.FromDXFPostProcessBeforeAdd(nil));
+    tb:=pointer(nb^.FromDXFPostProcessBeforeAdd(nil,gdb.GetCurrentDWG^));
     if tb<>nil then begin
                          tb^.bp:=nb^.bp;
                          nb^.done;
@@ -1022,7 +1022,7 @@ begin
 end;
 procedure Print_com.SetWindow(pdata:GDBPlatformint);
 begin
-  commandmanager.executecommandsilent('GetRect');
+  commandmanager.executecommandsilent('GetRect',gdb.GetCurrentDWG);
 end;
 
 procedure Print_com.SelectPaper(pdata:GDBPlatformint);
@@ -1256,7 +1256,7 @@ begin
      dec(self.mouseclic);
      if assigned(redrawoglwndproc) then redrawoglwndproc;
      if TextInsertParams.runtexteditor then
-                                           RunTextEditor(pdata);
+                                           RunTextEditor(pdata,gdb.GetCurrentDWG^);
      //redrawoglwnd;
      build('');
 end;
@@ -1340,7 +1340,7 @@ begin
                                     PGDBObjWithLocalCS(tv)^.CalcObjMatrix;
                 tv.transform(dispmatr);
                 tv.build(gdb.GetCurrentDWG^);
-                tv.YouChanged;
+                tv.YouChanged(gdb.GetCurrentDWG^);
 
                 SetObjCreateManipulator(domethod,undomethod);
                 with ptdrawing(gdb.GetCurrentDWG).UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
@@ -1588,7 +1588,7 @@ begin
     //pb^.
     //GDBObjCircleInit(pc,gdb.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
     //pc^.lod:=4;
-    tb:=pb^.FromDXFPostProcessBeforeAdd(nil);
+    tb:=pb^.FromDXFPostProcessBeforeAdd(nil,gdb.GetCurrentDWG^);
     if tb<>nil then begin
                          tb^.bp:=pb^.bp;
                          pb^.done;
@@ -1644,7 +1644,7 @@ begin
     //pb^.rotate:=BIProp.Rotation;
     pb.setrot(BIProp.Rotation);
 
-    tb:=pb^.FromDXFPostProcessBeforeAdd(nil);
+    tb:=pb^.FromDXFPostProcessBeforeAdd(nil,gdb.GetCurrentDWG^);
     if tb<>nil then begin
                          tb^.bp:=pb^.bp;
                          //gdb.GetCurrentDWG.ConstructObjRoot.deliteminarray(pb^.bp.PSelfInOwnerArray);
@@ -1824,9 +1824,9 @@ begin
   begin
     begin
       gdb.GetCurrentDWG{.UndoStack}.PushStartMarker('Редактирование на чертеже');
-      gdb.GetCurrentDWG.SelObjArray.modifyobj(dist,wc,true,pobj);
+      gdb.GetCurrentDWG.SelObjArray.modifyobj(dist,wc,true,pobj,gdb.GetCurrentDWG^);
       gdb.GetCurrentDWG{.UndoStack}.PushEndMarker;
-      gdb.GetCurrentDWG.SelObjArray.resprojparam;
+      gdb.GetCurrentDWG.SelObjArray.resprojparam(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG.myGluProject2);
 
 
       if fixentities then
@@ -1875,7 +1875,7 @@ begin
     begin
       if fixentities then
       begin
-           gdb.GetCurrentDWG.SelObjArray.modifyobj(dist,wc,false,pobj);
+           gdb.GetCurrentDWG.SelObjArray.modifyobj(dist,wc,false,pobj,gdb.GetCurrentDWG^);
 
            //xdir:=GetDirInPoint(pgdbobjlwPolyline(osp.PGDBObject).Vertex3D_in_WCS_Array,wc,pgdbobjlwPolyline(osp.PGDBObject).closed);
            xdir:=pgdbobjentity(osp.PGDBObject)^.GetTangentInPoint(wc);// GetDirInPoint(pgdbobjlwPolyline(osp.PGDBObject).Vertex3D_in_WCS_Array,wc,pgdbobjlwPolyline(osp.PGDBObject).closed);
@@ -1920,7 +1920,7 @@ begin
            end;
       end
       else
-      gdb.GetCurrentDWG.SelObjArray.modifyobj(dist,wc,false,pobj);
+      gdb.GetCurrentDWG.SelObjArray.modifyobj(dist,wc,false,pobj,gdb.GetCurrentDWG^);
     end
   end;
 end;
@@ -2836,7 +2836,7 @@ begin
 
 
                                                   //p3dpl^.vertexarrayinocs.deleteelement(PEProp.nearestvertex);
-                                                  p3dpl^.YouChanged;
+                                                  p3dpl^.YouChanged(gdb.GetCurrentDWG^);
                                                   gdb.GetCurrentROOT.FormatAfterEdit(gdb.GetCurrentDWG^);
                                                   //p3dpl^.Format;
                                                   if assigned(redrawoglwndproc) then redrawoglwndproc;
@@ -2864,7 +2864,7 @@ begin
                                                                          end;
 
                                                                          //p3dpl^.vertexarrayinocs.InsertElement(PEProp.nearestline,PEProp.dir,@wc);
-                                                                         p3dpl^.YouChanged;
+                                                                         p3dpl^.YouChanged(gdb.GetCurrentDWG^);
                                                                          gdb.GetCurrentROOT.FormatAfterEdit(gdb.GetCurrentDWG^);
                                                                          //p3dpl^.Format;
                                                                          if assigned(redrawoglwndproc) then redrawoglwndproc;
@@ -2961,7 +2961,7 @@ begin
           s:=PGDBString(commandmanager.ContextCommandParams)^;
           commandmanager.executecommandend;
           s:='Insert('+s+')';
-          commandmanager.executecommand(@s[1]);
+          commandmanager.executecommand(@s[1],gdb.GetCurrentDWG);
           result:=ZCMD_OK_NOEND;
      end;
      end
@@ -3110,7 +3110,7 @@ begin
     PGDBObjBlockInsert(BLINSERT)^.init(gdb.GetCurrentROOT,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,0);
     BLinsert^.Name:=pb^.name;
     BLINSERT^.Local.p_insert.x:=xcoord;
-    tb:=pointer(BLINSERT^.FromDXFPostProcessBeforeAdd(nil));
+    tb:=pointer(BLINSERT^.FromDXFPostProcessBeforeAdd(nil,gdb.GetCurrentDWG^));
     if tb<>nil then begin
                          tb^.bp:=BLINSERT^.bp;
                          BLINSERT^.done;

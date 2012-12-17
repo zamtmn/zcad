@@ -19,7 +19,7 @@
 unit io;
 {$INCLUDE def.inc}
 interface
-uses geometry,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}UGDBSHXFont,strproc,FileUtil,LCLProc,GDBBlockDef,math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,GDBManager,iodxf,memman,UGDBDescriptor,gdbobjectsconstdef;
+uses geometry,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}UGDBSHXFont,strproc,FileUtil,LCLProc,GDBBlockDef,math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,{GDBManager,}iodxf,memman,{UGDBDescriptor,}gdbobjectsconstdef;
 const
   IgnoreSHP='() '#13;
   BreakSHP='*,'#10;
@@ -31,7 +31,7 @@ type ptsyminfo=^tsyminfo;
                            number,size:word;
                      end;
 procedure readpalette;
-procedure loadblock(s:GDBString);
+//procedure loadblock(s:GDBString);
 function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;
 {
   var
@@ -920,17 +920,18 @@ begin
   f.done;
 end;
 
-procedure loadblock(s:GDBString);
+{procedure loadblock(s:GDBString);
 var
   //bc:GDBInteger;
   pb:PGDBObjBlockdef;
 begin
   pb:=gdb.GetCurrentDWG.BlockDefArray.create(s);
   addfromdxf(sysparam.programpath+'block\'+s+'.dxf',pb,tlomerge,gdb.GetCurrentDWG^);
-end;
+end;}
 initialization
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('io.initialization');{$ENDIF}
+  readpalette;
   {fontdirect[ 0,0]:=cos(  0*pi/180);fontdirect[ 0,1]:=sin(  0*pi/180);
   fontdirect[ 1,0]:=cos( 30*pi/180);fontdirect[ 1,1]:=sin( 30*pi/180);
   fontdirect[ 2,0]:=cos( 45*pi/180);fontdirect[ 2,1]:=sin( 45*pi/180);

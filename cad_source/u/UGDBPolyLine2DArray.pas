@@ -30,11 +30,11 @@ GDBPolyline2DArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex2D*)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger;c:GDBBoolean);
                       constructor initnul;
 
-                      function onmouse:GDBBoolean;virtual;
+                      function onmouse(mc:GDBvertex2DI):GDBBoolean;virtual;
                       procedure DrawGeometry;virtual;
                       procedure optimize;virtual;
                       function _optimize:GDBBoolean;virtual;
-                      function inrect:GDBBoolean;virtual;
+                      function inrect(Frame1, Frame2: GDBvertex2DI;inv:GDBBoolean):GDBBoolean;virtual;
                       function ispointinside(point:GDBVertex2D):GDBBoolean;virtual;
                       procedure transform(const t_matrix:DMatrix4D);virtual;
 
@@ -42,7 +42,7 @@ GDBPolyline2DArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex2D*)
 {Export-}
 function _intercept2d(const p1,p2,p:GDBVertex2D;const dirx, diry: GDBDouble): GDBBoolean;
 implementation
-uses UGDBDescriptor,log;
+uses {UGDBDescriptor,}log;
 procedure GDBPolyline2DArray.transform(const t_matrix:DMatrix4D);
 var
     pv:PGDBVertex2D;
@@ -182,21 +182,21 @@ begin
   p:=parray;
   i:=count;
 
-  if GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameInverse then
+  if {GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrame}Inv{erse} then
   begin
   while i>0 do{or i:=0 to count-1 do}
   begin
      begin
           pp:=p;
           inc(p);
-          if (i<>1) and pointinquad2d(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, p.x,p.y)
+          if (i<>1) and pointinquad2d(Frame1.x, Frame1.y, Frame2.x, Frame2.y, p.x,p.y)
           then
           begin
                result := true;
                exit;
           end
           else
-          if pointinquad2d(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, pp.x,pp.y)
+          if pointinquad2d(Frame1.x, Frame1.y, Frame2.x, Frame2.y, pp.x,pp.y)
           then
           begin
                result := true;
@@ -205,10 +205,10 @@ begin
           else
           if
           (i<>1) and
-          intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, p.x,p.y,pp.x,pp.y)
-       or intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, p.x,p.y,pp.x,pp.y)
-       or intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, p.x,p.y,pp.x,pp.y)
-       or intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, p.x,p.y,pp.x,pp.y)
+          intercept2d2(Frame1.x, Frame1.y, Frame2.x, Frame1.y, p.x,p.y,pp.x,pp.y)
+       or intercept2d2(Frame2.x, Frame1.y, Frame2.x, Frame2.y, p.x,p.y,pp.x,pp.y)
+       or intercept2d2(Frame2.x, Frame2.y, Frame1.x, Frame2.y, p.x,p.y,pp.x,pp.y)
+       or intercept2d2(Frame1.x, Frame2.y, Frame1.x, Frame1.y, p.x,p.y,pp.x,pp.y)
           then
           begin
                result := true;
@@ -225,7 +225,7 @@ begin
   while i>0 do{or i:=0 to count-1 do}
   begin
      begin
-          if not pointinquad2d(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, p.x,p.y)
+          if not pointinquad2d(Frame1.x, Frame1.y, Frame2.x, Frame2.y, p.x,p.y)
           then
           begin
                result := false;
@@ -249,7 +249,7 @@ begin
    i:=0;
    while i<(count-1) do
    begin
-     d:=distance2piece(GDB.GetCurrentDWG.OGLwindow1.param.md.glmouse,ptpv1^,ptpv0^);
+     d:=distance2piece(mc,ptpv1^,ptpv0^);
      if d<2*sysvar.DISP.DISP_CursorSize^ then
      begin
           result:=true;

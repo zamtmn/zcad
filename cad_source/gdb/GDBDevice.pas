@@ -22,7 +22,7 @@ unit GDBDevice;
 interface
 uses ugdbdrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
 gl,OGLSpecFunc,uunitmanager{,shared},
-memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray,UGDBDescriptor{,UGDBLayerArray},oglwindowdef;
+memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray{,UGDBDescriptor}{,UGDBLayerArray},oglwindowdef;
 
 type
 {EXPORT+}
@@ -40,7 +40,7 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                    function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                    function ReturnLastOnMouse:PGDBObjEntity;virtual;
-                   function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
+                   function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
                    function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
                    //function GetDeviceType:TDeviceType;virtual;
                    procedure getoutbound;virtual;
@@ -51,7 +51,7 @@ GDBObjDevice=object(GDBObjBlockInsert)
                    procedure BuildGeometry(const drawing:TDrawingDef);virtual;
                    procedure BuildVarGeometry(const drawing:TDrawingDef);virtual;
 
-                   procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
+                   procedure SaveToDXFFollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                    procedure SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);virtual;
                    function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;
                    //procedure select;virtual;
@@ -186,9 +186,9 @@ begin
 
          //pvc^.DXFOut(handle, outhandle);
 
-              pvc^.SaveToDXF(handle, outhandle);
+              pvc^.SaveToDXF(handle, outhandle,drawing);
               pv^.SaveToDXFPostProcess(outhandle);
-              pv^.SaveToDXFFollow(handle, outhandle);
+              pv^.SaveToDXFFollow(handle, outhandle,drawing);
 
 
          pvc^.done;
@@ -279,9 +279,9 @@ end;
 function GDBObjDevice.ImEdited;
 //var t:gdbinteger;
 begin
-     inherited imedited (pobj,pobjinarray);
+     inherited imedited (pobj,pobjinarray,drawing);
      //bp.owner^.ImEdited(@self,bp.PSelfInOwnerArray);
-     YouChanged;
+     YouChanged(drawing);
      //ObjCasheArray.addnodouble(@pobj);
 end;
 function GDBObjDevice.ReturnLastOnMouse;
@@ -390,13 +390,15 @@ var pblockdef:PGDBObjBlockdef;
 begin
           //name:=copy(name,8,length(name)-7);
           devnam:=DevicePrefix+name;
-          index:=gdb.GetCurrentDWG.BlockDefArray.getindex(@devnam[1]);
-          pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
+          //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(@devnam[1]);
+          index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(@devnam[1]);
+          //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
+          pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getelement(index);
           for i:=0 to pblockdef.ObjArray.count-1 do
           begin
                pvisible:=GDBPointer(pblockdef.ObjArray.getelement(i)^);
                pvisible:=pvisible^.Clone(@self);
-               pvisible2:=PGDBObjEntity(pvisible^.FromDXFPostProcessBeforeAdd(nil));
+               pvisible2:=PGDBObjEntity(pvisible^.FromDXFPostProcessBeforeAdd(nil,drawing));
                if pvisible2=nil then
                                      begin
                                           pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
@@ -413,7 +415,7 @@ begin
                                  else
                                      begin
                                           pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
-                                          pvisible2^.FromDXFPostProcessBeforeAdd(nil);
+                                          pvisible2^.FromDXFPostProcessBeforeAdd(nil,drawing);
                                           pvisible2^.format;
                                           pvisible2.BuildGeometry(drawing);
                                           if pvisible2^.vp.ID=GDBDeviceID then
@@ -440,17 +442,19 @@ begin
      inherited;
      exit;
      begin
-          if not PBlockDefArray(gdb.GetCurrentDWG.BlockDefArray.parray)^[index].Formated then
-                                                                               PBlockDefArray(gdb.GetCurrentDWG.BlockDefArray.parray)^[index].format;
-          index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
-          assert((index>=0) and (index<gdb.GetCurrentDWG.BlockDefArray.count), 'Неверный индекс блока');
+          if not PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].Formated then
+                                                                               PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].format;
+          //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
+          index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
+          assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), 'Неверный индекс блока');
           ConstObjArray.cleareraseobj;
-          pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
+          //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
+          pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getelement(index);
           for i:=0 to pblockdef.ObjArray.count-1 do
           begin
                pvisible:=GDBPointer(pblockdef.ObjArray.getelement(i)^);
                pvisible:=pvisible^.Clone(@self);
-               pvisible2:=PGDBObjEntity(pvisible^.FromDXFPostProcessBeforeAdd(nil));
+               pvisible2:=PGDBObjEntity(pvisible^.FromDXFPostProcessBeforeAdd(nil,drawing));
                if pvisible2=nil then
                                      begin
                                          pvisible^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
@@ -462,7 +466,7 @@ begin
                                  else
                                      begin
                                          pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getelement(i)}i);
-                                         pvisible2^.FromDXFPostProcessBeforeAdd(nil);
+                                         pvisible2^.FromDXFPostProcessBeforeAdd(nil,drawing);
                                          pvisible2^.format;
                                         pvisible2.BuildGeometry(drawing);
                                         ConstObjArray.add(@pvisible2)
@@ -545,8 +549,9 @@ begin
                                                              //GDB.BlockDefArray.getblockdef(name)^.OU.CopyTo(@ou);
                                                         end;
           self.CalcObjMatrix;
-          index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
-          assert((index>=0) and (index<gdb.GetCurrentDWG.BlockDefArray.count), 'Неверный индекс блока');
+          //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
+          index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
+          assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), 'Неверный индекс блока');
 
           CreateDeviceNameProcess(@self,drawing);
 

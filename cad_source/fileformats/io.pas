@@ -911,7 +911,7 @@ begin
           val(sub,palette[i].b,code);
           palette[i].a:=255;
           if line<>'' then
-                          palette[i].name:={$IFNDEF DELPHI}InterfaceTranslate{$ENDIF}('rgbcolorname~'+line,line)
+                          palette[i].name:={$IFNDEF DELPHI}InterfaceTranslate('rgbcolorname~'+line,{$ELSE}({$ENDIF}line)
                       else
                           palette[i].name:=format(rsColorNum,[i]);
         end;

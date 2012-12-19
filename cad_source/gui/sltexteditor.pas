@@ -29,8 +29,9 @@ var
   sltexteditor1: Tsltexteditor1;
 
 implementation
-
+{$IFNDEF DELPHI}
 {$R *.lfm}
+{$ENDIF}
 
 { Tsltexteditor1 }
 

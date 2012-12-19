@@ -61,7 +61,7 @@ begin
      sysparam.programpath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)));
      sysparam.screenx:={GetSystemMetrics(SM_CXSCREEN)}Screen.Width;
      sysparam.screeny:={GetSystemMetrics(SM_CYSCREEN)}Screen.Height;
-     //sysparam.temppath:=GetEnvironmentVariable('TEMP');
+     sysparam.temppath:=GetEnvironmentVariable('TEMP');
      {$IFNDEF DELPHI}sysparam.temppath:=gettempdir;{$ENDIF}
      if (sysparam.temppath[length(sysparam.temppath)]<>PathDelim)
       then

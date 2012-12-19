@@ -1,4 +1,4 @@
-{
+﻿{
 *****************************************************************************
 *                                                                           *
 *  This file is part of the ZCAD                                            *
@@ -394,7 +394,7 @@ begin
   pcamera:=pcam;
   if pcamera=nil then
                      begin
-                     GDBGetMem({$IFDEF DEBUGBUILD}'{4B7A0493-E8D6-4F24-BB70-C9C246A351BA}',{$ENDIF}pcamera, sizeof(GDBObjCamera));
+                     GDBGetMem({$IFDEF DEBUGBUILD}'{4B7A0493-E8D6-4F24-BB70-C9C246A351BA}',{$ENDIF}pointer(pcamera), sizeof(GDBObjCamera));
                      pcamera^.initnul;
 
                        pcamera.fovy:=35.0;

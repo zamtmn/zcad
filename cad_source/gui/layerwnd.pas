@@ -5,12 +5,13 @@ unit layerwnd;
 interface
 
 uses
-  log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
+  FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Buttons, ExtCtrls, StdCtrls, Grids, ComCtrls,LCLIntf,lcltype,
 
   gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
 
-  zcadinterface,zcadstrconsts,strproc,shared,UBaseTypeDescriptor;
+  zcadinterface,zcadstrconsts,strproc,shared,UBaseTypeDescriptor,imagesmanager;
 
 type
 
@@ -66,7 +67,6 @@ var
   LayerWindow: TLayerWindow;
 
 implementation
-uses mainwindow;
 
 {$R *.lfm}
 
@@ -75,10 +75,10 @@ uses mainwindow;
 procedure TLayerWindow.FormCreate(Sender: TObject); // Процедура выполняется при отрисовке окна
 begin
 // Отрисовываем картинки на кнопках
-MainFormN.IconList.GetBitmap(II_Plus, B1.Glyph);
-MainFormN.IconList.GetBitmap(II_Minus, B2.Glyph);
-MainFormN.IconList.GetBitmap(II_Ok, B3.Glyph);
-ListView1.SmallImages:=MainFormN.IconList;
+IconList.GetBitmap(II_Plus, B1.Glyph);
+IconList.GetBitmap(II_Minus, B2.Glyph);
+IconList.GetBitmap(II_Ok, B3.Glyph);
+ListView1.SmallImages:=IconList;
 MouseDownItem:=nil;
 MouseDownSubItem:=-1;
 changedstamp:=false;

@@ -443,13 +443,16 @@ begin
   inherited init({$IFDEF DEBUGBUILD}'{8B10F808-46AD-4EF1-BCDD-55B74D27187B}',{$ENDIF}m);
   CommandsStack.init({$IFDEF DEBUGBUILD}'{8B10F808-46AD-4EF1-BCDD-55B74D27187B}',{$ENDIF}10);
   varstack.init;
-  DMenu:=TDMenuWnd.Create(application);
+  DMenu:=TDMenuWnd.CreateNew(application);
+  if SavedUnit<>nil then
+  begin
   pint:=SavedUnit.FindValue('DMenuX');
   if assigned(pint)then
                        DMenu.Left:=pint^;
   pint:=SavedUnit.FindValue('DMenuY');
   if assigned(pint)then
                        DMenu.Top:=pint^;
+  end;
 end;
 procedure GDBcommandmanager.CommandRegister(pc:PCommandObjectDef);
 begin

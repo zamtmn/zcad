@@ -4785,7 +4785,7 @@ begin
   oglsm.myglMatrixMode(GL_Projection);
   oglsm.myglpushmatrix;
   oglsm.myglLoadIdentity;
-  oglsm.mygluPickMatrix(param.md.glmouse.x, {gdb.GetCurrentDWG.pcamera^.viewport[3]-} param.md.glmouse.y, sysvar.DISP.DISP_CursorSize^ * 2, sysvar.DISP.DISP_CursorSize^ * 2, PTViewPortArray(@PDWG.Getpcamera^.viewport)^);
+  oglsm.mygluPickMatrix(param.md.glmouse.x, {gdb.GetCurrentDWG.pcamera^.viewport[3]-} param.md.glmouse.y, sysvar.DISP.DISP_CursorSize^ * 2, sysvar.DISP.DISP_CursorSize^ * 2, {PTViewPortArray}(@PDWG.Getpcamera^.viewport));
   {if param.projtype = ProjParalel then
                                       begin
                                       gdb.GetCurrentDWG.pcamera^.projMatrix:=ortho(-clientwidth*param.zoom/2,clientwidth*param.zoom/2,

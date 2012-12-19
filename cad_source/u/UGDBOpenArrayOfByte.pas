@@ -284,6 +284,7 @@ constructor GDBOpenArrayOfByte.InitFromFile;
 var infile,filelength:GDBInteger;
 begin
      //StringToWideChar(filename)
+     initnul;
      infile:=fileopen({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(FileName),fmShareDenyNone);
      if infile<=0 then
                       shared.ShowError('Не могу открыть файл "'+FileName+'"')

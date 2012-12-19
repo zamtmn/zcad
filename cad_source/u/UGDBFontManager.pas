@@ -168,14 +168,6 @@ begin
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBFontManager.initialization');{$ENDIF}
   FontManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
-  //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\times.shx');
-  //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\GENISO.SHX');
-  //FontManager.addFonf('C:\Program Files\AutoCAD 2010\Fonts\amgdt.shx');
-
-  //FromDirIterator({sysparam.programpath+'fonts/'}'C:\Program Files\AutoCAD 2010\Fonts\','*.shx','',addf,nil);
-
-  FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,sysvar.SYS.SYS_AlternateFont^));
-  FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,'ltypeshp.shx'));
 finalization
  FontManager.FreeAndDone;
 end.

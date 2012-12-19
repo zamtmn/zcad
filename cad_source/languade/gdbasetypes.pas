@@ -22,8 +22,8 @@ interface
 type
 {$IFDEF DELPHI}
 QWord=UInt64;
-PtrInt={Pointer}Cardinal;
-PtrUInt={Pointer}LongWord;
+PtrInt={Pointer}Integer;
+PtrUInt={Pointer}Cardinal;
 {$ENDIF}
 {EXPORT+}
 PGDBDouble=^GDBDouble;

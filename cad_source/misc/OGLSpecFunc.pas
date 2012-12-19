@@ -21,7 +21,7 @@ unit OGLSpecFunc;
 
 interface
 uses zcadsysvars,gdbasetypes,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
-     {$IFNDEF DELPHI}gl,glu,{$ELSE}opengl,windows,{$ENDIF}
+     {$IFNDEF DELPHI}gl,glu,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}
      log,sysutils,varmandef;
@@ -44,17 +44,17 @@ const ls = $AAAA;
                                    $33333333,$33333333,
                                    $CCCCCCCC,$CCCCCCCC
                                   );
-      GL_lines={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_lines;
-      GL_LINE_STRIP={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_LINE_STRIP;
-      GL_line_loop={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_line_loop;
-      GL_POINT_SMOOTH={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_POINT_SMOOTH;
-      GL_LINE_SMOOTH={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_LINE_SMOOTH;
-      GL_points={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_points;
-      GL_TRIANGLES={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_TRIANGLES;
-      GL_QUADS={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_QUADS;
-      GL_ALWAYS={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_ALWAYS;
-      GL_LINE_STIPPLE={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_LINE_STIPPLE;
-      GL_POLYGON_STIPPLE={$IFNDEF DELPHI}gl.{$ELSE}opengl.{$ENDIF}GL_POLYGON_STIPPLE;
+      GL_lines={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_lines;
+      GL_LINE_STRIP={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LINE_STRIP;
+      GL_line_loop={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_line_loop;
+      GL_POINT_SMOOTH={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_POINT_SMOOTH;
+      GL_LINE_SMOOTH={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LINE_SMOOTH;
+      GL_points={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_points;
+      GL_TRIANGLES={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_TRIANGLES;
+      GL_QUADS={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_QUADS;
+      GL_ALWAYS={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_ALWAYS;
+      GL_LINE_STIPPLE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LINE_STIPPLE;
+      GL_POLYGON_STIPPLE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_POLYGON_STIPPLE;
 type
     {$IFNDEF DELPHI}
     {if FPC_FULlVERSION>20600}
@@ -62,7 +62,7 @@ type
     {ENDIF}
     {$ENDIF}
     {$IFDEF DELPHI}
-    TViewPortArray = array [0..3] of GLint;
+    TViewPortArray = {array [0..3] of GLint}TVector4i;
     {$ENDIF}
     PTViewPortArray=^TViewPortArray;
 
@@ -188,7 +188,7 @@ begin
                                    _colour.r:=red;
                                    _colour.g:=green;
                                    _colour.b:=blue;
-                                   {$IFNDEF DELPHI}gl{$ELSE}opengl{$ENDIF}.glColor3ubv(@_colour);
+                                   {$IFNDEF DELPHI}gl{$ELSE}dglOpenGL{$ENDIF}.glColor3ubv(@_colour);
                               end;
 end;
 
@@ -198,7 +198,7 @@ begin
      or (v.g<>_colour.g)
      or (v.b<>_colour.b)then
                               begin
-                                   {$IFNDEF DELPHI}gl{$ELSE}opengl{$ENDIF}.glColor3ubv(@v);
+                                   {$IFNDEF DELPHI}gl{$ELSE}dglOpenGL{$ENDIF}.glColor3ubv(@v);
                                    _colour:=v;
                               end;
 end;
@@ -323,7 +323,7 @@ begin
   oglsm.myglMatrixMode(GL_Projection);
   oglsm.myglpushmatrix;
   glLoadIdentity;
-  gluPickMatrix(x,y,w,h,{$IFNDEF DELPHI}PTViewPortArray(@vp)^{$ELSE}@vp{$ENDIF});
+  gluPickMatrix(x,y,w,h,{$IFNDEF DELPHI}PTViewPortArray(@vp)^{$ELSE}TVector4i(vp){$ENDIF});
   glGetDoublev(GL_PROJECTION_MATRIX, @tm);
   tm := MatrixMultiply(pm, tm);
   tm := MatrixMultiply(mm, tm);

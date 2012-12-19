@@ -16,56 +16,18 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit MTedit_form;
+unit UOpenGLControl;
 {$INCLUDE def.inc}
-
 interface
-
 uses
-  gdbasetypes, zforms;
-
+  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,
+  log;
 type
-  TMTEdForm = object(zform)
-    //RichEdit1: TRichEdit;
-    //OkBtn: TButton;
-    //CancelBtn: TButton;
-    //procedure CancelBtnClick(Sender: TObject);
-    //procedure OkBtnClick(Sender: TObject);
-    //procedure resize(Sender: TObject);
-  private
-    { Private declarations }
-  public
-    all_ok:GDBBoolean;
-    { Public declarations }
+  TOpenGLControl = class(TPanel)
+    procedure SwapBuffers; virtual;abstract;
+    function MakeCurrent(SaveOldToStack: boolean = false): boolean; virtual;abstract;
   end;
-
-var
-  MTEdForm: TMTEdForm;
-
 implementation
-
-//{$R *.dfm}
-
-{procedure TMTEdForm.resize(Sender: TObject);
 begin
-     okBtn.top:=clientheight-25;
-     okBtn.left:=clientwidth-82;
-     CancelBtn.top:=clientheight-25;
-     CancelBtn.left:=2;
-     RichEdit1.Height:=clientheight-28;
-     //RichEdit1.;
-end;
-
-procedure TMTEdForm.OkBtnClick(Sender: TObject);
-begin
-     all_ok:=true;
-     close;
-end;
-
-procedure TMTEdForm.CancelBtnClick(Sender: TObject);
-begin
-     all_ok:=false;
-     close;
-end;}
-
+  {$IFDEF DEBUGINITSECTION}LogOut('UOpenGLControl.initialization');{$ENDIF}
 end.

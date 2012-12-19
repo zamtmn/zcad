@@ -87,7 +87,9 @@ procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoad
 procedure savedxf2000(name: GDBString; {PDrawing:PTSimpleDrawing}var drawing:TSimpleDrawing);
 procedure saveZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
 procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
+{$IFNDEF DELPHI}
 procedure Import(name: GDBString;var drawing:TSimpleDrawing);
+{$ENDIF}
 implementation
 uses GDBLine,GDBBlockDef,UGDBLayerArray,varmandef;
 function dxfhandlearraycreate(col: GDBInteger): GDBPointer;
@@ -130,7 +132,7 @@ begin
     end;
   result := 0;
 end;
-function getoldhandle(p: pdxfhandlerecopenarray; nev: GDBLongword): GDBLongword;
+function getoldhandle(p: pdxfhandlerecopenarray; nev: GDBLongword): Integer;
 var
   i: GDBInteger;
 begin
@@ -791,9 +793,9 @@ begin
                                  begin
                                       flags:=strtoint(s);
                                       if (flags and 1)>0 then
-                                                             BShapeProp.param.AD:=BShapeProp.param.AD.TACAbs
+                                                             BShapeProp.param.AD:={BShapeProp.param.AD.}TACAbs
                                                          else
-                                                             BShapeProp.param.AD:=BShapeProp.param.AD.TACRel;
+                                                             BShapeProp.param.AD:={BShapeProp.param.AD.}TACRel;
                                       if (flags and 2)>0 then
                                                              dashinfo:=TDIText;
                                       if (flags and 4)>0 then
@@ -1348,13 +1350,16 @@ var
   PSP:PShapeProp;
   PTP:PTextProp;
   p:pointer;
-
+  {$IFNDEF DELPHI}
   Handle2pointer:mappDWGHi;
   HandleIterator:mappDWGHi.TIterator;
+  {$ENDIF}
   DWGHandle:TDWGHandle;
   laststrokewrited:boolean;
 begin
+  {$IFNDEF DELPHI}
   Handle2pointer:=mappDWGHi.Create;
+  {$ENDIF}
   DecimalSeparator := '.';
   //standartstylehandle:=0;
   olddwg:=nil;//{gdb.GetCurrentDWG}@drawing;
@@ -1896,7 +1901,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                              outstream.TXTAddGDBStringEOL('4');
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(75));
                                                              outstream.TXTAddGDBStringEOL(inttostr(PSP^.Psymbol^.number));
-
+                                                             {$IFNDEF DELPHI}
                                                              HandleIterator:=Handle2pointer.Find(PSP^.param.PStyle);
                                                              if  HandleIterator=nil then
                                                                                         begin
@@ -1908,6 +1913,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                                                         begin
                                                                                              temphandle:=HandleIterator.GetValue;
                                                                                         end;
+                                                             {$ENDIF}
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
                                                              outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(46));
@@ -1928,6 +1934,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                              outstream.TXTAddGDBStringEOL('0');
 
                                                              //if uppercase(PTP^.param.PStyle^.name)<>TSNStandardStyleName then
+                                                             {$IFNDEF DELPHI}
                                                              begin
                                                              HandleIterator:=Handle2pointer.Find(PTP^.param.PStyle);
                                                              if  HandleIterator=nil then
@@ -1941,6 +1948,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                                                              temphandle:=HandleIterator.GetValue;
                                                                                         end;
                                                              end;
+                                                             {$ENDIF}
                                                              {else
                                                                  temphandle:=standartstylehandle;}
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
@@ -2000,6 +2008,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
 
                 p:=drawing.TextStyleTable.getelement(drawing.TextStyleTable.FindStyle('Standard',false));
+                {$IFNDEF DELPHI}
                 HandleIterator:=Handle2pointer.Find(p);
                                                                              if  HandleIterator=nil then
                                                                                         begin
@@ -2011,7 +2020,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                                                         begin
                                                                                              temphandle:=HandleIterator.GetValue;
                                                                                         end;
-
+                {$ENDIF}
                 outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
 
                 outstream.TXTAddGDBStringEOL(groups);
@@ -2051,6 +2060,7 @@ ENDTAB}
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                   outstream.TXTAddGDBStringEOL(dxfName_Style);
                   p:=drawing.TextStyleTable.getelement(i);
+                  {$IFNDEF DELPHI}
                   HandleIterator:=Handle2pointer.Find(drawing.TextStyleTable.getelement(i));
                                                                                if  HandleIterator=nil then
                                                                                                           begin
@@ -2062,6 +2072,7 @@ ENDTAB}
                                                                                                           begin
                                                                                                                temphandle:=HandleIterator.GetValue;
                                                                                                           end;
+                  {$ENDIF}
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                   outstream.TXTAddGDBStringEOL(inttohex({handle}temphandle, 0));
                   inc(handle);
@@ -2106,6 +2117,7 @@ ENDTAB}
                     //if uppercase(PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.name)<>TSNStandardStyleName then
                     begin
                     p:=drawing.TextStyleTable.getelement(i);
+                    {$IFNDEF DELPHI}
                     HandleIterator:=Handle2pointer.Find(p);
                                                                                  if  HandleIterator=nil then
                                                                                                             begin
@@ -2117,7 +2129,7 @@ ENDTAB}
                                                                                                             begin
                                                                                                                  temphandle:=HandleIterator.GetValue;
                                                                                                             end;
-
+                    {$ENDIF}
                     outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
                     //inc(handle);
                     end;
@@ -2242,7 +2254,7 @@ ENDTAB}
   GDBFreeMem(GDBPointer(phandlea));
   templatefile.done;
 
-  if FileExists(utf8tosys(name)) then
+  if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(name)) then
                            begin
                                 deletefile(name+'.bak');
                                 renamefile(name,name+'.bak');
@@ -2260,7 +2272,7 @@ ENDTAB}
                            then
                                if olddwg<>nil then
                                                   SetCurrentDWGProc(olddwg);
-  Handle2pointer.Destroy;
+  {$IFNDEF DELPHI}Handle2pointer.Destroy;{$ENDIF}
   //gdb.SetCurrentDWG(olddwg);
 end;
 procedure SaveZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
@@ -2303,10 +2315,10 @@ begin
      fillchar(gdb^,sizeof(GDBDescriptor),0);
      systype.TypeName2PTD('GDBDescriptor')^.DeSerialize(gdb,SA_SAVED_TO_SHD,memorybuf);}
 
-     outfile:=FileCreate(UTF8ToSys(name));
+     outfile:=FileCreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(name));
      FileWrite(outfile,memorybuf^.parray^,memorybuf^.Count);
      fileclose(outfile);
-     outfile:=FileCreate(UTF8ToSys(name+'remap'));
+     outfile:=FileCreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(name+'remap'));
      FileWrite(outfile,linkbyf^.parray^,linkbyf^.Count*linkbyf^.Size);
      fileclose(outfile);
      memorybuf^.done;
@@ -2364,6 +2376,7 @@ begin
      end;
      fileclose(infile);*)
 end;
+{$IFNDEF DELPHI}
 procedure Import(name: GDBString;var drawing:TSimpleDrawing);
 var
   Vec: TvVectorialDocument;
@@ -2444,6 +2457,7 @@ begin
     Vec.Free;
   //end;
 end;
+{$ENDIF}
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodxf.initialization');{$ENDIF} 
      i2:=0;

@@ -29,11 +29,11 @@ uses
   gtk2,gdk2,{gdk2x,}
   {$ENDIF}
   ugdbabstractdrawing,UGDBOpenArrayOfPV,UGDBSHXFont,
-  {$IFNDEF DELPHI}LCLType,InterfaceBase,FileUtil,{$ENDIF}
+  {$IFNDEF DELPHI}LCLType,InterfaceBase,FileUtil,{$ELSE}windows,{$ENDIF}
   {umytreenode,}menus,Classes,Forms,
   ExtCtrls,Controls,
   GDBGenericSubEntry,gdbasetypes,sysutils,
-  {$IFNDEF DELPHI}GLext,gl,glu,OpenGLContext,{$ELSE}opengl,windows,{$ENDIF}
+  {$IFNDEF DELPHI}GLext,gl,glu,OpenGLContext,{$ELSE}dglOpenGL,UOpenGLControl,{$ENDIF}
   Math,gdbase,varmandef,varman,UUnitManager,
   oglwindowdef,UGDBSelectedObjArray,
 
@@ -60,7 +60,7 @@ type
 
   { TOGLWnd }
 
-  TOGLWnd = class({TPanel}{$IFNDEF DELPHI}TOpenGLControl{$ELSE}TPanel{$ENDIF})
+  TOGLWnd = class({TPanel}TOpenGLControl)
   private
     OGLContext:TOGLContextDesk;
     {hrc:thandle;
@@ -4592,6 +4592,10 @@ if ch = #46 then
   end
 end;}
 procedure TOGLWnd.myKeyPress(var Key: Word; Shift: TShiftState);
+{$IFDEF DELPHI}
+const
+     VK_V=$56;
+{$ENDIF}
 begin
       if Key=VK_ESCAPE then
       begin

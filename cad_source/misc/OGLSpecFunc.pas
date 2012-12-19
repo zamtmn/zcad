@@ -213,7 +213,7 @@ type
                            procedure myglTexImage2D(target: GLenum; level: GLInt; internalformat: GLEnum; width, height: GLsizei; border: GLint; format, atype: GLenum; const pixels: Pointer);inline;
                            procedure myglTexParameteri(target: GLenum; pname: GLenum; param: GLint);inline;
                            procedure myglGetDoublev(pname: GLenum; params: PGLdouble);inline;
-                           function myglGetString(name: GLenum): PChar;inline;
+                           function myglGetString(name: GLenum): PAnsiChar;inline;
                            procedure mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);inline;
     end;
 
@@ -666,7 +666,7 @@ procedure TOGLStateManager.myglLightfv(light, pname: GLenum; const params: PGLfl
 begin
      glLightfv(light,pname,params);
 end;
-procedure TOGLStateManager.myglMaterialf(face, pname: GLenum; param: GLfloat);inline;
+procedure TOGLStateManager.myglMaterialf(face, pname: GLenum; param: GLfloat);
 begin
      glMaterialf(face,pname,param);
 end;
@@ -682,7 +682,7 @@ procedure TOGLStateManager.myglLightModeli(pname: GLenum; param: GLint);
 begin
      glLightModeli(pname,param);
 end;
-procedure TOGLStateManager.myglLoadIdentity;inline;
+procedure TOGLStateManager.myglLoadIdentity;
 begin
      glLoadIdentity;
 end;
@@ -746,7 +746,7 @@ procedure TOGLStateManager.myglReadPixels(x, y: GLint; width, height: GLsizei; f
 begin
      glReadPixels(x, y, width, height, format, atype, pixels);
 end;
-procedure TOGLStateManager.myglRasterPos2i(x, y: GLint);inline;
+procedure TOGLStateManager.myglRasterPos2i(x, y: GLint);
 begin
      glRasterPos2i(x, y);
 end;
@@ -774,13 +774,13 @@ procedure TOGLStateManager.myglGetDoublev(pname: GLenum; params: PGLdouble);
 begin
      glGetDoublev(pname, params);
 end;
-function TOGLStateManager.myglGetString(name: GLenum): PChar;
+function TOGLStateManager.myglGetString(name: GLenum): PAnsiChar;
 begin
      result:=glGetString(name);
 end;
 procedure TOGLStateManager.mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);
 begin
-     gluPickMatrix(x,y,delX,delY,viewport);
+     gluPickMatrix(x,y,delX,delY,{$IFNDEF DELPHI}viewport{$ELSE}PVector4i(viewport){$ENDIF});
 end;
 
 procedure TOGLStateManager.myglMatrixMode(const mode: GLenum);

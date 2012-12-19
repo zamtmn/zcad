@@ -110,10 +110,10 @@ procedure GDBObjWithLocalCS.higlight;
 begin
   oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^]);
   oglsm.myglbegin(GL_lines);
-  oglsm.myglVertex2dwoLCS(ProjP_insert.x-10,ProjP_insert.y);
-  oglsm.myglVertex2dwoLCS(ProjP_insert.x+10,ProjP_insert.y);
-  oglsm.myglVertex2dwoLCS(ProjP_insert.x,ProjP_insert.y-10);
-  oglsm.myglVertex2dwoLCS(ProjP_insert.x,ProjP_insert.y+10);
+  oglsm.myglVertex2d(ProjP_insert.x-10,ProjP_insert.y);
+  oglsm.myglVertex2d(ProjP_insert.x+10,ProjP_insert.y);
+  oglsm.myglVertex2d(ProjP_insert.x,ProjP_insert.y-10);
+  oglsm.myglVertex2d(ProjP_insert.x,ProjP_insert.y+10);
   oglsm.myglend;
   if PProjOutBound<>nil then PProjOutBound.DrawGeometry;
 

@@ -21,7 +21,7 @@ unit OGLSpecFunc;
 
 interface
 uses zcadsysvars,gdbasetypes,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
-     {$IFNDEF DELPHI}gl,glu,{$ELSE}dglOpenGL,windows,{$ENDIF}
+     {$IFNDEF DELPHI}gl,glu,glext,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}
      log,sysutils,varmandef;
@@ -55,7 +55,60 @@ const ls = $AAAA;
       GL_ALWAYS={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_ALWAYS;
       GL_LINE_STIPPLE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LINE_STIPPLE;
       GL_POLYGON_STIPPLE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_POLYGON_STIPPLE;
+
+      GL_PROJECTION={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_PROJECTION;
+      GL_MODELVIEW={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_MODELVIEW;
+      GL_VIEWPORT={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_VIEWPORT;
+      GL_LIGHTING={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LIGHTING;
+      GL_LIGHT0={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LIGHT0;
+      GL_COLOR_MATERIAL={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_COLOR_MATERIAL;
+      GL_POSITION={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_POSITION;
+      GL_FRONT_AND_BACK={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_FRONT_AND_BACK;
+      GL_SHININESS={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_SHININESS;
+      GL_SPECULAR={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_SPECULAR;
+      GL_LIGHT_MODEL_TWO_SIDE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LIGHT_MODEL_TWO_SIDE;
+      GL_AMBIENT_AND_DIFFUSE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_AMBIENT_AND_DIFFUSE;
+
+      GL_COLOR_LOGIC_OP={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_COLOR_LOGIC_OP;
+      GL_OR={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_OR;
+      GL_XOR={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_XOR;
+
+      GL_TEXTURE_2D={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_TEXTURE_2D;
+      GL_DEPTH_TEST={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_DEPTH_TEST;
+      GL_STENCIL_TEST={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_STENCIL_TEST;
+      GL_BLEND={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_BLEND;
+      GL_SRC_ALPHA={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_SRC_ALPHA;
+      GL_ONE_MINUS_SRC_ALPHA={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_ONE_MINUS_SRC_ALPHA;
+      GL_LINE_SMOOTH_HINT={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LINE_SMOOTH_HINT;
+      GL_NICEST={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_NICEST;
+      GL_KEEP={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_KEEP;
+      GL_COLOR_BUFFER_BIT={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_COLOR_BUFFER_BIT;
+      GL_DEPTH_BUFFER_BIT={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_DEPTH_BUFFER_BIT;
+      GL_STENCIL_BUFFER_BIT={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_STENCIL_BUFFER_BIT;
+      GL_LOAD={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LOAD;
+      GL_return={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_return;
+      GL_AUX0={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_AUX0;
+      GL_BACK={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_BACK;
+      GL_COLOR={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_COLOR;
+      GL_BGRA_EXT={$IFNDEF DELPHI}glext.{$ELSE}dglOpenGL.{$ENDIF}GL_BGRA_EXT;
+      GL_NEVER={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_NEVER;
+      GL_REPLACE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_REPLACE;
+      GL_UNSIGNED_BYTE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_UNSIGNED_BYTE;
+      GL_EQUAL={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_EQUAL;
+      GL_TEXTURE_MIN_FILTER={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_TEXTURE_MIN_FILTER;
+      GL_RGB={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_RGB;
+      GL_NEAREST={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_NEAREST;
+      GL_TEXTURE_MAG_FILTER={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_TEXTURE_MAG_FILTER;
+      GL_VENDOR={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_VENDOR;
+      GL_RENDERER={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_RENDERER;
+      GL_VERSION={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_VERSION;
+      GL_LINE_WIDTH_RANGE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LINE_WIDTH_RANGE;
+      GL_point_size_RANGE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_point_size_RANGE;
+      GL_PROJECTION_MATRIX={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_PROJECTION_MATRIX;
+
+      maxmybufer=99;
 type
+    tmyscrbuf = array [0..maxmybufer] of GLuint;
     {$IFNDEF DELPHI}
     {if FPC_FULlVERSION>20600}
     {glu}//TViewPortArray = array [0..3] of GLint;
@@ -117,9 +170,11 @@ type
                            procedure myglNormal3dV(const V:PGDBVertex);inline;
                            //procedure myglColor3ub(const red, green, blue: GLubyte);inline;
                            procedure myglVertex3d(const V:GDBVertex);virtual;//inline;
-                           procedure myglVertex2DwoLCS(const x,y:GDBDouble);virtual;//inline;
+                           procedure myglVertex2d(const x,y:GDBDouble);virtual;//inline;
+                           procedure myglVertex2f(const x,y:GLFloat);virtual;//inline;
                            procedure myglvertex2dv(const V:GDBPointer);virtual;//inline;
                            procedure myglvertex2iv(const V:GDBPointer);virtual;//inline;
+                           procedure myglVertex2i(x, y: GLint);virtual;//inline;
                            procedure myglVertex(const x,y,z:GDBDouble);virtual;//inline;
                            procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
                            procedure startrender;virtual;//inline;
@@ -127,6 +182,39 @@ type
                            {$IFDEF SINGLEPRECISIONGEOMETRY}
                            procedure glVertex3dv(const v: PGDBVertex);inline;
                            {$ENDIF}
+                           procedure myglViewport(const x,y,width,height:GDBInteger);inline;
+                           procedure myglGetIntegerv(pname: GLenum; params: PGLint);inline;
+                           procedure myglLoadMatrixd(const m: PGLdouble);inline;
+                           procedure myglLightfv(light, pname: GLenum; const params: PGLfloat);inline;
+                           procedure myglMaterialf(face, pname: GLenum; param: GLfloat);inline;
+                           procedure myglMaterialfv(face, pname: GLenum; const params: PGLfloat);inline;
+                           procedure myglColorMaterial(face, mode: GLenum);inline;
+                           procedure myglLightModeli(pname: GLenum; param: GLint);inline;
+                           procedure myglLoadIdentity;inline;
+                           procedure myglOrtho(left, right, bottom, top, zNear, zFar: GLdouble);inline;
+                           procedure myglScalef(x, y, z: GLfloat);inline;
+                           procedure myglTranslated(x, y, z: GLdouble);inline;
+                           procedure myglBindTexture(target: GLenum; texture: GLuint);inline;
+                           procedure myglCopyTexSubImage2D(target: GLenum; level, xoffset, yoffset, x, y: GLint; width, height: GLsizei);inline;
+                           procedure myglTexCoord2d(s, t: GLdouble);inline;
+                           procedure myglClearColor(red, green, blue, alpha: GLclampf);inline;
+                           procedure myglBlendFunc(sfactor, dfactor: GLenum);inline;
+                           procedure myglHint(target, mode: GLenum);inline;
+                           procedure myglClear(mask: GLbitfield);inline;
+                           procedure myglAccum(op: GLenum; value: GLfloat);inline;
+                           procedure myglDrawBuffer(mode: GLenum);inline;
+                           procedure myglReadBuffer(mode: GLenum);inline;
+                           procedure myglCopyPixels(x, y: GLint; width, height: GLsizei; atype: GLenum);inline;
+                           procedure myglReadPixels(x, y: GLint; width, height: GLsizei; format, atype: GLenum; pixels: Pointer);inline;
+                           procedure myglRasterPos2i(x, y: GLint);inline;
+                           procedure myglDrawPixels(width, height: GLsizei; format, atype: GLenum; const pixels: Pointer);inline;
+                           procedure myglDeleteTextures(n: GLsizei; const textures: PGLuint);inline;
+                           procedure myglGenTextures(n: GLsizei; textures: PGLuint);inline;
+                           procedure myglTexImage2D(target: GLenum; level: GLInt; internalformat: GLEnum; width, height: GLsizei; border: GLint; format, atype: GLenum; const pixels: Pointer);inline;
+                           procedure myglTexParameteri(target: GLenum; pname: GLenum; param: GLint);inline;
+                           procedure myglGetDoublev(pname: GLenum; params: PGLdouble);inline;
+                           function myglGetString(name: GLenum): PChar;inline;
+                           procedure mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);inline;
     end;
 
 var
@@ -134,8 +222,10 @@ var
    notuseLCS:GDBBOOLEAN;
    GLRasterizer:TOGLStateManager;
    OGLSM:PTOGLStateManager;
+   wglSwapIntervalEXT: function(interval: GLint): BOOL;{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 const
      MY_EmptyMode=1000000;
+
 
 procedure SetDCPixelFormat(oglc:TOGLContextDesk);
 function isOpenGLError:GLenum;
@@ -146,6 +236,10 @@ procedure MyglMakeCurrent(oglc:TOGLContextDesk);
 procedure MySwapBuffers(oglc:TOGLContextDesk);
 procedure MywglDeleteContext(oglc:TOGLContextDesk);
 procedure MywglCreateContext(var oglc:TOGLContextDesk);
+
+{$IFDEF WINDOWS}
+function wglGetProcAddress(ProcName:LPCSTR):PROC; external 'opengl32' name 'wglGetProcAddress';
+{$ENDIF}
 
 Procedure DrawAABB(const BoundingBox:GDBBoundingBbox);
 var
@@ -245,6 +339,21 @@ begin
                            glVertex3dV(@t);
                       end;
 end;
+procedure TOGLStateManager.myglVertex2i(x, y: GLint);
+var t:gdbvertex;
+begin
+     {$IFDEF DEBUGCOUNTGEOMETRY}
+     //processpoint(v^);
+     inc(pointcount);
+     {$ENDIF}
+     if notuseLCS then
+                      glVertex2i(x,y)
+                  else
+                      begin
+                           t:=vertexadd(createvertex(x,y,0),CurrentCamCSOffset);
+                           glVertex3dV(@t);
+                      end;
+end;
 procedure TOGLStateManager.myglvertex2dv(const V:Pointer);
 var t:gdbvertex;
 begin
@@ -280,9 +389,34 @@ procedure TOGLStateManager.myglNormal3dV(const V:PGDBVertex);{$IFNDEF DELPHI}inl
 begin
      glNormal3dV(pointer(v))
 end;
-procedure TOGLStateManager.myglVertex2dwoLCS(const x,y:GDBDouble);
+procedure TOGLStateManager.myglVertex2f(const x,y:GLFloat);
+var t:gdbvertex;
 begin
-     glVertex2d(x,y)
+     {$IFDEF DEBUGCOUNTGEOMETRY}
+     inc(pointcount);
+     {$ENDIF}
+     if notuseLCS then
+                      glVertex2f(x,y)
+                  else
+                      begin
+                           t:=vertexadd(createvertex(x,y,0),CurrentCamCSOffset);
+                           glVertex3dv(@t);
+                      end;
+end;
+
+procedure TOGLStateManager.myglVertex2d(const x,y:GDBDouble);
+var t:gdbvertex;
+begin
+     {$IFDEF DEBUGCOUNTGEOMETRY}
+     inc(pointcount);
+     {$ENDIF}
+     if notuseLCS then
+                      glVertex2d(x,y)
+                  else
+                      begin
+                           t:=vertexadd(createvertex(x,y,0),CurrentCamCSOffset);
+                           glVertex3dv(@t);
+                      end;
 end;
 
 procedure TOGLStateManager.myglVertex3d;
@@ -516,6 +650,139 @@ procedure TOGLStateManager.myglMultMatrixD(const matrix:DMatrix4D);
 begin
      glmultmatrixd(@matrix);
 end;
+procedure TOGLStateManager.myglViewport(const x,y,width,height:GDBInteger);
+begin
+     glViewport(x,y,width,height);
+end;
+procedure TOGLStateManager.myglGetIntegerv(pname: GLenum; params: PGLint);
+begin
+     glGetIntegerv(pname,params);
+end;
+procedure TOGLStateManager.myglLoadMatrixd(const m: PGLdouble);
+begin
+     glLoadMatrixd(m);
+end;
+procedure TOGLStateManager.myglLightfv(light, pname: GLenum; const params: PGLfloat);
+begin
+     glLightfv(light,pname,params);
+end;
+procedure TOGLStateManager.myglMaterialf(face, pname: GLenum; param: GLfloat);inline;
+begin
+     glMaterialf(face,pname,param);
+end;
+procedure TOGLStateManager.myglMaterialfv(face, pname: GLenum; const params: PGLfloat);
+begin
+     myglMaterialfv(face,pname,params);
+end;
+procedure TOGLStateManager.myglColorMaterial(face, mode: GLenum);
+begin
+     glColorMaterial(face,mode);
+end;
+procedure TOGLStateManager.myglLightModeli(pname: GLenum; param: GLint);
+begin
+     glLightModeli(pname,param);
+end;
+procedure TOGLStateManager.myglLoadIdentity;inline;
+begin
+     glLoadIdentity;
+end;
+procedure TOGLStateManager.myglOrtho(left, right, bottom, top, zNear, zFar: GLdouble);
+begin
+     glOrtho(left,right,bottom,top,zNear,zFar);
+end;
+procedure TOGLStateManager.myglScalef(x, y, z: GLfloat);
+begin
+     glScalef(x,y,z);
+end;
+procedure TOGLStateManager.myglTranslated(x, y, z: GLdouble);
+begin
+     glTranslated(x,y,z);
+end;
+procedure TOGLStateManager.myglBindTexture(target: GLenum; texture: GLuint);
+begin
+     glBindTexture(target,texture);
+end;
+procedure TOGLStateManager.myglCopyTexSubImage2D(target: GLenum; level, xoffset, yoffset, x, y: GLint; width, height: GLsizei);
+begin
+     glCopyTexSubImage2D(target,level, xoffset, yoffset, x, y,width, height);
+end;
+procedure TOGLStateManager.myglTexCoord2d(s, t: GLdouble);
+begin
+     glTexCoord2d(s, t);
+end;
+procedure TOGLStateManager.myglClearColor(red, green, blue, alpha: GLclampf);
+begin
+     glClearColor(red, green, blue, alpha);
+end;
+procedure TOGLStateManager.myglBlendFunc(sfactor, dfactor: GLenum);
+begin
+     glBlendFunc(sfactor, dfactor);
+end;
+procedure TOGLStateManager.myglHint(target, mode: GLenum);
+begin
+     glHint(target, mode);
+end;
+procedure TOGLStateManager.myglClear(mask: GLbitfield);
+begin
+     glClear(mask);
+end;
+procedure TOGLStateManager.myglAccum(op: GLenum; value: GLfloat);
+begin
+     glAccum(op,value);
+end;
+procedure TOGLStateManager.myglDrawBuffer(mode: GLenum);
+begin
+     glDrawBuffer(mode);
+end;
+procedure TOGLStateManager.myglReadBuffer(mode: GLenum);
+begin
+     glReadBuffer(mode);
+end;
+procedure TOGLStateManager.myglCopyPixels(x, y: GLint; width, height: GLsizei; atype: GLenum);
+begin
+     glCopyPixels(x, y,width, height,atype);
+end;
+procedure TOGLStateManager.myglReadPixels(x, y: GLint; width, height: GLsizei; format, atype: GLenum; pixels: Pointer);
+begin
+     glReadPixels(x, y, width, height, format, atype, pixels);
+end;
+procedure TOGLStateManager.myglRasterPos2i(x, y: GLint);inline;
+begin
+     glRasterPos2i(x, y);
+end;
+procedure TOGLStateManager.myglDrawPixels(width, height: GLsizei; format, atype: GLenum; const pixels: Pointer);
+begin
+     glDrawPixels(width, height, format, atype, pixels);
+end;
+procedure TOGLStateManager.myglDeleteTextures(n: GLsizei; const textures: PGLuint);
+begin
+     glDeleteTextures(n, textures);
+end;
+procedure TOGLStateManager.myglGenTextures(n: GLsizei; textures: PGLuint);
+begin
+     glGenTextures(n, textures);
+end;
+procedure TOGLStateManager.myglTexImage2D(target: GLenum; level: GLInt; internalformat: GLEnum; width, height: GLsizei; border: GLint; format, atype: GLenum; const pixels: Pointer);
+begin
+     glTexImage2D(target, level, internalformat, width, height, border, format, atype, pixels);
+end;
+procedure TOGLStateManager.myglTexParameteri(target: GLenum; pname: GLenum; param: GLint);
+begin
+     glTexParameteri(target, pname, param);
+end;
+procedure TOGLStateManager.myglGetDoublev(pname: GLenum; params: PGLdouble);
+begin
+     glGetDoublev(pname, params);
+end;
+function TOGLStateManager.myglGetString(name: GLenum): PChar;
+begin
+     result:=glGetString(name);
+end;
+procedure TOGLStateManager.mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);
+begin
+     gluPickMatrix(x,y,delX,delY,viewport);
+end;
+
 procedure TOGLStateManager.myglMatrixMode(const mode: GLenum);
 begin
      if _glMatrixMode<>mode then

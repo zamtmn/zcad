@@ -21,20 +21,28 @@ unit mainwindow;
 
 interface
 uses
-  lineweightwnd,ugdbsimpledrawing,zcadsysvars,GDBBlockDef,layercombobox,ucxmenumgr,zcadstrconsts,math,LMessages,LCLIntf,
-  ActnList,LCLType,LCLProc,strproc,log,{$IFNDEF DELPHI}intftranslations,{$ENDIF}toolwin,
-  umytreenode,menus,Classes, SysUtils, FileUtil,{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls,Controls, {Graphics, Dialogs,}
-  gdbasetypes,SysInfo, oglwindow, io,
-  gdbase, languade,geometry,
-  varmandef, varman, UUnitManager, GDBManager, {odbase, odbasedef, iodxf,} UGDBOpenArrayOfByte, plugins,
-  {math, }UGDBDescriptor,cmdline,
-  {gdbobjectsconstdef,}UGDBLayerArray,{deveditor,}
-  {ZEditsWithProcedure,}{zforms,}{ZButtonsWithCommand,}{ZComboBoxsWithProc,}{ZButtonsWithVariable,}{zmenus,}
-  {GDBCommandsBase,}{ GDBCommandsDraw,GDBCommandsElectrical,}
-  commanddefinternal,commandline,{zmainforms,}memman,UGDBNamedObjectsArray,
-  {ZGUIArrays,}{ZBasicVisible,}{ZEditsWithVariable,}{ZTabControlsGeneric,}shared,{ZPanelsWithSplit,}{ZGUIsCT,}{ZstaticsText,}{UZProcessBar,}strmy{,strutils},{ZPanelsGeneric,}
-  graphics,
-  AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr{,xmlconf},zcadinterface,colorwnd;
+  {LCL}
+       AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
+       ActnList,LCLType,LCLProc,intftranslations,toolwin,LMessages,LCLIntf,
+       Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,FileUtil,
+       menus,graphics,dialogs,XMLPropStorage,
+  {FPC}
+       math,
+  {ZCAD BASE}
+       zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
+       geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
+       varmandef, varman,UUnitManager,SysInfo,shared,strmy,
+  {ZCAD SIMPLE PASCAL SCRIPT}
+       languade,
+  {ZCAD ENTITIES}
+       GDBEntity,UGDBSelectedObjArray,UGDBLayerArray,ugdbsimpledrawing,
+       GDBBlockDef,UGDBDescriptor,GDBManager,
+  {ZCAD COMMANDS}
+       commanddefinternal,commandline,
+  {GUI}
+       cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
+       colorwnd,imagesmanager;
+  {}
 type
   TInterfaceVars=record
                        CColor,CLWeight:GDBInteger;
@@ -51,138 +59,124 @@ type
 
                           end;
 
-  TFileHistory=Array [0..9] of {TmyMenuItem}TmyAction;
+  TFileHistory=Array [0..9] of TmyAction;
 
   { MainForm }
 
   MainForm = class(TFreedForm)
-                    ToolBarU{,ToolBarR}:TToolBar;
-                    //ToolBarD: TToolBar;
-                    //ObjInsp,
-                    MainPanel:TForm{TPanel};
-                    FToolBar{,MainPanelU}:TToolButtonForm;
-                    //MainPanelD:TCLine;
-                    //SplitterV,SplitterH: TSplitter;
+    ToolBarU{,ToolBarR}:TToolBar;
+    //ToolBarD: TToolBar;
+    //ObjInsp,
+    MainPanel:TForm{TPanel};
+    FToolBar{,MainPanelU}:TToolButtonForm;
+    //MainPanelD:TCLine;
+    //SplitterV,SplitterH: TSplitter;
 
-                    PageControl:TmyPageControl;
-                    HScrollBar,VScrollBar:TScrollBar;
+    PageControl:TmyPageControl;
+    HScrollBar,VScrollBar:TScrollBar;
 
-                    //MainMenu:TMenu;
-                    StandartActions:TmyActionList;
+    //MainMenu:TMenu;
+    StandartActions:TmyActionList;
 
-                    SystemTimer: TTimer;
+    SystemTimer: TTimer;
 
-                    toolbars:tstringlist;
-                    IconList: TImageList;
+    toolbars:tstringlist;
 
-                    updatesbytton,updatescontrols:tlist;
+    updatesbytton,updatescontrols:tlist;
 
-                    {procedure LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-                                               State: TOwnerDrawState);}
-                    procedure LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-                                               State: TOwnerDrawState);
-                    procedure ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-                                                                   State: TOwnerDrawState);
-                    function findtoolbatdesk(tbn:string):string;
-                    procedure CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
-                    procedure CreateHTPB(tb:TToolBar);
+    {procedure LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+                               State: TOwnerDrawState);}
+    procedure LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+                               State: TOwnerDrawState);
+    procedure ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+                                                   State: TOwnerDrawState);
+    function findtoolbatdesk(tbn:string):string;
+    procedure CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
+    procedure CreateHTPB(tb:TToolBar);
 
-                    procedure FormCreate(Sender: TObject);
-                    procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
-                    procedure AfterConstruction; override;
-                    destructor Destroy;override;
-                    procedure setnormalfocus(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
+    procedure AfterConstruction; override;
+    destructor Destroy;override;
+    procedure setnormalfocus(Sender: TObject);
 
-                    procedure draw;
+    procedure draw;
 
-                    procedure loadpanels(pf:GDBString);
-                    procedure CreateLayoutbox(tb:TToolBar);
-                    procedure loadmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
-                    procedure loadpopupmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
-                    procedure createmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
-                    procedure setmainmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
-                    procedure loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
+    procedure loadpanels(pf:GDBString);
+    procedure CreateLayoutbox(tb:TToolBar);
+    procedure loadmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
+    procedure loadpopupmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
+    procedure createmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
+    procedure setmainmenu(var f:GDBOpenArrayOfByte;var line:GDBString);
+    procedure loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
 
-                    procedure ChangedDWGTabCtrl(Sender: TObject);
-                    procedure UpdateControls;
+    procedure ChangedDWGTabCtrl(Sender: TObject);
+    procedure UpdateControls;
 
-                    procedure StartLongProcess(total:integer);
-                    procedure ProcessLongProcess(current:integer);
-                    procedure EndLongProcess;
-                    procedure Say(word:gdbstring);
+    procedure StartLongProcess(total:integer);
+    procedure ProcessLongProcess(current:integer);
+    procedure EndLongProcess;
+    procedure Say(word:gdbstring);
 
-                    procedure SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
+    procedure SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
 
-                    function MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
-                    procedure ShowAllCursors;
-                    procedure RestoreCursors;
-                    //function DOShowModal(MForm:TForm): Integer;
-                    procedure CloseDWGPageInterf(Sender: TObject);
-                    function CloseDWGPage(Sender: TObject):integer;
+    function MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
+    procedure ShowAllCursors;
+    procedure RestoreCursors;
+    procedure CloseDWGPageInterf(Sender: TObject);
+    function CloseDWGPage(Sender: TObject):integer;
 
-                    procedure PageControlMouseDown(Sender: TObject;Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-                    procedure correctscrollbars;
+    procedure PageControlMouseDown(Sender: TObject;Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure correctscrollbars;
 
 
-                    private
-                    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-                    public
-                    rt:GDBInteger;
-                    FileHistory:TFileHistory;
-                    //hToolTip: HWND;
+    private
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    public
+    rt:GDBInteger;
+    FileHistory:TFileHistory;
+    procedure CreateAnchorDockingInterface;
+    procedure CreateStandartInterface;
+    procedure CreateInterfaceLists;
+    procedure InitSystemCalls;
+    procedure LoadActions;
+    procedure myKeyPress(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure ChangeCLineW(Sender:Tobject);
+    procedure ChangeCColor(Sender:Tobject);
+    procedure DropDownColor(Sender:Tobject);
+    procedure DropUpColor(Sender:Tobject);
+    procedure ChangeLayout(Sender:Tobject);
+    procedure idle(Sender: TObject; var Done: Boolean);virtual;
+    procedure ReloadLayer(plt:PGDBNamedObjectsArray);
+    procedure GeneralTick(Sender: TObject);
+    procedure asynccloseapp(Data: PtrInt);
+    procedure processfilehistory(filename:GDBString);
+    function CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
+    procedure DockMasterCreateControl(Sender: TObject; aName: string; var
+    AControl: TControl; DoDisableAutoSizing: boolean);
 
-                    //procedure KeyPress(var Key: char);override;
-                    procedure CreateAnchorDockingInterface;
-                    procedure CreateStandartInterface;
-                    procedure CreateInterfaceLists;
-                    procedure InitSystemCalls;
-                    procedure LoadActions;
-                    procedure LoadIcons;
-                    procedure myKeyPress(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
+                                   Raw: boolean = false;
+                                   WithThemeSpace: boolean = true); override;
 
-                    //procedure ChangeCLayer(Sender:Tobject);
-                    procedure ChangeCLineW(Sender:Tobject);
-                    procedure ChangeCColor(Sender:Tobject);
-                    procedure DropDownColor(Sender:Tobject);
-                     procedure DropUpColor(Sender:Tobject);
+    function IsShortcut(var Message: TLMKey): boolean; override;
+    function GetLayerProp(PLayer:Pointer;var lp:TLayerPropRecord):boolean;
+    function GetLayersArray(var la:TLayerArray):boolean;
+    function ClickOnLayerProp(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean;
 
-                    procedure ChangeLayout(Sender:Tobject);
+    procedure setvisualprop;
+    procedure addoneobject;
 
-                    procedure idle(Sender: TObject; var Done: Boolean);virtual;
-                    procedure ReloadLayer(plt:PGDBNamedObjectsArray);
-
-                    procedure GeneralTick(Sender: TObject);//(uID, msg: UINT; dwUse, dw1, dw2: DWord); stdcall;
-
-                    procedure asynccloseapp(Data: PtrInt);
-
-                    procedure processfilehistory(filename:GDBString);
-                    function CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
-                    procedure DockMasterCreateControl(Sender: TObject; aName: string; var
-  AControl: TControl; DoDisableAutoSizing: boolean);
-
-                    procedure GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
-                                                   Raw: boolean = false;
-                                                   WithThemeSpace: boolean = true); override;
-
-                    function IsShortcut(var Message: TLMKey): boolean; override;
-                    function GetLayerProp(PLayer:Pointer;var lp:TLayerPropRecord):boolean;
-                    function GetLayersArray(var la:TLayerArray):boolean;
-                    function ClickOnLayerProp(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean;
-
-                    procedure setvisualprop;
-                    procedure addoneobject;
-
-                    procedure _scroll(Sender: TObject; ScrollCode: TScrollCode;
-                           var ScrollPos: Integer);
-                    procedure ShowCXMenu;
-                    procedure MainMouseMove;
-                    function MainMouseDown:GDBBoolean;
-
+    procedure _scroll(Sender: TObject; ScrollCode: TScrollCode;
+           var ScrollPos: Integer);
+    procedure ShowCXMenu;
+    procedure MainMouseMove;
+    function MainMouseDown:GDBBoolean;
                end;
-  TMyAnchorDockManager = class(TAnchorDockManager)
+  {TMyAnchorDockManager = class(TAnchorDockManager)
   public
     procedure ResetBounds(Force: Boolean); override;
-  end;
+  end;}
 procedure UpdateVisible;
 function getoglwndparam: GDBPointer; export;
 function LoadLayout_com(Operands:pansichar):GDBInteger;
@@ -193,46 +187,30 @@ var
   IVars:TInterfaceVars;
   MainFormN: MainForm;
   //MainForm: MainForm;
-  uGeneralTimer:cardinal;
-  GeneralTime:GDBInteger;
-  LayerBox:{TComboBox}TZCADLayerComboBox;
+  //uGeneralTimer:cardinal;
+  //GeneralTime:GDBInteger;
+  LayerBox:TZCADLayerComboBox;
   LineWBox,ColorBox:TComboBox;
   LayoutBox:TComboBox;
   LPTime:Tdatetime;
   oldlongprocess:integer;
-  tf:tform;
+  //tf:tform;
   OLDColor:integer;
   //DockMaster:  TAnchorDockMaster = nil;
-
-  //imagesindex
-  II_Plus,
-  II_Minus,
-  II_Ok,
-  II_LayerOff,
-  II_LayerOn,
-  II_LayerUnPrint,
-  II_LayerPrint,
-  II_LayerUnLock,
-  II_LayerLock,
-  II_LayerFreze,
-  II_LayerUnFreze
-  :integer;
 
   function CloseApp:GDBInteger;
   function IsRealyQuit:GDBBoolean;
 
 implementation
 
-uses {GDBCommandsBase,}{Objinsp}{,optionswnd, Tedit_form, MTedit_form}
-  GDBEntity,UGDBSelectedObjArray,dialogs,XMLPropStorage{,layerwnd};
-procedure TMyAnchorDockManager.ResetBounds(Force: Boolean);
+{procedure TMyAnchorDockManager.ResetBounds(Force: Boolean);
 begin
      inherited;
      //OldSiteClientRect:=FSiteClientRect;
      //FSiteClientRect:=Site.ClientRect;
      //site:=site;
      //Site.ClientRect:=FSiteClientRect;
-end;
+end;}
 constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -1174,16 +1152,6 @@ begin
                                           cmdedit.SetFocus;
      end;
 end;
-function loadicon(iconlist: TImageList;f:string):integer;
-var
-  bmp:TPortableNetworkGraphic;
-begin
-  bmp:=TPortableNetworkGraphic.create;
-  bmp.LoadFromFile(f);
-  bmp.Transparent:=true;
-  result:=iconlist.Add(bmp,nil);
-  freeandnil(bmp);
-end;
 procedure MainForm.InitSystemCalls;
 begin
   ShowAllCursorsProc:=self.ShowAllCursors;
@@ -1206,8 +1174,7 @@ var
 begin
   StandartActions:=TmyActionList.Create(self);
   if not assigned(StandartActions.Images) then
-                             StandartActions.Images:=TImageList.Create(
-                               StandartActions);
+                             StandartActions.Images:=TImageList.Create(StandartActions);
   StandartActions.brocenicon:=StandartActions.LoadImage(sysparam.programpath+
   'menu/BMP/noimage.bmp');
   StandartActions.LoadFromACNFile(sysparam.programpath+'menu/actions.acn');
@@ -1218,23 +1185,6 @@ begin
   begin
        FileHistory[i]:=TmyAction.Create(self);
   end;
-end;
-
-procedure MainForm.LoadIcons;
-begin
-  iconlist:=timagelist.Create(self);
-
-  II_Plus:=loadicon(iconlist, sysparam.programpath+'images/plus.png');
-  II_Minus:=loadicon(iconlist, sysparam.programpath+'images/minus.png');
-  II_Ok:=loadicon(iconlist, sysparam.programpath+'images/ok.png');
-  II_LayerOff:=loadicon(iconlist, sysparam.programpath+'images/off.png');
-  II_LayerOn:=loadicon(iconlist, sysparam.programpath+'images/on.png');
-  II_LayerUnPrint:=loadicon(iconlist, sysparam.programpath+'images/unprint.png');
-  II_LayerPrint:=loadicon(iconlist, sysparam.programpath+'images/print.png');
-  II_LayerUnLock:=loadicon(iconlist, sysparam.programpath+'images/unlock.png');
-  II_LayerLock:=loadicon(iconlist, sysparam.programpath+'images/lock.png');
-  II_LayerFreze:=loadicon(iconlist, sysparam.programpath+'images/freze.png');
-  II_LayerUnFreze:=loadicon(iconlist, sysparam.programpath+'images/unfreze.png');
 end;
 
 procedure MainForm.CreateInterfaceLists;
@@ -1250,7 +1200,7 @@ begin
   self.SetBounds(0, 0, 800, 44);
   DockMaster.HeaderClass:=TmyAnchorDockHeader;
   DockMaster.SplitterClass:=TmyAnchorDockSplitter;
-  DockMaster.ManagerClass:=TMyAnchorDockManager;
+  DockMaster.ManagerClass:={TMy}TAnchorDockManager;
   DockMaster.OnCreateControl:={@}DockMasterCreateControl;
   DockMaster.MakeDockSite(Self, [akTop, akBottom, akLeft, akRight], admrpChild
     {admrpNone}, {true}false);

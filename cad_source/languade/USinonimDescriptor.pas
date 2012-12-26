@@ -34,7 +34,7 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
 
                end;
 implementation
-uses {ZBasicVisible,}UUnitManager,log;
+uses {ZBasicVisible,}urtl,UUnitManager,log;
 destructor GDBSinonimDescriptor.done;
 begin
      SinonimName:='';

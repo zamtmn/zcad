@@ -10,7 +10,7 @@ unit GDBCommandsElectrical;
 
 interface
 uses
-  gdbentityfactory,zcadsysvars,csvdocument,
+  urtl,gdbentityfactory,zcadsysvars,csvdocument,
   UGDBOpenArrayOfPV,GDBBlockInsert,devices,UGDBTree,ugdbdescriptor,gdbasetypes,commandline,GDBCommandsDraw,GDBElLeader,
   plugins,
   commandlinedef,

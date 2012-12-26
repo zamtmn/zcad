@@ -82,6 +82,7 @@ C:\zcad\CAD_SOURCE\gui\oglwindowdef.pas
 C:\zcad\CAD_SOURCE\languade\UUnitManager.pas
 C:\zcad\CAD_SOURCE\u\UGDBNumerator.pas
 C:\zcad\CAD_SOURCE\gdb\UGDBDrawingdef.pas
+C:\zcad\CAD_SOURCE\gdb\ugdbabstractdrawing.pas
 C:\zcad\CAD_SOURCE\gdb\ugdbsimpledrawing.pas
 C:\zcad\CAD_SOURCE\gdb\UGDBDescriptor.pas
 C:\zcad\CAD_SOURCE\commands\GDBCommandsBase.pas

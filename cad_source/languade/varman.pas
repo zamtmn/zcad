@@ -45,7 +45,8 @@ const
      arraytype=5;
      enumtype=6;
      proceduraltype=7;
-     maxtype=7;
+     variablecategory=8;
+     maxtype=8;
      parsetype:array [1..maxtype] of td=
      (
       (template:'_identifier'#0'_softspace'#0'==_softspace'#0'_identifier'#0'_softend'#0;id:identtype),
@@ -54,7 +55,8 @@ const
       (template:'_identifier'#0'_softspace'#0'==_softspace'#0'=o=b=j=e=c=t_endlexem'#0'_softspace'#0;id:objecttype),
       (template:'_identifier'#0'_softspace'#0'==_softspace'#0'=a=r=r=a=y_softspace'#0;id:arraytype),
       (template:'_identifier'#0'_softspace'#0'==_softspace'#0'=p=r=o=c=e=d=u=r=e_hardspace'#0;id:proceduraltype),
-      (template:'_identifier'#0'_softspace'#0'==_softspace'#0'=(_softspace'#0;id:enumtype)
+      (template:'_identifier'#0'_softspace'#0'==_softspace'#0'=(_softspace'#0;id:enumtype),
+      (template:'_softspace'#0'=(=*=v=a=r=c=a=t=e=g=o=r=y=f=o=r=o=i_softspace'#0'_identifier'#0'==_GDBString'#0'=*=)';id:variablecategory)
       );
      functionmember=1;
      proceduremember=2;
@@ -191,7 +193,7 @@ var
   SysUnit,SavedUnit,SysVarUnit,DBUnit,DWGDBUnit,DWGUnit:PTUnit;
   BaseTypesEndIndex:GDBInteger;
   OldTypesCount:GDBInteger;
-  VarCategory,BlockCategory,EqCategory:GDBGDBStringArray;
+  VarCategory:GDBGDBStringArray;
   CategoryCollapsed:GDBOpenArrayOfByte;
   CategoryUnknownCOllapsed:boolean;
 
@@ -1462,11 +1464,7 @@ begin
   //DecimalSeparator := '.';
   ShortDateFormat:='MM.yy';
   VarCategory.init(100);
-  BlockCategory.init(100);
-  EqCategory.init(100);
-  VarCategory.loadfromfile(expandpath('*rtl/VarCategory.cat'));
-  BlockCategory.loadfromfile(expandpath('*rtl/BlockCategory.cat'));
-  EqCategory.loadfromfile(expandpath('*rtl/EqCategory.cat'));
+  //VarCategory.loadfromfile(expandpath('*rtl/VarCategory.cat'));
   CategoryCollapsed.init({$IFDEF DEBUGBUILD}'{716C3EDB-32A3-416D-A599-B04B1B45D6E4}',{$ENDIF}VarCategory.Count);
   CategoryCollapsed.CreateArray;
   fillchar(CategoryCollapsed.parray^,CategoryCollapsed.max,byte(true));
@@ -1476,8 +1474,6 @@ end;
 finalization;
 begin
      VarCategory.FreeAndDone;
-     BlockCategory.FreeAndDone;
-     EqCategory.FreeAndDone;
      CategoryCollapsed.done;
 end;
 end.

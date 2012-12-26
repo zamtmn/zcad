@@ -10,7 +10,7 @@ unit GDBCommandsOPS;
 interface
 uses
 
-  urtl,gdbentityfactory,zcadsysvars,strproc,gdbasetypes,commandline,log,UGDBOpenArrayOfPObjects,
+  gdbentityfactory,zcadsysvars,strproc,gdbasetypes,commandline,log,UGDBOpenArrayOfPObjects,
   plugins,
   commandlinedef,
   commanddefinternal,

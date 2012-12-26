@@ -18,7 +18,7 @@
 unit GDBBlockDef;
 {$INCLUDE def.inc}
 interface
-uses urtl,ugdbdrawingdef,UGDBVisibleOpenArray,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,memman, geometry,
+uses ugdbdrawingdef,UGDBVisibleOpenArray,GDBSubordinated,dxflow,UGDBOpenArrayOfByte,gdbasetypes,sysutils,gdbase,memman, geometry,
      UGDBLayerArray,ugdbltypearray,
      zcadstrconsts,varmandef,gdbobjectsconstdef,GDBGenericSubEntry,varman;
 type

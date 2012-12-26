@@ -20,7 +20,7 @@ unit projecttreewnd;
 {$INCLUDE def.inc}
 interface
 uses
- gdbobjectsconstdef,zcadstrconsts,ucxmenumgr,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ UGDBStringArray,gdbobjectsconstdef,zcadstrconsts,ucxmenumgr,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}ComCtrls,
  {ZTabControlsGeneric,zmenus,}{DeviceBase}devicebaseabstract,log,SysUtils,{UGDBTree,}gdbase,UGDBDescriptor{,math,commandline},varman,languade{,UGDBTracePropArray},
   {ZEditsWithProcedure,zbasicvisible,}varmandef,shared,sysinfo{,ZTreeViewsGeneric},memman,gdbasetypes;
@@ -64,11 +64,12 @@ type
   end;
 var
   ProjectTreeWindow:TProjectTreeWnd;{<Дерево проекта}
+  BlockCategory,EqCategory:GDBGDBStringArray;
 
   //ProgramDBContextMenuN,ProjectDBContextMenuN,ProgramDEVContextMenuN:TmyPopupMenu;
 
 implementation
-uses {commandline,}GDBBlockDef,UBaseTypeDescriptor,zcadinterface,UGDBStringArray,UUnitManager;
+uses {commandline,}GDBBlockDef,UBaseTypeDescriptor,zcadinterface,UUnitManager;
 function TBlockTreeNode.GetParams;
 begin
      result:=@FBlockName;
@@ -340,6 +341,10 @@ initialization
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('projecttreewnd.initialization');{$ENDIF}
   ProjectTreeWindow:=nil;
+  BlockCategory.init(100);
+  EqCategory.init(100);
+  BlockCategory.loadfromfile(expandpath('*rtl/BlockCategory.cat'));
+  EqCategory.loadfromfile(expandpath('*rtl/EqCategory.cat'));
   (*
   ProgramDBContextMenuN:=TmyPopupMenu.create(nil);
   cxmenumgr.RegisterLCLMenu(ProgramDBContextMenuN);
@@ -361,5 +366,7 @@ begin
      {FreeAndNil(ProgramDBContextMenuN);
      FreeAndNil(ProjectDBContextMenuN);
      FreeAndNil(ProgramDEVContextMenuN);}
+     BlockCategory.FreeAndDone;
+     EqCategory.FreeAndDone;
 end;
 end.

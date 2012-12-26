@@ -21,7 +21,7 @@ unit GDBRoot;
 
 interface
 Uses
-   urtl,ugdbdrawingdef,GDBCamera,OGLSpecFunc,
+   ugdbdrawingdef,GDBCamera,OGLSpecFunc,
    UGDBEntTree,{UGDBVisibleTreeArray,UGDBOpenArrayOfPV,}
 devices,gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry,uunitmanager{,shared};
 type

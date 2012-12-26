@@ -23,6 +23,16 @@ uses gdbasetypes,
      gdbobjectsconstdef;
 type
 {EXPORT+}
+(*varcategoryforoi SUMMARY='Суммарно'*)
+(*varcategoryforoi CABLE='Параметры кабеля'*)
+(*varcategoryforoi DEVICE='Параметры устройства'*)
+(*varcategoryforoi OBJFUNC='ункция:объект'*)
+(*varcategoryforoi NMO='Имя'*)
+(*varcategoryforoi DB='База данных'*)
+(*varcategoryforoi GC='Групповое подключение'*)
+(*varcategoryforoi LENGTH='Параметры длинны'*)
+(*varcategoryforoi BTY='Параметры определения блока'*)
+(*varcategoryforoi EL='El(Устаревшая группа)'*)
 GDBTypedPointer=record
                       Instance:GDBPointer;
                       PTD:GDBPointer;

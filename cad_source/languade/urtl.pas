@@ -23,15 +23,13 @@ uses UUnitManager,zcadsysvars,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$E
      UBaseTypeDescriptor,gdbasetypes, shared,gdbase,UGDBOpenArrayOfByte, strmy, varmandef,sysinfo,
      UGDBOpenArrayOfData,UGDBStringArray,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,UPointerDescriptor,
      URecordDescriptor,UObjectDescriptor,USinonimDescriptor;
-var
-   units:TUnitManager;
 implementation
 uses
     log,memman;
 initialization;
      {$IFDEF DEBUGINITSECTION}LogOut('urtl.initialization');{$ENDIF}
-     units.init;
-          units.loadunit(expandpath('*rtl/system.pas'),nil);
+     //units.init;
+     units.loadunit(expandpath('*rtl/system.pas'),nil);
 
   SysUnit:=units.findunit('System');
 
@@ -202,5 +200,5 @@ initialization;
   programlog.logoutstr('UUnitManager.startup',lp_DecPos);
 
 finalization;
-  units.FreeAndDone;
+  //units.FreeAndDone;
 end.

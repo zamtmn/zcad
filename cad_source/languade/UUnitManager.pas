@@ -41,7 +41,9 @@ type
                        procedure AfterObjectDone(p:PGDBaseObject);virtual;
                        procedure free;virtual;
                  end;
-{EXPORT-}                 
+{EXPORT-}
+var
+   units:TUnitManager;
 implementation
 uses
     log,memman;
@@ -342,6 +344,13 @@ begin
                 typemode:begin
                                  parseresult:=getpattern(@parsetype,maxtype,line,typ); // длдл
                                 case typ of
+                                            variablecategory:
+                                                     begin
+                                                           unitpart:=unitpart;
+                                                           typename:=parseresult^.getGDBString(0)+'_'+parseresult^.getGDBString(1);
+                                                           VarCategory.addnodouble(@typename);
+                                                           addtype:=false;
+                                                     end;
                                   identtype:begin
                                                   typename:=parseresult^.getGDBString(0);
                                                   gdbgetmem({$IFDEF DEBUGBUILD}'{611C73B3-FC2B-4E77-A58F-061B3C7707C8}',{$ENDIF}GDBPointer(etd),sizeof(GDBSinonimDescriptor));
@@ -698,5 +707,7 @@ begin
 end;
 initialization;
      {$IFDEF DEBUGINITSECTION}LogOut('uunitmanager.initialization');{$ENDIF}
+     units.init;
 finalization;
+     units.FreeAndDone;
 end.

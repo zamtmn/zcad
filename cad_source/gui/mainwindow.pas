@@ -962,7 +962,7 @@ begin
   TempForm.Caption:=rsGDBObjInspWndName;
   TempForm.SetBounds(0,100,200,600);
   if assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
+  SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,nil);
   if assigned(SetCurrentObjDefaultProc)then
                                            SetCurrentObjDefaultProc;
   pint:=SavedUnit.FindValue('VIEW_ObjInspV');
@@ -2086,7 +2086,7 @@ end;
 procedure MainForm.loadpopupmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
 var
     pmenuitem:TmyMenuItem;
-    ppopupmenu:TmyPopupMenu;
+    ppopupmenu:TPopupMenu;
 begin
            {if not assigned(pm) then
                                    begin

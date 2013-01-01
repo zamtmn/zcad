@@ -108,7 +108,8 @@ begin
 end;
 procedure TSimpleDrawing.ChangeStampt;
 begin
-
+     if OGLwindow1<>nil then
+     OGLwindow1.param.lastonmouseobject:=nil;
 end;
 function TSimpleDrawing.GetUndoTop:TArrayIndex;
 begin

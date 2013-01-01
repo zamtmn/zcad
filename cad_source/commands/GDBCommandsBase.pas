@@ -90,7 +90,7 @@ type
 
        InfoFormVar:TInfoForm=nil;
 
-       MSelectCXMenu:TmyPopupMenu=nil;
+       MSelectCXMenu:TPopupMenu=nil;
 
    function SaveAs_com(Operands:pansichar):GDBInteger;
    procedure CopyToClipboard;
@@ -244,12 +244,12 @@ begin
                                  membuf.SaveToFile('*log\lms.pas');
                                  {$ENDIF}
                                  if assigned(SetGDBObjInspProc)then
-                                                               SetGDBObjInspProc(SysUnit.TypeName2PTD('TMSEditor'),@MSEditor);
+                                                               SetGDBObjInspProc(SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,gdb.GetCurrentDWG);
                                 end
                             else
                                 commandmanager.executecommandend;
 end;
-function GetOnMouseObjWAddr(var ContextMenu:TmyPopupMenu):GDBInteger;
+function GetOnMouseObjWAddr(var ContextMenu:TPopupMenu):GDBInteger;
 var
   pp:PGDBObjEntity;
   ir:itrec;
@@ -320,12 +320,12 @@ begin
      if Operands='VARS' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,gdb.GetCurrentDWG);
                             end
 else if Operands='CAMERA' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBObjCamera'),gdb.GetCurrentDWG.pcamera);
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBObjCamera'),gdb.GetCurrentDWG.pcamera,gdb.GetCurrentDWG);
                             end
 else if Operands='CURRENT' then
                             begin
@@ -336,7 +336,7 @@ else if Operands='CURRENT' then
                                           obj:=pGDBObjEntity(GDB.GetCurrentDWG.GetLastSelected)^.GetObjTypeName;
                                           objt:=SysUnit.TypeName2PTD(obj);
                                           If assigned(SetGDBObjInspProc)then
-                                          SetGDBObjInspProc(objt,GDB.GetCurrentDWG.GetLastSelected);
+                                          SetGDBObjInspProc(objt,GDB.GetCurrentDWG.GetLastSelected,gdb.GetCurrentDWG);
                                      end
                                  else
                                      begin
@@ -357,7 +357,7 @@ else if Operands='SELECTED' then
                                                                    obj:=pp^.GetObjTypeName;
                                                                    objt:=SysUnit.TypeName2PTD(obj);
                                                                    If assigned(SetGDBObjInspProc)then
-                                                                   SetGDBObjInspProc(objt,pp);
+                                                                   SetGDBObjInspProc(objt,pp,gdb.GetCurrentDWG);
                                                                    exit;
                                                               end;
                                               pp:=gdb.GetCurrentROOT.objarray.iterate(ir);
@@ -369,52 +369,52 @@ else if Operands='SELECTED' then
 else if Operands='OGLWND_DEBUG' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('OGLWndtype'),@gdb.GetCurrentDWG.OGLwindow1.param);
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('OGLWndtype'),@gdb.GetCurrentDWG.OGLwindow1.param,gdb.GetCurrentDWG);
                             end
 else if Operands='GDBDescriptor' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBDescriptor'),@gdb);
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBDescriptor'),@gdb,gdb.GetCurrentDWG);
                             end
 else if Operands='RELE_DEBUG' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(dbunit.TypeName2PTD('vardesk'),dbunit.FindVariable('SEVCABLEkvvg'));
+                                 SetGDBObjInspProc(dbunit.TypeName2PTD('vardesk'),dbunit.FindVariable('SEVCABLEkvvg'),gdb.GetCurrentDWG);
                             end
 else if Operands='LAYERS' then
                             begin
-                                 SetGDBObjInspProc(dbunit.TypeName2PTD('GDBLayerArray'),@gdb.GetCurrentDWG.LayerTable);
+                                 SetGDBObjInspProc(dbunit.TypeName2PTD('GDBLayerArray'),@gdb.GetCurrentDWG.LayerTable,gdb.GetCurrentDWG);
                             end
 else if Operands='TSTYLES' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(dbunit.TypeName2PTD('GDBTextStyleArray'),@gdb.GetCurrentDWG.TextStyleTable);
+                                 SetGDBObjInspProc(dbunit.TypeName2PTD('GDBTextStyleArray'),@gdb.GetCurrentDWG.TextStyleTable,gdb.GetCurrentDWG);
                             end
 else if Operands='FONTS' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(dbunit.TypeName2PTD('GDBFontManager'),@FontManager);
+                                 SetGDBObjInspProc(dbunit.TypeName2PTD('GDBFontManager'),@FontManager,gdb.GetCurrentDWG);
                             end
 else if Operands='OSMODE' then
                             begin
                                  OSModeEditor.GetState;
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor);
+                                 SetGDBObjInspProc(dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,gdb.GetCurrentDWG);
                             end
 else if Operands='NUMERATORS' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBNumerator'),@gdb.GetCurrentDWG.Numerator);
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBNumerator'),@gdb.GetCurrentDWG.Numerator,gdb.GetCurrentDWG);
                             end
 else if Operands='LINETYPESTYLES' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBLtypeArray'),@gdb.GetCurrentDWG.LTypeStyleTable);
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBLtypeArray'),@gdb.GetCurrentDWG.LTypeStyleTable,gdb.GetCurrentDWG);
                             end
 else if Operands='TABLESTYLES' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBTableStyleArray'),@gdb.GetCurrentDWG.TableStyleTable);
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBTableStyleArray'),@gdb.GetCurrentDWG.TableStyleTable,gdb.GetCurrentDWG);
                             end
                             ;
      If assigned(SetCurrentObjDefaultProc)then
@@ -979,7 +979,7 @@ end;
 function Options_com(Operands:pansichar):GDBInteger;
 begin
   if assigned(SetGDBObjInspProc)then
-                                    SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar);
+                                    SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,gdb.GetCurrentDWG);
   historyoutstr(rscmOptions2OI);
   //Optionswindow.Show;
   result:=cmd_ok;
@@ -1689,7 +1689,7 @@ end;
 function SnapProp_com(Operands:pansichar):GDBInteger;
 begin
      if assigned(StoreAndSetGDBObjInspProc)then
-      StoreAndSetGDBObjInspProc(dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor);
+      StoreAndSetGDBObjInspProc(dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,gdb.GetCurrentDWG);
       result:=cmd_ok;
 end;
 function UpdatePO_com(Operands:pansichar):GDBInteger;

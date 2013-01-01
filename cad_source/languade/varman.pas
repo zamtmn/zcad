@@ -101,7 +101,9 @@ const
      usesmode=8;
      subunitmode=9;
      usescopymode=10;
-     maxparsemodetemplate=10;
+     proceduremode=11;
+     functionmode=12;
+     maxparsemodetemplate=12;
      parsemodetemplate:array [1..maxparsemodetemplate] of td=
      (
      (template:'_softspace'#0'=i=m=p=l=e=m=e=n=t=a=t=i=o=n_hardspace'#0;id:impl),
@@ -113,7 +115,9 @@ const
      (template:'_softspace'#0'=s=u=b=u=n=i=t_hardspace'#0;id:subunitmode),
      (template:'_softspace'#0'=u=s=e=s=c=o=p=y_hardspace'#0;id:usescopymode),
      (template:'_softspace'#0'=b=e=g=i=n_hardspace'#0;id:beginmode),
-     (template:'_softspace'#0'=e=n=d_softspace'#0'=.';id:endmode)
+     (template:'_softspace'#0'=e=n=d_softspace'#0'=.';id:endmode),
+     (template:'_softspace'#0'=p=r=o=c=e=d=u=r=e_hardspace'#0;id:proceduremode),
+     (template:'_softspace'#0'=f=u=n=c=t=i=o=n_hardspace'#0;id:functionmode)
      );
      mod_virtual=1;
      mod_abstract=2;

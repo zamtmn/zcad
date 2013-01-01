@@ -47,8 +47,8 @@ type
     TSplashTextOutProc=procedure (s:string;pm:boolean);
 
     //ObjInsp
-    TSetGDBObjInsp=procedure(exttype:PUserTypeDescriptor; addr:Pointer);
-    TStoreAndSetGDBObjInsp=procedure(exttype:PUserTypeDescriptor; addr:Pointer);
+    TSetGDBObjInsp=procedure(exttype:PUserTypeDescriptor; addr,context:Pointer);
+    TStoreAndSetGDBObjInsp=procedure(exttype:PUserTypeDescriptor; addr,context:Pointer);
 
     //mainwindow
     TMessageBox=function(Text, Caption: PChar; Flags: Longint): Integer of object;

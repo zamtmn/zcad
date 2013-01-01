@@ -49,6 +49,8 @@ GDBaseObject=object
     function GetObjName:GDBString;virtual;
     constructor initnul;
     destructor Done;virtual; abstract;
+    function IsEntity:GDBBoolean;virtual;
+
   end;
 devicedesk=record
                  category,variable,name,id,nameall,tu,edizm,mass:GDBString;
@@ -359,6 +361,10 @@ begin
 end;
 constructor GDBaseObject.initnul;
 begin
+end;
+function GDBaseObject.IsEntity:GDBBoolean;
+begin
+     result:=false;
 end;
 procedure GDBaseObject.format;
 begin

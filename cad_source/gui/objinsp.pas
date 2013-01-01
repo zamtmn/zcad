@@ -22,7 +22,7 @@ unit Objinsp;
 interface
 
 uses
-  zcadinterface,ucxmenumgr,umytreenode,
+  ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
   Themes,
   {$IFDEF LCLGTK2}
   x,xlib,{x11,}{xutil,}
@@ -32,7 +32,7 @@ uses
   {StdCtrls,}ExtCtrls,{ComCtrls,}Controls,Classes,menus,Forms,lcltype,fileutil,
 
   gdbasetypes,SysUtils,shared,
-  gdbase,{OGLtypes,} io{,UGDBOpenArrayOfByte,varman},varmandef,UGDBDescriptor{,UGDBOpenArrayOfPV},
+  gdbase{OGLtypes,} {io}{,UGDBOpenArrayOfByte,varman},varmandef,{UGDBDescriptor}ugdbdrawingdef{,UGDBOpenArrayOfPV},
   {zforms,ZComboBoxsWithProc,ZEditsWithProcedure,log,gdbcircle,}memman{,zbasicvisible,zguisct},TypeDescriptors{,commctrl};
 const
   rowh=21;
@@ -51,9 +51,11 @@ type
 
     PStoredObj:GDBPointer;
     StoredObjGDBType:PUserTypeDescriptor;
+    pStoredContext:GDBPointer;
 
     pcurrobj,pdefaultobj:GDBPointer;
     currobjgdbtype,defaultobjgdbtype:PUserTypeDescriptor;
+    pcurcontext,pdefaultcontext:GDBPointer;
     PEditor:TPropEditor;
     PDA:TPropertyDeskriptorArray;
     namecol{,mmnamecol}:GDBInteger;
@@ -101,7 +103,7 @@ type
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);override;
     procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);override;
     private
-    procedure setptr(exttype:PUserTypeDescriptor; addr:GDBPointer);
+    procedure setptr(exttype:PUserTypeDescriptor; addr,context:GDBPointer);
     procedure updateinsp;
     public
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
@@ -114,8 +116,8 @@ type
     procedure FormHide(Sender: TObject);
   end;
 
-procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
-procedure StoreAndSetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
+procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr,context:GDBPointer);
+procedure StoreAndSetGDBObjInsp(exttype:PUserTypeDescriptor; addr,context:GDBPointer);
 function ReStoreGDBObjInsp:GDBBoolean;
 procedure UpdateObjInsp;
 procedure ReturnToDefault;
@@ -174,9 +176,10 @@ begin
      if (GDBobjinsp.PStoredObj=nil) then
                                     else
                                     begin
-                                         GDBobjinsp.setptr(GDBobjinsp.StoredObjGDBType,GDBobjinsp.PStoredObj);
+                                         GDBobjinsp.setptr(GDBobjinsp.StoredObjGDBType,GDBobjinsp.PStoredObj,GDBobjinsp.pStoredContext);
                                          GDBobjinsp.PStoredObj:=nil;
                                          GDBobjinsp.StoredObjGDBType:=nil;
+                                         GDBobjinsp.pStoredContext:=nil;
 
                                          {GDBobjinsp.pcurrobj:=GDBobjinsp.PStoredObj;
                                          GDBobjinsp.currobjgdbtype:=GDBobjinsp.StoredObjGDBType;
@@ -185,7 +188,7 @@ begin
                                     end;
      end;
 end;
-procedure StoreAndSetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
+procedure StoreAndSetGDBObjInsp(exttype:PUserTypeDescriptor; addr,context:GDBPointer);
 begin
      if assigned(GDBobjinsp)then
      begin
@@ -193,16 +196,17 @@ begin
                              begin
                                   GDBobjinsp.PStoredObj:=GDBobjinsp.pcurrobj;
                                   GDBobjinsp.StoredObjGDBType:=GDBobjinsp.currobjgdbtype;
+                                  GDBobjinsp.pStoredContext:=GDBobjinsp.pcurcontext;
                              end;
-     GDBobjinsp.setptr(exttype,addr);
+     GDBobjinsp.setptr(exttype,addr,context);
      end;
 end;
 
-procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr:GDBPointer);
+procedure SetGDBObjInsp(exttype:PUserTypeDescriptor; addr,context:GDBPointer);
 begin
      if assigned(GDBobjinsp)then
                                 begin
-                                     GDBobjinsp.setptr(exttype,addr);
+                                     GDBobjinsp.setptr(exttype,addr,context);
                                 end;
 end;
 procedure UpdateObjInsp;
@@ -322,11 +326,12 @@ procedure TGDBobjinsp.SetCurrentObjDefault;
 begin
   pdefaultobj:=pcurrobj;
   defaultobjgdbtype:=currobjgdbtype;
+  pdefaultcontext:=pcurcontext;
 end;
 
 procedure TGDBobjinsp.ReturnToDefault;
 begin
-  setptr(defaultobjgdbtype,pdefaultobj);
+  setptr(defaultobjgdbtype,pdefaultobj,pdefaultcontext);
 end;
 
 procedure TGDBobjinsp.createpda;
@@ -393,6 +398,7 @@ begin
     //PEPD:=PUserTypeDescriptor(Types.exttype.getelement(exttype)^);
     //PTUserTypeDescriptor(PEPD)^.CreateProperties(@PDA,'root',field_no_attrib,0,bmode,addr);
     //PD:=PUserTypeDescriptor(Types.exttype.getelement(exttype)^);
+  if exttype<>nil then
   PTUserTypeDescriptor(exttype)^.CreateProperties(PDM_Field,@PDA,'root',field_no_attrib,0,bmode,addr,'','');
 end;
 
@@ -737,26 +743,36 @@ end;
 procedure TGDBobjinsp.Notify;
 var
    pld:GDBPointer;
-   pdwg:PTDrawing;
+   //pdwg:PTDrawing;
 begin
   if sender=peditor then
   begin   //fghfgh
 
-    pdwg:=ptdrawing(gdb.GetCurrentDWG);
-    if pdwg<>nil then
+    //pdwg:=ptdrawing(gdb.GetCurrentDWG);
+    if pcurcontext<>nil then
     begin
-         pdwg.OGLwindow1.param.lastonmouseobject:=nil;
-         pdwg.Changed:=true;
+         PTDrawingDef(pcurcontext).ChangeStampt(true);
     end;
     pld:=peditor.PInstance;
     if GDBobj then
                   begin
                        if ppropcurrentedit^.mode=PDM_Field then
-                                                               PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(pld,{self.pcurrobj,}self.currobjgdbtype)
+                                                               begin
+                                                               //PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(pld,self.currobjgdbtype);
+                                                               if PGDBaseObject(pcurrobj)^.IsEntity then
+                                                                                                        PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^)
+                                                                                                    else
+                                                                                                        PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(nil,self.currobjgdbtype);
+                                                               end
+
                                                            else
                                                                begin
                                                                  PObjectDescriptor(currobjgdbtype)^.SimpleRunMetodWithArg(ppropcurrentedit^.w,pcurrobj,ppropcurrentedit^.valueAddres);
-                                                                 PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(nil,self.currobjgdbtype)
+                                                                 //PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(nil,self.currobjgdbtype)
+                                                                 if PGDBaseObject(pcurrobj)^.IsEntity then
+                                                                                                          PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^)
+                                                                                                      else
+                                                                                                          PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(nil,self.currobjgdbtype);
                                                                end;
 
                   end;
@@ -987,9 +1003,9 @@ begin
          //ppropcurrentedit:=pp;
        end;
        vsa.init(50);
-       if pp^.valkey<>'' then
+       if (pp^.valkey<>'')and(self.pcurcontext<>nil) then
        begin
-            pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+            pobj:=PTSimpleDrawing(pcurcontext).GetCurrentROOT.ObjArray.beginiterate(ir);
             if pobj<>nil then
             repeat
                   if self.GDBobj then
@@ -1004,7 +1020,7 @@ begin
                             vsa.addnodouble(@vv);
                        end;
                   end;
-                  pobj:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+                  pobj:=PTSimpleDrawing(pcurcontext).GetCurrentROOT.ObjArray.iterate(ir);
             until pobj=nil;
             vsa.sort;
        end;
@@ -1037,7 +1053,7 @@ var
   vsa:GDBGDBStringArray;
   ir:itrec;
 
-  menu:TmyPopupMenu;
+  menu:TPopupMenu;
 
 begin
   inherited;
@@ -1061,9 +1077,9 @@ begin
                               begin
                                    menu:=nil;
                                    if pp^.valkey<>''then
-                                   menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPVARCXMENU'))
+                                   menu:=TPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPVARCXMENU'))
                               else if pp^.Value<>''then
-                                   menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPCXMENU'));
+                                   menu:=TPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPCXMENU'));
                                    if menu<>nil then
                                    begin
                                    currpd:=pp;
@@ -1082,7 +1098,7 @@ end;
 procedure TGDBobjinsp.updateinsp;
 begin
   //exit;
-  setptr(currobjgdbtype,pcurrobj);
+  setptr(currobjgdbtype,pcurrobj,pcurcontext);
 end;
 
 
@@ -1096,6 +1112,7 @@ begin
       //-----------------------------------------------------------------peditor.Hide;
       //peditor^.done;
       //peditor:=nil;
+      self.freeeditor;
     end;
     //currobjgdbtype:=exttype;
     //pcurrobj:=addr;

@@ -325,6 +325,7 @@ end;
 procedure TDrawing.ChangeStampt;
 begin
      self.Changed:={true}st;
+     inherited;
 end;
 function TDrawing.GetChangeStampt:GDBBoolean;
 begin

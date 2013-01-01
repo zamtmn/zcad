@@ -169,6 +169,7 @@ function TUnitManager.changeparsemode(newmode:GDBInteger;var mode:GDBInteger):pa
 var i:GDBInteger;
     //line:GDBString;
     //fieldgdbtype: gdbtypedesk;
+    pfu:pointer;
 begin
      result:=modeOk;
      if mode=typemode then
@@ -178,6 +179,16 @@ begin
           begin
                currentunit.TypeIndex2PTD(i)^.Format;
           end;
+     end;
+     if (mode=unitmode)and(newmode<>unitmode) then
+     if (CurrentUnit<>nil) then
+     if (CurrentUnit.InterfaceUses.Count=0) then
+     begin
+       pfu:=findunit('system');
+       if (pfu<>nil)and(pfu<>CurrentUnit) then
+       begin
+            CurrentUnit.InterfaceUses.addnodouble(@pfu);
+       end;
      end;
      if newmode=endmode then
      begin
@@ -222,6 +233,7 @@ var
   unitpart:TunitPart;
     ir:itrec;
   tempstring:gdbstring;
+  doexit:gdbboolean;
 begin
   unitpart:=tnothing;
   currentunit:=pointer(pcreatedunit);
@@ -230,7 +242,8 @@ begin
   mode:=unitmode;
   line:='';
   //kolvo:=0;
-  while (f.notEOF)or(line<>'') do
+  doexit:=false;
+  while ((f.notEOF)or(line<>''))and(not doexit) do
   begin
     if line='' then
                    begin
@@ -340,7 +353,10 @@ begin
                          begin
                               unitpart:=timpl;
                          end;
-
+                proceduremode,functionmode:
+                         begin
+                              doexit:=true;
+                         end;
                 typemode:begin
                                  parseresult:=getpattern(@parsetype,maxtype,line,typ); // длдл
                                 case typ of

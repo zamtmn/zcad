@@ -1208,7 +1208,7 @@ begin
        if ptype<>nil then
        begin
             If assigned(SetGDBObjInspProc)then
-            SetGDBObjInspProc(ptype,param.SelDesc.LastSelectedObject);
+            SetGDBObjInspProc(ptype,param.SelDesc.LastSelectedObject,pdwg);
        end;
   end
   else

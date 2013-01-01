@@ -1222,7 +1222,7 @@ begin
   s:='**Напрямую**';
   cabcomparam.Traces.Enums.add(@s);
   if assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pcabcom);
+  SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pcabcom,gdb.GetCurrentDWG);
 
 
 
@@ -2151,7 +2151,7 @@ function Find_com(Operands:pansichar):GDBInteger;
    // ir:itrec;
 begin
      if assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pfindcom);
+  SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pfindcom,gdb.GetCurrentDWG);
   gdb.GetCurrentDWG.SelObjArray.clearallobjects;
   gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
   result:=cmd_ok;
@@ -2383,7 +2383,7 @@ begin
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   sysvar.dwg.DWG_OSMode^:=sysvar.dwg.DWG_OSMode^ or osm_nearest;
   if assigned(SetGDBObjInspProc)then
-  SetGDBObjInspProc(SysUnit.TypeName2PTD('TELLeaderComParam'),@ELLeaderComParam);
+  SetGDBObjInspProc(SysUnit.TypeName2PTD('TELLeaderComParam'),@ELLeaderComParam,gdb.GetCurrentDWG);
   historyout('Первая точка:');
 end;
 function _Cable_com_Manager(Operands:pansichar):GDBInteger;
@@ -2394,7 +2394,7 @@ begin
         CableManager.init;
         CableManager.build;
         if assigned(SetGDBObjInspProc)then
-        SetGDBObjInspProc(SysUnit.TypeName2PTD('TCableManager'),@CableManager);
+        SetGDBObjInspProc(SysUnit.TypeName2PTD('TCableManager'),@CableManager,gdb.GetCurrentDWG);
 
 
 end;

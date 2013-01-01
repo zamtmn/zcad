@@ -389,7 +389,7 @@ begin
 
      {if PCollapsed<>field_no_attrib then
      if pboolean(pcollapsed)^ then exit;}
-     if self.TypeName='TObjectUnit' then
+     if (self.TypeName='TObjectUnit')or(self.TypeName='TUnit') then
                                         begin
                                         //if (bmode=property_build)then
                                         begin

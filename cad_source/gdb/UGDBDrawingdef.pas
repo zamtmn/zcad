@@ -31,6 +31,7 @@ TDrawingDef=object(GDBaseobject)
                        procedure AddBlockFromDBIfNeed(name:GDBString);virtual;abstract;
                        function GetCurrentRootSimple:GDBPointer;virtual;abstract;
                        function GetBlockDefArraySimple:GDBPointer;virtual;abstract;
+                       procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
                  end;
 {EXPORT-}
 implementation

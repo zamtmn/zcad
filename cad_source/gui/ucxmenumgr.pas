@@ -21,33 +21,33 @@ unit ucxmenumgr;
 interface
 
 uses
-  umytreenode,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,{ComCtrls,StdCtrls,}Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,{ButtonPanel,}Buttons,
-  {strutils,}{$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
+  ExtCtrls,lclproc,Graphics,ActnList,{ComCtrls,StdCtrls,}Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,Buttons,
+  {strutils,}{$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils{,strproc,varmandef,Varman,gdbasetypes,UGDBOpenArrayOfByte};
 
 type
    tcxmenumgr=class
-   CurrentCXMenu:^TmyPopupMenu;
-   menupopupcount,notprocessedclosecount:GDBInteger;
-   procedure PopUpMenu(var menu:TmyPopupMenu);
+   CurrentCXMenu:^TPopupMenu;
+   menupopupcount,notprocessedclosecount:Integer;
+   procedure PopUpMenu(var menu:TPopupMenu);
    procedure reset;
-   procedure RegisterLCLMenu(var menu:TmyPopupMenu);
+   procedure RegisterLCLMenu(var menu:TPopupMenu);
    procedure CloseNotify(Sender: TObject);
    procedure LCLCloseNotify(Sender: TObject);
    procedure PopUpNotify(Sender: TObject);
    procedure CloseCurrentMenu;
    procedure AsyncCloseCurrentMenu(Data: PtrInt);
-   function ismenupopup:gdbboolean;
+   function ismenupopup:boolean;
    end;
 var
    cxmenumgr:tcxmenumgr=nil;
 implementation
 uses {commandline,}log{,sharedgdb};
-procedure tcxmenumgr.RegisterLCLMenu(var menu:TmyPopupMenu);
+procedure tcxmenumgr.RegisterLCLMenu(var menu:TPopupMenu);
 begin
      menu.OnClose:=LCLCloseNotify;
      menu.OnPopup:=PopUpNotify;
 end;
-procedure tcxmenumgr.PopUpMenu(var menu:TmyPopupMenu);
+procedure tcxmenumgr.PopUpMenu(var menu:TPopupMenu);
 begin
      if CurrentCXMenu<>nil then
      if CurrentCXMenu^<>nil then
@@ -91,7 +91,7 @@ begin
                                      CurrentCXMenu:=nil;
                                 end;
 end;
-function tcxmenumgr.ismenupopup:gdbboolean;
+function tcxmenumgr.ismenupopup:boolean;
 begin
      if CurrentCXMenu<>nil then
      if CurrentCXMenu^<>nil then

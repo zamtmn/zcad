@@ -65,6 +65,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure FormatEntity(const drawing:TDrawingDef);virtual;
                     procedure FormatFast(const drawing:TDrawingDef);virtual;
                     procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;
+                    procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
 
                     procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
                     procedure DrawWithOutAttrib({visibleactualy:TActulity;}var DC:TDrawContext{subrender:GDBInteger});virtual;
@@ -131,6 +132,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function IsActualy:GDBBoolean;virtual;
                     function IsHaveLCS:GDBBoolean;virtual;
                     function IsHaveGRIPS:GDBBoolean;virtual;
+                    function IsEntity:GDBBoolean;virtual;
                     function GetLayer:PGDBLayerProp;virtual;
                     function GetCenterPoint:GDBVertex;virtual;
                     procedure SetInFrustum(infrustumactualy:TActulity;var totalobj,infrustumobj:GDBInteger);virtual;
@@ -195,7 +197,10 @@ function GDBObjEntity.IsHaveGRIPS:GDBBoolean;
 begin
      result:=true;
 end;
-
+function GDBObjEntity.IsEntity:GDBBoolean;
+begin
+     result:=true;
+end;
 procedure GDBObjEntity.ReCalcFromObjMatrix;
 begin
 
@@ -607,6 +612,10 @@ procedure GDBObjEntity.FormatAfterEdit;
 begin
      formatentity(drawing);
      //AddObjectToObjArray
+end;
+procedure GDBObjEntity.FormatAfterFielfmod;
+begin
+
 end;
 procedure GDBObjEntity.higlight;
 begin

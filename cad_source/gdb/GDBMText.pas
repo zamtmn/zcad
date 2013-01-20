@@ -40,18 +40,30 @@ GDBObjMText=object(GDBObjText)
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  //procedure getoutbound;virtual;
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                 procedure FormatContent(const drawing:TDrawingDef);virtual;
                  procedure createpoint(const drawing:TDrawingDef);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
                  destructor done;virtual;
 
                  procedure SimpleDrawGeometry;virtual;
+                 procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
 
                  //procedure CalcObjMatrix;virtual;
             end;
 {Export-}
 implementation
 uses {io,}shared,log;
+procedure GDBObjMText.FormatAfterDXFLoad;
+begin
+     formatcontent(drawing);
+
+     calcobjmatrix;
+
+     CalcGabarit(drawing);
+
+     calcbb;
+end;
 procedure GDBObjMText.SimpleDrawGeometry;
 begin
      if self.text.count=1 then
@@ -95,7 +107,7 @@ begin
   text.init(10);
   format;
 end;
-procedure GDBObjMText.FormatEntity(const drawing:TDrawingDef);
+procedure GDBObjMText.FormatContent(const drawing:TDrawingDef);
 var
   canbreak: GDBBoolean;
   currsymbol, lastbreak, lastcanbreak, i: GDBInteger;
@@ -465,12 +477,22 @@ begin
         end;}
       end;
   end;
-    calcobjmatrix;
+    {calcobjmatrix;
     CalcGabarit(drawing);
     //getoutbound;
     calcbb;
-    createpoint(drawing);
+    createpoint(drawing);}
 end;
+procedure GDBObjMText.FormatEntity(const drawing:TDrawingDef);
+begin
+  formatcontent(drawing);
+  calcobjmatrix;
+  CalcGabarit(drawing);
+  //getoutbound;
+  createpoint(drawing);
+  calcbb;
+end;
+
 procedure GDBObjMText.CalcGabarit;
 var
 //  i: GDBInteger;
@@ -490,7 +512,10 @@ begin
         if text.count > 0 then
                               obj_height := ((self.text.count-1) * linespace + textprop.size)/textprop.size
                           else
-                              obj_height := 0;
+                              begin
+                              obj_height := 1;
+                              obj_width := 1;
+                              end;
         {if text.count=1 then
                         obj_height:=text.count * linespace / textprop.size
                         else

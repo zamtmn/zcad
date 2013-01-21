@@ -816,7 +816,7 @@ begin
      until pvisible=nil;
 
 
-     _dest.format;
+     _dest.formatentity(_to^);
 end;
 procedure addf(fn:gdbstring);
 begin

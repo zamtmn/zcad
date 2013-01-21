@@ -1152,6 +1152,7 @@ begin
     pda.cleareraseobj;
     currobjgdbtype:=exttype;
     pcurrobj:=addr;
+    pcurcontext:=context;
     if (exttype.GetTypeAttributes and TA_OBJECT)<>0 then
       GDBobj:=true
     else

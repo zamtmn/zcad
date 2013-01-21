@@ -762,7 +762,7 @@ begin
                                                                if PGDBaseObject(pcurrobj)^.IsEntity then
                                                                                                         PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^)
                                                                                                     else
-                                                                                                        PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(nil,self.currobjgdbtype);
+                                                                                                        PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(pld,self.currobjgdbtype);
                                                                end
 
                                                            else
@@ -1109,10 +1109,7 @@ begin
     pda.cleareraseobj;
     if peditor<>nil then
     begin
-      //-----------------------------------------------------------------peditor.Hide;
-      //peditor^.done;
-      //peditor:=nil;
-      self.freeeditor;
+      //--MultiSelectEditor not work with this----------self.freeeditor;
     end;
     //currobjgdbtype:=exttype;
     //pcurrobj:=addr;

@@ -142,6 +142,7 @@ begin
      oglwnd.PDWG:=ptd;
      oglwnd.GDBActivate;
      oglwnd._onresize(nil);
+     oglwnd.Show;
 
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
 
@@ -523,4 +524,4 @@ end;
 
 
 end.
-
+

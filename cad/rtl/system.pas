@@ -37,13 +37,15 @@ itrec=record
 (*varcategoryforoi SUMMARY='Суммарно'*)
 (*varcategoryforoi CABLE='Параметры кабеля'*)
 (*varcategoryforoi DEVICE='Параметры устройства'*)
-(*varcategoryforoi OBJFUNC='ункция:объект'*)
+(*varcategoryforoi OBJFUNC='Функция:объект'*)
 (*varcategoryforoi NMO='Имя'*)
 (*varcategoryforoi DB='База данных'*)
 (*varcategoryforoi GC='Групповое подключение'*)
 (*varcategoryforoi LENGTH='Параметры длинны'*)
 (*varcategoryforoi BTY='Параметры определения блока'*)
 (*varcategoryforoi EL='El(Устаревшая группа)'*)
+(*varcategoryforoi UNITPARAM='Измеряемый параметр'*)
+(*varcategoryforoi DESC='Описание'*)
 GDBTypedPointer=record
                       Instance:GDBPointer;
                       PTD:GDBPointer;
@@ -60,6 +62,7 @@ GDBaseObject=object
     function GetObjName:GDBString;virtual;abstract;
     constructor initnul;
     destructor Done;virtual; abstract;
+    function IsEntity:GDBBoolean;virtual;abstract;
   end;
 devicedesk=record
                  category,variable,name,id,nameall,tu,edizm,mass:GDBString;
@@ -1227,6 +1230,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
                     procedure FormatFast(const drawing:TDrawingDef);virtual;abstract;
                     procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;abstract;
+                    procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
                     procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                     procedure DrawWithOutAttrib({visibleactualy:TActulity;}var DC:TDrawContext{subrender:GDBInteger});virtual;abstract;
                     procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;abstract;
@@ -1287,6 +1291,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function IsActualy:GDBBoolean;virtual;abstract;
                     function IsHaveLCS:GDBBoolean;virtual;abstract;
                     function IsHaveGRIPS:GDBBoolean;virtual;abstract;
+                    function IsEntity:GDBBoolean;virtual;abstract;
                     function GetLayer:PGDBLayerProp;virtual;abstract;
                     function GetCenterPoint:GDBVertex;virtual;abstract;
                     procedure SetInFrustum(infrustumactualy:TActulity;var totalobj,infrustumobj:GDBInteger);virtual;abstract;
@@ -2029,11 +2034,13 @@ GDBObjMText=object(GDBObjText)
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;abstract;
                  //procedure getoutbound;virtual;abstract;
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
+                 procedure FormatContent(const drawing:TDrawingDef);virtual;abstract;
                  procedure createpoint(const drawing:TDrawingDef);virtual;abstract;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                  function GetObjTypeName:GDBString;virtual;abstract;
                  destructor done;virtual;abstract;
                  procedure SimpleDrawGeometry;virtual;abstract;
+                 procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;abstract;
                  //procedure CalcObjMatrix;virtual;abstract;
             end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBpoint.pas
@@ -2803,6 +2810,7 @@ TDrawingDef=object(GDBaseobject)
                        procedure AddBlockFromDBIfNeed(name:GDBString);virtual;abstract;
                        function GetCurrentRootSimple:GDBPointer;virtual;abstract;
                        function GetBlockDefArraySimple:GDBPointer;virtual;abstract;
+                       procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
                  end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\ugdbabstractdrawing.pas
 PTAbstractDrawing=^TAbstractDrawing;

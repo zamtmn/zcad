@@ -730,7 +730,7 @@ begin
 
                 powner^.VarObjArray.cloneentityto(@pobj^.VarObjArray,psubobj);
                 pobj^.correctobjects(pointer(pobj^.bp.ListPos.Owner),pobj^.bp.ListPos.SelfIndex);
-                pobj.Format;
+                pobj.FormatEntity(gdb.GetCurrentDWG^);
 
                 //pobj^.VarObjArray.free;
            {powner^.objmatrix:=onematrix;

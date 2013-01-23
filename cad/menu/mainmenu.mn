@@ -38,6 +38,7 @@ Panel Standart;
     Separator
     action ACN_REGEN
     button OPS_Sensor_Mark,#++,Numbering sensors on the plan
+    action ACN_DEVNUMBERING
     Separator
     button RebuildTree,#rtree,Rebuild entitys tree
     Separator

@@ -2514,6 +2514,21 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                             Center:GDBBoolean;(*'Center'*)
                             Scale:GDBDouble;(*'Scale'*)
                       end;
+         TST=(
+                 TST_YX(*'Y-X'*),
+                 TST_XY(*'X-Y'*)
+                );
+         TNumberingParams=record
+                            SortMode:TST;(*''*)
+                            InverseX:GDBBoolean;(*'Inverse X axis dir'*)
+                            InverseY:GDBBoolean;(*'Inverse Y axis dir'*)
+                            DeadDand:GDBDouble;(*'Deadband'*)
+                            StartNumber:GDBInteger;(*'Start'*)
+                            Increment:GDBInteger;(*'Increment'*)
+                            SaveStart:GDBBoolean;(*'Save start number'*)
+                            BaseName:GDBString;(*'Base name sorting devices'*)
+                            NumberVar:GDBString;(*'Number variable'*)
+                      end;
   TBEditParam=record
                     CurrentEditBlock:GDBString;(*'Current block'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Select block'*)
@@ -2627,6 +2642,11 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
                          procedure ShowMenu;virtual;abstract;
                          procedure Run(pdata:GDBPlatformint); virtual;abstract;
           end;
+  Number_com=object(CommandRTEdObject)
+                         procedure CommandStart(Operands:pansichar); virtual;abstract;
+                         procedure ShowMenu;virtual;abstract;
+                         procedure Run(pdata:GDBPlatformint); virtual;abstract;
+             end;
   Print_com=object(CommandRTEdObject)
                          VS:GDBInteger;
                          p1,p2:GDBVertex;

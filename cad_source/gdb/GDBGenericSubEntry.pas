@@ -88,6 +88,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                               //function FindObjectsInPointDone(const point:GDBVertex):GDBBoolean;virtual;
                               function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                               procedure correctsublayers(var la:GDBLayerArray);virtual;
+                              function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
 
                       end;
 {Export-}
@@ -109,6 +110,11 @@ begin
     ObjTree.addtonul(pobj);
     CorrectNodeTreeBB(pobj);
 end;}
+function GDBObjGenericSubEntry.CalcTrueInFrustum;
+begin
+      result:=ObjArray.CalcTrueInFrustum(frustum,visibleactualy);
+end;
+
 procedure GDBObjGenericSubEntry.correctsublayers(var la:GDBLayerArray);
 var p:pGDBObjEntity;
 //    i:GDBInteger;
@@ -200,6 +206,7 @@ end;
 function GDBObjGenericSubEntry.AddObjectToObjArray(p:GDBPointer):GDBInteger;
 begin
      result:=ObjArray.add(p);
+     PGDBObjEntity(p^).bp.ListPos.Owner:=@self;
      //ObjArray.ObjTree.AddObjectToNodeTree(PGDBObjEntity(p^));
 end;
 procedure GDBObjGenericSubEntry.SetInFrustumFromTree;

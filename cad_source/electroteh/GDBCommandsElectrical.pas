@@ -1110,7 +1110,8 @@ begin
           1:begin
                  New_line^.bp.ListPos.Owner:=FirstOwner;
                  FirstOwner^.ObjArray.add(addr(New_line));
-                 FirstOwner^.Formatentity(gdb.GetCurrentDWG^);
+                 //FirstOwner^.Formatentity(gdb.GetCurrentDWG^);
+                 FirstOwner.YouChanged(gdb.GetCurrentDWG^);
                  mode:=-1;
             end;
           2:begin
@@ -1130,7 +1131,8 @@ begin
 
                  New_line^.bp.ListPos.Owner:=FirstOwner;
                  FirstOwner^.ObjArray.add(addr(New_line));
-                 FirstOwner^.Formatentity(gdb.GetCurrentDWG^);
+                 //FirstOwner^.Formatentity(gdb.GetCurrentDWG^);
+                 FirstOwner.YouChanged(gdb.GetCurrentDWG^);
                  mode:=-1;
 
                  SecondOwner^.YouDeleted;

@@ -199,7 +199,7 @@ begin
      pobj:=self.ObjToConnectedArray.beginiterate(ir);
      if pobj<>nil then
      repeat
-           pobj^.connectedtogdb(@self);
+           pobj^.connectedtogdb(@self,drawing);
 
            pobj:=self.ObjToConnectedArray.iterate(ir);
      until pobj=nil;

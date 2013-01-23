@@ -19,13 +19,13 @@
 unit GDBConnected;
 {$INCLUDE def.inc}
 interface
-Uses GDBEntity,GDBGenericSubEntry,UGDBOpenArrayOfPV;
+Uses GDBEntity,GDBGenericSubEntry,UGDBOpenArrayOfPV,ugdbdrawingdef;
 type
 {Export+}
 PGDBObjConnected=^GDBObjConnected;
 GDBObjConnected=object(GDBObjGenericSubEntry)
                       procedure addtoconnect(pobj:pgdbobjEntity;var ConnectedArray:GDBObjOpenArrayOfPV);virtual;
-                      procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry);virtual;abstract;
+                      procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;const drawing:TDrawingDef);virtual;abstract;
                 end;
 {Export-}
 implementation

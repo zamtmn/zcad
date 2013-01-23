@@ -15,7 +15,6 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-
 unit gdbase;
 {$INCLUDE def.inc}
 interface
@@ -353,7 +352,7 @@ var
 implementation
 uses
      log;
-function GDBaseObject.GetObjType;
+function GDBaseObject.GetObjType:GDBWord;
 begin
      result:=GDBBaseObjectID;
 end;
@@ -371,25 +370,25 @@ end;
 procedure GDBaseObject.format;
 begin
 end;
-procedure GDBaseObject.FormatAfterFielfmod;
+procedure GDBaseObject.FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);
 begin
      format;
 end;
-function GDBaseObject.AfterSerialize;
+function GDBaseObject.AfterSerialize(SaveFlag:GDBWord; membuf:GDBPointer):GDBInteger;
 begin
      result:=0;
 end;
-function GDBaseObject.AfterDeSerialize;
+function GDBaseObject.AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):GDBInteger;
 begin
      result:=0;
 end;
-function GDBaseObject.GetObjTypeName;
+function GDBaseObject.GetObjTypeName:GDBString;
 begin
      //pointer(result):=typeof(testobj);
      result:='GDBaseObject';
 
 end;
-function GDBaseObject.GetObjName;
+function GDBaseObject.GetObjName:GDBString;
 begin
      //pointer(result):=typeof(testobj);
      result:=GetObjTypeName;
@@ -399,7 +398,7 @@ constructor GDBNamedObject.initnul;
 begin
      pointer(name):=nil;
 end;
-constructor GDBNamedObject.Init;
+constructor GDBNamedObject.Init(n:GDBString);
 begin
     initnul;
     SetName(n);
@@ -408,15 +407,15 @@ destructor GDBNamedObject.done;
 begin
      SetName('');
 end;
-procedure GDBNamedObject.SetName;
+procedure GDBNamedObject.SetName(n:GDBString);
 begin
      name:=n;
 end;
-function GDBNamedObject.GetName;
+function GDBNamedObject.GetName:GDBString;
 begin
      result:=name;
 end;
-function GDBNamedObject.GetFullName;
+function GDBNamedObject.GetFullName:GDBString;
 begin
      result:=name;
 end;

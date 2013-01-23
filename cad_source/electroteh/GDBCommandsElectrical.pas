@@ -2253,7 +2253,7 @@ begin
   gdb.GetCurrentDWG.OGLwindow1.reprojectaxis;
   //OGLwindow1.param.firstdraw := true;
   //gdb.GetCurrentDWG.pcamera^.getfrustum(@gdb.GetCurrentDWG.pcamera^.modelMatrix,@gdb.GetCurrentDWG.pcamera^.projMatrix,gdb.GetCurrentDWG.pcamera^.clipLCS,gdb.GetCurrentDWG.pcamera^.frustum);
-  gdb.GetCurrentROOT.Format;
+  gdb.GetCurrentROOT.FormatEntity(gdb.GetCurrentDWG^);
   //gdb.GetCurrentDWG.ObjRoot.calcvisible;
   //gdb.GetCurrentDWG.ConstructObjRoot.calcvisible;
   end;

@@ -803,21 +803,19 @@ end;
 class function TGDBVertexLess.c(a,b:tdevcoord):boolean;
 begin
      //if a.coord.y<b.coord.y then
-     if a.coord.y<b.coord.y+NumberingParams.DeadDand then
+     if a.coord.y<b.coord.y-NumberingParams.DeadDand then
                     result:=true
                 else
-                    if a.coord.y>b.coord.y+NumberingParams.DeadDand then
+                    if  {a.coord.y>b.coord.y}abs(a.coord.y-b.coord.y)>{eps}NumberingParams.DeadDand then
                                    begin
                                    result:=false;
-                                   a:=a;
                                    end
                 else
-                    if a.coord.x<b.coord.x+NumberingParams.DeadDand then
+                    if a.coord.x<b.coord.x-NumberingParams.DeadDand then
                                    result:=true
                 else
                     begin
                     result:=false;
-                    a:=a;
                     end;
 end;
 procedure Number_com.Run(pdata:GDBPlatformint);
@@ -838,6 +836,7 @@ var
 begin
      mpd:=devcoordarray.Create;
      psd:=gdb.GetCurrentDWG^.SelObjArray.beginiterate(ir);
+     count:=0;
      if psd<>nil then
      repeat
            if psd^.objaddr^.vp.ID=GDBDeviceID then
@@ -861,6 +860,7 @@ begin
                                                                                             dcoord.coord.x:=-dcoord.coord.x;
                                                        end;
                 dcoord.pdev:=pointer(psd^.objaddr);
+                inc(count);
                 mpd.PushBack(dcoord);
            end;
      psd:=gdb.GetCurrentDWG^.SelObjArray.iterate(ir);
@@ -912,6 +912,7 @@ begin
      historyoutstr(sysutils.format(rscmNEntitiesProcessed,[inttostr(count)]));
      if NumberingParams.SaveStart then
                                       NumberingParams.StartNumber:=index;
+     mpd.Destroy;
      Commandmanager.executecommandend;
 end;
 
@@ -1668,7 +1669,7 @@ begin
                 if tv^.IsHaveLCS then
                                     PGDBObjWithLocalCS(tv)^.CalcObjMatrix;
                 tv^.transform(dispmatr);
-                tv^.Format;
+                tv^.FormatEntity(ClipboardDWG^);
               end;
           end;
           pobj:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);

@@ -121,7 +121,7 @@ begin
                       template:=content;
   content:=textformat(template,@self);
        CodePage:=TCP;
-  if content='' then content:=str_empty;
+  if (content='')and(template='') then content:=str_empty;
   lod:=0;
   P_drawInOCS:=NulVertex;
   CalcGabarit(drawing);
@@ -189,7 +189,7 @@ begin
         P_drawInOCS.x := -obj_width * textprop.wfactor * textprop.size;
       end;
   end;
-    if content='' then content:=str_empty;
+    if (content='')and(template='') then content:=str_empty;
     calcobjmatrix;
     //getoutbound;
     createpoint(drawing);

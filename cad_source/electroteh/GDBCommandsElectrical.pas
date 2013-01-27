@@ -10,7 +10,7 @@ unit GDBCommandsElectrical;
 
 interface
 uses
-  gdbentityfactory,zcadsysvars,csvdocument,
+  UGDBSelectedObjArray,gdbentityfactory,zcadsysvars,csvdocument,
   UGDBOpenArrayOfPV,GDBBlockInsert,devices,UGDBTree,ugdbdescriptor,gdbasetypes,commandline,GDBCommandsDraw,GDBElLeader,
   plugins,
   commandlinedef,
@@ -79,6 +79,9 @@ TBasicFinter=record
     procedure Command(Operands:pansichar); virtual;
     procedure BuildDM(Operands:pansichar); virtual;
   end;
+  KIP_CDBuild_com=object(FloatInsert_com)
+    procedure Command(Operands:pansichar); virtual;
+  end;
 
     (*PGDBEmSEPDeviceNode=^GDBEmSEPDeviceNode;
     GDBEmSEPDeviceNode=object(GDBVisNode)
@@ -105,6 +108,7 @@ var
    EM_SRBUILD:EM_SRBUILD_com;
    EM_SEPBUILD:EM_SEPBUILD_com;
    em_sepbuild_params:TBasicFinter;
+   KIP_CDBuild:KIP_CDBuild_com;
 
    //treecontrol:ZTreeViewGeneric;
    //zf:zform;
@@ -605,6 +609,68 @@ commandmanager.DMShow;
   cman.done;
   //treecontrol.done;
 end;*)
+procedure KIP_CDBuild_com.Command(Operands:pansichar);
+var
+    psd:PSelectedObjDesc;
+    ir:itrec;
+    pdev,pnevdev:PGDBObjDevice;
+    PBH:PGDBObjBlockdef;
+    currentcoord:GDBVertex;
+    t_matrix:DMatrix4D;
+    pobj,pcobj:PGDBObjEntity;
+    ir2:itrec;
+begin
+     currentcoord:=nulvertex;
+     gdb.GetCurrentDWG^.AddBlockFromDBIfNeed('HEAD_CONNECTIONDIAGRAM');
+     PBH:=gdb.GetCurrentDWG^.BlockDefArray.getblockdef('HEAD_CONNECTIONDIAGRAM');
+     if not PBH.Formated then
+                             PBH.FormatEntity(gdb.GetCurrentDWG^);
+     if pbh=nil then
+                    exit;
+     t_matrix:=geometry.CreateTranslationMatrix(createvertex(0,15,0));
+     psd:=gdb.GetCurrentDWG^.SelObjArray.beginiterate(ir);
+     if psd<>nil then
+     repeat
+           if psd^.objaddr^.vp.ID=GDBDeviceID then
+           begin
+                pointer(pnevdev):=psd^.objaddr^.Clone(@GDB.GetCurrentDWG.ConstructObjRoot);
+
+                pnevdev.Local.P_insert:=currentcoord;
+                pnevdev.Local.Basis.oz:=xy_Z_Vertex;
+
+                pnevdev^.BuildGeometry(gdb.GetCurrentDWG^);
+                pnevdev^.BuildVarGeometry(gdb.GetCurrentDWG^);
+                pnevdev^.formatEntity(gdb.GetCurrentDWG^);
+
+                //PBH^.ObjArray.clonetransformedentityto(@pnevdev^.VarObjArray,pnevdev,t_matrix);
+                     pobj:=PBH.ObjArray.beginiterate(ir2);
+                     if pobj<>nil then
+                     repeat
+                           pcobj:=pobj.Clone(pnevdev);
+                           //pobj.FormatEntity(gdb.GetCurrentDWG^);
+                           pcobj.transformat(pobj,@t_matrix);
+                           //pcobj.ReCalcFromObjMatrix;
+                           if pcobj^.IsHaveLCS then
+                                                 pcobj^.FormatEntity(gdb.GetCurrentDWG^);
+                           pcobj^.FormatEntity(gdb.GetCurrentDWG^);
+                           pnevdev^.VarObjArray.add(@pcobj);
+                           pobj:=PBH.ObjArray.iterate(ir2);
+                     until pobj=nil;
+
+
+
+                pnevdev^.formatEntity(gdb.GetCurrentDWG^);
+
+                gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.add(addr(pnevdev));
+                currentcoord.x:=currentcoord.x+45;
+
+                //gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
+
+           end;
+     psd:=gdb.GetCurrentDWG^.SelObjArray.iterate(ir);
+     until psd=nil;
+end;
+
 procedure EM_SRBUILD_com.Command(Operands:pansichar);
 var
       pobj: pGDBObjEntity;
@@ -1135,7 +1201,7 @@ begin
                  FirstOwner.YouChanged(gdb.GetCurrentDWG^);
                  mode:=-1;
 
-                 SecondOwner^.YouDeleted;
+                 SecondOwner^.YouDeleted(gdb.GetCurrentDWG^);
                  end
                     else mode:=0;
             end;
@@ -1239,7 +1305,7 @@ begin
                                          begin
                                               if assigned(ReturnToDefaultProc)then
                                                                                   ReturnToDefaultProc;
-                                              p3dpl^.YouDeleted;
+                                              p3dpl^.YouDeleted(gdb.GetCurrentDWG^);
                                               ptdrawing(gdb.GetCurrentDWG).UndoStack.KillLastCommand;
                                          end;
   end;
@@ -1328,7 +1394,7 @@ begin
            else
                begin
                     tw2:=NearestPointOnSegment(lastpoint,l2.CoordInWCS.lBegin,l2.CoordInWCS.lEnd);
-                    PTrace.BuildGraf;
+                    PTrace.BuildGraf(gdb.GetCurrentDWG^);
                     pa.init({$IFDEF DEBUGBUILD}'{FE5DE449-60C7-4D92-9BA5-FEB937820B96}',{$ENDIF}100);
                     PTrace.graf.FindPath(tw1,tw2,l1,l2,pa);
                     if addfirstpoint then
@@ -1377,7 +1443,7 @@ begin
            else
                begin
                     tw2:=NearestPointOnSegment(lastpoint,l2.CoordInWCS.lBegin,l2.CoordInWCS.lEnd);
-                    PTrace.BuildGraf;
+                    PTrace.BuildGraf(gdb.GetCurrentDWG^);
                     pa.init({$IFDEF DEBUGBUILD}'{FE5DE449-60C7-4D92-9BA5-FEB937820B96}',{$ENDIF}100);
                     PTrace.graf.FindPath(tw1,tw2,l1,l2,pa);
                     if addfirstpoint then
@@ -2105,19 +2171,19 @@ begin
                                                         pc1.VertexArrayInOCS.Invert;
                                                         pc2.VertexArrayInOCS.deleteelement(0);
                                                         pc2.VertexArrayInOCS.copyto(@pc1.VertexArrayInOCS);
-                                                        pc2.YouDeleted;
+                                                        pc2.YouDeleted(gdb.GetCurrentDWG^);
                                                    end
 else if geometry.Vertexlength(pv12^,pv21^)<eps then
                                                    begin
                                                         pc2.VertexArrayInOCS.deleteelement(0);
                                                         pc2.VertexArrayInOCS.copyto(@pc1.VertexArrayInOCS);
-                                                        pc2.YouDeleted;
+                                                        pc2.YouDeleted(gdb.GetCurrentDWG^);
                                                    end
 else if geometry.Vertexlength(pv11^,pv22^)<eps then
                                                    begin
                                                         pc1.VertexArrayInOCS.deleteelement(0);
                                                         pc1.VertexArrayInOCS.copyto(@pc2.VertexArrayInOCS);
-                                                        pc1.YouDeleted;
+                                                        pc1.YouDeleted(gdb.GetCurrentDWG^);
                                                         pc1:=pc2
                                                    end
 else if geometry.Vertexlength(pv12^,pv22^)<eps then
@@ -2125,7 +2191,7 @@ else if geometry.Vertexlength(pv12^,pv22^)<eps then
                                                         pc2.VertexArrayInOCS.Invert;
                                                         pc2.VertexArrayInOCS.deleteelement(0);
                                                         pc2.VertexArrayInOCS.copyto(@pc1.VertexArrayInOCS);
-                                                        pc2.YouDeleted;
+                                                        pc2.YouDeleted(gdb.GetCurrentDWG^);
                                                    end
 else
                                                    begin
@@ -2136,7 +2202,7 @@ else
 
 
 
-  pc1.format;
+  pc1.formatentity(gdb.GetCurrentDWG^);
   gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
   gdb.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
   gdb.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
@@ -2910,7 +2976,7 @@ begin
                          begin
                               if pgdbboolean(pvd^.data.Instance)^ then
                                                                         begin
-                                                                        pv^.YouDeleted;
+                                                                        pv^.YouDeleted(gdb.GetCurrentDWG^);
                                                                         end;
                          end;
     end;
@@ -2972,8 +3038,9 @@ begin
   CreateCommandFastObjectPlugin(@_El_ExternalKZ_com,'El_ExternalKZ',CADWG,0);
   CreateCommandFastObjectPlugin(@_AutoGenCableRemove_com,'EL_AutoGen_Cable_Remove',CADWG,0);
 
-  EM_SRBUILD.init('EM_SRBUILD',0,0);
-  EM_SEPBUILD.init('EM_SEPBUILD',0,0);
+  EM_SRBUILD.init('EM_SRBUILD',CADWG,0);
+  EM_SEPBUILD.init('EM_SEPBUILD',CADWG,0);
+  KIP_CDBuild.init('KIP_CDBuild',CADWG,0);
 
   EM_SEPBUILD.commanddata.Instance:=@em_sepbuild_params;
   EM_SEPBUILD.commanddata.PTD:=SysUnit.TypeName2PTD('TBasicFinter');

@@ -643,7 +643,7 @@ begin
     nb^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2);
 
 
-     pb^.YouDeleted;
+     pb^.YouDeleted(gdb.GetCurrentDWG^);
      inc(result);
 end;
 
@@ -753,7 +753,7 @@ begin
                 psubobj:=pobj^.VarObjArray.beginiterate(ir2);
                 if psubobj<>nil then
                 repeat
-                      psubobj^.YouDeleted;
+                      psubobj^.YouDeleted(gdb.GetCurrentDWG^);
                       psubobj:=pobj^.VarObjArray.iterate(ir2);
                 until psubobj=nil;
 
@@ -865,7 +865,12 @@ begin
            end;
      psd:=gdb.GetCurrentDWG^.SelObjArray.iterate(ir);
      until psd=nil;
-
+     if count=0 then
+                    begin
+                         historyoutstr('In selection not found devices');
+                         Commandmanager.executecommandend;
+                         exit;
+                    end;
      index:=NumberingParams.StartNumber;
      devcoordsort.Sort(mpd,mpd.Size);
      count:=0;
@@ -973,7 +978,7 @@ begin
            pvisible^.formatentity(gdb.GetCurrentDWG^);
            pvisible^.BuildGeometry(gdb.GetCurrentDWG^);
            powner^.VarObjArray.add(@pvisible);
-           pobj^.YouDeleted;
+           pobj^.YouDeleted(gdb.GetCurrentDWG^);
            end;
            pobj:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
      until pobj=nil;
@@ -1854,7 +1859,7 @@ begin
                              inc(count);
                         end
                     else
-                        pv^.DelSelectedSubitem;
+                        pv^.DelSelectedSubitem(gdb.GetCurrentDWG^);
 
   pv:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
   until pv=nil;

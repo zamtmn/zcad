@@ -55,7 +55,7 @@ GDBObjGenericSubEntry=object(GDBObjWithMatrix)
                             function CanAddGDBObj(pobj:PGDBObjEntity):GDBBoolean;virtual;
                             function EubEntryType:GDBInteger;virtual;
                             function MigrateTo(new_sub:PGDBObjGenericSubEntry):GDBInteger;virtual;
-                            function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
+                            function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
                             function RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
                             function GoodRemoveMiFromArray(const obj:GDBObjEntity):GDBInteger;virtual;
                             {function SubMi(pobj:pGDBObjEntity):GDBInteger;virtual;}

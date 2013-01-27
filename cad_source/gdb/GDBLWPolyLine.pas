@@ -530,6 +530,7 @@ begin
     v:=geometry.VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
 
     if not CanSimplyDrawInWCS(DC,geometry.oneVertexlength(v),5) then
+    if Width3D_in_WCS_Array.parray<>nil then
            begin
                 q3d:=Width3D_in_WCS_Array.parray;
                 oglsm.myglbegin(GL_Lines);

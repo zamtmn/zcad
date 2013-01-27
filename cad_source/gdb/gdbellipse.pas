@@ -213,7 +213,7 @@ begin
   majoraxis:=majaxis;
   PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{AEF4273C-4EE8-4520-B23A-04C3AD6DABE3}',{$ENDIF}100);
-  format;
+  //format;
 end;
 procedure GDBObjEllipse.CalcObjMatrix;
 var m1:DMatrix4D;
@@ -479,7 +479,7 @@ begin
   startangle := startangle{ * pi / 180};
   endangle := endangle{ * pi / 180};
   PProjoutbound:=nil;
-  format;
+  //format;
 end;
 function GDBObjEllipse.onmouse;
 var i:GDBInteger;
@@ -663,7 +663,7 @@ begin
                                                                                       startangle:=endangle;
                                                                                       endangle:=rrr
                                                                                  end;
-        format;
+        //format;
         //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
         end;
 

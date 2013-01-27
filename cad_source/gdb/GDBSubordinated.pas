@@ -33,7 +33,7 @@ GDBObjGenericWithSubordinated=object(GDBaseObject)
                                     OU:TObjectUnit;(*'Variables'*)
                                     function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
                                     function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
-                                    procedure DelSelectedSubitem;virtual;
+                                    procedure DelSelectedSubitem(const drawing:TDrawingDef);virtual;
                                     function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;abstract;
                                     procedure RemoveInArray(pobjinarray:GDBInteger);virtual;abstract;
                                     function CreateOU:GDBInteger;virtual;

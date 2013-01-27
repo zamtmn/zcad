@@ -744,7 +744,7 @@ begin
               startangle:=ad.startangle;
               endangle:=ad.endangle;
               r:=ad.r;
-              format;
+              //format;
         end;
         {A:= ptdata.p2.x - ptdata.p1.x;
         B:= ptdata.p2.y - ptdata.p1.y;

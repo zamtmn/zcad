@@ -19,7 +19,7 @@
 unit UGDBGraf;
 {$INCLUDE def.inc}
 interface
-uses varmandef,UGDBPoint3DArray,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry,gdbEntity,UGDBOpenArrayOfPV;
+uses ugdbdrawingdef,varmandef,UGDBPoint3DArray,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry,gdbEntity,UGDBOpenArrayOfPV;
 type
 {EXPORT+}
 PTLinkType=^TLinkType;
@@ -43,7 +43,7 @@ GDBGraf=object(GDBOpenArrayOfData)(*OpenArrayOfData=grafelement*)
                 constructor init(m:GDBInteger);
                 function addge(v:gdbvertex):pgrafelement;
                 procedure clear;virtual;
-                function minimalize:GDBBoolean;
+                function minimalize(const drawing:TDrawingDef):GDBBoolean;
                 function divide:GDBBoolean;
                 destructor done;virtual;
                 procedure freeelement(p:GDBPointer);virtual;
@@ -283,7 +283,7 @@ begin
               //until l2<>nil;
 
               if (l1<>nil)and(l2<>nil) then
-              result:=l1^.jointoline(l2);
+              result:=l1^.jointoline(l2,drawing);
               if result then system.break;
        end;
   end;

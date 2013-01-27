@@ -441,7 +441,8 @@ begin
                                      GDBGetMem({$IFDEF DEBUGBUILD}'{Net.CreateObjFree.line}',{$ENDIF}GDBPointer(tpl), sizeof(GDBObjLine));
                                      //GDBObjLineInit(@self,tpl,drawing.GetLayerTable^.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, tv,ip.interceptcoord);
                                      {выдрано из GDBObjLineInit для отвязки от GDBManager}
-                                     tpl^.init(@self,drawing.GetLayerTable^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,tv,ip.interceptcoord);
+                                     tpl^.init(@self,{drawing.GetLayerTable^.GetCurrentLayer}self.vp.Layer,sysvar.dwg.DWG_CLinew^,tv,ip.interceptcoord);
+                                     CopyVPto(tpl^);
                                      objarray.add(addr(tpl));
                                      {tpl := GDBPointer(self.ObjArray.CreateObj(GDBLineID,@self));
                                      GDBObjLineInit(@self,tpl, sysvar.DWG_CLayer^, sysvar.DWG_CLinew^, tv,ip.interceptcoord);}
@@ -458,7 +459,8 @@ begin
                                      GDBGetMem({$IFDEF DEBUGBUILD}'{Net.CreateObjFree.line}',{$ENDIF}GDBPointer(tpl), sizeof(GDBObjLine));
                                      //GDBObjLineInit(@self,tpl,drawing.GetLayerTable^.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, tv,ip.interceptcoord);
                                      {выдрано из GDBObjLineInit для отвязки от GDBManager}
-                                     tpl^.init(@self,drawing.GetLayerTable^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,tv,ip.interceptcoord);
+                                     tpl^.init(@self,{drawing.GetLayerTable^.GetCurrentLayer}self.vp.Layer,sysvar.dwg.DWG_CLinew^,tv,ip.interceptcoord);
+                                     CopyVPto(tpl^);
                                      objarray.add(addr(tpl));
                                      {tpl := GDBPointer(self.ObjArray.CreateObj(GDBLineID,@self));
                                      GDBObjLineInit(@self,tpl, sysvar.DWG_CLayer^, sysvar.DWG_CLinew^, tv,ip.interceptcoord);}

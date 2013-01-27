@@ -122,7 +122,7 @@ GDBObjEntity=object(GDBObjSubordinated)
                     function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
                     function ReturnLastOnMouse:PGDBObjEntity;virtual;
                     function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
-                    function YouDeleted:GDBInteger;virtual;
+                    function YouDeleted(const drawing:TDrawingDef):GDBInteger;virtual;
                     procedure YouChanged(const drawing:TDrawingDef);virtual;
                     function GetObjTypeName:GDBString;virtual;
                     function GetObjType:GDBWord;virtual;
@@ -146,7 +146,7 @@ GDBObjEntity=object(GDBObjSubordinated)
 
                     function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
 
-                    function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
+                    function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
                     function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
                     procedure CalcObjMatrix;virtual;
                     procedure ReCalcFromObjMatrix;virtual;
@@ -186,6 +186,7 @@ begin
   toObj.vp.LineType:=vp.LineType;
   toObj.vp.LineTypeScale:=vp.LineTypeScale;
   toObj.vp.color:=vp.color;
+  toObj.vp.Layer:=vp.Layer;
 end;
 
 procedure GDBObjEntity.correctsublayers(var la:GDBLayerArray);
@@ -209,7 +210,7 @@ procedure GDBObjEntity.CalcObjMatrix;
 begin
 
 end;
-function GDBObjEntity.EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;
+function GDBObjEntity.EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;
 begin
 
 end;
@@ -381,7 +382,7 @@ begin
 end;
 function GDBObjEntity.YouDeleted;
 begin
-     pgdbobjgenericsubentry(bp.ListPos.owner)^.EraseMi(@self,bp.ListPos.SelfIndex);
+     pgdbobjgenericsubentry(bp.ListPos.owner)^.EraseMi(@self,bp.ListPos.SelfIndex,drawing);
 end;
 procedure GDBObjEntity.YouChanged;
 begin

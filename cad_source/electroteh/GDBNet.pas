@@ -24,14 +24,14 @@ GDBObjNet=object(GDBObjConnected)
                  function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
                  procedure restructure(const drawing:TDrawingDef);virtual;
                  function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
-                 function BuildGraf:GDBInteger;virtual;
+                 function BuildGraf(const drawing:TDrawingDef):GDBInteger;virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
-                 function EraseMi(pobj:pgdbobjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
+                 function EraseMi(pobj:pgdbobjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
                  function CalcNewName(Net1,Net2:PGDBObjNet):GDBInteger;
                  procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;const drawing:TDrawingDef);virtual;
                  function GetObjTypeName:GDBString;virtual;
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;
-                 procedure DelSelectedSubitem;virtual;
+                 procedure DelSelectedSubitem(const drawing:TDrawingDef);virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
@@ -111,10 +111,10 @@ begin
   repeat
     if pv^.Selected then
                         begin
-                        pv^.YouDeleted;
+                        pv^.YouDeleted(drawing);
                         end
                     else
-                        pv^.DelSelectedSubitem;
+                        pv^.DelSelectedSubitem(drawing);
 
   pv:=ObjArray.iterate(ir);
   until pv=nil;
@@ -154,7 +154,7 @@ begin
      if self.ObjArray.Count=0 then
                                   begin
                                        self.ObjArray.Count:=0;
-                                       self.YouDeleted;
+                                       self.YouDeleted(drawing);
                                   end;
 end;
 procedure GDBObjNet.SaveToDXF;
@@ -216,7 +216,8 @@ begin
      objarray.pack;
      self.correctobjects(pointer(bp.ListPos.Owner),bp.ListPos.SelfIndex);
      pobj^.done;
-     format;
+     YouChanged(drawing);
+     //bp.ListPos.Owner^.ImEdited(@self,bp.ListPos.SelfIndex,drawing);
 end;
 procedure GDBObjNet.DrawGeometry;
 var i{,j}:GDBInteger;
@@ -269,7 +270,7 @@ begin
      ObjArray.DeSelect(SelObjArray,SelectedObjCount);
 
 end;
-function GDBObjNet.BuildGraf:GDBInteger;
+function GDBObjNet.BuildGraf(const drawing:TDrawingDef):GDBInteger;
 var pl:pgdbobjline;
     //i:GDBInteger;
     tgf: pgrafelement;
@@ -291,7 +292,7 @@ begin
                 end
                    else
                        begin
-                       pl^.YouDeleted;
+                       pl^.YouDeleted(drawing);
                        exit;
                        end;
 
@@ -376,8 +377,9 @@ begin
                                            ou.free;
                                            currentnet.OU.CopyTo(@ou);
                                       end;
-                                      format;
-                                      currentnet.YouDeleted;
+                                      //format;
+                                      formatentity(drawing);
+                                      currentnet.YouDeleted(drawing);
                                       system.break;
                                       end
                                          else
@@ -471,8 +473,8 @@ begin
            inc(i);
      until i=ObjArray.Count;
      //ObjArray.Shrink;
-     BuildGraf;
-     if graf.minimalize then exit;
+     BuildGraf(drawing);
+     if graf.minimalize(drawing) then exit;
      //exit;
      if graf.divide then
      begin

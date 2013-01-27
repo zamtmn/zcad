@@ -30,6 +30,7 @@ GDBObjEntityOpenArray=object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
                       function copytowithoutcorrect(source:PGDBObjEntityOpenArray):GDBInteger;virtual;
                       function deliteminarray(p:GDBInteger):GDBInteger;virtual;
                       function cloneentityto(PEA:PGDBObjEntityOpenArray;own:GDBPointer):GDBInteger;virtual;
+                      //function clonetransformedentityto(PEA:PGDBObjEntityOpenArray;own:GDBPointer;const t_matrix:DMatrix4D):GDBInteger;virtual;
                       procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble);virtual;
 
                 end;
@@ -52,6 +53,21 @@ begin
            pobj:=iterate(ir);
      until pobj=nil;
 end;
+
+{function GDBObjEntityOpenArray.clonetransformedentityto(PEA:PGDBObjEntityOpenArray;own:GDBPointer;const t_matrix:DMatrix4D):GDBInteger;
+var pobj,pcobj:PGDBObjEntity;
+    ir:itrec;
+begin
+     pobj:=beginiterate(ir);
+     if pobj<>nil then
+     repeat
+           pcobj:=pobj.Clone(own);
+           pcobj.transformat(pcobj,@t_matrix);
+           pcobj.ReCalcFromObjMatrix;
+           PEA^.add(@pcobj);
+           pobj:=iterate(ir);
+     until pobj=nil;
+end;}
 
 function GDBObjEntityOpenArray.CloneEntityTo(PEA:PGDBObjEntityOpenArray;own:GDBPointer):GDBInteger;
 var pobj,pcobj:PGDBObjEntity;

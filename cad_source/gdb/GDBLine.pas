@@ -71,7 +71,7 @@ GDBObjLine=object(GDBObj3d)
                  function IsRTNeedModify(const Point:PControlPointDesc; p:GDBPointer):Boolean;virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
-                  function jointoline(pl:pgdbobjline):GDBBoolean;virtual;
+                  function jointoline(pl:pgdbobjline;const drawing:TDrawingDef):GDBBoolean;virtual;
 
                   function ObjToGDBString(prefix,sufix:GDBString):GDBString;virtual;
                   function GetObjTypeName:GDBString;virtual;
@@ -191,7 +191,7 @@ function GDBObjLine.GetObjTypeName;
 begin
      result:=ObjN_GDBObjLine;
 end;
-function GDBObjLine.jointoline(pl:pgdbobjline):GDBBoolean;
+function GDBObjLine.jointoline(pl:pgdbobjline;const drawing:TDrawingDef):GDBBoolean;
 function online(w,u:gdbvertex):GDBBoolean;
 var ww:GDBDouble;
     l:GDBDouble;
@@ -210,7 +210,7 @@ begin
      result:=false;
      if length<pl^.length then
      begin
-          result:=pl^.jointoline(@self);
+          result:=pl^.jointoline(@self,drawing);
           exit;
      end;
      dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
@@ -232,8 +232,8 @@ begin
      self.CoordInOCS.lbegin:=VertexDmorph(self.CoordInOCS.lbegin,dir,a1);
      self.CoordInWCS.lend:=VertexDmorph(self.CoordInWCS.lbegin,dir,a2);
      self.CoordInWCS.lbegin:=VertexDmorph(self.CoordInWCS.lbegin,dir,a1);
-     format;
-     pl^.YouDeleted;
+     FormatEntity(drawing);
+     pl^.YouDeleted(drawing);
      result:=true;
 end;
 function GDBObjLine.ObjToGDBString(prefix,sufix:GDBString):GDBString;

@@ -38,7 +38,7 @@ GDBObjRoot=object(GDBObjGenericSubEntry)
                  procedure getoutbound;virtual;
                  function FindVariable(varname:GDBString):pvardesk;virtual;
                  function GetHandle:GDBPlatformint;virtual;
-                 function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;virtual;
+                 function EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
 
                  function GetMatrix:PDMatrix4D;virtual;
                  procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
@@ -115,11 +115,11 @@ function GDBObjRoot.GetMatrix;
 begin
      result:=@self.ObjMatrix{ @OneMatrix};
 end;
-function GDBObjRoot.EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;
+function GDBObjRoot.EraseMi(pobj:pGDBObjEntity;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;
 var p:PGDBObjConnected;
     ir:itrec;
 begin
-     inherited EraseMi(pobj,pobjinarray);
+     inherited EraseMi(pobj,pobjinarray,drawing);
      p:=self.ObjToConnectedArray.beginiterate(ir);
      if p<>nil then
      repeat

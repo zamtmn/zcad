@@ -871,9 +871,9 @@ begin
                         nodeend:=pcabledesk^.Devices.iterate(ir_inNodeArray);
                   until nodeend=nil;
                   if nodestart<>nil then
-                                        InsertDat(nodestart^.name,startname,endname,count,currentcoord,GDB.GetCurrentDWG.ConstructObjRoot).YouDeleted
+                                        InsertDat(nodestart^.name,startname,endname,count,currentcoord,GDB.GetCurrentDWG.ConstructObjRoot).YouDeleted(gdb.GetCurrentDWG^)
                                     else
-                                        InsertDat('_error_here',startname,endname,count,currentcoord,GDB.GetCurrentDWG.ConstructObjRoot).YouDeleted;
+                                        InsertDat('_error_here',startname,endname,count,currentcoord,GDB.GetCurrentDWG.ConstructObjRoot).YouDeleted(gdb.GetCurrentDWG^);
 
                   pvd:=PCableSS.ou.FindVariable('CABLE_WireCount');
                   if pvd=nil then

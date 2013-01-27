@@ -105,7 +105,7 @@ begin
   end;
 
   text.init(10);
-  format;
+  //format;
 end;
 procedure GDBObjMText.FormatContent(const drawing:TDrawingDef);
 var
@@ -148,7 +148,7 @@ begin
   content:=textformat(template,@self);
   CodePage:=TCP;
   linespace := textprop.size * linespacef * 5 / 3;
-  if content='' then content:=str_empty;
+  if (content='')and(template='') then content:=str_empty;
   text.free;
   //freeopenarrayofGDBString(ptext);
   //GDBGetMem(ptext, 10000);
@@ -174,6 +174,8 @@ begin
   lastlinewidth := 0;
   currline := '';
   maxlinewidth := (width / textprop.size) / textprop.wfactor;
+  if content<>'' then
+  begin
   repeat
     sym:=getsymbol(content,currsymbol,l,pgdbfont(pfont)^.unicode);
     psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym);
@@ -247,6 +249,7 @@ begin
     inc(currsymbol,l);
     psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym);
   until currsymbol > length(content);
+  end;
   if linewidth=0 then
                      linewidth:=1;
   currline := copy(content, lastbreak, currsymbol - lastbreak);

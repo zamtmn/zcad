@@ -13,3 +13,5 @@ action ACN_ORTODEVPLACE,OrtoDevPlace,array.bmp,Device placement,Device placement
 
 action ACN_PROCESSKZ,EL_ExternalKZ,#Process external KZ,,,
 action ACN_REMAUTOCABLES,EL_AutoGen_Cable_Remove,#Remove auto cables,,,
+
+action ACN_KIPCDBUILD,KIP_CDBuild,#CDB,Connection diagram,,

@@ -257,40 +257,40 @@ MainMenuItem Modify;
   }
 MainMenuItem Schematic;
   {
-    MenuItem **Электрическая принципиальная;
+    MenuItem Circuit diagram;
       {
-        Command **Цепь,EL_Wire,none,none
-        Command **Контакт НО1,Insert(DEVICE_NOC),none,none
-        Command **Контакт НО2,Insert(DEVICE_NOC2),none,none
+        Command **Connection,EL_Wire,none,none
+        Command **NO1 Contact,Insert(DEVICE_NOC),none,none
+        Command **NO2 Contact,Insert(DEVICE_NOC2),none,none
       }
-    MenuItem **Электрическая подключений;
+    MenuItem Connections diagram;
       {
-       Command **Расстановка маркеров кабелей,Insert(DEVICE_CABLE_MARK),none,none
-       Command **Обновить маркеры кабелей,KIP_Cable_Mark,none,none
+       Command **Placing markers cable,Insert(DEVICE_CABLE_MARK),none,none
+       Command **Updating markers cable,KIP_Cable_Mark,none,none
       }
   }
 MainMenuItem Plan;
   {
-    MenuItem Кабель/Трасса;
+    MenuItem Cable/Trace;
       {
         action ACN_WIRE
         action ACN_CABLE
         action ACN_CABLEJOIN
         action ACN_CABLESELECT
         action ACN_CABLEINVERT
-        Command Уходит вверх,Insert(DEVICE_EL_CABLE_UP),none,none
-        Command Уходит вниз,Insert(DEVICE_EL_CABLE_DOWN),none,none
-        Command Приходит сверху,Insert(DEVICE_EL_CABLE_FROMUP),none,none
-        Command Приходит снизу,Insert(DEVICE_EL_CABLE_FROMDOWN),none,none
+        Command Goes up,Insert(DEVICE_EL_CABLE_UP),none,none
+        Command Goes down,Insert(DEVICE_EL_CABLE_DOWN),none,none
+        Command Comes from above,Insert(DEVICE_EL_CABLE_FROMUP),none,none
+        Command Comes from below,Insert(DEVICE_EL_CABLE_FROMDOWN),none,none
       }
-    MenuItem Внешний кабельный журнал;
+    MenuItem Cable legend;
       {
-        Command Обработать журнал,EL_ExternalKZ,none,none
-        Command Удалить автоматически сгенерированные кабели,EL_AutoGen_Cable_Remove,none,none
+        Command Process auto cables,EL_ExternalKZ,none,none
+        Command Remove generated cables,EL_AutoGen_Cable_Remove,none,none
       }
-    MenuItem КИПиА;
+    MenuItem Instrumentation and Control;
       {
-       MenuItem Расстоновка оборудования;
+       MenuItem Placement equipment;
        {
         Command Датчик,Insert(DEVICE_KIP_SENSOR),none,none
         Command Соединительная коробка,Insert(DEVICE_KIP_CONNECTION_BOX),none,none
@@ -301,18 +301,18 @@ MainMenuItem Plan;
         Command Ответвительная коробка,Insert(DEVICE_KIP_UKP),none,none
        }
       }
-    MenuItem ОПС;
+    MenuItem Alarm system;
       {
-       MenuItem Расстоновка оборудования;
+       MenuItem Placement equipment;
        {
-        MenuItem ПС;
+        MenuItem Fire alarm;
         {
          Command Авто расстановка извещателей,PLACESMOKEDETECTORORTO,none,none
          Command Дымовой извещатель,Insert(DEVICE_PS_DAT_SMOKE),none,none
          Command Тепловой извещатель,Insert(DEVICE_PS_DAT_TERMO),none,none
          Command Ручной извещатель,Insert(DEVICE_PS_DAT_HAND),none,none
         }
-        MenuItem ОС;
+        MenuItem Security alarm;
         {
          Command Магнитоконтактный извещатель,Insert(DEVICE_OS_DAT_BGB),none,none
          Command Звуковой извещатель,Insert(DEVICE_OS_DAT_BGT),none,none
@@ -327,17 +327,17 @@ MainMenuItem Plan;
        }
        Command Автонумерация извещателей,OPS_Sensor_Mark,none,none
       }
-    MenuItem ЭМ;
+    MenuItem Power supply;
       {
-       MenuItem Расстоновка оборудования;
+       MenuItem Placement equipment;
        {
         Command Двигатель,Insert(DEVICE_EL_MOTOR),none,none
         Command Распредустройство,Insert(DEVICE_EL_SR),none,none
        }
       }
-    MenuItem ЭО;
+    MenuItem Lighting;
       {
-       MenuItem Расстоновка оборудования;
+       MenuItem Placement equipment;
        {
         Command Светильник 1,Insert(DEVICE_EL_LIGHT_FBULB),none,none
         Command Светильник 2,Insert(DEVICE_EL_LIGHT_LBULB),none,none
@@ -345,17 +345,17 @@ MainMenuItem Plan;
         Command Выключатель,Insert(DEVICE_EL_LIGHT_SWITH),none,none
        }
       }
-    MenuItem Видеонаблюдение;
+    MenuItem CCTV;
       {
-       MenuItem Расстоновка оборудования;
+       MenuItem Placement equipment;
        {
         Command Видеокамера,Insert(DEVICE_SS_VCAM),none,none
         Command Видеокамера в кожухе,Insert(DEVICE_SS_VCAMTC),none,none
        }
       }
-    MenuItem Связь;
+    MenuItem Miscellaneous;
       {
-       MenuItem Расстоновка оборудования;
+       MenuItem Placement equipment;
        {
         Command АТС,Insert(DEVICE_SS_ATS),none,none
         Command Стойка 19,Insert(DEVICE_SS_19),none,none
@@ -366,7 +366,7 @@ MainMenuItem Plan;
         Command Вторичные часы,Insert(DEVICE_SS_SECCLOCK),none,none
        }
       }
-   Command Расстоновка блоков массивом,OrtoDevPlace,none,none
+   Command Alignment blocks array,OrtoDevPlace,none,none
   }
 MainMenuItem Info;
   {
@@ -374,21 +374,21 @@ MainMenuItem Info;
   }
 MainMenuItem Model;
   {
-    Command Менеджер кабелей,EL_CableMan,none,none
-    MenuItem ОПС;
+    Command Cable manager,EL_CableMan,none,none
+    MenuItem Alarm system;
       {
-       Command Создание схемы подключения извещателей,OPS_SPBuild,none,none
+       Command Connection diagram,OPS_SPBuild,none,none
       }
-    MenuItem ЭМ;
+    MenuItem Power supply;
       {
        Command Создание расчетной схемы распределительной сети,EM_SRBuild,none,none
        Command Создание схемы электрической принципиальной распределительной сети,EM_SEPBuild,none,none
       }
-    Command Найти оборудование,EL_Find,none,none
-    Command Проверка,EL_Сheck,none,none
-    Command Создать кабельный журнал,El_Cable_Legend,none,none
-    Command Создать "ведомость" оборудования,El_Material_Legend,none,none
-    Command Отчет по именам примитивов,VarReport(NMO_Name),none,none
+    Command Find device/cable,EL_Find,none,none
+    Command Verifying rules,EL_Сheck,none,none
+    Command Create cable report,El_Cable_Legend,none,none
+    Command Create material report,El_Material_Legend,none,none
+    Command Names of entities,VarReport(NMO_Name),none,none
   }
 MainMenuItem Settings;
   {
@@ -413,7 +413,7 @@ MainMenuItem Help;
 MainMenuItem __Debug;
   {
     Command **Command list,CommandList,none,none
-    MenuItem **Файлы с ошибками (текущая отладка);
+    MenuItem **Files with errors (current debug);
     {
      Command **Error 0(polylines),Load(*../errors/0.dxf),none,none
      Command **Error 1,Load(*../errors/1.dxf),none,none
@@ -421,25 +421,24 @@ MainMenuItem __Debug;
      Command **Error 3,Load(*../errors/3.dxf),none,none
      Command **Error 4,Load(*../errors/4.dxf),none,none
     }
-    Command **Загрузить пример ЭМ,Load(*sample/test_dxf/em.dxf),none,none
-    Command **Загрузить пример ОПС,Load(*sample/test_dxf/ops.dxf),none,none
-    Command **Загрузить схему??,Load(*sample/test_dxf/shema_Poly_Line_Text_Circle_Arc.dxf),none,none
-    Command **Загрузить чайник,Load(*sample/test_dxf/teapot.dxf),none,none
-    Command **Вставить все определенные блоки,PlaceAllBlocks,none,none
-    Command **Пошарить в Clipboard,DebClip,none,none
-    Command **Отчет по выделениям памяти,MemSummary,none,none
-    MenuItem **Инспектор;
+    Command **Sample file power supply,Load(*sample/test_dxf/em.dxf),none,none
+    Command **Sample file alarm,Load(*sample/test_dxf/ops.dxf),none,none
+    Command **Sample file,Load(*sample/test_dxf/shema_Poly_Line_Text_Circle_Arc.dxf),none,none
+    Command **Utah teapot,Load(*sample/test_dxf/teapot.dxf),none,none
+    Command **PlaceAllBlocks,PlaceAllBlocks,none,none
+    Command **Check clipboard,DebClip,none,none
+    Command **Report on memory allocation(for debugbuild),MemSummary,none,none
+    MenuItem **Inspector;
       {
-        Command **Зафиксировать текущий объект (отладка),SetObjInsp(CURRENT),none,none
-        Command **GDB (отладка),SetObjInsp(GDBDescriptor),none,none
+        Command **Fix the current,SetObjInsp(CURRENT),none,none
+        Command **GDB,SetObjInsp(GDBDescriptor),none,none
         Command **OGLWND (отладка),SetObjInsp(OGLWND_DEBUG),none,none
-        Command **Реле? (отладка),SetObjInsp(RELE_DEBUG),none,none
       }
   }
 MainMenuItem __DB;
   {
-    Command **Добавить в базу,DBaseAdd,none,none
-    Command **Связать с объектом,DBaseLink,none,none
+    Command **Add to the drawing database,DBaseAdd,none,none
+    Command **linked to entity,DBaseLink,none,none
   }
 PopUpMenu PROGRAMDBCXMENU;
   {

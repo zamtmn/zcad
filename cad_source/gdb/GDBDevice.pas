@@ -393,6 +393,8 @@ begin
           //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(@devnam[1]);
           index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(@devnam[1]);
           //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getelement(index);
+          if index>-1 then
+          begin
           pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getelement(index);
           for i:=0 to pblockdef.ObjArray.count-1 do
           begin
@@ -430,6 +432,7 @@ begin
           VarObjArray.Shrink;
           self.BlockDesc:=pblockdef.BlockDesc;
           pblockdef^.ou.copyto(@ou);
+          end;
 end;
 procedure GDBObjDevice.BuildGeometry;
 var pblockdef:PGDBObjBlockdef;

@@ -10,8 +10,10 @@ var
    _puop:GDBString;
    _ibpops:GDBString;
    _am:GDBString;
+   _thermoresistance:GDBString;
 implementation
 begin
+     _thermoresistance:='Датчикитемпературы_термосопротивления_';
      _cables:='Кабели_';
      _cables_sv:='Кабели_связь';
      _detsmokesl:='Извещатели_пожарные_дымовые_шлейфовые_';

@@ -57,25 +57,31 @@ constructor DeviceDbBaseObject.initnul;
 begin
      Inherited initnul;
      GDBPointer(NameTemplate):=nil;
-     NameTemplate:='DeviceDbBaseObject.initnul';
+     //NameTemplate:='DeviceDbBaseObject.initnul';
      GDBPointer(UIDTemplate):=nil;
-     UIDTemplate:='DeviceDbBaseObject.initnul';
+     //UIDTemplate:='DeviceDbBaseObject.initnul';
      GDBPointer(NameFullTemplate):=nil;
-     NameFullTemplate:='DeviceDbBaseObject.initnul';
+     //NameFullTemplate:='DeviceDbBaseObject.initnul';
 end;
 procedure DeviceDbBaseObject.FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);
 begin
      format;
+     if NameShortTemplate<>'' then
      NameShort:=typeformat(NameShortTemplate,@self,PTypeDescriptor);
+     if NameTemplate<>'' then
      Name:=typeformat(NameTemplate,@self,PTypeDescriptor);
+     if NameFullTemplate<>'' then
      NameFull:=typeformat(NameFullTemplate,@self,PTypeDescriptor);
      UID:=typeformat(UIDTemplate,@self,PTypeDescriptor);
 end;
 procedure DeviceDbBaseObject.Format;
 begin
      inherited format;
+     if NameShortTemplate<>'' then
      NameShort:=NameShortTemplate;
+     if NameTemplate<>'' then
      Name:=NameTemplate;
+     if NameFullTemplate<>'' then
      NameFull:=NameFullTemplate;
      UID:=UIDTemplate;
 end;

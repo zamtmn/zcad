@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit ugdbdrawingdef;
+unit UGDBDrawingdef;
 interface
 uses gdbase,gdbasetypes,UGDBLayerArray,UGDBTextStyleArray,ugdbltypearray,UUnitManager,UGDBTableStyleArray;
 type
@@ -35,4 +35,4 @@ TDrawingDef=object(GDBaseobject)
                  end;
 {EXPORT-}
 implementation
-end.
+end.

@@ -278,6 +278,7 @@ var
    textrect:TRect;
    ARect: TRect;
    BrushColor,FontColor:TColor;
+   ts:TTextStyle;
 const
      cellsize=13;
      textoffset=cellsize+5;
@@ -305,11 +306,15 @@ begin
                            textrect := Item.DisplayRectSubItem( SubItem,drLabel);
                            //ARect.Left:=ARect.Left+2;
                            //textrect:=ARect;
+                           ts := TCustomListView(Sender).Canvas.TextStyle;
+                           ts.Layout := tlCenter;
+                           //ts.SystemFont := false;
+                           //ts.Alignment := taRightJustify;
                            if colorindex in [1..255] then
                             begin
                                  textrect.Left:=textrect.Left+textoffset;
-                                 DrawText(TCustomListView(sender).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_SINGLELINE or DT_VCENTER);
-                                 //TCustomListView(sender).canvas.TextRect(textrect,textrect.Left,0,s,estilo);
+                                 //DrawText(TCustomListView(sender).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_SINGLELINE or DT_VCENTER);
+                                 TCustomListView(sender).canvas.TextRect(textrect,textrect.Left,0,s,ts);
                                  //TCustomListView(Sender).Canvas.TextRect(Retang,Retang.Left,0,Item.SubItems[4],estilo);
                                  if colorindex in [1..255] then
                                                 begin

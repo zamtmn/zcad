@@ -9,7 +9,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Spin,
   {From ZCAD}
-  zcadsysvars,{zcadinterface,} iodxf,varmandef, oglwindow,  UUnitManager,
+  zcadsysvars,{zcadinterface,} iodxf,varmandef, oglwindow,  UUnitManager,urtl,
   UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,ugdbsimpledrawing,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
 
 type
@@ -367,7 +367,7 @@ begin
   repeat
     if pv^.Selected then
                         begin
-                             pv^.YouDeleted;
+                             pv^.YouDeleted(gdb.GetCurrentDWG^);
                              inc(count);
                         end;
   pv:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
@@ -524,4 +524,4 @@ end;
 
 
 end.
-
+

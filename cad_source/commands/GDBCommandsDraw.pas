@@ -148,7 +148,8 @@ type
                       end;
          TST=(
                  TST_YX(*'Y-X'*),
-                 TST_XY(*'X-Y'*)
+                 TST_XY(*'X-Y'*),
+                 TST_UNSORTED(*'Unsorted'*)
                 );
          TNumberingParams=record
                             SortMode:TST;(*''*)
@@ -841,15 +842,16 @@ begin
      repeat
            if psd^.objaddr^.vp.ID=GDBDeviceID then
            begin
-                if NumberingParams.SortMode=TST_YX then
+                case NumberingParams.SortMode of
+                                                TST_YX,TST_UNSORTED:
                                                        begin
                                                        dcoord.coord:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS;
                                                        if NumberingParams.InverseX then
                                                                                        dcoord.coord.x:=-dcoord.coord.x;
                                                        if NumberingParams.InverseY then
                                                                                        dcoord.coord.y:=-dcoord.coord.y;
-                                                       end
-                                                   else
+                                                       end;
+                                                TST_XY:
                                                        begin
                                                             dcoord.coord.x:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS.y;
                                                             dcoord.coord.y:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS.x;
@@ -859,6 +861,7 @@ begin
                                                             if NumberingParams.InverseY then
                                                                                             dcoord.coord.x:=-dcoord.coord.x;
                                                        end;
+                                               end;{case}
                 dcoord.pdev:=pointer(psd^.objaddr);
                 inc(count);
                 mpd.PushBack(dcoord);
@@ -868,11 +871,13 @@ begin
      if count=0 then
                     begin
                          historyoutstr('In selection not found devices');
+                         mpd.Destroy;
                          Commandmanager.executecommandend;
                          exit;
                     end;
      index:=NumberingParams.StartNumber;
-     devcoordsort.Sort(mpd,mpd.Size);
+     if NumberingParams.SortMode<>TST_UNSORTED then
+                                                   devcoordsort.Sort(mpd,mpd.Size);
      count:=0;
      for i:=0 to mpd.Size-1 do
        begin

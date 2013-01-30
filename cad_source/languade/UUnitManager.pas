@@ -657,8 +657,11 @@ if addtype then
                                      varname:=pGDBString(parseresult^.getelement(i))^;
                                      if varname='rp_21' then
                                                             varname:=varname;
+                                     if currentunit^.FindVariable(varname)=nil then
+                                     begin
                                      currentunit^.setvardesc(vd, varname,vuname, vartype);
                                      currentunit^.InterfaceVariables.createvariable(vd.name, vd);
+                                     end;
                                      end;
                                 end;
                                 vuname:='';

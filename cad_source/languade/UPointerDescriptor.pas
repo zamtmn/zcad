@@ -33,12 +33,18 @@ GDBPointerDescriptor=object(TUserTypeDescriptor)
                      procedure Format;virtual;
                      function GetTypeAttributes:TTypeAttr;virtual;
                      function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TPropEditor;virtual;
+                     procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
                      destructor Done;virtual;
                end;
 const PAssigned:gdbpointer=nil;
       PNIL:byte=255;
 implementation
 uses varman,log;
+procedure GDBPointerDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);
+begin
+
+end;
+
 destructor GDBPointerDescriptor.done;
 begin
      ReferType:='';

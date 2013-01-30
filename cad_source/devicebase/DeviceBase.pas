@@ -1,7 +1,7 @@
 unit DeviceBase;
 {$INCLUDE def.inc}
 interface
-uses devicebaseabstract,zcadsysvars,fileutil,strproc,strmy,gdbasetypes,gdbase,UUnitManager,varman,{varmandef,}sysutils,typedescriptors,URecordDescriptor,UObjectDescriptor,shared;
+uses varmandef,CsvDocument,devicebaseabstract,zcadsysvars,fileutil,strproc,strmy,gdbasetypes,gdbase,UUnitManager,varman,{varmandef,}sysutils,typedescriptors,URecordDescriptor,UObjectDescriptor,shared;
 type
 {REGISTEROBJECTTYPE DbBaseObject}
 {REGISTEROBJECTTYPE ElDeviceBaseObject}
@@ -15,6 +15,7 @@ DeviceDbBaseObject=object(DbBaseObject)
                        NameTemplate:GDBString;(*'**Формат названия'*)(*oi_readonly*)
                        NameFullTemplate:GDBString;(*'**Формат полного названия'*)(*oi_readonly*)
                        UIDTemplate:GDBString;(*'**Формат уникального идентификатора'*)(*oi_readonly*)
+                       Variants:{-}TCSVDocument{/GDBPointer/};(*'Варианты'*)(*oi_readonly*)
                        constructor initnul;
                        procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
                        procedure Format;virtual;
@@ -25,8 +26,8 @@ ElDeviceBaseObject=object(DeviceDbBaseObject)
                                    procedure Format;virtual;
                              end;
 CableDeviceBaseObject=object(DeviceDbBaseObject)
-                                   ThreadSection:GDBDouble;(*'**Сечение жилы'*)
-                                   ThreadCount:GDBDouble;(*'**Количество жил'*)
+                                   CoreCrossSection:GDBDouble;(*'**Сечение жилы'*)
+                                   NumberOfCores:GDBDouble;(*'**Количество жил'*)
                                    OuterDiameter:GDBDouble;(*'**Наружный диаметр'*)
                                    constructor initnul;
                              end;
@@ -56,6 +57,7 @@ end;
 constructor DeviceDbBaseObject.initnul;
 begin
      Inherited initnul;
+     variants:=nil;
      GDBPointer(NameTemplate):=nil;
      //NameTemplate:='DeviceDbBaseObject.initnul';
      GDBPointer(UIDTemplate):=nil;
@@ -107,12 +109,35 @@ procedure loaddev(fn:gdbstring);
 begin
      units.loadunit({utf8tosys}(fn),nil);
 end;
+procedure loadvariants(fn:gdbstring);
+var
+   pvd:pvardesk;
+   pfd:PFieldDescriptor;
+   pf:ppointer;
+   dbobject:string;
+begin
+     dbobject:=extractfilename(ChangeFileExt(fn,''));
+     pvd:=DBUnit.FindVariable(dbobject);
+     if pvd<>nil then
+                     begin
+                          pfd:=PRecordDescriptor(pvd^.data.PTD)^.FindField('Variants');
+                          if pfd<>nil then
+                          begin
+                               pf:=pvd.data.Instance+pfd.Offset;
+                               pf^:=TCSVDocument.Create;
+                               TCSVDocument(pf^).LoadFromFile(fn);
+                          end;
+                     end
+                 else
+                     shared.ShowError('');
+end;
 procedure DeviceManager.loadfromdir(path: GDBString);
 var sr: TSearchRec;
     s:gdbstring;
 begin
 
   FromDirIterator(utf8tosys(path),'*.pas',firstfilename,loaddev,nil);
+  FromDirIterator(utf8tosys(path),'*.csv','',loadvariants,nil);
 
 end;
 procedure startup;

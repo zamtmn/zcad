@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}{layerwnd,}strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ URecordDescriptor,ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}{layerwnd,}strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -445,6 +445,35 @@ begin
           shared.updatevisible;
      end;}
 end;
+procedure remapprjdb(pu:ptunit);
+var
+   pv,pvindb:pvardesk;
+   ir:itrec;
+   ptd:PUserTypeDescriptor;
+   pfd:PFieldDescriptor;
+   pf,pfindb:ppointer;
+begin
+     pv:=pu.InterfaceVariables.vardescarray.beginiterate(ir);
+      if pv<>nil then
+        repeat
+              ptd:=DBUnit.TypeName2PTD(pv.data.PTD.TypeName);
+              if ptd<>nil then
+              if (ptd.GetTypeAttributes and TA_OBJECT)=TA_OBJECT then
+              begin
+                   pvindb:=DBUnit.InterfaceVariables.findvardescbytype(pv.data.PTD);
+                   if pvindb<>nil then
+                   begin
+                        pfd:=PRecordDescriptor(pvindb^.data.PTD)^.FindField('Variants');
+                        pf:=pv.data.Instance+pfd.Offset;
+                        pfindb:=pvindb.data.Instance+pfd.Offset;
+                        pf^:=pfindb^;
+                   end;
+              end;
+              pv:=pu.InterfaceVariables.vardescarray.iterate(ir);
+        until pv=nil;
+end;
+
+
 function Load_Merge(Operands:pansichar;LoadMode:TLoadOpt):GDBInteger;
 var
    s: GDBString;
@@ -485,8 +514,9 @@ begin
                                      begin
                                            pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
                                            mem.InitFromFile(s+'.dbpas');
-                                           pu^.free;
+                                           //pu^.free;
                                            units.parseunit(mem,PTSimpleUnit(pu));
+                                           remapprjdb(pu);
                                            mem.done;
                                      end;
                                 end
@@ -497,7 +527,7 @@ begin
                                           begin
                                                 pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
                                                 mem.InitFromFile(s+'.dbpas');
-                                                pu^.free;
+                                                //pu^.free;
                                                 units.parseunit(mem,PTSimpleUnit(pu));
                                                 mem.done;
                                           end;

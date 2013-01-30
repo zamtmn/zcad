@@ -2296,6 +2296,7 @@ DeviceDbBaseObject=object(DbBaseObject)
                        NameTemplate:GDBString;(*'**Формат названия'*)(*oi_readonly*)
                        NameFullTemplate:GDBString;(*'**Формат полного названия'*)(*oi_readonly*)
                        UIDTemplate:GDBString;(*'**Формат уникального идентификатора'*)(*oi_readonly*)
+                       variants:GDBPointer;(*'Варианты'*)(*oi_readonly*)
                        constructor initnul;
                        procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
                        procedure Format;virtual;abstract;
@@ -2306,8 +2307,8 @@ ElDeviceBaseObject=object(DeviceDbBaseObject)
                                    procedure Format;virtual;abstract;
                              end;
 CableDeviceBaseObject=object(DeviceDbBaseObject)
-                                   ThreadSection:GDBDouble;(*'**Сечение жилы'*)
-                                   ThreadCount:GDBDouble;(*'**Количество жил'*)
+                                   CoreCrossSection:GDBDouble;(*'**Сечение жилы'*)
+                                   NumberOfCores:GDBDouble;(*'**Количество жил'*)
                                    OuterDiameter:GDBDouble;(*'**Наружный диаметр'*)
                                    constructor initnul;
                              end;

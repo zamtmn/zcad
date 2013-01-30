@@ -104,6 +104,7 @@ GDBFloatDescriptor=object(BaseTypeDescriptor)
 GDBPointerDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                          procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
                     end;
 TEnumDataDescriptor=object(BaseTypeDescriptor)
                      constructor init;
@@ -682,6 +683,10 @@ begin
                                              end
                                          else result := 'nil';
 end;
+procedure GDBPointerDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);
+begin
+end;
+
 function GDBStringDescriptor.GetValueAsString;
 var
      uGDBString:GDBString;

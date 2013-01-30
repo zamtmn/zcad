@@ -1,7 +1,7 @@
 unit DeviceBase;
 {$INCLUDE def.inc}
 interface
-uses varmandef,CsvDocument,devicebaseabstract,zcadsysvars,fileutil,strproc,strmy,gdbasetypes,gdbase,UUnitManager,varman,{varmandef,}sysutils,typedescriptors,URecordDescriptor,UObjectDescriptor,shared;
+uses gvector,varmandef,CsvDocument,devicebaseabstract,zcadsysvars,fileutil,strproc,strmy,gdbasetypes,gdbase,UUnitManager,varman,{varmandef,}sysutils,typedescriptors,URecordDescriptor,UObjectDescriptor,shared;
 type
 {REGISTEROBJECTTYPE DbBaseObject}
 {REGISTEROBJECTTYPE ElDeviceBaseObject}
@@ -19,6 +19,7 @@ DeviceDbBaseObject=object(DbBaseObject)
                        constructor initnul;
                        procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;
                        procedure Format;virtual;
+                       procedure SetOtherFields(PField,PTypeDescriptor:GDBPointer);virtual;
                  end;
 ElDeviceBaseObject=object(DeviceDbBaseObject)
                                    Pins:GDBString;(*'**Клеммы'*)
@@ -65,8 +66,88 @@ begin
      GDBPointer(NameFullTemplate):=nil;
      //NameFullTemplate:='DeviceDbBaseObject.initnul';
 end;
+procedure DeviceDbBaseObject.SetOtherFields(PField,PTypeDescriptor:GDBPointer);
+type
+thead=record
+            offset:integer;
+            TD:PUserTypeDescriptor;
+            cheked:boolean;
+      end;
+theadarray=TVector<thead>;
+var
+    i:integer;
+    FieldName:string;
+    //cheked:boolean;
+
+    //offset:GDBInteger;
+    //tc:PUserTypeDescriptor;
+    pf:GDBPointer;
+
+    headarray:theadarray;
+    head:thead;
+
+function checkrow(row:integer):boolean;
+var
+    j:integer;
+    value:string;
+begin
+     for j:=0 to headarray.Size-1 do
+     begin
+          if headarray[j].cheked then
+          begin
+               value:=headarray[j].TD.GetValueAsString(@self+headarray[j].offset);
+               if variants.Cells[j,row]<>'*' then
+               if variants.Cells[j,row]<>value then
+                                                 begin
+                                                      result:=false;
+                                                      exit;
+                                                 end;
+          end;
+     end;
+     result:=true;
+end;
+procedure setrow(row:integer);
+var
+    j:integer;
+    value:string;
+begin
+     for j:=0 to headarray.Size-1 do
+     begin
+          if not headarray[j].cheked then
+          begin
+               headarray[j].TD.SetValueFromString(@self+headarray[j].offset,variants.Cells[j,i]);
+          end;
+     end;
+end;
+
+begin
+     if not assigned(variants) then exit;
+     headarray:=theadarray.Create;
+     for i:=0 to variants.ColCount[0]-1 do
+     begin
+          head.cheked:=false;
+          FieldName:=variants.Cells[i,0];
+          if FieldName<>''then
+          if FieldName[1]='^'then
+                                 begin
+                                      head.cheked:=true;
+                                      FieldName:=copy(FieldName,2,length(FieldName)-1);
+                                 end;
+          head.offset:=0;
+          PRecordDescriptor(PTypeDescriptor).ApplyOperator('.',FieldName,head.offset,head.td);
+          headarray.PushBack(head);
+     end;
+     for i:=1 to variants.RowCount do
+     begin
+          if checkrow(i) then
+                             setrow(i);
+     end;
+     headarray.Destroy;
+end;
+
 procedure DeviceDbBaseObject.FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);
 begin
+     SetOtherFields(PField,PTypeDescriptor);
      format;
      if NameShortTemplate<>'' then
      NameShort:=typeformat(NameShortTemplate,@self,PTypeDescriptor);
@@ -125,7 +206,9 @@ begin
                           begin
                                pf:=pvd.data.Instance+pfd.Offset;
                                pf^:=TCSVDocument.Create;
+                               TCSVDocument(pf^).Delimiter:=';';
                                TCSVDocument(pf^).LoadFromFile(fn);
+                               //TCSVDocument(pf^).SaveToFile('c:\1.csv');
                           end;
                      end
                  else

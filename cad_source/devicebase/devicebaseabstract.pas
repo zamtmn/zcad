@@ -29,6 +29,7 @@ DbBaseObject=object(GDBaseObject)
                        EdIzm:TEdIzm;(*'**Ед. изм.'*)(*oi_readonly*)
                        Manufacturer:GDBString;(*'**Производитель'*)(*oi_readonly*)
                        TreeCoord:GDBString;(*'**Позиция в дереве БД'*)(*oi_readonly*)
+                       PartNumber:GDBString;(*'**Каталожный номер'*)(*oi_readonly*)
                        constructor initnul;
                  end;
 {EXPORT-}

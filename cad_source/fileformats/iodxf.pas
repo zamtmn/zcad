@@ -1508,8 +1508,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
         end;
         if inlayertable and (groupi=390) then
                                              plottablefansdle:=lasthandle;  {поймать плоттабле}
-        {if instyletable and (groupi=5) then
-                                             standartstylehandle:=lasthandle;{intable;}  {поймать standart}
+        (*{if instyletable and (groupi=5) then
+                                             standartstylehandle:=lasthandle;{intable;}  {поймать standart}*)
       end
       else
         if (groupi = 2) and (values = 'ENTITIES') then

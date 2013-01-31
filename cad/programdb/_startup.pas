@@ -11,9 +11,11 @@ var
    _ibpops:GDBString;
    _am:GDBString;
    _thermoresistance:GDBString;
+   _pressureswitches:GDBString;
 implementation
 begin
      _thermoresistance:='Датчикитемпературы_термосопротивления_';
+     _pressureswitches:='Датчикидавления_реледавления_';
      _cables:='Кабели_';
      _cables_sv:='Кабели_связь';
      _detsmokesl:='Извещатели_пожарные_дымовые_шлейфовые_';

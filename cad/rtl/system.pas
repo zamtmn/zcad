@@ -1065,6 +1065,7 @@ varmanager=object(varmanagerdef)
                  constructor init;
                  function findvardesc(varname:GDBString): pvardesk;virtual;abstract;
                  function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;abstract;
+                 function findvardescbytype(pt:PUserTypeDescriptor):pvardesk;virtual;abstract;
                  procedure createvariable(varname:GDBString; var vd:vardesk);virtual;abstract;
                  function findfieldcustom(var pdesc: pGDBByte; var offset: GDBInteger;var tc:PUserTypeDescriptor; nam: ShortString): GDBBoolean;virtual;abstract;
                  destructor done;virtual;abstract;
@@ -2286,6 +2287,7 @@ DbBaseObject=object(GDBaseObject)
                        EdIzm:TEdIzm;(*'**Ед. изм.'*)(*oi_readonly*)
                        Manufacturer:GDBString;(*'**Производитель'*)(*oi_readonly*)
                        TreeCoord:GDBString;(*'**Позиция в дереве БД'*)(*oi_readonly*)
+                       PartNumber:GDBString;(*'**Каталожный номер'*)(*oi_readonly*)
                        constructor initnul;
                  end;
 //Generate on C:\zcad\CAD_SOURCE\DeviceBase\DeviceBase.pas
@@ -2296,10 +2298,11 @@ DeviceDbBaseObject=object(DbBaseObject)
                        NameTemplate:GDBString;(*'**Формат названия'*)(*oi_readonly*)
                        NameFullTemplate:GDBString;(*'**Формат полного названия'*)(*oi_readonly*)
                        UIDTemplate:GDBString;(*'**Формат уникального идентификатора'*)(*oi_readonly*)
-                       variants:GDBPointer;(*'Варианты'*)(*oi_readonly*)
+                       Variants:GDBPointer;(*'Варианты'*)(*oi_readonly*)
                        constructor initnul;
                        procedure FormatAfterFielfmod(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
                        procedure Format;virtual;abstract;
+                       procedure SetOtherFields(PField,PTypeDescriptor:GDBPointer);virtual;abstract;
                  end;
 ElDeviceBaseObject=object(DeviceDbBaseObject)
                                    Pins:GDBString;(*'**Клеммы'*)

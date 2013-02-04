@@ -12,10 +12,14 @@ var
    _am:GDBString;
    _thermoresistance:GDBString;
    _pressureswitches:GDBString;
+   _pressuremanometer:GDBString;
+   _thermometer:GDBString;
 implementation
 begin
      _thermoresistance:='Датчикитемпературы_термосопротивления_';
+     _thermometer:='Датчикитемпературы_термометры_';
      _pressureswitches:='Датчикидавления_реледавления_';
+     _pressuremanometer:='Датчикидавления_манометры_';
      _cables:='Кабели_';
      _cables_sv:='Кабели_связь';
      _detsmokesl:='Извещатели_пожарные_дымовые_шлейфовые_';

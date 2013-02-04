@@ -331,7 +331,7 @@ end;
 function evaluate(expr: GDBString;_unit:PTUnit): vardesk;
 var
   s,s1,s2: String;
-  s3:string;
+  //s3:string;
   rez, hrez, subrezult: vardesk;
   pvar: pvardesk;
   operatorname, functionname, functiontype, operatoptype: GDBInteger;
@@ -377,8 +377,8 @@ begin
           rez.name := pvar^.name;
           rez.data.Instance := pvar^.data.Instance;
           rez.data.ptd := pvar^.data.ptd;
-          pointer(s3):=pointer(rez.data.Instance^);
-          pointer(s3):=nil;
+          //pointer(s3):=pointer(rez.data.Instance^);
+          //pointer(s3):=nil;
           if pvar^.name = invar then
                                     begin
                                          pvar^.name:='';

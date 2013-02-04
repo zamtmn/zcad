@@ -48,6 +48,7 @@ function ConvertToDxfString(str:GDBString):GDBString;
 function MakeHash(const s: GDBString): GDBLongword;
 
 procedure KillString(var str:GDBString);inline;
+procedure RemoveOneRefCount(str:GDBString);inline;
 
 type
   TCodePage=(CP_utf8,CP_win);
@@ -64,7 +65,10 @@ procedure KillString(var str:GDBString);inline;
 begin
      GDBPointer(str):=nil;
 end;
-
+procedure RemoveOneRefCount(str:GDBString);inline;
+begin
+     GDBPointer(str):=nil;
+end;
 function MakeHash(const s: GDBString): GDBLongword;
 var
   I: Integer;

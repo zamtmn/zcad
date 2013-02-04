@@ -228,7 +228,7 @@ end;
 procedure GDBObjCable.FormatEntity(const drawing:TDrawingDef);
 var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
     currentobj,CurrentSubObj,CurrentSubObj2,ptd:PGDBObjDevice;
-    devpoint,{cabpoint,}tp,tp2,tp3,_XWCS,_YWCS,_ZWCS:GDBVertex;
+    devpoint,{cabpoint,}tp,tp2,tp3,{_XWCS,}_YWCS,_ZWCS:GDBVertex;
     ptv,ptvpred,ptvnext:pgdbvertex;
     ptn,{ptnfirst,ptnfirst2,}ptnlast,ptnlast2:PTNodeProp;
     tn:TNodeProp;
@@ -435,7 +435,7 @@ begin
 
 
 
-  _XWCS:=XWCS;//gdb.GetCurrentDWG.pcamera.xdir;
+  //_XWCS:=XWCS;//gdb.GetCurrentDWG.pcamera.xdir;
   _YWCS:=YWCS;//gdb.GetCurrentDWG.pcamera.ydir;
   _ZWCS:=ZWCS;//gdb.GetCurrentDWG.pcamera.look;
   ptnlast:=NodePropArray.getelement(vertexarrayInWCS.Count-1);

@@ -93,10 +93,11 @@ begin
 
 end;
 function GDBGDBStringArray.add(p:GDBPointer):TArrayIndex;
-var s:GDBString;
+//var s:GDBString;
 begin
-     s:=pGDBString(p)^;
-     GDBPointer(s):=nil;
+     //s:=pGDBString(p)^;
+     //GDBPointer(s):=nil;
+     RemoveOneRefCount(pGDBString(p)^);
      result:=inherited add(p);
 end;
 function GDBGDBStringArray.addutoa(p:GDBPointer):TArrayIndex;

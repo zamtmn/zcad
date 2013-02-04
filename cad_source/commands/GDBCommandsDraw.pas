@@ -308,6 +308,8 @@ tdevcoord=record
 TGDBVertexLess=class
                     class function c(a,b:tdevcoord):boolean;{inline;}
                end;
+devcoordarray=specialize TVector<tdevcoord>;
+devcoordsort=specialize TOrderingArrayUtils<devcoordarray, tdevcoord, TGDBVertexLess>;
 var
     MirrorParam:TMirrorParam;
     PrintParam:TPrintParams;
@@ -820,9 +822,6 @@ begin
                     end;
 end;
 procedure Number_com.Run(pdata:GDBPlatformint);
-type
-  devcoordarray=specialize TVector<tdevcoord>;
-  devcoordsort=specialize TOrderingArrayUtils<devcoordarray, tdevcoord, TGDBVertexLess>;
 var
     psd:PSelectedObjDesc;
     ir:itrec;

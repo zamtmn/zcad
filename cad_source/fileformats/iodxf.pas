@@ -1354,7 +1354,7 @@ var
   Handle2pointer:mappDWGHi;
   HandleIterator:mappDWGHi.TIterator;
   {$ENDIF}
-  DWGHandle:TDWGHandle;
+  //DWGHandle:TDWGHandle;
   laststrokewrited:boolean;
 begin
   {$IFNDEF DELPHI}
@@ -2282,14 +2282,14 @@ var
 //  pmem,tmem:GDBPointer;
   outfile:GDBInteger;
   memorybuf:PGDBOpenArrayOfByte;
-  s:ZCPHeader;
+  //s:ZCPHeader;
   linkbyf:PGDBOpenArrayOfTObjLinkRecord;
 //  test:gdbvertex;
   sub:integer;
 begin
      memorybuf:=nil;
      linkbyf:=nil;
-     s:=NULZCPHeader;
+     //s:=NULZCPHeader;
      zcpmode:=zcptxt;
      sub:=0;
      sysunit^.TypeName2PTD('ZCPHeader')^.Serialize(@ZCPHead,SA_SAVED_TO_SHD,memorybuf,linkbyf,sub);
@@ -2325,15 +2325,15 @@ begin
      linkbyf^.done;
 end;
 procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
-var
+//var
 //  objcount:GDBInteger;
 //  pmem,tmem:GDBPointer;
 //  infile:GDBInteger;
 //  head:ZCPheader;
-  memorybuf:GDBOpenArrayOfByte;
-  FileHeader:ZCPHeader;
+  //memorybuf:GDBOpenArrayOfByte;
+  //FileHeader:ZCPHeader;
 //  test:gdbvertex;
-  linkbyf:PGDBOpenArrayOfTObjLinkRecord;
+  //linkbyf:PGDBOpenArrayOfTObjLinkRecord;
 begin
      (*
      FileHeader:=NULZCPHeader;
@@ -2384,7 +2384,7 @@ var
   CurEntity: TvEntity;
   i:integer;
   pobj:PGDBObjEntity;
-  j, k: Integer;
+  j{, k}: Integer;
   CurSegment: TPathSegment;
   Cur2DSegment: T2DSegment absolute CurSegment;
   PosX, PosY: Double;

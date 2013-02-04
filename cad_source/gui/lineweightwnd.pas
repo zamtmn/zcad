@@ -116,7 +116,7 @@ procedure TLineWeightSelectWND._onDrawItem(Control: TWinControl;
   Index: Integer; ARect: TRect; State: TOwnerDrawState);
 var
   s:string;
-  y,pw,ll:integer;
+  {y,pw,}ll:integer;
 begin
   if (odSelected in state){or(Item = Sender.Selected)} then
                    begin
@@ -175,4 +175,4 @@ begin
 end;
 
 end.
-
+

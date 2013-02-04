@@ -82,13 +82,13 @@ end;
 function GDBObjBlockdefArray.getindex;
 var
    i:GDBInteger;
-   debugs:string;
+   //debugs:string;
 begin
   result:=-1;
   if count = 0 then exit;
   for i:=0 to count-1 do
                         begin
-                        debugs:=PBlockdefArray(parray)[i].Name;
+                        //debugs:=PBlockdefArray(parray)[i].Name;
                         if uppercase(PBlockdefArray(parray)[i].Name)=uppercase(name) then
                                                                    result := i;
                         end;

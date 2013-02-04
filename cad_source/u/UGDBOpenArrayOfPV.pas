@@ -82,8 +82,8 @@ end;
 function GDBObjOpenArrayOfPV.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 var pobj:pGDBObjEntity;
     ir:itrec;
-    fr:TInRect;
-    all:boolean;
+    //fr:TInRect;
+    //all:boolean;
 begin
      result:=false;
      pobj:=beginiterate(ir);

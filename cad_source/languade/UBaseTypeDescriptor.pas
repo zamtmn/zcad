@@ -352,7 +352,7 @@ begin
      result := 'False';
 end;
 function GDBBooleanDescriptor.CreateEditor;
-var num:cardinal;
+var //num:cardinal;
     cbedit:TComboBox;
     propeditor:TPropEditor;
     //p:EnumDescriptor;
@@ -454,7 +454,7 @@ end;
 procedure GDBQWordDescriptor.SetValueFromString;
 var
      qw:GDBQWord;
-     error:integer;
+     //error:integer;
 begin
      {$IFNDEF DELPHI}
      if TryStrToQWord(value,qw) then
@@ -774,7 +774,7 @@ var
     cbedit:TComboBox;
     propeditor:TPropEditor;
     ir:itrec;
-    number:longword;
+    //number:longword;
     p:pgdbstring;
 begin
      propeditor:=TPropEditor.Create(theowner,PInstance,@self,FreeOnLostFocus);

@@ -104,7 +104,7 @@ procedure GDBLtypeProp.format;
 var
    PSP:PShapeProp;
    PTP:PTextProp;
-   ir,ir2:itrec;
+   {ir,}ir2:itrec;
    sh:double;
    i:integer;
    Psymbol:PGDBsymdolinfo;
@@ -207,7 +207,7 @@ begin
      Psymbol:=nil;
 end;
 function GDBLtypeArray.createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
-var p:GDBPointer;
+var //p:GDBPointer;
     ir:itrec;
     psp:PShapeProp;
     sp:ShapeProp;
@@ -272,7 +272,7 @@ var
    line:GDBString;
    i:integer;
    WhatNeed:TSeek;
-   LTName,LTDesk,LTClass:GDBString;
+   LTName{,LTDesk,LTClass}:GDBString;
    p:PGDBLtypeProp;
 function GetStr(var s: GDBString; out dinfo:TDashInfo): String;
 var j:integer;
@@ -298,7 +298,7 @@ begin
 end;
 procedure CreateLineTypeFrom(var LT:GDBString;pltprop:PGDBLtypeProp);
 var
-   element,subelement,text_shape,font_style,paramname:GDBString;
+   element,subelement,{text_shape,font_style,}paramname:GDBString;
    j:integer;
    stroke:GDBDouble;
    dinfo:TDashInfo;
@@ -394,14 +394,14 @@ begin
                                   begin
                                        LTName:=GetPredStr(line,',');
                                        LTName:=copy(LTName,2,length(LTName)-1);
-                                       LTDesk:=Line;
+                                       //LTDesk:=Line;
                                        WhatNeed:=TSeekImplementation;
                                   end;
                              end;
                          'A':begin
                                   if WhatNeed=TSeekImplementation then
                                   begin
-                                       LTClass:=GetPredStr(line,',');
+                                       {LTClass:=}GetPredStr(line,',');
                                        case AddItem(LTName,pointer(p)) of
                                                     IsFounded:
                                                               begin

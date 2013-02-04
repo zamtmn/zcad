@@ -81,15 +81,15 @@ begin
 end;
 
 function GDBObjDevice.EraseMi;
-var
-p:PGDBObjEntity;
+//var
+//p:PGDBObjEntity;
 begin
      if pobj^.bp.TreePos.Owner<>nil then
      begin
           PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.deliteminarray(pobj^.bp.TreePos.SelfIndex);
      end;
 
-     pointer(p):= VarObjArray.GetObject(pobjinarray);
+     //pointer(p):= VarObjArray.GetObject(pobjinarray);
      VarObjArray.deliteminarray(pobjinarray);
 
      //p^.done;
@@ -101,7 +101,7 @@ end;
 procedure GDBObjDevice.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
     ir:itrec;
-    pv,pvc:pgdbobjEntity;
+    pv{,pvc}:pgdbobjEntity;
 begin
           if assigned(SysVar.DWG.DWG_AdditionalGrips)then
           begin
@@ -200,11 +200,11 @@ begin
      //self.CalcObjMatrix;
 end;
 procedure GDBObjDevice.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
-var
-   s:gdbstring;
+//var
+   //s:gdbstring;
 begin
      inherited;
-     s:=inttohex(GetHandle,10);
+     //s:=inttohex(GetHandle,10);
      //historyout(@s[1]);
      dxfGDBStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
      dxfGDBStringout(outhandle,1000,'_UPGRADE=1');
@@ -509,7 +509,7 @@ procedure GDBObjDevice.FormatAfterDXFLoad;
 var
     p:pgdbobjEntity;
     ir:itrec;
-    pblockdef:PGDBObjBlockdef;
+    //pblockdef:PGDBObjBlockdef;
 begin
   //BuildVarGeometry;
   inherited;

@@ -252,10 +252,10 @@ begin
 end;}
 procedure GDBPolyPoint3DArray.drawgeometry;
 var p:PGDBPolyVertex3D;
-    counter,lines,points:GDBInteger;
+    //counter,lines,points:GDBInteger;
     i:GDBInteger;
-    v1,v2:gdbvertex;
-    ir:itrec;
+    //v1,v2:gdbvertex;
+    //ir:itrec;
     //emptycount:GDBInteger;
     //d:GDBDouble;
     //ptpv0,ptpv1:PGDBPolyVertex3D;
@@ -351,10 +351,10 @@ begin
 end;
 procedure GDBPolyPoint3DArray.simpledrawgeometry(const num:integer);
 var p,pp:PGDBPolyVertex3D;
-    totalcounter,counter,lines,points,linenumber:GDBInteger;
+    totalcounter,{counter,lines,points,}linenumber:GDBInteger;
     i:GDBInteger;
-    v1,v2:gdbvertex;
-    ir:itrec;
+    //v1,v2:gdbvertex;
+    //ir:itrec;
     //emptycount:GDBInteger;
     //d:GDBDouble;
     //ptpv0,ptpv1:PGDBPolyVertex3D;

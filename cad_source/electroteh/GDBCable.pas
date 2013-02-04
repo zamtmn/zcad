@@ -501,7 +501,7 @@ procedure GDBObjCable.DrawGeometry;
 var
    ptn1,ptn2:PTNodeProp;
    ir_inNodeArray:itrec;
-   notfirst:boolean;
+   //notfirst:boolean;
 begin
   oglsm.myglbegin(GL_lines);
   ptn2:=NodePropArray.beginiterate(ir_inNodeArray);

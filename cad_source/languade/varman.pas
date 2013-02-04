@@ -899,13 +899,13 @@ begin
 end;
 function varmanager.findfieldcustom;
 var
-  path,sp, typeGDBString, sub, field, inds: GDBString;
+  path,{sp,} typeGDBString, sub, {field,} inds: GDBString;
   oper: ansichar;
   i, oldi, j, indexcount: GDBInteger;
   pind: parrayindex;
   ind, sum: GDBInteger;
-  sizeinmem: GDBLongword;
-  deb1,deb2:shortString;
+  //sizeinmem: GDBLongword;
+  //deb1,deb2:shortString;
   pt:PTUserTypeDescriptor;
 begin
   result := false;
@@ -918,8 +918,8 @@ begin
   begin
     exit;
   end;
-  deb1:=pvardesk(pdesc)^.name;
-  deb2:=copy(nam, 1, length(pvardesk(pdesc)^.name));
+  //deb1:=pvardesk(pdesc)^.name;
+  //deb2:=copy(nam, 1, length(pvardesk(pdesc)^.name));
   if pvardesk(pdesc)^.name <> copy(nam, 1, length(pvardesk(pdesc)^.name)) then
   begin
     exit;
@@ -960,7 +960,7 @@ begin
           if i >= length(path) then
           begin
             oper := #00;
-            sp:=path;
+            //sp:=path;
             path := '';
           end
           else
@@ -1010,7 +1010,7 @@ begin
           inc(i);}
 //----------------------------------          tc := unpac_GDBString_to_GDBWord(copy(typeGDBString, i, 2));
           inc(i, 2);
-          sizeinmem := unpac_GDBString_to_lGDBWord(copy(typeGDBString, i, 4));
+          {sizeinmem :=} unpac_GDBString_to_lGDBWord(copy(typeGDBString, i, 4));
              //offset:=offset+sizeinmem;
           inc(i, 4);
           indexcount := unpac_GDBString_to_GDBWord(copy(typeGDBString, i, 2));
@@ -1073,9 +1073,9 @@ function varmanager.findvardescbyinst(varinst:GDBPointer):pvardesk;
 var
   //pblock: pdblock;
   pdesc: pvardesk;
-  offset: GDBLongword;
-  temp: pvardesk;
-  bc:PUserTypeDescriptor;
+  //offset: GDBLongword;
+  //temp: pvardesk;
+  //bc:PUserTypeDescriptor;
       ir:itrec;
 
 begin
@@ -1094,9 +1094,9 @@ end;
 function varmanager.findvardescbytype(pt:PUserTypeDescriptor):pvardesk;
 var
   pdesc: pvardesk;
-  offset: GDBLongword;
-  temp: pvardesk;
-  bc:PUserTypeDescriptor;
+  //offset: GDBLongword;
+  //temp: pvardesk;
+  //bc:PUserTypeDescriptor;
       ir:itrec;
 
 begin

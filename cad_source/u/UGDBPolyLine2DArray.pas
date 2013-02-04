@@ -46,7 +46,7 @@ procedure GDBPolyline2DArray.transform(const t_matrix:DMatrix4D);
 var
     pv:PGDBVertex2D;
     tv:GDBVertex;
-    i,c:integer;
+    i{,c}:integer;
 
 begin
     pv:=parray;
@@ -91,12 +91,12 @@ function GDBPolyline2DArray._optimize;
 var
     pvprev,pv,pvnext:PGDBVertex2D;
     v1,v2:gdbvertex;
-    i,c:integer;
+    i{,c}:integer;
 
 begin
     result:=false;
     if count<2 then exit;
-    c:=0;
+    //c:=0;
     pv:=parray;
     pvnext:=pv;
     inc(pvnext);

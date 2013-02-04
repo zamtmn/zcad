@@ -591,18 +591,18 @@ end;
 
 procedure GDBObjText.createpoint;
 var
-  psymbol: GDBPointer;
-  i, j, k: GDBInteger;
-  len: GDBWord;
+  //psymbol: GDBPointer;
+  i{, j, k}: GDBInteger;
+  //len: GDBWord;
   matr,m1: DMatrix4D;
   v:GDBvertex4D;
-  pv:GDBPolyVertex2D;
+  //pv:GDBPolyVertex2D;
   pv3:GDBPolyVertex3D;
 
   minx,miny,maxx,maxy:GDBDouble;
 
   plp,plp2:pgdbvertex;
-  lp,tv:gdbvertex;
+  lp{,tv}:gdbvertex;
   pl:GDBPoint3DArray;
   ispl:gdbboolean;
   ir:itrec;  
@@ -826,7 +826,7 @@ begin
   dxfGDBIntegerout(outhandle,73,vv);
 end;
 procedure GDBObjText.LoadFromDXF;
-var s{, layername}: GDBString;
+var //s{, layername}: GDBString;
   byt{, code}: GDBInteger;
   doublepoint,angleload: GDBBoolean;
   vv, gv, textbackward: GDBInteger;
@@ -862,7 +862,7 @@ else if not dxfGDBIntegerload(f,72,byt,gv)then
      if not dxfGDBIntegerload(f,73,byt,vv)then
      if not dxfGDBIntegerload(f,71,byt,textbackward)then
      if not dxfGDBStringload(f,1,byt,content)then
-                                               s := f.readgdbstring;
+                                               {s := }f.readgdbstring;
     byt:=readmystrtoint(f);
   end;
   if (textbackward and 4)<>0 then

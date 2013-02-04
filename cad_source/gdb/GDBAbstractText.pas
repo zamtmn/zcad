@@ -74,7 +74,7 @@ implementation
 uses
    log,GDBSubordinated;
 procedure GDBObjAbstractText.transform;
-var tv,tv2:GDBVertex;
+var tv{,tv2}:GDBVertex;
    m:DMatrix4D;
 begin
 
@@ -106,11 +106,11 @@ procedure GDBObjAbstractText.FormatAfterFielfmod(PField,PTypeDescriptor:GDBPoint
 var
    r:double;
    ox:gdbvertex;
-   m,m2,m3:DMAtrix4D;
+   {m,}m2,m3:DMAtrix4D;
 begin
      if PField=@textprop.angle then
                                    begin
-                                        m:=self.CalcObjMatrixWithoutOwner;
+                                        //m:=self.CalcObjMatrixWithoutOwner;
                                         m2:=self.getownermatrix^;
                                         m3:=m2;
                                         matrixinvert(m3);
@@ -161,10 +161,10 @@ begin
 end;
 
 function convertfromunicode(s:GDBString):GDBString;
-var i,i2:GDBInteger;
-    ps,varname:GDBString;
-    pv:pvardesk;
-    num,code:integer;
+var //i,i2:GDBInteger;
+    ps{,varname}:GDBString;
+    //pv:pvardesk;
+    //num,code:integer;
 begin
      ps:=s;
      {
@@ -185,7 +185,7 @@ function textformat;
 var i,i2,counter:GDBInteger;
     ps,varname:GDBString;
     pv:pvardesk;
-    num,code:integer;
+    //num,code:integer;
     vd:vardesk;
 begin
      //ps:=s;
@@ -561,9 +561,9 @@ begin
 end;
 
 procedure GDBObjAbstractText.DrawGeometry;
-var
-   _lod:integer;
-   templod:gdbdouble;
+//var
+   //_lod:integer;
+   //templod:gdbdouble;
 begin
   //exit;
   //oglsm.myglpointsize(1);

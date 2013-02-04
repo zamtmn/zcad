@@ -121,7 +121,7 @@ implementation
 uses GDBMText,GDBBlockDef,oglwindow,UGDBPoint3DArray,devicebaseabstract;
 function GetCableMaterial(pcd:PTCableDesctiptor):GDBString;
 var
-   {pvn,}pvm,pvmc,pvl:pvardesk;
+   {pvn,}{pvm,}pvmc{,pvl}:pvardesk;
    line:gdbstring;
    eq:pvardesk;
 begin
@@ -142,9 +142,9 @@ begin
 end;
 procedure Cable2CableMark(pcd:PTCableDesctiptor;pv:pGDBObjDevice);
 var
-   {pvn,}pvm,pvmc,pvl:pvardesk;
-   line:gdbstring;
-   eq:pvardesk;
+   {pvn,}pvm,{pvmc,}pvl:pvardesk;
+   //line:gdbstring;
+   //eq:pvardesk;
 begin
                         pvm:=pv^.ou.FindVariable('CableMaterial');
                         if pvm<>nil then
@@ -174,8 +174,8 @@ begin
      result:=nodename;
 end;}
 procedure IP(pnode:PGDBBaseNode;PProcData:Pointer);
-var
-   pvd:pvardesk;
+//var
+//   pvd:pvardesk;
 begin
 (*     if PGDBEmSEPDeviceNode(pnode)^.upcable<>nil then
      begin
@@ -186,8 +186,8 @@ begin
      end; *)
 end;
 function icf (pnode:PGDBBaseNode;PExpr:GDBPointer):GDBBoolean;
-var
-   pvd:pvardesk;
+//var
+//   pvd:pvardesk;
 begin
  (*    result:=false;
      if PGDBEmSEPDeviceNode(pnode)^.upcable<>nil then
@@ -290,8 +290,8 @@ begin
      
 end;
 procedure drawcable(pcabledesk:PTCableDesctiptor;p1,p2:GDBVertex;g1,g2:GDBBoundingBbox;bgm1,bgm2:TBGMode);
-var
-   pl:pgdbobjline;
+//var
+//   pl:pgdbobjline;
 begin
      if abs(p1.x-p2.x)<eps then
                                drawlineandtext(pcabledesk,createvertex(p1.x,p1.y+g1.LBN.y,p1.z),createvertex(p2.x,p2.y+g2.RTF.y,p2.z))
@@ -613,7 +613,7 @@ procedure KIP_CDBuild_com.Command(Operands:pansichar);
 var
     psd:PSelectedObjDesc;
     ir:itrec;
-    pdev,pnevdev:PGDBObjDevice;
+    {pdev,}pnevdev:PGDBObjDevice;
     PBH:PGDBObjBlockdef;
     currentcoord:GDBVertex;
     t_matrix:DMatrix4D;
@@ -679,7 +679,7 @@ var
       counter:integer;
       //tcd:TCopyObjectDesc;
       pvd:pvardesk;
-      name,material,potrname,potrmaterial:GDBString;
+      name,{material,}potrname{,potrmaterial}:GDBString;
       p,pust,i,iust,cosf:PGDBDouble;
       potrpust,potriust,potrpr,potrir,potrpv,potrp,potri,potrks,potrcos,sumpcos,sumpotrp,sumpotri:GDBDouble;
       cman:TCableManager;
@@ -714,13 +714,13 @@ begin
               inc(counter);
 
               name:='Без имени';
-              material:='Без имени';
+              //material:='Без имени';
               pvd:=pobj^.ou.FindVariable('NMO_Name');
               if pvd<>nil then
                               name:=pgdbstring(pvd.data.Instance)^;
               pvd:=pobj^.ou.FindVariable('DB_link');
-              if pvd<>nil then
-                              material:=pgdbstring(pvd.data.Instance)^;
+              //if pvd<>nil then
+              //                material:=pgdbstring(pvd.data.Instance)^;
               historyoutstr('Найден объект источник энергии "'+name+'"');
 
               p:=nil;pust:=nil;i:=nil;iust:=nil;cosf:=nil;
@@ -783,7 +783,7 @@ begin
                                               case PTDeviceType(pvd^.data.Instance)^ of
                                                    TDT_SilaPotr:
                                                                 begin
-                                                                      potrmaterial:='Без имени';
+                                                                      //potrmaterial:='Без имени';
                                                                       pvd:=pgroupdev^.ou.FindVariable('NMO_Name');
                                                                       if pvd<>nil then
                                                                                       begin
@@ -793,8 +793,8 @@ begin
                                                                                                               potrname:=potrname+'+ '+Uni2CP(pgdbstring(pvd.data.Instance)^);
                                                                                       end;
                                                                       pvd:=pgroupdev^.ou.FindVariable('DB_link');
-                                                                      if pvd<>nil then
-                                                                                      potrmaterial:=pgdbstring(pvd.data.Instance)^;
+                                                                      //if pvd<>nil then
+                                                                      //                potrmaterial:=pgdbstring(pvd.data.Instance)^;
                                                                       potrpv:=1;
                                                                       pvd:=pgroupdev^.ou.FindVariable('PV');
                                                                       if pvd<>nil then
@@ -885,7 +885,7 @@ begin
                                                                 end;
                                                    TDT_SilaIst:
                                                                 begin
-                                                                      potrmaterial:='Без имени';
+                                                                      //potrmaterial:='Без имени';
                                                                       pvd:=pgroupdev^.ou.FindVariable('NMO_Name');
                                                                       if pvd<>nil then
                                                                                       begin
@@ -895,8 +895,8 @@ begin
                                                                                                               potrname:=potrname+'+ '+Uni2CP(pgdbstring(pvd.data.Instance)^);
                                                                                       end;
                                                                       pvd:=pgroupdev^.ou.FindVariable('DB_link');
-                                                                      if pvd<>nil then
-                                                                                      potrmaterial:=pgdbstring(pvd.data.Instance)^;
+                                                                      //if pvd<>nil then
+                                                                      //                potrmaterial:=pgdbstring(pvd.data.Instance)^;
                                                                       potrp:=0;
                                                                       pvd:=pgroupdev^.ou.FindVariable('PowerUst');
                                                                       if pvd<>nil then
@@ -1069,7 +1069,7 @@ begin
 end;
 
 function El_Wire_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
-var po:PGDBObjSubordinated;
+var //po:PGDBObjSubordinated;
     Objects:GDBObjOpenArrayOfPV;
 begin
   result:=0;
@@ -1100,7 +1100,7 @@ begin
 end;
 
 function El_Wire_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
-var po:PGDBObjSubordinated;
+var //po:PGDBObjSubordinated;
     mode:GDBInteger;
     TempNet:PGDBObjNet;
     //nn:GDBString;
@@ -1130,7 +1130,7 @@ begin
        begin
             PGDBObjEntity(osp^.PGDBObject)^.formatentity(gdb.GetCurrentDWG^);
             historyout(GDBPointer(PGDBObjline(osp^.PGDBObject)^.ObjToGDBString('Found: ','')));
-            po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
+            //po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
             //SecondOwner:=GDBPointer(po);
        end
   end {else SecondOwner:=nil};
@@ -1487,9 +1487,9 @@ end;
 function _Cable_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var //po:PGDBObjSubordinated;
     plastw:pgdbvertex;
-    tw1,tw2:gdbvertex;
-    l1,l2:pgdbobjline;
-    pa:GDBPoint3dArray;
+    //tw1,tw2:gdbvertex;
+    //l1,l2:pgdbobjline;
+    //pa:GDBPoint3dArray;
     polydata:tpolydata;
     domethod,undomethod:tmethod;
 begin
@@ -2233,7 +2233,7 @@ var pv,pvlast:pGDBObjEntity;
     count:integer;
     //a:HandledMsg;
     tpz{, glx1, gly1}: GDBDouble;
-  {fv1,}tp,wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex;
+  {fv1,}{tp,}wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex;
     findvarvalue:gdbboolean;
 begin
   gdb.GetCurrentDWG.SelObjArray.clearallobjects;
@@ -2299,14 +2299,14 @@ begin
         dcsRTF:=MinusInfinityVertex;
         wcsLBN:=InfinityVertex;
         wcsRTF:=MinusInfinityVertex;
-        tp:=gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        tp:=gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        tp:=gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        tp:=gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        tp:=gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        tp:=gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        tp:=gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        tp:=gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
   gdb.GetCurrentDWG.pcamera^.prop.point.x:=-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2);
   gdb.GetCurrentDWG.pcamera^.prop.point.y:=-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2);
 
@@ -2531,7 +2531,7 @@ end;
 function findconnector(CurrentObj:PGDBObjDevice):PGDBObjDevice;
 var
     CurrentSubObj:PGDBObjDevice;
-    ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice:itrec;
+    {ir_inGDB,ir_inVertexArray,ir_inNodeArray,}ir_inDevice:itrec;
 begin
      result:=nil;
 CurrentSubObj:=CurrentObj^.VarObjArray.beginiterate(ir_inDevice);
@@ -2550,8 +2550,8 @@ until CurrentSubObj=nil;
 end;
 function CreateCable(name,mater:gdbstring):PGDBObjCable;
 var
-    vd,pvn,pvn2: pvardesk;
-    pvd,pvd2:pvardesk;
+    //vd,pvn,pvn2: pvardesk;
+    pvd{,pvd2}:pvardesk;
 begin
   result := GDBPointer(gdb.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,gdb.GetCurrentROOT));
   result^.ou.copyfrom(units.findunit('cable'));
@@ -2588,7 +2588,7 @@ var
     ir_net,ir_net2,ir_riser,ir_riser2:itrec;
     nline,new_line:pgdbobjline;
     np:GDBVertex;
-    net2processed:boolean;
+    //net2processed:boolean;
     processednets:GDBOpenArrayOfPObjects;
     vd,pvn,pvn2: pvardesk;
     segments:GDBOpenArrayOfPObjects;
@@ -2783,7 +2783,7 @@ begin
                                       if net<>net2 then
                                       begin
 
-                                      net2processed:=false;
+                                      //net2processed:=false;
                                       riser:=net.riserarray.beginiterate(ir_riser);
                                       if (riser<>nil) then
                                       repeat
@@ -2964,7 +2964,7 @@ var //i,len: GDBInteger;
     pv:pGDBObjEntity;
     ir:itrec;
     pvd{,pvn,pvm,pvmc,pvl}:pvardesk;
-    mat:gdbstring;
+    //mat:gdbstring;
 begin
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
@@ -2994,10 +2994,10 @@ end;
 
 function _test_com(Operands:pansichar):GDBInteger;
 var i: GDBInteger;
-    pv:pGDBObjEntity;
-    ir:itrec;
-    pvd{,pvn,pvm,pvmc,pvl}:pvardesk;
-    mat:gdbstring;
+    //pv:pGDBObjEntity;
+    //ir:itrec;
+    //pvd{,pvn,pvm,pvmc,pvl}:pvardesk;
+    //mat:gdbstring;
 begin
      historyout('Тест производительности. запасаемя терпением');
      {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('тест производительности - getonmouseobject*10000',lp_IncPos);{$ENDIF}

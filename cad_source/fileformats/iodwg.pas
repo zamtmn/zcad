@@ -536,8 +536,8 @@ end;
 
 function bit_chain.BitRead_ms:BITCODE_MS;
 var
-   b1:BITCODE_RS;
-   b2:BITCODE_RL;
+   //b1:BITCODE_RS;
+   //b2:BITCODE_RL;
    i, j:integer;
    w:array [0..1] of word;
    //long unsigned int result;

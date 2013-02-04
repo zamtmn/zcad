@@ -43,7 +43,7 @@ begin
 end;
 procedure GDBPolyPoint2DArray.drawgeometry;
 var p:PGDBPolyVertex2D;
-    counter:GDBInteger;
+    //counter:GDBInteger;
     i:GDBInteger;
 begin
   if count<2 then exit;

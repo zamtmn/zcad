@@ -437,8 +437,8 @@ begin
 end;
 
 procedure TOGLWnd.ClearOntrackpoint;
-var
-   i:integer;
+//var
+   //i:integer;
 begin
     { if param.ontrackarray.total>1 then
      for i := 0 to param.ontrackarray.total-1 do
@@ -447,8 +447,8 @@ begin
   param.ontrackarray.total := 1;
 end;
 procedure TOGLWnd.Clear0Ontrackpoint;
-var
-   i:integer;
+//var
+   //i:integer;
 begin
   {   if param.ontrackarray.total>1 then
      for i := 0 to param.ontrackarray.total-1 do
@@ -868,10 +868,10 @@ begin
 end;
 
 procedure TOGLWnd.calcgrid;
-var ca, cv: extended;
-    tempv,cav: gdbvertex;  ds:GDBString;
+var //ca, cv: extended;
+    tempv,cav: gdbvertex;  //ds:GDBString;
     l,u,r,b,maxh,maxv,ph,pv:GDBDouble;
-    x,y:integer;
+    //x,y:integer;
 begin
      if pdwg=NIL then exit;
 
@@ -995,7 +995,7 @@ begin
 end;
 
 procedure TOGLWnd.mouseunproject(X, Y: integer);
-var ca, cv: extended;cav: gdbvertex;  ds:GDBString;
+var ca, cv: extended;{cav: gdbvertex;}  ds:GDBString;
 begin
   if pdwg=NIL then exit;
 
@@ -1014,9 +1014,9 @@ begin
   //param.md.mouseray.dir.y := param.md.mouseray.lend.y - param.md.mouseray.lbegin.y;
   //param.md.mouseray.dir.z := param.md.mouseray.lend.z - param.md.mouseray.lbegin.z;
 
-  cav.x := -param.md.mouseray.lbegin.x;
-  cav.y := -param.md.mouseray.lbegin.y;
-  cav.z := -param.md.workplane{.d}[3] / param.md.workplane{.normal.z}[2] * param.md.mouseray.dir.z - param.md.mouseray.lbegin.z;
+  //cav.x := -param.md.mouseray.lbegin.x;
+  //cav.y := -param.md.mouseray.lbegin.y;
+  //cav.z := -param.md.workplane{.d}[3] / param.md.workplane{.normal.z}[2] * param.md.mouseray.dir.z - param.md.mouseray.lbegin.z;
   //ca := param.md.workplane.normal.x * cav.x + param.md.workplane.normal.y * cav.y + param.md.workplane.normal.z * cav.z;
   {cv := param.md.workplane.normal.x * param.md.mouseray.dir.x +
         param.md.workplane.normal.y * param.md.mouseray.dir.y +
@@ -1101,7 +1101,7 @@ var
 //  mpoint: tpoint;
   smallwheel:gdbdouble;
 //    glx1, gly1: GDBDouble;
-  fv1: GDBVertex;
+  //fv1: GDBVertex;
 
 //  msg : TMsg;
 
@@ -1219,7 +1219,7 @@ begin
   end
 end;
 procedure TOGLWnd._onFastMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
-var dx,dy:integer;
+//var dx,dy:integer;
   {$IFDEF LCLGTK2}Widget: PGtkWidget;{$ENDIF}
 begin
      (*if FastMMX>0 then
@@ -1269,9 +1269,9 @@ var
   glmcoord1: gdbpiece;
   tv2:gdbvertex4d;
   ax:gdbvertex;
-  ux,uy:GDBDouble;
-  htext,htext2:gdbstring;
-  key: GDBByte;
+  //ux,uy:GDBDouble;
+  //htext,htext2:gdbstring;
+  //key: GDBByte;
   lptime:ttime;
 begin
   mouseunproject(oldX, clientheight-oldY);
@@ -1310,8 +1310,8 @@ procedure TOGLWnd._onMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer)
 //procedure TOGLWnd.Pre_MouseMove;
 var
   glmcoord1: gdbpiece;
-  tv2:gdbvertex4d;
-  ax:gdbvertex;
+  //tv2:gdbvertex4d;
+  //ax:gdbvertex;
   ux,uy:GDBDouble;
   htext,htext2:gdbstring;
 
@@ -1319,7 +1319,7 @@ var
 
 //  i:integer;
   key: GDBByte;
-  lptime:ttime;
+  //lptime:ttime;
 begin
   //if random<0.8 then exit;
   //if   (param.md.mouse.y=y)and(param.md.mouse.x=x)then
@@ -1561,11 +1561,11 @@ if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove----{end}',lp_decPos);{$ENDIF}
 end;
 procedure textwrite(s: GDBString);
-var
-  psymbol: PGDBByte;
-  i, j, k: GDBInteger;
-  len: GDBWord;
-  matr: {array[0..3, 0..3] of GDBDouble}DMatrix4D;
+//var
+  //psymbol: PGDBByte;
+  //i, j, k: GDBInteger;
+  //len: GDBWord;
+  //matr: {array[0..3, 0..3] of GDBDouble}DMatrix4D;
 begin
   exit;
   (*
@@ -1829,7 +1829,7 @@ const
      steps=10;
 var
   tpz,tzoom: GDBDouble;
-  fv1,tp,wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex;
+  {fv1,tp,}wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex;
   camerapos,target:GDBVertex;
   i:integer;
   pucommand:pointer;
@@ -1849,14 +1849,14 @@ begin
   dcsRTF:=MinusInfinityVertex;
   wcsLBN:=InfinityVertex;
   wcsRTF:=MinusInfinityVertex;
-  tp:=ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  tp:=ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  {tp:=}ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  {tp:=}ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  {tp:=}ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  {tp:=}ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  {tp:=}ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  {tp:=}ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  {tp:=}ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+  {tp:=}ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
 
   dcsLBN.z:=0;
   dcsRTF.z:=0;
@@ -1955,9 +1955,9 @@ procedure TOGLWnd.RotTo(x0,y0,z0:GDBVertex);
 const
      steps=10;
 var
-  tpz,tzoom: GDBDouble;
-  fv1,tp,wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex;
-  camerapos,target:GDBVertex;
+  //tpz,tzoom: GDBDouble;
+  fv1{,tp,wcsLBN,wcsRTF,dcsLBN,dcsRTF}: GDBVertex;
+  //camerapos,target:GDBVertex;
   i:integer;
   pucommand:pointer;
   q1,q2,q:GDBQuaternion;
@@ -2023,10 +2023,10 @@ begin
 end;
 procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
 var
-   op:gdbstring;
-   size,modalresult:integer;
-   us:unicodestring;
-   u8s:UTF8String;
+   //op:gdbstring;
+   {size,}modalresult:integer;
+   //us:unicodestring;
+   //u8s:UTF8String;
    astring:ansistring;
    pint:PGDBInteger;
 begin
@@ -2372,8 +2372,8 @@ begin
     //oglsm.myglDisable(GL_COLOR_MATERIAL);
 end;
 procedure TOGLWnd.LightOff;
-var
-   p:GDBvertex4F;
+//var
+   //p:GDBvertex4F;
 begin
     oglsm.myglDisable(GL_LIGHTING);
     oglsm.myglDisable(GL_LIGHT0);
@@ -2381,7 +2381,7 @@ begin
 end;
 procedure drawfrustustum(frustum:ClipArray);
 var
-tv1,tv2,tv3,tv4,sv1{,sv2,sv3,sv4},d1{,d2,d3,d4}:gdbvertex;
+tv1,tv2,tv3,tv4{,sv1,sv2,sv3,sv4,d1PProjPoint{,d2,d3,d4}:gdbvertex;
 Tempplane:DVector4D;
 
 begin
@@ -2411,12 +2411,12 @@ procedure TOGLWnd.showcursor;
     pt:ptraceprop;
 //      ir:itrec;
 //  ptp:ptraceprop;
-  mvertex,dvertex,tv1,tv2,tv3,tv4,sv1{,sv2,sv3,sv4},d1{,d2,d3,d4}:gdbvertex;
+  mvertex,dvertex,tv1,tv2,{tv3,tv4,}sv1{,sv2,sv3,sv4},d1{,d2,d3,d4}:gdbvertex;
   Tempplane,plx,ply,plz:DVector4D;
     a: GDBInteger;
-    scrx,scry,texture{,e}:integer;
-    scrollmode:GDBBOOlean;
-    LPTime:Tdatetime;
+    //scrx,scry,texture{,e}:integer;
+    //scrollmode:GDBBOOlean;
+    //LPTime:Tdatetime;
 
     i2d,i2dresult:intercept2dprop;
     td,td2,td22:gdbdouble;
@@ -3124,9 +3124,9 @@ procedure TOGLWnd.draw;
 var
   //ps: TPaintStruct;
 //  pg:PGDBvertex2S;
-  {i,}a: GDBInteger;
+  {i,}//a: GDBInteger;
 //  fpss:GDBString;
-  scrx,scry,texture{,e}:integer;
+  //scrx,scry,texture{,e}:integer;
 //  t:gdbdouble;
   scrollmode:GDBBOOlean;
   LPTime:Tdatetime;
@@ -3644,10 +3644,10 @@ begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.findonmobj-----{end}',lp_DecPos);{$ENDIF}
 end;
 procedure TOGLWnd.processmousenode(Node:TEntTreeNode;var i:integer);
-var
-  pp:PGDBObjEntity;
-  ir:itrec;
-  inr:TINRect;
+//var
+  //pp:PGDBObjEntity;
+  //ir:itrec;
+  //inr:TINRect;
 begin
      if CalcAABBInFrustum (Node.BoundingBox,param.mousefrustum)<>IREmpty then
      begin
@@ -3664,7 +3664,7 @@ var
   i: GDBInteger;
   pp:PGDBObjEntity;
   ir:itrec;
-  inr:TINRect;
+  //inr:TINRect;
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.getonmouseobjectbytree',lp_IncPos);{$ENDIF}
   i := 0;
@@ -3700,7 +3700,7 @@ var
   i: GDBInteger;
   pp:PGDBObjEntity;
   ir:itrec;
-  inr:TINRect;
+  //inr:TINRect;
   line:GDBString;
   pvd:pvardesk;
 begin
@@ -4573,8 +4573,8 @@ begin
     mousein := false;
 end;}
 function getsortedindex(cl:integer):integer;
-var i:integer;
-    s:string;
+//var i:integer;
+    //s:string;
 begin
      {s:=(pGDBLayerProp(gdb.GetCurrentDWG.LayerTable.getelement(cl))^.GetFullName);
      for i:=0 to layerbox.ItemsCount-1 do

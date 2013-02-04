@@ -45,9 +45,9 @@ var
      ImInFrustum:TInRect;
      pobj:PGDBObjEntity;
      ir:itrec;
-     v1,v2,v3:gdbvertex;
+     v1{,v2,v3}:gdbvertex;
      tx:double;
-     bb:GDBBoundingBbox;
+     //bb:GDBBoundingBbox;
 begin
      //enttree.FulDraw:=true;
      if OwnerFuldraw then

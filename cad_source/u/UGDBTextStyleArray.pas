@@ -97,7 +97,7 @@ begin
 end;}
 function GDBTextStyleArray.setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):GDBInteger;
 var ts:GDBTextStyle;
-    ff:gdbstring;
+    //ff:gdbstring;
     ps:PGDBTextStyle;
     //p:GDBPointer;
 begin
@@ -127,7 +127,7 @@ begin
 end;
 function GDBTextStyleArray.addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):GDBInteger;
 var ts:GDBTextStyle;
-    ff:gdbstring;
+    //ff:gdbstring;
     //p:GDBPointer;
 begin
   ts.name:=stylename;

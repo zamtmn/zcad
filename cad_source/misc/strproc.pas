@@ -284,7 +284,7 @@ begin
   //expr:=expr;
 end;
 function GetPredStr(var s: GDBString; substr: GDBString): GDBString;
-var i, c,a: GDBInteger;
+var i{, c,a}: GDBInteger;
 begin
   i:=pos(substr,s);
   if i<>0 then
@@ -346,7 +346,7 @@ end;
 end;
 
 function Tria_Utf8ToAnsi(const s:string):string;
-var i,n,j, Len:integer;
+var i,n,j{, Len}:integer;
 begin
   SetLength(Result,Length(s));
   j:=1; i:=1;
@@ -456,7 +456,7 @@ begin
 SetLength(Result,j-1);
 end;
 function Tria_AnsiToUtf8(const s:string):string;
-var i,n,j, Len:integer;
+var i,n,j{, Len}:integer;
 begin
   SetLength(Result,Length(s)*3);
   j:=1;

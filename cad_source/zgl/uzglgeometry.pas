@@ -44,13 +44,13 @@ var
     dir:GDBvertex;
     i,j:integer;
 
-    ir,ir2,ir3,ir4,ir5:itrec;
+    {ir,}ir2,ir3,ir4,ir5:itrec;
     TDI:PTDashInfo;
     PStroke:PGDBDouble;
     PSP:PShapeProp;
     PTP:PTextProp;
     firstloop,scissorstart:boolean;
-    mrot,mentrot,mminusrot,madd,mminusadd,mtrans,mscale,objmatrix,matr:dmatrix4d;
+    mrot,mentrot,{mminusrot,}madd,{mminusadd,}mtrans,mscale,objmatrix,matr:dmatrix4d;
     minx,miny,maxx,maxy:GDBDouble;
     //lp,tv:gdbvertex;
     //i:integer;
@@ -149,7 +149,7 @@ begin
                                                                  mrot:=CreateRotationMatrixZ(Sin(PSP^.param.Angle*pi/180{+a}), Cos(PSP^.param.Angle*pi/180{+a}));
                                                                  mentrot:=CreateRotationMatrixZ(Sin(a), Cos(a));
                                                                  madd:=geometry.CreateTranslationMatrix(createvertex(PSP^.param.x*scale,PSP^.param.y*scale,0));
-                                                                 mminusadd:=geometry.CreateTranslationMatrix(createvertex(-PSP^.param.x*scale,PSP^.param.y*scale,0));
+                                                                 //mminusadd:=geometry.CreateTranslationMatrix(createvertex(-PSP^.param.x*scale,PSP^.param.y*scale,0));
                                                                  mtrans:=CreateTranslationMatrix(createvertex(tv.x,tv.y,tv.z));
                                                                  mscale:=CreateScaleMatrix(geometry.createvertex(PSP^.param.Height*scale,PSP^.param.Height*scale,PSP^.param.Height*scale));
                                                                  objmatrix:=onematrix;
@@ -173,7 +173,7 @@ begin
                                                                  mrot:=CreateRotationMatrixZ(Sin(PTP^.param.Angle*pi/180{+a}), Cos(PTP^.param.Angle*pi/180{+a}));
                                                                  mentrot:=CreateRotationMatrixZ(Sin(a), Cos(a));
                                                                  madd:=geometry.CreateTranslationMatrix(createvertex(PTP^.param.x*scale,PTP^.param.y*scale,0));
-                                                                 mminusadd:=geometry.CreateTranslationMatrix(createvertex(-PTP^.param.x*scale,PTP^.param.y*scale,0));
+                                                                 //mminusadd:=geometry.CreateTranslationMatrix(createvertex(-PTP^.param.x*scale,PTP^.param.y*scale,0));
                                                                  mtrans:=CreateTranslationMatrix(createvertex(tv.x,tv.y,tv.z));
                                                                  mscale:=CreateScaleMatrix(geometry.createvertex(PTP^.param.Height*scale,PTP^.param.Height*scale,PTP^.param.Height*scale));
                                                                  objmatrix:=onematrix;

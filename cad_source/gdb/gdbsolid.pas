@@ -79,7 +79,7 @@ begin
       end;
 end;
 procedure GDBObjSolid.FormatEntity(const drawing:TDrawingDef);
-var i:GDBInteger;
+//var i:GDBInteger;
 begin
   calcObjMatrix;
   createpoint;
@@ -123,7 +123,7 @@ begin
 end;
 
 procedure GDBObjSolid.LoadFromDXF;
-var s: GDBString;
+var //s: GDBString;
   byt: GDBInteger;
 begin
   byt:=readmystrtoint(f);
@@ -134,7 +134,7 @@ begin
           if not dxfvertexload(f,11,byt,PInOCS[1]) then
           if not dxfvertexload(f,12,byt,PInOCS[2]) then
           if not dxfvertexload(f,13,byt,PInOCS[3]) then
-          s := f.readGDBSTRING;
+          {s := }f.readGDBSTRING;
     byt:=readmystrtoint(f);
   end;
 end;
@@ -149,8 +149,8 @@ begin
 end;
 
 procedure GDBObjSolid.DrawGeometry;
-var
-   p:GDBvertex4F;
+//var
+   //p:GDBvertex4F;
 begin
 (*  oglsm.myglEnable(GL_LIGHTING);
   oglsm.myglEnable(GL_LIGHT0);
@@ -251,8 +251,8 @@ begin
       end;
 end;
 procedure GDBObjSolid.RenderFeedback;
-var //pm:DMatrix4D;
-    tv:GDBvertex;
+//var //pm:DMatrix4D;
+    //tv:GDBvertex;
 begin
            inherited;
            //pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
@@ -302,8 +302,8 @@ begin
     result:=true;
 end;
 function GDBObjSolid.CalcTrueInFrustum;
-var d1:GDBDouble;
-    i:integer;
+//var //d1:GDBDouble;
+    //i:integer;
 begin
       result:=CalcOutBound4VInFrustum(PInWCS,frustum);
 end;

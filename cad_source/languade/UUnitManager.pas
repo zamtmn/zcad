@@ -47,20 +47,20 @@ var
 implementation
 uses
     log,memman;
-var s:gdbstring;
+//var s:gdbstring;
 const
      {GDBGDBPointerType:gdbtypedesk=
                                 (
                                  TypeIndex:TGDBPointer;
                                  sizeinmem:sizeof(GDBPointer);
                                 );}
-     VMTBase:BaseDescriptor=
+     (*VMTBase:BaseDescriptor=
                            (
                            ProgramName:'#';
                            UserName:'Object';
                            PFT:@GDBPointerDescriptorOdj;
                            Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY;
-                           );
+                           );*)
      FPVMT:FieldDescriptor=
                            (
                             base:(
@@ -112,8 +112,8 @@ function TUnitManager.internalfindunit;
 var
   p:PTUnit;
   ir:itrec;
-  nfn:gdbstring;
-  tcurrentunit:PTUnit;
+  //nfn:gdbstring;
+  //tcurrentunit:PTUnit;
 begin
   p:=beginiterate(ir);
   //uname:=uppercase(uname);
@@ -133,8 +133,8 @@ end;
 
 function TUnitManager.findunit;
 var
-  p:PTUnit;
-  ir:itrec;
+  //p:PTUnit;
+  //ir:itrec;
   nfn:gdbstring;
   tcurrentunit:PTUnit;
 begin
@@ -232,7 +232,7 @@ var
   p,pfu:pointer;
   unitpart:TunitPart;
     ir:itrec;
-  tempstring:gdbstring;
+  //tempstring:gdbstring;
   doexit:gdbboolean;
 begin
   unitpart:=tnothing;
@@ -309,7 +309,7 @@ begin
                                                      p:=parseresult.beginiterate(ir);
                                                      if p<>nil then
                                                      repeat
-                                                           tempstring:=(pstring(p)^);
+                                                           //tempstring:=(pstring(p)^);
                                                            pfu:=findunit(pstring(p)^);
                                                            if pfu<>nil then
                                                                            begin

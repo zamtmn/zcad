@@ -348,7 +348,7 @@ end;
 procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:GDBBoolean);
 var
     ptv,ptvprev: pgdbvertex;
-    tv:gdbvertex;
+    //tv:gdbvertex;
     vs:VectorSnap;
         ir:itrec;
 begin
@@ -386,7 +386,7 @@ procedure GDBObjCurve.FormatWithoutSnapArray;
 var //i,j: GDBInteger;
     ptv,ptvprev: pgdbvertex;
     tv:gdbvertex;
-    vs:VectorSnap;
+    //vs:VectorSnap;
         ir:itrec;
 begin
   //snaparray.clear;
@@ -414,11 +414,11 @@ begin
 end;
 
 procedure GDBObjCurve.FormatEntity(const drawing:TDrawingDef);
-var //i,j: GDBInteger;
-    ptv,ptvprev: pgdbvertex;
-    tv:gdbvertex;
-    vs:VectorSnap;
-        ir:itrec;
+//var //i,j: GDBInteger;
+    //ptv,ptvprev: pgdbvertex;
+    //tv:gdbvertex;
+    //vs:VectorSnap;
+        //ir:itrec;
 begin
   FormatWithoutSnapArray;
   //------------BuildSnapArray(VertexArrayInWCS,snaparray,false);
@@ -570,7 +570,7 @@ end;
 procedure GDBObjCurve.addcontrolpoints;
 var pdesc:controlpointdesc;
     i:GDBInteger;
-    pv2d:pGDBvertex2d;
+    //pv2d:pGDBvertex2d;
     pv:pGDBvertex;
 begin
           //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
@@ -804,11 +804,11 @@ begin
 end;
 function GDBObjCurve.getsnap;
 //const pnum=8;
-var t,d,e:GDBDouble;
-    tv,n,v,dir:gdbvertex;
-    mode,vertexnum:GDBInteger;
-    pv1:PGDBVertex;
-    pv2:PGDBVertex;
+//var //t,d,e:GDBDouble;
+    //tv,n,v,dir:gdbvertex;
+    //mode,vertexnum:GDBInteger;
+    //pv1:PGDBVertex;
+    //pv2:PGDBVertex;
 begin
      result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,false,param,ProjectProc);
 (*

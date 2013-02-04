@@ -174,11 +174,11 @@ begin
      end;
 end;
 procedure GDBObjNet.SaveToDXFObjXData(var outhandle:{GDBInteger}GDBOpenArrayOfByte);
-var
-   s:gdbstring;
+//var
+   //s:gdbstring;
 begin
      inherited;
-     s:=inttohex(GetHandle,10);
+     //s:=inttohex(GetHandle,10);
      //historyout(@s[1]);
      dxfGDBStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
      dxfGDBStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToNet));
@@ -222,7 +222,7 @@ end;
 procedure GDBObjNet.DrawGeometry;
 var i{,j}:GDBInteger;
     tgf: pgrafelement;
-    wcoord:gdbvertex;
+    //wcoord:gdbvertex;
 begin
      inc(dc.subrender);
      if graf.Count=0 then exit;
@@ -344,14 +344,14 @@ var CurrentNet:PGDBObjNet;
     pmyline,ptestline:pgdbobjline;
     inter:intercept3dprop;
     ir,ir2,ir3:itrec;
-    p:pointer;
+    //p:pointer;
 begin
      formatentity(drawing);
      CurrentNet:=ConnectedArea.ObjArray.beginiterate(ir);
      if (currentnet<>nil) then
      repeat
-           p:=@self;
-           p:=currentnet;
+           //p:=@self;
+           //p:=currentnet;
            if (currentnet<>@self) then
            if {(currentnet<>@self) and }(currentnet^.vp.ID=GDBNetID) then
            begin

@@ -117,8 +117,8 @@ begin
 end;
 
 function CreateSimpleDWG:PTSimpleDrawing;
-var
-   ptd:PTSimpleDrawing;
+//var
+   //ptd:PTSimpleDrawing;
 begin
      gdBGetMem({$IFDEF DEBUGBUILD}'{2A28BFB9-661F-4331-955A-C6F18DE67A19}',{$ENDIF}GDBPointer(result),sizeof(TSimpleDrawing));
      //ptd:=currentdwg;
@@ -148,7 +148,7 @@ var i:GDBInteger;
     p:GDBPointer;
     m,m2,mt:DMatrix4D;
     t:gdbvertex;
-    tt:dvector4d;
+    //tt:dvector4d;
     rtmod:TRTModifyData;
     //tum:TUndableMethod;
 begin

@@ -86,8 +86,8 @@ end;
 procedure GDBObjPolyline.FormatEntity(const drawing:TDrawingDef);
 var //i,j: GDBInteger;
     ptv,ptvprev,ptvfisrt: pgdbvertex;
-    tv:gdbvertex;
-    vs:VectorSnap;
+    //tv:gdbvertex;
+    //vs:VectorSnap;
         ir:itrec;
 begin
   FormatWithoutSnapArray;

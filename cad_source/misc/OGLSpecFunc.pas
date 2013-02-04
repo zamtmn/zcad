@@ -466,13 +466,13 @@ begin
   oglsm.myglMatrixMode(GL_MODELVIEW);
 end;
 function isOpenGLError:GLenum;
-var
-   s:string;
+//var
+   //s:string;
 begin
      result:=glgeterror;
      if result<>GL_NO_ERROR then
                       begin
-                           s:='OPENGL ERROR! '+inttostr(result);
+                           //s:='OPENGL ERROR! '+inttostr(result);
                            //MessageBox(0,@s[1],0,MB_OK);
                            {asm
                               int(3);

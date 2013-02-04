@@ -241,7 +241,7 @@ begin
 end;
 procedure ParseCommand(comm:pansichar; out command,operands:GDBString);
 var
-   i,p1,p2: GDBInteger;
+   {i,}p1,p2: GDBInteger;
 begin
   p1:=pos('(',comm);
   p2:=pos(')',comm);
@@ -300,11 +300,11 @@ begin
           pcommandrunning^.CommandStart(pansichar(operands));
 end;
 function GDBcommandmanager.execute(const comm:pansichar;silent:GDBBoolean;pdrawing:PTDrawingDef): GDBInteger;
-var i,p1,p2: GDBInteger;
+var //i,p1,p2: GDBInteger;
     command,operands:GDBString;
     cc:TCStartAttr;
     pfoundcommand:PCommandObjectDef;
-    p:pchar;
+    //p:pchar;
 begin
   if length(comm)>0 then
   if comm[0]<>';' then

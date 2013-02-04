@@ -33,16 +33,16 @@ function SaveFileDialog(out FileName:GDBString;const DefExt, Filter, InitialDir,
 function GetVersion(_file:pchar):TmyFileVersionInfo;
 implementation
 uses log;
-var
-   lpCustFilter: array[0..255] of char = '';
-   nFilterIndex: Integer = 0;
-   szFile: array[0..2048] of char = '';
-   szFileTitle: array[0..255] of char;
-   szCurrentDir: array[0..1024] of char = '';
+//var
+   //lpCustFilter: array[0..255] of char = '';
+   //nFilterIndex: Integer = 0;
+   //szFile: array[0..2048] of char = '';
+   //szFileTitle: array[0..255] of char;
+   //szCurrentDir: array[0..1024] of char = '';
 function SaveFileDialog;
 var
    SD:TSaveDialog;
-   fileext:GDBString;
+   //fileext:GDBString;
 begin
      sd:=TSaveDialog.Create(nil);
      sd.Title:=Title;
@@ -53,9 +53,9 @@ begin
      if sd.Execute
      then
          begin
-          nFilterIndex:=sd.FilterIndex; // Запоминаем текущий фильтр
+          //nFilterIndex:=sd.FilterIndex; // Запоминаем текущий фильтр
           FileName:=sd.FileName;
-          fileext:=uppercase(ExtractFileEXT(FileName));
+          //fileext:=uppercase(ExtractFileEXT(FileName));
           result:=true;
          end
      else
@@ -96,7 +96,7 @@ var
 
   i: Integer;
   //Version: TFileVersionInfo;
-  MyFile, MyVersion,ts: GDBString;
+  {MyFile,} MyVersion,ts: GDBString;
 
 begin
      result.build:=0;

@@ -168,8 +168,8 @@ begin
 end;
 
 procedure TmyActionList.SetImage(img,identifer:string;var action:TmyAction);
-var
-    bmp:TBitmap;
+//var
+    //bmp:TBitmap;
 begin
      if length(img)>1 then
      begin
@@ -212,13 +212,13 @@ end;
 procedure TmyActionList.LoadFromACNFile(fname:string);
 var
     f:GDBOpenArrayOfByte;
-    line,ts,{bn,}bc{,bh}:GDBString;
+    line{,ts,}{bn,}{bc}{,bh}:GDBString;
     actionname,actioncommand,actionpic,actioncaption,actionhint,actionshortcut:string;
-    buttonpos:GDBInteger;
-    ppanel:TToolBar;
-    b:TToolButton;
-    i:longint;
-    y,xx,yy,w,code:GDBInteger;
+    //buttonpos:GDBInteger;
+    //ppanel:TToolBar;
+    //b:TToolButton;
+    //i:longint;
+    //y,xx,yy,w,code:GDBInteger;
     //bmp:TBitmap;
     action:TmyAction;
 //const bsize=24;

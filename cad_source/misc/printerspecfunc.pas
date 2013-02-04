@@ -180,7 +180,7 @@ begin
     end;
 end;
 procedure TPrinterRasterizer.myglVertex;
-var t,t1:gdbvertex;
+var t{,t1}:gdbvertex;
     p1,p2:GDBVertex2DI;
 begin
      (*

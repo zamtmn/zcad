@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  {gmap,}gvector,garrayutils,{gutil,}UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,
@@ -489,10 +489,10 @@ end;
                        procedure Run(pdata:GDBPlatformint); virtual;
                  end;}
 procedure BlockScale_com.CommandStart(Operands:pansichar);
-var pb:PGDBObjBlockdef;
+var //pb:PGDBObjBlockdef;
     pobj:PGDBObjBlockInsert;
     ir:itrec;
-    i,counter:integer;
+    {i,}counter:integer;
 begin
      counter:=0;
      savemousemode := gdb.GetCurrentDWG^.OGLwindow1.param.md.mode;
@@ -525,15 +525,15 @@ end;
 procedure BlockScale_com.Run(pdata:{pointer}GDBPlatformint);
 var pb:PGDBObjBlockInsert;
     ir:itrec;
-    i,result:gdbinteger;
+    {i,}result:gdbinteger;
     poa:PGDBObjEntityTreeArray;
-    selname,newname:GDBString;
+    //selname,newname:GDBString;
 begin
      begin
           poa:=@gdb.GetCurrentROOT^.ObjArray;
 
           result:=0;
-          i:=0;
+          //i:=0;
           pb:=poa^.beginiterate(ir);
           if pb<>nil then
           repeat
@@ -563,7 +563,7 @@ end;
 
 
 procedure BlockReplace_com.CommandStart(Operands:pansichar);
-var pb:PGDBObjBlockdef;
+var //pb:PGDBObjBlockdef;
     //ir:itrec;
     i:integer;
 begin
@@ -599,7 +599,7 @@ end;
 procedure BlockReplace_com.Run(pdata:GDBPlatformint);
 var pb:PGDBObjBlockInsert;
     ir:itrec;
-    i,result:gdbinteger;
+    {i,}result:gdbinteger;
     poa:PGDBObjEntityTreeArray;
     selname,newname:GDBString;
 procedure rb(pb:PGDBObjBlockInsert);
@@ -657,7 +657,7 @@ begin
      begin
           poa:=@gdb.GetCurrentROOT^.ObjArray;
           result:=0;
-          i:=0;
+          //i:=0;
           newname:=TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Replace);
           selname:=TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Find);
           selname:=uppercase(selname);
@@ -697,9 +697,9 @@ begin
      end;
 end;
 procedure BlockReplace_com.Format;
-var pb:PGDBObjBlockdef;
+//var pb:PGDBObjBlockdef;
     //ir:itrec;
-    i:integer;
+    //i:integer;
 begin
      BlockReplaceParams.CurrentFindBlock:=TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Find);
      BlockReplaceParams.CurrentReplaceBlock:=TEnumDataDescriptor.GetValueAsString(@BlockReplaceParams.Replace);
@@ -737,10 +737,10 @@ begin
 end;
 procedure CFO_com.Run(pdata:GDBPlatformint);
 var
-   pobj,pvisible: pGDBObjDevice;
+   pobj{,pvisible}: pGDBObjDevice;
    psubobj:PGDBObjEntity;
    ir,ir2:itrec;
-   tp:gdbpointer;
+   //tp:gdbpointer;
    m,m2:DMatrix4D;
 begin
      m:=powner^.objmatrix;
@@ -827,7 +827,7 @@ var
     ir:itrec;
     mpd:devcoordarray;
     pdev:PGDBObjDevice;
-    key:GDBVertex;
+    //key:GDBVertex;
     index:integer;
     pvd:pvardesk;
     dcoord:tdevcoord;
@@ -960,7 +960,7 @@ procedure ATO_com.Run(pdata:GDBPlatformint);
 var
    pobj,pvisible: pGDBObjEntity;
    ir:itrec;
-   tp:gdbpointer;
+   //tp:gdbpointer;
    m,m2:DMatrix4D;
 begin
      m:=powner^.objmatrix;
@@ -1220,17 +1220,17 @@ end;
 procedure Print_com.Print(pdata:GDBPlatformint);
  var
   //Pic: TPicture;
-  d, pgw,pgh: Integer;
-  Hin: Integer; // half inch
-  s: string;
+  //d, pgw,pgh: Integer;
+  //Hin: Integer; // half inch
+  //s: string;
   prn:TPrinterRasterizer;
   oldrasterozer:PTOGLStateManager;
-  dx,dy,cx,cy,sx,sy,scale:gdbdouble;
-  tmatrix,_clip:DMatrix4D;
+  dx,dy,{cx,cy,}sx,sy,scale:gdbdouble;
+  tmatrix{,_clip}:DMatrix4D;
   cdwg:PTSimpleDrawing;
   oldForeGround:rgb;
   DC:TDrawContext;
-  pr:TPaperRect;
+  //pr:TPaperRect;
 begin
   cdwg:=gdb.GetCurrentDWG;
   oldForeGround:=ForeGround;
@@ -1246,13 +1246,13 @@ begin
   dy:=p2.y-p1.y;
   if dy=0 then
               dy:=1;
-  cx:=(p2.x+p1.x)/2;
-  cy:=(p2.y+p1.y)/2;
+  //cx:=(p2.x+p1.x)/2;
+  //cy:=(p2.y+p1.y)/2;
   prn.model:=onematrix;//cdwg^.pcamera^.modelMatrix{LCS};
   prn.project:=cdwg^.pcamera^.projMatrix{LCS};
   //prn.w:=Printer.PaperSize.Width;
   //prn.h:=Printer.PaperSize.Height;
-  pr:=Printer.PaperSize.PaperRect;
+  //pr:=Printer.PaperSize.PaperRect;
   prn.w:=Printer.PageWidth;
   prn.h:=Printer.PageHeight;
   prn.wmm:=dx;
@@ -1287,7 +1287,7 @@ begin
 
   gdb.GetCurrentDWG^.pcamera^.NextPosition;
   inc(cdwg^.pcamera^.DRAWCOUNT);
-  _clip:=MatrixMultiply(prn.model,prn.project);
+  //_clip:=MatrixMultiply(prn.model,prn.project);
   gdb.GetCurrentDWG^.pcamera^.getfrustum(@cdwg^.pcamera^.modelMatrix,   @cdwg^.pcamera^.projMatrix,   cdwg^.pcamera^.clip,   cdwg^.pcamera^.frustum);
   //_frustum:=calcfrustum(@_clip);
   gdb.GetCurrentDWG^.OGLwindow1.param.firstdraw := TRUE;
@@ -1540,12 +1540,12 @@ begin
   end;
 end;
 procedure pasteclip_com.Command(Operands:pansichar);
-var res:longbool;
-    uFormat:longword;
+var //res:longbool;
+    //uFormat:longword;
 
 //    lpszFormatName:string[200];
-    hData:THANDLE;
-    pbuf:pchar;
+    //hData:THANDLE;
+    //pbuf:pchar;
 //    hgBuffer:HGLOBAL;
 
     s:gdbstring;
@@ -1902,7 +1902,7 @@ function InverseSelected_com(operands:pansichar):GDBInteger;
 var pv:pGDBObjEntity;
     ir:itrec;
     count:integer;
-    domethod,undomethod:tmethod;
+    //domethod,undomethod:tmethod;
 begin
   //if (gdb.GetCurrentROOT^.ObjArray.count = 0)or(GDB.GetCurrentDWG^.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
   count:=0;
@@ -2354,7 +2354,7 @@ begin
 end;
 function Move_com.Move(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
 var
-    dist:gdbvertex;
+    //dist:gdbvertex;
     im:DMatrix4D;
     ir:itrec;
     pcd:PTCopyObjectDesc;
@@ -2384,11 +2384,11 @@ begin
 end;
 function Move_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 var //i:GDBInteger;
-    dist:gdbvertex;
-    dispmatr,im:DMatrix4D;
-    ir:itrec;
-    pcd:PTCopyObjectDesc;
-    m:tmethod;
+    //dist:gdbvertex;
+    dispmatr{,im}:DMatrix4D;
+    //ir:itrec;
+    //pcd:PTCopyObjectDesc;
+    //m:tmethod;
 begin
       dispmatr:=CalcTransformMatrix(t3dp,wc);
       gdb.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
@@ -2406,11 +2406,11 @@ begin
 end;
 function Copy_com.Copy(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
 var
-    dist:gdbvertex;
-    im:DMatrix4D;
+    //dist:gdbvertex;
+    //im:DMatrix4D;
     ir:itrec;
     pcd:PTCopyObjectDesc;
-    m:tmethod;
+    //m:tmethod;
     domethod,undomethod:tmethod;
     pcopyofcopyobj:pGDBObjEntity;
 begin
@@ -2507,7 +2507,7 @@ var
     dispmatr,im,rotmatr:DMatrix4D;
     ir:itrec;
     pcd:PTCopyObjectDesc;
-    v1,v2:GDBVertex2d;
+    //v1,v2:GDBVertex2d;
     m:tmethod;
 begin
   dispmatr:=geometry.CreateTranslationMatrix(createvertex(-t3dp.x,-t3dp.y,-t3dp.z));
@@ -2564,12 +2564,12 @@ end;
 
 function rotate_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 var
-    dispmatr,im,rotmatr:DMatrix4D;
-    ir:itrec;
-    pcd:PTCopyObjectDesc;
+    //dispmatr,im,rotmatr:DMatrix4D;
+    //ir:itrec;
+    //pcd:PTCopyObjectDesc;
     a:double;
     v1,v2:GDBVertex2d;
-    m:tmethod;
+    //m:tmethod;
 begin
       v2.x:=wc.x;
       v2.y:=wc.y;
@@ -2605,7 +2605,7 @@ var
     dispmatr,im,rotmatr:DMatrix4D;
     ir:itrec;
     pcd:PTCopyObjectDesc;
-    v:GDBVertex;
+    //v:GDBVertex;
     m:tmethod;
 begin
 if a<eps then a:=1;
@@ -2681,14 +2681,14 @@ end;
 
 function scale_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 var
-    dispmatr,im,rotmatr:DMatrix4D;
-    ir:itrec;
-    pcd:PTCopyObjectDesc;
+    //dispmatr,im,rotmatr:DMatrix4D;
+    //ir:itrec;
+    //pcd:PTCopyObjectDesc;
     a:double;
-    v:GDBVertex;
-    m:tmethod;
+    //v:GDBVertex;
+    //m:tmethod;
 begin
-      v:=geometry.VertexSub(t3dp,wc);
+      //v:=geometry.VertexSub(t3dp,wc);
       a:=geometry.Vertexlength(t3dp,wc);
       scale(a,button);
 end;
@@ -2758,14 +2758,14 @@ end;
 
 function _3DPoly_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var
-    ptv,ptvprev:pgdbvertex;
-    ir:itrec;
-    v,l:gdbdouble;
+    //ptv,ptvprev:pgdbvertex;
+    //ir:itrec;
+    //v,l:gdbdouble;
     domethod,undomethod:tmethod;
     polydata:tpolydata;
-    _tv:gdbvertex;
-    p3dpl2:pgdbobjpolyline;
-    i:integer;
+    //_tv:gdbvertex;
+    //p3dpl2:pgdbobjpolyline;
+    //i:integer;
 begin
   result:=mclick;
   p3dpl^.vp.Layer :=gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer;

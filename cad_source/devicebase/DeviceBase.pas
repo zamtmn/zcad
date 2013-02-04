@@ -37,6 +37,12 @@ DeviceManager=object(GDBaseObject)
                     constructor init;
                     procedure loadfromdir(path: GDBString);
               end;
+thead=record
+            offset:integer;
+            TD:PUserTypeDescriptor;
+            cheked:boolean;
+      end;
+theadarray=TVector<thead>;
 {procedure startup;
 procedure finalize;}
 const
@@ -67,13 +73,6 @@ begin
      //NameFullTemplate:='DeviceDbBaseObject.initnul';
 end;
 procedure DeviceDbBaseObject.SetOtherFields(PField,PTypeDescriptor:GDBPointer);
-type
-thead=record
-            offset:integer;
-            TD:PUserTypeDescriptor;
-            cheked:boolean;
-      end;
-theadarray=TVector<thead>;
 var
     i:integer;
     FieldName:string;

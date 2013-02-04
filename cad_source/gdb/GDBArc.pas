@@ -109,7 +109,7 @@ end;
 procedure GDBObjARC.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 var
    m1:DMatrix4D;
-   td,td2,td3,slbegin,slend,t1,t2,llbegin_x2,llbegin_y2,llend_x2,llend_y2:double;
+   //td,td2,td3,slbegin,slend,t1,t2,llbegin_x2,llbegin_y2,llend_x2,llend_y2:double;
    dir,tv:gdbvertex;
 begin
      m1:=GetMatrix^;
@@ -125,8 +125,8 @@ begin
 end;
 
 procedure GDBObjARC.transform;
-var tv,tv2:GDBVertex4D;
-    a:gdbdouble;
+var {tv,}tv2:GDBVertex4D;
+    //a:gdbdouble;
 begin
 
   {tv.x:=cos(startangle);
@@ -159,8 +159,8 @@ begin
 
 end;
 procedure GDBObjARC.ReCalcFromObjMatrix;
-var
-    ox:gdbvertex;
+//var
+    //ox:gdbvertex;
 begin
      inherited;
      Local.P_insert:=PGDBVertex(@objmatrix[3])^;
@@ -331,7 +331,7 @@ begin
 end;
 var
     sx,sy,ex,ey,minx,miny,maxx,maxy:GDBDouble;
-    i,sq,eq,q:integer;
+    {i,}sq,eq,q:integer;
 begin
   vp.BoundingBox:=CreateBBFrom2Point(q0,q2);
   //concatBBandPoint(vp.BoundingBox,q1);
@@ -406,7 +406,7 @@ var
   //psymbol: PGDBByte;
   i{, j, k}: GDBInteger;
   //len: GDBWord;
-  matr{,m1}: DMatrix4D;
+  //matr{,m1}: DMatrix4D;
   v:GDBvertex;
   pv:GDBVertex;
 begin
@@ -434,7 +434,7 @@ begin
                      end;
   GDBGetMem(PPoint,sizeof(GDBPoint2DArray));
   PPoint^.init(lod+1);}
-  matr:=objMatrix;
+  //matr:=objMatrix;
   v.x:=cos(startangle);
   v.y:=sin(startangle);
   v.z:=0;
@@ -557,7 +557,7 @@ begin
 
 end;
 procedure GDBObjARC.LoadFromDXF;
-var s: GDBString;
+var //s: GDBString;
   byt{, code}: GDBInteger;
 begin
   //initnul;
@@ -568,7 +568,7 @@ begin
     if not dxfvertexload(f,10,byt,Local.P_insert) then
     if not dxfGDBDoubleload(f,40,byt,r) then
     if not dxfGDBDoubleload(f,50,byt,startangle) then
-    if not dxfGDBDoubleload(f,51,byt,endangle) then s := f.readgdbstring;
+    if not dxfGDBDoubleload(f,51,byt,endangle) then {s := }f.readgdbstring;
     byt:=readmystrtoint(f);
   end;
   startangle := startangle * pi / 180;
@@ -702,11 +702,11 @@ begin
 end;
 
 procedure GDBObjARC.rtmodifyonepoint(const rtmod:TRTModifyData);
-var a,b,c,d,e,f,g,p_x,p_y,rr:GDBDouble;
-    tv:gdbvertex2d;
+var //a,b,c,d,e,f,g,p_x,p_y,rr:GDBDouble;
+    //tv:gdbvertex2d;
     tv3d:gdbvertex;
     ptdata:tarcrtmodify;
-    m1:DMatrix4D;
+    //m1:DMatrix4D;
     ad:TArcData;
 begin
      //rtmod.point.pobject:=;

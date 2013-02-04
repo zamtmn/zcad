@@ -97,7 +97,7 @@ end;
 procedure GDBObjCamera.MoveInLocalCSXY(oldx,oldy:GDBDouble;ax:gdbvertex);
 var
   //glmcoord1: gdbpiece;
-  tempmatr,tempmatr2,rotmatr:DMatrix4D;
+  tempmatr,{tempmatr2,}rotmatr:DMatrix4D;
   tv,tv2:gdbvertex4d;
   //ay:gdbvertex;
   //ux,uy:GDBDouble;
@@ -105,7 +105,7 @@ var
 
 begin
       tempmatr:=onematrix;
-      tempmatr2:=onematrix;
+      //tempmatr2:=onematrix;
       rotmatr:=onematrix;
       pgdbvertex(@rotmatr[0])^:=prop.xdir;
       pgdbvertex(@rotmatr[1])^:=prop.ydir;

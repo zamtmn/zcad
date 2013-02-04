@@ -138,7 +138,7 @@ begin
                        end;
 end;
 procedure GDBObjBlockdef.LoadFromDXF;
-var s{, layername}: GDBString;
+var //s{, layername}: GDBString;
   byt{, code}: GDBInteger;
   uou:PTObjectUnit;
 begin
@@ -147,7 +147,7 @@ begin
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-                                           s:=f.ReadGDBString;
+                                           {s:=}f.ReadGDBString;
     byt:=readmystrtoint(f);
   end;
 

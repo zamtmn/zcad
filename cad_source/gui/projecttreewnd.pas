@@ -148,7 +148,7 @@ end;
 procedure BuildBranchN(var CurrNode:TmyTreeNode;var TreePos:GDBString; const catalog:GDBGDBStringArray);
 var
     i:integer;
-    CurrFindNode,tn:TmyTreeNode;
+    CurrFindNode{,tn}:TmyTreeNode;
     category:GDBString;
 begin
      TmyTreeView(CurrNode.TreeView).NodeType:=TmyTreeNode;
@@ -176,7 +176,7 @@ var
    ir:itrec;
    offset:GDBInteger;
    tc:PUserTypeDescriptor;
-   treepos,treesuperpos{,category},s:GDBString;
+   treepos,treesuperpos{,category,s}:GDBString;
    i:integer;
    CurrNode{,CurrFindNode,tn}:TmyTreeNode;
    eqnode:TEqTreeNode;
@@ -246,7 +246,7 @@ begin
 end;
 procedure TProjectTreeWnd.AfterConstruction;
 var
-   tnode:TTreeNode;
+   //tnode:TTreeNode;
    pb:PGDBObjBlockdef;
     ir:itrec;
     i:integer;

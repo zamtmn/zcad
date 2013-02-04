@@ -248,11 +248,11 @@ procedure TmyAnchorDockHeader.Paint;
    end;
 
 var
-  r,r1: TRect;
+  r{,r1}: TRect;
   TxtH: longint;
   TxtW: longint;
   dx,dy: Integer;
-  ts:TTextStyle;
+  //ts:TTextStyle;
 begin
   //exit;
   r:=ClientRect;
@@ -394,11 +394,11 @@ end;
 procedure MainForm.addoneobject;
 //const //pusto=-1000;
       //different=-10001;
-var lw,layer:GDBInteger;
+var lw{,layer}:GDBInteger;
 begin
 
   lw:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.LineWeight;
-  layer:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.layer);
+  //layer:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.layer);
   if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=1
   then
       begin
@@ -513,7 +513,7 @@ end;
 function MainForm.GetLayerProp(PLayer:Pointer;var lp:TLayerPropRecord):boolean;
 var
    cdwg:PTSimpleDrawing;
-   pcl:PGDBLayerProp;
+   //pcl:PGDBLayerProp;
 begin
      if player=nil then
                        begin
@@ -711,9 +711,9 @@ begin
 end;
 
 function CloseApp:GDBInteger;
-var
-   pint:PGDBInteger;
-   mem:GDBOpenArrayOfByte;
+//var
+   //pint:PGDBInteger;
+   //mem:GDBOpenArrayOfByte;
 begin
 (*
      if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
@@ -821,7 +821,7 @@ end;
 function _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject):Integer;
 var
    poglwnd:toglwnd;
-   i:integer;
+   //i:integer;
    s:string;
 begin
   if ClosedDWG<>nil then
@@ -866,7 +866,7 @@ function MainForm.CloseDWGPage(Sender: TObject):integer;
 var
    poglwnd:toglwnd;
    ClosedDWG:PTDrawing;
-   i:integer;
+   //i:integer;
 begin
   //application.ProcessMessages;
   Closeddwg:=nil;
@@ -888,7 +888,7 @@ begin
 end;
 function MainForm.CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
 var
-  i:integer;
+  //i:integer;
   pint:PGDBInteger;
   TB:TToolBar;
   tbdesk:string;
@@ -1021,13 +1021,13 @@ end;
 
 procedure MainForm.DockMasterCreateControl(Sender: TObject; aName: string; var
   AControl: TControl; DoDisableAutoSizing: boolean);
-var
-  i:integer;
-  pint:PGDBInteger;
-  TB:TToolBar;
-  tbdesk:string;
-  ta:TmyAction;
-  TempForm:TForm;
+//var
+  //i:integer;
+  //pint:PGDBInteger;
+  //TB:TToolBar;
+  //tbdesk:string;
+  //ta:TmyAction;
+  //TempForm:TForm;
   procedure CreateForm(Caption: string; NewBounds: TRect);
   begin
        begin
@@ -1276,9 +1276,9 @@ end;
 
 procedure MainForm.CreateStandartInterface;
 var
-  action: tmyaction;
+  //action: tmyaction;
   TempForm:TForm;
-  pint:PGDBInteger;
+  //pint:PGDBInteger;
 begin
   self.SetBounds(0,0,sysparam.screenx-100,sysparam.screeny-100);
 
@@ -1340,10 +1340,10 @@ end;
 
 
 procedure MainForm.FormCreate(Sender: TObject);
-var
-  i:integer;
-  pint:PGDBInteger;
-  bmp:TPortableNetworkGraphic;
+//var
+  //i:integer;
+  //pint:PGDBInteger;
+  //bmp:TPortableNetworkGraphic;
 begin
   self.onclose:=self.FormClose;
   self.onkeydown:=self.mykeypress;
@@ -1456,9 +1456,9 @@ end;}
 procedure MainForm.LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: TOwnerDrawState);
 var
-   plp:PGDBLayerProp;
-   Dest: PChar;
-   y,pw,ll:integer;
+   //plp:PGDBLayerProp;
+   //Dest: PChar;
+   {y,pw,}ll:integer;
 begin
   //y:=(ARect.Top+ARect.Bottom)div 2;
   //TComboBox(Control).canvas.Rectangle(ARect.Left,y,ARect.Left+10,y+10);
@@ -1483,8 +1483,8 @@ end;
 procedure MainForm.ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: TOwnerDrawState);
 var
-   plp:PGDBLayerProp;
-   Dest: PChar;
+   //plp:PGDBLayerProp;
+   //Dest: PChar;
    y:integer;
    textrect:TRect;
 const
@@ -1547,9 +1547,9 @@ var
     buttonpos:GDBInteger;
     b:TToolButton;
     i:longint;
-    y,xx,yy,w,code:GDBInteger;
-    bmp:TBitmap;
-    te:tedit;
+    {y,xx,yy,}w,code:GDBInteger;
+    //bmp:TBitmap;
+    //te:tedit;
     action:tmyaction;
 begin
      if not assigned(tb.Images) then
@@ -1839,14 +1839,14 @@ end;
 procedure MainForm.loadpanels(pf:GDBString);
 var
     f:GDBOpenArrayOfByte;
-    line,ts,{bn,}bc{,bh}:GDBString;
-    buttonpos:GDBInteger;
-    ppanel:TToolBar;
-    b:TToolButton;
-    i:longint;
-    y,xx,yy,w,code:GDBInteger;
-    bmp:TBitmap;
-    action:tmyaction;
+    line{,ts}{bn,}{bc}{,bh}:GDBString;
+    //buttonpos:GDBInteger;
+    //ppanel:TToolBar;
+    //b:TToolButton;
+    //i:longint;
+    //y,xx,yy,w,code:GDBInteger;
+    //bmp:TBitmap;
+    //action:tmyaction;
 
     paneldesk:string;
 //const bsize=24;
@@ -1861,7 +1861,7 @@ begin
       begin
            line := f.readstring('; ','');
            paneldesk:=line+':';
-           ts:=line;
+           //ts:=line;
            {if uppercase(ts)='ToolBarR'
            then
                begin
@@ -1889,7 +1889,7 @@ begin
                 yy:=strtoint(line);
            end;}
 
-           buttonpos:=0;
+           //buttonpos:=0;
            while line<>'{' do
                              line := f.readstring(#$A,#$D);
            line := f.readstring(#$A' ',#$D);
@@ -2060,7 +2060,7 @@ begin
 end;
 procedure MainForm.loadmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
 var
-    pmenuitem:TmyMenuItem;
+    //pmenuitem:TmyMenuItem;
     ppopupmenu:TMenuItem;
 begin
            {if not assigned(pm) then
@@ -2085,7 +2085,7 @@ begin
 end;
 procedure MainForm.loadpopupmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
 var
-    pmenuitem:TmyMenuItem;
+    //pmenuitem:TmyMenuItem;
     ppopupmenu:TPopupMenu;
 begin
            {if not assigned(pm) then
@@ -2122,7 +2122,7 @@ end;
 
 procedure MainForm.createmenu(var f:GDBOpenArrayOfByte;{var pm:TMenu;}var line:GDBString);
 var
-    pmenuitem:TmyMenuItem;
+    //pmenuitem:TmyMenuItem;
     ppopupmenu:TMenuItem;
     ts:GDBString;
     menuname:string;
@@ -2166,7 +2166,7 @@ procedure MainForm.loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var lin
 var
     pmenuitem:TmyMenuItem;
     pm1:TMenuItem;
-    ppopupmenu,submenu:TMenuItem;
+    {ppopupmenu,}submenu:TMenuItem;
     line2:GDBString;
     i:integer;
     pstr:PGDBString;
@@ -2389,10 +2389,10 @@ begin
 end;
 procedure MainForm.ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
 var
-   IsEditableFocus:boolean;
-   IsCommandNotEmpty:boolean;
-   _enabled,_disabled:boolean;
-   i:integer;
+   //IsEditableFocus:boolean;
+   //IsCommandNotEmpty:boolean;
+   {_enabled,}_disabled:boolean;
+   //i:integer;
 //const
      //EditableShortCut=[(scCtrl or VK_Z),{(VK_CONTROL or VK_SHIFT or VK_Z),}VK_DELETE,VK_BACK,VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN];
      //ClipboardShortCut=[VK_SHIFT or VK_DELETE,VK_BACK,VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN];
@@ -2460,10 +2460,10 @@ end;
 procedure MainForm.myKeyPress{(var Key: char)}(Sender: TObject; var Key: Word; Shift: TShiftState);
 //procedure MainForm.Pre_Char;
 var
-   ccg:char;
+   //ccg:char;
    tempkey:word;
-   comtext,deb:string;
-   ct:tclass;
+   comtext{,deb}:string;
+   //ct:tclass;
 begin
      if assigned(GetPeditorProc) then
      if GetPeditorProc<>nil then
@@ -2953,9 +2953,9 @@ end;
 
 procedure MainForm.correctscrollbars;
 var
-   poglwnd:toglwnd;
-   name:gdbstring;
-   i:Integer;
+   //poglwnd:toglwnd;
+   //name:gdbstring;
+   //i:Integer;
    pdwg:PTSimpleDrawing;
    BB:GDBBoundingBbox;
    size,min,max,position:integer;
@@ -2986,13 +2986,13 @@ begin
 end;
 procedure updatevisible; export;
 var
-   ir:itrec;
+   //ir:itrec;
    poglwnd:toglwnd;
    name:gdbstring;
    i:Integer;
    pdwg:PTSimpleDrawing;
-   BB:GDBBoundingBbox;
-   size,min,max,position:integer;
+   //BB:GDBBoundingBbox;
+   //size,min,max,position:integer;
 begin
    pdwg:=gdb.GetCurrentDWG;
    if assigned(mainformn)then

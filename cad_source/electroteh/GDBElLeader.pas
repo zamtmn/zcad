@@ -225,7 +225,7 @@ end;
 procedure GDBObjElLeader.FormatEntity(const drawing:TDrawingDef);
 var
    pl:pgdbobjline;
-   tv,tv2,tv3:gdbvertex;
+   tv,tv2{,tv3}:gdbvertex;
    pobj,pcable:PGDBObjCable;
    ir,ir2:itrec;
    s:gdbstring;
@@ -407,7 +407,7 @@ begin
      if pcable<>nil then
                         begin
                              tv2:=GetDirInPoint(pcable^.VertexArrayInWCS,mainline.CoordInWCS.lBegin,false);
-                             tv3:=geometry.vectordot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin));
+                             //tv3:=geometry.vectordot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin));
                              if {tv3.z}scalardot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin))>0 then
                                             tv2:=geometry.vectordot(tv2,Local.basis.OZ)
                                         else
@@ -683,7 +683,7 @@ constructor GDBObjElLeader.initnul;
 var
    //pl:pgdbobjline;
    tv:gdbvertex;
-   a:TGDBTableCellStyle;
+   //a:TGDBTableCellStyle;
 begin
      inherited;
      size:=0;

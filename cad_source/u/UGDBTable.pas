@@ -75,9 +75,9 @@ begin
   inherited;
 end;
 constructor GDBTableArray.init;
-var //i,j:gdbinteger;
-    psl:PGDBGDBStringArray;
-    s:gdbstring;
+//var //i,j:gdbinteger;
+    //psl:PGDBGDBStringArray;
+    //s:gdbstring;
 begin
    inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}r,sizeof(GDBGDBStringArray));
 

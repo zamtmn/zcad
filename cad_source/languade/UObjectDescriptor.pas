@@ -307,9 +307,9 @@ end;
 function ObjectDescriptor.FindMetod;
 var pmd:pMetodDescriptor;
     ir:itrec;
-    f,s:shortstring;
-    l:longint;
-    tm:tmethod;
+    //f,s:shortstring;
+    //l:longint;
+    //tm:tmethod;
     h:gdblongword;
     umn:GDBSTRING;
 begin
@@ -540,7 +540,7 @@ end;
 function ObjectDescriptor.CreateProperties;
 var
    pld:PtUserTypeDescriptor;
-   p,p2:pointer;
+   p{,p2}:pointer;
    pp:PPropertyDescriptor;
    objtypename,propname:string;
    ir,ir2:itrec;
@@ -576,7 +576,7 @@ begin
                                             p:=ppd^.valueAddres;
                                        end;
            ObjectDescriptor.SimpleRunMetodWithArg(pp.r,baddr,p);
-           p2:=p;
+           //p2:=p;
            PTUserTypeDescriptor(pp^.base.PFT)^.CreateProperties(PDM_Property,PPDA,propname,@pp^.collapsed,{ppd^.Attr}pp^.base.Attributes or ownerattrib,bmode,p,'','');
 
            pp:=Properties.iterate(ir);

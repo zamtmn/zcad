@@ -40,7 +40,7 @@ type
     procedure AfterConstruction; override;
   private
     mode:TCLineMode;
-    prompttext:ansistring;
+    //prompttext:ansistring;
   public
 
     //DMenu:TDMenuWnd;
@@ -86,7 +86,7 @@ end;
 
 procedure TCLine.HistoryAdd(s:string);
 var
-   l,ll:integer;
+   //l,ll:integer;
    ss:string;
 begin
      ss:=(s);
@@ -97,7 +97,7 @@ begin
     //TTextStrings(CLine.HistoryLine.lines).add(ss);
     HistoryLine.Append(ss);
     CWMemo.Append(ss);
-    l:=HistoryLine.GetTextLen;
+    //l:=HistoryLine.GetTextLen;
     HistoryLine.SelStart:=utflen;
     HistoryLine.SelLength:=2;
 
@@ -128,9 +128,9 @@ begin
      mode:=m;
 end;
 procedure TCLine.FormCreate(Sender: TObject);
-var
-   bv:tbevel;
-   pint:PGDBInteger;
+//var
+   //bv:tbevel;
+   //pint:PGDBInteger;
 begin
     self.Constraints.MinHeight:=36;
     utfpresent:=false;
@@ -316,17 +316,17 @@ begin
 end;
 
 procedure TCLine.keypressmy(Sender: TObject; var Key: char);
-var code,ch: GDBInteger;
+var code{,ch}: GDBInteger;
   len: double;
   temp: gdbvertex;
   v:vardesk;
-  s,xx,yy,zz,expr:GDBString;
+  s,{xx,yy,zz,}expr:GDBString;
   tv:gdbvertex;
   parseresult:PGDBGDBStringArray;
   cmd,subexpr,superexpr:string;
   parsed:gdbboolean;
 begin
-    ch:=ord(key);
+    //ch:=ord(key);
     if ord(key)=13 then
     begin
     if (length(CmdEdit.text) > 0) then

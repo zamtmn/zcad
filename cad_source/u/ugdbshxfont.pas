@@ -63,20 +63,20 @@ uses {math,}log;
 procedure GDBfont.CreateSymbol(var Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
 var
   psymbol: GDBPointer;
-  i, j, k: GDBInteger;
+  {i, }j, k: GDBInteger;
   len: GDBWord;
   //matr,m1: DMatrix4D;
   v:GDBvertex4D;
-  pv:GDBPolyVertex2D;
+  //pv:GDBPolyVertex2D;
   pv3:GDBPolyVertex3D;
 
-  plp,plp2:pgdbvertex;
-  lp,tv:gdbvertex;
-  pl:GDBPoint3DArray;
-  ispl:gdbboolean;
-  ir:itrec;
+  //plp,plp2:pgdbvertex;
+  //lp,tv:gdbvertex;
+  //pl:GDBPoint3DArray;
+  //ispl:gdbboolean;
+  //ir:itrec;
   psyminfo:PGDBsymdolinfo;
-  deb:GDBsymdolinfo;
+  //deb:GDBsymdolinfo;
 begin
   if _symbol=100 then
                       _symbol:=_symbol;
@@ -86,7 +86,7 @@ begin
                       _symbol:=_symbol;
 
   psyminfo:=self.GetOrReplaceSymbolInfo(integer(_symbol));
-  deb:=psyminfo^;
+  //deb:=psyminfo^;
   psymbol := self.SHXdata.getelement({pgdbfont(pfont).symbo linfo[GDBByte(_symbol)]}psyminfo.addr);// GDBPointer(GDBPlatformint(pfont)+ pgdbfont(pfont).symbo linfo[GDBByte(_symbol)].addr);
   if {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size <> 0 then
     for j := 1 to {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size do
@@ -102,8 +102,8 @@ begin
             v.z:=0;
             v.w:=1;
             v:=VectorTransform(v,matr);
-            pv.coord:=PGDBvertex2D(@v)^;
-            pv.count:=0;
+            //pv.coord:=PGDBvertex2D(@v)^;
+            //pv.count:=0;
 
             if v.x<minx then minx:=v.x;
             if v.y<miny then miny:=v.y;
@@ -114,7 +114,7 @@ begin
 
             pv3.coord:=PGDBvertex(@v)^;
 
-            tv:=pv3.coord;
+            //tv:=pv3.coord;
             pv3.LineNumber:=ln;
 
             pv3.count:=0;
@@ -144,8 +144,8 @@ begin
             Vertex3D_in_WCS_Array.add(@pv3);
 
 
-            pv.coord:=PGDBvertex2D(@v)^;
-            pv.count:=0;
+            //pv.coord:=PGDBvertex2D(@v)^;
+            //pv.count:=0;
             //inc(pGDBByte(psymbol), 2 * sizeof(GDBDouble));
           end;
         4:
@@ -160,8 +160,8 @@ begin
             v.z:=0;
             v.w:=1;
             v:=VectorTransform(v,matr);
-            pv.coord:=PGDBvertex2D(@v)^;
-            pv.count:=len;
+            //pv.coord:=PGDBvertex2D(@v)^;
+            //pv.count:=len;
 
             if v.x<minx then minx:=v.x;
             if v.y<miny then miny:=v.y;
@@ -173,7 +173,7 @@ begin
             pv3.coord:=PGDBvertex(@v)^;
             pv3.count:=len;
 
-            tv:=pv3.coord;
+            //tv:=pv3.coord;
             pv3.LineNumber:=ln;
 
             Vertex3D_in_WCS_Array.add(@pv3);
@@ -199,14 +199,14 @@ begin
 
 
             v:=VectorTransform(v,objmatrix);
-            pv.coord:=PGDBvertex2D(@v)^;
-            pv.count:=-1;
+            //pv.coord:=PGDBvertex2D(@v)^;
+            //pv.count:=-1;
 
             pv3.coord:=PGDBvertex(@v)^;
             pv3.count:={-1}k-len+1;
 
             pv3.LineNumber:=ln;
-            tv:=pv3.coord;
+            //tv:=pv3.coord;
 
             Vertex3D_in_WCS_Array.add(@pv3);
 
@@ -266,13 +266,13 @@ function GDBfont.findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
 var
    pobj:PGDBUNISymbolInfo;
    ir:itrec;
-   debug:GDBInteger;
+   //debug:GDBInteger;
 begin
      pobj:=unisymbolinfo.beginiterate(ir);
      if pobj<>nil then
      repeat
-           debug:=pobj^.symbol;
-           debug:=pobj^.symbolinfo.addr;
+           //debug:=pobj^.symbol;
+           //debug:=pobj^.symbolinfo.addr;
            if pobj^.symbol=symbol then
                                       begin
                                            result:=@pobj^.symbolinfo;
@@ -283,8 +283,8 @@ begin
      result:=nil;
 end;
 function GDBfont.GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
-var
-   usi:GDBUNISymbolInfo;
+//var
+   //usi:GDBUNISymbolInfo;
 begin
      if symbol=49 then
                         symbol:=symbol;

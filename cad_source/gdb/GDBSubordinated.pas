@@ -140,8 +140,8 @@ begin
 end;
 procedure CreateDeviceNameProcess(pEntity:PGDBObjGenericWithSubordinated;const drawing:TDrawingDef);
 var
-   pvn,pvnt,pdbv:pvardesk;
-   pdbu:ptunit;
+   pvn,pvnt{,pdbv}:pvardesk;
+   //pdbu:ptunit;
 begin
      pvn:=pEntity^.OU.FindVariable('NMO_Name');
      pvnt:=pEntity^.OU.FindVariable('NMO_Template');

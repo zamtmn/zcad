@@ -90,8 +90,8 @@ begin
      result:=normalizevertex(geometry.vectordot(point,self.Local.basis.oz));
 end;
 procedure GDBObjCircle.ReCalcFromObjMatrix;
-var
-    ox:gdbvertex;
+//var
+    //ox:gdbvertex;
 begin
      inherited;
      Local.P_insert:=PGDBVertex(@objmatrix[3])^;
@@ -111,7 +111,7 @@ end;
 function GDBObjCircle.IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;
 var
    m1:DMatrix4D;
-   td,td2,td3,slbegin,slend,t1,t2,llbegin_x2,llbegin_y2,llend_x2,llend_y2:double;
+   td,td2,td3,{slbegin,slend,}t1,t2,llbegin_x2,llbegin_y2,llend_x2,llend_y2:double;
    llbegin,llend:gdbvertex;
 begin
      m1:=GetMatrix^;
@@ -121,8 +121,8 @@ begin
      if (abs(lbegin.z)<eps)and(abs(lend.z)<eps)
         then
             begin
-                 slbegin:=SqrOneVertexlength(llbegin);
-                 slend:=SqrOneVertexlength(llend);
+                 //slbegin:=SqrOneVertexlength(llbegin);
+                 //slend:=SqrOneVertexlength(llend);
 
                  llbegin_x2:=llbegin.x*llbegin.x;
                  llbegin_y2:=llbegin.y*llbegin.y;
@@ -441,7 +441,7 @@ procedure GDBObjCircle.projectpoint;
 begin
 end;
 procedure GDBObjCircle.LoadFromDXF;
-var s: GDBString;
+var //s: GDBString;
   byt{, code}: GDBInteger;
 begin
   //initnul;
@@ -450,7 +450,7 @@ begin
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
-    if not dxfGDBDoubleload(f,40,byt,Radius) then s := f.readgdbstring;
+    if not dxfGDBDoubleload(f,40,byt,Radius) then {s := }f.readgdbstring;
     byt:=readmystrtoint(f);
   end;
   //PProjoutbound:=nil;
@@ -547,7 +547,7 @@ begin
 end;
 function GDBObjCircle.getsnap;
 var
-   tv,n,v:gdbvertex;
+   tv,n{,v}:gdbvertex;
    plane:DVector4D;
 begin
      if onlygetsnapcount=6 then

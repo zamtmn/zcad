@@ -46,7 +46,7 @@ function createsymbol(pf:PGDBfont;symbol:GDBInteger;pshxdata:pbyte;{var pdata:pb
 var
   {temp,}psubsymbol:PGDBByte;
   ppolycount:longint;
-  i,j,poz,code,sizeshp,sizeshx,stackheap:GDBInteger;
+  i,j,{poz,}{code,}sizeshp,sizeshx,stackheap:GDBInteger;
   baselen,ymin,ymax,xmin,xmax,x,y,x1,y1,xb,yb,r,startangle,angle,normal,hordlen,tgl:fontfloat;
   stack:array[0..4,0..1] of fontfloat;
   tr:{array[1..3,0..1] of fontfloat}tarcrtmodify;
@@ -55,7 +55,7 @@ var
   int:GDBInteger;
   dx,dy:GDBShortint;
   draw:GDBBoolean;
-  ff:GDBInteger;
+  //ff:GDBInteger;
   onlyver:GDBInteger;
   psyminfo,psubsyminfo:PGDBsymdolinfo;
   inccounter:integer;
@@ -720,7 +720,7 @@ begin
           end;
 
 procedure initfont(var pf:pgdbfont;name:gdbstring);
-var i:integer;
+//var i:integer;
 begin
      //GDBGetMem({$IFDEF DEBUGBUILD}'{2D1F6D71-DF5C-46B1-9E3A-9975CC281FAC}',{$ENDIF}GDBPointer(pf),sizeof(gdbfont));
      pf^.init(name);
@@ -885,7 +885,7 @@ else
 end;
 procedure readpalette;
 var
-  i,poz,code:GDBInteger;
+  i,{poz,}code:GDBInteger;
   //byt:GDBByte;
   line,sub:GDBString;
   f:GDBOpenArrayOfByte;

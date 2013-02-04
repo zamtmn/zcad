@@ -182,10 +182,10 @@ procedure GDBObjBlockInsert.ReCalcFromObjMatrix;
 var
     ox:gdbvertex;
     tv:gdbvertex;
-    m1,m2:DMatrix4D;
+    //m1,m2:DMatrix4D;
 
-    kQ:DMatrix3D;
-    kD,kU:DVector3D;
+    //kQ:DMatrix3D;
+    //kD,kU:DVector3D;
     //Tran: TTransformations;
     //mmm:TMatrix;
 begin
@@ -321,8 +321,8 @@ begin
   //setrot(rotate);
 end;
 procedure GDBObjBlockInsert.TransformAt;
-var
-    ox:gdbvertex;
+//var
+    //ox:gdbvertex;
 begin
      inherited;
      ReCalcFromObjMatrix;
@@ -591,7 +591,7 @@ begin
 end;
 procedure GDBObjBlockInsert.LoadFromDXF;
 var
-  s: GDBString;
+  //s: GDBString;
   byt{, code, i}: GDBInteger;
   hlGDBWord: GDBInteger;
   attrcont: GDBBoolean;
@@ -606,7 +606,7 @@ begin
      if not dxfvertexload1(f,41,byt,scale) then
      if not dxfGDBDoubleload(f,50,byt,rotate) then
      if dxfGDBIntegerload(f,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
-else if not dxfGDBStringload(f,2,byt,name)then s := f.readgdbstring;
+else if not dxfGDBStringload(f,2,byt,name)then {s := }f.readgdbstring;
     byt:=readmystrtoint(f);
   end;
   if attrcont then ;

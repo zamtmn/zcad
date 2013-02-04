@@ -237,7 +237,7 @@ begin
 end;
 function GDBDescriptor.FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
 var
-   pobj:pGDBObjEntity;
+   //pobj:pGDBObjEntity;
    ir:itrec;
 begin
      result:=entities.beginiterate(ir);
@@ -347,8 +347,8 @@ end;
 
 constructor TDrawing.init;
 var {tp:GDBTextStyleProp;}
-    ts:PTGDBTableStyle;
-    cs:TGDBTableCellStyle;
+    //ts:PTGDBTableStyle;
+    //cs:TGDBTableCellStyle;
     pvd:pvardesk;
 begin
   DWGUnits.init;
@@ -491,12 +491,12 @@ begin
 end;
 function createtstylebyindex(_from,_to:PTSimpleDrawing;oldti:TArrayIndex):TArrayIndex;
 var
-   {_dest,}td:PGDBObjBlockdef;
+   //{_dest,}td:PGDBObjBlockdef;
    newti:TArrayIndex;
    tsname:gdbstring;
    poldstyle,pnevstyle:PGDBTextStyle;
-   ir:itrec;
-   {pvisible,}pvisible2:PGDBObjEntity;
+   //ir:itrec;
+   //{pvisible,}pvisible2:PGDBObjEntity;
    //pl:PGDBLayerProp;
 begin
                     poldstyle:=PGDBTextStyle(_from.TextStyleTable.getelement(oldti));
@@ -511,13 +511,13 @@ begin
       result:=_to.TextStyleTable.FindStyle(tsname,poldstyle^.UsedInLTYPE);
 end;
 procedure createtstyleifneed(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
-var
-   {_dest,}td:PGDBObjBlockdef;
-   oldti,newti:TArrayIndex;
-   tsname:gdbstring;
-   poldstyle,pnevstyle:PGDBTextStyle;
-   ir:itrec;
-   {pvisible,}pvisible2:PGDBObjEntity;
+//var
+   //{_dest,}td:PGDBObjBlockdef;
+   //oldti,newti:TArrayIndex;
+   //tsname:gdbstring;
+   //poldstyle,pnevstyle:PGDBTextStyle;
+   //ir:itrec;
+   //{pvisible,}pvisible2:PGDBObjEntity;
    //pl:PGDBLayerProp;
 begin
                if (_source^.vp.ID=GDBTextID)
@@ -616,12 +616,12 @@ begin
      //_dest.vp.Layer:=createlayerifneed(_from,_to,_source.vp.Layer);
 end;
 procedure RemapLStyle(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
-var p:GDBPointer;
+var //p:GDBPointer;
     ir:itrec;
     psp:PShapeProp;
     ptp:PTextProp;
-    sp:ShapeProp;
-    tp:TextProp;
+    //sp:ShapeProp;
+    //tp:TextProp;
 begin
   if _source.vp.LineType=nil then
                                  exit;
@@ -693,7 +693,7 @@ end;
 procedure GDBDescriptor.FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:GDBOpenArrayOfPObjects);
 var
    croot:PGDBObjGenericSubEntry;
-   pvisible,pvisible2,pv:PGDBObjEntity;
+   pvisible{,pvisible2,pv}:PGDBObjEntity;
    ir:itrec;
    pvd:pvardesk;
 begin
@@ -721,7 +721,7 @@ end;
 procedure GDBDescriptor.FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:GDBOpenArrayOfPObjects);
 var
    croot:PGDBObjGenericSubEntry;
-   pvisible,pvisible2,pv:PGDBObjEntity;
+   pvisible{,pvisible2,pv}:PGDBObjEntity;
    ir:itrec;
    pvd:pvardesk;
 begin
@@ -747,7 +747,7 @@ end;
 function GDBDescriptor.FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
 var
    croot:PGDBObjGenericSubEntry;
-   pvisible,pvisible2,pv:PGDBObjEntity;
+   pvisible{,pvisible2,pv}:PGDBObjEntity;
    ir:itrec;
    pvd:pvardesk;
 begin
@@ -780,8 +780,8 @@ var
    _dest{,td}:PGDBObjBlockdef;
    //tn:gdbstring;
    ir:itrec;
-   pvisible,pvisible2,pv:PGDBObjEntity;
-   pl:PGDBLayerProp;
+   pvisible,pvisible2{,pv}:PGDBObjEntity;
+   //pl:PGDBLayerProp;
 
 begin
       if pos(DevicePrefix,_source.Name)=1 then
@@ -802,7 +802,7 @@ begin
            createblockifneed(_from,_to,pvisible);
 
                //pvisible:=CopyEnt(_from,_to,pvisible);
-               pv:=pvisible;
+               //pv:=pvisible;
                pvisible2:=pvisible^.Clone(_dest);
                RemapAll(_from,_to,pvisible,pvisible2);
                //pvisible2:=nil;

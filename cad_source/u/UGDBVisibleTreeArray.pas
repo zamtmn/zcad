@@ -44,9 +44,9 @@ begin
      p^.bp.TreePos.Owner:=nil;
 end;
 destructor GDBObjEntityTreeArray.done;
-var
-  p:PGDBaseObject;
-  ir:itrec;
+//var
+  //p:PGDBaseObject;
+  //ir:itrec;
 begin
   inherited;
   objtree.done;

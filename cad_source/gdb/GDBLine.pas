@@ -178,8 +178,8 @@ begin
      result:=intercept3d(lbegin,lend,CoordInWCS.lBegin,CoordInWCS.lEnd);
 end;
 procedure GDBObjLine.getoutbound;
-var //tv,tv2:GDBVertex4D;
-    t,b,l,r,n,f:GDBDouble;
+//var //tv,tv2:GDBVertex4D;
+    //t,b,l,r,n,f:GDBDouble;
 begin
      vp.BoundingBox:=CreateBBFrom2Point(CoordInWCS.lBegin,CoordInWCS.lEnd);
 end;
@@ -259,7 +259,7 @@ begin
   //format;
 end;
 procedure GDBObjLine.LoadFromDXF;
-var s: GDBString;
+var //s: GDBString;
   byt: GDBInteger;
 begin
   byt:=readmystrtoint(f);
@@ -267,7 +267,7 @@ begin
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
        if not dxfvertexload(f,10,byt,CoordInOCS.lBegin) then
-          if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then s := f.readGDBSTRING;
+          if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then {s := }f.readGDBSTRING;
     byt:=readmystrtoint(f);
   end;
 end;
@@ -302,7 +302,7 @@ begin
 end;
 
 procedure GDBObjLine.FormatEntity(const drawing:TDrawingDef);
-var m:DMatrix4D;
+//var m:DMatrix4D;
 begin
   calcgeometry;
   calcbb;
@@ -654,7 +654,7 @@ begin
 end;
 function GDBObjLine.getintersect;
 var t1,t2,dist:GDBDouble;
-    tv1,tv2,dir,dir2,e:gdbvertex;
+    tv1,tv2,dir,dir2{,e}:gdbvertex;
 begin
      if (onlygetsnapcount=1)or(pobj^.vp.id<>gdblineid) then
      begin

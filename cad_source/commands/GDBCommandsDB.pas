@@ -63,15 +63,15 @@ begin
 end;
 function DBaseRename_com:GDBInteger;
 var //t:PUserTypeDescriptor;
-    pvd,pdbv:pvardesk;
+    {pvd,}pdbv:pvardesk;
     //pu:ptunit;
-    pv:pGDBObjEntity;
-    ir:itrec;
-    c:integer;
+    //pv:pGDBObjEntity;
+    //ir:itrec;
+    //c:integer;
 
-    p:pointer;
+    //p:pointer;
     pu:ptunit;
-    vn:GDBString;
+    //vn:GDBString;
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin
@@ -101,9 +101,9 @@ var //t:PUserTypeDescriptor;
     ir:itrec;
     c:integer;
 
-    p:pointer;
+    //p:pointer;
     pu:ptunit;
-    vn:GDBString;
+    //vn:GDBString;
 begin
      if commandmanager.ContextCommandParams<>nil then
      begin

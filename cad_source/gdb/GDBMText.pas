@@ -642,17 +642,17 @@ end;
 *)
 procedure GDBObjMText.createpoint;
 var
-  psymbol: PGDBByte;
-  lin,i, j, k{, l}: GDBInteger;
+  //psymbol: PGDBByte;
+  {lin,}i{, j, k}{, l}: GDBInteger;
 
-  len: GDBWord;
+  //len: GDBWord;
   matr,m1: DMatrix4D;
   v:GDBvertex4D;
-  pv:GDBPolyVertex2D;
+  //pv:GDBPolyVertex2D;
   pv3:GDBPolyVertex3D;
   minx,miny,maxx,maxy:GDBDouble;
 
-  lp,tv:gdbvertex;
+  lp{,tv}:gdbvertex;
   plp,plp2:pgdbvertex;
   pswp:pGDBStrWithPoint;
       ir:itrec;
@@ -677,7 +677,7 @@ begin
   miny:=+10000000;
   maxx:=-10000000;
   maxy:=-10000000;}
-  lin:=0;
+  //lin:=0;
   {for l:=0 to ptext.count-1 do
   begin}
         pswp:=text.beginiterate(ir);
@@ -888,7 +888,7 @@ begin
   result := tvo;
 end;
 procedure GDBObjMText.LoadFromDXF;
-var s{, layername}: GDBString;
+var //s{, layername}: GDBString;
   byt{, code}: GDBInteger;
   ux: gdbvertex;
   angleload: GDBBoolean;
@@ -922,7 +922,7 @@ begin
                                                       if TXTStyleIndex=-1 then
                                                                           TXTStyleIndex:=0;
                                                  end
-    else s := f.readgdbstring;
+    else {s := }f.readgdbstring;
     byt:=readmystrtoint(f);
   end;
   OldVersTextReplace(Template);
@@ -959,7 +959,7 @@ end;
 procedure GDBObjMText.SaveToDXF(var handle: TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);
 var
 //  i, j: GDBInteger;
-  bw: GDBByte;
+  //bw: GDBByte;
   s: GDBString;
   ul:boolean;
 begin

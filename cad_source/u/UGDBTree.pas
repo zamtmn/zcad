@@ -60,7 +60,7 @@ procedure TGDBTree.IterateProc;
 var
   p:PGDBBaseNode;
   ir:itrec;
-  q:boolean;
+  //q:boolean;
 begin
   p:=beginiterate(ir);
   if p<>nil then

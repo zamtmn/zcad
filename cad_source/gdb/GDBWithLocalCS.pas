@@ -80,8 +80,8 @@ begin
      result:=true;
 end;
 procedure GDBObjWithLocalCS.ReCalcFromObjMatrix;
-var
-    ox:gdbvertex;
+//var
+    //ox:gdbvertex;
 begin
      inherited;
      Local.basis.ox:=PGDBVertex(@objmatrix[0])^;
@@ -252,7 +252,7 @@ begin
      P_insert_in_WCS:={PGDBVertex(@dispmatr[3])^;//}VectorTransform3D(nulvertex,objmatrix);
 end;
 procedure GDBObjWithLocalCS.transform;
-var tv,tv2:GDBVertex4D;
+//var tv,tv2:GDBVertex4D;
 begin
 
   {tv2:=PGDBVertex4D(@t_matrix[3])^;

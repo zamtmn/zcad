@@ -88,7 +88,7 @@ begin
      Local.p_insert:=PGDBVertex(@objmatrix[3])^;}ReCalcFromObjMatrix;
 end;
 procedure GDBObjEllipse.transform;
-var tv,tv2:GDBVertex4D;
+var {tv,}tv2:GDBVertex4D;
 begin
   inherited;
 
@@ -100,8 +100,8 @@ begin
   ReCalcFromObjMatrix;
 end;
 procedure GDBObjEllipse.ReCalcFromObjMatrix;
-var
-    ox:gdbvertex;
+//var
+    //ox:gdbvertex;
 begin
      inherited;
      {Local.basis.ox:=PGDBVertex(@objmatrix[0])^;
@@ -129,7 +129,7 @@ begin
 end;
 
 function GDBObjEllipse.CalcObjMatrixWithoutOwner;
-var rotmatr,dispmatr,m1:DMatrix4D;
+var rotmatr,dispmatr{,m1}:DMatrix4D;
 begin
      //Local.oz:=NormalizeVertex(Local.oz);
      Local.basis.ox:=MajorAxis;
@@ -323,7 +323,7 @@ var
   //psymbol: PGDBByte;
   i{, j, k}: GDBInteger;
   //len: GDBWord;
-  matr{,m1}: DMatrix4D;
+  //matr{,m1}: DMatrix4D;
   v:GDBvertex;
   pv:GDBVertex;
 begin
@@ -351,7 +351,7 @@ begin
                      end;
   GDBGetMem(PPoint,sizeof(GDBPoint2DArray));
   PPoint^.init(lod+1);}
-  matr:=objMatrix;
+  //matr:=objMatrix;
   v.x:=cos(startangle);
   v.y:=sin(startangle);
   v.z:=0;
@@ -461,7 +461,7 @@ begin
   dxfGDBDoubleout(outhandle,42,endangle{ * 180 / pi});
 end;
 procedure GDBObjEllipse.LoadFromDXF;
-var s: GDBString;
+var //s: GDBString;
   byt{, code}: GDBInteger;
 begin
   //initnul;
@@ -473,7 +473,7 @@ begin
     if not dxfvertexload(f,11,byt,MajorAxis) then
     if not dxfGDBDoubleload(f,40,byt,ratio) then
     if not dxfGDBDoubleload(f,41,byt,startangle) then
-    if not dxfGDBDoubleload(f,42,byt,endangle) then s := f.readgdbstring;
+    if not dxfGDBDoubleload(f,42,byt,endangle) then {s := }f.readgdbstring;
     byt:=readmystrtoint(f);
   end;
   startangle := startangle{ * pi / 180};

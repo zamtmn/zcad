@@ -332,12 +332,12 @@ begin
 end;
 
 function GDBOpenArrayOfByte.AddByte(PData:GDBPointer):GDBInteger;
-var addr:GDBPlatformint;
+//var addr:GDBPlatformint;
 begin
      result:=adddata(pdata,sizeof(GDBByte));
 end;
 function GDBOpenArrayOfByte.AddFontFloat(PData:GDBPointer):GDBInteger;
-var addr:GDBPlatformint;
+//var addr:GDBPlatformint;
 begin
      result:=adddata(pdata,sizeof(fontfloat));
 end;

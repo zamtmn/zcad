@@ -68,10 +68,10 @@ function createtree(var entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRoot
 procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInteger});
 implementation
 procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInteger});
-var
-   currtime:TDateTime;
-   Hour,Minute,Second,MilliSecond:word;
-   q1,q2:gdbboolean; {currd:PTSimpleDrawing;}
+//var
+   //currtime:TDateTime;
+   //Hour,Minute,Second,MilliSecond:word;
+   //q1,q2:gdbboolean; {currd:PTSimpleDrawing;}
 begin
   //currd:=gdb.GetCurrentDWG;
   if (Node.infrustum={currd.pcamera.POSCOUNT}dc.InfrustumActualy) then

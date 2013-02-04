@@ -147,7 +147,7 @@ begin
 end;
 
 procedure GDBObjLWpolyline.transform;
-var tv,tv2:GDBVertex4D;
+//var tv,tv2:GDBVertex4D;
 begin
  inherited;
  Vertex2D_in_OCS_Array.transform(t_matrix);

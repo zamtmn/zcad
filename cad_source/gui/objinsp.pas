@@ -807,8 +807,8 @@ begin
      }
 end;
 procedure TGDBobjinsp.createscrollbars;
-var //si:scrollinfo;
-    a:integer;
+//var //si:scrollinfo;
+    //a:integer;
 begin
      self.VertScrollBar.Range:=contentheigth;
      self.VertScrollBar.page:={clientheight}height;
@@ -960,7 +960,7 @@ begin
 end;
 procedure TGDBobjinsp.createeditor(pp:PPropertyDeskriptor);
 var
-  my:GDBInteger;
+  //my:GDBInteger;
 
   //pedipor:pzbasic;
 //  tb:GDBBoolean;
@@ -1046,12 +1046,12 @@ var
   //pedipor:pzbasic;
 //  tb:GDBBoolean;
 //  pb:PGDBBoolean;
-  tp:pointer;
-  pobj:pGDBObjEntity;
-  pv:pvardesk;
-  vv:gdbstring;
-  vsa:GDBGDBStringArray;
-  ir:itrec;
+  //tp:pointer;
+  //pobj:pGDBObjEntity;
+  //pv:pvardesk;
+  //vv:gdbstring;
+  //vsa:GDBGDBStringArray;
+  //ir:itrec;
 
   menu:TPopupMenu;
 
@@ -1207,7 +1207,7 @@ begin
   peditor.geteditor.SetBounds(namecol-1,ppropcurrentedit.y1,clientwidth-namecol-2,ppropcurrentedit.y2);
 end;
 procedure TGDBobjinsp._onresize(sender:tobject);
-var x,xn:integer;
+//var x,xn:integer;
 {$IFDEF LCLGTK2}Widget: PGtkWidget;{$ENDIF}
 begin
   {$IFDEF LCLGTK2}

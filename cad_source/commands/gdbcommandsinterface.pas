@@ -84,7 +84,7 @@ uses GDBPolyLine,UGDBPolyLine2DArray,GDBLWPolyLine,mainwindow,UGDBSelectedObjArr
      oglwindow,geometry;
 function CloseDWG_com(Operands:pansichar):GDBInteger;
 var
-   poglwnd:toglwnd;
+   //poglwnd:toglwnd;
    CurrentDWG:PTDrawing;
 begin
   application.ProcessMessages;
@@ -406,9 +406,9 @@ begin
   result:=cmd_ok;
 end;
 function Show_com(Operands:pansichar):GDBInteger;
-var
-   obj:gdbstring;
-   objt:PUserTypeDescriptor;
+//var
+   //obj:gdbstring;
+   //objt:PUserTypeDescriptor;
 begin
   DockMaster.ShowControl(Operands,true);
 {     if Operands='ObjInsp' then

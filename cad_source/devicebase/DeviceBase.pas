@@ -80,7 +80,7 @@ var
 
     //offset:GDBInteger;
     //tc:PUserTypeDescriptor;
-    pf:GDBPointer;
+    //pf:GDBPointer;
 
     headarray:theadarray;
     head:thead;
@@ -108,7 +108,7 @@ end;
 procedure setrow(row:integer);
 var
     j:integer;
-    value:string;
+    //value:string;
 begin
      for j:=0 to headarray.Size-1 do
      begin
@@ -214,8 +214,8 @@ begin
                      shared.ShowError('');
 end;
 procedure DeviceManager.loadfromdir(path: GDBString);
-var sr: TSearchRec;
-    s:gdbstring;
+//var sr: TSearchRec;
+    //s:gdbstring;
 begin
 
   FromDirIterator(utf8tosys(path),'*.pas',firstfilename,loaddev,nil);

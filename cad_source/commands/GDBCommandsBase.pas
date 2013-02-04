@@ -253,7 +253,7 @@ function GetOnMouseObjWAddr(var ContextMenu:TPopupMenu):GDBInteger;
 var
   pp:PGDBObjEntity;
   ir:itrec;
-  inr:TINRect;
+  //inr:TINRect;
   line,saddr:GDBString;
   pvd:pvardesk;
 begin
@@ -422,8 +422,8 @@ else if Operands='TABLESTYLES' then
      //GDBobjinsp.SetCurrentObjDefault;
 end;
 function CloseDWGOnMouse_com(Operands:pansichar):GDBInteger;
-var
-   poglwnd:Ptoglwnd;
+//var
+   //poglwnd:Ptoglwnd;
 begin
      {переделать
      poglwnd:=pointer(mainform.PageControl.getpagewindow(mainform.PageControl.onmouse)^.FindKidsByType(typeof(TOGLWnd)));
@@ -553,12 +553,12 @@ begin
         shared.ShowError('MERGE:'+format(rsUnableToOpenFile,[s]));
 end;
 function Merge_com(Operands:pansichar):GDBInteger;
-var
-   s: GDBString;
-   fileext:GDBString;
-   isload:boolean;
-   mem:GDBOpenArrayOfByte;
-   pu:ptunit;
+//var
+   //s: GDBString;
+   //fileext:GDBString;
+   //isload:boolean;
+   //mem:GDBOpenArrayOfByte;
+   //pu:ptunit;
 begin
      result:=Load_merge(operands,TLOMerge);
 end;
@@ -623,15 +623,15 @@ procedure SaveDXFDPAS(s:gdbstring);
 var
    mem:GDBOpenArrayOfByte;
    pu:ptunit;
-   filepath,filename{,fileext}:GDBString;
+   //filepath,filename{,fileext}:GDBString;
 begin
      savedxf2000(s, GDB.GetCurrentDWG^);
 
      pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
      mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
      pu^.SavePasToMem(mem);
-     filepath:=ExtractFilePath(s);
-     filename:=ExtractFileName(s);
+     //filepath:=ExtractFilePath(s);
+     //filename:=ExtractFileName(s);
      mem.SaveToFile(s+'.dbpas');
      mem.done;
      if assigned(ProcessFilehistoryProc) then
@@ -776,8 +776,8 @@ begin
 end;
 
 function ChangeProjType_com(Operands:pansichar):GDBInteger;
-var
-   ta:TmyAction;
+//var
+//   ta:TmyAction;
 begin
      //ta:=tmyaction(MainFormN.StandartActions.ActionByName('ACN_PERSPECTIVE'));
   if GDB.GetCurrentDWG.OGLwindow1.param.projtype = projparalel then
@@ -1050,8 +1050,8 @@ var
    mem:GDBOpenArrayOfByte;
    pobj:PGDBObjEntity;
    op:gdbstring;
-   size,modalresult:integer;
-   us:unicodestring;
+   {size,}modalresult:integer;
+   //us:unicodestring;
    u8s:UTF8String;
    astring:ansistring;
 begin
@@ -1106,9 +1106,9 @@ function MultiObjVarMan_com(Operands:pansichar):GDBInteger;
 var
    mem:GDBOpenArrayOfByte;
    pobj:PGDBObjEntity;
-   op:gdbstring;
-   size,modalresult:integer;
-   us:unicodestring;
+   //op:gdbstring;
+   {size,}modalresult:integer;
+   //us:unicodestring;
    u8s:UTF8String;
    astring:ansistring;
    counter:integer;
@@ -1184,13 +1184,13 @@ begin
   result:=cmd_ok;
 end;
 procedure CopyToClipboard;
-var res:longbool;
-    uFormat:longword;
+var //res:longbool;
+    //uFormat:longword;
 
 //    lpszFormatName:string[200];
 //    hData:THANDLE;
-    pbuf:pchar;
-    hgBuffer:HGLOBAL;
+    //pbuf:pchar;
+    //hgBuffer:HGLOBAL;
 
     s,suni:ansistring;
     I:gdbinteger;
@@ -1199,7 +1199,7 @@ var res:longbool;
 
     zcformat:TClipboardFormat;
 
-    memsubstr:TMemoryStream;
+    //memsubstr:TMemoryStream;
 begin
      if fileexists(utf8tosys(CopyClipFile)) then
                                     SysUtils.deletefile(CopyClipFile);
@@ -1306,14 +1306,14 @@ var
     //lpszFormatName:string[200];
     //hData:THANDLE;
     pbuf:pansichar;
-    PWA:Pwordarray;
+    //PWA:Pwordarray;
 
-    s,suni:gdbstring;
-    I,memsize:gdbinteger;
+    //s,suni:gdbstring;
+    I{,memsize}:gdbinteger;
 
        //mem:GDBOpenArrayOfByte;
    //ev:TEditWnd;
-   a,modalresult:integer;
+   //a,modalresult:integer;
    cf:TClipboardFormat;
    ts:string;
 
@@ -1340,7 +1340,7 @@ begin
           Clipboard.GetFormat(cf,memsubstr);
 
           //memsize:=memsubstr.GetSize;
-          memsize:=memsubstr.Seek(0,soFromEnd);
+          //memsize:=memsubstr.Seek(0,soFromEnd);
           pbuf:=memsubstr.Memory;
 
           InfoForm.Memo.lines.Add('  ANSI: '+pbuf);
@@ -1352,7 +1352,7 @@ begin
      end;
      memsubstr.Free;
 
-     modalresult:=DOShowModal(InfoForm);
+     {modalresult:=}DOShowModal(InfoForm);
      InfoForm.Free;
 
      result:=cmd_ok;
@@ -1368,7 +1368,7 @@ var
     //mem:GDBOpenArrayOfByte;
     //ev:TEditWnd;
 
-    memsubstr:TMemoryStream;
+    //memsubstr:TMemoryStream;
     InfoForm:TInfoForm;
 begin
 
@@ -1378,7 +1378,7 @@ begin
      InfoForm.DialogPanel.CloseButton.Hide;
      InfoForm.caption:=('Память мы расходуем...');
 
-     memsubstr:=TMemoryStream.Create;
+     //memsubstr:=TMemoryStream.Create;
      memcount.init(100);
      for i := 0 to memdesktotal do
      begin
@@ -1430,8 +1430,8 @@ end;
 
 function RebuildTree_com:GDBInteger;
 var //i: GDBInteger;
-    pv:pGDBObjEntity;
-    ir:itrec;
+    //pv:pGDBObjEntity;
+    //ir:itrec;
     depth:integer;
 begin
   if assigned(StartLongProcessProc) then StartLongProcessProc(gdb.GetCurrentROOT.ObjArray.count);
@@ -1481,11 +1481,11 @@ begin
   end;
 end;
 function isrect(const p1,p2,p3,p4:GDBVertex2D):boolean;
-var
-   p:gdbdouble;
+//var
+   //p:gdbdouble;
 begin
-     p:=SqrVertexlength(p1,p3)-sqrVertexlength(p2,p4);
-     p:=SqrVertexlength(p1,p2)-sqrVertexlength(p3,p4);
+     //p:=SqrVertexlength(p1,p3)-sqrVertexlength(p2,p4);
+     //p:=SqrVertexlength(p1,p2)-sqrVertexlength(p3,p4);
      if (abs(SqrVertexlength(p1,p3)-sqrVertexlength(p2,p4))<sqreps)and(abs(SqrVertexlength(p1,p2)-sqrVertexlength(p3,p4))<sqreps)
      then
          result:=true
@@ -1914,7 +1914,7 @@ end;
 function CommandList_com(Operands:pansichar):GDBInteger;
 var
    p:PCommandObjectDef;
-   ps:pgdbstring;
+   //ps:pgdbstring;
    ir:itrec;
    clist:GDBGDBStringArray;
 begin
@@ -1932,11 +1932,11 @@ begin
    result:=cmd_ok;
 end;
 function StoreFrustum_com(Operands:pansichar):GDBInteger;
-var
-   p:PCommandObjectDef;
-   ps:pgdbstring;
-   ir:itrec;
-   clist:GDBGDBStringArray;
+//var
+   //p:PCommandObjectDef;
+   //ps:pgdbstring;
+   //ir:itrec;
+   //clist:GDBGDBStringArray;
 begin
    gdb.GetCurrentDWG.OGLwindow1.param.debugfrustum:=gdb.GetCurrentDWG.pcamera.frustum;
    gdb.GetCurrentDWG.OGLwindow1.param.ShowDebugFrustum:=true;

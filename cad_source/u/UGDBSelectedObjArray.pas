@@ -290,9 +290,9 @@ end;
 
 *)
 procedure processobject(pobj:PGDBObjEntity;minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
-var i: GDBInteger;
-  m,oplus,ominus:DMatrix4D;
-  tv,P_insert_in_OCS,P_insert_in_WCS:gdbvertex;
+var //i: GDBInteger;
+  m{,oplus,ominus}:DMatrix4D;
+  {tv,}P_insert_in_OCS,P_insert_in_WCS:gdbvertex;
 begin
   pobj^.Transform(minusd);
 
@@ -367,8 +367,8 @@ var i: GDBInteger;
 //  d: GDBDouble;
 //  td:tcontrolpointdist;
   tdesc:pselectedobjdesc;
-  m,oplus:DMatrix4D;
-  tv:gdbvertex;
+  //m,oplus:DMatrix4D;
+  //tv:gdbvertex;
 begin
   if count > 0 then
   begin
@@ -391,8 +391,8 @@ var i: GDBInteger;
 //  d: GDBDouble;
 //  td:tcontrolpointdist;
   tdesc:pselectedobjdesc;
-  m,tempm,oplus,ominus:DMatrix4D;
-  tv:gdbvertex;
+  //m,tempm,oplus,ominus:DMatrix4D;
+  //tv:gdbvertex;
 begin
   if count > 0 then
   begin
@@ -571,11 +571,11 @@ end;
 procedure GDBSelectedObjArray.selectcurrentcontrolpoint;
 var i: GDBInteger;
 //  d: GDBDouble;
-  td:tcontrolpointdist;
+  //td:tcontrolpointdist;
   tdesc:pselectedobjdesc;
 begin
-  td.pcontrolpoint := nil;
-  td.disttomouse:=9999;
+  //td.pcontrolpoint := nil;
+  //td.disttomouse:=9999;
   SelectedCount:=0;
   if count > 0 then
   begin

@@ -215,13 +215,13 @@ begin
      end;
 end;
 procedure TLayerWindow.Notify(Sender: TObject;Command:TMyNotifyCommand);
-var
-   pld:GDBPointer;
-   pdwg:PTDrawing;
+//var
+   //pld:GDBPointer;
+   //pdwg:PTDrawing;
 begin
   if sender=PEditor then
   begin
-    pld:=peditor.PInstance;
+    //pld:=peditor.PInstance;
     if Command=TMNC_EditingDone then
                                     begin
                                     Application.QueueAsyncCall(@asyncfreeeditor,0);
@@ -272,9 +272,9 @@ procedure TLayerWindow.onCDSubItem(Sender: TCustomListView; Item: TListItem;
 var
    colorindex,ll:integer;
    s:string;
-   plp:PGDBLayerProp;
-   Dest: PChar;
-   y,i:integer;
+   //plp:PGDBLayerProp;
+   //Dest: PChar;
+   y{,i}:integer;
    textrect:TRect;
    ARect: TRect;
    BrushColor,FontColor:TColor;
@@ -368,11 +368,11 @@ procedure TLayerWindow.LWMouseUp(Sender: TObject; Button: TMouseButton;
                           Shift: TShiftState; X, Y: Integer);
 var
    li:TListItem;
-   ht:THitTests;
+   //ht:THitTests;
    //
    //pt: TPoint;
    col: Integer;
-   pos: integer;
+   //pos: integer;
 begin
 
      if GetListItem(ListView1,x,y,li,col) then
@@ -387,9 +387,9 @@ end;
 procedure TLayerWindow.UpdateItem(Item: TListItem);
 var
    pdwg:PTSimpleDrawing;
-   ir:itrec;
+   //ir:itrec;
    plp:PGDBLayerProp;
-   s:ansistring;
+   //s:ansistring;
 begin
      pdwg:=gdb.GetCurrentDWG;
      plp:=Item.Data;
@@ -430,7 +430,7 @@ var
    pdwg:PTSimpleDrawing;
    ir:itrec;
    plp:PGDBLayerProp;
-   s:ansistring;
+   //s:ansistring;
    li:TListItem;
 begin
      //ListView1.onconc

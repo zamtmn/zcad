@@ -131,8 +131,8 @@ begin
 end;
 function GDBObjGenericSubEntry.FindObjectsInPointSlow(const point:GDBVertex;var Objects:GDBObjOpenArrayOfPV):GDBBoolean;
 var
-    minus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
-    plus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
+    //minus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
+    //plus:gdbboolean{$IFNDEF DELPHI}=false{$ENDIF};
     pobj:PGDBObjEntity;
     ir:itrec;
 begin
@@ -398,8 +398,8 @@ begin
      RemoveMiFromArray(@obj,obj.bp.ListPos.SelfIndex);
 end;
 function GDBObjGenericSubEntry.RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:GDBInteger):GDBInteger;
-var
-p:PGDBObjEntity;
+//var
+//p:PGDBObjEntity;
 begin
      if pobj^.bp.TreePos.Owner<>nil then
      begin
@@ -407,12 +407,12 @@ begin
      end;
      pobj^.bp.TreePos.Owner:=nil;
 
-     pointer(p):=ObjArray.GetObject(pobjinarray);
+     //pointer(p):=ObjArray.GetObject(pobjinarray);
      ObjArray.deliteminarray(pobjinarray);
 end;
 function GDBObjGenericSubEntry.EraseMi;
-var
-p:PGDBObjEntity;
+//var
+//p:PGDBObjEntity;
 begin
      {if pobj^.bp.TreePos.Owner<>nil then
      begin
@@ -522,9 +522,9 @@ begin
   restructure(drawing);
 end;
 procedure GDBObjGenericSubEntry.formatafteredit;
-var
-  p:pGDBObjEntity;
-      ir:itrec;
+//var
+  //p:pGDBObjEntity;
+      //ir:itrec;
 
 begin
   ObjCasheArray.Formatafteredit(drawing);
@@ -606,4 +606,4 @@ begin
 end;*)
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBSubEntry.initialization');{$ENDIF}
-end.
+end.

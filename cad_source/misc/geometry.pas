@@ -373,12 +373,12 @@ begin
       //bit:=bit*2;
 end;
 function CalcPointTrueInFrustum (const lbegin:GDBvertex; const frustum:ClipArray):TInRect;
-var i,j:GDBInteger;
-    d1,d2:gdbdouble;
-    bytebegin,byteend,bit:integer;
-    ca:TLineClipArray;
-    cacount:integer;
-    d,p:gdbvertex;
+var i{,j}:GDBInteger;
+    d1{,d2}:gdbdouble;
+    //bytebegin,byteend,bit:integer;
+    //ca:TLineClipArray;
+    //cacount:integer;
+    //d,p:gdbvertex;
 begin
       for i:=0 to 5 do
       begin
@@ -1419,7 +1419,7 @@ begin
 end;
 function intercept2dmy(const l1begin,l1end,l2begin,l2end:gdbvertex2d):intercept2dprop;
 var
-  z, {t,} t1, t2, d, d1, d2: GDBDouble;
+  {z,} {t,} t1, t2, d, d1, d2: GDBDouble;
 begin
   //t := 0;
   //t1 := 0;
@@ -1477,8 +1477,8 @@ begin
 end;
 function intercept3dmy2(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;
 var
-  {z, t, }t1, t2{, d, d1, d2}: GDBDouble;
-  p13,p43,p21,pp:gdbvertex;
+  {z, t, }t1{, t2, d, d1, d2}: GDBDouble;
+  p13,p43,p21{,pp}:gdbvertex;
   d1343,d4321,d1321,d4343,d2121,numer,denom:GDBDouble;
 begin
    result.isintercept := false;
@@ -1507,7 +1507,7 @@ begin
    result.t1:=numer/denom;
    result.t2:= (d1343 + d4321 * result.t1) / d4343;
    t1:=result.t1;
-   t2:=result.t2;
+   //t2:=result.t2;
 
    {if abs(result.t1-1)<bigeps then result.t1:=1;
    if abs(result.t1)<bigeps then result.t1:=0;
@@ -1519,9 +1519,9 @@ begin
    result.interceptcoord.x:= l1begin.x + t1 * p21.x;
    result.interceptcoord.y:= l1begin.y + t1 * p21.y;
    result.interceptcoord.z:= l1begin.z + t1 * p21.z;
-   pp.x:= l2begin.x + t2 * p43.x;
-   pp.y:= l2begin.y + t2 * p43.y;
-   pp.z:= l2begin.z + t2 * p43.z;
+   //pp.x:= l2begin.x + t2 * p43.x;
+   //pp.y:= l2begin.y + t2 * p43.y;
+   //pp.z:= l2begin.z + t2 * p43.z;
 
    {if (ABS(pp.x-result.interceptcoord.x)>bigEPS) or
       (ABS(pp.y-result.interceptcoord.y)>bigEPS) or
@@ -1941,7 +1941,7 @@ end;
 function GetArcParamFrom3Point2D(Const PointData:tarcrtmodify;out ad:TArcData):GDBBoolean;
 var a,b,c,d,e,f,g,rr:GDBDouble;
     tv:gdbvertex2d;
-    tv3d:gdbvertex;
+    //tv3d:gdbvertex;
 begin
   A:= PointData.p2.x - PointData.p1.x;
   B:= PointData.p2.y - PointData.p1.y;

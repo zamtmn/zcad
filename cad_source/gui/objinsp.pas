@@ -1208,7 +1208,7 @@ begin
 end;
 procedure TGDBobjinsp._onresize(sender:tobject);
 //var x,xn:integer;
-{$IFDEF LCLGTK2}Widget: PGtkWidget;{$ENDIF}
+{$IFDEF LCLGTK2}var Widget: PGtkWidget;{$ENDIF}
 begin
   {$IFDEF LCLGTK2}
   //Widget:=PGtkWidget(PtrUInt(Handle));

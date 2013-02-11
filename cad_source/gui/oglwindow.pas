@@ -1220,7 +1220,7 @@ begin
 end;
 procedure TOGLWnd._onFastMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
 //var dx,dy:integer;
-  {$IFDEF LCLGTK2}Widget: PGtkWidget;{$ENDIF}
+  {$IFDEF LCLGTK2}var Widget: PGtkWidget;{$ENDIF}
 begin
      (*if FastMMX>0 then
                       begin

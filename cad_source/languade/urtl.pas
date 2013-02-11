@@ -26,8 +26,10 @@ uses UUnitManager,zcadsysvars,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$E
 implementation
 uses
     log,memman;
-//var
-  //ptd:PUserTypeDescriptor;
+{$IFNDEF WINDOWS}
+var
+  ptd:PUserTypeDescriptor;
+{$ENDIF}
 initialization;
      {$IFDEF DEBUGINITSECTION}LogOut('urtl.initialization');{$ENDIF}
      //units.init;
@@ -203,4 +205,4 @@ initialization;
 
 finalization;
   //units.FreeAndDone;
-end.
+end.

@@ -34,6 +34,7 @@ type
   TFindType=(
                TFT_Obozn(*'**обозначении'*),
                TFT_DBLink(*'**материале'*),
+               TFT_DESC_MountingDrawing(*'**сокращенноммонтажномчертеже'*),
                TFT_variable(*'??указанной переменной'*)
              );
 PTBasicFinter=^TBasicFinter;
@@ -619,6 +620,10 @@ var
     t_matrix:DMatrix4D;
     pobj,pcobj:PGDBObjEntity;
     ir2:itrec;
+    pvd:pvardesk;
+    dn:tdevname;
+    dna:devnamearray;
+    i:integer;
 begin
      currentcoord:=nulvertex;
      gdb.GetCurrentDWG^.AddBlockFromDBIfNeed('HEAD_CONNECTIONDIAGRAM');
@@ -627,8 +632,68 @@ begin
                              PBH.FormatEntity(gdb.GetCurrentDWG^);
      if pbh=nil then
                     exit;
-     t_matrix:=geometry.CreateTranslationMatrix(createvertex(0,15,0));
+
+     dna:=devnamearray.Create;
      psd:=gdb.GetCurrentDWG^.SelObjArray.beginiterate(ir);
+     if psd<>nil then
+     repeat
+           if psd^.objaddr^.vp.ID=GDBDeviceID then
+           begin
+                pvd:=psd^.objaddr^.OU.FindVariable('DESC_MountingSite');
+                if pvd<>nil then
+                                dn.name:=pvd.data.PTD.GetValueAsString(pvd.data.Instance)
+                            else
+                                dn.name:='';
+                dn.pdev:=pointer(psd^.objaddr);
+                dna.PushBack(dn);
+           end;
+           psd:=gdb.GetCurrentDWG^.SelObjArray.iterate(ir);
+     until psd=nil;
+
+     devnamesort.Sort(dna,dna.Size);
+     t_matrix:=geometry.CreateTranslationMatrix(createvertex(0,15,0));
+
+
+     for i:=0 to dna.Size-1 do
+       begin
+            dn:=dna[i];
+
+            pointer(pnevdev):=dn.pdev^.Clone(@GDB.GetCurrentDWG.ConstructObjRoot);
+
+            pnevdev.Local.P_insert:=currentcoord;
+            pnevdev.Local.Basis.oz:=xy_Z_Vertex;
+
+            //pnevdev^.BuildGeometry(gdb.GetCurrentDWG^);
+            //pnevdev^.BuildVarGeometry(gdb.GetCurrentDWG^);
+            pnevdev^.formatEntity(gdb.GetCurrentDWG^);
+
+            //PBH^.ObjArray.clonetransformedentityto(@pnevdev^.VarObjArray,pnevdev,t_matrix);
+                 pobj:=PBH.ObjArray.beginiterate(ir2);
+                 if pobj<>nil then
+                 repeat
+                       pcobj:=pobj.Clone(pnevdev);
+                       //pobj.FormatEntity(gdb.GetCurrentDWG^);
+                       pcobj.transformat(pobj,@t_matrix);
+                       //pcobj.ReCalcFromObjMatrix;
+                       if pcobj^.IsHaveLCS then
+                                             pcobj^.FormatEntity(gdb.GetCurrentDWG^);
+                       pcobj^.FormatEntity(gdb.GetCurrentDWG^);
+                       pnevdev^.VarObjArray.add(@pcobj);
+                       pobj:=PBH.ObjArray.iterate(ir2);
+                 until pobj=nil;
+
+
+
+            pnevdev^.formatEntity(gdb.GetCurrentDWG^);
+
+            gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.add(addr(pnevdev));
+            currentcoord.x:=currentcoord.x+45;
+
+            //gdb.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeTreeBB(pb);
+
+
+       end;
+     {psd:=gdb.GetCurrentDWG^.SelObjArray.beginiterate(ir);
      if psd<>nil then
      repeat
            if psd^.objaddr^.vp.ID=GDBDeviceID then
@@ -668,7 +733,10 @@ begin
 
            end;
      psd:=gdb.GetCurrentDWG^.SelObjArray.iterate(ir);
-     until psd=nil;
+     until psd=nil;}
+
+
+     dna.Destroy;
 end;
 
 procedure EM_SRBUILD_com.Command(Operands:pansichar);
@@ -2244,6 +2312,9 @@ begin
                 end;
       TFT_DBLink:begin
                      varname:=('DB_link');
+                end;
+      TFT_DESC_MountingDrawing:begin
+                     varname:=('DESC_MountingDrawing');
                 end;
    end;
 

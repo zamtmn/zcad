@@ -305,11 +305,20 @@ tdevcoord=record
               coord:GDBVertex;
               pdev:PGDBObjDevice;
         end;
+tdevname=record
+              name:GDBString;
+              pdev:PGDBObjDevice;
+        end;
 TGDBVertexLess=class
                     class function c(a,b:tdevcoord):boolean;{inline;}
                end;
+TGDBNameLess=class
+                    class function c(a,b:tdevname):boolean;{inline;}
+               end;
 devcoordarray=specialize TVector<tdevcoord>;
+devnamearray=specialize TVector<tdevname>;
 devcoordsort=specialize TOrderingArrayUtils<devcoordarray, tdevcoord, TGDBVertexLess>;
+devnamesort=specialize TOrderingArrayUtils<devnamearray, tdevname, TGDBNameLess>;
 var
     MirrorParam:TMirrorParam;
     PrintParam:TPrintParams;
@@ -803,6 +812,14 @@ begin
   commandmanager.DMAddMethod('Нумеровать','Нумеровать выбранные устройства',@run);
   commandmanager.DMShow;
 end;
+class function TGDBNameLess.c(a,b:tdevname):boolean;
+begin
+     if a.name<b.name then
+                          result:=true
+                      else
+                          result:=false;
+end;
+
 class function TGDBVertexLess.c(a,b:tdevcoord):boolean;
 begin
      //if a.coord.y<b.coord.y then

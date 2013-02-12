@@ -9,6 +9,7 @@ var
   NMO_Type:GDBString;(*'Тип'*)
   DESC_MountingSite:GDBString;(*'Место установки'*)
   DESC_MountingParts:GDBString;(*'Чертеж установки'*)
+  DESC_MountingDrawing:GDBString;(*'Сокр. чертеж установки'*)
   DESC_Function:GDBString;(*'Функция'*)
 
   UNITPARAM_Environment:GDBString;(*'Среда'*)

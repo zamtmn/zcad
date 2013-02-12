@@ -934,7 +934,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
              DWG_StepGrid:PGDBvertex2D;(*'Grid step'*)
              DWG_OriginGrid:PGDBvertex2D;(*'Grid origin'*)
              DWG_DrawGrid:PGDBBoolean;(*'Show grid'*)
-             DWG_SnapGrid:PGDBBoolean;(*'Stap to grid'*)
+             DWG_SnapGrid:PGDBBoolean;(*'Snap to grid'*)
              DWG_SelectedObjToInsp:PGDBBoolean;(*'Selected object to inspector'*)
        end;
   TLayerControls=record

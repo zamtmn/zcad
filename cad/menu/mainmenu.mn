@@ -410,9 +410,9 @@ MainMenuItem Help;
     action ACN_HELP
     action ACN_ABOUT
   }
-MainMenuItem __Debug;
+MainMenuItem Debug;
   {
-    Command **Command list,CommandList,none,none
+    Command Command list,CommandList,none,none
     MenuItem **Files with errors (current debug);
     {
      Command **Error 0(polylines),Load(*../errors/0.dxf),none,none
@@ -421,24 +421,24 @@ MainMenuItem __Debug;
      Command **Error 3,Load(*../errors/3.dxf),none,none
      Command **Error 4,Load(*../errors/4.dxf),none,none
     }
-    Command **Sample file power supply,Load(*sample/test_dxf/em.dxf),none,none
-    Command **Sample file alarm,Load(*sample/test_dxf/ops.dxf),none,none
-    Command **Sample file,Load(*sample/test_dxf/shema_Poly_Line_Text_Circle_Arc.dxf),none,none
-    Command **Utah teapot,Load(*sample/test_dxf/teapot.dxf),none,none
-    Command **PlaceAllBlocks,PlaceAllBlocks,none,none
-    Command **Check clipboard,DebClip,none,none
-    Command **Report on memory allocation(for debugbuild),MemSummary,none,none
-    MenuItem **Inspector;
+    Command Sample file power supply,Load(*sample/test_dxf/em.dxf),none,none
+    Command Sample file alarm,Load(*sample/test_dxf/ops.dxf),none,none
+    Command Sample file,Load(*sample/test_dxf/shema_Poly_Line_Text_Circle_Arc.dxf),none,none
+    Command Utah teapot,Load(*sample/test_dxf/teapot.dxf),none,none
+    Command PlaceAllBlocks,PlaceAllBlocks,none,none
+    Command Check clipboard,DebClip,none,none
+    Command Report on memory allocation(for debugbuild),MemSummary,none,none
+    MenuItem Inspector;
       {
         Command **Fix the current,SetObjInsp(CURRENT),none,none
         Command **GDB,SetObjInsp(GDBDescriptor),none,none
         Command **OGLWND (отладка),SetObjInsp(OGLWND_DEBUG),none,none
       }
   }
-MainMenuItem __DB;
+MainMenuItem DB;
   {
-    Command **Add to the drawing database,DBaseAdd,none,none
-    Command **linked to entity,DBaseLink,none,none
+    Command Add to the drawing database,DBaseAdd,none,none
+    Command linked to entity,DBaseLink,none,none
   }
 PopUpMenu PROGRAMDBCXMENU;
   {
@@ -486,5 +486,5 @@ PopUpMenu NONSELECTEDENTSCXMENU;
     Separator
     action ACN_SELECTALL
   }
-CreateMenu MainMenu File,Edit,View,Format,Draw,Modify,Schematic,Plan,Info,Model,Settings,Window,Help,__Debug,__DB;
+CreateMenu MainMenu File,Edit,View,Format,Draw,Modify,Schematic,Plan,Info,Model,Settings,Window,Help,Debug,DB;
 SetMainMenu MainMenu;

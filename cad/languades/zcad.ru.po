@@ -372,6 +372,14 @@ msgctxt "zcadexternal.acn_deselectall~textimage"
 msgid "DSA"
 msgstr ""
 
+#: zcadexternal.acn_devnumbering~caption
+msgid "Numbering Devices"
+msgstr "Нумерация устройств"
+
+#: zcadexternal.acn_devnumbering~textimage
+msgid "D++"
+msgstr ""
+
 #: zcadexternal.acn_dist~caption
 msgid "Distance"
 msgstr ""
@@ -437,6 +445,15 @@ msgstr "Инвентировать выбор"
 #: zcadexternal.acn_inverseselected~textimage
 msgctxt "zcadexternal.acn_inverseselected~textimage"
 msgid "SI"
+msgstr ""
+
+#: zcadexternal.acn_kipcdbuild~caption
+msgctxt "zcadexternal.acn_kipcdbuild~caption"
+msgid "Connection diagram"
+msgstr ""
+
+#: zcadexternal.acn_kipcdbuild~textimage
+msgid "CDB"
 msgstr ""
 
 #: zcadexternal.acn_layer~caption
@@ -1086,10 +1103,10 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#| msgid "Rotate"
+#| msgid "Block params"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
-msgstr "Параметры блока"
+msgid "Rotate"
+msgstr "Поворот"
 
 #: zcadexternal.gdbobjcircle~area
 msgctxt "zcadexternal.gdbobjcircle~area"
@@ -1371,6 +1388,46 @@ msgstr "Перестроить дерево примитивов"
 msgid "Reset camera"
 msgstr "Камера в начало"
 
+#: zcadexternal.menucommand~commandlist
+msgid "Command list"
+msgstr "Список команд"
+
+#: zcadexternal.menucommand~dbaseadd
+msgid "Add to the drawing database"
+msgstr "Добавить в БД чертежа"
+
+#: zcadexternal.menucommand~dbaselink
+msgid "linked to entity"
+msgstr ""
+
+#: zcadexternal.menucommand~debclip
+msgid "Check clipboard"
+msgstr "Проверить клипбоард"
+
+#: zcadexternal.menucommand~el_autogen_cable_remove
+msgid "Remove generated cables"
+msgstr "Удалить сгенерированные кабели"
+
+#: zcadexternal.menucommand~el_cableman
+msgid "Cable manager"
+msgstr "Менеджер кабелей"
+
+#: zcadexternal.menucommand~el_cable_legend
+msgid "Create cable report"
+msgstr "Создать кабельный журнал"
+
+#: zcadexternal.menucommand~el_externalkz
+msgid "Process auto cables"
+msgstr "Авто прокладка кабелей"
+
+#: zcadexternal.menucommand~el_find
+msgid "Find device/cable"
+msgstr "Найти устройство/кабель"
+
+#: zcadexternal.menucommand~el_material_legend
+msgid "Create material report"
+msgstr "Создать ведомость оборудования"
+
 #: zcadexternal.menucommand~fuckoff1
 msgid "Dimensions styles (not impl)"
 msgstr "Стили размеров (не реализовано)"
@@ -1379,6 +1436,55 @@ msgstr "Стили размеров (не реализовано)"
 msgctxt "zcadexternal.menucommand~fuckoff2"
 msgid "Layouts (not impl)"
 msgstr "Листы (не реализовано)"
+
+#: zcadexternal.menucommand~insert(device_el_cable_down)
+msgid "Goes down"
+msgstr "Уходит вниз"
+
+#: zcadexternal.menucommand~insert(device_el_cable_fromdown)
+msgid "Comes from below"
+msgstr "Приходит снизу"
+
+#: zcadexternal.menucommand~insert(device_el_cable_fromup)
+msgid "Comes from above"
+msgstr "Приходит сверху"
+
+#: zcadexternal.menucommand~insert(device_el_cable_up)
+msgid "Goes up"
+msgstr "Уходит вверх"
+
+#: zcadexternal.menucommand~load(*sample/test_dxf/em.dxf)
+msgid "Sample file power supply"
+msgstr "Пример ЭМ"
+
+#: zcadexternal.menucommand~load(*sample/test_dxf/ops.dxf)
+msgid "Sample file alarm"
+msgstr "Пример ОПС"
+
+#: zcadexternal.menucommand~load(*sample/test_dxf/shema_poly_line_text_circle_arc.dxf)
+msgid "Sample file"
+msgstr ""
+
+#: zcadexternal.menucommand~load(*sample/test_dxf/teapot.dxf)
+msgid "Utah teapot"
+msgstr "Чайник Юта"
+
+#: zcadexternal.menucommand~memsummary
+msgid "Report on memory allocation(for debugbuild)"
+msgstr "Отчет о выделениях памяти (отладка)"
+
+#: zcadexternal.menucommand~ops_spbuild
+msgctxt "zcadexternal.menucommand~ops_spbuild"
+msgid "Connection diagram"
+msgstr "Схема соединений"
+
+#: zcadexternal.menucommand~ortodevplace
+msgid "Alignment blocks array"
+msgstr "Расставить устройства массивом"
+
+#: zcadexternal.menucommand~placeallblocks
+msgid "PlaceAllBlocks"
+msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(camera)
 msgid "Camera"
@@ -1418,6 +1524,19 @@ msgstr "Стили"
 msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
 msgid "Options"
 msgstr "Параметры"
+
+#: zcadexternal.menucommand~varreport(nmo_name)
+msgid "Names of entities"
+msgstr ""
+
+#: zcadexternal.menu~db
+msgid "DB"
+msgstr ""
+
+#: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
+msgid "Debug"
+msgstr "Отладка"
 
 #: zcadexternal.menu~draw
 msgctxt "zcadexternal.menu~draw"
@@ -1563,17 +1682,70 @@ msgctxt "zcadexternal.rgb~r"
 msgid "Red"
 msgstr "Красный"
 
+#: zcadexternal.submenu~alarm system
+msgid "Alarm system"
+msgstr "ОПС"
+
 #: zcadexternal.submenu~block/device
 msgid "Block/Device"
 msgstr "Блок/Устройство"
+
+#: zcadexternal.submenu~cable legend
+msgid "Cable legend"
+msgstr "Кабельный журнал"
+
+#: zcadexternal.submenu~cable/trace
+msgid "Cable/Trace"
+msgstr "Кабель/Трасса"
+
+#: zcadexternal.submenu~cctv
+msgid "CCTV"
+msgstr "Связь"
+
+#: zcadexternal.submenu~circuit diagram
+msgid "Circuit diagram"
+msgstr "Схема"
+
+#: zcadexternal.submenu~connections diagram
+msgid "Connections diagram"
+msgstr "Схема соединений"
+
+#: zcadexternal.submenu~fire alarm
+msgid "Fire alarm"
+msgstr "Пожарная сигнализация"
 
 #: zcadexternal.submenu~inspector
 msgid "Inspector"
 msgstr "Инспектор"
 
+#: zcadexternal.submenu~instrumentation and control
+msgid "Instrumentation and Control"
+msgstr "КИПиА"
+
+#: zcadexternal.submenu~lighting
+msgid "Lighting"
+msgstr ""
+
+#: zcadexternal.submenu~miscellaneous
+msgctxt "zcadexternal.submenu~miscellaneous"
+msgid "Miscellaneous"
+msgstr "Разное"
+
 #: zcadexternal.submenu~pan
 msgid "Pan"
 msgstr ""
+
+#: zcadexternal.submenu~placement equipment
+msgid "Placement equipment"
+msgstr "Расстановка оборудования"
+
+#: zcadexternal.submenu~power supply
+msgid "Power supply"
+msgstr "Электроснабжение"
+
+#: zcadexternal.submenu~security alarm
+msgid "Security alarm"
+msgstr "Охранная сигнализация"
 
 #: zcadexternal.submenu~show window
 msgctxt "zcadexternal.submenu~show window"
@@ -1733,6 +1905,32 @@ msgctxt "zcadexternal.tcompileinfo~sys_lclversion"
 msgid "LCL version"
 msgstr ""
 
+#: zcadexternal.tdanfoss_esmu_l~_100
+msgctxt "zcadexternal.tdanfoss_esmu_l~_100"
+msgid "100"
+msgstr ""
+
+#: zcadexternal.tdanfoss_esmu_l~_250
+msgctxt "zcadexternal.tdanfoss_esmu_l~_250"
+msgid "250"
+msgstr ""
+
+#: zcadexternal.tdanfoss_kpi35pdiff~_04_15
+msgid "0.4-1.5"
+msgstr ""
+
+#: zcadexternal.tdanfoss_kpi35pdiff~_05_20
+msgid "0.5-2"
+msgstr ""
+
+#: zcadexternal.tdanfoss_kpicontact~ag
+msgid "Ag"
+msgstr ""
+
+#: zcadexternal.tdanfoss_kpicontact~au
+msgid "Au"
+msgstr ""
+
 #: zcadexternal.tdebug~memi2
 msgctxt "zcadexternal.tdebug~memi2"
 msgid "MemMan::I2"
@@ -1833,7 +2031,7 @@ msgstr "Редактирование составных объектов"
 
 #: zcadexternal.tdwg~dwg_helpgeometrydraw
 msgid "Help geometry"
-msgstr ""
+msgstr "Вспомогательная геометрия"
 
 #: zcadexternal.tdwg~dwg_ltscale
 msgid "Drawing line type scale"
@@ -1841,7 +2039,7 @@ msgstr "Масштаб типов линий чертжа"
 
 #: zcadexternal.tdwg~dwg_origingrid
 msgid "Grid origin"
-msgstr ""
+msgstr "Начало сетки"
 
 #: zcadexternal.tdwg~dwg_osmode
 msgctxt "zcadexternal.tdwg~dwg_osmode"
@@ -1856,7 +2054,7 @@ msgstr "Режим полярной трассировки"
 #: zcadexternal.tdwg~dwg_selectedobjtoinsp
 msgctxt "zcadexternal.tdwg~dwg_selectedobjtoinsp"
 msgid "Selected object to inspector"
-msgstr ""
+msgstr "Отображать выбранный объект в инспекторе"
 
 #: zcadexternal.tdwg~dwg_snapgrid
 msgid "Stap to grid"
@@ -1864,11 +2062,11 @@ msgstr ""
 
 #: zcadexternal.tdwg~dwg_stepgrid
 msgid "Grid step"
-msgstr ""
+msgstr "Шаг сетки"
 
 #: zcadexternal.tdwg~dwg_systmgeometrydraw
 msgid "System geometry"
-msgstr ""
+msgstr "Системная геоиетрия"
 
 #: zcadexternal.telcablecomparam~pcable
 msgid "Cabel"
@@ -1985,6 +2183,85 @@ msgstr "Устройство"
 msgid "Show scroll bars"
 msgstr "Показывать полосы прокрутки"
 
+#: zcadexternal.tkazteplocontrol_tb2r_l~_100
+msgctxt "zcadexternal.tkazteplocontrol_tb2r_l~_100"
+msgid "100"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tb2r_l~_125
+msgid "125"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tb2r_l~_160
+msgctxt "zcadexternal.tkazteplocontrol_tb2r_l~_160"
+msgid "160"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tb2r_l~_200
+msgid "200"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tb2r_l~_250
+msgctxt "zcadexternal.tkazteplocontrol_tb2r_l~_250"
+msgid "250"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tb2r_l~_315
+msgid "315"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tb2r_l~_80
+msgid "80"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tblimit~_0_100
+msgid "0..+100"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tblimit~_0_120
+msgid "0..+120"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tblimit~_0_150
+msgid "0..+150"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tblimit~_0_200
+msgid "0..+200"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tblimit~_0_300
+msgid "0..+300"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tblimit~_0_400
+msgid "0..+400"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tblimit~_0_60
+msgid "0..+60"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tblimit~_m20_40
+msgid "-20..+40"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tblimit~_m30_60
+msgid "-30..+60"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tblimit~_m50_100
+msgid "-50..+100"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tblimit~_m50_150
+msgid "-50..+150"
+msgstr ""
+
+#: zcadexternal.tkazteplocontrol_tblimit~_m50_50
+msgid "-50..+50"
+msgstr ""
+
 #: zcadexternal.tlayercontrols~dsgn_lc_cable
 #| msgid "Cable"
 msgctxt "zcadexternal.tlayercontrols~dsgn_lc_cable"
@@ -2008,6 +2285,82 @@ msgstr "Включено"
 #: zcadexternal.tlayercontrol~layername
 msgid "Layer name"
 msgstr "Слой"
+
+#: zcadexternal.tmanotom_mp3ulimit~_0_6
+msgid "0.6"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_1
+msgid "1"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_10
+msgid "10"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_100
+msgctxt "zcadexternal.tmanotom_mp3ulimit~_100"
+msgid "100"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_1000
+msgid "1000"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_16
+msgid "16"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_160
+msgctxt "zcadexternal.tmanotom_mp3ulimit~_160"
+msgid "160"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_1600
+msgid "1600"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_1_6
+msgid "1.6"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_25
+msgid "25"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_250
+msgctxt "zcadexternal.tmanotom_mp3ulimit~_250"
+msgid "250"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_2_5
+msgid "2.5"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_4
+msgctxt "zcadexternal.tmanotom_mp3ulimit~_4"
+msgid "4"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_40
+msgid "40"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_400
+msgid "400"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_6
+msgid "6"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_60
+msgid "60"
+msgstr ""
+
+#: zcadexternal.tmanotom_mp3ulimit~_600
+msgid "600"
+msgstr ""
 
 #: zcadexternal.tmirrorparam~sourceents
 msgid "Source entities"
@@ -2044,6 +2397,38 @@ msgstr "Кабели"
 msgctxt "zcadexternal.tmstype~tmst_devices"
 msgid "Devices"
 msgstr "Устройства"
+
+#: zcadexternal.tnumberingparams~basename
+msgid "Base name sorting devices"
+msgstr "Базовое имя сортируемых устройств"
+
+#: zcadexternal.tnumberingparams~deaddand
+msgid "Deadband"
+msgstr "\"Мертвая\" зона"
+
+#: zcadexternal.tnumberingparams~increment
+msgid "Increment"
+msgstr "Инкремент"
+
+#: zcadexternal.tnumberingparams~inversex
+msgid "Inverse X axis dir"
+msgstr "Инвертировать направление X"
+
+#: zcadexternal.tnumberingparams~inversey
+msgid "Inverse Y axis dir"
+msgstr "Инвертировать направление Y"
+
+#: zcadexternal.tnumberingparams~numbervar
+msgid "Number variable"
+msgstr "Нумеруесая переменная"
+
+#: zcadexternal.tnumberingparams~savestart
+msgid "Save start number"
+msgstr "Сохранять старовое значение"
+
+#: zcadexternal.tnumberingparams~startnumber
+msgid "Start"
+msgstr "Начальное значение"
 
 #: zcadexternal.tobjlinkrecordmode~obt
 msgctxt "zcadexternal.tobjlinkrecordmode~obt"
@@ -2269,6 +2654,18 @@ msgctxt "zcadexternal.tosmode~kosm_tangent"
 msgid "Tangent"
 msgstr "Касательная"
 
+#: zcadexternal.towen_dts3105_l~_120
+msgid "120"
+msgstr ""
+
+#: zcadexternal.towen_dts3105_l~_220
+msgid "220"
+msgstr ""
+
+#: zcadexternal.towen_dts3105_l~_70
+msgid "70"
+msgstr ""
+
 #: zcadexternal.tpath~device_library
 msgctxt "zcadexternal.tpath~device_library"
 msgid "Device base"
@@ -2367,7 +2764,7 @@ msgstr "Цвет фона"
 
 #: zcadexternal.trd~rd_imagedegradation
 msgid "Image degradation"
-msgstr ""
+msgstr "Ухудшение изображения"
 
 #: zcadexternal.trd~rd_lastcalcvisible
 #| msgid "Last update time"
@@ -2565,6 +2962,18 @@ msgstr "Примитив"
 msgctxt "zcadexternal.tsetvarstyle~scale"
 msgid "New scale"
 msgstr "Новый масштаб"
+
+#: zcadexternal.tst~tst_unsorted
+msgid "Unsorted"
+msgstr "Без сортировки"
+
+#: zcadexternal.tst~tst_xy
+msgid "X-Y"
+msgstr ""
+
+#: zcadexternal.tst~tst_yx
+msgid "Y-X"
+msgstr ""
 
 #: zcadexternal.tsubpolyedit~tspe_insert
 msgid "Insert vertex"
@@ -2866,6 +3275,10 @@ msgstr "В стеке обнаружены следующие данные:"
 msgid "%s entities processed"
 msgstr "Обработвно %s примитивов"
 
+#: zcadstrconsts.rscmnewbasepoint
+msgid "New base point:"
+msgstr "Новая ьазовая точка:"
+
 #: zcadstrconsts.rscmnoblockdefindwg
 msgid "No BlockDef \"%s\" in the drawing"
 msgstr "В чертеже отсутствует определение блока \"%s\""
@@ -2897,6 +3310,14 @@ msgstr "Нельзя резать здесь"
 #: zcadstrconsts.rscmoptions2oi
 msgid "Options are available in the Object Inspector"
 msgstr "Настройки доступны в инспекторе обьектов"
+
+#: zcadstrconsts.rscmpickorenterangle
+msgid "Pick or enter angle:"
+msgstr "Укажите мышью или введите угол:"
+
+#: zcadstrconsts.rscmpickorenterscale
+msgid "Pick or enter scale:"
+msgstr "Укажите мышью или введите масштаб:"
 
 #: zcadstrconsts.rscmpoint
 msgid "Point:"

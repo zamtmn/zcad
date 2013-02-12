@@ -66,7 +66,7 @@ begin
   tvo^.vp.layer :=vp.layer;
   tvo^.bp.ListPos.Owner:=own;
   p:=vertexarrayinocs.PArray;
-  for i:=0 to VertexArrayInWCS.Count-1 do
+  for i:=0 to VertexArrayInOCS.Count-1 do
   begin
       tvo^.vertexarrayinocs.add(p);
       inc(p)

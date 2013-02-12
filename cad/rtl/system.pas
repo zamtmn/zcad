@@ -3034,6 +3034,7 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
   TFindType=(
                TFT_Obozn(*'**обозначении'*),
                TFT_DBLink(*'**материале'*),
+               TFT_DESC_MountingDrawing(*'**сокращенноммонтажномчертеже'*),
                TFT_variable(*'??указанной переменной'*)
              );
 PTBasicFinter=^TBasicFinter;

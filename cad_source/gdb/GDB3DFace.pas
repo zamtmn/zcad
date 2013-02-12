@@ -54,6 +54,7 @@ GDBObj3DFace=object(GDBObj3d)
                  procedure getoutbound;virtual;
 
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+                 procedure transform(const t_matrix:DMatrix4D);virtual;
            end;
 {Export-}
 
@@ -65,6 +66,14 @@ begin
       for i:=0 to 3 do
       begin
            PInOCS[I]:=geometry.VectorTransform3D(PGDBObj3DFace(p)^.PInOCS[I],t_matrix^);
+      end;
+end;
+procedure GDBObj3DFace.transform(const t_matrix:DMatrix4D);
+var i:GDBInteger;
+begin
+      for i:=0 to 3 do
+      begin
+           PInOCS[I]:=geometry.VectorTransform3D(PInOCS[I],t_matrix);
       end;
 end;
 procedure GDBObj3DFace.getoutbound;

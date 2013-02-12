@@ -672,7 +672,7 @@ begin
 end;
 procedure TOGLStateManager.myglMaterialfv(face, pname: GLenum; const params: PGLfloat);
 begin
-     myglMaterialfv(face,pname,params);
+     glMaterialfv(face,pname,params);
 end;
 procedure TOGLStateManager.myglColorMaterial(face, mode: GLenum);
 begin

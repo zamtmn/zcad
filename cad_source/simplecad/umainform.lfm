@@ -1,11 +1,11 @@
 object Form1: TForm1
   Left = 385
-  Height = 818
+  Height = 909
   Top = 107
-  Width = 1024
+  Width = 1097
   Caption = 'ZCAD engine demo program'
-  ClientHeight = 818
-  ClientWidth = 1024
+  ClientHeight = 909
+  ClientWidth = 1097
   KeyPreview = True
   OnDestroy = _DestroyApp
   OnKeyDown = _KeyDown
@@ -13,13 +13,13 @@ object Form1: TForm1
   LCLVersion = '1.1'
   object Panel1: TPanel
     Left = 0
-    Height = 818
+    Height = 909
     Top = 0
     Width = 824
     Align = alLeft
     BevelOuter = bvNone
     Caption = 'Panel1'
-    ClientHeight = 818
+    ClientHeight = 909
     ClientWidth = 824
     TabOrder = 0
     object PanelUp: TPanel
@@ -43,7 +43,7 @@ object Form1: TForm1
     end
     object Panel2: TPanel
       Left = 0
-      Height = 472
+      Height = 563
       Top = 346
       Width = 824
       Align = alClient
@@ -53,7 +53,7 @@ object Form1: TForm1
   end
   object Splitter1: TSplitter
     Left = 824
-    Height = 818
+    Height = 909
     Top = 0
     Width = 10
   end
@@ -65,7 +65,7 @@ object Form1: TForm1
     Left = 834
     Height = 38
     Top = 24
-    Width = 190
+    Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add lines'
     OnClick = BtnAddLinesClick
@@ -79,7 +79,7 @@ object Form1: TForm1
     Left = 834
     Height = 33
     Top = 63
-    Width = 190
+    Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add circles'
     OnClick = BtnAddCirclesClick
@@ -95,7 +95,7 @@ object Form1: TForm1
     Left = 906
     Height = 28
     Top = 547
-    Width = 118
+    Width = 191
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Rebuild tree'
     OnClick = BtnRebuildClick
@@ -121,7 +121,7 @@ object Form1: TForm1
     Left = 970
     Height = 23
     Top = 0
-    Width = 54
+    Width = 127
     Anchors = [akTop, akLeft, akRight]
     MaxValue = 1000000
     MinValue = 1
@@ -136,7 +136,7 @@ object Form1: TForm1
     Left = 834
     Height = 37
     Top = 360
-    Width = 190
+    Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Erase Selected'
     OnClick = BtnEraseSelClick
@@ -150,7 +150,7 @@ object Form1: TForm1
     Left = 834
     Height = 31
     Top = 96
-    Width = 190
+    Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add texts'
     OnClick = BtnAddTextsClick
@@ -164,7 +164,7 @@ object Form1: TForm1
     Left = 834
     Height = 35
     Top = 449
-    Width = 190
+    Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Open DXF'
     OnClick = BtnOpenDXFClick
@@ -178,7 +178,7 @@ object Form1: TForm1
     Left = 834
     Height = 32
     Top = 488
-    Width = 190
+    Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Save DXF'
     OnClick = BtnSaveDXFClick
@@ -192,7 +192,7 @@ object Form1: TForm1
     Left = 834
     Height = 32
     Top = 328
-    Width = 190
+    Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Select All'
     OnClick = BtnSelectAllClick
@@ -220,7 +220,7 @@ object Form1: TForm1
     Left = 834
     Height = 31
     Top = 128
-    Width = 190
+    Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add 3DPolyLines'
     OnClick = BtnAdd3DpolyLinesClick
@@ -234,7 +234,7 @@ object Form1: TForm1
     Left = 834
     Height = 31
     Top = 160
-    Width = 190
+    Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add LWPolyLines'
     OnClick = BtnAddLWPolyLines1Click
@@ -258,7 +258,7 @@ object Form1: TForm1
     Left = 834
     Height = 32
     Top = 200
-    Width = 190
+    Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Process Lines'
     OnClick = BtnProcessObjectsClick
@@ -272,7 +272,7 @@ object Form1: TForm1
     Left = 834
     Height = 32
     Top = 232
-    Width = 190
+    Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Off entity layer'
     OnClick = OffEntLayerClick
@@ -286,21 +286,37 @@ object Form1: TForm1
     Left = 834
     Height = 32
     Top = 264
-    Width = 190
+    Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'On all layer'
     OnClick = OnAllLayerClick
     TabOrder = 17
   end
+  object Memo1: TMemo
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = BtnRebuild
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 834
+    Height = 334
+    Top = 575
+    Width = 263
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    TabOrder = 18
+  end
   object OpenDialog1: TOpenDialog
     DefaultExt = '.dxf'
     Filter = 'DXF File|*.dxf'
-    left = 920
-    top = 760
+    left = 880
+    top = 408
   end
   object SaveDialog1: TSaveDialog
     Filter = 'DXF file|*.dxf'
-    left = 976
-    top = 760
+    left = 936
+    top = 408
   end
 end

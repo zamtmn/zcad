@@ -5,7 +5,7 @@ unit umainform;
 interface
 
 uses
-  gdbentityfactory,UGDBLayerArray,ugdbabstractdrawing,LCLType, geometry, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
+  zcadinterface,gdbentityfactory,UGDBLayerArray,ugdbabstractdrawing,LCLType, geometry, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Spin,
   {From ZCAD}
@@ -33,6 +33,7 @@ type
     CheckBox1: TCheckBox;
     ChkBox3D: TCheckBox;
     Label1: TLabel;
+    Memo1: TMemo;
     OpenDialog1: TOpenDialog;
     Panel1: TPanel;
     Panel2: TPanel;
@@ -59,6 +60,9 @@ type
     procedure _FormCreate(Sender: TObject);
     procedure _KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure _FormShow(Sender: TObject);
+
+    procedure _StartLongProcess(a:integer);
+    procedure _EndLongProcess;
   private
     oglwnd:TOGLWND;
     { private declarations }
@@ -69,11 +73,26 @@ type
 var
   Form1: TForm1;
   stepgrid,origingrid:GDBvertex2D;
+  LPTime:Tdatetime;
   //rm:trestoremode;
 
 implementation
 
 {$R *.lfm}
+procedure TForm1._StartLongProcess(a:integer);
+begin
+     LPTime:=now;
+end;
+procedure TForm1._EndLongProcess;
+var
+  Time:Tdatetime;
+  ts:string;
+begin
+ time:=(now-LPTime)*10e4;
+ str(time:3:4,ts);
+ memo1.Append(format('Done.  %s second',[ts]));
+end;
+
 procedure TForm1._KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if Key=VK_ESCAPE then
@@ -179,6 +198,8 @@ begin
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
 
 
+     zcadinterface.StartLongProcessProc:=@_StartLongProcess;
+     zcadinterface.EndLongProcessProc:=@_EndLongProcess;
 end;
 function CreateRandomDouble(len:GDBDouble):GDBDouble;inline;
 begin
@@ -211,6 +232,7 @@ var
    pobj:PGDBObjLine;
    v1,v2:gdbvertex;
 begin
+  _StartLongProcess(0);
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := PGDBObjLine(CreateInitObjFree(GDBLineID,nil));
@@ -223,8 +245,11 @@ begin
     pobj^.BuildGeometry(gdb.GetCurrentDWG^);
     pobj^.formatEntity(gdb.GetCurrentDWG^);
   end;
+  _EndLongProcess;
+  _StartLongProcess(0);
   gdb.GetCurrentDWG^.pObjRoot^.FormatEntity(gdb.GetCurrentDWG^);
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
+  _EndLongProcess;
   UGDBDescriptor.redrawoglwnd;
 end;
 
@@ -237,6 +262,7 @@ var
    v1,v2:gdbvertex2d;
    lw:GLLWWidth;
 begin
+  _StartLongProcess(0);
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := PGDBObjLWPolyline(CreateInitObjFree(GDBLWPolyLineID,nil));
@@ -257,8 +283,11 @@ begin
     pobj^.BuildGeometry(gdb.GetCurrentDWG^);
     pobj^.formatEntity(gdb.GetCurrentDWG^);
   end;
+  _EndLongProcess;
   gdb.GetCurrentDWG^.pObjRoot^.FormatEntity(gdb.GetCurrentDWG^);
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
+  _StartLongProcess(0);
+  _EndLongProcess;
   UGDBDescriptor.redrawoglwnd;
 end;
 
@@ -268,6 +297,7 @@ var //i: GDBInteger;
     ir:itrec;
     l,hl:double;
 begin
+  _StartLongProcess(0);
   pv:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
@@ -290,7 +320,7 @@ begin
         end;
   pv:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
   until pv=nil;
-
+  _EndLongProcess;
 
   UGDBDescriptor.redrawoglwnd;
 end;
@@ -303,6 +333,7 @@ var
    pobj:PGDBObjCircle;
    v1,v2:gdbvertex;
 begin
+  _StartLongProcess(0);
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := PGDBObjCircle(CreateInitObjFree(GDBCircleID,nil));
@@ -314,8 +345,11 @@ begin
     pobj^.BuildGeometry(gdb.GetCurrentDWG^);
     pobj^.formatEntity(gdb.GetCurrentDWG^);
   end;
+  _EndLongProcess;
+  _StartLongProcess(0);
   gdb.GetCurrentDWG^.pObjRoot^.FormatEntity(gdb.GetCurrentDWG^);
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
+  _EndLongProcess;
   UGDBDescriptor.redrawoglwnd;
 end;
 
@@ -327,6 +361,7 @@ var
    pobj:PGDBObjPolyline;
    v1,v2:gdbvertex;
 begin
+  _StartLongProcess(0);
   for i:=1 to SpinEdit1.Value do
   begin
     pobj := PGDBObjPolyline(CreateInitObjFree(GDBPolyLineID,nil));
@@ -344,14 +379,19 @@ begin
     pobj^.BuildGeometry(gdb.GetCurrentDWG^);
     pobj^.formatEntity(gdb.GetCurrentDWG^);
   end;
+  _EndLongProcess;
+  _StartLongProcess(0);
   gdb.GetCurrentDWG^.pObjRoot^.FormatEntity(gdb.GetCurrentDWG^);
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
+  _EndLongProcess;
   UGDBDescriptor.redrawoglwnd;
 end;
 
 procedure TForm1.BtnRebuildClick(Sender: TObject);
 begin
+     _StartLongProcess(0);
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
+     _EndLongProcess;
      UGDBDescriptor.redrawoglwnd;
 end;
 
@@ -362,6 +402,7 @@ var pv:pGDBObjEntity;
     domethod,undomethod:tmethod;
 begin
   if (gdb.GetCurrentROOT^.ObjArray.count = 0)or(GDB.GetCurrentDWG^.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
+  _StartLongProcess(0);
   pv:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
@@ -378,6 +419,7 @@ begin
   GDB.GetCurrentDWG^.OGLwindow1.param.lastonmouseobject:=nil;
   gdb.GetCurrentDWG^.OnMouseObj.Clear;
   gdb.GetCurrentDWG^.SelObjArray.clearallobjects;
+  _EndLongProcess;
   UGDBDescriptor.redrawoglwnd;
 end;
 procedure TForm1.BtnAddTextsClick(Sender: TObject);
@@ -396,6 +438,7 @@ begin
        tp.oblique:=0;
        gdb.GetCurrentDWG^.TextStyleTable.addstyle('standart','txt.shx',tp,false);
   end;
+  _StartLongProcess(0);
   for i:=1 to SpinEdit1.Value do
   begin
     pGDBObjEntity(pobj):=CreateInitObjFree(GDBTextID,nil);
@@ -415,8 +458,11 @@ begin
     pobj^.BuildGeometry(gdb.GetCurrentDWG^);
     pobj^.formatEntity(gdb.GetCurrentDWG^);
   end;
+  _EndLongProcess;
+  _StartLongProcess(0);
   gdb.GetCurrentDWG^.pObjRoot^.FormatEntity(gdb.GetCurrentDWG^);
   gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
+  _EndLongProcess;
   UGDBDescriptor.redrawoglwnd;
 end;
 
@@ -448,7 +494,7 @@ begin
   GDB.GetCurrentDWG^.OGLwindow1.param.SelDesc.Selectedobjcount:=0;
 
   count:=0;
-
+  _StartLongProcess(0);
   pv:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
@@ -467,7 +513,7 @@ begin
 
   pv:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
   until pv=nil;
-
+  _EndLongProcess;
   UGDBDescriptor.redrawoglwnd;
   //if assigned(updatevisibleproc) then updatevisibleproc;
 

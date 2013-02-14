@@ -21,7 +21,7 @@ unit GDBText;
 
 interface
 uses
-ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,sysutils,UGDBSHXFont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
+ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,sysutils,ugdbfont,UGDBPoint3DArray,UGDBLayerArray,gdbasetypes,GDBAbstractText,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,
 ugdbltypearray,
 GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef,geometry,dxflow,strmy,math,memman,log,GDBSubordinated,UGDBTextStyleArray;
 type
@@ -211,7 +211,7 @@ begin
    while i<=length(content) do
   //for i:=1 to length(content) do
   begin
-    sym:=getsymbol(content,i,l,PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont^.unicode);
+    sym:=getsymbol(content,i,l,PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont^.font.unicode);
     //psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(content[i])));
     psyminfo:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(sym);
     obj_width:=obj_width+psyminfo.NextSymX;
@@ -628,7 +628,7 @@ begin
   i := 1;
   while i <= length(content) do
   begin
-    sym:=getsymbol(content,i,l,pgdbfont(pfont)^.unicode);
+    sym:=getsymbol(content,i,l,pgdbfont(pfont)^.font.unicode);
     if {content[i]}sym={#}1 then
     begin
          ispl:=not(ispl);

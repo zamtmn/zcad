@@ -28,7 +28,7 @@ uses
   //x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
   {$ENDIF}
-  ugdbabstractdrawing,UGDBOpenArrayOfPV,UGDBSHXFont,
+  ugdbabstractdrawing,UGDBOpenArrayOfPV,ugdbfont,
   {$IFNDEF DELPHI}LCLType,InterfaceBase,FileUtil,{$ELSE}windows,{$ENDIF}
   {umytreenode,}menus,Classes,Forms,
   ExtCtrls,Controls,

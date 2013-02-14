@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit UGDBSHXFont;
+unit ugdbfont;
 {$INCLUDE def.inc}
 interface
 uses UGDBPolyPoint3DArray,gdbobjectsconstdef,UGDBPoint3DArray,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
@@ -36,17 +36,19 @@ GDBUNISymbolInfo=record
     symbolinfo:GDBsymdolinfo;
   end;
 TSymbolInfoArray=array [0..255] of GDBsymdolinfo;
+SHXFont=object(GDBNamedObject)
+              compiledsize:GDBInteger;
+              h,u:GDBByte;
+              unicode:GDBBoolean;
+              symbolinfo:TSymbolInfoArray;
+              SHXdata:GDBOpenArrayOfByte;
+              unisymbolinfo:GDBOpenArrayOfData
+        end;
 PGDBfont=^GDBfont;
 GDBfont=object(GDBNamedObject)
     fontfile:GDBString;
     Internalname:GDBString;
-    compiledsize:GDBInteger;
-    h,u:GDBByte;
-    unicode:GDBBoolean;
-    symbolinfo:TSymbolInfoArray;
-    SHXdata:GDBOpenArrayOfByte;
-    unisymbolinfo:GDBOpenArrayOfData;
-
+    font:SHXFont;
     constructor initnul;
     constructor init(n:GDBString);
     destructor done;virtual;
@@ -87,7 +89,7 @@ begin
 
   psyminfo:=self.GetOrReplaceSymbolInfo(integer(_symbol));
   //deb:=psyminfo^;
-  psymbol := self.SHXdata.getelement({pgdbfont(pfont).symbo linfo[GDBByte(_symbol)]}psyminfo.addr);// GDBPointer(GDBPlatformint(pfont)+ pgdbfont(pfont).symbo linfo[GDBByte(_symbol)].addr);
+  psymbol := self.font.SHXdata.getelement({pgdbfont(pfont).symbo linfo[GDBByte(_symbol)]}psyminfo.addr);// GDBPointer(GDBPlatformint(pfont)+ pgdbfont(pfont).symbo linfo[GDBByte(_symbol)].addr);
   if {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size <> 0 then
     for j := 1 to {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size do
     begin
@@ -234,16 +236,16 @@ begin
      Internalname:='';
      for i:=0 to 255 do
      begin
-      symbolinfo[i].Name:='';
+      font.symbolinfo[i].Name:='';
      end;
-          pobj:=unisymbolinfo.beginiterate(ir);
+          pobj:=font.unisymbolinfo.beginiterate(ir);
           if pobj<>nil then
           repeat
                 pobj^.symbolinfo.Name:='';
-                pobj:=unisymbolinfo.iterate(ir);
+                pobj:=font.unisymbolinfo.iterate(ir);
           until pobj=nil;
-     SHXdata.done;
-     unisymbolinfo.{FreeAnd}Done;
+     font.SHXdata.done;
+     font.unisymbolinfo.{FreeAnd}Done;
      inherited;
 end;
 constructor GDBfont.Init;
@@ -253,14 +255,14 @@ begin
      inherited;
      for i:=0 to 255 do
      begin
-      symbolinfo[i].addr:=0;
-      symbolinfo[i].size:=0;
+      font.symbolinfo[i].addr:=0;
+      font.symbolinfo[i].size:=0;
      end;
-     self.u:=1;
-     self.h:=1;
-     unicode:=false;
-     SHXdata.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1024);
-     unisymbolinfo.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1000,sizeof(GDBUNISymbolInfo));
+     font.u:=1;
+     font.h:=1;
+     font.unicode:=false;
+     font.SHXdata.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1024);
+     font.unisymbolinfo.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1000,sizeof(GDBUNISymbolInfo));
 end;
 function GDBfont.findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
 var
@@ -268,7 +270,7 @@ var
    ir:itrec;
    //debug:GDBInteger;
 begin
-     pobj:=unisymbolinfo.beginiterate(ir);
+     pobj:=font.unisymbolinfo.beginiterate(ir);
      if pobj<>nil then
      repeat
            //debug:=pobj^.symbol;
@@ -278,7 +280,7 @@ begin
                                            result:=@pobj^.symbolinfo;
                                            exit;
                                       end;
-           pobj:=unisymbolinfo.iterate(ir);
+           pobj:=font.unisymbolinfo.iterate(ir);
      until pobj=nil;
      result:=nil;
 end;
@@ -290,9 +292,9 @@ begin
                         symbol:=symbol;
      if symbol<256 then
                        begin
-                       result:=@self.symbolinfo[symbol];
+                       result:=@self.font.symbolinfo[symbol];
                        if result^.addr=0 then
-                                        result:=@self.symbolinfo[ord('?')];
+                                        result:=@self.font.symbolinfo[ord('?')];
                        end
                    else
                        //result:=@self.symbolinfo[ord('?')]
@@ -302,11 +304,11 @@ begin
                             //usi.symbolinfo:=result^;;
                             if result=nil then
                             begin
-                                 result:=@self.symbolinfo[ord('?')];
+                                 result:=@self.font.symbolinfo[ord('?')];
                                  exit;
                             end;
                             if result^.addr=0 then
-                                             result:=@self.symbolinfo[ord('?')];
+                                             result:=@self.font.symbolinfo[ord('?')];
 
                        end;
 end;
@@ -315,7 +317,7 @@ var
    usi:GDBUNISymbolInfo;
 begin
      if symbol<256 then
-                       result:=@self.symbolinfo[symbol]
+                       result:=@self.font.symbolinfo[symbol]
                    else
                        //result:=@self.symbolinfo[0]
                        begin
@@ -331,9 +333,9 @@ begin
                                  usi.symbolinfo.w:=0;
                                  usi.symbolinfo.SymMinY:=0;
                                  killstring(usi.symbolinfo.Name);
-                                 unisymbolinfo.Add(@usi);
+                                 font.unisymbolinfo.Add(@usi);
 
-                                 result:=@(PGDBUNISymbolInfo(unisymbolinfo.getelement(unisymbolinfo.Count-1))^.symbolinfo);
+                                 result:=@(PGDBUNISymbolInfo(font.unisymbolinfo.getelement(font.unisymbolinfo.Count-1))^.symbolinfo);
                             end;
                        end;
 end;

@@ -33,7 +33,7 @@ UGDBFontManager,
 ugdbltypearray,
 GDBCamera,
 UGDBOpenArrayOfPV,
-GDBRoot,UGDBSHXFont,
+GDBRoot,ugdbfont,
 OGLWindow,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,ugdbtrash;
 type
 {EXPORT+}

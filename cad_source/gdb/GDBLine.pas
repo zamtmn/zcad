@@ -20,7 +20,7 @@ unit GDBLine;
 {$INCLUDE def.inc}
 
 interface
-uses ugdbdrawingdef,GDBCamera,uzglgeometry,{testing LineTypes...}UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,ugdbltypearray,UGDBSHXFont,
+uses ugdbdrawingdef,GDBCamera,uzglgeometry,{testing LineTypes...}UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,ugdbltypearray,ugdbfont,
      zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,shared,OGLSpecFunc;
 type

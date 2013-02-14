@@ -32,7 +32,7 @@ UGDBTextStyleArray,
 {UGDBFontManager,}
 GDBCamera,
 UGDBOpenArrayOfPV,
-GDBRoot,UGDBSHXFont,
+GDBRoot,ugdbfont,
 OGLWindow,UGDBOpenArrayOfPObjects{,UGDBVisibleOpenArray};
 type
 {EXPORT+}

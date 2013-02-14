@@ -19,7 +19,7 @@
 unit UGDBFontManager;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,strproc,UGDBSHXFont,gdbasetypes,SysInfo,memman,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
+uses zcadsysvars,strproc,ugdbfont,gdbasetypes,SysInfo,memman,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
      UGDBNamedObjectsArray;
 type
 {Export+}

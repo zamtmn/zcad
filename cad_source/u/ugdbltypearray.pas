@@ -20,7 +20,7 @@ unit ugdbltypearray;
 {$INCLUDE def.inc}
 interface
 uses Classes,UGDBStringArray,UGDBOpenArrayOfData,zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
-     UGDBTextStyleArray,ugdbfont,UGDBOpenArrayOfObjects,
+     UGDBTextStyleArray,UGDBOpenArrayOfObjects,
      varmandef,{gdbobjectsconstdef,}UGDBNamedObjectsArray,StrProc,shared;
 const
      DefaultSHXHeight=1;

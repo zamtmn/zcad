@@ -331,6 +331,14 @@ GDBArrayVertex=array[0..0] of GDBvertex;
              end;
 FreeElProc=procedure (p:GDBPointer);
 TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
+PGDBsymdolinfo=^GDBsymdolinfo;
+GDBsymdolinfo=record
+    addr: GDBInteger;
+    size: GDBWord;
+    NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: GDBDouble;
+    Name:GDBString;
+    Number:GDBInteger;
+  end;
 //Generate on C:\zcad\CAD_SOURCE\u\UOpenArray.pas
 POpenArray=^OpenArray;
 OpenArray=object(GDBaseObject)
@@ -610,31 +618,35 @@ GDBOpenArrayOfByte=object(GDBOpenArray)
                       function readtoparser(break:GDBString): GDBString;
                       destructor done;virtual;abstract;
                    end;
-//Generate on C:\zcad\CAD_SOURCE\u\UGDBSHXFont.pas
-PGDBsymdolinfo=^GDBsymdolinfo;
-GDBsymdolinfo=record
-    addr: GDBInteger;
-    size: GDBWord;
-    NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: GDBDouble;
-    Name:GDBString;
-    Number:GDBInteger;
-  end;
+//Generate on C:\zcad\CAD_SOURCE\u\ugdbshxfont.pas
 PGDBUNISymbolInfo=^GDBUNISymbolInfo;
 GDBUNISymbolInfo=record
     symbol:GDBInteger;
     symbolinfo:GDBsymdolinfo;
   end;
 TSymbolInfoArray=array [0..255] of GDBsymdolinfo;
+PBASEFont=^BASEFont;
+BASEFont=object(GDBaseObject)
+              unicode:GDBBoolean;
+              symbolinfo:TSymbolInfoArray;
+              unisymbolinfo:GDBOpenArrayOfData;
+              constructor init;
+              destructor done;virtual;abstract;
+        end;
+PSHXFont=^SHXFont;
+SHXFont=object(BASEFont)
+              compiledsize:GDBInteger;
+              h,u:GDBByte;
+              SHXdata:GDBOpenArrayOfByte;
+              constructor init;
+              destructor done;virtual;abstract;
+        end;
+//Generate on C:\zcad\CAD_SOURCE\u\ugdbfont.pas
 PGDBfont=^GDBfont;
 GDBfont=object(GDBNamedObject)
     fontfile:GDBString;
     Internalname:GDBString;
-    compiledsize:GDBInteger;
-    h,u:GDBByte;
-    unicode:GDBBoolean;
-    symbolinfo:TSymbolInfoArray;
-    SHXdata:GDBOpenArrayOfByte;
-    unisymbolinfo:GDBOpenArrayOfData;
+    font:PSHXFont;
     constructor initnul;
     constructor init(n:GDBString);
     destructor done;virtual;abstract;
@@ -1346,6 +1358,7 @@ GDBObj3DFace=object(GDBObj3d)
                  function GetObjTypeName:GDBString;virtual;abstract;
                  procedure getoutbound;virtual;abstract;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
+                 procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
            end;
 //Generate on C:\zcad\CAD_SOURCE\gdb\GDBWithMatrix.pas
 PGDBObjWithMatrix=^GDBObjWithMatrix;

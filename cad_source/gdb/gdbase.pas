@@ -324,6 +324,14 @@ GDBArrayVertex=array[0..0] of GDBvertex;
              end;
 FreeElProc=procedure (p:GDBPointer);
 TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
+PGDBsymdolinfo=^GDBsymdolinfo;
+GDBsymdolinfo=record
+    addr: GDBInteger;
+    size: GDBWord;
+    NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: GDBDouble;
+    Name:GDBString;
+    Number:GDBInteger;
+  end;
 {EXPORT-}
 TDWGHandle=ptruint;
 const

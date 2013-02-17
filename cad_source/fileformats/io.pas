@@ -19,13 +19,13 @@
 unit io;
 {$INCLUDE def.inc}
 interface
-uses geometry,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}GDBBlockDef,math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,{GDBManager,}iodxf,memman,{UGDBDescriptor,}gdbobjectsconstdef;
+uses EasyLazFreeType,ugdbshxfont,geometry,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}GDBBlockDef,math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,{GDBManager,}iodxf,memman,{UGDBDescriptor,}gdbobjectsconstdef;
 const
-  IgnoreSHP='() '#13;
-  BreakSHP='*,'#10;
+  //IgnoreSHP='() '#13;
+  //BreakSHP='*,'#10;
   fontdirect:array[0..$F,0..1] of GDBDouble=
   ((1,0),(1,0.5),(1,1),(0.5,1),(0,1),(-0.5,1),(-1,1),(-1,0.5),(-1,0),(-1,-0.5),(-1,-1),(-0.5,-1),(0,-1),(0.5,-1),(1,-1),(1,-0.5));
-  rootblock:GDBString='ROOT_ENTRY';
+  //rootblock:GDBString='ROOT_ENTRY';
 type ptsyminfo=^tsyminfo;
      tsyminfo=packed record
                            number,size:word;
@@ -33,6 +33,7 @@ type ptsyminfo=^tsyminfo;
 procedure readpalette;
 //procedure loadblock(s:GDBString);
 function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;
+function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
 {
   var
      fontdirect:array[0..$F,0..1] of GDBDouble;
@@ -138,9 +139,9 @@ begin
                  startangle:=ad.startangle;
                  angle:=ad.endangle-ad.startangle;
                  if angle<0 then angle := 2*pi+angle;
-                 pf^.font.SHXdata.AddByteByVal(GDBPolylineID);
-                 ppolycount:=pf^.font.SHXdata.Count;
-                 pf^.font.SHXdata.AllocData(sizeof(GDBWord));
+                 PSHXFont(pf^.font).SHXdata.AddByteByVal(GDBPolylineID);
+                 ppolycount:=PSHXFont(pf^.font).SHXdata.Count;
+                 PSHXFont(pf^.font).SHXdata.AllocData(sizeof(GDBWord));
                  inc(sizeshx);
                  sizeshp:=0;
                  {tf:=tr.p1.x;
@@ -154,26 +155,26 @@ begin
                      if draw then
                        begin
                                     ProcessMinMax(x1,y1);
-                         pf^.font.SHXdata.AddFontFloat(@x1);
-                         pf^.font.SHXdata.AddFontFloat(@y1);
+                         PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
+                         PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
                          inc(sizeshp);
                        end;
                    end;
                    {x:=x1;
                    y:=y1;}
-                   pGDBWord(pf^.font.SHXdata.getelement(ppolycount))^:=sizeshp;
+                   pGDBWord(PSHXFont(pf^.font).SHXdata.getelement(ppolycount))^:=sizeshp;
                  end
          else
          begin
-         pf^.font.SHXdata.AddByteByVal(GDBLineID);
+         PSHXFont(pf^.font).SHXdata.AddByteByVal(GDBLineID);
          tf:=tr.p1.x;
-         pf^.font.SHXdata.AddFontFloat(@tf);
+         PSHXFont(pf^.font).SHXdata.AddFontFloat(@tf);
          tf:=tr.p1.y;
-         pf^.font.SHXdata.AddFontFloat(@tf);
+         PSHXFont(pf^.font).SHXdata.AddFontFloat(@tf);
          tf:=tr.p3.x;
-         pf^.font.SHXdata.AddFontFloat(@tf);
+         PSHXFont(pf^.font).SHXdata.AddFontFloat(@tf);
          tf:=tr.p3.y;
-         pf^.font.SHXdata.AddFontFloat(@tf);
+         PSHXFont(pf^.font).SHXdata.AddFontFloat(@tf);
          inc(sizeshx);
          {pf^.SHXdata.AddByteByVal(GDBLineID);
          tf:=tr.p2.x;
@@ -193,11 +194,11 @@ end;
 begin
             inccounter:=0;
             psyminfo:=pf^.GetOrCreateSymbolInfo(symbol);
-            psyminfo{pf^.sym bolinfo[symbol]}.addr:={GDBPlatformint(pdata)-GDBPlatformint(pf)}pf^.font.SHXdata.Count;
+            psyminfo.addr:=PSHXFont(pf^.font).SHXdata.Count;
             onlyver:=0;
             sizeshx:=0;
             draw:=true;
-            baselen:=1/pf^.font.h;
+            baselen:=1/PSHXFont(pf^.font).h;
             stackheap:=-1;
             x:=0;
             y:=0;
@@ -274,25 +275,25 @@ begin
                                      end;
                       {$IFDEF TOTALYLOG}programlog.logoutstr('('+inttostr(subsymbol)+')',0);{$ENDIF}
                       psubsyminfo:=pf^.GetOrCreateSymbolInfo(subsymbol);
-                      psubsymbol:=pf.font.SHXdata.getelement(psubsyminfo.addr);
+                      psubsymbol:=PSHXFont(pf^.font).SHXdata.getelement(psubsyminfo.addr);
                       xb:=x;
                       yb:=y;
                       if (psubsymbol<>nil){and(subsymbol<>111)} then
                         for i:=1 to {pf^.symbo linfo[subsymbol]}psubsyminfo.size do
                           begin
-                            pf^.font.SHXdata.AddByteByVal(pGDBByte(psubsymbol)^);//--------------------- pGDBByte(pdata)^:=pGDBByte(psubsymbol)^;
+                            PSHXFont(pf^.font).SHXdata.AddByteByVal(pGDBByte(psubsymbol)^);//--------------------- pGDBByte(pdata)^:=pGDBByte(psubsymbol)^;
                             //---------------------inc(pdata,sizeof(GDBLineID));
                             case pGDBByte(psubsymbol)^ of
                               2:
                                 begin
                                   inc(psubsymbol,sizeof(GDBLineID));
-                                  x1:=pfontfloat(psubsymbol)^*baselen*pf^.font.h+xb;
+                                  x1:=pfontfloat(psubsymbol)^*baselen*PSHXFont(pf^.font).h+xb;
                                   inc(psubsymbol,sizeof(fontfloat));
-                                  y1:=pfontfloat(psubsymbol)^*baselen*pf^.font.h+yb;
+                                  y1:=pfontfloat(psubsymbol)^*baselen*PSHXFont(pf^.font).h+yb;
                                   inc(psubsymbol,sizeof(fontfloat));
-                                  x:=pfontfloat(psubsymbol)^*baselen*pf^.font.h+xb;
+                                  x:=pfontfloat(psubsymbol)^*baselen*PSHXFont(pf^.font).h+xb;
                                   inc(psubsymbol,sizeof(fontfloat));
-                                  y:=pfontfloat(psubsymbol)^*baselen*pf^.font.h+yb;
+                                  y:=pfontfloat(psubsymbol)^*baselen*PSHXFont(pf^.font).h+yb;
                                   inc(psubsymbol,sizeof(fontfloat));
                                   if draw then
                                     begin
@@ -309,13 +310,13 @@ begin
                                     end;
                                                                                                                                                                                                                 //pGDBByte(pdata)^:=GDBLineID;
                                                                                                                                                                                                                 //inc(pdata,sizeof(GDBLineID));
-                                  pf^.font.SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
+                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
                                   //---------------------inc(pdata,sizeof(fontfloat));
-                                  pf^.font.SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
+                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
                                   //---------------------inc(pdata,sizeof(fontfloat));
-                                  pf^.font.SHXdata.AddFontFloat(@x);//---------------------pfontfloat(pdata)^:=x;
+                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);//---------------------pfontfloat(pdata)^:=x;
                                   //---------------------inc(pdata,sizeof(fontfloat));
-                                  pf^.font.SHXdata.AddFontFloat(@y);//---------------------pfontfloat(pdata)^:=y;
+                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);//---------------------pfontfloat(pdata)^:=y;
                                   //---------------------inc(pdata,sizeof(fontfloat));
                                   inc(sizeshx);
                                                                                                                                                                                                            //end;
@@ -324,13 +325,13 @@ begin
                                 begin
                                   inc(psubsymbol,sizeof(GDBLineID));
                                   sizeshp:=pGDBWord(psubsymbol)^;
-                                  pf^.font.SHXdata.AddWord(@sizeshp);//---------------------pGDBWord(pdata)^:=sizeshp;
+                                  PSHXFont(pf^.font).SHXdata.AddWord(@sizeshp);//---------------------pGDBWord(pdata)^:=sizeshp;
                                   inc(psubsymbol,sizeof(GDBWord));
                                   //---------------------inc(pdata,sizeof(GDBWord));
 
-                                  x1:=pfontfloat(psubsymbol)^*baselen*pf^.font.h+xb;
+                                  x1:=pfontfloat(psubsymbol)^*baselen*PSHXFont(pf^.font).h+xb;
                                   inc(psubsymbol,sizeof(fontfloat));
-                                  y1:=pfontfloat(psubsymbol)^*baselen*pf^.font.h+yb;
+                                  y1:=pfontfloat(psubsymbol)^*baselen*PSHXFont(pf^.font).h+yb;
                                   inc(psubsymbol,sizeof(fontfloat));
                                   if draw then
                                     begin
@@ -341,20 +342,20 @@ begin
                                         ymin:=y1;}
                                     end;//if draw then begin
 
-                                  pf^.font.SHXdata.AddByteByVal(GDBLineID);//--------------------- pGDBByte(pdata)^:=GDBLineID;
+                                  PSHXFont(pf^.font).SHXdata.AddByteByVal(GDBLineID);//--------------------- pGDBByte(pdata)^:=GDBLineID;
                                   //--------------------- inc(pdata,sizeof(GDBLineID));
-                                  pf^.font.SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
+                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
                                   //---------------------inc(pdata,sizeof(fontfloat));
-                                  pf^.font.SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
+                                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
                                   //---------------------inc(pdata,sizeof(fontfloat));
 
                                   j:=1;
                                   while j<>sizeshp do
                                     begin
 
-                                      x:=pfontfloat(psubsymbol)^*baselen*pf^.font.h+xb;
+                                      x:=pfontfloat(psubsymbol)^*baselen*PSHXFont(pf^.font).h+xb;
                                       inc(psubsymbol,sizeof(fontfloat));
-                                      y:=pfontfloat(psubsymbol)^*baselen*pf^.font.h+yb;
+                                      y:=pfontfloat(psubsymbol)^*baselen*PSHXFont(pf^.font).h+yb;
                                       inc(psubsymbol,sizeof(fontfloat));
                                       if draw then
                                         begin
@@ -366,9 +367,9 @@ begin
                                         end;//if draw then begin;
                                                                                                                                                                                                                         //if draw then begin
 
-                                      pf^.font.SHXdata.AddFontFloat(@x);//---------------------pfontfloat(pdata)^:=x;
+                                      PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);//---------------------pfontfloat(pdata)^:=x;
                                       //---------------------inc(pdata,sizeof(fontfloat));
-                                      pf^.font.SHXdata.AddFontFloat(@y);//---------------------pfontfloat(pdata)^:=y;
+                                      PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);//---------------------pfontfloat(pdata)^:=y;
                                       //---------------------inc(pdata,sizeof(fontfloat));
                                                                                                                                                                                                                                        //end;
                                       inc(j);
@@ -397,15 +398,15 @@ begin
                           y1:=y+dy*baselen;
                           if draw then
                             begin
-                              pf^.font.SHXdata.AddByteByVal(GDBLineID);//---------------------pGDBByte(pdata)^:=GDBLineID;
+                              PSHXFont(pf^.font).SHXdata.AddByteByVal(GDBLineID);//---------------------pGDBByte(pdata)^:=GDBLineID;
                               //---------------------inc(pdata,sizeof(GDBLineID));
-                              pf^.font.SHXdata.AddFontFloat(@x);//---------------------pfontfloat(pdata)^:=x;
+                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);//---------------------pfontfloat(pdata)^:=x;
                               //---------------------inc(pdata,sizeof(fontfloat));
-                              pf^.font.SHXdata.AddFontFloat(@y);//---------------------pfontfloat(pdata)^:=y;
+                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);//---------------------pfontfloat(pdata)^:=y;
                               //---------------------inc(pdata,sizeof(fontfloat));
-                              pf^.font.SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
+                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
                               //---------------------inc(pdata,sizeof(fontfloat));
-                              pf^.font.SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
+                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
                               //---------------------inc(pdata,sizeof(fontfloat));
                               inc(sizeshx);
                               if draw then
@@ -445,24 +446,24 @@ begin
                       end;
                       if draw then
                             begin
-                      pf^.font.SHXdata.AddByteByVal(GDBPolylineID);
-                      ppolycount:=pf^.font.SHXdata.count;
-                      pf^.font.SHXdata.AllocData(sizeof(GDBWord));
+                      PSHXFont(pf^.font).SHXdata.AddByteByVal(GDBPolylineID);
+                      ppolycount:=PSHXFont(pf^.font).SHXdata.count;
+                      PSHXFont(pf^.font).SHXdata.AllocData(sizeof(GDBWord));
                       inc(sizeshx);
                       if (dx<>0)or(dy<>0) then
                                               sizeshp:=1
                                           else
                                               sizeshp:=0;
-                      pf^.font.SHXdata.AddFontFloat(@x);
-                      pf^.font.SHXdata.AddFontFloat(@y);
+                      PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
+                      PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
                             end;
                       while (dx<>0)or(dy<>0) do
                         begin
                         {$IFDEF TOTALYLOG}programlog.logoutstr('('+inttostr(dx)+','+inttostr(dy)+')',0);{$ENDIF}
                           if draw then
                             begin
-                              pf^.font.SHXdata.AddFontFloat(@x1);
-                              pf^.font.SHXdata.AddFontFloat(@y1);
+                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
+                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
                               inc(sizeshp);
                               if onlyver=0 then
                               begin
@@ -499,7 +500,7 @@ begin
                         end;
                         if draw then
                             begin
-                      pGDBWord(pf^.font.SHXdata.getelement(ppolycount))^:=sizeshp;
+                      pGDBWord(PSHXFont(pf^.font).SHXdata.getelement(ppolycount))^:=sizeshp;
                             end;
                       end;
                     end;
@@ -519,13 +520,13 @@ begin
                       xb:=x-r*cos(startangle);
                       yb:=y-r*sin(startangle);
 
-                      pf^.font.SHXdata.AddByteByVal(GDBPolylineID);
-                      ppolycount:=pf^.font.SHXdata.Count;
-                      pf^.font.SHXdata.AllocData(sizeof(GDBWord));
+                      PSHXFont(pf^.font).SHXdata.AddByteByVal(GDBPolylineID);
+                      ppolycount:=PSHXFont(pf^.font).SHXdata.Count;
+                      PSHXFont(pf^.font).SHXdata.AllocData(sizeof(GDBWord));
                       inc(sizeshx);
                       sizeshp:=1;
-                      pf^.font.SHXdata.AddFontFloat(@x);
-                      pf^.font.SHXdata.AddFontFloat(@y);
+                      PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
+                      PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
                       x1:=0;
                       y1:=0;
                       for i:=1 to arccount do
@@ -535,14 +536,14 @@ begin
                           if draw then
                             begin
                                          ProcessMinMax(x1,y1);
-                              pf^.font.SHXdata.AddFontFloat(@x1);
-                              pf^.font.SHXdata.AddFontFloat(@y1);
+                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
+                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
                               inc(sizeshp);
                             end;
                         end;
                       x:=x1;
                       y:=y1;
-                      pGDBWord(pf^.font.SHXdata.getelement(ppolycount))^:=sizeshp;
+                      pGDBWord(PSHXFont(pf^.font).SHXdata.getelement(ppolycount))^:=sizeshp;
                     end;
                   011:
                     begin
@@ -570,13 +571,13 @@ begin
                    xb:=x-r*cos(startangle);
                    yb:=y-r*sin(startangle);
 
-                   pf^.font.SHXdata.AddByteByVal(GDBPolylineID);
-                   ppolycount:=pf^.font.SHXdata.Count;
-                   pf^.font.SHXdata.AllocData(sizeof(GDBWord));
+                   PSHXFont(pf^.font).SHXdata.AddByteByVal(GDBPolylineID);
+                   ppolycount:=PSHXFont(pf^.font).SHXdata.Count;
+                   PSHXFont(pf^.font).SHXdata.AllocData(sizeof(GDBWord));
                    inc(sizeshx);
                    sizeshp:=1;
-                   pf^.font.SHXdata.AddFontFloat(@x);
-                   pf^.font.SHXdata.AddFontFloat(@y);
+                   PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
+                   PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
                    x1:=0;
                    y1:=0;
                    for i:=1 to arccount do
@@ -586,14 +587,14 @@ begin
                        if draw then
                          begin
                               ProcessMinMax(x1,y1);
-                              pf^.font.SHXdata.AddFontFloat(@x1);
-                              pf^.font.SHXdata.AddFontFloat(@y1);
+                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
+                              PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
                               inc(sizeshp);
                          end;
                      end;
                    x:=x1;
                    y:=y1;
-                   pGDBWord(pf^.font.SHXdata.getelement(ppolycount))^:=sizeshp;
+                   pGDBWord(PSHXFont(pf^.font).SHXdata.getelement(ppolycount))^:=sizeshp;
                     end;
                   012:
                     begin
@@ -652,15 +653,15 @@ begin
                             y1:=y+byt2*y1*baselen;
                             if draw then
                               begin
-                                pf^.font.SHXdata.AddByteByVal(GDBLineID);//---------------------pGDBByte(pdata)^:=GDBLineID;
+                                PSHXFont(pf^.font).SHXdata.AddByteByVal(GDBLineID);//---------------------pGDBByte(pdata)^:=GDBLineID;
                                 //---------------------inc(pdata,sizeof(GDBLineID));
-                                pf^.font.SHXdata.AddFontFloat(@x);//---------------------pfontfloat(pdata)^:=x;
+                                PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);//---------------------pfontfloat(pdata)^:=x;
                                 //---------------------inc(pdata,sizeof(fontfloat));
-                                pf^.font.SHXdata.AddFontFloat(@y);//---------------------pfontfloat(pdata)^:=y;
+                                PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);//---------------------pfontfloat(pdata)^:=y;
                                 //---------------------inc(pdata,sizeof(fontfloat));
-                                pf^.font.SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
+                                PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
                                 //---------------------inc(pdata,sizeof(fontfloat));
-                                pf^.font.SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
+                                PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);//---------------------pfontfloat(pdata)^:=y1;
                                 //---------------------inc(pdata,sizeof(fontfloat));
                                 inc(sizeshx);
                                 ProcessMinMax(x,y);
@@ -724,6 +725,7 @@ procedure initfont(var pf:pgdbfont;name:gdbstring);
 begin
      //GDBGetMem({$IFDEF DEBUGBUILD}'{2D1F6D71-DF5C-46B1-9E3A-9975CC281FAC}',{$ENDIF}GDBPointer(pf),sizeof(gdbfont));
      pf^.init(name);
+     pf.ItSHX;
 end;
 function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;
 var
@@ -745,7 +747,7 @@ begin
   initfont(pf,extractfilename(name));
   pf^.fontfile:=name;
   pf^.font.unicode:=false;
-  pf^.font.SHXdata.AllocData(2);
+  PSHXFont(pf^.font).SHXdata.AllocData(2);
   pdata:=pointer(pf);
   inc(pdata,sizeof(GDBfont));
   {test:=}memorybuf.readbyte;
@@ -775,8 +777,8 @@ begin
          if symnum=0 then
                          begin
                               pf^.Internalname:=line;
-                              pf^.font.h:=memorybuf.readbyte;
-                              pf^.font.u:=memorybuf.readbyte;
+                              PSHXFont(pf^.font).h:=memorybuf.readbyte;
+                              PSHXFont(pf^.font).u:=memorybuf.readbyte;
                               memorybuf.readbyte;
                               line:='';
                          end
@@ -807,7 +809,7 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
        initfont(pf,extractfilename(name));
        pf^.fontfile:=name;
        pf^.font.unicode:=true;
-       pf^.font.SHXdata.AllocData(2);
+       PSHXFont(pf^.font).SHXdata.AllocData(2);
        pdata:=pointer(pf);
        inc(pdata,sizeof(GDBfont));
        {test:=}memorybuf.readbyte;
@@ -817,8 +819,8 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
        {symmin:=}memorybuf.readword;
 
        pf^.internalname:=memorybuf.readstring(#0,'');
-       pf^.font.h:=memorybuf.readbyte;
-       pf^.font.u:=memorybuf.readbyte;
+       PSHXFont(pf^.font).h:=memorybuf.readbyte;
+       PSHXFont(pf^.font).u:=memorybuf.readbyte;
        memorybuf.readbyte;
        {test:=}memorybuf.readbyte;
        memorybuf.readbyte;
@@ -877,11 +879,9 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
   end
 else
     result:=false;
-  pf.font.compiledsize:=pf.font.SHXdata.Count;
-  //pf^.compiledsize:=GDBPlatformint(pdata)-GDBPlatformint(pf);
-  //result:=remapmememblock({$IFDEF DEBUGBUILD}'Compiled fonts',{$ENDIF}pf,pf^.compiledsize);
+  if pf.font<>nil then
+  PSHXFont(pf^.font).compiledsize:=PSHXFont(pf^.font).SHXdata.Count;
   memorybuf.done;
-  //halt(0);
 end;
 procedure readpalette;
 var
@@ -890,7 +890,6 @@ var
   line,sub:GDBString;
   f:GDBOpenArrayOfByte;
 begin
-  //f.init(10000);
   f.InitFromFile(sysparam.programpath+'components/palette.rgb');
   while f.notEOF do
     begin
@@ -916,8 +915,47 @@ begin
                           palette[i].name:=format(rsColorNum,[i]);
         end;
     end;
-  //f.close;
   f.done;
+end;
+
+function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
+var
+   ftFont: TFreeTypeFont;
+   i:integer;
+   fe:boolean;
+   glyph:TFreeTypeGlyph;
+   psyminfo,psubsyminfo:PGDBsymdolinfo;
+
+   x,y,x1,y1:fontfloat;
+begin
+    //result:=false;
+    result:=true;
+    ftFont := TFreeTypeFont.Create; //only one font at once for now...
+    ftFont.Name := name;
+    ftFont.SizeInPoints := 1;
+    initfont(pf,extractfilename(name));
+    pf.ItSHX;
+    for i:=32 to ftFont.GlyphCount-1 do
+      begin
+           glyph:=ftFont.Glyph[i];
+           psyminfo:=pf^.GetOrCreateSymbolInfo(glyph.Index);
+           psyminfo.addr:=PSHXFont(pf^.font).SHXdata.Count;
+           psyminfo.w:=glyph.Bounds.Right{/9.6}*64/96;
+           psyminfo.NextSymX:=psyminfo.w;
+           psyminfo.h:=glyph.Bounds.Top{/9.6}*64/96;
+
+           x:=0;
+           y:=0;
+           x1:=psyminfo.w;
+           y1:=psyminfo.h;
+
+           PSHXFont(pf^.font).SHXdata.AddByteByVal({pGDBByte(psubsymbol)^}2);
+           PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
+           PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
+           PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
+           PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
+           psyminfo.size:=1;
+      end;
 end;
 
 {procedure loadblock(s:GDBString);

@@ -19,38 +19,18 @@
 unit ugdbfont;
 {$INCLUDE def.inc}
 interface
-uses UGDBPolyPoint3DArray,gdbobjectsconstdef,UGDBPoint3DArray,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses ugdbshxfont,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,UGDBPoint3DArray,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
 type
 {EXPORT+}
-PGDBsymdolinfo=^GDBsymdolinfo;
-GDBsymdolinfo=record
-    addr: GDBInteger;
-    size: GDBWord;
-    NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: GDBDouble;
-    Name:GDBString;
-    Number:GDBInteger;
-  end;
-PGDBUNISymbolInfo=^GDBUNISymbolInfo;
-GDBUNISymbolInfo=record
-    symbol:GDBInteger;
-    symbolinfo:GDBsymdolinfo;
-  end;
-TSymbolInfoArray=array [0..255] of GDBsymdolinfo;
-SHXFont=object(GDBNamedObject)
-              compiledsize:GDBInteger;
-              h,u:GDBByte;
-              unicode:GDBBoolean;
-              symbolinfo:TSymbolInfoArray;
-              SHXdata:GDBOpenArrayOfByte;
-              unisymbolinfo:GDBOpenArrayOfData
-        end;
 PGDBfont=^GDBfont;
 GDBfont=object(GDBNamedObject)
     fontfile:GDBString;
     Internalname:GDBString;
-    font:SHXFont;
+    font:{PSHXFont}PBASEFont;
     constructor initnul;
     constructor init(n:GDBString);
+    procedure ItSHX;
+    procedure ItFFT;
     destructor done;virtual;
     function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
     function GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
@@ -89,7 +69,7 @@ begin
 
   psyminfo:=self.GetOrReplaceSymbolInfo(integer(_symbol));
   //deb:=psyminfo^;
-  psymbol := self.font.SHXdata.getelement({pgdbfont(pfont).symbo linfo[GDBByte(_symbol)]}psyminfo.addr);// GDBPointer(GDBPlatformint(pfont)+ pgdbfont(pfont).symbo linfo[GDBByte(_symbol)].addr);
+  psymbol := self.font.GetSymbolDataAddr(psyminfo.addr);
   if {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size <> 0 then
     for j := 1 to {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size do
     begin
@@ -226,43 +206,28 @@ begin
      pointer(fontfile):=nil;
 end;
 destructor GDBfont.done;
-var i:integer;
-    pobj:PGDBUNISymbolInfo;
-    ir:itrec;
-
-
 begin
      fontfile:='';
      Internalname:='';
-     for i:=0 to 255 do
-     begin
-      font.symbolinfo[i].Name:='';
-     end;
-          pobj:=font.unisymbolinfo.beginiterate(ir);
-          if pobj<>nil then
-          repeat
-                pobj^.symbolinfo.Name:='';
-                pobj:=font.unisymbolinfo.iterate(ir);
-          until pobj=nil;
-     font.SHXdata.done;
-     font.unisymbolinfo.{FreeAnd}Done;
+     if font<>nil then
+                      font.done;
      inherited;
 end;
+procedure GDBfont.ItSHX;
+begin
+     GDBGetMem(font,sizeof(SHXFont));
+     PSHXFont(font)^.init;
+end;
+procedure GDBfont.ItFFT;
+begin
+end;
 constructor GDBfont.Init;
-var i:integer;
 begin
      initnul;
      inherited;
-     for i:=0 to 255 do
-     begin
-      font.symbolinfo[i].addr:=0;
-      font.symbolinfo[i].size:=0;
-     end;
-     font.u:=1;
-     font.h:=1;
-     font.unicode:=false;
-     font.SHXdata.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1024);
-     font.unisymbolinfo.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1000,sizeof(GDBUNISymbolInfo));
+     font:=nil;
+     {GDBGetMem(font,sizeof(SHXFont));
+     font^.init;}
 end;
 function GDBfont.findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
 var
@@ -340,5 +305,5 @@ begin
                        end;
 end;
 begin
-  {$IFDEF DEBUGINITSECTION}LogOut('UGDBGraf.initialization');{$ENDIF}
+  {$IFDEF DEBUGINITSECTION}LogOut('UGDBFont.initialization');{$ENDIF}
 end.

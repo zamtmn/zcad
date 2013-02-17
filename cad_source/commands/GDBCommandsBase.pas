@@ -1160,7 +1160,7 @@ var //i: GDBInteger;
         ir:itrec;
     drawing:PTDrawingDef;
 begin
-  if assigned(StartLongProcessProc) then StartLongProcessProc(gdb.GetCurrentROOT.ObjArray.count);
+  if assigned(StartLongProcessProc) then StartLongProcessProc(gdb.GetCurrentROOT.ObjArray.count,'Regenerate drawing');
   drawing:=gdb.GetCurrentDwg;
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
@@ -1434,7 +1434,7 @@ var //i: GDBInteger;
     //ir:itrec;
     depth:integer;
 begin
-  if assigned(StartLongProcessProc) then StartLongProcessProc(gdb.GetCurrentROOT.ObjArray.count);
+  if assigned(StartLongProcessProc) then StartLongProcessProc(gdb.GetCurrentROOT.ObjArray.count,'Rebuild drawing spatial');
   gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
   if assigned(EndLongProcessProc) then EndLongProcessProc;
 

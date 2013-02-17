@@ -2740,7 +2740,7 @@ begin
        FDoc.Delimiter:=';';
        FDoc.LoadFromFile(utf8tosys(s));
        if assigned (StartLongProcessProc) then
-                          StartLongProcessProc(FDoc.RowCount);
+                          StartLongProcessProc(FDoc.RowCount,'Create cables');
        netarray.init({$IFDEF DEBUGBUILD}'{6FC12C96-F62C-47A3-A5B4-35D9564DB25E}',{$ENDIF}100);
        for row:=0 to FDoc.RowCount-1 do
        begin

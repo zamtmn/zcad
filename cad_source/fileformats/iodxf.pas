@@ -1224,7 +1224,7 @@ begin
      phandlearray := dxfhandlearraycreate(10000);
   //f.ReadFromFile(name);
   if assigned(StartLongProcessProc)then
-    StartLongProcessProc(f.Count);
+    StartLongProcessProc(f.Count,'Load DXF file');
   while f.notEOF do
   begin
     s := f.ReadString2;
@@ -1371,7 +1371,7 @@ begin
   //--------------------------if outstream>0 then
   begin
     if assigned(StartLongProcessProc)then
-  StartLongProcessProc({p}drawing.pObjRoot^.ObjArray.Count);
+  StartLongProcessProc({p}drawing.pObjRoot^.ObjArray.Count,'Save DXF file');
   phandlea := dxfhandlearraycreate(10000);
   pushhandle(phandlea,0,0);
   templatefile.InitFromFile(sysparam.programpath + 'components/empty.dxf');

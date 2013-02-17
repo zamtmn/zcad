@@ -34,6 +34,7 @@ type
     TProcedure_Pointer_=Procedure(p:pointer);
     TProcedure_Integer_=Procedure(a:integer);
     TMethod_Integer_=Procedure(a:integer) of object;
+    TMethod_IntegerString_=Procedure(a:integer;s:string) of object;
     TFunction__Integer=Function:integer;
     TFunction__Boolean=Function:boolean;
     TFunction__Pointer=Function:Pointer;
@@ -80,7 +81,7 @@ var
 
    //mainwindow
    ShowAllCursorsProc,RestoreAllCursorsProc:TSimpleMethod;
-   StartLongProcessProc:TMethod_Integer_;
+   StartLongProcessProc:TMethod_IntegerString_;
    ProcessLongProcessProc:TMethod_Integer_;
    EndLongProcessProc:TSimpleMethod;
    UpdateVisibleProc:TSimpleProcedure;
@@ -117,4 +118,4 @@ begin
                                          RestoreAllCursorsProc;
 end;
 
-end.
+end.

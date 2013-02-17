@@ -1404,7 +1404,7 @@ begin
   if f.Count<>0 then
   begin
     if assigned(StartLongProcessProc) then
-                                           StartLongProcessProc(f.Count);
+                                           StartLongProcessProc(f.Count,'Load DWG file');
     s := f.ReadString(#0,'');
     if s = 'AC1018' then
         begin
@@ -1425,4 +1425,4 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}log.LogOut('iodwg.initialization');{$ENDIF}
-end.
+end.

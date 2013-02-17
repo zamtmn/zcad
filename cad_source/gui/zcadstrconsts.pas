@@ -144,8 +144,9 @@ resourcestring
   rsEmpty='Empty';
   rsmm='mm';
   rscompiledtimemsg='Done.  %s second';
+  rsprocesstimemsg='%s:  %s second';
 
   rsncOGLc='OpenGL context is not created';
 implementation
 
-end.
+end.

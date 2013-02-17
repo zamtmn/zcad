@@ -113,7 +113,7 @@ type
     procedure ChangedDWGTabCtrl(Sender: TObject);
     procedure UpdateControls;
 
-    procedure StartLongProcess(total:integer);
+    procedure StartLongProcess(total:integer;processname:GDBString);
     procedure ProcessLongProcess(current:integer);
     procedure EndLongProcess;
     procedure Say(word:gdbstring);
@@ -193,6 +193,7 @@ var
   LineWBox,ColorBox:TComboBox;
   LayoutBox:TComboBox;
   LPTime:Tdatetime;
+  pname:GDBString;
   oldlongprocess:integer;
   //tf:tform;
   OLDColor:integer;
@@ -2785,10 +2786,10 @@ begin
           //sendmessageA(mainwindow.MainForm.handle,wm_user,0,0);
      end;
 end;
-procedure MainForm.StartLongProcess(total:integer);
+procedure MainForm.StartLongProcess(total:integer;processname:GDBString);
 begin
      LPTime:=now;
-
+     pname:=processname;
      if (assigned(ProcessBar)and assigned(HintText)) then
      begin
   ProcessBar.max:=total;
@@ -2872,7 +2873,11 @@ begin
     time:=(now-LPTime)*10e4;
     str(time:3:2,ts);
     //say(format(rscompiledtimemsg,[ts]));
-    shared.HistoryOutStr(format(rscompiledtimemsg,[ts]));
+    if pname='' then
+                     shared.HistoryOutStr(format(rscompiledtimemsg,[ts]))
+                 else
+                     shared.HistoryOutStr(format(rsprocesstimemsg,[pname,ts]))
+    pname:='';
 end;
 procedure MainForm.ReloadLayer(plt: PGDBNamedObjectsArray);
 var

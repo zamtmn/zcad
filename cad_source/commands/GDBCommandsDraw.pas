@@ -1488,7 +1488,7 @@ begin
               end;
 
      end;
-     pt^.Format;
+     pt^.FormatEntity(gdb.GetCurrentDWG^);
 end;
 procedure FloatInsert_com.CommandStart(Operands:pansichar);
 begin

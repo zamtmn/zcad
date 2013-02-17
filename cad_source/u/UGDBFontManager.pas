@@ -19,7 +19,7 @@
 unit UGDBFontManager;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,strproc,ugdbfont,gdbasetypes,SysInfo,memman,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
+uses shared,zcadsysvars,strproc,ugdbfont,gdbasetypes,SysInfo,memman,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
      UGDBNamedObjectsArray;
 type
 {Export+}
@@ -72,9 +72,13 @@ end;*)
 function GDBFontManager.addFonf(FontPathName:GDBString):PGDBfont;
 var
   p:PGDBfont;
-  FontName:GDBString;
+  FontName,FontExt:GDBString;
+  FontLoaded:GDBBoolean;
       //ir:itrec;
 begin
+     result:=nil;
+     if FontPathName='' then exit;
+     FontExt:=uppercase(ExtractFileExt(FontPathName));
      FontName:=ExtractFileName(FontPathName);
           if FontName='_mipgost.shx' then
                                     fontname:=FontName;
@@ -85,17 +89,23 @@ begin
              IsCreated:
                        begin
                             programlog.logoutstr('Loading font '+FontPathName,lp_IncPos);
-                            if (FontPathName<>'')and(createnewfontfromshx(FontPathName,p)) then
+                            if FontExt='.SHX' then
+                                                  FontLoaded:=createnewfontfromshx(FontPathName,p)
+                       else if FontExt='.TTF' then
+                                                  FontLoaded:=createnewfontfromttf(FontPathName,p);
+                            if FontLoaded then
                             begin
-                                 programlog.logoutstr('OK',lp_DecPos)
+                                 programlog.logoutstr('OK',lp_OldPos)
                             end
                             else
                             begin
-                                 programlog.logoutstr('unknown format',lp_DecPos);
+                                 shared.ShowError(sysutils.format('Font file "%S" unknown format',[FontPathName]));
+                                 //shared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
                                  dec(self.Count);
                                  //p^.Name:='ERROR ON LOAD';
                                  p:=nil;
                             end;
+                            programlog.logoutstr('done..',lp_DecPos);
                             //p^.init(FontPathName,Color,LW,oo,ll,pp);
                        end;
              IsError:

@@ -2876,7 +2876,7 @@ begin
     if pname='' then
                      shared.HistoryOutStr(format(rscompiledtimemsg,[ts]))
                  else
-                     shared.HistoryOutStr(format(rsprocesstimemsg,[pname,ts]))
+                     shared.HistoryOutStr(format(rsprocesstimemsg,[pname,ts]));
     pname:='';
 end;
 procedure MainForm.ReloadLayer(plt: PGDBNamedObjectsArray);

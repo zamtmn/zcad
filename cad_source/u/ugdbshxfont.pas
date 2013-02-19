@@ -19,8 +19,12 @@
 unit ugdbshxfont;
 {$INCLUDE def.inc}
 interface
-uses memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,UGDBPoint3DArray,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses gmap,gutil,EasyLazFreeType,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,UGDBPoint3DArray,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
 type
+{$IFNDEF DELPHI}
+TLessInt={specialize }TLess<integer>;
+TMapChar={specialize }TMap<integer,integer,TLessInt>;
+{$ENDIF}
 {EXPORT+}
 PGDBUNISymbolInfo=^GDBUNISymbolInfo;
 GDBUNISymbolInfo=record
@@ -46,6 +50,15 @@ SHXFont=object(BASEFont)
               destructor done;virtual;
               function GetSymbolDataAddr(offset:integer):pointer;virtual;
         end;
+PTTFFont=^TTFFont;
+TTFFont=object(SHXFont)
+              ftFont: TFreeTypeFont;
+              MapChar:TMapChar;
+              MapCharIterator:TMapChar.TIterator;
+              constructor init;
+              destructor done;virtual;
+        end;
+
 {EXPORT-}
 implementation
 uses {math,}log;
@@ -58,6 +71,7 @@ begin
      begin
       symbolinfo[i].addr:=0;
       symbolinfo[i].size:=0;
+      symbolinfo[i].LatestCreate:=false;
      end;
      unicode:=false;
      unisymbolinfo.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1000,sizeof(GDBUNISymbolInfo));
@@ -99,6 +113,20 @@ end;
 function SHXFont.GetSymbolDataAddr(offset:integer):pointer;
 begin
      result:=SHXdata.getelement(offset);
+end;
+constructor TTFFont.init;
+begin
+     inherited;
+     ftFont:=TFreeTypeFont.create;
+     MapChar:=TMapChar.Create;
+     MapCharIterator:=TMapChar.TIterator.Create;
+end;
+destructor TTFFont.done;
+begin
+     inherited;
+     ftFont.Destroy;
+     MapChar.Destroy;
+     MapCharIterator.Destroy;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBSHXFont.initialization');{$ENDIF}

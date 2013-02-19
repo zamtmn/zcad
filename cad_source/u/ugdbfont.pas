@@ -220,6 +220,8 @@ begin
 end;
 procedure GDBfont.ItFFT;
 begin
+     GDBGetMem(font,sizeof(TTFFont));
+     PTTFFont(font)^.init;
 end;
 constructor GDBfont.Init;
 begin
@@ -297,6 +299,7 @@ begin
                                  usi.symbolinfo.size:=0;
                                  usi.symbolinfo.w:=0;
                                  usi.symbolinfo.SymMinY:=0;
+                                 usi.symbolinfo.LatestCreate:=false;
                                  killstring(usi.symbolinfo.Name);
                                  font.unisymbolinfo.Add(@usi);
 

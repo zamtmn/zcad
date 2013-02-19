@@ -331,6 +331,7 @@ GDBsymdolinfo=record
     NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: GDBDouble;
     Name:GDBString;
     Number:GDBInteger;
+    LatestCreate:GDBBoolean;
   end;
 {EXPORT-}
 TDWGHandle=ptruint;

@@ -19,7 +19,7 @@
 unit io;
 {$INCLUDE def.inc}
 interface
-uses EasyLazFreeType,ugdbshxfont,geometry,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}GDBBlockDef,math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,{GDBManager,}iodxf,memman,{UGDBDescriptor,}gdbobjectsconstdef;
+uses gmap,gutil,TTObjs,EasyLazFreeType,ugdbshxfont,geometry,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}GDBBlockDef,math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,{GDBManager,}iodxf,memman,{UGDBDescriptor,}gdbobjectsconstdef;
 const
   //IgnoreSHP='() '#13;
   //BreakSHP='*,'#10;
@@ -30,6 +30,11 @@ type ptsyminfo=^tsyminfo;
      tsyminfo=packed record
                            number,size:word;
                      end;
+     {$IFNDEF DELPHI}
+     TLessInt={specialize }TLess<integer>;
+     TMapChar={specialize }TMap<integer,integer,TLessInt>;
+     {$ENDIF}
+
 procedure readpalette;
 //procedure loadblock(s:GDBString);
 function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;
@@ -41,9 +46,9 @@ function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
 
 implementation
 uses
-    shared;
+    TTTypes,shared;
 
-function createsymbol(pf:PGDBfont;symbol:GDBInteger;pshxdata:pbyte;{var pdata:pbyte;}datalen:integer;unicode:boolean;symname:gdbstring):GDBInteger;
+function createsymbol(pf:PGDBfont;symbol:GDBInteger;pshxdata:system.pbyte;{var pdata:pbyte;}datalen:integer;unicode:boolean;symname:gdbstring):GDBInteger;
 var
   {temp,}psubsymbol:PGDBByte;
   ppolycount:longint;
@@ -725,7 +730,7 @@ procedure initfont(var pf:pgdbfont;name:gdbstring);
 begin
      //GDBGetMem({$IFDEF DEBUGBUILD}'{2D1F6D71-DF5C-46B1-9E3A-9975CC281FAC}',{$ENDIF}GDBPointer(pf),sizeof(gdbfont));
      pf^.init(name);
-     pf.ItSHX;
+     //pf.ItSHX;
 end;
 function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;
 var
@@ -745,6 +750,7 @@ begin
   begin
     {$IFDEF TOTALYLOG}programlog.logoutstr('AUTOCAD-86 SHAPES 1.0',0);{$ENDIF}
   initfont(pf,extractfilename(name));
+  pf.ItSHX;
   pf^.fontfile:=name;
   pf^.font.unicode:=false;
   PSHXFont(pf^.font).SHXdata.AllocData(2);
@@ -807,6 +813,7 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
   begin
        {$IFDEF TOTALYLOG}programlog.logoutstr('AUTOCAD-86 UNIFONT 1.0',0);{$ENDIF}
        initfont(pf,extractfilename(name));
+       pf.ItSHX;
        pf^.fontfile:=name;
        pf^.font.unicode:=true;
        PSHXFont(pf^.font).SHXdata.AllocData(2);
@@ -919,43 +926,109 @@ begin
 end;
 
 function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
+{
+TLessInt=TLess<integer>;
+TMapChar=TMap<integer,integer, lessppi>;
+}
 var
-   ftFont: TFreeTypeFont;
-   i:integer;
+   //ftFont: TFreeTypeFont;
+   i,j:integer;
    fe:boolean;
    glyph:TFreeTypeGlyph;
+   //_TT_Glyph:TT_Glyph;
+   _glyph:PGlyph;
    psyminfo,psubsyminfo:PGDBsymdolinfo;
 
-   x,y,x1,y1:fontfloat;
+   x,y,x1,y1,scx,scy:fontfloat;
+   cends:integer;
+   startcountur:boolean;
+   k:gdbdouble;
+   //MapChar:TMapChar;
+   //MapCharIterator:TMapChar.TIterator;
+   pttf:PTTFFont;
 begin
     //result:=false;
-    result:=true;
-    ftFont := TFreeTypeFont.Create; //only one font at once for now...
-    ftFont.Name := name;
-    ftFont.SizeInPoints := 1;
     initfont(pf,extractfilename(name));
-    pf.ItSHX;
-    for i:=32 to ftFont.GlyphCount-1 do
+    pf.ItFFT;
+    pttf:=pointer(pf^.font);
+    //MapChar:=TMapChar.Create;
+    result:=true;
+    //ftFont := TFreeTypeFont.Create; //only one font at once for now...
+    pttf^.ftFont.SizeInPoints := 1000;
+    pttf^.ftFont.Name := name;
+    pf.font.unicode:=true;
+    k:=(pttf^.ftFont.DPI/92)/pttf^.ftFont.SizeInPoints;
+    for i:=0 to 65535 do
       begin
-           glyph:=ftFont.Glyph[i];
-           psyminfo:=pf^.GetOrCreateSymbolInfo(glyph.Index);
-           psyminfo.addr:=PSHXFont(pf^.font).SHXdata.Count;
-           psyminfo.w:=glyph.Bounds.Right{/9.6}*64/96;
-           psyminfo.NextSymX:=psyminfo.w;
-           psyminfo.h:=glyph.Bounds.Top{/9.6}*64/96;
-
-           x:=0;
-           y:=0;
-           x1:=psyminfo.w;
-           y1:=psyminfo.h;
-
-           PSHXFont(pf^.font).SHXdata.AddByteByVal({pGDBByte(psubsymbol)^}2);
-           PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
-           PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
-           PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
-           PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
-           psyminfo.size:=1;
+           j:=pttf^.ftFont.CharIndex[i];
+           if j>0 then
+                      begin
+                           pttf^.MapChar.Insert(j,i);
+                      end;
       end;
+    for i:=1 to pttf^.ftFont.GlyphCount-1 do
+      begin
+           glyph:=pttf^.ftFont.Glyph[i];
+           _glyph:=glyph.Data.z;
+           pttf^.MapCharIterator:=pttf^.MapChar.Find(i);
+                                           if  pttf^.MapCharIterator=nil then
+                                                                      begin
+                                                                           j:=0;
+                                                                      end
+                                                                  else
+                                                                      begin
+                                                                           j:=pttf^.MapCharIterator.GetValue;
+                                                                      end;
+           programlog.LogOutStr('TTF: Symbol index='+inttostr(i)+'; code='+inttostr(j),0);
+           psyminfo:=pf^.GetOrCreateSymbolInfo(j);
+           (*
+           psyminfo.addr:=PSHXFont(pf^.font).SHXdata.Count;
+           psyminfo.w:=glyph.Bounds.Right*k/64;
+           psyminfo.NextSymX:={psyminfo.w}glyph.Advance*k{*64}{/ftFont.SizeInPoints};
+           psyminfo.h:=glyph.Bounds.Top*k/64;
+           psyminfo.size:=0;
+           cends:=0;
+           startcountur:=true;
+           for j:=0 to _glyph^.outline.n_points do
+           begin
+           x1:=_glyph^.outline.points^[j].x*k/64;
+           y1:=_glyph^.outline.points^[j].y*k/64;
+           if  startcountur then
+                                begin
+                                     scx:=x1;
+                                     scy:=y1;
+                                     startcountur:=false;
+                                end
+           else
+           begin
+             //if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then
+             //programlog.LogOutStr('TTF: flag='+inttostr(_glyph^.outline.flags[j]),0);
+             begin
+                  PSHXFont(pf^.font).SHXdata.AddByteByVal({pGDBByte(psubsymbol)^}2);
+                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
+                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
+                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
+                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
+                  inc(psyminfo.size);
+             end;
+           if j=_glyph^.outline.conEnds[cends] then
+             begin
+                  inc(cends);
+                  startcountur:=true;
+                  PSHXFont(pf^.font).SHXdata.AddByteByVal({pGDBByte(psubsymbol)^}2);
+                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
+                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
+                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@scx);
+                  PSHXFont(pf^.font).SHXdata.AddFontFloat(@scy);
+                  inc(psyminfo.size);
+             end;
+           end;
+           x:=x1;
+           y:=y1;
+           end;
+           *)
+      end;
+    //mapchar.Destroy;
 end;
 
 {procedure loadblock(s:GDBString);

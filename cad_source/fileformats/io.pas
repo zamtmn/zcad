@@ -211,7 +211,7 @@ begin
                           AddPoint(scontur,TPA_OnCurve);
   //                   end;
   //end;
-  solve;
+  //solve;
   ChangeMode(TSM_WaitStartCountur);
   farray.Clear;
 end;
@@ -1172,7 +1172,7 @@ begin
     //MapChar:=TMapChar.Create;
     result:=true;
     //ftFont := TFreeTypeFont.Create; //only one font at once for now...
-    pttf^.ftFont.SizeInPoints := 1000;
+    pttf^.ftFont.SizeInPoints := 100;
     pttf^.ftFont.Name := name;
     pf.font.unicode:=true;
     k:={(pttf^.ftFont.DPI/92)}1.048/pttf^.ftFont.SizeInPoints;
@@ -1186,9 +1186,9 @@ begin
       end;
     BS:=TBezierSolver2D.create;
     BS.shx:=@PSHXFont(pf^.font).SHXdata;
-    BS.fmode:=TSM_WaitStartCountur;
     for i:=1 to pttf^.ftFont.GlyphCount-1 do
       begin
+           BS.fmode:=TSM_WaitStartCountur;
            glyph:=pttf^.ftFont.Glyph[i];
            _glyph:=glyph.Data.z;
            pttf^.MapCharIterator:=pttf^.MapChar.Find(i);
@@ -1200,8 +1200,10 @@ begin
                                                                       begin
                                                                            chcode:=pttf^.MapCharIterator.GetValue;
                                                                       end;
+           if chcode<>0 then
+             begin
            programlog.LogOutStr('TTF: Symbol index='+inttostr(i)+'; code='+inttostr(chcode),0);
-           if chcode=52 then
+           if chcode=33 then
                             chcode:=chcode;
            psyminfo:=pf^.GetOrCreateSymbolInfo(chcode);
            BS.shxsize:=@psyminfo.size;
@@ -1269,6 +1271,8 @@ begin
            end;
            x:=x1;
            y:=y1;
+           end;
+           bs.EndCountur;
            end;
       end;
     bs.Destroy;

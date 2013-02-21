@@ -139,7 +139,7 @@ begin
   PATH_Template_File:='default.dxf';
   PATH_Program_Run:='C:\zcad\cad\';
   PATH_Support_Path:='*rtl|*rtl/objdefunits|*rtl/objdefunits/include|*components|*blocks/el/general|*rtl/styles';
-  PATH_Fonts:='*fonts/|C:/Program Files/AutoCAD 2010/Fonts/|C:/APPS/MY/acad/support/|C:\Program Files\Autodesk\AutoCAD 2012 - Russian\Fonts\';
+  PATH_Fonts:='*fonts/|C:/Program Files/AutoCAD 2010/Fonts/|C:/APPS/MY/acad/support/|C:\Program Files\Autodesk\AutoCAD 2012 - Russian\Fonts\|C:\Windows\Fonts\';
   PATH_LayoutFile:='C:\zcad\cad\components/defaultlayout.xml';
   ShowHiddenFieldInObjInsp:=False;
   testGDBBoolean:=False;

@@ -19,7 +19,7 @@
 unit io;
 {$INCLUDE def.inc}
 interface
-uses gmap,gutil,TTObjs,EasyLazFreeType,ugdbshxfont,geometry,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}GDBBlockDef,math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,{GDBManager,}iodxf,memman,{UGDBDescriptor,}gdbobjectsconstdef;
+uses gmap,gvector,gutil,TTObjs,EasyLazFreeType,ugdbshxfont,geometry,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}GDBBlockDef,math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,{GDBManager,}iodxf,memman,{UGDBDescriptor,}gdbobjectsconstdef;
 const
   //IgnoreSHP='() '#13;
   //BreakSHP='*,'#10;
@@ -33,7 +33,25 @@ type ptsyminfo=^tsyminfo;
      {$IFNDEF DELPHI}
      TLessInt={specialize }TLess<integer>;
      TMapChar={specialize }TMap<integer,integer,TLessInt>;
+     TVector2D={specialize }TVector<GDBvertex2D>;
      {$ENDIF}
+     TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);
+     TSolverMode=(TSM_WaitStartCountur,TSM_WaitStartPoint,TSM_WaitPoint);
+     TBezierSolver2D=class
+                          FArray:TVector2D;
+                          FMode:TSolverMode;
+                          BOrder:integer;
+                          shx:PGDBOpenArrayOfByte;
+                          shxsize:PGDBWord;
+                          scontur:GDBvertex2D;
+                          constructor create;
+                          procedure AddPoint(x,y:double;pa:TPointAttr);overload;
+                          procedure AddPoint(p:GDBvertex2D;pa:TPointAttr);overload;
+                          procedure ChangeMode(Mode:TSolverMode);
+                          procedure EndCountur;
+                          procedure solve;
+                          function getpoint(t:gdbdouble):GDBvertex2D;
+                     end;
 
 procedure readpalette;
 //procedure loadblock(s:GDBString);
@@ -47,6 +65,206 @@ function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
 implementation
 uses
     TTTypes,shared;
+procedure adddcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
+const
+     s=0.01;
+begin
+    shx.AddByteByVal({pGDBByte(psubsymbol)^}2);
+    x:=x-1*s;
+    y:=y-1*s;
+    shx.AddFontFloat(@x);
+    shx.AddFontFloat(@y);
+    x:=x+2*s;
+    y:=y+2*s;
+    shx.AddFontFloat(@x);
+    shx.AddFontFloat(@y);
+    inc(size);
+
+    shx.AddByteByVal({pGDBByte(psubsymbol)^}2);
+    x:=x-1*s-1*s;
+    y:=y-1*s+1*s;
+    shx.AddFontFloat(@x);
+    shx.AddFontFloat(@y);
+    x:=x+2*s;
+    y:=y-2*s;
+    shx.AddFontFloat(@x);
+    shx.AddFontFloat(@y);
+    inc(size);
+end;
+procedure addline(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y,x1,y1:fontfloat);
+begin
+    shx.AddByteByVal({pGDBByte(psubsymbol)^}2);
+    shx.AddFontFloat(@x);
+    shx.AddFontFloat(@y);
+
+    shx.AddFontFloat(@x1);
+    shx.AddFontFloat(@y1);
+    inc(size);
+end;
+procedure addgcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
+const
+     s=0.01;
+begin
+    shx.AddByteByVal({pGDBByte(psubsymbol)^}2);
+    y:=y+1*s;
+    shx.AddFontFloat(@x);
+    shx.AddFontFloat(@y);
+    x:=x+1*s;
+    y:=y-1*s;
+    shx.AddFontFloat(@x);
+    shx.AddFontFloat(@y);
+    inc(size);
+
+    shx.AddByteByVal({pGDBByte(psubsymbol)^}2);
+    shx.AddFontFloat(@x);
+    shx.AddFontFloat(@y);
+    x:=x-1*s;
+    y:=y-1*s;
+    shx.AddFontFloat(@x);
+    shx.AddFontFloat(@y);
+    inc(size);
+
+    shx.AddByteByVal({pGDBByte(psubsymbol)^}2);
+    shx.AddFontFloat(@x);
+    shx.AddFontFloat(@y);
+    x:=x-1*s;
+    y:=y+1*s;
+    shx.AddFontFloat(@x);
+    shx.AddFontFloat(@y);
+    inc(size);
+
+    shx.AddByteByVal({pGDBByte(psubsymbol)^}2);
+    shx.AddFontFloat(@x);
+    shx.AddFontFloat(@y);
+    x:=x+1*s;
+    y:=y+1*s;
+    shx.AddFontFloat(@x);
+    shx.AddFontFloat(@y);
+    inc(size);
+
+end;
+constructor TBezierSolver2D.create;
+begin
+     FArray:=TVector2D.Create;
+     FArray.Reserve(10);
+     FMode:=TSM_WaitStartCountur;
+end;
+procedure TBezierSolver2D.AddPoint(x,y:double;pa:TPointAttr);
+var
+   p:GDBvertex2D;
+begin
+     p.x:=x;
+     p.y:=y;
+     AddPoint(p,pa);
+end;
+procedure TBezierSolver2D.AddPoint(p:GDBvertex2D;pa:TPointAttr);
+begin
+     case FMode of
+     TSM_WaitStartCountur:begin
+                             scontur:=p;
+                             FArray.PushBack(p);
+                             ChangeMode(TSM_WaitPoint);
+                        end;
+     TSM_WaitStartPoint:begin
+                             FArray.PushBack(p);
+                             ChangeMode(TSM_WaitPoint);
+                        end;
+     TSM_WaitPoint:begin
+                        if pa=TPA_OnCurve then
+                        begin
+                             FArray.PushBack(p);
+                             ChangeMode(TSM_WaitStartPoint);
+                             AddPoint(p,pa);
+                        end
+                        else
+                            begin
+                                 if FArray.Size=2 then
+                                 begin
+                                      AddPoint(Vertexmorph(FArray.Back,p,0.5),TPA_OnCurve);
+                                      AddPoint(p,pa);
+                                 end
+                                 else
+                                 begin
+                                      FArray.PushBack(p);
+                                 end;
+                            end;
+                   end;
+     end;
+end;
+procedure TBezierSolver2D.ChangeMode(Mode:TSolverMode);
+begin
+  case Mode of
+  TSM_WaitStartPoint:begin
+                          if FMode=TSM_WaitPoint then
+                          begin
+                               solve;
+                               FArray.Clear;
+                          end;
+                     end;
+  end;
+  FMode:=mode;
+end;
+procedure TBezierSolver2D.EndCountur;
+begin
+  //case fMode of
+  //TSM_WaitStartPoint:begin
+                          AddPoint(scontur,TPA_OnCurve);
+  //                   end;
+  //end;
+  solve;
+  ChangeMode(TSM_WaitStartCountur);
+  farray.Clear;
+end;
+function TBezierSolver2D.getpoint(t:gdbdouble):GDBvertex2D;
+var
+   i,j,k,rindex:integer;
+begin
+     rindex:=BOrder-1;
+     j:=BOrder;
+     k:=j;
+     for i:=0 to round((BOrder+2)*(BOrder-1)/2) do
+     begin
+          dec(k);
+          if k>0 then
+          begin
+          inc(rindex);
+          farray[rindex]:=Vertexmorph(FArray[i],FArray[i+1],t);
+          end
+          else
+          begin
+               dec(j);
+               k:=j;
+          end;
+     end;
+     result:=farray[rindex];
+end;
+procedure TBezierSolver2D.solve;
+var
+   size,i,j,rindex,n:integer;
+   p,prevp:GDBvertex2D;
+begin
+     BOrder:=FArray.Size;
+     if border<3 then
+     begin
+          if border=2 then
+          addline(shx,shxsize^,FArray[0].x,FArray[0].y,FArray[1].x,FArray[1].y);
+          exit;
+     end;
+     size:=round((BOrder+2)*(BOrder-1)/2)+1;
+     FArray.Resize(size);
+     n:=BOrder{*2};
+     for j:=1 to n-1 do
+     begin
+          p:=getpoint(j/n);
+          //addgcross(shx,shxsize^,p.x,p.y);
+          if j>1 then
+                     addline(shx,shxsize^,p.x,p.y,prevp.x,prevp.y)
+                 else
+                     addline(shx,shxsize^,p.x,p.y,FArray[0].x,FArray[0].y);
+          prevp:=p;
+     end;
+          addline(shx,shxsize^,p.x,p.y,FArray[BOrder-1].x,FArray[BOrder-1].y);
+end;
 
 function createsymbol(pf:PGDBfont;symbol:GDBInteger;pshxdata:system.pbyte;{var pdata:pbyte;}datalen:integer;unicode:boolean;symname:gdbstring):GDBInteger;
 var
@@ -924,7 +1142,6 @@ begin
     end;
   f.done;
 end;
-
 function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
 {
 TLessInt=TLess<integer>;
@@ -940,12 +1157,13 @@ var
    psyminfo,psubsyminfo:PGDBsymdolinfo;
 
    x,y,x1,y1,scx,scy:fontfloat;
-   cends:integer;
+   cends,lastoncurve,chcode:integer;
    startcountur:boolean;
    k:gdbdouble;
    //MapChar:TMapChar;
    //MapCharIterator:TMapChar.TIterator;
    pttf:PTTFFont;
+   BS:TBezierSolver2D;
 begin
     //result:=false;
     initfont(pf,extractfilename(name));
@@ -957,15 +1175,18 @@ begin
     pttf^.ftFont.SizeInPoints := 1000;
     pttf^.ftFont.Name := name;
     pf.font.unicode:=true;
-    k:=(pttf^.ftFont.DPI/92)/pttf^.ftFont.SizeInPoints;
+    k:={(pttf^.ftFont.DPI/92)}1.048/pttf^.ftFont.SizeInPoints;
     for i:=0 to 65535 do
       begin
-           j:=pttf^.ftFont.CharIndex[i];
-           if j>0 then
+           chcode:=pttf^.ftFont.CharIndex[i];
+           if chcode>0 then
                       begin
-                           pttf^.MapChar.Insert(j,i);
+                           pttf^.MapChar.Insert(chcode,i);
                       end;
       end;
+    BS:=TBezierSolver2D.create;
+    BS.shx:=@PSHXFont(pf^.font).SHXdata;
+    BS.fmode:=TSM_WaitStartCountur;
     for i:=1 to pttf^.ftFont.GlyphCount-1 do
       begin
            glyph:=pttf^.ftFont.Glyph[i];
@@ -973,26 +1194,39 @@ begin
            pttf^.MapCharIterator:=pttf^.MapChar.Find(i);
                                            if  pttf^.MapCharIterator=nil then
                                                                       begin
-                                                                           j:=0;
+                                                                           chcode:=0;
                                                                       end
                                                                   else
                                                                       begin
-                                                                           j:=pttf^.MapCharIterator.GetValue;
+                                                                           chcode:=pttf^.MapCharIterator.GetValue;
                                                                       end;
-           programlog.LogOutStr('TTF: Symbol index='+inttostr(i)+'; code='+inttostr(j),0);
-           psyminfo:=pf^.GetOrCreateSymbolInfo(j);
-           (*
+           programlog.LogOutStr('TTF: Symbol index='+inttostr(i)+'; code='+inttostr(chcode),0);
+           if chcode=52 then
+                            chcode:=chcode;
+           psyminfo:=pf^.GetOrCreateSymbolInfo(chcode);
+           BS.shxsize:=@psyminfo.size;
            psyminfo.addr:=PSHXFont(pf^.font).SHXdata.Count;
            psyminfo.w:=glyph.Bounds.Right*k/64;
            psyminfo.NextSymX:={psyminfo.w}glyph.Advance*k{*64}{/ftFont.SizeInPoints};
            psyminfo.h:=glyph.Bounds.Top*k/64;
            psyminfo.size:=0;
            cends:=0;
+           lastoncurve:=0;
            startcountur:=true;
            for j:=0 to _glyph^.outline.n_points do
            begin
            x1:=_glyph^.outline.points^[j].x*k/64;
            y1:=_glyph^.outline.points^[j].y*k/64;
+          if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then
+          begin
+               //adddcross(@PSHXFont(pf^.font).SHXdata,psyminfo.size,x1,y1);
+               bs.AddPoint(x1,y1,TPA_OnCurve);
+          end
+          else
+              begin
+              //addgcross(@PSHXFont(pf^.font).SHXdata,psyminfo.size,x1,y1);
+              bs.AddPoint(x1,y1,TPA_NotOnCurve);
+              end;
            if  startcountur then
                                 begin
                                      scx:=x1;
@@ -1001,33 +1235,43 @@ begin
                                 end
            else
            begin
-             //if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then
+             if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then
+             begin
+                  //shared.HistoryOutStr(inttostr(j-lastoncurve));
+                  if j-lastoncurve>3 then
+                                         lastoncurve:=lastoncurve;
+                  lastoncurve:=j;
+             end;
              //programlog.LogOutStr('TTF: flag='+inttostr(_glyph^.outline.flags[j]),0);
              begin
-                  PSHXFont(pf^.font).SHXdata.AddByteByVal({pGDBByte(psubsymbol)^}2);
+                  {PSHXFont(pf^.font).SHXdata.AddByteByVal(2);
                   PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
                   PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
                   PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
                   PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
-                  inc(psyminfo.size);
+                  inc(psyminfo.size);}
              end;
            if j=_glyph^.outline.conEnds[cends] then
              begin
+                  bs.EndCountur;
                   inc(cends);
                   startcountur:=true;
-                  PSHXFont(pf^.font).SHXdata.AddByteByVal({pGDBByte(psubsymbol)^}2);
+                  lastoncurve:=j+1;
+                  {PSHXFont(pf^.font).SHXdata.AddByteByVal(2);
                   PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
                   PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
                   PSHXFont(pf^.font).SHXdata.AddFontFloat(@scx);
                   PSHXFont(pf^.font).SHXdata.AddFontFloat(@scy);
-                  inc(psyminfo.size);
+                  inc(psyminfo.size);}
+                  if cends=_glyph^.outline.n_contours then
+                                                          break;
              end;
            end;
            x:=x1;
            y:=y1;
            end;
-           *)
       end;
+    bs.Destroy;
     //mapchar.Destroy;
 end;
 

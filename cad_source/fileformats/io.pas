@@ -43,7 +43,8 @@ type ptsyminfo=^tsyminfo;
                           BOrder:integer;
                           shx:PGDBOpenArrayOfByte;
                           shxsize:PGDBWord;
-                          scontur:GDBvertex2D;
+                          scontur,truescontur:GDBvertex2D;
+                          sconturpa:TPointAttr;
                           constructor create;
                           procedure AddPoint(x,y:double;pa:TPointAttr);overload;
                           procedure AddPoint(p:GDBvertex2D;pa:TPointAttr);overload;
@@ -162,7 +163,9 @@ begin
      case FMode of
      TSM_WaitStartCountur:begin
                              scontur:=p;
-                             FArray.PushBack(p);
+                             sconturpa:=pa;
+                             if pa=TPA_OnCurve then
+                                                   FArray.PushBack(p);
                              ChangeMode(TSM_WaitPoint);
                         end;
      TSM_WaitStartPoint:begin
@@ -178,7 +181,13 @@ begin
                         end
                         else
                             begin
-                                 if FArray.Size=2 then
+                                 if FArray.Size=0 then
+                                 begin
+                                      truescontur:=Vertexmorph(scontur,p,0.5);
+                                      AddPoint(truescontur,TPA_OnCurve);
+                                      AddPoint(p,pa);
+                                 end
+                            else if FArray.Size=2 then
                                  begin
                                       AddPoint(Vertexmorph(FArray.Back,p,0.5),TPA_OnCurve);
                                       AddPoint(p,pa);
@@ -208,7 +217,14 @@ procedure TBezierSolver2D.EndCountur;
 begin
   //case fMode of
   //TSM_WaitStartPoint:begin
-                          AddPoint(scontur,TPA_OnCurve);
+
+  if sconturpa=TPA_OnCurve then
+                               AddPoint(scontur,TPA_OnCurve)
+                           else
+                               begin
+                                    AddPoint(scontur,TPA_NotOnCurve);
+                                    AddPoint(truescontur,TPA_OnCurve);
+                               end;
   //                   end;
   //end;
   //solve;
@@ -252,7 +268,7 @@ begin
      end;
      size:=round((BOrder+2)*(BOrder-1)/2)+1;
      FArray.Resize(size);
-     n:=BOrder{*2};
+     n:=BOrder{*2}-1;
      for j:=1 to n-1 do
      begin
           p:=getpoint(j/n);
@@ -1203,8 +1219,8 @@ begin
            if chcode<>0 then
              begin
            programlog.LogOutStr('TTF: Symbol index='+inttostr(i)+'; code='+inttostr(chcode),0);
-           if chcode=33 then
-                            chcode:=chcode;
+           if chcode=56 then
+                             chcode:=chcode;
            psyminfo:=pf^.GetOrCreateSymbolInfo(chcode);
            BS.shxsize:=@psyminfo.size;
            psyminfo.addr:=PSHXFont(pf^.font).SHXdata.Count;

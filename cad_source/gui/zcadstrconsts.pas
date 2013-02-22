@@ -106,6 +106,7 @@ resourcestring
   rsDoubleBlockIgnored='Ignored double definition block "%s"';
   rsZCADStarted='ZCAD v%s started';
   rsGridTooDensity='Grid too density';
+  rsLoadingFontFile='Loading font file "%S"';
 
   {window names}
   rsOpenFile='Open file...';
@@ -149,4 +150,4 @@ resourcestring
   rsncOGLc='OpenGL context is not created';
 implementation
 
-end.
+end.

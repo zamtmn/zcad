@@ -125,8 +125,8 @@ destructor TTFFont.done;
 begin
      inherited;
      ftFont.Destroy;
-     MapChar.Destroy;
      MapCharIterator.Destroy;
+     MapChar.Destroy;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBSHXFont.initialization');{$ENDIF}

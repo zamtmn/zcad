@@ -780,7 +780,7 @@ begin
 end;
 procedure TOGLStateManager.mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);
 begin
-     gluPickMatrix(x,y,delX,delY,{$IFNDEF DELPHI}viewport{$ELSE}PVector4i(viewport){$ENDIF});
+     gluPickMatrix(x,y,delX,delY,{$IFNDEF DELPHI}PTViewPortArray(viewport)^{$ELSE}(viewport){$ENDIF});
 end;
 
 procedure TOGLStateManager.myglMatrixMode(const mode: GLenum);

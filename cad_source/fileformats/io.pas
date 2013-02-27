@@ -1178,12 +1178,13 @@ begin
     pttf:=pointer(pf^.font);
     result:=true;
     pttf^.ftFont.Hinted:=false;
-    k:=pttf^.ftFont.SizeInPoints;
-    k:=pttf^.ftFont.SizeInPixels;
     pttf^.ftFont.SizeInPoints := 10;
     pttf^.ftFont.Name := name;
     pf.font.unicode:=true;
+    k:=1;
+    {$if FPC_FULlVERSION>=20701}
     k:=1/pttf^.ftFont.CapHeight;
+    {$ENDIF}
     for i:=0 to 65535 do
       begin
            chcode:=pttf^.ftFont.CharIndex[i];

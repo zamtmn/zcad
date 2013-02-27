@@ -19,7 +19,7 @@
 unit UGDBFontManager;
 {$INCLUDE def.inc}
 interface
-uses shared,zcadsysvars,strproc,ugdbfont,gdbasetypes,SysInfo,memman,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
+uses zcadstrconsts,shared,zcadsysvars,strproc,ugdbfont,gdbasetypes,SysInfo,memman,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
      UGDBNamedObjectsArray;
 type
 {Export+}
@@ -88,6 +88,7 @@ begin
                        end;
              IsCreated:
                        begin
+                            shared.HistoryOutStr(sysutils.format(rsLoadingFontFile,[FontPathName]));
                             programlog.logoutstr('Loading font '+FontPathName,lp_IncPos);
                             if FontExt='.SHX' then
                                                   FontLoaded:=createnewfontfromshx(FontPathName,p)

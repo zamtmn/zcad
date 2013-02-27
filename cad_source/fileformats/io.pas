@@ -1159,16 +1159,10 @@ begin
   f.done;
 end;
 function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
-{
-TLessInt=TLess<integer>;
-TMapChar=TMap<integer,integer, lessppi>;
-}
 var
-   //ftFont: TFreeTypeFont;
    i,j:integer;
    fe:boolean;
    glyph:TFreeTypeGlyph;
-   //_TT_Glyph:TT_Glyph;
    _glyph:PGlyph;
    psyminfo,psubsyminfo:PGDBsymdolinfo;
 
@@ -1176,22 +1170,20 @@ var
    cends,lastoncurve,chcode:integer;
    startcountur:boolean;
    k:gdbdouble;
-   //MapChar:TMapChar;
-   //MapCharIterator:TMapChar.TIterator;
    pttf:PTTFFont;
    BS:TBezierSolver2D;
 begin
-    //result:=false;
     initfont(pf,extractfilename(name));
     pf.ItFFT;
     pttf:=pointer(pf^.font);
-    //MapChar:=TMapChar.Create;
     result:=true;
-    //ftFont := TFreeTypeFont.Create; //only one font at once for now...
-    pttf^.ftFont.SizeInPoints := 100;
+    pttf^.ftFont.Hinted:=false;
+    k:=pttf^.ftFont.SizeInPoints;
+    k:=pttf^.ftFont.SizeInPixels;
+    pttf^.ftFont.SizeInPoints := 10;
     pttf^.ftFont.Name := name;
     pf.font.unicode:=true;
-    k:={(pttf^.ftFont.DPI/92)}1.048/pttf^.ftFont.SizeInPoints;
+    k:=1/pttf^.ftFont.CapHeight;
     for i:=0 to 65535 do
       begin
            chcode:=pttf^.ftFont.CharIndex[i];
@@ -1225,7 +1217,7 @@ begin
            BS.shxsize:=@psyminfo.size;
            psyminfo.addr:=PSHXFont(pf^.font).SHXdata.Count;
            psyminfo.w:=glyph.Bounds.Right*k/64;
-           psyminfo.NextSymX:={psyminfo.w}glyph.Advance*k{*64}{/ftFont.SizeInPoints};
+           psyminfo.NextSymX:=glyph.Advance*k;
            psyminfo.h:=glyph.Bounds.Top*k/64;
            psyminfo.size:=0;
            cends:=0;

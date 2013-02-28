@@ -34,7 +34,6 @@ GDBfont=object(GDBNamedObject)
     destructor done;virtual;
     function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
     function GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
-    function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
     procedure CreateSymbol(var Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
   end;
 {EXPORT-}
@@ -231,81 +230,17 @@ begin
      {GDBGetMem(font,sizeof(SHXFont));
      font^.init;}
 end;
-function GDBfont.findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
-var
-   pobj:PGDBUNISymbolInfo;
-   ir:itrec;
-   //debug:GDBInteger;
-begin
-     pobj:=font.unisymbolinfo.beginiterate(ir);
-     if pobj<>nil then
-     repeat
-           //debug:=pobj^.symbol;
-           //debug:=pobj^.symbolinfo.addr;
-           if pobj^.symbol=symbol then
-                                      begin
-                                           result:=@pobj^.symbolinfo;
-                                           exit;
-                                      end;
-           pobj:=font.unisymbolinfo.iterate(ir);
-     until pobj=nil;
-     result:=nil;
-end;
 function GDBfont.GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
 //var
    //usi:GDBUNISymbolInfo;
 begin
-     if symbol=49 then
-                        symbol:=symbol;
-     if symbol<256 then
-                       begin
-                       result:=@self.font.symbolinfo[symbol];
-                       if result^.addr=0 then
-                                        result:=@self.font.symbolinfo[ord('?')];
-                       end
-                   else
-                       //result:=@self.symbolinfo[ord('?')]
-                       begin
-                            result:=findunisymbolinfo(symbol);
-                            //result:=@symbolinfo[ord('?')];
-                            //usi.symbolinfo:=result^;;
-                            if result=nil then
-                            begin
-                                 result:=@self.font.symbolinfo[ord('?')];
-                                 exit;
-                            end;
-                            if result^.addr=0 then
-                                             result:=@self.font.symbolinfo[ord('?')];
-
-                       end;
+     result:=font.GetOrReplaceSymbolInfo(symbol);
 end;
 function GDBfont.GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
 var
    usi:GDBUNISymbolInfo;
 begin
-     if symbol<256 then
-                       result:=@self.font.symbolinfo[symbol]
-                   else
-                       //result:=@self.symbolinfo[0]
-                       begin
-                            result:=findunisymbolinfo(symbol);
-                            if result=nil then
-                            begin
-                                 usi.symbol:=symbol;
-                                 usi.symbolinfo.addr:=0;
-                                 usi.symbolinfo.NextSymX:=0;
-                                 usi.symbolinfo.SymMaxY:=0;
-                                 usi.symbolinfo.h:=0;
-                                 usi.symbolinfo.size:=0;
-                                 usi.symbolinfo.w:=0;
-                                 usi.symbolinfo.SymMinY:=0;
-                                 usi.symbolinfo.LatestCreate:=false;
-                                 killstring(usi.symbolinfo.Name);
-                                 font.unisymbolinfo.Add(@usi);
-
-                                 result:=@(PGDBUNISymbolInfo(font.unisymbolinfo.getelement(font.unisymbolinfo.Count-1))^.symbolinfo);
-                            end;
-                       end;
+     result:=font.GetOrCreateSymbolInfo(symbol);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBFont.initialization');{$ENDIF}

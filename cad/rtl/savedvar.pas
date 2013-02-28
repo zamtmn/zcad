@@ -31,15 +31,15 @@ begin
   TEdWND_Height:=481;
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=238;
-  VIEW_ObjInspSubV:=98;
+  VIEW_ObjInspSubV:=130;
   PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File1:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File2:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File3:='J:\nh\Наиль\ИЗМ2\AOB.dxf';
-  PATH_File4:='J:\nh\Фарит\котельная\prj\AK_plan.dxf';
-  PATH_File5:='J:\nh\сургут\котельная\proj.dxf';
-  PATH_File6:='J:\nh\искандер\Кирилл Никитин\тоёта\АОВ\AOB.dxf';
-  PATH_File7:='J:\nh\ЗВЕЗДИНА\дом 5эт\ПС\proj.dxf';
-  PATH_File8:='J:\nh\Рамиль\Ноябрьск реконструкция\АК\AK.dxf';
-  PATH_File9:='J:\nh\Коробова\рубин\АОВ\AOB2.dxf';
+  PATH_File1:='C:\fonttest.dxf';
+  PATH_File2:='C:\zcad\cad\sample\test_dxf\truetype.dxf';
+  PATH_File3:='C:\zcad\cad\sample\test_dxf\em.dxf';
+  PATH_File4:='C:\zcad\cad\sample\test_dxf\ops.dxf';
+  PATH_File5:='C:\zcad\cad\sample\test_dxf\test.dxf';
+  PATH_File6:='C:\zcad\cad\sample\zigzag.dxf';
+  PATH_File7:='C:\АВК.dxf';
+  PATH_File8:='J:\nh\Коробова\промышленная\proj.dxf';
+  PATH_File9:='C:\zcad\cad\sample\test_dxf\teapot.dxf';
 end.

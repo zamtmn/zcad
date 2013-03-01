@@ -247,7 +247,7 @@ begin
 
       end;
     inc(currsymbol,l);
-    psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym);
+    //psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym);
   until currsymbol > length(content);
   end;
   if linewidth=0 then
@@ -778,6 +778,10 @@ begin
             pswp:=text.iterate(ir);
         until pswp=nil;
 
+       if minx=+infinity then minx:=0;
+       if miny=+infinity then miny:=0;
+       if maxx=NegInfinity then maxx:=1;
+       if maxy=NegInfinity then maxy:=1;
 
   v.x:=minx;
   v.y:=maxy;

@@ -669,6 +669,11 @@ begin
                              pl.Add(@lp);
                      end;
 
+       if minx=+infinity then minx:=0;
+       if miny=+infinity then miny:=0;
+       if maxx=NegInfinity then maxx:=1;
+       if maxy=NegInfinity then maxy:=1;
+
   v.x:=minx;
   v.y:=maxy;
   v.z:=0;

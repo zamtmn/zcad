@@ -955,9 +955,10 @@ begin
                            si.GlyphIndex:=chcode;
                            si.PSymbolInfo:=nil;
                            pttf^.MapChar.Insert(i,si);
+                           //programlog.LogOutStr('TTF: Symbol index='+inttostr(si.GlyphIndex)+'; code='+inttostr(i),0);
                       end;
       end;
-    exit;
+    {exit;}
     iterator:=pttf^.MapChar.Min;
     if assigned(iterator) then
     begin
@@ -968,7 +969,7 @@ begin
           cfeatettfsymbol(chcode,si,pttf);
           iterator.Value:=si;
 
-    until not iterator.next;
+    until {not iterator.next}true;
     iterator.Destroy;
     end;
 end;

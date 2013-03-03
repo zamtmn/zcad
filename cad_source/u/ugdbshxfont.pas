@@ -128,8 +128,12 @@ begin
   si.PSymbolInfo.addr:=pttf.SHXdata.Count;
   si.PSymbolInfo.w:=glyph.Bounds.Right*k/64;
   si.PSymbolInfo.NextSymX:=glyph.Advance*k;
+  si.PSymbolInfo.SymMaxX:=si.PSymbolInfo.NextSymX;
+  si.PSymbolInfo.SymMinX:=0;
   si.PSymbolInfo.h:=glyph.Bounds.Top*k/64;
   si.PSymbolInfo.size:=0;
+  if _glyph^.outline.n_contours>0 then
+  begin
   cends:=0;
   lastoncurve:=0;
   startcountur:=true;
@@ -137,6 +141,7 @@ begin
   begin
   x1:=_glyph^.outline.points^[j].x*k/64;
   y1:=_glyph^.outline.points^[j].y*k/64;
+  //programlog.LogOutStr('TTF x='+floattostr(x1)+' y='+floattostr(y1),0);
  if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then
  begin
       //adddcross(@PSHXFont(pf^.font).SHXdata,psyminfo.size,x1,y1);
@@ -191,6 +196,7 @@ begin
   y:=y1;
   end;
   bs.EndCountur;
+  end;
 end;
 procedure adddcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
 const
@@ -568,7 +574,12 @@ begin
                                                               end;
                               end
                           else
-                              result:=@symbolinfo[ord('?')];
+                              begin
+                                   //result:=@symbolinfo[ord('?')];
+                                   CharIterator:=MapChar.Min;
+                                   si:=CharIterator.value;
+                                   result:=si.PSymbolInfo;
+                              end;
      exit;
 
      if symbol=49 then

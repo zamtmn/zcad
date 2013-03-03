@@ -70,6 +70,7 @@ begin
   //deb:=psyminfo^;
   psymbol := self.font.GetSymbolDataAddr(psyminfo.addr);
   if {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size <> 0 then
+  begin;
     for j := 1 to {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size do
     begin
       case GDBByte(psymbol^) of
@@ -198,6 +199,7 @@ begin
           end;
       end;
     end;
+  end
   end;
 constructor GDBfont.initnul;
 begin

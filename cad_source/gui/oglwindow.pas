@@ -2446,7 +2446,10 @@ procedure TOGLWnd.showcursor;
     if param.md.mousein then
     if (param.md.mode and MGetSelectObject) <> 0 then
     begin
+    _NotUseLCS:=NotUseLCS;
+    NotUseLCS:=true;
     drawfrustustum(param.mousefrustumLCS);
+    NotUseLCS:=_NotUseLCS;
     {tv1:=PointOf3PlaneIntersect(param.mousefrustumLCS[0],param.mousefrustumLCS[3],Tempplane);
     tv2:=PointOf3PlaneIntersect(param.mousefrustumLCS[1],param.mousefrustumLCS[3],Tempplane);
     tv3:=PointOf3PlaneIntersect(param.mousefrustumLCS[1],param.mousefrustumLCS[2],Tempplane);
@@ -3035,6 +3038,7 @@ procedure TOGLWnd.RestoreBuffers;
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers',lp_incPos);{$ENDIF};
   _NotUseLCS:=NotUseLCS;
+  NotUseLCS:=true;
   oglsm.myglEnable(GL_TEXTURE_2D);
   oglsm.myglDisable(GL_DEPTH_TEST);
        oglsm.myglMatrixMode(GL_PROJECTION);

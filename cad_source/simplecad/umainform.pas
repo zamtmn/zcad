@@ -10,13 +10,14 @@ uses
   StdCtrls, Spin,
   {From ZCAD}
   zcadsysvars,{zcadinterface,} iodxf,varmandef, oglwindow,  UUnitManager,urtl,
-  UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDB3DFace,GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,ugdbsimpledrawing,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
+  UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDB3DFace,GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
 
 type
 
   { TForm1 }
 
   TForm1 = class(TForm)
+    BtnAddCircles1: TButton;
     BtnAddLWPolyLines1: TButton;
     BtnAddLines: TButton;
     BtnAddCircles: TButton;
@@ -46,6 +47,7 @@ type
     procedure BtnAdd3DFaces1Click(Sender: TObject);
     //procedure FormatEntitysAndRebuildTreeAndRedraw;
     procedure BtnAdd3DpolyLinesClick(Sender: TObject);
+    procedure BtnAddArcsClick(Sender: TObject);
     procedure BtnAddLinesClick(Sender: TObject);
     procedure BtnAddCirclesClick(Sender: TObject);
     procedure BtnAddLWPolylines1Click(Sender: TObject);
@@ -427,6 +429,33 @@ begin
   BtnRebuildClick(self);
 end;
 
+procedure TForm1.BtnAddArcsClick(Sender: TObject);
+var
+   ptd:PTDrawing;
+   tn:GDBString;
+   i:integer;
+   pobj:PGDBObjArc;
+   v1,v2:gdbvertex;
+begin
+  _StartLongProcess(0,'Add arcs');
+  for i:=1 to SpinEdit1.Value do
+  begin
+    pobj := PGDBObjArc(CreateInitObjFree(GDBArcID,nil));
+    pobj^.Local.P_insert:=CreateRandomVertex(1000,500);
+    pobj^.R:=CreateRandomDouble(10)+0.1;
+    pobj^.StartAngle:=CreateRandomDouble(2*pi);
+    pobj^.EndAngle:=CreateRandomDouble(2*pi);
+    gdb.GetCurrentRoot^.AddMi(@pobj);
+    processobj(pobj);
+    pobj^.BuildGeometry(gdb.GetCurrentDWG^);
+    pobj^.formatEntity(gdb.GetCurrentDWG^);
+  end;
+  _EndLongProcess;
+  //FormatEntitysAndRebuildTreeAndRedraw;
+  BtnRebuildClick(self);
+end;
+
+
 procedure TForm1.BtnRebuildClick(Sender: TObject);
 begin
      _StartLongProcess(0,'Rebuild spatial tree');
@@ -607,4 +636,4 @@ end;
 
 
 end.
-
+

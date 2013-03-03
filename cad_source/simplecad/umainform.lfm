@@ -92,10 +92,10 @@ object Form1: TForm1
     AnchorSideTop.Side = asrCenter
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 908
-    Height = 28
-    Top = 548
-    Width = 189
+    Left = 906
+    Height = 23
+    Top = 612
+    Width = 191
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Rebuild tree'
     OnClick = BtnRebuildClick
@@ -106,9 +106,9 @@ object Form1: TForm1
     AnchorSideLeft.Side = asrBottom
     AnchorSideRight.Side = asrBottom
     Left = 834
-    Height = 21
-    Top = 552
-    Width = 74
+    Height = 19
+    Top = 614
+    Width = 72
     Caption = 'Show tree'
     OnChange = TreeChange
     TabOrder = 5
@@ -118,10 +118,10 @@ object Form1: TForm1
     AnchorSideLeft.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 957
-    Height = 22
+    Left = 970
+    Height = 23
     Top = 0
-    Width = 140
+    Width = 127
     Anchors = [akTop, akLeft, akRight]
     MaxValue = 1000000
     MinValue = 1
@@ -135,7 +135,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 834
     Height = 37
-    Top = 360
+    Top = 392
     Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Erase Selected'
@@ -149,7 +149,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 834
     Height = 32
-    Top = 88
+    Top = 120
     Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add texts'
@@ -162,8 +162,8 @@ object Form1: TForm1
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 834
-    Height = 35
-    Top = 449
+    Height = 28
+    Top = 529
     Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Open DXF'
@@ -176,8 +176,8 @@ object Form1: TForm1
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 834
-    Height = 32
-    Top = 488
+    Height = 26
+    Top = 561
     Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Save DXF'
@@ -191,7 +191,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 834
     Height = 32
-    Top = 328
+    Top = 360
     Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Select All'
@@ -204,9 +204,9 @@ object Form1: TForm1
     AnchorSideTop.Control = SpinEdit1
     AnchorSideTop.Side = asrCenter
     Left = 834
-    Height = 12
-    Top = 5
-    Width = 123
+    Height = 15
+    Top = 4
+    Width = 136
     Alignment = taCenter
     Caption = 'Number of entities to add'
     Layout = tlCenter
@@ -219,7 +219,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 834
     Height = 31
-    Top = 120
+    Top = 152
     Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add 3DPolyLines'
@@ -233,7 +233,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 834
     Height = 31
-    Top = 152
+    Top = 184
     Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add LWPolyLines'
@@ -244,9 +244,9 @@ object Form1: TForm1
     AnchorSideLeft.Control = Splitter1
     AnchorSideLeft.Side = asrBottom
     Left = 834
-    Height = 21
-    Top = 529
-    Width = 97
+    Height = 19
+    Top = 595
+    Width = 104
     Caption = '3D(ZCoord<>0)'
     TabOrder = 14
   end
@@ -257,7 +257,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 834
     Height = 32
-    Top = 224
+    Top = 256
     Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Process Lines'
@@ -271,7 +271,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 834
     Height = 32
-    Top = 256
+    Top = 288
     Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Off entity layer'
@@ -285,7 +285,7 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 834
     Height = 32
-    Top = 288
+    Top = 320
     Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'On all layer'
@@ -302,8 +302,8 @@ object Form1: TForm1
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 834
-    Height = 333
-    Top = 576
+    Height = 274
+    Top = 635
     Width = 263
     Anchors = [akTop, akLeft, akRight, akBottom]
     TabOrder = 18
@@ -315,22 +315,36 @@ object Form1: TForm1
     AnchorSideRight.Side = asrBottom
     Left = 834
     Height = 31
-    Top = 184
+    Top = 216
     Width = 263
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Add 3DFaces'
     OnClick = BtnAdd3DFaces1Click
     TabOrder = 19
   end
+  object BtnAddCircles1: TButton
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 834
+    Height = 33
+    Top = 88
+    Width = 263
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Add arcs'
+    OnClick = BtnAddArcsClick
+    TabOrder = 20
+  end
   object OpenDialog1: TOpenDialog
     DefaultExt = '.dxf'
     Filter = 'DXF File|*.dxf'
-    left = 880
-    top = 408
+    left = 878
+    top = 488
   end
   object SaveDialog1: TSaveDialog
     Filter = 'DXF file|*.dxf'
-    left = 936
-    top = 408
+    left = 934
+    top = 488
   end
-end
+end

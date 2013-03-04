@@ -219,7 +219,7 @@ begin
     pint:=SavedUnit.FindValue('DMenuY');
     if assigned(pint)then
                          DMenu.Top:=pint^;}
-    CWindow:=TCWindow.Create(application);
+    CWindow:=TCWindow.CreateNew(application);
     //CWindow.Show;
     SetCommandLineMode:=self.SetMode;
 end;

@@ -396,7 +396,7 @@ begin
       case GDBByte(psymbol^) of
         2:
           begin
-            inc(pGDBByte(psymbol), sizeof(GDBLineID));
+            inc(pGDBByte(psymbol), sizeof(SHXLine));
             PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
             inc(pfontfloat(psymbol));
             PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;

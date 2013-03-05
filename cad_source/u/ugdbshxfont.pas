@@ -169,7 +169,7 @@ begin
     end;
     //programlog.LogOutStr('TTF: flag='+inttostr(_glyph^.outline.flags[j]),0);
     begin
-         {PSHXFont(pf^.font).SHXdata.AddByteByVal(2);
+         {PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);
          PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
          PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
          PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
@@ -182,7 +182,7 @@ begin
          inc(cends);
          startcountur:=true;
          lastoncurve:=j+1;
-         {PSHXFont(pf^.font).SHXdata.AddByteByVal(2);
+         {PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);
          PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
          PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
          PSHXFont(pf^.font).SHXdata.AddFontFloat(@scx);
@@ -202,7 +202,7 @@ procedure adddcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
 const
      s=0.01;
 begin
-    shx.AddByteByVal({pGDBByte(psubsymbol)^}2);
+    shx.AddByteByVal(SHXLine);
     x:=x-1*s;
     y:=y-1*s;
     shx.AddFontFloat(@x);
@@ -213,7 +213,7 @@ begin
     shx.AddFontFloat(@y);
     inc(size);
 
-    shx.AddByteByVal({pGDBByte(psubsymbol)^}2);
+    shx.AddByteByVal(SHXLine);
     x:=x-1*s-1*s;
     y:=y-1*s+1*s;
     shx.AddFontFloat(@x);
@@ -226,7 +226,7 @@ begin
 end;
 procedure addline(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y,x1,y1:fontfloat);
 begin
-    shx.AddByteByVal({pGDBByte(psubsymbol)^}2);
+    shx.AddByteByVal(SHXLine);
     shx.AddFontFloat(@x);
     shx.AddFontFloat(@y);
 
@@ -238,7 +238,7 @@ procedure addgcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
 const
      s=0.01;
 begin
-    shx.AddByteByVal({pGDBByte(psubsymbol)^}2);
+    shx.AddByteByVal(SHXLine);
     y:=y+1*s;
     shx.AddFontFloat(@x);
     shx.AddFontFloat(@y);
@@ -248,7 +248,7 @@ begin
     shx.AddFontFloat(@y);
     inc(size);
 
-    shx.AddByteByVal({pGDBByte(psubsymbol)^}2);
+    shx.AddByteByVal(SHXLine);
     shx.AddFontFloat(@x);
     shx.AddFontFloat(@y);
     x:=x-1*s;
@@ -257,7 +257,7 @@ begin
     shx.AddFontFloat(@y);
     inc(size);
 
-    shx.AddByteByVal({pGDBByte(psubsymbol)^}2);
+    shx.AddByteByVal(SHXLine);
     shx.AddFontFloat(@x);
     shx.AddFontFloat(@y);
     x:=x-1*s;
@@ -266,7 +266,7 @@ begin
     shx.AddFontFloat(@y);
     inc(size);
 
-    shx.AddByteByVal({pGDBByte(psubsymbol)^}2);
+    shx.AddByteByVal(SHXLine);
     shx.AddFontFloat(@x);
     shx.AddFontFloat(@y);
     x:=x+1*s;

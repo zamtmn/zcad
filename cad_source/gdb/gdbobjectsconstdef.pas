@@ -40,6 +40,12 @@ const {as_normal=0;
   osm_apparentintersection=4096;
   osm_paralel=8192;
 
+  SHXLine=$01;
+  SHXPoly=$02;
+  SHXCountur=$08;
+  SHXCounturCCW=$0C;
+  SHXCounturCW=$0D;
+
   GDBBaseObjectID = 30000;
   GDBRootId = 30001;
   GDBcameraID = 0;

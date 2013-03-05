@@ -74,9 +74,9 @@ begin
     for j := 1 to {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size do
     begin
       case GDBByte(psymbol^) of
-        2:
+        SHXLine:
           begin
-            inc(pGDBByte(psymbol), sizeof(GDBLineID));
+            inc(pGDBByte(psymbol), sizeof(SHXLine));
             PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
             inc(pfontfloat(psymbol));
             PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
@@ -130,9 +130,9 @@ begin
             //pv.count:=0;
             //inc(pGDBByte(psymbol), 2 * sizeof(GDBDouble));
           end;
-        4:
+        SHXPoly:
           begin
-            inc(pGDBByte(psymbol), sizeof(GDBPolylineID));
+            inc(pGDBByte(psymbol), sizeof(SHXPoly));
             len := GDBWord(psymbol^);
             inc(pGDBByte(psymbol), sizeof(GDBWord));
             PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;

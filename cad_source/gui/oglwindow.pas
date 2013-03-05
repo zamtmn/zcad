@@ -1591,7 +1591,7 @@ begin
         case GDBByte(psymbol^) of
           2:
             begin
-              inc(psymbol, sizeof(GDBLineID));
+              inc(psymbol, sizeof(SHXLine));
               oglsm.myglbegin(GL_lines);
               glVertex2fv(GDBPointer(psymbol));
               inc(psymbol, 2 * sizeof(fontfloat));

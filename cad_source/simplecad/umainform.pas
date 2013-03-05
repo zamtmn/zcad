@@ -459,6 +459,7 @@ end;
 procedure TForm1.BtnRebuildClick(Sender: TObject);
 begin
      _StartLongProcess(0,'Rebuild spatial tree');
+     gdb.GetCurrentDWG^.pObjRoot^.calcbb;
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,0,nil,TND_Root)^;
      _EndLongProcess;
      UGDBDescriptor.redrawoglwnd;

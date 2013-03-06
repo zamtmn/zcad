@@ -1707,7 +1707,7 @@ begin
                           LineWbox.OnChange:=ChangeCLineW;
                           LineWbox.OnDropDown:=DropDownColor;
                           LineWbox.OnCloseUp:=DropUpColor;
-                          LineWbox.AutoSize:={false}true;
+                          LineWbox.AutoSize:=false;
                           LineWbox.OnMouseLeave:=self.setnormalfocus;
                           LineWbox.DropDownCount:=50;
                           LineWbox.ItemHeight:=16;
@@ -1746,7 +1746,7 @@ begin
                           ColorBox.OnChange:=ChangeCColor;
                           ColorBox.OnDropDown:=DropDownColor;
                           ColorBox.OnCloseUp:=DropUpColor;
-                          ColorBox.AutoSize:={false}true;
+                          ColorBox.AutoSize:=false;
                           ColorBox.OnMouseLeave:=self.setnormalfocus;
                           ColorBox.DropDownCount:=50;
                           ColorBox.ItemHeight:=16;

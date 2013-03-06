@@ -83,6 +83,7 @@ type
     sGlyph_Freze_OFF:TBitmap;
     sGlyph_Lock_ON:TBitmap;
     sGlyph_Lock_OFF:TBitmap;
+    FNotClose:boolean;
     procedure SetItemIndex(AValue:integer);
     procedure SetListHeight(AValue:integer);
     function ReadItemsCount:integer;
@@ -314,6 +315,7 @@ begin
   B1.OnClick:=@B1Klac;
   B1.Visible:=true;
   Application.OnDeactivate:=@PLDeActivate;
+  FNotClose:=false;
 end;
 
 procedure TZCADLayerComboBox.ItemsClear;                                       // Очистить список
@@ -507,6 +509,7 @@ procedure TZCADLayerComboBox.PLDeActivate(Sender:TObject);                     /
   var
     S,P:TPoint;
 begin
+  if FNotClose then exit;
   if PoleLista<>nil then
   begin
     PoleLista.Free;
@@ -591,6 +594,7 @@ procedure TZCADLayerComboBox.LVKlac(Sender:TObject);                           /
 begin
   if LV.Items.Count>0 then
   begin
+    FNotClose:=true;
     S.X:=0;
     S.Y:=0;
     KlacContrlPoint:=LV.ScreenToClient(S);
@@ -664,6 +668,7 @@ begin
       LV.EndUpdate;
       if collapsed then
                        Application.QueueAsyncCall(@PLDeActivate2,0);
+      FNotClose:=false;
       //ListChanged;
     end;
   end;
@@ -709,4 +714,4 @@ end;
 
 initialization
 
-end.
+end.

@@ -501,7 +501,8 @@ begin
                               LV.DefaultItemHeight:=-1;
                               hh:=LV.Height-LV.ClientHeight;
                               hh:=screen.WorkAreaHeight-a.y-1;
-                              h:=LV.Items.Count*{19}(LV.DefaultItemHeight+1)+10;
+                              {$IFDEF LINUX}h:=LV.Items.Count*(LV.DefaultItemHeight+1)+10;
+                              {$ELSE}h:=LV.Items.Count*(LV.DefaultItemHeight-1)+4;{$ENDIF}
                               if h>hh then h:=hh;
                               PoleLista.ClientHeight:=h;//{LV..Height*LV.Items.Count}1000;
                          end;
@@ -720,4 +721,4 @@ end;
 
 initialization
 
-end.
+end.

@@ -23,7 +23,7 @@ unit gdbentityfactory;
 interface
 uses memman,gdbobjectsconstdef,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity,GDBCable,GDBDevice,
      GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMText,GDBLine,
-     GDBPolyLine,GDBLWPolyLine,gdbellipse,GDB3DFace,GDBSolid;
+     GDBPolyLine,GDBLWPolyLine,gdbellipse,GDB3DFace,GDBSolid,gdbspline;
 function CreateInitObjFree(t:GDBByte;owner:PGDBObjGenericSubEntry):PGDBObjEntity;export;
 function CreateObjFree(t: GDBByte): PGDBObjEntity;export;
 implementation
@@ -95,7 +95,12 @@ begin
         GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Ellipse}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjEllipse));
         PGDBObjEllipse(temp).initnul{(owner)};
         PGDBObjEllipse(temp).bp.ListPos.Owner:=owner;
-      end
+      end;
+    GDBSplineID: begin
+        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Spline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjSpline));
+        PGDBObjSpline(temp).initnul(owner);
+        PGDBObjSpline(temp).bp.ListPos.Owner:=owner;
+      end;
   end;
   result := temp;
 end;
@@ -139,7 +144,10 @@ begin
       end;
     GDBEllipseID: begin
         GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.Ellipse}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjEllipse));
-      end
+      end;
+    GDBSplineID: begin
+        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.Spline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjSpline));
+      end;
   end;
   result := temp;
 end;

@@ -64,6 +64,10 @@ type
     property BorderVisible:boolean read sBorderVisible write SetBorderVisible;
     property BackgroundColor:TColor read sBackgroundColor write SetBackgroundColor;
   end;
+  TMyListView=class(TListView)
+              public
+              property DefaultItemHeight;
+              end;
 
   TZCADLayerComboBox=class({TWinControl}TCustomPanel)                                        // Компонент TZCADLayerComboBox
   private
@@ -72,7 +76,7 @@ type
     CP1:TControlPole;
     B1:TBitBtn;
     PoleLista:TForm;
-    LV:TListView;
+    LV:TMyListView;
     IL:TImageList;
     sOnChange:TNotifyEvent;
     sListHeight:integer;
@@ -466,7 +470,7 @@ begin
     PoleLista.BorderStyle:=bsNone;
     PoleLista.OnDeactivate:=@PLDeActivate;
     UpdateIcon;
-    LV:=TListView.Create(PoleLista);
+    LV:=TmyListView.Create(PoleLista);
     LV.BorderStyle:=bsSingle;
     LV.Parent:=PoleLista;
     LV.Font:=CP1.Font;
@@ -494,10 +498,12 @@ begin
                          PoleLista.Height:=sListHeight
                      else
                          begin
+                              LV.DefaultItemHeight:=-1;
+                              hh:=LV.Height-LV.ClientHeight;
                               hh:=screen.WorkAreaHeight-a.y-1;
-                              h:=LV.Items.Count*19+4;
+                              h:=LV.Items.Count*{19}(LV.DefaultItemHeight+1)+10;
                               if h>hh then h:=hh;
-                              PoleLista.Height:=h;//{LV..Height*LV.Items.Count}1000;
+                              PoleLista.ClientHeight:=h;//{LV..Height*LV.Items.Count}1000;
                          end;
 
     PoleLista.Show;

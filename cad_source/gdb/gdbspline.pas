@@ -20,13 +20,15 @@ unit gdbspline;
 {$INCLUDE def.inc}
 
 interface
-uses ugdbdrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
+uses UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},GDBEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
 ugdbltypearray,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman{,OGLSpecFunc};
 type
 {Export+}
 PGDBObjSpline=^GDBObjSpline;
 GDBObjSpline=object(GDBObjCurve)
+                 ControlArrayInOCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
+                 ControlArrayInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  Closed:GDBBoolean;(*saved_to_shd*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -48,7 +50,7 @@ GDBObjSpline=object(GDBObjCurve)
            end;
 {Export-}
 implementation
-uses gdbcable,log;
+uses GDBCable,log;
 procedure GDBObjSpline.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 begin
   GDBPoint3dArrayAddOnTrackAxis(VertexArrayInWCS,posr,processaxis,closed);
@@ -149,14 +151,18 @@ begin
 end;
 constructor GDBObjSpline.init;
 begin
-  vp.ID := GDBSplineID;
   closed := c;
   inherited init(own,layeraddres, lw);
+  ControlArrayInWCS.init({$IFDEF DEBUGBUILD}'{4213E1EA-8FF1-4E99-AEF5-C1635CB49B5A}',{$ENDIF}1000);
+  ControlArrayInOCS.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}1000);
+  vp.ID := GDBSplineID;
 end;
 constructor GDBObjSpline.initnul;
 begin
   inherited initnul(owner);
-  vp.ID := GDBPolylineID;
+  ControlArrayInWCS.init({$IFDEF DEBUGBUILD}'{4213E1EA-8FF1-4E99-AEF5-C1635CB49B5A}',{$ENDIF}1000);
+  ControlArrayInOCS.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}1000);
+  vp.ID := GDBSplineID;
 end;
 
 procedure GDBObjSpline.DrawGeometry;
@@ -225,7 +231,7 @@ begin
   else if dxfvertexload(f,11,byt,tv) then
                                       begin
                                            if byt=31 then
-                                                         addvertex(tv);
+                                                         Controlarrayinocs.add(@tv);;
                                       end
 
   else if dxfGDBIntegerload(f,70,byt,hlGDBWord) then
@@ -302,4 +308,4 @@ begin
 end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
-end.
+end.

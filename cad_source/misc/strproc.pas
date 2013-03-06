@@ -127,14 +127,23 @@ begin
 end;
 function FindInPaths(Paths,FileName:GDBString):GDBString;
 var
-   s,ts:gdbstring;
+   s,ts,ts2:gdbstring;
 begin
      FileName:=ExpandPath(FileName);
-     if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)) then
-                                 begin
-                                      result:=FileName;
-                                      exit;
-                                 end;
+     ts:={$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName);
+     if FileExists(ts)  then
+                            begin
+                                 result:=FileName;
+                                 exit;
+                            end;
+     {$IFDEF LINUX}
+     ts:=lowercase(ts);
+     if FileExists(ts)  then
+                            begin
+                                 result:=lowercase(FileName);
+                                 exit;
+                            end;
+     {$ENDIF}
      {if gdb.GetCurrentDWG<>nil then
      begin
                                    s:=ExtractFilePath(gdb.GetCurrentDWG.FileName)+filename;
@@ -149,11 +158,20 @@ begin
      repeat
            GetPartOfPath(ts,s,'|');
            ts:=ExpandPath(ts)+FileName;
-            if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
+           ts2:={$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts);
+           if FileExists(ts2) then
                                  begin
                                       result:=ts;
                                       exit;
                                  end;
+           {$IFDEF LINUX}
+           ts2:=lowercase(ts2);
+           if FileExists(ts2)  then
+                                  begin
+                                       result:=lowercase(ts);
+                                       exit;
+                                  end;
+           {$ENDIF}
      until s='';
      result:='';
 end;
@@ -560,4 +578,4 @@ end;*)
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('strproc.initialization');{$ENDIF}
 CodePage:=CP_utf8;
-end.
+end.

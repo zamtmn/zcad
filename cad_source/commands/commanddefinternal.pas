@@ -320,6 +320,7 @@ begin
      onCommandContinue:=onCCont;
      CommandName:=name;
      overlay:=false;
+     NotUseCommandLine:=true;
 end;
 
 function CommandRTEdObjectPlugin.AfterClick;

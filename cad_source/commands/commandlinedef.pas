@@ -50,6 +50,7 @@ type
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
     function GetObjTypeName:GDBString;virtual;
     function IsRTECommand:GDBBoolean;virtual;
+    procedure CommandContinue; virtual;
   end;
   CommandFastObjectDef = object(CommandObjectDef)
     procedure CommandInit; virtual;abstract;
@@ -83,6 +84,9 @@ implementation
 function CommandObjectDef.IsRTECommand:GDBBoolean;
 begin
      result:=false;
+end;
+procedure CommandObjectDef.CommandContinue;
+begin
 end;
 function CommandObjectDef.GetObjTypeName;
 begin

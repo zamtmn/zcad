@@ -36,7 +36,7 @@ uses
        languade,
   {ZCAD ENTITIES}
        GDBEntity,UGDBSelectedObjArray,UGDBLayerArray,ugdbsimpledrawing,
-       GDBBlockDef,UGDBDescriptor,GDBManager,
+       GDBBlockDef,UGDBDescriptor,GDBManager,ugdbltypearray,
   {ZCAD COMMANDS}
        commanddefinternal,commandline,
   {GUI}
@@ -47,6 +47,7 @@ type
   TInterfaceVars=record
                        CColor,CLWeight:GDBInteger;
                        CLayer:PGDBLayerProp;
+                       CLType:PGDBLTypeProp;
                  end;
 
   TmyAnchorDockHeader = class(TAnchorDockHeader)
@@ -89,6 +90,8 @@ type
     procedure LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                State: TOwnerDrawState);
     procedure ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+                                                   State: TOwnerDrawState);
+    procedure LTypeBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                                    State: TOwnerDrawState);
     function findtoolbatdesk(tbn:string):string;
     procedure CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
@@ -143,7 +146,10 @@ type
     procedure myKeyPress(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure ChangeCLineW(Sender:Tobject);
     procedure ChangeCColor(Sender:Tobject);
+    procedure ChangeLType(Sender:Tobject);
     procedure DropDownColor(Sender:Tobject);
+    procedure DropDownLType(Sender:Tobject);
+    procedure DropUpLType(Sender:Tobject);
     procedure DropUpColor(Sender:Tobject);
     procedure ChangeLayout(Sender:Tobject);
     procedure idle(Sender: TObject; var Done: Boolean);virtual;
@@ -190,7 +196,7 @@ var
   //uGeneralTimer:cardinal;
   //GeneralTime:GDBInteger;
   LayerBox:TZCADLayerComboBox;
-  LineWBox,ColorBox:TComboBox;
+  LineWBox,ColorBox,LTypeBox:TComboBox;
   LayoutBox:TComboBox;
   LPTime:Tdatetime;
   pname:GDBString;
@@ -324,6 +330,7 @@ const pusto=-1000;
 var lw:GDBInteger;
     color:GDBInteger;
     layer:pgdblayerprop;
+    ltype:PGDBLtypeProp;
     //i,se:GDBInteger;
     pv:{pgdbobjEntity}PSelectedObjDesc;
         ir:itrec;
@@ -340,6 +347,7 @@ begin
            IVars.CColor:=sysvar.dwg.DWG_CColor^;
            IVars.CLWeight:=sysvar.dwg.DWG_CLinew^+3;
            ivars.CLayer:=gdb.GetCurrentDWG.LayerTable.getelement(sysvar.dwg.DWG_CLayer^);
+           ivars.CLType:=gdb.GetCurrentDWG.LTypeStyleTable.getelement(sysvar.dwg.DWG_CLType^);
       end
   else
       begin
@@ -347,6 +355,7 @@ begin
            lw:=pusto;
            layer:=lpusto;
            color:=pusto;
+           ltype:=lpusto;
            pv:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
            //pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
            if pv<>nil then
@@ -362,8 +371,10 @@ begin
                                       else if layer<> pv^.objaddr^.vp.layer then layer:=ldifferent;
                          if color=pusto then color:=pv^.objaddr^.vp.color
                                         else if color<> pv^.objaddr^.vp.color then color:=different;
+                         if ltype=lpusto then ltype:=pv^.objaddr^.vp.LineType
+                                        else if ltype<> pv^.objaddr^.vp.LineType then ltype:=ldifferent;
                     end;
-                if (layer=ldifferent)and(lw=different)and(color=different) then system.Break;
+                if (layer=ldifferent)and(lw=different)and(color=different)and(ltype=ldifferent) then system.Break;
            end;
            pv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
            until pv=nil;
@@ -387,6 +398,13 @@ begin
                            else
                                begin
                                     ivars.CColor:=color;
+                               end;
+           if ltype<>lpusto then
+           if ltype=ldifferent then
+                                  ivars.CLType:=nil
+                           else
+                               begin
+                                    ivars.CLType:=ltype;
                                end;
 
       end;
@@ -415,6 +433,7 @@ begin
            LayerBox.ItemIndex:=getsortedindex((layer));//(layer);    xcvxcv}
            //gdb.GetCurrentDWG.OGLwindow1.SelectedObjectsPLayer:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.layer;
            ivars.CColor:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.color;
+           ivars.CLType:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.LineType;
       end
   else
       begin
@@ -431,6 +450,8 @@ begin
 
            if ivars.CColor<>PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.color then
               ivars.CColor:=ColorBoxDifferent;
+           if ivars.CLType<>PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.LineType then
+              ivars.CLType:=nil;
       end;
 end;
 
@@ -1453,6 +1474,57 @@ begin
     ARect.Left:=ARect.Left+36;
     DrawText(LayerBox.canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
 end;}
+procedure drawLT(canvas:TCanvas;ARect: TRect;ll: Integer;s:string);
+var
+  y:integer;
+  oldw:Integer;
+begin
+  if ll>0 then
+   begin
+        oldw:=canvas.Pen.Width;
+        canvas.Pen.Style:=psSolid;
+        canvas.Pen.EndCap:=pecFlat;
+        y:=(ARect.Top+ARect.Bottom)div 2;
+        canvas.Line(ARect.Left,y,ARect.Left+ll,y);
+        canvas.Pen.Width:=oldw;
+        ARect.Left:=ARect.Left+ll+5;
+   end;
+  DrawText(canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_SINGLELINE or DT_VCENTER)
+end;
+
+procedure MainForm.LTypeBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+                                               State: TOwnerDrawState);
+var
+   plt:PGDBLtypeProp;
+   ll:integer;
+begin
+    if gdb.GetCurrentDWG=nil then
+                                 exit;
+    if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
+                                 exit;
+    TComboBox(Control).canvas.FillRect(ARect);
+    if {(odComboBoxEdit in State)}not TComboBox(Control).DroppedDown then
+                                      begin
+                                           plt:=IVars.CLType;
+                                      end
+                                 else
+                                     plt:=PGDBLtypeProp(tcombobox(Control).items.Objects[Index]);
+   if plt<>nil then
+                   begin
+                        s:=Tria_AnsiToUtf8(plt^.Name);
+                        ll:=30;
+                   end
+               else
+                   begin
+                       s:=rsDifferent;
+                       if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
+                                 exit;
+                       ll:=0;
+                   end;
+
+    ARect.Left:=ARect.Left+2;
+    drawLT(TComboBox(Control).canvas,ARect,ll,s);
+end;
 
 procedure MainForm.LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: TOwnerDrawState);
@@ -1752,6 +1824,40 @@ begin
                           ColorBox.ItemHeight:=16;
                           AddToBar(tb,ColorBox);
                           updatescontrols.Add(ColorBox);
+                     end;
+                     if uppercase(line)='LTYPECOMBOBOX' then
+                     begin
+                          bc := f.readstring(',','');
+                          ts := f.readstring(';','');
+                          val(bc,w,code);
+                          {if assigned(LTypeBox) then
+                                                    shared.ShowError(format(rsReCreating,['COLORCOMBOBOX']));}
+                          LTypeBox:=TComboBox.Create(tb);
+                          LTypeBox.Style:=csOwnerDrawFixed;
+                          LTypeBox.OnDrawItem:=LTypeBoxDrawItem;
+                          if code=0 then
+                                        LTypeBox.Width:=w;
+                          if ts<>''then
+                          begin
+                               ts:=InterfaceTranslate('hint_panel~COLORCOMBOBOX',ts);
+                               LTypeBox.hint:=(ts);
+                               LTypeBox.ShowHint:=true;
+                          end;
+                          LTypeBox.Clear;
+                          LTypeBox.readonly:=true;
+                          LTypeBox.items.AddObject(rsByBlock,TObject(0));
+                          //LTypeBox.items.AddObject(rsByLayer,TObject(256));
+                          //LTypeBox.items.AddObject(rsSelectColor,TObject(ColorBoxSelColor));
+                          LTypeBox.ItemIndex:=0;
+                          LTypeBox.OnChange:=ChangeLType;
+                          LTypeBox.OnDropDown:=DropDownLType;
+                          LTypeBox.OnCloseUp:=DropUpLType;
+                          LTypeBox.AutoSize:=false;
+                          LTypeBox.OnMouseLeave:=self.setnormalfocus;
+                          LTypeBox.DropDownCount:=50;
+                          LTypeBox.ItemHeight:=16;
+                          AddToBar(tb,LTypeBox);
+                          updatescontrols.Add(LTypeBox);
                      end;
                      if uppercase(line)='SEPARATOR' then
                                          begin
@@ -2660,10 +2766,53 @@ begin
      OldColor:=tcombobox(Sender).ItemIndex;
      tcombobox(Sender).ItemIndex:=-1;
 end;
+procedure MainForm.DropUpLType(Sender:Tobject);
+begin
+     tcombobox(Sender).ItemIndex:=0;
+end;
+
+procedure MainForm.DropDownLType(Sender:Tobject);
+var
+   i:integer;
+begin
+     tcombobox(Sender).clear;
+     for i:=0 to gdb.GetCurrentDWG.LTypeStyleTable.Count-1 do
+     begin
+          tcombobox(Sender).AddItem('',tobject(gdb.GetCurrentDWG.LTypeStyleTable.getelement(i)));
+     end;
+     //OldColor:=tcombobox(Sender).ItemIndex;
+     tcombobox(Sender).ItemIndex:=-1;
+end;
 procedure MainForm.DropUpColor(Sender:Tobject);
 begin
      if tcombobox(Sender).ItemIndex=-1 then
                                            tcombobox(Sender).ItemIndex:=OldColor;
+end;
+procedure MainForm.ChangeLType(Sender:Tobject);
+var
+   LTIndex,CLTSave,index:Integer;
+   plt:PGDBLtypeProp;
+   mr:integer;
+begin
+     index:=tcombobox(Sender).ItemIndex;
+     plt:=PGDBLtypeProp(tcombobox(Sender).items.Objects[index]);
+     LTIndex:=gdb.GetCurrentDWG.LTypeStyleTable.GetIndexByPointer(plt);
+     if plt=nil then
+                         exit;
+     if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
+     then
+     begin
+          SysVar.dwg.DWG_CLType^:=LTIndex;
+     end
+     else
+     begin
+          CLTSave:=SysVar.dwg.DWG_CLType^;
+          SysVar.dwg.DWG_CLType^:=LTIndex;
+          commandmanager.ExecuteCommand('SelObjChangeLTypeToCurrent',gdb.GetCurrentDWG);
+          SysVar.dwg.DWG_CLType^:=CLTSave;
+     end;
+     setvisualprop;
+     setnormalfocus(nil);
 end;
 
 procedure  MainForm.ChangeCColor(Sender:Tobject);
@@ -3015,6 +3164,8 @@ begin
   mainwindow.LineWBox.enabled:=true;
   if assigned(mainwindow.ColorBox) then
   mainwindow.ColorBox.enabled:=true;
+  if assigned(mainwindow.LTypeBox) then
+  mainwindow.LTypeBox.enabled:=true;
   if assigned(MainFormN.HScrollBar) then
   begin
   MainFormN.HScrollBar.enabled:=true;
@@ -3080,6 +3231,8 @@ begin
            mainwindow.LineWBox.enabled:=false;
            if assigned(mainwindow.ColorBox) then
            mainwindow.ColorBox.enabled:=false;
+           if assigned(mainwindow.LTypeBox) then
+           mainwindow.LTypeBox.enabled:=false;
            if assigned(MainFormN.HScrollBar) then
            begin
            MainFormN.HScrollBar.enabled:=false;

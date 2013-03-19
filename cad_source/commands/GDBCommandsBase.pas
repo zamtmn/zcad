@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- URecordDescriptor,ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}{layerwnd,}strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}{layerwnd,}strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -945,7 +945,41 @@ begin
     end
   end;
 end;
-
+function SelObjChangeLTypeToCurrent_com:GDBInteger;
+var pv:pGDBObjEntity;
+    psv:PSelectedObjDesc;
+    plt:PGDBLtypeProp;
+    ir:itrec;
+begin
+  if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
+  plt:=gdb.GetCurrentDWG.LTypeStyleTable.getelement(SysVar.dwg.DWG_CLType^);
+  if plt=nil then
+                 exit;
+  pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+    if pv^.Selected then
+                        begin
+                             pv^.vp.LineType:=plt;
+                             pv^.Formatentity(gdb.GetCurrentDWG^);
+                        end;
+  pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+  until pv=nil;
+  psv:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
+  if psv<>nil then
+  begin
+       repeat
+             if psv.objaddr^.Selected then
+                                          begin
+                                               psv.objaddr^.vp.LineType:=plt;
+                                               psv.objaddr^.Formatentity(gdb.GetCurrentDWG^);
+                                          end;
+       psv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
+       until psv=nil;
+  end;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  result:=cmd_ok;
+end;
 function SelObjChangeLayerToCurrent_com:GDBInteger;
 var pv:pGDBObjEntity;
     psv:PSelectedObjDesc;
@@ -2127,6 +2161,7 @@ begin
   CreateCommandFastObjectPlugin(@SelObjChangeLayerToCurrent_com,'SelObjChangeLayerToCurrent',CADWG,0);
   CreateCommandFastObjectPlugin(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);
   CreateCommandFastObjectPlugin(@SelObjChangeColorToCurrent_com,'SelObjChangeColorToCurrent',CADWG,0);
+  CreateCommandFastObjectPlugin(@SelObjChangeLTypeToCurrent_com,'SelObjChangeLTypeToCurrent',CADWG,0);
   CreateCommandFastObjectPlugin(@MemSummary_com,'MeMSummary',0,0);
   selframecommand:=CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,@FrameEdit_com_Command_End,nil,nil,@FrameEdit_com_BeforeClick,@FrameEdit_com_AfterClick,nil,nil,'SelectFrame',0,0);
   selframecommand^.overlay:=true;

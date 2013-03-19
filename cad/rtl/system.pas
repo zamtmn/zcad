@@ -338,6 +338,7 @@ GDBsymdolinfo=record
     NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: GDBDouble;
     Name:GDBString;
     Number:GDBInteger;
+    LatestCreate:GDBBoolean;
   end;
 //Generate on C:\zcad\CAD_SOURCE\u\UOpenArray.pas
 POpenArray=^OpenArray;
@@ -632,6 +633,10 @@ BASEFont=object(GDBaseObject)
               unisymbolinfo:GDBOpenArrayOfData;
               constructor init;
               destructor done;virtual;abstract;
+              function GetSymbolDataAddr(offset:integer):pointer;virtual;abstract;
+              function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;abstract;
+              function GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;abstract;
+              function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
         end;
 PSHXFont=^SHXFont;
 SHXFont=object(BASEFont)
@@ -640,19 +645,30 @@ SHXFont=object(BASEFont)
               SHXdata:GDBOpenArrayOfByte;
               constructor init;
               destructor done;virtual;abstract;
+              function GetSymbolDataAddr(offset:integer):pointer;virtual;abstract;
+        end;
+PTTFFont=^TTFFont;
+TTFFont=object(SHXFont)
+              ftFont: TFreeTypeFont;
+              MapChar:TMapChar;
+              MapCharIterator:TMapChar.TIterator;
+              function GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;abstract;
+              constructor init;
+              destructor done;virtual;abstract;
         end;
 //Generate on C:\zcad\CAD_SOURCE\u\ugdbfont.pas
 PGDBfont=^GDBfont;
 GDBfont=object(GDBNamedObject)
     fontfile:GDBString;
     Internalname:GDBString;
-    font:PSHXFont;
+    font:{PSHXFont}PBASEFont;
     constructor initnul;
     constructor init(n:GDBString);
+    procedure ItSHX;
+    procedure ItFFT;
     destructor done;virtual;abstract;
     function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
     function GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
-    function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
     procedure CreateSymbol(var Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
   end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBTextStyleArray.pas
@@ -939,6 +955,7 @@ GDBTableArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
              DWG_CLinew:PGDBInteger;(*'Current line weigwt'*)
              DWG_CColor:PGDBInteger;(*'Current color'*)
              DWG_LTScale:PGDBDouble;(*'Drawing line type scale'*)
+             DWG_CLType:PGDBInteger;(*'Drawing line type'*)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
              DWG_SystmGeometryDraw:PGDBBoolean;(*'System geometry'*)
@@ -2353,6 +2370,7 @@ CableDeviceBaseObject=object(DeviceDbBaseObject)
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
     function GetObjTypeName:GDBString;virtual;abstract;
     function IsRTECommand:GDBBoolean;virtual;abstract;
+    procedure CommandContinue; virtual;abstract;
   end;
   CommandFastObjectDef = object(CommandObjectDef)
     procedure CommandInit; virtual;abstract;

@@ -29,12 +29,55 @@
       <CharSet Value="0000"/>
       <StringTable ProductVersion="0.0.0.8"/>
     </VersionInfo>
-    <MacroValues Count="1">
-      <Macro1 Name="LCLWidgetType" Value="win32"/>
-    </MacroValues>
     <BuildModes Count="4">
-      <Item1 Name="WIN" Default="True"/>
-      <Item2 Name="GTK2">
+      <Item1 Name="Default1" Default="True"/>
+      <Item2 Name="WIN">
+        <MacroValues Count="1">
+          <Macro1 Name="LCLWidgetType" Value="win32"/>
+        </MacroValues>
+        <CompilerOptions>
+          <Version Value="11"/>
+          <Target>
+            <Filename Value="../cad/zcad"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="u;../cad;$(ProjOutDir)"/>
+            <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;misc;fileformats;../cad"/>
+            <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
+          </SearchPaths>
+          <Parsing>
+            <Style Value="1"/>
+            <SyntaxOptions>
+              <SyntaxMode Value="Delphi"/>
+              <IncludeAssertionCode Value="True"/>
+              <AllowLabel Value="False"/>
+              <CPPInline Value="False"/>
+              <UseAnsiStrings Value="False"/>
+            </SyntaxOptions>
+          </Parsing>
+          <CodeGeneration>
+            <TargetOS Value="win32"/>
+          </CodeGeneration>
+          <Other>
+            <Verbosity>
+              <ShowWarn Value="False"/>
+              <ShowNotes Value="False"/>
+              <ShowGenInfo Value="False"/>
+            </Verbosity>
+            <WriteFPCLogo Value="False"/>
+            <ConfigFile>
+              <StopAfterErrCount Value="5"/>
+            </ConfigFile>
+            <CompilerMessages>
+              <IgnoredMessages idx4055="True" idx5024="True" idx5062="True"/>
+              <UseMsgFile Value="True"/>
+            </CompilerMessages>
+            <CompilerPath Value="$(CompPath)"/>
+          </Other>
+          <LCLWidgetType Value="win32"/>
+        </CompilerOptions>
+      </Item2>
+      <Item3 Name="GTK2">
         <MacroValues Count="1">
           <Macro1 Name="LCLWidgetType" Value="gtk2"/>
         </MacroValues>
@@ -79,8 +122,8 @@
           </Other>
           <LCLWidgetType Value="gtk2"/>
         </CompilerOptions>
-      </Item2>
-      <Item3 Name="qt">
+      </Item3>
+      <Item4 Name="qt">
         <MacroValues Count="1">
           <Macro1 Name="LCLWidgetType" Value="qt"/>
         </MacroValues>
@@ -126,50 +169,6 @@
             <CompilerPath Value="$(CompPath)"/>
           </Other>
           <LCLWidgetType Value="qt"/>
-        </CompilerOptions>
-      </Item3>
-      <Item4 Name="Default1">
-        <CompilerOptions>
-          <Version Value="11"/>
-          <Target>
-            <Filename Value="../cad/zcad"/>
-          </Target>
-          <SearchPaths>
-            <IncludeFiles Value="u;../cad;$(ProjOutDir)"/>
-            <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;misc;fileformats;../cad"/>
-            <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
-          </SearchPaths>
-          <Parsing>
-            <Style Value="1"/>
-            <SyntaxOptions>
-              <SyntaxMode Value="Delphi"/>
-              <IncludeAssertionCode Value="True"/>
-              <AllowLabel Value="False"/>
-              <CPPInline Value="False"/>
-              <UseAnsiStrings Value="False"/>
-            </SyntaxOptions>
-          </Parsing>
-          <Linking>
-            <Debugging>
-              <DebugInfoType Value="dsStabs"/>
-              <UseExternalDbgSyms Value="True"/>
-            </Debugging>
-          </Linking>
-          <Other>
-            <Verbosity>
-              <ShowNotes Value="False"/>
-              <ShowGenInfo Value="False"/>
-            </Verbosity>
-            <WriteFPCLogo Value="False"/>
-            <ConfigFile>
-              <StopAfterErrCount Value="5"/>
-            </ConfigFile>
-            <CompilerMessages>
-              <IgnoredMessages idx4055="True" idx5024="True" idx5062="True"/>
-              <UseMsgFile Value="True"/>
-            </CompilerMessages>
-            <CompilerPath Value="$(CompPath)"/>
-          </Other>
         </CompilerOptions>
       </Item4>
     </BuildModes>
@@ -374,12 +373,14 @@
         <UseAnsiStrings Value="False"/>
       </SyntaxOptions>
     </Parsing>
-    <CodeGeneration>
-      <TargetOS Value="win32"/>
-    </CodeGeneration>
+    <Linking>
+      <Debugging>
+        <DebugInfoType Value="dsStabs"/>
+        <UseExternalDbgSyms Value="True"/>
+      </Debugging>
+    </Linking>
     <Other>
       <Verbosity>
-        <ShowWarn Value="False"/>
         <ShowNotes Value="False"/>
         <ShowGenInfo Value="False"/>
       </Verbosity>
@@ -393,7 +394,6 @@
       </CompilerMessages>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
-    <LCLWidgetType Value="win32"/>
   </CompilerOptions>
   <Debugging>
     <Exceptions Count="2">

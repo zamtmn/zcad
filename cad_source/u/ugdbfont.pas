@@ -216,12 +216,12 @@ begin
 end;
 procedure GDBfont.ItSHX;
 begin
-     GDBGetMem(font,sizeof(SHXFont));
+     GDBGetMem({$IFDEF DEBUGBUILD}'{FB4B76DB-BD4E-449E-A505-9ABF79E7809A}',{$ENDIF}font,sizeof(SHXFont));
      PSHXFont(font)^.init;
 end;
 procedure GDBfont.ItFFT;
 begin
-     GDBGetMem(font,sizeof(TTFFont));
+     GDBGetMem({$IFDEF DEBUGBUILD}'{638B5484-83D8-4FEA-AE47-918B8B0CBC08}',{$ENDIF}font,sizeof(TTFFont));
      PTTFFont(font)^.init;
 end;
 constructor GDBfont.Init;

@@ -379,8 +379,11 @@ procedure GDBDescriptor.eraseobj(ObjAddr:PGDBaseObject);
 begin
      inherited eraseobj(objaddr);
      if objaddr=pointer(CurrentDWG) then
-                               CurrentDWG:=nil;
-     
+                                        begin
+                                             CurrentDWG:=nil;
+                                             DWGUnit:=nil;
+                                        end;
+
 end;
 function GDBDescriptor.CreateDWG:PTDrawing;
 var

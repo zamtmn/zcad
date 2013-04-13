@@ -49,7 +49,7 @@ GDBaseObject=object
     function GetObjTypeName:GDBString;virtual;
     function GetObjName:GDBString;virtual;
     constructor initnul;
-    destructor Done;virtual; abstract;
+    destructor Done;virtual;{ abstract;}
     function IsEntity:GDBBoolean;virtual;
 
   end;
@@ -376,6 +376,11 @@ function GDBaseObject.IsEntity:GDBBoolean;
 begin
      result:=false;
 end;
+destructor GDBaseObject.Done;
+begin
+
+end;
+
 procedure GDBaseObject.format;
 begin
 end;

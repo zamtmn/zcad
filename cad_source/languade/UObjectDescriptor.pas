@@ -54,9 +54,16 @@ ObjectDescriptor=object(RecordDescriptor)
                        destructor Done;virtual;
                        function GetTypeAttributes:TTypeAttr;virtual;
                        procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
+                       procedure MagicFreeInstance(PInstance:GDBPointer);virtual;
                  end;
 implementation
 uses varman{$IFNDEF DELPHI},lineinfo{$ENDIF};
+procedure ObjectDescriptor.MagicFreeInstance(PInstance:GDBPointer);
+begin
+     //RunMetod('Done',PInstance);
+     inherited;
+end;
+
 procedure ObjectDescriptor.AddProperty(var pd:PropertyDescriptor);
 begin
      Properties.add(@pd);
@@ -411,7 +418,7 @@ begin
                                              end;
       deb:=(pmd^.Attributes)and(not m_virtual);}
       case (pmd^.Attributes)and(not m_virtual) of
-      m_procedure:
+      m_procedure,m_destructor:
                   begin
                        {$ifdef WIN64}
                        //tm.Code:=ppointer(GDBPlatformint(self.PVMT)+

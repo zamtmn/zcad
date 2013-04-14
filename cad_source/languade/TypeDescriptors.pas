@@ -112,6 +112,7 @@ TUserTypeDescriptor=object(UserTypeDescriptor)
                           //procedure IncAddr(var addr:GDBPointer);virtual;
                           function CreatePD:GDBPointer;
                           function GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:GDBInteger):PPropertyDeskriptor;
+                          function FindField(fn:GDBString):PFieldDescriptor;virtual;
                    end;
 var zcpmode:tzcpmode;
     currpd:PPropertyDeskriptor;
@@ -212,6 +213,11 @@ begin
      gdbgetmem({$IFDEF DEBUGBUILD}'{CC044792-AE73-48C9-B10A-346BFE9E46C9}',{$ENDIF}result,sizeof(PropertyDeskriptor));
      PPropertyDeskriptor(result)^.initnul;
 end;
+function TUserTypeDescriptor.FindField(fn:GDBString):PFieldDescriptor;
+begin
+     result:=nil;
+end;
+
 {procedure TUserTypeDescriptor.IncAddr;
 begin
      inc(pGDBByte(addr),SizeInGDBBytes);

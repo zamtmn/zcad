@@ -44,6 +44,10 @@ type
 {EXPORT-}
 var
    units:TUnitManager;
+   IrInDBUnit:itrec;
+   PVardeskInDBUnit:PVardesk;
+   PVariantsField:PFieldDescriptor;
+   PTObj:PPointer;
 implementation
 uses
     log,memman;
@@ -728,5 +732,19 @@ initialization;
      {$IFDEF DEBUGINITSECTION}LogOut('uunitmanager.initialization');{$ENDIF}
      units.init;
 finalization;
+     if DBUnit<>nil then
+     begin
+          PVardeskInDBUnit:=DBUnit.InterfaceVariables.vardescarray.beginiterate(IrInDBUnit);
+          if PVardeskInDBUnit<>nil then
+          repeat
+                PVariantsField:=PTUserTypeDescriptor(PVardeskInDBUnit.data.PTD)^.FindField('Variants');
+                if PVariantsField<>nil then
+                begin
+                     PTObj:=pointer(ptrint(PVardeskInDBUnit.data.Instance)+ptrint(PVariantsField.Offset));
+                     (tobject(PTObj^).Free);
+                end;
+                PVardeskInDBUnit:=DBUnit.InterfaceVariables.vardescarray.iterate(IrInDBUnit);
+          until PVardeskInDBUnit=nil
+     end;
      units.FreeAndDone;
 end.

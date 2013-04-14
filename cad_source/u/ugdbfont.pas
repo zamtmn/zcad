@@ -211,7 +211,10 @@ begin
      fontfile:='';
      Internalname:='';
      if font<>nil then
-                      font.done;
+                      begin
+                           font.done;
+                           GDBFreeMem(font);
+                      end;
      inherited;
 end;
 procedure GDBfont.ItSHX;

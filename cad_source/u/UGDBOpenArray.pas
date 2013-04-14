@@ -196,11 +196,11 @@ procedure GDBOpenArray.SetSize;
 begin
      if nsize>max then
                       begin
-                           parray := enlargememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, size * max, nsize*max);
+                           parray := enlargememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, size * max, size*nsize);
                       end
 else if nsize<max then
                       begin
-                           parray := enlargememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, size * max, nsize*max);
+                           parray := enlargememblock({$IFDEF DEBUGBUILD}@Guid[1],{$ENDIF}parray, size * max, size*nsize);
                            if count>nsize then count:=nsize;
 
                       end;

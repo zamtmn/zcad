@@ -44,6 +44,7 @@ TBezierSolver2D=class
                      scontur,truescontur:GDBvertex2D;
                      sconturpa:TPointAttr;
                      constructor create;
+                     destructor Destroy;overload;
                      procedure AddPoint(x,y:double;pa:TPointAttr);overload;
                      procedure AddPoint(p:GDBvertex2D;pa:TPointAttr);overload;
                      procedure ChangeMode(Mode:TSolverMode);
@@ -282,6 +283,12 @@ begin
      FArray.Reserve(10);
      FMode:=TSM_WaitStartCountur;
 end;
+destructor TBezierSolver2D.Destroy;
+begin
+     FArray.Destroy;
+     inherited;
+end;
+
 procedure TBezierSolver2D.AddPoint(x,y:double;pa:TPointAttr);
 var
    p:GDBvertex2D;

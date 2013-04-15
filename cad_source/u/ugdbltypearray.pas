@@ -153,6 +153,7 @@ begin
 end;
 destructor GDBLtypeProp.done;
 begin
+     self.desk:='';
      dasharray.done;
      strokesarray.done;
      shapearray.freeanddone;
@@ -452,4 +453,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('ugdbltypearray.initialization');{$ENDIF}
-end.
+end.

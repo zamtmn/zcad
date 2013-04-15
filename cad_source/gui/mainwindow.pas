@@ -927,7 +927,7 @@ begin
 MainPanel:=Tform{Tpanel}(Tform.NewInstance);
 if DoDisableAlign then
 MainPanel.DisableAlign;
-MainPanel.Create(Application);
+MainPanel.CreateNew(Application);
 MainPanel.SetBounds(200,200,600,500);
 MainPanel.Caption:=rsDrawingWindowWndName;
 MainPanel.BorderWidth:=0;
@@ -964,7 +964,7 @@ CLine:=TCLine(TCLine.NewInstance);
 CLine.FormStyle:=fsStayOnTop;
 if DoDisableAlign then
 CLine.DisableAlign;
-CLine.Create(Application);
+CLine.CreateNew(Application);
 CLine.SetBounds(200,100,600,100);
 CLine.Caption:=rsCommandLineWndName;
 CLine.Align:=alBottom;
@@ -980,7 +980,7 @@ begin
   TempForm:=CreateObjInspInstanceProc;
   if DoDisableAlign then
   TempForm.DisableAlign;
-  TempForm.Create(Application);
+  TempForm.CreateNew(Application);
   TempForm.Caption:=rsGDBObjInspWndName;
   TempForm.SetBounds(0,100,200,600);
   if assigned(SetGDBObjInspProc)then
@@ -1007,7 +1007,7 @@ if tbdesk=''then
 FToolBar:=TToolButtonForm(TToolButtonForm.NewInstance);
 if DoDisableAlign then
 FToolBar.DisableAlign;
-FToolBar.Create(Application);
+FToolBar.CreateNew(Application);
 FToolBar.Caption:='';
 FToolBar.SetBounds(100,64,500,26);
 

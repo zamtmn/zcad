@@ -78,7 +78,7 @@ begin
 end;
 procedure createsplash;
 begin
-     SplashWindow:=TSplashWnd.Create(nil);
+     SplashWindow:=TSplashWnd.CreateNew(nil);
      if not sysparam.nosplash then
                                   SplashWindow.show;
      application.ProcessMessages;

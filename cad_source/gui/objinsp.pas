@@ -331,6 +331,7 @@ end;
 
 procedure TGDBobjinsp.ReturnToDefault;
 begin
+  self.freeeditor;
   setptr(defaultobjgdbtype,pdefaultobj,pdefaultcontext);
 end;
 

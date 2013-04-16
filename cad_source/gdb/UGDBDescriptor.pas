@@ -82,6 +82,7 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
 
                     function GetCurrentDWG:{PTDrawing}PTSimpleDrawing;
                     procedure asociatedwgvars;
+                    procedure freedwgvars;
                     procedure SetCurrentDWG(PDWG:PTAbstractDrawing);
 
                     function CreateDWG:PTDrawing;
@@ -290,6 +291,20 @@ begin
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_LTscale,'DWG_LTScale');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CColor,'DWG_CColor');
    end;
+end;
+procedure GDBDescriptor.freedwgvars;
+begin
+   SysVar.DWG.DWG_SnapGrid:=nil;
+   SysVar.DWG.DWG_DrawGrid:=nil;
+   SysVar.DWG.DWG_StepGrid:=nil;
+   SysVar.DWG.DWG_OriginGrid:=nil;
+
+   SysVar.dwg.DWG_CLayer:=nil;
+   SysVar.dwg.DWG_CLType:=nil;
+   SysVar.dwg.DWG_CLinew:=nil;
+   SysVar.dwg.DWG_DrawMode:=nil;
+   SysVar.dwg.DWG_LTscale:=nil;
+   SysVar.dwg.DWG_CColor:=nil;
 end;
 
 procedure GDBDescriptor.SetCurrentDWG(PDWG:PTAbstractDrawing);

@@ -872,7 +872,9 @@ begin
             tobject(poglwnd):=FindControlByType(poglwnd,TOGLWnd);
             gdb.CurrentDWG:=PTDrawing(poglwnd.PDWG);
             poglwnd.GDBActivate;
-       end;
+       end
+       else
+           gdb.freedwgvars;
        shared.SBTextOut('Закрыто');
        if assigned(ReturnToDefaultProc)then
                                            ReturnToDefaultProc;

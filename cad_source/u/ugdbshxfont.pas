@@ -587,6 +587,8 @@ begin
                                    si:=CharIterator.value;
                                    result:=si.PSymbolInfo;
                               end;
+     if CharIterator<>nil then
+                              CharIterator.Destroy;
      exit;
 
      if symbol=49 then

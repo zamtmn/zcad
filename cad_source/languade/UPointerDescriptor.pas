@@ -184,6 +184,7 @@ begin
                                                           begin
                                                                PTPropertyDeskriptorArray(ppd^.SubNode)^.cleareraseobj;
                                                                ppd^.SubNode^.Done;
+                                                               gdbfreemem(ppd^.SubNode);
                                                           end;
                              ppd^.Name:=name;
                              ppd^.PTypeManager:=PTUserTypeDescriptor(PUserTypeDescriptor((TypeOf)));

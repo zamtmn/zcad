@@ -2020,6 +2020,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                                                     else
                                                                                         begin
                                                                                              temphandle:=HandleIterator.GetValue;
+                                                                                             HandleIterator.Destroy;
                                                                                         end;
                 {$ENDIF}
                 outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
@@ -2072,6 +2073,7 @@ ENDTAB}
                                                                                                       else
                                                                                                           begin
                                                                                                                temphandle:=HandleIterator.GetValue;
+                                                                                                               HandleIterator.Destroy;
                                                                                                           end;
                   {$ENDIF}
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
@@ -2129,6 +2131,7 @@ ENDTAB}
                                                                                                         else
                                                                                                             begin
                                                                                                                  temphandle:=HandleIterator.GetValue;
+                                                                                                                 HandleIterator.Destroy;
                                                                                                             end;
                     {$ENDIF}
                     outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));

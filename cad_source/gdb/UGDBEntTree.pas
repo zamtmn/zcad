@@ -214,7 +214,10 @@ var pobj:PGDBObjEntity;
     tv:gdbvertex;
     _InNodeCount:gdbinteger;
 begin
-     _InNodeCount:=entitys.GetRealCount div _NodeDepth + 1;
+     //_InNodeCount:=entitys.GetRealCount div {_NodeDepth + 1}(nodedepth+2);
+     //if _InNodeCount<500 then _InNodeCount:=500;
+
+     _InNodeCount:=500;
 
      inc(nodedepth);
      if PRootNode<>nil then
@@ -232,7 +235,7 @@ begin
      result.minuscount:=0;
      result.Root:=_root;
      result.NodeDir:=dir;
-     if (entitys.Count<=_InNodeCount)or(nodedepth>_NodeDepth) then
+     if ((entitys.Count<=_InNodeCount){and(nodedepth>1)})or(nodedepth>_NodeDepth) then
                                                 begin
                                                      //result.selected:=false;
                                                      {if entitys.beginiterate(ir)<>nil then

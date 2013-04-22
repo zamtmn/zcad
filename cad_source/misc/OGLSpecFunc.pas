@@ -165,6 +165,7 @@ type
                            constructor init;
 
                            procedure glcolor3ub(const red, green, blue: GLubyte);virtual;//inline;
+                           procedure glcolor4ub(const red, green, blue,alpha: GLubyte);virtual;//inline;
                            procedure glColor3ubv(const v: gdbase.RGB);virtual;//inline;
 
                            procedure myglNormal3dV(const V:PGDBVertex);inline;
@@ -285,6 +286,22 @@ begin
                                    {$IFNDEF DELPHI}gl{$ELSE}dglOpenGL{$ENDIF}.glColor3ubv(@_colour);
                               end;
 end;
+
+procedure TOGLStateManager.glcolor4ub(const red, green, blue, alpha: GLubyte);
+begin
+     if (red<>_colour.r)
+     or (green<>_colour.g)
+     or (blue<>_colour.b)
+     or (alpha<>_colour.a)then
+                              begin
+                                   _colour.r:=red;
+                                   _colour.g:=green;
+                                   _colour.b:=blue;
+                                   _colour.a:=alpha;
+                                   {$IFNDEF DELPHI}gl{$ELSE}dglOpenGL{$ENDIF}.glColor4ub(red, green, blue, alpha);
+                              end;
+end;
+
 
 procedure TOGLStateManager.glColor3ubv(const v: gdbase.rgb);
 begin

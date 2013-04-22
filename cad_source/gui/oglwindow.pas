@@ -2681,12 +2681,26 @@ procedure TOGLWnd.showcursor;
       oglsm.myglVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame2.y);
       oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame2.y);
       oglsm.myglend;
-      {myglbegin(GL_lines);
-      glVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame1.y);
-      glVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame2.y);
-      myglend;}
       if param.seldesc.MouseFrameInverse then oglsm.myglDisable(GL_LINE_STIPPLE);
-      oglsm.myglDisable(GL_TEXTURE_2D);
+
+      if param.seldesc.MouseFrameInverse then
+      begin
+      oglsm.myglLogicOp(GL_XOR);
+      oglsm.myglLineStipple(1, $F0F0);
+      oglsm.myglEnable(GL_LINE_STIPPLE);
+      end;
+      if param.seldesc.MouseFrameInverse then
+                                             oglsm.glcolor4ub(0,40,0,10)
+                                         else
+                                             oglsm.glcolor4ub(0,0,40,10);
+      oglsm.myglbegin(GL_QUADS);
+      oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame1.y);
+      oglsm.myglVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame1.y);
+      oglsm.myglVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame2.y);
+      oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame2.y);
+      oglsm.myglend;
+      if param.seldesc.MouseFrameInverse then oglsm.myglDisable(GL_LINE_STIPPLE);
+
     end;
 
     //oglsm.mytotalglend;

@@ -2756,28 +2756,36 @@ procedure TOGLWnd.showcursor;
           begin
             if pt.trace then
             begin
-                 //i2d,i2dresult
+              //|---2---|
+              //|       |
+              //1       3
+              //|       |
+              //|---4---|
+              {1}
               i2dresult:=intercept2dmy(CreateVertex2D(0,0),CreateVertex2D(0,clientheight),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
+              {2}
               i2d:=intercept2dmy(CreateVertex2D(0,clientheight),CreateVertex2D(clientwidth,clientheight),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
               if not i2dresult.isintercept then
                                                i2dresult:=i2d;
               if i2d.isintercept then
               if i2d.t2>0 then
-              if (i2d.t2<i2dresult.t2)or(i2dresult.t2<0) then
+              if (i2d.t2>i2dresult.t2)or(i2dresult.t2<0) then
                                               i2dresult:=i2d;
+              {3}
               i2d:=intercept2dmy(CreateVertex2D(clientwidth,clientheight),CreateVertex2D(clientwidth,0),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
               if not i2dresult.isintercept then
                                                i2dresult:=i2d;
               if i2d.isintercept then
               if i2d.t2>0 then
-              if (i2d.t2<i2dresult.t2)or(i2dresult.t2<0) then
+              if (i2d.t2>i2dresult.t2)or(i2dresult.t2<0) then
                                               i2dresult:=i2d;
+              {4}
               i2d:=intercept2dmy(CreateVertex2D(clientwidth,0),CreateVertex2D(0,0),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
               if not i2dresult.isintercept then
                                                i2dresult:=i2d;
               if i2d.isintercept then
               if i2d.t2>0 then
-              if (i2d.t2<i2dresult.t2)or(i2dresult.t2<0) then
+              if (i2d.t2>i2dresult.t2)or(i2dresult.t2<0) then
                                               i2dresult:=i2d;
 
               //geometry.

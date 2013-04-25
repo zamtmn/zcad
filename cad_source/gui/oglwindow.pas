@@ -2332,10 +2332,14 @@ begin
   if button = mbMiddle then
   begin
     cursor := crnone;
-    param.scrollmode:=false;
+    //param.scrollmode:=false;
     param.firstdraw:=true;
     paint;
   end;
+  if assigned(GetCurrentObjProc) then
+  if GetCurrentObjProc=@sysvar then
+  If assigned(UpdateObjInspProc)then
+                                   UpdateObjInspProc;
 end;
 procedure drawtick(uID, msg: UINT; dwUse, dw1, dw2: DWord); stdcall;
 begin

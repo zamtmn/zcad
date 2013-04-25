@@ -90,6 +90,7 @@ resourcestring
 
   rscmSelEntBeforeComm='Entities must be selected before run the command';
   rscmSelDevBeforeComm='Device must be selected before run the command';
+  rscmSelDevsBeforeComm='Devices must be selected before run the command';
   rscmPolyNotSel='Poly entities not selected';
   rscm2VNotRemove='Only 2 vertex there is nothing to remove';
 

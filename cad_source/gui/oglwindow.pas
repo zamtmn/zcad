@@ -2332,7 +2332,7 @@ begin
   if button = mbMiddle then
   begin
     cursor := crnone;
-    //param.scrollmode:=false;
+    param.scrollmode:=false;
     param.firstdraw:=true;
     paint;
   end;

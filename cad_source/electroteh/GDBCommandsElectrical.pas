@@ -10,7 +10,7 @@ unit GDBCommandsElectrical;
 
 interface
 uses
-  UGDBSelectedObjArray,gdbentityfactory,zcadsysvars,csvdocument,
+  zcadstrconsts,UGDBSelectedObjArray,gdbentityfactory,zcadsysvars,csvdocument,
   UGDBOpenArrayOfPV,GDBBlockInsert,devices,UGDBTree,ugdbdescriptor,gdbasetypes,commandline,GDBCommandsDraw,GDBElLeader,
   plugins,
   commandlinedef,
@@ -650,6 +650,12 @@ begin
            psd:=gdb.GetCurrentDWG^.SelObjArray.iterate(ir);
      until psd=nil;
 
+     if dna.Size=0 then
+     begin
+          historyoutstr(rscmSelDevsBeforeComm);
+     end
+     else
+     begin
      devnamesort.Sort(dna,dna.Size);
      t_matrix:=geometry.CreateTranslationMatrix(createvertex(0,15,0));
 
@@ -735,7 +741,7 @@ begin
      psd:=gdb.GetCurrentDWG^.SelObjArray.iterate(ir);
      until psd=nil;}
 
-
+     end;
      dna.Destroy;
 end;
 

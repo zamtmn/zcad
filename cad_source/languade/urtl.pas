@@ -32,6 +32,7 @@ var
 {$ENDIF}
 initialization;
      {$IFDEF DEBUGINITSECTION}LogOut('urtl.initialization');{$ENDIF}
+     programlog.logoutstr('urtl.initialization',lp_IncPos);
      //units.init;
      units.loadunit(expandpath('*rtl/system.pas'),nil);
 
@@ -201,7 +202,7 @@ initialization;
 
   if sysunit<>nil then
   PRecordDescriptor(sysunit.TypeName2PTD('CommandRTEdObject'))^.FindField('commanddata')^.Collapsed:=false;
-  programlog.logoutstr('UUnitManager.startup',lp_DecPos);
+  programlog.logoutstr('urtl.initialization  {end}',lp_DecPos);
 
 finalization;
   //units.FreeAndDone;

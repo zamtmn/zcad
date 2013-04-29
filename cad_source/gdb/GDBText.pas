@@ -203,6 +203,7 @@ var
   psyminfo:PGDBsymdolinfo;
   l:GDBInteger;
   sym:word;
+  TDInfo:TTrianglesDataInfo;
 begin
   obj_height:=1;
   obj_width:=0;
@@ -213,7 +214,7 @@ begin
   begin
     sym:=getsymbol(content,i,l,PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont^.font.unicode);
     //psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(content[i])));
-    psyminfo:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(sym);
+    psyminfo:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(sym,tdinfo);
     obj_width:=obj_width+psyminfo.NextSymX;
     if psyminfo.SymMaxY>obj_height then obj_height:=psyminfo.SymMaxY;
     if psyminfo.SymMinY<obj_y then obj_y:=psyminfo.SymMinY;
@@ -609,6 +610,7 @@ var
   pfont:pgdbfont;
   ln,l:GDBInteger;
   sym:word;
+  TDInfo:TTrianglesDataInfo;
 begin
   ln:=1;
   pfont:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont;
@@ -647,7 +649,7 @@ begin
     end
     else
     begin
-      pfont^.CreateSymbol(Vertex3D_in_WCS_Array,sym,objmatrix,matr,minx,miny,maxx,maxy,{pfont,}ln);
+      pfont^.CreateSymbol(Vertex3D_in_WCS_Array,self.Geom.Triangles,sym,objmatrix,matr,minx,miny,maxx,maxy,{pfont,}ln);
 
     end;
       //FillChar(m1, sizeof(DMatrix4D), 0);
@@ -656,7 +658,7 @@ begin
   m1[1, 1] := 1;
   m1[2, 2] := 1;
   m1[3, 3] := 1;}
-  m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}{(ord(content[i]))}sym).NextSymX;
+  m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}{(ord(content[i]))}sym,tdinfo).NextSymX;
   matr:=MatrixMultiply(m1,matr);
   inc(i,l);
   end;

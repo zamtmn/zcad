@@ -19,12 +19,13 @@
 unit ugdbshxfont;
 {$INCLUDE def.inc}
 interface
-uses TTTypes,TTObjs,gvector,gmap,gutil,EasyLazFreeType,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,UGDBPoint3DArray,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses uzglfonttriangles2darray,TTTypes,TTObjs,gvector,gmap,gutil,EasyLazFreeType,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,UGDBPoint3DArray,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
 type
 PTTTFSymInfo=^TTTFSymInfo;
 TTTFSymInfo=packed record
                       GlyphIndex:Integer;
                       PSymbolInfo:PGDBSymdolInfo;
+                      TrianglesDataInfo:TTrianglesDataInfo;
                 end;
 {$IFNDEF DELPHI}
 TLessInt={specialize }TLess<integer>;
@@ -67,9 +68,10 @@ BASEFont=object(GDBaseObject)
               constructor init;
               destructor done;virtual;
               function GetSymbolDataAddr(offset:integer):pointer;virtual;abstract;
+              function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
 
               function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;
-              function GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;
+              function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;virtual;
               function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
         end;
 PSHXFont=^SHXFont;
@@ -86,7 +88,9 @@ TTFFont=object(SHXFont)
               ftFont: TFreeTypeFont;
               MapChar:TMapChar;
               MapCharIterator:TMapChar.TIterator;
-              function GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;
+              TriangleData:ZGLFontTriangle2DArray;
+              function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;virtual;
+              function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
               constructor init;
               destructor done;virtual;
         end;
@@ -97,6 +101,23 @@ var
 procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont{;var pf:PGDBfont});
 implementation
 uses {math,}log;
+procedure TriangulateSymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont{;var pf:PGDBfont});
+var
+   tv:GDBFontVertex2D;
+begin
+     si.TrianglesDataInfo.TrianglesAddr:=pttf^.TriangleData.count;
+     si.TrianglesDataInfo.TrianglesSize:=3;
+     tv.x:=0;
+     tv.y:=0;
+     pttf^.TriangleData.Add(@tv);
+     tv.x:=0;
+     tv.y:=1;
+     pttf^.TriangleData.Add(@tv);
+     tv.x:=1;
+     tv.y:=0;
+     pttf^.TriangleData.Add(@tv);
+end;
+
 procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont{;var pf:PGDBfont});
 var
    i,j:integer;
@@ -108,9 +129,15 @@ var
    x,y,x1,y1,scx,scy:fontfloat;
    cends,lastoncurve:integer;
    startcountur:boolean;
+   startcounturindex:integer;
    k:gdbdouble;
    Iterator:TMapChar.TIterator;
    done:boolean;
+procedure EndSymContour;
+begin
+      bs.EndCountur;
+end;
+
 begin
   k:=1;
   {$if FPC_FULlVERSION>=20701}
@@ -157,6 +184,7 @@ begin
                        begin
                             scx:=x1;
                             scy:=y1;
+                            startcounturindex:=pttf.SHXdata.Count;
                             startcountur:=false;
                        end
   else
@@ -179,7 +207,7 @@ begin
     end;
   if j=_glyph^.outline.conEnds[cends] then
     begin
-         bs.EndCountur;
+         EndSymContour;
          inc(cends);
          startcountur:=true;
          lastoncurve:=j+1;
@@ -196,8 +224,9 @@ begin
   x:=x1;
   y:=y1;
   end;
-  bs.EndCountur;
+  EndSymContour;
   end;
+  TriangulateSymbol(chcode,si,pttf);
 end;
 procedure adddcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
 const
@@ -453,10 +482,12 @@ begin
      until pobj=nil;
      unisymbolinfo.{FreeAnd}Done;
 end;
-function BASEFont.GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
+function BASEFont.GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
 //var
    //usi:GDBUNISymbolInfo;
 begin
+     TrianglesDataInfo.TrianglesAddr:=0;
+     TrianglesDataInfo.TrianglesSize:=0;
      if symbol=49 then
                         symbol:=symbol;
      if symbol<256 then
@@ -481,6 +512,11 @@ begin
 
                        end;
 end;
+function BASEFont.GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;
+begin
+     result:=nil;
+end;
+
 function BASEFont.GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
 var
    usi:GDBUNISymbolInfo;
@@ -551,6 +587,7 @@ end;
 constructor TTFFont.init;
 begin
      inherited;
+     TriangleData.init({$IFDEF DEBUGBUILD}'{4A97D8DA-8B55-41AA-9287-7F0C842AC2D0}',{$ENDIF}200);
      ftFont:=TFreeTypeFont.create;
      MapChar:=TMapChar.Create;
      MapCharIterator:=TMapChar.TIterator.Create;
@@ -558,11 +595,16 @@ end;
 destructor TTFFont.done;
 begin
      inherited;
+     TriangleData.done;
      ftFont.Destroy;
      MapCharIterator.Destroy;
      MapChar.Destroy;
 end;
-function TTFFont.GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
+function TTFFont.GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;
+begin
+     result:=self.TriangleData.getelement(offset);
+end;
+function TTFFont.GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
 var
    CharIterator:TMapChar.TIterator;
    si:TTTFSymInfo;
@@ -587,6 +629,7 @@ begin
                                    si:=CharIterator.value;
                                    result:=si.PSymbolInfo;
                               end;
+     TrianglesDataInfo:=si.TrianglesDataInfo;
      if CharIterator<>nil then
                               CharIterator.Destroy;
      exit;

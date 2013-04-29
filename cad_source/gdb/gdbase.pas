@@ -87,6 +87,8 @@ PDMatrix4D=^DMatrix4D;
 DMatrix4D=array[0..3]of DVector4D;
 DMatrix3D=array[0..2]of DVector3D;
 ClipArray=array[0..5]of DVector4D;
+FontFloat=GDBFloat;
+PFontFloat=^FontFloat;
 PGDBvertex=^GDBvertex;
 GDBvertex=record
                 x:GDBDouble;(*saved_to_shd*)
@@ -125,6 +127,15 @@ GDBvertex2D=record
                 x:GDBDouble;(*saved_to_shd*)
                 y:GDBDouble;(*saved_to_shd*)
             end;
+PGDBFontVertex2D=^GDBFontVertex2D;
+GDBFontVertex2D=record
+                x:FontFloat;(*saved_to_shd*)
+                y:FontFloat;(*saved_to_shd*)
+            end;
+TTrianglesDataInfo=record
+               TrianglesAddr: GDBInteger;
+               TrianglesSize: GDBWord;
+               end;
 PGDBPolyVertex2D=^GDBPolyVertex2D;
 GDBPolyVertex2D=record
                       coord:GDBvertex2D;
@@ -294,9 +305,6 @@ GDBArrayVertex=array[0..0] of GDBvertex;
                          versionstring:GDBstring;
                      end;
   TArrayIndex=GDBInteger;
-
-  fontfloat=GDBFloat;
-  pfontfloat=^fontfloat;
 
   TPolyData=record
                   nearestvertex:gdbinteger;

@@ -579,7 +579,10 @@ begin
 
                                                                                    //Vertex3D_in_WCS_Array.simpledrawgeometry({_lod}3)
                                                                                    //simpledrawgeometry
-                                                                                   Vertex3D_in_WCS_Array.drawgeometry
+                                                                                   begin
+                                                                                   Vertex3D_in_WCS_Array.drawgeometry;
+                                                                                   geom.DrawGeometry;
+                                                                                   end
                                                                                else
                                                                                    //Vertex3D_in_WCS_Array.drawgeometry;
                                                                                    //Vertex3D_in_WCS_Array.simpledrawgeometry(_lod);

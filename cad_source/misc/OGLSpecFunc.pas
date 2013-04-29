@@ -119,6 +119,8 @@ type
     {$ENDIF}
     PTViewPortArray=^TViewPortArray;
 
+    TessObj=Pointer;
+
     TOGLContextDesk=record
                           hrc: {HGLRC}thandle;
                           dc:HDC;
@@ -216,6 +218,9 @@ type
                            procedure myglGetDoublev(pname: GLenum; params: PGLdouble);inline;
                            function myglGetString(name: GLenum): PAnsiChar;inline;
                            procedure mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);inline;
+
+                           function NewTess:TessObj;
+                           procedure DeleteTess(ptessobj:TessObj);
     end;
 
 var
@@ -273,6 +278,14 @@ procedure processpoint(const point:gdbvertex);
 begin
      //inc(pointcount);
      //middlepoint:=geometry.VertexAdd(middlepoint,point);
+end;
+function TOGLStateManager.NewTess:Pointer;
+begin
+     result:=gluNewTess;
+end;
+procedure TOGLStateManager.DeleteTess(ptessobj:Pointer);
+begin
+     gluDeleteTess(ptessobj);
 end;
 procedure TOGLStateManager.glcolor3ub(const red, green, blue: GLubyte);
 begin

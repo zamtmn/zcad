@@ -123,6 +123,7 @@ var
   l:GDBInteger;
   sym:word;
   newline:boolean;
+  TDInfo:TTrianglesDataInfo;
 procedure setstartx;
 begin
      if length(pswp.str)>0 then
@@ -130,7 +131,7 @@ begin
                                  if pswp.str[1]=' ' then
                                                          l:=l;
                                sym:=getsymbol(pswp.str,1,l,pgdbfont(pfont)^.font.unicode);
-                               psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym);
+                               psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym,tdinfo);
                                pswp^.x:= 0-psyminfo.SymMinX{*textprop.size};
                                end
                            else
@@ -178,7 +179,7 @@ begin
   begin
   repeat
     sym:=getsymbol(content,currsymbol,l,pgdbfont(pfont)^.font.unicode);
-    psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym);
+    psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym,tdinfo);
     if newline then
                    begin
                         linewidth:=linewidth-psyminfo.SymMinX;
@@ -197,7 +198,7 @@ begin
         currline := copy(content, lastbreak, currsymbol - lastbreak);
         lastbreak := currsymbol + 2;
         currsymbol := currsymbol + 1;
-        psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}({integer(content[currsymbol])}sym));
+        psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}({integer(content[currsymbol])}sym),tdinfo);
         canbreak := false;
 
         {GDBPointer(ptext.GDBStringarray[ptext.count].str) := nil;
@@ -209,7 +210,7 @@ begin
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
         begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo({ach2uch}(GDBByte(' '))).NextSymX;
+             swp.w := swp.w - pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo({ach2uch}(GDBByte(' ')),tdinfo).NextSymX;
         end;
         self.text.add(@swp);
         newline:=true;
@@ -228,7 +229,7 @@ begin
         newline:=true;
         lastbreak := lastcanbreak + 1;
         currsymbol := lastcanbreak;
-        psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym);
+        psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym,tdinfo);
 
         canbreak := false;
 
@@ -241,7 +242,7 @@ begin
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
         begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(GDBByte(' '))}32).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
+             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(GDBByte(' '))}32,tdinfo).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
         end;
         self.text.add(@swp);
 
@@ -262,7 +263,7 @@ begin
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
         begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(GDBByte(' '))}32).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
+             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(GDBByte(' '))}32,tdinfo).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
         end;
         self.text.add(@swp);
   //w := width;
@@ -662,6 +663,7 @@ var
   ln,l:GDBInteger;
 
   sym:word;
+  TDInfo:TTrianglesDataInfo;
 begin
   ln:=0;
   pfont:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont;
@@ -751,7 +753,7 @@ begin
     begin
     //matr:=matrixmultiply(matr,objmatrix);
 
-      pfont.CreateSymbol(Vertex3D_in_WCS_Array,sym,objmatrix,matr,minx,miny,maxx,maxy,ln);
+      pfont.CreateSymbol(Vertex3D_in_WCS_Array,self.Geom.Triangles,sym,objmatrix,matr,minx,miny,maxx,maxy,ln);
 
       matr:=m1;
       FillChar(m1, sizeof(DMatrix4D), 0);
@@ -761,7 +763,7 @@ begin
   m1[3, 3] := 1;
     {if sym<256 then
                     sym:=ach2uch(sym);}
-  m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(ord(pswp^.str[i]))}sym).NextSymX;
+  m1[3, 0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(ord(pswp^.str[i]))}sym,tdinfo).NextSymX;
   m1[3, 1] := 0;
   matr:=MatrixMultiply(m1,matr);
   end;

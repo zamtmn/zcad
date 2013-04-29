@@ -61,7 +61,7 @@ GDBaseObject=object
     function GetObjTypeName:GDBString;virtual;abstract;
     function GetObjName:GDBString;virtual;abstract;
     constructor initnul;
-    destructor Done;virtual; abstract;
+    destructor Done;virtual;{ abstract;}
     function IsEntity:GDBBoolean;virtual;abstract;
   end;
 devicedesk=record
@@ -98,6 +98,8 @@ PDMatrix4D=^DMatrix4D;
 DMatrix4D=array[0..3]of DVector4D;
 DMatrix3D=array[0..2]of DVector3D;
 ClipArray=array[0..5]of DVector4D;
+FontFloat=GDBFloat;
+PFontFloat=^FontFloat;
 PGDBvertex=^GDBvertex;
 GDBvertex=record
                 x:GDBDouble;(*saved_to_shd*)
@@ -136,6 +138,15 @@ GDBvertex2D=record
                 x:GDBDouble;(*saved_to_shd*)
                 y:GDBDouble;(*saved_to_shd*)
             end;
+PGDBFontVertex2D=^GDBFontVertex2D;
+GDBFontVertex2D=record
+                x:FontFloat;(*saved_to_shd*)
+                y:FontFloat;(*saved_to_shd*)
+            end;
+TTrianglesDataInfo=record
+               TrianglesAddr: GDBInteger;
+               TrianglesSize: GDBWord;
+               end;
 PGDBPolyVertex2D=^GDBPolyVertex2D;
 GDBPolyVertex2D=record
                       coord:GDBvertex2D;
@@ -304,8 +315,6 @@ GDBArrayVertex=array[0..0] of GDBvertex;
                          versionstring:GDBstring;
                      end;
   TArrayIndex=GDBInteger;
-  fontfloat=GDBFloat;
-  pfontfloat=^fontfloat;
   TPolyData=record
                   nearestvertex:gdbinteger;
                   nearestline:gdbinteger;
@@ -634,8 +643,9 @@ BASEFont=object(GDBaseObject)
               constructor init;
               destructor done;virtual;abstract;
               function GetSymbolDataAddr(offset:integer):pointer;virtual;abstract;
+              function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;abstract;
               function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;abstract;
-              function GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;abstract;
+              function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;virtual;abstract;
               function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
         end;
 PSHXFont=^SHXFont;
@@ -652,7 +662,9 @@ TTFFont=object(SHXFont)
               ftFont: TFreeTypeFont;
               MapChar:TMapChar;
               MapCharIterator:TMapChar.TIterator;
-              function GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;abstract;
+              TriangleData:ZGLFontTriangle2DArray;
+              function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;virtual;abstract;
+              function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;abstract;
               constructor init;
               destructor done;virtual;abstract;
         end;
@@ -668,8 +680,8 @@ GDBfont=object(GDBNamedObject)
     procedure ItFFT;
     destructor done;virtual;abstract;
     function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
-    function GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
-    procedure CreateSymbol(var Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
+    function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
+    procedure CreateSymbol(var Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;var Triangles:ZGLTriangle3DArray;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
   end;
 //Generate on C:\zcad\CAD_SOURCE\u\UGDBTextStyleArray.pas
 PGDBTextStyleProp=^GDBTextStyleProp;
@@ -1154,13 +1166,18 @@ ZGLLine3DArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex*)
 ZGLPoint3DArray=object(ZGLLine3DArray)(*OpenArrayOfData=GDBVertex*)
                 procedure DrawGeometry;virtual;abstract;
              end;
+//Generate on C:\zcad\cad_source\zgl\uzgltriangles3darray.pas
+ZGLTriangle3DArray=object(ZGLLine3DArray)(*OpenArrayOfData=GDBVertex*)
+                procedure DrawGeometry;virtual;abstract;
+             end;
 //Generate on C:\zcad\cad_source\zgl\uzglgeometry.pas
 ZGLGeometry=object(GDBaseObject)
                                  Lines:ZGLLine3DArray;
                                  Points:ZGLpoint3DArray;
                                  SHX:GDBPolyPoint3DArray;
+                                 Triangles:ZGLTriangle3DArray;
                 procedure DrawGeometry;virtual;abstract;
-                 procedure DrawNiceGeometry;virtual;abstract;
+                procedure DrawNiceGeometry;virtual;abstract;
                 procedure Clear;virtual;abstract;
                 constructor init;
                 destructor done;virtual;abstract;
@@ -2977,6 +2994,7 @@ GDBDescriptor=object(GDBOpenArrayOfPObjects)
                     function GetCurrentROOT:PGDBObjGenericSubEntry;
                     function GetCurrentDWG:{PTDrawing}PTSimpleDrawing;
                     procedure asociatedwgvars;
+                    procedure freedwgvars;
                     procedure SetCurrentDWG(PDWG:PTAbstractDrawing);
                     function CreateDWG:PTDrawing;
                     //function CreateSimpleDWG:PTSimpleDrawing;virtual;abstract;

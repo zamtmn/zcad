@@ -19,7 +19,7 @@
 unit ugdbfont;
 {$INCLUDE def.inc}
 interface
-uses ugdbshxfont,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,UGDBPoint3DArray,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses uzgltriangles3darray,ugdbshxfont,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,UGDBPoint3DArray,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
 type
 {EXPORT+}
 PGDBfont=^GDBfont;
@@ -33,21 +33,22 @@ GDBfont=object(GDBNamedObject)
     procedure ItFFT;
     destructor done;virtual;
     function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
-    function GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
-    procedure CreateSymbol(var Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
+    function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
+    procedure CreateSymbol(var Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;var Triangles:ZGLTriangle3DArray;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
   end;
 {EXPORT-}
 var
    pbasefont: PGDBfont;
 implementation
 uses {math,}log;
-procedure GDBfont.CreateSymbol(var Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
+procedure GDBfont.CreateSymbol(var Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;var Triangles:ZGLTriangle3DArray;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
 var
   psymbol: GDBPointer;
   {i, }j, k: GDBInteger;
   len: GDBWord;
   //matr,m1: DMatrix4D;
   v:GDBvertex4D;
+  v3:GDBVertex;
   //pv:GDBPolyVertex2D;
   pv3:GDBPolyVertex3D;
 
@@ -58,6 +59,8 @@ var
   //ir:itrec;
   psyminfo:PGDBsymdolinfo;
   //deb:GDBsymdolinfo;
+  TDInfo:TTrianglesDataInfo;
+  PTriangles:PGDBFontVertex2D;
 begin
   if _symbol=100 then
                       _symbol:=_symbol;
@@ -66,7 +69,21 @@ begin
   if _symbol=32 then
                       _symbol:=_symbol;
 
-  psyminfo:=self.GetOrReplaceSymbolInfo(integer(_symbol));
+  psyminfo:=self.GetOrReplaceSymbolInfo(integer(_symbol),TDInfo);
+  if tdinfo.TrianglesSize>0 then
+  begin
+       PTriangles:=self.font.GetTriangleDataAddr(TDInfo.TrianglesAddr);
+       for j:=1 to tdinfo.TrianglesSize do
+       begin
+            v3.x:=PTriangles.x;
+            v3.y:=PTriangles.y;
+            v3.z:=0;
+            v3:=VectorTransform3D(v3,matr);
+            v3:=VectorTransform3D(v3,objmatrix);
+            Triangles.Add(@v3);
+            inc(PTriangles);
+       end;
+  end;
   //deb:=psyminfo^;
   psymbol := self.font.GetSymbolDataAddr(psyminfo.addr);
   if {pgdbfont(pfont)^.symbo linfo[GDBByte(_symbol)]}psyminfo.size <> 0 then
@@ -235,11 +252,11 @@ begin
      {GDBGetMem(font,sizeof(SHXFont));
      font^.init;}
 end;
-function GDBfont.GetOrReplaceSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
+function GDBfont.GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
 //var
    //usi:GDBUNISymbolInfo;
 begin
-     result:=font.GetOrReplaceSymbolInfo(symbol);
+     result:=font.GetOrReplaceSymbolInfo(symbol,TrianglesDataInfo);
 end;
 function GDBfont.GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
 var

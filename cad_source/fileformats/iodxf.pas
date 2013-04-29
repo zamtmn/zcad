@@ -571,6 +571,7 @@ var
   PTP:PTextProp;
   DWGHandle:TDWGHandle;
   ir,ir2:itrec;
+  TDInfo:TTrianglesDataInfo;
 begin
   blockload:=false;
   nulisread:=false;
@@ -923,7 +924,7 @@ begin
                                          begin
                                             psp^.param.PStyle:=ptstyle;
                                             psp^.FontName:=ptstyle^.dxfname;
-                                            psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.Psymbol));
+                                            psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.Psymbol),tdinfo);
                                             psp^.SymbolName:=psp^.Psymbol^.Name;
                                          end;
 

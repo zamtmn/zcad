@@ -19,7 +19,7 @@
 unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,ugdbltypearray,ugdbfont,sysutils,gdbase,memman,log,
+uses zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,uzgltriangles3darray,ugdbltypearray,ugdbfont,sysutils,gdbase,memman,log,
      gdbasetypes;
 type
 {Export+}
@@ -27,8 +27,9 @@ ZGLGeometry=object(GDBaseObject)
                                  Lines:ZGLLine3DArray;
                                  Points:ZGLpoint3DArray;
                                  SHX:GDBPolyPoint3DArray;
+                                 Triangles:ZGLTriangle3DArray;
                 procedure DrawGeometry;virtual;
-                 procedure DrawNiceGeometry;virtual;
+                procedure DrawNiceGeometry;virtual;
                 procedure Clear;virtual;
                 constructor init;
                 destructor done;virtual;
@@ -54,6 +55,7 @@ var
     minx,miny,maxx,maxy:GDBDouble;
     //lp,tv:gdbvertex;
     //i:integer;
+    TDInfo:TTrianglesDataInfo;
 
 procedure SetUnLTyped;
 begin
@@ -163,7 +165,7 @@ begin
                                                                   miny:=0;
                                                                   maxx:=0;
                                                                   maxy:=0;
-                                                                  PSP^.param.PStyle.pfont.CreateSymbol(shx,PSP.Psymbol.Number,objmatrix,matr,minx,miny,maxx,maxy,1);
+                                                                  PSP^.param.PStyle.pfont.CreateSymbol(shx,triangles,PSP.Psymbol.Number,objmatrix,matr,minx,miny,maxx,maxy,1);
                                                                   PSP:=vp.LineType^.shapearray.iterate(ir4);
                                                              end;
                                                     TDIText:begin
@@ -185,8 +187,8 @@ begin
                                                                   matr     :=onematrix;
                                                                   for j:=1 to (system.length(PTP^.Text)) do
                                                                   begin
-                                                                  PTP^.param.PStyle.pfont.CreateSymbol(shx,byte(PTP^.Text[j]),objmatrix,matr,minx,miny,maxx,maxy,1);
-                                                                  matr[3, 0] := matr[3, 0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j])).NextSymX;
+                                                                  PTP^.param.PStyle.pfont.CreateSymbol(shx,triangles,byte(PTP^.Text[j]),objmatrix,matr,minx,miny,maxx,maxy,1);
+                                                                  matr[3, 0] := matr[3, 0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]),tdinfo).NextSymX;
 
                                                                   end;
                                                                   PTP:=vp.LineType^.textarray.iterate(ir5);
@@ -214,30 +216,39 @@ begin
   Points.DrawGeometry;
   //shx.DrawNiceGeometry;
   shx.DrawGeometry;
+  Triangles.DrawGeometry;
 end;
 procedure ZGLGeometry.drawNicegeometry;
 begin
+  if lines.Count>0 then
   Lines.DrawGeometry;
+  if Points.Count>0 then
   Points.DrawGeometry;
+  if shx.Count>0 then
   shx.DrawNiceGeometry;
+  if Triangles.Count>0 then
+  Triangles.DrawGeometry;
 end;
 procedure ZGLGeometry.Clear;
 begin
   Lines.Clear;
   Points.Clear;
   SHX.Clear;
+  Triangles.Clear;
 end;
 constructor ZGLGeometry.init;
 begin
 Lines.init({$IFDEF DEBUGBUILD}'{261A56E9-FC91-4A6D-A534-695778390843}',{$ENDIF}100);
 Points.init({$IFDEF DEBUGBUILD}'{AF4B3440-50B5-4482-A2B7-D38DDE4EC731}',{$ENDIF}100);
 SHX.init({$IFDEF DEBUGBUILD}'{93201215-874A-4FC5-8062-103AF05AD930}',{$ENDIF}100);
+Triangles.init({$IFDEF DEBUGBUILD}'{EE569D51-8C1D-4AE3-A80F-BBBC565DA372}',{$ENDIF}100);
 end;
 destructor ZGLGeometry.done;
 begin
 Lines.done;
 Points.done;
 SHX.done;
+Triangles.done;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBPoint3DArray.initialization');{$ENDIF}

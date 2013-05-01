@@ -102,6 +102,7 @@ var
    trmode:Cardinal;
    pointcount:integer;
    triangle:array[0..2] of GDBFontVertex2D;
+   coord: array [0..100] of gdbvertex;
 procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont{;var pf:PGDBfont});
 implementation
 uses {math,}log;
@@ -190,11 +191,12 @@ procedure TessErrorCallBack(error: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall
 begin
      error:=error;
 end;
-procedure TessBeginCallBack(mode: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+procedure TessBeginCallBack(gmode: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
-     mode:=mode;
+     if gmode=GL_TRIANGLES then
+                               gmode:=gmode;
      pointcount:=0;
-     trmode:=mode;
+     trmode:=gmode;
 end;
 procedure TessVertexCallBack(const v,v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 var
@@ -215,6 +217,8 @@ begin
                                              ptrdata^.Add(@triangle[0]);
                                              ptrdata^.Add(@triangle[1]);
                                              ptrdata^.Add(@triangle[2]);
+                                             if trmode=GL_TRIANGLES then
+                                                                       pointcount:=0;
                                              end;
                          end
                      else
@@ -235,6 +239,9 @@ begin
                                             ptrdata^.Add(@triangle[1]);
                                             ptrdata^.Add(@triangle[2]);
                                        end;
+                              else begin
+                                        triangle[1]:=triangle[1];
+                                   end;
                               end;
                          end;
 
@@ -351,8 +358,39 @@ begin
 
 
 
+                   coord[0].x := 0.35337424278259277;
+                   coord[0].y := 0;
+                   coord[0].z := 0;
 
-           //TessBeginCallBack(GL_TRIANGLE_FAN,nil);
+                   coord[1].x := 0.35337424278259277;
+                   coord[1].y := 0.85889571905136108;
+                   coord[1].z := 0;
+;
+                   coord[2].x := 0.032719835638999939;
+                   coord[2].y := 0.85889571905136108;
+                   coord[2].z := 0;
+
+                   coord[3].x := 0.032719835638999939;
+                   coord[3].y := 0.97505110502243042;
+                   coord[3].z := 0;
+
+                   coord[4].x := 0.80490797758102417;
+                   coord[4].y := 0.97505110502243042;
+                   coord[4].z := 0;
+
+                   coord[5].x := 0.80490797758102417;
+                   coord[5].y := 0.85889571905136108;
+                   coord[5].z := 0;
+
+                   coord[6].x := 0.48261758685112;
+                   coord[6].y := 0.85889571905136108;
+                   coord[6].z := 0;
+
+                   coord[7].x := 0.48261758685112;
+                   coord[7].y := 0;
+                   coord[7].z := 0;
+
+
 
            OGLSM.TessBeginContour(tesselator);
            //si.TrianglesDataInfo.TrianglesAddr:=pttf^.TriangleData.count;
@@ -361,6 +399,7 @@ begin
            //for count:=tparrayindex-2 downto oldtparrayindex do
            begin
                 OGLSM.TessVertex(tesselator,@tparray[count],@tparray[count]);
+                //gluTessVertex(tesselator, @tparray[count], @tparray[count]);
 
                 //trp.x:=tparray[count].x;
                 //trp.y:=tparray[count].y;
@@ -368,8 +407,49 @@ begin
                 //TessVertexCallBack(@tparray[count],nil);
 
            end;
+
            OGLSM.TessEndContour(tesselator);
+
+
            //bs.EndCountur;
+
+           (*
+           gluTessBeginContour(tesselator);
+                   coord[0].x := 0.35337424278259277;
+                   coord[0].y := 0;
+                   coord[0].z := 0;
+                   gluTessVertex(tesselator, @coord[0], @coord[0]);
+                   coord[1].x := 0.35337424278259277;
+                   coord[1].y := 0.85889571905136108;
+                   coord[1].z := 0;
+                   gluTessVertex(tesselator, @coord[1], @coord[1]);
+                   coord[2].x := 0.032719835638999939;
+                   coord[2].y := 0.85889571905136108;
+                   coord[2].z := 0;
+                   gluTessVertex(tesselator, @coord[2], @coord[2]);
+                   coord[3].x := 0.032719835638999939;
+                   coord[3].y := 0.97505110502243042;
+                   coord[3].z := 0;
+
+                   gluTessVertex(tesselator, @coord[3], @coord[3]);
+                   coord[4].x := 0.80490797758102417;
+                   coord[4].y := 0.97505110502243042;
+                   coord[4].z := 0;
+                   gluTessVertex(tesselator, @coord[4], @coord[4]);
+                   coord[5].x := 0.80490797758102417;
+                   coord[5].y := 0.85889571905136108;
+                   coord[5].z := 0;
+                   gluTessVertex(tesselator, @coord[5], @coord[5]);
+                   coord[6].x := 0.48261758685112;
+                   coord[6].y := 0.85889571905136108;
+                   coord[6].z := 0;
+                   gluTessVertex(tesselator, @coord[6], @coord[6]);
+                   coord[7].x := 0.48261758685112;
+                   coord[7].y := 0;
+                   coord[7].z := 0;
+                   gluTessVertex(tesselator, @coord[7], @coord[7]);
+
+                 gluTessEndContour(tesselator);*)
 end;
 begin
   k:=1;
@@ -402,11 +482,11 @@ begin
   tesselator:=OGLSM.NewTess;
   OGLSM.TessCallback(tesselator,GLU_TESS_VERTEX_DATA,@TessVertexCallBack);
   OGLSM.TessCallback(tesselator,GLU_TESS_BEGIN_DATA,@TessBeginCallBack);
-  //OGLSM.TessCallback(tesselator,GLU_TESS_Error_DATA,@TessErrorCallBack);
-  gluTessProperty(tesselator,GLU_TESS_WINDING_RULE,GLU_TESS_WINDING_ODD);
-  gluTessProperty(tesselator, GLU_TESS_BOUNDARY_ONLY, GLU_FALSE);
-  gluTessProperty(tesselator, GLU_TESS_TOLERANCE , 1000.0);
-  OGLSM.TessBeginPolygon(tesselator,pointer(11));
+  OGLSM.TessCallback(tesselator,GLU_TESS_Error_DATA,@TessErrorCallBack);
+  //gluTessProperty(tesselator,GLU_TESS_WINDING_RULE,GLU_TESS_WINDING_ODD);
+  //gluTessProperty(tesselator, GLU_TESS_BOUNDARY_ONLY, GLU_FALSE);
+  //gluTessProperty(tesselator, GLU_TESS_TOLERANCE , 1000.0);
+  OGLSM.TessBeginPolygon(tesselator,nil);
   //gluTessNormal( tesselator, 0.0, 0.0, -1.0);
   cends:=0;
   lastoncurve:=0;
@@ -606,15 +686,15 @@ begin
      end;
      size:=round((BOrder+2)*(BOrder-1)/2)+1;
      FArray.Resize(size);
-     n:=BOrder{*2}-1;
+     n:=BOrder{*2}-1+5;//<----------------------------
      for j:=1 to n-1 do
      begin
           p:=getpoint(j/n);
           //addgcross(shx,shxsize^,p.x,p.y);
           if j>1 then
-                     addline(shx,shxsize^,p.x,p.y,prevp.x,prevp.y)
+                     addline(shx,shxsize^,prevp.x,prevp.y,p.x,p.y)
                  else
-                     addline(shx,shxsize^,p.x,p.y,FArray[0].x,FArray[0].y);
+                     addline(shx,shxsize^,FArray[0].x,FArray[0].y,p.x,p.y);
           prevp:=p;
      end;
           addline(shx,shxsize^,p.x,p.y,FArray[BOrder-1].x,FArray[BOrder-1].y);

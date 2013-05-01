@@ -19,7 +19,7 @@
 unit ugdbshxfont;
 {$INCLUDE def.inc}
 interface
-uses uzglfonttriangles2darray,TTTypes,TTObjs,gvector,gmap,gutil,EasyLazFreeType,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,UGDBPoint3DArray,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses glu,math,OGLSpecFunc,uzglfonttriangles2darray,TTTypes,TTObjs,gvector,gmap,gutil,EasyLazFreeType,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,UGDBPoint3DArray,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
 type
 PTTTFSymInfo=^TTTFSymInfo;
 TTTFSymInfo=packed record
@@ -98,136 +98,15 @@ TTFFont=object(SHXFont)
 {EXPORT-}
 var
    BS:TBezierSolver2D;
+   ttessv:gdbvertex;
+   trmode:Cardinal;
+   pointcount:integer;
+   triangle:array[0..2] of GDBFontVertex2D;
 procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont{;var pf:PGDBfont});
 implementation
 uses {math,}log;
-procedure TriangulateSymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont{;var pf:PGDBfont});
 var
-   tv:GDBFontVertex2D;
-begin
-     si.TrianglesDataInfo.TrianglesAddr:=pttf^.TriangleData.count;
-     si.TrianglesDataInfo.TrianglesSize:=3;
-     tv.x:=0;
-     tv.y:=0;
-     pttf^.TriangleData.Add(@tv);
-     tv.x:=0;
-     tv.y:=1;
-     pttf^.TriangleData.Add(@tv);
-     tv.x:=1;
-     tv.y:=0;
-     pttf^.TriangleData.Add(@tv);
-end;
-
-procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont{;var pf:PGDBfont});
-var
-   i,j:integer;
-   fe:boolean;
-   glyph:TFreeTypeGlyph;
-   _glyph:PGlyph;
-   //psyminfo,psubsyminfo:PGDBsymdolinfo;
-
-   x,y,x1,y1,scx,scy:fontfloat;
-   cends,lastoncurve:integer;
-   startcountur:boolean;
-   startcounturindex:integer;
-   k:gdbdouble;
-   Iterator:TMapChar.TIterator;
-   done:boolean;
-procedure EndSymContour;
-begin
-      bs.EndCountur;
-end;
-
-begin
-  k:=1;
-  {$if FPC_FULlVERSION>=20701}
-  k:=1/pttf^.ftFont.CapHeight;
-  {$ENDIF}
-  BS.shx:=@pttf^.SHXdata;
-
-  BS.fmode:=TSM_WaitStartCountur;
-  glyph:=pttf^.ftFont.Glyph[{i}si.GlyphIndex];
-  _glyph:=glyph.Data.z;
-  //programlog.LogOutStr('TTF: Symbol index='+inttostr(si.GlyphIndex)+'; code='+inttostr(chcode),0);
-  //if chcode=56 then
-  //                  chcode:=chcode;
-  si.PSymbolInfo:=pttf^.GetOrCreateSymbolInfo(chcode);
-  BS.shxsize:=@si.PSymbolInfo.size;
-  si.PSymbolInfo.addr:=pttf.SHXdata.Count;
-  si.PSymbolInfo.w:=glyph.Bounds.Right*k/64;
-  si.PSymbolInfo.NextSymX:=glyph.Advance*k;
-  si.PSymbolInfo.SymMaxX:=si.PSymbolInfo.NextSymX;
-  si.PSymbolInfo.SymMinX:=0;
-  si.PSymbolInfo.h:=glyph.Bounds.Top*k/64;
-  si.PSymbolInfo.size:=0;
-  if _glyph^.outline.n_contours>0 then
-  begin
-  cends:=0;
-  lastoncurve:=0;
-  startcountur:=true;
-  for j:=0 to _glyph^.outline.n_points do
-  begin
-  x1:=_glyph^.outline.points^[j].x*k/64;
-  y1:=_glyph^.outline.points^[j].y*k/64;
-  //programlog.LogOutStr('TTF x='+floattostr(x1)+' y='+floattostr(y1),0);
- if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then
- begin
-      //adddcross(@PSHXFont(pf^.font).SHXdata,psyminfo.size,x1,y1);
-      bs.AddPoint(x1,y1,TPA_OnCurve);
- end
- else
-     begin
-     //addgcross(@PSHXFont(pf^.font).SHXdata,psyminfo.size,x1,y1);
-     bs.AddPoint(x1,y1,TPA_NotOnCurve);
-     end;
-  if  startcountur then
-                       begin
-                            scx:=x1;
-                            scy:=y1;
-                            startcounturindex:=pttf.SHXdata.Count;
-                            startcountur:=false;
-                       end
-  else
-  begin
-    if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then
-    begin
-         //shared.HistoryOutStr(inttostr(j-lastoncurve));
-         if j-lastoncurve>3 then
-                                lastoncurve:=lastoncurve;
-         lastoncurve:=j;
-    end;
-    //programlog.LogOutStr('TTF: flag='+inttostr(_glyph^.outline.flags[j]),0);
-    begin
-         {PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
-         inc(psyminfo.size);}
-    end;
-  if j=_glyph^.outline.conEnds[cends] then
-    begin
-         EndSymContour;
-         inc(cends);
-         startcountur:=true;
-         lastoncurve:=j+1;
-         {PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@scx);
-         PSHXFont(pf^.font).SHXdata.AddFontFloat(@scy);
-         inc(psyminfo.size);}
-         if cends=_glyph^.outline.n_contours then
-                                                 break;
-    end;
-  end;
-  x:=x1;
-  y:=y1;
-  end;
-  EndSymContour;
-  end;
-  TriangulateSymbol(chcode,si,pttf);
-end;
+   ptrdata:PZGLFontTriangle2DArray;
 procedure adddcross(shx:PGDBOpenArrayOfByte;var size:GDBWord;x,y:fontfloat);
 const
      s=0.01;
@@ -305,6 +184,297 @@ begin
     shx.AddFontFloat(@y);
     inc(size);
 
+end;
+
+procedure TessErrorCallBack(error: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+begin
+     error:=error;
+end;
+procedure TessBeginCallBack(mode: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+begin
+     mode:=mode;
+     pointcount:=0;
+     trmode:=mode;
+end;
+procedure TessVertexCallBack(const v,v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+var
+   k:integer;
+   pv:pgdbvertex;
+   trp:GDBFontVertex2D;
+begin
+     if v=nil then exit;
+     pv:=pointer(v);
+     trp.x:=pv.x;
+     trp.y:=pv.y;
+     if pointcount<3 then
+                         begin
+                              triangle[pointcount]:=trp;
+                              inc(pointcount);
+                              if pointcount=3 then
+                                             begin
+                                             ptrdata^.Add(@triangle[0]);
+                                             ptrdata^.Add(@triangle[1]);
+                                             ptrdata^.Add(@triangle[2]);
+                                             end;
+                         end
+                     else
+                         begin
+                              case trmode of
+                       GL_TRIANGLE_FAN:begin
+                                            triangle[1]:=triangle[2];
+                                            triangle[2]:=trp;
+                                            ptrdata^.Add(@triangle[0]);
+                                            ptrdata^.Add(@triangle[1]);
+                                            ptrdata^.Add(@triangle[2]);
+                                       end;
+                     GL_TRIANGLE_STRIP:begin
+                                            triangle[0]:=triangle[1];
+                                            triangle[1]:=triangle[2];
+                                            triangle[2]:=trp;
+                                            ptrdata^.Add(@triangle[0]);
+                                            ptrdata^.Add(@triangle[1]);
+                                            ptrdata^.Add(@triangle[2]);
+                                       end;
+                              end;
+                         end;
+
+     //ptrdata^.Add(@trp);
+end;
+procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont{;var pf:PGDBfont});
+var
+   i,j:integer;
+   fe:boolean;
+   glyph:TFreeTypeGlyph;
+   _glyph:PGlyph;
+   //psyminfo,psubsyminfo:PGDBsymdolinfo;
+
+   x,y,x1,y1,scx,scy:fontfloat;
+   cends,lastoncurve:integer;
+   startcountur:boolean;
+   startcounturindex:integer;
+   k:gdbdouble;
+   Iterator:TMapChar.TIterator;
+   done:boolean;
+   tesselator:TessObj;
+   tv:GDBFontVertex2D;
+   lastv:GDBFontVertex2D;
+   tparray:array[0..65535] of gdbvertex;
+   tparrayindex,oldtparrayindex:integer;
+   trp:GDBFontVertex2D;
+procedure CompareAndTess(v:GDBFontVertex2D);
+begin
+     if (abs(lastv.x-v.x)>eps)or(abs(lastv.y-v.y)>eps) then
+     begin
+          tparray[tparrayindex].x:=v.x;
+          tparray[tparrayindex].y:=v.y;
+          tparray[tparrayindex].z:=0;
+          //OGLSM.TessVertex(tesselator,@tparray[tparrayindex],nil);
+          inc(tparrayindex);
+          lastv:=v;
+     end
+        else
+            v:=v;
+end;
+
+procedure EndSymContour;
+var
+   psymbol,pendsymbol:GDBPointer;
+   v:GDBFontVertex2D;
+   len: GDBWord;
+   count:integer;
+begin
+     {v.x:=0;
+     v.y:=0;
+     OGLSM.TessVertex(tesselator,@v,@ttessv);
+     v.x:=1;
+     v.y:=0;
+     OGLSM.TessVertex(tesselator,@v,@ttessv);
+     v.x:=1;
+     v.y:=1;
+     OGLSM.TessVertex(tesselator,@v,@ttessv);
+     v.x:=0;
+     v.y:=1;
+     OGLSM.TessVertex(tesselator,@v,@ttessv);}
+     bs.EndCountur;
+     lastv.x:=Infinity;
+     lastv.y:=Infinity;
+     oldtparrayindex:=tparrayindex;
+      if startcounturindex<pttf.SHXdata.Count then
+      begin
+           psymbol:=pttf.SHXdata.getelement(startcounturindex);
+           pendsymbol:=pttf.SHXdata.getelement(pttf.SHXdata.Count);
+           while psymbol<pendsymbol do
+               begin
+                 case GDBByte(psymbol^) of
+                   SHXLine:
+                     begin
+                       inc(pGDBByte(psymbol), sizeof(SHXLine));
+                       v.x:=pfontfloat(psymbol)^;
+                       inc(pfontfloat(psymbol));
+                       v.y:=pfontfloat(psymbol)^;
+                       inc(pfontfloat(psymbol));
+
+                       CompareAndTess(v);
+
+                       v.x:=pfontfloat(psymbol)^;
+                       inc(pfontfloat(psymbol));
+                       v.y:=pfontfloat(psymbol)^;
+                       inc(pfontfloat(psymbol));
+
+                       CompareAndTess(v);
+                     end;
+                   SHXPoly:
+                     begin
+                       inc(pGDBByte(psymbol), sizeof(SHXPoly));
+                       len := GDBWord(psymbol^);
+                       inc(pGDBByte(psymbol), sizeof(GDBWord));
+                       v.x:=pfontfloat(psymbol)^;
+                       inc(pfontfloat(psymbol));
+                       v.y:=pfontfloat(psymbol)^;
+                       inc(pfontfloat(psymbol));
+                       CompareAndTess(v);
+
+                       count := 1;
+                       while count < len do //for count:=1 to len-1 do
+                       begin
+                       v.x:=pfontfloat(psymbol)^;
+                       inc(pfontfloat(psymbol));
+                       v.y:=pfontfloat(psymbol)^;
+                       inc(pfontfloat(psymbol));
+                       CompareAndTess(v);
+                       inc(count);
+                       end;
+                     end;
+                 end;
+               end;
+             end;
+
+
+
+
+           //TessBeginCallBack(GL_TRIANGLE_FAN,nil);
+
+           OGLSM.TessBeginContour(tesselator);
+           //si.TrianglesDataInfo.TrianglesAddr:=pttf^.TriangleData.count;
+           //si.TrianglesDataInfo.TrianglesSize:=3;
+           for count:=oldtparrayindex to tparrayindex-2 do
+           //for count:=tparrayindex-2 downto oldtparrayindex do
+           begin
+                OGLSM.TessVertex(tesselator,@tparray[count],@tparray[count]);
+
+                //trp.x:=tparray[count].x;
+                //trp.y:=tparray[count].y;
+                //ptrdata^.Add(@trp);
+                //TessVertexCallBack(@tparray[count],nil);
+
+           end;
+           OGLSM.TessEndContour(tesselator);
+           //bs.EndCountur;
+end;
+begin
+  k:=1;
+  {$if FPC_FULlVERSION>=20701}
+  k:=1/pttf^.ftFont.CapHeight;
+  {$ENDIF}
+  BS.shx:=@pttf^.SHXdata;
+
+  BS.fmode:=TSM_WaitStartCountur;
+  glyph:=pttf^.ftFont.Glyph[{i}si.GlyphIndex];
+  _glyph:=glyph.Data.z;
+  //programlog.LogOutStr('TTF: Symbol index='+inttostr(si.GlyphIndex)+'; code='+inttostr(chcode),0);
+  //if chcode=56 then
+  //                  chcode:=chcode;
+  si.PSymbolInfo:=pttf^.GetOrCreateSymbolInfo(chcode);
+  BS.shxsize:=@si.PSymbolInfo.size;
+  si.PSymbolInfo.addr:=pttf.SHXdata.Count;
+  si.PSymbolInfo.w:=glyph.Bounds.Right*k/64;
+  si.PSymbolInfo.NextSymX:=glyph.Advance*k;
+  si.PSymbolInfo.SymMaxX:=si.PSymbolInfo.NextSymX;
+  si.PSymbolInfo.SymMinX:=0;
+  si.PSymbolInfo.h:=glyph.Bounds.Top*k/64;
+  si.PSymbolInfo.size:=0;
+  si.TrianglesDataInfo.TrianglesAddr:=pttf^.TriangleData.count;
+  si.TrianglesDataInfo.TrianglesSize:=pttf^.TriangleData.count;
+  ptrdata:=@pttf^.TriangleData;
+  tparrayindex:=0;
+  if _glyph^.outline.n_contours>0 then
+  begin
+  tesselator:=OGLSM.NewTess;
+  OGLSM.TessCallback(tesselator,GLU_TESS_VERTEX_DATA,@TessVertexCallBack);
+  OGLSM.TessCallback(tesselator,GLU_TESS_BEGIN_DATA,@TessBeginCallBack);
+  //OGLSM.TessCallback(tesselator,GLU_TESS_Error_DATA,@TessErrorCallBack);
+  gluTessProperty(tesselator,GLU_TESS_WINDING_RULE,GLU_TESS_WINDING_ODD);
+  gluTessProperty(tesselator, GLU_TESS_BOUNDARY_ONLY, GLU_FALSE);
+  gluTessProperty(tesselator, GLU_TESS_TOLERANCE , 1000.0);
+  OGLSM.TessBeginPolygon(tesselator,pointer(11));
+  //gluTessNormal( tesselator, 0.0, 0.0, -1.0);
+  cends:=0;
+  lastoncurve:=0;
+  startcountur:=true;
+  for j:=0 to _glyph^.outline.n_points do
+  begin
+  x1:=_glyph^.outline.points^[j].x*k/64;
+  y1:=_glyph^.outline.points^[j].y*k/64;
+  //programlog.LogOutStr('TTF x='+floattostr(x1)+' y='+floattostr(y1),0);
+ if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then
+ begin
+      //adddcross(@pttf.SHXdata,si.PSymbolInfo.size,x1,y1);
+      bs.AddPoint(x1,y1,TPA_OnCurve);
+ end
+ else
+     begin
+     //addgcross(@pttf.SHXdata,si.PSymbolInfo.size,x1,y1);
+     bs.AddPoint(x1,y1,TPA_NotOnCurve);
+     end;
+  if  startcountur then
+                       begin
+                            scx:=x1;
+                            scy:=y1;
+                            startcounturindex:=pttf.SHXdata.Count;
+                            startcountur:=false;
+                       end
+  else
+  begin
+    if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then
+    begin
+         //shared.HistoryOutStr(inttostr(j-lastoncurve));
+         if j-lastoncurve>3 then
+                                lastoncurve:=lastoncurve;
+         lastoncurve:=j;
+    end;
+    //programlog.LogOutStr('TTF: flag='+inttostr(_glyph^.outline.flags[j]),0);
+    begin
+         {PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);
+         PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
+         PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
+         PSHXFont(pf^.font).SHXdata.AddFontFloat(@x);
+         PSHXFont(pf^.font).SHXdata.AddFontFloat(@y);
+         inc(psyminfo.size);}
+    end;
+  if j=_glyph^.outline.conEnds[cends] then
+    begin
+         EndSymContour;
+         inc(cends);
+         startcountur:=true;
+         lastoncurve:=j+1;
+         {PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);
+         PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);
+         PSHXFont(pf^.font).SHXdata.AddFontFloat(@y1);
+         PSHXFont(pf^.font).SHXdata.AddFontFloat(@scx);
+         PSHXFont(pf^.font).SHXdata.AddFontFloat(@scy);
+         inc(psyminfo.size);}
+         if cends=_glyph^.outline.n_contours then
+                                                 break;
+    end;
+  end;
+  x:=x1;
+  y:=y1;
+  end;
+  //EndSymContour;
+  OGLSM.TessEndPolygon(tesselator);
+  si.TrianglesDataInfo.TrianglesSize:=pttf^.TriangleData.count-si.TrianglesDataInfo.TrianglesSize;
+  OGLSM.DeleteTess(tesselator);
+  end;
 end;
 constructor TBezierSolver2D.create;
 begin

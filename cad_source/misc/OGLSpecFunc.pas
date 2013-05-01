@@ -327,7 +327,7 @@ begin
      tv.x:=location.x;
      tv.y:=location.y;
      tv.z:=0;
-     gluTessVertex(tess,PT3darray(@tv)^,data);
+     gluTessVertex(tess,{PT3darray(@tv)^}pointer(location),data);
 end;
 
 procedure TOGLStateManager.glcolor3ub(const red, green, blue: GLubyte);

@@ -50,11 +50,13 @@ const ls = $AAAA;
       GL_POINT_SMOOTH={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_POINT_SMOOTH;
       GL_LINE_SMOOTH={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LINE_SMOOTH;
       GL_points={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_points;
-      GL_TRIANGLES={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_TRIANGLES;
       GL_QUADS={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_QUADS;
       GL_ALWAYS={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_ALWAYS;
       GL_LINE_STIPPLE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LINE_STIPPLE;
       GL_POLYGON_STIPPLE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_POLYGON_STIPPLE;
+      GL_TRIANGLES={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_TRIANGLES;
+      GL_TRIANGLE_FAN={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_TRIANGLE_FAN;
+      GL_TRIANGLE_STRIP={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_TRIANGLE_STRIP;
 
       GL_PROJECTION={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_PROJECTION;
       GL_MODELVIEW={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_MODELVIEW;
@@ -105,6 +107,10 @@ const ls = $AAAA;
       GL_LINE_WIDTH_RANGE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LINE_WIDTH_RANGE;
       GL_point_size_RANGE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_point_size_RANGE;
       GL_PROJECTION_MATRIX={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_PROJECTION_MATRIX;
+      GLU_TESS_VERTEX={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_VERTEX;
+      GLU_TESS_VERTEX_DATA={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_VERTEX_DATA;
+      GLU_TESS_BEGIN_DATA={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_BEGIN_DATA;
+      GLU_TESS_ERROR_DATA={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_ERROR_DATA;
 
       maxmybufer=99;
 type
@@ -221,6 +227,12 @@ type
 
                            function NewTess:TessObj;
                            procedure DeleteTess(ptessobj:TessObj);
+                           procedure TessBeginPolygon(tess:TessObj;data:pointer);
+                           procedure TessEndPolygon(tess:TessObj);
+                           procedure TessBeginContour(tess:TessObj);
+                           procedure TessEndContour(tess:TessObj);
+                           procedure TessVertex(tess:TessObj; location:PGDBFontVertex2D; data:pointer);
+                           procedure TessCallback(tess:TessObj; which:GLenum; CallBackFunc:_GLUfuncptr);
     end;
 
 var
@@ -231,8 +243,6 @@ var
    wglSwapIntervalEXT: function(interval: GLint): BOOL;{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 const
      MY_EmptyMode=1000000;
-
-
 procedure SetDCPixelFormat(oglc:TOGLContextDesk);
 function isOpenGLError:GLenum;
 function CalcDisplaySubFrustum(const x,y,w,h:gdbdouble;const mm,pm:DMatrix4D;const vp:IMatrix4):ClipArray;
@@ -287,6 +297,39 @@ procedure TOGLStateManager.DeleteTess(ptessobj:Pointer);
 begin
      gluDeleteTess(ptessobj);
 end;
+procedure TOGLStateManager.TessBeginPolygon(tess:TessObj;data:pointer);
+begin
+     gluTessBeginPolygon(tess,data);
+end;
+procedure TOGLStateManager.TessEndPolygon(tess:TessObj);
+begin
+     gluTessEndPolygon(tess);
+end;
+procedure TOGLStateManager.TessBeginContour(tess:TessObj);
+begin
+     gluTessBeginContour(tess);
+end;
+procedure TOGLStateManager.TessEndContour(tess:TessObj);
+begin
+     gluTessEndContour(tess);
+end;
+procedure TOGLStateManager.TessCallback(tess:TessObj; which:GLenum; CallBackFunc:_GLUfuncptr);
+begin
+     gluTessCallback(tess,which,CallBackFunc);
+end;
+
+procedure TOGLStateManager.TessVertex(tess:TessObj; location:PGDBFontVertex2D; data:pointer);
+type
+    PT3darray=^T3darray;
+var
+   tv:gdbvertex;
+begin
+     tv.x:=location.x;
+     tv.y:=location.y;
+     tv.z:=0;
+     gluTessVertex(tess,PT3darray(@tv)^,data);
+end;
+
 procedure TOGLStateManager.glcolor3ub(const red, green, blue: GLubyte);
 begin
      if (red<>_colour.r)

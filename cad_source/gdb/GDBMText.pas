@@ -670,6 +670,7 @@ begin
   pl.init({$IFDEF DEBUGBUILD}'{E44FB0DD-3556-4279-8845-5EA005F302DB}',{$ENDIF}10);
   ispl:=false;
   Vertex3D_in_WCS_Array.clear;
+  Geom.Triangles.clear;
 
   minx:=+infinity;
   miny:=+infinity;
@@ -1003,4 +1004,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBMtext.initialization');{$ENDIF}
-end.
+end.

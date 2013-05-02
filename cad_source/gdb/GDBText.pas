@@ -618,6 +618,7 @@ begin
   ispl:=false;
   pl.init({$IFDEF DEBUGBUILD}'{AC324582-5E55-4290-8017-44B8C675198A}',{$ENDIF}10);
   Vertex3D_in_WCS_Array.clear;
+  Geom.Triangles.clear;
 
   minx:=+infinity;
   miny:=+infinity;

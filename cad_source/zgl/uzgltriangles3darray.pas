@@ -37,6 +37,7 @@ begin
   oglsm.myglbegin(GL_TRIANGLES);
   for i:=0 to count-{3}1 do
   begin
+     //if ((i div 3)mod 2)>0 then
      oglsm.myglVertex3dV(@p^);
      inc(p);
   end;
@@ -45,4 +46,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('uzgltriangles3darray.initialization');{$ENDIF}
 end.
-
+

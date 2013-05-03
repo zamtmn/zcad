@@ -212,10 +212,14 @@ end;
 
 procedure ZGLGeometry.drawgeometry;
 begin
+  if lines.Count>0 then
   Lines.DrawGeometry;
+  if Points.Count>0 then
   Points.DrawGeometry;
+  if shx.Count>0 then
   //shx.DrawNiceGeometry;
   shx.DrawGeometry;
+  if Triangles.Count>0 then
   Triangles.DrawGeometry;
 end;
 procedure ZGLGeometry.drawNicegeometry;
@@ -253,4 +257,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBPoint3DArray.initialization');{$ENDIF}
 end.
-
+

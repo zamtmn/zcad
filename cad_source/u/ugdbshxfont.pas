@@ -102,7 +102,6 @@ var
    trmode:Cardinal;
    pointcount:integer;
    triangle:array[0..2] of GDBFontVertex2D;
-   coord: array [0..100] of gdbvertex;
 procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont{;var pf:PGDBfont});
 implementation
 uses {math,}log;
@@ -355,42 +354,6 @@ begin
                  end;
                end;
              end;
-
-
-
-                   coord[0].x := 0.35337424278259277;
-                   coord[0].y := 0;
-                   coord[0].z := 0;
-
-                   coord[1].x := 0.35337424278259277;
-                   coord[1].y := 0.85889571905136108;
-                   coord[1].z := 0;
-;
-                   coord[2].x := 0.032719835638999939;
-                   coord[2].y := 0.85889571905136108;
-                   coord[2].z := 0;
-
-                   coord[3].x := 0.032719835638999939;
-                   coord[3].y := 0.97505110502243042;
-                   coord[3].z := 0;
-
-                   coord[4].x := 0.80490797758102417;
-                   coord[4].y := 0.97505110502243042;
-                   coord[4].z := 0;
-
-                   coord[5].x := 0.80490797758102417;
-                   coord[5].y := 0.85889571905136108;
-                   coord[5].z := 0;
-
-                   coord[6].x := 0.48261758685112;
-                   coord[6].y := 0.85889571905136108;
-                   coord[6].z := 0;
-
-                   coord[7].x := 0.48261758685112;
-                   coord[7].y := 0;
-                   coord[7].z := 0;
-
-
 
            OGLSM.TessBeginContour(tesselator);
            //si.TrianglesDataInfo.TrianglesAddr:=pttf^.TriangleData.count;
@@ -686,7 +649,7 @@ begin
      end;
      size:=round((BOrder+2)*(BOrder-1)/2)+1;
      FArray.Resize(size);
-     n:=BOrder{*2}-1+5;//<----------------------------
+     n:=BOrder{*2}-1+2;//<----------------------------
      for j:=1 to n-1 do
      begin
           p:=getpoint(j/n);
@@ -914,4 +877,4 @@ initialization
   BS:=TBezierSolver2D.create;
 finalization
   bs.Destroy;
-end.
+end.

@@ -4197,8 +4197,11 @@ var
 //  oldit:itrec;
       ir,ir2:itrec;
   pdata:GDBPointer;
+  DefaultRadius,DefaultTextRadius:GDBDouble;
 begin
-  param.ospoint.radius:=sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1;
+  DefaultRadius:=sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1;
+  DefaultTextRadius:=(5*5)*DefaultRadius;
+  param.ospoint.radius:=DefaultRadius;
   param.ospoint.ostype:=os_none;
       if param.md.mouseonworkplan
       then
@@ -4240,7 +4243,7 @@ begin
             begin
                  if param.ospoint.ostype=os_nearest then
                  begin
-                      if (osp.radius<sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1) then copyospoint(param.ospoint,osp);
+                      if (osp.radius<DefaultRadius) then copyospoint(param.ospoint,osp);
                  end
                  else
                  if (osp.radius<=param.ospoint.radius)or(osp.ostype=os_textinsert) then
@@ -4252,13 +4255,13 @@ begin
 
                                                                                                                                      end
                                                                                        else
-                                                                                           if (osp.ostype<>os_perpendicular) then
+                                                                                           if ((osp.ostype<>os_perpendicular)and(osp.ostype<>os_textinsert))or((osp.ostype=os_textinsert)and (osp.radius<=DefaultTextRadius)) then
                                                                                                                                      copyospoint(param.ospoint,osp)
                                                                                        end;
             end
             else
             begin
-                 if (osp.radius<sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1)and(param.ospoint.ostype=os_none) then copyospoint(param.ospoint,osp)
+                 if (osp.radius<DefaultRadius)and(param.ospoint.ostype=os_none) then copyospoint(param.ospoint,osp)
                  else if param.ospoint.ostype=os_nearest then
                                                             if {(osp.radius<sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1)and}(osp.radius<param.ospoint.radius) then
                                                                                                    copyospoint(param.ospoint,osp);
@@ -4291,10 +4294,11 @@ begin
             dx:=osp.dispcoord.x-param.md.glmouse.x;
             dy:=osp.dispcoord.y-param.md.glmouse.y;
             osp.radius:=dx*dx+dy*dy;
+            if (osp.radius<=param.ospoint.radius) then
             begin
                  if param.ospoint.ostype=os_nearest then
                  begin
-                      if (osp.radius<sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1) then copyospoint(param.ospoint,osp);
+                      if (osp.radius<DefaultRadius) then copyospoint(param.ospoint,osp);
                  end
                  else
                  //if (osp.radius<param.ospoint.radius) then copyospoint(param.ospoint,osp);

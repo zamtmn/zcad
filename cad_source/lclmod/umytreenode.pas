@@ -269,6 +269,7 @@ function FindControlByType(_parent:TWinControl;_class:TClass):TControl;
 var
     i:integer;
 begin
+     if assigned(_parent)then
      for i := 0 to _parent.ControlCount - 1 do
       if TClass(typeof(_parent.Controls[i])) = _class then
                               begin

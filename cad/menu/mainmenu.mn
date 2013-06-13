@@ -488,4 +488,4 @@ PopUpMenu NONSELECTEDENTSCXMENU;
     action ACN_SELECTALL
   }
 CreateMenu MainMenu File,Edit,View,Format,Draw,Modify,Schematic,Plan,Info,Model,Settings,Window,Help,Debug,DB;
-SetMainMenu MainMenu;
+;SetMainMenu MainMenu;

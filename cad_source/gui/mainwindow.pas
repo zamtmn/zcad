@@ -2225,7 +2225,7 @@ var
     pmenu:TMainMenu;
 begin
      line := f.readstring(';','');
-     pmenu:=TMainMenu(application.FindComponent(MenuNameModifier+uppercase(line)));
+     pmenu:=TMainMenu(self{application}.FindComponent(MenuNameModifier+uppercase(line)));
      self.Menu:=pmenu;
 end;
 

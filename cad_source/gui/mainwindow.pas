@@ -2239,7 +2239,7 @@ var
 begin
            {if not assigned(createdmenu) then
                                    begin}
-                                   createdmenu:=TMainMenu.Create({self}application);
+                                   createdmenu:=TMainMenu.Create(self{application});
                                    createdmenu.Images:=self.StandartActions.Images;
                                    {end;}
 

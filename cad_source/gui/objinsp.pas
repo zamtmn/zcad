@@ -32,7 +32,7 @@ uses
   {StdCtrls,}ExtCtrls,{ComCtrls,}Controls,Classes,menus,Forms,lcltype,fileutil,
 
   gdbasetypes,SysUtils,shared,
-  gdbase{OGLtypes,} {io}{,UGDBOpenArrayOfByte,varman},varmandef,{UGDBDescriptor}ugdbdrawingdef{,UGDBOpenArrayOfPV},
+  gdbase{OGLtypes,} {io}{,UGDBOpenArrayOfByte,varman},varmandef,{UGDBDescriptor}UGDBDrawingdef{,UGDBOpenArrayOfPV},
   {zforms,ZComboBoxsWithProc,ZEditsWithProcedure,log,gdbcircle,}memman{,zbasicvisible,zguisct},TypeDescriptors{,commctrl};
 const
   rowh=21;
@@ -139,7 +139,7 @@ var
 
 implementation
 
-uses UObjectDescriptor,gdbentity,UGDBStringArray,log;
+uses UObjectDescriptor,GDBEntity,UGDBStringArray,log;
 procedure TGDBobjinsp.FormHide(Sender: TObject);
 begin
      proptreeptr:=proptreeptr;
@@ -563,7 +563,7 @@ begin
         else
         begin
 
-          canvas.Brush.Color := clWhite;
+          canvas.Brush.Color := {clWhite}{clAppWorkspace}clBtnFace;
           canvas.Rectangle(r);
 
           //selectobject({cdc}dc,GetStockObject(WHITE_BRUSH));
@@ -588,6 +588,7 @@ begin
           r.Left:=r.Right-1;
           r.Right:=clientwidth-2;
           //Rectangle({cdc}dc,r.Left,r.Top,r.Right,r.Bottom);
+          canvas.Brush.Color := {clWhite}{clAppWorkspace}clWindow;
           canvas.Rectangle(r);
         ppd.x1:=r.Left;
         ppd.y1:=r.Top;
@@ -595,6 +596,7 @@ begin
         ppd.y2:=r.Bottom-1;
           r.Top:=r.Top+3;
           r.Left:=r.Left+3;
+          r.Right:=r.Right-1;
           if (ppd^.Attr and FA_READONLY)<>0 then
           begin
             tempcolor:=canvas.Font.Color;

@@ -637,17 +637,12 @@ var
   sub:GDBInteger;
   arect:trect;
 begin
-//dc := canvas.Handle;
-//if dc=0 then
-//              dc:=0;
 ARect := GetClientRect;
 InflateRect(ARect, -BorderWidth, -BorderWidth);
-//----------------------------------------------InflateRect(ARect, -BevelWidth, -BevelWidth);
-canvas.Brush.Color := clBtnFace;
-canvas.FillRect(ARect);
-//canvas.Frame3d(arect,5,bvRaised);
-//canvas.Line(clientwidth-1,0,clientwidth-1,clientheight);
-//FillRect(DC, ARect, HBRUSH(Brush.Reference.Handle));
+
+//canvas.Brush.Color := clBtnFace;
+//canvas.FillRect(ARect);
+
 y:=startdrawy;
 sub:=0;
 drawprop(@pda,y,sub);

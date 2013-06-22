@@ -100,6 +100,7 @@ type
     function ReadItem(iIndex:integer):TLayerPropRecord;
     procedure B1Klac(Sender:TObject);
     procedure PLDeActivate(Sender:TObject);
+    procedure asyncfree(Data: PtrInt);
     procedure PLDeActivate2(Data:PtrInt);
     procedure PLDeActivate3(Data:PtrInt);
     procedure LVKlac(Sender:TObject);
@@ -511,6 +512,10 @@ begin
   end;
   if (PoleLista=nil) and (M1=true) then M1:=false;
 end;
+procedure TZCADLayerComboBox.asyncfree(Data: PtrInt);
+begin
+     Tobject(Data).Free;
+end;
 
 procedure TZCADLayerComboBox.PLDeActivate(Sender:TObject);                     // Закрытие списка
   var
@@ -519,7 +524,8 @@ begin
   if FNotClose then exit;
   if PoleLista<>nil then
   begin
-    PoleLista.Free;
+    //PoleLista.Free;
+    Application.QueueAsyncCall(@asyncfree,PtrInt(PoleLista));
     PoleLista:=nil;
     S.X:=0;
     S.Y:=0;
@@ -721,4 +727,4 @@ end;
 
 initialization
 
-end.
+end.

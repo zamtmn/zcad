@@ -50,10 +50,6 @@ type
                        CLType:PGDBLTypeProp;
                  end;
 
-  TmyAnchorDockHeader = class(TAnchorDockHeader)
-                        protected
-                                 procedure Paint; override;
-                        end;
   TmyAnchorDockSplitter = class(TAnchorDockSplitter)
   public
     constructor Create(TheOwner: TComponent); override;
@@ -224,7 +220,7 @@ begin
   self.MinSize:=1;
 end;
 
-procedure TmyAnchorDockHeader.Paint;
+(*procedure TmyAnchorDockHeader.Paint;
 
   {procedure DrawGrabber(r: TRect);
   begin
@@ -313,7 +309,7 @@ begin
     end;
   end else
     DrawGrabber(r);
-end;
+end;*)
 procedure setlayerstate(PLayer:PGDBLayerProp;var lp:TLayerPropRecord);
 begin
      lp.OnOff:=player^._on;
@@ -1222,7 +1218,7 @@ var
   action: tmyaction;
 begin
   self.SetBounds(0, 0, 800, 44);
-  DockMaster.HeaderClass:=TmyAnchorDockHeader;
+  DockMaster.HeaderStyle:=adhsLines;
   DockMaster.SplitterClass:=TmyAnchorDockSplitter;
   DockMaster.ManagerClass:={TMy}TAnchorDockManager;
   DockMaster.OnCreateControl:={@}DockMasterCreateControl;

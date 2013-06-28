@@ -22,7 +22,7 @@ unit layercombobox;
 interface
 
 uses
-  Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms;
+  Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes;
 
 type
   TLayerPropRecord=record                                                // Запись cписка (данные в памяти)
@@ -68,13 +68,18 @@ type
               public
               property DefaultItemHeight;
               end;
-
+  TLayerComboBoxButton = class(TCustomSpeedButton)
+  protected
+    function GetDrawDetails: TThemedElementDetails; override;
+    procedure CalculatePreferredSize(var PreferredWidth,
+           PreferredHeight: integer; WithThemeSpace: Boolean); override;
+  end;
   TZCADLayerComboBox=class({TWinControl}TCustomPanel)                                        // Компонент TZCADLayerComboBox
   private
     MyItems:TLayerArray;
     M1:boolean; // Маркер
     CP1:TControlPole;
-    B1:TBitBtn;
+    B1:TLayerComboBoxButton;
     PoleLista:TForm;
     LV:TMyListView;
     IL:TImageList;
@@ -154,7 +159,40 @@ procedure Register;
 implementation
 
 uses
-  StdCtrls,GraphType,Themes,types;
+  StdCtrls,GraphType,types;
+
+function TLayerComboBoxButton.GetDrawDetails: TThemedElementDetails;
+
+function WindowPart: TThemedComboBox;
+  begin
+    // no check states available
+    Result := tcDropDownButtonNormal;
+    if not IsEnabled then
+      Result := tcDropDownButtonDisabled
+    else
+    if FState in [bsDown, bsExclusive] then
+      Result := tcDropDownButtonPressed
+    else
+    if FState = bsHot then
+      Result := tcDropDownButtonHot
+    else
+      Result := tcDropDownButtonNormal;
+  end;
+
+begin
+  Result := ThemeServices.GetElementDetails(WindowPart);
+end;
+
+procedure TLayerComboBoxButton.CalculatePreferredSize(var PreferredWidth,
+  PreferredHeight: integer; WithThemeSpace: Boolean);
+begin
+  with ThemeServices.GetDetailSize(ThemeServices.GetElementDetails(tcDropDownButtonNormal)) do
+  begin
+    PreferredWidth:=1;//cx{+2};
+    PreferredHeight:=1;//cy{+2};
+  end;
+end;
+
 
 //============================================================================//
 
@@ -287,7 +325,7 @@ begin
   sGlyph_Lock_OFF:=TBitmap.Create;
   sListHeight:=-1;
   sItemIndex:=-1;
-  B1:=TBitBtn.Create(self);
+  B1:=TLayerComboBoxButton.Create(self);
   B1.Parent:=self;
   {B1.Anchors:=[akTop,akRight,akBottom];
   B1.AnchorSideTop.Control:=Self;
@@ -299,7 +337,7 @@ begin
   B1.BorderSpacing.Right:=0;
   B1.BorderSpacing.Bottom:=0;}
   B1.Align:=alRight;
-  B1.Width:=26;
+  //B1.Width:=26;
   CP1:=TControlPole.Create(self);
   CP1.Parent:=self;
   CP1.Align:=alClient;
@@ -310,15 +348,15 @@ begin
   //inherited Width:=120;
   //inherited Height:=100;
   //self.AutoSize:=true;
-  Details:=ThemeServices.GetElementDetails({ttGlyphClosed}tcDropDownButtonNormal);
-  Size:=ThemeServices.GetDetailSize(Details);
-  BM.Width:=Size.cx;
-  BM.Height:=Size.cy;
-  ThemeServices.DrawElement(BM.Canvas.Handle,Details,Rect(0,0,Size.cx,Size.cy),nil);
-  B1.Glyph.Assign(BM);
-  BM.Free;
+  //Details:=ThemeServices.GetElementDetails({ttGlyphClosed}tcDropDownButtonNormal);
+  //Size:=ThemeServices.GetDetailSize(Details);
+  //BM.Width:=Size.cx;
+  //BM.Height:=Size.cy;
+  //ThemeServices.DrawElement(BM.Canvas.Handle,Details,Rect(0,0,Size.cx,Size.cy),nil);
+  //B1.Glyph.Assign(BM);
+  //BM.Free;
   B1.OnClick:=@B1Klac;
-  B1.Visible:=true;
+  //B1.Visible:=true;
   Application.OnDeactivate:=@PLDeActivate;
   FNotClose:=false;
 end;
@@ -727,4 +765,4 @@ end;
 
 initialization
 
-end.
+end.

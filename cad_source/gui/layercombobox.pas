@@ -269,7 +269,7 @@ begin
       //Brush.Color:=sBackgroundColor;
       //Rectangle(0,0,w,h);
       //Pen.Color:=sBorderColor;
-      //Brush.Style:=bsClear;
+      Brush.Style:=bsClear;
     DrawComboBoxBox(Canvas, False, False, not Enabled, Bounds(0, 0, clientwidth,clientheight));
     //w1:=ThemeServices.GetDetailSize(ThemeServices.GetElementDetails(tcDropDownButtonNormal)).cx;
     w1:=20;
@@ -572,6 +572,7 @@ begin
     LV.RowSelect:=true;
     LV.ViewStyle:=vsReport;
     LV.ShowColumnHeaders:=false;
+    LV.SortColumn:=3;
     LV.ScrollBars:=ssAutoVertical;
     LV.Columns.Add;
     LV.Columns.Items[0].Width:=18;
@@ -817,4 +818,4 @@ end;
 
 initialization
 
-end.
+end.

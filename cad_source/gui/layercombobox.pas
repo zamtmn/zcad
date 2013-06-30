@@ -210,7 +210,7 @@ begin
   Height:=16;
 end;}
 
-procedure DrawComboBoxButton(ACanvas: TCanvas; ADown, AMouseInControl: Boolean; const ARect: TRect);
+procedure DrawComboBoxButton(ACanvas: TCanvas; ADown, AMouseInControl, ADisabled: Boolean; const ARect: TRect);
 var
   ComboElem: TThemedComboBox;
   Details: TThemedElementDetails;
@@ -221,23 +221,33 @@ begin
       ComboElem := tcDropDownButtonPressed
     else if AMouseInControl then
       ComboElem := tcDropDownButtonHot
+    else if ADisabled then
+      ComboElem := tcDropDownButtonDisabled
     else
       ComboElem := tcDropDownButtonNormal;
 
-   ComboElem := tcDropDownButtonNormal;
+   //ComboElem := tcDropDownButtonNormal;
 
     Details := ThemeServices.GetElementDetails(ComboElem);
     ThemeServices.DrawElement(ACanvas.Handle, Details, ARect);
   end
 end;
-procedure DrawComboBoxBox(ACanvas: TCanvas; ADown, AMouseInControl: Boolean; const ARect: TRect);
+procedure DrawComboBoxBox(ACanvas: TCanvas; ADown, AMouseInControl, ADisabled: Boolean; const ARect: TRect);
 var
-  ComboElem: {TThemedButton}TThemedEdit;
+  ComboElem: {$IFDEF LINUX}TThemedButton{$ELSE}TThemedEdit{$ENDIF};
   Details: TThemedElementDetails;
 begin
   if ThemeServices.ThemesEnabled then
   begin
-    ComboElem := {tbPushButtonNormal}teEditTextNormal;
+    if AMouseInControl then
+      ComboElem := {$IFDEF LINUX}tbPushButtonHot{$ELSE}teEditTextHot{$ENDIF}
+    else if ADisabled then
+      ComboElem := {$IFDEF LINUX}tbPushButtonDisabled{$ELSE}teEditTextDisabled{$ENDIF}
+    else
+      ComboElem := {$IFDEF LINUX}tbPushButtonNormal{$ELSE}teEditTextNormal{$ENDIF};
+
+    //ComboElem := {$IFDEF LINUX}tbPushButtonNormal{$ELSE}teEditTextNormal{$ENDIF};
+
     Details := ThemeServices.GetElementDetails(ComboElem);
     ThemeServices.DrawElement(ACanvas.Handle, Details, ARect);
   end
@@ -260,10 +270,10 @@ begin
       //Rectangle(0,0,w,h);
       //Pen.Color:=sBorderColor;
       Brush.Style:=bsClear;
-    DrawComboBoxBox(Canvas, False, False, Bounds(0, 0, clientwidth,clientheight));
+    DrawComboBoxBox(Canvas, False, False, not Enabled, Bounds(0, 0, clientwidth,clientheight));
     //w1:=ThemeServices.GetDetailSize(ThemeServices.GetElementDetails(tcDropDownButtonNormal)).cx;
     w1:=20;
-    DrawComboBoxButton(Canvas, True, False, Bounds(clientwidth-w1, 0, w1,clientheight));
+    DrawComboBoxButton(Canvas, False, False, not Enabled, Bounds(clientwidth-w1, 0, w1,clientheight));
       if {Index=-1}not {TZCADLayerComboBox(parent).}fGetLayerProp(nil,lp) then
       begin
         //IL.Draw(Canvas,1,(h-16) div 2,1,gdeNormal);
@@ -807,4 +817,4 @@ end;
 
 initialization
 
-end.
+end.

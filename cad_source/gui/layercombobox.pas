@@ -215,7 +215,7 @@ var
   ComboElem: TThemedComboBox;
   Details: TThemedElementDetails;
 begin
-  if ThemeServices.ThemesEnabled then
+  //if ThemeServices.ThemesEnabled then
   begin
     if ADown then
       ComboElem := tcDropDownButtonPressed
@@ -237,12 +237,12 @@ var
   ComboElem: {$IFDEF LINUX}TThemedButton{$ELSE}TThemedEdit{$ENDIF};
   Details: TThemedElementDetails;
 begin
-  if ThemeServices.ThemesEnabled then
+  //if ThemeServices.ThemesEnabled then
   begin
     if AMouseInControl then
       ComboElem := {$IFDEF LINUX}tbPushButtonHot{$ELSE}teEditTextHot{$ENDIF}
     else if ADisabled then
-      ComboElem := {$IFDEF LINUX}tbPushButtonDisabled{$ELSE}teEditTextDisabled{$ENDIF}
+      ComboElem := {$IFDEF LINUX}tbPushButtonDisabled{$ELSE}teEditTextReadOnly{$ENDIF}
     else
       ComboElem := {$IFDEF LINUX}tbPushButtonNormal{$ELSE}teEditTextNormal{$ENDIF};
 
@@ -269,7 +269,7 @@ begin
       //Brush.Color:=sBackgroundColor;
       //Rectangle(0,0,w,h);
       //Pen.Color:=sBorderColor;
-      Brush.Style:=bsClear;
+      //Brush.Style:=bsClear;
     DrawComboBoxBox(Canvas, False, False, not Enabled, Bounds(0, 0, clientwidth,clientheight));
     //w1:=ThemeServices.GetDetailSize(ThemeServices.GetElementDetails(tcDropDownButtonNormal)).cx;
     w1:=20;
@@ -547,7 +547,7 @@ procedure TZCADLayerComboBox.B1Klac(Sender:TObject);                           /
     a:TPoint;
     h,hh:integer;
 begin
-  if (PoleLista=nil) {and (M1=false)} then
+  if (PoleLista=nil) and (M1=false) then
   begin
     PoleLista:=TForm.Create(nil);
     PoleLista.Width:=Width;
@@ -623,14 +623,14 @@ begin
     S:=Mouse.CursorPos;
     P.X:=P.X+S.X;
     P.Y:=P.Y+S.Y;
-    if ((P.Y>0) and (P.Y<B1.Height))and((P.X>0) and (P.X<B1.Width)) then M1:=true;
+    if ((P.Y>0) and (P.Y<B1.Height))and((P.X>0) and (P.X<B1.Width)) then M1:=true;}
     S.X:=0;
     S.Y:=0;
-    P:=CP1.ScreenToClient(S);
+    P:={CP1.}ScreenToClient(S);
     S:=Mouse.CursorPos;
     P.X:=P.X+S.X;
     P.Y:=P.Y+S.Y;
-    if ((P.Y>0) and (P.Y<CP1.Height))and((P.X>0) and (P.X<CP1.Width)) then M1:=true;}
+    if ((P.Y>0) and (P.Y<{CP1.}Height))and((P.X>0) and (P.X<{CP1.}Width)) then M1:=true;
   end;
   {CP1.}Invalidate;
 end;
@@ -817,4 +817,4 @@ end;
 
 initialization
 
-end.
+end.

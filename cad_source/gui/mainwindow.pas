@@ -1021,6 +1021,7 @@ begin
       // restore the layout
       // this will close unneeded forms and call OnCreateControl for all needed
       DockMaster.LoadLayoutFromConfig(XMLConfig,false);
+      DockMaster.LoadSettingsFromConfig(XMLConfig);
     finally
       XMLConfig.Free;
     end;
@@ -1128,7 +1129,7 @@ var
   action: tmyaction;
 begin
   self.SetBounds(0, 0, 800, 44);
-  DockMaster.HeaderStyle:=adhsLines;
+  //DockMaster.HeaderStyle:=adhsLines;
   DockMaster.SplitterClass:=TmyAnchorDockSplitter;
   DockMaster.ManagerClass:={TMy}TAnchorDockManager;
   DockMaster.OnCreateControl:={@}DockMasterCreateControl;

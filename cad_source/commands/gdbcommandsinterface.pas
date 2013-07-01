@@ -370,6 +370,7 @@ begin
     Config:=TXMLConfigStorage.Create(XMLConfig);
     try
       DockMaster.SaveLayoutToConfig(Config);
+      DockMaster.SaveSettingsToConfig(Config);
     finally
       Config.Free;
     end;

@@ -25,7 +25,7 @@ uses
        AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
        ActnList,LCLType,LCLProc,intftranslations,toolwin,LMessages,LCLIntf,
        Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,FileUtil,
-       menus,graphics,dialogs,XMLPropStorage,
+       menus,graphics,dialogs,XMLPropStorage,Buttons,
   {FPC}
        math,
   {ZCAD BASE}
@@ -70,6 +70,7 @@ type
     //SplitterV,SplitterH: TSplitter;
 
     PageControl:TmyPageControl;
+    DHPanel:TPanel;
     HScrollBar,VScrollBar:TScrollBar;
 
     //MainMenu:TMenu;
@@ -840,12 +841,34 @@ MainPanel.SetBounds(200,200,600,500);
 MainPanel.Caption:=rsDrawingWindowWndName;
 MainPanel.BorderWidth:=0;
 
-HScrollBar:=TScrollBar.create(MainPanel);
-HScrollBar.Align:=albottom;
+DHPanel:=TPanel.Create(MainPanel);
+DHPanel.Align:=albottom;
+DHPanel.BevelInner:=bvNone;
+DHPanel.BevelOuter:=bvNone;
+DHPanel.BevelWidth:=0;
+DHPanel.AutoSize:=true;
+DHPanel.Parent:=MainPanel;
+
+HScrollBar:=TScrollBar.create(DHPanel);
+HScrollBar.Align:=alLeft;
 HScrollBar.kind:=sbHorizontal;
 HScrollBar.OnScroll:=_scroll;
 HScrollBar.Enabled:=false;
-HScrollBar.Parent:=MainPanel;
+HScrollBar.Parent:=DHPanel;
+HScrollBar.Anchors:=[akRight];
+HScrollBar.AnchorSideRight.Control:=DHPanel;
+HScrollBar.AnchorSideRight.Side:=asrBottom;
+HScrollBar.BorderSpacing.Right:=HScrollBar.Height;
+
+{with TSpeedButton.Create(DHPanel) do
+begin
+   Align:=alright;
+   width:=HScrollBar.Height;
+   height:=HScrollBar.Height;
+   Parent:=DHPanel;
+   action:=tmyaction(self.StandartActions.ActionByName('ACN_VIEWTOP'));
+   caption:='';
+end;}
 
 VScrollBar:=TScrollBar.create(MainPanel);
 VScrollBar.Align:=alright;

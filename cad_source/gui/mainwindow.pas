@@ -25,7 +25,7 @@ uses
        AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
        ActnList,LCLType,LCLProc,intftranslations,toolwin,LMessages,LCLIntf,
        Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,FileUtil,
-       menus,graphics,dialogs,XMLPropStorage,Buttons,
+       menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
   {FPC}
        math,
   {ZCAD BASE}
@@ -55,6 +55,12 @@ type
     constructor Create(TheOwner: TComponent); override;
 
                           end;
+  TMySpeedButton = class(TCustomSpeedButton)
+  protected
+    function GetDrawDetails: TThemedElementDetails; override;
+    procedure CalculatePreferredSize(var PreferredWidth,
+           PreferredHeight: integer; {%H-}WithThemeSpace: Boolean); override;
+  end;
 
   TFileHistory=Array [0..9] of TmyAction;
 
@@ -817,6 +823,37 @@ begin
   if (Sender is TPageControl) then
                                   CloseDWGPage((Sender as TPageControl).Pages[I]);
 end;
+function TMySpeedButton.GetDrawDetails: TThemedElementDetails;
+
+  function WindowPart: TThemedComboBox;
+    begin
+      // no check states available
+      Result := tcDropDownButtonNormal;
+      if not IsEnabled then
+        Result := tcDropDownButtonDisabled
+      else
+      if FState in [bsDown, bsExclusive] then
+        Result := tcDropDownButtonPressed
+      else
+      if FState = bsHot then
+        Result := tcDropDownButtonHot
+      else
+        Result := tcDropDownButtonNormal;
+    end;
+
+  begin
+    Result := ThemeServices.GetElementDetails(WindowPart);
+  end;
+
+  procedure TMySpeedButton.CalculatePreferredSize(var PreferredWidth,
+    PreferredHeight: integer; WithThemeSpace: Boolean);
+  begin
+    with ThemeServices.GetDetailSize(ThemeServices.GetElementDetails(twSmallCloseButtonNormal)) do
+    begin
+      PreferredWidth:=-1;
+      PreferredHeight:=-1;
+    end;
+  end;
 function MainForm.CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
 var
   //i:integer;
@@ -849,6 +886,13 @@ DHPanel.BevelWidth:=0;
 DHPanel.AutoSize:=true;
 DHPanel.Parent:=MainPanel;
 
+VScrollBar:=TScrollBar.create(MainPanel);
+VScrollBar.Align:=alright;
+VScrollBar.kind:=sbVertical;
+VScrollBar.OnScroll:=_scroll;
+VScrollBar.Enabled:=false;
+VScrollBar.Parent:=MainPanel;
+
 HScrollBar:=TScrollBar.create(DHPanel);
 HScrollBar.Align:=alLeft;
 HScrollBar.kind:=sbHorizontal;
@@ -860,6 +904,12 @@ HScrollBar.AnchorSideRight.Control:=DHPanel;
 HScrollBar.AnchorSideRight.Side:=asrBottom;
 HScrollBar.BorderSpacing.Right:=HScrollBar.Height;
 
+with TMySpeedButton.Create(DHPanel) do
+begin
+     Align:=alRight;
+     Parent:=DHPanel;
+end;
+
 {with TSpeedButton.Create(DHPanel) do
 begin
    Align:=alright;
@@ -869,13 +919,6 @@ begin
    action:=tmyaction(self.StandartActions.ActionByName('ACN_VIEWTOP'));
    caption:='';
 end;}
-
-VScrollBar:=TScrollBar.create(MainPanel);
-VScrollBar.Align:=alright;
-VScrollBar.kind:=sbVertical;
-VScrollBar.OnScroll:=_scroll;
-VScrollBar.Enabled:=false;
-VScrollBar.Parent:=MainPanel;
 
 PageControl:=TmyPageControl.Create(MainPanel{Application});
 PageControl.Constraints.MinHeight:=32;

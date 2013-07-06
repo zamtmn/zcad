@@ -5,7 +5,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-02-09 01:28+0400\n"
+"PO-Revision-Date: 2013-06-23 23:14+0400\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 
@@ -250,23 +250,10 @@ msgctxt "lclstrconsts.ifsvk_up"
 msgid "Up"
 msgstr "Стрелка вверх"
 
-#: lclstrconsts.liscannotexecute
-msgid "can not execute %s"
-msgstr "Запустить %s невозможно"
-
-#: lclstrconsts.liscefilter
-#| msgid "(Filter)"
-msgid "(filter)"
-msgstr "(фильтр)"
-
 #: lclstrconsts.lislclresourcesnotfound
 msgctxt "lclstrconsts.lislclresourcesnotfound"
 msgid "Resource %s not found"
 msgstr "Ресурс %s не найден"
-
-#: lclstrconsts.lisprogramfilenotfound
-msgid "program file not found %s"
-msgstr "Файл программы %s не найден"
 
 #: lclstrconsts.rs3ddkshadowcolorcaption
 msgid "3D Dark Shadow"
@@ -373,6 +360,10 @@ msgstr "Элемент управления класса '%s' не может и
 #: lclstrconsts.rscontrolhasnoparentwindow
 msgid "Control '%s' has no parent window"
 msgstr "Элемент управления '%s' не имеет родительского окна"
+
+#: lclstrconsts.rscontrolisnotaparent
+msgid "'%s' is not a parent of '%s'"
+msgstr "'%s' не является родителем '%s'"
 
 #: lclstrconsts.rscreamcolorcaption
 msgid "Cream"
@@ -518,7 +509,12 @@ msgstr "(файл не найден: \"%s\")"
 
 #: lclstrconsts.rsfileinformation
 msgid "File information"
-msgstr "Информация о файле"
+msgstr "Сведения о файле"
+
+#: lclstrconsts.rsfilter
+msgctxt "lclstrconsts.rsfilter"
+msgid "(filter)"
+msgstr "(фильтр)"
 
 #: lclstrconsts.rsfind
 msgid "Find"
@@ -710,7 +706,7 @@ msgstr "Ключевое слово справки %s%s%s не найдено в
 
 #: lclstrconsts.rshelphelpnodehasnohelpdatabase
 msgid "Help node %s%s%s has no Help Database"
-msgstr "Узел справки %s%s%s не имеет соответствующей базы данных"
+msgstr "Элемент справки %s%s%s не имеет соответствующей базы данных"
 
 #: lclstrconsts.rshelpnohelpfoundforsource
 msgid "No help found for line %d, column %d of %s."

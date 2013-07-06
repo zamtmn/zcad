@@ -65,17 +65,14 @@ msgstr "Пользовательская область стыковки %s%s%s 
 msgid "Docking / Anchordocking"
 msgstr "Стыковка / Anchordocking"
 
-#: anchordockstr.adrsdockingenabledrequiresarestartoftheide
-msgid "Docking enabled (Requires a restart of the IDE)"
-msgstr "Включить стыковку (требует перезапуска IDE)"
-
 #: anchordockstr.adrsdockingoptions
 msgid "Docking options"
 msgstr "Параметры стыковки"
 
 #: anchordockstr.adrsdraganddockc
-msgid "Use the mouse to drag and dock window \"%c\""
-msgstr "Используйте мышь для перетаскивания и стыковки окна \"%c\""
+#| msgid "Use the mouse to drag and dock window \"%c\""
+msgid "Use the mouse to drag and dock window \"%s\""
+msgstr "Используйте мышь для перетаскивания и стыковки окна \"%s\""
 
 #: anchordockstr.adrsdragthreshold
 msgid "Drag threshold"
@@ -113,6 +110,24 @@ msgstr "Ошибка загрузки разбивки окна из файла 
 msgid "Error writing window layout to file \"%s\"%s%s"
 msgstr "Ошибка записи разбивки окна в файл \"%s\"%s%s"
 
+#: anchordockstr.adrsfilledheaders
+#| msgid "Filled headers"
+msgid "Fill headers"
+msgstr "Отображать заголовки закрашенными"
+
+#: anchordockstr.adrsfilledheadershint
+msgid "Fill headers of docked controls"
+msgstr "Закрашивать заголовки пристыкованных объектов"
+
+#: anchordockstr.adrsflattenheaders
+msgid "Flatten headers"
+msgstr "Отображать заголовки плоскими"
+
+#: anchordockstr.adrsflattenheadershint
+#| msgid "Flaten headers of docked controls"
+msgid "Flatten headers of docked controls"
+msgstr "Сделать заголовки пристыкованных объектов плоскими"
+
 #: anchordockstr.adrsgeneraldockingoptions
 msgid "General docking options"
 msgstr "Общие параметры стыковки"
@@ -128,6 +143,10 @@ msgstr "Помещение заголовка сверху"
 #: anchordockstr.adrsheaderposition
 msgid "Header position"
 msgstr "Положение заголовка"
+
+#: anchordockstr.adrsheaderstyle
+msgid "Header Style:"
+msgstr "Стиль заголовка:"
 
 #: anchordockstr.adrshideheadercaptionsforsiteswithonlyonedockedcontrol
 msgid "Hide header captions for sites with only one docked control, as that is already shown in the normal window title"

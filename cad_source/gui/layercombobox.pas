@@ -560,6 +560,7 @@ begin
     PoleLista.Top:={B1.Parent.ClientToScreen(a).Y}a.y;
     PoleLista.BorderStyle:=bsNone;
     PoleLista.OnDeactivate:=@PLDeActivate;
+    PoleLista.ShowInTaskBar:=stNever;
     UpdateIcon;
     LV:=TmyListView.Create(PoleLista);
     LV.BorderStyle:=bsSingle;

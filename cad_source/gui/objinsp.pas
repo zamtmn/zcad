@@ -810,7 +810,7 @@ procedure TGDBobjinsp.createscrollbars;
 begin
      self.VertScrollBar.Range:=contentheigth;
      self.VertScrollBar.page:={clientheight}height;
-     {$IFNDEF LINUX}self.VertScrollBar.Tracking:=true;{$ENDIF}
+     {IFNDEF LINUX}self.VertScrollBar.Tracking:=true;{ENDIF}
      self.VertScrollBar.Smooth:=true;
 
      //if contentheigth>clientheight

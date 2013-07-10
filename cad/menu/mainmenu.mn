@@ -487,5 +487,13 @@ PopUpMenu NONSELECTEDENTSCXMENU;
     Separator
     action ACN_SELECTALL
   }
+PopUpMenu FASTMENU;
+  {
+    action ACN_PASTE
+    Separator
+    action ACN_SELECTALL
+    Separator
+    action ACN_VIEWTOP
+  }
 CreateMenu MainMenu File,Edit,View,Format,Draw,Modify,Schematic,Plan,Info,Model,Settings,Window,Help,Debug,DB;
 SetMainMenu MainMenu;

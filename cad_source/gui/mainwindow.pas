@@ -158,6 +158,7 @@ type
     procedure idle(Sender: TObject; var Done: Boolean);virtual;
     procedure ReloadLayer(plt:PGDBNamedObjectsArray);
     procedure GeneralTick(Sender: TObject);
+    procedure ShowFastMenu(Sender: TObject);
     procedure asynccloseapp(Data: PtrInt);
     procedure processfilehistory(filename:GDBString);
     function CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
@@ -179,6 +180,7 @@ type
     procedure _scroll(Sender: TObject; ScrollCode: TScrollCode;
            var ScrollPos: Integer);
     procedure ShowCXMenu;
+    procedure ShowFMenu;
     procedure MainMouseMove;
     function MainMouseDown:GDBBoolean;
                end;
@@ -825,20 +827,20 @@ begin
 end;
 function TMySpeedButton.GetDrawDetails: TThemedElementDetails;
 
-  function WindowPart: TThemedComboBox;
+  function WindowPart: TThemedScrollBar;
     begin
       // no check states available
-      Result := tcDropDownButtonNormal;
+      Result := tsArrowBtnDownNormal;
       if not IsEnabled then
-        Result := tcDropDownButtonDisabled
+        Result := tsArrowBtnDownDisabled
       else
       if FState in [bsDown, bsExclusive] then
-        Result := tcDropDownButtonPressed
+        Result := tsArrowBtnDownPressed
       else
       if FState = bsHot then
-        Result := tcDropDownButtonHot
+        Result := tsArrowBtnDownHot
       else
-        Result := tcDropDownButtonNormal;
+        Result := tsArrowBtnDownNormal;
     end;
 
   begin
@@ -848,12 +850,17 @@ function TMySpeedButton.GetDrawDetails: TThemedElementDetails;
   procedure TMySpeedButton.CalculatePreferredSize(var PreferredWidth,
     PreferredHeight: integer; WithThemeSpace: Boolean);
   begin
-    with ThemeServices.GetDetailSize(ThemeServices.GetElementDetails(twSmallCloseButtonNormal)) do
+    with ThemeServices.GetDetailSize(ThemeServices.GetElementDetails(tsArrowBtnDownNormal)) do
     begin
-      PreferredWidth:=-1;
-      PreferredHeight:=-1;
+      PreferredWidth:=cx;
+      PreferredHeight:=1;
     end;
   end;
+procedure MainForm.ShowFastMenu(Sender: TObject);
+begin
+     ShowFMenu;
+end;
+
 function MainForm.CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
 var
   //i:integer;
@@ -893,22 +900,23 @@ VScrollBar.OnScroll:=_scroll;
 VScrollBar.Enabled:=false;
 VScrollBar.Parent:=MainPanel;
 
-HScrollBar:=TScrollBar.create(DHPanel);
-HScrollBar.Align:=alLeft;
-HScrollBar.kind:=sbHorizontal;
-HScrollBar.OnScroll:=_scroll;
-HScrollBar.Enabled:=false;
-HScrollBar.Parent:=DHPanel;
-HScrollBar.Anchors:=[akRight];
-HScrollBar.AnchorSideRight.Control:=DHPanel;
-HScrollBar.AnchorSideRight.Side:=asrBottom;
-HScrollBar.BorderSpacing.Right:=HScrollBar.Height;
-
 with TMySpeedButton.Create(DHPanel) do
 begin
      Align:=alRight;
      Parent:=DHPanel;
+     onclick:=ShowFastMenu;
 end;
+
+HScrollBar:=TScrollBar.create(DHPanel);
+HScrollBar.Align:=alClient;
+HScrollBar.kind:=sbHorizontal;
+HScrollBar.OnScroll:=_scroll;
+HScrollBar.Enabled:=false;
+HScrollBar.Parent:=DHPanel;
+//HScrollBar.Anchors:=[akRight];
+//HScrollBar.AnchorSideRight.Control:=DHPanel;
+//HScrollBar.AnchorSideRight.Side:=asrBottom;
+//HScrollBar.BorderSpacing.Right:=HScrollBar.Height;
 
 {with TSpeedButton.Create(DHPanel) do
 begin
@@ -3057,6 +3065,17 @@ begin
                                        menu.PopUp;
                                   end;
 end;
+procedure MainForm.ShowFMenu;
+var
+  menu:TmyPopupMenu;
+begin
+    menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'FASTMENU'));
+    if menu<>nil then
+    begin
+         menu.PopUp;
+    end;
+end;
+
 
 procedure MainForm._scroll(Sender: TObject; ScrollCode: TScrollCode;var ScrollPos: Integer);
 var

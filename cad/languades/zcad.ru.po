@@ -123,6 +123,11 @@ msgctxt "tlayerwindow.listview1.columns[9].caption"
 msgid "Description"
 msgstr "Описание"
 
+#: tlineweightselectwnd.caption
+msgctxt "tlineweightselectwnd.caption"
+msgid "Form1"
+msgstr ""
+
 #: tsltexteditor1.caption
 msgid "sltexteditor1"
 msgstr ""
@@ -402,9 +407,17 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
+#: zcadexternal.acn_fakecopyclipbase~caption
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
+msgstr ""
+
+#: zcadexternal.acn_fakepaste~caption
+msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -630,6 +643,10 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
+#: zcadexternal.acn_processkz~caption
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_processkz~textimage
 msgctxt "zcadexternal.acn_processkz~textimage"
 msgid "Process external KZ"
@@ -664,6 +681,10 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
+
+#: zcadexternal.acn_remautocables~caption
+msgid ""
+msgstr ""
 
 #: zcadexternal.acn_remautocables~textimage
 msgid "Remove auto cables"
@@ -1103,6 +1124,7 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
+#, fuzzy
 #| msgid "Block params"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Rotate"
@@ -1357,6 +1379,7 @@ msgid "Polar tracking"
 msgstr "Полярная трассировка"
 
 #: zcadexternal.hint_panel~dwg_snapgrid
+msgctxt "zcadexternal.hint_panel~dwg_snapgrid"
 msgid "Snap to grid"
 msgstr "Привязка к сетке"
 
@@ -2057,8 +2080,9 @@ msgid "Selected object to inspector"
 msgstr "Отображать выбранный объект в инспекторе"
 
 #: zcadexternal.tdwg~dwg_snapgrid
-msgid "Stap to grid"
-msgstr ""
+msgctxt "zcadexternal.tdwg~dwg_snapgrid"
+msgid "Snap to grid"
+msgstr "Привязка к сетке"
 
 #: zcadexternal.tdwg~dwg_stepgrid
 msgid "Grid step"
@@ -2425,6 +2449,10 @@ msgstr "Нумеруесая переменная"
 #: zcadexternal.tnumberingparams~savestart
 msgid "Save start number"
 msgstr "Сохранять старовое значение"
+
+#: zcadexternal.tnumberingparams~sortmode
+msgid ""
+msgstr ""
 
 #: zcadexternal.tnumberingparams~startnumber
 msgid "Start"
@@ -3339,6 +3367,10 @@ msgstr "Вторая точка:"
 msgid "Device must be selected before run the command"
 msgstr "Устройство должно быть выбрано до запуска команды"
 
+#: zcadstrconsts.rscmseldevsbeforecomm
+msgid "Devices must be selected before run the command"
+msgstr ""
+
 #: zcadstrconsts.rscmselentbeforecomm
 msgid "Entities must be selected before run the command"
 msgstr "Примитивы должны быть выбраны до запуска команды"
@@ -3461,6 +3493,10 @@ msgstr "Ошибка загрузки файла разбивки окон"
 msgid "Loading file \"%s\""
 msgstr "Загрузка файла  \"%s\""
 
+#: zcadstrconsts.rsloadingfontfile
+msgid "Loading font file \"%S\""
+msgstr ""
+
 #: zcadstrconsts.rsmenunotfounf
 msgid "Menu \"%s\" not found"
 msgstr "Меню \"%s\" не найдено"
@@ -3486,6 +3522,10 @@ msgstr "Пока не реализовано"
 #: zcadstrconsts.rsopenfile
 msgid "Open file..."
 msgstr "Открыть файл..."
+
+#: zcadstrconsts.rsprocesstimemsg
+msgid "%s:  %s second"
+msgstr ""
 
 #: zcadstrconsts.rsprogramdb
 msgid "Program DB"

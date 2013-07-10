@@ -25,21 +25,21 @@ implementation
 begin
   DMenuX:=503;
   DMenuY:=171;
-  TEdWND_Left:=504;
-  TEdWND_Top:=267;
+  TEdWND_Left:=506;
+  TEdWND_Top:=290;
   TEdWND_Width:=794;
   TEdWND_Height:=481;
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=238;
-  VIEW_ObjInspSubV:=130;
-  PATH_File0:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File1:='C:\fonttest.dxf';
-  PATH_File2:='C:\zcad\cad\sample\test_dxf\truetype.dxf';
-  PATH_File3:='C:\zcad\cad\sample\test_dxf\em.dxf';
-  PATH_File4:='C:\zcad\cad\sample\test_dxf\ops.dxf';
-  PATH_File5:='C:\zcad\cad\sample\test_dxf\test.dxf';
-  PATH_File6:='C:\zcad\cad\sample\zigzag.dxf';
-  PATH_File7:='C:\АВК.dxf';
-  PATH_File8:='J:\nh\Коробова\промышленная\proj.dxf';
-  PATH_File9:='C:\zcad\cad\sample\test_dxf\teapot.dxf';
+  VIEW_ObjInspSubV:=86;
+  PATH_File0:='/home/zamtmn/zcad/cad/sample/test_dxf/ops.dxf';
+  PATH_File1:='/home/zamtmn/zcad/cad/autosave/autosave.dxf';
+  PATH_File2:='/home/zamtmn/zcad/cad/sample/test_dxf/em.dxf';
+  PATH_File3:='/home/zamtmn/zcad/cad/../errors/2.dxf';
+  PATH_File4:='/home/zamtmn/zcad/cad/sample/zigzag.dxf';
+  PATH_File5:='/home/zamtmn/zcad/cad/sample/test_dxf/truetype.dxf';
+  PATH_File6:='/home/zamtmn/zcad/cad/sample/test_dxf/teapot.dxf';
+  PATH_File7:='C:\zcad\cad\autosave\autosave.dxf';
+  PATH_File8:='C:\fonttest.dxf';
+  PATH_File9:='C:\zcad\cad\sample\test_dxf\truetype.dxf';
 end.

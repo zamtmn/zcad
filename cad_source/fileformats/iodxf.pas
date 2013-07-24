@@ -388,6 +388,7 @@ begin
                                                     end;
 
                                 if not trash then
+                                begin
                                 if (newowner<>owner) then
                                 begin
                                      m4:=PGDBObjEntity(newowner)^.getmatrix^;
@@ -395,8 +396,10 @@ begin
                                      //pobj^.Format;
                                      pobj^.CalcObjMatrix;
                                      pobj^.transform(m4);
+                                end
+                                else
+                                    pobj^.CalcObjMatrix;
                                 end;
-
                                 if not trash then
                                 begin
                                  newowner^.AddMi(@pobj);

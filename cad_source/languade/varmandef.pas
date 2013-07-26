@@ -147,11 +147,11 @@ TTraceAngle=(
               TTA45(*'45 deg'*),
               TTA30(*'30 deg'*)
              );
-TTraceMode=record
+TTraceMode=packed record
                  Angle:TTraceAngle;(*'Angle'*)
                  ZAxis:GDBBoolean;(*'Z Axis'*)
            end;
-TOSMode=record
+TOSMode=packed record
               kosm_inspoint:GDBBoolean;(*'Insertion'*)
               kosm_endpoint:GDBBoolean;(*'Endpoint'*)
               kosm_midpoint:GDBBoolean;(*'Midpoint'*)
@@ -167,29 +167,29 @@ TOSMode=record
               kosm_apparentintersection:GDBBoolean;(*'Apparent intersection'*)
               kosm_paralel:GDBBoolean;(*'Paralel'*)
         end;
-  indexdesk = record
+  indexdesk =packed  record
     indexmin, count: GDBInteger;
   end;
-  arrayindex = array[1..2] of indexdesk;
+  arrayindex =packed  array[1..2] of indexdesk;
   parrayindex = ^arrayindex;
   PTTypedData=^TTypedData;
-  TTypedData=record
+  TTypedData=packed record
                    Instance: GDBPointer;
                    PTD:{-}PUserTypeDescriptor{/GDBPointer/};
              end;
   PTEnumData=^TEnumData;
-  TEnumData=record
+  TEnumData=packed record
                   Selected:GDBInteger;
                   Enums:GDBGDBStringArray;
             end;
-  vardesk = record
+  vardesk =packed  record
     name: GDBString;
     username: GDBString;
     data: TTypedData;
     attrib:GDBInteger;
   end;
 ptypemanagerdef=^typemanagerdef;
-typemanagerdef=object(GDBaseObject)
+typemanagerdef=packed object(GDBaseObject)
                   exttype:GDBOpenArrayOfPObjects;
                   procedure readbasetypes;virtual;abstract;
                   procedure readexttypes(fn: GDBString);virtual;abstract;
@@ -198,7 +198,7 @@ typemanagerdef=object(GDBaseObject)
                   function _TypeIndex2PTD(ind:integer):PUserTypeDescriptor;virtual;abstract;
             end;
 pvarmanagerdef=^varmanagerdef;
-varmanagerdef=object(GDBaseObject)
+varmanagerdef=packed object(GDBaseObject)
                  vardescarray:GDBOpenArrayOfData;
                  vararray:GDBOpenArrayOfByte;
                  function findvardesc(varname:GDBString): pvardesk;virtual;abstract;

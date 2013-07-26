@@ -386,7 +386,10 @@ begin
                                                   GDBStringtypearray:='';
                                                   fieldoffset := sizeof(pointer);
                                              end;
-                                 recordtype:begin
+                                 recordtype,packedrecordtype:begin
+                                                  if typ=packedrecordtype then
+                                                  typ:=typ;
+
                                                   typename:=parseresult^.getGDBString(0);
                                                   if (typename) = 'TRestoreMode'
                                                   then
@@ -397,7 +400,7 @@ begin
                                                   PRecordDescriptor(etd)^.init(typename,currentunit);
                                                   ObjOrRecordRead(f,line,GDBStringtypearray,fieldoffset,GDBPointer(etd));
                                              end;
-                                 objecttype:begin
+                                 objecttype,packedobjecttype:begin
                                                   {FPVMT}
                                                   typename:=parseresult^.getGDBString(0);
                                                   if (typename) = 'GDBObj3DFace'
@@ -455,7 +458,7 @@ begin
                                                   line:='';
                                                   addtype:=false;
                                              end;
-                                  arraytype:begin
+                                  arraytype,packedarraytype:begin
                                                   typename:=pGDBString(parseresult^.getelement(0))^;
                                                   if typename='GDBPalette' then
                                                                               typename:=typename;

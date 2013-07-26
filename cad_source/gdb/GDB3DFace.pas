@@ -25,7 +25,7 @@ GDBase,gdbobjectsconstdef{,oglwindowdef,dxflow},memman,OGLSpecFunc;
 type
 {Export+}
 PGDBObj3DFace=^GDBObj3DFace;
-GDBObj3DFace=object(GDBObj3d)
+GDBObj3DFace=packed object(GDBObj3d)
                  PInOCS:OutBound4V;(*'Coordinates OCS'*)(*saved_to_shd*)
                  PInWCS:OutBound4V;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  PInDCS:OutBound4V;(*'Coordinates DCS'*)(*hidden_in_objinsp*)

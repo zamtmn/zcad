@@ -26,7 +26,7 @@ uses zcadsysvars,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,
 type
 {EXPORT+}
     PTUnitManager=^TUnitManager;
-    TUnitManager=object(GDBOpenArrayOfObjects)
+    TUnitManager=packed object(GDBOpenArrayOfObjects)
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;
@@ -387,7 +387,7 @@ begin
                                                   fieldoffset := sizeof(pointer);
                                              end;
                                  recordtype,packedrecordtype:begin
-                                                  if typ=packedrecordtype then
+                                                  if typ<>packedrecordtype then
                                                   typ:=typ;
 
                                                   typename:=parseresult^.getGDBString(0);
@@ -402,6 +402,8 @@ begin
                                              end;
                                  objecttype,packedobjecttype:begin
                                                   {FPVMT}
+                                                  if typ<>packedobjecttype then
+                                                  typ:=typ;
                                                   typename:=parseresult^.getGDBString(0);
                                                   if (typename) = 'GDBObj3DFace'
                                                   then
@@ -459,6 +461,8 @@ begin
                                                   addtype:=false;
                                              end;
                                   arraytype,packedarraytype:begin
+                                                   if typ<>packedarraytype then
+                                                   typ:=typ;
                                                   typename:=pGDBString(parseresult^.getelement(0))^;
                                                   if typename='GDBPalette' then
                                                                               typename:=typename;

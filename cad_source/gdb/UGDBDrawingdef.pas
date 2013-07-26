@@ -22,7 +22,7 @@ uses gdbase,gdbasetypes,UGDBLayerArray,UGDBTextStyleArray,ugdbltypearray,UUnitMa
 type
 {EXPORT+}
 PTDrawingDef=^TDrawingDef;
-TDrawingDef=object(GDBaseobject)
+TDrawingDef=packed object(GDBaseobject)
                        function GetLayerTable:PGDBLayerArray;virtual;abstract;
                        function GetLTypeTable:PGDBLtypeArray;virtual;abstract;
                        function GetTextStyleTable:PGDBTextStyleArray;virtual;abstract;
@@ -35,4 +35,4 @@ TDrawingDef=object(GDBaseobject)
                  end;
 {EXPORT-}
 implementation
-end.
+end.

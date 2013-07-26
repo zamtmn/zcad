@@ -22,7 +22,7 @@ uses ugdbdrawingdef,gdbase,gdbasetypes,GDBCamera,GDBGenericSubEntry,GDBRoot,UGDB
 type
 {EXPORT+}
 PTAbstractDrawing=^TAbstractDrawing;
-TAbstractDrawing=object(TDrawingDef)
+TAbstractDrawing=packed object(TDrawingDef)
                        //function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
                        function myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex):Integer;virtual;abstract;
                        function myGluUnProject(win:GDBVertex;out obj:GDBvertex):Integer;virtual;abstract;

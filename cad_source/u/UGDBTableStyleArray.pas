@@ -30,14 +30,14 @@ TTableCellJustify=(jcl(*'TopLeft'*),
               jcc(*'TopCenter'*),
               jcr(*'TopRight'*));
 PTGDBTableCellStyle=^TGDBTableCellStyle;
-TGDBTableCellStyle=record
+TGDBTableCellStyle=packed record
                           Width,TextWidth:GDBDouble;
                           CF:TTableCellJustify;
                     end;
-GDBCellFormatArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=TGDBTableCellStyle*)
+GDBCellFormatArray=packed object(GDBOpenArrayOfData)(*OpenArrayOfData=TGDBTableCellStyle*)
                    end;
 PTGDBTableStyle=^TGDBTableStyle;
-TGDBTableStyle=object(GDBNamedObject)
+TGDBTableStyle=packed object(GDBNamedObject)
                      rowheight:gdbinteger;
                      textheight:gdbdouble;
                      tblformat:GDBCellFormatArray;
@@ -46,7 +46,7 @@ TGDBTableStyle=object(GDBNamedObject)
                      destructor Done;virtual;
                end;
 PGDBTableStyleArray=^GDBTableStyleArray;
-GDBTableStyleArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=TGDBTableStyle*)
+GDBTableStyleArray=packed object(GDBNamedObjectsArray)(*OpenArrayOfData=TGDBTableStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     function AddStyle(name:GDBString):PTGDBTableStyle;

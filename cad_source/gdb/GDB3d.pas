@@ -22,7 +22,7 @@ interface
 uses GDBEntity,log;
 type
 {EXPORT+}
-GDBObj3d=object(GDBObjEntity)
+GDBObj3d=packed object(GDBObjEntity)
          end;
 {EXPORT-}
 implementation

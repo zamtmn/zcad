@@ -27,7 +27,7 @@ GDBProjectProc=function (objcoord:GDBVertex; out wincoord:GDBVertex):Integer of 
 {REGISTEROBJECTTYPE GDBObjCamera}
 {EXPORT+}
 PGDBObjCamera=^GDBObjCamera;
-GDBObjCamera=object(GDBBaseCamera)
+GDBObjCamera=packed object(GDBBaseCamera)
                    modelMatrixLCS:DMatrix4D;
                    zminLCS,zmaxLCS:GDBDouble;
                    frustumLCS:ClipArray;

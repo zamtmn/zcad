@@ -37,12 +37,12 @@ GDBRoot,ugdbfont,
 OGLWindow,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,ugdbtrash;
 type
 {EXPORT+}
-TDWGProps=record
+TDWGProps=packed record
                 Name:GDBString;
                 Number:GDBInteger;
           end;
 PTDrawing=^TDrawing;
-TDrawing=object(TSimpleDrawing)
+TDrawing=packed object(TSimpleDrawing)
 
            FileName:GDBString;
            Changed:GDBBoolean;
@@ -70,7 +70,7 @@ TDrawing=object(TSimpleDrawing)
            procedure AddBlockFromDBIfNeed(name:GDBString);virtual;
      end;
 PGDBDescriptor=^GDBDescriptor;
-GDBDescriptor=object(GDBOpenArrayOfPObjects)
+GDBDescriptor=packed object(GDBOpenArrayOfPObjects)
                     CurrentDWG:{PTDrawing}PTSimpleDrawing;
                     ProjectUnits:TUnitManager;
                     constructor init;

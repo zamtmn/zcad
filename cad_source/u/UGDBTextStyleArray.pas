@@ -25,13 +25,13 @@ type
   //ptextstyle = ^textstyle;
 {EXPORT+}
 PGDBTextStyleProp=^GDBTextStyleProp;
-  GDBTextStyleProp=record
+  GDBTextStyleProp=packed record
                     size:GDBDouble;(*saved_to_shd*)
                     oblique:GDBDouble;(*saved_to_shd*)
                     wfactor:GDBDouble;(*saved_to_shd*)
               end;
   PGDBTextStyle=^GDBTextStyle;
-  GDBTextStyle = record
+  GDBTextStyle = packed record
     name: GDBAnsiString;(*saved_to_shd*)
     dxfname: GDBAnsiString;(*saved_to_shd*)
     pfont: PGDBfont;
@@ -39,7 +39,7 @@ PGDBTextStyleProp=^GDBTextStyleProp;
     UsedInLTYPE:GDBBoolean;
   end;
 PGDBTextStyleArray=^GDBTextStyleArray;
-GDBTextStyleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
+GDBTextStyleArray=packed object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
 

@@ -25,7 +25,7 @@ GDBPointerArray=array [0..0] of GDBPointer;
 PGDBPointerArray=^GDBPointerArray;
 {Export+}
 PGDBOpenArrayOfGDBPointer=^GDBOpenArrayOfGDBPointer;
-GDBOpenArrayOfGDBPointer=object(GDBOpenArray)
+GDBOpenArrayOfGDBPointer=packed object(GDBOpenArray)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       constructor initnul;
                       function iterate (var ir:itrec):GDBPointer;virtual;

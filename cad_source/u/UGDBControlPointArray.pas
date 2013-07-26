@@ -24,7 +24,7 @@ uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
 type
 {Export+}
 PGDBControlPointArray=^GDBControlPointArray;
-GDBControlPointArray=object(GDBOpenArrayOfData)
+GDBControlPointArray=packed object(GDBOpenArrayOfData)
                            SelectedCount:GDBInteger;
                            constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 

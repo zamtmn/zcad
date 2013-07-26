@@ -25,7 +25,7 @@ uses UGDBEntTree,UGDBVisibleOpenArray,{UGDBOpenArrayOfPV,}
 type
 {Export+}
 PGDBObjEntityTreeArray=^GDBObjEntityTreeArray;
-GDBObjEntityTreeArray=object(GDBObjEntityOpenArray)(*OpenArrayOfPObj*)
+GDBObjEntityTreeArray=packed object(GDBObjEntityOpenArray)(*OpenArrayOfPObj*)
                             ObjTree:TEntTreeNode;
                             constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                             constructor initnul;

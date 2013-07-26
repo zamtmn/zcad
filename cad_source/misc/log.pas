@@ -40,7 +40,7 @@ end;
 //PTDateTime=^TDateTime;
 {EXPORT+}
 ptlog=^tlog;
-tlog=object
+tlog=packed object
            LogFileName:GDBString;
            FileHandle:cardinal;
            Indent:GDBInteger;

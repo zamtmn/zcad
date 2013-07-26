@@ -23,7 +23,7 @@ uses uzglline3darray,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
 geometry;
 type
 {Export+}
-ZGLTriangle3DArray=object(ZGLLine3DArray)(*OpenArrayOfData=GDBVertex*)
+ZGLTriangle3DArray=packed object(ZGLLine3DArray)(*OpenArrayOfData=GDBVertex*)
                 procedure DrawGeometry;virtual;
              end;
 {Export-}
@@ -46,4 +46,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('uzgltriangles3darray.initialization');{$ENDIF}
 end.
-
+

@@ -24,13 +24,13 @@ uses GDBCamera,{GDBWithLocalCS,}GDBWithMatrix,GDBEntity,UGDBControlPointArray,UG
 type
 {Export+}
 PSelectedObjDesc=^SelectedObjDesc;
-SelectedObjDesc=record
+SelectedObjDesc=packed record
                       objaddr:PGDBObjEntity;
                       pcontrolpoint:PGDBControlPointArray;
                       ptempobj:PGDBObjEntity;
                 end;
 PGDBSelectedObjArray=^GDBSelectedObjArray;
-GDBSelectedObjArray=object(GDBOpenArrayOfData)
+GDBSelectedObjArray=packed object(GDBOpenArrayOfData)
                           SelectedCount:GDBInteger;
                           constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 

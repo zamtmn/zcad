@@ -26,7 +26,7 @@ type
 {EXPORT+}
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
          PTEntTreeNode=^TEntTreeNode;
-         TEntTreeNode=object(GDBaseObject)
+         TEntTreeNode=packed object(GDBaseObject)
                             nodedepth:GDBInteger;
                             pluscount,minuscount:GDBInteger;
                             point:GDBVertex;

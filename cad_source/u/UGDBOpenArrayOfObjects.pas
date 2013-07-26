@@ -24,7 +24,7 @@ uses gdbasetypes,UGDBOpenArrayOfData,
 type
 {Export+}
 PGDBOpenArrayOfObjects=^GDBOpenArrayOfObjects;
-GDBOpenArrayOfObjects=object(GDBOpenArrayOfData)
+GDBOpenArrayOfObjects=packed object(GDBOpenArrayOfData)
                              procedure cleareraseobj;virtual;
                              function CreateObject:PGDBaseObject;
                              procedure free;virtual;
@@ -93,4 +93,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBOpenArrayofObjects.initialization');{$ENDIF}
-end.
+end.

@@ -37,7 +37,7 @@ TTextJustify=(jstl(*'TopLeft'*)=1,
               jsbtc(*'Center'*)=11,
               jsbtr(*'Right'*)=12);
 PGDBTextProp=^GDBTextProp;
-GDBTextProp=record
+GDBTextProp=packed record
                   size:GDBDouble;(*saved_to_shd*)
                   oblique:GDBDouble;(*saved_to_shd*)
                   wfactor:GDBDouble;(*saved_to_shd*)
@@ -47,7 +47,7 @@ GDBTextProp=record
                   backward:GDBBoolean;
             end;
 PGDBObjAbstractText=^GDBObjAbstractText;
-GDBObjAbstractText=object(GDBObjPlainWithOX)
+GDBObjAbstractText=packed object(GDBObjPlainWithOX)
                          textprop:GDBTextProp;(*saved_to_shd*)
                          P_drawInOCS:GDBvertex;(*saved_to_shd*)
                          DrawMatrix:DMatrix4D;

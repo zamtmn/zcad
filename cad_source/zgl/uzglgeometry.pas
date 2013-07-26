@@ -23,7 +23,7 @@ uses zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzg
      gdbasetypes;
 type
 {Export+}
-ZGLGeometry=object(GDBaseObject)
+ZGLGeometry=packed object(GDBaseObject)
                                  Lines:ZGLLine3DArray;
                                  Points:ZGLpoint3DArray;
                                  SHX:GDBPolyPoint3DArray;
@@ -257,4 +257,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBPoint3DArray.initialization');{$ENDIF}
 end.
-
+

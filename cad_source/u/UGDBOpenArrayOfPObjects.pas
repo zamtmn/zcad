@@ -24,7 +24,7 @@ uses {log,}gdbasetypes,UGDBOpenArrayOfPointer,
 type
 {Export+}
 PGDBOpenArrayOfPObjects=^GDBOpenArrayOfPObjects;
-GDBOpenArrayOfPObjects=object(GDBOpenArrayOfGDBPointer)
+GDBOpenArrayOfPObjects=packed object(GDBOpenArrayOfGDBPointer)
                              procedure cleareraseobj;virtual;
                              procedure eraseobj(ObjAddr:PGDBaseObject);virtual;
                              procedure cleareraseobjfrom(n:GDBInteger);virtual;

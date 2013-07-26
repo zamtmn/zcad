@@ -23,7 +23,7 @@ uses uzglline3darray,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
 geometry;
 type
 {Export+}
-ZGLPoint3DArray=object(ZGLLine3DArray)(*OpenArrayOfData=GDBVertex*)
+ZGLPoint3DArray=packed object(ZGLLine3DArray)(*OpenArrayOfData=GDBVertex*)
                 procedure DrawGeometry;virtual;
              end;
 {Export-}

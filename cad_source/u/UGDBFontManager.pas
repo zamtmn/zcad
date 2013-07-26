@@ -24,12 +24,12 @@ uses zcadstrconsts,shared,zcadsysvars,strproc,ugdbfont,gdbasetypes,SysInfo,memma
 type
 {Export+}
   PGDBFontRecord=^GDBFontRecord;
-  GDBFontRecord = record
+  GDBFontRecord = packed record
     Name: GDBString;
     Pfont: GDBPointer;
   end;
 PGDBFontManager=^GDBFontManager;
-GDBFontManager=object({GDBOpenArrayOfData}GDBNamedObjectsArray)(*OpenArrayOfData=GDBfont*)
+GDBFontManager=packed object({GDBOpenArrayOfData}GDBNamedObjectsArray)(*OpenArrayOfData=GDBfont*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 
                     function addFonf(FontPathName:GDBString):PGDBfont;

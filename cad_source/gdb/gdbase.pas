@@ -151,7 +151,7 @@ PGDBvertex2S=^GDBvertex2S;
 GDBvertex2S=packed record
                    x,y:GDBFloat;
              end;
-GDBvertex2DI=record
+GDBvertex2DI=packed record
                    x,y:GDBInteger;
              end;
 GDBBoundingBbox=packed record
@@ -240,7 +240,7 @@ RGB=packed record
           a:GDBByte;(*'Alpha'*)
           name:GDBString;
     end;
-GDBPalette=array[0..255] of RGB;
+GDBPalette=packed array[0..255] of RGB;
 PGDBNamedObject=^GDBNamedObject;
 GDBNamedObject=packed object(GDBaseObject)
                      Name:GDBAnsiString;(*saved_to_shd*)(*'Name'*)
@@ -277,7 +277,7 @@ GDBArrayGDBDouble=packed array[0..300] of GDBDouble;
 GDBArrayAttrib=packed array[0..300] of GDBAttrib;
 PGDBArrayGLlwwidth=^GDBArrayGLlwwidth;
 GDBArrayGLlwwidth=packed array[0..300] of GLLWWidth;
-GDBOpenArrayGLlwwidth_GDBWord=record
+GDBOpenArrayGLlwwidth_GDBWord=packed record
     count: GDBWord;
     widtharray: GDBArrayGLlwwidth;
   end;

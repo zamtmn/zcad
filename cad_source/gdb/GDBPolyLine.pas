@@ -26,7 +26,7 @@ GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman{,OGLSpecF
 type
 {Export+}
 PGDBObjPolyline=^GDBObjPolyline;
-GDBObjPolyline=object(GDBObjCurve)
+GDBObjPolyline=packed object(GDBObjCurve)
                  Closed:GDBBoolean;(*saved_to_shd*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);

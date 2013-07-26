@@ -25,7 +25,7 @@ type
 PTLinkType=^TLinkType;
 TLinkType=(LT_Normal,LT_OnlyLink);
 pgrafelement=^grafelement;
-grafelement=object(GDBaseObject)
+grafelement=packed object(GDBaseObject)
                   linkcount:GDBInteger;
                   point:gdbvertex;
                   link:GDBObjOpenArrayOfPV;
@@ -39,7 +39,7 @@ grafelement=object(GDBaseObject)
                   function addline(pv:pgdbobjEntity):GDBInteger;
                   function IsConnectedTo(node:pgrafelement):pgdbobjEntity;
             end;
-GDBGraf=object(GDBOpenArrayOfData)(*OpenArrayOfData=grafelement*)
+GDBGraf=packed object(GDBOpenArrayOfData)(*OpenArrayOfData=grafelement*)
                 constructor init(m:GDBInteger);
                 function addge(v:gdbvertex):pgrafelement;
                 procedure clear;virtual;

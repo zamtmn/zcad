@@ -24,11 +24,11 @@ GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,G
 type
 {Export+}
   ptEllipsertmodify=^tEllipsertmodify;
-  tEllipsertmodify=record
+  tEllipsertmodify=packed record
                         p1,p2,p3:GDBVertex2d;
                   end;
 PGDBObjEllipse=^GDBObjEllipse;
-GDBObjEllipse=object(GDBObjPlain)
+GDBObjEllipse=packed object(GDBObjPlain)
                  RR:GDBDouble;(*saved_to_shd*)
                  MajorAxis:GDBvertex;
                  Ratio:GDBDouble;(*saved_to_shd*)

@@ -22,36 +22,36 @@ interface
 uses gdbasetypes,sysutils, dynlibs, log,memman,UGDBOpenArrayOfData,GDBEntity;
 type
     {Export+}
-  PluginVersionInfo=record
+  PluginVersionInfo=packed record
     PluginName: pansichar;
     PluginVersion: GDBInteger;
   end;
   GetVersFunc=function: PluginVersionInfo;
   Initfunc=function: GDBInteger;
   pmoduledesc=^moduledesc;
-  moduledesc=record
+  moduledesc=packed record
     modulename:pansichar;
     modulehandle:thandle;
     ininfunction:function(path:pansichar):GDBInteger;
     donefunction:function:GDBInteger;
   end;
-  arraymoduledesc=array[0..0] of moduledesc;
+  arraymoduledesc=packed array[0..0] of moduledesc;
   popenarraymoduledesc=^openarraymoduledesc;
-  openarraymoduledesc=record
+  openarraymoduledesc=packed record
     count:GDBInteger;
     modarr:arraymoduledesc;
   end;
-  copyobjectdesc=record
+  copyobjectdesc=packed record
                  oldnum,newnum:PGDBOBJENTITY;
                  end;
-  copyobjectarray=array [0..0] of copyobjectdesc;
+  copyobjectarray=packed array [0..0] of copyobjectdesc;
   pcopyobjectarraywm=^copyobjectarraywm;
   copyobjectarraywm=record
                           max:GDBInteger;
                           copyobjectarray:copyobjectarray;
                     end;
   PGDBPluginsArray=^GDBPluginsArray;
-  GDBPluginsArray=object(GDBOpenArrayOfData)
+  GDBPluginsArray=packed object(GDBOpenArrayOfData)
                         constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                         procedure loadplugins(path: GDBString);
                   end;

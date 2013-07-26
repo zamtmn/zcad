@@ -27,11 +27,11 @@ type
 //PProjPoint:{-}PGDBPolyPoint2DArray{/GDBPointer/};
 {Export+}
   ptcirclertmodify=^tcirclertmodify;
-  tcirclertmodify=record
+  tcirclertmodify=packed record
                         r,p_insert:GDBBoolean;
                   end;
 PGDBObjCircle=^GDBObjCircle;
-GDBObjCircle=object(GDBObjWithLocalCS)
+GDBObjCircle=packed object(GDBObjWithLocalCS)
                  Radius:GDBDouble;(*'Radius'*)(*saved_to_shd*)
                  Diametr:GDBDouble;(*'Diametr'*)
                  Length:GDBDouble;(*'Length'*)

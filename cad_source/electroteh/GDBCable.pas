@@ -21,12 +21,12 @@ type
               );
 {Export+}
 PTNodeProp=^TNodeProp;
-TNodeProp=record
+TNodeProp=packed record
                 PrevP,NextP:GDBVertex;
                 DevLink:PGDBObjDevice;
           end;
 PGDBObjCable=^GDBObjCable;
-GDBObjCable=object(GDBObjCurve)
+GDBObjCable=packed object(GDBObjCurve)
                  NodePropArray:GDBOpenArrayOfData;(*hidden_in_objinsp*)
                  str11:GDBVertex;(*hidden_in_objinsp*)
                  str12:GDBVertex;(*hidden_in_objinsp*)

@@ -23,7 +23,7 @@ uses gdbasetypes,UGDBOpenArray,gdbase;
 type
 {Export+}
 PGDBOpenArrayOfData=^GDBOpenArrayOfData;
-GDBOpenArrayOfData=object(GDBOpenArray)
+GDBOpenArrayOfData=packed object(GDBOpenArray)
 
                     function iterate(var ir:itrec):GDBPointer;virtual;
                     //procedure clear;virtual;

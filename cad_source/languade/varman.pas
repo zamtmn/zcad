@@ -137,7 +137,7 @@ const
 type
 {EXPORT+}
 ptypemanager=^typemanager;
-typemanager=object(typemanagerdef)
+typemanager=packed object(typemanagerdef)
                   constructor init;
                   procedure CreateBaseTypes;virtual;
                   function _TypeName2PTD(name: GDBString):PUserTypeDescriptor;virtual;
@@ -148,7 +148,7 @@ typemanager=object(typemanagerdef)
                   procedure free;virtual;
             end;
 pvarmanager=^varmanager;
-varmanager=object(varmanagerdef)
+varmanager=packed object(varmanagerdef)
                  constructor init;
                  function findvardesc(varname:GDBString): pvardesk;virtual;
                  function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;
@@ -161,7 +161,7 @@ varmanager=object(varmanagerdef)
 TunitPart=(TNothing,TInterf,TImpl,TProg);
 PTUnit=^TUnit;
 PTSimpleUnit=^TSimpleUnit;
-TSimpleUnit=object(GDBaseobject)
+TSimpleUnit=packed object(GDBaseobject)
                   Name:GDBString;
                   InterfaceUses:GDBOpenArrayOfGDBPointer;
                   InterfaceVariables: varmanager;
@@ -179,11 +179,11 @@ TSimpleUnit=object(GDBaseobject)
                   procedure CopyFrom(source:PTSimpleUnit);virtual;
             end;
 PTObjectUnit=^TObjectUnit;
-TObjectUnit=object(TSimpleUnit)
+TObjectUnit=packed object(TSimpleUnit)
                   function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
                   procedure free;virtual;
             end;
-TUnit=object(TSimpleUnit)
+TUnit=packed object(TSimpleUnit)
             InterfaceTypes:typemanager;
             //ImplementationUses:GDBInteger;
             ImplementationTypes:typemanager;

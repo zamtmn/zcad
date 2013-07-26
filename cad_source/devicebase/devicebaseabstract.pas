@@ -15,7 +15,7 @@ TOborudCategory=(_misc(*'**Разное'*),
 TEdIzm=(_sht(*'**шт.'*),
         _m(*'**м'*));
 PDbBaseObject=^DbBaseObject;        
-DbBaseObject=object(GDBaseObject)
+DbBaseObject=packed object(GDBaseObject)
                        Category:TOborudCategory;(*'**Категория'*)(*oi_readonly*)
                        Group:GDBString;(*'**Группа'*)
                        Position:GDBString;(*'**Позиция'*)(*oi_readonly*)

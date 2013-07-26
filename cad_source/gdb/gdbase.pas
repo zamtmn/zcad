@@ -34,12 +34,12 @@ type
 (*varcategoryforoi EL='El(Устаревшая группа)'*)
 (*varcategoryforoi UNITPARAM='Измеряемый параметр'*)
 (*varcategoryforoi DESC='Описание'*)
-GDBTypedPointer=record
+GDBTypedPointer=packed record
                       Instance:GDBPointer;
                       PTD:GDBPointer;
                 end;
 PGDBaseObject=^GDBaseObject;
-GDBaseObject=object
+GDBaseObject=packed object
     function ObjToGDBString(prefix,sufix:GDBString):GDBString; virtual;
     function GetObjType:GDBWord;virtual;
     procedure Format;virtual;
@@ -53,16 +53,16 @@ GDBaseObject=object
     function IsEntity:GDBBoolean;virtual;
 
   end;
-devicedesk=record
+devicedesk=packed record
                  category,variable,name,id,nameall,tu,edizm,mass:GDBString;
            end;
 PTZCPOffsetTable=^TZCPOffsetTable;
-TZCPOffsetTable=record
+TZCPOffsetTable=packed record
                       GDB:GDBLongword;(*saved_to_shd*)
                       GDBRT:GDBLongword;(*saved_to_shd*)
                 end;
 PZCPHeader=^ZCPHeader;
-ZCPHeader=record
+ZCPHeader=packed record
                 Signature:GDBString;(*saved_to_shd*)
                 Copyright:GDBString;(*saved_to_shd*)
                 Coment:GDBString;(*saved_to_shd*)
@@ -72,7 +72,7 @@ ZCPHeader=record
           end;
 TObjLinkRecordMode=(OBT(*'ObjBeginToken'*),OFT(*'ObjFieldToken'*),UBR(*'UncnownByReference'*));
 PTObjLinkRecord=^TObjLinkRecord;
-TObjLinkRecord=record
+TObjLinkRecord=packed record
                      OldAddr:GDBLongword;(*saved_to_shd*)
                      NewAddr:GDBLongword;(*saved_to_shd*)
                      TempAddr:GDBLongword;(*saved_to_shd*)
@@ -80,114 +80,114 @@ TObjLinkRecord=record
                      Mode:TObjLinkRecordMode;(*saved_to_shd*)
                end;
 PIMatrix4=^IMatrix4;               
-IMatrix4=array[0..3]of GDBInteger;
-DVector4D=array[0..3]of GDBDouble;
-DVector3D=array[0..2]of GDBDouble;
+IMatrix4=packed array[0..3]of GDBInteger;
+DVector4D=packed array[0..3]of GDBDouble;
+DVector3D=packed array[0..2]of GDBDouble;
 PDMatrix4D=^DMatrix4D;
-DMatrix4D=array[0..3]of DVector4D;
-DMatrix3D=array[0..2]of DVector3D;
-ClipArray=array[0..5]of DVector4D;
+DMatrix4D=packed array[0..3]of DVector4D;
+DMatrix3D=packed array[0..2]of DVector3D;
+ClipArray=packed array[0..5]of DVector4D;
 FontFloat=GDBFloat;
 PFontFloat=^FontFloat;
 PGDBvertex=^GDBvertex;
-GDBvertex=record
+GDBvertex=packed record
                 x:GDBDouble;(*saved_to_shd*)
                 y:GDBDouble;(*saved_to_shd*)
                 z:GDBDouble;(*saved_to_shd*)
           end;
 PGDBQuaternion=^GDBQuaternion;
-GDBQuaternion=record
+GDBQuaternion=packed record
    ImagPart: GDBvertex;
    RealPart: GDBDouble;
               end;
-GDBBasis=record
+GDBBasis=packed record
                 ox:GDBvertex;(*'OX Axis'*)(*saved_to_shd*)
                 oy:GDBvertex;(*'OY Axis'*)(*saved_to_shd*)
                 oz:GDBvertex;(*'OZ Axis'*)(*saved_to_shd*)
           end;
-GDBvertex3S=record
+GDBvertex3S=packed record
                 x:GDBFloat;(*saved_to_shd*)
                 y:GDBFloat;(*saved_to_shd*)
                 z:GDBFloat;(*saved_to_shd*)
           end;
 PGDBLineProp=^GDBLineProp;
-GDBLineProp=record
+GDBLineProp=packed record
                   lBegin:GDBvertex;(*'Begin'*)(*saved_to_shd*)
                   lEnd:GDBvertex;(*'End'*)(*saved_to_shd*)
               end;
 PGDBvertex4D=^GDBvertex4D;
-GDBvertex4D=record
+GDBvertex4D=packed record
                 x,y,z,w:GDBDouble;
             end;
-GDBvertex4F=record
+GDBvertex4F=packed record
                 x,y,z,w:GDBFloat;
             end;
 PGDBvertex2D=^GDBvertex2D;
-GDBvertex2D=record
+GDBvertex2D=packed record
                 x:GDBDouble;(*saved_to_shd*)
                 y:GDBDouble;(*saved_to_shd*)
             end;
 PGDBFontVertex2D=^GDBFontVertex2D;
-GDBFontVertex2D=record
+GDBFontVertex2D=packed record
                 x:FontFloat;(*saved_to_shd*)
                 y:FontFloat;(*saved_to_shd*)
             end;
-TTrianglesDataInfo=record
+TTrianglesDataInfo=packed record
                TrianglesAddr: GDBInteger;
                TrianglesSize: GDBWord;
                end;
 PGDBPolyVertex2D=^GDBPolyVertex2D;
-GDBPolyVertex2D=record
+GDBPolyVertex2D=packed record
                       coord:GDBvertex2D;
                       count:GDBInteger;
                 end;
 PGDBPolyVertex3D=^GDBPolyVertex3D;
-GDBPolyVertex3D=record
+GDBPolyVertex3D=packed record
                       coord:GDBvertex;
                       count:GDBInteger;
                       LineNumber:GDBInteger;
                 end;
 PGDBvertex2S=^GDBvertex2S;
-GDBvertex2S=record
+GDBvertex2S=packed record
                    x,y:GDBFloat;
              end;
 GDBvertex2DI=record
                    x,y:GDBInteger;
              end;
-GDBBoundingBbox=record
+GDBBoundingBbox=packed record
                       LBN:GDBvertex;(*'Near'*)
                       RTF:GDBvertex;(*'Far'*)
                 end;
 TInRect=(IRFully,IRPartially,IREmpty);                
 PGDBvertex2DI=^GDBvertex2DI;
-GDBvertex2DIArray=array [0..0] of GDBvertex2DI;
+GDBvertex2DIArray=packed array [0..0] of GDBvertex2DI;
 PGDBvertex2DIArray=^GDBvertex2DIArray;
-OutBound4V=array [0..3]of GDBvertex;
-Proj4V2DI=array [0..3]of GDBvertex2DI;
+OutBound4V=packed array [0..3]of GDBvertex;
+Proj4V2DI=packed array [0..3]of GDBvertex2DI;
 PGDBQuad3d=^GDBQuad3d;
-GDBQuad2d=array[0..3] of GDBvertex2D;
+GDBQuad2d=packed array[0..3] of GDBvertex2D;
 GDBQuad3d={array[0..3] of GDBvertex}OutBound4V;
 PGDBLineProj=^GDBLineProj;
-GDBLineProj=array[0..6] of GDBvertex2D;
-GDBplane=record
+GDBLineProj=packed array[0..6] of GDBvertex2D;
+GDBplane=packed record
                normal:GDBvertex;
                d:GDBDouble;
          end;
-GDBray=record
+GDBray=packed record
              start,dir:GDBvertex;
        end;
-GDBPiece=record
+GDBPiece=packed record
              lbegin,dir,lend:GDBvertex;
        end;
 ptarcrtmodify=^tarcrtmodify;
-tarcrtmodify=record
+tarcrtmodify=packed record
                       p1,p2,p3:GDBVertex2d;
                 end;
-TArcData=record
+TArcData=packed record
                r,startangle,endangle:gdbdouble;
                p:GDBvertex2D;
 end;
-GDBCameraBaseProp=record
+GDBCameraBaseProp=packed record
                         point:GDBvertex;
                         look:GDBvertex;
                         ydir:GDBvertex;
@@ -196,7 +196,7 @@ GDBCameraBaseProp=record
                   end;
 TActulity=GDBInteger;
 TObjID=GDBWord;
-TDrawContext=record
+TDrawContext=packed record
                    VisibleActualy:TActulity;
                    InfrustumActualy:TActulity;
                    DRAWCOUNT:TActulity;
@@ -213,7 +213,7 @@ TDrawContext=record
              end;
 
 PGDBBaseCamera=^GDBBaseCamera;
-GDBBaseCamera=object(GDBaseObject)
+GDBBaseCamera=packed object(GDBaseObject)
                 modelMatrix:DMatrix4D;
                 fovy:GDBDouble;
                 totalobj:GDBInteger;
@@ -233,7 +233,7 @@ GDBBaseCamera=object(GDBaseObject)
                 procedure NextPosition;virtual; abstract;
           end;
 PRGB=^RGB;
-RGB=record
+RGB=packed record
           r:GDBByte;(*'Red'*)
           g:GDBByte;(*'Green'*)
           b:GDBByte;(*'Blue'*)
@@ -242,7 +242,7 @@ RGB=record
     end;
 GDBPalette=array[0..255] of RGB;
 PGDBNamedObject=^GDBNamedObject;
-GDBNamedObject=object(GDBaseObject)
+GDBNamedObject=packed object(GDBaseObject)
                      Name:GDBAnsiString;(*saved_to_shd*)(*'Name'*)
                      constructor initnul;
                      constructor init(n:GDBString);
@@ -251,12 +251,12 @@ GDBNamedObject=object(GDBaseObject)
                      function GetName:GDBString;
                      function GetFullName:GDBString;virtual;
                end;
-ODBDevicepassport=record
+ODBDevicepassport=packed record
                         category,name,id,nameall,tu,edizm:GDBString;
                         mass:GDBDouble;
                   end;
 PGLLWWidth=^GLLWWidth;
-GLLWWidth=record
+GLLWWidth=packed record
                 startw:GDBDouble;(*saved_to_shd*)
                 endw:GDBDouble;(*saved_to_shd*)
                 hw:GDBBoolean;(*saved_to_shd*)
@@ -264,27 +264,27 @@ GLLWWidth=record
           end;
 PGDBOpenArrayGLlwwidth_GDBWord=^GDBOpenArrayGLlwwidth_GDBWord;
 PGDBStrWithPoint=^GDBStrWithPoint;
-GDBStrWithPoint=record
+GDBStrWithPoint=packed record
                       str:GDBString;
                       x,y,z,w:GDBDouble;
                 end;
-GDBAttrib=record
+GDBAttrib=packed record
                 tag,prompt,value:GDBString;
           end;
-GDBArrayVertex2D=array[0..300] of GDBVertex2D;
+GDBArrayVertex2D=packed array[0..300] of GDBVertex2D;
 PGDBArrayVertex2D=^GDBArrayVertex2D;
-GDBArrayGDBDouble=array[0..300] of GDBDouble;
-GDBArrayAttrib=array[0..300] of GDBAttrib;
+GDBArrayGDBDouble=packed array[0..300] of GDBDouble;
+GDBArrayAttrib=packed array[0..300] of GDBAttrib;
 PGDBArrayGLlwwidth=^GDBArrayGLlwwidth;
-GDBArrayGLlwwidth=array[0..300] of GLLWWidth;
+GDBArrayGLlwwidth=packed array[0..300] of GLLWWidth;
 GDBOpenArrayGLlwwidth_GDBWord=record
     count: GDBWord;
     widtharray: GDBArrayGLlwwidth;
   end;
 PGDBArrayVertex=^GDBArrayVertex;
-GDBArrayVertex=array[0..0] of GDBvertex;
+GDBArrayVertex=packed array[0..0] of GDBvertex;
   pcontrolpointdesc=^controlpointdesc;
-  controlpointdesc=record
+  controlpointdesc=packed record
                          pointtype:GDBInteger;
                          pobject:GDBPointer;
                          worldcoord:GDBvertex;
@@ -292,21 +292,21 @@ GDBArrayVertex=array[0..0] of GDBvertex;
                          dispcoord:GDBvertex2DI;
                          selected:GDBBoolean;
                    end;
-  TRTModifyData=record
+  TRTModifyData=packed record
                      point:controlpointdesc;
                      dist,wc:gdbvertex;
                end;
-  tcontrolpointdist=record
+  tcontrolpointdist=packed record
     pcontrolpoint:pcontrolpointdesc;
     disttomouse:GDBInteger;
   end;
-  TmyFileVersionInfo=record
+  TmyFileVersionInfo=packed record
                          major,minor,release,build,revision:GDBInteger;
                          versionstring:GDBstring;
                      end;
   TArrayIndex=GDBInteger;
 
-  TPolyData=record
+  TPolyData=packed record
                   nearestvertex:gdbinteger;
                   nearestline:gdbinteger;
                   dir:gdbinteger;
@@ -314,7 +314,7 @@ GDBArrayVertex=array[0..0] of GDBvertex;
             end;
   TLoadOpt=(TLOLoad,TLOMerge);
   PTLayerControl=^TLayerControl;
-  TLayerControl=record
+  TLayerControl=packed record
                       Enabled:GDBBoolean;(*'Enabled'*)
                       LayerName:GDBString;(*'Layer name'*)
                 end;
@@ -325,7 +325,7 @@ GDBArrayVertex=array[0..0] of GDBvertex;
   TBlockType=(BT_Connector,BT_Unknown);
   TBlockBorder=(BB_Owner,BB_Self,BB_Empty);
   TBlockGroup=(BG_El_Device,BG_Unknown);
-  TBlockDesc=record
+  TBlockDesc=packed record
                    BType:TBlockType;(*'Block type'*)
                    BBorder:TBlockBorder;(*'Border'*)
                    BGroup:TBlockGroup;(*'Block group'*)
@@ -333,7 +333,7 @@ GDBArrayVertex=array[0..0] of GDBvertex;
 FreeElProc=procedure (p:GDBPointer);
 TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
 PGDBsymdolinfo=^GDBsymdolinfo;
-GDBsymdolinfo=record
+GDBsymdolinfo=packed record
     addr: GDBInteger;
     size: GDBWord;
     NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: GDBDouble;

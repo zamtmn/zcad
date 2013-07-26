@@ -24,26 +24,26 @@ uses gdbasetypes,
      gdbase;
 type
 {EXPORT+}
-  tmemdeb=record
+  tmemdeb=packed record
                 GetMemCount,FreeMemCount:PGDBInteger;
                 TotalAllocMb,CurrentAllocMB:PGDBInteger;
           end;
-  trenderdeb=record
+  trenderdeb=packed record
                    primcount,pointcount,bathcount:GDBInteger;
                    middlepoint:GDBVertex;
              end;
-  tlanguadedeb=record
+  tlanguadedeb=packed record
                    UpdatePO,NotEnlishWord,DebugWord:GDBInteger;
              end;
 
-  tdebug=record
+  tdebug=packed record
                memdeb:tmemdeb;
                renderdeb:trenderdeb;
                languadedeb:tlanguadedeb;
                memi2:GDBInteger;(*'MemMan::I2'*)
                int1:GDBInteger;
         end;
-  tpath=record
+  tpath=packed record
              Device_Library:PGDBString;(*'Device base'*)
              Support_Path:PGDBString;(*'Support files'*)
              Fonts_Path:PGDBString;(*'Fonts'*)
@@ -68,13 +68,13 @@ type
                 TVSOff(*'Off'*),
                 TVSDefault(*'Default'*)
              );
-  TImageDegradation=record
+  TImageDegradation=packed record
                           RD_ID_Enabled:PGDBBoolean;(*'Enabled'*)
                           RD_ID_CurrentDegradationFactor:GDBDouble;(*'Current degradation factor'*)(*oi_readonly*)
                           RD_ID_MaxDegradationFactor:PGDBDouble;(*'Max degradation factor'*)
                           RD_ID_PrefferedRenderTime:PGDBInteger;(*'Preffered rendertime'*)
                       end;
-  trd=record
+  trd=packed record
             RD_Renderer:PGDBString;(*'Device'*)(*oi_readonly*)
             RD_Version:PGDBString;(*'Version'*)(*oi_readonly*)
             RD_Vendor:PGDBString;(*'Vendor'*)(*oi_readonly*)
@@ -94,13 +94,13 @@ type
             RD_ImageDegradation:TImageDegradation;(*'Image degradation'*)
             RD_PanObjectDegradation:PGDBBoolean;(*'Degradation while pan'*)
       end;
-  tsave=record
+  tsave=packed record
               SAVE_Auto_On:PGDBBoolean;(*'Autosave'*)
               SAVE_Auto_Current_Interval:pGDBInteger;(*'Time to autosave'*)(*oi_readonly*)
               SAVE_Auto_Interval:PGDBInteger;(*'Time between autosaves'*)
               SAVE_Auto_FileName:PGDBString;(*'Autosave file name'*)
         end;
-  tcompileinfo=record
+  tcompileinfo=packed record
                      SYS_Compiler:GDBString;(*'Compiler'*)(*oi_readonly*)
                      SYS_CompilerVer:GDBString;(*'Compiler version'*)(*oi_readonly*)
                      SYS_CompilerTargetCPU:GDBString;(*'Target CPU'*)(*oi_readonly*)
@@ -110,7 +110,7 @@ type
                      SYS_LCLVersion:GDBString;(*'LCL version'*)(*oi_readonly*)
                end;
 
-  tsys=record
+  tsys=packed record
              SYS_Version:PGDBString;(*'Program version'*)(*oi_readonly*)
              SSY_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
              SYS_RunTime:PGDBInteger;(*'Uptime'*)(*oi_readonly*)
@@ -118,7 +118,7 @@ type
              SYS_IsHistoryLineCreated:PGDBBoolean;(*'IsHistoryLineCreated'*)(*oi_readonly*)
              SYS_AlternateFont:PGDBString;(*'Alternate font file'*)
        end;
-  tdwg=record
+  tdwg=packed record
              DWG_DrawMode:PGDBInteger;(*'Draw mode?'*)
              DWG_OSMode:PGDBInteger;(*'Snap mode'*)
              DWG_PolarMode:PGDBInteger;(*'Polar tracking mode'*)
@@ -137,31 +137,31 @@ type
              DWG_SnapGrid:PGDBBoolean;(*'Snap to grid'*)
              DWG_SelectedObjToInsp:PGDBBoolean;(*'Selected object to inspector'*)
        end;
-  TLayerControls=record
+  TLayerControls=packed record
                        DSGN_LC_Net:PTLayerControl;(*'Nets'*)
                        DSGN_LC_Cable:PTLayerControl;(*'Cables'*)
                        DSGN_LC_Leader:PTLayerControl;(*'Leaders'*)
                  end;
 
-  tdesigning=record
+  tdesigning=packed record
              DSGN_LayerControls:TLayerControls;(*'Control layers'*)
              DSGN_TraceAutoInc:PGDBBoolean;(*'Increment trace names'*)
              DSGN_LeaderDefaultWidth:PGDBDouble;(*'Default leader width'*)
              DSGN_HelpScale:PGDBDouble;(*'Scale of auxiliary elements'*)
        end;
-  tview=record
+  tview=packed record
                VIEW_CommandLineVisible,
                VIEW_HistoryLineVisible,
                VIEW_ObjInspVisible:PGDBBoolean;
          end;
-  tmisc=record
+  tmisc=packed record
               PMenuProjType,PMenuCommandLine,PMenuHistoryLine,PMenuDebugObjInsp:pGDBPointer;
               ShowHiddenFieldInObjInsp:PGDBBoolean;(*'Show hidden fields'*)
         end;
-  tinterface=record
+  tinterface=packed record
               INTF_ShowScrollBars:PGDBBoolean;(*'Show scroll bars'*)
              end;
-  tdisp=record
+  tdisp=packed record
              DISP_ZoomFactor:PGDBDouble;(*'Mouse wheel scale factor'*)
              DISP_OSSize:PGDBDouble;(*'Snap aperture size'*)
              DISP_CursorSize:PGDBInteger;(*'Cursor size'*)
@@ -170,7 +170,7 @@ type
              DISP_ColorAxis:PGDBBoolean;(*'Colored cursor'*)
         end;
   pgdbsysvariable=^gdbsysvariable;
-  gdbsysvariable=record
+  gdbsysvariable=packed record
     PATH:tpath;(*'Paths'*)
     RD:trd;(*'Render'*)
     DISP:tdisp;

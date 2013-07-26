@@ -8,7 +8,7 @@ type
 {REGISTEROBJECTTYPE CableDeviceBaseObject}
 {EXPORT+}
 PDeviceDbBaseObject=^DeviceDbBaseObject;
-DeviceDbBaseObject=object(DbBaseObject)
+DeviceDbBaseObject=packed object(DbBaseObject)
                        UID:GDBString;(*'**Уникальный идентификатор'*)(*oi_readonly*)
 
                        NameShortTemplate:GDBString;(*'**Формат короткого названия'*)(*oi_readonly*)
@@ -21,12 +21,12 @@ DeviceDbBaseObject=object(DbBaseObject)
                        procedure Format;virtual;
                        procedure SetOtherFields(PField,PTypeDescriptor:GDBPointer);virtual;
                  end;
-ElDeviceBaseObject=object(DeviceDbBaseObject)
+ElDeviceBaseObject=packed object(DeviceDbBaseObject)
                                    Pins:GDBString;(*'**Клеммы'*)
                                    constructor initnul;
                                    procedure Format;virtual;
                              end;
-CableDeviceBaseObject=object(DeviceDbBaseObject)
+CableDeviceBaseObject=packed object(DeviceDbBaseObject)
                                    CoreCrossSection:GDBDouble;(*'**Сечение жилы'*)
                                    NumberOfCores:GDBDouble;(*'**Количество жил'*)
                                    OuterDiameter:GDBDouble;(*'**Наружный диаметр'*)

@@ -6,7 +6,7 @@ type
                          _02_00_75(*'2х0.75'*),
                          _03_00_50(*'3х0.5'*),
                          _03_00_75(*'3х0.75'*));
-    TKAMKABEL_SVVP=object(CableDeviceBaseObject)
+    TKAMKABEL_SVVP=packed object(CableDeviceBaseObject)
                         Wire_Count_Section_DESC:TKAMKABEL_SVVP_WCS;
            end;
 var

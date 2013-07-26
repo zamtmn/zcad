@@ -24,7 +24,7 @@ uses gdbasetypes,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
 type
 {Export+}
 PGDBPolyPoint3DArray=^GDBPolyPoint3DArray;
-GDBPolyPoint3DArray=object(GDBOpenArrayOfData)
+GDBPolyPoint3DArray=packed object(GDBOpenArrayOfData)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       procedure DrawGeometry;virtual;
                       procedure DrawNiceGeometry;virtual;

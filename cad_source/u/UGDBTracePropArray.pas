@@ -23,7 +23,7 @@ uses UGDBOpenArrayOfData,sysutils,gdbasetypes,gdbase;
 {Export+}
 type
   ptraceprop=^traceprop;
-  traceprop=record
+  traceprop=packed record
     trace:gdbboolean;
     tmouse: GDBDouble;
     dmouse: GDBInteger;
@@ -31,7 +31,7 @@ type
     dispraycoord: GDBVertex;
     worldraycoord: GDBVertex;
   end;
-GDBtracepropArray=object(GDBOpenArrayOfData)
+GDBtracepropArray=packed object(GDBOpenArrayOfData)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
              end;
 {Export-}

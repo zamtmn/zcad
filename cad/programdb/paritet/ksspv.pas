@@ -4,7 +4,7 @@ uses system;
 type
      TPARITET_KVK_WCS=(_02_050(*'2х0.5'*),
                        _02_075(*'2х0.75'*));
-     TPARITET_KVK=object(CableDeviceBaseObject)
+     TPARITET_KVK=packed object(CableDeviceBaseObject)
                         Wire_Count_Section_DESC:TPARITET_KVK_WCS;
                   end;
 

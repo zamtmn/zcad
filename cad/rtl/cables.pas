@@ -11,7 +11,7 @@ type
                TCT_Sila(*'Силовой'*)
               );
   PTCableLength=^TCableLength;
-  TCableLength=record
+  TCableLength=packed record
                      RoundTo:GDBInteger;(*'Округлять до'*)
                      Cable_AddLength:GDBDouble;(*'Добавить к длине'*)
                      Cable_KZap:GDBDouble;(*'Коэффициент запаса'*)

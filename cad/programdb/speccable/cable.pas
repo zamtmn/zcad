@@ -46,25 +46,25 @@ type
                             _2_2_2_5(*'2х2х2.5'*));
 
 
-    TSPECCABLE_KPSVV_ng_LS=object(CableDeviceBaseObject)
+    TSPECCABLE_KPSVV_ng_LS=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPECCABLE_KPSVV_WCS;
            end;
-    TSPECCABLE_KPSVV=object(CableDeviceBaseObject)
+    TSPECCABLE_KPSVV=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPECCABLE_KPSVV_WCS;
            end;
-    TSPECCABLE_KPSE_ng_FRLS=object(CableDeviceBaseObject)
+    TSPECCABLE_KPSE_ng_FRLS=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPECCABLE_KPSE_ng_FRLS_WCS;
            end;
-    TSPECCABLE_KPSVEV=object(CableDeviceBaseObject)
+    TSPECCABLE_KPSVEV=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPECCABLE_KPSVEV_WCS;
            end;
-    TSPECCABLE_KPSVEV_ng_LS=object(CableDeviceBaseObject)
+    TSPECCABLE_KPSVEV_ng_LS=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPECCABLE_KPSVEV_WCS;
            end;
-    TSPECCABLE_KPSVEVKVMN=object(CableDeviceBaseObject)
+    TSPECCABLE_KPSVEVKVMN=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPECCABLE_KPSVV_WCS;
            end;
-    TSPECCABLE_KPSVEVBVM=object(CableDeviceBaseObject)
+    TSPECCABLE_KPSVEVBVM=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSPECCABLE_KPSVV_WCS;
            end;
 var

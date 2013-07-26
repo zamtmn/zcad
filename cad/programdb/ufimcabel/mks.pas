@@ -21,10 +21,10 @@ type
                         _10_75(*'10х0.75'*),
                         _14_75(*'14х0.75'*));
 
-    TUFIMCABLEMKS=object(CableDeviceBaseObject)
+    TUFIMCABLEMKS=packed object(CableDeviceBaseObject)
                         Wire_Count_Section_DESC:TUFIMCABLEMKS_WCS;
                   end; 
-    TUFIMCABLEMKES=object(CableDeviceBaseObject)
+    TUFIMCABLEMKES=packed object(CableDeviceBaseObject)
                         Wire_Count_Section_DESC:TUFIMCABLEMKS_WCS;
            end;
 var

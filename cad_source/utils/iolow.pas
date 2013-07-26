@@ -11,7 +11,7 @@ type
   popenarrayc = ^openarrayc;
   openarrayc = array[0..0] of ansichar;
 {EXPORT+}
-  filestream = object
+  filestream = packed object
     name:GDBString;
     bufer:{-}popenarrayc{/GDBPointer/};
     filesize,

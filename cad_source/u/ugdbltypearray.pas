@@ -32,43 +32,43 @@ type
 PTDashInfo=^TDashInfo;
 TDashInfo=(TDIDash,TDIText,TDIShape);
 TAngleDir=(TACAbs,TACRel,TACUpRight);
-shxprop=record
+shxprop=packed record
                 Height,Angle,X,Y:GDBDouble;
                 AD:TAngleDir;
                 PStyle:PGDBTextStyle;
         end;
 
-BasicSHXDashProp=object(GDBaseObject)
+BasicSHXDashProp=packed object(GDBaseObject)
                 param:shxprop;
                 constructor initnul;
           end;
 PTextProp=^TextProp;
-TextProp=object(BasicSHXDashProp)
+TextProp=packed object(BasicSHXDashProp)
                 Text,Style:GDBString;
                 //PFont:PGDBfont;
                 constructor initnul;
                 destructor done;virtual;
           end;
 PShapeProp=^ShapeProp;
-ShapeProp=object(BasicSHXDashProp)
+ShapeProp=packed object(BasicSHXDashProp)
                 SymbolName,FontName:GDBString;
                 Psymbol:PGDBsymdolinfo;
                 constructor initnul;
                 destructor done;virtual;
           end;
-GDBDashInfoArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=TDashInfo*)
+GDBDashInfoArray=packed object(GDBOpenArrayOfData)(*OpenArrayOfData=TDashInfo*)
                end;
-GDBDoubleArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBDouble*)
+GDBDoubleArray=packed object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBDouble*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                end;
-GDBShapePropArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=ShapeProp*)
+GDBShapePropArray=packed object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=ShapeProp*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                end;
-GDBTextPropArray=object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=TextProp*)
+GDBTextPropArray=packed object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=TextProp*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                end;
 PGDBLtypeProp=^GDBLtypeProp;
-GDBLtypeProp=object(GDBNamedObject)
+GDBLtypeProp=packed object(GDBNamedObject)
                len:GDBDouble;(*'Length'*)
                h:GDBDouble;(*'Height'*)
                dasharray:GDBDashInfoArray;(*'DashInfo array'*)
@@ -81,9 +81,9 @@ GDBLtypeProp=object(GDBNamedObject)
                procedure Format;virtual;
              end;
 PGDBLtypePropArray=^GDBLtypePropArray;
-GDBLtypePropArray=array [0..0] of GDBLtypeProp;
+GDBLtypePropArray=packed array [0..0] of GDBLtypeProp;
 PGDBLtypeArray=^GDBLtypeArray;
-GDBLtypeArray=object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLtypeProp*)
+GDBLtypeArray=packed object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLtypeProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     procedure LoadFromFile(fname:GDBString;lm:TLoadOpt);

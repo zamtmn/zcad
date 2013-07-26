@@ -28,7 +28,7 @@ MZW_CONTROL=64;
 type
 {Export+}
   pmousedesc = ^mousedesc;
-  mousedesc = record
+  mousedesc = packed record
     mode: GDBByte;
     mouse, mouseglue: GDBvertex2DI;
     glmouse:GDBvertex2DI;
@@ -43,7 +43,7 @@ type
   end;
 
   PSelectiondesc = ^Selectiondesc;
-  Selectiondesc = record
+  Selectiondesc = packed record
     OnMouseObject,LastSelectedObject:GDBPointer;
     Selectedobjcount:GDBInteger;
     MouseFrameON: GDBBoolean;
@@ -53,23 +53,23 @@ type
     BigMouseFrustum:ClipArray;
   end;
 type
-  tcpdist = record
+  tcpdist = packed record
     cpnum: GDBInteger;
     cpdist: GDBInteger;
   end;
-  traceprop2 = record
+  traceprop2 = packed record
     tmouse: GDBDouble;
     dmouse: GDBInteger;
     dir: GDBVertex;
     dispraycoord: GDBVertex;
     worldraycoord: GDBVertex;
   end;
-  arrtraceprop = array[0..0] of traceprop;
-  GDBArraytraceprop_GDBWord = record
+  arrtraceprop = packed array[0..0] of traceprop;
+  GDBArraytraceprop_GDBWord = packed record
     count: GDBWord;
     arr: arrtraceprop;
   end;
-  objcontrolpoint = record
+  objcontrolpoint = packed record
     objnum: GDBInteger;
     newobjnum: GDBInteger;
     ostype: real;
@@ -77,16 +77,16 @@ type
     dispcoord: GDBvertex2DI;
     selected: GDBBoolean;
   end;
-  arrayobjcontrolpoint = array[0..0] of objcontrolpoint;
+  arrayobjcontrolpoint = packed array[0..0] of objcontrolpoint;
   popenarrayobjcontrolpoint_GDBWordwm = ^openarrayobjcontrolpoint_GDBWordwm;
-  openarrayobjcontrolpoint_GDBWordwm = record
+  openarrayobjcontrolpoint_GDBWordwm = packed record
     count, max: GDBWord;
     arraycp: arrayobjcontrolpoint;
   end;
 
   PGDBOpenArraytraceprop_GDBWord = ^GDBArraytraceprop_GDBWord;
   pos_record=^os_record;
-  os_record = record
+  os_record = packed record
     worldcoord: GDBVertex;
     dispcoord: GDBVertex;
     dmousecoord: GDBVertex;
@@ -97,11 +97,11 @@ type
     radius: GDBFloat;
     PGDBObject:GDBPointer;
   end;
-  totrackarray = record
-    otrackarray: array[0..3] of os_record;
+  totrackarray = packed record
+    otrackarray: packed array[0..3] of os_record;
     total, current: GDBInteger;
   end;
-  CSIcon=record
+  CSIcon=packed record
                CSIconCoord: GDBvertex;
                CSIconX,CSIconY,CSIconZ: GDBvertex;
                CSX, CSY, CSZ: GDBvertex2DI;
@@ -109,7 +109,7 @@ type
          end;
 
   POGLWndtype = ^OGLWndtype;
-  OGLWndtype = record
+  OGLWndtype = packed record
     polarlinetrace: GDBInteger;
     pointnum, axisnum: GDBInteger;
     CSIcon:CSIcon;

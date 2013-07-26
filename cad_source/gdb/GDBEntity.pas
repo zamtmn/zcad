@@ -28,7 +28,7 @@ type
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
 {Export+}
 PTExtAttrib=^TExtAttrib;
-TExtAttrib=record
+TExtAttrib=packed record
                  FreeObject:GDBBoolean;
                  OwnerHandle:GDBQWord;
                  Handle:GDBQWord;
@@ -36,7 +36,7 @@ TExtAttrib=record
                  ExtAttrib2:GDBBoolean;
            end;
 PGDBObjEntity=^GDBObjEntity;
-GDBObjEntity=object(GDBObjSubordinated)
+GDBObjEntity=packed object(GDBObjSubordinated)
                     vp:GDBObjVisualProp;(*'General'*)(*saved_to_shd*)
                     Selected:GDBBoolean;(*'Selected'*)(*hidden_in_objinsp*)
                     Visible:TActulity;(*'Visible'*)(*oi_readonly*)(*hidden_in_objinsp*)

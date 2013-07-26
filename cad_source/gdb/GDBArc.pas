@@ -24,7 +24,7 @@ GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,G
 type
 {Export+}
 PGDBObjArc=^GDBObjARC;
-GDBObjArc=object(GDBObjPlain)
+GDBObjArc=packed object(GDBObjPlain)
                  R:GDBDouble;(*saved_to_shd*)
                  StartAngle:GDBDouble;(*saved_to_shd*)
                  EndAngle:GDBDouble;(*saved_to_shd*)

@@ -23,7 +23,7 @@ uses gdbasetypes,gdbase,UGDBOpenArrayOfData{,UGDBOpenArrayOfByte},sysutils;
 type
 {EXPORT+}
 PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
-XYZWGDBGDBStringArray=object(GDBOpenArrayOfData)
+XYZWGDBGDBStringArray=packed object(GDBOpenArrayOfData)
                              constructor init(m:GDBInteger);
                              procedure freeelement(p:GDBPointer);virtual;
                              function add(p:GDBPointer):TArrayIndex;virtual;

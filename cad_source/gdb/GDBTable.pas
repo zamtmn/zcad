@@ -31,12 +31,12 @@ type
 
 {EXPORT+}
 PTGDBTableItemFormat=^TGDBTableItemFormat;
-TGDBTableItemFormat=record
+TGDBTableItemFormat=packed record
                  Width,TextWidth:GDBDouble;
                  CF:TTableCellJustify;
                 end;
 PGDBObjTable=^GDBObjTable;
-GDBObjTable=object(GDBObjComplex)
+GDBObjTable=packed object(GDBObjComplex)
             PTableStyle:PTGDBTableStyle;
             tbl:GDBTableArray;
             w,h:GDBDouble;

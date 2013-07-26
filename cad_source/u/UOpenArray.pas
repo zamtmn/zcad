@@ -24,7 +24,7 @@ type
 GDBITERATEPROC = procedure(const pdata:GDBPointer)of object;
 {Export+}
 POpenArray=^OpenArray;
-OpenArray=object(GDBaseObject)
+OpenArray=packed object(GDBaseObject)
                 Deleted:TArrayIndex;(*hidden_in_objinsp*)
                 Count:TArrayIndex;(*saved_to_shd*)(*hidden_in_objinsp*)
                 Max:TArrayIndex;(*hidden_in_objinsp*)

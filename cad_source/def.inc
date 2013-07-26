@@ -17,7 +17,7 @@
 {$ENDIF}
 
 {$IFDEF FPC}
-            {$PACKRECORDS 1}
+            {PACKRECORDS 1}
             //{$MODE DELPHI}
             {ASSERTIONS-}
             {SMARTLINK+}

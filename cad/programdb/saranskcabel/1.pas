@@ -42,7 +42,7 @@ type
                          _0150_2_064(*'150х2х0.64'*),
                          _0200_2_064(*'200х2х0.64'*),
                          _0300_2_064(*'300х2х0.64'*));
-    TSARCABLETPPep=object(CableDeviceBaseObject)
+    TSARCABLETPPep=packed object(CableDeviceBaseObject)
                         Wire_Count_Section_DESC:TSARCABLETPPep_WCS;
            end;
 var

@@ -23,14 +23,14 @@ uses gdbasetypes,gdbase,UGDBOpenArrayOfData{,UGDBOpenArrayOfByte},sysutils;
 type
 {EXPORT+}
 PGDBBOMItem=^GDBBOMItem;
-GDBBOMItem=record
+GDBBOMItem=packed record
                  Material:GDBString;
                  Amount:GDBDouble;
                  Names:GDBString;
                  processed:GDBBoolean;
                 end;
 PBbillOfMaterial=^GDBBbillOfMaterial;
-GDBBbillOfMaterial=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBNumItem*)
+GDBBbillOfMaterial=packed object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBNumItem*)
                        constructor init(m:GDBInteger);
                        procedure freeelement(p:GDBPointer);virtual;
                        //function getnamenumber(_Name:GDBString):GDBstring;

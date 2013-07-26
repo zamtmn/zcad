@@ -55,13 +55,13 @@ TBezierSolver2D=class
                 end;
 {EXPORT+}
 PGDBUNISymbolInfo=^GDBUNISymbolInfo;
-GDBUNISymbolInfo=record
+GDBUNISymbolInfo=packed record
     symbol:GDBInteger;
     symbolinfo:GDBsymdolinfo;
   end;
-TSymbolInfoArray=array [0..255] of GDBsymdolinfo;
+TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
 PBASEFont=^BASEFont;
-BASEFont=object(GDBaseObject)
+BASEFont=packed object(GDBaseObject)
               unicode:GDBBoolean;
               symbolinfo:TSymbolInfoArray;
               unisymbolinfo:GDBOpenArrayOfData;
@@ -75,7 +75,7 @@ BASEFont=object(GDBaseObject)
               function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
         end;
 PSHXFont=^SHXFont;
-SHXFont=object(BASEFont)
+SHXFont=packed object(BASEFont)
               compiledsize:GDBInteger;
               h,u:GDBByte;
               SHXdata:GDBOpenArrayOfByte;
@@ -84,7 +84,7 @@ SHXFont=object(BASEFont)
               function GetSymbolDataAddr(offset:integer):pointer;virtual;
         end;
 PTTFFont=^TTFFont;
-TTFFont=object(SHXFont)
+TTFFont=packed object(SHXFont)
               ftFont: TFreeTypeFont;
               MapChar:TMapChar;
               MapCharIterator:TMapChar.TIterator;
@@ -877,4 +877,4 @@ initialization
   BS:=TBezierSolver2D.create;
 finalization
   bs.Destroy;
-end.
+end.

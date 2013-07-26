@@ -45,7 +45,7 @@ type
                         _05_10_00(*'5х10'*),
                         _05_16_00(*'5х16'*),
                         _05_25_00(*'5х25'*));
-    tSEVCABLEVVG=object(CableDeviceBaseObject)
+    tSEVCABLEVVG=packed object(CableDeviceBaseObject)
                         Wire_Count_Section_DESC:TSEVCABLE_VVG_WCS;
            end;
 var

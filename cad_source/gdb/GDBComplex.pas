@@ -27,7 +27,7 @@ GDBase,GDBWithLocalCS,gdbobjectsconstdef,{oglwindowdef,}geometry{,dxflow},memman
 type
 {EXPORT+}
 PGDBObjComplex=^GDBObjComplex;
-GDBObjComplex=object(GDBObjWithLocalCS)
+GDBObjComplex=packed object(GDBObjWithLocalCS)
                     ConstObjArray:{GDBObjEntityOpenArray;}GDBObjEntityTreeArray;(*oi_readonly*)(*hidden_in_objinsp*)
                     procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                     procedure DrawOnlyGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;

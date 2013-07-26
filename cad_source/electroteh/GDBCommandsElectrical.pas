@@ -38,26 +38,26 @@ type
                TFT_variable(*'??указанной переменной'*)
              );
 PTBasicFinter=^TBasicFinter;
-TBasicFinter=record
+TBasicFinter=packed record
                    IncludeCable:GDBBoolean;(*'Include filter'*)
                    IncludeCableMask:GDBString;(*'Include mask'*)
                    ExcludeCable:GDBBoolean;(*'Exclude filter'*)
                    ExcludeCableMask:GDBString;(*'Exclude mask'*)
              end;
-  TFindDeviceParam=record
+  TFindDeviceParam=packed record
                         FindType:TFindType;(*'Find in'*)
                         FindMethod:GDBBoolean;(*'Use symbols *, ?'*)
                         FindString:GDBString;(*'Text'*)
                     end;
-     GDBLine=record
+     GDBLine=packed record
                   lBegin,lEnd:GDBvertex;
               end;
-  TELCableComParam=record
+  TELCableComParam=packed record
                         Traces:TEnumData;(*'Trace'*)
                         PCable:PGDBObjCable;(*'Cabel'*)
                         PTrace:PGDBObjNet;(*'Trace (pointer)'*)
                    end;
-  TELLeaderComParam=record
+  TELLeaderComParam=packed record
                         Scale:GDBDouble;(*'Scale'*)
                         Size:GDBInteger;(*'Size'*)
                         twidth:GDBDouble;(*'Width'*)

@@ -23,13 +23,13 @@ uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase;
 type
 {Export+}
 PVectotSnap=^VectorSnap;
-VectorSnap=record
+VectorSnap=packed record
                  l_1_4,l_1_3,l_1_2,l_2_3,l_3_4:GDBvertex;
            end;
 PVectorSnapArray=^VectorSnapArray;
-VectorSnapArray=array [0..0] of VectorSnap;
+VectorSnapArray=packed array [0..0] of VectorSnap;
 PGDBVectorSnapArray=^GDBVectorSnapArray;
-GDBVectorSnapArray=object(GDBOpenArrayOfData)
+GDBVectorSnapArray=packed object(GDBOpenArrayOfData)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
              end;
 {Export-}

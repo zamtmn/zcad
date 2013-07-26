@@ -5,7 +5,7 @@ type
      TOWEN_DTS3105_L=(_70(*'70'*),
                      _120(*'120'*),
                      _220(*'220'*));
-     TOWEN_DTS3105=object(ElDeviceBaseObject);
+     TOWEN_DTS3105=packed object(ElDeviceBaseObject);
                    ImmersionLength:TOWEN_DTS3105_L;
                    end;
 var

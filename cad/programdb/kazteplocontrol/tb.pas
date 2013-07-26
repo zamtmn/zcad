@@ -21,7 +21,7 @@ type
                               _200(*'200'*),
                               _250(*'250'*),
                               _315(*'315'*));
-     TKAZTEPLOCONTROL_TB2R=object(ElDeviceBaseObject);
+     TKAZTEPLOCONTROL_TB2R=packed object(ElDeviceBaseObject);
                           Limit:TKAZTEPLOCONTROL_TBLIMIT;
                           ImmersionLength:TKAZTEPLOCONTROL_TB2R_L;
                     end;

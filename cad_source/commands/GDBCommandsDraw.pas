@@ -48,7 +48,7 @@ type
                        TEP_leave(*'Leave'*)
                        );
 
-         TBlockInsert=record
+         TBlockInsert=packed record
                             Blocks:TEnumData;(*'Block'*)
                             Scale:GDBvertex;(*'Scale'*)
                             Rotation:GDBDouble;(*'Rotation'*)
@@ -62,11 +62,11 @@ type
                        TPEM_Nearest(*'Paste in nearest segment'*),
                        TPEM_Select(*'Choose a segment'*)
                        );
-         TMirrorParam=record
+         TMirrorParam=packed record
                             SourceEnts:TEntityProcess;(*'Source entities'*)
                       end;
 
-         TPolyEdit=record
+         TPolyEdit=packed record
                             Action:TSubPolyEdit;(*'Action'*)
                             Mode:TPolyEditMode;(*'Mode'*)
                             vdist:gdbdouble;(*hidden_in_objinsp*)
@@ -83,7 +83,7 @@ type
                  TIM_Text(*'Text'*),
                  TIM_MText(*'MText'*)
                 );
-         TTextInsertParams=record
+         TTextInsertParams=packed record
                             mode:TIMode;(*'Entity'*)
                             Style:TEnumData;(*'Style'*)
                             justify:TTextJustify;(*'Justify'*)
@@ -100,7 +100,7 @@ type
                  BRM_Device(*'Device'*),
                  BRM_BD(*'Block and Device'*)
                 );
-         TBlockReplaceParams=record
+         TBlockReplaceParams=packed record
                             Process:BRMode;(*'Process'*)
                             CurrentFindBlock:GDBString;(*'**CurrentFind'*)(*oi_readonly*)(*hidden_in_objinsp*)
                             Find:TEnumData;(*'Find'*)
@@ -108,7 +108,7 @@ type
                             Replace:TEnumData;(*'Replace'*)
                             SaveVariables:GDBBoolean;(*'Save Variables'*)
                       end;
-         TSelGeneralParams=record
+         TSelGeneralParams=packed record
                                  SameLayer:GDBBoolean;(*'Same layer'*)
                                  SameLineWeight:GDBBoolean;(*'Same line weight'*)
                                  SameEntType:GDBBoolean;(*'Same entity type'*)
@@ -117,31 +117,31 @@ type
                  TD_Diff(*'Diff'*),
                  TD_NotDiff(*'Not Diff'*)
                 );
-         TSelBlockParams=record
+         TSelBlockParams=packed record
                                  SameName:GDBBoolean;(*'Same name'*)
                                  DiffBlockDevice:TDiff;(*'Block and Device'*)
                            end;
-         TSelTextParams=record
+         TSelTextParams=packed record
                                  SameContent:GDBBoolean;(*'Same content'*)
                                  SameTemplate:GDBBoolean;(*'Same template'*)
                                  DiffTextMText:TDiff;(*'Text and Mtext'*)
                            end;
-         TSelSimParams=record
+         TSelSimParams=packed record
                              General:TSelGeneralParams;(*'General'*)
                              Blocks:TSelBlockParams;(*'Blocks'*)
                              Texts:TSelTextParams;(*'Texts'*)
                       end;
-         TBlockScaleParams=record
+         TBlockScaleParams=packed record
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
                            end;
-         TSetVarStyle=record
+         TSetVarStyle=packed record
                             ent:TMSType;(*'Entity'*)
                             CurrentFindBlock:GDBString;(*'**CurrentFind'*)
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
                            end;
-         TPrintParams=record
+         TPrintParams=packed record
                             FitToPage:GDBBoolean;(*'Fit to page'*)
                             Center:GDBBoolean;(*'Center'*)
                             Scale:GDBDouble;(*'Scale'*)
@@ -151,7 +151,7 @@ type
                  TST_XY(*'X-Y'*),
                  TST_UNSORTED(*'Unsorted'*)
                 );
-         TNumberingParams=record
+         TNumberingParams=packed record
                             SortMode:TST;(*''*)
                             InverseX:GDBBoolean;(*'Inverse X axis dir'*)
                             InverseY:GDBBoolean;(*'Inverse Y axis dir'*)
@@ -162,15 +162,15 @@ type
                             BaseName:GDBString;(*'Base name sorting devices'*)
                             NumberVar:GDBString;(*'Number variable'*)
                       end;
-  TBEditParam=record
+  TBEditParam=packed record
                     CurrentEditBlock:GDBString;(*'Current block'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Select block'*)
               end;
   PTCopyObjectDesc=^TCopyObjectDesc;
-  TCopyObjectDesc=record
+  TCopyObjectDesc=packed record
                  obj,clone:PGDBObjEntity;
                  end;
-  OnDrawingEd_com = object(CommandRTEdObject)
+  OnDrawingEd_com =packed  object(CommandRTEdObject)
     t3dp: gdbvertex;
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
     procedure CommandStart(Operands:pansichar); virtual;
@@ -178,7 +178,7 @@ type
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
-  move_com = object(CommandRTEdObject)
+  move_com = packed object(CommandRTEdObject)
     t3dp: gdbvertex;
     pcoa:PGDBOpenArrayOfData;
     //constructor init;
@@ -190,32 +190,32 @@ type
     function Move(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
     procedure showprompt(mklick:integer);virtual;
   end;
-  copy_com = object(move_com)
+  copy_com = packed object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     function Copy(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
   end;
-  mirror_com = object(copy_com)
+  mirror_com = packed object(copy_com)
     function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
 
-  rotate_com = object(move_com)
+  rotate_com = packed object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     procedure CommandContinue; virtual;
     procedure rot(a:GDBDouble; button: GDBByte);
     procedure showprompt(mklick:integer);virtual;
   end;
-  scale_com = object(move_com)
+  scale_com = packed object(move_com)
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     procedure scale(a:GDBDouble; button: GDBByte);
     procedure showprompt(mklick:integer);virtual;
     procedure CommandContinue; virtual;
   end;
-  copybase_com = object(CommandRTEdObject)
+  copybase_com = packed object(CommandRTEdObject)
     procedure CommandStart(Operands:pansichar); virtual;
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
-  FloatInsert_com = object(CommandRTEdObject)
+  FloatInsert_com = packed object(CommandRTEdObject)
     procedure CommandStart(Operands:pansichar); virtual;
     procedure Build(Operands:pansichar); virtual;
     procedure Command(Operands:pansichar); virtual;abstract;
@@ -223,7 +223,7 @@ type
     function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
   TFIWPMode=(FIWPCustomize,FIWPRun);
-  FloatInsertWithParams_com = object(FloatInsert_com)
+  FloatInsertWithParams_com = packed object(FloatInsert_com)
     CMode:TFIWPMode;
     procedure CommandStart(Operands:pansichar); virtual;
     procedure BuildDM(Operands:pansichar); virtual;
@@ -232,11 +232,11 @@ type
     //procedure Command(Operands:pansichar); virtual;abstract;
     //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
   end;
-  PasteClip_com = object(FloatInsert_com)
+  PasteClip_com = packed object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;
   end;
 
-  TextInsert_com=object(FloatInsert_com)
+  TextInsert_com=packed object(FloatInsert_com)
                        pt:PGDBObjText;
                        //procedure Build(Operands:pansichar); virtual;
                        procedure CommandStart(Operands:pansichar); virtual;
@@ -246,18 +246,18 @@ type
                        function DoEnd(pdata:GDBPointer):GDBBoolean;virtual;
   end;
 
-  BlockReplace_com=object(CommandRTEdObject)
+  BlockReplace_com=packed object(CommandRTEdObject)
                          procedure CommandStart(Operands:pansichar); virtual;
                          procedure BuildDM(Operands:pansichar); virtual;
                          procedure Format;virtual;
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;
                    end;
-  BlockScale_com=object(CommandRTEdObject)
+  BlockScale_com=packed object(CommandRTEdObject)
                          procedure CommandStart(Operands:pansichar); virtual;
                          procedure BuildDM(Operands:pansichar); virtual;
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;
                    end;
-  SelSim_com=object(CommandRTEdObject)
+  SelSim_com=packed object(CommandRTEdObject)
                          created:boolean;
                          bnames,textcontents,textremplates:GDBGDBStringArray;
                          layers,weights,objtypes:GDBOpenArrayOfGDBPointer;
@@ -268,23 +268,23 @@ type
                          procedure Run(pdata:GDBPlatformint); virtual;
                          procedure Sel(pdata:{pointer}GDBPlatformint); virtual;
                    end;
-  ATO_com=object(CommandRTEdObject)
+  ATO_com=packed object(CommandRTEdObject)
                          powner:PGDBObjDevice;
                          procedure CommandStart(Operands:pansichar); virtual;
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:GDBPlatformint); virtual;
           end;
-  CFO_com=object(ATO_com)
+  CFO_com=packed object(ATO_com)
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:GDBPlatformint); virtual;
           end;
-  Number_com=object(CommandRTEdObject)
+  Number_com=packed object(CommandRTEdObject)
                          procedure CommandStart(Operands:pansichar); virtual;
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:GDBPlatformint); virtual;
              end;
 
-  Print_com=object(CommandRTEdObject)
+  Print_com=packed object(CommandRTEdObject)
                          VS:GDBInteger;
                          p1,p2:GDBVertex;
                          procedure CommandContinue; virtual;
@@ -297,7 +297,7 @@ type
           end;
 
 
-  ITT_com = object(FloatInsert_com)
+  ITT_com = packed object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;
   end;
 {EXPORT-}

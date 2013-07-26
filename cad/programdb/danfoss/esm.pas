@@ -6,7 +6,7 @@ type
                      _250(*'250'*));
      TDANFOSS_ESMU_M=(ns(*'нержавеющая сталь'*),
                      cu(*'медь'*));
-     TDANFOSS_ESMU=object(ElDeviceBaseObject);
+     TDANFOSS_ESMU=packed object(ElDeviceBaseObject);
                    ImmersionLength:TDANFOSS_ESMU_L;
                    Material:TDANFOSS_ESMU_M;
                    end;

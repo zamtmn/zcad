@@ -25,7 +25,7 @@ type
              _O(*'О'*));
     tiznos=(_A(*'А'*),
             _B(*'Б'*));
-    trp_21=object(ElDeviceBaseObject)
+    trp_21=packed object(ElDeviceBaseObject)
                  volt:tvolt;(*'Напр. пит.'*)
                  kont:tkont;(*'Кол-во групп контактов'*)
                  klimat:tklimat;(*'Климат. исп.'*)

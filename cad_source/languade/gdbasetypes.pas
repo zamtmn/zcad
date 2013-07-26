@@ -65,7 +65,7 @@ PGDBShortint=^GDBShortint;
 PGDBPointer=^GDBPointer;
 {-}GDBPointer=pointer;{//}
 
-itrec=record
+itrec=packed record
             itp:{-}PGDBPointer{/GDBPointer/};
             itc:GDBInteger;
       end;
@@ -76,4 +76,4 @@ GDBPlatforumint=PtrUInt;
 implementation
 end.
 
-
+

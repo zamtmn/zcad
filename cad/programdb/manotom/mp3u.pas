@@ -20,7 +20,7 @@ type
                          _600(*'600'*),
                          _1000(*'1000'*),
                          _1600(*'1600'*));
-     TMANOTOM_MP3U=object(ElDeviceBaseObject);
+     TMANOTOM_MP3U=packed object(ElDeviceBaseObject);
                           Limit:TMANOTOM_MP3ULIMIT;
                     end;
 var

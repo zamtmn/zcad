@@ -66,7 +66,7 @@ type
            TMST_Devices(*'Devices'*),
            TMST_Cables(*'Cables'*)
           );
-  TMSEditor=object(GDBaseObject)
+  TMSEditor=packed object(GDBaseObject)
                 SelCount:GDBInteger;(*'Selected objects'*)(*oi_readonly*)
                 EntType:TMSType;(*'Process primitives'*)
                 OU:TObjectUnit;(*'Variables'*)

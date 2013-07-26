@@ -18,7 +18,7 @@ type
                         _05_01_00(*'5х1.0'*),
                         _05_01_50(*'5х1.5'*),
                         _05_02_50(*'5х2.5'*));
-    TKAMKABEL_PVS=object(CableDeviceBaseObject)
+    TKAMKABEL_PVS=packed object(CableDeviceBaseObject)
                         Wire_Count_Section_DESC:TKAMKABEL_PVS_WCS;
            end;
 var

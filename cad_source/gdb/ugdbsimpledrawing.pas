@@ -37,7 +37,7 @@ OGLWindow,UGDBOpenArrayOfPObjects{,UGDBVisibleOpenArray};
 type
 {EXPORT+}
 PTSimpleDrawing=^TSimpleDrawing;
-TSimpleDrawing=object(TAbstractDrawing)
+TSimpleDrawing=packed object(TAbstractDrawing)
                        pObjRoot:PGDBObjGenericSubEntry;
                        mainObjRoot:GDBObjRoot;(*saved_to_shd*)
                        LayerTable:GDBLayerArray;(*saved_to_shd*)

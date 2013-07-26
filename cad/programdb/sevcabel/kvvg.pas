@@ -40,7 +40,7 @@ type
                    _37_1_00(*'37х1'*),
                    _37_1_50(*'37х1.5'*),
                    _37_2_50(*'37х2.5'*));
-    tSEVCABLEkvvg=object(CableDeviceBaseObject)
+    tSEVCABLEkvvg=packed object(CableDeviceBaseObject)
                 Wire_Count_Section_DESC:TSEVCABLE_KVVG_WCS;
            end;
 var

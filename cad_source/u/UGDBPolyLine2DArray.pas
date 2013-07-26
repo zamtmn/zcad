@@ -24,7 +24,7 @@ uses zcadsysvars,gdbasetypes,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase
 type
 {Export+}
 PGDBPolyline2DArray=^GDBPolyline2DArray;
-GDBPolyline2DArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex2D*)
+GDBPolyline2DArray=packed object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex2D*)
                       closed:GDBBoolean;(*saved_to_shd*)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger;c:GDBBoolean);
                       constructor initnul;

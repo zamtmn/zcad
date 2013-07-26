@@ -5,13 +5,13 @@ type
      TAMK_KSSPV_WCS=(_01_02_052(*'1х2х0.52'*),
                      _02_02_052(*'2х2х0.52'*),
                      _04_02_052(*'4х2х0.52'*));
-    TAMK_KSSPV3=object(CableDeviceBaseObject)
+    TAMK_KSSPV3=packed object(CableDeviceBaseObject)
                         Wire_Count_Section_DESC:TAMK_KSSPV_WCS;
                 end;
-    TAMK_KSSPV4=object(CableDeviceBaseObject)
+    TAMK_KSSPV4=packed object(CableDeviceBaseObject)
                         Wire_Count_Section_DESC:TAMK_KSSPV_WCS;
                 end;
-    TAMK_KSSPV5=object(CableDeviceBaseObject)
+    TAMK_KSSPV5=packed object(CableDeviceBaseObject)
                         Wire_Count_Section_DESC:TAMK_KSSPV_WCS;
                 end;
 

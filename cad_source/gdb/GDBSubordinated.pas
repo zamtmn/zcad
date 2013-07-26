@@ -29,7 +29,7 @@ type
 {EXPORT+}
 PGDBObjSubordinated=^GDBObjSubordinated;
 PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
-GDBObjGenericWithSubordinated=object(GDBaseObject)
+GDBObjGenericWithSubordinated=packed object(GDBaseObject)
                                     OU:TObjectUnit;(*'Variables'*)
                                     function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
                                     function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
@@ -54,19 +54,19 @@ GDBObjGenericWithSubordinated=object(GDBaseObject)
 
 
 end;
-TEntityAdress=record
+TEntityAdress=packed record
                           Owner:PGDBObjGenericWithSubordinated;(*'Adress'*)
                           SelfIndex:TArrayIndex;(*'Position'*)
               end;
-TTreeAdress=record
+TTreeAdress=packed record
                           Owner:GDBPointer;(*'Adress'*)
                           SelfIndex:TArrayIndex;(*'Position'*)
               end;
-GDBObjBaseProp=record
+GDBObjBaseProp=packed record
                       ListPos:TEntityAdress;(*'List'*)
                       TreePos:TTreeAdress;(*'Tree'*)
                  end;
-GDBObjSubordinated=object(GDBObjGenericWithSubordinated)
+GDBObjSubordinated=packed object(GDBObjGenericWithSubordinated)
                          bp:GDBObjBaseProp;(*'Owner'*)(*oi_readonly*)(*hidden_in_objinsp*)
                          function GetOwner:PGDBObjSubordinated;virtual;abstract;
                          procedure createfield;virtual;

@@ -26,7 +26,7 @@ GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman{,OGLSpecF
 type
 {Export+}
 PGDBObjSpline=^GDBObjSpline;
-GDBObjSpline=object(GDBObjCurve)
+GDBObjSpline=packed object(GDBObjCurve)
                  ControlArrayInOCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  ControlArrayInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  Closed:GDBBoolean;(*saved_to_shd*)
@@ -308,4 +308,4 @@ begin
 end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
-end.
+end.

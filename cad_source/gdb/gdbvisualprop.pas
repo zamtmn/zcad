@@ -26,7 +26,7 @@ uses log,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbo
 type
 {Export+}
 PGDBObjVisualProp=^GDBObjVisualProp;
-GDBObjVisualProp=record
+GDBObjVisualProp=packed record
                       Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
                       LineWeight:GDBSmallint;(*'Line weight'*)(*saved_to_shd*)
                       LineType:{GDBString}PGDBLtypeProp;(*'Line type'*)(*saved_to_shd*)

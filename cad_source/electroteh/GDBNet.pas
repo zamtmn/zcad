@@ -15,7 +15,7 @@ const
 type
 {Export+}
 PGDBObjNet=^GDBObjNet;
-GDBObjNet=object(GDBObjConnected)
+GDBObjNet=packed object(GDBObjConnected)
                  graf:GDBGraf;
                  riserarray:GDBOpenArrayOfPObjects;
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);

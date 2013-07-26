@@ -22,7 +22,7 @@ interface
 uses {GDBEntity,}log,GDBase{,gdbasetypes};
 type
 {EXPORT+}
-ZGLObjSimpleEntity=object(GDBaseObject)
+ZGLObjSimpleEntity=packed object(GDBaseObject)
                   end;
 {EXPORT-}
 implementation

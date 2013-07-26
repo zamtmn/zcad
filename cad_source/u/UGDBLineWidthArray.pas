@@ -22,7 +22,7 @@ interface
 uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman;
 type
 {Export+}
-GDBLineWidthArray=object(GDBOpenArrayOfData)(*OpenArrayOfData=GLLWWidth*)
+GDBLineWidthArray=packed object(GDBOpenArrayOfData)(*OpenArrayOfData=GLLWWidth*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
              end;

@@ -24,7 +24,7 @@ uses ugdbdrawingdef, GDBCamera, GDBEntity,gdbase,gdbasetypes,geometry,GDBSubordi
 type
 {EXPORT+}
 PGDBObjWithMatrix=^GDBObjWithMatrix;
-GDBObjWithMatrix=object(GDBObjEntity)
+GDBObjWithMatrix=packed object(GDBObjEntity)
                        ObjMatrix:DMatrix4D;(*'OCS Matrix'*)
                        constructor initnul(owner:PGDBObjGenericWithSubordinated);
                        function GetMatrix:PDMatrix4D;virtual;

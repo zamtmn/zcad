@@ -54,7 +54,7 @@ type
                    TODPCT_by_Count(*'by number'*),
                    TODPCT_by_XY(*'by width/height'*)
                  );
-  TOPSPlaceSmokeDetectorOrtoParam=record
+  TOPSPlaceSmokeDetectorOrtoParam=packed record
                                         InsertType:TInsertType;(*'Insert'*)
                                         Scale:GDBDouble;(*'Plan scale'*)
                                         ScaleBlock:GDBDouble;(*'Blocks scale'*)
@@ -72,7 +72,7 @@ type
                                         oldsh:GDBInteger;(*hidden_in_objinsp*)
                                         olddt:TOPSDatType;(*hidden_in_objinsp*)
                                   end;
-  TOrtoDevPlaceParam=record
+  TOrtoDevPlaceParam=packed record
                                         Name:GDBString;(*'Block'*)(*oi_readonly*)
                                         ScaleBlock:GDBDouble;(*'Blocks scale'*)
                                         CountType:TODPCountType;(*'Type of placement'*)
@@ -84,10 +84,10 @@ type
                                         NormalizePoint:GDBBoolean;(*'Normalize to grid (if enabled)'*)
 
                      end;
-     GDBLine=record
+     GDBLine=packed record
                   lBegin,lEnd:GDBvertex;
               end;
-  OPS_SPBuild=object(FloatInsert_com)
+  OPS_SPBuild=packed object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;
   end;
 

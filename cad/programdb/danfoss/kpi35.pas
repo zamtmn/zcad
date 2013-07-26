@@ -6,7 +6,7 @@ type
                           _05_20(*'0.5-2'*));
      TDANFOSS_KPICONTACT=(ag(*'Ag'*),
                           au(*'Au'*));
-     TDANFOSS_KPI35=object(ElDeviceBaseObject);
+     TDANFOSS_KPI35=packed object(ElDeviceBaseObject);
                           diff:TDANFOSS_KPI35PDIFF;
                           cont:TDANFOSS_KPICONTACT;
                     end;

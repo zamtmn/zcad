@@ -387,10 +387,9 @@ begin
                                                   fieldoffset := sizeof(pointer);
                                              end;
                                  recordtype,packedrecordtype:begin
-                                                  if typ<>packedrecordtype then
-                                                  typ:=typ;
-
                                                   typename:=parseresult^.getGDBString(0);
+                                                  if typ<>packedrecordtype then
+                                                                               ShowError('Record "'+typename+'" not packed');
                                                   if (typename) = 'TRestoreMode'
                                                   then
                                                        typename:=typename;
@@ -402,9 +401,9 @@ begin
                                              end;
                                  objecttype,packedobjecttype:begin
                                                   {FPVMT}
-                                                  if typ<>packedobjecttype then
-                                                  typ:=typ;
                                                   typename:=parseresult^.getGDBString(0);
+                                                  if typ<>packedobjecttype then
+                                                                               ShowError('Object "'+typename+'" not packed');
                                                   if (typename) = 'GDBObj3DFace'
                                                   then
                                                        typename:=typename;
@@ -461,9 +460,9 @@ begin
                                                   addtype:=false;
                                              end;
                                   arraytype,packedarraytype:begin
-                                                   if typ<>packedarraytype then
-                                                   typ:=typ;
                                                   typename:=pGDBString(parseresult^.getelement(0))^;
+                                                  if typ<>packedarraytype then
+                                                                               ShowError('Array "'+typename+'" not packed');
                                                   if typename='GDBPalette' then
                                                                               typename:=typename;
                                                   if parseresult<>nil then begin parseresult^.FreeAndDone;GDBfreeMem(gdbpointer(parseresult));end;

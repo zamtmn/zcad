@@ -416,11 +416,7 @@ MainMenuItem Debug;
     Command Command list,CommandList,none,none
     MenuItem **Files with errors (current debug);
     {
-     Command **Error 0(polylines),Load(*../errors/0.dxf),none,none
-     Command **Error 1,Load(*../errors/1.dxf),none,none
-     Command **Error 2,Load(*../errors/2.dxf),none,none
-     Command **Error 3,Load(*../errors/3.dxf),none,none
-     Command **Error 4,Load(*../errors/4.dxf),none,none
+     BUGFILES
     }
     Command Sample file power supply,Load(*sample/test_dxf/em.dxf),none,none
     Command Sample file alarm,Load(*sample/test_dxf/ops.dxf),none,none

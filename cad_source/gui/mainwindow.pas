@@ -208,6 +208,7 @@ var
   oldlongprocess:integer;
   //tf:tform;
   OLDColor:integer;
+  localpm:TMenuItem;
   //DockMaster:  TAnchorDockMaster = nil;
 
   function CloseApp:GDBInteger;
@@ -2251,7 +2252,11 @@ begin
            loadsubmenu(f,ppopupmenu,line);*)
 
 end;
-
+procedure bugfileiterator(filename:GDBString);
+begin
+  localpm.Add(TmyMenuItem.Create(localpm,'**'+extractfilename(filename),'Load('+filename+')'));
+  //localpm.Add(pmenuitem);
+end;
 procedure MainForm.loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
 var
     pmenuitem:TmyMenuItem;
@@ -2300,6 +2305,13 @@ begin
                                                            {ppopupmenu}pm.Add(pmenuitem);
                                                            line := f.readstring(',','');
                                                            line := f.readstring(#$A' ',#$D);
+                                                           line := f.readstring(#$A' ',#$D);
+                                                           line:=readspace(line);
+                                                      end
+                else if uppercase(line)='BUGFILES' then
+                                                      begin
+                                                           localpm:=pm;
+                                                           FromDirIterator(expandpath('*../errors/'),'*.dxf','',@bugfileiterator,nil);
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);
                                                       end

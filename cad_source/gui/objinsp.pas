@@ -1055,6 +1055,11 @@ var
 
 begin
   inherited;
+  if (y<0)or(y>clientheight)or(x<0)or(x>clientwidth) then
+  begin
+       freeeditor;
+       exit;
+  end;
   y:=y+self.VertScrollBar.Position;
   //if proptreeptr=nil then exit;
   my:=startdrawy;

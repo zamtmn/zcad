@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
     <Version Value="9"/>
@@ -28,7 +28,6 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
-        <LaunchingApplication PathPlusParams="\usr\bin\xterm -T 'Lazarus Run Output' -e $(LazarusDir)\tools\runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
     <RequiredPackages Count="4">
@@ -45,7 +44,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="133">
+    <Units Count="134">
       <Unit0>
         <Filename Value="advcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -68,8 +67,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="46"/>
-        <CursorPos X="34" Y="14"/>
+        <TopLine Value="455"/>
+        <CursorPos X="18" Y="480"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -121,7 +120,7 @@
       <Unit7>
         <Filename Value="..\languade\varman.pas"/>
         <UnitName Value="Varman"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1407"/>
         <CursorPos X="1" Y="1445"/>
@@ -257,7 +256,7 @@
       <Unit22>
         <Filename Value="..\gdb\UGDBDescriptor.pas"/>
         <UnitName Value="UGDBDescriptor"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="839"/>
         <CursorPos X="1" Y="864"/>
@@ -339,12 +338,10 @@
       </Unit30>
       <Unit31>
         <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1936"/>
         <CursorPos X="1" Y="1959"/>
         <UsageCount Value="38"/>
-        <Loaded Value="True"/>
       </Unit31>
       <Unit32>
         <Filename Value="..\misc\sharedgdb.pas"/>
@@ -357,12 +354,10 @@
       </Unit32>
       <Unit33>
         <Filename Value="C:\lazarus\lcl\include\control.inc"/>
-        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1420"/>
         <CursorPos X="1" Y="1443"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit33>
       <Unit34>
         <Filename Value="..\fileformats\iodwg.pas"/>
@@ -501,7 +496,7 @@
       <Unit49>
         <Filename Value="..\u\UGDBOpenArray.pas"/>
         <UnitName Value="UGDBOpenArray"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="24" Y="27"/>
@@ -561,10 +556,10 @@
       <Unit56>
         <Filename Value="..\gui\objinsp.pas"/>
         <UnitName Value="Objinsp"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1201"/>
-        <CursorPos X="40" Y="1242"/>
+        <TopLine Value="105"/>
+        <CursorPos X="26" Y="123"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -572,7 +567,7 @@
       <Unit57>
         <Filename Value="..\commands\commandline.pas"/>
         <UnitName Value="commandline"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="43"/>
         <CursorPos X="17" Y="19"/>
@@ -681,7 +676,7 @@
       <Unit69>
         <Filename Value="..\devicebase\DeviceBase.pas"/>
         <UnitName Value="DeviceBase"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2"/>
         <CursorPos X="24" Y="4"/>
@@ -1025,12 +1020,10 @@
       </Unit109>
       <Unit110>
         <Filename Value="C:\lazarus\lcl\include\wincontrol.inc"/>
-        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="6771"/>
         <CursorPos X="1" Y="6794"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit110>
       <Unit111>
         <Filename Value="C:\lazarus\lcl\interfaces\win32\win32wscontrols.pp"/>
@@ -1211,7 +1204,7 @@
       <Unit131>
         <Filename Value="..\u\UGDBFontManager.pas"/>
         <UnitName Value="UGDBFontManager"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="20"/>
         <CursorPos X="6" Y="43"/>
@@ -1222,7 +1215,7 @@
       <Unit132>
         <Filename Value="..\gui\cmdline.pas"/>
         <UnitName Value="cmdline"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="206"/>
         <CursorPos X="32" Y="222"/>
@@ -1230,8 +1223,19 @@
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit132>
+      <Unit133>
+        <Filename Value="..\languade\URecordDescriptor.pas"/>
+        <UnitName Value="URecordDescriptor"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="501"/>
+        <CursorPos X="1" Y="520"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit133>
     </Units>
-    <JumpHistory Count="22" HistoryIndex="21">
+    <JumpHistory Count="23" HistoryIndex="22">
       <Position1>
         <Filename Value="..\gui\cmdline.pas"/>
         <Caret Line="222" Column="32" TopLine="206"/>
@@ -1320,6 +1324,10 @@
         <Filename Value="..\gui\objinsp.pas"/>
         <Caret Line="1242" Column="40" TopLine="1201"/>
       </Position22>
+      <Position23>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="480" Column="16" TopLine="455"/>
+      </Position23>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1367,4 +1375,4 @@
     </Exceptions>
   </Debugging>
   <EditorMacros Count="0"/>
-</CONFIG>
+</CONFIG>

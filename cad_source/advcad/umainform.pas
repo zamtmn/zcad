@@ -477,6 +477,7 @@ begin
   GDB.GetCurrentDWG^.OGLwindow1.param.lastonmouseobject:=nil;
   gdb.GetCurrentDWG^.OnMouseObj.Clear;
   gdb.GetCurrentDWG^.SelObjArray.clearallobjects;
+  ReturnToDefault;
   _EndLongProcess;
   UGDBDescriptor.redrawoglwnd;
 end;
@@ -626,4 +627,4 @@ end;
 
 
 end.
-
+

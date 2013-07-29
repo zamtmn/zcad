@@ -14,10 +14,10 @@ object Form1: TForm1
   object Panel1: TPanel
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Splitter1
-    Left = 256
-    Height = 664
+    Left = 216
+    Height = 808
     Top = 0
-    Width = 568
+    Width = 608
     Anchors = [akTop, akRight]
     BevelOuter = bvNone
     Caption = 'Panel1'
@@ -65,10 +65,10 @@ object Form1: TForm1
     AnchorSideTop.Side = asrCenter
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 906
+    Left = 916
     Height = 23
-    Top = 612
-    Width = 206
+    Top = 613
+    Width = 196
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Rebuild tree'
     OnClick = BtnRebuildClick
@@ -79,9 +79,9 @@ object Form1: TForm1
     AnchorSideLeft.Side = asrBottom
     AnchorSideRight.Side = asrBottom
     Left = 834
-    Height = 19
+    Height = 21
     Top = 614
-    Width = 72
+    Width = 82
     Caption = 'Show tree'
     OnChange = TreeChange
     TabOrder = 5
@@ -91,10 +91,10 @@ object Form1: TForm1
     AnchorSideLeft.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 970
+    Left = 975
     Height = 23
     Top = 0
-    Width = 142
+    Width = 137
     Anchors = [akTop, akLeft, akRight]
     MaxValue = 1000000
     MinValue = 1
@@ -177,9 +177,9 @@ object Form1: TForm1
     AnchorSideTop.Control = SpinEdit1
     AnchorSideTop.Side = asrCenter
     Left = 834
-    Height = 15
-    Top = 4
-    Width = 136
+    Height = 17
+    Top = 3
+    Width = 141
     Alignment = taCenter
     Caption = 'Number of entities to add'
     Layout = tlCenter
@@ -217,9 +217,9 @@ object Form1: TForm1
     AnchorSideLeft.Control = Splitter1
     AnchorSideLeft.Side = asrBottom
     Left = 834
-    Height = 19
+    Height = 21
     Top = 595
-    Width = 104
+    Width = 113
     Caption = '3D(ZCoord<>0)'
     TabOrder = 14
   end
@@ -275,8 +275,8 @@ object Form1: TForm1
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 834
-    Height = 274
-    Top = 635
+    Height = 273
+    Top = 636
     Width = 278
     Anchors = [akTop, akLeft, akRight, akBottom]
     TabOrder = 18
@@ -317,8 +317,8 @@ object Form1: TForm1
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 245
-    Top = 664
+    Height = 101
+    Top = 808
     Width = 824
     Anchors = [akTop, akLeft, akRight, akBottom]
     Caption = 'PanelCLine'
@@ -331,9 +331,9 @@ object Form1: TForm1
     AnchorSideBottom.Control = Panel1
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 664
+    Height = 808
     Top = 0
-    Width = 256
+    Width = 216
     Anchors = [akTop, akLeft, akRight, akBottom]
     Caption = 'PanelObjInsp'
     TabOrder = 22
@@ -349,4 +349,4 @@ object Form1: TForm1
     left = 934
     top = 488
   end
-end
+end

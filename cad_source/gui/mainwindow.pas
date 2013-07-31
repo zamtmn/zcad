@@ -2253,8 +2253,13 @@ begin
 
 end;
 procedure bugfileiterator(filename:GDBString);
+var
+    myitem:TmyMenuItem;
 begin
-  localpm.Add(TmyMenuItem.Create(localpm,'**'+extractfilename(filename),'Load('+filename+')'));
+  myitem:=TmyMenuItem.Create(localpm,'**'+extractfilename(filename),'Load('+filename+')');
+  localpm.SubMenuImages:=IconList;
+  myitem.ImageIndex:=II_Bug;
+  localpm.Add(myitem);
   //localpm.Add(pmenuitem);
 end;
 procedure MainForm.loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
@@ -2314,6 +2319,7 @@ begin
                                                            FromDirIterator(expandpath('*../errors/'),'*.dxf','',@bugfileiterator,nil);
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);
+                                                           localpm:=nil;
                                                       end
                 else if uppercase(line)='FILEHISTORY' then
                                                       begin

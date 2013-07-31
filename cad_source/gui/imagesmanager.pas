@@ -36,7 +36,8 @@ var
   II_LayerUnLock,
   II_LayerLock,
   II_LayerFreze,
-  II_LayerUnFreze
+  II_LayerUnFreze,
+  II_Bug
   :integer;
   IconList: TImageList;
 procedure LoadIcons;
@@ -66,6 +67,7 @@ begin
   II_LayerLock:=loadicon(iconlist, sysparam.programpath+'images/lock.png');
   II_LayerFreze:=loadicon(iconlist, sysparam.programpath+'images/freze.png');
   II_LayerUnFreze:=loadicon(iconlist, sysparam.programpath+'images/unfreze.png');
+  II_Bug:=loadicon(iconlist, sysparam.programpath+'images/bug.png');
 end;
 end.
-
+

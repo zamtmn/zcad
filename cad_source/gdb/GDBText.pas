@@ -27,7 +27,7 @@ GDBase,{UGDBDescriptor,}gdbobjectsconstdef,oglwindowdef,geometry,dxflow,strmy,ma
 type
 {Export+}
 PGDBObjText=^GDBObjText;
-GDBObjText=packed object(GDBObjAbstractText)
+GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  Content:GDBAnsiString;
                  Template:GDBAnsiString;(*saved_to_shd*)
                  TXTStyleIndex:TArrayIndex;(*saved_to_shd*)

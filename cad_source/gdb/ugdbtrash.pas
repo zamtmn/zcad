@@ -23,7 +23,7 @@ uses
 gdbase,GDBasetypes,GDBEntity,gdbobjectsconstdef,geometry;
 type
 {EXPORT+}
-GDBObjTrash=packed object(GDBObjEntity)
+GDBObjTrash={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
                  function GetHandle:GDBPlatformint;virtual;
                  function GetMatrix:PDMatrix4D;virtual;
                  constructor initnul;

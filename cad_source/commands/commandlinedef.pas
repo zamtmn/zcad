@@ -29,7 +29,7 @@ type
   TCStartAttr=GDBInteger;{атрибут разрешения\запрещения запуска команды}
     TCEndAttr=GDBInteger;{атрибут действия по завершению команды}
   PCommandObjectDef = ^CommandObjectDef;
-  CommandObjectDef =packed object (GDBaseObject)
+  CommandObjectDef ={$IFNDEF DELPHI}packed{$ENDIF} object (GDBaseObject)
     CommandName:GDBString;(*hidden_in_objinsp*)
     CommandGDBString:GDBString;(*hidden_in_objinsp*)
     savemousemode: GDBByte;(*hidden_in_objinsp*)
@@ -52,12 +52,12 @@ type
     function IsRTECommand:GDBBoolean;virtual;
     procedure CommandContinue; virtual;
   end;
-  CommandFastObjectDef =packed object(CommandObjectDef)
+  CommandFastObjectDef ={$IFNDEF DELPHI}packed{$ENDIF} object(CommandObjectDef)
     procedure CommandInit; virtual;abstract;
     procedure CommandEnd; virtual;abstract;
   end;
   PCommandRTEdObjectDef=^CommandRTEdObjectDef;
-  CommandRTEdObjectDef = packed object(CommandFastObjectDef)
+  CommandRTEdObjectDef = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandFastObjectDef)
     procedure CommandStart(Operands:pansichar); virtual;abstract;
     procedure CommandEnd; virtual;abstract;
     procedure CommandCancel; virtual;abstract;
@@ -69,7 +69,7 @@ type
     function IsRTECommand:GDBBoolean;virtual;
   end;
   pGDBcommandmanagerDef=^GDBcommandmanagerDef;
-  GDBcommandmanagerDef=packed object(GDBOpenArrayOfPObjects)
+  GDBcommandmanagerDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                                   lastcommand:GDBString;
                                   pcommandrunning:PCommandRTEdObjectDef;
                                   function executecommand(const comm:pansichar;pdrawing:PTDrawingDef): GDBInteger;virtual;abstract;

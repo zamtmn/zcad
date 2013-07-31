@@ -23,7 +23,7 @@ uses gdbase,gdbasetypes,UGDBOpenArrayOfData,strproc,sysutils,UGDBOpenArray;
 type
 {EXPORT+}
     PGDBGDBStringArray=^GDBGDBStringArray;
-    GDBGDBStringArray=packed object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBString*)
+    GDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBString*)
                           constructor init(m:GDBInteger);
                           procedure loadfromfile(fname:GDBString);
                           procedure freeelement(p:GDBPointer);virtual;

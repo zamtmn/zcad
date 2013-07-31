@@ -26,7 +26,7 @@ uses zcadsysvars,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,
 type
 {EXPORT+}
     PTUnitManager=^TUnitManager;
-    TUnitManager=packed object(GDBOpenArrayOfObjects)
+    TUnitManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;

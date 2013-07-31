@@ -24,7 +24,7 @@ uses zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef}
 type
 {EXPORT+}
 PGDBLayerProp=^GDBLayerProp;
-GDBLayerProp=packed object(GDBNamedObject)
+GDBLayerProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                color:GDBByte;(*saved_to_shd*)(*'Color'*)
                lineweight:GDBSmallint;(*saved_to_shd*)(*'Line weight'*)
                _on:GDBBoolean;(*saved_to_shd*)(*'On'*)
@@ -37,7 +37,7 @@ GDBLayerProp=packed object(GDBNamedObject)
 PGDBLayerPropArray=^GDBLayerPropArray;
 GDBLayerPropArray=packed array [0..0] of GDBLayerProp;
 PGDBLayerArray=^GDBLayerArray;
-GDBLayerArray=packed object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLayerProp*)
+GDBLayerArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLayerProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
 

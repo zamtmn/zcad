@@ -39,7 +39,7 @@ PGDBTextStyleProp=^GDBTextStyleProp;
     UsedInLTYPE:GDBBoolean;
   end;
 PGDBTextStyleArray=^GDBTextStyleArray;
-GDBTextStyleArray=packed object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
+GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
 

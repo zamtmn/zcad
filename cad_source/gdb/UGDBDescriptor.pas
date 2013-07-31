@@ -42,7 +42,7 @@ TDWGProps=packed record
                 Number:GDBInteger;
           end;
 PTDrawing=^TDrawing;
-TDrawing=packed object(TSimpleDrawing)
+TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
 
            FileName:GDBString;
            Changed:GDBBoolean;
@@ -70,7 +70,7 @@ TDrawing=packed object(TSimpleDrawing)
            procedure AddBlockFromDBIfNeed(name:GDBString);virtual;
      end;
 PGDBDescriptor=^GDBDescriptor;
-GDBDescriptor=packed object(GDBOpenArrayOfPObjects)
+GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     CurrentDWG:{PTDrawing}PTSimpleDrawing;
                     ProjectUnits:TUnitManager;
                     constructor init;

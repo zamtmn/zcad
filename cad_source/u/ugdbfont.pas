@@ -23,7 +23,7 @@ uses uzgltriangles3darray,ugdbshxfont,memman,UGDBPolyPoint3DArray,gdbobjectscons
 type
 {EXPORT+}
 PGDBfont=^GDBfont;
-GDBfont=packed object(GDBNamedObject)
+GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     fontfile:GDBString;
     Internalname:GDBString;
     font:{PSHXFont}PBASEFont;

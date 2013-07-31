@@ -39,7 +39,7 @@ GDBTypedPointer=packed record
                       PTD:GDBPointer;
                 end;
 PGDBaseObject=^GDBaseObject;
-GDBaseObject=packed object
+GDBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object
     function ObjToGDBString(prefix,sufix:GDBString):GDBString; virtual;
     function GetObjType:GDBWord;virtual;
     procedure Format;virtual;
@@ -213,7 +213,7 @@ TDrawContext=packed record
              end;
 
 PGDBBaseCamera=^GDBBaseCamera;
-GDBBaseCamera=packed object(GDBaseObject)
+GDBBaseCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 modelMatrix:DMatrix4D;
                 fovy:GDBDouble;
                 totalobj:GDBInteger;
@@ -242,7 +242,7 @@ RGB=packed record
     end;
 GDBPalette=packed array[0..255] of RGB;
 PGDBNamedObject=^GDBNamedObject;
-GDBNamedObject=packed object(GDBaseObject)
+GDBNamedObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      Name:GDBAnsiString;(*saved_to_shd*)(*'Name'*)
                      constructor initnul;
                      constructor init(n:GDBString);

@@ -22,7 +22,7 @@ interface
 uses zglsimpleentity,log;
 type
 {EXPORT+}
-ZGLObjLine3D=packed object(ZGLObjSimpleEntity)
+ZGLObjLine3D={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLObjSimpleEntity)
              end;
 {EXPORT-}
 implementation

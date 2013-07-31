@@ -28,7 +28,7 @@ type
 //procedure CalcObjMatrix;virtual;
 {Export+}
 PGDBObjMText=^GDBObjMText;
-GDBObjMText=packed object(GDBObjText)
+GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  width:GDBDouble;(*saved_to_shd*)
                  linespace:GDBDouble;(*saved_to_shd*)
                  linespacef:GDBDouble;(*saved_to_shd*)

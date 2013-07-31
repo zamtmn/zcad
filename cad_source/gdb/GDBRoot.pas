@@ -27,7 +27,7 @@ devices,gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubE
 type
 {Export+}
 PGDBObjRoot=^GDBObjRoot;
-GDBObjRoot=packed object(GDBObjGenericSubEntry)
+GDBObjRoot={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                  constructor initnul;
                  destructor done;virtual;
                  //function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;

@@ -26,7 +26,7 @@ TNodeProp=packed record
                 DevLink:PGDBObjDevice;
           end;
 PGDBObjCable=^GDBObjCable;
-GDBObjCable=packed object(GDBObjCurve)
+GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  NodePropArray:GDBOpenArrayOfData;(*hidden_in_objinsp*)
                  str11:GDBVertex;(*hidden_in_objinsp*)
                  str12:GDBVertex;(*hidden_in_objinsp*)

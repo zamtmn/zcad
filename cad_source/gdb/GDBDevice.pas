@@ -27,7 +27,7 @@ memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varm
 type
 {EXPORT+}
 PGDBObjDevice=^GDBObjDevice;
-GDBObjDevice=packed object(GDBObjBlockInsert)
+GDBObjDevice={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjBlockInsert)
                    VarObjArray:GDBObjEntityOpenArray;(*oi_readonly*)(*hidden_in_objinsp*)
                    lstonmouse:PGDBObjEntity;(*oi_readonly*)(*hidden_in_objinsp*)
                    function Clone(own:GDBPointer):PGDBObjEntity;virtual;

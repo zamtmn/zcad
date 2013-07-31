@@ -31,7 +31,7 @@ type
                         r,p_insert:GDBBoolean;
                   end;
 PGDBObjCircle=^GDBObjCircle;
-GDBObjCircle=packed object(GDBObjWithLocalCS)
+GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  Radius:GDBDouble;(*'Radius'*)(*saved_to_shd*)
                  Diametr:GDBDouble;(*'Diametr'*)
                  Length:GDBDouble;(*'Length'*)

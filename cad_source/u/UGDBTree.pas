@@ -26,12 +26,12 @@ PIterateCmpareFunc=function(pnode:PGDBBaseNode;PExpr:GDBPointer):GDBBoolean;
 IterateProc=procedure(pnode:PGDBBaseNode;PProcData:Pointer);
 {EXPORT+}
 PTGDBTree=^TGDBTree;
-TGDBTree=packed object(GDBOpenArrayOfPObjects)
+TGDBTree={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                procedure AddNode(pnode:PGDBBaseNode);
                function IterateFind(CompareFunc:PIterateCmpareFunc;PExpr:GDBPointer;SubFind:GDBBoolean):PGDBBaseNode;
                procedure IterateProc(Proc:IterateProc;SubProc:GDBBoolean;PProcData:Pointer);
          end;
-GDBBaseNode=packed object(GDBaseObject)
+GDBBaseNode={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                   SubNode:PTGDBTree;
                   constructor initnul;
                   function GetNodeName:GDBString;virtual;

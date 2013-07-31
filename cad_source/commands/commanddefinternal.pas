@@ -33,12 +33,12 @@ type
   comfunc=function:GDBInteger;
   comfuncwithoper=function(operands:pansichar):GDBInteger;
 {Export+}
-  CommandFastObject = packed object(CommandFastObjectDef)
+  CommandFastObject = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandFastObjectDef)
     procedure CommandInit; virtual;
     procedure CommandEnd; virtual;
   end;
   PCommandFastObjectPlugin=^CommandFastObjectPlugin;
-  CommandFastObjectPlugin = packed object(CommandFastObjectDef)
+  CommandFastObjectPlugin = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandFastObjectDef)
     onCommandStart:comfuncwithoper;
     constructor Init(name:pansichar;func:comfuncwithoper);
     procedure CommandStart(Operands:pansichar); virtual;
@@ -46,7 +46,7 @@ type
     procedure CommandEnd; virtual;
   end;
   pCommandRTEdObject=^CommandRTEdObject;
-  CommandRTEdObject = packed object(CommandRTEdObjectDef)
+  CommandRTEdObject = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObjectDef)
     saveosmode:GDBInteger;(*hidden_in_objinsp*)
     UndoTop:TArrayIndex;(*hidden_in_objinsp*)
     commanddata:TTypedData;(*'Command options'*)
@@ -61,7 +61,7 @@ type
     //function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual; abstract;
   end;
   pCommandRTEdObjectPlugin=^CommandRTEdObjectPlugin;
-  CommandRTEdObjectPlugin = packed object(CommandRTEdObject)
+  CommandRTEdObjectPlugin = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
     onCommandStart:comfuncwithoper;
     onCommandEnd,onCommandCancel,onFormat:comproc;(*hidden_in_objinsp*)
     onBeforeClick,onAfterClick:commousefunc;(*hidden_in_objinsp*)
@@ -77,7 +77,7 @@ type
     function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual;
     procedure DrawHeplGeometry;virtual;
   end;
-  TOSModeEditor=packed object(GDBaseObject)
+  TOSModeEditor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               osm:TOSMode;(*'Snap'*)
               trace:TTraceMode;(*'Trace'*)
               procedure Format;virtual;

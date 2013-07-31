@@ -36,7 +36,7 @@ TGDBTableItemFormat=packed record
                  CF:TTableCellJustify;
                 end;
 PGDBObjTable=^GDBObjTable;
-GDBObjTable=packed object(GDBObjComplex)
+GDBObjTable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             PTableStyle:PTGDBTableStyle;
             tbl:GDBTableArray;
             w,h:GDBDouble;

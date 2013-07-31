@@ -137,7 +137,7 @@ const
 type
 {EXPORT+}
 ptypemanager=^typemanager;
-typemanager=packed object(typemanagerdef)
+typemanager={$IFNDEF DELPHI}packed{$ENDIF} object(typemanagerdef)
                   constructor init;
                   procedure CreateBaseTypes;virtual;
                   function _TypeName2PTD(name: GDBString):PUserTypeDescriptor;virtual;
@@ -148,7 +148,7 @@ typemanager=packed object(typemanagerdef)
                   procedure free;virtual;
             end;
 pvarmanager=^varmanager;
-varmanager=packed object(varmanagerdef)
+varmanager={$IFNDEF DELPHI}packed{$ENDIF} object(varmanagerdef)
                  constructor init;
                  function findvardesc(varname:GDBString): pvardesk;virtual;
                  function findvardescbyinst(varinst:GDBPointer):pvardesk;virtual;
@@ -161,7 +161,7 @@ varmanager=packed object(varmanagerdef)
 TunitPart=(TNothing,TInterf,TImpl,TProg);
 PTUnit=^TUnit;
 PTSimpleUnit=^TSimpleUnit;
-TSimpleUnit=packed object(GDBaseobject)
+TSimpleUnit={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
                   Name:GDBString;
                   InterfaceUses:GDBOpenArrayOfGDBPointer;
                   InterfaceVariables: varmanager;
@@ -179,11 +179,11 @@ TSimpleUnit=packed object(GDBaseobject)
                   procedure CopyFrom(source:PTSimpleUnit);virtual;
             end;
 PTObjectUnit=^TObjectUnit;
-TObjectUnit=packed object(TSimpleUnit)
+TObjectUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
                   function SaveToMem(var membuf:GDBOpenArrayOfByte):PUserTypeDescriptor;virtual;
                   procedure free;virtual;
             end;
-TUnit=packed object(TSimpleUnit)
+TUnit={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleUnit)
             InterfaceTypes:typemanager;
             //ImplementationUses:GDBInteger;
             ImplementationTypes:typemanager;

@@ -24,7 +24,7 @@ uses
  {GDBEntity,}zcadsysvars,geometry,GDBWithLocalCS,gdbase,gdbasetypes,varmandef,OGLSpecFunc{,GDBEntity};
 type
 {EXPORT+}
-GDBObjPlain=packed object(GDBObjWithLocalCS)
+GDBObjPlain={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                   Outbound:OutBound4V;
 
                   procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;

@@ -15,7 +15,7 @@ const
 type
 {Export+}
 PGDBObjNet=^GDBObjNet;
-GDBObjNet=packed object(GDBObjConnected)
+GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
                  graf:GDBGraf;
                  riserarray:GDBOpenArrayOfPObjects;
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);

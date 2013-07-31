@@ -23,7 +23,7 @@ uses UGDBOpenArray,UGDBOpenArrayOfData,gdbasetypes,gdbase{,UGDBOpenArrayOfData,U
 type
 {EXPORT+}
 PGDBTableArray=^GDBTableArray;
-GDBTableArray=packed object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
+GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBGDBStringArray*)
                     columns,rows:GDBInteger;
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}c,r:GDBInteger);
                     destructor done;virtual;

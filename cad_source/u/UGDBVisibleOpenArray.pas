@@ -24,7 +24,7 @@ uses GDBCamera,{UGDBOpenArray,}gdbasetypes{,math},UGDBOpenArrayOfPV,{,UGDBOpenAr
 type
 {Export+}
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
-GDBObjEntityOpenArray=packed object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
+GDBObjEntityOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPV)(*OpenArrayOfPObj*)
                       function add(p:GDBPointer):TArrayIndex;virtual;
                       function addwithoutcorrect(p:GDBPointer):GDBInteger;virtual;
                       function copytowithoutcorrect(source:PGDBObjEntityOpenArray):GDBInteger;virtual;

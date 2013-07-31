@@ -24,7 +24,7 @@ geometry;
 type
 {Export+}
 PZGLFontTriangle2DArray=^ZGLFontTriangle2DArray;
-ZGLFontTriangle2DArray=packed object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBFontVertex2D*)
+ZGLFontTriangle2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBFontVertex2D*)
                              constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                              constructor initnul;
                        end;

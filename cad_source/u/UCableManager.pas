@@ -14,7 +14,7 @@ const
 type
 {EXPORT+}
     PTCableDesctiptor=^TCableDesctiptor;
-    TCableDesctiptor=packed object(GDBaseObject)
+    TCableDesctiptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      Name:GDBString;
                      Segments:GDBOpenArrayOfPObjects;
                      StartDevice,EndDevice:PGDBObjDevice;
@@ -28,7 +28,7 @@ type
                  end;
 
     PTCableManager=^TCableManager;
-    TCableManager=packed object(GDBOpenArrayOfObjects)(*OpenArrayOfPObj*)
+    TCableManager={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*OpenArrayOfPObj*)
                        constructor init;
                        procedure build;virtual;
                        function FindOrCreate(sname:gdbstring):PTCableDesctiptor;virtual;

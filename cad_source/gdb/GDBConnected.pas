@@ -23,7 +23,7 @@ Uses GDBEntity,GDBGenericSubEntry,UGDBOpenArrayOfPV,ugdbdrawingdef;
 type
 {Export+}
 PGDBObjConnected=^GDBObjConnected;
-GDBObjConnected=packed object(GDBObjGenericSubEntry)
+GDBObjConnected={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                       procedure addtoconnect(pobj:pgdbobjEntity;var ConnectedArray:GDBObjOpenArrayOfPV);virtual;
                       procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;const drawing:TDrawingDef);virtual;abstract;
                 end;

@@ -23,12 +23,12 @@ uses gdbasetypes,gdbase{,UGDBOpenArrayOfData,UGDBOpenArrayOfByte},sysutils,UGDBN
 type
 {EXPORT+}
 PGDBNumItem=^GDBNumItem;
-GDBNumItem=packed object(GDBNamedObject)
+GDBNumItem={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                  Nymber:GDBInteger;
                  constructor Init(N:GDBString);
                 end;
 PGDBNumerator=^GDBNumerator;
-GDBNumerator=packed object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBNumItem*)
+GDBNumerator={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBNumItem*)
                        constructor init(m:GDBInteger);
                        function getnamenumber(_Name:GDBString;AutoInc:GDBBoolean):GDBstring;
                        function getnumber(_Name:GDBString;AutoInc:GDBBoolean):GDBInteger;

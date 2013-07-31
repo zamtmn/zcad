@@ -19,7 +19,7 @@
 unit ugdbshxfont;
 {$INCLUDE def.inc}
 interface
-uses glu,math,OGLSpecFunc,uzglfonttriangles2darray,TTTypes,TTObjs,gvector,gmap,gutil,EasyLazFreeType,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,UGDBPoint3DArray,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses {glu,}math,OGLSpecFunc,uzglfonttriangles2darray,TTTypes,TTObjs,gvector,gmap,gutil,EasyLazFreeType,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,UGDBPoint3DArray,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
 type
 PTTTFSymInfo=^TTTFSymInfo;
 TTTFSymInfo=packed record
@@ -61,7 +61,7 @@ GDBUNISymbolInfo=packed record
   end;
 TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
 PBASEFont=^BASEFont;
-BASEFont=packed object(GDBaseObject)
+BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               unicode:GDBBoolean;
               symbolinfo:TSymbolInfoArray;
               unisymbolinfo:GDBOpenArrayOfData;
@@ -75,7 +75,7 @@ BASEFont=packed object(GDBaseObject)
               function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
         end;
 PSHXFont=^SHXFont;
-SHXFont=packed object(BASEFont)
+SHXFont={$IFNDEF DELPHI}packed{$ENDIF} object(BASEFont)
               compiledsize:GDBInteger;
               h,u:GDBByte;
               SHXdata:GDBOpenArrayOfByte;
@@ -84,7 +84,7 @@ SHXFont=packed object(BASEFont)
               function GetSymbolDataAddr(offset:integer):pointer;virtual;
         end;
 PTTFFont=^TTFFont;
-TTFFont=packed object(SHXFont)
+TTFFont={$IFNDEF DELPHI}packed{$ENDIF} object(SHXFont)
               ftFont: TFreeTypeFont;
               MapChar:TMapChar;
               MapCharIterator:TMapChar.TIterator;

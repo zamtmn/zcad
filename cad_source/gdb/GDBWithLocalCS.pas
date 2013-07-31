@@ -32,7 +32,7 @@ GDBObj2dprop=packed record
                    P_insert:GDBvertex;(*'Insertion point OCS'*)(*saved_to_shd*)
              end;
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
-GDBObjWithLocalCS=packed object(GDBObjWithMatrix)
+GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                Local:GDBObj2dprop;(*'Object orientation'*)(*saved_to_shd*)
                P_insert_in_WCS:GDBvertex;(*'Insertion point WCS'*)(*saved_to_shd*)
                ProjP_insert:GDBvertex;(*'Insertion point DCS'*)

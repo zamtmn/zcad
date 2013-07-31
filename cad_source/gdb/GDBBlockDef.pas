@@ -24,7 +24,7 @@ uses ugdbdrawingdef,UGDBVisibleOpenArray,GDBSubordinated,dxflow,UGDBOpenArrayOfB
 type
 {Export+}
 PGDBObjBlockdef=^GDBObjBlockdef;
-GDBObjBlockdef=packed object(GDBObjGenericSubEntry)
+GDBObjBlockdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericSubEntry)
                      Name:GDBString;(*saved_to_shd*)
                      VarFromFile:GDBString;(*saved_to_shd*)
                      Base:GDBvertex;(*saved_to_shd*)

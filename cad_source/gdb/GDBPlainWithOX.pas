@@ -26,7 +26,7 @@ type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/GDBPointer/};
 {EXPORT+}
 PGDBObjPlainWithOX=^GDBObjPlainWithOX;
-GDBObjPlainWithOX=packed object(GDBObjPlain)
+GDBObjPlainWithOX={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                procedure CalcObjMatrix;virtual;
          end;
 {EXPORT-}

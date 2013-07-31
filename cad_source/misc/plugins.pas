@@ -51,7 +51,7 @@ type
                           copyobjectarray:copyobjectarray;
                     end;
   PGDBPluginsArray=^GDBPluginsArray;
-  GDBPluginsArray=packed object(GDBOpenArrayOfData)
+  GDBPluginsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                         constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                         procedure loadplugins(path: GDBString);
                   end;

@@ -14,7 +14,7 @@ GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflo
 type
 {EXPORT+}
 PGDBObjElLeader=^GDBObjElLeader;
-GDBObjElLeader=packed object(GDBObjComplex)
+GDBObjElLeader={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
             MainLine:GDBObjLine;
             MarkLine:GDBObjLine;
             Tbl:GDBObjTable;

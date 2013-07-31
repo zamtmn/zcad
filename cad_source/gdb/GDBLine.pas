@@ -34,7 +34,7 @@ type
                  pdy:GDBDouble;(*'Проекция dy'*)(*hidden_in_objinsp*)}
 {Export+}
 PGDBObjLine=^GDBObjLine;
-GDBObjLine=packed object(GDBObj3d)
+GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  CoordInOCS:GDBLineProp;(*'Coordinates OCS'*)(*saved_to_shd*)
                  CoordInWCS:GDBLineProp;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)

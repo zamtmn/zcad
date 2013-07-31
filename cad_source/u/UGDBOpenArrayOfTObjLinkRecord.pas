@@ -24,7 +24,7 @@ type
 {Export+}
 TGenLincMode=(EnableGen,DisableGen);
 PGDBOpenArrayOfTObjLinkRecord=^GDBOpenArrayOfTObjLinkRecord;
-GDBOpenArrayOfTObjLinkRecord=packed object(GDBOpenArrayOfData)(*OpenArrayOfData=TObjLinkRecord*)
+GDBOpenArrayOfTObjLinkRecord={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=TObjLinkRecord*)
                       GenLinkMode:TGenLincMode;
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       constructor initnul;

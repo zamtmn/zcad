@@ -47,7 +47,7 @@ GDBTextProp=packed record
                   backward:GDBBoolean;
             end;
 PGDBObjAbstractText=^GDBObjAbstractText;
-GDBObjAbstractText=packed object(GDBObjPlainWithOX)
+GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
                          textprop:GDBTextProp;(*saved_to_shd*)
                          P_drawInOCS:GDBvertex;(*saved_to_shd*)
                          DrawMatrix:DMatrix4D;

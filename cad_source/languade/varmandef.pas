@@ -189,7 +189,7 @@ TOSMode=packed record
     attrib:GDBInteger;
   end;
 ptypemanagerdef=^typemanagerdef;
-typemanagerdef=packed object(GDBaseObject)
+typemanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                   exttype:GDBOpenArrayOfPObjects;
                   procedure readbasetypes;virtual;abstract;
                   procedure readexttypes(fn: GDBString);virtual;abstract;
@@ -198,7 +198,7 @@ typemanagerdef=packed object(GDBaseObject)
                   function _TypeIndex2PTD(ind:integer):PUserTypeDescriptor;virtual;abstract;
             end;
 pvarmanagerdef=^varmanagerdef;
-varmanagerdef=packed object(GDBaseObject)
+varmanagerdef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                  vardescarray:GDBOpenArrayOfData;
                  vararray:GDBOpenArrayOfByte;
                  function findvardesc(varname:GDBString): pvardesk;virtual;abstract;

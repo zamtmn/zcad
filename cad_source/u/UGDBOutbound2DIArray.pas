@@ -24,7 +24,7 @@ uses zcadsysvars,gdbasetypes,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase
 type
 {Export+}
 PGDBOOutbound2DIArray=^GDBOOutbound2DIArray;
-GDBOOutbound2DIArray=packed object(GDBOpenArrayOfData)
+GDBOOutbound2DIArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       procedure DrawGeometry;virtual;
                       procedure addpoint(point:GDBvertex2DI);virtual;

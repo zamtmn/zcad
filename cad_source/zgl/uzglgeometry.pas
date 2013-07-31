@@ -23,7 +23,7 @@ uses zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzg
      gdbasetypes;
 type
 {Export+}
-ZGLGeometry=packed object(GDBaseObject)
+ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  Lines:ZGLLine3DArray;
                                  Points:ZGLpoint3DArray;
                                  SHX:GDBPolyPoint3DArray;

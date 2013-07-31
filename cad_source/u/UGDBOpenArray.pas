@@ -23,7 +23,7 @@ uses gdbasetypes,sysutils,UOpenArray,memman,gdbase;
 type
 {Export+}
 PGDBOpenArray=^GDBOpenArray;
-GDBOpenArray=packed object(OpenArray)
+GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
                       PArray:GDBPointer;(*hidden_in_objinsp*)
                       guid:GDBString;
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m,s:GDBInteger);

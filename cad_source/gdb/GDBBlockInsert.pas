@@ -27,7 +27,7 @@ const zcadmetric='!!ZMODIFIER:';
 type
 {Export+}
 PGDBObjBlockInsert=^GDBObjBlockInsert;
-GDBObjBlockInsert=packed object(GDBObjComplex)
+GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      scale:GDBvertex;(*saved_to_shd*)
                      rotate:GDBDouble;(*saved_to_shd*)
                      index:GDBInteger;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)

@@ -40,7 +40,7 @@ end;
 //PTDateTime=^TDateTime;
 {EXPORT+}
 ptlog=^tlog;
-tlog=packed object
+tlog={$IFNDEF DELPHI}packed{$ENDIF} object
            LogFileName:GDBString;
            FileHandle:cardinal;
            Indent:GDBInteger;

@@ -87,7 +87,7 @@ type
      GDBLine=packed record
                   lBegin,lEnd:GDBvertex;
               end;
-  OPS_SPBuild=packed object(FloatInsert_com)
+  OPS_SPBuild={$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;
   end;
 

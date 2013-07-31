@@ -66,7 +66,7 @@ type
            TMST_Devices(*'Devices'*),
            TMST_Cables(*'Cables'*)
           );
-  TMSEditor=packed object(GDBaseObject)
+  TMSEditor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 SelCount:GDBInteger;(*'Selected objects'*)(*oi_readonly*)
                 EntType:TMSType;(*'Process primitives'*)
                 OU:TObjectUnit;(*'Variables'*)

@@ -24,7 +24,7 @@ uses gdbasetypes,UGDBOpenArrayOfData,
 type
 {Export+}
 PGDBOpenArrayOfObjects=^GDBOpenArrayOfObjects;
-GDBOpenArrayOfObjects=packed object(GDBOpenArrayOfData)
+GDBOpenArrayOfObjects={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                              procedure cleareraseobj;virtual;
                              function CreateObject:PGDBaseObject;
                              procedure free;virtual;

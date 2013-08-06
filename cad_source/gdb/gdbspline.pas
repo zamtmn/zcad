@@ -185,7 +185,7 @@ begin
   inherited init(own,layeraddres, lw);
   ControlArrayInWCS.init({$IFDEF DEBUGBUILD}'{4213E1EA-8FF1-4E99-AEF5-C1635CB49B5A}',{$ENDIF}1000);
   ControlArrayInOCS.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}1000);
-  Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000,sizeof(GDBDouble));
+  Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000,sizeof(GDBFloat));
   vp.ID := GDBSplineID;
 end;
 constructor GDBObjSpline.initnul;
@@ -193,7 +193,7 @@ begin
   inherited initnul(owner);
   ControlArrayInWCS.init({$IFDEF DEBUGBUILD}'{4213E1EA-8FF1-4E99-AEF5-C1635CB49B5A}',{$ENDIF}1000);
   ControlArrayInOCS.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}1000);
-  Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000,sizeof(GDBDouble));
+  Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000,sizeof(GDBFloat));
   vp.ID := GDBSplineID;
 end;
 
@@ -245,7 +245,7 @@ var s{, layername}: GDBString;
   hlGDBWord: GDBinteger;
   vertexgo: GDBBoolean;
   tv:gdbvertex;
-  tr:gdbdouble;
+  tr:gdbfloat;
 begin
   closed := false;
   vertexgo := false;
@@ -261,7 +261,7 @@ begin
                                               if byt=30 then
                                                             addvertex(tv);
                                          end
-  else if dxfGDBDoubleload(f,40,byt,tr) then
+  else if dxfGDBFloatload(f,40,byt,tr) then
                                       begin
                                            Knots.add(@tr);
                                       end
@@ -340,4 +340,4 @@ begin
 end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
-end.
+end.

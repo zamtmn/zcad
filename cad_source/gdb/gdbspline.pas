@@ -20,7 +20,7 @@ unit gdbspline;
 {$INCLUDE def.inc}
 
 interface
-uses UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},GDBEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
+uses gl,glu,OGLSpecFunc,UGDBOpenArrayOfData,UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},GDBEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
 ugdbltypearray,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman{,OGLSpecFunc};
 type
@@ -29,6 +29,7 @@ PGDBObjSpline=^GDBObjSpline;
 GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  ControlArrayInOCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  ControlArrayInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
+                 Knots:GDBOpenArrayOfData;(*saved_to_shd*)(*hidden_in_objinsp*)
                  Closed:GDBBoolean;(*saved_to_shd*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -85,13 +86,42 @@ function GDBObjSpline.getsnap;
 begin
      result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,closed,param,ProjectProc);
 end;
+procedure NurbsVertexCallBack(const v: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+var
+    tv: gdbvertex;
+begin
+     tv:=pgdbvertex(v)^;
+end;
+
+procedure NurbsErrorCallBack(const v: GLenum);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+var
+    tv: GLenum;
+    p:pchar;
+begin
+     tv:=v;
+     p:=gluErrorString(v);
+     log.LogOut(p);
+end;
+
 procedure GDBObjSpline.FormatEntity(const drawing:TDrawingDef);
 var //i,j: GDBInteger;
     ptv,ptvprev,ptvfisrt: pgdbvertex;
     //tv:gdbvertex;
     //vs:VectorSnap;
         ir:itrec;
+    nurbsobj:GLUnurbsObj;
 begin
+  nurbsobj:=OGLSM.NewNurbsRenderer;
+
+  OGLSM.NurbsCallback(nurbsobj,GLU_NURBS_VERTEX_EXT,@NurbsVertexCallBack);
+  OGLSM.NurbsCallback(nurbsobj,GLU_NURBS_ERROR,@NurbsErrorCallBack);
+
+  OGLSM.BeginCurve(nurbsobj);
+  gluNurbsCurve (nurbsobj,Knots.Count,Knots.PArray,VertexArrayInOCS.Count,VertexArrayInOCS.PArray,4,GL_MAP1_VERTEX_3);
+  OGLSM.EndCurve(nurbsobj);
+
+
+  OGLSM.DeleteNurbsRenderer(nurbsobj);
   FormatWithoutSnapArray;
   //-------------BuildSnapArray(VertexArrayInWCS,snaparray,Closed);
   Geom.Clear;
@@ -155,6 +185,7 @@ begin
   inherited init(own,layeraddres, lw);
   ControlArrayInWCS.init({$IFDEF DEBUGBUILD}'{4213E1EA-8FF1-4E99-AEF5-C1635CB49B5A}',{$ENDIF}1000);
   ControlArrayInOCS.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}1000);
+  Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000,sizeof(GDBDouble));
   vp.ID := GDBSplineID;
 end;
 constructor GDBObjSpline.initnul;
@@ -162,6 +193,7 @@ begin
   inherited initnul(owner);
   ControlArrayInWCS.init({$IFDEF DEBUGBUILD}'{4213E1EA-8FF1-4E99-AEF5-C1635CB49B5A}',{$ENDIF}1000);
   ControlArrayInOCS.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}1000);
+  Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000,sizeof(GDBDouble));
   vp.ID := GDBSplineID;
 end;
 
@@ -213,6 +245,7 @@ var s{, layername}: GDBString;
   hlGDBWord: GDBinteger;
   vertexgo: GDBBoolean;
   tv:gdbvertex;
+  tr:gdbdouble;
 begin
   closed := false;
   vertexgo := false;
@@ -228,12 +261,10 @@ begin
                                               if byt=30 then
                                                             addvertex(tv);
                                          end
-  else if dxfvertexload(f,11,byt,tv) then
+  else if dxfGDBDoubleload(f,40,byt,tr) then
                                       begin
-                                           if byt=31 then
-                                                         Controlarrayinocs.add(@tv);;
+                                           Knots.add(@tr);
                                       end
-
   else if dxfGDBIntegerload(f,70,byt,hlGDBWord) then
                                                    begin
                                                         if (hlGDBWord and 1) = 1 then closed := true;
@@ -242,6 +273,7 @@ begin
     byt:=readmystrtoint(f);
   end;
 vertexarrayinocs.Shrink;
+Knots.Shrink;
   //format;
 end;
 {procedure GDBObjPolyline.LoadFromDXF;

@@ -111,6 +111,7 @@ const ls = $AAAA;
       GLU_TESS_VERTEX_DATA={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_VERTEX_DATA;
       GLU_TESS_BEGIN_DATA={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_BEGIN_DATA;
       GLU_TESS_ERROR_DATA={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_ERROR_DATA;
+      GLU_NURBS_VERTEX_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_VERTEX_EXT;
 
       maxmybufer=99;
 type
@@ -126,6 +127,7 @@ type
     PTViewPortArray=^TViewPortArray;
 
     TessObj=Pointer;
+    GLUnurbsObj=Pointer;
 
     TOGLContextDesk=record
                           hrc: {HGLRC}thandle;
@@ -233,6 +235,13 @@ type
                            procedure TessEndContour(tess:TessObj);
                            procedure TessVertex(tess:TessObj; location:PGDBFontVertex2D; data:pointer);
                            procedure TessCallback(tess:TessObj; which:GLenum; CallBackFunc:_GLUfuncptr);
+
+                           function NewNurbsRenderer:GLUnurbsObj;
+                           procedure DeleteNurbsRenderer(renderer:GLUnurbsObj);
+                           procedure NurbsCallback(nurb:GLUnurbsObj; which:GLenum; CallBackFunc:_GLUfuncptr);
+                           procedure BeginCurve(renderer:GLUnurbsObj);
+	                   procedure EndCurve(renderer:GLUnurbsObj);
+
     end;
 
 var
@@ -288,6 +297,26 @@ procedure processpoint(const point:gdbvertex);
 begin
      //inc(pointcount);
      //middlepoint:=geometry.VertexAdd(middlepoint,point);
+end;
+function TOGLStateManager.NewNurbsRenderer:GLUnurbsObj;
+begin
+     result:=gluNewNurbsRenderer;
+end;
+procedure TOGLStateManager.DeleteNurbsRenderer(renderer:GLUnurbsObj);
+begin
+     gluDeleteNurbsRenderer(renderer)
+end;
+procedure TOGLStateManager.NurbsCallback(nurb:GLUnurbsObj; which:GLenum; CallBackFunc:_GLUfuncptr);
+begin
+     gluNurbsCallback(nurb,which,CallBackFunc);
+end;
+procedure TOGLStateManager.BeginCurve(renderer:GLUnurbsObj);
+begin
+     gluBeginCurve(renderer);
+end;
+procedure TOGLStateManager.EndCurve(renderer:GLUnurbsObj);
+begin
+     gluEndCurve(renderer);
 end;
 function TOGLStateManager.NewTess:Pointer;
 begin

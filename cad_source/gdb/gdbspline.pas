@@ -137,7 +137,9 @@ var //i,j: GDBInteger;
     tfv:GDBvertex4S;
     ptfv:PGDBvertex4S;
     fl:PGDBFloat;
+    s:string;
 begin
+     s:=gluGetString(GLU_VERSION);
      FormatWithoutSnapArray;
      CP.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}VertexArrayInOCS.count,sizeof(GDBvertex4S));
      ptv:=VertexArrayInOCS.beginiterate(ir);
@@ -413,4 +415,4 @@ begin
 end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
-end.
+end.

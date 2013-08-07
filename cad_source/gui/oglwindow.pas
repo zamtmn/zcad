@@ -4537,6 +4537,9 @@ begin
   GDBPointer(p):=oglsm.myglGetString(GL_VERSION);
   programlog.logoutstr('RD_Version:='+p,0);
   sysvar.RD.RD_Version^:=p;
+  GDBPointer(p):=oglsm.mygluGetString(GLU_VERSION);
+  programlog.logoutstr('RD_GLUVersion:='+p,0);
+  sysvar.RD.RD_GLUVersion^:=p;
   sysvar.RD.RD_MaxWidth^:=round(min(sysvar.RD.RD_MaxPointSize^,sysvar.RD.RD_MaxLineWidth^));
   programlog.logoutstr('RD_MaxWidth:='+inttostr(sysvar.RD.RD_MaxWidth^),0);
   programlog.logoutstr('end;',lp_DecPos);

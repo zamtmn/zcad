@@ -116,6 +116,8 @@ initialization;
   SysVar.RD.RD_Renderer^:=rsncOGLc;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_Version,'RD_Version');
   SysVar.RD.RD_Version^:=rsncOGLc;
+  SysVarUnit.AssignToSymbol(SysVar.RD.RD_GLUVersion,'RD_GLUVersion');
+  SysVar.RD.RD_GLUVersion^:=rsncOGLc;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxWidth,'RD_MaxWidth');
   SysVar.RD.RD_MaxWidth^:=-1;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_BackGroundColor,'RD_BackGroundColor');
@@ -206,4 +208,4 @@ initialization;
 
 finalization;
   //units.FreeAndDone;
-end.
+end.

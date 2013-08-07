@@ -78,6 +78,7 @@ type
             RD_Renderer:PGDBString;(*'Device'*)(*oi_readonly*)
             RD_Version:PGDBString;(*'Version'*)(*oi_readonly*)
             RD_Vendor:PGDBString;(*'Vendor'*)(*oi_readonly*)
+            RD_GLUVersion:PGDBString;(*'GLU Version'*)(*oi_readonly*)
             RD_MaxWidth:pGDBInteger;(*'Max width'*)(*oi_readonly*)
             RD_MaxLineWidth:PGDBDouble;(*'Max line width'*)(*oi_readonly*)
             RD_MaxPointSize:PGDBDouble;(*'Max point size'*)(*oi_readonly*)

@@ -104,6 +104,7 @@ const ls = $AAAA;
       GL_VENDOR={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_VENDOR;
       GL_RENDERER={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_RENDERER;
       GL_VERSION={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_VERSION;
+      GLU_VERSION={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_VERSION;
       GL_LINE_WIDTH_RANGE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LINE_WIDTH_RANGE;
       GL_point_size_RANGE={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_point_size_RANGE;
       GL_PROJECTION_MATRIX={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_PROJECTION_MATRIX;
@@ -225,6 +226,7 @@ type
                            procedure myglTexParameteri(target: GLenum; pname: GLenum; param: GLint);inline;
                            procedure myglGetDoublev(pname: GLenum; params: PGLdouble);inline;
                            function myglGetString(name: GLenum): PAnsiChar;inline;
+                           function mygluGetString(name: GLenum): PAnsiChar;inline;
                            procedure mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);inline;
 
                            function NewTess:TessObj;
@@ -879,6 +881,10 @@ end;
 function TOGLStateManager.myglGetString(name: GLenum): PAnsiChar;
 begin
      result:=glGetString(name);
+end;
+function TOGLStateManager.mygluGetString(name: GLenum): PAnsiChar;
+begin
+     result:=gluGetString(name);
 end;
 procedure TOGLStateManager.mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);
 begin

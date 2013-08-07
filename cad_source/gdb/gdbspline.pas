@@ -30,6 +30,7 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  ControlArrayInOCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  ControlArrayInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  Knots:GDBOpenArrayOfData;(*saved_to_shd*)(*hidden_in_objinsp*)
+                 AproxPointInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  Closed:GDBBoolean;(*saved_to_shd*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -52,6 +53,8 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
 {Export-}
 implementation
 uses GDBCable,log;
+var
+    parr:PGDBPoint3dArray;
 procedure GDBObjSpline.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 begin
   GDBPoint3dArrayAddOnTrackAxis(VertexArrayInWCS,posr,processaxis,closed);
@@ -86,11 +89,14 @@ function GDBObjSpline.getsnap;
 begin
      result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,closed,param,ProjectProc);
 end;
-procedure NurbsVertexCallBack(const v: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+procedure NurbsVertexCallBack(const v: PGDBvertex3S);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 var
     tv: gdbvertex;
 begin
-     tv:=pgdbvertex(v)^;
+     tv.x:=v^.x;
+     tv.y:=v^.y;
+     tv.z:=v^.z;
+     parr^.add(@tv);
      tv.x:=0;
 end;
 
@@ -110,18 +116,14 @@ var
     p:pchar;
 begin
      tv:=v;
-     p:=gluErrorString(v);
-     log.LogOut(p);
 end;
 
-procedure NurbsEndCallBack(const v: GLenum);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+procedure NurbsEndCallBack;{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 var
     tv: GLenum;
     p:pchar;
 begin
-     tv:=v;
-     p:=gluErrorString(v);
-     log.LogOut(p);
+     tv:=1;
 end;
 
 procedure GDBObjSpline.FormatEntity(const drawing:TDrawingDef);
@@ -133,9 +135,10 @@ var //i,j: GDBInteger;
     nurbsobj:GLUnurbsObj;
     CP:GDBOpenArrayOfData;
     tfv:GDBvertex4S;
-    ptfv:^GDBvertex4S;
-    fl:^GDBFloat;
+    ptfv:PGDBvertex4S;
+    fl:PGDBFloat;
 begin
+     FormatWithoutSnapArray;
      CP.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}VertexArrayInOCS.count,sizeof(GDBvertex4S));
      ptv:=VertexArrayInOCS.beginiterate(ir);
   if ptv<>nil then
@@ -160,18 +163,19 @@ begin
         fl:=Knots.iterate(ir);
   until fl=nil;
 
+  parr:=@AproxPointInWCS;
+  AproxPointInWCS.Clear;
 
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity;
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity;
-  gluOrtho2D(-5.0, 5.0, -5.0, 5.0);
+  //glMatrixMode(GL_MODELVIEW);
+  //glLoadIdentity;
+  //glMatrixMode(GL_PROJECTION);
+  //glLoadIdentity;
+  //gluOrtho2D(-5.0, 5.0, -5.0, 5.0);
 
   nurbsobj:={OGLSM.}gluNewNurbsRenderer;
 
   gluNurbsProperty(nurbsobj,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
-  gluNurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,5);
+  //gluNurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,5);
   gluNurbsProperty(nurbsobj,GLU_DISPLAY_MODE,{GLU_FILL}GLU_POINT);
   //gluNurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX, GL_TRUE);
   {OGLSM.}gluNurbsCallback(nurbsobj,GLU_NURBS_BEGIN_EXT,@NurbsBeginCallBack);
@@ -188,17 +192,16 @@ begin
 
   CP.done;
 
-  FormatWithoutSnapArray;
   //-------------BuildSnapArray(VertexArrayInWCS,snaparray,Closed);
   Geom.Clear;
-  if VertexArrayInWCS.Count>1 then
+  if AproxPointInWCS.Count>1 then
   begin
-  ptv:=VertexArrayInWCS.beginiterate(ir);
+  ptv:=AproxPointInWCS.beginiterate(ir);
   ptvfisrt:=ptv;
   if ptv<>nil then
   repeat
         ptvprev:=ptv;
-        ptv:=VertexArrayInWCS.iterate(ir);
+        ptv:=AproxPointInWCS.iterate(ir);
         if ptv<>nil then
                         Geom.DrawLine(ptv^,ptvprev^,vp);
   until ptv=nil;
@@ -252,6 +255,7 @@ begin
   ControlArrayInWCS.init({$IFDEF DEBUGBUILD}'{4213E1EA-8FF1-4E99-AEF5-C1635CB49B5A}',{$ENDIF}1000);
   ControlArrayInOCS.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}1000);
   Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000,sizeof(GDBFloat));
+  AproxPointInWCS.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}1000);
   vp.ID := GDBSplineID;
 end;
 constructor GDBObjSpline.initnul;
@@ -260,6 +264,7 @@ begin
   ControlArrayInWCS.init({$IFDEF DEBUGBUILD}'{4213E1EA-8FF1-4E99-AEF5-C1635CB49B5A}',{$ENDIF}1000);
   ControlArrayInOCS.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}1000);
   Knots.init({$IFDEF DEBUGBUILD}'{BF696899-F624-47EA-8E03-2086912119AE}',{$ENDIF}1000,sizeof(GDBFloat));
+  AproxPointInWCS.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}1000);
   vp.ID := GDBSplineID;
 end;
 
@@ -281,12 +286,14 @@ begin
   tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight,closed);
   CopyVPto(tpo^);
   //tpo^.vertexarray.init({$IFDEF DEBUGBUILD}'{90423E18-2ABF-48A8-8E0E-5D08A9E54255}',{$ENDIF}1000);
-  p:=vertexarrayinocs.PArray;
+  vertexarrayinocs.copyto(@tpo^.vertexarrayinocs);
+  Knots.copyto(@tpo^.Knots);
+  {p:=vertexarrayinocs.PArray;
   for i:=0 to vertexarrayinocs.Count-1 do
   begin
       tpo^.vertexarrayinocs.add(p);
       inc(p)
-  end;
+  end;}
   //tpo^.snaparray:=nil;
   //tpo^.format;
   result := tpo;
@@ -406,4 +413,4 @@ begin
 end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
-end.
+end.

@@ -110,6 +110,12 @@ GDBvertex3S=packed record
                 y:GDBFloat;(*saved_to_shd*)
                 z:GDBFloat;(*saved_to_shd*)
           end;
+GDBvertex4S=packed record
+                x:GDBFloat;(*saved_to_shd*)
+                y:GDBFloat;(*saved_to_shd*)
+                z:GDBFloat;(*saved_to_shd*)
+                w:GDBFloat;(*saved_to_shd*)
+          end;
 PGDBLineProp=^GDBLineProp;
 GDBLineProp=packed record
                   lBegin:GDBvertex;(*'Begin'*)(*saved_to_shd*)

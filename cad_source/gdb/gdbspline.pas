@@ -91,9 +91,30 @@ var
     tv: gdbvertex;
 begin
      tv:=pgdbvertex(v)^;
+     tv.x:=0;
 end;
 
 procedure NurbsErrorCallBack(const v: GLenum);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+var
+    tv: GLenum;
+    p:pchar;
+begin
+     tv:=v;
+     p:=gluErrorString(v);
+     log.LogOut(p);
+end;
+
+procedure NurbsBeginCallBack(const v: GLenum);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+var
+    tv: GLenum;
+    p:pchar;
+begin
+     tv:=v;
+     p:=gluErrorString(v);
+     log.LogOut(p);
+end;
+
+procedure NurbsEndCallBack(const v: GLenum);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 var
     tv: GLenum;
     p:pchar;
@@ -110,18 +131,63 @@ var //i,j: GDBInteger;
     //vs:VectorSnap;
         ir:itrec;
     nurbsobj:GLUnurbsObj;
+    CP:GDBOpenArrayOfData;
+    tfv:GDBvertex4S;
+    ptfv:^GDBvertex4S;
+    fl:^GDBFloat;
 begin
-  nurbsobj:=OGLSM.NewNurbsRenderer;
+     CP.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}VertexArrayInOCS.count,sizeof(GDBvertex4S));
+     ptv:=VertexArrayInOCS.beginiterate(ir);
+  if ptv<>nil then
+  repeat
+        tfv.x:=ptv^.x;
+        tfv.y:=ptv^.y;
+        tfv.z:=ptv^.z;
+        tfv.w:=1;
+        CP.Add(@tfv);
+        ptv:=VertexArrayInOCS.iterate(ir);
+  until ptv=nil;
 
-  OGLSM.NurbsCallback(nurbsobj,GLU_NURBS_VERTEX_EXT,@NurbsVertexCallBack);
-  OGLSM.NurbsCallback(nurbsobj,GLU_NURBS_ERROR,@NurbsErrorCallBack);
+  ptfv:=CP.beginiterate(ir);
+  if ptfv<>nil then
+  repeat
+        ptfv:=CP.iterate(ir);
+  until ptfv=nil;
 
-  OGLSM.BeginCurve(nurbsobj);
-  gluNurbsCurve (nurbsobj,Knots.Count,Knots.PArray,VertexArrayInOCS.Count,VertexArrayInOCS.PArray,4,GL_MAP1_VERTEX_3);
-  OGLSM.EndCurve(nurbsobj);
+  fl:=Knots.beginiterate(ir);
+  if fl<>nil then
+  repeat
+        fl:=Knots.iterate(ir);
+  until fl=nil;
 
 
-  OGLSM.DeleteNurbsRenderer(nurbsobj);
+
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity;
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity;
+  gluOrtho2D(-5.0, 5.0, -5.0, 5.0);
+
+  nurbsobj:={OGLSM.}gluNewNurbsRenderer;
+
+  gluNurbsProperty(nurbsobj,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
+  gluNurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,5);
+  gluNurbsProperty(nurbsobj,GLU_DISPLAY_MODE,{GLU_FILL}GLU_POINT);
+  //gluNurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX, GL_TRUE);
+  {OGLSM.}gluNurbsCallback(nurbsobj,GLU_NURBS_BEGIN_EXT,@NurbsBeginCallBack);
+  {OGLSM.}gluNurbsCallback(nurbsobj,GLU_NURBS_END_EXT,@NurbsEndCallBack);
+  {OGLSM.}gluNurbsCallback(nurbsobj,GLU_NURBS_VERTEX_EXT,@NurbsVertexCallBack);
+  {OGLSM.}gluNurbsCallback(nurbsobj,GLU_NURBS_ERROR,@NurbsErrorCallBack);
+
+  {OGLSM.}gluBeginCurve(nurbsobj);
+  gluNurbsCurve (nurbsobj,Knots.Count,Knots.PArray,{CP.Count}4,CP.PArray,4,GL_MAP1_VERTEX_4);
+  {OGLSM.}gluEndCurve(nurbsobj);
+
+
+  {OGLSM.}gluDeleteNurbsRenderer(nurbsobj);
+
+  CP.done;
+
   FormatWithoutSnapArray;
   //-------------BuildSnapArray(VertexArrayInWCS,snaparray,Closed);
   Geom.Clear;
@@ -340,4 +406,4 @@ begin
 end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
-end.
+end.

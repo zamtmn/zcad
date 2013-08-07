@@ -956,4 +956,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBCurve.initialization');{$ENDIF}
-end.
+end.

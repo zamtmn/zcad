@@ -105,11 +105,13 @@ GDBBasis=packed record
                 oy:GDBvertex;(*'OY Axis'*)(*saved_to_shd*)
                 oz:GDBvertex;(*'OZ Axis'*)(*saved_to_shd*)
           end;
+PGDBvertex3S=^GDBvertex3S;
 GDBvertex3S=packed record
                 x:GDBFloat;(*saved_to_shd*)
                 y:GDBFloat;(*saved_to_shd*)
                 z:GDBFloat;(*saved_to_shd*)
           end;
+PGDBvertex4S=^GDBvertex4S;
 GDBvertex4S=packed record
                 x:GDBFloat;(*saved_to_shd*)
                 y:GDBFloat;(*saved_to_shd*)
@@ -450,4 +452,4 @@ end;
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('gdbase.initialization');{$ENDIF}
 end.
-
+

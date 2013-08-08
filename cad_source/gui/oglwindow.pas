@@ -4540,6 +4540,12 @@ begin
   GDBPointer(p):=oglsm.mygluGetString(GLU_VERSION);
   programlog.logoutstr('RD_GLUVersion:='+p,0);
   sysvar.RD.RD_GLUVersion^:=p;
+  GDBPointer(p):=oglsm.mygluGetString(GLU_EXTENSIONS);
+  programlog.logoutstr('RD_GLUExtensions:='+p,0);
+  sysvar.RD.RD_GLUExtensions^:=p;
+  GDBPointer(p):=oglsm.myglGetString(GL_EXTENSIONS);
+  programlog.logoutstr('RD_Extensions:='+p,0);
+  sysvar.RD.RD_Extensions^:=p;
   sysvar.RD.RD_MaxWidth^:=round(min(sysvar.RD.RD_MaxPointSize^,sysvar.RD.RD_MaxLineWidth^));
   programlog.logoutstr('RD_MaxWidth:='+inttostr(sysvar.RD.RD_MaxWidth^),0);
   programlog.logoutstr('end;',lp_DecPos);

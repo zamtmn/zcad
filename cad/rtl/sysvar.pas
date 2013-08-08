@@ -38,8 +38,10 @@ var
   RD_MaxPointSize:GDBDouble;
   RD_Vendor:GDBString;
   RD_Renderer:GDBString;
+  RD_Extensions:GDBString;
   RD_Version:GDBString;
   RD_GLUVersion:GDBString;
+  RD_GLUExtensions:GDBString;
   RD_MaxWidth:GDBInteger;
   RD_BackGroundColor:RGB;
   RD_Restore_Mode:TRestoreMode;

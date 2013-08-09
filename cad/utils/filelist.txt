@@ -68,6 +68,7 @@ C:\zcad\CAD_SOURCE\gdb\GDBMText.pas
 C:\zcad\CAD_SOURCE\gdb\GDBpoint.pas
 C:\zcad\CAD_SOURCE\gdb\GDBCurve.pas
 C:\zcad\CAD_SOURCE\gdb\GDBPolyLine.pas
+C:\zcad\CAD_SOURCE\gdb\gdbspline.pas
 C:\zcad\CAD_SOURCE\electroteh\GDBCable.pas
 C:\zcad\CAD_SOURCE\gdb\GDBRoot.pas
 C:\zcad\CAD_SOURCE\gdb\GDBCamera.pas

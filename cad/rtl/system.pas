@@ -2187,6 +2187,29 @@ GDBObjPolyline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
            end;
+//Generate on C:\zcad\CAD_SOURCE\gdb\gdbspline.pas
+PGDBObjSpline=^GDBObjSpline;
+GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
+                 ControlArrayInOCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
+                 ControlArrayInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
+                 Knots:GDBOpenArrayOfData;(*saved_to_shd*)(*hidden_in_objinsp*)
+                 AproxPointInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
+                 Closed:GDBBoolean;(*saved_to_shd*)
+                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
+                 constructor initnul(owner:PGDBObjGenericWithSubordinated);
+                 procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;abstract;
+                 procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
+                 procedure startsnap(out osp:os_record; out pdata:GDBPointer);virtual;abstract;
+                 function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;abstract;
+                 procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;abstract;
+                 procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
+                 function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
+                 function GetObjTypeName:GDBString;virtual;abstract;
+                 function FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;abstract;
+                 function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
+                 function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
+                 procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
+           end;
 //Generate on C:\zcad\CAD_SOURCE\electroteh\GDBCable.pas
 PTNodeProp=^TNodeProp;
 TNodeProp=packed record

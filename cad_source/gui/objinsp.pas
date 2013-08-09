@@ -482,6 +482,20 @@ var
     result := ThemeServices.GetDetailSize(Details);
     //ThemeServices.DrawElement(Canvas.Handle, Details, Rect(X, Y, X + result.cx, Y + result.cy), nil);
   end;
+procedure drawstring(cnvs:tcanvas;r:trect;L,T:integer;s:string);
+const
+  maxsize=200;
+var
+   s2:string;
+begin
+     if length(s)<maxsize then
+                          cnvs.TextRect(r,L,T,s)
+                      else
+                          begin
+                               s2:=copy(s,1,maxsize)+'...';
+                               cnvs.TextRect(r,L,T,s2);
+                          end;
+end;
 begin
   //colorn:=windows.RGB(150,150,150);
 
@@ -582,7 +596,8 @@ begin
           //  SetTextColor({cdc}dc,coloro);
           end
           else
-              canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
+              drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
+              //canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
               //drawtextA({cdc}dc,GDBPointer(ppd^.Name),length(ppd^.Name),r,DT_left);
           r.Top:=r.Top-3;
           r.Left:=r.Right-1;
@@ -601,7 +616,8 @@ begin
           begin
             tempcolor:=canvas.Font.Color;
             canvas.Font.Color:=clGrayText;
-            canvas.TextRect(r,r.Left,r.Top,(ppd^.value));
+            drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
+            //canvas.TextRect(r,r.Left,r.Top,(ppd^.value));
             canvas.Font.Color:=tempcolor;
 
 //            coloro:=SetTextColor({cdc}dc,colorn);

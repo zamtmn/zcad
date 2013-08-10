@@ -20,7 +20,7 @@ unit gdbspline;
 {$INCLUDE def.inc}
 
 interface
-uses gl,glu,OGLSpecFunc,UGDBOpenArrayOfData,UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},GDBEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
+uses OGLSpecFunc,UGDBOpenArrayOfData,UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},GDBEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
 ugdbltypearray,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman{,OGLSpecFunc};
 type
@@ -32,6 +32,7 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  Knots:GDBOpenArrayOfData;(*saved_to_shd*)(*hidden_in_objinsp*)
                  AproxPointInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
                  Closed:GDBBoolean;(*saved_to_shd*)
+                 Degree:GDBInteger;(*saved_to_shd*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
@@ -41,6 +42,7 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
 
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                 procedure SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                  procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                  function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:GDBString;virtual;
@@ -106,7 +108,7 @@ var
     p:pchar;
 begin
      tv:=v;
-     p:=gluErrorString(v);
+     p:=OGLSM.ErrorString(v);
      log.LogOut(p);
 end;
 
@@ -139,7 +141,7 @@ var //i,j: GDBInteger;
     fl:PGDBFloat;
     s:string;
 begin
-     s:=gluGetString(GLU_VERSION);
+
      FormatWithoutSnapArray;
      CP.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}VertexArrayInOCS.count,sizeof(GDBvertex4S));
      ptv:=VertexArrayInOCS.beginiterate(ir);
@@ -174,23 +176,23 @@ begin
   //glLoadIdentity;
   //gluOrtho2D(-5.0, 5.0, -5.0, 5.0);
 
-  nurbsobj:={OGLSM.}gluNewNurbsRenderer;
+  nurbsobj:=OGLSM.NewNurbsRenderer;
 
-  gluNurbsProperty(nurbsobj,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
-  gluNurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,10);
-  gluNurbsProperty(nurbsobj,GLU_DISPLAY_MODE,{GLU_FILL}GLU_POINT);
+  OGLSM.NurbsProperty(nurbsobj,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
+  OGLSM.NurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,10);
+  OGLSM.NurbsProperty(nurbsobj,GLU_DISPLAY_MODE,{GLU_FILL}GLU_POINT);
   //gluNurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX, GL_TRUE);
-  {OGLSM.}gluNurbsCallback(nurbsobj,GLU_NURBS_BEGIN_EXT,@NurbsBeginCallBack);
-  {OGLSM.}gluNurbsCallback(nurbsobj,GLU_NURBS_END_EXT,@NurbsEndCallBack);
-  {OGLSM.}gluNurbsCallback(nurbsobj,GLU_NURBS_VERTEX_EXT,@NurbsVertexCallBack);
-  {OGLSM.}gluNurbsCallback(nurbsobj,GLU_NURBS_ERROR,@NurbsErrorCallBack);
+  OGLSM.NurbsCallback(nurbsobj,GLU_NURBS_BEGIN_EXT,@NurbsBeginCallBack);
+  OGLSM.NurbsCallback(nurbsobj,GLU_NURBS_END_EXT,@NurbsEndCallBack);
+  OGLSM.NurbsCallback(nurbsobj,GLU_NURBS_VERTEX_EXT,@NurbsVertexCallBack);
+  OGLSM.NurbsCallback(nurbsobj,GLU_NURBS_ERROR,@NurbsErrorCallBack);
 
-  {OGLSM.}gluBeginCurve(nurbsobj);
-  gluNurbsCurve (nurbsobj,Knots.Count,Knots.PArray,{CP.Count}4,CP.PArray,4,GL_MAP1_VERTEX_4);
-  {OGLSM.}gluEndCurve(nurbsobj);
+  OGLSM.BeginCurve(nurbsobj);
+  OGLSM.NurbsCurve (nurbsobj,Knots.Count,Knots.PArray,{CP.Count}4,CP.PArray,degree+1,GL_MAP1_VERTEX_4);
+  OGLSM.EndCurve(nurbsobj);
 
 
-  {OGLSM.}gluDeleteNurbsRenderer(nurbsobj);
+  OGLSM.DeleteNurbsRenderer(nurbsobj);
 
   CP.done;
 
@@ -290,6 +292,7 @@ begin
   //tpo^.vertexarray.init({$IFDEF DEBUGBUILD}'{90423E18-2ABF-48A8-8E0E-5D08A9E54255}',{$ENDIF}1000);
   vertexarrayinocs.copyto(@tpo^.vertexarrayinocs);
   Knots.copyto(@tpo^.Knots);
+  tpo^.degree:=degree;
   {p:=vertexarrayinocs.PArray;
   for i:=0 to vertexarrayinocs.Count-1 do
   begin
@@ -301,18 +304,44 @@ begin
   result := tpo;
 end;
 procedure GDBObjSpline.SaveToDXF;
-//var
+var
 //    ptv:pgdbvertex;
-//    ir:itrec;
+    ir:itrec;
+    fl:PGDBFloat;
+    ptv:pgdbvertex;
 begin
-  SaveToDXFObjPrefix(handle,outhandle,'POLYLINE','AcDb3dPolyline');
-  dxfGDBIntegerout(outhandle,66,1);
-  dxfvertexout(outhandle,10,geometry.NulVertex);
+  SaveToDXFObjPrefix(handle,outhandle,'SPLINE','AcDbSpline');
   if closed then
                 dxfGDBIntegerout(outhandle,70,9)
             else
                 dxfGDBIntegerout(outhandle,70,8);
+  dxfGDBIntegerout(outhandle,71,degree);
+  dxfGDBIntegerout(outhandle,72,Knots.Count);
+  dxfGDBIntegerout(outhandle,73,VertexArrayInOCS.Count);
+
+  dxfGDBDoubleout(outhandle,42,0.0000000001);
+  dxfGDBDoubleout(outhandle,43,0.0000000001);
+
+  fl:=Knots.beginiterate(ir);
+  if fl<>nil then
+  repeat
+        dxfGDBDoubleout(outhandle,40,fl^);
+        fl:=Knots.iterate(ir);
+  until fl=nil;
+
+  ptv:=VertexArrayInOCS.beginiterate(ir);
+  if ptv<>nil then
+  repeat
+        dxfvertexout(outhandle,10,ptv^);
+        ptv:=VertexArrayInOCS.iterate(ir);
+  until ptv=nil;
+
 end;
+
+procedure GDBObjSpline.SaveToDXFfollow(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);
+begin
+end;
+
 procedure GDBObjSpline.LoadFromDXF;
 var s{, layername}: GDBString;
   byt{, code}: GDBInteger;
@@ -344,6 +373,11 @@ begin
                                                    begin
                                                         if (hlGDBWord and 1) = 1 then closed := true;
                                                    end
+  else if dxfGDBIntegerload(f,71,byt,Degree) then
+                                                   begin
+                                                        Degree:=Degree;
+                                                   end
+
                                       else s:= f.readGDBSTRING;
     byt:=readmystrtoint(f);
   end;

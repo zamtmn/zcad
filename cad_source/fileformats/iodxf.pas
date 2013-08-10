@@ -2388,7 +2388,7 @@ end;
 procedure Import(name: GDBString;var drawing:TSimpleDrawing);
 var
   Vec: TvVectorialDocument;
-  source:TvVectorialPage;
+  source:{TvVectorialPage}TvPage;
   CurEntity: TvEntity;
   i:integer;
   pobj:PGDBObjEntity;

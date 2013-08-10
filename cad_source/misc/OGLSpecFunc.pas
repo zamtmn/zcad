@@ -25,6 +25,8 @@ uses zcadsysvars,gdbasetypes,gdbase,{$IFNDEF DELPHI}LCLType,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
      {$IFDEF WINDOWS}windows,{$ENDIF}
      log,sysutils,varmandef;
+type
+    GLenum={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GLenum;
 const ls = $AAAA;
       ps:array [0..31] of LONGWORD=(
                                    $33333333,$33333333,
@@ -114,7 +116,16 @@ const ls = $AAAA;
       GLU_TESS_ERROR_DATA={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_TESS_ERROR_DATA;
       GL_EXTENSIONS={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_EXTENSIONS;
       GLU_EXTENSIONS={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_EXTENSIONS;
-      //GLU_NURBS_VERTEX_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_VERTEX_EXT;
+      GLU_NURBS_VERTEX_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_VERTEX_EXT;
+      GL_MAP1_VERTEX_4={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_MAP1_VERTEX_4;
+      GLU_NURBS_MODE_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_MODE_EXT;
+      GLU_NURBS_TESSELLATOR_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_TESSELLATOR_EXT;
+      GLU_SAMPLING_TOLERANCE={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_SAMPLING_TOLERANCE;
+      GLU_DISPLAY_MODE={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_DISPLAY_MODE;
+      GLU_POINT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_POINT;
+      GLU_NURBS_BEGIN_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_BEGIN_EXT;
+      GLU_NURBS_END_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_END_EXT;
+      GLU_NURBS_ERROR={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_ERROR;
 
       maxmybufer=99;
 type
@@ -245,6 +256,10 @@ type
                            procedure NurbsCallback(nurb:GLUnurbsObj; which:GLenum; CallBackFunc:_GLUfuncptr);
                            procedure BeginCurve(renderer:GLUnurbsObj);
 	                   procedure EndCurve(renderer:GLUnurbsObj);
+                           procedure NurbsCurve(nurb:PGLUnurbs; knotCount:GLint; knots:PGLfloat; stride:GLint; control:PGLfloat;
+                                                order:GLint; _type:GLenum);
+                           procedure NurbsProperty(nurb:PGLUnurbs; _property:GLenum; value:GLfloat);
+                           function ErrorString(error:GLenum):PGLubyte;
 
     end;
 
@@ -321,6 +336,18 @@ end;
 procedure TOGLStateManager.EndCurve(renderer:GLUnurbsObj);
 begin
      gluEndCurve(renderer);
+end;
+procedure TOGLStateManager.NurbsCurve(nurb:PGLUnurbs; knotCount:GLint; knots:PGLfloat; stride:GLint; control:PGLfloat;order:GLint; _type:GLenum);
+begin
+     gluNurbsCurve(nurb,knotCount,knots,stride,control,order,_type);
+end;
+procedure TOGLStateManager.NurbsProperty(nurb:PGLUnurbs; _property:GLenum; value:GLfloat);
+begin
+     gluNurbsProperty(nurb,_property,value);
+end;
+function TOGLStateManager.ErrorString(error:GLenum):PGLubyte;
+begin
+     result:=gluErrorString(error);
 end;
 function TOGLStateManager.NewTess:Pointer;
 begin

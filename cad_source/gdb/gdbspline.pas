@@ -35,6 +35,7 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  Degree:GDBInteger;(*saved_to_shd*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBBoolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
+                 destructor done;virtual;
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
 
                  procedure FormatEntity(const drawing:TDrawingDef);virtual;
@@ -63,12 +64,12 @@ begin
 end;
 function GDBObjSpline.onmouse;
 begin
-  if VertexArrayInWCS.count<2 then
+  if {VertexArrayInWCS}AproxPointInWCS.count<2 then
                                   begin
                                        result:=false;
                                        exit;
                                   end;
-   result:=VertexArrayInWCS.onmouse(mf,closed);
+   result:={VertexArrayInWCS}AproxPointInWCS.onmouse(mf,closed);
 end;
 function GDBObjSpline.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;
 begin
@@ -271,7 +272,14 @@ begin
   AproxPointInWCS.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}1000);
   vp.ID := GDBSplineID;
 end;
-
+destructor GDBObjSpline.done;
+begin
+          ControlArrayInWCS.done;
+          ControlArrayInOCS.done;
+          Knots.done;
+          AproxPointInWCS.done;
+          inherited;
+end;
 procedure GDBObjSpline.DrawGeometry;
 begin
      //vertexarrayInWCS.DrawGeometryWClosed(closed);

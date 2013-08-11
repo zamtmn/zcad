@@ -596,8 +596,7 @@ begin
           //  SetTextColor({cdc}dc,coloro);
           end
           else
-              drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
-              //canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
+              canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
               //drawtextA({cdc}dc,GDBPointer(ppd^.Name),length(ppd^.Name),r,DT_left);
           r.Top:=r.Top-3;
           r.Left:=r.Right-1;
@@ -626,7 +625,8 @@ begin
           end
           else
             //drawtextA({cdc}dc,GDBPointer(ppd^.value),length(ppd^.value),r,DT_left);
-            canvas.TextRect(r,r.Left,r.Top,(ppd^.value));
+            drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
+            //canvas.TextRect(r,r.Left,r.Top,(ppd^.value));
                                  //TextOut(cdc, namecol, y * rowh, GDBPointer(ppd^.value), length(ppd^.value));
           y:=y++rowh;
         end;

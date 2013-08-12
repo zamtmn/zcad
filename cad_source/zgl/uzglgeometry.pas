@@ -19,7 +19,7 @@
 unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,uzgltriangles3darray,ugdbltypearray,ugdbfont,sysutils,gdbase,memman,log,
+uses UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,uzgltriangles3darray,ugdbltypearray,ugdbfont,sysutils,gdbase,memman,log,
      gdbasetypes;
 type
 {Export+}
@@ -34,9 +34,31 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 constructor init;
                 destructor done;virtual;
                 procedure DrawLine(const p1,p2:GDBVertex; const vp:GDBObjVisualProp);virtual;
+                procedure DrawPolyLine(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed:GDBBoolean);virtual;
              end;
 {Export-}
 implementation
+procedure ZGLGeometry.DrawPolyLine(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed:GDBBoolean);
+var
+    ptv,ptvprev,ptvfisrt: pgdbvertex;
+    ir:itrec;
+begin
+  if Points.Count>1 then
+  begin
+  ptv:=Points.beginiterate(ir);
+  ptvfisrt:=ptv;
+  if ptv<>nil then
+  repeat
+        ptvprev:=ptv;
+        ptv:=Points.iterate(ir);
+        if ptv<>nil then
+                        DrawLine(ptv^,ptvprev^,vp);
+  until ptv=nil;
+  if closed then
+                DrawLine(ptvprev^,ptvfisrt^,vp);
+  end;
+end;
+
 procedure ZGLGeometry.DrawLine(const p1,p2:GDBVertex; const vp:GDBObjVisualProp);
 var
     scale,length:GDBDouble;

@@ -156,17 +156,17 @@ begin
         ptv:=VertexArrayInOCS.iterate(ir);
   until ptv=nil;
 
-  ptfv:=CP.beginiterate(ir);
+  {ptfv:=CP.beginiterate(ir);
   if ptfv<>nil then
   repeat
         ptfv:=CP.iterate(ir);
-  until ptfv=nil;
+  until ptfv=nil;}
 
-  fl:=Knots.beginiterate(ir);
+  {fl:=Knots.beginiterate(ir);
   if fl<>nil then
   repeat
         fl:=Knots.iterate(ir);
-  until fl=nil;
+  until fl=nil;}
 
   parr:=@AproxPointInWCS;
   AproxPointInWCS.Clear;
@@ -197,22 +197,8 @@ begin
 
   CP.done;
 
-  //-------------BuildSnapArray(VertexArrayInWCS,snaparray,Closed);
   Geom.Clear;
-  if AproxPointInWCS.Count>1 then
-  begin
-  ptv:=AproxPointInWCS.beginiterate(ir);
-  ptvfisrt:=ptv;
-  if ptv<>nil then
-  repeat
-        ptvprev:=ptv;
-        ptv:=AproxPointInWCS.iterate(ir);
-        if ptv<>nil then
-                        Geom.DrawLine(ptv^,ptvprev^,vp);
-  until ptv=nil;
-  if closed then
-                Geom.DrawLine(ptvprev^,ptvfisrt^,vp);
-  end;
+  Geom.DrawPolyLine(AproxPointInWCS,vp,closed);
 end;
 
 function GDBObjSpline.FromDXFPostProcessBeforeAdd;

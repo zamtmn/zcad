@@ -407,17 +407,9 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
-#: zcadexternal.acn_fakecopyclipbase~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
-msgstr ""
-
-#: zcadexternal.acn_fakepaste~caption
-msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -643,10 +635,6 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
-#: zcadexternal.acn_processkz~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_processkz~textimage
 msgctxt "zcadexternal.acn_processkz~textimage"
 msgid "Process external KZ"
@@ -681,10 +669,6 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
-
-#: zcadexternal.acn_remautocables~caption
-msgid ""
-msgstr ""
 
 #: zcadexternal.acn_remautocables~textimage
 msgid "Remove auto cables"
@@ -1124,11 +1108,10 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#, fuzzy
-#| msgid "Block params"
+#| msgid "Rotate"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
-msgstr "Поворот"
+msgid "Block params"
+msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjcircle~area
 msgctxt "zcadexternal.gdbobjcircle~area"
@@ -2450,10 +2433,6 @@ msgstr "Нумеруесая переменная"
 msgid "Save start number"
 msgstr "Сохранять старовое значение"
 
-#: zcadexternal.tnumberingparams~sortmode
-msgid ""
-msgstr ""
-
 #: zcadexternal.tnumberingparams~startnumber
 msgid "Start"
 msgstr "Начальное значение"
@@ -3369,7 +3348,7 @@ msgstr "Устройство должно быть выбрано до запу�
 
 #: zcadstrconsts.rscmseldevsbeforecomm
 msgid "Devices must be selected before run the command"
-msgstr ""
+msgstr "Устройства должны быть выбраны до запуска команды"
 
 #: zcadstrconsts.rscmselentbeforecomm
 msgid "Entities must be selected before run the command"
@@ -3495,7 +3474,7 @@ msgstr "Загрузка файла  \"%s\""
 
 #: zcadstrconsts.rsloadingfontfile
 msgid "Loading font file \"%S\""
-msgstr ""
+msgstr "Загрузка файла шрифтов \"%S\""
 
 #: zcadstrconsts.rsmenunotfounf
 msgid "Menu \"%s\" not found"
@@ -3525,7 +3504,7 @@ msgstr "Открыть файл..."
 
 #: zcadstrconsts.rsprocesstimemsg
 msgid "%s:  %s second"
-msgstr ""
+msgstr "%s:  %s секунд"
 
 #: zcadstrconsts.rsprogramdb
 msgid "Program DB"

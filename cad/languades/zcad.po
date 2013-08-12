@@ -1043,13 +1043,13 @@ msgstr ""
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+msgid "Rotate"
 msgstr ""
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
+msgid "Block params"
 msgstr ""
 
 #: zcadexternal.gdbobjcircle~area
@@ -1235,6 +1235,12 @@ msgstr ""
 #: zcadexternal.gdbsysvariable~view
 msgctxt "zcadexternal.gdbsysvariable~view"
 msgid "View"
+msgstr ""
+
+#: zcadexternal.hint_panel~colorcombobox
+#, fuzzy
+msgctxt "zcadexternal.hint_panel~colorcombobox"
+msgid "Line type selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~colorcombobox
@@ -1459,6 +1465,10 @@ msgstr ""
 
 #: zcadexternal.menu~edit
 msgid "Edit"
+msgstr ""
+
+#: zcadexternal.menu~fastmenu
+msgid "FASTMENU"
 msgstr ""
 
 #: zcadexternal.menu~file
@@ -1930,6 +1940,10 @@ msgstr ""
 
 #: zcadexternal.tdwg~dwg_clinew
 msgid "Current line weigwt"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_cltype
+msgid "Drawing line type"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_drawgrid
@@ -2644,6 +2658,18 @@ msgstr ""
 
 #: zcadexternal.trd~rd_backgroundcolor
 msgid "Background color"
+msgstr ""
+
+#: zcadexternal.trd~rd_extensions
+msgid "Extensions"
+msgstr ""
+
+#: zcadexternal.trd~rd_gluextensions
+msgid "GLU Extensions"
+msgstr ""
+
+#: zcadexternal.trd~rd_gluversion
+msgid "GLU Version"
 msgstr ""
 
 #: zcadexternal.trd~rd_imagedegradation
@@ -3452,4 +3478,4 @@ msgstr ""
 #: zcadstrconsts.rszcadstarted
 msgid "ZCAD v%s started"
 msgstr ""
-
+

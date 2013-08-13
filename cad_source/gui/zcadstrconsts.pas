@@ -59,6 +59,9 @@ resourcestring
   rsUnableToWriteFile='Unable to write file "%s"';
   rsUnableToFindFile='Unable to find file "%s"';
   rsTemplateNotFound='Template file "%s" not found';
+  rsReserveFontNotLoad='Can not load reserve font';
+  rsReserveFontNotFound='Reserve font is not found in the resources';
+  rsAlternateFontNotFoundIn='Alternate font "%s" is not found in "%s"';
 
   {commands messages}
   rscmCantGetBlockToReplace='Unable get block name to replace';

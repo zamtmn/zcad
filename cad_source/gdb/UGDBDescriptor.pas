@@ -20,7 +20,7 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-zcadsysvars,zcadinterface,zcadstrconsts,GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,ugdbabstractdrawing,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
+LResources,zcadsysvars,zcadinterface,zcadstrconsts,GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,ugdbabstractdrawing,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
 UGDBNumerator, gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,sysinfo,ugdbsimpledrawing,
@@ -34,7 +34,7 @@ ugdbltypearray,
 GDBCamera,
 UGDBOpenArrayOfPV,
 GDBRoot,ugdbfont,
-OGLWindow,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,ugdbtrash;
+OGLWindow,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,ugdbtrash,UGDBOpenArrayOfByte;
 type
 {EXPORT+}
 TDWGProps=packed record
@@ -843,6 +843,12 @@ begin
 end;
 
 procedure startup;
+var
+   r: TLResource;
+   f:GDBOpenArrayOfByte;
+const
+   resname='GEWIND';
+   filename='GEWIND.SHX';
 begin
   RedrawOGLWNDProc:=RedrawOGLWND;
   LTypeManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
@@ -855,14 +861,28 @@ begin
 
   //FromDirIterator({sysparam.programpath+'fonts/'}'C:\Program Files\AutoCAD 2010\Fonts\','*.shx','',addf,nil);
 
-  FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,sysvar.SYS.SYS_AlternateFont^));
+  pbasefont:=FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,sysvar.SYS.SYS_AlternateFont^));
+  if pbasefont=nil then
+  begin
+       shared.LogError(format(rsAlternateFontNotFoundIn,[sysvar.SYS.SYS_AlternateFont^,sysvar.PATH.Fonts_Path^]));
+       r := LazarusResources.Find(resname);
+       if r = nil then
+                      shared.FatalError(rsReserveFontNotFound)
+                  else
+                      begin
+                           f.init(length(r.Value));
+                           f.AddData(@r.Value[1],length(r.Value));
+                           f.SaveToFile(sysvar.PATH.Temp_files^+filename);
+                           pbasefont:=FontManager.addFonf(sysvar.PATH.Temp_files^+filename);
+                           f.done;
+                           if pbasefont=nil then
+                                                shared.FatalError(rsReserveFontNotLoad);
+                      end;
+  end;
   FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,'ltypeshp.shx'));
 
 
-  pbasefont:=FontManager.getAddres(sysvar.SYS.SYS_AlternateFont^);
-  if pbasefont=nil then
-                       shared.FatalError('Альтернативный шрифт "'+sysvar.SYS.SYS_AlternateFont^+
-                                         '" не найден в "'+ sysvar.PATH.Fonts_Path^+'"');
+  //pbasefont:=FontManager.getAddres(sysvar.SYS.SYS_AlternateFont^);
 
   //FontManager.addFonf(sysparam.programpath+'fonts/gewind.shx');
   //FontManager.addFonf('gothice.shx');
@@ -896,6 +916,7 @@ begin
   GDBTrash.done;
 end;
 begin
+  {$I gewind.lrs}
   programlog.logoutstr('UGDBDescriptor.startup',lp_IncPos);
   //UGDBDescriptor.startup;
   {$IFDEF DEBUGINITSECTION}LogOut('GDBDescriptor.initialization');{$ENDIF}

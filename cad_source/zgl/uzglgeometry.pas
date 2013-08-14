@@ -19,7 +19,7 @@
 unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
-uses UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,uzgltriangles3darray,ugdbltypearray,ugdbfont,sysutils,gdbase,memman,log,
+uses UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,uzgltriangles3darray,ugdbltypearray,ugdbfont,sysutils,gdbase,memman,log,
      gdbasetypes;
 type
 {Export+}
@@ -36,26 +36,85 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 procedure DrawLine(const p1,p2:GDBVertex; const vp:GDBObjVisualProp);virtual;
                 procedure DrawPolyLine(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed:GDBBoolean);virtual;
              end;
+ZPolySegmentData={$IFNDEF DELPHI}packed{$ENDIF} record
+                                                      startpoint,endpoint,dir:GDBVertex;
+                                                      length,accumlength:GDBDouble;
+                                                end;
 {Export-}
 implementation
+function getlength(const points:GDBPoint3dArray;var sd:GDBOpenArrayOfData; const closed:GDBBoolean):GDBDouble;
+var
+    ptv,ptvprev,pfirstv: pgdbvertex;
+    ir:itrec;
+    segment:ZPolySegmentData;
+    cl:GDBDouble;
+begin
+  result:=0;
+  ptvprev:=points.beginiterate(ir);
+  pfirstv:=ptvprev;
+  ptv:=points.iterate(ir);
+  if ptv<>nil then
+  repeat
+        cl:=geometry.Vertexlength(ptv^,ptvprev^);
+
+        segment.startpoint:=ptvprev^;
+        segment.endpoint:=ptvprev^;
+        segment.length:=cl;
+        segment.accumlength:=result;
+
+        result:=result+cl;
+
+        ptvprev:=ptv;
+        ptv:=points.iterate(ir);
+  until ptv=nil;
+  if closed then
+                result:=result+geometry.Vertexlength(pfirstv^,ptvprev^);
+end;
 procedure ZGLGeometry.DrawPolyLine(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed:GDBBoolean);
 var
     ptv,ptvprev,ptvfisrt: pgdbvertex;
     ir:itrec;
+    scale,polylength,num,d:GDBDouble;
+    sd:GDBOpenArrayOfData;
+procedure SetPolyUnLTyped;
+begin
+      ptv:=Points.beginiterate(ir);
+      ptvfisrt:=ptv;
+      if ptv<>nil then
+      repeat
+            ptvprev:=ptv;
+            ptv:=Points.iterate(ir);
+            if ptv<>nil then
+                            DrawLine(ptv^,ptvprev^,vp);
+      until ptv=nil;
+      if closed then
+                    DrawLine(ptvprev^,ptvfisrt^,vp);
+end;
 begin
   if Points.Count>1 then
   begin
-  ptv:=Points.beginiterate(ir);
-  ptvfisrt:=ptv;
-  if ptv<>nil then
-  repeat
-        ptvprev:=ptv;
-        ptv:=Points.iterate(ir);
-        if ptv<>nil then
-                        DrawLine(ptv^,ptvprev^,vp);
-  until ptv=nil;
-  if closed then
-                DrawLine(ptvprev^,ptvfisrt^,vp);
+       if (vp.LineType=nil) or (vp.LineType.dasharray.Count=0) then
+       begin
+            SetPolyUnLTyped;
+       end
+       else
+       begin
+       if closed then
+                     sd.init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}sizeof(ZPolySegmentData),points.Count+1)
+                 else
+                     sd.init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}sizeof(ZPolySegmentData),points.Count);
+       polylength:=getlength(points,sd,closed);
+       scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;
+       num:=polylength/(scale*vp.LineType.len);
+       if (num<1)or(num>1000) then
+                                  SetPolyUnLTyped
+       else
+           begin
+                SetPolyUnLTyped;
+                d:=(polylength-(scale*vp.LineType.len)*trunc(num))/2;
+           end;
+       sd.done;
+       end;
   end;
 end;
 
@@ -92,43 +151,53 @@ begin
      end
      else
      begin
+          {длина линии}
           length := Vertexlength(p1,p2);
 
+          {направление линии}
           dir:=geometry.VertexSub(p2,p1);
           dir.x:=p2.x-p1.x;
           dir.y:=p2.y-p1.y;
           dir.z:=p2.z-p1.z;
 
-          scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;
-          num:=Length/(scale*vp.LineType.len);
+          scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;//фактический масштаб линии
+          num:=Length/(scale*vp.LineType.len);//количество повторений шаблона
           if (num<1)or(num>1000) then
-                       SetUnLTyped
+                                     SetUnLTyped //не рисуем шаблон при большом количестве повторений
           else
           begin
-               d:=(Length-(scale*vp.LineType.len)*trunc(num))/2;
-               if d>eps then
+               d:=(Length-(scale*vp.LineType.len)*trunc(num))/2; //длинна добавки для выравнивания
+               //if d>eps then
                begin
                     d:=d/Length;
                     tv2:=VertexMulOnSc(dir,d);
                     tv:=VertexSub(p2,tv2);
 
+                    {сдвиг на половину первого штриха}
                     PStroke:=vp.LineType^.strokesarray.beginiterate(ir3);
                     tv3:=VertexMulOnSc(dir,(scale*abs(PStroke^/2))/length);
                     tv:=VertexSub(tv,tv3);
 
+                    {добавка в конец линии}
+                    begin
                     lines.Add(@tv);
                     lines.Add(@p2);
+                    end;
 
                     tv:=VertexAdd(p1,tv2);
 
-                    PStroke:=vp.LineType^.strokesarray.beginiterate(ir3);
+                    PStroke:=vp.LineType^.strokesarray.beginiterate(ir3);//первый штрих
                     tv3:=geometry.VertexMulOnSc(dir,(scale*abs(PStroke^/2))/length);
                     tv:=geometry.VertexSub(tv,tv3);
                     if (SqrOneVertexlength(tv3))<(SqrOneVertexlength(tv2)) then
                     begin
                        scissorstart:=false;
+                       {добавка в начало линии}
+                       if d>eps then
+                       begin
                        lines.Add(@p1);
                        lines.Add(@tv);
+                       end;
                     end
                     else
                        scissorstart:=true;
@@ -222,8 +291,8 @@ begin
 
                     end;
                end
-               else
-                   SetUnLTyped;
+               {else
+                   SetUnLTyped;}
 
           end;
      end;

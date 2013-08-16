@@ -1689,14 +1689,15 @@ begin
                           val(bc,w,code);
                           {if assigned(LayerBox) then
                                                     shared.ShowError(format(rsReCreating,['LAYERCOMBOBOX']));}
-                          LayerBox:={TComboBox}TZCADLayerComboBox.Create(tb);
-                          IconList.GetBitmap(II_LayerOn,LayerBox.Glyph_OnOff_ON);
-                          IconList.GetBitmap(II_LayerOff,LayerBox.Glyph_OnOff_OFF);
-                          IconList.GetBitmap(II_LayerFreze,LayerBox.Glyph_Freze_ON);
-                          IconList.GetBitmap(II_LayerUnFreze,LayerBox.Glyph_Freze_OFF);
-                          IconList.GetBitmap(II_LayerLock,LayerBox.Glyph_Lock_ON);
-                          IconList.GetBitmap(II_LayerUnLock,LayerBox.Glyph_Lock_OFF);
-                          LayerBox.UpdateIcon;
+                          LayerBox:=TZCADLayerComboBox.Create(tb);
+                          LayerBox.ImageList:=IconList;
+
+                          LayerBox.Index_Lock_ON:=II_LayerLock;
+                          LayerBox.Index_Lock_OFF:=II_LayerUnLock;
+                          LayerBox.Index_Freze_ON:=II_LayerFreze;
+                          LayerBox.Index_Freze_OFF:=II_LayerUnFreze;
+                          LayerBox.Index_OnOff_ON:=II_LayerOn;
+                          LayerBox.Index_OnOff_OFF:=II_LayerOff;
 
                           LayerBox.fGetLayerProp:=self.GetLayerProp;
                           LayerBox.fGetLayersArray:=self.GetLayersArray;
@@ -3039,25 +3040,26 @@ var
 begin
   (*
   {layerbox.ClearText;}
-  layerbox.ItemsClear;
+  //layerbox.ItemsClear;
   //layerbox.Sorted:=true;
   plp:=plt^.beginiterate(ir);
   if plp<>nil then
   repeat
        s:=plp^.GetFullName;
        //(OnOff,Freze,Lock:boolean;ItemName:utf8string;lo:pointer)
-       layerbox.AddItem(plp^._on,false,plp^._lock,s,pointer(plp));//      sdfg
+       //layerbox.AddItem(plp^._on,false,plp^._lock,s,pointer(plp));//      sdfg
        //layerbox.Items.Add(s);
        plp:=plt^.iterate(ir);
   until plp=nil;
   //layerbox.Items.;
   //layerbox.Sorted:=false;
   //layerbox.Items.Add(S_Different);
-  layerbox.Additem(false,false,false,rsDifferent,nil);
-  layerbox.ItemIndex:=(SysVar.dwg.DWG_CLayer^);
+  //layerbox.Additem(false,false,false,rsDifferent,nil);
+  //layerbox.ItemIndex:=(SysVar.dwg.DWG_CLayer^);
   //layerbox.Sorted:=true;
   *)
 end;
+
 procedure MainForm.MainMouseMove;
 begin
      cxmenumgr.reset;

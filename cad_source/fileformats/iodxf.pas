@@ -771,12 +771,15 @@ begin
                                       begin
                                       case dashinfo of
                                       TDIShape:begin
-                                                    pointer(psp):=pltypeprop^.shapearray.CreateObject;
-                                                    psp^.initnul;
-                                                    psp^.param:=BShapeProp.param;
-                                                    psp^.Psymbol:=pointer(shapenumber);
-                                                    psp^.param.PStyle:=pointer(stylehandle);
-                                                    pltypeprop^.dasharray.Add(@dashinfo);
+                                                    if stylehandle<>0 then
+                                                    begin
+                                                        pointer(psp):=pltypeprop^.shapearray.CreateObject;
+                                                        psp^.initnul;
+                                                        psp^.param:=BShapeProp.param;
+                                                        psp^.Psymbol:=pointer(shapenumber);
+                                                        psp^.param.PStyle:=pointer(stylehandle);
+                                                        pltypeprop^.dasharray.Add(@dashinfo);
+                                                    end;
                                                end;
                                       TDIText:begin
                                                     pointer(ptp):=pltypeprop^.Textarray.CreateObject;

@@ -957,6 +957,7 @@ begin
                       pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
                                                    if pltypeprop<>nil then
                                                    repeat
+                                                         {$IFDEF TOTALYLOG}programlog.logoutstr('Formatting line type '+pltypeprop.Name,0);{$ENDIF}
                                                          pltypeprop^.Format;
                                                          pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
                                                    until pltypeprop=nil;

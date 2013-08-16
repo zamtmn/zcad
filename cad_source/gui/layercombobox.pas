@@ -13,7 +13,7 @@
 *****************************************************************************
 }
 {
-@author(Dimitriy P.S.)
+@author(Dimitriy P.S. (Моего тут осталось 30 - 40 %))
 }
 unit layercombobox;
 
@@ -25,7 +25,7 @@ uses
   Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes;
 
 type
-  TLayerPropRecord=record                                                // Запись cписка (данные в памяти)
+  TLayerPropRecord=record                                                       // Запись cписка (данные в памяти)
     OnOff:boolean;       // Включение/выключение слоя
     Freze:boolean;       // Заморозка слоя
     Lock:boolean;        // Блокировка слоя
@@ -33,55 +33,21 @@ type
     PLayer:pointer;
   end;
 
-  //TLayerAction=(TLAGet,TLASet);
   TLayerArray=array of TLayerPropRecord;
   TGetLayerPropFunc=function(PLayer:Pointer;var lp:TLayerPropRecord):boolean of object;
   TGetLayersArrayFunc=function(var la:TLayerArray):boolean of object;
   TClickOnLayerPropFunc=function(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean of object;
 
-  {TControlPole=class(TGraphicControl)                                         // Для вывода выьранного пункта меню
-  private
-    sBorderColor:TColor;
-    sBorderVisible:boolean;
-    sBackgroundColor:TColor;
-    procedure SetBorderColor(const AValue:TColor);
-    procedure SetBorderVisible(const AValue:boolean);
-    procedure SetBackgroundColor(const AValue:TColor);
-  protected
-    procedure Paint;override;
+  TMyListView=class(TListView)
   public
-    IL:TImageList;
+    property DefaultItemHeight;
+  end;
+
+  TZCADLayerComboBox=class(TCustomControl)                          // Компонент TZCADLayerComboBox
+  private
     Index:integer;
     AktivItem:TLayerPropRecord;
-    constructor Create(AOwner:TComponent);override;
-  published
-    property Align;
-    property Anchors;
-    property Height;
-    property Width;
-    property Constraints;
-    property BorderColor:TColor read sBorderColor write SetBorderColor;
-    property BorderVisible:boolean read sBorderVisible write SetBorderVisible;
-    property BackgroundColor:TColor read sBackgroundColor write SetBackgroundColor;
-  end;}
-  TMyListView=class(TListView)
-              public
-              property DefaultItemHeight;
-              end;
-  {TLayerComboBoxButton = class(TCustomSpeedButton)
-  protected
-    function GetDrawDetails: TThemedElementDetails; override;
-    procedure CalculatePreferredSize(var PreferredWidth,
-           PreferredHeight: integer; WithThemeSpace: Boolean); override;
-  end;}
-  TZCADLayerComboBox=class({TWinControl}{TCustomPanel}TCustomControl)                                        // Компонент TZCADLayerComboBox
-  private
-  Index:integer;
-  AktivItem:TLayerPropRecord;
-    MyItems:TLayerArray;
     M1:boolean; // Маркер
-    //CP1:TControlPole;
-    //B1:TLayerComboBoxButton;
     PoleLista:TForm;
     LV:TMyListView;
     IL:TImageList;
@@ -95,16 +61,13 @@ type
     sGlyph_Lock_ON:TBitmap;
     sGlyph_Lock_OFF:TBitmap;
     FNotClose:boolean;
-    procedure SetItemIndex(AValue:integer);
     procedure SetListHeight(AValue:integer);
-    function ReadItemsCount:integer;
     function ReadHeight:integer;
     function ReadWidth:integer;
     procedure SetHeight(AValue:integer);
     procedure SetWidth(AValue:integer);
     function ReadFont:TFont;
     procedure SetFont(AValue:TFont);
-    function ReadItem(iIndex:integer):TLayerPropRecord;
     procedure B1Klac(Sender:TObject);
     procedure PLDeActivate(Sender:TObject);
     procedure asyncfree(Data: PtrInt);
@@ -124,22 +87,14 @@ type
     fClickOnLayerProp:TClickOnLayerPropFunc;
     constructor Create(AOwner:TComponent);override;
     procedure UpdateIcon;
-    procedure ItemsClear;
-    procedure AddItem(OnOff,Freze,Lock:boolean;ItemName:utf8string;lo:pointer);
-    procedure DelItem(ItemIndex:integer);
     destructor Destroy;override;
-    procedure CompareEvent(Sender: TObject; Item1, Item2: TListItem;
-                               Data: Integer; var Compare: Integer);
-    property ItemIndex:integer read sItemIndex write SetItemIndex;
-    property ItemsCount:integer read ReadItemsCount;
-    property Item[iIndex:Integer]:TLayerPropRecord read ReadItem;
-    //property GetLayerPropFunc:TGetLayerPropFunc stored fGetLayerProp;
+    procedure CompareEvent(Sender: TObject; Item1, Item2: TListItem;Data: Integer; var Compare: Integer);
   published
     property Align;
     property Anchors;
     property Constraints;
-    //property TabOrder;
-    //property TabStop;
+    property TabOrder;
+    property TabStop;
     property Visible;
     property Enabled;
     property Hint;
@@ -157,58 +112,10 @@ type
     property OnChange:TNotifyEvent read GetOnChange write SetOnChange;
   end;
 
-procedure Register;
-
 implementation
 
 uses
   StdCtrls,GraphType,types;
-
-{function TLayerComboBoxButton.GetDrawDetails: TThemedElementDetails;
-
-function WindowPart: TThemedComboBox;
-  begin
-    // no check states available
-    Result := tcDropDownButtonNormal;
-    if not IsEnabled then
-      Result := tcDropDownButtonDisabled
-    else
-    if FState in [bsDown, bsExclusive] then
-      Result := tcDropDownButtonPressed
-    else
-    if FState = bsHot then
-      Result := tcDropDownButtonHot
-    else
-      Result := tcDropDownButtonNormal;
-    Result := tcComboBoxDontCare;
-  end;
-
-begin
-  Result := ThemeServices.GetElementDetails(WindowPart);
-end;
-
-procedure TLayerComboBoxButton.CalculatePreferredSize(var PreferredWidth,
-  PreferredHeight: integer; WithThemeSpace: Boolean);
-begin
-  with ThemeServices.GetDetailSize(ThemeServices.GetElementDetails(tcDropDownButtonNormal)) do
-  begin
-    PreferredWidth:=cx;
-    PreferredHeight:=cy;
-  end;
-end;}
-
-
-//============================================================================//
-
-{constructor TControlPole.Create(AOwner:TComponent);                           // Создание объекта класса
-begin
-  inherited Create(AOwner);
-  sBorderColor:=$00969696;
-  sBorderVisible:=true;
-  sBackgroundColor:=$00FFFFFF;
-  Width:=16;
-  Height:=16;
-end;}
 
 procedure DrawComboBoxButton(ACanvas: TCanvas; ADown, AMouseInControl, ADisabled: Boolean; const ARect: TRect);
 var
@@ -232,10 +139,11 @@ begin
     ThemeServices.DrawElement(ACanvas.Handle, Details, ARect);
   end
 end;
+
 procedure DrawComboBoxBox(ACanvas: TCanvas; ADown, AMouseInControl, ADisabled: Boolean; const ARect: TRect);
-var
-  ComboElem: {$IFDEF LINUX}TThemedButton{$ELSE}TThemedEdit{$ENDIF};
-  Details: TThemedElementDetails;
+  var
+    ComboElem: {$IFDEF LINUX}TThemedButton{$ELSE}TThemedEdit{$ENDIF};
+    Details: TThemedElementDetails;
 begin
   //if ThemeServices.ThemesEnabled then
   begin
@@ -253,7 +161,9 @@ begin
   end
 end;
 
-procedure TZCADLayerComboBox.Paint;                                                 // Отрисовка
+//============================================================================//
+
+procedure TZCADLayerComboBox.Paint;                                             // Отрисовка
   var
     w,h,w1:integer;
     lp:TLayerPropRecord;
@@ -301,41 +211,15 @@ begin
   inherited Paint;
 end;
 
-{procedure TControlPole.SetBorderColor(const AValue:TColor);                   // Изменить свойство цвета контура
+procedure TZCADLayerComboBox.CompareEvent(Sender: TObject; Item1, Item2: TListItem; Data: Integer; var Compare: Integer);
 begin
-  if AValue=sBorderColor then exit;
-  sBorderColor:=AValue;
-  Invalidate;
+  if Item1.SubItems[2]>Item2.SubItems[2] then compare:=1 else
+  begin
+    if Item1.SubItems[2]=Item2.SubItems[2] then compare:=0 else compare:=-1;
+  end;
 end;
 
-procedure TControlPole.SetBackgroundColor(const AValue:TColor);               // Изменить свойство цвета заливки
-begin
-  if AValue=sBackgroundColor then exit;
-  sBackgroundColor:=AValue;
-  Invalidate;
-end;
-
-procedure TControlPole.SetBorderVisible(const AValue:boolean);                // Изменить свойство отображения контура
-begin
-  if AValue=sBorderVisible then exit;
-  sBorderVisible:=AValue;
-  Invalidate;
-end;}
-
-//============================================================================//
-procedure TZCADLayerComboBox.CompareEvent(Sender: TObject; Item1, Item2: TListItem;
-                           Data: Integer; var Compare: Integer);
-begin
-     if Item1.SubItems[2]>Item2.SubItems[2] then
-                                                compare:=1
-else if Item1.SubItems[2]=Item2.SubItems[2] then
-                                                compare:=0
-                                            else
-                                                compare:=-1;
-
-end;
-
-constructor TZCADLayerComboBox.Create(AOwner:TComponent);                      // Создание объекта класса
+constructor TZCADLayerComboBox.Create(AOwner:TComponent);                       // Создание объекта класса
   var
     BM:TBitmap;
     n:integer;
@@ -343,12 +227,7 @@ constructor TZCADLayerComboBox.Create(AOwner:TComponent);                      /
     Size:TSize;
 begin
   inherited Create(AOwner);
-  //BorderWidth:=0;
-  {self.BevelOuter:=bvLowered;
-  self.BevelWidth:=2;}
-  //BorderStyle:=bsnone;
   M1:=false;
-  SetLength(MyItems,0);
   BM:=TBitMap.Create;
   BM.Width:=16;
   BM.Height:=16;
@@ -357,10 +236,6 @@ begin
   BM.Canvas.Pen.Color:=$ffffff;
   BM.Canvas.Brush.Color:=$ffffff;
   BM.Canvas.Rectangle(0,0,17,17);
-
-
-  //IL:=mainformn.IconList;
-
   IL:=TImageList.Create(self);
   IL.Width:=16;
   IL.Height:=16;
@@ -368,6 +243,7 @@ begin
   begin
     IL.Add(BM,nil);
   end;
+  BM.Free;
   sGlyph_OnOff_ON:=TBitmap.Create;
   sGlyph_OnOff_OFF:=TBitmap.Create;
   sGlyph_Freze_ON:=TBitmap.Create;
@@ -376,162 +252,55 @@ begin
   sGlyph_Lock_OFF:=TBitmap.Create;
   sListHeight:=-1;
   sItemIndex:=-1;
-  //B1:=TLayerComboBoxButton.Create(self);
-  //B1.Parent:=self;
-  //B1.Flat:=true;
-  //B1.AutoSize:=true;
-  {B1.Anchors:=[akTop,akRight,akBottom];
-  B1.AnchorSideTop.Control:=Self;
-  B1.AnchorSideRight.Control:=Self;
-  B1.AnchorSideRight.Side:=asrBottom;
-  B1.AnchorSideBottom.Control:=Self;
-  B1.AnchorSideBottom.Side:=asrBottom;
-  B1.BorderSpacing.Top:=0;
-  B1.BorderSpacing.Right:=0;
-  B1.BorderSpacing.Bottom:=0;}
-  //B1.Align:=alRight;
-  //CP1:=TControlPole.Create(self);
-  //CP1.Parent:=self;
-  //CP1.Align:=alClient;
-  //CP1.BorderSpacing.Right:=26;
-  //CP1.IL:=IL;
-  {CP1.}Index:=-1;
-  {CP1.}OnClick:=@B1Klac;
-  //inherited Width:=120;
-  //inherited Height:=100;
-  //self.AutoSize:=true;
-  //Details:=ThemeServices.GetElementDetails({ttGlyphClosed}tcDropDownButtonNormal);
-  //Size:=ThemeServices.GetDetailSize(Details);
-  //BM.Width:=Size.cx;
-  //BM.Height:=Size.cy;
-  //ThemeServices.DrawElement(BM.Canvas.Handle,Details,Rect(0,0,Size.cx,Size.cy),nil);
-  //B1.Glyph.Assign(BM);
-  //BM.Free;
-  //B1.OnClick:=@B1Klac;
+  Index:=-1;
+  OnClick:=@B1Klac;
   Application.OnDeactivate:=@PLDeActivate;
   FNotClose:=false;
   autosize:=true;
 end;
 
-procedure TZCADLayerComboBox.ItemsClear;                                       // Очистить список
-  var
-    n:integer;
-begin
-  for n:=0 to length(MyItems)-1 do
-  begin
-    MyItems[n].Name:='';
-  end;
-  SetLength(MyItems,0);
-  SetItemIndex(-1);
-  ObnovitSpisok;
-  //ListChanged;
-end;
-
-procedure TZCADLayerComboBox.AddItem(OnOff,Freze,Lock:boolean;ItemName:utf8string;lo:pointer); // Создание пункта в списке
-begin
-  SetLength(MyItems,length(MyItems)+1);
-  MyItems[High(MyItems)].Name:=ItemName;
-  MyItems[High(MyItems)].OnOff:=OnOff;
-  MyItems[High(MyItems)].Freze:=Freze;
-  MyItems[High(MyItems)].Lock:=Lock;
-  MyItems[High(MyItems)].PLayer:=lo;
-  ObnovitSpisok;
-  //ListChanged;
-end;
-
-procedure TZCADLayerComboBox.DelItem(ItemIndex:integer);                       // Удаление пункта из списка
-  var
-    ServisMassiv:array of TLayerPropRecord;
-    n:integer;
-begin
-  SetLength(ServisMassiv,0);
-  for n:=0 to Length(MyItems)-1 do
-  begin
-    if n<>ItemIndex then
-    begin
-      SetLength(ServisMassiv,Length(ServisMassiv)+1);
-      ServisMassiv[High(ServisMassiv)]:=MyItems[n];
-    end
-    else MyItems[n].Name:='';
-  end;
-  SetLength(MyItems,0);
-  MyItems:=Copy(ServisMassiv,0,Length(ServisMassiv));
-  SetLength(ServisMassiv,0);
-  SetItemIndex(sItemIndex);
-  ObnovitSpisok;
-  //ListChanged;
-end;
-
-procedure TZCADLayerComboBox.SetItemIndex(AValue:integer);                     // Задаёт значение выбранного элемента списка
-begin
-  if sItemIndex=AValue then exit;
-  if (AValue>=0) and (AValue<length(MyItems)) then
-  begin
-    sItemIndex:=AValue;
-    {CP1.}Index:=AValue;
-    {CP1.}AktivItem:=MyItems[AValue];
-  end
-  else
-  begin
-    sItemIndex:=-1;
-    {CP1.}Index:=-1;
-  end;
-  {CP1.}Invalidate;
-  //ListChanged;
-end;
-
-procedure TZCADLayerComboBox.SetListHeight(AValue:integer);                    // Изменение свойства высоты разворачиваемого списка
+procedure TZCADLayerComboBox.SetListHeight(AValue:integer);                     // Изменение свойства высоты разворачиваемого списка
 begin
   sListHeight:=AValue;
   if sListHeight<30 then sListHeight:=30;
 end;
 
-function TZCADLayerComboBox.ReadItemsCount:integer;                            // Возвращает длину списка
-begin
-  result:=length(MyItems);
-end;
-
-function TZCADLayerComboBox.ReadHeight:integer;                                // Возвращает значение параметра высоты
+function TZCADLayerComboBox.ReadHeight:integer;                                 // Возвращает значение параметра высоты
 begin
   result:=inherited Height;
 end;
 
-function TZCADLayerComboBox.ReadWidth:integer;                                 // Возвращает значение параметра ширины
+function TZCADLayerComboBox.ReadWidth:integer;                                  // Возвращает значение параметра ширины
 begin
   result:=inherited Width;
 end;
 
-procedure TZCADLayerComboBox.SetHeight(AValue:integer);                        // Задаёт значение параметра высоты
+procedure TZCADLayerComboBox.SetHeight(AValue:integer);                         // Задаёт значение параметра высоты
 begin
   {if AValue<18 then AValue:=18;}
   inherited Height:=AValue;
   {CP1.}Invalidate;
 end;
 
-procedure TZCADLayerComboBox.SetWidth(AValue:integer);                         // Задаёт значение параметра ширины
+procedure TZCADLayerComboBox.SetWidth(AValue:integer);                          // Задаёт значение параметра ширины
 begin
   {if AValue<120 then AValue:=120;}
   inherited Width:=AValue;
   {CP1.}Invalidate;
 end;
 
-function TZCADLayerComboBox.ReadFont:TFont;                                    // Возвращает параметр шрифта
+function TZCADLayerComboBox.ReadFont:TFont;                                     // Возвращает параметр шрифта
 begin
-  result:={CP1.}Font;
+  result:=Font;
 end;
 
-procedure TZCADLayerComboBox.SetFont(AValue:TFont);                            // Задаёт значение параметра шрифта
+procedure TZCADLayerComboBox.SetFont(AValue:TFont);                             // Задаёт значение параметра шрифта
 begin
-  {CP1.}Font:=AValue;
-  {CP1.}Invalidate;
+  Font:=AValue;
+  Invalidate;
 end;
 
-function TZCADLayerComboBox.ReadItem(iIndex:integer):TLayerPropRecord;    // Возвращает пункт списка по индексу
-begin
-  result:=MyItems[iIndex];
-end;
-
-procedure TZCADLayerComboBox.UpdateIcon;                                       // Обновляет значки
+procedure TZCADLayerComboBox.UpdateIcon;                                        // Обновляет значки
 begin
   IL.Replace(0,sGlyph_OnOff_ON,nil);
   IL.Replace(1,sGlyph_OnOff_OFF,nil);
@@ -539,10 +308,10 @@ begin
   IL.Replace(3,sGlyph_Freze_OFF,nil);
   IL.Replace(4,sGlyph_Lock_ON,nil);
   IL.Replace(5,sGlyph_Lock_OFF,nil);
-  {CP1.}Invalidate;
+  Invalidate;
 end;
 
-procedure TZCADLayerComboBox.B1Klac(Sender:TObject);                           // Открытие развёрнутого списка
+procedure TZCADLayerComboBox.B1Klac(Sender:TObject);                            // Открытие развёрнутого списка
   var
     a:TPoint;
     h,hh:integer;
@@ -604,12 +373,13 @@ begin
   end;
   if (PoleLista=nil) and (M1=true) then M1:=false;
 end;
+
 procedure TZCADLayerComboBox.asyncfree(Data: PtrInt);
 begin
-     Tobject(Data).Free;
+  Tobject(Data).Free;
 end;
 
-procedure TZCADLayerComboBox.PLDeActivate(Sender:TObject);                     // Закрытие списка
+procedure TZCADLayerComboBox.PLDeActivate(Sender:TObject);                      // Закрытие списка
   var
     S,P:TPoint;
 begin
@@ -637,12 +407,12 @@ begin
   {CP1.}Invalidate;
 end;
 
-procedure TZCADLayerComboBox.PLDeActivate2(Data:PtrInt);                       // Закрытие списка 2
+procedure TZCADLayerComboBox.PLDeActivate2(Data:PtrInt);                        // Закрытие списка 2
 begin
   PLDeActivate(nil);
 end;
 
-procedure TZCADLayerComboBox.PLDeActivate3(Data:PtrInt);                       // Закрытие списка 3
+procedure TZCADLayerComboBox.PLDeActivate3(Data:PtrInt);                        // Закрытие списка 3
 begin
   if PoleLista<>nil then
   begin
@@ -651,6 +421,7 @@ begin
     M1:=false;
   end;
 end;
+
 procedure ObnovitItem(li:TListItem;lp:TLayerPropRecord);
 begin
   li.SubItems[2]:=lp.Name;
@@ -658,10 +429,9 @@ begin
   if lp.OnOff=true then li.ImageIndex:=0 else li.ImageIndex:=1;
   if lp.Freze=true then li.SubItemImages[0]:=2 else li.SubItemImages[0]:=3;
   if lp.Lock=true then li.SubItemImages[1]:=4 else li.SubItemImages[1]:=5;
-
 end;
 
-procedure TZCADLayerComboBox.ObnovitSpisok;                                    // Заполнение (обновление) списка развёрнутого листа
+procedure TZCADLayerComboBox.ObnovitSpisok;                                     // Заполнение (обновление) списка развёрнутого листа
   var
     n:integer;
     LayerArray:TLayerArray;
@@ -689,7 +459,7 @@ begin
   end;
 end;
 
-procedure TZCADLayerComboBox.LVKlac(Sender:TObject);                           // Обработков кликов на развёрнутом списке
+procedure TZCADLayerComboBox.LVKlac(Sender:TObject);                            // Обработков кликов на развёрнутом списке
   var
     LVItem:TListItem;
     KlacPoint,KlacContrlPoint,S:TPoint;
@@ -779,7 +549,7 @@ begin
   end;
 end;
 
-procedure TZCADLayerComboBox.KeyDown(Sender:TObject;var Key:Word;Shift:TShiftState);// Отлавливаем эскей
+procedure TZCADLayerComboBox.KeyDown(Sender:TObject;var Key:Word;Shift:TShiftState); // Отлавливаем эскей
 begin
   if Key=27 then Application.QueueAsyncCall(@PLDeActivate3,0);
 end;
@@ -811,12 +581,5 @@ begin
 end;
 
 //============================================================================//
-
-procedure Register;
-begin
-  RegisterComponents('Misc',[TZCADLayerComboBox]);
-end;
-
-initialization
 
 end.

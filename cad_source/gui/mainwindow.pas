@@ -3037,7 +3037,7 @@ var
   s:ansistring{[ls]};
   //ss:ansistring;
 begin
-
+  (*
   {layerbox.ClearText;}
   layerbox.ItemsClear;
   //layerbox.Sorted:=true;
@@ -3056,6 +3056,7 @@ begin
   layerbox.Additem(false,false,false,rsDifferent,nil);
   layerbox.ItemIndex:=(SysVar.dwg.DWG_CLayer^);
   //layerbox.Sorted:=true;
+  *)
 end;
 procedure MainForm.MainMouseMove;
 begin

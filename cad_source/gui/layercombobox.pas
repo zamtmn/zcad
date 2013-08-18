@@ -137,7 +137,7 @@ begin
   end
 end;
 
-procedure DrawComboBoxBox(ACanvas:TCanvas;ADown,AMouseInControl,ADisabled:Boolean;const ARect:TRect);
+procedure DrawComboBoxBox(ACanvas:TCanvas;ADown,AMouseInControl,ADisabled:Boolean; ARect:TRect);
   var
     ComboElem: {$IFDEF LINUX}TThemedButton{$ELSE}TThemedEdit{$ENDIF};
     Details: TThemedElementDetails;
@@ -152,6 +152,7 @@ begin
     //ComboElem := {$IFDEF LINUX}tbPushButtonNormal{$ELSE}teEditTextNormal{$ENDIF};
     Details:=ThemeServices.GetElementDetails(ComboElem);
     ThemeServices.DrawElement(ACanvas.Handle,Details,ARect);
+    ARect.Left:=ARect.Right-20;
     DrawComboBoxButton(ACanvas,ADown,AMouseInControl,ADisabled,ARect);
   end
   else
@@ -252,22 +253,35 @@ begin
         // Отрисовываем иконки состояния выбранного слоя и надпись (имя выбранного слоя)
         if sIL<>nil then
         begin
+          //Я заменил Height на ClientHeight, неработало в винде, в лине видимо канвас в абсолютных координатах, поэтому там работало
+          //разбил по строкам чтоб при отладке было ясно видно then или else выполняется
           if (sIndex_OnOff_OFF>=0) and (sIndex_OnOff_ON>=0) and (sIndex_OnOff_OFF<sIL.Count) and (sIndex_OnOff_ON<sIL.Count) then
           begin
-            if lp.OnOff=false then sIL.Draw(Canvas,1,(Height-16) div 2,sIndex_OnOff_OFF,gdeNormal) else sIL.Draw(Canvas,1,(Height-16) div 2,sIndex_OnOff_ON,gdeNormal);
+            if lp.OnOff=false then
+                                  sIL.Draw(Canvas,1,(ClientHeight-16) div 2,sIndex_OnOff_OFF,gdeNormal)
+                              else
+                                  sIL.Draw(Canvas,1,(ClientHeight-16) div 2,sIndex_OnOff_ON,gdeNormal);
           end;
           if (sIndex_Freze_OFF>=0) and (sIndex_Freze_ON>=0) and (sIndex_Freze_OFF<sIL.Count) and (sIndex_Freze_ON<sIL.Count) then
           begin
-            if lp.Freze=false then sIL.Draw(Canvas,18,(Height-16) div 2,sIndex_Freze_OFF,gdeNormal) else sIL.Draw(Canvas,18,(Height-16) div 2,sIndex_Freze_ON,gdeNormal);
+            if lp.Freze=false then
+                                  sIL.Draw(Canvas,18,(ClientHeight-16) div 2,sIndex_Freze_OFF,gdeNormal)
+                              else
+                                  sIL.Draw(Canvas,18,(ClientHeight-16) div 2,sIndex_Freze_ON,gdeNormal);
           end;
           if (sIndex_Lock_OFF>=0) and (sIndex_Lock_ON>=0) and (sIndex_Lock_OFF<sIL.Count) and (sIndex_Lock_ON<sIL.Count) then
           begin
-            if lp.Lock=false then sIL.Draw(Canvas,35,(Height-16) div 2,sIndex_Lock_OFF,gdeNormal) else sIL.Draw(Canvas,35,(Height-16) div 2,sIndex_Lock_ON,gdeNormal);
+            if lp.Lock=false then
+                                 sIL.Draw(Canvas,35,(ClientHeight-16) div 2,sIndex_Lock_OFF,gdeNormal)
+                             else
+                                 sIL.Draw(Canvas,35,(ClientHeight-16) div 2,sIndex_Lock_ON,gdeNormal);
           end;
         end;
         //TextOut(55,(Height-TextHeight(lp.Name)) div 2,lp.Name);  // Можно использовать эту строку заместо 2 последующих (но может TextRect заработает)
-        TxRect:=Rect(55,2,31,2);
-        TextRect(TxRect,55,(Height-TextHeight(lp.Name)) div 2,lp.Name);  // Видимо функция TextRect попросту не работает... может когданибудь заработает? (текст не ограничивается по рамке)
+        TxRect:=ClientRect;//получение клиентской области
+        InflateRect(TxRect,-1,-1);//уменьшение ее на 1 пиксель внутрь по x и y
+        TxRect.Left:=TxRect.Left+54;//сдвиг к началу текста
+        TextRect(TxRect,55,(ClientHeight-TextHeight(lp.Name)) div 2,lp.Name);  // Видимо функция TextRect попросту не работает... может когданибудь заработает? (текст не ограничивается по рамке)
       end;
       Unlock;
     end;
@@ -528,4 +542,4 @@ end;
 
 //============================================================================//
 
-end.
+end.

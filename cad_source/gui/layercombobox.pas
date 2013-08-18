@@ -141,7 +141,7 @@ procedure DrawComboBoxBox(ACanvas:TCanvas;ADown,AMouseInControl,ADisabled:Boolea
   var
     ComboElem: {$IFDEF LINUX}TThemedButton{$ELSE}TThemedEdit{$ENDIF};
     Details: TThemedElementDetails;
-    i,n,w:integer;
+    i:integer;
 begin
   if ThemeServices.ThemesEnabled then
   begin
@@ -152,6 +152,7 @@ begin
     //ComboElem := {$IFDEF LINUX}tbPushButtonNormal{$ELSE}teEditTextNormal{$ENDIF};
     Details:=ThemeServices.GetElementDetails(ComboElem);
     ThemeServices.DrawElement(ACanvas.Handle,Details,ARect);
+    DrawComboBoxButton(ACanvas,ADown,AMouseInControl,ADisabled,ARect);
   end
   else
   begin
@@ -183,6 +184,7 @@ begin
       LineTo(Width-29,Height-1);
     end;
   end;
+  (*
   {$IFDEF LINUX}
   with ACanvas do
   begin
@@ -197,9 +199,9 @@ begin
     end;
   end;
   {$ELSE}
-  w:=20;
   DrawComboBoxButton(ACanvas,ADown,AMouseInControl,ADisabled,ARect);
   {$ENDIF}
+  *)
 end;
 
 //============================================================================//

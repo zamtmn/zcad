@@ -143,7 +143,7 @@ procedure DrawComboBoxBox(ACanvas:TCanvas;ADown,AMouseInControl,ADisabled:Boolea
   var
     ComboElem: {$IFDEF LINUX}TThemedButton{$ELSE}TThemedEdit{$ENDIF};
     Details: TThemedElementDetails;
-    i,n,h,w:integer;
+    i,n,h,w,HalfRightButtonWidth:integer;
 begin
   if ThemeServices.ThemesEnabled then
   begin
@@ -163,19 +163,20 @@ begin
     w:=ARect.Right-ARect.Left;
     with ACanvas do
     begin
+      HalfRightButtonWidth:=RightButtonWidth div 2;
       // Основа
       Pen.Style:=psSolid;
       Pen.Color:=clWindow;
       for i:=1 to w-2 do
       begin
         MoveTo(0,i);
-        LineTo(w-30,i);
+        LineTo(w-RightButtonWidth,i);
       end;
       // Кнопка
       Pen.Color:=clForm;
-      for i:=0 to Height-1 do
+      for i:=0 to h-1 do
       begin
-        MoveTo(w-30,i);
+        MoveTo(w-RightButtonWidth,i);
         LineTo(w-1,i);
       end;
       if AMouseInControl then Pen.Color:=clActiveBorder else Pen.Color:=clInactiveBorder;
@@ -185,16 +186,18 @@ begin
       LineTo(w-1,h-1);
       LineTo(0,h-1);
       LineTo(0,0);
-      MoveTo(w-29,0);
-      LineTo(w-29,h-1);
+      MoveTo(w-RightButtonWidth+1,0);
+      LineTo(w-RightButtonWidth+1,h-1);
+      // Стрелка?
       Pen.Style:=psSolid;
       if AMouseInControl then Pen.Color:=clGrayText else Pen.Color:=clWindowText;
       n:=12;
       for i:=(h-12) div 2 to (h-12) div 2+12 do
       begin
-        MoveTo(w-15-(n div 2),i);
-        LineTo(w-15+(n div 2),i);
+        MoveTo(w-HalfRightButtonWidth-(n div 2),i);
+        LineTo(w-HalfRightButtonWidth+(n div 2),i);
         n:=n-1;
+        if n=1 then system.break;// без этого стрелка кривая в qt
       end;
     end;
   end;
@@ -555,4 +558,4 @@ end;
 
 //============================================================================//
 
-end.
+end.

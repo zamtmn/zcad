@@ -23,10 +23,12 @@ interface
 
 uses
   Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes;
+const
+  RightButtonWidth=20;// Ширина правой кнопки-стрелки при "темной" отрисовке
 
 type
   TLayerPropRecord=record                                                       // Запись cписка (данные в памяти)
-    OnOff:boolean;       // Включение/выключение слоя
+    _On:boolean;         // Включен/выключен слой
     Freze:boolean;       // Заморозка слоя
     Lock:boolean;        // Блокировка слоя
     Name:string;         // Имя слоя
@@ -53,12 +55,12 @@ type
     sIL:TImageList;
     sListHeight:integer;
     sSostoyanie:integer;
-    sIndex_OnOff_ON:Integer;
-    sIndex_OnOff_OFF:Integer;
-    sIndex_Freze_ON:Integer;
-    sIndex_Freze_OFF:Integer;
-    sIndex_Lock_ON:Integer;
-    sIndex_Lock_OFF:Integer;
+    sIndex_ON:Integer;
+    sIndex_OFF:Integer;
+    sIndex_Freze:Integer;
+    sIndex_UnFreze:Integer;
+    sIndex_Lock:Integer;
+    sIndex_UnLock:Integer;
     FNotClose:boolean;
     procedure SetListHeight(AValue:integer);
     function ReadHeight:integer;
@@ -101,12 +103,12 @@ type
     property Width:integer read ReadWidth write SetWidth;
     property ListHeight:integer read sListHeight write SetListHeight;
     property ImageList:TImageList read sIL write sIL;
-    property Index_OnOff_ON:integer read sIndex_OnOff_ON write sIndex_OnOff_ON;
-    property Index_OnOff_OFF:integer read sIndex_OnOff_OFF write sIndex_OnOff_OFF;
-    property Index_Freze_ON:integer read sIndex_Freze_ON write sIndex_Freze_ON;
-    property Index_Freze_OFF:integer read sIndex_Freze_OFF write sIndex_Freze_OFF;
-    property Index_Lock_ON:integer read sIndex_Lock_ON write sIndex_Lock_ON;
-    property Index_Lock_OFF:integer read sIndex_Lock_OFF write sIndex_Lock_OFF;
+    property Index_ON:integer read sIndex_ON write sIndex_ON;
+    property Index_OFF:integer read sIndex_OFF write sIndex_OFF;
+    property Index_Freze:integer read sIndex_Freze write sIndex_Freze;
+    property Index_UnFreze:integer read sIndex_UnFreze write sIndex_UnFreze;
+    property Index_Lock:integer read sIndex_Lock write sIndex_Lock;
+    property Index_UnLock:integer read sIndex_UnLock write sIndex_UnLock;
   end;
 
 implementation
@@ -141,7 +143,7 @@ procedure DrawComboBoxBox(ACanvas:TCanvas;ADown,AMouseInControl,ADisabled:Boolea
   var
     ComboElem: {$IFDEF LINUX}TThemedButton{$ELSE}TThemedEdit{$ENDIF};
     Details: TThemedElementDetails;
-    i:integer;
+    i,n,h,w:integer;
 begin
   if ThemeServices.ThemesEnabled then
   begin
@@ -152,37 +154,48 @@ begin
     //ComboElem := {$IFDEF LINUX}tbPushButtonNormal{$ELSE}teEditTextNormal{$ENDIF};
     Details:=ThemeServices.GetElementDetails(ComboElem);
     ThemeServices.DrawElement(ACanvas.Handle,Details,ARect);
-    ARect.Left:=ARect.Right-20;
+    ARect.Left:=ARect.Right-RightButtonWidth;
     DrawComboBoxButton(ACanvas,ADown,AMouseInControl,ADisabled,ARect);
   end
   else
   begin
+    h:=ARect.Bottom-ARect.Top;
+    w:=ARect.Right-ARect.Left;
     with ACanvas do
     begin
       // Основа
       Pen.Style:=psSolid;
       Pen.Color:=clWindow;
-      for i:=1 to Height-2 do
+      for i:=1 to w-2 do
       begin
         MoveTo(0,i);
-        LineTo(Width-30,i);
+        LineTo(w-30,i);
       end;
       // Кнопка
       Pen.Color:=clForm;
       for i:=0 to Height-1 do
       begin
-        MoveTo(Width-30,i);
-        LineTo(Width-1,i);
+        MoveTo(w-30,i);
+        LineTo(w-1,i);
       end;
       if AMouseInControl then Pen.Color:=clActiveBorder else Pen.Color:=clInactiveBorder;
       // Бордюр
       MoveTo(0,0);
-      LineTo(Width-1,0);
-      LineTo(Width-1,Height-1);
-      LineTo(0,Height-1);
+      LineTo(w-1,0);
+      LineTo(w-1,h-1);
+      LineTo(0,h-1);
       LineTo(0,0);
-      MoveTo(Width-29,0);
-      LineTo(Width-29,Height-1);
+      MoveTo(w-29,0);
+      LineTo(w-29,h-1);
+      Pen.Style:=psSolid;
+      if AMouseInControl then Pen.Color:=clGrayText else Pen.Color:=clWindowText;
+      n:=12;
+      for i:=(h-12) div 2 to (h-12) div 2+12 do
+      begin
+        MoveTo(w-15-(n div 2),i);
+        LineTo(w-15+(n div 2),i);
+        n:=n-1;
+      end;
     end;
   end;
   (*
@@ -216,12 +229,12 @@ begin
   inherited Create(AOwner);
   M1:=false;
   sIL:=nil; // На всякий случай
-  sIndex_OnOff_ON:=-1;
-  sIndex_OnOff_OFF:=-1;
-  sIndex_Freze_ON:=-1;
-  sIndex_Freze_OFF:=-1;
-  sIndex_Lock_ON:=-1;
-  sIndex_Lock_OFF:=-1;
+  sIndex_ON:=-1;
+  sIndex_OFF:=-1;
+  sIndex_Freze:=-1;
+  sIndex_UnFreze:=-1;
+  sIndex_Lock:=-1;
+  sIndex_UnLock:=-1;
   sListHeight:=-1;
   Index:=-1;
   sSostoyanie:=1;
@@ -246,7 +259,7 @@ begin
       Lock;
       if sSostoyanie<3 then MD:=false else MD:=true;
       if sSostoyanie<2 then MIC:=false else MIC:=true;
-      DrawComboBoxBox(Canvas,MD,MIC,not Enabled,Bounds(0,0,clientwidth,clientheight));
+      DrawComboBoxBox(Canvas,MD,MIC,not Enabled,ClientRect);
       Brush.Style:=bsClear;
       if fGetLayerProp(nil,lp) then
       begin
@@ -255,32 +268,32 @@ begin
         begin
           //Я заменил Height на ClientHeight, неработало в винде, в лине видимо канвас в абсолютных координатах, поэтому там работало
           //разбил по строкам чтоб при отладке было ясно видно then или else выполняется
-          if (sIndex_OnOff_OFF>=0) and (sIndex_OnOff_ON>=0) and (sIndex_OnOff_OFF<sIL.Count) and (sIndex_OnOff_ON<sIL.Count) then
+          if (sIndex_OFF>=0) and (sIndex_ON>=0) and (sIndex_OFF<sIL.Count) and (sIndex_ON<sIL.Count) then
           begin
-            if lp.OnOff=false then
-                                  sIL.Draw(Canvas,1,(ClientHeight-16) div 2,sIndex_OnOff_OFF,gdeNormal)
-                              else
-                                  sIL.Draw(Canvas,1,(ClientHeight-16) div 2,sIndex_OnOff_ON,gdeNormal);
+            if lp._On then
+                          sIL.Draw(Canvas,1,(ClientHeight-16) div 2,sIndex_ON,gdeNormal)
+                      else
+                          sIL.Draw(Canvas,1,(ClientHeight-16) div 2,sIndex_OFF,gdeNormal);
           end;
-          if (sIndex_Freze_OFF>=0) and (sIndex_Freze_ON>=0) and (sIndex_Freze_OFF<sIL.Count) and (sIndex_Freze_ON<sIL.Count) then
+          if (sIndex_Freze>=0) and (sIndex_UnFreze>=0) and (sIndex_Freze<sIL.Count) and (sIndex_UnFreze<sIL.Count) then
           begin
-            if lp.Freze=false then
-                                  sIL.Draw(Canvas,18,(ClientHeight-16) div 2,sIndex_Freze_OFF,gdeNormal)
-                              else
-                                  sIL.Draw(Canvas,18,(ClientHeight-16) div 2,sIndex_Freze_ON,gdeNormal);
+            if lp.Freze then
+                            sIL.Draw(Canvas,18,(ClientHeight-16) div 2,sIndex_Freze,gdeNormal)
+                        else
+                            sIL.Draw(Canvas,18,(ClientHeight-16) div 2,sIndex_UnFreze,gdeNormal);
           end;
-          if (sIndex_Lock_OFF>=0) and (sIndex_Lock_ON>=0) and (sIndex_Lock_OFF<sIL.Count) and (sIndex_Lock_ON<sIL.Count) then
+          if (sIndex_Lock>=0) and (sIndex_UnLock>=0) and (sIndex_Lock<sIL.Count) and (sIndex_UnLock<sIL.Count) then
           begin
-            if lp.Lock=false then
-                                 sIL.Draw(Canvas,35,(ClientHeight-16) div 2,sIndex_Lock_OFF,gdeNormal)
-                             else
-                                 sIL.Draw(Canvas,35,(ClientHeight-16) div 2,sIndex_Lock_ON,gdeNormal);
+            if lp.Lock then
+                           sIL.Draw(Canvas,35,(ClientHeight-16) div 2,sIndex_Lock,gdeNormal)
+                       else
+                           sIL.Draw(Canvas,35,(ClientHeight-16) div 2,sIndex_UnLock,gdeNormal);
           end;
         end;
-        //TextOut(55,(Height-TextHeight(lp.Name)) div 2,lp.Name);  // Можно использовать эту строку заместо 2 последующих (но может TextRect заработает)
         TxRect:=ClientRect;//получение клиентской области
-        InflateRect(TxRect,-1,-1);//уменьшение ее на 1 пиксель внутрь по x и y
-        TxRect.Left:=TxRect.Left+54;//сдвиг к началу текста
+        //InflateRect(TxRect,-1,-1);//уменьшение ее на 1 пиксель внутрь по x и y
+        TxRect.Left:=TxRect.Left+55;//сдвиг к началу текста
+        TxRect.Right:=TxRect.Right-RightButtonWidth;//сдвиг к началу текста
         TextRect(TxRect,55,(ClientHeight-TextHeight(lp.Name)) div 2,lp.Name);  // Видимо функция TextRect попросту не работает... может когданибудь заработает? (текст не ограничивается по рамке)
       end;
       Unlock;
@@ -431,9 +444,9 @@ begin
   li.Data:=lp.PLayer;
   if sIL<>nil then
   begin
-    if lp.OnOff then li.ImageIndex:=sIndex_OnOff_OFF else li.ImageIndex:=sIndex_OnOff_ON;
-    if lp.Freze then li.SubItemImages[0]:=sIndex_Freze_ON else li.SubItemImages[0]:=sIndex_Freze_OFF;
-    if lp.Lock then li.SubItemImages[1]:=sIndex_Lock_ON else li.SubItemImages[1]:=sIndex_Lock_OFF;
+    if lp._On then li.ImageIndex:=sIndex_ON else li.ImageIndex:=sIndex_OFF;
+    if lp.Freze then li.SubItemImages[0]:=sIndex_Freze else li.SubItemImages[0]:=sIndex_UnFreze;
+    if lp.Lock then li.SubItemImages[1]:=sIndex_Lock else li.SubItemImages[1]:=sIndex_UnLock;
   end;
 end;
 

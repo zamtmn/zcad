@@ -232,7 +232,7 @@ end;
 
 procedure setlayerstate(PLayer:PGDBLayerProp;var lp:TLayerPropRecord);
 begin
-     lp.OnOff:=player^._on;
+     lp._On:=player^._on;
      lp.Freze:=false;
      lp.Lock:=player^._lock;
      lp.Name:=Tria_AnsiToUtf8(player.Name);
@@ -1692,12 +1692,12 @@ begin
                           LayerBox:=TZCADLayerComboBox.Create(tb);
                           LayerBox.ImageList:=IconList;
 
-                          LayerBox.Index_Lock_ON:=II_LayerLock;
-                          LayerBox.Index_Lock_OFF:=II_LayerUnLock;
-                          LayerBox.Index_Freze_ON:=II_LayerFreze;
-                          LayerBox.Index_Freze_OFF:=II_LayerUnFreze;
-                          LayerBox.Index_OnOff_ON:=II_LayerOn;
-                          LayerBox.Index_OnOff_OFF:=II_LayerOff;
+                          LayerBox.Index_Lock:=II_LayerLock;
+                          LayerBox.Index_UnLock:=II_LayerUnLock;
+                          LayerBox.Index_Freze:=II_LayerFreze;
+                          LayerBox.Index_UnFreze:=II_LayerUnFreze;
+                          LayerBox.Index_ON:=II_LayerOn;
+                          LayerBox.Index_OFF:=II_LayerOff;
 
                           LayerBox.fGetLayerProp:=self.GetLayerProp;
                           LayerBox.fGetLayersArray:=self.GetLayersArray;

@@ -34,6 +34,7 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 constructor init;
                 destructor done;virtual;
                 procedure DrawLine(const p1,p2:GDBVertex; const vp:GDBObjVisualProp);virtual;
+                procedure DrawLineWithoutLT(const p1,p2:GDBVertex);virtual;
                 procedure DrawPolyLine(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed:GDBBoolean);virtual;
              end;
 ZPolySegmentData={$IFNDEF DELPHI}packed{$ENDIF} record
@@ -117,6 +118,11 @@ begin
        end;
   end;
 end;
+procedure ZGLGeometry.DrawLineWithoutLT(const p1,p2:GDBVertex);
+begin
+     lines.Add(@p1);
+     lines.Add(@p2);
+end;
 
 procedure ZGLGeometry.DrawLine(const p1,p2:GDBVertex; const vp:GDBObjVisualProp);
 var
@@ -138,16 +144,16 @@ var
     //i:integer;
     TDInfo:TTrianglesDataInfo;
 
-procedure SetUnLTyped;
+{procedure SetUnLTyped;
 begin
   lines.Add(@p1);
   lines.Add(@p2);
-end;
+end;}
 begin
      //Clear;
      if (vp.LineType=nil) or (vp.LineType.dasharray.Count=0) then
      begin
-          SetUnLTyped;
+          DrawLineWithoutLT(p1,p2);
      end
      else
      begin
@@ -163,7 +169,7 @@ begin
           scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;//фактический масштаб линии
           num:=Length/(scale*vp.LineType.len);//количество повторений шаблона
           if (num<1)or(num>1000) then
-                                     SetUnLTyped //не рисуем шаблон при большом количестве повторений
+                                     DrawLineWithoutLT(p1,p2) //не рисуем шаблон при большом количестве повторений
           else
           begin
                d:=(Length-(scale*vp.LineType.len)*trunc(num))/2; //длинна добавки для выравнивания
@@ -195,8 +201,9 @@ begin
                        {добавка в начало линии}
                        if d>eps then
                        begin
-                       lines.Add(@p1);
-                       lines.Add(@tv);
+                       //lines.Add(@p1);
+                       //lines.Add(@tv);
+                       DrawLineWithoutLT(p1,tv);
                        end;
                     end
                     else

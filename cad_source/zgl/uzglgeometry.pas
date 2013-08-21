@@ -35,7 +35,9 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 destructor done;virtual;
                 procedure DrawLine(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);virtual;
                 procedure DrawLineWithoutLT(const p1,p2:GDBVertex);virtual;
+                procedure DrawPointWithoutLT(const p:GDBVertex);virtual;
                 procedure DrawPolyLine(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed:GDBBoolean);virtual;
+                procedure PlaceNPatterns(StartPatternPoint,FactStartPoint:GDBVertex;num:integer; const vp:GDBObjVisualProp;dir:GDBvertex;scale,length:GDBDouble);
              end;
 ZPolySegmentData={$IFNDEF DELPHI}packed{$ENDIF} record
                                                       startpoint,endpoint,dir:GDBVertex;
@@ -49,6 +51,7 @@ var
     ir:itrec;
     segment:ZPolySegmentData;
     cl:GDBDouble;
+
 begin
   result:=0;
   ptvprev:=points.beginiterate(ir);
@@ -123,26 +126,107 @@ begin
      lines.Add(@p1);
      lines.Add(@p2);
 end;
-
-procedure ZGLGeometry.DrawLine(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);
+procedure ZGLGeometry.DrawPointWithoutLT(const p:GDBVertex);
+begin
+     points.Add(@p);
+end;
+function creatematrix(StartPatternPoint:GDBVertex;param:shxprop;a,scale:GDBDouble):dmatrix4d;
 var
-    scale,length:GDBDouble;
-    num,d,a:GDBDouble;
-    outPatternPoint,addAllignVector,halfStrokeAllignVector,FactStartPoint:GDBVertex;
-    dir:GDBvertex;
-    i,j:integer;
+    mrot,mentrot,madd,mtrans,mscale,objmatrix,matr:dmatrix4d;
+begin
+    mrot:=CreateRotationMatrixZ(Sin(param.Angle*pi/180), Cos(param.Angle*pi/180));
+    mentrot:=CreateRotationMatrixZ(Sin(a), Cos(a));
+    madd:=geometry.CreateTranslationMatrix(createvertex(param.x*scale,param.y*scale,0));
+    mtrans:=CreateTranslationMatrix(createvertex(StartPatternPoint.x,StartPatternPoint.y,StartPatternPoint.z));
+    mscale:=CreateScaleMatrix(geometry.createvertex(param.Height*scale,param.Height*scale,param.Height*scale));
+    result:=onematrix;
+    result:=MatrixMultiply(result,mscale);
+    result:=MatrixMultiply(result,mrot);
+    result:=MatrixMultiply(result,madd);
+    result:=MatrixMultiply(result,mentrot);
+    result:=MatrixMultiply(result,mtrans);
+end;
 
-    {ir,}ir2,ir3,ir4,ir5:itrec;
+procedure ZGLGeometry.PlaceNPatterns(StartPatternPoint,FactStartPoint:GDBVertex;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
+                                     num:integer;                               //количество паттернов
+                                     const vp:GDBObjVisualProp;                 //стиль и прочая лабуда
+                                     dir:GDBvertex;scale,length:GDBDouble);     //направление, масштаб, длинна
+var i,j:integer;
     TDI:PTDashInfo;
     PStroke:PGDBDouble;
+    scale_div_length:GDBDouble;
     PSP:PShapeProp;
     PTP:PTextProp;
-    //firstloop,scissorstart:boolean;
+    ir2,ir3,ir4,ir5:itrec;
+    addAllignVector:GDBVertex;
+    a:GDBDouble;
     mrot,mentrot,madd,mtrans,mscale,objmatrix,matr:dmatrix4d;
     minx,miny,maxx,maxy:GDBDouble;
     TDInfo:TTrianglesDataInfo;
 begin
-     //Clear;
+  scale_div_length:=scale/length;
+  a:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(dir.x,dir.y));
+  for i:=1 to num do
+  begin
+    TDI:=vp.LineType^.dasharray.beginiterate(ir2);
+    PStroke:=vp.LineType^.strokesarray.beginiterate(ir3);
+    PSP:=vp.LineType^.shapearray.beginiterate(ir4);
+    PTP:=vp.LineType^.textarray.beginiterate(ir5);
+    if PStroke<>nil then
+    repeat
+    case TDI^ of
+        TDIDash:begin
+                     if PStroke^<>0 then
+                     begin
+                          addAllignVector:=geometry.VertexMulOnSc(dir,abs(PStroke^)*scale_div_length);
+                          addAllignVector:=geometry.VertexAdd(StartPatternPoint,addAllignVector);
+                          if PStroke^>0 then
+                          begin
+                               DrawLineWithoutLT(FactStartPoint,addAllignVector);
+                          end;
+                          StartPatternPoint:=addAllignVector;
+                          FactStartPoint:=StartPatternPoint;
+                     end
+                        else
+                            DrawPointWithoutLT(StartPatternPoint);
+
+                     PStroke:=vp.LineType^.strokesarray.iterate(ir3);
+                end;
+       TDIShape:begin
+                     { TODO : убрать двойное преобразование номера символа }
+                     objmatrix:=creatematrix(StartPatternPoint,PSP^.param,a,scale);
+                     matr:=onematrix;
+                     minx:=0;miny:=0;maxx:=0;maxy:=0;
+                     PSP^.param.PStyle.pfont.CreateSymbol(shx,triangles,PSP.Psymbol.Number,objmatrix,matr,minx,miny,maxx,maxy,1);
+                     PSP:=vp.LineType^.shapearray.iterate(ir4);
+                end;
+        TDIText:begin
+                      { TODO : убрать двойное преобразование номера символа }
+                     objmatrix:=creatematrix(StartPatternPoint,PTP^.param,a,scale);
+                      matr:=onematrix;
+                      minx:=0;miny:=0;maxx:=0;maxy:=0;
+                      for j:=1 to (system.length(PTP^.Text)) do
+                      begin
+                      PTP^.param.PStyle.pfont.CreateSymbol(shx,triangles,byte(PTP^.Text[j]),objmatrix,matr,minx,miny,maxx,maxy,1);
+                      matr[3,0]:=matr[3,0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]),tdinfo).NextSymX;
+                      end;
+                      PTP:=vp.LineType^.textarray.iterate(ir5);
+                 end;
+          end;
+          TDI:=vp.LineType^.dasharray.iterate(ir2);
+    until TDI=nil;
+  end;
+end;
+
+procedure ZGLGeometry.DrawLine(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);
+var
+    scale,length:GDBDouble;
+    num,d:GDBDouble;
+    outPatternPoint,addAllignVector,halfStrokeAllignVector:GDBVertex;
+    dir:GDBvertex;
+    ir3:itrec;
+    PStroke:PGDBDouble;
+begin
      if (vp.LineType=nil) or (vp.LineType.dasharray.Count=0) then
      begin
           DrawLineWithoutLT(startpoint,endpoint);
@@ -158,121 +242,23 @@ begin
           else
           begin
                d:=(Length-(scale*vp.LineType.len)*trunc(num))/2; //длинна добавки для выравнивания
-               //if d>eps then
-               begin
-                    d:=d/Length;
-                    addAllignVector:=VertexMulOnSc(dir,d);//вектор добавки для выравнивания
-                    outPatternPoint:=VertexSub(endpoint,addAllignVector);//последняя точка шаблонов на линии
+               d:=d/Length;
+               addAllignVector:=VertexMulOnSc(dir,d);//вектор добавки для выравнивания
+               outPatternPoint:=VertexSub(endpoint,addAllignVector);//последняя точка шаблонов на линии
 
-                    {сдвиг на половину первого штриха}
-                    PStroke:=vp.LineType^.strokesarray.beginiterate(ir3);//первый штрих
-                    halfStrokeAllignVector:=VertexMulOnSc(dir,(scale*abs(PStroke^/2))/length);//вектор сдвига на пол первого штриха
-                    outPatternPoint:=VertexSub(outPatternPoint,halfStrokeAllignVector);//сдвиг последней точки на полпервого штриха
+               {сдвиг на половину первого штриха}
+               PStroke:=vp.LineType^.strokesarray.beginiterate(ir3);//первый штрих
+               halfStrokeAllignVector:=VertexMulOnSc(dir,(scale*abs(PStroke^/2))/length);//вектор сдвига на пол первого штриха
+               outPatternPoint:=VertexSub(outPatternPoint,halfStrokeAllignVector);//сдвиг последней точки на полпервого штриха
 
-                    {добавка в конец линии}
-                    DrawLineWithoutLT(outPatternPoint,endpoint);
+               {добавка в конец линии}
+               DrawLineWithoutLT(outPatternPoint,endpoint);
 
-                    outPatternPoint:=VertexAdd(startpoint,addAllignVector);//вектор добавки для выравнивания
-                    outPatternPoint:=geometry.VertexSub(outPatternPoint,halfStrokeAllignVector);//первая точка шаблонов на линии
-                    (*if (SqrOneVertexlength(halfStrokeAllignVector))<(SqrOneVertexlength(addAllignVector)) then
-                    begin
-                       //if d>eps then
-                       //             DrawLineWithoutLT(startpoint,outPatternPoint);
-                       FactStartPoint:=outPatternPoint;
-                       //FactStartPoint:=startpoint;
-                    end
-                    else
-                       begin
-                       FactStartPoint:=startpoint;
-                       end;*)
-                    FactStartPoint:=startpoint;
+               outPatternPoint:=VertexAdd(startpoint,addAllignVector);//вектор добавки для выравнивания
+               outPatternPoint:=geometry.VertexSub(outPatternPoint,halfStrokeAllignVector);//первая точка шаблонов на линии
 
-                    for i:=1 to trunc(num) do
-                    begin
-                                  TDI:=vp.LineType^.dasharray.beginiterate(ir2);
-                                  PStroke:=vp.LineType^.strokesarray.beginiterate(ir3);
-                                  PSP:=vp.LineType^.shapearray.beginiterate(ir4);
-                                  PTP:=vp.LineType^.textarray.beginiterate(ir5);
-                                  //laststrokewrited:=false;
-                                  if PStroke<>nil then
-                                  repeat
-                                        case TDI^ of
-                                                    TDIDash:begin
-                                                                 if PStroke^<>0 then
-                                                                 begin
-                                                                      addAllignVector:=geometry.VertexMulOnSc(dir,(scale*abs(PStroke^))/length);
-                                                                      addAllignVector:=geometry.VertexAdd(outPatternPoint,addAllignVector);
-                                                                      if PStroke^>0 then
-                                                                      begin
-                                                                           DrawLineWithoutLT(FactStartPoint,addAllignVector);
-                                                                      end;
-                                                                      outPatternPoint:=addAllignVector;
-                                                                      FactStartPoint:=addAllignVector;
-                                                                 end
-                                                                    else
-                                                                        points.Add(@outPatternPoint);
-                                                                 PStroke:=vp.LineType^.strokesarray.iterate(ir3);
-                                                            end;
-                                                    TDIShape:begin
-                                                                  { TODO : убрать двойное преобразование номера символа }
-                                                                 a:=Vertexangle(CreateVertex2D(startpoint.x,startpoint.y),CreateVertex2D(endpoint.x,endpoint.y));
-                                                                 //a:=0;
-                                                                 mrot:=CreateRotationMatrixZ(Sin(PSP^.param.Angle*pi/180{+a}), Cos(PSP^.param.Angle*pi/180{+a}));
-                                                                 mentrot:=CreateRotationMatrixZ(Sin(a), Cos(a));
-                                                                 madd:=geometry.CreateTranslationMatrix(createvertex(PSP^.param.x*scale,PSP^.param.y*scale,0));
-                                                                 //mminusadd:=geometry.CreateTranslationMatrix(createvertex(-PSP^.param.x*scale,PSP^.param.y*scale,0));
-                                                                 mtrans:=CreateTranslationMatrix(createvertex(outPatternPoint.x,outPatternPoint.y,outPatternPoint.z));
-                                                                 mscale:=CreateScaleMatrix(geometry.createvertex(PSP^.param.Height*scale,PSP^.param.Height*scale,PSP^.param.Height*scale));
-                                                                 objmatrix:=onematrix;
-                                                                 objmatrix:=MatrixMultiply(objmatrix,mscale);
-                                                                 objmatrix:=MatrixMultiply(objmatrix,mrot);
-                                                                 objmatrix:=MatrixMultiply(objmatrix,madd);
-                                                                 objmatrix:=MatrixMultiply(objmatrix,mentrot);
-                                                                 objmatrix:=MatrixMultiply(objmatrix,mtrans);
-                                                                  matr     :=onematrix;
-                                                                  minx:=0;
-                                                                  miny:=0;
-                                                                  maxx:=0;
-                                                                  maxy:=0;
-                                                                  PSP^.param.PStyle.pfont.CreateSymbol(shx,triangles,PSP.Psymbol.Number,objmatrix,matr,minx,miny,maxx,maxy,1);
-                                                                  PSP:=vp.LineType^.shapearray.iterate(ir4);
-                                                             end;
-                                                    TDIText:begin
-                                                                  { TODO : убрать двойное преобразование номера символа }
-                                                                 a:=Vertexangle(CreateVertex2D(startpoint.x,startpoint.y),CreateVertex2D(endpoint.x,endpoint.y));
-                                                                 //a:=0;
-                                                                 mrot:=CreateRotationMatrixZ(Sin(PTP^.param.Angle*pi/180{+a}), Cos(PTP^.param.Angle*pi/180{+a}));
-                                                                 mentrot:=CreateRotationMatrixZ(Sin(a), Cos(a));
-                                                                 madd:=geometry.CreateTranslationMatrix(createvertex(PTP^.param.x*scale,PTP^.param.y*scale,0));
-                                                                 //mminusadd:=geometry.CreateTranslationMatrix(createvertex(-PTP^.param.x*scale,PTP^.param.y*scale,0));
-                                                                 mtrans:=CreateTranslationMatrix(createvertex(outPatternPoint.x,outPatternPoint.y,outPatternPoint.z));
-                                                                 mscale:=CreateScaleMatrix(geometry.createvertex(PTP^.param.Height*scale,PTP^.param.Height*scale,PTP^.param.Height*scale));
-                                                                 objmatrix:=onematrix;
-                                                                 objmatrix:=MatrixMultiply(objmatrix,mscale);
-                                                                 objmatrix:=MatrixMultiply(objmatrix,mrot);
-                                                                 objmatrix:=MatrixMultiply(objmatrix,madd);
-                                                                 objmatrix:=MatrixMultiply(objmatrix,mentrot);
-                                                                 objmatrix:=MatrixMultiply(objmatrix,mtrans);
-                                                                  matr     :=onematrix;
-                                                                  for j:=1 to (system.length(PTP^.Text)) do
-                                                                  begin
-                                                                  PTP^.param.PStyle.pfont.CreateSymbol(shx,triangles,byte(PTP^.Text[j]),objmatrix,matr,minx,miny,maxx,maxy,1);
-                                                                  matr[3, 0] := matr[3, 0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]),tdinfo).NextSymX;
-
-                                                                  end;
-                                                                  PTP:=vp.LineType^.textarray.iterate(ir5);
-                                                             end;
-                                                    //pfont^.CreateSymbol(Vertex3D_in_WCS_Array,sym,objmatrix,matr,minx,miny,maxx,maxy,{pfont,}ln);
-                                        end;
-                                        TDI:=vp.LineType^.dasharray.iterate(ir2);
-                                  until {PStroke}TDI=nil;
-
-                    end;
-               end
-               {else
-                   SetUnLTyped;}
-
-          end;
+               PlaceNPatterns(outPatternPoint,startpoint,trunc(num),vp,dir,scale,length);//исуем num паттернов
+         end
      end;
      Lines.Shrink;
      Points.Shrink;

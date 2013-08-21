@@ -198,7 +198,7 @@ begin
   CP.done;
 
   Geom.Clear;
-  Geom.DrawPolyLine(AproxPointInWCS,vp,closed);
+  Geom.DrawPolyLineWithLT(AproxPointInWCS,vp,closed);
 end;
 
 function GDBObjSpline.FromDXFPostProcessBeforeAdd;
@@ -443,4 +443,4 @@ begin
 end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
-end.
+end.

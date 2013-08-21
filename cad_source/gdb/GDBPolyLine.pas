@@ -102,10 +102,10 @@ begin
         ptvprev:=ptv;
         ptv:=VertexArrayInWCS.iterate(ir);
         if ptv<>nil then
-                        Geom.DrawLine(ptv^,ptvprev^,vp);
+                        Geom.DrawLineWithLT(ptv^,ptvprev^,vp);
   until ptv=nil;
   if closed then
-                Geom.DrawLine(ptvprev^,ptvfisrt^,vp);
+                Geom.DrawLineWithLT(ptvprev^,ptvfisrt^,vp);
   end;
 end;
 
@@ -302,4 +302,4 @@ begin
 end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
-end.
+end.

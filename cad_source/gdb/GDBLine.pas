@@ -318,7 +318,7 @@ begin
   //dir.z:=CoordInWCS.lend.z-CoordInWCS.lbegin.z;
 
   Geom.Clear;
-  Geom.DrawLine(CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
+  Geom.DrawLineWithLT(CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
 
   //self.RenderFeedbackIFNeed;
 end;
@@ -904,4 +904,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBLine.initialization');{$ENDIF}
-end.
+end.

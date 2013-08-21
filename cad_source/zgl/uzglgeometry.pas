@@ -33,10 +33,10 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 procedure Clear;virtual;
                 constructor init;
                 destructor done;virtual;
-                procedure DrawLine(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);virtual;
+                procedure DrawLineWithLT(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);virtual;
+                procedure DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed:GDBBoolean);virtual;
                 procedure DrawLineWithoutLT(const p1,p2:GDBVertex);virtual;
                 procedure DrawPointWithoutLT(const p:GDBVertex);virtual;
-                procedure DrawPolyLine(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed:GDBBoolean);virtual;
                 procedure PlaceNPatterns(StartPatternPoint,FactStartPoint:GDBVertex;num:integer; const vp:GDBObjVisualProp;dir:GDBvertex;scale,length:GDBDouble);
              end;
 ZPolySegmentData={$IFNDEF DELPHI}packed{$ENDIF} record
@@ -74,7 +74,7 @@ begin
   if closed then
                 result:=result+geometry.Vertexlength(pfirstv^,ptvprev^);
 end;
-procedure ZGLGeometry.DrawPolyLine(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed:GDBBoolean);
+procedure ZGLGeometry.DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed:GDBBoolean);
 var
     ptv,ptvprev,ptvfisrt: pgdbvertex;
     ir:itrec;
@@ -89,10 +89,10 @@ begin
             ptvprev:=ptv;
             ptv:=Points.iterate(ir);
             if ptv<>nil then
-                            DrawLine(ptv^,ptvprev^,vp);
+                            DrawLineWithLT(ptv^,ptvprev^,vp);
       until ptv=nil;
       if closed then
-                    DrawLine(ptvprev^,ptvfisrt^,vp);
+                    DrawLineWithLT(ptvprev^,ptvfisrt^,vp);
 end;
 begin
   if Points.Count>1 then
@@ -130,15 +130,19 @@ procedure ZGLGeometry.DrawPointWithoutLT(const p:GDBVertex);
 begin
      points.Add(@p);
 end;
-function creatematrix(StartPatternPoint:GDBVertex;param:shxprop;a,scale:GDBDouble):dmatrix4d;
+function creatematrix(PInsert:GDBVertex; //Точка вставки
+                      param:shxprop;     //Параметры текста
+                      LineAngle,         //Угол линии
+                      Scale:GDBDouble)   //Масштаб линии
+                      :dmatrix4d;        //Выходная матрица
 var
-    mrot,mentrot,madd,mtrans,mscale,objmatrix,matr:dmatrix4d;
+    mrot,mentrot,madd,mtrans,mscale:dmatrix4d;
 begin
     mrot:=CreateRotationMatrixZ(Sin(param.Angle*pi/180), Cos(param.Angle*pi/180));
-    mentrot:=CreateRotationMatrixZ(Sin(a), Cos(a));
-    madd:=geometry.CreateTranslationMatrix(createvertex(param.x*scale,param.y*scale,0));
-    mtrans:=CreateTranslationMatrix(createvertex(StartPatternPoint.x,StartPatternPoint.y,StartPatternPoint.z));
-    mscale:=CreateScaleMatrix(geometry.createvertex(param.Height*scale,param.Height*scale,param.Height*scale));
+    mentrot:=CreateRotationMatrixZ(Sin(LineAngle), Cos(LineAngle));
+    madd:=geometry.CreateTranslationMatrix(createvertex(param.x*Scale,param.y*Scale,0));
+    mtrans:=CreateTranslationMatrix(createvertex(PInsert.x,PInsert.y,PInsert.z));
+    mscale:=CreateScaleMatrix(geometry.createvertex(param.Height*Scale,param.Height*Scale,param.Height*Scale));
     result:=onematrix;
     result:=MatrixMultiply(result,mscale);
     result:=MatrixMultiply(result,mrot);
@@ -160,7 +164,7 @@ var i,j:integer;
     ir2,ir3,ir4,ir5:itrec;
     addAllignVector:GDBVertex;
     a:GDBDouble;
-    mrot,mentrot,madd,mtrans,mscale,objmatrix,matr:dmatrix4d;
+    objmatrix,matr:dmatrix4d;
     minx,miny,maxx,maxy:GDBDouble;
     TDInfo:TTrianglesDataInfo;
 begin
@@ -218,7 +222,7 @@ begin
   end;
 end;
 
-procedure ZGLGeometry.DrawLine(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);
+procedure ZGLGeometry.DrawLineWithLT(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);
 var
     scale,length:GDBDouble;
     num,d:GDBDouble;

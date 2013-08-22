@@ -49,6 +49,10 @@ type
                        CLayer:PGDBLayerProp;
                        CLType:PGDBLTypeProp;
                  end;
+  TFiletoMenuIteratorData=record
+                                localpm:TMenuItem;
+                                ImageIndex:Integer;
+                          end;
 
   TmyAnchorDockSplitter = class(TAnchorDockSplitter)
   public
@@ -208,7 +212,7 @@ var
   oldlongprocess:integer;
   //tf:tform;
   OLDColor:integer;
-  localpm:TMenuItem;
+  localpm:TFiletoMenuIteratorData;
   //DockMaster:  TAnchorDockMaster = nil;
 
   function CloseApp:GDBInteger;
@@ -2257,10 +2261,10 @@ procedure bugfileiterator(filename:GDBString);
 var
     myitem:TmyMenuItem;
 begin
-  myitem:=TmyMenuItem.Create(localpm,'**'+extractfilename(filename),'Load('+filename+')');
-  localpm.SubMenuImages:=IconList;
-  myitem.ImageIndex:=II_Bug;
-  localpm.Add(myitem);
+  myitem:=TmyMenuItem.Create(localpm.localpm,'**'+extractfilename(filename),'Load('+filename+')');
+  localpm.localpm.SubMenuImages:=IconList;
+  myitem.ImageIndex:=localpm.ImageIndex;
+  localpm.localpm.Add(myitem);
   //localpm.Add(pmenuitem);
 end;
 procedure MainForm.loadsubmenu(var f:GDBOpenArrayOfByte;var pm:TMenuItem;var line:GDBString);
@@ -2316,11 +2320,23 @@ begin
                                                       end
                 else if uppercase(line)='BUGFILES' then
                                                       begin
-                                                           localpm:=pm;
+                                                           localpm.localpm:=pm;
+                                                           localpm.ImageIndex:=II_Bug;
                                                            FromDirIterator(expandpath('*../errors/'),'*.dxf','',@bugfileiterator,nil);
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);
-                                                           localpm:=nil;
+                                                           localpm.localpm:=nil;
+                                                           localpm.ImageIndex:=-1;
+                                                      end
+                else if uppercase(line)='SAMPLEFILES' then
+                                                      begin
+                                                           localpm.localpm:=pm;
+                                                           localpm.ImageIndex:=II_Dxf;
+                                                           FromDirIterator(expandpath('*/sample'),'*.dxf','',@bugfileiterator,nil);
+                                                           line := f.readstring(#$A' ',#$D);
+                                                           line:=readspace(line);
+                                                           localpm.localpm:=nil;
+                                                           localpm.ImageIndex:=-1;
                                                       end
                 else if uppercase(line)='FILEHISTORY' then
                                                       begin

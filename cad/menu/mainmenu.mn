@@ -413,15 +413,15 @@ MainMenuItem Help;
   }
 MainMenuItem Debug;
   {
-    Command Command list,CommandList,none,none
+    MenuItem Sample files;
+    {
+     SAMPLEFILES
+    }
     MenuItem **Files with errors (current debug);
     {
      BUGFILES
     }
-    Command Sample file power supply,Load(*sample/test_dxf/em.dxf),none,none
-    Command Sample file alarm,Load(*sample/test_dxf/ops.dxf),none,none
-    Command Sample file,Load(*sample/test_dxf/shema_Poly_Line_Text_Circle_Arc.dxf),none,none
-    Command Utah teapot,Load(*sample/test_dxf/teapot.dxf),none,none
+    Command Command list,CommandList,none,none
     Command PlaceAllBlocks,PlaceAllBlocks,none,none
     Command Check clipboard,DebClip,none,none
     Command Report on memory allocation(for debugbuild),MemSummary,none,none

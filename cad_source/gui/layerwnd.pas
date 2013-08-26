@@ -135,7 +135,8 @@ begin
                                 else
                                     begin
                                     ListItem.SubItemImages[1]:=II_LayerOff;
-                                    MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
+                                    if SysVar.dwg.DWG_CLayer^=gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer(ListItem.Data) then
+                                                          MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
                                     end;
                     changedstamp:=true;
              end;

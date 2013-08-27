@@ -242,7 +242,7 @@ begin
      begin
      tn:=expandpath(sysvar.PATH.Template_Path^)+sysvar.PATH.Template_File^;
      if fileExists(utf8tosys(tn)) then
-                           merge_com(@tn[1])
+                           {merge_com(@tn[1])}Load_merge(@tn[1],TLOLoad)
                        else
                            shared.ShowError(format(rsTemplateNotFound,[tn]));
                            //shared.ShowError('Не найден файл шаблона "'+tn+'"');

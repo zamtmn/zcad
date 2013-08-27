@@ -8,6 +8,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
 
 #: colorselectwnd.button1.caption
 msgctxt "colorselectwnd.button1.caption"
@@ -1108,10 +1109,10 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#| msgid "Rotate"
+#| msgid "Block params"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
-msgstr "Параметры блока"
+msgid "Rotate"
+msgstr "Повернуть"
 
 #: zcadexternal.gdbobjcircle~area
 msgctxt "zcadexternal.gdbobjcircle~area"
@@ -1273,6 +1274,14 @@ msgctxt "zcadexternal.gdbobjwithmatrix~objmatrix"
 msgid "OCS Matrix"
 msgstr "Матрица СК объекта"
 
+#: zcadexternal.gdbsnap2d~base
+msgid "Base"
+msgstr "Начало"
+
+#: zcadexternal.gdbsnap2d~spacing
+msgid "Spacing"
+msgstr "Шаг"
+
 #: zcadexternal.gdbsysvariable~debug
 msgctxt "zcadexternal.gdbsysvariable~debug"
 msgid "Debug"
@@ -1323,6 +1332,7 @@ msgid "View"
 msgstr "Вид"
 
 #: zcadexternal.hint_panel~colorcombobox
+#| msgid "Line type selection"
 msgid "Color selection"
 msgstr "Выбор цвета"
 
@@ -1332,8 +1342,9 @@ msgid "On/Off Additional grips"
 msgstr "Вкл./Выкл. добавочных ручек"
 
 #: zcadexternal.hint_panel~dwg_drawgrid
+#| msgid "Show grid"
 msgctxt "zcadexternal.hint_panel~dwg_drawgrid"
-msgid "Show grid"
+msgid "Display grid"
 msgstr "Показать сетку"
 
 #: zcadexternal.hint_panel~dwg_drawmode
@@ -1362,9 +1373,10 @@ msgid "Polar tracking"
 msgstr "Полярная трассировка"
 
 #: zcadexternal.hint_panel~dwg_snapgrid
+#| msgid "Snap to grid"
 msgctxt "zcadexternal.hint_panel~dwg_snapgrid"
-msgid "Snap to grid"
-msgstr "Привязка к сетке"
+msgid "Snap"
+msgstr "Шаг"
 
 #: zcadexternal.hint_panel~dwg_systmgeometrydraw
 msgctxt "zcadexternal.hint_panel~dwg_systmgeometrydraw"
@@ -1459,22 +1471,6 @@ msgstr "Приходит сверху"
 msgid "Goes up"
 msgstr "Уходит вверх"
 
-#: zcadexternal.menucommand~load(*sample/test_dxf/em.dxf)
-msgid "Sample file power supply"
-msgstr "Пример ЭМ"
-
-#: zcadexternal.menucommand~load(*sample/test_dxf/ops.dxf)
-msgid "Sample file alarm"
-msgstr "Пример ОПС"
-
-#: zcadexternal.menucommand~load(*sample/test_dxf/shema_poly_line_text_circle_arc.dxf)
-msgid "Sample file"
-msgstr ""
-
-#: zcadexternal.menucommand~load(*sample/test_dxf/teapot.dxf)
-msgid "Utah teapot"
-msgstr "Чайник Юта"
-
 #: zcadexternal.menucommand~memsummary
 msgid "Report on memory allocation(for debugbuild)"
 msgstr "Отчет о выделениях памяти (отладка)"
@@ -1553,6 +1549,10 @@ msgstr "Черчение"
 msgctxt "zcadexternal.menu~edit"
 msgid "Edit"
 msgstr "Правка"
+
+#: zcadexternal.menu~fastmenu
+msgid "FASTMENU"
+msgstr ""
 
 #: zcadexternal.menu~file
 msgctxt "zcadexternal.menu~file"
@@ -1748,6 +1748,10 @@ msgstr "Расстановка оборудования"
 #: zcadexternal.submenu~power supply
 msgid "Power supply"
 msgstr "Электроснабжение"
+
+#: zcadexternal.submenu~sample files
+msgid "Sample files"
+msgstr ""
 
 #: zcadexternal.submenu~security alarm
 msgid "Security alarm"
@@ -1984,7 +1988,7 @@ msgstr "Размер перекрестия"
 #: zcadexternal.tdisp~disp_cursorsize
 msgctxt "zcadexternal.tdisp~disp_cursorsize"
 msgid "Cursor size"
-msgstr "Размер курсора"
+msgstr "Размер прицела"
 
 #: zcadexternal.tdisp~disp_drawzaxis
 msgctxt "zcadexternal.tdisp~disp_drawzaxis"
@@ -2020,9 +2024,14 @@ msgctxt "zcadexternal.tdwg~dwg_clinew"
 msgid "Current line weigwt"
 msgstr "Текущий вес линии"
 
+#: zcadexternal.tdwg~dwg_cltype
+msgid "Drawing line type"
+msgstr ""
+
 #: zcadexternal.tdwg~dwg_drawgrid
+#| msgid "Show grid"
 msgctxt "zcadexternal.tdwg~dwg_drawgrid"
-msgid "Show grid"
+msgid "Display grid"
 msgstr "Показать сетку"
 
 #: zcadexternal.tdwg~dwg_drawmode
@@ -2035,6 +2044,10 @@ msgctxt "zcadexternal.tdwg~dwg_editinsubentry"
 msgid "SubEntities edit"
 msgstr "Редактирование составных объектов"
 
+#: zcadexternal.tdwg~dwg_gridspacing
+msgid "Grid spacing"
+msgstr "Шаг сетки"
+
 #: zcadexternal.tdwg~dwg_helpgeometrydraw
 msgid "Help geometry"
 msgstr "Вспомогательная геометрия"
@@ -2042,10 +2055,6 @@ msgstr "Вспомогательная геометрия"
 #: zcadexternal.tdwg~dwg_ltscale
 msgid "Drawing line type scale"
 msgstr "Масштаб типов линий чертжа"
-
-#: zcadexternal.tdwg~dwg_origingrid
-msgid "Grid origin"
-msgstr "Начало сетки"
 
 #: zcadexternal.tdwg~dwg_osmode
 msgctxt "zcadexternal.tdwg~dwg_osmode"
@@ -2062,18 +2071,19 @@ msgctxt "zcadexternal.tdwg~dwg_selectedobjtoinsp"
 msgid "Selected object to inspector"
 msgstr "Отображать выбранный объект в инспекторе"
 
-#: zcadexternal.tdwg~dwg_snapgrid
-msgctxt "zcadexternal.tdwg~dwg_snapgrid"
-msgid "Snap to grid"
-msgstr "Привязка к сетке"
+#: zcadexternal.tdwg~dwg_snap
+msgid "Snap settings"
+msgstr "Настройка шаговой привязки"
 
-#: zcadexternal.tdwg~dwg_stepgrid
-msgid "Grid step"
-msgstr "Шаг сетки"
+#: zcadexternal.tdwg~dwg_snapgrid
+#| msgid "Snap to grid"
+msgctxt "zcadexternal.tdwg~dwg_snapgrid"
+msgid "Snap"
+msgstr "Шаг"
 
 #: zcadexternal.tdwg~dwg_systmgeometrydraw
 msgid "System geometry"
-msgstr "Системная геоиетрия"
+msgstr "Системная геометрия"
 
 #: zcadexternal.telcablecomparam~pcable
 msgid "Cabel"
@@ -2584,7 +2594,7 @@ msgstr "Масштаб блоков"
 #: zcadexternal.tosmodeeditor~osm
 msgctxt "zcadexternal.tosmodeeditor~osm"
 msgid "Snap"
-msgstr "Привязка"
+msgstr "Шаг"
 
 #: zcadexternal.tosmodeeditor~trace
 msgctxt "zcadexternal.tosmodeeditor~trace"
@@ -2768,6 +2778,18 @@ msgstr "Масштабировать"
 msgctxt "zcadexternal.trd~rd_backgroundcolor"
 msgid "Background color"
 msgstr "Цвет фона"
+
+#: zcadexternal.trd~rd_extensions
+msgid "Extensions"
+msgstr ""
+
+#: zcadexternal.trd~rd_gluextensions
+msgid "GLU Extensions"
+msgstr ""
+
+#: zcadexternal.trd~rd_gluversion
+msgid "GLU Version"
+msgstr ""
 
 #: zcadexternal.trd~rd_imagedegradation
 msgid "Image degradation"
@@ -3197,13 +3219,19 @@ msgid "On"
 msgstr "Включен"
 
 #: zcadstrconsts.fontnotfoundandreplace
-msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
-msgstr "Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
+msgid ""
+"For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+msgstr ""
+"Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
 
 #: zcadstrconsts.rsaboutwndcaption
 msgctxt "zcadstrconsts.rsaboutwndcaption"
 msgid "About ZCAD"
 msgstr "О программе ZCAD"
+
+#: zcadstrconsts.rsalternatefontnotfoundin
+msgid "Alternate font \"%s\" is not found in \"%s\""
+msgstr ""
 
 #: zcadstrconsts.rsauthor
 msgid "Writeln by Andrey M. Zubarev"
@@ -3439,7 +3467,8 @@ msgid "Expression %s return %s"
 msgstr "Выражение  %s возвращает %s"
 
 #: zcadstrconsts.rsfardeffilenotfounf
-msgid "File definition of the variables can not be found for the device \"%s\";"
+msgid ""
+"File definition of the variables can not be found for the device \"%s\";"
 msgstr "Файл определения переменных не найден для устройства \"%s\";"
 
 #: zcadstrconsts.rsfileformat
@@ -3536,15 +3565,29 @@ msgstr "Повторное создание %s!"
 msgid ""
 "-UNDO\\REDO - yet it is better not to use;\n"
 "\n"
-"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" "
+"and \"RebuildTree\" in command line;\n"
 "\n"
-"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
+"-To disable the display of this window comment out line \"About\" in the "
+"file \"components\\autorun.cmd\". Encoding of all configuration files - "
+"UTF8;\n"
 msgstr ""
 "-UNDO\\REDO - пока лучше не пользоваться;\n"
 "\n"
-"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
+"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" "
+"и \"RebuildTree\" в командной строке;\n"
 "\n"
-"-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
+"-Для отключения показа этого окна закоментируйте строку \"About\" в файле "
+"\"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
+
+#: zcadstrconsts.rsreservefontnotfound
+msgid "Reserve font is not found in the resources"
+msgstr ""
+
+#: zcadstrconsts.rsreservefontnotload
+msgctxt "zcadstrconsts.rsreservefontnotload"
+msgid "Can not load reserve font"
+msgstr ""
 
 #: zcadstrconsts.rsrevstr
 msgctxt "zcadstrconsts.rsrevstr"
@@ -3635,4 +3678,3 @@ msgstr "Внимание!"
 #: zcadstrconsts.rszcadstarted
 msgid "ZCAD v%s started"
 msgstr "ZCAD v%s запущен"
-

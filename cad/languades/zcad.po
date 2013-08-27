@@ -1043,13 +1043,13 @@ msgstr ""
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
+msgid "Block params"
 msgstr ""
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+msgid "Rotate"
 msgstr ""
 
 #: zcadexternal.gdbobjcircle~area
@@ -1194,6 +1194,14 @@ msgstr ""
 msgid "OCS Matrix"
 msgstr ""
 
+#: zcadexternal.gdbsnap2d~base
+msgid "Base"
+msgstr ""
+
+#: zcadexternal.gdbsnap2d~spacing
+msgid "Spacing"
+msgstr ""
+
 #: zcadexternal.gdbsysvariable~debug
 msgctxt "zcadexternal.gdbsysvariable~debug"
 msgid "Debug"
@@ -1244,6 +1252,7 @@ msgid "Line type selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~colorcombobox
+#, fuzzy
 msgctxt "zcadexternal.hint_panel~colorcombobox"
 msgid "Color selection"
 msgstr ""
@@ -1253,8 +1262,9 @@ msgid "On/Off Additional grips"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_drawgrid
+#, fuzzy
 msgctxt "zcadexternal.hint_panel~dwg_drawgrid"
-msgid "Show grid"
+msgid "Display grid"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_drawmode
@@ -1279,8 +1289,9 @@ msgid "Polar tracking"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_snapgrid
+#, fuzzy
 msgctxt "zcadexternal.hint_panel~dwg_snapgrid"
-msgid "Snap to grid"
+msgid "Snap"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_systmgeometrydraw
@@ -1372,22 +1383,6 @@ msgstr ""
 
 #: zcadexternal.menucommand~insert(device_el_cable_up)
 msgid "Goes up"
-msgstr ""
-
-#: zcadexternal.menucommand~load(*sample/test_dxf/em.dxf)
-msgid "Sample file power supply"
-msgstr ""
-
-#: zcadexternal.menucommand~load(*sample/test_dxf/ops.dxf)
-msgid "Sample file alarm"
-msgstr ""
-
-#: zcadexternal.menucommand~load(*sample/test_dxf/shema_poly_line_text_circle_arc.dxf)
-msgid "Sample file"
-msgstr ""
-
-#: zcadexternal.menucommand~load(*sample/test_dxf/teapot.dxf)
-msgid "Utah teapot"
 msgstr ""
 
 #: zcadexternal.menucommand~memsummary
@@ -1700,6 +1695,10 @@ msgctxt "zcadexternal.submenu~power supply"
 msgid "Power supply"
 msgstr ""
 
+#: zcadexternal.submenu~sample files
+msgid "Sample files"
+msgstr ""
+
 #: zcadexternal.submenu~security alarm
 msgid "Security alarm"
 msgstr ""
@@ -1947,8 +1946,9 @@ msgid "Drawing line type"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_drawgrid
+#, fuzzy
 msgctxt "zcadexternal.tdwg~dwg_drawgrid"
-msgid "Show grid"
+msgid "Display grid"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_drawmode
@@ -1959,16 +1959,16 @@ msgstr ""
 msgid "SubEntities edit"
 msgstr ""
 
+#: zcadexternal.tdwg~dwg_gridspacing
+msgid "Grid spacing"
+msgstr ""
+
 #: zcadexternal.tdwg~dwg_helpgeometrydraw
 msgid "Help geometry"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_ltscale
 msgid "Drawing line type scale"
-msgstr ""
-
-#: zcadexternal.tdwg~dwg_origingrid
-msgid "Grid origin"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_osmode
@@ -1984,14 +1984,14 @@ msgstr ""
 msgid "Selected object to inspector"
 msgstr ""
 
+#: zcadexternal.tdwg~dwg_snap
+msgid "Snap settings"
+msgstr ""
+
 #: zcadexternal.tdwg~dwg_snapgrid
 #, fuzzy
 msgctxt "zcadexternal.tdwg~dwg_snapgrid"
-msgid "Snap to grid"
-msgstr ""
-
-#: zcadexternal.tdwg~dwg_stepgrid
-msgid "Grid step"
+msgid "Snap"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_systmgeometrydraw
@@ -3054,6 +3054,10 @@ msgctxt "zcadstrconsts.rsaboutwndcaption"
 msgid "About ZCAD"
 msgstr ""
 
+#: zcadstrconsts.rsalternatefontnotfoundin
+msgid "Alternate font \"%s\" is not found in \"%s\""
+msgstr ""
+
 #: zcadstrconsts.rsauthor
 msgid "Writeln by Andrey M. Zubarev"
 msgstr ""
@@ -3387,6 +3391,15 @@ msgid ""
 "-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
 "\n"
 "-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
+msgstr ""
+
+#: zcadstrconsts.rsreservefontnotfound
+msgid "Reserve font is not found in the resources"
+msgstr ""
+
+#: zcadstrconsts.rsreservefontnotload
+msgctxt "zcadstrconsts.rsreservefontnotload"
+msgid "Can not load reserve font"
 msgstr ""
 
 #: zcadstrconsts.rsrevstr

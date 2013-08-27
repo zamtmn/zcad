@@ -225,6 +225,12 @@ procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
 implementation
 uses {mainwindow,}UGDBTracePropArray,GDBEntity,{io,}geometry,gdbobjectsconstdef,{UGDBDescriptor,}zcadinterface,
      shared,{cmdline,}GDBText;
+function correcttogrid(point:GDBVertex):GDBVertex;
+begin
+  result.x:=round((point.x-SysVar.DWG.DWG_Snap.Base.x)/SysVar.DWG.DWG_Snap.Spacing.x)*SysVar.DWG.DWG_Snap.Spacing.x+SysVar.DWG.DWG_Snap.Base.x;
+  result.y:=round((point.y-SysVar.DWG.DWG_Snap.Base.y)/SysVar.DWG.DWG_Snap.Spacing.y)*SysVar.DWG.DWG_Snap.Spacing.y+SysVar.DWG.DWG_Snap.Base.y;
+  result.z:=point.z;
+end;
 procedure creategrid;
 var i,j:GDBInteger;
 begin
@@ -963,15 +969,15 @@ begin
      u:=Vertexlength(param.md.WPPointLU,param.md.WPPointUR);
      b:=Vertexlength(param.md.WPPointRB,param.md.WPPointBL);
      if r>l then
-                maxv:=r
+                maxh:=r
             else
-                maxv:=l;
+                maxh:=l;
      if b>u then
-                maxh:=b
+                maxv:=b
             else
-                maxh:=u;
-     ph:={round}(maxh/sysvar.DWG.DWG_StepGrid.y);
-     pv:={round}(maxv/sysvar.DWG.DWG_StepGrid.x);
+                maxv:=u;
+     ph:={round}(maxh/sysvar.DWG.DWG_GridSpacing.y)+1;
+     pv:={round}(maxv/sysvar.DWG.DWG_GridSpacing.x)+1;
      param.md.WPPointUR.z:=1;
      if (4*ph>clientwidth)or(4*pv>clientheight)then
                                                    begin
@@ -983,15 +989,13 @@ begin
      param.md.WPPointLU:=vertexmulonsc(vertexsub(param.md.WPPointLU,param.md.WPPointBL),1/pv);
      param.md.WPPointRB:=vertexmulonsc(vertexsub(param.md.WPPointRB,param.md.WPPointBL),1/ph);
 
-     param.md.WPPointBL.x:=round((param.md.WPPointBL.x-SysVar.DWG.DWG_OriginGrid.x)/SysVar.DWG.DWG_StepGrid.x)*SysVar.DWG.DWG_StepGrid.x+SysVar.DWG.DWG_OriginGrid.x;
-     param.md.WPPointBL.y:=round((param.md.WPPointBL.y-SysVar.DWG.DWG_OriginGrid.y)/SysVar.DWG.DWG_StepGrid.y)*SysVar.DWG.DWG_StepGrid.y+SysVar.DWG.DWG_OriginGrid.y;
+     param.md.WPPointBL.x:=round((param.md.WPPointBL.x-SysVar.DWG.DWG_Snap.Base.x)/SysVar.DWG.DWG_GridSpacing.x)*SysVar.DWG.DWG_GridSpacing.x+SysVar.DWG.DWG_GridSpacing.x+SysVar.DWG.DWG_Snap.Base.x;
+     param.md.WPPointBL.y:=round((param.md.WPPointBL.y-SysVar.DWG.DWG_Snap.Base.y)/SysVar.DWG.DWG_GridSpacing.y)*SysVar.DWG.DWG_GridSpacing.y-SysVar.DWG.DWG_GridSpacing.y+SysVar.DWG.DWG_Snap.Base.y;
+     {param.md.WPPointBL:=correcttogrid(param.md.WPPointBL);}
      param.md.WPPointBL.z:=(-param.md.workplane[3]-param.md.workplane[0]*param.md.WPPointBL.x-param.md.workplane[1]*param.md.WPPointBL.y)/param.md.workplane[2];
 
-     param.md.WPPointUR.x:=ph;
-     param.md.WPPointUR.y:=pv;
-
-
-
+     param.md.WPPointUR.x:=pv;
+     param.md.WPPointUR.y:=ph;
 end;
 
 procedure TOGLWnd.mouseunproject(X, Y: integer);
@@ -1787,11 +1791,11 @@ begin
           oglsm.myglVertex3d({createvertex(i,j,0)}v1);
           //v1:=vertexadd(v1,param.md.WPPointLU);
           //v1.x:=v1.x+sysvar.DWG.DWG_StepGrid.x;
-          v1.y:=v1.y+sysvar.DWG.DWG_StepGrid.y;
+          v1.y:=v1.y+sysvar.DWG.DWG_GridSpacing.y;
           inc(pg);
         end;
         //v:=vertexadd(v,param.md.WPPointRB);
-        v.x:=v1.x-sysvar.DWG.DWG_StepGrid.x;
+        v.x:=v1.x-sysvar.DWG.DWG_GridSpacing.x;
   end;
   oglsm.myglend;
   end;
@@ -4165,12 +4169,6 @@ begin
 
   end;
 end;
-function correcttogrid(point:GDBVertex):GDBVertex;
-begin
-  result.x:=round((point.x-SysVar.DWG.DWG_OriginGrid.x)/SysVar.DWG.DWG_StepGrid.x)*SysVar.DWG.DWG_StepGrid.x+SysVar.DWG.DWG_OriginGrid.x;
-  result.y:=round((point.y-SysVar.DWG.DWG_OriginGrid.y)/SysVar.DWG.DWG_StepGrid.y)*SysVar.DWG.DWG_StepGrid.y+SysVar.DWG.DWG_OriginGrid.y;
-  result.z:=point.z;
-end;
 function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
 var
    gr:GDBBoolean;
@@ -4181,9 +4179,10 @@ begin
                                      gr:=true;
      if (need and gr) then
                           begin
-                               result.x:=round((point.x-SysVar.DWG.DWG_OriginGrid.x)/SysVar.DWG.DWG_StepGrid.x)*SysVar.DWG.DWG_StepGrid.x+SysVar.DWG.DWG_OriginGrid.x;
-                               result.y:=round((point.y-SysVar.DWG.DWG_OriginGrid.y)/SysVar.DWG.DWG_StepGrid.y)*SysVar.DWG.DWG_StepGrid.y+SysVar.DWG.DWG_OriginGrid.y;
-                               result.z:=point.z;
+                               result:=correcttogrid(point);
+                               {result.x:=round((point.x-SysVar.DWG.DWG_Snap.Base.x)/SysVar.DWG.DWG_Snap.Spacing.x)*SysVar.DWG.DWG_Snap.Spacing.x+SysVar.DWG.DWG_Snap.Spacing.x;
+                               result.y:=round((point.y-SysVar.DWG.DWG_Snap.Base.y)/SysVar.DWG.DWG_Snap.Spacing.y)*SysVar.DWG.DWG_Snap.Spacing.y+SysVar.DWG.DWG_Snap.Spacing.y;
+                               result.z:=point.z;}
                           end
                       else
                           result:=point;

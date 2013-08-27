@@ -1030,36 +1030,54 @@ begin
                                   begin
                                        if LoadMode=TLOLoad then
                                        if active then
-                                       if sysvar.DWG.DWG_OriginGrid<>nil then
+                                       if sysvar.DWG.DWG_Snap<>nil then
                                        begin
-                                            sysvar.DWG.DWG_OriginGrid^.x:=strtofloat(s);
+                                            sysvar.DWG.DWG_Snap.Base.x:=strtofloat(s);
                                        end;
                                    end;
                                 23:
                                   begin
                                        if LoadMode=TLOLoad then
                                        if active then
-                                       if sysvar.DWG.DWG_OriginGrid<>nil then
+                                       if sysvar.DWG.DWG_Snap<>nil then
                                        begin
-                                            sysvar.DWG.DWG_OriginGrid^.y:=strtofloat(s);
+                                            sysvar.DWG.DWG_Snap.Base.y:=strtofloat(s);
                                        end;
                                    end;
                                 14:
                                   begin
                                        if LoadMode=TLOLoad then
                                        if active then
-                                       if sysvar.DWG.DWG_StepGrid<>nil then
+                                       if sysvar.DWG.DWG_Snap<>nil then
                                        begin
-                                            sysvar.DWG.DWG_StepGrid^.x:=strtofloat(s);
+                                            sysvar.DWG.DWG_Snap.Spacing.x:=strtofloat(s);
                                        end;
                                    end;
                                 24:
                                   begin
                                        if LoadMode=TLOLoad then
                                        if active then
-                                       if sysvar.DWG.DWG_StepGrid<>nil then
+                                       if sysvar.DWG.DWG_Snap<>nil then
                                        begin
-                                            sysvar.DWG.DWG_StepGrid^.y:=strtofloat(s);
+                                            sysvar.DWG.DWG_Snap.Spacing.y:=strtofloat(s);
+                                       end;
+                                   end;
+                                15:
+                                  begin
+                                       if LoadMode=TLOLoad then
+                                       if active then
+                                       if sysvar.DWG.DWG_GridSpacing<>nil then
+                                       begin
+                                            sysvar.DWG.DWG_GridSpacing.x:=strtofloat(s);
+                                       end;
+                                   end;
+                                25:
+                                  begin
+                                       if LoadMode=TLOLoad then
+                                       if active then
+                                       if sysvar.DWG.DWG_GridSpacing<>nil then
+                                       begin
+                                            sysvar.DWG.DWG_GridSpacing.y:=strtofloat(s);
                                        end;
                                    end;
                                 40:
@@ -1654,17 +1672,17 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                              outstream.TXTAddGDBStringEOL('0');
                                                         end;
                outstream.TXTAddGDBStringEOL(dxfGroupCode(13));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_OriginGrid^.x));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap.Base.x));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(23));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_OriginGrid^.y));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap.Base.y));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(14));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_StepGrid^.x));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap.Spacing.x));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(24));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_StepGrid^.y));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap.Spacing.y));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(15));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_StepGrid^.x));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_GridSpacing.x));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(25));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_StepGrid^.y));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_GridSpacing.y));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(16));
                outstream.TXTAddGDBStringEOL(floattostr(-{gdb.GetCurrentDWG}drawing.pcamera^.prop.look.x));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(26));

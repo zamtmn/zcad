@@ -47,7 +47,7 @@ begin
 end;
 procedure writestring(h: integer; s: string);
 begin
-  if s='//Generate on C:\zcad\CAD_SOURCE\gdb\GDBtext.pas' then
+  if s='//Generate on E:\zcad\CAD_SOURCE\gdb\GDBtext.pas' then
                s:=s;
   s := s + eol;
   FileWrite(h,s[1],length(s));
@@ -217,9 +217,9 @@ begin
 end;
 begin
      error:=false;
-     outhandle:=createoutfile('C:\zcad\CAD\rtl\system.tmp');
-     registerhandle:=createoutfile('C:\zcad\CAD_SOURCE\LANGUADE\RegCnownTypes.pas');
-     registerfnhandle:=createoutfile('C:\zcad\CAD_SOURCE\LANGUADE\RFN.pas');
+     outhandle:=createoutfile('E:\zcad\CAD\rtl\system.tmp');
+     registerhandle:=createoutfile('E:\zcad\CAD_SOURCE\LANGUADE\RegCnownTypes.pas');
+     registerfnhandle:=createoutfile('E:\zcad\CAD_SOURCE\LANGUADE\RFN.pas');
 
      writestring(outhandle,'unit System;');
      writestring(outhandle,'{Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}');
@@ -272,9 +272,9 @@ begin
                   end
               else
                   begin
-                       DeleteFile('C:\zcad\CAD\rtl\system.pas');
-                       RenameFile('C:\zcad\CAD\rtl\system.tmp','C:\zcad\CAD\rtl\system.pas');
-                       DeleteFile('C:\zcad\CAD\rtl\system.tmp');
+                       DeleteFile('E:\zcad\CAD\rtl\system.pas');
+                       RenameFile('E:\zcad\CAD\rtl\system.tmp','E:\zcad\CAD\rtl\system.pas');
+                       DeleteFile('E:\zcad\CAD\rtl\system.tmp');
                   end
 end.
 

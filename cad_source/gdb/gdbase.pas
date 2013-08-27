@@ -135,6 +135,11 @@ GDBvertex2D=packed record
                 x:GDBDouble;(*saved_to_shd*)
                 y:GDBDouble;(*saved_to_shd*)
             end;
+PGDBSnap2D=^GDBSnap2D;
+GDBSnap2D=packed record
+                Base:GDBvertex2D;(*'Base'*)(*saved_to_shd*)
+                Spacing:GDBvertex2D;(*'Spacing'*)(*saved_to_shd*)
+            end;
 PGDBFontVertex2D=^GDBFontVertex2D;
 GDBFontVertex2D=packed record
                 x:FontFloat;(*saved_to_shd*)
@@ -452,4 +457,4 @@ end;
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('gdbase.initialization');{$ENDIF}
 end.
-
+

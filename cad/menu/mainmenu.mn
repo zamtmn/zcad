@@ -10,8 +10,8 @@ Panel OIButtons;
 Panel Status;
   {
     Separator
-    variable DWG_SnapGrid,snaptogrid.bmp,Snap to grid
-    variable DWG_DrawGrid,1.bmp,Show grid
+    variable DWG_SnapGrid,snaptogrid.bmp,Snap
+    variable DWG_DrawGrid,1.bmp,Display grid
     variable DWG_EditInSubEntry,sub.bmp,On/Off Selecting parts of dynamic objects
     variable DWG_AdditionalGrips,#+G,On/Off Additional grips
     variable DWG_DrawMode,lwt.bmp,Show/Hide Lineweight

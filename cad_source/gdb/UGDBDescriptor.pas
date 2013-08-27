@@ -281,8 +281,8 @@ begin
    DWGUnit:=PTDrawing(CurrentDWG).DWGUnits.findunit('DrawingVars');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_SnapGrid,'DWG_SnapGrid');
    DWGUnit.AssignToSymbol(SysVar.DWG.DWG_DrawGrid,'DWG_DrawGrid');
-   DWGUnit.AssignToSymbol(SysVar.DWG.DWG_StepGrid,'DWG_StepGrid');
-   DWGUnit.AssignToSymbol(SysVar.DWG.DWG_OriginGrid,'DWG_OriginGrid');
+   DWGUnit.AssignToSymbol(SysVar.DWG.DWG_Snap,'DWG_Snap');
+   DWGUnit.AssignToSymbol(SysVar.DWG.DWG_GridSpacing,'DWG_GridSpacing');
 
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLType,'DWG_CLType');
@@ -296,8 +296,8 @@ procedure GDBDescriptor.freedwgvars;
 begin
    SysVar.DWG.DWG_SnapGrid:=nil;
    SysVar.DWG.DWG_DrawGrid:=nil;
-   SysVar.DWG.DWG_StepGrid:=nil;
-   SysVar.DWG.DWG_OriginGrid:=nil;
+   SysVar.DWG.DWG_Snap:=nil;
+   SysVar.DWG.DWG_GridSpacing:=nil;
 
    SysVar.dwg.DWG_CLayer:=nil;
    SysVar.dwg.DWG_CLType:=nil;

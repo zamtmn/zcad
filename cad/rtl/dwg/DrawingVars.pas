@@ -14,8 +14,9 @@ var
    DWG_SnapGrid:GDBBoolean;
    DWG_DrawMode:GDBInteger;
 
-  DWG_StepGrid:GDBvertex2D;
-  DWG_OriginGrid:GDBvertex2D;
+   DWG_Snap:GDBSnap2D;
+   DWG_GridSpacing:GDBvertex2D;
+
   DWG_LTScale:GDBDouble;
 
 

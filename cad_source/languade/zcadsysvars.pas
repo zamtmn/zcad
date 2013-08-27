@@ -134,10 +134,10 @@ type
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
              DWG_SystmGeometryDraw:PGDBBoolean;(*'System geometry'*)
              DWG_HelpGeometryDraw:PGDBBoolean;(*'Help geometry'*)
-             DWG_StepGrid:PGDBvertex2D;(*'Grid step'*)
-             DWG_OriginGrid:PGDBvertex2D;(*'Grid origin'*)
-             DWG_DrawGrid:PGDBBoolean;(*'Show grid'*)
-             DWG_SnapGrid:PGDBBoolean;(*'Snap to grid'*)
+             DWG_Snap:PGDBSnap2D;(*'Snap settings'*)
+             DWG_GridSpacing:PGDBvertex2D;(*'Grid spacing'*)
+             DWG_DrawGrid:PGDBBoolean;(*'Display grid'*)
+             DWG_SnapGrid:PGDBBoolean;(*'Snap'*)
              DWG_SelectedObjToInsp:PGDBBoolean;(*'Selected object to inspector'*)
        end;
   TLayerControls=packed record

@@ -48,6 +48,7 @@ var
    _EQ_SEVCABLEkvvgE:tSEVCABLEkvvg;
    _EQ_SEVCABLEkvvgng:tSEVCABLEkvvg;
    _EQ_SEVCABLEkvvgngLS:tSEVCABLEkvvg;
+   _EQ_SEVCABLEkvvgngAFRLSLS:tSEVCABLEkvvg;
 implementation
 begin
 
@@ -148,8 +149,34 @@ begin
 
      _EQ_SEVCABLEkvvgngLS.Wire_Count_Section_DESC:=_04_1_50;
 
-     _EQ_SEVCABLEkvvgngLS.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_контрольные_КВВГнг|BC_Кабельная продукция_контрольные_КВВГнг-LS(СЕВКАБЕЛЬ)';
+     _EQ_SEVCABLEkvvgngLS.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_контрольные_КВВГнг-LS|BC_Кабельная продукция_контрольные_КВВГнг-LS(СЕВКАБЕЛЬ)';
 
      _EQ_SEVCABLEkvvgngLS.format;
+
+
+
+     _EQ_SEVCABLEkvvgngAFRLSLS.initnul;
+
+     _EQ_SEVCABLEkvvgngAFRLSLS.Category:=_kables;
+     _EQ_SEVCABLEkvvgngAFRLSLS.Group:=_cables;
+     _EQ_SEVCABLEkvvgngAFRLSLS.EdIzm:=_m;
+     _EQ_SEVCABLEkvvgngAFRLSLS.ID:='SEVCABLEkvvgngAFRLS';
+     _EQ_SEVCABLEkvvgngAFRLSLS.Standard:='ТУ 16.К71-337-2004';
+     _EQ_SEVCABLEkvvgngAFRLSLS.OKP:='';
+     _EQ_SEVCABLEkvvgngAFRLSLS.Manufacturer:='ОАО "СЕВКАБЕЛЬ-ХОЛДИНГ" г.Санкт-Петербург';
+     _EQ_SEVCABLEkvvgngAFRLSLS.Description:='Кабели контрольные с ПВХ-изоляцией, огнестойкие, не распространяющие горение, с низким дымо- и газовыделением';
+
+     _EQ_SEVCABLEkvvgngAFRLSLS.NameShortTemplate:='КВВГнг(A)-FRLS-%%[Wire_Count_Section_DESC]';
+     _EQ_SEVCABLEkvvgngAFRLSLS.NameTemplate:='Кабель контрольный КВВГнг(A)-FRLS-%%[Wire_Count_Section_DESC]';
+     _EQ_SEVCABLEkvvgngAFRLSLS.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_SEVCABLEkvvgngAFRLSLS.NameFullTemplate:='Кабель контрольный с медными жилами, с терми-ческим барьером из слюдосодержащих лент, с изоляцией и оболочкой из поливинилхлоридного пластиката пониженной пожарной опасности, сечением %%[Wire_Count_Section_DESC]';
+
+     _EQ_SEVCABLEkvvgngAFRLSLS.Wire_Count_Section_DESC:=_04_1_50;
+
+     _EQ_SEVCABLEkvvgngAFRLSLS.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_контрольные_КВВГнг-(A)FRLS|BC_Кабельная продукция_контрольные_КВВГнг(A)-FRLS(СЕВКАБЕЛЬ)';
+
+     _EQ_SEVCABLEkvvgngAFRLSLS.format;
+Кабель контрольный с медными жилами, с терми-ческим барьером из слюдосодержащих лент, с изо-ляцией и оболочкой из ПВХ пластиката пониженной 
+пожарной опасности
 
 end.

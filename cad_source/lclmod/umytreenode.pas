@@ -31,6 +31,11 @@ type
                    function Execute: Boolean; override;
                    procedure SetCommand(_Caption,_Command,_Options:TTranslateString);
               end;
+    TmyButtonAction=class(TAction)
+                   public
+                   button:TToolButton;
+                   function Execute: Boolean; override;
+              end;
 
     TmyActionList=class(TActionList)
                        procedure LoadFromACNFile(fname:string);
@@ -132,6 +137,20 @@ begin
                    else
                        self.Enabled:=true;
 end;
+function TmyButtonAction.Execute: Boolean;
+begin
+     result:=false;
+     if assigned(button) then
+       if button.enabled then
+         begin
+           //button.
+           if (button.Style = tbsCheck) then
+                                     button.Down := not button.Down;
+           button.Click;
+           result:=true;
+         end;
+end;
+
 function TmyAction.Execute: Boolean;
 var
     s:string;

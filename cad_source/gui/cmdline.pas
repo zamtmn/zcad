@@ -325,6 +325,7 @@ var code{,ch}: GDBInteger;
   parseresult:PGDBGDBStringArray;
   cmd,subexpr,superexpr:string;
   parsed:gdbboolean;
+  command,operands:GDBString;
 begin
     //ch:=ord(key);
     if ord(key)=13 then
@@ -332,6 +333,7 @@ begin
     if (length(CmdEdit.text) > 0) then
     begin
       expr:=CmdEdit.text;
+      ParseCommand(@expr[1],command,operands);
       //if IsParsed('_realnumber'#0,expr,parseresult)then
       // expr:=expr;
       val(CmdEdit.text, len, code);
@@ -372,7 +374,7 @@ begin
                                               v.data.Instance:=v.data.Instance;
                                               historyoutstr(Format(rsExprOutText,[expr,s]));
                                          end
-      else if commandmanager.FindCommand(uppercase(cmd))<>nil then
+      else if commandmanager.FindCommand(uppercase({cmd}command))<>nil then
           begin
                //CmdEdit.text:=FindAlias(CmdEdit.text,';','=');
                commandmanager.executecommand(GDBPointer(Cmd),gdb.GetCurrentDWG);

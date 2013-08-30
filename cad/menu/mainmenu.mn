@@ -16,13 +16,13 @@ Panel OIButtons;
 Panel Status;
   {
     Separator
-    variable DWG_SnapGrid,snaptogrid.bmp,Snap
-    variable DWG_DrawGrid,1.bmp,Display grid
+    variable DWG_SnapGrid,snaptogrid.bmp,Snap,F9
+    variable DWG_DrawGrid,1.bmp,Display grid,F7
     variable DWG_EditInSubEntry,sub.bmp,On/Off Selecting parts of dynamic objects
     variable DWG_AdditionalGrips,#+G,On/Off Additional grips
     variable DWG_DrawMode,lwt.bmp,Show/Hide Lineweight
-    variable DWG_OSMode,osnap.bmp,Object snap
-    variable DWG_PolarMode,polar.bmp,Polar tracking
+    variable DWG_OSMode,osnap.bmp,Object snap,F3
+    variable DWG_PolarMode,polar.bmp,Polar tracking,F10
     variable DWG_HelpGeometryDraw,#AG,Auxiliary graphics (connectivity, direction, etc.)
     variable DWG_SystmGeometryDraw,#SG,System graphics (size, communication, etc. for debugging)
   }

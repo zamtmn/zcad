@@ -2719,6 +2719,8 @@ procedure TOGLWnd.showcursor;
     //if gdb.GetCurrentDWG.SelObjArray.Count<>0 then gdb.GetCurrentDWG.SelObjArray.drawpoint;
     if tocommandmcliccount=0 then a:=1
                              else a:=0;
+    if sysvar.DWG.DWG_PolarMode<>nil then
+    if sysvar.DWG.DWG_PolarMode^>0 then
     if param.ontrackarray.total <> 0 then
     begin
       oglsm.myglLogicOp(GL_XOR);

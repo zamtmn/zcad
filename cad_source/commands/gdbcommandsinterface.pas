@@ -411,7 +411,10 @@ function Show_com(Operands:pansichar):GDBInteger;
    //obj:gdbstring;
    //objt:PUserTypeDescriptor;
 begin
-  DockMaster.ShowControl(Operands,true);
+  if Operands<>'' then
+                      DockMaster.ShowControl(Operands,true)
+                  else
+                      shared.ShowError('Show command must have one operand!');
 {     if Operands='ObjInsp' then
                             begin
                                  DockMaster.ShowControl('ObjectInspector',true);
@@ -474,4 +477,4 @@ initialization
   startup;
 finalization
   finalize;
-end.
+end.

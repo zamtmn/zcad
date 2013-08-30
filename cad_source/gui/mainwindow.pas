@@ -1604,7 +1604,7 @@ end;
 procedure MainForm.CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
 var
     f:GDBOpenArrayOfByte;
-    line,ts,{bn,}bc{,bh}:GDBString;
+    line,ts,ts2,{bn,}bc{,bh}:GDBString;
     buttonpos:GDBInteger;
     b:TToolButton;
     i:longint;
@@ -1612,6 +1612,8 @@ var
     //bmp:TBitmap;
     //te:tedit;
     action:tmyaction;
+    baction:TmyButtonAction;
+    shortcut:TShortCut;
 begin
      if not assigned(tb.Images) then
                                     tb.Images:=standartactions.Images;
@@ -1670,6 +1672,12 @@ begin
                                           ts:=system.copy(line,i+1,length(line)-i);
                                           line:=system.copy(line,1,i-1);
                                      end;
+                          i:=pos(',',ts);
+                          if i>0 then
+                                     begin
+                                          ts2:=system.copy(ts,i+1,length(ts)-i);
+                                          ts:=system.copy(ts,1,i-1);
+                                     end;
                           b:=TmyVariableToolButton.Create(tb);
                           b.Style:=tbsCheck;
                           TmyVariableToolButton(b).AssignToVar(bc);
@@ -1682,9 +1690,19 @@ begin
                           SetImage(tb,b,line,false,'button_variable~'+bc);
                           b.AutoSize:=true;
                           AddToBar(tb,b);
-
                           updatesbytton.Add(b);
-
+                          if ts2<>'' then
+                          begin
+                               shortcut:=TextToShortCut(ts2);
+                               if shortcut>0 then
+                               begin
+                               baction:=TmyButtonAction.Create(StandartActions);
+                               baction.button:=b;
+                               baction.ShortCut:=shortcut;
+                               StandartActions.AddMyAction(TMyAction(baction));
+                               end;
+                               ts2:='';
+                          end;
                      end;
                      if uppercase(line)='LAYERCOMBOBOX' then
                      begin

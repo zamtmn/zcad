@@ -1,3 +1,9 @@
+Panel test;
+  {
+    action ACN_QUIT
+    Separator
+    action ACN_LOAD
+  }
 Panel OIButtons;
   {
     action ACN_SNAPRUNTIME

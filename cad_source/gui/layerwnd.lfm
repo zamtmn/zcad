@@ -1,12 +1,11 @@
 object LayerWindow: TLayerWindow
-  Left = 234
-  Height = 588
-  Top = 176
-  Width = 800
-  ActiveControl = B1
+  Left = 779
+  Height = 653
+  Top = 139
+  Width = 840
   Caption = 'LayerWindow'
-  ClientHeight = 588
-  ClientWidth = 800
+  ClientHeight = 653
+  ClientWidth = 840
   Constraints.MinHeight = 500
   Constraints.MinWidth = 800
   OnClose = FormClose
@@ -14,20 +13,20 @@ object LayerWindow: TLayerWindow
   OnShow = FormShow
   LCLVersion = '1.1'
   object Bevel1: TBevel
-    AnchorSideLeft.Control = B3
+    AnchorSideLeft.Control = MkCurrentBtn
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = B3
+    AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = B3
     AnchorSideBottom.Side = asrBottom
-    Left = 101
-    Height = 30
-    Top = 5
-    Width = 694
-    Anchors = [akTop, akLeft, akRight, akBottom]
+    Left = 82
+    Height = 25
+    Top = 1
+    Width = 757
+    Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 2
-    BorderSpacing.Right = 5
+    BorderSpacing.Top = 1
+    BorderSpacing.Right = 1
   end
   object Label1: TLabel
     AnchorSideLeft.Control = Bevel1
@@ -36,134 +35,69 @@ object LayerWindow: TLayerWindow
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
-    Left = 108
-    Height = 16
-    Top = 12
-    Width = 680
+    Left = 83
+    Height = 23
+    Top = 2
+    Width = 755
     Anchors = [akTop, akLeft, akRight, akBottom]
-    BorderSpacing.Around = 7
+    BorderSpacing.Around = 1
     Caption = 'Label1'
+    Layout = tlCenter
     ParentColor = False
-  end
-  object Bevel2: TBevel
-    AnchorSideLeft.Control = Owner
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = Button_Apply
-    Left = 5
-    Height = 30
-    Top = 518
-    Width = 790
-    Anchors = [akLeft, akRight, akBottom]
-    BorderSpacing.Left = 5
-    BorderSpacing.Right = 5
-    BorderSpacing.Bottom = 5
-  end
-  object Label2: TLabel
-    AnchorSideLeft.Control = Bevel2
-    AnchorSideTop.Control = Bevel2
-    AnchorSideRight.Control = Bevel2
-    AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = Bevel2
-    AnchorSideBottom.Side = asrBottom
-    Left = 12
-    Height = 16
-    Top = 525
-    Width = 776
-    Anchors = [akTop, akLeft, akRight, akBottom]
-    BorderSpacing.Around = 7
-    Caption = 'Label2'
-    ParentColor = False
-  end
-  object B1: TBitBtn
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Owner
-    Left = 5
-    Height = 30
-    Top = 5
-    Width = 30
-    BorderSpacing.Left = 5
-    BorderSpacing.Top = 5
-    OnClick = B1Click
-    TabOrder = 0
-  end
-  object B2: TBitBtn
-    AnchorSideLeft.Control = B1
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = B1
-    AnchorSideBottom.Control = B1
-    AnchorSideBottom.Side = asrBottom
-    Left = 37
-    Height = 30
-    Top = 5
-    Width = 30
-    Anchors = [akTop, akLeft, akBottom]
-    BorderSpacing.Left = 2
-    OnClick = B2Click
-    TabOrder = 1
-  end
-  object B3: TBitBtn
-    AnchorSideLeft.Control = B2
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = B2
-    AnchorSideBottom.Control = B2
-    AnchorSideBottom.Side = asrBottom
-    Left = 69
-    Height = 30
-    Top = 5
-    Width = 30
-    Anchors = [akTop, akLeft, akBottom]
-    BorderSpacing.Left = 2
-    TabOrder = 2
   end
   object ButtonApplyClose: TBitBtn
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 641
+    Left = 685
     Height = 30
-    Top = 553
+    Top = 622
     Width = 154
     Anchors = [akRight, akBottom]
-    BorderSpacing.Right = 5
-    BorderSpacing.Bottom = 5
+    BorderSpacing.Right = 1
+    BorderSpacing.Bottom = 1
     Caption = 'Apply and close'
     OnClick = AplyClose
-    TabOrder = 3
+    TabOrder = 0
   end
   object Button_Apply: TBitBtn
     AnchorSideRight.Control = ButtonApplyClose
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 486
+    Left = 534
     Height = 30
-    Top = 553
+    Top = 622
     Width = 150
     Anchors = [akRight, akBottom]
-    BorderSpacing.Right = 5
-    BorderSpacing.Bottom = 5
+    BorderSpacing.Right = 1
+    BorderSpacing.Bottom = 1
     Caption = 'Apply'
     OnClick = Aply
     ParentShowHint = False
-    TabOrder = 4
+    TabOrder = 1
   end
   object ListView1: TListView
-    AnchorSideTop.Control = B1
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Bevel1
     AnchorSideTop.Side = asrBottom
-    AnchorSideBottom.Control = Label2
-    Left = 5
-    Height = 481
-    Top = 37
-    Width = 790
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = ButtonApplyClose
+    Left = 1
+    Height = 592
+    Top = 28
+    Width = 838
     Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 1
     BorderSpacing.Top = 2
+    BorderSpacing.Right = 1
     BorderSpacing.Bottom = 2
     Columns = <    
       item
         AutoSize = True
         Caption = 'Status'
-        Width = 786
+        Width = 44
       end    
       item
         Caption = 'Name'
@@ -209,10 +143,58 @@ object LayerWindow: TLayerWindow
     ReadOnly = True
     RowSelect = True
     SortType = stText
-    TabOrder = 5
+    TabOrder = 2
     ViewStyle = vsReport
     OnChange = ListView1Change
     OnCustomDrawSubItem = onCDSubItem
     OnSelectItem = ListView1SelectItem
+  end
+  object MkCurrentBtn: TSpeedButton
+    AnchorSideLeft.Control = B2
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Bevel1
+    AnchorSideBottom.Control = Bevel1
+    AnchorSideBottom.Side = asrBottom
+    Left = 55
+    Height = 25
+    Top = 1
+    Width = 25
+    Anchors = [akTop, akLeft, akBottom]
+    Flat = True
+    OnClick = MkCurrent
+  end
+  object SpeedButton1: TSpeedButton
+    Left = 561
+    Height = 22
+    Top = 563
+    Width = 23
+  end
+  object B2: TSpeedButton
+    AnchorSideLeft.Control = B1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Bevel1
+    AnchorSideBottom.Control = Bevel1
+    AnchorSideBottom.Side = asrBottom
+    Left = 28
+    Height = 25
+    Top = 1
+    Width = 27
+    Anchors = [akTop, akLeft, akBottom]
+    Flat = True
+    OnClick = B2Click
+  end
+  object B1: TSpeedButton
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Bevel1
+    AnchorSideBottom.Control = Bevel1
+    AnchorSideBottom.Side = asrBottom
+    Left = 1
+    Height = 25
+    Top = 1
+    Width = 27
+    Anchors = [akTop, akLeft, akBottom]
+    BorderSpacing.Left = 1
+    Flat = True
+    OnClick = B1Click
   end
 end

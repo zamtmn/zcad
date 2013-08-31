@@ -105,6 +105,7 @@ resourcestring
   rsQuitQuery='Do yo want to quit ZCAD?';
   rsCloseDWGQuery='Drawing "%s" not saved. Close?';
   rsCurrentLayerOff='The current layer is turned off';
+  rsLayerMustBeSelected='Layer must be selected';
   rsSaveEmptyDWG='Drawing is empty. Sure?';
   rsBlockIgnored='Ignored block "%s"';
   rsDoubleBlockIgnored='Ignored double definition block "%s"';

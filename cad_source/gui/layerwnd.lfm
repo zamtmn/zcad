@@ -1,11 +1,11 @@
 object LayerWindow: TLayerWindow
   Left = 779
-  Height = 653
+  Height = 590
   Top = 139
-  Width = 840
+  Width = 938
   Caption = 'LayerWindow'
-  ClientHeight = 653
-  ClientWidth = 840
+  ClientHeight = 590
+  ClientWidth = 938
   Constraints.MinHeight = 500
   Constraints.MinWidth = 800
   OnClose = FormClose
@@ -22,7 +22,7 @@ object LayerWindow: TLayerWindow
     Left = 82
     Height = 25
     Top = 1
-    Width = 757
+    Width = 855
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 2
     BorderSpacing.Top = 1
@@ -38,7 +38,7 @@ object LayerWindow: TLayerWindow
     Left = 83
     Height = 23
     Top = 2
-    Width = 755
+    Width = 853
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 1
     Caption = 'Label1'
@@ -50,9 +50,9 @@ object LayerWindow: TLayerWindow
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 685
+    Left = 783
     Height = 30
-    Top = 622
+    Top = 559
     Width = 154
     Anchors = [akRight, akBottom]
     BorderSpacing.Right = 1
@@ -65,9 +65,9 @@ object LayerWindow: TLayerWindow
     AnchorSideRight.Control = ButtonApplyClose
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 534
+    Left = 632
     Height = 30
-    Top = 622
+    Top = 559
     Width = 150
     Anchors = [akRight, akBottom]
     BorderSpacing.Right = 1
@@ -85,9 +85,9 @@ object LayerWindow: TLayerWindow
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonApplyClose
     Left = 1
-    Height = 592
+    Height = 529
     Top = 28
-    Width = 838
+    Width = 936
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 1
     BorderSpacing.Top = 2
@@ -142,6 +142,7 @@ object LayerWindow: TLayerWindow
     MultiSelect = True
     ReadOnly = True
     RowSelect = True
+    ScrollBars = ssAutoBoth
     SortType = stText
     TabOrder = 2
     ViewStyle = vsReport
@@ -162,12 +163,6 @@ object LayerWindow: TLayerWindow
     Anchors = [akTop, akLeft, akBottom]
     Flat = True
     OnClick = MkCurrent
-  end
-  object SpeedButton1: TSpeedButton
-    Left = 561
-    Height = 22
-    Top = 563
-    Width = 23
   end
   object B2: TSpeedButton
     AnchorSideLeft.Control = B1

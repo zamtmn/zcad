@@ -27,7 +27,6 @@ type
     ListView1: TListView;
     CurrentLayer:TListItem;
     MkCurrentBtn: TSpeedButton;
-    SpeedButton1: TSpeedButton;
     procedure Aply(Sender: TObject);
     procedure AplyClose(Sender: TObject);
     procedure B1Click(Sender: TObject);

@@ -18,17 +18,16 @@ type
   { TLayerWindow }
 
   TLayerWindow = class(TForm)
+    B1: TSpeedButton;
+    B2: TSpeedButton;
     Bevel1: TBevel;
-    Bevel2: TBevel;
-    B1: TBitBtn;
-    B2: TBitBtn;
-    B3: TBitBtn;
     ButtonApplyClose: TBitBtn;
     Button_Apply: TBitBtn;
     Label1: TLabel;
-    Label2: TLabel;
     ListView1: TListView;
     CurrentLayer:TListItem;
+    MkCurrentBtn: TSpeedButton;
+    SpeedButton1: TSpeedButton;
     procedure Aply(Sender: TObject);
     procedure AplyClose(Sender: TObject);
     procedure B1Click(Sender: TObject);
@@ -44,10 +43,12 @@ type
                           Shift: TShiftState; X, Y: Integer);
     procedure LWMouseDown(Sender: TObject; Button: TMouseButton;
                           Shift: TShiftState; X, Y: Integer);
+    procedure MkCurrent(Sender: TObject);
     procedure onCDSubItem(Sender: TCustomListView; Item: TListItem;
       SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
     procedure ProcessClick(ListItem:TListItem;SubItem:Integer);
     procedure Process(ListItem:TListItem;SubItem:Integer);
+    procedure MaceItemCurrent(ListItem:TListItem);
     procedure Notify(Sender: TObject;Command:TMyNotifyCommand); virtual;
     procedure asyncfreeeditor(Data: PtrInt);
     procedure freeeditor;
@@ -77,7 +78,7 @@ begin
 // Отрисовываем картинки на кнопках
 IconList.GetBitmap(II_Plus, B1.Glyph);
 IconList.GetBitmap(II_Minus, B2.Glyph);
-IconList.GetBitmap(II_Ok, B3.Glyph);
+IconList.GetBitmap(II_Ok, MkCurrentBtn.Glyph);
 ListView1.SmallImages:=IconList;
 MouseDownItem:=nil;
 MouseDownSubItem:=-1;
@@ -105,6 +106,20 @@ begin
      else
          result:=false;
 end;
+procedure TLayerWindow.MaceItemCurrent(ListItem:TListItem);
+begin
+     if CurrentLayer<>ListItem then
+     begin
+     SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer(ListItem.Data);
+     ListItem.ImageIndex:=II_Ok;
+     CurrentLayer.ImageIndex:=-1;
+     CurrentLayer:=ListItem;
+     if not PGDBLayerProp(ListItem.Data)^._on then
+                                                   MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
+     changedstamp:=true;
+     end;
+end;
+
 procedure TLayerWindow.Process(ListItem:TListItem;SubItem:Integer);
 var
    pos,si: integer;
@@ -117,7 +132,8 @@ begin
      dec(subitem);
      case subitem of
           -1:begin
-                   if CurrentLayer<>ListItem then
+                  MaceItemCurrent(ListItem);
+                   {if CurrentLayer<>ListItem then
                    begin
                    SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer(ListItem.Data);
                    ListItem.ImageIndex:=II_Ok;
@@ -126,7 +142,7 @@ begin
                    if not PGDBLayerProp(ListItem.Data)^._on then
                                                                  MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
                    changedstamp:=true;
-                   end;
+                   end;}
             end;
            1:begin
                    PGDBLayerProp(ListItem.Data)^._on:=not PGDBLayerProp(ListItem.Data)^._on;
@@ -268,6 +284,17 @@ procedure TLayerWindow.LWMouseDown(Sender: TObject; Button: TMouseButton;
 begin
      GetListItem(ListView1,x,y,MouseDownItem,MouseDownSubItem);
 end;
+
+procedure TLayerWindow.MkCurrent(Sender: TObject);
+var
+   i:integer;
+begin
+  if assigned(ListView1.Selected)then
+                                     MaceItemCurrent(ListView1.Selected)
+                                 else
+                                     MessageBox(@rsLayerMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
+end;
+
 procedure TLayerWindow.onCDSubItem(Sender: TCustomListView; Item: TListItem;
   SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
 var

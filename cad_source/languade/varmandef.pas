@@ -23,7 +23,7 @@ interface
 uses zcadsysvars,SysUtils,UGDBTree,UGDBStringArray,{gdbobjectsconstdef,}strutils,gdbasetypes,
   UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,gdbase,UGDBOpenArrayOfData,
   UGDBOpenArrayOfPObjects,
-  Classes,Controls,StdCtrls{$IFNDEF DELPHI},LCLVersion{$ENDIF};
+  Classes,Controls,StdCtrls,Graphics,types{$IFNDEF DELPHI},LCLVersion{$ENDIF};
 const
   {Ttypenothing=-1;
   Ttypecustom=1;
@@ -119,6 +119,9 @@ UserTypeDescriptor=object(GDBaseObject)
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
                          procedure _init(size:GDBInteger;tname:string;pu:pointer);
                          function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TPropEditor;virtual;
+                         function GetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;virtual;
+                         procedure DrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer);virtual;
+                         procedure RunFastEditor(PInstance:GDBPointer);virtual;
                          procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;abstract;
                          function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
                          function SerializePreProcess(Value:GDBString;sub:integer):GDBString;virtual;
@@ -314,6 +317,16 @@ end;
 function UserTypeDescriptor.CreateEditor;
 begin
      result:=nil;
+end;
+function UserTypeDescriptor.GetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;
+begin
+     result:=Size(0,0)
+end;
+procedure UserTypeDescriptor.DrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer);
+begin
+end;
+procedure UserTypeDescriptor.RunFastEditor;
+begin
 end;
 function UserTypeDescriptor.GetTypeAttributes;
 begin

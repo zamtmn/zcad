@@ -19,7 +19,9 @@
 unit UBaseTypeDescriptor;
 {$INCLUDE def.inc}
 interface
-uses  strproc,log,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
+uses
+      Graphics,classes,Themes,types,
+      strproc,log,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
       varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,UGDBOpenArrayOfPointer,math,
 
       StdCtrls,shared;
@@ -38,6 +40,9 @@ GDBBooleanDescriptor=object(BaseTypeDescriptor)
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
                           function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TPropEditor;virtual;
+                          function GetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;virtual;
+                          procedure DrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer);virtual;
+                          procedure RunFastEditor(PInstance:GDBPointer);virtual;
                           procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
                     end;
 GDBShortintDescriptor=object(BaseTypeDescriptor)
@@ -351,6 +356,37 @@ begin
      else
      result := 'False';
 end;
+function GDBBooleanDescriptor.GetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;
+var
+  Details: TThemedElementDetails;
+  ComboElem:TThemedButton;
+begin
+     if assigned(PInstance) then
+     begin
+     ComboElem:=tbCheckBoxUncheckedNormal;
+     Details:=ThemeServices.GetElementDetails(ComboElem);
+     result:=ThemeServices.GetDetailSize(Details);
+     end
+     else
+         result:=size(0,0);
+end;
+procedure GDBBooleanDescriptor.DrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer);
+var
+  Details: TThemedElementDetails;
+  ComboElem:TThemedButton;
+begin
+     if pboolean(PInstance)^ then
+                                 ComboElem:=tbCheckBoxCheckedNormal
+                             else
+                                 ComboElem:=tbCheckBoxUncheckedNormal;
+     Details:=ThemeServices.GetElementDetails(ComboElem);
+     ThemeServices.DrawElement(Canvas.Handle,Details,r);
+end;
+procedure GDBBooleanDescriptor.RunFastEditor;
+begin
+     pboolean(PInstance)^:=not pboolean(PInstance)^;
+end;
+
 function GDBBooleanDescriptor.CreateEditor;
 var //num:cardinal;
     cbedit:TComboBox;

@@ -105,7 +105,7 @@ begin
                        0:
                            s:=s+rsByBlock;
                        else
-                           s:=s+'(Red='+inttostr(palette[ColorInfex].r)+' Green='+inttostr(palette[ColorInfex].g)+' Blue='+inttostr(palette[ColorInfex].b)+')';
+                           s:=s+' '+palette[ColorInfex].name+' '+'(Red='+inttostr(palette[ColorInfex].r)+' Green='+inttostr(palette[ColorInfex].g)+' Blue='+inttostr(palette[ColorInfex].b)+')';
      end;
      if ColorInfex=0 then
                          ByBlock.Caption:=rsByBlock+'(*)'
@@ -220,7 +220,7 @@ begin
      graypalette.width:=GrayGeometry.dx*6;
      graypalette.Height:=grayGeometry.dy*2;
 
-     caption:=inttostr(clientwidth)+' '+inttostr(clientheight);
+     //caption:=inttostr(clientwidth)+' '+inttostr(clientheight);
 end;
 
 procedure TColorSelectWND.EvenPalettePaint(Sender: TObject);

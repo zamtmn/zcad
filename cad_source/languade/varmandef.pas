@@ -251,9 +251,15 @@ begin
                                   end;
 end;
 procedure TPropEditor.ExitEdit(Sender: TObject);
+var
+   peditor:tobject;
 begin
      if fFreeOnLostFocus then
-                             EditingDone(self.geteditor);
+                             begin
+                                  peditor:=self.geteditor;
+                                  if peditor<>nil then
+                                                      EditingDone(peditor);
+                             end;
 end;
 
 procedure UserTypeDescriptor.IncAddr;

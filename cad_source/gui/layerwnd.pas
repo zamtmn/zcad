@@ -45,8 +45,9 @@ type
     procedure MkCurrent(Sender: TObject);
     procedure onCDSubItem(Sender: TCustomListView; Item: TListItem;
       SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
-    procedure ProcessClick(ListItem:TListItem;SubItem:Integer);
-    procedure Process(ListItem:TListItem;SubItem:Integer);
+    procedure ProcessClick(ListItem:TListItem;SubItem:Integer;DoubleClick:Boolean);
+    procedure Process(ListItem:TListItem;SubItem:Integer;DoubleClick:Boolean);
+    procedure createeditor(ListView:TListView;ListItem:TListItem;SubItem:Integer;P:PAnsiString);
     procedure MaceItemCurrent(ListItem:TListItem);
     procedure Notify(Sender: TObject;Command:TMyNotifyCommand); virtual;
     procedure asyncfreeeditor(Data: PtrInt);
@@ -55,6 +56,7 @@ type
   private
     MouseDownItem:TListItem;
     MouseDownSubItem: Integer;
+    DoubleClick:Boolean;
     changedstamp:boolean;
     PEditor:TPropEditor;
     EditedItem:TListItem;
@@ -119,7 +121,7 @@ begin
      end;
 end;
 
-procedure TLayerWindow.Process(ListItem:TListItem;SubItem:Integer);
+procedure TLayerWindow.Process(ListItem:TListItem;SubItem:Integer;DoubleClick:Boolean);
 var
    pos,si: integer;
    mr:integer;
@@ -130,19 +132,12 @@ begin
                   ListItem.ImageIndex:=3;}
      dec(subitem);
      case subitem of
-          -1:begin
-                  MaceItemCurrent(ListItem);
-                   {if CurrentLayer<>ListItem then
-                   begin
-                   SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer(ListItem.Data);
-                   ListItem.ImageIndex:=II_Ok;
-                   CurrentLayer.ImageIndex:=-1;
-                   CurrentLayer:=ListItem;
-                   if not PGDBLayerProp(ListItem.Data)^._on then
-                                                                 MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
-                   changedstamp:=true;
-                   end;}
-            end;
+          -1:
+             if DoubleClick then
+             MaceItemCurrent(ListItem);
+           0:
+             if DoubleClick then
+             createeditor(ListView1,ListItem,SubItem,@PGDBLayerProp(ListItem.Data)^.Name);
            1:begin
                    PGDBLayerProp(ListItem.Data)^._on:=not PGDBLayerProp(ListItem.Data)^._on;
                    if PGDBLayerProp(ListItem.Data)^._on then
@@ -209,27 +204,35 @@ begin
                                     ListItem.SubItemImages[7]:=II_LayerUnPrint;
                     changedstamp:=true;
              end;
-           8:begin
-                Pos := -GetScrollPos (ListView1.Handle, SB_HORZ);
-                si := -1;
-                while si < subitem do
-                begin
-                  Inc (Si);
-                  Inc (Pos, ListView1.Columns.Items[si].Width);
-                end;
-                si:=ListItem.DisplayRect(drBounds).Bottom-ListItem.DisplayRect(drBounds).Top-1;
-                if peditor<>nil then
-                begin
-                     Application.RemoveAsyncCalls(self);
-                     freeeditor;
-                end;
-                PEditor:=GDBAnsiStringDescriptorObj.CreateEditor(self.ListView1,pos,ListItem.Top,ListView1.Columns.Items[SubItem+1].Width,si,@PGDBLayerProp(ListItem.Data)^.desk,nil,true);
-                PEditor.geteditor.SetFocus;
-                PEditor.OwnerNotify:=@Notify;
-                EditedItem:=ListItem;
-             end;
+           8:
+             if DoubleClick then
+             createeditor(ListView1,ListItem,SubItem,@PGDBLayerProp(ListItem.Data)^.desk);
      end;
 end;
+procedure TLayerWindow.createeditor(ListView:TListView;ListItem:TListItem;SubItem:Integer;P:PAnsiString);
+var
+   pos,si: integer;
+   mr:integer;
+begin
+  Pos := -GetScrollPos (ListView.Handle, SB_HORZ);
+  si := -1;
+  while si < subitem do
+  begin
+    Inc (Si);
+    Inc (Pos, ListView.Columns.Items[si].Width);
+  end;
+  si:=ListItem.DisplayRect(drBounds).Bottom-ListItem.DisplayRect(drBounds).Top-1;
+  if peditor<>nil then
+  begin
+       Application.RemoveAsyncCalls(self);
+       freeeditor;
+  end;
+  PEditor:=GDBAnsiStringDescriptorObj.CreateEditor(self.ListView1,pos,ListItem.Top,ListView1.Columns.Items[SubItem+1].Width,si,p,nil,true);
+  PEditor.geteditor.SetFocus;
+  PEditor.OwnerNotify:=@Notify;
+  EditedItem:=ListItem;
+end;
+
 procedure TLayerWindow.Notify(Sender: TObject;Command:TMyNotifyCommand);
 //var
    //pld:GDBPointer;
@@ -255,7 +258,9 @@ procedure TLayerWindow.freeeditor;
 begin
   //if peditor<>nil then
   begin
-       freeandnil(peditor);
+       peditor.Free;
+       peditor:=nil;
+       //freeandnil(peditor);
        ListView1.BeginUpdate;
        UpdateItem(EditedItem);
        ListView1.EndUpdate;
@@ -264,16 +269,16 @@ begin
 end;
 
 
-procedure TLayerWindow.ProcessClick(ListItem:TListItem;SubItem:Integer);
+procedure TLayerWindow.ProcessClick(ListItem:TListItem;SubItem:Integer;DoubleClick:Boolean);
 var i:integer;
 begin
      //ListView1.BeginUpdate;
-     process(ListItem,SubItem);
+     process(ListItem,SubItem,DoubleClick);
      for i:=0 to ListView1.Items.Count-1 do
      begin
           if ListView1.Items[i].Selected then
           if ListView1.Items[i]<>ListItem then
-                                              process(ListView1.Items[i],SubItem);
+                                              process(ListView1.Items[i],SubItem,false);
      end;
      //ListView1.EndUpdate;
 end;
@@ -281,7 +286,23 @@ end;
 procedure TLayerWindow.LWMouseDown(Sender: TObject; Button: TMouseButton;
                           Shift: TShiftState; X, Y: Integer);
 begin
+     if Button=mbLeft then
+     begin
      GetListItem(ListView1,x,y,MouseDownItem,MouseDownSubItem);
+     {if ListView1.SelCount>1 then
+     begin}
+     if ssDouble in Shift then
+                              doubleclick:=true
+                          else
+                              doubleclick:=false;
+     {end
+     else
+         begin
+         ProcessClick(MouseDownItem,MouseDownSubItem,false);
+         MouseDownItem:=nil;
+         MouseDownSubItem:=-1;
+         end;}
+     end;
 end;
 
 procedure TLayerWindow.MkCurrent(Sender: TObject);
@@ -295,7 +316,7 @@ begin
 end;
 function ProcessSubItem(Selected:boolean;canvas:tcanvas;Item: TListItem;SubItem: Integer): TRect;
 begin
-                           if Selected then
+                           if Selected or Item.Selected then
                            begin
                            canvas.Brush.Color:=clHighlight;
                            canvas.Font.Color:=clHighlightText;
@@ -400,15 +421,18 @@ var
    col: Integer;
    //pos: integer;
 begin
-
+     if Button=mbLeft then
+     begin
      if GetListItem(ListView1,x,y,li,col) then
      begin
      if li=MouseDownItem then
      if col=MouseDownSubItem then
-                                 ProcessClick(li,col);
+                                 ProcessClick(li,col,DoubleClick);
+     end;
      end;
      MouseDownItem:=nil;
      MouseDownSubItem:=-1;
+     DoubleClick:=false;
 end;
 procedure TLayerWindow.UpdateItem(Item: TListItem);
 var

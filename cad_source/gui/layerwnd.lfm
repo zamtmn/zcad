@@ -97,7 +97,7 @@ object LayerWindow: TLayerWindow
       item
         AutoSize = True
         Caption = 'Status'
-        Width = 44
+        Width = 932
       end    
       item
         Caption = 'Name'

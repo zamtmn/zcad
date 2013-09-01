@@ -6,7 +6,7 @@ interface
 
 uses
   log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
-  FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, Grids, ComCtrls,LCLIntf,lcltype,
 
   gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
@@ -293,6 +293,19 @@ begin
                                  else
                                      MessageBox(@rsLayerMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
 end;
+function ProcessSubItem(Selected:boolean;canvas:tcanvas;Item: TListItem;SubItem: Integer): TRect;
+begin
+                           if Selected then
+                           begin
+                           canvas.Brush.Color:=clHighlight;
+                           canvas.Font.Color:=clHighlightText;
+                           end;
+                           {$IFNDEF LCLGTK2}
+                           result := Item.DisplayRectSubItem( SubItem,drBounds);
+                           canvas.FillRect(result);
+                           {$ENDIF}
+                           result := Item.DisplayRectSubItem( SubItem,drBounds);
+end;
 
 procedure TLayerWindow.onCDSubItem(Sender: TCustomListView; Item: TListItem;
   SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
@@ -312,24 +325,15 @@ const
 begin
      BrushColor:=TCustomListView(sender).canvas.Brush.Color;
      FontColor:=TCustomListView(sender).canvas.Font.Color;
-     if SubItem=5 then
+     DefaultDraw:=false;
+     case SubItem of
+     5:
                       begin
-                           DefaultDraw:=false;
                            colorindex:=PGDBLayerProp(Item.Data)^.color;
                            s:=GetColorNameFromIndex(colorindex);
-                           //programlog.LogOutStr(inttostr(plongword(@State)^),0);
-                           if ((cdsSelected in state)or(Item = Sender.Selected))and(Sender.Focused) then
-                                            begin
-                                            TCustomListView(sender).canvas.Brush.Color:=clHighlight;
-                                            TCustomListView(sender).canvas.Font.Color:=clHighlightText;
-                                            end;
 
-                           //else
-                           {$IFNDEF LCLGTK2}
-                           ARect := Item.DisplayRectSubItem( SubItem,drBounds);
-                           TCustomListView(sender).canvas.FillRect(ARect);
-                           {$ENDIF}
-                           ARect := Item.DisplayRectSubItem( SubItem,drIcon);
+                           ARect:=ProcessSubItem((cdsSelected in state)or(Item = Sender.Selected)and(Sender.Focused),TCustomListView(sender).canvas,Item,SubItem);
+
                            textrect := Item.DisplayRectSubItem( SubItem,drLabel);
                            //ARect.Left:=ARect.Left+2;
                            //textrect:=ARect;
@@ -358,24 +362,18 @@ begin
                                                  end
                             end
                            else
-                           DrawText(TCustomListView(sender).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_SINGLELINE or DT_VCENTER);
+                           DrawText(sender.canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_SINGLELINE or DT_VCENTER);
                            //TCustomListView(sender).canvas.TextRect(textrect,textrect.Left,0,s,estilo);
-                           end
-else if SubItem=7 then
-                      begin
-                           DefaultDraw:=false;
-                           if ((cdsSelected in state)or(Item = Sender.Selected))and(Sender.Focused) then
-                           begin
-                           TCustomListView(sender).canvas.Brush.Color:=clHighlight;
-                           TCustomListView(sender).canvas.Font.Color:=clHighlightText;
                            end;
-                           {$IFNDEF LCLGTK2}
-                           ARect := Item.DisplayRectSubItem( SubItem,drBounds);
-                           TCustomListView(sender).canvas.FillRect(ARect);
-                           {$ENDIF}
+4,3,2,8:
+                      begin
+                           ARect:=ProcessSubItem((cdsSelected in state)or(Item = Sender.Selected)and(Sender.Focused),TCustomListView(sender).canvas,Item,SubItem);
+                           TListView(Sender).SmallImages.Draw(Sender.Canvas,ARect.Left+(ARect.Right-ARect.Left)div 2-8,ARect.Top,Item.SubItemImages[SubItem-1],gdeNormal)
+                      end;
+7:
+                      begin
+                           ARect:=ProcessSubItem((cdsSelected in state)or(Item = Sender.Selected)and(Sender.Focused),TCustomListView(sender).canvas,Item,SubItem);
                            colorindex:=PGDBLayerProp(Item.Data)^.lineweight;
-                           ARect := Item.DisplayRectSubItem( SubItem,drBounds);
-
                            s:=GetLWNameFromLW(colorindex);
                            if colorindex<0 then
                                       ll:=0
@@ -383,9 +381,10 @@ else if SubItem=7 then
                                       ll:=30;
                             //ARect.Left:=ARect.Left+2;
                             drawLW(TCustomListView(sender).canvas,ARect,ll,(colorindex) div 10,s);
-                       end
+                       end;
                   else
                       DefaultDraw:=true;
+                  end;
       TCustomListView(sender).canvas.Brush.Color:=BrushColor;
       TCustomListView(sender).canvas.Font.Color:=FontColor;
 

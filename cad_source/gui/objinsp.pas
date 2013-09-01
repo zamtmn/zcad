@@ -447,12 +447,13 @@ var
 //  curr:propdeskptr;
   s:GDBString;
   ppd:PPropertyDeskriptor;
-  r{,rr}:trect;
+  fer,r{,rr}:trect;
   //colorn,coloro:tCOLORREF;
   tempcolor:TColor;
   ir:itrec;
   temp:integer;
   Size: TSize;
+  FESize:TSize;
   procedure DrawTreeIcon(X, Y: Integer; Minus: Boolean);
   const
     PlusMinusDetail: array[Boolean] of TThemedTreeview =
@@ -625,6 +626,18 @@ begin
           end
           else
             //drawtextA({cdc}dc,GDBPointer(ppd^.value),length(ppd^.value),r,DT_left);
+            if ppd.PTypeManager<>nil then
+            begin
+            FESize:=ppd.PTypeManager.GetPrefferedFastEditorSize(ppd^.valueAddres);
+            if FESize.cX>0 then
+            begin
+                 fer:=r;
+                 fer.Left:=fer.Right-FESize.cX-5;
+                 fer.Right:=fer.Right-5;
+                 r.Right:=fer.Left;
+                 ppd.PTypeManager.DrawFastEditor(canvas,fer,ppd^.valueAddres);
+            end;
+            end;
             drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
             //canvas.TextRect(r,r.Left,r.Top,(ppd^.value));
                                  //TextOut(cdc, namecol, y * rowh, GDBPointer(ppd^.value), length(ppd^.value));
@@ -1068,6 +1081,7 @@ var
   //ir:itrec;
 
   menu:TPopupMenu;
+  fesize:tsize;
 
 begin
   inherited;
@@ -1090,7 +1104,26 @@ begin
   if pp=nil then
                 exit;
   if (button=mbLeft) then
-                         createeditor(pp)
+                         begin
+                              if pp.PTypeManager<>nil then
+                              begin
+                              fesize:=pp.PTypeManager.GetPrefferedFastEditorSize(pp.valueAddres);
+                              if (fesize.cx>0)and((clientwidth-x-5)<fesize.cx) then
+                                                                                   begin
+                                                                                        pp.PTypeManager.RunFastEditor(pp.valueAddres);
+                                                                                        if GDBobj then
+                                                                                        if PGDBaseObject(pcurrobj)^.IsEntity then
+                                                                                                                            PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^);
+                                                                                        if assigned(redrawoglwndproc) then redrawoglwndproc;
+                                                                                        self.updateinsp;
+                                                                                        if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+                                                                                   end
+                                                                             else
+                                                                                 createeditor(pp)
+                              end
+                                 else
+                                     createeditor(pp)
+                         end
                      else
                          begin
                               begin

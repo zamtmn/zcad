@@ -22,7 +22,7 @@ unit Objinsp;
 interface
 
 uses
-  ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
+  strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
   Themes,
   {$IFDEF LCLGTK2}
   x,xlib,{x11,}{xutil,}
@@ -626,6 +626,7 @@ begin
           end
           else
             //drawtextA({cdc}dc,GDBPointer(ppd^.value),length(ppd^.value),r,DT_left);
+            begin
             if ppd.PTypeManager<>nil then
             begin
             FESize:=ppd.PTypeManager.GetPrefferedFastEditorSize(ppd^.valueAddres);
@@ -641,6 +642,7 @@ begin
             drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
             //canvas.TextRect(r,r.Left,r.Top,(ppd^.value));
                                  //TextOut(cdc, namecol, y * rowh, GDBPointer(ppd^.value), length(ppd^.value));
+            end;
           y:=y++rowh;
         end;
       end;
@@ -943,7 +945,7 @@ begin
                          tempstr:=tempstr+'   '+pp^.ValKey+':'+pp^.ValType;
     if pp^.Value<>'' then
                          tempstr:=tempstr+':='+pp^.Value;
-    tempstr:=(tempstr);
+    tempstr:=ReplaceStr(tempstr,'|',';');
   self.Hint:=tempstr;
   self.ShowHint:=true;
 

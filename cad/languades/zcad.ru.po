@@ -30,8 +30,8 @@ msgstr ""
 
 #: tcolorselectwnd.caption
 msgctxt "tcolorselectwnd.caption"
-msgid "Form1"
-msgstr ""
+msgid "Color selection"
+msgstr "Выбор цвета"
 
 #: tcolorselectwnd.label2.caption
 msgctxt "tcolorselectwnd.label2.caption"
@@ -71,10 +71,6 @@ msgstr "Слои"
 
 #: tlayerwindow.label1.caption
 msgid "Label1"
-msgstr ""
-
-#: tlayerwindow.label2.caption
-msgid "Label2"
 msgstr ""
 
 #: tlayerwindow.listview1.columns[0].caption
@@ -1333,6 +1329,7 @@ msgstr "Вид"
 
 #: zcadexternal.hint_panel~colorcombobox
 #| msgid "Line type selection"
+msgctxt "zcadexternal.hint_panel~colorcombobox"
 msgid "Color selection"
 msgstr "Выбор цвета"
 
@@ -3492,6 +3489,10 @@ msgstr "Инициализация:"
 msgid "Layer DEFPOINTS can not be printed"
 msgstr "Слой DEFPOINTS не может быть печатным"
 
+#: zcadstrconsts.rslayermustbeselected
+msgid "Layer must be selected"
+msgstr ""
+
 #: zcadstrconsts.rslayoutload
 msgctxt "zcadstrconsts.rslayoutload"
 msgid "Error loading layout from file"
@@ -3644,6 +3645,10 @@ msgstr "Не могу открыть файл \"%s\""
 #: zcadstrconsts.rsunabletowritefile
 msgid "Unable to write file \"%s\""
 msgstr "Не могу записать файл \"%s\""
+
+#: zcadstrconsts.rsunassigned
+msgid "Unassigned"
+msgstr "Не связано"
 
 #: zcadstrconsts.rsuncategorized
 msgid "Uncategorized"

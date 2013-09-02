@@ -21,7 +21,7 @@ msgstr ""
 
 #: tcolorselectwnd.caption
 msgctxt "TCOLORSELECTWND.CAPTION"
-msgid "Form1"
+msgid "Color selection"
 msgstr ""
 
 #: tcolorselectwnd.label2.caption
@@ -64,10 +64,6 @@ msgstr ""
 #: tlayerwindow.label1.caption
 msgctxt "TLAYERWINDOW.LABEL1.CAPTION"
 msgid "Label1"
-msgstr ""
-
-#: tlayerwindow.label2.caption
-msgid "Label2"
 msgstr ""
 
 #: tlayerwindow.listview1.columns[0].caption
@@ -3315,6 +3311,10 @@ msgstr ""
 msgid "Layer DEFPOINTS can not be printed"
 msgstr ""
 
+#: zcadstrconsts.rslayermustbeselected
+msgid "Layer must be selected"
+msgstr ""
+
 #: zcadstrconsts.rslayoutload
 msgctxt "zcadstrconsts.rslayoutload"
 msgid "Error loading layout from file"
@@ -3456,6 +3456,10 @@ msgstr ""
 
 #: zcadstrconsts.rsunabletowritefile
 msgid "Unable to write file \"%s\""
+msgstr ""
+
+#: zcadstrconsts.rsunassigned
+msgid "Unassigned"
 msgstr ""
 
 #: zcadstrconsts.rsuncategorized

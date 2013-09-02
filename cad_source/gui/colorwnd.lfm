@@ -1,7 +1,7 @@
 object ColorSelectWND: TColorSelectWND
-  Left = 718
+  Left = 703
   Height = 470
-  Top = 204
+  Top = 202
   Width = 632
   Caption = 'Color selection'
   ClientHeight = 470

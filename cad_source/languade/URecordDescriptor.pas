@@ -509,7 +509,7 @@ begin
                                                                                 ppd^.Attr:=ownerattrib or pfd^.base.Attributes;
                                                                                 ppd^.Collapsed:=PCollapsed;
                                                                                 ppd^.valueAddres:=addr;
-                                                                                ppd^.value:='Не инициализирован';
+                                                                                ppd^.value:='Not initialized';
                                                                                 if assigned(pobj) then
                                                                                                       if assigned(ppointer(pobj)^) then
                                                                                                                                        begin

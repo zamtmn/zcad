@@ -19,7 +19,7 @@
 unit UPointerDescriptor;
 {$INCLUDE def.inc}
 interface
-uses TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,gdbasetypes,varmandef,gdbase{,UGDBOpenArrayOfData},UGDBStringArray,memman;
+uses zcadstrconsts,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,gdbasetypes,varmandef,gdbase{,UGDBOpenArrayOfData},UGDBStringArray,memman;
 type
 PGDBPointerDescriptor=^GDBPointerDescriptor;
 GDBPointerDescriptor=object(TUserTypeDescriptor)
@@ -192,7 +192,7 @@ begin
                              ppd^.Collapsed:=PCollapsed;
                              ppd^.SubNode:=nil;
                              ppd^.valueAddres:={addr}ta;
-                             ppd^.value:='unassigned';
+                             ppd^.value:=rsUnassigned;
                              ppd^.HelpPointer:=nil;
                         end;
      if bm<>bmode then

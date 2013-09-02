@@ -38,6 +38,7 @@ const
   rowh=21;
   alligmentall=2;
   alligmentarrayofarray=64;
+  fastEditorOffset=0;
 type
   arrindop=record
     currnum,currcount,num,count:GDBInteger;
@@ -633,8 +634,9 @@ begin
             if FESize.cX>0 then
             begin
                  fer:=r;
-                 fer.Left:=fer.Right-FESize.cX-5;
-                 fer.Right:=fer.Right-5;
+                 fer.Left:=fer.Right-FESize.cX-fastEditorOffset;
+                 fer.Right:=fer.Right-fastEditorOffset;
+                 fer.Top:=fer.Top-3;
                  r.Right:=fer.Left;
                  ppd.PTypeManager.DrawFastEditor(canvas,fer,ppd^.valueAddres);
             end;
@@ -1054,7 +1056,7 @@ begin
             vsa.sort;
        end;
        if assigned(pp^.valueAddres) then
-       PEditor:=pp^.PTypeManager^.CreateEditor(self,{namecol-6}pp^.x1,{my}pp^.y1,{clientwidth-namecol+3}pp^.x2-pp^.x1,{rowh}pp^.y2-pp^.y1,pp^.valueAddres,@vsa,false);
+       PEditor:=pp^.PTypeManager^.CreateEditor(self,{namecol-6}pp^.x1,{my}pp^.y1,{clientwidth-namecol+3}pp^.x2-pp^.x1,{rowh}pp^.y2-pp^.y1+1,pp^.valueAddres,@vsa,false);
        vsa.done;
        if assigned(PEditor){<>nil} then
        begin
@@ -1111,7 +1113,7 @@ begin
                               if pp.PTypeManager<>nil then
                               begin
                               fesize:=pp.PTypeManager.GetPrefferedFastEditorSize(pp.valueAddres);
-                              if (fesize.cx>0)and((clientwidth-x-5)<fesize.cx) then
+                              if (fesize.cx>0)and(({clientwidth}pp.x2-x-fastEditorOffset-1)<=fesize.cx) then
                                                                                    begin
                                                                                         pp.PTypeManager.RunFastEditor(pp.valueAddres);
                                                                                         if GDBobj then
@@ -1259,7 +1261,7 @@ end;
 procedure TGDBobjinsp.updateeditorBounds;
 begin
   if peditor<>nil then
-  peditor.geteditor.SetBounds(namecol-1,ppropcurrentedit.y1,clientwidth-namecol-2,ppropcurrentedit.y2-ppropcurrentedit.y1);
+  peditor.geteditor.SetBounds(namecol-1,ppropcurrentedit.y1,clientwidth-namecol-1,ppropcurrentedit.y2-ppropcurrentedit.y1+1);
 end;
 procedure TGDBobjinsp._onresize(sender:tobject);
 //var x,xn:integer;

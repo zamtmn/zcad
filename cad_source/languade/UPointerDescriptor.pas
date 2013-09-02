@@ -191,7 +191,7 @@ begin
                              ppd^.Attr:=ownerattrib;
                              ppd^.Collapsed:=PCollapsed;
                              ppd^.SubNode:=nil;
-                             ppd^.valueAddres:=addr;
+                             ppd^.valueAddres:={addr}ta;
                              ppd^.value:='unassigned';
                              ppd^.HelpPointer:=nil;
                         end;

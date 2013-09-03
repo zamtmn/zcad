@@ -38,7 +38,7 @@ const
   rowh=21;
   alligmentall=2;
   alligmentarrayofarray=64;
-  fastEditorOffset=0;
+  fastEditorOffset={$IFDEF LCLQT}7{$ELSE}2{$ENDIF} ;
 type
   arrindop=record
     currnum,currcount,num,count:GDBInteger;

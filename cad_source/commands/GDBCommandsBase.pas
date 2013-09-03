@@ -618,38 +618,20 @@ begin
 
      GDB.CurrentDWG:=pdwg;
 end;
-
 procedure SaveDXFDPAS(s:gdbstring);
 var
    mem:GDBOpenArrayOfByte;
    pu:ptunit;
-   //filepath,filename{,fileext}:GDBString;
 begin
-     savedxf2000(s, GDB.GetCurrentDWG^);
-
-     pu:=PTDrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName);
-     mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
-     pu^.SavePasToMem(mem);
-     //filepath:=ExtractFilePath(s);
-     //filename:=ExtractFileName(s);
-     mem.SaveToFile(s+'.dbpas');
-     mem.done;
+     dwgSaveDXFDPAS(s, GDB.GetCurrentDWG);
      if assigned(ProcessFilehistoryProc) then
-      ProcessFilehistoryProc(s);
+                                             ProcessFilehistoryProc(s);
 end;
 function QSave_com(Operands:pansichar):GDBInteger;
 var s,s1:GDBString;
     itautoseve:boolean;
 begin
      itautoseve:=false;
-     if gdb.GetCurrentROOT.ObjArray.Count<1 then
-                                                     begin
-                                                          if assigned(messageboxproc)then
-                                                          begin
-                                                          if messageboxproc(@rsSaveEmptyDWG[1],@rsWarningCaption[1],MB_YESNO)=IDNO then
-                                                          exit;
-                                                          end;
-                                                     end;
      if operands='QS' then
                           begin
                                s1:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^);
@@ -661,7 +643,6 @@ begin
                           begin
                                if gdb.GetCurrentDWG.GetFileName=rsUnnamedWindowTitle then
                                                                       begin
-                                                                           //commandmanager.executecommandend;
                                                                            SaveAs_com('');
                                                                            exit;
                                                                       end;
@@ -670,25 +651,13 @@ begin
      if not itautoseve then
                            gdb.GetCurrentDWG.ChangeStampt(false);
      SaveDXFDPAS(s1);
-     //savedxf2000(s1, @GDB);
      SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
      result:=cmd_ok;
 end;
 function SaveAs_com(Operands:pansichar):GDBInteger;
-var //pd:^TSaveDialog;
-   //sfn: TopenFILENAME;
-//   cf: pansichar;
+var
    s: GDBString;
-//   errcode: DWord;
-   {filepath,filename,}fileext:GDBString;
-//    fileext:GDBString;
-//   mem:GDBOpenArrayOfByte;
-//   ev:TEditWnd;
-//   a:integer;
-//   pobj:PGDBObjEntity;
-//   op:gdbstring;
-//   pu:ptunit;
-
+   fileext:GDBString;
 begin
      if assigned(ShowAllCursorsProc) then ShowAllCursorsProc;
      if SaveFileDialog(s,'dxf',ProjectFileFilter,'',rsSaveFile) then
@@ -702,14 +671,6 @@ begin
                                      gdb.GetCurrentDWG.SetFileName(s);
                                      gdb.GetCurrentDWG.ChangeStampt(false);
                                      if assigned(updatevisibleproc) then updatevisibleproc;
-                                    (* savedxf2000(s, @GDB);
-                                     pu:=gdb.GetCurrentDWG.DWGUnits.findunit(DrawingDeviceBaseUnitName);
-                                     mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
-                                     pu^.SavePasToMem(mem);
-                                     filepath:=ExtractFilePath(s);
-                                     filename:=ExtractFileName(s);
-                                     mem.SaveToFile(s+'.dbpas');
-                                     mem.done; *)
                                 end
      else begin
           shared.ShowError(Format(rsunknownFileExt, [fileext]));

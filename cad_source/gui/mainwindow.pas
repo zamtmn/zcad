@@ -687,7 +687,7 @@ begin
                while MainFormN.PageControl.ActivePage<>nil do
                begin
                     //MainFormN.PageControl.ActivePage.Destroy;
-                    if MainFormN.CloseDWGPage(MainFormN.PageControl.ActivePage)=IDNO then
+                    if MainFormN.CloseDWGPage(MainFormN.PageControl.ActivePage)=IDCANCEL then
                                                                                              exit;
                end;
           end;
@@ -771,9 +771,17 @@ begin
        result:=IDYES;
        if ClosedDWG.Changed then
                                  begin
+                                      repeat
                                       s:=format(rsCloseDWGQuery,[ClosedDWG.FileName]);
-                                      result:=MainFormN.MessageBox(@s[1],@rsWarningCaption[1],MB_YESNO);
-                                      if result<>IDYES then exit;
+                                      result:=MainFormN.MessageBox(@s[1],@rsWarningCaption[1],{MB_YESNO}MB_YESNOCANCEL);
+                                      if result=IDCANCEL then exit;
+                                      if result=IDNO then system.break;
+                                      if result=IDYES then
+                                      begin
+                                           result:=dwgQSave_com(ClosedDWG);
+                                      end;
+                                      until result<>cmd_error;
+                                      result:=IDYES;
                                  end;
        commandmanager.executecommandtotalend;
        poglwnd:=ClosedDWG.OGLwindow1;

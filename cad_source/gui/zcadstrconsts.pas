@@ -104,7 +104,7 @@ resourcestring
   rsNotYetImplemented='Not yet implemented';
   rsLayerDefpaontsCanNotBePrinted='Layer DEFPOINTS can not be printed';
   rsQuitQuery='Do yo want to quit ZCAD?';
-  rsCloseDWGQuery='Drawing "%s" not saved. Close?';
+  rsCloseDWGQuery='Drawing "%s" not saved. Save?';
   rsCurrentLayerOff='The current layer is turned off';
   rsLayerMustBeSelected='Layer must be selected';
   rsSaveEmptyDWG='Drawing is empty. Sure?';

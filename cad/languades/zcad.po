@@ -1039,13 +1039,13 @@ msgstr ""
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+msgid "Rotate"
 msgstr ""
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
+msgid "Block params"
 msgstr ""
 
 #: zcadexternal.gdbobjcircle~area
@@ -1244,13 +1244,13 @@ msgstr ""
 #: zcadexternal.hint_panel~colorcombobox
 #, fuzzy
 msgctxt "zcadexternal.hint_panel~colorcombobox"
-msgid "Line type selection"
+msgid "Color selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~colorcombobox
 #, fuzzy
 msgctxt "zcadexternal.hint_panel~colorcombobox"
-msgid "Color selection"
+msgid "Line type selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_additionalgrips
@@ -3083,7 +3083,7 @@ msgid "ByLayer"
 msgstr ""
 
 #: zcadstrconsts.rsclosedwgquery
-msgid "Drawing \"%s\" not saved. Close?"
+msgid "Drawing \"%s\" not saved. Save?"
 msgstr ""
 
 #: zcadstrconsts.rscm2vnotremove

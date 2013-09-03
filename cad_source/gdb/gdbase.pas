@@ -20,6 +20,11 @@ unit gdbase;
 interface
 uses gdbasetypes,
      gdbobjectsconstdef;
+const
+     cmd_ok=-1;
+     cmd_error=1;
+     cmd_cancel=-2;
+     ZCMD_OK_NOEND=-10;
 type
 {EXPORT+}
 (*varcategoryforoi SUMMARY='Суммарно'*)

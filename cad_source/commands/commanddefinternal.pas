@@ -23,9 +23,6 @@ unit commanddefinternal;
 interface
 uses gdbobjectsconstdef,zcadsysvars,geometry,varmandef,gdbasetypes,gdbase,commandlinedef,commandline,oglwindowdef,UGDBDescriptor
   {,UGDBLayerArray},memman,shared;
-const cmd_ok=-1;
-const cmd_cancel=-2;
-const ZCMD_OK_NOEND=-10;
 type
   comproc=procedure(_self:pointer);
   commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger):GDBInteger;

@@ -20,7 +20,7 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-LResources,zcadsysvars,zcadinterface,zcadstrconsts,GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,ugdbabstractdrawing,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
+WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,ugdbabstractdrawing,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
 UGDBNumerator, gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,sysinfo,ugdbsimpledrawing,
@@ -113,9 +113,42 @@ procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
 procedure clearotrack;
 procedure clearcp;
 procedure redrawoglwnd;
+function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
+function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log,OGLSpecFunc;
+ function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
+ var
+    mem:GDBOpenArrayOfByte;
+    pu:ptunit;
+ begin
+      savedxf2000(s,dwg^);
+      pu:=PTDrawing(dwg).DWGUnits.findunit(DrawingDeviceBaseUnitName);
+      mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
+      pu^.SavePasToMem(mem);
+      mem.SaveToFile(s+'.dbpas');
+      mem.done;
+      result:=cmd_ok;
+ end;
+ function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
+ var s,s1:GDBString;
+     itautoseve:boolean;
+ begin
+      begin
+           if dwg.GetFileName=rsUnnamedWindowTitle then
+           begin
+                if not(SaveFileDialog(s1,'dxf',ProjectFileFilter,'',rsSaveFile)) then
+                begin
+                     result:=cmd_error;
+                     exit;
+                end;
+           end
+           else
+               s1:=gdb.GetCurrentDWG.GetFileName;
+      end;
+      result:=dwgSaveDXFDPAS(s1,dwg);
+ end;
 function SetCurrentDWG(PDWG:pointer):pointer;
 begin
      result:=gdb.GetCurrentDWG;

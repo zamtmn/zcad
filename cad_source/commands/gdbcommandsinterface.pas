@@ -451,6 +451,23 @@ begin
                                   Helpwindow:=THelpWnd.mycreate(Application,@Helpwindow);
   DOShowModal(Helpwindow);
 end;
+function ClearFileHistory_com(Operands:pansichar):GDBInteger;
+var i,j,k:integer;
+    pstr,pstrnext:PGDBString;
+begin
+     for i:=0 to 9 do
+     begin
+          pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
+          if assigned(pstr) then
+          pstr^:='';
+          if assigned(MainFormN.FileHistory[i]) then
+          begin
+              MainFormN.FileHistory[i].Caption:='';
+              MainFormN.FileHistory[i].command:='';
+              MainFormN.FileHistory[i].Visible:=false;
+          end;
+     end;
+end;
 procedure startup;
 //var
    //pmenuitem:pzmenuitem;
@@ -468,6 +485,7 @@ begin
   CreateCommandFastObjectPlugin(@Show_com,'Show',0,0);
   CreateCommandFastObjectPlugin(@About_com,'About',0,0);
   CreateCommandFastObjectPlugin(@Help_com,'Help',0,0);
+  CreateCommandFastObjectPlugin(@ClearFileHistory_com,'ClearFileHistory',0,0);
 
   Aboutwindow:=nil;
   Helpwindow:=nil;
@@ -477,4 +495,4 @@ initialization
   startup;
 finalization
   finalize;
-end.
+end.

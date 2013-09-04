@@ -427,10 +427,14 @@ MainMenuItem Debug;
     {
      BUGFILES
     }
-    Command Command list,CommandList,none,none
-    Command PlaceAllBlocks,PlaceAllBlocks,none,none
-    Command Check clipboard,DebClip,none,none
-    Command Report on memory allocation(for debugbuild),MemSummary,none,none
+    MenuItem **Utils;
+    {
+     Command Command list,CommandList,none,none
+     Command Clear File History,ClearFileHistory,none,none
+     Command PlaceAllBlocks,PlaceAllBlocks,none,none
+     Command Check clipboard,DebClip,none,none
+     Command Report on memory allocation(for debugbuild),MemSummary,none,none
+    }
     MenuItem Inspector;
       {
         Command **Fix the current,SetObjInsp(CURRENT),none,none

@@ -16,6 +16,8 @@ var
   DSGN_LCCable:TLayerControl;
   DSGN_LCLeader:TLayerControl;
   INTF_ShowScrollBars:GDBBoolean;
+  INTF_ShowDwgTabs:GDBBoolean;
+  INTF_ShowDwgTabCloseBurron:GDBBoolean;
   VIEW_CommandLineVisible:GDBBoolean;
   VIEW_HistoryLineVisible:GDBBoolean;
   VIEW_ObjInspVisible:GDBBoolean;
@@ -91,6 +93,8 @@ begin
   DSGN_LCLeader.Enabled:=True;
   DSGN_LCLeader.LayerName:='TEXT';
   INTF_ShowScrollBars:=True;
+  INTF_ShowDwgTabs:=True;
+  INTF_ShowDwgTabCloseBurron:=True;
   VIEW_CommandLineVisible:=True;
   VIEW_HistoryLineVisible:=True;
   VIEW_ObjInspVisible:=True;

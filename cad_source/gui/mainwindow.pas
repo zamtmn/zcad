@@ -947,9 +947,18 @@ PageControl.Parent:=MainPanel;
 PageControl.Align:=alClient;
 PageControl.{OnPageChanged}OnChange:=ChangedDWGTabCtrl;
 PageControl.BorderWidth:=0;
-PageControl.Options:=[nboShowCloseButtons];
+if assigned(SysVar.INTF.INTF_ShowDwgTabCloseBurron) then
+begin
+     if SysVar.INTF.INTF_ShowDwgTabCloseBurron^ then
+                                                    PageControl.Options:=PageControl.Options+[nboShowCloseButtons]
+                                                else
+                                                    PageControl.Options:=PageControl.Options-[nboShowCloseButtons]
+end
+else
+    PageControl.Options:=[nboShowCloseButtons];
 PageControl.OnCloseTabClicked:=CloseDWGPageInterf;
 PageControl.OnMouseDown:=PageControlMouseDown;
+PageControl.ShowTabs:=SysVar.INTF.INTF_ShowDwgTabs^;
 result:=MainPanel;
 result.Name:=aname;
 end
@@ -3223,6 +3232,23 @@ begin
   mainwindow.ColorBox.enabled:=true;
   if assigned(mainwindow.LTypeBox) then
   mainwindow.LTypeBox.enabled:=true;
+
+  if assigned(MainFormN.PageControl) then
+  if assigned(SysVar.INTF.INTF_ShowDwgTabs) then
+  if sysvar.INTF.INTF_ShowDwgTabs^ then
+                                       MainFormN.PageControl.ShowTabs:=true
+                                   else
+                                       MainFormN.PageControl.ShowTabs:=false;
+
+  if assigned(MainFormN.PageControl) then
+  if assigned(SysVar.INTF.INTF_ShowDwgTabCloseBurron) then
+  begin
+       if SysVar.INTF.INTF_ShowDwgTabCloseBurron^ then
+                                                      MainFormN.PageControl.Options:=MainFormN.PageControl.Options+[nboShowCloseButtons]
+                                                  else
+                                                      MainFormN.PageControl.Options:=MainFormN.PageControl.Options-[nboShowCloseButtons];
+  end;
+
   if assigned(MainFormN.HScrollBar) then
   begin
   MainFormN.HScrollBar.enabled:=true;
@@ -3233,6 +3259,7 @@ begin
                                    else
                                        MainFormN.HScrollBar.Hide;
   end;
+
   if assigned(MainFormN.VScrollBar) then
   begin
   MainFormN.VScrollBar.enabled:=true;

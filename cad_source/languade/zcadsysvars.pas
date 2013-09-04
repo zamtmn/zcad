@@ -163,6 +163,8 @@ type
         end;
   tinterface=packed record
               INTF_ShowScrollBars:PGDBBoolean;(*'Show scroll bars'*)
+              INTF_ShowDwgTabs:PGDBBoolean;(*'Show drawing tabs'*)
+              INTF_ShowDwgTabCloseBurron:PGDBBoolean;(*'Show drawing tab close button'*)
              end;
   tdisp=packed record
              DISP_ZoomFactor:PGDBDouble;(*'Mouse wheel scale factor'*)

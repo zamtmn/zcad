@@ -409,6 +409,8 @@ MainMenuItem Window;
   {
     action ACN_CLOSE
     Separator
+    Drawings
+    Separator
     action ACN_WNEXT
     action ACN_WPREV
   }

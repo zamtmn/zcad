@@ -67,6 +67,7 @@ type
   end;
 
   TFileHistory=Array [0..9] of TmyAction;
+  TDrawings=Array [0..9] of TmyAction;
 
   { MainForm }
 
@@ -145,6 +146,7 @@ type
     public
     rt:GDBInteger;
     FileHistory:TFileHistory;
+    Drawings:TDrawings;
     procedure CreateAnchorDockingInterface;
     procedure CreateStandartInterface;
     procedure CreateInterfaceLists;
@@ -1208,9 +1210,14 @@ begin
   StandartActions.LoadFromACNFile(sysparam.programpath+'menu/electrotech.acn');
   StandartActions.OnUpdate:=ActionUpdate;
 
-  for i:=0 to 9 do
+  for i:=low(FileHistory) to high(FileHistory) do
   begin
        FileHistory[i]:=TmyAction.Create(self);
+  end;
+  for i:=low(Drawings) to high(Drawings) do
+  begin
+       Drawings[i]:=TmyAction.Create(self);
+       Drawings[i].visible:=false;
   end;
 end;
 
@@ -2402,6 +2409,17 @@ begin
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);
                                                       end
+                else if uppercase(line)='DRAWINGS' then
+                                                      begin
+                                                           for i:=0 to 9 do
+                                                           begin
+                                                                pm1:=TMenuItem.Create(pm);
+                                                                pm1.Action:=Drawings[i];
+                                                                pm.Add(pm1);
+                                                           end;
+                                                           line := f.readstring(#$A' ',#$D);
+                                                           line:=readspace(line);
+                                                      end
                 else if uppercase(line)='TOOLBARS' then
                                                       begin
                                                            for i:=0 to toolbars.Count-1 do
@@ -3209,16 +3227,18 @@ var
    //ir:itrec;
    poglwnd:toglwnd;
    name:gdbstring;
-   i:Integer;
+   i,k:Integer;
    pdwg:PTSimpleDrawing;
    //BB:GDBBoundingBbox;
    //size,min,max,position:integer;
 begin
+
    pdwg:=gdb.GetCurrentDWG;
    if assigned(mainformn)then
    begin
    MainFormN.UpdateControls;
    MainFormN.correctscrollbars;
+   k:=0;
   if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
   begin
                                       begin
@@ -3269,20 +3289,29 @@ begin
                                    else
                                        MainFormN.VScrollBar.Hide;
   end;
-
-
   for i:=0 to MainFormN.PageControl.PageCount-1 do
     begin
          tobject(poglwnd):=FindControlByType(MainFormN.PageControl.Pages[i]{.PageControl},TOGLwnd);
            if assigned(poglwnd) then
             if poglwnd.PDWG<>nil then
-           begin
+            begin
                 name:=extractfilename(PTDrawing(poglwnd.PDWG)^.FileName);
                 if @PTDRAWING(poglwnd.PDWG).mainObjRoot=(PTDRAWING(poglwnd.PDWG).pObjRoot) then
                                                                      MainFormN.PageControl.Pages[i].caption:=(name)
                                                                  else
                                                                      MainFormN.PageControl.Pages[i].caption:='BEdit('+name+':'+PGDBObjBlockdef(PTDRAWING(poglwnd.PDWG).pObjRoot).Name+')';
-           end;    end;
+
+                if k<=high(MainFormN.Drawings) then
+                begin
+                MainFormN.Drawings[k].Caption:=MainFormN.PageControl.Pages[i].caption;
+                MainFormN.Drawings[k].visible:=true;
+                MainFormN.Drawings[k].command:='ShowPage('+inttostr(i)+')';
+                inc(k);
+                end;
+                end;
+
+            end;
+    end;
     { i:=0;
     pcontrol:=MainForm.PageControl.pages.beginiterate(ir);
      if pcontrol<>nil then
@@ -3304,7 +3333,10 @@ begin
            inc(i);
            pcontrol:=MainForm.PageControl.pages.iterate(ir);
      until pcontrol=nil;                  }
-                                      end;
+  for i:=k to high(MainFormN.Drawings) do
+  begin
+       MainFormN.Drawings[i].visible:=false;
+  end;
   end
   else
       begin
@@ -3339,7 +3371,7 @@ begin
            end;
       end;
   end;
-end;
+  end;
 function DockingOptions_com(Operands:pansichar):GDBInteger;
 begin
      ShowAnchorDockOptions(DockMaster);

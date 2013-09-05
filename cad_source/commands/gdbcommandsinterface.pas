@@ -701,6 +701,12 @@ begin
      memcount.FreeAndDone;
     result:=cmd_ok;
 end;
+function ShowPage_com(Operands:pansichar):GDBInteger;
+begin
+  if assigned(mainformn)then
+  if assigned(mainformn.PageControl)then
+  mainformn.PageControl.ActivePageIndex:=strtoint(Operands);
+end;
 procedure startup;
 begin
   CreateCommandFastObjectPlugin(@newdwg_com,'NewDWG',0,0).CEndActionAttr:=CEDWGNChanged;
@@ -724,6 +730,7 @@ begin
   CreateCommandFastObjectPlugin(@CommandList_com,'CommandList',0,0);
   CreateCommandFastObjectPlugin(@DebClip_com,'DebClip',0,0);
   CreateCommandFastObjectPlugin(@MemSummary_com,'MeMSummary',0,0);
+  CreateCommandFastObjectPlugin(@ShowPage_com,'ShowPage',0,0);
   Aboutwindow:=nil;
   Helpwindow:=nil;
 end;

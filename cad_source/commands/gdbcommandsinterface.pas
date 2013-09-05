@@ -21,7 +21,7 @@ unit gdbcommandsinterface;
 
 interface
 uses
- ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -468,9 +468,240 @@ begin
           end;
      end;
 end;
+function tw_com(Operands:pansichar):GDBInteger;
+begin
+  if CWMemo.IsVisible then
+                                 CWindow.Hide
+                             else
+                                 CWindow.Show;
+
+end;
+function SetObjInsp_com(Operands:pansichar):GDBInteger;
+var
+   obj:gdbstring;
+   objt:PUserTypeDescriptor;
+  pp:PGDBObjEntity;
+  ir:itrec;
+begin
+     if Operands='VARS' then
+                            begin
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,gdb.GetCurrentDWG);
+                            end
+else if Operands='CAMERA' then
+                            begin
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBObjCamera'),gdb.GetCurrentDWG.pcamera,gdb.GetCurrentDWG);
+                            end
+else if Operands='CURRENT' then
+                            begin
+
+                                 if (GDB.GetCurrentDWG.GetLastSelected <> nil)
+                                 then
+                                     begin
+                                          obj:=pGDBObjEntity(GDB.GetCurrentDWG.GetLastSelected)^.GetObjTypeName;
+                                          objt:=SysUnit.TypeName2PTD(obj);
+                                          If assigned(SetGDBObjInspProc)then
+                                          SetGDBObjInspProc(objt,GDB.GetCurrentDWG.GetLastSelected,gdb.GetCurrentDWG);
+                                     end
+                                 else
+                                     begin
+                                          ShowError('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL, try SetObjInsp(SELECTED)...');
+                                     end;
+                                 SysVar.DWG.DWG_SelectedObjToInsp^:=false;
+                            end
+else if Operands='SELECTED' then
+                            begin
+                                     begin
+                                          //ShowError('ugdbdescriptor.poglwnd^.SelDesc.LastSelectedObject=NIL, try find selected in DRAWING...');
+                                          pp:=gdb.GetCurrentROOT.objarray.beginiterate(ir);
+                                          if pp<>nil then
+                                         begin
+                                              repeat
+                                              if pp^.Selected then
+                                                              begin
+                                                                   obj:=pp^.GetObjTypeName;
+                                                                   objt:=SysUnit.TypeName2PTD(obj);
+                                                                   If assigned(SetGDBObjInspProc)then
+                                                                   SetGDBObjInspProc(objt,pp,gdb.GetCurrentDWG);
+                                                                   exit;
+                                                              end;
+                                              pp:=gdb.GetCurrentROOT.objarray.iterate(ir);
+                                              until pp=nil;
+                                         end;
+                                     end;
+                                 SysVar.DWG.DWG_SelectedObjToInsp^:=false;
+                            end
+else if Operands='OGLWND_DEBUG' then
+                            begin
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('OGLWndtype'),@gdb.GetCurrentDWG.OGLwindow1.param,gdb.GetCurrentDWG);
+                            end
+else if Operands='GDBDescriptor' then
+                            begin
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBDescriptor'),@gdb,gdb.GetCurrentDWG);
+                            end
+else if Operands='RELE_DEBUG' then
+                            begin
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(dbunit.TypeName2PTD('vardesk'),dbunit.FindVariable('SEVCABLEkvvg'),gdb.GetCurrentDWG);
+                            end
+else if Operands='LAYERS' then
+                            begin
+                                 SetGDBObjInspProc(dbunit.TypeName2PTD('GDBLayerArray'),@gdb.GetCurrentDWG.LayerTable,gdb.GetCurrentDWG);
+                            end
+else if Operands='TSTYLES' then
+                            begin
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(dbunit.TypeName2PTD('GDBTextStyleArray'),@gdb.GetCurrentDWG.TextStyleTable,gdb.GetCurrentDWG);
+                            end
+else if Operands='FONTS' then
+                            begin
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(dbunit.TypeName2PTD('GDBFontManager'),@FontManager,gdb.GetCurrentDWG);
+                            end
+else if Operands='OSMODE' then
+                            begin
+                                 OSModeEditor.GetState;
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,gdb.GetCurrentDWG);
+                            end
+else if Operands='NUMERATORS' then
+                            begin
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBNumerator'),@gdb.GetCurrentDWG.Numerator,gdb.GetCurrentDWG);
+                            end
+else if Operands='LINETYPESTYLES' then
+                            begin
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBLtypeArray'),@gdb.GetCurrentDWG.LTypeStyleTable,gdb.GetCurrentDWG);
+                            end
+else if Operands='TABLESTYLES' then
+                            begin
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBTableStyleArray'),@gdb.GetCurrentDWG.TableStyleTable,gdb.GetCurrentDWG);
+                            end
+                            ;
+     If assigned(SetCurrentObjDefaultProc)then
+                                              SetCurrentObjDefaultProc
+     //GDBobjinsp.SetCurrentObjDefault;
+end;
+
+function Options_com(Operands:pansichar):GDBInteger;
+begin
+  if assigned(SetGDBObjInspProc)then
+                                    SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,gdb.GetCurrentDWG);
+  historyoutstr(rscmOptions2OI);
+  result:=cmd_ok;
+end;
+function SaveOptions_com(Operands:pansichar):GDBInteger;
+var
+   mem:GDBOpenArrayOfByte;
+begin
+           mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
+           SysVarUnit^.SavePasToMem(mem);
+           mem.SaveToFile(sysparam.programpath+'rtl/sysvar.pas');
+           mem.done;
+end;
+function CommandList_com(Operands:pansichar):GDBInteger;
+var
+   p:PCommandObjectDef;
+   ir:itrec;
+   clist:GDBGDBStringArray;
+begin
+   clist.init(200);
+   p:=commandmanager.beginiterate(ir);
+   if p<>nil then
+   repeat
+         clist.add(@p^.CommandName);
+         p:=commandmanager.iterate(ir);
+   until p=nil;
+   clist.sort;
+   shared.HistoryOutStr(clist.GetTextWithEOL);
+   clist.done;
+   result:=cmd_ok;
+end;
+function DebClip_com(Operands:pansichar):GDBInteger;
+var
+   pbuf:pansichar;
+   i:gdbinteger;
+   cf:TClipboardFormat;
+   ts:string;
+
+   memsubstr:TMemoryStream;
+   InfoForm:TInfoForm;
+begin
+     InfoForm:=TInfoForm.create(application.MainForm);
+     InfoForm.DialogPanel.HelpButton.Hide;
+     InfoForm.DialogPanel.CancelButton.Hide;
+     InfoForm.DialogPanel.CloseButton.Hide;
+     InfoForm.caption:=('Clipboard:');
+
+     memsubstr:=TMemoryStream.Create;
+     ts:=Clipboard.AsText;
+     i:=Clipboard.FormatCount;
+     for i:=0 to Clipboard.FormatCount-1 do
+     begin
+          cf:=Clipboard.Formats[i];
+          ts:=ClipboardFormatToMimeType(cf);
+          if ts='' then
+                       ts:=inttostr(cf);
+          InfoForm.Memo.lines.Add(ts);
+          Clipboard.GetFormat(cf,memsubstr);
+          pbuf:=memsubstr.Memory;
+          InfoForm.Memo.lines.Add('  ANSI: '+pbuf);
+          memsubstr.Clear;
+     end;
+     memsubstr.Free;
+
+     DOShowModal(InfoForm);
+     InfoForm.Free;
+
+     result:=cmd_ok;
+end;
+function MemSummary_com(Operands:pansichar):GDBInteger;
+var
+    memcount:GDBNumerator;
+    pmemcounter:PGDBNumItem;
+    ir:itrec;
+    s:gdbstring;
+    I:gdbinteger;
+    InfoForm:TInfoForm;
+begin
+
+     InfoForm:=TInfoForm.create(application.MainForm);
+     InfoForm.DialogPanel.HelpButton.Hide;
+     InfoForm.DialogPanel.CancelButton.Hide;
+     InfoForm.DialogPanel.CloseButton.Hide;
+     InfoForm.caption:=('Memory is used to:');
+     memcount.init(100);
+     for i := 0 to memdesktotal do
+     begin
+          if not(memdeskarr[i].free) then
+          begin
+               pmemcounter:=memcount.addnumerator(memdeskarr[i].getmemguid);
+               inc(pmemcounter^.Nymber,memdeskarr[i].size);
+           end;
+     end;
+     memcount.sort;
+
+     pmemcounter:=memcount.beginiterate(ir);
+     if pmemcounter<>nil then
+     repeat
+
+           s:=pmemcounter^.Name+' '+inttostr(pmemcounter^.Nymber);
+           InfoForm.Memo.lines.Add(s);
+           pmemcounter:=memcount.iterate(ir);
+     until pmemcounter=nil;
+
+
+     DOShowModal(InfoForm);
+     InfoForm.Free;
+     memcount.FreeAndDone;
+    result:=cmd_ok;
+end;
 procedure startup;
-//var
-   //pmenuitem:pzmenuitem;
 begin
   CreateCommandFastObjectPlugin(@newdwg_com,'NewDWG',0,0).CEndActionAttr:=CEDWGNChanged;
   CreateCommandFastObjectPlugin(@NextDrawint_com,'NextDrawing',0,0);
@@ -486,12 +717,18 @@ begin
   CreateCommandFastObjectPlugin(@About_com,'About',0,0);
   CreateCommandFastObjectPlugin(@Help_com,'Help',0,0);
   CreateCommandFastObjectPlugin(@ClearFileHistory_com,'ClearFileHistory',0,0);
-
+  CreateCommandFastObjectPlugin(@TW_com,'TextWindow',0,0).overlay:=true;
+  CreateCommandFastObjectPlugin(@Options_com,'Options',0,0);
+  CreateCommandFastObjectPlugin(@SaveOptions_com,'SaveOptions',0,0);
+  CreateCommandFastObjectPlugin(@SetObjInsp_com,'SetObjInsp',CADWG,0);
+  CreateCommandFastObjectPlugin(@CommandList_com,'CommandList',0,0);
+  CreateCommandFastObjectPlugin(@DebClip_com,'DebClip',0,0);
+  CreateCommandFastObjectPlugin(@MemSummary_com,'MeMSummary',0,0);
   Aboutwindow:=nil;
   Helpwindow:=nil;
 end;
 initialization
-  {$IFDEF DEBUGINITSECTION}LogOut('GDBCommandsBase.initialization');{$ENDIF}
+  {$IFDEF DEBUGINITSECTION}LogOut('gdbcommandsinterface.initialization');{$ENDIF}
   startup;
 finalization
   finalize;

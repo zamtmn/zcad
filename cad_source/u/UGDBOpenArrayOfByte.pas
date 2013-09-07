@@ -107,7 +107,7 @@ begin
                                   begin
                                        stringread:=not stringread;
                                   end;
-      if (GetChar(readpos)='{')and(mode=parse) then
+      if (GetChar(readpos)='{')and(mode=parse)and(not stringread) then
                                   begin
                                        mode:=commenttouncomment;
                                        inc(readpos);
@@ -119,7 +119,7 @@ begin
                                        lastbreak:=true;
                                        inc(readpos);
                                   end
-      else if (GetChar(readpos)='/')and(mode=parse)and(GetChar(readpos+1)='/') then
+      else if (GetChar(readpos)='/')and(mode=parse)and(GetChar(readpos+1)='/')and(not stringread) then
                                   begin
                                        //if readpos<>buferread-1 then
                                        begin

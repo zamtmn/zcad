@@ -3340,6 +3340,12 @@ begin
   end
   else
       begin
+           for i:=low(MainFormN.Drawings) to high(MainFormN.Drawings) do
+             begin
+                         MainFormN.Drawings[i].Caption:='';
+                         MainFormN.Drawings[i].visible:=false;
+                         MainFormN.Drawings[i].command:='';
+             end;
            mainformn.Caption:=('ZCad v'+sysvar.SYS.SYS_Version^);
            if assigned(mainwindow.LayerBox)then
            mainwindow.LayerBox.enabled:=false;

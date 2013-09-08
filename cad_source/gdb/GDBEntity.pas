@@ -426,7 +426,7 @@ end;
 function GDBObjEntity.CalculateLineWeight;
 var lw: GDBInteger;
 begin
-     if dc.drawmode = 0 then
+     if not dc.drawmode then
                                          begin
                                               lw := 1;
                                               exit;
@@ -504,7 +504,7 @@ begin
   //Draw(lw,dc);
   //exit;
   sel := false;
-  if dc.drawmode = 0 then
+  if not dc.drawmode then
                          lw := 1
                      else
                          lw := CalculateLineWeight(dc);

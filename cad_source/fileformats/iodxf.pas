@@ -237,7 +237,10 @@ else if (byt = 9) and (s = '$LWDISPLAY') then
                                                s := f.readGDBString;
                                                if LoadMode=TLOLoad then
                                                if sysvar.DWG.DWG_DrawMode<>nil then
-                                               sysvar.DWG.DWG_DrawMode^ := strtoint(s);
+                                               case strtoint(s) of
+                                                               1:sysvar.DWG.DWG_DrawMode^ := true;
+                                                               0:sysvar.DWG.DWG_DrawMode^ := false;
+                                               end;
                                           end
 else if (byt = 9) and (s = '$LTSCALE') then
                                           begin
@@ -1487,7 +1490,12 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
       outstream.TXTAddGDBStringEOL('$LWDISPLAY');
       outstream.TXTAddGDBStringEOL('290');
       if assigned(sysvar.DWG.DWG_DrawMode) then
-                                               outstream.TXTAddGDBStringEOL(inttostr(sysvar.DWG.DWG_DrawMode^))
+                                               begin
+                                                    if sysvar.DWG.DWG_DrawMode^ then
+                                                                                    outstream.TXTAddGDBStringEOL(inttostr(1))
+                                                                                else
+                                                                                    outstream.TXTAddGDBStringEOL(inttostr(0));
+                                               end
                                            else
                                                outstream.TXTAddGDBStringEOL(inttostr(0));
       groups := templatefile.readGDBString;

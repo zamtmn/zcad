@@ -3,7 +3,7 @@ interface
 uses System;
 var
   DWG_OSMode:GDBInteger;
-  DWG_PolarMode:GDBInteger;
+  DWG_PolarMode:GDBBoolean;
   DWG_SystmGeometryDraw:GDBBoolean;
   DWG_HelpGeometryDraw:GDBBoolean;
   DWG_EditInSubEntry:GDBBoolean;
@@ -77,7 +77,7 @@ var
 implementation
 begin
   DWG_OSMode:=14311;
-  DWG_PolarMode:=1;
+  DWG_PolarMode:=True;
   DWG_SystmGeometryDraw:=False;
   DWG_HelpGeometryDraw:=True;
   DWG_EditInSubEntry:=False;

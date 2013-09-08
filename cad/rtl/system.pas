@@ -228,7 +228,7 @@ TDrawContext=packed record
                    Selected:GDBBoolean;
                    SysLayer:GDBPointer;
                    MaxDetail:GDBBoolean;
-                   DrawMode:GDBInteger;
+                   DrawMode:GDBBoolean;
                    OwnerLineWeight:GDBSmallInt;
                    OwnerColor:GDBInteger;
                    MaxWidth:GDBInteger;
@@ -977,9 +977,9 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
              SYS_AlternateFont:PGDBString;(*'Alternate font file'*)
        end;
   tdwg=packed record
-             DWG_DrawMode:PGDBInteger;(*'Draw mode?'*)
-             DWG_OSMode:PGDBInteger;(*'Snap mode'*)
-             DWG_PolarMode:PGDBInteger;(*'Polar tracking mode'*)
+             DWG_DrawMode:PGDBBoolean;(*'Display line weights'*)
+             DWG_OSMode:PGDBInteger;(*'Snap mode'*)(*oi_readonly*)
+             DWG_PolarMode:PGDBBoolean;(*'Polar tracking mode'*)
              DWG_CLayer:PGDBInteger;(*'Current layer'*)
              DWG_CLinew:PGDBInteger;(*'Current line weigwt'*)
              DWG_CColor:PGDBInteger;(*'Current color'*)

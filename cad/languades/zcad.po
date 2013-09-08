@@ -1272,7 +1272,8 @@ msgid "On/Off Selecting parts of dynamic objects"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_helpgeometrydraw
-msgid "Auxiliary graphics (connectivity, direction, etc.)"
+#, fuzzy
+msgid "Auxiliary graphics (connectivity"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_osmode
@@ -1291,7 +1292,8 @@ msgid "Snap"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_systmgeometrydraw
-msgid "System graphics (size, communication, etc. for debugging)"
+#, fuzzy
+msgid "System graphics (size"
 msgstr ""
 
 #: zcadexternal.hint_panel~layercombobox
@@ -1315,6 +1317,10 @@ msgstr ""
 
 #: zcadexternal.menucommand~cam_reset
 msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~clearfilehistory
+msgid "Clear File History"
 msgstr ""
 
 #: zcadexternal.menucommand~commandlist
@@ -1948,7 +1954,8 @@ msgid "Display grid"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_drawmode
-msgid "Draw mode?"
+#, fuzzy
+msgid "Display line weights"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_editinsubentry
@@ -2099,6 +2106,14 @@ msgstr ""
 #: zcadexternal.tinserttype~tit_device
 msgctxt "zcadexternal.tinserttype~tit_device"
 msgid "Device"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_showdwgtabcloseburron
+msgid "Show drawing tab close button"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_showdwgtabs
+msgid "Show drawing tabs"
 msgstr ""
 
 #: zcadexternal.tinterface~intf_showscrollbars

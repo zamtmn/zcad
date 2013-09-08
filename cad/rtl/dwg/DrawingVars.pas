@@ -12,7 +12,7 @@ var
 
    DWG_DrawGrid:GDBBoolean;
    DWG_SnapGrid:GDBBoolean;
-   DWG_DrawMode:GDBInteger;
+   DWG_DrawMode:GDBBoolean;
 
    DWG_Snap:GDBSnap2D;
    DWG_GridSpacing:GDBvertex2D;
@@ -29,7 +29,7 @@ begin
   DWG_StepGrid.y:=0.5;
   DWG_OriginGrid.x:=0.0;
   DWG_OriginGrid.y:=0.0;
-  DWG_DrawMode:=0;
+  DWG_DrawMode:=False;
 
 
   DWG_CLayer:=0;

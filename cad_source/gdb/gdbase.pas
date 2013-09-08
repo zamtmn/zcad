@@ -222,7 +222,7 @@ TDrawContext=packed record
                    Selected:GDBBoolean;
                    SysLayer:GDBPointer;
                    MaxDetail:GDBBoolean;
-                   DrawMode:GDBInteger;
+                   DrawMode:GDBBoolean;
                    OwnerLineWeight:GDBSmallInt;
                    OwnerColor:GDBInteger;
                    MaxWidth:GDBInteger;

@@ -384,7 +384,7 @@ end;
 
 procedure TOGLWnd.AddOntrackpoint;
 begin
-  if sysvar.dwg.DWG_PolarMode^ = 0 then exit;
+  if not sysvar.dwg.DWG_PolarMode^ then exit;
   copyospoint(param.ontrackarray.otrackarray[param.ontrackarray.current],param.ospoint);
   param.ontrackarray.otrackarray[param.ontrackarray.current].arrayworldaxis.clear;
   param.ontrackarray.otrackarray[param.ontrackarray.current].arraydispaxis.clear;
@@ -2720,7 +2720,7 @@ procedure TOGLWnd.showcursor;
     if tocommandmcliccount=0 then a:=1
                              else a:=0;
     if sysvar.DWG.DWG_PolarMode<>nil then
-    if sysvar.DWG.DWG_PolarMode^>0 then
+    if sysvar.DWG.DWG_PolarMode^ then
     if param.ontrackarray.total <> 0 then
     begin
       oglsm.myglLogicOp(GL_XOR);
@@ -3148,7 +3148,7 @@ begin
   if sysvar.dwg.DWG_DrawMode<>nil then
                                       result.DrawMode:=sysvar.dwg.DWG_DrawMode^
                                   else
-                                      result.DrawMode:=1;
+                                      result.DrawMode:=true;
   result.OwnerLineWeight:=-3;
   result.OwnerColor:=ClWhite;
   result.MaxWidth:=sysvar.RD.RD_MaxWidth^;
@@ -3821,7 +3821,7 @@ var
 begin
   PDWG.myGluProject2(param.ospoint.worldcoord,
              param.ospoint.dispcoord);
-  if sysvar.dwg.DWG_PolarMode^ = 0 then exit;
+  if not sysvar.dwg.DWG_PolarMode^ then exit;
   //param.ospoint.arrayworldaxis.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}4);
   param.ospoint.arrayworldaxis.clear;
   pv:=polaraxis.PArray;
@@ -3896,7 +3896,7 @@ var
 begin
   PDWG.myGluProject2(param.ospoint.worldcoord,
              param.ospoint.dispcoord);
-  if sysvar.dwg.DWG_PolarMode^ = 0 then exit;
+  if not sysvar.dwg.DWG_PolarMode^ then exit;
   //param.ontrackarray.otrackarray[0].arrayworldaxis.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}4);
   param.ontrackarray.otrackarray[0].arrayworldaxis.clear;
   pv:=polaraxis.PArray;
@@ -3964,7 +3964,7 @@ begin
       PDWG.myGluProject2(param.ontrackarray.otrackarray[j].worldcoord,
                  param.ontrackarray.otrackarray[j].dispcoord);
     end;
-    if sysvar.dwg.DWG_PolarMode^ = 0 then exit;
+    if not sysvar.dwg.DWG_PolarMode^ then exit;
   for j := a to param.ontrackarray.total - 1 do
   begin
     {gdb.GetCurrentDWG^.myGluProject2(param.ontrackarray.otrackarray[j].worldcoord,

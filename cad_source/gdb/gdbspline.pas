@@ -274,7 +274,8 @@ begin
             else oglsm.myglbegin(GL_line_strip);
   vertexarrayInWCS.iterategl(@myglVertex3dv);
   oglsm.myglend;}
-  inherited;
+  //inherited;
+  drawbb;
 end;
 function GDBObjSpline.Clone;
 var tpo: PGDBObjSpline;

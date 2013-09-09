@@ -1198,4 +1198,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBEntity.initialization');{$ENDIF}
-end.
+end.

@@ -645,12 +645,12 @@ begin
 end;
 procedure GDBObjElLeader.DrawGeometry;
 begin
-  inherited;
   inc(dc.subrender);
   MainLine.DrawGeometry(lw,dc{infrustumactualy,subrender});
   MarkLine.DrawGeometry(lw,dc{infrustumactualy,subrender});
   tbl.DrawGeometry(lw,dc{infrustumactualy,subrender});
   dec(dc.subrender);
+  inherited;
 end;
 procedure GDBObjElLeader.DrawOnlyGeometry;
 begin

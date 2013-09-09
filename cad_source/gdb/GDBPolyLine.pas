@@ -167,6 +167,7 @@ begin
             else oglsm.myglbegin(GL_line_strip);
   vertexarrayInWCS.iterategl(@myglVertex3dv);
   oglsm.myglend;}
+  inherited;
 end;
 function GDBObjPolyline.Clone;
 var tpo: PGDBObjPolyLine;

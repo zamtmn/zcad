@@ -19,7 +19,7 @@
 unit UGDBNamedObjectsArray;
 {$INCLUDE def.inc}
 interface
-uses {,UGDBOpenArray}UGDBOpenArrayOfObjects{,oglwindowdef},sysutils,gdbase, geometry,
+uses ugdbopenarrayofpidentobects,{,UGDBOpenArray}UGDBOpenArrayOfObjects{,oglwindowdef},sysutils,gdbase, geometry,
      {varmandef,gdbobjectsconstdef}gdbasetypes;
 type
 {EXPORT+}
@@ -27,7 +27,7 @@ TForCResult=(IsFounded(*'IsFounded'*)=1,
              IsCreated(*'IsCreated'*)=2,
              IsError(*'IsError'*)=3);
 PGDBNamedObjectsArray=^GDBNamedObjectsArray;
-GDBNamedObjectsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBLayerProp*)
+GDBNamedObjectsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPIdentObects)(*OpenArrayOfData=GDBLayerProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m,s:GDBInteger);
                     function getIndex(name: GDBString):GDBInteger;
                     function getAddres(name: GDBString):GDBPointer;
@@ -111,9 +111,26 @@ begin
   until p=nil;
 end;
 function GDBNamedObjectsArray.GetIndexByPointer(p:PGDBNamedObject):GDBInteger;
+{старая версия, когда именованые объекты располагались не по ссылке
 begin
      result:=(GDBPlatformint(p)-GDBPlatformint(parray))div size
+end;}
+var
+  pobj:PGDBNamedObject;
+  ir:itrec;
+begin
+  result:=-1;
+  pobj:=beginiterate(ir);
+  if pobj<>nil then
+  repeat
+    if pobj = p then
+    begin
+      result := ir.itc;
+      exit;
+    end;
+    pobj:=iterate(ir);
+  until pobj=nil;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBNamedObjectArray.initialization');{$ENDIF}
-end.
+end.

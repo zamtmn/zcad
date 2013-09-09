@@ -35,7 +35,7 @@ GDBLayerProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                function GetFullName:GDBString;virtual;
          end;
 PGDBLayerPropArray=^GDBLayerPropArray;
-GDBLayerPropArray=packed array [0..0] of GDBLayerProp;
+GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
 PGDBLayerArray=^GDBLayerArray;
 GDBLayerArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLayerProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
@@ -173,4 +173,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBLayerArray.initialization');{$ENDIF}
   DefaultErrorLayer.Init('DefaultErrorLayer',200,0,true,false,true,'');
-end.
+end.

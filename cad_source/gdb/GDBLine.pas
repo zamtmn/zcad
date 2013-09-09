@@ -420,7 +420,6 @@ procedure GDBObjLine.DrawGeometry;
 var
   templod:gdbdouble;
 begin
-  inherited;
   if (selected)or(dc.selected) then
                      geom.DrawNiceGeometry
                  else
@@ -440,7 +439,7 @@ begin
   oglsm.myglend;
      end;
   end;
-
+  inherited;
   {oglsm.myglbegin(GL_points);
   myglVertex3dV(@CoordInWCS.lBegin);
   myglVertex3dV(@CoordInWCS.lEnd);

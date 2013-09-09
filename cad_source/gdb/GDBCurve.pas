@@ -288,11 +288,11 @@ begin
 end;
 procedure GDBObjCurve.DrawGeometry;
 begin
-  inherited;
   VertexArrayInWCS.DrawGeometry;
   {myglbegin(GL_line_strip);
   VertexArrayInWCS.iterategl(@glVertex3dv);
   myglend;}
+  inherited;
 end;
 procedure GDBObjCurve.AddControlpoint;
 var i: GDBInteger;

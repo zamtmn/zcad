@@ -585,7 +585,7 @@ begin
       end;
    end;
    oglsm.myglend();
-
+   inherited;
 
 
 
@@ -963,4 +963,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBLWPolyline.initialization');{$ENDIF}
-end.
+end.

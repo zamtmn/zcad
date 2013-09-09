@@ -565,7 +565,7 @@ begin
        oglsm.myglend;
   end;
   end;}
-  drawbb;
+  inherited;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBCable.initialization');{$ENDIF}

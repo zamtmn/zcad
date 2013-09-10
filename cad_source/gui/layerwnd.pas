@@ -319,16 +319,16 @@ end;
 procedure TLayerWindow.onCDItem(Sender: TCustomListView; Item: TListItem;
   State: TCustomDrawState; var DefaultDraw: Boolean);
 begin
-  if (state<>[cdsSelected,cdsFocused])and(state<>[]) then
+  {if (state<>[cdsSelected,cdsFocused])and(state<>[]) then
   begin
   Sender.canvas.Brush.Color:=clHighlight;
   Sender.canvas.Font.Color:=clHighlightText;
-  end;
+  end;}
 end;
 
 function ProcessSubItem(State: TCustomDrawState;canvas:tcanvas;Item: TListItem;SubItem: Integer): TRect;
 begin
-     if (cdsSelected in state) or (cdsFocused in state){or Item.Selected} then
+     if (cdsSelected in state) {or (cdsFocused in state)}{or Item.Selected} then
      {if (cdsSelected in state) or (cdsGrayed in state) or (cdsDisabled in state)
      or (cdsChecked in state) or (cdsFocused in state) or (cdsDefault in state)
      or (cdsHot in state) or (cdsMarked in state) or (cdsIndeterminate in state)then}
@@ -521,6 +521,7 @@ begin
        until plp=nil;
      end;
      ListView1.SortColumn:=1;
+     ListView1.SetFocus;
      ListView1.EndUpdate;
 end;
 
@@ -544,39 +545,42 @@ var
    counter:integer;
    li:TListItem;
 begin
+     pdwg:=gdb.GetCurrentDWG;
      if assigned(ListView1.Selected)then
-                                        begin
-                                             player:=(ListView1.Selected.Data);
-                                             pdwg:=gdb.GetCurrentDWG;
-                                             counter:=0;
-                                             repeat
-                                                  inc(counter);
-                                                  layername:=inttostr(counter);
-                                                  if length(layername)<2 then
-                                                                             layername:='0'+layername;
-                                                  layername:='Layer'+layername;
-                                             until pdwg^.LayerTable.getIndex(layername)=-1;
-
-                                             pdwg^.LayerTable.AddItem(name,pcreatedlayer);
-                                             pcreatedlayer^:=player^;
-                                             pcreatedlayer^.Name:=layername;
-
-
-                                             ListView1.BeginUpdate;
-                                                    li:=ListView1.Items.Add;
-                                                    li.Data:=pcreatedlayer;
-                                                    UpdateItem(li);
-                                                    ListView1.SortColumn:=-1;
-                                                    ListView1.SortColumn:=1;
-                                                    ListView1.Selected.Selected:=false;
-                                                    li.Selected:=true;
-                                                    //ListView1.Selected:=nil;
-                                                    //ListView1.Selected:=li;
-                                             ListView1.EndUpdate;
-
-                                        end
+                                        player:=(ListView1.Selected.Data)
                                     else
-                                        MessageBox(@rsLayerMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
+                                        player:=pdwg^.LayerTable.GetCurrentLayer;
+
+     counter:=0;
+     repeat
+          inc(counter);
+          layername:=inttostr(counter);
+          if length(layername)<2 then
+                                     layername:='0'+layername;
+          layername:='Layer'+layername;
+     until pdwg^.LayerTable.getIndex(layername)=-1;
+
+     pdwg^.LayerTable.AddItem(name,pcreatedlayer);
+     pcreatedlayer^:=player^;
+     pcreatedlayer^.Name:=layername;
+
+
+     ListView1.BeginUpdate;
+            li:=ListView1.Items.Add;
+            li.Data:=pcreatedlayer;
+            UpdateItem(li);
+            ListView1.SortColumn:=-1;
+            ListView1.SortColumn:=1;
+            if assigned(ListView1.Selected)then
+            begin
+                ListView1.Selected.Selected:=false;
+                ListView1.Selected:=nil;
+            end;
+            //li.Selected:=true;
+            ListView1.Selected:=li;
+            //ListView1.Selected:=nil;
+            //ListView1.Selected:=li;
+     ListView1.EndUpdate;
 
 end;
 

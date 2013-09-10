@@ -538,7 +538,14 @@ end;
 
 procedure TLayerWindow.B1Click(Sender: TObject); // Процедура добавления слоя
 begin
+  ShowError(rsNotYetImplemented);
   //SGrid.RowCount:=SGrid.RowCount+1;
+end;
+
+procedure TLayerWindow.B2Click(Sender: TObject); // Процедура удаления слоя
+begin
+  ShowError(rsNotYetImplemented);
+  //SGrid.RowCount:=SGrid.RowCount-1;
 end;
 
 procedure TLayerWindow.AplyClose(Sender: TObject);
@@ -554,11 +561,6 @@ begin
            if assigned(redrawoglwndproc)then
                                             redrawoglwndproc;
      end;
-end;
-
-procedure TLayerWindow.B2Click(Sender: TObject); // Процедура удаления слоя
-begin
-  //SGrid.RowCount:=SGrid.RowCount-1;
 end;
 
 procedure TLayerWindow.FormClose(Sender: TObject; var CloseAction: TCloseAction

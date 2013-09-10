@@ -537,9 +537,47 @@ begin
 end;
 
 procedure TLayerWindow.B1Click(Sender: TObject); // Процедура добавления слоя
+var
+   player,pcreatedlayer:PGDBLayerProp;
+   pdwg:PTSimpleDrawing;
+   layername:string;
+   counter:integer;
+   li:TListItem;
 begin
-  ShowError(rsNotYetImplemented);
-  //SGrid.RowCount:=SGrid.RowCount+1;
+     if assigned(ListView1.Selected)then
+                                        begin
+                                             player:=(ListView1.Selected.Data);
+                                             pdwg:=gdb.GetCurrentDWG;
+                                             counter:=0;
+                                             repeat
+                                                  inc(counter);
+                                                  layername:=inttostr(counter);
+                                                  if length(layername)<2 then
+                                                                             layername:='0'+layername;
+                                                  layername:='Layer'+layername;
+                                             until pdwg^.LayerTable.getIndex(layername)=-1;
+
+                                             pdwg^.LayerTable.AddItem(name,pcreatedlayer);
+                                             pcreatedlayer^:=player^;
+                                             pcreatedlayer^.Name:=layername;
+
+
+                                             ListView1.BeginUpdate;
+                                                    li:=ListView1.Items.Add;
+                                                    li.Data:=pcreatedlayer;
+                                                    UpdateItem(li);
+                                                    ListView1.SortColumn:=-1;
+                                                    ListView1.SortColumn:=1;
+                                                    ListView1.Selected.Selected:=false;
+                                                    li.Selected:=true;
+                                                    //ListView1.Selected:=nil;
+                                                    //ListView1.Selected:=li;
+                                             ListView1.EndUpdate;
+
+                                        end
+                                    else
+                                        MessageBox(@rsLayerMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
+
 end;
 
 procedure TLayerWindow.B2Click(Sender: TObject); // Процедура удаления слоя

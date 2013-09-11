@@ -29,8 +29,8 @@ type
     MkCurrentBtn: TSpeedButton;
     procedure Aply(Sender: TObject);
     procedure AplyClose(Sender: TObject);
-    procedure B1Click(Sender: TObject);
-    procedure B2Click(Sender: TObject);
+    procedure LayerAdd(Sender: TObject);
+    procedure LayerDelete(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -531,13 +531,18 @@ begin
      Sender:=Sender;
 end;
 
-procedure TLayerWindow.ListView1SelectItem(Sender: TObject; Item: TListItem;
-  Selected: Boolean);
+procedure TLayerWindow.ListView1SelectItem(Sender: TObject; Item: TListItem;Selected: Boolean);
+var
+   player,pcreatedlayer:PGDBLayerProp;
+   pdwg:PTSimpleDrawing;
+   layername:string;
+   counter:integer;
+   li:TListItem;
 begin
      item:=item;
 end;
 
-procedure TLayerWindow.B1Click(Sender: TObject); // Процедура добавления слоя
+procedure TLayerWindow.LayerAdd(Sender: TObject); // Процедура добавления слоя
 var
    player,pcreatedlayer:PGDBLayerProp;
    pdwg:PTSimpleDrawing;
@@ -566,28 +571,38 @@ begin
 
 
      ListView1.BeginUpdate;
-            li:=ListView1.Items.Add;
-            li.Data:=pcreatedlayer;
-            UpdateItem(li);
-            ListView1.SortColumn:=-1;
-            ListView1.SortColumn:=1;
-            if assigned(ListView1.Selected)then
-            begin
-                ListView1.Selected.Selected:=false;
-                ListView1.Selected:=nil;
-            end;
-            //li.Selected:=true;
-            ListView1.Selected:=li;
-            //ListView1.Selected:=nil;
-            //ListView1.Selected:=li;
+     li:=ListView1.Items.Add;
+     li.Data:=pcreatedlayer;
+     UpdateItem(li);
+     ListView1.SortColumn:=-1;
+     ListView1.SortColumn:=1;
+     if assigned(ListView1.Selected)then
+     begin
+         ListView1.Selected.Selected:=false;
+         ListView1.Selected:=nil;
+     end;
+     ListView1.Selected:=li;
      ListView1.EndUpdate;
-
 end;
 
-procedure TLayerWindow.B2Click(Sender: TObject); // Процедура удаления слоя
+procedure TLayerWindow.LayerDelete(Sender: TObject); // Процедура удаления слоя
+var
+   player,pcreatedlayer:PGDBLayerProp;
+   pdwg:PTSimpleDrawing;
+   layername:string;
+   counter:integer;
+   li:TListItem;
 begin
-  ShowError(rsNotYetImplemented);
-  //SGrid.RowCount:=SGrid.RowCount-1;
+  //ShowError(rsNotYetImplemented);
+  pdwg:=gdb.GetCurrentDWG;
+  if assigned(ListView1.Selected)then
+                                     begin
+                                     player:=(ListView1.Selected.Data);
+                                     pdwg^.LayerTable.eraseobj(player);
+                                     ListView1.Items.Delete(ListView1.Items.IndexOf(ListView1.Selected));
+                                     end
+                                 else
+                                     MessageBox(@rsLayerMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
 end;
 
 procedure TLayerWindow.AplyClose(Sender: TObject);

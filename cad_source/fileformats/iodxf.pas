@@ -1374,6 +1374,7 @@ var
   invporttable:boolean;
   olddwg:{PTDrawing}PTSimpleDrawing;
   pltp:PGDBLtypeProp;
+  plp:PGDBLayerProp;
   ir,ir2,ir3,ir4,ir5:itrec;
   TDI:PTDashInfo;
   PStroke:PGDBDouble;
@@ -1818,9 +1819,12 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
               begin
                 inlayertable := false;
                 ignoredsource:=false;
-                for i := 0 to drawing.layertable.count - 1 do
+                plp:=drawing.layertable.beginiterate(ir);
+                if plp<>nil then
+                repeat
+                //for i := 0 to drawing.layertable.count - 1 do
                 begin
-                  //if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name <> '0' then
+                  //if PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[pltp].name <> '0' then
                   begin
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                     outstream.TXTAddGDBStringEOL(dxfName_Layer);
@@ -1832,43 +1836,46 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                     outstream.TXTAddGDBStringEOL('AcDbLayerTableRecord');
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
-                    outstream.TXTAddGDBStringEOL(PGDBLayerPropArray(drawing.layertable.parray)^[i].name);
+                    outstream.TXTAddGDBStringEOL(plp.name);
                     attr:=0;
-                    if PGDBLayerPropArray(drawing.layertable.parray)^[i]._lock then
-                                                                                             attr:=attr + 4;
+                    if plp._lock then
+                                     attr:=attr + 4;
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
                     outstream.TXTAddGDBStringEOL(inttostr(attr));
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(62));
-                    if PGDBLayerPropArray(drawing.layertable.parray)^[i]._on
+                    if plp._on
                      then
-                         outstream.TXTAddGDBStringEOL(inttostr(PGDBLayerPropArray(drawing.layertable.parray)^[i].color))
+                         outstream.TXTAddGDBStringEOL(inttostr(plp.color))
                      else
-                         outstream.TXTAddGDBStringEOL(inttostr(-PGDBLayerPropArray(drawing.layertable.parray)^[i].color));
+                         outstream.TXTAddGDBStringEOL(inttostr(-plp.color));
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(6));
                     outstream.TXTAddGDBStringEOL('Continuous');
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(290));
-                    if PGDBLayerPropArray(drawing.layertable.parray)^[i]._print then
-                    //if uppercase(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[i].name) <> 'DEFPOINTS' then
+                    if plp._print then
+                    //if uppercase(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[pltp].name) <> 'DEFPOINTS' then
                       outstream.TXTAddGDBStringEOL('1')
                     else
                       outstream.TXTAddGDBStringEOL('0');
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(370));
-                    outstream.TXTAddGDBStringEOL(inttostr(PGDBLayerPropArray(drawing.layertable.parray)^[i].lineweight));
+                    outstream.TXTAddGDBStringEOL(inttostr(plp.lineweight));
                     //WriteString_EOL(outstream, '-3');
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(390));
                     outstream.TXTAddGDBStringEOL(inttohex(plottablefansdle,0));
 
-                    if PGDBLayerPropArray(drawing.layertable.parray)^[i].desk<>''then
+                    if plp.desk<>''then
                     begin
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(1001));
                          outstream.TXTAddGDBStringEOL('AcAecLayerStandard');
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(1000));
                          outstream.TXTAddGDBStringEOL('');
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(1000));
-                         outstream.TXTAddGDBStringEOL(PGDBLayerPropArray(drawing.layertable.parray)^[i].desk);
+                         outstream.TXTAddGDBStringEOL(plp.desk);
                     end;
                   end;
                 end;
+                plp:=drawing.layertable.iterate(ir);
+                until plp=nil;
+
                 outstream.TXTAddGDBStringEOL(groups);
                 outstream.TXTAddGDBStringEOL(values);
               end

@@ -1,7 +1,7 @@
 object LayerWindow: TLayerWindow
-  Left = 463
+  Left = 692
   Height = 590
-  Top = 171
+  Top = 208
   Width = 938
   Caption = 'LayerWindow'
   ClientHeight = 590
@@ -97,7 +97,7 @@ object LayerWindow: TLayerWindow
       item
         AutoSize = True
         Caption = 'Status'
-        Width = 100
+        Width = 932
       end    
       item
         Caption = 'Name'
@@ -106,17 +106,17 @@ object LayerWindow: TLayerWindow
       item
         AutoSize = True
         Caption = 'On'
-        Width = 100
+        Width = 28
       end    
       item
         AutoSize = True
         Caption = 'Freze'
-        Width = 100
+        Width = 39
       end    
       item
         AutoSize = True
         Caption = 'Lock'
-        Width = 100
+        Width = 37
       end    
       item
         Caption = 'Color'
@@ -125,7 +125,7 @@ object LayerWindow: TLayerWindow
       item
         AutoSize = True
         Caption = 'Line type'
-        Width = 100
+        Width = 60
       end    
       item
         Caption = 'Line weight'
@@ -137,7 +137,7 @@ object LayerWindow: TLayerWindow
       item
         AutoSize = True
         Caption = 'Description'
-        Width = 100
+        Width = 72
       end>
     MultiSelect = True
     ReadOnly = True
@@ -177,7 +177,7 @@ object LayerWindow: TLayerWindow
     Width = 27
     Anchors = [akTop, akLeft, akBottom]
     Flat = True
-    OnClick = B2Click
+    OnClick = LayerDelete
   end
   object B1: TSpeedButton
     AnchorSideLeft.Control = Owner
@@ -191,6 +191,6 @@ object LayerWindow: TLayerWindow
     Anchors = [akTop, akLeft, akBottom]
     BorderSpacing.Left = 1
     Flat = True
-    OnClick = B1Click
+    OnClick = LayerAdd
   end
 end

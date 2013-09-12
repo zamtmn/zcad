@@ -37,10 +37,23 @@ GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*O
                       procedure freeelement(p:GDBPointer);virtual;
                       procedure FormatEntity(const drawing:TDrawingDef);virtual;
                       procedure Grow;virtual;
+                      procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
                     end;
 {Export-}
 implementation
 uses iodxf{,UGDBDescriptor},UUnitManager{,shared},log{,ugdbsimpledrawing};
+procedure GDBObjBlockdefArray.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
+var p:PGDBObjBlockdef;
+    ir:itrec;
+begin
+    inherited;
+    p:=beginiterate(ir);
+    if p<>nil then
+    repeat
+         p^.IterateCounter(PCounted,Counter,proc);
+    p:=iterate(ir);
+    until p=nil;
+end;
 procedure GDBObjBlockdefArray.Grow;
 var
   p:PGDBObjBlockdef;

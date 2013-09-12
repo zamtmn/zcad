@@ -154,12 +154,21 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure CopyVPto(var toObj:GDBObjEntity);virtual;
                     function CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
                     procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;
+                    procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
               end;
 {Export-}
 var onlygetsnapcount:GDBInteger;
     ForeGround:RGB;
 implementation
 uses {UGDBEntTree,}GDBGenericSubEntry,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
+
+procedure GDBObjEntity.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
+var p:pGDBObjEntity;
+    ir:itrec;
+begin
+    proc(@self,PCounted,Counter);
+end;
+
 procedure GDBObjEntity.FormatAfterDXFLoad;
 begin
      //format;
@@ -1198,4 +1207,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBEntity.initialization');{$ENDIF}
-end.
+end.

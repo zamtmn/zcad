@@ -103,10 +103,12 @@ resourcestring
   {messages}
   rsNotYetImplemented='Not yet implemented';
   rsLayerDefpaontsCanNotBePrinted='Layer DEFPOINTS can not be printed';
+  rsLayerUsedIn='Layer "%s" used in: %d-model, %d-blockdef table';
   rsQuitQuery='Do yo want to quit ZCAD?';
   rsCloseDWGQuery='Drawing "%s" not saved. Save?';
   rsCurrentLayerOff='The current layer is turned off';
   rsLayerMustBeSelected='Layer must be selected';
+  rsUnableDelUsedLayer='Unable to delete, layer is used';
   rsSaveEmptyDWG='Drawing is empty. Sure?';
   rsBlockIgnored='Ignored block "%s"';
   rsDoubleBlockIgnored='Ignored double definition block "%s"';

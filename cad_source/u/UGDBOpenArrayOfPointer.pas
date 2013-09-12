@@ -35,6 +35,8 @@ GDBOpenArrayOfGDBPointer={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                       procedure cleareraseobj;virtual;abstract;
                       function IsObjExist(pobj:GDBPointer):GDBBoolean;
                       function copyto(source:PGDBOpenArray):GDBInteger;virtual;
+                      procedure RemoveFromArray(const pdata:GDBPointer);virtual;
+                      procedure AddToArray(const pdata:GDBPointer);virtual;
              end;
 {Export-}
 implementation
@@ -52,6 +54,26 @@ begin
   until p=nil;
   result:=count;
 end;
+procedure GDBOpenArrayOfGDBPointer.RemoveFromArray(const pdata:GDBPointer);
+var p:GDBPointer;
+    ir:itrec;
+begin
+       p:=beginiterate(ir);
+       if p<>nil then
+       repeat
+             if p=pdata then
+                           begin
+                                pointer(ir.itp^):=nil;
+                                exit;
+                           end;
+             p:=iterate(ir);
+       until p=nil;
+end;
+procedure GDBOpenArrayOfGDBPointer.AddToArray(const pdata:GDBPointer);
+begin
+     add(@pdata);
+end;
+
 function GDBOpenArrayOfGDBPointer.IsObjExist;
 var p:GDBPointer;
     ir:itrec;

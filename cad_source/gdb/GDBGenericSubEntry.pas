@@ -90,6 +90,8 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                               procedure correctsublayers(var la:GDBLayerArray);virtual;
                               function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
 
+                              procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;
+
                       end;
 {Export-}
 implementation
@@ -110,6 +112,18 @@ begin
     ObjTree.addtonul(pobj);
     CorrectNodeTreeBB(pobj);
 end;}
+procedure GDBObjGenericSubEntry.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
+var p:pGDBObjEntity;
+    ir:itrec;
+begin
+    inherited;
+    p:=objarray.beginiterate(ir);
+    if p<>nil then
+    repeat
+         p^.IterateCounter(PCounted,Counter,proc);
+    p:=objarray.iterate(ir);
+    until p=nil;
+end;
 function GDBObjGenericSubEntry.CalcTrueInFrustum;
 begin
       result:=ObjArray.CalcTrueInFrustum(frustum,visibleactualy);

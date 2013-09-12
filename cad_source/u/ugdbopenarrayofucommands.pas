@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfUCommands;
 {$INCLUDE def.inc}
 interface
-uses zcadstrconsts,UGDBOpenArrayOfPV,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
+uses UGDBLayerArray,zcadstrconsts,UGDBOpenArrayOfPV,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
      gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman{,GDBSubordinated};
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
@@ -28,6 +28,7 @@ TTypeCommand=(TTC_MBegin,TTC_MEnd,TTC_MNotUndableIfOverlay,TTC_Command,TTC_Chang
 PTElementaryCommand=^TElementaryCommand;
 TElementaryCommand=object(GDBaseObject)
                          AutoProcessGDB:GDBBoolean;
+                         AfterAction:GDBBoolean;
                          function GetCommandType:TTypeCommand;virtual;
                          procedure UnDo;virtual;abstract;
                          procedure Comit;virtual;abstract;
@@ -304,6 +305,7 @@ end;
 constructor TGObjectChangeCommand2.Assign(var _dodata:_T;_domethod,_undomethod:tmethod);
 begin
   AutoProcessGDB:=True;
+  AfterAction:=true;
   Data:=_DoData;
   domethod:=_domethod;
   undomethod:=_undomethod;
@@ -314,10 +316,13 @@ type
     TCangeMethod=procedure(const data:_T)of object;
 begin
      TCangeMethod(undomethod)(Data);
+     if AfterAction then
+     begin
      if AutoProcessGDB then
                            PGDBObjEntity(undomethod.Data)^.YouChanged(gdb.GetCurrentDWG^)
                        else
                            PGDBObjEntity(undomethod.Data)^.formatEntity(gdb.GetCurrentDWG^);
+     end;
 end;
 
 procedure TGObjectChangeCommand2.Comit;
@@ -325,10 +330,13 @@ type
     TCangeMethod=procedure(const data:_T)of object;
 begin
      TCangeMethod(domethod)(Data);
+     if AfterAction then
+     begin
      if AutoProcessGDB then
                            PGDBObjEntity(undomethod.Data)^.YouChanged(gdb.GetCurrentDWG^)
                        else
                            PGDBObjEntity(undomethod.Data)^.formatEntity(gdb.GetCurrentDWG^);
+     end;
 end;
 
 constructor TGChangeCommand.Assign(var data:_T);

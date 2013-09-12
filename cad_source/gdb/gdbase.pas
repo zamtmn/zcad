@@ -360,6 +360,7 @@ GDBsymdolinfo=packed record
     LatestCreate:GDBBoolean;
   end;
 {EXPORT-}
+TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 TDWGHandle=ptruint;
 const
   empty_GDBString='Empty GDBString';

@@ -24,6 +24,7 @@ E:\zcad\CAD_SOURCE\u\UGDBTextStyleArray.pas
 E:\zcad\CAD_SOURCE\u\UGDBXYZWStringArray.pas
 E:\zcad\CAD_SOURCE\u\UGDBVectorSnapArray.pas
 E:\zcad\CAD_SOURCE\u\UGDBLineWidthArray.pas
+E:\zcad\CAD_SOURCE\u\ugdbopenarrayofpidentobects.pas
 E:\zcad\CAD_SOURCE\u\UGDBNamedObjectsArray.pas
 E:\zcad\CAD_SOURCE\u\UGDBLayerArray.pas
 E:\zcad\CAD_SOURCE\u\ugdbltypearray.pas

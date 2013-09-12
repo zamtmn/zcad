@@ -427,6 +427,8 @@ GDBOpenArrayOfGDBPointer={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                       procedure cleareraseobj;virtual;abstract;
                       function IsObjExist(pobj:GDBPointer):GDBBoolean;
                       function copyto(source:PGDBOpenArray):GDBInteger;virtual;abstract;
+                      procedure RemoveFromArray(const pdata:GDBPointer);virtual;abstract;
+                      procedure AddToArray(const pdata:GDBPointer);virtual;abstract;
              end;
 //Generate on E:\zcad\CAD_SOURCE\u\UGDBOpenArrayOfPObjects.pas
 PGDBOpenArrayOfPObjects=^GDBOpenArrayOfPObjects;
@@ -744,12 +746,20 @@ GDBLineWidthArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Ope
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                 constructor initnul;
              end;
+//Generate on E:\zcad\CAD_SOURCE\u\ugdbopenarrayofpidentobects.pas
+PGDBObjOpenArrayOfPIdentObects=^GDBObjOpenArrayOfPIdentObects;
+GDBObjOpenArrayOfPIdentObects={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
+                             objsizeof:GDBInteger;
+                             constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m,_objsizeof:GDBInteger);
+                             function getelement(index:TArrayIndex):GDBPointer;
+                             function CreateObject:PGDBaseObject;
+                end;
 //Generate on E:\zcad\CAD_SOURCE\u\UGDBNamedObjectsArray.pas
 TForCResult=(IsFounded(*'IsFounded'*)=1,
              IsCreated(*'IsCreated'*)=2,
              IsError(*'IsError'*)=3);
 PGDBNamedObjectsArray=^GDBNamedObjectsArray;
-GDBNamedObjectsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*OpenArrayOfData=GDBLayerProp*)
+GDBNamedObjectsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPIdentObects)(*OpenArrayOfData=GDBLayerProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m,s:GDBInteger);
                     function getIndex(name: GDBString):GDBInteger;
                     function getAddres(name: GDBString):GDBPointer;
@@ -769,7 +779,7 @@ GDBLayerProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                function GetFullName:GDBString;virtual;abstract;
          end;
 PGDBLayerPropArray=^GDBLayerPropArray;
-GDBLayerPropArray=packed array [0..0] of GDBLayerProp;
+GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
 PGDBLayerArray=^GDBLayerArray;
 GDBLayerArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBLayerProp*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
@@ -1386,6 +1396,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure CopyVPto(var toObj:GDBObjEntity);virtual;abstract;
                     function CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
                     procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;abstract;
+                    procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;abstract;
               end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDB3d.pas
 GDBObj3d={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
@@ -1786,6 +1797,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                               function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
                               procedure correctsublayers(var la:GDBLayerArray);virtual;abstract;
                               function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
+                              procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;abstract;
                       end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBBlockdef.pas
 PGDBObjBlockdef=^GDBObjBlockdef;
@@ -1821,6 +1833,7 @@ GDBObjBlockdefArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*O
                       procedure freeelement(p:GDBPointer);virtual;abstract;
                       procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
                       procedure Grow;virtual;abstract;
+                      procedure IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);virtual;abstract;
                     end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBComplex.pas
 PGDBObjComplex=^GDBObjComplex;

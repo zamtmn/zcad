@@ -5,7 +5,7 @@ unit layerwnd;
 interface
 
 uses
-  log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
+  ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, Grids, ComCtrls,LCLIntf,lcltype,
 
@@ -55,6 +55,7 @@ type
     procedure asyncfreeeditor(Data: PtrInt);
     procedure freeeditor;
     procedure UpdateItem(Item: TListItem);
+    procedure countlayer(player:PGDBLayerProp;out e,b:GDBInteger);
   private
     MouseDownItem:TListItem;
     MouseDownSubItem: Integer;
@@ -530,6 +531,16 @@ procedure TLayerWindow.ListView1Change(Sender: TObject; Item: TListItem;
 begin
      Sender:=Sender;
 end;
+procedure TLayerWindow.countlayer(player:PGDBLayerProp;out e,b:GDBInteger);
+var
+   pdwg:PTSimpleDrawing;
+begin
+  pdwg:=gdb.GetCurrentDWG;
+  e:=0;
+  pdwg^.mainObjRoot.IterateCounter(player,e,@LayerCounter);
+  b:=0;
+  pdwg^.BlockDefArray.IterateCounter(player,b,@LayerCounter);
+end;
 
 procedure TLayerWindow.ListView1SelectItem(Sender: TObject; Item: TListItem;Selected: Boolean);
 var
@@ -538,8 +549,15 @@ var
    layername:string;
    counter:integer;
    li:TListItem;
+   inent,inblock:integer;
 begin
-     item:=item;
+     if selected then
+     begin
+          pdwg:=gdb.GetCurrentDWG;
+          player:=(Item.Data);
+          countlayer(player,inent,inblock);
+          Label1.Caption:=Format(rsLayerUsedIn,[player^.Name,inent,inblock]);
+     end;
 end;
 
 procedure TLayerWindow.LayerAdd(Sender: TObject); // Процедура добавления слоя
@@ -549,6 +567,7 @@ var
    layername:string;
    counter:integer;
    li:TListItem;
+   domethod,undomethod:tmethod;
 begin
      pdwg:=gdb.GetCurrentDWG;
      if assigned(ListView1.Selected)then
@@ -568,6 +587,14 @@ begin
      pdwg^.LayerTable.AddItem(name,pcreatedlayer);
      pcreatedlayer^:=player^;
      pcreatedlayer^.Name:=layername;
+
+     domethod:=tmethod(@pdwg^.LayerTable.AddToArray);
+     undomethod:=tmethod(@pdwg^.LayerTable.RemoveFromArray);
+     with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGObjectChangeCommand2(pcreatedlayer,tmethod(domethod),tmethod(undomethod))^ do
+     begin
+          AfterAction:=false;
+          //comit;
+     end;
 
 
      ListView1.BeginUpdate;
@@ -590,19 +617,37 @@ var
    player,pcreatedlayer:PGDBLayerProp;
    pdwg:PTSimpleDrawing;
    layername:string;
-   counter:integer;
+   e,b:GDBInteger;
    li:TListItem;
+   domethod,undomethod:tmethod;
 begin
   //ShowError(rsNotYetImplemented);
   pdwg:=gdb.GetCurrentDWG;
   if assigned(ListView1.Selected)then
                                      begin
                                      player:=(ListView1.Selected.Data);
-                                     pdwg^.LayerTable.eraseobj(player);
+                                     countlayer(player,e,b);
+                                     if (e+b)>0 then
+                                                  begin
+                                                       ShowError(rsUnableDelUsedLayer);
+                                                       exit;
+                                                  end;
+
+                                     domethod:=tmethod(@pdwg^.LayerTable.RemoveFromArray);
+                                     undomethod:=tmethod(@pdwg^.LayerTable.AddToArray);
+                                     with ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushCreateTGObjectChangeCommand2(player,tmethod(domethod),tmethod(undomethod))^ do
+                                     begin
+                                          AfterAction:=false;
+                                          comit;
+                                     end;
+
+
+                                     //pdwg^.LayerTable.eraseobj(player);
                                      ListView1.Items.Delete(ListView1.Items.IndexOf(ListView1.Selected));
+                                     Label1.Caption:='';
                                      end
                                  else
-                                     MessageBox(@rsLayerMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
+                                     ShowError(rsLayerMustBeSelected);
 end;
 
 procedure TLayerWindow.AplyClose(Sender: TObject);

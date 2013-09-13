@@ -949,6 +949,15 @@ PageControl.Parent:=MainPanel;
 PageControl.Align:=alClient;
 PageControl.{OnPageChanged}OnChange:=ChangedDWGTabCtrl;
 PageControl.BorderWidth:=0;
+if assigned(SysVar.INTF.INTF_DwgTabsPosition) then
+begin
+     case SysVar.INTF.INTF_DwgTabsPosition^ of
+                                              TATop:PageControl.TabPosition:=tpTop;
+                                              TABottom:PageControl.TabPosition:=tpBottom;
+                                              TALeft:PageControl.TabPosition:=tpLeft;
+                                              TARight:PageControl.TabPosition:=tpRight;
+     end;
+end;
 if assigned(SysVar.INTF.INTF_ShowDwgTabCloseBurron) then
 begin
      if SysVar.INTF.INTF_ShowDwgTabCloseBurron^ then
@@ -3259,7 +3268,15 @@ begin
                                        MainFormN.PageControl.ShowTabs:=true
                                    else
                                        MainFormN.PageControl.ShowTabs:=false;
-
+  if assigned(SysVar.INTF.INTF_DwgTabsPosition) then
+  begin
+       case SysVar.INTF.INTF_DwgTabsPosition^ of
+                                                TATop:MainFormN.PageControl.TabPosition:=tpTop;
+                                                TABottom:MainFormN.PageControl.TabPosition:=tpBottom;
+                                                TALeft:MainFormN.PageControl.TabPosition:=tpLeft;
+                                                TARight:MainFormN.PageControl.TabPosition:=tpRight;
+       end;
+  end;
   if assigned(MainFormN.PageControl) then
   if assigned(SysVar.INTF.INTF_ShowDwgTabCloseBurron) then
   begin

@@ -176,7 +176,7 @@ GDBBoundingBbox=packed record
                       LBN:GDBvertex;(*'Near'*)
                       RTF:GDBvertex;(*'Far'*)
                 end;
-TInRect=(IRFully,IRPartially,IREmpty);                
+TInRect=(IRFully,IRPartially,IREmpty);
 PGDBvertex2DI=^GDBvertex2DI;
 GDBvertex2DIArray=packed array [0..0] of GDBvertex2DI;
 PGDBvertex2DIArray=^GDBvertex2DIArray;
@@ -359,6 +359,8 @@ GDBsymdolinfo=packed record
     Number:GDBInteger;
     LatestCreate:GDBBoolean;
   end;
+PTAlign=^TAlign;
+TAlign=(TATop,TABottom,TALeft,TARight);
 {EXPORT-}
 TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 TDWGHandle=ptruint;

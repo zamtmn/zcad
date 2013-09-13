@@ -164,6 +164,7 @@ type
   tinterface=packed record
               INTF_ShowScrollBars:PGDBBoolean;(*'Show scroll bars'*)
               INTF_ShowDwgTabs:PGDBBoolean;(*'Show drawing tabs'*)
+              INTF_DwgTabsPosition:PTAlign;(*'Drawing tabs position'*)
               INTF_ShowDwgTabCloseBurron:PGDBBoolean;(*'Show drawing tab close button'*)
              end;
   tdisp=packed record

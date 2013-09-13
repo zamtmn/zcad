@@ -182,7 +182,7 @@ GDBBoundingBbox=packed record
                       LBN:GDBvertex;(*'Near'*)
                       RTF:GDBvertex;(*'Far'*)
                 end;
-TInRect=(IRFully,IRPartially,IREmpty);                
+TInRect=(IRFully,IRPartially,IREmpty);
 PGDBvertex2DI=^GDBvertex2DI;
 GDBvertex2DIArray=packed array [0..0] of GDBvertex2DI;
 PGDBvertex2DIArray=^GDBvertex2DIArray;
@@ -362,6 +362,8 @@ GDBsymdolinfo=packed record
     Number:GDBInteger;
     LatestCreate:GDBBoolean;
   end;
+PTAlign=^TAlign;
+TAlign=(TATop,TABottom,TALeft,TARight);
 //Generate on E:\zcad\CAD_SOURCE\u\UOpenArray.pas
 POpenArray=^OpenArray;
 OpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -1028,6 +1030,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
   tinterface=packed record
               INTF_ShowScrollBars:PGDBBoolean;(*'Show scroll bars'*)
               INTF_ShowDwgTabs:PGDBBoolean;(*'Show drawing tabs'*)
+              INTF_DwgTabsPosition:PTAlign;(*'Drawing tabs position'*)
               INTF_ShowDwgTabCloseBurron:PGDBBoolean;(*'Show drawing tab close button'*)
              end;
   tdisp=packed record

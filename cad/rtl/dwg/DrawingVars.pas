@@ -5,7 +5,7 @@ var
    camera:GDBObjCamera;
    DWGProps:TDWGProps;
 
-   DWG_CLayer:GDBInteger;
+   DWG_CLayer:PGDBLayerProp;
    DWG_CLinew:GDBInteger;
    DWG_CColor:GDBInteger;
    DWG_CLType:GDBInteger;

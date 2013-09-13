@@ -775,7 +775,7 @@ var count: GDBInteger;
 
     //cmlx,cmrx,cmuy,cmdy:gdbdouble;
     {lx,rx,}uy,dy:gdbdouble;
-    lsave:integer;
+    lsave:{integer}PGDBPointer;
 begin
   if gdb.GetCurrentROOT.ObjArray.Count = 0 then exit;
   cman.init;

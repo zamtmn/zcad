@@ -113,7 +113,7 @@ procedure TLayerWindow.MaceItemCurrent(ListItem:TListItem);
 begin
      if CurrentLayer<>ListItem then
      begin
-     SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer(ListItem.Data);
+     SysVar.dwg.DWG_CLayer^:={gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer}(ListItem.Data);
      ListItem.ImageIndex:=II_Ok;
      CurrentLayer.ImageIndex:=-1;
      CurrentLayer:=ListItem;
@@ -147,7 +147,7 @@ begin
                                 else
                                     begin
                                     ListItem.SubItemImages[1]:=II_LayerOff;
-                                    if SysVar.dwg.DWG_CLayer^=gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer(ListItem.Data) then
+                                    if SysVar.dwg.DWG_CLayer^={gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer}(ListItem.Data) then
                                                           MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
                                     end;
                     changedstamp:=true;

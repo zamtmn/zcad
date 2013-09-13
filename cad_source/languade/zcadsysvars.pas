@@ -125,7 +125,7 @@ type
              DWG_DrawMode:PGDBBoolean;(*'Display line weights'*)
              DWG_OSMode:PGDBInteger;(*'Snap mode'*)(*oi_readonly*)
              DWG_PolarMode:PGDBBoolean;(*'Polar tracking mode'*)
-             DWG_CLayer:PGDBInteger;(*'Current layer'*)
+             DWG_CLayer:PGDBPointer;(*'Current layer'*)(*oi_readonly*)
              DWG_CLinew:PGDBInteger;(*'Current line weigwt'*)
              DWG_CColor:PGDBInteger;(*'Current color'*)
              DWG_LTScale:PGDBDouble;(*'Drawing line type scale'*)

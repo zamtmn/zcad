@@ -712,7 +712,7 @@ begin
                     player:=drawing.LayerTable.addlayer(lname, abs(strtoint(lcolor)), strtoint(llw),oo,ll,pp,desk,LoadMode);
                     if uppercase(lname)=uppercase(clayer)then
                                                              if sysvar.DWG.DWG_CLayer<>nil then
-                                                                                               sysvar.DWG.DWG_CLayer^:=drawing.LayerTable.GetIndexByPointer(player);
+                                                                                               sysvar.DWG.DWG_CLayer^:={drawing.LayerTable.GetIndexByPointer}(player);
                     llw:='';
                     {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer '+lname,0);{$ENDIF}
                   end;

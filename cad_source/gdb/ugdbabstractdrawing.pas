@@ -18,7 +18,7 @@
 
 unit ugdbabstractdrawing;
 interface
-uses ugdbdrawingdef,gdbase,gdbasetypes,GDBCamera,GDBGenericSubEntry,GDBRoot,UGDBSelectedObjArray,UGDBLayerArray,UGDBOpenArrayOfPV;
+uses UGDBDrawingdef,gdbase,gdbasetypes,GDBCamera,GDBGenericSubEntry,GDBRoot,UGDBSelectedObjArray,UGDBLayerArray,UGDBOpenArrayOfPV;
 type
 {EXPORT+}
 PTAbstractDrawing=^TAbstractDrawing;
@@ -40,4 +40,4 @@ TAbstractDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TDrawingDef)
                  end;
 {EXPORT-}
 implementation
-end.
+end.

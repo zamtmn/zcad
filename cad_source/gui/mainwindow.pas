@@ -1525,7 +1525,7 @@ begin
                                  exit;
     if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
                                  exit;
-    if odSelected in state then
+    if not ({odSelected}odComboBoxEdit in state) then
     TComboBox(Control).canvas.FillRect(ARect);
     if {(odComboBoxEdit in State)}not TComboBox(Control).DroppedDown then
                                       begin
@@ -1562,7 +1562,7 @@ begin
   //TComboBox(Control).canvas.Line(ARect.Left,y,ARect.Left+ll,y);
     if gdb.GetCurrentDWG=nil then
                                  exit;
-    if odSelected in state then
+    if not ({odSelected}odComboBoxEdit in state) then
     TComboBox(Control).canvas.FillRect(ARect);
     if {(odComboBoxEdit in State)}not TComboBox(Control).DroppedDown then
                                       begin
@@ -1592,7 +1592,7 @@ begin
     if (gdb.GetCurrentDWG=nil)or(sysvar.DWG.DWG_CColor=nil) then
      exit;
     begin
-    if odSelected in state then
+    if not ({odSelected}odComboBoxEdit in state) then
     TComboBox(Control).canvas.FillRect(ARect);
     if {(odComboBoxEdit in State)}not TComboBox(Control).DroppedDown then
                                       begin

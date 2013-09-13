@@ -135,7 +135,7 @@ end;
 function GDBLayerArray.GetCurrentLayer;
 begin
      if assigned(sysvar.dwg.DWG_CLayer) then
-                                            result:=getelement(sysvar.dwg.DWG_CLayer^)
+                                            result:={getelement}(sysvar.dwg.DWG_CLayer^)
                                         else
                                             result:=getsystemlayer;
 end;
@@ -173,4 +173,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBLayerArray.initialization');{$ENDIF}
   DefaultErrorLayer.Init('DefaultErrorLayer',200,0,true,false,true,'');
-end.
+end.

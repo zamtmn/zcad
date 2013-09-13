@@ -268,7 +268,7 @@ begin
            LayerBox.ItemIndex:=getsortedindex(SysVar.dwg.DWG_CLayer^);}
            IVars.CColor:=sysvar.dwg.DWG_CColor^;
            IVars.CLWeight:=sysvar.dwg.DWG_CLinew^+3;
-           ivars.CLayer:=gdb.GetCurrentDWG.LayerTable.getelement(sysvar.dwg.DWG_CLayer^);
+           ivars.CLayer:={gdb.GetCurrentDWG.LayerTable.getelement}(sysvar.dwg.DWG_CLayer^);
            ivars.CLType:=gdb.GetCurrentDWG.LTypeStyleTable.getelement(sysvar.dwg.DWG_CLType^);
       end
   else
@@ -380,7 +380,7 @@ end;
 function MainForm.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;var newlp:TLayerPropRecord):boolean;
 var
    cdwg:PTSimpleDrawing;
-   tcl:integer;
+   tcl:{integer}PGDBLayerProp;
 begin
      CDWG:=GDB.GetCurrentDWG;
      result:=false;
@@ -401,7 +401,7 @@ begin
                                 if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0 then
                                 begin
                                           if assigned(sysvar.dwg.DWG_CLayer) then
-                                            sysvar.dwg.DWG_CLayer^:=cdwg^.LayerTable.GetIndexByPointer(Player);
+                                            sysvar.dwg.DWG_CLayer^:={cdwg^.LayerTable.GetIndexByPointer}(Player);
                                           if not PGDBLayerProp(PLayer)^._on then
                                                                             MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
                                           setvisualprop;
@@ -409,7 +409,7 @@ begin
                                 else
                                 begin
                                        tcl:=SysVar.dwg.DWG_CLayer^;
-                                       SysVar.dwg.DWG_CLayer^:=cdwg^.LayerTable.GetIndexByPointer(Player);
+                                       SysVar.dwg.DWG_CLayer^:={cdwg^.LayerTable.GetIndexByPointer}(Player);
                                        commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent',gdb.GetCurrentDWG);
                                        SysVar.dwg.DWG_CLayer^:=tcl;
                                        {gdb.GetCurrentDWG.OGLwindow1.}setvisualprop;

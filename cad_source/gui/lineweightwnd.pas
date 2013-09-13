@@ -109,7 +109,8 @@ begin
         canvas.Pen.Width:=oldw;
         ARect.Left:=ARect.Left+ll+5;
    end;
-  DrawText(canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_SINGLELINE or DT_VCENTER)
+  canvas.TextRect(ARect,ARect.Left,(ARect.Top+ARect.Bottom-canvas.TextHeight(s)) div 2,s);
+  //DrawText(canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_SINGLELINE or DT_VCENTER)
 end;
 
 procedure TLineWeightSelectWND._onDrawItem(Control: TWinControl;
@@ -175,4 +176,4 @@ begin
 end;
 
 end.
-
+

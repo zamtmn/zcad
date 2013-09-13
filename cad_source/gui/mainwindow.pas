@@ -1499,6 +1499,7 @@ procedure drawLT(canvas:TCanvas;ARect: TRect;ll: Integer;s:string);
 var
   y:integer;
   oldw:Integer;
+  ts:TTextStyle;
 begin
   if ll>0 then
    begin
@@ -1510,7 +1511,8 @@ begin
         canvas.Pen.Width:=oldw;
         ARect.Left:=ARect.Left+ll+5;
    end;
-  DrawText(canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_SINGLELINE or DT_VCENTER)
+  canvas.TextRect(ARect,ARect.Left,(ARect.Top+ARect.Bottom-canvas.TextHeight(s)) div 2,s);
+  //DrawText(canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_SINGLELINE or DT_VCENTER)
 end;
 
 procedure MainForm.LTypeBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
@@ -1523,6 +1525,7 @@ begin
                                  exit;
     if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
                                  exit;
+    if odSelected in state then
     TComboBox(Control).canvas.FillRect(ARect);
     if {(odComboBoxEdit in State)}not TComboBox(Control).DroppedDown then
                                       begin
@@ -1559,6 +1562,7 @@ begin
   //TComboBox(Control).canvas.Line(ARect.Left,y,ARect.Left+ll,y);
     if gdb.GetCurrentDWG=nil then
                                  exit;
+    if odSelected in state then
     TComboBox(Control).canvas.FillRect(ARect);
     if {(odComboBoxEdit in State)}not TComboBox(Control).DroppedDown then
                                       begin
@@ -1588,6 +1592,7 @@ begin
     if (gdb.GetCurrentDWG=nil)or(sysvar.DWG.DWG_CColor=nil) then
      exit;
     begin
+    if odSelected in state then
     TComboBox(Control).canvas.FillRect(ARect);
     if {(odComboBoxEdit in State)}not TComboBox(Control).DroppedDown then
                                       begin
@@ -1613,7 +1618,8 @@ begin
     if index<ColorBoxSelColor then
      begin
           textrect.Left:=textrect.Left+textoffset;
-          DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_SINGLELINE or DT_VCENTER);
+          TComboBox(Control).canvas.TextRect(ARect,textrect.Left,(ARect.Top+ARect.Bottom-canvas.TextHeight(s)) div 2,s);
+          //DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_SINGLELINE or DT_VCENTER);
 
           if index in [1..255] then
                          begin
@@ -1630,7 +1636,10 @@ begin
                           end
      end
     else
-    DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_SINGLELINE or DT_VCENTER)
+    begin
+         TComboBox(Control).canvas.TextRect(ARect,ARect.Left,(ARect.Top+ARect.Bottom-canvas.TextHeight(s)) div 2,s);
+    //DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_SINGLELINE or DT_VCENTER)
+    end;
     end;
 end;
 

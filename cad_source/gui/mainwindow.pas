@@ -95,6 +95,7 @@ type
 
     {procedure LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                State: TOwnerDrawState);}
+    procedure ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);
     procedure LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                State: TOwnerDrawState);
     procedure ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
@@ -1495,6 +1496,14 @@ begin
     ARect.Left:=ARect.Left+36;
     DrawText(LayerBox.canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
 end;}
+procedure MainForm.ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);
+begin
+     //if not ({odSelected}odComboBoxEdit in state) then
+     {$ifdef windows}
+     //TComboBox(Control).canvas.FillRect(ARect);
+     {$endif}
+end;
+
 procedure drawLT(canvas:TCanvas;ARect: TRect;ll: Integer;s:string);
 var
   y:integer;
@@ -1525,8 +1534,7 @@ begin
                                  exit;
     if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
                                  exit;
-    if not ({odSelected}odComboBoxEdit in state) then
-    TComboBox(Control).canvas.FillRect(ARect);
+    ComboBoxDrawItem(Control,ARect,State);
     if {(odComboBoxEdit in State)}not TComboBox(Control).DroppedDown then
                                       begin
                                            plt:=IVars.CLType;
@@ -1562,8 +1570,7 @@ begin
   //TComboBox(Control).canvas.Line(ARect.Left,y,ARect.Left+ll,y);
     if gdb.GetCurrentDWG=nil then
                                  exit;
-    if not ({odSelected}odComboBoxEdit in state) then
-    TComboBox(Control).canvas.FillRect(ARect);
+    ComboBoxDrawItem(Control,ARect,State);
     if {(odComboBoxEdit in State)}not TComboBox(Control).DroppedDown then
                                       begin
                                            index:=IVars.CLWeight;
@@ -1592,8 +1599,7 @@ begin
     if (gdb.GetCurrentDWG=nil)or(sysvar.DWG.DWG_CColor=nil) then
      exit;
     begin
-    if not ({odSelected}odComboBoxEdit in state) then
-    TComboBox(Control).canvas.FillRect(ARect);
+    ComboBoxDrawItem(Control,ARect,State);
     if {(odComboBoxEdit in State)}not TComboBox(Control).DroppedDown then
                                       begin
                                            index:=IVars.CColor;

@@ -1498,10 +1498,11 @@ begin
 end;}
 procedure MainForm.ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);
 begin
-     //if not ({odSelected}odComboBoxEdit in state) then
-     {$ifdef windows}
+     //if not ({odSelected}{odComboBoxEdit}odDisabled in state) then
+     if (state<>[])and(state<>[odHotLight])and(state<>[odPainted]) then
+     {ifdef windows}
      TComboBox(Control).canvas.FillRect(ARect);
-     {$endif}
+     {endif}
 end;
 
 procedure drawLT(canvas:TCanvas;ARect: TRect;ll: Integer;s:string);

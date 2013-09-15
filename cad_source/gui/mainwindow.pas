@@ -1500,7 +1500,7 @@ procedure MainForm.ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwner
 begin
      //if not ({odSelected}odComboBoxEdit in state) then
      {$ifdef windows}
-     //TComboBox(Control).canvas.FillRect(ARect);
+     TComboBox(Control).canvas.FillRect(ARect);
      {$endif}
 end;
 

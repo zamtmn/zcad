@@ -113,7 +113,11 @@ procedure TLayerWindow.MaceItemCurrent(ListItem:TListItem);
 begin
      if CurrentLayer<>ListItem then
      begin
-     SysVar.dwg.DWG_CLayer^:={gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer}(ListItem.Data);
+     with PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(sysvar.dwg.DWG_CLayer^)^ do
+     begin
+          SysVar.dwg.DWG_CLayer^:={gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer}(ListItem.Data);
+          ComitFromObj;
+     end;
      ListItem.ImageIndex:=II_Ok;
      CurrentLayer.ImageIndex:=-1;
      CurrentLayer:=ListItem;

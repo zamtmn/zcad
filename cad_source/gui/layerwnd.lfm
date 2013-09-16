@@ -11,7 +11,7 @@ object LayerWindow: TLayerWindow
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '1.1'
+  LCLVersion = '1.3'
   object Bevel1: TBevel
     AnchorSideLeft.Control = MkCurrentBtn
     AnchorSideLeft.Side = asrBottom

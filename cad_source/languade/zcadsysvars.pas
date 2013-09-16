@@ -96,6 +96,8 @@ type
             RD_LineSmooth:PGDBBoolean;(*'Line smoth'*)
             RD_ImageDegradation:TImageDegradation;(*'Image degradation'*)
             RD_PanObjectDegradation:PGDBBoolean;(*'Degradation while pan'*)
+            RD_SpatialNodesDepth:PGDBInteger;(*'Spatial index nodes depth'*)(*hidden_in_objinsp*)
+            RD_SpatialNodeCount:PGDBInteger;(*'Spatial index ents in node'*)(*hidden_in_objinsp*)
       end;
   tsave=packed record
               SAVE_Auto_On:PGDBBoolean;(*'Autosave'*)

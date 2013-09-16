@@ -139,7 +139,8 @@ initialization;
                                                       SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=0
                                                   else
                                                       SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=SysVar.RD.RD_ImageDegradation.RD_ID_MaxDegradationFactor^;
-
+  SysVarUnit.AssignToSymbol(SysVar.RD.RD_SpatialNodesDepth,'RD_SpatialNodesDepth');
+  SysVarUnit.AssignToSymbol(SysVar.RD.RD_SpatialNodeCount,'RD_SpatialNodeCount');
   SysVarUnit.AssignToSymbol(SysVar.SAVE.SAVE_Auto_Current_Interval,'SAVE_Auto_Current_Interval');
   SysVarUnit.AssignToSymbol(SysVar.SAVE.SAVE_Auto_Interval,'SAVE_Auto_Interval');
   SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;

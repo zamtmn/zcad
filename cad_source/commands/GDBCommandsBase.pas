@@ -1144,9 +1144,9 @@ begin
      end;
      s:=s+'(далее в +): '+inttostr(pnode.pluscount);
      s:=s+' (далее в -): '+inttostr(pnode.minuscount);
-
+     {$IFDEF TOTALYLOG}
      shared.HistoryOutStr(dupestring('  ',pnode.nodedepth)+s);
-
+     {$ENDIF}
      if pnode.nodedepth>depth then
                                   depth:=pnode.nodedepth;
 

@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfUCommands;
 {$INCLUDE def.inc}
 interface
-uses UGDBLayerArray,zcadstrconsts,UGDBOpenArrayOfPV,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
+uses zcadinterface,UGDBLayerArray,zcadstrconsts,UGDBOpenArrayOfPV,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
      gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman{,GDBSubordinated};
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
@@ -348,10 +348,15 @@ end;
 procedure TGChangeCommand.UnDo;
 begin
      _T(addr^):=OldData;
+     if assigned(SetVisuaProplProc)then
+                                       SetVisuaProplProc;
 end;
 procedure TGChangeCommand.Comit;
 begin
      _T(addr^):=NewData;
+     if assigned(SetVisuaProplProc)then
+                                       SetVisuaProplProc;
+
 end;
 procedure TGChangeCommand.ComitFromObj;
 begin

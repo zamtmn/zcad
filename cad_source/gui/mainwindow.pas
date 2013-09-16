@@ -33,7 +33,7 @@ uses
        geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
        varmandef, varman,UUnitManager,SysInfo,shared,strmy,
   {ZCAD SIMPLE PASCAL SCRIPT}
-       languade,
+       languade,UGDBOpenArrayOfUCommands,
   {ZCAD ENTITIES}
        GDBEntity,UGDBSelectedObjArray,UGDBLayerArray,ugdbsimpledrawing,
        GDBBlockDef,UGDBDescriptor,GDBManager,ugdbltypearray,
@@ -402,7 +402,14 @@ begin
                                 if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0 then
                                 begin
                                           if assigned(sysvar.dwg.DWG_CLayer) then
-                                            sysvar.dwg.DWG_CLayer^:={cdwg^.LayerTable.GetIndexByPointer}(Player);
+                                          if sysvar.dwg.DWG_CLayer^<>Player then
+                                          begin
+                                               with PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(sysvar.dwg.DWG_CLayer^)^ do
+                                               begin
+                                                    sysvar.dwg.DWG_CLayer^:=Player;
+                                                    ComitFromObj;
+                                               end;
+                                          end;
                                           if not PGDBLayerProp(PLayer)^._on then
                                                                             MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
                                           setvisualprop;

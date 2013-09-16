@@ -12,3 +12,8 @@
 {$DEFINE PTCommand := PTGDBStringChangeCommand}
 {$DEFINE TData     := GDBString}
   {$I TGChangeCommandIMPL.inc}
+
+{$DEFINE TCommand  := TGDBPoinerChangeCommand}
+{$DEFINE PTCommand := PTGDBPoinerChangeCommand}
+{$DEFINE TData     := GDBPointer}
+  {$I TGChangeCommandIMPL.inc}

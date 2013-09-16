@@ -21,7 +21,7 @@ unit UGDBEntTree;
 interface
 uses
     {math,}graphics,
-    geometry,UGDBVisibleOpenArray,GDBEntity,gdbase,gdbasetypes,log,memman,OGLSpecFunc;
+    zcadsysvars,geometry,UGDBVisibleOpenArray,GDBEntity,gdbase,gdbasetypes,log,memman,OGLSpecFunc;
 type
 {EXPORT+}
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
@@ -61,9 +61,9 @@ TTestTreeNode=Object(GDBaseObject)
                     destructor done;virtual;
               end;
 TTestTreeArray=array [0..2] of TTestTreeNode;
-const
+//const
   //_InNodeCount=10;
-  _NodeDepth=16;
+  {_NodeDepth=16;}
 function createtree(var entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInteger});
 implementation
@@ -217,7 +217,10 @@ begin
      //_InNodeCount:=entitys.GetRealCount div {_NodeDepth + 1}(nodedepth+2);
      //if _InNodeCount<500 then _InNodeCount:=500;
 
-     _InNodeCount:=500;
+     if SysVar.RD.RD_SpatialNodeCount^>0 then
+                                             _InNodeCount:=SysVar.RD.RD_SpatialNodeCount^
+                                         else
+                                             _InNodeCount:=500;
 
      inc(nodedepth);
      if PRootNode<>nil then
@@ -235,7 +238,7 @@ begin
      result.minuscount:=0;
      result.Root:=_root;
      result.NodeDir:=dir;
-     if ((entitys.Count<=_InNodeCount){and(nodedepth>1)})or(nodedepth>_NodeDepth) then
+     if ((entitys.Count<=_InNodeCount){and(nodedepth>1)})or(nodedepth>SysVar.RD.RD_SpatialNodesDepth^) then
                                                 begin
                                                      //result.selected:=false;
                                                      {if entitys.beginiterate(ir)<>nil then

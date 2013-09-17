@@ -77,7 +77,8 @@ type
 
 var
   Form1: TForm1;
-  stepgrid,origingrid:GDBvertex2D;
+  snap:GDBSnap2D;
+  grid:GDBvertex2D;
   LPTime:Tdatetime;
   pname:string;
   //rm:trestoremode;
@@ -134,13 +135,16 @@ var
    pobj:PGDBObjEntity;
    v1,v2:gdbvertex;
 begin
-     stepgrid.x:=1;
-     stepgrid.y:=1;
-     origingrid.x:=0;
-     origingrid.y:=0;
 
-     sysvar.DWG.DWG_StepGrid:=@stepgrid;
-     sysvar.DWG.DWG_OriginGrid:=@origingrid;
+     Snap.Base.x:=1;
+     Snap.Base.y:=1;
+     Snap.Spacing.x:=1;
+     Snap.Spacing.y:=1;
+     grid.x:=2;
+     grid.y:=2;
+
+     sysvar.DWG.DWG_Snap:=@Snap;
+     sysvar.DWG.DWG_GridSpacing:=@grid;
      sysvar.DWG.DWG_SystmGeometryDraw^:=CheckBox1.Checked;
 
      ugdbdescriptor.startup;
@@ -258,7 +262,7 @@ begin
   begin
     pobj := PGDBObjLine(CreateInitObjFree(GDBLineID,nil));
     v1:=CreateRandomVertex(1000,500);
-    v2:=geometry.VertexAdd(v1,CreateRandomVertex(100,50));
+    v2:=geometry.VertexAdd(v1,CreateRandomVertex(1000,500));
     pobj^.CoordInOCS.lBegin:=v1;
     pobj^.CoordInOCS.lEnd:=v2;
     gdb.GetCurrentRoot^.AddMi(@pobj);
@@ -638,4 +642,4 @@ end;
 
 
 end.
-
+

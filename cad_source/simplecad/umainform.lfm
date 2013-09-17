@@ -10,7 +10,7 @@ object Form1: TForm1
   OnDestroy = _DestroyApp
   OnKeyDown = _KeyDown
   OnShow = _FormShow
-  LCLVersion = '1.1'
+  LCLVersion = '1.3'
   object Panel1: TPanel
     Left = 0
     Height = 909
@@ -92,10 +92,10 @@ object Form1: TForm1
     AnchorSideTop.Side = asrCenter
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 906
+    Left = 922
     Height = 23
-    Top = 612
-    Width = 191
+    Top = 613
+    Width = 175
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Rebuild tree'
     OnClick = BtnRebuildClick
@@ -106,9 +106,9 @@ object Form1: TForm1
     AnchorSideLeft.Side = asrBottom
     AnchorSideRight.Side = asrBottom
     Left = 834
-    Height = 19
+    Height = 21
     Top = 614
-    Width = 72
+    Width = 88
     Caption = 'Show tree'
     OnChange = TreeChange
     TabOrder = 5
@@ -118,10 +118,10 @@ object Form1: TForm1
     AnchorSideLeft.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 970
+    Left = 995
     Height = 23
     Top = 0
-    Width = 127
+    Width = 102
     Anchors = [akTop, akLeft, akRight]
     MaxValue = 1000000
     MinValue = 1
@@ -206,7 +206,7 @@ object Form1: TForm1
     Left = 834
     Height = 15
     Top = 4
-    Width = 136
+    Width = 161
     Alignment = taCenter
     Caption = 'Number of entities to add'
     Layout = tlCenter
@@ -244,9 +244,9 @@ object Form1: TForm1
     AnchorSideLeft.Control = Splitter1
     AnchorSideLeft.Side = asrBottom
     Left = 834
-    Height = 19
+    Height = 21
     Top = 595
-    Width = 104
+    Width = 126
     Caption = '3D(ZCoord<>0)'
     TabOrder = 14
   end
@@ -302,8 +302,8 @@ object Form1: TForm1
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 834
-    Height = 274
-    Top = 635
+    Height = 273
+    Top = 636
     Width = 263
     Anchors = [akTop, akLeft, akRight, akBottom]
     TabOrder = 18
@@ -347,4 +347,4 @@ object Form1: TForm1
     left = 934
     top = 488
   end
-end
+end

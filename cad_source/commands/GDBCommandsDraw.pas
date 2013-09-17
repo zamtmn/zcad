@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  {gmap,}gvector,garrayutils,{gutil,}UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  {gmap,}UGDBEntTree,gvector,garrayutils,{gutil,}UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,
@@ -3338,6 +3338,87 @@ begin
     result:=0;
 
 end;
+procedure CheckIntersection(pl1,pl2:PGDBObjLine;var linelinetests,intersectcount:integer);
+var
+    IP:Intercept3DProp;
+begin
+      inc(linelinetests);
+      IP:=pl2^.IsIntersect_Line(pl1^.CoordInWCS.lBegin,pl1^.CoordInWCS.lEnd);
+      if ip.isintercept then
+      begin
+           inc(intersectcount);
+      end;
+end;
+procedure FindLineIntersectionsInNode(pl:PGDBObjLine;PNode:PTEntTreeNode;var lineAABBtests,linelinetests,intersectcount:integer);
+var
+    ir1:itrec;
+    pl1:PGDBObjLine;
+begin
+     inc(lineAABBtests);
+     if boundingintersect(pl^.vp.BoundingBox,PNode^.BoundingBox) then
+     begin
+           pl1:=PNode^.nul.beginiterate(ir1);
+           if pl1<>nil then
+           repeat
+                 CheckIntersection(pl,pl1,linelinetests,intersectcount);
+
+                 pl1:=PNode^.nul.iterate(ir1);
+           until pl1=nil;
+
+           if PNode^.pplusnode<>nil then
+                                        FindLineIntersectionsInNode(pl,PNode^.pplusnode,lineAABBtests,linelinetests,intersectcount);
+           if PNode^.pminusnode<>nil then
+                                        FindLineIntersectionsInNode(pl,PNode^.pminusnode,lineAABBtests,linelinetests,intersectcount);
+
+     end;
+end;
+
+procedure FindAllIntersectionsInNode(PNode:PTEntTreeNode;var lineAABBtests,linelinetests,intersectcount:integer);
+var
+    ir1,ir2:itrec;
+    pl1,pl2:PGDBObjLine;
+begin
+     pl1:=PNode^.nul.beginiterate(ir1);
+     if pl1<>nil then
+     repeat
+           ir2:=ir1;
+           pl2:=PNode^.nul.iterate(ir2);
+           if pl2<>nil then
+           repeat
+                 CheckIntersection(pl1,pl2,linelinetests,intersectcount);
+
+                 pl2:=PNode^.nul.iterate(ir2);
+           until pl2=nil;
+
+           if PNode^.pplusnode<>nil then
+                                        FindLineIntersectionsInNode(pl1,PNode^.pplusnode,lineAABBtests,linelinetests,intersectcount);
+           if PNode^.pminusnode<>nil then
+                                        FindLineIntersectionsInNode(pl1,PNode^.pminusnode,lineAABBtests,linelinetests,intersectcount);
+
+           pl1:=PNode^.nul.iterate(ir1);
+     until pl1=nil;
+     //else
+         begin
+               if PNode^.pplusnode<>nil then
+                                            FindAllIntersectionsInNode(PNode^.pplusnode,lineAABBtests,linelinetests,intersectcount);
+               if PNode^.pminusnode<>nil then
+                                            FindAllIntersectionsInNode(PNode^.pminusnode,lineAABBtests,linelinetests,intersectcount);
+         end;
+end;
+function FindAllIntersections_com(operands:pansichar):GDBInteger;
+var
+    lineAABBtests,linelinetests,intersectcount:integer;
+begin
+     intersectcount:=0;
+     linelinetests:=0;
+     lineAABBtests:=0;
+     if assigned(StartLongProcessProc) then StartLongProcessProc(10,'Search intersections');
+     FindAllIntersectionsInNode(@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,lineAABBtests,linelinetests,intersectcount);
+     if assigned(EndLongProcessProc) then EndLongProcessProc;
+     shared.HistoryOutStr('Line-AABB tests count: '+inttostr(lineAABBtests));
+     shared.HistoryOutStr('Line-Line tests count: '+inttostr(linelinetests));
+     shared.HistoryOutStr('Intersections count: '+inttostr(intersectcount));
+end;
 
 procedure startup;
 begin
@@ -3446,6 +3527,8 @@ begin
 
   PSD:=TPrinterSetupDialog.Create(nil);
   PAGED:=TPageSetupDialog.Create(nil);
+
+  CreateCommandFastObjectPlugin(@FindAllIntersections_com,'FindAllIntersections',CADWG,0);
 end;
 procedure Finalize;
 begin

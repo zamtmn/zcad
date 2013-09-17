@@ -368,7 +368,7 @@ begin
      result:=ThemeServices.GetDetailSize(Details);
      end
      else
-         result:=size(0,0);
+         result:=types.size(0,0);
 end;
 procedure GDBBooleanDescriptor.DrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer);
 var

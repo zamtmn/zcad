@@ -903,7 +903,7 @@ begin
                       shared.FatalError(rsReserveFontNotFound)
                   else
                       begin
-                           f.init(length(r.Value));
+                           f.init({$IFDEF DEBUGBUILD}'{94091172-3DD7-4038-99B6-90CD8B8E971D}',{$ENDIF}length(r.Value));
                            f.AddData(@r.Value[1],length(r.Value));
                            f.SaveToFile(sysvar.PATH.Temp_files^+filename);
                            pbasefont:=FontManager.addFonf(sysvar.PATH.Temp_files^+filename);

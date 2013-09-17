@@ -141,7 +141,7 @@ end;
 
 constructor TEntTreeNode.initnul;
 begin
-     nul.init({$IFDEF DEBUGBUILD}'{0B3BD93C-D6F7-4F08-B9E5-21574D345206}',{$ENDIF}50);
+     nul.init({$IFDEF DEBUGBUILD}'TEntTreeNode.nul',{$ENDIF}50);
      FulDraw:=True;
 end;
 procedure TEntTreeNode.ClearSub;
@@ -191,9 +191,9 @@ begin
 end;
 constructor TTestTreeNode.initnul;
 begin
-     nul.init({$IFDEF DEBUGBUILD}'{920880D2-9F43-4861-916C-572E7DF0E049}',{$ENDIF}InNodeCount{*2});
-     plus.init({$IFDEF DEBUGBUILD}'{7930F3C0-94EE-4A4B-8263-FF7A04DB0B9B}',{$ENDIF}InNodeCount{*2});
-     minus.init({$IFDEF DEBUGBUILD}'{18750ABA-EE1F-4D09-A247-6D1DE22A5170}',{$ENDIF}InNodeCount{*2});
+     nul.init({$IFDEF DEBUGBUILD}'TTestTreeNode.nul',{$ENDIF}InNodeCount{*2});
+     plus.init({$IFDEF DEBUGBUILD}'TTestTreeNode.plus',{$ENDIF}InNodeCount{*2});
+     minus.init({$IFDEF DEBUGBUILD}'TTestTreeNode.minus',{$ENDIF}InNodeCount{*2});
 end;
 destructor TTestTreeNode.done;
 begin
@@ -230,7 +230,7 @@ begin
                            end
                        else
                            begin
-                           GDBGetMem({$IFDEF DEBUGBUILD}'{A1E9743F-63CF-4C8F-8C40-57CCDC24F8CF}',{$ENDIF}pointer(result),sizeof(TEntTreeNode));
+                           GDBGetMem({$IFDEF DEBUGBUILD}'TEntTreeNode',{$ENDIF}pointer(result),sizeof(TEntTreeNode));
                            result.initnul;
                            end;
      result.BoundingBox:=aabb;
@@ -330,7 +330,7 @@ begin
            pobj:=entitys.iterate(ir);
      until pobj=nil;
      end;
-     entcount:=ta[0].nul.Count;
+     {entcount:=ta[0].nul.Count;
      dentcount:=abs(ta[0].plus.Count-ta[0].minus.Count);
      imin:=-1;
      for i:=1 to 2 do
@@ -350,9 +350,9 @@ begin
                                                  imin:=i;
                                             end;
                                        end;
-     end;
+     end;}
 
-     if imin=-1 then
+     //if imin=-1 then
      begin
 
      tv:=vertexsub(aabb.RTF,aabb.LBN);

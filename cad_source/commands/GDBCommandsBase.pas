@@ -1176,7 +1176,9 @@ begin
   depth:=0;
   PrintTreeNode(@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,depth);
   shared.HistoryOutStr('Total entities: '+inttostr(GDB.GetCurrentROOT.ObjArray.count));
-  shared.HistoryOutStr('Tree depth  : '+inttostr(depth));
+  shared.HistoryOutStr('Fact tree depth: '+inttostr(depth));
+  shared.HistoryOutStr('Max tree depth: '+inttostr(SysVar.RD.RD_SpatialNodesDepth^));
+  shared.HistoryOutStr('Max in node entities: '+inttostr(SysVar.RD.RD_SpatialNodeCount^));
 
   result:=cmd_ok;
 end;

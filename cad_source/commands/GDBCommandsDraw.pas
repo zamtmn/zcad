@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  {gmap,}UGDBEntTree,gvector,garrayutils,{gutil,}UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  {gmap,}UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,
@@ -317,6 +317,10 @@ TGDBNameLess=class
                end;
 devcoordarray=specialize TVector<tdevcoord>;
 devnamearray=specialize TVector<tdevname>;
+PointOnCurve3DPropArray=specialize TVector<GDBDouble>;
+LessDouble=specialize TLess<double>;
+PointOnCurve3DPropArraySort=specialize TOrderingArrayUtils<PointOnCurve3DPropArray, GDBDouble,LessDouble>;
+MapPointOnCurve3DPropArray=specialize TMap<PGDBObjLine,PointOnCurve3DPropArray, lessppi>;
 devcoordsort=specialize TOrderingArrayUtils<devcoordarray, tdevcoord, TGDBVertexLess>;
 devnamesort=specialize TOrderingArrayUtils<devnamearray, tdevname, TGDBNameLess>;
 var
@@ -3338,18 +3342,42 @@ begin
     result:=0;
 
 end;
-procedure CheckIntersection(pl1,pl2:PGDBObjLine;var linelinetests,intersectcount:integer);
+procedure PlacePoint(const point:GDBVertex);inline;
+var
+    PCreatedGDBPoint:PGDBobjPoint;
+begin
+    PCreatedGDBPoint := GDBPointer(gdb.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBPointID,gdb.GetCurrentROOT));
+    PCreatedGDBPoint^.P_insertInOCS:=point;
+    PCreatedGDBPoint^.vp.layer:=sysvar.DWG.DWG_CLayer^;
+    PCreatedGDBPoint^.FormatEntity(gdb.GetCurrentDWG^);
+end;
+
+procedure CheckIntersection(pl1,pl2:PGDBObjLine;var linelinetests,intersectcount:integer;pparray:PGDBPoint3dArray;LinesMap:MapPointOnCurve3DPropArray;var lineiterator:MapPointOnCurve3DPropArray.TIterator);
 var
     IP:Intercept3DProp;
+    lineiterator2:MapPointOnCurve3DPropArray.TIterator;
 begin
       inc(linelinetests);
       IP:=pl2^.IsIntersect_Line(pl1^.CoordInWCS.lBegin,pl1^.CoordInWCS.lEnd);
       if ip.isintercept then
       begin
            inc(intersectcount);
+           pparray^.Add(@ip.interceptcoord);
+           if lineiterator=nil then
+                                   begin
+                                        lineiterator:=LinesMap.InsertAndGetIterator(pl1,PointOnCurve3DPropArray.Create);
+                                   end;
+           lineiterator.value.PushBack(IP.t1);
+
+           lineiterator2:=LinesMap.Find(pl2);
+           if lineiterator2=nil then
+                                   begin
+                                        lineiterator2:=LinesMap.InsertAndGetIterator(pl2,PointOnCurve3DPropArray.Create);
+                                   end;
+           lineiterator2.value.PushBack(IP.t2);
       end;
 end;
-procedure FindLineIntersectionsInNode(pl:PGDBObjLine;PNode:PTEntTreeNode;var lineAABBtests,linelinetests,intersectcount:integer);
+procedure FindLineIntersectionsInNode(pl:PGDBObjLine;PNode:PTEntTreeNode;var lineAABBtests,linelinetests,intersectcount:integer;pparray:PGDBPoint3dArray;LinesMap:MapPointOnCurve3DPropArray;var lineiterator:MapPointOnCurve3DPropArray.TIterator);
 var
     ir1:itrec;
     pl1:PGDBObjLine;
@@ -3360,60 +3388,148 @@ begin
            pl1:=PNode^.nul.beginiterate(ir1);
            if pl1<>nil then
            repeat
-                 CheckIntersection(pl,pl1,linelinetests,intersectcount);
+                 CheckIntersection(pl,pl1,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
 
                  pl1:=PNode^.nul.iterate(ir1);
            until pl1=nil;
 
            if PNode^.pplusnode<>nil then
-                                        FindLineIntersectionsInNode(pl,PNode^.pplusnode,lineAABBtests,linelinetests,intersectcount);
+                                        FindLineIntersectionsInNode(pl,PNode^.pplusnode,lineAABBtests,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
            if PNode^.pminusnode<>nil then
-                                        FindLineIntersectionsInNode(pl,PNode^.pminusnode,lineAABBtests,linelinetests,intersectcount);
+                                        FindLineIntersectionsInNode(pl,PNode^.pminusnode,lineAABBtests,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
 
      end;
 end;
 
-procedure FindAllIntersectionsInNode(PNode:PTEntTreeNode;var lineAABBtests,linelinetests,intersectcount:integer);
+procedure FindAllIntersectionsInNode(PNode:PTEntTreeNode;var lineAABBtests,linelinetests,intersectcount:integer;pparray:PGDBPoint3dArray;LinesMap:MapPointOnCurve3DPropArray);
 var
     ir1,ir2:itrec;
     pl1,pl2:PGDBObjLine;
+    lineiterator:MapPointOnCurve3DPropArray.TIterator;
 begin
      pl1:=PNode^.nul.beginiterate(ir1);
      if pl1<>nil then
      repeat
+           lineiterator:=LinesMap.Find(pl1);
            ir2:=ir1;
            pl2:=PNode^.nul.iterate(ir2);
            if pl2<>nil then
            repeat
-                 CheckIntersection(pl1,pl2,linelinetests,intersectcount);
+                 CheckIntersection(pl1,pl2,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
 
                  pl2:=PNode^.nul.iterate(ir2);
            until pl2=nil;
 
            if PNode^.pplusnode<>nil then
-                                        FindLineIntersectionsInNode(pl1,PNode^.pplusnode,lineAABBtests,linelinetests,intersectcount);
+                                        FindLineIntersectionsInNode(pl1,PNode^.pplusnode,lineAABBtests,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
            if PNode^.pminusnode<>nil then
-                                        FindLineIntersectionsInNode(pl1,PNode^.pminusnode,lineAABBtests,linelinetests,intersectcount);
+                                        FindLineIntersectionsInNode(pl1,PNode^.pminusnode,lineAABBtests,linelinetests,intersectcount,pparray,LinesMap,lineiterator);
 
            pl1:=PNode^.nul.iterate(ir1);
      until pl1=nil;
      //else
          begin
                if PNode^.pplusnode<>nil then
-                                            FindAllIntersectionsInNode(PNode^.pplusnode,lineAABBtests,linelinetests,intersectcount);
+                                            FindAllIntersectionsInNode(PNode^.pplusnode,lineAABBtests,linelinetests,intersectcount,pparray,LinesMap);
                if PNode^.pminusnode<>nil then
-                                            FindAllIntersectionsInNode(PNode^.pminusnode,lineAABBtests,linelinetests,intersectcount);
+                                            FindAllIntersectionsInNode(PNode^.pminusnode,lineAABBtests,linelinetests,intersectcount,pparray,LinesMap);
          end;
+end;
+procedure PlaceLines(LinesMap:MapPointOnCurve3DPropArray;var lm,lcr:integer);inline;
+var
+    //PCreatedGDBPoint:PGDBobjPoint;
+    lineiterator:MapPointOnCurve3DPropArray.TIterator;
+    pl,PCreatedGDBLine:PGDBObjLine;
+    LC:GDBLineProp;
+    arr:PointOnCurve3DPropArray;
+    point,point2:gdbvertex;
+    i:integer;
+begin
+      lineiterator:=LinesMap.Min;
+      if lineiterator<>nil then
+      repeat
+            arr:=lineiterator.Value;
+            if arr.Size>0 then
+            begin
+                 pl:=lineiterator.key;
+                 PointOnCurve3DPropArraySort.Sort(arr,arr.size);
+                 lc:=pl^.CoordInOCS;
+                 point:=geometry.Vertexmorph(lc.lBegin,lc.lEnd,arr[0]);
+                 pl^.CoordInOCS.lend:=point;
+                 pl^.FormatEntity(gdb.GetCurrentDWG^);
+                 inc(lm);
+                 for i:=1 to arr.size-1 do
+                 begin
+                      point2:=geometry.Vertexmorph(lc.lBegin,lc.lEnd,arr[i]);
+
+                      begin
+                          PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+                          PCreatedGDBLine^.vp:=pl^.vp;
+                          PCreatedGDBLine^.CoordInOCS.lbegin:=point;
+                          PCreatedGDBLine^.CoordInOCS.lend:=point2;
+                          PCreatedGDBLine^.FormatEntity(gdb.GetCurrentDWG^);
+                          inc(lcr);
+                      end;
+
+                      point:=point2;
+                 end;
+
+                 PCreatedGDBLine := GDBPointer(gdb.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+                 PCreatedGDBLine^.vp:=pl^.vp;
+                 PCreatedGDBLine^.CoordInOCS.lbegin:=point;
+                 PCreatedGDBLine^.CoordInOCS.lend:=lc.lEnd;
+                 PCreatedGDBLine^.FormatEntity(gdb.GetCurrentDWG^);
+                 inc(lcr);
+
+
+            end;
+      until not lineiterator.next;
+     //for i:=0 to LinesMap.
+    {PCreatedGDBPoint := GDBPointer(gdb.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBPointID,gdb.GetCurrentROOT));
+    PCreatedGDBPoint^.P_insertInOCS:=point;
+    PCreatedGDBPoint^.FormatEntity(gdb.GetCurrentDWG^);}
 end;
 function FindAllIntersections_com(operands:pansichar):GDBInteger;
 var
-    lineAABBtests,linelinetests,intersectcount:integer;
+    lineAABBtests,linelinetests,intersectcount,lm,lc:integer;
+    parray:GDBPoint3dArray;
+    pv:PGDBVertex;
+    ir:itrec;
+    LinesMap:MapPointOnCurve3DPropArray;
+    //PointOnCurve3DPropArray=specialize TVector<PointOnCurve3DProp>;
+    //MapPointOnCurve3DPropArray=specialize TMap<PGDBObjLine,PointOnCurve3DPropArray, lessppi>;
 begin
      intersectcount:=0;
      linelinetests:=0;
      lineAABBtests:=0;
-     if assigned(StartLongProcessProc) then StartLongProcessProc(10,'Search intersections');
-     FindAllIntersectionsInNode(@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,lineAABBtests,linelinetests,intersectcount);
+     lm:=0;
+     lc:=0;
+     parray.init({$IFDEF DEBUGBUILD}'{527C1C8F-E832-43F9-B8C4-2733AD9EAF67}',{$ENDIF}10000);
+     LinesMap:=MapPointOnCurve3DPropArray.Create;
+     if assigned(StartLongProcessProc) then StartLongProcessProc(10,'Search intersections and storing data');
+     FindAllIntersectionsInNode(@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,lineAABBtests,linelinetests,intersectcount,@parray,LinesMap);
+     if assigned(EndLongProcessProc) then EndLongProcessProc;
+
+     if assigned(StartLongProcessProc) then StartLongProcessProc(10,'Placing points');
+       pv:=parray.beginiterate(ir);
+       if pv<>nil then
+       repeat
+             PlacePoint(pv^);
+             pv:=parray.iterate(ir);
+       until pv=nil;
+     if assigned(EndLongProcessProc) then EndLongProcessProc;
+
+     if assigned(StartLongProcessProc) then StartLongProcessProc(10,'Cutting lines');
+      PlaceLines(LinesMap,lm,lc);
+     if assigned(EndLongProcessProc) then EndLongProcessProc;
+     shared.HistoryOutStr('Lines modified: '+inttostr(lm));
+     shared.HistoryOutStr('Lines created: '+inttostr(lc));
+
+
+
+     if assigned(StartLongProcessProc) then StartLongProcessProc(10,'Freeing memory');
+     parray.done;
+     LinesMap.Free;
      if assigned(EndLongProcessProc) then EndLongProcessProc;
      shared.HistoryOutStr('Line-AABB tests count: '+inttostr(lineAABBtests));
      shared.HistoryOutStr('Line-Line tests count: '+inttostr(linelinetests));

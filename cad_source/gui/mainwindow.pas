@@ -1840,7 +1840,7 @@ begin
 
                           //LineWbox.items.Add(rsDifferent);
                           LineWbox.OnChange:=ChangeCLineW;
-                          LineWbox.OnDropDown:=DropDownColor;
+                          LineWbox.OnGetItems{OnDropDown}:=DropDownColor;
                           LineWbox.OnCloseUp:=DropUpColor;
                           LineWbox.AutoSize:=false;
                           LineWbox.OnMouseLeave:=self.setnormalfocus;
@@ -1879,7 +1879,7 @@ begin
                           ColorBox.items.AddObject(rsSelectColor,TObject(ColorBoxSelColor));
                           ColorBox.ItemIndex:=0;
                           ColorBox.OnChange:=ChangeCColor;
-                          ColorBox.OnDropDown:=DropDownColor;
+                          ColorBox.OnGetItems{OnDropDown}:=DropDownColor;
                           ColorBox.OnCloseUp:=DropUpColor;
                           ColorBox.AutoSize:=false;
                           ColorBox.OnMouseLeave:=self.setnormalfocus;
@@ -1913,7 +1913,7 @@ begin
                           //LTypeBox.items.AddObject(rsSelectColor,TObject(ColorBoxSelColor));
                           LTypeBox.ItemIndex:=0;
                           LTypeBox.OnChange:=ChangeLType;
-                          LTypeBox.OnDropDown:=DropDownLType;
+                          LTypeBox.OnGetItems{OnDropDown}:=DropDownLType;
                           LTypeBox.OnCloseUp:=DropUpLType;
                           LTypeBox.AutoSize:=false;
                           LTypeBox.OnMouseLeave:=self.setnormalfocus;

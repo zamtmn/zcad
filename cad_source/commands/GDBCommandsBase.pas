@@ -1177,7 +1177,8 @@ end;
 
 function RebuildTree_com:GDBInteger;
 var i: GDBInteger;
-    percent:string;
+    percent,apercent:string;
+    cp,ap:single;
     //pv:pGDBObjEntity;
     //ir:itrec;
     depth:integer;
@@ -1209,12 +1210,16 @@ begin
   shared.HistoryOutStr('Total overflow nodes: '+inttostr(tr.OverflowCount));
   shared.HistoryOutStr('Fact tree depth: '+inttostr(tr.MaxDepth));
   shared.HistoryOutStr('by levels:');
+  ap:=0;
   for i:=0 to tr.MaxDepth do
   begin
        shared.HistoryOutStr('level '+inttostr(i));
        shared.HistoryOutStr('  Entities: '+inttostr(tr.PLevelStat^[i].EntCount));
-       str(tr.PLevelStat^[i].EntCount/tr.EntCount*100:2:2,percent);
-       shared.HistoryOutStr('  Entities(%): '+percent);
+       cp:=tr.PLevelStat^[i].EntCount/tr.EntCount*100;
+       ap:=ap+cp;
+       str(cp:2:2,percent);
+       str(ap:2:2,apercent);
+       shared.HistoryOutStr('  Entities(%)[summary]: '+percent+'['+apercent+']');
        shared.HistoryOutStr('  Nodes: '+inttostr(tr.PLevelStat^[i].NodesCount));
        shared.HistoryOutStr('  Overflow nodes: '+inttostr(tr.PLevelStat^[i].OverflowCount));
   end;

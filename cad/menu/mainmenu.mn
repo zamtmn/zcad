@@ -429,6 +429,10 @@ MainMenuItem Debug;
     {
      BUGFILES
     }
+    MenuItem **Other Commands (current debug);
+    {
+     Command Find all intersections (lines only),FindAllIntersections,none,none
+    }
     MenuItem **Utils;
     {
      Command Command list,CommandList,none,none

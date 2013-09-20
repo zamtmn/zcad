@@ -2407,6 +2407,7 @@ begin
                                                            localpm.localpm:=pm;
                                                            localpm.ImageIndex:=II_Dxf;
                                                            FromDirIterator(expandpath('*/sample'),'*.dxf','',@bugfileiterator,nil);
+                                                           FromDirIterator(expandpath('*/sample'),'*.dwg','',@bugfileiterator,nil);
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);
                                                            localpm.localpm:=nil;

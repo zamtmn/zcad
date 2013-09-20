@@ -1245,7 +1245,7 @@ begin
          //shared.HistoryOutStr(format(' Size in bytes: %d',[a]));
          a:=objbitreader.byte+a;
          ot:=DWG_OBJECT_TYPE(objbitreader.BitRead_bs);//Object type
-         shared.HistoryOutStr(format(' Object type: %x(%d), Name: %s',[ot,ot,DWGObjectName(ot)]));
+         //shared.HistoryOutStr(format(' Object type: %x(%d), Name: %s',[ot,ot,DWGObjectName(ot)]));
          if ot=DWG_TYPE_LINE then
          begin
          objbitreader.BitRead_rl;//Size of object data in bits (number of bits before the handles), or the “endbit” of the pre-handles section.

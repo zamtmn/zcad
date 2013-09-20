@@ -3348,7 +3348,7 @@ var
 begin
     PCreatedGDBPoint := GDBPointer(gdb.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBPointID,gdb.GetCurrentROOT));
     PCreatedGDBPoint^.P_insertInOCS:=point;
-    PCreatedGDBPoint^.vp.layer:=sysvar.DWG.DWG_CLayer^;
+    PCreatedGDBPoint^.vp.layer:=gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer;
     PCreatedGDBPoint^.FormatEntity(gdb.GetCurrentDWG^);
 end;
 

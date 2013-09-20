@@ -1378,6 +1378,7 @@ begin
                              pobj := CreateInitObjFree(GDBLineID,nil);
                              PGDBObjLine(pobj)^.CoordInOCS.lBegin:=v1;
                              PGDBObjLine(pobj)^.CoordInOCS.lEnd:=v2;
+                             PGDBObjLine(pobj)^.vp.Layer:=gdb.GetCurrentDWG^.LayerTable.GetSystemLayer;
                              gdb.GetCurrentRoot^.AddMi(@pobj);
                              PGDBObjEntity(pobj)^.BuildGeometry(gdb.GetCurrentDWG^);
                              PGDBObjEntity(pobj)^.formatEntity(gdb.GetCurrentDWG^);

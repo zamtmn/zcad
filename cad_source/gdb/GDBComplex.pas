@@ -68,7 +68,7 @@ procedure GDBObjComplex.BuildGeometry;
 begin
      //ConstObjArray.ObjTree.done;
      ConstObjArray.ObjTree.Clear;
-     ConstObjArray.ObjTree:=createtree(ConstObjArray,vp.BoundingBox,@ConstObjArray.ObjTree,0,nil,TND_Root)^;
+     ConstObjArray.ObjTree:=createtree(ConstObjArray,vp.BoundingBox,@ConstObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
 end;
 
 function GDBObjComplex.onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;

@@ -803,7 +803,7 @@ begin
                   currentcoord:=coord;
                   PTCableType(pvd^.data.Instance)^:=TCT_ShleifOPS;
                   lsave:=SysVar.dwg.DWG_CLayer^;
-                  SysVar.dwg.DWG_CLayer^:=0;
+                  SysVar.dwg.DWG_CLayer^:=gdb.GetCurrentDWG.LayerTable.GetSystemLayer;
 
                   gdb.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,'DEVICE_CABLE_MARK');
                   pointer(pv):=addblockinsert(@GDB.GetCurrentDWG.ConstructObjRoot,@{gdb.GetCurrentROOT.ObjArray}GDB.GetCurrentDWG.ConstructObjRoot.ObjArray,currentcoord, 1, 0,'DEVICE_CABLE_MARK');

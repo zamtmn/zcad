@@ -401,12 +401,12 @@ begin
      //gdb.GetCurrentDWG.ObjRoot.format;//FormatAfterEdit;
      //gdb.GetCurrentROOT.sddf
      //gdb.GetCurrentROOT.format;
-     gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
+     gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
      gdb.GetCurrentROOT.FormatEntity(gdb.GetCurrentDWG^);
      if assigned(updatevisibleproc) then updatevisibleproc;
      if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
                                          begin
-                                         gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
+                                         gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
                                          isOpenGLError;
                                          if assigned(redrawoglwndproc) then redrawoglwndproc;
                                          end;
@@ -1155,17 +1155,42 @@ begin
      if assigned(pnode.pminusnode) then
                        PrintTreeNode(pnode.pminusnode,depth);
 end;
+procedure GetTreeStat(pnode:PTEntTreeNode;depth:integer;var tr:TTreeStatistik);
+begin
+     inc(tr.NodesCount);
+     inc(tr.EntCount,pnode^.nul.Count);
+     if depth>tr.MaxDepth then
+                              tr.MaxDepth:=depth;
+     if pnode^.nul.Count>GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^) then
+                                                                            begin
+                                                                                 inc(tr.OverflowCount);
+                                                                                 inc(tr.PLevelStat^[depth].OverflowCount);
+                                                                            end;
+     inc(tr.PLevelStat^[depth].NodesCount);
+     inc(tr.PLevelStat^[depth].EntCount,pnode^.nul.Count);
+
+     if assigned(pnode.pplusnode) then
+                       GetTreeStat(pnode.pplusnode,depth+1,tr);
+     if assigned(pnode.pminusnode) then
+                       GetTreeStat(pnode.pminusnode,depth+1,tr);
+end;
 
 function RebuildTree_com:GDBInteger;
-var //i: GDBInteger;
+var i: GDBInteger;
+    percent:string;
     //pv:pGDBObjEntity;
     //ir:itrec;
     depth:integer;
+    tr:TTreeStatistik;
 begin
+  shared.HistoryOutStr('Total entities: '+inttostr(GDB.GetCurrentROOT.ObjArray.count));
+  shared.HistoryOutStr('Max tree depth: '+inttostr(SysVar.RD.RD_SpatialNodesDepth^));
+  shared.HistoryOutStr('Max in node entities: '+inttostr(GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^)));
+  shared.HistoryOutStr('Create tree...');
   if assigned(StartLongProcessProc) then StartLongProcessProc(gdb.GetCurrentROOT.ObjArray.count,'Rebuild drawing spatial');
-  gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,0,nil,TND_Root)^;
+  gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
   if assigned(EndLongProcessProc) then EndLongProcessProc;
-
+  shared.HistoryOutStr('Done');
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
   GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
@@ -1174,12 +1199,26 @@ begin
   clearcp;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   depth:=0;
-  PrintTreeNode(@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,depth);
-  shared.HistoryOutStr('Total entities: '+inttostr(GDB.GetCurrentROOT.ObjArray.count));
-  shared.HistoryOutStr('Fact tree depth: '+inttostr(depth));
-  shared.HistoryOutStr('Max tree depth: '+inttostr(SysVar.RD.RD_SpatialNodesDepth^));
-  shared.HistoryOutStr('Max in node entities: '+inttostr(SysVar.RD.RD_SpatialNodeCount^));
+  //PrintTreeNode(@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,depth);
 
+  tr:=MakeTreeStatisticRec(SysVar.RD.RD_SpatialNodesDepth^);
+  GetTreeStat(@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,depth,tr);
+  shared.HistoryOutStr('as a result:');
+  shared.HistoryOutStr('Total entities: '+inttostr(tr.EntCount));
+  shared.HistoryOutStr('Total nodes: '+inttostr(tr.NodesCount));
+  shared.HistoryOutStr('Total overflow nodes: '+inttostr(tr.OverflowCount));
+  shared.HistoryOutStr('Fact tree depth: '+inttostr(tr.MaxDepth));
+  shared.HistoryOutStr('by levels:');
+  for i:=0 to tr.MaxDepth do
+  begin
+       shared.HistoryOutStr('level '+inttostr(i));
+       shared.HistoryOutStr('  Entities: '+inttostr(tr.PLevelStat^[i].EntCount));
+       str(tr.PLevelStat^[i].EntCount/tr.EntCount*100:2:2,percent);
+       shared.HistoryOutStr('  Entities(%): '+percent);
+       shared.HistoryOutStr('  Nodes: '+inttostr(tr.PLevelStat^[i].NodesCount));
+       shared.HistoryOutStr('  Overflow nodes: '+inttostr(tr.PLevelStat^[i].OverflowCount));
+  end;
+  KillTreeStatisticRec(tr);
   result:=cmd_ok;
 end;
 procedure polytest_com_CommandStart(Operands:pansichar);

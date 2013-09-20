@@ -22,8 +22,19 @@ interface
 uses
     {math,}graphics,
     zcadsysvars,geometry,UGDBVisibleOpenArray,GDBEntity,gdbase,gdbasetypes,log,memman,OGLSpecFunc;
+const
+     IninialNodeDepth=-1;
 type
 {EXPORT+}
+         TTreeLevelStatistik=record
+                                   NodesCount,EntCount,OverflowCount:GDBInteger;
+                             end;
+         PTTreeLevelStatistikArray=^TTreeLevelStatistikArray;
+         TTreeLevelStatistikArray=Array [0..0] of  TTreeLevelStatistik;
+         TTreeStatistik=record
+                              NodesCount,EntCount,OverflowCount,MaxDepth:GDBInteger;
+                              PLevelStat:PTTreeLevelStatistikArray;
+                        end;
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
          PTEntTreeNode=^TEntTreeNode;
          TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -65,8 +76,21 @@ TTestTreeArray=array [0..2] of TTestTreeNode;
   //_InNodeCount=10;
   {_NodeDepth=16;}
 function createtree(var entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
+function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
 procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInteger});
+function MakeTreeStatisticRec(treedepth:integer):TTreeStatistik;
+procedure KillTreeStatisticRec(var tr:TTreeStatistik);
 implementation
+function MakeTreeStatisticRec(treedepth:integer):TTreeStatistik;
+begin
+     fillchar(result,sizeof(TTreeStatistik),0);
+     gdbgetmem(result.PLevelStat,(treedepth+1)*sizeof(TTreeLevelStatistik));
+end;
+procedure KillTreeStatisticRec(var tr:TTreeStatistik);
+begin
+     gdbfreemem(tr.PLevelStat);
+end;
+
 procedure treerender(var Node:TEntTreeNode;var DC:TDrawContext{subrender:GDBInteger});
 //var
    //currtime:TDateTime;
@@ -202,6 +226,13 @@ begin
      plus.ClearAndDone;
      minus.ClearAndDone;
 end;
+function GetInNodeCount(_InNodeCount:GDBInteger):GDBInteger;
+begin
+     if _InNodeCount>0 then
+                           result:=_InNodeCount
+                       else
+                           result:=500;
+end;
 
 function createtree(var entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
 var pobj:PGDBObjEntity;
@@ -216,12 +247,7 @@ var pobj:PGDBObjEntity;
 begin
      //_InNodeCount:=entitys.GetRealCount div {_NodeDepth + 1}(nodedepth+2);
      //if _InNodeCount<500 then _InNodeCount:=500;
-
-     if SysVar.RD.RD_SpatialNodeCount^>0 then
-                                             _InNodeCount:=SysVar.RD.RD_SpatialNodeCount^
-                                         else
-                                             _InNodeCount:=500;
-
+     _InNodeCount:=GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^);
      inc(nodedepth);
      if PRootNode<>nil then
                            begin

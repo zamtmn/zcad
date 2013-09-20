@@ -135,7 +135,13 @@ end;
 function GDBLayerArray.GetCurrentLayer;
 begin
      if assigned(sysvar.dwg.DWG_CLayer) then
-                                            result:={getelement}(sysvar.dwg.DWG_CLayer^)
+                                            begin
+                                            if assigned(sysvar.dwg.DWG_CLayer^) then
+                                                                                    result:={getelement}(sysvar.dwg.DWG_CLayer^)
+                                                                                else
+                                                                                    result:=getsystemlayer;
+
+                                            end
                                         else
                                             result:=getsystemlayer;
 end;

@@ -1840,7 +1840,7 @@ begin
 
                           //LineWbox.items.Add(rsDifferent);
                           LineWbox.OnChange:=ChangeCLineW;
-                          LineWbox.OnGetItems{OnDropDown}:=DropDownColor;
+                          LineWbox.OnDropDown:=DropDownColor;
                           LineWbox.OnCloseUp:=DropUpColor;
                           LineWbox.AutoSize:=false;
                           LineWbox.OnMouseLeave:=self.setnormalfocus;
@@ -1879,7 +1879,7 @@ begin
                           ColorBox.items.AddObject(rsSelectColor,TObject(ColorBoxSelColor));
                           ColorBox.ItemIndex:=0;
                           ColorBox.OnChange:=ChangeCColor;
-                          ColorBox.OnGetItems{OnDropDown}:=DropDownColor;
+                          ColorBox.OnDropDown:=DropDownColor;
                           ColorBox.OnCloseUp:=DropUpColor;
                           ColorBox.AutoSize:=false;
                           ColorBox.OnMouseLeave:=self.setnormalfocus;
@@ -1913,7 +1913,7 @@ begin
                           //LTypeBox.items.AddObject(rsSelectColor,TObject(ColorBoxSelColor));
                           LTypeBox.ItemIndex:=0;
                           LTypeBox.OnChange:=ChangeLType;
-                          LTypeBox.OnGetItems{OnDropDown}:=DropDownLType;
+                          LTypeBox.OnDropDown:=DropDownLType;
                           LTypeBox.OnCloseUp:=DropUpLType;
                           LTypeBox.AutoSize:=false;
                           LTypeBox.OnMouseLeave:=self.setnormalfocus;
@@ -2879,13 +2879,31 @@ procedure MainForm.DropDownLType(Sender:Tobject);
 var
    i:integer;
 begin
-     tcombobox(Sender).clear;
+     //tcombobox(Sender).ItemIndex:=-1;
+
+     //If use  Items.Clear and add items in GTK2 combobox close on mouseup
+
+     //Add items if need
+     if tcombobox(Sender).Items.Count<gdb.GetCurrentDWG.LTypeStyleTable.Count then
+     begin
+           for i:=0 to gdb.GetCurrentDWG.LTypeStyleTable.Count-tcombobox(Sender).Items.Count-1 do
+           begin
+                tcombobox(Sender).AddItem('',nil);
+           end;
+     end;
+     //Remove items if need
+     if tcombobox(Sender).Items.Count>gdb.GetCurrentDWG.LTypeStyleTable.Count then
+     begin
+           for i:=0 to tcombobox(Sender).Items.Count-gdb.GetCurrentDWG.LTypeStyleTable.Count-1 do
+           begin
+                tcombobox(Sender).Items.Delete(1);
+           end;
+     end;
+     //Correct items
      for i:=0 to gdb.GetCurrentDWG.LTypeStyleTable.Count-1 do
      begin
-          tcombobox(Sender).AddItem('',tobject(gdb.GetCurrentDWG.LTypeStyleTable.getelement(i)));
+          tcombobox(Sender).Items.Objects[i]:=tobject(gdb.GetCurrentDWG.LTypeStyleTable.getelement(i));
      end;
-     //OldColor:=tcombobox(Sender).ItemIndex;
-     tcombobox(Sender).ItemIndex:=-1;
 end;
 procedure MainForm.DropUpColor(Sender:Tobject);
 begin

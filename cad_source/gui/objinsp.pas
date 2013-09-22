@@ -894,6 +894,7 @@ begin
                        //mmnamecol:=x;
                        namecol:=x;
                        repaint;
+                       updateeditorBounds;
                        exit;
                   end;
 

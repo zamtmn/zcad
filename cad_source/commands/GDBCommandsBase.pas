@@ -1522,6 +1522,10 @@ function Zoom_com(Operands:pansichar):GDBInteger;
 begin
      if uppercase(operands)='ALL' then
                                       gdb.GetCurrentDWG.OGLwindow1.ZoomAll
+else if uppercase(operands)='SEL' then
+                                    begin
+                                         gdb.GetCurrentDWG.OGLwindow1.ZoomSel;
+                                    end
 else if uppercase(operands)='IN' then
                                      begin
                                           gdb.GetCurrentDWG.OGLwindow1.DoMouseWheel([],1,point(0,0));

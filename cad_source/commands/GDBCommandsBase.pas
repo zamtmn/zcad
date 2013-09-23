@@ -83,6 +83,7 @@ type
    {procedure startup;
    procedure finalize;}
    var selframecommand:PCommandObjectDef;
+       zoomwindowcommand:PCommandObjectDef;
        ms2objinsp:PCommandObjectDef;
        deselall,selall:pCommandFastObjectPlugin;
 
@@ -626,8 +627,27 @@ procedure FrameEdit_com_CommandStart(Operands:pansichar);
 begin
   //inherited CommandStart;
   GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera));
-  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := true;
   historyoutstr(rscmFirstPoint);
+end;
+function ShowWindow_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
+var //i: GDBInteger;
+  ti: GDBInteger;
+  x,y,w,h:gdbdouble;
+  pv:PGDBObjEntity;
+  ir:itrec;
+  r:TInRect;
+begin
+  result:=mclick;
+  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2 := mc;
+  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame23d := wc;
+  if (button and MZW_LBUTTON)<>0 then
+  begin
+    begin
+      GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := false;
+      GDB.GetCurrentDWG.OGLwindow1.ZoomToVolume(CreateBBFrom2Point(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame13d,GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame23d));
+      commandmanager.executecommandend;
+    end;
+  end;
 end;
 procedure FrameEdit_com_Command_End;
 begin
@@ -640,6 +660,7 @@ begin
   result:=0;
   if (button and MZW_LBUTTON)<>0 then
   begin
+    GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := true;
     historyoutstr(rscmSecondPoint);
     GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1 := mc;
     GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2 := mc;
@@ -1889,7 +1910,9 @@ begin
   CreateCommandFastObjectPlugin(@StoreFrustum_com,'StoreFrustum',CADWG,0).overlay:=true;
   CreateCommandFastObjectPlugin(@TestScript_com,'TestScript',0,0).overlay:=true;
 
-
+  zoomwindowcommand:=CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,@FrameEdit_com_Command_End,nil,nil,@FrameEdit_com_BeforeClick,@ShowWindow_com_AfterClick,nil,nil,'ZoomWindow',0,0);
+  zoomwindowcommand^.overlay:=true;
+  zoomwindowcommand.CEndActionAttr:=0;
 
   //Optionswindow.initxywh('',@mainformn,500,300,400,100,false);
   //Aboutwindow:=TAboutWnd.create(Application);{.initxywh('',@mainform,500,200,200,180,false);}

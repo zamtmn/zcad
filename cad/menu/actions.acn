@@ -33,6 +33,7 @@ action ACN_SAVELAYOUT,SaveLayout,#SLay,Save window layout as default,,
 action ACN_DOCKOPT,DockingOptions,#DO,Docking options,,
 action ACN_TEXTWINDOW,TextWindow,#TW,View text window,,F2
 action ACN_ZOOMALL,Zoom(ALL),zoomall.bmp,Zoom All,,HOME
+action ACN_ZOOMSEL,Zoom(SEL),#zsel,Zoom selected,,END
 action ACN_ZOOMIN,Zoom(IN),zoomin.bmp,Zoom in,,PGUP
 action ACN_ZOOMOUT,Zoom(OUT),zoomout.bmp,Zoom out,,PGDN
 action ACN_PANLEFT,Pan(LEFT),panleft.bmp,Pan left,,LEFT

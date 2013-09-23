@@ -176,7 +176,10 @@ type
     procedure _onMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
     procedure _onFastMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
     procedure asynczoomall(Data: PtrInt);
+    procedure asynczoomsel(Data: PtrInt);
+    procedure ZoomToVolume(Volume:GDBBoundingBbox);
     procedure ZoomAll;
+    procedure ZoomSel;
     procedure SetCameraPosZoom(_pos:gdbvertex;_zoom:gdbdouble;finalcalk:gdbboolean);
     procedure RotTo(x0,y0,z0:GDBVertex);
     procedure myKeyPress(var Key: Word; Shift: TShiftState);
@@ -1828,100 +1831,118 @@ begin
                                  end;
   if assigned(updatevisibleproc) then updatevisibleproc;
 end;
-procedure TOGLWnd.ZoomAll;
-const
-     steps=10;
+
+procedure TOGLWnd.ZoomToVolume(Volume:GDBBoundingBbox);
+  const
+       steps=10;
+  var
+    tpz,tzoom: GDBDouble;
+    {fv1,tp,}wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex;
+    camerapos,target:GDBVertex;
+    i:integer;
+    pucommand:pointer;
+  begin
+    if param.projtype = PROJPerspective then
+                                            begin
+                                                 historyout('Zoom: Пока только для паралельной проекции!');
+                                            end;
+    historyout('Zoom: Пока корректно только при виде сверху!');
+
+
+    CalcOptimalMatrix;
+
+    dcsLBN:=InfinityVertex;
+    dcsRTF:=MinusInfinityVertex;
+    wcsLBN:=InfinityVertex;
+    wcsRTF:=MinusInfinityVertex;
+    {tp:=}ProjectPoint(Volume.LBN.x,Volume.LBN.y,Volume.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.RTF.x,Volume.LBN.y,Volume.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.RTF.x,Volume.RTF.y,Volume.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.LBN.x,Volume.RTF.y,Volume.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.LBN.x,Volume.LBN.y,Volume.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.RTF.x,Volume.LBN.y,Volume.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.RTF.x,Volume.RTF.y,Volume.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.LBN.x,Volume.RTF.y,Volume.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+
+    dcsLBN.z:=0;
+    dcsRTF.z:=0;
+    pdwg.myGluUnProject(dcsLBN,wcsLBN);
+    pdwg.myGluUnProject(dcsRTF,wcsRTF);
+
+       if wcsRTF.x<wcsLBN.x then
+                                begin
+                                     tpz:=wcsLBN.x;
+                                     wcsLBN.x:=wcsRTF.x;
+                                     wcsRTF.x:=tpz;
+                                end;
+       if wcsRTF.y<wcsLBN.y then
+                                begin
+                                tpz:=wcsLBN.y;
+                                wcsLBN.y:=wcsRTF.y;
+                                wcsRTF.y:=tpz;
+                                end;
+       if wcsRTF.z<wcsLBN.z then
+                                begin
+                                tpz:=wcsLBN.z;
+                                wcsLBN.z:=wcsRTF.z;
+                                wcsRTF.z:=tpz;
+                                end;
+    if (abs(wcsRTF.x-wcsLBN.x)<eps)and(abs(wcsRTF.y-wcsLBN.y)<eps) then
+                                                                      begin
+                                                                           historyout('ZoomToVolume: Пустой чертеж?');
+                                                                           exit;
+                                                                      end;
+    target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),-(wcsLBN.z+(wcsRTF.z-wcsLBN.z)/2));
+    camerapos:=pdwg.Getpcamera^.prop.point;
+    target:=vertexsub(target,camerapos);
+
+    tzoom:=abs((wcsRTF.x-wcsLBN.x){*pdwg.GetPcamera.prop.xdir.x}/clientwidth);
+    tpz:=abs((wcsRTF.y-wcsLBN.y){*pdwg.GetPcamera.prop.ydir.y}/clientheight);
+
+    //-------with gdb.GetCurrentDWG.UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
+    pucommand:=PDWG^.StoreOldCamerapPos;
+    begin
+
+    if tpz>tzoom then tzoom:=tpz;
+
+    tzoom:=tzoom-PDWG.Getpcamera^.prop.zoom;
+
+    for i:=1 to steps do
+    begin
+    SetCameraPosZoom(vertexadd(camerapos,geometry.VertexMulOnSc(target,i/steps)),PDWG.Getpcamera^.prop.zoom+tzoom{*i}/steps,i=steps);
+    if sysvar.RD.RD_LastRenderTime^<30 then
+                                          sleep(30-sysvar.RD.RD_LastRenderTime^);
+    end;
+    PDWG^.StoreNewCamerapPos(pucommand);
+    calcgrid;
+
+    draw;
+    doCameraChanged;
+    end;
+  end;
+procedure TOGLWnd.ZoomSel;
 var
-  tpz,tzoom: GDBDouble;
-  {fv1,tp,}wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex;
-  camerapos,target:GDBVertex;
-  i:integer;
-  pucommand:pointer;
+   psa:PGDBSelectedObjArray;
+begin
+     psa:=PDWG^.GetSelObjArray;
+     if psa<>nil then
+     begin
+          if psa^.Count=0 then
+                              begin
+                                   historyout('ZoomSel: Ничего не выбрано?');
+                                   exit;
+                              end;
+          zoomtovolume(psa^.getonlyoutbound);
+     end;
+
+end;
+procedure TOGLWnd.ZoomAll;
+var
   proot:PGDBObjGenericSubEntry;
 begin
-  if param.projtype = PROJPerspective then
-                                          begin
-                                               historyout('ZoomAll: Пока только для паралельной проекции!');
-                                          end;
-  historyout('ZoomAll: Пока корректно только при виде сверху!');
-
-
-  CalcOptimalMatrix;
-
   proot:=pdwg.GetCurrentROOT;
-  dcsLBN:=InfinityVertex;
-  dcsRTF:=MinusInfinityVertex;
-  wcsLBN:=InfinityVertex;
-  wcsRTF:=MinusInfinityVertex;
-  {tp:=}ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  {tp:=}ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  {tp:=}ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  {tp:=}ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  {tp:=}ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  {tp:=}ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  {tp:=}ProjectPoint(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  {tp:=}ProjectPoint(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-
-  dcsLBN.z:=0;
-  dcsRTF.z:=0;
-  pdwg.myGluUnProject(dcsLBN,wcsLBN);
-  pdwg.myGluUnProject(dcsRTF,wcsRTF);
-
-     if wcsRTF.x<wcsLBN.x then
-                              begin
-                                   tpz:=wcsLBN.x;
-                                   wcsLBN.x:=wcsRTF.x;
-                                   wcsRTF.x:=tpz;
-                              end;
-     if wcsRTF.y<wcsLBN.y then
-                              begin
-                              tpz:=wcsLBN.y;
-                              wcsLBN.y:=wcsRTF.y;
-                              wcsRTF.y:=tpz;
-                              end;
-     if wcsRTF.z<wcsLBN.z then
-                              begin
-                              tpz:=wcsLBN.z;
-                              wcsLBN.z:=wcsRTF.z;
-                              wcsRTF.z:=tpz;
-                              end;
-     //param.DebugBoundingBbox.LBN:=wcsLBN;
-     //param.DebugBoundingBbox.RTF:=wcsRTF;
-     //param.ShowDebugBoundingBbox:=true;
-  if (abs(wcsRTF.x-wcsLBN.x)<eps)and(abs(wcsRTF.y-wcsLBN.y)<eps) then
-                                                                    begin
-                                                                         historyout('MBMouseDblClk: Пустой чертеж?');
-                                                                         exit;
-                                                                    end;
-
-  //target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),pdwg.Getpcamera^.prop.point.z);
-  target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),-(wcsLBN.z+(wcsRTF.z-wcsLBN.z)/2));
-  camerapos:=pdwg.Getpcamera^.prop.point;
-  target:=vertexsub(target,camerapos);
-
-  tzoom:=abs((wcsRTF.x-wcsLBN.x){*pdwg.GetPcamera.prop.xdir.x}/clientwidth);
-  tpz:=abs((wcsRTF.y-wcsLBN.y){*pdwg.GetPcamera.prop.ydir.y}/clientheight);
-
-  //-------with gdb.GetCurrentDWG.UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
-  pucommand:=PDWG^.StoreOldCamerapPos;
-  begin
-
-  if tpz>tzoom then tzoom:=tpz;
-
-  tzoom:=tzoom-PDWG.Getpcamera^.prop.zoom;
-
-  for i:=1 to steps do
-  begin
-  SetCameraPosZoom(vertexadd(camerapos,geometry.VertexMulOnSc(target,i/steps)),PDWG.Getpcamera^.prop.zoom+tzoom{*i}/steps,i=steps);
-  if sysvar.RD.RD_LastRenderTime^<30 then
-                                        sleep(30-sysvar.RD.RD_LastRenderTime^);
-  end;
-  PDWG^.StoreNewCamerapPos(pucommand);
-  calcgrid;
-
-  draw;
-  doCameraChanged;
-  end;
+  if proot<>nil then
+                    zoomtovolume(proot.vp.BoundingBox);
 end;
 procedure TOGLWnd.SetCameraPosZoom(_pos:gdbvertex;_zoom:gdbdouble;finalcalk:gdbboolean);
 var
@@ -2025,6 +2046,11 @@ procedure TOGLWnd.asynczoomall(Data: PtrInt);
 begin
      ZoomAll();
 end;
+procedure TOGLWnd.asynczoomsel(Data: PtrInt);
+begin
+     ZoomSel();
+end;
+
 procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
 var
    //op:gdbstring;
@@ -2125,7 +2151,10 @@ begin
                                 if mbMiddle=button then
                                   begin
                                        {$IFNDEF DELPHI}
-                                       Application.QueueAsyncCall(asynczoomall, 0);
+                                       if ssShift in shift then
+                                                               Application.QueueAsyncCall(asynczoomsel, 0)
+                                                           else
+                                                               Application.QueueAsyncCall(asynczoomall, 0);
                                        {$ENDIF}
                                        //Pre_MBMouseDblClk(Button,Shift,X, Y);
                                        {exclude(shift,ssdouble);

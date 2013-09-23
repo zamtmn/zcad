@@ -58,6 +58,7 @@ Panel View;
     action ACN_ZOOMIN
     action ACN_ZOOMOUT
     action ACN_ZOOMALL
+    action ACN_ZOOMSEL
     Separator
     action ACN_PANUP
     action ACN_PANDOWN
@@ -187,6 +188,7 @@ MainMenuItem View;
             action ACN_ZOOMIN
             action ACN_ZOOMOUT
             action ACN_ZOOMALL
+            action ACN_ZOOMSEL
            }
         MenuItem Pan;
            {

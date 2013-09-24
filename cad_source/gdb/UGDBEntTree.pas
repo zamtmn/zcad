@@ -25,16 +25,16 @@ uses
 const
      IninialNodeDepth=-1;
 type
+TTreeLevelStatistik=record
+                          NodesCount,EntCount,OverflowCount:GDBInteger;
+                    end;
+PTTreeLevelStatistikArray=^TTreeLevelStatistikArray;
+TTreeLevelStatistikArray=Array [0..0] of  TTreeLevelStatistik;
+TTreeStatistik=record
+                     NodesCount,EntCount,OverflowCount,MaxDepth:GDBInteger;
+                     PLevelStat:PTTreeLevelStatistikArray;
+               end;
 {EXPORT+}
-         TTreeLevelStatistik=record
-                                   NodesCount,EntCount,OverflowCount:GDBInteger;
-                             end;
-         PTTreeLevelStatistikArray=^TTreeLevelStatistikArray;
-         TTreeLevelStatistikArray=Array [0..0] of  TTreeLevelStatistik;
-         TTreeStatistik=record
-                              NodesCount,EntCount,OverflowCount,MaxDepth:GDBInteger;
-                              PLevelStat:PTTreeLevelStatistikArray;
-                        end;
          TNodeDir=(TND_Plus,TND_Minus,TND_Root);
          PTEntTreeNode=^TEntTreeNode;
          TEntTreeNode={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)

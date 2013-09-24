@@ -8,7 +8,7 @@ var
    DWG_CLayer:PGDBLayerProp;
    DWG_CLinew:GDBInteger;
    DWG_CColor:GDBInteger;
-   DWG_CLType:GDBInteger;
+   DWG_CLType:PGDBLtypeProp;
 
    DWG_DrawGrid:GDBBoolean;
    DWG_SnapGrid:GDBBoolean;

@@ -21,7 +21,7 @@ unit GDBManager;
 
 
 interface
-uses gdbentityfactory,zcadsysvars,gdbellipse,GDB3DFace,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
+uses ugdbltypearray,gdbentityfactory,zcadsysvars,gdbellipse,GDB3DFace,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
      UGDBDescriptor,varmandef,gdbobjectsconstdef,
      UGDBVisibleOpenArray,GDBGenericSubEntry,gdbEntity,GDBCable,GDBDevice,
      GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMText,GDBLine,
@@ -44,11 +44,11 @@ function getgdb: GDBPointer; export;
 //procedure GDBFreeMemGDBObject(source:PGDBproperty);export;
 //procedure GDBGetMemGDBObject(source:PGDBproperty);export;
 function GetSelOjbj:TSelObjDesk;
-procedure GDBObjSetEntityProp(var pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;color:GDBInteger;LW: GDBSmallint); export;
-procedure GDBObjSetLineProp(var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;color:GDBInteger;LW: GDBSmallint; p1, p2: GDBvertex); export;
+procedure GDBObjSetEntityProp(var pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint); export;
+procedure GDBObjSetLineProp(var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p1, p2: GDBvertex); export;
 procedure GDBObjLineInit(own:PGDBObjGenericSubEntry;var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LW: GDBSmallint; p1, p2: GDBvertex); export;
 procedure GDBObjCircleInit(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble); export;
-procedure GDBObjSetCircleProp(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;color:GDBInteger;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble); export;
+procedure GDBObjSetCircleProp(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble); export;
 var a: GDBObjLine;
   p: gdbvertex;
 implementation
@@ -75,16 +75,17 @@ begin
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
 end;
-procedure GDBObjSetEntityProp(var pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;color:GDBInteger;LW: GDBSmallint);
+procedure GDBObjSetEntityProp(var pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint);
 begin
      pobjent^.vp.Layer:=layeraddres;
+     pobjent^.vp.LineType:=LTAddres;
      pobjent^.vp.LineWeight:=LW;
      pobjent^.vp.color:=color;
 end;
 
-procedure GDBObjSetLineProp(var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;color:GDBInteger;LW: GDBSmallint; p1, p2: GDBvertex);
+procedure GDBObjSetLineProp(var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p1, p2: GDBvertex);
 begin
-  GDBObjSetEntityProp(pobjline,layeraddres,color,LW);
+  GDBObjSetEntityProp(pobjline,layeraddres,LTAddres,color,LW);
   pobjline.CoordInOCS.lBegin := p1;
   pobjline.CoordInOCS.lEnd := p2;
 end;
@@ -93,9 +94,9 @@ procedure GDBObjLineInit(own:PGDBObjGenericSubEntry;var pobjline: PGDBObjLine;la
 begin
   pobjline^.init(own,layeraddres, LW, p1, p2);
 end;
-procedure GDBObjSetCircleProp(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;color:GDBInteger;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble);
+procedure GDBObjSetCircleProp(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble);
 begin
-     GDBObjSetEntityProp(pobjcircle,layeraddres,color,LW);
+     GDBObjSetEntityProp(pobjcircle,layeraddres,LTAddres,color,LW);
      pobjcircle.Local.p_insert := p;
      pobjcircle.Radius := rr;
 end;

@@ -800,7 +800,7 @@ var pv:pGDBObjEntity;
     ir:itrec;
 begin
   if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
-  plt:=gdb.GetCurrentDWG.LTypeStyleTable.getelement(SysVar.dwg.DWG_CLType^);
+  plt:={gdb.GetCurrentDWG.LTypeStyleTable.getelement}(SysVar.dwg.DWG_CLType^);
   if plt=nil then
                  exit;
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);

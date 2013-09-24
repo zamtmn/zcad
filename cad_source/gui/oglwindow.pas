@@ -1739,13 +1739,16 @@ begin
      commandmanager.sendpoint2command(coord, param.md.mouse, key,nil,pdwg^);
 end;
 procedure TOGLWnd.sendcoordtocommandTraceOn(coord:GDBVertex;key: GDBByte;pos:pos_record);
+var
+   cs:integer;
 begin
      //if commandmanager.pcommandrunning<>nil then
      //if commandmanager.pcommandrunning.IsRTECommand then
+    cs:=commandmanager.CommandsStack.Count;
         commandmanager.sendpoint2command(coord,param.md.mouse,key,pos,pdwg^);
 
      if (key and MZW_LBUTTON)<>0 then
-     if commandmanager.pcommandrunning<>nil then
+     if (commandmanager.pcommandrunning<>nil)and(cs=commandmanager.CommandsStack.Count) then
      begin
            inc(tocommandmcliccount);
            param.ontrackarray.otrackarray[0].worldcoord:=coord;

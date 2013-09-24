@@ -29,7 +29,7 @@ uses
   {FPC}
        math,
   {ZCAD BASE}
-       zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
+       gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
        varmandef, varman,UUnitManager,SysInfo,shared,strmy,
   {ZCAD SIMPLE PASCAL SCRIPT}
@@ -1512,21 +1512,53 @@ begin
      {endif}
 end;
 
-procedure drawLT(canvas:TCanvas;ARect: TRect;ll: Integer;s:string);
+procedure drawLT(canvas:TCanvas;ARect: TRect;ll: Integer;s:string;plt:PGDBLtypeProp);
 var
   y:integer;
   oldw:Integer;
   ts:TTextStyle;
+  geom:ZGLGeometry;
+  vp:GDBObjVisualProp;
+  p1,p2:Gdbvertex;
+    p,pp:PGDBVertex;
+    i:GDBInteger;
 begin
-  if ll>0 then
+  if (ll>0)and(plt.len>0) then
    begin
+        geom.init;
+        ll:=100;
+        p1:=createvertex(ARect.Left,(ARect.Top+ARect.Bottom)/2,0);
+        p2:=createvertex(ll,p1.y,0);
+        vp.LineType:=plt;
+        vp.LineTypeScale:=plt.len*ll/sysvar.DWG.DWG_LTScale^/(2*2);
+        geom.DrawLineWithLT(p1,p2,vp);
         oldw:=canvas.Pen.Width;
         canvas.Pen.Style:=psSolid;
         canvas.Pen.EndCap:=pecFlat;
         y:=(ARect.Top+ARect.Bottom)div 2;
-        canvas.Line(ARect.Left,y,ARect.Left+ll,y);
+        //canvas.Line(ARect.Left,y,ARect.Left+ll,y);
+
+        p:=geom.Lines.PArray;
+        for i:=0 to (geom.Lines.count-1)div 2 do
+        begin
+           pp:=p;
+           inc(p);
+           canvas.Line(round(pp.x),round(pp.y),round(p.x),round(p.y));
+           inc(p);
+        end;
+
+        p:=geom.Points.PArray;
+        for i:=0 to (geom.Points.count-1) do
+        begin
+           canvas.EllipseC(round(pp.x),round(pp.y),1,1);
+           inc(p);
+        end;
+
+
+
         canvas.Pen.Width:=oldw;
         ARect.Left:=ARect.Left+ll+5;
+        geom.done;
    end;
   canvas.TextRect(ARect,ARect.Left,(ARect.Top+ARect.Bottom-canvas.TextHeight(s)) div 2,s);
   //DrawText(canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_SINGLELINE or DT_VCENTER)
@@ -1563,7 +1595,7 @@ begin
                    end;
 
     ARect.Left:=ARect.Left+2;
-    drawLT(TComboBox(Control).canvas,ARect,ll,s);
+    drawLT(TComboBox(Control).canvas,ARect,ll,s,plt);
 end;
 
 procedure MainForm.LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;

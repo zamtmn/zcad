@@ -235,6 +235,8 @@ begin
 end;
 
 function createtree(var entitys:GDBObjEntityOpenArray;AABB:GDBBoundingBbox;PRootNode:PTEntTreeNode;nodedepth:GDBInteger;_root:PTEntTreeNode;dir:TNodeDir):PTEntTreeNode;
+const
+     aabbaxisscale=3;
 var pobj:PGDBObjEntity;
     ir:itrec;
     midlepoint:gdbvertex;
@@ -356,9 +358,9 @@ begin
            pobj:=entitys.iterate(ir);
      until pobj=nil;
      end;
-     {entcount:=ta[0].nul.Count;
+     entcount:=ta[0].nul.Count;
      dentcount:=abs(ta[0].plus.Count-ta[0].minus.Count);
-     imin:=-1;
+     imin:=0;
      for i:=1 to 2 do
      begin
           if ta[i].nul.Count<entcount then
@@ -376,17 +378,17 @@ begin
                                                  imin:=i;
                                             end;
                                        end;
-     end;}
+     end;
 
      //if imin=-1 then
      begin
 
      tv:=vertexsub(aabb.RTF,aabb.LBN);
-     if (tv.x>=tv.y)and(tv.x>=tv.z) then
+     if (tv.x>=tv.y*aabbaxisscale)and(tv.x>=tv.z*aabbaxisscale) then
                                         imin:=0
-else if (tv.y>=tv.x)and(tv.y>=tv.z) then
+else if (tv.y>=tv.x*aabbaxisscale)and(tv.y>=tv.z*aabbaxisscale) then
                                         imin:=1
-else if (tv.z>=tv.x)and(tv.z>=tv.y) then
+else if (tv.z>=tv.x*aabbaxisscale)and(tv.z>=tv.y*aabbaxisscale) then
                                         imin:=2;
      end;
 

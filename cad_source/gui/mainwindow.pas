@@ -1512,7 +1512,7 @@ begin
      {endif}
 end;
 
-procedure drawLT(canvas:TCanvas;ARect: TRect;ll: Integer;s:string;plt:PGDBLtypeProp);
+procedure drawLT(canvas:TCanvas;ARect: TRect;s:string;plt:PGDBLtypeProp);
 var
   y:integer;
   midline:integer;
@@ -1526,13 +1526,16 @@ var
     i:GDBInteger;
     Points: array of TPoint;
     ppoly,poldpoly:PGDBPolyVertex3D;
+    ll: Integer;
+const
+      txtoffset=5;
 begin
-  if (ll>0)and(plt.len>0) then
+  if {(ll>0)and}(plt<>nil)and(plt.len>0) then
    begin
+        ll:=ARect.Left+canvas.TextExtent(s).cx+2*txtoffset;
         geom.init;
-        ll:=100;
-        p1:=createvertex(ARect.Left,(ARect.Top+ARect.Bottom)/2,0);
-        p2:=createvertex(ARect.Left+ll,p1.y,0);
+        p1:=createvertex(ARect.Left+ll,(ARect.Top+ARect.Bottom)/2,0);
+        p2:=createvertex(ARect.Right-txtoffset,p1.y,0);
         vp.LineType:=plt;
         vp.LineTypeScale:=(ll)*(1/plt.len/sysvar.DWG.DWG_LTScale^)/1;
         if (plt^.h=0)and((plt^.shapearray.Count=0)and(plt^.Textarray.Count=0)) then
@@ -1634,7 +1637,7 @@ begin
         end;
 
         canvas.Pen.Width:=oldw;
-        ARect.Left:=ARect.Left+ll+5;
+        //ARect.Left:=ARect.Left+{ll+}txtoffset;
         geom.done;
    end;
   canvas.TextRect(ARect,ARect.Left,(ARect.Top+ARect.Bottom-canvas.TextHeight(s)) div 2,s);
@@ -1672,7 +1675,7 @@ begin
                    end;
 
     ARect.Left:=ARect.Left+2;
-    drawLT(TComboBox(Control).canvas,ARect,ll,s,plt);
+    drawLT(TComboBox(Control).canvas,ARect,{ll,}s,plt);
 end;
 
 procedure MainForm.LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;

@@ -1515,46 +1515,123 @@ end;
 procedure drawLT(canvas:TCanvas;ARect: TRect;ll: Integer;s:string;plt:PGDBLtypeProp);
 var
   y:integer;
+  midline:integer;
   oldw:Integer;
+  n:double;
   ts:TTextStyle;
   geom:ZGLGeometry;
   vp:GDBObjVisualProp;
   p1,p2:Gdbvertex;
-    p,pp:PGDBVertex;
+    p,pp,ppp:PGDBVertex;
     i:GDBInteger;
+    Points: array of TPoint;
+    ppoly,poldpoly:PGDBPolyVertex3D;
 begin
   if (ll>0)and(plt.len>0) then
    begin
         geom.init;
         ll:=100;
         p1:=createvertex(ARect.Left,(ARect.Top+ARect.Bottom)/2,0);
-        p2:=createvertex(ll,p1.y,0);
+        p2:=createvertex(ARect.Left+ll,p1.y,0);
         vp.LineType:=plt;
-        vp.LineTypeScale:=plt.len*ll/sysvar.DWG.DWG_LTScale^/(2*2);
+        vp.LineTypeScale:=(ll)*(1/plt.len/sysvar.DWG.DWG_LTScale^)/1;
+        if (plt^.h=0)and((plt^.shapearray.Count=0)and(plt^.Textarray.Count=0)) then
+                        n:=4
+                    else
+                        n:=1;
+        if plt^.h*vp.LineTypeScale>(ARect.Bottom-ARect.Top)/2 then
+                                                                  n:=trunc(2*(plt^.h*vp.LineTypeScale)/(ARect.Bottom-ARect.Top)+2);
+        vp.LineTypeScale:=vp.LineTypeScale/n;
+        //scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;
+        //num:=Length/(scale*vp.LineType.len)
         geom.DrawLineWithLT(p1,p2,vp);
         oldw:=canvas.Pen.Width;
         canvas.Pen.Style:=psSolid;
         canvas.Pen.EndCap:=pecFlat;
         y:=(ARect.Top+ARect.Bottom)div 2;
+        midline:=ARect.Top+ARect.Bottom;
         //canvas.Line(ARect.Left,y,ARect.Left+ll,y);
 
+        if geom.Lines.count>0 then
+        begin
         p:=geom.Lines.PArray;
         for i:=0 to (geom.Lines.count-1)div 2 do
         begin
            pp:=p;
            inc(p);
-           canvas.Line(round(pp.x),round(pp.y),round(p.x),round(p.y));
+           canvas.Line(round(pp.x),round(midline-pp.y),round(p.x),round(midline-p.y));
            inc(p);
         end;
+        end;
 
+        if geom.Points.count>0 then
+        begin
         p:=geom.Points.PArray;
         for i:=0 to (geom.Points.count-1) do
         begin
-           canvas.EllipseC(round(pp.x),round(pp.y),1,1);
+           //canvas.EllipseC(round(p.x),round(midline-p.y),1,1);
+           Canvas.Pixels[round(p.x),round(midline-p.y)]:=canvas.Pen.Color;
            inc(p);
         end;
+        end;
 
+        if geom.Triangles.count>0 then
+        begin
+        canvas.Brush.Style:=bsSolid;
+        canvas.Brush.Color:=canvas.Pen.Color;
+        p:=geom.Triangles.PArray;
+        for i:=0 to (geom.Triangles.count-1)div 3 do
+        begin
+           pp:=p;
+           inc(p);
+           ppp:=p;
+           inc(p);
+           setlength(points,3);
+           points[0].x:=round(pp.x);
+           points[0].y:=round(midline-pp.y);
+           points[1].x:=round(ppp.x);
+           points[1].y:=round(midline-ppp.y);
+           points[2].x:=round(p.x);
+           points[2].y:=round(midline-p.y);
 
+           canvas.Polygon(Points);
+           inc(p);
+        end;
+        end;
+
+        if geom.SHX.count>1 then
+        begin
+        //oglsm.myglbegin(GL_LINES);
+        ppoly:=geom.SHX.parray;
+        poldpoly:=nil;
+        for i:=0 to geom.SHX.count-1 do
+        begin
+                if ppoly^.count<>0 then
+                                  begin
+                                       if poldpoly<>nil then
+                                        begin
+                                          canvas.Line(round(poldpoly.coord.x),round(midline-poldpoly.coord.y),round(ppoly.coord.x),round(midline-ppoly.coord.y));
+                                        end;
+                                       poldpoly:=ppoly;
+                                       //if ppoly^.count=-1 then
+                                       //                       poldpoly:=nil
+                                  end
+                                  else
+                                  begin
+                                  if poldpoly<>nil then
+                                                       begin
+                                                       canvas.Line(round(poldpoly.coord.x),round(midline-poldpoly.coord.y),round(ppoly.coord.x),round(midline-ppoly.coord.y));
+                                                       poldpoly:=nil;
+                                                       end
+                                                   else
+                                                       poldpoly:=ppoly;
+                                  end;
+                                  //oglsm.myglvertex3dv(pointer(ppoly));
+           //poldpoly:=ppoly;
+           inc(ppoly);
+        end;
+        //oglsm.myglend;
+        end;
 
         canvas.Pen.Width:=oldw;
         ARect.Left:=ARect.Left+ll+5;

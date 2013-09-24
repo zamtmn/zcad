@@ -645,7 +645,9 @@ begin
     begin
       GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := false;
       GDB.GetCurrentDWG.OGLwindow1.ZoomToVolume(CreateBBFrom2Point(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame13d,GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame23d));
+      GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := false;
       commandmanager.executecommandend;
+      result:=cmd_ok;
     end;
   end;
 end;

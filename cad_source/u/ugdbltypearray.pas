@@ -29,6 +29,7 @@ const
      DefaultSHXY=0;
 type
 {EXPORT+}
+TLTMode=(TLTContinous,TLTByLayer,TLTByBlock,TLTLineType);
 PTDashInfo=^TDashInfo;
 TDashInfo=(TDIDash,TDIText,TDIShape);
 TAngleDir=(TACAbs,TACRel,TACUpRight);
@@ -71,6 +72,7 @@ PGDBLtypeProp=^GDBLtypeProp;
 GDBLtypeProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                len:GDBDouble;(*'Length'*)
                h:GDBDouble;(*'Height'*)
+               Mode:TLTMode;
                dasharray:GDBDashInfoArray;(*'DashInfo array'*)
                strokesarray:GDBDoubleArray;(*'Strokes array'*)
                shapearray:GDBShapePropArray;(*'Shape array'*)
@@ -88,6 +90,7 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     constructor initnul;
                     procedure LoadFromFile(fname:GDBString;lm:TLoadOpt);
                     function createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
+                    function GetCurrentLType:PGDBLtypeProp;
                     {function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
                     function GetSystemLayer:PGDBLayerProp;
                     function GetCurrentLayer:PGDBLayerProp;
@@ -100,6 +103,20 @@ uses
     log;
 type
     TSeek=(TSeekInterface,TSeekImplementation);
+function GDBLtypeArray.GetCurrentLType;
+begin
+     if assigned(sysvar.dwg.DWG_CLType) then
+                                            begin
+                                            if assigned(sysvar.dwg.DWG_CLType^) then
+                                                                                    result:={getelement}(sysvar.dwg.DWG_CLType^)
+                                                                                else
+                                                                                    result:=getelement(0);
+
+                                            end
+                                        else
+                                            result:=getelement(0);
+end;
+
 procedure GDBLtypeProp.format;
 var
    PSP:PShapeProp;
@@ -142,9 +159,23 @@ begin
                                       until PTP=nil;
 
 end;
+function N2TLTMode(n:GDBString):TLTMode;
+begin
+     n:=lowercase(n);
+     if n='continuous' then
+                           result:=TLTMode.TLTContinous
+else if n='bylayer' then
+                           result:=TLTMode.TLTByLayer
+else if n='byblock' then
+                           result:=TLTMode.TLTByBlock
+else
+    result:=TLTMode.TLTLineType;
+end;
+
 constructor GDBLtypeProp.init(n:GDBString);
 begin
      inherited;
+     Mode:=N2TLTMode(n);
      len:=0;
      pointer(desk):=nil;
      dasharray.init({$IFDEF DEBUGBUILD}'{9DA63ECC-B244-4EBD-A9AE-AB24F008B526}',{$ENDIF}10,sizeof(TDashInfo));

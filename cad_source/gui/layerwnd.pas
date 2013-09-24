@@ -5,7 +5,7 @@ unit layerwnd;
 interface
 
 uses
-  ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
+  ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, Grids, ComCtrls,LCLIntf,lcltype,
 
@@ -474,7 +474,7 @@ begin
                  Item.SubItems.Add('');
                  Item.SubItems.Add('');
                  Item.SubItems.Add(GetColorNameFromIndex(plp^.color));
-                 Item.SubItems.Add('Continuous');
+                 Item.SubItems.Add({'Continuous'}strproc.Tria_AnsiToUtf8(PGDBLtypeProp(plp^.LT)^.name));
                  Item.SubItems.Add(GetLWNameFromLW(plp^.lineweight));
                  Item.SubItems.Add('');
                  Item.SubItems.Add(strproc.Tria_AnsiToUtf8(plp^.desk));

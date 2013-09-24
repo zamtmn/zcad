@@ -201,7 +201,7 @@ begin
   end;
   end;
 end;
-procedure readvariables(var f: GDBOpenArrayOfByte;var clayer:GDBString;LoadMode:TLoadOpt);
+procedure readvariables(var f: GDBOpenArrayOfByte;var clayer:GDBString;var cltype:GDBString;LoadMode:TLoadOpt);
 var
   byt: GDBByte;
   s: GDBString;
@@ -223,6 +223,13 @@ begin
                                                if LoadMode=TLOLoad then
                                                                        clayer := s;
                                           end
+else if (byt = 9) and (s = '$CELTYPE') then
+                                     begin
+                                          s := f.readGDBString;
+                                          s:=f.readGDBString;
+                                          if LoadMode=TLOLoad then
+                                                                  cltype := s;
+                                     end
 else if (byt = 9) and (s = '$CELWEIGHT') then
                                           begin
                                                s := f.readGDBString;
@@ -552,7 +559,7 @@ procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owne
 var
   byt,ti: GDBInteger;
   error,flags: GDBInteger;
-  s, sname, lname, lcolor, llw,desk: String;
+  s, sname, lname, lcolor, llw,desk,ltn: String;
   tp: PGDBObjBlockdef;
   oo,ll,pp:GDBBoolean;
   blockload:boolean;
@@ -564,7 +571,7 @@ var
 
   nulisread:boolean;
 
-  clayer:GDBString;
+  clayer,cltype:GDBString;
   player:PGDBLayerProp;
   pltypeprop:PGDBLtypeProp;
   dashinfo:TDashInfo;
@@ -582,7 +589,7 @@ begin
   blockload:=false;
   nulisread:=false;
   {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF2000',lp_IncPos);{$ENDIF}
-  readvariables(f,clayer,LoadMode);
+  readvariables(f,clayer,cltype,LoadMode);
   repeat
     gotodxf(f, 0, dxfName_SECTION);
     if not f.notEOF then
@@ -634,6 +641,7 @@ begin
                     ll:=false;
                     pp:=true;
                     desk:='';
+                    ltn:='';
                     while byt <> 0 do
                     begin
                       if not nulisread then
@@ -655,6 +663,10 @@ begin
                             if strtoint(lcolor)<0 then begin
                                                             oo:=false;
                                                        end;
+                          end;
+                        6:
+                          begin
+                            ltn := s;
                           end;
                         370:
                           begin
@@ -710,6 +722,7 @@ begin
                     end;
                     if llw='' then llw:='-1';
                     player:=drawing.LayerTable.addlayer(lname, abs(strtoint(lcolor)), strtoint(llw),oo,ll,pp,desk,LoadMode);
+                    player.LT:=drawing.LTypeStyleTable.getAddres(ltn);
                     if uppercase(lname)=uppercase(clayer)then
                                                              if sysvar.DWG.DWG_CLayer<>nil then
                                                                                                sysvar.DWG.DWG_CLayer^:={drawing.LayerTable.GetIndexByPointer}(player);
@@ -757,6 +770,10 @@ begin
                                                          begin
                                                          end;
                                        end;
+                                     if uppercase(s)=uppercase(cltype)then
+                                                                          if sysvar.DWG.DWG_CLType<>nil then
+                                                                                                            sysvar.DWG.DWG_CLType^:=pltypeprop;
+
                                 end;
                               3:
                                 begin
@@ -1446,6 +1463,15 @@ else if (groupi = 9) and (ucvalues = '$CLAYER') then
       outstream.TXTAddGDBStringEOL('$CLAYER');
       outstream.TXTAddGDBStringEOL('8');
       outstream.TXTAddGDBStringEOL(drawing.LayerTable.GetCurrentLayer^.Name);
+      groups := templatefile.readGDBString;
+      values := templatefile.readGDBString;
+    end
+else if (groupi = 9) and (ucvalues = '$CELTYPE') then
+    begin
+      outstream.TXTAddGDBStringEOL(groups);
+      outstream.TXTAddGDBStringEOL('$CELTYPE');
+      outstream.TXTAddGDBStringEOL('6');
+      outstream.TXTAddGDBStringEOL(drawing.LTypeStyleTable.GetCurrentLType^.Name);
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
     end

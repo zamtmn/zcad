@@ -270,7 +270,7 @@ begin
            IVars.CColor:=sysvar.dwg.DWG_CColor^;
            IVars.CLWeight:=sysvar.dwg.DWG_CLinew^+3;
            ivars.CLayer:={gdb.GetCurrentDWG.LayerTable.getelement}(sysvar.dwg.DWG_CLayer^);
-           ivars.CLType:=gdb.GetCurrentDWG.LTypeStyleTable.getelement(sysvar.dwg.DWG_CLType^);
+           ivars.CLType:={gdb.GetCurrentDWG.LTypeStyleTable.getelement}(sysvar.dwg.DWG_CLType^);
       end
   else
       begin
@@ -1537,13 +1537,13 @@ begin
         p1:=createvertex(ARect.Left+ll,(ARect.Top+ARect.Bottom)/2,0);
         p2:=createvertex(ARect.Right-txtoffset,p1.y,0);
         vp.LineType:=plt;
-        vp.LineTypeScale:=(ll)*(1/plt.len/sysvar.DWG.DWG_LTScale^)/1;
+        vp.LineTypeScale:=(p2.x-p1.x)*(1/plt.len/sysvar.DWG.DWG_LTScale^);
         if (plt^.h=0)and((plt^.shapearray.Count=0)and(plt^.Textarray.Count=0)) then
                         n:=4
                     else
                         n:=1;
         if plt^.h*vp.LineTypeScale>(ARect.Bottom-ARect.Top)/2 then
-                                                                  n:=trunc(2*(plt^.h*vp.LineTypeScale)/(ARect.Bottom-ARect.Top)+2);
+                                                                  n:={trunc}(2+2*(plt^.h*vp.LineTypeScale)/((ARect.Bottom-ARect.Top)/2));
         vp.LineTypeScale:=vp.LineTypeScale/n;
         //scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;
         //num:=Length/(scale*vp.LineType.len)
@@ -3024,8 +3024,8 @@ begin
 end;
 procedure MainForm.ChangeLType(Sender:Tobject);
 var
-   LTIndex,CLTSave,index:Integer;
-   plt:PGDBLtypeProp;
+   LTIndex,index:Integer;
+   CLTSave,plt:PGDBLtypeProp;
    mr:integer;
 begin
      index:=tcombobox(Sender).ItemIndex;
@@ -3036,12 +3036,12 @@ begin
      if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
      then
      begin
-          SysVar.dwg.DWG_CLType^:=LTIndex;
+          SysVar.dwg.DWG_CLType^:={LTIndex}plt;
      end
      else
      begin
           CLTSave:=SysVar.dwg.DWG_CLType^;
-          SysVar.dwg.DWG_CLType^:=LTIndex;
+          SysVar.dwg.DWG_CLType^:={LTIndex}plt;
           commandmanager.ExecuteCommand('SelObjChangeLTypeToCurrent',gdb.GetCurrentDWG);
           SysVar.dwg.DWG_CLType^:=CLTSave;
      end;

@@ -27,6 +27,7 @@ PGDBLayerProp=^GDBLayerProp;
 GDBLayerProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                color:GDBByte;(*saved_to_shd*)(*'Color'*)
                lineweight:GDBSmallint;(*saved_to_shd*)(*'Line weight'*)
+               LT:GDBPointer;(*saved_to_shd*)(*'Line type'*)
                _on:GDBBoolean;(*saved_to_shd*)(*'On'*)
                _lock:GDBBoolean;(*saved_to_shd*)(*'Lock'*)
                _print:GDBBoolean;(*saved_to_shd*)(*'Print'*)
@@ -100,6 +101,7 @@ end;
 constructor GDBLayerProp.Init(N:GDBString; C: GDBInteger; LW: GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString);
 begin
     initnul;
+    LT:=nil;
     SetName(n);
     color := c;
     lineweight := lw;

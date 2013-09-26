@@ -26,6 +26,23 @@ Panel Status;
     variable DWG_HelpGeometryDraw,#AG,Auxiliary graphics (connectivity, direction, etc.)
     variable DWG_SystmGeometryDraw,#SG,System graphics (size, communication, etc. for debugging)
   }
+Panel ObjectSnap;
+  {
+    variable DWG_OSMode|1,#I,Snap to isert point,
+    variable DWG_OSMode|2,#E,Snap to end point,
+    variable DWG_OSMode|4,#M,Snap to middle point,
+    variable DWG_OSMode|8,#1/3,Snap to 1/3 point,
+    variable DWG_OSMode|16,#1/4,Snap to 1/4 point,
+    variable DWG_OSMode|32,#C,Snap to center point,
+    variable DWG_OSMode|64,#Q,Snap to quadrant,
+    variable DWG_OSMode|128,#P,Snap to point,
+    variable DWG_OSMode|256,#In,Snap to intersection,
+    variable DWG_OSMode|512,#P,Snap to perpendicular,
+    variable DWG_OSMode|1024,#T,Snap to tangent,
+    variable DWG_OSMode|2048,#N,Snap to nearest point,
+    variable DWG_OSMode|4096,#AIn,Snap to appartament intersection,
+    variable DWG_OSMode|8192,#E,Snap to paralel,
+  }
 Panel Standart;
   {
     action ACN_NEW

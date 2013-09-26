@@ -62,7 +62,8 @@ type
                   public
                   FVariable:String;{**<Command to manager commands}
                   FBufer:DWord;
-                  procedure AssignToVar(varname:string);
+                  FMask:DWord;
+                  procedure AssignToVar(varname:string;mask:DWord);
                   protected procedure Click; override;
                   end;
     {**Modified TMenuItem}
@@ -364,13 +365,18 @@ begin
                                end;
 end;}
 
-procedure TmyVariableToolButton.AssignToVar(varname:string);
+procedure TmyVariableToolButton.AssignToVar(varname:string;mask:DWord);
 var
    pvd:pvardesk;
+   accum:byte;
+   pv,pm:pbyte;
+   i:integer;
+   tBufer:DWord;
 begin
      if varname='DWG_DrawMode' then
                                      varname:=varname;
      FVariable:=varname;
+     Fmask:=mask;
      pvd:=nil;
      if DWGUnit<>nil then
      pvd:=DWGUnit^.InterfaceVariables.findvardesc(FVariable);
@@ -383,11 +389,27 @@ begin
                                                         begin
                                                              self.Down:=PGDBBoolean(pvd^.data.Instance)^;
                                                         end
+          else if fmask<>0 then
+                               begin
+                                    pv:=pvd^.data.Instance;
+                                    pm:=@Fmask;
+                                    accum:=0;
+                                    for i:=1 to pvd^.data.PTD^.SizeInGDBBytes do
+                                     begin
+                                          accum:=accum or(pv^ and pm^);
+                                          inc(pv);
+                                          inc(pm);
+                                     end;
+                                    if accum<>0 then
+                                                    self.Down:=true
+                                                else
+                                                    self.Down:=false;
+                               end
           else if sizeof(FBufer)>=pvd^.data.PTD^.SizeInGDBBytes then
                                                                     begin
-                                                                         fbufer:=0;
-                                                                         Move(pvd^.data.Instance^, FBufer,pvd^.data.PTD^.SizeInGDBBytes);
-                                                                         if fbufer<>0 then
+                                                                         TBufer:=0;
+                                                                         Move(pvd^.data.Instance^, TBufer,pvd^.data.PTD^.SizeInGDBBytes);
+                                                                         if TBufer<>0 then
                                                                                          self.Down:=true
                                                                                       else
                                                                                           self.Down:=false;
@@ -399,6 +421,9 @@ end;
 procedure TmyVariableToolButton.Click;
 var
    pvd:pvardesk;
+   accum:byte;
+   pv,pm:pbyte;
+   i:integer;
 begin
   pvd:=nil;
   if DWGUnit<>nil then
@@ -412,6 +437,23 @@ begin
                                                              PGDBBoolean(pvd^.data.Instance)^:=not PGDBBoolean(pvd^.data.Instance)^;
                                                              self.Down:=PGDBBoolean(pvd^.data.Instance)^;
                                                         end
+          else if fmask<>0 then
+                               begin
+                                    pv:=pvd^.data.Instance;
+                                    pm:=@Fmask;
+                                    accum:=0;
+                                    for i:=1 to pvd^.data.PTD^.SizeInGDBBytes do
+                                     begin
+                                          pv^:=pv^ xor pm^;
+                                          accum:=accum or(pv^ and pm^);
+                                          inc(pv);
+                                          inc(pm);
+                                     end;
+                                    if accum<>0 then
+                                                    self.Down:=true
+                                                else
+                                                    self.Down:=false;
+                               end
      else if sizeof(FBufer)>=pvd^.data.PTD^.SizeInGDBBytes then
                                                                begin
                                                                     if not self.Down then
@@ -438,6 +480,7 @@ begin
                                                                end;
      end;
      if assigned(redrawoglwndproc) then redrawoglwndproc;
+     if assigned(UpdateVisibleProc) then UpdateVisibleProc;
 end;
 procedure TmyCommandToolButton.click;
 begin

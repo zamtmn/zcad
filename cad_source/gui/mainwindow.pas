@@ -1772,7 +1772,8 @@ end;
 procedure MainForm.CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
 var
     f:GDBOpenArrayOfByte;
-    line,ts,ts2,{bn,}bc{,bh}:GDBString;
+    line,ts,ts2,{bn,}bc,masks{,bh}:GDBString;
+    mask:DWord;
     buttonpos:GDBInteger;
     b:TToolButton;
     i:longint;
@@ -1832,6 +1833,21 @@ begin
                      if uppercase(line)='VARIABLE' then
                      begin
                           bc := f.readstring(',','');
+                          masks:='';
+                          i:=pos('|', bc);
+                          if i>0 then
+                                     begin
+                                          masks:=system.copy(bc,i+1,length(bc)-i);
+                                          bc:=system.copy(bc,1,i-1);
+                                     end;
+                          if masks<>''then
+                                         begin
+                                              val(masks,mask,code);
+                                              if code<>0 then
+                                                             mask:=0;
+                                         end
+                                     else
+                                         mask:=0;
                           line := f.readstring(';','');
                           ts:='???';
                           i:=pos(',',line);
@@ -1848,7 +1864,7 @@ begin
                                      end;
                           b:=TmyVariableToolButton.Create(tb);
                           b.Style:=tbsCheck;
-                          TmyVariableToolButton(b).AssignToVar(bc);
+                          TmyVariableToolButton(b).AssignToVar(bc,mask);
                           if ts<>''then
                           begin
                                ts:=InterfaceTranslate('hint_panel~'+bc,ts);
@@ -2645,7 +2661,7 @@ begin
      if assigned(updatesbytton) then
      for i:=0 to updatesbytton.Count-1 do
      begin
-          TmyVariableToolButton(updatesbytton[i]).AssignToVar(TmyVariableToolButton(updatesbytton[i]).FVariable);
+          TmyVariableToolButton(updatesbytton[i]).AssignToVar(TmyVariableToolButton(updatesbytton[i]).FVariable,TmyVariableToolButton(updatesbytton[i]).FMask);
      end;
      if assigned(updatescontrols) then
      for i:=0 to updatescontrols.Count-1 do

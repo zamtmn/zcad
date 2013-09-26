@@ -33,7 +33,7 @@ action ACN_SAVELAYOUT,SaveLayout,#SLay,Save window layout as default,,
 action ACN_DOCKOPT,DockingOptions,#DO,Docking options,,
 action ACN_TEXTWINDOW,TextWindow,#TW,View text window,,F2
 action ACN_ZOOMALL,Zoom(ALL),zoomall.bmp,Zoom All,,HOME
-action ACN_ZOOMWINDOW,ZoomWindow,#zwin,Zoom window,,
+action ACN_ZOOMWINDOW,ZoomWindow,zoomwindow.bmp,Zoom window,,
 action ACN_ZOOMSEL,Zoom(SEL),#zsel,Zoom selected,,END
 action ACN_ZOOMIN,Zoom(IN),zoomin.bmp,Zoom in,,PGUP
 action ACN_ZOOMOUT,Zoom(OUT),zoomout.bmp,Zoom out,,PGDN
@@ -75,7 +75,7 @@ action ACN_COPYFROMOWNER,CopyFromOwner,#COF,Copy from owner,,
 action ACN_DEVNUMBERING,NumDevices,#D++,Numbering Devices,,
 action ACN_POLYED,PolyED,polyed.bmp,Edit polyline,,
 action ACN_OBJVARMAN,ObjVarMan,varman.bmp,Object variables manager,,
-action ACN_MULTIOBJVARMAN,MultiObjVarMan,#Mvar,Multi object variables manager,,
+action ACN_MULTIOBJVARMAN,MultiObjVarMan,mvarman.bmp,Multi object variables manager,,
 
 action ACN_LINE,Line,line.bmp,Draw line,,
 action ACN_3DPOLY,3DPoly,pline.bmp,Draw 3Dpolyline,,

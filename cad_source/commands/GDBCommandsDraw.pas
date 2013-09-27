@@ -1383,7 +1383,7 @@ begin
      begin
      gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.cleareraseobj;
      case TextInsertParams.mode of
-           TextInsertParams.mode.TIM_Text:
+           TIM_Text:
            begin
              PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Oblique',0,FA_READONLY);
              PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('WidthFactor',0,FA_READONLY);
@@ -1394,7 +1394,7 @@ begin
                 pt := GDBPointer(CreateObjFree(GDBTextID));
                 pt^.init(@GDB.GetCurrentDWG^.ConstructObjRoot,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,'',nulvertex,2.5,0,1,0,1);
            end;
-           TextInsertParams.mode.TIM_MText:
+           TIM_MText:
            begin
                 PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Oblique',FA_READONLY,0);
                 PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('WidthFactor',FA_READONLY,0);

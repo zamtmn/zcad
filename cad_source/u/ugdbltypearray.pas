@@ -91,6 +91,7 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     procedure LoadFromFile(fname:GDBString;lm:TLoadOpt);
                     function createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
                     function GetCurrentLType:PGDBLtypeProp;
+                    function GetSystemLT:PGDBLtypeProp;
                     {function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
                     function GetSystemLayer:PGDBLayerProp;
                     function GetCurrentLayer:PGDBLayerProp;
@@ -103,6 +104,19 @@ uses
     log;
 type
     TSeek=(TSeekInterface,TSeekImplementation);
+function GDBLtypeArray.GetSystemLT:PGDBLtypeProp;
+var
+   ir:itrec;
+begin
+  result:=beginiterate(ir);
+  if result<>nil then
+  repeat
+    if result^.Mode=TLTContinous then
+                                     exit;
+    result:=iterate(ir);
+  until result=nil;
+end;
+
 function GDBLtypeArray.GetCurrentLType;
 begin
      if assigned(sysvar.dwg.DWG_CLType) then
@@ -194,8 +208,16 @@ begin
 end;
 
 constructor GDBLtypeArray.init;
+var
+   plp:PGDBLtypeProp;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBLtypeProp));
+  if AddItem('Continuous',pointer(plp))=IsCreated then
+            begin
+                 plp.init('Continuous');
+                 plp.len:=0;
+                 plp.Mode:=TLTContinous;
+            end;
 end;
 constructor GDBLtypeArray.initnul;
 begin

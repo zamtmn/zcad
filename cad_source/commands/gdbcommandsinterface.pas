@@ -408,36 +408,28 @@ begin
   result:=cmd_ok;
 end;
 function Show_com(Operands:pansichar):GDBInteger;
-//var
-   //obj:gdbstring;
-   //objt:PUserTypeDescriptor;
+var
+   ctrl:TControl;
 begin
   if Operands<>'' then
-                      DockMaster.ShowControl(Operands,true)
+                      begin
+                           ctrl:=DockMaster.FindControl(Operands);
+                           if (ctrl<>nil)and(ctrl.IsVisible) then
+                                           begin
+                                                DockMaster.ManualFloat(ctrl);
+                                                DockMaster.GetAnchorSite(ctrl).Close;
+                                           end
+                                       else
+                                           begin
+                                                DockMaster.ShowControl(Operands,true);
+                                           end;
+                      end
                   else
                       shared.ShowError('Show command must have one operand!');
-{     if Operands='ObjInsp' then
-                            begin
-                                 DockMaster.ShowControl('ObjectInspector',true);
-                            end
-else if Operands='CommandLine' then
-                            begin
-                                 DockMaster.ShowControl('CommandLine',true);
-                            end
-else if Operands='PageControl' then
-                            begin
-                                 DockMaster.ShowControl('PageControl',true);
-                            end
-else if Operands='ToolBarR' then
-                            begin
-                                 DockMaster.ShowControl('ToolBarR',true);
-                            end;}
 end;
 function quit_com(Operands:pansichar):GDBInteger;
 begin
      //Application.QueueAsyncCall(MainFormN.asynccloseapp, 0);
-
-
      CloseApp;
 end;
 function About_com(Operands:pansichar):GDBInteger;
@@ -740,4 +732,4 @@ initialization
   startup;
 finalization
   finalize;
-end.
+end.

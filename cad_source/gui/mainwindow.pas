@@ -2731,6 +2731,8 @@ var
    //IsEditableFocus:boolean;
    //IsCommandNotEmpty:boolean;
    {_enabled,}_disabled:boolean;
+   ctrl:TControl;
+   ti:integer;
    //i:integer;
 //const
      //EditableShortCut=[(scCtrl or VK_Z),{(VK_CONTROL or VK_SHIFT or VK_Z),}VK_DELETE,VK_BACK,VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN];
@@ -2739,6 +2741,24 @@ begin
      if AAction is TmyAction then
      begin
      Handled:=true;
+
+          if uppercase(TmyAction(AAction).command)='SHOW' then
+          if uppercase(TmyAction(AAction).options)<>'' then
+          begin
+               ctrl:=DockMaster.FindControl(TmyAction(AAction).options);
+               if ctrl=nil then
+                               begin
+                                    if toolbars.Find(TmyAction(AAction).options,ti) then
+                                    TmyAction(AAction).Enabled:=false
+                               end
+                           else
+                               begin
+                                    TmyAction(AAction).Enabled:=true;
+                                    TmyAction(AAction).Checked:=ctrl.IsVisible;
+                               end;
+               exit;
+          end;
+
 
      _disabled:=false;
 

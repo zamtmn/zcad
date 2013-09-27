@@ -1713,7 +1713,7 @@ var
    y:integer;
    textrect:TRect;
 const
-     cellsize=13;
+     cellsize=11;
      textoffset=cellsize+5;
 begin
     if (gdb.GetCurrentDWG=nil)or(sysvar.DWG.DWG_CColor=nil) then

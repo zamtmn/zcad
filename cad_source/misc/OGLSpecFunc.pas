@@ -283,7 +283,7 @@ procedure MywglDeleteContext(oglc:TOGLContextDesk);
 procedure MywglCreateContext(var oglc:TOGLContextDesk);
 
 {$IFDEF WINDOWS}
-function wglGetProcAddress(ProcName:LPCSTR):PROC; external 'opengl32' name 'wglGetProcAddress';
+function wglGetProcAddress(ProcName:LPCSTR):PROC;stdcall; external 'opengl32' name 'wglGetProcAddress';
 {$ENDIF}
 
 Procedure DrawAABB(const BoundingBox:GDBBoundingBbox);

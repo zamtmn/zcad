@@ -2742,6 +2742,19 @@ begin
      begin
      Handled:=true;
 
+
+          if uppercase(TmyAction(AAction).command)='SHOWPAGE' then
+          if uppercase(TmyAction(AAction).options)<>'' then
+          begin
+               if assigned(mainformn)then
+               if assigned(mainformn.PageControl)then
+               if mainformn.PageControl.ActivePageIndex=strtoint(TmyAction(AAction).options) then
+                                                                               TmyAction(AAction).Checked:=true
+                                                                           else
+                                                                               TmyAction(AAction).Checked:=false;
+               exit;
+          end;
+
           if uppercase(TmyAction(AAction).command)='SHOW' then
           if uppercase(TmyAction(AAction).options)<>'' then
           begin
@@ -3512,7 +3525,8 @@ begin
                 begin
                 MainFormN.Drawings[k].Caption:=MainFormN.PageControl.Pages[i].caption;
                 MainFormN.Drawings[k].visible:=true;
-                MainFormN.Drawings[k].command:='ShowPage('+inttostr(i)+')';
+                MainFormN.Drawings[k].command:='ShowPage';
+                MainFormN.Drawings[k].options:=inttostr(i);
                 inc(k);
                 end;
                 end;

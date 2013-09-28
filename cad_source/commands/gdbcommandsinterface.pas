@@ -421,7 +421,10 @@ begin
                                            end
                                        else
                                            begin
-                                                DockMaster.ShowControl(Operands,true);
+                                                If IsValidIdent(Operands) then
+                                                                              DockMaster.ShowControl(Operands,true)
+                                                                          else
+                                                                              shared.ShowError('Show: invalid identificator!');
                                            end;
                       end
                   else

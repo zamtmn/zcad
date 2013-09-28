@@ -224,6 +224,7 @@ MainMenuItem View;
         action ACN_SHOW_OBJECTINSPECTOR
         action ACN_SHOW_PAGECONTROL
         action ACN_SHOW_COMMANDLINE
+        action ACN_TEXTWINDOW
         MenuItem ToolBars;
            {
              ToolBars

@@ -547,7 +547,7 @@ begin
   UManager.init;
 
   defaultunit.init(DefNumMetric);
-  units.loadunit(expandpath('*rtl\objcalc\opsmarkdef.pas'),(@defaultunit));
+  units.loadunit(expandpath('*rtl/objcalc/opsmarkdef.pas'),(@defaultunit));
   pcabledesk:=cman.beginiterate(ir);
   if pcabledesk<>nil then
   repeat
@@ -620,7 +620,7 @@ begin
                          p:=@ptn^.bp.ListPos.Owner.ou;
                          currentunit.InterfaceUses.addnodouble(@p);
 
-                         units.loadunit(expandpath('*rtl\objcalc\opsmark.pas'),(currentunit));
+                         units.loadunit(expandpath('*rtl/objcalc/opsmark.pas'),(currentunit));
 
                          ProcessedDevices.Add(@ptn^.bp.ListPos.Owner);
 

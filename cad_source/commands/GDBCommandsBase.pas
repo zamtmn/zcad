@@ -686,6 +686,15 @@ begin
     begin
       GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := false;
 
+         if sysvar.DSGN.DSGN_SelNew^ then
+         begin
+               GDB.GetCurrentROOT.ObjArray.DeSelect(GDB.GetCurrentDWG.GetSelObjArray,GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
+               GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject := nil;
+               GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.OnMouseObject := nil;
+               GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
+               GDB.GetCurrentDWG.GetSelObjArray.clearallobjects;
+         end;
+
       //mclick:=-1;
       if GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x > GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x then
       begin

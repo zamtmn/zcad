@@ -153,6 +153,7 @@ type
              DSGN_TraceAutoInc:PGDBBoolean;(*'Increment trace names'*)
              DSGN_LeaderDefaultWidth:PGDBDouble;(*'Default leader width'*)
              DSGN_HelpScale:PGDBDouble;(*'Scale of auxiliary elements'*)
+             DSGN_SelNew:PGDBBoolean;(*'New selection set'*)
        end;
   tview=packed record
                VIEW_CommandLineVisible,

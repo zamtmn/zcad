@@ -12,6 +12,8 @@ Panel OIButtons;
     Separator
     action ACN_OBJVARMAN
     action ACN_MULTIOBJVARMAN
+    Separator
+    variable DSGN_SelNew,one.bmp,New selection set,
   }
 Panel Status;
   {

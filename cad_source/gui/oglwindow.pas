@@ -2246,7 +2246,6 @@ begin
           else
           begin
           param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
-
           {//Выделение всех объектов под мышью
           if gdb.GetCurrentDWG.OnMouseObj.Count >0 then
           begin
@@ -2267,6 +2266,16 @@ begin
                if (key and MZW_SHIFT)=0
                then
                    begin
+
+                        if sysvar.DSGN.DSGN_SelNew^ then
+                        begin
+                              pdwg.GetCurrentROOT.ObjArray.DeSelect(pdwg.GetSelObjArray,param.SelDesc.Selectedobjcount);
+                              param.SelDesc.LastSelectedObject := nil;
+                              //param.SelDesc.OnMouseObject := nil;
+                              param.seldesc.Selectedobjcount:=0;
+                              PDWG^.GetSelObjArray.clearallobjects;
+                        end;
+
                         if PGDBObjEntity(param.SelDesc.OnMouseObject)^.select(PDWG^.GetSelObjArray,param.SelDesc.Selectedobjcount) then
                           begin
                         param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;

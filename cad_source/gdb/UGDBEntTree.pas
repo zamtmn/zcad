@@ -266,7 +266,7 @@ begin
      result.minuscount:=0;
      result.Root:=_root;
      result.NodeDir:=dir;
-     if ((entitys.Count<=_InNodeCount){and(nodedepth>1)})or(nodedepth>SysVar.RD.RD_SpatialNodesDepth^) then
+     if ((entitys.Count<=_InNodeCount){and(nodedepth>1)})or(nodedepth>=SysVar.RD.RD_SpatialNodesDepth^) then
                                                 begin
                                                      //result.selected:=false;
                                                      {if entitys.beginiterate(ir)<>nil then

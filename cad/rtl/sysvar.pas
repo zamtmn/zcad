@@ -15,6 +15,7 @@ var
   DSGN_LCNet:TLayerControl;
   DSGN_LCCable:TLayerControl;
   DSGN_LCLeader:TLayerControl;
+  DSGN_SelNew:GDBBoolean;
   INTF_ShowScrollBars:GDBBoolean;
   INTF_ShowDwgTabs:GDBBoolean;
   INTF_DwgTabsPosition:TAlign;
@@ -95,6 +96,7 @@ begin
   DSGN_LCCable.LayerName:='EL_KABLE';
   DSGN_LCLeader.Enabled:=True;
   DSGN_LCLeader.LayerName:='TEXT';
+  DSGN_SelNew:=false;
   INTF_ShowScrollBars:=True;
   INTF_ShowDwgTabs:=True;
   INTF_DwgTabsPosition:=TATop;

@@ -59,15 +59,11 @@ type
     constructor Create(TheOwner: TComponent); override;
 
                           end;
-  TMySpeedButton = class(TCustomSpeedButton)
-  protected
-    function GetDrawDetails: TThemedElementDetails; override;
-    procedure CalculatePreferredSize(var PreferredWidth,
-           PreferredHeight: integer; {%H-}WithThemeSpace: Boolean); override;
-  end;
-
+  PTDummyMyActionsArray=^TDummyMyActionsArray;
+  TDummyMyActionsArray=Array [0..0] of TmyAction;
   TFileHistory=Array [0..9] of TmyAction;
   TDrawings=Array [0..9] of TmyAction;
+  TCommandHistory=Array [0..9] of TmyAction;
 
   { MainForm }
 
@@ -148,6 +144,7 @@ type
     rt:GDBInteger;
     FileHistory:TFileHistory;
     Drawings:TDrawings;
+    CommandsHistory:TCommandHistory;
     procedure CreateAnchorDockingInterface;
     procedure CreateStandartInterface;
     procedure CreateInterfaceLists;
@@ -168,6 +165,7 @@ type
     procedure ShowFastMenu(Sender: TObject);
     procedure asynccloseapp(Data: PtrInt);
     procedure processfilehistory(filename:GDBString);
+    procedure processcommandhistory(Command:GDBString);
     function CreateZCADControl(aName: string;DoDisableAlign:boolean=false):TControl;
     procedure DockMasterCreateControl(Sender: TObject; aName: string; var
     AControl: TControl; DoDisableAutoSizing: boolean);
@@ -526,49 +524,88 @@ begin
           end;
      end;
 end;
-
+function FindIndex(taa:PTDummyMyActionsArray;l,h:integer;ca:string):integer;
+var
+    i:integer;
+begin
+  result:=h-1;
+  for i:=l to h do
+  begin
+       if assigned(taa[i]) then
+       if taa[i].Caption=ca then
+       begin
+            result:=i-1;
+            system.break;
+       end;
+  end;
+end;
+procedure ScrollArray(taa:PTDummyMyActionsArray;l,h:integer);
+var
+    j,i:integer;
+begin
+  for i:=h downto l do
+  begin
+       j:=i+1;
+       if (assigned(taa[j]))and(assigned(taa[i]))then
+       taa[j].SetCommand(taa[i].caption,taa[i].Command,taa[i].options);
+  end;
+end;
+procedure CheckArray(taa:PTDummyMyActionsArray;l,h:integer);
+var
+    i:integer;
+begin
+  for i:=l to h do
+  begin
+       if assigned(taa[i]) then
+       if taa[i].command='' then
+                                taa[i].visible:=false
+                            else
+                                taa[i].visible:=true;
+  end;
+end;
+procedure SetArrayTop(taa:PTDummyMyActionsArray;_Caption,_Command,_Options:string);
+begin
+     if assigned(taa[0]) then
+     if _Caption<>''then
+                          taa[0].SetCommand(_Caption,_Command,_Options)
+                      else
+                          taa[0].SetCommand(rsEmpty,'','');
+end;
 procedure MainForm.processfilehistory(filename:GDBString);
 var i,j,k:integer;
     pstr,pstrnext:PGDBString;
     //pvarfirst:pvardesk;
 begin
-     k:=8;
-     for i:=0 to 9 do
-     begin
-          if assigned(FileHistory[i]) then
-          if FileHistory[i].Caption=filename then
-          begin
-               k:=i-1;
-               system.break;
-          end;
-     end;
+     k:=FindIndex(@FileHistory,low(filehistory),high(filehistory),filename);
      if k<0 then exit;
-      for i:=k downto 0 do
-      begin
-           j:=i+1;
-           pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
-           pstrnext:=SavedUnit.FindValue('PATH_File'+inttostr(j));
-           if (assigned(pstr))and(assigned(pstrnext))then
-                                                         pstrnext^:=pstr^;
-           if (assigned(FileHistory[j]))and(assigned(FileHistory[i]))then
-           FileHistory[j].SetCommand(FileHistory[i].caption,FileHistory[i].{F}Command,FileHistory[i].options);
-      end;
-      pstr:=SavedUnit.FindValue('PATH_File0');
-      if (assigned(pstr))then
-                              pstr^:=filename;
-      if assigned(FileHistory[0]) then
-      if FileName<>''then
-                           FileHistory[0].SetCommand(FileName,'Load',FileName)
-                       else
-                           FileHistory[0].SetCommand(rsEmpty,'','');
-      for i:=0 to 9 do
-      begin
-           if assigned(FileHistory[i]) then
-           if FileHistory[i].command='' then
-                                            FileHistory[i].visible:=false
-                                        else
-                                            FileHistory[i].visible:=true;
-      end;
+
+     ScrollArray(@FileHistory,0,k);
+
+     for i:=k downto 0 do
+     begin
+          j:=i+1;
+          pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
+          pstrnext:=SavedUnit.FindValue('PATH_File'+inttostr(j));
+          if (assigned(pstr))and(assigned(pstrnext))then
+                                                        pstrnext^:=pstr^;
+     end;
+     pstr:=SavedUnit.FindValue('PATH_File0');
+     if (assigned(pstr))then
+                             pstr^:=filename;
+
+     SetArrayTop(@FileHistory,FileName,'Load',FileName);
+     CheckArray(@FileHistory,low(filehistory),high(filehistory));
+end;
+procedure  MainForm.processcommandhistory(Command:GDBString);
+var
+   k:integer;
+begin
+     k:=FindIndex(@CommandsHistory,low(Commandshistory),high(Commandshistory),Command);
+     if k<0 then exit;
+
+     ScrollArray(@CommandsHistory,0,k);
+     SetArrayTop(@CommandsHistory,Command,Command,'');
+     CheckArray(@CommandsHistory,low(Commandshistory),high(Commandshistory));
 end;
 function IsRealyQuit:GDBBoolean;
 var
@@ -848,37 +885,6 @@ begin
   if (Sender is TPageControl) then
                                   CloseDWGPage((Sender as TPageControl).Pages[I]);
 end;
-function TMySpeedButton.GetDrawDetails: TThemedElementDetails;
-
-  function WindowPart: TThemedScrollBar;
-    begin
-      // no check states available
-      Result := tsArrowBtnDownNormal;
-      if not IsEnabled then
-        Result := tsArrowBtnDownDisabled
-      else
-      if FState in [bsDown, bsExclusive] then
-        Result := tsArrowBtnDownPressed
-      else
-      if FState = bsHot then
-        Result := tsArrowBtnDownHot
-      else
-        Result := tsArrowBtnDownNormal;
-    end;
-
-  begin
-    Result := ThemeServices.GetElementDetails(WindowPart);
-  end;
-
-  procedure TMySpeedButton.CalculatePreferredSize(var PreferredWidth,
-    PreferredHeight: integer; WithThemeSpace: Boolean);
-  begin
-    with ThemeServices.GetDetailSize(ThemeServices.GetElementDetails(tsArrowBtnDownNormal)) do
-    begin
-      PreferredWidth:=cx;
-      PreferredHeight:=1;
-    end;
-  end;
 procedure MainForm.ShowFastMenu(Sender: TObject);
 begin
      ShowFMenu;
@@ -1212,6 +1218,7 @@ begin
   ProcessFilehistoryProc:=self.processfilehistory;
   CursorOn:=ShowAllCursors;
   CursorOff:=RestoreCursors;
+  commandmanager.OnCommandRun:=processcommandhistory;
 end;
 
 procedure MainForm.LoadActions;
@@ -1235,6 +1242,11 @@ begin
   begin
        Drawings[i]:=TmyAction.Create(self);
        Drawings[i].visible:=false;
+  end;
+  for i:=low(CommandsHistory) to high(CommandsHistory) do
+  begin
+       CommandsHistory[i]:=TmyAction.Create(self);
+       CommandsHistory[i].visible:=false;
   end;
 end;
 
@@ -2405,6 +2417,7 @@ begin
            //pm.items.Add(ppopupmenu);
 
            loadsubmenu(f,TMenuItem(ppopupmenu),line);
+           //ppopupmenu.Alignment:=paLeft;
 
            cxmenumgr.RegisterLCLMenu(ppopupmenu)
 
@@ -2581,6 +2594,21 @@ begin
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);
                                                       end
+                else if uppercase(line)='LASTCOMMANDS' then
+                                                      begin
+                                                           for i:=0 to 9 do
+                                                           begin
+                                                                pm1:=TMenuItem.Create(pm);
+                                                                pm1.Action:=CommandsHistory[i];
+                                                                if pm is TMenuItem then
+                                                                                       pm.Add(pm1)
+                                                                                   else
+                                                                                       TMyPopUpMenu(pm).Items.Add(pm1);
+                                                                //pm.Add(pm1);
+                                                           end;
+                                                           line := f.readstring(#$A' ',#$D);
+                                                           line:=readspace(line);
+                                                      end
                 else if uppercase(line)='TOOLBARS' then
                                                       begin
                                                            for i:=0 to toolbars.Count-1 do
@@ -2644,8 +2672,11 @@ begin
                                                            submenu:=TMenuItem.Create(pm);
                                                            line:=InterfaceTranslate('submenu~'+line,line);
                                                            submenu.Caption:=(line);
-                                                           {ppopupmenu}pm.{items.}Add(submenu);
-
+                                                           //{ppopupmenu}pm.{items.}Add(submenu);
+                                                           if pm is TMenuItem then
+                                                                                  pm.Add(submenu)
+                                                                              else
+                                                                                  TMyPopUpMenu(pm).Items.Add(submenu);
                                                            loadsubmenu(f,{ppopupmenu}submenu,line);
                                                            line := f.readstring(#$A' ',#$D);
                                                            line:=readspace(line);

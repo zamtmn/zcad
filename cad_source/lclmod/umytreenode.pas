@@ -21,7 +21,7 @@ unit umytreenode;
 interface
 
 uses
-  uinfoform,zcadinterface,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,{StdCtrls,}Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,{ButtonPanel,}Buttons,
+  Themes,uinfoform,zcadinterface,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,{StdCtrls,}Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,{ButtonPanel,}Buttons,
   {strutils,}{$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
 type
     TmyAction=class(TAction)
@@ -116,6 +116,12 @@ type
                  protected
                  //procedure DoChange;override;
                  end;
+  TMySpeedButton = class(TCustomSpeedButton)
+  protected
+    function GetDrawDetails: TThemedElementDetails; override;
+    procedure CalculatePreferredSize(var PreferredWidth,
+           PreferredHeight: integer; {%H-}WithThemeSpace: Boolean); override;
+  end;
 
 PIterateCmpareFunc=function(node:TmyTreeNode;PExpr:Pointer):Boolean;
 
@@ -128,6 +134,37 @@ procedure SetHeightControl(_parent:TWinControl;h:integer);
 //   ACN_ShowObjInsp:TmyAction=nil;
 implementation
 uses commandline,log,ugdbdescriptor;
+function TMySpeedButton.GetDrawDetails: TThemedElementDetails;
+
+  function WindowPart: TThemedScrollBar;
+    begin
+      // no check states available
+      Result := tsArrowBtnDownNormal;
+      if not IsEnabled then
+        Result := tsArrowBtnDownDisabled
+      else
+      if FState in [bsDown, bsExclusive] then
+        Result := tsArrowBtnDownPressed
+      else
+      if FState = bsHot then
+        Result := tsArrowBtnDownHot
+      else
+        Result := tsArrowBtnDownNormal;
+    end;
+
+  begin
+    Result := ThemeServices.GetElementDetails(WindowPart);
+  end;
+
+  procedure TMySpeedButton.CalculatePreferredSize(var PreferredWidth,
+    PreferredHeight: integer; WithThemeSpace: Boolean);
+  begin
+    with ThemeServices.GetDetailSize(ThemeServices.GetElementDetails(tsArrowBtnDownNormal)) do
+    begin
+      PreferredWidth:=cx;
+      PreferredHeight:=1;
+    end;
+  end;
 procedure TmyAction.SetCommand(_Caption,_Command,_Options:TTranslateString);
 begin
      command:=_Command;

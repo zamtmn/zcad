@@ -20,11 +20,11 @@ unit cmdline;
 {$INCLUDE def.inc}
 interface
 uses
- zcadsysvars,zcadstrconsts,strproc,lclproc,sysutils,gdbasetypes,
+ buttons,zcadsysvars,zcadstrconsts,strproc,lclproc,sysutils,gdbasetypes,
  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
  UDMenuWnd,gdbase, memman,UGDBDescriptor,math,commandline,varman,languade,
  UGDBTracePropArray,varmandef,
- geometry,shared,UGDBStringArray,zcadinterface;
+ geometry,shared,UGDBStringArray,zcadinterface,umytreenode;
 
 const
      cheight=18;
@@ -54,6 +54,7 @@ type
     procedure HistoryAdd(s:string);
     procedure mypaint(sender:tobject);
     procedure FormCreate(Sender: TObject);
+    procedure ButtonPressed(Sender: TObject);
 
     destructor Destroy;override;
     function FindAlias(prefix:GDBString;comment,breacer:GDBString):GDBString;
@@ -127,10 +128,22 @@ begin
      end;
      mode:=m;
 end;
+procedure TCLine.ButtonPressed(Sender: TObject);
+var
+  menu:TmyPopupMenu;
+begin
+    menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'LASTCOMMANDSCXMENU'));
+    if menu<>nil then
+    begin
+      menu.PopUp;
+    end;
+end;
+
 procedure TCLine.FormCreate(Sender: TObject);
-//var
+var
    //bv:tbevel;
    //pint:PGDBInteger;
+   sbutton:TmySpeedButton;
 begin
     self.Constraints.MinHeight:=36;
     utfpresent:=false;
@@ -181,6 +194,13 @@ begin
     //prompt.Text:='Command';
     prompt.parent:=panel;
     //prompt.Canvas.Brush:=prompt.Canvas.Brush;
+
+    sbutton:=TmySpeedButton.Create(self);
+    sbutton.OnClick:=ButtonPressed;
+    sbutton.Width:=panel.Constraints.MinHeight;
+    sbutton.Align:=alLeft;
+    sbutton.Color:=panel.Color;
+    sbutton.parent:=panel;
 
     cmdedit:=TEdit.create(panel);
     cmdedit.Align:=alClient;

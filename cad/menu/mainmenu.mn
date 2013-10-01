@@ -516,12 +516,25 @@ PopUpMenu SELECTEDENTSCXMENU;
     action ACN_DESELECTALL
     action ACN_INVERSESELECTED
     action ACN_SELSIM
+    MenuItem Last commands;
+    {
+     LASTCOMMANDS
+    }
   }
 PopUpMenu NONSELECTEDENTSCXMENU;
   {
     action ACN_PASTE
     Separator
     action ACN_SELECTALL
+    Separator
+    MenuItem Last commands;
+    {
+     LASTCOMMANDS
+    }
+  }
+PopUpMenu LASTCOMMANDSCXMENU;
+  {
+   LASTCOMMANDS
   }
 PopUpMenu FASTMENU;
   {

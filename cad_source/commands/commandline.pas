@@ -28,6 +28,7 @@ const
 type
   tvarstack=object({varmanagerdef}varmanager)
             end;
+  TOnCommandRun=procedure(command:string) of object;
 
   GDBcommandmanager=object(GDBcommandmanagerDef)
                           CommandsStack:GDBOpenArrayOfGDBPointer;
@@ -35,6 +36,7 @@ type
                           busy:GDBBoolean;
                           varstack:tvarstack;
                           DMenu:TDMenuWnd;
+                          OnCommandRun:TOnCommandRun;
                           constructor init(m:GDBInteger);
                           function execute(const comm:pansichar;silent:GDBBoolean;pdrawing:PTDrawingDef): GDBInteger;virtual;
                           function executecommand(const comm:pansichar;pdrawing:PTDrawingDef): GDBInteger;virtual;
@@ -329,6 +331,8 @@ begin
                         begin
                         historyoutstr(rsRunCommand+':'+pfoundcommand^.CommandName);
                         lastcommand := command;
+                        if assigned(OnCommandRun) then
+                                                      OnCommandRun(command);
                         end;
 
           run(pfoundcommand,operands,pdrawing);

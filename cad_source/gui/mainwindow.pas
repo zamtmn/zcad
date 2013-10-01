@@ -2557,7 +2557,7 @@ begin
                 else if uppercase(line)='FILEHISTORY' then
                                                       begin
 
-                                                           for i:=0 to 9 do
+                                                           for i:=low(FileHistory) to high(FileHistory) do
                                                            begin
                                                                 pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i));
                                                                 if assigned(pstr)then
@@ -2585,7 +2585,7 @@ begin
                                                       end
                 else if uppercase(line)='DRAWINGS' then
                                                       begin
-                                                           for i:=0 to 9 do
+                                                           for i:=low(Drawings) to high(Drawings) do
                                                            begin
                                                                 pm1:=TMenuItem.Create(pm);
                                                                 pm1.Action:=Drawings[i];
@@ -2596,7 +2596,7 @@ begin
                                                       end
                 else if uppercase(line)='LASTCOMMANDS' then
                                                       begin
-                                                           for i:=0 to 9 do
+                                                           for i:=low(CommandsHistory) to high(CommandsHistory) do
                                                            begin
                                                                 pm1:=TMenuItem.Create(pm);
                                                                 pm1.Action:=CommandsHistory[i];

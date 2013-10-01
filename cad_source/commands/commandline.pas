@@ -331,6 +331,7 @@ begin
                         begin
                         historyoutstr(rsRunCommand+':'+pfoundcommand^.CommandName);
                         lastcommand := command;
+                        if not (busy) then
                         if assigned(OnCommandRun) then
                                                       OnCommandRun(command);
                         end;

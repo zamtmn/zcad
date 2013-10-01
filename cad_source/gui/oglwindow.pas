@@ -4734,7 +4734,7 @@ begin
         commandmanager.ExecuteCommand('Erase');
         Key:=00;
       end}
- else if Key = VK_RETURN then
+ else if (Key = VK_RETURN)or(Key = VK_SPACE) then
       begin
            commandmanager.executelastcommad(pdwg);
            Key:=00;

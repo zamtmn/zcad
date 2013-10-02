@@ -933,6 +933,7 @@ with TMySpeedButton.Create(DHPanel) do
 begin
      Align:=alRight;
      Parent:=DHPanel;
+     width:=VScrollBar.Width;
      onclick:=ShowFastMenu;
 end;
 
@@ -1817,6 +1818,7 @@ begin
                           b.ShowCaption:=false;
                           b.ShowHint:=true;
                           b.Caption:=action.imgstr;
+                          //b.AutoSize:=true;
                           AddToBar(tb,b);
                           b.Visible:=true;
                      end;
@@ -1833,6 +1835,7 @@ begin
                                      end;
                           b:=TmyCommandToolButton.Create(tb);
                           TmyCommandToolButton(b).FCommand:=bc;
+                          //b.AutoSize:=true;
                           if ts<>''then
                           begin
                                ts:=InterfaceTranslate('hint_panel~'+bc,ts);
@@ -1884,7 +1887,7 @@ begin
                           b.ShowHint:=true;
                           end;
                           SetImage(tb,b,line,false,'button_variable~'+bc);
-                          b.AutoSize:=true;
+                          //b.AutoSize:=true;
                           AddToBar(tb,b);
                           updatesbytton.Add(b);
                           if ts2<>'' then

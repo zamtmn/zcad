@@ -581,12 +581,15 @@ begin
 
           canvas.Brush.Color := {clWhite}{clAppWorkspace}clBtnFace;
           canvas.Rectangle(r);
-
+          if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
+          begin
+                canvas.Font.Italic:=not canvas.Font.Italic;
+          end;
           //selectobject({cdc}dc,GetStockObject(WHITE_BRUSH));
           //Rectangle({cdc}dc,{2} r.left,r.Top,r.Right,r.Bottom);
           r.Left:=r.Left+2;
           r.Top:=r.Top+3;
-          if (ppd^.Attr and FA_READONLY)<>0 then
+          if ((ppd^.Attr and FA_READONLY)<>0)or((ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0) then
           begin
             tempcolor:=canvas.Font.Color;
             canvas.Font.Color:=clGrayText;
@@ -645,6 +648,12 @@ begin
             //canvas.TextRect(r,r.Left,r.Top,(ppd^.value));
                                  //TextOut(cdc, namecol, y * rowh, GDBPointer(ppd^.value), length(ppd^.value));
             end;
+
+        if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
+        begin
+              canvas.Font.Italic:=not canvas.Font.Italic;
+        end;
+
           y:=y++rowh;
         end;
       end;

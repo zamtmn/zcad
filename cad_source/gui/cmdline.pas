@@ -20,7 +20,7 @@ unit cmdline;
 {$INCLUDE def.inc}
 interface
 uses
- buttons,zcadsysvars,zcadstrconsts,strproc,lclproc,sysutils,gdbasetypes,
+ Themes,buttons,zcadsysvars,zcadstrconsts,strproc,lclproc,sysutils,gdbasetypes,
  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
  UDMenuWnd,gdbase, memman,UGDBDescriptor,math,commandline,varman,languade,
  UGDBTracePropArray,varmandef,
@@ -154,8 +154,8 @@ begin
     panel:=TPanel.create(self);
     panel.parent:=self;
     panel.top:=0;
-    panel.Constraints.MinHeight:=14+2;
-    panel.Constraints.MaxHeight:=14+2;
+    panel.Constraints.MinHeight:=17;
+    panel.Constraints.MaxHeight:=17;
     panel.BorderStyle:=bsNone;
     panel.BevelOuter:=bvnone;
     panel.BorderWidth:=0;
@@ -197,8 +197,15 @@ begin
 
     sbutton:=TmySpeedButton.Create(self);
     sbutton.OnClick:=ButtonPressed;
-    sbutton.Width:=panel.Constraints.MinHeight;
+    //sbutton.Width:=panel.Constraints.MinHeight;
     sbutton.Align:=alLeft;
+    with ThemeServices.GetDetailSize(ThemeServices.GetElementDetails(tsArrowBtnDownNormal)) do
+    begin
+         if cx>0 then
+                     sbutton.width:=cx
+                 else
+                     sbutton.width:=15;
+    end;
     sbutton.Color:=panel.Color;
     sbutton.parent:=panel;
 

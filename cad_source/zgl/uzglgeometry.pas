@@ -23,17 +23,24 @@ uses UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGD
      gdbasetypes;
 type
 {Export+}
+PZGLGeometry=^ZGLGeometry;
 PZPolySegmentData=^ZPolySegmentData;
 ZPolySegmentData={$IFNDEF DELPHI}packed{$ENDIF} record
                                                       startpoint,endpoint,dir:GDBVertex;
-                                                      length,accumlength:GDBDouble;
+                                                      length,naccumlength,accumlength:GDBDouble;
                                                 end;
 ZSegmentator={$IFNDEF DELPHI}packed{$ENDIF}object(GDBOpenArrayOfData)
-                                                 dir:GDBvertex;
+                                                 dir,cp:GDBvertex;
+                                                 cdp,angle:GDBDouble;
                                                  pcurrsegment:PZPolySegmentData;
                                                  ir:itrec;
-                                                 constructor InitFromLine(const startpoint,endpoint:GDBVertex;out length:GDBDouble);
+                                                 PGeom:PZGLGeometry;
+                                                 constructor InitFromLine(const startpoint,endpoint:GDBVertex;out length:GDBDouble;PG:PZGLGeometry);
+                                                 constructor InitFromPolyline(const points:GDBPoint3dArray;out length:GDBDouble;const closed:GDBBoolean;PG:PZGLGeometry);
                                                  procedure startdraw;
+                                                 procedure nextsegment;
+                                                 procedure normalize(l:GDBDouble);
+                                                 procedure draw(length:GDBDouble;paint:boolean);
                                            end;
 ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  Lines:ZGLLine3DArray;
@@ -49,8 +56,8 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 procedure DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed:GDBBoolean);virtual;
                 procedure DrawLineWithoutLT(const p1,p2:GDBVertex);virtual;
                 procedure DrawPointWithoutLT(const p:GDBVertex);virtual;
-                procedure PlaceNPatterns(var Segmentator:ZSegmentator;StartPatternPoint,FactStartPoint:GDBVertex;num:integer; const vp:PGDBLtypeProp;scale,length:GDBDouble);
-                procedure PlaceOnePattern(var Segmentator:ZSegmentator;var StartPatternPoint,FactStartPoint:GDBVertex; const vp:PGDBLtypeProp;scale,length,scale_div_length,angle:GDBDouble);
+                procedure PlaceNPatterns(var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;scale,length:GDBDouble);
+                procedure PlaceOnePattern(var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;scale,length,scale_div_length:GDBDouble);
                 procedure PlaceShape(const StartPatternPoint:GDBVertex; PSP:PShapeProp;scale,angle:GDBDouble);
                 procedure PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
              end;
@@ -63,15 +70,21 @@ begin
      segment.dir:=geometry.VertexSub(endpoint,startpoint);
      segment.length:=geometry.Vertexlength(startpoint,endpoint);
      segment.accumlength:=prevlength+segment.length;
+     segment.naccumlength:=segment.accumlength;
      result:=segment.accumlength;
 end;
-function getlength(const points:GDBPoint3dArray;var sd:GDBOpenArrayOfData; const closed:GDBBoolean):GDBDouble;
+constructor ZSegmentator.InitFromLine(const startpoint,endpoint:GDBVertex;out length:GDBDouble;PG:PZGLGeometry);
 var
-    ptv,ptvprev,pfirstv: pgdbvertex;
-    ir:itrec;
-    segment:ZPolySegmentData;
-    cl:GDBDouble;
-
+   segment:ZPolySegmentData;
+begin
+     inherited init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}1,sizeof(ZPolySegmentData));
+     length:=CalcSegment(startpoint,endpoint,segment,0);
+     add(@segment);
+     normalize(length);
+     PGeom:=pg;
+end;
+{function getlength(const points:GDBPoint3dArray;var sd:GDBOpenArrayOfData; const closed:GDBBoolean):GDBDouble;
+var
 begin
   result:=0;
   ptvprev:=points.beginiterate(ir);
@@ -90,21 +103,68 @@ begin
                      result:=CalcSegment(ptv^,pfirstv^,segment,result);
                      sd.add(@segment);
                 end;
-end;
-constructor ZSegmentator.InitFromLine(const startpoint,endpoint:GDBVertex;out length:GDBDouble);
+end;}
+constructor ZSegmentator.InitFromPolyline(const points:GDBPoint3dArray;out length:GDBDouble;const closed:GDBBoolean;PG:PZGLGeometry);
 var
    segment:ZPolySegmentData;
+   ptv,ptvprev,pfirstv: pgdbvertex;
+   _ir:itrec;
+   cl:GDBDouble;
 begin
-     inherited init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}1,sizeof(ZPolySegmentData));
-     length:=CalcSegment(startpoint,endpoint,segment,0);
-     add(@segment);
+     if closed then
+                   inherited init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}points.Count,sizeof(ZPolySegmentData))
+               else
+                   inherited init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}points.Count+1,sizeof(ZPolySegmentData));
+    length:=0;
+    ptvprev:=points.beginiterate(_ir);
+    pfirstv:=ptvprev;
+    ptv:=points.iterate(_ir);
+    if ptv<>nil then
+    repeat
+          length:=CalcSegment(ptvprev^,ptv^,segment,length);
+          add(@segment);
+
+          ptvprev:=ptv;
+          ptv:=points.iterate(_ir);
+    until ptv=nil;
+    if closed then
+                  begin
+                       length:=CalcSegment(ptvprev^,pfirstv^,segment,length);
+                       add(@segment);
+                  end;
+    normalize(length);
+    PGeom:=pg;
+end;
+
+procedure ZSegmentator.normalize(l:GDBDouble);
+var
+   psegment:PZPolySegmentData;
+   _ir:itrec;
+begin
+     psegment:=beginiterate(_ir);
+     if psegment<>nil then
+     repeat
+           psegment^.naccumlength:=psegment^.naccumlength/l;
+
+           psegment:=iterate(_ir);
+     until psegment=nil;
+end;
+procedure ZSegmentator.nextsegment;
+begin
+     cdp:=pcurrsegment^.naccumlength;
+     pcurrsegment:=iterate(ir);
+     dir:=pcurrsegment^.dir;
+     angle:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(dir.x,dir.y));
+     cp:=pcurrsegment^.startpoint;
 end;
 procedure ZSegmentator.startdraw;
 begin
-     self.pcurrsegment:=beginiterate(ir);
+     pcurrsegment:=beginiterate(ir);
      dir:=pcurrsegment^.dir;
+     angle:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(dir.x,dir.y));
+     cdp:=0;
+     cp:=pcurrsegment^.startpoint;
 end;
-
 procedure ZGLGeometry.DrawLineWithoutLT(const p1,p2:GDBVertex);
 begin
      lines.Add(@p1);
@@ -162,9 +222,9 @@ PTP^.param.PStyle.pfont.CreateSymbol(shx,triangles,byte(PTP^.Text[j]),objmatrix,
 matr[3,0]:=matr[3,0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]),tdinfo).NextSymX;
 end;
 end;
-procedure ZGLGeometry.PlaceOnePattern(var Segmentator:ZSegmentator;var StartPatternPoint,FactStartPoint:GDBVertex;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
+procedure ZGLGeometry.PlaceOnePattern(var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
                                      const vp:PGDBLtypeProp;                 //стиль и прочая лабуда
-                                     scale,length,scale_div_length,angle:GDBDouble);     //направление, масштаб, длинна
+                                     scale,length,scale_div_length:GDBDouble);     //направление, масштаб, длинна
 var
     TDI:PTDashInfo;
     PStroke:PGDBDouble;
@@ -184,26 +244,22 @@ begin
         TDIDash:begin
                      if PStroke^<>0 then
                      begin
-                          addAllignVector:=geometry.VertexMulOnSc(Segmentator.dir,abs(PStroke^)*scale_div_length);
-                          addAllignVector:=geometry.VertexAdd(StartPatternPoint,addAllignVector);
                           if PStroke^>0 then
-                          begin
-                               DrawLineWithoutLT(FactStartPoint,addAllignVector);
-                          end;
-                          StartPatternPoint:=addAllignVector;
-                          FactStartPoint:=StartPatternPoint;
+                                            Segmentator.draw(abs(PStroke^)*scale_div_length,true)
+                                        else
+                                            Segmentator.draw(abs(PStroke^)*scale_div_length,false);
                      end
                         else
-                            DrawPointWithoutLT(StartPatternPoint);
-
+                            DrawPointWithoutLT(Segmentator.cp);
+                     self.DrawLineWithoutLT(nulvertex,Segmentator.cp);
                      PStroke:=vp.strokesarray.iterate(ir3);
                 end;
        TDIShape:begin
-                     PlaceShape(StartPatternPoint,PSP,scale,angle);
+                     PlaceShape(Segmentator.cp,PSP,scale,Segmentator.angle);
                      PSP:=vp.shapearray.iterate(ir4);
                 end;
         TDIText:begin
-                     PlaceText(StartPatternPoint,PTP,scale,angle);
+                     PlaceText(Segmentator.cp,PTP,scale,Segmentator.angle);
                      PTP:=vp.textarray.iterate(ir5);
                  end;
           end;
@@ -212,25 +268,68 @@ begin
 end;
 end;
 
-procedure ZGLGeometry.PlaceNPatterns(var Segmentator:ZSegmentator;StartPatternPoint,FactStartPoint:GDBVertex;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
+procedure ZGLGeometry.PlaceNPatterns(var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
                                      num:integer; //кол-во паттернов
                                      const vp:PGDBLtypeProp;                 //стиль и прочая лабуда
                                      scale,length:GDBDouble);     //направление, масштаб, длинна
 var i:integer;
     scale_div_length:GDBDouble;
-    angle:GDBDouble;
 begin
   scale_div_length:=scale/length;
-  angle:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(Segmentator.dir.x,Segmentator.dir.y));
   for i:=1 to num do
-  PlaceOnePattern(Segmentator,StartPatternPoint,FactStartPoint,vp,scale,length,scale_div_length,angle);//рисуем один паттерн
+  PlaceOnePattern(Segmentator,vp,scale,length,scale_div_length);//рисуем один паттерн
+end;
+procedure ZSegmentator.draw(length:GDBDouble;paint:boolean);
+var
+    tcdp:GDBDouble;
+    oldcp,tv:gdbvertex;
+begin
+     tcdp:=length+cdp;
+     if (cdp<-eps)and(tcdp>eps)then
+                                   begin
+                                        length:=length+cdp;
+                                        cdp:=0;
+                                   end;
+     if (cdp>=-eps)and(tcdp>eps) then
+     begin
+     if tcdp<=(pcurrsegment.naccumlength+eps) then
+                                          begin
+                                               oldcp:=cp;
+                                               tv:=VertexMulOnSc(dir,length);
+                                               cp:=vertexadd(cp,tv);
+                                               if paint then
+                                                            self.PGeom.DrawLineWithoutLT(oldcp,cp);
+                                               cdp:=tcdp;
+                                          end
+                                      else
+                                          begin
+                                               if paint then
+                                                            self.PGeom.DrawLineWithoutLT(cp,pcurrsegment^.endpoint);
+                                               length:=tcdp-pcurrsegment^.naccumlength;
+                                               self.nextsegment;
+                                               draw(length,paint);
+                                               //tcdp:=cdp;
+                                          end;
+     end
+     else
+         cdp:=tcdp;
+end;
+function getLTfromVP(const vp:GDBObjVisualProp):PGDBLtypeProp;
+begin
+      result:=vp.LineType;
+      if assigned(result) then
+      if result.Mode=TLTByLayer then
+                                result:=vp.Layer.LT;
 end;
 procedure ZGLGeometry.DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed:GDBBoolean);
 var
     ptv,ptvprev,ptvfisrt: pgdbvertex;
     ir:itrec;
-    scale,polylength,num,d:GDBDouble;
-    sd:GDBOpenArrayOfData;
+    scale,polylength,num,normalizedD,d,halfStroke,dend:GDBDouble;
+    Segmentator:ZSegmentator;
+    lt:PGDBLtypeProp;
+    PStroke:PGDBDouble;
+    ir3:itrec;
 procedure SetPolyUnLTyped;
 begin
       ptv:=Points.beginiterate(ir);
@@ -248,44 +347,45 @@ end;
 begin
   if Points.Count>1 then
   begin
-       if (vp.LineType=nil) or (vp.LineType.dasharray.Count=0) then
+       LT:=getLTfromVP(vp);
+       if (LT=nil) or (LT.dasharray.Count=0) then
        begin
             SetPolyUnLTyped;
        end
        else
        begin
-       if closed then
-                     sd.init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}sizeof(ZPolySegmentData),points.Count+1)
-                 else
-                     sd.init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}sizeof(ZPolySegmentData),points.Count);
-       polylength:=getlength(points,sd,closed);
-       scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;
-       num:=polylength/(scale*vp.LineType.len);
-       if (num<1)or(num>1000) then
-                                  SetPolyUnLTyped
-       else
-           begin
-                SetPolyUnLTyped;
-                d:=(polylength-(scale*vp.LineType.len)*trunc(num))/2;
-           end;
-       sd.done;
+            //SetPolyUnLTyped;
+           polylength:=0;
+           Segmentator.InitFromPolyline(points,polylength,closed,@self);
+           scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;
+           num:=polylength/(scale*vp.LineType.len);
+           if (num<1)or(num>1000) then
+                                      SetPolyUnLTyped
+           else
+               begin
+                    Segmentator.startdraw;
+                    D:=(polyLength-(scale*LT.len)*trunc(num))/2; //длинна добавки для выравнивания
+                    normalizedD:=D/polyLength;
+
+                    PStroke:=LT^.strokesarray.beginiterate(ir3);//первый штрих
+                    halfStroke:=(scale*abs(PStroke^/2))/polylength;//первый штрих
+                    Segmentator.draw(normalizedD-halfStroke,true);
+
+
+                    PlaceNPatterns(Segmentator,trunc(num),LT,scale,polylength);//рисуем num паттернов
+                    dend:=1-Segmentator.cdp;
+                    if dend>eps then
+                                    Segmentator.draw(dend,true);//дорисовываем окончание если надо
+               end;
+           Segmentator.done;
        end;
   end;
-end;
-function getLTfromVP(const vp:GDBObjVisualProp):PGDBLtypeProp;
-begin
-      result:=vp.LineType;
-      if assigned(result) then
-      if result.Mode=TLTByLayer then
-                                result:=vp.Layer.LT;
 end;
 
 procedure ZGLGeometry.DrawLineWithLT(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);
 var
     scale,length:GDBDouble;
-    num,normalizedD,D:GDBDouble;
-    outPatternPoint,addAllignVector,halfStrokeAllignVector:GDBVertex;
-    dir:GDBvertex;
+    num,normalizedD,D,halfStroke,dend:GDBDouble;
     ir3:itrec;
     PStroke:PGDBDouble;
     lt:PGDBLtypeProp;
@@ -306,26 +406,20 @@ begin
                                      DrawLineWithoutLT(startpoint,endpoint) //не рисуем шаблон при большом количестве повторений
           else
           begin
-               Segmentator.InitFromLine(startpoint,endpoint,length);//длина линии
+               Segmentator.InitFromLine(startpoint,endpoint,length,@self);//длина линии
                Segmentator.startdraw;
-               dir:=geometry.VertexSub(endpoint,startpoint);//направление линии
                D:=(Length-(scale*LT.len)*trunc(num))/2; //длинна добавки для выравнивания
                normalizedD:=D/Length;
-               addAllignVector:=VertexMulOnSc(dir,normalizedD);//вектор добавки для выравнивания
-               outPatternPoint:=VertexSub(endpoint,addAllignVector);//последняя точка шаблонов на линии
 
-               {сдвиг на половину первого штриха}
                PStroke:=LT^.strokesarray.beginiterate(ir3);//первый штрих
-               halfStrokeAllignVector:=VertexMulOnSc(dir,(scale*abs(PStroke^/2))/length);//вектор сдвига на пол первого штриха
-               outPatternPoint:=VertexSub(outPatternPoint,halfStrokeAllignVector);//сдвиг последней точки на полпервого штриха
+               halfStroke:=(scale*abs(PStroke^/2))/length;//первый штрих
+               Segmentator.draw(normalizedD-halfStroke,true);
 
-               {добавка в конец линии}
-               DrawLineWithoutLT(outPatternPoint,endpoint);
 
-               outPatternPoint:=VertexAdd(startpoint,addAllignVector);//вектор добавки для выравнивания
-               outPatternPoint:=geometry.VertexSub(outPatternPoint,halfStrokeAllignVector);//первая точка шаблонов на линии
-
-               PlaceNPatterns(Segmentator,outPatternPoint,startpoint,trunc(num),LT,scale,length);//рисуем num паттернов
+               PlaceNPatterns(Segmentator,trunc(num),LT,scale,length);//рисуем num паттернов
+               dend:=1-Segmentator.cdp;
+               if dend>eps then
+                               Segmentator.draw(dend,true);//дорисовываем окончание если надо
                Segmentator.done;
          end;
      end;

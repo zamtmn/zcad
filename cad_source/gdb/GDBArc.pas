@@ -291,6 +291,8 @@ begin
 
   calcbb;
   createpoint;
+  Geom.Clear;
+  Geom.DrawPolyLineWithLT(Vertex3D_in_WCS_Array,vp,false);
 end;
 procedure GDBObjARC.getoutbound;
 function getQuadrant(a:GDBDouble):integer;
@@ -514,7 +516,10 @@ begin
   //oglsm.myglpushmatrix;
   //glmultmatrixd(@objmatrix);
   if dc.selected then
-                     Vertex3D_in_WCS_Array.drawgeometry2
+                     begin
+                     //Vertex3D_in_WCS_Array.drawgeometry2
+                          Geom.DrawGeometry;
+                     end
                  else
                      begin
                            {if endangle>startangle then
@@ -529,7 +534,10 @@ begin
                                                simply:=CanSimplyDrawInOCS(DC,sin(angle/2)*tan(angle/4),5)
                                             end;
                          if simply then
-                                                      Vertex3D_in_WCS_Array.drawgeometry
+                                       begin
+                                           //Vertex3D_in_WCS_Array.drawgeometry
+                                           Geom.DrawGeometry;
+                                       end
                                                         else
                                                             begin
                                                                  oglsm.myglbegin(GL_lines);

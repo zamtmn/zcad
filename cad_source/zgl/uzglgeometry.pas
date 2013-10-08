@@ -27,7 +27,7 @@ PZGLGeometry=^ZGLGeometry;
 PZPolySegmentData=^ZPolySegmentData;
 ZPolySegmentData={$IFNDEF DELPHI}packed{$ENDIF} record
                                                       startpoint,endpoint,dir:GDBVertex;
-                                                      length,naccumlength,accumlength:GDBDouble;
+                                                      length,nlength,naccumlength,accumlength:GDBDouble;
                                                 end;
 ZSegmentator={$IFNDEF DELPHI}packed{$ENDIF}object(GDBOpenArrayOfData)
                                                  dir,cp:GDBvertex;
@@ -145,7 +145,7 @@ begin
      if psegment<>nil then
      repeat
            psegment^.naccumlength:=psegment^.naccumlength/l;
-
+           psegment^.nlength:=psegment^.length/l;
            psegment:=iterate(_ir);
      until psegment=nil;
 end;
@@ -251,7 +251,7 @@ begin
                      end
                         else
                             DrawPointWithoutLT(Segmentator.cp);
-                     self.DrawLineWithoutLT(nulvertex,Segmentator.cp);
+                     //self.DrawLineWithoutLT(nulvertex,Segmentator.cp);
                      PStroke:=vp.strokesarray.iterate(ir3);
                 end;
        TDIShape:begin
@@ -295,7 +295,7 @@ begin
      if tcdp<=(pcurrsegment.naccumlength+eps) then
                                           begin
                                                oldcp:=cp;
-                                               tv:=VertexMulOnSc(dir,length);
+                                               tv:=VertexMulOnSc(dir,length/pcurrsegment.nlength);
                                                cp:=vertexadd(cp,tv);
                                                if paint then
                                                             self.PGeom.DrawLineWithoutLT(oldcp,cp);

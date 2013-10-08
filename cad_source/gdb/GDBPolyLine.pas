@@ -95,7 +95,7 @@ begin
   Geom.Clear;
   if VertexArrayInWCS.Count>1 then
   begin
-  ptv:=VertexArrayInWCS.beginiterate(ir);
+  {ptv:=VertexArrayInWCS.beginiterate(ir);
   ptvfisrt:=ptv;
   if ptv<>nil then
   repeat
@@ -106,6 +106,8 @@ begin
   until ptv=nil;
   if closed then
                 Geom.DrawLineWithLT(ptvprev^,ptvfisrt^,vp);
+  end;}
+  Geom.DrawPolyLineWithLT(VertexArrayInWCS,vp,closed);
   end;
 end;
 
@@ -167,7 +169,7 @@ begin
             else oglsm.myglbegin(GL_line_strip);
   vertexarrayInWCS.iterategl(@myglVertex3dv);
   oglsm.myglend;}
-  inherited;
+  //inherited;
 end;
 function GDBObjPolyline.Clone;
 var tpo: PGDBObjPolyLine;
@@ -303,4 +305,4 @@ begin
 end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
-end.
+end.

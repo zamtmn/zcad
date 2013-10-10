@@ -21,6 +21,8 @@ unit uzglgeometry;
 interface
 uses UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,uzgltriangles3darray,ugdbltypearray,ugdbfont,sysutils,gdbase,memman,log,
      gdbasetypes;
+const
+     maxPatternsCount=1000;
 type
 {Export+}
 PZGLGeometry=^ZGLGeometry;
@@ -53,11 +55,12 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 constructor init;
                 destructor done;virtual;
                 procedure DrawLineWithLT(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);virtual;
-                procedure DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed:GDBBoolean);virtual;
+                procedure DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);virtual;
                 procedure DrawLineWithoutLT(const p1,p2:GDBVertex);virtual;
                 procedure DrawPointWithoutLT(const p:GDBVertex);virtual;
-                procedure PlaceNPatterns(var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;scale,length:GDBDouble);
-                procedure PlaceOnePattern(var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;scale,length,scale_div_length:GDBDouble);
+                {Patterns func}
+                procedure PlaceNPatterns(var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:GDBDouble);
+                procedure PlaceOnePattern(var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:GDBDouble);
                 procedure PlaceShape(const StartPatternPoint:GDBVertex; PSP:PShapeProp;scale,angle:GDBDouble);
                 procedure PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
              end;
@@ -224,7 +227,7 @@ end;
 end;
 procedure ZGLGeometry.PlaceOnePattern(var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
                                      const vp:PGDBLtypeProp;                 //стиль и прочая лабуда
-                                     scale,length,scale_div_length:GDBDouble);     //направление, масштаб, длинна
+                                     TangentScale,NormalScale,length,scale_div_length:GDBDouble);     //направление, масштаб, длинна
 var
     TDI:PTDashInfo;
     PStroke:PGDBDouble;
@@ -255,11 +258,11 @@ begin
                      PStroke:=vp.strokesarray.iterate(ir3);
                 end;
        TDIShape:begin
-                     PlaceShape(Segmentator.cp,PSP,scale,Segmentator.angle);
+                     PlaceShape(Segmentator.cp,PSP,NormalScale,Segmentator.angle);
                      PSP:=vp.shapearray.iterate(ir4);
                 end;
         TDIText:begin
-                     PlaceText(Segmentator.cp,PTP,scale,Segmentator.angle);
+                     PlaceText(Segmentator.cp,PTP,NormalScale,Segmentator.angle);
                      PTP:=vp.textarray.iterate(ir5);
                  end;
           end;
@@ -271,13 +274,13 @@ end;
 procedure ZGLGeometry.PlaceNPatterns(var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
                                      num:integer; //кол-во паттернов
                                      const vp:PGDBLtypeProp;                 //стиль и прочая лабуда
-                                     scale,length:GDBDouble);     //направление, масштаб, длинна
+                                     TangentScale,NormalScale,length:GDBDouble);     //направление, масштаб, длинна
 var i:integer;
     scale_div_length:GDBDouble;
 begin
-  scale_div_length:=scale/length;
+  scale_div_length:=TangentScale/length;
   for i:=1 to num do
-  PlaceOnePattern(Segmentator,vp,scale,length,scale_div_length);//рисуем один паттерн
+  PlaceOnePattern(Segmentator,vp,TangentScale,NormalScale,length,scale_div_length);//рисуем один паттерн
 end;
 procedure ZSegmentator.draw(length:GDBDouble;paint:boolean);
 var
@@ -321,15 +324,16 @@ begin
       if result.Mode=TLTByLayer then
                                 result:=vp.Layer.LT;
 end;
-procedure ZGLGeometry.DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed:GDBBoolean);
+procedure ZGLGeometry.DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);
 var
     ptv,ptvprev,ptvfisrt: pgdbvertex;
     ir:itrec;
-    scale,polylength,num,normalizedD,d,halfStroke,dend:GDBDouble;
+    TangentScale,NormalScale,polylength,TrueNumberOfPatterns,normalizedD,d,halfStroke,dend:GDBDouble;
     Segmentator:ZSegmentator;
     lt:PGDBLtypeProp;
     PStroke:PGDBDouble;
     ir3:itrec;
+    minPatternsCount,NumberOfPatterns:integer;
 procedure SetPolyUnLTyped;
 begin
       ptv:=Points.beginiterate(ir);
@@ -357,22 +361,37 @@ begin
             //SetPolyUnLTyped;
            polylength:=0;
            Segmentator.InitFromPolyline(points,polylength,closed,@self);
-           scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;
-           num:=polylength/(scale*vp.LineType.len);
-           if (num<1)or(num>1000) then
-                                      SetPolyUnLTyped
+           TangentScale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;
+           NormalScale:=TangentScale;
+           TrueNumberOfPatterns:=polylength/(TangentScale*vp.LineType.len);
+           if ltgen and closed then
+                        begin
+                        minPatternsCount:=2;
+                        NumberOfPatterns:=round(TrueNumberOfPatterns);
+                        TangentScale:=polyLength/(NumberOfPatterns*vp.LineType.len);
+                        end
+                    else
+                        begin
+                        minPatternsCount:=1;
+                        NumberOfPatterns:=trunc(TrueNumberOfPatterns);
+                        end;
+           if (NumberOfPatterns<minPatternsCount)or(NumberOfPatterns>maxPatternsCount) then
+                                                                                           SetPolyUnLTyped
            else
                begin
                     Segmentator.startdraw;
-                    D:=(polyLength-(scale*LT.len)*trunc(num))/2; //длинна добавки для выравнивания
+                    D:=(polyLength-(TangentScale*LT.len)*NumberOfPatterns)/2; //длинна добавки для выравнивания
                     normalizedD:=D/polyLength;
 
+                    if (not closed)or(not ltgen) then
+                    begin
                     PStroke:=LT^.strokesarray.beginiterate(ir3);//первый штрих
-                    halfStroke:=(scale*abs(PStroke^/2))/polylength;//первый штрих
+                    halfStroke:=(TangentScale*abs(PStroke^/2))/polylength;//первый штрих
                     Segmentator.draw(normalizedD-halfStroke,true);
+                    end;
 
 
-                    PlaceNPatterns(Segmentator,trunc(num),LT,scale,polylength);//рисуем num паттернов
+                    PlaceNPatterns(Segmentator,NumberOfPatterns,LT,TangentScale,NormalScale,polylength);//рисуем TrueNumberOfPatterns паттернов
                     dend:=1-Segmentator.cdp;
                     if dend>eps then
                                     Segmentator.draw(dend,true);//дорисовываем окончание если надо
@@ -402,7 +421,7 @@ begin
           length := Vertexlength(startpoint,endpoint);//длина линии
           scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;//фактический масштаб линии
           num:=Length/(scale*LT.len);//количество повторений шаблона
-          if (num<1)or(num>1000) then
+          if (num<1)or(num>maxPatternsCount) then
                                      DrawLineWithoutLT(startpoint,endpoint) //не рисуем шаблон при большом количестве повторений
           else
           begin
@@ -416,7 +435,7 @@ begin
                Segmentator.draw(normalizedD-halfStroke,true);
 
 
-               PlaceNPatterns(Segmentator,trunc(num),LT,scale,length);//рисуем num паттернов
+               PlaceNPatterns(Segmentator,trunc(num),LT,scale,scale,length);//рисуем num паттернов
                dend:=1-Segmentator.cdp;
                if dend>eps then
                                Segmentator.draw(dend,true);//дорисовываем окончание если надо

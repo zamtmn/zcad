@@ -266,7 +266,7 @@ begin
   //getoutbound;
   calcbb;
   Geom.Clear;
-  Geom.DrawPolyLineWithLT(Vertex3D_in_WCS_Array,vp,true);
+  Geom.DrawPolyLineWithLT(Vertex3D_in_WCS_Array,vp,true,true);
 end;
 procedure GDBObjCircle.getoutbound;
 var //tv,tv2:GDBVertex4D;

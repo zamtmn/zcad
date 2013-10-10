@@ -292,7 +292,7 @@ begin
   calcbb;
   createpoint;
   Geom.Clear;
-  Geom.DrawPolyLineWithLT(Vertex3D_in_WCS_Array,vp,false);
+  Geom.DrawPolyLineWithLT(Vertex3D_in_WCS_Array,vp,false,false);
 end;
 procedure GDBObjARC.getoutbound;
 function getQuadrant(a:GDBDouble):integer;

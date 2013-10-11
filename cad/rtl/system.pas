@@ -972,6 +972,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
             RD_PanObjectDegradation:PGDBBoolean;(*'Degradation while pan'*)
             RD_SpatialNodesDepth:PGDBInteger;(*'Spatial index nodes depth'*)(*hidden_in_objinsp*)
             RD_SpatialNodeCount:PGDBInteger;(*'Spatial index ents in node'*)(*hidden_in_objinsp*)
+            RD_MaxLTPatternsInEntity:PGDBInteger;(*'Max LT patterns in entity'*)
       end;
   tsave=packed record
               SAVE_Auto_On:PGDBBoolean;(*'Autosave'*)
@@ -1212,6 +1213,25 @@ ZGLTriangle3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLLine3DArray)(*OpenAr
                 procedure DrawGeometry;virtual;abstract;
              end;
 //Generate on E:\zcad\cad_source\zgl\uzglgeometry.pas
+PZGLGeometry=^ZGLGeometry;
+PZPolySegmentData=^ZPolySegmentData;
+ZPolySegmentData={$IFNDEF DELPHI}packed{$ENDIF} record
+                                                      startpoint,endpoint,dir:GDBVertex;
+                                                      length,nlength,naccumlength,accumlength:GDBDouble;
+                                                end;
+ZSegmentator={$IFNDEF DELPHI}packed{$ENDIF}object(GDBOpenArrayOfData)
+                                                 dir,cp:GDBvertex;
+                                                 cdp,angle:GDBDouble;
+                                                 pcurrsegment:PZPolySegmentData;
+                                                 ir:itrec;
+                                                 PGeom:PZGLGeometry;
+                                                 constructor InitFromLine(const startpoint,endpoint:GDBVertex;out length:GDBDouble;PG:PZGLGeometry);
+                                                 constructor InitFromPolyline(const points:GDBPoint3dArray;out length:GDBDouble;const closed:GDBBoolean;PG:PZGLGeometry);
+                                                 procedure startdraw;
+                                                 procedure nextsegment;
+                                                 procedure normalize(l:GDBDouble);
+                                                 procedure draw(length:GDBDouble;paint:boolean);
+                                           end;
 ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  Lines:ZGLLine3DArray;
                                  Points:ZGLpoint3DArray;
@@ -1223,15 +1243,15 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 constructor init;
                 destructor done;virtual;abstract;
                 procedure DrawLineWithLT(const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp);virtual;abstract;
-                procedure DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed:GDBBoolean);virtual;abstract;
+                procedure DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);virtual;abstract;
                 procedure DrawLineWithoutLT(const p1,p2:GDBVertex);virtual;abstract;
                 procedure DrawPointWithoutLT(const p:GDBVertex);virtual;abstract;
-                procedure PlaceNPatterns(StartPatternPoint,FactStartPoint:GDBVertex;num:integer; const vp:PGDBLtypeProp;dir:GDBvertex;scale,length:GDBDouble);
+                {Patterns func}
+                procedure PlaceNPatterns(var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:GDBDouble);
+                procedure PlaceOnePattern(var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:GDBDouble);
+                procedure PlaceShape(const StartPatternPoint:GDBVertex; PSP:PShapeProp;scale,angle:GDBDouble);
+                procedure PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
              end;
-ZPolySegmentData={$IFNDEF DELPHI}packed{$ENDIF} record
-                                                      startpoint,endpoint,dir:GDBVertex;
-                                                      length,accumlength:GDBDouble;
-                                                end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBSubordinated.pas
 PGDBObjSubordinated=^GDBObjSubordinated;
 PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;

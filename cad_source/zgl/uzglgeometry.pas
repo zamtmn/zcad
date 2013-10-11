@@ -21,8 +21,6 @@ unit uzglgeometry;
 interface
 uses UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,uzgltriangles3darray,ugdbltypearray,ugdbfont,sysutils,gdbase,memman,log,
      gdbasetypes;
-const
-     maxPatternsCount=1000;
 type
 {Export+}
 PZGLGeometry=^ZGLGeometry;
@@ -354,10 +352,10 @@ begin
             ptvprev:=ptv;
             ptv:=Points.iterate(ir);
             if ptv<>nil then
-                            DrawLineWithLT(ptv^,ptvprev^,vp);
+                            DrawLineWithoutLT(ptv^,ptvprev^);
       until ptv=nil;
       if closed then
-                    DrawLineWithLT(ptvprev^,ptvfisrt^,vp);
+                    DrawLineWithoutLT(ptvprev^,ptvfisrt^);
 end;
 begin
   if Points.Count>1 then
@@ -386,7 +384,7 @@ begin
                         minPatternsCount:=1;
                         NumberOfPatterns:=trunc(TrueNumberOfPatterns);
                         end;
-           if (NumberOfPatterns<minPatternsCount)or(NumberOfPatterns>maxPatternsCount) then
+           if (NumberOfPatterns<minPatternsCount)or(NumberOfPatterns>SysVar.RD.RD_MaxLTPatternsInEntity^) then
                                                                                            SetPolyUnLTyped
            else
                begin
@@ -432,7 +430,7 @@ begin
           length := Vertexlength(startpoint,endpoint);//длина линии
           scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;//фактический масштаб линии
           num:=Length/(scale*LT.len);//количество повторений шаблона
-          if (num<1)or(num>maxPatternsCount) then
+          if (num<1)or(num>SysVar.RD.RD_MaxLTPatternsInEntity^) then
                                      DrawLineWithoutLT(startpoint,endpoint) //не рисуем шаблон при большом количестве повторений
           else
           begin
@@ -506,4 +504,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBPoint3DArray.initialization');{$ENDIF}
 end.
-
+

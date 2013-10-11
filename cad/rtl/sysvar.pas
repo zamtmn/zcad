@@ -59,6 +59,7 @@ var
   RD_ID_PrefferedRenderTime:GDBInteger;
   RD_SpatialNodesDepth:GDBInteger;
   RD_SpatialNodeCount:GDBInteger;
+  RD_MaxLTPatternsInEntity:GDBInteger;
   SAVE_Auto_Interval:GDBInteger;
   SAVE_Auto_Current_Interval:GDBInteger;
   SAVE_Auto_FileName:GDBString;
@@ -136,6 +137,7 @@ begin
   RD_ID_PrefferedRenderTime:=20;
   RD_SpatialNodesDepth:=16;
   RD_SpatialNodeCount:=-1;
+  RD_MaxLTPatternsInEntity:=10000;
   SAVE_Auto_Interval:=300;
   SAVE_Auto_Current_Interval:=860;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';

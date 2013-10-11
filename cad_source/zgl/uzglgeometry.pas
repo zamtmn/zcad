@@ -153,12 +153,20 @@ begin
      until psegment=nil;
 end;
 procedure ZSegmentator.nextsegment;
+var
+   psegment:PZPolySegmentData;
 begin
+     psegment:=iterate(ir);
+     if psegment<>nil then
+     begin
      cdp:=pcurrsegment^.naccumlength;
-     pcurrsegment:=iterate(ir);
+     pcurrsegment:=psegment;
      dir:=pcurrsegment^.dir;
      angle:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(dir.x,dir.y));
      cp:=pcurrsegment^.startpoint;
+     end
+     else
+         pcurrsegment:=pcurrsegment;
 end;
 procedure ZSegmentator.startdraw;
 begin
@@ -287,6 +295,8 @@ var
     tcdp:GDBDouble;
     oldcp,tv:gdbvertex;
 begin
+     if cdp<1then
+     begin
      tcdp:=length+cdp;
      if (cdp<-eps)and(tcdp>eps)then
                                    begin
@@ -316,6 +326,7 @@ begin
      end
      else
          cdp:=tcdp;
+     end;
 end;
 function getLTfromVP(const vp:GDBObjVisualProp):PGDBLtypeProp;
 begin
@@ -495,4 +506,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBPoint3DArray.initialization');{$ENDIF}
 end.
-
+

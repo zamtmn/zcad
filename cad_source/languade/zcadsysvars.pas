@@ -98,6 +98,7 @@ type
             RD_PanObjectDegradation:PGDBBoolean;(*'Degradation while pan'*)
             RD_SpatialNodesDepth:PGDBInteger;(*'Spatial index nodes depth'*)(*hidden_in_objinsp*)
             RD_SpatialNodeCount:PGDBInteger;(*'Spatial index ents in node'*)(*hidden_in_objinsp*)
+            RD_MaxLTPatternsInEntity:PGDBInteger;(*'Max LT patterns in entity'*)
       end;
   tsave=packed record
               SAVE_Auto_On:PGDBBoolean;(*'Autosave'*)

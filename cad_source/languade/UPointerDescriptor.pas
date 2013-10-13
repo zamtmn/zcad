@@ -163,6 +163,8 @@ begin
 
                                                                                                                                                                                                  PTPropertyDeskriptorArray(ppd^.SubNode)^.cleareraseobj;
                                                                                                                                                                                                  ppd^.SubNode^.Done;
+                                                                                                                                                                                                 gdbfreemem(ppd^.SubNode);
+                                                                                                                                                                                                 ppd^.SubNode:=nil;
 
                                                                                                                                                                                             end;
                                                                                                                                                                                             bm2:=-bmode;

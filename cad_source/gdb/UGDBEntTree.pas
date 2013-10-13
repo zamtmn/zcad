@@ -84,7 +84,7 @@ implementation
 function MakeTreeStatisticRec(treedepth:integer):TTreeStatistik;
 begin
      fillchar(result,sizeof(TTreeStatistik),0);
-     gdbgetmem(result.PLevelStat,(treedepth+1)*sizeof(TTreeLevelStatistik));
+     gdbgetmem({$IFDEF DEBUGBUILD}'{7604D7A4-2788-49B5-BB45-F9CD42F9785B}',{$ENDIF}result.PLevelStat,(treedepth+1)*sizeof(TTreeLevelStatistik));
 end;
 procedure KillTreeStatisticRec(var tr:TTreeStatistik);
 begin

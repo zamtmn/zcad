@@ -91,6 +91,7 @@ var //i,j: GDBInteger;
         ir:itrec;
 begin
   FormatWithoutSnapArray;
+  calcbb;
   //-------------BuildSnapArray(VertexArrayInWCS,snaparray,Closed);
   Geom.Clear;
   if VertexArrayInWCS.Count>1 then
@@ -305,4 +306,4 @@ begin
 end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
-end.
+end.

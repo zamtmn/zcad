@@ -41,7 +41,7 @@ uses
        commanddefinternal,commandline,
   {GUI}
        cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
-       colorwnd,imagesmanager;
+       colorwnd,imagesmanager,ltwnd;
   {}
 type
   TInterfaceVars=record
@@ -215,7 +215,8 @@ var
   OLDColor:integer;
   localpm:TFiletoMenuIteratorData;
   //DockMaster:  TAnchorDockMaster = nil;
-
+const
+     LTEditor:pointer=@LTypeBox;//пофиг что, используем только цифру
   function CloseApp:GDBInteger;
   function IsRealyQuit:GDBBoolean;
 
@@ -1674,7 +1675,13 @@ begin
                                       end
                                  else
                                      plt:=PGDBLtypeProp(tcombobox(Control).items.Objects[Index]);
-   if plt<>nil then
+   if plt=LTEditor then
+                       begin
+                       s:=rsSelectLT;
+                       plt:=nil;
+                       ll:=0;
+                       end
+else if plt<>nil then
                    begin
                         s:=Tria_AnsiToUtf8(plt^.Name);
                         ll:=30;
@@ -3079,17 +3086,17 @@ begin
      //If use  Items.Clear and add items in GTK2 combobox close on mouseup
 
      //Add items if need
-     if tcombobox(Sender).Items.Count<gdb.GetCurrentDWG.LTypeStyleTable.Count then
+     if tcombobox(Sender).Items.Count<gdb.GetCurrentDWG.LTypeStyleTable.Count+1 then
      begin
-           for i:=0 to gdb.GetCurrentDWG.LTypeStyleTable.Count-tcombobox(Sender).Items.Count-1 do
+           for i:=0 to gdb.GetCurrentDWG.LTypeStyleTable.Count-tcombobox(Sender).Items.Count{-1} do
            begin
                 tcombobox(Sender).AddItem('',nil);
            end;
      end;
      //Remove items if need
-     if tcombobox(Sender).Items.Count>gdb.GetCurrentDWG.LTypeStyleTable.Count then
+     if tcombobox(Sender).Items.Count>gdb.GetCurrentDWG.LTypeStyleTable.Count+1 then
      begin
-           for i:=0 to tcombobox(Sender).Items.Count-gdb.GetCurrentDWG.LTypeStyleTable.Count-1 do
+           for i:=0 to tcombobox(Sender).Items.Count-gdb.GetCurrentDWG.LTypeStyleTable.Count{-1} do
            begin
                 tcombobox(Sender).Items.Delete(1);
            end;
@@ -3099,6 +3106,7 @@ begin
      begin
           tcombobox(Sender).Items.Objects[i]:=tobject(gdb.GetCurrentDWG.LTypeStyleTable.getelement(i));
      end;
+     tcombobox(Sender).Items.Objects[gdb.GetCurrentDWG.LTypeStyleTable.Count]:=LTEditor;
 end;
 procedure MainForm.DropUpColor(Sender:Tobject);
 begin
@@ -3116,6 +3124,16 @@ begin
      LTIndex:=gdb.GetCurrentDWG.LTypeStyleTable.GetIndexByPointer(plt);
      if plt=nil then
                          exit;
+     if plt=lteditor then
+                         begin
+                              //shared.ShowError('Not implement yet');
+                              LTWindow:=TLTWindow.Create(nil);
+                              //SetHeightControl(LTWindow,22);
+                              DOShowModal(LTWindow);
+                              Freeandnil(LTWindow);
+                         end
+     else
+     begin
      if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
      then
      begin
@@ -3127,6 +3145,7 @@ begin
           SysVar.dwg.DWG_CLType^:={LTIndex}plt;
           commandmanager.ExecuteCommand('SelObjChangeLTypeToCurrent',gdb.GetCurrentDWG);
           SysVar.dwg.DWG_CLType^:=CLTSave;
+     end;
      end;
      setvisualprop;
      setnormalfocus(nil);

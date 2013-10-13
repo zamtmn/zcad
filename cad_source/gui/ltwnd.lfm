@@ -1,0 +1,18 @@
+object LTWindow: TLTWindow
+  Left = 234
+  Height = 240
+  Top = 246
+  Width = 320
+  Caption = 'LTWindow'
+  ClientHeight = 240
+  ClientWidth = 320
+  LCLVersion = '1.3'
+  object Label1: TLabel
+    Left = 136
+    Height = 15
+    Top = 16
+    Width = 119
+    Caption = 'Not Implemed yet(('
+    ParentColor = False
+  end
+end

@@ -19,7 +19,7 @@
 unit UGDBPoint3DArray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
+uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,math,
 geometry;
 type
 {Export+}
@@ -33,10 +33,52 @@ GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenA
                 procedure DrawGeometry;virtual;
                 procedure DrawGeometry2;virtual;
                 procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;
+                function getoutbound:GDBBoundingBbox;virtual;
              end;
 {Export-}
 implementation
 uses OGLSpecFunc,log;
+function GDBPoint3DArray.getoutbound;
+var
+    t,b,l,r,n,f:GDBDouble;
+    ptv:pgdbvertex;
+    ir:itrec;
+begin
+  l:=Infinity;
+  b:=Infinity;
+  n:=Infinity;
+  r:=NegInfinity;
+  t:=NegInfinity;
+  f:=NegInfinity;
+  ptv:=beginiterate(ir);
+  if ptv<>nil then
+  begin
+  repeat
+        if ptv.x<l then
+                 l:=ptv.x;
+        if ptv.x>r then
+                 r:=ptv.x;
+        if ptv.y<b then
+                 b:=ptv.y;
+        if ptv.y>t then
+                 t:=ptv.y;
+        if ptv.z<n then
+                 n:=ptv.z;
+        if ptv.z>f then
+                 f:=ptv.z;
+        ptv:=iterate(ir);
+  until ptv=nil;
+  result.LBN:=CreateVertex(l,B,n);
+  result.RTF:=CreateVertex(r,T,f);
+
+  end
+              else
+  begin
+  result.LBN:=CreateVertex(-1,-1,-1);
+  result.RTF:=CreateVertex(1,1,1);
+  end;
+end;
+
 procedure GDBPoint3DArray.drawgeometry;
 var p:PGDBVertex;
     i:GDBInteger;

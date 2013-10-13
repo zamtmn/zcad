@@ -90,6 +90,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure getoutbound;virtual;
                     procedure getonlyoutbound;virtual;
                     procedure correctbb;virtual;
+                    function GetLTCorrectSize:GDBDouble;virtual;
                     procedure calcbb;virtual;
                     procedure DrawBB;
                     function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
@@ -784,7 +785,18 @@ begin
                            //if lend.z>=0 then CalcZ(lend.z);
                       end;}
 end;
+function GDBObjEntity.GetLTCorrectSize:GDBDouble;
+begin
+      if vp.LineType<>nil then
+      begin
+           if SysVar.dwg.DWG_LTScale<>nil then
+                                              result:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale*vp.LineType.h
+                                          else
+                                              result:=vp.LineTypeScale*vp.LineType.h;
+      end
+         else
 
+end;
 procedure GDBObjEntity.correctbb;
 var cv:gdbvertex;
     d:double;
@@ -800,15 +812,8 @@ begin
                                 cv.y:=minoffsetstart;
      if cv.z<minoffsetstart then
                                 cv.z:=minoffsetstart;}
-     if vp.LineType<>nil then
-     begin
-          if SysVar.dwg.DWG_LTScale<>nil then
-                                             d:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale*vp.LineType.h
-                                         else
-                                             d:=vp.LineTypeScale*vp.LineType.h;
+     d:=GetLTCorrectSize;
      cv:=createvertex(d,d,d);
-     end
-        else cv:=nulvertex;
      vp.BoundingBox.LBN:=VertexSUB(vp.BoundingBox.LBN,cv);
      vp.BoundingBox.RTF:=VertexAdd(vp.BoundingBox.RTF,cv);
 end;
@@ -1207,4 +1212,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBEntity.initialization');{$ENDIF}
-end.
+end.

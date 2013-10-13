@@ -51,6 +51,7 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
+                 procedure getoutbound;virtual;
 
            end;
 {Export-}
@@ -58,6 +59,13 @@ implementation
 uses GDBCable,log;
 var
     parr:PGDBPoint3dArray;
+procedure GDBObjSpline.getoutbound;
+begin
+  if AproxPointInWCS.Count>0 then
+                                 vp.BoundingBox:=AproxPointInWCS.getoutbound
+                             else
+                                 vp.BoundingBox:=VertexArrayInWCS.getoutbound
+end;
 procedure GDBObjSpline.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 begin
   GDBPoint3dArrayAddOnTrackAxis(VertexArrayInWCS,posr,processaxis,closed);
@@ -199,6 +207,7 @@ begin
 
   Geom.Clear;
   Geom.DrawPolyLineWithLT(AproxPointInWCS,vp,closed,false);
+  calcbb;
 end;
 
 function GDBObjSpline.FromDXFPostProcessBeforeAdd;
@@ -445,4 +454,4 @@ begin
 end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
-end.
+end.

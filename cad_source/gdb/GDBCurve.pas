@@ -211,44 +211,8 @@ begin
 end;
 
 procedure GDBObjCurve.getoutbound;
-var //tv,tv2:GDBVertex4D;
-    t,b,l,r,n,f:GDBDouble;
-    ptv:pgdbvertex;
-    ir:itrec;
 begin
-  l:=Infinity;
-  b:=Infinity;
-  n:=Infinity;
-  r:=NegInfinity;
-  t:=NegInfinity;
-  f:=NegInfinity;
-  ptv:=VertexArrayInWCS.beginiterate(ir);
-  if ptv<>nil then
-  begin
-  repeat
-        if ptv.x<l then
-                 l:=ptv.x;
-        if ptv.x>r then
-                 r:=ptv.x;
-        if ptv.y<b then
-                 b:=ptv.y;
-        if ptv.y>t then
-                 t:=ptv.y;
-        if ptv.z<n then
-                 n:=ptv.z;
-        if ptv.z>f then
-                 f:=ptv.z;
-        ptv:=VertexArrayInWCS.iterate(ir);
-  until ptv=nil;
-  vp.BoundingBox.LBN:=CreateVertex(l,B,n);
-  vp.BoundingBox.RTF:=CreateVertex(r,T,f);
-
-  end
-              else
-  begin
-  vp.BoundingBox.LBN:=CreateVertex(-1,-1,-1);
-  vp.BoundingBox.RTF:=CreateVertex(1,1,1);
-  end;
+  vp.BoundingBox:=VertexArrayInWCS.getoutbound;
 end;
 function GDBObjCurve.GetObjTypeName;
 begin
@@ -408,7 +372,6 @@ begin
         ptvprev:=ptv;
         ptv:=VertexArrayInWCS.iterate(ir);
   until ptv=nil;
-  calcbb;
   VertexArrayInOCS.Shrink;
   VertexArrayInWCS.Shrink;
 end;
@@ -421,6 +384,7 @@ procedure GDBObjCurve.FormatEntity(const drawing:TDrawingDef);
         //ir:itrec;
 begin
   FormatWithoutSnapArray;
+  calcbb;
   //------------BuildSnapArray(VertexArrayInWCS,snaparray,false);
 end;
 

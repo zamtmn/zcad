@@ -320,14 +320,14 @@ var
    v:gdbvertex;
 begin
   Vertex3D_in_WCS_Array.clear;
-  if (lod>8) then
+  if (lod>32) then
                  begin
                       l:=lod;
                       if l>CircleLODCount then
                                    l:=CircleLODCount;
                  end
             else
-                l:=8;
+                l:=32;
 
   pvertex:=circlepointoflod[l].beginiterate(ir);
   if pvertex<>nil then
@@ -529,7 +529,7 @@ begin
       result:=true;
       for i:=0 to 5 do
       begin
-      if(frustum[i][0] * P_insert_in_WCS.x + frustum[i][1] * P_insert_in_WCS.y + frustum[i][2] * P_insert_in_WCS.z + frustum[i][3]+radius < 0 )
+      if(frustum[i][0] * P_insert_in_WCS.x + frustum[i][1] * P_insert_in_WCS.y + frustum[i][2] * P_insert_in_WCS.z + frustum[i][3]+radius+GetLTCorrectSize < 0 )
       then
       begin
            result:=false;
@@ -543,7 +543,7 @@ var i{,count}:GDBInteger;
 begin
       for i:=0 to 5 do
       begin
-      if(frustum[i][0] * P_insert_in_WCS.x + frustum[i][1] * P_insert_in_WCS.y + frustum[i][2] * P_insert_in_WCS.z + frustum[i][3]+radius < 0 )
+      if(frustum[i][0] * P_insert_in_WCS.x + frustum[i][1] * P_insert_in_WCS.y + frustum[i][2] * P_insert_in_WCS.z + frustum[i][3]+radius+GetLTCorrectSize < 0 )
       then
       begin
            result:=IREmpty;

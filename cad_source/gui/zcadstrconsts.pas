@@ -149,6 +149,7 @@ resourcestring
   rsByBlock='ByBlock';
   rsDefault='Default';
   rsSelectColor='Select color...';
+  rsSelectLT='Select line type...';
   rsColorNum='Color %d';
   rsEmpty='Empty';
   rsmm='mm';
@@ -158,4 +159,4 @@ resourcestring
   rsncOGLc='OpenGL context is not created';
 implementation
 
-end.
+end.

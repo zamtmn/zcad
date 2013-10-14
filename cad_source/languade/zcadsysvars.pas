@@ -133,6 +133,7 @@ type
              DWG_CColor:PGDBInteger;(*'Current color'*)
              DWG_LTScale:PGDBDouble;(*'Drawing line type scale'*)
              DWG_CLType:PGDBPointer;(*'Drawing line type'*)(*oi_readonly*)
+             DWG_CTStyle:PGDBPointer;(*'Text style'*)(*oi_readonly*)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
              DWG_SystmGeometryDraw:PGDBBoolean;(*'System geometry'*)

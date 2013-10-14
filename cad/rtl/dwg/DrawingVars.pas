@@ -9,6 +9,7 @@ var
    DWG_CLinew:GDBInteger;
    DWG_CColor:GDBInteger;
    DWG_CLType:PGDBLtypeProp;
+   DWG_CTStyle:PGDBTextStyle;
 
    DWG_DrawGrid:GDBBoolean;
    DWG_SnapGrid:GDBBoolean;

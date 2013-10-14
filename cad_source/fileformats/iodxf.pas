@@ -201,7 +201,7 @@ begin
   end;
   end;
 end;
-procedure readvariables(var f: GDBOpenArrayOfByte;var clayer:GDBString;var cltype:GDBString;LoadMode:TLoadOpt);
+procedure readvariables(var f: GDBOpenArrayOfByte;var ctstyle:string; var clayer:GDBString;var cltype:GDBString;LoadMode:TLoadOpt);
 var
   byt: GDBByte;
   s: GDBString;
@@ -223,6 +223,13 @@ begin
                                                if LoadMode=TLOLoad then
                                                                        clayer := s;
                                           end
+else if (byt = 9) and (s = '$TEXTSTYLE') then
+                                    begin
+                                         s := f.readGDBString;
+                                         s:=f.readGDBString;
+                                         if LoadMode=TLOLoad then
+                                                                 ctstyle := s;
+                                    end
 else if (byt = 9) and (s = '$CELTYPE') then
                                      begin
                                           s := f.readGDBString;
@@ -571,7 +578,7 @@ var
 
   nulisread:boolean;
 
-  clayer,cltype:GDBString;
+  clayer,cltype,ctstyle:GDBString;
   player:PGDBLayerProp;
   pltypeprop:PGDBLtypeProp;
   dashinfo:TDashInfo;
@@ -589,7 +596,7 @@ begin
   blockload:=false;
   nulisread:=false;
   {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF2000',lp_IncPos);{$ENDIF}
-  readvariables(f,clayer,cltype,LoadMode);
+  readvariables(f,ctstyle,clayer,cltype,LoadMode);
   repeat
     gotodxf(f, 0, dxfName_SECTION);
     if not f.notEOF then
@@ -975,6 +982,9 @@ begin
                              until pltypeprop=nil;
                         end;
                         {$IFDEF TOTALYLOG}programlog.logoutstr('Found style '+tstyle.Name,0);{$ENDIF}
+                       if uppercase(tstyle.Name)=uppercase(ctstyle)then
+                                    if sysvar.DWG.DWG_CTStyle<>nil then
+                                                                      sysvar.DWG.DWG_CTStyle^:=drawing.TextStyleTable.getelement(drawing.TextStyleTable.FindStyle(tstyle.Name,false));
                         tstyle.Name:='';
                       end;
                       pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);

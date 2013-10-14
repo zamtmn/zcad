@@ -1007,6 +1007,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
              DWG_CColor:PGDBInteger;(*'Current color'*)
              DWG_LTScale:PGDBDouble;(*'Drawing line type scale'*)
              DWG_CLType:PGDBPointer;(*'Drawing line type'*)(*oi_readonly*)
+             DWG_CTStyle:PGDBPointer;(*'Text style'*)(*oi_readonly*)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
              DWG_SystmGeometryDraw:PGDBBoolean;(*'System geometry'*)
@@ -2122,7 +2123,7 @@ PGDBObjText=^GDBObjText;
 GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  Content:GDBAnsiString;
                  Template:GDBAnsiString;(*saved_to_shd*)
-                 TXTStyleIndex:TArrayIndex;(*saved_to_shd*)
+                 TXTStyleIndex:PGDBTextStyle;(*saved_to_shd*)
                  CoordMin,CoordMax:GDBvertex;
                  obj_height,obj_width,obj_y:GDBDouble;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte);

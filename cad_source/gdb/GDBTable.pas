@@ -183,6 +183,7 @@ ConstObjArray.cleareraseobj;
                            pgdbmtext.linespacef:=PTableStyle^.rowheight/pgdbmtext.textprop.size*3/5;
                            pgdbmtext.width:=pcf^.TextWidth*scale;
                            pgdbmtext.vp.Layer:=vp.Layer;
+                           pgdbmtext.TXTStyleIndex:=drawing.GetTextStyleTable^.getelement(0);
 
                            pgdbmtext.Local.P_insert.y:=(-ccount*PTableStyle^.rowheight-PTableStyle^.rowheight/4)*scale;
                            case pcf^.CF of

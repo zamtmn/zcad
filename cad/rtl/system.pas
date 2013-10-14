@@ -522,6 +522,7 @@ GDBPoint3dArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenA
                 procedure DrawGeometry;virtual;abstract;
                 procedure DrawGeometry2;virtual;abstract;
                 procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;abstract;
+                function getoutbound:GDBBoundingBbox;virtual;abstract;
              end;
 //Generate on E:\zcad\CAD_SOURCE\u\UGDBPolyLine2DArray.pas
 PGDBPolyline2DArray=^GDBPolyline2DArray;
@@ -1368,6 +1369,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure getoutbound;virtual;abstract;
                     procedure getonlyoutbound;virtual;abstract;
                     procedure correctbb;virtual;abstract;
+                    function GetLTCorrectSize:GDBDouble;virtual;abstract;
                     procedure calcbb;virtual;abstract;
                     procedure DrawBB;
                     function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;abstract;
@@ -2273,6 +2275,7 @@ GDBObjSpline={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
                  function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;abstract;
+                 procedure getoutbound;virtual;abstract;
            end;
 //Generate on E:\zcad\CAD_SOURCE\electroteh\GDBCable.pas
 PTNodeProp=^TNodeProp;

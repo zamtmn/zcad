@@ -795,6 +795,7 @@ begin
                                               result:=vp.LineTypeScale*vp.LineType.h;
       end
          else
+         result:=0;
 
 end;
 procedure GDBObjEntity.correctbb;
@@ -1212,4 +1213,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBEntity.initialization');{$ENDIF}
-end.
+end.

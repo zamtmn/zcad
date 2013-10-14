@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}{layerwnd,}strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}{layerwnd,}strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -829,6 +829,42 @@ begin
              if psv.objaddr^.Selected then
                                           begin
                                                psv.objaddr^.vp.LineType:=plt;
+                                               psv.objaddr^.Formatentity(gdb.GetCurrentDWG^);
+                                          end;
+       psv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
+       until psv=nil;
+  end;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  result:=cmd_ok;
+end;
+function SelObjChangeTStyleToCurrent_com:GDBInteger;
+var pv:PGDBObjText;
+    psv:PSelectedObjDesc;
+    prs:PGDBTextStyle;
+    ir:itrec;
+begin
+  if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
+  prs:=(SysVar.dwg.DWG_CTStyle^);
+  if prs=nil then
+                 exit;
+  pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+    if pv^.Selected then
+    if (pv^.vp.ID=GDBMTextID)or(pv^.vp.ID=GDBTextID) then
+                        begin
+                             pv^.TXTStyleIndex:=prs;
+                             pv^.Formatentity(gdb.GetCurrentDWG^);
+                        end;
+  pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
+  until pv=nil;
+  psv:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
+  if psv<>nil then
+  begin
+       repeat
+             if psv.objaddr^.Selected then
+                                          begin
+                                               PGDBObjText(psv.objaddr)^.TXTStyleIndex:=prs;
                                                psv.objaddr^.Formatentity(gdb.GetCurrentDWG^);
                                           end;
        psv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
@@ -1900,6 +1936,7 @@ begin
   CreateCommandFastObjectPlugin(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);
   CreateCommandFastObjectPlugin(@SelObjChangeColorToCurrent_com,'SelObjChangeColorToCurrent',CADWG,0);
   CreateCommandFastObjectPlugin(@SelObjChangeLTypeToCurrent_com,'SelObjChangeLTypeToCurrent',CADWG,0);
+  CreateCommandFastObjectPlugin(@SelObjChangeTStyleToCurrent_com,'SelObjChangeTStyleToCurrent',CADWG,0);
   selframecommand:=CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,@FrameEdit_com_Command_End,nil,nil,@FrameEdit_com_BeforeClick,@FrameEdit_com_AfterClick,nil,nil,'SelectFrame',0,0);
   selframecommand^.overlay:=true;
   selframecommand.CEndActionAttr:=0;

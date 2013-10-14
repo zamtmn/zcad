@@ -30,7 +30,7 @@ PGDBObjText=^GDBObjText;
 GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  Content:GDBAnsiString;
                  Template:GDBAnsiString;(*saved_to_shd*)
-                 TXTStyleIndex:TArrayIndex;(*saved_to_shd*)
+                 TXTStyleIndex:PGDBTextStyle;(*saved_to_shd*)
                  CoordMin,CoordMax:GDBvertex;
                  obj_height,obj_width,obj_y:GDBDouble;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte);
@@ -212,9 +212,9 @@ begin
    while i<=length(content) do
   //for i:=1 to length(content) do
   begin
-    sym:=getsymbol(content,i,l,PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont^.font.unicode);
+    sym:=getsymbol(content,i,l,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont^.font.unicode);
     //psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(ach2uch(GDBByte(content[i])));
-    psyminfo:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(sym,tdinfo);
+    psyminfo:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(sym,tdinfo);
     obj_width:=obj_width+psyminfo.NextSymX;
     if psyminfo.SymMaxY>obj_height then obj_height:=psyminfo.SymMaxY;
     if psyminfo.SymMinY<obj_y then obj_y:=psyminfo.SymMinY;
@@ -613,7 +613,7 @@ var
   TDInfo:TTrianglesDataInfo;
 begin
   ln:=1;
-  pfont:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont;
+  pfont:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont;
 
   ispl:=false;
   pl.init({$IFDEF DEBUGBUILD}'{AC324582-5E55-4290-8017-44B8C675198A}',{$ENDIF}10);
@@ -818,7 +818,7 @@ begin
                              bw:=bw+2;
   if bw<>0 then
                dxfGDBIntegerout(outhandle,71,bw);
-  dxfGDBStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.name);
+  dxfGDBStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.name);
 
   SaveToDXFObjPostfix(outhandle);
 
@@ -862,9 +862,9 @@ else if dxfGDBDoubleload(f,51,byt,textprop.oblique) then
                                                         textprop.oblique:=textprop.oblique
 else if     dxfGDBStringload(f,7,byt,style)then
                                              begin
-                                                  TXTStyleIndex :={gdb.GetCurrentDWG}drawing.GetTextStyleTable^.FindStyle(Style,false);
-                                                  if TXTStyleIndex=-1 then
-                                                                      TXTStyleIndex:=0;
+                                                  TXTStyleIndex :=drawing.GetTextStyleTable^.getelement(drawing.GetTextStyleTable^.FindStyle(Style,false));
+                                                  if TXTStyleIndex=nil then
+                                                                      TXTStyleIndex:=drawing.GetTextStyleTable^.getelement(0);
                                              end
 else if not dxfGDBIntegerload(f,72,byt,gv)then
      if not dxfGDBIntegerload(f,73,byt,vv)then

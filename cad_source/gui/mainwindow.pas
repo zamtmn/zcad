@@ -31,17 +31,17 @@ uses
   {ZCAD BASE}
        gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
-       varmandef, varman,UUnitManager,SysInfo,shared,strmy,
+       varmandef, varman,UUnitManager,SysInfo,shared,strmy,UGDBTextStyleArray,
   {ZCAD SIMPLE PASCAL SCRIPT}
        languade,UGDBOpenArrayOfUCommands,
   {ZCAD ENTITIES}
        GDBEntity,UGDBSelectedObjArray,UGDBLayerArray,ugdbsimpledrawing,
-       GDBBlockDef,UGDBDescriptor,GDBManager,ugdbltypearray,
+       GDBBlockDef,UGDBDescriptor,GDBManager,ugdbltypearray,gdbobjectsconstdef,GDBText,
   {ZCAD COMMANDS}
        commanddefinternal,commandline,
   {GUI}
        cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
-       colorwnd,imagesmanager,ltwnd;
+       colorwnd,imagesmanager,ltwnd,usuptstylecombo,usupportgui;
   {}
 type
   TComboFiller=procedure(cb:TCustomComboBox) of object;
@@ -49,6 +49,7 @@ type
                        CColor,CLWeight:GDBInteger;
                        CLayer:PGDBLayerProp;
                        CLType:PGDBLTypeProp;
+                       CTStyle:PGDBTextStyle;
                  end;
   TFiletoMenuIteratorData=record
                                 localpm:TMenuItem;
@@ -92,7 +93,6 @@ type
 
     {procedure LayerBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                State: TOwnerDrawState);}
-    procedure ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);
     procedure LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                State: TOwnerDrawState);
     procedure ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
@@ -252,12 +252,15 @@ end;
 procedure MainForm.setvisualprop;
 const pusto=-1000;
       lpusto=pointer(0);
+      tspusto=pointer(0);
       different=-10001;
       ldifferent=pointer(1);
+      tsdifferent=pointer(1);
 var lw:GDBInteger;
     color:GDBInteger;
     layer:pgdblayerprop;
     ltype:PGDBLtypeProp;
+    tstyle:PGDBTextStyle;
     //i,se:GDBInteger;
     pv:{pgdbobjEntity}PSelectedObjDesc;
         ir:itrec;
@@ -275,6 +278,7 @@ begin
            IVars.CLWeight:=sysvar.dwg.DWG_CLinew^+3;
            ivars.CLayer:={gdb.GetCurrentDWG.LayerTable.getelement}(sysvar.dwg.DWG_CLayer^);
            ivars.CLType:={gdb.GetCurrentDWG.LTypeStyleTable.getelement}(sysvar.dwg.DWG_CLType^);
+           ivars.CTStyle:=sysvar.dwg.DWG_CTStyle^;
       end
   else
       begin
@@ -283,6 +287,7 @@ begin
            layer:=lpusto;
            color:=pusto;
            ltype:=lpusto;
+           tstyle:=tspusto;
            pv:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
            //pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
            if pv<>nil then
@@ -300,8 +305,13 @@ begin
                                         else if color<> pv^.objaddr^.vp.color then color:=different;
                          if ltype=lpusto then ltype:=pv^.objaddr^.vp.LineType
                                         else if ltype<> pv^.objaddr^.vp.LineType then ltype:=ldifferent;
+                         if (pv^.objaddr^.vp.ID=GDBMTextID)or(pv^.objaddr^.vp.ID=GDBTextID) then
+                         begin
+                         if tstyle=tspusto then tstyle:=PGDBObjText(pv^.objaddr)^.TXTStyleIndex
+                                           else if tstyle<> PGDBObjText(pv^.objaddr)^.TXTStyleIndex then tstyle:=tsdifferent;
+                         end;
                     end;
-                if (layer=ldifferent)and(lw=different)and(color=different)and(ltype=ldifferent) then system.Break;
+                if (layer=ldifferent)and(lw=different)and(color=different)and(ltype=ldifferent)and(tstyle=tsdifferent) then system.Break;
            end;
            pv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
            until pv=nil;
@@ -333,7 +343,13 @@ begin
                                begin
                                     ivars.CLType:=ltype;
                                end;
-
+           if tstyle<>lpusto then
+           if tstyle=ldifferent then
+                                  ivars.CTStyle:=nil
+                           else
+                               begin
+                                    ivars.CTStyle:=tstyle;
+                               end;
       end;
       UpdateControls;
 end;
@@ -1556,14 +1572,6 @@ begin
     ARect.Left:=ARect.Left+36;
     DrawText(LayerBox.canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
 end;}
-procedure MainForm.ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);
-begin
-     //if not ({odSelected}{odComboBoxEdit}odDisabled in state) then
-     if (state<>[])and(state<>[odHotLight])and(state<>[odPainted]) then
-     {ifdef windows}
-     TComboBox(Control).canvas.FillRect(ARect);
-     {endif}
-end;
 
 procedure drawLT(canvas:TCanvas;ARect: TRect;s:string;plt:PGDBLtypeProp);
 var
@@ -2044,7 +2052,7 @@ begin
                      if uppercase(line)='TSTYLECOMBOBOX' then
                      begin
                           ReadComboSubParam(bc,ts,w);
-                          TStyleBox:=CreateCBox(tb,nil,nil,nil,nil,nil,w,ts);
+                          TStyleBox:=CreateCBox(tb,TSupportTStyleCombo.DrawItemTStyle,TSupportTStyleCombo.ChangeLType,TSupportTStyleCombo.DropDownTStyle,TSupportTStyleCombo.CloseUpTStyle,TSupportTStyleCombo.FillLTStyle,w,ts);
                      end;
                      if uppercase(line)='SEPARATOR' then
                                          begin
@@ -3049,31 +3057,6 @@ end;
 procedure MainForm.DropUpLType(Sender:Tobject);
 begin
      tcombobox(Sender).ItemIndex:=0;
-end;
-procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
-var
-   i:integer;
-begin
-  //tcombobox(Sender).ItemIndex:=-1;
-
-  //If use  Items.Clear and add items in GTK2 combobox close on mouseup
-
-  //Add items if need
-  if cb.Items.Count<ItemsCount then
-  begin
-        for i:=0 to ItemsCount-cb.Items.Count-1 do
-        begin
-             cb.AddItem('',nil);
-        end;
-  end;
-  //Remove items if need
-  if cb.Items.Count>ItemsCount then
-  begin
-        for i:=0 to cb.Items.Count-ItemsCount-1 do
-        begin
-             cb.Items.Delete(1);
-        end;
-  end;
 end;
 
 procedure MainForm.DropDownLType(Sender:Tobject);

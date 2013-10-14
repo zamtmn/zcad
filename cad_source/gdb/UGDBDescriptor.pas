@@ -319,6 +319,7 @@ begin
 
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLType,'DWG_CLType');
+   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CTStyle,'DWG_CTStyle');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLinew,'DWG_CLinew');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_DrawMode,'DWG_DrawMode');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_LTscale,'DWG_LTScale');
@@ -334,6 +335,7 @@ begin
 
    SysVar.dwg.DWG_CLayer:=nil;
    SysVar.dwg.DWG_CLType:=nil;
+   SysVar.dwg.DWG_CTStyle:=nil;
    SysVar.dwg.DWG_CLinew:=nil;
    SysVar.dwg.DWG_DrawMode:=nil;
    SysVar.dwg.DWG_LTscale:=nil;
@@ -541,7 +543,7 @@ begin
           CopyBlock(BlockBaseDWG,_to,td);
      end;
 end;
-function createtstylebyindex(_from,_to:PTSimpleDrawing;oldti:TArrayIndex):TArrayIndex;
+function createtstylebyindex(_from,_to:PTSimpleDrawing;oldti:{TArrayIndex}PGDBTextStyle):PGDBTextStyle;
 var
    //{_dest,}td:PGDBObjBlockdef;
    newti:TArrayIndex;
@@ -551,7 +553,7 @@ var
    //{pvisible,}pvisible2:PGDBObjEntity;
    //pl:PGDBLayerProp;
 begin
-                    poldstyle:=PGDBTextStyle(_from.TextStyleTable.getelement(oldti));
+                    poldstyle:=oldti{PGDBTextStyle(_from.TextStyleTable.getelement(oldti))};
                     tsname:=poldstyle^.name;
                     newti:=_to.TextStyleTable.FindStyle(tsname,poldstyle^.UsedInLTYPE);
                     if newti<0 then
@@ -560,7 +562,7 @@ begin
                                         pnevstyle:=PGDBTextStyle(_to.TextStyleTable.getelement(newti));
                                         pnevstyle^:=poldstyle^;
                                    end;
-      result:=_to.TextStyleTable.FindStyle(tsname,poldstyle^.UsedInLTYPE);
+      result:=_to.TextStyleTable.getelement(_to.TextStyleTable.FindStyle(tsname,poldstyle^.UsedInLTYPE));
 end;
 procedure createtstyleifneed(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 //var

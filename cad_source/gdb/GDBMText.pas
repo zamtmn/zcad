@@ -138,9 +138,9 @@ begin
                                pswp^.x:= 0;
 end;
 begin
-  textprop.wfactor:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.prop.wfactor;
-  textprop.oblique:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.prop.oblique;
-  pfont:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont;
+  textprop.wfactor:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.prop.wfactor;
+  textprop.oblique:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.prop.oblique;
+  pfont:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont;
   TCP:=CodePage;
   CodePage:=CP_win;
   if template='' then
@@ -666,7 +666,7 @@ var
   TDInfo:TTrianglesDataInfo;
 begin
   ln:=0;
-  pfont:=PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.pfont;
+  pfont:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont;
   pl.init({$IFDEF DEBUGBUILD}'{E44FB0DD-3556-4279-8845-5EA005F302DB}',{$ENDIF}10);
   ispl:=false;
   Vertex3D_in_WCS_Array.clear;
@@ -925,9 +925,9 @@ begin
 
     else if     dxfGDBStringload(f,7,byt,style)then
                                                  begin
-                                                      TXTStyleIndex :={gdb.GetCurrentDWG}drawing.GetTextStyleTable^.FindStyle(Style,false);
-                                                      if TXTStyleIndex=-1 then
-                                                                          TXTStyleIndex:=0;
+                                                 TXTStyleIndex :=drawing.GetTextStyleTable^.getelement(drawing.GetTextStyleTable^.FindStyle(Style,false));
+                                                 if TXTStyleIndex=nil then
+                                                                     TXTStyleIndex:=drawing.GetTextStyleTable^.getelement(0);
                                                  end
     else {s := }f.readgdbstring;
     byt:=readmystrtoint(f);
@@ -996,7 +996,7 @@ begin
     end;
     dxfGDBStringout(outhandle,3,z2dxfmtext(s,ul));
   end;
-  dxfGDBStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}drawing.GetTextStyleTable^.getelement(TXTStyleIndex))^.name);
+  dxfGDBStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.name);
   SaveToDXFObjPostfix(outhandle);
   dxfvertexout(outhandle,11,Local.basis.ox);
   dxfGDBIntegerout(outhandle,73,2);

@@ -463,6 +463,7 @@ begin
           ptext.Local.P_insert:=tbl.Local.P_insert;
           ptext.Local.P_insert.y:=ptext.Local.P_insert.y+1.5*scale;
           ptext.textprop.justify:=jsbl;
+          ptext.TXTStyleIndex:=drawing.GetTextStyleTable^.getelement(0);
           if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
                                    begin
                                    ptext.Local.P_insert.x:= ptext.Local.P_insert.x+tbl.w;

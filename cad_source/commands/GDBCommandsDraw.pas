@@ -1464,7 +1464,7 @@ begin
                                                                         BuildPrimitives;
      pt^.vp.Layer:=gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer;
      pt^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
-     pt^.TXTStyleIndex:=TextInsertParams.Style.Selected;
+     pt^.TXTStyleIndex:=gdb.GetCurrentDWG^.TextStyleTable.getelement(TextInsertParams.Style.Selected);
      pt^.textprop.size:=TextInsertParams.h;
      pt^.Content:='';
      pt^.Template:=(TextInsertParams.text);

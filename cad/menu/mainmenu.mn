@@ -58,6 +58,7 @@ Panel Standart;
     colorcombobox 100,Color selection
     ltypecombobox 250,Line type selection
     linewcombobox 100,Line weight selection
+    tstylecombobox 100,Text style selection
     Separator
     action ACN_UNDO
     action ACN_REDO

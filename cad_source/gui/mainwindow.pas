@@ -211,7 +211,7 @@ var
   //uGeneralTimer:cardinal;
   //GeneralTime:GDBInteger;
   LayerBox:TZCADLayerComboBox;
-  LineWBox,ColorBox,LTypeBox:TComboBox;
+  LineWBox,ColorBox,LTypeBox,TStyleBox:TComboBox;
   LayoutBox:TComboBox;
   LPTime:Tdatetime;
   pname:GDBString;
@@ -1851,7 +1851,8 @@ begin
   result.OnCloseUp:=CloseUp;
   result.OnMouseLeave:=setnormalfocus;
 
-  Filler(result);
+  if assigned(Filler)then
+                         Filler(result);
   result.ItemIndex:=0;
 
   AddToBar(owner,result);
@@ -2039,6 +2040,11 @@ begin
                      begin
                           ReadComboSubParam(bc,ts,w);
                           LTypeBox:=CreateCBox(tb,LTypeBoxDrawItem,ChangeLType,DropDownLType,DropUpLType,FillLTCombo,w,ts);
+                     end;
+                     if uppercase(line)='TSTYLECOMBOBOX' then
+                     begin
+                          ReadComboSubParam(bc,ts,w);
+                          TStyleBox:=CreateCBox(tb,nil,nil,nil,nil,nil,w,ts);
                      end;
                      if uppercase(line)='SEPARATOR' then
                                          begin
@@ -3044,31 +3050,39 @@ procedure MainForm.DropUpLType(Sender:Tobject);
 begin
      tcombobox(Sender).ItemIndex:=0;
 end;
+procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
+var
+   i:integer;
+begin
+  //tcombobox(Sender).ItemIndex:=-1;
+
+  //If use  Items.Clear and add items in GTK2 combobox close on mouseup
+
+  //Add items if need
+  if cb.Items.Count<ItemsCount then
+  begin
+        for i:=0 to ItemsCount-cb.Items.Count-1 do
+        begin
+             cb.AddItem('',nil);
+        end;
+  end;
+  //Remove items if need
+  if cb.Items.Count>ItemsCount then
+  begin
+        for i:=0 to cb.Items.Count-ItemsCount-1 do
+        begin
+             cb.Items.Delete(1);
+        end;
+  end;
+end;
 
 procedure MainForm.DropDownLType(Sender:Tobject);
 var
    i:integer;
 begin
-     //tcombobox(Sender).ItemIndex:=-1;
+     //Correct items count
+     SetcomboItemsCount(tcombobox(Sender),gdb.GetCurrentDWG.LTypeStyleTable.Count+1);
 
-     //If use  Items.Clear and add items in GTK2 combobox close on mouseup
-
-     //Add items if need
-     if tcombobox(Sender).Items.Count<gdb.GetCurrentDWG.LTypeStyleTable.Count+1 then
-     begin
-           for i:=0 to gdb.GetCurrentDWG.LTypeStyleTable.Count-tcombobox(Sender).Items.Count{-1} do
-           begin
-                tcombobox(Sender).AddItem('',nil);
-           end;
-     end;
-     //Remove items if need
-     if tcombobox(Sender).Items.Count>gdb.GetCurrentDWG.LTypeStyleTable.Count+1 then
-     begin
-           for i:=0 to tcombobox(Sender).Items.Count-gdb.GetCurrentDWG.LTypeStyleTable.Count{-1} do
-           begin
-                tcombobox(Sender).Items.Delete(1);
-           end;
-     end;
      //Correct items
      for i:=0 to gdb.GetCurrentDWG.LTypeStyleTable.Count-1 do
      begin
@@ -3485,6 +3499,8 @@ begin
   mainwindow.ColorBox.enabled:=true;
   if assigned(mainwindow.LTypeBox) then
   mainwindow.LTypeBox.enabled:=true;
+  if assigned(mainwindow.TStyleBox) then
+  mainwindow.TStyleBox.enabled:=true;
 
   if assigned(MainFormN.PageControl) then
   if assigned(SysVar.INTF.INTF_ShowDwgTabs) then
@@ -3595,6 +3611,8 @@ begin
            mainwindow.LineWBox.enabled:=false;
            if assigned(mainwindow.ColorBox) then
            mainwindow.ColorBox.enabled:=false;
+           if assigned(mainwindow.TStyleBox) then
+           mainwindow.TStyleBox.enabled:=false;
            if assigned(mainwindow.LTypeBox) then
            mainwindow.LTypeBox.enabled:=false;
            if assigned(MainFormN.HScrollBar) then

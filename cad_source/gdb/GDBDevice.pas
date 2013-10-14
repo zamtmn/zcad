@@ -239,7 +239,7 @@ begin
     and (tbb.LBN.y=tbb.RTF.y)
     and (tbb.LBN.z=tbb.RTF.z) then
                               else
-                                  concatbb(vp.BoundingBox,VarObjArray.calcbb);
+                                  concatbb(vp.BoundingBox,{VarObjArray.calcbb}tbb);
 end;
 function GDBObjDevice.Clone;
 var tvo: PGDBObjDevice;

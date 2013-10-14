@@ -44,6 +44,7 @@ uses
        colorwnd,imagesmanager,ltwnd;
   {}
 type
+  TComboFiller=procedure(cb:TCustomComboBox) of object;
   TInterfaceVars=record
                        CColor,CLWeight:GDBInteger;
                        CLayer:PGDBLayerProp;
@@ -100,6 +101,7 @@ type
                                                    State: TOwnerDrawState);
     function findtoolbatdesk(tbn:string):string;
     procedure CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
+    function CreateCBox(owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
     procedure CreateHTPB(tb:TToolBar);
 
     procedure FormCreate(Sender: TObject);
@@ -148,6 +150,9 @@ type
     procedure CreateAnchorDockingInterface;
     procedure CreateStandartInterface;
     procedure CreateInterfaceLists;
+    procedure FillColorCombo(cb:TCustomComboBox);
+    procedure FillLTCombo(cb:TCustomComboBox);
+    procedure FillLWCombo(cb:TCustomComboBox);
     procedure InitSystemCalls;
     procedure LoadActions;
     procedure myKeyPress(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -1258,6 +1263,40 @@ begin
   updatescontrols:=tlist.Create;
 end;
 
+procedure MainForm.FillColorCombo(cb:TCustomComboBox);
+var
+   i:integer;
+   ts:string;
+begin
+  cb.items.AddObject(rsByBlock, TObject(0));
+  cb.items.AddObject(rsByLayer, TObject(256));
+  for i := 1 to 7 do
+  begin
+       ts:=palette[i].name;
+       cb.items.AddObject(ts, TObject(i));
+  end;
+  cb.items.AddObject(rsSelectColor, TObject(ColorBoxSelColor));
+end;
+
+procedure MainForm.FillLTCombo(cb:TCustomComboBox);
+begin
+  cb.items.AddObject(rsByBlock, TObject(0));
+end;
+
+procedure MainForm.FillLWCombo(cb:TCustomComboBox);
+var
+   i:integer;
+begin
+  cb.items.AddObject(rsByLayer, TObject(2));
+  cb.items.AddObject(rsByBlock, TObject(1));
+  cb.items.AddObject(rsdefault, TObject(0));
+  for i := low(lwarray) to high(lwarray) do
+  begin
+  s:=GetLWNameFromN(i);
+       cb.items.AddObject(s, TObject(lwarray[i]+3));
+  end;
+end;
+
 procedure MainForm.CreateAnchorDockingInterface;
 var
   action: tmyaction;
@@ -1788,6 +1827,36 @@ begin
     end;
     end;
 end;
+function MainForm.CreateCBox(owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
+begin
+  result:=TComboBox.Create(owner);
+  result.Style:=csOwnerDrawFixed;
+  result.AutoSize:=false;
+  result.Clear;
+  result.readonly:=true;
+  result.DropDownCount:=50;
+  result.ItemHeight:=16;
+  if w<>0 then
+              result.Width:=w;
+  if ts<>''then
+  begin
+       ts:=InterfaceTranslate('hint_panel~LINEWCOMBOBOX',ts);
+       result.hint:=(ts);
+       result.ShowHint:=true;
+  end;
+
+  result.OnDrawItem:=DrawItem;
+  result.OnChange:=Change;
+  result.OnDropDown:=DropDown;
+  result.OnCloseUp:=CloseUp;
+  result.OnMouseLeave:=setnormalfocus;
+
+  Filler(result);
+  result.ItemIndex:=0;
+
+  AddToBar(owner,result);
+  updatescontrols.Add(result);
+end;
 
 procedure MainForm.CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
 var
@@ -1803,6 +1872,16 @@ var
     action:tmyaction;
     baction:TmyButtonAction;
     shortcut:TShortCut;
+
+  procedure ReadComboSubParam(out a,b:string;out c:integer);
+  begin
+    a := f.readstring(',','');
+    b := f.readstring(';','');
+    val(a,c,code);
+    if code<>0 then
+                  c:=0;
+  end;
+
 begin
      if not assigned(tb.Images) then
                                     tb.Images:=standartactions.Images;
@@ -1912,9 +1991,7 @@ begin
                      end;
                      if uppercase(line)='LAYERCOMBOBOX' then
                      begin
-                          bc := f.readstring(',','');
-                          ts := f.readstring(';','');
-                          val(bc,w,code);
+                          ReadComboSubParam(bc,ts,w);
                           {if assigned(LayerBox) then
                                                     shared.ShowError(format(rsReCreating,['LAYERCOMBOBOX']));}
                           LayerBox:=TZCADLayerComboBox.Create(tb);
@@ -1950,127 +2027,18 @@ begin
                      end;
                      if uppercase(line)='LINEWCOMBOBOX' then
                      begin
-                          bc := f.readstring(',','');
-                          ts := f.readstring(';','');
-                          val(bc,w,code);
-                          {if assigned(LineWBox) then
-                                                    shared.ShowError(format(rsReCreating,['LINEWCOMBOBOX']));}
-                          LineWBox:=TComboBox.Create(tb);
-                          LineWBox.Style:=csOwnerDrawFixed;
-                          LineWBox.OnDrawItem:=LineWBoxDrawItem;
-                          if code=0 then
-                                        LineWBox.Width:=w;
-                          if ts<>''then
-                          begin
-                               ts:=InterfaceTranslate('hint_panel~LINEWCOMBOBOX',ts);
-                               LineWBox.hint:=(ts);
-                               LineWBox.ShowHint:=true;
-                          end;
-                          LineWbox.Clear;
-                          LineWbox.readonly:=true;
-                          //LineWbox.items.Add(rsdefault);
-                          //LineWbox.items.Add(rsByBlock);
-                          LineWbox.items.AddObject(rsByLayer,TObject(2));
-                          LineWbox.items.AddObject(rsByBlock,TObject(1));
-                          LineWbox.items.AddObject(rsdefault,TObject(0));
-                          //LineWbox.items.Add(rsByLayer);
-                          {for i := 0 to 20 do
-                          begin
-                          s:=floattostr(i / 10) + ' '+rsmm;
-                               LineWbox.items.AddObject(s,TObject(I*10+2));
-                               //LineWbox.items.Add(s);
-                          end;}
-                          for i := low(lwarray) to high(lwarray) do
-                          begin
-                          //s:=floattostr(lwarray[i]/100) + ' '+rsmm;
-                          s:=GetLWNameFromN(i);
-                               LineWbox.items.AddObject(s,TObject(lwarray[i]+3));
-                               //LineWbox.items.Add(s);
-                          end;
-
-                          //LineWbox.items.Add(rsDifferent);
-                          LineWbox.OnChange:=ChangeCLineW;
-                          LineWbox.OnDropDown:=DropDownColor;
-                          LineWbox.OnCloseUp:=DropUpColor;
-                          LineWbox.AutoSize:=false;
-                          LineWbox.OnMouseLeave:=self.setnormalfocus;
-                          LineWbox.DropDownCount:=50;
-                          LineWbox.ItemHeight:=16;
-                           AddToBar(tb,LineWBox);
-                           updatescontrols.Add(LineWBox);
+                          ReadComboSubParam(bc,ts,w);
+                          LineWBox:=CreateCBox(tb,LineWBoxDrawItem,ChangeCLineW,DropDownColor,DropUpColor,FillLWCombo,w,ts);
                      end;
                      if uppercase(line)='COLORCOMBOBOX' then
                      begin
-                          bc := f.readstring(',','');
-                          ts := f.readstring(';','');
-                          val(bc,w,code);
-                          {if assigned(ColorBox) then
-                                                    shared.ShowError(format(rsReCreating,['COLORCOMBOBOX']));}
-                          ColorBox:=TComboBox.Create(tb);
-                          ColorBox.Style:=csOwnerDrawFixed;
-                          ColorBox.OnDrawItem:=ColorBoxDrawItem;
-                          if code=0 then
-                                        ColorBox.Width:=w;
-                          if ts<>''then
-                          begin
-                               ts:=InterfaceTranslate('hint_panel~COLORCOMBOBOX',ts);
-                               ColorBox.hint:=(ts);
-                               ColorBox.ShowHint:=true;
-                          end;
-                          ColorBox.Clear;
-                          ColorBox.readonly:=true;
-                          ColorBox.items.AddObject(rsByBlock,TObject(0));
-                          ColorBox.items.AddObject(rsByLayer,TObject(256));
-                          for i := 1 to 7 do
-                          begin
-                               ts:=palette[i].name;
-                               ColorBox.items.AddObject(ts,TObject(i));
-                          end;
-                          ColorBox.items.AddObject(rsSelectColor,TObject(ColorBoxSelColor));
-                          ColorBox.ItemIndex:=0;
-                          ColorBox.OnChange:=ChangeCColor;
-                          ColorBox.OnDropDown:=DropDownColor;
-                          ColorBox.OnCloseUp:=DropUpColor;
-                          ColorBox.AutoSize:=false;
-                          ColorBox.OnMouseLeave:=self.setnormalfocus;
-                          ColorBox.DropDownCount:=50;
-                          ColorBox.ItemHeight:=16;
-                          AddToBar(tb,ColorBox);
-                          updatescontrols.Add(ColorBox);
+                          ReadComboSubParam(bc,ts,w);
+                          ColorBox:=CreateCBox(tb,ColorBoxDrawItem,ChangeCColor,DropDownColor,DropUpColor,FillColorCombo,w,ts);
                      end;
                      if uppercase(line)='LTYPECOMBOBOX' then
                      begin
-                          bc := f.readstring(',','');
-                          ts := f.readstring(';','');
-                          val(bc,w,code);
-                          {if assigned(LTypeBox) then
-                                                    shared.ShowError(format(rsReCreating,['COLORCOMBOBOX']));}
-                          LTypeBox:=TComboBox.Create(tb);
-                          LTypeBox.Style:=csOwnerDrawFixed;
-                          LTypeBox.OnDrawItem:=LTypeBoxDrawItem;
-                          if code=0 then
-                                        LTypeBox.Width:=w;
-                          if ts<>''then
-                          begin
-                               ts:=InterfaceTranslate('hint_panel~COLORCOMBOBOX',ts);
-                               LTypeBox.hint:=(ts);
-                               LTypeBox.ShowHint:=true;
-                          end;
-                          LTypeBox.Clear;
-                          LTypeBox.readonly:=true;
-                          LTypeBox.items.AddObject(rsByBlock,TObject(0));
-                          //LTypeBox.items.AddObject(rsByLayer,TObject(256));
-                          //LTypeBox.items.AddObject(rsSelectColor,TObject(ColorBoxSelColor));
-                          LTypeBox.ItemIndex:=0;
-                          LTypeBox.OnChange:=ChangeLType;
-                          LTypeBox.OnDropDown:=DropDownLType;
-                          LTypeBox.OnCloseUp:=DropUpLType;
-                          LTypeBox.AutoSize:=false;
-                          LTypeBox.OnMouseLeave:=self.setnormalfocus;
-                          LTypeBox.DropDownCount:=50;
-                          LTypeBox.ItemHeight:=16;
-                          AddToBar(tb,LTypeBox);
-                          updatescontrols.Add(LTypeBox);
+                          ReadComboSubParam(bc,ts,w);
+                          LTypeBox:=CreateCBox(tb,LTypeBoxDrawItem,ChangeLType,DropDownLType,DropUpLType,FillLTCombo,w,ts);
                      end;
                      if uppercase(line)='SEPARATOR' then
                                          begin

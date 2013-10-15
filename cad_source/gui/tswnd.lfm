@@ -1,9 +1,9 @@
-object LTWindow: TLTWindow
+object TSWindow: TTSWindow
   Left = 234
   Height = 240
   Top = 246
   Width = 320
-  Caption = 'LTWindow'
+  Caption = 'TSWindow'
   ClientHeight = 240
   ClientWidth = 320
   Position = poMainFormCenter

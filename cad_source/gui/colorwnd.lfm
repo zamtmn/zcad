@@ -11,7 +11,8 @@ object ColorSelectWND: TColorSelectWND
   OnCreate = _onCreate
   OnResize = resize
   OnShow = _onshow
-  LCLVersion = '1.1'
+  Position = poMainFormCenter
+  LCLVersion = '1.3'
   object ButtonPanel1: TButtonPanel
     Left = 1
     Height = 34

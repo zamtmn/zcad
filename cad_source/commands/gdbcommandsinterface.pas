@@ -21,7 +21,7 @@ unit gdbcommandsinterface;
 
 interface
 uses
- uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -355,6 +355,24 @@ begin
   Freeandnil(LayerWindow);
   result:=cmd_ok;
 end;
+function TextStyles_cmd:GDBInteger;
+begin
+  TSWindow:=TTSWindow.Create(nil);
+  SetHeightControl(TSWindow,22);
+  DOShowModal(TSWindow);
+  Freeandnil(TSWindow);
+  result:=cmd_ok;
+end;
+function LineTypes_cmd:GDBInteger;
+begin
+  LTWindow:=TLTWindow.Create(nil);
+  SetHeightControl(LTWindow,22);
+  DOShowModal(LTWindow);
+  Freeandnil(LTWindow);
+  result:=cmd_ok;
+end;
+
+
 
 procedure finalize;
 begin
@@ -714,6 +732,8 @@ begin
   CreateCommandFastObjectPlugin(@LoadLayout_com,'LoadLayout',0,0);
   CreateCommandFastObjectPlugin(@quit_com,'Quit',0,0);
   CreateCommandFastObjectPlugin(@layer_cmd,'Layer',CADWG,0);
+  CreateCommandFastObjectPlugin(@TextStyles_cmd,'TextStyles',CADWG,0);
+  CreateCommandFastObjectPlugin(@LineTypes_cmd,'LineTypes',CADWG,0);
   CreateCommandFastObjectPlugin(@SaveLayout_com,'SaveLayout',0,0);
   CreateCommandFastObjectPlugin(@Show_com,'Show',0,0);
   CreateCommandFastObjectPlugin(@About_com,'About',0,0);

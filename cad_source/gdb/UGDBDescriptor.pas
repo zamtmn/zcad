@@ -323,6 +323,7 @@ begin
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLinew,'DWG_CLinew');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_DrawMode,'DWG_DrawMode');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_LTscale,'DWG_LTScale');
+   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLTscale,'DWG_CLTScale');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CColor,'DWG_CColor');
    end;
 end;
@@ -339,6 +340,7 @@ begin
    SysVar.dwg.DWG_CLinew:=nil;
    SysVar.dwg.DWG_DrawMode:=nil;
    SysVar.dwg.DWG_LTscale:=nil;
+   SysVar.dwg.DWG_CLTscale:=nil;
    SysVar.dwg.DWG_CColor:=nil;
 end;
 

@@ -1,19 +1,239 @@
 object LTWindow: TLTWindow
-  Left = 234
-  Height = 240
-  Top = 246
-  Width = 320
+  Left = 346
+  Height = 598
+  Top = 156
+  Width = 1015
   Caption = 'LTWindow'
-  ClientHeight = 240
-  ClientWidth = 320
+  ClientHeight = 598
+  ClientWidth = 1015
+  OnCreate = _onCreate
   Position = poMainFormCenter
   LCLVersion = '1.3'
-  object Label1: TLabel
-    Left = 136
-    Height = 15
-    Top = 16
-    Width = 104
-    Caption = 'Not Implemed yet(('
+  object ButtonPanel1: TButtonPanel
+    Left = 1
+    Height = 34
+    Top = 563
+    Width = 1013
+    BorderSpacing.Around = 1
+    OKButton.Name = 'OKButton'
+    OKButton.DefaultCaption = True
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CancelButton.Name = 'CancelButton'
+    CancelButton.DefaultCaption = True
+    TabOrder = 0
+    ShowButtons = [pbOK, pbCancel, pbHelp]
+  end
+  object B1: TSpeedButton
+    AnchorSideLeft.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 1
+    Height = 22
+    Top = 1
+    Width = 27
+    Anchors = [akTop, akLeft, akBottom]
+    BorderSpacing.Left = 1
+    Flat = True
+  end
+  object B2: TSpeedButton
+    AnchorSideLeft.Control = B1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
+    Left = 28
+    Height = 21
+    Top = 1
+    Width = 27
+    Anchors = [akTop, akLeft, akBottom]
+    Flat = True
+  end
+  object MkCurrentBtn: TSpeedButton
+    AnchorSideLeft.Control = B2
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
+    Left = 55
+    Height = 21
+    Top = 1
+    Width = 25
+    Anchors = [akTop, akLeft, akBottom]
+    Flat = True
+  end
+  object Bevel1: TBevel
+    AnchorSideLeft.Control = MkCurrentBtn
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
+    Left = 82
+    Height = 25
+    Top = 1
+    Width = 932
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 2
+    BorderSpacing.Top = 1
+    BorderSpacing.Right = 1
+  end
+  object Label2: TLabel
+    AnchorSideLeft.Control = Bevel1
+    AnchorSideTop.Control = Bevel1
+    AnchorSideRight.Control = Bevel1
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Bevel1
+    AnchorSideBottom.Side = asrBottom
+    Left = 83
+    Height = 23
+    Top = 2
+    Width = 930
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Around = 1
+    Caption = 'Label2'
+    Layout = tlCenter
     ParentColor = False
+  end
+  object ListView1: TListView
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Bevel1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = GroupBox2
+    Left = 1
+    Height = 450
+    Top = 28
+    Width = 1014
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 1
+    BorderSpacing.Top = 2
+    Columns = <    
+      item
+        Caption = 'Status'
+      end    
+      item
+        Caption = 'Line type'
+        Width = 100
+      end    
+      item
+        Caption = 'Apperance'
+        Width = 200
+      end    
+      item
+        AutoSize = True
+        Caption = 'Description'
+        Width = 177
+      end>
+    ReadOnly = True
+    RowSelect = True
+    ScrollBars = ssAutoBoth
+    SortType = stText
+    TabOrder = 1
+    ViewStyle = vsReport
+    OnChange = _LTChange
+    OnCustomDrawSubItem = _onCDSubItem
+    OnSelectItem = _LTSelect
+  end
+  object GroupBox2: TGroupBox
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = ButtonPanel1
+    Left = 760
+    Height = 84
+    Top = 478
+    Width = 253
+    Anchors = [akRight, akBottom]
+    AutoSize = True
+    BorderSpacing.Left = 2
+    BorderSpacing.Right = 2
+    BorderSpacing.InnerBorder = 10
+    Caption = 'GroupBox2'
+    ClientHeight = 66
+    ClientWidth = 249
+    TabOrder = 2
+    object Label3: TLabel
+      AnchorSideLeft.Control = GroupBox2
+      AnchorSideTop.Control = GScale
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = GScale
+      Left = 62
+      Height = 15
+      Top = 4
+      Width = 97
+      Anchors = [akTop, akRight]
+      Caption = 'Global scale factor'
+      ParentColor = False
+    end
+    object GScale: TFloatSpinEdit
+      AnchorSideTop.Control = GroupBox2
+      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Side = asrBottom
+      Left = 159
+      Height = 23
+      Top = 0
+      Width = 90
+      Anchors = [akTop, akRight]
+      Increment = 1
+      MaxValue = 100
+      MinValue = 0
+      TabOrder = 0
+      Value = 0
+    end
+    object CScale: TFloatSpinEdit
+      AnchorSideTop.Control = GScale
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Side = asrBottom
+      Left = 159
+      Height = 23
+      Top = 23
+      Width = 90
+      Anchors = [akTop, akRight]
+      Increment = 1
+      MaxValue = 100
+      MinValue = 0
+      TabOrder = 1
+      Value = 0
+    end
+    object Label4: TLabel
+      AnchorSideLeft.Control = GroupBox2
+      AnchorSideTop.Control = CScale
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = CScale
+      Left = 20
+      Height = 15
+      Top = 27
+      Width = 139
+      Anchors = [akTop, akRight]
+      Caption = 'Current object scale factor'
+      ParentColor = False
+    end
+  end
+  object GroupBox1: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = GroupBox2
+    AnchorSideRight.Control = GroupBox2
+    AnchorSideBottom.Control = ButtonPanel1
+    Left = 0
+    Height = 84
+    Top = 478
+    Width = 758
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Caption = 'GroupBox1'
+    ClientHeight = 66
+    ClientWidth = 754
+    TabOrder = 3
+    object Memo1: TMemo
+      Left = 0
+      Height = 66
+      Top = 0
+      Width = 754
+      Align = alClient
+      Lines.Strings = (
+        'Memo1'
+      )
+      TabOrder = 0
+    end
   end
 end

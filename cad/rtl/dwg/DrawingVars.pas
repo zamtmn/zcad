@@ -10,6 +10,7 @@ var
    DWG_CColor:GDBInteger;
    DWG_CLType:PGDBLtypeProp;
    DWG_CTStyle:PGDBTextStyle;
+   DWG_CLTScale:GDBDouble;
 
    DWG_DrawGrid:GDBBoolean;
    DWG_SnapGrid:GDBBoolean;
@@ -64,6 +65,7 @@ begin
      DWGProps.Number:=100;
 
      DWG_LTScale:=1;
+     DWG_CLTScale:=1;
 
      Developer:='Зубарев';
 end.

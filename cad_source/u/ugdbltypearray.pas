@@ -81,6 +81,8 @@ GDBLtypeProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                constructor init(n:GDBString);
                destructor done;virtual;
                procedure Format;virtual;
+               function GetAsText:GDBString;
+               function GetLTString:GDBString;
              end;
 PGDBLtypePropArray=^GDBLtypePropArray;
 GDBLtypePropArray=packed array [0..0] of GDBLtypeProp;
@@ -129,6 +131,75 @@ begin
                                             end
                                         else
                                             result:=getelement(0);
+end;
+function getshapestring(PSP:PShapeProp):gdbstring;
+begin
+     result:='['+psp^.SymbolName+','+psp^.FontName;
+     case psp^.param.AD of
+                    TACAbs:result:=result+',A='+floattostr(psp^.param.Angle);
+                    TACRel:result:=result+',R='+floattostr(psp^.param.Angle);
+                TACUpRight:result:=result+',U='+floattostr(psp^.param.Angle);
+     end;
+     result:=result+',S='+floattostr(psp^.param.Height);
+     result:=result+',X='+floattostr(psp^.param.X);
+     result:=result+',Y='+floattostr(psp^.param.Y);
+     result:=result+']'
+end;
+function gettextstring(PTP:PTextProp):gdbstring;
+begin
+  result:='["'+PTP^.Text+'",'+PTP^.Style;
+  case ptp^.param.AD of
+                 TACAbs:result:=result+',A='+floattostr(ptp^.param.Angle);
+                 TACRel:result:=result+',R='+floattostr(ptp^.param.Angle);
+             TACUpRight:result:=result+',U='+floattostr(ptp^.param.Angle);
+  end;
+  result:=result+',S='+floattostr(ptp^.param.Height);
+  result:=result+',X='+floattostr(ptp^.param.X);
+  result:=result+',Y='+floattostr(ptp^.param.Y);
+  result:=result+']'
+end;
+
+function GDBLtypeProp.GetLTString:GDBString;
+var
+    TDI:PTDashInfo;
+    PStroke:PGDBDouble;
+    PSP:PShapeProp;
+    PTP:PTextProp;
+    ir2,ir3,ir4,ir5:itrec;
+begin
+  begin
+    TDI:=dasharray.beginiterate(ir2);
+    PStroke:=strokesarray.beginiterate(ir3);
+    PSP:=shapearray.beginiterate(ir4);
+    PTP:=textarray.beginiterate(ir5);
+    if PStroke<>nil then
+    repeat
+    case TDI^ of
+        TDIDash:begin
+                     result:=result+','+floattostr(PStroke^);
+                     PStroke:=strokesarray.iterate(ir3);
+                end;
+       TDIShape:begin
+                     result:=result+','+getshapestring(PSP);
+                     PSP:=shapearray.iterate(ir4);
+                end;
+        TDIText:begin
+                     result:=result+','+gettextstring(PTP);
+                     PTP:=textarray.iterate(ir5);
+                 end;
+          end;
+          TDI:=dasharray.iterate(ir2);
+    until TDI=nil;
+end;
+end;
+function GDBLtypeProp.GetAsText:GDBString;
+begin
+     if mode<>TLTLineType then
+                                   result:='This is system layer!!!'
+                               else
+                                   begin
+                                        result:='*'+self.Name+','+self.desk+#13#10'A'+GetLTString;
+                                   end;
 end;
 
 procedure GDBLtypeProp.format;

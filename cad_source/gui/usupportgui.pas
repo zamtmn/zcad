@@ -22,10 +22,11 @@ unit usupportgui;
 interface
 
 uses
-  StdCtrls,gdbasetypes,Controls,Classes,LCLType;
+  StdCtrls,gdbasetypes,Controls,Classes,LCLType,ComCtrls,Graphics;
 
 procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
 procedure ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);
+function ListViewDrawSubItem(State: TCustomDrawState;canvas:tcanvas;Item: TListItem;SubItem: Integer): TRect;
 implementation
 procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
 var
@@ -59,6 +60,23 @@ begin
      {ifdef windows}
      TComboBox(Control).canvas.FillRect(ARect);
      {endif}
+end;
+
+function ListViewDrawSubItem(State: TCustomDrawState;canvas:tcanvas;Item: TListItem;SubItem: Integer): TRect;
+begin
+     if (cdsSelected in state) {or (cdsFocused in state)}{or Item.Selected} then
+     {if (cdsSelected in state) or (cdsGrayed in state) or (cdsDisabled in state)
+     or (cdsChecked in state) or (cdsFocused in state) or (cdsDefault in state)
+     or (cdsHot in state) or (cdsMarked in state) or (cdsIndeterminate in state)then}
+     begin
+     canvas.Brush.Color:=clHighlight;
+     canvas.Font.Color:=clHighlightText;
+     end;
+     {$IFNDEF LCLGTK2}
+     result := Item.DisplayRectSubItem( SubItem,drBounds);
+     canvas.FillRect(result);
+     {$ENDIF}
+     result := Item.DisplayRectSubItem( SubItem,drBounds);
 end;
 
 

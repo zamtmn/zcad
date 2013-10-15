@@ -264,6 +264,14 @@ else if (byt = 9) and (s = '$LTSCALE') then
                                                if sysvar.DWG.DWG_LTScale<>nil then
                                                sysvar.DWG.DWG_LTScale^ := strtofloat(s);
                                           end
+else if (byt = 9) and (s = '$CELTSCALE') then
+                                          begin
+                                               s := f.readGDBString;
+                                               s := f.readGDBString;
+                                               if LoadMode=TLOLoad then
+                                               if sysvar.DWG.DWG_CLTScale<>nil then
+                                               sysvar.DWG.DWG_CLTScale^ := strtofloat(s);
+                                          end
 else if (byt = 9) and (s = '$CECOLOR') then
                                           begin
                                                s := f.readGDBString;
@@ -1513,6 +1521,18 @@ else if (groupi = 9) and (ucvalues = '$LTSCALE') then
       outstream.TXTAddGDBStringEOL('40');
       if assigned(sysvar.DWG.DWG_LTScale) then
                                              outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_LTScale^))
+                                         else
+                                             outstream.TXTAddGDBStringEOL(floattostr(1.0));
+      groups := templatefile.readGDBString;
+      values := templatefile.readGDBString;
+    end
+else if (groupi = 9) and (ucvalues = '$CELTSCALE') then
+    begin
+      outstream.TXTAddGDBStringEOL(groups);
+      outstream.TXTAddGDBStringEOL('$CELTSCALE');
+      outstream.TXTAddGDBStringEOL('40');
+      if assigned(sysvar.DWG.DWG_CLTScale) then
+                                             outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_CLTScale^))
                                          else
                                              outstream.TXTAddGDBStringEOL(floattostr(1.0));
       groups := templatefile.readGDBString;

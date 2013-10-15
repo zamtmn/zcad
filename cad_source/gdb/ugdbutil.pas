@@ -22,11 +22,17 @@ interface
 uses
 gdbase,GDBasetypes,GDBEntity,gdbobjectsconstdef,geometry;
 procedure LayerCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
+procedure LTypeCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 implementation
  uses log;
 procedure LayerCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 begin
      if PCounted=PGDBObjEntity(PInstance)^.vp.Layer then
+                                  inc(Counter);
+end;
+procedure LTypeCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
+begin
+     if PCounted=PGDBObjEntity(PInstance)^.vp.LineType then
                                   inc(Counter);
 end;
 begin

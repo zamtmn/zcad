@@ -47,10 +47,24 @@ GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Ope
                     function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):GDBInteger;
                     function FindStyle(StyleName:GDBString;ult:GDBBoolean):GDBInteger;
                     procedure freeelement(p:GDBPointer);virtual;
+                    function GetCurrentTextStyle:PGDBTextStyle;
               end;
 {EXPORT-}
 implementation
 uses {UGDBDescriptor,}{io,}log;
+function GDBTextStyleArray.GetCurrentTextStyle;
+begin
+     if assigned(sysvar.dwg.DWG_CTStyle) then
+                                            begin
+                                            if assigned(sysvar.dwg.DWG_CTStyle^) then
+                                                                                    result:={getelement}(sysvar.dwg.DWG_CTStyle^)
+                                                                                else
+                                                                                    result:=getelement(0);
+
+                                            end
+                                        else
+                                            result:=getelement(0);
+end;
 procedure GDBTextStyleArray.freeelement;
 begin
   PGDBTextStyle(p).name:='';

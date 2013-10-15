@@ -1485,6 +1485,15 @@ else if (groupi = 9) and (ucvalues = '$CELTYPE') then
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
     end
+else if (groupi = 9) and (ucvalues = '$TEXTSTYLE') then
+    begin
+      outstream.TXTAddGDBStringEOL(groups);
+      outstream.TXTAddGDBStringEOL('$TEXTSTYLE');
+      outstream.TXTAddGDBStringEOL('7');
+      outstream.TXTAddGDBStringEOL(drawing.TextStyleTable.GetCurrentTextStyle^.Name);
+      groups := templatefile.readGDBString;
+      values := templatefile.readGDBString;
+    end
 else if (groupi = 9) and (ucvalues = '$CELWEIGHT') then
     begin
       outstream.TXTAddGDBStringEOL(groups);

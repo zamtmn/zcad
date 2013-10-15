@@ -48,7 +48,7 @@ begin
   SetcomboItemsCount(tcombobox(Sender),ptt.Count);
 
   //Correct items
-  for i:=0 to gdb.GetCurrentDWG.LTypeStyleTable.Count-1 do
+  for i:=0 to ptt.Count-1 do
   begin
        pts:=gdb.GetCurrentDWG.TextStyleTable.getelement(i);
        tcombobox(Sender).Items.Objects[i]:=tobject(pts);

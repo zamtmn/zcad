@@ -881,6 +881,8 @@ else if not dxfGDBIntegerload(f,72,byt,gv)then
                                  textprop.backward:=true
                              else
                                  textprop.backward:=false;
+  if TXTStyleIndex=nil then
+                           TXTStyleIndex:=sysvar.DWG.DWG_CTStyle^;
   OldVersTextReplace(Template);
   OldVersTextReplace(Content);
   textprop.justify := jt[vv, gv];

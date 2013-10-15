@@ -11,7 +11,7 @@ uses
 
   gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
 
-  zcadinterface,zcadstrconsts,strproc,shared,UBaseTypeDescriptor,imagesmanager;
+  zcadinterface,zcadstrconsts,strproc,shared,UBaseTypeDescriptor,imagesmanager,usupportgui;
 
 type
 
@@ -331,23 +331,6 @@ begin
   end;}
 end;
 
-function ProcessSubItem(State: TCustomDrawState;canvas:tcanvas;Item: TListItem;SubItem: Integer): TRect;
-begin
-     if (cdsSelected in state) {or (cdsFocused in state)}{or Item.Selected} then
-     {if (cdsSelected in state) or (cdsGrayed in state) or (cdsDisabled in state)
-     or (cdsChecked in state) or (cdsFocused in state) or (cdsDefault in state)
-     or (cdsHot in state) or (cdsMarked in state) or (cdsIndeterminate in state)then}
-     begin
-     canvas.Brush.Color:=clHighlight;
-     canvas.Font.Color:=clHighlightText;
-     end;
-     {$IFNDEF LCLGTK2}
-     result := Item.DisplayRectSubItem( SubItem,drBounds);
-     canvas.FillRect(result);
-     {$ENDIF}
-     result := Item.DisplayRectSubItem( SubItem,drBounds);
-end;
-
 procedure TLayerWindow.onCDSubItem(Sender: TCustomListView; Item: TListItem;
   SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
 var
@@ -373,7 +356,7 @@ begin
                            colorindex:=PGDBLayerProp(Item.Data)^.color;
                            s:=GetColorNameFromIndex(colorindex);
 
-                           ARect:=ProcessSubItem(state,sender.canvas,Item,SubItem);
+                           ARect:=ListViewDrawSubItem(state,sender.canvas,Item,SubItem);
 
                            textrect := Item.DisplayRectSubItem( SubItem,drLabel);
                            //ARect.Left:=ARect.Left+2;
@@ -408,12 +391,12 @@ begin
                            end;
 4,3,2,8:
                       begin
-                           ARect:=ProcessSubItem(state,TCustomListView(sender).canvas,Item,SubItem);
+                           ARect:=ListViewDrawSubItem(state,TCustomListView(sender).canvas,Item,SubItem);
                            TListView(Sender).SmallImages.Draw(Sender.Canvas,ARect.Left+(ARect.Right-ARect.Left)div 2-8,ARect.Top,Item.SubItemImages[SubItem-1],gdeNormal)
                       end;
 7:
                       begin
-                           ARect:=ProcessSubItem(state,TCustomListView(sender).canvas,Item,SubItem);
+                           ARect:=ListViewDrawSubItem(state,TCustomListView(sender).canvas,Item,SubItem);
                            colorindex:=PGDBLayerProp(Item.Data)^.lineweight;
                            s:=GetLWNameFromLW(colorindex);
                            if colorindex<0 then
@@ -466,7 +449,7 @@ begin
      Item.SubItems.Clear;
      if plp=pdwg^.LayerTable.GetCurrentLayer then
                                                              begin
-                                                             Item.ImageIndex:=2;
+                                                             Item.ImageIndex:=II_Ok;
                                                              CurrentLayer:=Item;
                                                              end;
                  Item.SubItems.Add(strproc.Tria_AnsiToUtf8(plp^.GetName));

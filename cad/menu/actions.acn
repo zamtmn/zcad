@@ -60,6 +60,8 @@ action ACN_VIEWRD,View(RD),#RD,Rotate camera down,,CTRL+DOWN
 action ACN_SNAPRUNTIME,SnapProperties,magnet.bmp,Run time snap editor,,ALT+S
 
 action ACN_LAYER,Layer,layer.bmp,Layers ...,Layers properties manager,
+action ACN_TSTYLES,TextStyles,textstyles.bmp,Text styles ...,Text styles properties manager,
+action ACN_LTYPES,LineTypes,#LT,Line types ...,Line types properties manager,
 
 action ACN_COPY,Copy,copy.bmp,Copy,Copy primitives,
 action ACN_MOVE,Move,move.bmp,Move,Move primitives,

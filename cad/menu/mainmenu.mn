@@ -55,9 +55,14 @@ Panel Standart;
     Separator
     action ACN_LAYER
     layercombobox 200,Layer selection
+    Separator
     colorcombobox 100,Color selection
+    Separator
     ltypecombobox 250,Line type selection
+    Separator
     linewcombobox 100,Line weight selection
+    Separator
+    action ACN_TSTYLES
     tstylecombobox 100,Text style selection
     Separator
     action ACN_UNDO
@@ -244,16 +249,18 @@ MainMenuItem View;
   }
 MainMenuItem Format;
   {
-    Command Layers,SetObjInsp(LAYERS),none,none
+    Command Layers (objinsp),SetObjInsp(LAYERS),none,none
     action ACN_LAYER
     MenuItem Text;
       {
-        Command Styles,SetObjInsp(TSTYLES),none,none
-	Command Fonts,SetObjInsp(FONTS),none,none
+        action ACN_TSTYLES
+        Command Styles (objinsp),SetObjInsp(TSTYLES),none,none
+	Command Fonts (objinsp),SetObjInsp(FONTS),none,none
       }
-    Command Line type styles,SetObjInsp(LINETYPESTYLES),none,none
-    Command Table styles,SetObjInsp(TABLESTYLES),none,none
-    Command Numerators,SetObjInsp(NUMERATORS),none,none
+    action ACN_LTYPES
+    Command Line type styles (objinsp),SetObjInsp(LINETYPESTYLES),none,none
+    Command Table styles (objinsp),SetObjInsp(TABLESTYLES),none,none
+    Command Numerators (objinsp),SetObjInsp(NUMERATORS),none,none
     Command Dimensions styles (not impl),fuckoff1,none,none
     Command Layouts (not impl),fuckoff2,none,none
   }

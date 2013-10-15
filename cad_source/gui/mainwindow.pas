@@ -3091,11 +3091,7 @@ begin
                          exit;
      if plt=lteditor then
                          begin
-                              //shared.ShowError('Not implement yet');
-                              LTWindow:=TLTWindow.Create(nil);
-                              //SetHeightControl(LTWindow,22);
-                              DOShowModal(LTWindow);
-                              Freeandnil(LTWindow);
+                              commandmanager.ExecuteCommand('LineTypes',gdb.GetCurrentDWG);
                          end
      else
      begin

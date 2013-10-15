@@ -48,7 +48,7 @@ begin
   begin
         for i:=0 to cb.Items.Count-ItemsCount-1 do
         begin
-             cb.Items.Delete(1);
+             cb.Items.Delete(0);
         end;
   end;
 end;

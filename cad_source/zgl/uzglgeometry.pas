@@ -191,8 +191,16 @@ function creatematrix(PInsert:GDBVertex; //Точка вставки
 var
     mrot,mentrot,madd,mtrans,mscale:dmatrix4d;
 begin
+{case PSP.param.AD of
+                    TACAbs:a:=PSP^.param.Angle*pi/180;
+                    TACRel:a:=PSP^.param.Angle*pi/180-angle;
+                    TACUpRight:a:=0;
+                  end;}
     mrot:=CreateRotationMatrixZ(Sin(param.Angle*pi/180), Cos(param.Angle*pi/180));
-    mentrot:=CreateRotationMatrixZ(Sin(LineAngle), Cos(LineAngle));
+    if param.AD=TACRel then
+                           mentrot:=CreateRotationMatrixZ(Sin(LineAngle), Cos(LineAngle))
+                       else
+                           mentrot:=onematrix;
     madd:=geometry.CreateTranslationMatrix(createvertex(param.x*Scale,param.y*Scale,0));
     mtrans:=CreateTranslationMatrix(createvertex(PInsert.x,PInsert.y,PInsert.z));
     mscale:=CreateScaleMatrix(geometry.createvertex(param.Height*Scale,param.Height*Scale,param.Height*Scale));

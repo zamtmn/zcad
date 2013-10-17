@@ -3132,8 +3132,11 @@ begin
                                if mr=mrOk then
                                               begin
                                               ColorIndex:=ColorSelectWND.ColorInfex;
+                                              if assigned(Sender)then
+                                              begin
                                               AddToComboIfNeed(tcombobox(Sender),palette[ColorIndex].name,TObject(ColorIndex));
                                               tcombobox(Sender).ItemIndex:=tcombobox(Sender).Items.Count-2;
+                                              end;
                                               end
                                           else
                                               begin

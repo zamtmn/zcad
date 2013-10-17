@@ -20,7 +20,7 @@ unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
 uses UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,uzgltriangles3darray,ugdbltypearray,ugdbfont,sysutils,gdbase,memman,log,
-     gdbasetypes;
+     gdbasetypes,strproc;
 type
 {Export+}
 PZGLGeometry=^ZGLGeometry;
@@ -228,6 +228,7 @@ var
     minx,miny,maxx,maxy:GDBDouble;
     j:integer;
     TDInfo:TTrianglesDataInfo;
+    sym:integer;
 begin
 { TODO : убрать двойное преобразование номера символа }
 objmatrix:=creatematrix(StartPatternPoint,PTP^.param,angle,scale);
@@ -235,7 +236,10 @@ matr:=onematrix;
 minx:=0;miny:=0;maxx:=0;maxy:=0;
 for j:=1 to (system.length(PTP^.Text)) do
 begin
-PTP^.param.PStyle.pfont.CreateSymbol(shx,triangles,byte(PTP^.Text[j]),objmatrix,matr,minx,miny,maxx,maxy,1);
+     sym:=byte(PTP^.Text[j]);
+          if ptp.param.PStyle.pfont.font.unicode then
+                                                     sym:=ach2uch(sym);
+PTP^.param.PStyle.pfont.CreateSymbol(shx,triangles,sym,objmatrix,matr,minx,miny,maxx,maxy,1);
 matr[3,0]:=matr[3,0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]),tdinfo).NextSymX;
 end;
 end;

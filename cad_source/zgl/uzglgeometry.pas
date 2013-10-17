@@ -175,9 +175,22 @@ begin
      cp:=pcurrsegment^.startpoint;
 end;
 procedure ZGLGeometry.DrawLineWithoutLT(const p1,p2:GDBVertex);
+{var
+   d,a:GDBDouble;
+   tv:GDBVertex;
+   i:integer;}
 begin
      lines.Add(@p1);
      lines.Add(@p2);
+     {d:=geometry.Vertexlength(p1,p2)/30;
+     a:=d/2;
+     for i:=0 to 2 do
+     begin
+          tv:=geometry.VertexAdd(p1,createvertex(random*d-a,random*d-a,0));
+          lines.Add(@tv);
+          tv:=geometry.VertexAdd(p2,createvertex(random*d-a,random*d-a,0));
+          lines.Add(@tv);
+     end;}
 end;
 procedure ZGLGeometry.DrawPointWithoutLT(const p:GDBVertex);
 begin

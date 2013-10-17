@@ -33,9 +33,8 @@ type
     ListView1: TListView;
     Memo1: TMemo;
     MkCurrentBtn: TSpeedButton;
-    Panel1: TPanel;
-    Panel2: TPanel;
-    Panel3: TPanel;
+    Splitter1: TSplitter;
+    procedure MkCurrentBtnClick(Sender: TObject);
     procedure _CreateLT(Sender: TObject);
     procedure _LTSelect(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure _LTChange(Sender: TObject; Item: TListItem; Change: TItemChange);
@@ -215,6 +214,11 @@ begin
 end;
 
 procedure TLTWindow._CreateLT(Sender: TObject);
+begin
+
+end;
+
+procedure TLTWindow.MkCurrentBtnClick(Sender: TObject);
 begin
 
 end;

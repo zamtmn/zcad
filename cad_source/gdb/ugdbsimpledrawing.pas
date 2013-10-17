@@ -105,7 +105,7 @@ begin
     PSP:=pltp.shapearray.beginiterate(ir2);
                                        if PSP<>nil then
                                        repeat
-                                             pts:=TextStyleTable.getelement(TextStyleTable.FindStyle(psp.FontName,true));
+                                             pts:={TextStyleTable.getelement}(TextStyleTable.FindStyle(psp.FontName,true));
                                              PSP^.param.PStyle:=pts;
                                              PSP^.Psymbol:=pts^.pfont.font.findunisymbolinfos(psp.SymbolName);
                                              PSP:=pltp.shapearray.iterate(ir2);
@@ -113,7 +113,7 @@ begin
    PTP:=pltp.textarray.beginiterate(ir2);
                                       if PTP<>nil then
                                       repeat
-                                            pts:=TextStyleTable.getelement(TextStyleTable.FindStyle(PTP.Style,false));
+                                            pts:={TextStyleTable.getelement}(TextStyleTable.FindStyle(PTP.Style,false));
                                             if pts=nil then
                                                            pts:=TextStyleTable.getelement(0);
                                             PTP^.param.PStyle:=pts;
@@ -728,4 +728,4 @@ begin
 
 end;
 
-end.
+end.

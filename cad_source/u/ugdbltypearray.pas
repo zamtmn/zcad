@@ -363,8 +363,8 @@ begin
                        repeat
                              sp.initnul;
                              sp:=psp^;
-                             i:=_DestTextStyleTable.FindStyle(sp.param.PStyle^.name,sp.param.PStyle^.UsedInLTYPE);
-                             sp.param.PStyle:=_DestTextStyleTable.getelement(i);
+                             //i:=_DestTextStyleTable.FindStyle(sp.param.PStyle^.name,sp.param.PStyle^.UsedInLTYPE);
+                             sp.param.PStyle:=_DestTextStyleTable.FindStyle(sp.param.PStyle^.name,sp.param.PStyle^.UsedInLTYPE);//_DestTextStyleTable.getelement(i);
                              sp.Psymbol:=sp.param.PStyle.pfont.GetOrCreateSymbolInfo(sp.Psymbol.Number);
                              result.shapearray.add(@sp);
                              pointer(sp.SymbolName):=nil;
@@ -376,8 +376,8 @@ begin
                        repeat
                              tp.initnul;
                              tp:=ptp^;
-                             i:=_DestTextStyleTable.FindStyle(tp.param.PStyle^.name,tp.param.PStyle^.UsedInLTYPE);
-                             tp.param.PStyle:=_DestTextStyleTable.getelement(i);
+                             //i:=_DestTextStyleTable.FindStyle(tp.param.PStyle^.name,tp.param.PStyle^.UsedInLTYPE);
+                             tp.param.PStyle:=_DestTextStyleTable.FindStyle(tp.param.PStyle^.name,tp.param.PStyle^.UsedInLTYPE);//_DestTextStyleTable.getelement(i);
                              //tp.Psymbol:=tp.param.PStyle.pfont.GetOrCreateSymbolInfo(tp.Psymbol.Number);
                              result.textarray.add(@tp);
                              //pointer(tp.SymbolName):=nil;
@@ -630,4 +630,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('ugdbltypearray.initialization');{$ENDIF}
-end.
+end.

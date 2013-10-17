@@ -548,7 +548,7 @@ end;
 function createtstylebyindex(_from,_to:PTSimpleDrawing;oldti:{TArrayIndex}PGDBTextStyle):PGDBTextStyle;
 var
    //{_dest,}td:PGDBObjBlockdef;
-   newti:TArrayIndex;
+   newti:{TArrayIndex}PGDBTextStyle;
    tsname:gdbstring;
    poldstyle,pnevstyle:PGDBTextStyle;
    //ir:itrec;
@@ -558,13 +558,13 @@ begin
                     poldstyle:=oldti{PGDBTextStyle(_from.TextStyleTable.getelement(oldti))};
                     tsname:=poldstyle^.name;
                     newti:=_to.TextStyleTable.FindStyle(tsname,poldstyle^.UsedInLTYPE);
-                    if newti<0 then
+                    if newti{<0}=nil then
                                    begin
                                         newti:=_to.TextStyleTable.addstyle(poldstyle.name,poldstyle.pfont.Name,poldstyle.prop,poldstyle.UsedInLTYPE);
-                                        pnevstyle:=PGDBTextStyle(_to.TextStyleTable.getelement(newti));
+                                        pnevstyle:=PGDBTextStyle({_to.TextStyleTable.getelement}(newti));
                                         pnevstyle^:=poldstyle^;
                                    end;
-      result:=_to.TextStyleTable.getelement(_to.TextStyleTable.FindStyle(tsname,poldstyle^.UsedInLTYPE));
+      result:={_to.TextStyleTable.getelement}(_to.TextStyleTable.FindStyle(tsname,poldstyle^.UsedInLTYPE));
 end;
 procedure createtstyleifneed(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 //var

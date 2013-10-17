@@ -64,6 +64,7 @@ end;
 
 function ListViewDrawSubItem(State: TCustomDrawState;canvas:tcanvas;Item: TListItem;SubItem: Integer): TRect;
 begin
+     {$IFNDEF LCLQT}
      if (cdsSelected in state) {or (cdsFocused in state)}{or Item.Selected} then
      {if (cdsSelected in state) or (cdsGrayed in state) or (cdsDisabled in state)
      or (cdsChecked in state) or (cdsFocused in state) or (cdsDefault in state)
@@ -76,8 +77,9 @@ begin
      result := Item.DisplayRectSubItem( SubItem,drBounds);
      canvas.FillRect(result);
      {$ENDIF}
+     {$ENDIF}
      result := Item.DisplayRectSubItem( SubItem,drBounds);
 end;
 
 
-end.
+end.

@@ -925,7 +925,7 @@ begin
 
     else if     dxfGDBStringload(f,7,byt,style)then
                                                  begin
-                                                 TXTStyleIndex :=drawing.GetTextStyleTable^.getelement(drawing.GetTextStyleTable^.FindStyle(Style,false));
+                                                 TXTStyleIndex :={drawing.GetTextStyleTable^.getelement}(drawing.GetTextStyleTable^.FindStyle(Style,false));
                                                  if TXTStyleIndex=nil then
                                                                      TXTStyleIndex:=drawing.GetTextStyleTable^.getelement(0);
                                                  end
@@ -1006,4 +1006,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBMtext.initialization');{$ENDIF}
-end.
+end.

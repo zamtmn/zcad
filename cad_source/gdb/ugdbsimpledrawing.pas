@@ -33,7 +33,7 @@ UGDBTextStyleArray,
 GDBCamera,
 UGDBOpenArrayOfPV,
 GDBRoot,ugdbfont,
-OGLWindow,UGDBOpenArrayOfPObjects{,UGDBVisibleOpenArray};
+OGLWindow,UGDBOpenArrayOfPObjects,ugdbshxfont{,UGDBVisibleOpenArray};
 type
 {EXPORT+}
 PTSimpleDrawing=^TSimpleDrawing;
@@ -84,11 +84,58 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        procedure ChangeStampt(st:GDBBoolean);virtual;
                        function GetUndoTop:TArrayIndex;virtual;
                        function GetDWGUnits:PTUnitManager;virtual;
+                       procedure AssignLTWithFonts(pltp:PGDBLtypeProp);virtual;
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 implementation
 uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, {GDBManager,}shared,{commandline,}log{,OGLSpecFunc};
+
+procedure TSimpleDrawing.AssignLTWithFonts(pltp:PGDBLtypeProp);
+var
+   PSP:PShapeProp;
+   PTP:PTextProp;
+   {ir,}ir2:itrec;
+   sh:double;
+   i:integer;
+   Psymbol:PGDBsymdolinfo;
+   TDInfo:TTrianglesDataInfo;
+   pts:pGDBTextStyle;
+begin
+    PSP:=pltp.shapearray.beginiterate(ir2);
+                                       if PSP<>nil then
+                                       repeat
+                                             pts:=TextStyleTable.getelement(TextStyleTable.FindStyle(psp.FontName,true));
+                                             PSP^.param.PStyle:=pts;
+                                             PSP^.Psymbol:=pts^.pfont.font.findunisymbolinfos(psp.SymbolName);
+                                             PSP:=pltp.shapearray.iterate(ir2);
+                                       until PSP=nil;
+   PTP:=pltp.textarray.beginiterate(ir2);
+                                      if PTP<>nil then
+                                      repeat
+                                            pts:=TextStyleTable.getelement(TextStyleTable.FindStyle(PTP.Style,false));
+                                            if pts=nil then
+                                                           pts:=TextStyleTable.getelement(0);
+                                            PTP^.param.PStyle:=pts;
+                                            {for i:=1 to length(PTP^.Text) do
+                                            begin
+                                                 if PTP^.param.PStyle<>nil then
+                                                 begin
+                                                 Psymbol:=PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[i]),TDInfo);
+                                                 sh:=abs(Psymbol.SymMaxY*PTP^.param.Height);
+                                                 if h<sh then
+                                                             h:=sh;
+                                                 sh:=abs(Psymbol.SymMinY*PTP^.param.Height);
+                                                 if h<sh then
+                                                             h:=sh;
+                                                 end;
+                                            end;}
+                                            PTP:=pltp.textarray.iterate(ir2);
+                                      until PTP=nil;
+
+end;
+
+
 function TSimpleDrawing.GetDWGUnits:PTUnitManager;
 begin
      result:=nil;

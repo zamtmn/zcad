@@ -73,6 +73,7 @@ BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;
               function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;virtual;
               function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
+              function findunisymbolinfos(symbolname:GDBString):PGDBsymdolinfo;
         end;
 PSHXFont=^SHXFont;
 SHXFont={$IFNDEF DELPHI}packed{$ENDIF} object(BASEFont)
@@ -770,6 +771,35 @@ begin
            //debug:=pobj^.symbol;
            //debug:=pobj^.symbolinfo.addr;
            if pobj^.symbol=symbol then
+                                      begin
+                                           result:=@pobj^.symbolinfo;
+                                           exit;
+                                      end;
+           pobj:=unisymbolinfo.iterate(ir);
+     until pobj=nil;
+     result:=nil;
+end;
+function BASEFont.findunisymbolinfos(symbolname:GDBString):PGDBsymdolinfo;
+var
+   pobj:PGDBUNISymbolInfo;
+   ir:itrec;
+   i:integer;
+   //debug:GDBInteger;
+begin
+     symbolname:=uppercase(symbolname);
+
+     for i:=0 to 255 do
+     begin
+          if uppercase(symbolinfo[i].Name)=symbolname then
+          begin
+               result:=@symbolinfo[i];
+               exit;
+          end;
+     end;
+     pobj:=unisymbolinfo.beginiterate(ir);
+     if pobj<>nil then
+     repeat
+           if uppercase(pobj^.symbolinfo.Name)=symbolname then
                                       begin
                                            result:=@pobj^.symbolinfo;
                                            exit;

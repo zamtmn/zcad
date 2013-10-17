@@ -20,7 +20,7 @@ unit ugdbltypearray;
 {$INCLUDE def.inc}
 interface
 uses Classes,UGDBStringArray,UGDBOpenArrayOfData,zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
-     UGDBTextStyleArray,UGDBOpenArrayOfObjects,
+     UGDBTextStyleArray,UGDBOpenArrayOfObjects,UGDBFontManager,
      varmandef,{gdbobjectsconstdef,}UGDBNamedObjectsArray,StrProc,shared;
 const
      DefaultSHXHeight=1;
@@ -83,6 +83,7 @@ GDBLtypeProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                procedure Format;virtual;
                function GetAsText:GDBString;
                function GetLTString:GDBString;
+               procedure CreateLineTypeFrom(var LT:GDBString);
              end;
 PGDBLtypePropArray=^GDBLtypePropArray;
 GDBLtypePropArray=packed array [0..0] of GDBLtypeProp;
@@ -91,6 +92,7 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     procedure LoadFromFile(fname:GDBString;lm:TLoadOpt);
+                    procedure ParseStrings(const ltd:tstrings; var CurrentLine:integer;out LTName,LTDesk,LTImpl:GDBString);
                     function createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
                     function GetCurrentLType:PGDBLtypeProp;
                     function GetSystemLT:PGDBLtypeProp;
@@ -391,38 +393,44 @@ begin
              end;
              end;
 end;
-
-procedure GDBLtypeArray.LoadFromFile(fname:GDBString;lm:TLoadOpt);
+procedure GDBLtypeArray.ParseStrings(const ltd:tstrings; var CurrentLine:integer;out LTName,LTDesk,LTImpl:GDBString);
 var
-   strings:TStringList{=nil};
    line:GDBString;
    i:integer;
    WhatNeed:TSeek;
-   LTName{,LTDesk,LTClass}:GDBString;
    p:PGDBLtypeProp;
-function GetStr(var s: GDBString; out dinfo:TDashInfo): String;
-var j:integer;
 begin
-     if length(s)>0 then
+     LTName:='';
+     LTDesk:='';
+     LTImpl:='';
+     WhatNeed:=TSeekInterface;
+     for i:=CurrentLine-1 to ltd.Count-1 do
      begin
-          if s[1]='[' then
-                           begin
-                                j:=pos(']',s);
-                                result:=copy(s,2,j-2);
-                                s:=copy(s,j+1,length(s)-j);
-                                GetPredStr(s,',');
-                                dinfo:=TDIText;
-                           end
-                       else
-                           begin
-                           result:=GetPredStr(s,',');
-                           dinfo:=TDIDash;
-                           end;
-     end
-     else
-        result:='';
+          line:=ltd.Strings[i];
+          inc(CurrentLine);
+          if length(line)>1 then
+          case line[1] of
+                         '*':begin
+                                  if WhatNeed=TSeekInterface then
+                                  begin
+                                       LTName:=GetPredStr(line,',');
+                                       LTName:=copy(LTName,2,length(LTName)-1);
+                                       LTDesk:=Line;
+                                       WhatNeed:=TSeekImplementation;
+                                  end;
+                             end;
+                         'A':begin
+                                  if WhatNeed=TSeekImplementation then
+                                  begin
+                                       {LTClass:=}GetPredStr(line,',');
+                                       LTImpl:=line;
+                                  end;
+
+                             end;
+          end;
+     end;
 end;
-procedure CreateLineTypeFrom(var LT:GDBString;pltprop:PGDBLtypeProp);
+procedure GDBLtypeProp.CreateLineTypeFrom(var LT:GDBString);
 var
    element,subelement,{text_shape,font_style,}paramname:GDBString;
    j:integer;
@@ -430,6 +438,30 @@ var
    dinfo:TDashInfo;
    SP:ShapeProp;
    TP:TextProp;
+   p:TTrianglesDataInfo;
+
+   function GetStr(var s: GDBString; out dinfo:TDashInfo): String;
+   var j:integer;
+   begin
+        if length(s)>0 then
+        begin
+             if s[1]='[' then
+                              begin
+                                   j:=pos(']',s);
+                                   result:=copy(s,2,j-2);
+                                   s:=copy(s,j+1,length(s)-j);
+                                   GetPredStr(s,',');
+                                   dinfo:=TDIText;
+                              end
+                          else
+                              begin
+                              result:=GetPredStr(s,',');
+                              dinfo:=TDIDash;
+                              end;
+        end
+        else
+           result:='';
+   end;
 procedure GetParam(var SHXDashProp:BasicSHXDashProp);
 begin
   subelement:=GetPredStr(element,',');
@@ -438,50 +470,61 @@ begin
        paramname:=Uppercase(GetPredStr(subelement,'='));
        stroke:=strtofloat(subelement);
        if paramname='X' then
-                            SP.param.X:=stroke
+                            SHXDashProp.param.X:=stroke
   else if paramname='Y' then
-                            SP.param.Y:=stroke
+                            SHXDashProp.param.Y:=stroke
   else if paramname='S' then
-                            SP.param.Height:=stroke
+                            SHXDashProp.param.Height:=stroke
   else if paramname='A' then
                             begin
-                                 SP.param.Angle:=stroke;
-                                 SP.param.AD:=TACAbs;
+                                 SHXDashProp.param.Angle:=stroke;
+                                 SHXDashProp.param.AD:=TACAbs;
                             end
   else if paramname='R' then
                             begin
-                                 SP.param.Angle:=stroke;
-                                 SP.param.AD:=TACRel;
+                                 SHXDashProp.param.Angle:=stroke;
+                                 SHXDashProp.param.AD:=TACRel;
                             end
   else if paramname='U' then
                             begin
-                                 SP.param.Angle:=stroke;
-                                 SP.param.AD:=TACUpRight;
+                                 SHXDashProp.param.Angle:=stroke;
+                                 SHXDashProp.param.AD:=TACUpRight;
                             end
   else shared.ShowError('CreateLineTypeFrom: unknow value "'+paramname+'"');
        subelement:=GetPredStr(element,',');
   end;
 end;
 begin
-     pltprop^.init(LTName);
+     strokesarray.Clear;
+     Textarray.Clear;
+     shapearray.Clear;
+     dasharray.Clear;
      element:=GetStr(LT,dinfo);
+     len:=0;
      while element<>'' do
      begin
           case dinfo of
                        TDIDash:begin
                                     stroke:=strtofloat(element);
-                                    pltprop.len:=pltprop.len+abs(stroke);
-                                    pltprop^.strokesarray.add(@stroke);
+                                    len:=len+abs(stroke);
+                                    strokesarray.add(@stroke);
                                end;
                        TDIText:begin
                                     j:=pos('"',element);
                                     if j>0 then
                                                begin
                                                     TP.initnul;
-                                                    TP.Text:=GetPredStr(element,',');
-                                                    TP.Style:=GetPredStr(element,',');
+                                                    TP.Text:=trim(GetPredStr(element,','));
+                                                    if length(TP.Text)>1 then
+                                                                             if TP.Text[1]='"' then
+                                                                                                   TP.Text[1]:=' ';
+                                                    if length(TP.Text)>1 then
+                                                                             if TP.Text[length(TP.Text)]='"' then
+                                                                                                                 TP.Text[length(TP.Text)]:=' ';
+                                                    TP.Text:=trim(TP.Text);
+                                                    TP.Style:=trim(GetPredStr(element,','));
                                                     GetParam(TP);
-                                                    pltprop^.Textarray.add(@TP);
+                                                    Textarray.add(@TP);
                                                     killstring(TP.Text);
                                                     killstring(TP.Style);
                                                     TP.done;
@@ -493,7 +536,7 @@ begin
                                                     SP.SymbolName:=GetPredStr(element,',');
                                                     SP.FontName:=GetPredStr(element,',');
                                                     GetParam(SP);
-                                                    pltprop^.shapearray.add(@SP);
+                                                    shapearray.add(@SP);
                                                     killstring(SP.SymbolName);
                                                     killstring(SP.FontName);
                                                     SP.done;
@@ -501,12 +544,20 @@ begin
                                end;
 
           end;
-          pltprop^.dasharray.Add(@dinfo);
+          dasharray.Add(@dinfo);
           element:=GetStr(LT,dinfo);
      end;
 end;
-
+procedure GDBLtypeArray.LoadFromFile(fname:GDBString;lm:TLoadOpt);
+var
+   strings:TStringList{=nil};
+   line:GDBString;
+   i:integer;
+   WhatNeed:TSeek;
+   LTName{,LTDesk,LTClass}:GDBString;
+   p:PGDBLtypeProp;
 begin
+     //Переделать используя ParseStrings или выкинуть нахуй
      strings:=TStringList.Create;
      strings.LoadFromFile(fname);
      WhatNeed:=TSeekInterface;
@@ -543,7 +594,8 @@ begin
                                                               end;
                                                     IsCreated:
                                                               begin
-                                                                   CreateLineTypeFrom(line,p);
+                                                                   p^.init(LTName);
+                                                                   p^.CreateLineTypeFrom(line);
                                                                    {if uppercase(name)=LNSysDefpoints then
                                                                                                       p^.init(Name,Color,LW,oo,ll,false,d)
                                                                    else

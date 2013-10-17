@@ -272,7 +272,7 @@ begin
 end;
 function GDBOpenArray.getelement;
 begin
-     if (index>=max) then
+     if (index>=max)or(index<0) then
                         result:=nil
                     else
      begin

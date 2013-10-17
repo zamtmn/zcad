@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ButtonPanel, Buttons, ExtCtrls, ComCtrls, Spin,
 
-  zcadsysvars, ugdbsimpledrawing, gdbase, gdbasetypes,ugdbltypearray,UGDBDescriptor,imagesmanager,strproc,usupportgui,ugdbutil,zcadstrconsts;
+  zcadsysvars, ugdbsimpledrawing, gdbase, gdbasetypes,ugdbltypearray,UGDBDescriptor,imagesmanager,strproc,usupportgui,ugdbutil,zcadstrconsts,shared;
 
 type
 
@@ -18,6 +18,7 @@ type
     B1: TSpeedButton;
     B2: TSpeedButton;
     Bevel1: TBevel;
+    BitBtn1: TBitBtn;
     ButtonPanel1: TButtonPanel;
     GroupBox1: TGroupBox;
     GScale: TFloatSpinEdit;
@@ -36,6 +37,7 @@ type
     procedure _onCreate(Sender: TObject);
     procedure UpdateItem(Item: TListItem);
     procedure countlt(plt:PGDBLtypeProp;out e,b:GDBInteger);
+    procedure _UpdateLT(Sender: TObject);
   private
     { private declarations }
   public
@@ -143,6 +145,49 @@ begin
   b:=0;
   pdwg^.BlockDefArray.IterateCounter(plt,b,@LTypeCounter);
 end;
+
+procedure TLTWindow._UpdateLT(Sender: TObject);
+var
+   pltp:PGDBLtypeProp;
+   pdwg:PTSimpleDrawing;
+   layername:string;
+   counter:integer;
+   li:TListItem;
+   ltd:tstrings;
+   ltmode:TLTMode;
+   inent,inblock:integer;
+   header,impl:string;
+   CurrentLine:integer;
+   LTName,LTDesk,LTImpl:GDBString;
+begin
+     li:=ListView1.Selected;
+     ltd:=self.Memo1.Lines;
+     pdwg:=gdb.GetCurrentDWG;
+     if li<>nil then
+                    pltp:=li.Data
+                else
+                    pltp:=nil;
+     if pltp<>nil then
+                      if pltp^.Mode<>TLTLineType then
+                                                     pltp:=nil;
+     if (pltp=nil) then
+                     begin
+                          shared.ShowError('Please select non system layer!!!');
+                          exit;
+                     end;
+     CurrentLine:=1;
+     pdwg^.GetLTypeTable.ParseStrings(ltd,CurrentLine,LTName,LTDesk,LTImpl);
+     LTName:=strproc.Tria_Utf8ToAnsi(LTName);
+     LTDesk:=strproc.Tria_Utf8ToAnsi(LTDesk);
+     LTImpl:=strproc.Tria_Utf8ToAnsi(LTImpl);
+     pltp^.Name:=LTName;
+     pltp^.desk:=LTDesk;
+     pltp^.CreateLineTypeFrom(LTImpl);
+     pdwg.AssignLTWithFonts(pltp);
+     pltp^.Format;
+     _onCreate(nil);
+end;
+
 procedure TLTWindow._LTSelect(Sender: TObject; Item: TListItem; Selected: Boolean);
 var
    pltp:PGDBLtypeProp;

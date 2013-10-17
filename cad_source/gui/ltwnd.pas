@@ -33,7 +33,8 @@ type
     ListView1: TListView;
     Memo1: TMemo;
     MkCurrentBtn: TSpeedButton;
-    Splitter1: TSplitter;
+    Panel1: TPanel;
+    Panel2: TPanel;
     procedure MkCurrentBtnClick(Sender: TObject);
     procedure _CreateLT(Sender: TObject);
     procedure _LTSelect(Sender: TObject; Item: TListItem; Selected: Boolean);

@@ -19,17 +19,24 @@ type
     B2: TSpeedButton;
     Bevel1: TBevel;
     BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
     ButtonPanel1: TButtonPanel;
     GroupBox1: TGroupBox;
+    GroupBox3: TGroupBox;
     GScale: TFloatSpinEdit;
     CScale: TFloatSpinEdit;
     GroupBox2: TGroupBox;
+    Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     ListView1: TListView;
     Memo1: TMemo;
     MkCurrentBtn: TSpeedButton;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    procedure _CreateLT(Sender: TObject);
     procedure _LTSelect(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure _LTChange(Sender: TObject; Item: TListItem; Change: TItemChange);
     procedure _onCDSubItem(Sender: TCustomListView; Item: TListItem;
@@ -202,9 +209,14 @@ begin
           pdwg:=gdb.GetCurrentDWG;
           pltp:=(Item.Data);
           countlt(pltp,inent,inblock);
-          Label2.Caption:=Format(rsLineTypeUsedIn,[pltp^.Name,inent,inblock]);
-          Memo1.Text:=Format(rsLineTypeDesk,[pltp^.len,strproc.Tria_AnsiToUtf8(pltp^.getastext)]);//pltp^.getastext;
+          Label2.Caption:=Tria_AnsiToUtf8(Format(rsLineTypeUsedIn,[pltp^.Name,inent,inblock]));
+          Memo1.Text:=Format(rsLineTypeDesk,[pltp^.len,Tria_AnsiToUtf8(pltp^.getastext)]);//pltp^.getastext;
      end;
+end;
+
+procedure TLTWindow._CreateLT(Sender: TObject);
+begin
+
 end;
 
 end.

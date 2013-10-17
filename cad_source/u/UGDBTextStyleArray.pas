@@ -20,7 +20,7 @@ unit UGDBTextStyleArray;
 {$INCLUDE def.inc}
 interface
 uses UGDBFontManager,zcadsysvars,gdbasetypes,SysInfo,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
-     strproc,varmandef,shared,ugdbfont,zcadstrconsts;
+     strproc,varmandef,shared,ugdbfont,zcadstrconsts,UGDBNamedObjectsArray,memman;
 type
   //ptextstyle = ^textstyle;
 {EXPORT+}
@@ -31,21 +31,20 @@ PGDBTextStyleProp=^GDBTextStyleProp;
                     wfactor:GDBDouble;(*saved_to_shd*)
               end;
   PGDBTextStyle=^GDBTextStyle;
-  GDBTextStyle = packed record
-    name: GDBAnsiString;(*saved_to_shd*)
+  GDBTextStyle = packed object(GDBNamedObject)
     dxfname: GDBAnsiString;(*saved_to_shd*)
     pfont: PGDBfont;
     prop:GDBTextStyleProp;(*saved_to_shd*)
     UsedInLTYPE:GDBBoolean;
   end;
 PGDBTextStyleArray=^GDBTextStyleArray;
-GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
+GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBTextStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
 
-                    function addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):{GDBInteger}PGDBTextStyle;
-                    function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):{GDBInteger}PGDBTextStyle;
-                    function FindStyle(StyleName:GDBString;ult:GDBBoolean):{GDBInteger}PGDBTextStyle;
+                    function addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
+                    function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
+                    function FindStyle(StyleName:GDBString;ult:GDBBoolean):PGDBTextStyle;
                     procedure freeelement(p:GDBPointer);virtual;
                     function GetCurrentTextStyle:PGDBTextStyle;
               end;
@@ -140,11 +139,13 @@ begin
   //pointer(ts.dxfname):=nil;
 end;
 function GDBTextStyleArray.addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):{GDBInteger}PGDBTextStyle;
-var ts:GDBTextStyle;
+var ts:PGDBTextStyle;
     //ff:gdbstring;
     //p:GDBPointer;
 begin
-  ts.name:=stylename;
+  GDBGetmem(ts,sizeof(GDBTextStyle));
+  ts.init(stylename);
+  //ts.name:=stylename;
   ts.dxfname:=FontFile;
   ts.UsedInLTYPE:=USedInLT;
 
@@ -163,26 +164,31 @@ begin
   //if ts.pfont=nil then ts.pfont:=FontManager.getAddres('normal.shx');
   ts.prop:=tp;
   result:=getelement(add(@ts));
-  pointer(ts.name):=nil;
-  pointer(ts.dxfname):=nil;
+  //pointer(ts.name):=nil;
+  //pointer(ts.dxfname):=nil;
 end;
 function GDBTextStyleArray.FindStyle;
 var
   pts:pGDBTextStyle;
   i:GDBInteger;
 begin
-  StyleName:=uppercase(StyleName);
+
+  result:=getAddres(stylename);
+  if result<>nil then
+                  if result^.UsedInLTYPE<>ult then
+                                               result:=nil;
+  {StyleName:=uppercase(StyleName);
   result:=nil;
   if count=0 then exit;
-  pts:=parray;
+  result:=parray;
   for i:=0 to count-1 do
   begin
-       if (uppercase(pts^.name)=stylename)and(pts^.UsedInLTYPE=ult) then begin
-                                       result:=pts;
+        if (uppercase(result^.name)=stylename)and(result^.UsedInLTYPE=ult) then begin
+                                       result:=result;
                                        exit;
                                   end;
-       inc(pts);
-  end;
+       inc(result);
+  end;}
 end;
 
 {function GDBLayerArray.CalcCopactMemSize2;
@@ -230,4 +236,4 @@ begin
 //end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBTextStyleArray.initialization');{$ENDIF}
-end.
+end.

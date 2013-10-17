@@ -667,6 +667,7 @@ BASEFont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
               function GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;virtual;abstract;
               function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;virtual;abstract;
               function findunisymbolinfo(symbol:GDBInteger):PGDBsymdolinfo;
+              function findunisymbolinfos(symbolname:GDBString):PGDBsymdolinfo;
         end;
 PSHXFont=^SHXFont;
 SHXFont={$IFNDEF DELPHI}packed{$ENDIF} object(BASEFont)
@@ -703,31 +704,6 @@ GDBfont={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
     function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
     procedure CreateSymbol(var Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;var Triangles:ZGLTriangle3DArray;_symbol:GDBInteger;const objmatrix:DMatrix4D;matr:DMatrix4D;var minx,miny,maxx,maxy:GDBDouble;ln:GDBInteger);
   end;
-//Generate on E:\zcad\CAD_SOURCE\u\UGDBTextStyleArray.pas
-PGDBTextStyleProp=^GDBTextStyleProp;
-  GDBTextStyleProp=packed record
-                    size:GDBDouble;(*saved_to_shd*)
-                    oblique:GDBDouble;(*saved_to_shd*)
-                    wfactor:GDBDouble;(*saved_to_shd*)
-              end;
-  PGDBTextStyle=^GDBTextStyle;
-  GDBTextStyle = packed record
-    name: GDBAnsiString;(*saved_to_shd*)
-    dxfname: GDBAnsiString;(*saved_to_shd*)
-    pfont: PGDBfont;
-    prop:GDBTextStyleProp;(*saved_to_shd*)
-    UsedInLTYPE:GDBBoolean;
-  end;
-PGDBTextStyleArray=^GDBTextStyleArray;
-GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBTextStyle*)
-                    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
-                    constructor initnul;
-                    function addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):GDBInteger;
-                    function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):GDBInteger;
-                    function FindStyle(StyleName:GDBString;ult:GDBBoolean):GDBInteger;
-                    procedure freeelement(p:GDBPointer);virtual;abstract;
-                    function GetCurrentTextStyle:PGDBTextStyle;
-              end;
 //Generate on E:\zcad\CAD_SOURCE\u\UGDBXYZWStringArray.pas
 PGDBXYZWGDBStringArray=^XYZWGDBGDBStringArray;
 XYZWGDBGDBStringArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
@@ -770,6 +746,30 @@ GDBNamedObjectsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPIde
                     function getAddres(name: GDBString):GDBPointer;
                     function GetIndexByPointer(p:PGDBNamedObject):GDBInteger;
                     function AddItem(name:GDBSTRING; out PItem:Pointer):TForCResult;
+              end;
+//Generate on E:\zcad\CAD_SOURCE\u\UGDBTextStyleArray.pas
+PGDBTextStyleProp=^GDBTextStyleProp;
+  GDBTextStyleProp=packed record
+                    size:GDBDouble;(*saved_to_shd*)
+                    oblique:GDBDouble;(*saved_to_shd*)
+                    wfactor:GDBDouble;(*saved_to_shd*)
+              end;
+  PGDBTextStyle=^GDBTextStyle;
+  GDBTextStyle = packed object(GDBNamedObject)
+    dxfname: GDBAnsiString;(*saved_to_shd*)
+    pfont: PGDBfont;
+    prop:GDBTextStyleProp;(*saved_to_shd*)
+    UsedInLTYPE:GDBBoolean;
+  end;
+PGDBTextStyleArray=^GDBTextStyleArray;
+GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBTextStyle*)
+                    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                    constructor initnul;
+                    function addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
+                    function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
+                    function FindStyle(StyleName:GDBString;ult:GDBBoolean):PGDBTextStyle;
+                    procedure freeelement(p:GDBPointer);virtual;abstract;
+                    function GetCurrentTextStyle:PGDBTextStyle;
               end;
 //Generate on E:\zcad\CAD_SOURCE\u\UGDBLayerArray.pas
 PGDBLayerProp=^GDBLayerProp;
@@ -848,6 +848,9 @@ GDBLtypeProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                constructor init(n:GDBString);
                destructor done;virtual;abstract;
                procedure Format;virtual;abstract;
+               function GetAsText:GDBString;
+               function GetLTString:GDBString;
+               procedure CreateLineTypeFrom(var LT:GDBString);
              end;
 PGDBLtypePropArray=^GDBLtypePropArray;
 GDBLtypePropArray=packed array [0..0] of GDBLtypeProp;
@@ -856,6 +859,7 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     procedure LoadFromFile(fname:GDBString;lm:TLoadOpt);
+                    procedure ParseStrings(const ltd:tstrings; var CurrentLine:integer;out LTName,LTDesk,LTImpl:GDBString);
                     function createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
                     function GetCurrentLType:PGDBLtypeProp;
                     function GetSystemLT:PGDBLtypeProp;
@@ -3057,6 +3061,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
                        function GetUndoTop:TArrayIndex;virtual;abstract;
                        function GetDWGUnits:PTUnitManager;virtual;abstract;
+                       procedure AssignLTWithFonts(pltp:PGDBLtypeProp);virtual;abstract;
                  end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\UGDBDescriptor.pas
 TDWGProps=packed record

@@ -43,9 +43,9 @@ GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*Ope
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
 
-                    function addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):GDBInteger;
-                    function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):GDBInteger;
-                    function FindStyle(StyleName:GDBString;ult:GDBBoolean):GDBInteger;
+                    function addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):{GDBInteger}PGDBTextStyle;
+                    function setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):{GDBInteger}PGDBTextStyle;
+                    function FindStyle(StyleName:GDBString;ult:GDBBoolean):{GDBInteger}PGDBTextStyle;
                     procedure freeelement(p:GDBPointer);virtual;
                     function GetCurrentTextStyle:PGDBTextStyle;
               end;
@@ -109,7 +109,7 @@ begin
       exit;
     end;
 end;}
-function GDBTextStyleArray.setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):GDBInteger;
+function GDBTextStyleArray.setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
 var ts:GDBTextStyle;
     //ff:gdbstring;
     ps:PGDBTextStyle;
@@ -134,12 +134,12 @@ begin
   //if ts.pfont=nil then ts.pfont:=FontManager.getAddres('normal.shx');
   ts.prop:=tp;
   //result:=add(@ts);
-  ps:=getelement(FindStyle(StyleName,USedInLT));
+  ps:={getelement}(FindStyle(StyleName,USedInLT));
   ps^:=ts;
   //pointer(ts.name):=nil;
   //pointer(ts.dxfname):=nil;
 end;
-function GDBTextStyleArray.addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):GDBInteger;
+function GDBTextStyleArray.addstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):{GDBInteger}PGDBTextStyle;
 var ts:GDBTextStyle;
     //ff:gdbstring;
     //p:GDBPointer;
@@ -162,7 +162,7 @@ begin
   //ts.pfont:=FontManager.{FindFonf}getAddres(FontFile);
   //if ts.pfont=nil then ts.pfont:=FontManager.getAddres('normal.shx');
   ts.prop:=tp;
-  result:=add(@ts);
+  result:=getelement(add(@ts));
   pointer(ts.name):=nil;
   pointer(ts.dxfname):=nil;
 end;
@@ -172,13 +172,13 @@ var
   i:GDBInteger;
 begin
   StyleName:=uppercase(StyleName);
-  result:=-1;
+  result:=nil;
   if count=0 then exit;
   pts:=parray;
   for i:=0 to count-1 do
   begin
        if (uppercase(pts^.name)=stylename)and(pts^.UsedInLTYPE=ult) then begin
-                                       result:=i;
+                                       result:=pts;
                                        exit;
                                   end;
        inc(pts);
@@ -230,4 +230,4 @@ begin
 //end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBTextStyleArray.initialization');{$ENDIF}
-end.
+end.

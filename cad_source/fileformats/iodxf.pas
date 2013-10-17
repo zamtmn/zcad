@@ -572,7 +572,8 @@ begin
 end;
 procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
-  byt,ti: GDBInteger;
+  byt: GDBInteger;
+  ti:PGDBTextStyle;
   error,flags: GDBInteger;
   s, sname, lname, lcolor, llw,desk,ltn: String;
   tp: PGDBObjBlockdef;
@@ -930,11 +931,11 @@ begin
                                end;
                           end;
                         end;
-                        ti:=-1;
+                        ti:=nil;
                         if (flags and 1)=0 then
                         begin
                         ti:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
-                        if ti<>-1 then
+                        if ti<>nil then
                         begin
                           if LoadMode=TLOLoad then
                                                   ti:=drawing.TextStyleTable.setstyle(tstyle.Name,lname,tstyle.prop,false);
@@ -944,7 +945,7 @@ begin
                         end
                         else
                             begin
-                              if drawing.TextStyleTable.FindStyle(lname,true)<>-1 then
+                              if drawing.TextStyleTable.FindStyle(lname,true)<>nil then
                               begin
                                 if LoadMode=TLOLoad then
                                                         ti:=drawing.TextStyleTable.setstyle(lname,lname,tstyle.prop,true);
@@ -952,9 +953,9 @@ begin
                                  else
                                      ti:=drawing.TextStyleTable.addstyle(lname,lname,tstyle.prop,true);
                             end;
-                        if ti<>-1 then
+                        if ti<>nil then
                         begin
-                             ptstyle:=drawing.TextStyleTable.getelement(ti);
+                             ptstyle:={drawing.TextStyleTable.getelement}(ti);
                              pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
                              if pltypeprop<>nil then
                              repeat
@@ -992,7 +993,7 @@ begin
                         {$IFDEF TOTALYLOG}programlog.logoutstr('Found style '+tstyle.Name,0);{$ENDIF}
                        if uppercase(tstyle.Name)=uppercase(ctstyle)then
                                     if sysvar.DWG.DWG_CTStyle<>nil then
-                                                                      sysvar.DWG.DWG_CTStyle^:=drawing.TextStyleTable.getelement(drawing.TextStyleTable.FindStyle(tstyle.Name,false));
+                                                                      sysvar.DWG.DWG_CTStyle^:={drawing.TextStyleTable.getelement}(drawing.TextStyleTable.FindStyle(tstyle.Name,false));
                         tstyle.Name:='';
                       end;
                       pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
@@ -2114,7 +2115,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                 outstream.TXTAddGDBStringEOL('0');
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
 
-                p:=drawing.TextStyleTable.getelement(drawing.TextStyleTable.FindStyle('Standard',false));
+                p:={drawing.TextStyleTable.getelement}(drawing.TextStyleTable.FindStyle('Standard',false));
                 {$IFNDEF DELPHI}
                 HandleIterator:=Handle2pointer.Find(p);
                                                                              if  HandleIterator=nil then

@@ -56,8 +56,10 @@ Panel Standart;
     action ACN_LAYER
     layercombobox 200,Layer selection
     Separator
+    action ACN_COLORS
     colorcombobox 100,Color selection
     Separator
+    action ACN_LTYPES
     ltypecombobox 250,Line type selection
     Separator
     linewcombobox 100,Line weight selection

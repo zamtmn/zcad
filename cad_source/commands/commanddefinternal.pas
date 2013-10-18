@@ -246,6 +246,7 @@ begin
   //poglwnd^.md.mode := savemousemode;
   OSModeEditor.GetState;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
+  if assigned(UpdateVisibleProc) then UpdateVisibleProc;
     end;
 end;
 procedure CommandRTEdObject.CommandEnd;

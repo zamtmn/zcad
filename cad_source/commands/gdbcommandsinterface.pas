@@ -21,7 +21,7 @@ unit gdbcommandsinterface;
 
 interface
 uses
- ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ colorwnd,ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -371,6 +371,26 @@ begin
   Freeandnil(LTWindow);
   result:=cmd_ok;
 end;
+function Colors_cmd:GDBInteger;
+var
+   mr:integer;
+begin
+     if not assigned(ColorSelectWND)then
+     Application.CreateForm(TColorSelectWND, ColorSelectWND);
+     SetHeightControl(ColorSelectWND,22);
+     if assigned(ShowAllCursorsProc) then
+                                         ShowAllCursorsProc;
+     mr:=ColorSelectWND.run(SysVar.dwg.DWG_CColor^,true){showmodal};
+     if mr=mrOk then
+                    begin
+                    SysVar.dwg.DWG_CColor^:=ColorSelectWND.ColorInfex;
+                    end;
+     if assigned(RestoreAllCursorsProc) then
+                                            RestoreAllCursorsProc;
+     freeandnil(ColorSelectWND);
+     result:=cmd_ok;
+end;
+
 
 
 
@@ -734,6 +754,7 @@ begin
   CreateCommandFastObjectPlugin(@layer_cmd,'Layer',CADWG,0);
   CreateCommandFastObjectPlugin(@TextStyles_cmd,'TextStyles',CADWG,0);
   CreateCommandFastObjectPlugin(@LineTypes_cmd,'LineTypes',CADWG,0);
+  CreateCommandFastObjectPlugin(@Colors_cmd,'Colors',CADWG,0);
   CreateCommandFastObjectPlugin(@SaveLayout_com,'SaveLayout',0,0);
   CreateCommandFastObjectPlugin(@Show_com,'Show',0,0);
   CreateCommandFastObjectPlugin(@About_com,'About',0,0);

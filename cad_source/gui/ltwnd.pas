@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ButtonPanel, Buttons, ExtCtrls, ComCtrls, Spin,
 
-  zcadsysvars, ugdbsimpledrawing, gdbase, gdbasetypes,ugdbltypearray,UGDBDescriptor,imagesmanager,strproc,usupportgui,ugdbutil,zcadstrconsts,shared;
+  zcadsysvars, ugdbsimpledrawing, gdbase, gdbasetypes,ugdbltypearray,UGDBDescriptor,imagesmanager,strproc,usupportgui,ugdbutil,zcadstrconsts,shared,UGDBNamedObjectsArray;
 
 type
 
@@ -45,6 +45,7 @@ type
     procedure UpdateItem(Item: TListItem);
     procedure countlt(plt:PGDBLtypeProp;out e,b:GDBInteger);
     procedure _UpdateLT(Sender: TObject);
+    procedure _UpDateLV(LV:TListView;SLT:PGDBLtypeProp);
   private
     { private declarations }
   public
@@ -79,6 +80,36 @@ begin
                  Item.SubItems.Add('');
                  Item.SubItems.Add(strproc.Tria_AnsiToUtf8(pltp^.desk));
 end;
+procedure TLTWindow._UpDateLV(LV:TListView;SLT:PGDBLtypeProp);
+var
+   pdwg:PTSimpleDrawing;
+   ir:itrec;
+   pltp:PGDBLtypeProp;
+   //s:ansistring;
+   li:TListItem;
+begin
+     LV.BeginUpdate;
+     LV.SmallImages:=IconList;
+     LV.Clear;
+     pdwg:=gdb.GetCurrentDWG;
+     if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
+     begin
+       pltp:=pdwg^.LTypeStyleTable.beginiterate(ir);
+       if pltp<>nil then
+       repeat
+            li:=LV.Items.Add;
+            li.Data:=pltp;
+            UpdateItem(li);
+            if SLT<>nil then
+               if pltp=slt then
+                               LV.Selected:=li;
+
+            pltp:=pdwg^.LTypeStyleTable.iterate(ir);
+       until pltp=nil;
+     end;
+     LV.EndUpdate;
+end;
+
 procedure TLTWindow._onCreate(Sender: TObject);
 var
    pdwg:PTSimpleDrawing;
@@ -89,30 +120,7 @@ var
 begin
      GScale.Value:=sysvar.DWG.DWG_LTScale^;
      CScale.Value:=sysvar.DWG.DWG_CLTScale^;
-
-     ListView1.BeginUpdate;
-     ListView1.SmallImages:=IconList;
-     ListView1.Clear;
-     //ListView1.OnMouseUp:=@LWMouseUp;
-     //ListView1.OnMouseDown:=@LWMouseDown;
-     pdwg:=gdb.GetCurrentDWG;
-     if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
-     begin
-       pltp:=pdwg^.LTypeStyleTable.beginiterate(ir);
-       if pltp<>nil then
-       repeat
-            li:=ListView1.Items.Add;
-
-            li.Data:=pltp;
-
-            UpdateItem(li);
-
-            pltp:=pdwg^.LTypeStyleTable.iterate(ir);
-       until pltp=nil;
-     end;
-     //ListView1.SortColumn:=1;
-     //ListView1.SetFocus;
-     ListView1.EndUpdate;
+     _UpDateLV(ListView1,nil);
 end;
 
 procedure TLTWindow._onCDSubItem(Sender: TCustomListView; Item: TListItem;
@@ -157,13 +165,8 @@ procedure TLTWindow._UpdateLT(Sender: TObject);
 var
    pltp:PGDBLtypeProp;
    pdwg:PTSimpleDrawing;
-   layername:string;
-   counter:integer;
    li:TListItem;
    ltd:tstrings;
-   ltmode:TLTMode;
-   inent,inblock:integer;
-   header,impl:string;
    CurrentLine:integer;
    LTName,LTDesk,LTImpl:GDBString;
 begin
@@ -192,7 +195,7 @@ begin
      pltp^.CreateLineTypeFrom(LTImpl);
      pdwg.AssignLTWithFonts(pltp);
      pltp^.Format;
-     _onCreate(nil);
+     _UpDateLV(ListView1,pltp);
 end;
 
 procedure TLTWindow._LTSelect(Sender: TObject; Item: TListItem; Selected: Boolean);
@@ -215,8 +218,34 @@ begin
 end;
 
 procedure TLTWindow._CreateLT(Sender: TObject);
+var
+   pltp:PGDBLtypeProp;
+   pdwg:PTSimpleDrawing;
+   li:TListItem;
+   ltd:tstrings;
+   CurrentLine:integer;
+   LTName,LTDesk,LTImpl:GDBString;
 begin
+     pdwg:=gdb.GetCurrentDWG;
+     CurrentLine:=1;
+     ltd:=self.Memo1.Lines;
+     pdwg^.GetLTypeTable.ParseStrings(ltd,CurrentLine,LTName,LTDesk,LTImpl);
+     LTName:=strproc.Tria_Utf8ToAnsi(LTName);
+     LTDesk:=strproc.Tria_Utf8ToAnsi(LTDesk);
+     LTImpl:=strproc.Tria_Utf8ToAnsi(LTImpl);
 
+     if (pdwg^.GetLTypeTable.AddItem(LTName,pltp)<>IsCreated) then
+                        begin
+                             shared.ShowError('Line type name already exist!!!');
+                             exit;
+                        end;
+
+     pltp^.init(LTName);
+     pltp^.desk:=LTDesk;
+     pltp^.CreateLineTypeFrom(LTImpl);
+     pdwg.AssignLTWithFonts(pltp);
+     pltp^.Format;
+     _UpDateLV(ListView1,pltp);
 end;
 
 procedure TLTWindow.MkCurrentBtnClick(Sender: TObject);
@@ -225,4 +254,3 @@ begin
 end;
 
 end.
-

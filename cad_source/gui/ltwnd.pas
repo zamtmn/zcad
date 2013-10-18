@@ -36,6 +36,7 @@ type
     Panel1: TPanel;
     Panel2: TPanel;
     procedure MkCurrentBtnClick(Sender: TObject);
+    procedure _close(Sender: TObject; var CloseAction: TCloseAction);
     procedure _CreateLT(Sender: TObject);
     procedure _LTSelect(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure _LTChange(Sender: TObject; Item: TListItem; Change: TItemChange);
@@ -251,6 +252,15 @@ end;
 procedure TLTWindow.MkCurrentBtnClick(Sender: TObject);
 begin
 
+end;
+
+procedure TLTWindow._close(Sender: TObject; var CloseAction: TCloseAction);
+begin
+     if self.ModalResult=MrOk then
+                                  begin
+                                       sysvar.DWG.DWG_LTScale^:=GScale.Value;
+                                       sysvar.DWG.DWG_CLTScale^:=CScale.Value;
+                                  end;
 end;
 
 end.

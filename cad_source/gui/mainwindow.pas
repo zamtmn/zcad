@@ -1619,7 +1619,7 @@ begin
         if {(plt^.h=0)and}({(plt^.shapearray.Count=0)and}(plt^.Textarray.Count=0)) then
                         n:=4
                     else
-                        n:=1;
+                        n:=1.000001;
         if plt^.h*vp.LineTypeScale>(ARect.Bottom-ARect.Top)/sysvar.DWG.DWG_LTScale^/2 then
                                                                   n:={trunc}(2+2*(plt^.h*vp.LineTypeScale)/((ARect.Bottom-ARect.Top)/sysvar.DWG.DWG_LTScale^));
         vp.LineTypeScale:=vp.LineTypeScale/n;

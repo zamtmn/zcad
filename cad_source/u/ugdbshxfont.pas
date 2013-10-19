@@ -860,6 +860,8 @@ begin
      begin
           if ttfsi.PSymbolInfo.SymMaxY<PTriangles.y then
                                                   ttfsi.PSymbolInfo.SymMaxY:=PTriangles.y;
+          if ttfsi.PSymbolInfo.SymMinY>PTriangles.y then
+                                                  ttfsi.PSymbolInfo.SymMinY:=PTriangles.y;
           inc(PTriangles);
      end;
 end;

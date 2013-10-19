@@ -202,7 +202,8 @@ procedure UpdateVisible;
 function getoglwndparam: GDBPointer; export;
 function LoadLayout_com(Operands:pansichar):GDBInteger;
 function _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject):Integer;
-procedure drawLT(canvas:TCanvas;ARect: TRect;s:string;plt:PGDBLtypeProp);
+procedure drawLT(const canvas:TCanvas;const ARect: TRect;const s:string;const plt:PGDBLtypeProp);safecall;
+procedure superdrawdraw(const canvas:TCanvas;const ARect: TRect;const s:string;const plt:pointer);
 {procedure startup;
 procedure finalize;}
 var
@@ -1573,14 +1574,26 @@ begin
     ARect.Left:=ARect.Left+36;
     DrawText(LayerBox.canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_VCENTER)
 end;}
-
-procedure drawLT(canvas:TCanvas;ARect: TRect;s:string;plt:PGDBLtypeProp);
+procedure superdrawdraw(const canvas:TCanvas;const ARect: TRect;const s:string;const plt:pointer);
+var
+  midline:integer;
+  geom:ZGLGeometry;
+  ppoly,poldpoly:^TPOINT;
+begin
+  exit;
+  geom.init;
+  canvas.Line(round(poldpoly.x),round(midline-poldpoly.y),round(ppoly.x),round(midline-ppoly.y));
+  poldpoly:=ppoly;
+  canvas.Pen.Width:=1;
+  geom.done;
+  canvas.TextRect(ARect,ARect.Left,(ARect.Top+ARect.Bottom-5) div 2,s);
+end;
+procedure drawLT(const canvas:TCanvas;const ARect: TRect;const s:string;const plt:PGDBLtypeProp);
 var
   y:integer;
   midline:integer;
   oldw:Integer;
   n:double;
-  ts:TTextStyle;
   geom:ZGLGeometry;
   vp:GDBObjVisualProp;
   p1,p2:Gdbvertex;

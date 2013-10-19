@@ -20,6 +20,7 @@ type
     Bevel1: TBevel;
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
     ButtonPanel1: TButtonPanel;
     GroupBox1: TGroupBox;
     GroupBox3: TGroupBox;
@@ -38,6 +39,7 @@ type
     procedure MkCurrentBtnClick(Sender: TObject);
     procedure _close(Sender: TObject; var CloseAction: TCloseAction);
     procedure _CreateLT(Sender: TObject);
+    procedure _LoadLT(Sender: TObject);
     procedure _LTSelect(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure _LTChange(Sender: TObject; Item: TListItem; Change: TItemChange);
     procedure _onCDSubItem(Sender: TCustomListView; Item: TListItem;
@@ -247,6 +249,11 @@ begin
      pdwg.AssignLTWithFonts(pltp);
      pltp^.Format;
      _UpDateLV(ListView1,pltp);
+end;
+
+procedure TLTWindow._LoadLT(Sender: TObject);
+begin
+
 end;
 
 procedure TLTWindow.MkCurrentBtnClick(Sender: TObject);

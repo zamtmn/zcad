@@ -1,7 +1,7 @@
 object LayerWindow: TLayerWindow
-  Left = 692
+  Left = 380
   Height = 590
-  Top = 208
+  Top = 198
   Width = 938
   Caption = 'LayerWindow'
   ClientHeight = 590
@@ -96,37 +96,32 @@ object LayerWindow: TLayerWindow
     BorderSpacing.Bottom = 2
     Columns = <    
       item
-        AutoSize = True
         Caption = 'Status'
-        Width = 932
+        Width = 100
       end    
       item
         Caption = 'Name'
         Width = 250
       end    
       item
-        AutoSize = True
         Caption = 'On'
-        Width = 28
+        Width = 100
       end    
       item
-        AutoSize = True
         Caption = 'Freze'
-        Width = 39
+        Width = 100
       end    
       item
-        AutoSize = True
         Caption = 'Lock'
-        Width = 37
+        Width = 100
       end    
       item
         Caption = 'Color'
         Width = 80
       end    
       item
-        AutoSize = True
         Caption = 'Line type'
-        Width = 60
+        Width = 100
       end    
       item
         Caption = 'Line weight'
@@ -138,7 +133,7 @@ object LayerWindow: TLayerWindow
       item
         AutoSize = True
         Caption = 'Description'
-        Width = 72
+        Width = 100
       end>
     MultiSelect = True
     ReadOnly = True

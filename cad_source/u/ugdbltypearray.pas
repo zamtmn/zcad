@@ -213,6 +213,7 @@ var
    i:integer;
    Psymbol:PGDBsymdolinfo;
    TDInfo:TTrianglesDataInfo;
+   sym:integer;
 begin
     h:=0;
     PSP:=shapearray.beginiterate(ir2);
@@ -233,7 +234,10 @@ begin
                                             begin
                                                  if PTP^.param.PStyle<>nil then
                                                  begin
-                                                 Psymbol:=PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[i]),TDInfo);
+                                                      sym:=byte(PTP^.Text[i]);
+                                                      if ptp.param.PStyle.pfont.font.unicode then
+                                                                                                 sym:=ach2uch(sym);
+                                                 Psymbol:=PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(sym),TDInfo);
                                                  sh:=abs(Psymbol.SymMaxY*PTP^.param.Height);
                                                  if h<sh then
                                                              h:=sh;
@@ -630,4 +634,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('ugdbltypearray.initialization');{$ENDIF}
-end.
+end.

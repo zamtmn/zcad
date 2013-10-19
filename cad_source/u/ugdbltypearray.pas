@@ -214,17 +214,28 @@ var
    Psymbol:PGDBsymdolinfo;
    TDInfo:TTrianglesDataInfo;
    sym:integer;
+procedure processH(Psymbol:PGDBsymdolinfo;param:shxprop);
+begin
+  sh:=abs(param.Y+Psymbol.SymMaxY*param.Height);
+  if h<sh then
+              h:=sh;
+  sh:=abs(param.Y+Psymbol.SymMinY*param.Height);
+  if h<sh then
+              h:=sh;
+  sh:=abs(param.Y-Psymbol.SymMinY*param.Height);
+  if h<sh then
+              h:=sh;
+  sh:=abs(param.Y-Psymbol.SymMinY*param.Height);
+  if h<sh then
+              h:=sh;
+end;
+
 begin
     h:=0;
     PSP:=shapearray.beginiterate(ir2);
                                        if PSP<>nil then
                                        repeat
-                                             sh:=abs(psp^.Psymbol.SymMaxY*psp^.param.Height);
-                                             if h<sh then
-                                                         h:=sh;
-                                             sh:=abs(psp^.Psymbol.SymMinY*psp^.param.Height);
-                                             if h<sh then
-                                                         h:=sh;
+                                             processH(psp.Psymbol,psp^.param);
                                              PSP:=shapearray.iterate(ir2);
                                        until PSP=nil;
    PTP:=textarray.beginiterate(ir2);
@@ -238,12 +249,7 @@ begin
                                                       if ptp.param.PStyle.pfont.font.unicode then
                                                                                                  sym:=ach2uch(sym);
                                                  Psymbol:=PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(sym),TDInfo);
-                                                 sh:=abs(Psymbol.SymMaxY*PTP^.param.Height);
-                                                 if h<sh then
-                                                             h:=sh;
-                                                 sh:=abs(Psymbol.SymMinY*PTP^.param.Height);
-                                                 if h<sh then
-                                                             h:=sh;
+                                                 processH(Psymbol,PTP^.param);
                                                  end;
                                             end;
                                             PTP:=textarray.iterate(ir2);

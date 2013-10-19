@@ -1,6 +1,6 @@
 unit layerwnd;
-
-{$mode objfpc}{$H+}
+{$INCLUDE def.inc}
+{$mode objfpc}
 
 interface
 
@@ -71,7 +71,8 @@ type
 var
   LayerWindow: TLayerWindow;
 implementation
-
+uses
+    mainwindow;
 {$R *.lfm}
 
 { TLayerWindow }
@@ -330,12 +331,12 @@ begin
   Sender.canvas.Font.Color:=clHighlightText;
   end;}
 end;
-
 procedure TLayerWindow.onCDSubItem(Sender: TCustomListView; Item: TListItem;
   SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
 var
    colorindex,ll:integer;
    s:string;
+   canv:TCanvas;
    //plp:PGDBLayerProp;
    //Dest: PChar;
    y{,i}:integer;
@@ -351,6 +352,14 @@ begin
      FontColor:=TCustomListView(sender).canvas.Font.Color;
      DefaultDraw:=false;
      case SubItem of
+     6:
+       begin
+            ARect:=ListViewDrawSubItem(state,sender.canvas,Item,SubItem);
+            {textrect}ARect := Item.DisplayRectSubItem( SubItem,drLabel);
+            s:=PGDBLtypeProp(PGDBLayerProp(Item.Data)^.LT)^.name;
+            canv:=Sender.canvas;
+            drawLT{superdrawdraw}(canv,ARect,s,PGDBLayerProp(Item.Data)^.LT);
+       end;
      5:
                       begin
                            colorindex:=PGDBLayerProp(Item.Data)^.color;

@@ -1608,7 +1608,7 @@ begin
   if {(ll>0)and}(plt<>nil)and(plt.len>0) then
    begin
         if s<>'' then
-                     ll:=ARect.Left+canvas.TextExtent(s).cx+2*txtoffset
+                     ll:={ARect.Left+}canvas.TextExtent(s).cx+2*txtoffset
                  else
                      ll:=0;
         geom.init;
@@ -1616,12 +1616,12 @@ begin
         p2:=createvertex(ARect.Right-txtoffset,p1.y,0);
         vp.LineType:=plt;
         vp.LineTypeScale:=(p2.x-p1.x)*(1/plt.len/sysvar.DWG.DWG_LTScale^);
-        if (plt^.h=0)and((plt^.shapearray.Count=0)and(plt^.Textarray.Count=0)) then
+        if {(plt^.h=0)and}({(plt^.shapearray.Count=0)and}(plt^.Textarray.Count=0)) then
                         n:=4
                     else
                         n:=1;
-        if plt^.h*vp.LineTypeScale>(ARect.Bottom-ARect.Top)/2 then
-                                                                  n:={trunc}(2+2*(plt^.h*vp.LineTypeScale)/((ARect.Bottom-ARect.Top)/2));
+        if plt^.h*vp.LineTypeScale>(ARect.Bottom-ARect.Top)/sysvar.DWG.DWG_LTScale^/2 then
+                                                                  n:={trunc}(2+2*(plt^.h*vp.LineTypeScale)/((ARect.Bottom-ARect.Top)/sysvar.DWG.DWG_LTScale^));
         vp.LineTypeScale:=vp.LineTypeScale/n;
         //scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;
         //num:=Length/(scale*vp.LineType.len)

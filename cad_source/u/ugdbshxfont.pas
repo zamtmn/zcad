@@ -92,6 +92,7 @@ TTFFont={$IFNDEF DELPHI}packed{$ENDIF} object(SHXFont)
               TriangleData:ZGLFontTriangle2DArray;
               function GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;virtual;
               function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
+              procedure ProcessTriangleData(ttfsi:TTTFSymInfo);
               constructor init;
               destructor done;virtual;
         end;
@@ -847,6 +848,22 @@ function TTFFont.GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;
 begin
      result:=self.TriangleData.getelement(offset);
 end;
+procedure TTFFont.ProcessTriangleData(ttfsi:TTTFSymInfo);
+var
+   PTriangles:PGDBFontVertex2D;
+   j:integer;
+begin
+if ttfsi.TrianglesDataInfo.TrianglesSize>0 then
+begin
+     PTriangles:=GetTriangleDataAddr(Ttfsi.TrianglesDataInfo.TrianglesAddr);
+     for j:=1 to ttfsi.TrianglesDataInfo.TrianglesSize do
+     begin
+          if ttfsi.PSymbolInfo.SymMaxY<PTriangles.y then
+                                                  ttfsi.PSymbolInfo.SymMaxY:=PTriangles.y;
+          inc(PTriangles);
+     end;
+end;
+end;
 function TTFFont.GetOrReplaceSymbolInfo(symbol:GDBInteger; var TrianglesDataInfo:TTrianglesDataInfo):PGDBsymdolinfo;
 var
    CharIterator:TMapChar.TIterator;
@@ -861,6 +878,7 @@ begin
                                                           else
                                                               begin
                                                                    cfeatettfsymbol(symbol,si,@self);
+                                                                   ProcessTriangleData(si);
                                                                    CharIterator.Value:=si;
                                                                    result:=si.PSymbolInfo;
                                                               end;

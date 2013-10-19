@@ -356,7 +356,7 @@ begin
        begin
             ARect:=ListViewDrawSubItem(state,sender.canvas,Item,SubItem);
             {textrect}ARect := Item.DisplayRectSubItem( SubItem,drLabel);
-            s:=PGDBLtypeProp(PGDBLayerProp(Item.Data)^.LT)^.name;
+            s:=strproc.Tria_AnsiToUtf8(PGDBLtypeProp(PGDBLayerProp(Item.Data)^.LT)^.name);
             canv:=Sender.canvas;
             drawLT{superdrawdraw}(canv,ARect,s,PGDBLayerProp(Item.Data)^.LT);
        end;

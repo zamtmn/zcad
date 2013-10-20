@@ -1621,7 +1621,7 @@ begin
                     else
                         n:=1.000001;
         if plt^.h*vp.LineTypeScale>(ARect.Bottom-ARect.Top)/sysvar.DWG.DWG_LTScale^/2 then
-                                                                  n:={trunc}(2+2*(plt^.h*vp.LineTypeScale)/((ARect.Bottom-ARect.Top)/sysvar.DWG.DWG_LTScale^));
+                                                                  n:={trunc}( 2+(plt^.h*vp.LineTypeScale)/((ARect.Bottom-ARect.Top)/sysvar.DWG.DWG_LTScale^));
         vp.LineTypeScale:=vp.LineTypeScale/n;
         //scale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;
         //num:=Length/(scale*vp.LineType.len)

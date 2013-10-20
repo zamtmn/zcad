@@ -391,12 +391,12 @@ begin
            Segmentator.InitFromPolyline(points,polylength,closed,@self);
            TangentScale:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale;
            NormalScale:=TangentScale;
-           TrueNumberOfPatterns:=polylength/(TangentScale*vp.LineType.len);
+           TrueNumberOfPatterns:=polylength/(TangentScale*LT.len);
            if ltgen and closed then
                         begin
                         minPatternsCount:=2;
                         NumberOfPatterns:=round(TrueNumberOfPatterns);
-                        TangentScale:=polyLength/(NumberOfPatterns*vp.LineType.len);
+                        TangentScale:=polyLength/(NumberOfPatterns*LT.len);
                         end
                     else
                         begin

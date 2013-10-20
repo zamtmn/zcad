@@ -176,7 +176,8 @@ var
    LTName,LTDesk,LTImpl:GDBString;
 begin
      li:=ListView1.Selected;
-     ltd:=self.Memo1.Lines;
+     ltd:=tstringlist.Create;
+     ltd.Text:=self.Memo1.Text;
      pdwg:=gdb.GetCurrentDWG;
      if li<>nil then
                     pltp:=li.Data
@@ -201,6 +202,7 @@ begin
      pdwg.AssignLTWithFonts(pltp);
      pltp^.Format;
      _UpDateLV(ListView1,pltp);
+     ltd.Free;
 end;
 
 procedure TLTWindow._LTSelect(Sender: TObject; Item: TListItem; Selected: Boolean);
@@ -233,7 +235,8 @@ var
 begin
      pdwg:=gdb.GetCurrentDWG;
      CurrentLine:=1;
-     ltd:=self.Memo1.Lines;
+     ltd:=tstringlist.Create;
+     ltd.Text:=self.Memo1.Text;
      pdwg^.GetLTypeTable.ParseStrings(ltd,CurrentLine,LTName,LTDesk,LTImpl);
      LTName:=strproc.Tria_Utf8ToAnsi(LTName);
      LTDesk:=strproc.Tria_Utf8ToAnsi(LTDesk);
@@ -251,6 +254,7 @@ begin
      pdwg.AssignLTWithFonts(pltp);
      pltp^.Format;
      _UpDateLV(ListView1,pltp);
+     ltd.Free;
 end;
 
 procedure TLTWindow._LoadLT(Sender: TObject);

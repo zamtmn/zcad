@@ -216,6 +216,8 @@ var
    sym:integer;
 procedure processH(Psymbol:PGDBsymdolinfo;param:shxprop);
 begin
+  if Psymbol<>nil then
+  begin
   sh:=abs(param.Y+Psymbol.SymMaxY*param.Height);
   if h<sh then
               h:=sh;
@@ -228,6 +230,7 @@ begin
   sh:=abs(param.Y-Psymbol.SymMinY*param.Height);
   if h<sh then
               h:=sh;
+  end;
 end;
 
 begin

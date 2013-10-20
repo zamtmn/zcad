@@ -1,0 +1,93 @@
+unit linetypesloadwnd;
+{$INCLUDE def.inc}
+interface
+
+uses
+  strproc,UGDBDescriptor,gdbase,zcadstrconsts,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  ButtonPanel, StdCtrls, types, lclintf,lcltype, EditBtn, ComCtrls,ugdbsimpledrawing;
+
+type
+
+  { TLineWeightSelectWindow }
+
+  TLineWeightSelectWindow = class(TForm)
+    ButtonPanel1: TButtonPanel;
+    FileNameEdit1: TFileNameEdit;
+    ListView1: TListView;
+    procedure _oncreate(Sender: TObject);
+    function run(filename:string):integer;
+    procedure LoadFromFile(filename:string);
+    procedure _onSelect(Sender: TObject; Item: TListItem; Selected: Boolean);
+  private
+    { private declarations }
+  public
+    text:String;
+    { public declarations }
+  end;
+
+var
+  LineWeightSelectWindow: TLineWeightSelectWindow=nil;
+implementation
+
+{$R *.lfm}
+
+{ TLineWeightSelectWindow }
+procedure TLineWeightSelectWindow.LoadFromFile(filename:string);
+var
+   li:TListItem;
+   ltd:TStringList;
+   pdwg:PTSimpleDrawing;
+   CurrentLine:integer;
+   LTName,LTDesk,LTImpl:String;
+begin
+     ltd:=TStringList.Create;
+     ltd.LoadFromFile(filename);
+     ListView1.BeginUpdate;
+     ListView1.Clear;
+     pdwg:=gdb.GetCurrentDWG;
+
+     CurrentLine:=1;
+     repeat
+     pdwg^.GetLTypeTable.ParseStrings(ltd,CurrentLine,LTName,LTDesk,LTImpl);
+     LTName:=strproc.Tria_AnsiToUtf8(LTName);
+     LTDesk:=strproc.Tria_AnsiToUtf8(LTDesk);
+     LTImpl:=strproc.Tria_AnsiToUtf8(LTImpl);
+     li:=ListView1.Items.Add;
+     li.Caption:=LTName;
+     li.SubItems.Add(LTDesk);
+     li.SubItems.Add(LTImpl);
+     until CurrentLine>ltd.Count;
+     ListView1.EndUpdate;
+end;
+
+procedure TLineWeightSelectWindow._onSelect(Sender: TObject; Item: TListItem;
+  Selected: Boolean);
+begin
+  if selected then
+  begin
+       text:='*'+Item.Caption+','+Item.SubItems[0]+#13#10+'A,'+Item.SubItems[1];
+  end;
+end;
+
+procedure TLineWeightSelectWindow._oncreate(Sender: TObject);
+//var i:integer;
+begin
+     {ListBox1.items.AddObject(rsByLayer,TObject(2));
+     ListBox1.items.AddObject(rsByBlock,TObject(1));
+     ListBox1.items.AddObject(rsdefault,TObject(0));
+     for i := low(lwarray) to high(lwarray) do
+     begin
+          ListBox1.items.AddObject(GetLWNameFromN(i),TObject(lwarray[i]+3));
+     end;
+     ListBox1.ItemIndex:=0;}
+end;
+function TLineWeightSelectWindow.run(filename:string):integer;
+var i:integer;
+begin
+     LoadFromFile(filename);
+     FileNameEdit1.FileName:=filename;
+     result:=showmodal;
+end;
+
+end.
+

@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ButtonPanel, Buttons, ExtCtrls, ComCtrls, Spin,
 
-  zcadsysvars, ugdbsimpledrawing, gdbase, gdbasetypes,ugdbltypearray,UGDBDescriptor,imagesmanager,strproc,usupportgui,ugdbutil,zcadstrconsts,shared,UGDBNamedObjectsArray;
+  linetypesloadwnd,zcadsysvars, ugdbsimpledrawing, gdbase, gdbasetypes,ugdbltypearray,UGDBDescriptor,imagesmanager,strproc,usupportgui,ugdbutil,zcadstrconsts,shared,UGDBNamedObjectsArray;
 
 type
 
@@ -102,6 +102,7 @@ begin
        repeat
             li:=LV.Items.Add;
             li.Data:=pltp;
+            li.Selected:=false;
             UpdateItem(li);
             if SLT<>nil then
                if pltp=slt then
@@ -140,6 +141,7 @@ begin
                             FontColor:=TCustomListView(sender).canvas.Font.Color;
 
                             ARect:=ListViewDrawSubItem(state,sender.canvas,Item,SubItem);
+                            ARect := Item.DisplayRectSubItem( SubItem,drLabel);
                             drawLT(TCustomListView(Sender).canvas,ARect,{ll,}'',Item.Data);
 
                             TCustomListView(sender).canvas.Brush.Color:=BrushColor;
@@ -253,7 +255,11 @@ end;
 
 procedure TLTWindow._LoadLT(Sender: TObject);
 begin
-
+     LineWeightSelectWindow:=TLineWeightSelectWindow.Create(nil);
+     //SetHeightControl(LineWeightSelectWindow,22);
+     if LineWeightSelectWindow.run(FindInSupportPath('zcad.lin'))=mrok then
+        Memo1.Text:=LineWeightSelectWindow.text;
+     Freeandnil(LineWeightSelectWindow);
 end;
 
 procedure TLTWindow.MkCurrentBtnClick(Sender: TObject);

@@ -434,6 +434,7 @@ begin
                                   begin
                                        {LTClass:=}GetPredStr(line,',');
                                        LTImpl:=line;
+                                       exit;
                                   end;
 
                              end;

@@ -109,7 +109,7 @@ object LTWindow: TLTWindow
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Panel1
     Left = 5
-    Height = 401
+    Height = 403
     Top = 26
     Width = 884
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -130,7 +130,7 @@ object LTWindow: TLTWindow
       item
         AutoSize = True
         Caption = 'Description'
-        Width = 100
+        Width = 530
       end>
     HideSelection = False
     ReadOnly = True
@@ -150,17 +150,17 @@ object LTWindow: TLTWindow
     AnchorSideRight.Control = Panel1
     AnchorSideBottom.Control = ButtonPanel1
     Left = 5
-    Height = 137
-    Top = 427
-    Width = 600
+    Height = 135
+    Top = 429
+    Width = 630
     Anchors = [akTop, akLeft, akRight, akBottom]
     AutoSize = True
     BorderSpacing.Left = 5
     BorderSpacing.Right = 5
     BorderSpacing.Bottom = 5
     Caption = 'GroupBox1'
-    ClientHeight = 118
-    ClientWidth = 596
+    ClientHeight = 117
+    ClientWidth = 626
     TabOrder = 2
     object Memo1: TMemo
       AnchorSideLeft.Control = GroupBox1
@@ -169,7 +169,7 @@ object LTWindow: TLTWindow
       AnchorSideBottom.Control = GroupBox1
       AnchorSideBottom.Side = asrBottom
       Left = 5
-      Height = 108
+      Height = 107
       Top = 5
       Width = 525
       Anchors = [akTop, akLeft, akRight, akBottom]
@@ -182,23 +182,23 @@ object LTWindow: TLTWindow
     object Panel2: TPanel
       AnchorSideTop.Control = GroupBox1
       Left = 535
-      Height = 95
+      Height = 94
       Top = 5
-      Width = 56
+      Width = 86
       Anchors = [akTop, akLeft, akRight, akBottom]
       AutoSize = True
       BorderSpacing.Top = 5
       BorderSpacing.Right = 5
       BorderSpacing.Bottom = 5
       BevelOuter = bvNone
-      ClientHeight = 95
-      ClientWidth = 56
+      ClientHeight = 94
+      ClientWidth = 86
       TabOrder = 1
       object BitBtn1: TBitBtn
         Left = 0
         Height = 25
         Top = 0
-        Width = 56
+        Width = 86
         Align = alTop
         AutoSize = True
         Caption = 'Update'
@@ -209,7 +209,7 @@ object LTWindow: TLTWindow
         Left = 0
         Height = 25
         Top = 25
-        Width = 56
+        Width = 86
         Align = alTop
         AutoSize = True
         Caption = 'Create'
@@ -220,10 +220,10 @@ object LTWindow: TLTWindow
         Left = 0
         Height = 25
         Top = 50
-        Width = 56
+        Width = 86
         Align = alTop
         AutoSize = True
-        Caption = 'Create'
+        Caption = 'Load'
         OnClick = _LoadLT
         TabOrder = 2
       end
@@ -233,28 +233,28 @@ object LTWindow: TLTWindow
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonPanel1
-    Left = 610
-    Height = 141
-    Top = 427
-    Width = 284
+    Left = 640
+    Height = 139
+    Top = 429
+    Width = 254
     Anchors = [akRight, akBottom]
     AutoSize = True
     BevelOuter = bvNone
-    ClientHeight = 141
-    ClientWidth = 284
+    ClientHeight = 139
+    ClientWidth = 254
     TabOrder = 3
     object GroupBox2: TGroupBox
       Left = 0
-      Height = 86
+      Height = 85
       Top = 0
-      Width = 279
+      Width = 249
       Align = alTop
       AutoSize = True
       BorderSpacing.Right = 5
       BorderSpacing.InnerBorder = 3
       Caption = 'GroupBox2'
       ClientHeight = 67
-      ClientWidth = 275
+      ClientWidth = 245
       TabOrder = 0
       object Label3: TLabel
         AnchorSideLeft.Control = GroupBox2
@@ -264,7 +264,7 @@ object LTWindow: TLTWindow
         Left = 5
         Height = 15
         Top = 9
-        Width = 175
+        Width = 145
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 5
         Caption = 'Global scale factor'
@@ -274,7 +274,7 @@ object LTWindow: TLTWindow
         AnchorSideTop.Control = GroupBox2
         AnchorSideRight.Control = GroupBox2
         AnchorSideRight.Side = asrBottom
-        Left = 180
+        Left = 150
         Height = 23
         Top = 5
         Width = 90
@@ -286,14 +286,14 @@ object LTWindow: TLTWindow
         MaxValue = 10000000000
         MinValue = 1E-10
         TabOrder = 0
-        Value = 1E-7
+        Value = 1E-10
       end
       object CScale: TFloatSpinEdit
         AnchorSideTop.Control = GScale
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = GroupBox2
         AnchorSideRight.Side = asrBottom
-        Left = 180
+        Left = 150
         Height = 23
         Top = 33
         Width = 90
@@ -314,7 +314,7 @@ object LTWindow: TLTWindow
         Left = 5
         Height = 15
         Top = 37
-        Width = 175
+        Width = 145
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 5
         Caption = 'Current object scale factor'
@@ -325,9 +325,9 @@ object LTWindow: TLTWindow
       AnchorSideTop.Control = GroupBox2
       AnchorSideTop.Side = asrBottom
       Left = 0
-      Height = 50
-      Top = 86
-      Width = 279
+      Height = 49
+      Top = 85
+      Width = 249
       Align = alBottom
       Anchors = [akTop, akLeft, akRight, akBottom]
       AutoSize = True
@@ -337,7 +337,7 @@ object LTWindow: TLTWindow
       Caption = 'GroupBox3'
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ClientHeight = 31
-      ClientWidth = 275
+      ClientWidth = 245
       TabOrder = 1
       object Label1: TLabel
         AnchorSideLeft.Control = GroupBox3
@@ -345,7 +345,7 @@ object LTWindow: TLTWindow
         Left = 5
         Height = 15
         Top = 5
-        Width = 41
+        Width = 34
         BorderSpacing.Left = 5
         BorderSpacing.Top = 5
         BorderSpacing.Bottom = 5

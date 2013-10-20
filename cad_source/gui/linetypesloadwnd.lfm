@@ -1,0 +1,65 @@
+object LineWeightSelectWindow: TLineWeightSelectWindow
+  Left = 586
+  Height = 491
+  Top = 251
+  Width = 408
+  Caption = 'Form1'
+  ClientHeight = 491
+  ClientWidth = 408
+  OnCreate = _oncreate
+  LCLVersion = '1.3'
+  object ButtonPanel1: TButtonPanel
+    Left = 6
+    Height = 34
+    Top = 451
+    Width = 396
+    OKButton.Name = 'OKButton'
+    OKButton.DefaultCaption = True
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CancelButton.Name = 'CancelButton'
+    CancelButton.DefaultCaption = True
+    TabOrder = 0
+    ShowButtons = [pbOK, pbCancel]
+  end
+  object FileNameEdit1: TFileNameEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = Owner
+    Left = 104
+    Height = 23
+    Top = 0
+    Width = 200
+    Filter = '*.lin|Line styles file'
+    FilterIndex = 1
+    HideDirectories = False
+    ButtonWidth = 23
+    NumGlyphs = 1
+    MaxLength = 0
+    TabOrder = 1
+  end
+  object ListView1: TListView
+    AnchorSideTop.Control = FileNameEdit1
+    AnchorSideTop.Side = asrBottom
+    Left = 0
+    Height = 422
+    Top = 23
+    Width = 408
+    Align = alBottom
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Columns = <    
+      item
+        Caption = 'Name'
+      end    
+      item
+        AutoSize = True
+        Width = 394
+      end>
+    RowSelect = True
+    TabOrder = 2
+    ViewStyle = vsReport
+    OnSelectItem = _onSelect
+  end
+end

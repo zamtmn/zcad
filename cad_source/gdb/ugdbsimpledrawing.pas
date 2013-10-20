@@ -101,11 +101,23 @@ var
    Psymbol:PGDBsymdolinfo;
    TDInfo:TTrianglesDataInfo;
    pts:pGDBTextStyle;
+procedure createstyle;
+var
+   tp:GDBTextStyleProp;
+begin
+     tp.oblique:=0;
+     tp.size:=1;
+     tp.wfactor:=1;
+     pts:=TextStyleTable.addstyle(psp.FontName,psp.FontName,tp,true);
+end;
+
 begin
     PSP:=pltp.shapearray.beginiterate(ir2);
                                        if PSP<>nil then
                                        repeat
-                                             pts:={TextStyleTable.getelement}(TextStyleTable.FindStyle(psp.FontName,true));
+                                             pts:=TextStyleTable.FindStyle(psp.FontName,true);
+                                             if pts=nil then
+                                                            createstyle;
                                              PSP^.param.PStyle:=pts;
                                              PSP^.Psymbol:=pts^.pfont.font.findunisymbolinfos(psp.SymbolName);
                                              PSP:=pltp.shapearray.iterate(ir2);
@@ -728,4 +740,4 @@ begin
 
 end;
 
-end.
+end.

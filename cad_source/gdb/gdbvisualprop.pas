@@ -37,7 +37,15 @@ GDBObjVisualProp=packed record
                       color:GDBInteger;
                  end;
 {Export-}
+function getLTfromVP(const vp:GDBObjVisualProp):PGDBLtypeProp;
 implementation
+function getLTfromVP(const vp:GDBObjVisualProp):PGDBLtypeProp;
+begin
+      result:=vp.LineType;
+      if assigned(result) then
+      if result.Mode=TLTByLayer then
+                                result:=vp.Layer.LT;
+end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('gdbvisualprop.initialization');{$ENDIF}
-end.
+end.

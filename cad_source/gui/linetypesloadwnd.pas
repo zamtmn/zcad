@@ -14,6 +14,7 @@ type
     ButtonPanel1: TButtonPanel;
     FileNameEdit1: TFileNameEdit;
     ListView1: TListView;
+    procedure _changefile(Sender: TObject);
     procedure _oncreate(Sender: TObject);
     function run(filename:string):integer;
     procedure LoadFromFile(filename:string);
@@ -52,10 +53,14 @@ begin
      LTName:=strproc.Tria_AnsiToUtf8(LTName);
      LTDesk:=strproc.Tria_AnsiToUtf8(LTDesk);
      LTImpl:=strproc.Tria_AnsiToUtf8(LTImpl);
+     if (LTName<>'')and(LTImpl<>'')then
+     if (length(LTName)<200)and(length(LTImpl)<200)then
+     begin
      li:=ListView1.Items.Add;
      li.Caption:=LTName;
      li.SubItems.Add(LTDesk);
      li.SubItems.Add(LTImpl);
+     end;
      until CurrentLine>ltd.Count;
      ListView1.EndUpdate;
 end;
@@ -66,7 +71,7 @@ begin
   if selected then
   begin
        text:='*'+Item.Caption+','+Item.SubItems[0]+#13#10+'A,'+Item.SubItems[1];
-  end;
+  end
 end;
 
 procedure TLineWeightSelectWindow._oncreate(Sender: TObject);
@@ -81,11 +86,19 @@ begin
      end;
      ListBox1.ItemIndex:=0;}
 end;
+
+procedure TLineWeightSelectWindow._changefile(Sender: TObject);
+begin
+     text:='';
+     LoadFromFile(FileNameEdit1.FileName);
+end;
+
 function TLineWeightSelectWindow.run(filename:string):integer;
 var i:integer;
 begin
      LoadFromFile(filename);
      FileNameEdit1.FileName:=filename;
+     FileNameEdit1.InitialDir:=ExtractFilePath(filename);
      result:=showmodal;
 end;
 

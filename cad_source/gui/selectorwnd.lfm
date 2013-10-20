@@ -1,18 +1,27 @@
-object LineWeightSelectWindow: TLineWeightSelectWindow
+object SelectorWindow: TSelectorWindow
   Left = 586
-  Height = 527
+  Height = 485
   Top = 251
-  Width = 558
+  Width = 126
+  AutoSize = True
   Caption = 'Form1'
-  ClientHeight = 527
-  ClientWidth = 558
+  ClientHeight = 485
+  ClientWidth = 126
   OnCreate = _oncreate
+  OnShow = _onShow
   LCLVersion = '1.3'
   object ButtonPanel1: TButtonPanel
+    AnchorSideLeft.Control = ListView1
+    AnchorSideTop.Control = ListView1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
     Left = 6
     Height = 34
-    Top = 487
-    Width = 546
+    Top = 447
+    Width = 114
+    Align = alNone
+    Anchors = [akTop, akLeft, akRight]
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'
@@ -25,13 +34,11 @@ object LineWeightSelectWindow: TLineWeightSelectWindow
     ShowButtons = [pbOK, pbCancel]
   end
   object ListView1: TListView
-    AnchorSideTop.Side = asrBottom
     Left = 0
-    Height = 458
-    Top = 23
-    Width = 558
-    Align = alBottom
-    Anchors = [akTop, akLeft, akRight, akBottom]
+    Height = 441
+    Top = 0
+    Width = 126
+    Align = alTop
     Columns = <    
       item
         AutoSize = True
@@ -41,30 +48,13 @@ object LineWeightSelectWindow: TLineWeightSelectWindow
       item
         AutoSize = True
         Caption = 'Description'
-        Width = 254
+        Width = 72
       end>
     ReadOnly = True
     RowSelect = True
+    SortColumn = 0
     TabOrder = 1
     ViewStyle = vsReport
     OnSelectItem = _onSelect
-  end
-  object FileNameEdit1: TFileNameEdit
-    AnchorSideLeft.Control = Owner
-    AnchorSideLeft.Side = asrCenter
-    AnchorSideTop.Control = Owner
-    Left = 158
-    Height = 23
-    Top = 0
-    Width = 242
-    Filter = 'Line types file|*.lin|All files|*.*'
-    FilterIndex = 0
-    HideDirectories = True
-    ButtonWidth = 23
-    DirectInput = False
-    NumGlyphs = 1
-    MaxLength = 0
-    TabOrder = 2
-    OnChange = _changefile
   end
 end

@@ -133,7 +133,7 @@ object LayerWindow: TLayerWindow
       item
         AutoSize = True
         Caption = 'Description'
-        Width = 100
+        Width = 72
       end>
     MultiSelect = True
     ReadOnly = True

@@ -5,7 +5,7 @@ unit layerwnd;
 interface
 
 uses
-  ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
+  selectorwnd,ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, Grids, ComCtrls,LCLIntf,lcltype,
 
@@ -127,7 +127,27 @@ begin
      changedstamp:=true;
      end;
 end;
+procedure FillSelector(SelectorWindow: TSelectorWindow);
+var
+   pdwg:PTSimpleDrawing;
+   ir:itrec;
+   pltp:PGDBLtypeProp;
+begin
+     SelectorWindow.StartAddItems;
+     pdwg:=gdb.GetCurrentDWG;
+     if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
+     begin
+       pltp:=pdwg^.LTypeStyleTable.beginiterate(ir);
+       if pltp<>nil then
+       repeat
+            if (pltp^.Mode<>TLTByBlock)and(pltp^.Mode<>TLTByLayer)then
+                SelectorWindow.AddItem(strproc.Tria_AnsiToUtf8(pltp^.Name),strproc.Tria_AnsiToUtf8(pltp^.desk),pltp);
 
+            pltp:=pdwg^.LTypeStyleTable.iterate(ir);
+       until pltp=nil;
+     end;
+     SelectorWindow.EndAddItems;
+end;
 procedure TLayerWindow.Process(ListItem:TListItem;SubItem:Integer;DoubleClick:Boolean);
 var
    pos,si: integer;
@@ -180,6 +200,22 @@ begin
                                     ListItem.SubItems[4]:=GetColorNameFromIndex(ColorSelectWND.ColorInfex);
                                end;
                 freeandnil(ColorSelectWND);
+                changedstamp:=true;
+             end;
+           5:begin
+                if not assigned(SelectorWindow)then
+                Application.CreateForm(TSelectorWindow, SelectorWindow);
+                FillSelector(SelectorWindow);
+                if assigned(ShowAllCursorsProc) then
+                                                    ShowAllCursorsProc;
+                mr:=SelectorWindow.run;
+                if assigned(RestoreAllCursorsProc) then
+                                                    RestoreAllCursorsProc;
+                if mr=mrOk then
+                               begin
+                                    PGDBLayerProp(ListItem.Data)^.LT:=SelectorWindow.data;
+                               end;
+                freeandnil(SelectorWindow);
                 changedstamp:=true;
              end;
            6:begin

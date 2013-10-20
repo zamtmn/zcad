@@ -786,13 +786,16 @@ begin
                       end;}
 end;
 function GDBObjEntity.GetLTCorrectSize:GDBDouble;
+var
+   LT:PGDBLtypeProp;
 begin
-      if vp.LineType<>nil then
+      LT:=getLTfromVP(vp);
+      if LT<>nil then
       begin
            if SysVar.dwg.DWG_LTScale<>nil then
-                                              result:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale*vp.LineType.h
+                                              result:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale*LT.h
                                           else
-                                              result:=vp.LineTypeScale*vp.LineType.h;
+                                              result:=vp.LineTypeScale*LT.h;
       end
          else
          result:=0;
@@ -1213,4 +1216,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBEntity.initialization');{$ENDIF}
-end.
+end.

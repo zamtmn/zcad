@@ -352,13 +352,6 @@ begin
          cdp:=tcdp;
      end;
 end;
-function getLTfromVP(const vp:GDBObjVisualProp):PGDBLtypeProp;
-begin
-      result:=vp.LineType;
-      if assigned(result) then
-      if result.Mode=TLTByLayer then
-                                result:=vp.Layer.LT;
-end;
 procedure ZGLGeometry.DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);
 var
     ptv,ptvprev,ptvfisrt: pgdbvertex;
@@ -530,4 +523,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBPoint3DArray.initialization');{$ENDIF}
 end.
-
+

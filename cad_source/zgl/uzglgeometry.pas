@@ -233,7 +233,8 @@ begin
 objmatrix:=creatematrix(StartPatternPoint,PSP^.param,angle,scale);
 matr:=onematrix;
 minx:=0;miny:=0;maxx:=0;maxy:=0;
-PSP^.param.PStyle.pfont.CreateSymbol(shx,triangles,PSP.Psymbol.Number,objmatrix,matr,minx,miny,maxx,maxy,1);
+if PSP.Psymbol<> nil then
+                    PSP^.param.PStyle.pfont.CreateSymbol(shx,triangles,PSP.Psymbol.Number,objmatrix,matr,minx,miny,maxx,maxy,1);
 end;
 procedure ZGLGeometry.PlaceText(const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:GDBDouble);
 var

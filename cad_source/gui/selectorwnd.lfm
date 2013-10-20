@@ -1,12 +1,12 @@
 object SelectorWindow: TSelectorWindow
   Left = 586
-  Height = 485
+  Height = 477
   Top = 251
-  Width = 126
+  Width = 354
   AutoSize = True
   Caption = 'Form1'
-  ClientHeight = 485
-  ClientWidth = 126
+  ClientHeight = 477
+  ClientWidth = 354
   OnCreate = _oncreate
   OnShow = _onShow
   LCLVersion = '1.3'
@@ -19,7 +19,7 @@ object SelectorWindow: TSelectorWindow
     Left = 6
     Height = 34
     Top = 447
-    Width = 114
+    Width = 342
     Align = alNone
     Anchors = [akTop, akLeft, akRight]
     OKButton.Name = 'OKButton'
@@ -37,18 +37,18 @@ object SelectorWindow: TSelectorWindow
     Left = 0
     Height = 441
     Top = 0
-    Width = 126
+    Width = 354
     Align = alTop
     Columns = <    
       item
         AutoSize = True
         Caption = 'Name'
-        Width = 44
+        Width = 100
       end    
       item
         AutoSize = True
         Caption = 'Description'
-        Width = 72
+        Width = 100
       end>
     ReadOnly = True
     RowSelect = True
@@ -57,4 +57,4 @@ object SelectorWindow: TSelectorWindow
     ViewStyle = vsReport
     OnSelectItem = _onSelect
   end
-end
+end

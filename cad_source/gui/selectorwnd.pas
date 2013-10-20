@@ -63,6 +63,7 @@ begin
      ih:=textrect.Bottom-textrect.top;
      c:=ListView1.Items.Count;
      if c>20 then c:=20;
+     if c<4 then c:=4;
      ListView1.Height:=hh+c*(ih+3)+1+2*ListView1.BorderWidth;
      //ListView1.Width:=ListView1.Column[0].Width+ListView1.Column[1].Width;
 end;
@@ -91,4 +92,4 @@ begin
 end;
 
 end.
-
+

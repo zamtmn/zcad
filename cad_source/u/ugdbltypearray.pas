@@ -209,7 +209,7 @@ var
    PSP:PShapeProp;
    PTP:PTextProp;
    {ir,}ir2:itrec;
-   sh:double;
+   sh,wlen:double;
    i:integer;
    Psymbol:PGDBsymdolinfo;
    TDInfo:TTrianglesDataInfo;
@@ -230,6 +230,9 @@ begin
   sh:=abs(param.Y-Psymbol.SymMinY*param.Height);
   if h<sh then
               h:=sh;
+  sh:=abs(param.x+Psymbol.NextSymX*param.Height);
+  if h<sh then
+              h:=sh;
   end;
 end;
 
@@ -244,6 +247,7 @@ begin
    PTP:=textarray.beginiterate(ir2);
                                       if PTP<>nil then
                                       repeat
+                                            wlen:=0;
                                             for i:=1 to length(PTP^.Text) do
                                             begin
                                                  if PTP^.param.PStyle<>nil then
@@ -253,8 +257,11 @@ begin
                                                                                                  sym:=ach2uch(sym);
                                                  Psymbol:=PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(sym),TDInfo);
                                                  processH(Psymbol,PTP^.param);
+                                                 wlen:=wlen+Psymbol.NextSymX*PTP^.param.Height;
                                                  end;
                                             end;
+                                            if h<wlen then
+                                                          h:=wlen;
                                             PTP:=textarray.iterate(ir2);
                                       until PTP=nil;
 
@@ -645,4 +652,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('ugdbltypearray.initialization');{$ENDIF}
-end.
+end.

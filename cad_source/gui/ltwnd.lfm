@@ -132,7 +132,6 @@ object LTWindow: TLTWindow
         Caption = 'Description'
         Width = 530
       end>
-    HideSelection = False
     ReadOnly = True
     RowSelect = True
     ScrollBars = ssAutoBoth

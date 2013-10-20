@@ -515,11 +515,12 @@ begin
      dasharray.Clear;
      element:=GetStr(LT,dinfo);
      len:=0;
+     stroke:=1;
      while element<>'' do
      begin
           case dinfo of
                        TDIDash:begin
-                                    stroke:=strtofloat(element);
+                                    trystrtofloat(element,stroke);
                                     len:=len+abs(stroke);
                                     strokesarray.add(@stroke);
                                end;

@@ -134,6 +134,7 @@ type
              DWG_LTScale:PGDBDouble;(*'Global line type scale'*)
              DWG_CLTScale:PGDBDouble;(*'Current line type scale'*)
              DWG_CLType:PGDBPointer;(*'Drawing line type'*)(*oi_readonly*)
+             DWG_RotateTextInLT:PGDBBoolean;(*'Rotate text in line type'*)
              DWG_CTStyle:PGDBPointer;(*'Text style'*)(*oi_readonly*)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)

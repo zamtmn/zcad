@@ -22,12 +22,12 @@ type
     BitBtn2: TBitBtn;
     BitBtn3: TBitBtn;
     ButtonPanel1: TButtonPanel;
+    CheckBox1: TCheckBox;
     GroupBox1: TGroupBox;
     GroupBox3: TGroupBox;
     GScale: TFloatSpinEdit;
     CScale: TFloatSpinEdit;
     GroupBox2: TGroupBox;
-    Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
@@ -124,6 +124,7 @@ var
 begin
      GScale.Value:=sysvar.DWG.DWG_LTScale^;
      CScale.Value:=sysvar.DWG.DWG_CLTScale^;
+     CheckBox1.Checked:=sysvar.DWG.DWG_RotateTextInLT^;
      _UpDateLV(ListView1,nil);
 end;
 
@@ -271,12 +272,14 @@ begin
 
 end;
 
+
 procedure TLTWindow._close(Sender: TObject; var CloseAction: TCloseAction);
 begin
      if self.ModalResult=MrOk then
                                   begin
                                        sysvar.DWG.DWG_LTScale^:=GScale.Value;
                                        sysvar.DWG.DWG_CLTScale^:=CScale.Value;
+                                       sysvar.DWG.DWG_RotateTextInLT^:=CheckBox1.Checked;
                                   end;
 end;
 

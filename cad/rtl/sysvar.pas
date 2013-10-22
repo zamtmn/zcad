@@ -9,6 +9,7 @@ var
   DWG_EditInSubEntry:GDBBoolean;
   DWG_AdditionalGrips:GDBBoolean;
   DWG_SelectedObjToInsp:GDBBoolean;
+  DWG_RotateTextInLT:GDBBoolean;
   DSGN_TraceAutoInc:GDBBoolean;
   DSGN_LeaderDefaultWidth:GDBDouble;
   DSGN_HelpScale:GDBDouble;
@@ -88,6 +89,7 @@ begin
   DWG_EditInSubEntry:=False;
   DWG_AdditionalGrips:=False;
   DWG_SelectedObjToInsp:=True;
+  DWG_RotateTextInLT:=True;
   DSGN_TraceAutoInc:=False;
   DSGN_LeaderDefaultWidth:=10.0;
   DSGN_HelpScale:=1.0;

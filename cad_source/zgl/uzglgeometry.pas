@@ -224,6 +224,43 @@ begin
     result:=MatrixMultiply(result,mentrot);
     result:=MatrixMultiply(result,mtrans);
 end;
+function CreateReadableMatrix(PInsert:GDBVertex; //Точка вставки
+                      param:shxprop;     //Параметры текста
+                      LineAngle,         //Угол линии
+                      Scale:GDBDouble;
+                      dx,dy:GDBDouble)   //Масштаб линии
+                      :dmatrix4d;        //Выходная матрица
+var
+    mrot,mrot2,mentrot,madd,madd2,madd3,mtrans,mscale:dmatrix4d;
+begin
+    mrot:=CreateRotationMatrixZ(Sin(param.Angle*pi/180), Cos(param.Angle*pi/180));
+    if param.AD=TACRel then
+                           mentrot:=CreateRotationMatrixZ(Sin(LineAngle), Cos(LineAngle))
+                       else
+                           mentrot:=onematrix;
+    madd:=geometry.CreateTranslationMatrix(createvertex(param.x*Scale,param.y*Scale,0));
+    mtrans:=CreateTranslationMatrix(createvertex(PInsert.x,PInsert.y,PInsert.z));
+    mscale:=CreateScaleMatrix(geometry.createvertex(param.Height*Scale,param.Height*Scale,param.Height*Scale));
+    result:=onematrix;
+    result:=MatrixMultiply(result,mscale);
+
+    if sysvar.DWG.DWG_RotateTextInLT^ then
+    if (LineAngle>(2*pi/4+bigeps))and(LineAngle<(pi+2*pi/4-bigeps)) then
+    begin
+    madd2:=geometry.CreateTranslationMatrix(createvertex(dx*Scale,dy*Scale,0));
+    madd3:=geometry.CreateTranslationMatrix(createvertex(-dx*Scale,-dy*Scale,0));
+    mrot2:=CreateRotationMatrixZ(Sin(pi), Cos(pi));
+    result:=MatrixMultiply(result,madd3);
+    result:=MatrixMultiply(result,mrot2);
+    result:=MatrixMultiply(result,madd2);
+    end;
+
+    result:=MatrixMultiply(result,mrot);
+    result:=MatrixMultiply(result,madd);
+
+    result:=MatrixMultiply(result,mentrot);
+    result:=MatrixMultiply(result,mtrans);
+end;
 procedure ZGLGeometry.PlaceShape(const StartPatternPoint:GDBVertex;PSP:PShapeProp;scale,angle:GDBDouble);
 var
     objmatrix,matr:dmatrix4d;
@@ -245,7 +282,7 @@ var
     sym:integer;
 begin
 { TODO : убрать двойное преобразование номера символа }
-objmatrix:=creatematrix(StartPatternPoint,PTP^.param,angle,scale);
+objmatrix:={creatematrix}CreateReadableMatrix(StartPatternPoint,PTP^.param,angle,scale,PTP.txtL,PTP.txtH);
 matr:=onematrix;
 minx:=0;miny:=0;maxx:=0;maxy:=0;
 for j:=1 to (system.length(PTP^.Text)) do
@@ -523,4 +560,4 @@ end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBPoint3DArray.initialization');{$ENDIF}
 end.
-
+

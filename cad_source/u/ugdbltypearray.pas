@@ -46,6 +46,7 @@ BasicSHXDashProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
 PTextProp=^TextProp;
 TextProp={$IFNDEF DELPHI}packed{$ENDIF} object(BasicSHXDashProp)
                 Text,Style:GDBString;
+                txtL,txtH:GDBDouble;
                 //PFont:PGDBfont;
                 constructor initnul;
                 destructor done;virtual;
@@ -209,7 +210,7 @@ var
    PSP:PShapeProp;
    PTP:PTextProp;
    {ir,}ir2:itrec;
-   sh,wlen:double;
+   sh:double;
    i:integer;
    Psymbol:PGDBsymdolinfo;
    TDInfo:TTrianglesDataInfo;
@@ -247,7 +248,8 @@ begin
    PTP:=textarray.beginiterate(ir2);
                                       if PTP<>nil then
                                       repeat
-                                            wlen:=0;
+                                            PTP.txtL:=0;
+                                            PTP.txtH:=0;
                                             for i:=1 to length(PTP^.Text) do
                                             begin
                                                  if PTP^.param.PStyle<>nil then
@@ -257,11 +259,15 @@ begin
                                                                                                  sym:=ach2uch(sym);
                                                  Psymbol:=PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(sym),TDInfo);
                                                  processH(Psymbol,PTP^.param);
-                                                 wlen:=wlen+Psymbol.NextSymX*PTP^.param.Height;
+                                                 if PTP.txtH<Psymbol.SymMaxY*PTP.param.Height then
+                                                                                                  PTP.txtH:=Psymbol.SymMaxY*PTP.param.Height;
+                                                 PTP.txtL:=PTP.txtL+Psymbol.NextSymX*PTP^.param.Height;
                                                  end;
                                             end;
-                                            if h<wlen then
-                                                          h:=wlen;
+                                            if h<PTP.txtL then
+                                                          h:=PTP.txtL;
+                                            PTP.txtH:=PTP.txtH/2;
+                                            PTP.txtL:=PTP.txtL/2;
                                             PTP:=textarray.iterate(ir2);
                                       until PTP=nil;
 
@@ -652,4 +658,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('ugdbltypearray.initialization');{$ENDIF}
-end.
+end.

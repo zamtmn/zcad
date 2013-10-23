@@ -234,7 +234,7 @@ var
     mrot,mrot2,mentrot,madd,madd2,madd3,mtrans,mscale:dmatrix4d;
 begin
     mrot:=CreateRotationMatrixZ(Sin(param.Angle*pi/180), Cos(param.Angle*pi/180));
-    if param.AD=TACRel then
+    if (param.AD<>TACAbs) then
                            mentrot:=CreateRotationMatrixZ(Sin(LineAngle), Cos(LineAngle))
                        else
                            mentrot:=onematrix;
@@ -245,6 +245,7 @@ begin
     result:=MatrixMultiply(result,mscale);
 
     if sysvar.DWG.DWG_RotateTextInLT^ then
+    if (param.AD<>TACAbs) then
     if (LineAngle>(2*pi/4+bigeps))and(LineAngle<(pi+2*pi/4-bigeps)) then
     begin
     madd2:=geometry.CreateTranslationMatrix(createvertex(dx*Scale,dy*Scale,0));

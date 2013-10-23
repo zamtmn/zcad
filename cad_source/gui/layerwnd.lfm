@@ -3,7 +3,7 @@ object LayerWindow: TLayerWindow
   Height = 590
   Top = 198
   Width = 938
-  Caption = 'LayerWindow'
+  Caption = 'Layers'
   ClientHeight = 590
   ClientWidth = 938
   Constraints.MinHeight = 500
@@ -29,7 +29,7 @@ object LayerWindow: TLayerWindow
     BorderSpacing.Top = 1
     BorderSpacing.Right = 1
   end
-  object Label1: TLabel
+  object LayerDescLabel: TLabel
     AnchorSideLeft.Control = Bevel1
     AnchorSideTop.Control = Bevel1
     AnchorSideRight.Control = Bevel1
@@ -42,7 +42,6 @@ object LayerWindow: TLayerWindow
     Width = 853
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 1
-    Caption = 'Label1'
     Layout = tlCenter
     ParentColor = False
   end
@@ -148,7 +147,7 @@ object LayerWindow: TLayerWindow
     OnSelectItem = ListView1SelectItem
   end
   object MkCurrentBtn: TSpeedButton
-    AnchorSideLeft.Control = B2
+    AnchorSideLeft.Control = DeleteLayerBtn
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Bevel1
     AnchorSideBottom.Control = Bevel1
@@ -161,8 +160,8 @@ object LayerWindow: TLayerWindow
     Flat = True
     OnClick = MkCurrent
   end
-  object B2: TSpeedButton
-    AnchorSideLeft.Control = B1
+  object DeleteLayerBtn: TSpeedButton
+    AnchorSideLeft.Control = AddLayerBtn
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Bevel1
     AnchorSideBottom.Control = Bevel1
@@ -175,7 +174,7 @@ object LayerWindow: TLayerWindow
     Flat = True
     OnClick = LayerDelete
   end
-  object B1: TSpeedButton
+  object AddLayerBtn: TSpeedButton
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Bevel1
     AnchorSideBottom.Control = Bevel1

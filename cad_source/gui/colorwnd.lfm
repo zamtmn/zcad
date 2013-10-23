@@ -1,7 +1,7 @@
 object ColorSelectWND: TColorSelectWND
-  Left = 703
+  Left = 649
   Height = 470
-  Top = 202
+  Top = 205
   Width = 632
   Caption = 'Color selection'
   ClientHeight = 470
@@ -40,7 +40,7 @@ object ColorSelectWND: TColorSelectWND
     TabIndex = 0
     TabOrder = 1
     object TabSheet1: TTabSheet
-      Caption = 'TabSheet1'
+      Caption = 'Color index'
       ClientHeight = 406
       ClientWidth = 624
       object oddpalette: TPaintBox
@@ -100,10 +100,10 @@ object ColorSelectWND: TColorSelectWND
         Left = 0
         Height = 22
         Top = 383
-        Width = 77
+        Width = 101
         Alignment = taRightJustify
         Anchors = [akTop, akLeft, akBottom]
-        Caption = 'Color number:'
+        Caption = '??Color description'
         Layout = tlCenter
         ParentColor = False
       end

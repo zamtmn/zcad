@@ -18,12 +18,12 @@ type
   { TLayerWindow }
 
   TLayerWindow = class(TForm)
-    B1: TSpeedButton;
-    B2: TSpeedButton;
+    AddLayerBtn: TSpeedButton;
+    DeleteLayerBtn: TSpeedButton;
     Bevel1: TBevel;
     ButtonApplyClose: TBitBtn;
     Button_Apply: TBitBtn;
-    Label1: TLabel;
+    LayerDescLabel: TLabel;
     ListView1: TListView;
     CurrentLayer:TListItem;
     MkCurrentBtn: TSpeedButton;
@@ -80,8 +80,8 @@ uses
 procedure TLayerWindow.FormCreate(Sender: TObject); // Процедура выполняется при отрисовке окна
 begin
 // Отрисовываем картинки на кнопках
-IconList.GetBitmap(II_Plus, B1.Glyph);
-IconList.GetBitmap(II_Minus, B2.Glyph);
+IconList.GetBitmap(II_Plus, AddLayerBtn.Glyph);
+IconList.GetBitmap(II_Minus, DeleteLayerBtn.Glyph);
 IconList.GetBitmap(II_Ok, MkCurrentBtn.Glyph);
 ListView1.SmallImages:=IconList;
 MouseDownItem:=nil;
@@ -588,7 +588,7 @@ begin
           pdwg:=gdb.GetCurrentDWG;
           player:=(Item.Data);
           countlayer(player,inent,inblock);
-          Label1.Caption:=Format(rsLayerUsedIn,[player^.Name,inent,inblock]);
+          LayerDescLabel.Caption:=Format(rsLayerUsedIn,[player^.Name,inent,inblock]);
      end;
 end;
 
@@ -676,7 +676,7 @@ begin
 
                                      //pdwg^.LayerTable.eraseobj(player);
                                      ListView1.Items.Delete(ListView1.Items.IndexOf(ListView1.Selected));
-                                     Label1.Caption:='';
+                                     LayerDescLabel.Caption:='';
                                      end
                                  else
                                      ShowError(rsLayerMustBeSelected);

@@ -2,17 +2,17 @@ object LineWeightSelectWND: TLineWeightSelectWND
   Left = 653
   Height = 491
   Top = 218
-  Width = 181
-  Caption = 'Form1'
+  Width = 196
+  Caption = 'Lineweight'
   ClientHeight = 491
-  ClientWidth = 181
+  ClientWidth = 196
   OnCreate = _oncreate
-  LCLVersion = '1.1'
+  LCLVersion = '1.3'
   object ButtonPanel1: TButtonPanel
     Left = 6
     Height = 34
     Top = 451
-    Width = 169
+    Width = 184
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'
@@ -28,7 +28,7 @@ object LineWeightSelectWND: TLineWeightSelectWND
     Left = 0
     Height = 445
     Top = 0
-    Width = 181
+    Width = 196
     Align = alClient
     ItemHeight = 0
     OnDrawItem = _onDrawItem

@@ -38,6 +38,8 @@ type
     end;
 
 function InterfaceTranslate(const Identifier, OriginalValue: String): String;
+procedure DisableTranslate;
+procedure EnableTranslate;
 var
    PODirectory, Lang, FallbackLang: String;
    po: TmyPOFile;
@@ -45,10 +47,18 @@ var
    _UpdatePO:integer=0;
    _NotEnlishWord:integer=0;
    _DebugWord:integer=0;
+   DisableTranslateCount:integer;
 const
   identpref='zcadexternal.';
 implementation
-
+procedure DisableTranslate;
+begin
+     inc(DisableTranslateCount);
+end;
+procedure EnableTranslate;
+begin
+     dec(DisableTranslateCount);
+end;
 procedure TPoTranslator.TranslateStringProperty(Sender: TObject;
   const Instance: TPersistent; PropInfo: PPropInfo; var Content: string);
 var
@@ -168,6 +178,11 @@ begin
     if UTF8LowerCase(Identifier)='acn_close~caption' then
                                 s:=s;
     log.programlog.LogOutStr(Identifier+' '+OriginalValue,0);
+    if DisableTranslateCount>0 then
+                              begin
+                                   result:=OriginalValue;
+                                   exit;
+                              end;
     result:=po.Translate({Identifier}'', OriginalValue);
 
     if sysinfo.sysparam.updatepo then
@@ -221,6 +236,7 @@ end;
 
 procedure initialize;
     begin
+      DisableTranslateCount:=0;
       PODirectory := sysinfo.sysparam.programpath+'languades/';
       GetLanguageIDs(Lang, FallbackLang); // определено в модуле gettext
       createpo;

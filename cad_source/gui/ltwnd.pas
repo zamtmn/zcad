@@ -15,8 +15,7 @@ type
   { TLTWindow }
 
   TLTWindow = class(TForm)
-    B1: TSpeedButton;
-    B2: TSpeedButton;
+    DeleteLtBtn: TSpeedButton;
     Bevel1: TBevel;
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
@@ -28,7 +27,7 @@ type
     GScale: TFloatSpinEdit;
     CScale: TFloatSpinEdit;
     GroupBox2: TGroupBox;
-    Label2: TLabel;
+    LTDescLabel: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     ListView1: TListView;
@@ -92,7 +91,6 @@ var
    li:TListItem;
 begin
      LV.BeginUpdate;
-     LV.SmallImages:=IconList;
      LV.Clear;
      pdwg:=gdb.GetCurrentDWG;
      if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
@@ -122,6 +120,9 @@ var
    //s:ansistring;
    li:TListItem;
 begin
+     ListView1.SmallImages:=IconList;
+     IconList.GetBitmap(II_Minus,DeleteLtBtn.Glyph);
+     IconList.GetBitmap(II_Ok,MkCurrentBtn.Glyph);
      GScale.Value:=sysvar.DWG.DWG_LTScale^;
      CScale.Value:=sysvar.DWG.DWG_CLTScale^;
      CheckBox1.Checked:=sysvar.DWG.DWG_RotateTextInLT^;
@@ -220,8 +221,11 @@ begin
           pdwg:=gdb.GetCurrentDWG;
           pltp:=(Item.Data);
           countlt(pltp,inent,inblock);
-          Label2.Caption:=Tria_AnsiToUtf8(Format(rsLineTypeUsedIn,[pltp^.Name,inent,inblock]));
-          Memo1.Text:=Format(rsLineTypeDesk,[pltp^.len,Tria_AnsiToUtf8(pltp^.getastext)]);//pltp^.getastext;
+          LTDescLabel.Caption:=Format(rsLineTypeUsedIn,[Tria_AnsiToUtf8(pltp^.Name),inent,inblock]);
+          if pltp^.Mode=TLTLineType then
+                                        Memo1.Text:=Format(rsLineTypeDesk,[pltp^.len,Tria_AnsiToUtf8(pltp^.getastext)])
+                                    else
+                                        Memo1.Text:=rsSysLineTypeWarning;
      end;
 end;
 

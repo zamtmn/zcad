@@ -1,7 +1,7 @@
 unit DeviceBase;
 {$INCLUDE def.inc}
 interface
-uses gvector,varmandef,CsvDocument,devicebaseabstract,zcadsysvars,fileutil,strproc,strmy,gdbasetypes,gdbase,UUnitManager,varman,{varmandef,}sysutils,typedescriptors,URecordDescriptor,UObjectDescriptor,shared;
+uses intftranslations,gvector,varmandef,CsvDocument,devicebaseabstract,zcadsysvars,fileutil,strproc,strmy,gdbasetypes,gdbase,UUnitManager,varman,{varmandef,}sysutils,typedescriptors,URecordDescriptor,UObjectDescriptor,shared;
 type
 {REGISTEROBJECTTYPE DbBaseObject}
 {REGISTEROBJECTTYPE ElDeviceBaseObject}
@@ -175,6 +175,7 @@ constructor DeviceManager.init;
 var
    s,ts:gdbstring;
 begin
+     DisableTranslate;
      s:=sysvar.PATH.device_library^;
      repeat
            GetPartOfPath(ts,s,'|');
@@ -184,6 +185,7 @@ begin
                                       loadfromdir(ts);
                                  end;
      until s='';
+     EnableTranslate;
 end;
 procedure loaddev(fn:gdbstring);
 begin

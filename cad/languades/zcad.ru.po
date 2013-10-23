@@ -3,22 +3,12 @@ msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: Andrey Zubarev <zamtmn@yandex.ru>\n"
+"Last-Translator: Andrey M/ Zubarev <zamtmn@yandex.ru>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.7\n"
-
-#: colorselectwnd.button1.caption
-msgctxt "colorselectwnd.button1.caption"
-msgid "Button1"
-msgstr ""
-
-#: colorselectwnd.caption
-msgctxt "colorselectwnd.caption"
-msgid "Form1"
-msgstr ""
 
 #: tcolorselectwnd.byblock.caption
 msgid "??ByBlock"
@@ -36,26 +26,16 @@ msgstr "Выбор цвета"
 #: tcolorselectwnd.label2.caption
 msgctxt "tcolorselectwnd.label2.caption"
 msgid "Color number:"
-msgstr ""
+msgstr "Цвет номер:"
 
 #: tcolorselectwnd.label3.caption
 msgctxt "tcolorselectwnd.label3.caption"
-msgid "Color number:"
+msgid "??Color description"
 msgstr ""
 
 #: tcolorselectwnd.tabsheet1.caption
-msgid "TabSheet1"
-msgstr ""
-
-#: tform1.button1.caption
-msgctxt "tform1.button1.caption"
-msgid "Button1"
-msgstr ""
-
-#: tform1.caption
-msgctxt "tform1.caption"
-msgid "Form1"
-msgstr ""
+msgid "Color index"
+msgstr "Индексная палитра"
 
 #: tlayerwindow.buttonapplyclose.caption
 msgid "Apply and close"
@@ -66,12 +46,10 @@ msgid "Apply"
 msgstr "Применить"
 
 #: tlayerwindow.caption
-msgid "LayerWindow"
+#| msgid "LayerWindow"
+msgctxt "tlayerwindow.caption"
+msgid "Layers"
 msgstr "Слои"
-
-#: tlayerwindow.label1.caption
-msgid "Label1"
-msgstr ""
 
 #: tlayerwindow.listview1.columns[0].caption
 msgid "Status"
@@ -120,26 +98,18 @@ msgctxt "tlayerwindow.listview1.columns[9].caption"
 msgid "Description"
 msgstr "Описание"
 
-#: tlineweightselectwnd.caption
-msgctxt "tlineweightselectwnd.caption"
-msgid "Form1"
-msgstr ""
-
 #: tsltexteditor1.caption
-msgid "sltexteditor1"
-msgstr ""
-
-#: tsltexteditor1.editfield.text
-msgid "EditField"
-msgstr ""
+msgid "Text editor"
+msgstr "Редактор текста"
 
 #: tsltexteditor1.helptext.caption
-msgid " тест "
-msgstr ""
+msgctxt "tsltexteditor1.helptext.caption"
+msgid "Text"
+msgstr "Текст"
 
 #: tsltexteditor1.okbutton.caption
 msgid "Ok"
-msgstr ""
+msgstr "Ок"
 
 #: ugdbdescriptor.unnamedwindowtitle
 msgctxt "ugdbdescriptor.unnamedwindowtitle"
@@ -1105,6 +1075,7 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
+#, fuzzy
 #| msgid "Rotate"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Block params"
@@ -1328,6 +1299,7 @@ msgid "View"
 msgstr "Вид"
 
 #: zcadexternal.hint_panel~colorcombobox
+#, fuzzy
 #| msgid "Color selection"
 msgctxt "zcadexternal.hint_panel~colorcombobox"
 msgid "Line type selection"
@@ -1501,6 +1473,7 @@ msgid "Fonts"
 msgstr "Шрифты"
 
 #: zcadexternal.menucommand~setobjinsp(layers)
+msgctxt "zcadexternal.menucommand~setobjinsp(layers)"
 msgid "Layers"
 msgstr "Слои"
 
@@ -3231,10 +3204,8 @@ msgid "On"
 msgstr "Включен"
 
 #: zcadstrconsts.fontnotfoundandreplace
-msgid ""
-"For text style \"%s\" not found font \"%s\", is replaced by an alternative"
-msgstr ""
-"Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
+msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+msgstr "Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
 
 #: zcadstrconsts.rsaboutwndcaption
 msgctxt "zcadstrconsts.rsaboutwndcaption"
@@ -3479,8 +3450,7 @@ msgid "Expression %s return %s"
 msgstr "Выражение  %s возвращает %s"
 
 #: zcadstrconsts.rsfardeffilenotfounf
-msgid ""
-"File definition of the variables can not be found for the device \"%s\";"
+msgid "File definition of the variables can not be found for the device \"%s\";"
 msgstr "Файл определения переменных не найден для устройства \"%s\";"
 
 #: zcadstrconsts.rsfileformat
@@ -3508,10 +3478,24 @@ msgstr "Слой DEFPOINTS не может быть печатным"
 msgid "Layer must be selected"
 msgstr ""
 
+#: zcadstrconsts.rslayerusedin
+msgid "Layer \"%s\" used in: %d-model, %d-blockdef table"
+msgstr ""
+
 #: zcadstrconsts.rslayoutload
 msgctxt "zcadstrconsts.rslayoutload"
 msgid "Error loading layout from file"
 msgstr "Ошибка загрузки файла разбивки окон"
+
+#: zcadstrconsts.rslinetypedesk
+msgid ""
+";;Pattern length %f\n"
+"%s\n"
+msgstr ""
+
+#: zcadstrconsts.rslinetypeusedin
+msgid "Line type \"%s\" used in: %d-model, %d-blockdef table"
+msgstr ""
 
 #: zcadstrconsts.rsloadingfile
 msgid "Loading file \"%s\""
@@ -3581,20 +3565,15 @@ msgstr "Повторное создание %s!"
 msgid ""
 "-UNDO\\REDO - yet it is better not to use;\n"
 "\n"
-"-If you have problems with rendering or selecting entities, run \"Regen\" "
-"and \"RebuildTree\" in command line;\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
 "\n"
-"-To disable the display of this window comment out line \"About\" in the "
-"file \"components\\autorun.cmd\". Encoding of all configuration files - "
-"UTF8;\n"
+"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
 msgstr ""
 "-UNDO\\REDO - пока лучше не пользоваться;\n"
 "\n"
-"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" "
-"и \"RebuildTree\" в командной строке;\n"
+"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
 "\n"
-"-Для отключения показа этого окна закоментируйте строку \"About\" в файле "
-"\"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
+"-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
 
 #: zcadstrconsts.rsreservefontnotfound
 msgid "Reserve font is not found in the resources"
@@ -3632,6 +3611,10 @@ msgstr "Сохранить файл..."
 msgid "Select color..."
 msgstr "Выбор цвета..."
 
+#: zcadstrconsts.rsselectlt
+msgid "Select line type..."
+msgstr ""
+
 #: zcadstrconsts.rstemplatenotfound
 msgid "Template file \"%s\" not found"
 msgstr "Файл шаблона \"%s\" не найден"
@@ -3648,6 +3631,10 @@ msgstr "Редактор текста"
 msgctxt "zcadstrconsts.rstoolbarnotfound"
 msgid "Toolbar \"%s\" is not found! Create a blank window"
 msgstr "Панель инструментов \"%s\" не найдена! Создано пусте окно"
+
+#: zcadstrconsts.rsunabledelusedlayer
+msgid "Unable to delete, layer is used"
+msgstr ""
 
 #: zcadstrconsts.rsunabletofindfile
 msgid "Unable to find file \"%s\""
@@ -3698,3 +3685,4 @@ msgstr "Внимание!"
 #: zcadstrconsts.rszcadstarted
 msgid "ZCAD v%s started"
 msgstr "ZCAD v%s запущен"
+

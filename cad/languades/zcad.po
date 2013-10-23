@@ -1,16 +1,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
-#: colorselectwnd.button1.caption
-msgctxt "ColorSelectWND.BUTTON1.CAPTION"
-msgid "Button1"
-msgstr ""
-
-#: colorselectwnd.caption
-msgctxt "ColorSelectWND.CAPTION"
-msgid "Form1"
-msgstr ""
-
 #: tcolorselectwnd.byblock.caption
 msgid "??ByBlock"
 msgstr ""
@@ -31,21 +21,11 @@ msgstr ""
 
 #: tcolorselectwnd.label3.caption
 msgctxt "TCOLORSELECTWND.LABEL3.CAPTION"
-msgid "Color number:"
+msgid "??Color description"
 msgstr ""
 
 #: tcolorselectwnd.tabsheet1.caption
-msgid "TabSheet1"
-msgstr ""
-
-#: tform1.button1.caption
-msgctxt "tform1.button1.caption"
-msgid "Button1"
-msgstr ""
-
-#: tform1.caption
-msgctxt "tform1.caption"
-msgid "Form1"
+msgid "Color index"
 msgstr ""
 
 #: tlayerwindow.buttonapplyclose.caption
@@ -58,12 +38,8 @@ msgid "Apply"
 msgstr ""
 
 #: tlayerwindow.caption
-msgid "LayerWindow"
-msgstr ""
-
-#: tlayerwindow.label1.caption
-msgctxt "TLAYERWINDOW.LABEL1.CAPTION"
-msgid "Label1"
+msgctxt "tlayerwindow.caption"
+msgid "Layers"
 msgstr ""
 
 #: tlayerwindow.listview1.columns[0].caption
@@ -113,21 +89,13 @@ msgctxt "tlayerwindow.listview1.columns[9].caption"
 msgid "Description"
 msgstr ""
 
-#: tlineweightselectwnd.caption
-msgctxt "TLINEWEIGHTSELECTWND.CAPTION"
-msgid "Form1"
-msgstr ""
-
 #: tsltexteditor1.caption
-msgid "sltexteditor1"
-msgstr ""
-
-#: tsltexteditor1.editfield.text
-msgid "EditField"
+msgid "Text editor"
 msgstr ""
 
 #: tsltexteditor1.helptext.caption
-msgid " тест "
+msgctxt "tsltexteditor1.helptext.caption"
+msgid "Text"
 msgstr ""
 
 #: tsltexteditor1.okbutton.caption
@@ -1414,6 +1382,7 @@ msgid "Fonts"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(layers)
+msgctxt "zcadexternal.menucommand~setobjinsp(layers)"
 msgid "Layers"
 msgstr ""
 
@@ -3330,9 +3299,23 @@ msgstr ""
 msgid "Layer must be selected"
 msgstr ""
 
+#: zcadstrconsts.rslayerusedin
+msgid "Layer \"%s\" used in: %d-model, %d-blockdef table"
+msgstr ""
+
 #: zcadstrconsts.rslayoutload
 msgctxt "zcadstrconsts.rslayoutload"
 msgid "Error loading layout from file"
+msgstr ""
+
+#: zcadstrconsts.rslinetypedesk
+msgid ""
+";;Pattern length %f\n"
+"%s\n"
+msgstr ""
+
+#: zcadstrconsts.rslinetypeusedin
+msgid "Line type \"%s\" used in: %d-model, %d-blockdef table"
 msgstr ""
 
 #: zcadstrconsts.rsloadingfile
@@ -3444,6 +3427,10 @@ msgstr ""
 msgid "Select color..."
 msgstr ""
 
+#: zcadstrconsts.rsselectlt
+msgid "Select line type..."
+msgstr ""
+
 #: zcadstrconsts.rstemplatenotfound
 msgid "Template file \"%s\" not found"
 msgstr ""
@@ -3459,6 +3446,10 @@ msgstr ""
 #: zcadstrconsts.rstoolbarnotfound
 msgctxt "zcadstrconsts.rstoolbarnotfound"
 msgid "Toolbar \"%s\" is not found! Create a blank window"
+msgstr ""
+
+#: zcadstrconsts.rsunabledelusedlayer
+msgid "Unable to delete, layer is used"
 msgstr ""
 
 #: zcadstrconsts.rsunabletofindfile

@@ -43,6 +43,7 @@ msgid "Layers"
 msgstr ""
 
 #: tlayerwindow.listview1.columns[0].caption
+msgctxt "tlayerwindow.listview1.columns[0].caption"
 msgid "Status"
 msgstr ""
 
@@ -89,7 +90,67 @@ msgctxt "tlayerwindow.listview1.columns[9].caption"
 msgid "Description"
 msgstr ""
 
+#: tltwindow.bitbtn1.caption
+msgid "Update"
+msgstr ""
+
+#: tltwindow.bitbtn2.caption
+msgid "Create"
+msgstr ""
+
+#: tltwindow.bitbtn3.caption
+msgid "Load"
+msgstr ""
+
+#: tltwindow.caption
+msgid "Line type manager"
+msgstr ""
+
+#: tltwindow.checkbox1.caption
+msgid "Auto rotate text"
+msgstr ""
+
+#: tltwindow.groupbox1.caption
+msgid "Line type description"
+msgstr ""
+
+#: tltwindow.groupbox2.caption
+msgid "Drawing settings"
+msgstr ""
+
+#: tltwindow.groupbox3.caption
+msgid "Global settings"
+msgstr ""
+
+#: tltwindow.label3.caption
+msgid "Global scale factor"
+msgstr ""
+
+#: tltwindow.label4.caption
+msgid "Current object scale factor"
+msgstr ""
+
+#: tltwindow.listview1.columns[0].caption
+msgctxt "TLTWINDOW.LISTVIEW1.COLUMNS[0].CAPTION"
+msgid "Status"
+msgstr ""
+
+#: tltwindow.listview1.columns[1].caption
+msgctxt "TLTWINDOW.LISTVIEW1.COLUMNS[1].CAPTION"
+msgid "Line type"
+msgstr ""
+
+#: tltwindow.listview1.columns[2].caption
+msgid "Apperance"
+msgstr ""
+
+#: tltwindow.listview1.columns[3].caption
+msgctxt "TLTWINDOW.LISTVIEW1.COLUMNS[3].CAPTION"
+msgid "Description"
+msgstr ""
+
 #: tsltexteditor1.caption
+msgctxt "tsltexteditor1.caption"
 msgid "Text editor"
 msgstr ""
 
@@ -105,6 +166,11 @@ msgstr ""
 #: ugdbdescriptor.unnamedwindowtitle
 msgctxt "ugdbdescriptor.unnamedwindowtitle"
 msgid "unnamed"
+msgstr ""
+
+#: ugdbltypearray.rssystemlayerwarning
+msgctxt "ugdbltypearray.rssystemlayerwarning"
+msgid "This is system line type!"
 msgstr ""
 
 #: uunitmanager.noglc
@@ -221,6 +287,14 @@ msgstr ""
 
 #: zcadexternal.acn_close~caption
 msgid "Close drawing"
+msgstr ""
+
+#: zcadexternal.acn_colors~caption
+msgid "Colors ..."
+msgstr ""
+
+#: zcadexternal.acn_colors~hint
+msgid "Select current color"
 msgstr ""
 
 #: zcadexternal.acn_copyclipbase~caption
@@ -450,6 +524,14 @@ msgstr ""
 msgid "Open drawing"
 msgstr ""
 
+#: zcadexternal.acn_ltypes~caption
+msgid "Line types ..."
+msgstr ""
+
+#: zcadexternal.acn_ltypes~hint
+msgid "Line types properties manager"
+msgstr ""
+
 #: zcadexternal.acn_materiallegend~caption
 msgctxt "zcadexternal.acn_materiallegend~caption"
 msgid "Export materials legend"
@@ -478,10 +560,6 @@ msgstr ""
 
 #: zcadexternal.acn_multiobjvarman~caption
 msgid "Multi object variables manager"
-msgstr ""
-
-#: zcadexternal.acn_multiobjvarman~textimage
-msgid "Mvar"
 msgstr ""
 
 #: zcadexternal.acn_new~caption
@@ -732,6 +810,14 @@ msgstr ""
 msgid "Draw text"
 msgstr ""
 
+#: zcadexternal.acn_tstyles~caption
+msgid "Text styles ..."
+msgstr ""
+
+#: zcadexternal.acn_tstyles~hint
+msgid "Text styles properties manager"
+msgstr ""
+
 #: zcadexternal.acn_undo~caption
 msgid "Undo"
 msgstr ""
@@ -830,6 +916,18 @@ msgstr ""
 msgid "Zoom out"
 msgstr ""
 
+#: zcadexternal.acn_zoomsel~caption
+msgid "Zoom selected"
+msgstr ""
+
+#: zcadexternal.acn_zoomsel~textimage
+msgid "zsel"
+msgstr ""
+
+#: zcadexternal.acn_zoomwindow~caption
+msgid "Zoom window"
+msgstr ""
+
 #: zcadexternal.brmode~brm_bd
 msgctxt "zcadexternal.brmode~brm_bd"
 msgid "Block and Device"
@@ -907,6 +1005,11 @@ msgstr ""
 #: zcadexternal.gdblayerprop~lineweight
 msgctxt "zcadexternal.gdblayerprop~lineweight"
 msgid "Line weight"
+msgstr ""
+
+#: zcadexternal.gdblayerprop~lt
+msgctxt "zcadexternal.gdblayerprop~lt"
+msgid "Line type"
 msgstr ""
 
 #: zcadexternal.gdblayerprop~_lock
@@ -1209,16 +1312,9 @@ msgctxt "zcadexternal.gdbsysvariable~view"
 msgid "View"
 msgstr ""
 
-#: zcadexternal.hint_panel~colorcombobox
-#, fuzzy
-msgctxt "zcadexternal.hint_panel~colorcombobox"
-msgid "Color selection"
-msgstr ""
-
-#: zcadexternal.hint_panel~colorcombobox
-#, fuzzy
-msgctxt "zcadexternal.hint_panel~colorcombobox"
-msgid "Line type selection"
+#: zcadexternal.hint_panel~dsgn_selnew
+msgctxt "zcadexternal.hint_panel~dsgn_selnew"
+msgid "New selection set"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_additionalgrips
@@ -1270,8 +1366,27 @@ msgid "Layer selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~linewcombobox
+#, fuzzy
 msgctxt "zcadexternal.hint_panel~linewcombobox"
 msgid "Line weight selection"
+msgstr ""
+
+#: zcadexternal.hint_panel~linewcombobox
+#, fuzzy
+msgctxt "zcadexternal.hint_panel~linewcombobox"
+msgid "Color selection"
+msgstr ""
+
+#: zcadexternal.hint_panel~linewcombobox
+#, fuzzy
+msgctxt "zcadexternal.hint_panel~linewcombobox"
+msgid "Text style selection"
+msgstr ""
+
+#: zcadexternal.hint_panel~linewcombobox
+#, fuzzy
+msgctxt "zcadexternal.hint_panel~linewcombobox"
+msgid "Line type selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~ops_sensor_mark
@@ -1331,6 +1446,10 @@ msgstr ""
 msgid "Create material report"
 msgstr ""
 
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
 #: zcadexternal.menucommand~fuckoff1
 msgid "Dimensions styles (not impl)"
 msgstr ""
@@ -1377,21 +1496,25 @@ msgid "Camera"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(fonts)
+#, fuzzy
 msgctxt "zcadexternal.menucommand~setobjinsp(fonts)"
-msgid "Fonts"
+msgid "Fonts (objinsp)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(layers)
+#, fuzzy
 msgctxt "zcadexternal.menucommand~setobjinsp(layers)"
-msgid "Layers"
+msgid "Layers (objinsp)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(linetypestyles)
-msgid "Line type styles"
+#, fuzzy
+msgid "Line type styles (objinsp)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(numerators)
-msgid "Numerators"
+#, fuzzy
+msgid "Numerators (objinsp)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(osmode)
@@ -1400,11 +1523,13 @@ msgid "Object snap"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(tablestyles)
-msgid "Table styles"
+#, fuzzy
+msgid "Table styles (objinsp)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(tstyles)
-msgid "Styles"
+#, fuzzy
+msgid "Styles (objinsp)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(vars)
@@ -1452,6 +1577,10 @@ msgstr ""
 
 #: zcadexternal.menu~info
 msgid "Info"
+msgstr ""
+
+#: zcadexternal.menu~lastcommandscxmenu
+msgid "LASTCOMMANDSCXMENU"
 msgstr ""
 
 #: zcadexternal.menu~model
@@ -1611,6 +1740,16 @@ msgstr ""
 
 #: zcadexternal.submenu~instrumentation and control
 msgid "Instrumentation and Control"
+msgstr ""
+
+#: zcadexternal.submenu~last commands
+msgctxt "zcadexternal.submenu~last commands"
+msgid "Last commands"
+msgstr ""
+
+#: zcadexternal.submenu~last commands
+msgctxt "zcadexternal.submenu~last commands"
+msgid "Last commands"
 msgstr ""
 
 #: zcadexternal.submenu~lighting
@@ -1818,32 +1957,6 @@ msgstr ""
 msgid "LCL version"
 msgstr ""
 
-#: zcadexternal.tdanfoss_esmu_l~_100
-msgctxt "zcadexternal.tdanfoss_esmu_l~_100"
-msgid "100"
-msgstr ""
-
-#: zcadexternal.tdanfoss_esmu_l~_250
-msgctxt "zcadexternal.tdanfoss_esmu_l~_250"
-msgid "250"
-msgstr ""
-
-#: zcadexternal.tdanfoss_kpi35pdiff~_04_15
-msgid "0.4-1.5"
-msgstr ""
-
-#: zcadexternal.tdanfoss_kpi35pdiff~_05_20
-msgid "0.5-2"
-msgstr ""
-
-#: zcadexternal.tdanfoss_kpicontact~ag
-msgid "Ag"
-msgstr ""
-
-#: zcadexternal.tdanfoss_kpicontact~au
-msgid "Au"
-msgstr ""
-
 #: zcadexternal.tdebug~memi2
 msgid "MemMan::I2"
 msgstr ""
@@ -1858,6 +1971,11 @@ msgstr ""
 
 #: zcadexternal.tdesigning~dsgn_leaderdefaultwidth
 msgid "Default leader width"
+msgstr ""
+
+#: zcadexternal.tdesigning~dsgn_selnew
+msgctxt "zcadexternal.tdesigning~dsgn_selnew"
+msgid "New selection set"
 msgstr ""
 
 #: zcadexternal.tdesigning~dsgn_traceautoinc
@@ -1912,8 +2030,16 @@ msgstr ""
 msgid "Current line weigwt"
 msgstr ""
 
+#: zcadexternal.tdwg~dwg_cltscale
+msgid "Current line type scale"
+msgstr ""
+
 #: zcadexternal.tdwg~dwg_cltype
 msgid "Drawing line type"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_ctstyle
+msgid "Text style"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_drawgrid
@@ -1940,7 +2066,8 @@ msgid "Help geometry"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_ltscale
-msgid "Drawing line type scale"
+#, fuzzy
+msgid "Global line type scale"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_osmode
@@ -1949,6 +2076,10 @@ msgstr ""
 
 #: zcadexternal.tdwg~dwg_polarmode
 msgid "Polar tracking mode"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_rotatetextinlt
+msgid "Rotate text in line type"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_selectedobjtoinsp
@@ -2077,6 +2208,10 @@ msgctxt "zcadexternal.tinserttype~tit_device"
 msgid "Device"
 msgstr ""
 
+#: zcadexternal.tinterface~intf_dwgtabsposition
+msgid "Drawing tabs position"
+msgstr ""
+
 #: zcadexternal.tinterface~intf_showdwgtabcloseburron
 msgid "Show drawing tab close button"
 msgstr ""
@@ -2087,85 +2222,6 @@ msgstr ""
 
 #: zcadexternal.tinterface~intf_showscrollbars
 msgid "Show scroll bars"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tb2r_l~_100
-msgctxt "zcadexternal.tkazteplocontrol_tb2r_l~_100"
-msgid "100"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tb2r_l~_125
-msgid "125"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tb2r_l~_160
-msgctxt "zcadexternal.tkazteplocontrol_tb2r_l~_160"
-msgid "160"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tb2r_l~_200
-msgid "200"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tb2r_l~_250
-msgctxt "zcadexternal.tkazteplocontrol_tb2r_l~_250"
-msgid "250"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tb2r_l~_315
-msgid "315"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tb2r_l~_80
-msgid "80"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tblimit~_0_100
-msgid "0..+100"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tblimit~_0_120
-msgid "0..+120"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tblimit~_0_150
-msgid "0..+150"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tblimit~_0_200
-msgid "0..+200"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tblimit~_0_300
-msgid "0..+300"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tblimit~_0_400
-msgid "0..+400"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tblimit~_0_60
-msgid "0..+60"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tblimit~_m20_40
-msgid "-20..+40"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tblimit~_m30_60
-msgid "-30..+60"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tblimit~_m50_100
-msgid "-50..+100"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tblimit~_m50_150
-msgid "-50..+150"
-msgstr ""
-
-#: zcadexternal.tkazteplocontrol_tblimit~_m50_50
-msgid "-50..+50"
 msgstr ""
 
 #: zcadexternal.tlayercontrols~dsgn_lc_cable
@@ -2190,82 +2246,6 @@ msgstr ""
 
 #: zcadexternal.tlayercontrol~layername
 msgid "Layer name"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_0_6
-msgid "0.6"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_1
-msgid "1"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_10
-msgid "10"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_100
-msgctxt "zcadexternal.tmanotom_mp3ulimit~_100"
-msgid "100"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_1000
-msgid "1000"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_16
-msgid "16"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_160
-msgctxt "zcadexternal.tmanotom_mp3ulimit~_160"
-msgid "160"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_1600
-msgid "1600"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_1_6
-msgid "1.6"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_25
-msgid "25"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_250
-msgctxt "zcadexternal.tmanotom_mp3ulimit~_250"
-msgid "250"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_2_5
-msgid "2.5"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_4
-msgctxt "zcadexternal.tmanotom_mp3ulimit~_4"
-msgid "4"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_40
-msgid "40"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_400
-msgid "400"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_6
-msgid "6"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_60
-msgid "60"
-msgstr ""
-
-#: zcadexternal.tmanotom_mp3ulimit~_600
-msgid "600"
 msgstr ""
 
 #: zcadexternal.tmirrorparam~sourceents
@@ -2545,18 +2525,6 @@ msgstr ""
 msgid "Tangent"
 msgstr ""
 
-#: zcadexternal.towen_dts3105_l~_120
-msgid "120"
-msgstr ""
-
-#: zcadexternal.towen_dts3105_l~_220
-msgid "220"
-msgstr ""
-
-#: zcadexternal.towen_dts3105_l~_70
-msgid "70"
-msgstr ""
-
 #: zcadexternal.tpath~device_library
 msgid "Device base"
 msgstr ""
@@ -2682,6 +2650,10 @@ msgstr ""
 msgid "Max line width"
 msgstr ""
 
+#: zcadexternal.trd~rd_maxltpatternsinentity
+msgid "Max LT patterns in entity"
+msgstr ""
+
 #: zcadexternal.trd~rd_maxpointsize
 msgid "Max point size"
 msgstr ""
@@ -2705,6 +2677,14 @@ msgstr ""
 
 #: zcadexternal.trd~rd_restore_mode
 msgid "Restore mode"
+msgstr ""
+
+#: zcadexternal.trd~rd_spatialnodecount
+msgid "Spatial index ents in node"
+msgstr ""
+
+#: zcadexternal.trd~rd_spatialnodesdepth
+msgid "Spatial index nodes depth"
 msgstr ""
 
 #: zcadexternal.trd~rd_usestencil
@@ -3431,6 +3411,11 @@ msgstr ""
 msgid "Select line type..."
 msgstr ""
 
+#: zcadstrconsts.rssyslinetypewarning
+msgctxt "zcadstrconsts.rssyslinetypewarning"
+msgid "This is system line type!"
+msgstr ""
+
 #: zcadstrconsts.rstemplatenotfound
 msgid "Template file \"%s\" not found"
 msgstr ""
@@ -3440,6 +3425,7 @@ msgid " TEXT: "
 msgstr ""
 
 #: zcadstrconsts.rstexteditor
+msgctxt "zcadstrconsts.rstexteditor"
 msgid "Text editor"
 msgstr ""
 

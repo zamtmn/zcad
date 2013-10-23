@@ -1,10 +1,10 @@
 object LTWindow: TLTWindow
-  Left = 238
+  Left = 226
   Height = 616
-  Top = 89
+  Top = 131
   Width = 1084
   Anchors = [akTop]
-  Caption = 'LTWindow'
+  Caption = 'Line type manager'
   ClientHeight = 616
   ClientWidth = 1084
   OnClose = _close
@@ -28,39 +28,26 @@ object LTWindow: TLTWindow
     TabOrder = 0
     ShowButtons = [pbOK, pbCancel, pbHelp]
   end
-  object B1: TSpeedButton
+  object DeleteLtBtn: TSpeedButton
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Bevel1
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
-    Left = 1
+    Left = 5
     Height = 25
     Top = 1
     Width = 27
     Anchors = [akTop, akLeft, akBottom]
-    BorderSpacing.Left = 1
-    Flat = True
-  end
-  object B2: TSpeedButton
-    AnchorSideLeft.Control = B1
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = Bevel1
-    AnchorSideBottom.Control = Bevel1
-    AnchorSideBottom.Side = asrBottom
-    Left = 28
-    Height = 25
-    Top = 1
-    Width = 27
-    Anchors = [akTop, akLeft, akBottom]
+    BorderSpacing.Left = 5
     Flat = True
   end
   object MkCurrentBtn: TSpeedButton
-    AnchorSideLeft.Control = B2
+    AnchorSideLeft.Control = DeleteLtBtn
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Bevel1
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
-    Left = 55
+    Left = 32
     Height = 25
     Top = 1
     Width = 25
@@ -75,29 +62,28 @@ object LTWindow: TLTWindow
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Side = asrBottom
-    Left = 85
+    Left = 62
     Height = 25
     Top = 1
-    Width = 994
+    Width = 1017
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 5
     BorderSpacing.Top = 1
     BorderSpacing.Right = 5
   end
-  object Label2: TLabel
+  object LTDescLabel: TLabel
     AnchorSideLeft.Control = Bevel1
     AnchorSideTop.Control = Bevel1
     AnchorSideRight.Control = Bevel1
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
-    Left = 86
+    Left = 63
     Height = 23
     Top = 2
-    Width = 992
+    Width = 1015
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 1
-    Caption = 'Label2'
     Layout = tlCenter
     ParentColor = False
   end
@@ -109,11 +95,12 @@ object LTWindow: TLTWindow
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Panel1
     Left = 5
-    Height = 416
-    Top = 26
+    Height = 414
+    Top = 28
     Width = 1074
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 5
+    BorderSpacing.Top = 2
     BorderSpacing.Right = 5
     Columns = <    
       item
@@ -174,7 +161,7 @@ object LTWindow: TLTWindow
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Around = 5
       Lines.Strings = (
-        'Select linr type!'
+        'Select line type!'
       )
       TabOrder = 0
     end

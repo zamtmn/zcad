@@ -19,7 +19,7 @@ unit gdbaligneddimension;
 {$INCLUDE def.inc}
 
 interface
-uses Varman,UGDBLayerArray,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
+uses GDBMText,Varman,UGDBLayerArray,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
 type
@@ -164,10 +164,18 @@ end;
 procedure GDBObjAlignedDimension.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
 begin
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{4CBC9A73-A88D-443B-B925-2F0611D82AB0}',{$ENDIF}2);
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init({$IFDEF DEBUGBUILD}'{4CBC9A73-A88D-443B-B925-2F0611D82AB0}',{$ENDIF}4);
 
           pdesc.selected:=false;
           pdesc.pobject:=nil;
+
+          pdesc.pointtype:=os_p10;
+          pdesc.worldcoord:=DimData.P10InWCS;
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
+
+          pdesc.pointtype:=os_p11;
+          pdesc.worldcoord:=DimData.P11InOCS;
+          PSelectedObjDesc(tdesc)^.pcontrolpoint^.add(@pdesc);
 
           pdesc.pointtype:=os_p13;
           pdesc.worldcoord:=DimData.P13InWCS;
@@ -228,14 +236,46 @@ end;
 procedure GDBObjAlignedDimension.FormatEntity(const drawing:TDrawingDef);
 var
   pl:pgdbobjline;
+  ptext:PGDBObjMText;
+  tv:GDBVertex;
+  l:GDBDouble;
 begin
           ConstObjArray.cleareraseobj;
 
           pl:=pointer(ConstObjArray.CreateInitObj(GDBlineID,@self));
           pl.vp.Layer:=vp.Layer;
-          pl.CoordInOCS.lBegin:=DimData.P13InWCS;
-          pl.CoordInOCS.lEnd:=DimData.P14InWCS;
+          pl.vp.LineType:=vp.LineType;
+          pl.CoordInOCS.lBegin:=DimData.P14InWCS;
+          pl.CoordInOCS.lEnd:=DimData.P10InWCS;
           pl.FormatEntity(drawing);
+
+          tv:=geometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
+          tv:=geometry.VertexAdd(DimData.P13InWCS,tv);
+
+          pl:=pointer(ConstObjArray.CreateInitObj(GDBlineID,@self));
+          pl.vp.Layer:=vp.Layer;
+          pl.vp.LineType:=vp.LineType;
+          pl.CoordInOCS.lBegin:=DimData.P13InWCS;
+          pl.CoordInOCS.lEnd:=tv;
+          pl.FormatEntity(drawing);
+
+          pl:=pointer(ConstObjArray.CreateInitObj(GDBlineID,@self));
+          pl.vp.Layer:=vp.Layer;
+          pl.vp.LineType:=vp.LineType;
+          pl.CoordInOCS.lBegin:=DimData.P10InWCS;
+          pl.CoordInOCS.lEnd:=tv;
+          pl.FormatEntity(drawing);
+
+          l:=geometry.Vertexlength(DimData.P13InWCS,DimData.P14InWCS);
+          ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
+          ptext.vp.Layer:=vp.Layer;
+          ptext.Template:=floattostr(l);;
+          ptext.Local.P_insert:=DimData.P11InOCS;
+          ptext.textprop.justify:=jsbl;
+          ptext.TXTStyleIndex:=drawing.GetTextStyleTable^.getelement(0);
+          ptext.textprop.size:=2.5;
+          ptext.FormatEntity(drawing);;
+
 
   inherited;
 end;

@@ -1907,6 +1907,42 @@ GDBObjComplex={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                     procedure BuildGeometry(const drawing:TDrawingDef);virtual;abstract;
                     procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;abstract;
               end;
+//Generate on E:\zcad\CAD_SOURCE\gdb\gdbaligneddimension.pas
+PTDXFDimData2D=^TDXFDimData2D;
+TDXFDimData2D=packed record
+  P10:GDBVertex2D;
+  P11:GDBVertex2D;
+  P12:GDBVertex2D;
+  P13:GDBVertex2D;
+  P14:GDBVertex2D;
+  P15:GDBVertex2D;
+  P16:GDBVertex2D;
+end;
+PTDXFDimData=^TDXFDimData;
+TDXFDimData=packed record
+  P10InWCS:GDBVertex;
+  P11InOCS:GDBVertex;
+  P12InOCS:GDBVertex;
+  P13InWCS:GDBVertex;
+  P14InWCS:GDBVertex;
+  P15InWCS:GDBVertex;
+  P16InOCS:GDBVertex;
+end;
+PGDBObjAlignedDimension=^GDBObjAlignedDimension;
+GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
+                      DimData:TDXFDimData;
+                      PProjPoint:PTDXFDimData2D;
+                      constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                      constructor initnul(owner:PGDBObjGenericWithSubordinated);
+                      procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
+                      procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;abstract;
+                      function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
+                      //procedure DrawGeometry;
+                      procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
+                      procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
+                      procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
+                      procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;abstract;
+                   end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBBlockInsert.pas
 PGDBObjBlockInsert=^GDBObjBlockInsert;
 GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)

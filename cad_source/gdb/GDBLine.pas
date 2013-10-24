@@ -903,4 +903,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBLine.initialization');{$ENDIF}
-end.
+end.

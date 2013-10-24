@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  {gmap,}UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  gdbaligneddimension,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,
@@ -3535,9 +3535,23 @@ begin
      shared.HistoryOutStr('Line-Line tests count: '+inttostr(linelinetests));
      shared.HistoryOutStr('Intersections count: '+inttostr(intersectcount));
 end;
+function AddTestDim_com(operands:pansichar):GDBInteger;
+var
+    pd:PGDBObjAlignedDimension;
+begin
+  pd := GDBPointer(gdb.GetCurrentDWG^.pObjRoot^.ObjArray.CreateInitObj(GDBAlignedDimensionID,gdb.GetCurrentROOT));
+  //GDBObjSetCircleProp(pd,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^);
+  //GDBObjCircleInit(pd,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
+  //pd^.lod:=4;
+  pd^.Formatentity(gdb.GetCurrentDWG^);
+  pd^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2);
+end;
 
 procedure startup;
 begin
+  CreateCommandFastObjectPlugin(@AddTestDim_com,'AddTestDim',CADWG,0);
+
+
   BIProp.Blocks.Enums.init(100);
   BIProp.Scale:=geometry.OneVertex;
   BIProp.Rotation:=0;

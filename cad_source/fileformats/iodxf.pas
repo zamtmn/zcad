@@ -38,7 +38,7 @@ const
      );
      {MODE OBJFPC}
      //a: array of string = ('aaa', 'bbb', 'ccc');
-     acadentsupportcol=13;
+     acadentsupportcol=14;
      entnamtable:array[1..acadentsupportcol]of entnamindex=
      (
      (entname:'POINT'),
@@ -53,7 +53,8 @@ const
      (entname:'3DFACE'),
      (entname:'SOLID'),
      (entname:'ELLIPSE'),
-     (entname:'SPLINE')
+     (entname:'SPLINE'),
+     (entname:'DIMENSION')
      );
 const
      NULZCPHeader:ZCPHeader=(

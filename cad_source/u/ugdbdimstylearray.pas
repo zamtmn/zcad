@@ -33,6 +33,7 @@ TGDBDimPlacingProp=packed record
                  end;
 TGDBDimUnitsProp=packed record
                  end;
+PGDBDimStyle=^GDBDimStyle;
 GDBDimStyle = packed object(GDBNamedObject)
                       Lines:TGDBDimLinesProp;
                       Arrows:TGDBDimArrowsProp;
@@ -41,7 +42,7 @@ GDBDimStyle = packed object(GDBNamedObject)
                       Units:TGDBDimUnitsProp;
              end;
 PGDBDimStyleArray=^GDBDimStyleArray;
-GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBTextStyle*)
+GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBDimStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
               end;

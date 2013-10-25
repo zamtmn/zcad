@@ -97,6 +97,7 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     function createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
                     function GetCurrentLType:PGDBLtypeProp;
                     function GetSystemLT:PGDBLtypeProp;
+                    procedure format;virtual;
                     {function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;
                     function GetSystemLayer:PGDBLayerProp;
                     function GetCurrentLayer:PGDBLayerProp;
@@ -109,6 +110,19 @@ uses
     log;
 type
     TSeek=(TSeekInterface,TSeekImplementation);
+procedure GDBLtypeArray.format;
+var
+   ir:itrec;
+   pltypeprop:PGDBLtypeProp;
+begin
+  pltypeprop:=beginiterate(ir);
+  if pltypeprop<>nil then
+  repeat
+        pltypeprop^.Format;
+
+        pltypeprop:=iterate(ir);
+  until pltypeprop=nil;
+end;
 function GDBLtypeArray.GetSystemLT:PGDBLtypeProp;
 var
    ir:itrec;

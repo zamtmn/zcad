@@ -28,6 +28,7 @@ E:\zcad\CAD_SOURCE\u\UGDBNamedObjectsArray.pas
 E:\zcad\CAD_SOURCE\u\UGDBTextStyleArray.pas
 E:\zcad\CAD_SOURCE\u\UGDBLayerArray.pas
 E:\zcad\CAD_SOURCE\u\ugdbltypearray.pas
+E:\zcad\CAD_SOURCE\u\ugdbdimstylearray.pas
 E:\zcad\CAD_SOURCE\u\UGDBTableStyleArray.pas
 E:\zcad\CAD_SOURCE\u\UGDBTable.pas
 E:\zcad\CAD_SOURCE\languade\zcadsysvars.pas

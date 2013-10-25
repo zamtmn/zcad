@@ -20,7 +20,7 @@ unit ugdbsimpledrawing;
 {$INCLUDE def.inc}
 interface
 uses //gdbase,gdbasetypes,
-{gdbobjectsconstdef,}GDBWithLocalCS,ugdbabstractdrawing,zcadsysvars,{zcadinterface,}{zcadstrconsts,}{GDBWithLocalCS,}{UGDBOpenArrayOfUCommands,}strproc,{GDBBlockDef,}UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
+{gdbobjectsconstdef,}ugdbdimstylearray,GDBWithLocalCS,ugdbabstractdrawing,zcadsysvars,{zcadinterface,}{zcadstrconsts,}{GDBWithLocalCS,}{UGDBOpenArrayOfUCommands,}strproc,{GDBBlockDef,}UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
 UGDBNumerator, gdbase,varmandef,varman,
 sysutils, memman, geometry, {gdbobjectsconstdef,}
 gdbasetypes,sysinfo,
@@ -53,6 +53,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        Numerator:GDBNumerator;(*saved_to_shd*)
                        TableStyleTable:GDBTableStyleArray;(*saved_to_shd*)
                        LTypeStyleTable:GDBLtypeArray;
+                       DimStyleTable:GDBDimStyleArray;
                        function GetLastSelected:PGDBObjEntity;virtual;
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
                        constructor init(pcam:PGDBObjCamera);
@@ -69,6 +70,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetLTypeTable:PGDBLtypeArray;virtual;
                        function GetTableStyleTable:PGDBTableStyleArray;virtual;
                        function GetTextStyleTable:PGDBTextStyleArray;virtual;
+                       function GetDimStyleTable:PGDBDimStyleArray;virtual;
                        function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;
                        procedure RotateCameraInLocalCSXY(ux,uy:GDBDouble);virtual;
                        procedure MoveCameraInLocalCSXY(oldx,oldy:GDBDouble;ax:gdbvertex);virtual;
@@ -359,7 +361,10 @@ function TSimpleDrawing.GetTextStyleTable:PGDBTextStyleArray;
 begin
      result:=@TextStyleTable;
 end;
-
+function TSimpleDrawing.GetDimStyleTable:PGDBDimStyleArray;
+begin
+     result:=@self.DimStyleTable;
+end;
 procedure TSimpleDrawing.SetCurrentDWG;
 begin
 
@@ -443,7 +448,7 @@ begin
      Numerator.FreeAndDone;
      TableStyleTable.FreeAndDone;
      LTypeStyleTable.FreeAndDone;
-
+     DimStyleTable.FreeAndDone;
      //FileName:='';
 end;
 constructor TSimpleDrawing.init;
@@ -479,6 +484,7 @@ begin
                      end;
   LTypeStyleTable.init({$IFDEF DEBUGBUILD}'{2BF47561-AEBD-4159-BF98-FCBA81DAD595}',{$ENDIF}100);
   LayerTable.init({$IFDEF DEBUGBUILD}'{6AFCB58D-9C9B-4325-A00A-C2E8BDCBE1DD}',{$ENDIF}200,LTypeStyleTable.GetSystemLT);
+  DimStyleTable.init({$IFDEF DEBUGBUILD}'{C354FF9D-E581-4E5A-AFE0-09AE87DEC2F0}',{$ENDIF}100);
   mainobjroot.initnul;
   mainobjroot.vp.Layer:=LayerTable.GetSystemLayer;
   pObjRoot:=@mainobjroot;

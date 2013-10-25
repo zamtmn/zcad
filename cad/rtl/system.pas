@@ -871,6 +871,14 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
                     function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;}
               end;
+//Generate on E:\zcad\CAD_SOURCE\u\ugdbdimstylearray.pas
+  GDBDimStyle = packed object(GDBNamedObject)
+  end;
+PGDBDimStyleArray=^GDBDimStyleArray;
+GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBTextStyle*)
+                    constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                    constructor initnul;
+              end;
 //Generate on E:\zcad\CAD_SOURCE\u\UGDBTableStyleArray.pas
 TTableCellJustify=(jcl(*'TopLeft'*),
               jcc(*'TopCenter'*),
@@ -1942,6 +1950,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
                       procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                       procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;abstract;
+                      function GetObjTypeName:GDBString;virtual;abstract;
                    end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBBlockInsert.pas
 PGDBObjBlockInsert=^GDBObjBlockInsert;
@@ -3029,6 +3038,7 @@ TDrawingDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
                        function GetLTypeTable:PGDBLtypeArray;virtual;abstract;
                        function GetTextStyleTable:PGDBTextStyleArray;virtual;abstract;
                        function GetTableStyleTable:PGDBTableStyleArray;virtual;abstract;
+                       function GetDimStyleTable:PGDBDimStyleArray;virtual;abstract;
                        function GetDWGUnits:PTUnitManager;virtual;abstract;
                        procedure AddBlockFromDBIfNeed(name:GDBString);virtual;abstract;
                        function GetCurrentRootSimple:GDBPointer;virtual;abstract;
@@ -3069,6 +3079,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        Numerator:GDBNumerator;(*saved_to_shd*)
                        TableStyleTable:GDBTableStyleArray;(*saved_to_shd*)
                        LTypeStyleTable:GDBLtypeArray;
+                       DimStyleTable:GDBDimStyleArray;
                        function GetLastSelected:PGDBObjEntity;virtual;abstract;
                        function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
                        constructor init(pcam:PGDBObjCamera);
@@ -3085,6 +3096,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetLTypeTable:PGDBLtypeArray;virtual;abstract;
                        function GetTableStyleTable:PGDBTableStyleArray;virtual;abstract;
                        function GetTextStyleTable:PGDBTextStyleArray;virtual;abstract;
+                       function GetDimStyleTable:PGDBDimStyleArray;virtual;abstract;
                        function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;abstract;
                        procedure RotateCameraInLocalCSXY(ux,uy:GDBDouble);virtual;abstract;
                        procedure MoveCameraInLocalCSXY(oldx,oldy:GDBDouble;ax:gdbvertex);virtual;abstract;

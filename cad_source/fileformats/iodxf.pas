@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{MODE OBJFPC}
+{$MODE OBJFPC}
 unit iodxf;
 {$INCLUDE def.inc}
 interface
@@ -26,8 +26,8 @@ type
                     entname:GDBString;
               end;
      {$IFNDEF DELPHI}
-     lessppi={specialize }TLess<pointer>;
-     mappDWGHi={specialize }TMap<pointer,TDWGHandle, lessppi>;
+     lessppi=specialize TLess<pointer>;
+     mappDWGHi=specialize TMap<pointer,TDWGHandle, lessppi>;
      {$ENDIF}
 
 const
@@ -202,7 +202,7 @@ begin
   end;
   end;
 end;
-procedure readvariables(var f: GDBOpenArrayOfByte;var ctstyle:string; var clayer:GDBString;var cltype:GDBString;LoadMode:TLoadOpt);
+procedure readvariables(var f: GDBOpenArrayOfByte;var ctstyle:GDBstring; var clayer:GDBString;var cltype:GDBString;LoadMode:TLoadOpt);
 var
   byt: GDBByte;
   s: GDBString;
@@ -571,40 +571,565 @@ begin
   end;
   {$IFDEF TOTALYLOG}programlog.logoutstr('end; {AddFromDXF12}',lp_decPos);{$ENDIF}
 end;
+procedure ReadLTStyles(var s:String;cltype:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+var
+   pltypeprop:PGDBLtypeProp;
+   byt: GDBInteger;
+   dashinfo:TDashInfo;
+   shapenumber,stylehandle:TDWGHandle;
+   PSP:PShapeProp;
+   PTP:PTextProp;
+   BShapeProp:BasicSHXDashProp;
+   txtstr:string;
+   TempDouble:GDBDouble;
+   error,flags: GDBInteger;
+begin
+  dashinfo:=TDIDash;
+  if GoToDXForENDTAB(f, 0, dxfName_LType) then
+  while s = dxfName_LType do
+  begin
+       pltypeprop:=nil;
+       byt := 2;
+       while byt <> 0 do
+       begin
+       s := f.readGDBString;
+       byt := strtoint(s);
+       s := f.readGDBString;
+       case byt of
+       2:
+         begin
+           case drawing.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
+                        IsFounded:
+                                  begin
+                                       if LoadMode=TLOLoad then
+                                       begin
+                                       end
+                                       else
+                                           pltypeprop:=nil;
+                                  end;
+                        IsCreated:
+                                  begin
+                                       pltypeprop^.init(s);
+                                       dashinfo:=TDIDash;
+                                  end;
+                        IsError:
+                                  begin
+                                  end;
+                end;
+              if uppercase(s)=uppercase(cltype)then
+                                                   if sysvar.DWG.DWG_CLType<>nil then
+                                                                                     sysvar.DWG.DWG_CLType^:=pltypeprop;
+
+         end;
+       3:
+         begin
+              if pltypeprop<>nil then
+                                pltypeprop^.desk:=s;
+         end;
+       40:
+         begin
+              if pltypeprop<>nil then
+              pltypeprop^.len:=strtofloat(s);
+         end;
+       49:
+          begin
+               if pltypeprop<>nil then
+               begin
+               case dashinfo of
+               TDIShape:begin
+                             if stylehandle<>0 then
+                             begin
+                                 pointer(psp):=pltypeprop^.shapearray.CreateObject;
+                                 psp^.initnul;
+                                 psp^.param:=BShapeProp.param;
+                                 psp^.Psymbol:=pointer(shapenumber);
+                                 psp^.param.PStyle:=pointer(stylehandle);
+                                 pltypeprop^.dasharray.Add(@dashinfo);
+                             end;
+                        end;
+               TDIText:begin
+                             pointer(ptp):=pltypeprop^.Textarray.CreateObject;
+                             ptp^.initnul;
+                             ptp^.param:=BShapeProp.param;
+                             ptp^.Text:=txtstr;
+                             //ptp^.Style:=;
+                             ptp^.param.PStyle:=pointer(stylehandle);
+                             pltypeprop^.dasharray.Add(@dashinfo);
+                        end;
+               end;
+                    dashinfo:=TDIDash;
+                    TempDouble:=strtofloat(s);
+                    pltypeprop^.dasharray.Add(@dashinfo);
+                    pltypeprop^.strokesarray.Add(@TempDouble);
+               end;
+          end;
+       74:if pltypeprop<>nil then
+          begin
+               flags:=strtoint(s);
+               if (flags and 1)>0 then
+                                      BShapeProp.param.AD:={BShapeProp.param.AD.}TACAbs
+                                  else
+                                      BShapeProp.param.AD:={BShapeProp.param.AD.}TACRel;
+               if (flags and 2)>0 then
+                                      dashinfo:=TDIText;
+               if (flags and 4)>0 then
+                                      dashinfo:=TDIShape;
+
+          end;
+       75:begin
+               shapenumber:=strtoint(s);//
+          end;
+      340:begin
+               if pltypeprop<>nil then
+                                      stylehandle:=strtoint64('$'+s);
+          end;
+      46:begin
+              BShapeProp.param.Height:=strtofloat(s);
+         end;
+      50:begin
+              BShapeProp.param.Angle:=strtofloat(s);
+         end;
+      44:begin
+              BShapeProp.param.X:=strtofloat(s);
+         end;
+      45:begin
+              BShapeProp.param.Y:=strtofloat(s);
+         end;
+      9:begin if pltypeprop<>nil then
+              txtstr:=s;
+         end;
+       end;
+       end;
+  end;
+end;
+procedure ReadLayers(var s:string;clayer:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+var
+byt: GDBInteger;
+oo,ll,pp:GDBBoolean;
+sname, lname, lcolor, llw,desk,ltn: String;
+nulisread:boolean;
+player:PGDBLayerProp;
+begin
+  nulisread:=false;
+  gotodxf(f, 0, dxfName_Layer);
+
+  while s = dxfName_Layer do
+  begin
+    byt := 2;
+    oo:=true;
+    ll:=false;
+    pp:=true;
+    desk:='';
+    ltn:='';
+    while byt <> 0 do
+    begin
+      if not nulisread then
+      begin
+      s := f.readGDBString;
+      byt := strtoint(s);
+      s := f.readGDBString;
+      end
+      else
+          nulisread:=false;
+      case byt of
+        2:
+          begin
+            lname := s;
+          end;
+        62:
+          begin
+            lcolor := s;
+            if strtoint(lcolor)<0 then begin
+                                            oo:=false;
+                                       end;
+          end;
+        6:
+          begin
+            ltn := s;
+          end;
+        370:
+          begin
+            llw := s;
+          end;
+        70:
+          begin
+               if (strtoint(s)and 4)<>0 then
+                                                 begin
+                                                      ll:=true;
+                                                 end;
+           end;
+        290:
+          begin
+               if (strtoint(s))=0 then
+                                            begin
+                                                 pp:=false;
+                                            end;
+           end;
+        1001:
+          begin
+               //s := f.readGDBString;
+               if s='AcAecLayerStandard' then
+                 begin
+                      s := f.readGDBString;
+                      byt:=strtoint(s);
+                      if byt<>0 then
+                      begin
+                          s := f.readGDBString;
+                          begin
+                                s := f.readGDBString;
+                                byt:=strtoint(s);
+                                if byt<>0 then
+                                              desk := f.readGDBString
+                                          else
+                                              begin
+                                              nulisread:=true;
+                                              s := f.readGDBString;
+                                              end;
+
+                          end;
+                      end
+                         else
+                         begin
+                          nulisread:=true;
+                          s := f.readGDBString;
+                         end;
+                 end;
+           end;
+
+
+      end;
+    end;
+    if llw='' then llw:='-1';
+    player:=drawing.LayerTable.addlayer(lname, abs(strtoint(lcolor)), strtoint(llw),oo,ll,pp,desk,LoadMode);
+    player^.LT:=drawing.LTypeStyleTable.getAddres(ltn);
+    if uppercase(lname)=uppercase(clayer)then
+                                             if sysvar.DWG.DWG_CLayer<>nil then
+                                                                               sysvar.DWG.DWG_CLayer^:={drawing.LayerTable.GetIndexByPointer}(player);
+    llw:='';
+    {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer '+lname,0);{$ENDIF}
+  end;
+end;
+procedure ReadTextstyles(var s:string;ctstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+var
+   tstyle:GDBTextStyle;
+   ptstyle:PGDBTextStyle;
+   DWGHandle:TDWGHandle;
+   byt: GDBInteger;
+   error,flags: GDBInteger;
+   sname, lname, lcolor, llw,desk,ltn: String;
+   ti:PGDBTextStyle;
+   pltypeprop:PGDBLtypeProp;
+   ir,ir2:itrec;
+   PSP:PShapeProp;
+   PTP:PTextProp;
+   TDInfo:TTrianglesDataInfo;
+begin
+  if GoToDXForENDTAB(f, 0, dxfName_Style) then
+  while s = dxfName_Style do
+  begin
+    tstyle.name:='';
+    tstyle.pfont:=nil;
+    tstyle.prop.oblique:=0;
+    tstyle.prop.size:=1;
+    DWGHandle:=0;
+
+    byt := 2;
+
+    while byt <> 0 do
+    begin
+      s := f.readGDBString;
+      byt := strtoint(s);
+      s := f.readGDBString;
+      case byt of
+        2:
+          begin
+            tstyle.name := s;
+          end;
+        5:begin
+               DWGHandle:=strtoint64('$'+s)
+          end;
+
+        40:
+          begin
+            tstyle.prop.size:=strtofloat(s);
+          end;
+        41:
+          begin
+            tstyle.prop.wfactor:=strtofloat(s);
+          end;
+        50:
+          begin
+            tstyle.prop.oblique:=strtofloat(s);
+          end;
+        70:begin
+                flags:=strtoint(s);
+           end;
+        3:
+          begin
+               lname:=s;
+               //FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,s));
+               //tstyle.pfont:=FontManager.getAddres(s);
+               //if tstyle.pfont:=;
+           end;
+      end;
+    end;
+    ti:=nil;
+    if (flags and 1)=0 then
+    begin
+    ti:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
+    if ti<>nil then
+    begin
+      if LoadMode=TLOLoad then
+                              ti:=drawing.TextStyleTable.setstyle(tstyle.Name,lname,tstyle.prop,false);
+    end
+       else
+           ti:=drawing.TextStyleTable.addstyle(tstyle.Name,lname,tstyle.prop,false);
+    end
+    else
+        begin
+          if drawing.TextStyleTable.FindStyle(lname,true)<>nil then
+          begin
+            if LoadMode=TLOLoad then
+                                    ti:=drawing.TextStyleTable.setstyle(lname,lname,tstyle.prop,true);
+          end
+             else
+                 ti:=drawing.TextStyleTable.addstyle(lname,lname,tstyle.prop,true);
+        end;
+    if ti<>nil then
+    begin
+         ptstyle:={drawing.TextStyleTable.getelement}(ti);
+         pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
+         if pltypeprop<>nil then
+         repeat
+               PSP:=pltypeprop^.shapearray.beginiterate(ir2);
+               if PSP<>nil then
+               repeat
+                     if psp^.param.PStyle=pointer(DWGHandle) then
+                     begin
+                        psp^.param.PStyle:=ptstyle;
+                        psp^.FontName:=ptstyle^.dxfname;
+                        psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.Psymbol),tdinfo);
+                        psp^.SymbolName:=psp^.Psymbol^.Name;
+                     end;
+
+                     PSP:=pltypeprop^.shapearray.iterate(ir2);
+               until PSP=nil;
+
+               PTP:=pltypeprop^.Textarray.beginiterate(ir2);
+               if PTP<>nil then
+               repeat
+                     if pTp^.param.PStyle=pointer(DWGHandle) then
+                     begin
+                        pTp^.param.PStyle:=ptstyle;
+                        {pTp^.FontName:=ptstyle^.dxfname;
+                        pTp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(pTp^.Psymbol));
+                        pTp^.SymbolName:=pTp^.Psymbol^.Name;}
+                     end;
+
+                     PTP:=pltypeprop^.Textarray.iterate(ir2);
+               until PTP=nil;
+
+               pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
+         until pltypeprop=nil;
+    end;
+    {$IFDEF TOTALYLOG}programlog.logoutstr('Found style '+tstyle.Name,0);{$ENDIF}
+   if uppercase(tstyle.Name)=uppercase(ctstyle)then
+                if sysvar.DWG.DWG_CTStyle<>nil then
+                                                  sysvar.DWG.DWG_CTStyle^:={drawing.TextStyleTable.getelement}(drawing.TextStyleTable.FindStyle(tstyle.Name,false));
+    tstyle.Name:='';
+  end;
+  pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
+                               if pltypeprop<>nil then
+                               repeat
+                                     {$IFDEF TOTALYLOG}programlog.logoutstr('Formatting line type '+pltypeprop.Name,0);{$ENDIF}
+                                     pltypeprop^.Format;
+                                     pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
+                               until pltypeprop=nil;
+end;
+procedure ReadVport(var s:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+var
+   byt: GDBInteger;
+   active:boolean;
+   error,flags: GDBInteger;
+begin
+                               if GoToDXForENDTAB(f, 0, 'VPORT') then
+                               begin
+                                 byt := -100;
+                                 active:=false;
+
+                                 while byt <> 0 do
+                                 begin
+                                   s := f.readGDBString;
+                                   programlog.LogOutStr(s,0);
+                                   byt := strtoint(s);
+                                   s := f.readGDBString;
+                                   if (byt=0)and(s='VPORT')then
+                                   begin
+                                         byt := -100;
+                                         active:=false;
+                                   end;
+                                   programlog.LogOutStr(s,0);
+                                   case byt of
+                                     2:
+                                       begin
+                                            if uppercase(s)='*ACTIVE' then
+                                                                          active:=true
+                                                                      else
+                                                                          active:=false;
+                                       end;
+                                     12:
+                                       begin
+                                            if LoadMode=TLOLoad then
+                                            if active then
+                                            if @drawing<>nil then
+                                            if drawing.pcamera<>nil then
+                                            begin
+                                                 drawing.pcamera^.prop.point.x:=-strtofloat(s);
+                                            end;
+                                        end;
+                                     22:
+                                       begin
+                                            if LoadMode=TLOLoad then
+                                            if active then
+                                            if @drawing<>nil then
+                                            if drawing.pcamera<>nil then
+                                            begin
+                                                 drawing.pcamera^.prop.point.y:=-strtofloat(s);
+                                            end;
+                                        end;
+                                     13:
+                                       begin
+                                            if LoadMode=TLOLoad then
+                                            if active then
+                                            if sysvar.DWG.DWG_Snap<>nil then
+                                            begin
+                                                 sysvar.DWG.DWG_Snap^.Base.x:=strtofloat(s);
+                                            end;
+                                        end;
+                                     23:
+                                       begin
+                                            if LoadMode=TLOLoad then
+                                            if active then
+                                            if sysvar.DWG.DWG_Snap<>nil then
+                                            begin
+                                                 sysvar.DWG.DWG_Snap^.Base.y:=strtofloat(s);
+                                            end;
+                                        end;
+                                     14:
+                                       begin
+                                            if LoadMode=TLOLoad then
+                                            if active then
+                                            if sysvar.DWG.DWG_Snap<>nil then
+                                            begin
+                                                 sysvar.DWG.DWG_Snap^.Spacing.x:=strtofloat(s);
+                                            end;
+                                        end;
+                                     24:
+                                       begin
+                                            if LoadMode=TLOLoad then
+                                            if active then
+                                            if sysvar.DWG.DWG_Snap<>nil then
+                                            begin
+                                                 sysvar.DWG.DWG_Snap^.Spacing.y:=strtofloat(s);
+                                            end;
+                                        end;
+                                     15:
+                                       begin
+                                            if LoadMode=TLOLoad then
+                                            if active then
+                                            if sysvar.DWG.DWG_GridSpacing<>nil then
+                                            begin
+                                                 sysvar.DWG.DWG_GridSpacing^.x:=strtofloat(s);
+                                            end;
+                                        end;
+                                     25:
+                                       begin
+                                            if LoadMode=TLOLoad then
+                                            if active then
+                                            if sysvar.DWG.DWG_GridSpacing<>nil then
+                                            begin
+                                                 sysvar.DWG.DWG_GridSpacing^.y:=strtofloat(s);
+                                            end;
+                                        end;
+                                     40:
+                                       begin
+                                            if LoadMode=TLOLoad then
+                                            if active then
+                                            if @drawing<>nil then
+                                            if drawing.pcamera<>nil then
+                                            if drawing.OGLwindow1<>nil then
+                                            begin
+                                                 drawing.pcamera^.prop.zoom:=(strtofloat(s)/drawing.OGLwindow1.ClientHeight);
+                                            end;
+                                        end;
+                                     41:
+                                       begin
+                                            if LoadMode=TLOLoad then
+                                            if active then
+                                            if @drawing<>nil then
+                                            if drawing.pcamera<>nil then
+                                            if drawing.OGLwindow1<>nil then
+                                            begin
+                                                 if drawing.OGLwindow1.ClientHeight*strtofloat(s)>drawing.OGLwindow1.ClientWidth then
+                                                 drawing.pcamera^.prop.zoom:=drawing.pcamera^.prop.zoom*strtofloat(s)*drawing.OGLwindow1.ClientHeight/drawing.OGLwindow1.ClientWidth;
+                                            end;
+                                        end;
+                                     71:
+                                       begin
+                                            if LoadMode=TLOLoad then
+                                            if active then
+                                            if @drawing<>nil then
+                                            if drawing.OGLwindow1<>nil then
+                                            begin
+                                                 flags:=strtoint(s);
+                                                 if (flags and 1)<>0 then
+                                                               drawing.OGLwindow1.param.projtype:=PROJPerspective
+                                                           else
+                                                               drawing.OGLwindow1.param.projtype:=PROJParalel;
+                                            end;
+                                       end;
+                                     75:
+                                       begin
+                                            if LoadMode=TLOLoad then
+                                            if active then
+                                            if sysvar.DWG.DWG_SnapGrid<>nil then
+                                            begin
+                                                 if s<>'0' then
+                                                               sysvar.DWG.DWG_SnapGrid^:=true
+                                                           else
+                                                               sysvar.DWG.DWG_SnapGrid^:=false;
+                                            end;
+                                       end;
+                                   76:
+                                     begin
+                                          if LoadMode=TLOLoad then
+                                          if active then
+                                          if sysvar.DWG.DWG_DrawGrid<>nil then
+                                          begin
+                                               if s<>'0' then
+                                                             sysvar.DWG.DWG_DrawGrid^:=true
+                                                         else
+                                                             sysvar.DWG.DWG_DrawGrid^:=false;
+                                          end;
+                                      end;
+                                 end;
+
+                               end;
+                               end;
+end;
+
 procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
   byt: GDBInteger;
-  ti:PGDBTextStyle;
-  error,flags: GDBInteger;
-  s, sname, lname, lcolor, llw,desk,ltn: String;
+  error: GDBInteger;
+  s, sname: String;
   tp: PGDBObjBlockdef;
-  oo,ll,pp:GDBBoolean;
   blockload:boolean;
 
-  tstyle:GDBTextStyle;
-  ptstyle:PGDBTextStyle;
-
-  active:boolean;
-
-  nulisread:boolean;
-
   clayer,cltype,ctstyle:GDBString;
-  player:PGDBLayerProp;
-  pltypeprop:PGDBLtypeProp;
-  dashinfo:TDashInfo;
-  TempDouble:GDBDouble;
-  BShapeProp:BasicSHXDashProp;
-  //di:TDashInfo;
-  shapenumber,stylehandle:TDWGHandle;
-  txtstr:string;
-  PSP:PShapeProp;
-  PTP:PTextProp;
-  DWGHandle:TDWGHandle;
-  ir,ir2:itrec;
-  TDInfo:TTrianglesDataInfo;
 begin
   blockload:=false;
-  nulisread:=false;
+  //nulisread:=false;
   {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF2000',lp_IncPos);{$ENDIF}
   readvariables(f,ctstyle,clayer,cltype,LoadMode);
   repeat
@@ -626,565 +1151,44 @@ begin
         s := f.readGDBString;
         s := f.readGDBString;
 
-        if s = dxfName_CLASSES then
-        begin
-          gotodxf(f, 0, dxfName_ENDTAB);
-        end
-        else
-          if s = dxfName_APPID then
-          begin
-            gotodxf(f, 0, dxfName_ENDTAB);
-          end
-          else
-            if s = dxfName_BLOCK_RECORD then
-            begin
-              gotodxf(f, 0, dxfName_ENDTAB);
-            end
-            else
-              if s = dxfName_DIMSTYLE then
-              begin
+        case s of
+        dxfName_CLASSES:
+                        gotodxf(f, 0, dxfName_ENDTAB);
+        dxfName_APPID:
+                      gotodxf(f, 0, dxfName_ENDTAB);
+        dxfName_BLOCK_RECORD:
+                     gotodxf(f, 0, dxfName_ENDTAB);
+        dxfName_DIMSTYLE:
                 gotodxf(f, 0, dxfName_ENDTAB);
-              end
-              else
-                if s = dxfName_Layer then
+        dxfName_Layer:
                 begin
                   {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer table',lp_IncPos);{$ENDIF}
-                  gotodxf(f, 0, dxfName_Layer);
-
-                  while s = dxfName_Layer do
-                  begin
-                    byt := 2;
-                    oo:=true;
-                    ll:=false;
-                    pp:=true;
-                    desk:='';
-                    ltn:='';
-                    while byt <> 0 do
-                    begin
-                      if not nulisread then
-                      begin
-                      s := f.readGDBString;
-                      byt := strtoint(s);
-                      s := f.readGDBString;
-                      end
-                      else
-                          nulisread:=false;
-                      case byt of
-                        2:
-                          begin
-                            lname := s;
-                          end;
-                        62:
-                          begin
-                            lcolor := s;
-                            if strtoint(lcolor)<0 then begin
-                                                            oo:=false;
-                                                       end;
-                          end;
-                        6:
-                          begin
-                            ltn := s;
-                          end;
-                        370:
-                          begin
-                            llw := s;
-                          end;
-                        70:
-                          begin
-                               if (strtoint(s)and 4)<>0 then
-                                                                 begin
-                                                                      ll:=true;
-                                                                 end;
-                           end;
-                        290:
-                          begin
-                               if (strtoint(s))=0 then
-                                                            begin
-                                                                 pp:=false;
-                                                            end;
-                           end;
-                        1001:
-                          begin
-                               //s := f.readGDBString;
-                               if s='AcAecLayerStandard' then
-                                 begin
-                                      s := f.readGDBString;
-                                      byt:=strtoint(s);
-                                      if byt<>0 then
-                                      begin
-                                          s := f.readGDBString;
-                                          begin
-                                                s := f.readGDBString;
-                                                byt:=strtoint(s);
-                                                if byt<>0 then
-                                                              desk := f.readGDBString
-                                                          else
-                                                              begin
-                                                              nulisread:=true;
-                                                              s := f.readGDBString;
-                                                              end;
-
-                                          end;
-                                      end
-                                         else
-                                         begin
-                                          nulisread:=true;
-                                          s := f.readGDBString;
-                                         end;
-                                 end;
-                           end;
-
-
-                      end;
-                    end;
-                    if llw='' then llw:='-1';
-                    player:=drawing.LayerTable.addlayer(lname, abs(strtoint(lcolor)), strtoint(llw),oo,ll,pp,desk,LoadMode);
-                    player.LT:=drawing.LTypeStyleTable.getAddres(ltn);
-                    if uppercase(lname)=uppercase(clayer)then
-                                                             if sysvar.DWG.DWG_CLayer<>nil then
-                                                                                               sysvar.DWG.DWG_CLayer^:={drawing.LayerTable.GetIndexByPointer}(player);
-                    llw:='';
-                    {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer '+lname,0);{$ENDIF}
-                  end;
+                  ReadLayers(s,clayer,f,exitGDBString,owner,LoadMode,drawing);
                   {$IFDEF TOTALYLOG}programlog.logoutstr('end; {layer table}',lp_DecPos);{$ENDIF}
-          //gotodxf(f, 0, dxfName_ENDTAB);
-                end
-                else
-                  if s = dxfName_LType then
+                end;
+        dxfName_LType:
                   begin
-                    //gotodxf(f, 0, dxfName_ENDTAB);
-                    {$IFDEF TOTALYLOG}programlog.logoutstr('Found line type table',lp_IncPos);{$ENDIF}
-                    dashinfo:=TDIDash;
-                    if GoToDXForENDTAB(f, 0, dxfName_LType) then
-                    begin
-                         while s = dxfName_LType do
-                         begin
-                              pltypeprop:=nil;
-                              byt := 2;
-                              while byt <> 0 do
-                              begin
-                              s := f.readGDBString;
-                              byt := strtoint(s);
-                              s := f.readGDBString;
-                              case byt of
-                              2:
-                                begin
-                                  case drawing.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
-                                               IsFounded:
-                                                         begin
-                                                              if LoadMode=TLOLoad then
-                                                              begin
-                                                              end
-                                                              else
-                                                                  pltypeprop:=nil;
-                                                         end;
-                                               IsCreated:
-                                                         begin
-                                                              pltypeprop^.init(s);
-                                                              dashinfo:=TDIDash;
-                                                         end;
-                                               IsError:
-                                                         begin
-                                                         end;
-                                       end;
-                                     if uppercase(s)=uppercase(cltype)then
-                                                                          if sysvar.DWG.DWG_CLType<>nil then
-                                                                                                            sysvar.DWG.DWG_CLType^:=pltypeprop;
-
-                                end;
-                              3:
-                                begin
-                                     if pltypeprop<>nil then
-                                                       pltypeprop^.desk:=s;
-                                end;
-                              40:
-                                begin
-                                     if pltypeprop<>nil then
-                                     pltypeprop^.len:=strtofloat(s);
-                                end;
-                              49:
-                                 begin
-                                      if pltypeprop<>nil then
-                                      begin
-                                      case dashinfo of
-                                      TDIShape:begin
-                                                    if stylehandle<>0 then
-                                                    begin
-                                                        pointer(psp):=pltypeprop^.shapearray.CreateObject;
-                                                        psp^.initnul;
-                                                        psp^.param:=BShapeProp.param;
-                                                        psp^.Psymbol:=pointer(shapenumber);
-                                                        psp^.param.PStyle:=pointer(stylehandle);
-                                                        pltypeprop^.dasharray.Add(@dashinfo);
-                                                    end;
-                                               end;
-                                      TDIText:begin
-                                                    pointer(ptp):=pltypeprop^.Textarray.CreateObject;
-                                                    ptp^.initnul;
-                                                    ptp^.param:=BShapeProp.param;
-                                                    ptp^.Text:=txtstr;
-                                                    //ptp^.Style:=;
-                                                    ptp^.param.PStyle:=pointer(stylehandle);
-                                                    pltypeprop^.dasharray.Add(@dashinfo);
-                                               end;
-                                      end;
-                                           dashinfo:=TDIDash;
-                                           TempDouble:=strtofloat(s);
-                                           pltypeprop^.dasharray.Add(@dashinfo);
-                                           pltypeprop^.strokesarray.Add(@TempDouble);
-                                      end;
-                                 end;
-                              74:if pltypeprop<>nil then
-                                 begin
-                                      flags:=strtoint(s);
-                                      if (flags and 1)>0 then
-                                                             BShapeProp.param.AD:={BShapeProp.param.AD.}TACAbs
-                                                         else
-                                                             BShapeProp.param.AD:={BShapeProp.param.AD.}TACRel;
-                                      if (flags and 2)>0 then
-                                                             dashinfo:=TDIText;
-                                      if (flags and 4)>0 then
-                                                             dashinfo:=TDIShape;
-
-                                 end;
-                              75:begin
-                                      shapenumber:=strtoint(s);//
-                                 end;
-                             340:begin
-                                      if pltypeprop<>nil then
-                                                             stylehandle:=strtoint64('$'+s);
-                                 end;
-                             46:begin
-                                     BShapeProp.param.Height:=strtofloat(s);
-                                end;
-                             50:begin
-                                     BShapeProp.param.Angle:=strtofloat(s);
-                                end;
-                             44:begin
-                                     BShapeProp.param.X:=strtofloat(s);
-                                end;
-                             45:begin
-                                     BShapeProp.param.Y:=strtofloat(s);
-                                end;
-                             9:begin if pltypeprop<>nil then
-                                     txtstr:=s;
-                                end;
-                              end;
-                              end;
-                         end;
-                    end;
-                  end
-                  else
-                    if s = dxfName_Style then
-                    {begin
-                      gotodxf(f, 0, dxfName_ENDTAB);
-                    end}
+                    {$IFDEF TOTALYLOG}programlog.logoutstr('Found line types table',lp_IncPos);{$ENDIF}
+                    ReadLTStyles(s,cltype,f,exitGDBString,owner,LoadMode,drawing);
+                    {$IFDEF TOTALYLOG}programlog.logoutstr('end; (line types table)',lp_DecPos);{$ENDIF}
+                  end;
+        dxfName_Style:
                     begin
                       {$IFDEF TOTALYLOG}programlog.logoutstr('Found style table',lp_IncPos);{$ENDIF}
-                      //gotodxf(f, 0, dxfName_Style);
-                      if GoToDXForENDTAB(f, 0, dxfName_Style) then
-                      //begin
-                      while s = dxfName_Style do
-                      begin
-                        tstyle.name:='';
-                        tstyle.pfont:=nil;
-                        tstyle.prop.oblique:=0;
-                        tstyle.prop.size:=1;
-                        DWGHandle:=0;
-
-                        byt := 2;
-
-                        while byt <> 0 do
-                        begin
-                          s := f.readGDBString;
-                          byt := strtoint(s);
-                          s := f.readGDBString;
-                          case byt of
-                            2:
-                              begin
-                                tstyle.name := s;
-                              end;
-                            5:begin
-                                   DWGHandle:=strtoint64('$'+s)
-                              end;
-
-                            40:
-                              begin
-                                tstyle.prop.size:=strtofloat(s);
-                              end;
-                            41:
-                              begin
-                                tstyle.prop.wfactor:=strtofloat(s);
-                              end;
-                            50:
-                              begin
-                                tstyle.prop.oblique:=strtofloat(s);
-                              end;
-                            70:begin
-                                    flags:=strtoint(s);
-                               end;
-                            3:
-                              begin
-                                   lname:=s;
-                                   //FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,s));
-                                   //tstyle.pfont:=FontManager.getAddres(s);
-                                   //if tstyle.pfont:=;
-                               end;
-                          end;
-                        end;
-                        ti:=nil;
-                        if (flags and 1)=0 then
-                        begin
-                        ti:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
-                        if ti<>nil then
-                        begin
-                          if LoadMode=TLOLoad then
-                                                  ti:=drawing.TextStyleTable.setstyle(tstyle.Name,lname,tstyle.prop,false);
-                        end
-                           else
-                               ti:=drawing.TextStyleTable.addstyle(tstyle.Name,lname,tstyle.prop,false);
-                        end
-                        else
-                            begin
-                              if drawing.TextStyleTable.FindStyle(lname,true)<>nil then
-                              begin
-                                if LoadMode=TLOLoad then
-                                                        ti:=drawing.TextStyleTable.setstyle(lname,lname,tstyle.prop,true);
-                              end
-                                 else
-                                     ti:=drawing.TextStyleTable.addstyle(lname,lname,tstyle.prop,true);
-                            end;
-                        if ti<>nil then
-                        begin
-                             ptstyle:={drawing.TextStyleTable.getelement}(ti);
-                             pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
-                             if pltypeprop<>nil then
-                             repeat
-                                   PSP:=pltypeprop^.shapearray.beginiterate(ir2);
-                                   if PSP<>nil then
-                                   repeat
-                                         if psp^.param.PStyle=pointer(DWGHandle) then
-                                         begin
-                                            psp^.param.PStyle:=ptstyle;
-                                            psp^.FontName:=ptstyle^.dxfname;
-                                            psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.Psymbol),tdinfo);
-                                            psp^.SymbolName:=psp^.Psymbol^.Name;
-                                         end;
-
-                                         PSP:=pltypeprop^.shapearray.iterate(ir2);
-                                   until PSP=nil;
-
-                                   PTP:=pltypeprop^.Textarray.beginiterate(ir2);
-                                   if PTP<>nil then
-                                   repeat
-                                         if pTp^.param.PStyle=pointer(DWGHandle) then
-                                         begin
-                                            pTp^.param.PStyle:=ptstyle;
-                                            {pTp^.FontName:=ptstyle^.dxfname;
-                                            pTp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(pTp^.Psymbol));
-                                            pTp^.SymbolName:=pTp^.Psymbol^.Name;}
-                                         end;
-
-                                         PTP:=pltypeprop^.Textarray.iterate(ir2);
-                                   until PTP=nil;
-
-                                   pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
-                             until pltypeprop=nil;
-                        end;
-                        {$IFDEF TOTALYLOG}programlog.logoutstr('Found style '+tstyle.Name,0);{$ENDIF}
-                       if uppercase(tstyle.Name)=uppercase(ctstyle)then
-                                    if sysvar.DWG.DWG_CTStyle<>nil then
-                                                                      sysvar.DWG.DWG_CTStyle^:={drawing.TextStyleTable.getelement}(drawing.TextStyleTable.FindStyle(tstyle.Name,false));
-                        tstyle.Name:='';
-                      end;
-                      pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
-                                                   if pltypeprop<>nil then
-                                                   repeat
-                                                         {$IFDEF TOTALYLOG}programlog.logoutstr('Formatting line type '+pltypeprop.Name,0);{$ENDIF}
-                                                         pltypeprop^.Format;
-                                                         pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
-                                                   until pltypeprop=nil;
+                      ReadTextstyles(s,ctstyle,f,exitGDBString,owner,LoadMode,drawing);
                       {$IFDEF TOTALYLOG}programlog.logoutstr('end; {style table}',lp_DecPos);{$ENDIF}
-              //gotodxf(f, 0, dxfName_ENDTAB);
-                    end
-                    else
-                      if s = 'UCS' then
-                      begin
-                        gotodxf(f, 0, dxfName_ENDTAB);
-                      end
-                      else
-                        if s = 'VIEW' then
-                        begin
-                          gotodxf(f, 0, dxfName_ENDTAB);
-                        end
-                        else
-                          if s = 'VPORT' then
-                          if GoToDXForENDTAB(f, 0, 'VPORT') then
+                    end;
+        'UCS':
+              gotodxf(f, 0, dxfName_ENDTAB);
+        'VIEW':
+              gotodxf(f, 0, dxfName_ENDTAB);
+        'VPORT':
                           begin
-                            //gotodxf(f, 0, dxfName_ENDTAB);
-
-                            byt := -100;
-                            active:=false;
-
-                            while byt <> 0 do
-                            begin
-                              s := f.readGDBString;
-                              programlog.LogOutStr(s,0);
-                              byt := strtoint(s);
-                              s := f.readGDBString;
-                              if (byt=0)and(s='VPORT')then
-                              begin
-                                    byt := -100;
-                                    active:=false;
-                              end;
-                              programlog.LogOutStr(s,0);
-                              case byt of
-                                2:
-                                  begin
-                                       if uppercase(s)='*ACTIVE' then
-                                                                     active:=true
-                                                                 else
-                                                                     active:=false;
-                                  end;
-                                12:
-                                  begin
-                                       if LoadMode=TLOLoad then
-                                       if active then
-                                       if @drawing<>nil then
-                                       if drawing.pcamera<>nil then
-                                       begin
-                                            drawing.pcamera^.prop.point.x:=-strtofloat(s);
-                                       end;
-                                   end;
-                                22:
-                                  begin
-                                       if LoadMode=TLOLoad then
-                                       if active then
-                                       if @drawing<>nil then
-                                       if drawing.pcamera<>nil then
-                                       begin
-                                            drawing.pcamera^.prop.point.y:=-strtofloat(s);
-                                       end;
-                                   end;
-                                13:
-                                  begin
-                                       if LoadMode=TLOLoad then
-                                       if active then
-                                       if sysvar.DWG.DWG_Snap<>nil then
-                                       begin
-                                            sysvar.DWG.DWG_Snap.Base.x:=strtofloat(s);
-                                       end;
-                                   end;
-                                23:
-                                  begin
-                                       if LoadMode=TLOLoad then
-                                       if active then
-                                       if sysvar.DWG.DWG_Snap<>nil then
-                                       begin
-                                            sysvar.DWG.DWG_Snap.Base.y:=strtofloat(s);
-                                       end;
-                                   end;
-                                14:
-                                  begin
-                                       if LoadMode=TLOLoad then
-                                       if active then
-                                       if sysvar.DWG.DWG_Snap<>nil then
-                                       begin
-                                            sysvar.DWG.DWG_Snap.Spacing.x:=strtofloat(s);
-                                       end;
-                                   end;
-                                24:
-                                  begin
-                                       if LoadMode=TLOLoad then
-                                       if active then
-                                       if sysvar.DWG.DWG_Snap<>nil then
-                                       begin
-                                            sysvar.DWG.DWG_Snap.Spacing.y:=strtofloat(s);
-                                       end;
-                                   end;
-                                15:
-                                  begin
-                                       if LoadMode=TLOLoad then
-                                       if active then
-                                       if sysvar.DWG.DWG_GridSpacing<>nil then
-                                       begin
-                                            sysvar.DWG.DWG_GridSpacing.x:=strtofloat(s);
-                                       end;
-                                   end;
-                                25:
-                                  begin
-                                       if LoadMode=TLOLoad then
-                                       if active then
-                                       if sysvar.DWG.DWG_GridSpacing<>nil then
-                                       begin
-                                            sysvar.DWG.DWG_GridSpacing.y:=strtofloat(s);
-                                       end;
-                                   end;
-                                40:
-                                  begin
-                                       if LoadMode=TLOLoad then
-                                       if active then
-                                       if @drawing<>nil then
-                                       if drawing.pcamera<>nil then
-                                       if drawing.OGLwindow1<>nil then
-                                       begin
-                                            drawing.pcamera^.prop.zoom:=(strtofloat(s)/drawing.OGLwindow1.ClientHeight);
-                                       end;
-                                   end;
-                                41:
-                                  begin
-                                       if LoadMode=TLOLoad then
-                                       if active then
-                                       if @drawing<>nil then
-                                       if drawing.pcamera<>nil then
-                                       if drawing.OGLwindow1<>nil then
-                                       begin
-                                            if drawing.OGLwindow1.ClientHeight*strtofloat(s)>drawing.OGLwindow1.ClientWidth then
-                                            drawing.pcamera^.prop.zoom:=drawing.pcamera^.prop.zoom*strtofloat(s)*drawing.OGLwindow1.ClientHeight/drawing.OGLwindow1.ClientWidth;
-                                       end;
-                                   end;
-                                71:
-                                  begin
-                                       if LoadMode=TLOLoad then
-                                       if active then
-                                       if @drawing<>nil then
-                                       if drawing.OGLwindow1<>nil then
-                                       begin
-                                            flags:=strtoint(s);
-                                            if (flags and 1)<>0 then
-                                                          drawing.OGLwindow1.param.projtype:=PROJPerspective
-                                                      else
-                                                          drawing.OGLwindow1.param.projtype:=PROJParalel;
-                                       end;
-                                  end;
-                                75:
-                                  begin
-                                       if LoadMode=TLOLoad then
-                                       if active then
-                                       if sysvar.DWG.DWG_SnapGrid<>nil then
-                                       begin
-                                            if s<>'0' then
-                                                          sysvar.DWG.DWG_SnapGrid^:=true
-                                                      else
-                                                          sysvar.DWG.DWG_SnapGrid^:=false;
-                                       end;
-                                  end;
-                              76:
-                                begin
-                                     if LoadMode=TLOLoad then
-                                     if active then
-                                     if sysvar.DWG.DWG_DrawGrid<>nil then
-                                     begin
-                                          if s<>'0' then
-                                                        sysvar.DWG.DWG_DrawGrid^:=true
-                                                    else
-                                                        sysvar.DWG.DWG_DrawGrid^:=false;
-                                     end;
-                                 end;
-                            end;
-
+                          {$IFDEF TOTALYLOG}programlog.logoutstr('Found vports table',lp_IncPos);{$ENDIF}
+                          ReadVport(s,f,exitGDBString,owner,LoadMode,drawing);
+                          {$IFDEF TOTALYLOG}programlog.logoutstr('end; {vports table}',lp_DecPos);{$ENDIF}
                           end;
-                          end;
+                       end;{case}
         s := f.readGDBString;
         s := f.readGDBString;
       end;
@@ -1748,17 +1752,17 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                              outstream.TXTAddGDBStringEOL('0');
                                                         end;
                outstream.TXTAddGDBStringEOL(dxfGroupCode(13));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap.Base.x));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap^.Base.x));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(23));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap.Base.y));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap^.Base.y));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(14));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap.Spacing.x));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap^.Spacing.x));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(24));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap.Spacing.y));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_Snap^.Spacing.y));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(15));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_GridSpacing.x));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_GridSpacing^.x));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(25));
-               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_GridSpacing.y));
+               outstream.TXTAddGDBStringEOL(floattostr(sysvar.DWG.DWG_GridSpacing^.y));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(16));
                outstream.TXTAddGDBStringEOL(floattostr(-drawing.pcamera^.prop.look.x));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(26));
@@ -1903,41 +1907,41 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                     outstream.TXTAddGDBStringEOL('AcDbLayerTableRecord');
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
-                    outstream.TXTAddGDBStringEOL(plp.name);
+                    outstream.TXTAddGDBStringEOL(plp^.name);
                     attr:=0;
-                    if plp._lock then
+                    if plp^._lock then
                                      attr:=attr + 4;
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
                     outstream.TXTAddGDBStringEOL(inttostr(attr));
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(62));
-                    if plp._on
+                    if plp^._on
                      then
-                         outstream.TXTAddGDBStringEOL(inttostr(plp.color))
+                         outstream.TXTAddGDBStringEOL(inttostr(plp^.color))
                      else
-                         outstream.TXTAddGDBStringEOL(inttostr(-plp.color));
+                         outstream.TXTAddGDBStringEOL(inttostr(-plp^.color));
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(6));
                     //outstream.TXTAddGDBStringEOL('Continuous');
                     outstream.TXTAddGDBStringEOL(PGDBLtypeProp(plp^.LT)^.Name);
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(290));
-                    if plp._print then
+                    if plp^._print then
                     //if uppercase(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[pltp].name) <> 'DEFPOINTS' then
                       outstream.TXTAddGDBStringEOL('1')
                     else
                       outstream.TXTAddGDBStringEOL('0');
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(370));
-                    outstream.TXTAddGDBStringEOL(inttostr(plp.lineweight));
+                    outstream.TXTAddGDBStringEOL(inttostr(plp^.lineweight));
                     //WriteString_EOL(outstream, '-3');
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(390));
                     outstream.TXTAddGDBStringEOL(inttohex(plottablefansdle,0));
 
-                    if plp.desk<>''then
+                    if plp^.desk<>''then
                     begin
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(1001));
                          outstream.TXTAddGDBStringEOL('AcAecLayerStandard');
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(1000));
                          outstream.TXTAddGDBStringEOL('');
                          outstream.TXTAddGDBStringEOL(dxfGroupCode(1000));
-                         outstream.TXTAddGDBStringEOL(plp.desk);
+                         outstream.TXTAddGDBStringEOL(plp^.desk);
                     end;
                   end;
                 end;
@@ -2465,7 +2469,7 @@ begin
      gdb.GetCurrentROOT.correctobjects(nil,-1);
      //fillchar(FileHeader,sizeof(FileHeader),0);
      {systype.TypeName2PTD('GDBVertex')^.DeSerialize(@test,SA_SAVED_TO_SHD,memorybuf);}
-     (*FileRead(infile,header,sizeof(shdblockheader));
+     FileRead(infile,header,sizeof(shdblockheader));
      while header.blocktype<>shd_block_eof do
      begin
           case header.blocktype of

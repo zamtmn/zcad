@@ -273,6 +273,7 @@ GDBNamedObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      procedure SetName(n:GDBString);
                      function GetName:GDBString;
                      function GetFullName:GDBString;virtual;abstract;
+                     procedure SetDefaultValues;virtual;abstract;
                end;
 ODBDevicepassport=packed record
                         category,name,id,nameall,tu,edizm:GDBString;
@@ -873,15 +874,24 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;}
               end;
 //Generate on E:\zcad\CAD_SOURCE\u\ugdbdimstylearray.pas
+TDimUnit=(DUScientific,DUDecimal,DUEngineering,DUArchitectural,DUFractional,DUSystem);
+TDimDSep=(DDSDot,DDSComma,DDSSpace);
 TGDBDimLinesProp=packed record
                  end;
 TGDBDimArrowsProp=packed record
-                 end;
+                       DIMASZ:GDBDouble; //Dimensioning arrow size
+                  end;
 TGDBDimTextProp=packed record
+                       DIMTXT:GDBDouble; //Text size
                  end;
 TGDBDimPlacingProp=packed record
                  end;
 TGDBDimUnitsProp=packed record
+                       DIMLFAC:GDBDouble;//Linear measurements scale factor
+                       DIMLUNIT:TDimUnit;//Sets units for all dimension types except Angular:
+                       DIMDEC:GDBInteger;//Number of decimal places for the tolerance values of a primary units dimension
+                       DIMDSEP:TDimDSep;//Single-character decimal separator used when creating dimensions whose unit format is decimal
+                       DIMRND:GDBDouble;//Rounding value for dimension distances
                  end;
 PGDBDimStyle=^GDBDimStyle;
 GDBDimStyle = packed object(GDBNamedObject)
@@ -890,6 +900,7 @@ GDBDimStyle = packed object(GDBNamedObject)
                       Text:TGDBDimTextProp;
                       Placing:TGDBDimPlacingProp;
                       Units:TGDBDimUnitsProp;
+                      procedure SetDefaultValues;virtual;abstract;
              end;
 PGDBDimStyleArray=^GDBDimStyleArray;
 GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBDimStyle*)
@@ -1956,6 +1967,7 @@ end;
 PGDBObjAlignedDimension=^GDBObjAlignedDimension;
 GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       DimData:TDXFDimData;
+                      PDimStyle:PGDBDimStyle;
                       PProjPoint:PTDXFDimData2D;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -1968,6 +1980,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                       procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;abstract;
                       function GetObjTypeName:GDBString;virtual;abstract;
+                      function GetLinearDimStr(l:GDBDouble):GDBString;
                    end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBBlockInsert.pas
 PGDBObjBlockInsert=^GDBObjBlockInsert;

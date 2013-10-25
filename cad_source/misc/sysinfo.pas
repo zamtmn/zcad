@@ -19,7 +19,7 @@
 unit SysInfo;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF};
+uses gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF},zcadsysvars,sysutils;
 {$INCLUDE revision.inc}
 type tsysparam=record
                      programpath: GDBString;
@@ -30,11 +30,12 @@ type tsysparam=record
               end;
 var
   sysparam: tsysparam;
+  SysDefaultFormatSettings:TFormatSettings;
 
 Procedure getsysinfo;
 implementation
 
-uses {shared,varmandef,} sysutils,WindowsSpecific,log;
+uses WindowsSpecific,log;
 procedure ProcessParanstr;
 var
    i:integer;
@@ -57,6 +58,7 @@ begin
 end;
 Procedure getsysinfo;
 begin
+     SysDefaultFormatSettings:=DefaultFormatSettings;
      {$IFDEF DEBUGINITSECTION}log.LogOut('sysinfo.getsysinfo');{$ENDIF}
      sysparam.programpath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)));
      sysparam.screenx:={GetSystemMetrics(SM_CXSCREEN)}Screen.Width;

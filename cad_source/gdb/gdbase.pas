@@ -268,6 +268,7 @@ GDBNamedObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      procedure SetName(n:GDBString);
                      function GetName:GDBString;
                      function GetFullName:GDBString;virtual;
+                     procedure SetDefaultValues;virtual;
                end;
 ODBDevicepassport=packed record
                         category,name,id,nameall,tu,edizm:GDBString;
@@ -440,6 +441,7 @@ end;
 constructor GDBNamedObject.initnul;
 begin
      pointer(name):=nil;
+     SetDefaultValues;
 end;
 constructor GDBNamedObject.Init(n:GDBString);
 begin
@@ -461,6 +463,9 @@ end;
 function GDBNamedObject.GetFullName:GDBString;
 begin
      result:=name;
+end;
+procedure GDBNamedObject.SetDefaultValues;
+begin
 end;
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('gdbase.initialization');{$ENDIF}

@@ -47,6 +47,7 @@ end;
 PGDBObjAlignedDimension=^GDBObjAlignedDimension;
 GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       DimData:TDXFDimData;
+                      PDimStyle:PGDBDimStyle;
                       PProjPoint:PTDXFDimData2D;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -61,6 +62,8 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
 
                       function GetObjTypeName:GDBString;virtual;
+
+                      function GetLinearDimStr(l:GDBDouble):GDBString;
                    end;
 {EXPORT-}
 implementation
@@ -131,25 +134,70 @@ begin
                              end;
                     end;
 end;
+function GetTFromLinePoint(q:GDBvertex;var p1,p2:GDBvertex):double;
+var w,l:GDBVertex;
+begin
+     w:=VertexSub(q,p1);
+     l:=VertexSub(p2,p1);
+     result:=scalardot(w,l)/scalardot(l,l);
+end;
+function CorrectPointLine(q:GDBvertex;p1,p2:GDBvertex;out d:GDBDouble):GDBVertex;
+var w,l:GDBVertex;
+    dist:GDBDouble;
+begin
+     w:=VertexSub(q,p1);
+     l:=VertexSub(p2,p1);
+     dist:=scalardot(w,l)/scalardot(l,l);
+     p1:=Vertexmorph(p1,p2,dist);
+     d:=Vertexlength(q,p1);
+     q:=geometry.Vertexmorphabs2(p1,q,d);
+     result:=VertexAdd(p2,VertexSub(q,p1));
+end;
+function SetPointLine(d:GDBDouble;q:GDBvertex;p1,p2:GDBvertex):GDBVertex;
+var w,l:GDBVertex;
+    dist:GDBDouble;
+begin
+     w:=VertexSub(q,p1);
+     l:=VertexSub(p2,p1);
+     dist:=scalardot(w,l)/scalardot(l,l);
+     p1:=Vertexmorph(p1,p2,dist);
+     result:=geometry.Vertexmorphabs2(p1,q,d);
+     //result:=VertexAdd(p2,VertexSub(q,p1));
+end;
 procedure GDBObjAlignedDimension.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
     tv,tv2:GDBVERTEX;
+    t:GDBDouble;
 begin
           case rtmod.point.pointtype of
                os_p10:begin
-                             DimData.P10InWCS:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+                             tv:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+                             DimData.P10InWCS:=CorrectPointLine(tv,DimData.P13InWCS,DimData.P14InWCS,t);
+                             DimData.P11InOCS:=SetPointLine(t,DimData.P11InOCS,DimData.P13InWCS,DimData.P14InWCS);
                         end;
                os_p11:begin
                              DimData.P11InOCS:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+                             t:=GettFromLinePoint(DimData.P11InOCS,DimData.P13InWCS,DimData.P14InWCS);
+                             tv:=geometry.Vertexmorph(DimData.P13InWCS,DimData.P14InWCS,t);
+                             tv:=vertexsub(DimData.P11InOCS,tv);
+                             DimData.P10InWCS:=VertexAdd(DimData.P14InWCS,tv);
                         end;
                os_p12:begin
                              DimData.P12InOCS:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
                         end;
                os_p13:begin
                              DimData.P13InWCS:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+                             t:=GettFromLinePoint(DimData.P11InOCS,DimData.P13InWCS,DimData.P14InWCS);
+                             tv:=geometry.Vertexmorph(DimData.P13InWCS,DimData.P14InWCS,t);
+                             tv:=vertexsub(DimData.P11InOCS,tv);
+                             DimData.P10InWCS:=VertexAdd(DimData.P14InWCS,tv);
                         end;
                os_p14:begin
                              DimData.P14InWCS:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+                             t:=GettFromLinePoint(DimData.P11InOCS,DimData.P13InWCS,DimData.P14InWCS);
+                             tv:=geometry.Vertexmorph(DimData.P13InWCS,DimData.P14InWCS,t);
+                             tv:=vertexsub(DimData.P11InOCS,tv);
+                             DimData.P10InWCS:=VertexAdd(DimData.P14InWCS,tv);
                         end;
                os_p15:begin
                              DimData.P15InWCS:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
@@ -194,12 +242,14 @@ begin
   CopyVPto(tvo^);
   tvo^.DimData := DimData;
   tvo^.bp.ListPos.Owner:=own;
+  tvo^.PDimStyle:=PDimStyle;
   result := tvo;
 end;
 
 procedure GDBObjAlignedDimension.LoadFromDXF;
 var
-  byt: GDBInteger;
+  byt:GDBInteger;
+  style:GDBString;
 begin
   byt:=readmystrtoint(f);
   while byt <> 0 do
@@ -211,7 +261,15 @@ begin
                 if not dxfvertexload(f,13,byt,DimData.P13InWCS) then
                    if not dxfvertexload(f,14,byt,DimData.P14InWCS) then
                       if not dxfvertexload(f,15,byt,DimData.P15InWCS) then
-                         if not dxfvertexload(f,16,byt,DimData.P16InOCS) then f.readGDBSTRING;
+                         if not dxfvertexload(f,16,byt,DimData.P16InOCS) then
+                            if dxfGDBStringload(f,3,byt,style)then
+                                                                  begin
+                                                                       PDimStyle:=drawing.GetDimStyleTable^.getAddres(Style);
+                                                                       if PDimStyle=nil then
+                                                                                            PDimStyle:=drawing.GetDimStyleTable^.getelement(0);
+                                                                  end
+                            else
+                                f.readGDBSTRING;
     byt:=readmystrtoint(f);
   end;
 end;
@@ -233,12 +291,30 @@ begin
   DimData.P13InWCS := createvertex(1,1,0);
   DimData.P14InWCS:= createvertex(300,1,0);
 end;
+function GDBObjAlignedDimension.GetLinearDimStr(l:GDBDouble):GDBString;
+var
+   n:double;
+begin
+     l:=l*PDimStyle.Units.DIMLFAC;
+     if PDimStyle.Units.DIMRND<>0 then
+        begin
+             n:=l/PDimStyle.Units.DIMRND;
+             l:=round(n)*PDimStyle.Units.DIMRND;
+        end;
+     case PDimStyle.Units.DIMDSEP of
+                                      DDSDot:DecimalSeparator:='.';
+                                    DDSComma:DecimalSeparator:=',';
+                                    DDSSpace:DecimalSeparator:=' ';
+     end;
+     l:=roundto(l,-PDimStyle.Units.DIMDEC);
+     result:=floattostr(l);
+end;
 procedure GDBObjAlignedDimension.FormatEntity(const drawing:TDrawingDef);
 var
   pl:pgdbobjline;
   ptext:PGDBObjMText;
   tv:GDBVertex;
-  l:GDBDouble;
+  l,angle:GDBDouble;
 begin
           ConstObjArray.cleareraseobj;
 
@@ -266,17 +342,23 @@ begin
           pl.CoordInOCS.lEnd:=tv;
           pl.FormatEntity(drawing);
 
-          l:=geometry.Vertexlength(DimData.P13InWCS,DimData.P14InWCS);
+
           ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
           ptext.vp.Layer:=vp.Layer;
-          ptext.Template:=floattostr(l);;
+          ptext.Template:=GetLinearDimStr(Vertexlength(DimData.P13InWCS,DimData.P14InWCS));
           ptext.Local.P_insert:=DimData.P11InOCS;
-          ptext.textprop.justify:=jsbl;
+          ptext.textprop.justify:=jsmc;
+          angle:=vertexangle(CreateVertex2D(DimData.P13InWCS.x,DimData.P13InWCS.y),CreateVertex2D(DimData.P14InWCS.x,DimData.P14InWCS.y));
+          l:=GettFromLinePoint(DimData.P11InOCS,DimData.P13InWCS,DimData.P14InWCS);
+          if (l>0)and(l<1) then
+             begin
+          ptext.textprop.angle:=angle;
+          ptext.Local.basis.ox.x:=cos(angle);
+          ptext.Local.basis.ox.y:=sin(angle);
+             end;
           ptext.TXTStyleIndex:=drawing.GetTextStyleTable^.getelement(0);
-          ptext.textprop.size:=2.5;
+          ptext.textprop.size:=PDimStyle.Text.DIMTXT;
           ptext.FormatEntity(drawing);;
-
-
   inherited;
 end;
 {procedure GDBObjAlignedDimension.DrawGeometry;

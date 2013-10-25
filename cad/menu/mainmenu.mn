@@ -262,6 +262,7 @@ MainMenuItem Format;
     action ACN_LTYPES
     Command Line type styles (objinsp),SetObjInsp(LINETYPESTYLES),none,none
     Command Table styles (objinsp),SetObjInsp(TABLESTYLES),none,none
+    Command Dim styles (objinsp),SetObjInsp(DIMSTYLES),none,none
     Command Numerators (objinsp),SetObjInsp(NUMERATORS),none,none
     Command Dimensions styles (not impl),fuckoff1,none,none
     Command Layouts (not impl),fuckoff2,none,none

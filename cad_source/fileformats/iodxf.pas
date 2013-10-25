@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses gdbentityfactory,{$IFNDEF DELPHI}gmap,gutil,dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,{pdfvectorialreader,}GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, {GDBManager,} {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
+uses ugdbdimstylearray,gdbentityfactory,{$IFNDEF DELPHI}gmap,gutil,dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,{pdfvectorialreader,}GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, {GDBManager,} {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
    entnamindex=record
@@ -935,16 +935,10 @@ begin
     {$IFDEF TOTALYLOG}programlog.logoutstr('Found style '+tstyle.Name,0);{$ENDIF}
    if uppercase(tstyle.Name)=uppercase(ctstyle)then
                 if sysvar.DWG.DWG_CTStyle<>nil then
-                                                  sysvar.DWG.DWG_CTStyle^:={drawing.TextStyleTable.getelement}(drawing.TextStyleTable.FindStyle(tstyle.Name,false));
+                                                  sysvar.DWG.DWG_CTStyle^:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
     tstyle.Name:='';
   end;
-  pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
-                               if pltypeprop<>nil then
-                               repeat
-                                     {$IFDEF TOTALYLOG}programlog.logoutstr('Formatting line type '+pltypeprop.Name,0);{$ENDIF}
-                                     pltypeprop^.Format;
-                                     pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
-                               until pltypeprop=nil;
+  drawing.LTypeStyleTable.format;
 end;
 procedure ReadVport(var s:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
@@ -1117,6 +1111,59 @@ begin
                                end;
                                end;
 end;
+procedure ReadDimStyles(var s:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+//begin
+//     gotodxf(f, 0, dxfName_ENDTAB);//scip this table
+//end;
+var
+   psimstyleprop:PGDBDimStyle;
+   byt:integer;
+begin
+if GoToDXForENDTAB(f, 0, dxfName_DIMSTYLE) then
+while s = dxfName_DIMSTYLE do
+begin
+     psimstyleprop:=nil;
+     byt := 2;
+     while byt <> 0 do
+     begin
+     s := f.readGDBString;
+     byt := strtoint(s);
+     s := f.readGDBString;
+     case byt of
+     2:
+       begin
+         case drawing.DimStyleTable.AddItem(s,pointer(psimstyleprop)) of
+                      IsFounded:
+                                begin
+                                     if LoadMode=TLOLoad then
+                                     begin
+                                     end
+                                     else
+                                         psimstyleprop:=nil;
+                                end;
+                      IsCreated:
+                                begin
+                                     psimstyleprop^.init(s);
+                                end;
+                      IsError:
+                                begin
+                                end;
+         end;{case}
+       end;
+     3:
+       begin
+            //if psimstyleprop<>nil then
+            //                  psimstyleprop^.desk:=s;
+       end;
+     40:
+       begin
+            //if psimstyleprop<>nil then
+            //psimstyleprop^.len:=strtofloat(s);
+       end;
+     end;
+     end;
+end;
+end;
 
 procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
@@ -1129,7 +1176,6 @@ var
   clayer,cltype,ctstyle:GDBString;
 begin
   blockload:=false;
-  //nulisread:=false;
   {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF2000',lp_IncPos);{$ENDIF}
   readvariables(f,ctstyle,clayer,cltype,LoadMode);
   repeat
@@ -1152,43 +1198,47 @@ begin
         s := f.readGDBString;
 
         case s of
-        dxfName_CLASSES:
-                        gotodxf(f, 0, dxfName_ENDTAB);
-        dxfName_APPID:
-                      gotodxf(f, 0, dxfName_ENDTAB);
-        dxfName_BLOCK_RECORD:
-                     gotodxf(f, 0, dxfName_ENDTAB);
-        dxfName_DIMSTYLE:
-                gotodxf(f, 0, dxfName_ENDTAB);
-        dxfName_Layer:
-                begin
-                  {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer table',lp_IncPos);{$ENDIF}
-                  ReadLayers(s,clayer,f,exitGDBString,owner,LoadMode,drawing);
-                  {$IFDEF TOTALYLOG}programlog.logoutstr('end; {layer table}',lp_DecPos);{$ENDIF}
-                end;
-        dxfName_LType:
-                  begin
-                    {$IFDEF TOTALYLOG}programlog.logoutstr('Found line types table',lp_IncPos);{$ENDIF}
-                    ReadLTStyles(s,cltype,f,exitGDBString,owner,LoadMode,drawing);
-                    {$IFDEF TOTALYLOG}programlog.logoutstr('end; (line types table)',lp_DecPos);{$ENDIF}
-                  end;
-        dxfName_Style:
-                    begin
-                      {$IFDEF TOTALYLOG}programlog.logoutstr('Found style table',lp_IncPos);{$ENDIF}
-                      ReadTextstyles(s,ctstyle,f,exitGDBString,owner,LoadMode,drawing);
-                      {$IFDEF TOTALYLOG}programlog.logoutstr('end; {style table}',lp_DecPos);{$ENDIF}
-                    end;
-        'UCS':
-              gotodxf(f, 0, dxfName_ENDTAB);
-        'VIEW':
-              gotodxf(f, 0, dxfName_ENDTAB);
-        'VPORT':
-                          begin
-                          {$IFDEF TOTALYLOG}programlog.logoutstr('Found vports table',lp_IncPos);{$ENDIF}
-                          ReadVport(s,f,exitGDBString,owner,LoadMode,drawing);
-                          {$IFDEF TOTALYLOG}programlog.logoutstr('end; {vports table}',lp_DecPos);{$ENDIF}
-                          end;
-                       end;{case}
+                    dxfName_CLASSES:
+                                    gotodxf(f, 0, dxfName_ENDTAB);//scip this table
+                      dxfName_APPID:
+                                    gotodxf(f, 0, dxfName_ENDTAB);//scip this table
+               dxfName_BLOCK_RECORD:
+                                    gotodxf(f, 0, dxfName_ENDTAB);//scip this table
+                   dxfName_DIMSTYLE:
+                                    begin
+                                      {$IFDEF TOTALYLOG}programlog.logoutstr('Found dimstyles table',lp_IncPos);{$ENDIF}
+                                      ReadDimStyles(s,f,exitGDBString,owner,LoadMode,drawing);
+                                      {$IFDEF TOTALYLOG}programlog.logoutstr('end; {dimstyles table}',lp_DecPos);{$ENDIF}
+                                    end;
+                      dxfName_Layer:
+                                    begin
+                                      {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer table',lp_IncPos);{$ENDIF}
+                                      ReadLayers(s,clayer,f,exitGDBString,owner,LoadMode,drawing);
+                                      {$IFDEF TOTALYLOG}programlog.logoutstr('end; {layer table}',lp_DecPos);{$ENDIF}
+                                    end;
+                      dxfName_LType:
+                                    begin
+                                      {$IFDEF TOTALYLOG}programlog.logoutstr('Found line types table',lp_IncPos);{$ENDIF}
+                                      ReadLTStyles(s,cltype,f,exitGDBString,owner,LoadMode,drawing);
+                                      {$IFDEF TOTALYLOG}programlog.logoutstr('end; (line types table)',lp_DecPos);{$ENDIF}
+                                    end;
+                      dxfName_Style:
+                                    begin
+                                      {$IFDEF TOTALYLOG}programlog.logoutstr('Found style table',lp_IncPos);{$ENDIF}
+                                      ReadTextstyles(s,ctstyle,f,exitGDBString,owner,LoadMode,drawing);
+                                      {$IFDEF TOTALYLOG}programlog.logoutstr('end; {style table}',lp_DecPos);{$ENDIF}
+                                    end;
+                              'UCS':
+                                    gotodxf(f, 0, dxfName_ENDTAB);//scip this table
+                             'VIEW':
+                                    gotodxf(f, 0, dxfName_ENDTAB);//scip this table
+                            'VPORT':
+                                    begin
+                                    {$IFDEF TOTALYLOG}programlog.logoutstr('Found vports table',lp_IncPos);{$ENDIF}
+                                    ReadVport(s,f,exitGDBString,owner,LoadMode,drawing);
+                                    {$IFDEF TOTALYLOG}programlog.logoutstr('end; {vports table}',lp_DecPos);{$ENDIF}
+                                    end;
+        end;{case}
         s := f.readGDBString;
         s := f.readGDBString;
       end;

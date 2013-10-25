@@ -616,6 +616,11 @@ else if Operands='TABLESTYLES' then
                                  If assigned(SetGDBObjInspProc)then
                                  SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBTableStyleArray'),@gdb.GetCurrentDWG.TableStyleTable,gdb.GetCurrentDWG);
                             end
+else if Operands='DIMSTYLES' then
+                            begin
+                                 If assigned(SetGDBObjInspProc)then
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('GDBDimStyleArray'),@gdb.GetCurrentDWG.DimStyleTable,gdb.GetCurrentDWG);
+                            end
                             ;
      If assigned(SetCurrentObjDefaultProc)then
                                               SetCurrentObjDefaultProc

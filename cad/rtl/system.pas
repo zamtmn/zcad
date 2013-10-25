@@ -865,6 +865,7 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     function createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
                     function GetCurrentLType:PGDBLtypeProp;
                     function GetSystemLT:PGDBLtypeProp;
+                    procedure format;virtual;abstract;
                     {function addlayer(name:GDBString;color:GDBInteger;lw:GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString;lm:TLoadOpt):PGDBLayerProp;virtual;abstract;
                     function GetSystemLayer:PGDBLayerProp;
                     function GetCurrentLayer:PGDBLayerProp;
@@ -872,10 +873,26 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
                     function createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;}
               end;
 //Generate on E:\zcad\CAD_SOURCE\u\ugdbdimstylearray.pas
-  GDBDimStyle = packed object(GDBNamedObject)
-  end;
+TGDBDimLinesProp=packed record
+                 end;
+TGDBDimArrowsProp=packed record
+                 end;
+TGDBDimTextProp=packed record
+                 end;
+TGDBDimPlacingProp=packed record
+                 end;
+TGDBDimUnitsProp=packed record
+                 end;
+PGDBDimStyle=^GDBDimStyle;
+GDBDimStyle = packed object(GDBNamedObject)
+                      Lines:TGDBDimLinesProp;
+                      Arrows:TGDBDimArrowsProp;
+                      Text:TGDBDimTextProp;
+                      Placing:TGDBDimPlacingProp;
+                      Units:TGDBDimUnitsProp;
+             end;
 PGDBDimStyleArray=^GDBDimStyleArray;
-GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBTextStyle*)
+GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBDimStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
               end;

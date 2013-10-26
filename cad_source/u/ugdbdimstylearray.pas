@@ -52,6 +52,7 @@ GDBDimStyle = packed object(GDBNamedObject)
                       Placing:TGDBDimPlacingProp;
                       Units:TGDBDimUnitsProp;
                       procedure SetDefaultValues;virtual;
+                      procedure SetValueFromDxf(group:GDBInteger;value:GDBString);virtual;
              end;
 PGDBDimStyleArray=^GDBDimStyleArray;
 GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBDimStyle*)
@@ -61,6 +62,70 @@ GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*Op
 {EXPORT-}
 implementation
 uses {UGDBDescriptor,}{io,}log;
+procedure GDBDimStyle.SetValueFromDxf(group:GDBInteger;value:GDBString);
+begin
+  case group of
+  2:
+    begin
+      self.SetName(value);
+    end;
+  45:
+    begin
+         Units.DIMRND:=strtofloat(value);
+    end;
+  73:
+    begin
+                                   if strtofloat(value)<>0 then
+                                                           Text.DIMTIH:=true
+                                                       else
+                                                           Text.DIMTIH:=false;
+    end;
+  74:
+    begin
+                                   if strtofloat(value)<>0 then
+                                                           Text.DIMTOH:=true
+                                                       else
+                                                           Text.DIMTOH:=false;
+    end;
+  144:
+    begin
+                           Units.DIMLFAC:=strtofloat(value);
+    end;
+  140:
+    begin
+                           Text.DIMTXT:=strtofloat(value);
+    end;
+  271:
+    begin
+Units.DIMDEC:=strtoint(value);
+    end;
+  277:
+  begin
+       begin
+            group:=strtoint(value);
+            case group of
+                       1:Units.DIMLUNIT:=DUScientific;
+                       2:Units.DIMLUNIT:=DUDecimal;
+                       3:Units.DIMLUNIT:=DUEngineering;
+                       4:Units.DIMLUNIT:=DUArchitectural;
+                       5:Units.DIMLUNIT:=DUFractional;
+                       6:Units.DIMLUNIT:=DUSystem;
+            end;
+       end;
+  end;
+  278:
+  begin
+       begin
+            Units.DIMDSEP:=DDSDot;
+            group:=strtoint(value);
+            case group of
+                       44:Units.DIMDSEP:=DDSComma;
+                       32:Units.DIMDSEP:=DDSSpace;
+            end;
+       end;
+  end;
+  end;
+end;
 procedure GDBDimStyle.SetDefaultValues;
 begin
      Units.DIMLFAC:=1;

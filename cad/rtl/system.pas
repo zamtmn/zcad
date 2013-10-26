@@ -883,6 +883,8 @@ TGDBDimArrowsProp=packed record
                   end;
 TGDBDimTextProp=packed record
                        DIMTXT:GDBDouble; //Text size
+                       DIMTIH:GDBBoolean;//Text inside horizontal if nonzero
+                       DIMTOH:GDBBoolean;//Text outside horizontal if nonzero
                  end;
 TGDBDimPlacingProp=packed record
                  end;
@@ -901,6 +903,7 @@ GDBDimStyle = packed object(GDBNamedObject)
                       Placing:TGDBDimPlacingProp;
                       Units:TGDBDimUnitsProp;
                       procedure SetDefaultValues;virtual;abstract;
+                      procedure SetValueFromDxf(group:GDBInteger;value:GDBString);virtual;abstract;
              end;
 PGDBDimStyleArray=^GDBDimStyleArray;
 GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBDimStyle*)

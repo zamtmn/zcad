@@ -68,6 +68,8 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
 {EXPORT-}
 implementation
 uses UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve;
+var
+  WorkingFormatSettings:TFormatSettings;
 function GDBObjAlignedDimension.GetObjTypeName;
 begin
      result:=ObjN_ObjAlignedDimension;
@@ -302,12 +304,12 @@ begin
              l:=round(n)*PDimStyle.Units.DIMRND;
         end;
      case PDimStyle.Units.DIMDSEP of
-                                      DDSDot:DecimalSeparator:='.';
-                                    DDSComma:DecimalSeparator:=',';
-                                    DDSSpace:DecimalSeparator:=' ';
+                                      DDSDot:WorkingFormatSettings.DecimalSeparator:='.';
+                                    DDSComma:WorkingFormatSettings.DecimalSeparator:=',';
+                                    DDSSpace:WorkingFormatSettings.DecimalSeparator:=' ';
      end;
      l:=roundto(l,-PDimStyle.Units.DIMDEC);
-     result:=floattostr(l);
+     result:=floattostr(l,WorkingFormatSettings);
 end;
 procedure GDBObjAlignedDimension.FormatEntity(const drawing:TDrawingDef);
 var
@@ -367,4 +369,5 @@ begin
 end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('gdbaligneddimension.initialization');{$ENDIF}
+  WorkingFormatSettings:=DefaultFormatSettings;
 end.

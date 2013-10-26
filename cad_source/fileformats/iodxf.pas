@@ -1129,91 +1129,33 @@ begin
      s := f.readGDBString;
      byt := strtoint(s);
      s := f.readGDBString;
-     case byt of
-     2:
-       begin
-         case drawing.DimStyleTable.AddItem(s,pointer(psimstyleprop)) of
-                      IsFounded:
-                                begin
-                                     if LoadMode=TLOLoad then
-                                     begin
-                                     end
-                                     else
-                                         psimstyleprop:=nil;
-                                end;
-                      IsCreated:
-                                begin
-                                     psimstyleprop^.init(s);
-                                end;
-                      IsError:
-                                begin
-                                end;
-         end;{case}
-       end;
-     45:
-       begin
-            if psimstyleprop<>nil then
-                              psimstyleprop^.Units.DIMRND:=strtofloat(s);
-       end;
-     73:
-       begin
-            if psimstyleprop<>nil then
-                                      if strtofloat(s)<>0 then
-                                                              psimstyleprop^.Text.DIMTIH:=true
-                                                          else
-                                                              psimstyleprop^.Text.DIMTIH:=false;
-       end;
-     74:
-       begin
-            if psimstyleprop<>nil then
-                                      if strtofloat(s)<>0 then
-                                                              psimstyleprop^.Text.DIMTOH:=true
-                                                          else
-                                                              psimstyleprop^.Text.DIMTOH:=false;
-       end;
-     144:
-       begin
-            if psimstyleprop<>nil then
-                              psimstyleprop^.Units.DIMLFAC:=strtofloat(s);
-       end;
-     140:
-       begin
-            if psimstyleprop<>nil then
-                              psimstyleprop^.Text.DIMTXT:=strtofloat(s);
-       end;
-     271:
-       begin
-            if psimstyleprop<>nil then
-                              psimstyleprop^.Units.DIMDEC:=strtoint(s);
-       end;
-     277:
+
+
+     if psimstyleprop=nil then
      begin
-          if psimstyleprop<>nil then
-          begin
-               byt:=strtoint(s);
-               case byt of
-                          1:psimstyleprop^.Units.DIMLUNIT:=DUScientific;
-                          2:psimstyleprop^.Units.DIMLUNIT:=DUDecimal;
-                          3:psimstyleprop^.Units.DIMLUNIT:=DUEngineering;
-                          4:psimstyleprop^.Units.DIMLUNIT:=DUArchitectural;
-                          5:psimstyleprop^.Units.DIMLUNIT:=DUFractional;
-                          6:psimstyleprop^.Units.DIMLUNIT:=DUSystem;
-               end;
-          end;
-     end;
-     278:
-     begin
-          if psimstyleprop<>nil then
-          begin
-               psimstyleprop^.Units.DIMDSEP:=DDSDot;
-               byt:=strtoint(s);
-               case byt of
-                          44:psimstyleprop^.Units.DIMDSEP:=DDSComma;
-                          32:psimstyleprop^.Units.DIMDSEP:=DDSSpace;
-               end;
-          end;
-     end;
-     end;
+           if byt=2 then
+                         begin
+                           case drawing.DimStyleTable.AddItem(s,pointer(psimstyleprop)) of
+                                        IsFounded:
+                                                  begin
+                                                       if LoadMode=TLOLoad then
+                                                       begin
+                                                       end
+                                                       else
+                                                           psimstyleprop:=nil;
+                                                  end;
+                                        IsCreated:
+                                                  begin
+                                                       psimstyleprop^.init(s);
+                                                  end;
+                                        IsError:
+                                                  begin
+                                                  end;
+                           end;{case}
+                         end;
+     end
+     else
+         psimstyleprop^.SetValueFromDxf(byt,s);
      end;
 end;
 end;

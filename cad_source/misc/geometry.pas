@@ -175,6 +175,9 @@ function QuaternionToMatrix(quat : GDBQuaternion) :  DMatrix4D;
 
 function GetArcParamFrom3Point2D(Const PointData:tarcrtmodify;out ad:TArcData):GDBBoolean;
 
+function isNotReadableAngle(Angle:GDBDouble):GDBBoolean;
+function CorrectAngleIfNotReadable(Angle:GDBDouble):GDBDouble;
+
 var WorldMatrix{,CurrentCS}:DMatrix4D;
     wx:PGDBVertex;
     wy:PGDBVertex;
@@ -184,6 +187,21 @@ type
     TLineClipArray=array[0..5]of gdbdouble;
 implementation
 uses shared,log;
+function isNotReadableAngle(Angle:GDBDouble):GDBBoolean;
+begin
+     if (Angle>(2*pi/4+bigeps))and(Angle<(pi+2*pi/4-bigeps)) then
+                                                                 result:=true
+                                                             else
+                                                                 result:=false;
+end;
+function CorrectAngleIfNotReadable(Angle:GDBDouble):GDBDouble;
+begin
+     if isNotReadableAngle(Angle) then
+                                      result:=angle-pi
+                                  else
+                                      result:=angle;
+end;
+
 function GetXfFromZ(oz:GDBVertex):GDBVertex;
 begin
      if (abs (oz.x) < 1/64) and (abs (oz.y) < 1/64) then

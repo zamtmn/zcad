@@ -246,7 +246,7 @@ begin
 
     if sysvar.DWG.DWG_RotateTextInLT^ then
     if (param.AD<>TACAbs) then
-    if (LineAngle>(2*pi/4+bigeps))and(LineAngle<(pi+2*pi/4-bigeps)) then
+    if isNotReadableAngle(LineAngle) then
     begin
     madd2:=geometry.CreateTranslationMatrix(createvertex(dx*Scale,dy*Scale,0));
     madd3:=geometry.CreateTranslationMatrix(createvertex(-dx*Scale,-dy*Scale,0));

@@ -876,7 +876,13 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
 //Generate on E:\zcad\CAD_SOURCE\u\ugdbdimstylearray.pas
 TDimUnit=(DUScientific,DUDecimal,DUEngineering,DUArchitectural,DUFractional,DUSystem);
 TDimDSep=(DDSDot,DDSComma,DDSSpace);
+TDimTextVertPosition=(DTVPCenters,DTVPAbove,DTVPOutside,DTVPJIS,DTVPBellov);
 TGDBDimLinesProp=packed record
+                       //выносные линии
+                       DIMEXE:GDBDouble;//Extension line extension
+                       DIMEXO:GDBDouble;//Extension line offset
+                       //размерные линии
+                       DIMDLE:GDBDouble;//Dimension line extension
                  end;
 TGDBDimArrowsProp=packed record
                        DIMASZ:GDBDouble; //Dimensioning arrow size
@@ -885,6 +891,8 @@ TGDBDimTextProp=packed record
                        DIMTXT:GDBDouble; //Text size
                        DIMTIH:GDBBoolean;//Text inside horizontal if nonzero
                        DIMTOH:GDBBoolean;//Text outside horizontal if nonzero
+                       DIMTAD:TDimTextVertPosition;//Text above dimension line if nonzero
+                       DIMGAP:GDBDouble; //Dimension line gap //Смещение текста
                  end;
 TGDBDimPlacingProp=packed record
                  end;
@@ -1972,8 +1980,14 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       DimData:TDXFDimData;
                       PDimStyle:PGDBDimStyle;
                       PProjPoint:PTDXFDimData2D;
+                      TextTParam,TextAngle:GDBDouble;
+                      TextInside:GDBBoolean;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
+                      procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef);
+                      procedure DrawDimensionLine(p1,p2:GDBVertex;const drawing:TDrawingDef);
+                      function DrawDimensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef):pgdbobjline;
+                      procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
                       procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
                       procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;abstract;
                       function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;

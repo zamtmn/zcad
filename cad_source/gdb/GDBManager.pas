@@ -203,6 +203,7 @@ begin
   //pb^.ObjArray.init(1000);
   pb^.CalcObjMatrix;
   pb.setrot(angle);
+  pb.rotate:=angle;
   pb^.BuildGeometry(gdb.GetCurrentDWG^);
   pb^.BuildVarGeometry(gdb.GetCurrentDWG^);
   pb^.formatEntity(gdb.GetCurrentDWG^);

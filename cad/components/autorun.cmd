@@ -3,6 +3,7 @@
 ;-------------------
 ;Загрузка УГО блоков
 ;-------------------
+MergeBlocks(_sys.dxf)
 MergeBlocks(_connector.dxf)
 MergeBlocks(_el.dxf)
 MergeBlocks(_nok.dxf)

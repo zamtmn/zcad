@@ -19,10 +19,14 @@ unit gdbaligneddimension;
 {$INCLUDE def.inc}
 
 interface
-uses ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
+uses GDBPoint,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
 type
+TDimBlockParam=record
+                     name:GDBString;
+                     width:GDBDouble;
+               end;
 {EXPORT+}
 PTDXFDimData2D=^TDXFDimData2D;
 TDXFDimData2D=packed record
@@ -49,8 +53,15 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       DimData:TDXFDimData;
                       PDimStyle:PGDBDimStyle;
                       PProjPoint:PTDXFDimData2D;
+                      TextTParam,TextAngle,DimAngle:GDBDouble;
+                      TextInside:GDBBoolean;
+                      TextOffset:GDBVertex;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
+                      procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef);
+                      procedure DrawDimensionLine(p1,p2:GDBVertex;const drawing:TDrawingDef);
+                      function DrawDimensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef):pgdbobjline;
+                      procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
                       procedure FormatEntity(const drawing:TDrawingDef);virtual;
                       procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
                       function Clone(own:GDBPointer):PGDBObjEntity;virtual;
@@ -64,10 +75,12 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       function GetObjTypeName:GDBString;virtual;
 
                       function GetLinearDimStr(l:GDBDouble):GDBString;
+                      function GetTextOffset:GDBVertex;
+                      function GetDimBlockParam(nline:GDBInteger):TDimBlockParam;
                    end;
 {EXPORT-}
 implementation
-uses UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve;
+uses GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
 var
   WorkingFormatSettings:TFormatSettings;
 function GDBObjAlignedDimension.GetObjTypeName;
@@ -311,57 +324,155 @@ begin
      l:=roundto(l,-PDimStyle.Units.DIMDEC);
      result:=floattostr(l,WorkingFormatSettings);
 end;
+procedure GDBObjAlignedDimension.DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef);
+var
+   pl:pgdbobjline;
+   pp:pgdbobjpoint;
+begin
+  pp:=pointer(ConstObjArray.CreateInitObj(GDBpointID,@self));
+  pp.vp.Layer:=vp.Layer;
+  pp.vp.LineType:=vp.LineType;
+  pp.P_insertInOCS:=p1;
+  pp.FormatEntity(drawing);
+
+  pl:=pointer(ConstObjArray.CreateInitObj(GDBlineID,@self));
+  pl.vp.Layer:=vp.Layer;
+  pl.vp.LineType:=vp.LineType;
+  pl.CoordInOCS.lBegin:=Vertexmorphabs2(p1,p2,PDimStyle.Lines.DIMEXO);
+  pl.CoordInOCS.lEnd:=Vertexmorphabs(p1,p2,PDimStyle.Lines.DIMEXE);
+  pl.FormatEntity(drawing);
+end;
+function GDBObjAlignedDimension.DrawDimensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef):pgdbobjline;
+begin
+  result:=pointer(ConstObjArray.CreateInitObj(GDBlineID,@self));
+  result.vp.Layer:=vp.Layer;
+  result.vp.LineType:=vp.LineType;
+  result.CoordInOCS.lBegin:=p1;
+  result.CoordInOCS.lEnd:=p2;
+end;
+
+procedure GDBObjAlignedDimension.DrawDimensionLine(p1,p2:GDBVertex;const drawing:TDrawingDef);
+var
+   pl:pgdbobjline;
+   tbp:TDimBlockParam;
+   pv:pGDBObjBlockInsert;
+begin
+  tbp:=GetDimBlockParam(0);
+  gdb.AddBlockFromDBIfNeed(@drawing,tbp.name);
+  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p1,PDimStyle.Arrows.DIMASZ,DimAngle*180/pi-180,@tbp.name[1]);
+  pv^.formatentity(gdb.GetCurrentDWG^);
+  tbp:=GetDimBlockParam(1);
+  gdb.AddBlockFromDBIfNeed(@drawing,tbp.name);
+  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p2,PDimStyle.Arrows.DIMASZ,DimAngle*180/pi,@tbp.name[1]);
+  pv^.formatentity(gdb.GetCurrentDWG^);
+  pl:=DrawDimensionLineLinePart(Vertexmorphabs(p1,p2,PDimStyle.Lines.DIMDLE),Vertexmorphabs(p2,p1,PDimStyle.Lines.DIMDLE),drawing);
+  pl.FormatEntity(drawing);
+
+  if not TextInside then
+     begin
+          if TextTParam>0.5 then
+                                begin
+                                     pl:=DrawDimensionLineLinePart(p2,DimData.P11InOCS,drawing);
+                                     pl.FormatEntity(drawing);
+                                end
+                            else
+                                begin
+                                  pl:=DrawDimensionLineLinePart(p1,DimData.P11InOCS,drawing);
+                                  pl.FormatEntity(drawing);
+                                end;
+     end;
+end;
+function GDBObjAlignedDimension.GetDimBlockParam(nline:GDBInteger):TDimBlockParam;
+begin
+     result.name:='_ArchTick';
+     result.width:=0;
+end;
+
+function GDBObjAlignedDimension.GetTextOffset:GDBVertex;
+var
+   l:GDBDouble;
+   dimdir:gdbvertex;
+begin
+     dimdir:=geometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
+     dimdir:=normalizevertex(dimdir);
+     if (textangle<>0)or(abs(dimdir.x)<eps)then
+     begin
+     l:=PDimStyle.Text.DIMGAP+PDimStyle.Text.DIMTXT/2;
+     case PDimStyle.Text.DIMTAD of
+                                  DTVPCenters:dimdir:=nulvertex;
+                                  DTVPAbove:begin
+                                                 if dimdir.y<-eps then
+                                                                      dimdir:=geometry.VertexMulOnSc(dimdir,-1);
+                                            end;
+                                  DTVPJIS:dimdir:=nulvertex;
+                                  DTVPBellov:begin
+                                                 if dimdir.y>eps then
+                                                                      dimdir:=geometry.VertexMulOnSc(dimdir,-1);
+                                            end;
+     end;
+     result:=geometry.VertexMulOnSc(dimdir,l);
+     end
+        else
+            result:=nulvertex;
+end;
+
+procedure GDBObjAlignedDimension.DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
+var
+  ptext:PGDBObjMText;
+begin
+  DimAngle:=vertexangle(CreateVertex2D(DimData.P13InWCS.x,DimData.P13InWCS.y),CreateVertex2D(DimData.P14InWCS.x,DimData.P14InWCS.y));
+  TextAngle:=CorrectAngleIfNotReadable(DimAngle);
+
+  TextTParam:=GettFromLinePoint(DimData.P11InOCS,DimData.P13InWCS,DimData.P14InWCS);
+  if (TextTParam>0)and(TextTParam<1) then
+                                         begin
+                                              TextInside:=true;
+                                         end
+                                            else
+                                                TextInside:=False;
+  if TextInside then
+                    begin
+                         if PDimStyle.Text.DIMTIH then
+                                                      TextAngle:=0;
+                    end
+                else
+                    begin
+                         if PDimStyle.Text.DIMTOH then
+                                                      TextAngle:=0;
+                    end;
+
+
+  ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
+  ptext.vp.Layer:=vp.Layer;
+  ptext.Template:=GetLinearDimStr(Vertexlength(DimData.P13InWCS,DimData.P14InWCS));
+  TextOffset:=GetTextOffset;
+  ptext.Local.P_insert:=vertexadd(p,TextOffset);
+  ptext.textprop.justify:=jsmc;
+
+  ptext.textprop.angle:=TextAngle;
+  ptext.Local.basis.ox.x:=cos(TextAngle);
+  ptext.Local.basis.ox.y:=sin(TextAngle);
+  ptext.TXTStyleIndex:=drawing.GetTextStyleTable^.getelement(0);
+  ptext.textprop.size:=PDimStyle.Text.DIMTXT;
+  ptext.FormatEntity(drawing);
+end;
+
 procedure GDBObjAlignedDimension.FormatEntity(const drawing:TDrawingDef);
 var
-  pl:pgdbobjline;
-  ptext:PGDBObjMText;
   tv:GDBVertex;
-  l,angle:GDBDouble;
 begin
           ConstObjArray.cleareraseobj;
 
-          pl:=pointer(ConstObjArray.CreateInitObj(GDBlineID,@self));
-          pl.vp.Layer:=vp.Layer;
-          pl.vp.LineType:=vp.LineType;
-          pl.CoordInOCS.lBegin:=DimData.P14InWCS;
-          pl.CoordInOCS.lEnd:=DimData.P10InWCS;
-          pl.FormatEntity(drawing);
+          DrawDimensionText(DimData.P11InOCS,drawing);
+
+          DrawExtensionLine(DimData.P14InWCS,DimData.P10InWCS,0,drawing);
 
           tv:=geometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
           tv:=geometry.VertexAdd(DimData.P13InWCS,tv);
+          DrawExtensionLine(DimData.P13InWCS,tv,1,drawing);
 
-          pl:=pointer(ConstObjArray.CreateInitObj(GDBlineID,@self));
-          pl.vp.Layer:=vp.Layer;
-          pl.vp.LineType:=vp.LineType;
-          pl.CoordInOCS.lBegin:=DimData.P13InWCS;
-          pl.CoordInOCS.lEnd:=tv;
-          pl.FormatEntity(drawing);
-
-          pl:=pointer(ConstObjArray.CreateInitObj(GDBlineID,@self));
-          pl.vp.Layer:=vp.Layer;
-          pl.vp.LineType:=vp.LineType;
-          pl.CoordInOCS.lBegin:=DimData.P10InWCS;
-          pl.CoordInOCS.lEnd:=tv;
-          pl.FormatEntity(drawing);
-
-
-          ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
-          ptext.vp.Layer:=vp.Layer;
-          ptext.Template:=GetLinearDimStr(Vertexlength(DimData.P13InWCS,DimData.P14InWCS));
-          ptext.Local.P_insert:=DimData.P11InOCS;
-          ptext.textprop.justify:=jsmc;
-          angle:=vertexangle(CreateVertex2D(DimData.P13InWCS.x,DimData.P13InWCS.y),CreateVertex2D(DimData.P14InWCS.x,DimData.P14InWCS.y));
-          l:=GettFromLinePoint(DimData.P11InOCS,DimData.P13InWCS,DimData.P14InWCS);
-          if (l>0)and(l<1) then
-             begin
-          ptext.textprop.angle:=angle;
-          ptext.Local.basis.ox.x:=cos(angle);
-          ptext.Local.basis.ox.y:=sin(angle);
-             end;
-          ptext.TXTStyleIndex:=drawing.GetTextStyleTable^.getelement(0);
-          ptext.textprop.size:=PDimStyle.Text.DIMTXT;
-          ptext.FormatEntity(drawing);;
-  inherited;
+          DrawDimensionLine(tv,DimData.P10InWCS,drawing);
+   inherited;
 end;
 {procedure GDBObjAlignedDimension.DrawGeometry;
 begin

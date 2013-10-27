@@ -25,7 +25,13 @@ type
 {EXPORT+}
 TDimUnit=(DUScientific,DUDecimal,DUEngineering,DUArchitectural,DUFractional,DUSystem);
 TDimDSep=(DDSDot,DDSComma,DDSSpace);
+TDimTextVertPosition=(DTVPCenters,DTVPAbove,DTVPOutside,DTVPJIS,DTVPBellov);
 TGDBDimLinesProp=packed record
+                       //выносные линии
+                       DIMEXE:GDBDouble;//Extension line extension
+                       DIMEXO:GDBDouble;//Extension line offset
+                       //размерные линии
+                       DIMDLE:GDBDouble;//Dimension line extension
                  end;
 TGDBDimArrowsProp=packed record
                        DIMASZ:GDBDouble; //Dimensioning arrow size
@@ -34,6 +40,8 @@ TGDBDimTextProp=packed record
                        DIMTXT:GDBDouble; //Text size
                        DIMTIH:GDBBoolean;//Text inside horizontal if nonzero
                        DIMTOH:GDBBoolean;//Text outside horizontal if nonzero
+                       DIMTAD:TDimTextVertPosition;//Text above dimension line if nonzero
+                       DIMGAP:GDBDouble; //Dimension line gap //Смещение текста
                  end;
 TGDBDimPlacingProp=packed record
                  end;
@@ -69,9 +77,25 @@ begin
     begin
       self.SetName(value);
     end;
+  41:
+    begin
+         Arrows.DIMASZ:=strtofloat(value);
+    end;
+  42:
+    begin
+         Lines.DIMEXO:=strtofloat(value);
+    end;
+  44:
+    begin
+         Lines.DIMEXE:=strtofloat(value);
+    end;
   45:
     begin
          Units.DIMRND:=strtofloat(value);
+    end;
+  46:
+    begin
+         Lines.DIMDLE:=strtofloat(value);
     end;
   73:
     begin
@@ -87,6 +111,19 @@ begin
                                                        else
                                                            Text.DIMTOH:=false;
     end;
+  77:
+  begin
+       begin
+            group:=strtoint(value);
+            case group of
+                       0:Text.DIMTAD:=DTVPCenters;
+                       1:Text.DIMTAD:=DTVPAbove;
+                       2:Text.DIMTAD:=DTVPOutside;
+                       3:Text.DIMTAD:=DTVPJIS;
+                       4:Text.DIMTAD:=DTVPBellov;
+            end;
+       end;
+  end;
   144:
     begin
                            Units.DIMLFAC:=strtofloat(value);
@@ -94,6 +131,10 @@ begin
   140:
     begin
                            Text.DIMTXT:=strtofloat(value);
+    end;
+  167:
+    begin
+         Text.DIMGAP:=strtofloat(value);
     end;
   271:
     begin
@@ -128,6 +169,9 @@ Units.DIMDEC:=strtoint(value);
 end;
 procedure GDBDimStyle.SetDefaultValues;
 begin
+     Lines.DIMEXE:=0.18;
+     lines.DIMEXO:=0.0625;
+     Lines.DIMDLE:=0;
      Units.DIMLFAC:=1;
      Units.DIMLUNIT:=DUDecimal;
      Units.DIMDEC:=4;
@@ -137,6 +181,8 @@ begin
      text.DIMTXT:=0.18;
      text.DIMTIH:=true;
      text.DIMTOH:=true;
+     text.DIMTAD:=DTVPAbove;
+     text.DIMGAP:=0.625;
 end;
 constructor GDBDimStyleArray.initnul;
 begin

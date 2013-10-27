@@ -63,6 +63,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetPcamera:PGDBObjCamera;virtual;
                        function GetCurrentROOT:PGDBObjGenericSubEntry;virtual;
                        function GetCurrentRootSimple:GDBPointer;virtual;
+                       function GetCurrentRootObjArraySimple:GDBPointer;virtual;
                        function GetBlockDefArraySimple:GDBPointer;virtual;
                        function GetConstructObjRoot:PGDBObjRoot;virtual;
                        function GetSelObjArray:PGDBSelectedObjArray;virtual;
@@ -411,6 +412,11 @@ function TSimpleDrawing.GetCurrentRootSimple:GDBPointer;
 begin
      result:=self.pObjRoot;
 end;
+function TSimpleDrawing.GetCurrentRootObjArraySimple:GDBPointer;
+begin
+     result:=@pObjRoot.ObjArray;
+end;
+
 function TSimpleDrawing.GetBlockDefArraySimple:GDBPointer;
 begin
      result:=@self.BlockDefArray;

@@ -31,6 +31,7 @@ TDrawingDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
                        function GetDWGUnits:PTUnitManager;virtual;abstract;
                        procedure AddBlockFromDBIfNeed(name:GDBString);virtual;abstract;
                        function GetCurrentRootSimple:GDBPointer;virtual;abstract;
+                       function GetCurrentRootObjArraySimple:GDBPointer;virtual;abstract;
                        function GetBlockDefArraySimple:GDBPointer;virtual;abstract;
                        procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
                  end;

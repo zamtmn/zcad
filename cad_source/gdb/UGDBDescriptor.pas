@@ -20,7 +20,7 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,ugdbabstractdrawing,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
+UGDBDrawingdef,WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,ugdbabstractdrawing,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
 UGDBNumerator, gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,sysinfo,ugdbsimpledrawing,
@@ -91,7 +91,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
 
                     procedure CopyBlock(_from,_to:PTSimpleDrawing;_source:PGDBObjBlockdef);
                     function CopyEnt(_from,_to:PTSimpleDrawing;_source:PGDBObjEntity):PGDBObjEntity;
-                    procedure AddBlockFromDBIfNeed(_to:PTSimpleDrawing;name:GDBString);
+                    procedure AddBlockFromDBIfNeed(_to:{PTSimpleDrawing}PTDrawingDef;name:GDBString);
                     //procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;
                     function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
                     function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;
@@ -530,7 +530,7 @@ begin
     // gdbfreemem(pointer(currentdwg));
      ProjectUnits.done;
 end;
-procedure GDBDescriptor.AddBlockFromDBIfNeed(_to:PTSimpleDrawing;name:GDBString);
+procedure GDBDescriptor.AddBlockFromDBIfNeed(_to:{PTSimpleDrawing}PTDrawingDef;name:GDBString);
 var
    {_dest,}td:PGDBObjBlockdef;
    //tn:gdbstring;
@@ -538,11 +538,11 @@ var
    //pvisible,pvisible2:PGDBObjEntity;
   // pl:PGDBLayerProp;
 begin
-     td:=_to.BlockDefArray.getblockdef(name);
+     td:=PTSimpleDrawing(_to).BlockDefArray.getblockdef(name);
      if td=nil then
      begin
           td:=BlockBaseDWG.BlockDefArray.getblockdef(name);
-          CopyBlock(BlockBaseDWG,_to,td);
+          CopyBlock(BlockBaseDWG,PTSimpleDrawing(_to),td);
      end;
 end;
 function createtstylebyindex(_from,_to:PTSimpleDrawing;oldti:{TArrayIndex}PGDBTextStyle):PGDBTextStyle;

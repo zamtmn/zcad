@@ -877,6 +877,8 @@ GDBLtypeArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
 TDimUnit=(DUScientific,DUDecimal,DUEngineering,DUArchitectural,DUFractional,DUSystem);
 TDimDSep=(DDSDot,DDSComma,DDSSpace);
 TDimTextVertPosition=(DTVPCenters,DTVPAbove,DTVPOutside,DTVPJIS,DTVPBellov);
+TArrowStyle=(TSClosedFilled,TSClosedBlank,TSClosed,TSDot,TSArchitecturalTick,TSOblique,TSOpen,TSOriginIndicator,TSOriginIndicator2,
+            TSRightAngle,TSOpen30,TSDotSmall,TSDotBlank,TSDotSmallBlank,TSBox,TSBoxFilled,TSDatumTriangle,TSDatumtTriangleFilled,TSIntegral,TSUserDef);
 TGDBDimLinesProp=packed record
                        //выносные линии
                        DIMEXE:GDBDouble;//Extension line extension
@@ -886,6 +888,9 @@ TGDBDimLinesProp=packed record
                  end;
 TGDBDimArrowsProp=packed record
                        DIMASZ:GDBDouble; //Dimensioning arrow size
+                       DIMBLK1:TArrowStyle;//First arrow block name
+                       DIMBLK2:TArrowStyle;//First arrow block name
+                       DIMLDRBLK:TArrowStyle;//Arrow block name for leaders
                   end;
 TGDBDimTextProp=packed record
                        DIMTXT:GDBDouble; //Text size
@@ -1954,7 +1959,11 @@ GDBObjComplex={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                     procedure BuildGeometry(const drawing:TDrawingDef);virtual;abstract;
                     procedure FormatAfterDXFLoad(const drawing:TDrawingDef);virtual;abstract;
               end;
-//Generate on E:\zcad\CAD_SOURCE\gdb\gdbaligneddimension.pas
+//Generate on E:\zcad\CAD_SOURCE\gdb\gdbdimension.pas
+PGDBObjDimension=^GDBObjDimension;
+GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
+                   end;
+//Generate on E:\zcad\CAD_SOURCE\gdb\gdbgenericdimension.pas
 PTDXFDimData2D=^TDXFDimData2D;
 TDXFDimData2D=packed record
   P10:GDBVertex2D;
@@ -1975,13 +1984,23 @@ TDXFDimData=packed record
   P15InWCS:GDBVertex;
   P16InOCS:GDBVertex;
 end;
+PGDBObjGenericDimension=^GDBObjGenericDimension;
+GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
+                      DimData:TDXFDimData;
+                      PDimStyle:PGDBDimStyle;
+                      constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                      constructor initnul(owner:PGDBObjGenericWithSubordinated);
+                      procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;abstract;
+                   end;
+//Generate on E:\zcad\CAD_SOURCE\gdb\gdbaligneddimension.pas
 PGDBObjAlignedDimension=^GDBObjAlignedDimension;
-GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
+GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       DimData:TDXFDimData;
                       PDimStyle:PGDBDimStyle;
                       PProjPoint:PTDXFDimData2D;
-                      TextTParam,TextAngle:GDBDouble;
+                      TextTParam,TextAngle,DimAngle:GDBDouble;
                       TextInside:GDBBoolean;
+                      TextOffset:GDBVertex;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
                       procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef);
@@ -1989,7 +2008,6 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       function DrawDimensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef):pgdbobjline;
                       procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
                       procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
-                      procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;abstract;
                       function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                       //procedure DrawGeometry;
                       procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
@@ -1998,6 +2016,8 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;abstract;
                       function GetObjTypeName:GDBString;virtual;abstract;
                       function GetLinearDimStr(l:GDBDouble):GDBString;
+                      function GetTextOffset:GDBVertex;
+                      function GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
                    end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBBlockInsert.pas
 PGDBObjBlockInsert=^GDBObjBlockInsert;
@@ -3089,6 +3109,7 @@ TDrawingDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
                        function GetDWGUnits:PTUnitManager;virtual;abstract;
                        procedure AddBlockFromDBIfNeed(name:GDBString);virtual;abstract;
                        function GetCurrentRootSimple:GDBPointer;virtual;abstract;
+                       function GetCurrentRootObjArraySimple:GDBPointer;virtual;abstract;
                        function GetBlockDefArraySimple:GDBPointer;virtual;abstract;
                        procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
                  end;
@@ -3136,6 +3157,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetPcamera:PGDBObjCamera;virtual;abstract;
                        function GetCurrentROOT:PGDBObjGenericSubEntry;virtual;abstract;
                        function GetCurrentRootSimple:GDBPointer;virtual;abstract;
+                       function GetCurrentRootObjArraySimple:GDBPointer;virtual;abstract;
                        function GetBlockDefArraySimple:GDBPointer;virtual;abstract;
                        function GetConstructObjRoot:PGDBObjRoot;virtual;abstract;
                        function GetSelObjArray:PGDBSelectedObjArray;virtual;abstract;
@@ -3209,7 +3231,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     procedure eraseobj(ObjAddr:PGDBaseObject);virtual;abstract;
                     procedure CopyBlock(_from,_to:PTSimpleDrawing;_source:PGDBObjBlockdef);
                     function CopyEnt(_from,_to:PTSimpleDrawing;_source:PGDBObjEntity):PGDBObjEntity;
-                    procedure AddBlockFromDBIfNeed(_to:PTSimpleDrawing;name:GDBString);
+                    procedure AddBlockFromDBIfNeed(_to:{PTSimpleDrawing}PTDrawingDef;name:GDBString);
                     //procedure rtmodify(obj:PGDBObjEntity;md:GDBPointer;dist,wc:gdbvertex;save:GDBBoolean);virtual;abstract;
                     function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:GDBWord; InOwner:GDBBoolean):PGDBObjEntity;
                     function FindEntityByVar(objID:GDBWord;vname,vvalue:GDBString):PGDBObjEntity;

@@ -58,6 +58,8 @@ E:\zcad\CAD_SOURCE\gdb\GDBGenericSubEntry.pas
 E:\zcad\CAD_SOURCE\gdb\GDBBlockdef.pas
 E:\zcad\CAD_SOURCE\u\UGDBObjBlockdefArray.pas
 E:\zcad\CAD_SOURCE\gdb\GDBComplex.pas
+E:\zcad\CAD_SOURCE\gdb\gdbdimension.pas
+E:\zcad\CAD_SOURCE\gdb\gdbgenericdimension.pas
 E:\zcad\CAD_SOURCE\gdb\gdbaligneddimension.pas
 E:\zcad\CAD_SOURCE\gdb\GDBBlockInsert.pas
 E:\zcad\CAD_SOURCE\gdb\GDBDevice.pas

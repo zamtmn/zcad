@@ -19,37 +19,13 @@ unit gdbaligneddimension;
 {$INCLUDE def.inc}
 
 interface
-uses GDBPoint,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
+uses gdbgenericdimension,gdbdimension,GDBPoint,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
 type
-TDimBlockParam=record
-                     name:GDBString;
-                     width:GDBDouble;
-               end;
 {EXPORT+}
-PTDXFDimData2D=^TDXFDimData2D;
-TDXFDimData2D=packed record
-  P10:GDBVertex2D;
-  P11:GDBVertex2D;
-  P12:GDBVertex2D;
-  P13:GDBVertex2D;
-  P14:GDBVertex2D;
-  P15:GDBVertex2D;
-  P16:GDBVertex2D;
-end;
-PTDXFDimData=^TDXFDimData;
-TDXFDimData=packed record
-  P10InWCS:GDBVertex;
-  P11InOCS:GDBVertex;
-  P12InOCS:GDBVertex;
-  P13InWCS:GDBVertex;
-  P14InWCS:GDBVertex;
-  P15InWCS:GDBVertex;
-  P16InOCS:GDBVertex;
-end;
 PGDBObjAlignedDimension=^GDBObjAlignedDimension;
-GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
+GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       DimData:TDXFDimData;
                       PDimStyle:PGDBDimStyle;
                       PProjPoint:PTDXFDimData2D;
@@ -63,7 +39,6 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       function DrawDimensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef):pgdbobjline;
                       procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
                       procedure FormatEntity(const drawing:TDrawingDef);virtual;
-                      procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
                       function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                       //procedure DrawGeometry;
 
@@ -76,7 +51,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
 
                       function GetLinearDimStr(l:GDBDouble):GDBString;
                       function GetTextOffset:GDBVertex;
-                      function GetDimBlockParam(nline:GDBInteger):TDimBlockParam;
+                      function GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
                    end;
 {EXPORT-}
 implementation
@@ -261,34 +236,6 @@ begin
   result := tvo;
 end;
 
-procedure GDBObjAlignedDimension.LoadFromDXF;
-var
-  byt:GDBInteger;
-  style:GDBString;
-begin
-  byt:=readmystrtoint(f);
-  while byt <> 0 do
-  begin
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-       if not dxfvertexload(f,10,byt,DimData.P10InWCS) then
-          if not dxfvertexload(f,11,byt,DimData.P11InOCS) then
-             if not dxfvertexload(f,12,byt,DimData.P12InOCS) then
-                if not dxfvertexload(f,13,byt,DimData.P13InWCS) then
-                   if not dxfvertexload(f,14,byt,DimData.P14InWCS) then
-                      if not dxfvertexload(f,15,byt,DimData.P15InWCS) then
-                         if not dxfvertexload(f,16,byt,DimData.P16InOCS) then
-                            if dxfGDBStringload(f,3,byt,style)then
-                                                                  begin
-                                                                       PDimStyle:=drawing.GetDimStyleTable^.getAddres(Style);
-                                                                       if PDimStyle=nil then
-                                                                                            PDimStyle:=drawing.GetDimStyleTable^.getelement(0);
-                                                                  end
-                            else
-                                f.readGDBSTRING;
-    byt:=readmystrtoint(f);
-  end;
-end;
-
 constructor GDBObjAlignedDimension.initnul;
 begin
   inherited initnul;
@@ -353,39 +300,94 @@ end;
 
 procedure GDBObjAlignedDimension.DrawDimensionLine(p1,p2:GDBVertex;const drawing:TDrawingDef);
 var
+   l:GDBDouble;
    pl:pgdbobjline;
-   tbp:TDimBlockParam;
+   tbp0,tbp1:TDimArrowBlockParam;
    pv:pGDBObjBlockInsert;
+   p0inside,p1inside:GDBBoolean;
+   pp1,pp2:GDBVertex;
 begin
-  tbp:=GetDimBlockParam(0);
-  gdb.AddBlockFromDBIfNeed(@drawing,tbp.name);
-  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p1,PDimStyle.Arrows.DIMASZ,DimAngle*180/pi-180,@tbp.name[1]);
+  l:=geometry.Vertexlength(p1,p2);
+  tbp0:=GetDimBlockParam(0);
+  tbp1:=GetDimBlockParam(1);
+  tbp0.width:=tbp0.width*PDimStyle.Arrows.DIMASZ;
+  tbp1.width:=tbp1.width*PDimStyle.Arrows.DIMASZ;
+  gdb.AddBlockFromDBIfNeed(@drawing,tbp0.name);
+  gdb.AddBlockFromDBIfNeed(@drawing,tbp1.name);
+  if tbp0.width=0 then
+                      p0inside:=true
+                  else
+                      begin
+                           if l-PDimStyle.Arrows.DIMASZ/2>(tbp0.width+tbp1.width) then
+                                                            p0inside:=true
+                                                        else
+                                                            p0inside:=false;
+                      end;
+  if tbp1.width=0 then
+                      p1inside:=true
+                  else
+                      begin
+                           if l-PDimStyle.Arrows.DIMASZ/2>(tbp0.width+tbp1.width) then
+                                                            p1inside:=true
+                                                        else
+                                                            p1inside:=false;
+                      end;
+  if p0inside then
+                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p1,PDimStyle.Arrows.DIMASZ,DimAngle*180/pi-180,@tbp0.name[1])
+              else
+                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p1,PDimStyle.Arrows.DIMASZ,DimAngle*180/pi,@tbp0.name[1]);
   pv^.formatentity(gdb.GetCurrentDWG^);
-  tbp:=GetDimBlockParam(1);
-  gdb.AddBlockFromDBIfNeed(@drawing,tbp.name);
-  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p2,PDimStyle.Arrows.DIMASZ,DimAngle*180/pi,@tbp.name[1]);
+
+  if p1inside then
+                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p2,PDimStyle.Arrows.DIMASZ,DimAngle*180/pi,@tbp1.name[1])
+              else
+                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p2,PDimStyle.Arrows.DIMASZ,DimAngle*180/pi-180,@tbp1.name[1]);
   pv^.formatentity(gdb.GetCurrentDWG^);
-  pl:=DrawDimensionLineLinePart(Vertexmorphabs(p1,p2,PDimStyle.Lines.DIMDLE),Vertexmorphabs(p2,p1,PDimStyle.Lines.DIMDLE),drawing);
+
+
+  if tbp0.width=0 then
+                      pp1:=Vertexmorphabs(p2,p1,PDimStyle.Lines.DIMDLE)
+                  else
+                      begin
+                      if p0inside then
+                                      pp1:=Vertexmorphabs(p2,p1,-PDimStyle.Arrows.DIMASZ)
+                                  else
+                                      pp1:=p1;
+                      end;
+  if tbp1.width=0 then
+                      pp2:=Vertexmorphabs(p1,p2,PDimStyle.Lines.DIMDLE)
+                  else
+                      begin
+                      if p0inside then
+                                      pp2:=Vertexmorphabs(p1,p2,-PDimStyle.Arrows.DIMASZ)
+                                  else
+                                      pp2:=p2;
+                      end;
+
+  pl:=DrawDimensionLineLinePart(pp1,pp2,drawing);
   pl.FormatEntity(drawing);
 
   if not TextInside then
      begin
           if TextTParam>0.5 then
                                 begin
-                                     pl:=DrawDimensionLineLinePart(p2,DimData.P11InOCS,drawing);
+                                     pl:=DrawDimensionLineLinePart(pp2,DimData.P11InOCS,drawing);
                                      pl.FormatEntity(drawing);
                                 end
                             else
                                 begin
-                                  pl:=DrawDimensionLineLinePart(p1,DimData.P11InOCS,drawing);
+                                  pl:=DrawDimensionLineLinePart(pp1,DimData.P11InOCS,drawing);
                                   pl.FormatEntity(drawing);
                                 end;
      end;
 end;
-function GDBObjAlignedDimension.GetDimBlockParam(nline:GDBInteger):TDimBlockParam;
+function GDBObjAlignedDimension.GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
 begin
-     result.name:='_ArchTick';
-     result.width:=0;
+     case nline of
+                 0:result:=DimArrows[PDimStyle.Arrows.DIMBLK1];
+                 1:result:=DimArrows[PDimStyle.Arrows.DIMBLK2];
+                 else result:=DimArrows[PDimStyle.Arrows.DIMLDRBLK];
+     end;
 end;
 
 function GDBObjAlignedDimension.GetTextOffset:GDBVertex;

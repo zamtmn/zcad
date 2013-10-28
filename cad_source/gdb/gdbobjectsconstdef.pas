@@ -62,12 +62,15 @@ const {as_normal=0;
   GDBSolidID = 11;
   GDBEllipseID = 12;
   GDBSplineID = 13;
-  GDBAlignedDimensionID = 14;
+  GDBGenericDimensionID = 14;
+
   GDBNetID = 100;
   GDBDeviceID = 101;
   GDBCableID = 102;
   GDBTableID = 103;
   GDBElLeaderID = 104;
+
+  GDBAlignedDimensionID = 105;
 
   PROJParalel = 1;
   PROJPerspective = 2;

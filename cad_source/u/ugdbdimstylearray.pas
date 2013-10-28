@@ -26,6 +26,8 @@ type
 TDimUnit=(DUScientific,DUDecimal,DUEngineering,DUArchitectural,DUFractional,DUSystem);
 TDimDSep=(DDSDot,DDSComma,DDSSpace);
 TDimTextVertPosition=(DTVPCenters,DTVPAbove,DTVPOutside,DTVPJIS,DTVPBellov);
+TArrowStyle=(TSClosedFilled,TSClosedBlank,TSClosed,TSDot,TSArchitecturalTick,TSOblique,TSOpen,TSOriginIndicator,TSOriginIndicator2,
+            TSRightAngle,TSOpen30,TSDotSmall,TSDotBlank,TSDotSmallBlank,TSBox,TSBoxFilled,TSDatumTriangle,TSDatumtTriangleFilled,TSIntegral,TSUserDef);
 TGDBDimLinesProp=packed record
                        //выносные линии
                        DIMEXE:GDBDouble;//Extension line extension
@@ -35,6 +37,9 @@ TGDBDimLinesProp=packed record
                  end;
 TGDBDimArrowsProp=packed record
                        DIMASZ:GDBDouble; //Dimensioning arrow size
+                       DIMBLK1:TArrowStyle;//First arrow block name
+                       DIMBLK2:TArrowStyle;//First arrow block name
+                       DIMLDRBLK:TArrowStyle;//Arrow block name for leaders
                   end;
 TGDBDimTextProp=packed record
                        DIMTXT:GDBDouble; //Text size
@@ -68,6 +73,34 @@ GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*Op
                     constructor initnul;
               end;
 {EXPORT-}
+TDimArrowBlockParam=record
+                     name:GDBString;
+                     width:GDBDouble;
+               end;
+TDimArrowBlockArray=array[TArrowStyle] of TDimArrowBlockParam;
+var
+     DimArrows:TDimArrowBlockArray=(
+                                    (name:'_ClosedFilled';width:1),
+                                    (name:'_ClosedBlank';width:1),
+                                    (name:'_Closed';width:1),
+                                    (name:'_Dot';width:0),
+                                    (name:'_ArchTick';width:0),
+                                    (name:'_Oblique';width:0),
+                                    (name:'_Open';width:1),
+                                    (name:'_Origin';width:1),
+                                    (name:'_Origin2';width:1),
+                                    (name:'_Open90';width:0),
+                                    (name:'_Open30';width:0),
+                                    (name:'_DotSmall';width:0),
+                                    (name:'_DotBlank';width:1),
+                                    (name:'_Small';width:0),
+                                    (name:'_BoxBlank';width:1),
+                                    (name:'_BoxFilled';width:1),
+                                    (name:'_DatumBlank';width:1),
+                                    (name:'_DatumFilled';width:1),
+                                    (name:'_Integral';width:0),
+                                    (name:'_ClosedFilled';width:1)
+                                    );
 implementation
 uses {UGDBDescriptor,}{io,}log;
 procedure GDBDimStyle.SetValueFromDxf(group:GDBInteger;value:GDBString);

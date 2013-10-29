@@ -36,6 +36,7 @@ PGDBTextStyleProp=^GDBTextStyleProp;
     pfont: PGDBfont;
     prop:GDBTextStyleProp;(*saved_to_shd*)
     UsedInLTYPE:GDBBoolean;
+    destructor Done;virtual;
   end;
 PGDBTextStyleArray=^GDBTextStyleArray;
 GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBTextStyle*)
@@ -51,6 +52,11 @@ GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*O
 {EXPORT-}
 implementation
 uses {UGDBDescriptor,}{io,}log;
+destructor GDBTextStyle.Done;
+begin
+     inherited;
+end;
+
 function GDBTextStyleArray.GetCurrentTextStyle;
 begin
      if assigned(sysvar.dwg.DWG_CTStyle) then
@@ -114,27 +120,26 @@ var ts:GDBTextStyle;
     ps:PGDBTextStyle;
     //p:GDBPointer;
 begin
-  ts.name:=stylename;
-  ts.dxfname:=FontFile;
-  ts.UsedInLTYPE:=USedInLT;
+  ps:=(FindStyle(StyleName,USedInLT));
+  ps.name:=stylename;
+  ps.dxfname:=FontFile;
+  ps.UsedInLTYPE:=USedInLT;
 
   if pos('.',FontFile)=0 then
                              FontFile:=FontFile+'.shx';
 
-  ts.pfont:=FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,FontFile));
-  if not assigned(ts.pfont) then
+  ps.pfont:=FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,FontFile));
+  if not assigned(ps.pfont) then
                                 begin
                                      shared.LogError(sysutils.format(fontnotfoundandreplace,[Tria_AnsiToUtf8(stylename),FontFile]));
-                                     ts.pfont:=pbasefont;
+                                     ps.pfont:=pbasefont;
                                 end;
 
-  //ts.pfont:=FontManager.addFonf(FontFile);
-  //ts.pfont:=FontManager.{FindFonf}getAddres(FontFile);
-  //if ts.pfont=nil then ts.pfont:=FontManager.getAddres('normal.shx');
-  ts.prop:=tp;
+  //ps.pfont:=FontManager.addFonf(FontFile);
+  //ps.pfont:=FontManager.{FindFonf}getAddres(FontFile);
+  //if ps.pfont=nil then ps.pfont:=FontManager.getAddres('normal.shx');
+  ps.prop:=tp;
   //result:=add(@ts);
-  ps:={getelement}(FindStyle(StyleName,USedInLT));
-  ps^:=ts;
   //pointer(ts.name):=nil;
   //pointer(ts.dxfname):=nil;
 end;

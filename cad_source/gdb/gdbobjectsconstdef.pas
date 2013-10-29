@@ -175,6 +175,7 @@ const {as_normal=0;
   ObjN_GDBObjPolyLine='GDBObjPolyLine';
   ObjN_GDBObjSpline='GDBObjSpline';
   ObjN_ObjAlignedDimension='GDBObjAlignedDimension';
+  ObjN_ObjRotatedDimension='GDBObjRotatedDimension';
   ObjN_GDBObjLWPolyLine='GDBObjLWPolyLine';
   ObjN_GDBObjBlockInsert='GDBObjBlockInsert';
   ObjN_GDBObjDevice='GDBObjDevice';

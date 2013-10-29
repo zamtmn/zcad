@@ -61,6 +61,7 @@ E:\zcad\CAD_SOURCE\gdb\GDBComplex.pas
 E:\zcad\CAD_SOURCE\gdb\gdbdimension.pas
 E:\zcad\CAD_SOURCE\gdb\gdbgenericdimension.pas
 E:\zcad\CAD_SOURCE\gdb\gdbaligneddimension.pas
+E:\zcad\CAD_SOURCE\gdb\gdbrotateddimension.pas
 E:\zcad\CAD_SOURCE\gdb\GDBBlockInsert.pas
 E:\zcad\CAD_SOURCE\gdb\GDBDevice.pas
 E:\zcad\CAD_SOURCE\gdb\GDBconnected.pas

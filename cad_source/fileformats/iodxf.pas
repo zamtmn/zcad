@@ -705,22 +705,16 @@ end;
 procedure ReadLayers(var s:string;clayer:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
 byt: GDBInteger;
-oo,ll,pp:GDBBoolean;
-sname, lname, lcolor, llw,desk,ltn: String;
+lname,desk: String;
 nulisread:boolean;
 player:PGDBLayerProp;
 begin
   nulisread:=false;
   gotodxf(f, 0, dxfName_Layer);
-
+  player:=nil;
   while s = dxfName_Layer do
   begin
     byt := 2;
-    oo:=true;
-    ll:=false;
-    pp:=true;
-    desk:='';
-    ltn:='';
     while byt <> 0 do
     begin
       if not nulisread then
@@ -734,40 +728,19 @@ begin
       case byt of
         2:
           begin
-            lname := s;
-          end;
-        62:
-          begin
-            lcolor := s;
-            if strtoint(lcolor)<0 then begin
-                                            oo:=false;
-                                       end;
+            {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer '+s,0);{$ENDIF}
+            lname:=s;
+            player:=drawing.LayerTable.MergeItem(s,LoadMode);
+            if player<>nil then
+                               player^.init(s);
           end;
         6:
           begin
-            ltn := s;
+               if player<>nil then
+                                  player^.LT:=drawing.LTypeStyleTable.getAddres(s);
           end;
-        370:
-          begin
-            llw := s;
-          end;
-        70:
-          begin
-               if (strtoint(s)and 4)<>0 then
-                                                 begin
-                                                      ll:=true;
-                                                 end;
-           end;
-        290:
-          begin
-               if (strtoint(s))=0 then
-                                            begin
-                                                 pp:=false;
-                                            end;
-           end;
         1001:
           begin
-               //s := f.readGDBString;
                if s='AcAecLayerStandard' then
                  begin
                       s := f.readGDBString;
@@ -779,7 +752,11 @@ begin
                                 s := f.readGDBString;
                                 byt:=strtoint(s);
                                 if byt<>0 then
-                                              desk := f.readGDBString
+                                              begin
+                                                   desk := f.readGDBString;
+                                                   if player<>nil then
+                                                                      player^.desk:=desk;
+                                              end
                                           else
                                               begin
                                               nulisread:=true;
@@ -795,18 +772,17 @@ begin
                          end;
                  end;
            end;
-
+         else begin
+                   if player<>nil then
+                                  player^.SetValueFromDxf(byt,s);
+              end;
 
       end;
     end;
-    if llw='' then llw:='-1';
-    player:=drawing.LayerTable.addlayer(lname, abs(strtoint(lcolor)), strtoint(llw),oo,ll,pp,desk,LoadMode);
-    player^.LT:=drawing.LTypeStyleTable.getAddres(ltn);
+
     if uppercase(lname)=uppercase(clayer)then
                                              if sysvar.DWG.DWG_CLayer<>nil then
-                                                                               sysvar.DWG.DWG_CLayer^:={drawing.LayerTable.GetIndexByPointer}(player);
-    llw:='';
-    {$IFDEF TOTALYLOG}programlog.logoutstr('Found layer '+lname,0);{$ENDIF}
+                                                                               sysvar.DWG.DWG_CLayer^:=player;
   end;
 end;
 procedure ReadTextstyles(var s:string;ctstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
@@ -1135,23 +1111,9 @@ begin
      begin
            if byt=2 then
                          begin
-                           case drawing.DimStyleTable.AddItem(s,pointer(psimstyleprop)) of
-                                        IsFounded:
-                                                  begin
-                                                       if LoadMode=TLOLoad then
-                                                       begin
-                                                       end
-                                                       else
-                                                           psimstyleprop:=nil;
-                                                  end;
-                                        IsCreated:
-                                                  begin
-                                                       psimstyleprop^.init(s);
-                                                  end;
-                                        IsError:
-                                                  begin
-                                                  end;
-                           end;{case}
+                              psimstyleprop:=drawing.DimStyleTable.MergeItem(s,LoadMode);
+                              if psimstyleprop<>nil then
+                                                        psimstyleprop^.init(s);
                          end;
      end
      else

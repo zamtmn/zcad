@@ -32,8 +32,10 @@ GDBLayerProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                _lock:GDBBoolean;(*saved_to_shd*)(*'Lock'*)
                _print:GDBBoolean;(*saved_to_shd*)(*'Print'*)
                desk:GDBAnsiString;(*saved_to_shd*)(*'Description'*)
-               constructor Init(N:GDBString; C: GDBInteger; LW: GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString);
+               constructor InitWithParam(N:GDBString; C: GDBInteger; LW: GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString);
                function GetFullName:GDBString;virtual;
+               procedure SetValueFromDxf(group:GDBInteger;value:GDBString);virtual;
+               procedure SetDefaultValues;virtual;
          end;
 PGDBLayerPropArray=^GDBLayerPropArray;
 GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
@@ -98,7 +100,54 @@ begin
   inherited initnul;
   size:=sizeof(GDBLayerProp);
 end;
-constructor GDBLayerProp.Init(N:GDBString; C: GDBInteger; LW: GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString);
+procedure GDBLayerProp.SetDefaultValues;
+begin
+     color:=7;
+     lineweight:=-1;
+     LT:=nil;
+     _on:=true;
+     _lock:=false;
+     if uppercase(name)=LNSysDefpoints then
+                                           _print:=false
+                                       else
+                                           _print:=true;
+     desk:='';
+end;
+procedure GDBLayerProp.SetValueFromDxf(group:GDBInteger;value:GDBString);
+var
+   _color:integer;
+begin
+  case group of
+          62:
+            begin
+              _color:=strtoint(value);
+              color:=abs(_color);
+              if _color<0 then begin
+                                    self._on:=false;
+                               end;
+            end;
+          370:
+            begin
+              self.lineweight:=strtoint(value);
+            end;
+          70:
+            begin
+                 if (strtoint(value)and 4)<>0 then
+                                                   begin
+                                                        self._lock:=true;
+                                                   end;
+             end;
+          290:
+            begin
+                 if (strtoint(value))=0 then
+                                              begin
+                                                   self._print:=false;
+                                              end;
+             end;
+        end;
+end;
+
+constructor GDBLayerProp.InitWithParam(N:GDBString; C: GDBInteger; LW: GDBInteger;oo,ll,pp:GDBBoolean;d:GDBString);
 begin
     initnul;
     LT:=nil;
@@ -168,9 +217,9 @@ begin
              IsCreated:
                        begin
                             if uppercase(name)=LNSysDefpoints then
-                                                               p^.init(Name,Color,LW,oo,ll,false,d)
+                                                               p^.initwithparam(Name,Color,LW,oo,ll,false,d)
                             else
-                            p^.init(Name,Color,LW,oo,ll,pp,d);
+                            p^.initwithparam(Name,Color,LW,oo,ll,pp,d);
                        end;
              IsError:
                        begin
@@ -180,5 +229,5 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBLayerArray.initialization');{$ENDIF}
-  DefaultErrorLayer.Init('DefaultErrorLayer',200,0,true,false,true,'');
+  DefaultErrorLayer.Initwithparam('DefaultErrorLayer',200,0,true,false,true,'');
 end.

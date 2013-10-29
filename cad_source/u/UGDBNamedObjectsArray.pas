@@ -33,11 +33,23 @@ GDBNamedObjectsArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjOpenArrayOfPIde
                     function getAddres(name: GDBString):GDBPointer;
                     function GetIndexByPointer(p:PGDBNamedObject):GDBInteger;
                     function AddItem(name:GDBSTRING; out PItem:Pointer):TForCResult;
+                    function MergeItem(name:GDBSTRING;LoadMode:TLoadOpt):GDBPointer;
               end;
 {EXPORT-}
 implementation
 uses
     log;
+function GDBNamedObjectsArray.MergeItem(name:GDBSTRING;LoadMode:TLoadOpt):GDBPointer;
+begin
+     if AddItem(name,result)=IsFounded then
+                       begin
+                            if LoadMode=TLOMerge then
+                            begin
+                                 result:=nil;
+                            end;
+                       end;
+end;
+
 function GDBNamedObjectsArray.AddItem;
 var
   p:PGDBNamedObject;
@@ -133,4 +145,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBNamedObjectArray.initialization');{$ENDIF}
-end.
+end.

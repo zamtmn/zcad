@@ -59,6 +59,7 @@ implementation
 uses GDBCable,log;
 var
     parr:PGDBPoint3dArray;
+    ptv0:pgdbvertex;
 procedure GDBObjSpline.getoutbound;
 begin
   if AproxPointInWCS.Count>0 then
@@ -104,9 +105,9 @@ procedure NurbsVertexCallBack(const v: PGDBvertex3S);{$IFDEF Windows}stdcall{$EL
 var
     tv: gdbvertex;
 begin
-     tv.x:=v^.x;
-     tv.y:=v^.y;
-     tv.z:=v^.z;
+     tv.x:=v^.x+ptv0^.x;
+     tv.y:=v^.y+ptv0^.y;
+     tv.z:=v^.z+ptv0^.z;
      parr^.add(@tv);
      tv.x:=0;
 end;
@@ -154,11 +155,12 @@ begin
      FormatWithoutSnapArray;
      CP.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}VertexArrayInOCS.count,sizeof(GDBvertex4S));
      ptv:=VertexArrayInOCS.beginiterate(ir);
+     ptv0:=ptv;
   if ptv<>nil then
   repeat
-        tfv.x:=ptv^.x;
-        tfv.y:=ptv^.y;
-        tfv.z:=ptv^.z;
+        tfv.x:=ptv^.x-ptv0^.x;
+        tfv.y:=ptv^.y-ptv0^.y;
+        tfv.z:=ptv^.z-ptv0^.z;
         tfv.w:=1;
         CP.Add(@tfv);
         ptv:=VertexArrayInOCS.iterate(ir);
@@ -454,4 +456,4 @@ begin
 end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBPolyline.initialization');{$ENDIF}
-end.
+end.

@@ -19,35 +19,17 @@ unit gdbgenericdimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdimension,GDBPoint,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
+uses GDBWithLocalCS,gdbdimension,GDBPoint,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
 type
 {EXPORT+}
-PTDXFDimData2D=^TDXFDimData2D;
-TDXFDimData2D=packed record
-  P10:GDBVertex2D;
-  P11:GDBVertex2D;
-  P12:GDBVertex2D;
-  P13:GDBVertex2D;
-  P14:GDBVertex2D;
-  P15:GDBVertex2D;
-  P16:GDBVertex2D;
-end;
-PTDXFDimData=^TDXFDimData;
-TDXFDimData=packed record
-  P10InWCS:GDBVertex;
-  P11InOCS:GDBVertex;
-  P12InOCS:GDBVertex;
-  P13InWCS:GDBVertex;
-  P14InWCS:GDBVertex;
-  P15InWCS:GDBVertex;
-  P16InOCS:GDBVertex;
-end;
+TDimType=(DTRotated,DTAligned,DTAngular,DTDiameter,DTRadius,DTAngular3P,DTOrdinate);
 PGDBObjGenericDimension=^GDBObjGenericDimension;
-GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
+GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                       DimData:TDXFDimData;
                       PDimStyle:PGDBDimStyle;
+                      DimType:TDimType;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
                       procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
@@ -55,29 +37,45 @@ GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                    end;
 {EXPORT-}
 implementation
-uses gdbaligneddimension,GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
+uses gdbrotateddimension,gdbaligneddimension,GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
 var
   WorkingFormatSettings:TFormatSettings;
 function GDBObjGenericDimension.FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;
 var
   ResultDim:PGDBObjDimension;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjAlignedDimension));
-  result:=ResultDim;
-  PGDBObjAlignedDimension(ResultDim)^.initnul(bp.ListPos.Owner);
-  ResultDim.vp.Layer:=vp.Layer;
-  ResultDim^.Local:=local;
-  ResultDim^.P_insert_in_WCS:=P_insert_in_WCS;
-    PGDBObjAlignedDimension(ResultDim)^.DimData:=DimData;
-    PGDBObjAlignedDimension(ResultDim)^.PDimStyle:=PDimStyle;
+         case DimType of
+                               DTRotated:begin
+                                 GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjRotatedDimension));
+                                 result:=ResultDim;
+                                 PGDBObjRotatedDimension(ResultDim)^.initnul(bp.ListPos.Owner);
+                                 ResultDim.vp.Layer:=vp.Layer;
+                                 ResultDim^.Local:=local;
+                                 ResultDim^.P_insert_in_WCS:=P_insert_in_WCS;
+                                 PGDBObjRotatedDimension(ResultDim)^.DimData:=DimData;
+                                 PGDBObjRotatedDimension(ResultDim)^.PDimStyle:=PDimStyle;
+                               end;
+                               else
+                                   begin
+                                     GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjAlignedDimension));
+                                     result:=ResultDim;
+                                     PGDBObjAlignedDimension(ResultDim)^.initnul(bp.ListPos.Owner);
+                                     ResultDim.vp.Layer:=vp.Layer;
+                                     ResultDim^.Local:=local;
+                                     ResultDim^.P_insert_in_WCS:=P_insert_in_WCS;
+                                     PGDBObjAlignedDimension(ResultDim)^.DimData:=DimData;
+                                     PGDBObjAlignedDimension(ResultDim)^.PDimStyle:=PDimStyle;
+                                   end;
+       end;
 end;
 
 procedure GDBObjGenericDimension.LoadFromDXF;
 var
-  byt:GDBInteger;
+  byt,dtype:GDBInteger;
   style:GDBString;
 begin
   byt:=readmystrtoint(f);
+  dtype:=-1;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
@@ -88,6 +86,7 @@ begin
                    if not dxfvertexload(f,14,byt,DimData.P14InWCS) then
                       if not dxfvertexload(f,15,byt,DimData.P15InWCS) then
                          if not dxfvertexload(f,16,byt,DimData.P16InOCS) then
+                            if not dxfGDBIntegerload(f,70,byt,dtype) then
                             if dxfGDBStringload(f,3,byt,style)then
                                                                   begin
                                                                        PDimStyle:=drawing.GetDimStyleTable^.getAddres(Style);
@@ -98,15 +97,28 @@ begin
                                 f.readGDBSTRING;
     byt:=readmystrtoint(f);
   end;
+  if dtype<>-1 then
+  begin
+       case dtype and 15 of
+       0:DimType:=DTRotated;
+       1:DimType:=DTAligned;
+       2:DimType:=DTAngular;
+       3:DimType:=DTDiameter;
+       4:DimType:=DTRadius;
+       5:DimType:=DTAngular3P;
+       6:DimType:=DTOrdinate;
+       end;
+  end;
 end;
 
 constructor GDBObjGenericDimension.initnul;
 begin
-  inherited initnul;
+  inherited initnul(owner);
   bp.ListPos.Owner:=owner;
   vp.ID := GDBGenericDimensionID;
   DimData.P13InWCS := createvertex(1,1,0);
   DimData.P14InWCS:= createvertex(300,1,0);
+  DimType:=TDimType.DTRotated;
 end;
 constructor GDBObjGenericDimension.init;
 begin
@@ -114,6 +126,7 @@ begin
   vp.ID := GDBGenericDimensionID;
   DimData.P13InWCS := createvertex(1,1,0);
   DimData.P14InWCS:= createvertex(300,1,0);
+  DimType:=TDimType.DTRotated;
 end;
 
 begin

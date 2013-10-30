@@ -51,6 +51,7 @@ const
       InfinityVertex:GDBVertex=(x:Infinity;y:Infinity;z:Infinity);
       NulVertex4D:GDBVertex4d=(x:0;y:0;z:0;w:1);
       NulVector4D:DVector4D=(0,0,0,0);
+      NulVector4D2:DVector4D=(0,0,0,1);
       NulVertex:GDBVertex=(x:0;y:0;z:0);
       XWCS:GDBVertex=(x:1;y:0;z:0);
       YWCS:GDBVertex=(x:0;y:1;z:0);

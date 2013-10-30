@@ -31,10 +31,36 @@ GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimens
                         function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                         function P13ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;
+                        procedure transform(const t_matrix:DMatrix4D);virtual;
+                        procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                    end;
 {EXPORT-}
 implementation
 uses GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
+procedure GDBObjRotatedDimension.transform;
+var tv:GDBVertex4D;
+    tm:DMatrix4D;
+begin
+  tm:=t_matrix;
+  tm[3]:=NulVector4D2;
+  vectorD:=VectorTransform3D(vectorD,tm);
+  vectorN:=VectorTransform3D(vectorN,tm);
+  vectorD:=normalizevertex(vectorD);
+  vectorN:=normalizevertex(vectorN);
+  inherited;
+end;
+procedure GDBObjRotatedDimension.TransformAt;
+var
+    tm:DMatrix4D;
+begin
+     tm:=t_matrix^;
+     tm[3]:=NulVector4D2;
+  vectorD:=VectorTransform3D(PGDBObjRotatedDimension(p)^.vectorD,tm);
+  vectorN:=VectorTransform3D(PGDBObjRotatedDimension(p)^.vectorN,tm);
+  vectorD:=normalizevertex(vectorD);
+  vectorN:=normalizevertex(vectorN);
+  inherited;
+end;
 function GDBObjRotatedDimension.P13ChangeTo(tv:GDBVertex):GDBVertex;
 begin
      result:=tv;

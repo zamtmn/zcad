@@ -64,12 +64,35 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                 function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                 function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;
+                procedure transform(const t_matrix:DMatrix4D);virtual;
+                procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                 end;
 {EXPORT-}
 var
   WorkingFormatSettings:TFormatSettings;
 implementation
 uses GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
+procedure GDBObjDimension.transform;
+var tv:GDBVertex4D;
+begin
+  DimData.P10InWCS:=VectorTransform3D(DimData.P10InWCS,t_matrix);
+  DimData.P11InOCS:=VectorTransform3D(DimData.P11InOCS,t_matrix);
+  DimData.P12InOCS:=VectorTransform3D(DimData.P12InOCS,t_matrix);
+  DimData.P13InWCS:=VectorTransform3D(DimData.P13InWCS,t_matrix);
+  DimData.P14InWCS:=VectorTransform3D(DimData.P14InWCS,t_matrix);
+  DimData.P15InWCS:=VectorTransform3D(DimData.P15InWCS,t_matrix);
+  DimData.P16InOCS:=VectorTransform3D(DimData.P16InOCS,t_matrix);
+end;
+procedure GDBObjDimension.TransformAt;
+begin
+  DimData.P10InWCS:=VectorTransform3D(PGDBObjDimension(p)^.DimData.P10InWCS,t_matrix^);
+  DimData.P11InOCS:=VectorTransform3D(PGDBObjDimension(p)^.DimData.P11InOCS,t_matrix^);
+  DimData.P12InOCS:=VectorTransform3D(PGDBObjDimension(p)^.DimData.P12InOCS,t_matrix^);
+  DimData.P13InWCS:=VectorTransform3D(PGDBObjDimension(p)^.DimData.P13InWCS,t_matrix^);
+  DimData.P14InWCS:=VectorTransform3D(PGDBObjDimension(p)^.DimData.P14InWCS,t_matrix^);
+  DimData.P15InWCS:=VectorTransform3D(PGDBObjDimension(p)^.DimData.P15InWCS,t_matrix^);
+  DimData.P16InOCS:=VectorTransform3D(PGDBObjDimension(p)^.DimData.P16InOCS,t_matrix^);
+end;
 function GDBObjDimension.GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
 begin
      case nline of

@@ -2011,6 +2011,7 @@ GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                       DimData:TDXFDimData;
                       PDimStyle:PGDBDimStyle;
                       DimType:TDimType;
+                      a50,a52:GDBDouble;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
                       procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;abstract;
@@ -2022,6 +2023,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       TextTParam,TextAngle,DimAngle:GDBDouble;
                       TextInside:GDBBoolean;
                       TextOffset:GDBVertex;
+                      vectorD,vectorN:GDBVertex;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
                       procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef);
@@ -2033,6 +2035,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                       function GetObjTypeName:GDBString;virtual;abstract;
                       function GetTextOffset:GDBVertex;
+                      procedure CalcDNVectors;virtual;abstract;
                       function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                       function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                       //function P12ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
@@ -2045,6 +2048,10 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
 PGDBObjRotatedDimension=^GDBObjRotatedDimension;
 GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimension)
                         function GetObjTypeName:GDBString;virtual;abstract;
+                        procedure CalcDNVectors;virtual;abstract;
+                        function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
+                        function P13ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
+                        function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                    end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBBlockInsert.pas
 PGDBObjBlockInsert=^GDBObjBlockInsert;

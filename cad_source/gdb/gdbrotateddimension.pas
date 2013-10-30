@@ -27,10 +27,58 @@ type
 PGDBObjRotatedDimension=^GDBObjRotatedDimension;
 GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimension)
                         function GetObjTypeName:GDBString;virtual;
+                        procedure CalcDNVectors;virtual;
+                        function Clone(own:GDBPointer):PGDBObjEntity;virtual;
+                        function P13ChangeTo(tv:GDBVertex):GDBVertex;virtual;
+                        function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                    end;
 {EXPORT-}
 implementation
 uses GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
+function GDBObjRotatedDimension.P13ChangeTo(tv:GDBVertex):GDBVertex;
+begin
+     result:=tv;
+end;
+function GDBObjRotatedDimension.P14ChangeTo(tv:GDBVertex):GDBVertex;
+var
+    t,tl:GDBDouble;
+    temp:GDBVertex;
+begin
+     result:=tv;
+     tl:=GetTFromDirNormalizedPoint(DimData.P10InWCS,tv,vectorN);
+     DimData.P10InWCS:=VertexDmorph(tv,vectorN,tl);
+end;
+{
+var
+    t,tl:GDBDouble;
+    temp:GDBVertex;
+begin
+     tl:=scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD);
+     temp:=VertexDmorph(DimData.P13InWCS,self.vectorD,tl);
+     tv:=CorrectPointLine(tv,DimData.P13InWCS,temp,t);
+     result:=tv;
+     DimData.P10InWCS:=tv;
+     self.CalcDNVectors;
+     DimData.P11InOCS:=SetPointLine(t,DimData.P11InOCS,DimData.P13InWCS,temp)
+end;
+}
+procedure GDBObjRotatedDimension.CalcDNVectors;
+begin
+end;
+function GDBObjRotatedDimension.Clone;
+var tvo: PGDBObjRotatedDimension;
+begin
+  GDBGetMem({$IFDEF DEBUGBUILD}'{5A1B005F-39F1-431B-B65E-0C532AEFA5D0}-GDBObjLine.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjRotatedDimension));
+  tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
+  CopyVPto(tvo^);
+  tvo^.DimData := DimData;
+  tvo^.bp.ListPos.Owner:=own;
+  tvo^.PDimStyle:=PDimStyle;
+  tvo^.vectorD:=vectorD;
+  tvo^.vectorN:=vectorN;
+  tvo^.vp.ID := GDBRotatedDimensionID;
+  result := tvo;
+end;
 function GDBObjRotatedDimension.GetObjTypeName;
 begin
      result:=ObjN_ObjRotatedDimension;

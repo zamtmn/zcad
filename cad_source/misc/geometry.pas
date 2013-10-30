@@ -113,6 +113,8 @@ procedure MatrixNormalize(var M: DMatrix4D);inline;
 function CreateRotationMatrixX(const Sine, Cosine: GDBDouble): DMatrix4D;inline;
 function CreateRotationMatrixY(const Sine, Cosine: GDBDouble): DMatrix4D;inline;
 function CreateRotationMatrixZ(const Sine, Cosine: GDBDouble): DMatrix4D;inline;
+function CreateRotatedXVector(const angle: GDBDouble):GDBVertex;
+function CreateRotatedYVector(const angle: GDBDouble):GDBVertex;
 function CreateAffineRotationMatrix(const anAxis: GDBvertex; angle: double):DMatrix4D;inline;
 function distance2piece(var q:GDBvertex2DI;var p1,p2:GDBvertex2D): double;overload;inline;
 function distance2piece(q:GDBvertex;var p1,p2:GDBvertex): {DistAndPoint}double;overload;//inline;
@@ -1143,6 +1145,16 @@ begin
   Result[2, 0] := Sine;
   Result[2, 2] := Cosine;
   Result[3, 3] := 1;
+end;
+function CreateRotatedXVector(const angle: GDBDouble):GDBVertex;
+begin
+  Result.x:=cos(angle);
+  Result.y:=sin(angle);
+  Result.z:=0;
+end;
+function CreateRotatedYVector(const angle: GDBDouble):GDBVertex;
+begin
+  Result:=CreateRotatedXVector(angle+pi/2);
 end;
 function CreateRotationMatrixZ(const Sine, Cosine: GDBDouble): DMatrix4D;
 begin

@@ -29,6 +29,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       TextTParam,TextAngle,DimAngle:GDBDouble;
                       TextInside:GDBBoolean;
                       TextOffset:GDBVertex;
+                      vectorD,vectorN:GDBVertex;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
                       procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef);
@@ -46,7 +47,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
 
                       function GetTextOffset:GDBVertex;
 
-
+                      procedure CalcDNVectors;virtual;
                       function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P12ChangeTo(tv:GDBVertex):GDBVertex;virtual;
@@ -56,17 +57,21 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       //function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                    end;
 {EXPORT-}
+function CorrectPointLine(q:GDBvertex;p1,p2:GDBvertex;out d:GDBDouble):GDBVertex;
+function GetTFromDirNormalizedPoint(q:GDBvertex;var p1,dirNormalized:GDBvertex):double;
 implementation
 uses GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
 function CorrectPointLine(q:GDBvertex;p1,p2:GDBvertex;out d:GDBDouble):GDBVertex;
 var w,l:GDBVertex;
     dist:GDBDouble;
 begin
+     //расстояние от точки до линии
      w:=VertexSub(q,p1);
      l:=VertexSub(p2,p1);
      dist:=scalardot(w,l)/scalardot(l,l);
      p1:=Vertexmorph(p1,p2,dist);
      d:=Vertexlength(q,p1);
+
      q:=geometry.Vertexmorphabs2(p1,q,d);
      result:=VertexAdd(p2,VertexSub(q,p1));
 end;
@@ -88,24 +93,39 @@ begin
      l:=VertexSub(p2,p1);
      result:=scalardot(w,l)/scalardot(l,l);
 end;
+function GetTFromDirNormalizedPoint(q:GDBvertex;var p1,dirNormalized:GDBvertex):double;
+var w:GDBVertex;
+begin
+     w:=VertexSub(q,p1);
+     result:=scalardot(w,dirNormalized);
+end;
 function GDBObjAlignedDimension.P10ChangeTo(tv:GDBVertex):GDBVertex;
 var
-    t:GDBDouble;
+    t,tl:GDBDouble;
+    temp:GDBVertex;
 begin
-     tv:=CorrectPointLine(tv,DimData.P13InWCS,DimData.P14InWCS,t);
+     tl:=scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD);
+     temp:=VertexDmorph(DimData.P13InWCS,self.vectorD,tl);
+     tv:=CorrectPointLine(tv,DimData.P13InWCS,temp,t);
      result:=tv;
-     DimData.P11InOCS:=SetPointLine(t,DimData.P11InOCS,DimData.P13InWCS,DimData.P14InWCS)
+     DimData.P10InWCS:=tv;
+     self.CalcDNVectors;
+     DimData.P11InOCS:=SetPointLine(t,DimData.P11InOCS,DimData.P13InWCS,temp)
 end;
 function GDBObjAlignedDimension.P11ChangeTo(tv:GDBVertex):GDBVertex;
 var
-    t:GDBDouble;
-    tvertex:GDBVERTEX;
+    t,tl:GDBDouble;
+    tvertex,temp:GDBVERTEX;
 begin
      result:=tv;
-     t:=GettFromLinePoint(tv,DimData.P13InWCS,DimData.P14InWCS);
-     tvertex:=geometry.Vertexmorph(DimData.P13InWCS,DimData.P14InWCS,t);
+
+     tl:=scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD);
+     temp:=VertexDmorph(DimData.P13InWCS,self.vectorD,tl);
+
+     t:=GettFromLinePoint(tv,DimData.P13InWCS,{DimData.P14InWCS}temp);
+     tvertex:=geometry.Vertexmorph(DimData.P13InWCS,{DimData.P14InWCS}temp,t);
      tvertex:=vertexsub(tv,tvertex);
-     DimData.P10InWCS:=VertexAdd(DimData.P14InWCS,tvertex);
+     DimData.P10InWCS:=VertexAdd({DimData.P14InWCS}temp,tvertex);
 end;
 function GDBObjAlignedDimension.P13ChangeTo(tv:GDBVertex):GDBVertex;
 var
@@ -210,6 +230,7 @@ var
    pv:pGDBObjBlockInsert;
    p0inside,p1inside:GDBBoolean;
    pp1,pp2:GDBVertex;
+   zangle:gdbdouble;
 begin
   l:=geometry.Vertexlength(p1,p2);
   tbp0:=GetDimBlockParam(0);
@@ -236,16 +257,17 @@ begin
                                                         else
                                                             p1inside:=false;
                       end;
+  zangle:=vertexangle(createvertex2d(p1.x,p1.y),createvertex2d(p2.x,p2.y));
   if p0inside then
-                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p1,PDimStyle.Arrows.DIMASZ,DimAngle*180/pi-180,@tbp0.name[1])
+                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p1,PDimStyle.Arrows.DIMASZ,ZAngle*180/pi-180,@tbp0.name[1])
               else
-                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p1,PDimStyle.Arrows.DIMASZ,DimAngle*180/pi,@tbp0.name[1]);
+                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p1,PDimStyle.Arrows.DIMASZ,ZAngle*180/pi,@tbp0.name[1]);
   pv^.formatentity(gdb.GetCurrentDWG^);
 
   if p1inside then
-                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p2,PDimStyle.Arrows.DIMASZ,DimAngle*180/pi,@tbp1.name[1])
+                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p2,PDimStyle.Arrows.DIMASZ,ZAngle*180/pi,@tbp1.name[1])
               else
-                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p2,PDimStyle.Arrows.DIMASZ,DimAngle*180/pi-180,@tbp1.name[1]);
+                  pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p2,PDimStyle.Arrows.DIMASZ,ZAngle*180/pi-180,@tbp1.name[1]);
   pv^.formatentity(gdb.GetCurrentDWG^);
 
 
@@ -317,7 +339,8 @@ procedure GDBObjAlignedDimension.DrawDimensionText(p:GDBVertex;const drawing:TDr
 var
   ptext:PGDBObjMText;
 begin
-  DimAngle:=vertexangle(CreateVertex2D(DimData.P13InWCS.x,DimData.P13InWCS.y),CreateVertex2D(DimData.P14InWCS.x,DimData.P14InWCS.y));
+  //DimAngle:=vertexangle(CreateVertex2D(DimData.P13InWCS.x,DimData.P13InWCS.y),CreateVertex2D(DimData.P14InWCS.x,DimData.P14InWCS.y));
+  DimAngle:=vertexangle(NulVertex2D,CreateVertex2D(vectorD.x,vectorD.y));
   TextAngle:=CorrectAngleIfNotReadable(DimAngle);
 
   TextTParam:=GettFromLinePoint(DimData.P11InOCS,DimData.P13InWCS,DimData.P14InWCS);
@@ -341,7 +364,7 @@ begin
 
   ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
   ptext.vp.Layer:=vp.Layer;
-  ptext.Template:=GetLinearDimStr(Vertexlength(DimData.P13InWCS,DimData.P14InWCS));
+  ptext.Template:=GetLinearDimStr({Vertexlength(DimData.P13InWCS,DimData.P14InWCS)}abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)));
   TextOffset:=GetTextOffset;
   ptext.Local.P_insert:=vertexadd(p,TextOffset);
   ptext.textprop.justify:=jsmc;
@@ -353,20 +376,35 @@ begin
   ptext.textprop.size:=PDimStyle.Text.DIMTXT;
   ptext.FormatEntity(drawing);
 end;
+procedure GDBObjAlignedDimension.CalcDNVectors;
+begin
+     vectorD:=vertexsub(DimData.P14InWCS,DimData.P13InWCS);
+     vectorD:=normalizevertex(vectorD);
+
+     vectorN:=vertexsub(DimData.P10InWCS,DimData.P14InWCS);
+     vectorN:=normalizevertex(vectorN);
+end;
 
 procedure GDBObjAlignedDimension.FormatEntity(const drawing:TDrawingDef);
 var
   tv:GDBVertex;
+  l:double;
 begin
           ConstObjArray.cleareraseobj;
+          CalcDNVectors;
 
           DrawDimensionText(DimData.P11InOCS,drawing);
 
-          DrawExtensionLine(DimData.P14InWCS,DimData.P10InWCS,0,drawing);
+          l:=GetTFromDirNormalizedPoint(DimData.P10InWCS,DimData.P14InWCS,vectorN);
+          //DrawExtensionLine(DimData.P14InWCS,DimData.P10InWCS,0,drawing);
+          DrawExtensionLine(DimData.P14InWCS,VertexDmorph(DimData.P14InWCS,self.vectorN,l),0,drawing);
 
-          tv:=geometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
-          tv:=geometry.VertexAdd(DimData.P13InWCS,tv);
-          DrawExtensionLine(DimData.P13InWCS,tv,1,drawing);
+          //tv:=geometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
+          //tv:=geometry.VertexAdd(DimData.P13InWCS,tv);
+          //DrawExtensionLine(DimData.P13InWCS,tv,1,drawing);
+          l:=GetTFromDirNormalizedPoint(DimData.P10InWCS,DimData.P13InWCS,vectorN);
+          tv:=VertexDmorph(DimData.P13InWCS,self.vectorN,l);
+          DrawExtensionLine(DimData.P13InWCS,tv,0,drawing);
 
           DrawDimensionLine(tv,DimData.P10InWCS,drawing);
    inherited;

@@ -30,6 +30,7 @@ GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                       DimData:TDXFDimData;
                       PDimStyle:PGDBDimStyle;
                       DimType:TDimType;
+                      a50,a52:GDBDouble;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
                       procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;
@@ -49,6 +50,8 @@ begin
                                  GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjRotatedDimension));
                                  result:=ResultDim;
                                  PGDBObjRotatedDimension(ResultDim)^.initnul(bp.ListPos.Owner);
+                                 PGDBObjRotatedDimension(ResultDim)^.vectorD:=CreateRotatedXVector(a50*pi/180);
+                                 PGDBObjRotatedDimension(ResultDim)^.vectorN:=CreateRotatedYVector(a50*pi/180);
                                  ResultDim.vp.Layer:=vp.Layer;
                                  ResultDim^.Local:=local;
                                  ResultDim^.P_insert_in_WCS:=P_insert_in_WCS;
@@ -87,6 +90,8 @@ begin
                       if not dxfvertexload(f,15,byt,DimData.P15InWCS) then
                          if not dxfvertexload(f,16,byt,DimData.P16InOCS) then
                             if not dxfGDBIntegerload(f,70,byt,dtype) then
+                               if not dxfGDBDoubleload(f,50,byt,a50) then
+                                  if not dxfGDBDoubleload(f,52,byt,a52) then
                             if dxfGDBStringload(f,3,byt,style)then
                                                                   begin
                                                                        PDimStyle:=drawing.GetDimStyleTable^.getAddres(Style);

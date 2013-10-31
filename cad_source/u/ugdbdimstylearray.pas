@@ -30,32 +30,32 @@ TArrowStyle=(TSClosedFilled,TSClosedBlank,TSClosed,TSDot,TSArchitecturalTick,TSO
             TSRightAngle,TSOpen30,TSDotSmall,TSDotBlank,TSDotSmallBlank,TSBox,TSBoxFilled,TSDatumTriangle,TSDatumtTriangleFilled,TSIntegral,TSUserDef);
 TGDBDimLinesProp=packed record
                        //выносные линии
-                       DIMEXE:GDBDouble;//Extension line extension
-                       DIMEXO:GDBDouble;//Extension line offset
+                       DIMEXE:GDBDouble;//Extension line extension//group44
+                       DIMEXO:GDBDouble;//Extension line offset//group42
                        //размерные линии
-                       DIMDLE:GDBDouble;//Dimension line extension
+                       DIMDLE:GDBDouble;//Dimension line extension//group46
                  end;
 TGDBDimArrowsProp=packed record
-                       DIMASZ:GDBDouble; //Dimensioning arrow size
-                       DIMBLK1:TArrowStyle;//First arrow block name
-                       DIMBLK2:TArrowStyle;//First arrow block name
-                       DIMLDRBLK:TArrowStyle;//Arrow block name for leaders
+                       DIMASZ:GDBDouble; //Dimensioning arrow size//group41
+                       DIMBLK1:TArrowStyle;//First arrow block name//group343
+                       DIMBLK2:TArrowStyle;//First arrow block name//group344
+                       DIMLDRBLK:TArrowStyle;//Arrow block name for leaders//group341
                   end;
 TGDBDimTextProp=packed record
-                       DIMTXT:GDBDouble; //Text size
-                       DIMTIH:GDBBoolean;//Text inside horizontal if nonzero
-                       DIMTOH:GDBBoolean;//Text outside horizontal if nonzero
-                       DIMTAD:TDimTextVertPosition;//Text above dimension line if nonzero
-                       DIMGAP:GDBDouble; //Dimension line gap //Смещение текста
+                       DIMTXT:GDBDouble; //Text size//group140
+                       DIMTIH:GDBBoolean;//Text inside horizontal if nonzero//group73
+                       DIMTOH:GDBBoolean;//Text outside horizontal if nonzero//group74
+                       DIMTAD:TDimTextVertPosition;//Text above dimension line if nonzero//group77
+                       DIMGAP:GDBDouble; //Dimension line gap //Смещение текста//group147
                  end;
 TGDBDimPlacingProp=packed record
                  end;
 TGDBDimUnitsProp=packed record
-                       DIMLFAC:GDBDouble;//Linear measurements scale factor
-                       DIMLUNIT:TDimUnit;//Sets units for all dimension types except Angular:
-                       DIMDEC:GDBInteger;//Number of decimal places for the tolerance values of a primary units dimension
-                       DIMDSEP:TDimDSep;//Single-character decimal separator used when creating dimensions whose unit format is decimal
-                       DIMRND:GDBDouble;//Rounding value for dimension distances
+                       DIMLFAC:GDBDouble;//Linear measurements scale factor//group144
+                       DIMLUNIT:TDimUnit;//Sets units for all dimension types except Angular://group277
+                       DIMDEC:GDBInteger;//Number of decimal places for the tolerance values of a primary units dimension//group271
+                       DIMDSEP:TDimDSep;//Single-character decimal separator used when creating dimensions whose unit format is decimal//group278
+                       DIMRND:GDBDouble;//Rounding value for dimension distances//group45
                  end;
 PGDBDimStyle=^GDBDimStyle;
 GDBDimStyle = packed object(GDBNamedObject)

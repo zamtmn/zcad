@@ -33,10 +33,27 @@ GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimens
                         function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         procedure transform(const t_matrix:DMatrix4D);virtual;
                         procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+                        procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                    end;
 {EXPORT-}
 implementation
 uses GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
+procedure GDBObjRotatedDimension.SaveToDXF;
+begin
+  SaveToDXFObjPrefix(handle,outhandle,'DIMENSION','AcDbDimension');
+  dxfvertexout(outhandle,10,DimData.P10InWCS);
+  dxfvertexout(outhandle,11,DimData.P11InOCS);
+  if DimData.TextMoved then
+                           dxfGDBIntegerout(outhandle,70,0+128)
+                       else
+                           dxfGDBIntegerout(outhandle,70,0);
+  dxfGDBStringout(outhandle,3,PDimStyle^.Name);
+  dxfGDBStringout(outhandle,100,'AcDbAlignedDimension');
+  dxfvertexout(outhandle,13,DimData.P13InWCS);
+  dxfvertexout(outhandle,14,DimData.P14InWCS);
+  dxfGDBDoubleout(outhandle,50,vertexangle(createvertex2d(0,0),createvertex2d(vectorD.x,vectorD.y))*180/pi);
+  dxfGDBStringout(outhandle,100,'AcDbRotatedDimension');
+end;
 procedure GDBObjRotatedDimension.transform;
 var tv:GDBVertex4D;
     tm:DMatrix4D;

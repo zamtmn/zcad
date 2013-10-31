@@ -1413,7 +1413,7 @@ var
   outstream: {GDBInteger}GDBOpenArrayOfByte;
   groups, values, ucvalues: GDBString;
   groupi, valuei, intable,attr: GDBInteger;
-  temphandle,temphandle2,handle,lasthandle,vporttablehandle,plottablefansdle,{standartstylehandle,}i{,cod}: TDWGHandle;
+  temphandle,temphandle2,temphandle3,temphandle4,handle,lasthandle,vporttablehandle,plottablefansdle,dimtablehandle,i{,cod}: TDWGHandle;
   phandlea: pdxfhandlerecopenarray;
   inlayertable, inblocksec, inblocktable, inlttypetable, indimstyletable: GDBBoolean;
   handlepos:integer;
@@ -1423,6 +1423,7 @@ var
   olddwg:{PTDrawing}PTSimpleDrawing;
   pltp:PGDBLtypeProp;
   plp:PGDBLayerProp;
+  pdsp:PGDBDimStyle;
   ir,ir2,ir3,ir4,ir5:itrec;
   TDI:PTDashInfo;
   PStroke:PGDBDouble;
@@ -1598,6 +1599,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                         valuei:=0;
         if inlayertable and (groupi=390) then
                                              plottablefansdle:={handle-1}intable;  {поймать плоттабле}
+        if indimstyletable and (groupi=5) then
+                                             dimtablehandle:=valuei;  {поймать dimtable}
 
         intable := {}getnevhandle(phandlea, valuei){}{valuei};
         if {}intable <>-1{}{true} then
@@ -2108,43 +2111,116 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
               begin
                 indimstyletable:=false;
                 ignoredsource:=false;
+                temphandle3:=handle-1;
+                temphandle4:=handle-3;
+                //дальше идут стили
+                pdsp:=drawing.DimStyleTable.beginiterate(ir);
+                if pdsp<>nil then
+                repeat
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
+                      outstream.TXTAddGDBStringEOL('DIMSTYLE');
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(105));
+                      outstream.TXTAddGDBStringEOL(inttohex({temphandle3}handle, 0));
+                      inc(handle);
 
-                outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
-                outstream.TXTAddGDBStringEOL('DIMSTYLE');
-                outstream.TXTAddGDBStringEOL(dxfGroupCode(105));
-                outstream.TXTAddGDBStringEOL(inttohex(handle-1, 0));
-                //inc(handle);
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(330));
+                      outstream.TXTAddGDBStringEOL(inttohex({temphandle4}{temphandle3}dimtablehandle, 0));
 
-                outstream.TXTAddGDBStringEOL(dxfGroupCode(330));
-                outstream.TXTAddGDBStringEOL(inttohex(handle-3, 0));
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+                      outstream.TXTAddGDBStringEOL('AcDbSymbolTableRecord');
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
+                      outstream.TXTAddGDBStringEOL('AcDbDimStyleTableRecord');
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
+                      outstream.TXTAddGDBStringEOL(pdsp^.Name);
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
+                      outstream.TXTAddGDBStringEOL('0');
 
-                outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
-                outstream.TXTAddGDBStringEOL('AcDbSymbolTableRecord');
-                outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
-                outstream.TXTAddGDBStringEOL('AcDbDimStyleTableRecord');
-                outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
-                outstream.TXTAddGDBStringEOL('Standard');
-                outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
-                outstream.TXTAddGDBStringEOL('0');
-                outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
+                      //тут сами настройки
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(44));
+                      outstream.TXTAddGDBStringEOL(floattostr(pdsp^.Lines.DIMEXE));
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(42));
+                      outstream.TXTAddGDBStringEOL(floattostr(pdsp^.Lines.DIMEXO));
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(46));
+                      outstream.TXTAddGDBStringEOL(floattostr(pdsp^.Lines.DIMDLE));
 
-                p:={drawing.TextStyleTable.getelement}(drawing.TextStyleTable.FindStyle('Standard',false));
-                {$IFNDEF DELPHI}
-                HandleIterator:=Handle2pointer.Find(p);
-                                                                             if  HandleIterator=nil then
-                                                                                        begin
-                                                                                             Handle2pointer.Insert(p,handle);
-                                                                                             temphandle:=handle;
-                                                                                             inc(handle);
-                                                                                        end
-                                                                                    else
-                                                                                        begin
-                                                                                             temphandle:=HandleIterator.GetValue;
-                                                                                             HandleIterator.Destroy;
-                                                                                        end;
-                {$ENDIF}
-                outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(41));
+                      outstream.TXTAddGDBStringEOL(floattostr(pdsp^.Arrows.DIMASZ));
+                       (*
+                       TGDBDimArrowsProp=packed record
+                                              DIMBLK1:TArrowStyle;//First arrow block name//group343
+                                              DIMBLK2:TArrowStyle;//First arrow block name//group344
+                                              DIMLDRBLK:TArrowStyle;//Arrow block name for leaders//group341
+                                         end;
+                       *)
+                       outstream.TXTAddGDBStringEOL(dxfGroupCode(140));
+                       outstream.TXTAddGDBStringEOL(floattostr(pdsp^.Text.DIMTXT));
 
+                       outstream.TXTAddGDBStringEOL(dxfGroupCode(73));
+                       if pdsp^.Text.DIMTIH then
+                                                outstream.TXTAddGDBStringEOL('1')
+                                            else
+                                                outstream.TXTAddGDBStringEOL('0');
+                       outstream.TXTAddGDBStringEOL(dxfGroupCode(74));
+                       if pdsp^.Text.DIMTOH then
+                                                outstream.TXTAddGDBStringEOL('1')
+                                            else
+                                                outstream.TXTAddGDBStringEOL('0');
+                       outstream.TXTAddGDBStringEOL(dxfGroupCode(147));
+                       outstream.TXTAddGDBStringEOL(floattostr(pdsp^.Text.DIMGAP));
+
+                       outstream.TXTAddGDBStringEOL(dxfGroupCode(77));
+                       case pdsp^.Text.DIMTAD of
+                                  DTVPCenters:outstream.TXTAddGDBStringEOL('0');
+                                    DTVPAbove:outstream.TXTAddGDBStringEOL('1');
+                                  DTVPOutside:outstream.TXTAddGDBStringEOL('2');
+                                      DTVPJIS:outstream.TXTAddGDBStringEOL('3');
+                                   DTVPBellov:outstream.TXTAddGDBStringEOL('4');
+                       end;{case}
+
+                       outstream.TXTAddGDBStringEOL(dxfGroupCode(144));
+                       outstream.TXTAddGDBStringEOL(floattostr(pdsp^.Units.DIMLFAC));
+                       outstream.TXTAddGDBStringEOL(dxfGroupCode(271));
+                       outstream.TXTAddGDBStringEOL(inttostr(pdsp^.Units.DIMDEC));
+                       outstream.TXTAddGDBStringEOL(dxfGroupCode(45));
+                       outstream.TXTAddGDBStringEOL(floattostr(pdsp^.Units.DIMRND));
+
+                       outstream.TXTAddGDBStringEOL(dxfGroupCode(277));
+                       case pdsp^.Units.DIMLUNIT of
+                                   DUScientific:outstream.TXTAddGDBStringEOL('1');
+                                      DUDecimal:outstream.TXTAddGDBStringEOL('2');
+                                  DUEngineering:outstream.TXTAddGDBStringEOL('3');
+                                DUArchitectural:outstream.TXTAddGDBStringEOL('4');
+                                   DUFractional:outstream.TXTAddGDBStringEOL('5');
+                                       DUSystem:outstream.TXTAddGDBStringEOL('6');
+                       end;{case}
+                       outstream.TXTAddGDBStringEOL(dxfGroupCode(278));
+                       case pdsp^.Units.DIMDSEP of
+                                   DDSDot:outstream.TXTAddGDBStringEOL('46');
+                                 DDSComma:outstream.TXTAddGDBStringEOL('44');
+                                 DDSSpace:outstream.TXTAddGDBStringEOL('32');
+                       end;{case}
+
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
+                      p:=drawing.TextStyleTable.FindStyle('Standard',false);
+                      {$IFNDEF DELPHI}
+                      HandleIterator:=Handle2pointer.Find(p);
+                                                                                   if  HandleIterator=nil then
+                                                                                              begin
+                                                                                                   Handle2pointer.Insert(p,handle);
+                                                                                                   temphandle:=handle;
+                                                                                                   inc(handle);
+                                                                                              end
+                                                                                          else
+                                                                                              begin
+                                                                                                   temphandle:=HandleIterator.GetValue;
+                                                                                                   HandleIterator.Destroy;
+                                                                                              end;
+                      {$ENDIF}
+                      outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
+
+
+                      pdsp:=drawing.DimStyleTable.iterate(ir);
+                until pdsp=nil;
                 outstream.TXTAddGDBStringEOL(groups);
                 outstream.TXTAddGDBStringEOL(values);
 {0
@@ -2348,7 +2424,7 @@ ENDTAB}
                   begin
                     IgnoredSource := true;
                   end
-              else if (groupi = 0) and (values = 'DIMSTYLE')and indimstyletable then
+              else if (groupi = 0) and (values = dxfName_DIMSTYLE)and indimstyletable then
                   begin
                     IgnoredSource := true;
                   end

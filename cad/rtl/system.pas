@@ -1983,6 +1983,7 @@ TDXFDimData=packed record
   P14InWCS:GDBVertex;
   P15InWCS:GDBVertex;
   P16InOCS:GDBVertex;
+  TextMoved:GDBBoolean;
 end;
 PGDBObjDimension=^GDBObjDimension;
 GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
@@ -2003,6 +2004,8 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                 function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                 function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
+                procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
+                procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
                 end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\gdbgenericdimension.pas
 TDimType=(DTRotated,DTAligned,DTAngular,DTDiameter,DTRadius,DTAngular3P,DTOrdinate);
@@ -2052,6 +2055,8 @@ GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimens
                         function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                         function P13ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                         function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
+                        procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
+                        procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
                    end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBBlockInsert.pas
 PGDBObjBlockInsert=^GDBObjBlockInsert;

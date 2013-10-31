@@ -118,7 +118,7 @@ var
     tvertex,temp:GDBVERTEX;
 begin
      result:=tv;
-
+     DimData.TextMoved:=true;
      tl:=scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD);
      temp:=VertexDmorph(DimData.P13InWCS,self.vectorD,tl);
 
@@ -338,12 +338,14 @@ end;
 procedure GDBObjAlignedDimension.DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
 var
   ptext:PGDBObjMText;
+  ip: Intercept3DProp;
 begin
   //DimAngle:=vertexangle(CreateVertex2D(DimData.P13InWCS.x,DimData.P13InWCS.y),CreateVertex2D(DimData.P14InWCS.x,DimData.P14InWCS.y));
   DimAngle:=vertexangle(NulVertex2D,CreateVertex2D(vectorD.x,vectorD.y));
   TextAngle:=CorrectAngleIfNotReadable(DimAngle);
 
-  TextTParam:=GettFromLinePoint(DimData.P11InOCS,DimData.P13InWCS,DimData.P14InWCS);
+  ip:=geometry.intercept3dmy2(DimData.P13InWCS,DimData.P14InWCS,DimData.P11InOCS,vertexadd(DimData.P11InOCS,self.vectorN));
+  TextTParam:=ip.t1;//GettFromLinePoint(DimData.P11InOCS,DimData.P13InWCS,DimData.P14InWCS);
   if (TextTParam>0)and(TextTParam<1) then
                                          begin
                                               TextInside:=true;
@@ -366,9 +368,16 @@ begin
   ptext.vp.Layer:=vp.Layer;
   ptext.Template:=GetLinearDimStr({Vertexlength(DimData.P13InWCS,DimData.P14InWCS)}abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)));
   TextOffset:=GetTextOffset;
-  ptext.Local.P_insert:=vertexadd(p,TextOffset);
-  ptext.textprop.justify:=jsmc;
-
+  if self.DimData.textmoved then
+                   begin
+                        ptext.Local.P_insert:=vertexadd(p,TextOffset);
+                        ptext.textprop.justify:=jsmc;
+                   end
+               else
+               begin
+                    ptext.Local.P_insert:=p;
+                    ptext.textprop.justify:=jsmc;
+               end;
   ptext.textprop.angle:=TextAngle;
   ptext.Local.basis.ox.x:=cos(TextAngle);
   ptext.Local.basis.ox.y:=sin(TextAngle);

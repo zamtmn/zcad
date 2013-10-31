@@ -43,6 +43,7 @@ TDXFDimData=packed record
   P14InWCS:GDBVertex;
   P15InWCS:GDBVertex;
   P16InOCS:GDBVertex;
+  TextMoved:GDBBoolean;
 end;
 PGDBObjDimension=^GDBObjDimension;
 GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)

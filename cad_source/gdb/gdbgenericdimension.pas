@@ -114,6 +114,13 @@ begin
        6:DimType:=DTOrdinate;
        end;
   end;
+  if dtype<>-1 then
+                   begin
+                        if (dtype and 128)<>0 then
+                                                  DimData.TextMoved:=true
+                                              else
+                                                  DimData.TextMoved:=false;
+                   end;
 end;
 
 constructor GDBObjGenericDimension.initnul;
@@ -124,6 +131,7 @@ begin
   DimData.P13InWCS := createvertex(1,1,0);
   DimData.P14InWCS:= createvertex(300,1,0);
   DimType:=TDimType.DTRotated;
+  DimData.TextMoved:=false;
 end;
 constructor GDBObjGenericDimension.init;
 begin
@@ -132,6 +140,7 @@ begin
   DimData.P13InWCS := createvertex(1,1,0);
   DimData.P14InWCS:= createvertex(300,1,0);
   DimType:=TDimType.DTRotated;
+  DimData.TextMoved:=false;
 end;
 
 begin

@@ -71,7 +71,7 @@ const {as_normal=0;
   GDBElLeaderID = 104;
 
   GDBAlignedDimensionID = 105;
-  GDBRotatedDimensionID = 105;
+  GDBRotatedDimensionID = 106;
 
   PROJParalel = 1;
   PROJPerspective = 2;

@@ -55,6 +55,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;
+                       procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                    end;
 {EXPORT-}
 function CorrectPointLine(q:GDBvertex;p1,p2:GDBvertex;out d:GDBDouble):GDBVertex;
@@ -99,6 +100,21 @@ begin
      w:=VertexSub(q,p1);
      result:=scalardot(w,dirNormalized);
 end;
+procedure GDBObjAlignedDimension.SaveToDXF;
+begin
+  SaveToDXFObjPrefix(handle,outhandle,'DIMENSION','AcDbDimension');
+  dxfvertexout(outhandle,10,DimData.P10InWCS);
+  dxfvertexout(outhandle,11,DimData.P11InOCS);
+  if DimData.TextMoved then
+                           dxfGDBIntegerout(outhandle,70,1+128)
+                       else
+                           dxfGDBIntegerout(outhandle,70,1);
+  dxfGDBStringout(outhandle,3,PDimStyle^.Name);
+  dxfGDBStringout(outhandle,100,'AcDbAlignedDimension');
+  dxfvertexout(outhandle,13,DimData.P13InWCS);
+  dxfvertexout(outhandle,14,DimData.P14InWCS);
+end;
+
 function GDBObjAlignedDimension.P10ChangeTo(tv:GDBVertex):GDBVertex;
 var
     t,tl:GDBDouble;

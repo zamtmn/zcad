@@ -22,6 +22,10 @@ interface
 uses UGDBFontManager,zcadsysvars,gdbasetypes,SysInfo,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
      strproc,varmandef,shared,ugdbfont,zcadstrconsts,UGDBNamedObjectsArray,memman;
 type
+TDimArrowBlockParam=record
+                     name:GDBString;
+                     width:GDBDouble;
+               end;
 {EXPORT+}
 TDimUnit=(DUScientific,DUDecimal,DUEngineering,DUArchitectural,DUFractional,DUSystem);
 TDimDSep=(DDSDot,DDSComma,DDSSpace);
@@ -66,6 +70,7 @@ GDBDimStyle = packed object(GDBNamedObject)
                       Units:TGDBDimUnitsProp;
                       procedure SetDefaultValues;virtual;
                       procedure SetValueFromDxf(group:GDBInteger;value:GDBString);virtual;
+                      function GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
              end;
 PGDBDimStyleArray=^GDBDimStyleArray;
 GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBDimStyle*)
@@ -73,10 +78,6 @@ GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*Op
                     constructor initnul;
               end;
 {EXPORT-}
-TDimArrowBlockParam=record
-                     name:GDBString;
-                     width:GDBDouble;
-               end;
 TDimArrowBlockArray=array[TArrowStyle] of TDimArrowBlockParam;
 var
      DimArrows:TDimArrowBlockArray=(
@@ -103,6 +104,15 @@ var
                                     );
 implementation
 uses {UGDBDescriptor,}{io,}log;
+function GDBDimStyle.GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
+begin
+     case nline of
+                 0:result:=DimArrows[Arrows.DIMBLK1];
+                 1:result:=DimArrows[Arrows.DIMBLK2];
+                 else result:=DimArrows[Arrows.DIMLDRBLK];
+     end;
+end;
+
 procedure GDBDimStyle.SetValueFromDxf(group:GDBInteger;value:GDBString);
 begin
   case group of

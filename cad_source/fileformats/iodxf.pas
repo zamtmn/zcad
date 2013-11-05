@@ -1436,6 +1436,39 @@ var
   {$ENDIF}
   //DWGHandle:TDWGHandle;
   laststrokewrited:boolean;
+procedure GetOrCreateHandle(const PDWGObject:pointer; var handle:TDWGHandle; out temphandle:TDWGHandle);
+begin
+    {$IFNDEF DELPHI}
+    HandleIterator:=Handle2pointer.Find(PDWGObject);
+    if  HandleIterator=nil then
+                               begin
+                                    Handle2pointer.Insert(PDWGObject,handle);
+                                    temphandle:=handle;
+                                    inc(handle);
+                               end
+                           else
+                               begin
+                                    temphandle:=HandleIterator.GetValue;
+                                    HandleIterator.Destroy;
+                               end;
+   {$ENDIF}
+end;
+procedure GetHandle(const PDWGObject:pointer; out temphandle:TDWGHandle);
+begin
+    {$IFNDEF DELPHI}
+    HandleIterator:=Handle2pointer.Find(PDWGObject);
+    if  HandleIterator=nil then
+                               temphandle:=0
+                           else
+                               begin
+                                    temphandle:=HandleIterator.GetValue;
+                                    HandleIterator.Destroy;
+                               end;
+   {$ENDIF}
+end;
+
+
+
 begin
   {$IFNDEF DELPHI}
   Handle2pointer:=mappDWGHi.Create;
@@ -1599,9 +1632,6 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                         valuei:=0;
         if inlayertable and (groupi=390) then
                                              plottablefansdle:={handle-1}intable;  {поймать плоттабле}
-        if indimstyletable and (groupi=5) then
-                                             dimtablehandle:=valuei;  {поймать dimtable}
-
         intable := {}getnevhandle(phandlea, valuei){}{valuei};
         if {}intable <>-1{}{true} then
         begin
@@ -1625,6 +1655,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
         end;
         if inlayertable and (groupi=390) then
                                              plottablefansdle:=lasthandle;  {поймать плоттабле}
+        if indimstyletable and (groupi=5) then
+                                             dimtablehandle:=lasthandle;  {поймать dimtable}
         (*{if instyletable and (groupi=5) then
                                              standartstylehandle:=lasthandle;{intable;}  {поймать standart}*)
       end
@@ -1656,8 +1688,11 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
               begin
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                 outstream.TXTAddGDBStringEOL('BLOCK');
+
+                //GetOrCreateHandle(@(PBlockdefArray(drawing.BlockDefArray.parray)^[i]),handle,temphandle);
+                //
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
-                outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
+                outstream.TXTAddGDBStringEOL(inttohex(handle{temphandle}, 0));
                 inc(handle);
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                 outstream.TXTAddGDBStringEOL(dxfName_AcDbEntity);
@@ -1880,9 +1915,12 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
               begin
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                 outstream.TXTAddGDBStringEOL(dxfName_BLOCK_RECORD);
+
+                GetOrCreateHandle(@(PBlockdefArray(drawing.BlockDefArray.parray)^[i]),handle,temphandle);
+
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
-                outstream.TXTAddGDBStringEOL(inttohex(handle, 0));
-                inc(handle);
+                outstream.TXTAddGDBStringEOL(inttohex({handle}temphandle, 0));
+                //inc(handle);
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
                 outstream.TXTAddGDBStringEOL(dxfName_AcDbSymbolTableRecord);
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(100));
@@ -2025,19 +2063,9 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                              outstream.TXTAddGDBStringEOL('4');
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(75));
                                                              outstream.TXTAddGDBStringEOL(inttostr(PSP^.Psymbol^.number));
-                                                             {$IFNDEF DELPHI}
-                                                             HandleIterator:=Handle2pointer.Find(PSP^.param.PStyle);
-                                                             if  HandleIterator=nil then
-                                                                                        begin
-                                                                                             Handle2pointer.Insert(PSP^.param.PStyle,handle);
-                                                                                             temphandle:=handle;
-                                                                                             inc(handle);
-                                                                                        end
-                                                                                    else
-                                                                                        begin
-                                                                                             temphandle:=HandleIterator.GetValue;
-                                                                                        end;
-                                                             {$ENDIF}
+
+                                                             GetOrCreateHandle(PSP^.param.PStyle,handle,temphandle);
+
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
                                                              outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(46));
@@ -2057,22 +2085,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(75));
                                                              outstream.TXTAddGDBStringEOL('0');
 
-                                                             //if uppercase(PTP^.param.PStyle^.name)<>TSNStandardStyleName then
-                                                             {$IFNDEF DELPHI}
-                                                             begin
-                                                             HandleIterator:=Handle2pointer.Find(PTP^.param.PStyle);
-                                                             if  HandleIterator=nil then
-                                                                                        begin
-                                                                                             Handle2pointer.Insert(PTP^.param.PStyle,handle);
-                                                                                             temphandle:=handle;
-                                                                                             inc(handle);
-                                                                                        end
-                                                                                    else
-                                                                                        begin
-                                                                                             temphandle:=HandleIterator.GetValue;
-                                                                                        end;
-                                                             end;
-                                                             {$ENDIF}
+                                                             GetOrCreateHandle(PTP^.param.PStyle,handle,temphandle);
+
                                                              {else
                                                                  temphandle:=standartstylehandle;}
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
@@ -2145,6 +2159,61 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
 
                       outstream.TXTAddGDBStringEOL(dxfGroupCode(41));
                       outstream.TXTAddGDBStringEOL(floattostr(pdsp^.Arrows.DIMASZ));
+
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(173));
+                      if pdsp^.Arrows.DIMBLK1<>pdsp^.Arrows.DIMBLK2 then
+                                                                        begin
+                                                                             outstream.TXTAddGDBStringEOL('1');
+                                                                         end
+                                           else
+                                               begin
+                                                    outstream.TXTAddGDBStringEOL('0');
+                                               end;
+
+                      if pdsp^.Arrows.DIMLDRBLK<>TSClosedFilled then
+                      begin
+                           GetOrCreateHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(-1).name),handle,temphandle);
+                           outstream.TXTAddGDBStringEOL(dxfGroupCode(341));
+                           outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
+                      end;
+
+
+                      if pdsp^.Arrows.DIMBLK1<>pdsp^.Arrows.DIMBLK2 then
+                                                                        begin
+                                                                             if pdsp^.Arrows.DIMBLK1<>TSClosedFilled then
+                                                                             begin
+                                                                                   GetHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),temphandle);
+                                                                                   if temphandle<>0 then
+                                                                                   begin
+                                                                                         outstream.TXTAddGDBStringEOL(dxfGroupCode(343));
+                                                                                         outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
+                                                                                   end;
+                                                                             end;
+                                                                             if pdsp^.Arrows.DIMBLK2<>TSClosedFilled then
+                                                                             begin
+                                                                                   GetHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(1).name),temphandle);
+                                                                                   if temphandle<>0 then
+                                                                                   begin
+                                                                                         outstream.TXTAddGDBStringEOL(dxfGroupCode(344));
+                                                                                         outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
+                                                                                   end;
+                                                                             end;
+                                                                         end
+                                           else
+                                               begin
+                                                    if pdsp^.Arrows.DIMBLK1<>TSClosedFilled then
+                                                    begin
+                                                    GetHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),temphandle);
+                                                    if temphandle<>0 then
+                                                    begin
+                                                    outstream.TXTAddGDBStringEOL(dxfGroupCode(342));
+                                                    outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
+                                                    end;
+                                                    end;
+                                               end;
+
+                      //GetOrCreateHandle(@(PBlockdefArray(drawing.BlockDefArray.parray)^[i]),handle,temphandle);
+
                        (*
                        TGDBDimArrowsProp=packed record
                                               DIMBLK1:TArrowStyle;//First arrow block name//group343
@@ -2202,20 +2271,9 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
 
                       outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
                       p:=drawing.TextStyleTable.FindStyle('Standard',false);
-                      {$IFNDEF DELPHI}
-                      HandleIterator:=Handle2pointer.Find(p);
-                                                                                   if  HandleIterator=nil then
-                                                                                              begin
-                                                                                                   Handle2pointer.Insert(p,handle);
-                                                                                                   temphandle:=handle;
-                                                                                                   inc(handle);
-                                                                                              end
-                                                                                          else
-                                                                                              begin
-                                                                                                   temphandle:=HandleIterator.GetValue;
-                                                                                                   HandleIterator.Destroy;
-                                                                                              end;
-                      {$ENDIF}
+
+                      GetOrCreateHandle(p,handle,temphandle);
+
                       outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
 
 
@@ -2258,20 +2316,9 @@ ENDTAB}
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                   outstream.TXTAddGDBStringEOL(dxfName_Style);
                   p:=drawing.TextStyleTable.getelement(i);
-                  {$IFNDEF DELPHI}
-                  HandleIterator:=Handle2pointer.Find(drawing.TextStyleTable.getelement(i));
-                                                                               if  HandleIterator=nil then
-                                                                                                          begin
-                                                                                                               Handle2pointer.Insert(p,handle);
-                                                                                                               temphandle:=handle;
-                                                                                                               inc(handle);
-                                                                                                          end
-                                                                                                      else
-                                                                                                          begin
-                                                                                                               temphandle:=HandleIterator.GetValue;
-                                                                                                               HandleIterator.Destroy;
-                                                                                                          end;
-                  {$ENDIF}
+
+                  GetOrCreateHandle(drawing.TextStyleTable.getelement(i),handle,temphandle);
+
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                   outstream.TXTAddGDBStringEOL(inttohex({handle}temphandle, 0));
                   inc(handle);
@@ -2316,20 +2363,9 @@ ENDTAB}
                     //if uppercase(PGDBTextStyle(drawing.TextStyleTable.getelement(i))^.name)<>TSNStandardStyleName then
                     begin
                     p:=drawing.TextStyleTable.getelement(i);
-                    {$IFNDEF DELPHI}
-                    HandleIterator:=Handle2pointer.Find(p);
-                                                                                 if  HandleIterator=nil then
-                                                                                                            begin
-                                                                                                                 Handle2pointer.Insert(p,handle);
-                                                                                                                 temphandle:=handle;
-                                                                                                                 inc(handle);
-                                                                                                            end
-                                                                                                        else
-                                                                                                            begin
-                                                                                                                 temphandle:=HandleIterator.GetValue;
-                                                                                                                 HandleIterator.Destroy;
-                                                                                                            end;
-                    {$ENDIF}
+
+                    GetOrCreateHandle(p,handle,temphandle);
+
                     outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
                     //inc(handle);
                     end;

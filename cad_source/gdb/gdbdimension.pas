@@ -57,7 +57,6 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
                 function GetLinearDimStr(l:GDBDouble):GDBString;
                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                function GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
                 function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                 function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                 function P12ChangeTo(tv:GDBVertex):GDBVertex;virtual;
@@ -93,14 +92,6 @@ begin
   DimData.P14InWCS:=VectorTransform3D(PGDBObjDimension(p)^.DimData.P14InWCS,t_matrix^);
   DimData.P15InWCS:=VectorTransform3D(PGDBObjDimension(p)^.DimData.P15InWCS,t_matrix^);
   DimData.P16InOCS:=VectorTransform3D(PGDBObjDimension(p)^.DimData.P16InOCS,t_matrix^);
-end;
-function GDBObjDimension.GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
-begin
-     case nline of
-                 0:result:=DimArrows[PDimStyle.Arrows.DIMBLK1];
-                 1:result:=DimArrows[PDimStyle.Arrows.DIMBLK2];
-                 else result:=DimArrows[PDimStyle.Arrows.DIMLDRBLK];
-     end;
 end;
 function GDBObjDimension.P10ChangeTo(tv:GDBVertex):GDBVertex;
 begin

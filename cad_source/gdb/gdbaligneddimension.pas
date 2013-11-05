@@ -249,8 +249,8 @@ var
    zangle:gdbdouble;
 begin
   l:=geometry.Vertexlength(p1,p2);
-  tbp0:=GetDimBlockParam(0);
-  tbp1:=GetDimBlockParam(1);
+  tbp0:=PDimStyle.GetDimBlockParam(0);
+  tbp1:=PDimStyle.GetDimBlockParam(1);
   tbp0.width:=tbp0.width*PDimStyle.Arrows.DIMASZ;
   tbp1.width:=tbp1.width*PDimStyle.Arrows.DIMASZ;
   gdb.AddBlockFromDBIfNeed(@drawing,tbp0.name);

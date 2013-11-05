@@ -653,6 +653,7 @@ begin
   ccsLBN.z:=-ccsLBN.z;
   ccsRTF.z:=-ccsRTF.z;
   td:=(ccsRTF.z-ccsLBN.z)/20;
+  td:=min(td,-ccsLBN.z/100);
   ccsLBN.z:=ccsLBN.z-td;
   ccsRTF.z:=ccsRTF.z+td;
   if (ccsLBN.z-ccsRTF.z)<sqreps then

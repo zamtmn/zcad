@@ -33,6 +33,7 @@ const
   dxfName_CLASSES='CLASSES';
   dxfName_APPID='APPID';
   dxfName_DIMSTYLE='DIMSTYLE';
+  dxfName_BLOCKRECORD='BLOCK_RECORD';
   dxfName_ENDSEC='ENDSEC';
   dxfName_Layer='LAYER';
   dxfName_Style='STYLE';
@@ -57,18 +58,15 @@ function dxfGDBFloatload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBIntege
 function dxfGDBIntegerload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; out v:GDBInteger):GDBBoolean;
 function dxfGDBStringload(var f:GDBOpenArrayOfByte;dxfcod,currentdxfcod:GDBInteger; var v:GDBString):GDBBoolean;
 function dxfGroupCode(const dxfcod:GDBInteger):GDBString;
-
-
-
-
-
-
-
-
+function DXFHandle(sh:string):TDWGHandle;
 
 implementation
 uses
     log;
+function DXFHandle(sh:string):TDWGHandle;
+begin
+     result:=StrToQWord('$'+sh);
+end;
 function dxfGroupCode(const dxfcod:GDBInteger):GDBString;
 begin
      result:=inttostr(dxfcod);
@@ -239,4 +237,4 @@ end;
 
 begin
      {$IFDEF DEBUGINITSECTION}LogOut('dxflow.initialization');{$ENDIF}
-end.
+end.

@@ -149,15 +149,15 @@ end;
 
 procedure GDBObjPoint.DrawGeometry;
 begin
-  {myglbegin(GL_points);
-  glVertex3dV(@P_insertInWCS);
-  myglend;}
-  oglsm.myglbegin(GL_LINES);
+  oglsm.myglbegin(GL_points);
+  oglsm.glVertex3dV(@P_insertInWCS);
+  oglsm.myglend;
+  {oglsm.myglbegin(GL_LINES);
   oglsm.myglVertex(P_insertInWCS.x-0.5,P_insertInWCS.y-0.5,P_insertInWCS.z);
   oglsm.myglVertex(P_insertInWCS.x+0.5,P_insertInWCS.y+0.5,P_insertInWCS.z);
   oglsm.myglVertex(P_insertInWCS.x-0.5,P_insertInWCS.y+0.5,P_insertInWCS.z);
   oglsm.myglVertex(P_insertInWCS.x+0.5,P_insertInWCS.y-0.5,P_insertInWCS.z);
-  oglsm.myglend;
+  oglsm.myglend;}
   inherited;
 end;
 function GDBObjPoint.CalcInFrustum;

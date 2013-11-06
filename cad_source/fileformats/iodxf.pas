@@ -19,17 +19,12 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses ugdbdimstylearray,gdbentityfactory,{$IFNDEF DELPHI}gmap,gutil,dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,{pdfvectorialreader,}GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, {GDBManager,} {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
+uses usimplegenerics,ugdbdimstylearray,gdbentityfactory,{$IFNDEF DELPHI}gmap,gutil,dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,{pdfvectorialreader,}GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, {GDBManager,} {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
    entnamindex=record
                     entname:GDBString;
               end;
-     {$IFNDEF DELPHI}
-     lessppi=specialize TLess<pointer>;
-     mappDWGHi=specialize TMap<pointer,TDWGHandle, lessppi>;
-     {$ENDIF}
-
 const
      acadentignoredcol=1;
      ignorenamtable:array[1..acadentignoredcol]of entnamindex=
@@ -1088,9 +1083,6 @@ begin
                                end;
 end;
 procedure ReadDimStyles(var s:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
-//begin
-//     gotodxf(f, 0, dxfName_ENDTAB);//scip this table
-//end;
 var
    psimstyleprop:PGDBDimStyle;
    byt:integer;
@@ -1121,6 +1113,32 @@ begin
      end;
 end;
 end;
+procedure ReadBlockRecird(const Handle2BlockName:TMapBlockHandle_BlockNames;var s:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+var
+   byt:integer;
+   bname:string;
+   bhandle:TDWGHandle;
+begin
+while s = dxfName_BLOCKRECORD do
+begin
+     byt := 2;
+     while byt <> 0 do
+     begin
+     s := f.readGDBString;
+     byt := strtoint(s);
+     s := f.readGDBString;
+     if byt=2 then
+                  begin
+                       bname:=s;
+                       Handle2BlockName.Insert(bhandle,bname);
+                  end;
+     if byt=5 then
+                  begin
+                       bhandle:=DXFHandle(s);
+                  end;
+     end;
+end;
+end;
 
 procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
@@ -1131,7 +1149,11 @@ var
   blockload:boolean;
 
   clayer,cltype,ctstyle:GDBString;
+  Handle2BlockName:TMapBlockHandle_BlockNames;
 begin
+  {$IFNDEF DELPHI}
+  Handle2BlockName:=TMapBlockHandle_BlockNames.Create;
+  {$ENDIF}
   blockload:=false;
   {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF2000',lp_IncPos);{$ENDIF}
   readvariables(f,ctstyle,clayer,cltype,LoadMode);
@@ -1160,7 +1182,11 @@ begin
                       dxfName_APPID:
                                     gotodxf(f, 0, dxfName_ENDTAB);//scip this table
                dxfName_BLOCK_RECORD:
-                                    gotodxf(f, 0, dxfName_ENDTAB);//scip this table
+                                    begin
+                                    {$IFDEF TOTALYLOG}programlog.logoutstr('Found BLOCK_RECORD table',lp_IncPos);{$ENDIF}
+                                    ReadBlockRecird(Handle2BlockName,s,f,exitGDBString,owner,LoadMode,drawing);
+                                    {$IFDEF TOTALYLOG}programlog.logoutstr('end; {BLOCK_RECORD table}',lp_DecPos);{$ENDIF}
+                                    end;
                    dxfName_DIMSTYLE:
                                     begin
                                       {$IFDEF TOTALYLOG}programlog.logoutstr('Found dimstyles table',lp_IncPos);{$ENDIF}
@@ -1278,6 +1304,7 @@ begin
           until (s = dxfName_ENDSEC);
           {$IFDEF TOTALYLOG}programlog.logoutstr('end; {block table}',lp_DecPos);{$ENDIF}
           drawing.BlockDefArray.Format;
+          drawing.DimStyleTable.ResolveDXFHandles(Handle2BlockName);
         end;
 
     s := s;
@@ -1285,6 +1312,9 @@ begin
     if assigned(ProcessLongProcessProc)then
     ProcessLongProcessProc(f.ReadPos);
   until not f.notEOF;
+  {$IFNDEF DELPHI}
+  Handle2BlockName.destroy;
+  {$ENDIF}
   {$IFDEF TOTALYLOG}programlog.logoutstr('end; {AddFromDXF2000}',lp_decPos);{$ENDIF}
 end;
 

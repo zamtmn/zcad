@@ -19,7 +19,7 @@
 unit ugdbdimstylearray;
 {$INCLUDE def.inc}
 interface
-uses UGDBFontManager,zcadsysvars,gdbasetypes,SysInfo,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
+uses usimplegenerics,UGDBFontManager,zcadsysvars,gdbasetypes,SysInfo,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
      strproc,varmandef,shared,ugdbfont,zcadstrconsts,UGDBNamedObjectsArray,memman;
 type
 TDimArrowBlockParam=record
@@ -32,6 +32,10 @@ TDimDSep=(DDSDot,DDSComma,DDSSpace);
 TDimTextVertPosition=(DTVPCenters,DTVPAbove,DTVPOutside,DTVPJIS,DTVPBellov);
 TArrowStyle=(TSClosedFilled,TSClosedBlank,TSClosed,TSDot,TSArchitecturalTick,TSOblique,TSOpen,TSOriginIndicator,TSOriginIndicator2,
             TSRightAngle,TSOpen30,TSDotSmall,TSDotBlank,TSDotSmallBlank,TSBox,TSBoxFilled,TSDatumTriangle,TSDatumtTriangleFilled,TSIntegral,TSUserDef);
+PTDimStyleDXFLoadingData=^TDimStyleDXFLoadingData;
+TDimStyleDXFLoadingData=record
+                              DIMBLK1handle,DIMBLK2handle,DIMLDRBLKhandle:TDWGHandle;
+                        end;
 TGDBDimLinesProp=packed record
                        //выносные линии
                        DIMEXE:GDBDouble;//Extension line extension//group44
@@ -68,14 +72,20 @@ GDBDimStyle = packed object(GDBNamedObject)
                       Text:TGDBDimTextProp;
                       Placing:TGDBDimPlacingProp;
                       Units:TGDBDimUnitsProp;
+                      PDXFLoadingData:PTDimStyleDXFLoadingData;
                       procedure SetDefaultValues;virtual;
                       procedure SetValueFromDxf(group:GDBInteger;value:GDBString);virtual;
                       function GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
+                      function GetDimBlockTypeByName(bname:String):TArrowStyle;
+                      procedure CreateLDIfNeed;
+                      procedure ReleaseLDIfNeed;
+                      procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
              end;
 PGDBDimStyleArray=^GDBDimStyleArray;
 GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBDimStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
+                    procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
               end;
 {EXPORT-}
 TDimArrowBlockArray=array[TArrowStyle] of TDimArrowBlockParam;
@@ -104,6 +114,62 @@ var
                                     );
 implementation
 uses {UGDBDescriptor,}{io,}log;
+procedure GDBDimStyle.ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
+var Iterator:TMapBlockHandle_BlockNames.TIterator;
+    BlockName:string;
+begin
+     if PDXFLoadingData<>nil then
+     begin
+          if PDXFLoadingData^.DIMLDRBLKhandle<>0 then
+          begin
+               Iterator:=Handle2BlockName.Find(PDXFLoadingData^.DIMLDRBLKhandle);
+               if  Iterator<>nil then
+                                    begin
+                                         BlockName:=Iterator.GetValue;
+                                         Iterator.Destroy;
+                                         arrows.DIMLDRBLK:=GetDimBlockTypeByName(BlockName);
+                                    end;
+          end;
+          if PDXFLoadingData^.DIMBLK1handle<>0 then
+          begin
+               Iterator:=Handle2BlockName.Find(PDXFLoadingData^.DIMBLK1handle);
+               if  Iterator<>nil then
+                                    begin
+                                         BlockName:=Iterator.GetValue;
+                                         Iterator.Destroy;
+                                         arrows.DIMBLK1:=GetDimBlockTypeByName(BlockName);
+                                    end;
+          end;
+          if PDXFLoadingData^.DIMBLK2handle<>0 then
+          begin
+               Iterator:=Handle2BlockName.Find(PDXFLoadingData^.DIMBLK2handle);
+               if  Iterator<>nil then
+                                    begin
+                                         BlockName:=Iterator.GetValue;
+                                         Iterator.Destroy;
+                                         arrows.DIMBLK2:=GetDimBlockTypeByName(BlockName);
+                                    end;
+          end;
+     end;
+end;
+
+procedure GDBDimStyle.CreateLDIfNeed;
+begin
+     if PDXFLoadingData=nil then
+     begin
+          GDBGetMem({$IFDEF DEBUGBUILD}'{29732718-D406-4A69-A37E-3F9A28E849EF}',{$ENDIF}PDXFLoadingData,SizeOf(PDXFLoadingData^));
+          PDXFLoadingData^.DIMBLK1handle:=0;
+          PDXFLoadingData^.DIMBLK2handle:=0;
+          PDXFLoadingData^.DIMLDRBLKhandle:=0;
+     end;
+end;
+procedure GDBDimStyle.ReleaseLDIfNeed;
+begin
+     if PDXFLoadingData<>nil then
+     begin
+          GDBFreeMem(PDXFLoadingData);
+     end;
+end;
 function GDBDimStyle.GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
 begin
      case nline of
@@ -111,6 +177,19 @@ begin
                  1:result:=DimArrows[Arrows.DIMBLK2];
                  else result:=DimArrows[Arrows.DIMLDRBLK];
      end;
+end;
+function GDBDimStyle.GetDimBlockTypeByName(bname:String):TArrowStyle;
+var
+   ias:TArrowStyle;
+begin
+     bname:=uppercase(bname);
+     for ias:=low(TArrowStyle) to high(TArrowStyle) do
+     if uppercase(DimArrows[ias].name)=bname then
+                                                  begin
+                                                       result:=ias;
+                                                       exit;
+                                                  end;
+     result:=high(TArrowStyle);
 end;
 
 procedure GDBDimStyle.SetValueFromDxf(group:GDBInteger;value:GDBString);
@@ -208,10 +287,26 @@ Units.DIMDEC:=strtoint(value);
             end;
        end;
   end;
+  341:
+  begin
+       CreateLDIfNeed;
+       PDXFLoadingData.DIMLDRBLKhandle:=StrToQWord('$'+value);
+  end;
+  343:
+  begin
+       CreateLDIfNeed;
+       PDXFLoadingData.DIMBLK1handle:=StrToQWord('$'+value);
+  end;
+  344:
+  begin
+       CreateLDIfNeed;
+       PDXFLoadingData.DIMBLK2handle:=StrToQWord('$'+value);
+  end;
   end;
 end;
 procedure GDBDimStyle.SetDefaultValues;
 begin
+     PDXFLoadingData:=nil;
      Lines.DIMEXE:=0.18;
      lines.DIMEXO:=0.0625;
      Lines.DIMDLE:=0;
@@ -227,6 +322,20 @@ begin
      text.DIMTAD:=DTVPAbove;
      text.DIMGAP:=0.625;
 end;
+procedure GDBDimStyleArray.ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
+var
+  p:PGDBDimStyle;
+  ir:itrec;
+begin
+  p:=beginiterate(ir);
+  if p<>nil then
+  repeat
+    p^.ResolveDXFHandles(Handle2BlockName);
+
+    p:=iterate(ir);
+  until p=nil;
+end;
+
 constructor GDBDimStyleArray.initnul;
 begin
   inherited initnul;

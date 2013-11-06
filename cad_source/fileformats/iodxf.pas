@@ -2212,7 +2212,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                                         begin
                                                                              if pdsp^.Arrows.DIMBLK1<>TSClosedFilled then
                                                                              begin
-                                                                                   GetHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),temphandle);
+                                                                                   GetOrCreateHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),handle,temphandle);
                                                                                    if temphandle<>0 then
                                                                                    begin
                                                                                          outstream.TXTAddGDBStringEOL(dxfGroupCode(343));
@@ -2221,7 +2221,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                                              end;
                                                                              if pdsp^.Arrows.DIMBLK2<>TSClosedFilled then
                                                                              begin
-                                                                                   GetHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(1).name),temphandle);
+                                                                                   GetOrCreateHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(1).name),handle,temphandle);
                                                                                    if temphandle<>0 then
                                                                                    begin
                                                                                          outstream.TXTAddGDBStringEOL(dxfGroupCode(344));

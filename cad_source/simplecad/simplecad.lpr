@@ -8,7 +8,7 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, lazopenglcontext, fpvectorialpkg, printer4lazarus,UUnitManager,
-  umainform
+  umainform, UGDBDrawingdef
   { you can add units after this };
 
 {$R *.res}

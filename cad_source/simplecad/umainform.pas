@@ -505,6 +505,7 @@ var
    v1,v2:gdbvertex;
    tp:GDBTextStyleProp;
    angl:double;
+   ts:PGDBTextStyle;
 begin
   if gdb.GetCurrentDWG^.TextStyleTable.count=0 then
   begin
@@ -512,13 +513,14 @@ begin
        tp.oblique:=0;
        gdb.GetCurrentDWG^.TextStyleTable.addstyle('standart','txt.shx',tp,false);
   end;
+  ts:= gdb.GetCurrentDWG^.TextStyleTable.getAddres('standart');
   _StartLongProcess(0,'Add texts');
   for i:=1 to SpinEdit1.Value do
   begin
     pGDBObjEntity(pobj):=CreateInitObjFree(GDBTextID,nil);
     v1:=CreateRandomVertex(1000,500);
     pobj^.Local.P_insert:=v1;
-    pobj^.TXTStyleIndex:=0;
+    pobj^.TXTStyleIndex:=ts;
     pobj^.Template:='Hello word!';
     pobj^.textprop.size:=1+random(10);
     pobj^.textprop.justify:=1+random(20);
@@ -642,4 +644,4 @@ end;
 
 
 end.
-
+

@@ -192,7 +192,7 @@ implementation
 uses shared,log;
 function isNotReadableAngle(Angle:GDBDouble):GDBBoolean;
 begin
-     if (Angle>(2*pi/4+bigeps))and(Angle<(pi+2*pi/4-bigeps)) then
+     if (Angle>(2*pi/4-eps))and(Angle<(pi+2*pi/4+eps)) then
                                                                  result:=true
                                                              else
                                                                  result:=false;
@@ -2027,4 +2027,4 @@ begin
      //wy:=@CurrentCS[1];
      //wz:=@CurrentCS[2];
      //w0:=@CurrentCS[3];
-end.
+end.

@@ -278,6 +278,7 @@ begin
                                                  PTP.txtL:=PTP.txtL+Psymbol.NextSymX*PTP^.param.Height;
                                                  end;
                                             end;
+                                            PTP.txtL:=PTP.txtL-(Psymbol.NextSymX-Psymbol.SymMaxX)*PTP^.param.Height;
                                             if h<PTP.txtL then
                                                           h:=PTP.txtL;
                                             PTP.txtH:=PTP.txtH/2;

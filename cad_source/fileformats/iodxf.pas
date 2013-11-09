@@ -2155,7 +2155,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
             else
               if (indimstyletable) and ((groupi = 0) and (values = dxfName_ENDTAB)) then
               begin
-                //TODO надо писать заголовок таблицы руками, а не из шаблона DXF, т.к. там есть перечень стилей который проебывается
+                { TODO :  надо писать заголовок таблицы руками, а не из шаблона DXF, т.к. там есть перечень стилей который проебывается}
                 indimstyletable:=false;
                 ignoredsource:=false;
                 temphandle3:=handle-1;

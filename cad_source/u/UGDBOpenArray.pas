@@ -182,7 +182,8 @@ begin
   PArray:=nil;
   pointer(guid):=nil;
   {$IFDEF DEBUGBUILD}Guid:=ErrGuid;{$ENDIF}
-  //CreateArray; { TODO: делаем познее выделение }
+  //CreateArray;
+  { TODO: делаем познее выделение }
   //GDBGetMem({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}PArray, size * max);
 end;
 constructor GDBOpenArray.initnul;

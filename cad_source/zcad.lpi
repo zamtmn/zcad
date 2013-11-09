@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
     <Version Value="9"/>
@@ -25,7 +25,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="9"/>
       <RevisionNr Value="7"/>
-      <BuildNr Value="1927"/>
+      <BuildNr Value="2075"/>
       <CharSet Value="0000"/>
       <StringTable ProductVersion="0.0.0.8"/>
     </VersionInfo>
@@ -77,9 +77,6 @@
         </CompilerOptions>
       </Item2>
       <Item3 Name="GTK2">
-        <MacroValues Count="1">
-          <Macro2 Name="LCLWidgetType" Value="gtk2"/>
-        </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
@@ -122,9 +119,6 @@
         </CompilerOptions>
       </Item3>
       <Item4 Name="qt">
-        <MacroValues Count="1">
-          <Macro3 Name="LCLWidgetType" Value="qt"/>
-        </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
@@ -162,10 +156,8 @@
           </Other>
         </CompilerOptions>
       </Item4>
-      <SharedMatrixOptions Count="3">
-        <Item1 ID="438644306926" Modes="WIN" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
-        <Item2 ID="885790696077" Modes="GTK2" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
-        <Item3 ID="374215417046" Modes="qt" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt"/>
+      <SharedMatrixOptions Count="1">
+        <Item1 ID="537773227438" Modes="WIN" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
@@ -201,7 +193,7 @@
         <PackageName Value="LCL"/>
       </Item6>
     </RequiredPackages>
-    <Units Count="27">
+    <Units Count="40">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -340,13 +332,84 @@
         <UnitName Value="colorwnd"/>
       </Unit25>
       <Unit26>
+        <Filename Value="gui/linetypesloadtwnd.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="LineWeightSelectWND"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="linetypesloadtwnd"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="u/ugdbltypearray.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ugdbltypearray"/>
+      </Unit27>
+      <Unit28>
+        <Filename Value="gui/ltwnd.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="LTWindow"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="ltwnd"/>
+      </Unit28>
+      <Unit29>
         <Filename Value="gui/lineweightwnd.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="LineWeightSelectWND"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="lineweightwnd"/>
-      </Unit26>
+      </Unit29>
+      <Unit30>
+        <Filename Value="u/UGDBOpenArray.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="UGDBOpenArray"/>
+      </Unit30>
+      <Unit31>
+        <Filename Value="fileformats/iodxf.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="iodxf"/>
+      </Unit31>
+      <Unit32>
+        <Filename Value="gdb/GDBEntity.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GDBEntity"/>
+      </Unit32>
+      <Unit33>
+        <Filename Value="zgl/uzglgeometry.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uzglgeometry"/>
+      </Unit33>
+      <Unit34>
+        <Filename Value="fileformats/io.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="io"/>
+      </Unit34>
+      <Unit35>
+        <Filename Value="gdb/GDBArc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GDBArc"/>
+      </Unit35>
+      <Unit36>
+        <Filename Value="gdb/gdbellipse.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gdbellipse"/>
+      </Unit36>
+      <Unit37>
+        <Filename Value="gdb/GDBTable.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GDBTable"/>
+      </Unit37>
+      <Unit38>
+        <Filename Value="languade/varmandef.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="varmandef"/>
+      </Unit38>
+      <Unit39>
+        <Filename Value="u/UGDBControlPointArray.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="UGDBControlPointArray"/>
+      </Unit39>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -401,4 +464,4 @@
       </Item2>
     </Exceptions>
   </Debugging>
-</CONFIG>
+</CONFIG>

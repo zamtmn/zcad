@@ -75,6 +75,7 @@ type Intercept3DProp=record
                            point:gdbvertex;
                            d:GDBDouble;
                     end;
+     TCSDir=(TCSDLeft,TCSDRight);
 function CrossVertex(const Vector1, Vector2: GDBVertex): GDBVertex;inline;
 function intercept2d(const x1, y1, x2, y2, x3, y3, x4, y4: GDBDouble): GDBBoolean;inline;
 function intercept2d2(const x11, y11, x12, y12, x21, y21, x22, y22: GDBFloat): GDBBoolean;inline;
@@ -181,6 +182,8 @@ function GetArcParamFrom3Point2D(Const PointData:tarcrtmodify;out ad:TArcData):G
 function isNotReadableAngle(Angle:GDBDouble):GDBBoolean;
 function CorrectAngleIfNotReadable(Angle:GDBDouble):GDBDouble;
 
+function GetCSDirFrom0x0y2D(const ox,oy:GDBVertex):TCSDir;
+
 var WorldMatrix{,CurrentCS}:DMatrix4D;
     wx:PGDBVertex;
     wy:PGDBVertex;
@@ -190,6 +193,14 @@ type
     TLineClipArray=array[0..5]of gdbdouble;
 implementation
 uses shared,log;
+function GetCSDirFrom0x0y2D(const ox,oy:GDBVertex):TCSDir;
+begin
+    if vectordot(ox,oy).z>eps then
+                                  result:=TCSDLeft
+                              else
+                                  result:=TCSDRight;
+end;
+
 function isNotReadableAngle(Angle:GDBDouble):GDBBoolean;
 begin
      if (Angle>(pi*0.5+eps))and(Angle<(pi*1.5+eps)) then

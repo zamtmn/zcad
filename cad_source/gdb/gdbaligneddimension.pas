@@ -46,7 +46,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef);
                       procedure DrawDimensionLine(p1,p2:GDBVertex;const drawing:TDrawingDef);
                       procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
-                      procedure CalcTextParam;virtual;
+                      procedure CalcTextParam(dlStart,dlEnd:Gdbvertex);virtual;
                       procedure FormatEntity(const drawing:TDrawingDef);virtual;
                       function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                       //procedure DrawGeometry;
@@ -60,7 +60,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       function GetTextOffset:GDBVertex;
 
                       procedure CalcDNVectors;virtual;
-                      procedure CalcDefaultPlaceText;virtual;
+                      procedure CalcDefaultPlaceText(dlStart,dlEnd:Gdbvertex);virtual;
                       function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P12ChangeTo(tv:GDBVertex):GDBVertex;virtual;
@@ -127,12 +127,12 @@ begin
   dxfvertexout(outhandle,13,DimData.P13InWCS);
   dxfvertexout(outhandle,14,DimData.P14InWCS);
 end;
-procedure GDBObjAlignedDimension.CalcDefaultPlaceText;
+procedure GDBObjAlignedDimension.CalcDefaultPlaceText(dlStart,dlEnd:Gdbvertex);
 begin
   //case PDimStyle.Text.DIMJUST;
   //end;{case}
-  DimData.P11InOCS:=VertexMulOnSc(vertexadd(DimData.P13InWCS,DimData.P14InWCS),0.5);
-  DimData.P11InOCS:=VertexAdd(DimData.P11InOCS,vertexsub(DimData.P10InWCS,DimData.P14InWCS));
+  DimData.P11InOCS:=VertexMulOnSc({vertexadd(DimData.P13InWCS,DimData.P14InWCS)}vertexadd(dlStart,dlEnd),0.5);
+  //DimData.P11InOCS:=VertexAdd(DimData.P11InOCS,vertexsub(DimData.P10InWCS,DimData.P14InWCS));
   DimData.P11InOCS:=VertexAdd(DimData.P11InOCS,getTextOffset);
 end;
 function GDBObjAlignedDimension.P10ChangeTo(tv:GDBVertex):GDBVertex;
@@ -148,8 +148,8 @@ begin
      self.CalcDNVectors;
      if self.DimData.TextMoved then
                                    DimData.P11InOCS:=SetPointLine(t,DimData.P11InOCS,DimData.P13InWCS,temp)
-                               else
-                                   CalcDefaultPlaceText;
+                               {else
+                                   CalcDefaultPlaceText(DimData.P13InWCS,DimData.P14InWCS);}
 end;
 function GDBObjAlignedDimension.P11ChangeTo(tv:GDBVertex):GDBVertex;
 var
@@ -196,7 +196,7 @@ begin
                                        tvertex:=VertexMulOnSc(tvertex,t);
                                        DimData.P10InWCS:=VertexAdd(DimData.P14InWCS,tvertex);
                                        DimData.P13InWCS:=tv;
-                                       CalcDefaultPlaceText;
+                                       //CalcDefaultPlaceText(DimData.P13InWCS,DimData.P14InWCS);
                                    end
 end;
 function GDBObjAlignedDimension.P14ChangeTo(tv:GDBVertex):GDBVertex;
@@ -229,7 +229,7 @@ begin
                                           tvertex:=VertexMulOnSc(tvertex,t);
                                           DimData.P10InWCS:=VertexAdd(tv,tvertex);
                                           DimData.P14InWCS:=tv;
-                                          CalcDefaultPlaceText;
+                                          //CalcDefaultPlaceText(DimData.P13InWCS,DimData.P14InWCS);
                                     end
 end;
 function GDBObjAlignedDimension.GetObjTypeName;
@@ -425,7 +425,7 @@ begin
   DimAngle:=vertexangle(NulVertex2D,CreateVertex2D(vectorD.x,vectorD.y));
   TextAngle:=CorrectAngleIfNotReadable(DimAngle);
 
-  ip:=geometry.intercept3dmy2(DimData.P13InWCS,DimData.P14InWCS,DimData.P11InOCS,vertexadd(DimData.P11InOCS,self.vectorN));
+  ip:=geometry.intercept3dmy2({DimData.P13InWCS,DimData.P14InWCS}dlStart,dlEnd,DimData.P11InOCS,vertexadd(DimData.P11InOCS,self.vectorN));
   TextTParam:=ip.t1;//GettFromLinePoint(DimData.P11InOCS,DimData.P13InWCS,DimData.P14InWCS);
   if (TextTParam>0)and(TextTParam<1) then
                                          begin
@@ -433,6 +433,7 @@ begin
                                          end
                                             else
                                                 TextInside:=False;
+  ip:=geometry.intercept3dmy2({DimData.P13InWCS,DimData.P14InWCS}dlStart,dlEnd,DimData.P11InOCS,vertexadd(DimData.P11InOCS,self.vectorN));
   if TextInside then
                     begin
                          if PDimStyle.Text.DIMTIH then
@@ -490,11 +491,6 @@ var
 begin
           ConstObjArray.cleareraseobj;
           CalcDNVectors;
-          CalcTextParam;
-          if not self.DimData.TextMoved then
-                                            CalcDefaultPlaceText;
-
-          DrawDimensionText(DimData.P11InOCS,drawing);
 
           l:=GetTFromDirNormalizedPoint(DimData.P10InWCS,DimData.P14InWCS,vectorN);
           //DrawExtensionLine(DimData.P14InWCS,DimData.P10InWCS,0,drawing);
@@ -506,6 +502,12 @@ begin
           l:=GetTFromDirNormalizedPoint(DimData.P10InWCS,DimData.P13InWCS,vectorN);
           tv:=VertexDmorph(DimData.P13InWCS,self.vectorN,l);
           DrawExtensionLine(DimData.P13InWCS,tv,0,drawing);
+
+          if not self.DimData.TextMoved then
+                                            CalcDefaultPlaceText(tv,DimData.P10InWCS);
+          CalcTextParam(tv,DimData.P10InWCS);
+
+          DrawDimensionText(DimData.P11InOCS,drawing);
 
           DrawDimensionLine(tv,DimData.P10InWCS,drawing);
    inherited;

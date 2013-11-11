@@ -22,6 +22,17 @@ interface
 uses gdbgenericdimension,gdbdimension,GDBPoint,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
+(*
+Alligned dimension structure in DXF
+
+   (11,21,31)
+|----X(text)-----X (10,20,30)
+|                |
+|                |
+|                |
+X (13,23,33)     X (14,24,34)
+
+*)
 type
 {EXPORT+}
 PGDBObjAlignedDimension=^GDBObjAlignedDimension;
@@ -48,6 +59,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       function GetTextOffset:GDBVertex;
 
                       procedure CalcDNVectors;virtual;
+                      procedure CalcDefaultPlaceText;virtual;
                       function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P12ChangeTo(tv:GDBVertex):GDBVertex;virtual;
@@ -114,7 +126,14 @@ begin
   dxfvertexout(outhandle,13,DimData.P13InWCS);
   dxfvertexout(outhandle,14,DimData.P14InWCS);
 end;
-
+procedure GDBObjAlignedDimension.CalcDefaultPlaceText;
+begin
+  //case PDimStyle.Text.DIMJUST;
+  //end;{case}
+  DimData.P11InOCS:=VertexMulOnSc(vertexadd(DimData.P13InWCS,DimData.P14InWCS),0.5);
+  DimData.P11InOCS:=VertexAdd(DimData.P11InOCS,vertexsub(DimData.P10InWCS,DimData.P14InWCS));
+  DimData.P11InOCS:=VertexAdd(DimData.P11InOCS,getTextOffset);
+end;
 function GDBObjAlignedDimension.P10ChangeTo(tv:GDBVertex):GDBVertex;
 var
     t,tl:GDBDouble;
@@ -126,7 +145,10 @@ begin
      result:=tv;
      DimData.P10InWCS:=tv;
      self.CalcDNVectors;
-     DimData.P11InOCS:=SetPointLine(t,DimData.P11InOCS,DimData.P13InWCS,temp)
+     if self.DimData.TextMoved then
+                                   DimData.P11InOCS:=SetPointLine(t,DimData.P11InOCS,DimData.P13InWCS,temp)
+                               else
+                                   CalcDefaultPlaceText;
 end;
 function GDBObjAlignedDimension.P11ChangeTo(tv:GDBVertex):GDBVertex;
 var
@@ -143,16 +165,47 @@ begin
      tvertex:=vertexsub(tv,tvertex);
      DimData.P10InWCS:=VertexAdd({DimData.P14InWCS}temp,tvertex);
 end;
+(*
+Alligned dimension structure in DXF
+
+   (11,21,31)
+|----X(text)-----X (10,20,30)
+|                |
+|                |
+|                |
+X (13,23,33)     X (14,24,34)
+
+*)
 function GDBObjAlignedDimension.P13ChangeTo(tv:GDBVertex):GDBVertex;
 var
     t:GDBDouble;
     tvertex:GDBVERTEX;
 begin
      result:=tv;
-     t:=GettFromLinePoint(DimData.P11InOCS,tv,DimData.P14InWCS);
-     tvertex:=geometry.Vertexmorph(tv,DimData.P14InWCS,t);
-     tvertex:=vertexsub(DimData.P11InOCS,tvertex);
-     DimData.P10InWCS:=VertexAdd(DimData.P14InWCS,tvertex);
+     if self.DimData.TextMoved then
+                                   begin
+                                       t:=GettFromLinePoint(DimData.P11InOCS,tv,DimData.P14InWCS);
+                                       tvertex:=geometry.Vertexmorph(tv,DimData.P14InWCS,t);
+                                       tvertex:=vertexsub(DimData.P11InOCS,tvertex);
+                                       DimData.P10InWCS:=VertexAdd(DimData.P14InWCS,tvertex);
+                                   end
+                               else
+                                   begin
+                                        t:=vertexlength(tv,DimData.P14InWCS);
+                                        if t>eps then begin
+                                        t:=vertexlength(DimData.P10InWCS,DimData.P14InWCS);
+                                        tvertex:=vertexsub(DimData.P14InWCS,tv);
+                                        tvertex:=geometry.vectordot(tvertex,self.Local.Basis.oz);
+                                        tvertex:=normalizevertex(tvertex);
+                                        tvertex:=VertexMulOnSc(tvertex,t);
+                                        DimData.P10InWCS:=VertexAdd(DimData.P14InWCS,tvertex);
+                                        DimData.P13InWCS:=tv;
+                                        //self.CalcDNVectors;
+                                        CalcDefaultPlaceText;
+                                        end
+                                           else
+                                               result:=DimData.P13InWCS;
+                                   end
 end;
 function GDBObjAlignedDimension.P14ChangeTo(tv:GDBVertex):GDBVertex;
 var

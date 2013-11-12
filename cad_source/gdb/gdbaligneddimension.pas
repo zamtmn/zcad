@@ -399,7 +399,10 @@ begin
      dimdir:=normalizevertex(dimdir);
      if (textangle<>0)or(abs(dimdir.x)<eps)then
      begin
-     l:=PDimStyle.Text.DIMGAP+PDimStyle.Text.DIMTXT/2;
+          if PDimStyle.Text.DIMGAP>0 then
+                                         l:=PDimStyle.Text.DIMGAP+PDimStyle.Text.DIMTXT/2
+                                     else
+                                         l:=-2*PDimStyle.Text.DIMGAP+PDimStyle.Text.DIMTXT/2;
      case PDimStyle.Text.DIMTAD of
                                   DTVPCenters:dimdir:=nulvertex;
                                   DTVPAbove:begin
@@ -456,7 +459,7 @@ begin
 
   ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
   ptext.vp.Layer:=vp.Layer;
-  ptext.Template:=GetLinearDimStr({Vertexlength(DimData.P13InWCS,DimData.P14InWCS)}abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)));
+  ptext.Template:=GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)));
   TextOffset:=GetTextOffset;
   if self.DimData.textmoved then
                    begin

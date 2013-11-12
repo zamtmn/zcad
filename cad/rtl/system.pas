@@ -883,34 +883,39 @@ TDimDSep=(DDSDot,DDSComma,DDSSpace);
 TDimTextVertPosition=(DTVPCenters,DTVPAbove,DTVPOutside,DTVPJIS,DTVPBellov);
 TArrowStyle=(TSClosedFilled,TSClosedBlank,TSClosed,TSDot,TSArchitecturalTick,TSOblique,TSOpen,TSOriginIndicator,TSOriginIndicator2,
             TSRightAngle,TSOpen30,TSDotSmall,TSDotBlank,TSDotSmallBlank,TSBox,TSBoxFilled,TSDatumTriangle,TSDatumtTriangleFilled,TSIntegral,TSUserDef);
+PTDimStyleDXFLoadingData=^TDimStyleDXFLoadingData;
+TDimStyleDXFLoadingData=packed record
+                              DIMBLK1handle,DIMBLK2handle,DIMLDRBLKhandle:TDWGHandle;
+                        end;
 TGDBDimLinesProp=packed record
                        //выносные линии
-                       DIMEXE:GDBDouble;//Extension line extension
-                       DIMEXO:GDBDouble;//Extension line offset
+                       DIMEXE:GDBDouble;//Extension line extension//group44
+                       DIMEXO:GDBDouble;//Extension line offset//group42
                        //размерные линии
-                       DIMDLE:GDBDouble;//Dimension line extension
+                       DIMDLE:GDBDouble;//Dimension line extension//group46
                  end;
 TGDBDimArrowsProp=packed record
-                       DIMASZ:GDBDouble; //Dimensioning arrow size
-                       DIMBLK1:TArrowStyle;//First arrow block name
-                       DIMBLK2:TArrowStyle;//First arrow block name
-                       DIMLDRBLK:TArrowStyle;//Arrow block name for leaders
+                       DIMASZ:GDBDouble; //Dimensioning arrow size//group41
+                       DIMBLK1:TArrowStyle;//First arrow block name//group343
+                       DIMBLK2:TArrowStyle;//First arrow block name//group344
+                       DIMLDRBLK:TArrowStyle;//Arrow block name for leaders//group341
                   end;
 TGDBDimTextProp=packed record
-                       DIMTXT:GDBDouble; //Text size
-                       DIMTIH:GDBBoolean;//Text inside horizontal if nonzero
-                       DIMTOH:GDBBoolean;//Text outside horizontal if nonzero
-                       DIMTAD:TDimTextVertPosition;//Text above dimension line if nonzero
-                       DIMGAP:GDBDouble; //Dimension line gap //Смещение текста
+                       DIMTXT:GDBDouble; //Text size//group140
+                       DIMTIH:GDBBoolean;//Text inside horizontal if nonzero//group73
+                       DIMTOH:GDBBoolean;//Text outside horizontal if nonzero//group74
+                       DIMTAD:TDimTextVertPosition;//Text above dimension line if nonzero//group77
+                       DIMGAP:GDBDouble; //Dimension line gap //Смещение текста//group147
                  end;
 TGDBDimPlacingProp=packed record
                  end;
 TGDBDimUnitsProp=packed record
-                       DIMLFAC:GDBDouble;//Linear measurements scale factor
-                       DIMLUNIT:TDimUnit;//Sets units for all dimension types except Angular:
-                       DIMDEC:GDBInteger;//Number of decimal places for the tolerance values of a primary units dimension
-                       DIMDSEP:TDimDSep;//Single-character decimal separator used when creating dimensions whose unit format is decimal
-                       DIMRND:GDBDouble;//Rounding value for dimension distances
+                       DIMLFAC:GDBDouble;//Linear measurements scale factor//group144
+                       DIMLUNIT:TDimUnit;//Sets units for all dimension types except Angular://group277
+                       DIMDEC:GDBInteger;//Number of decimal places for the tolerance values of a primary units dimension//group271
+                       DIMDSEP:TDimDSep;//Single-character decimal separator used when creating dimensions whose unit format is decimal//group278
+                       DIMRND:GDBDouble;//Rounding value for dimension distances//group45
+                       DIMPOST:GDBAnsiString; //Dimension prefix<>suffix //group3
                  end;
 PGDBDimStyle=^GDBDimStyle;
 GDBDimStyle = packed object(GDBNamedObject)
@@ -919,13 +924,20 @@ GDBDimStyle = packed object(GDBNamedObject)
                       Text:TGDBDimTextProp;
                       Placing:TGDBDimPlacingProp;
                       Units:TGDBDimUnitsProp;
+                      PDXFLoadingData:PTDimStyleDXFLoadingData;
                       procedure SetDefaultValues;virtual;abstract;
                       procedure SetValueFromDxf(group:GDBInteger;value:GDBString);virtual;abstract;
+                      function GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
+                      function GetDimBlockTypeByName(bname:String):TArrowStyle;
+                      procedure CreateLDIfNeed;
+                      procedure ReleaseLDIfNeed;
+                      procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
              end;
 PGDBDimStyleArray=^GDBDimStyleArray;
 GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBDimStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
+                    procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
               end;
 //Generate on E:\zcad\CAD_SOURCE\u\UGDBTableStyleArray.pas
 TTableCellJustify=(jcl(*'TopLeft'*),
@@ -1996,7 +2008,6 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;abstract;
                 function GetLinearDimStr(l:GDBDouble):GDBString;
                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
-                function GetDimBlockParam(nline:GDBInteger):TDimArrowBlockParam;
                 function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                 function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                 function P12ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
@@ -2032,6 +2043,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef);
                       procedure DrawDimensionLine(p1,p2:GDBVertex;const drawing:TDrawingDef);
                       procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
+                      procedure CalcTextParam(dlStart,dlEnd:Gdbvertex);virtual;abstract;
                       procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
                       function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                       //procedure DrawGeometry;
@@ -2039,6 +2051,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       function GetObjTypeName:GDBString;virtual;abstract;
                       function GetTextOffset:GDBVertex;
                       procedure CalcDNVectors;virtual;abstract;
+                      procedure CalcDefaultPlaceText(dlStart,dlEnd:Gdbvertex);virtual;abstract;
                       function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                       function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                       //function P12ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
@@ -2046,6 +2059,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                       //function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                       //function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
+                       procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;abstract;
                    end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\gdbrotateddimension.pas
 PGDBObjRotatedDimension=^GDBObjRotatedDimension;
@@ -2057,6 +2071,7 @@ GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimens
                         function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                         procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                         procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
+                        procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;abstract;
                    end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBBlockInsert.pas
 PGDBObjBlockInsert=^GDBObjBlockInsert;

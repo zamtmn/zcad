@@ -155,6 +155,7 @@ end;
 function GDBObjDimension.GetLinearDimStr(l:GDBDouble):GDBString;
 var
    n:double;
+   i:integer;
 begin
      l:=l*PDimStyle.Units.DIMLFAC;
      if PDimStyle.Units.DIMRND<>0 then
@@ -168,7 +169,19 @@ begin
                                     DDSSpace:WorkingFormatSettings.DecimalSeparator:=' ';
      end;
      l:=roundto(l,-PDimStyle.Units.DIMDEC);
-     result:=floattostr(l,WorkingFormatSettings);
+     if PDimStyle.Units.DIMPOST='' then
+                                       result:=floattostr(l,WorkingFormatSettings)
+                                   else
+                                       begin
+                                            result:=PDimStyle.Units.DIMPOST;
+                                                 i:=pos('<>',uppercase(result));
+                                                 if i>0 then
+                                                            begin
+                                                                 result:=copy(result,1,i-1)+floattostr(l,WorkingFormatSettings)+copy(result,i+2,length(result)-i-1)
+                                                            end
+                                                        else
+                                                            result:=floattostr(l,WorkingFormatSettings)+result;
+                                       end;
 end;
 procedure GDBObjDimension.RenderFeedback;
 var tv:GDBvertex;

@@ -2179,6 +2179,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                       outstream.TXTAddGDBStringEOL('AcDbDimStyleTableRecord');
                       outstream.TXTAddGDBStringEOL(dxfGroupCode(2));
                       outstream.TXTAddGDBStringEOL(pdsp^.Name);
+                      outstream.TXTAddGDBStringEOL(dxfGroupCode(3));
+                      outstream.TXTAddGDBStringEOL(pdsp^.Units.DIMPOST);
                       outstream.TXTAddGDBStringEOL(dxfGroupCode(70));
                       outstream.TXTAddGDBStringEOL('0');
 

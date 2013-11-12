@@ -33,7 +33,7 @@ TDimTextVertPosition=(DTVPCenters,DTVPAbove,DTVPOutside,DTVPJIS,DTVPBellov);
 TArrowStyle=(TSClosedFilled,TSClosedBlank,TSClosed,TSDot,TSArchitecturalTick,TSOblique,TSOpen,TSOriginIndicator,TSOriginIndicator2,
             TSRightAngle,TSOpen30,TSDotSmall,TSDotBlank,TSDotSmallBlank,TSBox,TSBoxFilled,TSDatumTriangle,TSDatumtTriangleFilled,TSIntegral,TSUserDef);
 PTDimStyleDXFLoadingData=^TDimStyleDXFLoadingData;
-TDimStyleDXFLoadingData=record
+TDimStyleDXFLoadingData=packed record
                               DIMBLK1handle,DIMBLK2handle,DIMLDRBLKhandle:TDWGHandle;
                         end;
 TGDBDimLinesProp=packed record
@@ -64,6 +64,7 @@ TGDBDimUnitsProp=packed record
                        DIMDEC:GDBInteger;//Number of decimal places for the tolerance values of a primary units dimension//group271
                        DIMDSEP:TDimDSep;//Single-character decimal separator used when creating dimensions whose unit format is decimal//group278
                        DIMRND:GDBDouble;//Rounding value for dimension distances//group45
+                       DIMPOST:GDBAnsiString; //Dimension prefix<>suffix //group3
                  end;
 PGDBDimStyle=^GDBDimStyle;
 GDBDimStyle = packed object(GDBNamedObject)
@@ -199,6 +200,10 @@ begin
     begin
       self.SetName(value);
     end;
+  3:
+    begin
+         units.DIMPOST:=value;
+    end;
   41:
     begin
          Arrows.DIMASZ:=strtofloat(value);
@@ -315,6 +320,7 @@ begin
      Units.DIMDEC:=4;
      Units.DIMRND:=0;
      Units.DIMDSEP:=DDSDot;
+     Units.DIMPOST:='';
      Arrows.DIMASZ:=0.18;
      text.DIMTXT:=0.18;
      text.DIMTIH:=true;

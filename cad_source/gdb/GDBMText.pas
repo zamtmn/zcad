@@ -52,6 +52,9 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  //procedure CalcObjMatrix;virtual;
             end;
 {Export-}
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:GDBDouble;content:GDBString;var text:XYZWGDBGDBStringArray);
+function GetLinesH(linespace,size:GDBDouble;var lines:XYZWGDBGDBStringArray):GDBDouble;
+function GetLinesW(var lines:XYZWGDBGDBStringArray):GDBDouble;
 implementation
 uses {io,}shared,log;
 procedure GDBObjMText.FormatAfterDXFLoad;
@@ -107,60 +110,47 @@ begin
   text.init(10);
   //format;
 end;
-procedure GDBObjMText.FormatContent(const drawing:TDrawingDef);
+function GetLinesH(linespace,size:GDBDouble;var lines:XYZWGDBGDBStringArray):GDBDouble;
+begin
+  if lines.count > 0 then
+    result := (lines.count - 1) * linespace + size
+  else
+    result := 0;
+end;
+function GetLinesW(var lines:XYZWGDBGDBStringArray):GDBDouble;
+var
+  pswp:pGDBStrWithPoint;
+  ir:itrec;
+begin
+  pswp:=lines.beginiterate(ir);
+  if pswp<>nil then
+                    begin
+                          result:=pswp^.w;
+                          pswp:=lines.iterate(ir);
+                          if pswp<>nil then
+                          repeat
+                                if result<pswp^.w then
+                                                      result:=pswp^.w;
+                            pswp:=lines.iterate(ir);
+                          until pswp=nil
+                    end
+               else
+                   result:=0;
+end;
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:GDBDouble;content:GDBString;var text:XYZWGDBGDBStringArray);
 var
   canbreak: GDBBoolean;
-  currsymbol, lastbreak, lastcanbreak, i: GDBInteger;
-  linewidth, lastlinewidth, maxlinewidth, {w, }h, angle: GDBDouble;
+  currsymbol, lastbreak, lastcanbreak: GDBInteger;
+  linewidth, lastlinewidth, maxlinewidth: GDBDouble;
   currline: GDBString;
   swp:GDBStrWithPoint;
-  pswp:pGDBStrWithPoint;
-      ir:itrec;
   psyminfo:PGDBsymdolinfo;
-  TCP:TCodePage;
-  pfont:pgdbfont;
-
   l:GDBInteger;
   sym:word;
   newline:boolean;
   TDInfo:TTrianglesDataInfo;
-procedure setstartx;
 begin
-     if length(pswp.str)>0 then
-                               begin
-                                 if pswp.str[1]=' ' then
-                                                         l:=l;
-                               sym:=getsymbol(pswp.str,1,l,pgdbfont(pfont)^.font.unicode);
-                               psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym,tdinfo);
-                               pswp^.x:= 0-psyminfo.SymMinX{*textprop.size};
-                               end
-                           else
-                               pswp^.x:= 0;
-end;
-begin
-  textprop.wfactor:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.prop.wfactor;
-  textprop.oblique:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.prop.oblique;
-  pfont:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont;
-  TCP:=CodePage;
-  CodePage:=CP_win;
-  if template='' then
-                      template:=content;
   swp.str:='';
-  content:=textformat(template,@self);
-  CodePage:=TCP;
-  linespace := textprop.size * linespacef * 5 / 3;
-  if (content='')and(template='') then content:=str_empty;
-  text.free;
-  //freeopenarrayofGDBString(ptext);
-  //GDBGetMem(ptext, 10000);
-  //ptext.count := 0;
-
-  lod:=0;
-  P_drawInOCS:=NulVertex;
-  {P_drawInOCS.x := 0;
-  P_drawInOCS.y := 0;
-  P_drawInOCS.z := 0;}
-
   canbreak := false;
   currsymbol := 1;
   //psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
@@ -174,7 +164,7 @@ begin
 
   lastlinewidth := 0;
   currline := '';
-  maxlinewidth := (width / textprop.size) / textprop.wfactor;
+  maxlinewidth := (width / size) / wfactor;
   if content<>'' then
   begin
   repeat
@@ -212,7 +202,7 @@ begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
              swp.w := swp.w - pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo({ach2uch}(GDBByte(' ')),tdinfo).NextSymX;
         end;
-        self.text.add(@swp);
+        text.add(@swp);
         newline:=true;
         linewidth := 0;
         lastlinewidth := linewidth;
@@ -244,7 +234,7 @@ begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
              swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(GDBByte(' '))}32,tdinfo).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
         end;
-        self.text.add(@swp);
+        text.add(@swp);
 
       end;
     inc(currsymbol,l);
@@ -265,34 +255,62 @@ begin
              swp.str:=copy(swp.str,1,length(swp.str)-1);
              swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(GDBByte(' '))}32,tdinfo).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[GDBByte(' ')].dx;
         end;
-        self.text.add(@swp);
+        text.add(@swp);
   //w := width;
-  if self.text.count > 0 then
-    h := (self.text.count - 1) * linespace + textprop.size
-  else
-    h := 0;
-     //h:=(PGDBmtext(temp)^.ptext.count-1)*PGDBmtext(temp)^.linespace/PGDBmtext(temp)^.size+1
-     //pm^.p_draw:=pm^.p_insert;
+end;
+
+procedure GDBObjMText.FormatContent(const drawing:TDrawingDef);
+var
+  i: GDBInteger;
+  h, angle: GDBDouble;
+  pswp:pGDBStrWithPoint;
+    ir:itrec;
+  psyminfo:PGDBsymdolinfo;
+  TCP:TCodePage;
+  pfont:pgdbfont;
+
+  l:GDBInteger;
+  sym:word;
+  TDInfo:TTrianglesDataInfo;
+procedure setstartx;
+begin
+     if length(pswp.str)>0 then
+                               begin
+                                 if pswp.str[1]=' ' then
+                                                         l:=l;
+                               sym:=getsymbol(pswp.str,1,l,pgdbfont(pfont)^.font.unicode);
+                               psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym,tdinfo);
+                               pswp^.x:= 0-psyminfo.SymMinX{*textprop.size};
+                               end
+                           else
+                               pswp^.x:= 0;
+end;
+begin
+  textprop.wfactor:=PGDBTextStyle((TXTStyleIndex))^.prop.wfactor;
+  textprop.oblique:=PGDBTextStyle((TXTStyleIndex))^.prop.oblique;
+  pfont:=TXTStyleIndex^.pfont;
+  TCP:=CodePage;
+  CodePage:=CP_win;
+  if template='' then
+                      template:=content;
+  content:=textformat(template,@self);
+  CodePage:=TCP;
+  linespace := textprop.size * linespacef * 5 / 3;
+  if (content='')and(template='') then content:=str_empty;
+  text.free;
+
+  lod:=0;
   P_drawInOCS:=NulVertex;
-  {p_draw.x := 0;
-  p_draw.y := 0;
-  p_draw.z := 0;}
 
-  //angle:=(90 - textprop.oblique)*(pi/180);
-  {if angle<>pi/2 then
-                     begin
-                          angle:=tan(angle);
-                     end
-                else}
-                    begin
-                         angle:=0;
-                    end;
-  //angle:=0;
+  FormatMtext(pfont,width,textprop.size,textprop.wfactor,content,text);
 
-  if textprop.justify = 0 then
-    textprop.justify := 1;
+  h:=GetLinesH(linespace,textprop.size,text);
+
+  P_drawInOCS:=NulVertex;
+  angle:=0;
+
   case textprop.justify of
-    1:
+    jstl:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size;
         i:=0;
@@ -306,13 +324,8 @@ begin
           inc(i);
           pswp:=text.iterate(ir);
         until pswp=nil
-        {for i := 0 to ptext.count - 1 do
-        begin
-          ptext.GDBStringarray[i].x := 0;
-          ptext.GDBStringarray[i].y := -(i) * linespace / textprop.size;
-        end;}
       end;
-    2:
+    jstc:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size;
         i:=0;
@@ -327,13 +340,8 @@ begin
           inc(i);
           pswp:=text.iterate(ir);
         until pswp=nil
-        {for i := 0 to ptext.count - 1 do
-        begin
-          ptext.GDBStringarray[i].x := -ptext.GDBStringarray[i].w * textprop.size / 2 / textprop.size;
-          ptext.GDBStringarray[i].y := -(i) * linespace / textprop.size;
-        end;}
       end;
-    3:
+    jstr:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size;
         i:=0;
@@ -348,13 +356,8 @@ begin
           inc(i);
           pswp:=text.iterate(ir);
         until pswp=nil
-        {for i := 0 to ptext.count - 1 do
-        begin
-          ptext.GDBStringarray[i].x := -ptext.GDBStringarray[i].w * textprop.size  / textprop.size;
-          ptext.GDBStringarray[i].y := -(i) * linespace / textprop.size;
-        end;}
       end;
-    4:
+    jsml:
       begin
                                 //p_draw.y:=p_draw.y+h/2/size-size
         P_drawInOCS.y := P_drawInOCS.y - textprop.size + h / 2;
@@ -369,14 +372,9 @@ begin
           inc(i);
           pswp:=text.iterate(ir);
         until pswp=nil
-        {for i := 0 to ptext.count - 1 do
-        begin
-          ptext.GDBStringarray[i].x := 0;
-          ptext.GDBStringarray[i].y := -(i) * linespace / textprop.size;
-        end;}
       end;
 
-    5:
+    jsmc:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size + h / 2;
         i:=0;
@@ -391,13 +389,8 @@ begin
           inc(i);
           pswp:=text.iterate(ir);
         until pswp=nil
-        {for i := 0 to ptext.count - 1 do
-        begin
-          ptext.GDBStringarray[i].x := -ptext.GDBStringarray[i].w * textprop.size / 2 / textprop.size;
-          ptext.GDBStringarray[i].y := -(i) * linespace / textprop.size;
-        end;}
       end;
-    6:
+    jsmr:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size + h / 2;
         i:=0;
@@ -412,13 +405,8 @@ begin
           inc(i);
           pswp:=text.iterate(ir);
         until pswp=nil
-        {for i := 0 to ptext.count - 1 do
-        begin
-          ptext.GDBStringarray[i].x := -ptext.GDBStringarray[i].w * textprop.size  / textprop.size;
-          ptext.GDBStringarray[i].y := -(i) * linespace / textprop.size;
-        end;}
       end;
-    7:
+    jsbl:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size + h;
         i:=0;
@@ -432,13 +420,8 @@ begin
           inc(i);
           pswp:=text.iterate(ir);
         until pswp=nil
-        {for i := 0 to ptext.count - 1 do
-        begin
-          ptext.GDBStringarray[i].x := 0;
-          ptext.GDBStringarray[i].y := -(i) * linespace / textprop.size;
-        end;}
       end;
-    8:
+    jsbc:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size + h;
         i:=0;
@@ -453,13 +436,8 @@ begin
           inc(i);
           pswp:=text.iterate(ir);
         until pswp=nil
-        {for i := 0 to ptext.count - 1 do
-        begin
-          ptext.GDBStringarray[i].x := -ptext.GDBStringarray[i].w * textprop.size  / 2 / textprop.size;
-          ptext.GDBStringarray[i].y := -(i) * linespace / textprop.size;
-        end;}
       end;
-    9:
+    jsbr:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size + h;
         i:=0;
@@ -474,11 +452,6 @@ begin
           inc(i);
           pswp:=text.iterate(ir);
         until pswp=nil
-        {for i := 0 to ptext.count - 1 do
-        begin
-          ptext.GDBStringarray[i].x := -ptext.GDBStringarray[i].w * textprop.size  / textprop.size;
-          ptext.GDBStringarray[i].y := -(i) * linespace / textprop.size;
-        end;}
       end;
   end;
     {calcobjmatrix;
@@ -936,7 +909,7 @@ begin
                            TXTStyleIndex:=sysvar.DWG.DWG_CTStyle^;
   OldVersTextReplace(Template);
   OldVersTextReplace(Content);  
-  textprop.justify:=j;
+  textprop.justify:=b2j[j];
   P_drawInOCS := Local.p_insert;
   linespace := textprop.size * linespacef * 5 / 3;
   if not angleload then
@@ -977,7 +950,7 @@ begin
   dxfvertexout(outhandle,10,Local.p_insert);
   dxfGDBDoubleout(outhandle,40,textprop.size);
   dxfGDBDoubleout(outhandle,41,width);
-  dxfGDBIntegerout(outhandle,71,textprop.justify);
+  dxfGDBIntegerout(outhandle,71,ord(textprop.justify));
   if  convertfromunicode(template)=content then
                                                s := template
                                            else
@@ -1006,4 +979,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBMtext.initialization');{$ENDIF}
-end.
+end.

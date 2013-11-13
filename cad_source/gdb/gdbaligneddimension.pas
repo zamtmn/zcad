@@ -19,7 +19,7 @@ unit gdbaligneddimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbgenericdimension,gdbdimension,GDBPoint,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
+uses UGDBTextStyleArray,UGDBXYZWStringArray,GDBAbstractText,gdbgenericdimension,gdbdimension,GDBPoint,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
 (*
@@ -47,6 +47,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       procedure DrawDimensionLine(p1,p2:GDBVertex;const drawing:TDrawingDef);
                       procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
                       procedure CalcTextParam(dlStart,dlEnd:Gdbvertex);virtual;
+                      procedure CalcTextAngle;virtual;
                       procedure FormatEntity(const drawing:TDrawingDef);virtual;
                       function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                       //procedure DrawGeometry;
@@ -420,13 +421,18 @@ begin
         else
             result:=nulvertex;
 end;
+procedure GDBObjAlignedDimension.CalcTextAngle;
+begin
+   DimAngle:=vertexangle(NulVertex2D,CreateVertex2D(vectorD.x,vectorD.y));
+   TextAngle:=CorrectAngleIfNotReadable(DimAngle);
+end;
+
 procedure GDBObjAlignedDimension.CalcTextParam;
 var
   ptext:PGDBObjMText;
   ip: Intercept3DProp;
 begin
-  DimAngle:=vertexangle(NulVertex2D,CreateVertex2D(vectorD.x,vectorD.y));
-  TextAngle:=CorrectAngleIfNotReadable(DimAngle);
+  CalcTextAngle;
 
   ip:=geometry.intercept3dmy2({DimData.P13InWCS,DimData.P14InWCS}dlStart,dlEnd,DimData.P11InOCS,vertexadd(DimData.P11InOCS,self.vectorN));
   TextTParam:=ip.t1;//GettFromLinePoint(DimData.P11InOCS,DimData.P13InWCS,DimData.P14InWCS);
@@ -453,30 +459,59 @@ procedure GDBObjAlignedDimension.DrawDimensionText(p:GDBVertex;const drawing:TDr
 var
   ptext:PGDBObjMText;
   ip: Intercept3DProp;
+  txtlines:XYZWGDBGDBStringArray;
+  dimtext:GDBString;
+  dimtxtstyle:PGDBTextStyle;
+  dimtextw,dimtexth:GDBDouble;
+  p2:GDBVertex;
 begin
   //CalcTextParam;
-
+  dimtext:=GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)));
+  dimtxtstyle:=drawing.GetTextStyleTable^.getelement(0);
+  txtlines.init(3);
+  FormatMtext(dimtxtstyle.pfont,0,PDimStyle.Text.DIMTXT,dimtxtstyle^.prop.wfactor,dimtext,txtlines);
+  dimtexth:=GetLinesH(1,PDimStyle.Text.DIMTXT,txtlines);
+  dimtextw:=GetLinesW(txtlines)*PDimStyle.Text.DIMTXT;
+  txtlines.done;
 
   ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
   ptext.vp.Layer:=vp.Layer;
-  ptext.Template:=GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)));
+  ptext.Template:=dimtext;
   TextOffset:=GetTextOffset;
   if self.DimData.textmoved then
                    begin
-                        ptext.Local.P_insert:=vertexadd(p,TextOffset);
-                        ptext.textprop.justify:=jsmc;
-                   end
-               else
-               begin
-                    ptext.Local.P_insert:=p;
-                    ptext.textprop.justify:=jsmc;
-               end;
+                        p:=vertexadd(p,TextOffset);
+                   end;
+  ptext.Local.P_insert:=p;
+  ptext.textprop.justify:=jsmc;
   ptext.textprop.angle:=TextAngle;
   ptext.Local.basis.ox.x:=cos(TextAngle);
   ptext.Local.basis.ox.y:=sin(TextAngle);
-  ptext.TXTStyleIndex:=drawing.GetTextStyleTable^.getelement(0);
+  ptext.TXTStyleIndex:=dimtxtstyle;
   ptext.textprop.size:=PDimStyle.Text.DIMTXT;
   ptext.FormatEntity(drawing);
+
+  if PDimStyle.Text.DIMGAP<0 then
+  begin
+  dimtextw:=dimtextw-2*PDimStyle.Text.DIMGAP;
+  dimtexth:=dimtexth-2*PDimStyle.Text.DIMGAP;
+
+  p:=geometry.VertexDmorph(p,ptext.Local.basis.ox,-dimtextw/2);
+  p:=geometry.VertexDmorph(p,ptext.Local.basis.oy,dimtexth/2);
+
+  p2:=geometry.VertexDmorph(p,ptext.Local.basis.ox,dimtextw);
+  DrawDimensionLineLinePart(p,p2,drawing).FormatEntity(drawing);
+
+  p:=geometry.VertexDmorph(p2,ptext.Local.basis.oy,-dimtexth);
+  DrawDimensionLineLinePart(p2,p,drawing).FormatEntity(drawing);
+
+  p2:=geometry.VertexDmorph(p,ptext.Local.basis.ox,-dimtextw);
+  DrawDimensionLineLinePart(p,p2,drawing).FormatEntity(drawing);
+
+  p:=geometry.VertexDmorph(p2,ptext.Local.basis.oy,dimtexth);
+  DrawDimensionLineLinePart(p2,p,drawing).FormatEntity(drawing);
+  end;
+
 end;
 procedure GDBObjAlignedDimension.CalcDNVectors;
 begin
@@ -506,6 +541,7 @@ begin
           tv:=VertexDmorph(DimData.P13InWCS,self.vectorN,l);
           DrawExtensionLine(DimData.P13InWCS,tv,0,drawing);
 
+          CalcTextAngle;
           if not self.DimData.TextMoved then
                                             CalcDefaultPlaceText(tv,DimData.P10InWCS);
           CalcTextParam(tv,DimData.P10InWCS);

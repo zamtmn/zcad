@@ -259,7 +259,7 @@ begin
     begin
                            Text.DIMTXT:=strtofloat(value);
     end;
-  167:
+  147:
     begin
          Text.DIMGAP:=strtofloat(value);
     end;

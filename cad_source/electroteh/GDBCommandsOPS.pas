@@ -696,7 +696,7 @@ begin
      if name<>'' then
      begin
      pt:=pointer(CreateObjFree(GDBMtextID));
-     pt^.init({gdb.GetCurrentROOT}@root,gdb.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,name,tv,2.5,0,0.65,90,jsbc,1,1);
+     pt^.init({gdb.GetCurrentROOT}@root,gdb.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,name,tv,2.5,0,0.65,90,dxfjsbc,1,1);
      pt^.TXTStyleIndex:=gdb.GetCurrentDWG.GetTextStyleTable^.getelement(0);
      {gdb.GetCurrentROOT}root.ObjArray.add(@pt);
      pt^.Formatentity(gdb.GetCurrentDWG^);

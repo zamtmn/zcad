@@ -362,9 +362,9 @@ GDBsymdolinfo=packed record
   end;
 PTAlign=^TAlign;
 TAlign=(TATop,TABottom,TALeft,TARight);
+TDWGHandle=GDBQWord;
 {EXPORT-}
 TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
-TDWGHandle=ptruint;
 const
   empty_GDBString='Empty GDBString';
   arccount: GDBWord=16;

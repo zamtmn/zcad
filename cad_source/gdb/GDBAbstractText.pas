@@ -42,7 +42,7 @@ GDBTextProp=packed record
                   oblique:GDBDouble;(*saved_to_shd*)
                   wfactor:GDBDouble;(*saved_to_shd*)
                   angle:GDBDouble;(*saved_to_shd*)
-                  justify:{-}GDBByte{/TTextJustify/};(*saved_to_shd*)
+                  justify:TTextJustify;(*saved_to_shd*)
                   upsidedown:GDBBoolean;
                   backward:GDBBoolean;
             end;

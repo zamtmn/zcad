@@ -54,14 +54,18 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  function ProcessFromDXFObjXData(_Name,_Value:GDBString;ptu:PTUnit):GDBBoolean;virtual;
            end;
 {Export-}
+var
+jt: array[0..3, 0..4] of TTextJustify = ((jsbl, jsbc, jsbr, jsbl, jsmc), (jsbtl, jsbtc, jsbtr, jsbl, jsbl), (jsml, jsmc, jsmr, jsbl, jsbl), (jstl, jstc, jstr, jsbl, jsbl));
+j2b: array[TTextJustify] of byte=(1,2,3,4,5,6,7,8,9,10,11,12);
+b2j: array[1..12] of TTextJustify=(jstl,jstc,jstr,jsml,jsmc,jsmr,jsbl,jsbc,jsbr,jsbtl,jsbtc,jsbtr);
 function getsymbol(s:gdbstring; i:integer;out l:integer;const fontunicode:gdbboolean):word;
 implementation
 uses {io,}shared;
-function acadvjustify(j: GDBByte): GDBByte;
+function acadvjustify(j:TTextJustify): GDBByte;
 var
   t: GDBByte;
 begin
-  t := 3 - ((j - 1) div 3);
+  t := 3 - ((ord(j) - 1) div 3);
   if t = 1 then
     result := 0
   else
@@ -88,7 +92,7 @@ begin
   textprop.oblique := 0;
   textprop.wfactor := 1;
   textprop.angle := 0;
-  textprop.justify := 1;
+  textprop.justify := jstl;
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{08E35ED5-B4A7-4210-A3C9-0645E8F27ABA}-GDBText.Vertex3D_in_WCS_Array',{$ENDIF}100);
   //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{116E3B21-8230-44E8-B7A5-9CEED4B886D2}',{$ENDIF}100);
   PProjoutbound:=nil;
@@ -105,7 +109,7 @@ begin
   textprop.oblique := o;
   textprop.wfactor := w;
   textprop.angle := a;
-  textprop.justify := j;
+  textprop.justify := jstl;
   Vertex3D_in_WCS_Array.init({$IFDEF DEBUGBUILD}'{8776360E-8115-4773-917D-83ED1843FF9C}',{$ENDIF}1000);
   //Vertex2D_in_DCS_Array.init({$IFDEF DEBUGBUILD}'{EDC6D76B-DDFF-41A0-ACCC-48804795A3F5}',{$ENDIF}100);
   PProjoutbound:=nil;
@@ -125,65 +129,63 @@ begin
   lod:=0;
   P_drawInOCS:=NulVertex;
   CalcGabarit(drawing);
-  if textprop.justify = 0 then textprop.justify := 1;
   case textprop.justify of
-    1:
+    jstl:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size;
         P_drawInOCS.x := 0;
       end;
-    2:
+    jstc:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size;
         P_drawInOCS.x := -obj_width * textprop.wfactor * textprop.size / 2;
       end;
-    3:
+    jstr:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size;
         P_drawInOCS.x := -obj_width * textprop.wfactor * textprop.size;
       end;
-    4:
+    jsml:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size / 2;
         P_drawInOCS.x := 0;
       end;
-
-    5:
+    jsmc:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size / 2;
         P_drawInOCS.x := -obj_width * textprop.wfactor * textprop.size / 2;
       end;
-    6:
+    jsmr:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size / 2;
         P_drawInOCS.x := -obj_width * textprop.wfactor * textprop.size;
       end;
-    7:
+    jsbl:
       begin
         P_drawInOCS.y := P_drawInOCS.y;
         P_drawInOCS.x := 0;
       end;
-    8:
+    jsbc:
       begin
         P_drawInOCS.y := P_drawInOCS.y;
         P_drawInOCS.x := -obj_width * textprop.wfactor * textprop.size / 2;
       end;
-    9:
+    jsbr:
       begin
         P_drawInOCS.y := P_drawInOCS.y;
         P_drawInOCS.x := -obj_width * textprop.wfactor * textprop.size;
       end;
-    10:
+    jsbtl:
       begin
         P_drawInOCS.y := P_drawInOCS.y+1/3*textprop.size;
         P_drawInOCS.x := 0;
       end;
-    11:
+    jsbtc:
       begin
         P_drawInOCS.y := P_drawInOCS.y+1/3*textprop.size;
         P_drawInOCS.x := -obj_width * textprop.wfactor * textprop.size / 2;
       end;
-    12:
+     jsbtr:
       begin
         P_drawInOCS.y := P_drawInOCS.y+1/3*textprop.size;
         P_drawInOCS.x := -obj_width * textprop.wfactor * textprop.size;
@@ -790,7 +792,7 @@ var
   s:GDBString;
 begin
   vv := acadvjustify(textprop.justify);
-  hv := (textprop.justify - 1) mod 3;
+  hv := (ord(textprop.justify) - 1) mod 3;
   SaveToDXFObjPrefix(handle,outhandle,'TEXT','AcDbText');
   tv:=Local.p_insert;
   tv.x:=tv.x+P_drawInOCS.x;

@@ -1443,7 +1443,8 @@ var
   outstream: {GDBInteger}GDBOpenArrayOfByte;
   groups, values, ucvalues: GDBString;
   groupi, valuei, intable,attr: GDBInteger;
-  temphandle,temphandle2,temphandle3,temphandle4,handle,lasthandle,vporttablehandle,plottablefansdle,dimtablehandle,i{,cod}: TDWGHandle;
+  temphandle,temphandle2,temphandle3,temphandle4,handle,lasthandle,vporttablehandle,plottablefansdle,dimtablehandle: TDWGHandle;
+  i: integer;
   phandlea: pdxfhandlerecopenarray;
   inlayertable, inblocksec, inblocktable, inlttypetable, indimstyletable: GDBBoolean;
   handlepos:integer;

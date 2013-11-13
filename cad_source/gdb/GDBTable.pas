@@ -20,7 +20,7 @@ unit GDBTable;
 {$INCLUDE def.inc}
 
 interface
-uses ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,UGDBTableStyleArray,GDBLine{,math},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils,UGDBTable,UGDBStringArray,GDBMTEXT{,UGDBOpenArrayOfData},
+uses GDBAbstractText,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,UGDBTableStyleArray,GDBLine{,math},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils,UGDBTable,UGDBStringArray,GDBMTEXT{,UGDBOpenArrayOfData},
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,UGDBSelectedObjArray,UGDBVisibleOpenArray,}gdbEntity{,varman,varmandef},
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef{,oglwindowdef},geometry,dxflow,memman{,GDBSubordinated,UGDBOpenArrayOfByte};
 //jcm(*'TopMiddle'*),
@@ -192,7 +192,7 @@ ConstObjArray.cleareraseobj;
                                                    pgdbmtext.Local.P_insert.x:=(x+scale);
                                               end;
                                           jcc:begin
-                                                   pgdbmtext.textprop.justify:=jstm;
+                                                   pgdbmtext.textprop.justify:=jstc;
                                                    pgdbmtext.Local.P_insert.x:=(x+pcf^.Width/2*scale);
                                               end;
                                           jcr:begin

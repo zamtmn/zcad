@@ -460,7 +460,7 @@ begin
            tname:=pfd^.base.UserName;
            if tname='' then
                            tname:=pfd^.base.ProgramName;
-           if tname='ObjArray' then
+           if tname='PTDimStyleDXFLoadingData' then
                                    tname:=tname;
            if (pfd^.base.PFT^.TypeName='TEnumData') then
                        begin

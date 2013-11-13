@@ -365,6 +365,7 @@ GDBsymdolinfo=packed record
   end;
 PTAlign=^TAlign;
 TAlign=(TATop,TABottom,TALeft,TARight);
+TDWGHandle=GDBQWord;
 //Generate on E:\zcad\CAD_SOURCE\u\UOpenArray.pas
 POpenArray=^OpenArray;
 OpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)

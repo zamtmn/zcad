@@ -884,6 +884,7 @@ TDimDSep=(DDSDot,DDSComma,DDSSpace);
 TDimTextVertPosition=(DTVPCenters,DTVPAbove,DTVPOutside,DTVPJIS,DTVPBellov);
 TArrowStyle=(TSClosedFilled,TSClosedBlank,TSClosed,TSDot,TSArchitecturalTick,TSOblique,TSOpen,TSOriginIndicator,TSOriginIndicator2,
             TSRightAngle,TSOpen30,TSDotSmall,TSDotBlank,TSDotSmallBlank,TSBox,TSBoxFilled,TSDatumTriangle,TSDatumtTriangleFilled,TSIntegral,TSUserDef);
+TDimTextMove=(DTMMoveDimLine,DTMCreateLeader,DTMnothung);
 PTDimStyleDXFLoadingData=^TDimStyleDXFLoadingData;
 TDimStyleDXFLoadingData=packed record
                               DIMBLK1handle,DIMBLK2handle,DIMLDRBLKhandle:TDWGHandle;
@@ -909,6 +910,7 @@ TGDBDimTextProp=packed record
                        DIMGAP:GDBDouble; //Dimension line gap //Смещение текста//group147
                  end;
 TGDBDimPlacingProp=packed record
+                       DIMTMOVE:TDimTextMove;
                  end;
 TGDBDimUnitsProp=packed record
                        DIMLFAC:GDBDouble;//Linear measurements scale factor//group144
@@ -2045,6 +2047,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       procedure DrawDimensionLine(p1,p2:GDBVertex;const drawing:TDrawingDef);
                       procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
                       procedure CalcTextParam(dlStart,dlEnd:Gdbvertex);virtual;abstract;
+                      procedure CalcTextAngle;virtual;abstract;
                       procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
                       function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                       //procedure DrawGeometry;

@@ -32,6 +32,7 @@ TDimDSep=(DDSDot,DDSComma,DDSSpace);
 TDimTextVertPosition=(DTVPCenters,DTVPAbove,DTVPOutside,DTVPJIS,DTVPBellov);
 TArrowStyle=(TSClosedFilled,TSClosedBlank,TSClosed,TSDot,TSArchitecturalTick,TSOblique,TSOpen,TSOriginIndicator,TSOriginIndicator2,
             TSRightAngle,TSOpen30,TSDotSmall,TSDotBlank,TSDotSmallBlank,TSBox,TSBoxFilled,TSDatumTriangle,TSDatumtTriangleFilled,TSIntegral,TSUserDef);
+TDimTextMove=(DTMMoveDimLine,DTMCreateLeader,DTMnothung);
 PTDimStyleDXFLoadingData=^TDimStyleDXFLoadingData;
 TDimStyleDXFLoadingData=packed record
                               DIMBLK1handle,DIMBLK2handle,DIMLDRBLKhandle:TDWGHandle;
@@ -57,6 +58,7 @@ TGDBDimTextProp=packed record
                        DIMGAP:GDBDouble; //Dimension line gap //Смещение текста//group147
                  end;
 TGDBDimPlacingProp=packed record
+                       DIMTMOVE:TDimTextMove;
                  end;
 TGDBDimUnitsProp=packed record
                        DIMLFAC:GDBDouble;//Linear measurements scale factor//group144
@@ -292,6 +294,15 @@ Units.DIMDEC:=strtoint(value);
             end;
        end;
   end;
+  279:
+  begin
+       group:=strtoint(value);
+       case group of
+                  0:Placing.DIMTMOVE:=DTMMoveDimLine;
+                  1:Placing.DIMTMOVE:=DTMCreateLeader;
+                  2:Placing.DIMTMOVE:=DTMnothung;
+       end;
+  end;
   341:
   begin
        CreateLDIfNeed;
@@ -327,6 +338,7 @@ begin
      text.DIMTOH:=true;
      text.DIMTAD:=DTVPAbove;
      text.DIMGAP:=0.625;
+     Placing.DIMTMOVE:=DTMMoveDimLine;
 end;
 procedure GDBDimStyleArray.ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
 var

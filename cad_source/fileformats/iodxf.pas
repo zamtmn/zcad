@@ -2304,6 +2304,12 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                  DDSComma:outstream.TXTAddGDBStringEOL('44');
                                  DDSSpace:outstream.TXTAddGDBStringEOL('32');
                        end;{case}
+                       outstream.TXTAddGDBStringEOL(dxfGroupCode(279));
+                       case pdsp^.Placing.DIMTMOVE of
+                                   DTMMoveDimLine:outstream.TXTAddGDBStringEOL('0');
+                                 DTMCreateLeader:outstream.TXTAddGDBStringEOL('1');
+                                 DTMnothung:outstream.TXTAddGDBStringEOL('2');
+                       end;{case}
 
                       outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
                       p:=drawing.TextStyleTable.FindStyle('Standard',false);

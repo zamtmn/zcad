@@ -55,6 +55,7 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
 procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:GDBDouble;content:GDBString;var text:XYZWGDBGDBStringArray);
 function GetLinesH(linespace,size:GDBDouble;var lines:XYZWGDBGDBStringArray):GDBDouble;
 function GetLinesW(var lines:XYZWGDBGDBStringArray):GDBDouble;
+function GetLineSpaceFromLineSpaceF(linespacef,size:GDBDouble):GDBDouble;
 implementation
 uses {io,}shared,log;
 procedure GDBObjMText.FormatAfterDXFLoad;
@@ -109,6 +110,10 @@ begin
 
   text.init(10);
   //format;
+end;
+function GetLineSpaceFromLineSpaceF(linespacef,size:GDBDouble):GDBDouble;
+begin
+    result:=size*linespacef*5/3;
 end;
 function GetLinesH(linespace,size:GDBDouble;var lines:XYZWGDBGDBStringArray):GDBDouble;
 begin

@@ -2041,6 +2041,8 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       TextInside:GDBBoolean;
                       TextOffset:GDBVertex;
                       vectorD,vectorN:GDBVertex;
+                      dimtextw,dimtexth:GDBDouble;
+                      dimtext:GDBString;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
                       procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef);
@@ -2053,9 +2055,9 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       //procedure DrawGeometry;
                       procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                       function GetObjTypeName:GDBString;virtual;abstract;
-                      function GetTextOffset:GDBVertex;
+                      function GetTextOffset(const drawing:TDrawingDef):GDBVertex;
                       procedure CalcDNVectors;virtual;abstract;
-                      procedure CalcDefaultPlaceText(dlStart,dlEnd:Gdbvertex);virtual;abstract;
+                      procedure CalcDefaultPlaceText(dlStart,dlEnd:Gdbvertex;const drawing:TDrawingDef);virtual;abstract;
                       function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                       function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                       //function P12ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;

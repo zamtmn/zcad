@@ -308,6 +308,13 @@ Units.DIMDEC:=strtoint(value);
        CreateLDIfNeed;
        PDXFLoadingData.DIMLDRBLKhandle:=StrToQWord('$'+value);
   end;
+  342:
+  begin
+       CreateLDIfNeed;
+       PDXFLoadingData.DIMLDRBLKhandle:=StrToQWord('$'+value);
+       PDXFLoadingData.DIMBLK1handle:=PDXFLoadingData.DIMLDRBLKhandle;
+       PDXFLoadingData.DIMBLK2handle:=PDXFLoadingData.DIMLDRBLKhandle;
+  end;
   343:
   begin
        CreateLDIfNeed;

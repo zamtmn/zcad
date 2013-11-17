@@ -47,6 +47,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
                       procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef);
                       procedure DrawDimensionLine(p1,p2:GDBVertex;const drawing:TDrawingDef);
+                      function GetPSize:GDBDouble;
                       procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
                       procedure CalcTextParam(dlStart,dlEnd:Gdbvertex);virtual;
                       procedure CalcTextAngle;virtual;
@@ -322,6 +323,15 @@ begin
   pl:=DrawExtensionLineLinePart(Vertexmorphabs2(p1,p2,PDimStyle.Lines.DIMEXO),Vertexmorphabs(p1,p2,PDimStyle.Lines.DIMEXE),drawing);
   pl.FormatEntity(drawing);
 end;
+function GDBObjAlignedDimension.GetPSize: GDBDouble;
+begin
+  if TextTParam>0.5 then
+                        Result:=dimtextw
+                    else
+                        Result:=-dimtextw;
+  if vectorN.y<0 then
+                     Result:=-Result;
+end;
 procedure GDBObjAlignedDimension.DrawDimensionLine(p1,p2:GDBVertex;const drawing:TDrawingDef);
 var
    l:GDBDouble;
@@ -413,7 +423,7 @@ begin
              begin
              pl:=DrawDimensionLineLinePart(VertexMulOnSc(vertexadd(p1,p2),0.5),DimData.P11InOCS,drawing);
              pl.FormatEntity(drawing);
-             pl:=DrawDimensionLineLinePart(DimData.P11InOCS,VertexDmorph(DimData.P11InOCS,VectorT,dimtextw),drawing);
+             pl:=DrawDimensionLineLinePart(DimData.P11InOCS,VertexDmorph(DimData.P11InOCS,VectorT,getpsize),drawing);
              pl.FormatEntity(drawing);
              end;
         end;
@@ -530,7 +540,7 @@ begin
                         p:=vertexadd(p,TextOffset);
                         if self.PDimStyle.Placing.DIMTMOVE=DTMCreateLeader then
                               begin
-                                   p:=VertexDmorph(p,VectorT,dimtextw/2);
+                                   p:=VertexDmorph(p,VectorT,GetPSize/2);
                               end;
                    end;
   ptext.Local.P_insert:=p;

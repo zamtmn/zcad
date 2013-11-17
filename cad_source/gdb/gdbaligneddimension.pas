@@ -40,7 +40,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       TextTParam,TextAngle,DimAngle:GDBDouble;
                       TextInside:GDBBoolean;
                       TextOffset:GDBVertex;
-                      vectorD,vectorN:GDBVertex;
+                      vectorD,vectorN,vectorT:GDBVertex;
                       dimtextw,dimtexth:GDBDouble;
                       dimtext:GDBString;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
@@ -369,8 +369,6 @@ begin
               else
                   pointer(pv):=addblockinsert(@self,@self.ConstObjArray,p2,PDimStyle.Arrows.DIMASZ,ZAngle*180/pi-180,@tbp1.name[1]);
   pv^.formatentity(gdb.GetCurrentDWG^);
-
-
   if tbp0.width=0 then
                       pp1:=Vertexmorphabs(p2,p1,PDimStyle.Lines.DIMDLE)
                   else
@@ -392,20 +390,34 @@ begin
 
   pl:=DrawDimensionLineLinePart(pp1,pp2,drawing);
   pl.FormatEntity(drawing);
-
-  if not TextInside then
-     begin
-          if TextTParam>0.5 then
-                                begin
-                                     pl:=DrawDimensionLineLinePart(pp2,DimData.P11InOCS,drawing);
-                                     pl.FormatEntity(drawing);
-                                end
-                            else
-                                begin
-                                  pl:=DrawDimensionLineLinePart(pp1,DimData.P11InOCS,drawing);
-                                  pl.FormatEntity(drawing);
-                                end;
-     end;
+  case self.PDimStyle.Placing.DIMTMOVE of
+  DTMMoveDimLine:
+        begin
+              if not TextInside then
+                 begin
+                      if TextTParam>0.5 then
+                                            begin
+                                                 pl:=DrawDimensionLineLinePart(pp2,DimData.P11InOCS,drawing);
+                                                 pl.FormatEntity(drawing);
+                                            end
+                                        else
+                                            begin
+                                              pl:=DrawDimensionLineLinePart(pp1,DimData.P11InOCS,drawing);
+                                              pl.FormatEntity(drawing);
+                                            end;
+                 end;
+        end;
+  DTMCreateLeader:
+        begin
+             if self.DimData.TextMoved then
+             begin
+             pl:=DrawDimensionLineLinePart(VertexMulOnSc(vertexadd(p1,p2),0.5),DimData.P11InOCS,drawing);
+             pl.FormatEntity(drawing);
+             pl:=DrawDimensionLineLinePart(DimData.P11InOCS,VertexDmorph(DimData.P11InOCS,VectorT,dimtextw),drawing);
+             pl.FormatEntity(drawing);
+             end;
+        end;
+  end;{case}
 end;
 function GDBObjAlignedDimension.GetTextOffset(const drawing:TDrawingDef):GDBVertex;
 var
@@ -424,7 +436,9 @@ begin
 
      dimdir:=geometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
      dimdir:=normalizevertex(dimdir);
-     if (textangle<>0)or(abs(dimdir.x)<eps)then
+     if (textangle=0)and(DimData.TextMoved) then
+                        dimdir:=x_Y_zVertex;
+     if (textangle<>0)or(abs(dimdir.x)<eps)or(DimData.TextMoved)then
      begin
           if PDimStyle.Text.DIMGAP>0 then
                                          l:=PDimStyle.Text.DIMGAP+{PDimStyle.Text.DIMTXT}dimtexth/2
@@ -479,6 +493,9 @@ begin
                          if PDimStyle.Text.DIMTOH then
                                                       TextAngle:=0;
                     end;
+  vectorT.x:=cos(TextAngle);
+  vectorT.y:=sin(TextAngle);
+  vectorT.z:=0;
 end;
 
 procedure GDBObjAlignedDimension.DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
@@ -502,9 +519,19 @@ begin
   ptext.vp.Layer:=vp.Layer;
   ptext.Template:=dimtext;
   TextOffset:=GetTextOffset(drawing);
+
+  if PDimStyle.Text.DIMGAP<0 then
+  begin
+      dimtextw:=dimtextw-2*PDimStyle.Text.DIMGAP;
+      dimtexth:=dimtexth-2*PDimStyle.Text.DIMGAP;
+  end;
   if self.DimData.textmoved then
                    begin
                         p:=vertexadd(p,TextOffset);
+                        if self.PDimStyle.Placing.DIMTMOVE=DTMCreateLeader then
+                              begin
+                                   p:=VertexDmorph(p,VectorT,dimtextw/2);
+                              end;
                    end;
   ptext.Local.P_insert:=p;
   ptext.linespacef:=1;
@@ -518,9 +545,6 @@ begin
 
   if PDimStyle.Text.DIMGAP<0 then
   begin
-  dimtextw:=dimtextw-2*PDimStyle.Text.DIMGAP;
-  dimtexth:=dimtexth-2*PDimStyle.Text.DIMGAP;
-
   p:=geometry.VertexDmorph(p,ptext.Local.basis.ox,-dimtextw/2);
   p:=geometry.VertexDmorph(p,ptext.Local.basis.oy,dimtexth/2);
 

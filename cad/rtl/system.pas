@@ -2040,7 +2040,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       TextTParam,TextAngle,DimAngle:GDBDouble;
                       TextInside:GDBBoolean;
                       TextOffset:GDBVertex;
-                      vectorD,vectorN:GDBVertex;
+                      vectorD,vectorN,vectorT:GDBVertex;
                       dimtextw,dimtexth:GDBDouble;
                       dimtext:GDBString;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);

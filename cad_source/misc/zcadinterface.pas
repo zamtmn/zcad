@@ -92,6 +92,7 @@ var
 
    //UGDBDescriptor
    RedrawOGLWNDProc:TSimpleProcedure;
+   ResetOGLWNDProc:TSimpleProcedure;
    SetCurrentDWGProc:TSetCurrentDrawing;
 
    //cmdline
@@ -118,4 +119,4 @@ begin
                                          RestoreAllCursorsProc;
 end;
 
-end.
+end.

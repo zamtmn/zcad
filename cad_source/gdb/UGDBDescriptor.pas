@@ -178,6 +178,18 @@ begin
   //gdb.GetCurrentDWG.OGLwindow1.repaint;
 end;
 
+procedure resetoglwnd;
+var
+   pdwg:PTSimpleDrawing;
+begin
+  pdwg:=gdb.GetCurrentDWG;
+  if pdwg<>nil then
+  begin
+       pdwg.OGLwindow1.param.lastonmouseobject:=nil;
+  end;
+end;
+
+
 procedure clearotrack;
 begin
      gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.current:=0;
@@ -888,6 +900,8 @@ const
    filename='GEWIND.SHX';
 begin
   RedrawOGLWNDProc:=RedrawOGLWND;
+  ResetOGLWNDProc:=ResetOGLWND;
+
   LTypeManager.init({$IFDEF DEBUGBUILD}'{9D0E081C-796F-4EB1-98A9-8B6EA9BD8640}',{$ENDIF}100);
 
   LTypeManager.LoadFromFile(FindInPaths(sysvar.PATH.Support_Path^,'zcad.lin'),TLOLoad);

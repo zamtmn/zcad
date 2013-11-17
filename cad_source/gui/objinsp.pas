@@ -1129,6 +1129,7 @@ begin
                                                                                         if GDBobj then
                                                                                         if PGDBaseObject(pcurrobj)^.IsEntity then
                                                                                                                             PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^);
+                                                                                        if assigned(resetoglwndproc) then resetoglwndproc;
                                                                                         if assigned(redrawoglwndproc) then redrawoglwndproc;
                                                                                         self.updateinsp;
                                                                                         if assigned(UpdateVisibleProc) then UpdateVisibleProc;

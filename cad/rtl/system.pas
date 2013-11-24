@@ -895,6 +895,7 @@ TGDBDimLinesProp=packed record
                        DIMEXO:GDBDouble;//Extension line offset//group42
                        //размерные линии
                        DIMDLE:GDBDouble;//Dimension line extension//group46
+                       DIMCEN:GDBDouble;//Size of center mark/lines//group141
                  end;
 TGDBDimArrowsProp=packed record
                        DIMASZ:GDBDouble; //Dimensioning arrow size//group41
@@ -2047,6 +2048,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
                       procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef);
                       procedure DrawDimensionLine(p1,p2:GDBVertex;const drawing:TDrawingDef);
+                      function GetPSize:GDBDouble;
                       procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
                       procedure CalcTextParam(dlStart,dlEnd:Gdbvertex);virtual;abstract;
                       procedure CalcTextAngle;virtual;abstract;
@@ -2078,6 +2080,18 @@ GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimens
                         procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                         procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
                         procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;abstract;
+                   end;
+//Generate on E:\zcad\CAD_SOURCE\gdb\gdbdiametricdimension.pas
+PGDBObjDiametricDimension=^GDBObjDiametricDimension;
+GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
+                        constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                        constructor initnul(owner:PGDBObjGenericWithSubordinated);
+                        function GetObjTypeName:GDBString;virtual;abstract;
+                        procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
+                        function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
+                        procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
+                        function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
+                        function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                    end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBBlockInsert.pas
 PGDBObjBlockInsert=^GDBObjBlockInsert;

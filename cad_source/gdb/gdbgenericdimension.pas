@@ -38,7 +38,7 @@ GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                    end;
 {EXPORT-}
 implementation
-uses gdbrotateddimension,gdbaligneddimension,GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
+uses gdbdiametricdimension,gdbrotateddimension,gdbaligneddimension,GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
 var
   WorkingFormatSettings:TFormatSettings;
 function GDBObjGenericDimension.FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;
@@ -47,18 +47,18 @@ var
 begin
          case DimType of
                                DTRotated:begin
-                                 GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjRotatedDimension));
-                                 result:=ResultDim;
-                                 PGDBObjRotatedDimension(ResultDim)^.initnul(bp.ListPos.Owner);
-                                 PGDBObjRotatedDimension(ResultDim)^.vectorD:=CreateRotatedXVector(a50*pi/180);
-                                 PGDBObjRotatedDimension(ResultDim)^.vectorN:=CreateRotatedYVector(a50*pi/180);
-                                 ResultDim.vp.Layer:=vp.Layer;
-                                 ResultDim^.Local:=local;
-                                 ResultDim^.P_insert_in_WCS:=P_insert_in_WCS;
-                                 PGDBObjRotatedDimension(ResultDim)^.DimData:=DimData;
-                                 PGDBObjRotatedDimension(ResultDim)^.PDimStyle:=PDimStyle;
-                               end;
-                               else
+                                               GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjRotatedDimension));
+                                               result:=ResultDim;
+                                               PGDBObjRotatedDimension(ResultDim)^.initnul(bp.ListPos.Owner);
+                                               PGDBObjRotatedDimension(ResultDim)^.vectorD:=CreateRotatedXVector(a50*pi/180);
+                                               PGDBObjRotatedDimension(ResultDim)^.vectorN:=CreateRotatedYVector(a50*pi/180);
+                                               ResultDim.vp.Layer:=vp.Layer;
+                                               ResultDim^.Local:=local;
+                                               ResultDim^.P_insert_in_WCS:=P_insert_in_WCS;
+                                               PGDBObjRotatedDimension(ResultDim)^.DimData:=DimData;
+                                               PGDBObjRotatedDimension(ResultDim)^.PDimStyle:=PDimStyle;
+                                         end;
+                               DTAligned:
                                    begin
                                      GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjAlignedDimension));
                                      result:=ResultDim;
@@ -69,6 +69,18 @@ begin
                                      PGDBObjAlignedDimension(ResultDim)^.DimData:=DimData;
                                      PGDBObjAlignedDimension(ResultDim)^.PDimStyle:=PDimStyle;
                                    end;
+                               else
+                                 begin
+                                   GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjDiametricDimension));
+                                   result:=ResultDim;
+                                   PGDBObjDiametricDimension(ResultDim)^.initnul(bp.ListPos.Owner);
+                                   ResultDim.vp.Layer:=vp.Layer;
+                                   ResultDim^.Local:=local;
+                                   ResultDim^.P_insert_in_WCS:=P_insert_in_WCS;
+                                   PGDBObjAlignedDimension(ResultDim)^.DimData:=DimData;
+                                   PGDBObjAlignedDimension(ResultDim)^.PDimStyle:=PDimStyle;
+                                 end;
+
        end;
 end;
 

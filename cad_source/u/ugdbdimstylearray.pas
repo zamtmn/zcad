@@ -43,6 +43,7 @@ TGDBDimLinesProp=packed record
                        DIMEXO:GDBDouble;//Extension line offset//group42
                        //размерные линии
                        DIMDLE:GDBDouble;//Dimension line extension//group46
+                       DIMCEN:GDBDouble;//Size of center mark/lines//group141
                  end;
 TGDBDimArrowsProp=packed record
                        DIMASZ:GDBDouble; //Dimensioning arrow size//group41
@@ -261,6 +262,10 @@ begin
     begin
                            Text.DIMTXT:=strtofloat(value);
     end;
+  141:
+    begin
+                           Lines.DIMCEN:=strtofloat(value);
+    end;
   147:
     begin
          Text.DIMGAP:=strtofloat(value);
@@ -333,6 +338,7 @@ begin
      Lines.DIMEXE:=0.18;
      lines.DIMEXO:=0.0625;
      Lines.DIMDLE:=0;
+     Lines.DIMCEN:=0.09;
      Units.DIMLFAC:=1;
      Units.DIMLUNIT:=DUDecimal;
      Units.DIMDEC:=4;

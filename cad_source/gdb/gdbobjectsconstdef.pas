@@ -72,6 +72,7 @@ const {as_normal=0;
 
   GDBAlignedDimensionID = 105;
   GDBRotatedDimensionID = 106;
+  GDBDiametricDimensionID = 107;
 
   PROJParalel = 1;
   PROJPerspective = 2;
@@ -176,6 +177,7 @@ const {as_normal=0;
   ObjN_GDBObjSpline='GDBObjSpline';
   ObjN_ObjAlignedDimension='GDBObjAlignedDimension';
   ObjN_ObjRotatedDimension='GDBObjRotatedDimension';
+  ObjN_ObjDiametricDimension='GDBObjDiametricDimension';
   ObjN_GDBObjLWPolyLine='GDBObjLWPolyLine';
   ObjN_GDBObjBlockInsert='GDBObjBlockInsert';
   ObjN_GDBObjDevice='GDBObjDevice';

@@ -2260,6 +2260,9 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                        outstream.TXTAddGDBStringEOL(dxfGroupCode(140));
                        outstream.TXTAddGDBStringEOL(floattostr(pdsp^.Text.DIMTXT));
 
+                       outstream.TXTAddGDBStringEOL(dxfGroupCode(141));
+                       outstream.TXTAddGDBStringEOL(floattostr(pdsp^.Lines.DIMCEN));
+
                        outstream.TXTAddGDBStringEOL(dxfGroupCode(73));
                        if pdsp^.Text.DIMTIH then
                                                 outstream.TXTAddGDBStringEOL('1')

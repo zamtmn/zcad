@@ -31,6 +31,10 @@ type
   TOnCommandRun=procedure(command:string) of object;
 
   GDBcommandmanager=object(GDBcommandmanagerDef)
+                          LatestRunPC:PCommandObjectDef;
+                          LatestRunOperands:GDBString;
+                          LatestRunPDrawing:PTDrawingDef;
+
                           CommandsStack:GDBOpenArrayOfGDBPointer;
                           ContextCommandParams:GDBPointer;
                           busy:GDBBoolean;
@@ -63,6 +67,8 @@ type
                           function GetValueHeap:GDBInteger;
                           function CurrentCommandNotUseCommandLine:GDBBoolean;
                           procedure PrepairVarStack;
+                          function Get3DPoint:GDBVertex;
+                          function EndGetPoint(newmode:TGetPointMode):GDBBoolean;
                     end;
 var commandmanager:GDBcommandmanager;
 function getcommandmanager:GDBPointer;export;
@@ -72,6 +78,33 @@ procedure ParseCommand(comm:pansichar; out command,operands:GDBString);
 procedure finalize;}
 implementation
 uses ugdbsimpledrawing,UGDBStringArray,{cmdline,}{UGDBDescriptor,}forms{,varman};
+function GDBcommandmanager.EndGetPoint(newmode:TGetPointMode):GDBBoolean;
+begin
+  if pcommandrunning<>nil then
+  begin
+  if pcommandrunning^.GetPointMode=TGPWait then
+                              begin
+                                  pcommandrunning^.GetPointMode:=newmode;
+                                  result:=true;
+                              end
+                          else
+                              result:=false;
+  end
+     else
+                              result:=false;
+end;
+function GDBcommandmanager.Get3DPoint:GDBVertex;
+begin
+  pcommandrunning^.GetPointMode:=TGPWait;
+  while (pcommandrunning^.GetPointMode=TGPWait)and(not Application.Terminated) do
+  begin
+       //Application.HandleMessage;
+       Application.ProcessMessages;
+  end;
+  if (pcommandrunning^.GetPointMode=TGPPoint)and(not Application.Terminated) then
+                                                                   result:=pcommandrunning^.GetPointValue
+end;
+
 function GDBcommandmanager.GetValueHeap:GDBInteger;
 begin
      result:=varstack.vardescarray.count;
@@ -207,7 +240,15 @@ begin
      if pcommandrunning.IsRTECommand then
      begin
           pcommandrunning^.MouseMoveCallback(p3d,p2d,mode,osp);
-     end;
+     end
+     else if pcommandrunning^.GetPointMode=TGPWait then
+                                      begin
+                                           if mode=MZW_LBUTTON then
+                                           begin
+                                                pcommandrunning^.GetPointMode:=TGPpoint;
+                                                pcommandrunning^.GetPointValue:=p3d;
+                                           end;
+                                      end;
      //clearotrack;
         p:=CommandsStack.beginiterate(ir);
         if p<>nil then
@@ -295,7 +336,18 @@ begin
                                                                        end;
                                                               end
                                                           else
+                                                              begin
+                                                                      if EndGetPoint(TGPOtherCommand) then
+                                                                       begin
+                                                                            LatestRunPC:=pc;
+                                                                            LatestRunOperands:=operands;
+                                                                            LatestRunPDrawing:=pdrawing;
+
+                                                                            exit;
+                                                                       end;
                                                               self.executecommandtotalend;
+
+                                                              end;
                                       end;
           pcommandrunning := pointer(pc);
           pcommandrunning^.pdwg:=pd;
@@ -391,8 +443,11 @@ end;
 procedure GDBcommandmanager.executecommandend;
 var
    temp:PCommandRTEdObjectDef;
+   temp2:PCommandObjectDef;
 begin
   //ReturnToDefault;
+  if EndGetPoint(TGPCancel) then
+                      exit;
   temp:=pcommandrunning;
   pcommandrunning := nil;
   if temp<>nil then
@@ -415,13 +470,22 @@ begin
                                          PrepairVarStack;
                                     end;
    ContextCommandParams:=nil;
-
+   if LatestRunPC<>nil then
+   begin
+        temp2:=LatestRunPC;
+        LatestRunPC:=nil;
+        GDBcommandmanager.run(temp2,LatestRunOperands,LatestRunPDrawing);
+   end
+   else if pcommandrunning<>nil then if pcommandrunning^.GetPointMode=TGPCloseApp then
+                                        Application.QueueAsyncCall(AppCloseProc, 0);
 end;
 procedure GDBcommandmanager.executecommandtotalend;
 var
    temp:PCommandRTEdObjectDef;
 begin
   //ReturnToDefault;
+     if EndGetPoint(TGPCancel) then
+                      exit;
   self.DMHide;
   self.DMClear;
 
@@ -446,6 +510,7 @@ var
       pint:PGDBInteger;
 begin
   inherited init({$IFDEF DEBUGBUILD}'{8B10F808-46AD-4EF1-BCDD-55B74D27187B}',{$ENDIF}m);
+  //pcommandrunning^.GetPointMode:=TGPCancel;
   CommandsStack.init({$IFDEF DEBUGBUILD}'{8B10F808-46AD-4EF1-BCDD-55B74D27187B}',{$ENDIF}10);
   varstack.init;
   DMenu:=TDMenuWnd.CreateNew(application);

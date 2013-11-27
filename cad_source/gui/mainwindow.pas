@@ -38,7 +38,7 @@ uses
        GDBEntity,UGDBSelectedObjArray,UGDBLayerArray,ugdbsimpledrawing,
        GDBBlockDef,UGDBDescriptor,GDBManager,ugdbltypearray,gdbobjectsconstdef,GDBText,
   {ZCAD COMMANDS}
-       commanddefinternal,commandline,
+       commandlinedef,commanddefinternal,commandline,
   {GUI}
        cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
        colorwnd,imagesmanager,ltwnd,usuptstylecombo,usupportgui;
@@ -788,7 +788,8 @@ end;
 procedure MainForm.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
      CloseAction:=caNone;
-     Application.QueueAsyncCall(asynccloseapp, 0);
+     if not commandmanager.EndGetPoint(TGPCloseApp) then
+                                           Application.QueueAsyncCall(asynccloseapp, 0);
 end;
 
 procedure MainForm.draw;
@@ -1244,6 +1245,7 @@ begin
   CursorOn:=ShowAllCursors;
   CursorOff:=RestoreCursors;
   commandmanager.OnCommandRun:=processcommandhistory;
+  AppCloseProc:=asynccloseapp;
 end;
 
 procedure MainForm.LoadActions;

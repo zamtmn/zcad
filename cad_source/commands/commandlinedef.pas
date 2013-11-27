@@ -26,6 +26,7 @@ const
      CEDWGNChanged=2;
 type
 {Export+}
+  TGetPointMode=(TGPWait,TGPPoint,TGPCancel,TGPOtherCommand,TGPCloseApp);
   TCStartAttr=GDBInteger;{атрибут разрешения\запрещения запуска команды}
     TCEndAttr=GDBInteger;{атрибут действия по завершению команды}
   PCommandObjectDef = ^CommandObjectDef;
@@ -41,6 +42,8 @@ type
     CEndActionAttr:TCEndAttr;(*hidden_in_objinsp*)
     pdwg:GDBPointer;(*hidden_in_objinsp*)
     NotUseCommandLine:GDBBoolean;(*hidden_in_objinsp*)
+    GetPointMode:TGetPointMode;(*hidden_in_objinsp*)
+    GetPointValue:GDBVertex;(*hidden_in_objinsp*)
     procedure CommandStart(Operands:pansichar); virtual; abstract;
     procedure CommandEnd; virtual; abstract;
     procedure CommandCancel; virtual; abstract;
@@ -101,6 +104,7 @@ begin
   overlay:=false;
   CEndActionAttr:=CEDeSelect;
   NotUseCommandLine:=true;
+  GetPointMode:=TGPCancel;
 end;
 
 destructor CommandObjectDef.done;

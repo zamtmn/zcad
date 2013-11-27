@@ -523,7 +523,7 @@ begin
     pobj^.TXTStyleIndex:=ts;
     pobj^.Template:='Hello word!';
     pobj^.textprop.size:=1+random(10);
-    pobj^.textprop.justify:=1+random(20);
+    pobj^.textprop.justify:=b2j[1+random(11)];
     pobj^.textprop.wfactor:=0.3+random*0.7;
     pobj^.textprop.oblique:=random(20);
     angl:=pi*random{*0.5};
@@ -644,4 +644,4 @@ end;
 
 
 end.
-
+

@@ -67,7 +67,7 @@ type
                           function GetValueHeap:GDBInteger;
                           function CurrentCommandNotUseCommandLine:GDBBoolean;
                           procedure PrepairVarStack;
-                          function Get3DPoint:GDBVertex;
+                          function Get3DPoint(out p:GDBVertex):GDBBoolean;
                           function EndGetPoint(newmode:TGetPointMode):GDBBoolean;
                     end;
 var commandmanager:GDBcommandmanager;
@@ -93,7 +93,7 @@ begin
      else
                               result:=false;
 end;
-function GDBcommandmanager.Get3DPoint:GDBVertex;
+function GDBcommandmanager.Get3DPoint(out p:GDBVertex):GDBBoolean;
 begin
   pcommandrunning^.GetPointMode:=TGPWait;
   while (pcommandrunning^.GetPointMode=TGPWait)and(not Application.Terminated) do
@@ -102,7 +102,12 @@ begin
        Application.ProcessMessages;
   end;
   if (pcommandrunning^.GetPointMode=TGPPoint)and(not Application.Terminated) then
-                                                                   result:=pcommandrunning^.GetPointValue
+                                                                                 begin
+                                                                                 p:=pcommandrunning^.GetPointValue;
+                                                                                 result:=true;
+                                                                                 end
+                                                                             else
+                                                                                 result:=false;
 end;
 
 function GDBcommandmanager.GetValueHeap:GDBInteger;

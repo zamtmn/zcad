@@ -3538,13 +3538,38 @@ end;
 function AddTestDim_com(operands:pansichar):GDBInteger;
 var
     pd:PGDBObjAlignedDimension;
+    p1,p2,p3:gdbvertex;
+    savemode:GDBByte;
+    domethod,undomethod:tmethod;
 begin
-  pd := GDBPointer(gdb.GetCurrentDWG^.pObjRoot^.ObjArray.CreateInitObj(GDBAlignedDimensionID,gdb.GetCurrentROOT));
-  //GDBObjSetCircleProp(pd,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^);
-  //GDBObjCircleInit(pd,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer, sysvar.dwg.DWG_CLinew^, wc, 0);
-  //pd^.lod:=4;
+    savemode:=GDB.GetCurrentDWG^.OGLwindow1.param.md.mode;
+    GDB.GetCurrentDWG^.OGLwindow1.param.md.mode:=(savemode or MGet3DPoint or MGet3DPointWoOP)and(not MGetSelectionFrame)and(not MGetSelectObject);
+    if commandmanager.get3dpoint(p1) then
+    if commandmanager.get3dpoint(p2) then
+    if commandmanager.get3dpoint(p3) then
+    begin
+  pd := GDBPointer(gdb.GetCurrentROOT^.ObjArray.CreateObj(GDBAlignedDimensionID,gdb.GetCurrentROOT));
+  pd^.initnul(gdb.GetCurrentROOT);
+  pd^.PDimStyle:=gdb.GetCurrentDWG^.DimStyleTable.getelement(0);
+  GDBObjSetEntityProp(pd,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^);
+
+  pd^.DimData.P13InWCS:=p1;
+  pd^.DimData.P14InWCS:=p2;
+  pd^.DimData.P10InWCS:=p3;
+  pd^.CalcDNVectors;
+  pd^.DimData.P10InWCS:=pd^.P10ChangeTo(p3);
   pd^.Formatentity(gdb.GetCurrentDWG^);
-  pd^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2);
+  //pd^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2);
+
+           SetObjCreateManipulator(domethod,undomethod);
+           with ptdrawing(gdb.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+           begin
+                AddObject(pd);
+                comit;
+           end;
+    end;
+    result:=cmd_ok;
+    GDB.GetCurrentDWG^.OGLwindow1.param.md.mode:=savemode;
 end;
 
 procedure startup;

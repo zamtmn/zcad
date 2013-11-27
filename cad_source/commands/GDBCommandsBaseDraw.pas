@@ -140,16 +140,17 @@ begin
 end;
 function Getpoint_com(Operands:pansichar):GDBInteger;
 var
-   p1:gdbvertex;
+   p1,p2,p3:gdbvertex;
    savemode:GDBByte;
+   point:boolean;
 begin
     savemode:=GDB.GetCurrentDWG.OGLwindow1.param.md.mode;
     GDB.GetCurrentDWG.OGLwindow1.param.md.mode:=(savemode or MGet3DPoint or MGet3DPointWoOP)and(not MGetSelectionFrame)and(not MGetSelectObject);
     repeat
-    p1:=commandmanager.get3dpoint;
-    if commandmanager.pcommandrunning^.GetPointMode=TGPPoint then
-                                                shared.ShowError('x='+floattostr(p1.x)+'; y='+floattostr(p1.y)+'; z='+floattostr(p1.z));
-    until commandmanager.pcommandrunning^.GetPointMode<>TGPPoint;
+    point:=commandmanager.get3dpoint(p1);
+    if point then
+                 shared.ShowError('x='+floattostr(p1.x)+'; y='+floattostr(p1.y)+'; z='+floattostr(p1.z));
+    until not point;
     result:=cmd_ok;
     GDB.GetCurrentDWG.OGLwindow1.param.md.mode:=savemode;
 end;

@@ -21,7 +21,7 @@ unit gdbentityfactory;
 
 
 interface
-uses gdbgenericdimension,memman,gdbobjectsconstdef,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity,GDBCable,GDBDevice,
+uses gdbaligneddimension,gdbgenericdimension,memman,gdbobjectsconstdef,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity,GDBCable,GDBDevice,
      GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMText,GDBLine,
      GDBPolyLine,GDBLWPolyLine,gdbellipse,GDB3DFace,GDBSolid,gdbspline;
 function CreateInitObjFree(t:GDBByte;owner:PGDBObjGenericSubEntry):PGDBObjEntity;export;
@@ -152,6 +152,9 @@ begin
       end;
     GDBSplineID: begin
         GDBGetMem({$IFDEF DEBUGBUILD}'{CreateObjFree.Spline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjSpline));
+      end;
+    GDBAlignedDimensionID: begin
+        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Spline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjAlignedDimension));
       end;
   end;
   result := temp;

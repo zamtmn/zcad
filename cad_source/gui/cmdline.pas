@@ -404,6 +404,7 @@ begin
       else if commandmanager.FindCommand(uppercase({cmd}command))<>nil then
           begin
                //CmdEdit.text:=FindAlias(CmdEdit.text,';','=');
+               CmdEdit.text:='';
                commandmanager.executecommand(GDBPointer(Cmd),gdb.GetCurrentDWG);
           end
       else begin

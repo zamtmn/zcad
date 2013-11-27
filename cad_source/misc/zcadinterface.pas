@@ -34,6 +34,7 @@ type
     TProcedure_Pointer_=Procedure(p:pointer);
     TProcedure_Integer_=Procedure(a:integer);
     TMethod_Integer_=Procedure(a:integer) of object;
+    TMethod_PtrInt_=procedure (Data: PtrInt) of object;
     TMethod_IntegerString_=Procedure(a:integer;s:string) of object;
     TFunction__Integer=Function:integer;
     TFunction__Boolean=Function:boolean;
@@ -89,6 +90,7 @@ var
    ProcessFilehistoryProc:TMethod_String_;
    AddOneObjectProc:TSimpleMethod;
    SetVisuaProplProc:TSimpleMethod;
+   AppCloseProc:TMethod_PtrInt_;
 
    //UGDBDescriptor
    RedrawOGLWNDProc:TSimpleProcedure;

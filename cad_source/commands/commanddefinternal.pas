@@ -205,6 +205,7 @@ begin
          CommandName:=name;
          onCommandStart:=func;
          overlay:=false;
+         GetPointMode:=TGPCancel;
 end;
 procedure CommandFastObjectPlugin.CommandStart;
 var
@@ -319,6 +320,7 @@ begin
      CommandName:=name;
      overlay:=false;
      NotUseCommandLine:=true;
+     GetPointMode:=TGPCancel;
 end;
 
 function CommandRTEdObjectPlugin.AfterClick;

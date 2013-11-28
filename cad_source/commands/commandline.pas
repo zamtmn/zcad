@@ -98,8 +98,8 @@ begin
   pcommandrunning^.GetPointMode:=TGPWait;
   while (pcommandrunning^.GetPointMode=TGPWait)and(not Application.Terminated) do
   begin
-       //Application.HandleMessage;
-       Application.ProcessMessages;
+       Application.HandleMessage;
+       //Application.ProcessMessages;
   end;
   if (pcommandrunning^.GetPointMode=TGPPoint)and(not Application.Terminated) then
                                                                                  begin

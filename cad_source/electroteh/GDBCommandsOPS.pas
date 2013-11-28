@@ -324,7 +324,7 @@ begin
                                                          end;}
   result:=mclick;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
-  pl := pointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
+  pl := pointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,gdb.GetCurrentROOT}));
   GDBObjLineInit(gdb.GetCurrentROOT,pl, gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^, t3dp, wc);
   pl^.Formatentity(gdb.GetCurrentDWG^);
   if (button and MZW_LBUTTON)=0 then
@@ -1063,7 +1063,7 @@ begin
   //ny:=OrtoDevPlaceParam.NY;
   result:=mclick;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
-  pl := pointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
+  pl := pointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,gdb.GetCurrentROOT}));
   GDBObjLineInit(gdb.GetCurrentROOT,pl, gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^, t3dp, wc);
   pl^.FormatEntity(gdb.GetCurrentDWG^);
 

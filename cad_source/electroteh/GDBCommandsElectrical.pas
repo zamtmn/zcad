@@ -1167,7 +1167,7 @@ begin
   if (button and MZW_LBUTTON)<>0 then
   begin
     Prompt('Вторая точка:');
-    New_line := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
+    New_line := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,gdb.GetCurrentROOT}));
     GDBObjLineInit(gdb.GetCurrentROOT,New_line,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,wc,wc);
     New_line^.Formatentity(gdb.GetCurrentDWG^);
   end
@@ -2899,7 +2899,7 @@ begin
                                                                  //log.LogOut('processednets.AddRef(net2^); Примитивов в графе: '+inttostr(supernet^.objarray.count));
                                                             end;
 
-                                                                New_line := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID,gdb.GetCurrentROOT));
+                                                                New_line := GDBPointer(gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.CreateObj(GDBLineID{,gdb.GetCurrentROOT}));
                                                                 GDBObjLineInit(gdb.GetCurrentROOT,New_line,gdb.GetCurrentDWG.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,riser.P_insert_in_WCS,riser2.P_insert_in_WCS);
                                                                 New_line^.ou.copyfrom(units.findunit('_riserlink'));
                                                                 vd:=New_line.OU.FindVariable('LengthOverrider');

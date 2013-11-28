@@ -98,14 +98,14 @@ begin
   result := temp;
 end;
 
-procedure pushhandle(p: pdxfhandlerecopenarray; old, nev: GDBPlatformint);
+procedure pushhandle(p: pdxfhandlerecopenarray; old, nev: TDWGHandle);
 begin
   p^.arr[p^.count].old := old;
   p^.arr[p^.count].nev := nev;
   inc(p^.count);
 end;
 
-function getnevhandle(p: pdxfhandlerecopenarray; old: ptruint): GDBPlatformint;
+function getnevhandle(p: pdxfhandlerecopenarray; old: TDWGHandle): TDWGHandle;
 var
   i: GDBInteger;
 begin
@@ -117,7 +117,7 @@ begin
     end;
   result := -1;
 end;
-function getnevhandleWithNil(p: pdxfhandlerecopenarray; old: ptruint): GDBPlatformint;
+function getnevhandleWithNil(p: pdxfhandlerecopenarray; old: TDWGHandle): TDWGHandle;
 var
   i: GDBInteger;
 begin
@@ -129,7 +129,7 @@ begin
     end;
   result := 0;
 end;
-function getoldhandle(p: pdxfhandlerecopenarray; nev: GDBLongword): Integer;
+function getoldhandle(p: pdxfhandlerecopenarray; nev: TDWGHandle): TDWGHandle;
 var
   i: GDBInteger;
 begin

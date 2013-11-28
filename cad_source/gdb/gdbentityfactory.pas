@@ -25,7 +25,7 @@ uses gdbaligneddimension,gdbgenericdimension,memman,gdbobjectsconstdef,zcadsysva
      GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMText,GDBLine,
      GDBPolyLine,GDBLWPolyLine,gdbellipse,GDB3DFace,GDBSolid,gdbspline;
 function CreateInitObjFree(t:GDBByte;owner:PGDBObjGenericSubEntry):PGDBObjEntity;export;
-function CreateObjFree(t: GDBByte): PGDBObjEntity;export;
+function CreateObjFree(t: GDBByte): GDBPointer;export;
 implementation
 uses
     log;
@@ -109,7 +109,7 @@ begin
   end;
   result := temp;
 end;
-function CreateObjFree(t:GDBByte): PGDBObjEntity;export;
+function CreateObjFree(t:GDBByte): GDBPointer;export;
 var temp: PGDBObjEntity;
 begin
   temp := nil;

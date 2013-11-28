@@ -3537,39 +3537,42 @@ begin
 end;
 function AddTestDim_com(operands:pansichar):GDBInteger;
 var
-    pd:PGDBObjAlignedDimension;
-    p1,p2,p3:gdbvertex;
-    savemode:GDBByte;
-    domethod,undomethod:tmethod;
+    pd:PGDBObjAlignedDimension;//указатель на создаваемый примитив
+    p1,p2,p3:gdbvertex;//3 точки которые будут получены от пользователя
+    savemode:GDBByte;//переменная для сохранения текущего режима редактора
+    domethod,undomethod:tmethod;//шняга для ундо\редо, будет убрана в отдельную процедуру
 begin
-    savemode:=GDB.GetCurrentDWG^.OGLwindow1.param.md.mode;
-    GDB.GetCurrentDWG^.OGLwindow1.param.md.mode:=(savemode or MGet3DPoint or MGet3DPointWoOP)and(not MGetSelectionFrame)and(not MGetSelectObject);
-    if commandmanager.get3dpoint(p1) then
-    if commandmanager.get3dpoint(p2) then
-    if commandmanager.get3dpoint(p3) then
-    begin
-  pd := GDBPointer(gdb.GetCurrentROOT^.ObjArray.CreateObj(GDBAlignedDimensionID,gdb.GetCurrentROOT));
-  pd^.initnul(gdb.GetCurrentROOT);
-  pd^.PDimStyle:=gdb.GetCurrentDWG^.DimStyleTable.getelement(0);
-  GDBObjSetEntityProp(pd,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^);
+    savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,         //устанавливаем режим указания точек мышью
+                                                    MGetSelectionFrame or MGetSelectObject);//сбрасываем режим выбора примитивов мышью
+    if commandmanager.get3dpoint(p1) then    //пытаемся получить от пользователя первую точку
+      if commandmanager.get3dpoint(p2) then  //если первая получена, пытаемся получить от пользователя вторую точку
+        if commandmanager.get3dpoint(p3) then//если вторая получена, пытаемся получить от пользователя третью точку
+          begin //если все 3 точки получены - строим примитив
+               pd := GDBPointer(gdb.GetCurrentROOT^.ObjArray.CreateObj(GDBAlignedDimensionID,gdb.GetCurrentROOT));//выделяем вамять под примитив
+               pd^.initnul(gdb.GetCurrentROOT);//инициализируем примитив, указываем его владельца
+               GDBObjSetEntityProp(pd,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^);//присваиваем слой, цвет, типлиний, и прогую дрянь
 
-  pd^.DimData.P13InWCS:=p1;
-  pd^.DimData.P14InWCS:=p2;
-  pd^.DimData.P10InWCS:=p3;
-  pd^.CalcDNVectors;
-  pd^.DimData.P10InWCS:=pd^.P10ChangeTo(p3);
-  pd^.Formatentity(gdb.GetCurrentDWG^);
-  //pd^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,@gdb.GetCurrentDWG^.myGluProject2);
+               {тут в зависимости от примитива}
+               pd^.PDimStyle:=gdb.GetCurrentDWG^.DimStyleTable.getelement(0);//указываем стиль размеров
+               pd^.DimData.P13InWCS:=p1;//присваиваем полученые точки
+               pd^.DimData.P14InWCS:=p2;//присваиваем полученые точки
+               pd^.DimData.P10InWCS:=p3;//присваиваем полученые точки
 
-           SetObjCreateManipulator(domethod,undomethod);
-           with ptdrawing(gdb.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
-           begin
-                AddObject(pd);
-                comit;
-           end;
-    end;
-    result:=cmd_ok;
-    GDB.GetCurrentDWG^.OGLwindow1.param.md.mode:=savemode;
+               pd^.CalcDNVectors;//перерасчитываем p3 - она должна лежать на нормали выпущеной из p2
+               pd^.DimData.P10InWCS:=pd^.P10ChangeTo(p3);//перерасчитываем p3 - она должна лежать на нормали выпущеной из p2
+
+               pd^.FormatEntity(gdb.GetCurrentDWG^);//примитив строит сам себя, с учетом настроек выше
+
+               {далее добавление примитива в базу с учетом ундо\редо, будет вынесено в отдельную процедуру}
+               SetObjCreateManipulator(domethod,undomethod);
+               with ptdrawing(gdb.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+               begin
+                    AddObject(pd);
+                    comit;
+               end;
+          end;
+    result:=cmd_ok;//команда завершилась, говорим что всё заебись
+    GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);//восстанавливаем сохраненный режим редактора
 end;
 
 procedure startup;

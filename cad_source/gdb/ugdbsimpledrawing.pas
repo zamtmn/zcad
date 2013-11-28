@@ -88,11 +88,38 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetUndoTop:TArrayIndex;virtual;
                        function GetDWGUnits:PTUnitManager;virtual;
                        procedure AssignLTWithFonts(pltp:PGDBLtypeProp);virtual;
+                       function GetMouseEditorMode:GDBByte;virtual;
+                       function DefMouseEditorMode(SetMask,ReSetMask:GDBByte):GDBByte;virtual;
+                       function SetMouseEditorMode(mode:GDBByte):GDBByte;virtual;
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 implementation
 uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, {GDBManager,}shared,{commandline,}log{,OGLSpecFunc};
+function TSimpleDrawing.GetMouseEditorMode:GDBByte;
+begin
+     if assigned(OGLwindow1) then
+                                 result:=OGLwindow1.param.md.mode
+                             else
+                                 result:=0;
+end;
+
+function TSimpleDrawing.DefMouseEditorMode(SetMask,ReSetMask:GDBByte):GDBByte;
+begin
+     result:=GetMouseEditorMode;
+     SetMouseEditorMode((result or setmask) and (not ReSetMask))
+end;
+
+function TSimpleDrawing.SetMouseEditorMode(mode:GDBByte):GDBByte;
+begin
+     if assigned(OGLwindow1) then
+                                 begin
+                                      result:=OGLwindow1.param.md.mode;
+                                      OGLwindow1.param.md.mode:=mode;
+                                 end
+                             else
+                                 result:=0;
+end;
 
 procedure TSimpleDrawing.AssignLTWithFonts(pltp:PGDBLtypeProp);
 var

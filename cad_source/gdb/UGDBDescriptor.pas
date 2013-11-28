@@ -98,6 +98,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     procedure FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:GDBOpenArrayOfPObjects);
                     procedure FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:GDBOpenArrayOfPObjects);
                     procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
+                    procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
               end;
 {EXPORT-}
 var GDB: GDBDescriptor;
@@ -118,6 +119,18 @@ function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log,OGLSpecFunc;
+ procedure GDBDescriptor.AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
+ var
+     domethod,undomethod:tmethod;
+ begin
+      SetObjCreateManipulator(domethod,undomethod);
+      with ptdrawing(GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+      begin
+           AddObject(PEnt);
+           comit;
+      end;
+ end;
+
  function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
  var
     mem:GDBOpenArrayOfByte;

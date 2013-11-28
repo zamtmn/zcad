@@ -36,7 +36,7 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects
                       function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
                       function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;
                       function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;
-                      function CreateObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;virtual;
+                      function CreateObj(t: GDBByte{;owner:GDBPointer}):GDBPointer;virtual;
                       function CreateInitObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;virtual;
                       function calcbb:GDBBoundingBbox;
                       function calcvisbb(infrustumactualy:TActulity):GDBBoundingBbox;
@@ -225,7 +225,7 @@ begin
                        until pobj=nil;
                   end;
 end;
-function GDBObjOpenArrayOfPV.CreateObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;
+function GDBObjOpenArrayOfPV.CreateObj(t: GDBByte{;owner:GDBPointer}):GDBPointer;
 var temp: PGDBObjEntity;
 begin
   temp := nil;

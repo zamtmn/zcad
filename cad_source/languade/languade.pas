@@ -146,6 +146,7 @@ var
   i: GDBInteger;
 begin
   expr := readspace(expr);
+  if expr='' then exit;
   i := 1;
   if expr[1] in ['a'..'z', 'A'..'Z', '0'..'9','_' {,'(',')'}] then
   begin

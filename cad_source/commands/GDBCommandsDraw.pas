@@ -620,7 +620,7 @@ var
     nb,tb:PGDBObjBlockInsert;
 begin
 
-    nb := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID,gdb.GetCurrentROOT));
+    nb := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,gdb.GetCurrentROOT}));
     //PGDBObjBlockInsert(nb)^.initnul;//(@gdb.GetCurrentDWG^.ObjRoot,gdb.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(nb)^.init(gdb.GetCurrentROOT,gdb.GetCurrentDWG^.LayerTable.GetSystemLayer,0);
     nb^.Name:=newname;//'DEVICE_NOC';
@@ -1771,7 +1771,7 @@ begin
                          gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.cleareraseobj;
                          //gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
                     end;
-    pb := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID,gdb.GetCurrentROOT));
+    pb := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,gdb.GetCurrentROOT}));
     //PGDBObjBlockInsert(pb)^.initnul;//(@gdb.GetCurrentDWG^.ObjRoot,gdb.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(pb)^.init(gdb.GetCurrentROOT,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,0);
     pb^.Name:=PGDBObjBlockdef(gdb.GetCurrentDWG^.BlockDefArray.getelement(BIProp.Blocks.Selected))^.Name;//'DEVICE_NOC';
@@ -3310,7 +3310,7 @@ begin
            historyoutstr(pb^.name);
 
 
-    BLINSERT := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID,gdb.GetCurrentROOT));
+    BLINSERT := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,gdb.GetCurrentROOT}));
     PGDBObjBlockInsert(BLINSERT)^.initnul;//(@gdb.GetCurrentDWG^.ObjRoot,gdb.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(BLINSERT)^.init(gdb.GetCurrentROOT,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,0);
     BLinsert^.Name:=pb^.name;
@@ -3535,51 +3535,9 @@ begin
      shared.HistoryOutStr('Line-Line tests count: '+inttostr(linelinetests));
      shared.HistoryOutStr('Intersections count: '+inttostr(intersectcount));
 end;
-function AddTestDim_com(operands:pansichar):GDBInteger;
-var
-    pd:PGDBObjAlignedDimension;//указатель на создаваемый примитив
-    p1,p2,p3:gdbvertex;//3 точки которые будут получены от пользователя
-    savemode:GDBByte;//переменная для сохранения текущего режима редактора
-    domethod,undomethod:tmethod;//шняга для ундо\редо, будет убрана в отдельную процедуру
-begin
-    savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,         //устанавливаем режим указания точек мышью
-                                                    MGetSelectionFrame or MGetSelectObject);//сбрасываем режим выбора примитивов мышью
-    if commandmanager.get3dpoint(p1) then    //пытаемся получить от пользователя первую точку
-      if commandmanager.get3dpoint(p2) then  //если первая получена, пытаемся получить от пользователя вторую точку
-        if commandmanager.get3dpoint(p3) then//если вторая получена, пытаемся получить от пользователя третью точку
-          begin //если все 3 точки получены - строим примитив
-               pd := GDBPointer(gdb.GetCurrentROOT^.ObjArray.CreateObj(GDBAlignedDimensionID,gdb.GetCurrentROOT));//выделяем вамять под примитив
-               pd^.initnul(gdb.GetCurrentROOT);//инициализируем примитив, указываем его владельца
-               GDBObjSetEntityProp(pd,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^);//присваиваем слой, цвет, типлиний, и прогую дрянь
-
-               {тут в зависимости от примитива}
-               pd^.PDimStyle:=gdb.GetCurrentDWG^.DimStyleTable.getelement(0);//указываем стиль размеров
-               pd^.DimData.P13InWCS:=p1;//присваиваем полученые точки
-               pd^.DimData.P14InWCS:=p2;//присваиваем полученые точки
-               pd^.DimData.P10InWCS:=p3;//присваиваем полученые точки
-
-               pd^.CalcDNVectors;//перерасчитываем p3 - она должна лежать на нормали выпущеной из p2
-               pd^.DimData.P10InWCS:=pd^.P10ChangeTo(p3);//перерасчитываем p3 - она должна лежать на нормали выпущеной из p2
-
-               pd^.FormatEntity(gdb.GetCurrentDWG^);//примитив строит сам себя, с учетом настроек выше
-
-               {далее добавление примитива в базу с учетом ундо\редо, будет вынесено в отдельную процедуру}
-               SetObjCreateManipulator(domethod,undomethod);
-               with ptdrawing(gdb.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
-               begin
-                    AddObject(pd);
-                    comit;
-               end;
-          end;
-    result:=cmd_ok;//команда завершилась, говорим что всё заебись
-    GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);//восстанавливаем сохраненный режим редактора
-end;
 
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@AddTestDim_com,'AddTestDim',CADWG,0);
-
-
   BIProp.Blocks.Enums.init(100);
   BIProp.Scale:=geometry.OneVertex;
   BIProp.Rotation:=0;

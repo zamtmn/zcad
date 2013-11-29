@@ -275,6 +275,10 @@ MainMenuItem Draw;
     action ACN_BInsert
     action ACN_TEXT
   }
+MainMenuItem Dimension;
+  {
+    action ACN_DIMALIGNED
+  }
 MainMenuItem Modify;
   {
     action ACN_POLYED
@@ -555,5 +559,5 @@ PopUpMenu FASTMENU;
     Separator
     action ACN_VIEWTOP
   }
-CreateMenu MainMenu File,Edit,View,Format,Draw,Modify,Schematic,Plan,Info,Model,Settings,Window,Help,Debug,DB;
+CreateMenu MainMenu File,Edit,View,Format,Draw,Dimension,Modify,Schematic,Plan,Info,Model,Settings,Window,Help,Debug,DB;
 SetMainMenu MainMenu;

@@ -186,7 +186,7 @@ X (13,23,33)     X (14,24,34)
 *)
 function GDBObjAlignedDimension.P13ChangeTo(tv:GDBVertex):GDBVertex;
 var
-    t:GDBDouble;
+    t,dir:GDBDouble;
     tvertex:GDBVERTEX;
 begin
      result:=tv;
@@ -200,8 +200,12 @@ begin
                                else
                                    begin
                                         t:=vertexlength(DimData.P10InWCS,DimData.P14InWCS);
+                                        dir:=-1;
                                         if GetCSDirFrom0x0y2D(vertexsub(DimData.P13InWCS,DimData.P14InWCS),vertexsub(DimData.P10InWCS,DimData.P14InWCS))=TCSDRight then
-                                           t:=-t;
+                                                                      begin
+                                                                           t:=-t;
+                                                                           dir:=-dir;
+                                                                      end;
                                         if vertexlength(tv,DimData.P14InWCS)>eps then
                                                   begin
                                                   tvertex:=vertexsub(DimData.P14InWCS,tv);
@@ -209,7 +213,7 @@ begin
                                                   tvertex:=normalizevertex(tvertex);
                                                   end
                                            else
-                                               tvertex:=geometry.x_Y_zVertex;
+                                               tvertex:=geometry.VertexMulOnSc(geometry.x_Y_zVertex,dir);
 
                                        tvertex:=VertexMulOnSc(tvertex,t);
                                        DimData.P10InWCS:=VertexAdd(DimData.P14InWCS,tvertex);
@@ -219,7 +223,7 @@ begin
 end;
 function GDBObjAlignedDimension.P14ChangeTo(tv:GDBVertex):GDBVertex;
 var
-    t:GDBDouble;
+    t,dir:GDBDouble;
     tvertex:GDBVERTEX;
 begin
      result:=tv;
@@ -233,8 +237,12 @@ begin
                                 else
                                     begin
                                          t:=vertexlength(DimData.P10InWCS,DimData.P14InWCS);
+                                         dir:=-1;
                                          if GetCSDirFrom0x0y2D(vertexsub(DimData.P13InWCS,DimData.P14InWCS),vertexsub(DimData.P10InWCS,DimData.P14InWCS))=TCSDRight then
-                                            t:=-t;
+                                                                       begin
+                                                                            t:=-t;
+                                                                            dir:=-dir;
+                                                                       end;
                                          if vertexlength(DimData.P13InWCS,tv)>eps then
                                                  begin
                                                        tvertex:=vertexsub(tv,DimData.P13InWCS);
@@ -242,7 +250,7 @@ begin
                                                        tvertex:=normalizevertex(tvertex);
                                                  end
                                             else
-                                                tvertex:=geometry.x_Y_zVertex;
+                                                tvertex:=geometry.VertexMulOnSc(geometry.x_Y_zVertex,dir);
 
                                           tvertex:=VertexMulOnSc(tvertex,t);
                                           DimData.P10InWCS:=VertexAdd(tv,tvertex);

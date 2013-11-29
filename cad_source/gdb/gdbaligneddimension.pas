@@ -144,9 +144,14 @@ var
     t,tl:GDBDouble;
     temp:GDBVertex;
 begin
-     tl:=scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD);
-     temp:=VertexDmorph(DimData.P13InWCS,self.vectorD,tl);
-     tv:=CorrectPointLine(tv,DimData.P13InWCS,temp,t);
+     if geometry.sqrVertexlength(tv,DimData.P14InWCS)>sqreps then
+     begin
+           tl:=scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD);
+           temp:=VertexDmorph(DimData.P13InWCS,self.vectorD,tl);
+           tv:=CorrectPointLine(tv,DimData.P13InWCS,temp,t);
+     end
+     else
+           tv:=DimData.P14InWCS;
      result:=tv;
      DimData.P10InWCS:=tv;
      self.CalcDNVectors;
@@ -206,16 +211,16 @@ begin
                                                                            t:=-t;
                                                                            dir:=-dir;
                                                                       end;
-                                        if vertexlength(tv,DimData.P14InWCS)>eps then
+                                        //if vertexlength(tv,DimData.P14InWCS)>eps then
                                                   begin
                                                   tvertex:=vertexsub(DimData.P14InWCS,tv);
                                                   tvertex:=geometry.vectordot(tvertex,self.Local.Basis.oz);
                                                   tvertex:=normalizevertex(tvertex);
                                                   end
-                                           else
-                                               tvertex:=geometry.VertexMulOnSc(geometry.x_Y_zVertex,dir);
+                                           //else
+                                           //    tvertex:=geometry.VertexMulOnSc(geometry.x_Y_zVertex,dir);
 
-                                       tvertex:=VertexMulOnSc(tvertex,t);
+                                       ;tvertex:=VertexMulOnSc(tvertex,t);
                                        DimData.P10InWCS:=VertexAdd(DimData.P14InWCS,tvertex);
                                        DimData.P13InWCS:=tv;
                                        //CalcDefaultPlaceText(DimData.P13InWCS,DimData.P14InWCS);
@@ -243,16 +248,16 @@ begin
                                                                             t:=-t;
                                                                             dir:=-dir;
                                                                        end;
-                                         if vertexlength(DimData.P13InWCS,tv)>eps then
+                                         //if vertexlength(DimData.P13InWCS,tv)>eps then
                                                  begin
                                                        tvertex:=vertexsub(tv,DimData.P13InWCS);
                                                        tvertex:=geometry.vectordot(tvertex,self.Local.Basis.oz);
                                                        tvertex:=normalizevertex(tvertex);
                                                  end
-                                            else
-                                                tvertex:=geometry.VertexMulOnSc(geometry.x_Y_zVertex,dir);
+                                            //else
+                                                //tvertex:=geometry.VertexMulOnSc(geometry.x_Y_zVertex,dir);
 
-                                          tvertex:=VertexMulOnSc(tvertex,t);
+                                          ;tvertex:=VertexMulOnSc(tvertex,t);
                                           DimData.P10InWCS:=VertexAdd(tv,tvertex);
                                           DimData.P14InWCS:=tv;
                                           //CalcDefaultPlaceText(DimData.P13InWCS,DimData.P14InWCS);
@@ -585,8 +590,17 @@ begin
      vectorD:=vertexsub(DimData.P14InWCS,DimData.P13InWCS);
      vectorD:=normalizevertex(vectorD);
 
-     vectorN:=vertexsub(DimData.P10InWCS,DimData.P14InWCS);
-     vectorN:=normalizevertex(vectorN);
+     if geometry.sqrVertexlength(DimData.P10InWCS,DimData.P14InWCS)>sqreps then
+                                                  begin
+                                                  vectorN:=vertexsub(DimData.P10InWCS,DimData.P14InWCS);
+                                                  end
+                                              else
+                                                  begin
+                                                       vectorN.x:=-vectorD.y;
+                                                       vectorN.y:=vectorD.x;
+                                                       vectorN.z:=0;
+                                                  end;
+     vectorN:=normalizevertex(vectorN)
 end;
 
 procedure GDBObjAlignedDimension.FormatEntity(const drawing:TDrawingDef);

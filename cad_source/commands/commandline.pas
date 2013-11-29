@@ -67,7 +67,8 @@ type
                           function GetValueHeap:GDBInteger;
                           function CurrentCommandNotUseCommandLine:GDBBoolean;
                           procedure PrepairVarStack;
-                          function Get3DPoint(out p:GDBVertex):GDBBoolean;
+                          function Get3DPoint(prompt:GDBString;out p:GDBVertex):GDBBoolean;
+                          function Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:GDBPointer):GDBBoolean;
                           function EndGetPoint(newmode:TGetPointMode):GDBBoolean;
                     end;
 var commandmanager:GDBcommandmanager;
@@ -82,9 +83,9 @@ function GDBcommandmanager.EndGetPoint(newmode:TGetPointMode):GDBBoolean;
 begin
   if pcommandrunning<>nil then
   begin
-  if pcommandrunning^.GetPointMode=TGPWait then
+  if pcommandrunning^.IData.GetPointMode=TGPWait then
                               begin
-                                  pcommandrunning^.GetPointMode:=newmode;
+                                  pcommandrunning^.IData.GetPointMode:=newmode;
                                   result:=true;
                               end
                           else
@@ -93,21 +94,32 @@ begin
      else
                               result:=false;
 end;
-function GDBcommandmanager.Get3DPoint(out p:GDBVertex):GDBBoolean;
+function GDBcommandmanager.Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:GDBPointer):GDBBoolean;
 begin
-  pcommandrunning^.GetPointMode:=TGPWait;
-  while (pcommandrunning^.GetPointMode=TGPWait)and(not Application.Terminated) do
+  shared.HistoryOutStr(prompt);
+  pcommandrunning^.IData.GetPointMode:=TGPWait;
+  pcommandrunning^.IData.PInteractiveData:=PInteractiveData;
+  pcommandrunning^.IData.PInteractiveProc:=InteractiveProc;
+  while (pcommandrunning^.IData.GetPointMode=TGPWait)and(not Application.Terminated) do
   begin
        Application.HandleMessage;
        //Application.ProcessMessages;
   end;
-  if (pcommandrunning^.GetPointMode=TGPPoint)and(not Application.Terminated) then
+  if (pcommandrunning^.IData.GetPointMode=TGPPoint)and(not Application.Terminated) then
                                                                                  begin
-                                                                                 p:=pcommandrunning^.GetPointValue;
+                                                                                 p:=pcommandrunning^.IData.GetPointValue;
                                                                                  result:=true;
                                                                                  end
                                                                              else
+                                                                                 begin
                                                                                  result:=false;
+                                                                                 //shared.HistoryOutStr('cancel');
+                                                                                 end;
+end;
+
+function GDBcommandmanager.Get3DPoint(prompt:GDBString;out p:GDBVertex):GDBBoolean;
+begin
+  result:=Get3DPointInteractive(prompt,p,nil,nil);
 end;
 
 function GDBcommandmanager.GetValueHeap:GDBInteger;
@@ -246,13 +258,18 @@ begin
      begin
           pcommandrunning^.MouseMoveCallback(p3d,p2d,mode,osp);
      end
-     else if pcommandrunning^.GetPointMode=TGPWait then
+     else if pcommandrunning^.IData.GetPointMode=TGPWait then
                                       begin
                                            if mode=MZW_LBUTTON then
                                            begin
-                                                pcommandrunning^.GetPointMode:=TGPpoint;
-                                                pcommandrunning^.GetPointValue:=p3d;
-                                           end;
+                                                if assigned(pcommandrunning^.IData.PInteractiveProc) then
+                                                pcommandrunning^.IData.PInteractiveProc(pcommandrunning^.IData.PInteractiveData,p3d,true);
+                                                pcommandrunning^.IData.GetPointMode:=TGPpoint;
+                                                pcommandrunning^.IData.GetPointValue:=p3d;
+                                           end
+                                           else
+                                               if assigned(pcommandrunning^.IData.PInteractiveProc) then
+                                                pcommandrunning^.IData.PInteractiveProc(pcommandrunning^.IData.PInteractiveData,p3d,false);
                                       end;
      //clearotrack;
         p:=CommandsStack.beginiterate(ir);
@@ -481,7 +498,7 @@ begin
         LatestRunPC:=nil;
         GDBcommandmanager.run(temp2,LatestRunOperands,LatestRunPDrawing);
    end
-   else if pcommandrunning<>nil then if pcommandrunning^.GetPointMode=TGPCloseApp then
+   else if pcommandrunning<>nil then if pcommandrunning^.IData.GetPointMode=TGPCloseApp then
                                         Application.QueueAsyncCall(AppCloseProc, 0);
 end;
 procedure GDBcommandmanager.executecommandtotalend;

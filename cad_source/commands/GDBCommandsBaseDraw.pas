@@ -138,23 +138,6 @@ begin
      oldpoint:=point;
      commandmanager.executecommandsilent('Get3DPoint(Следующая точка:)',gdb.GetCurrentDWG);
 end;
-function Getpoint_com(Operands:pansichar):GDBInteger;
-var
-   p1,p2,p3:gdbvertex;
-   savemode:GDBByte;
-   point:boolean;
-begin
-    savemode:=GDB.GetCurrentDWG.OGLwindow1.param.md.mode;
-    GDB.GetCurrentDWG.OGLwindow1.param.md.mode:=(savemode or MGet3DPoint or MGet3DPointWoOP)and(not MGetSelectionFrame)and(not MGetSelectObject);
-    repeat
-    point:=commandmanager.get3dpoint(p1);
-    if point then
-                 shared.ShowError('x='+floattostr(p1.x)+'; y='+floattostr(p1.y)+'; z='+floattostr(p1.z));
-    until not point;
-    result:=cmd_ok;
-    GDB.GetCurrentDWG.OGLwindow1.param.md.mode:=savemode;
-end;
-
 procedure startup;
 begin
   CreateCommandRTEdObjectPlugin(@Line_com_CommandStart,nil,nil,nil,@Line_com_BeforeClick,nil,nil,nil,'Get3DPoint',0,0).overlay:=true;
@@ -162,7 +145,6 @@ begin
   CreateCommandRTEdObjectPlugin(@Rect_com_CommandStart,nil,nil,nil,nil,nil,nil,@Rect_com_CommandCont,'GetRect',0,0).overlay:=true;
 
   CreateCommandRTEdObjectPlugin(@Dist_com_CommandStart,nil,nil,nil,nil,nil,nil,@Dist_com_CommandCont,'Dist',0,0){.overlay:=true};
-  CreateCommandFastObjectPlugin(@Getpoint_com,'TestGetPoint',CADWG,0);
 end;
 procedure Finalize;
 begin

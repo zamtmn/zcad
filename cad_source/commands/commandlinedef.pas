@@ -25,8 +25,15 @@ const
      CEDeSelect=1;
      CEDWGNChanged=2;
 type
+TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
 {Export+}
-  TGetPointMode=(TGPWait,TGPPoint,TGPCancel,TGPOtherCommand,TGPCloseApp);
+    TGetPointMode=(TGPWait,TGPPoint,TGPCancel,TGPOtherCommand,TGPCloseApp);
+    TInteractiveData=packed record
+                       GetPointMode:TGetPointMode;(*hidden_in_objinsp*)
+                       GetPointValue:GDBVertex;(*hidden_in_objinsp*)
+                       PInteractiveData:GDBPointer;
+                       PInteractiveProc:{-}TInteractiveProcObjBuild{/GDBPointer/};
+                    end;
   TCStartAttr=GDBInteger;{атрибут разрешения\запрещения запуска команды}
     TCEndAttr=GDBInteger;{атрибут действия по завершению команды}
   PCommandObjectDef = ^CommandObjectDef;
@@ -42,8 +49,7 @@ type
     CEndActionAttr:TCEndAttr;(*hidden_in_objinsp*)
     pdwg:GDBPointer;(*hidden_in_objinsp*)
     NotUseCommandLine:GDBBoolean;(*hidden_in_objinsp*)
-    GetPointMode:TGetPointMode;(*hidden_in_objinsp*)
-    GetPointValue:GDBVertex;(*hidden_in_objinsp*)
+    IData:TInteractiveData;(*hidden_in_objinsp*)
     procedure CommandStart(Operands:pansichar); virtual; abstract;
     procedure CommandEnd; virtual; abstract;
     procedure CommandCancel; virtual; abstract;
@@ -104,7 +110,7 @@ begin
   overlay:=false;
   CEndActionAttr:=CEDeSelect;
   NotUseCommandLine:=true;
-  GetPointMode:=TGPCancel;
+  IData.GetPointMode:=TGPCancel;
 end;
 
 destructor CommandObjectDef.done;

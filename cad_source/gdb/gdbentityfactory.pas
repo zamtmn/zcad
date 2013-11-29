@@ -106,6 +106,11 @@ begin
         PGDBObjGenericDimension(temp).initnul(owner);
         PGDBObjGenericDimension(temp).bp.ListPos.Owner:=owner;
       end;
+    GDBAlignedDimensionID: begin
+        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Spline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjAlignedDimension));
+        PGDBObjAlignedDimension(temp).initnul(owner);
+        PGDBObjAlignedDimension(temp).bp.ListPos.Owner:=owner;
+      end;
   end;
   result := temp;
 end;

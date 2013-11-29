@@ -62,6 +62,7 @@ uses
   GDBCommandsBase,
   GDBCommandsDB,
   GDBCommandsDraw,
+  gdbcommandsexample,
   gdbcommandsinterface,
 
   GDBCommandsElectrical,
@@ -103,7 +104,7 @@ begin
                              programlog.logoutstr('DefaultSystemCodePage:='+inttostr(DefaultSystemCodePage),0);
                              programlog.logoutstr('DefaultUnicodeCodePage:='+inttostr(DefaultUnicodeCodePage),0);
                              programlog.logoutstr('UTF8CompareLocale:='+inttostr(UTF8CompareLocale),0);
-                             {$modeswitch systemcodepage}
+                             {modeswitch systemcodepage}
                              {$ENDIF}
 
   //Application_Initialize перемещен в инициализацию splashwnd чтоб показать сплэш пораньше

@@ -91,11 +91,20 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetMouseEditorMode:GDBByte;virtual;
                        function DefMouseEditorMode(SetMask,ReSetMask:GDBByte):GDBByte;virtual;
                        function SetMouseEditorMode(mode:GDBByte):GDBByte;virtual;
+                       procedure FreeConstructionObjects;virtual;
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 implementation
 uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, {GDBManager,}shared,{commandline,}log{,OGLSpecFunc};
+procedure TSimpleDrawing.FreeConstructionObjects;
+begin
+  ConstructObjRoot.ObjArray.cleareraseobj;
+  ConstructObjRoot.ObjCasheArray.Clear;
+  //ConstructObjRoot.ObjToConnectedArray.Clear;
+  ConstructObjRoot.ObjMatrix:=onematrix;
+end;
+
 function TSimpleDrawing.GetMouseEditorMode:GDBByte;
 begin
      if assigned(OGLwindow1) then

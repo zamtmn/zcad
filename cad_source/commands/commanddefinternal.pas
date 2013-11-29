@@ -205,7 +205,7 @@ begin
          CommandName:=name;
          onCommandStart:=func;
          overlay:=false;
-         GetPointMode:=TGPCancel;
+         IData.GetPointMode:=TGPCancel;
 end;
 procedure CommandFastObjectPlugin.CommandStart;
 var
@@ -236,10 +236,11 @@ begin
   gdb.GetCurrentDWG.OGLwindow1.Clear0Ontrackpoint;
   if not overlay then
                      begin
-                          gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+                          gdb.GetCurrentDWG.FreeConstructionObjects;
+                          {gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
                           gdb.GetCurrentDWG.ConstructObjRoot.ObjCasheArray.Clear;
                           //gdb.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
-                          gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
+                          gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;}
                      end;
   if gdb.GetCurrentDWG.OGLwindow1<>nil then
   gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
@@ -320,7 +321,7 @@ begin
      CommandName:=name;
      overlay:=false;
      NotUseCommandLine:=true;
-     GetPointMode:=TGPCancel;
+     IData.GetPointMode:=TGPCancel;
 end;
 
 function CommandRTEdObjectPlugin.AfterClick;

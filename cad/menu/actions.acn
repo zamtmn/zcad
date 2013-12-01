@@ -86,7 +86,7 @@ action ACN_CIRCLE,Circle,circle.bmp,Draw circle,,
 action ACN_BInsert,Insert,insert.bmp,Insert block,,
 action ACN_TEXT,Text,text.bmp,Draw text,,
 
-action ACN_DIMALIGNED,DimAligned,@DA,Draw aligned dimension,,
+action ACN_DIMALIGNED,DimAligned,dimaligned.bmp,Draw aligned dimension,,
 
 action ACN_OPTIONS,Options,options.bmp,Options,,
 action ACN_SAVEOPTIONS,SaveOptions,,Save options,,

@@ -34,6 +34,8 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
                        PInteractiveData:GDBPointer;
                        PInteractiveProc:{-}TInteractiveProcObjBuild{/GDBPointer/};
                     end;
+    TCommandOperands=PAnsiChar;
+    TCommandResult=GDBInteger;
   TCStartAttr=GDBInteger;{атрибут разрешения\запрещения запуска команды}
     TCEndAttr=GDBInteger;{атрибут действия по завершению команды}
   PCommandObjectDef = ^CommandObjectDef;
@@ -50,7 +52,7 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
     pdwg:GDBPointer;(*hidden_in_objinsp*)
     NotUseCommandLine:GDBBoolean;(*hidden_in_objinsp*)
     IData:TInteractiveData;(*hidden_in_objinsp*)
-    procedure CommandStart(Operands:pansichar); virtual; abstract;
+    procedure CommandStart(Operands:TCommandOperands); virtual; abstract;
     procedure CommandEnd; virtual; abstract;
     procedure CommandCancel; virtual; abstract;
     procedure CommandInit; virtual; abstract;

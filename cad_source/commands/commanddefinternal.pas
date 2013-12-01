@@ -28,7 +28,7 @@ type
   commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger):GDBInteger;
   comdrawfunc=function(mclick:GDBInteger):GDBInteger;
   comfunc=function:GDBInteger;
-  comfuncwithoper=function(operands:pansichar):GDBInteger;
+  comfuncwithoper=function(operands:TCommandOperands):TCommandResult;
 {Export+}
   CommandFastObject = {$IFNDEF DELPHI}packed{$ENDIF} object(CommandFastObjectDef)
     procedure CommandInit; virtual;

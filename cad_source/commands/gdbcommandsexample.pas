@@ -27,8 +27,11 @@ uses
   {подключеные модули, список будет меняться в зависимости от требуемых примитивов и действий с ними}
   gdbaligneddimension,//unit describes aligned dimensional entity
                       //модуль описывающий выровненный размерный примитив
+  gdbrotateddimension,
   GDBLine,            //unit describes line entity
                       //модуль описывающий примитив линия
+  geometry,
+  math,
   gdbentityfactory,   //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   zcadsysvars,        //system global variables
@@ -98,7 +101,60 @@ begin
     PGDBObjAlignedDimension(PInteractiveData)^.FormatEntity(gdb.GetCurrentDWG^);//format entity
                                                                                 //"форматируем" примитив в соответствии с заданными параметрами
 end;
+function isRDIMHorisontal(p1,p2,p3,nevp3:gdbvertex):integer;
+var
+   minx,maxx,miny,maxy:GDBDouble;
+begin
+     minx:=min(p1.x,p2.x);
+     maxx:=max(p1.x,p2.x);
+     miny:=min(p1.y,p2.y);
+     maxy:=max(p1.y,p2.y);
+     if (minx<=p3.x)and(p3.x<=maxx)and(miny<=p3.y)and(p3.y<=maxy)then
+                                                                 begin
+                                                                      if (minx<=nevp3.x)and(nevp3.x<=maxx)and(miny<=nevp3.y)and(nevp3.y<=maxy)
+                                                                      then
+                                                                          result:=0
+                                                                      else
+                                                                          begin
+                                                                               if (minx>nevp3.x)or(nevp3.x>maxx)then
+                                                                                                                    result:=2
+                                                                                                                else
+                                                                                                                    result:=1;
 
+                                                                          end;
+                                                                 end
+                                                              else
+                                                                 result:=0;
+end;
+
+procedure InteractiveRDimManipulator(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
+begin
+    GDBObjSetEntityProp(PGDBObjRotatedDimension(PInteractiveData),
+                        sysvar.dwg.DWG_CLayer^,
+                        sysvar.dwg.DWG_CLType^,
+                        sysvar.dwg.DWG_CColor^,
+                        sysvar.dwg.DWG_CLinew^);
+    PGDBObjRotatedDimension(PInteractiveData)^.PDimStyle:=gdb.GetCurrentDWG^.DimStyleTable.getelement(0);
+
+    case isRDIMHorisontal(PGDBObjRotatedDimension(PInteractiveData)^.DimData.P13InWCS,
+                        PGDBObjRotatedDimension(PInteractiveData)^.DimData.P14InWCS,
+                        PGDBObjRotatedDimension(PInteractiveData)^.DimData.P10InWCS,
+                        Point) of
+                                 1:begin
+                                      PGDBObjRotatedDimension(PInteractiveData)^.vectorD:=XWCS;
+                                      PGDBObjRotatedDimension(PInteractiveData)^.vectorN:=YWCS;
+                                   end;
+                                 2:begin
+                                      PGDBObjRotatedDimension(PInteractiveData)^.vectorD:=YWCS;
+                                      PGDBObjRotatedDimension(PInteractiveData)^.vectorN:=XWCS;
+                                   end;
+    end;
+
+    PGDBObjRotatedDimension(PInteractiveData)^.DimData.P10InWCS:=Point;
+    PGDBObjRotatedDimension(PInteractiveData)^.DimData.P10InWCS:=PGDBObjRotatedDimension(PInteractiveData)^.P10ChangeTo(Point);
+
+    PGDBObjRotatedDimension(PInteractiveData)^.FormatEntity(gdb.GetCurrentDWG^);
+end;
 
 {"command" function, they must all have a description of the function name(operands:TCommandOperands):TCommandResult;}
 {after the registration, it will be available from the interface}
@@ -169,13 +225,8 @@ begin
                                         //присваиваем полученые точки в соответствующие места примитиву
                pd^.DimData.P14InWCS:=p2;//assign the obtained point to the appropriate location primitive
                                         //присваиваем полученые точки в соответствующие места примитиву
-               pd^.DimData.P10InWCS:=p3;//assign the obtained point to the appropriate location primitive
-                                        //присваиваем полученые точки в соответствующие места примитиву
-
-               pd^.CalcDNVectors;                        //calculate p3 - she must lie on normal drawn from p2, use the built-in to primitive mechanism
-                                                         //рассчитываем p3 - она должна лежать на нормали проведенной из p2, используем для этого встроенный в примитив механизм
-               pd^.DimData.P10InWCS:=pd^.P10ChangeTo(p3);//calculate p3 - she must lie on normal drawn from p2, use the built-in to primitive mechanism
-                                                         //рассчитываем p3 - она должна лежать на нормали проведенной из p2, используем для этого встроенный в примитив механизм
+               InteractiveADimManipulator(pd,p3,false);//use the interactive function for final configuration entity
+                                                       //используем интерактивную функцию для окончательной настройки примитива
 
                pd^.FormatEntity(gdb.GetCurrentDWG^);//format entity
                                                     //"форматируем" примитив в соответствии с заданными параметрами
@@ -191,6 +242,60 @@ begin
                                                     //восстанавливаем сохраненный режим редактора
 end;
 
+function DrawRotatedDim_com(operands:TCommandOperands):TCommandResult;
+var
+    pd:PGDBObjRotatedDimension;
+    pline:PGDBObjLine;
+    p1,p2,p3,vd,vn:gdbvertex;
+    savemode:GDBByte;
+begin
+    savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,
+                                                    MGetSelectionFrame or MGetSelectObject);
+    if commandmanager.get3dpoint('Specify first point:',p1) then
+    begin
+         pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+         pline^.CoordInOCS.lBegin:=p1;
+         InteractiveLineEndManipulator(pline,p1,false);
+      if commandmanager.Get3DPointInteractive('Specify second point:',p2,@InteractiveLineEndManipulator,pline) then
+      begin
+           gdb.GetCurrentDWG.FreeConstructionObjects;
+           pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRotatedDimensionID,gdb.GetCurrentROOT));
+           pd^.DimData.P13InWCS:=p1;
+           pd^.DimData.P14InWCS:=p2;
+           InteractiveRDimManipulator(pd,p2,false);
+        if commandmanager.Get3DPointInteractive('Specify third point:',p3,@InteractiveRDimManipulator,pd) then
+          begin
+               vd:=pd^.vectorD;
+               vn:=pd^.vectorN;
+               gdb.GetCurrentDWG.FreeConstructionObjects;
+               pd := CreateObjFree(GDBRotatedDimensionID);
+               pd^.initnul(gdb.GetCurrentROOT);
+               GDBObjSetEntityProp(pd,
+                                   sysvar.dwg.DWG_CLayer^,
+                                   sysvar.dwg.DWG_CLType^,
+                                   sysvar.dwg.DWG_CColor^,
+                                   sysvar.dwg.DWG_CLinew^);
+
+               pd^.PDimStyle:=gdb.GetCurrentDWG^.DimStyleTable.getelement(0);
+               pd^.DimData.P13InWCS:=p1;
+               pd^.DimData.P14InWCS:=p2;
+               pd^.DimData.P10InWCS:=p3;
+
+               pd^.vectorD:=vd;
+               pd^.vectorN:=vn;
+               InteractiveRDimManipulator(pd,p3,false);
+
+               pd^.FormatEntity(gdb.GetCurrentDWG^);
+
+               gdb.AddEntToCurrentDrawingWithUndo(pd);
+          end;
+      end;
+    end;
+    result:=cmd_ok;
+    GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);
+end;
+
+
 initialization
      {$IFDEF DEBUGINITSECTION}LogOut('gdbcommandsexample.initialization');{$ENDIF}//write to log for the control initialization sequence
                                                                                   //пишем в лог для отслеживания последовательности инициализации модулей
@@ -204,4 +309,5 @@ initialization
                                                                              //функция DrawAlignedDim_com будет доступна по имени DimAligned,
                                                                              //для запуска требует наличия открытого чертежа
                                                                              //т.е. при наборе в комстроке DimAligned выполнится DrawAlignedDim_com
+     CreateCommandFastObjectPlugin(@DrawRotatedDim_com,'DimLinear',CADWG,0);
 end.

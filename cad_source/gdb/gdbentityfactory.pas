@@ -21,7 +21,7 @@ unit gdbentityfactory;
 
 
 interface
-uses gdbaligneddimension,gdbgenericdimension,memman,gdbobjectsconstdef,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity,GDBCable,GDBDevice,
+uses gdbrotateddimension,gdbaligneddimension,gdbgenericdimension,memman,gdbobjectsconstdef,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity,GDBCable,GDBDevice,
      GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMText,GDBLine,
      GDBPolyLine,GDBLWPolyLine,gdbellipse,GDB3DFace,GDBSolid,gdbspline;
 function CreateInitObjFree(t:GDBByte;owner:PGDBObjGenericSubEntry):PGDBObjEntity;export;
@@ -111,6 +111,11 @@ begin
         PGDBObjAlignedDimension(temp).initnul(owner);
         PGDBObjAlignedDimension(temp).bp.ListPos.Owner:=owner;
       end;
+    GDBRotatedDimensionID: begin
+        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Spline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjRotatedDimension));
+        PGDBObjRotatedDimension(temp).initnul(owner);
+        PGDBObjRotatedDimension(temp).bp.ListPos.Owner:=owner;
+      end;
   end;
   result := temp;
 end;
@@ -160,6 +165,9 @@ begin
       end;
     GDBAlignedDimensionID: begin
         GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Spline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjAlignedDimension));
+      end;
+    GDBRotatedDimensionID: begin
+        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Spline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjRotatedDimension));
       end;
   end;
   result := temp;

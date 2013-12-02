@@ -81,17 +81,28 @@ implementation
 uses GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
 function CorrectPointLine(q:GDBvertex;p1,p2:GDBvertex;out d:GDBDouble):GDBVertex;
 var w,l:GDBVertex;
-    dist:GDBDouble;
+    dist,llength:GDBDouble;
 begin
      //расстояние от точки до линии
      w:=VertexSub(q,p1);
      l:=VertexSub(p2,p1);
+     llength:=scalardot(l,l);
+     if llength<sqreps then
+                           begin
+                                d:=0;
+                                result:=p2;
+                                exit;
+                           end;
      dist:=scalardot(w,l)/scalardot(l,l);
      p1:=Vertexmorph(p1,p2,dist);
      d:=Vertexlength(q,p1);
-
-     q:=geometry.Vertexmorphabs2(p1,q,d);
-     result:=VertexAdd(p2,VertexSub(q,p1));
+     if d>eps then
+                  begin
+                       q:=geometry.Vertexmorphabs2(p1,q,d);
+                       result:=VertexAdd(p2,VertexSub(q,p1));
+                  end
+              else
+                  result:=p2;
 end;
 function SetPointLine(d:GDBDouble;q:GDBvertex;p1,p2:GDBvertex):GDBVertex;
 var w,l:GDBVertex;

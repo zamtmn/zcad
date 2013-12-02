@@ -278,6 +278,7 @@ MainMenuItem Draw;
 MainMenuItem Dimension;
   {
     action ACN_DIMALIGNED
+    action ACN_DIMLINEAR
   }
 MainMenuItem Modify;
   {

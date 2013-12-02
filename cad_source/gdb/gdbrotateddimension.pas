@@ -34,10 +34,26 @@ GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimens
                         procedure transform(const t_matrix:DMatrix4D);virtual;
                         procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                         procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
+                        constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                        constructor initnul(owner:PGDBObjGenericWithSubordinated);
                    end;
 {EXPORT-}
 implementation
 uses GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
+constructor GDBObjRotatedDimension.initnul;
+begin
+  inherited initnul(owner);
+  vp.ID := GDBRotatedDimensionID;
+  vectorD:=XWCS;
+  vectorN:=YWCS;
+end;
+constructor GDBObjRotatedDimension.init;
+begin
+  inherited init(own,layeraddres, lw);
+  vp.ID := GDBRotatedDimensionID;
+  vectorD:=XWCS;
+  vectorN:=YWCS;
+end;
 procedure GDBObjRotatedDimension.SaveToDXF;
 begin
   SaveToDXFObjPrefix(handle,outhandle,'DIMENSION','AcDbDimension');

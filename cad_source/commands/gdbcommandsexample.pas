@@ -30,6 +30,8 @@ uses
   gdbrotateddimension,
   GDBLine,            //unit describes line entity
                       //модуль описывающий примитив линия
+  GDBArc,
+  GDBEntity,
   geometry,
   math,
   gdbentityfactory,   //unit describing a "factory" to create primitives
@@ -48,6 +50,12 @@ uses
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   log;                //log system
                       //система логирования
+type
+    PT3PointPentity=^T3PointPentity;
+    T3PointPentity=record
+                         p1,p2,p3:gdbvertex;
+                         pentity:PGDBObjEntity;
+    end;
 
 implementation
 {Интерактивные процедуры используются совместно с Get3DPointInteractive, впоследствии будут вынесены в отдельный модуль}
@@ -294,6 +302,71 @@ begin
     result:=cmd_ok;
     GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);
 end;
+procedure InteractiveArcManipulator(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
+var
+    PointData:tarcrtmodify;
+    ad:TArcData;
+begin
+     PointData.p1.x:=PT3PointPentity(PInteractiveData)^.p1.x;
+     PointData.p1.y:=PT3PointPentity(PInteractiveData)^.p1.y;
+     PointData.p2.x:=PT3PointPentity(PInteractiveData)^.p2.x;
+     PointData.p2.y:=PT3PointPentity(PInteractiveData)^.p2.y;
+     PointData.p3.x:=Point.x;
+     PointData.p3.y:=Point.y;
+     if GetArcParamFrom3Point2D(PointData,ad) then
+     begin
+       PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.Local.p_insert.x:=ad.p.x;
+       PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.Local.p_insert.y:=ad.p.y;
+       PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.Local.p_insert.z:=0;
+       PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.startangle:=ad.startangle;
+       PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.endangle:=ad.endangle;
+       PGDBObjArc(PT3PointPentity(PInteractiveData)^.pentity)^.r:=ad.r;
+
+       GDBObjSetEntityProp(PT3PointPentity(PInteractiveData)^.pentity,
+                           sysvar.dwg.DWG_CLayer^,
+                           sysvar.dwg.DWG_CLType^,
+                           sysvar.dwg.DWG_CColor^,
+                           sysvar.dwg.DWG_CLinew^);
+
+       PT3PointPentity(PInteractiveData)^.pentity^.FormatEntity(gdb.GetCurrentDWG^);
+     end;
+end;
+function DrawArc_com(operands:TCommandOperands):TCommandResult;
+var
+    pa:PGDBObjArc;
+    pline:PGDBObjLine;
+    pe:T3PointPentity;
+    savemode:GDBByte;
+begin
+    savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,
+                                                    MGetSelectionFrame or MGetSelectObject);
+    if commandmanager.get3dpoint('Specify first point:',pe.p1) then
+    begin
+         pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+         pline^.CoordInOCS.lBegin:=pe.p1;
+         InteractiveLineEndManipulator(pline,pe.p1,false);
+      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveLineEndManipulator,pline) then
+      begin
+           gdb.GetCurrentDWG.FreeConstructionObjects;
+           pe.pentity:= GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBArcID,gdb.GetCurrentROOT));
+        if commandmanager.Get3DPointInteractive('Specify third point:',pe.p3,@InteractiveArcManipulator,@pe) then
+          begin
+               gdb.GetCurrentDWG.FreeConstructionObjects;
+               pa := CreateObjFree(GDBArcID);
+               pe.pentity:=pa;
+               pa^.initnul;
+
+               InteractiveArcManipulator(@pe,pe.p3,false);
+               pa^.FormatEntity(gdb.GetCurrentDWG^);
+
+               gdb.AddEntToCurrentDrawingWithUndo(pa);
+          end;
+      end;
+    end;
+    result:=cmd_ok;
+    GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);
+end;
+
 
 
 initialization
@@ -310,4 +383,6 @@ initialization
                                                                              //для запуска требует наличия открытого чертежа
                                                                              //т.е. при наборе в комстроке DimAligned выполнится DrawAlignedDim_com
      CreateCommandFastObjectPlugin(@DrawRotatedDim_com,'DimLinear',CADWG,0);
+     CreateCommandFastObjectPlugin(@DrawArc_com,'Arc',CADWG,0);
+
 end.

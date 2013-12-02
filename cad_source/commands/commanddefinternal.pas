@@ -291,6 +291,7 @@ begin
      p^.dyn:=true;
      p^.CStartAttrEnableAttr:=SA;
      p^.CStartAttrDisableAttr:=DA;
+     p^.NotUseCommandLine:=true;
      commandmanager.CommandRegister(p);
      result:=p;
 end;

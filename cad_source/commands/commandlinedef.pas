@@ -34,7 +34,7 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVe
                        PInteractiveData:GDBPointer;
                        PInteractiveProc:{-}TInteractiveProcObjBuild{/GDBPointer/};
                     end;
-    TCommandOperands=PAnsiChar;
+    TCommandOperands={-}PAnsiChar{/GDBPointer/};
     TCommandResult=GDBInteger;
   TCStartAttr=GDBInteger;{атрибут разрешения\запрещения запуска команды}
     TCEndAttr=GDBInteger;{атрибут действия по завершению команды}

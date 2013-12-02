@@ -93,7 +93,7 @@ begin
                                 result:=p2;
                                 exit;
                            end;
-     dist:=scalardot(w,l)/scalardot(l,l);
+     dist:=scalardot(w,l)/{scalardot(l,l)}llength;
      p1:=Vertexmorph(p1,p2,dist);
      d:=Vertexlength(q,p1);
      if d>eps then
@@ -468,8 +468,9 @@ begin
    dimtextw:=GetLinesW(txtlines)*PDimStyle.Text.DIMTXT;
    txtlines.done;
 
-     dimdir:=geometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
-     dimdir:=normalizevertex(dimdir);
+     {dimdir:=geometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
+     dimdir:=normalizevertex(dimdir);}
+     dimdir:=self.vectorN;
      if (textangle=0)and(DimData.TextMoved) then
                         dimdir:=x_Y_zVertex;
      if (textangle<>0)or(abs(dimdir.x)<eps)or(DimData.TextMoved)then

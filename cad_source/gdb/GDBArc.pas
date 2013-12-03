@@ -65,6 +65,7 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+                 function CorrectBBForOutSidePoints:GDBBoundingBbox;virtual;
            end;
 {EXPORT-}
 implementation
@@ -80,6 +81,12 @@ begin
      result:=VectorTransform3D(point,m1);
      result:=normalizevertex(result);
 end;}
+function GDBObjARC.CorrectBBForOutSidePoints:GDBBoundingBbox;
+begin
+     result:=vp.BoundingBox;
+     geometry.concatBBandPoint(result,P_insert_in_WCS);
+end;
+
 procedure GDBObjARC.TransformAt;
 var
     tv:GDBVertex4D;
@@ -598,6 +605,9 @@ begin
      end;
      end;
      result:=Vertex3D_in_WCS_Array.onmouse(mf,false);
+     if not result then
+                  if CalcPointTrueInFrustum(P_insert_in_WCS,mf)=IRFully then
+                                                                            result:=true;
 end;
 procedure GDBObjARC.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 begin
@@ -648,7 +658,7 @@ function GDBObjARC.getsnap;
 //var t,d,e:GDBDouble;
   //  tv,n,v:gdbvertex;
 begin
-     if onlygetsnapcount=3 then
+     if onlygetsnapcount=4 then
      begin
           result:=false;
           exit;
@@ -656,6 +666,16 @@ begin
      result:=true;
      case onlygetsnapcount of
      0:begin
+            if (sysvar.dwg.DWG_OSMode^ and osm_center)<>0
+            then
+            begin
+            osp.worldcoord:=P_insert_in_WCS;
+            osp.dispcoord:=ProjP_insert;
+            osp.ostype:=os_center;
+            end
+            else osp.ostype:=os_none;
+       end;
+     1:begin
             if (sysvar.dwg.DWG_OSMode^ and osm_endpoint)<>0
             then
             begin
@@ -665,7 +685,7 @@ begin
             end
             else osp.ostype:=os_none;
        end;
-     1:begin
+     2:begin
             if (sysvar.dwg.DWG_OSMode^ and osm_midpoint)<>0
             then
             begin
@@ -675,7 +695,7 @@ begin
             end
             else osp.ostype:=os_none;
        end;
-     2:begin
+     3:begin
             if (sysvar.dwg.DWG_OSMode^ and osm_endpoint)<>0
             then
             begin

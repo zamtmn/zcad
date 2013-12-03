@@ -129,7 +129,7 @@ begin
 end;
 function TEntTreeNode.CorrectNodeTreeBB(pobj:PGDBObjEntity):GDBInteger;
 begin
-     ConcatBB(BoundingBox,pobj^.vp.BoundingBox);
+     ConcatBB(BoundingBox,pobj^.CorrectBBForOutSidePoints{vp.BoundingBox});
 end;
 function TEntTreeNode.AddObjectToNodeTree(pobj:PGDBObjEntity):GDBInteger;
 begin

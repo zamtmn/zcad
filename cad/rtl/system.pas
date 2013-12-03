@@ -464,7 +464,7 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects
                       function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;abstract;
                       function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInRect;virtual;abstract;
                       function DeSelect(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBInteger;virtual;abstract;
-                      function CreateObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;virtual;abstract;
+                      function CreateObj(t: GDBByte{;owner:GDBPointer}):GDBPointer;virtual;abstract;
                       function CreateInitObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;virtual;abstract;
                       function calcbb:GDBBoundingBbox;
                       function calcvisbb(infrustumactualy:TActulity):GDBBoundingBbox;
@@ -2080,6 +2080,8 @@ GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimens
                         procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                         procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
                         procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;abstract;
+                        constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
+                        constructor initnul(owner:PGDBObjGenericWithSubordinated);
                    end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\gdbdiametricdimension.pas
 PGDBObjDiametricDimension=^GDBObjDiametricDimension;
@@ -2092,6 +2094,7 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                         function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                         function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
+                        procedure DrawCenterMarker(cp:GDBVertex;r:GDBDouble;const drawing:TDrawingDef);
                    end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBBlockInsert.pas
 PGDBObjBlockInsert=^GDBObjBlockInsert;
@@ -2661,6 +2664,15 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                                    constructor initnul;
                              end;
 //Generate on E:\zcad\CAD_SOURCE\commands\commandlinedef.pas
+    TGetPointMode=(TGPWait,TGPPoint,TGPCancel,TGPOtherCommand,TGPCloseApp);
+    TInteractiveData=packed record
+                       GetPointMode:TGetPointMode;(*hidden_in_objinsp*)
+                       GetPointValue:GDBVertex;(*hidden_in_objinsp*)
+                       PInteractiveData:GDBPointer;
+                       PInteractiveProc:GDBPointer;
+                    end;
+    TCommandOperands=GDBPointer;
+    TCommandResult=GDBInteger;
   TCStartAttr=GDBInteger;{атрибут разрешения\запрещения запуска команды}
     TCEndAttr=GDBInteger;{атрибут действия по завершению команды}
   PCommandObjectDef = ^CommandObjectDef;
@@ -2676,7 +2688,8 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
     CEndActionAttr:TCEndAttr;(*hidden_in_objinsp*)
     pdwg:GDBPointer;(*hidden_in_objinsp*)
     NotUseCommandLine:GDBBoolean;(*hidden_in_objinsp*)
-    procedure CommandStart(Operands:pansichar); virtual; abstract;
+    IData:TInteractiveData;(*hidden_in_objinsp*)
+    procedure CommandStart(Operands:TCommandOperands); virtual; abstract;
     procedure CommandEnd; virtual; abstract;
     procedure CommandCancel; virtual; abstract;
     procedure CommandInit; virtual; abstract;
@@ -3256,6 +3269,10 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetUndoTop:TArrayIndex;virtual;abstract;
                        function GetDWGUnits:PTUnitManager;virtual;abstract;
                        procedure AssignLTWithFonts(pltp:PGDBLtypeProp);virtual;abstract;
+                       function GetMouseEditorMode:GDBByte;virtual;abstract;
+                       function DefMouseEditorMode(SetMask,ReSetMask:GDBByte):GDBByte;virtual;abstract;
+                       function SetMouseEditorMode(mode:GDBByte):GDBByte;virtual;abstract;
+                       procedure FreeConstructionObjects;virtual;abstract;
                  end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\UGDBDescriptor.pas
 TDWGProps=packed record
@@ -3312,6 +3329,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     procedure FindMultiEntityByVar(objID:GDBWord;vname,vvalue:GDBString;var entarray:GDBOpenArrayOfPObjects);
                     procedure FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:GDBOpenArrayOfPObjects);
                     procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
+                    procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
               end;
 //Generate on E:\zcad\CAD_SOURCE\commands\GDBCommandsBase.pas
   TMSType=(

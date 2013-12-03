@@ -90,6 +90,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure getoutbound;virtual;
                     procedure getonlyoutbound;virtual;
                     procedure correctbb;virtual;
+                    function CorrectBBForOutSidePoints:GDBBoundingBbox;virtual;
                     function GetLTCorrectSize:GDBDouble;virtual;
                     procedure calcbb;virtual;
                     procedure DrawBB;
@@ -801,6 +802,10 @@ begin
          result:=0;
 
 end;
+function GDBObjEntity.CorrectBBForOutSidePoints:GDBBoundingBbox;
+begin
+     result:=vp.BoundingBox;
+end;
 procedure GDBObjEntity.correctbb;
 var cv:gdbvertex;
     d:double;
@@ -1216,4 +1221,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBEntity.initialization');{$ENDIF}
-end.
+end.

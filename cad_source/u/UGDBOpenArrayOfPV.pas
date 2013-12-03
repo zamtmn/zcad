@@ -39,6 +39,7 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects
                       function CreateObj(t: GDBByte{;owner:GDBPointer}):GDBPointer;virtual;
                       function CreateInitObj(t: GDBByte;owner:GDBPointer):PGDBObjSubordinated;virtual;
                       function calcbb:GDBBoundingBbox;
+                      function calcbbvispart:GDBBoundingBbox;
                       function calcvisbb(infrustumactualy:TActulity):GDBBoundingBbox;
                       function getoutbound:GDBBoundingBbox;
                       function getonlyoutbound:GDBBoundingBbox;
@@ -127,7 +128,7 @@ begin
            else
                result:=IREmpty;
 end;}
-function GDBObjOpenArrayOfPV.calcbb:GDBBoundingBbox;
+function GDBObjOpenArrayOfPV.calcbbvispart:GDBBoundingBbox;
 var pobj:pGDBObjEntity;
     ir:itrec;
 begin
@@ -144,6 +145,28 @@ begin
                        if pobj<>nil then
                        repeat
                              concatbb(result,pobj^.vp.BoundingBox);
+                             pobj:=iterate(ir);
+                       until pobj=nil;
+                  end;
+end;
+
+function GDBObjOpenArrayOfPV.calcbb:GDBBoundingBbox;
+var pobj:pGDBObjEntity;
+    ir:itrec;
+begin
+  pobj:=beginiterate(ir);
+  if pobj=nil then
+                  begin
+                       result.LBN:=NulVertex;
+                       result.RTF:=NulVertex;
+                  end
+              else
+                  begin
+                       result:=pobj^.{vp.BoundingBox}CorrectBBForOutSidePoints;
+                       pobj:=iterate(ir);
+                       if pobj<>nil then
+                       repeat
+                             concatbb(result,pobj^.{vp.BoundingBox}CorrectBBForOutSidePoints);
                              pobj:=iterate(ir);
                        until pobj=nil;
                   end;

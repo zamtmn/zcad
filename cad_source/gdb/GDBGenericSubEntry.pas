@@ -65,6 +65,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             procedure correctobjects(powner:PGDBObjEntity;pinownerarray:GDBInteger);virtual;
                             destructor done;virtual;
                             procedure getoutbound;virtual;
+                            function getoutboundvispart:GDBBoundingBbox;virtual;
                             procedure getonlyoutbound;virtual;
 
                             procedure DrawBB;
@@ -519,6 +520,10 @@ begin
      self.VisibleOBJBoundingBox:=ObjArray.calcvisbb({gdb.GetCurrentDWG.pcamera^.POSCOUNT}{visibleactualy}infrustumactualy);
      {ObjArray.calcvisible;
      visible:=true;}
+end;
+function GDBObjGenericSubEntry.getoutboundvispart:GDBBoundingBbox;
+begin
+     result:=ObjArray.calcbbvispart;
 end;
 procedure GDBObjGenericSubEntry.getoutbound;
 begin

@@ -86,6 +86,8 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetFileName:GDBString;virtual;
                        procedure ChangeStampt(st:GDBBoolean);virtual;
                        function GetUndoTop:TArrayIndex;virtual;
+                       function CanUndo:boolean;virtual;
+                       function CanRedo:boolean;virtual;
                        function GetDWGUnits:PTUnitManager;virtual;
                        procedure AssignLTWithFonts(pltp:PGDBLtypeProp);virtual;
                        function GetMouseEditorMode:GDBByte;virtual;
@@ -212,6 +214,14 @@ end;
 function TSimpleDrawing.GetUndoTop:TArrayIndex;
 begin
      result:=0;
+end;
+function TSimpleDrawing.CanUndo:boolean;
+begin
+     result:=false;
+end;
+function TSimpleDrawing.CanRedo:boolean;
+ begin
+     result:=false;
 end;
 
 function CreateSimpleDWG:PTSimpleDrawing;

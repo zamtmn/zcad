@@ -3560,7 +3560,7 @@ begin
   rotate.NotUseCommandLine:=false;
   scale.init('Scale',0,0);
   scale.NotUseCommandLine:=false;
-  copybase.init('CopyBase',0,0);
+  copybase.init('CopyBase',CADWG or CASelEnts,0);
   PasteClip.init('PasteClip',0,0);
 
   TextInsert.init('Text',0,0);
@@ -3588,7 +3588,7 @@ begin
   CreateCommandFastObjectPlugin(@Erase_com,'Erase',CADWG,0);
   CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
   CreateCommandFastObjectPlugin(@PlaceAllBlocks_com,'PlaceAllBlocks',CADWG,0);
-  CreateCommandFastObjectPlugin(@InverseSelected_com,'InverseSelected',CADWG,0);
+  CreateCommandFastObjectPlugin(@InverseSelected_com,'InverseSelected',CADWG or CASelEnts,0);
   //CreateCommandFastObjectPlugin(@bedit_com,'BEdit');
   pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);
   BEditParam.Blocks.Enums.init(100);
@@ -3616,7 +3616,7 @@ begin
   PrintParam.Scale:=1;
   Print.commanddata.Instance:=@PrintParam;
   Print.commanddata.PTD:=SysUnit^.TypeName2PTD('TPrintParams');
-  SelSim.init('SelSim',0,0);
+  SelSim.init('SelSim',CADWG or CASelEnts,0);
   SelSim.CEndActionAttr:=0;
   SelSimParams.General.SameEntType:=true;
   SelSimParams.General.SameLayer:=true;

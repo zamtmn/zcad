@@ -66,6 +66,8 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
            procedure ChangeStampt(st:GDBBoolean);virtual;
            function GetChangeStampt:GDBBoolean;virtual;
            function GetUndoTop:TArrayIndex;virtual;
+           function CanUndo:boolean;virtual;
+           function CanRedo:boolean;virtual;
            function GetDWGUnits:PTUnitManager;virtual;
            procedure AddBlockFromDBIfNeed(name:GDBString);virtual;
      end;
@@ -427,6 +429,20 @@ end;
 function TDrawing.GetUndoTop:TArrayIndex;
 begin
      result:=UndoStack.CurrentCommand;
+end;
+function TDrawing.CanUndo:boolean;
+begin
+     if UndoStack.CurrentCommand>0 then
+                                       result:=true
+                                   else
+                                       result:=false;
+end;
+function TDrawing.CanRedo:boolean;
+begin
+     if UndoStack.CurrentCommand<UndoStack.Count then
+                                                     result:=true
+                                                 else
+                                                     result:=false;
 end;
 function TDrawing.GetDWGUnits:PTUnitManager;
 begin

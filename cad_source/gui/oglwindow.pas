@@ -1946,7 +1946,7 @@ var
 begin
   proot:=pdwg.GetCurrentROOT;
   if proot<>nil then
-                    zoomtovolume(proot.getoutboundvispart);
+                    zoomtovolume(proot.vp.BoundingBox);
 end;
 procedure TOGLWnd.SetCameraPosZoom(_pos:gdbvertex;_zoom:gdbdouble;finalcalk:gdbboolean);
 var

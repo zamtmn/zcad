@@ -301,7 +301,13 @@ function GetCommandContext(pdrawing:PTDrawingDef;POGLWnd:POGLWndtype):TCStartAtt
 begin
      result:=0;
      if pdrawing<>nil then
-                          result:=result or CADWG;
+                          begin
+                               result:=result or CADWG;
+                               if pdrawing^.CanRedo then
+                                                        result:=result or CACanRedo;
+                               if pdrawing^.CanUndo then
+                                                        result:=result or CACanUndo;
+                          end;
      if POGLWnd<>nil then
                          begin
                               if POGLWnd^.SelDesc.Selectedobjcount=1 then

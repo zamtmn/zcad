@@ -24,6 +24,10 @@ const
      CADWG=1;
      CASelEnt=2;
      CASelEnts=4;
+     CACanUndo=8;
+     CACanRedo=16;
+
+
      CEDeSelect=1;
      CEDWGNChanged=2;
 type

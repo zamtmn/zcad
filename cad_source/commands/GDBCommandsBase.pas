@@ -1917,7 +1917,7 @@ begin
   selall:=CreateCommandFastObjectPlugin(@SelectAll_com,'SelectAll',CADWG,0);
   selall^.overlay:=true;
   selall.CEndActionAttr:=0;
-  deselall:=CreateCommandFastObjectPlugin(@DeSelectAll_com,'DeSelectAll',CADWG,0);
+  deselall:=CreateCommandFastObjectPlugin(@DeSelectAll_com,'DeSelectAll',CADWG  or CASelEnts,0);
   deselall.CEndActionAttr:=CEDeSelect;
   deselall^.overlay:=true;
   //deselall.CEndActionAttr:=0;
@@ -1930,7 +1930,7 @@ begin
   CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG or CASelEnt,0);
   CreateCommandFastObjectPlugin(@MultiObjVarMan_com,'MultiObjVarMan',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@Regen_com,'Regen',CADWG,0);
-  CreateCommandFastObjectPlugin(@Copyclip_com,'CopyClip',CADWG,0);
+  CreateCommandFastObjectPlugin(@Copyclip_com,'CopyClip',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@ChangeProjType_com,'ChangeProjType',CADWG,0);
   CreateCommandFastObjectPlugin(@SelObjChangeLayerToCurrent_com,'SelObjChangeLayerToCurrent',CADWG,0);
   CreateCommandFastObjectPlugin(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);
@@ -1941,8 +1941,8 @@ begin
   selframecommand^.overlay:=true;
   selframecommand.CEndActionAttr:=0;
   CreateCommandFastObjectPlugin(@RebuildTree_com,'RebuildTree',CADWG,0);
-  CreateCommandFastObjectPlugin(@undo_com,'Undo',CADWG,0).overlay:=true;
-  CreateCommandFastObjectPlugin(@redo_com,'Redo',CADWG,0).overlay:=true;
+  CreateCommandFastObjectPlugin(@undo_com,'Undo',CADWG or CACanUndo,0).overlay:=true;
+  CreateCommandFastObjectPlugin(@redo_com,'Redo',CADWG or CACanRedo,0).overlay:=true;
 
   CreateCommandRTEdObjectPlugin(@polytest_com_CommandStart,nil,nil,nil,@polytest_com_BeforeClick,@polytest_com_BeforeClick,nil,nil,'PolyTest',0,0);
   //CreateCommandFastObjectPlugin(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);

@@ -34,6 +34,8 @@ TDrawingDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
                        function GetCurrentRootObjArraySimple:GDBPointer;virtual;abstract;
                        function GetBlockDefArraySimple:GDBPointer;virtual;abstract;
                        procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
+                       function CanUndo:boolean;virtual;abstract;
+                       function CanRedo:boolean;virtual;abstract;
                  end;
 {EXPORT-}
 implementation

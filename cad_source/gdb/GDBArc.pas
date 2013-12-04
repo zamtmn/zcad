@@ -65,7 +65,6 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                 function CorrectBBForOutSidePoints:GDBBoundingBbox;virtual;
            end;
 {EXPORT-}
 implementation
@@ -81,11 +80,6 @@ begin
      result:=VectorTransform3D(point,m1);
      result:=normalizevertex(result);
 end;}
-function GDBObjARC.CorrectBBForOutSidePoints:GDBBoundingBbox;
-begin
-     result:=vp.BoundingBox;
-     geometry.concatBBandPoint(result,P_insert_in_WCS);
-end;
 
 procedure GDBObjARC.TransformAt;
 var

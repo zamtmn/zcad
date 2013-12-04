@@ -29,7 +29,7 @@ uses
   {FPC}
        math,
   {ZCAD BASE}
-       gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
+       oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
        varmandef, varman,UUnitManager,SysInfo,shared,strmy,UGDBTextStyleArray,
   {ZCAD SIMPLE PASCAL SCRIPT}
@@ -440,7 +440,7 @@ begin
                                 begin
                                        tcl:=SysVar.dwg.DWG_CLayer^;
                                        SysVar.dwg.DWG_CLayer^:={cdwg^.LayerTable.GetIndexByPointer}(Player);
-                                       commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent',gdb.GetCurrentDWG);
+                                       commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
                                        SysVar.dwg.DWG_CLayer^:=tcl;
                                        {gdb.GetCurrentDWG.OGLwindow1.}setvisualprop;
                                 end;
@@ -2775,6 +2775,8 @@ var
    {_enabled,}_disabled:boolean;
    ctrl:TControl;
    ti:integer;
+   POGLWndParam:POGLWndtype;
+   PSimpleDrawing:PTSimpleDrawing;
    //i:integer;
 //const
      //EditableShortCut=[(scCtrl or VK_Z),{(VK_CONTROL or VK_SHIFT or VK_Z),}VK_DELETE,VK_BACK,VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN];
@@ -2837,9 +2839,15 @@ begin
      //GetCommandContext;
      //i:=TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr;
 *)
+
+     PSimpleDrawing:=gdb.GetCurrentDWG;
+     if PSimpleDrawing<>nil then
+                                POGLWndParam:=@PSimpleDrawing.OGLwindow1.param
+                            else
+                                POGLWndParam:=nil;
      if assigned(TmyAction(AAction).pfoundcommand) then
      begin
-     if ((GetCommandContext(gdb.GetCurrentDWG) xor TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)and TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)<>0
+     if ((GetCommandContext(PSimpleDrawing,POGLWndParam) xor TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)and TmyAction(AAction).pfoundcommand^.CStartAttrEnableAttr)<>0
           then
               _disabled:=true;
 
@@ -2927,7 +2935,7 @@ begin
                                       if assigned(PageControl)then
                                          if PageControl.PageCount>1 then
                                          begin
-                                              commandmanager.executecommandsilent('PrevDrawing',gdb.GetCurrentDWG);
+                                              commandmanager.executecommandsilent('PrevDrawing',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
                                               tempkey:=00;
                                          end;
                                  end
@@ -2936,7 +2944,7 @@ begin
                                       if assigned(PageControl)then
                                          if PageControl.PageCount>1 then
                                          begin
-                                              commandmanager.executecommandsilent('NextDrawing',gdb.GetCurrentDWG);
+                                              commandmanager.executecommandsilent('NextDrawing',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
                                               tempkey:=00;
                                          end;
                                  end
@@ -3032,7 +3040,7 @@ begin
      if (pdwg)<>nil then
      if (pdwg.OGLwindow1.param.SelDesc.Selectedobjcount=0) then
      begin
-          commandmanager.executecommandsilent('QSave(QS)',gdb.GetCurrentDWG);
+          commandmanager.executecommandsilent('QSave(QS)',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
           SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
      end;
      date:=sysutils.date;
@@ -3110,7 +3118,7 @@ begin
                          exit;
      if plt=lteditor then
                          begin
-                              commandmanager.ExecuteCommand('LineTypes',gdb.GetCurrentDWG);
+                              commandmanager.ExecuteCommand('LineTypes',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
                          end
      else
      begin
@@ -3123,7 +3131,7 @@ begin
      begin
           CLTSave:=SysVar.dwg.DWG_CLType^;
           SysVar.dwg.DWG_CLType^:={LTIndex}plt;
-          commandmanager.ExecuteCommand('SelObjChangeLTypeToCurrent',gdb.GetCurrentDWG);
+          commandmanager.ExecuteCommand('SelObjChangeLTypeToCurrent',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
           SysVar.dwg.DWG_CLType^:=CLTSave;
      end;
      end;
@@ -3172,7 +3180,7 @@ begin
      begin
           CColorSave:=SysVar.dwg.DWG_CColor^;
           SysVar.dwg.DWG_CColor^:=ColorIndex;
-          commandmanager.ExecuteCommand('SelObjChangeColorToCurrent',gdb.GetCurrentDWG);
+          commandmanager.ExecuteCommand('SelObjChangeColorToCurrent',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
           SysVar.dwg.DWG_CColor^:=CColorSave;
      end;
      setvisualprop;
@@ -3194,7 +3202,7 @@ begin
            begin
                 tcl:=SysVar.dwg.DWG_CLinew^;
                 SysVar.dwg.DWG_CLinew^:=index;
-                commandmanager.ExecuteCommand('SelObjChangeLWToCurrent',gdb.GetCurrentDWG);
+                commandmanager.ExecuteCommand('SelObjChangeLWToCurrent',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
                 SysVar.dwg.DWG_CLinew^:=tcl;
            end;
   end;

@@ -198,7 +198,7 @@ begin
      {if assigned(pfoundcommand)then
 
                                else}
-                                   commandmanager.executecommand(@s[1],gdb.GetCurrentDWG);
+                                   commandmanager.executecommand(@s[1],gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
      result:=true;
 end;
 procedure TmyActionList.AddMyAction(Action:TmyAction);
@@ -522,16 +522,16 @@ end;
 procedure TmyCommandToolButton.click;
 begin
      if action=nil then
-                       commandmanager.executecommand(@Fcommand[1],gdb.GetCurrentDWG);
+                       commandmanager.executecommand(@Fcommand[1],gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
      inherited;
 end;
 
 procedure TmyMenuItem.Click;
 begin
      if fsilent then
-                    commandmanager.executecommandsilent(@Fcommand[1],gdb.GetCurrentDWG)
+                    commandmanager.executecommandsilent(@Fcommand[1],gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam)
                 else
-                    commandmanager.executecommand(@Fcommand[1],gdb.GetCurrentDWG);
+                    commandmanager.executecommand(@Fcommand[1],gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
      inherited;
 end;
 procedure TmyMenuItem.SetCommand(_Caption,_Command:TTranslateString);

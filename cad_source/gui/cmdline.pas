@@ -405,7 +405,7 @@ begin
           begin
                //CmdEdit.text:=FindAlias(CmdEdit.text,';','=');
                CmdEdit.text:='';
-               commandmanager.executecommand(GDBPointer(Cmd),gdb.GetCurrentDWG);
+               commandmanager.executecommand(GDBPointer(Cmd),gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
           end
       else begin
            cmd:=CmdEdit.text;

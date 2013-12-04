@@ -1218,7 +1218,7 @@ begin
 end;
 procedure Print_com.SetWindow(pdata:GDBPlatformint);
 begin
-  commandmanager.executecommandsilent('GetRect',gdb.GetCurrentDWG);
+  commandmanager.executecommandsilent('GetRect',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
 end;
 
 procedure Print_com.SelectPaper(pdata:GDBPlatformint);
@@ -3166,7 +3166,7 @@ begin
           s:=PGDBString(commandmanager.ContextCommandParams)^;
           commandmanager.executecommandend;
           s:='Insert('+s+')';
-          commandmanager.executecommand(@s[1],gdb.GetCurrentDWG);
+          commandmanager.executecommand(@s[1],gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
           result:=ZCMD_OK_NOEND;
      end;
      end

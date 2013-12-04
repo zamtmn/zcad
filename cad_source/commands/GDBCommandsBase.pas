@@ -1927,8 +1927,8 @@ begin
   CreateCommandFastObjectPlugin(@SaveAs_com,'SaveAs',CADWG,0);
   CreateCommandFastObjectPlugin(@Cam_reset_com,'Cam_Reset',CADWG,0);
   CreateCommandFastObjectPlugin(@ProjectTree_com,'ProjectTree',CADWG,0);
-  CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG,0);
-  CreateCommandFastObjectPlugin(@MultiObjVarMan_com,'MultiObjVarMan',CADWG,0);
+  CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG or CASelEnt,0);
+  CreateCommandFastObjectPlugin(@MultiObjVarMan_com,'MultiObjVarMan',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@Regen_com,'Regen',CADWG,0);
   CreateCommandFastObjectPlugin(@Copyclip_com,'CopyClip',CADWG,0);
   CreateCommandFastObjectPlugin(@ChangeProjType_com,'ChangeProjType',CADWG,0);

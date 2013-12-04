@@ -117,7 +117,7 @@ begin
      begin
           CLTSave:=SysVar.dwg.DWG_CTStyle^;
           SysVar.dwg.DWG_CTStyle^:={TSIndex}pts;
-          commandmanager.ExecuteCommand('SelObjChangeTstyleToCurrent',gdb.GetCurrentDWG);
+          commandmanager.ExecuteCommand('SelObjChangeTstyleToCurrent',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
           SysVar.dwg.DWG_CTStyle^:=CLTSave;
      end;
      if assigned(SetVisuaProplProc) then SetVisuaProplProc;

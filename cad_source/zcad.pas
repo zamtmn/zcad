@@ -121,7 +121,7 @@ begin
   historyoutstr(format(rsZCADStarted,[sysvar.SYS.SYS_Version^]));
   gdbplugins.loadplugins(sysparam.programpath+'PLUGINS\');
 
-  SplashWindow.TXTOut('Выполнение *components\autorun.cmd',false);commandmanager.executefile('*components/autorun.cmd',gdb.GetCurrentDWG);
+  SplashWindow.TXTOut('Выполнение *components\autorun.cmd',false);commandmanager.executefile('*components/autorun.cmd',gdb.GetCurrentDWG,nil);
   //убираем срлэш
   removesplash;
 

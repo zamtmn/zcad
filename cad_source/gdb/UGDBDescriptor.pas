@@ -34,7 +34,7 @@ ugdbltypearray,
 GDBCamera,
 UGDBOpenArrayOfPV,
 GDBRoot,ugdbfont,
-OGLWindow,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,ugdbtrash,UGDBOpenArrayOfByte;
+OGLWindow,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,ugdbtrash,UGDBOpenArrayOfByte,oglwindowdef;
 type
 {EXPORT+}
 TDWGProps=packed record
@@ -81,6 +81,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     function GetCurrentROOT:PGDBObjGenericSubEntry;
 
                     function GetCurrentDWG:{PTDrawing}PTSimpleDrawing;
+                    function GetCurrentOGLWParam:POGLWndtype;
                     procedure asociatedwgvars;
                     procedure freedwgvars;
                     procedure SetCurrentDWG(PDWG:PTAbstractDrawing);
@@ -325,6 +326,19 @@ begin
                         else
                             result:=nil;
 end;
+function GDBDescriptor.GetCurrentOGLWParam:POGLWndtype;
+begin
+     if currentdwg<>nil then
+                            begin
+                                 if currentdwg^.OGLwindow1<>nil then
+                                                                    result:=@currentdwg^.OGLwindow1.param
+                                                                else
+                                                                    result:=nil;
+                            end
+                        else
+                            result:=nil;
+end;
+
 function GDBDescriptor.GetCurrentDWG;
 begin
  result:=CurrentDWG;

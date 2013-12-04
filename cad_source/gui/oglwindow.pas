@@ -1204,7 +1204,7 @@ begin
 
   if param.SelDesc.Selectedobjcount>1 then
     begin
-       commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',pdwg);
+       commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',pdwg,@param);
     end
   else
   begin
@@ -2223,7 +2223,7 @@ begin
           if (key and MZW_SHIFT) = 0 then
           begin
             param.startgluepoint:=param.nearesttcontrolpoint.pcontrolpoint;
-            commandmanager.ExecuteCommandSilent('OnDrawingEd',pdwg);
+            commandmanager.ExecuteCommandSilent('OnDrawingEd',pdwg,@param);
             //param.lastpoint:=param.nearesttcontrolpoint.pcontrolpoint^.worldcoord;
             //sendmousecoord{wop}(key);  bnmbnm
             if commandmanager.pcommandrunning <> nil then
@@ -2242,7 +2242,7 @@ begin
           //getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
           if (key and MZW_CONTROL)<>0 then
           begin
-               commandmanager.ExecuteCommandSilent('SelectOnMouseObjects',pdwg);
+               commandmanager.ExecuteCommandSilent('SelectOnMouseObjects',pdwg,@param);
           end
           else
           begin
@@ -2299,7 +2299,7 @@ begin
           else if ((param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then
           begin
           { TODO : Добавить возможность выбора объектов без секрамки во время выполнения команды }
-            commandmanager.ExecuteCommandSilent('SelectFrame',pdwg);
+            commandmanager.ExecuteCommandSilent('SelectFrame',pdwg,@param);
             sendmousecoord(MZW_LBUTTON);
           end;
         end;
@@ -2315,7 +2315,7 @@ begin
       end
       else if ((param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then
           begin
-            commandmanager.ExecuteCommandSilent('SelectFrame',pdwg);
+            commandmanager.ExecuteCommandSilent('SelectFrame',pdwg,@param);
             sendmousecoord(MZW_LBUTTON);
           end;
       needredraw:=true;
@@ -4737,12 +4737,12 @@ begin
       end}
  else if (Key = VK_RETURN)or(Key = VK_SPACE) then
       begin
-           commandmanager.executelastcommad(pdwg);
+           commandmanager.executelastcommad(pdwg,@param);
            Key:=00;
       end
  else if (Key=VK_V)and(shift=[ssctrl]) then
                     begin
-                         commandmanager.executecommand('PasteClip',pdwg);
+                         commandmanager.executecommand('PasteClip',pdwg,@param);
                          key:=00;
                     end
  (*else if (Key=VK_TAB)and(shift=[ssctrl,ssShift]) then

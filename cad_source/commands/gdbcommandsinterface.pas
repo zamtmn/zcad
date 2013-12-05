@@ -21,7 +21,7 @@ unit gdbcommandsinterface;
 
 interface
 uses
- colorwnd,ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ colorwnd,dswnd,ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -363,7 +363,15 @@ begin
   Freeandnil(TSWindow);
   result:=cmd_ok;
 end;
-function LineTypes_cmd:GDBInteger;
+function DimStyles_cmd:GDBInteger;
+begin
+  DSWindow:=TDSWindow.Create(nil);
+  SetHeightControl(DSWindow,22);
+  DOShowModal(DSWindow);
+  Freeandnil(DSWindow);
+  result:=cmd_ok;
+end;
+ function LineTypes_cmd:GDBInteger;
 begin
   LTWindow:=TLTWindow.Create(nil);
   SetHeightControl(LTWindow,22);
@@ -758,6 +766,7 @@ begin
   CreateCommandFastObjectPlugin(@quit_com,'Quit',0,0);
   CreateCommandFastObjectPlugin(@layer_cmd,'Layer',CADWG,0);
   CreateCommandFastObjectPlugin(@TextStyles_cmd,'TextStyles',CADWG,0);
+  CreateCommandFastObjectPlugin(@DimStyles_cmd,'DimStyles',CADWG,0);
   CreateCommandFastObjectPlugin(@LineTypes_cmd,'LineTypes',CADWG,0);
   CreateCommandFastObjectPlugin(@Colors_cmd,'Colors',CADWG,0);
   CreateCommandFastObjectPlugin(@SaveLayout_com,'SaveLayout',0,0);

@@ -90,6 +90,7 @@ GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*Op
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
+                    function GetCurrentDimStyle:PGDBDimStyle;
               end;
 {EXPORT-}
 TDimArrowBlockArray=array[TArrowStyle] of TDimArrowBlockParam;
@@ -365,6 +366,19 @@ begin
 
     p:=iterate(ir);
   until p=nil;
+end;
+function GDBDimStyleArray.GetCurrentDimStyle:PGDBDimStyle;
+begin
+  if assigned(sysvar.dwg.DWG_CDimStyle) then
+                                         begin
+                                         if assigned(sysvar.dwg.DWG_CDimStyle^) then
+                                                                                 result:={getelement}(sysvar.dwg.DWG_CDimStyle^)
+                                                                             else
+                                                                                 result:=getelement(0);
+
+                                         end
+                                     else
+                                         result:=getelement(0);
 end;
 
 constructor GDBDimStyleArray.initnul;

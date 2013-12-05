@@ -307,6 +307,8 @@ begin
                                                         result:=result or CACanRedo;
                                if pdrawing^.CanUndo then
                                                         result:=result or CACanUndo;
+                               if pdrawing^.GetChangeStampt then
+                                                                result:=result or CADWGChanged;
                           end;
      if POGLWnd<>nil then
                          begin

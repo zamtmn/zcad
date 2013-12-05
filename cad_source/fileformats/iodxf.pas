@@ -197,7 +197,7 @@ begin
   end;
   end;
 end;
-procedure readvariables(var f: GDBOpenArrayOfByte;var ctstyle:GDBstring; var clayer:GDBString;var cltype:GDBString;LoadMode:TLoadOpt);
+procedure readvariables(var f: GDBOpenArrayOfByte;var ctstyle:GDBstring; var clayer:GDBString;var cltype:GDBString;var cdimstyle:GDBString;LoadMode:TLoadOpt);
 var
   byt: GDBByte;
   s: GDBString;
@@ -225,6 +225,13 @@ else if (byt = 9) and (s = '$TEXTSTYLE') then
                                          s:=f.readGDBString;
                                          if LoadMode=TLOLoad then
                                                                  ctstyle := s;
+                                    end
+else if (byt = 9) and (s = '$DIMSTYLE') then
+                                    begin
+                                         s := f.readGDBString;
+                                         s:=f.readGDBString;
+                                         if LoadMode=TLOLoad then
+                                                                 cdimstyle := s;
                                     end
 else if (byt = 9) and (s = '$CELTYPE') then
                                      begin
@@ -1082,7 +1089,7 @@ begin
                                end;
                                end;
 end;
-procedure ReadDimStyles(var s:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadDimStyles(var s:string;cdimstyle:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
    psimstyleprop:PGDBDimStyle;
    byt:integer;
@@ -1106,6 +1113,9 @@ begin
                               psimstyleprop:=drawing.DimStyleTable.MergeItem(s,LoadMode);
                               if psimstyleprop<>nil then
                                                         psimstyleprop^.init(s);
+                              if uppercase(s)=uppercase(cdimstyle)then
+                              if (sysvar.DWG.DWG_CTStyle<>nil)and(LoadMode=TLOLoad) then
+                                                                                        sysvar.DWG.DWG_CDimStyle^:=psimstyleprop;
                          end;
      end
      else
@@ -1148,7 +1158,7 @@ var
   tp: PGDBObjBlockdef;
   blockload:boolean;
 
-  clayer,cltype,ctstyle:GDBString;
+  clayer,cdimstyle,cltype,ctstyle:GDBString;
   Handle2BlockName:TMapBlockHandle_BlockNames;
 begin
   {$IFNDEF DELPHI}
@@ -1156,7 +1166,7 @@ begin
   {$ENDIF}
   blockload:=false;
   {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF2000',lp_IncPos);{$ENDIF}
-  readvariables(f,ctstyle,clayer,cltype,LoadMode);
+  readvariables(f,ctstyle,clayer,cltype,cdimstyle,LoadMode);
   repeat
     gotodxf(f, 0, dxfName_SECTION);
     if not f.notEOF then
@@ -1190,7 +1200,7 @@ begin
                    dxfName_DIMSTYLE:
                                     begin
                                       {$IFDEF TOTALYLOG}programlog.logoutstr('Found dimstyles table',lp_IncPos);{$ENDIF}
-                                      ReadDimStyles(s,f,exitGDBString,owner,LoadMode,drawing);
+                                      ReadDimStyles(s,cdimstyle,f,exitGDBString,owner,LoadMode,drawing);
                                       {$IFDEF TOTALYLOG}programlog.logoutstr('end; {dimstyles table}',lp_DecPos);{$ENDIF}
                                     end;
                       dxfName_Layer:
@@ -1577,6 +1587,15 @@ else if (groupi = 9) and (ucvalues = '$TEXTSTYLE') then
       outstream.TXTAddGDBStringEOL('$TEXTSTYLE');
       outstream.TXTAddGDBStringEOL('7');
       outstream.TXTAddGDBStringEOL(drawing.TextStyleTable.GetCurrentTextStyle^.Name);
+      groups := templatefile.readGDBString;
+      values := templatefile.readGDBString;
+    end
+else if (groupi = 9) and (ucvalues = '$DIMSTYLE') then
+    begin
+      outstream.TXTAddGDBStringEOL(groups);
+      outstream.TXTAddGDBStringEOL('$DIMSTYLE');
+      outstream.TXTAddGDBStringEOL('2');
+      outstream.TXTAddGDBStringEOL(drawing.DimStyleTable.GetCurrentDimStyle^.Name);
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
     end

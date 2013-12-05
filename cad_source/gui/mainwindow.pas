@@ -31,17 +31,17 @@ uses
   {ZCAD BASE}
        oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
-       varmandef, varman,UUnitManager,SysInfo,shared,strmy,UGDBTextStyleArray,
+       varmandef, varman,UUnitManager,SysInfo,shared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
   {ZCAD SIMPLE PASCAL SCRIPT}
        languade,UGDBOpenArrayOfUCommands,
   {ZCAD ENTITIES}
        GDBEntity,UGDBSelectedObjArray,UGDBLayerArray,ugdbsimpledrawing,
-       GDBBlockDef,UGDBDescriptor,GDBManager,ugdbltypearray,gdbobjectsconstdef,GDBText,
+       GDBBlockDef,UGDBDescriptor,GDBManager,ugdbltypearray,gdbobjectsconstdef,GDBText,gdbdimension,
   {ZCAD COMMANDS}
        commandlinedef,commanddefinternal,commandline,
   {GUI}
        cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
-       colorwnd,imagesmanager,ltwnd,usuptstylecombo,usupportgui;
+       colorwnd,imagesmanager,ltwnd,usuptstylecombo,usupportgui,usupdimstylecombo;
   {}
 type
   TComboFiller=procedure(cb:TCustomComboBox) of object;
@@ -50,6 +50,7 @@ type
                        CLayer:PGDBLayerProp;
                        CLType:PGDBLTypeProp;
                        CTStyle:PGDBTextStyle;
+                       CDimStyle:PGDBDimStyle;
                  end;
   TFiletoMenuIteratorData=record
                                 localpm:TMenuItem;
@@ -213,7 +214,7 @@ var
   //uGeneralTimer:cardinal;
   //GeneralTime:GDBInteger;
   LayerBox:TZCADLayerComboBox;
-  LineWBox,ColorBox,LTypeBox,TStyleBox:TComboBox;
+  LineWBox,ColorBox,LTypeBox,TStyleBox,DimStyleBox:TComboBox;
   LayoutBox:TComboBox;
   LPTime:Tdatetime;
   pname:GDBString;
@@ -252,17 +253,16 @@ begin
      lp.PLayer:=player;;
 end;
 procedure MainForm.setvisualprop;
-const pusto=-1000;
-      lpusto=pointer(0);
-      tspusto=pointer(0);
-      different=-10001;
-      ldifferent=pointer(1);
-      tsdifferent=pointer(1);
+const IntEmpty=-1000;
+      IntDifferent=-10001;
+      PEmpty=pointer(0);
+      PDifferent=pointer(1);
 var lw:GDBInteger;
     color:GDBInteger;
     layer:pgdblayerprop;
     ltype:PGDBLtypeProp;
     tstyle:PGDBTextStyle;
+    dimstyle:PGDBDimStyle;
     //i,se:GDBInteger;
     pv:{pgdbobjEntity}PSelectedObjDesc;
         ir:itrec;
@@ -281,15 +281,17 @@ begin
            ivars.CLayer:={gdb.GetCurrentDWG.LayerTable.getelement}(sysvar.dwg.DWG_CLayer^);
            ivars.CLType:={gdb.GetCurrentDWG.LTypeStyleTable.getelement}(sysvar.dwg.DWG_CLType^);
            ivars.CTStyle:=sysvar.dwg.DWG_CTStyle^;
+           ivars.CDimStyle:=sysvar.dwg.DWG_CDimStyle^;
       end
   else
       begin
            //se:=param.seldesc.Selectedobjcount;
-           lw:=pusto;
-           layer:=lpusto;
-           color:=pusto;
-           ltype:=lpusto;
-           tstyle:=tspusto;
+           lw:=IntEmpty;
+           layer:=PEmpty;
+           color:=IntEmpty;
+           ltype:=PEmpty;
+           tstyle:=PEmpty;
+           dimstyle:=PEmpty;
            pv:=gdb.GetCurrentDWG.SelObjArray.beginiterate(ir);
            //pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
            if pv<>nil then
@@ -299,58 +301,70 @@ begin
                 //if pv^.Selected
                 //then
                     begin
-                         if lw=pusto then lw:=pv^.objaddr^.vp.LineWeight
-                                      else if lw<> pv^.objaddr^.vp.LineWeight then lw:=different;
-                         if layer=lpusto then layer:=pv^.objaddr^.vp.layer
-                                      else if layer<> pv^.objaddr^.vp.layer then layer:=ldifferent;
-                         if color=pusto then color:=pv^.objaddr^.vp.color
-                                        else if color<> pv^.objaddr^.vp.color then color:=different;
-                         if ltype=lpusto then ltype:=pv^.objaddr^.vp.LineType
-                                        else if ltype<> pv^.objaddr^.vp.LineType then ltype:=ldifferent;
+                         if lw=IntEmpty then lw:=pv^.objaddr^.vp.LineWeight
+                                      else if lw<> pv^.objaddr^.vp.LineWeight then lw:=IntDifferent;
+                         if layer=PEmpty then layer:=pv^.objaddr^.vp.layer
+                                      else if layer<> pv^.objaddr^.vp.layer then layer:=PDifferent;
+                         if color=IntEmpty then color:=pv^.objaddr^.vp.color
+                                        else if color<> pv^.objaddr^.vp.color then color:=IntDifferent;
+                         if ltype=PEmpty then ltype:=pv^.objaddr^.vp.LineType
+                                        else if ltype<> pv^.objaddr^.vp.LineType then ltype:=PDifferent;
                          if (pv^.objaddr^.vp.ID=GDBMTextID)or(pv^.objaddr^.vp.ID=GDBTextID) then
                          begin
-                         if tstyle=tspusto then tstyle:=PGDBObjText(pv^.objaddr)^.TXTStyleIndex
-                                           else if tstyle<> PGDBObjText(pv^.objaddr)^.TXTStyleIndex then tstyle:=tsdifferent;
+                         if tstyle=PEmpty then tstyle:=PGDBObjText(pv^.objaddr)^.TXTStyleIndex
+                                           else if tstyle<> PGDBObjText(pv^.objaddr)^.TXTStyleIndex then tstyle:=PDifferent;
+                         end;
+                         if (pv^.objaddr^.vp.ID=GDBAlignedDimensionID)or(pv^.objaddr^.vp.ID=GDBRotatedDimensionID)or(pv^.objaddr^.vp.ID=GDBDiametricDimensionID) then
+                         begin
+                         if dimstyle=PEmpty then dimstyle:=PGDBObjDimension(pv^.objaddr)^.PDimStyle
+                                            else if dimstyle<>PGDBObjDimension(pv^.objaddr)^.PDimStyle then dimstyle:=PDifferent;
                          end;
                     end;
-                if (layer=ldifferent)and(lw=different)and(color=different)and(ltype=ldifferent)and(tstyle=tsdifferent) then system.Break;
+                if (layer=PDifferent)and(lw=IntDifferent)and(color=IntDifferent)and(ltype=PDifferent)and(tstyle=PDifferent)and(dimstyle=PDifferent) then system.Break;
            end;
            pv:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
            until pv=nil;
-           if lw<>pusto then
-           if lw=different then
+           if lw<>IntEmpty then
+           if lw=IntDifferent then
                                ivars.CLWeight:=ColorBoxDifferent
                            else
                                begin
                                     ivars.CLWeight:=lw+3
                                end;
-           if layer<>lpusto then
-           if layer=ldifferent then
+           if layer<>PEmpty then
+           if layer=PDifferent then
                                   ivars.CLayer:=nil
                                else
                                begin
                                     ivars.CLayer:=layer;
                                end;
-           if color<>pusto then
-           if color=different then
+           if color<>IntEmpty then
+           if color=IntDifferent then
                                   ivars.CColor:=ColorBoxDifferent
                            else
                                begin
                                     ivars.CColor:=color;
                                end;
-           if ltype<>lpusto then
-           if ltype=ldifferent then
+           if ltype<>PEmpty then
+           if ltype=PDifferent then
                                   ivars.CLType:=nil
                            else
                                begin
                                     ivars.CLType:=ltype;
                                end;
-           if tstyle<>lpusto then
-           if tstyle=ldifferent then
+           if tstyle<>PEmpty then
+           if tstyle=PDifferent then
                                   ivars.CTStyle:=nil
                            else
                                begin
                                     ivars.CTStyle:=tstyle;
+                               end;
+           if dimstyle<>PEmpty then
+           if dimstyle=PDifferent then
+                                  ivars.CDimStyle:=nil
+                           else
+                               begin
+                                    ivars.CDimStyle:=dimstyle;
                                end;
       end;
       UpdateControls;
@@ -360,7 +374,7 @@ procedure MainForm.addoneobject;
       //different=-10001;
 var lw{,layer}:GDBInteger;
 begin
-
+  exit;
   lw:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.LineWeight;
   //layer:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.layer);
   if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=1
@@ -379,6 +393,14 @@ begin
            //gdb.GetCurrentDWG.OGLwindow1.SelectedObjectsPLayer:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.layer;
            ivars.CColor:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.color;
            ivars.CLType:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.LineType;
+
+           {CColor
+           CLWeight:GDBInteger;
+           CLayer:PGDBLayerProp;
+           CLType:PGDBLTypeProp;
+           CTStyle:PGDBTextStyle;
+           CDimStyle:PGDBDimStyle;}
+
       end
   else
       begin
@@ -2073,6 +2095,11 @@ begin
                           ReadComboSubParam(bc,ts,w);
                           TStyleBox:=CreateCBox(tb,TSupportTStyleCombo.DrawItemTStyle,TSupportTStyleCombo.ChangeLType,TSupportTStyleCombo.DropDownTStyle,TSupportTStyleCombo.CloseUpTStyle,TSupportTStyleCombo.FillLTStyle,w,ts);
                      end;
+                     if uppercase(line)='DIMSTYLECOMBOBOX' then
+                     begin
+                          ReadComboSubParam(bc,ts,w);
+                          DimStyleBox:=CreateCBox(tb,TSupportDimStyleCombo.DrawItemTStyle,TSupportDimStyleCombo.ChangeLType,TSupportDimStyleCombo.DropDownTStyle,TSupportDimStyleCombo.CloseUpTStyle,TSupportDimStyleCombo.FillLTStyle,w,ts);
+                     end;
                      if uppercase(line)='SEPARATOR' then
                                          begin
                                          buttonpos:=buttonpos+3;
@@ -3035,6 +3062,9 @@ begin
      end
      else
          SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
+     if pdwg<>nil then
+     if not pdwg^.GetChangeStampt then
+                                      SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
      //SysVar.debug.memi2:=memman.i2;
      if (SysVar.SAVE.SAVE_Auto_Current_Interval^<1)and(commandmanager.pcommandrunning=nil) then
      if (pdwg)<>nil then

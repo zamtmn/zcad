@@ -26,6 +26,7 @@ const
      CASelEnts=4;
      CACanUndo=8;
      CACanRedo=16;
+     CADWGChanged=32;
 
 
      CEDeSelect=1;

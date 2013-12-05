@@ -366,6 +366,7 @@ begin
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_LTscale,'DWG_LTScale');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLTscale,'DWG_CLTScale');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CColor,'DWG_CColor');
+   DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CDimStyle,'DWG_CDimStyle');
    end;
 end;
 procedure GDBDescriptor.freedwgvars;
@@ -383,6 +384,7 @@ begin
    SysVar.dwg.DWG_LTscale:=nil;
    SysVar.dwg.DWG_CLTscale:=nil;
    SysVar.dwg.DWG_CColor:=nil;
+   SysVar.dwg.DWG_CDimStyle:=nil;
 end;
 
 procedure GDBDescriptor.SetCurrentDWG(PDWG:PTAbstractDrawing);

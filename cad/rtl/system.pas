@@ -1087,6 +1087,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
              DWG_LTScale:PGDBDouble;(*'Global line type scale'*)
              DWG_CLTScale:PGDBDouble;(*'Current line type scale'*)
              DWG_CLType:PGDBPointer;(*'Drawing line type'*)(*oi_readonly*)
+             DWG_CDimStyle:PGDBPointer;(*'Dim style'*)(*oi_readonly*)
              DWG_RotateTextInLT:PGDBBoolean;(*'Rotate text in line type'*)
              DWG_CTStyle:PGDBPointer;(*'Text style'*)(*oi_readonly*)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
@@ -2720,9 +2721,9 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
   GDBcommandmanagerDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                                   lastcommand:GDBString;
                                   pcommandrunning:PCommandRTEdObjectDef;
-                                  function executecommand(const comm:pansichar;pdrawing:PTDrawingDef): GDBInteger;virtual;abstract;
+                                  function executecommand(const comm:pansichar;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;abstract;
                                   procedure executecommandend;virtual;abstract;
-                                  function executelastcommad(pdrawing:PTDrawingDef): GDBInteger;virtual;abstract;
+                                  function executelastcommad(pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;abstract;
                                   procedure sendpoint2command(p3d:gdbvertex; p2d:gdbvertex2di; mode:GDBByte;osp:pos_record;const drawing:TDrawingDef);virtual;abstract;
                                   procedure CommandRegister(pc:PCommandObjectDef);virtual;abstract;
                              end;
@@ -3199,6 +3200,9 @@ TDrawingDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseobject)
                        function GetCurrentRootObjArraySimple:GDBPointer;virtual;abstract;
                        function GetBlockDefArraySimple:GDBPointer;virtual;abstract;
                        procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
+                       function GetChangeStampt:GDBBoolean;virtual;abstract;
+                       function CanUndo:boolean;virtual;abstract;
+                       function CanRedo:boolean;virtual;abstract;
                  end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\ugdbabstractdrawing.pas
 PTAbstractDrawing=^TAbstractDrawing;
@@ -3267,12 +3271,15 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetFileName:GDBString;virtual;abstract;
                        procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
                        function GetUndoTop:TArrayIndex;virtual;abstract;
+                       function CanUndo:boolean;virtual;abstract;
+                       function CanRedo:boolean;virtual;abstract;
                        function GetDWGUnits:PTUnitManager;virtual;abstract;
                        procedure AssignLTWithFonts(pltp:PGDBLtypeProp);virtual;abstract;
                        function GetMouseEditorMode:GDBByte;virtual;abstract;
                        function DefMouseEditorMode(SetMask,ReSetMask:GDBByte):GDBByte;virtual;abstract;
                        function SetMouseEditorMode(mode:GDBByte):GDBByte;virtual;abstract;
                        procedure FreeConstructionObjects;virtual;abstract;
+                       function GetChangeStampt:GDBBoolean;virtual;abstract;
                  end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\UGDBDescriptor.pas
 TDWGProps=packed record
@@ -3301,6 +3308,8 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
            procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
            function GetChangeStampt:GDBBoolean;virtual;abstract;
            function GetUndoTop:TArrayIndex;virtual;abstract;
+           function CanUndo:boolean;virtual;abstract;
+           function CanRedo:boolean;virtual;abstract;
            function GetDWGUnits:PTUnitManager;virtual;abstract;
            procedure AddBlockFromDBIfNeed(name:GDBString);virtual;abstract;
      end;
@@ -3314,6 +3323,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     function AfterDeSerialize(SaveFlag:GDBWord; membuf:GDBPointer):integer;virtual;abstract;
                     function GetCurrentROOT:PGDBObjGenericSubEntry;
                     function GetCurrentDWG:{PTDrawing}PTSimpleDrawing;
+                    function GetCurrentOGLWParam:POGLWndtype;
                     procedure asociatedwgvars;
                     procedure freedwgvars;
                     procedure SetCurrentDWG(PDWG:PTAbstractDrawing);

@@ -11,6 +11,7 @@ var
    DWG_CLType:PGDBLtypeProp;
    DWG_CTStyle:PGDBTextStyle;
    DWG_CLTScale:GDBDouble;
+   DWG_CDimStyle:PGDBDimStyle;
 
    DWG_DrawGrid:GDBBoolean;
    DWG_SnapGrid:GDBBoolean;
@@ -38,6 +39,7 @@ begin
   DWG_CLinew:=-1;
   DWG_CColor:=256;
   DWG_CLType:=0;
+  DWG_CDimStyle:=0;
 
      camera.initnul;
      camera.fovy:=35.0;

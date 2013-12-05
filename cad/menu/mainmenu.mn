@@ -67,6 +67,8 @@ Panel Standart;
     action ACN_TSTYLES
     tstylecombobox 100,Text style selection
     Separator
+    dimstylecombobox 100,Dim style selection
+    Separator
     action ACN_UNDO
     action ACN_REDO
     Separator

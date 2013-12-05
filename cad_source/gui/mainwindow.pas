@@ -2114,7 +2114,7 @@ begin
            end;
 
            until not(f.ReadPos<f.count);
-           if (tbname='STANDART')and(not sysparam.standartinterface) then
+           if (tbname='Status')and(not sysparam.standartinterface) then
                        begin
                             if assigned(LayoutBox) then
                                                       shared.ShowError(format(rsReCreating,['LAYOUTBOX']));
@@ -3527,9 +3527,9 @@ begin
    k:=0;
   if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
   begin
-                                      begin
-                                           mainformn.setvisualprop;
-                                           mainformn.Caption:=(('ZCad v'+sysvar.SYS.SYS_Version^+' - ['+gdb.GetCurrentDWG.GetFileName+']'));
+  mainformn.setvisualprop;
+  mainformn.Caption:='ZCad v'+sysvar.SYS.SYS_Version^+' - ['+gdb.GetCurrentDWG.GetFileName+']';
+
   if assigned(mainwindow.LayerBox) then
   mainwindow.LayerBox.enabled:=true;
   if assigned(mainwindow.LineWBox) then
@@ -3540,6 +3540,9 @@ begin
   mainwindow.LTypeBox.enabled:=true;
   if assigned(mainwindow.TStyleBox) then
   mainwindow.TStyleBox.enabled:=true;
+  if assigned(mainwindow.DimStyleBox) then
+  mainwindow.DimStyleBox.enabled:=true;
+
 
   if assigned(MainFormN.PageControl) then
   if assigned(SysVar.INTF.INTF_ShowDwgTabs) then
@@ -3608,7 +3611,7 @@ begin
                 end;
 
             end;
-    end;
+
     { i:=0;
     pcontrol:=MainForm.PageControl.pages.beginiterate(ir);
      if pcontrol<>nil then
@@ -3652,6 +3655,8 @@ begin
            mainwindow.ColorBox.enabled:=false;
            if assigned(mainwindow.TStyleBox) then
            mainwindow.TStyleBox.enabled:=false;
+           if assigned(mainwindow.DimStyleBox) then
+           mainwindow.DimStyleBox.enabled:=false;
            if assigned(mainwindow.LTypeBox) then
            mainwindow.LTypeBox.enabled:=false;
            if assigned(MainFormN.HScrollBar) then

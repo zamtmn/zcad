@@ -1,0 +1,19 @@
+object DSWindow: TDSWindow
+  Left = 552
+  Height = 240
+  Top = 143
+  Width = 320
+  Caption = 'DSWindow'
+  ClientHeight = 240
+  ClientWidth = 320
+  Position = poMainFormCenter
+  LCLVersion = '1.3'
+  object Label1: TLabel
+    Left = 136
+    Height = 15
+    Top = 16
+    Width = 185
+    Caption = 'Dim styles wnd not Implemed yet(('
+    ParentColor = False
+  end
+end

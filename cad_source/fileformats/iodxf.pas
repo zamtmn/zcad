@@ -361,7 +361,7 @@ var
 //  byt,LayerColor: GDBInteger;
   s{, sname, sx1, sy1, sz1,scode,LayerName}: GDBString;
 //  ErrorCode,GroupCode: GDBInteger;
-
+group:integer;
 objid: GDBInteger;
   pobj,postobj: PGDBObjEntity;
 //  tp: PGDBObjBlockdef;
@@ -372,14 +372,14 @@ objid: GDBInteger;
 begin
   additionalunit.init('temparraryunit');
   additionalunit.InterfaceUses.addnodouble(@SysUnit);
+  group:=-1;
   while (f.notEOF) and (s <> exitGDBString) do
   begin
     if assigned(ProcessLongProcessProc) then
                                             ProcessLongProcessProc(f.ReadPos);
-
     s := f.readGDBString;
     objid:=entname2GDBID(s);
-    if objid>0 then
+    if (objid>0)and(group=0) then
     begin
     if owner <> nil then
       begin
@@ -492,9 +492,16 @@ begin
     end
     else
     begin
+         if group=0 then
+         begin
          objid:=ISIFNOREDENT(s);
          if objid>0 then
          gotodxf(f, 0, '');
+         end
+         else
+             if trystrtoint(s,group)then
+                                    else
+                                        group:=-1;
     end;
   end;
   additionalunit.done;
@@ -1272,7 +1279,7 @@ begin
                                     s := f.readGDBString;
                                end
               else begin
-                   if s='DEVICE_PS_AR2' then
+                   if s='polyline' then
                                   s:=s;
 
                 tp := drawing.BlockDefArray.create(s);

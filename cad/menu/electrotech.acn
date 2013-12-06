@@ -11,7 +11,7 @@ action ACN_PLACESMOKEDETECTORORTO,PlaceSmokeDetectorOrto,ps.bmp,Automatic placem
 action ACN_SENSORMARK,OPS_Sensor_Mark,#++,Numbering sensors on the plan,Numbering sensors on the plan,
 action ACN_ORTODEVPLACE,OrtoDevPlace,array.bmp,Device placement,Device placement,
 
-action ACN_PROCESSKZ,EL_ExternalKZ,#Process external KZ,,,
-action ACN_REMAUTOCABLES,EL_AutoGen_Cable_Remove,#Remove auto cables,,,
+action ACN_PROCESSKZ,EL_ExternalKZ,autocable.bmp,,,
+action ACN_REMAUTOCABLES,EL_AutoGen_Cable_Remove,removeautocable.bmp,,,
 
 action ACN_KIPCDBUILD,KIP_CDBuild,#CDB,Connection diagram,,

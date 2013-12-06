@@ -45,6 +45,7 @@ function getgdb: GDBPointer; export;
 //procedure GDBGetMemGDBObject(source:PGDBproperty);export;
 function GetSelOjbj:TSelObjDesk;
 procedure GDBObjSetEntityProp(const pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint); export;
+procedure GDBObjSetEntityCurrentProp(const pobjent: PGDBObjEntity); export;
 procedure GDBObjSetLineProp(var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p1, p2: GDBvertex); export;
 procedure GDBObjLineInit(own:PGDBObjGenericSubEntry;var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LW: GDBSmallint; p1, p2: GDBvertex); export;
 procedure GDBObjCircleInit(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble); export;
@@ -74,6 +75,13 @@ begin
     end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
+end;
+procedure GDBObjSetEntityCurrentProp(const pobjent: PGDBObjEntity);
+begin
+     pobjent^.vp.Layer:=sysvar.dwg.DWG_CLayer^;
+     pobjent^.vp.LineType:=sysvar.dwg.DWG_CLType^;
+     pobjent^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
+     pobjent^.vp.color:=sysvar.dwg.DWG_CColor^;
 end;
 procedure GDBObjSetEntityProp(const pobjent: PGDBObjEntity;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint);
 begin

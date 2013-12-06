@@ -146,23 +146,39 @@ var //i,j: GDBInteger;
         ir:itrec;
     nurbsobj:GLUnurbsObj;
     CP:GDBOpenArrayOfData;
-    tfv:GDBvertex4S;
+    tfv:GDBvertex4D;
+    tfvs:GDBvertex4S;
     ptfv:PGDBvertex4S;
     fl:PGDBFloat;
     s:string;
+    m:DMatrix4D;
 begin
 
      FormatWithoutSnapArray;
      CP.init({$IFDEF DEBUGBUILD}'{A50FF064-FCF0-4A6C-B012-002C7A7BA6F0}',{$ENDIF}VertexArrayInOCS.count,sizeof(GDBvertex4S));
      ptv:=VertexArrayInOCS.beginiterate(ir);
      ptv0:=ptv;
+     if bp.ListPos.owner<>nil then
+                                         if bp.ListPos.owner^.GetHandle=H_Root then
+                                                                                   begin
+                                                                                        m:=onematrix;
+                                                                                    end
+                                                                               else
+                                                                                   begin
+                                                                                         m:=bp.ListPos.owner^.GetMatrix^;
+                                                                                   end;
   if ptv<>nil then
   repeat
         tfv.x:=ptv^.x-ptv0^.x;
         tfv.y:=ptv^.y-ptv0^.y;
         tfv.z:=ptv^.z-ptv0^.z;
         tfv.w:=1;
-        CP.Add(@tfv);
+        tfv:=geometry.VectorTransform(tfv,m);
+        tfvs.x:=tfv.x;
+        tfvs.y:=tfv.y;
+        tfvs.z:=tfv.z;
+        tfvs.w:=tfv.w;
+        CP.Add(@tfvs);
         ptv:=VertexArrayInOCS.iterate(ir);
   until ptv=nil;
 

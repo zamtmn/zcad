@@ -13,8 +13,9 @@
 *****************************************************************************
 }
 {
-@author(Andrey Zubarev <zamtmn@yandex.ru>) 
+@author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
+{$mode objfpc}
 unit gdbcommandsexample;
 {$INCLUDE def.inc}{file def.inc is necessary to include at the beginning of each module zcad}
                   {it contains a centralized compilation parameters settings}
@@ -31,9 +32,11 @@ uses
   GDBLine,            //unit describes line entity
                       //модуль описывающий примитив линия
   GDBArc,
+  GDBCircle,
   GDBEntity,
   geometry,
   math,
+  sysutils,
   gdbentityfactory,   //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   zcadsysvars,        //system global variables
@@ -55,7 +58,16 @@ type
     T3PointPentity=record
                          p1,p2,p3:gdbvertex;
                          pentity:PGDBObjEntity;
-    end;
+                   end;
+    TCircleDrawMode=(TCDM_CR,TCDM_CD,TCDM_2P,TCDM_3P);
+    PT3PointCircleModePentity=^T3PointCircleModePentity;
+    T3PointCircleModePentity=record
+                                   p1,p2,p3:gdbvertex;
+                                   cdm:TCircleDrawMode;
+                                   npoint:GDBInteger;
+                                   pentity:PGDBObjEntity;
+                             end;
+
 
 implementation
 {Интерактивные процедуры используются совместно с Get3DPointInteractive, впоследствии будут вынесены в отдельный модуль}
@@ -65,18 +77,10 @@ implementation
 {Процедура интерактивного изменения конца линии}
 procedure InteractiveLineEndManipulator(const PInteractiveData:GDBPointer{pointer to the line entity};Point:GDBVertex{new end coord};Click:GDBBoolean{true if lmb presseed});
 begin
+     GDBObjSetEntityCurrentProp(PGDBObjLine(PInteractiveData));//assign general properties from system variables to entity
+                                                               //присваиваем примитиву общие свойства из системных переменных
      PGDBObjLine(PInteractiveData)^.CoordInOCS.lEnd:=Point;//set the new point to the end of the line
                                                            //устанавливаем новую точку конца линии
-     GDBObjSetEntityProp(PGDBObjLine(PInteractiveData),    //assign general properties from system variables to entity
-                                                           //присваиваем примитиву общие свойства из системных переменных
-                         sysvar.dwg.DWG_CLayer^,           //layer
-                                                           //слой
-                         sysvar.dwg.DWG_CLType^,           //line type
-                                                           //типлиний
-                         sysvar.dwg.DWG_CColor^,           //color
-                                                           //цвет
-                         sysvar.dwg.DWG_CLinew^);          //lineweight
-                                                           //вес линий
      PGDBObjLine(PInteractiveData)^.FormatEntity(gdb.GetCurrentDWG^);//format entity
                                                                      //"форматируем" примитив в соответствии с заданными параметрами
 end;
@@ -85,18 +89,11 @@ end;
 {Процедура интерактивного изменения третьей точки выровненного размера}
 procedure InteractiveADimManipulator(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
 begin
-    GDBObjSetEntityProp(PGDBObjAlignedDimension(PInteractiveData),//assign general properties from system variables to entity
-                                                                  //присваиваем примитиву общие свойства из системных переменных
-                        sysvar.dwg.DWG_CLayer^,                   //layer
-                                                                  //слой
-                        sysvar.dwg.DWG_CLType^,                   //line type
-                                                                  //типлиний
-                        sysvar.dwg.DWG_CColor^,                   //color
-                                                                  //цвет
-                        sysvar.dwg.DWG_CLinew^);                  //lineweight
-                                                                  //вес линий
-    PGDBObjAlignedDimension(PInteractiveData)^.PDimStyle:=gdb.GetCurrentDWG^.DimStyleTable.getelement(0);//specify the dimension style (there is no such system variable, in the future it will appear)
-                                                                                                         //указываем стиль размеров (пока нет такой системной переменной)
+    GDBObjSetEntityCurrentProp(PGDBObjAlignedDimension(PInteractiveData));//assign general properties from system variables to entity
+                                                                         //присваиваем примитиву общие свойства из системных переменных
+
+    PGDBObjAlignedDimension(PInteractiveData)^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;//specify the dimension style
+                                                                                    //указываем стиль размеров
 
     PGDBObjAlignedDimension(PInteractiveData)^.DimData.P10InWCS:=Point;//assign the obtained point to the appropriate location primitive
                                                                        //присваиваем полученые точки в соответствующие места примитиву
@@ -137,12 +134,8 @@ end;
 
 procedure InteractiveRDimManipulator(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
 begin
-    GDBObjSetEntityProp(PGDBObjRotatedDimension(PInteractiveData),
-                        sysvar.dwg.DWG_CLayer^,
-                        sysvar.dwg.DWG_CLType^,
-                        sysvar.dwg.DWG_CColor^,
-                        sysvar.dwg.DWG_CLinew^);
-    PGDBObjRotatedDimension(PInteractiveData)^.PDimStyle:=gdb.GetCurrentDWG^.DimStyleTable.getelement(0);
+    GDBObjSetEntityCurrentProp(PGDBObjRotatedDimension(PInteractiveData));
+    PGDBObjRotatedDimension(PInteractiveData)^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
 
     case isRDIMHorisontal(PGDBObjRotatedDimension(PInteractiveData)^.DimData.P13InWCS,
                         PGDBObjRotatedDimension(PInteractiveData)^.DimData.P14InWCS,
@@ -196,7 +189,7 @@ begin
       if commandmanager.Get3DPointInteractive('Specify second point:',p2,@InteractiveLineEndManipulator,pline) then  //trying to get the user to the second point, use the interactive function to draw a line
                                                                                                                      //пытаемся получить от пользователя вторую точку, используем интерактивную функцию для черчения линии
       begin
-           gdb.GetCurrentDWG.FreeConstructionObjects;//clear the constructed objects list (temporary line will be removed)
+           gdb.GetCurrentDWG^.FreeConstructionObjects;//clear the constructed objects list (temporary line will be removed)
                                                      //очищаем список конструируемых объектов (временная линия будет удалена)
            pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBAlignedDimensionID,gdb.GetCurrentROOT));//create dimensional entity in the list of constructing
                                                                                                                                   //создаем размерный примитив в списке конструируемых
@@ -214,21 +207,12 @@ begin
                                                           //выделяем вамять под примитив
                pd^.initnul(gdb.GetCurrentROOT);//инициализируем примитив, указываем его владельца
                                                //initialize the primitive, specify its owner
-               GDBObjSetEntityProp(pd,                     //assign general properties from system variables to entity
-                                                           //присваиваем примитиву общие свойства из системных переменных
-                                   sysvar.dwg.DWG_CLayer^, //layer
-                                                           //слой
-                                   sysvar.dwg.DWG_CLType^, //line type
-                                                           //типлиний
-                                   sysvar.dwg.DWG_CColor^, //color
-                                                           //цвет
-                                   sysvar.dwg.DWG_CLinew^);//lineweight
-                                                           //вес линий
+               GDBObjSetEntityCurrentProp(pd);//assign general properties from system variables to entity
+                                              //присваиваем примитиву общие свойства из системных переменных
 
-               pd^.PDimStyle:=gdb.GetCurrentDWG^.DimStyleTable.getelement(0);//specify the dimension style (there is no such system variable)
-                                                                             //is assigned a zero-dimensional style from the table descriptions, i.e. 'Standart'
-                                                                             //указываем стиль размеров (пока нет такой системной переменной)
-                                                                             //присваевается нулевой размерный стиль из таблицы описаний, т.е. 'Standart'
+               pd^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;//specify the dimension style
+                                                        //указываем стиль размеров
+
                pd^.DimData.P13InWCS:=p1;//assign the obtained point to the appropriate location primitive
                                         //присваиваем полученые точки в соответствующие места примитиву
                pd^.DimData.P14InWCS:=p2;//assign the obtained point to the appropriate location primitive
@@ -266,7 +250,7 @@ begin
          InteractiveLineEndManipulator(pline,p1,false);
       if commandmanager.Get3DPointInteractive('Specify second point:',p2,@InteractiveLineEndManipulator,pline) then
       begin
-           gdb.GetCurrentDWG.FreeConstructionObjects;
+           gdb.GetCurrentDWG^.FreeConstructionObjects;
            pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRotatedDimensionID,gdb.GetCurrentROOT));
            pd^.DimData.P13InWCS:=p1;
            pd^.DimData.P14InWCS:=p2;
@@ -275,16 +259,12 @@ begin
           begin
                vd:=pd^.vectorD;
                vn:=pd^.vectorN;
-               gdb.GetCurrentDWG.FreeConstructionObjects;
+               gdb.GetCurrentDWG^.FreeConstructionObjects;
                pd := CreateObjFree(GDBRotatedDimensionID);
                pd^.initnul(gdb.GetCurrentROOT);
-               GDBObjSetEntityProp(pd,
-                                   sysvar.dwg.DWG_CLayer^,
-                                   sysvar.dwg.DWG_CLType^,
-                                   sysvar.dwg.DWG_CColor^,
-                                   sysvar.dwg.DWG_CLinew^);
+               GDBObjSetEntityCurrentProp(pd);
 
-               pd^.PDimStyle:=gdb.GetCurrentDWG^.DimStyleTable.getelement(0);
+               pd^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
                pd^.DimData.P13InWCS:=p1;
                pd^.DimData.P14InWCS:=p2;
                pd^.DimData.P10InWCS:=p3;
@@ -347,11 +327,11 @@ begin
          InteractiveLineEndManipulator(pline,pe.p1,false);
       if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveLineEndManipulator,pline) then
       begin
-           gdb.GetCurrentDWG.FreeConstructionObjects;
+           gdb.GetCurrentDWG^.FreeConstructionObjects;
            pe.pentity:= GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBArcID,gdb.GetCurrentROOT));
         if commandmanager.Get3DPointInteractive('Specify third point:',pe.p3,@InteractiveArcManipulator,@pe) then
           begin
-               gdb.GetCurrentDWG.FreeConstructionObjects;
+               gdb.GetCurrentDWG^.FreeConstructionObjects;
                pa := CreateObjFree(GDBArcID);
                pe.pentity:=pa;
                pa^.initnul;
@@ -366,7 +346,109 @@ begin
     result:=cmd_ok;
     GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);
 end;
+procedure InteractiveSmartCircleManipulator(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
+var
+    PointData:tarcrtmodify;
+    ad:TArcData;
+begin
+  GDBObjSetEntityCurrentProp(PT3PointCircleModePentity(PInteractiveData)^.pentity);
+  case PT3PointCircleModePentity(PInteractiveData)^.npoint of
+     0:begin
+         PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert:=PT3PointCircleModePentity(PInteractiveData)^.p1;
+       end;
+     1:begin
+         case
+             PT3PointCircleModePentity(PInteractiveData)^.cdm of
+             TCDM_CR:begin
+                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert:=PT3PointCircleModePentity(PInteractiveData)^.p1;
+                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=geometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point);
+                     end;
+             TCDM_CD:begin
+                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert:=PT3PointCircleModePentity(PInteractiveData)^.p1;
+                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=geometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point)/2;
+                     end;
+             TCDM_2P,TCDM_3P:begin
+                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert:=VertexMulOnSc(VertexAdd(PT3PointCircleModePentity(PInteractiveData)^.p1,point),0.5);
+                       PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=geometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point)/2;
+                     end;
 
+         end;
+       end;
+     2:begin
+         case
+             PT3PointCircleModePentity(PInteractiveData)^.cdm of
+             TCDM_3P:begin
+                 PointData.p1.x:=PT3PointCircleModePentity(PInteractiveData)^.p1.x;
+                 PointData.p1.y:=PT3PointCircleModePentity(PInteractiveData)^.p1.y;
+                 PointData.p2.x:=PT3PointCircleModePentity(PInteractiveData)^.p2.x;
+                 PointData.p2.y:=PT3PointCircleModePentity(PInteractiveData)^.p2.y;
+                 PointData.p3.x:=Point.x;
+                 PointData.p3.y:=Point.y;
+                 if GetArcParamFrom3Point2D(PointData,ad) then
+                 begin
+                   PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert.x:=ad.p.x;
+                   PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert.y:=ad.p.y;
+                   PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Local.p_insert.z:=0;
+                   PGDBObjCircle(PT3PointCircleModePentity(PInteractiveData)^.pentity)^.Radius:=ad.r;
+                 end;
+                     end;
+         end;
+       end;
+  end;
+  PT3PointCircleModePentity(PInteractiveData)^.pentity^.FormatEntity(gdb.GetCurrentDWG^);
+end;
+
+function DrawCircle_com(operands:TCommandOperands):TCommandResult;
+var
+    pcircle:PGDBObjCircle;
+    pe:T3PointCircleModePentity;
+    savemode:GDBByte;
+begin
+    case uppercase(operands) of
+                               'CR':pe.cdm:=TCDM_CR;
+                               'CD':pe.cdm:=TCDM_CD;
+                               '2P':pe.cdm:=TCDM_2P;
+                               '3P':pe.cdm:=TCDM_3P;
+                               else
+                                   pe.cdm:=TCDM_CR;
+    end;
+    pe.npoint:=0;
+    savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,
+                                                    MGetSelectionFrame or MGetSelectObject);
+    if commandmanager.get3dpoint('Specify first point:',pe.p1) then
+    begin
+         inc(pe.npoint);
+         pe.pentity := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,gdb.GetCurrentROOT));
+         InteractiveSmartCircleManipulator(@pe,pe.p1,false);
+      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveSmartCircleManipulator,@pe) then
+      begin
+           if pe.cdm=TCDM_3P then
+           begin
+                inc(pe.npoint);
+                if commandmanager.Get3DPointInteractive('Specify second point:',pe.p3,@InteractiveSmartCircleManipulator,@pe) then
+                begin
+                     gdb.GetCurrentDWG^.FreeConstructionObjects;
+                     pcircle := CreateObjFree(GDBCircleID);
+                     pe.pentity:=pcircle;
+                     pcircle^.initnul;
+                     InteractiveSmartCircleManipulator(@pe,pe.p3,false);
+                     gdb.AddEntToCurrentDrawingWithUndo(pcircle);
+                end;
+           end
+           else
+           begin
+               gdb.GetCurrentDWG^.FreeConstructionObjects;
+               pcircle := CreateObjFree(GDBCircleID);
+               pe.pentity:=pcircle;
+               pcircle^.initnul;
+               InteractiveSmartCircleManipulator(@pe,pe.p2,false);
+               gdb.AddEntToCurrentDrawingWithUndo(pcircle);
+           end;
+      end;
+    end;
+    result:=cmd_ok;
+    GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);
+end;
 
 
 initialization
@@ -384,5 +466,6 @@ initialization
                                                                              //т.е. при наборе в комстроке DimAligned выполнится DrawAlignedDim_com
      CreateCommandFastObjectPlugin(@DrawRotatedDim_com,'DimLinear',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawArc_com,'Arc',CADWG,0);
+     CreateCommandFastObjectPlugin(@DrawCircle_com,'Circle',CADWG,0);
 
 end.

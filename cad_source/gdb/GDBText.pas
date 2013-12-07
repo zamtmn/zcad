@@ -884,7 +884,11 @@ else if not dxfGDBIntegerload(f,72,byt,gv)then
                              else
                                  textprop.backward:=false;
   if TXTStyleIndex=nil then
-                           TXTStyleIndex:=sysvar.DWG.DWG_CTStyle^;
+                           begin
+                               TXTStyleIndex:=drawing.GetTextStyleTable^.FindStyle('Standard',false);
+                               if TXTStyleIndex=nil then
+                                                        TXTStyleIndex:=sysvar.DWG.DWG_CTStyle^;
+                           end;
   OldVersTextReplace(Template);
   OldVersTextReplace(Content);
   textprop.justify := jt[vv, gv];

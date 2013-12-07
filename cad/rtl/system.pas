@@ -942,6 +942,7 @@ GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*Op
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                     constructor initnul;
                     procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
+                    function GetCurrentDimStyle:PGDBDimStyle;
               end;
 //Generate on E:\zcad\CAD_SOURCE\u\UGDBTableStyleArray.pas
 TTableCellJustify=(jcl(*'TopLeft'*),
@@ -2007,11 +2008,18 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       DimData:TDXFDimData;
                       PDimStyle:PGDBDimStyle;
                       PProjPoint:PTDXFDimData2D;
+                      vectorD,vectorN,vectorT:GDBVertex;
+                      TextTParam,TextAngle,DimAngle:GDBDouble;
+                      TextInside:GDBBoolean;
+                      TextOffset:GDBVertex;
+                      dimtextw,dimtexth:GDBDouble;
+                      dimtext:GDBString;
                 function DrawDimensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef):pgdbobjline;
                 function DrawExtensionLineLinePart(p1,p2:GDBVertex;const drawing:TDrawingDef):pgdbobjline;
                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;abstract;
                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;abstract;
                 function GetLinearDimStr(l:GDBDouble):GDBString;
+                function GetDimStr:GDBString;virtual;abstract;
                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                 function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                 function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
@@ -2022,6 +2030,9 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                 procedure transform(const t_matrix:DMatrix4D);virtual;abstract;
                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
+                procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);virtual;abstract;
+                function GetTextOffset(const drawing:TDrawingDef):GDBVertex;virtual;abstract;
+                function GetPSize:GDBDouble;virtual;abstract;
                 end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\gdbgenericdimension.pas
 TDimType=(DTRotated,DTAligned,DTAngular,DTDiameter,DTRadius,DTAngular3P,DTOrdinate);
@@ -2039,18 +2050,10 @@ GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
 //Generate on E:\zcad\CAD_SOURCE\gdb\gdbaligneddimension.pas
 PGDBObjAlignedDimension=^GDBObjAlignedDimension;
 GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
-                      TextTParam,TextAngle,DimAngle:GDBDouble;
-                      TextInside:GDBBoolean;
-                      TextOffset:GDBVertex;
-                      vectorD,vectorN,vectorT:GDBVertex;
-                      dimtextw,dimtexth:GDBDouble;
-                      dimtext:GDBString;
                       constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
                       procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:GDBInteger;const drawing:TDrawingDef);
                       procedure DrawDimensionLine(p1,p2:GDBVertex;const drawing:TDrawingDef);
-                      function GetPSize:GDBDouble;
-                      procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
                       procedure CalcTextParam(dlStart,dlEnd:Gdbvertex);virtual;abstract;
                       procedure CalcTextAngle;virtual;abstract;
                       procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
@@ -2058,7 +2061,6 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       //procedure DrawGeometry;
                       procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                       function GetObjTypeName:GDBString;virtual;abstract;
-                      function GetTextOffset(const drawing:TDrawingDef):GDBVertex;
                       procedure CalcDNVectors;virtual;abstract;
                       procedure CalcDefaultPlaceText(dlStart,dlEnd:Gdbvertex;const drawing:TDrawingDef);virtual;abstract;
                       function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
@@ -2069,6 +2071,7 @@ GDBObjAlignedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                       //function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                       //function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                        procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;abstract;
+                       function GetDimStr:GDBString;virtual;abstract;
                    end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\gdbrotateddimension.pas
 PGDBObjRotatedDimension=^GDBObjRotatedDimension;
@@ -2091,11 +2094,13 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                         function GetObjTypeName:GDBString;virtual;abstract;
                         procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
+                        function GetDimStr:GDBString;virtual;abstract;
                         function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                         procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                         function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                         function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                         procedure DrawCenterMarker(cp:GDBVertex;r:GDBDouble;const drawing:TDrawingDef);
+                        procedure CalcDNVectors;virtual;abstract;
                    end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBBlockInsert.pas
 PGDBObjBlockInsert=^GDBObjBlockInsert;

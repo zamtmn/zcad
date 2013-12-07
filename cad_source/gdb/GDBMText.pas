@@ -911,7 +911,11 @@ begin
     byt:=readmystrtoint(f);
   end;
   if TXTStyleIndex=nil then
-                           TXTStyleIndex:=sysvar.DWG.DWG_CTStyle^;
+                           begin
+                               TXTStyleIndex:=drawing.GetTextStyleTable^.FindStyle('Standard',false);
+                               if TXTStyleIndex=nil then
+                                                        TXTStyleIndex:=sysvar.DWG.DWG_CTStyle^;
+                           end;
   OldVersTextReplace(Template);
   OldVersTextReplace(Content);  
   textprop.justify:=b2j[j];

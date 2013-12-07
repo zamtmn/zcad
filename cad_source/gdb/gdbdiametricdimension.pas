@@ -40,16 +40,29 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         function GetObjTypeName:GDBString;virtual;
 
                         procedure FormatEntity(const drawing:TDrawingDef);virtual;
+                        function GetDimStr:GDBString;virtual;
                         function Clone(own:GDBPointer):PGDBObjEntity;virtual;
                         procedure addcontrolpoints(tdesc:GDBPointer);virtual;
 
                         function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
+                        function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         procedure DrawCenterMarker(cp:GDBVertex;r:GDBDouble;const drawing:TDrawingDef);
+                        procedure CalcDNVectors;virtual;
                    end;
 {EXPORT-}
 implementation
 uses log;
+procedure GDBObjDiametricDimension.CalcDNVectors;
+begin
+     vectorD:=vertexsub(DimData.P15InWCS,DimData.P10InWCS);
+     vectorD:=normalizevertex(vectorD);
+     vectorN.x:=-vectorD.y;
+     vectorN.y:=vectorD.x;
+     vectorN.z:=0;
+     vectorN:=normalizevertex(vectorN)
+end;
+
 procedure GDBObjDiametricDimension.DrawCenterMarker(cp:GDBVertex;r:GDBDouble;const drawing:TDrawingDef);
 var
    ls:GDBDouble;
@@ -99,6 +112,21 @@ begin
      d:=Vertexlength(center,DimData.P11InOCS);
      DimData.P11InOCS:=VertexDmorph(center,dirv,d);
 end;
+function GDBObjDiametricDimension.P11ChangeTo(tv:GDBVertex):GDBVertex;
+var
+  dirv,center:GDBVertex;
+  d:double;
+begin
+     center:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
+     d:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS)/2;
+     dirv:=vertexsub(tv,center);
+     dirv:=normalizevertex(dirv);
+
+     //result:=VertexDmorph(center,dirv,d);
+     DimData.P10InWCS:=VertexDmorph(center,dirv,-d);
+     DimData.P15InWCS:=VertexDmorph(center,dirv,d);
+     result:=tv;
+end;
 procedure GDBObjDiametricDimension.addcontrolpoints(tdesc:GDBPointer);
 var pdesc:controlpointdesc;
 begin
@@ -131,19 +159,35 @@ begin
   tvo^.PDimStyle:=PDimStyle;
   result := tvo;
 end;
-
+function GDBObjDiametricDimension.GetDimStr:GDBString;
+begin
+     result:='%%C'+GetLinearDimStr(Vertexlength(DimData.P10InWCS,DimData.P15InWCS));
+end;
 procedure GDBObjDiametricDimension.FormatEntity(const drawing:TDrawingDef);
 var
   center:GDBVertex;
   d:double;
+  pl:pgdbobjline;
 begin
           ConstObjArray.cleareraseobj;
+          CalcDNVectors;
           center:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
           d:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
 
           DrawCenterMarker(center,d/2,drawing);
           //DrawDimensionText(DimData.P11InOCS,drawing);
-          DrawDimensionLineLinePart(DimData.P11InOCS,DimData.P15InWCS,drawing);
+          CalcTextParam(DimData.P10InWCS,DimData.P15InWCS);
+          DrawDimensionText(DimData.P11InOCS,drawing);
+          if (self.TextInside)or(self.TextAngle=0) then
+                                 begin
+                                 DrawDimensionLine{LinePart}(DimData.P11InOCS,DimData.P15InWCS,true,false,false,drawing);
+                                 pl:=DrawDimensionLineLinePart(DimData.P11InOCS,VertexDmorph(DimData.P11InOCS,VectorT,getpsize),drawing);
+                                 pl.FormatEntity(drawing);
+                                 end
+                             else
+                                 begin
+                                      DrawDimensionLine{LinePart}(geometry.VertexDmorph(DimData.P11InOCS,vectord, Self.dimtextw),DimData.P15InWCS,true,false,false,drawing)
+                                 end;
    inherited;
 end;
 constructor GDBObjDiametricDimension.initnul;

@@ -38,7 +38,7 @@ GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                    end;
 {EXPORT-}
 implementation
-uses gdbdiametricdimension,gdbrotateddimension,gdbaligneddimension,GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
+uses gdbradialdimension,gdbdiametricdimension,gdbrotateddimension,gdbaligneddimension,GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
 var
   WorkingFormatSettings:TFormatSettings;
 function GDBObjGenericDimension.FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;
@@ -69,7 +69,7 @@ begin
                                      PGDBObjAlignedDimension(ResultDim)^.DimData:=DimData;
                                      PGDBObjAlignedDimension(ResultDim)^.PDimStyle:=PDimStyle;
                                    end;
-                               else
+                               DTDiameter:
                                  begin
                                    GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjDiametricDimension));
                                    result:=ResultDim;
@@ -80,6 +80,17 @@ begin
                                    PGDBObjAlignedDimension(ResultDim)^.DimData:=DimData;
                                    PGDBObjAlignedDimension(ResultDim)^.PDimStyle:=PDimStyle;
                                  end;
+                                 else
+                                   begin
+                                     GDBGetMem({$IFDEF DEBUGBUILD}'{4C837C43-E018-4307-ADC2-DEB5134AF6D8}',{$ENDIF}GDBPointer(ResultDim),sizeof(GDBObjRadialDimension));
+                                     result:=ResultDim;
+                                     PGDBObjRadialDimension(ResultDim)^.initnul(bp.ListPos.Owner);
+                                     ResultDim.vp.Layer:=vp.Layer;
+                                     ResultDim^.Local:=local;
+                                     ResultDim^.P_insert_in_WCS:=P_insert_in_WCS;
+                                     PGDBObjRadialDimension(ResultDim)^.DimData:=DimData;
+                                     PGDBObjRadialDimension(ResultDim)^.PDimStyle:=PDimStyle;
+                                   end;
 
        end;
 end;

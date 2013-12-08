@@ -52,6 +52,7 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
 
                         function TextNeedOffset(dimdir:gdbvertex):GDBBoolean;virtual;
                         function TextAlwaysMoved:GDBBoolean;virtual;
+                        function GetCenterPoint:GDBVertex;virtual;
                    end;
 {EXPORT-}
 implementation
@@ -166,6 +167,10 @@ function GDBObjDiametricDimension.GetDimStr:GDBString;
 begin
      result:='%%C'+GetLinearDimStr(Vertexlength(DimData.P10InWCS,DimData.P15InWCS));
 end;
+function GDBObjDiametricDimension.GetCenterPoint:GDBVertex;
+begin
+     result:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
+end;
 procedure GDBObjDiametricDimension.FormatEntity(const drawing:TDrawingDef);
 var
   center:GDBVertex;
@@ -174,7 +179,7 @@ var
 begin
           ConstObjArray.cleareraseobj;
           CalcDNVectors;
-          center:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
+          center:=GetCenterPoint;
           d:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
 
           DrawCenterMarker(center,d/2,drawing);

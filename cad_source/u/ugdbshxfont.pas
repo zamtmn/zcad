@@ -887,10 +887,17 @@ begin
                               end
                           else
                               begin
-                                   //result:=@symbolinfo[ord('?')];
-                                   CharIterator:=MapChar.Min;
-                                   si:=CharIterator.value;
-                                   result:=si.PSymbolInfo;
+                                   if symbol=8709 then
+                                                      begin
+                                                           result:=GetOrReplaceSymbolInfo(216,TrianglesDataInfo);
+                                                           exit;
+                                                      end
+                                                  else
+                                                      begin
+                                                           CharIterator:=MapChar.Min;
+                                                           si:=CharIterator.value;
+                                                           result:=si.PSymbolInfo;
+                                                      end;
                               end;
      TrianglesDataInfo:=si.TrianglesDataInfo;
      if CharIterator<>nil then

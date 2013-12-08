@@ -77,6 +77,8 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
 
                 procedure DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);virtual;
                 function GetTextOffset(const drawing:TDrawingDef):GDBVertex;virtual;
+                function TextNeedOffset(dimdir:gdbvertex):GDBBoolean;virtual;
+                function TextAlwaysMoved:GDBBoolean;virtual;
                 function GetPSize:GDBDouble;virtual;
 
                 procedure CalcTextAngle;virtual;
@@ -247,6 +249,14 @@ begin
   if vectorN.y<0 then
                      Result:=-Result;
 end;
+function GDBObjDimension.TextNeedOffset(dimdir:gdbvertex):GDBBoolean;
+begin
+     result:=(textangle<>0)or(abs(dimdir.x)<eps)or(DimData.TextMoved);
+end;
+function GDBObjDimension.TextAlwaysMoved:GDBBoolean;
+begin
+     result:=false;
+end;
 
 function GDBObjDimension.GetTextOffset(const drawing:TDrawingDef):GDBVertex;
 var
@@ -266,9 +276,9 @@ begin
      {dimdir:=geometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
      dimdir:=normalizevertex(dimdir);}
      dimdir:=self.vectorN;
-     if (textangle=0)and(DimData.TextMoved) then
+     if (textangle=0)and((DimData.TextMoved)or TextAlwaysMoved) then
                         dimdir:=x_Y_zVertex;
-     if (textangle<>0)or(abs(dimdir.x)<eps)or(DimData.TextMoved)then
+     if TextNeedOffset(dimdir) then
      begin
           if PDimStyle.Text.DIMGAP>0 then
                                          l:=PDimStyle.Text.DIMGAP+{PDimStyle.Text.DIMTXT}dimtexth/2
@@ -319,7 +329,7 @@ begin
       dimtextw:=dimtextw-2*PDimStyle.Text.DIMGAP;
       dimtexth:=dimtexth-2*PDimStyle.Text.DIMGAP;
   end;
-  if self.DimData.textmoved then
+  if (self.DimData.textmoved)or TextAlwaysMoved then
                    begin
                         p:=vertexadd(p,TextOffset);
                         if self.PDimStyle.Placing.DIMTMOVE=DTMCreateLeader then

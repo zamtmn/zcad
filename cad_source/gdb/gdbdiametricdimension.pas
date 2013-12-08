@@ -49,6 +49,9 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         procedure DrawCenterMarker(cp:GDBVertex;r:GDBDouble;const drawing:TDrawingDef);
                         procedure CalcDNVectors;virtual;
+
+                        function TextNeedOffset(dimdir:gdbvertex):GDBBoolean;virtual;
+                        function TextAlwaysMoved:GDBBoolean;virtual;
                    end;
 {EXPORT-}
 implementation
@@ -189,6 +192,14 @@ begin
                                       DrawDimensionLine{LinePart}(geometry.VertexDmorph(DimData.P11InOCS,vectord, Self.dimtextw),DimData.P15InWCS,true,false,false,drawing)
                                  end;
    inherited;
+end;
+function GDBObjDiametricDimension.TextNeedOffset(dimdir:gdbvertex):GDBBoolean;
+begin
+   result:=true;
+end;
+function GDBObjDiametricDimension.TextAlwaysMoved:GDBBoolean;
+begin
+   result:=true;
 end;
 constructor GDBObjDiametricDimension.initnul;
 begin

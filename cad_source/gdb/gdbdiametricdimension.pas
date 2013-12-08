@@ -53,6 +53,8 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         function TextNeedOffset(dimdir:gdbvertex):GDBBoolean;virtual;
                         function TextAlwaysMoved:GDBBoolean;virtual;
                         function GetCenterPoint:GDBVertex;virtual;
+                        procedure CalcTextInside;virtual;
+                        function GetRadius:GDBDouble;virtual;
                    end;
 {EXPORT-}
 implementation
@@ -171,20 +173,24 @@ function GDBObjDiametricDimension.GetCenterPoint:GDBVertex;
 begin
      result:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
 end;
+function GDBObjDiametricDimension.GetRadius:GDBDouble;
+begin
+     result:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS)/2;
+end;
 procedure GDBObjDiametricDimension.FormatEntity(const drawing:TDrawingDef);
 var
   center:GDBVertex;
-  d:double;
   pl:pgdbobjline;
 begin
           ConstObjArray.cleareraseobj;
           CalcDNVectors;
           center:=GetCenterPoint;
-          d:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
 
-          DrawCenterMarker(center,d/2,drawing);
-          //DrawDimensionText(DimData.P11InOCS,drawing);
           CalcTextParam(DimData.P10InWCS,DimData.P15InWCS);
+          if not self.TextInside then
+            DrawCenterMarker(center,GetRadius,drawing);
+          //DrawDimensionText(DimData.P11InOCS,drawing);
+
           DrawDimensionText(DimData.P11InOCS,drawing);
           if (self.TextInside)or(self.TextAngle=0) then
                                  begin
@@ -201,6 +207,13 @@ end;
 function GDBObjDiametricDimension.TextNeedOffset(dimdir:gdbvertex):GDBBoolean;
 begin
    result:=true;
+end;
+procedure GDBObjDiametricDimension.CalcTextInside;
+begin
+     if SqrVertexlength(DimData.P15InWCS,DimData.P10InWCS)>SqrVertexlength(DimData.P10InWCS,DimData.P11InOCS) then
+                                                                                                                  TextInside:=true
+                                                                                                              else
+                                                                                                                  TextInside:=false;
 end;
 function GDBObjDiametricDimension.TextAlwaysMoved:GDBBoolean;
 begin

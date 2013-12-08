@@ -46,10 +46,15 @@ GDBObjRadialDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDiametricDimen
                         function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
+                        function GetRadius:GDBDouble;virtual;
                    end;
 {EXPORT-}
 implementation
 uses log;
+function GDBObjRadialDimension.GetRadius:GDBDouble;
+begin
+     result:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
+end;
 function GDBObjRadialDimension.P10ChangeTo(tv:GDBVertex):GDBVertex;
 var
   dirv,center:GDBVertex;
@@ -81,15 +86,12 @@ var
   dirv,center:GDBVertex;
   r:double;
 begin
-
      r:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
      dirv:=vertexsub(tv,DimData.P10InWCS);
      dirv:=normalizevertex(dirv);
 
      DimData.P15InWCS:=VertexDmorph(DimData.P10InWCS,dirv,r);
-     //r:=Vertexlength(DimData.P10InWCS,DimData.P11InOCS);
-     result:=tv;//VertexDmorph(DimData.P10InWCS,dirv,r);
-
+     result:=tv;
 end;
 
 function GDBObjRadialDimension.Clone;

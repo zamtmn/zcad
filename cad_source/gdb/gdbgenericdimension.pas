@@ -90,6 +90,7 @@ begin
                                      ResultDim^.P_insert_in_WCS:=P_insert_in_WCS;
                                      PGDBObjRadialDimension(ResultDim)^.DimData:=DimData;
                                      PGDBObjRadialDimension(ResultDim)^.PDimStyle:=PDimStyle;
+                                     PGDBObjRadialDimension(ResultDim)^.P15ChangeTo(PGDBObjRadialDimension(ResultDim)^.DimData.P15InWCS);
                                    end;
 
        end;

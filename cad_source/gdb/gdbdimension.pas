@@ -83,6 +83,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
 
                 procedure CalcTextAngle;virtual;
                 procedure CalcTextParam(dlStart,dlEnd:Gdbvertex);virtual;
+                procedure CalcTextInside;virtual;
                 procedure DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;const drawing:TDrawingDef);
                 end;
 {EXPORT-}
@@ -199,7 +200,15 @@ begin
         end;
   end;{case}
 end;
-
+procedure GDBObjDimension.CalcTextInside;
+begin
+  if (TextTParam>0)and(TextTParam<1) then
+                                         begin
+                                              TextInside:=true;
+                                         end
+                                            else
+                                                TextInside:=False;;
+end;
 procedure GDBObjDimension.CalcTextParam;
 var
   ptext:PGDBObjMText;
@@ -209,12 +218,7 @@ begin
 
   ip:=geometry.intercept3dmy2({DimData.P13InWCS,DimData.P14InWCS}dlStart,dlEnd,DimData.P11InOCS,vertexadd(DimData.P11InOCS,self.vectorN));
   TextTParam:=ip.t1;//GettFromLinePoint(DimData.P11InOCS,DimData.P13InWCS,DimData.P14InWCS);
-  if (TextTParam>0)and(TextTParam<1) then
-                                         begin
-                                              TextInside:=true;
-                                         end
-                                            else
-                                                TextInside:=False;
+  CalcTextInside;
   ip:=geometry.intercept3dmy2({DimData.P13InWCS,DimData.P14InWCS}dlStart,dlEnd,DimData.P11InOCS,vertexadd(DimData.P11InOCS,self.vectorN));
   if TextInside then
                     begin

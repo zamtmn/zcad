@@ -55,10 +55,30 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         function GetCenterPoint:GDBVertex;virtual;
                         procedure CalcTextInside;virtual;
                         function GetRadius:GDBDouble;virtual;
+                        function GetDIMTMOVE:TDimTextMove;virtual;
+
+                        procedure SaveToDXF(var handle:TDWGHandle;var outhandle:GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                    end;
 {EXPORT-}
 implementation
 uses log;
+procedure GDBObjDiametricDimension.SaveToDXF;
+begin
+  SaveToDXFObjPrefix(handle,outhandle,'DIMENSION','AcDbDimension');
+  dxfvertexout(outhandle,10,DimData.P10InWCS);
+  dxfvertexout(outhandle,11,DimData.P11InOCS);
+  {if DimData.TextMoved then}
+                           dxfGDBIntegerout(outhandle,70,3+128)
+                       {else
+                           dxfGDBIntegerout(outhandle,70,3);};
+  dxfGDBStringout(outhandle,3,PDimStyle^.Name);
+  dxfGDBStringout(outhandle,100,'AcDbDiametricDimension');
+  dxfvertexout(outhandle,15,DimData.P15InWCS)
+end;
+function GDBObjDiametricDimension.GetDIMTMOVE:TDimTextMove;
+begin
+     result:=DTMCreateLeader;
+end;
 procedure GDBObjDiametricDimension.CalcDNVectors;
 begin
      vectorD:=vertexsub(DimData.P15InWCS,DimData.P10InWCS);

@@ -289,6 +289,8 @@ MainMenuItem Dimension;
   {
     action ACN_DIMALIGNED
     action ACN_DIMLINEAR
+    action ACN_DIMRADIAL
+    action ACN_DIMDIAMETRIC
   }
 MainMenuItem Modify;
   {

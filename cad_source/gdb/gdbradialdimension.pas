@@ -47,10 +47,26 @@ GDBObjRadialDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDiametricDimen
                         function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                         function GetRadius:GDBDouble;virtual;
+
+                        procedure SaveToDXF(var handle:TDWGHandle;var outhandle:GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;
                    end;
 {EXPORT-}
 implementation
 uses log;
+procedure GDBObjRadialDimension.SaveToDXF;
+begin
+  SaveToDXFObjPrefix(handle,outhandle,'DIMENSION','AcDbDimension');
+  dxfvertexout(outhandle,10,DimData.P10InWCS);
+  dxfvertexout(outhandle,11,DimData.P11InOCS);
+  {if DimData.TextMoved then}
+                           dxfGDBIntegerout(outhandle,70,4+128)
+                       {else
+                           dxfGDBIntegerout(outhandle,70,4);};
+  dxfGDBStringout(outhandle,3,PDimStyle^.Name);
+  dxfGDBStringout(outhandle,100,'AcDbRadialDimension');
+  dxfvertexout(outhandle,15,DimData.P15InWCS)
+end;
+
 function GDBObjRadialDimension.GetRadius:GDBDouble;
 begin
      result:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);

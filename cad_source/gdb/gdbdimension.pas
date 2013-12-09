@@ -85,6 +85,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 procedure CalcTextParam(dlStart,dlEnd:Gdbvertex);virtual;
                 procedure CalcTextInside;virtual;
                 procedure DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;const drawing:TDrawingDef);
+                function GetDIMTMOVE:TDimTextMove;virtual;
                 end;
 {EXPORT-}
 var
@@ -305,6 +306,10 @@ begin
         else
             result:=nulvertex;
 end;
+function GDBObjDimension.GetDIMTMOVE:TDimTextMove;
+begin
+     result:=PDimStyle.Placing.DIMTMOVE;
+end;
 
 procedure GDBObjDimension.DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
 var
@@ -336,7 +341,7 @@ begin
   if (self.DimData.textmoved)or TextAlwaysMoved then
                    begin
                         p:=vertexadd(p,TextOffset);
-                        if self.PDimStyle.Placing.DIMTMOVE=DTMCreateLeader then
+                        if GetDIMTMOVE=DTMCreateLeader then
                               begin
                                    p:=VertexDmorph(p,VectorT,GetPSize/2);
                               end;

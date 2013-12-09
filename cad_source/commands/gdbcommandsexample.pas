@@ -29,6 +29,8 @@ uses
   gdbaligneddimension,//unit describes aligned dimensional entity
                       //модуль описывающий выровненный размерный примитив
   gdbrotateddimension,
+  gdbdiametricdimension,
+  gdbradialdimension,
   GDBLine,            //unit describes line entity
                       //модуль описывающий примитив линия
   GDBArc,
@@ -53,6 +55,10 @@ uses
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   log;                //log system
                       //система логирования
+const
+     rsSpecifyfirstPoint='Specify first point:';
+     rsSpecifySecondPoint='Specify second point:';
+     rsSpecifyThirdPoint='Specify third point:';
 type
     PT3PointPentity=^T3PointPentity;
     T3PointPentity=record
@@ -233,6 +239,27 @@ begin
     GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);//restore editor mode
                                                     //восстанавливаем сохраненный режим редактора
 end;
+function GetInteractiveLine(prompt1,prompt2:GDBString;var p1,p2:GDBVertex):GDBBoolean;
+var
+    pline:PGDBObjLine;
+    savemode:GDBByte;
+begin
+    savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,
+                                                    MGetSelectionFrame or MGetSelectObject);
+    result:=false;
+    if commandmanager.get3dpoint(prompt1,p1) then
+    begin
+         pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+         pline^.CoordInOCS.lBegin:=p1;
+         InteractiveLineEndManipulator(pline,p1,false);
+      if commandmanager.Get3DPointInteractive(prompt2,p2,@InteractiveLineEndManipulator,pline) then
+      begin
+           result:=true;
+      end;
+    end;
+    gdb.GetCurrentDWG^.FreeConstructionObjects;
+    GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);
+end;
 
 function DrawRotatedDim_com(operands:TCommandOperands):TCommandResult;
 var
@@ -243,45 +270,118 @@ var
 begin
     savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,
                                                     MGetSelectionFrame or MGetSelectObject);
-    if commandmanager.get3dpoint('Specify first point:',p1) then
+    if GetInteractiveLine(rsSpecifyfirstPoint,rsSpecifySecondPoint,p1,p2) then
     begin
-         pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
-         pline^.CoordInOCS.lBegin:=p1;
-         InteractiveLineEndManipulator(pline,p1,false);
-      if commandmanager.Get3DPointInteractive('Specify second point:',p2,@InteractiveLineEndManipulator,pline) then
-      begin
-           gdb.GetCurrentDWG^.FreeConstructionObjects;
-           pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRotatedDimensionID,gdb.GetCurrentROOT));
-           pd^.DimData.P13InWCS:=p1;
-           pd^.DimData.P14InWCS:=p2;
-           InteractiveRDimManipulator(pd,p2,false);
-        if commandmanager.Get3DPointInteractive('Specify third point:',p3,@InteractiveRDimManipulator,pd) then
-          begin
-               vd:=pd^.vectorD;
-               vn:=pd^.vectorN;
-               gdb.GetCurrentDWG^.FreeConstructionObjects;
-               pd := CreateObjFree(GDBRotatedDimensionID);
-               pd^.initnul(gdb.GetCurrentROOT);
-               GDBObjSetEntityCurrentProp(pd);
+         pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRotatedDimensionID,gdb.GetCurrentROOT));
+         pd^.DimData.P13InWCS:=p1;
+         pd^.DimData.P14InWCS:=p2;
+         InteractiveRDimManipulator(pd,p2,false);
+         if commandmanager.Get3DPointInteractive(rsSpecifyThirdPoint,p3,@InteractiveRDimManipulator,pd) then
+         begin
+              vd:=pd^.vectorD;
+              vn:=pd^.vectorN;
+              gdb.GetCurrentDWG^.FreeConstructionObjects;
+              pd := CreateObjFree(GDBRotatedDimensionID);
+              pd^.initnul(gdb.GetCurrentROOT);
+              GDBObjSetEntityCurrentProp(pd);
 
-               pd^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
-               pd^.DimData.P13InWCS:=p1;
-               pd^.DimData.P14InWCS:=p2;
-               pd^.DimData.P10InWCS:=p3;
+              pd^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
+              pd^.DimData.P13InWCS:=p1;
+              pd^.DimData.P14InWCS:=p2;
+              pd^.DimData.P10InWCS:=p3;
 
-               pd^.vectorD:=vd;
-               pd^.vectorN:=vn;
-               InteractiveRDimManipulator(pd,p3,false);
+              pd^.vectorD:=vd;
+              pd^.vectorN:=vn;
+              InteractiveRDimManipulator(pd,p3,false);
 
-               pd^.FormatEntity(gdb.GetCurrentDWG^);
-
-               gdb.AddEntToCurrentDrawingWithUndo(pd);
-          end;
-      end;
+              pd^.FormatEntity(gdb.GetCurrentDWG^);
+              gdb.AddEntToCurrentDrawingWithUndo(pd);
+         end;
     end;
     result:=cmd_ok;
     GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);
 end;
+
+procedure InteractiveDDimManipulator(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
+begin
+    GDBObjSetEntityCurrentProp(PGDBObjDiametricDimension(PInteractiveData));
+    PGDBObjDiametricDimension(PInteractiveData)^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
+
+    PGDBObjDiametricDimension(PInteractiveData)^.DimData.P11InOCS:=Point;
+    PGDBObjDiametricDimension(PInteractiveData)^.DimData.P11InOCS:=PGDBObjRotatedDimension(PInteractiveData)^.P11ChangeTo(Point);
+
+    PGDBObjDiametricDimension(PInteractiveData)^.FormatEntity(gdb.GetCurrentDWG^);
+end;
+
+function DrawDiametricDim_com(operands:TCommandOperands):TCommandResult;
+var
+    pd:PGDBObjDiametricDimension;
+    pline:PGDBObjLine;
+    p1,p2,p3,vd,vn:gdbvertex;
+    savemode:GDBByte;
+begin
+    savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,
+                                                    MGetSelectionFrame or MGetSelectObject);
+    if GetInteractiveLine(rsSpecifyfirstPoint,rsSpecifySecondPoint,p1,p2) then
+    begin
+         pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBDiametricDimensionID,gdb.GetCurrentROOT));
+         pd^.DimData.P10InWCS:=p1;
+         pd^.DimData.P15InWCS:=p2;
+         InteractiveDDimManipulator(pd,p2,false);
+         if commandmanager.Get3DPointInteractive(rsSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd) then
+         begin
+              gdb.GetCurrentDWG^.FreeConstructionObjects;
+              pd := CreateObjFree(GDBDiametricDimensionID);
+              pd^.initnul(gdb.GetCurrentROOT);
+
+              pd^.DimData.P10InWCS:=p1;
+              pd^.DimData.P15InWCS:=p2;
+              pd^.DimData.P11InOCS:=p3;
+
+              InteractiveDDimManipulator(pd,p3,false);
+
+              pd^.FormatEntity(gdb.GetCurrentDWG^);
+              gdb.AddEntToCurrentDrawingWithUndo(pd);
+         end;
+    end;
+    result:=cmd_ok;
+    GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);
+end;
+function DrawRadialDim_com(operands:TCommandOperands):TCommandResult;
+var
+    pd:PGDBObjRadialDimension;
+    pline:PGDBObjLine;
+    p1,p2,p3,vd,vn:gdbvertex;
+    savemode:GDBByte;
+begin
+    savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,
+                                                    MGetSelectionFrame or MGetSelectObject);
+    if GetInteractiveLine(rsSpecifyfirstPoint,rsSpecifySecondPoint,p1,p2) then
+    begin
+         pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRadialDimensionID,gdb.GetCurrentROOT));
+         pd^.DimData.P10InWCS:=p1;
+         pd^.DimData.P15InWCS:=p2;
+         InteractiveDDimManipulator(pd,p2,false);
+         if commandmanager.Get3DPointInteractive(rsSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd) then
+         begin
+              gdb.GetCurrentDWG^.FreeConstructionObjects;
+              pd := CreateObjFree(GDBRadialDimensionID);
+              pd^.initnul(gdb.GetCurrentROOT);
+
+              pd^.DimData.P10InWCS:=p1;
+              pd^.DimData.P15InWCS:=p2;
+              pd^.DimData.P11InOCS:=p3;
+
+              InteractiveDDimManipulator(pd,p3,false);
+
+              pd^.FormatEntity(gdb.GetCurrentDWG^);
+              gdb.AddEntToCurrentDrawingWithUndo(pd);
+         end;
+    end;
+    result:=cmd_ok;
+    GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);
+end;
+
 procedure InteractiveArcManipulator(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
 var
     PointData:tarcrtmodify;
@@ -465,6 +565,9 @@ initialization
                                                                              //для запуска требует наличия открытого чертежа
                                                                              //т.е. при наборе в комстроке DimAligned выполнится DrawAlignedDim_com
      CreateCommandFastObjectPlugin(@DrawRotatedDim_com,'DimLinear',CADWG,0);
+     CreateCommandFastObjectPlugin(@DrawDiametricDim_com,'DimDiameter',CADWG,0);
+     CreateCommandFastObjectPlugin(@DrawRadialDim_com,'DimRadius',CADWG,0);
+
      CreateCommandFastObjectPlugin(@DrawArc_com,'Arc',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawCircle_com,'Circle',CADWG,0);
 

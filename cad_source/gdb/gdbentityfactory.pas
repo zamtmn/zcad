@@ -21,7 +21,7 @@ unit gdbentityfactory;
 
 
 interface
-uses gdbrotateddimension,gdbaligneddimension,gdbgenericdimension,memman,gdbobjectsconstdef,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity,GDBCable,GDBDevice,
+uses gdbradialdimension,gdbdiametricdimension,gdbrotateddimension,gdbaligneddimension,gdbgenericdimension,memman,gdbobjectsconstdef,zcadsysvars,GDBase,GDBasetypes,GDBGenericSubEntry,gdbEntity,GDBCable,GDBDevice,
      GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMText,GDBLine,
      GDBPolyLine,GDBLWPolyLine,gdbellipse,GDB3DFace,GDBSolid,gdbspline;
 function CreateInitObjFree(t:GDBByte;owner:PGDBObjGenericSubEntry):PGDBObjEntity;export;
@@ -116,6 +116,16 @@ begin
         PGDBObjRotatedDimension(temp).initnul(owner);
         PGDBObjRotatedDimension(temp).bp.ListPos.Owner:=owner;
       end;
+    GDBDiametricDimensionID: begin
+        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Spline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjDiametricDimension));
+        PGDBObjDiametricDimension(temp).initnul(owner);
+        PGDBObjDiametricDimension(temp).bp.ListPos.Owner:=owner;
+      end;
+    GDBRadialDimensionID: begin
+        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Spline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjRadialDimension));
+        PGDBObjRadialDimension(temp).initnul(owner);
+        PGDBObjRadialDimension(temp).bp.ListPos.Owner:=owner;
+      end;
   end;
   result := temp;
 end;
@@ -168,6 +178,12 @@ begin
       end;
     GDBRotatedDimensionID: begin
         GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Spline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjRotatedDimension));
+      end;
+    GDBDiametricDimensionID: begin
+        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Spline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjDiametricDimension));
+      end;
+    GDBRadialDimensionID: begin
+        GDBGetMem({$IFDEF DEBUGBUILD}'{CreateInitObjFree.Spline}',{$ENDIF}GDBPointer(temp), sizeof(GDBObjRadialDimension));
       end;
   end;
   result := temp;

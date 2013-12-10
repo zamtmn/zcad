@@ -19,7 +19,7 @@
 unit commandline;
 {$INCLUDE def.inc}
 interface
-uses UDMenuWnd,uinfoform,zcadstrconsts,{umytreenode,}sysinfo,strproc,UGDBOpenArrayOfPointer,
+uses gdbobjectsconstdef,UDMenuWnd,uinfoform,zcadstrconsts,{umytreenode,}sysinfo,strproc,UGDBOpenArrayOfPointer,
      gdbasetypes,commandlinedef, sysutils,gdbase,oglwindowdef,
      memman,shared,log,varmandef,varman,ugdbdrawingdef,zcadinterface;
 const
@@ -68,6 +68,7 @@ type
                           function CurrentCommandNotUseCommandLine:GDBBoolean;
                           procedure PrepairVarStack;
                           function Get3DPoint(prompt:GDBString;out p:GDBVertex):GDBBoolean;
+                          function GetEntity(prompt:GDBString;out p:GDBPointer):GDBBoolean;
                           function Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:GDBPointer):GDBBoolean;
                           function EndGetPoint(newmode:TGetPointMode):GDBBoolean;
                     end;
@@ -83,7 +84,7 @@ function GDBcommandmanager.EndGetPoint(newmode:TGetPointMode):GDBBoolean;
 begin
   if pcommandrunning<>nil then
   begin
-  if pcommandrunning^.IData.GetPointMode=TGPWait then
+  if (pcommandrunning^.IData.GetPointMode=TGPWait)or(pcommandrunning^.IData.GetPointMode=TGPWaitEnt) then
                               begin
                                   pcommandrunning^.IData.GetPointMode:=newmode;
                                   result:=true;
@@ -95,7 +96,14 @@ begin
                               result:=false;
 end;
 function GDBcommandmanager.Get3DPointInteractive(prompt:GDBString;out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;const PInteractiveData:GDBPointer):GDBBoolean;
+var
+   savemode:GDBByte;//variable to store the current mode of the editor
+                     //переменная для сохранения текущего режима редактора
 begin
+  savemode:=PTSimpleDrawing(pcommandrunning.pdwg)^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,//set mode point of the mouse
+                                                                                                     //устанавливаем режим указания точек мышью
+                                                                      MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode
+                                                                                                              //сбрасываем режим выбора примитивов мышью
   shared.HistoryOutStr(prompt);
   pcommandrunning^.IData.GetPointMode:=TGPWait;
   pcommandrunning^.IData.PInteractiveData:=PInteractiveData;
@@ -115,11 +123,41 @@ begin
                                                                                  result:=false;
                                                                                  //shared.HistoryOutStr('cancel');
                                                                                  end;
+  PTSimpleDrawing(pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);//restore editor mode
+                                                                      //восстанавливаем сохраненный режим редактора
 end;
 
 function GDBcommandmanager.Get3DPoint(prompt:GDBString;out p:GDBVertex):GDBBoolean;
 begin
   result:=Get3DPointInteractive(prompt,p,nil,nil);
+end;
+function GDBcommandmanager.GetEntity(prompt:GDBString;out p:GDBPointer):GDBBoolean;
+var
+   savemode:GDBByte;
+begin
+  savemode:=PTSimpleDrawing(pcommandrunning.pdwg)^.DefMouseEditorMode(MGetSelectObject,
+                                                                      MGet3DPoint or MGet3DPointWoOP or MGetSelectionFrame or MGetControlpoint);
+  shared.HistoryOutStr(prompt);
+  pcommandrunning^.IData.GetPointMode:=TGPWaitEnt;
+  pcommandrunning^.IData.PInteractiveData:=nil;
+  pcommandrunning^.IData.PInteractiveProc:=nil;
+  while (pcommandrunning^.IData.GetPointMode=TGPWaitEnt)and(not Application.Terminated) do
+  begin
+       Application.HandleMessage;
+       //Application.ProcessMessages;
+  end;
+  if (pcommandrunning^.IData.GetPointMode=TGPEnt)and(not Application.Terminated) then
+                                                                                 begin
+                                                                                 p:=PTSimpleDrawing(pcommandrunning.pdwg)^.OGLwindow1.param.SelDesc.LastSelectedObject;
+                                                                                 result:=true;
+                                                                                 end
+                                                                             else
+                                                                                 begin
+                                                                                 result:=false;
+                                                                                 //shared.HistoryOutStr('cancel');
+                                                                                 end;
+  PTSimpleDrawing(pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);//restore editor mode
+                                                                      //восстанавливаем сохраненный режим редактора
 end;
 
 function GDBcommandmanager.GetValueHeap:GDBInteger;

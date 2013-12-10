@@ -23,7 +23,7 @@ interface
 
 uses
 
-   uinfoform,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBLayerArray,zcadstrconsts,{ucxmenumgr,}
+   commandlinedef,uinfoform,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBLayerArray,zcadstrconsts,{ucxmenumgr,}
   {$IFDEF LCLGTK2}
   //x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
@@ -2140,7 +2140,120 @@ procedure TOGLWnd.MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integ
 var key: GDBByte;
     NeedRedraw:boolean;
     //menu:TmyPopupMenu;
+    FreeClick:boolean;
+
+  function ProcessControlpoint:boolean;
+  begin
+     begin
+      result:=false;
+      if param.gluetocp then
+      begin
+        PDWG.GetSelObjArray.selectcurrentcontrolpoint(key,param.md.mouseglue.x,param.md.mouseglue.y,param.height);
+        needredraw:=true;
+        result:=true;
+        if (key and MZW_SHIFT) = 0 then
+        begin
+          param.startgluepoint:=param.nearesttcontrolpoint.pcontrolpoint;
+          commandmanager.ExecuteCommandSilent('OnDrawingEd',pdwg,@param);
+          //param.lastpoint:=param.nearesttcontrolpoint.pcontrolpoint^.worldcoord;
+          //sendmousecoord{wop}(key);  bnmbnm
+          if commandmanager.pcommandrunning <> nil then
+          begin
+            if key=MZW_LBUTTON then
+                                   param.lastpoint:=param.nearesttcontrolpoint.pcontrolpoint^.worldcoord;
+            commandmanager.pcommandrunning^.MouseMoveCallback(param.nearesttcontrolpoint.pcontrolpoint^.worldcoord,
+                                                              param.md.mouseglue, key,nil)
+          end;
+        end;
+      end;
+    end;
+  end;
+
+  function ProcessEntSelect:boolean;
+  begin
+    result:=false;
+    begin
+      getonmouseobjectbytree(PDWG.GetCurrentROOT.ObjArray.ObjTree);
+      //getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
+      if (key and MZW_CONTROL)<>0 then
+      begin
+           commandmanager.ExecuteCommandSilent('SelectOnMouseObjects',pdwg,@param);
+           result:=true;
+      end
+      else
+      begin
+      {//Выделение всех объектов под мышью
+      if gdb.GetCurrentDWG.OnMouseObj.Count >0 then
+      begin
+           pobj:=gdb.GetCurrentDWG.OnMouseObj.beginiterate(ir);
+           if pobj<>nil then
+           repeat
+                 pobj^.select;
+                 param.SelDesc.LastSelectedObject := pobj;
+                 pobj:=gdb.GetCurrentDWG.OnMouseObj.iterate(ir);
+           until pobj=nil;
+        addoneobject;
+        SetObjInsp;
+      end}
+
+      //Выделение одного объекта под мышью
+      if param.SelDesc.OnMouseObject <> nil then
+      begin
+           result:=true;
+           if (key and MZW_SHIFT)=0
+           then
+               begin
+                    if sysvar.DSGN.DSGN_SelNew^ then
+                    begin
+                          pdwg.GetCurrentROOT.ObjArray.DeSelect(pdwg.GetSelObjArray,param.SelDesc.Selectedobjcount);
+                          param.SelDesc.LastSelectedObject := nil;
+                          //param.SelDesc.OnMouseObject := nil;
+                          param.seldesc.Selectedobjcount:=0;
+                          PDWG^.GetSelObjArray.clearallobjects;
+                    end;
+                    if commandmanager.pcommandrunning<>nil then
+                    if commandmanager.pcommandrunning^.IData.GetPointMode<>TGPWaitEnt then
+                    begin
+                    if PGDBObjEntity(param.SelDesc.OnMouseObject)^.select(PDWG^.GetSelObjArray,param.SelDesc.Selectedobjcount) then
+                      begin
+                            if assigned(addoneobjectproc) then addoneobjectproc;
+                            SetObjInsp;
+                            if assigned(updatevisibleproc) then updatevisibleproc;
+                      end;
+                    end;
+                    param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
+               end
+           else
+               begin
+                    PGDBObjEntity(param.SelDesc.OnMouseObject)^.DeSelect(PDWG^.GetSelObjArray,param.SelDesc.Selectedobjcount);
+                    param.SelDesc.LastSelectedObject := nil;
+                    //addoneobject;
+                    SetObjInsp;
+                    if assigned(updatevisibleproc) then updatevisibleproc;
+               end;
+               //param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
+               if commandmanager.pcommandrunning<>nil then
+               if commandmanager.pcommandrunning.IData.GetPointMode=TGPWaitEnt then
+               if param.SelDesc.LastSelectedObject<>nil then
+               begin
+                 commandmanager.pcommandrunning^.IData.GetPointMode:=TGPEnt;
+               end;
+           NeedRedraw:=true;
+      end
+
+      else if ((param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then
+      begin
+        result:=true;
+      { TODO : Добавить возможность выбора объектов без секрамки во время выполнения команды }
+        commandmanager.ExecuteCommandSilent('SelectFrame',pdwg,@param);
+        sendmousecoord(MZW_LBUTTON);
+      end;
+    end;
+    end;
+  end;
+
 begin
+  FreeClick:=true;
   if assigned(MainmouseDown)then
   if mainmousedown then
                        exit;
@@ -2212,112 +2325,30 @@ begin
   param.md.mouse.x := x;
   param.md.mouse.y := y;
   if (ssLeft in shift) then
-    if commandmanager.pcommandrunning = nil then
+    //---------------------------------------------------------if commandmanager.pcommandrunning = nil then
     begin
       if (param.md.mode and MGetControlpoint) <> 0 then
+                                                       FreeClick:=not ProcessControlpoint;
 
-        if param.gluetocp then
-        begin
-          PDWG.GetSelObjArray.selectcurrentcontrolpoint(key,param.md.mouseglue.x,param.md.mouseglue.y,param.height);
-          needredraw:=true;
-          if (key and MZW_SHIFT) = 0 then
-          begin
-            param.startgluepoint:=param.nearesttcontrolpoint.pcontrolpoint;
-            commandmanager.ExecuteCommandSilent('OnDrawingEd',pdwg,@param);
-            //param.lastpoint:=param.nearesttcontrolpoint.pcontrolpoint^.worldcoord;
-            //sendmousecoord{wop}(key);  bnmbnm
-            if commandmanager.pcommandrunning <> nil then
-            begin
-              if key=MZW_LBUTTON then
-                                     param.lastpoint:=param.nearesttcontrolpoint.pcontrolpoint^.worldcoord;
-              commandmanager.pcommandrunning^.MouseMoveCallback(param.nearesttcontrolpoint.pcontrolpoint^.worldcoord,
-                                                                param.md.mouseglue, key,nil)
-            end;
-          end;
-        end
-
-        else
-        begin
-          getonmouseobjectbytree(PDWG.GetCurrentROOT.ObjArray.ObjTree);
-          //getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
-          if (key and MZW_CONTROL)<>0 then
-          begin
-               commandmanager.ExecuteCommandSilent('SelectOnMouseObjects',pdwg,@param);
-          end
-          else
-          begin
-          param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
-          {//Выделение всех объектов под мышью
-          if gdb.GetCurrentDWG.OnMouseObj.Count >0 then
-          begin
-               pobj:=gdb.GetCurrentDWG.OnMouseObj.beginiterate(ir);
-               if pobj<>nil then
-               repeat
-                     pobj^.select;
-                     param.SelDesc.LastSelectedObject := pobj;
-                     pobj:=gdb.GetCurrentDWG.OnMouseObj.iterate(ir);
-               until pobj=nil;
-            addoneobject;
-            SetObjInsp;
-          end}
-
-          //Выделение одного объекта под мышью
-          if param.SelDesc.OnMouseObject <> nil then
-          begin
-               if (key and MZW_SHIFT)=0
-               then
-                   begin
-
-                        if sysvar.DSGN.DSGN_SelNew^ then
-                        begin
-                              pdwg.GetCurrentROOT.ObjArray.DeSelect(pdwg.GetSelObjArray,param.SelDesc.Selectedobjcount);
-                              param.SelDesc.LastSelectedObject := nil;
-                              //param.SelDesc.OnMouseObject := nil;
-                              param.seldesc.Selectedobjcount:=0;
-                              PDWG^.GetSelObjArray.clearallobjects;
-                        end;
-
-                        if PGDBObjEntity(param.SelDesc.OnMouseObject)^.select(PDWG^.GetSelObjArray,param.SelDesc.Selectedobjcount) then
-                          begin
-                        param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
-                        if assigned(addoneobjectproc) then addoneobjectproc;
-                        SetObjInsp;
-                        if assigned(updatevisibleproc) then updatevisibleproc;
-                          end;
-                   end
-               else
-                   begin
-                        PGDBObjEntity(param.SelDesc.OnMouseObject)^.DeSelect(PDWG^.GetSelObjArray,param.SelDesc.Selectedobjcount);
-                        param.SelDesc.LastSelectedObject := nil;
-                        //addoneobject;
-                        SetObjInsp;
-                        if assigned(updatevisibleproc) then updatevisibleproc;
-                   end;
-               NeedRedraw:=true;
-          end
-
-          else if ((param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then
-          begin
-          { TODO : Добавить возможность выбора объектов без секрамки во время выполнения команды }
-            commandmanager.ExecuteCommandSilent('SelectFrame',pdwg,@param);
-            sendmousecoord(MZW_LBUTTON);
-          end;
-        end;
-        end;
+        {else} if FreeClick and((param.md.mode and MGetSelectObject) <> 0) then
+        FreeClick:=not ProcessEntSelect;
         needredraw:=true;
-    end
-    else
+    end;
+    //---------------------------------------------------------else
     begin
-      if (param.md.mode and (MGet3DPoint or MGet3DPointWoOP)) <> 0 then
+      if FreeClick and((param.md.mode and (MGet3DPoint or MGet3DPointWoOP)) <> 0) then
       begin
+        //if commandmanager.pcommandrunning <> nil then
+        //                                             FreeClick:=false;
         sendmousecoordwop(key);
         //GDBFreeMem(GDB.PObjPropArray^.propertyarray[0].pobject);
-      end
-      else if ((param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then
+      end;
+       {if FreeClick and(((param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0)) then
           begin
             commandmanager.ExecuteCommandSilent('SelectFrame',pdwg,@param);
             sendmousecoord(MZW_LBUTTON);
-          end;
+            FreeClick:=false;
+          end;}
       needredraw:=true;
     end;
     If assigned(UpdateObjInspProc)then
@@ -2528,7 +2559,7 @@ procedure TOGLWnd.showcursor;
     _NotUseLCS:=NotUseLCS;
     NotUseLCS:=true;
     if param.md.mousein then
-    if param.md.mode <> MGetSelectObject then
+    if ((param.md.mode)and(MGet3DPoint or MGet3DPointWoOP or MGetControlpoint))<> 0 then
     begin
     //sv1:=VertexAdd(param.md.mouse3dcoord,gdb.GetCurrentDWG.pcamera.look);
     //sv1:=gdb.GetCurrentDWG.pcamera.point;

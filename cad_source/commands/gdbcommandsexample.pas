@@ -176,13 +176,7 @@ var
                       //pointer to temporary line
     p1,p2,p3:gdbvertex;//3 points to be obtained from the user
                        //3 точки которые будут получены от пользователя
-    savemode:GDBByte;//variable to store the current mode of the editor
-                     //переменная для сохранения текущего режима редактора
 begin
-    savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,         //set mode point of the mouse
-                                                                                            //устанавливаем режим указания точек мышью
-                                                    MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode
-                                                                                            //сбрасываем режим выбора примитивов мышью
     if commandmanager.get3dpoint('Specify first point:',p1) then  //try to get from the user first point
                                                                   //пытаемся получить от пользователя первую точку
     begin
@@ -236,16 +230,11 @@ begin
     end;
     result:=cmd_ok;//All Ok
                    //команда завершилась, говорим что всё заебись
-    GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);//restore editor mode
-                                                    //восстанавливаем сохраненный режим редактора
 end;
 function GetInteractiveLine(prompt1,prompt2:GDBString;var p1,p2:GDBVertex):GDBBoolean;
 var
     pline:PGDBObjLine;
-    savemode:GDBByte;
 begin
-    savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,
-                                                    MGetSelectionFrame or MGetSelectObject);
     result:=false;
     if commandmanager.get3dpoint(prompt1,p1) then
     begin
@@ -258,7 +247,6 @@ begin
       end;
     end;
     gdb.GetCurrentDWG^.FreeConstructionObjects;
-    GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);
 end;
 
 function DrawRotatedDim_com(operands:TCommandOperands):TCommandResult;
@@ -266,10 +254,7 @@ var
     pd:PGDBObjRotatedDimension;
     pline:PGDBObjLine;
     p1,p2,p3,vd,vn:gdbvertex;
-    savemode:GDBByte;
 begin
-    savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,
-                                                    MGetSelectionFrame or MGetSelectObject);
     if GetInteractiveLine(rsSpecifyfirstPoint,rsSpecifySecondPoint,p1,p2) then
     begin
          pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRotatedDimensionID,gdb.GetCurrentROOT));
@@ -299,7 +284,6 @@ begin
          end;
     end;
     result:=cmd_ok;
-    GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);
 end;
 
 procedure InteractiveDDimManipulator(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
@@ -318,10 +302,7 @@ var
     pd:PGDBObjDiametricDimension;
     pline:PGDBObjLine;
     p1,p2,p3,vd,vn:gdbvertex;
-    savemode:GDBByte;
 begin
-    savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,
-                                                    MGetSelectionFrame or MGetSelectObject);
     if GetInteractiveLine(rsSpecifyfirstPoint,rsSpecifySecondPoint,p1,p2) then
     begin
          pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBDiametricDimensionID,gdb.GetCurrentROOT));
@@ -345,17 +326,13 @@ begin
          end;
     end;
     result:=cmd_ok;
-    GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);
 end;
 function DrawRadialDim_com(operands:TCommandOperands):TCommandResult;
 var
     pd:PGDBObjRadialDimension;
     pline:PGDBObjLine;
     p1,p2,p3,vd,vn:gdbvertex;
-    savemode:GDBByte;
 begin
-    savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,
-                                                    MGetSelectionFrame or MGetSelectObject);
     if GetInteractiveLine(rsSpecifyfirstPoint,rsSpecifySecondPoint,p1,p2) then
     begin
          pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRadialDimensionID,gdb.GetCurrentROOT));
@@ -379,7 +356,6 @@ begin
          end;
     end;
     result:=cmd_ok;
-    GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);
 end;
 
 procedure InteractiveArcManipulator(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
@@ -416,10 +392,7 @@ var
     pa:PGDBObjArc;
     pline:PGDBObjLine;
     pe:T3PointPentity;
-    savemode:GDBByte;
 begin
-    savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,
-                                                    MGetSelectionFrame or MGetSelectObject);
     if commandmanager.get3dpoint('Specify first point:',pe.p1) then
     begin
          pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
@@ -444,7 +417,6 @@ begin
       end;
     end;
     result:=cmd_ok;
-    GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);
 end;
 procedure InteractiveSmartCircleManipulator(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
 var
@@ -502,7 +474,6 @@ function DrawCircle_com(operands:TCommandOperands):TCommandResult;
 var
     pcircle:PGDBObjCircle;
     pe:T3PointCircleModePentity;
-    savemode:GDBByte;
 begin
     case uppercase(operands) of
                                'CR':pe.cdm:=TCDM_CR;
@@ -513,8 +484,6 @@ begin
                                    pe.cdm:=TCDM_CR;
     end;
     pe.npoint:=0;
-    savemode:=GDB.GetCurrentDWG^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,
-                                                    MGetSelectionFrame or MGetSelectObject);
     if commandmanager.get3dpoint('Specify first point:',pe.p1) then
     begin
          inc(pe.npoint);
@@ -547,9 +516,17 @@ begin
       end;
     end;
     result:=cmd_ok;
-    GDB.GetCurrentDWG^.SetMouseEditorMode(savemode);
 end;
 
+function test_com(operands:TCommandOperands):TCommandResult;
+var
+    p:pointer;
+begin
+    if commandmanager.getentity('Specify entity:',p) then
+    begin
+    end;
+    result:=cmd_ok;
+end;
 
 initialization
      {$IFDEF DEBUGINITSECTION}LogOut('gdbcommandsexample.initialization');{$ENDIF}//write to log for the control initialization sequence
@@ -570,5 +547,7 @@ initialization
 
      CreateCommandFastObjectPlugin(@DrawArc_com,'Arc',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawCircle_com,'Circle',CADWG,0);
+
+     CreateCommandFastObjectPlugin(@test_com,'ts',CADWG,0);
 
 end.

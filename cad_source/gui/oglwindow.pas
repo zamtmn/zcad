@@ -2211,8 +2211,8 @@ var key: GDBByte;
                           param.seldesc.Selectedobjcount:=0;
                           PDWG^.GetSelObjArray.clearallobjects;
                     end;
-                    if commandmanager.pcommandrunning<>nil then
-                    if commandmanager.pcommandrunning^.IData.GetPointMode<>TGPWaitEnt then
+                    param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
+                    if (commandmanager.pcommandrunning=nil)or(commandmanager.pcommandrunning^.IData.GetPointMode<>TGPWaitEnt) then
                     begin
                     if PGDBObjEntity(param.SelDesc.OnMouseObject)^.select(PDWG^.GetSelObjArray,param.SelDesc.Selectedobjcount) then
                       begin
@@ -2221,7 +2221,6 @@ var key: GDBByte;
                             if assigned(updatevisibleproc) then updatevisibleproc;
                       end;
                     end;
-                    param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
                end
            else
                begin

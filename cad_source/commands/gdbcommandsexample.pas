@@ -39,6 +39,7 @@ uses
   geometry,
   math,
   sysutils,
+  shared,
   gdbentityfactory,   //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
   zcadsysvars,        //system global variables
@@ -301,28 +302,61 @@ function DrawDiametricDim_com(operands:TCommandOperands):TCommandResult;
 var
     pd:PGDBObjDiametricDimension;
     pline:PGDBObjLine;
+    pcircle:PGDBObjCircle;
     p1,p2,p3,vd,vn:gdbvertex;
+
+  procedure FinalCreateDDim;
+  begin
+      pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBDiametricDimensionID,gdb.GetCurrentROOT));
+      pd^.DimData.P10InWCS:=p1;
+      pd^.DimData.P15InWCS:=p2;
+      InteractiveDDimManipulator(pd,p2,false);
+      if commandmanager.Get3DPointInteractive(rsSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd) then
+      begin
+          gdb.GetCurrentDWG^.FreeConstructionObjects;
+          pd := CreateObjFree(GDBDiametricDimensionID);
+          pd^.initnul(gdb.GetCurrentROOT);
+
+          pd^.DimData.P10InWCS:=p1;
+          pd^.DimData.P15InWCS:=p2;
+          pd^.DimData.P11InOCS:=p3;
+
+          InteractiveDDimManipulator(pd,p3,false);
+
+          pd^.FormatEntity(gdb.GetCurrentDWG^);
+          gdb.AddEntToCurrentDrawingWithUndo(pd);
+      end;
+  end;
+
 begin
+    if operands<>'' then
+    begin
     if GetInteractiveLine(rsSpecifyfirstPoint,rsSpecifySecondPoint,p1,p2) then
     begin
-         pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBDiametricDimensionID,gdb.GetCurrentROOT));
-         pd^.DimData.P10InWCS:=p1;
-         pd^.DimData.P15InWCS:=p2;
-         InteractiveDDimManipulator(pd,p2,false);
-         if commandmanager.Get3DPointInteractive(rsSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd) then
+         FinalCreateDDim;
+    end;
+    end
+    else
+    begin
+         if commandmanager.GetEntity('Select circle or arc',pcircle) then
          begin
-              gdb.GetCurrentDWG^.FreeConstructionObjects;
-              pd := CreateObjFree(GDBDiametricDimensionID);
-              pd^.initnul(gdb.GetCurrentROOT);
-
-              pd^.DimData.P10InWCS:=p1;
-              pd^.DimData.P15InWCS:=p2;
-              pd^.DimData.P11InOCS:=p3;
-
-              InteractiveDDimManipulator(pd,p3,false);
-
-              pd^.FormatEntity(gdb.GetCurrentDWG^);
-              gdb.AddEntToCurrentDrawingWithUndo(pd);
+              case pcircle^.vp.ID of
+              GDBCircleID:begin
+                              p1:=pcircle^.q1;
+                              p2:=pcircle^.q3;
+                              FinalCreateDDim;
+                          end;
+                 GDBArcID:begin
+                              p1:=pcircle^.Local.P_insert;
+                              p2:=PGDBObjArc(pcircle)^.q1;
+                              p3:=VertexSub(p2,p1);
+                              p1:=VertexSub(p1,p3);
+                              FinalCreateDDim;
+                          end;
+                     else begin
+                              shared.ShowError('Please select Arc or Circle');
+                          end;
+              end;
          end;
     end;
     result:=cmd_ok;
@@ -331,28 +365,59 @@ function DrawRadialDim_com(operands:TCommandOperands):TCommandResult;
 var
     pd:PGDBObjRadialDimension;
     pline:PGDBObjLine;
+    pcircle:PGDBObjCircle;
     p1,p2,p3,vd,vn:gdbvertex;
-begin
-    if GetInteractiveLine(rsSpecifyfirstPoint,rsSpecifySecondPoint,p1,p2) then
-    begin
+
+  procedure FinalCreateRDim;
+  begin
          pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRadialDimensionID,gdb.GetCurrentROOT));
          pd^.DimData.P10InWCS:=p1;
          pd^.DimData.P15InWCS:=p2;
          InteractiveDDimManipulator(pd,p2,false);
-         if commandmanager.Get3DPointInteractive(rsSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd) then
+    if commandmanager.Get3DPointInteractive(rsSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd) then
+    begin
+         gdb.GetCurrentDWG^.FreeConstructionObjects;
+         pd := CreateObjFree(GDBRadialDimensionID);
+         pd^.initnul(gdb.GetCurrentROOT);
+
+         pd^.DimData.P10InWCS:=p1;
+         pd^.DimData.P15InWCS:=p2;
+         pd^.DimData.P11InOCS:=p3;
+
+         InteractiveDDimManipulator(pd,p3,false);
+
+         pd^.FormatEntity(gdb.GetCurrentDWG^);
+         gdb.AddEntToCurrentDrawingWithUndo(pd);
+    end;
+  end;
+
+begin
+    if operands<>'' then
+    begin
+    if GetInteractiveLine(rsSpecifyfirstPoint,rsSpecifySecondPoint,p1,p2) then
+    begin
+         FinalCreateRDim;
+    end;
+    end
+    else
+    begin
+         if commandmanager.GetEntity('Select circle or arc',pcircle) then
          begin
-              gdb.GetCurrentDWG^.FreeConstructionObjects;
-              pd := CreateObjFree(GDBRadialDimensionID);
-              pd^.initnul(gdb.GetCurrentROOT);
-
-              pd^.DimData.P10InWCS:=p1;
-              pd^.DimData.P15InWCS:=p2;
-              pd^.DimData.P11InOCS:=p3;
-
-              InteractiveDDimManipulator(pd,p3,false);
-
-              pd^.FormatEntity(gdb.GetCurrentDWG^);
-              gdb.AddEntToCurrentDrawingWithUndo(pd);
+              case pcircle^.vp.ID of
+              GDBCircleID:begin
+                              p1:=pcircle^.Local.P_insert;
+                              p2:=pcircle^.q1;
+                              FinalCreateRDim;
+                          end;
+                 GDBArcID:begin
+                              p1:=pcircle^.Local.P_insert;
+                              p2:=PGDBObjArc(pcircle)^.q1;
+                              FinalCreateRDim;
+                          end;
+                     else begin
+                              shared.ShowError('Please select Arc or Circle');
+                          end;
+              end;
          end;
     end;
     result:=cmd_ok;

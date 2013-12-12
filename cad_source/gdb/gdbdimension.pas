@@ -280,7 +280,19 @@ begin
 
      {dimdir:=geometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
      dimdir:=normalizevertex(dimdir);}
-     dimdir:=self.vectorN;
+     if GetCSDirFrom0x0y2D(vectorD,vectorN)=TCSDLeft then
+                                                          dimdir:=geometry.VertexMulOnSc(vectorN,-1)
+                                                      else
+                                                          dimdir:=self.vectorN;
+     if PDimStyle.Text.DIMTAD<>DTVPBellov then
+     begin
+     if dimdir.x>0 then
+                       dimdir:=geometry.VertexMulOnSc(dimdir,-1);
+     end
+     else
+     if dimdir.x<0 then
+                       dimdir:=geometry.VertexMulOnSc(dimdir,-1);
+
      if (textangle=0)and((DimData.TextMoved)or TextAlwaysMoved) then
                         dimdir:=x_Y_zVertex;
      if TextNeedOffset(dimdir) then

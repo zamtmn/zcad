@@ -146,7 +146,7 @@ procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:GDBDouble;content:GDBStr
 var
   canbreak: GDBBoolean;
   currsymbol, lastbreak, lastcanbreak: GDBInteger;
-  linewidth, lastlinewidth, maxlinewidth: GDBDouble;
+  linewidth, lastlinewidth, maxlinewidth,lastsymspace: GDBDouble;
   currline: GDBString;
   swp:GDBStrWithPoint;
   psyminfo:PGDBsymdolinfo;
@@ -162,6 +162,7 @@ begin
   lastbreak := 1;
   lastcanbreak := 1;
   linewidth := 0;
+  lastsymspace:=0;
 
   //sym:=getsymbol(content,currsymbol,l);
   //psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym);
@@ -185,7 +186,8 @@ begin
       lastcanbreak := currsymbol;
       canbreak := true;
       lastlinewidth := linewidth;
-      linewidth := linewidth + psyminfo.NextSymX
+      linewidth := lastsymspace + linewidth + psyminfo.{NextSymX}SymMaxX;
+      lastsymspace:=psyminfo.NextSymX-psyminfo.SymMaxX;
     end
     else
       if copy(content,currsymbol,2)='\P' then          {\P}
@@ -210,17 +212,21 @@ begin
         text.add(@swp);
         newline:=true;
         linewidth := 0;
+        lastsymspace:=0;
         lastlinewidth := linewidth;
       end
       else
       begin
-        linewidth := linewidth + psyminfo.NextSymX;
+        //linewidth := linewidth + psyminfo.NextSymX;
+        linewidth := lastsymspace + linewidth + psyminfo.{NextSymX}SymMaxX;
+        lastsymspace:=psyminfo.NextSymX-psyminfo.SymMaxX;
       end;
     if canbreak then
       if maxlinewidth <= linewidth then
       begin
         currline := copy(content, lastbreak, lastcanbreak - lastbreak);
         linewidth := 0;
+        lastsymspace:=0;
         newline:=true;
         lastbreak := lastcanbreak + 1;
         currsymbol := lastcanbreak;

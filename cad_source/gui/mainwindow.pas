@@ -106,6 +106,7 @@ type
     procedure CreateHTPB(tb:TToolBar);
 
     procedure FormCreate(Sender: TObject);
+    procedure DecorateSysTypes;
     procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
     procedure AfterConstruction; override;
     destructor Destroy;override;
@@ -1483,7 +1484,27 @@ begin
 
   //self.EnableAlign;
 end;
+function LWDecorator(PInstance:GDBPointer):GDBString;
+begin
+     result:='test';
+     result:=GetLWNameFromLW(PTGDBLineWeight(PInstance)^);
+end;
 
+procedure DecorateType(tn:string;getvalueasstring:TOnGetValueAsString);
+var
+   PT:PUserTypeDescriptor;
+begin
+     PT:=SysUnit.TypeName2PTD(tn);
+     if PT<>nil then
+                    begin
+                         PT^.Decorators.OnGetValueAsString:=getvalueasstring;
+                    end;
+end;
+
+procedure MainForm.DecorateSysTypes;
+begin
+     DecorateType('TGDBLineWeight',@LWDecorator);
+end;
 
 procedure MainForm.FormCreate(Sender: TObject);
 //var
@@ -1491,6 +1512,7 @@ procedure MainForm.FormCreate(Sender: TObject);
   //pint:PGDBInteger;
   //bmp:TPortableNetworkGraphic;
 begin
+  DecorateSysTypes;
   self.onclose:=self.FormClose;
   self.onkeydown:=self.mykeypress;
   self.KeyPreview:=true;

@@ -48,8 +48,13 @@ begin
     inherited init(PSinonimOf^.SizeInGDBBytes,Tname,pu);
 end;
 function GDBSinonimDescriptor.CreateProperties;
+var
+   td:TDecoratedProcs;
 begin
+     td:=PTUserTypeDescriptor(PSinonimOf)^.Decorators;
+     PTUserTypeDescriptor(PSinonimOf)^.Decorators:=Decorators;
      PTUserTypeDescriptor(PSinonimOf)^.CreateProperties(mode,PPDA,Name,PCollapsed,ownerattrib,bmode,addr,valkey,valtype);
+     PTUserTypeDescriptor(PSinonimOf)^.Decorators:=td;
 end;
 procedure GDBSinonimDescriptor.ApplyOperator;
 begin

@@ -107,15 +107,19 @@ TPropEditor=class(TComponent)
                  procedure keyPress(Sender: TObject; var Key: char);
                  function geteditor:TWinControl;
             end;
+TOnGetValueAsString=function(PInstance:GDBPointer):GDBString;
+TDecoratedProcs=packed record
+                OnGetValueAsString:TOnGetValueAsString;
+                end;
 
 TPropEditorOwner=TWinControl;
-
 UserTypeDescriptor=object(GDBaseObject)
                          SizeInGDBBytes:GDBInteger;
                          TypeName:String;
                          PUnit:GDBPointer;
                          OIP:TOIProps;
                          Collapsed:GDBBoolean;
+                         Decorators:TDecoratedProcs;
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
                          procedure _init(size:GDBInteger;tname:string;pu:pointer);
                          function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TPropEditor;virtual;
@@ -129,6 +133,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          function GetTypeAttributes:TTypeAttr;virtual;
                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                          function GetUserValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                         function GetDecoratedValueAsString(pinstance:GDBPointer):GDBString;virtual;
                          procedure CopyInstanceTo(source,dest:pointer);virtual;
                          procedure SetValueFromString(PInstance:GDBPointer;_Value:GDBstring);virtual;abstract;
                          procedure InitInstance(PInstance:GDBPointer);virtual;
@@ -307,6 +312,7 @@ end;
 constructor UserTypeDescriptor.init;
 begin
      _init(size,tname,pu);
+     Decorators.OnGetValueAsString:=nil;
 end;
 destructor UserTypeDescriptor.done;
 begin
@@ -339,6 +345,13 @@ end;
 function UserTypeDescriptor.GetUserValueAsString;
 begin
      result:=GetValueAsString(pinstance);
+end;
+function UserTypeDescriptor.GetDecoratedValueAsString(pinstance:GDBPointer):GDBString;
+begin
+     if assigned(Decorators.OnGetValueAsString) then
+                                         result:=Decorators.OnGetValueAsString(pinstance)
+                                     else
+                                         result:=GetValueAsString(pinstance);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('varmandef.initialization');{$ENDIF}

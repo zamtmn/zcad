@@ -32,7 +32,7 @@ const
 var
   LineWeightSelectWND: TLineWeightSelectWND=nil;
   function GetLWNameFromN(num:integer):String;
-  function GetLWNameFromLW(lw:integer):String;
+  function GetLWNameFromLW(lw:TGDBLineWeight):String;
   function GetColorNameFromIndex(index:integer):String;
   procedure drawLW(canvas:TCanvas;ARect: TRect;ll,lw: Integer;s:string);
 implementation
@@ -43,7 +43,7 @@ function GetLWNameFromN(num:integer):String;
 begin
      result:=FloatToStrF(lwarray[num]/100,ffFixed,4,2) + ' '+rsmm;
 end;
-function GetLWNameFromLW(lw:integer):String;
+function GetLWNameFromLW(lw:TGDBLineWeight):String;
 begin
  case lw of
               -3:
@@ -176,4 +176,4 @@ begin
 end;
 
 end.
-
+

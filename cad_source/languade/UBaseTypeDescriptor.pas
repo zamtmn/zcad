@@ -212,7 +212,7 @@ begin
      ppd^.valueAddres:=addr;
      ppd^.mode:=mode;
      if (ppd^.Attr and FA_DIFFERENT)=0 then
-                                           ppd^.value:=GetValueAsString(addr)
+                                           ppd^.value:=GetDecoratedValueAsString(addr)
                                        else
                                            ppd^.value:='*Разный*';
      if ppd^.value='rp_21' then

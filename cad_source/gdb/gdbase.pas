@@ -363,6 +363,8 @@ GDBsymdolinfo=packed record
 PTAlign=^TAlign;
 TAlign=(TATop,TABottom,TALeft,TARight);
 TDWGHandle=GDBQWord;
+PTGDBLineWeight=^TGDBLineWeight;
+TGDBLineWeight=GDBSmallint;
 {EXPORT-}
 TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 const

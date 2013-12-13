@@ -366,6 +366,8 @@ GDBsymdolinfo=packed record
 PTAlign=^TAlign;
 TAlign=(TATop,TABottom,TALeft,TARight);
 TDWGHandle=GDBQWord;
+PTGDBLineWeight=^TGDBLineWeight;
+TGDBLineWeight=GDBSmallint;
 //Generate on E:\zcad\CAD_SOURCE\u\UOpenArray.pas
 POpenArray=^OpenArray;
 OpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -1083,7 +1085,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
              DWG_OSMode:PGDBInteger;(*'Snap mode'*)(*oi_readonly*)
              DWG_PolarMode:PGDBBoolean;(*'Polar tracking mode'*)
              DWG_CLayer:PGDBPointer;(*'Current layer'*)(*oi_readonly*)
-             DWG_CLinew:PGDBInteger;(*'Current line weigwt'*)
+             DWG_CLinew:PTGDBLineWeight;(*'Current line weigwt'*)
              DWG_CColor:PGDBInteger;(*'Current color'*)
              DWG_LTScale:PGDBDouble;(*'Global line type scale'*)
              DWG_CLTScale:PGDBDouble;(*'Current line type scale'*)
@@ -1387,7 +1389,7 @@ GDBObjSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericWithSubord
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=packed record
                       Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
-                      LineWeight:GDBSmallint;(*'Line weight'*)(*saved_to_shd*)
+                      LineWeight:TGDBLineWeight;(*'Line weight'*)(*saved_to_shd*)
                       LineType:{GDBString}PGDBLtypeProp;(*'Line type'*)(*saved_to_shd*)
                       LineTypeScale:GDBDouble;(*'Line type scale'*)(*saved_to_shd*)
                       ID:TObjID;(*'Object type'*)(*oi_readonly*)
@@ -2037,7 +2039,9 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 function GetPSize:GDBDouble;virtual;abstract;
                 procedure CalcTextAngle;virtual;abstract;
                 procedure CalcTextParam(dlStart,dlEnd:Gdbvertex);virtual;abstract;
+                procedure CalcTextInside;virtual;abstract;
                 procedure DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;const drawing:TDrawingDef);
+                function GetDIMTMOVE:TDimTextMove;virtual;abstract;
                 end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\gdbgenericdimension.pas
 TDimType=(DTRotated,DTAligned,DTAngular,DTDiameter,DTRadius,DTAngular3P,DTOrdinate);
@@ -2106,6 +2110,11 @@ GDBObjDiametricDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDimension)
                         procedure CalcDNVectors;virtual;abstract;
                         function TextNeedOffset(dimdir:gdbvertex):GDBBoolean;virtual;abstract;
                         function TextAlwaysMoved:GDBBoolean;virtual;abstract;
+                        function GetCenterPoint:GDBVertex;virtual;abstract;
+                        procedure CalcTextInside;virtual;abstract;
+                        function GetRadius:GDBDouble;virtual;abstract;
+                        function GetDIMTMOVE:TDimTextMove;virtual;abstract;
+                        procedure SaveToDXF(var handle:TDWGHandle;var outhandle:GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;abstract;
                    end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\gdbradialdimension.pas
 PGDBObjRadialDimension=^GDBObjRadialDimension;
@@ -2114,10 +2123,13 @@ GDBObjRadialDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjDiametricDimen
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                         function GetObjTypeName:GDBString;virtual;abstract;
                         function GetDimStr:GDBString;virtual;abstract;
+                        function GetCenterPoint:GDBVertex;virtual;abstract;
                         function Clone(own:GDBPointer):PGDBObjEntity;virtual;abstract;
                         function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                         function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
                         function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;abstract;
+                        function GetRadius:GDBDouble;virtual;abstract;
+                        procedure SaveToDXF(var handle:TDWGHandle;var outhandle:GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;abstract;
                    end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBBlockInsert.pas
 PGDBObjBlockInsert=^GDBObjBlockInsert;
@@ -2687,7 +2699,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                                    constructor initnul;
                              end;
 //Generate on E:\zcad\CAD_SOURCE\commands\commandlinedef.pas
-    TGetPointMode=(TGPWait,TGPPoint,TGPCancel,TGPOtherCommand,TGPCloseApp);
+    TGetPointMode=(TGPWait{point},TGPWaitEnt,TGPEnt,TGPPoint,TGPCancel,TGPOtherCommand,TGPCloseApp);
     TInteractiveData=packed record
                        GetPointMode:TGetPointMode;(*hidden_in_objinsp*)
                        GetPointValue:GDBVertex;(*hidden_in_objinsp*)

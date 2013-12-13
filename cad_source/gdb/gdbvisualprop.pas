@@ -28,7 +28,7 @@ type
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=packed record
                       Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
-                      LineWeight:GDBSmallint;(*'Line weight'*)(*saved_to_shd*)
+                      LineWeight:TGDBLineWeight;(*'Line weight'*)(*saved_to_shd*)
                       LineType:{GDBString}PGDBLtypeProp;(*'Line type'*)(*saved_to_shd*)
                       LineTypeScale:GDBDouble;(*'Line type scale'*)(*saved_to_shd*)
                       ID:TObjID;(*'Object type'*)(*oi_readonly*)
@@ -48,4 +48,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('gdbvisualprop.initialization');{$ENDIF}
-end.
+end.

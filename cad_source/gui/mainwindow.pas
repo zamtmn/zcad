@@ -1486,10 +1486,21 @@ begin
 end;
 function LWDecorator(PInstance:GDBPointer):GDBString;
 begin
-     result:='test';
      result:=GetLWNameFromLW(PTGDBLineWeight(PInstance)^);
 end;
-
+function NamedObjectsDecorator(PInstance:GDBPointer):GDBString;
+begin
+     if PGDBLayerProp(PInstance^)<>nil then
+                                           begin
+                                           result:=PGDBNamedObject((ppointer(PInstance)^){^}).Name
+                                           end
+                                       else
+                                           result:=rsUnassigned;
+end;
+function PaletteColorDecorator(PInstance:GDBPointer):GDBString;
+begin
+     result:=ColorIndex2Name(PTGDBPaletteColor(PInstance)^);
+end;
 procedure DecorateType(tn:string;getvalueasstring:TOnGetValueAsString);
 var
    PT:PUserTypeDescriptor;
@@ -1504,6 +1515,11 @@ end;
 procedure MainForm.DecorateSysTypes;
 begin
      DecorateType('TGDBLineWeight',@LWDecorator);
+     DecorateType('PGDBLayerPropObjInsp',@NamedObjectsDecorator);
+     DecorateType('PGDBLtypePropObjInsp',@NamedObjectsDecorator);
+     DecorateType('PGDBTextStyleArrayObjInsp',@NamedObjectsDecorator);
+     DecorateType('PGDBDimStyleObjInsp',@NamedObjectsDecorator);
+     DecorateType('TGDBPaletteColor',@PaletteColorDecorator);
 end;
 
 procedure MainForm.FormCreate(Sender: TObject);

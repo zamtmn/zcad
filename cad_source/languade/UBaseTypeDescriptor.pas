@@ -111,6 +111,11 @@ GDBPointerDescriptor=object(BaseTypeDescriptor)
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
                     end;
+GDBPtrUIntDescriptor=object(BaseTypeDescriptor)
+                          constructor init;
+                          function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
+                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
+                    end;
 TEnumDataDescriptor=object(BaseTypeDescriptor)
                      constructor init;
                      procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
@@ -135,6 +140,7 @@ GDBShortintDescriptorObj:GDBShortintDescriptor;
 GDBBooleanDescriptorOdj:GDBBooleanDescriptor;
 GDBPointerDescriptorOdj:GDBPointerDescriptor;
 GDBEnumDataDescriptorObj:TEnumDataDescriptor;
+GDBPtrUIntDescriptorObj:GDBPtrUIntDescriptor;
 implementation
 //uses varman{,ZComboEdBoxsWithProc};
 function TEnumDataDescriptor.CreateProperties;
@@ -520,6 +526,26 @@ begin
      if error=0 then
                     pGDBFloat(pinstance)^:=vGDBFloat;
 end;
+constructor GDBPtrUIntDescriptor.init;
+begin
+     inherited init(sizeof(GDBPointer),'GDBPtrUInt',nil);
+end;
+function GDBPtrUIntDescriptor.GetValueAsString;
+var
+     UPtrUInt:PtrUInt;
+begin
+    UPtrUInt:=PPtrUInt(pinstance)^;
+    result := inttostr(UPtrUInt);
+end;
+procedure GDBPtrUIntDescriptor .SetValueFromString;
+var
+     vPtrUInt:PtrUInt;
+     error:integer;
+begin
+     val(value,vPtrUInt,error);
+     if error=0 then
+                    PPtrUInt(pinstance)^:=vPtrUInt;
+end;
 constructor GDBDoubleDescriptor.init;
 begin
      inherited init(sizeof(GDBDouble),'GDBDouble',nil);
@@ -882,4 +908,5 @@ begin
      GDBPointerDescriptorOdj.init;
 
      GDBEnumDataDescriptorObj.init;
+     GDBPtrUIntDescriptorObj.init;
 end.

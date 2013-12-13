@@ -69,6 +69,8 @@ GDBShapePropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*
 GDBTextPropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=TextProp*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                end;
+PPGDBLtypePropObjInsp=^PGDBLtypePropObjInsp;
+PGDBLtypePropObjInsp=GDBPointer;
 PGDBLtypeProp=^GDBLtypeProp;
 GDBLtypeProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                len:GDBDouble;(*'Length'*)

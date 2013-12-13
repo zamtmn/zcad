@@ -37,7 +37,7 @@ PGDBObjLine=^GDBObjLine;
 GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  CoordInOCS:GDBLineProp;(*'Coordinates OCS'*)(*saved_to_shd*)
                  CoordInWCS:GDBLineProp;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
-                 PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)
+                 PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)(*hidden_in_objinsp*)
                  Length:GDBDouble;(*'Length'*)
                  //Length_2:GDBDouble;(*'Sqrt length'*)(*hidden_in_objinsp*)
                  //dir:GDBvertex;(*'Direction'*)(*hidden_in_objinsp*)

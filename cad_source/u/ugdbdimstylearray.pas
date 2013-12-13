@@ -69,6 +69,8 @@ TGDBDimUnitsProp=packed record
                        DIMRND:GDBDouble;//Rounding value for dimension distances//group45
                        DIMPOST:GDBAnsiString; //Dimension prefix<>suffix //group3
                  end;
+PPGDBDimStyleObjInsp=^PGDBDimStyleObjInsp;
+PGDBDimStyleObjInsp=GDBPointer;
 PGDBDimStyle=^GDBDimStyle;
 GDBDimStyle = packed object(GDBNamedObject)
                       Lines:TGDBDimLinesProp;

@@ -589,6 +589,7 @@ begin
      exttype.addref(GDBAnsiStringDescriptorObj);
      exttype.addref(GDBFloatDescriptorObj);
      exttype.addref(GDBEnumDataDescriptorObj);
+     exttype.addref(GDBPtrUIntDescriptorObj);
      BaseTypesEndIndex:=exttype.Count;
 end;
 

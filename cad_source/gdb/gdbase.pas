@@ -258,6 +258,8 @@ RGB=packed record
           a:GDBByte;(*'Alpha'*)
           name:GDBString;
     end;
+PTGDBPaletteColor=^TGDBPaletteColor;
+TGDBPaletteColor=GDBInteger;
 GDBPalette=packed array[0..255] of RGB;
 PGDBNamedObject=^GDBNamedObject;
 GDBNamedObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)

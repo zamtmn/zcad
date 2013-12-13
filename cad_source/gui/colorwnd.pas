@@ -81,12 +81,23 @@ var
 const
   xsize=50;
   ysize=50;
-
+function ColorIndex2Name(ColorInfex:Integer):string;
 implementation
 
 {$R *.lfm}
 
 { TColorSelectWND }
+function ColorIndex2Name(ColorInfex:Integer):string;
+begin
+     Case ColorInfex of
+                       256:
+                           result:=rsByLayer;
+                       0:
+                           result:=rsByBlock;
+                       else
+                           result:=palette[ColorInfex].name+' '+'(Red='+inttostr(palette[ColorInfex].r)+' Green='+inttostr(palette[ColorInfex].g)+' Blue='+inttostr(palette[ColorInfex].b)+')';
+     end;
+end;
 
 procedure TColorSelectWND.testsetcolor(Sender: TObject);
 var
@@ -98,15 +109,7 @@ begin
      mainpalette.Repaint;
      graypalette.Repaint;}
      repaint;
-     s:='#'+inttostr(ColorInfex)+' ';
-     Case ColorInfex of
-                       256:
-                           s:=s+rsByLayer;
-                       0:
-                           s:=s+rsByBlock;
-                       else
-                           s:=s+' '+palette[ColorInfex].name+' '+'(Red='+inttostr(palette[ColorInfex].r)+' Green='+inttostr(palette[ColorInfex].g)+' Blue='+inttostr(palette[ColorInfex].b)+')';
-     end;
+     s:='#'+inttostr(ColorInfex)+' '+ColorIndex2Name(ColorInfex);
      if ColorInfex=0 then
                          ByBlock.Caption:=rsByBlock+'(*)'
                      else

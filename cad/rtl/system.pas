@@ -29,6 +29,8 @@ PGDBShortint=^GDBShortint;
 
 PGDBPointer=^GDBPointer;
 
+PGDBPtrUInt=^GDBPtrUInt;
+
 itrec=packed record
             itp:GDBPointer;
             itc:GDBInteger;
@@ -263,6 +265,8 @@ RGB=packed record
           a:GDBByte;(*'Alpha'*)
           name:GDBString;
     end;
+PTGDBPaletteColor=^TGDBPaletteColor;
+TGDBPaletteColor=GDBInteger;
 GDBPalette=packed array[0..255] of RGB;
 PGDBNamedObject=^GDBNamedObject;
 GDBNamedObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -768,6 +772,8 @@ PGDBTextStyleProp=^GDBTextStyleProp;
     UsedInLTYPE:GDBBoolean;
     destructor Done;virtual;abstract;
   end;
+PPGDBTextStyleArrayObjInsp=^PGDBTextStyleArrayObjInsp;
+PGDBTextStyleArrayObjInsp=GDBPointer;
 PGDBTextStyleArray=^GDBTextStyleArray;
 GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBTextStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
@@ -779,6 +785,8 @@ GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*O
                     function GetCurrentTextStyle:PGDBTextStyle;
               end;
 //Generate on E:\zcad\CAD_SOURCE\u\UGDBLayerArray.pas
+PPGDBLayerPropObjInsp=^PGDBLayerPropObjInsp;
+PGDBLayerPropObjInsp={GDBPtrUInt}GDBPointer;
 PGDBLayerProp=^GDBLayerProp;
 GDBLayerProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                color:GDBByte;(*saved_to_shd*)(*'Color'*)
@@ -845,6 +853,8 @@ GDBShapePropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*
 GDBTextPropArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*OpenArrayOfObject=TextProp*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                end;
+PPGDBLtypePropObjInsp=^PGDBLtypePropObjInsp;
+PGDBLtypePropObjInsp=GDBPointer;
 PGDBLtypeProp=^GDBLtypeProp;
 GDBLtypeProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                len:GDBDouble;(*'Length'*)
@@ -923,6 +933,8 @@ TGDBDimUnitsProp=packed record
                        DIMRND:GDBDouble;//Rounding value for dimension distances//group45
                        DIMPOST:GDBAnsiString; //Dimension prefix<>suffix //group3
                  end;
+PPGDBDimStyleObjInsp=^PGDBDimStyleObjInsp;
+PGDBDimStyleObjInsp=GDBPointer;
 PGDBDimStyle=^GDBDimStyle;
 GDBDimStyle = packed object(GDBNamedObject)
                       Lines:TGDBDimLinesProp;
@@ -1084,15 +1096,15 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
              DWG_DrawMode:PGDBBoolean;(*'Display line weights'*)
              DWG_OSMode:PGDBInteger;(*'Snap mode'*)(*oi_readonly*)
              DWG_PolarMode:PGDBBoolean;(*'Polar tracking mode'*)
-             DWG_CLayer:PGDBPointer;(*'Current layer'*)(*oi_readonly*)
+             DWG_CLayer:PPGDBLayerPropObjInsp;(*'Current layer'*)(*oi_readonly*)
              DWG_CLinew:PTGDBLineWeight;(*'Current line weigwt'*)
-             DWG_CColor:PGDBInteger;(*'Current color'*)
+             DWG_CColor:PTGDBPaletteColor;(*'Current color'*)
              DWG_LTScale:PGDBDouble;(*'Global line type scale'*)
              DWG_CLTScale:PGDBDouble;(*'Current line type scale'*)
-             DWG_CLType:PGDBPointer;(*'Drawing line type'*)(*oi_readonly*)
-             DWG_CDimStyle:PGDBPointer;(*'Dim style'*)(*oi_readonly*)
+             DWG_CLType:PPGDBLtypePropObjInsp;(*'Drawing line type'*)(*oi_readonly*)
+             DWG_CDimStyle:PPGDBDimStyleObjInsp;(*'Dim style'*)(*oi_readonly*)
              DWG_RotateTextInLT:PGDBBoolean;(*'Rotate text in line type'*)
-             DWG_CTStyle:PGDBPointer;(*'Text style'*)(*oi_readonly*)
+             DWG_CTStyle:PPGDBTextStyleArrayObjInsp;(*'Text style'*)(*oi_readonly*)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
              DWG_SystmGeometryDraw:PGDBBoolean;(*'System geometry'*)
@@ -1388,14 +1400,14 @@ GDBObjSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjGenericWithSubord
 //Generate on E:\zcad\CAD_SOURCE\gdb\gdbvisualprop.pas
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=packed record
-                      Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
+                      Layer:PGDBLayerPropObjInsp;(*'Layer'*)(*saved_to_shd*)
                       LineWeight:TGDBLineWeight;(*'Line weight'*)(*saved_to_shd*)
-                      LineType:{GDBString}PGDBLtypeProp;(*'Line type'*)(*saved_to_shd*)
+                      LineType:PGDBLtypePropObjInsp;(*'Line type'*)(*saved_to_shd*)
                       LineTypeScale:GDBDouble;(*'Line type scale'*)(*saved_to_shd*)
-                      ID:TObjID;(*'Object type'*)(*oi_readonly*)
+                      ID:TObjID;(*'Object type'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       BoundingBox:GDBBoundingBbox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
-                      LastCameraPos:TActulity;(*oi_readonly*)
-                      color:GDBInteger;
+                      LastCameraPos:TActulity;(*oi_readonly*)(*hidden_in_objinsp*)
+                      Color:TGDBPaletteColor;
                  end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBEntity.pas
 PTExtAttrib=^TExtAttrib;
@@ -1413,7 +1425,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     Visible:TActulity;(*'Visible'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     infrustum:TActulity;(*'In frustum'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     PExtAttrib:PTExtAttrib;(*hidden_in_objinsp*)
-                    Geom:ZGLGeometry;
+                    Geom:ZGLGeometry;(*hidden_in_objinsp*)
                     destructor done;virtual;abstract;
                     constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -2008,7 +2020,7 @@ end;
 PGDBObjDimension=^GDBObjDimension;
 GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       DimData:TDXFDimData;
-                      PDimStyle:PGDBDimStyle;
+                      PDimStyle:PGDBDimStyleObjInsp;
                       PProjPoint:PTDXFDimData2D;
                       vectorD,vectorN,vectorT:GDBVertex;
                       TextTParam,TextAngle,DimAngle:GDBDouble;
@@ -2267,7 +2279,7 @@ PGDBObjLine=^GDBObjLine;
 GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  CoordInOCS:GDBLineProp;(*'Coordinates OCS'*)(*saved_to_shd*)
                  CoordInWCS:GDBLineProp;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
-                 PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)
+                 PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)(*hidden_in_objinsp*)
                  Length:GDBDouble;(*'Length'*)
                  //Length_2:GDBDouble;(*'Sqrt length'*)(*hidden_in_objinsp*)
                  //dir:GDBvertex;(*'Direction'*)(*hidden_in_objinsp*)

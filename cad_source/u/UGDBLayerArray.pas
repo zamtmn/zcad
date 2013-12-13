@@ -23,6 +23,8 @@ uses zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef}
      varmandef,gdbobjectsconstdef,UGDBNamedObjectsArray,StrProc;
 type
 {EXPORT+}
+PPGDBLayerPropObjInsp=^PGDBLayerPropObjInsp;
+PGDBLayerPropObjInsp={GDBPtrUInt}GDBPointer;
 PGDBLayerProp=^GDBLayerProp;
 GDBLayerProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                color:GDBByte;(*saved_to_shd*)(*'Color'*)

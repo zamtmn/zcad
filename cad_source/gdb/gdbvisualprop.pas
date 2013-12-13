@@ -27,14 +27,14 @@ type
 {Export+}
 PGDBObjVisualProp=^GDBObjVisualProp;
 GDBObjVisualProp=packed record
-                      Layer:PGDBLayerProp;(*'Layer'*)(*saved_to_shd*)
+                      Layer:{-}PGDBLayerProp{/PGDBLayerPropObjInsp/};(*'Layer'*)(*saved_to_shd*)
                       LineWeight:TGDBLineWeight;(*'Line weight'*)(*saved_to_shd*)
-                      LineType:{GDBString}PGDBLtypeProp;(*'Line type'*)(*saved_to_shd*)
+                      LineType:{-}PGDBLtypeProp{/PGDBLtypePropObjInsp/};(*'Line type'*)(*saved_to_shd*)
                       LineTypeScale:GDBDouble;(*'Line type scale'*)(*saved_to_shd*)
-                      ID:TObjID;(*'Object type'*)(*oi_readonly*)
+                      ID:TObjID;(*'Object type'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       BoundingBox:GDBBoundingBbox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
-                      LastCameraPos:TActulity;(*oi_readonly*)
-                      color:GDBInteger;
+                      LastCameraPos:TActulity;(*oi_readonly*)(*hidden_in_objinsp*)
+                      Color:TGDBPaletteColor;
                  end;
 {Export-}
 function getLTfromVP(const vp:GDBObjVisualProp):PGDBLtypeProp;

@@ -48,7 +48,7 @@ end;
 PGDBObjDimension=^GDBObjDimension;
 GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                       DimData:TDXFDimData;
-                      PDimStyle:PGDBDimStyle;
+                      PDimStyle:{-}PGDBDimStyle{/PGDBDimStyleObjInsp/};
                       PProjPoint:PTDXFDimData2D;
                       vectorD,vectorN,vectorT:GDBVertex;
                       TextTParam,TextAngle,DimAngle:GDBDouble;

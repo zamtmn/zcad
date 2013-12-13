@@ -1066,7 +1066,10 @@ begin
             vsa.sort;
        end;
        if assigned(pp^.valueAddres) then
-       PEditor:=pp^.PTypeManager^.CreateEditor(self,{namecol-6}pp^.x1,{my}pp^.y1,{clientwidth-namecol+3}pp^.x2-pp^.x1,{rowh}pp^.y2-pp^.y1+1,pp^.valueAddres,@vsa,false);
+       if assigned(pp^.Decorators.OnCreateEditor) then
+                                                      PEditor:=pp^.Decorators.OnCreateEditor(self,pp^.x1,pp^.y1,pp^.x2-pp^.x1,pp^.y2-pp^.y1+1,pp^.valueAddres,@vsa,false,pp^.PTypeManager)
+                                                  else
+                                                      PEditor:=pp^.PTypeManager^.CreateEditor(self,pp^.x1,pp^.y1,pp^.x2-pp^.x1,pp^.y2-pp^.y1+1,pp^.valueAddres,@vsa,false);
        vsa.done;
        if assigned(PEditor){<>nil} then
        begin

@@ -213,6 +213,7 @@ begin
      ppd^.ValKey:=valkey;
      ppd^.ValType:=valtype;
      ppd^.PTypeManager:=@self;
+     ppd^.Decorators:=Decorators;
      ppd^.Attr:=ownerattrib;
      ppd^.Collapsed:=PCollapsed;
      ppd^.valueAddres:=addr;

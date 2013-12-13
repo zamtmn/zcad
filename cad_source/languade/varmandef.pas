@@ -52,8 +52,16 @@ const
   vda_different=1;
   vda_RO=2;
 type
+TPropEditorOwner=TWinControl;
 PDMode=(PDM_Field,PDM_Property);
 PUserTypeDescriptor=^UserTypeDescriptor;
+TPropEditor=class;
+TOnCreateEditor=function (TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TPropEditor;
+TOnGetValueAsString=function(PInstance:GDBPointer):GDBString;
+TDecoratedProcs=packed record
+                OnGetValueAsString:TOnGetValueAsString;
+                OnCreateEditor:TOnCreateEditor;
+                end;
   PBasePropertyDeskriptor=^BasePropertyDeskriptor;
   BasePropertyDeskriptor=object({GDBaseObject}GDBBaseNode)
     Name: GDBString;
@@ -72,6 +80,7 @@ PUserTypeDescriptor=^UserTypeDescriptor;
     _bmode:GDBInteger;
     mode:PDMode;
     r,w:GDBString;
+    Decorators:TDecoratedProcs;
   end;
   propdeskptr = ^propdesk;
   propdesk = record
@@ -100,6 +109,7 @@ TPropEditor=class(TComponent)
                  PTD:PUserTypeDescriptor;
                  OwnerNotify:TMyNotifyProc;
                  fFreeOnLostFocus:boolean;
+                 byObjects:boolean;
                  constructor Create(AOwner:TComponent;_PInstance:GDBPointer;_PTD:PUserTypeDescriptor;FreeOnLostFocus:boolean);
                  procedure EditingDone(Sender: TObject);
                  procedure EditingProcess(Sender: TObject);
@@ -107,12 +117,6 @@ TPropEditor=class(TComponent)
                  procedure keyPress(Sender: TObject; var Key: char);
                  function geteditor:TWinControl;
             end;
-TOnGetValueAsString=function(PInstance:GDBPointer):GDBString;
-TDecoratedProcs=packed record
-                OnGetValueAsString:TOnGetValueAsString;
-                end;
-
-TPropEditorOwner=TWinControl;
 UserTypeDescriptor=object(GDBaseObject)
                          SizeInGDBBytes:GDBInteger;
                          TypeName:String;
@@ -227,6 +231,7 @@ begin
      PInstance:=_PInstance;
      PTD:=_PTD;
      fFreeOnLostFocus:=FreeOnLostFocus;
+     byObjects:=false;
 end;
 function TPropEditor.geteditor:TWinControl;
 begin
@@ -244,17 +249,37 @@ begin
 end;
 
 procedure TPropEditor.EditingDone(Sender: TObject);
+var
+  i:integer;
+  p:pointer;
 begin
-     ptd.SetValueFromString(PInstance,tedit(sender).text);
+     if byobjects then
+                      begin
+                           i:=tcombobox(sender).ItemIndex;
+                           p:=tcombobox(sender).Items.Objects[i];
+                           ptd.CopyInstanceTo(@p,PInstance)
+                      end
+                  else
+                      ptd.SetValueFromString(PInstance,tedit(sender).text);
 
      if assigned(OwnerNotify) then
                                   OwnerNotify(self,TMNC_EditingDone);
 end;
 procedure TPropEditor.EditingProcess(Sender: TObject);
+var
+  i:integer;
+  p:pointer;
 begin
      if assigned(OwnerNotify) then
                                   begin
-                                        ptd.SetValueFromString(PInstance,tedit(sender).text);
+                                       if byobjects then
+                                                        begin
+                                                             i:=tcombobox(sender).ItemIndex;
+                                                             p:=tcombobox(sender).Items.Objects[i];
+                                                             ptd.CopyInstanceTo(@p,PInstance)
+                                                        end
+                                                    else
+                                                        ptd.SetValueFromString(PInstance,tedit(sender).text);
                                         OwnerNotify(self,TMNC_EditingProcess);
                                   end;
 end;

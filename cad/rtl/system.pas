@@ -764,6 +764,8 @@ PGDBTextStyleProp=^GDBTextStyleProp;
                     oblique:GDBDouble;(*saved_to_shd*)
                     wfactor:GDBDouble;(*saved_to_shd*)
               end;
+  PPGDBTextStyleObjInsp=^PGDBTextStyleObjInsp;
+  PGDBTextStyleObjInsp=GDBPointer;
   PGDBTextStyle=^GDBTextStyle;
   GDBTextStyle = packed object(GDBNamedObject)
     dxfname: GDBAnsiString;(*saved_to_shd*)
@@ -772,8 +774,6 @@ PGDBTextStyleProp=^GDBTextStyleProp;
     UsedInLTYPE:GDBBoolean;
     destructor Done;virtual;abstract;
   end;
-PPGDBTextStyleArrayObjInsp=^PGDBTextStyleArrayObjInsp;
-PGDBTextStyleArrayObjInsp=GDBPointer;
 PGDBTextStyleArray=^GDBTextStyleArray;
 GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBTextStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
@@ -1104,7 +1104,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
              DWG_CLType:PPGDBLtypePropObjInsp;(*'Drawing line type'*)(*oi_readonly*)
              DWG_CDimStyle:PPGDBDimStyleObjInsp;(*'Dim style'*)(*oi_readonly*)
              DWG_RotateTextInLT:PGDBBoolean;(*'Rotate text in line type'*)
-             DWG_CTStyle:PPGDBTextStyleArrayObjInsp;(*'Text style'*)(*oi_readonly*)
+             DWG_CTStyle:PPGDBTextStyleObjInsp;(*'Text style'*)(*oi_readonly*)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
              DWG_SystmGeometryDraw:PGDBBoolean;(*'System geometry'*)
@@ -2368,7 +2368,7 @@ PGDBObjText=^GDBObjText;
 GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  Content:GDBAnsiString;
                  Template:GDBAnsiString;(*saved_to_shd*)
-                 TXTStyleIndex:PGDBTextStyle;(*saved_to_shd*)
+                 TXTStyleIndex:PGDBTextStyleObjInsp;(*saved_to_shd*)
                  CoordMin,CoordMax:GDBvertex;
                  obj_height,obj_width,obj_y:GDBDouble;
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte);

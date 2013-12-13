@@ -29,7 +29,7 @@ uses
   {FPC}
        math,
   {ZCAD BASE}
-       oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
+       UGDBStringArray,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
        varmandef, varman,UUnitManager,SysInfo,shared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
   {ZCAD SIMPLE PASCAL SCRIPT}
@@ -1492,7 +1492,7 @@ function NamedObjectsDecorator(PInstance:GDBPointer):GDBString;
 begin
      if PGDBLayerProp(PInstance^)<>nil then
                                            begin
-                                           result:=PGDBNamedObject((ppointer(PInstance)^){^}).Name
+                                           result:=Tria_AnsiToUtf8(PGDBNamedObject(ppointer(PInstance)^).Name)
                                            end
                                        else
                                            result:=rsUnassigned;
@@ -1501,7 +1501,55 @@ function PaletteColorDecorator(PInstance:GDBPointer):GDBString;
 begin
      result:=ColorIndex2Name(PTGDBPaletteColor(PInstance)^);
 end;
-procedure DecorateType(tn:string;getvalueasstring:TOnGetValueAsString);
+
+function NamedObjectsDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;NO:PGDBNamedObjectsArray):TPropEditor;
+var
+    cbedit:TComboBox;
+    propeditor:TPropEditor;
+    ir:itrec;
+    number:integer;
+    p,pcurrent:PGDBLayerProp;
+begin
+     propeditor:=TPropEditor.Create(theowner,PInstance,ptd,FreeOnLostFocus);
+     propeditor.byObjects:=true;
+     cbedit:=TComboBox.Create(propeditor);
+     cbedit.SetBounds(x,y,w,h);
+     cbedit.Text:=PTD.GetValueAsString(pinstance);
+     cbedit.OnChange:=propeditor.EditingProcess;
+     {$IFNDEF DELPHI}
+     cbedit.ReadOnly:=true;
+     {$ENDIF}
+     pcurrent:=PGDBLayerProp(ppointer(pinstance)^);
+
+                             p:=NO.beginiterate(ir);
+                             if p<>nil then
+                             repeat
+                                   number:=cbedit.Items.AddObject(Tria_AnsiToUtf8(p^.Name),tobject(p));
+                                   if pcurrent=p then
+                                                     cbedit.ItemIndex:=number;
+                                   p:=NO.iterate(ir);
+                             until p=nil;
+     cbedit.Parent:=theowner;
+     cbedit.DroppedDown:=true;
+     result:=propeditor;
+end;
+function LayersDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TPropEditor;
+begin
+     result:=NamedObjectsDecoratorCreateEditor(TheOwner,x,y,w,h,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.LayerTable);
+end;
+function LTypeDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TPropEditor;
+begin
+     result:=NamedObjectsDecoratorCreateEditor(TheOwner,x,y,w,h,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.LTypeStyleTable);
+end;
+function TextStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TPropEditor;
+begin
+     result:=NamedObjectsDecoratorCreateEditor(TheOwner,x,y,w,h,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.TextStyleTable);
+end;
+function DimStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TPropEditor;
+begin
+     result:=NamedObjectsDecoratorCreateEditor(TheOwner,x,y,w,h,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.DimStyleTable);
+end;
+procedure DecorateType(tn:string;getvalueasstring:TOnGetValueAsString;CreateEditor:TOnCreateEditor);
 var
    PT:PUserTypeDescriptor;
 begin
@@ -1509,17 +1557,18 @@ begin
      if PT<>nil then
                     begin
                          PT^.Decorators.OnGetValueAsString:=getvalueasstring;
+                         PT^.Decorators.OnCreateEditor:=CreateEditor;
                     end;
 end;
 
 procedure MainForm.DecorateSysTypes;
 begin
-     DecorateType('TGDBLineWeight',@LWDecorator);
-     DecorateType('PGDBLayerPropObjInsp',@NamedObjectsDecorator);
-     DecorateType('PGDBLtypePropObjInsp',@NamedObjectsDecorator);
-     DecorateType('PGDBTextStyleArrayObjInsp',@NamedObjectsDecorator);
-     DecorateType('PGDBDimStyleObjInsp',@NamedObjectsDecorator);
-     DecorateType('TGDBPaletteColor',@PaletteColorDecorator);
+     DecorateType('TGDBLineWeight',@LWDecorator,nil);
+     DecorateType('PGDBLayerPropObjInsp',@NamedObjectsDecorator,LayersDecoratorCreateEditor);
+     DecorateType('PGDBLtypePropObjInsp',@NamedObjectsDecorator,LTypeDecoratorCreateEditor);
+     DecorateType('PGDBTextStyleObjInsp',@NamedObjectsDecorator,TextStyleDecoratorCreateEditor);
+     DecorateType('PGDBDimStyleObjInsp',@NamedObjectsDecorator,DimStyleDecoratorCreateEditor);
+     DecorateType('TGDBPaletteColor',@PaletteColorDecorator,nil);
 end;
 
 procedure MainForm.FormCreate(Sender: TObject);

@@ -136,7 +136,7 @@ type
              DWG_CLType:{-}PGDBPointer{/PPGDBLtypePropObjInsp/};(*'Drawing line type'*)(*oi_readonly*)
              DWG_CDimStyle:{-}PGDBPointer{/PPGDBDimStyleObjInsp/};(*'Dim style'*)(*oi_readonly*)
              DWG_RotateTextInLT:PGDBBoolean;(*'Rotate text in line type'*)
-             DWG_CTStyle:{-}PGDBPointer{/PPGDBTextStyleArrayObjInsp/};(*'Text style'*)(*oi_readonly*)
+             DWG_CTStyle:{-}PGDBPointer{/PPGDBTextStyleObjInsp/};(*'Text style'*)(*oi_readonly*)
              DWG_EditInSubEntry:PGDBBoolean;(*'SubEntities edit'*)
              DWG_AdditionalGrips:PGDBBoolean;(*'Additional grips'*)
              DWG_SystmGeometryDraw:PGDBBoolean;(*'System geometry'*)

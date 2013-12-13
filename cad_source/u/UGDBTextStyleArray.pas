@@ -30,6 +30,8 @@ PGDBTextStyleProp=^GDBTextStyleProp;
                     oblique:GDBDouble;(*saved_to_shd*)
                     wfactor:GDBDouble;(*saved_to_shd*)
               end;
+  PPGDBTextStyleObjInsp=^PGDBTextStyleObjInsp;
+  PGDBTextStyleObjInsp=GDBPointer;
   PGDBTextStyle=^GDBTextStyle;
   GDBTextStyle = packed object(GDBNamedObject)
     dxfname: GDBAnsiString;(*saved_to_shd*)
@@ -38,8 +40,6 @@ PGDBTextStyleProp=^GDBTextStyleProp;
     UsedInLTYPE:GDBBoolean;
     destructor Done;virtual;
   end;
-PPGDBTextStyleArrayObjInsp=^PGDBTextStyleArrayObjInsp;
-PGDBTextStyleArrayObjInsp=GDBPointer;
 PGDBTextStyleArray=^GDBTextStyleArray;
 GDBTextStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBTextStyle*)
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);

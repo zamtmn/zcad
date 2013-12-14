@@ -270,7 +270,7 @@ begin
        Application.RemoveAsyncCalls(self);
        freeeditor;
   end;
-  PEditor:=GDBAnsiStringDescriptorObj.CreateEditor(self.ListView1,pos,ListItem.Top,ListView1.Columns.Items[SubItem+1].Width,si,p,nil,true);
+  PEditor:=GDBAnsiStringDescriptorObj.CreateEditor(self.ListView1,pos,ListItem.Top,ListView1.Columns.Items[SubItem+1].Width,si,p,nil,true).Editor;
   PEditor.geteditor.SetFocus;
   PEditor.OwnerNotify:=@Notify;
   EditedItem:=ListItem;

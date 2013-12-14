@@ -981,7 +981,7 @@ begin
       //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
       ppropcurrentedit:=pp;
     end;
-    PEditor:=pp^.PTypeManager^.CreateEditor(@self,{namecol-6}pp^.x1,{my}pp^.y1,{clientwidth-namecol+3}pp^.x2-pp^.x1,{rowh}pp^.y2-pp^.y1,pp^.valueAddres,nil,false);
+    PEditor:=pp^.PTypeManager^.CreateEditor(@self,{namecol-6}pp^.x1,{my}pp^.y1,{clientwidth-namecol+3}pp^.x2-pp^.x1,{rowh}pp^.y2-pp^.y1,pp^.valueAddres,nil,false).Editor;
     if PEditor<>nil then
     begin
       //-----------------------------------------------------------------PEditor^.show;
@@ -1020,6 +1020,8 @@ var
   vv:gdbstring;
   vsa:GDBGDBStringArray;
   ir:itrec;
+  TED:TEditorDesc;
+  editorcontrol:TWinControl;
 begin
      if pp^.SubNode<>nil then
      begin
@@ -1075,9 +1077,26 @@ begin
        end;
        if assigned(pp^.valueAddres) then
        if assigned(pp^.Decorators.OnCreateEditor) then
-                                                      PEditor:=pp^.Decorators.OnCreateEditor(self,pp^.x1,pp^.y1,pp^.x2-pp^.x1,pp^.y2-pp^.y1+1,pp^.valueAddres,@vsa,false,pp^.PTypeManager)
+                                                      TED:=pp^.Decorators.OnCreateEditor(self,pp^.x1,pp^.y1,pp^.x2-pp^.x1,pp^.y2-pp^.y1+1,pp^.valueAddres,@vsa,false,pp^.PTypeManager)
                                                   else
-                                                      PEditor:=pp^.PTypeManager^.CreateEditor(self,pp^.x1,pp^.y1,pp^.x2-pp^.x1,pp^.y2-pp^.y1+1,pp^.valueAddres,@vsa,false);
+                                                      TED:=pp^.PTypeManager^.CreateEditor(self,pp^.x1,pp^.y1,pp^.x2-pp^.x1,pp^.y2-pp^.y1+1,pp^.valueAddres,@vsa,false);
+     case ted.Mode of
+                     TEM_Integrate:begin
+                                       editorcontrol:=TED.Editor.geteditor;
+                                       editorcontrol.SetBounds(pp^.x1,pp^.y1,pp^.x2-pp^.x1,pp^.y2-pp^.y1+1);
+                                       if (editorcontrol is TCombobox) then
+                                                                           begin
+                                                                                {$IFDEF LINUX}
+                                                                                editorcontrol.Visible:=false;
+                                                                                {$ENDIF}
+                                                                                editorcontrol.Parent:=self;
+                                                                                (editorcontrol as TCombobox).droppeddown:=true;
+                                                                           end
+                                                                       else
+                                                                           editorcontrol.Parent:=self;
+                                       PEditor:=TED.Editor;
+                                  end;
+     end;
        vsa.done;
        if assigned(PEditor){<>nil} then
        begin

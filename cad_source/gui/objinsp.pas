@@ -22,7 +22,7 @@ unit Objinsp;
 interface
 
 uses
-  strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
+  StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
   Themes,
   {$IFDEF LCLGTK2}
   x,xlib,{x11,}{xutil,}
@@ -998,6 +998,14 @@ begin
                                     mresplit:=false;
                                     exit;
                                     end;
+     if peditor<>nil then
+     if peditor.geteditor.Visible=false then
+                                            begin
+                                                 peditor.geteditor.Visible:=true;
+                                                 peditor.geteditor.setfocus;
+                                                 if  peditor.geteditor is  TComboBox then
+                                                 TComboBox(peditor.geteditor).DroppedDown:=true;
+                                            end;
 end;
 procedure TGDBobjinsp.createeditor(pp:PPropertyDeskriptor);
 var
@@ -1075,7 +1083,8 @@ begin
        begin
             ppropcurrentedit:=pp;
             peditor.OwnerNotify:=self.Notify;
-            peditor.geteditor.setfocus;
+            if peditor.geteditor.Visible then
+                                             peditor.geteditor.setfocus;
          //-----------------------------------------------------------------PEditor^.SetFocus;
          //-----------------------------------------------------------------PEditor^.show;
          //-----------------------------------------------------------------PEditor^.SetFocus;

@@ -1529,6 +1529,9 @@ begin
                                                      cbedit.ItemIndex:=number;
                                    p:=NO.iterate(ir);
                              until p=nil;
+     {$IFDEF LINUX}
+     cbedit.Visible:=false;
+     {$ENDIF}
      cbedit.Parent:=theowner;
      cbedit.DroppedDown:=true;
      result:=propeditor;

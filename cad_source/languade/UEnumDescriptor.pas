@@ -221,6 +221,10 @@ begin
      GetNumberInArrays(PInstance,number);
      cbedit.ItemIndex:=number;
 
+     {$IFDEF LINUX}
+     cbedit.Visible:=false;
+     {$ENDIF}
+
      cbedit.Parent:=theowner;
      cbedit.DroppedDown:=true;
      result:=propeditor;

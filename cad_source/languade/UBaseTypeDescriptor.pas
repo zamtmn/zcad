@@ -302,6 +302,10 @@ begin
                               cbedit.OnChange:=propeditor.EditingProcess;
                               cbedit.OnExit:=propeditor.ExitEdit;
 
+                              {$IFDEF LINUX}
+                              cbedit.Visible:=false;
+                              {$ENDIF}
+
                               cbedit.Parent:=theowner;
                               result:=propeditor;
                               (*
@@ -416,6 +420,10 @@ begin
 
      cbedit.Items.Add('True');
      cbedit.Items.Add('False');
+
+     {$IFDEF LINUX}
+     cbedit.Visible:=false;
+     {$ENDIF}
 
      if pgdbboolean(pinstance)^ then
                                     cbedit.ItemIndex:=0
@@ -861,6 +869,10 @@ begin
                              until p=nil;
 
      cbedit.ItemIndex:=PTEnumData(Pinstance)^.Selected;
+
+     {$IFDEF LINUX}
+     cbedit.Visible:=false;
+     {$ENDIF}
 
      cbedit.Parent:=theowner;
      cbedit.DroppedDown:=true;

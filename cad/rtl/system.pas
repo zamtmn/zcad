@@ -1088,7 +1088,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
              SYS_Version:PGDBString;(*'Program version'*)(*oi_readonly*)
              SSY_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
              SYS_RunTime:PGDBInteger;(*'Uptime'*)(*oi_readonly*)
-             SYS_SystmGeometryColor:PGDBInteger;(*'Help color'*)
+             SYS_SystmGeometryColor:PTGDBPaletteColor;(*'Help color'*)
              SYS_IsHistoryLineCreated:PGDBBoolean;(*'IsHistoryLineCreated'*)(*oi_readonly*)
              SYS_AlternateFont:PGDBString;(*'Alternate font file'*)
        end;

@@ -1501,24 +1501,27 @@ function PaletteColorDecorator(PInstance:GDBPointer):GDBString;
 begin
      result:=ColorIndex2Name(PTGDBPaletteColor(PInstance)^);
 end;
+procedure CreateComboPropEditor(TheOwner:TPropEditorOwner;pinstance:pointer;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;out propeditor:TPropEditor; out cbedit:TComboBox);
+begin
+  propeditor:=TPropEditor.Create(theowner,PInstance,ptd,FreeOnLostFocus);
+  propeditor.byObjects:=true;
+  cbedit:=TComboBox.Create(propeditor);
+  cbedit.Text:=PTD.GetValueAsString(pinstance);
+  cbedit.OnChange:=propeditor.EditingProcess;
+  {$IFNDEF DELPHI}
+  cbedit.ReadOnly:=true;
+  {$ENDIF}
+end;
 
-function NamedObjectsDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;NO:PGDBNamedObjectsArray):TPropEditor;
+function NamedObjectsDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;NO:PGDBNamedObjectsArray):TEditorDesc;
 var
     cbedit:TComboBox;
-    propeditor:TPropEditor;
     ir:itrec;
     number:integer;
     p,pcurrent:PGDBLayerProp;
 begin
-     propeditor:=TPropEditor.Create(theowner,PInstance,ptd,FreeOnLostFocus);
-     propeditor.byObjects:=true;
-     cbedit:=TComboBox.Create(propeditor);
-     cbedit.SetBounds(x,y,w,h);
-     cbedit.Text:=PTD.GetValueAsString(pinstance);
-     cbedit.OnChange:=propeditor.EditingProcess;
-     {$IFNDEF DELPHI}
-     cbedit.ReadOnly:=true;
-     {$ENDIF}
+     CreateComboPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit);
+
      pcurrent:=PGDBLayerProp(ppointer(pinstance)^);
 
                              p:=NO.beginiterate(ir);
@@ -1529,26 +1532,44 @@ begin
                                                      cbedit.ItemIndex:=number;
                                    p:=NO.iterate(ir);
                              until p=nil;
-     {$IFDEF LINUX}
-     cbedit.Visible:=false;
-     {$ENDIF}
-     cbedit.Parent:=theowner;
-     cbedit.DroppedDown:=true;
-     result:=propeditor;
+
+     result.mode:=TEM_Integrate;
 end;
-function LayersDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TPropEditor;
+function LineWeightDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+var
+    cbedit:TComboBox;
+    ir:itrec;
+    i:integer;
+    number:integer;
+    p,pcurrent:PGDBLayerProp;
+begin
+     CreateComboPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit);
+
+     pcurrent:=PGDBLayerProp(ppointer(pinstance)^);
+
+     cbedit.items.AddObject(rsByLayer, TObject(-1));
+     cbedit.items.AddObject(rsByBlock, TObject(-2));
+     cbedit.items.AddObject(rsdefault, TObject(-3));
+     for i := low(lwarray) to high(lwarray) do
+     begin
+     s:=GetLWNameFromN(i);
+          cbedit.items.AddObject(s, TObject(lwarray[i]));
+     end;
+     result.mode:=TEM_Integrate;
+end;
+function LayersDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
      result:=NamedObjectsDecoratorCreateEditor(TheOwner,x,y,w,h,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.LayerTable);
 end;
-function LTypeDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TPropEditor;
+function LTypeDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
      result:=NamedObjectsDecoratorCreateEditor(TheOwner,x,y,w,h,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.LTypeStyleTable);
 end;
-function TextStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TPropEditor;
+function TextStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
      result:=NamedObjectsDecoratorCreateEditor(TheOwner,x,y,w,h,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.TextStyleTable);
 end;
-function DimStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TPropEditor;
+function DimStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
      result:=NamedObjectsDecoratorCreateEditor(TheOwner,x,y,w,h,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.DimStyleTable);
 end;
@@ -1566,7 +1587,7 @@ end;
 
 procedure MainForm.DecorateSysTypes;
 begin
-     DecorateType('TGDBLineWeight',@LWDecorator,nil);
+     DecorateType('TGDBLineWeight',@LWDecorator,LineWeightDecoratorCreateEditor);
      DecorateType('PGDBLayerPropObjInsp',@NamedObjectsDecorator,LayersDecoratorCreateEditor);
      DecorateType('PGDBLtypePropObjInsp',@NamedObjectsDecorator,LTypeDecoratorCreateEditor);
      DecorateType('PGDBTextStyleObjInsp',@NamedObjectsDecorator,TextStyleDecoratorCreateEditor);

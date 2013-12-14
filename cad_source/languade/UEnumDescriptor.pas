@@ -31,7 +31,7 @@ EnumDescriptor=object(TUserTypeDescriptor)
                      constructor init(size:GDBInteger;tname:string;pu:pointer);
                      procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
                      function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
-                     function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TPropEditor;virtual;
+                     function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
                      function GetNumberInArrays(addr:GDBPointer;out number:GDBLongword):GDBBoolean;virtual;
                      function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                      function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
@@ -202,10 +202,7 @@ var
 begin
      propeditor:=TPropEditor.Create(theowner,PInstance,@self,FreeOnLostFocus);
      cbedit:=TComboBox.Create(propeditor);
-     cbedit.SetBounds(x,y,w,h);
      cbedit.Text:=GetValueAsString(pinstance);
-     //cbedit.OnEditingDone:=propeditor.EditingDone;
-     //cbedit.OnKeyPress:=propeditor.keyPress;
      cbedit.OnChange:=propeditor.EditingProcess;
      {$IFNDEF DELPHI}
      cbedit.ReadOnly:=true;
@@ -221,29 +218,8 @@ begin
      GetNumberInArrays(PInstance,number);
      cbedit.ItemIndex:=number;
 
-     {$IFDEF LINUX}
-     cbedit.Visible:=false;
-     {$ENDIF}
-
-     cbedit.Parent:=theowner;
-     cbedit.DroppedDown:=true;
-     result:=propeditor;
-     (*
-     gdbgetmem({$IFDEF DEBUGBUILD}'{926E1599-2B34-43FF-B9D5-885F4E37F2B3}',{$ENDIF}result,sizeof(ZComboBoxWithProc));
-     PZComboBoxWithProc(result).initxywh('',owner,x,y,w,h+100,true);
-     PZComboBoxWithProc(result).LincedData:=pinstance;
-     //PZComboBoxWithProc(result)^.assigntoprocofobject(onc(self.EditorChange));
-     PZComboBoxWithProc(result)^.onChangeObj:=EditorChange;
-     //PZComboBoxWithProc(result)^.onChangeObj(nil,1);
-
-     //tmethod(self.EditorChange);
-     selectobject(PZComboBoxWithProc(result)^.DC, GetStockObject(ANSI_VAR_FONT));
-     self.UserValue.copyto(@PZComboBoxWithProc(result)^.GDBStrings);
-     PZComboBoxWithProc(result).sync;
-     num:=0;
-     GetNumberInArrays(pinstance,num);
-     PZComboBoxWithProc(result)^.setitem(num);
-     *)
+     result.editor:=propeditor;
+     result.mode:=TEM_Integrate;
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UEnumDescriptor.initialization');{$ENDIF}

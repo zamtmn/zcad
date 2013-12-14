@@ -56,7 +56,12 @@ TPropEditorOwner=TWinControl;
 PDMode=(PDM_Field,PDM_Property);
 PUserTypeDescriptor=^UserTypeDescriptor;
 TPropEditor=class;
-TOnCreateEditor=function (TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TPropEditor;
+TEditorMode=(TEM_Integrate,TEM_Nothing);
+TEditorDesc=packed record
+                  Editor:TPropEditor;
+                  Mode:TEditorMode;
+            end;
+TOnCreateEditor=function (TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 TOnGetValueAsString=function(PInstance:GDBPointer):GDBString;
 TDecoratedProcs=packed record
                 OnGetValueAsString:TOnGetValueAsString;
@@ -117,6 +122,7 @@ TPropEditor=class(TComponent)
                  procedure keyPress(Sender: TObject; var Key: char);
                  function geteditor:TWinControl;
             end;
+
 UserTypeDescriptor=object(GDBaseObject)
                          SizeInGDBBytes:GDBInteger;
                          TypeName:String;
@@ -126,7 +132,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          Decorators:TDecoratedProcs;
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
                          procedure _init(size:GDBInteger;tname:string;pu:pointer);
-                         function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TPropEditor;virtual;
+                         function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
                          function GetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;virtual;
                          procedure DrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer);virtual;
                          procedure RunFastEditor(PInstance:GDBPointer);virtual;
@@ -347,7 +353,8 @@ begin
 end;
 function UserTypeDescriptor.CreateEditor;
 begin
-     result:=nil;
+     result.editor:=nil;
+     result.mode:=TEM_Nothing;
 end;
 function UserTypeDescriptor.GetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;
 begin

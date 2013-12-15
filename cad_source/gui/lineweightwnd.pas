@@ -25,7 +25,35 @@ type
     { public declarations }
   end;
 const
-  lwarray:array [1..24] of integer=(0,5,9,13,15,18,20,25,30,35,40,50,53,60,70,80,90,100,106,120,140,158,200,211);
+  LnWt000 = 0;
+  LnWt005 = 5;
+  LnWt009 = 9;
+  LnWt013 = 13;
+  LnWt015 = 15;
+  LnWt018 = 18;
+  LnWt020 = 20;
+  LnWt025 = 25;
+  LnWt030 = 30;
+  LnWt035 = 35;
+  LnWt040 = 40;
+  LnWt050 = 50;
+  LnWt053 = 53;
+  LnWt060 = 60;
+  LnWt070 = 70;
+  LnWt080 = 80;
+  LnWt090 = 90;
+  LnWt100 = 100;
+  LnWt106 = 106;
+  LnWt120 = 120;
+  LnWt140 = 140;
+  LnWt158 = 158;
+  LnWt200 = 200;
+  LnWt211 = 211;
+  LnWtByLayer = -1;
+  LnWtByBlock = -2;
+  LnWtByLwDefault = -3;
+  lwarray:array [1..24] of TGDBLineWeight=(LnWt000,LnWt005,LnWt009,LnWt013,LnWt015,LnWt018,LnWt020,LnWt025,LnWt030,LnWt035,LnWt040,LnWt050,LnWt053,LnWt060,LnWt070,LnWt080,LnWt090,
+                                           LnWt100,LnWt106,LnWt120,LnWt140,LnWt158,LnWt200,LnWt211);
   ColorBoxDifferent=258;
   ColorBoxSelColor=257;
 

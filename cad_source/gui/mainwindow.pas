@@ -1539,22 +1539,30 @@ function LineWeightDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBIn
 var
     cbedit:TComboBox;
     ir:itrec;
-    i:integer;
+    i,seli:integer;
     number:integer;
-    p,pcurrent:PGDBLayerProp;
+    currLW:TGDBLineWeight;
+procedure addLWtoC(name:string;value:TGDBLineWeight);
+begin
+     cbedit.items.AddObject(name, TObject(value));
+     if value=currLW then
+                         seli:=cbedit.Items.Count-1;
+end;
+
 begin
      CreateComboPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit);
 
-     pcurrent:=PGDBLayerProp(ppointer(pinstance)^);
+     currLW:=PTGDBLineWeight(pinstance)^;
+     seli:=0;
 
-     cbedit.items.AddObject(rsByLayer, TObject(-1));
-     cbedit.items.AddObject(rsByBlock, TObject(-2));
-     cbedit.items.AddObject(rsdefault, TObject(-3));
+     addLWtoC(rsByLayer,LnWtByLayer);
+     addLWtoC(rsByBlock,LnWtByBlock);
+     addLWtoC(rsdefault,LnWtByLwDefault);
      for i := low(lwarray) to high(lwarray) do
      begin
-     s:=GetLWNameFromN(i);
-          cbedit.items.AddObject(s, TObject(lwarray[i]));
+          addLWtoC(GetLWNameFromN(i),lwarray[i]);
      end;
+     cbedit.ItemIndex:=seli;
      result.mode:=TEM_Integrate;
 end;
 function LayersDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;

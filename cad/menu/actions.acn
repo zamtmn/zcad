@@ -64,6 +64,7 @@ action ACN_COLORS,Colors,colors.bmp,Colors ...,Select current color,
 action ACN_TSTYLES,TextStyles,textstyles.bmp,Text styles ...,Text styles properties manager,
 action ACN_DSTYLES,DimStyles,dimstyles.bmp,Dimension styles ...,Dimension styles properties manager,
 action ACN_LTYPES,LineTypes,linestyles.bmp,Line types ...,Line types properties manager,
+action ACN_MATCHPROP,MatchProp,matchprop.bmp,Match properties,Match properties,
 
 action ACN_COPY,Copy,copy.bmp,Copy,Copy primitives,
 action ACN_MOVE,Move,move.bmp,Move,Move primitives,

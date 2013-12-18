@@ -74,6 +74,7 @@ Panel Standart;
     action ACN_REDO
     Separator
     action ACN_REGEN
+    action ACN_MATCHPROP
     button OPS_Sensor_Mark,#++,Numbering sensors on the plan
     action ACN_DEVNUMBERING
     action ACN_KIPCDBUILD

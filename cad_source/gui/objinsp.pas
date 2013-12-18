@@ -767,6 +767,7 @@ procedure TGDBobjinsp.freeeditor;
 begin
      freeandnil(peditor);
      if assigned(shared.cmdedit) then
+     if shared.cmdedit.IsVisible then
                                      shared.cmdedit.SetFocus;
 end;
 

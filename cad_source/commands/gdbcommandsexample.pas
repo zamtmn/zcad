@@ -44,6 +44,7 @@ uses
                       //модуль описывающий "фабрику" для создания примитивов
   zcadsysvars,        //system global variables
                       //системные переменные
+  zcadinterface,
   gdbase,gdbasetypes, //base types
                       //описания базовых типов
   gdbobjectsconstdef, //base constants
@@ -592,6 +593,22 @@ begin
     end;
     result:=cmd_ok;
 end;
+function matchprop_com(operands:TCommandOperands):TCommandResult;
+var
+    ps,pd:PGDBObjCircle;
+begin
+    if commandmanager.getentity('Select source enyity:',ps) then
+    begin
+         while commandmanager.getentity('Select destination enyity:',pd) do
+         begin
+              GDBObjSetEntityProp(pd,ps^.vp.Layer,ps^.vp.LineType,ps^.vp.Color,ps^.vp.LineWeight);
+              pd^.vp.LineTypeScale:=ps^.vp.LineTypeScale;
+              pd^.FormatEntity(gdb.GetCurrentDWG^);
+              if assigned(redrawoglwndproc) then redrawoglwndproc;
+         end;
+    end;
+    result:=cmd_ok;
+end;
 
 initialization
      {$IFDEF DEBUGINITSECTION}LogOut('gdbcommandsexample.initialization');{$ENDIF}//write to log for the control initialization sequence
@@ -609,6 +626,7 @@ initialization
      CreateCommandFastObjectPlugin(@DrawRotatedDim_com,'DimLinear',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawDiametricDim_com,'DimDiameter',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawRadialDim_com,'DimRadius',CADWG,0);
+     CreateCommandFastObjectPlugin(@matchprop_com,'MatchProp',CADWG,0);
 
      CreateCommandFastObjectPlugin(@DrawArc_com,'Arc',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawCircle_com,'Circle',CADWG,0);

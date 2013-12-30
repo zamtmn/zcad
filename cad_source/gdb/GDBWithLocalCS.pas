@@ -34,10 +34,10 @@ GDBObj2dprop=packed record
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
 GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                Local:GDBObj2dprop;(*'Object orientation'*)(*saved_to_shd*)
-               P_insert_in_WCS:GDBvertex;(*'Insertion point WCS'*)(*saved_to_shd*)
-               ProjP_insert:GDBvertex;(*'Insertion point DCS'*)
-               PProjOutBound:PGDBOOutbound2DIArray;(*'Bounding box DCS'*)
-               lod:GDBByte;(*'Level of detail'*)
+               P_insert_in_WCS:GDBvertex;(*'Insertion point WCS'*)(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
+               ProjP_insert:GDBvertex;(*'Insertion point DCS'*)(*oi_readonly*)(*hidden_in_objinsp*)
+               PProjOutBound:PGDBOOutbound2DIArray;(*'Bounding box DCS'*)(*oi_readonly*)(*hidden_in_objinsp*)
+               lod:GDBByte;(*'Level of detail'*)(*oi_readonly*)(*hidden_in_objinsp*)
                constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;

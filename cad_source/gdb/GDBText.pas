@@ -30,9 +30,12 @@ PGDBObjText=^GDBObjText;
 GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  Content:GDBAnsiString;
                  Template:GDBAnsiString;(*saved_to_shd*)
-                 TXTStyleIndex:{-}PGDBTextStyle{/PGDBTextStyleObjInsp/};(*saved_to_shd*)
-                 CoordMin,CoordMax:GDBvertex;
-                 obj_height,obj_width,obj_y:GDBDouble;
+                 TXTStyleIndex:{-}PGDBTextStyle{/PGDBTextStyleObjInsp/};(*saved_to_shd*)(*'Style'*)
+                 CoordMin:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 CoordMax:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 obj_height:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
+                 obj_width:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
+                 obj_y:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;

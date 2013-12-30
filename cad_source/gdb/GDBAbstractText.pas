@@ -49,9 +49,9 @@ GDBTextProp=packed record
 PGDBObjAbstractText=^GDBObjAbstractText;
 GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
                          textprop:GDBTextProp;(*saved_to_shd*)
-                         P_drawInOCS:GDBvertex;(*saved_to_shd*)
-                         DrawMatrix:DMatrix4D;
-                         Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;
+                         P_drawInOCS:GDBvertex;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
+                         DrawMatrix:DMatrix4D;(*oi_readonly*)(*hidden_in_objinsp*)
+                         Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                          procedure CalcObjMatrix;virtual;
                          procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                          procedure SimpleDrawGeometry;virtual;

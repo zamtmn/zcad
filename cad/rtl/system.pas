@@ -1567,7 +1567,7 @@ GDBObj3DFace={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBWithMatrix.pas
 PGDBObjWithMatrix=^GDBObjWithMatrix;
 GDBObjWithMatrix={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
-                       ObjMatrix:DMatrix4D;(*'OCS Matrix'*)
+                       ObjMatrix:DMatrix4D;(*'OCS Matrix'*)(*oi_readonly*)(*hidden_in_objinsp*)
                        constructor initnul(owner:PGDBObjGenericWithSubordinated);
                        function GetMatrix:PDMatrix4D;virtual;abstract;
                        procedure CalcObjMatrix;virtual;abstract;
@@ -1587,10 +1587,10 @@ GDBObj2dprop=packed record
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
 GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                Local:GDBObj2dprop;(*'Object orientation'*)(*saved_to_shd*)
-               P_insert_in_WCS:GDBvertex;(*'Insertion point WCS'*)(*saved_to_shd*)
-               ProjP_insert:GDBvertex;(*'Insertion point DCS'*)
-               PProjOutBound:PGDBOOutbound2DIArray;(*'Bounding box DCS'*)
-               lod:GDBByte;(*'Level of detail'*)
+               P_insert_in_WCS:GDBvertex;(*'Insertion point WCS'*)(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
+               ProjP_insert:GDBvertex;(*'Insertion point DCS'*)(*oi_readonly*)(*hidden_in_objinsp*)
+               PProjOutBound:PGDBOOutbound2DIArray;(*'Bounding box DCS'*)(*oi_readonly*)(*hidden_in_objinsp*)
+               lod:GDBByte;(*'Level of detail'*)(*oi_readonly*)(*hidden_in_objinsp*)
                constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint);
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;abstract;
@@ -1643,7 +1643,7 @@ GDBObjSolid={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
            end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBPlain.pas
 GDBObjPlain={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
-                  Outbound:OutBound4V;
+                  Outbound:OutBound4V;(*oi_readonly*)(*hidden_in_objinsp*)
                   procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
             end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\GDBPlainWithOX.pas
@@ -1677,9 +1677,9 @@ GDBTextProp=packed record
 PGDBObjAbstractText=^GDBObjAbstractText;
 GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
                          textprop:GDBTextProp;(*saved_to_shd*)
-                         P_drawInOCS:GDBvertex;(*saved_to_shd*)
-                         DrawMatrix:DMatrix4D;
-                         Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;
+                         P_drawInOCS:GDBvertex;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
+                         DrawMatrix:DMatrix4D;(*oi_readonly*)(*hidden_in_objinsp*)
+                         Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                          procedure CalcObjMatrix;virtual;abstract;
                          procedure DrawGeometry(lw:GDBInteger;var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                          procedure SimpleDrawGeometry;virtual;abstract;
@@ -1703,13 +1703,19 @@ GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
 PGDBObjCircle=^GDBObjCircle;
 GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                  Radius:GDBDouble;(*'Radius'*)(*saved_to_shd*)
-                 Diametr:GDBDouble;(*'Diametr'*)
-                 Length:GDBDouble;(*'Length'*)
-                 Area:GDBDouble;(*'Area'*)
-                 q0,q1,q2,q3:GDBvertex;
-                 pq0,pq1,pq2,pq3:GDBvertex;
-                 Outbound:OutBound4V;
-                 Vertex3D_in_WCS_Array:GDBPoint3DArray;
+                 Diametr:GDBDouble;(*'Diametr'*)(*oi_readonly*)
+                 Length:GDBDouble;(*'Length'*)(*oi_readonly*)
+                 Area:GDBDouble;(*'Area'*)(*oi_readonly*)
+                 q0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 q1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 q2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 q3:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 pq0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 pq1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 pq2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 pq3:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 Outbound:OutBound4V;(*oi_readonly*)(*hidden_in_objinsp*)
+                 Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;RR:GDBDouble);
                  constructor initnul;
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;abstract;
@@ -1749,11 +1755,15 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  R:GDBDouble;(*saved_to_shd*)
                  StartAngle:GDBDouble;(*saved_to_shd*)
                  EndAngle:GDBDouble;(*saved_to_shd*)
-                 angle:GDBDouble;
-                 Vertex3D_in_WCS_Array:GDBPoint3DArray;
-                 length:GDBDouble;
-                 q0,q1,q2:GDBvertex;
-                 pq0,pq1,pq2:GDBvertex;
+                 angle:GDBDouble;(*oi_readonly*)
+                 Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
+                 length:GDBDouble;(*oi_readonly*)
+                 q0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 q1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 q2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 pq0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 pq1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 pq2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;RR,S,E:GDBDouble);
                  constructor initnul;
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;abstract;
@@ -2368,9 +2378,12 @@ PGDBObjText=^GDBObjText;
 GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  Content:GDBAnsiString;
                  Template:GDBAnsiString;(*saved_to_shd*)
-                 TXTStyleIndex:PGDBTextStyleObjInsp;(*saved_to_shd*)
-                 CoordMin,CoordMax:GDBvertex;
-                 obj_height,obj_width,obj_y:GDBDouble;
+                 TXTStyleIndex:PGDBTextStyleObjInsp;(*saved_to_shd*)(*'Style'*)
+                 CoordMin:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 CoordMax:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 obj_height:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
+                 obj_width:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
+                 obj_y:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;abstract;
@@ -2394,9 +2407,9 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
 PGDBObjMText=^GDBObjMText;
 GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  width:GDBDouble;(*saved_to_shd*)
-                 linespace:GDBDouble;(*saved_to_shd*)
+                 linespace:GDBDouble;(*saved_to_shd*)(*oi_readonly*)
                  linespacef:GDBDouble;(*saved_to_shd*)
-                 text:XYZWGDBGDBStringArray;
+                 text:XYZWGDBGDBStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte;wi,l:GDBDouble);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;abstract;

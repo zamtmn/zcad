@@ -28,11 +28,15 @@ GDBObjArc={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                  R:GDBDouble;(*saved_to_shd*)
                  StartAngle:GDBDouble;(*saved_to_shd*)
                  EndAngle:GDBDouble;(*saved_to_shd*)
-                 angle:GDBDouble;
-                 Vertex3D_in_WCS_Array:GDBPoint3DArray;
-                 length:GDBDouble;
-                 q0,q1,q2:GDBvertex;
-                 pq0,pq1,pq2:GDBvertex;
+                 angle:GDBDouble;(*oi_readonly*)
+                 Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
+                 length:GDBDouble;(*oi_readonly*)
+                 q0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 q1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 q2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 pq0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 pq1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 pq2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;p:GDBvertex;RR,S,E:GDBDouble);
                  constructor initnul;
                  procedure LoadFromDXF(var f:GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;

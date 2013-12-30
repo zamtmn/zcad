@@ -20,7 +20,7 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-UGDBDrawingdef,WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,ugdbabstractdrawing,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
+ugdbdimstylearray,UGDBDrawingdef,WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,ugdbabstractdrawing,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
 UGDBNumerator, gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,sysinfo,ugdbsimpledrawing,
@@ -940,6 +940,7 @@ procedure startup;
 var
    r: TLResource;
    f:GDBOpenArrayOfByte;
+   pds:PGDBDimStyle;
 const
    resname='GEWIND';
    filename='GEWIND.SHX';
@@ -991,6 +992,8 @@ begin
   SetCurrentDWGProc:=SetCurrentDWG;
   BlockBaseDWG:=gdb.CreateDWG;
   ClipboardDWG:=gdb.CreateDWG;
+  ClipboardDWG.DimStyleTable.AddItem('Standart',pds);
+  pds.init('Standart');
   //gdb.currentdwg:=BlockBaseDWG;
   GDBTrash.initnul;
 end;

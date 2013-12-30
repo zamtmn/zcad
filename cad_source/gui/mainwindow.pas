@@ -278,7 +278,7 @@ begin
            {if assigned(LayerBox) then
            LayerBox.ItemIndex:=getsortedindex(SysVar.dwg.DWG_CLayer^);}
            IVars.CColor:=sysvar.dwg.DWG_CColor^;
-           IVars.CLWeight:=sysvar.dwg.DWG_CLinew^+3;
+           IVars.CLWeight:=sysvar.dwg.DWG_CLinew^;
            ivars.CLayer:={gdb.GetCurrentDWG.LayerTable.getelement}(sysvar.dwg.DWG_CLayer^);
            ivars.CLType:={gdb.GetCurrentDWG.LTypeStyleTable.getelement}(sysvar.dwg.DWG_CLType^);
            ivars.CTStyle:=sysvar.dwg.DWG_CTStyle^;
@@ -330,7 +330,7 @@ begin
                                ivars.CLWeight:=ColorBoxDifferent
                            else
                                begin
-                                    ivars.CLWeight:=lw+3
+                                    ivars.CLWeight:=lw
                                end;
            if layer<>PEmpty then
            if layer=PDifferent then
@@ -1330,13 +1330,13 @@ procedure MainForm.FillLWCombo(cb:TCustomComboBox);
 var
    i:integer;
 begin
-  cb.items.AddObject(rsByLayer, TObject(2));
-  cb.items.AddObject(rsByBlock, TObject(1));
-  cb.items.AddObject(rsdefault, TObject(0));
+  cb.items.AddObject(rsByLayer, TObject(LnWtByLayer));
+  cb.items.AddObject(rsByBlock, TObject(LnWtByBlock));
+  cb.items.AddObject(rsdefault, TObject(LnWtByLwDefault));
   for i := low(lwarray) to high(lwarray) do
   begin
   s:=GetLWNameFromN(i);
-       cb.items.AddObject(s, TObject(lwarray[i]+3));
+       cb.items.AddObject(s, TObject(lwarray[i]));
   end;
 end;
 
@@ -1551,6 +1551,8 @@ end;
 
 begin
      CreateComboPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit);
+     cbedit.Style:=csOwnerDrawFixed;
+     cbedit.OnDrawItem:=MainFormN.LineWBoxDrawItem;
 
      currLW:=PTGDBLineWeight(pinstance)^;
      seli:=0;
@@ -1924,13 +1926,13 @@ begin
                                       end
                                  else
                                      index:=integer(tcombobox(Control).items.Objects[Index]);
-   s:=GetLWNameFromLW(index-3);
+   s:=GetLWNameFromLW(index);
    if (index<4)or(index=ColorBoxDifferent) then
               ll:=0
           else
               ll:=30;
     ARect.Left:=ARect.Left+2;
-    drawLW(TComboBox(Control).canvas,ARect,ll,(index-3) div 10,s);
+    drawLW(TComboBox(Control).canvas,ARect,ll,(index) div 10,s);
 end;
 procedure MainForm.ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: TOwnerDrawState);
@@ -3340,7 +3342,7 @@ procedure  MainForm.ChangeCLineW(Sender:Tobject);
 var tcl,index:GDBInteger;
 begin
   index:=tcombobox(Sender).ItemIndex;
-  index:=integer(tcombobox(Sender).items.Objects[index])-3;
+  index:=integer(tcombobox(Sender).items.Objects[index]);
   if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
   then
   begin

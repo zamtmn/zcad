@@ -53,7 +53,7 @@ begin
                 result:=rsByBlock;
               -1:
                 result:=rsByLayer;
-ColorBoxDifferent-3:
+ColorBoxDifferent:
                 result:=rsDifferent;
               else
                   begin
@@ -155,13 +155,13 @@ var i:integer;
 begin
      if showBy then
      begin
-     ListBox1.items.AddObject(rsByLayer,TObject(2));
-     ListBox1.items.AddObject(rsByBlock,TObject(1));
+     ListBox1.items.AddObject(rsByLayer,TObject(LnWtByLayer));
+     ListBox1.items.AddObject(rsByBlock,TObject(LnWtByBlock));
      end;
-     ListBox1.items.AddObject(rsdefault,TObject(0));
+     ListBox1.items.AddObject(rsdefault,TObject(LnWtByLwDefault));
      for i := low(lwarray) to high(lwarray) do
      begin
-          ListBox1.items.AddObject(GetLWNameFromN(i),TObject(lwarray[i]+3));
+          ListBox1.items.AddObject(GetLWNameFromN(i),TObject(lwarray[i]));
      end;
      ListBox1.ItemIndex:=0;
      clw:=clw+3;

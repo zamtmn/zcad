@@ -634,9 +634,9 @@ begin
           else
             //drawtextA({cdc}dc,GDBPointer(ppd^.value),length(ppd^.value),r,DT_left);
             begin
-            if ppd.PTypeManager<>nil then
+            if assigned(ppd.FastEditor.OnGetPrefferedFastEditorSize) then
             begin
-            FESize:=ppd.PTypeManager.GetPrefferedFastEditorSize(ppd^.valueAddres);
+            FESize:=ppd.FastEditor.OnGetPrefferedFastEditorSize(ppd^.valueAddres);
             if FESize.cX>0 then
             begin
                  fer:=r;
@@ -644,7 +644,7 @@ begin
                  fer.Right:=fer.Right-fastEditorOffset;
                  fer.Top:=fer.Top-3;
                  r.Right:=fer.Left;
-                 ppd.PTypeManager.DrawFastEditor(canvas,fer,ppd^.valueAddres);
+                 ppd.FastEditor.OnDrawFastEditor(canvas,fer,ppd^.valueAddres);
             end;
             end;
             if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)) then
@@ -1158,12 +1158,12 @@ begin
                 exit;
   if (button=mbLeft) then
                          begin
-                              if pp.PTypeManager<>nil then
+                              if assigned(pp.FastEditor.OnGetPrefferedFastEditorSize) then
                               begin
-                              fesize:=pp.PTypeManager.GetPrefferedFastEditorSize(pp.valueAddres);
+                              fesize:=pp.FastEditor.OnGetPrefferedFastEditorSize(pp.valueAddres);
                               if (fesize.cx>0)and(({clientwidth}pp.x2-x-fastEditorOffset-1)<=fesize.cx) then
                                                                                    begin
-                                                                                        pp.PTypeManager.RunFastEditor(pp.valueAddres);
+                                                                                        pp.FastEditor.OnRunFastEditor(pp.valueAddres);
                                                                                         if GDBobj then
                                                                                         if PGDBaseObject(pcurrobj)^.IsEntity then
                                                                                                                             PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^);

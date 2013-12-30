@@ -620,7 +620,10 @@ begin
           begin
             tempcolor:=canvas.Font.Color;
             canvas.Font.Color:=clGrayText;
-            drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
+            if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)) then
+                                               ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
+                                           else
+                                               drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
             //canvas.TextRect(r,r.Left,r.Top,(ppd^.value));
             canvas.Font.Color:=tempcolor;
 

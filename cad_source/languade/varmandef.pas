@@ -63,9 +63,11 @@ TEditorDesc=packed record
             end;
 TOnCreateEditor=function (TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 TOnGetValueAsString=function(PInstance:GDBPointer):GDBString;
+TOnDrawProperty=procedure(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
 TDecoratedProcs=packed record
                 OnGetValueAsString:TOnGetValueAsString;
                 OnCreateEditor:TOnCreateEditor;
+                OnDrawProperty:TOnDrawProperty;
                 end;
   PBasePropertyDeskriptor=^BasePropertyDeskriptor;
   BasePropertyDeskriptor=object({GDBaseObject}GDBBaseNode)

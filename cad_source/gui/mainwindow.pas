@@ -1583,7 +1583,7 @@ function DimStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInte
 begin
      result:=NamedObjectsDecoratorCreateEditor(TheOwner,x,y,w,h,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.DimStyleTable);
 end;
-procedure DecorateType(tn:string;getvalueasstring:TOnGetValueAsString;CreateEditor:TOnCreateEditor);
+procedure DecorateType(tn:string;getvalueasstring:TOnGetValueAsString;CreateEditor:TOnCreateEditor;DrawProperty:TOnDrawProperty);
 var
    PT:PUserTypeDescriptor;
 begin
@@ -1592,17 +1592,35 @@ begin
                     begin
                          PT^.Decorators.OnGetValueAsString:=getvalueasstring;
                          PT^.Decorators.OnCreateEditor:=CreateEditor;
+                         PT^.Decorators.OnDrawProperty:=DrawProperty;
                     end;
+end;
+procedure drawLWProp(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
+var
+   index:TGDBLineWeight;
+   ll:integer;
+   s:gdbstring;
+begin
+     index:=PTGDBLineWeight(PInstance)^;
+     s:=GetLWNameFromLW(index);
+    if (index<1) then
+               ll:=0
+           else
+               ll:=30;
+     ARect.Left:=ARect.Left+2;
+     //drawLW(TComboBox(Control).canvas,ARect,ll,(index) div 10,s);
+
+     DrawLW(canvas,ARect,ll,(index) div 10,s);
 end;
 
 procedure MainForm.DecorateSysTypes;
 begin
-     DecorateType('TGDBLineWeight',@LWDecorator,LineWeightDecoratorCreateEditor);
-     DecorateType('PGDBLayerPropObjInsp',@NamedObjectsDecorator,LayersDecoratorCreateEditor);
-     DecorateType('PGDBLtypePropObjInsp',@NamedObjectsDecorator,LTypeDecoratorCreateEditor);
-     DecorateType('PGDBTextStyleObjInsp',@NamedObjectsDecorator,TextStyleDecoratorCreateEditor);
-     DecorateType('PGDBDimStyleObjInsp',@NamedObjectsDecorator,DimStyleDecoratorCreateEditor);
-     DecorateType('TGDBPaletteColor',@PaletteColorDecorator,nil);
+     DecorateType('TGDBLineWeight',@LWDecorator,@LineWeightDecoratorCreateEditor,@drawLWProp);
+     DecorateType('PGDBLayerPropObjInsp',@NamedObjectsDecorator,@LayersDecoratorCreateEditor,nil);
+     DecorateType('PGDBLtypePropObjInsp',@NamedObjectsDecorator,@LTypeDecoratorCreateEditor,nil);
+     DecorateType('PGDBTextStyleObjInsp',@NamedObjectsDecorator,@TextStyleDecoratorCreateEditor,nil);
+     DecorateType('PGDBDimStyleObjInsp',@NamedObjectsDecorator,@DimStyleDecoratorCreateEditor,nil);
+     DecorateType('TGDBPaletteColor',@PaletteColorDecorator,nil,nil);
 end;
 
 procedure MainForm.FormCreate(Sender: TObject);

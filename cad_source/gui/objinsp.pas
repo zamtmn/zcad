@@ -644,7 +644,10 @@ begin
                  ppd.PTypeManager.DrawFastEditor(canvas,fer,ppd^.valueAddres);
             end;
             end;
-            drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
+            if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)) then
+                                                           ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
+                                                       else
+                                                           drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
             //canvas.TextRect(r,r.Left,r.Top,(ppd^.value));
                                  //TextOut(cdc, namecol, y * rowh, GDBPointer(ppd^.value), length(ppd^.value));
             end;

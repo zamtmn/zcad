@@ -50,11 +50,15 @@ end;
 function GDBSinonimDescriptor.CreateProperties;
 var
    td:TDecoratedProcs;
+   tfe:TFastEditorProcs;
 begin
      td:=PTUserTypeDescriptor(PSinonimOf)^.Decorators;
+     tfe:=PTUserTypeDescriptor(PSinonimOf)^.FastEditor;
      PTUserTypeDescriptor(PSinonimOf)^.Decorators:=Decorators;
+     PTUserTypeDescriptor(PSinonimOf)^.FastEditor:=FastEditor;
      PTUserTypeDescriptor(PSinonimOf)^.CreateProperties(mode,PPDA,Name,PCollapsed,ownerattrib,bmode,addr,valkey,valtype);
      PTUserTypeDescriptor(PSinonimOf)^.Decorators:=td;
+     PTUserTypeDescriptor(PSinonimOf)^.FastEditor:=tfe;
 end;
 procedure GDBSinonimDescriptor.ApplyOperator;
 begin

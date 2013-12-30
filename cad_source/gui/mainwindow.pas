@@ -22,7 +22,7 @@ unit mainwindow;
 interface
 uses
   {LCL}
-       AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
+       types,AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
        ActnList,LCLType,LCLProc,intftranslations,toolwin,LMessages,LCLIntf,
        Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,FileUtil,
        menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
@@ -1595,6 +1595,51 @@ begin
                          PT^.Decorators.OnDrawProperty:=DrawProperty;
                     end;
 end;
+function BooleanGetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;
+var
+  Details: TThemedElementDetails;
+  ComboElem:TThemedButton;
+begin
+     if assigned(PInstance) then
+     begin
+     ComboElem:=tbCheckBoxUncheckedNormal;
+     Details:=ThemeServices.GetElementDetails(ComboElem);
+     result:=ThemeServices.GetDetailSize(Details);
+     end
+     else
+         result:=types.size(0,0);
+end;
+procedure BooleanDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer);
+var
+  Details: TThemedElementDetails;
+  ComboElem:TThemedButton;
+begin
+     if pboolean(PInstance)^ then
+                                 ComboElem:=tbCheckBoxCheckedNormal
+                             else
+                                 ComboElem:=tbCheckBoxUncheckedNormal;
+     Details:=ThemeServices.GetElementDetails(ComboElem);
+     ThemeServices.DrawElement(Canvas.Handle,Details,r);
+end;
+procedure BooleanInverse(PInstance:GDBPointer);
+begin
+     pboolean(PInstance)^:=not pboolean(PInstance)^;
+end;
+procedure AddFastEditorToType(tn:string;GetPrefferedFastEditorSize:TGetPrefferedFastEditorSize;
+                                        DrawFastEditor:TDrawFastEditor;
+                                        RunFastEditor:TRunFastEditor);
+var
+   PT:PUserTypeDescriptor;
+begin
+     PT:=SysUnit.TypeName2PTD(tn);
+     if PT<>nil then
+                    begin
+                         PT^.FastEditor.OnGetPrefferedFastEditorSize:=GetPrefferedFastEditorSize;
+                         PT^.FastEditor.OnDrawFastEditor:=DrawFastEditor;
+                         PT^.FastEditor.OnRunFastEditor:=RunFastEditor;
+                    end;
+end;
+
 procedure drawLWProp(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
 var
    index:TGDBLineWeight;
@@ -1621,6 +1666,8 @@ begin
      DecorateType('PGDBTextStyleObjInsp',@NamedObjectsDecorator,@TextStyleDecoratorCreateEditor,nil);
      DecorateType('PGDBDimStyleObjInsp',@NamedObjectsDecorator,@DimStyleDecoratorCreateEditor,nil);
      DecorateType('TGDBPaletteColor',@PaletteColorDecorator,nil,nil);
+     AddFastEditorToType('GDBBoolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
+     //AddFastEditorToType('GDBInteger',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
 end;
 
 procedure MainForm.FormCreate(Sender: TObject);

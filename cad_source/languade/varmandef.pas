@@ -64,10 +64,20 @@ TEditorDesc=packed record
 TOnCreateEditor=function (TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 TOnGetValueAsString=function(PInstance:GDBPointer):GDBString;
 TOnDrawProperty=procedure(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
+
+TGetPrefferedFastEditorSize=function (PInstance:GDBPointer):TSize;
+TDrawFastEditor=procedure (canvas:TCanvas;r:trect;PInstance:GDBPointer);
+TRunFastEditor=procedure (PInstance:GDBPointer);
+
 TDecoratedProcs=packed record
                 OnGetValueAsString:TOnGetValueAsString;
                 OnCreateEditor:TOnCreateEditor;
                 OnDrawProperty:TOnDrawProperty;
+                end;
+TFastEditorProcs=packed record
+                OnGetPrefferedFastEditorSize:TGetPrefferedFastEditorSize;
+                OnDrawFastEditor:TDrawFastEditor;
+                OnRunFastEditor:TRunFastEditor;
                 end;
   PBasePropertyDeskriptor=^BasePropertyDeskriptor;
   BasePropertyDeskriptor=object({GDBaseObject}GDBBaseNode)
@@ -88,6 +98,7 @@ TDecoratedProcs=packed record
     mode:PDMode;
     r,w:GDBString;
     Decorators:TDecoratedProcs;
+    FastEditor:TFastEditorProcs;
   end;
   propdeskptr = ^propdesk;
   propdesk = record
@@ -132,12 +143,10 @@ UserTypeDescriptor=object(GDBaseObject)
                          OIP:TOIProps;
                          Collapsed:GDBBoolean;
                          Decorators:TDecoratedProcs;
+                         FastEditor:TFastEditorProcs;
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
                          procedure _init(size:GDBInteger;tname:string;pu:pointer);
                          function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
-                         function GetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;virtual;
-                         procedure DrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer);virtual;
-                         procedure RunFastEditor(PInstance:GDBPointer);virtual;
                          procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;abstract;
                          function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
                          function SerializePreProcess(Value:GDBString;sub:integer):GDBString;virtual;
@@ -357,16 +366,6 @@ function UserTypeDescriptor.CreateEditor;
 begin
      result.editor:=nil;
      result.mode:=TEM_Nothing;
-end;
-function UserTypeDescriptor.GetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;
-begin
-     result:=Size(0,0)
-end;
-procedure UserTypeDescriptor.DrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer);
-begin
-end;
-procedure UserTypeDescriptor.RunFastEditor;
-begin
 end;
 function UserTypeDescriptor.GetTypeAttributes;
 begin

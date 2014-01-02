@@ -77,6 +77,7 @@ uses
    function SaveAs_com(Operands:pansichar):GDBInteger;
    procedure CopyToClipboard;}
    function quit_com(Operands:pansichar):GDBInteger;
+   function layer_cmd:GDBInteger;
    //function Regen_com(Operands:pansichar):GDBInteger;
 //var DWGPageCxMenu:pzpopupmenu;
 implementation

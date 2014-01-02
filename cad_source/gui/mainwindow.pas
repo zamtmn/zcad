@@ -230,6 +230,7 @@ const
   function IsRealyQuit:GDBBoolean;
 
 implementation
+uses gdbcommandsinterface;
 
 {procedure TMyAnchorDockManager.ResetBounds(Force: Boolean);
 begin
@@ -1609,7 +1610,7 @@ begin
      else
          result:=types.size(0,0);
 end;
-procedure BooleanDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer);
+procedure BooleanDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;hot,pressed,readonly:boolean);
 var
   Details: TThemedElementDetails;
   ComboElem:TThemedButton;
@@ -1621,10 +1622,41 @@ begin
      Details:=ThemeServices.GetElementDetails(ComboElem);
      ThemeServices.DrawElement(Canvas.Handle,Details,r);
 end;
+procedure ButtonDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;hot,pressed,readonly:boolean);
+var
+  Details: TThemedElementDetails;
+  ComboElem:TThemedButton;
+begin
+     ComboElem:=tbPushButtonNormal;
+     Details:=ThemeServices.GetElementDetails(ComboElem);
+     ThemeServices.DrawElement(Canvas.Handle,Details,r);
+     ThemeServices.DrawText(Canvas.Handle,Details,'...',r,DT_CENTER or DT_VCENTER,0);
+end;
+function ButtonGetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;
+var
+  Details: TThemedElementDetails;
+  ComboElem:TThemedButton;
+begin
+     if assigned(PInstance) then
+     begin
+     ComboElem:=tbCheckBoxCheckedNormal;
+     Details:=ThemeServices.GetElementDetails(ComboElem);
+     result:=ThemeServices.GetDetailSize(Details);
+     end
+     else
+         result:=types.size(0,0);
+     result.cx:=15;
+     result.cy:=15;
+end;
 procedure BooleanInverse(PInstance:GDBPointer);
 begin
      pboolean(PInstance)^:=not pboolean(PInstance)^;
 end;
+procedure runlayerswnd(PInstance:GDBPointer);
+begin
+     layer_cmd;
+end;
+
 procedure AddFastEditorToType(tn:string;GetPrefferedFastEditorSize:TGetPrefferedFastEditorSize;
                                         DrawFastEditor:TDrawFastEditor;
                                         RunFastEditor:TRunFastEditor);
@@ -1667,6 +1699,7 @@ begin
      DecorateType('PGDBDimStyleObjInsp',@NamedObjectsDecorator,@DimStyleDecoratorCreateEditor,nil);
      DecorateType('TGDBPaletteColor',@PaletteColorDecorator,nil,nil);
      AddFastEditorToType('GDBBoolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
+     AddFastEditorToType('PGDBLayerPropObjInsp',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runlayerswnd);
      //AddFastEditorToType('GDBInteger',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
 end;
 

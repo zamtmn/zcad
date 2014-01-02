@@ -66,7 +66,7 @@ TOnGetValueAsString=function(PInstance:GDBPointer):GDBString;
 TOnDrawProperty=procedure(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
 
 TGetPrefferedFastEditorSize=function (PInstance:GDBPointer):TSize;
-TDrawFastEditor=procedure (canvas:TCanvas;r:trect;PInstance:GDBPointer);
+TDrawFastEditor=procedure (canvas:TCanvas;r:trect;PInstance:GDBPointer;hot,pressed,readonly:boolean);
 TRunFastEditor=procedure (PInstance:GDBPointer);
 
 TDecoratedProcs=packed record

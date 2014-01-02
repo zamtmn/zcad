@@ -642,9 +642,19 @@ begin
                  fer:=r;
                  fer.Left:=fer.Right-FESize.cX-fastEditorOffset;
                  fer.Right:=fer.Right-fastEditorOffset;
+                 if FESize.cy>0 then
+                 begin
                  fer.Top:=fer.Top-3;
+                 temp:=(fer.Bottom+fer.Top)div 2;
+                 fer.Top:=temp-FESize.cy div 2;
+                 fer.Bottom:=fer.Top+FESize.cy;
+                 end
+                 else
+                 begin
+                 fer.Top:=fer.Top-3;
+                 end;
                  r.Right:=fer.Left;
-                 ppd.FastEditor.OnDrawFastEditor(canvas,fer,ppd^.valueAddres);
+                 ppd.FastEditor.OnDrawFastEditor(canvas,fer,ppd^.valueAddres,false,false,false);
             end;
             end;
             if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)) then

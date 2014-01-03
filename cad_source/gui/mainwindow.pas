@@ -1675,6 +1675,10 @@ procedure runlayerswnd(PInstance:GDBPointer);
 begin
      layer_cmd;
 end;
+procedure runcolorswnd(PInstance:GDBPointer);
+begin
+     Colors_cmd;
+end;
 
 procedure AddFastEditorToType(tn:string;GetPrefferedFastEditorSize:TGetPrefferedFastEditorSize;
                                         DrawFastEditor:TDrawFastEditor;
@@ -1690,7 +1694,6 @@ begin
                          PT^.FastEditor.OnRunFastEditor:=RunFastEditor;
                     end;
 end;
-
 procedure drawLWProp(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
 var
    index:TGDBLineWeight;
@@ -1704,9 +1707,51 @@ begin
            else
                ll:=30;
      ARect.Left:=ARect.Left+2;
-     //drawLW(TComboBox(Control).canvas,ARect,ll,(index) div 10,s);
 
      DrawLW(canvas,ARect,ll,(index) div 10,s);
+end;
+procedure DrawColor(Canvas:TCanvas; Index: Integer; ARect: TRect);
+var
+   s:string;
+   textrect: TRect;
+   y:integer;
+const
+     cellsize=11;
+     textoffset=cellsize+5;
+begin
+  s:=GetColorNameFromIndex(index);
+  ARect.Left:=ARect.Left+2;
+  textrect:=ARect;
+  if index<ColorBoxSelColor then
+   begin
+        textrect.Left:=textrect.Left+textoffset;
+        canvas.TextRect(ARect,textrect.Left,(ARect.Top+ARect.Bottom-canvas.TextHeight(s)) div 2,s);
+        if index in [1..255] then
+                       begin
+                            canvas.Brush.Color:=RGBToColor(palette[index].RGB.r,palette[index].RGB.g,palette[index].RGB.b);
+                       end
+                   else
+                       canvas.Brush.Color:=clWhite;
+        y:=(ARect.Top+ARect.Bottom-cellsize)div 2;
+        canvas.Rectangle(ARect.Left,y,ARect.Left+cellsize,y+cellsize);
+        if index=7 then
+                       begin
+                            canvas.Brush.Color:=clBlack;
+                            canvas.Polygon([point(ARect.Left,y),point(ARect.Left+cellsize-1,y),point(ARect.Left+cellsize-1,y+cellsize-1)]);
+                        end
+   end
+  else
+  begin
+       canvas.TextRect(ARect,ARect.Left,(ARect.Top+ARect.Bottom-canvas.TextHeight(s)) div 2,s);
+  end;
+end;
+
+procedure drawIndexColorProp(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
+var
+   index:TGDBLineWeight;
+begin
+     index:=PTGDBPaletteColor(PInstance)^;
+     DrawColor(Canvas,Index,ARect);
 end;
 function CreateEmptyEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
@@ -1720,6 +1765,39 @@ begin
   DOShowModal(OSWindow);
   Freeandnil(OSWindow);
 end;
+function ColorDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+var
+    cbedit:TComboBox;
+    ir:itrec;
+    i,seli:integer;
+    number:integer;
+    currColor:TGDBPaletteColor;
+procedure addColorToC(name:string;value:TGDBPaletteColor);
+begin
+     cbedit.items.AddObject(name, TObject(value));
+     if value=currColor then
+                         seli:=cbedit.Items.Count-1;
+end;
+
+begin
+     CreateComboPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit);
+     cbedit.Style:=csOwnerDrawFixed;
+     cbedit.OnDrawItem:=MainFormN.ColorBoxDrawItem;
+
+     currColor:=PTGDBPaletteColor(pinstance)^;
+     seli:=-1;
+     addColorToC(ColorIndex2Name(0),0);
+     addColorToC(ColorIndex2Name(256),256);
+     for i := 1 to 7 do
+     begin
+          addColorToC(ColorIndex2Name(i),i);
+     end;
+     if seli=-1 then
+                    addColorToC(ColorIndex2Name(currColor),currColor);
+     cbedit.ItemIndex:=seli;
+     result.mode:=TEM_Integrate;
+end;
+
 procedure MainForm.DecorateSysTypes;
 begin
      DecorateType('TGDBLineWeight',@LWDecorator,@LineWeightDecoratorCreateEditor,@drawLWProp);
@@ -1727,7 +1805,8 @@ begin
      DecorateType('PGDBLtypePropObjInsp',@NamedObjectsDecorator,@LTypeDecoratorCreateEditor,nil);
      DecorateType('PGDBTextStyleObjInsp',@NamedObjectsDecorator,@TextStyleDecoratorCreateEditor,nil);
      DecorateType('PGDBDimStyleObjInsp',@NamedObjectsDecorator,@DimStyleDecoratorCreateEditor,nil);
-     DecorateType('TGDBPaletteColor',@PaletteColorDecorator,nil,nil);
+     DecorateType('TGDBPaletteColor',@PaletteColorDecorator,@ColorDecoratorCreateEditor,@drawIndexColorProp);
+     AddFastEditorToType('TGDBPaletteColor',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runcolorswnd);
      AddFastEditorToType('GDBBoolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
      AddFastEditorToType('PGDBLayerPropObjInsp',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runlayerswnd);
      DecorateType('TGDBOSMode',nil,CreateEmptyEditor,nil);
@@ -2064,16 +2143,9 @@ begin
     ARect.Left:=ARect.Left+2;
     drawLW(TComboBox(Control).canvas,ARect,ll,(index) div 10,s);
 end;
+
 procedure MainForm.ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: TOwnerDrawState);
-var
-   //plp:PGDBLayerProp;
-   //Dest: PChar;
-   y:integer;
-   textrect:TRect;
-const
-     cellsize=11;
-     textoffset=cellsize+5;
 begin
     if (gdb.GetCurrentDWG=nil)or(sysvar.DWG.DWG_CColor=nil) then
      exit;
@@ -2085,46 +2157,7 @@ begin
                                       end
                                  else
                                      index:=integer(tcombobox(Control).items.Objects[Index]);
-    s:=GetColorNameFromIndex(index);
-    {case index of
-                 0:
-                   s:=rsByBlock;
-               256:
-                   s:=rsByLayer;
-            1..255:
-                   s:=palette[index].name;
-  ColorBoxSelColor:
-                   s:=rsSelectColor;
- ColorBoxDifferent:
-                   s:=rsDifferent;
-    end;}
-    ARect.Left:=ARect.Left+2;
-    textrect:=ARect;
-    if index<ColorBoxSelColor then
-     begin
-          textrect.Left:=textrect.Left+textoffset;
-          TComboBox(Control).canvas.TextRect(ARect,textrect.Left,(ARect.Top+ARect.Bottom-canvas.TextHeight(s)) div 2,s);
-          //DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_SINGLELINE or DT_VCENTER);
-
-          if index in [1..255] then
-                         begin
-                              TComboBox(Control).canvas.Brush.Color:=RGBToColor(palette[index].RGB.r,palette[index].RGB.g,palette[index].RGB.b);
-                         end
-                     else
-                         TComboBox(Control).canvas.Brush.Color:=clWhite;
-          y:=(ARect.Top+ARect.Bottom-cellsize)div 2;
-          TComboBox(Control).canvas.Rectangle(ARect.Left,y,ARect.Left+cellsize,y+cellsize);
-          if index=7 then
-                         begin
-                              TComboBox(Control).canvas.Brush.Color:=clBlack;
-                              TComboBox(Control).canvas.Polygon([point(ARect.Left,y),point(ARect.Left+cellsize-1,y),point(ARect.Left+cellsize-1,y+cellsize-1)]);
-                          end
-     end
-    else
-    begin
-         TComboBox(Control).canvas.TextRect(ARect,ARect.Left,(ARect.Top+ARect.Bottom-canvas.TextHeight(s)) div 2,s);
-    //DrawText(TComboBox(Control).canvas.Handle,@s[1],length(s),arect,DT_LEFT or DT_SINGLELINE or DT_VCENTER)
-    end;
+    DrawColor(TComboBox(Control).canvas,Index,ARect);
     end;
 end;
 function MainForm.CreateCBox(owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;

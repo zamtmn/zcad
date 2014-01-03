@@ -257,17 +257,21 @@ GDBBaseCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 CamCSOffset:GDBvertex;
                 procedure NextPosition;virtual; abstract;
           end;
-PRGB=^RGB;
-RGB=packed record
+PTRGB=^TRGB;
+TRGB=packed record
           r:GDBByte;(*'Red'*)
           g:GDBByte;(*'Green'*)
           b:GDBByte;(*'Blue'*)
           a:GDBByte;(*'Alpha'*)
-          name:GDBString;
+    end;
+PTDXFCOLOR=^TDXFCOLOR;
+TDXFCOLOR=packed record
+          RGB:TRGB;(*'Color'*)
+          name:GDBString;(*'Name'*)
     end;
 PTGDBPaletteColor=^TGDBPaletteColor;
 TGDBPaletteColor=GDBInteger;
-GDBPalette=packed array[0..255] of RGB;
+GDBPalette=packed array[0..255] of TDXFCOLOR;
 PGDBNamedObject=^GDBNamedObject;
 GDBNamedObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      Name:GDBAnsiString;(*saved_to_shd*)(*'Name'*)
@@ -372,6 +376,8 @@ TAlign=(TATop,TABottom,TALeft,TARight);
 TDWGHandle=GDBQWord;
 PTGDBLineWeight=^TGDBLineWeight;
 TGDBLineWeight=GDBSmallint;
+PTGDBOSMode=^TGDBOSMode;
+TGDBOSMode=GDBInteger;
 //Generate on E:\zcad\CAD_SOURCE\u\UOpenArray.pas
 POpenArray=^OpenArray;
 OpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -1053,7 +1059,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
             RD_MaxWidth:pGDBInteger;(*'Max width'*)(*oi_readonly*)
             RD_MaxLineWidth:PGDBDouble;(*'Max line width'*)(*oi_readonly*)
             RD_MaxPointSize:PGDBDouble;(*'Max point size'*)(*oi_readonly*)
-            RD_BackGroundColor:PRGB;(*'Background color'*)
+            RD_BackGroundColor:PTRGB;(*'Background color'*)
             RD_Restore_Mode:ptrestoremode;(*'Restore mode'*)
             RD_LastRenderTime:pGDBInteger;(*'Last render time'*)(*oi_readonly*)
             RD_LastUpdateTime:pGDBInteger;(*'Last update time'*)(*oi_readonly*)
@@ -1094,7 +1100,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
        end;
   tdwg=packed record
              DWG_DrawMode:PGDBBoolean;(*'Display line weights'*)
-             DWG_OSMode:PGDBInteger;(*'Snap mode'*)(*oi_readonly*)
+             DWG_OSMode:PTGDBOSMode;(*'Snap mode'*)
              DWG_PolarMode:PGDBBoolean;(*'Polar tracking mode'*)
              DWG_CLayer:PPGDBLayerPropObjInsp;(*'Current layer'*)
              DWG_CLinew:PTGDBLineWeight;(*'Current line weigwt'*)

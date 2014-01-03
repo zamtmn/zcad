@@ -169,7 +169,7 @@ type
                            _LineStipplepattern: GLushort;
                            _ppolygonpattern:pointer;
 
-                           _colour:gdbase.RGB;
+                           _colour:gdbase.TRGB;
 
                            procedure myglbegin(mode:GLenum);inline;
                            procedure myglend;inline;
@@ -191,7 +191,7 @@ type
 
                            procedure glcolor3ub(const red, green, blue: GLubyte);virtual;//inline;
                            procedure glcolor4ub(const red, green, blue,alpha: GLubyte);virtual;//inline;
-                           procedure glColor3ubv(const v: gdbase.RGB);virtual;//inline;
+                           procedure glColor3ubv(const v: TRGB);virtual;//inline;
 
                            procedure myglNormal3dV(const V:PGDBVertex);inline;
                            //procedure myglColor3ub(const red, green, blue: GLubyte);inline;
@@ -420,7 +420,7 @@ begin
 end;
 
 
-procedure TOGLStateManager.glColor3ubv(const v: gdbase.rgb);
+procedure TOGLStateManager.glColor3ubv(const v: TRGB);
 begin
      if (v.r<>_colour.r)
      or (v.g<>_colour.g)

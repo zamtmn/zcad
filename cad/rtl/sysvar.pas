@@ -48,7 +48,7 @@ var
   RD_GLUVersion:GDBString;
   RD_GLUExtensions:GDBString;
   RD_MaxWidth:GDBInteger;
-  RD_BackGroundColor:RGB;
+  RD_BackGroundColor:TRGB;
   RD_Restore_Mode:TRestoreMode;
   RD_LastRenderTime:GDBInteger;
   RD_LastUpdateTime:GDBInteger;
@@ -127,7 +127,6 @@ begin
   RD_BackGroundColor.g:=0;
   RD_BackGroundColor.b:=0;
   RD_BackGroundColor.a:=255;
-  RD_BackGroundColor.name:='';
   RD_Restore_Mode:=WND_Texture;
   RD_LastRenderTime:=22;
   RD_LastUpdateTime:=0;

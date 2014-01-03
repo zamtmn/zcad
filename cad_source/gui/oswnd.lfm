@@ -1,0 +1,20 @@
+object OSWindow: TOSWindow
+  Left = 338
+  Height = 240
+  Top = 213
+  Width = 320
+  Caption = 'OSWindow'
+  ClientHeight = 240
+  ClientWidth = 320
+  Position = poDesktopCenter
+  ShowInTaskBar = stNever
+  LCLVersion = '1.3'
+  object Label1: TLabel
+    Left = 56
+    Height = 15
+    Top = 32
+    Width = 217
+    Caption = 'Object Snap Editor: Not yet implemented'
+    ParentColor = False
+  end
+end

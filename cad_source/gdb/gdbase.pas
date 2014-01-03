@@ -250,17 +250,21 @@ GDBBaseCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 CamCSOffset:GDBvertex;
                 procedure NextPosition;virtual; abstract;
           end;
-PRGB=^RGB;
-RGB=packed record
+PTRGB=^TRGB;
+TRGB=packed record
           r:GDBByte;(*'Red'*)
           g:GDBByte;(*'Green'*)
           b:GDBByte;(*'Blue'*)
           a:GDBByte;(*'Alpha'*)
-          name:GDBString;
+    end;
+PTDXFCOLOR=^TDXFCOLOR;
+TDXFCOLOR=packed record
+          RGB:TRGB;(*'Color'*)
+          name:GDBString;(*'Name'*)
     end;
 PTGDBPaletteColor=^TGDBPaletteColor;
 TGDBPaletteColor=GDBInteger;
-GDBPalette=packed array[0..255] of RGB;
+GDBPalette=packed array[0..255] of TDXFCOLOR;
 PGDBNamedObject=^GDBNamedObject;
 GDBNamedObject={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                      Name:GDBAnsiString;(*saved_to_shd*)(*'Name'*)
@@ -367,6 +371,8 @@ TAlign=(TATop,TABottom,TALeft,TARight);
 TDWGHandle=GDBQWord;
 PTGDBLineWeight=^TGDBLineWeight;
 TGDBLineWeight=GDBSmallint;
+PTGDBOSMode=^TGDBOSMode;
+TGDBOSMode=GDBInteger;
 {EXPORT-}
 TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 const

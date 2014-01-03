@@ -1249,7 +1249,7 @@ procedure Print_com.Print(pdata:GDBPlatformint);
   dx,dy,{cx,cy,}sx,sy,scale:gdbdouble;
   tmatrix{,_clip}:DMatrix4D;
   cdwg:PTSimpleDrawing;
-  oldForeGround:rgb;
+  oldForeGround:TRGB;
   DC:TDrawContext;
   //pr:TPaperRect;
 begin

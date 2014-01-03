@@ -335,7 +335,7 @@ begin
   VarObjArray.DrawOnlyGeometry(CalculateLineWeight(dc),dc{infrustumactualy,subrender});
   dc.subrender := dc.subrender - 1;
   p:=VarObjArray.beginiterate(ir);
-  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^]);
+  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
   if sysvar.DWG.DWG_SystmGeometryDraw^ then
   begin
   if p<>nil then
@@ -363,7 +363,7 @@ begin
   VarObjArray.DrawWithattrib(dc{infrustumactualy,subrender}){DrawGeometry(CalculateLineWeight)};
   dc.subrender := dc.subrender - 1;
   p:=VarObjArray.beginiterate(ir);
-  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^]);
+  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
   if sysvar.DWG.DWG_SystmGeometryDraw^ then
   begin
   if p<>nil then

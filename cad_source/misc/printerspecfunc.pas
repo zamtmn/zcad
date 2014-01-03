@@ -39,7 +39,7 @@ type
                            procedure myglPopMatrix;virtual;//inline;
 
                            procedure glcolor3ub(const red, green, blue: GLubyte);virtual;//inline;
-                           procedure glColor3ubv(const v: rgb);virtual;//inline;
+                           procedure glColor3ubv(const v: TRGB);virtual;//inline;
                            Function translate(const V:GDBVertex):GDBVertex2DI;
                            procedure myglPointSize(const size: GLfloat);virtual;//inline;
                            procedure myglLineWidth(const width: GLfloat);virtual;//inline;
@@ -75,7 +75,7 @@ begin
                               end;
 end;
 
-procedure TPrinterRasterizer.glColor3ubv(const v: rgb);
+procedure TPrinterRasterizer.glColor3ubv(const v: TRGB);
 begin
      if (v.r<>_colour.r)
      or (v.g<>_colour.g)

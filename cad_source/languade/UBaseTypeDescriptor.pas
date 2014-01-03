@@ -31,7 +31,7 @@ BaseTypeDescriptor=object(TUserTypeDescriptor)
                          function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;
                          function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                          function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
-                         function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
+                         function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:GDBInteger};pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
                          procedure EditorChange(Sender:TObject);
                          procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
                    end;
@@ -39,7 +39,7 @@ GDBBooleanDescriptor=object(BaseTypeDescriptor)
                           constructor init;
                           function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                           procedure SetValueFromString(PInstance:GDBPointer;Value:GDBstring);virtual;
-                          function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
+                          function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:GDBInteger};pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
                           procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
                     end;
 GDBShortintDescriptor=object(BaseTypeDescriptor)
@@ -116,7 +116,7 @@ GDBPtrUIntDescriptor=object(BaseTypeDescriptor)
 TEnumDataDescriptor=object(BaseTypeDescriptor)
                      constructor init;
                      procedure EditorChange(Sender:TObject;NewValue:GDBInteger);
-                     function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
+                     function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:GDBInteger};pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
                      function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                      procedure SetValueFromString(PInstance:GDBPointer;_Value:GDBstring);virtual;
                      function CreateProperties(mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:GDBString;PCollapsed:GDBPointer;ownerattrib:GDBWord;var bmode:GDBInteger;var addr:GDBPointer;ValKey,ValType:GDBString):PTPropertyDeskriptorArray;virtual;

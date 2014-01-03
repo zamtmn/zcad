@@ -19,7 +19,7 @@
 unit UPointerDescriptor;
 {$INCLUDE def.inc}
 interface
-uses zcadstrconsts,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,gdbasetypes,varmandef,gdbase{,UGDBOpenArrayOfData},UGDBStringArray,memman;
+uses types,zcadstrconsts,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,gdbasetypes,varmandef,gdbase{,UGDBOpenArrayOfData},UGDBStringArray,memman;
 type
 PGDBPointerDescriptor=^GDBPointerDescriptor;
 GDBPointerDescriptor=object(TUserTypeDescriptor)
@@ -32,7 +32,7 @@ GDBPointerDescriptor=object(TUserTypeDescriptor)
                      function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      procedure Format;virtual;
                      function GetTypeAttributes:TTypeAttr;virtual;
-                     function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
+                     function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:GDBInteger};pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
                      procedure SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);virtual;
                      destructor Done;virtual;
                end;
@@ -56,7 +56,7 @@ function GDBPointerDescriptor.CreateEditor;
 begin
      if assigned(TypeOf)and assigned(pointer(pinstance^)) then
 
-     result:=TypeOf^.CreateEditor(theowner,x,y,w,h,pointer(pinstance^),nil,FreeOnLostFocus)
+     result:=TypeOf^.CreateEditor(theowner,rect,pointer(pinstance^),nil,FreeOnLostFocus)
 end;
 function GDBPointerDescriptor.Serialize;
 var //pd:PFieldDescriptor;

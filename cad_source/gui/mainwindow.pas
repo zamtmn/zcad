@@ -1514,7 +1514,7 @@ begin
   {$ENDIF}
 end;
 
-function NamedObjectsDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;NO:PGDBNamedObjectsArray):TEditorDesc;
+function NamedObjectsDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;NO:PGDBNamedObjectsArray):TEditorDesc;
 var
     cbedit:TComboBox;
     ir:itrec;
@@ -1568,21 +1568,21 @@ begin
      cbedit.ItemIndex:=seli;
      result.mode:=TEM_Integrate;
 end;
-function LayersDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+function LayersDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
-     result:=NamedObjectsDecoratorCreateEditor(TheOwner,x,y,w,h,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.LayerTable);
+     result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.LayerTable);
 end;
-function LTypeDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+function LTypeDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
-     result:=NamedObjectsDecoratorCreateEditor(TheOwner,x,y,w,h,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.LTypeStyleTable);
+     result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.LTypeStyleTable);
 end;
-function TextStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+function TextStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
-     result:=NamedObjectsDecoratorCreateEditor(TheOwner,x,y,w,h,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.TextStyleTable);
+     result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.TextStyleTable);
 end;
-function DimStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+function DimStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
-     result:=NamedObjectsDecoratorCreateEditor(TheOwner,x,y,w,h,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.DimStyleTable);
+     result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.DimStyleTable);
 end;
 procedure DecorateType(tn:string;getvalueasstring:TOnGetValueAsString;CreateEditor:TOnCreateEditor;DrawProperty:TOnDrawProperty);
 var
@@ -1619,6 +1619,8 @@ begin
                                  begin
                                  if state=TFES_Hot then
                                                        ComboElem:=tbCheckBoxCheckedHot
+                                                   else if state=TFES_Pressed then
+                                                       ComboElem:=tbCheckBoxCheckedPressed
                                                    else
                                                        ComboElem:=tbCheckBoxCheckedNormal
                                  end
@@ -1626,6 +1628,8 @@ begin
                                  begin
                                  if state=TFES_Hot then
                                                        ComboElem:=tbCheckBoxUncheckedHot
+                                                   else if state=TFES_Pressed then
+                                                       ComboElem:=tbCheckBoxUncheckedPressed
                                                    else
                                                        ComboElem:=tbCheckBoxUncheckedNormal
                                  end;
@@ -1639,6 +1643,8 @@ var
 begin
      if state=TFES_Hot then
                            ComboElem:=tbPushButtonHot
+                       else if state=TFES_Pressed then
+                           ComboElem:=tbPushButtonPressed
                        else
                            ComboElem:=tbPushButtonNormal;
      Details:=ThemeServices.GetElementDetails(ComboElem);

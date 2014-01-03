@@ -926,7 +926,12 @@ begin
   begin
   fesize:=pp.FastEditor.OnGetPrefferedFastEditorSize(pp.valueAddres);
   if (fesize.cx>0)and((pp.rect.Right-x-fastEditorOffset-1)<=fesize.cx) then
-                                                                           pp.FastEditorState:=TFES_Hot
+                                                                           begin
+                                                                                if ssLeft in Shift then
+                                                                                                       pp.FastEditorState:=TFES_Pressed
+                                                                                                   else
+                                                                                                       pp.FastEditorState:=TFES_Hot
+                                                                           end
                                                                        else
                                                                            pp.FastEditorState:=TFES_Default;
 
@@ -1001,6 +1006,10 @@ begin
 end;
 //procedure TGDBobjinsp.pre_mousedown;
 procedure TGDBobjinsp.MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);
+var
+  pp:PPropertyDeskriptor;
+  my:GDBInteger;
+  FESize:TSize;
 begin
      inherited;
      if (button=mbLeft)
@@ -1016,7 +1025,34 @@ begin
                                                  peditor.geteditor.setfocus;
                                                  if  peditor.geteditor is  TComboBox then
                                                  TComboBox(peditor.geteditor).DroppedDown:=true;
+                                                 exit;
                                             end;
+     if (button=mbLeft) then
+                            begin
+                                 y:=y+self.VertScrollBar.Position;
+                                 my:=startdrawy;
+                                 pp:=mousetoprop(@pda,x,y,my);
+                                 if pp=nil then
+                                               exit;
+                                 if assigned(pp.FastEditor.OnGetPrefferedFastEditorSize) then
+                                 begin
+                                 fesize:=pp.FastEditor.OnGetPrefferedFastEditorSize(pp.valueAddres);
+                                 if (fesize.cx>0)and((pp.rect.Right-x-fastEditorOffset-1)<=fesize.cx) then
+                                 if pp.FastEditorState=TFES_Pressed then
+                                                                                      begin
+                                                                                           pp.FastEditorState:=TFES_Default;
+                                                                                           pp.FastEditor.OnRunFastEditor(pp.valueAddres);
+                                                                                           if GDBobj then
+                                                                                           if PGDBaseObject(pcurrobj)^.IsEntity then
+                                                                                                                               PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^);
+                                                                                           if assigned(resetoglwndproc) then resetoglwndproc;
+                                                                                           if assigned(redrawoglwndproc) then redrawoglwndproc;
+                                                                                           self.updateinsp;
+                                                                                           if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+                                                                                      end
+                            end;
+                            end;
+
 end;
 procedure TGDBobjinsp.createeditor(pp:PPropertyDeskriptor);
 var
@@ -1167,14 +1203,15 @@ begin
                               fesize:=pp.FastEditor.OnGetPrefferedFastEditorSize(pp.valueAddres);
                               if (fesize.cx>0)and((pp.rect.Right-x-fastEditorOffset-1)<=fesize.cx) then
                                                                                    begin
-                                                                                        pp.FastEditor.OnRunFastEditor(pp.valueAddres);
+                                                                                        pp.FastEditorState:=TFES_Pressed;
+                                                                                        {pp.FastEditor.OnRunFastEditor(pp.valueAddres);
                                                                                         if GDBobj then
                                                                                         if PGDBaseObject(pcurrobj)^.IsEntity then
                                                                                                                             PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^);
                                                                                         if assigned(resetoglwndproc) then resetoglwndproc;
                                                                                         if assigned(redrawoglwndproc) then redrawoglwndproc;
                                                                                         self.updateinsp;
-                                                                                        if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+                                                                                        if assigned(UpdateVisibleProc) then UpdateVisibleProc;}
                                                                                    end
                                                                              else
                                                                                  createeditor(pp)

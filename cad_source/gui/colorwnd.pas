@@ -95,7 +95,7 @@ begin
                        0:
                            result:=rsByBlock;
                        else
-                           result:=palette[ColorInfex].name+' '+'(Red='+inttostr(palette[ColorInfex].r)+' Green='+inttostr(palette[ColorInfex].g)+' Blue='+inttostr(palette[ColorInfex].b)+')';
+                           result:=palette[ColorInfex].name+' '+'(Red='+inttostr(palette[ColorInfex].RGB.r)+' Green='+inttostr(palette[ColorInfex].RGB.g)+' Blue='+inttostr(palette[ColorInfex].RGB.b)+')';
      end;
 end;
 
@@ -166,7 +166,7 @@ begin
                                    end;
           xcoord:=startx+x*dx;
           ycoord:=starty+y*dy;
-          canvas.Brush.Color:=RGBToColor(palette[cindex].r,palette[cindex].g,palette[cindex].b);
+          canvas.Brush.Color:=RGBToColor(palette[cindex].RGB.r,palette[cindex].RGB.g,palette[cindex].RGB.b);
           canvas.Rectangle(xcoord+1,ycoord+1*sign(dy),xcoord+dx-1,ycoord+dy-1*sign(dy));
           cindex:=cindex+incindex;
      end;

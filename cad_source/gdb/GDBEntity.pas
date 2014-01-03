@@ -159,7 +159,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
               end;
 {Export-}
 var onlygetsnapcount:GDBInteger;
-    ForeGround:RGB;
+    ForeGround:TRGB;
 implementation
 uses {UGDBEntTree,}GDBGenericSubEntry,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
 
@@ -319,7 +319,7 @@ procedure GDBObjEntity.DrawBB;
 begin
   if (sysvar.DWG.DWG_SystmGeometryDraw^){and(GDB.GetCurrentDWG.OGLwindow1.param.subrender=0)} then
   begin
-  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^]);
+  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
   DrawAABB(vp.BoundingBox);
   end;
 end;
@@ -503,7 +503,7 @@ var lw: GDBInteger;
 procedure SetEntColor(color:integer);inline;
 begin
   if color<>7 then
-                  oglsm.glcolor3ubv(palette[color])
+                  oglsm.glcolor3ubv(palette[color].RGB)
               else
                   oglsm.glcolor3ubv(foreground);
 end;

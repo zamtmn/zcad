@@ -40,7 +40,7 @@ uses
   {ZCAD COMMANDS}
        commandlinedef,commanddefinternal,commandline,
   {GUI}
-       cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
+       oswnd,cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
        colorwnd,imagesmanager,ltwnd,usuptstylecombo,usupportgui,usupdimstylecombo;
   {}
 type
@@ -1536,7 +1536,7 @@ begin
 
      result.mode:=TEM_Integrate;
 end;
-function LineWeightDecoratorCreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+function LineWeightDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 var
     cbedit:TComboBox;
     ir:itrec;
@@ -1708,7 +1708,18 @@ begin
 
      DrawLW(canvas,ARect,ll,(index) div 10,s);
 end;
-
+function CreateEmptyEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+begin
+     result.mode:=TEM_Nothing;
+     result.Editor:=nil;
+end;
+procedure runOSwnd(PInstance:GDBPointer);
+begin
+  OSWindow:=TOSWindow.Create(nil);
+  SetHeightControl(OSWindow,22);
+  DOShowModal(OSWindow);
+  Freeandnil(OSWindow);
+end;
 procedure MainForm.DecorateSysTypes;
 begin
      DecorateType('TGDBLineWeight',@LWDecorator,@LineWeightDecoratorCreateEditor,@drawLWProp);
@@ -1719,7 +1730,9 @@ begin
      DecorateType('TGDBPaletteColor',@PaletteColorDecorator,nil,nil);
      AddFastEditorToType('GDBBoolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
      AddFastEditorToType('PGDBLayerPropObjInsp',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runlayerswnd);
-     //AddFastEditorToType('GDBInteger',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
+     DecorateType('TGDBOSMode',nil,CreateEmptyEditor,nil);
+     AddFastEditorToType('TGDBOSMode',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runOSwnd);
+     //TGDBOSMode
 end;
 
 procedure MainForm.FormCreate(Sender: TObject);
@@ -2095,7 +2108,7 @@ begin
 
           if index in [1..255] then
                          begin
-                              TComboBox(Control).canvas.Brush.Color:=RGBToColor(palette[index].r,palette[index].g,palette[index].b);
+                              TComboBox(Control).canvas.Brush.Color:=RGBToColor(palette[index].RGB.r,palette[index].RGB.g,palette[index].RGB.b);
                          end
                      else
                          TComboBox(Control).canvas.Brush.Color:=clWhite;

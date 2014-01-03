@@ -3474,7 +3474,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
 
     if (sysvar.DWG.DWG_SystmGeometryDraw^) then
                                                begin
-                                               oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^+2]);
+                                               oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^+2].RGB);
                                                PDWG.GetCurrentROOT^.ObjArray.ObjTree.draw;
                                                end;
                                            //else

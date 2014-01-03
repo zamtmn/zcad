@@ -420,7 +420,7 @@ begin
                                  //TCustomListView(Sender).Canvas.TextRect(Retang,Retang.Left,0,Item.SubItems[4],estilo);
                                  if colorindex in [1..255] then
                                                 begin
-                                                     TCustomListView(sender).canvas.Brush.Color:=RGBToColor(palette[colorindex].r,palette[colorindex].g,palette[colorindex].b);
+                                                     TCustomListView(sender).canvas.Brush.Color:=RGBToColor(palette[colorindex].RGB.r,palette[colorindex].RGB.g,palette[colorindex].RGB.b);
                                                 end
                                             else
                                                 TCustomListView(sender).canvas.Brush.Color:=clWhite;

@@ -901,14 +901,14 @@ begin
           val(sub,i,code);
 
           sub:=GetPredStr(line,',');
-          val(sub,palette[i].r,code);
+          val(sub,palette[i].RGB.r,code);
 
           sub:=GetPredStr(line,',');
-          val(sub,palette[i].g,code);
+          val(sub,palette[i].RGB.g,code);
 
           sub:=GetPredStr(line,':');
-          val(sub,palette[i].b,code);
-          palette[i].a:=255;
+          val(sub,palette[i].RGB.b,code);
+          palette[i].RGB.a:=255;
           if line<>'' then
                           palette[i].name:={$IFNDEF DELPHI}InterfaceTranslate('rgbcolorname~'+line,{$ELSE}({$ENDIF}line)
                       else

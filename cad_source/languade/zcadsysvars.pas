@@ -84,7 +84,7 @@ type
             RD_MaxWidth:pGDBInteger;(*'Max width'*)(*oi_readonly*)
             RD_MaxLineWidth:PGDBDouble;(*'Max line width'*)(*oi_readonly*)
             RD_MaxPointSize:PGDBDouble;(*'Max point size'*)(*oi_readonly*)
-            RD_BackGroundColor:PRGB;(*'Background color'*)
+            RD_BackGroundColor:PTRGB;(*'Background color'*)
             RD_Restore_Mode:ptrestoremode;(*'Restore mode'*)
             RD_LastRenderTime:pGDBInteger;(*'Last render time'*)(*oi_readonly*)
             RD_LastUpdateTime:pGDBInteger;(*'Last update time'*)(*oi_readonly*)
@@ -126,7 +126,7 @@ type
        end;
   tdwg=packed record
              DWG_DrawMode:PGDBBoolean;(*'Display line weights'*)
-             DWG_OSMode:PGDBInteger;(*'Snap mode'*)(*oi_readonly*)
+             DWG_OSMode:PTGDBOSMode;(*'Snap mode'*)
              DWG_PolarMode:PGDBBoolean;(*'Polar tracking mode'*)
              DWG_CLayer:{-}PGDBPointer{/PPGDBLayerPropObjInsp/};(*'Current layer'*)
              DWG_CLinew:PTGDBLineWeight;(*'Current line weigwt'*)

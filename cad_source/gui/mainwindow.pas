@@ -1610,24 +1610,37 @@ begin
      else
          result:=types.size(0,0);
 end;
-procedure BooleanDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;hot,pressed,readonly:boolean);
+procedure BooleanDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
 var
   Details: TThemedElementDetails;
   ComboElem:TThemedButton;
 begin
      if pboolean(PInstance)^ then
-                                 ComboElem:=tbCheckBoxCheckedNormal
+                                 begin
+                                 if state=TFES_Hot then
+                                                       ComboElem:=tbCheckBoxCheckedHot
+                                                   else
+                                                       ComboElem:=tbCheckBoxCheckedNormal
+                                 end
                              else
-                                 ComboElem:=tbCheckBoxUncheckedNormal;
+                                 begin
+                                 if state=TFES_Hot then
+                                                       ComboElem:=tbCheckBoxUncheckedHot
+                                                   else
+                                                       ComboElem:=tbCheckBoxUncheckedNormal
+                                 end;
      Details:=ThemeServices.GetElementDetails(ComboElem);
      ThemeServices.DrawElement(Canvas.Handle,Details,r);
 end;
-procedure ButtonDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;hot,pressed,readonly:boolean);
+procedure ButtonDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
 var
   Details: TThemedElementDetails;
   ComboElem:TThemedButton;
 begin
-     ComboElem:=tbPushButtonNormal;
+     if state=TFES_Hot then
+                           ComboElem:=tbPushButtonHot
+                       else
+                           ComboElem:=tbPushButtonNormal;
      Details:=ThemeServices.GetElementDetails(ComboElem);
      ThemeServices.DrawElement(Canvas.Handle,Details,r);
      ThemeServices.DrawText(Canvas.Handle,Details,'...',r,DT_CENTER or DT_VCENTER,0);

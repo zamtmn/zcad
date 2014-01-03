@@ -61,12 +61,14 @@ TEditorDesc=packed record
                   Editor:TPropEditor;
                   Mode:TEditorMode;
             end;
-TOnCreateEditor=function (TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+TOnCreateEditor=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 TOnGetValueAsString=function(PInstance:GDBPointer):GDBString;
 TOnDrawProperty=procedure(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
 
+TFastEditorState=(TFES_Default,TFES_Hot,TFES_Pressed);
+
 TGetPrefferedFastEditorSize=function (PInstance:GDBPointer):TSize;
-TDrawFastEditor=procedure (canvas:TCanvas;r:trect;PInstance:GDBPointer;hot,pressed,readonly:boolean);
+TDrawFastEditor=procedure (canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
 TRunFastEditor=procedure (PInstance:GDBPointer);
 
 TDecoratedProcs=packed record
@@ -92,13 +94,15 @@ TFastEditorProcs=packed record
     ValueOffsetInMem: GDBWord;
     valueAddres:GDBPointer;
     HelpPointer:GDBPointer;
-    x1,y1,x2,y2:GDBInteger;
+    rect:trect;
+    //x1,y1,x2,y2:GDBInteger;
     _ppda:GDBPointer;
     _bmode:GDBInteger;
     mode:PDMode;
     r,w:GDBString;
     Decorators:TDecoratedProcs;
     FastEditor:TFastEditorProcs;
+    FastEditorState:TFastEditorState;
   end;
   propdeskptr = ^propdesk;
   propdesk = record
@@ -146,7 +150,7 @@ UserTypeDescriptor=object(GDBaseObject)
                          FastEditor:TFastEditorProcs;
                          constructor init(size:GDBInteger;tname:string;pu:pointer);
                          procedure _init(size:GDBInteger;tname:string;pu:pointer);
-                         function CreateEditor(TheOwner:TPropEditorOwner;x,y,w,h:GDBInteger;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
+                         function CreateEditor(TheOwner:TPropEditorOwner;rect:trect{x,y,w,h:GDBInteger};pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean):TEditorDesc{TPropEditor};virtual;
                          procedure ApplyOperator(oper,path:GDBString;var offset:GDBInteger;out tc:PUserTypeDescriptor);virtual;abstract;
                          function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
                          function SerializePreProcess(Value:GDBString;sub:integer):GDBString;virtual;

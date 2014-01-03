@@ -256,6 +256,7 @@ procedure TLayerWindow.createeditor(ListView:TListView;ListItem:TListItem;SubIte
 var
    pos,si: integer;
    mr:integer;
+   rect:trect;
 begin
   Pos := -GetScrollPos (ListView.Handle, SB_HORZ);
   si := -1;
@@ -270,7 +271,8 @@ begin
        Application.RemoveAsyncCalls(self);
        freeeditor;
   end;
-  PEditor:=GDBAnsiStringDescriptorObj.CreateEditor(self.ListView1,pos,ListItem.Top,ListView1.Columns.Items[SubItem+1].Width,si,p,nil,true).Editor;
+  rect:=Bounds(pos,ListItem.Top,ListView1.Columns.Items[SubItem+1].Width,si);
+  PEditor:=GDBAnsiStringDescriptorObj.CreateEditor(self.ListView1,rect,p,nil,true).Editor;
   PEditor.geteditor.SetFocus;
   PEditor.OwnerNotify:=@Notify;
   EditedItem:=ListItem;

@@ -442,48 +442,51 @@ begin
   if last then
               y:=y-rowh;
 end;
-
-procedure TGDBobjinsp.drawprop(PPA:PTPropertyDeskriptorArray; var y,sub:GDBInteger);
+procedure drawheader(Canvas:tcanvas;collapsed:boolean;r:trect;name:string);
+function GetSizeTreeIcon(Minus: Boolean):TSize;
+const
+  PlusMinusDetail: array[Boolean] of TThemedTreeview =
+  (
+    ttGlyphClosed,
+    ttGlyphOpened
+  );
 var
-//  curr:propdeskptr;
-  s:GDBString;
-  ppd:PPropertyDeskriptor;
-  fer,r{,rr}:trect;
-  //colorn,coloro:tCOLORREF;
-  tempcolor:TColor;
-  ir:itrec;
-  temp:integer;
+  Details: TThemedElementDetails;
+begin
+  Details := ThemeServices.GetElementDetails(PlusMinusDetail[Minus]);
+  result := ThemeServices.GetDetailSize(Details);
+end;
+procedure DrawTreeIcon({Canvas:tcanvas;}X, Y: Integer; Minus: Boolean);
+const
+  PlusMinusDetail: array[Boolean] of TThemedTreeview =
+  (
+    ttGlyphClosed,
+    ttGlyphOpened
+  );
+var
+  Details: TThemedElementDetails;
   Size: TSize;
-  FESize:TSize;
-  procedure DrawTreeIcon(X, Y: Integer; Minus: Boolean);
-  const
-    PlusMinusDetail: array[Boolean] of TThemedTreeview =
-    (
-      ttGlyphClosed,
-      ttGlyphOpened
-    );
-  var
-    Details: TThemedElementDetails;
-    Size: TSize;
-  begin
-    Details := ThemeServices.GetElementDetails(PlusMinusDetail[Minus]);
-    Size := ThemeServices.GetDetailSize(Details);
-    ThemeServices.DrawElement(Canvas.Handle, Details, Rect(X, Y, X + Size.cx, Y + Size.cy), nil);
-  end;
-  function GetSizeTreeIcon(Minus: Boolean):TSize;
-  const
-    PlusMinusDetail: array[Boolean] of TThemedTreeview =
-    (
-      ttGlyphClosed,
-      ttGlyphOpened
-    );
-  var
-    Details: TThemedElementDetails;
-  begin
-    Details := ThemeServices.GetElementDetails(PlusMinusDetail[Minus]);
-    result := ThemeServices.GetDetailSize(Details);
-    //ThemeServices.DrawElement(Canvas.Handle, Details, Rect(X, Y, X + result.cx, Y + result.cy), nil);
-  end;
+begin
+  Details := ThemeServices.GetElementDetails(PlusMinusDetail[Minus]);
+  Size := ThemeServices.GetDetailSize(Details);
+  ThemeServices.DrawElement(Canvas.Handle, Details, Rect(X, Y, X + Size.cx, Y + Size.cy), nil);
+end;
+var
+   Size: TSize;
+   temp:integer;
+begin
+  size:=GetSizeTreeIcon(collapsed);
+  temp:=(r.bottom-r.top-size.cy)div 3;
+  DrawTreeIcon({Canvas,}r.left,r.top+temp,collapsed);
+  inc(r.left,size.cx+1);
+  canvas.TextRect(r,r.Left,r.Top,(name));
+  dec(r.left,size.cx+1);
+end;
+procedure drawrect(cnvs:tcanvas;clr:TColor;r:trect);
+begin
+  cnvs.Brush.Color := clBtnFace;
+  cnvs.Rectangle(r);
+end;
 procedure drawstring(cnvs:tcanvas;r:trect;L,T:integer;s:string);
 const
   maxsize=200;
@@ -498,95 +501,130 @@ begin
                                cnvs.TextRect(r,L,T,s2);
                           end;
 end;
+procedure drawvalue(ppd:PPropertyDeskriptor;canvas:tcanvas;fulldraw:boolean);
+var
+   fer,r:trect;
+   tempcolor:TColor;
+   FESize:TSize;
+   temp:integer;
 begin
-  //colorn:=windows.RGB(150,150,150);
+     if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
+     begin
+           canvas.Font.Italic:=true;
+     end;
+  r:=ppd.rect;
+  if fulldraw then
+  drawrect(canvas,clWindow,r);
+  r.Top:=r.Top+3;
+  r.Left:=r.Left+3;
+  r.Right:=r.Right-1;
+  if (ppd^.Attr and FA_READONLY)<>0 then
+  begin
+    tempcolor:=canvas.Font.Color;
+    canvas.Font.Color:=clGrayText;
+    if fulldraw then
+    if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)) then
+                                       ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
+                                   else
+                                       drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
+    canvas.Font.Color:=tempcolor;
+  end
+  else
+    begin
+    if assigned(ppd.FastEditor.OnGetPrefferedFastEditorSize) then
+    begin
+    FESize:=ppd.FastEditor.OnGetPrefferedFastEditorSize(ppd^.valueAddres);
+    if FESize.cX>0 then
+    begin
+         fer:=r;
+         fer.Left:=fer.Right-FESize.cX-fastEditorOffset;
+         fer.Right:=fer.Right-fastEditorOffset;
+         if FESize.cy>0 then
+         begin
+         fer.Top:=fer.Top-3;
+         temp:=(fer.Bottom+fer.Top)div 2;
+         fer.Top:=temp-FESize.cy div 2;
+         fer.Bottom:=fer.Top+FESize.cy;
+         end
+         else
+         begin
+         fer.Top:=fer.Top-3;
+         end;
+         r.Right:=fer.Left;
+         ppd.FastEditor.OnDrawFastEditor(canvas,fer,ppd^.valueAddres,ppd.FastEditorState);
+    end;
+    end;
+    if fulldraw then
+    if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)) then
+                                                   ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
+                                               else
+                                                   drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
+    end;
 
- { if ppa^.Count=0 then
-                      begin
-                           y:=y+rowh;
-                           exit;
-                      end; }
+if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
+begin
+      canvas.Font.Italic:=false;
+end;
 
+end;
+
+procedure TGDBobjinsp.drawprop(PPA:PTPropertyDeskriptorArray; var y,sub:GDBInteger);
+var
+  s:GDBString;
+  ppd:PPropertyDeskriptor;
+  fer,r:trect;
+  tempcolor:TColor;
+  ir:itrec;
+  temp:integer;
+  Size: TSize;
+  FESize:TSize;
+begin
   ppd:=ppa^.beginiterate(ir);
   if ppd<>nil then
     repeat
       if (ppd^.IsVisible) then
       begin
         r.Left:=2+8*sub;
-        r.Top:=y{ * rowh};
-        r.Right:=namecol{-5};  //--------------------------------------------------
-        r.Bottom:=y{ * rowh}+rowh+1;
-        {ppd.x1:=r.Left;
-        ppd.y1:=r.Top;
-        ppd.x2:=r.Right;
-        ppd.y2:=r.Bottom;}
-        if ppd^.SubNode<>nil
-          then
-        begin
-          {if not ppd^.Collapsed^ then
-            s:='–'+ppd^.Name
-          else
-            s:='+'+ppd^.Name;}s:=ppd^.Name;
-          r.Right:=clientwidth-2;
-                                 {c:=GetBkColor(cdc);
-                                 SetBkColor(cdc,0);
-                                 SetBkMode(cdc,OPAQUE);}
-                                 //FillRect(cdc,r,0);
-          //selectobject({cdc}dc,GetStockObject(LTGRAY_BRUSH));
-          //Rectangle({cdc}dc,r.Left,r.Top,r.Right,r.Bottom);
+        r.Top:=y;
+        r.Right:=namecol;
+        r.Bottom:=y+rowh+1;
+        if ppd^.SubNode<>nil then
+                                  begin
+                                    s:=ppd^.Name;
+                                    r.Right:=clientwidth-2;
 
-          //canvas.Brush.Style := bsSolid;
-          canvas.Brush.Color := clBtnFace;
-          canvas.Rectangle(r);
-          //canvas.Frame3d(r,1,{bvRaised}bvSpace);
+                                    drawrect(canvas,clBtnFace,r);
 
-          r.Left:=r.Left+3;
-          r.Top:=r.Top+3;
-          if (ppd^.Attr and FA_READONLY)<>0 then
-          begin
-            //coloro:=SetTextColor({cdc}dc,colorn);
+                                    r.Left:=r.Left+3;
+                                    r.Top:=r.Top+3;
+                                    if (ppd^.Attr and FA_READONLY)<>0 then
+                                                                          begin
+                                                                            tempcolor:=canvas.Font.Color;
+                                                                            canvas.Font.Color:=clGrayText;
 
-            tempcolor:=canvas.Font.Color;
-            canvas.Font.Color:=clGrayText;
-            size:=GetSizeTreeIcon(not ppd^.Collapsed^);
-            temp:=(r.bottom-r.top-size.cy)div 3;
-            DrawTreeIcon(r.left,r.top+temp,not ppd^.Collapsed^);
-            inc(r.left,size.cx+1);
-            canvas.TextRect(r,r.Left,r.Top,(s));
-            dec(r.left,size.cx+1);
-            //drawtextA({cdc}dc,GDBPointer(s),length(s),r,DT_left);
-            canvas.Font.Color:=tempcolor;
-            //SetTextColor({cdc}dc,coloro);
-          end
-          else
-              begin
-              //drawtextA({cdc}dc,GDBPointer(s),length(s),r,DT_left);
-              //canvas.Font.Color:=clYellow;    dfg
-                size:=GetSizeTreeIcon(not ppd^.Collapsed^);
-                temp:=(r.bottom-r.top-size.cy)div 3;
-              DrawTreeIcon(r.left,r.top+temp,not ppd^.Collapsed^);
-              inc(r.left,size.cx+1);
-              canvas.TextRect(r,r.Left,r.Top,(s));
+                                                                            drawheader(canvas,not ppd^.Collapsed^,r,s);
 
-              dec(r.left,size.cx+1);
-              end;
-          inc(sub);
-          y:=y+rowh;
-          if not ppd^.Collapsed^ then
-            drawprop(GDBPointer(ppd.SubNode),y,sub);
-          dec(sub);
-        end
+                                                                            canvas.Font.Color:=tempcolor;
+                                                                          end
+                                                                      else
+                                                                          begin
+                                                                            drawheader(canvas,not ppd^.Collapsed^,r,s);
+                                                                          end;
+                                    inc(sub);
+                                    y:=y+rowh;
+                                    if not ppd^.Collapsed^ then
+                                      drawprop(GDBPointer(ppd.SubNode),y,sub);
+                                    dec(sub);
+                                  end
         else
         begin
 
-          canvas.Brush.Color := {clWhite}{clAppWorkspace}clBtnFace;
-          canvas.Rectangle(r);
+          drawrect(canvas,clBtnFace,r);
+
           if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
           begin
-                canvas.Font.Italic:=not canvas.Font.Italic;
+                canvas.Font.Italic:=true;
           end;
-          //selectobject({cdc}dc,GetStockObject(WHITE_BRUSH));
-          //Rectangle({cdc}dc,{2} r.left,r.Top,r.Right,r.Bottom);
           r.Left:=r.Left+2;
           r.Top:=r.Top+3;
           if ((ppd^.Attr and FA_READONLY)<>0)or((ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0) then
@@ -595,80 +633,20 @@ begin
             canvas.Font.Color:=clGrayText;
             canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
             canvas.Font.Color:=tempcolor;
-
-          //  coloro:=SetTextColor({cdc}dc,colorn);
-          //  drawtextA({cdc}dc,GDBPointer(ppd^.Name),length(ppd^.Name),r,DT_left);
-          //  SetTextColor({cdc}dc,coloro);
           end
           else
               canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
-              //drawtextA({cdc}dc,GDBPointer(ppd^.Name),length(ppd^.Name),r,DT_left);
           r.Top:=r.Top-3;
           r.Left:=r.Right-1;
           r.Right:=clientwidth-2;
-          //Rectangle({cdc}dc,r.Left,r.Top,r.Right,r.Bottom);
-          canvas.Brush.Color := {clWhite}{clAppWorkspace}clWindow;
-          canvas.Rectangle(r);
-        ppd.x1:=r.Left;
-        ppd.y1:=r.Top;
-        ppd.x2:=r.Right;
-        ppd.y2:=r.Bottom-1;
-          r.Top:=r.Top+3;
-          r.Left:=r.Left+3;
-          r.Right:=r.Right-1;
-          if (ppd^.Attr and FA_READONLY)<>0 then
+
+          ppd.rect:=r;
+          drawvalue(ppd,canvas,true);
+
+          if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
           begin
-            tempcolor:=canvas.Font.Color;
-            canvas.Font.Color:=clGrayText;
-            if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)) then
-                                               ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
-                                           else
-                                               drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
-            //canvas.TextRect(r,r.Left,r.Top,(ppd^.value));
-            canvas.Font.Color:=tempcolor;
-
-//            coloro:=SetTextColor({cdc}dc,colorn);
-//            drawtextA({cdc}dc,GDBPointer(ppd^.value),length(ppd^.value),r,DT_left);
-//            SetTextColor({cdc}dc,coloro);
-          end
-          else
-            //drawtextA({cdc}dc,GDBPointer(ppd^.value),length(ppd^.value),r,DT_left);
-            begin
-            if assigned(ppd.FastEditor.OnGetPrefferedFastEditorSize) then
-            begin
-            FESize:=ppd.FastEditor.OnGetPrefferedFastEditorSize(ppd^.valueAddres);
-            if FESize.cX>0 then
-            begin
-                 fer:=r;
-                 fer.Left:=fer.Right-FESize.cX-fastEditorOffset;
-                 fer.Right:=fer.Right-fastEditorOffset;
-                 if FESize.cy>0 then
-                 begin
-                 fer.Top:=fer.Top-3;
-                 temp:=(fer.Bottom+fer.Top)div 2;
-                 fer.Top:=temp-FESize.cy div 2;
-                 fer.Bottom:=fer.Top+FESize.cy;
-                 end
-                 else
-                 begin
-                 fer.Top:=fer.Top-3;
-                 end;
-                 r.Right:=fer.Left;
-                 ppd.FastEditor.OnDrawFastEditor(canvas,fer,ppd^.valueAddres,false,false,false);
-            end;
-            end;
-            if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)) then
-                                                           ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
-                                                       else
-                                                           drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
-            //canvas.TextRect(r,r.Left,r.Top,(ppd^.value));
-                                 //TextOut(cdc, namecol, y * rowh, GDBPointer(ppd^.value), length(ppd^.value));
-            end;
-
-        if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
-        begin
-              canvas.Font.Italic:=not canvas.Font.Italic;
-        end;
+                canvas.Font.Italic:=false;
+          end;
 
           y:=y++rowh;
         end;
@@ -914,6 +892,7 @@ var
 //  pb:PGDBBoolean;
   tp:pointer;
   tempstr:gdbstring;
+  FESize:TSize;
 begin
     if mresplit then
                   begin
@@ -943,9 +922,24 @@ begin
        exit;
   end;
 
+  if assigned(pp.FastEditor.OnGetPrefferedFastEditorSize) then
+  begin
+  fesize:=pp.FastEditor.OnGetPrefferedFastEditorSize(pp.valueAddres);
+  if (fesize.cx>0)and((pp.rect.Right-x-fastEditorOffset-1)<=fesize.cx) then
+                                                                           pp.FastEditorState:=TFES_Hot
+                                                                       else
+                                                                           pp.FastEditorState:=TFES_Default;
+
+  drawvalue(pp,canvas,false);
+  end;
+
   if oldpp<>pp then
   begin
-
+       if oldpp<>nil then
+                         begin
+                         oldpp.FastEditorState:=TFES_Default;
+                         drawvalue(oldpp,canvas,false);
+                         end;
 (*  TI.cbSize := SizeOf(TOOLINFO);
   TI.uFlags := TTF_SUBCLASS;
   TI.uId := 0;
@@ -998,7 +992,7 @@ begin
       //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
       ppropcurrentedit:=pp;
     end;
-    PEditor:=pp^.PTypeManager^.CreateEditor(@self,{namecol-6}pp^.x1,{my}pp^.y1,{clientwidth-namecol+3}pp^.x2-pp^.x1,{rowh}pp^.y2-pp^.y1,pp^.valueAddres,nil,false).Editor;
+    PEditor:=pp^.PTypeManager^.CreateEditor(@self,pp.rect,pp^.valueAddres,nil,false).Editor;
     if PEditor<>nil then
     begin
       //-----------------------------------------------------------------PEditor^.show;
@@ -1094,13 +1088,13 @@ begin
        end;
        if assigned(pp^.valueAddres) then
        if assigned(pp^.Decorators.OnCreateEditor) then
-                                                      TED:=pp^.Decorators.OnCreateEditor(self,pp^.x1,pp^.y1,pp^.x2-pp^.x1,pp^.y2-pp^.y1+1,pp^.valueAddres,@vsa,false,pp^.PTypeManager)
+                                                      TED:=pp^.Decorators.OnCreateEditor(self,pp^.rect,pp^.valueAddres,@vsa,false,pp^.PTypeManager)
                                                   else
-                                                      TED:=pp^.PTypeManager^.CreateEditor(self,pp^.x1,pp^.y1,pp^.x2-pp^.x1,pp^.y2-pp^.y1+1,pp^.valueAddres,@vsa,false);
+                                                      TED:=pp^.PTypeManager^.CreateEditor(self,pp^.rect,pp^.valueAddres,@vsa,false);
      case ted.Mode of
                      TEM_Integrate:begin
                                        editorcontrol:=TED.Editor.geteditor;
-                                       editorcontrol.SetBounds(pp^.x1,pp^.y1,pp^.x2-pp^.x1,pp^.y2-pp^.y1+1);
+                                       editorcontrol.SetBounds(pp^.rect.Left,pp^.rect.Top,pp^.rect.Right-pp^.rect.Left,pp^.rect.Bottom-pp^.rect.Top);
                                        if (editorcontrol is TCombobox) then
                                                                            begin
                                                                                 {$IFDEF LINUX}
@@ -1171,7 +1165,7 @@ begin
                               if assigned(pp.FastEditor.OnGetPrefferedFastEditorSize) then
                               begin
                               fesize:=pp.FastEditor.OnGetPrefferedFastEditorSize(pp.valueAddres);
-                              if (fesize.cx>0)and(({clientwidth}pp.x2-x-fastEditorOffset-1)<=fesize.cx) then
+                              if (fesize.cx>0)and((pp.rect.Right-x-fastEditorOffset-1)<=fesize.cx) then
                                                                                    begin
                                                                                         pp.FastEditor.OnRunFastEditor(pp.valueAddres);
                                                                                         if GDBobj then
@@ -1320,7 +1314,7 @@ end;
 procedure TGDBobjinsp.updateeditorBounds;
 begin
   if peditor<>nil then
-  peditor.geteditor.SetBounds(namecol-1,ppropcurrentedit.y1,clientwidth-namecol-1,ppropcurrentedit.y2-ppropcurrentedit.y1+1);
+  peditor.geteditor.SetBounds(namecol-1,ppropcurrentedit.rect.Top,clientwidth-namecol-1,ppropcurrentedit.rect.Bottom-ppropcurrentedit.rect.Top+1);
 end;
 procedure TGDBobjinsp._onresize(sender:tobject);
 //var x,xn:integer;

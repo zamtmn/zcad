@@ -1573,8 +1573,13 @@ begin
      result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.LayerTable);
 end;
 function LTypeDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+var
+    cbedit:TComboBox;
 begin
      result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.LTypeStyleTable);
+     cbedit:=TComboBox(result.Editor.geteditor);
+     cbedit.Style:=csOwnerDrawFixed;
+     cbedit.OnDrawItem:=MainFormN.LTypeBoxDrawItem;
 end;
 function TextStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 begin
@@ -1786,8 +1791,8 @@ begin
 
      currColor:=PTGDBPaletteColor(pinstance)^;
      seli:=-1;
-     addColorToC(ColorIndex2Name(0),0);
-     addColorToC(ColorIndex2Name(256),256);
+     addColorToC(ColorIndex2Name(ClByBlock),ClByBlock);
+     addColorToC(ColorIndex2Name(ClByLayer),ClByLayer);
      for i := 1 to 7 do
      begin
           addColorToC(ColorIndex2Name(i),i);
@@ -1797,12 +1802,35 @@ begin
      cbedit.ItemIndex:=seli;
      result.mode:=TEM_Integrate;
 end;
+procedure drawLTProp(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
+var
+   //index:TGDBLineWeight;
+   PLT:PGDBLtypeProp;
+   ll:integer;
+   s:gdbstring;
+begin
+     PLT:=ppointer(PInstance)^;
+     if plt<>nil then
+                        begin
+                             s:=Tria_AnsiToUtf8(plt^.Name);
+                             ll:=30;
+                        end
+                    else
+                        begin
+                            s:=rsDifferent;
+                            if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
+                                      exit;
+                            ll:=0;
+                        end;
 
+         ARect.Left:=ARect.Left+2;
+         drawLT(canvas,ARect,s,plt);
+end;
 procedure MainForm.DecorateSysTypes;
 begin
      DecorateType('TGDBLineWeight',@LWDecorator,@LineWeightDecoratorCreateEditor,@drawLWProp);
      DecorateType('PGDBLayerPropObjInsp',@NamedObjectsDecorator,@LayersDecoratorCreateEditor,nil);
-     DecorateType('PGDBLtypePropObjInsp',@NamedObjectsDecorator,@LTypeDecoratorCreateEditor,nil);
+     DecorateType('PGDBLtypePropObjInsp',@NamedObjectsDecorator,@LTypeDecoratorCreateEditor,@drawLTProp);
      DecorateType('PGDBTextStyleObjInsp',@NamedObjectsDecorator,@TextStyleDecoratorCreateEditor,nil);
      DecorateType('PGDBDimStyleObjInsp',@NamedObjectsDecorator,@DimStyleDecoratorCreateEditor,nil);
      DecorateType('TGDBPaletteColor',@PaletteColorDecorator,@ColorDecoratorCreateEditor,@drawIndexColorProp);

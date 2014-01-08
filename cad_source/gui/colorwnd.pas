@@ -81,6 +81,10 @@ var
 const
   xsize=50;
   ysize=50;
+
+  ClByLayer=256;
+  ClByBlock=0;
+
 function ColorIndex2Name(ColorInfex:Integer):string;
 implementation
 

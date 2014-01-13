@@ -1563,7 +1563,7 @@ if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
   isOpenGLError;
   CorrectMouseAfterOS;
   {repaint;//}draw;//paint;
-  inc(sysvar.debug.int1);
+  //inc(sysvar.debug.int1);
   //debugvar(Variables,1);
 
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.Pre_MouseMove----{end}',lp_decPos);{$ENDIF}
@@ -3192,7 +3192,7 @@ procedure TOGLWnd.finishdraw;
   var
     LPTime:Tdatetime;
 begin
-     inc(sysvar.debug.int1);
+     //inc(sysvar.debug.int1);
      CalcOptimalMatrix;
      self.RestoreBuffers;
      LPTime:=now();

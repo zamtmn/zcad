@@ -664,8 +664,8 @@ begin
         end;
         if LincedObjects then
         begin
-             if assigned(sysvar.MISC.ShowHiddenFieldInObjInsp) then
-             if not sysvar.MISC.ShowHiddenFieldInObjInsp^ then
+             if assigned(sysvar.debug.ShowHiddenFieldInObjInsp) then
+             if not sysvar.debug.ShowHiddenFieldInObjInsp^ then
                                                                 exit;
              p:=PGDBOpenArray(baddr)^.beginiterate(ir);
              pcol:=colarray.beginiterate(ir2);

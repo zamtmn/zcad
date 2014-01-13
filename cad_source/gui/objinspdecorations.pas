@@ -22,7 +22,7 @@ unit objinspdecorations;
 interface
 
 uses
-  ugdbltypearray,sysutils,umytreenode,oswnd,gdbcommandsinterface,Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,varmandef,Varman,colorwnd,UGDBLayerArray,gdbase,lineweightwnd,gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
+  Forms,ugdbltypearray,sysutils,umytreenode,oswnd,gdbcommandsinterface,Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,varmandef,Varman,colorwnd,UGDBLayerArray,gdbase,lineweightwnd,gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
 
 procedure DecorateSysTypes;
 implementation
@@ -224,8 +224,22 @@ begin
      layer_cmd;
 end;
 procedure runcolorswnd(PInstance:GDBPointer);
+var
+   mr:integer;
 begin
-     Colors_cmd;
+     if not assigned(ColorSelectWND)then
+     Application.CreateForm(TColorSelectWND, ColorSelectWND);
+     SetHeightControl(ColorSelectWND,22);
+     if assigned(ShowAllCursorsProc) then
+                                         ShowAllCursorsProc;
+     mr:=ColorSelectWND.run(PTGDBPaletteColor(PInstance)^,true){showmodal};
+     if mr=mrOk then
+                    begin
+                    PTGDBPaletteColor(PInstance)^:=ColorSelectWND.ColorInfex;
+                    end;
+     if assigned(RestoreAllCursorsProc) then
+                                            RestoreAllCursorsProc;
+     freeandnil(ColorSelectWND);
 end;
 
 procedure AddFastEditorToType(tn:string;GetPrefferedFastEditorSize:TGetPrefferedFastEditorSize;

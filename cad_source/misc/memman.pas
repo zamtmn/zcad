@@ -71,11 +71,11 @@ begin
   {$IFDEF FILL0ALLOCATEDMEMORY}
   fillchar(p^,size,0);
   {$ENDIF}
-  {$IFDEF DEBUGBUILD}
   inc(GetMemCount);
   TotalAlloc:=TotalAlloc+size;
   CurrentAlloc:=CurrentAlloc+size;
   TotalAllocMB:=TotalAlloc div 1024;
+  {$IFDEF DEBUGBUILD}
   if memdeskfree>0 then
   begin
   freememdesk.PopData(@i,sizeof(i));
@@ -134,8 +134,8 @@ end;
 procedure GDBFreeMem(var p: Pointer) export;
 {$IFDEF DEBUGBUILD}var i:GDBInteger;{$ENDIF}
 begin
-  {$IFDEF DEBUGBUILD}
   inc(FreeMemCount);
+  {$IFDEF DEBUGBUILD}
   if p=nil then
                begin
                     programlog.LogOutStr('ERROR:GDBFreeMem(nil)',0);

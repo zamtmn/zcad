@@ -266,7 +266,7 @@ begin
 end;
 function PropertyDeskriptor.IsVisible;
 begin
-     result:=((Attr and FA_HIDDEN_IN_OBJ_INSP)=0)or(sysvar.MISC.ShowHiddenFieldInObjInsp^);
+     result:=((Attr and FA_HIDDEN_IN_OBJ_INSP)=0)or(sysvar.debug.ShowHiddenFieldInObjInsp^);
 end;
 procedure TPropertyDeskriptorArray.cleareraseobj;
 var curr:PPropertyDeskriptor;

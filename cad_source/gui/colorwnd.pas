@@ -25,7 +25,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, Buttons, {ColorBox,} ButtonPanel, Spin, ExtCtrls, ComCtrls,math,
-  gdbase,zcadstrconsts;
+  gdbobjectsconstdef,gdbase,zcadstrconsts;
 
 type
   ColorGeometry=record
@@ -82,9 +82,6 @@ const
   xsize=50;
   ysize=50;
 
-  ClByLayer=256;
-  ClByBlock=0;
-
 function ColorIndex2Name(ColorInfex:Integer):string;
 implementation
 
@@ -94,9 +91,9 @@ implementation
 function ColorIndex2Name(ColorInfex:Integer):string;
 begin
      Case ColorInfex of
-                       256:
+                       ClByLayer:
                            result:=rsByLayer;
-                       0:
+                       ClByBlock:
                            result:=rsByBlock;
                        else
                            result:=palette[ColorInfex].name+' '+'(Red='+inttostr(palette[ColorInfex].RGB.r)+' Green='+inttostr(palette[ColorInfex].RGB.g)+' Blue='+inttostr(palette[ColorInfex].RGB.b)+')';

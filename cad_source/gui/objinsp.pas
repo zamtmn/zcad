@@ -91,7 +91,8 @@ type
     procedure EraseBackground(DC: HDC); override;
 
     procedure freeeditor;
-    procedure asyncfreeeditor(Data: PtrInt);
+    procedure AsyncFreeEditorAndSelectNext(Data: PtrInt);
+    procedure AsyncFreeEditor(Data: PtrInt);
     function IsMouseOnSpliter(pp:PPropertyDeskriptor; X:Integer):GDBBoolean;
 
     procedure createeditor(pp:PPropertyDeskriptor);
@@ -767,7 +768,7 @@ begin
                                      shared.cmdedit.SetFocus;
 end;
 
-procedure TGDBobjinsp.asyncfreeeditor;
+procedure TGDBobjinsp.AsyncFreeEditorAndSelectNext;
 var
       next:PPropertyDeskriptor;
 begin
@@ -775,6 +776,10 @@ begin
      freeeditor;
      if next<>nil then
      createeditor(next);
+end;
+procedure TGDBobjinsp.AsyncFreeEditor;
+begin
+     freeeditor;
 end;
 
 procedure TGDBobjinsp.Notify;
@@ -791,6 +796,9 @@ begin
          PTDrawingDef(pcurcontext).ChangeStampt(true);
     end;
     pld:=peditor.PInstance;
+
+    if (Command=TMNC_RunFastEditor) then
+                                        ppropcurrentedit.FastEditor.OnRunFastEditor(pld);
     if GDBobj then
                   begin
                        if ppropcurrentedit^.mode=PDM_Field then
@@ -813,9 +821,12 @@ begin
                                                                end;
 
                   end;
-    if Command=TMNC_EditingDone then
-                                    Application.QueueAsyncCall(asyncfreeeditor, 0);
-
+  if (Command=TMNC_RunFastEditor) then
+                                      begin
+                                           Application.QueueAsyncCall(AsyncFreeEditor,0);
+                                      end;
+   if (Command=TMNC_EditingDone) then
+                                      Application.QueueAsyncCall(AsyncFreeEditorAndSelectNext,0);
     if assigned(redrawoglwndproc) then redrawoglwndproc;
     self.updateinsp;
     if assigned(UpdateVisibleProc) then UpdateVisibleProc;

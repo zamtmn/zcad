@@ -27,9 +27,6 @@ type
 const
   lwarray:array [1..24] of TGDBLineWeight=(LnWt000,LnWt005,LnWt009,LnWt013,LnWt015,LnWt018,LnWt020,LnWt025,LnWt030,LnWt035,LnWt040,LnWt050,LnWt053,LnWt060,LnWt070,LnWt080,LnWt090,
                                            LnWt100,LnWt106,LnWt120,LnWt140,LnWt158,LnWt200,LnWt211);
-  ColorBoxDifferent=258;
-  ColorBoxSelColor=257;
-
 var
   LineWeightSelectWND: TLineWeightSelectWND=nil;
   function GetLWNameFromN(num:integer):String;
@@ -53,7 +50,7 @@ begin
                 result:=rsByBlock;
               -1:
                 result:=rsByLayer;
-ColorBoxDifferent:
+     ClDifferent:
                 result:=rsDifferent;
               else
                   begin
@@ -70,9 +67,9 @@ case index of
                result:=rsByLayer;
         1..255:
                result:=palette[index].name;
-ColorBoxSelColor:
+        ClSelColor:
                result:=rsSelectColor;
-ColorBoxDifferent:
+        ClDifferent:
                result:=rsDifferent;
 end;
 end;

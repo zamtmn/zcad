@@ -83,11 +83,11 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_DrawZAxis,'DISP_DrawZAxis');
   SysVarUnit.AssignToSymbol(SysVar.DISP.DISP_ColorAxis,'DISP_ColorAxis');
 
-  SysVarUnit.AssignToSymbol(SysVar.MISC.PMenuProjType,'PMenuProjType');
-  SysVarUnit.AssignToSymbol(SysVar.MISC.PMenuCommandLine,'PMenuCommandLine');
-  SysVarUnit.AssignToSymbol(SysVar.MISC.PMenuHistoryLine,'PMenuHistoryLine');
-  SysVarUnit.AssignToSymbol(SysVar.MISC.PMenuDebugObjInsp,'PMenuDebugObjInsp');
-  SysVarUnit.AssignToSymbol(SysVar.MISC.ShowHiddenFieldInObjInsp,'ShowHiddenFieldInObjInsp');
+  //SysVarUnit.AssignToSymbol(SysVar.MISC.PMenuProjType,'PMenuProjType');
+  //SysVarUnit.AssignToSymbol(SysVar.MISC.PMenuCommandLine,'PMenuCommandLine');
+  //SysVarUnit.AssignToSymbol(SysVar.MISC.PMenuHistoryLine,'PMenuHistoryLine');
+  //SysVarUnit.AssignToSymbol(SysVar.MISC.PMenuDebugObjInsp,'PMenuDebugObjInsp');
+  SysVarUnit.AssignToSymbol(SysVar.debug.ShowHiddenFieldInObjInsp,'ShowHiddenFieldInObjInsp');
 
   SysVarUnit.AssignToSymbol(SysVar.VIEW.VIEW_CommandLineVisible,'VIEW_CommandLineVisible');
   SysVarUnit.AssignToSymbol(SysVar.VIEW.VIEW_HistoryLineVisible,'VIEW_HistoryLineVisible');
@@ -97,6 +97,7 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ShowDwgTabs,'INTF_ShowDwgTabs');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_DwgTabsPosition,'INTF_DwgTabsPosition');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ShowDwgTabCloseBurron,'INTF_ShowDwgTabCloseBurron');
+  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ShowLinesInObjInsp,'INTF_ShowLinesInObjInsp');
 
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_PanObjectDegradation,'RD_PanObjectDegradation');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_UseStencil,'RD_UseStencil');

@@ -1015,8 +1015,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
                memdeb:tmemdeb;
                renderdeb:trenderdeb;
                languadedeb:tlanguadedeb;
-               memi2:GDBInteger;(*'MemMan::I2'*)
-               int1:GDBInteger;
+               ShowHiddenFieldInObjInsp:PGDBBoolean;(*'Show hidden fields'*)
         end;
   tpath=packed record
              Device_Library:PGDBString;(*'Device base'*)
@@ -1138,15 +1137,12 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
                VIEW_HistoryLineVisible,
                VIEW_ObjInspVisible:PGDBBoolean;
          end;
-  tmisc=packed record
-              PMenuProjType,PMenuCommandLine,PMenuHistoryLine,PMenuDebugObjInsp:pGDBPointer;
-              ShowHiddenFieldInObjInsp:PGDBBoolean;(*'Show hidden fields'*)
-        end;
   tinterface=packed record
               INTF_ShowScrollBars:PGDBBoolean;(*'Show scroll bars'*)
               INTF_ShowDwgTabs:PGDBBoolean;(*'Show drawing tabs'*)
               INTF_DwgTabsPosition:PTAlign;(*'Drawing tabs position'*)
               INTF_ShowDwgTabCloseBurron:PGDBBoolean;(*'Show drawing tab close button'*)
+              INTF_ShowLinesInObjInsp:PGDBBoolean;(*'Show lines in object inspector'*)
              end;
   tdisp=packed record
              DISP_ZoomFactor:PGDBDouble;(*'Mouse wheel scale factor'*)
@@ -1167,7 +1163,6 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
     DSGN:tdesigning;(*'Design'*)
     INTF:tinterface;(*'Interface'*)
     VIEW:tview;(*'View'*)
-    MISC:tmisc;(*'Miscellaneous'*)
     debug:tdebug;(*'Debug'*)
   end;
 //Generate on E:\zcad\CAD_SOURCE\languade\varmandef.pas

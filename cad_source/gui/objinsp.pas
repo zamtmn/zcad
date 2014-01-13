@@ -31,7 +31,7 @@ uses
   strproc,{umytreenode,}types,graphics,
   {StdCtrls,}ExtCtrls,{ComCtrls,}Controls,Classes,menus,Forms,lcltype,fileutil,
 
-  gdbasetypes,SysUtils,shared,
+  gdbasetypes,SysUtils,shared,zcadsysvars,
   gdbase{OGLtypes,} {io}{,UGDBOpenArrayOfByte,varman},varmandef,{UGDBDescriptor}UGDBDrawingdef{,UGDBOpenArrayOfPV},
   {zforms,ZComboBoxsWithProc,ZEditsWithProcedure,log,gdbcircle,}memman{,zbasicvisible,zguisct},TypeDescriptors{,commctrl};
 const
@@ -485,7 +485,9 @@ end;
 procedure drawrect(cnvs:tcanvas;clr:TColor;r:trect);
 begin
   cnvs.Brush.Color := clBtnFace;
-  cnvs.Rectangle(r);
+  if assigned(sysvar.INTF.INTF_ShowLinesInObjInsp) then
+    if sysvar.INTF.INTF_ShowLinesInObjInsp^ then
+       cnvs.Rectangle(r);
 end;
 procedure drawstring(cnvs:tcanvas;r:trect;L,T:integer;s:string);
 const
@@ -893,7 +895,9 @@ var
   tp:pointer;
   tempstr:gdbstring;
   FESize:TSize;
+  needredraw:boolean;
 begin
+    needredraw:=false;
     if mresplit then
                   begin
                        //mmnamecol:=x;
@@ -935,7 +939,8 @@ begin
                                                                        else
                                                                            pp.FastEditorState:=TFES_Default;
 
-  drawvalue(pp,canvas,false);
+  //drawvalue(pp,canvas,false);
+  needredraw:=true;
   end;
 
   if oldpp<>pp then
@@ -943,7 +948,8 @@ begin
        if oldpp<>nil then
                          begin
                          oldpp.FastEditorState:=TFES_Default;
-                         drawvalue(oldpp,canvas,false);
+                         //drawvalue(oldpp,canvas,false);
+                         needredraw:=true;
                          end;
 (*  TI.cbSize := SizeOf(TOOLINFO);
   TI.uFlags := TTF_SUBCLASS;
@@ -981,6 +987,10 @@ begin
   end
   else
   Application.ActivateHint(ClientToScreen(Point(X, Y)));
+
+
+  if needredraw then
+                    invalidate;
 
   oldpp:=pp;
   if (pp^.Attr and FA_READONLY)<>0 then exit;

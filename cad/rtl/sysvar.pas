@@ -21,14 +21,10 @@ var
   INTF_ShowDwgTabs:GDBBoolean;
   INTF_DwgTabsPosition:TAlign;
   INTF_ShowDwgTabCloseBurron:GDBBoolean;
+  INTF_ShowLinesInObjInsp:GDBBoolean;
   VIEW_CommandLineVisible:GDBBoolean;
   VIEW_HistoryLineVisible:GDBBoolean;
   VIEW_ObjInspVisible:GDBBoolean;
-  PMenuProjType:GDBPointer;
-  PMenuCommandLine:GDBPointer;
-  PMenuHistoryLine:GDBPointer;
-  PMenuStatusPanel:GDBPointer;
-  PMenuDebugObjInsp:GDBPointer;
   StatusPanelVisible:GDBBoolean;
   DISP_ZoomFactor:GDBDouble;
   DISP_CursorSize:GDBInteger;
@@ -104,6 +100,7 @@ begin
   INTF_ShowDwgTabs:=True;
   INTF_DwgTabsPosition:=TATop;
   INTF_ShowDwgTabCloseBurron:=True;
+  INTF_ShowLinesInObjInsp:=True;
   VIEW_CommandLineVisible:=True;
   VIEW_HistoryLineVisible:=True;
   VIEW_ObjInspVisible:=True;

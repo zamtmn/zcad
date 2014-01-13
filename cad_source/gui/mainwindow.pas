@@ -328,7 +328,7 @@ begin
            until pv=nil;
            if lw<>IntEmpty then
            if lw=IntDifferent then
-                               ivars.CLWeight:=ColorBoxDifferent
+                               ivars.CLWeight:=ClDifferent
                            else
                                begin
                                     ivars.CLWeight:=lw
@@ -342,7 +342,7 @@ begin
                                end;
            if color<>IntEmpty then
            if color=IntDifferent then
-                                  ivars.CColor:=ColorBoxDifferent
+                                  ivars.CColor:=ClDifferent
                            else
                                begin
                                     ivars.CColor:=color;
@@ -418,7 +418,7 @@ begin
            if LinewBox.ItemIndex<>lw then LinewBox.ItemIndex:=(LinewBox.Items.Count-1);
 
            if ivars.CColor<>PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.color then
-              ivars.CColor:=ColorBoxDifferent;
+              ivars.CColor:=ClDifferent;
            if ivars.CLType<>PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.LineType then
               ivars.CLType:=nil;
       end;
@@ -1312,14 +1312,14 @@ var
    i:integer;
    ts:string;
 begin
-  cb.items.AddObject(rsByBlock, TObject(0));
-  cb.items.AddObject(rsByLayer, TObject(256));
+  cb.items.AddObject(rsByBlock, TObject(ClByBlock));
+  cb.items.AddObject(rsByLayer, TObject(ClByLayer));
   for i := 1 to 7 do
   begin
        ts:=palette[i].name;
        cb.items.AddObject(ts, TObject(i));
   end;
-  cb.items.AddObject(rsSelectColor, TObject(ColorBoxSelColor));
+  cb.items.AddObject(rsSelectColor, TObject(ClSelColor));
 end;
 
 procedure MainForm.FillLTCombo(cb:TCustomComboBox);
@@ -1807,7 +1807,7 @@ begin
                                  else
                                      index:=integer(tcombobox(Control).items.Objects[Index]);
    s:=GetLWNameFromLW(index);
-   if (index<4)or(index=ColorBoxDifferent) then
+   if (index<4)or(index=ClDifferent) then
               ll:=0
           else
               ll:=30;
@@ -1826,7 +1826,7 @@ begin
   s:=GetColorNameFromIndex(index);
   ARect.Left:=ARect.Left+2;
   textrect:=ARect;
-  if index<ColorBoxSelColor then
+  if index<ClSelColor then
    begin
         textrect.Left:=textrect.Left+textoffset;
         canvas.TextRect(ARect,textrect.Left,(ARect.Top+ARect.Bottom-canvas.TextHeight(s)) div 2,s);
@@ -3165,7 +3165,7 @@ var
 begin
      index:=tcombobox(Sender).ItemIndex;
      ColorIndex:=integer(tcombobox(Sender).items.Objects[index]);
-     if ColorIndex=ColorBoxSelColor then
+     if ColorIndex=ClSelColor then
                            begin
                                if not assigned(ColorSelectWND)then
                                Application.CreateForm(TColorSelectWND, ColorSelectWND);

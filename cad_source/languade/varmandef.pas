@@ -123,7 +123,7 @@ TOIProps=record
                ci,barpos:GDBInteger;
          end;
 pvardesk = ^vardesk;
-TMyNotifyCommand=(TMNC_EditingDone,TMNC_EditingProcess);
+TMyNotifyCommand=(TMNC_EditingDone,TMNC_EditingProcess,TMNC_RunFastEditor);
 TMyNotifyProc=procedure (Sender: TObject;Command:TMyNotifyCommand) of object;
 TPropEditor=class(TComponent)
                  public
@@ -132,6 +132,8 @@ TPropEditor=class(TComponent)
                  OwnerNotify:TMyNotifyProc;
                  fFreeOnLostFocus:boolean;
                  byObjects:boolean;
+                 CanRunFastEditor:boolean;
+                 RunFastEditorValue:tobject;
                  constructor Create(AOwner:TComponent;_PInstance:GDBPointer;_PTD:PUserTypeDescriptor;FreeOnLostFocus:boolean);
                  procedure EditingDone(Sender: TObject);
                  procedure EditingProcess(Sender: TObject);
@@ -253,6 +255,8 @@ begin
      PTD:=_PTD;
      fFreeOnLostFocus:=FreeOnLostFocus;
      byObjects:=false;
+     CanRunFastEditor:=false;
+     RunFastEditorValue:=nil;
 end;
 function TPropEditor.geteditor:TWinControl;
 begin
@@ -290,18 +294,27 @@ procedure TPropEditor.EditingProcess(Sender: TObject);
 var
   i:integer;
   p:pointer;
+  rfs:boolean;
 begin
+     rfs:=false;
      if assigned(OwnerNotify) then
                                   begin
                                        if byobjects then
                                                         begin
                                                              i:=tcombobox(sender).ItemIndex;
                                                              p:=tcombobox(sender).Items.Objects[i];
-                                                             ptd.CopyInstanceTo(@p,PInstance)
+                                                             if CanRunFastEditor then
+                                                             if RunFastEditorValue=p then
+                                                                                         rfs:=true;
+                                                             if not rfs then
+                                                                            ptd.CopyInstanceTo(@p,PInstance);
                                                         end
                                                     else
                                                         ptd.SetValueFromString(PInstance,tedit(sender).text);
-                                        OwnerNotify(self,TMNC_EditingProcess);
+                                        if rfs then
+                                                   OwnerNotify(self,TMNC_RunFastEditor)
+                                               else
+                                                   OwnerNotify(self,TMNC_EditingProcess);
                                   end;
 end;
 procedure TPropEditor.ExitEdit(Sender: TObject);

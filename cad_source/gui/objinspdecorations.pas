@@ -320,6 +320,11 @@ begin
      end;
      if seli=-1 then
                     addColorToC(ColorIndex2Name(currColor),currColor);
+
+     result.editor.CanRunFastEditor:=true;
+     result.editor.RunFastEditorValue:=tobject(ClSelColor);
+     addColorToC(rsSelectColor,ClSelColor);
+
      cbedit.ItemIndex:=seli;
      result.mode:=TEM_Integrate;
 end;

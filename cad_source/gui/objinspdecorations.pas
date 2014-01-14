@@ -308,7 +308,7 @@ end;
 begin
      CreateComboPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit);
      cbedit.Style:=csOwnerDrawFixed;
-     cbedit.OnDrawItem:=MainFormN.ColorBoxDrawItem;
+     cbedit.OnDrawItem:=MainFormN.ColorDrawItem;
 
      currColor:=PTGDBPaletteColor(pinstance)^;
      seli:=-1;

@@ -98,6 +98,8 @@ type
                                State: TOwnerDrawState);
     procedure ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                                    State: TOwnerDrawState);
+    procedure ColorDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+                                                   State: TOwnerDrawState);
     procedure LTypeBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
                                                    State: TOwnerDrawState);
     function findtoolbatdesk(tbn:string):string;
@@ -1853,7 +1855,7 @@ procedure MainForm.ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect:
   State: TOwnerDrawState);
 begin
     if (gdb.GetCurrentDWG=nil)or(sysvar.DWG.DWG_CColor=nil) then
-     exit;
+    exit;
     begin
     ComboBoxDrawItem(Control,ARect,State);
     if {(odComboBoxEdit in State)}not TComboBox(Control).DroppedDown then
@@ -1862,6 +1864,15 @@ begin
                                       end
                                  else
                                      index:=integer(tcombobox(Control).items.Objects[Index]);
+    DrawColor(TComboBox(Control).canvas,Index,ARect);
+    end;
+end;
+procedure MainForm.ColorDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
+  State: TOwnerDrawState);
+begin
+    begin
+    ComboBoxDrawItem(Control,ARect,State);
+    index:=integer(tcombobox(Control).items.Objects[Index]);
     DrawColor(TComboBox(Control).canvas,Index,ARect);
     end;
 end;

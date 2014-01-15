@@ -623,6 +623,22 @@ begin
     result:=cmd_ok;
 end;
 
+function GetLength_com(operands:TCommandOperands):TCommandResult;
+var
+   p1,p2:GDBVertex;
+   vd:vardesk;
+begin
+    vd:=commandmanager.GetValue;
+    if commandmanager.get3dpoint('Select point:',p1) then
+    begin
+         if commandmanager.get3dpoint('Select point:',p2) then
+          begin
+               pgdblength(ppointer(vd.data.Instance)^)^:=geometry.Vertexlength(p1,p2);
+          end;
+    end;
+    result:=cmd_ok;
+end;
+
 initialization
      {$IFDEF DEBUGINITSECTION}LogOut('gdbcommandsexample.initialization');{$ENDIF}//write to log for the control initialization sequence
                                                                                   //пишем в лог для отслеживания последовательности инициализации модулей
@@ -646,5 +662,6 @@ initialization
 
      CreateCommandFastObjectPlugin(@test_com,'ts',CADWG,0);
      CreateCommandFastObjectPlugin(@GetPoint_com,'GetPoint',CADWG,0);
+     CreateCommandFastObjectPlugin(@GetLength_com,'GetLength',CADWG,0);
 
 end.

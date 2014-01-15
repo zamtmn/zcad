@@ -102,7 +102,7 @@ var
 begin
   savemode:=PTSimpleDrawing(pcommandrunning.pdwg)^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,//set mode point of the mouse
                                                                                                      //устанавливаем режим указания точек мышью
-                                                                      MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode
+                                                                      MGetControlpoint or MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode
                                                                                                               //сбрасываем режим выбора примитивов мышью
   shared.HistoryOutStr(prompt);
   pcommandrunning^.IData.GetPointMode:=TGPWait;

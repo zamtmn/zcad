@@ -184,7 +184,7 @@ begin
      Details:=ThemeServices.GetElementDetails(ComboElem);
      ThemeServices.DrawElement(Canvas.Handle,Details,r);
 end;
-procedure ButtonDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
+procedure ButtonDraw(canvas:TCanvas;r:trect;state:TFastEditorState;s:string);
 var
   Details: TThemedElementDetails;
   ComboElem:TThemedButton;
@@ -197,7 +197,22 @@ begin
                            ComboElem:=tbPushButtonNormal;
      Details:=ThemeServices.GetElementDetails(ComboElem);
      ThemeServices.DrawElement(Canvas.Handle,Details,r);
-     ThemeServices.DrawText(Canvas.Handle,Details,'...',r,DT_CENTER or DT_VCENTER,0);
+     ThemeServices.DrawText(Canvas.Handle,Details,s,r,DT_CENTER or DT_VCENTER,0);
+end;
+procedure ButtonDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
+begin
+     ButtonDraw(canvas,r,state,'...');
+end;
+procedure ButtonCrossDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
+var
+  Details: TThemedElementDetails;
+  ComboElem:TThemedButton;
+begin
+     ButtonDraw(canvas,r,state,'+');
+end;
+procedure ButtonTxtDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
+begin
+     ButtonDraw(canvas,r,state,'T');
 end;
 function ButtonGetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;
 var
@@ -389,6 +404,11 @@ begin
      commandmanager.PushValue('','PGDBVertex',@PInstance);
      commandmanager.executecommand('GetPoint',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
 end;
+procedure GetLengthFromDrawing(PInstance:PGDBVertex);
+begin
+     commandmanager.PushValue('','PGDBLength',@PInstance);
+     commandmanager.executecommand('GetLength',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+end;
 procedure DecorateSysTypes;
 begin
      DecorateType('TGDBLineWeight',@LWDecorator,@LineWeightDecoratorCreateEditor,@drawLWProp);
@@ -400,8 +420,9 @@ begin
      AddFastEditorToType('TGDBPaletteColor',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runcolorswnd);
      AddFastEditorToType('GDBBoolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
      AddFastEditorToType('PGDBLayerPropObjInsp',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runlayerswnd);
-     AddFastEditorToType('GDBString',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@RunStringEditor);
-     AddFastEditorToType('GDBVertex',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@GetVertexFromDrawing);
+     AddFastEditorToType('GDBString',@ButtonGetPrefferedFastEditorSize,@ButtonTxtDrawFastEditor,@RunStringEditor);
+     AddFastEditorToType('GDBCoordinates3D',@ButtonGetPrefferedFastEditorSize,@ButtonCrossDrawFastEditor,@GetVertexFromDrawing);
+     AddFastEditorToType('GDBLength',@ButtonGetPrefferedFastEditorSize,@ButtonCrossDrawFastEditor,@GetLengthFromDrawing);
      DecorateType('TGDBOSMode',nil,CreateEmptyEditor,nil);
      AddFastEditorToType('TGDBOSMode',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runOSwnd);
      //TGDBOSMode

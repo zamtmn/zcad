@@ -29,7 +29,7 @@ type
 PGDBObj2dprop=^GDBObj2dprop;
 GDBObj2dprop=packed record
                    Basis:GDBBasis;(*'Basis'*)(*saved_to_shd*)
-                   P_insert:GDBvertex;(*'Insertion point OCS'*)(*saved_to_shd*)
+                   P_insert:GDBCoordinates3D;(*'Insertion point OCS'*)(*saved_to_shd*)
              end;
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
 GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)

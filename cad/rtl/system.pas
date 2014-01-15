@@ -108,6 +108,10 @@ GDBvertex=packed record
                 y:GDBDouble;(*saved_to_shd*)
                 z:GDBDouble;(*saved_to_shd*)
           end;
+PGDBCoordinates3D=^GDBCoordinates3D;
+GDBCoordinates3D=GDBvertex;
+PGDBLength=^GDBLength;
+GDBLength=GDBDouble;
 PGDBQuaternion=^GDBQuaternion;
 GDBQuaternion=packed record
    ImagPart: GDBvertex;
@@ -133,8 +137,8 @@ GDBvertex4S=packed record
           end;
 PGDBLineProp=^GDBLineProp;
 GDBLineProp=packed record
-                  lBegin:GDBvertex;(*'Begin'*)(*saved_to_shd*)
-                  lEnd:GDBvertex;(*'End'*)(*saved_to_shd*)
+                  lBegin:GDBCoordinates3D;(*'Begin'*)(*saved_to_shd*)
+                  lEnd:GDBCoordinates3D;(*'End'*)(*saved_to_shd*)
               end;
 PGDBvertex4D=^GDBvertex4D;
 GDBvertex4D=packed record
@@ -1583,7 +1587,7 @@ GDBObjWithMatrix={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjEntity)
 PGDBObj2dprop=^GDBObj2dprop;
 GDBObj2dprop=packed record
                    Basis:GDBBasis;(*'Basis'*)(*saved_to_shd*)
-                   P_insert:GDBvertex;(*'Insertion point OCS'*)(*saved_to_shd*)
+                   P_insert:GDBCoordinates3D;(*'Insertion point OCS'*)(*saved_to_shd*)
              end;
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
 GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
@@ -1703,8 +1707,8 @@ GDBObjAbstractText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlainWithOX)
                   end;
 PGDBObjCircle=^GDBObjCircle;
 GDBObjCircle={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
-                 Radius:GDBDouble;(*'Radius'*)(*saved_to_shd*)
-                 Diametr:GDBDouble;(*'Diametr'*)(*oi_readonly*)
+                 Radius:GDBLength;(*'Radius'*)(*saved_to_shd*)
+                 Diametr:GDBLength;(*'Diametr'*)(*oi_readonly*)
                  Length:GDBDouble;(*'Length'*)(*oi_readonly*)
                  Area:GDBDouble;(*'Area'*)(*oi_readonly*)
                  q0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
@@ -2291,7 +2295,7 @@ GDBObjLine={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObj3d)
                  CoordInOCS:GDBLineProp;(*'Coordinates OCS'*)(*saved_to_shd*)
                  CoordInWCS:GDBLineProp;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)(*hidden_in_objinsp*)
-                 Length:GDBDouble;(*'Length'*)
+                 Length:GDBDouble;(*'Length'*)(*oi_readonly*)
                  //Length_2:GDBDouble;(*'Sqrt length'*)(*hidden_in_objinsp*)
                  //dir:GDBvertex;(*'Direction'*)(*hidden_in_objinsp*)
                  //Geom2:ZGLGeometry;

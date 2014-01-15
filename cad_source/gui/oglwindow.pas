@@ -2057,10 +2057,7 @@ end;
 
 procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
 var
-   //op:gdbstring;
-   {size,}modalresult:integer;
-   //us:unicodestring;
-   //u8s:UTF8String;
+   modalresult:integer;
    astring:ansistring;
    pint:PGDBInteger;
 begin
@@ -2115,7 +2112,6 @@ begin
      if modalresult=MrOk then
                          begin
                               PGDBObjText(pobj)^.YouChanged(drawing);
-                              //gdb.GetCurrentROOT.FormatAfterEdit;
                               if assigned(redrawoglwndproc) then redrawoglwndproc;
                          end;
 

@@ -443,7 +443,37 @@ begin
   if last then
               y:=y-rowh;
 end;
-procedure drawheader(Canvas:tcanvas;collapsed:boolean;r:trect;name:string);
+procedure drawfasteditor(ppd:PPropertyDeskriptor;canvas:tcanvas;var r:trect);
+var
+   fer:trect;
+   FESize:TSize;
+   temp:integer;
+begin
+     if assigned(ppd.FastEditor.OnGetPrefferedFastEditorSize) then
+     begin
+           FESize:=ppd.FastEditor.OnGetPrefferedFastEditorSize(ppd^.valueAddres);
+           if FESize.cX>0 then
+           begin
+                fer:=r;
+                fer.Left:=fer.Right-FESize.cX-fastEditorOffset;
+                fer.Right:=fer.Right-fastEditorOffset;
+                if FESize.cy>0 then
+                begin
+                fer.Top:=fer.Top-3;
+                temp:=(fer.Bottom+fer.Top)div 2;
+                fer.Top:=temp-FESize.cy div 2;
+                fer.Bottom:=fer.Top+FESize.cy;
+                end
+                else
+                begin
+                fer.Top:=fer.Top-3;
+                end;
+                r.Right:=fer.Left;
+                ppd.FastEditor.OnDrawFastEditor(canvas,fer,ppd^.valueAddres,ppd.FastEditorState);
+           end;
+     end;
+end;
+procedure drawheader(Canvas:tcanvas;ppd:PPropertyDeskriptor;r:trect;name:string);
 function GetSizeTreeIcon(Minus: Boolean):TSize;
 const
   PlusMinusDetail: array[Boolean] of TThemedTreeview =
@@ -476,10 +506,14 @@ var
    Size: TSize;
    temp:integer;
 begin
-  size:=GetSizeTreeIcon(collapsed);
+  if not ppd^.Collapsed^ then
+                             ppd^.Collapsed^:=ppd^.Collapsed^;
+  size:=GetSizeTreeIcon(not ppd^.Collapsed^);
   temp:=(r.bottom-r.top-size.cy)div 3;
-  DrawTreeIcon({Canvas,}r.left,r.top+temp,collapsed);
+  DrawTreeIcon({Canvas,}r.left,r.top+temp,not ppd^.Collapsed^);
   inc(r.left,size.cx+1);
+  if assigned(ppd.FastEditor.OnGetPrefferedFastEditorSize) then
+  drawfasteditor(ppd,canvas,r);
   canvas.TextRect(r,r.Left,r.Top,(name));
   dec(r.left,size.cx+1);
 end;
@@ -534,29 +568,7 @@ begin
   end
   else
     begin
-    if assigned(ppd.FastEditor.OnGetPrefferedFastEditorSize) then
-    begin
-    FESize:=ppd.FastEditor.OnGetPrefferedFastEditorSize(ppd^.valueAddres);
-    if FESize.cX>0 then
-    begin
-         fer:=r;
-         fer.Left:=fer.Right-FESize.cX-fastEditorOffset;
-         fer.Right:=fer.Right-fastEditorOffset;
-         if FESize.cy>0 then
-         begin
-         fer.Top:=fer.Top-3;
-         temp:=(fer.Bottom+fer.Top)div 2;
-         fer.Top:=temp-FESize.cy div 2;
-         fer.Bottom:=fer.Top+FESize.cy;
-         end
-         else
-         begin
-         fer.Top:=fer.Top-3;
-         end;
-         r.Right:=fer.Left;
-         ppd.FastEditor.OnDrawFastEditor(canvas,fer,ppd^.valueAddres,ppd.FastEditorState);
-    end;
-    end;
+         drawfasteditor(ppd,canvas,r);
     if fulldraw then
     if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)) then
                                                    ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
@@ -597,7 +609,6 @@ begin
                                     r.Right:=clientwidth-2;
 
                                     drawrect(canvas,clBtnFace,r);
-
                                     r.Left:=r.Left+3;
                                     r.Top:=r.Top+3;
                                     if (ppd^.Attr and FA_READONLY)<>0 then
@@ -605,14 +616,15 @@ begin
                                                                             tempcolor:=canvas.Font.Color;
                                                                             canvas.Font.Color:=clGrayText;
 
-                                                                            drawheader(canvas,not ppd^.Collapsed^,r,s);
+                                                                            drawheader(canvas,ppd,r,s);
 
                                                                             canvas.Font.Color:=tempcolor;
                                                                           end
                                                                       else
                                                                           begin
-                                                                            drawheader(canvas,not ppd^.Collapsed^,r,s);
+                                                                            drawheader(canvas,ppd,r,s);
                                                                           end;
+                                    ppd.rect:=r;
                                     inc(sub);
                                     y:=y+rowh;
                                     if not ppd^.Collapsed^ then
@@ -1062,10 +1074,13 @@ begin
                                  if pp.FastEditorState=TFES_Pressed then
                                                                                       begin
                                                                                            pp.FastEditorState:=TFES_Default;
+                                                                                           if assigned(pp.FastEditor.OnRunFastEditor)then
+                                                                                           begin
                                                                                            pp.FastEditor.OnRunFastEditor(pp.valueAddres);
                                                                                            if GDBobj then
                                                                                            if PGDBaseObject(pcurrobj)^.IsEntity then
                                                                                                                                PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^);
+                                                                                           end;
                                                                                            if assigned(resetoglwndproc) then resetoglwndproc;
                                                                                            if assigned(redrawoglwndproc) then redrawoglwndproc;
                                                                                            self.updateinsp;

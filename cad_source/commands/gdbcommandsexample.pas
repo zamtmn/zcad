@@ -55,6 +55,7 @@ uses
                       //"Менеджер" чертежей
   GDBManager,         //different functions simplify the creation entities, while there are very few
                       //разные функции упрощающие создание примитивов, пока их там очень мало
+  varmandef,
   log;                //log system
                       //система логирования
 const
@@ -609,6 +610,18 @@ begin
     end;
     result:=cmd_ok;
 end;
+function GetPoint_com(operands:TCommandOperands):TCommandResult;
+var
+   p:GDBVertex;
+   vd:vardesk;
+begin
+    vd:=commandmanager.GetValue;
+    if commandmanager.get3dpoint('Select point:',p) then
+    begin
+         pgdbvertex(ppointer(vd.data.Instance)^)^:=p;
+    end;
+    result:=cmd_ok;
+end;
 
 initialization
      {$IFDEF DEBUGINITSECTION}LogOut('gdbcommandsexample.initialization');{$ENDIF}//write to log for the control initialization sequence
@@ -632,5 +645,6 @@ initialization
      CreateCommandFastObjectPlugin(@DrawCircle_com,'Circle',CADWG,0);
 
      CreateCommandFastObjectPlugin(@test_com,'ts',CADWG,0);
+     CreateCommandFastObjectPlugin(@GetPoint_com,'GetPoint',CADWG,0);
 
 end.

@@ -373,6 +373,9 @@ begin
            ppd^.Name:=name;
            ppd^.Attr:=ownerattrib;
            ppd^.Collapsed:=PCollapsed;
+           ppd^.Decorators:=Decorators;
+           ppd^.FastEditor:=FastEditor;
+           ppd^.valueAddres:=addr;
            if bmode=property_build then
            begin
                 gdbgetmem({$IFDEF DEBUGBUILD}'{6F9EBE33-15A8-4FF5-87D7-BF01A40F6789}',{$ENDIF}GDBPointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));

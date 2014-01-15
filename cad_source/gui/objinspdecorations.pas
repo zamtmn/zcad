@@ -22,7 +22,7 @@ unit objinspdecorations;
 interface
 
 uses
-  Forms,ugdbltypearray,sysutils,umytreenode,oswnd,gdbcommandsinterface,Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,varmandef,Varman,colorwnd,UGDBLayerArray,gdbase,lineweightwnd,gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
+  uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,oswnd,gdbcommandsinterface,Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,varmandef,Varman,colorwnd,UGDBLayerArray,gdbase,lineweightwnd,gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
 
 procedure DecorateSysTypes;
 implementation
@@ -352,6 +352,43 @@ begin
          ARect.Left:=ARect.Left+2;
          drawLT(canvas,ARect,s,plt);
 end;
+procedure RunStringEditor(PInstance:GDBPointer);
+var
+   modalresult:integer;
+   InfoForm:TInfoForm=nil;
+   pint:PGDBInteger;
+begin
+     if not assigned(InfoForm) then
+     begin
+     InfoForm:=TInfoForm.createnew(application.MainForm);
+     pint:=SavedUnit.FindValue('TEdWND_Left');
+     if assigned(pint)then
+                          InfoForm.Left:=pint^;
+     pint:=SavedUnit.FindValue('TEdWND_Top');
+     if assigned(pint)then
+                          InfoForm.Top:=pint^;
+     pint:=SavedUnit.FindValue('TEdWND_Width');
+     if assigned(pint)then
+                          InfoForm.Width:=pint^;
+     pint:=SavedUnit.FindValue('TEdWND_Height');
+     if assigned(pint)then
+                          InfoForm.Height:=pint^;
+
+     end;
+     InfoForm.caption:=(rsTextEdCaption);
+
+     InfoForm.memo.text:=pgdbstring(PInstance)^;
+     modalresult:=DOShowModal(InfoForm);
+     if modalresult=MrOk then
+                         begin
+                              pgdbstring(PInstance)^:=ConvertToDxfString(InfoForm.memo.text);
+                         end;
+end;
+procedure GetVertexFromDrawing(PInstance:PGDBVertex);
+begin
+     commandmanager.PushValue('','PGDBVertex',@PInstance);
+     commandmanager.executecommand('GetPoint',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+end;
 procedure DecorateSysTypes;
 begin
      DecorateType('TGDBLineWeight',@LWDecorator,@LineWeightDecoratorCreateEditor,@drawLWProp);
@@ -363,6 +400,8 @@ begin
      AddFastEditorToType('TGDBPaletteColor',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runcolorswnd);
      AddFastEditorToType('GDBBoolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
      AddFastEditorToType('PGDBLayerPropObjInsp',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runlayerswnd);
+     AddFastEditorToType('GDBString',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@RunStringEditor);
+     AddFastEditorToType('GDBVertex',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@GetVertexFromDrawing);
      DecorateType('TGDBOSMode',nil,CreateEmptyEditor,nil);
      AddFastEditorToType('TGDBOSMode',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runOSwnd);
      //TGDBOSMode

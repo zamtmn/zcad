@@ -22,12 +22,19 @@ unit objinspdecorations;
 interface
 
 uses
-  uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,oswnd,gdbcommandsinterface,Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,varmandef,Varman,colorwnd,UGDBLayerArray,gdbase,lineweightwnd,gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
+  Objinsp,uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,oswnd,gdbcommandsinterface,Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,varmandef,Varman,colorwnd,UGDBLayerArray,gdbase,lineweightwnd,gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
+type
+    AsyncCommHelper=class
+                         class procedure GetVertex(Pinstance:PtrInt);
+                         class procedure GetLength(Pinstance:PtrInt);
+    end;
 
 procedure DecorateSysTypes;
 implementation
 uses
   mainwindow;
+var
+   count:integer;
 function LWDecorator(PInstance:GDBPointer):GDBString;
 begin
      result:=GetLWNameFromLW(PTGDBLineWeight(PInstance)^);
@@ -399,15 +406,45 @@ begin
                               pgdbstring(PInstance)^:=ConvertToDxfString(InfoForm.memo.text);
                          end;
 end;
+class procedure AsyncCommHelper.GetVertex(Pinstance:PtrInt);
+begin
+     if count>0 then
+                    begin
+                        dec(count);
+                        Application.QueueAsyncCall(GetVertex,PtrInt(PInstance));
+                    end
+                else
+                    begin
+                         commandmanager.PushValue('','PGDBVertex',@PInstance);
+                         commandmanager.executecommand('GetPoint',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                         GDBobjinsp.UpdateObjectInInsp;
+                    end;
+end;
 procedure GetVertexFromDrawing(PInstance:PGDBVertex);
 begin
-     commandmanager.PushValue('','PGDBVertex',@PInstance);
-     commandmanager.executecommand('GetPoint',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+     commandmanager.executecommandtotalend;
+     count:=1;
+     Application.QueueAsyncCall(AsyncCommHelper.GetVertex,PtrInt(PInstance));
+end;
+class procedure AsyncCommHelper.GetLength(Pinstance:PtrInt);
+begin
+     if count>0 then
+                    begin
+                        dec(count);
+                        Application.QueueAsyncCall(GetLength,PtrInt(PInstance));
+                    end
+                else
+                    begin
+                         commandmanager.PushValue('','PGDBLength',@PInstance);
+                         commandmanager.executecommand('GetLength',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                         GDBobjinsp.UpdateObjectInInsp;
+                    end;
 end;
 procedure GetLengthFromDrawing(PInstance:PGDBVertex);
 begin
-     commandmanager.PushValue('','PGDBLength',@PInstance);
-     commandmanager.executecommand('GetLength',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+     commandmanager.executecommandtotalend;
+     count:=1;
+     Application.QueueAsyncCall(AsyncCommHelper.GetLength,PtrInt(PInstance));
 end;
 procedure DecorateSysTypes;
 begin

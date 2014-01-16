@@ -104,6 +104,7 @@ type
   //procedure Pre_MouseDown(fwkeys:longint; x,y:GDBInteger; var r:HandledMsg); virtual;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);override;
     procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);override;
+    procedure UpdateObjectInInsp;
     private
     procedure setptr(exttype:PUserTypeDescriptor; addr,context:GDBPointer);
     procedure updateinsp;
@@ -1077,19 +1078,24 @@ begin
                                                                                            if assigned(pp.FastEditor.OnRunFastEditor)then
                                                                                            begin
                                                                                            pp.FastEditor.OnRunFastEditor(pp.valueAddres);
-                                                                                           if GDBobj then
-                                                                                           if PGDBaseObject(pcurrobj)^.IsEntity then
-                                                                                                                               PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^);
                                                                                            end;
-                                                                                           if assigned(resetoglwndproc) then resetoglwndproc;
-                                                                                           if assigned(redrawoglwndproc) then redrawoglwndproc;
-                                                                                           self.updateinsp;
-                                                                                           if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+                                                                                           UpdateObjectInInsp;
                                                                                       end
                             end;
                             end;
 
 end;
+procedure TGDBobjinsp.UpdateObjectInInsp;
+begin
+  if GDBobj then
+  if PGDBaseObject(pcurrobj)^.IsEntity then
+                                      PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^);
+  if assigned(resetoglwndproc) then resetoglwndproc;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  self.updateinsp;
+  if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+end;
+
 procedure TGDBobjinsp.createeditor(pp:PPropertyDeskriptor);
 var
   //my:GDBInteger;

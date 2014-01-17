@@ -837,7 +837,10 @@ begin
                                                              end;
                     end;
                     if PGDBaseObject(pcurrobj)^.IsEntity then
-                                                             PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^)
+                                                             begin
+                                                             PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^);
+                                                             PGDBObjEntity(pcurrobj).YouChanged(PTDrawingDef(pcurcontext)^);
+                                                             end
                                                          else
                                                              PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(ppropcurrentedit^.valueAddres,self.currobjgdbtype);
 

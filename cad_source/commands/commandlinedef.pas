@@ -34,7 +34,7 @@ const
 type
 TInteractiveProcObjBuild=procedure(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
 {Export+}
-    TGetPointMode=(TGPWait{point},TGPWaitEnt,TGPEnt,TGPPoint,TGPCancel,TGPOtherCommand,TGPCloseApp);
+    TGetPointMode=(TGPWait{point},TGPWaitEnt,TGPEnt,TGPPoint,TGPCancel,TGPOtherCommand, TGPCloseDWG,TGPCloseApp);
     TInteractiveData=packed record
                        GetPointMode:TGetPointMode;(*hidden_in_objinsp*)
                        GetPointValue:GDBVertex;(*hidden_in_objinsp*)

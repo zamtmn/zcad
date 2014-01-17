@@ -881,7 +881,8 @@ begin
                                       until result<>cmd_error;
                                       result:=IDYES;
                                  end;
-       commandmanager.executecommandtotalend;
+       //commandmanager.executecommandtotalend;
+       commandmanager.ChangeModeAndEnd(TGPCloseDWG);
        poglwnd:=ClosedDWG.OGLwindow1;
        gdb.eraseobj(ClosedDWG);
        gdb.pack;

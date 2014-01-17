@@ -47,6 +47,7 @@ type
                           function executecommandsilent(const comm:pansichar;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;
                           procedure executecommandend;virtual;
                           procedure executecommandtotalend;virtual;
+                          procedure ChangeModeAndEnd(newmode:TGetPointMode);
                           procedure executefile(fn:GDBString;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           function executelastcommad(pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;
                           procedure sendpoint2command(p3d:gdbvertex; p2d:gdbvertex2di; mode:GDBByte;osp:pos_record;const drawing:TDrawingDef);virtual;
@@ -123,6 +124,7 @@ begin
                                                                                  result:=false;
                                                                                  //shared.HistoryOutStr('cancel');
                                                                                  end;
+  if (pcommandrunning^.IData.GetPointMode<>TGPCloseDWG)then
   PTSimpleDrawing(pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);//restore editor mode
                                                                       //восстанавливаем сохраненный режим редактора
 end;
@@ -554,12 +556,11 @@ begin
    else if pcommandrunning<>nil then if pcommandrunning^.IData.GetPointMode=TGPCloseApp then
                                         Application.QueueAsyncCall(AppCloseProc, 0);
 end;
-procedure GDBcommandmanager.executecommandtotalend;
+procedure GDBcommandmanager.ChangeModeAndEnd(newmode:TGetPointMode);
 var
    temp:PCommandRTEdObjectDef;
 begin
-  //ReturnToDefault;
-     if EndGetPoint(TGPCancel) then
+  if EndGetPoint(newmode) then
                       exit;
   self.DMHide;
   self.DMClear;
@@ -569,12 +570,17 @@ begin
   if temp<>nil then
                    temp^.CommandEnd;
   if pcommandrunning=nil then
-                             //if assigned(CLine)then
-                             //CLine.SetMode(CLCOMMANDREDY);
                              if assigned(SetCommandLineMode) then
                              SetCommandLineMode(CLCOMMANDREDY);
   CommandsStack.Clear;
   ContextCommandParams:=nil;
+end;
+
+procedure GDBcommandmanager.executecommandtotalend;
+var
+   temp:PCommandRTEdObjectDef;
+begin
+  ChangeModeAndEnd(TGPCancel);
 end;
 function GDBcommandmanager.executelastcommad(pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;
 begin

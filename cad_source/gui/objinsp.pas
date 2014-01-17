@@ -812,39 +812,40 @@ begin
 
     if (Command=TMNC_RunFastEditor) then
                                         ppropcurrentedit.FastEditor.OnRunFastEditor(pld);
-    if GDBobj then
-                  begin
-                       if ppropcurrentedit^.mode=PDM_Field then
-                                                               begin
-                                                               //PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(pld,self.currobjgdbtype);
-                                                               if PGDBaseObject(pcurrobj)^.IsEntity then
-                                                                                                        PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^)
-                                                                                                    else
-                                                                                                        PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(pld,self.currobjgdbtype);
-                                                               end
-
-                                                           else
-                                                               begin
-                                                                 PObjectDescriptor(currobjgdbtype)^.SimpleRunMetodWithArg(ppropcurrentedit^.w,pcurrobj,ppropcurrentedit^.valueAddres);
-                                                                 //PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(nil,self.currobjgdbtype)
-                                                                 if PGDBaseObject(pcurrobj)^.IsEntity then
-                                                                                                          PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^)
-                                                                                                      else
-                                                                                                          PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(nil,self.currobjgdbtype);
-                                                               end;
-
-                  end;
-  if (Command=TMNC_RunFastEditor) then
+    UpdateObjectInInsp;
+   if (Command=TMNC_RunFastEditor) then
                                       begin
                                            Application.QueueAsyncCall(AsyncFreeEditor,0);
                                       end;
    if (Command=TMNC_EditingDone) then
                                       Application.QueueAsyncCall(AsyncFreeEditorAndSelectNext,0);
-    if assigned(redrawoglwndproc) then redrawoglwndproc;
-    self.updateinsp;
-    if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+    //if assigned(redrawoglwndproc) then redrawoglwndproc;
+    //self.updateinsp;
+    //if assigned(UpdateVisibleProc) then UpdateVisibleProc;
     //MainForm.ReloadLayer(@gdb.GetCurrentDWG.LayerTable);
   end;
+end;
+procedure TGDBobjinsp.UpdateObjectInInsp;
+begin
+  if GDBobj then
+                begin
+                     if ppropcurrentedit<>nil then
+                     begin
+                     if ppropcurrentedit^.mode=PDM_Property then
+                                                             begin
+                                                               PObjectDescriptor(currobjgdbtype)^.SimpleRunMetodWithArg(ppropcurrentedit^.w,pcurrobj,ppropcurrentedit^.valueAddres);
+                                                             end;
+                    end;
+                    if PGDBaseObject(pcurrobj)^.IsEntity then
+                                                             PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^)
+                                                         else
+                                                             PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(ppropcurrentedit^.valueAddres,self.currobjgdbtype);
+
+                end;
+  if assigned(resetoglwndproc) then resetoglwndproc;
+  if assigned(redrawoglwndproc) then redrawoglwndproc;
+  self.updateinsp;
+  if assigned(UpdateVisibleProc) then UpdateVisibleProc;
 end;
 procedure TGDBobjinsp.scroll;
 //var si:scrollinfo;
@@ -1077,6 +1078,7 @@ begin
                                                                                            pp.FastEditorState:=TFES_Default;
                                                                                            if assigned(pp.FastEditor.OnRunFastEditor)then
                                                                                            begin
+                                                                                           ppropcurrentedit:=pp;
                                                                                            pp.FastEditor.OnRunFastEditor(pp.valueAddres);
                                                                                            end;
                                                                                            UpdateObjectInInsp;
@@ -1085,17 +1087,6 @@ begin
                             end;
 
 end;
-procedure TGDBobjinsp.UpdateObjectInInsp;
-begin
-  if GDBobj then
-  if PGDBaseObject(pcurrobj)^.IsEntity then
-                                      PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^);
-  if assigned(resetoglwndproc) then resetoglwndproc;
-  if assigned(redrawoglwndproc) then redrawoglwndproc;
-  self.updateinsp;
-  if assigned(UpdateVisibleProc) then UpdateVisibleProc;
-end;
-
 procedure TGDBobjinsp.createeditor(pp:PPropertyDeskriptor);
 var
   //my:GDBInteger;

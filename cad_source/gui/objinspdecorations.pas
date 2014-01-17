@@ -217,6 +217,13 @@ var
 begin
      ButtonDraw(canvas,r,state,'+');
 end;
+procedure ButtonHLineDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
+var
+  Details: TThemedElementDetails;
+  ComboElem:TThemedButton;
+begin
+     ButtonDraw(canvas,r,state,'-');
+end;
 procedure ButtonTxtDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
 begin
      ButtonDraw(canvas,r,state,'T');
@@ -459,7 +466,7 @@ begin
      AddFastEditorToType('PGDBLayerPropObjInsp',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runlayerswnd);
      AddFastEditorToType('GDBString',@ButtonGetPrefferedFastEditorSize,@ButtonTxtDrawFastEditor,@RunStringEditor);
      AddFastEditorToType('GDBCoordinates3D',@ButtonGetPrefferedFastEditorSize,@ButtonCrossDrawFastEditor,@GetVertexFromDrawing);
-     AddFastEditorToType('GDBLength',@ButtonGetPrefferedFastEditorSize,@ButtonCrossDrawFastEditor,@GetLengthFromDrawing);
+     AddFastEditorToType('GDBLength',@ButtonGetPrefferedFastEditorSize,@ButtonHLineDrawFastEditor,@GetLengthFromDrawing);
      DecorateType('TGDBOSMode',nil,CreateEmptyEditor,nil);
      AddFastEditorToType('TGDBOSMode',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runOSwnd);
      //TGDBOSMode

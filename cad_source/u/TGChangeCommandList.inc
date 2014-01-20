@@ -3,6 +3,11 @@
 {$DEFINE TData     := GDBVertex}
   {$I TGChangeCommandIMPL.inc}
 
+{$DEFINE TCommand  := TGDBDoubleChangeCommand}
+{$DEFINE PTCommand := PTGDBDoubleChangeCommand}
+{$DEFINE TData     := GDBDouble}
+  {$I TGChangeCommandIMPL.inc}
+
 {$DEFINE TCommand  := TGDBCameraBasePropChangeCommand}
 {$DEFINE PTCommand := PTGDBCameraBasePropChangeCommand}
 {$DEFINE TData     := GDBCameraBaseProp}

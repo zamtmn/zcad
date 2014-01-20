@@ -56,6 +56,7 @@ uses
   GDBManager,         //different functions simplify the creation entities, while there are very few
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   varmandef,
+  UGDBOpenArrayOfUCommands,
   log;                //log system
                       //система логирования
 const
@@ -613,12 +614,18 @@ end;
 function GetPoint_com(operands:TCommandOperands):TCommandResult;
 var
    p:GDBVertex;
-   vd:vardesk;
+   vdpobj,vdpvertex:vardesk;
+   pc:pointer;
 begin
-    vd:=commandmanager.GetValue;
+    //vdpobj:=commandmanager.GetValue;
+    vdpobj:=commandmanager.PopValue;
+    vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint('Select point:',p) then
     begin
-         pgdbvertex(ppointer(vd.data.Instance)^)^:=p;
+         pc:=PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(pgdbvertex(ppointer(vdpvertex.data.Instance)^)^);
+         pgdbvertex(ppointer(vdpvertex.data.Instance)^)^:=p;
+         PTGDBVertexChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
+         PTGDBVertexChangeCommand(pc)^.ComitFromObj;
     end;
     result:=cmd_ok;
 end;
@@ -626,14 +633,19 @@ end;
 function GetLength_com(operands:TCommandOperands):TCommandResult;
 var
    p1,p2:GDBVertex;
-   vd:vardesk;
+   vdpobj,vdpvertex:vardesk;
+   pc:pointer;
 begin
-    vd:=commandmanager.GetValue;
+    vdpobj:=commandmanager.PopValue;
+    vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint('Select point:',p1) then
     begin
          if commandmanager.get3dpoint('Select point:',p2) then
           begin
-               pgdblength(ppointer(vd.data.Instance)^)^:=geometry.Vertexlength(p1,p2);
+               pc:=PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(pgdbdouble(ppointer(vdpvertex.data.Instance)^)^);
+               pgdblength(ppointer(vdpvertex.data.Instance)^)^:=geometry.Vertexlength(p1,p2);
+               PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
+               PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
           end;
     end;
     result:=cmd_ok;

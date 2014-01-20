@@ -414,6 +414,8 @@ begin
                          end;
 end;
 class procedure AsyncCommHelper.GetVertex(Pinstance:PtrInt);
+var
+   p:pointer;
 begin
      if count>0 then
                     begin
@@ -423,6 +425,13 @@ begin
                 else
                     begin
                          commandmanager.PushValue('','PGDBVertex',@PInstance);
+                         if GDBobjinsp.GDBobj then
+                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.pcurrobj)
+                                              else
+                                                  begin
+                                                       p:=nil;
+                                                       commandmanager.PushValue('','PGDBObjEntity',@p)
+                                                  end;
                          commandmanager.executecommand('GetPoint',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
@@ -434,6 +443,8 @@ begin
      Application.QueueAsyncCall(AsyncCommHelper.GetVertex,PtrInt(PInstance));
 end;
 class procedure AsyncCommHelper.GetLength(Pinstance:PtrInt);
+var
+   p:pointer;
 begin
      if count>0 then
                     begin
@@ -443,6 +454,13 @@ begin
                 else
                     begin
                          commandmanager.PushValue('','PGDBLength',@PInstance);
+                         if GDBobjinsp.GDBobj then
+                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.pcurrobj)
+                                              else
+                                                  begin
+                                                       p:=nil;
+                                                       commandmanager.PushValue('','PGDBObjEntity',@p)
+                                                  end;
                          commandmanager.executecommand('GetLength',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
                          GDBobjinsp.UpdateObjectInInsp;
                     end;

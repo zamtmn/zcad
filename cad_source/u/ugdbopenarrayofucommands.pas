@@ -59,6 +59,7 @@ TChangeCommand=object(TCustomChangeCommand)
 generic TGChangeCommand<_T>=object(TCustomChangeCommand)
                                       public
                                       OldData,NewData:_T;
+                                      PEntity:PGDBObjEntity;
                                       constructor Assign(var data:_T);
 
                                       procedure UnDo;virtual;
@@ -344,16 +345,21 @@ begin
      Addr:=@data;
      olddata:=data;
      newdata:=data;
+     PEntity:=nil;
 end;
 procedure TGChangeCommand.UnDo;
 begin
      _T(addr^):=OldData;
+     if assigned(PEntity)then
+                             PEntity^.YouChanged(gdb.GetCurrentDWG^);
      if assigned(SetVisuaProplProc)then
                                        SetVisuaProplProc;
 end;
 procedure TGChangeCommand.Comit;
 begin
      _T(addr^):=NewData;
+     if assigned(PEntity)then
+                             PEntity^.YouChanged(gdb.GetCurrentDWG^);
      if assigned(SetVisuaProplProc)then
                                        SetVisuaProplProc;
 

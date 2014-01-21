@@ -150,7 +150,7 @@ var ts:PGDBTextStyle;
     //ff:gdbstring;
     //p:GDBPointer;
 begin
-  GDBGetmem(ts,sizeof(GDBTextStyle));
+  GDBGetmem({$IFDEF DEBUGBUILD}'{ED59B789-33EF-487E-9E1D-711F5988A194}',{$ENDIF}ts,sizeof(GDBTextStyle));
   ts.init(stylename);
   //ts.name:=stylename;
   ts.dxfname:=FontFile;
@@ -243,4 +243,4 @@ begin
 //end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBTextStyleArray.initialization');{$ENDIF}
-end.
+end.

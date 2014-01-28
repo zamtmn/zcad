@@ -1273,6 +1273,7 @@ begin
   CursorOff:=RestoreCursors;
   commandmanager.OnCommandRun:=processcommandhistory;
   AppCloseProc:=asynccloseapp;
+  zcadinterface.SetNormalFocus:=self.setnormalfocus;
 end;
 
 procedure MainForm.LoadActions;

@@ -198,6 +198,8 @@ begin
      {if assigned(pfoundcommand)then
 
                                else}
+                                   if assigned(zcadinterface.SetNormalFocus)then
+                                                                                zcadinterface.SetNormalFocus(nil);
                                    commandmanager.executecommand(@s[1],gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
      result:=true;
 end;

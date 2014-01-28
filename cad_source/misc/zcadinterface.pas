@@ -31,6 +31,7 @@ type
     //Abstract
     TSimpleProcedure=Procedure;
     TSimpleMethod=Procedure of object;
+    TSimpleLCLMethod=Procedure (sender:TObject) of object;
     TProcedure_Pointer_=Procedure(p:pointer);
     TProcedure_Integer_=Procedure(a:integer);
     TMethod_Integer_=Procedure(a:integer) of object;
@@ -91,6 +92,7 @@ var
    AddOneObjectProc:TSimpleMethod;
    SetVisuaProplProc:TSimpleMethod;
    AppCloseProc:TMethod_PtrInt_;
+   SetNormalFocus:TSimpleLCLMethod;
 
    //UGDBDescriptor
    RedrawOGLWNDProc:TSimpleProcedure;
@@ -121,4 +123,4 @@ begin
                                          RestoreAllCursorsProc;
 end;
 
-end.
+end.

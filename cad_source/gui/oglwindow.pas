@@ -2249,6 +2249,8 @@ var key: GDBByte;
 
 begin
   FreeClick:=true;
+  if assigned(zcadinterface.SetNormalFocus)then
+                                               zcadinterface.SetNormalFocus(nil);
   if assigned(MainmouseDown)then
   if mainmousedown then
                        exit;
@@ -2412,6 +2414,8 @@ begin
   if GetCurrentObjProc=@sysvar then
   If assigned(UpdateObjInspProc)then
                                    UpdateObjInspProc;
+  if assigned(zcadinterface.SetNormalFocus)then
+                                               zcadinterface.SetNormalFocus(nil);
 end;
 procedure drawtick(uID, msg: UINT; dwUse, dw1, dw2: DWord); stdcall;
 begin

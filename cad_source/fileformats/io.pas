@@ -340,7 +340,7 @@ begin
                                         ymin:=y1;}
                                     end;//if draw then begin
 
-                                  PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);//--------------------- pGDBByte(pdata)^:=SHXLine;
+                                  //PSHXFont(pf^.font).SHXdata.AddByteByVal(SHXLine);//--------------------- pGDBByte(pdata)^:=SHXLine;
                                   //--------------------- inc(pdata,sizeof(SHXLine));
                                   PSHXFont(pf^.font).SHXdata.AddFontFloat(@x1);//---------------------pfontfloat(pdata)^:=x1;
                                   //---------------------inc(pdata,sizeof(fontfloat));

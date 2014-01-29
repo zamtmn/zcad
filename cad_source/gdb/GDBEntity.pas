@@ -816,10 +816,24 @@ begin
                                 cv.y:=minoffsetstart;
      if cv.z<minoffsetstart then
                                 cv.z:=minoffsetstart;}
+
+      if self.vp.LineType<>nil then
+      begin
+           if SysVar.dwg.DWG_LTScale<>nil then
+                                              d:=SysVar.dwg.DWG_LTScale^*vp.LineTypeScale*self.vp.LineType.len
+                                          else
+                                              d:=vp.LineTypeScale*self.vp.LineType.len;
+      end
+         else
+             d:=0;
+     cv:=VertexSUB(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
+     if (d>0)and(d*d<cv.x*cv.x+cv.y*cv.y+cv.z*cv.z) then
+     begin
      d:=GetLTCorrectSize;
      cv:=createvertex(d,d,d);
      vp.BoundingBox.LBN:=VertexSUB(vp.BoundingBox.LBN,cv);
      vp.BoundingBox.RTF:=VertexAdd(vp.BoundingBox.RTF,cv);
+     end;
 end;
 procedure GDBObjEntity.calcbb;
 begin

@@ -80,6 +80,7 @@ TFastEditorProcs=packed record
                 OnGetPrefferedFastEditorSize:TGetPrefferedFastEditorSize;
                 OnDrawFastEditor:TDrawFastEditor;
                 OnRunFastEditor:TRunFastEditor;
+                UndoInsideFastEditor:GDBBoolean;
                 end;
   PBasePropertyDeskriptor=^BasePropertyDeskriptor;
   BasePropertyDeskriptor=object({GDBaseObject}GDBBaseNode)

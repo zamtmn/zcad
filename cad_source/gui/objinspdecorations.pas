@@ -273,7 +273,8 @@ end;
 
 procedure AddFastEditorToType(tn:string;GetPrefferedFastEditorSize:TGetPrefferedFastEditorSize;
                                         DrawFastEditor:TDrawFastEditor;
-                                        RunFastEditor:TRunFastEditor);
+                                        RunFastEditor:TRunFastEditor;
+                                        _UndoInsideFastEditor:GDBBoolean=false);
 var
    PT:PUserTypeDescriptor;
 begin
@@ -283,6 +284,7 @@ begin
                          PT^.FastEditor.OnGetPrefferedFastEditorSize:=GetPrefferedFastEditorSize;
                          PT^.FastEditor.OnDrawFastEditor:=DrawFastEditor;
                          PT^.FastEditor.OnRunFastEditor:=RunFastEditor;
+                         PT^.FastEditor.UndoInsideFastEditor:=_UndoInsideFastEditor;
                     end;
 end;
 procedure drawLWProp(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
@@ -483,10 +485,10 @@ begin
      AddFastEditorToType('GDBBoolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
      AddFastEditorToType('PGDBLayerPropObjInsp',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runlayerswnd);
      AddFastEditorToType('GDBString',@ButtonGetPrefferedFastEditorSize,@ButtonTxtDrawFastEditor,@RunStringEditor);
-     AddFastEditorToType('GDBCoordinates3D',@ButtonGetPrefferedFastEditorSize,@ButtonCrossDrawFastEditor,@GetVertexFromDrawing);
-     AddFastEditorToType('GDBLength',@ButtonGetPrefferedFastEditorSize,@ButtonHLineDrawFastEditor,@GetLengthFromDrawing);
+     AddFastEditorToType('GDBCoordinates3D',@ButtonGetPrefferedFastEditorSize,@ButtonCrossDrawFastEditor,@GetVertexFromDrawing,true);
+     AddFastEditorToType('GDBLength',@ButtonGetPrefferedFastEditorSize,@ButtonHLineDrawFastEditor,@GetLengthFromDrawing,true);
      DecorateType('TGDBOSMode',nil,CreateEmptyEditor,nil);
      AddFastEditorToType('TGDBOSMode',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runOSwnd);
      //TGDBOSMode
 end;
-end.
+end.

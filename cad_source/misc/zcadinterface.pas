@@ -37,6 +37,7 @@ type
     TMethod_Integer_=Procedure(a:integer) of object;
     TMethod_PtrInt_=procedure (Data: PtrInt) of object;
     TMethod_IntegerString_=Procedure(a:integer;s:string) of object;
+    TMethod__Pointer=function:Pointer of object;
     TFunction__Integer=Function:integer;
     TFunction__Boolean=Function:boolean;
     TFunction__Pointer=Function:Pointer;
@@ -98,6 +99,7 @@ var
    RedrawOGLWNDProc:TSimpleProcedure;
    ResetOGLWNDProc:TSimpleProcedure;
    SetCurrentDWGProc:TSetCurrentDrawing;
+   _GetUndoStack:TMethod__Pointer;
 
    //cmdline
     SetCommandLineMode:TSetCommandLineMode;
@@ -105,7 +107,16 @@ var
 
 function DoShowModal(MForm:TForm): Integer;
 function MessageBox(Text, Caption: PChar; Flags: Longint): Integer;
+function GetUndoStack:pointer;
 implementation
+function GetUndoStack:pointer;
+begin
+     if assigned(_GetUndoStack) then
+                                    result:=_GetUndoStack
+                                else
+                                    result:=nil;
+end;
+
 function DoShowModal(MForm:TForm): Integer;
 begin
      if assigned(ShowAllCursorsProc) then
@@ -123,4 +134,4 @@ begin
                                          RestoreAllCursorsProc;
 end;
 
-end.
+end.

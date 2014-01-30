@@ -22,7 +22,7 @@ unit Objinsp;
 interface
 
 uses
-  StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
+  UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
   Themes,
   {$IFDEF LCLGTK2}
   x,xlib,{x11,}{xutil,}
@@ -45,10 +45,16 @@ type
   end;
   arrayarrindop=array[0..10] of arrindop;
   parrayarrindop=^arrayarrindop;
+  TEditorContext=record
+                       ppropcurrentedit:PPropertyDeskriptor;
+                       UndoStack:PGDBObjOpenArrayOfUCommands;
+                       UndoCommand:PTTypedChangeCommand;
+                 end;
+
   TGDBobjinsp=class({TPanel}{TScrollBox}tform)
     public
     GDBobj:GDBBoolean;
-    ppropcurrentedit:PPropertyDeskriptor;
+    EDContext:TEditorContext;
 
     PStoredObj:GDBPointer;
     StoredObjGDBType:PUserTypeDescriptor;
@@ -316,7 +322,7 @@ begin
      peditor:=nil;
      currobjgdbtype:=nil;
      createpda;
-  ppropcurrentedit:=nil;
+  EDContext.ppropcurrentedit:=nil;
   startdrawy:=0;
 
   MResplit:=false;
@@ -334,7 +340,8 @@ end;
 
 procedure TGDBobjinsp.ReturnToDefault;
 begin
-  self.freeeditor;
+  if assigned(peditor)then
+                          self.freeeditor;
   setptr(defaultobjgdbtype,pdefaultobj,pdefaultcontext);
 end;
 
@@ -775,6 +782,9 @@ begin
 end;
 procedure TGDBobjinsp.freeeditor;
 begin
+     EDContext.ppropcurrentedit:=nil;
+     EDContext.UndoCommand:=0;
+     EDContext.UndoStack:=nil;
      freeandnil(peditor);
      if assigned(shared.cmdedit) then
      if shared.cmdedit.IsVisible then
@@ -785,7 +795,7 @@ procedure TGDBobjinsp.AsyncFreeEditorAndSelectNext;
 var
       next:PPropertyDeskriptor;
 begin
-     next:=findnext(@pda,ppropcurrentedit);
+     next:=findnext(@pda,EDContext.ppropcurrentedit);
      freeeditor;
      if next<>nil then
      createeditor(next);
@@ -808,10 +818,16 @@ begin
     begin
          PTDrawingDef(pcurcontext).ChangeStampt(true);
     end;
+
+    if EDContext.UndoCommand<>nil then
+                                      begin
+                                           EDContext.UndoCommand.ComitFromObj;
+                                      end;
+
     pld:=peditor.PInstance;
 
     if (Command=TMNC_RunFastEditor) then
-                                        ppropcurrentedit.FastEditor.OnRunFastEditor(pld);
+                                        EDContext.ppropcurrentedit.FastEditor.OnRunFastEditor(pld);
     UpdateObjectInInsp;
    if (Command=TMNC_RunFastEditor) then
                                       begin
@@ -829,11 +845,11 @@ procedure TGDBobjinsp.UpdateObjectInInsp;
 begin
   if GDBobj then
                 begin
-                     if ppropcurrentedit<>nil then
+                     if EDContext.ppropcurrentedit<>nil then
                      begin
-                     if ppropcurrentedit^.mode=PDM_Property then
+                     if EDContext.ppropcurrentedit^.mode=PDM_Property then
                                                              begin
-                                                               PObjectDescriptor(currobjgdbtype)^.SimpleRunMetodWithArg(ppropcurrentedit^.w,pcurrobj,ppropcurrentedit^.valueAddres);
+                                                               PObjectDescriptor(currobjgdbtype)^.SimpleRunMetodWithArg(EDContext.ppropcurrentedit^.w,pcurrobj,EDContext.ppropcurrentedit^.valueAddres);
                                                              end;
                     end;
                     if PGDBaseObject(pcurrobj)^.IsEntity then
@@ -842,7 +858,7 @@ begin
                                                              PGDBObjEntity(pcurrobj).YouChanged(PTDrawingDef(pcurcontext)^);
                                                              end
                                                          else
-                                                             PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(ppropcurrentedit^.valueAddres,self.currobjgdbtype);
+                                                             PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(EDContext.ppropcurrentedit^.valueAddres,self.currobjgdbtype);
 
                 end;
   if assigned(resetoglwndproc) then resetoglwndproc;
@@ -946,7 +962,7 @@ begin
                             else
                                 self.Cursor:=crDefault;
 
-  if (pp=nil)or(ppropcurrentedit=pp) then
+  if (pp=nil)or(EDContext.ppropcurrentedit=pp) then
   begin
         self.Hint:='';
         self.ShowHint:=false;
@@ -1033,7 +1049,7 @@ begin
       GDBobjinsp.buildproplist(currobjgdbtype,property_correct,tp);
       //-----------------------------------------------------------------peditor^.done;
       //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
-      ppropcurrentedit:=pp;
+      EDContext.ppropcurrentedit:=pp;
     end;
     PEditor:=pp^.PTypeManager^.CreateEditor(@self,pp.rect,pp^.valueAddres,nil,false).Editor;
     if PEditor<>nil then
@@ -1081,7 +1097,7 @@ begin
                                                                                            pp.FastEditorState:=TFES_Default;
                                                                                            if assigned(pp.FastEditor.OnRunFastEditor)then
                                                                                            begin
-                                                                                           ppropcurrentedit:=pp;
+                                                                                           EDContext.ppropcurrentedit:=pp;
                                                                                            pp.FastEditor.OnRunFastEditor(pp.valueAddres);
                                                                                            end;
                                                                                            UpdateObjectInInsp;
@@ -1183,7 +1199,18 @@ begin
        vsa.done;
        if assigned(PEditor){<>nil} then
        begin
-            ppropcurrentedit:=pp;
+            //GetUndoStack;
+            EDContext.ppropcurrentedit:=pp;
+            EDContext.UndoStack:=GetUndoStack;
+
+            if EDContext.UndoStack<>nil then
+            if GDBobj then
+            if PGDBaseObject(pcurrobj)^.IsEntity then
+            begin
+                 EDContext.UndoCommand:=EDContext.UndoStack.PushCreateTTypedChangeCommand(EDContext.ppropcurrentedit^.valueAddres,EDContext.ppropcurrentedit^.PTypeManager);
+                 EDContext.UndoCommand.PEntity:=pcurrobj;
+            end;
+
             peditor.OwnerNotify:=self.Notify;
             if peditor.geteditor.Visible then
                                              peditor.geteditor.setfocus;
@@ -1371,7 +1398,7 @@ begin
 
   pcurrobj:=nil;
   peditor:=nil;
-  ppropcurrentedit:=nil;
+  EDContext.ppropcurrentedit:=nil;
   startdrawy:=0;
 
   MResplit:=false;
@@ -1388,7 +1415,7 @@ end;
 procedure TGDBobjinsp.updateeditorBounds;
 begin
   if peditor<>nil then
-  peditor.geteditor.SetBounds(namecol-1,ppropcurrentedit.rect.Top,clientwidth-namecol-1,ppropcurrentedit.rect.Bottom-ppropcurrentedit.rect.Top+1);
+  peditor.geteditor.SetBounds(namecol-1,EDContext.ppropcurrentedit.rect.Top,clientwidth-namecol-1,EDContext.ppropcurrentedit.rect.Bottom-EDContext.ppropcurrentedit.rect.Top+1);
 end;
 procedure TGDBobjinsp._onresize(sender:tobject);
 //var x,xn:integer;

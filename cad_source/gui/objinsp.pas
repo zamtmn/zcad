@@ -102,6 +102,7 @@ type
     function IsMouseOnSpliter(pp:PPropertyDeskriptor; X:Integer):GDBBoolean;
 
     procedure createeditor(pp:PPropertyDeskriptor);
+    function CurrObjIsEntity:boolean;
 
     {LCL}
   //procedure Pre_MouseMove(fwkeys:longint; x,y:GDBSmallInt; var r:HandledMsg); virtual;
@@ -1097,14 +1098,36 @@ begin
                                                                                            pp.FastEditorState:=TFES_Default;
                                                                                            if assigned(pp.FastEditor.OnRunFastEditor)then
                                                                                            begin
+                                                                                           freeeditor;
                                                                                            EDContext.ppropcurrentedit:=pp;
-                                                                                           pp.FastEditor.OnRunFastEditor(pp.valueAddres);
+                                                                                           if (pp.FastEditor.UndoInsideFastEditor)and CurrObjIsEntity then
+                                                                                                                                     pp.FastEditor.OnRunFastEditor(pp.valueAddres)
+                                                                                                                                 else
+                                                                                                                                     begin
+                                                                                                                                     EDContext.UndoStack:=GetUndoStack;
+                                                                                                                                     EDContext.UndoCommand:=EDContext.UndoStack.PushCreateTTypedChangeCommand(pp^.valueAddres,pp^.PTypeManager);
+                                                                                                                                     EDContext.UndoCommand.PEntity:=pcurrobj;
+
+                                                                                                                                     pp.FastEditor.OnRunFastEditor(pp.valueAddres);
+                                                                                                                                     EDContext.UndoCommand.ComitFromObj;
+
+                                                                                                                                     EDContext.UndoStack:=nil;
+                                                                                                                                     EDContext.UndoCommand:=nil;
+                                                                                                                                     end;
                                                                                            end;
                                                                                            UpdateObjectInInsp;
                                                                                       end
                             end;
                             end;
 
+end;
+function TGDBobjinsp.CurrObjIsEntity;
+begin
+result:=false;
+if EDContext.UndoStack<>nil then
+            if GDBobj then
+            if PGDBaseObject(pcurrobj)^.IsEntity then
+                                                     result:=true;
 end;
 procedure TGDBobjinsp.createeditor(pp:PPropertyDeskriptor);
 var
@@ -1203,9 +1226,7 @@ begin
             EDContext.ppropcurrentedit:=pp;
             EDContext.UndoStack:=GetUndoStack;
 
-            if EDContext.UndoStack<>nil then
-            if GDBobj then
-            if PGDBaseObject(pcurrobj)^.IsEntity then
+            if CurrObjIsEntity then
             begin
                  EDContext.UndoCommand:=EDContext.UndoStack.PushCreateTTypedChangeCommand(EDContext.ppropcurrentedit^.valueAddres,EDContext.ppropcurrentedit^.PTypeManager);
                  EDContext.UndoCommand.PEntity:=pcurrobj;

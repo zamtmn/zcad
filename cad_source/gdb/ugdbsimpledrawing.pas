@@ -88,6 +88,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetUndoTop:TArrayIndex;virtual;
                        function CanUndo:boolean;virtual;
                        function CanRedo:boolean;virtual;
+                       function GetUndoStack:GDBPointer;virtual;
                        function GetDWGUnits:PTUnitManager;virtual;
                        procedure AssignLTWithFonts(pltp:PGDBLtypeProp);virtual;
                        function GetMouseEditorMode:GDBByte;virtual;
@@ -220,6 +221,10 @@ end;
 function TSimpleDrawing.GetUndoTop:TArrayIndex;
 begin
      result:=0;
+end;
+function TSimpleDrawing.GetUndoStack:GDBPointer;
+begin
+     result:=nil;
 end;
 function TSimpleDrawing.CanUndo:boolean;
 begin

@@ -19,7 +19,7 @@
 unit UGDBOpenArrayOfUCommands;
 {$INCLUDE def.inc}
 interface
-uses zcadinterface,UGDBLayerArray,zcadstrconsts,UGDBOpenArrayOfPV,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
+uses varmandef,zcadinterface,UGDBLayerArray,zcadstrconsts,UGDBOpenArrayOfPV,GDBEntity,UGDBOpenArrayOfData,shared,log,gdbasetypes{,math},UGDBOpenArrayOfPObjects{,UGDBOpenArray, oglwindowdef},sysutils,
      gdbase, geometry, {OGLtypes, oglfunc,} {varmandef,gdbobjectsconstdef,}memman{,GDBSubordinated};
 const BeginUndo:GDBString='BeginUndo';
       EndUndo:GDBString='EndUndo';
@@ -56,6 +56,19 @@ TChangeCommand=object(TCustomChangeCommand)
                      function GetDataTypeSize:PtrInt;virtual;
 
                end;
+PTTypedChangeCommand=^TTypedChangeCommand;
+TTypedChangeCommand=object(TCustomChangeCommand)
+                                      public
+                                      OldData,NewData:GDBPointer;
+                                      PTypeManager:PUserTypeDescriptor;
+                                      PEntity:PGDBObjEntity;
+                                      constructor Assign(PDataInstance:GDBPointer;PType:PUserTypeDescriptor);
+                                      procedure UnDo;virtual;
+                                      procedure Comit;virtual;
+                                      procedure ComitFromObj;virtual;
+                                      function GetDataTypeSize:PtrInt;virtual;
+                                      destructor Done;virtual;
+                                end;
 generic TGChangeCommand<_T>=object(TCustomChangeCommand)
                                       public
                                       OldData,NewData:_T;
@@ -123,6 +136,7 @@ generic TGMultiObjectProcessCommand<_LT>=object(TCustomChangeCommand)
   {$I TGObjectChangeCommand2List.inc}
   {$I TGMultiObjectChangeCommandList.inc}
   {$I TGMultiObjectCreateCommand.inc}
+  {$I TTypedChangeCommandIMPL.inc}
 {$UNDEF INTERFACE}
 
 {$DEFINE CLASSDECLARATION}
@@ -138,6 +152,7 @@ GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
                                  procedure PushEndMarker;
                                  procedure PushStone;
                                  procedure PushChangeCommand(_obj:GDBPointer;_fieldsize:PtrInt);overload;
+                                 //procedure PushTypedChangeCommand(_obj:GDBPointer;_PTypeManager:PUserTypeDescriptor);overload;
                                  procedure undo(prevheap:TArrayIndex;overlay:GDBBoolean);
                                  procedure KillLastCommand;
                                  procedure redo;
@@ -150,6 +165,7 @@ GDBObjOpenArrayOfUCommands=object(GDBOpenArrayOfPObjects)
                                  {$I TGObjectChangeCommand2List.inc}
                                  {$I TGMultiObjectChangeCommandList.inc}
                                  {$I TGMultiObjectCreateCommand.inc}
+                                 {$I TTypedChangeCommandIMPL.inc}
                            end;
 {$UNDEF CLASSDECLARATION}
 implementation
@@ -160,6 +176,7 @@ uses UGDBDescriptor,GDBManager;
   {$I TGObjectChangeCommand2List.inc}
   {$I TGMultiObjectChangeCommandList.inc}
   {$I TGMultiObjectCreateCommand.inc}
+  {$I TTypedChangeCommandIMPL.inc}
 {$UNDEF IMPLEMENTATION}
 {$MACRO OFF}
 
@@ -339,6 +356,62 @@ begin
                            PGDBObjEntity(undomethod.Data)^.formatEntity(gdb.GetCurrentDWG^);
      end;
 end;
+{TTypedChangeCommand=object(TCustomChangeCommand)
+                                      public
+                                      OldData,NewData:GDBPointer;
+                                      PTypeManager:PUserTypeDescriptor;
+                                      PEntity:PGDBObjEntity;
+                                      constructor Assign(PDataInstance:GDBPointer;PType:PUserTypeDescriptor);
+                                      procedure UnDo;virtual;
+                                      procedure Comit;virtual;
+                                      procedure ComitFromObj;virtual;
+                                      function GetDataTypeSize:PtrInt;virtual;
+                                end;}
+constructor TTypedChangeCommand.Assign(PDataInstance:GDBPointer;PType:PUserTypeDescriptor);
+begin
+     Addr:=PDataInstance;
+     PTypeManager:=PType;
+     GDBGetMem({$IFDEF DEBUGBUILD}'{49289E94-F423-4497-B0B2-32215E6D5D40}'{$ENDIF}OldData,PTypeManager^.SizeInGDBBytes);
+     GDBGetMem({$IFDEF DEBUGBUILD}'{49289E94-F423-4497-B0B2-32215E6D5D40}'{$ENDIF}NewData,PTypeManager^.SizeInGDBBytes);
+     PTypeManager^.CopyInstanceTo(Addr,OldData);
+     PTypeManager^.CopyInstanceTo(Addr,NewData);
+     PEntity:=nil;
+end;
+procedure TTypedChangeCommand.UnDo;
+begin
+     PTypeManager^.MagicFreeInstance(Addr);
+     PTypeManager^.CopyInstanceTo(OldData,Addr);
+     if assigned(PEntity)then
+                             PEntity^.YouChanged(gdb.GetCurrentDWG^);
+     if assigned(SetVisuaProplProc)then
+                                       SetVisuaProplProc;
+end;
+procedure TTypedChangeCommand.Comit;
+begin
+     PTypeManager^.MagicFreeInstance(Addr);
+     PTypeManager^.CopyInstanceTo(NewData,Addr);
+     if assigned(PEntity)then
+                             PEntity^.YouChanged(gdb.GetCurrentDWG^);
+     if assigned(SetVisuaProplProc)then
+                                       SetVisuaProplProc;
+end;
+procedure TTypedChangeCommand.ComitFromObj;
+begin
+     PTypeManager^.MagicFreeInstance(NewData);
+     PTypeManager^.CopyInstanceTo(Addr,NewData);
+end;
+function TTypedChangeCommand.GetDataTypeSize:PtrInt;
+begin
+     result:=PTypeManager^.SizeInGDBBytes;
+end;
+destructor TTypedChangeCommand.Done;
+begin
+     inherited;
+     PTypeManager^.MagicFreeInstance(NewData);
+     PTypeManager^.MagicFreeInstance(OldData);
+     GDBFreeMem(NewData);
+     GDBFreeMem(OldData);
+end;
 
 constructor TGChangeCommand.Assign(var data:_T);
 begin
@@ -471,6 +544,7 @@ begin
      startmarkercount:=0;
      end;
 end;
+//procedure GDBObjOpenArrayOfUCommands.PushTypedChangeCommand(_obj:GDBPointer;_PTypeManager:PUserTypeDescriptor);overload;
 procedure GDBObjOpenArrayOfUCommands.PushChangeCommand(_obj:GDBPointer;_fieldsize:PtrInt);
 var
    pcc:PTChangeCommand;

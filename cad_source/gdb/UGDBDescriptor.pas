@@ -66,6 +66,7 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
            procedure ChangeStampt(st:GDBBoolean);virtual;
            function GetChangeStampt:GDBBoolean;virtual;
            function GetUndoTop:TArrayIndex;virtual;
+           function GetUndoStack:GDBPointer;virtual;
            function CanUndo:boolean;virtual;
            function CanRedo:boolean;virtual;
            function GetDWGUnits:PTUnitManager;virtual;
@@ -84,6 +85,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
 
                     function GetCurrentDWG:{PTDrawing}PTSimpleDrawing;
                     function GetCurrentOGLWParam:POGLWndtype;
+                    function GetUndoStack:GDBPointer;
                     procedure asociatedwgvars;
                     procedure freedwgvars;
                     procedure SetCurrentDWG(PDWG:PTAbstractDrawing);
@@ -345,6 +347,17 @@ function GDBDescriptor.GetCurrentDWG;
 begin
  result:=CurrentDWG;
 end;
+function GDBDescriptor.GetUndoStack:GDBPointer;
+var
+   pdwg:PTSimpleDrawing;
+begin
+     pdwg:=GetCurrentDWG;
+     if pdwg<>nil then
+                      result:=pdwg.GetUndoStack
+                  else
+                      result:=nil;
+end;
+
 procedure GDBDescriptor.asociatedwgvars;
 //var
 //    DWGUnit:PTUnit;
@@ -431,6 +444,10 @@ end;
 function TDrawing.GetUndoTop:TArrayIndex;
 begin
      result:=UndoStack.CurrentCommand;
+end;
+function TDrawing.GetUndoStack:GDBPointer;
+begin
+     result:=@UndoStack;
 end;
 function TDrawing.CanUndo:boolean;
 begin
@@ -991,6 +1008,7 @@ begin
   gdb.init;
   SetCurrentDWGProc:=SetCurrentDWG;
   BlockBaseDWG:=gdb.CreateDWG;
+  _GetUndoStack:=gdb.GetUndoStack;
   ClipboardDWG:=gdb.CreateDWG;
   ClipboardDWG.DimStyleTable.AddItem('Standart',pds);
   pds.init('Standart');

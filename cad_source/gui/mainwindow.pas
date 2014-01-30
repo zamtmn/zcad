@@ -2748,6 +2748,7 @@ begin
      OGL:=TOGLwnd(FindControlByType(TPageControl(sender).ActivePage,TOGLwnd));
      if assigned(OGL) then
                           OGL.GDBActivate;
+     ReturnToDefaultProc;
 end;
 
 destructor MainForm.Destroy;

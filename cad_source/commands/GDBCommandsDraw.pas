@@ -2763,7 +2763,7 @@ begin
     if p3dpl=nil then
     begin
 
-    p3dpl := GDBPointer({gdb.GetCurrentROOT^.ObjArray.CreateInitObj}gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBPolylineID,gdb.GetCurrentROOT));
+    p3dpl := GDBPointer({gdb.GetCurrentROOT^.ObjArray.CreateInitObj}gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBPolylineID,{gdb.GetCurrentROOT}gdb.GetCurrentDWG^.GetConstructObjRoot));
     GDBObjSetEntityProp(p3dpl,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^);
     p3dpl^.AddVertex(wc);
     p3dpl^.Formatentity(gdb.GetCurrentDWG^);

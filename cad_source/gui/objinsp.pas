@@ -853,10 +853,10 @@ begin
                                                                PObjectDescriptor(currobjgdbtype)^.SimpleRunMetodWithArg(EDContext.ppropcurrentedit^.w,pcurrobj,EDContext.ppropcurrentedit^.valueAddres);
                                                              end;
                     end;
-                    if PGDBaseObject(pcurrobj)^.IsEntity then
+                    if CurrObjIsEntity then
                                                              begin
-                                                             PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^);
-                                                             PGDBObjEntity(pcurrobj).YouChanged(PTDrawingDef(pcurcontext)^);
+                                                             PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef({pcurcontext}PGDBObjEntity(pcurrobj)^.bp.ListPos.Owner)^);
+                                                             PGDBObjEntity(pcurrobj).YouChanged(PTDrawingDef({pcurcontext}PGDBObjEntity(pcurrobj)^.bp.ListPos.Owner)^);
                                                              end
                                                          else
                                                              PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(EDContext.ppropcurrentedit^.valueAddres,self.currobjgdbtype);
@@ -1100,6 +1100,7 @@ begin
                                                                                            begin
                                                                                            freeeditor;
                                                                                            EDContext.ppropcurrentedit:=pp;
+                                                                                           //pp.FastEditor.OnRunFastEditor(pp.valueAddres)
                                                                                            if (pp.FastEditor.UndoInsideFastEditor)and CurrObjIsEntity then
                                                                                                                                      pp.FastEditor.OnRunFastEditor(pp.valueAddres)
                                                                                                                                  else
@@ -1124,9 +1125,9 @@ end;
 function TGDBobjinsp.CurrObjIsEntity;
 begin
 result:=false;
-if EDContext.UndoStack<>nil then
             if GDBobj then
             if PGDBaseObject(pcurrobj)^.IsEntity then
+            //if PGDBObjEntity(pcurrobj).bp.ListPos.Owner=PTDrawingDef(pcurcontext)^.GetCurrentRootSimple then
                                                      result:=true;
 end;
 procedure TGDBobjinsp.createeditor(pp:PPropertyDeskriptor);

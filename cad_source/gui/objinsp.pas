@@ -22,7 +22,7 @@ unit Objinsp;
 interface
 
 uses
-  UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
+  GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
   Themes,
   {$IFDEF LCLGTK2}
   x,xlib,{x11,}{xutil,}
@@ -103,6 +103,7 @@ type
 
     procedure createeditor(pp:PPropertyDeskriptor);
     function CurrObjIsEntity:boolean;
+    function IsEntityInCurrentContext:boolean;
 
     {LCL}
   //procedure Pre_MouseMove(fwkeys:longint; x,y:GDBSmallInt; var r:HandledMsg); virtual;
@@ -854,12 +855,16 @@ begin
                                                              end;
                     end;
                     if CurrObjIsEntity then
-                                                             begin
-                                                             PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef({pcurcontext}PGDBObjEntity(pcurrobj)^.bp.ListPos.Owner)^);
-                                                             PGDBObjEntity(pcurrobj).YouChanged(PTDrawingDef({pcurcontext}PGDBObjEntity(pcurrobj)^.bp.ListPos.Owner)^);
-                                                             end
-                                                         else
-                                                             PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(EDContext.ppropcurrentedit^.valueAddres,self.currobjgdbtype);
+                                           begin
+                                               PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^);
+                                               if IsEntityInCurrentContext
+                                               then
+                                                   PGDBObjEntity(pcurrobj).YouChanged(PTDrawingDef(pcurcontext)^)
+                                               else
+                                                   PGDBObjRoot(PTDrawingDef(pcurcontext)^.GetCurrentRootSimple)^.FormatAfterEdit(PTDrawingDef(pcurcontext)^);
+                                           end
+                                       else
+                                           PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(EDContext.ppropcurrentedit^.valueAddres,self.currobjgdbtype);
 
                 end;
   if assigned(resetoglwndproc) then resetoglwndproc;
@@ -1130,6 +1135,15 @@ result:=false;
             //if PGDBObjEntity(pcurrobj).bp.ListPos.Owner=PTDrawingDef(pcurcontext)^.GetCurrentRootSimple then
                                                      result:=true;
 end;
+function TGDBobjinsp.IsEntityInCurrentContext;
+begin
+     if PGDBObjEntity(pcurrobj).bp.ListPos.Owner=PTDrawingDef(pcurcontext)^.GetCurrentRootSimple
+     then
+         result:=true
+    else
+         result:=false;
+end;
+
 procedure TGDBobjinsp.createeditor(pp:PPropertyDeskriptor);
 var
   //my:GDBInteger;

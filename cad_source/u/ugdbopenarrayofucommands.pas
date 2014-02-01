@@ -382,7 +382,17 @@ begin
      PTypeManager^.MagicFreeInstance(Addr);
      PTypeManager^.CopyInstanceTo(OldData,Addr);
      if assigned(PEntity)then
-                             PEntity^.YouChanged(gdb.GetCurrentDWG^);
+                             begin
+                                  //PEntity^.YouChanged(gdb.GetCurrentDWG^);
+                                  if PEntity^.bp.ListPos.Owner=gdb.GetCurrentDWG^.GetCurrentRootSimple
+                                  then
+                                      PEntity^.YouChanged(gdb.GetCurrentDWG^)
+                                  else
+                                      begin
+                                           PEntity^.FormatEntity(gdb.GetCurrentDWG^);
+                                           gdb.GetCurrentDWG^.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
+                                      end;
+                             end;
      if assigned(SetVisuaProplProc)then
                                        SetVisuaProplProc;
 end;
@@ -391,7 +401,17 @@ begin
      PTypeManager^.MagicFreeInstance(Addr);
      PTypeManager^.CopyInstanceTo(NewData,Addr);
      if assigned(PEntity)then
-                             PEntity^.YouChanged(gdb.GetCurrentDWG^);
+                             begin
+                                  //PEntity^.YouChanged(gdb.GetCurrentDWG^);
+                                  if PEntity^.bp.ListPos.Owner=gdb.GetCurrentDWG^.GetCurrentRootSimple
+                                  then
+                                      PEntity^.YouChanged(gdb.GetCurrentDWG^)
+                                  else
+                                      begin
+                                           PEntity^.FormatEntity(gdb.GetCurrentDWG^);
+                                           gdb.GetCurrentDWG^.GetCurrentROOT^.FormatAfterEdit(gdb.GetCurrentDWG^);
+                                      end;
+                             end;
      if assigned(SetVisuaProplProc)then
                                        SetVisuaProplProc;
 end;

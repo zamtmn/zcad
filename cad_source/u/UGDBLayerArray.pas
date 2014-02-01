@@ -55,9 +55,18 @@ GDBLayerArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenA
 {EXPORT-}
 var
    DefaultErrorLayer:GDBLayerProp;
+function GetLTName(LT:PGDBLayerProp):GDBString;
 implementation
 uses
     log;
+function GetLTName(LT:PGDBLayerProp):GDBString;
+begin
+     if assigned(LT) then
+                         result:=LT^.Name
+                     else
+                         result:='Continuous';
+end;
+
 function  GDBLayerArray.createlayerifneedbyname(lname:GDBString;_source:PGDBLayerProp):PGDBLayerProp;
 begin
            result:=getAddres(lname);

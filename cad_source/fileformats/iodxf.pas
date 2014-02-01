@@ -2025,10 +2025,11 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                      else
                          outstream.TXTAddGDBStringEOL(inttostr(-plp^.color));
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(6));
-                    if assigned(plp^.LT) then
+                    outstream.TXTAddGDBStringEOL(GetLTName(plp^.LT));
+                    {if assigned(plp^.LT) then
                                              outstream.TXTAddGDBStringEOL(PGDBLtypeProp(plp^.LT)^.Name)
                                          else
-                                             outstream.TXTAddGDBStringEOL('Continuous');
+                                             outstream.TXTAddGDBStringEOL('Continuous');}
                     outstream.TXTAddGDBStringEOL(dxfGroupCode(290));
                     if plp^._print then
                     //if uppercase(PGDBLayerPropArray(gdb.GetCurrentDWG.layertable.parray)^[pltp].name) <> 'DEFPOINTS' then

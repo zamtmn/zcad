@@ -394,7 +394,8 @@ begin
        begin
             ARect:=ListViewDrawSubItem(state,sender.canvas,Item,SubItem);
             {textrect}ARect := Item.DisplayRectSubItem( SubItem,drLabel);
-            s:=strproc.Tria_AnsiToUtf8(PGDBLtypeProp(PGDBLayerProp(Item.Data)^.LT)^.name);
+            s:=strproc.Tria_AnsiToUtf8(GetLTName(PGDBLayerProp(Item.Data)^.LT));
+            //s:=strproc.Tria_AnsiToUtf8(PGDBLtypeProp(PGDBLayerProp(Item.Data)^.LT)^.name);
             canv:=Sender.canvas;
             drawLT{superdrawdraw}(canv,ARect,s,PGDBLayerProp(Item.Data)^.LT);
        end;
@@ -504,7 +505,8 @@ begin
                  Item.SubItems.Add('');
                  Item.SubItems.Add('');
                  Item.SubItems.Add(GetColorNameFromIndex(plp^.color));
-                 Item.SubItems.Add({'Continuous'}strproc.Tria_AnsiToUtf8(PGDBLtypeProp(plp^.LT)^.name));
+                 Item.SubItems.Add(GetLTName(plp^.LT));
+                 //Item.SubItems.Add({'Continuous'}strproc.Tria_AnsiToUtf8(PGDBLtypeProp(plp^.LT)^.name));
                  Item.SubItems.Add(GetLWNameFromLW(plp^.lineweight));
                  Item.SubItems.Add('');
                  Item.SubItems.Add(strproc.Tria_AnsiToUtf8(plp^.desk));

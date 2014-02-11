@@ -1106,9 +1106,11 @@ begin
                                                                                            freeeditor;
                                                                                            EDContext.ppropcurrentedit:=pp;
                                                                                            //pp.FastEditor.OnRunFastEditor(pp.valueAddres)
-                                                                                           if (pp.FastEditor.UndoInsideFastEditor)and CurrObjIsEntity then
+                                                                                           if pp.FastEditor.UndoInsideFastEditor then
                                                                                                                                      pp.FastEditor.OnRunFastEditor(pp.valueAddres)
                                                                                                                                  else
+                                                                                                                                     begin
+                                                                                                                                     if CurrObjIsEntity then
                                                                                                                                      begin
                                                                                                                                      EDContext.UndoStack:=GetUndoStack;
                                                                                                                                      EDContext.UndoCommand:=EDContext.UndoStack.PushCreateTTypedChangeCommand(pp^.valueAddres,pp^.PTypeManager);
@@ -1119,6 +1121,9 @@ begin
 
                                                                                                                                      EDContext.UndoStack:=nil;
                                                                                                                                      EDContext.UndoCommand:=nil;
+                                                                                                                                     end
+                                                                                                                                     else
+                                                                                                                                         pp.FastEditor.OnRunFastEditor(pp.valueAddres)
                                                                                                                                      end;
                                                                                            end;
                                                                                            UpdateObjectInInsp;

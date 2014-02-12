@@ -98,6 +98,7 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_DwgTabsPosition,'INTF_DwgTabsPosition');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ShowDwgTabCloseBurron,'INTF_ShowDwgTabCloseBurron');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ShowLinesInObjInsp,'INTF_ShowLinesInObjInsp');
+  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ObjInspRowH,'INTF_ObjInspRowH');
 
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_PanObjectDegradation,'RD_PanObjectDegradation');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_UseStencil,'RD_UseStencil');

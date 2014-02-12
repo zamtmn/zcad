@@ -59,6 +59,7 @@ begin
   cbedit:=TComboBox.Create(propeditor);
   cbedit.Text:=PTD.GetValueAsString(pinstance);
   cbedit.OnChange:=propeditor.EditingProcess;
+  cbedit.Style:=csOwnerDrawFixed;
   {$IFNDEF DELPHI}
   cbedit.ReadOnly:=true;
   {$ENDIF}
@@ -241,8 +242,19 @@ begin
      end
      else
          result:=types.size(0,0);
-     result.cx:=15;
-     result.cy:=15;
+     if assigned(sysvar.INTF.INTF_ObjInspRowH) then
+                                                   begin
+                                                        result.cx:=sysvar.INTF.INTF_ObjInspRowH^-6;
+                                                        if result.cx<15 then
+                                                                            result.cx:=15;
+                                                        result.cy:=result.cx;
+                                                   end
+                                               else
+                                                   begin
+                                                        result.cx:=15;
+                                                        result.cy:=15;
+                                                   end
+
 end;
 procedure BooleanInverse(PInstance:GDBPointer);
 begin
@@ -491,4 +503,4 @@ begin
      AddFastEditorToType('TGDBOSMode',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runOSwnd);
      //TGDBOSMode
 end;
-end.
+end.

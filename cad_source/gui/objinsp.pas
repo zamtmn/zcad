@@ -35,7 +35,6 @@ uses
   gdbase{OGLtypes,} {io}{,UGDBOpenArrayOfByte,varman},varmandef,{UGDBDescriptor}UGDBDrawingdef{,UGDBOpenArrayOfPV},
   {zforms,ZComboBoxsWithProc,ZEditsWithProcedure,log,gdbcircle,}memman{,zbasicvisible,zguisct},TypeDescriptors{,commctrl};
 const
-  rowh=21;
   alligmentall=2;
   alligmentarrayofarray=64;
   fastEditorOffset={$IFDEF LCLQT}7{$ELSE}2{$ENDIF} ;
@@ -147,6 +146,7 @@ var
   typecount:GDBWord;
   //temp: GDBPointer;
   proptreeptr:propdeskptr;
+  rowh:integer;
 
 implementation
 
@@ -1218,6 +1218,7 @@ begin
             vsa.sort;
        end;
        if assigned(pp^.valueAddres) then
+       begin
        if assigned(pp^.Decorators.OnCreateEditor) then
                                                       TED:=pp^.Decorators.OnCreateEditor(self,pp^.rect,pp^.valueAddres,@vsa,false,pp^.PTypeManager)
                                                   else
@@ -1232,12 +1233,14 @@ begin
                                                                                 editorcontrol.Visible:=false;
                                                                                 {$ENDIF}
                                                                                 editorcontrol.Parent:=self;
+                                                                                (editorcontrol as TCombobox).itemheight:=pp^.rect.Bottom-pp^.rect.Top-6;
                                                                                 (editorcontrol as TCombobox).droppeddown:=true;
                                                                            end
                                                                        else
                                                                            editorcontrol.Parent:=self;
                                        PEditor:=TED.Editor;
                                   end;
+     end;
      end;
        vsa.done;
        if assigned(PEditor){<>nil} then
@@ -1479,6 +1482,9 @@ end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('objinsp.initialization');{$ENDIF}
   proptreeptr:=nil;
+  rowh:=21;
+  if assigned(sysvar.INTF.INTF_ObjInspRowH) then
+                                                rowh:=sysvar.INTF.INTF_ObjInspRowH^;
   {Objinsp.}currpd:=nil;
   SetGDBObjInspProc:=TSetGDBObjInsp(SetGDBObjInsp);
   StoreAndSetGDBObjInspProc:=TStoreAndSetGDBObjInsp(StoreAndSetGDBObjInsp);

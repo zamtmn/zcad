@@ -22,6 +22,7 @@ var
   INTF_DwgTabsPosition:TAlign;
   INTF_ShowDwgTabCloseBurron:GDBBoolean;
   INTF_ShowLinesInObjInsp:GDBBoolean;
+  INTF_ObjInspRowH:GDBInteger;
   VIEW_CommandLineVisible:GDBBoolean;
   VIEW_HistoryLineVisible:GDBBoolean;
   VIEW_ObjInspVisible:GDBBoolean;
@@ -101,6 +102,7 @@ begin
   INTF_DwgTabsPosition:=TATop;
   INTF_ShowDwgTabCloseBurron:=True;
   INTF_ShowLinesInObjInsp:=True;
+  INTF_ObjInspRowH:=21;
   VIEW_CommandLineVisible:=True;
   VIEW_HistoryLineVisible:=True;
   VIEW_ObjInspVisible:=True;

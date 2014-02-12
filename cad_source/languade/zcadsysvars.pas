@@ -170,6 +170,7 @@ type
               INTF_DwgTabsPosition:PTAlign;(*'Drawing tabs position'*)
               INTF_ShowDwgTabCloseBurron:PGDBBoolean;(*'Show drawing tab close button'*)
               INTF_ShowLinesInObjInsp:PGDBBoolean;(*'Show lines in object inspector'*)
+              INTF_ObjInspRowH:PGDBInteger;(*'Object inspector row height'*)
              end;
   tdisp=packed record
              DISP_ZoomFactor:PGDBDouble;(*'Mouse wheel scale factor'*)

@@ -1147,6 +1147,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
               INTF_DwgTabsPosition:PTAlign;(*'Drawing tabs position'*)
               INTF_ShowDwgTabCloseBurron:PGDBBoolean;(*'Show drawing tab close button'*)
               INTF_ShowLinesInObjInsp:PGDBBoolean;(*'Show lines in object inspector'*)
+              INTF_ObjInspRowH:PGDBInteger;(*'Object inspector row height'*)
              end;
   tdisp=packed record
              DISP_ZoomFactor:PGDBDouble;(*'Mouse wheel scale factor'*)
@@ -2729,7 +2730,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                                    constructor initnul;
                              end;
 //Generate on E:\zcad\CAD_SOURCE\commands\commandlinedef.pas
-    TGetPointMode=(TGPWait{point},TGPWaitEnt,TGPEnt,TGPPoint,TGPCancel,TGPOtherCommand,TGPCloseApp);
+    TGetPointMode=(TGPWait{point},TGPWaitEnt,TGPEnt,TGPPoint,TGPCancel,TGPOtherCommand, TGPCloseDWG,TGPCloseApp);
     TInteractiveData=packed record
                        GetPointMode:TGetPointMode;(*hidden_in_objinsp*)
                        GetPointValue:GDBVertex;(*hidden_in_objinsp*)
@@ -3337,6 +3338,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        function GetUndoTop:TArrayIndex;virtual;abstract;
                        function CanUndo:boolean;virtual;abstract;
                        function CanRedo:boolean;virtual;abstract;
+                       function GetUndoStack:GDBPointer;virtual;abstract;
                        function GetDWGUnits:PTUnitManager;virtual;abstract;
                        procedure AssignLTWithFonts(pltp:PGDBLtypeProp);virtual;abstract;
                        function GetMouseEditorMode:GDBByte;virtual;abstract;
@@ -3372,6 +3374,7 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
            procedure ChangeStampt(st:GDBBoolean);virtual;abstract;
            function GetChangeStampt:GDBBoolean;virtual;abstract;
            function GetUndoTop:TArrayIndex;virtual;abstract;
+           function GetUndoStack:GDBPointer;virtual;abstract;
            function CanUndo:boolean;virtual;abstract;
            function CanRedo:boolean;virtual;abstract;
            function GetDWGUnits:PTUnitManager;virtual;abstract;
@@ -3388,6 +3391,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     function GetCurrentROOT:PGDBObjGenericSubEntry;
                     function GetCurrentDWG:{PTDrawing}PTSimpleDrawing;
                     function GetCurrentOGLWParam:POGLWndtype;
+                    function GetUndoStack:GDBPointer;
                     procedure asociatedwgvars;
                     procedure freedwgvars;
                     procedure SetCurrentDWG(PDWG:PTAbstractDrawing);

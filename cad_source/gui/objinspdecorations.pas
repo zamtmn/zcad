@@ -59,6 +59,7 @@ begin
   cbedit:=TComboBox.Create(propeditor);
   cbedit.Text:=PTD.GetValueAsString(pinstance);
   cbedit.OnChange:=propeditor.EditingProcess;
+  cbedit.AutoSize:=false;
   cbedit.Style:=csOwnerDrawVariable;//csOwnerDrawFixed;
   {$IFNDEF DELPHI}
   cbedit.ReadOnly:=true;
@@ -103,6 +104,7 @@ end;
 
 begin
      CreateComboPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit);
+     cbedit.AutoSize:=false;
      cbedit.Style:=csOwnerDrawVariable;//csOwnerDrawFixed;
      cbedit.OnDrawItem:=MainFormN.LineWBoxDrawItem;
 
@@ -130,6 +132,7 @@ begin
      result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@gdb.GetCurrentDWG.LTypeStyleTable);
      cbedit:=TComboBox(result.Editor.geteditor);
      cbedit.Style:=csOwnerDrawVariable;//csOwnerDrawFixed;
+     cbedit.AutoSize:=false;
      cbedit.OnDrawItem:=MainFormN.LTypeBoxDrawItem;
 end;
 function TextStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
@@ -351,6 +354,7 @@ end;
 begin
      CreateComboPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit);
      cbedit.Style:=csOwnerDrawVariable;//csOwnerDrawFixed;
+     cbedit.AutoSize:=false;
      cbedit.OnDrawItem:=MainFormN.ColorDrawItem;
 
      currColor:=PTGDBPaletteColor(pinstance)^;
@@ -503,4 +507,4 @@ begin
      AddFastEditorToType('TGDBOSMode',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runOSwnd);
      //TGDBOSMode
 end;
-end.
+end.

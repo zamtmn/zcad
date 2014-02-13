@@ -343,6 +343,7 @@ begin
      cbedit:=TComboBox.Create(propeditor);
      cbedit.Text:=GetValueAsString(pinstance);
      cbedit.OnChange:=propeditor.EditingProcess;
+     cbedit.AutoSize:=false;
      cbedit.Style:=csOwnerDrawVariable;//csOwnerDrawFixed;
      {$IFNDEF DELPHI}
      cbedit.ReadOnly:=true;

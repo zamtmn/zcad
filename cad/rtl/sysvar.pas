@@ -102,7 +102,7 @@ begin
   INTF_DwgTabsPosition:=TATop;
   INTF_ShowDwgTabCloseBurron:=True;
   INTF_ShowLinesInObjInsp:=True;
-  INTF_ObjInspRowH:=21;
+  INTF_ObjInspRowH:=31;
   VIEW_CommandLineVisible:=True;
   VIEW_HistoryLineVisible:=True;
   VIEW_ObjInspVisible:=True;

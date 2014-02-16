@@ -38,6 +38,8 @@ implementation
 procedure Tsltexteditor1.shoftedform(Sender: TObject);
 begin
      EditField.SelectAll;
+     Constraints.MaxHeight:=Height;
+     Constraints.MinHeight:=Height;
 end;
 
 procedure Tsltexteditor1.KeyDown(Sender: TObject; var Key: Word;
@@ -53,4 +55,4 @@ begin
 end;
 
 end.
-
+

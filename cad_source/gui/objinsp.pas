@@ -524,7 +524,9 @@ begin
   inc(r.left,size.cx+1);
   if assigned(ppd.FastEditor.OnGetPrefferedFastEditorSize) then
   drawfasteditor(ppd,canvas,r);
+  canvas.Font.Italic:=true;
   canvas.TextRect(r,r.Left,r.Top,(name));
+  canvas.Font.Italic:=false;
   dec(r.left,size.cx+1);
 end;
 procedure drawrect(cnvs:tcanvas;clr:TColor;r:trect);

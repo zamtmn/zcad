@@ -1123,9 +1123,13 @@ begin
 
                                                                                                                                      EDContext.UndoStack:=nil;
                                                                                                                                      EDContext.UndoCommand:=nil;
+                                                                                                                                     EDContext.ppropcurrentedit:=nil;
                                                                                                                                      end
                                                                                                                                      else
-                                                                                                                                         pp.FastEditor.OnRunFastEditor(pp.valueAddres)
+                                                                                                                                         begin
+                                                                                                                                         pp.FastEditor.OnRunFastEditor(pp.valueAddres);
+                                                                                                                                         EDContext.ppropcurrentedit:=nil;
+                                                                                                                                         end;
                                                                                                                                      end;
                                                                                            end;
                                                                                            UpdateObjectInInsp;

@@ -866,7 +866,9 @@ begin
                                                    PGDBObjRoot(PTDrawingDef(pcurcontext)^.GetCurrentRootSimple)^.FormatAfterEdit(PTDrawingDef(pcurcontext)^);
                                            end
                                        else
+                                        begin
                                            PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(EDContext.ppropcurrentedit^.valueAddres,self.currobjgdbtype);
+                                        end;
 
                 end;
   if assigned(resetoglwndproc) then resetoglwndproc;
@@ -1123,16 +1125,15 @@ begin
 
                                                                                                                                      EDContext.UndoStack:=nil;
                                                                                                                                      EDContext.UndoCommand:=nil;
-                                                                                                                                     EDContext.ppropcurrentedit:=nil;
                                                                                                                                      end
                                                                                                                                      else
                                                                                                                                          begin
                                                                                                                                          pp.FastEditor.OnRunFastEditor(pp.valueAddres);
-                                                                                                                                         EDContext.ppropcurrentedit:=nil;
                                                                                                                                          end;
                                                                                                                                      end;
                                                                                            end;
                                                                                            UpdateObjectInInsp;
+                                                                                           EDContext.ppropcurrentedit:=nil;
                                                                                       end
                             end;
                             end;

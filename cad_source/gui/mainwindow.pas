@@ -1094,6 +1094,7 @@ FToolBar.Caption:='';
 FToolBar.SetBounds(100,64,500,26);
 
 TB:=TToolBar.Create(application);
+TB.ButtonHeight:=sysvar.INTF.INTF_ObjInspRowH^;
 TB.Align:=alclient;
 if aName<>'Status' then
 TB.EdgeBorders:=[];
@@ -1399,6 +1400,7 @@ begin
    ToolBarU:=TToolBar.Create(self);
    ToolBarU.Align:={alTop}alClient;
    ToolBarU.AutoSize:=true;
+   ToolBarU.ButtonHeight:=sysvar.INTF.INTF_ObjInspRowH^;
    ToolBarU.ShowCaptions:=true;
    ToolBarU.Parent:=self;
    ToolBarU.EdgeBorders:=[ebTop, ebBottom, ebLeft, ebRight];

@@ -352,7 +352,7 @@ end;
 function layer_cmd:GDBInteger;
 begin
   LayerWindow:=TLayerWindow.Create(nil);
-  SetHeightControl(LayerWindow,22);
+  SetHeightControl(LayerWindow,sysvar.INTF.INTF_ObjInspRowH^);
   DOShowModal(LayerWindow);
   Freeandnil(LayerWindow);
   result:=cmd_ok;
@@ -360,7 +360,7 @@ end;
 function TextStyles_cmd:GDBInteger;
 begin
   TSWindow:=TTSWindow.Create(nil);
-  SetHeightControl(TSWindow,22);
+  SetHeightControl(TSWindow,sysvar.INTF.INTF_ObjInspRowH^);
   DOShowModal(TSWindow);
   Freeandnil(TSWindow);
   result:=cmd_ok;
@@ -368,7 +368,7 @@ end;
 function DimStyles_cmd:GDBInteger;
 begin
   DSWindow:=TDSWindow.Create(nil);
-  SetHeightControl(DSWindow,22);
+  SetHeightControl(DSWindow,sysvar.INTF.INTF_ObjInspRowH^);
   DOShowModal(DSWindow);
   Freeandnil(DSWindow);
   result:=cmd_ok;
@@ -376,7 +376,7 @@ end;
  function LineTypes_cmd:GDBInteger;
 begin
   LTWindow:=TLTWindow.Create(nil);
-  SetHeightControl(LTWindow,22);
+  SetHeightControl(LTWindow,sysvar.INTF.INTF_ObjInspRowH^);
   DOShowModal(LTWindow);
   Freeandnil(LTWindow);
   result:=cmd_ok;
@@ -387,7 +387,7 @@ var
 begin
      if not assigned(ColorSelectWND)then
      Application.CreateForm(TColorSelectWND, ColorSelectWND);
-     SetHeightControl(ColorSelectWND,22);
+     SetHeightControl(ColorSelectWND,sysvar.INTF.INTF_ObjInspRowH^);
      if assigned(ShowAllCursorsProc) then
                                          ShowAllCursorsProc;
      mr:=ColorSelectWND.run(SysVar.dwg.DWG_CColor^,true){showmodal};
@@ -792,4 +792,4 @@ initialization
   startup;
 finalization
   finalize;
-end.
+end.

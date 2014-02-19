@@ -273,7 +273,7 @@ var
 begin
      if not assigned(ColorSelectWND)then
      Application.CreateForm(TColorSelectWND, ColorSelectWND);
-     SetHeightControl(ColorSelectWND,22);
+     SetHeightControl(ColorSelectWND,sysvar.INTF.INTF_ObjInspRowH^);
      if assigned(ShowAllCursorsProc) then
                                          ShowAllCursorsProc;
      mr:=ColorSelectWND.run(PTGDBPaletteColor(PInstance)^,true){showmodal};
@@ -333,7 +333,7 @@ end;
 procedure runOSwnd(PInstance:GDBPointer);
 begin
   OSWindow:=TOSWindow.Create(nil);
-  SetHeightControl(OSWindow,22);
+  SetHeightControl(OSWindow,sysvar.INTF.INTF_ObjInspRowH^);
   DOShowModal(OSWindow);
   Freeandnil(OSWindow);
 end;

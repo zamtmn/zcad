@@ -902,7 +902,7 @@ var
    changed:boolean;
 begin
      //ебаный скролинг работает везде по разному, или я туплю... переписывать надо эту хрень
-     if VertScrollBar.Range=contentheigth then
+     if (VertScrollBar.Range=contentheigth)or(VertScrollBar.Position=0) then
                                               changed:=false
                                           else
                                               changed:=true;

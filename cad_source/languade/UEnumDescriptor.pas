@@ -20,7 +20,7 @@ unit UEnumDescriptor;
 {$INCLUDE def.inc}
 interface
 uses types,sysutils,UGDBOpenArrayOfTObjLinkRecord,UGDBOpenArrayOfByte,TypeDescriptors,gdbasetypes,varmandef,gdbase,
-  UGDBOpenArrayOfData,UGDBStringArray,memman,
+  usupportgui,UGDBOpenArrayOfData,UGDBStringArray,memman,
   StdCtrls;
 type
 PEnumDescriptor=^EnumDescriptor;
@@ -204,8 +204,7 @@ begin
      cbedit:=TComboBox.Create(propeditor);
      cbedit.Text:=GetValueAsString(pinstance);
      cbedit.OnChange:=propeditor.EditingProcess;
-     cbedit.AutoSize:=false;
-     cbedit.Style:=csOwnerDrawVariable;//csOwnerDrawFixed;
+     SetComboSize(cbedit);
      {$IFNDEF DELPHI}
      cbedit.ReadOnly:=true;
      {$ENDIF}

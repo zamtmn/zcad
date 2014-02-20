@@ -1883,8 +1883,8 @@ end;
 function MainForm.CreateCBox(owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
 begin
   result:=TComboBox.Create(owner);
-  {result.Style:=csOwnerDrawFixed;
-  result.AutoSize:=false;}
+  result.Style:=csOwnerDrawFixed;
+  {result.AutoSize:=false;}
   SetComboSize(result);
   result.Clear;
   result.readonly:=true;

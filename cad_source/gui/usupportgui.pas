@@ -27,7 +27,14 @@ uses
 procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
 procedure ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);
 function ListViewDrawSubItem(State: TCustomDrawState;canvas:tcanvas;Item: TListItem;SubItem: Integer): TRect;
+procedure SetComboSize(cb:tcombobox);
 implementation
+procedure SetComboSize(cb:tcombobox);
+begin
+     cb.AutoSize:=false;
+     //cb.Style:={csOwnerDrawVariable;//}csOwnerDrawFixed;
+end;
+
 procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
 var
    i:integer;

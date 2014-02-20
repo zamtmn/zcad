@@ -22,7 +22,7 @@ unit Objinsp;
 interface
 
 uses
-  GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
+  usupportgui,GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
   Themes,
   {$IFDEF LCLGTK2}
   x,xlib,{x11,}{xutil,}
@@ -1240,7 +1240,8 @@ begin
                                                                                 editorcontrol.Visible:=false;
                                                                                 {$ENDIF}
                                                                                 editorcontrol.Parent:=self;
-                                                                                (editorcontrol as TCombobox).itemheight:=pp^.rect.Bottom-pp^.rect.Top-6;
+                                                                                SetComboSize(editorcontrol as TCombobox);
+                                                                                //(editorcontrol as TCombobox).itemheight:=pp^.rect.Bottom-pp^.rect.Top-6;
                                                                                 (editorcontrol as TCombobox).droppeddown:=true;
                                                                            end
                                                                        else

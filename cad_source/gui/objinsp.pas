@@ -898,37 +898,34 @@ begin
      }
 end;
 procedure TGDBobjinsp.createscrollbars;
-//var //si:scrollinfo;
-    //a:integer;
+var
+   changed:boolean;
 begin
+     //ебаный скролинг работает везде по разному, или я туплю... переписывать надо эту хрень
+     if VertScrollBar.Range=contentheigth then
+                                              changed:=false
+                                          else
+                                              changed:=true;
      self.VertScrollBar.Range:=contentheigth;
-     self.VertScrollBar.page:={clientheight}height;
-     {IFNDEF LINUX}self.VertScrollBar.Tracking:=true;{ENDIF}
+     self.VertScrollBar.page:=height;
+     self.VertScrollBar.Tracking:=true;
      self.VertScrollBar.Smooth:=true;
-
-     //if contentheigth>clientheight
-     //                             then application.MessageBox('1','2',1);
-
-{  if contentheigth>self.clientheight then
-                                    begin
-                                         if (style and ws_vscroll)=0 then
-                                         setstyle(WS_VSCROLL,0);
-                                         si.cbSize:=sizeof(scrollinfo);
-                                         si.fMask:=SIF_ALL;// сведения о полученных атрибутах
-                                         si.nMin:=0;// нижняя граница диапазона
-                                         si.nMax:=contentheigth;// верхняя граница диапазона
-                                         si.nPage:=clientheight;// размер страницы
-                                         si.nPos:=-startdrawy;// позиция ползунка
-                                         SetScrollInfo(handle,SB_VERT,si,true);
-
-                                    end
-                                else
-                                    begin
-                                         if (style and ws_vscroll)<>0 then
-                                         setstyle(0,WS_VSCROLL);
-                                         startdrawy:=0;
-                                    end;
-                                    }
+     if contentheigth<height  then
+                                 begin
+                                      ScrollBy(0,-VertScrollBar.Position);
+                                      VertScrollBar.Position:=0;
+                                      self.VertScrollBar.page:=height;
+                                      self.VertScrollBar.Range:=height;
+                                      self.VertScrollBar.Tracking:=false;
+                                      self.VertScrollBar.Smooth:=false;
+                                      UpdateScrollbars;
+                                 end;
+     if ((VertScrollBar.Position>0) and (VertScrollBar.Position<contentheigth-height))or changed then
+     begin
+     VertScrollBar.Position:=VertScrollBar.Position-1;
+     VertScrollBar.Position:=VertScrollBar.Position+1;
+     end;
+     UpdateScrollbars;
 end;
 function TGDBobjinsp.IsMouseOnSpliter(pp:PPropertyDeskriptor; X:Integer):GDBBoolean;
 begin
@@ -1171,6 +1168,7 @@ var
   ir:itrec;
   TED:TEditorDesc;
   editorcontrol:TWinControl;
+  tr:TRect;
 begin
      if pp^.SubNode<>nil then
      begin
@@ -1226,14 +1224,19 @@ begin
        end;
        if assigned(pp^.valueAddres) then
        begin
+         tr:=pp^.rect;
+         {$IFDEF LCLQT}
+         tr.Top:=tr.Top-self.VertScrollBar.Position;
+         tr.Bottom:=tr.Bottom-self.VertScrollBar.Position;
+         {$ENDIF}
        if assigned(pp^.Decorators.OnCreateEditor) then
-                                                      TED:=pp^.Decorators.OnCreateEditor(self,pp^.rect,pp^.valueAddres,@vsa,false,pp^.PTypeManager)
+                                                      TED:=pp^.Decorators.OnCreateEditor(self,tr,pp^.valueAddres,@vsa,false,pp^.PTypeManager)
                                                   else
-                                                      TED:=pp^.PTypeManager^.CreateEditor(self,pp^.rect,pp^.valueAddres,@vsa,false);
+                                                      TED:=pp^.PTypeManager^.CreateEditor(self,tr,pp^.valueAddres,@vsa,false);
      case ted.Mode of
                      TEM_Integrate:begin
                                        editorcontrol:=TED.Editor.geteditor;
-                                       editorcontrol.SetBounds(pp^.rect.Left,pp^.rect.Top,pp^.rect.Right-pp^.rect.Left,pp^.rect.Bottom-pp^.rect.Top);
+                                       editorcontrol.SetBounds(tr.Left,tr.Top,tr.Right-tr.Left,tr.Bottom-tr.Top);
                                        if (editorcontrol is TCombobox) then
                                                                            begin
                                                                                 {$IFDEF LINUX}
@@ -1298,7 +1301,7 @@ begin
        freeeditor;
        exit;
   end;
-  y:=y+self.VertScrollBar.Position;
+  y:=y+VertScrollBar.scrollpos{Position};
   //if proptreeptr=nil then exit;
   my:=startdrawy;
   pp:=mousetoprop(@pda,x,y,my);

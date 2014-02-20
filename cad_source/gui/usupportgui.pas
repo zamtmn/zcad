@@ -22,7 +22,7 @@ unit usupportgui;
 interface
 
 uses
-  StdCtrls,gdbasetypes,Controls,Classes,LCLType,ComCtrls,Graphics;
+  zcadsysvars,StdCtrls,gdbasetypes,Controls,Classes,LCLType,ComCtrls,Graphics;
 
 procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
 procedure ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);
@@ -32,7 +32,10 @@ implementation
 procedure SetComboSize(cb:tcombobox);
 begin
      cb.AutoSize:=false;
-     //cb.Style:={csOwnerDrawVariable;//}csOwnerDrawFixed;
+     {$IFDEF LCLWIN32}
+     cb.Style:=csOwnerDrawFixed;
+     cb.ItemHeight:=sysvar.INTF.INTF_ObjInspRowH^-6;
+     {$ENDIF}
 end;
 
 procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
@@ -89,4 +92,4 @@ begin
 end;
 
 
-end.
+end.

@@ -14,6 +14,7 @@ Panel OIButtons;
     action ACN_MULTIOBJVARMAN
     Separator
     variable DSGN_SelNew,one.bmp,New selection set,
+    variable DSGN_SelSameName,#SN,Auto select devices with same name,
   }
 Panel Status;
   {

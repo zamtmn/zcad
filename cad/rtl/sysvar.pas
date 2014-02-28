@@ -17,6 +17,7 @@ var
   DSGN_LCCable:TLayerControl;
   DSGN_LCLeader:TLayerControl;
   DSGN_SelNew:GDBBoolean;
+  DSGN_SelSameName:GDBBoolean;
   INTF_ShowScrollBars:GDBBoolean;
   INTF_ShowDwgTabs:GDBBoolean;
   INTF_DwgTabsPosition:TAlign;
@@ -97,6 +98,7 @@ begin
   DSGN_LCLeader.Enabled:=True;
   DSGN_LCLeader.LayerName:='TEXT';
   DSGN_SelNew:=false;
+  DSGN_SelSameName:=false;
   INTF_ShowScrollBars:=True;
   INTF_ShowDwgTabs:=True;
   INTF_DwgTabsPosition:=TATop;

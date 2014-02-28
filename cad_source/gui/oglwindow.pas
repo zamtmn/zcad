@@ -35,7 +35,7 @@ uses
   GDBGenericSubEntry,gdbasetypes,sysutils,
   {$IFNDEF DELPHI}{GLext,gl,glu,}OpenGLContext,{$ELSE}dglOpenGL,UOpenGLControl,{$ENDIF}
   Math,gdbase,varmandef,varman,UUnitManager,
-  oglwindowdef,UGDBSelectedObjArray,
+  oglwindowdef,UGDBSelectedObjArray,GDBEntity,
 
   GDBHelpObj,
   commandline,
@@ -185,6 +185,7 @@ type
     procedure myKeyPress(var Key: Word; Shift: TShiftState);
 
     procedure addaxistootrack(var posr:os_record;const axis:GDBVertex);
+    function SelectRelatedObjects(pent:PGDBObjEntity):GDBInteger;
 
     {LCL}
     function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint): Boolean;override;
@@ -226,7 +227,7 @@ procedure textwrite(s: GDBString);
 procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
 //function getsortedindex(cl:integer):integer;
 implementation
-uses {mainwindow,}UGDBTracePropArray,GDBEntity,{io,}geometry,gdbobjectsconstdef,{UGDBDescriptor,}zcadinterface,
+uses {mainwindow,}UGDBTracePropArray,{GDBEntity,}{io,}geometry,gdbobjectsconstdef,{UGDBDescriptor,}zcadinterface,
      shared,{cmdline,}GDBText;
 function correcttogrid(point:GDBVertex):GDBVertex;
 begin
@@ -2132,6 +2133,43 @@ begin
      inherited;
      draw;
 end;
+function TOGLWnd.SelectRelatedObjects(pent:PGDBObjEntity):GDBInteger;
+var
+   pvname,pvname2:pvardesk;
+   ir:itrec;
+   pobj:PGDBObjEntity;
+begin
+     result:=0;
+     if pent=nil then
+                     exit;
+     if assigned(sysvar.DSGN.DSGN_SelSameName)then
+     if sysvar.DSGN.DSGN_SelSameName^ then
+     begin
+          if (pent^.vp.ID=GDBDeviceID)or(pent^.vp.ID=GDBCableID)or(pent^.vp.ID=GDBNetID)then
+          begin
+               pvname:=pent^.ou.FindVariable('NMO_Name');
+               if pvname<>nil then
+               begin
+                   pobj:=pdwg.GetCurrentROOT.ObjArray.beginiterate(ir);
+                   if pobj<>nil then
+                   repeat
+                         if (pobj<>pent)and((pobj^.vp.ID=GDBDeviceID)or(pobj^.vp.ID=GDBCableID)or(pobj^.vp.ID=GDBNetID)) then
+                         begin
+                              pvname2:=pobj^.OU.FindVariable('NMO_Name');
+                              if pvname2<>nil then
+                              if pgdbstring(pvname2^.data.Instance)^=pgdbstring(pvname^.data.Instance)^ then
+                              begin
+                                   if pobj^.select(pdwg.GetSelObjArray,param.SelDesc.Selectedobjcount)then
+                                                                                                          inc(result);
+                              end;
+                         end;
+                         pobj:=pdwg.GetCurrentROOT.ObjArray.iterate(ir);
+                   until pobj=nil;
+               end;
+          end;
+     end;
+end;
+
 procedure TOGLWnd.MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);
 var key: GDBByte;
     NeedRedraw:boolean;
@@ -2166,6 +2204,8 @@ var key: GDBByte;
   end;
 
   function ProcessEntSelect:boolean;
+  var
+      RelSelectedObjects:Integer;
   begin
     result:=false;
     begin
@@ -2208,6 +2248,7 @@ var key: GDBByte;
                           PDWG^.GetSelObjArray.clearallobjects;
                     end;
                     param.SelDesc.LastSelectedObject := param.SelDesc.OnMouseObject;
+                    RelSelectedObjects:=SelectRelatedObjects(param.SelDesc.LastSelectedObject);
                     if (commandmanager.pcommandrunning=nil)or(commandmanager.pcommandrunning^.IData.GetPointMode<>TGPWaitEnt) then
                     begin
                     if PGDBObjEntity(param.SelDesc.OnMouseObject)^.select(PDWG^.GetSelObjArray,param.SelDesc.Selectedobjcount) then

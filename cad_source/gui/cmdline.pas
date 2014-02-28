@@ -27,7 +27,7 @@ uses
  geometry,shared,UGDBStringArray,zcadinterface,umytreenode;
 
 const
-     cheight=18;
+     cheight=48;
      commandsuffix='>';
      commandprefix=' ';
 type
@@ -154,8 +154,9 @@ begin
     panel:=TPanel.create(self);
     panel.parent:=self;
     panel.top:=0;
-    panel.Constraints.MinHeight:=17;
-    panel.Constraints.MaxHeight:=17;
+    //panel.Constraints.MinHeight:=17;
+    //panel.Constraints.MaxHeight:=17;
+    panel.AutoSize:=true; ;
     panel.BorderStyle:=bsNone;
     panel.BevelOuter:=bvnone;
     panel.BorderWidth:=0;
@@ -217,14 +218,14 @@ begin
     cmdedit.parent:=panel;
     cmdedit.DoubleBuffered:=true;
     cmdedit.AutoSize:=true;
-    with cmdedit.Constraints do
+    {with cmdedit.Constraints do
     begin
          MaxHeight:=22;
-    end;
-    with prompt.Constraints do
+    end;}
+    {with prompt.Constraints do
     begin
          MaxHeight:=22;
-    end;
+    end;}
     SetMode(CLCOMMANDREDY);
 
     cmdedit.OnKeyPress:=keypressmy;

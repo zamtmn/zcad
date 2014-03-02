@@ -14,7 +14,7 @@ uses
   commandline,//for ZCAD commands
 
   zcadsysvars,{zcadinterface,} iodxf,varmandef, oglwindow,  UUnitManager,urtl,
-  UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDB3DFace,GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
+  GDBAbstractText,UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDB3DFace,GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
 
 type
 
@@ -80,7 +80,7 @@ type
 
 var
   Form1: TForm1;
-  stepgrid,origingrid:GDBvertex2D;
+  grid:GDBSnap2D;
   LPTime:Tdatetime;
   pname:string;
   DefaultVarForObjInsp:GDBVertex;
@@ -158,13 +158,12 @@ begin
   SetCurrentObjDefault;
   GDBobjinsp.Show;
 
-     stepgrid.x:=1;
-     stepgrid.y:=1;
-     origingrid.x:=0;
-     origingrid.y:=0;
+     grid.Spacing.x:=1;
+     grid.Spacing.y:=1;
+     grid.Base.x:=0;
+     grid.Base.y:=0;
 
-     sysvar.DWG.DWG_StepGrid:=@stepgrid;
-     sysvar.DWG.DWG_OriginGrid:=@origingrid;
+     sysvar.DWG.DWG_Snap:=@grid;
      sysvar.DWG.DWG_SystmGeometryDraw^:=CheckBox1.Checked;
 
      ugdbdescriptor.startup;
@@ -503,10 +502,10 @@ begin
     pGDBObjEntity(pobj):=CreateInitObjFree(GDBTextID,nil);
     v1:=CreateRandomVertex(1000,500);
     pobj^.Local.P_insert:=v1;
-    pobj^.TXTStyleIndex:=0;
+    pobj^.TXTStyleIndex:=gdb.GetCurrentDWG^.TextStyleTable.getAddres('standart');
     pobj^.Template:='Hello word!';
     pobj^.textprop.size:=1+random(10);
-    pobj^.textprop.justify:=1+random(20);
+    pobj^.textprop.justify:=TTextJustify(1+random(20));
     pobj^.textprop.wfactor:=0.3+random*0.7;
     pobj^.textprop.oblique:=random(20);
     angl:=pi*random{*0.5};

@@ -473,8 +473,6 @@ begin
 
                                  newowner^.AddMi(@postobj);
                                  pobj^.OU.CopyTo(@PGDBObjEntity(postobj)^.ou);
-                                 pobj^.done;
-                                 GDBFreeMem(pointer(pobj));
                                  if foc=0 then
                                               PGDBObjEntity(postobj)^.BuildGeometry(drawing);
                                  if foc=0 then
@@ -484,8 +482,23 @@ begin
                                               end;
                                  if foc=0 then PGDBObjEntity(postobj)^.FromDXFPostProcessAfterAdd;
                                 end
-                                   //else
-                                   //    newowner:=newowner;
+                                   else
+                                       begin
+                                       newowner:=newowner;
+                                       {//добавляем потеряный примитив
+                                       owner^.AddMi(@postobj);
+                                           if foc=0 then
+                                                        begin
+                                                        PGDBObjEntity(postobj)^.BuildGeometry(drawing);
+                                                        PGDBObjEntity(postobj)^.FormatAfterDXFLoad(drawing);
+                                                        PGDBObjEntity(postobj)^.FromDXFPostProcessAfterAdd;
+                                                        end;}
+                                       //вытираем потеряный примитив
+                                       postobj^.done;
+                                       GDBFreeMem(pointer(postobj));
+                                       end;
+                                   pobj^.done;
+                                   GDBFreeMem(pointer(pobj));
                             end;
       end;
       additionalunit.free;
@@ -1177,19 +1190,19 @@ begin
   repeat
     gotodxf(f, 0, dxfName_SECTION);
     if not f.notEOF then
-      exit;
+      system.break;
     s := f.readGDBString;
     s := f.readGDBString;
     if s = dxfName_TABLES then
     begin
       if not f.notEOF then
-        exit;
+        system.break;
       s := f.readGDBString;
       s := f.readGDBString;
       while s = dxfName_TABLE do
       begin
         if not f.notEOF then
-          exit;
+          system.break;
         s := f.readGDBString;
         s := f.readGDBString;
 

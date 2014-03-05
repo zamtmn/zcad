@@ -38,6 +38,7 @@ GDBLayerProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                function GetFullName:GDBString;virtual;
                procedure SetValueFromDxf(group:GDBInteger;value:GDBString);virtual;
                procedure SetDefaultValues;virtual;
+               destructor done;virtual;
          end;
 PGDBLayerPropArray=^GDBLayerPropArray;
 GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
@@ -111,6 +112,12 @@ begin
   inherited initnul;
   size:=sizeof(GDBLayerProp);
 end;
+destructor GDBLayerProp.done;
+begin
+     inherited;
+     self.desk:='';
+end;
+
 procedure GDBLayerProp.SetDefaultValues;
 begin
      color:=7;

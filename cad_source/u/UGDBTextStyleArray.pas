@@ -57,6 +57,7 @@ uses {UGDBDescriptor,}{io,}log;
 destructor GDBTextStyle.Done;
 begin
      inherited;
+     dxfname:='';
 end;
 
 function GDBTextStyleArray.GetCurrentTextStyle;
@@ -243,4 +244,4 @@ begin
 //end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UGDBTextStyleArray.initialization');{$ENDIF}
-end.
+end.

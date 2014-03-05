@@ -371,8 +371,8 @@ constructor TTypedChangeCommand.Assign(PDataInstance:GDBPointer;PType:PUserTypeD
 begin
      Addr:=PDataInstance;
      PTypeManager:=PType;
-     GDBGetMem({$IFDEF DEBUGBUILD}'{49289E94-F423-4497-B0B2-32215E6D5D40}'{$ENDIF}OldData,PTypeManager^.SizeInGDBBytes);
-     GDBGetMem({$IFDEF DEBUGBUILD}'{49289E94-F423-4497-B0B2-32215E6D5D40}'{$ENDIF}NewData,PTypeManager^.SizeInGDBBytes);
+     GDBGetMem({$IFDEF DEBUGBUILD}'{49289E94-F423-4497-B0B2-32215E6D5D40}',{$ENDIF}OldData,PTypeManager^.SizeInGDBBytes);
+     GDBGetMem({$IFDEF DEBUGBUILD}'{49289E94-F423-4497-B0B2-32215E6D5D40}',{$ENDIF}NewData,PTypeManager^.SizeInGDBBytes);
      PTypeManager^.CopyInstanceTo(Addr,OldData);
      PTypeManager^.CopyInstanceTo(Addr,NewData);
      PEntity:=nil;

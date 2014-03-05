@@ -86,6 +86,7 @@ GDBDimStyle = packed object(GDBNamedObject)
                       procedure CreateLDIfNeed;
                       procedure ReleaseLDIfNeed;
                       procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
+                      destructor Done;virtual;
              end;
 PGDBDimStyleArray=^GDBDimStyleArray;
 GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBDimStyle*)
@@ -121,6 +122,13 @@ var
                                     );
 implementation
 uses {UGDBDescriptor,}{io,}log;
+destructor GDBDimStyle.Done;
+begin
+     units.DIMPOST:='';
+     ReleaseLDIfNeed;
+     inherited;
+end;
+
 procedure GDBDimStyle.ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
 var Iterator:TMapBlockHandle_BlockNames.TIterator;
     BlockName:string;

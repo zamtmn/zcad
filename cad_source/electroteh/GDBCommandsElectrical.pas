@@ -2661,7 +2661,7 @@ var
     supernet,net,net2:PGDBObjNet;
     cable:PGDBObjCable;
     pvd,pvd2:pvardesk;
-    netarray,riserarray:GDBOpenArrayOfPObjects;
+    netarray,riserarray,linesarray:GDBOpenArrayOfPObjects;
     ir_net,ir_net2,ir_riser,ir_riser2:itrec;
     nline,new_line:pgdbobjline;
     np:GDBVertex;
@@ -2716,6 +2716,7 @@ begin
 end;
 
 begin
+  linesarray.init(10);
   if length(operands)=0 then
                      begin
                           isload:=OpenFileDialog(s,'csv',CSVFileFilter,'','Открыть журнал...');
@@ -2913,6 +2914,7 @@ begin
                                                                 New_line^.Formatentity(gdb.GetCurrentDWG^);
                                                                 //New_line.bp.ListPos.Owner^.RemoveInArray(New_line.bp.ListPos.SelfIndex);
                                                                 supernet^.ObjArray.add(addr(New_line));
+                                                                linesarray.Add(addr(New_line));
                                                                 //log.LogOut('supernet^.ObjArray.add(addr(New_line)); Примитивов в графе: '+inttostr(supernet^.objarray.count));
 
 
@@ -3024,10 +3026,10 @@ begin
        repeat
             net.objarray.Clear;
             net.riserarray.clear;
-            //net.done;
             net:=supernetsarray.iterate(ir_net);
        until net=nil;
        supernetsarray.done;
+       linesarray.done;
 
 
        if assigned (EndLongProcessProc) then

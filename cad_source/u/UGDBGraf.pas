@@ -372,7 +372,8 @@ var
 begin
   if count = 0 then
   begin
-    createarray;
+    if parray=nil then
+                      createarray;
     pgrafelement(Parray)^.init(v);
     inc(count);
     result:=parray;

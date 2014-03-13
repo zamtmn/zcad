@@ -86,6 +86,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 procedure CalcTextInside;virtual;
                 procedure DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;const drawing:TDrawingDef);
                 function GetDIMTMOVE:TDimTextMove;virtual;
+                destructor done;virtual;
                 end;
 {EXPORT-}
 var
@@ -276,7 +277,7 @@ begin
    FormatMtext(dimtxtstyle.pfont,0,PDimStyle.Text.DIMTXT,dimtxtstyle^.prop.wfactor,dimtext,txtlines);
    dimtexth:=GetLinesH(GetLineSpaceFromLineSpaceF(1,PDimStyle.Text.DIMTXT),PDimStyle.Text.DIMTXT,txtlines);
    dimtextw:=GetLinesW(txtlines)*PDimStyle.Text.DIMTXT;
-   txtlines.done;
+   txtlines.freeanddone;
 
      {dimdir:=geometry.VertexSub(DimData.P10InWCS,DimData.P14InWCS);
      dimdir:=normalizevertex(dimdir);}
@@ -498,6 +499,12 @@ begin
                                                         else
                                                             result:=floattostr(l,WorkingFormatSettings)+result;
                                        end;
+end;
+destructor GDBObjDimension.done;
+begin
+  if PProjPoint<>nil then GDBFreeMem(pprojpoint);
+  dimtext:='';
+  inherited;
 end;
 procedure GDBObjDimension.RenderFeedback;
 var tv:GDBvertex;

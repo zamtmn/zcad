@@ -79,7 +79,6 @@ const
 var i2:GDBInteger;
 {$ENDIF}
 var FOC:GDBInteger;
-    phandlearray: pdxfhandlerecopenarray;
 procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 procedure savedxf2000(name: GDBString; {PDrawing:PTSimpleDrawing}var drawing:TSimpleDrawing);
 procedure saveZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
@@ -115,7 +114,7 @@ begin
       result := p^.arr[i].nev;
       exit;
     end;
-  result := -1;
+  result := 0;
 end;
 function getnevhandleWithNil(p: pdxfhandlerecopenarray; old: TDWGHandle): TDWGHandle;
 var
@@ -128,18 +127,6 @@ begin
       exit;
     end;
   result := 0;
-end;
-function getoldhandle(p: pdxfhandlerecopenarray; nev: TDWGHandle): TDWGHandle;
-var
-  i: GDBInteger;
-begin
-  for i := 0 to p^.count - 1 do
-    if p^.arr[i].nev = nev then
-    begin
-      result := p^.arr[i].old;
-      exit;
-    end;
-  result := -1;
 end;
 function ISIFNOREDENT(name:GDBString):GDBInteger;
 var i:GDBInteger;
@@ -356,7 +343,7 @@ begin
         end;
 end;
 
-procedure addentitiesfromdxf(var f: GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjSubordinated;var drawing:TSimpleDrawing);
+procedure addentitiesfromdxf(var f: GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjSubordinated;var drawing:TSimpleDrawing;h2p:TMapHandleToPointer);
 var
 //  byt,LayerColor: GDBInteger;
   s{, sname, sx1, sy1, sz1,scode,LayerName}: GDBString;
@@ -401,9 +388,11 @@ begin
                                 if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
                                 begin
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
-                                                                                      pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,GDBPlatformint(pobj));
+                                                                                      h2p.Insert(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,pobj);
+                                                                                      //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,GDBPlatformint(pobj));
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
-                                                                                      newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle));
+                                                                                      newowner:=h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
+                                                                                      //newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle));
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle=h_trash then
                                                                                       trash:=true;
 
@@ -452,14 +441,16 @@ begin
                                 if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
                                 begin
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
-                                                                                      newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle));
+                                                                                      newowner:=h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
+                                                                                      //newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle));
                                 end;
                                 if newowner<>nil then
                                 begin
                                 if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
                                 begin
                                      if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
-                                                                                      pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,GDBPlatformint(postobj));
+                                                                                      h2p.Insert(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,postobj);
+                                                                                      //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,GDBPlatformint(postobj));
                                 end;
                                 if newowner=pointer($ffffffff) then
                                                            newowner:=newowner;
@@ -528,8 +519,12 @@ var
 //objid: GDBInteger;
 //  pobj,postobj: PGDBObjEntity;
   tp: PGDBObjBlockdef;
+  //phandlearray: pdxfhandlerecopenarray;
+  h2p:TMapHandleToPointer;
 begin
   {$IFDEF TOTALYLOG}programlog.logoutstr('AddFromDXF12',lp_IncPos);{$ENDIF}
+  //phandlearray := dxfhandlearraycreate(10000);
+  h2p:=TMapHandleToPointer.Create;
   while (f.notEOF) and (s <> exitGDBString) do
   begin
   if assigned(ProcessLongProcessProc)then
@@ -576,7 +571,7 @@ begin
           begin
             tp := drawing.BlockDefArray.create(s);
             programlog.logoutstr('Found block '+s+';',lp_IncPos);
-            {addfromdxf12}addentitiesfromdxf(f, 'ENDBLK',tp,drawing);
+            {addfromdxf12}addentitiesfromdxf(f, 'ENDBLK',tp,drawing,h2p);
             programlog.logoutstr('end; {block '+s+'}',lp_DecPos);
           end;
         sname := f.readGDBString;
@@ -587,10 +582,12 @@ begin
     else if s = 'ENTITIES' then
     begin
          {$IFDEF TOTALYLOG}programlog.logoutstr('Found entities section',lp_IncPos);{$ENDIF}
-         addentitiesfromdxf(f, 'EOF',owner,drawing);;
+         addentitiesfromdxf(f, 'EOF',owner,drawing,h2p);
          {$IFDEF TOTALYLOG}programlog.logoutstr('end {entities section}',lp_DecPos);{$ENDIF}
     end;
   end;
+  //GDBFreeMem(GDBPointer(phandlearray));
+  h2p.Destroy;
   {$IFDEF TOTALYLOG}programlog.logoutstr('end; {AddFromDXF12}',lp_decPos);{$ENDIF}
 end;
 procedure ReadLTStyles(var s:String;cltype:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
@@ -1170,7 +1167,7 @@ begin
 end;
 end;
 
-procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;h2p:TMapHandleToPointer);
 var
   byt: GDBInteger;
   error: GDBInteger;
@@ -1262,7 +1259,7 @@ begin
       begin
         {$IFDEF TOTALYLOG}programlog.logoutstr('Found entities section',lp_IncPos);{$ENDIF}
         //inc(foc);
-        {addfromdxf12}addentitiesfromdxf(f, dxfName_ENDSEC,owner,drawing);
+        {addfromdxf12}addentitiesfromdxf(f, dxfName_ENDSEC,owner,drawing,h2p);
         owner^.ObjArray.pack;
         owner^.correctobjects(nil,0);
         //inc(foc);
@@ -1318,7 +1315,7 @@ begin
                 s := f.readGDBString;
                 tp^.Base.z := strtofloat(s);
                 inc(foc);
-                AddEntitiesFromDXF(f,'ENDBLK',tp,drawing);
+                AddEntitiesFromDXF(f,'ENDBLK',tp,drawing,h2p);
                 dec(foc);
                 if tp^.name='TX' then
                                                            tp^.name:=tp^.name;
@@ -1353,13 +1350,15 @@ var
   f: GDBOpenArrayOfByte;
   s,s1,s2: GDBString;
   dxfversion,code:integer;
+  h2p:TMapHandleToPointer;
 begin
   programlog.logoutstr('AddFromDXF',lp_IncPos);
   shared.HistoryOutStr(format(rsLoadingFile,[name]));
   f.InitFromFile(name);
   if f.Count<>0 then
   begin
-     phandlearray := dxfhandlearraycreate(10000);
+     h2p:=TMapHandleToPointer.create;
+     //phandlearray := dxfhandlearraycreate(10000);
   //f.ReadFromFile(name);
   if assigned(StartLongProcessProc)then
     StartLongProcessProc(f.Count,'Load DXF file');
@@ -1387,19 +1386,19 @@ begin
                                     end;
                                1015:begin
                                          shared.HistoryOutStr(format(rsFileFormat,['DXF2000 ('+s+')']));
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p)
                                     end;
                                1018:begin
                                          shared.HistoryOutStr(format(rsFileFormat,['DXF2004 ('+s+')']));
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p)
                                     end;
                                1021:begin
                                          shared.HistoryOutStr(format(rsFileFormat,['DXF2007 ('+s+')']));
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p)
                                     end;
                                1024:begin
                                          shared.HistoryOutStr(format(rsFileFormat,['DXF2010 ('+s+')']));
-                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing)
+                                         addfromdxf2000(f,'EOF',owner,loadmode,drawing,h2p)
                                     end;
                                else
                                        begin
@@ -1443,7 +1442,8 @@ begin
   if assigned(EndLongProcessProc)then
     EndLongProcessProc;
   owner^.calcbb;
-  GDBFreeMem(GDBPointer(phandlearray));
+  h2p.Destroy;
+  //GDBFreeMem(GDBPointer(phandlearray));
   end
      else
          shared.ShowError('IODXF.ADDFromDXF: Не могу открыть файл: '+name);
@@ -1475,7 +1475,9 @@ var
   groupi, valuei, intable,attr: GDBInteger;
   temphandle,temphandle2,temphandle3,temphandle4,handle,lasthandle,vporttablehandle,plottablefansdle,dimtablehandle: TDWGHandle;
   i: integer;
-  phandlea: pdxfhandlerecopenarray;
+  OldHandele2NewHandle:TMapOldHandleToNewHandle;
+  OldHandleIterator:TMapOldHandleToNewHandle.TIterator;
+  //phandlea: pdxfhandlerecopenarray;
   inlayertable, inblocksec, inblocktable, inlttypetable, indimstyletable: GDBBoolean;
   handlepos:integer;
   ignoredsource:boolean;
@@ -1497,7 +1499,7 @@ var
   {$ENDIF}
   //DWGHandle:TDWGHandle;
   laststrokewrited:boolean;
-procedure GetOrCreateHandle(const PDWGObject:pointer; var handle:TDWGHandle; out temphandle:TDWGHandle);
+{procedure GetOrCreateHandle(const PDWGObject:pointer; var handle:TDWGHandle; out temphandle:TDWGHandle);
 begin
     {$IFNDEF DELPHI}
     HandleIterator:=Handle2pointer.Find(PDWGObject);
@@ -1513,8 +1515,8 @@ begin
                                     HandleIterator.Destroy;
                                end;
    {$ENDIF}
-end;
-procedure GetHandle(const PDWGObject:pointer; out temphandle:TDWGHandle);
+end;}
+{procedure GetHandle(const PDWGObject:pointer; out temphandle:TDWGHandle);
 begin
     {$IFNDEF DELPHI}
     HandleIterator:=Handle2pointer.Find(PDWGObject);
@@ -1526,10 +1528,20 @@ begin
                                     HandleIterator.Destroy;
                                end;
    {$ENDIF}
-end;
-
-
-
+end;}
+{function GetNewHandle(const OldHandle:TDWGHandle):TDWGHandle;
+begin
+    {$IFNDEF DELPHI}
+    OldHandleIterator:=OldHandele2NewHandle.Find(OldHandle);
+    if  OldHandleIterator=nil then
+                               result:=0
+                           else
+                               begin
+                                    result:=OldHandleIterator.GetValue;
+                                    OldHandleIterator.Destroy;
+                               end;
+   {$ENDIF}
+end;}
 begin
   {$IFNDEF DELPHI}
   Handle2pointer:=mappDWGHi.Create;
@@ -1546,8 +1558,10 @@ begin
   begin
     if assigned(StartLongProcessProc)then
   StartLongProcessProc({p}drawing.pObjRoot^.ObjArray.Count,'Save DXF file');
-  phandlea := dxfhandlearraycreate(10000);
-  pushhandle(phandlea,0,0);
+  OldHandele2NewHandle:=TMapOldHandleToNewHandle.Create;
+  OldHandele2NewHandle.Insert(0,0);
+  //phandlea := dxfhandlearraycreate(10000);
+  //pushhandle(phandlea,0,0);
   templatefile.InitFromFile(sysparam.programpath + 'components/empty.dxf');
   handle := $2;
   inlayertable := false;
@@ -1702,8 +1716,10 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                         valuei:=0;
         if inlayertable and (groupi=390) then
                                              plottablefansdle:={handle-1}intable;  {поймать плоттабле}
-        intable := {}getnevhandle(phandlea, valuei){}{valuei};
-        if {}intable <>-1{}{true} then
+        intable :=OldHandele2NewHandle.MyGetValue(valuei);
+        //intable :=GetNewHandle(valuei);
+        //intable := {}getnevhandle(phandlea, valuei){}{valuei};
+        if {}intable >0{}{true} then
         begin
           if not ignoredsource then
           begin
@@ -1714,7 +1730,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
         end
         else
         begin
-          pushhandle(phandlea, valuei, handle);
+          OldHandele2NewHandle.Insert(valuei, handle);
+          //pushhandle(phandlea, valuei, handle);
           if not ignoredsource then
           begin
           outstream.TXTAddGDBStringEOL(groups);
@@ -1986,7 +2003,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(0));
                 outstream.TXTAddGDBStringEOL(dxfName_BLOCK_RECORD);
 
-                GetOrCreateHandle(@(PBlockdefArray(drawing.BlockDefArray.parray)^[i]),handle,temphandle);
+                Handle2pointer.MyGetOrCreateValue(@(PBlockdefArray(drawing.BlockDefArray.parray)^[i]),handle,temphandle);
+                //GetOrCreateHandle(@(PBlockdefArray(drawing.BlockDefArray.parray)^[i]),handle,temphandle);
 
                 outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                 outstream.TXTAddGDBStringEOL(inttohex({handle}temphandle, 0));
@@ -2137,7 +2155,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(75));
                                                              outstream.TXTAddGDBStringEOL(inttostr(PSP^.Psymbol^.number));
 
-                                                             GetOrCreateHandle(PSP^.param.PStyle,handle,temphandle);
+                                                             Handle2pointer.MyGetOrCreateValue(PSP^.param.PStyle,handle,temphandle);
+                                                             //GetOrCreateHandle(PSP^.param.PStyle,handle,temphandle);
 
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
                                                              outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
@@ -2158,7 +2177,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(75));
                                                              outstream.TXTAddGDBStringEOL('0');
 
-                                                             GetOrCreateHandle(PTP^.param.PStyle,handle,temphandle);
+                                                             Handle2pointer.MyGetOrCreateValue(PTP^.param.PStyle,handle,temphandle);
+                                                             //GetOrCreateHandle(PTP^.param.PStyle,handle,temphandle);
 
                                                              {else
                                                                  temphandle:=standartstylehandle;}
@@ -2248,7 +2268,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
 
                       if pdsp^.Arrows.DIMLDRBLK<>TSClosedFilled then
                       begin
-                           GetOrCreateHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(-1).name),handle,temphandle);
+                           Handle2pointer.MyGetOrCreateValue(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(-1).name),handle,temphandle);
+                           //GetOrCreateHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(-1).name),handle,temphandle);
                            outstream.TXTAddGDBStringEOL(dxfGroupCode(341));
                            outstream.TXTAddGDBStringEOL(inttohex(temphandle,0));
                       end;
@@ -2258,7 +2279,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                                         begin
                                                                              if pdsp^.Arrows.DIMBLK1<>TSClosedFilled then
                                                                              begin
-                                                                                   GetOrCreateHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),handle,temphandle);
+                                                                                   Handle2pointer.MyGetOrCreateValue(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),handle,temphandle);
+                                                                                   //GetOrCreateHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),handle,temphandle);
                                                                                    if temphandle<>0 then
                                                                                    begin
                                                                                          outstream.TXTAddGDBStringEOL(dxfGroupCode(343));
@@ -2267,7 +2289,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                                              end;
                                                                              if pdsp^.Arrows.DIMBLK2<>TSClosedFilled then
                                                                              begin
-                                                                                   GetOrCreateHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(1).name),handle,temphandle);
+                                                                                   Handle2pointer.MyGetOrCreateValue(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(1).name),handle,temphandle);
+                                                                                   //GetOrCreateHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(1).name),handle,temphandle);
                                                                                    if temphandle<>0 then
                                                                                    begin
                                                                                          outstream.TXTAddGDBStringEOL(dxfGroupCode(344));
@@ -2279,7 +2302,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                                                begin
                                                     if pdsp^.Arrows.DIMBLK1<>TSClosedFilled then
                                                     begin
-                                                    GetHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),temphandle);
+                                                    temphandle:=Handle2pointer.MyGetValue(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name));
+                                                    //GetHandle(drawing.BlockDefArray.getblockdef(pdsp^.GetDimBlockParam(0).name),temphandle);
                                                     if temphandle<>0 then
                                                     begin
                                                     outstream.TXTAddGDBStringEOL(dxfGroupCode(342));
@@ -2357,7 +2381,8 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                       outstream.TXTAddGDBStringEOL(dxfGroupCode(340));
                       p:=drawing.TextStyleTable.FindStyle('Standard',false);
 
-                      GetOrCreateHandle(p,handle,temphandle);
+                      Handle2pointer.MyGetOrCreateValue(p,handle,temphandle);
+                      //GetOrCreateHandle(p,handle,temphandle);
 
                       outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
 
@@ -2402,7 +2427,8 @@ ENDTAB}
                   outstream.TXTAddGDBStringEOL(dxfName_Style);
                   p:=drawing.TextStyleTable.getelement(i);
 
-                  GetOrCreateHandle(drawing.TextStyleTable.getelement(i),handle,temphandle);
+                  Handle2pointer.MyGetOrCreateValue(drawing.TextStyleTable.getelement(i),handle,temphandle);
+                  //GetOrCreateHandle(drawing.TextStyleTable.getelement(i),handle,temphandle);
 
                   outstream.TXTAddGDBStringEOL(dxfGroupCode(5));
                   outstream.TXTAddGDBStringEOL(inttohex({handle}temphandle, 0));
@@ -2449,7 +2475,8 @@ ENDTAB}
                     begin
                     p:=drawing.TextStyleTable.getelement(i);
 
-                    GetOrCreateHandle(p,handle,temphandle);
+                    Handle2pointer.MyGetOrCreateValue(p,handle,temphandle);
+                    //GetOrCreateHandle(p,handle,temphandle);
 
                     outstream.TXTAddGDBStringEOL(inttohex(temphandle, 0));
                     //inc(handle);
@@ -2572,7 +2599,8 @@ ENDTAB}
   //-------------fileclose(outstream);
 
 
-  GDBFreeMem(GDBPointer(phandlea));
+  //GDBFreeMem(GDBPointer(phandlea));
+  OldHandele2NewHandle.Destroy;
   templatefile.done;
 
   if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(name)) then

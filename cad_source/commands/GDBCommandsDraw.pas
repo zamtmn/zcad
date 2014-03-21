@@ -320,7 +320,7 @@ devnamearray=specialize TVector<tdevname>;
 PointOnCurve3DPropArray=specialize TVector<GDBDouble>;
 LessDouble=specialize TLess<double>;
 PointOnCurve3DPropArraySort=specialize TOrderingArrayUtils<PointOnCurve3DPropArray, GDBDouble,LessDouble>;
-MapPointOnCurve3DPropArray=specialize TMap<PGDBObjLine,PointOnCurve3DPropArray, lessppi>;
+MapPointOnCurve3DPropArray=specialize TMap<PGDBObjLine,PointOnCurve3DPropArray, LessPointer>;
 devcoordsort=specialize TOrderingArrayUtils<devcoordarray, tdevcoord, TGDBVertexLess>;
 devnamesort=specialize TOrderingArrayUtils<devnamearray, tdevname, TGDBNameLess>;
 var

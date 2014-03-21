@@ -15,8 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-{MODE OBJFPC}
-{$mode Delphi}
+{$MODE OBJFPC}
 unit usimplegenerics;
 {$INCLUDE def.inc}
 
@@ -26,43 +25,42 @@ uses gdbasetypes,gdbase,
      gutil,gmap;
 type
 {$IFNDEF DELPHI}
-lessppi={specialize }TLess<pointer>;
+LessPointer=specialize TLess<pointer>;
+LessDWGHandle=specialize TLess<TDWGHandle>;
 
-TMyMap <TKey, TValue, TCompare> = class(TMap<TKey, TValue, TCompare>)
+generic TMyMap <TKey, TValue, TCompare> = class(specialize TMap<TKey, TValue, TCompare>)
   function MyGetValue(key:TKey):TValue;inline;
   procedure MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);inline;
 end;
 
 
-mappDWGHi={specialize }TMyMap<pointer,TDWGHandle, lessppi>;
+TMapPointerToHandle=specialize TMyMap<pointer,TDWGHandle, LessPointer>;
 
-leshandle={specialize }TLess<TDWGHandle>;
-TMapOldHandleToNewHandle={specialize }TMyMap<TDWGHandle,TDWGHandle, leshandle>;
-TMapHandleToPointer={specialize }TMyMap<TDWGHandle,pointer, leshandle>;
+TMapHandleToHandle=specialize TMyMap<TDWGHandle,TDWGHandle, LessDWGHandle>;
+TMapHandleToPointer=specialize TMyMap<TDWGHandle,pointer, LessDWGHandle>;
 
-lessDWGHandle={specialize }TLess<TDWGHandle>;
-TMapBlockHandle_BlockNames={specialize }TMap<TDWGHandle,string,lessDWGHandle>;
+TMapBlockHandle_BlockNames=specialize TMap<TDWGHandle,string,LessDWGHandle>;
 {$ENDIF}
 
 implementation
 uses
     log;
-function TMyMap<TKey, TValue, TCompare>.MyGetValue;
+function TMyMap.MyGetValue(key:TKey):TValue;
 var
-   Iterator:TMyMap<TKey, TValue, TCompare>.TIterator;
+   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
 begin
   Iterator:=Find(key);
   if  Iterator=nil then
-                       result:=0
+                       result:=TValue(0)
                    else
                        begin
                             result:=Iterator.GetValue;
                             Iterator.Destroy;
                        end;
 end;
-procedure TMyMap<TKey, TValue, TCompare>.MyGetOrCreateValue;
+procedure TMyMap.MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);
 var
-   Iterator:TMyMap<TKey, TValue, TCompare>.TIterator;
+   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
 begin
   Iterator:=Find(key);
   if  Iterator=nil then
@@ -77,21 +75,6 @@ begin
                             Iterator.Destroy;
                        end;
 end;
-{procedure GetOrCreateHandle(const PDWGObject:pointer; var handle:TDWGHandle; out temphandle:TDWGHandle);
-begin
-    HandleIterator:=Handle2pointer.Find(PDWGObject);
-    if  HandleIterator=nil then
-                               begin
-                                    Handle2pointer.Insert(PDWGObject,handle);
-                                    temphandle:=handle;
-                                    inc(handle);
-                               end
-                           else
-                               begin
-                                    temphandle:=HandleIterator.GetValue;
-                                    HandleIterator.Destroy;
-                               end;
-end;}
 begin
      {$IFDEF DEBUGINITSECTION}LogOut('dxftypes.initialization');{$ENDIF}
 end.

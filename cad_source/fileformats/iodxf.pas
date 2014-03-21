@@ -31,8 +31,6 @@ const
      (
      (entname:'HATCH')
      );
-     {MODE OBJFPC}
-     //a: array of string = ('aaa', 'bbb', 'ccc');
      acadentsupportcol=14;
      entnamtable:array[1..acadentsupportcol]of entnamindex=
      (
@@ -51,7 +49,6 @@ const
      (entname:'SPLINE'),
      (entname:'DIMENSION')
      );
-const
      NULZCPHeader:ZCPHeader=(
      Signature:'';
      Copyright:'';
@@ -63,18 +60,6 @@ const
                   GDBRT:0;
                  );
                 );
-type
-  dxfhandlerec = record
-    old, nev: TDWGHandle;
-  end;
-  dxfhandlerecarray = array[0..300] of dxfhandlerec;
-  pdxfhandlerecopenarray = ^dxfhandlerecopenarray;
-  dxfhandlerecopenarray = record
-    count: GDBInteger;
-    arr: dxfhandlerecarray;
-  end;
-const
-  eol: GDBString = #13 + #10;
 {$IFDEF DEBUGBUILD}
 var i2:GDBInteger;
 {$ENDIF}
@@ -88,46 +73,6 @@ procedure Import(name: GDBString;var drawing:TSimpleDrawing);
 {$ENDIF}
 implementation
 uses GDBLine,GDBBlockDef,UGDBLayerArray,varmandef;
-function dxfhandlearraycreate(col: GDBInteger): GDBPointer;
-var
-  temp: pdxfhandlerecopenarray;
-begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{D0FC4FBD-35D4-4E1A-A5E0-6D74D0516215}',{$ENDIF}GDBPointer(temp), sizeof(GDBInteger) + col * sizeof(dxfhandlerec));
-  temp^.count := 0;
-  result := temp;
-end;
-
-procedure pushhandle(p: pdxfhandlerecopenarray; old, nev: TDWGHandle);
-begin
-  p^.arr[p^.count].old := old;
-  p^.arr[p^.count].nev := nev;
-  inc(p^.count);
-end;
-
-function getnevhandle(p: pdxfhandlerecopenarray; old: TDWGHandle): TDWGHandle;
-var
-  i: GDBInteger;
-begin
-  for i := 0 to p^.count - 1 do
-    if p^.arr[i].old = old then
-    begin
-      result := p^.arr[i].nev;
-      exit;
-    end;
-  result := 0;
-end;
-function getnevhandleWithNil(p: pdxfhandlerecopenarray; old: TDWGHandle): TDWGHandle;
-var
-  i: GDBInteger;
-begin
-  for i := 0 to p^.count - 1 do
-    if p^.arr[i].old = old then
-    begin
-      result := p^.arr[i].nev;
-      exit;
-    end;
-  result := 0;
-end;
 function ISIFNOREDENT(name:GDBString):GDBInteger;
 var i:GDBInteger;
 begin
@@ -420,12 +365,13 @@ begin
                                 if not trash then
                                 begin
                                  newowner^.AddMi(@pobj);
-                                 if foc=0 then
-                                              PGDBObjEntity(pobj)^.BuildGeometry(drawing);
-                                 if foc=0 then
-                                              //PGDBObjEntity(pobj)^.format;
-                                              PGDBObjEntity(pobj)^.FormatAfterDXFLoad(drawing);
-                                 if foc=0 then PGDBObjEntity(pobj)^.FromDXFPostProcessAfterAdd;
+                                    if foc=0 then
+                                                 begin
+                                                      PGDBObjEntity(pobj)^.BuildGeometry(drawing);
+                                                      //PGDBObjEntity(pobj)^.Format;
+                                                      PGDBObjEntity(pobj)^.FormatAfterDXFLoad(drawing);
+                                                      PGDBObjEntity(pobj)^.FromDXFPostProcessAfterAdd;
+                                                 end;
                                 end
                                    else
                                        begin
@@ -465,13 +411,12 @@ begin
                                  newowner^.AddMi(@postobj);
                                  pobj^.OU.CopyTo(@PGDBObjEntity(postobj)^.ou);
                                  if foc=0 then
-                                              PGDBObjEntity(postobj)^.BuildGeometry(drawing);
-                                 if foc=0 then
                                               begin
-                                                //PGDBObjEntity(postobj)^.Format;
-                                                PGDBObjEntity(postobj)^.FormatAfterDXFLoad(drawing);
+                                                   PGDBObjEntity(postobj)^.BuildGeometry(drawing);
+                                                   //PGDBObjEntity(postobj)^.Format;
+                                                   PGDBObjEntity(postobj)^.FormatAfterDXFLoad(drawing);
+                                                   PGDBObjEntity(postobj)^.FromDXFPostProcessAfterAdd;
                                               end;
-                                 if foc=0 then PGDBObjEntity(postobj)^.FromDXFPostProcessAfterAdd;
                                 end
                                    else
                                        begin
@@ -1475,8 +1420,8 @@ var
   groupi, valuei, intable,attr: GDBInteger;
   temphandle,temphandle2,temphandle3,temphandle4,handle,lasthandle,vporttablehandle,plottablefansdle,dimtablehandle: TDWGHandle;
   i: integer;
-  OldHandele2NewHandle:TMapOldHandleToNewHandle;
-  OldHandleIterator:TMapOldHandleToNewHandle.TIterator;
+  OldHandele2NewHandle:TMapHandleToHandle;
+  OldHandleIterator:TMapHandleToHandle.TIterator;
   //phandlea: pdxfhandlerecopenarray;
   inlayertable, inblocksec, inblocktable, inlttypetable, indimstyletable: GDBBoolean;
   handlepos:integer;
@@ -1494,8 +1439,8 @@ var
   PTP:PTextProp;
   p:pointer;
   {$IFNDEF DELPHI}
-  Handle2pointer:mappDWGHi;
-  HandleIterator:mappDWGHi.TIterator;
+  Handle2pointer:TMapPointerToHandle;
+  HandleIterator:TMapPointerToHandle.TIterator;
   {$ENDIF}
   //DWGHandle:TDWGHandle;
   laststrokewrited:boolean;
@@ -1544,7 +1489,7 @@ begin
 end;}
 begin
   {$IFNDEF DELPHI}
-  Handle2pointer:=mappDWGHi.Create;
+  Handle2pointer:=TMapPointerToHandle.Create;
   {$ENDIF}
   DecimalSeparator := '.';
   //standartstylehandle:=0;
@@ -1558,7 +1503,7 @@ begin
   begin
     if assigned(StartLongProcessProc)then
   StartLongProcessProc({p}drawing.pObjRoot^.ObjArray.Count,'Save DXF file');
-  OldHandele2NewHandle:=TMapOldHandleToNewHandle.Create;
+  OldHandele2NewHandle:=TMapHandleToHandle.Create;
   OldHandele2NewHandle.Insert(0,0);
   //phandlea := dxfhandlearraycreate(10000);
   //pushhandle(phandlea,0,0);

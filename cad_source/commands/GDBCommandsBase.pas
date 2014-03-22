@@ -483,12 +483,12 @@ begin
 
      GDB.CurrentDWG:=pdwg;
 end;
-procedure SaveDXFDPAS(s:gdbstring);
+function SaveDXFDPAS(s:gdbstring):GDBInteger;
 var
    mem:GDBOpenArrayOfByte;
    pu:ptunit;
 begin
-     dwgSaveDXFDPAS(s, GDB.GetCurrentDWG);
+     result:=dwgSaveDXFDPAS(s, GDB.GetCurrentDWG);
      if assigned(ProcessFilehistoryProc) then
                                              ProcessFilehistoryProc(s);
 end;
@@ -513,11 +513,10 @@ begin
                                                                       end;
                                s1:=gdb.GetCurrentDWG.GetFileName;
                           end;
-     if not itautoseve then
+     result:=SaveDXFDPAS(s1);
+     if (not itautoseve)and(result=cmd_ok) then
                            gdb.GetCurrentDWG.ChangeStampt(false);
-     SaveDXFDPAS(s1);
      SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
-     result:=cmd_ok;
 end;
 function SaveAs_com(Operands:pansichar):GDBInteger;
 var

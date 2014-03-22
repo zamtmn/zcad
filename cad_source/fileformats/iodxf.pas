@@ -65,7 +65,7 @@ var i2:GDBInteger;
 {$ENDIF}
 var FOC:GDBInteger;
 procedure addfromdxf(name: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
-procedure savedxf2000(name: GDBString; {PDrawing:PTSimpleDrawing}var drawing:TSimpleDrawing);
+function savedxf2000(name: GDBString; {PDrawing:PTSimpleDrawing}var drawing:TSimpleDrawing):boolean;
 procedure saveZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
 procedure LoadZCP(name: GDBString; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
 {$IFNDEF DELPHI}
@@ -1412,7 +1412,7 @@ begin
      until pv=nil;
 end;
 
-procedure savedxf2000(name: GDBString; var drawing:TSimpleDrawing);
+function savedxf2000(name: GDBString; var drawing:TSimpleDrawing):boolean;
 var
   templatefile: GDBOpenArrayOfByte;
   outstream: {GDBInteger}GDBOpenArrayOfByte;
@@ -2548,14 +2548,21 @@ ENDTAB}
   OldHandele2NewHandle.Destroy;
   templatefile.done;
 
+  result:=true;
   if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(name)) then
                            begin
-                                deletefile(name+'.bak');
-                                renamefile(name,name+'.bak');
+                                if (not(deletefile(name+'.bak')) or (not renamefile(name,name+'.bak'))) then
+                                begin
+                                   shared.HistoryOutStr(format(rsUnableRenameFileToBak,[name]));
+                                   result:=false;
+                                end;
                            end;
 
   if outstream.SaveToFile(name)<=0 then
+                                       begin
                                        shared.ShowError(format(rsUnableToWriteFile,[name]));
+                                       result:=false;
+                                       end;
                                        //shared.ShowError('Не могу открыть для записи файл: '+name);
   if assigned(EndLongProcessProc)then
   EndLongProcessProc;

@@ -58,6 +58,7 @@ resourcestring
   rsUnknownFileFormat='Unknown file format';
   rsUnableToOpenFile='Unable to open file "%s"';
   rsUnableToWriteFile='Unable to write file "%s"';
+  rsUnableRenameFileToBak='Could not rename file "%s" into "*.bak"';
   rsUnableToFindFile='Unable to find file "%s"';
   rsTemplateNotFound='Template file "%s" not found';
   rsReserveFontNotLoad='Can not load reserve font';

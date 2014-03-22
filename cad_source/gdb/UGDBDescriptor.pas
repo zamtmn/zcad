@@ -140,14 +140,18 @@ implementation
  var
     mem:GDBOpenArrayOfByte;
     pu:ptunit;
+    allok:boolean;
  begin
-      savedxf2000(s,dwg^);
+      allok:=savedxf2000(s,dwg^);
       pu:=PTDrawing(dwg).DWGUnits.findunit(DrawingDeviceBaseUnitName);
       mem.init({$IFDEF DEBUGBUILD}'{A1891083-67C6-4C21-8012-6D215935F6A6}',{$ENDIF}1024);
       pu^.SavePasToMem(mem);
       mem.SaveToFile(s+'.dbpas');
       mem.done;
-      result:=cmd_ok;
+      if allok then
+                   result:=cmd_ok
+               else
+                   result:=cmd_error;
  end;
  function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
  var s,s1:GDBString;

@@ -2548,13 +2548,11 @@ ENDTAB}
   OldHandele2NewHandle.Destroy;
   templatefile.done;
 
-  result:=true;
   if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(name)) then
                            begin
                                 if (not(deletefile(name+'.bak')) or (not renamefile(name,name+'.bak'))) then
                                 begin
                                    shared.HistoryOutStr(format(rsUnableRenameFileToBak,[name]));
-                                   result:=false;
                                 end;
                            end;
 
@@ -2562,8 +2560,9 @@ ENDTAB}
                                        begin
                                        shared.ShowError(format(rsUnableToWriteFile,[name]));
                                        result:=false;
-                                       end;
-                                       //shared.ShowError('Не могу открыть для записи файл: '+name);
+                                       end
+                                   else
+                                       result:=true;
   if assigned(EndLongProcessProc)then
   EndLongProcessProc;
 

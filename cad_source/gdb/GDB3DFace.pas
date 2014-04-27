@@ -298,13 +298,121 @@ begin
                                                              result:=true;
                                                              exit;
                                                         end;
-    result:=true;
+    if geometry.CalcTrueInFrustum (PInwCS[0],PInwCS[1],mf)<>IREmpty
+                                                                then
+                                                                    begin
+                                                                         result:=true;
+                                                                         exit;
+                                                                    end;
+    if geometry.CalcTrueInFrustum (PInwCS[1],PInwCS[2],mf)<>IREmpty
+                                                                then
+                                                                    begin
+                                                                         result:=true;
+                                                                         exit;
+                                                                    end;
+   if triangle then
+                   begin
+                          if geometry.CalcTrueInFrustum (PInwCS[2],PInwCS[0],mf)<>IREmpty
+                                                                                      then
+                                                                                          begin
+                                                                                               result:=true;
+                                                                                               exit;
+                                                                                          end;
+                   end
+               else
+                   begin
+                         if geometry.CalcTrueInFrustum (PInwCS[2],PInwCS[3],mf)<>IREmpty
+                                                                                     then
+                                                                                         begin
+                                                                                              result:=true;
+                                                                                              exit;
+                                                                                         end;
+                         if geometry.CalcTrueInFrustum (PInwCS[3],PInwCS[0],mf)<>IREmpty
+                                                                                     then
+                                                                                         begin
+                                                                                              result:=true;
+                                                                                              exit;
+                                                                                         end;
+                   end;
 end;
 function GDBObj3DFace.CalcTrueInFrustum;
-//var d1:GDBDouble;
-    //i:integer;
+var
+    i:integer;
 begin
       result:=CalcOutBound4VInFrustum(PInWCS,frustum);
+      if result<>IRPartially then
+                                 exit;
+      i:=0;
+      if geometry.CalcPointTrueInFrustum (PInwCS[0],frustum)<>IREmpty
+                                                                  then
+                                                                      begin
+                                                                           inc(i);
+                                                                      end;
+      if geometry.CalcPointTrueInFrustum (PInwCS[1],frustum)<>IREmpty
+                                                                  then
+                                                                      begin
+                                                                           inc(i);
+                                                                      end;
+      if geometry.CalcPointTrueInFrustum (PInwCS[2],frustum)<>IREmpty
+                                                                  then
+                                                                      begin
+                                                                           inc(i);
+                                                                      end;
+     if not triangle then
+                     begin
+                           if geometry.CalcPointTrueInFrustum (PInwCS[3],frustum)<>IREmpty
+                                                                                       then
+                                                                                           begin
+                                                                                                inc(i);
+                                                                                           end;
+                           if i=4 then
+                                      begin
+                                           result:=IRFully;
+                                           exit;
+                                      end;
+                     end
+                     else
+                     begin
+                          if i=3 then
+                                      begin
+                                           result:=IRFully;
+                                           exit;
+                                      end;
+
+                     end;
+     if geometry.CalcTrueInFrustum (PInwCS[0],PInwCS[1],frustum)<>IREmpty
+                                                                 then
+                                                                     begin
+                                                                          exit;
+                                                                     end;
+     if geometry.CalcTrueInFrustum (PInwCS[1],PInwCS[2],frustum)<>IREmpty
+                                                                 then
+                                                                     begin
+                                                                          exit;
+                                                                     end;
+    if triangle then
+                    begin
+                           if geometry.CalcTrueInFrustum (PInwCS[2],PInwCS[0],frustum)<>IREmpty
+                                                                                       then
+                                                                                           begin
+                                                                                                exit;
+                                                                                           end;
+                    end
+                else
+                    begin
+                          if geometry.CalcTrueInFrustum (PInwCS[2],PInwCS[3],frustum)<>IREmpty
+                                                                                      then
+                                                                                          begin
+                                                                                               exit;
+                                                                                          end;
+                          if geometry.CalcTrueInFrustum (PInwCS[3],PInwCS[0],frustum)<>IREmpty
+                                                                                      then
+                                                                                          begin
+                                                                                               exit;
+                                                                                          end;
+                    end;
+   result:=IRempty;
+
 end;
 procedure GDBObj3DFace.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 var vertexnumber:GDBInteger;

@@ -1444,6 +1444,7 @@ var
   {$ENDIF}
   //DWGHandle:TDWGHandle;
   laststrokewrited:boolean;
+  pcurrtextstyle:PGDBTextStyle;
 {procedure GetOrCreateHandle(const PDWGObject:pointer; var handle:TDWGHandle; out temphandle:TDWGHandle);
 begin
     {$IFNDEF DELPHI}
@@ -1565,7 +1566,11 @@ else if (groupi = 9) and (ucvalues = '$TEXTSTYLE') then
       outstream.TXTAddGDBStringEOL(groups);
       outstream.TXTAddGDBStringEOL('$TEXTSTYLE');
       outstream.TXTAddGDBStringEOL('7');
-      outstream.TXTAddGDBStringEOL(drawing.TextStyleTable.GetCurrentTextStyle^.Name);
+      pcurrtextstyle:=drawing.TextStyleTable.GetCurrentTextStyle;
+      if pcurrtextstyle<>nil then
+                                 outstream.TXTAddGDBStringEOL(drawing.TextStyleTable.GetCurrentTextStyle^.Name)
+                             else
+                                 outstream.TXTAddGDBStringEOL(TSNStandardStyleName);
       groups := templatefile.readGDBString;
       values := templatefile.readGDBString;
     end

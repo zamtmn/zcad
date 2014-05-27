@@ -796,7 +796,7 @@ begin
   RemapLStyle(_from,_to,_source,_dest);
   case _source.vp.ID of
                         GDBElLeaderID,gdbtableid:begin
-                                           createtstylebyindex(_from,_to,0);
+                                           createtstylebyindex(_from,_to,_from.TextStyleTable.getAddres(TSNStandardStyleName));
                                              end;
                         GDBTextID,GDBMtextID:begin
                                              createtstyleifneed(_from,_to,_source,_dest);

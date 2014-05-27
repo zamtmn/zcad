@@ -71,7 +71,7 @@ type
                           RD_ID_Enabled:PGDBBoolean;(*'Enabled'*)
                           RD_ID_CurrentDegradationFactor:GDBDouble;(*'Current degradation factor'*)(*oi_readonly*)
                           RD_ID_MaxDegradationFactor:PGDBDouble;(*'Max degradation factor'*)
-                          RD_ID_PrefferedRenderTime:PGDBInteger;(*'Preffered rendertime'*)
+                          RD_ID_PrefferedRenderTime:PGDBInteger;(*'Prefered rendertime'*)
                       end;
   trd=packed record
             RD_Renderer:PGDBString;(*'Device'*)(*oi_readonly*)
@@ -92,7 +92,7 @@ type
             RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
             RD_VSync:PTVSControl;(*'VSync'*)
             RD_Light:PGDBBoolean;(*'Light'*)
-            RD_LineSmooth:PGDBBoolean;(*'Line smoth'*)
+            RD_LineSmooth:PGDBBoolean;(*'Line smoothing'*)
             RD_ImageDegradation:TImageDegradation;(*'Image degradation'*)
             RD_PanObjectDegradation:PGDBBoolean;(*'Degradation while pan'*)
             RD_SpatialNodesDepth:PGDBInteger;(*'Spatial index nodes depth'*)(*hidden_in_objinsp*)

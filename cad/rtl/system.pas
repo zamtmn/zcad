@@ -810,6 +810,7 @@ GDBLayerProp={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObject)
                function GetFullName:GDBString;virtual;abstract;
                procedure SetValueFromDxf(group:GDBInteger;value:GDBString);virtual;abstract;
                procedure SetDefaultValues;virtual;abstract;
+               destructor done;virtual;abstract;
          end;
 PGDBLayerPropArray=^GDBLayerPropArray;
 GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
@@ -960,6 +961,7 @@ GDBDimStyle = packed object(GDBNamedObject)
                       procedure CreateLDIfNeed;
                       procedure ReleaseLDIfNeed;
                       procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);
+                      destructor Done;virtual;abstract;
              end;
 PGDBDimStyleArray=^GDBDimStyleArray;
 GDBDimStyleArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBNamedObjectsArray)(*OpenArrayOfData=GDBDimStyle*)
@@ -1050,7 +1052,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
                           RD_ID_Enabled:PGDBBoolean;(*'Enabled'*)
                           RD_ID_CurrentDegradationFactor:GDBDouble;(*'Current degradation factor'*)(*oi_readonly*)
                           RD_ID_MaxDegradationFactor:PGDBDouble;(*'Max degradation factor'*)
-                          RD_ID_PrefferedRenderTime:PGDBInteger;(*'Preffered rendertime'*)
+                          RD_ID_PrefferedRenderTime:PGDBInteger;(*'Prefered rendertime'*)
                       end;
   trd=packed record
             RD_Renderer:PGDBString;(*'Device'*)(*oi_readonly*)
@@ -1071,7 +1073,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
             RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
             RD_VSync:PTVSControl;(*'VSync'*)
             RD_Light:PGDBBoolean;(*'Light'*)
-            RD_LineSmooth:PGDBBoolean;(*'Line smoth'*)
+            RD_LineSmooth:PGDBBoolean;(*'Line smoothing'*)
             RD_ImageDegradation:TImageDegradation;(*'Image degradation'*)
             RD_PanObjectDegradation:PGDBBoolean;(*'Degradation while pan'*)
             RD_SpatialNodesDepth:PGDBInteger;(*'Spatial index nodes depth'*)(*hidden_in_objinsp*)
@@ -2071,6 +2073,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                 procedure CalcTextInside;virtual;abstract;
                 procedure DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;const drawing:TDrawingDef);
                 function GetDIMTMOVE:TDimTextMove;virtual;abstract;
+                destructor done;virtual;abstract;
                 end;
 //Generate on E:\zcad\CAD_SOURCE\gdb\gdbgenericdimension.pas
 TDimType=(DTRotated,DTAligned,DTAngular,DTDiameter,DTRadius,DTAngular3P,DTOrdinate);

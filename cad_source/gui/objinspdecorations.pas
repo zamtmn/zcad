@@ -427,6 +427,38 @@ begin
      modalresult:=DOShowModal(InfoForm);
      if modalresult=MrOk then
                          begin
+                              pgdbstring(PInstance)^:=InfoForm.memo.text;
+                         end;
+end;
+procedure RunAnsiStringEditor(PInstance:GDBPointer);
+var
+   modalresult:integer;
+   InfoForm:TInfoForm=nil;
+   pint:PGDBInteger;
+begin
+     if not assigned(InfoForm) then
+     begin
+     InfoForm:=TInfoForm.createnew(application.MainForm);
+     pint:=SavedUnit.FindValue('TEdWND_Left');
+     if assigned(pint)then
+                          InfoForm.Left:=pint^;
+     pint:=SavedUnit.FindValue('TEdWND_Top');
+     if assigned(pint)then
+                          InfoForm.Top:=pint^;
+     pint:=SavedUnit.FindValue('TEdWND_Width');
+     if assigned(pint)then
+                          InfoForm.Width:=pint^;
+     pint:=SavedUnit.FindValue('TEdWND_Height');
+     if assigned(pint)then
+                          InfoForm.Height:=pint^;
+
+     end;
+     InfoForm.caption:=(rsTextEdCaption);
+
+     InfoForm.memo.text:=ConvertFromDxfString(pgdbstring(PInstance)^);
+     modalresult:=DOShowModal(InfoForm);
+     if modalresult=MrOk then
+                         begin
                               pgdbstring(PInstance)^:=ConvertToDxfString(InfoForm.memo.text);
                          end;
 end;
@@ -500,11 +532,11 @@ begin
      AddFastEditorToType('GDBBoolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
      AddFastEditorToType('PGDBLayerPropObjInsp',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runlayerswnd);
      AddFastEditorToType('GDBString',@ButtonGetPrefferedFastEditorSize,@ButtonTxtDrawFastEditor,@RunStringEditor);
-     AddFastEditorToType('GDBAnsiString',@ButtonGetPrefferedFastEditorSize,@ButtonTxtDrawFastEditor,@RunStringEditor);
+     AddFastEditorToType('GDBAnsiString',@ButtonGetPrefferedFastEditorSize,@ButtonTxtDrawFastEditor,@RunAnsiStringEditor);
      AddFastEditorToType('GDBCoordinates3D',@ButtonGetPrefferedFastEditorSize,@ButtonCrossDrawFastEditor,@GetVertexFromDrawing,true);
      AddFastEditorToType('GDBLength',@ButtonGetPrefferedFastEditorSize,@ButtonHLineDrawFastEditor,@GetLengthFromDrawing,true);
      DecorateType('TGDBOSMode',nil,CreateEmptyEditor,nil);
      AddFastEditorToType('TGDBOSMode',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runOSwnd);
      //TGDBOSMode
 end;
-end.
+end.

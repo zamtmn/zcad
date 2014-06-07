@@ -2060,7 +2060,6 @@ procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
 var
    modalresult:integer;
    astring:ansistring;
-   pint:PGDBInteger;
 begin
      astring:=ConvertFromDxfString(PGDBObjText(pobj)^.Template);
 
@@ -2070,19 +2069,7 @@ begin
      if not assigned(InfoForm) then
      begin
      InfoForm:=TInfoForm.createnew(application.MainForm);
-     pint:=SavedUnit.FindValue('TEdWND_Left');
-     if assigned(pint)then
-                          InfoForm.Left:=pint^;
-     pint:=SavedUnit.FindValue('TEdWND_Top');
-     if assigned(pint)then
-                          InfoForm.Top:=pint^;
-     pint:=SavedUnit.FindValue('TEdWND_Width');
-     if assigned(pint)then
-                          InfoForm.Width:=pint^;
-     pint:=SavedUnit.FindValue('TEdWND_Height');
-     if assigned(pint)then
-                          InfoForm.Height:=pint^;
-
+     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND');
      end;
      //InfoForm.DialogPanel.ShowButtons:=[pbOK, pbCancel{, pbClose, pbHelp}];
      InfoForm.caption:=(rsMTextEditor);
@@ -2092,6 +2079,7 @@ begin
      if modalresult=MrOk then
                          begin
                               PGDBObjText(pobj)^.Template:=ConvertToDxfString(InfoForm.memo.text);
+                              StoreBoundsToSavedUnit('TEdWND',InfoForm.BoundsRect);
                          end;
      end
      else

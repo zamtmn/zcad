@@ -402,24 +402,11 @@ procedure RunStringEditor(PInstance:GDBPointer);
 var
    modalresult:integer;
    InfoForm:TInfoForm=nil;
-   pint:PGDBInteger;
 begin
      if not assigned(InfoForm) then
      begin
      InfoForm:=TInfoForm.createnew(application.MainForm);
-     pint:=SavedUnit.FindValue('TEdWND_Left');
-     if assigned(pint)then
-                          InfoForm.Left:=pint^;
-     pint:=SavedUnit.FindValue('TEdWND_Top');
-     if assigned(pint)then
-                          InfoForm.Top:=pint^;
-     pint:=SavedUnit.FindValue('TEdWND_Width');
-     if assigned(pint)then
-                          InfoForm.Width:=pint^;
-     pint:=SavedUnit.FindValue('TEdWND_Height');
-     if assigned(pint)then
-                          InfoForm.Height:=pint^;
-
+     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND');
      end;
      InfoForm.caption:=(rsTextEdCaption);
 
@@ -428,30 +415,18 @@ begin
      if modalresult=MrOk then
                          begin
                               pgdbstring(PInstance)^:=InfoForm.memo.text;
+                              StoreBoundsToSavedUnit('TEdWND',InfoForm.BoundsRect);
                          end;
 end;
 procedure RunAnsiStringEditor(PInstance:GDBPointer);
 var
    modalresult:integer;
    InfoForm:TInfoForm=nil;
-   pint:PGDBInteger;
 begin
      if not assigned(InfoForm) then
      begin
      InfoForm:=TInfoForm.createnew(application.MainForm);
-     pint:=SavedUnit.FindValue('TEdWND_Left');
-     if assigned(pint)then
-                          InfoForm.Left:=pint^;
-     pint:=SavedUnit.FindValue('TEdWND_Top');
-     if assigned(pint)then
-                          InfoForm.Top:=pint^;
-     pint:=SavedUnit.FindValue('TEdWND_Width');
-     if assigned(pint)then
-                          InfoForm.Width:=pint^;
-     pint:=SavedUnit.FindValue('TEdWND_Height');
-     if assigned(pint)then
-                          InfoForm.Height:=pint^;
-
+     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND');
      end;
      InfoForm.caption:=(rsTextEdCaption);
 
@@ -460,6 +435,7 @@ begin
      if modalresult=MrOk then
                          begin
                               pgdbstring(PInstance)^:=ConvertToDxfString(InfoForm.memo.text);
+                              StoreBoundsToSavedUnit('TEdWND',InfoForm.BoundsRect);
                          end;
 end;
 class procedure AsyncCommHelper.GetVertex(Pinstance:PtrInt);

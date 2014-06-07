@@ -23,7 +23,7 @@ interface
 uses
   {RegCnownTypes,}UGDBOpenArrayOfPointer,SysUtils,UBaseTypeDescriptor,
   gdbasetypes, shared,gdbase,UGDBOpenArrayOfByte,UGDBStringArray,varmandef,sysinfo,
-  log,memman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,strproc{$IFNDEF DELPHI},intftranslations{$ENDIF};
+  log,memman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,strproc{$IFNDEF DELPHI},intftranslations{$ENDIF},classes;
 type
     td=record
              template:GDBString;
@@ -215,10 +215,47 @@ function ObjOrRecordRead(var f: GDBOpenArrayOfByte; var line,GDBStringtypearray:
 function GetPVarMan: GDBPointer; export;
 //function getpsysvar: GDBPointer; export;
 function FindCategory(category:GDBString;var catname:GDBString):Pointer;
+function GetBoundsFromSavedUnit(name:string):Trect;
+procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
 //procedure startup;
 //procedure finalize;
 implementation
 uses {languade,}strmy{,GDBSubordinated};
+
+function GetBoundsFromSavedUnit(name:string):Trect;
+var
+   pint:PGDBInteger;
+begin
+     pint:=SavedUnit.FindValue(name+'_Left');
+     if assigned(pint)then
+                          result.Left:=pint^;
+     pint:=SavedUnit.FindValue(name+'_Top');
+     if assigned(pint)then
+                          result.Top:=pint^;
+     pint:=SavedUnit.FindValue(name+'_Width');
+     if assigned(pint)then
+                          result.Right:=result.Left+pint^;
+     pint:=SavedUnit.FindValue(name+'_Height');
+     if assigned(pint)then
+                          result.Bottom:=result.Top+pint^;
+end;
+procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
+var
+   pint:PGDBInteger;
+begin
+     pint:=SavedUnit.FindValue(name+'_Left');
+     if assigned(pint)then
+                          pint^:=tr.Left;
+     pint:=SavedUnit.FindValue(name+'_Top');
+     if assigned(pint)then
+                          pint^:=tr.Top;
+     pint:=SavedUnit.FindValue(name+'_Width');
+     if assigned(pint)then
+                          pint^:=tr.Right-tr.Left;
+     pint:=SavedUnit.FindValue(name+'_Height');
+     if assigned(pint)then
+                          pint^:=tr.Bottom-tr.Top;
+end;
 procedure TSimpleUnit.CopyTo;
 var
    pu:PTUnit;

@@ -99,8 +99,8 @@ type
   TFreedForm = class(tform)
                          private
                          PVariable:PTFreedForm;
-                         procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
                          public
+                         procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);virtual;
                          constructor myCreate(TheOwner: TComponent; _var:Pointer);
                     end;
   TToolButtonForm = class(tform{tpanel})

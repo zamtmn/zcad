@@ -8,6 +8,10 @@ var
   TEdWND_Top:GDBInteger;
   TEdWND_Width:GDBInteger;
   TEdWND_Height:GDBInteger;
+  ProjectTreeWND_Left:GDBInteger;
+  ProjectTreeWND_Top:GDBInteger;
+  ProjectTreeWND_Width:GDBInteger;
+  ProjectTreeWND_Height:GDBInteger;
   VIEW_CommandLineH:GDBInteger;
   VIEW_ObjInspV:GDBInteger;
   VIEW_ObjInspSubV:GDBInteger;
@@ -23,23 +27,27 @@ var
   PATH_File9:GDBString;
 implementation
 begin
-  DMenuX:=503;
-  DMenuY:=171;
-  TEdWND_Left:=506;
-  TEdWND_Top:=290;
-  TEdWND_Width:=794;
-  TEdWND_Height:=481;
+  DMenuX:=385;
+  DMenuY:=128;
+  TEdWND_Left:=631;
+  TEdWND_Top:=209;
+  TEdWND_Width:=695;
+  TEdWND_Height:=392;
+  ProjectTreeWND_Left:=631;
+  ProjectTreeWND_Top:=209;
+  ProjectTreeWND_Width:=222;
+  ProjectTreeWND_Height:=392;
   VIEW_CommandLineH:=65;
   VIEW_ObjInspV:=238;
-  VIEW_ObjInspSubV:=86;
-  PATH_File0:='/home/zamtmn/zcad/cad/sample/test_dxf/ops.dxf';
-  PATH_File1:='/home/zamtmn/zcad/cad/autosave/autosave.dxf';
-  PATH_File2:='/home/zamtmn/zcad/cad/sample/test_dxf/em.dxf';
-  PATH_File3:='/home/zamtmn/zcad/cad/../errors/2.dxf';
-  PATH_File4:='/home/zamtmn/zcad/cad/sample/zigzag.dxf';
-  PATH_File5:='/home/zamtmn/zcad/cad/sample/test_dxf/truetype.dxf';
-  PATH_File6:='/home/zamtmn/zcad/cad/sample/test_dxf/teapot.dxf';
-  PATH_File7:='C:\zcad\cad\autosave\autosave.dxf';
-  PATH_File8:='C:\fonttest.dxf';
-  PATH_File9:='C:\zcad\cad\sample\test_dxf\truetype.dxf';
+  VIEW_ObjInspSubV:=132;
+  PATH_File0:='E:\zcad\cad\autosave\autosave.dxf';
+  PATH_File1:='E:\Блок1 ПС audited.dxf';
+  PATH_File2:='E:\zcad\cad\\sample\test_dxf\test.dxf';
+  PATH_File3:='E:\Блок1 ПС.dxf';
+  PATH_File4:='E:\zcad\cad\\sample\test_dxf\ops.dxf';
+  PATH_File5:='J:\nh\Коробова\Боровский\AОВ.dxf';
+  PATH_File6:='J:\nh\Надежда\ЖБИ5\Котельная ПВХ\proj2.dxf';
+  PATH_File7:='J:\nh\ЗВЕЗДИНА\ХМГагарина\ATM.dxf';
+  PATH_File8:='J:\nh\ЗВЕЗДИНА\ХМГагарина\АГСВ\agsv.dxf';
+  PATH_File9:='J:\nh\Надежда\ЖБИ5\переделки\proj4.dxf';
 end.

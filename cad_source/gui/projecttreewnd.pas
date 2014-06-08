@@ -58,6 +58,7 @@ type
     BlockNodeUnCatN,DeviceNodeUnCatN,BlockNodeN,DeviceNodeN,ProgramEquipmentN,ProjectEquipmentN:TmyTreeNode;
 
     procedure AfterConstruction; override;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
     private
     procedure BuildTreeByEQ(var BuildNode:TmyTreeNode;PDBUNIT:PTUnit;pcm:TmyPopupMenu);
     procedure ChangePage(Sender: TObject);
@@ -244,6 +245,13 @@ begin
         pvdeq:=PDBUNIT^.InterfaceVariables.vardescarray.iterate(ir);
   until pvdeq=nil;
 end;
+procedure TProjectTreeWnd.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  inherited;
+  if CloseAction=caFree then
+                            StoreBoundsToSavedUnit('ProjectTreeWND',self.BoundsRect);
+end;
+
 procedure TProjectTreeWnd.AfterConstruction;
 var
    //tnode:TTreeNode;
@@ -258,7 +266,8 @@ var
     BlockNode:TBlockTreeNode;
 begin
   inherited;
-  self.Position:=poScreenCenter;
+  //self.Position:=poScreenCenter;
+  self.BoundsRect:=GetBoundsFromSavedUnit('ProjectTreeWND');
   caption:=rsProjectTree;
   self.borderstyle:=bsSizeToolWin;
 

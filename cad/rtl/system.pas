@@ -421,6 +421,7 @@ GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
                       function SetCount(index:GDBInteger):GDBPointer;virtual;abstract;
                       function copyto(source:PGDBOpenArray):GDBInteger;virtual;abstract;
                       function GetRealCount:GDBInteger;
+                      function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
              end;
 //Generate on E:\zcad\CAD_SOURCE\u\UGDBOpenArrayOfData.pas
 PGDBOpenArrayOfData=^GDBOpenArrayOfData;
@@ -642,7 +643,6 @@ GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       constructor initnul;
                       constructor InitFromFile(FileName:string);
-                      function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;abstract;
                       function AddByte(PData:GDBPointer):GDBInteger;virtual;abstract;
                       function AddByteByVal(Data:GDBByte):GDBInteger;virtual;abstract;
                       function AddWord(PData:GDBPointer):GDBInteger;virtual;abstract;
@@ -1312,6 +1312,12 @@ ZGLLine3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenAr
                 {procedure DrawGeometry2;virtual;abstract;
                 procedure DrawGeometryWClosed(closed:GDBBoolean);virtual;}abstract;
              end;
+//Generate on E:\zcad\cad_source\zgl\uzgvertex3sarray.pas
+ZGLVertex3Sarray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBvertex3S*)
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                constructor initnul;
+                procedure DrawGeometry;virtual;abstract;
+             end;
 //Generate on E:\zcad\cad_source\zgl\uzglpoint3darray.pas
 ZGLPoint3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLLine3DArray)(*OpenArrayOfData=GDBVertex*)
                 procedure DrawGeometry;virtual;abstract;
@@ -1319,6 +1325,29 @@ ZGLPoint3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLLine3DArray)(*OpenArray
 //Generate on E:\zcad\cad_source\zgl\uzgltriangles3darray.pas
 ZGLTriangle3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(ZGLLine3DArray)(*OpenArrayOfData=GDBVertex*)
                 procedure DrawGeometry;virtual;abstract;
+             end;
+//Generate on E:\zcad\cad_source\zgl\uzgprimitivessarray.pas
+TLLPrimitiveType=GDBInteger;
+TLLVertexIndex=GDBInteger;
+PTLLPrimitivePrefix=^TLLPrimitivePrefix;
+TLLPrimitivePrefix={$IFNDEF DELPHI}packed{$ENDIF} record
+                       LLPType:TLLPrimitiveType;
+                   end;
+PTLLLine=^TLLLine;
+TLLLine={$IFNDEF DELPHI}packed{$ENDIF} record
+              Prefix:TLLPrimitivePrefix;
+              P1Index:TLLVertexIndex;{P2Index=P1Index+1}
+        end;
+PTLLPoint=^TLLPoint;
+TLLPoint={$IFNDEF DELPHI}packed{$ENDIF} record
+              Prefix:TLLPrimitivePrefix;
+              PIndex:TLLVertexIndex;
+        end;
+TLLPrimitivesArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBByte*)
+                constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
+                constructor initnul;
+                procedure AddLLPLine(const P1Index:TLLVertexIndex);
+                procedure AddLLPPoint(const PIndex:TLLVertexIndex);
              end;
 //Generate on E:\zcad\cad_source\zgl\uzglgeometry.pas
 PZGLGeometry=^ZGLGeometry;
@@ -1341,12 +1370,15 @@ ZSegmentator={$IFNDEF DELPHI}packed{$ENDIF}object(GDBOpenArrayOfData)
                                                  procedure draw(length:GDBDouble;paint:boolean);
                                            end;
 ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                                 Lines:ZGLLine3DArray;
-                                 Points:ZGLpoint3DArray;
+                                 LLprimitives:TLLPrimitivesArray;
+                                 Vertex3S:ZGLVertex3Sarray;
+                                 {Lines:ZGLLine3DArray;}
+                                 {Points:ZGLpoint3DArray;}
                                  SHX:GDBPolyPoint3DArray;
                                  Triangles:ZGLTriangle3DArray;
                 procedure DrawGeometry;virtual;abstract;
                 procedure DrawNiceGeometry;virtual;abstract;
+                procedure DrawLLPrimitives(drawer:TZGLAbstractDrawer);
                 procedure Clear;virtual;abstract;
                 constructor init;
                 destructor done;virtual;abstract;
@@ -1354,6 +1386,9 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 procedure DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);virtual;abstract;
                 procedure DrawLineWithoutLT(const p1,p2:GDBVertex);virtual;abstract;
                 procedure DrawPointWithoutLT(const p:GDBVertex);virtual;abstract;
+                {}
+                procedure AddLine(const p1,p2:GDBVertex);
+                procedure AddPoint(const p:GDBVertex);
                 {Patterns func}
                 procedure PlaceNPatterns(var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:GDBDouble);
                 procedure PlaceOnePattern(var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:GDBDouble);

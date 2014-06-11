@@ -77,6 +77,7 @@ type Intercept3DProp=record
                     end;
      TCSDir=(TCSDLeft,TCSDRight);
 function CrossVertex(const Vector1, Vector2: GDBVertex): GDBVertex;inline;
+function VertexD2S(const Vector1:GDBVertex): GDBVertex3S;inline;
 function intercept2d(const x1, y1, x2, y2, x3, y3, x4, y4: GDBDouble): GDBBoolean;inline;
 function intercept2d2(const x11, y11, x12, y12, x21, y21, x22, y22: GDBFloat): GDBBoolean;inline;
 function intercept2dmy(const l1begin,l1end,l2begin,l2end:gdbvertex2d):intercept2dprop;//inline;
@@ -98,7 +99,8 @@ function SqrOneVertexlength(const Vector1: GDBVertex): GDBDouble;inline;
 function vertexlen2df(const x1, y1, x2, y2: GDBFloat): GDBFloat;inline;
 function NormalizeVertex(const Vector1: GDBVertex): GDBVertex;{inline;}
 function VertexMulOnSc(const Vector1:GDBVertex;sc:GDBDouble): GDBVertex;inline;
-function VertexAdd(const Vector1, Vector2: GDBVertex): GDBVertex;inline;
+function VertexAdd(const Vector1, Vector2: GDBVertex): GDBVertex;inline;overload;
+function VertexAdd(const Vector1, Vector2: GDBVertex3S): GDBVertex3S;inline;overload;
 function Vertex2DAdd(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;inline;
 function VertexSub(const Vector1, Vector2: GDBVertex): GDBVertex;inline;
 function MinusVertex(const Vector1: GDBVertex): GDBVertex;inline;
@@ -193,6 +195,12 @@ type
     TLineClipArray=array[0..5]of gdbdouble;
 implementation
 uses shared,log;
+function VertexD2S(const Vector1:GDBVertex): GDBVertex3S;
+begin
+     result.x:=Vector1.x;
+     result.y:=Vector1.y;
+     result.z:=Vector1.z;
+end;
 function GetCSDirFrom0x0y2D(const ox,oy:GDBVertex):TCSDir;
 begin
     if vectordot(ox,oy).z>eps then
@@ -1412,6 +1420,12 @@ begin
   Result.Z := Vector1.z*sc;
 end;
 function VertexAdd(const Vector1, Vector2: GDBVertex): GDBVertex;
+begin
+  Result.X := Vector1.x + Vector2.x;
+  Result.Y := Vector1.y + Vector2.y;
+  Result.Z := Vector1.z + Vector2.z;
+end;
+function VertexAdd(const Vector1, Vector2: GDBVertex3S): GDBVertex3s;
 begin
   Result.X := Vector1.x + Vector2.x;
   Result.Y := Vector1.y + Vector2.y;

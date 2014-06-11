@@ -809,7 +809,8 @@ begin
                                            if geometry.oneVertexlength(pcamera^.CamCSOffset)>1000000 then
                                            begin
                                                 OGLSpecFunc.CurrentCamCSOffset:=pcamera^.CamCSOffset;
-                                            OGLSpecFunc.notuseLCS:=pcamera^.notuseLCS;
+                                                OGLSpecFunc.CurrentCamCSOffsetS:=VertexD2S(OGLSpecFunc.CurrentCamCSOffset);
+                                                OGLSpecFunc.notuseLCS:=pcamera^.notuseLCS;
                                            end
                                            else OGLSpecFunc.notuseLCS:=true;
                                       end

@@ -203,6 +203,7 @@ type
                            procedure myglVertex2i(x, y: GLint);virtual;//inline;
                            procedure myglVertex(const x,y,z:GDBDouble);virtual;//inline;
                            procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
+                           procedure myglVertex3fV(const V:PGDBVertex3S);virtual;//inline;
                            procedure startrender;virtual;//inline;
                            procedure endrender;virtual;//inline;
                            {$IFDEF SINGLEPRECISIONGEOMETRY}
@@ -266,6 +267,7 @@ type
 
 var
    CurrentCamCSOffset:GDBvertex;
+   CurrentCamCSOffsetS:GDBvertex3S;
    notuseLCS:GDBBOOLEAN;
    GLRasterizer:TOGLStateManager;
    OGLSM:PTOGLStateManager;
@@ -517,6 +519,21 @@ begin
                       begin
                            t:=vertexadd(v^,CurrentCamCSOffset);
                            glVertex3dV(@t);
+                      end;
+end;
+procedure TOGLStateManager.myglVertex3fV;
+var t:gdbvertex3s;
+begin
+     {$IFDEF DEBUGCOUNTGEOMETRY}
+     processpoint(v^);
+     inc(pointcount);
+     {$ENDIF}
+     if notuseLCS then
+                      glVertex3fV(pointer(v))
+                  else
+                      begin
+                           t:=vertexadd(v^,CurrentCamCSOffsetS);
+                           glVertex3fV(@t);
                       end;
 end;
 procedure TOGLStateManager.myglNormal3dV(const V:PGDBVertex);{$IFNDEF DELPHI}inline;{$ENDIF}

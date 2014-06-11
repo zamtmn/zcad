@@ -35,8 +35,10 @@ E:\zcad\CAD_SOURCE\languade\zcadsysvars.pas
 E:\zcad\CAD_SOURCE\languade\varmandef.pas
 E:\zcad\CAD_SOURCE\languade\varman.pas
 E:\zcad\cad_source\zgl\uzglline3darray.pas
+E:\zcad\cad_source\zgl\uzgvertex3sarray.pas
 E:\zcad\cad_source\zgl\uzglpoint3darray.pas
 E:\zcad\cad_source\zgl\uzgltriangles3darray.pas
+E:\zcad\cad_source\zgl\uzgprimitivessarray.pas
 E:\zcad\cad_source\zgl\uzglgeometry.pas
 E:\zcad\CAD_SOURCE\gdb\GDBSubordinated.pas
 E:\zcad\CAD_SOURCE\gdb\gdbvisualprop.pas

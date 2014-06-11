@@ -150,7 +150,7 @@ end;
 procedure GDBObjPoint.DrawGeometry;
 begin
   oglsm.myglbegin(GL_points);
-  oglsm.glVertex3dV(@P_insertInWCS);
+  oglsm.myglVertex3dV(@P_insertInWCS);
   oglsm.myglend;
   {oglsm.myglbegin(GL_LINES);
   oglsm.myglVertex(P_insertInWCS.x-0.5,P_insertInWCS.y-0.5,P_insertInWCS.z);

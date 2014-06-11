@@ -19,7 +19,7 @@
 unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,uzgltriangles3darray,ugdbltypearray,ugdbfont,sysutils,gdbase,memman,log,
+uses uzglabstractdrawer,OGLSpecFunc,uzgprimitivessarray,uzgvertex3sarray,UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,uzgltriangles3darray,ugdbltypearray,ugdbfont,sysutils,gdbase,memman,log,
      gdbasetypes,strproc;
 type
 {Export+}
@@ -43,12 +43,15 @@ ZSegmentator={$IFNDEF DELPHI}packed{$ENDIF}object(GDBOpenArrayOfData)
                                                  procedure draw(length:GDBDouble;paint:boolean);
                                            end;
 ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
-                                 Lines:ZGLLine3DArray;
-                                 Points:ZGLpoint3DArray;
+                                 LLprimitives:TLLPrimitivesArray;
+                                 Vertex3S:ZGLVertex3Sarray;
+                                 {Lines:ZGLLine3DArray;}
+                                 {Points:ZGLpoint3DArray;}
                                  SHX:GDBPolyPoint3DArray;
                                  Triangles:ZGLTriangle3DArray;
                 procedure DrawGeometry;virtual;
                 procedure DrawNiceGeometry;virtual;
+                procedure DrawLLPrimitives(drawer:TZGLAbstractDrawer);
                 procedure Clear;virtual;
                 constructor init;
                 destructor done;virtual;
@@ -56,6 +59,9 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 procedure DrawPolyLineWithLT(const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:GDBBoolean);virtual;
                 procedure DrawLineWithoutLT(const p1,p2:GDBVertex);virtual;
                 procedure DrawPointWithoutLT(const p:GDBVertex);virtual;
+                {}
+                procedure AddLine(const p1,p2:GDBVertex);
+                procedure AddPoint(const p:GDBVertex);
                 {Patterns func}
                 procedure PlaceNPatterns(var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:GDBDouble);
                 procedure PlaceOnePattern(var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:GDBDouble);
@@ -64,6 +70,61 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
              end;
 {Export-}
 implementation
+procedure ZGLGeometry.DrawLLPrimitives(drawer:TZGLAbstractDrawer);
+var
+   PPrimitive:PTLLPrimitivePrefix;
+   ProcessedSize:TArrayIndex;
+   CurrentSize:TArrayIndex;
+begin
+     if LLprimitives.count=0 then exit;
+     ProcessedSize:=0;
+     PPrimitive:=LLprimitives.parray;
+     while ProcessedSize<LLprimitives.count do
+     begin
+     case PPrimitive.LLPType of
+                      LLLineId:begin
+                                    Drawer.DrawLine(PTLLLine(PPrimitive)^.P1Index);
+                                    CurrentSize:=sizeof(TLLLine);
+                               end;
+                      LLPointId:begin
+                                    Drawer.DrawPoint(PTLLPoint(PPrimitive)^.PIndex);
+                                    CurrentSize:=sizeof(TLLPoint);
+                               end;
+     end;
+     ProcessedSize:=ProcessedSize+CurrentSize;
+     inc(pbyte(PPrimitive),CurrentSize);
+     end;
+end;
+procedure ZGLGeometry.AddPoint(const p:GDBVertex);
+var
+    tv:GDBVertex3S;
+begin
+     tv:=VertexD2S(p);
+     LLprimitives.AddLLPPoint(Vertex3S.Add(@tv));
+end;
+
+procedure ZGLGeometry.AddLine(const p1,p2:GDBVertex);
+var
+    tv1,tv2:GDBVertex3S;
+begin
+     tv1:=VertexD2S(p1);
+     tv2:=VertexD2S(p2);
+     LLprimitives.AddLLPLine(Vertex3S.Add(@tv1));
+     Vertex3S.Add(@tv2);
+
+     //lines.Add(@p1);
+     //lines.Add(@p2);
+
+     {d:=geometry.Vertexlength(p1,p2)/30;
+     a:=d/2;
+     for i:=0 to 2 do
+     begin
+          tv:=geometry.VertexAdd(p1,createvertex(random*d-a,random*d-a,0));
+          lines.Add(@tv);
+          tv:=geometry.VertexAdd(p2,createvertex(random*d-a,random*d-a,0));
+          lines.Add(@tv);
+     end;}
+end;
 function CalcSegment(const startpoint,endpoint:GDBVertex;var segment:ZPolySegmentData;prevlength:GDBDouble):GDBDouble;
 begin
      segment.startpoint:=startpoint;
@@ -180,21 +241,12 @@ procedure ZGLGeometry.DrawLineWithoutLT(const p1,p2:GDBVertex);
    tv:GDBVertex;
    i:integer;}
 begin
-     lines.Add(@p1);
-     lines.Add(@p2);
-     {d:=geometry.Vertexlength(p1,p2)/30;
-     a:=d/2;
-     for i:=0 to 2 do
-     begin
-          tv:=geometry.VertexAdd(p1,createvertex(random*d-a,random*d-a,0));
-          lines.Add(@tv);
-          tv:=geometry.VertexAdd(p2,createvertex(random*d-a,random*d-a,0));
-          lines.Add(@tv);
-     end;}
+     self.AddLine(p1,p2);
 end;
 procedure ZGLGeometry.DrawPointWithoutLT(const p:GDBVertex);
 begin
-     points.Add(@p);
+     AddPoint(p);
+     //points.Add(@p);
 end;
 function creatematrix(PInsert:GDBVertex; //Точка вставки
                       param:shxprop;     //Параметры текста
@@ -508,18 +560,24 @@ begin
                Segmentator.done;
          end;
      end;
-     Lines.Shrink;
-     Points.Shrink;
+     //Lines.Shrink;
+     //Points.Shrink;
      shx.Shrink;
      Triangles.Shrink;
+     Vertex3S.Shrink;
+     LLprimitives.Shrink;
 end;
 
 procedure ZGLGeometry.drawgeometry;
 begin
-  if lines.Count>0 then
-  Lines.DrawGeometry;
-  if Points.Count>0 then
-  Points.DrawGeometry;
+  OGLDrawer.PVertexBuffer:=@Vertex3S;
+  DrawLLPrimitives(OGLDrawer);
+  //if Vertex3S.Count>0 then
+  //Vertex3S.DrawGeometry;
+  //if lines.Count>0 then
+  //Lines.DrawGeometry;
+  //if Points.Count>0 then
+  //Points.DrawGeometry;
   if shx.Count>0 then
   //shx.DrawNiceGeometry;
   shx.DrawGeometry;
@@ -528,10 +586,14 @@ begin
 end;
 procedure ZGLGeometry.drawNicegeometry;
 begin
-  if lines.Count>0 then
-  Lines.DrawGeometry;
-  if Points.Count>0 then
-  Points.DrawGeometry;
+  OGLDrawer.PVertexBuffer:=@Vertex3S;
+  DrawLLPrimitives(OGLDrawer);
+  //if Vertex3S.Count>0 then
+  //Vertex3S.DrawGeometry;
+  //if lines.Count>0 then
+  //Lines.DrawGeometry;
+  //if Points.Count>0 then
+  //Points.DrawGeometry;
   if shx.Count>0 then
   shx.DrawNiceGeometry;
   if Triangles.Count>0 then
@@ -539,22 +601,28 @@ begin
 end;
 procedure ZGLGeometry.Clear;
 begin
-  Lines.Clear;
-  Points.Clear;
+  Vertex3S.Clear;
+  LLprimitives.Clear;
+  //Lines.Clear;
+  //Points.Clear;
   SHX.Clear;
   Triangles.Clear;
 end;
 constructor ZGLGeometry.init;
 begin
-Lines.init({$IFDEF DEBUGBUILD}'{261A56E9-FC91-4A6D-A534-695778390843}',{$ENDIF}100);
-Points.init({$IFDEF DEBUGBUILD}'{AF4B3440-50B5-4482-A2B7-D38DDE4EC731}',{$ENDIF}100);
+Vertex3S.init({$IFDEF DEBUGBUILD}'{28B96AAC-8AD4-4BC8-85CA-78AAA0700CAF}',{$ENDIF}100);
+LLprimitives.init({$IFDEF DEBUGBUILD}'{6326CE08-54B5-404E-B567-C50AFEFBABEE}',{$ENDIF}100);
+//Lines.init({$IFDEF DEBUGBUILD}'{261A56E9-FC91-4A6D-A534-695778390843}',{$ENDIF}100);
+//Points.init({$IFDEF DEBUGBUILD}'{AF4B3440-50B5-4482-A2B7-D38DDE4EC731}',{$ENDIF}100);
 SHX.init({$IFDEF DEBUGBUILD}'{93201215-874A-4FC5-8062-103AF05AD930}',{$ENDIF}100);
 Triangles.init({$IFDEF DEBUGBUILD}'{EE569D51-8C1D-4AE3-A80F-BBBC565DA372}',{$ENDIF}100);
 end;
 destructor ZGLGeometry.done;
 begin
-Lines.done;
-Points.done;
+Vertex3S.done;
+LLprimitives.done;
+//Lines.done;
+//Points.done;
 SHX.done;
 Triangles.done;
 end;

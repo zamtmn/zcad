@@ -41,7 +41,9 @@ uses
        commandlinedef,commanddefinternal,commandline,
   {GUI}
        objinspdecorations,oswnd,cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
-       colorwnd,imagesmanager,ltwnd,usuptstylecombo,usupportgui,usupdimstylecombo;
+       colorwnd,imagesmanager,ltwnd,usuptstylecombo,usupportgui,usupdimstylecombo,
+  {}
+       uzglabstractdrawer;
   {}
 type
   TComboFiller=procedure(cb:TCustomComboBox) of object;
@@ -1664,6 +1666,11 @@ begin
         midline:=ARect.Top+ARect.Bottom;
         //canvas.Line(ARect.Left,y,ARect.Left+ll,y);
 
+        CanvasDrawer.midline:=midline;
+        CanvasDrawer.canvas:=canvas;
+        CanvasDrawer.PVertexBuffer:=@geom.Vertex3S;
+        geom.DrawLLPrimitives(CanvasDrawer);
+        (*
         if geom.Lines.count>0 then
         begin
         p:=geom.Lines.PArray;
@@ -1681,11 +1688,12 @@ begin
         p:=geom.Points.PArray;
         for i:=0 to (geom.Points.count-1) do
         begin
-           //canvas.EllipseC(round(p.x),round(midline-p.y),1,1);
            Canvas.Pixels[round(p.x),round(midline-p.y)]:=canvas.Pen.Color;
            inc(p);
         end;
         end;
+        *)
+
 
         if geom.Triangles.count>0 then
         begin

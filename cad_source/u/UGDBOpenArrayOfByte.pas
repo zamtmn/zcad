@@ -32,7 +32,6 @@ GDBOpenArrayOfByte={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArray)
                       constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                       constructor initnul;
                       constructor InitFromFile(FileName:string);
-                      function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
                       function AddByte(PData:GDBPointer):GDBInteger;virtual;
                       function AddByteByVal(Data:GDBByte):GDBInteger;virtual;
                       function AddWord(PData:GDBPointer):GDBInteger;virtual;
@@ -344,33 +343,6 @@ end;
 function GDBOpenArrayOfByte.AddWord(PData:GDBPointer):GDBInteger;
 begin
      result:=adddata(pdata,sizeof(GDBWord));
-end;
-
-function GDBOpenArrayOfByte.AddData;
-var addr:GDBPlatformint;
-begin
-  if parray=nil then
-                    createarray;
-  if count+sdata>max then
-                         begin
-                              if count+sdata>2*max then
-                                                       {Grow}SetSize(count+sdata)
-                                                   else
-                                                        Grow;
-                         end;
-  {if count = max then
-                     begin
-                          parray := enlargememblock(parray, size * max, 2*size * max);
-                          max:=2*max;
-                     end;}
-  begin
-       //{IFDEF TOTALYLOG}programlog.logoutstr('Write '+inttostr(SData)+' bytes, offset '+inttostr(count),0);{$ENDIF}
-       GDBPointer(addr) := parray;
-       addr := addr + count;
-       Move(PData^, GDBPointer(addr)^,SData);
-       result:=count;
-       inc(count,SData);
-  end;
 end;
 function GDBOpenArrayOfByte.AllocData;
 begin

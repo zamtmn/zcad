@@ -50,11 +50,39 @@ GDBOpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(OpenArray)
                       function SetCount(index:GDBInteger):GDBPointer;virtual;
                       function copyto(source:PGDBOpenArray):GDBInteger;virtual;
                       function GetRealCount:GDBInteger;
+                      function AddData(PData:GDBPointer;SData:GDBword):GDBInteger;virtual;
              end;
 {Export-}
 implementation
 uses
     log;
+function GDBOpenArray.AddData;
+var addr:GDBPlatformint;
+begin
+  if parray=nil then
+                    createarray;
+  if count+sdata>max then
+                         begin
+                              if count+sdata>2*max then
+                                                       {Grow}SetSize(count+sdata)
+                                                   else
+                                                        Grow;
+                         end;
+  {if count = max then
+                     begin
+                          parray := enlargememblock(parray, size * max, 2*size * max);
+                          max:=2*max;
+                     end;}
+  begin
+       //{IFDEF TOTALYLOG}programlog.logoutstr('Write '+inttostr(SData)+' bytes, offset '+inttostr(count),0);{$ENDIF}
+       GDBPointer(addr) := parray;
+       addr := addr + count;
+       Move(PData^, GDBPointer(addr)^,SData);
+       result:=count;
+       inc(count,SData);
+  end;
+end;
+
 function GDBOpenArray.copyto;
 var p:GDBPointer;
     ir:itrec;

@@ -18,7 +18,7 @@
 unit GDBArc;
 {$INCLUDE def.inc}
 interface
-uses ugdbdrawingdef,math,OGLSpecFunc,GDBWithLocalCS,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses gdbdrawcontext,ugdbdrawingdef,math,OGLSpecFunc,GDBWithLocalCS,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
 ugdbltypearray,
 GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain{,OGLSpecFunc};
 type
@@ -523,7 +523,7 @@ begin
   if dc.selected then
                      begin
                      //Vertex3D_in_WCS_Array.drawgeometry2
-                          Geom.DrawGeometry;
+                          Geom.DrawGeometry(DC);
                      end
                  else
                      begin
@@ -541,7 +541,7 @@ begin
                          if simply then
                                        begin
                                            //Vertex3D_in_WCS_Array.drawgeometry
-                                           Geom.DrawGeometry;
+                                           Geom.DrawGeometry(DC);
                                        end
                                                         else
                                                             begin

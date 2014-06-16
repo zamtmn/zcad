@@ -218,22 +218,6 @@ GDBCameraBaseProp=packed record
                   end;
 TActulity=GDBInteger;
 TObjID=GDBWord;
-TDrawContext=packed record
-                   VisibleActualy:TActulity;
-                   InfrustumActualy:TActulity;
-                   DRAWCOUNT:TActulity;
-                   Subrender:GDBInteger;
-                   Selected:GDBBoolean;
-                   SysLayer:GDBPointer;
-                   MaxDetail:GDBBoolean;
-                   DrawMode:GDBBoolean;
-                   OwnerLineWeight:GDBSmallInt;
-                   OwnerColor:GDBInteger;
-                   MaxWidth:GDBInteger;
-                   ScrollMode:GDBBoolean;
-                   Zoom:GDBDouble;
-             end;
-
 PGDBBaseCamera=^GDBBaseCamera;
 GDBBaseCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 modelMatrix:DMatrix4D;

@@ -19,7 +19,7 @@ unit GDBAbstractText;
 {$INCLUDE def.inc}
 
 interface
-uses GDBEntity,GDBCamera,zcadsysvars,languade,UGDBOpenArrayOfPObjects,{GDBEntity,}strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},UGDBPolyPoint3DArray{,varman},varmandef,
+uses gdbdrawcontext,GDBEntity,GDBCamera,zcadsysvars,languade,UGDBOpenArrayOfPObjects,{GDBEntity,}strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},UGDBPolyPoint3DArray{,varman},varmandef,
 GDBase,gdbobjectsconstdef,{oglwindowdef,}geometry{,dxflow,strmy},math{,GDBPlain},OGLSpecFunc{,GDBGenericSubEntry};
 type
 //jstm(*'TopCenter'*)=2,
@@ -581,7 +581,7 @@ begin
                                                                                    //simpledrawgeometry
                                                                                    begin
                                                                                    Vertex3D_in_WCS_Array.drawgeometry;
-                                                                                   geom.DrawGeometry;
+                                                                                   geom.DrawGeometry(DC);
                                                                                    end
                                                                                else
                                                                                    //Vertex3D_in_WCS_Array.drawgeometry;

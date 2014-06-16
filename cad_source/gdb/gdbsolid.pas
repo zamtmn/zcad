@@ -19,7 +19,7 @@ unit GDBSolid;
 {$INCLUDE def.inc}
 
 interface
-uses ugdbdrawingdef,GDBCamera,GDBWithLocalCS,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
+uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,GDBWithLocalCS,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 ugdbltypearray,
 GDBase,gdbobjectsconstdef{,oglwindowdef,dxflow},memman,OGLSpecFunc;
 type

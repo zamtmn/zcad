@@ -1,18 +1,18 @@
 object LineWeightSelectWindow: TLineWeightSelectWindow
   Left = 586
-  Height = 527
+  Height = 536
   Top = 251
-  Width = 558
+  Width = 426
   Caption = 'Form1'
-  ClientHeight = 527
-  ClientWidth = 558
+  ClientHeight = 536
+  ClientWidth = 426
   OnCreate = _oncreate
   LCLVersion = '1.3'
   object ButtonPanel1: TButtonPanel
     Left = 6
-    Height = 34
-    Top = 487
-    Width = 546
+    Height = 37
+    Top = 493
+    Width = 414
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'
@@ -25,23 +25,24 @@ object LineWeightSelectWindow: TLineWeightSelectWindow
     ShowButtons = [pbOK, pbCancel]
   end
   object ListView1: TListView
+    AnchorSideTop.Control = FileNameEdit1
     AnchorSideTop.Side = asrBottom
     Left = 0
-    Height = 458
-    Top = 23
-    Width = 558
+    Height = 460
+    Top = 27
+    Width = 426
     Align = alBottom
     Anchors = [akTop, akLeft, akRight, akBottom]
     Columns = <    
       item
         AutoSize = True
         Caption = 'Name'
-        Width = 44
+        Width = 554
       end    
       item
         AutoSize = True
         Caption = 'Description'
-        Width = 254
+        Width = 81
       end>
     ReadOnly = True
     RowSelect = True
@@ -50,19 +51,17 @@ object LineWeightSelectWindow: TLineWeightSelectWindow
     OnSelectItem = _onSelect
   end
   object FileNameEdit1: TFileNameEdit
-    AnchorSideLeft.Control = Owner
-    AnchorSideLeft.Side = asrCenter
-    AnchorSideTop.Control = Owner
-    Left = 158
-    Height = 23
+    Left = 0
+    Height = 27
     Top = 0
-    Width = 242
+    Width = 426
     Filter = 'Line types file|*.lin|All files|*.*'
     FilterIndex = 0
     HideDirectories = True
     ButtonWidth = 23
     DirectInput = False
     NumGlyphs = 1
+    Align = alTop
     MaxLength = 0
     TabOrder = 2
     OnChange = _changefile

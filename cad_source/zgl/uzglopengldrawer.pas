@@ -20,7 +20,7 @@ unit uzglopengldrawer;
 {$INCLUDE def.inc}
 interface
 uses
-    GDIPAPI,GDIPOBJ,windows,
+    {$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
     uzglabstractdrawer,UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase;
 type
 TZGLOpenGLDrawer=class(TZGLAbstractDrawer)
@@ -35,6 +35,7 @@ TZGLCanvasDrawer=class(TZGLAbstractDrawer)
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
                    end;
+{$IFDEF WINDOWS}G
 TZGLGDIPlusDrawer=class(TZGLCanvasDrawer)
                         graphicsGDIPlus:TGPGraphics;
                         pen: TGPPen;
@@ -46,12 +47,14 @@ TZGLGDIPlusDrawer=class(TZGLCanvasDrawer)
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
                    end;
+{$ENDIF}
 var
    OGLDrawer:TZGLAbstractDrawer;
    CanvasDrawer:TZGLCanvasDrawer;
-   GDIPlusDrawer:TZGLGDIPlusDrawer;
+   {$IFDEF WINDOWS}GDIPlusDrawer:TZGLGDIPlusDrawer;{$ENDIF}
 implementation
 uses log;
+{$IFDEF WINDOWS}
 procedure TZGLGDIPlusDrawer.startrender;
 begin
      canvas:=canvas;
@@ -85,7 +88,7 @@ begin
      pv:=PGDBVertex3S(PVertexBuffer.getelement(i));
      //graphicsGDIPlus.Drawpoint(Pen,pv.x,midline-pv.y);
 end;
-
+{$ENDIF}
 procedure TZGLOpenGLDrawer.DrawLine(const i1:TLLVertexIndex);
 begin
     oglsm.myglbegin(GL_LINES);
@@ -122,7 +125,7 @@ initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglabstractdrawer.initialization');{$ENDIF}
   OGLDrawer:=TZGLOpenGLDrawer.create;
   CanvasDrawer:=TZGLCanvasDrawer.create;
-  GDIPlusDrawer:=TZGLGDIPlusDrawer.create;
+  {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
 end.
-
+

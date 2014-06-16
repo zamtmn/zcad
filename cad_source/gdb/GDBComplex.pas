@@ -20,7 +20,7 @@ unit GDBComplex;
 {$INCLUDE def.inc}
 
 interface
-uses ugdbdrawingdef,GDBCamera,{ugdbsimpledrawing,}zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
+uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,{ugdbsimpledrawing,}zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,{math,}gdbasetypes{,GDBGenericSubEntry},SysInfo,sysutils,
 {UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray,UGDBVisibleOpenArray,gdbEntity{,varman,varmandef},
 UGDBVisibleTreeArray,UGDBEntTree,
 GDBase,GDBWithLocalCS,gdbobjectsconstdef,{oglwindowdef,}geometry{,dxflow},memman{,GDBSubordinated,UGDBOpenArrayOfByte};

@@ -19,7 +19,7 @@
 unit GDBCircle;
 {$INCLUDE def.inc}
 interface
-uses ugdbdrawingdef,OGLSpecFunc,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray,UGDBPoint3DArray{, UGDBPolyPoint3DArray,UGDBPolyPoint2DArray},UGDBOpenArrayOfByte,varman,varmandef,
+uses gdbdrawcontext,ugdbdrawingdef,OGLSpecFunc,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray,UGDBPoint3DArray{, UGDBPolyPoint3DArray,UGDBPolyPoint2DArray},UGDBOpenArrayOfByte,varman,varmandef,
 ugdbltypearray,
 GDBase,GDBWithLocalCS,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman{,OGLSpecFunc};
 type
@@ -407,14 +407,14 @@ begin
            if dc.selected then
                               begin
                               //Vertex3D_in_WCS_Array.drawgeometry2
-                              Geom.DrawGeometry;
+                              Geom.DrawGeometry(DC);
                               end
                           else
                               begin
                                    if CanSimplyDrawInOCS(DC,{self.radius}1,6) then
                                                                                   begin
                                                                                        //Vertex3D_in_WCS_Array.drawgeometry
-                                                                                       Geom.DrawGeometry;
+                                                                                       Geom.DrawGeometry(DC);
                                                                                   end
                                                          else
                                                              begin

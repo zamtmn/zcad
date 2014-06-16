@@ -19,7 +19,7 @@
 unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
-uses uzglabstractdrawer,OGLSpecFunc,uzgprimitivessarray,uzgvertex3sarray,UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,uzgltriangles3darray,ugdbltypearray,ugdbfont,sysutils,gdbase,memman,log,
+uses gdbdrawcontext,uzglabstractdrawer,OGLSpecFunc,uzgprimitivessarray,uzgvertex3sarray,UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,uzgltriangles3darray,ugdbltypearray,ugdbfont,sysutils,gdbase,memman,log,
      gdbasetypes,strproc;
 type
 {Export+}
@@ -49,8 +49,8 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  {Points:ZGLpoint3DArray;}
                                  SHX:GDBPolyPoint3DArray;
                                  Triangles:ZGLTriangle3DArray;
-                procedure DrawGeometry;virtual;
-                procedure DrawNiceGeometry;virtual;
+                procedure DrawGeometry(rc:TDrawContext);virtual;
+                procedure DrawNiceGeometry(rc:TDrawContext);virtual;
                 procedure DrawLLPrimitives(drawer:TZGLAbstractDrawer);
                 procedure Clear;virtual;
                 constructor init;
@@ -570,8 +570,8 @@ end;
 
 procedure ZGLGeometry.drawgeometry;
 begin
-  OGLDrawer.PVertexBuffer:=@Vertex3S;
-  DrawLLPrimitives(OGLDrawer);
+  rc.drawer.PVertexBuffer:=@Vertex3S;
+  DrawLLPrimitives(rc.drawer);
   //if Vertex3S.Count>0 then
   //Vertex3S.DrawGeometry;
   //if lines.Count>0 then
@@ -586,8 +586,8 @@ begin
 end;
 procedure ZGLGeometry.drawNicegeometry;
 begin
-  OGLDrawer.PVertexBuffer:=@Vertex3S;
-  DrawLLPrimitives(OGLDrawer);
+  rc.drawer.PVertexBuffer:=@Vertex3S;
+  DrawLLPrimitives(rc.drawer);
   //if Vertex3S.Count>0 then
   //Vertex3S.DrawGeometry;
   //if lines.Count>0 then

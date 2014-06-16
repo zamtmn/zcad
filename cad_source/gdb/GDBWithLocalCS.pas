@@ -20,7 +20,7 @@ unit GDBWithLocalCS;
 {$INCLUDE def.inc}
 
 interface
-uses ugdbdrawingdef,GDBCamera,zcadsysvars,OGLSpecFunc,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,GDBWithMatrix,
+uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,OGLSpecFunc,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,GDBWithMatrix,
 ugdbltypearray,
 GDBase,{gDBDescriptor,gdbobjectsconstdef,oglwindowdef,}geometry,dxflow,sysutils,memman,GDBSubordinated,UGDBLayerArray{,GDBGenericSubEntry};
 type

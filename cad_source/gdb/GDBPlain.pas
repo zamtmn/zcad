@@ -21,7 +21,7 @@ unit GDBPlain;
 
 interface
 uses
- {GDBEntity,}zcadsysvars,geometry,GDBWithLocalCS,gdbase,gdbasetypes,varmandef,OGLSpecFunc{,GDBEntity};
+ {GDBEntity,}gdbdrawcontext,zcadsysvars,geometry,GDBWithLocalCS,gdbase,gdbasetypes,varmandef,OGLSpecFunc{,GDBEntity};
 type
 {EXPORT+}
 GDBObjPlain={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)

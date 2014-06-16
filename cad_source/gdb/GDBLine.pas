@@ -20,7 +20,7 @@ unit GDBLine;
 {$INCLUDE def.inc}
 
 interface
-uses ugdbdrawingdef,GDBCamera,uzglgeometry,{testing LineTypes...}UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,ugdbltypearray,ugdbfont,
+uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,{testing LineTypes...}UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,ugdbltypearray,ugdbfont,
      zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,shared,OGLSpecFunc;
 type
@@ -421,10 +421,10 @@ var
   templod:gdbdouble;
 begin
   if (selected)or(dc.selected) then
-                     geom.DrawNiceGeometry
+                     geom.DrawNiceGeometry(DC)
                  else
                      begin
-                     geom.DrawGeometry;
+                     geom.DrawGeometry(DC);
                      exit;
                      end;
   if vp.LineType<>nil then

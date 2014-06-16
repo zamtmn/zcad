@@ -23,7 +23,7 @@ interface
 
 uses
 
-   commandlinedef,uinfoform,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBLayerArray,zcadstrconsts,{ucxmenumgr,}
+   uzglabstractdrawer,uzglopengldrawer,gdbdrawcontext,commandlinedef,uinfoform,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBLayerArray,zcadstrconsts,{ucxmenumgr,}
   {$IFDEF LCLGTK2}
   //x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
@@ -202,6 +202,8 @@ type
   end;
 const maxgrid=100;
 var
+  testform:tform;
+  testrender:TZGLAbstractDrawer;
     //pcommandline:PZEditWithProcedure;
     //playercombo:PZComboBoxWithProc;
     //plwcombo:PZComboBoxWithProc;
@@ -293,6 +295,14 @@ begin
      OMMTimer.Enabled:=true;}
      //onDragDrop:=FormDragDrop;
      //OnCreate:=formcreate;
+     if testform=nil then
+     begin
+     testform:=tform.CreateNew(application);
+     testform.Caption:='canvas render test';
+     testform.Show;
+     testrender:={TZGLCanvasDrawer}{TZGLGDIPlusDrawer}TZGLOpenGLDrawer.Create;
+     //TZGLCanvasDrawer(testrender).canvas:=testform.Canvas;
+     end;
 end;
 procedure TOGLWnd.SetMouseMode(smode:GDBByte);
 begin
@@ -3256,6 +3266,7 @@ begin
   result.MaxWidth:=sysvar.RD.RD_MaxWidth^;
   result.ScrollMode:=param.scrollmode;
   result.Zoom:=PDWG.GetPcamera.prop.zoom;
+  result.drawer:={OGLDrawer}testrender;
 end;
 
 procedure TOGLWnd.draw;
@@ -3510,11 +3521,13 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
                                            //else
                                               begin
                                               OGLSM.startrender;
+                                              dc.drawer.startrender;
                                               PDWG.Getpcamera.DRAWNOTEND:=treerender(PDWG.GetCurrentROOT^.ObjArray.ObjTree,lptime,dc);
                                               //oglsm.mytotalglend;
                                               //isOpenGLError;
                                               //render(gdb.GetCurrentROOT^);
                                               OGLSM.endrender;
+                                              dc.drawer.endrender;
                                               end;
 
 

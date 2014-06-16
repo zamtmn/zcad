@@ -43,7 +43,7 @@ uses
        objinspdecorations,oswnd,cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
        colorwnd,imagesmanager,ltwnd,usuptstylecombo,usupportgui,usupdimstylecombo,
   {}
-       uzglabstractdrawer;
+       gdbdrawcontext,uzglopengldrawer,uzglabstractdrawer;
   {}
 type
   TComboFiller=procedure(cb:TCustomComboBox) of object;

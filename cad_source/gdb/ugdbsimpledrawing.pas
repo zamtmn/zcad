@@ -33,7 +33,7 @@ UGDBTextStyleArray,
 GDBCamera,
 UGDBOpenArrayOfPV,
 GDBRoot,ugdbfont,
-OGLWindow,UGDBOpenArrayOfPObjects,ugdbshxfont{,UGDBVisibleOpenArray};
+OGLWindow,UGDBOpenArrayOfPObjects,ugdbshxfont,abstractviewarea{,UGDBVisibleOpenArray};
 type
 {EXPORT+}
 PTSimpleDrawing=^TSimpleDrawing;
@@ -46,7 +46,8 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        pcamera:PGDBObjCamera;
                        OnMouseObj:GDBObjOpenArrayOfPV;
 
-                       OGLwindow1:toglwnd;
+                       //OGLwindow1:toglwnd;
+                       wa:TAbstractViewArea;
 
                        TextStyleTable:GDBTextStyleArray;(*saved_to_shd*)
                        BlockDefArray:GDBObjBlockdefArray;(*saved_to_shd*)
@@ -116,8 +117,8 @@ end;
 
 function TSimpleDrawing.GetMouseEditorMode:GDBByte;
 begin
-     if assigned(OGLwindow1) then
-                                 result:=OGLwindow1.param.md.mode
+     if assigned(wa.getviewcontrol) then
+                                 result:=wa.param.md.mode
                              else
                                  result:=0;
 end;
@@ -130,10 +131,10 @@ end;
 
 function TSimpleDrawing.SetMouseEditorMode(mode:GDBByte):GDBByte;
 begin
-     if assigned(OGLwindow1) then
+     if assigned(wa.getviewcontrol) then
                                  begin
-                                      result:=OGLwindow1.param.md.mode;
-                                      OGLwindow1.param.md.mode:=mode;
+                                      result:=wa.param.md.mode;
+                                      wa.param.md.mode:=mode;
                                  end
                              else
                                  result:=0;
@@ -203,7 +204,7 @@ end;
 
 function TSimpleDrawing.GetLastSelected:PGDBObjEntity;
 begin
-     result:=OGLwindow1.param.SelDesc.LastSelectedObject;
+     result:=wa.param.SelDesc.LastSelectedObject;
 end;
 procedure TSimpleDrawing.SetFileName(NewName:GDBString);
 begin
@@ -215,8 +216,8 @@ begin
 end;
 procedure TSimpleDrawing.ChangeStampt;
 begin
-     if OGLwindow1<>nil then
-     OGLwindow1.param.lastonmouseobject:=nil;
+     if wa.getviewcontrol<>nil then
+     wa.param.lastonmouseobject:=nil;
 end;
 function TSimpleDrawing.GetUndoTop:TArrayIndex;
 begin
@@ -809,4 +810,4 @@ begin
 
 end;
 
-end.
+end.

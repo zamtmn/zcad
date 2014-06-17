@@ -127,7 +127,7 @@ end;
 function GDBObjRotatedDimension.Clone;
 var tvo: PGDBObjRotatedDimension;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{5A1B005F-39F1-431B-B65E-0C532AEFA5D0}-GDBObjLine.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjRotatedDimension));
+  GDBGetMem({$IFDEF DEBUGBUILD}'GDBObjRotatedDimension.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjRotatedDimension));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   CopyVPto(tvo^);
   tvo^.DimData := DimData;
@@ -144,4 +144,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('gdbrotateddimension.initialization');{$ENDIF}
-end.
+end.

@@ -291,7 +291,7 @@ function CommandStart(operands:pansichar):GDBInteger;
 begin
   GDB.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,'DEVICE_PS_DAT_SMOKE');
   GDB.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,'DEVICE_PS_DAT_TERMO');
-  GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera));
+  GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera));
   historyout('Первый угол:');
   If assigned(SetGDBObjInspProc)then
   SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pco,gdb.GetCurrentDWG);
@@ -782,7 +782,7 @@ begin
   cman.init;
   cman.build;
 
-         GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+         GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
 
   coord:=geometry.NulVertex;
   coord.y:=0;
@@ -958,7 +958,7 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
 
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
-  GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera));
+  GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera));
   historyout('Первый угол:');
   If assigned(SetGDBObjInspProc)then
   SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pco2,gdb.GetCurrentDWG);

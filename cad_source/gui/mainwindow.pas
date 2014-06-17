@@ -274,7 +274,7 @@ var lw:GDBInteger;
         ir:itrec;
 begin
 
-  if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
+  if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
   then
       begin
            if assigned(LinewBox) then
@@ -381,9 +381,9 @@ procedure MainForm.addoneobject;
 var lw{,layer}:GDBInteger;
 begin
   exit;
-  lw:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.LineWeight;
+  lw:=PGDBObjEntity(gdb.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.LineWeight;
   //layer:=gdb.GetCurrentDWG.LayerTable.GetIndexByPointer(PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.layer);
-  if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=1
+  if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=1
   then
       begin
            if assigned(LinewBox)then
@@ -397,8 +397,8 @@ begin
            {if assigned(LayerBox)then
            LayerBox.ItemIndex:=getsortedindex((layer));//(layer);    xcvxcv}
            //gdb.GetCurrentDWG.OGLwindow1.SelectedObjectsPLayer:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.layer;
-           ivars.CColor:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.color;
-           ivars.CLType:=PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.LineType;
+           ivars.CColor:=PGDBObjEntity(gdb.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.color;
+           ivars.CLType:=PGDBObjEntity(gdb.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.LineType;
 
            {CColor
            CLWeight:GDBInteger;
@@ -421,9 +421,9 @@ begin
            if assigned(LinewBox)then
            if LinewBox.ItemIndex<>lw then LinewBox.ItemIndex:=(LinewBox.Items.Count-1);
 
-           if ivars.CColor<>PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.color then
+           if ivars.CColor<>PGDBObjEntity(gdb.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.color then
               ivars.CColor:=ClDifferent;
-           if ivars.CLType<>PGDBObjEntity(gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.LineType then
+           if ivars.CLType<>PGDBObjEntity(gdb.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject)^.vp.LineType then
               ivars.CLType:=nil;
       end;
 end;
@@ -449,7 +449,7 @@ begin
                            cdwg:=gdb.GetCurrentDWG;
                            if cdwg<>nil then
                            begin
-                                if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0 then
+                                if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0 then
                                 begin
                                           if assigned(sysvar.dwg.DWG_CLayer) then
                                           if sysvar.dwg.DWG_CLayer^<>Player then
@@ -495,7 +495,7 @@ begin
      cdwg:=gdb.GetCurrentDWG;
      if cdwg<>nil then
      begin
-         if assigned(cdwg^.OGLwindow1) then
+         if assigned(cdwg^.wa.getviewcontrol) then
          begin
               setlength(la,cdwg^.LayerTable.Count);
               counter:=0;
@@ -523,7 +523,7 @@ begin
                             cdwg:=gdb.GetCurrentDWG;
                             if cdwg<>nil then
                             begin
-                                 if assigned(cdwg^.OGLwindow1) then
+                                 if assigned(cdwg^.wa) then
                                  begin
                                       if IVars.CLayer<>nil then
                                       begin
@@ -885,7 +885,7 @@ begin
                                  end;
        //commandmanager.executecommandtotalend;
        commandmanager.ChangeModeAndEnd(TGPCloseDWG);
-       poglwnd:=ClosedDWG.OGLwindow1;
+       poglwnd:=toglwnd(ClosedDWG.wa.getviewcontrol);
        gdb.eraseobj(ClosedDWG);
        gdb.pack;
        poglwnd.PDWG:=nil;
@@ -2883,7 +2883,7 @@ begin
 
      PSimpleDrawing:=gdb.GetCurrentDWG;
      if PSimpleDrawing<>nil then
-                                POGLWndParam:=@PSimpleDrawing.OGLwindow1.param
+                                POGLWndParam:=@PSimpleDrawing.wa.param
                             else
                                 POGLWndParam:=nil;
      if assigned(TmyAction(AAction).pfoundcommand) then
@@ -2963,8 +2963,8 @@ begin
      if comtext='' then
      begin
      if assigned(gdb.GetCurrentDWG) then
-     if assigned(gdb.GetCurrentDWG.OGLwindow1)then
-                    gdb.GetCurrentDWG.OGLwindow1.myKeyPress(tempkey,shift);
+     if assigned(gdb.GetCurrentDWG.wa.getviewcontrol)then
+                    gdb.GetCurrentDWG.wa.myKeyPress(tempkey,shift);
      end
      else
          if key=VK_ESCAPE then
@@ -3058,9 +3058,9 @@ begin
      pdwg:=gdb.GetCurrentDWG;
      if pdwg<>nil then
      begin
-     if pdwg.OGLwindow1<>nil then
+     if pdwg.wa.getviewcontrol<>nil then
      begin
-          if pdwg.OGLwindow1.Fastmmx>=0 then
+          if pdwg.wa.Fastmmx>=0 then
           begin
                //pdwg.OGLwindow1._onMouseMove(nil,pdwg.OGLwindow1.Fastmmshift,pdwg.OGLwindow1.Fastmmx,pdwg.OGLwindow1.Fastmmy);
                //pdwg.OGLwindow1.Fastmmx:=-1;
@@ -3068,8 +3068,8 @@ begin
           else
               if  pdwg.pcamera.DRAWNOTEND then
                                               begin
-                                                   rc:=pdwg.OGLwindow1.CreateRC;
-                                              pdwg.OGLwindow1.finishdraw(rc);
+                                                   rc:=pdwg.wa.CreateRC;
+                                              pdwg.wa.finishdraw(rc);
                                               done:=false;
                                               end;
      end
@@ -3082,7 +3082,7 @@ begin
      //SysVar.debug.memi2:=memman.i2;
      if (SysVar.SAVE.SAVE_Auto_Current_Interval^<1)and(commandmanager.pcommandrunning=nil) then
      if (pdwg)<>nil then
-     if (pdwg.OGLwindow1.param.SelDesc.Selectedobjcount=0) then
+     if (pdwg.wa.param.SelDesc.Selectedobjcount=0) then
      begin
           commandmanager.executecommandsilent('QSave(QS)',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
           SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
@@ -3166,7 +3166,7 @@ begin
                          end
      else
      begin
-     if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
+     if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
      then
      begin
           SysVar.dwg.DWG_CLType^:={LTIndex}plt;
@@ -3215,7 +3215,7 @@ begin
                            end;
      if colorindex<0 then
                          exit;
-     if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
+     if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
      then
      begin
           SysVar.dwg.DWG_CColor^:=ColorIndex;
@@ -3236,7 +3236,7 @@ var tcl,index:GDBInteger;
 begin
   index:=tcombobox(Sender).ItemIndex;
   index:=integer(tcombobox(Sender).items.Objects[index]);
-  if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
+  if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
   then
   begin
       SysVar.dwg.DWG_CLinew^:=index;
@@ -3353,15 +3353,13 @@ end;
 procedure MainForm.ShowAllCursors;
 begin
      if gdb.GetCurrentDWG<>nil then
-     if gdb.GetCurrentDWG.OGLwindow1<>nil then
-     gdb.GetCurrentDWG.OGLwindow1.Cursor:=crDefault;
+     gdb.GetCurrentDWG.wa.showmousecursor;
 end;
 
 procedure MainForm.RestoreCursors;
 begin
      if gdb.GetCurrentDWG<>nil then
-     if gdb.GetCurrentDWG.OGLwindow1<>nil then
-     gdb.GetCurrentDWG.OGLwindow1.Cursor:=crNone;
+     gdb.GetCurrentDWG.wa.hidemousecursor;
 end;
 
 procedure MainForm.Say(word:gdbstring);
@@ -3446,7 +3444,7 @@ var
   menu:TmyPopupMenu;
 begin
   menu:=nil;
-                                  if gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount>0 then
+                                  if gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount>0 then
                                                                           menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'SELECTEDENTSCXMENU'))
                                                                       else
                                                                           menu:=TmyPopupMenu(application.FindComponent(MenuNameModifier+'NONSELECTEDENTSCXMENU'));
@@ -3474,7 +3472,7 @@ var
 begin
   pdwg:=gdb.GetCurrentDWG;
   if pdwg<>nil then
-  if pdwg.OGLwindow1<>nil then begin
+  if pdwg.wa.getviewcontrol<>nil then begin
      nevpos:=PDWG.Getpcamera^.prop.point;
      if sender=HScrollBar then
      begin
@@ -3484,8 +3482,8 @@ else if sender=VScrollBar then
      begin
           nevpos.y:=-(VScrollBar.Min+VScrollBar.Max{$IFNDEF LINUX}-VScrollBar.PageSize{$ENDIF}-ScrollPos);
      end;
-     pdwg.OGLwindow1.SetCameraPosZoom(nevpos,PDWG.Getpcamera^.prop.zoom,true);
-     pdwg.OGLwindow1.draw;
+     pdwg.wa.SetCameraPosZoom(nevpos,PDWG.Getpcamera^.prop.zoom,true);
+     pdwg.wa.draw;
   end;
 end;
 
@@ -3500,16 +3498,16 @@ var
 begin
   pdwg:=gdb.GetCurrentDWG;
   if pdwg<>nil then
-  if pdwg.OGLwindow1<>nil then begin
+  if pdwg.wa<>nil then begin
   bb:=pdwg.GetCurrentROOT.vp.BoundingBox;
-  size:=round(pdwg.OGLwindow1.ClientWidth*pdwg.GetPcamera^.prop.zoom);
+  size:=round(pdwg.wa.getviewcontrol.ClientWidth*pdwg.GetPcamera^.prop.zoom);
   position:=round(-pdwg.GetPcamera^.prop.point.x);
   min:=round(bb.LBN.x+size/2);
   max:=round(bb.RTF.x+{$IFDEF LINUX}-{$ENDIF}size/2);
   if max<min then max:=min;
   MainFormN.HScrollBar.SetParams(position,min,max,size);
 
-  size:=round(pdwg.OGLwindow1.ClientHeight*pdwg.GetPcamera^.prop.zoom);
+  size:=round(pdwg.wa.getviewcontrol.ClientHeight*pdwg.GetPcamera^.prop.zoom);
   min:=round(bb.LBN.y+size/2);
   max:=round(bb.RTF.y+{$IFDEF LINUX}-{$ENDIF}size/2);
   if max<min then max:=min;
@@ -3520,7 +3518,7 @@ end;
 
 function getoglwndparam: GDBPointer; export;
 begin
-  result := addr(gdb.GetCurrentDWG.OGLwindow1.param);
+  result := addr(gdb.GetCurrentDWG.wa.param);
 end;
 procedure updatevisible; export;
 var

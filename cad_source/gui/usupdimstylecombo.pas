@@ -108,7 +108,7 @@ begin
                          exit;
 
 
-     if gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0
+     if gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
      then
      begin
           SysVar.dwg.DWG_CDimStyle^:=pts;
@@ -125,4 +125,4 @@ begin
 end;
 
 
-end.
+end.

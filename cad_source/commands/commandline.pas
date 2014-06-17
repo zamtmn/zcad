@@ -150,7 +150,7 @@ begin
   end;
   if (pcommandrunning^.IData.GetPointMode=TGPEnt)and(not Application.Terminated) then
                                                                                  begin
-                                                                                 p:=PTSimpleDrawing(pcommandrunning.pdwg)^.OGLwindow1.param.SelDesc.LastSelectedObject;
+                                                                                 p:=PTSimpleDrawing(pcommandrunning.pdwg)^.wa.param.SelDesc.LastSelectedObject;
                                                                                  result:=true;
                                                                                  end
                                                                              else

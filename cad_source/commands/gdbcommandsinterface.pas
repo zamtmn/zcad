@@ -47,7 +47,7 @@ uses
  UGDBEntTree,
   {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline,
- AnchorDocking,dialogs,XMLPropStorage,xmlconf{,
+ AnchorDocking,dialogs,XMLPropStorage,xmlconf,openglviewarea{,
    uPSCompiler,
   uPSRuntime,
   uPSC_std,
@@ -155,6 +155,7 @@ var
    ptd:PTDrawing;
    myts:TTabSheet;
    oglwnd:TOGLWND;
+   wpowner:TOpenGLViewArea;
    tn:GDBString;
 begin
      ptd:=gdb.CreateDWG;
@@ -187,23 +188,15 @@ begin
 
      //tf.align:=al_client;
 
-     oglwnd:=TOGLWnd.Create(myts);
-     oglwnd.onCameraChanged:=MainFormN.correctscrollbars;
-     oglwnd.ShowCXMenu:=MainFormN.ShowCXMenu;
-     oglwnd.MainMouseMove:=MainFormN.MainMouseMove;
-     oglwnd.MainMouseDown:=MainFormN.MainMouseDown;
-     {$if FPC_FULlVERSION>=20701}
-     oglwnd.AuxBuffers:=0;
-     oglwnd.StencilBits:=8;
-     //oglwnd.ColorBits:=24;
-     oglwnd.DepthBits:=24;
-     {$ENDIF}
+     wpowner:=TOpenGLViewArea.Create(myts);
+     oglwnd:=wpowner.OpenGLWindow;// TOGLWnd.Create(myts);
+
 
 
 
      //--------------------------------------------------------------oglwnd.BevelOuter:=bvnone;
-
-     gdb.GetCurrentDWG.OGLwindow1:=oglwnd;
+     gdb.GetCurrentDWG.wa:=wpowner;
+     //gdb.GetCurrentDWG.OGLwindow1:=oglwnd;
      {gdb.GetCurrentDWG.OGLwindow1}oglwnd.PDWG:=ptd;
      {gdb.GetCurrentDWG.OGLwindow1}oglwnd.align:=alClient;
           //gdb.GetCurrentDWG.OGLwindow1.align:=al_client;
@@ -579,7 +572,7 @@ else if Operands='SELECTED' then
 else if Operands='OGLWND_DEBUG' then
                             begin
                                  If assigned(SetGDBObjInspProc)then
-                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('OGLWndtype'),@gdb.GetCurrentDWG.OGLwindow1.param,gdb.GetCurrentDWG);
+                                 SetGDBObjInspProc(SysUnit.TypeName2PTD('OGLWndtype'),@gdb.GetCurrentDWG.wa.param,gdb.GetCurrentDWG);
                             end
 else if Operands='GDBDescriptor' then
                             begin

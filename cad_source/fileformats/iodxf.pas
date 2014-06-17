@@ -991,9 +991,9 @@ begin
                                             if active then
                                             if @drawing<>nil then
                                             if drawing.pcamera<>nil then
-                                            if drawing.OGLwindow1<>nil then
+                                            if drawing.wa.getviewcontrol<>nil then
                                             begin
-                                                 drawing.pcamera^.prop.zoom:=(strtofloat(s)/drawing.OGLwindow1.ClientHeight);
+                                                 drawing.pcamera^.prop.zoom:=(strtofloat(s)/drawing.wa.getviewcontrol.ClientHeight);
                                             end;
                                         end;
                                      41:
@@ -1002,10 +1002,10 @@ begin
                                             if active then
                                             if @drawing<>nil then
                                             if drawing.pcamera<>nil then
-                                            if drawing.OGLwindow1<>nil then
+                                            if drawing.wa.getviewcontrol<>nil then
                                             begin
-                                                 if drawing.OGLwindow1.ClientHeight*strtofloat(s)>drawing.OGLwindow1.ClientWidth then
-                                                 drawing.pcamera^.prop.zoom:=drawing.pcamera^.prop.zoom*strtofloat(s)*drawing.OGLwindow1.ClientHeight/drawing.OGLwindow1.ClientWidth;
+                                                 if drawing.wa.getviewcontrol.ClientHeight*strtofloat(s)>drawing.wa.getviewcontrol.ClientWidth then
+                                                 drawing.pcamera^.prop.zoom:=drawing.pcamera^.prop.zoom*strtofloat(s)*drawing.wa.getviewcontrol.ClientHeight/drawing.wa.getviewcontrol.ClientWidth;
                                             end;
                                         end;
                                      71:
@@ -1013,13 +1013,13 @@ begin
                                             if LoadMode=TLOLoad then
                                             if active then
                                             if @drawing<>nil then
-                                            if drawing.OGLwindow1<>nil then
+                                            if drawing.wa.getviewcontrol<>nil then
                                             begin
                                                  flags:=strtoint(s);
                                                  if (flags and 1)<>0 then
-                                                               drawing.OGLwindow1.param.projtype:=PROJPerspective
+                                                               drawing.wa.param.projtype:=PROJPerspective
                                                            else
-                                                               drawing.OGLwindow1.param.projtype:=PROJParalel;
+                                                               drawing.wa.param.projtype:=PROJParalel;
                                             end;
                                        end;
                                      75:
@@ -1819,12 +1819,12 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                outstream.TXTAddGDBStringEOL(dxfGroupCode(21));
                outstream.TXTAddGDBStringEOL('1.0');
 
-               if drawing.OGLwindow1<>nil then
+               if drawing.wa.getviewcontrol<>nil then
                                                         begin
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(12));
-                                                             outstream.TXTAddGDBStringEOL(floattostr(drawing.OGLwindow1.param.CPoint.x));
+                                                             outstream.TXTAddGDBStringEOL(floattostr(drawing.wa.param.CPoint.x));
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(22));
-                                                             outstream.TXTAddGDBStringEOL(floattostr(drawing.OGLwindow1.param.CPoint.y));
+                                                             outstream.TXTAddGDBStringEOL(floattostr(drawing.wa.param.CPoint.y));
                                                         end
                                                     else
                                                         begin
@@ -1858,13 +1858,13 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                outstream.TXTAddGDBStringEOL(dxfGroupCode(37));
                outstream.TXTAddGDBStringEOL(floattostr(0));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(40));
-               if drawing.OGLwindow1<>nil then
-                                                        outstream.TXTAddGDBStringEOL(floattostr(drawing.OGLwindow1.param.ViewHeight))
+               if drawing.wa.getviewcontrol<>nil then
+                                                        outstream.TXTAddGDBStringEOL(floattostr(drawing.wa.param.ViewHeight))
                                                     else
                                                         outstream.TXTAddGDBStringEOL(inttostr(500));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(41));
-               if drawing.OGLwindow1<>nil then
-                                                        outstream.TXTAddGDBStringEOL(floattostr(drawing.OGLwindow1.ClientWidth/drawing.OGLwindow1.ClientHeight))
+               if drawing.wa.getviewcontrol<>nil then
+                                                        outstream.TXTAddGDBStringEOL(floattostr(drawing.wa.getviewcontrol.ClientWidth/drawing.wa.getviewcontrol.ClientHeight))
                                                     else
                                                         outstream.TXTAddGDBStringEOL(inttostr(1));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(42));

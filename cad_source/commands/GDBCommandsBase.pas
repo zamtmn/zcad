@@ -302,11 +302,11 @@ begin
      val(Operands,GDBPlatforumint(pp),code);
      if (code=0)and(assigned(pp))then
                                      begin
-                                     pp^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
-                                     gdb.CurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject:=pp;
+                                     pp^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+                                     gdb.CurrentDWG.wa.param.SelDesc.LastSelectedObject:=pp;
                                      end;
      if assigned(updatevisibleproc) then updatevisibleproc;
-     gdb.CurrentDWG.OGLwindow1.SetObjInsp;
+     gdb.CurrentDWG.wa.SetObjInsp;
      //SetObjInsp;
      //commandmanager.executecommandsilent('MultiSelect2ObjIbsp');
 end;
@@ -441,7 +441,7 @@ var //i: GDBInteger;
     count:integer;
 begin
   if gdb.GetCurrentROOT.ObjArray.Count = 0 then exit;
-  GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount:=0;
+  GDB.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount:=0;
 
   count:=0;
 
@@ -459,7 +459,7 @@ begin
         if count>10000 then
                            pv^.SelectQuik//:=true
                        else
-                           pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
+                           pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
 
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
@@ -577,7 +577,7 @@ var
    prevundo:integer;
    overlay:GDBBoolean;
 begin
-  gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
+  gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
   if commandmanager.CommandsStack.Count>0 then
                                               begin
                                                    prevundo:=pCommandRTEdObject(ppointer(commandmanager.CommandsStack.getelement(commandmanager.CommandsStack.Count-1))^)^.UndoTop;
@@ -594,7 +594,7 @@ begin
 end;
 function Redo_com(Operands:pansichar):GDBInteger;
 begin
-  gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
+  gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
   ptdrawing(gdb.GetCurrentDWG).UndoStack.redo;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
@@ -605,17 +605,17 @@ function ChangeProjType_com(Operands:pansichar):GDBInteger;
 //   ta:TmyAction;
 begin
      //ta:=tmyaction(MainFormN.StandartActions.ActionByName('ACN_PERSPECTIVE'));
-  if GDB.GetCurrentDWG.OGLwindow1.param.projtype = projparalel then
+  if GDB.GetCurrentDWG.wa.param.projtype = projparalel then
   begin
-    GDB.GetCurrentDWG.OGLwindow1.param.projtype := projperspective;
+    GDB.GetCurrentDWG.wa.param.projtype := projperspective;
     //if ta<>nil then
     //               ta.Checked:=true;
 
   end
   else
-    if GDB.GetCurrentDWG.OGLwindow1.param.projtype = projPerspective then
+    if GDB.GetCurrentDWG.wa.param.projtype = projPerspective then
     begin
-    GDB.GetCurrentDWG.OGLwindow1.param.projtype := projparalel;
+    GDB.GetCurrentDWG.wa.param.projtype := projparalel;
       //if ta<>nil then
       //               ta.Checked:=false;
     end;
@@ -625,7 +625,7 @@ end;
 procedure FrameEdit_com_CommandStart(Operands:pansichar);
 begin
   //inherited CommandStart;
-  GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera));
+  GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera));
   historyoutstr(rscmFirstPoint);
 end;
 function ShowWindow_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
@@ -637,14 +637,14 @@ var //i: GDBInteger;
   r:TInRect;
 begin
   result:=mclick;
-  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2 := mc;
-  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame23d := wc;
+  GDB.GetCurrentDWG.wa.param.seldesc.Frame2 := mc;
+  GDB.GetCurrentDWG.wa.param.seldesc.Frame23d := wc;
   if (button and MZW_LBUTTON)<>0 then
   begin
     begin
-      GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := false;
-      GDB.GetCurrentDWG.OGLwindow1.ZoomToVolume(CreateBBFrom2Point(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame13d,GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame23d));
-      GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := false;
+      GDB.GetCurrentDWG.wa.param.seldesc.MouseFrameON := false;
+      GDB.GetCurrentDWG.wa.ZoomToVolume(CreateBBFrom2Point(GDB.GetCurrentDWG.wa.param.seldesc.Frame13d,GDB.GetCurrentDWG.wa.param.seldesc.Frame23d));
+      GDB.GetCurrentDWG.wa.param.seldesc.MouseFrameON := false;
       commandmanager.executecommandend;
       result:=cmd_ok;
     end;
@@ -653,7 +653,7 @@ end;
 procedure FrameEdit_com_Command_End;
 begin
   //ugdbdescriptor.poglwnd^.md.mode := (MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera);
-  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := false;
+  GDB.GetCurrentDWG.wa.param.seldesc.MouseFrameON := false;
 end;
 
 function FrameEdit_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
@@ -661,12 +661,12 @@ begin
   result:=0;
   if (button and MZW_LBUTTON)<>0 then
   begin
-    GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := true;
+    GDB.GetCurrentDWG.wa.param.seldesc.MouseFrameON := true;
     historyoutstr(rscmSecondPoint);
-    GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1 := mc;
-    GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2 := mc;
-    GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame13d := wc;
-    GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame23d := wc;
+    GDB.GetCurrentDWG.wa.param.seldesc.Frame1 := mc;
+    GDB.GetCurrentDWG.wa.param.seldesc.Frame2 := mc;
+    GDB.GetCurrentDWG.wa.param.seldesc.Frame13d := wc;
+    GDB.GetCurrentDWG.wa.param.seldesc.Frame23d := wc;
   end
 end;
 function FrameEdit_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
@@ -678,45 +678,45 @@ var //i: GDBInteger;
   r:TInRect;
 begin
   result:=mclick;
-  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2 := mc;
-  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame23d := wc;
+  GDB.GetCurrentDWG.wa.param.seldesc.Frame2 := mc;
+  GDB.GetCurrentDWG.wa.param.seldesc.Frame23d := wc;
   if (button and MZW_LBUTTON)<>0 then
   begin
     begin
-      GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := false;
+      GDB.GetCurrentDWG.wa.param.seldesc.MouseFrameON := false;
 
          if sysvar.DSGN.DSGN_SelNew^ then
          begin
-               GDB.GetCurrentROOT.ObjArray.DeSelect(GDB.GetCurrentDWG.GetSelObjArray,GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
-               GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject := nil;
-               GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.OnMouseObject := nil;
-               GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
+               GDB.GetCurrentROOT.ObjArray.DeSelect(GDB.GetCurrentDWG.GetSelObjArray,GDB.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+               GDB.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
+               GDB.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
+               GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
                GDB.GetCurrentDWG.GetSelObjArray.clearallobjects;
          end;
 
       //mclick:=-1;
-      if GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x > GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x then
+      if GDB.GetCurrentDWG.wa.param.seldesc.Frame1.x > GDB.GetCurrentDWG.wa.param.seldesc.Frame2.x then
       begin
-        ti := GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x;
-        GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x := GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x;
-        GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x := ti;
-        GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameInverse:=true;
+        ti := GDB.GetCurrentDWG.wa.param.seldesc.Frame2.x;
+        GDB.GetCurrentDWG.wa.param.seldesc.Frame2.x := GDB.GetCurrentDWG.wa.param.seldesc.Frame1.x;
+        GDB.GetCurrentDWG.wa.param.seldesc.Frame1.x := ti;
+        GDB.GetCurrentDWG.wa.param.seldesc.MouseFrameInverse:=true;
       end
-         else GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameInverse:=false;
-      if GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y < GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y then
+         else GDB.GetCurrentDWG.wa.param.seldesc.MouseFrameInverse:=false;
+      if GDB.GetCurrentDWG.wa.param.seldesc.Frame1.y < GDB.GetCurrentDWG.wa.param.seldesc.Frame2.y then
       begin
-        ti := GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y;
-        GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y := GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y;
-        GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y := ti;
+        ti := GDB.GetCurrentDWG.wa.param.seldesc.Frame2.y;
+        GDB.GetCurrentDWG.wa.param.seldesc.Frame2.y := GDB.GetCurrentDWG.wa.param.seldesc.Frame1.y;
+        GDB.GetCurrentDWG.wa.param.seldesc.Frame1.y := ti;
       end;
-      GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y := GDB.GetCurrentDWG.OGLwindow1.param.height - GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y;
-      GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y := GDB.GetCurrentDWG.OGLwindow1.param.height - GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y;
+      GDB.GetCurrentDWG.wa.param.seldesc.Frame1.y := GDB.GetCurrentDWG.wa.param.height - GDB.GetCurrentDWG.wa.param.seldesc.Frame1.y;
+      GDB.GetCurrentDWG.wa.param.seldesc.Frame2.y := GDB.GetCurrentDWG.wa.param.height - GDB.GetCurrentDWG.wa.param.seldesc.Frame2.y;
       //ugdbdescriptor.poglwnd^.seldesc.Selectedobjcount:=0;
 
-      x:=(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x+GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x)/2;
-      y:=(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y+GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y)/2;
-      w:=GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x-GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x;
-      h:=GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y-GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y;
+      x:=(GDB.GetCurrentDWG.wa.param.seldesc.Frame2.x+GDB.GetCurrentDWG.wa.param.seldesc.Frame1.x)/2;
+      y:=(GDB.GetCurrentDWG.wa.param.seldesc.Frame2.y+GDB.GetCurrentDWG.wa.param.seldesc.Frame1.y)/2;
+      w:=GDB.GetCurrentDWG.wa.param.seldesc.Frame2.x-GDB.GetCurrentDWG.wa.param.seldesc.Frame1.x;
+      h:=GDB.GetCurrentDWG.wa.param.seldesc.Frame2.y-GDB.GetCurrentDWG.wa.param.seldesc.Frame1.y;
 
       if (w=0) or (h=0)  then
                              begin
@@ -724,7 +724,7 @@ begin
                                   exit;
                              end;
 
-      GDB.GetCurrentDWG.OGLwindow1.param.seldesc.BigMouseFrustum:=CalcDisplaySubFrustum(x,y,w,h,gdb.getcurrentdwg.pcamera.modelMatrix,gdb.getcurrentdwg.pcamera.projMatrix,gdb.getcurrentdwg.pcamera.viewport);
+      GDB.GetCurrentDWG.wa.param.seldesc.BigMouseFrustum:=CalcDisplaySubFrustum(x,y,w,h,gdb.getcurrentdwg.pcamera.modelMatrix,gdb.getcurrentdwg.pcamera.projMatrix,gdb.getcurrentdwg.pcamera.viewport);
 
       pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
       if pv<>nil then
@@ -732,19 +732,19 @@ begin
             if pv^.Visible=gdb.GetCurrentDWG.pcamera.VISCOUNT then
             if pv^.infrustum=gdb.GetCurrentDWG.pcamera.POSCOUNT then
             begin
-                 r:=pv^.CalcTrueInFrustum(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.BigMouseFrustum,gdb.GetCurrentDWG.pcamera.VISCOUNT);
+                 r:=pv^.CalcTrueInFrustum(GDB.GetCurrentDWG.wa.param.seldesc.BigMouseFrustum,gdb.GetCurrentDWG.pcamera.VISCOUNT);
 
-                 if GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameInverse
+                 if GDB.GetCurrentDWG.wa.param.seldesc.MouseFrameInverse
                     then
                         begin
                              if r<>IREmpty then
                                                begin
                                                pv^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
                                                if (button and MZW_SHIFT)=0 then
-                                                                               pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount)
+                                                                               pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount)
                                                                            else
-                                                                               pv^.deselect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
-                                               GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject:=pv;
+                                                                               pv^.deselect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+                                               GDB.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject:=pv;
                                                end;
                         end
                     else
@@ -753,10 +753,10 @@ begin
                                               begin
                                                pv^.RenderFeedbackIFNeed(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
                                                if (button and MZW_SHIFT)=0 then
-                                                                               pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount)
+                                                                               pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount)
                                                                            else
-                                                                               pv^.deselect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
-                                               GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject:=pv;
+                                                                               pv^.deselect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+                                               GDB.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject:=pv;
                                               end;
                         end
             end;
@@ -792,12 +792,12 @@ begin
   begin
     //if mouseclic = 1 then
     begin
-      GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2 := mc;
-      if GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x > GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x then
+      GDB.GetCurrentDWG.wa.param.seldesc.Frame2 := mc;
+      if GDB.GetCurrentDWG.wa.param.seldesc.Frame1.x > GDB.GetCurrentDWG.wa.param.seldesc.Frame2.x then
       begin
-        GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameInverse:=true;
+        GDB.GetCurrentDWG.wa.param.seldesc.MouseFrameInverse:=true;
       end
-        else GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameInverse:=false;
+        else GDB.GetCurrentDWG.wa.param.seldesc.MouseFrameInverse:=false;
     end
   end;
 end;
@@ -807,7 +807,7 @@ var pv:pGDBObjEntity;
     plt:PGDBLtypeProp;
     ir:itrec;
 begin
-  if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
+  if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0) then exit;
   plt:={gdb.GetCurrentDWG.LTypeStyleTable.getelement}(SysVar.dwg.DWG_CLType^);
   if plt=nil then
                  exit;
@@ -842,7 +842,7 @@ var pv:PGDBObjText;
     prs:PGDBTextStyle;
     ir:itrec;
 begin
-  if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
+  if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0) then exit;
   prs:=(SysVar.dwg.DWG_CTStyle^);
   if prs=nil then
                  exit;
@@ -879,7 +879,7 @@ var pv:PGDBObjDimension;
     prs:PGDBDimStyle;
     ir:itrec;
 begin
-  if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
+  if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0) then exit;
   prs:=(SysVar.dwg.DWG_CDimStyle^);
   if prs=nil then
                  exit;
@@ -915,7 +915,7 @@ var pv:pGDBObjEntity;
     psv:PSelectedObjDesc;
     ir:itrec;
 begin
-  if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
+  if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0) then exit;
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
@@ -945,7 +945,7 @@ function SelObjChangeColorToCurrent_com:GDBInteger;
 var pv:pGDBObjEntity;
     ir:itrec;
 begin
-  if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
+  if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0) then exit;
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
@@ -960,7 +960,7 @@ function SelObjChangeLWToCurrent_com:GDBInteger;
 var pv:pGDBObjEntity;
     ir:itrec;
 begin
-  if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
+  if (gdb.GetCurrentROOT.ObjArray.count = 0)or(GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0) then exit;
   pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
@@ -998,7 +998,7 @@ var
    astring:ansistring;
 begin
      pobj:=nil;
-     if GDB.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount=1 then
+     if GDB.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount=1 then
                                                 pobj:=PGDBObjEntity(GDB.GetCurrentDWG.GetLastSelected)
 else if length(Operands)>3 then
                                begin
@@ -1114,10 +1114,10 @@ begin
   gdb.GetCurrentROOT.getoutbound;
   if assigned(EndLongProcessProc) then EndLongProcessProc;
 
-  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
-  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
-  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
-  GDB.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
+  GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
+  GDB.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
+  GDB.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
+  GDB.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   {objinsp.GDBobjinsp.}
   if assigned(ReturnToDefaultProc)then
                                       ReturnToDefaultProc;
@@ -1297,9 +1297,9 @@ begin
   gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
   if assigned(EndLongProcessProc) then EndLongProcessProc;
   shared.HistoryOutStr('Done');
-  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
-  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
-  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
+  GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
+  GDB.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
+  GDB.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
     if assigned(ReturnToDefaultProc)then
                                       ReturnToDefaultProc;
   clearcp;
@@ -1336,7 +1336,7 @@ begin
   if GDB.GetCurrentDWG.GetLastSelected<>nil then
   if GDB.GetCurrentDWG.GetLastSelected.vp.ID=GDBlwPolylineID then
   begin
-  GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera) or (MGet3DPoint));
+  GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera) or (MGet3DPoint));
   //GDB.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := true;
   historyout('тыкаем и проверяем внутри\снаружи 2D полилинии:');
   exit;
@@ -1626,19 +1626,19 @@ end;
 function Zoom_com(Operands:pansichar):GDBInteger;
 begin
      if uppercase(operands)='ALL' then
-                                      gdb.GetCurrentDWG.OGLwindow1.ZoomAll
+                                      gdb.GetCurrentDWG.wa.ZoomAll
 else if uppercase(operands)='SEL' then
                                     begin
-                                         gdb.GetCurrentDWG.OGLwindow1.ZoomSel;
+                                         gdb.GetCurrentDWG.wa.ZoomSel;
                                     end
 else if uppercase(operands)='IN' then
                                      begin
-                                          gdb.GetCurrentDWG.OGLwindow1.DoMouseWheel([],1,point(0,0));
+                                          gdb.GetCurrentDWG.wa.DoMouseWheel([],1,point(0,0));
                                           //gdb.GetCurrentDWG.OGLwindow1.DISP_ZoomFactor(sysvar.DISP.DISP_ZoomFactor^)
                                      end
 else if uppercase(operands)='OUT' then
                                      begin
-                                          gdb.GetCurrentDWG.OGLwindow1.DoMouseWheel([],-1,point(0,0));
+                                          gdb.GetCurrentDWG.wa.DoMouseWheel([],-1,point(0,0));
                                           //gdb.GetCurrentDWG.OGLwindow1.DISP_ZoomFactor(1/sysvar.DISP.DISP_ZoomFactor^);
                                      end;
      result:=cmd_ok;
@@ -1755,7 +1755,7 @@ else recognized:=false;
 if recognized then
                    begin
                         oz:=geometry.CrossVertex(ox,oy);
-                        gdb.GetCurrentDWG.OGLwindow1.RotTo(ox,oy,oz);
+                        gdb.GetCurrentDWG.wa.RotTo(ox,oy,oz);
                    end;
      result:=cmd_ok;
 end;
@@ -1764,23 +1764,23 @@ const
      pix=50;
 var x,y:integer;
 begin
-     x:=gdb.GetCurrentDWG.OGLwindow1.ClientWidth div 2;
-     y:=gdb.GetCurrentDWG.OGLwindow1.ClientHeight div 2;
+     x:=gdb.GetCurrentDWG.wa.getviewcontrol.ClientWidth div 2;
+     y:=gdb.GetCurrentDWG.wa.getviewcontrol.ClientHeight div 2;
      if uppercase(operands)='LEFT' then
-                                      gdb.GetCurrentDWG.OGLwindow1.PanScreen(x,y,x+pix,y)
+                                      gdb.GetCurrentDWG.wa.PanScreen(x,y,x+pix,y)
 else if uppercase(operands)='RIGHT' then
                                      begin
-                                          gdb.GetCurrentDWG.OGLwindow1.PanScreen(x,y,x-pix,y)
+                                          gdb.GetCurrentDWG.wa.PanScreen(x,y,x-pix,y)
                                      end
 else if uppercase(operands)='UP' then
                                           begin
-                                               gdb.GetCurrentDWG.OGLwindow1.PanScreen(x,y,x,y+pix)
+                                               gdb.GetCurrentDWG.wa.PanScreen(x,y,x,y+pix)
                                           end
 else if uppercase(operands)='DOWN' then
                                      begin
-                                          gdb.GetCurrentDWG.OGLwindow1.PanScreen(x,y,x,y-pix)
+                                          gdb.GetCurrentDWG.wa.PanScreen(x,y,x,y-pix)
                                      end;
-     gdb.GetCurrentDWG.OGLwindow1.RestoreMouse;
+     gdb.GetCurrentDWG.wa.RestoreMouse;
      result:=cmd_ok;
 end;
 function StoreFrustum_com(Operands:pansichar):GDBInteger;
@@ -1790,8 +1790,8 @@ function StoreFrustum_com(Operands:pansichar):GDBInteger;
    //ir:itrec;
    //clist:GDBGDBStringArray;
 begin
-   gdb.GetCurrentDWG.OGLwindow1.param.debugfrustum:=gdb.GetCurrentDWG.pcamera.frustum;
-   gdb.GetCurrentDWG.OGLwindow1.param.ShowDebugFrustum:=true;
+   gdb.GetCurrentDWG.wa.param.debugfrustum:=gdb.GetCurrentDWG.pcamera.frustum;
+   gdb.GetCurrentDWG.wa.param.ShowDebugFrustum:=true;
 end;
 (*function ScriptOnUses(Sender: TPSPascalCompiler; const Name: string): Boolean;
 { the OnUses callback function is called for each "uses" in the script.

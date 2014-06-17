@@ -770,7 +770,7 @@ begin
   counter:=0;
   cman.init;
   cman.build;
-             GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+             GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
 
   pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pobj<>nil then
@@ -1134,7 +1134,7 @@ begin
   FirstOwner:=nil;
   SecondOwner:=nil;
   OldFirstOwner:=nil;
-  gdb.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+  gdb.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   Prompt('Начало цепи:');
 end;
 
@@ -1284,7 +1284,7 @@ begin
     gdb.GetCurrentROOT.calcbb;
     gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
     oldfirstowner:=firstowner;
-    gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
+    gdb.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
 
     gdb.GetCurrentDWG.OnMouseObj.Clear;
     if assigned(ClrarIfItIsProc)then
@@ -1332,7 +1332,7 @@ var
    currentobj:PGDBObjNet;
 begin
   p3dpl:=nil;
-  gdb.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+  gdb.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
 
   cabcomparam.Pcable:=nil;
   cabcomparam.PTrace:=nil;
@@ -2094,7 +2094,7 @@ begin
                     begin
                     CurrentObj:=pointer(ptn^.DevLink^.bp.ListPos.owner);
                     if CurrentObj<>nil then
-                                           CurrentObj^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
+                                           CurrentObj^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
                     end;
 
                     ptn:=PGDBObjCable(pv)^.NodePropArray.iterate(irnpa);
@@ -2277,9 +2277,9 @@ else
 
 
   pc1.formatentity(gdb.GetCurrentDWG^);
-  gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
-  gdb.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
-  gdb.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
+  gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
+  gdb.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
+  gdb.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
      if assigned(ReturnToDefaultProc)then
                                          ReturnToDefaultProc;
   clearcp;
@@ -2295,7 +2295,7 @@ begin
      if assigned(SetGDBObjInspProc)then
   SetGDBObjInspProc(SysUnit.TypeName2PTD('CommandRTEdObject'),pfindcom,gdb.GetCurrentDWG);
   gdb.GetCurrentDWG.SelObjArray.clearallobjects;
-  gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
+  gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
   result:=cmd_ok;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
 end;
@@ -2311,7 +2311,7 @@ var pv,pvlast:pGDBObjEntity;
     findvarvalue:gdbboolean;
 begin
   gdb.GetCurrentDWG.SelObjArray.clearallobjects;
-  gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
+  gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
    case FindDeviceParam.FindType of
       tft_obozn:begin
                      varname:=('NMO_Name');
@@ -2359,7 +2359,7 @@ begin
 
                if findvarvalue then
                begin
-                  pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
+                  pv^.select(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
                   pvlast:=pv;
                   inc(count);
                end;
@@ -2376,26 +2376,26 @@ begin
         dcsRTF:=MinusInfinityVertex;
         wcsLBN:=InfinityVertex;
         wcsRTF:=MinusInfinityVertex;
-        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        {tp:=}gdb.getcurrentdwg.OGLwindow1.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+        {tp:=}gdb.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
   gdb.GetCurrentDWG.pcamera^.prop.point.x:=-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2);
   gdb.GetCurrentDWG.pcamera^.prop.point.y:=-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2);
 
 
-  gdb.GetCurrentDWG.pcamera^.prop.zoom:=(wcsRTF.x-wcsLBN.x)/gdb.GetCurrentDWG.OGLwindow1.clientwidth;
-  tpz:=(wcsRTF.y-wcsLBN.y)/gdb.GetCurrentDWG.OGLwindow1.clientheight;
+  gdb.GetCurrentDWG.pcamera^.prop.zoom:=(wcsRTF.x-wcsLBN.x)/gdb.GetCurrentDWG.wa.getviewcontrol.clientwidth;
+  tpz:=(wcsRTF.y-wcsLBN.y)/gdb.GetCurrentDWG.wa.getviewcontrol.clientheight;
 
   if tpz>gdb.GetCurrentDWG.pcamera^.prop.zoom then gdb.GetCurrentDWG.pcamera^.prop.zoom:=tpz;
 
-  gdb.GetCurrentDWG.OGLwindow1.CalcOptimalMatrix;
-  gdb.GetCurrentDWG.OGLwindow1.mouseunproject(gdb.GetCurrentDWG.OGLwindow1.param.md.mouse.x, gdb.GetCurrentDWG.OGLwindow1.param.md.mouse.y);
-  gdb.GetCurrentDWG.OGLwindow1.reprojectaxis;
+  gdb.GetCurrentDWG.wa.CalcOptimalMatrix;
+  gdb.GetCurrentDWG.wa.mouseunproject(gdb.GetCurrentDWG.wa.param.md.mouse.x, gdb.GetCurrentDWG.wa.param.md.mouse.y);
+  gdb.GetCurrentDWG.wa.reprojectaxis;
   //OGLwindow1.param.firstdraw := true;
   //gdb.GetCurrentDWG.pcamera^.getfrustum(@gdb.GetCurrentDWG.pcamera^.modelMatrix,@gdb.GetCurrentDWG.pcamera^.projMatrix,gdb.GetCurrentDWG.pcamera^.clipLCS,gdb.GetCurrentDWG.pcamera^.frustum);
   gdb.GetCurrentROOT.FormatEntity(gdb.GetCurrentDWG^);
@@ -2525,7 +2525,7 @@ end;
 function ElLeaser_com_CommandStart(operands:pansichar):GDBInteger;
 begin
   pold:=nil;
-  GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+  GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   sysvar.dwg.DWG_OSMode^:=sysvar.dwg.DWG_OSMode^ or osm_nearest;
   if assigned(SetGDBObjInspProc)then
   SetGDBObjInspProc(SysUnit.TypeName2PTD('TELLeaderComParam'),@ELLeaderComParam,gdb.GetCurrentDWG);
@@ -3061,10 +3061,10 @@ begin
     end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
-  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
-  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.OnMouseObject:=nil;
-  GDB.GetCurrentDWG.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
-  GDB.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
+  GDB.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
+  GDB.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
+  GDB.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
+  GDB.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   GDB.GetCurrentDWG.SelObjArray.Clear;
   if assigned(ReturnToDefaultProc)then
   ReturnToDefaultProc;
@@ -3080,8 +3080,8 @@ var i: GDBInteger;
 begin
      historyout('Тест производительности. запасаемя терпением');
      {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('тест производительности - getonmouseobject*10000',lp_IncPos);{$ENDIF}
-     for i:=0 to 10000 do
-            gdb.GetCurrentDWG.OGLwindow1.getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
+     //for i:=0 to 10000 do
+     //       gdb.GetCurrentDWG.wa.getonmouseobject(@gdb.GetCurrentROOT.ObjArray);
      {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('тест производительности',lp_DecPos);{$ENDIF}
      historyout('Конец теста. выходим, смотрим результаты в конце лога.');
      //quit_com('');

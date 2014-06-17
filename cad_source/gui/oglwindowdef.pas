@@ -101,7 +101,7 @@ type
     otrackarray: packed array[0..3] of os_record;
     total, current: GDBInteger;
   end;
-  CSIcon=packed record
+  TCSIcon=packed record
                CSIconCoord: GDBvertex;
                CSIconX,CSIconY,CSIconZ: GDBvertex;
                CSX, CSY, CSZ: GDBvertex2DI;
@@ -112,7 +112,7 @@ type
   OGLWndtype = packed record
     polarlinetrace: GDBInteger;
     pointnum, axisnum: GDBInteger;
-    CSIcon:CSIcon;
+    CSIcon:TCSIcon;
     //CSIconCoord: GDBvertex;
     //CSX, CSY, CSZ: GDBvertex2DI;
     BLPoint,CPoint,TRPoint:GDBvertex2D;
@@ -149,4 +149,4 @@ type
 
 implementation
 
-end.
+end.

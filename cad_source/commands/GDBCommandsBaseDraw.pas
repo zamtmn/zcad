@@ -46,7 +46,7 @@ var
    oldpoint,point:gdbvertex;
 function Line_com_CommandStart(operands:pansichar):GDBInteger;
 begin
-  GDB.GetCurrentDWG.OGLwindow1.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+  GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   if operands='' then
                      historyoutstr(rscmPoint)
                  else
@@ -154,4 +154,4 @@ initialization
      startup;
 finalization
      finalize;
-end.
+end.

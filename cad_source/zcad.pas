@@ -67,7 +67,7 @@ uses
 
   GDBCommandsElectrical,
   GDBCommandsOPS,
-  cmdline,
+  abstractviewarea,
   plugins,
   //layerwnd,
   zcadstrconsts,

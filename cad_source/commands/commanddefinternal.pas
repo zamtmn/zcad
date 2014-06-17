@@ -115,20 +115,20 @@ begin
          TTA30:c:=6;
     end;
 
-  gdb.GetCurrentDWG.oglwindow1.PolarAxis.clear;
+  gdb.GetCurrentDWG.wa.PolarAxis.clear;
   for i := 0 to c - 1 do
   begin
     v.x:=cos(pi * i / c);
     v.y:=sin(pi * i / c);
     v.z:=0;
-    gdb.GetCurrentDWG.oglwindow1.PolarAxis.add(@v);
+    gdb.GetCurrentDWG.wa.PolarAxis.add(@v);
   end;
   if self.trace.ZAxis then
   begin
     v.x:=0;
     v.y:=0;
     v.z:=1;
-    gdb.GetCurrentDWG.oglwindow1.PolarAxis.add(@v);
+    gdb.GetCurrentDWG.wa.PolarAxis.add(@v);
   end;
 end;
 procedure TOSModeEditor.GetState;
@@ -225,15 +225,15 @@ begin
     if (self.CEndActionAttr and CEDeSelect)<>0 then
     //if (@self<>pfindcom)and(@self<>@OnDrawingEd)and(@self<>selframecommand)and(@self<>ms2objinsp)and(@self<>csel)and(@self<>selall) then
     begin
-    gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
-    gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject := nil;
-    gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.OnMouseObject := nil;
-    gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
+    gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+    gdb.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
+    gdb.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
+    gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
     gdb.GetCurrentDWG.SelObjArray.clearallobjects;
     end;
-    if gdb.GetCurrentDWG.OGLwindow1<>nil then
+    if gdb.GetCurrentDWG.wa<>nil then
     if not overlay then
-  gdb.GetCurrentDWG.OGLwindow1.Clear0Ontrackpoint;
+  gdb.GetCurrentDWG.wa.Clear0Ontrackpoint;
   if not overlay then
                      begin
                           gdb.GetCurrentDWG.FreeConstructionObjects;
@@ -242,8 +242,8 @@ begin
                           //gdb.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
                           gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;}
                      end;
-  if gdb.GetCurrentDWG.OGLwindow1<>nil then
-  gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
+  if gdb.GetCurrentDWG.wa.getviewcontrol<>nil then
+  gdb.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   gdb.GetCurrentDWG.OnMouseObj.Clear;
   //poglwnd^.md.mode := savemousemode;
   OSModeEditor.GetState;
@@ -257,27 +257,27 @@ begin
     if (self.CEndActionAttr and CEDeSelect)<>0 then
     //if (@self<>pfindcom)and(@self<>@OnDrawingEd)and(@self<>selframecommand) then
     begin
-    gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.Selectedobjcount);
-    gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.LastSelectedObject := nil;
-    gdb.GetCurrentDWG.OGLwindow1.param.SelDesc.OnMouseObject := nil;
-    gdb.GetCurrentDWG.OGLwindow1.param.seldesc.Selectedobjcount:=0;
+    gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
+    gdb.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
+    gdb.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
+    gdb.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
     gdb.GetCurrentDWG.SelObjArray.clearallobjects;
     end;
-  gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
+  gdb.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   gdb.GetCurrentDWG.OnMouseObj.Clear;
   if commandline.commandmanager.CommandsStack.Count=0 then
   begin
-  gdb.GetCurrentDWG.OGLwindow1.Clear0Ontrackpoint;
+  gdb.GetCurrentDWG.wa.Clear0Ontrackpoint;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjCasheArray.Clear;
   //gdb.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
   end;
-  gdb.GetCurrentDWG.OGLwindow1.SetMouseMode(savemousemode);
+  gdb.GetCurrentDWG.wa.SetMouseMode(savemousemode);
   sysvar.dwg.DWG_OSMode^ := saveosmode;
 
   if commandline.commandmanager.CommandsStack.Count=0 then
-                                                           gdb.GetCurrentDWG.OGLwindow1.setobjinsp;
+                                                           gdb.GetCurrentDWG.wa.setobjinsp;
   //-------------------------------gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   OSModeEditor.GetState;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
@@ -393,7 +393,7 @@ end;
 
 procedure CommandRTEdObject.CommandStart;
 begin
-  savemousemode := gdb.GetCurrentDWG.OGLwindow1.param.md.mode;
+  savemousemode := gdb.GetCurrentDWG.wa.param.md.mode;
   saveosmode := sysvar.dwg.DWG_OSMode^;
   mouseclic := 0;
   UndoTop:=gdb.GetCurrentDWG.GetUndoTop{UndoStack.CurrentCommand};
@@ -410,9 +410,9 @@ end;
 procedure CommandRTEdObject.CommandCancel;
 begin
   gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
-  gdb.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
+  gdb.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   gdb.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
-  gdb.GetCurrentDWG.OGLwindow1.SetMouseMode(savemousemode);
+  gdb.GetCurrentDWG.wa.SetMouseMode(savemousemode);
   if assigned(redrawoglwndproc) then redrawoglwndproc;
 end;
 
@@ -437,4 +437,4 @@ end;
 begin
      {$IFDEF DEBUGINITSECTION}LogOut('commanddefinternal.initialization');{$ENDIF}
 end.
-
+

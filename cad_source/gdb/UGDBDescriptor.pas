@@ -187,15 +187,15 @@ begin
   if pdwg<>nil then
   begin
        gdb.GetCurrentRoot.FormatAfterEdit(pdwg^);
-  pdwg.OGLwindow1.param.firstdraw := TRUE;
-  pdwg.OGLwindow1.CalcOptimalMatrix;
+  pdwg.wa.param.firstdraw := TRUE;
+  pdwg.wa.CalcOptimalMatrix;
   pdwg.pcamera^.totalobj:=0;
   pdwg.pcamera^.infrustum:=0;
   gdb.GetCurrentROOT.CalcVisibleByTree(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,gdb.GetCurrentROOT.ObjArray.ObjTree,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg^.myGluProject2,pdwg.pcamera.prop.zoom);
   //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
   pdwg.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
-  pdwg.OGLwindow1.calcgrid;
-  pdwg.OGLwindow1.draw;
+  pdwg.wa.calcgrid;
+  pdwg.wa.draw;
   end;
   //gdb.GetCurrentDWG.OGLwindow1.repaint;
 end;
@@ -207,15 +207,15 @@ begin
   pdwg:=gdb.GetCurrentDWG;
   if pdwg<>nil then
   begin
-       pdwg.OGLwindow1.param.lastonmouseobject:=nil;
+       pdwg.wa.param.lastonmouseobject:=nil;
   end;
 end;
 
 
 procedure clearotrack;
 begin
-     gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.current:=0;
-     gdb.GetCurrentDWG.OGLwindow1.param.ontrackarray.total:=0;
+     gdb.GetCurrentDWG.wa.param.ontrackarray.current:=0;
+     gdb.GetCurrentDWG.wa.param.ontrackarray.total:=0;
 end;
 procedure clearcp;
 begin
@@ -338,8 +338,8 @@ function GDBDescriptor.GetCurrentOGLWParam:POGLWndtype;
 begin
      if currentdwg<>nil then
                             begin
-                                 if currentdwg^.OGLwindow1<>nil then
-                                                                    result:=@currentdwg^.OGLwindow1.param
+                                 if currentdwg^.wa.getviewcontrol<>nil then
+                                                                    result:=@currentdwg^.wa.param
                                                                 else
                                                                     result:=nil;
                             end

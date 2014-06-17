@@ -177,7 +177,7 @@ end;
 function GDBObjDiametricDimension.Clone;
 var tvo: PGDBObjDiametricDimension;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{5A1B005F-39F1-431B-B65E-0C532AEFA5D0}-GDBObjLine.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjDiametricDimension));
+  GDBGetMem({$IFDEF DEBUGBUILD}'GDBObjDiametricDimension.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjDiametricDimension));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   CopyVPto(tvo^);
   tvo^.DimData := DimData;
@@ -262,4 +262,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('gdbdiametricdimension.initialization');{$ENDIF}
-end.
+end.

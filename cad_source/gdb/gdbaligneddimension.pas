@@ -304,7 +304,7 @@ end;
 function GDBObjAlignedDimension.Clone;
 var tvo: PGDBObjAlignedDimension;
 begin
-  GDBGetMem({$IFDEF DEBUGBUILD}'{5A1B005F-39F1-431B-B65E-0C532AEFA5D0}-GDBObjLine.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjAlignedDimension));
+  GDBGetMem({$IFDEF DEBUGBUILD}'GDBObjAlignedDimension.Clone',{$ENDIF}GDBPointer(tvo), sizeof(GDBObjAlignedDimension));
   tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
   CopyVPto(tvo^);
   tvo^.DimData := DimData;
@@ -398,4 +398,4 @@ begin
 end;}
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('gdbaligneddimension.initialization');{$ENDIF}
-end.
+end.

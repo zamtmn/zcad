@@ -234,7 +234,7 @@ const
   procedure DrawColor(Canvas:TCanvas; Index: Integer; ARect: TRect);
 
 implementation
-uses gdbcommandsinterface;
+uses generalviewarea,gdbcommandsinterface;
 
 {procedure TMyAnchorDockManager.ResetBounds(Force: Boolean);
 begin
@@ -674,7 +674,7 @@ begin
                TControl(poglwnd):=FindControlByType(TTabSheet(MainFormN.PageControl.Pages[i]),TOGLWnd);
                if poglwnd<>nil then
                                    begin
-                                        if poglwnd.PDWG.GetChangeStampt then
+                                        if poglwnd.wa.PDWG.GetChangeStampt then
                                                                             begin
                                                                                  result:=true;
                                                                                  system.break;
@@ -888,7 +888,7 @@ begin
        poglwnd:=toglwnd(ClosedDWG.wa.getviewcontrol);
        gdb.eraseobj(ClosedDWG);
        gdb.pack;
-       poglwnd.PDWG:=nil;
+       poglwnd.wa.PDWG:=nil;
 
        poglwnd.{GDBActivateGLContext}MakeCurrent;
        poglwnd.free;
@@ -899,7 +899,7 @@ begin
        if poglwnd<>nil then
        begin
             tobject(poglwnd):=FindControlByType(poglwnd,TOGLWnd);
-            gdb.CurrentDWG:=PTDrawing(poglwnd.PDWG);
+            gdb.CurrentDWG:=PTDrawing(poglwnd.wa.PDWG);
             poglwnd.GDBActivate;
        end
        else
@@ -925,7 +925,7 @@ begin
   Closeddwg:=nil;
   TControl(poglwnd):=FindControlByType(TTabSheet(sender),TOGLWnd);
   if poglwnd<>nil then
-                      Closeddwg:=ptdrawing(poglwnd.PDWG);
+                      Closeddwg:=ptdrawing(poglwnd.wa.PDWG);
   result:=_CloseDWGPage(ClosedDWG,Sender);
 end;
 procedure MainForm.PageControlMouseDown(Sender: TObject;
@@ -3060,12 +3060,12 @@ begin
      begin
      if pdwg.wa.getviewcontrol<>nil then
      begin
-          if pdwg.wa.Fastmmx>=0 then
+          {if pdwg.wa.Fastmmx>=0 then
           begin
                //pdwg.OGLwindow1._onMouseMove(nil,pdwg.OGLwindow1.Fastmmshift,pdwg.OGLwindow1.Fastmmx,pdwg.OGLwindow1.Fastmmy);
                //pdwg.OGLwindow1.Fastmmx:=-1;
           end
-          else
+          else}
               if  pdwg.pcamera.DRAWNOTEND then
                                               begin
                                                    rc:=pdwg.wa.CreateRC;
@@ -3604,13 +3604,13 @@ begin
     begin
          tobject(poglwnd):=FindControlByType(MainFormN.PageControl.Pages[i]{.PageControl},TOGLwnd);
            if assigned(poglwnd) then
-            if poglwnd.PDWG<>nil then
+            if poglwnd.wa.PDWG<>nil then
             begin
-                name:=extractfilename(PTDrawing(poglwnd.PDWG)^.FileName);
-                if @PTDRAWING(poglwnd.PDWG).mainObjRoot=(PTDRAWING(poglwnd.PDWG).pObjRoot) then
+                name:=extractfilename(PTDrawing(poglwnd.wa.PDWG)^.FileName);
+                if @PTDRAWING(poglwnd.wa.PDWG).mainObjRoot=(PTDRAWING(poglwnd.wa.PDWG).pObjRoot) then
                                                                      MainFormN.PageControl.Pages[i].caption:=(name)
                                                                  else
-                                                                     MainFormN.PageControl.Pages[i].caption:='BEdit('+name+':'+PGDBObjBlockdef(PTDRAWING(poglwnd.PDWG).pObjRoot).Name+')';
+                                                                     MainFormN.PageControl.Pages[i].caption:='BEdit('+name+':'+PGDBObjBlockdef(PTDRAWING(poglwnd.wa.PDWG).pObjRoot).Name+')';
 
                 if k<=high(MainFormN.Drawings) then
                 begin

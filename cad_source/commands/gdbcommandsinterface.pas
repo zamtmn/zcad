@@ -197,14 +197,14 @@ begin
      //--------------------------------------------------------------oglwnd.BevelOuter:=bvnone;
      gdb.GetCurrentDWG.wa:=wpowner;
      //gdb.GetCurrentDWG.OGLwindow1:=oglwnd;
-     {gdb.GetCurrentDWG.OGLwindow1}oglwnd.PDWG:=ptd;
+     {gdb.GetCurrentDWG.OGLwindow1}oglwnd.wa.PDWG:=ptd;
      {gdb.GetCurrentDWG.OGLwindow1}oglwnd.align:=alClient;
           //gdb.GetCurrentDWG.OGLwindow1.align:=al_client;
      {gdb.GetCurrentDWG.OGLwindow1}oglwnd.Parent:=myts;
      {gdb.GetCurrentDWG.OGLwindow1}oglwnd.init;{переделать из инита нужно убрать обнуление pdwg}
-     {gdb.GetCurrentDWG.OGLwindow1}oglwnd.PDWG:=ptd;
+     {gdb.GetCurrentDWG.OGLwindow1}oglwnd.wa.PDWG:=ptd;
      programlog.logoutstr('oglwnd.PDWG:=ptd;',0);
-     oglwnd.GDBActivate;
+     //oglwnd.GDBActivate;
      oglwnd._onresize(nil);
      programlog.logoutstr('oglwnd._onresize(nil);',0);
      oglwnd.MakeCurrent(false);
@@ -785,4 +785,4 @@ initialization
   startup;
 finalization
   finalize;
-end.
+end.

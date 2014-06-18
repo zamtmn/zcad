@@ -29,6 +29,8 @@ TZGLAbstractDrawer=class
                         procedure startrender;virtual;
                         procedure endrender;virtual;
                    end;
+var
+  testrender:TZGLAbstractDrawer;
 implementation
 uses log;
 procedure TZGLAbstractDrawer.startrender;

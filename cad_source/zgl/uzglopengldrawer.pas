@@ -35,7 +35,7 @@ TZGLCanvasDrawer=class(TZGLAbstractDrawer)
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
                    end;
-{$IFDEF WINDOWS}G
+{$IFDEF WINDOWS}
 TZGLGDIPlusDrawer=class(TZGLCanvasDrawer)
                         graphicsGDIPlus:TGPGraphics;
                         pen: TGPPen;
@@ -128,4 +128,4 @@ initialization
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
 end.
-
+

@@ -377,7 +377,7 @@ procedure Line_com_CommandEnd(_self:pointer);
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 implementation
-uses GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,Varman,projecttreewnd,oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
+uses generalviewarea,GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,Varman,projecttreewnd,oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
 function GetBlockDefNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDBInteger;
 var pb:PGDBObjBlockdef;
     ir:itrec;

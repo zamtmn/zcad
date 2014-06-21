@@ -21,7 +21,7 @@ unit gdbcommandsinterface;
 
 interface
 uses
- colorwnd,dswnd,ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ uzglopengldrawer,uzglabstractdrawer,generalviewarea,colorwnd,dswnd,ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -154,8 +154,8 @@ function newdwg_com(Operands:pansichar):GDBInteger;
 var
    ptd:PTDrawing;
    myts:TTabSheet;
-   oglwnd:TOGLWND;
-   wpowner:TOpenGLViewArea;
+   oglwnd:TCADControl;
+   wpowner:{TOpenGLViewArea}TGeneralViewArea;
    tn:GDBString;
 begin
      ptd:=gdb.CreateDWG;
@@ -188,26 +188,34 @@ begin
 
      //tf.align:=al_client;
 
-     wpowner:=TOpenGLViewArea.Create(myts);
-     oglwnd:=wpowner.OpenGLWindow;// TOGLWnd.Create(myts);
+     wpowner:=TOpenGLViewArea{TCanvasViewArea}.Create(myts){)};
+     oglwnd:=wpowner.getviewcontrol;// TOGLWnd.Create(myts);
 
 
 
 
      //--------------------------------------------------------------oglwnd.BevelOuter:=bvnone;
      gdb.GetCurrentDWG.wa:=wpowner;
-     //gdb.GetCurrentDWG.OGLwindow1:=oglwnd;
-     {gdb.GetCurrentDWG.OGLwindow1}oglwnd.wa.PDWG:=ptd;
-     {gdb.GetCurrentDWG.OGLwindow1}oglwnd.align:=alClient;
-          //gdb.GetCurrentDWG.OGLwindow1.align:=al_client;
-     {gdb.GetCurrentDWG.OGLwindow1}oglwnd.Parent:=myts;
-     {gdb.GetCurrentDWG.OGLwindow1}oglwnd.init;{переделать из инита нужно убрать обнуление pdwg}
-     {gdb.GetCurrentDWG.OGLwindow1}oglwnd.wa.PDWG:=ptd;
+ wpowner.PDWG:=ptd;
+     wpowner.getviewcontrol.align:=alClient;
+     wpowner.getviewcontrol.Parent:=myts;
+     wpowner.getviewcontrol.Visible:=true;
+     wpowner.PDWG:=ptd;
      programlog.logoutstr('oglwnd.PDWG:=ptd;',0);
-     //oglwnd.GDBActivate;
-     oglwnd._onresize(nil);
+
+     if testform=nil then
+     begin
+     testform:=tform.CreateNew(application);
+     testform.Caption:='canvas render test';
+     testform.Show;
+     testrender:={TZGLCanvasDrawer}{TZGLGDIPlusDrawer}TZGLOpenGLDrawer.Create;
+     TZGLCanvasDrawer(testrender).canvas:=testform.Canvas;
+     end;
+
+     //TOGLWnd(oglwnd).GDBActivate;
+  wpowner.WaResize(nil);
      programlog.logoutstr('oglwnd._onresize(nil);',0);
-     oglwnd.MakeCurrent(false);
+     //oglwnd.MakeCurrent(false);
      programlog.logoutstr('oglwnd.MakeCurrent(false);',0);
      isOpenGLError;
      programlog.logoutstr('isOpenGLError;',0);
@@ -247,7 +255,7 @@ begin
      programlog.logoutstr('result:=cmd_ok;',0);
      application.ProcessMessages;
      programlog.logoutstr(' application.ProcessMessages;',0);
-     oglwnd._onresize(nil);
+     //oglwnd._onresize(nil);
      programlog.logoutstr('oglwnd._onresize(nil);',0);
 
      //GDB.AddBlockFromDBIfNeed(gdb.GetCurrentDWG,'DEVICE_TEST');

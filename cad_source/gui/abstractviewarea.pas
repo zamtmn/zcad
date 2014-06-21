@@ -23,7 +23,7 @@ uses {gdbase,gdbasetypes,
      UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,UGDBPoint3DArray,
      oglwindowdef,gdbdrawcontext,UGDBEntTree,ugdbabstractdrawing,
      uinfoform,}
-     gdbase,gdbasetypes,
+     GDBGenericSubEntry,gdbase,gdbasetypes,
      oglwindowdef,gdbdrawcontext,varmandef,Varman,UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
      shared,sysutils,
      ExtCtrls,Controls,Classes,LCLType,Forms,OGLSpecFunc,zcadsysvars,GDBEntity;
@@ -62,7 +62,6 @@ type
                            procedure RotTo(x0,y0,z0:GDBVertex);virtual;abstract;
                            procedure PanScreen(oldX,oldY,X,Y:Integer);virtual;abstract;
                            procedure RestoreMouse;virtual;abstract;
-                           function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):GDBBoolean;virtual;abstract;
                            procedure myKeyPress(var Key: Word; Shift: TShiftState);virtual;abstract;
                            procedure finishdraw(var RC:TDrawContext);virtual;abstract;
                            procedure SetCameraPosZoom(_pos:gdbvertex;_zoom:gdbdouble;finalcalk:gdbboolean);virtual;abstract;
@@ -91,7 +90,17 @@ type
                            procedure doCameraChanged;virtual;abstract;
                            procedure set3dmouse;virtual;abstract;
                            procedure WaMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);virtual;abstract;
-
+                           procedure WaResize(sender:tobject);virtual;abstract;
+                           procedure CreateScrbuf(w,h:integer); virtual;abstract;
+                           procedure delmyscrbuf; virtual;abstract;
+                           procedure SaveBuffers; virtual;abstract;
+                           procedure RestoreBuffers; virtual;abstract;
+                           procedure LightOn; virtual;abstract;
+                           procedure LightOff; virtual;abstract;
+                           procedure DrawGrid; virtual;abstract;
+                           procedure showcursor; virtual;abstract;
+                           procedure render(const Root:GDBObjGenericSubEntry;var DC:TDrawContext); virtual;abstract;
+                           function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):GDBBoolean; virtual;abstract;
                       end;
 var
    otracktimer: GDBInteger;

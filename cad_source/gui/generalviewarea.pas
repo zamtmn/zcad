@@ -23,7 +23,7 @@ uses {gdbase,gdbasetypes,
      UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,UGDBPoint3DArray,
      oglwindowdef,gdbdrawcontext,UGDBEntTree,ugdbabstractdrawing,
      uinfoform,}
-     gdbase,gdbasetypes,
+     gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,
      uinfoform,oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,Varman,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,geometry,
      gdbobjectsconstdef,shared,zcadstrconsts,UGDBTracePropArray,math,sysutils,commandlinedef,UGDBDrawingdef,strproc,GDBText,sltexteditor,
@@ -54,7 +54,7 @@ type
                            MainMouseMove:procedure of object;
                            MainMouseDown:function:boolean of object;}
 
-                           function getviewcontrol:TControl;override;
+                           function getviewcontrol:TCADControl;override;
 
 
                            procedure calcgrid;override;
@@ -66,19 +66,17 @@ type
                            procedure reprojectaxis;override;
                            procedure Project0Axis;override;
                            procedure create0axis;override;
-                           procedure ZoomToVolume(Volume:GDBBoundingBbox);virtual;abstract;
-                           procedure ZoomAll;virtual;abstract;
-                           procedure ZoomSel;virtual;abstract;
-                           function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint): Boolean;virtual;abstract;
-                           procedure RotTo(x0,y0,z0:GDBVertex);virtual;abstract;
+                           procedure ZoomToVolume(Volume:GDBBoundingBbox);override;
+                           procedure ZoomAll;override;
+                           procedure ZoomSel;override;
+                           procedure RotTo(x0,y0,z0:GDBVertex);override;
                            procedure PanScreen(oldX,oldY,X,Y:Integer);override;
-                           procedure RestoreMouse;virtual;abstract;
-                           function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):GDBBoolean;virtual;abstract;
+                           procedure RestoreMouse;override;
                            procedure myKeyPress(var Key: Word; Shift: TShiftState);override;
                            procedure finishdraw(var RC:TDrawContext);virtual;abstract;
                            function ProjectPoint(pntx,pnty,pntz:gdbdouble;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;override;
                            procedure mouseunproject(X, Y: integer);override;
-                           Procedure Paint; virtual;abstract;
+                           //Procedure Paint;override;
                            procedure addaxistootrack(var posr:os_record;const axis:GDBVertex);virtual;
                            procedure projectaxis;override;
                            procedure CalcOptimalMatrix;override;
@@ -106,14 +104,24 @@ type
                            procedure asynczoomall(Data: PtrInt);
                            procedure set3dmouse;override;
                            procedure SetCameraPosZoom(_pos:gdbvertex;_zoom:gdbdouble;finalcalk:gdbboolean);override;
+                           procedure DISP_ZoomFactor(x: double{; MousePos: TPoint});
+                           procedure showmousecursor;override;
+                           procedure hidemousecursor;override;
+                           Procedure Paint; override;
+
 
                            {onЧетоТам обработчики событй рабочей области}
                            procedure WaMouseUp(Sender:TObject;Button: TMouseButton; Shift:TShiftState;X, Y: Integer);
                            procedure WaMouseDown(Sender:TObject;Button: TMouseButton; Shift: TShiftState;X, Y: Integer);
                            procedure WaMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);override;
+                           procedure WaMouseWheel(Sender:TObject;Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint;var handled:boolean);
+                           procedure WaMouseEnter(Sender:TObject);
+                           procedure WaMouseLeave(Sender:TObject);
+
 
                            constructor Create(TheOwner: TComponent); override;
                            function CreateWorkArea(TheOwner: TComponent):TCADControl; virtual;abstract;
+                           procedure SetupWorkArea; virtual;abstract;
                            procedure doCameraChanged; override;
                       end;
 var
@@ -122,6 +130,284 @@ procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
 implementation
 uses
      commandline,mainwindow;
+Procedure TGeneralViewArea.Paint;
+begin
+     WorkArea.Repaint;
+end;
+procedure TGeneralViewArea.showmousecursor;
+begin
+     if assigned(WorkArea) then
+     WorkArea.Cursor:=crDefault;
+end;
+procedure TGeneralViewArea.hidemousecursor;
+begin
+     if assigned(WorkArea) then
+     WorkArea.Cursor:=crNone;
+end;
+procedure TGeneralViewArea.RestoreMouse;
+var
+  fv1: GDBVertex;
+begin
+  CalcOptimalMatrix;
+  mouseunproject(param.md.mouse.x, getviewcontrol.clientheight-param.md.mouse.y);
+  reprojectaxis;
+  if param.seldesc.MouseFrameON then
+  begin
+    pdwg^.myGluProject2(param.seldesc.Frame13d,
+               fv1);
+    param.seldesc.Frame1.x := round(fv1.x);
+    param.seldesc.Frame1.y := getviewcontrol.clientheight - round(fv1.y);
+    if param.seldesc.Frame1.x < 0 then param.seldesc.Frame1.x := 0
+    else if param.seldesc.Frame1.x > (getviewcontrol.clientwidth - 1) then param.seldesc.Frame1.x := getviewcontrol.clientwidth - 1;
+    if param.seldesc.Frame1.y < 0 then param.seldesc.Frame1.y := 1
+    else if param.seldesc.Frame1.y > (getviewcontrol.clientheight - 1) then param.seldesc.Frame1.y := getviewcontrol.clientheight - 1;
+  end;
+
+  //param.zoommode := true;
+  //param.scrollmode:=true;
+  pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+  //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
+  pdwg.GetCurrentROOT.calcvisible(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+  pdwg.GetSelObjArray.RenderFeedBack(pdwg^.GetPcamera^.POSCOUNT,pdwg^.GetPcamera^,pdwg^.myGluProject2);
+
+  calcmousefrustum;
+
+  if param.lastonmouseobject<>nil then
+                                      begin
+                                           PGDBObjEntity(param.lastonmouseobject)^.RenderFeedBack(pdwg.GetPcamera^.POSCOUNT,pdwg^.GetPcamera^, pdwg^.myGluProject2);
+                                      end;
+
+  Set3dmouse;
+  calcgrid;
+
+  {paint;}
+
+  WaMouseMove(self,[],param.md.mouse.x,param.md.mouse.y);
+
+end;
+
+procedure TGeneralViewArea.RotTo(x0,y0,z0:GDBVertex);
+const
+     steps=10;
+var
+  fv1: GDBVertex;
+  i:integer;
+  pucommand:pointer;
+  q1,q2,q:GDBQuaternion;
+  pcam:PGDBBaseCamera;
+
+  mat1,mat2,mat : DMatrix4D;
+begin
+  pcam:=PDWG.Getpcamera;
+  mat1:=CreateMatrixFromBasis(pcam.prop.xdir,pcam.prop.ydir,pcam.prop.look);
+  mat2:=CreateMatrixFromBasis(x0,y0,z0);
+
+  q1:=QuaternionFromMatrix(mat1);
+  q2:=QuaternionFromMatrix(mat2);
+  pucommand:=PDWG^.StoreOldCamerapPos;
+  for i:=1 to steps do
+  begin
+  q:=QuaternionSlerp(q1,q2,i/steps);
+  mat:=QuaternionToMatrix(q);
+  CreateBasisFromMatrix(mat,pcam.prop.xdir,pcam.prop.ydir,pcam.prop.look);
+
+  //wa.PDWG.Getpcamera^.prop.point:=vertexadd(camerapos,geometry.VertexMulOnSc(target,i/steps));
+  //wa.PDWG.Getpcamera^.prop.zoom:=wa.PDWG.Getpcamera^.prop.zoom+tzoom{*i}/steps;
+  param.firstdraw := true;
+  PDWG.Getpcamera^.NextPosition;
+  //RestoreMouse;
+  {}CalcOptimalMatrix;
+  mouseunproject(param.md.mouse.x,param.md.mouse.y);
+  reprojectaxis;
+  PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,PDWG.GetCurrentRoot.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+  PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom);
+  WaMouseMove(nil,[],param.md.mouse.x,param.md.mouse.y);
+  if i=steps then
+    begin
+  if param.seldesc.MouseFrameON then
+  begin
+    pdwg.myGluProject2(param.seldesc.Frame13d,
+               fv1);
+    param.seldesc.Frame1.x := round(fv1.x);
+    param.seldesc.Frame1.y := getviewcontrol.clientheight - round(fv1.y);
+    if param.seldesc.Frame1.x < 0 then param.seldesc.Frame1.x := 0
+    else if param.seldesc.Frame1.x > (getviewcontrol.clientwidth - 1) then param.seldesc.Frame1.x := getviewcontrol.clientwidth - 1;
+    if param.seldesc.Frame1.y < 0 then param.seldesc.Frame1.y := 1
+    else if param.seldesc.Frame1.y > (getviewcontrol.clientheight - 1) then param.seldesc.Frame1.y := getviewcontrol.clientheight - 1;
+  end;
+  end;{}
+  //----ComitFromObj;
+
+  if sysvar.RD.RD_LastRenderTime^<30 then
+                                        sleep(30-sysvar.RD.RD_LastRenderTime^);
+  end;
+  pcam.prop.xdir:=x0;
+  pcam.prop.ydir:=y0;
+  pcam.prop.look:=z0;
+  PDWG^.StoreNewCamerapPos(pucommand);
+  calcgrid;
+
+  draw;
+
+end;
+procedure TGeneralViewArea.ZoomSel;
+var
+   psa:PGDBSelectedObjArray;
+begin
+     psa:=PDWG^.GetSelObjArray;
+     if psa<>nil then
+     begin
+          if psa^.Count=0 then
+                              begin
+                                   historyout('ZoomSel: Ничего не выбрано?');
+                                   exit;
+                              end;
+          zoomtovolume(psa^.getonlyoutbound);
+     end;
+
+end;
+procedure TGeneralViewArea.ZoomAll;
+var
+  proot:PGDBObjGenericSubEntry;
+begin
+  proot:=pdwg.GetCurrentROOT;
+  if proot<>nil then
+                    zoomtovolume(proot.vp.BoundingBox);
+end;
+
+procedure TGeneralViewArea.ZoomToVolume(Volume:GDBBoundingBbox);
+  const
+       steps=10;
+  var
+    tpz,tzoom: GDBDouble;
+    {fv1,tp,}wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex;
+    camerapos,target:GDBVertex;
+    i:integer;
+    pucommand:pointer;
+  begin
+    if param.projtype = PROJPerspective then
+                                            begin
+                                                 historyout('Zoom: Пока только для паралельной проекции!');
+                                            end;
+    historyout('Zoom: Пока корректно только при виде сверху!');
+
+
+    CalcOptimalMatrix;
+
+    dcsLBN:=InfinityVertex;
+    dcsRTF:=MinusInfinityVertex;
+    wcsLBN:=InfinityVertex;
+    wcsRTF:=MinusInfinityVertex;
+    {tp:=}ProjectPoint(Volume.LBN.x,Volume.LBN.y,Volume.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.RTF.x,Volume.LBN.y,Volume.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.RTF.x,Volume.RTF.y,Volume.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.LBN.x,Volume.RTF.y,Volume.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.LBN.x,Volume.LBN.y,Volume.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.RTF.x,Volume.LBN.y,Volume.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.RTF.x,Volume.RTF.y,Volume.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.LBN.x,Volume.RTF.y,Volume.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+
+    dcsLBN.z:=0;
+    dcsRTF.z:=0;
+    pdwg.myGluUnProject(dcsLBN,wcsLBN);
+    pdwg.myGluUnProject(dcsRTF,wcsRTF);
+
+       if wcsRTF.x<wcsLBN.x then
+                                begin
+                                     tpz:=wcsLBN.x;
+                                     wcsLBN.x:=wcsRTF.x;
+                                     wcsRTF.x:=tpz;
+                                end;
+       if wcsRTF.y<wcsLBN.y then
+                                begin
+                                tpz:=wcsLBN.y;
+                                wcsLBN.y:=wcsRTF.y;
+                                wcsRTF.y:=tpz;
+                                end;
+       if wcsRTF.z<wcsLBN.z then
+                                begin
+                                tpz:=wcsLBN.z;
+                                wcsLBN.z:=wcsRTF.z;
+                                wcsRTF.z:=tpz;
+                                end;
+    if (abs(wcsRTF.x-wcsLBN.x)<eps)and(abs(wcsRTF.y-wcsLBN.y)<eps) then
+                                                                      begin
+                                                                           historyout('ZoomToVolume: Пустой чертеж?');
+                                                                           exit;
+                                                                      end;
+    target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),-(wcsLBN.z+(wcsRTF.z-wcsLBN.z)/2));
+    camerapos:=pdwg.Getpcamera^.prop.point;
+    target:=vertexsub(target,camerapos);
+
+    tzoom:=abs((wcsRTF.x-wcsLBN.x){*wa.pdwg.GetPcamera.prop.xdir.x}/getviewcontrol.clientwidth);
+    tpz:=abs((wcsRTF.y-wcsLBN.y){*wa.pdwg.GetPcamera.prop.ydir.y}/getviewcontrol.clientheight);
+
+    //-------with gdb.GetCurrentDWG.UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
+    pucommand:=PDWG^.StoreOldCamerapPos;
+    begin
+
+    if tpz>tzoom then tzoom:=tpz;
+
+    tzoom:=tzoom-PDWG.Getpcamera^.prop.zoom;
+
+    for i:=1 to steps do
+    begin
+    SetCameraPosZoom(vertexadd(camerapos,geometry.VertexMulOnSc(target,i/steps)),PDWG.Getpcamera^.prop.zoom+tzoom{*i}/steps,i=steps);
+    if sysvar.RD.RD_LastRenderTime^<30 then
+                                          sleep(30-sysvar.RD.RD_LastRenderTime^);
+    end;
+    PDWG^.StoreNewCamerapPos(pucommand);
+    calcgrid;
+
+    draw;
+    doCameraChanged;
+    end;
+  end;
+procedure TGeneralViewArea.DISP_ZoomFactor;
+var
+  glx1, gly1: GDBDouble;
+  pucommand:pointer;
+//  fv1: GDBVertex;
+begin
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DISP_ZoomFactor',lp_incPos);{$ENDIF}
+  //gdb.GetCurrentDWG.UndoStack.PushChangeCommand(@gdb.GetCurrentDWG.pcamera^.prop,sizeof(GDBCameraBaseProp));
+  //with gdb.GetCurrentDWG.UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
+  pucommand:=PDWG^.StoreOldCamerapPos;
+  begin
+        CalcOptimalMatrix;
+        if not param.md.mousein then
+                                    mouseunproject(getviewcontrol.clientwidth div 2, getviewcontrol.clientheight div 2);
+        glx1 := param.md.mouseray.lbegin.x;
+        gly1 := param.md.mouseray.lbegin.y;
+        if param.projtype = ProjParalel then
+          PDWG.Getpcamera^.prop.zoom := PDWG.Getpcamera^.prop.zoom * x
+        else
+        begin
+          PDWG.Getpcamera^.prop.point.x := PDWG.Getpcamera^.prop.point.x + (PDWG.Getpcamera^.prop.look.x *
+          (PDWG.Getpcamera^.zmax - PDWG.Getpcamera^.zmin) * sign(x - 1) / 10);
+          PDWG.Getpcamera^.prop.point.y := PDWG.Getpcamera^.prop.point.y + (PDWG.Getpcamera^.prop.look.y *
+          (PDWG.Getpcamera^.zmax - PDWG.Getpcamera^.zmin) * sign(x - 1) / 10);
+          PDWG.Getpcamera^.prop.point.z := PDWG.Getpcamera^.prop.point.z + (PDWG.Getpcamera^.prop.look.z *
+          (PDWG.Getpcamera^.zmax - PDWG.Getpcamera^.zmin) * sign(x - 1) / 10);
+        end;
+
+        CalcOptimalMatrix;
+        if param.md.mousein then
+                                mouseunproject(param.md.mouse.x, getviewcontrol.clientheight-param.md.mouse.y)
+                            else
+                                mouseunproject(getviewcontrol.clientwidth div 2, getviewcontrol.clientheight div 2);
+        if param.projtype = ProjParalel then
+        begin
+        PDWG.Getpcamera^.prop.point.x := PDWG.Getpcamera^.prop.point.x - (glx1 - param.md.mouseray.lbegin.x);
+        PDWG.Getpcamera^.prop.point.y := PDWG.Getpcamera^.prop.point.y - (gly1 - param.md.mouseray.lbegin.y);
+        end;
+        PDWG^.StoreNewCamerapPos(pucommand);
+        //ComitFromObj;
+  end;
+  doCameraChanged;
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DISP_ZoomFactor----{end}',lp_decPos);{$ENDIF}
+end;
+
 procedure TGeneralViewArea.SetCameraPosZoom(_pos:gdbvertex;_zoom:gdbdouble;finalcalk:gdbboolean);
 var
   fv1: GDBVertex;
@@ -178,6 +464,81 @@ end;
 procedure TGeneralViewArea.doCameraChanged;
 begin
      if assigned(onCameraChanged) then onCameraChanged;
+end;
+procedure TGeneralViewArea.WaMouseEnter;
+begin
+     param.md.mousein:=true;
+end;
+procedure TGeneralViewArea.WaMouseLeave;
+begin
+     param.md.mousein:=false;
+     draw;
+end;
+procedure TGeneralViewArea.WaMouseWheel(Sender:TObject;Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint;var handled:boolean);
+//procedure TOGLWnd.Pre_MouseWheel;
+var
+//  mpoint: tpoint;
+  smallwheel:gdbdouble;
+//    glx1, gly1: GDBDouble;
+  //fv1: GDBVertex;
+
+//  msg : TMsg;
+
+begin
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DoMouseWheel',lp_incPos);{$ENDIF}
+  smallwheel:=1+(sysvar.DISP.DISP_ZoomFactor^-1)/10;
+  //mpoint := point(mousepos.x - clientorigin.X, mousepos.y - clientorigin.y);
+  if {mousein(mpoint)}true then
+  begin
+    //mpoint := point({mpoint.x - left}0, {mpoint.y - top}0);
+    if wheeldelta < 0 then
+    begin
+      if (ssShift in Shift) then
+        DISP_ZoomFactor({1.01}smallwheel)
+      else
+      begin
+        ClearOntrackpoint;
+        Create0axis;
+        DISP_ZoomFactor(sysvar.DISP.DISP_ZoomFactor^);
+      end;
+      //handled := true;
+    end
+    else
+    begin
+      if (ssShift in Shift) then
+        DISP_ZoomFactor({0.990099009901}1/smallwheel)
+      else
+      begin
+        ClearOntrackpoint;
+        DISP_ZoomFactor(1 / sysvar.DISP.DISP_ZoomFactor^);
+      end;
+      //handled := true;
+    end;
+  end;
+  //pre_mousemove(0,param.md.mouse.x,param.md.mouse.y,r);
+      //param.firstdraw := true;
+      //CalcOptimalMatrix;
+      //gdb.GetCurrentDWG.ObjRoot.calcvisible;
+      //gdb.GetCurrentDWG.ConstructObjRoot.calcvisible;
+      //reprojectaxis;
+      //draw;
+      pdwg.getpcamera^.NextPosition;
+      param.firstdraw:=true;
+  restoremouse;
+  paint;
+
+  {if (PeekMessage(msg,handle,WM_MOUSEWHEEL,0,PM_NOREMOVE)) then
+                                                                           param.scrollmode:=true
+                                                                       else
+                                                                           begin
+                                                                           param.scrollmode:=false;
+                                                                           paint;
+                                                                           end;}
+
+  inherited;
+  handled:=true;
+  WaMouseMove(self,[],param.md.mouse.x,param.md.mouse.y);
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.DoMouseWheel----{end}',lp_decPos);{$ENDIF}
 end;
 
 procedure TGeneralViewArea.WaMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
@@ -432,10 +793,87 @@ begin
      ZoomAll();
 end;
 constructor TGeneralViewArea.Create(TheOwner: TComponent);
+var
+  i:integer;
+  v:gdbvertex;
 begin
      inherited;
 
      WorkArea:=CreateWorkArea(TheOwner);
+     SetupWorkArea;
+
+     OTTimer:=TTimer.create(self);
+     OHTimer:=TTimer.create(self);
+
+     PDWG:=nil;
+
+     param.projtype := Projparalel;
+     param.firstdraw := true;
+     param.SelDesc.OnMouseObject := nil;
+     param.lastonmouseobject:=nil;
+     param.SelDesc.LastSelectedObject := nil;
+     param.pglscreen := nil;
+     param.gluetocp := false;
+     param.cpdist.cpnum := -1;
+     param.cpdist.cpdist := 99999;
+
+     SetMouseMode((MGetControlpoint) or (MGetSelectObject) or (MMoveCamera) or (MRotateCamera) or (MGetSelectionFrame));
+     param.seldesc.MouseFrameON := false;
+     param.otracktimerwork := 0;
+     param.ontrackarray.total := 1;
+     param.ontrackarray.current := 1;
+     param.md.workplane{.normal.x}[0] := 0;
+     param.md.workplane{.normal.y}[1] := {sqrt(0.1)}0;
+     param.md.workplane{.normal.z}[2] := {sqrt(0.9)}1;
+     param.md.workplane{.d}[3] := 0;
+     param.scrollmode:=false;
+
+     param.md.mousein:=false;
+     param.processObjConstruct:=false;
+     param.ShowDebugBoundingBbox:=false;
+     param.ShowDebugFrustum:=false;
+     param.CSIcon.AxisLen:=0;
+
+     param.CSIcon.CSIconCoord:=nulvertex;
+     param.CSIcon.CSIconX:=nulvertex;
+     param.CSIcon.CSIconY:=nulvertex;
+
+     param.CSIcon.CSIconZ:=nulvertex;
+
+     PolarAxis.init({$IFDEF DEBUGBUILD}'{5AD9927A-0312-4844-8C2D-9498647CCECB}',{$ENDIF}10);
+
+     for i := 0 to 4 - 1 do
+     begin
+       v.x:=cos(pi * i / 4);
+       v.y:=sin(pi * i / 4);
+       v.z:=0;
+       PolarAxis.add(@v);
+     end;
+
+     param.ontrackarray.otrackarray[0].arrayworldaxis.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}10);
+     param.ontrackarray.otrackarray[0].arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
+     tocommandmcliccount:=0;
+
+
+     for i := 0 to 3 do
+                     begin
+                     param.ontrackarray.otrackarray[i].arrayworldaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
+                     param.ontrackarray.otrackarray[i].arrayworldaxis.CreateArray;
+                     param.ontrackarray.otrackarray[i].arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
+                     param.ontrackarray.otrackarray[i].arraydispaxis.CreateArray;
+                     end;
+
+
+     param.ospoint.arraydispaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
+     param.ospoint.arrayworldaxis.init({$IFDEF DEBUGBUILD}'{722A886F-5616-4E8F-B94D-3A1C3D7ADBD4}',{$ENDIF}10);
+
+     if PDWG<>nil then
+     begin
+     PDWG.Getpcamera^.obj_zmax:=-1;
+     PDWG.Getpcamera^.obj_zmin:=100000;
+     end;
+
+
      //OpenGLWindow.wa:=self;
      onCameraChanged:=MainFormN.correctscrollbars;
      ShowCXMenu:=MainFormN.ShowCXMenu;
@@ -445,8 +883,12 @@ begin
      WorkArea.onmouseup:=WaMouseUp;
      WorkArea.onmousedown:=WaMouseDown;
      WorkArea.onmousemove:=WaMouseMove;
+     WorkArea.onmousewheel:=WaMouseWheel;
+     WorkArea.onmouseenter:=WaMouseEnter;
+     WorkArea.onmouseleave:=WaMouseLeave;
+     WorkArea.onresize:=WaResize;
 end;
-function TGeneralViewArea.getviewcontrol:TControl;
+function TGeneralViewArea.getviewcontrol:TCADControl;
 begin
      result:=WorkArea;
 end;
@@ -910,7 +1352,7 @@ begin
   result.MaxWidth:=sysvar.RD.RD_MaxWidth^;
   result.ScrollMode:=param.scrollmode;
   result.Zoom:=PDWG.GetPcamera.prop.zoom;
-  result.drawer:={OGLDrawer}testrender;
+  //result.drawer:={OGLDrawer}testrender;
 end;
 procedure TGeneralViewArea.CorrectMouseAfterOS;
 var d,tv1,tv2:GDBVertex;
@@ -1692,22 +2134,29 @@ begin
   //gdb.GetCurrentDWG.pcamera.getfrustum(@gdb.GetCurrentDWG.pcamera^.modelMatrixLCS,@gdb.GetCurrentDWG.pcamera^.projMatrixLCS,gdb.GetCurrentDWG.pcamera^.clipLCS,gdb.GetCurrentDWG.pcamera^.frustumLCS);
 end;
 procedure TGeneralViewArea.SetOGLMatrix;
+var
+    pcam:PGDBObjCamera;
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SetOGLMatrix',0);{$ENDIF}
+  pcam:=pdwg.GetPcamera;
   oglsm.myglViewport(0, 0, getviewcontrol.clientWidth, getviewcontrol.clientHeight);
-  oglsm.myglGetIntegerv(GL_VIEWPORT, @{gdb.GetCurrentDWG}pdwg.GetPcamera^.viewport);
+  oglsm.myglGetIntegerv(GL_VIEWPORT, @pcam^.viewport);
+  pcam^.viewport[0]:=0;
+  pcam^.viewport[1]:=0;
+  pcam^.viewport[2]:=getviewcontrol.clientWidth;
+  pcam^.viewport[3]:=getviewcontrol.clientHeight;
 
   oglsm.myglMatrixMode(GL_MODELVIEW);
-  oglsm.myglLoadMatrixD(@{gdb.GetCurrentDWG}pdwg.GetPcamera^.modelMatrixLCS);
+  oglsm.myglLoadMatrixD(@pcam^.modelMatrixLCS);
 
   oglsm.myglMatrixMode(GL_PROJECTION);
-  oglsm.myglLoadMatrixD(@{gdb.GetCurrentDWG}pdwg.GetPcamera^.projMatrixLCS);
+  oglsm.myglLoadMatrixD(@pcam^.projMatrixLCS);
 
   oglsm.myglMatrixMode(GL_MODELVIEW);
 
 
-  {gdb.GetCurrentDWG}pdwg.GetPcamera^.getfrustum(@{gdb.GetCurrentDWG}pdwg.GetPcamera^.modelMatrix,   @{gdb.GetCurrentDWG}pdwg.GetPcamera^.projMatrix,   {gdb.GetCurrentDWG}pdwg.GetPcamera^.clip,   {gdb.GetCurrentDWG}pdwg.GetPcamera^.frustum);
-  {gdb.GetCurrentDWG}pdwg.GetPcamera^.getfrustum(@{gdb.GetCurrentDWG}pdwg.GetPcamera^.modelMatrixLCS,@{gdb.GetCurrentDWG}pdwg.GetPcamera^.projMatrixLCS,{gdb.GetCurrentDWG}pdwg.GetPcamera^.clipLCS,{gdb.GetCurrentDWG}pdwg.GetPcamera^.frustumLCS);
+  pcam^.getfrustum(@pcam^.modelMatrix,   @pcam^.projMatrix,   pcam^.clip,   pdwg.GetPcamera^.frustum);
+  pcam^.getfrustum(@pcam^.modelMatrixLCS,@pcam^.projMatrixLCS,pcam^.clipLCS,pdwg.GetPcamera^.frustumLCS);
 
 end;
 procedure TGeneralViewArea.PanScreen(oldX,oldY,X,Y:Integer);

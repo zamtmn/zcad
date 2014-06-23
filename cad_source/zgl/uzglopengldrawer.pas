@@ -27,6 +27,10 @@ TZGLOpenGLDrawer=class(TZGLAbstractDrawer)
                         public
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
+                        {в координатах окна}
+                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
+                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
+                        procedure DrawClosedPolyLine2DInDCS(const coords:array of single);override;
                    end;
 TZGLCanvasDrawer=class(TZGLAbstractDrawer)
                         public
@@ -104,6 +108,33 @@ begin
     oglsm.myglend;
 end;
 
+procedure TZGLOpenGLDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:integer);
+begin
+    oglsm.myglbegin(GL_lines);
+              oglsm.myglVertex2i(x1,y1);
+              oglsm.myglVertex2i(x2,y2);
+    oglsm.myglend;
+end;
+procedure TZGLOpenGLDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:single);
+begin
+    oglsm.myglbegin(GL_lines);
+              oglsm.myglVertex2f(x1,y1);
+              oglsm.myglVertex2f(x2,y2);
+    oglsm.myglend;
+end;
+procedure TZGLOpenGLDrawer.DrawClosedPolyLine2DInDCS(const coords:array of single);
+var
+   i:integer;
+begin
+     i:=0;
+     oglsm.myglbegin(GL_line_loop);
+     while i<high(coords) do
+     begin
+          oglsm.myglVertex2f(coords[i],coords[i+1]);
+          inc(i,2);
+     end;
+     oglsm.myglend;
+end;
 procedure TZGLCanvasDrawer.DrawLine(const i1:TLLVertexIndex);
 var
    pv1,pv2:PGDBVertex3S;

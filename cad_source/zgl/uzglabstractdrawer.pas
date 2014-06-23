@@ -28,6 +28,10 @@ TZGLAbstractDrawer=class
                         procedure DrawPoint(const i:TLLVertexIndex);virtual;abstract;
                         procedure startrender;virtual;
                         procedure endrender;virtual;
+
+                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);overload;virtual;abstract;
+                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);overload;virtual;abstract;
+                        procedure DrawClosedPolyLine2DInDCS(const coords:array of single);overload;virtual;abstract;
                    end;
 var
   testrender:TZGLAbstractDrawer;

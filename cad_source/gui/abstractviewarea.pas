@@ -45,6 +45,7 @@ type
                            currentmousemovesnaptogrid:GDBBoolean;
 
                            function getviewcontrol:TControl;virtual;abstract;
+                           procedure getareacaps;virtual;abstract;
                            procedure CalcOptimalMatrix;virtual;abstract;
                            procedure calcgrid;virtual;abstract;
                            procedure draw;virtual;abstract;
@@ -98,7 +99,7 @@ type
                            procedure LightOn; virtual;abstract;
                            procedure LightOff; virtual;abstract;
                            procedure DrawGrid; virtual;abstract;
-                           procedure showcursor; virtual;abstract;
+                           procedure showcursor(DC:TDrawContext); virtual;abstract;
                            procedure render(const Root:GDBObjGenericSubEntry;var DC:TDrawContext); virtual;abstract;
                            function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):GDBBoolean; virtual;abstract;
                       end;

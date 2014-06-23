@@ -60,19 +60,11 @@ type
 
   TOGLWnd = class({TPanel}TOpenGLControl)
   private
-    OGLContext:TOGLContextDesk;
   public
+    OGLContext:TOGLContextDesk;
     wa:TAbstractViewArea;
-    procedure init;virtual;
-    procedure beforeinit;virtual;
-    procedure initogl;
-
-    procedure pushmatrix;
-    procedure popmatrix;
-    procedure setdeicevariable;
 
     procedure draw;virtual;
-    procedure drawdebuggeometry;
     procedure finishdraw(var RC:TDrawContext);virtual;
     procedure mypaint(sender:tobject);
 
@@ -117,47 +109,19 @@ begin
      draw;
      inherited;
 end;
-procedure TOGLWnd.init;
-begin
-     beforeinit;
-end;
-//procedure ProcTime(uID, msg: UINT; dwUse, dw1, dw2: DWord); stdcall;
-
-procedure TOGLWnd.pushmatrix;
-begin
-  oglsm.myglMatrixMode(GL_PROJECTION);
-  oglsm.myglpushmatrix;
-  oglsm.myglMatrixMode(GL_MODELVIEW);
-  oglsm.myglpushmatrix;
-end;
-procedure TOGLWnd.popmatrix;
-begin
-  oglsm.myglMatrixMode(GL_MODELVIEW);
-  oglsm.myglpopmatrix;
-  oglsm.myglMatrixMode(GL_PROJECTION);
-  oglsm.myglpopmatrix;
-  oglsm.myglMatrixMode(GL_MODELVIEW);
-end;
 procedure TOGLWnd.GDBActivateGLContext;
 begin
-                                      MyglMakeCurrent(OGLContext);//wglMakeCurrent(DC, hrc);//initogl;
+                                      MyglMakeCurrent(OGLContext);
                                       isOpenGLError;
 end;
 
 procedure TOGLWnd.GDBActivate;
 begin
-     //PTDrawing(self.wa.pdwg)^.DWGUnits.findunit('DrawingVars').AssignToSymbol(SysVar.dwg.DWG_CLayer,'DWG_CLayer');
-     //PTDrawing(self.wa.pdwg)^.DWGUnits.findunit('DrawingVars').AssignToSymbol(SysVar.dwg.DWG_CLinew,'DWG_CLinew');
-
-  //if wa.PDWG<>gdb.GetCurrentDWG then
-                                 begin
-                                      //gdb.SetCurrentDWG(self.wa.pdwg);
-                                      wa.pdwg.SetCurrentDWG;
-                                      self.wa.param.firstdraw:=true;
-                                      GDBActivateGLContext;
-                                      //{переделать}size;
-                                      paint;
-                                 end;
+    wa.pdwg.SetCurrentDWG;
+    self.wa.param.firstdraw:=true;
+    GDBActivateGLContext;
+    //paint;
+    invalidate;
   if assigned(updatevisibleproc) then updatevisibleproc;
 end;
 procedure TOGLWnd.finishdraw;
@@ -170,14 +134,8 @@ begin
      LPTime:=now();
      wa.PDWG.Getpcamera.DRAWNOTEND:=wa.treerender(wa.PDWG.GetCurrentROOT^.ObjArray.ObjTree,lptime,rc);
      wa.SaveBuffers;
-     wa.showcursor;
+     wa.showcursor(rc);
      self.SwapBuffers;
-end;
-procedure TOGLWnd.drawdebuggeometry;
-begin
-
-
-
 end;
 procedure TOGLWnd.draw;
 var
@@ -264,7 +222,7 @@ if (clientwidth=0)or(clientheight=0) then
     wa.PDWG.GetSelObjArray.remappoints(wa.PDWG.GetPcamera.POSCOUNT,wa.param.scrollmode,wa.PDWG.GetPcamera^,wa.PDWG^.myGluProject2);
     wa.PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
-    wa.showcursor;
+    wa.showcursor(dc);
     //wa.param.firstdraw := false;
   end
   else
@@ -275,7 +233,7 @@ if (clientwidth=0)or(clientheight=0) then
     wa.render(wa.PDWG.GetConstructObjRoot^,dc);
     wa.PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
-    wa.showcursor;
+    wa.showcursor(dc);
     wa.CalcOptimalMatrix;
     oglsm.myglEnable(GL_DEPTH_TEST);
   end;
@@ -299,7 +257,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_AuxBuffer then
     wa.PDWG.GetSelObjArray.remappoints(wa.PDWG.GetPcamera.POSCOUNT,wa.param.scrollmode,wa.PDWG.GetPcamera^,wa.PDWG^.myGluProject2);
     wa.PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
-    wa.showcursor;
+    wa.showcursor(dc);
     //wa.param.firstdraw := false;
   end
   else
@@ -313,7 +271,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_AuxBuffer then
     inc(dc.subrender);
     wa.render(wa.PDWG.GetConstructObjRoot^,dc);
     wa.PDWG.GetSelObjArray.drawobj({.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
-    wa.showcursor;
+    wa.showcursor(dc);
     wa.CalcOptimalMatrix;
     dec(dc.subrender);
     oglsm.myglEnable(GL_DEPTH_TEST);
@@ -334,7 +292,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_DrawPixels then
     wa.PDWG.GetSelObjArray.remappoints(wa.PDWG.GetPcamera.POSCOUNT,wa.param.scrollmode,wa.PDWG.GetPcamera^,wa.PDWG^.myGluProject2);
     wa.PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
-    wa.showcursor;
+    wa.showcursor(dc);
     //wa.param.firstdraw := false;
   end
   else
@@ -362,7 +320,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_DrawPixels then
     wa.render(wa.PDWG.GetConstructObjRoot^,dc);
     wa.PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
-    wa.showcursor;
+    wa.showcursor(dc);
     wa.CalcOptimalMatrix;
     oglsm.myglEnable(GL_DEPTH_TEST);
 
@@ -381,7 +339,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_NewDraw then
     wa.PDWG.GetSelObjArray.remappoints(wa.PDWG.GetPcamera.POSCOUNT,wa.param.scrollmode,wa.PDWG.GetPcamera^,wa.PDWG^.myGluProject2);
     wa.PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
-    wa.showcursor;
+    wa.showcursor(dc);
     //wa.param.firstdraw := false;
     wa.PDWG.GetSelObjArray.remappoints(wa.PDWG.GetPcamera.POSCOUNT,wa.param.scrollmode,wa.PDWG.GetPcamera^,wa.PDWG^.myGluProject2);
   end
@@ -417,7 +375,6 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
 
     //isOpenGLError;
     wa.DrawGrid;
-    drawdebuggeometry;
 
     //oglsm.mytotalglend;
 
@@ -478,7 +435,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
     wa.PDWG.GetSelObjArray.drawobj({gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender}dc);
     dec(dc.subrender);
     wa.LightOff;
-    wa.showcursor;
+    wa.showcursor(dc);
 
         //oglsm.mytotalglend;
         //isOpenGLError;
@@ -519,7 +476,7 @@ else if sysvar.RD.RD_Restore_Mode^=WND_Texture then
 
         //oglsm.mytotalglend;
 
-    wa.showcursor;
+    wa.showcursor(dc);
 
         //oglsm.mytotalglend;
 
@@ -631,103 +588,7 @@ begin
      {переделать}//inherited done;
      inherited;
 end;
-procedure TOGLWnd.BeforeInit;
-var i: GDBInteger;
-    v:gdbvertex;
-begin
-  initogl;
-end;
-
-procedure TOGLWnd.setdeicevariable;
-var a:array [0..1] of GDBDouble;
-    p:pansichar;
-begin
-  programlog.logoutstr('TOGLWnd.SetDeiceVariable',lp_IncPos);
-  oglsm.myglGetDoublev(GL_LINE_WIDTH_RANGE,@a);
-  sysvar.RD.RD_MaxLineWidth^:=a[1];
-  oglsm.myglGetDoublev(GL_point_size_RANGE,@a);
-  sysvar.RD.RD_MaxPointSize^:=a[1];
-  GDBPointer(p):=oglsm.myglGetString(GL_VENDOR);
-  programlog.logoutstr('RD_Vendor:='+p,0);
-  sysvar.RD.RD_Vendor^:=p;
-  GDBPointer(p):=oglsm.myglGetString(GL_RENDERER);
-  programlog.logoutstr('RD_Renderer:='+p,0);
-  sysvar.RD.RD_Renderer^:=p;
-  GDBPointer(p):=oglsm.myglGetString(GL_VERSION);
-  programlog.logoutstr('RD_Version:='+p,0);
-  sysvar.RD.RD_Version^:=p;
-  GDBPointer(p):=oglsm.mygluGetString(GLU_VERSION);
-  programlog.logoutstr('RD_GLUVersion:='+p,0);
-  sysvar.RD.RD_GLUVersion^:=p;
-  GDBPointer(p):=oglsm.mygluGetString(GLU_EXTENSIONS);
-  programlog.logoutstr('RD_GLUExtensions:='+p,0);
-  sysvar.RD.RD_GLUExtensions^:=p;
-  GDBPointer(p):=oglsm.myglGetString(GL_EXTENSIONS);
-  programlog.logoutstr('RD_Extensions:='+p,0);
-  sysvar.RD.RD_Extensions^:=p;
-  sysvar.RD.RD_MaxWidth^:=round(min(sysvar.RD.RD_MaxPointSize^,sysvar.RD.RD_MaxLineWidth^));
-  programlog.logoutstr('RD_MaxWidth:='+inttostr(sysvar.RD.RD_MaxWidth^),0);
-  programlog.logoutstr('end;',lp_DecPos);
-end;
-
-procedure TOGLWnd.initogl;
-{$IFDEF LCLGTK2}var Widget: PGtkWidget;{$ENDIF}
-begin
-  programlog.logoutstr('TOGLWnd.InitOGL',lp_IncPos);
-
-  {$IFDEF LCLGTK2}
-  Widget:=PGtkWidget(PtrUInt(Handle));
-  gtk_widget_add_events (Widget,GDK_POINTER_MOTION_HINT_MASK);
-
-
-  {FastMMX:=XPending(GDK_WINDOW_XDISPLAY(PGtkWidget(Widget)^.window));
-  if sysvar.debug.memi2<fastmmx then
-                                    sysvar.debug.memi2:=fastmmx;
-  if FastMMX=0 then}{$ENDIF}
-
-
-
-
-  //------------------------------------------------------------------------releaseDC(dc,self.Handle{handle}{thdc});
-  MywglDeleteContext(OGLContext);//wglDeleteContext(hrc);
-
-  //------------------------------------------------------------------------
-  //------------------------------------------------------------------------OGLcontext.DC := {GetDC(Handle)}canvas.handle;
-  //------------------------------------------------------------------------
-
-  SetDCPixelFormat(OGLContext);//SetDCPixelFormat(dc);
-  MywglCreateContext(OGLContext);//hrc := wglCreateContext(DC);
-  MyglMakeCurrent(OGLContext);//wglMakeCurrent(DC, hrc);
-  self.MakeCurrent();
-  setdeicevariable;
-
-
-  //Pointer(@wglSwapIntervalEXT) := wglGetProcAddress('wglSwapIntervalEXT');
-  //wglSwapIntervalEXT(0);
-
-  {$IFDEF WINDOWS}
-  if SysVar.RD.RD_VSync^<>TVSDefault then
-  begin
-       Pointer(@wglSwapIntervalEXT) := wglGetProcAddress('wglSwapIntervalEXT');
-       if @wglSwapIntervalEXT<>nil then
-                                           begin
-                                                if SysVar.RD.RD_VSync^=TVSOn then
-                                                                                 wglSwapIntervalEXT(1)
-                                                                             else
-                                                                                 wglSwapIntervalEXT(0);
-                                           end
-                                       else
-                                           begin
-                                                shared.LogError('wglSwapIntervalEXT not supported by your video driver. Please set the VSync in the defaul');
-                                           end;
-  end;
-  {$ENDIF}
-  //CalcOptimalMatrix;
-  programlog.logoutstr('end;',lp_DecPos)
-end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('oglwindow.initialization');{$ENDIF}
-  //creategrid;
-  //readpalette;
 end.
 

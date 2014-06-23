@@ -202,6 +202,7 @@ begin
      wpowner.getviewcontrol.Visible:=true;
      wpowner.PDWG:=ptd;
      programlog.logoutstr('oglwnd.PDWG:=ptd;',0);
+     wpowner.getareacaps;
 
      if testform=nil then
      begin

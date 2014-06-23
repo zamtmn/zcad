@@ -22,7 +22,7 @@ interface
 uses sysutils,UGDBEntTree,GDBGenericSubEntry,GDBHelpObj,memman,OGLSpecFunc,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,
      uinfoform,oglwindow,oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,GDBEntity,Varman,zcadinterface,geometry,gdbobjectsconstdef,shared,zcadstrconsts,LCLType,
-     ExtCtrls,classes,Controls,Graphics,generalviewarea,UGDBTracePropArray,math,uzglabstractdrawer;
+     ExtCtrls,classes,Controls,Graphics,generalviewarea,UGDBTracePropArray,math,uzglabstractdrawer,log;
 type
     TOpenGLViewArea=class(TGeneralViewArea)
                       public
@@ -43,7 +43,8 @@ type
                       procedure LightOn; override;
                       procedure LightOff; override;
                       procedure DrawGrid; override;
-                      procedure showcursor; override;
+                      procedure showcursor(DC:TDrawContext); override;
+                      procedure getareacaps; override;
 
                       procedure render(const Root:GDBObjGenericSubEntry;var DC:TDrawContext); override;
                       function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):GDBBoolean; override;
@@ -164,36 +165,93 @@ begin
   oglsm.myglend;
   end;
 end;
+procedure setdeicevariable;
+var a:array [0..1] of GDBDouble;
+    p:pansichar;
+begin
+  programlog.logoutstr('TOGLWnd.SetDeiceVariable',lp_IncPos);
+  oglsm.myglGetDoublev(GL_LINE_WIDTH_RANGE,@a);
+  sysvar.RD.RD_MaxLineWidth^:=a[1];
+  oglsm.myglGetDoublev(GL_point_size_RANGE,@a);
+  sysvar.RD.RD_MaxPointSize^:=a[1];
+  GDBPointer(p):=oglsm.myglGetString(GL_VENDOR);
+  programlog.logoutstr('RD_Vendor:='+p,0);
+  sysvar.RD.RD_Vendor^:=p;
+  GDBPointer(p):=oglsm.myglGetString(GL_RENDERER);
+  programlog.logoutstr('RD_Renderer:='+p,0);
+  sysvar.RD.RD_Renderer^:=p;
+  GDBPointer(p):=oglsm.myglGetString(GL_VERSION);
+  programlog.logoutstr('RD_Version:='+p,0);
+  sysvar.RD.RD_Version^:=p;
+  GDBPointer(p):=oglsm.mygluGetString(GLU_VERSION);
+  programlog.logoutstr('RD_GLUVersion:='+p,0);
+  sysvar.RD.RD_GLUVersion^:=p;
+  GDBPointer(p):=oglsm.mygluGetString(GLU_EXTENSIONS);
+  programlog.logoutstr('RD_GLUExtensions:='+p,0);
+  sysvar.RD.RD_GLUExtensions^:=p;
+  GDBPointer(p):=oglsm.myglGetString(GL_EXTENSIONS);
+  programlog.logoutstr('RD_Extensions:='+p,0);
+  sysvar.RD.RD_Extensions^:=p;
+  sysvar.RD.RD_MaxWidth^:=round(min(sysvar.RD.RD_MaxPointSize^,sysvar.RD.RD_MaxLineWidth^));
+  programlog.logoutstr('RD_MaxWidth:='+inttostr(sysvar.RD.RD_MaxWidth^),0);
+  programlog.logoutstr('end;',lp_DecPos);
+end;
+
+procedure TOpenGLViewArea.getareacaps;
+begin
+  programlog.logoutstr('TOGLWnd.InitOGL',lp_IncPos);
+
+  {$IFDEF LCLGTK2}
+  Widget:=PGtkWidget(PtrUInt(Handle));
+  gtk_widget_add_events (Widget,GDK_POINTER_MOTION_HINT_MASK);
+  {$ENDIF}
+
+  MywglDeleteContext(OpenGLWindow.OGLContext);//wglDeleteContext(hrc);
+
+  SetDCPixelFormat(OpenGLWindow.OGLContext);//SetDCPixelFormat(dc);
+  MywglCreateContext(OpenGLWindow.OGLContext);//hrc := wglCreateContext(DC);
+  MyglMakeCurrent(OpenGLWindow.OGLContext);//wglMakeCurrent(DC, hrc);
+  OpenGLWindow.MakeCurrent();
+  setdeicevariable;
+
+  {$IFDEF WINDOWS}
+  if SysVar.RD.RD_VSync^<>TVSDefault then
+  begin
+       Pointer(@wglSwapIntervalEXT) := wglGetProcAddress('wglSwapIntervalEXT');
+       if @wglSwapIntervalEXT<>nil then
+                                           begin
+                                                if SysVar.RD.RD_VSync^=TVSOn then
+                                                                                 wglSwapIntervalEXT(1)
+                                                                             else
+                                                                                 wglSwapIntervalEXT(0);
+                                           end
+                                       else
+                                           begin
+                                                shared.LogError('wglSwapIntervalEXT not supported by your video driver. Please set the VSync in the defaul');
+                                           end;
+  end;
+  {$ENDIF}
+  programlog.logoutstr('end;',lp_DecPos)
+end;
+
 procedure TOpenGLViewArea.showcursor;
   var
     i, j: GDBInteger;
     pt:ptraceprop;
-//      ir:itrec;
-//  ptp:ptraceprop;
-  mvertex,dvertex,tv1,tv2,{tv3,tv4,}sv1{,sv2,sv3,sv4},d1{,d2,d3,d4}:gdbvertex;
-  Tempplane,plx,ply,plz:DVector4D;
+    mvertex,dvertex,tv1,tv2,sv1,d1:gdbvertex;
+    Tempplane,plx,ply,plz:DVector4D;
     a: GDBInteger;
-    //scrx,scry,texture{,e}:integer;
-    //scrollmode:GDBBOOlean;
-    //LPTime:Tdatetime;
-
     i2d,i2dresult:intercept2dprop;
     td,td2,td22:gdbdouble;
     _NotUseLCS:boolean;
-
-
   begin
     if param.scrollmode then
                             exit;
     CalcOptimalMatrix;
     if PDWG.GetSelObjArray.Count<>0 then PDWG.GetSelObjArray.drawpoint;
-    //oglsm.mytotalglend;
-    //isOpenGLError;
     oglsm.glcolor3ub(255, 255, 255);
-
     oglsm.myglEnable(GL_COLOR_LOGIC_OP);
     oglsm.myglLogicOp(GL_OR);
-
     if param.ShowDebugFrustum then
                             drawfrustustum(param.debugfrustum);
     if param.ShowDebugBoundingBbox then
@@ -209,52 +267,22 @@ procedure TOpenGLViewArea.showcursor;
     NotUseLCS:=true;
     drawfrustustum(param.mousefrustumLCS);
     NotUseLCS:=_NotUseLCS;
-    {tv1:=PointOf3PlaneIntersect(wa.param.mousefrustumLCS[0],wa.param.mousefrustumLCS[3],Tempplane);
-    tv2:=PointOf3PlaneIntersect(wa.param.mousefrustumLCS[1],wa.param.mousefrustumLCS[3],Tempplane);
-    tv3:=PointOf3PlaneIntersect(wa.param.mousefrustumLCS[1],wa.param.mousefrustumLCS[2],Tempplane);
-    tv4:=PointOf3PlaneIntersect(wa.param.mousefrustumLCS[0],wa.param.mousefrustumLCS[2],Tempplane);
-    oglsm.myglbegin(GL_LINES);
-                   glVertex3dv(@tv1);
-                   glVertex3dv(@tv2);
-                   glVertex3dv(@tv2);
-                   glVertex3dv(@tv3);
-                   glVertex3dv(@tv3);
-                   glVertex3dv(@tv4);
-                   glVertex3dv(@tv4);
-                   glVertex3dv(@tv1);
-    oglsm.myglend;}
     end;
-    //oglsm.mytotalglend;
-    //isOpenGLError;
     {оси курсора}
-
-    {myglbegin(GL_LINES);
-     glVertex3d(0,0,0);
-     glVertex3d(wa.param.md.mouse3dcoord.x,wa.param.md.mouse3dcoord.y,wa.param.md.mouse3dcoord.z);
-    myglend;
-
-    wa.param.md.mouse3dcoord:=geometry.NulVertex;}
     _NotUseLCS:=NotUseLCS;
     NotUseLCS:=true;
     if param.md.mousein then
     if ((param.md.mode)and(MGet3DPoint or MGet3DPointWoOP or MGetControlpoint))<> 0 then
     begin
-    //sv1:=VertexAdd(wa.param.md.mouse3dcoord,gdb.GetCurrentDWG.pcamera.look);
-    //sv1:=gdb.GetCurrentDWG.pcamera.point;
     sv1:=param.md.mouseray.lbegin;
     sv1:=vertexadd(sv1,PDWG.Getpcamera^.CamCSOffset);
 
     PointOfLinePlaneIntersect(VertexAdd(param.md.mouseray.lbegin,PDWG.Getpcamera^.CamCSOffset),param.md.mouseray.dir,tempplane,mvertex);
-    //mvertex:=vertexadd(mvertex,gdb.GetCurrentDWG.pcamera^.CamCSOffset);
-
     plx:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,PDWG.Getpcamera^.CamCSOffset),
                         vertexadd(VertexAdd(param.md.mouse3dcoord,xWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
-    //oglsm.mytotalglend;
-    //isOpenGLError;
     oglsm.myglbegin(GL_LINES);
     if sysvar.DISP.DISP_ColorAxis^ then oglsm.glColor3ub(255, 0, 0);
     tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[0],plx,Tempplane);
-    //tv1:=sv1;
     tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[1],plx,Tempplane);
     dvertex:=geometry.VertexSub(tv2,tv1);
     dvertex:=geometry.VertexMulOnSc(dvertex,SysVar.DISP.DISP_CrosshairSize^);
@@ -296,74 +324,9 @@ procedure TOpenGLViewArea.showcursor;
     oglsm.myglend;
     end;
     end;
-
-
-
-    //if wa.param.scrollmode then exit;
-
     oglsm.glColor3ub(255, 255, 255);
-
-
-    {sv1:=geometry.Vertexmorph(tv1,tv2,1/3);
-    sv2:=geometry.Vertexmorph(tv2,tv3,1/3);
-    sv3:=geometry.Vertexmorph(tv3,tv4,1/3);
-    sv4:=geometry.Vertexmorph(tv4,tv1,1/3);
-
-    myglbegin(GL_LINES);
-                   glVertex3d(sv1.x,sv1.y,sv1.z);
-                   glVertex3d(sv1.x+10*wa.param.mousefrustum[2][0],sv1.y+10*wa.param.mousefrustum[2][1],sv1.z+10*wa.param.mousefrustum[2][2]);
-                   glVertex3d(sv2.x,sv2.y,sv2.z);
-                   glVertex3d(sv2.x+10*wa.param.mousefrustum[1][0],sv2.y+10*wa.param.mousefrustum[1][1],sv2.z+10*wa.param.mousefrustum[1][2]);
-                   glVertex3d(sv3.x,sv3.y,sv3.z);
-                   glVertex3d(sv3.x+10*wa.param.mousefrustum[3][0],sv3.y+10*wa.param.mousefrustum[3][1],sv3.z+10*wa.param.mousefrustum[3][2]);
-                   glVertex3d(sv4.x,sv4.y,sv4.z);
-                   glVertex3d(sv4.x+10*wa.param.mousefrustum[0][0],sv4.y+10*wa.param.mousefrustum[0][1],sv4.z+10*wa.param.mousefrustum[0][2]);
-
-    myglend;}
-
-
-
-
-
-
-
-
-
-
-
-
     d1:=geometry.VertexAdd(param.md.mouseray.lbegin,param.md.mouseray.lend);
     d1:=geometry.VertexMulOnSc(d1,0.5);
-
-    {PointOfLinePlaneIntersect(d1,XWCS,gdb.GetCurrentDWG.pcamera.frustum[0],sv1);
-    PointOfLinePlaneIntersect(d1,XWCS,gdb.GetCurrentDWG.pcamera.frustum[1],sv2);
-
-    myglbegin(GL_LINES);
-                   glVertex3d(sv1.x,sv1.y,sv1.z);
-                   glVertex3d(sv2.x,sv2.y,sv2.z);
-    myglend;}
-
-    {PointOfLinePlaneIntersect(d1,yWCS,gdb.GetCurrentDWG.pcamera.frustum[2],sv1);
-    PointOfLinePlaneIntersect(d1,yWCS,gdb.GetCurrentDWG.pcamera.frustum[3],sv2);
-
-    myglbegin(GL_LINES);
-                   glVertex3d(sv1.x,sv1.y,sv1.z);
-                   glVertex3d(sv2.x,sv2.y,sv2.z);
-    myglend;}
-
-    {PointOfLinePlaneIntersect(d1,XWCS,gdb.GetCurrentDWG.pcamera.frustum[4],sv1);
-    PointOfLinePlaneIntersect(d1,XWCS,gdb.GetCurrentDWG.pcamera.frustum[5],sv2);
-
-    myglbegin(GL_LINES);
-                   glVertex3d(sv1.x,sv1.y,sv1.z);
-                   glVertex3d(sv2.x,sv2.y,sv2.z);
-    myglend;}
-
-
-
-
-    //oglsm.mytotalglend;
-    //isOpenGLError;
 
     oglsm.myglMatrixMode(GL_PROJECTION);
     oglsm.myglLoadIdentity;
@@ -376,7 +339,6 @@ procedure TOpenGLViewArea.showcursor;
 
     if param.lastonmouseobject<>nil then
                                         pGDBObjEntity(param.lastonmouseobject)^.higlight;
-    //oglsm.mytotalglend;
 
     oglsm.myglpopmatrix;
     oglsm.glColor3ub(0, 100, 100);
@@ -396,35 +358,6 @@ procedure TOpenGLViewArea.showcursor;
     //glColor3ub(255, 255, 255);
     oglsm.glColor3ubv(foreground{not(sysvar.RD.RD_BackGroundColor^.r),not(sysvar.RD.RD_BackGroundColor^.g),not(sysvar.RD.RD_BackGroundColor^.b)});
 
-    //oglsm.mytotalglend;
-    //isOpenGLError;
-
-    if not param.seldesc.MouseFrameON then
-    begin
-      {Курсор в DCS
-      myglbegin(GL_lines);
-      glVertex3f(0, wa.param.md.mouseglue.y, 0);
-      glVertex3f(clientwidth, wa.param.md.mouseglue.y, 0);
-      glVertex3f(wa.param.md.mouseglue.x, 0, 0);
-      glVertex3f(wa.param.md.mouseglue.x, clientheight, 0);
-      myglend;
-      }
-    end;
-    {
-    курсор в DCS
-    if (wa.param.md.mode and MGetSelectObject) <> 0 then
-    begin
-    myglbegin(GL_line_LOOP);
-    glVertex3f((wa.param.md.mouseglue.x - sysvar.DISP.DISP_CursorSize^), (wa.param.md.mouseglue.y + sysvar.DISP.DISP_CursorSize^), 0);
-    glVertex3f((wa.param.md.mouseglue.x - sysvar.DISP.DISP_CursorSize^), (wa.param.md.mouseglue.y - sysvar.DISP.DISP_CursorSize^), 0);
-    glVertex3f((wa.param.md.mouseglue.x + sysvar.DISP.DISP_CursorSize^), (wa.param.md.mouseglue.y - sysvar.DISP.DISP_CursorSize^), 0);
-    glVertex3f((wa.param.md.mouseglue.x + sysvar.DISP.DISP_CursorSize^), (wa.param.md.mouseglue.y + sysvar.DISP.DISP_CursorSize^), 0);
-    myglend;
-    end;
-    }
-
-    //oglsm.mytotalglend;
-    //isOpenGLError;
 
     if param.seldesc.MouseFrameON then
     begin
@@ -462,12 +395,9 @@ procedure TOpenGLViewArea.showcursor;
 
     end;
 
-    //oglsm.mytotalglend;
-    //isOpenGLError;
 
     if PDWG<>nil then
 
-    //if gdb.GetCurrentDWG.SelObjArray.Count<>0 then gdb.GetCurrentDWG.SelObjArray.drawpoint;
     if tocommandmcliccount=0 then a:=1
                              else a:=0;
     if sysvar.DWG.DWG_PolarMode<>nil then
@@ -487,24 +417,7 @@ procedure TOpenGLViewArea.showcursor;
                    getviewcontrol.clientheight - param.ontrackarray.otrackarray[i].dispcoord.y);
         oglsm.myglvertex2d(param.ontrackarray.otrackarray[i].dispcoord.x - marksize,
                    getviewcontrol.clientheight - param.ontrackarray.otrackarray[i].dispcoord.y);
-        {ptp:=wa.param.ontrackarray.otrackarray[i].arraydispaxis.beginiterate(ir);
-        if ptp<>nil then
-        repeat
-
-        glvertex2d(wa.param.ontrackarray.otrackarray[i].dispcoord.x,
-                   clientheight - wa.param.ontrackarray.otrackarray[i].dispcoord.y);
-         glvertex2d(wa.param.ontrackarray.otrackarray[i].dispcoord.x+ptp^.dir.x,clientheight - (wa.param.ontrackarray.otrackarray[i].dispcoord.y+ptp^.dir.y));
-
-
-              ptp:=wa.param.ontrackarray.otrackarray[i].arraydispaxis.iterate(ir);
-        until ptp=nil;}
-
-
-
         oglsm.myglend;
-
-        //oglsm.mytotalglend;
-        //isOpenGLError;
 
         oglsm.myglLineStipple(1, $3333);
         oglsm.myglEnable(GL_LINE_STIPPLE);
@@ -574,134 +487,94 @@ procedure TOpenGLViewArea.showcursor;
       oglsm.mygltranslated(param.ospoint.dispcoord.x, getviewcontrol.clientheight - param.ospoint.dispcoord.y,0);
       oglsm.mygllinewidth(2);
         oglsm.myglscalef(sysvar.DISP.DISP_OSSize^,sysvar.DISP.DISP_OSSize^,sysvar.DISP.DISP_OSSize^);
-        if (param.ospoint.ostype = os_begin)or(param.ospoint.ostype = os_end) then
-        begin oglsm.myglbegin(GL_line_loop);
-              oglsm.myglVertex2f(-1, 1);
-              oglsm.myglVertex2f(1, 1);
-              oglsm.myglVertex2f(1, -1);
-              oglsm.myglVertex2f(-1, -1);
-              oglsm.myglend;
-        end
-        else
-        if (param.ospoint.ostype = os_midle) then
-        begin oglsm.myglbegin(GL_lines{_loop});
-                  oglsm.myglVertex2f(0, -1);
-                  oglsm.myglVertex2f(0.8660254037844, 0.5);
-                  oglsm.myglVertex2f(0.8660254037844, 0.5);
-                  oglsm.myglVertex2f(-0.8660254037844,0.5);
-                  oglsm.myglVertex2f(-0.8660254037844,0.5);
-                  oglsm.myglVertex2f(0, -1);
-              oglsm.myglend;end
-        else
+
+        case param.ospoint.ostype of
+             os_begin,os_end:
+                             dc.drawer.DrawClosedPolyLine2DInDCS([-1,  1,
+                                                                   1,  1,
+                                                                   1, -1,
+                                                                  -1, -1]);
+                    os_midle:
+                             dc.drawer.DrawClosedPolyLine2DInDCS([ 0,              -1,
+                                                                   0.8660254037844, 0.5,
+                                                                  -0.8660254037844, 0.5]);
+        end;
         if (param.ospoint.ostype = os_1_4)or(param.ospoint.ostype = os_3_4) then
-        begin oglsm.myglbegin(GL_lines);
-                                       oglsm.myglVertex2f(-0.5, 1);
-                                       oglsm.myglVertex2f(-0.5, -1);
-                                       oglsm.myglVertex2f(-0.2, -1);
-                                       oglsm.myglVertex2f(0.15, 1);
-                                       oglsm.myglVertex2f(0.5, -1);
-                                       oglsm.myglVertex2f(0.15, 1);
-              oglsm.myglend;end
+        begin
+             dc.drawer.DrawLine2DInDCS(-0.5, 1,-0.5, -1);
+             dc.drawer.DrawLine2DInDCS(-0.2, -1,0.15, 1);
+             dc.drawer.DrawLine2DInDCS(0.5, -1,0.15, 1);
+        end
         else
         if (param.ospoint.ostype = os_center)then
                                                  circlepointoflod[8].DrawGeometry
         else
         if (param.ospoint.ostype = os_q0)or(param.ospoint.ostype = os_q1)
          or(param.ospoint.ostype = os_q2)or(param.ospoint.ostype = os_q3) then
-        begin oglsm.myglbegin(GL_lines{_loop});
-                                            oglsm.myglVertex2f(-1, 0);
-                                            oglsm.myglVertex2f(0, 1);
-                                            oglsm.myglVertex2f(0, 1);
-                                            oglsm.myglVertex2f(1, 0);
-                                            oglsm.myglVertex2f(1, 0);
-                                            oglsm.myglVertex2f(0, -1);
-                                            oglsm.myglVertex2f(0, -1);
-                                            oglsm.myglVertex2f(-1, 0);
-              oglsm.myglend;end
+        begin
+             dc.drawer.DrawClosedPolyLine2DInDCS([-1, 0,0, 1,1, 0,0, -1,-1, 0]);
+        end
         else
         if (param.ospoint.ostype = os_1_3)or(param.ospoint.ostype = os_2_3) then
-        begin oglsm.myglbegin(GL_lines);
-                                        oglsm.myglVertex2f(-0.5, 1);
-                                        oglsm.myglVertex2f(-0.5, -1);
-                                        oglsm.myglVertex2f(0, 1);
-                                        oglsm.myglVertex2f(0, -1);
-                                        oglsm.myglVertex2f(0.5, 1);
-                                        oglsm.myglVertex2f(0.5, -1);
-              oglsm.myglend;end
+        begin
+                                        dc.drawer.DrawLine2DInDCS(-0.5, 1,-0.5, -1);
+                                        dc.drawer.DrawLine2DInDCS(0, 1,0, -1);
+                                        dc.drawer.DrawLine2DInDCS(0.5, 1,0.5, -1);
+        end
         else
         if (param.ospoint.ostype = os_point) then
-        begin oglsm.myglbegin(GL_lines);
-                                        oglsm.myglVertex2f(-1, 1);
-                                        oglsm.myglVertex2f(1, -1);
-                                        oglsm.myglVertex2f(-1, -1);
-                                        oglsm.myglVertex2f(1, 1);
-              oglsm.myglend;end
+        begin
+             dc.drawer.DrawLine2DInDCS(-1, 1,1, -1);
+             dc.drawer.DrawLine2DInDCS(-1, -1,1, 1);
+        end
         else
         if (param.ospoint.ostype = os_intersection) then
-        begin oglsm.myglbegin(GL_lines);
-                                        oglsm.myglVertex2f(-1, 1);
-                                        oglsm.myglVertex2f(1, -1);
-                                        oglsm.myglVertex2f(-1, -1);
-                                        oglsm.myglVertex2f(1, 1);
-              oglsm.myglend;end
+        begin
+             dc.drawer.DrawLine2DInDCS(-1, 1,1, -1);
+             dc.drawer.DrawLine2DInDCS(-1, -1,1, 1);
+        end
         else
         if (param.ospoint.ostype = os_apparentintersection) then
-        begin oglsm.myglbegin(GL_lines);
-                                        oglsm.myglVertex2f(-1, 1);
-                                        oglsm.myglVertex2f(1, -1);
-                                        oglsm.myglVertex2f(-1, -1);
-                                        oglsm.myglVertex2f(1, 1);
-              oglsm.myglend;oglsm.myglbegin(GL_lines{_loop});
-                                        oglsm.myglVertex2f(-1, 1);
-                                        oglsm.myglVertex2f(1, 1);
-                                        oglsm.myglVertex2f(1, 1);
-                                        oglsm.myglVertex2f(1, -1);
-                                        oglsm.myglVertex2f(1, -1);
-                                        oglsm.myglVertex2f(-1, -1);
-                                        oglsm.myglVertex2f(-1, -1);
-                                        oglsm.myglVertex2f(-1, 1);
-              oglsm.myglend;end
+        begin
+             dc.drawer.DrawLine2DInDCS(-1, 1,1, -1);
+             dc.drawer.DrawLine2DInDCS(-1, -1,1, 1);
+             dc.drawer.DrawClosedPolyLine2DInDCS([-1, 1,
+                                                  1, 1,
+                                                  1, -1,
+                                                  -1, -1]);
+        end
         else
         if (param.ospoint.ostype = os_textinsert) then
-        begin oglsm.myglbegin(GL_lines);
-                                        oglsm.myglVertex2f(-1, 0);
-                                        oglsm.myglVertex2f(1, 0);
-                                        oglsm.myglVertex2f(0, 1);
-                                        oglsm.myglVertex2f(0, -1);
-               oglsm.myglend;end
+        begin
+             dc.drawer.DrawLine2DInDCS(-1, 0,1, 0);
+             dc.drawer.DrawLine2DInDCS(0, 1,0, -1);
+        end
         else
         if (param.ospoint.ostype = os_perpendicular) then
-        begin oglsm.myglbegin(GL_LINES{_STRIP});
-                                            oglsm.myglVertex2f(-1, -1);
-                                            oglsm.myglVertex2f(-1, 1);
-                                            oglsm.myglVertex2f(-1, 1);
-                                            oglsm.myglVertex2f(1,1);
-              oglsm.myglend;
-              oglsm.myglbegin(GL_LINES{_STRIP});
-                                            oglsm.myglVertex2f(-1, 0);
-                                            oglsm.myglVertex2f(0, 0);
-                                            oglsm.myglVertex2f(0, 0);
-                                            oglsm.myglVertex2f(0,1);
-              oglsm.myglend;end
+        begin
+             dc.drawer.DrawLine2DInDCS(-1, -1,-1, 1);
+             dc.drawer.DrawLine2DInDCS(-1, 1,1,1);
+             dc.drawer.DrawLine2DInDCS(-1, 0,0, 0);
+             dc.drawer.DrawLine2DInDCS(0, 0,0,1)
+        end
         else
         if (param.ospoint.ostype = os_trace) then
         begin
-             oglsm.myglbegin(GL_LINES);
-                       oglsm.myglVertex2f(-1, -0.5);oglsm.myglVertex2f(1, -0.5);
-                       oglsm.myglVertex2f(-1,  0.5);oglsm.myglVertex2f(1,  0.5);
-              oglsm.myglend;
+             dc.drawer.DrawLine2DInDCS(-1, -0.5,1, -0.5);
+             dc.drawer.DrawLine2DInDCS(-1,  0.5,1,  0.5);
         end
         else if (param.ospoint.ostype = os_nearest) then
-        begin oglsm.myglbegin(GL_lines{_loop});
-                                            oglsm.myglVertex2d(-1, 1);
-                                            oglsm.myglVertex2d(1, 1);
-                                            oglsm.myglVertex2d(1, 1);
-                                            oglsm.myglVertex2d(-1, -1);
-                                            oglsm.myglVertex2d(-1, -1);
-                                            oglsm.myglVertex2d(1, -1);
-                                            oglsm.myglVertex2d(1, -1);
-                                            oglsm.myglVertex2d(-1, 1);
-              oglsm.myglend;end;
+        begin
+             dc.drawer.DrawClosedPolyLine2DInDCS([-1, 1,
+                                                  1, 1,
+                                                  -1, -1,
+                                                  1, -1]);
+        end;
+
+
+
+
+
       oglsm.mygllinewidth(1);
     end;
 

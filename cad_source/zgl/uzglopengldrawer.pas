@@ -25,8 +25,25 @@ uses
 type
 TZGLOpenGLDrawer=class(TZGLAbstractDrawer)
                         public
+                        procedure startrender;override;
+                        procedure endrender;override;
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
+                        procedure SetLineWidth(const w:single);override;
+                        procedure SetPointSize(const s:single);override;
+                        procedure SetColor(const red, green, blue: byte);overload;override;
+                        procedure SetClearColor(const red, green, blue, alpha: byte);overload;override;
+                        procedure SetColor(const color: TRGB);overload;override;
+                        procedure ClearScreen(stencil:boolean);override;
+                        procedure TranslateCoord2D(const tx,ty:single);override;
+                        procedure ScaleCoord2D(const sx,sy:single);override;
+                        procedure SetLineSmooth(const smoth:boolean);override;
+                        procedure SetPointSmooth(const smoth:boolean);override;
+                        procedure ClearStatesMachine;override;
+                        procedure SetFillStencilMode;override;
+                        procedure SetDrawWithStencilMode;override;
+                        procedure DisableStencil;override;
+                        procedure SetZTest(Z:boolean);override;
                         {в координатах окна}
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
@@ -107,7 +124,106 @@ begin
     oglsm.myglVertex3fV(PVertexBuffer.getelement(i));
     oglsm.myglend;
 end;
-
+procedure TZGLOpenGLDrawer.TranslateCoord2D(const tx,ty:single);
+begin
+     oglsm.mygltranslated(tx, ty,0);
+end;
+procedure TZGLOpenGLDrawer.ScaleCoord2D(const sx,sy:single);
+begin
+     oglsm.myglscalef(sx,sy,1);
+end;
+procedure TZGLOpenGLDrawer.SetLineSmooth(const smoth:boolean);
+begin
+     if smoth then
+                 begin
+                      oglsm.myglEnable(GL_BLEND);
+                      oglsm.myglBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+                      oglsm.myglEnable(GL_LINE_SMOOTH);
+                      oglsm.myglHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
+                 end
+             else
+                 begin
+                      oglsm.myglDisable(GL_BLEND);
+                      oglsm.myglDisable(GL_LINE_SMOOTH);
+                 end;
+end;
+procedure TZGLOpenGLDrawer.SetPointSmooth(const smoth:boolean);
+begin
+     if smoth then
+                 begin
+                      oglsm.myglEnable(gl_point_smooth);
+                 end
+             else
+                 begin
+                      oglsm.myglDisable(gl_point_smooth);
+                 end;
+end;
+procedure TZGLOpenGLDrawer.ClearStatesMachine;
+begin
+     oglsm.mytotalglend;
+end;
+procedure TZGLOpenGLDrawer.SetFillStencilMode;
+begin
+     oglsm.myglEnable(GL_STENCIL_TEST);
+     oglsm.myglStencilFunc(GL_NEVER, 1, 0); // значение mask не используется
+     oglsm.myglStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
+end;
+procedure TZGLOpenGLDrawer.SetDrawWithStencilMode;
+begin
+    oglsm.myglEnable(GL_STENCIL_TEST);
+    oglsm.myglStencilFunc(GL_EQUAL,0,1);
+    oglsm.myglStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+end;
+procedure TZGLOpenGLDrawer.DisableStencil;
+begin
+     oglsm.myglDisable(GL_STENCIL_TEST);
+end;
+procedure TZGLOpenGLDrawer.SetZTest(Z:boolean);
+begin
+     if Z then
+             begin
+                  oglsm.myglEnable(GL_DEPTH_TEST);
+             end
+         else
+             begin
+                  oglsm.myglDisable(GL_DEPTH_TEST);
+             end;
+end;
+procedure TZGLOpenGLDrawer.startrender;
+begin
+     OGLSM.startrender;
+end;
+procedure TZGLOpenGLDrawer.endrender;
+begin
+     OGLSM.endrender;
+end;
+procedure TZGLOpenGLDrawer.SetColor(const red, green, blue: byte);
+begin
+     oglsm.glcolor3ub(red, green, blue);
+end;
+procedure TZGLOpenGLDrawer.ClearScreen(stencil:boolean);
+begin
+     if stencil then
+                    oglsm.myglClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT)
+                else
+                    oglsm.myglClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
+end;
+procedure TZGLOpenGLDrawer.SetColor(const color: TRGB);
+begin
+     oglsm.glcolor3ubv(color);
+end;
+procedure TZGLOpenGLDrawer.SetClearColor(const red, green, blue, alpha: byte);
+begin
+     oglsm.myglClearColor(red/255,green/255,blue/255,alpha/255);
+end;
+procedure TZGLOpenGLDrawer.SetLineWidth(const w:single);
+begin
+     oglsm.mygllinewidth(w);
+end;
+procedure TZGLOpenGLDrawer.SetPointSize(const s:single);
+begin
+     oglsm.myglpointsize(s);
+end;
 procedure TZGLOpenGLDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:integer);
 begin
     oglsm.myglbegin(GL_lines);

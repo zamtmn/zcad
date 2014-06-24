@@ -204,15 +204,6 @@ begin
      programlog.logoutstr('oglwnd.PDWG:=ptd;',0);
      wpowner.getareacaps;
 
-     if testform=nil then
-     begin
-     testform:=tform.CreateNew(application);
-     testform.Caption:='canvas render test';
-     testform.Show;
-     testrender:={TZGLCanvasDrawer}{TZGLGDIPlusDrawer}TZGLOpenGLDrawer.Create;
-     TZGLCanvasDrawer(testrender).canvas:=testform.Canvas;
-     end;
-
      //TOGLWnd(oglwnd).GDBActivate;
   wpowner.WaResize(nil);
      programlog.logoutstr('oglwnd._onresize(nil);',0);

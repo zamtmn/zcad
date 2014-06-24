@@ -19,7 +19,9 @@
 unit generalviewarea;
 {$INCLUDE def.inc}
 interface
-uses {gdbase,gdbasetypes,
+uses
+     GDBHelpObj{нужно убрать},
+     {gdbase,gdbasetypes,
      UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,UGDBPoint3DArray,
      oglwindowdef,gdbdrawcontext,UGDBEntTree,ugdbabstractdrawing,
      uinfoform,}
@@ -41,6 +43,7 @@ type
     TGeneralViewArea=class(TAbstractViewArea)
                            public
                            WorkArea:TCADControl;
+                           Drawer:TZGLAbstractDrawer;
                            {param: OGLWndtype;
                            PDWG:PTAbstractDrawing;
                            PolarAxis:GDBPoint3dArray;
@@ -108,6 +111,9 @@ type
                            procedure showmousecursor;override;
                            procedure hidemousecursor;override;
                            Procedure Paint; override;
+                           procedure draw;override;
+
+                           procedure showsnap(var DC:TDrawContext); virtual;
 
 
                            {onЧетоТам обработчики событй рабочей области}
@@ -121,6 +127,7 @@ type
 
                            constructor Create(TheOwner: TComponent); override;
                            function CreateWorkArea(TheOwner: TComponent):TCADControl; virtual;abstract;
+                           procedure CreateDrawer; virtual;abstract;
                            procedure SetupWorkArea; virtual;abstract;
                            procedure doCameraChanged; override;
                       end;
@@ -130,6 +137,270 @@ procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
 implementation
 uses
      commandline,mainwindow;
+procedure TGeneralViewArea.draw;
+var
+  scrollmode:GDBBOOlean;
+  LPTime:Tdatetime;
+  DC:TDrawContext;
+  tick,dt:cardinal;
+  const msec=1;
+begin
+  if not assigned(pdwg) then exit;
+  if (getviewcontrol.clientwidth=0)or(getviewcontrol.clientheight=0) then exit;
+  LPTime:=now;
+  {$IFDEF TOTALYLOG}programlog.logoutstr('TOGLWnd.draw',0);{$ENDIF}
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.draw',lp_IncPos);{$ENDIF}
+
+  //-----------------------------------MakeCurrent;{не забыть что обычный контекст не делает себя текущим сам!}
+
+
+  foreground.r:=not(sysvar.RD.RD_BackGroundColor^.r);
+  foreground.g:=not(sysvar.RD.RD_BackGroundColor^.g);
+  foreground.b:=not(sysvar.RD.RD_BackGroundColor^.b);
+  dc:=CreateRC;
+  if param.firstdraw then
+                            inc(PDWG.Getpcamera^.DRAWCOUNT);
+  dc.drawer.SetLineSmooth(SysVar.RD.RD_LineSmooth^);
+
+  dc.drawer.SetZTest(true);
+  if PDWG<>nil then
+  begin
+  {else if sysvar.RD.RD_Restore_Mode^=WND_Texture then}
+  begin
+  if param.firstdraw = true then
+  begin
+    dc.drawer.ClearStatesMachine;
+
+    dc.drawer.SetClearColor(sysvar.RD.RD_BackGroundColor^.r,sysvar.RD.RD_BackGroundColor^.g,sysvar.RD.RD_BackGroundColor^.b,sysvar.RD.RD_BackGroundColor^.a);
+    dc.drawer.ClearScreen(true);
+
+    CalcOptimalMatrix;
+    if sysvar.RD.RD_UseStencil<>nil then
+    if sysvar.RD.RD_UseStencil^ then
+    begin
+         dc.drawer.SetFillStencilMode;
+         PDWG.GetSelObjArray.drawobject(dc);
+         dc.drawer.SetDrawWithStencilMode;
+    end
+       else
+           dc.drawer.DisableStencil
+       else
+           dc.drawer.DisableStencil;
+    dc.drawer.SetLineWidth(1);
+    dc.drawer.SetPointSize(1);
+    dc.drawer.SetPointSmooth(false);
+
+    DrawGrid(dc);
+
+    LightOn(dc);
+
+    if (sysvar.DWG.DWG_SystmGeometryDraw^) then
+                                               begin
+                                               dc.drawer.setcolor(palette[sysvar.SYS.SYS_SystmGeometryColor^+2].RGB);
+                                               PDWG.GetCurrentROOT^.ObjArray.ObjTree.draw;
+                                               end;
+    begin
+    dc.drawer.startrender;
+    PDWG.Getpcamera.DRAWNOTEND:=treerender(PDWG.GetCurrentROOT^.ObjArray.ObjTree,lptime,dc);
+    dc.drawer.endrender;
+    end;
+    PDWG.GetCurrentROOT.DrawBB;
+
+    dc.drawer.ClearStatesMachine;
+
+
+    SaveBuffers(dc);
+
+    dc.drawer.SetZTest(false);
+    inc(dc.subrender);
+    if commandmanager.pcommandrunning<>nil then
+                                               commandmanager.pcommandrunning^.DrawHeplGeometry;
+
+    scrollmode:=param.scrollmode;
+    param.scrollmode:=true;
+
+    render(PDWG.GetConstructObjRoot^,dc);
+
+
+    param.scrollmode:=scrollmode;
+    PDWG.GetConstructObjRoot.DrawBB;
+
+
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode,PDWG.GetPcamera^,PDWG^.myGluProject2);
+    dc.drawer.DisableStencil;
+    dc.MaxDetail:=true;
+    PDWG.GetSelObjArray.drawobj(dc);
+    dec(dc.subrender);
+    LightOff(dc);
+    showcursor(dc);
+  end
+  else
+  begin
+    LightOff(dc);
+    RestoreBuffers(dc);
+    inc(dc.subrender);
+    if PDWG.GetConstructObjRoot.ObjArray.Count>0 then
+                                                    PDWG.GetConstructObjRoot.ObjArray.Count:=PDWG.GetConstructObjRoot.ObjArray.Count;
+    if commandmanager.pcommandrunning<>nil then
+                                               commandmanager.pcommandrunning^.DrawHeplGeometry;
+    scrollmode:=param.scrollmode;
+    param.scrollmode:=true;
+    render(PDWG.GetConstructObjRoot^,dc);
+    param.scrollmode:=scrollmode;
+    PDWG.GetConstructObjRoot.DrawBB;
+
+    dc.drawer.DisableStencil;
+    dc.MaxDetail:=true;
+    PDWG.GetSelObjArray.drawobj(dc);
+    showcursor(dc);
+
+    dec(dc.subrender);
+  end;
+  end
+  end
+     else begin
+               dc.drawer.SetClearColor(150,150,150,255);
+               dc.drawer.ClearScreen(false);
+          end;
+
+
+
+  //------------------------------------------------------------------MySwapBuffers(OGLContext);//SwapBuffers(DC);
+
+  //oglsm.mytotalglend;
+  dc.drawer.ClearStatesMachine;
+  SwapBuffers(dc);
+
+  lptime:=now()-LPTime;
+  tick:=round(lptime*10e7);
+  if param.firstdraw then
+                         sysvar.RD.RD_LastRenderTime^:=tick*msec
+                     else
+                         sysvar.RD.RD_LastUpdateTime^:=tick*msec;
+  {$IFDEF PERFOMANCELOG}
+                       if wa.param.firstdraw then
+                                              log.programlog.LogOutStrFast('Draw time='+inttostr(sysvar.RD.RD_LastRenderTime^),0)
+                                          else
+                                              log.programlog.LogOutStrFast('ReDraw time='+inttostr(sysvar.RD.RD_LastUpdateTime^),0);
+  {$ENDIF}
+  if param.firstdraw then
+  if   SysVar.RD.RD_ImageDegradation.RD_ID_Enabled^ then
+  begin
+  dt:=sysvar.RD.RD_LastRenderTime^-SysVar.RD.RD_ImageDegradation.RD_ID_PrefferedRenderTime^;
+  if dt<0 then
+                                         SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor+{0.5}dt/5
+                                     else
+                                         SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor+{0.5}dt/10;
+  if SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor>SysVar.RD.RD_ImageDegradation.RD_ID_MaxDegradationFactor^ then
+                                                 SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=SysVar.RD.RD_ImageDegradation.RD_ID_MaxDegradationFactor^;
+  if SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor<0 then
+                                                 SysVar.RD.RD_ImageDegradation.RD_ID_CurrentDegradationFactor:=0;
+  end;
+  param.firstdraw := false;
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.draw---{end}',lp_DecPos);{$ENDIF}
+end;
+procedure TGeneralViewArea.showsnap(var DC:TDrawContext);
+begin
+  if param.ospoint.ostype <> os_none then
+  begin
+    dc.drawer.SetColor(255,255, 0);
+    dc.drawer.SetLineWidth(2);
+    dc.drawer.TranslateCoord2D(param.ospoint.dispcoord.x, getviewcontrol.clientheight - param.ospoint.dispcoord.y);
+    dc.drawer.ScaleCoord2D(sysvar.DISP.DISP_OSSize^,sysvar.DISP.DISP_OSSize^);
+      if (param.ospoint.ostype = os_begin)or(param.ospoint.ostype = os_end) then
+      begin
+           dc.drawer.DrawClosedPolyLine2DInDCS([-1,  1,
+                                                 1,  1,
+                                                 1, -1,
+                                                -1, -1]);
+      end
+      else
+      if (param.ospoint.ostype = os_midle) then
+      begin
+           dc.drawer.DrawClosedPolyLine2DInDCS([ 0,              -1,
+                                                 0.8660254037844, 0.5,
+                                                -0.8660254037844, 0.5]);
+      end
+      else
+      if (param.ospoint.ostype = os_1_4)or(param.ospoint.ostype = os_3_4) then
+      begin
+           dc.drawer.DrawLine2DInDCS(-0.5,  1,-0.5, -1);
+           dc.drawer.DrawLine2DInDCS(-0.2, -1, 0.15, 1);
+           dc.drawer.DrawLine2DInDCS( 0.5, -1, 0.15, 1);
+      end
+      else
+      if (param.ospoint.ostype = os_center)then
+                                               circlepointoflod[8].DrawGeometry
+      else
+      if (param.ospoint.ostype = os_q0)or(param.ospoint.ostype = os_q1)
+       or(param.ospoint.ostype = os_q2)or(param.ospoint.ostype = os_q3) then
+      begin
+           dc.drawer.DrawClosedPolyLine2DInDCS([-1,  0,
+                                                 0,  1,
+                                                 1,  0,
+                                                 0, -1,
+                                                -1,  0]);
+      end
+      else
+      if (param.ospoint.ostype = os_1_3)or(param.ospoint.ostype = os_2_3) then
+      begin
+                                      dc.drawer.DrawLine2DInDCS(-0.5, 1,-0.5, -1);
+                                      dc.drawer.DrawLine2DInDCS(0, 1,0, -1);
+                                      dc.drawer.DrawLine2DInDCS(0.5, 1,0.5, -1);
+      end
+      else
+      if (param.ospoint.ostype = os_point) then
+      begin
+           dc.drawer.DrawLine2DInDCS(-1, 1,1, -1);
+           dc.drawer.DrawLine2DInDCS(-1, -1,1, 1);
+      end
+      else
+      if (param.ospoint.ostype = os_intersection) then
+      begin
+           dc.drawer.DrawLine2DInDCS(-1, 1,1, -1);
+           dc.drawer.DrawLine2DInDCS(-1, -1,1, 1);
+      end
+      else
+      if (param.ospoint.ostype = os_apparentintersection) then
+      begin
+           dc.drawer.DrawLine2DInDCS(-1, 1,1, -1);
+           dc.drawer.DrawLine2DInDCS(-1, -1,1, 1);
+           dc.drawer.DrawClosedPolyLine2DInDCS([-1,  1,
+                                                 1,  1,
+                                                 1, -1,
+                                                -1, -1]);
+      end
+      else
+      if (param.ospoint.ostype = os_textinsert) then
+      begin
+           dc.drawer.DrawLine2DInDCS(-1, 0, 1, 0);
+           dc.drawer.DrawLine2DInDCS( 0, 1, 0,-1);
+      end
+      else
+      if (param.ospoint.ostype = os_perpendicular) then
+      begin
+           dc.drawer.DrawLine2DInDCS(-1,-1,-1, 1);
+           dc.drawer.DrawLine2DInDCS(-1, 1, 1, 1);
+           dc.drawer.DrawLine2DInDCS(-1, 0, 0, 0);
+           dc.drawer.DrawLine2DInDCS( 0, 0, 0, 1);
+      end
+      else
+      if (param.ospoint.ostype = os_trace) then
+      begin
+           dc.drawer.DrawLine2DInDCS(-1, -0.5,1, -0.5);
+           dc.drawer.DrawLine2DInDCS(-1,  0.5,1,  0.5);
+      end
+      else if (param.ospoint.ostype = os_nearest) then
+      begin
+           dc.drawer.DrawClosedPolyLine2DInDCS([-1, 1,
+                                                 1, 1,
+                                                -1,-1,
+                                                 1,-1]);
+      end;
+    dc.drawer.SetLineWidth(1);
+  end;
+end;
+
 Procedure TGeneralViewArea.Paint;
 begin
      WorkArea.Repaint;
@@ -800,6 +1071,7 @@ begin
      inherited;
 
      WorkArea:=CreateWorkArea(TheOwner);
+     CreateDrawer;
      SetupWorkArea;
 
      OTTimer:=TTimer.create(self);
@@ -1352,7 +1624,7 @@ begin
   result.MaxWidth:=sysvar.RD.RD_MaxWidth^;
   result.ScrollMode:=param.scrollmode;
   result.Zoom:=PDWG.GetPcamera.prop.zoom;
-  //result.drawer:={OGLDrawer}testrender;
+  result.drawer:=drawer;
 end;
 procedure TGeneralViewArea.CorrectMouseAfterOS;
 var d,tv1,tv2:GDBVertex;

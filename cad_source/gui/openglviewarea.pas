@@ -19,7 +19,7 @@
 unit openglviewarea;
 {$INCLUDE def.inc}
 interface
-uses sysutils,UGDBEntTree,GDBGenericSubEntry,GDBHelpObj,memman,OGLSpecFunc,gdbase,gdbasetypes,
+uses uzglopengldrawer,sysutils,UGDBEntTree,GDBGenericSubEntry,GDBHelpObj,memman,OGLSpecFunc,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,
      uinfoform,oglwindow,oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,GDBEntity,Varman,zcadinterface,geometry,gdbobjectsconstdef,shared,zcadstrconsts,LCLType,
      ExtCtrls,classes,Controls,Graphics,generalviewarea,UGDBTracePropArray,math,uzglabstractdrawer,log;
@@ -29,21 +29,21 @@ type
                       OpenGLWindow:TOGLWnd;
                       myscrbuf:tmyscrbuf;
 
-                      procedure draw;override;
                       procedure finishdraw(var RC:TDrawContext); override;
                       function CreateWorkArea(TheOwner: TComponent):TCADControl; override;
-                      function CreateRC(_maxdetail:GDBBoolean=false):TDrawContext; override;
+                      procedure CreateDrawer; override;
                       procedure SetupWorkArea; override;
                       procedure WaResize(sender:tobject); override;
 
                       procedure CreateScrbuf(w,h:integer); override;
                       procedure delmyscrbuf; override;
-                      procedure SaveBuffers; override;
-                      procedure RestoreBuffers; override;
-                      procedure LightOn; override;
-                      procedure LightOff; override;
-                      procedure DrawGrid; override;
-                      procedure showcursor(DC:TDrawContext); override;
+                      procedure SaveBuffers(var DC:TDrawContext); override;
+                      procedure SwapBuffers(var DC:TDrawContext); override;
+                      procedure RestoreBuffers(var DC:TDrawContext); override;
+                      procedure LightOn(var DC:TDrawContext); override;
+                      procedure LightOff(var DC:TDrawContext); override;
+                      procedure DrawGrid(var DC:TDrawContext); override;
+                      procedure showcursor(var DC:TDrawContext); override;
                       procedure getareacaps; override;
 
                       procedure render(const Root:GDBObjGenericSubEntry;var DC:TDrawContext); override;
@@ -54,10 +54,11 @@ type
                       public
                       OpenGLWindow:TPanel;
                       function CreateWorkArea(TheOwner: TComponent):TCADControl; override;
-                      function CreateRC(_maxdetail:GDBBoolean=false):TDrawContext; override;
+                      procedure CreateDrawer; override;
                       procedure SetupWorkArea; override;
                       procedure WaResize(sender:tobject); override;
                       procedure draw; override;
+                      procedure getareacaps; override;
                   end;
 
 implementation
@@ -249,7 +250,7 @@ procedure TOpenGLViewArea.showcursor;
                             exit;
     CalcOptimalMatrix;
     if PDWG.GetSelObjArray.Count<>0 then PDWG.GetSelObjArray.drawpoint;
-    oglsm.glcolor3ub(255, 255, 255);
+    dc.drawer.SetColor(255, 255, 255);
     oglsm.myglEnable(GL_COLOR_LOGIC_OP);
     oglsm.myglLogicOp(GL_OR);
     if param.ShowDebugFrustum then
@@ -281,7 +282,7 @@ procedure TOpenGLViewArea.showcursor;
     plx:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,PDWG.Getpcamera^.CamCSOffset),
                         vertexadd(VertexAdd(param.md.mouse3dcoord,xWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
     oglsm.myglbegin(GL_LINES);
-    if sysvar.DISP.DISP_ColorAxis^ then oglsm.glColor3ub(255, 0, 0);
+    if sysvar.DISP.DISP_ColorAxis^ then dc.drawer.SetColor(255, 0, 0);
     tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[0],plx,Tempplane);
     tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[1],plx,Tempplane);
     dvertex:=geometry.VertexSub(tv2,tv1);
@@ -295,7 +296,7 @@ procedure TOpenGLViewArea.showcursor;
 
     ply:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,PDWG.Getpcamera^.CamCSOffset),
                         vertexadd(VertexAdd(param.md.mouse3dcoord,yWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
-   if sysvar.DISP.DISP_ColorAxis^ then oglsm.glColor3ub(0, 255, 0);
+   if sysvar.DISP.DISP_ColorAxis^ then dc.drawer.SetColor(0, 255, 0);
     oglsm.myglbegin(GL_LINES);
     tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[2],ply,Tempplane);
     tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[3],ply,Tempplane);
@@ -311,7 +312,7 @@ procedure TOpenGLViewArea.showcursor;
     begin
     plz:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,PDWG.Getpcamera^.CamCSOffset),
                         vertexadd(VertexAdd(param.md.mouse3dcoord,zWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
-    if sysvar.DISP.DISP_ColorAxis^ then oglsm.glColor3ub(0, 0, 255);
+    if sysvar.DISP.DISP_ColorAxis^ then dc.drawer.SetColor(0, 0, 255);
     oglsm.myglbegin(GL_LINES);
     tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[0],plz,Tempplane);
     tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[1],plz,Tempplane);
@@ -324,7 +325,7 @@ procedure TOpenGLViewArea.showcursor;
     oglsm.myglend;
     end;
     end;
-    oglsm.glColor3ub(255, 255, 255);
+    dc.drawer.SetColor(255, 255, 255);
     d1:=geometry.VertexAdd(param.md.mouseray.lbegin,param.md.mouseray.lend);
     d1:=geometry.VertexMulOnSc(d1,0.5);
 
@@ -341,7 +342,7 @@ procedure TOpenGLViewArea.showcursor;
                                         pGDBObjEntity(param.lastonmouseobject)^.higlight;
 
     oglsm.myglpopmatrix;
-    oglsm.glColor3ub(0, 100, 100);
+    dc.drawer.SetColor(0, 100, 100);
     oglsm.myglpushmatrix;
     oglsm.mygltranslated(param.CSIcon.csx.x + 2, -getviewcontrol.clientheight + param.CSIcon.csx.y - 10, 0);
     //textwrite('X');
@@ -408,7 +409,7 @@ procedure TOpenGLViewArea.showcursor;
       for i := a to param.ontrackarray.total - 1 do
       begin
        oglsm.myglbegin(GL_LINES);
-       oglsm.glcolor3ub(255,255, 0);
+       dc.drawer.SetColor(255,255, 0);
         oglsm.myglvertex2d(param.ontrackarray.otrackarray[i].dispcoord.x,
                    getviewcontrol.clientheight - param.ontrackarray.otrackarray[i].dispcoord.y + marksize);
         oglsm.myglvertex2d(param.ontrackarray.otrackarray[i].dispcoord.x,
@@ -422,7 +423,7 @@ procedure TOpenGLViewArea.showcursor;
         oglsm.myglLineStipple(1, $3333);
         oglsm.myglEnable(GL_LINE_STIPPLE);
         oglsm.myglbegin(GL_LINES);
-        oglsm.glcolor3ub(80,80, 80);
+        dc.drawer.SetColor(80,80, 80);
         if param.ontrackarray.otrackarray[i].arraydispaxis.Count <> 0 then
         begin;
         pt:=param.ontrackarray.otrackarray[i].arraydispaxis.PArray;
@@ -477,109 +478,7 @@ procedure TOpenGLViewArea.showcursor;
       end;
     end;
 
-    //oglsm.mytotalglend;
-    //isOpenGLError;
-
-    //{$REGION 'snap'}
-    if param.ospoint.ostype <> os_none then
-    begin
-     oglsm.glcolor3ub(255,255, 0);
-      oglsm.mygltranslated(param.ospoint.dispcoord.x, getviewcontrol.clientheight - param.ospoint.dispcoord.y,0);
-      oglsm.mygllinewidth(2);
-        oglsm.myglscalef(sysvar.DISP.DISP_OSSize^,sysvar.DISP.DISP_OSSize^,sysvar.DISP.DISP_OSSize^);
-
-        case param.ospoint.ostype of
-             os_begin,os_end:
-                             dc.drawer.DrawClosedPolyLine2DInDCS([-1,  1,
-                                                                   1,  1,
-                                                                   1, -1,
-                                                                  -1, -1]);
-                    os_midle:
-                             dc.drawer.DrawClosedPolyLine2DInDCS([ 0,              -1,
-                                                                   0.8660254037844, 0.5,
-                                                                  -0.8660254037844, 0.5]);
-        end;
-        if (param.ospoint.ostype = os_1_4)or(param.ospoint.ostype = os_3_4) then
-        begin
-             dc.drawer.DrawLine2DInDCS(-0.5, 1,-0.5, -1);
-             dc.drawer.DrawLine2DInDCS(-0.2, -1,0.15, 1);
-             dc.drawer.DrawLine2DInDCS(0.5, -1,0.15, 1);
-        end
-        else
-        if (param.ospoint.ostype = os_center)then
-                                                 circlepointoflod[8].DrawGeometry
-        else
-        if (param.ospoint.ostype = os_q0)or(param.ospoint.ostype = os_q1)
-         or(param.ospoint.ostype = os_q2)or(param.ospoint.ostype = os_q3) then
-        begin
-             dc.drawer.DrawClosedPolyLine2DInDCS([-1, 0,0, 1,1, 0,0, -1,-1, 0]);
-        end
-        else
-        if (param.ospoint.ostype = os_1_3)or(param.ospoint.ostype = os_2_3) then
-        begin
-                                        dc.drawer.DrawLine2DInDCS(-0.5, 1,-0.5, -1);
-                                        dc.drawer.DrawLine2DInDCS(0, 1,0, -1);
-                                        dc.drawer.DrawLine2DInDCS(0.5, 1,0.5, -1);
-        end
-        else
-        if (param.ospoint.ostype = os_point) then
-        begin
-             dc.drawer.DrawLine2DInDCS(-1, 1,1, -1);
-             dc.drawer.DrawLine2DInDCS(-1, -1,1, 1);
-        end
-        else
-        if (param.ospoint.ostype = os_intersection) then
-        begin
-             dc.drawer.DrawLine2DInDCS(-1, 1,1, -1);
-             dc.drawer.DrawLine2DInDCS(-1, -1,1, 1);
-        end
-        else
-        if (param.ospoint.ostype = os_apparentintersection) then
-        begin
-             dc.drawer.DrawLine2DInDCS(-1, 1,1, -1);
-             dc.drawer.DrawLine2DInDCS(-1, -1,1, 1);
-             dc.drawer.DrawClosedPolyLine2DInDCS([-1, 1,
-                                                  1, 1,
-                                                  1, -1,
-                                                  -1, -1]);
-        end
-        else
-        if (param.ospoint.ostype = os_textinsert) then
-        begin
-             dc.drawer.DrawLine2DInDCS(-1, 0,1, 0);
-             dc.drawer.DrawLine2DInDCS(0, 1,0, -1);
-        end
-        else
-        if (param.ospoint.ostype = os_perpendicular) then
-        begin
-             dc.drawer.DrawLine2DInDCS(-1, -1,-1, 1);
-             dc.drawer.DrawLine2DInDCS(-1, 1,1,1);
-             dc.drawer.DrawLine2DInDCS(-1, 0,0, 0);
-             dc.drawer.DrawLine2DInDCS(0, 0,0,1)
-        end
-        else
-        if (param.ospoint.ostype = os_trace) then
-        begin
-             dc.drawer.DrawLine2DInDCS(-1, -0.5,1, -0.5);
-             dc.drawer.DrawLine2DInDCS(-1,  0.5,1,  0.5);
-        end
-        else if (param.ospoint.ostype = os_nearest) then
-        begin
-             dc.drawer.DrawClosedPolyLine2DInDCS([-1, 1,
-                                                  1, 1,
-                                                  -1, -1,
-                                                  1, -1]);
-        end;
-
-
-
-
-
-      oglsm.mygllinewidth(1);
-    end;
-
-    //oglsm.mytotalglend;
-    //isOpenGLError;
+    showsnap(DC);
 
    //{$ENDREGION}
    NotUseLCS:=_NotUseLCS;
@@ -615,7 +514,7 @@ procedure TOpenGLViewArea.showcursor;
     td2:=td/5;
     td22:=td2/3;
     oglsm.myglbegin(GL_lines);
-    oglsm.glColor3ub(255, 0, 0);
+    dc.drawer.SetColor(255, 0, 0);
 
     oglsm.myglVertex3d(param.CSIcon.CSIconCoord);
     oglsm.myglVertex3d(param.CSIcon.CSIconX);
@@ -626,7 +525,7 @@ procedure TOpenGLViewArea.showcursor;
     oglsm.myglVertex3d(param.CSIcon.CSIconX);
     oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y+td22 , param.CSIcon.CSIconCoord.z));
 
-    oglsm.glColor3ub(0, 255, 0);
+    dc.drawer.SetColor(0, 255, 0);
 
     oglsm.myglVertex3d(param.CSIcon.CSIconCoord);
     oglsm.myglVertex3d(param.CSIcon.CSIconY);
@@ -637,7 +536,7 @@ procedure TOpenGLViewArea.showcursor;
     oglsm.myglVertex3d(param.CSIcon.CSIconY);
     oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x+td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z));
 
-    oglsm.glColor3ub(0, 0, 255);
+    dc.drawer.SetColor(0, 0, 255);
 
     oglsm.myglVertex3d(param.CSIcon.CSIconCoord);
     oglsm.myglVertex3d(param.CSIcon.CSIconZ);
@@ -646,7 +545,7 @@ procedure TOpenGLViewArea.showcursor;
     if IsVectorNul(vectordot(pdwg.GetPcamera.prop.look,ZWCS)) then
     begin
     oglsm.myglbegin(GL_lines);
-    oglsm.glColor3ub(255, 255, 255);
+    dc.drawer.SetColor(255, 255, 255);
     oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y , param.CSIcon.CSIconCoord.z));
     oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z));
     oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z));
@@ -659,7 +558,6 @@ procedure TOpenGLViewArea.showcursor;
     //oglsm.myglDisable(GL_COLOR_LOGIC_OP);
   end;
 end;
-
 procedure TOpenGLViewArea.DrawGrid;
 var
   pg:PGDBvertex2S;
@@ -670,7 +568,7 @@ begin
   if (sysvar.DWG.DWG_DrawGrid^)and(param.md.WPPointUR.z=1) then
   begin
   v:=param.md.WPPointBL;
-  oglsm.glcolor3ub(100, 100, 100);
+  dc.drawer.SetColor(100, 100, 100);
   pg := @gridarray;
   oglsm.myglbegin(gl_points);
   for i := 0 to round(param.md.WPPointUR.x) do
@@ -713,7 +611,7 @@ begin
   oglsm.myglColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
   oglsm.myglEnable(GL_COLOR_MATERIAL);
     end
-       else LightOff;
+       else LightOff(dc);
 end;
 procedure TOpenGLViewArea.LightOff;
 begin
@@ -721,6 +619,11 @@ begin
     oglsm.myglDisable(GL_LIGHT0);
     oglsm.myglDisable(GL_COLOR_MATERIAL);
 end;
+procedure TOpenGLViewArea.SwapBuffers(var DC:TDrawContext);
+begin
+     OpenGLWindow.SwapBuffers;
+end;
+
 procedure TOpenGLViewArea.SaveBuffers;
   var
     scrx,scry,texture{,e}:integer;
@@ -774,7 +677,7 @@ begin
    repeat
          oglsm.myglbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
          //isOpenGLError;
-         oglsm.glcolor3ub(255,255,255);
+         dc.drawer.SetColor(255,255,255);
          oglsm.myglbegin(GL_quads);
                  oglsm.myglTexCoord2d(0,0);
                  oglsm.myglVertex2d(scrx,scry);
@@ -807,11 +710,11 @@ function TCanvasViewArea.CreateWorkArea(TheOwner: TComponent):TCADControl;
 begin
      result:=TCADControl(TPanel.Create(TheOwner));
 end;
-function TCanvasViewArea.CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;
+procedure TCanvasViewArea.CreateDrawer;
 begin
-     result:=inherited;
-     result.drawer:={OGLDrawer}testrender;
+     drawer:=TZGLCanvasDrawer.Create;
 end;
+
 procedure TCanvasViewArea.SetupWorkArea;
 begin
   self.getviewcontrol.Color:=clHighlight;
@@ -823,14 +726,16 @@ end;
 procedure TCanvasViewArea.draw;
 begin
 end;
-function TOpenGLViewArea.CreateRC(_maxdetail:GDBBoolean=false):TDrawContext;
+procedure TCanvasViewArea.getareacaps;
 begin
-  result:=inherited;
-  result.drawer:={OGLDrawer}testrender;
 end;
 function TOpenGLViewArea.CreateWorkArea(TheOwner: TComponent):TCADControl;
 begin
      result:=TCADControl(TOGLWnd.Create(TheOwner));
+end;
+procedure TOpenGLViewArea.CreateDrawer;
+begin
+     drawer:=TZGLOpenGLDrawer.Create;
 end;
 procedure TOpenGLViewArea.SetupWorkArea;
 begin
@@ -923,11 +828,6 @@ begin
      //draw;
      //paint;
      getviewcontrol.Invalidate;
-end;
-
-procedure TOpenGLViewArea.draw;
-begin
-     OpenGLWindow.draw;
 end;
 procedure TOpenGLViewArea.finishdraw(var RC:TDrawContext);
 begin

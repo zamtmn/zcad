@@ -19,7 +19,11 @@
 unit openglviewarea;
 {$INCLUDE def.inc}
 interface
-uses abstractviewarea,uzglopengldrawer,sysutils,UGDBEntTree,GDBGenericSubEntry,GDBHelpObj,memman,OGLSpecFunc,gdbase,gdbasetypes,
+uses
+     {$IFDEF LCLGTK2}
+     gtk2,gdk2,
+     {$ENDIF}
+     abstractviewarea,uzglopengldrawer,sysutils,UGDBEntTree,GDBGenericSubEntry,GDBHelpObj,memman,OGLSpecFunc,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,
      uinfoform,oglwindow,oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,GDBEntity,Varman,zcadinterface,geometry,gdbobjectsconstdef,shared,zcadstrconsts,LCLType,
      ExtCtrls,classes,Controls,Graphics,generalviewarea,UGDBTracePropArray,math,uzglabstractdrawer,log;
@@ -124,11 +128,15 @@ begin
 end;
 
 procedure TOpenGLViewArea.getareacaps;
+{$IFDEF LCLGTK2}
+var
+   Widget:PGtkWidget;
+{$ENDIF}
 begin
   programlog.logoutstr('TOGLWnd.InitOGL',lp_IncPos);
 
   {$IFDEF LCLGTK2}
-  Widget:=PGtkWidget(PtrUInt(Handle));
+  Widget:=PGtkWidget(PtrUInt(OpenGLWindow.Handle));
   gtk_widget_add_events (Widget,GDK_POINTER_MOTION_HINT_MASK);
   {$ENDIF}
 

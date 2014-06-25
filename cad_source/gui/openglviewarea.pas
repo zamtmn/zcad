@@ -19,7 +19,7 @@
 unit openglviewarea;
 {$INCLUDE def.inc}
 interface
-uses uzglopengldrawer,sysutils,UGDBEntTree,GDBGenericSubEntry,GDBHelpObj,memman,OGLSpecFunc,gdbase,gdbasetypes,
+uses abstractviewarea,uzglopengldrawer,sysutils,UGDBEntTree,GDBGenericSubEntry,GDBHelpObj,memman,OGLSpecFunc,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,
      uinfoform,oglwindow,oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,GDBEntity,Varman,zcadinterface,geometry,gdbobjectsconstdef,shared,zcadstrconsts,LCLType,
      ExtCtrls,classes,Controls,Graphics,generalviewarea,UGDBTracePropArray,math,uzglabstractdrawer,log;
@@ -45,9 +45,7 @@ type
                       procedure DrawGrid(var DC:TDrawContext); override;
                       procedure showcursor(var DC:TDrawContext); override;
                       procedure getareacaps; override;
-
-                      procedure render(const Root:GDBObjGenericSubEntry;var DC:TDrawContext); override;
-                      function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):GDBBoolean; override;
+                      procedure GDBActivateGLContext; override;
 
                   end;
     TCanvasViewArea=class(TGeneralViewArea)
@@ -57,90 +55,17 @@ type
                       procedure CreateDrawer; override;
                       procedure SetupWorkArea; override;
                       procedure WaResize(sender:tobject); override;
-                      procedure draw; override;
                       procedure getareacaps; override;
+                      procedure GDBActivateGLContext; override;
                   end;
 
 implementation
 uses mainwindow;
-function TOpenGLViewArea.treerender;
-var
-   currtime:TDateTime;
-   Hour,Minute,Second,MilliSecond:word;
-   q1,q2:gdbboolean;
-   //currd:PTDrawing;
-begin //currd:=gdb.GetCurrentDWG;
-    if (sysvar.RD.RD_MaxRenderTime^<>0) then
-    begin
-     currtime:=now;
-     decodetime(currtime-StartTime,Hour,Minute,Second,MilliSecond);
-     if assigned(sysvar.RD.RD_MaxRenderTime) then
-     if (sysvar.RD.RD_MaxRenderTime^<>0) then
-     if (sysvar.RD.RD_MaxRenderTime^-MilliSecond)<0 then
-                            begin
-                                  result:=true;
-                                  exit;
-                            end;
-     end;
-     q1:=false;
-     q2:=false;
-
-  if Node.infrustum={gdb.GetCurrentDWG}PDWG.Getpcamera.POSCOUNT then
-  begin
-       if (Node.FulDraw)or(Node.nul.count=0) then
-       begin
-       if assigned(node.pminusnode)then
-                                       if node.minusdrawpos<>PDWG.Getpcamera.DRAWCOUNT then
-                                       begin
-                                       if not treerender(node.pminusnode^,StartTime,dc) then
-                                           node.minusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
-                                                                                     else
-                                                                                         q1:=true;
-                                       end;
-       if assigned(node.pplusnode)then
-                                      if node.plusdrawpos<>PDWG.Getpcamera.DRAWCOUNT then
-                                      begin
-                                       if not treerender(node.pplusnode^,StartTime,dc) then
-                                           node.plusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
-                                                                                    else
-                                                                                        q2:=true;
-                                      end;
-       end;
-       if node.nuldrawpos<>PDWG.Getpcamera.DRAWCOUNT then
-       begin
-        Node.nul.DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
-        node.nuldrawpos:=PDWG.Getpcamera.DRAWCOUNT;
-       end;
-  end;
-  result:=(q1) or (q2);
-  //Node.drawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;
-
-  //root.DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT);
-end;
-
-procedure TOpenGLViewArea.render;
+procedure TOpenGLViewArea.GDBActivateGLContext;
 begin
-  if dc.subrender = 0 then
-  begin
-    PDWG.Getpcamera^.obj_zmax:=-nan;
-    PDWG.Getpcamera^.obj_zmin:=-1000000;
-    PDWG.Getpcamera^.totalobj:=0;
-    PDWG.Getpcamera^.infrustum:=0;
-    //gdb.pcamera.getfrustum;
-    //pva^.calcvisible;
-//    if not wa.param.scrollmode then
-//                                PVA.renderfeedbac;
-    //if not wa.param.scrollmode then 56RenderOsnapstart(pva);
-    CalcOptimalMatrix;
-    //Clearcparray;
-  end;
-  //if wa.param.subrender=0 then
-  //pva^.DeSelect;
-  //if pva^.Count>0 then
-  //                       pva^.Count:=pva^.Count;
-  root.{ObjArray.}DrawWithattrib({gdb.GetCurrentDWG.pcamera.POSCOUNT,0}dc);
+                                      MyglMakeCurrent(OpenGLWindow.OGLContext);
+                                      isOpenGLError;
 end;
-
 procedure drawfrustustum(frustum:ClipArray);
 var
 tv1,tv2,tv3,tv4{,sv1,sv2,sv3,sv4,d1PProjPoint{,d2,d3,d4}:gdbvertex;
@@ -713,6 +638,7 @@ end;
 procedure TCanvasViewArea.CreateDrawer;
 begin
      drawer:=TZGLCanvasDrawer.Create;
+     TZGLCanvasDrawer(drawer).canvas:=TPanel(getviewcontrol).canvas;
 end;
 
 procedure TCanvasViewArea.SetupWorkArea;
@@ -723,10 +649,10 @@ procedure TCanvasViewArea.WaResize(sender:tobject);
 begin
 
 end;
-procedure TCanvasViewArea.draw;
+procedure TCanvasViewArea.getareacaps;
 begin
 end;
-procedure TCanvasViewArea.getareacaps;
+procedure TCanvasViewArea.GDBActivateGLContext;
 begin
 end;
 function TOpenGLViewArea.CreateWorkArea(TheOwner: TComponent):TCADControl;

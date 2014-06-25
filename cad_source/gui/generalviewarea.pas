@@ -35,10 +35,6 @@ const
   ontracignoredist=25;
 
 type
-    TCADControl=class(tcontrol)
-                public
-                property OnMouseUp;
-                end;
     TCameraChangedNotify=procedure of object;
     TGeneralViewArea=class(TAbstractViewArea)
                            public
@@ -111,7 +107,18 @@ type
                            procedure showmousecursor;override;
                            procedure hidemousecursor;override;
                            Procedure Paint; override;
+                           function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):GDBBoolean; override;
+                           procedure render(const Root:GDBObjGenericSubEntry;var DC:TDrawContext); override;
                            procedure draw;override;
+                           procedure showcursor(var DC:TDrawContext);override;
+                           procedure SaveBuffers(var DC:TDrawContext);override;
+                           procedure RestoreBuffers(var DC:TDrawContext);override;
+                           procedure SwapBuffers(var DC:TDrawContext);override;
+                           procedure DrawGrid(var DC:TDrawContext);override;
+                           procedure LightOn(var DC:TDrawContext);override;
+                           procedure LightOff(var DC:TDrawContext);override;
+                           procedure GDBActivate;override;
+
 
                            procedure showsnap(var DC:TDrawContext); virtual;
 
@@ -137,6 +144,113 @@ procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
 implementation
 uses
      commandline,mainwindow;
+procedure TGeneralViewArea.GDBActivate;
+begin
+    pdwg.SetCurrentDWG;
+    param.firstdraw:=true;
+    GDBActivateGLContext;
+    //paint;
+    getviewcontrol.invalidate;
+  if assigned(updatevisibleproc) then updatevisibleproc;
+end;
+procedure TGeneralViewArea.showcursor(var DC:TDrawContext);
+begin
+end;
+procedure TGeneralViewArea.DrawGrid(var DC:TDrawContext);
+begin
+end;
+procedure TGeneralViewArea.LightOn(var DC:TDrawContext);
+begin
+end;
+procedure TGeneralViewArea.SaveBuffers(var DC:TDrawContext);
+begin
+end;
+procedure TGeneralViewArea.RestoreBuffers(var DC:TDrawContext);
+begin
+end;
+procedure TGeneralViewArea.LightOff(var DC:TDrawContext);
+begin
+end;
+procedure TGeneralViewArea.SwapBuffers(var DC:TDrawContext);
+begin
+end;
+function TGeneralViewArea.treerender;
+var
+   currtime:TDateTime;
+   Hour,Minute,Second,MilliSecond:word;
+   q1,q2:gdbboolean;
+   //currd:PTDrawing;
+begin //currd:=gdb.GetCurrentDWG;
+    if (sysvar.RD.RD_MaxRenderTime^<>0) then
+    begin
+     currtime:=now;
+     decodetime(currtime-StartTime,Hour,Minute,Second,MilliSecond);
+     if assigned(sysvar.RD.RD_MaxRenderTime) then
+     if (sysvar.RD.RD_MaxRenderTime^<>0) then
+     if (sysvar.RD.RD_MaxRenderTime^-MilliSecond)<0 then
+                            begin
+                                  result:=true;
+                                  exit;
+                            end;
+     end;
+     q1:=false;
+     q2:=false;
+
+  if Node.infrustum={gdb.GetCurrentDWG}PDWG.Getpcamera.POSCOUNT then
+  begin
+       if (Node.FulDraw)or(Node.nul.count=0) then
+       begin
+       if assigned(node.pminusnode)then
+                                       if node.minusdrawpos<>PDWG.Getpcamera.DRAWCOUNT then
+                                       begin
+                                       if not treerender(node.pminusnode^,StartTime,dc) then
+                                           node.minusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
+                                                                                     else
+                                                                                         q1:=true;
+                                       end;
+       if assigned(node.pplusnode)then
+                                      if node.plusdrawpos<>PDWG.Getpcamera.DRAWCOUNT then
+                                      begin
+                                       if not treerender(node.pplusnode^,StartTime,dc) then
+                                           node.plusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
+                                                                                    else
+                                                                                        q2:=true;
+                                      end;
+       end;
+       if node.nuldrawpos<>PDWG.Getpcamera.DRAWCOUNT then
+       begin
+        Node.nul.DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
+        node.nuldrawpos:=PDWG.Getpcamera.DRAWCOUNT;
+       end;
+  end;
+  result:=(q1) or (q2);
+  //Node.drawpos:=gdb.GetCurrentDWG.pcamera.DRAWCOUNT;
+
+  //root.DrawWithattrib(gdb.GetCurrentDWG.pcamera.POSCOUNT);
+end;
+procedure TGeneralViewArea.render;
+begin
+  if dc.subrender = 0 then
+  begin
+    PDWG.Getpcamera^.obj_zmax:=-nan;
+    PDWG.Getpcamera^.obj_zmin:=-1000000;
+    PDWG.Getpcamera^.totalobj:=0;
+    PDWG.Getpcamera^.infrustum:=0;
+    //gdb.pcamera.getfrustum;
+    //pva^.calcvisible;
+//    if not wa.param.scrollmode then
+//                                PVA.renderfeedbac;
+    //if not wa.param.scrollmode then 56RenderOsnapstart(pva);
+    CalcOptimalMatrix;
+    //Clearcparray;
+  end;
+  //if wa.param.subrender=0 then
+  //pva^.DeSelect;
+  //if pva^.Count>0 then
+  //                       pva^.Count:=pva^.Count;
+  root.{ObjArray.}DrawWithattrib({gdb.GetCurrentDWG.pcamera.POSCOUNT,0}dc);
+end;
+
 procedure TGeneralViewArea.draw;
 var
   scrollmode:GDBBOOlean;
@@ -167,7 +281,7 @@ begin
   begin
   {else if sysvar.RD.RD_Restore_Mode^=WND_Texture then}
   begin
-  if param.firstdraw = true then
+  if {param.firstdraw = }true then
   begin
     dc.drawer.ClearStatesMachine;
 

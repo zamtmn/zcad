@@ -69,10 +69,6 @@ type
 
     destructor Destroy; override;
 
-
-    procedure GDBActivate;
-    procedure GDBActivateGLContext;
-
     {LCL}
     protected
     procedure EraseBackground(DC: HDC);{$IFNDEF DELPHI}override;{$ENDIF}
@@ -101,21 +97,6 @@ begin
      wa.param.firstdraw:=true;
      wa.draw;
      inherited;
-end;
-procedure TOGLWnd.GDBActivateGLContext;
-begin
-                                      MyglMakeCurrent(OGLContext);
-                                      isOpenGLError;
-end;
-
-procedure TOGLWnd.GDBActivate;
-begin
-    wa.pdwg.SetCurrentDWG;
-    self.wa.param.firstdraw:=true;
-    GDBActivateGLContext;
-    //paint;
-    invalidate;
-  if assigned(updatevisibleproc) then updatevisibleproc;
 end;
 procedure TOGLWnd.finishdraw;
   var

@@ -129,6 +129,7 @@ PIterateCmpareFunc=function(node:TmyTreeNode;PExpr:Pointer):Boolean;
 function IterateFind(Node:TmyTreeNode; CompareFunc:PIterateCmpareFunc;PExpr:Pointer;SubFind:Boolean):TmyTreeNode;
 function IterateFindCategoryN (node:TmyTreeNode;PExpr:Pointer):Boolean;
 function FindControlByType(_parent:TWinControl;_class:TClass):TControl;
+function FindComponentByType(_owner:TComponent;_class:TClass):TComponent;
 procedure SetHeightControl(_parent:TWinControl;h:integer);
 //var
 //   ACN_ShowObjInsp:TmyAction=nil;
@@ -333,6 +334,19 @@ begin
       if TClass(typeof(_parent.Controls[i])) = _class then
                               begin
                                    result:=_parent.Controls[i];
+                                   exit;
+                              end;
+     result:=nil;
+end;
+function FindComponentByType(_owner:TComponent;_class:TClass):TComponent;
+var
+    i:integer;
+begin
+     if assigned(_owner)then
+     for i := 0 to _owner.ComponentCount - 1 do
+      if _owner.Components[i] is _class then
+                              begin
+                                   result:=_owner.Components[i];
                                    exit;
                               end;
      result:=nil;

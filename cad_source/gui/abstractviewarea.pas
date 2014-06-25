@@ -29,6 +29,16 @@ uses {gdbase,gdbasetypes,
      ExtCtrls,Controls,Classes,LCLType,Forms,OGLSpecFunc,zcadsysvars,GDBEntity;
 
 type
+    TCADControl=class(tcontrol)
+                public
+                property OnMouseUp;
+                property onmousedown;
+                property onmousemove;
+                property onmousewheel;
+                property onmouseenter;
+                property onmouseleave;
+                property onresize;
+                end;
     TCameraChangedNotify=procedure of object;
     TAbstractViewArea=class(tcomponent)
                            public
@@ -44,7 +54,10 @@ type
                            tocommandmcliccount:GDBInteger;
                            currentmousemovesnaptogrid:GDBBoolean;
 
-                           function getviewcontrol:TControl;virtual;abstract;
+                           procedure GDBActivate;virtual;abstract;
+                           procedure GDBActivateGLContext;virtual;abstract;
+
+                           function getviewcontrol:TCADControl;virtual;abstract;
                            procedure getareacaps;virtual;abstract;
                            procedure CalcOptimalMatrix;virtual;abstract;
                            procedure calcgrid;virtual;abstract;

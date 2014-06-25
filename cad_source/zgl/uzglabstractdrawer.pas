@@ -26,8 +26,8 @@ TZGLAbstractDrawer=class
                         PVertexBuffer:PGDBOpenArrayOfData;
                         procedure DrawLine(const i1:TLLVertexIndex);virtual;abstract;
                         procedure DrawPoint(const i:TLLVertexIndex);virtual;abstract;
-                        procedure startrender;virtual;
-                        procedure endrender;virtual;
+                        procedure startrender;virtual;abstract;
+                        procedure endrender;virtual;abstract;
                         procedure SetLineWidth(const w:single);virtual;abstract;
                         procedure SetPointSize(const s:single);virtual;abstract;
                         procedure SetColor(const red, green, blue: byte);overload;virtual;abstract;
@@ -50,14 +50,99 @@ TZGLAbstractDrawer=class
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);overload;virtual;abstract;
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);overload;virtual;abstract;
                    end;
+TZGLGeneralDrawer=class(TZGLAbstractDrawer)
+                        public
+                        procedure DrawLine(const i1:TLLVertexIndex);override;
+                        procedure DrawPoint(const i:TLLVertexIndex);override;
+                        procedure startrender;override;
+                        procedure endrender;override;
+                        procedure SetLineWidth(const w:single);override;
+                        procedure SetPointSize(const s:single);override;
+                        procedure SetColor(const red, green, blue: byte);overload;override;
+                        procedure SetClearColor(const red, green, blue, alpha: byte);overload;override;
+                        procedure SetColor(const color: TRGB);overload;override;
+                        procedure ClearScreen(stencil:boolean);override;
+                        procedure TranslateCoord2D(const tx,ty:single);override;
+                        procedure ScaleCoord2D(const sx,sy:single);override;
+                        procedure SetLineSmooth(const smoth:boolean);override;
+                        procedure SetPointSmooth(const smoth:boolean);override;
+                        procedure ClearStatesMachine;override;
+                        procedure SetFillStencilMode;override;
+                        procedure SetDrawWithStencilMode;override;
+                        procedure DisableStencil;override;
+                        procedure SetZTest(Z:boolean);override;
+                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
+                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
+                        procedure DrawClosedPolyLine2DInDCS(const coords:array of single);overload;override;
+                   end;
 var
   testrender:TZGLAbstractDrawer;
 implementation
 uses log;
-procedure TZGLAbstractDrawer.startrender;
+procedure TZGLGeneralDrawer.DrawLine(const i1:TLLVertexIndex);
 begin
 end;
-procedure TZGLAbstractDrawer.endrender;
+procedure TZGLGeneralDrawer.DrawPoint(const i:TLLVertexIndex);
+begin
+end;
+procedure TZGLGeneralDrawer.startrender;
+begin
+end;
+procedure TZGLGeneralDrawer.endrender;
+begin
+end;
+procedure TZGLGeneralDrawer.SetLineWidth(const w:single);
+begin
+end;
+procedure TZGLGeneralDrawer.SetPointSize(const s:single);
+begin
+end;
+procedure TZGLGeneralDrawer.SetColor(const red, green, blue: byte);
+begin
+end;
+procedure TZGLGeneralDrawer.SetClearColor(const red, green, blue, alpha: byte);
+begin
+end;
+procedure TZGLGeneralDrawer.SetColor(const color: TRGB);
+begin
+end;
+procedure TZGLGeneralDrawer.ClearScreen(stencil:boolean);
+begin
+end;
+procedure TZGLGeneralDrawer.TranslateCoord2D(const tx,ty:single);
+begin
+end;
+procedure TZGLGeneralDrawer.ScaleCoord2D(const sx,sy:single);
+begin
+end;
+procedure TZGLGeneralDrawer.SetLineSmooth(const smoth:boolean);
+begin
+end;
+procedure TZGLGeneralDrawer.SetPointSmooth(const smoth:boolean);
+begin
+end;
+procedure TZGLGeneralDrawer.ClearStatesMachine;
+begin
+end;
+procedure TZGLGeneralDrawer.SetFillStencilMode;
+begin
+end;
+procedure TZGLGeneralDrawer.SetDrawWithStencilMode;
+begin
+end;
+procedure TZGLGeneralDrawer.DisableStencil;
+begin
+end;
+procedure TZGLGeneralDrawer.SetZTest(Z:boolean);
+begin
+end;
+procedure TZGLGeneralDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:integer);
+begin
+end;
+procedure TZGLGeneralDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:single);
+begin
+end;
+procedure TZGLGeneralDrawer.DrawClosedPolyLine2DInDCS(const coords:array of single);
 begin
 end;
 initialization

@@ -43,7 +43,7 @@ uses
        objinspdecorations,oswnd,cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
        colorwnd,imagesmanager,ltwnd,usuptstylecombo,usupportgui,usupdimstylecombo,
   {}
-       gdbdrawcontext,uzglopengldrawer,uzglabstractdrawer;
+       gdbdrawcontext,uzglopengldrawer,uzglabstractdrawer,abstractviewarea;
   {}
 type
   TComboFiller=procedure(cb:TCustomComboBox) of object;
@@ -862,7 +862,8 @@ begin
 end;
 function _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject):Integer;
 var
-   poglwnd:toglwnd;
+   viewcontrol:TCADControl;
+   wa:TGeneralViewArea;
    //i:integer;
    s:string;
 begin
@@ -885,22 +886,22 @@ begin
                                  end;
        //commandmanager.executecommandtotalend;
        commandmanager.ChangeModeAndEnd(TGPCloseDWG);
-       poglwnd:=toglwnd(ClosedDWG.wa.getviewcontrol);
+       viewcontrol:=ClosedDWG.wa.getviewcontrol;
        gdb.eraseobj(ClosedDWG);
        gdb.pack;
-       poglwnd.wa.PDWG:=nil;
+       //poglwnd.wa.PDWG:=nil;
 
-       poglwnd.{GDBActivateGLContext}MakeCurrent;
-       poglwnd.free;
+       //poglwnd.{GDBActivateGLContext}MakeCurrent;
+       viewcontrol.free;
 
        lincedcontrol.Free;
-       tobject(poglwnd):=mainformn.PageControl.ActivePage;
+       tobject(viewcontrol):=mainformn.PageControl.ActivePage;
 
-       if poglwnd<>nil then
+       if viewcontrol<>nil then
        begin
-            tobject(poglwnd):=FindControlByType(poglwnd,TOGLWnd);
-            gdb.CurrentDWG:=PTDrawing(poglwnd.wa.PDWG);
-            poglwnd.GDBActivate;
+            tobject(viewcontrol):=FindComponentByType(viewcontrol,TAbstractViewArea);
+            gdb.CurrentDWG:=PTDrawing(TAbstractViewArea(viewcontrol).PDWG);
+            TAbstractViewArea(viewcontrol).GDBActivate;
        end
        else
            gdb.freedwgvars;
@@ -917,16 +918,23 @@ end;
 
 function MainForm.CloseDWGPage(Sender: TObject):integer;
 var
-   poglwnd:toglwnd;
+   //wa:toglwnd;
+   wa:TGeneralViewArea;
    ClosedDWG:PTDrawing;
    //i:integer;
 begin
-  //application.ProcessMessages;
+  {TGeneralViewArea;}
+  (*Closeddwg:=nil;
+  TControl(wa):=FindControlByType(TTabSheet(sender),TOGLWnd);
+  if wa<>nil then
+                      Closeddwg:=ptdrawing(wa.wa.PDWG);
+  result:=_CloseDWGPage(ClosedDWG,Sender);*)
   Closeddwg:=nil;
-  TControl(poglwnd):=FindControlByType(TTabSheet(sender),TOGLWnd);
-  if poglwnd<>nil then
-                      Closeddwg:=ptdrawing(poglwnd.wa.PDWG);
+  wa:=TGeneralViewArea(FindComponentByType(TTabSheet(sender),TGeneralViewArea));
+  if wa<>nil then
+                      Closeddwg:=ptdrawing(wa.PDWG);
   result:=_CloseDWGPage(ClosedDWG,Sender);
+
 end;
 procedure MainForm.PageControlMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -2754,9 +2762,9 @@ end;
 
 procedure  MainForm.ChangedDWGTabCtrl(Sender: TObject);
 var
-   ogl:TOGlwnd;
+   ogl:TAbstractViewArea;
 begin
-     OGL:=TOGLwnd(FindControlByType(TPageControl(sender).ActivePage,TOGLwnd));
+     tcomponent(OGL):=FindComponentByType(TPageControl(sender).ActivePage,TAbstractViewArea);
      if assigned(OGL) then
                           OGL.GDBActivate;
      ReturnToDefaultProc;

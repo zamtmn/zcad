@@ -23,7 +23,7 @@ uses
     {$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
     uzglabstractdrawer,UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase;
 type
-TZGLOpenGLDrawer=class(TZGLAbstractDrawer)
+TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         public
                         procedure startrender;override;
                         procedure endrender;override;
@@ -49,12 +49,14 @@ TZGLOpenGLDrawer=class(TZGLAbstractDrawer)
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);override;
                    end;
-TZGLCanvasDrawer=class(TZGLAbstractDrawer)
+TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         public
                         canvas:tcanvas;
                         midline:integer;
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
+
+                        procedure ClearScreen(stencil:boolean);override;
                    end;
 {$IFDEF WINDOWS}
 TZGLGDIPlusDrawer=class(TZGLCanvasDrawer)
@@ -267,7 +269,10 @@ begin
     pv:=PGDBVertex3S(PVertexBuffer.getelement(i));
     Canvas.Pixels[round(pv.x),round(midline-pv.y)]:=canvas.Pen.Color;
 end;
-
+procedure TZGLCanvasDrawer.ClearScreen(stencil:boolean);
+begin
+     canvas.Rectangle(0,0,100,100);
+end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglabstractdrawer.initialization');{$ENDIF}
   OGLDrawer:=TZGLOpenGLDrawer.create;

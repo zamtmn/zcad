@@ -216,6 +216,11 @@ GDBCameraBaseProp=packed record
                         xdir:GDBvertex;
                         zoom: GDBDouble;
                   end;
+tmatrixs=packed record
+                   pmodelMatrix:PDMatrix4D;
+                   pprojMatrix:PDMatrix4D;
+                   pviewport:PIMatrix4;
+end;
 TActulity=GDBInteger;
 TObjID=GDBWord;
 PGDBBaseCamera=^GDBBaseCamera;

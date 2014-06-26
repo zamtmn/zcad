@@ -162,9 +162,353 @@ begin
     getviewcontrol.invalidate;
   if assigned(updatevisibleproc) then updatevisibleproc;
 end;
-procedure TGeneralViewArea.showcursor(var DC:TDrawContext);
+procedure drawfrustustum(frustum:ClipArray;var DC:TDrawContext);
+var
+tv1,tv2,tv3,tv4{,sv1,sv2,sv3,sv4,d1PProjPoint{,d2,d3,d4}:gdbvertex;
+Tempplane:DVector4D;
+
 begin
+  Tempplane:=frustum[5];
+  tempplane[3]:=(tempplane[3]-frustum[4][3])/2;
+  begin
+  tv1:=PointOf3PlaneIntersect(frustum[0],frustum[3],Tempplane);
+  tv2:=PointOf3PlaneIntersect(frustum[1],frustum[3],Tempplane);
+  tv3:=PointOf3PlaneIntersect(frustum[1],frustum[2],Tempplane);
+  tv4:=PointOf3PlaneIntersect(frustum[0],frustum[2],Tempplane);
+  {oglsm.myglbegin(GL_LINES);
+                 oglsm.myglVertex3dv(@tv1);
+                 oglsm.myglVertex3dv(@tv2);
+                 oglsm.myglVertex3dv(@tv2);
+                 oglsm.myglVertex3dv(@tv3);
+                 oglsm.myglVertex3dv(@tv3);
+                 oglsm.myglVertex3dv(@tv4);
+                 oglsm.myglVertex3dv(@tv4);
+                 oglsm.myglVertex3dv(@tv1);
+  oglsm.myglend;}
+  dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(tv2,tv3,dc.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(tv3,tv4,dc.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(tv4,tv1,dc.matrixs);
+  end;
 end;
+procedure TGeneralViewArea.showcursor(var DC:TDrawContext);
+var
+  i, j: GDBInteger;
+  pt:ptraceprop;
+  mvertex,dvertex,tv1,tv2,sv1,d1:gdbvertex;
+  Tempplane,plx,ply,plz:DVector4D;
+  a: GDBInteger;
+  i2d,i2dresult:intercept2dprop;
+  td,td2,td22:gdbdouble;
+  _NotUseLCS:boolean;
+begin
+  if param.scrollmode then
+                          exit;
+  CalcOptimalMatrix;
+  if PDWG.GetSelObjArray.Count<>0 then PDWG.GetSelObjArray.drawpoint;
+  dc.drawer.SetColor(255, 255, 255,255);
+  oglsm.myglEnable(GL_COLOR_LOGIC_OP);
+  oglsm.myglLogicOp(GL_OR);
+  if param.ShowDebugFrustum then
+                          drawfrustustum(param.debugfrustum,dc);
+  if param.ShowDebugBoundingBbox then
+                              DrawAABB(param.DebugBoundingBbox);
+
+  Tempplane:=param.mousefrustumLCS[5];
+  tempplane[3]:=(tempplane[3]-param.mousefrustumLCS[4][3])/2;
+  {курсор фрустума выделения}
+  if param.md.mousein then
+  if (param.md.mode and MGetSelectObject) <> 0 then
+  begin
+  _NotUseLCS:=NotUseLCS;
+  NotUseLCS:=true;
+  drawfrustustum(param.mousefrustumLCS,dc);
+  NotUseLCS:=_NotUseLCS;
+  end;
+  {оси курсора}
+  _NotUseLCS:=NotUseLCS;
+  NotUseLCS:=true;
+  if param.md.mousein then
+  if ((param.md.mode)and(MGet3DPoint or MGet3DPointWoOP or MGetControlpoint))<> 0 then
+  begin
+  sv1:=param.md.mouseray.lbegin;
+  sv1:=vertexadd(sv1,PDWG.Getpcamera^.CamCSOffset);
+
+  PointOfLinePlaneIntersect(VertexAdd(param.md.mouseray.lbegin,PDWG.Getpcamera^.CamCSOffset),param.md.mouseray.dir,tempplane,mvertex);
+  plx:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,PDWG.Getpcamera^.CamCSOffset),
+                      vertexadd(VertexAdd(param.md.mouse3dcoord,xWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
+  if sysvar.DISP.DISP_ColorAxis^ then dc.drawer.SetColor(255, 0, 0,255);
+  tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[0],plx,Tempplane);
+  tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[1],plx,Tempplane);
+  dvertex:=geometry.VertexSub(tv2,tv1);
+  dvertex:=geometry.VertexMulOnSc(dvertex,SysVar.DISP.DISP_CrosshairSize^);
+  tv1:=VertexSub(mvertex,dvertex);
+  tv2:=VertexAdd(mvertex,dvertex);
+  dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.matrixs);
+
+  ply:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,PDWG.Getpcamera^.CamCSOffset),
+                      vertexadd(VertexAdd(param.md.mouse3dcoord,yWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
+ if sysvar.DISP.DISP_ColorAxis^ then dc.drawer.SetColor(0, 255, 0,255);
+  tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[2],ply,Tempplane);
+  tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[3],ply,Tempplane);
+  dvertex:=geometry.VertexSub(tv2,tv1);
+  dvertex:=geometry.VertexMulOnSc(dvertex,SysVar.DISP.DISP_CrosshairSize^*{gdb.GetCurrentDWG.OGLwindow1.}getviewcontrol.ClientWidth/{gdb.GetCurrentDWG.OGLwindow1.}getviewcontrol.ClientHeight);
+  tv1:=VertexSub(mvertex,dvertex);
+  tv2:=VertexAdd(mvertex,dvertex);
+  dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.matrixs);
+
+  if sysvar.DISP.DISP_DrawZAxis^ then
+  begin
+  plz:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,PDWG.Getpcamera^.CamCSOffset),
+                      vertexadd(VertexAdd(param.md.mouse3dcoord,zWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
+  if sysvar.DISP.DISP_ColorAxis^ then dc.drawer.SetColor(0, 0, 255,255);
+  tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[0],plz,Tempplane);
+  tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[1],plz,Tempplane);
+  dvertex:=geometry.VertexSub(tv2,tv1);
+  dvertex:=geometry.VertexMulOnSc(dvertex,SysVar.DISP.DISP_CrosshairSize^);
+  tv1:=VertexSub(mvertex,dvertex);
+  tv2:=VertexAdd(mvertex,dvertex);
+  dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.matrixs);
+  end;
+  end;
+  dc.drawer.SetColor(255, 255, 255,255);
+  d1:=geometry.VertexAdd(param.md.mouseray.lbegin,param.md.mouseray.lend);
+  d1:=geometry.VertexMulOnSc(d1,0.5);
+
+
+
+  dc.drawer.SetDisplayCSmode(getviewcontrol.clientwidth, getviewcontrol.clientheight);
+  {oglsm.myglMatrixMode(GL_PROJECTION);
+  oglsm.myglLoadIdentity;
+  oglsm.myglOrtho(0.0, getviewcontrol.clientwidth, getviewcontrol.clientheight, 0.0, -1.0, 1.0);
+  oglsm.myglMatrixMode(GL_MODELVIEW);
+  oglsm.myglLoadIdentity;
+  oglsm.myglscalef(1, -1, 1);
+  oglsm.myglpushmatrix;
+  oglsm.mygltranslated(0, -getviewcontrol.clientheight, 0);}
+
+  if param.lastonmouseobject<>nil then
+                                      pGDBObjEntity(param.lastonmouseobject)^.higlight;
+
+  oglsm.myglpopmatrix;
+  dc.drawer.SetColor(0, 100, 100,255);
+  oglsm.myglpushmatrix;
+  oglsm.mygltranslated(param.CSIcon.csx.x + 2, -getviewcontrol.clientheight + param.CSIcon.csx.y - 10, 0);
+  //textwrite('X');
+  oglsm.myglpopmatrix;
+  oglsm.myglpushmatrix;
+  oglsm.mygltranslated(param.CSIcon.csy.x + 2, -getviewcontrol.clientheight + param.CSIcon.csy.y - 10, 0);
+  //textwrite('Y');
+  oglsm.myglpopmatrix;
+  oglsm.myglpushmatrix;
+  oglsm.mygltranslated(param.CSIcon.csz.x + 2, -getviewcontrol.clientheight + param.CSIcon.csz.y - 10, 0);
+  //textwrite('Z');
+  oglsm.myglpopmatrix;
+  oglsm.myglLoadIdentity;
+  //glColor3ub(255, 255, 255);
+  dc.drawer.SetColor(foreground);
+  //oglsm.glColor3ubv(foreground);
+
+
+  if param.seldesc.MouseFrameON then
+  begin
+    if param.seldesc.MouseFrameInverse then
+    begin
+    oglsm.myglLogicOp(GL_XOR);
+    oglsm.myglLineStipple(1, $F0F0);
+    oglsm.myglEnable(GL_LINE_STIPPLE);
+    end;
+    dc.drawer.DrawLine2DInDCS(param.seldesc.Frame1.x, param.seldesc.Frame1.y,param.seldesc.Frame2.x, param.seldesc.Frame1.y);
+    dc.drawer.DrawLine2DInDCS(param.seldesc.Frame2.x, param.seldesc.Frame1.y,param.seldesc.Frame2.x, param.seldesc.Frame2.y);
+    dc.drawer.DrawLine2DInDCS(param.seldesc.Frame2.x, param.seldesc.Frame2.y,param.seldesc.Frame1.x, param.seldesc.Frame2.y);
+    dc.drawer.DrawLine2DInDCS(param.seldesc.Frame1.x, param.seldesc.Frame2.y,param.seldesc.Frame1.x, param.seldesc.Frame1.y);
+
+    {oglsm.myglbegin(GL_line_loop);
+    oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame1.y);
+    oglsm.myglVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame1.y);
+    oglsm.myglVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame2.y);
+    oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame2.y);
+    oglsm.myglend;}
+    if param.seldesc.MouseFrameInverse then oglsm.myglDisable(GL_LINE_STIPPLE);
+
+    if param.seldesc.MouseFrameInverse then
+    begin
+    oglsm.myglLogicOp(GL_XOR);
+    oglsm.myglLineStipple(1, $F0F0);
+    oglsm.myglEnable(GL_LINE_STIPPLE);
+    end;
+    if param.seldesc.MouseFrameInverse then
+                                           dc.drawer.SetColor(0,40,0,10)
+                                       else
+                                           dc.drawer.SetColor(0,0,40,10);
+    oglsm.myglbegin(GL_QUADS);
+    oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame1.y);
+    oglsm.myglVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame1.y);
+    oglsm.myglVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame2.y);
+    oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame2.y);
+    oglsm.myglend;
+    if param.seldesc.MouseFrameInverse then oglsm.myglDisable(GL_LINE_STIPPLE);
+
+  end;
+
+
+  if PDWG<>nil then
+
+  if tocommandmcliccount=0 then a:=1
+                           else a:=0;
+  if sysvar.DWG.DWG_PolarMode<>nil then
+  if sysvar.DWG.DWG_PolarMode^ then
+  if param.ontrackarray.total <> 0 then
+  begin
+    oglsm.myglLogicOp(GL_XOR);
+    for i := a to param.ontrackarray.total - 1 do
+    begin
+     dc.drawer.SetColor(255,255, 0,255);
+      dc.drawer.DrawLine2DInDCS(param.ontrackarray.otrackarray[i].dispcoord.x,
+                 getviewcontrol.clientheight - param.ontrackarray.otrackarray[i].dispcoord.y + marksize,param.ontrackarray.otrackarray[i].dispcoord.x,
+                 getviewcontrol.clientheight - param.ontrackarray.otrackarray[i].dispcoord.y - marksize);
+     dc.drawer.DrawLine2DInDCS(param.ontrackarray.otrackarray[i].dispcoord.x + marksize,
+                 getviewcontrol.clientheight - param.ontrackarray.otrackarray[i].dispcoord.y,param.ontrackarray.otrackarray[i].dispcoord.x - marksize,
+                 getviewcontrol.clientheight - param.ontrackarray.otrackarray[i].dispcoord.y);
+
+      oglsm.myglLineStipple(1, $3333);
+      oglsm.myglEnable(GL_LINE_STIPPLE);
+      //oglsm.myglbegin(GL_LINES);
+      dc.drawer.SetColor(80,80, 80,255);
+      if param.ontrackarray.otrackarray[i].arraydispaxis.Count <> 0 then
+      begin;
+      pt:=param.ontrackarray.otrackarray[i].arraydispaxis.PArray;
+      for j := 0 to param.ontrackarray.otrackarray[i].arraydispaxis.count - 1 do
+        begin
+          if pt.trace then
+          begin
+            //|---2---|
+            //|       |
+            //1       3
+            //|       |
+            //|---4---|
+            {1}
+            i2dresult:=intercept2dmy(CreateVertex2D(0,0),CreateVertex2D(0,getviewcontrol.clientheight),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
+            {2}
+            i2d:=intercept2dmy(CreateVertex2D(0,getviewcontrol.clientheight),CreateVertex2D(getviewcontrol.clientwidth,getviewcontrol.clientheight),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
+            if not i2dresult.isintercept then
+                                             i2dresult:=i2d;
+            if i2d.isintercept then
+            if i2d.t2>0 then
+            if (i2d.t2>i2dresult.t2)or(i2dresult.t2<0) then
+                                            i2dresult:=i2d;
+            {3}
+            i2d:=intercept2dmy(CreateVertex2D(getviewcontrol.clientwidth,getviewcontrol.clientheight),CreateVertex2D(getviewcontrol.clientwidth,0),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
+            if not i2dresult.isintercept then
+                                             i2dresult:=i2d;
+            if i2d.isintercept then
+            if i2d.t2>0 then
+            if (i2d.t2>i2dresult.t2)or(i2dresult.t2<0) then
+                                            i2dresult:=i2d;
+            {4}
+            i2d:=intercept2dmy(CreateVertex2D(getviewcontrol.clientwidth,0),CreateVertex2D(0,0),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
+            if not i2dresult.isintercept then
+                                             i2dresult:=i2d;
+            if i2d.isintercept then
+            if i2d.t2>0 then
+            if (i2d.t2>i2dresult.t2)or(i2dresult.t2<0) then
+                                            i2dresult:=i2d;
+
+            //geometry.
+            dc.drawer.DrawLine2DInDCS(param.ontrackarray.otrackarray[i].dispcoord.x, getviewcontrol.clientheight - param.ontrackarray.otrackarray[i].dispcoord.y,i2dresult.interceptcoord.x, getviewcontrol.clientheight - i2dresult.interceptcoord.y);
+            //glvertex2d(pt.dispraycoord.x, clientheight - pt.dispraycoord.y);
+          end;
+          inc(pt);
+        end;
+      end;
+      //oglsm.myglend;
+      //oglsm.mytotalglend;
+      //isOpenGLError;
+      oglsm.myglDisable(GL_LINE_STIPPLE);
+    end;
+  end;
+
+  showsnap(DC);
+
+ //{$ENDREGION}
+ NotUseLCS:=_NotUseLCS;
+  oglsm.myglMatrixMode(GL_PROJECTION);
+  //glLoadIdentity;
+  //gdb.GetCurrentDWG.pcamera^.projMatrix:=onematrix;
+  if PDWG<>nil then
+  begin
+{    if wa.param.projtype = Projparalel then
+  begin
+    gdb.GetCurrentDWG.pcamera^.projMatrix:=ortho(-clientwidth * wa.param.zoom / 2, clientwidth * wa.param.zoom / 2,
+            -clientheight * wa.param.zoom / 2, clientheight * wa.param.zoom / 2,
+             gdb.GetCurrentDWG.pcamera^.zmin, gdb.GetCurrentDWG.pcamera^.zmax,@onematrix);
+  end;
+  if wa.param.projtype = Projperspective then
+    gdb.GetCurrentDWG.pcamera^.projMatrix:=Perspective(gdb.GetCurrentDWG.pcamera^.fovy, Width / Height, gdb.GetCurrentDWG.pcamera^.zmin, gdb.GetCurrentDWG.pcamera^.zmax,@onematrix);
+    glLoadMatrixD(@gdb.GetCurrentDWG.pcamera^.projMatrix);
+   glulookat(-gdb.GetCurrentDWG.pcamera^.point.x, -gdb.GetCurrentDWG.pcamera^.point.y, -gdb.GetCurrentDWG.pcamera^.point.z,
+             -gdb.GetCurrentDWG.pcamera^.point.x + gdb.GetCurrentDWG.pcamera^.look.x,
+             -gdb.GetCurrentDWG.pcamera^.point.y + gdb.GetCurrentDWG.pcamera^.look.y,
+             -gdb.GetCurrentDWG.pcamera^.point.z + gdb.GetCurrentDWG.pcamera^.look.z,
+              gdb.GetCurrentDWG.pcamera^.ydir.x, gdb.GetCurrentDWG.pcamera^.ydir.y, gdb.GetCurrentDWG.pcamera^.ydir.z);
+  gltranslated(0, 0, -500);
+  oglsm.myglMatrixMode(GL_MODELVIEW);
+  glLoadIdentity;
+  oglsm.myglDisable(GL_LIGHTING);
+}
+  oglsm.myglDisable(GL_COLOR_LOGIC_OP);
+  CalcOptimalMatrix;
+  if param.CSIcon.axislen<>0 then {переделать}
+  begin
+  td:=param.CSIcon.axislen;
+  td2:=td/5;
+  td22:=td2/3;
+  oglsm.myglbegin(GL_lines);
+  dc.drawer.SetColor(255, 0, 0,255);
+
+  oglsm.myglVertex3d(param.CSIcon.CSIconCoord);
+  oglsm.myglVertex3d(param.CSIcon.CSIconX);
+
+  oglsm.myglVertex3d(param.CSIcon.CSIconX);
+  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y-td22 , param.CSIcon.CSIconCoord.z));
+
+  oglsm.myglVertex3d(param.CSIcon.CSIconX);
+  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y+td22 , param.CSIcon.CSIconCoord.z));
+
+  dc.drawer.SetColor(0, 255, 0,255);
+
+  oglsm.myglVertex3d(param.CSIcon.CSIconCoord);
+  oglsm.myglVertex3d(param.CSIcon.CSIconY);
+
+  oglsm.myglVertex3d(param.CSIcon.CSIconY);
+  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x-td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z));
+
+  oglsm.myglVertex3d(param.CSIcon.CSIconY);
+  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x+td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z));
+
+  dc.drawer.SetColor(0, 0, 255,255);
+
+  oglsm.myglVertex3d(param.CSIcon.CSIconCoord);
+  oglsm.myglVertex3d(param.CSIcon.CSIconZ);
+
+  oglsm.myglend;
+  if IsVectorNul(vectordot(pdwg.GetPcamera.prop.look,ZWCS)) then
+  begin
+  oglsm.myglbegin(GL_lines);
+  dc.drawer.SetColor(255, 255, 255,255);
+  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y , param.CSIcon.CSIconCoord.z));
+  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z));
+  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z));
+  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z));
+  oglsm.myglend;
+  end;
+  end;
+  //oglsm.mytotalglend;
+  //isOpenGLError;
+  //oglsm.myglDisable(GL_COLOR_LOGIC_OP);
+end;
+end;
+
 procedure TGeneralViewArea.DrawGrid(var DC:TDrawContext);
 begin
 end;
@@ -446,7 +790,7 @@ procedure TGeneralViewArea.showsnap(var DC:TDrawContext);
 begin
   if param.ospoint.ostype <> os_none then
   begin
-    dc.drawer.SetColor(255,255, 0);
+    dc.drawer.SetColor(255,255, 0,255);
     dc.drawer.SetLineWidth(2);
     dc.drawer.TranslateCoord2D(param.ospoint.dispcoord.x, getviewcontrol.clientheight - param.ospoint.dispcoord.y);
     dc.drawer.ScaleCoord2D(sysvar.DISP.DISP_OSSize^,sysvar.DISP.DISP_OSSize^);
@@ -1768,6 +2112,9 @@ begin
   result.ScrollMode:=param.scrollmode;
   result.Zoom:=PDWG.GetPcamera.prop.zoom;
   result.drawer:=drawer;
+  result.matrixs.pmodelMatrix:=@PDWG.GetPcamera.modelMatrix;
+  result.matrixs.pprojMatrix:=@PDWG.GetPcamera.projMatrix;
+  result.matrixs.pviewport:=@PDWG.GetPcamera.viewport;
 end;
 procedure TGeneralViewArea.CorrectMouseAfterOS;
 var d,tv1,tv2:GDBVertex;

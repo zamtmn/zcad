@@ -30,7 +30,7 @@ TZGLAbstractDrawer=class
                         procedure endrender;virtual;abstract;
                         procedure SetLineWidth(const w:single);virtual;abstract;
                         procedure SetPointSize(const s:single);virtual;abstract;
-                        procedure SetColor(const red, green, blue: byte);overload;virtual;abstract;
+                        procedure SetColor(const red, green, blue, alpha: byte);overload;virtual;abstract;
                         procedure SetClearColor(const red, green, blue, alpha: byte);overload;virtual;abstract;
                         procedure SetColor(const color: TRGB);overload;virtual;abstract;
                         procedure ClearScreen(stencil:boolean);virtual;abstract;
@@ -43,12 +43,14 @@ TZGLAbstractDrawer=class
                         procedure SetDrawWithStencilMode;virtual;abstract;
                         procedure DisableStencil;virtual;abstract;
                         procedure SetZTest(Z:boolean);virtual;abstract;
+                        procedure SetDisplayCSmode(const width, height:integer);virtual;abstract;
 
 
 
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);overload;virtual;abstract;
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);overload;virtual;abstract;
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);overload;virtual;abstract;
+                        procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
                    end;
 TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         public
@@ -58,7 +60,7 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure endrender;override;
                         procedure SetLineWidth(const w:single);override;
                         procedure SetPointSize(const s:single);override;
-                        procedure SetColor(const red, green, blue: byte);overload;override;
+                        procedure SetColor(const red, green, blue, alpha: byte);overload;override;
                         procedure SetClearColor(const red, green, blue, alpha: byte);overload;override;
                         procedure SetColor(const color: TRGB);overload;override;
                         procedure ClearScreen(stencil:boolean);override;
@@ -74,6 +76,8 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);overload;override;
+                        procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure SetDisplayCSmode(const width, height:integer);override;
                    end;
 var
   testrender:TZGLAbstractDrawer;
@@ -97,7 +101,7 @@ end;
 procedure TZGLGeneralDrawer.SetPointSize(const s:single);
 begin
 end;
-procedure TZGLGeneralDrawer.SetColor(const red, green, blue: byte);
+procedure TZGLGeneralDrawer.SetColor(const red, green, blue, alpha: byte);
 begin
 end;
 procedure TZGLGeneralDrawer.SetClearColor(const red, green, blue, alpha: byte);
@@ -143,6 +147,12 @@ procedure TZGLGeneralDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:single);
 begin
 end;
 procedure TZGLGeneralDrawer.DrawClosedPolyLine2DInDCS(const coords:array of single);
+begin
+end;
+procedure TZGLGeneralDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
+begin
+end;
+procedure TZGLGeneralDrawer.SetDisplayCSmode;
 begin
 end;
 initialization

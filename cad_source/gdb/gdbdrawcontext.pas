@@ -35,6 +35,7 @@ TDrawContext=packed record
                    ScrollMode:GDBBoolean;
                    Zoom:GDBDouble;
                    drawer:TZGLAbstractDrawer;
+                   matrixs:tmatrixs;
              end;
 implementation
 begin

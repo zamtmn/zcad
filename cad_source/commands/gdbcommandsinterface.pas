@@ -188,7 +188,8 @@ begin
 
      //tf.align:=al_client;
 
-     wpowner:={TOpenGLViewArea}TCanvasViewArea.Create(myts){)};
+     //wpowner:=TOpenGLViewArea{TCanvasViewArea}.Create(myts);
+     wpowner:={TOpenGLViewArea}TCanvasViewArea.Create(myts);
      oglwnd:=wpowner.getviewcontrol;// TOGLWnd.Create(myts);
 
 

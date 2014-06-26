@@ -21,7 +21,7 @@ unit uzglopengldrawer;
 interface
 uses
     {$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
-    uzglabstractdrawer,UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase;
+    geometry,uzglabstractdrawer,UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase;
 type
 TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         public
@@ -31,7 +31,7 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure DrawPoint(const i:TLLVertexIndex);override;
                         procedure SetLineWidth(const w:single);override;
                         procedure SetPointSize(const s:single);override;
-                        procedure SetColor(const red, green, blue: byte);overload;override;
+                        procedure SetColor(const red, green, blue, alpha: byte);overload;override;
                         procedure SetColor(const color: TRGB);overload;override;
                         procedure SetClearColor(const red, green, blue, alpha: byte);overload;override;
                         procedure ClearScreen(stencil:boolean);override;
@@ -44,10 +44,13 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure SetDrawWithStencilMode;override;
                         procedure DisableStencil;override;
                         procedure SetZTest(Z:boolean);override;
+                        procedure SetDisplayCSmode(const width, height:integer);override;
                         {в координатах окна}
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);override;
+                        {в координатах модели}
+                        procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
                    end;
 TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         public
@@ -60,10 +63,15 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
 
+                        procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
+
                         procedure ClearScreen(stencil:boolean);override;
                         procedure SetClearColor(const red, green, blue, alpha: byte);overload;override;
-                        procedure SetColor(const red, green, blue: byte);overload;override;
+                        procedure SetColor(const red, green, blue, alpha: byte);overload;override;
                         procedure SetColor(const color: TRGB);overload;override;
+                        procedure SetDisplayCSmode(const width, height:integer);override;
+                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
+                        procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
 
                    end;
 {$IFDEF WINDOWS}
@@ -207,7 +215,7 @@ procedure TZGLOpenGLDrawer.endrender;
 begin
      OGLSM.endrender;
 end;
-procedure TZGLOpenGLDrawer.SetColor(const red, green, blue: byte);
+procedure TZGLOpenGLDrawer.SetColor(const red, green, blue, alpha: byte);
 begin
      oglsm.glcolor3ub(red, green, blue);
 end;
@@ -261,6 +269,25 @@ begin
      end;
      oglsm.myglend;
 end;
+procedure TZGLOpenGLDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
+begin
+     oglsm.myglbegin(GL_LINES);
+      oglsm.myglVertex3dv(@p1);
+      oglsm.myglVertex3dv(@p2);
+     oglsm.myglend;
+end;
+procedure TZGLOpenGLDrawer.SetDisplayCSmode(const width, height:integer);
+begin
+     oglsm.myglMatrixMode(GL_PROJECTION);
+     oglsm.myglLoadIdentity;
+     oglsm.myglOrtho(0.0, width, height, 0.0, -1.0, 1.0);
+     oglsm.myglMatrixMode(GL_MODELVIEW);
+     oglsm.myglLoadIdentity;
+     oglsm.myglscalef(1, -1, 1);
+     oglsm.myglpushmatrix;
+     oglsm.mygltranslated(0, -height, 0);
+end;
+
 constructor TZGLCanvasDrawer.create;
 begin
      sx:=0.1;
@@ -296,11 +323,29 @@ begin
     p:=TranslatePoint(pv^);
     Canvas.Pixels[round(pv.x),round(pv.y)]:=canvas.Pen.Color;
 end;
+procedure TZGLCanvasDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
+var
+   pp1,pp2:GDBVertex;
+   h:integer;
+begin
+     //_myGluProject(const objx,objy,objz:GDBdouble;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out winx,winy,winz:GDBdouble):Integer;
+    _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
+    _myGluProject2(p2,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp2);
+    h:=canvas.Height;
+     {pp1:=geometry.VectorTransform3D(p1,matrixs.pprojMatrix^);
+     pp1:=geometry.VectorTransform3D(pp1,matrixs.pmodelMatrix^);
+
+     pp2:=geometry.VectorTransform3D(p2,matrixs.pprojMatrix^);
+     pp2:=geometry.VectorTransform3D(pp2,matrixs.pmodelMatrix^);}
+
+     canvas.Line(round(pp1.x),h-round(pp1.y),round(pp2.x),h-round(pp2.y));
+end;
+
 procedure TZGLCanvasDrawer.SetClearColor(const red, green, blue, alpha: byte);
 begin
      ClearColor:=RGBToColor(red,green,blue);
 end;
-procedure TZGLCanvasDrawer.SetColor(const red, green, blue: byte);
+procedure TZGLCanvasDrawer.SetColor(const red, green, blue, alpha: byte);
 begin
      canvas.Pen.Color:=RGBToColor(red,green,blue);
 end;
@@ -312,6 +357,21 @@ procedure TZGLCanvasDrawer.ClearScreen(stencil:boolean);
 begin
      canvas.Brush.Color:=ClearColor;
      canvas.FillRect(0,0,canvas.width,canvas.height);
+end;
+procedure TZGLCanvasDrawer.SetDisplayCSmode(const width, height:integer);
+begin
+     sx:=1;
+     sy:=1;
+     tx:=0;
+     ty:={height}0;
+end;
+procedure TZGLCanvasDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:integer);
+begin
+     canvas.Line(round(x1*sx+tx),round(y1*sy+ty),round(x2*sx+tx),round(y2*sy+ty));
+end;
+procedure TZGLCanvasDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:single);
+begin
+     canvas.Line(round(x1*sx+tx),round(y1*sy+ty),round(x2*sx+tx),round(y2*sy+ty));
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglabstractdrawer.initialization');{$ENDIF}

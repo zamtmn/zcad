@@ -274,8 +274,10 @@ begin
 end;
 procedure TGeneralViewArea.DrawOrInvalidate;
 begin
-     draw;
-     //getviewcontrol.Invalidate;
+     if sysvar.RD.RD_DrawInsidePaintMessage^then
+                                                getviewcontrol.Invalidate
+                                            else
+                                                draw;
 end;
 
 procedure TGeneralViewArea.draw;

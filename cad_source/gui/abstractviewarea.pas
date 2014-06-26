@@ -79,7 +79,7 @@ type
                            procedure RestoreMouse;virtual;abstract;
                            procedure myKeyPress(var Key: Word; Shift: TShiftState);virtual;abstract;
                            procedure finishdraw(var RC:TDrawContext);virtual;abstract;
-                           procedure SetCameraPosZoom(_pos:gdbvertex;_zoom:gdbdouble;finalcalk:gdbboolean);virtual;abstract;
+                            procedure SetCameraPosZoom(_pos:gdbvertex;_zoom:gdbdouble;finalcalk:gdbboolean);virtual;abstract;
 
                            procedure showmousecursor;virtual;abstract;
                            procedure hidemousecursor;virtual;abstract;

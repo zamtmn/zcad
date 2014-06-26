@@ -226,21 +226,6 @@ GDBCameraBaseProp=packed record
                   end;
 TActulity=GDBInteger;
 TObjID=GDBWord;
-TDrawContext=packed record
-                   VisibleActualy:TActulity;
-                   InfrustumActualy:TActulity;
-                   DRAWCOUNT:TActulity;
-                   Subrender:GDBInteger;
-                   Selected:GDBBoolean;
-                   SysLayer:GDBPointer;
-                   MaxDetail:GDBBoolean;
-                   DrawMode:GDBBoolean;
-                   OwnerLineWeight:GDBSmallInt;
-                   OwnerColor:GDBInteger;
-                   MaxWidth:GDBInteger;
-                   ScrollMode:GDBBoolean;
-                   Zoom:GDBDouble;
-             end;
 PGDBBaseCamera=^GDBBaseCamera;
 GDBBaseCamera={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                 modelMatrix:DMatrix4D;
@@ -1070,6 +1055,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
             RD_LastUpdateTime:pGDBInteger;(*'Last update time'*)(*oi_readonly*)
             RD_LastCalcVisible:GDBInteger;(*'Last visible calculation time'*)(*oi_readonly*)
             RD_MaxRenderTime:pGDBInteger;(*'Maximum single pass time'*)
+            RD_DrawInsidePaintMessage:PGDBBoolean;(*'Draw inside paint message'*)
             RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
             RD_VSync:PTVSControl;(*'VSync'*)
             RD_Light:PGDBBoolean;(*'Light'*)
@@ -1376,8 +1362,8 @@ ZGLGeometry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
                                  {Points:ZGLpoint3DArray;}
                                  SHX:GDBPolyPoint3DArray;
                                  Triangles:ZGLTriangle3DArray;
-                procedure DrawGeometry;virtual;abstract;
-                procedure DrawNiceGeometry;virtual;abstract;
+                procedure DrawGeometry(rc:TDrawContext);virtual;abstract;
+                procedure DrawNiceGeometry(rc:TDrawContext);virtual;abstract;
                 procedure DrawLLPrimitives(drawer:TZGLAbstractDrawer);
                 procedure Clear;virtual;abstract;
                 constructor init;
@@ -3219,7 +3205,7 @@ type
     otrackarray: packed array[0..3] of os_record;
     total, current: GDBInteger;
   end;
-  CSIcon=packed record
+  TCSIcon=packed record
                CSIconCoord: GDBvertex;
                CSIconX,CSIconY,CSIconZ: GDBvertex;
                CSX, CSY, CSZ: GDBvertex2DI;
@@ -3229,7 +3215,7 @@ type
   OGLWndtype = packed record
     polarlinetrace: GDBInteger;
     pointnum, axisnum: GDBInteger;
-    CSIcon:CSIcon;
+    CSIcon:TCSIcon;
     //CSIconCoord: GDBvertex;
     //CSX, CSY, CSZ: GDBvertex2DI;
     BLPoint,CPoint,TRPoint:GDBvertex2D;
@@ -3336,7 +3322,8 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
                        SelObjArray:GDBSelectedObjArray;
                        pcamera:PGDBObjCamera;
                        OnMouseObj:GDBObjOpenArrayOfPV;
-                       OGLwindow1:toglwnd;
+                       //OGLwindow1:toglwnd;
+                       wa:TAbstractViewArea;
                        TextStyleTable:GDBTextStyleArray;(*saved_to_shd*)
                        BlockDefArray:GDBObjBlockdefArray;(*saved_to_shd*)
                        Numerator:GDBNumerator;(*saved_to_shd*)

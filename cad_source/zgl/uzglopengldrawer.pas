@@ -53,7 +53,10 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         public
                         canvas:tcanvas;
                         midline:integer;
+                        sx,sy,tx,ty:single;
                         ClearColor: TColor;
+                        constructor create;
+                        function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
 
@@ -258,21 +261,40 @@ begin
      end;
      oglsm.myglend;
 end;
+constructor TZGLCanvasDrawer.create;
+begin
+     sx:=0.1;
+     sy:=-0.1;
+     tx:=0;
+     ty:=400;
+end;
+function TZGLCanvasDrawer.TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
+begin
+     result.x:=p.x*sx+tx;
+     result.y:=p.y*sy+ty;
+     result.z:=p.z;
+end;
+
 procedure TZGLCanvasDrawer.DrawLine(const i1:TLLVertexIndex);
 var
    pv1,pv2:PGDBVertex3S;
+   p1,p2:GDBVertex3S;
 begin
     pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
     pv2:=PGDBVertex3S(PVertexBuffer.getelement(i1+1));
-    canvas.Line(round(pv1.x),round(midline-pv1.y),round(pv2.x),round(midline-pv2.y));
+    p1:=TranslatePoint(pv1^);
+    p2:=TranslatePoint(pv2^);
+    canvas.Line(round(p1.x),round(p1.y),round(p2.x),round(p2.y));
 end;
 
 procedure TZGLCanvasDrawer.DrawPoint(const i:TLLVertexIndex);
 var
    pv:PGDBVertex3S;
+   p:GDBVertex3S;
 begin
     pv:=PGDBVertex3S(PVertexBuffer.getelement(i));
-    Canvas.Pixels[round(pv.x),round(midline-pv.y)]:=canvas.Pen.Color;
+    p:=TranslatePoint(pv^);
+    Canvas.Pixels[round(pv.x),round(pv.y)]:=canvas.Pen.Color;
 end;
 procedure TZGLCanvasDrawer.SetClearColor(const red, green, blue, alpha: byte);
 begin

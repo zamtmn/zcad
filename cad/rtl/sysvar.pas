@@ -35,6 +35,7 @@ var
   DISP_DrawZAxis:GDBBoolean;
   DISP_ColorAxis:GDBBoolean;
   RD_UseStencil:GDBBoolean;
+  RD_DrawInsidePaintMessage:GDBBoolean;
   RD_PanObjectDegradation:GDBBoolean;
   RD_LineSmooth:GDBBoolean;
   RD_MaxLineWidth:GDBDouble;
@@ -116,6 +117,7 @@ begin
   DISP_DrawZAxis:=False;
   DISP_ColorAxis:=False;
   RD_UseStencil:=True;
+  RD_DrawInsidePaintMessage:=false;
   RD_PanObjectDegradation:=False;
   RD_LineSmooth:=False;
   RD_MaxLineWidth:=10.0;

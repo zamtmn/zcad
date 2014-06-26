@@ -103,6 +103,7 @@ initialization;
 
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_PanObjectDegradation,'RD_PanObjectDegradation');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_UseStencil,'RD_UseStencil');
+  SysVarUnit.AssignToSymbol(SysVar.RD.RD_DrawInsidePaintMessage,'RD_DrawInsidePaintMessage');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_VSync,'RD_VSync');
   {$IFNDEF WINDOWS}
   if SysVar.RD.RD_VSync<>nil then

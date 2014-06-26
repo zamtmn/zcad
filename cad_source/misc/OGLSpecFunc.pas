@@ -276,7 +276,6 @@ const
      MY_EmptyMode=1000000;
 procedure SetDCPixelFormat(oglc:TOGLContextDesk);
 function isOpenGLError:GLenum;
-function CalcDisplaySubFrustum(const x,y,w,h:gdbdouble;const mm,pm:DMatrix4D;const vp:IMatrix4):ClipArray;
 //(const v: PGLdouble); stdcall;
 //procedure myglVertex3dV(V:PGDBVertex);
 procedure MyglMakeCurrent(oglc:TOGLContextDesk);
@@ -600,21 +599,6 @@ begin
                            t:=vertexadd(t1,CurrentCamCSOffset);
                            glVertex3dv(@t);
                       end;
-end;
-function CalcDisplaySubFrustum(const x,y,w,h:gdbdouble;const mm,pm:DMatrix4D;const vp:IMatrix4):ClipArray;
-var
-tm: DMatrix4D;
-begin
-  oglsm.myglMatrixMode(GL_Projection);
-  oglsm.myglpushmatrix;
-  glLoadIdentity;
-  gluPickMatrix(x,y,w,h,{$IFNDEF DELPHI}PTViewPortArray(@vp)^{$ELSE}TVector4i(vp){$ENDIF});
-  glGetDoublev(GL_PROJECTION_MATRIX, @tm);
-  tm := MatrixMultiply(pm, tm);
-  tm := MatrixMultiply(mm, tm);
-  result := calcfrustum(@tm);
-  oglsm.myglpopmatrix;
-  oglsm.myglMatrixMode(GL_MODELVIEW);
 end;
 function isOpenGLError:GLenum;
 //var

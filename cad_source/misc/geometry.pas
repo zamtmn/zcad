@@ -186,6 +186,8 @@ function CorrectAngleIfNotReadable(Angle:GDBDouble):GDBDouble;
 
 function GetCSDirFrom0x0y2D(const ox,oy:GDBVertex):TCSDir;
 
+function CalcDisplaySubFrustum(const x,y,w,h:gdbdouble;const mm,pm:DMatrix4D;const vp:IMatrix4):ClipArray;
+
 var WorldMatrix{,CurrentCS}:DMatrix4D;
     wx:PGDBVertex;
     wy:PGDBVertex;
@@ -195,6 +197,50 @@ type
     TLineClipArray=array[0..5]of gdbdouble;
 implementation
 uses shared,log;
+function myPickMatrix(const x,y,deltax,deltay:gdbdouble;const vp:IMatrix4): DMatrix4D;
+var
+  tm,sm: DMatrix4D;
+begin
+    tm:=geometry.CreateTranslationMatrix(createvertex((vp[2]-2*(x-vp[0]))/deltax,
+	                                              (vp[3]-2*(y-vp[1]))/deltay, 0));
+    sm:=geometry.CreateScaleMatrix(createvertex(vp[2]/deltax,vp[3]/deltay, 1.0));
+    result:=geometry.MatrixMultiply(sm,tm);
+end;
+
+(*
+{
+    if (deltax <= 0 || deltay <= 0) {
+	return;
+    }
+
+    /* Translate and scale the picked region to the entire window */
+    glTranslatef((viewport[2] - 2 * (x - viewport[0])) / deltax,
+	    (viewport[3] - 2 * (y - viewport[1])) / deltay, 0);
+    glScalef(viewport[2] / deltax, viewport[3] / deltay, 1.0);
+}
+*)
+function CalcDisplaySubFrustum(const x,y,w,h:gdbdouble;const mm,pm:DMatrix4D;const vp:IMatrix4):ClipArray;
+var
+tm: DMatrix4D;
+begin
+  (*//use glu.gluPickMatrix
+  oglsm.myglMatrixMode(GL_Projection);
+  oglsm.myglpushmatrix;
+  glLoadIdentity;
+  gluPickMatrix(x,y,w,h,{$IFNDEF DELPHI}PTViewPortArray(@vp)^{$ELSE}TVector4i(vp){$ENDIF});
+  glGetDoublev(GL_PROJECTION_MATRIX, @tm);
+  tm := MatrixMultiply(pm, tm);
+  tm := MatrixMultiply(mm, tm);
+  result := calcfrustum(@tm);
+  oglsm.myglpopmatrix;
+  oglsm.myglMatrixMode(GL_MODELVIEW);
+  *)
+    //use glu.gluPickMatrix
+    tm := myPickMatrix(x,y,w,h,vp);
+    tm := MatrixMultiply(pm, tm);
+    tm := MatrixMultiply(mm, tm);
+    result := calcfrustum(@tm);
+end;
 function VertexD2S(const Vector1:GDBVertex): GDBVertex3S;
 begin
      result.x:=Vector1.x;

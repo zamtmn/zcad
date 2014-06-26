@@ -110,6 +110,7 @@ type
                            procedure render(const Root:GDBObjGenericSubEntry;var DC:TDrawContext); override;
                            procedure finishdraw(var RC:TDrawContext); override;
                            procedure draw;override;
+                           procedure DrawOrInvalidate;override;
                            procedure showcursor(var DC:TDrawContext);override;
                            procedure SaveBuffers(var DC:TDrawContext);override;
                            procedure RestoreBuffers(var DC:TDrawContext);override;
@@ -270,6 +271,11 @@ begin
      SaveBuffers(rc);
      showcursor(rc);
      SwapBuffers(rc);
+end;
+procedure TGeneralViewArea.DrawOrInvalidate;
+begin
+     draw;
+     //getviewcontrol.Invalidate;
 end;
 
 procedure TGeneralViewArea.draw;
@@ -1184,7 +1190,7 @@ if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
   //param.firstdraw:=true;
   isOpenGLError;
   CorrectMouseAfterOS;
-  {repaint;//}draw;//paint;
+  draworinvalidate;
   //inc(sysvar.debug.int1);
   //debugvar(Variables,1);
 

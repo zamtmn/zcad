@@ -62,6 +62,7 @@ type
                            procedure CalcOptimalMatrix;virtual;abstract;
                            procedure calcgrid;virtual;abstract;
                            procedure draw;virtual;abstract;
+                           procedure DrawOrInvalidate;virtual;abstract;
                            procedure Clear0Ontrackpoint;virtual;abstract;
                            procedure SetMouseMode(smode:GDBByte);virtual;abstract;
                            procedure SetObjInsp;virtual;abstract;

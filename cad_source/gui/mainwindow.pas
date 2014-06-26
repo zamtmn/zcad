@@ -2769,7 +2769,7 @@ begin
      if assigned(OGL) then
                           OGL.GDBActivate;
      OGL.param.firstdraw:=true;
-     OGL.draw;
+     OGL.draworinvalidate;
      ReturnToDefaultProc;
 end;
 
@@ -3494,7 +3494,7 @@ else if sender=VScrollBar then
           nevpos.y:=-(VScrollBar.Min+VScrollBar.Max{$IFNDEF LINUX}-VScrollBar.PageSize{$ENDIF}-ScrollPos);
      end;
      pdwg.wa.SetCameraPosZoom(nevpos,PDWG.Getpcamera^.prop.zoom,true);
-     pdwg.wa.draw;
+     pdwg.wa.draworinvalidate;
   end;
 end;
 

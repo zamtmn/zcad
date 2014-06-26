@@ -33,7 +33,6 @@ type
                       OpenGLWindow:TOGLWnd;
                       myscrbuf:tmyscrbuf;
 
-                      procedure finishdraw(var RC:TDrawContext); override;
                       function CreateWorkArea(TheOwner: TComponent):TCADControl; override;
                       procedure CreateDrawer; override;
                       procedure SetupWorkArea; override;
@@ -68,6 +67,7 @@ uses mainwindow;
 procedure TOpenGLViewArea.GDBActivateGLContext;
 begin
                                       MyglMakeCurrent(OpenGLWindow.OGLContext);
+                                      OpenGLWindow.MakeCurrent;
                                       isOpenGLError;
 end;
 procedure drawfrustustum(frustum:ClipArray);
@@ -651,7 +651,10 @@ end;
 
 procedure TCanvasViewArea.SetupWorkArea;
 begin
-  self.getviewcontrol.Color:=clHighlight;
+  //self.getviewcontrol.Color:=clHighlight;
+  TPanel(getviewcontrol).BorderStyle:=bsNone;
+  TPanel(getviewcontrol).BevelWidth:=0;
+  TPanel(getviewcontrol).onpaint:=mypaint;
 end;
 procedure TCanvasViewArea.WaResize(sender:tobject);
 begin
@@ -677,7 +680,6 @@ begin
      OpenGLWindow.wa:=self;
      OpenGLWindow.Cursor:=crNone;
      OpenGLWindow.ShowHint:=true;
-     OpenGLWindow.onpaint:=OpenGLWindow.mypaint;
      fillchar(myscrbuf,sizeof(tmyscrbuf),0);
 
      {$if FPC_FULlVERSION>=20701}
@@ -686,6 +688,7 @@ begin
      //OpenGLWindow.ColorBits:=24;
      OpenGLWindow.DepthBits:=24;
      {$ENDIF}
+     OpenGLWindow.onpaint:=mypaint;
 end;
 procedure TOpenGLViewArea.CreateScrbuf(w,h:integer);
 var scrx,scry,texture{,e}:integer;
@@ -762,10 +765,6 @@ begin
      //draw;
      //paint;
      getviewcontrol.Invalidate;
-end;
-procedure TOpenGLViewArea.finishdraw(var RC:TDrawContext);
-begin
-     OpenGLWindow.finishdraw(RC);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('viewareadef.initialization');{$ENDIF}

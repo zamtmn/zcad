@@ -64,9 +64,6 @@ type
     OGLContext:TOGLContextDesk;
     wa:TAbstractViewArea;
 
-    procedure finishdraw(var RC:TDrawContext);virtual;
-    procedure mypaint(sender:tobject);
-
     destructor Destroy; override;
 
     {LCL}
@@ -91,25 +88,6 @@ uses {mainwindow,}UGDBTracePropArray,{GDBEntity,}{io,}geometry,gdbobjectsconstde
 procedure TOGLWnd.EraseBackground(DC: HDC);
 begin
      dc:=0;
-end;
-procedure TOGLWnd.mypaint;
-begin
-     wa.param.firstdraw:=true;
-     wa.draw;
-     inherited;
-end;
-procedure TOGLWnd.finishdraw;
-  var
-    LPTime:Tdatetime;
-begin
-     //inc(sysvar.debug.int1);
-     wa.CalcOptimalMatrix;
-     wa.RestoreBuffers(rc);
-     LPTime:=now();
-     wa.PDWG.Getpcamera.DRAWNOTEND:=wa.treerender(wa.PDWG.GetCurrentROOT^.ObjArray.ObjTree,lptime,rc);
-     wa.SaveBuffers(rc);
-     wa.showcursor(rc);
-     self.SwapBuffers;
 end;
 function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
 var

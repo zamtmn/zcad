@@ -32,8 +32,8 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure SetLineWidth(const w:single);override;
                         procedure SetPointSize(const s:single);override;
                         procedure SetColor(const red, green, blue: byte);overload;override;
-                        procedure SetClearColor(const red, green, blue, alpha: byte);overload;override;
                         procedure SetColor(const color: TRGB);overload;override;
+                        procedure SetClearColor(const red, green, blue, alpha: byte);overload;override;
                         procedure ClearScreen(stencil:boolean);override;
                         procedure TranslateCoord2D(const tx,ty:single);override;
                         procedure ScaleCoord2D(const sx,sy:single);override;
@@ -53,10 +53,15 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         public
                         canvas:tcanvas;
                         midline:integer;
+                        ClearColor: TColor;
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
 
                         procedure ClearScreen(stencil:boolean);override;
+                        procedure SetClearColor(const red, green, blue, alpha: byte);overload;override;
+                        procedure SetColor(const red, green, blue: byte);overload;override;
+                        procedure SetColor(const color: TRGB);overload;override;
+
                    end;
 {$IFDEF WINDOWS}
 TZGLGDIPlusDrawer=class(TZGLCanvasDrawer)
@@ -269,9 +274,22 @@ begin
     pv:=PGDBVertex3S(PVertexBuffer.getelement(i));
     Canvas.Pixels[round(pv.x),round(midline-pv.y)]:=canvas.Pen.Color;
 end;
+procedure TZGLCanvasDrawer.SetClearColor(const red, green, blue, alpha: byte);
+begin
+     ClearColor:=RGBToColor(red,green,blue);
+end;
+procedure TZGLCanvasDrawer.SetColor(const red, green, blue: byte);
+begin
+     canvas.Pen.Color:=RGBToColor(red,green,blue);
+end;
+procedure TZGLCanvasDrawer.SetColor(const color: TRGB);
+begin
+     canvas.Pen.Color:=RGBToColor(color.r,color.g,color.b);
+end;
 procedure TZGLCanvasDrawer.ClearScreen(stencil:boolean);
 begin
-     canvas.Rectangle(0,0,100,100);
+     canvas.Brush.Color:=ClearColor;
+     canvas.FillRect(0,0,canvas.width,canvas.height);
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglabstractdrawer.initialization');{$ENDIF}

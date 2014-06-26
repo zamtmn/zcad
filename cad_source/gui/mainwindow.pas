@@ -889,7 +889,8 @@ begin
        viewcontrol:=ClosedDWG.wa.getviewcontrol;
        gdb.eraseobj(ClosedDWG);
        gdb.pack;
-       //poglwnd.wa.PDWG:=nil;
+
+       //ClosedDWG.wa.PDWG:=nil;
 
        //poglwnd.{GDBActivateGLContext}MakeCurrent;
        viewcontrol.free;
@@ -2767,6 +2768,8 @@ begin
      tcomponent(OGL):=FindComponentByType(TPageControl(sender).ActivePage,TAbstractViewArea);
      if assigned(OGL) then
                           OGL.GDBActivate;
+     OGL.param.firstdraw:=true;
+     OGL.draw;
      ReturnToDefaultProc;
 end;
 

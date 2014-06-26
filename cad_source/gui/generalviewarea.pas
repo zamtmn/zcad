@@ -72,7 +72,6 @@ type
                            procedure PanScreen(oldX,oldY,X,Y:Integer);override;
                            procedure RestoreMouse;override;
                            procedure myKeyPress(var Key: Word; Shift: TShiftState);override;
-                           procedure finishdraw(var RC:TDrawContext);virtual;abstract;
                            function ProjectPoint(pntx,pnty,pntz:gdbdouble;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;override;
                            procedure mouseunproject(X, Y: integer);override;
                            //Procedure Paint;override;
@@ -109,6 +108,7 @@ type
                            Procedure Paint; override;
                            function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):GDBBoolean; override;
                            procedure render(const Root:GDBObjGenericSubEntry;var DC:TDrawContext); override;
+                           procedure finishdraw(var RC:TDrawContext); override;
                            procedure draw;override;
                            procedure showcursor(var DC:TDrawContext);override;
                            procedure SaveBuffers(var DC:TDrawContext);override;
@@ -130,6 +130,7 @@ type
                            procedure WaMouseWheel(Sender:TObject;Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint;var handled:boolean);
                            procedure WaMouseEnter(Sender:TObject);
                            procedure WaMouseLeave(Sender:TObject);
+                           procedure mypaint(sender:tobject);
 
 
                            constructor Create(TheOwner: TComponent); override;
@@ -144,6 +145,13 @@ procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
 implementation
 uses
      commandline,mainwindow;
+procedure TGeneralViewArea.mypaint;
+begin
+     param.firstdraw:=true;
+     draw;
+     inherited;
+end;
+
 procedure TGeneralViewArea.GDBActivate;
 begin
     pdwg.SetCurrentDWG;
@@ -250,13 +258,27 @@ begin
   //                       pva^.Count:=pva^.Count;
   root.{ObjArray.}DrawWithattrib({gdb.GetCurrentDWG.pcamera.POSCOUNT,0}dc);
 end;
+procedure TGeneralViewArea.finishdraw;
+  var
+    LPTime:Tdatetime;
+begin
+     //inc(sysvar.debug.int1);
+     CalcOptimalMatrix;
+     RestoreBuffers(rc);
+     LPTime:=now();
+     PDWG.Getpcamera.DRAWNOTEND:=treerender(PDWG.GetCurrentROOT^.ObjArray.ObjTree,lptime,rc);
+     SaveBuffers(rc);
+     showcursor(rc);
+     SwapBuffers(rc);
+end;
 
 procedure TGeneralViewArea.draw;
 var
   scrollmode:GDBBOOlean;
   LPTime:Tdatetime;
   DC:TDrawContext;
-  tick,dt:cardinal;
+  dt:integer;
+  tick:cardinal;
   const msec=1;
 begin
   if not assigned(pdwg) then exit;
@@ -272,8 +294,6 @@ begin
   foreground.g:=not(sysvar.RD.RD_BackGroundColor^.g);
   foreground.b:=not(sysvar.RD.RD_BackGroundColor^.b);
   dc:=CreateRC;
-  if param.firstdraw then
-                            inc(PDWG.Getpcamera^.DRAWCOUNT);
   dc.drawer.SetLineSmooth(SysVar.RD.RD_LineSmooth^);
 
   dc.drawer.SetZTest(true);
@@ -281,8 +301,9 @@ begin
   begin
   {else if sysvar.RD.RD_Restore_Mode^=WND_Texture then}
   begin
-  if {param.firstdraw = }true then
+  if param.firstdraw = true then
   begin
+    inc(PDWG.Getpcamera^.DRAWCOUNT);
     dc.drawer.ClearStatesMachine;
 
     dc.drawer.SetClearColor(sysvar.RD.RD_BackGroundColor^.r,sysvar.RD.RD_BackGroundColor^.g,sysvar.RD.RD_BackGroundColor^.b,sysvar.RD.RD_BackGroundColor^.a);

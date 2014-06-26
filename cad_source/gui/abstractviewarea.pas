@@ -29,7 +29,7 @@ uses {gdbase,gdbasetypes,
      ExtCtrls,Controls,Classes,LCLType,Forms,OGLSpecFunc,zcadsysvars,GDBEntity;
 
 type
-    TCADControl=class(tcontrol)
+    TCADControl=class(TCustomControl)
                 public
                 property OnMouseUp;
                 property onmousedown;

@@ -500,12 +500,12 @@ end;
 procedure GDBObjEntity.DrawWithAttrib;
 var lw: GDBInteger;
   sel,_selected: GDBBoolean;
-procedure SetEntColor(color:integer);inline;
+procedure SetEntColor(color:integer;var DC:TDrawContext);inline;
 begin
   if color<>7 then
-                  oglsm.glcolor3ubv(palette[color].RGB)
+                  dc.drawer.SetColor(palette[color].RGB)
               else
-                  oglsm.glcolor3ubv(foreground);
+                  dc.drawer.SetColor(foreground);
 end;
 
 begin
@@ -536,11 +536,11 @@ begin
           begin
                case vp.color of
                                ClByLayer:
-                                         SetEntColor(vp.layer^.color);
+                                         SetEntColor(vp.layer^.color,dc);
                                ClByBlock:
-                                         SetEntColor(dc.ownercolor);
+                                         SetEntColor(dc.ownercolor,dc);
                                else
-                                   SetEntColor(vp.color);
+                                   SetEntColor(vp.color,dc);
 
                end;
           end
@@ -549,11 +549,11 @@ begin
                                          begin
                                               case vp.color of
                                                               ClByLayer:
-                                                                        SetEntColor(vp.layer^.color);
+                                                                        SetEntColor(vp.layer^.color,dc);
                                                               ClByBlock:
-                                                                        SetEntColor(dc.ownercolor);
+                                                                        SetEntColor(dc.ownercolor,dc);
                                                               else
-                                                                  SetEntColor(vp.color);
+                                                                  SetEntColor(vp.color,dc);
 
                                               end;
                                          end
@@ -561,11 +561,11 @@ begin
                                                     begin
                                                               case vp.color of
                                                                               ClByLayer:
-                                                                                        SetEntColor(bp.ListPos.owner.getlayer^.color);
+                                                                                        SetEntColor(bp.ListPos.owner.getlayer^.color,dc);
                                                                               ClByBlock:
-                                                                                        SetEntColor(dc.ownercolor);
+                                                                                        SetEntColor(dc.ownercolor,dc);
                                                                               else
-                                                                                  SetEntColor(vp.color);
+                                                                                  SetEntColor(vp.color,dc);
 
                                                               end;
                                                     end;

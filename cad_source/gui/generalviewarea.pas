@@ -631,11 +631,13 @@ var
   DC:TDrawContext;
   dt:integer;
   tick:cardinal;
+  needredraw:boolean;
   const msec=1;
 begin
   if not assigned(pdwg) then exit;
   if (getviewcontrol.clientwidth=0)or(getviewcontrol.clientheight=0) then exit;
   LPTime:=now;
+  needredraw:=param.firstdraw or true;
   {$IFDEF TOTALYLOG}programlog.logoutstr('TOGLWnd.draw',0);{$ENDIF}
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.draw',lp_IncPos);{$ENDIF}
 
@@ -653,7 +655,7 @@ begin
   begin
   {else if sysvar.RD.RD_Restore_Mode^=WND_Texture then}
   begin
-  if param.firstdraw = true then
+  if needredraw then
   begin
     inc(PDWG.Getpcamera^.DRAWCOUNT);
     dc.drawer.ClearStatesMachine;
@@ -760,17 +762,17 @@ begin
 
   lptime:=now()-LPTime;
   tick:=round(lptime*10e7);
-  if param.firstdraw then
+  if needredraw then
                          sysvar.RD.RD_LastRenderTime^:=tick*msec
                      else
                          sysvar.RD.RD_LastUpdateTime^:=tick*msec;
   {$IFDEF PERFOMANCELOG}
-                       if wa.param.firstdraw then
+                       if needredraw then
                                               log.programlog.LogOutStrFast('Draw time='+inttostr(sysvar.RD.RD_LastRenderTime^),0)
                                           else
                                               log.programlog.LogOutStrFast('ReDraw time='+inttostr(sysvar.RD.RD_LastUpdateTime^),0);
   {$ENDIF}
-  if param.firstdraw then
+  if needredraw then
   if   SysVar.RD.RD_ImageDegradation.RD_ID_Enabled^ then
   begin
   dt:=sysvar.RD.RD_LastRenderTime^-SysVar.RD.RD_ImageDegradation.RD_ID_PrefferedRenderTime^;

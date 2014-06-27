@@ -21,6 +21,7 @@ unit uzglopengldrawer;
 interface
 uses
     {$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
+    LCLIntf,
     geometry,uzglabstractdrawer,UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase;
 type
 TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
@@ -58,7 +59,13 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         midline:integer;
                         sx,sy,tx,ty:single;
                         ClearColor: TColor;
+                        OffScreedDC:HDC;
+                        CanvasDC:HDC;
+                        OffscreenBitmap:HBITMAP;
                         constructor create;
+                        procedure startrender;override;
+                        procedure endrender;override;
+
                         function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
@@ -294,6 +301,20 @@ begin
      sy:=-0.1;
      tx:=0;
      ty:=400;
+end;
+procedure TZGLCanvasDrawer.startrender;
+begin
+     CanvasDC:=GetDC(canvas.Handle);
+     OffScreedDC:=CreateCompatibleDC(CanvasDC);
+     OffscreenBitmap:=CreateCompatibleBitmap(OffScreedDC,canvas.Width,canvas.Height);
+     SelectObject(OffScreedDC,OffscreenBitmap);
+end;
+procedure TZGLCanvasDrawer.endrender;
+begin
+     BitBlt(canvas.Handle,0,0,canvas.Width,canvas.Height,OffScreedDC,0,0,SRCCOPY);
+     DeleteObject(OffscreenBitmap);
+     ReleaseDC(canvas.Handle,CanvasDC);
+     DeleteDC(OffScreedDC);
 end;
 function TZGLCanvasDrawer.TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
 begin

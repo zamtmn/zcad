@@ -21,7 +21,7 @@ unit uzglopengldrawer;
 interface
 uses
     {$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
-    LCLIntf,
+    LCLIntf,LCLType,Classes,
     geometry,uzglabstractdrawer,UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase;
 type
 TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
@@ -62,6 +62,7 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         OffScreedDC:HDC;
                         CanvasDC:HDC;
                         OffscreenBitmap:HBITMAP;
+                        ClearBrush: HBRUSH;
                         constructor create;
                         procedure startrender;override;
                         procedure endrender;override;
@@ -303,11 +304,23 @@ begin
      ty:=400;
 end;
 procedure TZGLCanvasDrawer.startrender;
+var
+  LogBrush: TLogBrush;
+  mRect: TRect;
 begin
      CanvasDC:=GetDC(canvas.Handle);
      OffScreedDC:=CreateCompatibleDC(CanvasDC);
      OffscreenBitmap:=CreateCompatibleBitmap(OffScreedDC,canvas.Width,canvas.Height);
      SelectObject(OffScreedDC,OffscreenBitmap);
+     with LogBrush do
+     begin
+       lbStyle := BS_SOLID;
+       lbColor := clBlue;
+       lbHatch := HS_CROSS
+     end;
+     mrect:=Rect(0,0,canvas.Width,canvas.Height);
+     ClearBrush:=CreateBrushIndirect(LogBrush);
+     FillRect(OffScreedDC,mRect,ClearBrush);
 end;
 procedure TZGLCanvasDrawer.endrender;
 begin
@@ -401,4 +414,4 @@ initialization
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
 end.
-
+

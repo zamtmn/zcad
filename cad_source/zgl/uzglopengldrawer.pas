@@ -21,7 +21,7 @@ unit uzglopengldrawer;
 interface
 uses
     {$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
-    LCLIntf,LCLType,Classes,
+    LCLIntf,LCLType,Classes,Controls,
     geometry,uzglabstractdrawer,UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase;
 type
 TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
@@ -56,6 +56,7 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
 TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         public
                         canvas:tcanvas;
+                        panel:TCustomControl;
                         midline:integer;
                         sx,sy,tx,ty:single;
                         ClearColor: TColor;
@@ -63,6 +64,7 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         CanvasDC:HDC;
                         OffscreenBitmap:HBITMAP;
                         ClearBrush: HBRUSH;
+                        hLinePen:HPEN;
                         constructor create;
                         procedure startrender;override;
                         procedure endrender;override;
@@ -308,24 +310,28 @@ var
   LogBrush: TLogBrush;
   mRect: TRect;
 begin
-     CanvasDC:=GetDC(canvas.Handle);
+     CanvasDC:=GetDC({canvas}panel.Handle);
      OffScreedDC:=CreateCompatibleDC(CanvasDC);
-     OffscreenBitmap:=CreateCompatibleBitmap(OffScreedDC,canvas.Width,canvas.Height);
+     OffscreenBitmap:=CreateCompatibleBitmap({OffScreedDC}CanvasDC,canvas.Width,canvas.Height);
      SelectObject(OffScreedDC,OffscreenBitmap);
      with LogBrush do
      begin
-       lbStyle := BS_SOLID;
+       lbStyle := {BS_HATCHED}BS_SOLID;
        lbColor := clBlue;
        lbHatch := HS_CROSS
      end;
      mrect:=Rect(0,0,canvas.Width,canvas.Height);
      ClearBrush:=CreateBrushIndirect(LogBrush);
-     FillRect(OffScreedDC,mRect,ClearBrush);
+     //FillRect(OffScreedDC,mRect,ClearBrush);
+
+     hLinePen:=CreatePen(PS_SOLID, 1, RGB(255, 255, 255));
+     SelectObject(OffScreedDC, hLinePen);
 end;
 procedure TZGLCanvasDrawer.endrender;
 begin
-     BitBlt(canvas.Handle,0,0,canvas.Width,canvas.Height,OffScreedDC,0,0,SRCCOPY);
+     BitBlt({canvas.Handle}CanvasDC,0,0,canvas.Width,canvas.Height,OffScreedDC,0,0,SRCCOPY);
      DeleteObject(OffscreenBitmap);
+     DeleteObject(hLinePen);
      ReleaseDC(canvas.Handle,CanvasDC);
      DeleteDC(OffScreedDC);
 end;
@@ -345,7 +351,9 @@ begin
     pv2:=PGDBVertex3S(PVertexBuffer.getelement(i1+1));
     p1:=TranslatePoint(pv1^);
     p2:=TranslatePoint(pv2^);
-    canvas.Line(round(p1.x),round(p1.y),round(p2.x),round(p2.y));
+    //canvas.Line(round(p1.x),round(p1.y),round(p2.x),round(p2.y));
+    MoveToEx(OffScreedDC, round(p1.x),round(p1.y), nil);
+    LineTo(OffScreedDC, round(p2.x),round(p2.y));
 end;
 
 procedure TZGLCanvasDrawer.DrawPoint(const i:TLLVertexIndex);
@@ -372,7 +380,9 @@ begin
      pp2:=geometry.VectorTransform3D(p2,matrixs.pprojMatrix^);
      pp2:=geometry.VectorTransform3D(pp2,matrixs.pmodelMatrix^);}
 
-     canvas.Line(round(pp1.x),h-round(pp1.y),round(pp2.x),h-round(pp2.y));
+     //canvas.Line(round(pp1.x),h-round(pp1.y),round(pp2.x),h-round(pp2.y));
+     MoveToEx(OffScreedDC, round(pp1.x),h-round(pp1.y), nil);
+     LineTo(OffScreedDC, round(pp2.x),h-round(pp2.y));
 end;
 
 procedure TZGLCanvasDrawer.SetClearColor(const red, green, blue, alpha: byte);
@@ -388,9 +398,13 @@ begin
      canvas.Pen.Color:=RGBToColor(color.r,color.g,color.b);
 end;
 procedure TZGLCanvasDrawer.ClearScreen(stencil:boolean);
+var
+  mRect: TRect;
 begin
-     canvas.Brush.Color:=ClearColor;
-     canvas.FillRect(0,0,canvas.width,canvas.height);
+     //canvas.Brush.Color:=ClearColor;
+     //canvas.FillRect(0,0,canvas.width,canvas.height);
+     mrect:=Rect(0,0,canvas.Width,canvas.Height);
+     FillRect(OffScreedDC,mRect,ClearBrush);
 end;
 procedure TZGLCanvasDrawer.SetDisplayCSmode(const width, height:integer);
 begin
@@ -414,4 +428,4 @@ initialization
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
 end.
-
+

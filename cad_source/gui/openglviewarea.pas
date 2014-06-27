@@ -297,6 +297,7 @@ procedure TCanvasViewArea.CreateDrawer;
 begin
      drawer:=TZGLCanvasDrawer.Create;
      TZGLCanvasDrawer(drawer).canvas:=TPanel(getviewcontrol).canvas;
+     TZGLCanvasDrawer(drawer).panel:=TPanel(getviewcontrol);
 end;
 
 procedure TCanvasViewArea.SetupWorkArea;

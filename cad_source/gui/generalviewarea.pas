@@ -648,6 +648,7 @@ begin
   foreground.g:=not(sysvar.RD.RD_BackGroundColor^.g);
   foreground.b:=not(sysvar.RD.RD_BackGroundColor^.b);
   dc:=CreateRC;
+  dc.drawer.startpaint;
   dc.drawer.SetLineSmooth(SysVar.RD.RD_LineSmooth^);
 
   dc.drawer.SetZTest(true);
@@ -759,6 +760,7 @@ begin
   //oglsm.mytotalglend;
   dc.drawer.ClearStatesMachine;
   SwapBuffers(dc);
+  dc.drawer.endpaint;
 
   lptime:=now()-LPTime;
   tick:=round(lptime*10e7);

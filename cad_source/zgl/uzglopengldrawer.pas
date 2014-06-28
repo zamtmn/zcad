@@ -428,4 +428,4 @@ initialization
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
 end.
-
+

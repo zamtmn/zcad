@@ -23,6 +23,9 @@ uses
      {$IFDEF LCLGTK2}
      gtk2,gdk2,
      {$ENDIF}
+     {$IFDEF LCLQT}
+     qtwidgets,qt4,
+     {$ENDIF}
      abstractviewarea,uzglopengldrawer,sysutils,UGDBEntTree,GDBGenericSubEntry,GDBHelpObj,memman,OGLSpecFunc,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,
      uinfoform,oglwindow,oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,GDBEntity,Varman,zcadinterface,geometry,gdbobjectsconstdef,shared,zcadstrconsts,LCLType,
@@ -313,6 +316,12 @@ begin
 end;
 procedure TCanvasViewArea.getareacaps;
 begin
+  {$IFDEF LCLQT}
+  TQtWidget(getviewcontrol.Handle).setAttribute(QtWA_PaintOutsidePaintEvent);
+  //TQtWidget(getviewcontrol.Handle).setAttribute(QtWA_PaintOnScreen);
+  //TQtWidget(getviewcontrol.Handle).setAttribute(QtWA_OpaquePaintEvent);
+  //TQtWidget(getviewcontrol.Handle).setAttribute(QtWA_NoSystemBackground);
+  {$ENDIF}
 end;
 procedure TCanvasViewArea.GDBActivateGLContext;
 begin

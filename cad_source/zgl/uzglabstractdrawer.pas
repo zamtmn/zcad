@@ -28,6 +28,8 @@ TZGLAbstractDrawer=class
                         procedure DrawPoint(const i:TLLVertexIndex);virtual;abstract;
                         procedure startrender;virtual;abstract;
                         procedure endrender;virtual;abstract;
+                        procedure startpaint;virtual;abstract;
+                        procedure endpaint;virtual;abstract;
                         procedure SetLineWidth(const w:single);virtual;abstract;
                         procedure SetPointSize(const s:single);virtual;abstract;
                         procedure SetColor(const red, green, blue, alpha: byte);overload;virtual;abstract;
@@ -58,6 +60,8 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure DrawPoint(const i:TLLVertexIndex);override;
                         procedure startrender;override;
                         procedure endrender;override;
+                        procedure startpaint;override;
+                        procedure endpaint;override;
                         procedure SetLineWidth(const w:single);override;
                         procedure SetPointSize(const s:single);override;
                         procedure SetColor(const red, green, blue, alpha: byte);overload;override;
@@ -93,6 +97,12 @@ procedure TZGLGeneralDrawer.startrender;
 begin
 end;
 procedure TZGLGeneralDrawer.endrender;
+begin
+end;
+procedure TZGLGeneralDrawer.startpaint;
+begin
+end;
+procedure TZGLGeneralDrawer.endpaint;
 begin
 end;
 procedure TZGLGeneralDrawer.SetLineWidth(const w:single);

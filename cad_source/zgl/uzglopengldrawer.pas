@@ -66,8 +66,8 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         ClearBrush: HBRUSH;
                         hLinePen:HPEN;
                         constructor create;
-                        procedure startrender;override;
-                        procedure endrender;override;
+                        procedure startpaint;override;
+                        procedure endpaint;override;
 
                         function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
                         procedure DrawLine(const i1:TLLVertexIndex);override;
@@ -305,7 +305,7 @@ begin
      tx:=0;
      ty:=400;
 end;
-procedure TZGLCanvasDrawer.startrender;
+procedure TZGLCanvasDrawer.startpaint;
 var
   LogBrush: TLogBrush;
   mRect: TRect;
@@ -327,7 +327,7 @@ begin
      hLinePen:=CreatePen(PS_SOLID, 1, RGB(255, 255, 255));
      SelectObject(OffScreedDC, hLinePen);
 end;
-procedure TZGLCanvasDrawer.endrender;
+procedure TZGLCanvasDrawer.endpaint;
 begin
      BitBlt({canvas.Handle}CanvasDC,0,0,canvas.Width,canvas.Height,OffScreedDC,0,0,SRCCOPY);
      DeleteObject(OffscreenBitmap);

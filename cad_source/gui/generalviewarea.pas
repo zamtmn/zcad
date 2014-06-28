@@ -1230,11 +1230,12 @@ end;
 procedure TGeneralViewArea.WaMouseEnter;
 begin
      param.md.mousein:=true;
+     DrawOrInvalidate
 end;
 procedure TGeneralViewArea.WaMouseLeave;
 begin
      param.md.mousein:=false;
-     draw;
+     DrawOrInvalidate;
 end;
 procedure TGeneralViewArea.WaMouseWheel(Sender:TObject;Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint;var handled:boolean);
 //procedure TOGLWnd.Pre_MouseWheel;
@@ -3709,4 +3710,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('viewareadef.initialization');{$ENDIF}
-end.
+end.

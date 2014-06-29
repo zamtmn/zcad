@@ -452,7 +452,7 @@ var
 begin
      CanvasDC:=GetDC({canvas}panel.Handle);
      OffScreedDC:=CreateCompatibleDC(CanvasDC);
-     OffscreenBitmap:=CreateCompatibleBitmap(CanvasDC,canvas.Width,canvas.Height);
+     OffscreenBitmap:=CreateCompatibleBitmap(CanvasDC,{canvas}panel.Width,{canvas}panel.Height);
      SelectObject(OffScreedDC,OffscreenBitmap);
      with LogBrush do
      begin
@@ -472,9 +472,12 @@ procedure TZGLCanvasDrawer.endpaint;
 begin
      BitBlt({canvas.Handle}CanvasDC,0,0,canvas.Width,canvas.Height,OffScreedDC,0,0,SRCCOPY);
      DeleteObject(OffscreenBitmap);
+     OffscreenBitmap:=0;
      DeleteObject(hLinePen);
+     hLinePen:=0;
      ReleaseDC(canvas.Handle,CanvasDC);
      DeleteDC(OffScreedDC);
+     OffScreedDC:=0;
 end;
 procedure TZGLCanvasDrawer.CreateScrbuf(w,h:integer);
 begin
@@ -501,7 +504,7 @@ var
   code:integer;
 begin
      BitBlt(OffScreedDC,0,0,w,h,SavedDC,0,0,SRCCOPY);
-     code:=GetLastError
+     //code:=GetLastError
 end;
 function TZGLCanvasDrawer.TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
 begin
@@ -600,4 +603,4 @@ initialization
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
 end.
-
+

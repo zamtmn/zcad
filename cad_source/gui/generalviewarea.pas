@@ -137,6 +137,8 @@ type
                            procedure CreateDrawer; virtual;abstract;
                            procedure SetupWorkArea; virtual;abstract;
                            procedure doCameraChanged; override;
+                           procedure startpaint;override;
+                           procedure endpaint;override;
                       end;
 var
     InfoForm:TInfoForm=nil;
@@ -640,7 +642,7 @@ begin
   foreground.g:=not(sysvar.RD.RD_BackGroundColor^.g);
   foreground.b:=not(sysvar.RD.RD_BackGroundColor^.b);
   dc:=CreateRC;
-  dc.drawer.startpaint;
+  startpaint;
   dc.drawer.SetLineSmooth(SysVar.RD.RD_LineSmooth^);
 
   dc.drawer.SetZTest(true);
@@ -752,7 +754,7 @@ begin
   //oglsm.mytotalglend;
   dc.drawer.ClearStatesMachine;
   SwapBuffers(dc);
-  dc.drawer.endpaint;
+  endpaint;
 
   lptime:=now()-LPTime;
   tick:=round(lptime*10e7);
@@ -1218,6 +1220,14 @@ end;
 procedure TGeneralViewArea.doCameraChanged;
 begin
      if assigned(onCameraChanged) then onCameraChanged;
+end;
+procedure TGeneralViewArea.startpaint;
+begin
+     drawer.startpaint;
+end;
+procedure TGeneralViewArea.endpaint;
+begin
+     drawer.endpaint;
 end;
 procedure TGeneralViewArea.WaMouseEnter;
 begin
@@ -3706,4 +3716,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('viewareadef.initialization');{$ENDIF}
-end.
+end.

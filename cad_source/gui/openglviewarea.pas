@@ -49,12 +49,12 @@ type
                   end;
     TCanvasViewArea=class(TGeneralViewArea)
                       public
-                      OpenGLWindow:TPanel;
                       function CreateWorkArea(TheOwner: TComponent):TCADControl; override;
                       procedure CreateDrawer; override;
                       procedure SetupWorkArea; override;
                       procedure getareacaps; override;
                       procedure GDBActivateGLContext; override;
+                      procedure startpaint;override;
                   end;
 
 implementation
@@ -232,6 +232,13 @@ end;
 procedure TCanvasViewArea.GDBActivateGLContext;
 begin
 end;
+procedure TCanvasViewArea.startpaint;
+begin
+     if assigned(WorkArea) then
+                                   TZGLCanvasDrawer(drawer).canvas:=WorkArea.canvas;
+     inherited;
+end;
+
 function TOpenGLViewArea.CreateWorkArea(TheOwner: TComponent):TCADControl;
 begin
      result:=TCADControl(TOGLWnd.Create(TheOwner));

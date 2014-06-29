@@ -23,7 +23,7 @@ uses {gdbase,gdbasetypes,
      UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,UGDBPoint3DArray,
      oglwindowdef,gdbdrawcontext,UGDBEntTree,ugdbabstractdrawing,
      uinfoform,}
-     GDBGenericSubEntry,gdbase,gdbasetypes,
+     uzglabstractdrawer,GDBGenericSubEntry,gdbase,gdbasetypes,
      oglwindowdef,gdbdrawcontext,varmandef,Varman,UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
      shared,sysutils,
      ExtCtrls,Controls,Classes,LCLType,Forms,OGLSpecFunc,zcadsysvars,GDBEntity;
@@ -42,6 +42,7 @@ type
     TCameraChangedNotify=procedure of object;
     TAbstractViewArea=class(tcomponent)
                            public
+                           Drawer:TZGLAbstractDrawer;
                            param: OGLWndtype;
                            PolarAxis:GDBPoint3dArray;
                            OTTimer:TTimer;
@@ -106,11 +107,7 @@ type
                            procedure set3dmouse;virtual;abstract;
                            procedure WaMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);virtual;abstract;
                            procedure WaResize(sender:tobject);virtual;abstract;
-                           procedure CreateScrbuf(w,h:integer); virtual;abstract;
-                           procedure delmyscrbuf; virtual;abstract;
-                           procedure SaveBuffers(var DC:TDrawContext); virtual;abstract;
                            procedure SwapBuffers(var DC:TDrawContext); virtual;abstract;
-                           procedure RestoreBuffers(var DC:TDrawContext); virtual;abstract;
                            procedure LightOn(var DC:TDrawContext); virtual;abstract;
                            procedure LightOff(var DC:TDrawContext); virtual;abstract;
                            procedure DrawGrid(var DC:TDrawContext); virtual;abstract;

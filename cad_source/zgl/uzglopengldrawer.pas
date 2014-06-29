@@ -23,8 +23,11 @@ uses
     {$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
     LCLIntf,LCLType,Classes,Controls,
     geometry,uzglabstractdrawer,UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase;
+const
+  texturesize=256;
 type
 TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
+                        myscrbuf:tmyscrbuf;
                         public
                         procedure startrender;override;
                         procedure endrender;override;
@@ -52,6 +55,10 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);override;
                         {в координатах модели}
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure SaveBuffers(w,h:integer);override;
+                        procedure RestoreBuffers(w,h:integer);override;
+                        procedure CreateScrbuf(w,h:integer); override;
+                        procedure delmyscrbuf; override;
                    end;
 TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         public
@@ -63,6 +70,8 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         OffScreedDC:HDC;
                         CanvasDC:HDC;
                         OffscreenBitmap:HBITMAP;
+                        SavedBitmap:HBITMAP;
+                        SavedDC:HDC;
                         ClearBrush: HBRUSH;
                         hLinePen:HPEN;
                         constructor create;
@@ -82,6 +91,12 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         procedure SetDisplayCSmode(const width, height:integer);override;
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
+
+                        procedure CreateScrbuf(w,h:integer); override;
+                        procedure delmyscrbuf; override;
+                        procedure SaveBuffers(w,h:integer);override;
+                        procedure RestoreBuffers(w,h:integer);override;
+
 
                    end;
 {$IFDEF WINDOWS}
@@ -279,6 +294,130 @@ begin
      end;
      oglsm.myglend;
 end;
+procedure TZGLOpenGLDrawer.SaveBuffers;
+  var
+    scrx,scry,texture{,e}:integer;
+begin
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SaveBuffers',lp_incPos);{$ENDIF};
+  oglsm.myglEnable(GL_TEXTURE_2D);
+  //isOpenGLError;
+
+   scrx:=0;
+   scry:=0;
+   texture:=0;
+   repeat
+         repeat
+               oglsm.myglbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
+               //isOpenGLError;
+               oglsm.myglCopyTexSubImage2D(GL_TEXTURE_2D,0,0,0,scrx,scry,texturesize,texturesize);
+               //isOpenGLError;
+               scrx:=scrx+texturesize;
+               inc(texture);
+         until scrx>w;
+   scrx:=0;
+   scry:=scry+texturesize;
+   until scry>h;
+
+
+  oglsm.myglDisable(GL_TEXTURE_2D);
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SaveBuffers----{end}',lp_decPos);{$ENDIF}
+end;
+procedure TZGLOpenGLDrawer.RestoreBuffers;
+  var
+    scrx,scry,texture{,e}:integer;
+    _NotUseLCS:boolean;
+begin
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers',lp_incPos);{$ENDIF};
+  _NotUseLCS:=NotUseLCS;
+  NotUseLCS:=true;
+  oglsm.myglEnable(GL_TEXTURE_2D);
+  oglsm.myglDisable(GL_DEPTH_TEST);
+       oglsm.myglMatrixMode(GL_PROJECTION);
+       oglsm.myglPushMatrix;
+       oglsm.myglLoadIdentity;
+       oglsm.myglOrtho(0.0, w, 0.0, h, -10.0, 10.0);
+       oglsm.myglMatrixMode(GL_MODELVIEW);
+       oglsm.myglPushMatrix;
+       oglsm.myglLoadIdentity;
+  begin
+   scrx:=0;
+   scry:=0;
+   texture:=0;
+   repeat
+   repeat
+         oglsm.myglbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
+         //isOpenGLError;
+         SetColor(255,255,255,255);
+         oglsm.myglbegin(GL_quads);
+                 oglsm.myglTexCoord2d(0,0);
+                 oglsm.myglVertex2d(scrx,scry);
+                 oglsm.myglTexCoord2d(1,0);
+                 oglsm.myglVertex2d(scrx+texturesize,scry);
+                 oglsm.myglTexCoord2d(1,1);
+                 oglsm.myglVertex2d(scrx+texturesize,scry+texturesize);
+                 oglsm.myglTexCoord2d(0,1);
+                 oglsm.myglVertex2d(scrx,scry+texturesize);
+         oglsm.myglend;
+         oglsm.mytotalglend;
+         //isOpenGLError;
+         scrx:=scrx+texturesize;
+         inc(texture);
+   until scrx>w;
+   scrx:=0;
+   scry:=scry+texturesize;
+   until scry>h;
+  end;
+  oglsm.myglDisable(GL_TEXTURE_2D);
+       oglsm.myglPopMatrix;
+       oglsm.myglMatrixMode(GL_PROJECTION);
+       oglsm.myglPopMatrix;
+       oglsm.myglMatrixMode(GL_MODELVIEW);
+   NotUseLCS:=_NotUseLCS;
+  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers----{end}',lp_decPos);{$ENDIF}
+end;
+procedure TZGLOpenGLDrawer.CreateScrbuf(w,h:integer);
+var scrx,scry,texture{,e}:integer;
+begin
+     //oglsm.mytotalglend;
+
+     oglsm.myglEnable(GL_TEXTURE_2D);
+     scrx:=0;  { TODO : Сделать генер текстур пакетом }
+     scry:=0;
+     texture:=0;
+     repeat
+           repeat
+                 //if texture>80 then texture:=0;
+
+                 oglsm.myglGenTextures(1, @myscrbuf[texture]);
+                 //isOpenGLError;
+                 oglsm.myglbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
+                 //isOpenGLError;
+                 oglsm.myglTexImage2D(GL_TEXTURE_2D,0,GL_RGB,texturesize,texturesize,0,GL_RGB,GL_UNSIGNED_BYTE,@TZGLOpenGLDrawer.CreateScrbuf);
+                 //isOpenGLError;
+                 oglsm.myglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                 //isOpenGLError;
+                 oglsm.myglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                 //isOpenGLError;
+                 scrx:=scrx+texturesize;
+                 inc(texture);
+           until scrx>w;
+           scrx:=0;
+           scry:=scry+texturesize;
+     until scry>h;
+     oglsm.myglDisable(GL_TEXTURE_2D);
+end;
+procedure TZGLOpenGLDrawer.delmyscrbuf;
+var i:integer;
+begin
+     for I := 0 to high(tmyscrbuf) do
+       begin
+             if myscrbuf[i]<>0 then
+                                   oglsm.mygldeletetextures(1,@myscrbuf[i]);
+             myscrbuf[i]:=0;
+       end;
+
+end;
+
 procedure TZGLOpenGLDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
 begin
      oglsm.myglbegin(GL_LINES);
@@ -304,6 +443,7 @@ begin
      sy:=-0.1;
      tx:=0;
      ty:=400;
+     SavedBitmap:=0;
 end;
 procedure TZGLCanvasDrawer.startpaint;
 var
@@ -312,7 +452,7 @@ var
 begin
      CanvasDC:=GetDC({canvas}panel.Handle);
      OffScreedDC:=CreateCompatibleDC(CanvasDC);
-     OffscreenBitmap:=CreateCompatibleBitmap({OffScreedDC}CanvasDC,canvas.Width,canvas.Height);
+     OffscreenBitmap:=CreateCompatibleBitmap(CanvasDC,canvas.Width,canvas.Height);
      SelectObject(OffScreedDC,OffscreenBitmap);
      with LogBrush do
      begin
@@ -326,6 +466,7 @@ begin
 
      hLinePen:=CreatePen(PS_SOLID, 1, RGB(255, 255, 255));
      SelectObject(OffScreedDC, hLinePen);
+     CreateScrbuf(canvas.Width,canvas.Height)
 end;
 procedure TZGLCanvasDrawer.endpaint;
 begin
@@ -334,6 +475,33 @@ begin
      DeleteObject(hLinePen);
      ReleaseDC(canvas.Handle,CanvasDC);
      DeleteDC(OffScreedDC);
+end;
+procedure TZGLCanvasDrawer.CreateScrbuf(w,h:integer);
+begin
+     if SavedBitmap=0 then
+     begin
+          SavedDC:=CreateCompatibleDC(CanvasDC);
+          SavedBitmap:=CreateCompatibleBitmap(SavedDC,w,h);
+          SelectObject(SavedDC,SavedBitmap);
+     end;
+end;
+procedure TZGLCanvasDrawer.delmyscrbuf;
+begin
+     DeleteObject(SavedBitmap);
+     DeleteDC(SavedDC);
+     SavedBitmap:=0;
+     SavedDC:=0;
+end;
+procedure TZGLCanvasDrawer.SaveBuffers(w,h:integer);
+begin
+     BitBlt(SavedDC,0,0,w,h,OffScreedDC,0,0,SRCCOPY);
+end;
+procedure TZGLCanvasDrawer.RestoreBuffers(w,h:integer);
+var
+  code:integer;
+begin
+     BitBlt(OffScreedDC,0,0,w,h,SavedDC,0,0,SRCCOPY);
+     code:=GetLastError
 end;
 function TZGLCanvasDrawer.TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
 begin
@@ -415,11 +583,15 @@ begin
 end;
 procedure TZGLCanvasDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:integer);
 begin
-     canvas.Line(round(x1*sx+tx),round(y1*sy+ty),round(x2*sx+tx),round(y2*sy+ty));
+     MoveToEx(OffScreedDC,round(x1*sx+tx),round(y1*sy+ty), nil);
+     LineTo(OffScreedDC,round(x2*sx+tx),round(y2*sy+ty));
+     //canvas.Line(round(x1*sx+tx),round(y1*sy+ty),round(x2*sx+tx),round(y2*sy+ty));
 end;
 procedure TZGLCanvasDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:single);
 begin
-     canvas.Line(round(x1*sx+tx),round(y1*sy+ty),round(x2*sx+tx),round(y2*sy+ty));
+     //canvas.Line(round(x1*sx+tx),round(y1*sy+ty),round(x2*sx+tx),round(y2*sy+ty));
+     MoveToEx(OffScreedDC,round(x1*sx+tx),round(y1*sy+ty), nil);
+     LineTo(OffScreedDC,round(x2*sx+tx),round(y2*sy+ty));
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglabstractdrawer.initialization');{$ENDIF}
@@ -428,4 +600,4 @@ initialization
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
 end.
-
+

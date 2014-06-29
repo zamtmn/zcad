@@ -46,6 +46,12 @@ TZGLAbstractDrawer=class
                         procedure DisableStencil;virtual;abstract;
                         procedure SetZTest(Z:boolean);virtual;abstract;
                         procedure SetDisplayCSmode(const width, height:integer);virtual;abstract;
+                        procedure WorkAreaResize(w,h:integer);virtual;abstract;
+                        procedure SaveBuffers(w,h:integer);virtual;abstract;
+                        procedure RestoreBuffers(w,h:integer);virtual;abstract;
+                        procedure CreateScrbuf(w,h:integer); virtual;abstract;
+                        procedure delmyscrbuf; virtual;abstract;
+
 
 
 
@@ -82,6 +88,11 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);overload;override;
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
                         procedure SetDisplayCSmode(const width, height:integer);override;
+                        procedure WorkAreaResize(w,h:integer);override;
+                        procedure SaveBuffers(w,h:integer);override;
+                        procedure RestoreBuffers(w,h:integer);override;
+                        procedure CreateScrbuf(w,h:integer); override;
+                        procedure delmyscrbuf; override;
                    end;
 var
   testrender:TZGLAbstractDrawer;
@@ -163,6 +174,23 @@ procedure TZGLGeneralDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var mat
 begin
 end;
 procedure TZGLGeneralDrawer.SetDisplayCSmode;
+begin
+end;
+procedure TZGLGeneralDrawer.WorkAreaResize;
+begin
+     delmyscrbuf;
+     CreateScrbuf(w,h);
+end;
+procedure TZGLGeneralDrawer.SaveBuffers;
+begin
+end;
+procedure TZGLGeneralDrawer.RestoreBuffers;
+begin
+end;
+procedure TZGLGeneralDrawer.CreateScrbuf(w,h:integer);
+begin
+end;
+procedure TZGLGeneralDrawer.delmyscrbuf;
 begin
 end;
 initialization

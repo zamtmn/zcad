@@ -47,11 +47,7 @@ uses
   UGDBPoint3DArray,
   strproc,OGLSpecFunc,memman,
   log,UGDBEntTree,sltexteditor,abstractviewarea;
-const
 
-  {ontracdist=10;
-  ontracignoredist=25;}
-  texturesize=256;
 type
   PTOGLWnd = ^TOGLWnd;
 
@@ -111,7 +107,7 @@ destructor TOGLWnd.Destroy;
 var
    i:integer;
 begin
-     wa.delmyscrbuf;
+     wa.Drawer.delmyscrbuf;
      if wa.param.pglscreen <> nil then
      GDBFreeMem(wa.param.pglscreen);
      MywglDeleteContext(OGLContext);//wglDeleteContext(hrc);

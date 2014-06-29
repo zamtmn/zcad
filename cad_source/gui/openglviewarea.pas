@@ -34,18 +34,12 @@ type
     TOpenGLViewArea=class(TGeneralViewArea)
                       public
                       OpenGLWindow:TOGLWnd;
-                      myscrbuf:tmyscrbuf;
-
                       function CreateWorkArea(TheOwner: TComponent):TCADControl; override;
                       procedure CreateDrawer; override;
                       procedure SetupWorkArea; override;
                       procedure WaResize(sender:tobject); override;
 
-                      procedure CreateScrbuf(w,h:integer); override;
-                      procedure delmyscrbuf; override;
-                      procedure SaveBuffers(var DC:TDrawContext); override;
                       procedure SwapBuffers(var DC:TDrawContext); override;
-                      procedure RestoreBuffers(var DC:TDrawContext); override;
                       procedure LightOn(var DC:TDrawContext); override;
                       procedure LightOff(var DC:TDrawContext); override;
                       procedure DrawGrid(var DC:TDrawContext); override;
@@ -59,7 +53,6 @@ type
                       function CreateWorkArea(TheOwner: TComponent):TCADControl; override;
                       procedure CreateDrawer; override;
                       procedure SetupWorkArea; override;
-                      procedure WaResize(sender:tobject); override;
                       procedure getareacaps; override;
                       procedure GDBActivateGLContext; override;
                   end;
@@ -209,89 +202,6 @@ procedure TOpenGLViewArea.SwapBuffers(var DC:TDrawContext);
 begin
      OpenGLWindow.SwapBuffers;
 end;
-
-procedure TOpenGLViewArea.SaveBuffers;
-  var
-    scrx,scry,texture{,e}:integer;
-begin
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SaveBuffers',lp_incPos);{$ENDIF};
-  oglsm.myglEnable(GL_TEXTURE_2D);
-  //isOpenGLError;
-
-   scrx:=0;
-   scry:=0;
-   texture:=0;
-   repeat
-         repeat
-               oglsm.myglbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
-               //isOpenGLError;
-               oglsm.myglCopyTexSubImage2D(GL_TEXTURE_2D,0,0,0,scrx,scry,texturesize,texturesize);
-               //isOpenGLError;
-               scrx:=scrx+texturesize;
-               inc(texture);
-         until scrx>self.getviewcontrol.clientwidth;
-   scrx:=0;
-   scry:=scry+texturesize;
-   until scry>self.getviewcontrol.clientheight;
-
-
-  oglsm.myglDisable(GL_TEXTURE_2D);
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SaveBuffers----{end}',lp_decPos);{$ENDIF}
-end;
-procedure TOpenGLViewArea.RestoreBuffers;
-  var
-    scrx,scry,texture{,e}:integer;
-    _NotUseLCS:boolean;
-begin
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers',lp_incPos);{$ENDIF};
-  _NotUseLCS:=NotUseLCS;
-  NotUseLCS:=true;
-  oglsm.myglEnable(GL_TEXTURE_2D);
-  oglsm.myglDisable(GL_DEPTH_TEST);
-       oglsm.myglMatrixMode(GL_PROJECTION);
-       oglsm.myglPushMatrix;
-       oglsm.myglLoadIdentity;
-       oglsm.myglOrtho(0.0, self.getviewcontrol.ClientWidth, 0.0, self.getviewcontrol.ClientHeight, -10.0, 10.0);
-       oglsm.myglMatrixMode(GL_MODELVIEW);
-       oglsm.myglPushMatrix;
-       oglsm.myglLoadIdentity;
-  begin
-   scrx:=0;
-   scry:=0;
-   texture:=0;
-   repeat
-   repeat
-         oglsm.myglbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
-         //isOpenGLError;
-         dc.drawer.SetColor(255,255,255,255);
-         oglsm.myglbegin(GL_quads);
-                 oglsm.myglTexCoord2d(0,0);
-                 oglsm.myglVertex2d(scrx,scry);
-                 oglsm.myglTexCoord2d(1,0);
-                 oglsm.myglVertex2d(scrx+texturesize,scry);
-                 oglsm.myglTexCoord2d(1,1);
-                 oglsm.myglVertex2d(scrx+texturesize,scry+texturesize);
-                 oglsm.myglTexCoord2d(0,1);
-                 oglsm.myglVertex2d(scrx,scry+texturesize);
-         oglsm.myglend;
-         oglsm.mytotalglend;
-         //isOpenGLError;
-         scrx:=scrx+texturesize;
-         inc(texture);
-   until scrx>self.getviewcontrol.clientwidth;
-   scrx:=0;
-   scry:=scry+texturesize;
-   until scry>self.getviewcontrol.clientheight;
-  end;
-  oglsm.myglDisable(GL_TEXTURE_2D);
-       oglsm.myglPopMatrix;
-       oglsm.myglMatrixMode(GL_PROJECTION);
-       oglsm.myglPopMatrix;
-       oglsm.myglMatrixMode(GL_MODELVIEW);
-   NotUseLCS:=_NotUseLCS;
-  {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers----{end}',lp_decPos);{$ENDIF}
-end;
-
 function TCanvasViewArea.CreateWorkArea(TheOwner: TComponent):TCADControl;
 begin
      result:=TCADControl(TPanel.Create(TheOwner));
@@ -309,10 +219,6 @@ begin
   TPanel(getviewcontrol).BorderStyle:=bsNone;
   TPanel(getviewcontrol).BevelWidth:=0;
   TPanel(getviewcontrol).onpaint:=mypaint;
-end;
-procedure TCanvasViewArea.WaResize(sender:tobject);
-begin
-
 end;
 procedure TCanvasViewArea.getareacaps;
 begin
@@ -340,7 +246,7 @@ begin
      OpenGLWindow.wa:=self;
      OpenGLWindow.Cursor:=crNone;
      OpenGLWindow.ShowHint:=true;
-     fillchar(myscrbuf,sizeof(tmyscrbuf),0);
+     //fillchar(myscrbuf,sizeof(tmyscrbuf),0);
 
      {$if FPC_FULlVERSION>=20701}
      OpenGLWindow.AuxBuffers:=0;
@@ -350,50 +256,6 @@ begin
      {$ENDIF}
      OpenGLWindow.onpaint:=mypaint;
 end;
-procedure TOpenGLViewArea.CreateScrbuf(w,h:integer);
-var scrx,scry,texture{,e}:integer;
-begin
-     //oglsm.mytotalglend;
-
-     oglsm.myglEnable(GL_TEXTURE_2D);
-     scrx:=0;  { TODO : Сделать генер текстур пакетом }
-     scry:=0;
-     texture:=0;
-     repeat
-           repeat
-                 //if texture>80 then texture:=0;
-
-                 oglsm.myglGenTextures(1, @myscrbuf[texture]);
-                 //isOpenGLError;
-                 oglsm.myglbindtexture(GL_TEXTURE_2D,myscrbuf[texture]);
-                 //isOpenGLError;
-                 oglsm.myglTexImage2D(GL_TEXTURE_2D,0,GL_RGB,texturesize,texturesize,0,GL_RGB,GL_UNSIGNED_BYTE,@TOpenGLViewArea.CreateScrbuf);
-                 //isOpenGLError;
-                 oglsm.myglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                 //isOpenGLError;
-                 oglsm.myglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                 //isOpenGLError;
-                 scrx:=scrx+texturesize;
-                 inc(texture);
-           until scrx>w;
-           scrx:=0;
-           scry:=scry+texturesize;
-     until scry>h;
-     oglsm.myglDisable(GL_TEXTURE_2D);
-end;
-
-procedure TOpenGLViewArea.delmyscrbuf;
-var i:integer;
-begin
-     for I := 0 to high(tmyscrbuf) do
-       begin
-             if myscrbuf[i]<>0 then
-                                   oglsm.mygldeletetextures(1,@myscrbuf[i]);
-             myscrbuf[i]:=0;
-       end;
-
-end;
-
 procedure TOpenGLViewArea.WaResize(sender:tobject);
 begin
      OpenGLWindow.MakeCurrent(false);
@@ -402,13 +264,12 @@ begin
      //self.MakeCurrent(false);
      //isOpenGLError;
 
-     delmyscrbuf;
      calcoptimalmatrix;
      calcgrid;
 
      {переделать}//inherited size{(fwSizeType,nWidth,nHeight)};
 
-     CreateScrbuf(getviewcontrol.clientwidth,getviewcontrol.clientheight);
+     drawer.WorkAreaResize(getviewcontrol.clientwidth,getviewcontrol.clientheight);
 
      {wa.param.md.glmouse.y := clientheight-wa.param.md.mouse.y;
      CalcOptimalMatrix;

@@ -26,9 +26,14 @@ uses {gdbase,gdbasetypes,
      uzglabstractdrawer,GDBGenericSubEntry,gdbase,gdbasetypes,
      oglwindowdef,gdbdrawcontext,varmandef,Varman,UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
      shared,sysutils,
-     ExtCtrls,Controls,Classes,LCLType,Forms,OGLSpecFunc,zcadsysvars,GDBEntity;
+     ExtCtrls,Controls,Classes,LCLType,Forms,OGLSpecFunc,zcadsysvars,GDBEntity,LMessages;
 
 type
+    TGDIPanel=class(TCustomControl)
+                protected
+                procedure WMPaint(var Message: TLMPaint); message LM_PAINT;
+    end;
+
     TCADControl=class(TCustomControl)
                 public
                 property OnMouseUp;
@@ -38,6 +43,7 @@ type
                 property onmouseenter;
                 property onmouseleave;
                 property onresize;
+                property onpaint;
                 end;
     TCameraChangedNotify=procedure of object;
     TAbstractViewArea=class(tcomponent)
@@ -114,7 +120,7 @@ type
                            procedure showcursor(var DC:TDrawContext); virtual;abstract;
                            procedure render(const Root:GDBObjGenericSubEntry;var DC:TDrawContext); virtual;abstract;
                            function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):GDBBoolean; virtual;abstract;
-                           procedure startpaint;virtual;abstract;
+                           function startpaint:boolean;virtual;abstract;
                            procedure endpaint;virtual;abstract;
                       end;
 var
@@ -122,6 +128,15 @@ var
 procedure copyospoint(out dest:os_record; source:os_record);
 function correcttogrid(point:GDBVertex):GDBVertex;
 implementation
+procedure TGDIPanel.WMPaint(var Message: TLMPaint);
+begin
+     Include(FControlState, csCustomPaint);
+     inherited WMPaint(Message);
+     if assigned(onpaint) then
+                              onpaint(nil);
+     Exclude(FControlState, csCustomPaint);
+end;
+
 function correcttogrid(point:GDBVertex):GDBVertex;
 begin
   result.x:=round((point.x-SysVar.DWG.DWG_Snap.Base.x)/SysVar.DWG.DWG_Snap.Spacing.x)*SysVar.DWG.DWG_Snap.Spacing.x+SysVar.DWG.DWG_Snap.Base.x;

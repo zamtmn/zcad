@@ -54,7 +54,7 @@ type
                       procedure SetupWorkArea; override;
                       procedure getareacaps; override;
                       procedure GDBActivateGLContext; override;
-                      procedure startpaint;override;
+                      function startpaint:boolean;override;
                   end;
 
 implementation
@@ -204,21 +204,23 @@ begin
 end;
 function TCanvasViewArea.CreateWorkArea(TheOwner: TComponent):TCADControl;
 begin
-     result:=TCADControl(TPanel.Create(TheOwner));
+     result:=TCADControl(TGDIPanel.Create(TheOwner));
+     TCADControl(result).Caption:='123';
+     //TGDIPanel(result).DoubleBuffered:=false;
 end;
 procedure TCanvasViewArea.CreateDrawer;
 begin
      drawer:=TZGLCanvasDrawer.Create;
-     TZGLCanvasDrawer(drawer).canvas:=TPanel(getviewcontrol).canvas;
-     TZGLCanvasDrawer(drawer).panel:=TPanel(getviewcontrol);
+     TZGLCanvasDrawer(drawer).canvas:=TCADControl(getviewcontrol).canvas;
+     TZGLCanvasDrawer(drawer).panel:=TCADControl(getviewcontrol);
 end;
 
 procedure TCanvasViewArea.SetupWorkArea;
 begin
   //self.getviewcontrol.Color:=clHighlight;
-  TPanel(getviewcontrol).BorderStyle:=bsNone;
-  TPanel(getviewcontrol).BevelWidth:=0;
-  TPanel(getviewcontrol).onpaint:=mypaint;
+  //TGDIPanel(getviewcontrol).BorderStyle:=bsNone;
+  //TGDIPanel(getviewcontrol).BevelWidth:=0;
+  TCADControl(getviewcontrol).onpaint:=mypaint;
 end;
 procedure TCanvasViewArea.getareacaps;
 begin
@@ -232,11 +234,11 @@ end;
 procedure TCanvasViewArea.GDBActivateGLContext;
 begin
 end;
-procedure TCanvasViewArea.startpaint;
+function TCanvasViewArea.startpaint;
 begin
      if assigned(WorkArea) then
                                    TZGLCanvasDrawer(drawer).canvas:=WorkArea.canvas;
-     inherited;
+     result:=inherited;
 end;
 
 function TOpenGLViewArea.CreateWorkArea(TheOwner: TComponent):TCADControl;

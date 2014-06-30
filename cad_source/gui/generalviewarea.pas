@@ -39,6 +39,7 @@ type
     TGeneralViewArea=class(TAbstractViewArea)
                            public
                            WorkArea:TCADControl;
+                           InsidePaintMessage:integer;
                            {param: OGLWndtype;
                            PDWG:PTAbstractDrawing;
                            PolarAxis:GDBPoint3dArray;
@@ -137,7 +138,7 @@ type
                            procedure CreateDrawer; virtual;abstract;
                            procedure SetupWorkArea; virtual;abstract;
                            procedure doCameraChanged; override;
-                           procedure startpaint;override;
+                           function startpaint:boolean;override;
                            procedure endpaint;override;
                       end;
 var
@@ -148,8 +149,10 @@ uses
      commandline,mainwindow;
 procedure TGeneralViewArea.mypaint;
 begin
-     param.firstdraw:=true;
+     //param.firstdraw:=true;
+     inc(InsidePaintMessage);
      draw;
+     dec(InsidePaintMessage);
      inherited;
 end;
 
@@ -625,7 +628,7 @@ var
   DC:TDrawContext;
   dt:integer;
   tick:cardinal;
-  needredraw:boolean;
+  needredraw,needredrawbydrawer:boolean;
   const msec=1;
 begin
   if not assigned(pdwg) then exit;
@@ -642,7 +645,8 @@ begin
   foreground.g:=not(sysvar.RD.RD_BackGroundColor^.g);
   foreground.b:=not(sysvar.RD.RD_BackGroundColor^.b);
   dc:=CreateRC;
-  startpaint;
+  needredrawbydrawer:=startpaint;
+  needredraw:=needredrawbydrawer or needredraw;
   dc.drawer.SetLineSmooth(SysVar.RD.RD_LineSmooth^);
 
   dc.drawer.SetZTest(true);
@@ -1221,13 +1225,13 @@ procedure TGeneralViewArea.doCameraChanged;
 begin
      if assigned(onCameraChanged) then onCameraChanged;
 end;
-procedure TGeneralViewArea.startpaint;
+function TGeneralViewArea.startpaint;
 begin
-     drawer.startpaint;
+     result:=drawer.startpaint(InsidePaintMessage>0);
 end;
 procedure TGeneralViewArea.endpaint;
 begin
-     drawer.endpaint;
+     drawer.endpaint(InsidePaintMessage>0);
 end;
 procedure TGeneralViewArea.WaMouseEnter;
 begin
@@ -1567,6 +1571,7 @@ var
   v:gdbvertex;
 begin
      inherited;
+     InsidePaintMessage:=0;
 
      WorkArea:=CreateWorkArea(TheOwner);
      CreateDrawer;
@@ -3716,4 +3721,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('viewareadef.initialization');{$ENDIF}
-end.
+end.

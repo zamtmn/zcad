@@ -75,8 +75,8 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         ClearBrush: HBRUSH;
                         hLinePen:HPEN;
                         constructor create;
-                        procedure startpaint;override;
-                        procedure endpaint;override;
+                        function startpaint(InPaintMessage:boolean):boolean;override;
+                        procedure endpaint(InPaintMessage:boolean);override;
 
                         function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
                         procedure DrawLine(const i1:TLLVertexIndex);override;
@@ -115,9 +115,21 @@ TZGLGDIPlusDrawer=class(TZGLCanvasDrawer)
 var
    OGLDrawer:TZGLAbstractDrawer;
    CanvasDrawer:TZGLCanvasDrawer;
+   code:integer;
    {$IFDEF WINDOWS}GDIPlusDrawer:TZGLGDIPlusDrawer;{$ENDIF}
 implementation
 uses log;
+procedure isWindowsErrors;
+begin
+     code:=code;
+     code:=0;
+     code:=GetLastError;
+     if code<>0 then
+                    code:=code;
+     SetLastError(0);
+     code:=0;
+end;
+
 {$IFDEF WINDOWS}
 procedure TZGLGDIPlusDrawer.startrender;
 begin
@@ -445,15 +457,24 @@ begin
      ty:=400;
      SavedBitmap:=0;
 end;
-procedure TZGLCanvasDrawer.startpaint;
+function TZGLCanvasDrawer.startpaint;
 var
   LogBrush: TLogBrush;
   mRect: TRect;
 begin
-     CanvasDC:=GetDC({canvas}panel.Handle);
+     CanvasDC:=0;
+     isWindowsErrors;
+     if InPaintMessage then
+                           CanvasDC:=(canvas.Handle)
+                       else
+                           CanvasDC:=GetDC(panel.Handle);
+     isWindowsErrors;
      OffScreedDC:=CreateCompatibleDC(CanvasDC);
-     OffscreenBitmap:=CreateCompatibleBitmap(CanvasDC,{canvas}panel.Width,{canvas}panel.Height);
+     isWindowsErrors;
+     OffscreenBitmap:=CreateCompatibleBitmap(CanvasDC,panel.Width,panel.Height);
+     isWindowsErrors;
      SelectObject(OffScreedDC,OffscreenBitmap);
+     isWindowsErrors;
      with LogBrush do
      begin
        lbStyle := {BS_HATCHED}BS_SOLID;
@@ -462,49 +483,69 @@ begin
      end;
      mrect:=Rect(0,0,canvas.Width,canvas.Height);
      ClearBrush:=CreateBrushIndirect(LogBrush);
+     isWindowsErrors;
      //FillRect(OffScreedDC,mRect,ClearBrush);
 
      hLinePen:=CreatePen(PS_SOLID, 1, RGB(255, 255, 255));
+     isWindowsErrors;
      SelectObject(OffScreedDC, hLinePen);
-     CreateScrbuf(canvas.Width,canvas.Height)
+     isWindowsErrors;
+     CreateScrbuf(canvas.Width,canvas.Height);
+     isWindowsErrors;
+     result:={true}false;
 end;
 procedure TZGLCanvasDrawer.endpaint;
 begin
-     BitBlt({canvas.Handle}CanvasDC,0,0,canvas.Width,canvas.Height,OffScreedDC,0,0,SRCCOPY);
+     isWindowsErrors;
+     BitBlt({canvas.Handle}CanvasDC,0,0,panel.Width,panel.Height,OffScreedDC,0,0,SRCCOPY);
+     isWindowsErrors;
      DeleteObject(OffscreenBitmap);
+     isWindowsErrors;
      OffscreenBitmap:=0;
      DeleteObject(hLinePen);
+     isWindowsErrors;
      hLinePen:=0;
-     ReleaseDC(canvas.Handle,CanvasDC);
+     if not InPaintMessage then
+     ReleaseDC(panel.Handle,CanvasDC);
+     isWindowsErrors;
      DeleteDC(OffScreedDC);
+     isWindowsErrors;
      OffScreedDC:=0;
 end;
 procedure TZGLCanvasDrawer.CreateScrbuf(w,h:integer);
 begin
      if SavedBitmap=0 then
+     if CanvasDC<>0 then
      begin
           SavedDC:=CreateCompatibleDC(CanvasDC);
+          isWindowsErrors;
           SavedBitmap:=CreateCompatibleBitmap(SavedDC,w,h);
+          isWindowsErrors;
           SelectObject(SavedDC,SavedBitmap);
+          isWindowsErrors;
      end;
 end;
 procedure TZGLCanvasDrawer.delmyscrbuf;
 begin
+     if SavedBitmap<>0 then
+     begin
      DeleteObject(SavedBitmap);
+     isWindowsErrors;
      DeleteDC(SavedDC);
+     isWindowsErrors;
      SavedBitmap:=0;
      SavedDC:=0;
+     end;
 end;
 procedure TZGLCanvasDrawer.SaveBuffers(w,h:integer);
 begin
      BitBlt(SavedDC,0,0,w,h,OffScreedDC,0,0,SRCCOPY);
+     isWindowsErrors;
 end;
 procedure TZGLCanvasDrawer.RestoreBuffers(w,h:integer);
-var
-  code:integer;
 begin
      BitBlt(OffScreedDC,0,0,w,h,SavedDC,0,0,SRCCOPY);
-     //code:=GetLastError
+     isWindowsErrors;
 end;
 function TZGLCanvasDrawer.TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
 begin
@@ -523,8 +564,12 @@ begin
     p1:=TranslatePoint(pv1^);
     p2:=TranslatePoint(pv2^);
     //canvas.Line(round(p1.x),round(p1.y),round(p2.x),round(p2.y));
+    //canvas.Pie(1,1,1,1,
+    //              1,1,1,1);
     MoveToEx(OffScreedDC, round(p1.x),round(p1.y), nil);
+    isWindowsErrors;
     LineTo(OffScreedDC, round(p2.x),round(p2.y));
+    isWindowsErrors;
 end;
 
 procedure TZGLCanvasDrawer.DrawPoint(const i:TLLVertexIndex);
@@ -534,7 +579,7 @@ var
 begin
     pv:=PGDBVertex3S(PVertexBuffer.getelement(i));
     p:=TranslatePoint(pv^);
-    Canvas.Pixels[round(pv.x),round(pv.y)]:=canvas.Pen.Color;
+    //Canvas.Pixels[round(pv.x),round(pv.y)]:=canvas.Pen.Color;
 end;
 procedure TZGLCanvasDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
 var
@@ -544,7 +589,7 @@ begin
      //_myGluProject(const objx,objy,objz:GDBdouble;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out winx,winy,winz:GDBdouble):Integer;
     _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
     _myGluProject2(p2,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp2);
-    h:=canvas.Height;
+    h:=panel.Height;
      {pp1:=geometry.VectorTransform3D(p1,matrixs.pprojMatrix^);
      pp1:=geometry.VectorTransform3D(pp1,matrixs.pmodelMatrix^);
 
@@ -553,20 +598,25 @@ begin
 
      //canvas.Line(round(pp1.x),h-round(pp1.y),round(pp2.x),h-round(pp2.y));
      MoveToEx(OffScreedDC, round(pp1.x),h-round(pp1.y), nil);
+     isWindowsErrors;
      LineTo(OffScreedDC, round(pp2.x),h-round(pp2.y));
+     isWindowsErrors;
 end;
 
 procedure TZGLCanvasDrawer.SetClearColor(const red, green, blue, alpha: byte);
 begin
-     ClearColor:=RGBToColor(red,green,blue);
+     //ClearColor:=RGBToColor(red,green,blue);
+     isWindowsErrors;
 end;
 procedure TZGLCanvasDrawer.SetColor(const red, green, blue, alpha: byte);
 begin
-     canvas.Pen.Color:=RGBToColor(red,green,blue);
+     //canvas.Pen.Color:=RGBToColor(red,green,blue);
+     isWindowsErrors;
 end;
 procedure TZGLCanvasDrawer.SetColor(const color: TRGB);
 begin
-     canvas.Pen.Color:=RGBToColor(color.r,color.g,color.b);
+     //canvas.Pen.Color:=RGBToColor(color.r,color.g,color.b);
+     isWindowsErrors;
 end;
 procedure TZGLCanvasDrawer.ClearScreen(stencil:boolean);
 var
@@ -576,6 +626,7 @@ begin
      //canvas.FillRect(0,0,canvas.width,canvas.height);
      mrect:=Rect(0,0,canvas.Width,canvas.Height);
      FillRect(OffScreedDC,mRect,ClearBrush);
+     isWindowsErrors;
 end;
 procedure TZGLCanvasDrawer.SetDisplayCSmode(const width, height:integer);
 begin
@@ -587,14 +638,18 @@ end;
 procedure TZGLCanvasDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:integer);
 begin
      MoveToEx(OffScreedDC,round(x1*sx+tx),round(y1*sy+ty), nil);
+     isWindowsErrors;
      LineTo(OffScreedDC,round(x2*sx+tx),round(y2*sy+ty));
      //canvas.Line(round(x1*sx+tx),round(y1*sy+ty),round(x2*sx+tx),round(y2*sy+ty));
+     isWindowsErrors;
 end;
 procedure TZGLCanvasDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:single);
 begin
      //canvas.Line(round(x1*sx+tx),round(y1*sy+ty),round(x2*sx+tx),round(y2*sy+ty));
      MoveToEx(OffScreedDC,round(x1*sx+tx),round(y1*sy+ty), nil);
+     isWindowsErrors;
      LineTo(OffScreedDC,round(x2*sx+tx),round(y2*sy+ty));
+     isWindowsErrors;
 end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglabstractdrawer.initialization');{$ENDIF}
@@ -603,4 +658,4 @@ initialization
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
 end.
-
+

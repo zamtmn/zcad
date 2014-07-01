@@ -243,10 +243,12 @@ begin
                            shared.ShowError(format(rsTemplateNotFound,[tn]));
                            //shared.ShowError('Не найден файл шаблона "'+tn+'"');
      end;
+     wpowner.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
+                                //создания или загрузки
      //redrawoglwnd;
      result:=cmd_ok;
      programlog.logoutstr('result:=cmd_ok;',0);
-     application.ProcessMessages;
+     //application.ProcessMessages;
      programlog.logoutstr(' application.ProcessMessages;',0);
      //oglwnd._onresize(nil);
      programlog.logoutstr('oglwnd._onresize(nil);',0);
@@ -335,6 +337,8 @@ begin
                                 gdb.GetCurrentDWG.SetFileName(s);
           programlog.logoutstr('gdb.GetCurrentDWG.FileName:=s;',0);
           load_merge(@s[1],tloload);
+          gdb.GetCurrentDWG.wa.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
+                                                  //создания или загрузки
           programlog.logoutstr('load_merge(@s[1],tloload);',0);
           if assigned(ProcessFilehistoryProc) then
            ProcessFilehistoryProc(s);

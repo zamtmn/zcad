@@ -28,7 +28,7 @@ TZGLAbstractDrawer=class
                         procedure DrawPoint(const i:TLLVertexIndex);virtual;abstract;
                         procedure startrender(var matrixs:tmatrixs);virtual;abstract;
                         procedure endrender;virtual;abstract;
-                        function startpaint(InPaintMessage:boolean):boolean;virtual;abstract;
+                        function startpaint(InPaintMessage:boolean;w,h:integer):boolean;virtual;abstract;
                         procedure endpaint(InPaintMessage:boolean);virtual;abstract;
                         procedure SetLineWidth(const w:single);virtual;abstract;
                         procedure SetPointSize(const s:single);virtual;abstract;
@@ -49,8 +49,9 @@ TZGLAbstractDrawer=class
                         procedure WorkAreaResize(w,h:integer);virtual;abstract;
                         procedure SaveBuffers(w,h:integer);virtual;abstract;
                         procedure RestoreBuffers(w,h:integer);virtual;abstract;
-                        procedure CreateScrbuf(w,h:integer); virtual;abstract;
+                        function CreateScrbuf(w,h:integer):boolean; virtual;abstract;
                         procedure delmyscrbuf; virtual;abstract;
+                        procedure SwapBuffers; virtual;abstract;
 
 
 
@@ -66,7 +67,7 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure DrawPoint(const i:TLLVertexIndex);override;
                         procedure startrender(var matrixs:tmatrixs);override;
                         procedure endrender;override;
-                        function startpaint(InPaintMessage:boolean):boolean;override;
+                        function startpaint(InPaintMessage:boolean;w,h:integer):boolean;override;
                         procedure endpaint(InPaintMessage:boolean);override;
                         procedure SetLineWidth(const w:single);override;
                         procedure SetPointSize(const s:single);override;
@@ -91,8 +92,9 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure WorkAreaResize(w,h:integer);override;
                         procedure SaveBuffers(w,h:integer);override;
                         procedure RestoreBuffers(w,h:integer);override;
-                        procedure CreateScrbuf(w,h:integer); override;
+                        function CreateScrbuf(w,h:integer):boolean; override;
                         procedure delmyscrbuf; override;
+                        procedure SwapBuffers; override;
                    end;
 var
   testrender:TZGLAbstractDrawer;
@@ -188,13 +190,16 @@ end;
 procedure TZGLGeneralDrawer.RestoreBuffers;
 begin
 end;
-procedure TZGLGeneralDrawer.CreateScrbuf(w,h:integer);
+function TZGLGeneralDrawer.CreateScrbuf(w,h:integer):boolean;
 begin
 end;
 procedure TZGLGeneralDrawer.delmyscrbuf;
 begin
 end;
+procedure TZGLGeneralDrawer.SwapBuffers;
+begin
+end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglabstractdrawer.initialization');{$ENDIF}
 end.
-
+

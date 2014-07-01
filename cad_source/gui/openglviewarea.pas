@@ -200,6 +200,7 @@ begin
 end;
 procedure TOpenGLViewArea.SwapBuffers(var DC:TDrawContext);
 begin
+     inherited;
      OpenGLWindow.SwapBuffers;
 end;
 function TCanvasViewArea.CreateWorkArea(TheOwner: TComponent):TCADControl;

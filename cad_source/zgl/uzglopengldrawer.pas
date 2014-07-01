@@ -21,6 +21,9 @@ unit uzglopengldrawer;
 interface
 uses
     {$IFDEF WINDOWS}GDIPAPI,GDIPOBJ,windows,{$ENDIF}
+    {$IFDEF LCLGTK2}
+    Gtk2Def,
+    {$ENDIF}
     LCLIntf,LCLType,Classes,Controls,
     geometry,uzglabstractdrawer,UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase;
 const
@@ -575,7 +578,13 @@ begin
 end;
 procedure TZGLCanvasDrawer.SaveBuffers(w,h:integer);
 begin
-     BitBlt(SavedDC,0,0,w,h,OffScreedDC,0,0,SRCCOPY);
+    {$IFDEF LCLGTK2}
+     if TGtkDeviceContext(SavedDC).drawable=nil
+     then
+         delmyscrbuf
+     else
+    {$ENDIF}
+         BitBlt(SavedDC,0,0,w,h,OffScreedDC,0,0,SRCCOPY);
      isWindowsErrors;
 end;
 procedure TZGLCanvasDrawer.RestoreBuffers(w,h:integer);
@@ -700,4 +709,4 @@ initialization
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
 end.
-
+

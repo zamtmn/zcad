@@ -254,7 +254,7 @@ procedure TOpenGLViewArea.SetupWorkArea;
 begin
      OpenGLWindow:=TOGLWnd(WorkArea);
      OpenGLWindow.wa:=self;
-     OpenGLWindow.Cursor:=crNone;
+     RemoveCursorIfNeed(OpenGLWindow,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^);
      OpenGLWindow.ShowHint:=true;
      //fillchar(myscrbuf,sizeof(tmyscrbuf),0);
 

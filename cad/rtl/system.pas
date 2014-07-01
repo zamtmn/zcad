@@ -224,6 +224,11 @@ GDBCameraBaseProp=packed record
                         xdir:GDBvertex;
                         zoom: GDBDouble;
                   end;
+tmatrixs=packed record
+                   pmodelMatrix:PDMatrix4D;
+                   pprojMatrix:PDMatrix4D;
+                   pviewport:PIMatrix4;
+end;
 TActulity=GDBInteger;
 TObjID=GDBWord;
 PGDBBaseCamera=^GDBBaseCamera;
@@ -1056,6 +1061,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
             RD_LastCalcVisible:GDBInteger;(*'Last visible calculation time'*)(*oi_readonly*)
             RD_MaxRenderTime:pGDBInteger;(*'Maximum single pass time'*)
             RD_DrawInsidePaintMessage:PGDBBoolean;(*'Draw inside paint message'*)
+            RD_RemoveSystemCursorFromWorkArea:PGDBBoolean;(*'Remove system cursor from work area'*)
             RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
             RD_VSync:PTVSControl;(*'VSync'*)
             RD_Light:PGDBBoolean;(*'Light'*)

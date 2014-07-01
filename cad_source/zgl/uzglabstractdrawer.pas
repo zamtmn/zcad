@@ -26,7 +26,7 @@ TZGLAbstractDrawer=class
                         PVertexBuffer:PGDBOpenArrayOfData;
                         procedure DrawLine(const i1:TLLVertexIndex);virtual;abstract;
                         procedure DrawPoint(const i:TLLVertexIndex);virtual;abstract;
-                        procedure startrender;virtual;abstract;
+                        procedure startrender(var matrixs:tmatrixs);virtual;abstract;
                         procedure endrender;virtual;abstract;
                         function startpaint(InPaintMessage:boolean):boolean;virtual;abstract;
                         procedure endpaint(InPaintMessage:boolean);virtual;abstract;
@@ -64,7 +64,7 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         public
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
-                        procedure startrender;override;
+                        procedure startrender(var matrixs:tmatrixs);override;
                         procedure endrender;override;
                         function startpaint(InPaintMessage:boolean):boolean;override;
                         procedure endpaint(InPaintMessage:boolean);override;
@@ -197,4 +197,4 @@ end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglabstractdrawer.initialization');{$ENDIF}
 end.
-
+

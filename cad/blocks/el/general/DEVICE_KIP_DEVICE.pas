@@ -11,6 +11,7 @@ var
   DESC_MountingParts:GDBString;(*'Чертеж установки'*)
   DESC_MountingDrawing:GDBString;(*'Сокр. чертеж установки'*)
   DESC_Function:GDBString;(*'Функция'*)
+  DESC_OutSignal:GDBString;(*'Выходной сигнал'*)
 
   UNITPARAM_Environment:GDBString;(*'Среда'*)
   UNITPARAM_ParameterMax:GDBDouble;(*'max Параметр'*)

@@ -523,6 +523,7 @@ begin
 end;
 procedure TGeneralViewArea.SwapBuffers(var DC:TDrawContext);
 begin
+     drawer.SwapBuffers;
 end;
 function TGeneralViewArea.treerender;
 var
@@ -1227,7 +1228,7 @@ begin
 end;
 function TGeneralViewArea.startpaint;
 begin
-     result:=drawer.startpaint(InsidePaintMessage>0);
+     result:=drawer.startpaint(InsidePaintMessage>0,getviewcontrol.clientwidth,getviewcontrol.clientheight);
 end;
 procedure TGeneralViewArea.endpaint;
 begin
@@ -1236,7 +1237,7 @@ end;
 procedure TGeneralViewArea.WaMouseEnter;
 begin
      param.md.mousein:=true;
-     DrawOrInvalidate
+     //DrawOrInvalidate
 end;
 procedure TGeneralViewArea.WaMouseLeave;
 begin
@@ -3721,4 +3722,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('viewareadef.initialization');{$ENDIF}
-end.
+end.

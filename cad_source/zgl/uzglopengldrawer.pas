@@ -29,6 +29,7 @@ type
 TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         myscrbuf:tmyscrbuf;
                         public
+                        function startpaint(InPaintMessage:boolean;w,h:integer):boolean;override;
                         procedure startrender(var matrixs:tmatrixs);override;
                         procedure endrender;override;
                         procedure DrawLine(const i1:TLLVertexIndex);override;
@@ -57,7 +58,7 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
                         procedure SaveBuffers(w,h:integer);override;
                         procedure RestoreBuffers(w,h:integer);override;
-                        procedure CreateScrbuf(w,h:integer); override;
+                        function CreateScrbuf(w,h:integer):boolean; override;
                         procedure delmyscrbuf; override;
                    end;
 TZGLCanvasDrawer=class(TZGLGeneralDrawer)
@@ -78,7 +79,7 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
 
                         procedure startrender(var matrixs:tmatrixs);override;
 
-                        function startpaint(InPaintMessage:boolean):boolean;override;
+                        function startpaint(InPaintMessage:boolean;w,h:integer):boolean;override;
                         procedure endpaint(InPaintMessage:boolean);override;
 
                         function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
@@ -95,10 +96,11 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
 
-                        procedure CreateScrbuf(w,h:integer); override;
+                        function CreateScrbuf(w,h:integer):boolean; override;
                         procedure delmyscrbuf; override;
                         procedure SaveBuffers(w,h:integer);override;
                         procedure RestoreBuffers(w,h:integer);override;
+                        procedure SwapBuffers;override;
 
 
                    end;
@@ -109,7 +111,7 @@ TZGLGDIPlusDrawer=class(TZGLCanvasDrawer)
                         HDC: HDC;
                         lpPaint: TPaintStruct;
                         public
-                        procedure startrender;override;
+                        procedure startrender(var matrixs:tmatrixs);override;
                         procedure endrender;override;
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
@@ -253,6 +255,17 @@ procedure TZGLOpenGLDrawer.startrender;
 begin
      OGLSM.startrender;
 end;
+function TZGLOpenGLDrawer.startpaint(InPaintMessage:boolean;w,h:integer):boolean;
+begin
+     if myscrbuf[0]=0 then
+                          begin
+                               result:=true;
+                               CreateScrbuf(w,h);
+                          end
+                       else
+                           result:=false;
+end;
+
 procedure TZGLOpenGLDrawer.endrender;
 begin
      OGLSM.endrender;
@@ -392,7 +405,7 @@ begin
    NotUseLCS:=_NotUseLCS;
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers----{end}',lp_decPos);{$ENDIF}
 end;
-procedure TZGLOpenGLDrawer.CreateScrbuf(w,h:integer);
+function TZGLOpenGLDrawer.CreateScrbuf(w,h:integer):boolean;
 var scrx,scry,texture{,e}:integer;
 begin
      //oglsm.mytotalglend;
@@ -422,6 +435,7 @@ begin
            scry:=scry+texturesize;
      until scry>h;
      oglsm.myglDisable(GL_TEXTURE_2D);
+     result:=false;
 end;
 procedure TZGLOpenGLDrawer.delmyscrbuf;
 var i:integer;
@@ -514,15 +528,11 @@ begin
      isWindowsErrors;
      SelectObject(OffScreedDC, hLinePen);
      isWindowsErrors;
-     CreateScrbuf(canvas.Width,canvas.Height);
+     result:=CreateScrbuf(canvas.Width,canvas.Height);
      isWindowsErrors;
-     result:={true}false;
 end;
 procedure TZGLCanvasDrawer.endpaint;
 begin
-     isWindowsErrors;
-     BitBlt({canvas.Handle}CanvasDC,0,0,panel.Width,panel.Height,OffScreedDC,0,0,SRCCOPY);
-     isWindowsErrors;
      DeleteObject(OffscreenBitmap);
      isWindowsErrors;
      OffscreenBitmap:=0;
@@ -536,17 +546,19 @@ begin
      isWindowsErrors;
      OffScreedDC:=0;
 end;
-procedure TZGLCanvasDrawer.CreateScrbuf(w,h:integer);
+function TZGLCanvasDrawer.CreateScrbuf(w,h:integer):boolean;
 begin
+     result:=false;
      if SavedBitmap=0 then
      if CanvasDC<>0 then
      begin
-          SavedDC:=CreateCompatibleDC(CanvasDC);
+          SavedDC:=CreateCompatibleDC({CanvasDC}0);
           isWindowsErrors;
-          SavedBitmap:=CreateCompatibleBitmap(SavedDC,w,h);
+          SavedBitmap:=CreateCompatibleBitmap({SavedDC}CanvasDC,w,h);
           isWindowsErrors;
           SelectObject(SavedDC,SavedBitmap);
           isWindowsErrors;
+          result:=true;
      end;
 end;
 procedure TZGLCanvasDrawer.delmyscrbuf;
@@ -569,6 +581,12 @@ end;
 procedure TZGLCanvasDrawer.RestoreBuffers(w,h:integer);
 begin
      BitBlt(OffScreedDC,0,0,w,h,SavedDC,0,0,SRCCOPY);
+     isWindowsErrors;
+end;
+procedure TZGLCanvasDrawer.SwapBuffers;
+begin
+     isWindowsErrors;
+     BitBlt({canvas.Handle}CanvasDC,0,0,panel.Width,panel.Height,OffScreedDC,0,0,SRCCOPY);
      isWindowsErrors;
 end;
 function TZGLCanvasDrawer.TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
@@ -682,4 +700,4 @@ initialization
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
 end.
-
+

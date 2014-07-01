@@ -19,7 +19,7 @@
 unit shared;
 {$INCLUDE def.inc}
 interface
-uses {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}zcadstrconsts,gdbasetypes,strutils,Classes, SysUtils, {$IFNDEF DELPHI}fileutil,{$ENDIF}{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls{$IFNDEF DELPHI},LCLProc{$ENDIF},Masks;
+uses {$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}Controls,zcadstrconsts,gdbasetypes,strutils,Classes, SysUtils, {$IFNDEF DELPHI}fileutil,{$ENDIF}{ LResources,} Forms, stdctrls, ExtCtrls, ComCtrls{$IFNDEF DELPHI},LCLProc{$ENDIF},Masks;
 
 type
 TFromDirIterator=procedure (filename:GDBString);
@@ -36,6 +36,7 @@ procedure OldVersTextReplace(var vv:GDBString);
 procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIterator);
 procedure DisableCmdLine;
 procedure EnableCmdLine;
+procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
 
 var
     ProcessBar:TProgressBar;
@@ -55,6 +56,14 @@ var
 implementation
 uses strproc,
      log;
+procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
+begin
+     if RemoveCursor then
+                         acontrol.cursor:=crNone
+                     else
+                         acontrol.cursor:=crDefault;
+end;
+
 procedure DisableCmdLine;
 begin
   application.MainForm.ActiveControl:=nil;

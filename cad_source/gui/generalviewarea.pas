@@ -903,7 +903,7 @@ end;
 procedure TGeneralViewArea.hidemousecursor;
 begin
      if assigned(WorkArea) then
-     WorkArea.Cursor:=crNone;
+     RemoveCursorIfNeed(WorkArea,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^);
 end;
 procedure TGeneralViewArea.RestoreMouse;
 var
@@ -1537,11 +1537,11 @@ if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
                                                               then
                                                                   getviewcontrol.Cursor:=crNoDrop
                                                               else
-                                                                  getviewcontrol.Cursor:=crNone;
+                                                                  RemoveCursorIfNeed(getviewcontrol,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^);
                                                        end
                                                    else
                                                        if not param.scrollmode then
-                                                                                   getviewcontrol.Cursor:=crNone;
+                                                                                   RemoveCursorIfNeed(getviewcontrol,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^);
 
   //if assigned(GDBobjinsp)then
                                if assigned(GetCurrentObjProc) then
@@ -1951,7 +1951,7 @@ begin
   inherited;
   if button = mbMiddle then
   begin
-    WorkArea.cursor := crnone;
+    RemoveCursorIfNeed(WorkArea,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^);
     param.scrollmode:=false;
     param.firstdraw:=true;
     WorkArea.invalidate;

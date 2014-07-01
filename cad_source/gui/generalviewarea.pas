@@ -688,7 +688,7 @@ begin
                                                PDWG.GetCurrentROOT^.ObjArray.ObjTree.draw;
                                                end;
     begin
-    dc.drawer.startrender;
+    dc.drawer.startrender(dc.matrixs);
     PDWG.Getpcamera.DRAWNOTEND:=treerender(PDWG.GetCurrentROOT^.ObjArray.ObjTree,lptime,dc);
     dc.drawer.endrender;
     end;
@@ -3721,4 +3721,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('viewareadef.initialization');{$ENDIF}
-end.
+end.

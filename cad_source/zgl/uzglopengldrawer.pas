@@ -29,7 +29,7 @@ type
 TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         myscrbuf:tmyscrbuf;
                         public
-                        procedure startrender;override;
+                        procedure startrender(var matrixs:tmatrixs);override;
                         procedure endrender;override;
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
@@ -75,6 +75,9 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         ClearBrush: HBRUSH;
                         hLinePen:HPEN;
                         constructor create;
+
+                        procedure startrender(var matrixs:tmatrixs);override;
+
                         function startpaint(InPaintMessage:boolean):boolean;override;
                         procedure endpaint(InPaintMessage:boolean);override;
 
@@ -121,6 +124,7 @@ implementation
 uses log;
 procedure isWindowsErrors;
 begin
+     {$IFDEF WINDOWS}
      code:=code;
      code:=0;
      code:=GetLastError;
@@ -128,6 +132,7 @@ begin
                     code:=code;
      SetLastError(0);
      code:=0;
+     {$ENDIF}
 end;
 
 {$IFDEF WINDOWS}
@@ -457,6 +462,25 @@ begin
      ty:=400;
      SavedBitmap:=0;
 end;
+procedure TZGLCanvasDrawer.startrender;
+var
+   m:DMatrix4D;
+   p1,p2,pp1,pp2:GDBVertex;
+
+begin
+     p1:=nulvertex;
+     p2:=onevertex;
+     _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
+     _myGluProject2(p2,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp2);
+
+     // _in.x:=_in.x * viewport[2] + viewport[0];
+    //_in.y:=_in.y * viewport[3] + viewport[1];
+     m:=geometry.MatrixMultiply(matrixs.pmodelMatrix^,matrixs.pprojMatrix^);
+     sx:=(m[0][0]/m[3][3]*0.5)*matrixs.pviewport[2] ;
+     sy:=-(m[1][1]/m[3][3]*0.5)*matrixs.pviewport[3] ;
+     tx:=(m[3][0]/m[3][3]*0.5+0.5)*matrixs.pviewport[2];
+     ty:=matrixs.pviewport[3]-(m[3][1]/m[3][3]*0.5+0.5)*matrixs.pviewport[3];
+end;
 function TZGLCanvasDrawer.startpaint;
 var
   LogBrush: TLogBrush;
@@ -624,7 +648,7 @@ var
 begin
      //canvas.Brush.Color:=ClearColor;
      //canvas.FillRect(0,0,canvas.width,canvas.height);
-     mrect:=Rect(0,0,canvas.Width,canvas.Height);
+     mrect:=Rect(0,0,panel.Width,panel.Height);
      FillRect(OffScreedDC,mRect,ClearBrush);
      isWindowsErrors;
 end;
@@ -658,4 +682,4 @@ initialization
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
 end.
-
+

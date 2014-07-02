@@ -21,7 +21,7 @@ unit zcadsysvars;
 
 interface
 uses gdbasetypes,
-     gdbase;
+     gdbase,UGDBStringArray;
 type
 {EXPORT+}
   tmemdeb=packed record
@@ -74,6 +74,7 @@ type
                           RD_ID_PrefferedRenderTime:PGDBInteger;(*'Prefered rendertime'*)
                       end;
   trd=packed record
+            RD_RendererBackEnd:TEnumData;(*'Render backend'*)
             RD_Renderer:PGDBString;(*'Device'*)(*oi_readonly*)
             RD_Version:PGDBString;(*'Version'*)(*oi_readonly*)
             RD_Extensions:PGDBString;(*'Extensions'*)(*oi_readonly*)
@@ -200,5 +201,6 @@ type
 var
   sysvar: gdbsysvariable;
 implementation
+begin
 end.
 

@@ -29,7 +29,7 @@ uses
      abstractviewarea,uzglopengldrawer,sysutils,UGDBEntTree,GDBGenericSubEntry,GDBHelpObj,memman,OGLSpecFunc,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,
      uinfoform,oglwindow,oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,GDBEntity,Varman,zcadinterface,geometry,gdbobjectsconstdef,shared,zcadstrconsts,LCLType,
-     ExtCtrls,classes,Controls,Graphics,generalviewarea,UGDBTracePropArray,math,uzglabstractdrawer,log;
+     ExtCtrls,classes,Controls,Graphics,generalviewarea,UGDBTracePropArray,math,uzglabstractdrawer,log,backendmanager;
 type
     TOpenGLViewArea=class(TGeneralViewArea)
                       public
@@ -299,4 +299,6 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('viewareadef.initialization');{$ENDIF}
+  RegisterBackend(TOpenGLViewArea,'OpenGL');
+  RegisterBackend(TCanvasViewArea,'GDI');
 end.

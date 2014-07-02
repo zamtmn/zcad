@@ -39,6 +39,11 @@ type
                           //destructor done;virtual;
                           //function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;
                     end;
+    PTEnumData=^TEnumData;
+    TEnumData=packed record
+                    Selected:GDBInteger;
+                    Enums:GDBGDBStringArray;
+              end;
 {EXPORT-}
 implementation
 uses UGDBOpenArrayOfByte,{strmy,}log;

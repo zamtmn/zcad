@@ -20,7 +20,7 @@ unit strproc;
 {$INCLUDE def.inc}
 
 interface
-uses zcadsysvars,{$IFNDEF DELPHI}fileutil,{$ENDIF}gdbasetypes,sysutils,sysinfo,strutils{$IFNDEF DELPHI},LCLProc{$ENDIF};
+uses {$IFNDEF DELPHI}fileutil,{$ENDIF}gdbasetypes,sysutils,strutils{$IFNDEF DELPHI},LCLProc{$ENDIF};
 function GetPredStr(var s: GDBString; substr: GDBString): GDBString;
 function ExpandPath(path:GDBString):GDBString;
 function readspace(expr: GDBString): GDBString;
@@ -60,7 +60,7 @@ var
   CodePage:TCodePage;
 implementation
 uses
-    {varmandef,}log;
+    sysinfo,zcadsysvars,log;
 procedure KillString(var str:GDBString);inline;
 begin
      GDBPointer(str):=nil;
@@ -578,4 +578,4 @@ end;*)
 begin
 {$IFDEF DEBUGINITSECTION}log.LogOut('strproc.initialization');{$ENDIF}
 CodePage:=CP_utf8;
-end.
+end.

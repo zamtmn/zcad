@@ -71,12 +71,12 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         midline:integer;
                         sx,sy,tx,ty:single;
                         ClearColor: TColor;
+                        PenColor: TColor;
                         OffScreedDC:HDC;
                         CanvasDC:HDC;
                         OffscreenBitmap:HBITMAP;
                         SavedBitmap:HBITMAP;
                         SavedDC:HDC;
-                        ClearBrush: HBRUSH;
                         hLinePen:HPEN;
                         constructor create;
 
@@ -500,7 +500,6 @@ begin
 end;
 function TZGLCanvasDrawer.startpaint;
 var
-  LogBrush: TLogBrush;
   mRect: TRect;
 begin
      CanvasDC:=0;
@@ -516,18 +515,7 @@ begin
      isWindowsErrors;
      SelectObject(OffScreedDC,OffscreenBitmap);
      isWindowsErrors;
-     with LogBrush do
-     begin
-       lbStyle := {BS_HATCHED}BS_SOLID;
-       lbColor := clBlue;
-       lbHatch := HS_CROSS
-     end;
-     mrect:=Rect(0,0,canvas.Width,canvas.Height);
-     ClearBrush:=CreateBrushIndirect(LogBrush);
-     isWindowsErrors;
-     //FillRect(OffScreedDC,mRect,ClearBrush);
-
-     hLinePen:=CreatePen(PS_SOLID, 1, RGB(255, 255, 255));
+     hLinePen:=CreatePen(PS_SOLID, 1, PenColor);
      isWindowsErrors;
      SelectObject(OffScreedDC, hLinePen);
      isWindowsErrors;
@@ -656,27 +644,46 @@ end;
 
 procedure TZGLCanvasDrawer.SetClearColor(const red, green, blue, alpha: byte);
 begin
-     //ClearColor:=RGBToColor(red,green,blue);
-     isWindowsErrors;
+     ClearColor:=RGB(red,green,blue);
 end;
 procedure TZGLCanvasDrawer.SetColor(const red, green, blue, alpha: byte);
+var
+   oldColor:TColor;
 begin
-     //canvas.Pen.Color:=RGBToColor(red,green,blue);
-     isWindowsErrors;
+     oldColor:=PenColor;
+     PenColor:=RGB(red,green,blue);
+     if oldColor<>PenColor then
+     begin
+         deleteobject(hLinePen);
+         isWindowsErrors;
+         hLinePen:=CreatePen(PS_SOLID, 1, PenColor);
+         isWindowsErrors;
+         SelectObject(OffScreedDC, hLinePen);
+         isWindowsErrors;
+     end;
 end;
 procedure TZGLCanvasDrawer.SetColor(const color: TRGB);
 begin
-     //canvas.Pen.Color:=RGBToColor(color.r,color.g,color.b);
-     isWindowsErrors;
+     SetColor(color.r,color.g,color.b,255);
 end;
 procedure TZGLCanvasDrawer.ClearScreen(stencil:boolean);
 var
   mRect: TRect;
+  ClearBrush: HBRUSH;
+  LogBrush: TLogBrush;
 begin
-     //canvas.Brush.Color:=ClearColor;
-     //canvas.FillRect(0,0,canvas.width,canvas.height);
      mrect:=Rect(0,0,panel.Width,panel.Height);
+     with LogBrush do
+     begin
+       lbStyle := {BS_HATCHED}BS_SOLID;
+       lbColor := ClearColor;
+       lbHatch := HS_CROSS
+     end;
+     ClearBrush:=CreateBrushIndirect(LogBrush);
+     isWindowsErrors;
      FillRect(OffScreedDC,mRect,ClearBrush);
+     isWindowsErrors;
+     deleteobject(ClearBrush);
      isWindowsErrors;
 end;
 procedure TZGLCanvasDrawer.SetDisplayCSmode(const width, height:integer);
@@ -684,7 +691,7 @@ begin
      sx:=1;
      sy:=1;
      tx:=0;
-     ty:={height}0;
+     ty:=0;
 end;
 procedure TZGLCanvasDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:integer);
 begin

@@ -614,6 +614,11 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                           //destructor done;virtual;abstract;
                           //function copyto(source:PGDBOpenArrayOfData):GDBInteger;virtual;abstract;
                     end;
+    PTEnumData=^TEnumData;
+    TEnumData=packed record
+                    Selected:GDBInteger;
+                    Enums:GDBGDBStringArray;
+              end;
 //Generate on E:\zcad\CAD_SOURCE\zgl\uzglline3darray.pas
 ZGLLine3DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)(*OpenArrayOfData=GDBVertex*)
                 constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
@@ -1045,6 +1050,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
                           RD_ID_PrefferedRenderTime:PGDBInteger;(*'Prefered rendertime'*)
                       end;
   trd=packed record
+            RD_RendererBackEnd:TEnumData;(*'Render backend'*)
             RD_Renderer:PGDBString;(*'Device'*)(*oi_readonly*)
             RD_Version:PGDBString;(*'Version'*)(*oi_readonly*)
             RD_Extensions:PGDBString;(*'Extensions'*)(*oi_readonly*)
@@ -1201,11 +1207,6 @@ TOSMode=packed record
                    Instance: GDBPointer;
                    PTD:GDBPointer;
              end;
-  PTEnumData=^TEnumData;
-  TEnumData=packed record
-                  Selected:GDBInteger;
-                  Enums:GDBGDBStringArray;
-            end;
   vardesk =packed  record
     name: GDBString;
     username: GDBString;

@@ -21,7 +21,7 @@ unit gdbcommandsinterface;
 
 interface
 uses
- abstractviewarea,uzglopengldrawer,uzglabstractdrawer,generalviewarea,colorwnd,dswnd,ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ backendmanager,abstractviewarea,uzglopengldrawer,uzglabstractdrawer,generalviewarea,colorwnd,dswnd,ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,OGLSpecFunc,
   sysinfo,
@@ -155,7 +155,7 @@ var
    ptd:PTDrawing;
    myts:TTabSheet;
    oglwnd:TCADControl;
-   wpowner:{TOpenGLViewArea}TGeneralViewArea;
+   wpowner:{TOpenGLViewArea}{TGeneralViewArea}TAbstractViewArea;
    tn:GDBString;
 begin
      ptd:=gdb.CreateDWG;
@@ -189,7 +189,8 @@ begin
      //tf.align:=al_client;
 
      //wpowner:=TOpenGLViewArea{TCanvasViewArea}.Create(myts);
-     wpowner:={TOpenGLViewArea}TCanvasViewArea.Create(myts);
+     //wpowner:={TOpenGLViewArea}TCanvasViewArea.Create(myts);
+     wpowner:=GetCurrentBackEnd.Create(myts);
      oglwnd:=wpowner.getviewcontrol;// TOGLWnd.Create(myts);
 
 

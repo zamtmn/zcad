@@ -213,11 +213,6 @@ TOSMode=packed record
                    Instance: GDBPointer;
                    PTD:{-}PUserTypeDescriptor{/GDBPointer/};
              end;
-  PTEnumData=^TEnumData;
-  TEnumData=packed record
-                  Selected:GDBInteger;
-                  Enums:GDBGDBStringArray;
-            end;
   vardesk =packed  record
     name: GDBString;
     username: GDBString;

@@ -21,12 +21,13 @@ unit uzglabstractdrawer;
 interface
 uses UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase;
 type
+TRenderMode=(TRM_ModelSpace,TRM_DisplaySpace,TRM_WindowSpace);
 TZGLAbstractDrawer=class
                         public
                         PVertexBuffer:PGDBOpenArrayOfData;
                         procedure DrawLine(const i1:TLLVertexIndex);virtual;abstract;
                         procedure DrawPoint(const i:TLLVertexIndex);virtual;abstract;
-                        procedure startrender(var matrixs:tmatrixs);virtual;abstract;
+                        procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);virtual;abstract;
                         procedure endrender;virtual;abstract;
                         function startpaint(InPaintMessage:boolean;w,h:integer):boolean;virtual;abstract;
                         procedure endpaint(InPaintMessage:boolean);virtual;abstract;
@@ -45,7 +46,6 @@ TZGLAbstractDrawer=class
                         procedure SetDrawWithStencilMode;virtual;abstract;
                         procedure DisableStencil;virtual;abstract;
                         procedure SetZTest(Z:boolean);virtual;abstract;
-                        procedure SetDisplayCSmode(const width, height:integer);virtual;abstract;
                         procedure WorkAreaResize(w,h:integer);virtual;abstract;
                         procedure SaveBuffers(w,h:integer);virtual;abstract;
                         procedure RestoreBuffers(w,h:integer);virtual;abstract;
@@ -65,7 +65,7 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         public
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
-                        procedure startrender(var matrixs:tmatrixs);override;
+                        procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
                         procedure endrender;override;
                         function startpaint(InPaintMessage:boolean;w,h:integer):boolean;override;
                         procedure endpaint(InPaintMessage:boolean);override;
@@ -88,7 +88,6 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);overload;override;
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
-                        procedure SetDisplayCSmode(const width, height:integer);override;
                         procedure WorkAreaResize(w,h:integer);override;
                         procedure SaveBuffers(w,h:integer);override;
                         procedure RestoreBuffers(w,h:integer);override;
@@ -174,9 +173,6 @@ procedure TZGLGeneralDrawer.DrawClosedPolyLine2DInDCS(const coords:array of sing
 begin
 end;
 procedure TZGLGeneralDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
-begin
-end;
-procedure TZGLGeneralDrawer.SetDisplayCSmode;
 begin
 end;
 procedure TZGLGeneralDrawer.WorkAreaResize;

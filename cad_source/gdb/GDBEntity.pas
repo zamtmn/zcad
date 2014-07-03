@@ -455,14 +455,12 @@ begin
     lw := lw div 10;
     if lw>dc.MaxWidth then lw:=dc.MaxWidth;
     result := lw;
-    oglsm.mygllinewidth(lw);
-    oglsm.myglEnable(GL_LINE_SMOOTH);
-    oglsm.myglpointsize(lw);
-    oglsm.myglEnable(gl_point_smooth);
+    dc.drawer.setlinewidth(lw);
   end
   else
   begin
-    result := 1
+    result := 1;
+    dc.drawer.setlinewidth(1);
   end;
 end;
 constructor GDBObjEntity.init;

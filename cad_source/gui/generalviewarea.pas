@@ -208,6 +208,7 @@ begin
   if param.scrollmode then
                           exit;
   CalcOptimalMatrix;
+  dc.drawer.startrender(TRM_ModelSpace,dc.matrixs);
   if PDWG.GetSelObjArray.Count<>0 then PDWG.GetSelObjArray.drawpoint;
   dc.drawer.SetColor(255, 255, 255,255);
   oglsm.myglEnable(GL_COLOR_LOGIC_OP);
@@ -279,8 +280,8 @@ begin
   d1:=geometry.VertexMulOnSc(d1,0.5);
 
 
-
-  dc.drawer.SetDisplayCSmode(getviewcontrol.clientwidth, getviewcontrol.clientheight);
+  dc.drawer.startrender(TRM_DisplaySpace,dc.matrixs);
+  //dc.drawer.SetDisplayCSmode(getviewcontrol.clientwidth, getviewcontrol.clientheight);
   {oglsm.myglMatrixMode(GL_PROJECTION);
   oglsm.myglLoadIdentity;
   oglsm.myglOrtho(0.0, getviewcontrol.clientwidth, getviewcontrol.clientheight, 0.0, -1.0, 1.0);
@@ -293,7 +294,7 @@ begin
   if param.lastonmouseobject<>nil then
                                       pGDBObjEntity(param.lastonmouseobject)^.higlight;
 
-  oglsm.myglpopmatrix;
+  (*oglsm.myglpopmatrix;
   dc.drawer.SetColor(0, 100, 100,255);
   oglsm.myglpushmatrix;
   oglsm.mygltranslated(param.CSIcon.csx.x + 2, -getviewcontrol.clientheight + param.CSIcon.csx.y - 10, 0);
@@ -308,10 +309,11 @@ begin
   //textwrite('Z');
   oglsm.myglpopmatrix;
   oglsm.myglLoadIdentity;
+  *)
   //glColor3ub(255, 255, 255);
+  dc.drawer.startrender(TRM_WindowSpace,dc.matrixs);
   dc.drawer.SetColor(foreground);
   //oglsm.glColor3ubv(foreground);
-
 
   if param.seldesc.MouseFrameON then
   begin
@@ -668,6 +670,7 @@ begin
     if sysvar.RD.RD_UseStencil^ then
     begin
          dc.drawer.SetFillStencilMode;
+         dc.drawer.startrender(TRM_ModelSpace,dc.matrixs);
          PDWG.GetSelObjArray.drawobject(dc);
          dc.drawer.SetDrawWithStencilMode;
     end
@@ -689,7 +692,7 @@ begin
                                                PDWG.GetCurrentROOT^.ObjArray.ObjTree.draw;
                                                end;
     begin
-    dc.drawer.startrender(dc.matrixs);
+    dc.drawer.startrender(TRM_ModelSpace,dc.matrixs);
     PDWG.Getpcamera.DRAWNOTEND:=treerender(PDWG.GetCurrentROOT^.ObjArray.ObjTree,lptime,dc);
     dc.drawer.endrender;
     end;
@@ -707,7 +710,6 @@ begin
 
     scrollmode:=param.scrollmode;
     param.scrollmode:=true;
-
     render(PDWG.GetConstructObjRoot^,dc);
 
 
@@ -728,6 +730,7 @@ begin
     LightOff(dc);
     drawer.RestoreBuffers(getviewcontrol.Width,getviewcontrol.Height);
     inc(dc.subrender);
+    dc.drawer.startrender(TRM_ModelSpace,dc.matrixs);
     if PDWG.GetConstructObjRoot.ObjArray.Count>0 then
                                                     PDWG.GetConstructObjRoot.ObjArray.Count:=PDWG.GetConstructObjRoot.ObjArray.Count;
     if commandmanager.pcommandrunning<>nil then
@@ -741,6 +744,8 @@ begin
     dc.drawer.DisableStencil;
     dc.MaxDetail:=true;
     PDWG.GetSelObjArray.drawobj(dc);
+    dc.drawer.SetLineWidth(1);
+    dc.drawer.SetPointSize(1);
     showcursor(dc);
 
     dec(dc.subrender);

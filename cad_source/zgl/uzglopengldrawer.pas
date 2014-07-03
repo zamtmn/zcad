@@ -33,7 +33,7 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         myscrbuf:tmyscrbuf;
                         public
                         function startpaint(InPaintMessage:boolean;w,h:integer):boolean;override;
-                        procedure startrender(var matrixs:tmatrixs);override;
+                        procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
                         procedure endrender;override;
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
@@ -52,7 +52,6 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure SetDrawWithStencilMode;override;
                         procedure DisableStencil;override;
                         procedure SetZTest(Z:boolean);override;
-                        procedure SetDisplayCSmode(const width, height:integer);override;
                         {в координатах окна}
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
@@ -78,9 +77,10 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         SavedBitmap:HBITMAP;
                         SavedDC:HDC;
                         hLinePen:HPEN;
+                        linewidth:integer;
                         constructor create;
 
-                        procedure startrender(var matrixs:tmatrixs);override;
+                        procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
 
                         function startpaint(InPaintMessage:boolean;w,h:integer):boolean;override;
                         procedure endpaint(InPaintMessage:boolean);override;
@@ -95,17 +95,19 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         procedure SetClearColor(const red, green, blue, alpha: byte);overload;override;
                         procedure SetColor(const red, green, blue, alpha: byte);overload;override;
                         procedure SetColor(const color: TRGB);overload;override;
-                        procedure SetDisplayCSmode(const width, height:integer);override;
+                        procedure SetLineWidth(const w:single);override;
+                        procedure _createPen;
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
+                        procedure DrawClosedPolyLine2DInDCS(const coords:array of single);override;
 
                         function CreateScrbuf(w,h:integer):boolean; override;
                         procedure delmyscrbuf; override;
                         procedure SaveBuffers(w,h:integer);override;
                         procedure RestoreBuffers(w,h:integer);override;
                         procedure SwapBuffers;override;
-
-
+                        procedure TranslateCoord2D(const tx,ty:single);override;
+                        procedure ScaleCoord2D(const sx,sy:single);override;
                    end;
 {$IFDEF WINDOWS}
 TZGLGDIPlusDrawer=class(TZGLCanvasDrawer)
@@ -114,7 +116,7 @@ TZGLGDIPlusDrawer=class(TZGLCanvasDrawer)
                         HDC: HDC;
                         lpPaint: TPaintStruct;
                         public
-                        procedure startrender(var matrixs:tmatrixs);override;
+                        procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
                         procedure endrender;override;
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
@@ -257,6 +259,24 @@ end;
 procedure TZGLOpenGLDrawer.startrender;
 begin
      OGLSM.startrender;
+     case mode of
+                 TRM_ModelSpace:
+                 begin
+                 end;
+                 TRM_DisplaySpace,TRM_WindowSpace:
+                 begin
+                  oglsm.myglMatrixMode(GL_PROJECTION);
+                  oglsm.myglLoadIdentity;
+                  oglsm.myglOrtho(0.0,matrixs.pviewport[2],matrixs.pviewport[3], 0.0, -1.0, 1.0);
+                  oglsm.myglMatrixMode(GL_MODELVIEW);
+                  oglsm.myglLoadIdentity;
+                  if mode=TRM_DisplaySpace then
+                  begin
+                  oglsm.myglscalef(1, -1, 1);
+                  oglsm.mygltranslated(0, -matrixs.pviewport[3], 0);
+                  end;
+                 end;
+     end;
 end;
 function TZGLOpenGLDrawer.startpaint(InPaintMessage:boolean;w,h:integer):boolean;
 begin
@@ -294,7 +314,19 @@ begin
 end;
 procedure TZGLOpenGLDrawer.SetLineWidth(const w:single);
 begin
-     oglsm.mygllinewidth(w);
+     if w>1 then begin
+                      oglsm.mygllinewidth(w);
+                      oglsm.myglEnable(GL_LINE_SMOOTH);
+                      oglsm.myglpointsize(w);
+                      oglsm.myglEnable(gl_point_smooth);
+                 end
+            else
+                begin
+                      oglsm.mygllinewidth(1);
+                      oglsm.myglDisable(GL_LINE_SMOOTH);
+                      oglsm.myglpointsize(1);
+                      oglsm.myglDisable(gl_point_smooth);
+                end;
 end;
 procedure TZGLOpenGLDrawer.SetPointSize(const s:single);
 begin
@@ -459,18 +491,6 @@ begin
       oglsm.myglVertex3dv(@p2);
      oglsm.myglend;
 end;
-procedure TZGLOpenGLDrawer.SetDisplayCSmode(const width, height:integer);
-begin
-     oglsm.myglMatrixMode(GL_PROJECTION);
-     oglsm.myglLoadIdentity;
-     oglsm.myglOrtho(0.0, width, height, 0.0, -1.0, 1.0);
-     oglsm.myglMatrixMode(GL_MODELVIEW);
-     oglsm.myglLoadIdentity;
-     oglsm.myglscalef(1, -1, 1);
-     oglsm.myglpushmatrix;
-     oglsm.mygltranslated(0, -height, 0);
-end;
-
 constructor TZGLCanvasDrawer.create;
 begin
      sx:=0.1;
@@ -482,21 +502,31 @@ end;
 procedure TZGLCanvasDrawer.startrender;
 var
    m:DMatrix4D;
-   p1,p2,pp1,pp2:GDBVertex;
-
 begin
-     p1:=nulvertex;
-     p2:=onevertex;
-     _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
-     _myGluProject2(p2,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp2);
-
-     // _in.x:=_in.x * viewport[2] + viewport[0];
-    //_in.y:=_in.y * viewport[3] + viewport[1];
-     m:=geometry.MatrixMultiply(matrixs.pmodelMatrix^,matrixs.pprojMatrix^);
-     sx:=(m[0][0]/m[3][3]*0.5)*matrixs.pviewport[2] ;
-     sy:=-(m[1][1]/m[3][3]*0.5)*matrixs.pviewport[3] ;
-     tx:=(m[3][0]/m[3][3]*0.5+0.5)*matrixs.pviewport[2];
-     ty:=matrixs.pviewport[3]-(m[3][1]/m[3][3]*0.5+0.5)*matrixs.pviewport[3];
+     case mode of
+                 TRM_ModelSpace:
+                 begin
+                      m:=geometry.MatrixMultiply(matrixs.pmodelMatrix^,matrixs.pprojMatrix^);
+                      sx:=(m[0][0]/m[3][3]*0.5)*matrixs.pviewport[2] ;
+                      sy:=-(m[1][1]/m[3][3]*0.5)*matrixs.pviewport[3] ;
+                      tx:=(m[3][0]/m[3][3]*0.5+0.5)*matrixs.pviewport[2];
+                      ty:=matrixs.pviewport[3]-(m[3][1]/m[3][3]*0.5+0.5)*matrixs.pviewport[3];
+                 end;
+                 TRM_DisplaySpace:
+                 begin
+                      sx:=1;
+                      sy:=-1;
+                      tx:=0;
+                      ty:=matrixs.pviewport[3];
+                 end;
+                 TRM_WindowSpace:
+                 begin
+                      sx:=1;
+                      sy:=1;
+                      tx:=0;
+                      ty:=0;
+                 end;
+     end;
 end;
 function TZGLCanvasDrawer.startpaint;
 var
@@ -592,7 +622,16 @@ begin
      result.y:=p.y*sy+ty;
      result.z:=p.z;
 end;
-
+procedure TZGLCanvasDrawer.TranslateCoord2D(const tx,ty:single);
+begin
+     self.tx:=self.tx+tx;
+     self.ty:=self.ty+ty;
+end;
+procedure TZGLCanvasDrawer.ScaleCoord2D(const sx,sy:single);
+begin
+  self.sx:=self.sx*sx;
+  self.sy:=self.sy*sy;
+end;
 procedure TZGLCanvasDrawer.DrawLine(const i1:TLLVertexIndex);
 var
    pv1,pv2:PGDBVertex3S;
@@ -646,6 +685,16 @@ procedure TZGLCanvasDrawer.SetClearColor(const red, green, blue, alpha: byte);
 begin
      ClearColor:=RGB(red,green,blue);
 end;
+procedure TZGLCanvasDrawer._createPen;
+begin
+  deleteobject(hLinePen);
+  isWindowsErrors;
+  hLinePen:=CreatePen({PS_DOT}PS_SOLID,linewidth,PenColor);
+  isWindowsErrors;
+  SelectObject(OffScreedDC, hLinePen);
+  isWindowsErrors;
+end;
+
 procedure TZGLCanvasDrawer.SetColor(const red, green, blue, alpha: byte);
 var
    oldColor:TColor;
@@ -654,12 +703,18 @@ begin
      PenColor:=RGB(red,green,blue);
      if oldColor<>PenColor then
      begin
-         deleteobject(hLinePen);
-         isWindowsErrors;
-         hLinePen:=CreatePen(PS_SOLID, 1, PenColor);
-         isWindowsErrors;
-         SelectObject(OffScreedDC, hLinePen);
-         isWindowsErrors;
+         _createPen;
+     end;
+end;
+procedure TZGLCanvasDrawer.SetLineWidth(const w:single);
+var
+   oldlinewidth:integer;
+begin
+     oldlinewidth:=linewidth;
+     linewidth:=round(w);
+     if oldlinewidth<>linewidth then
+     begin
+         _createPen;
      end;
 end;
 procedure TZGLCanvasDrawer.SetColor(const color: TRGB);
@@ -686,13 +741,6 @@ begin
      deleteobject(ClearBrush);
      isWindowsErrors;
 end;
-procedure TZGLCanvasDrawer.SetDisplayCSmode(const width, height:integer);
-begin
-     sx:=1;
-     sy:=1;
-     tx:=0;
-     ty:=0;
-end;
 procedure TZGLCanvasDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:integer);
 begin
      MoveToEx(OffScreedDC,round(x1*sx+tx),round(y1*sy+ty), nil);
@@ -709,6 +757,23 @@ begin
      LineTo(OffScreedDC,round(x2*sx+tx),round(y2*sy+ty));
      isWindowsErrors;
 end;
+procedure TZGLCanvasDrawer.DrawClosedPolyLine2DInDCS(const coords:array of single);
+var
+   i:integer;
+begin
+     MoveToEx(OffScreedDC,round(coords[0]*sx+tx),round(coords[1]*sy+ty), nil);
+     isWindowsErrors;
+     i:=2;
+     while i<length(coords) do
+     begin
+     LineTo(OffScreedDC,round(coords[i]*sx+tx),round(coords[i+1]*sy+ty));
+     isWindowsErrors;
+     inc(i,2);
+     end;
+     LineTo(OffScreedDC,round(coords[0]*sx+tx),round(coords[1]*sy+ty));
+     isWindowsErrors;
+end;
+
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglabstractdrawer.initialization');{$ENDIF}
   OGLDrawer:=TZGLOpenGLDrawer.create;
@@ -716,4 +781,4 @@ initialization
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
 end.
-
+

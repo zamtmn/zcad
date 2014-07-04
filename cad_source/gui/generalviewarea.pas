@@ -211,8 +211,9 @@ begin
   dc.drawer.startrender(TRM_ModelSpace,dc.matrixs);
   if PDWG.GetSelObjArray.Count<>0 then PDWG.GetSelObjArray.drawpoint;
   dc.drawer.SetColor(255, 255, 255,255);
-  oglsm.myglEnable(GL_COLOR_LOGIC_OP);
-  oglsm.myglLogicOp(GL_OR);
+  {oglsm.myglEnable(GL_COLOR_LOGIC_OP);
+  oglsm.myglLogicOp(GL_OR);}
+  dc.drawer.SetDrawMode(TDM_OR);
   if param.ShowDebugFrustum then
                           drawfrustustum(param.debugfrustum,dc);
   if param.ShowDebugBoundingBbox then
@@ -319,9 +320,12 @@ begin
   begin
     if param.seldesc.MouseFrameInverse then
     begin
-    oglsm.myglLogicOp(GL_XOR);
-    oglsm.myglLineStipple(1, $F0F0);
-    oglsm.myglEnable(GL_LINE_STIPPLE);
+    {oglsm.myglLogicOp(GL_XOR);}
+    dc.drawer.SetDrawMode(TDM_XOR);
+    dc.drawer.SetPenStyle(TPS_Dash);
+    //dc.drawer.SetColor(255,0,0,0);
+    {oglsm.myglLineStipple(1, $F0F0);
+    oglsm.myglEnable(GL_LINE_STIPPLE);}
     end;
     dc.drawer.DrawLine2DInDCS(param.seldesc.Frame1.x, param.seldesc.Frame1.y,param.seldesc.Frame2.x, param.seldesc.Frame1.y);
     dc.drawer.DrawLine2DInDCS(param.seldesc.Frame2.x, param.seldesc.Frame1.y,param.seldesc.Frame2.x, param.seldesc.Frame2.y);
@@ -334,13 +338,17 @@ begin
     oglsm.myglVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame2.y);
     oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame2.y);
     oglsm.myglend;}
-    if param.seldesc.MouseFrameInverse then oglsm.myglDisable(GL_LINE_STIPPLE);
+    if param.seldesc.MouseFrameInverse then
+                                           dc.drawer.SetPenStyle(TPS_Solid);
+                                          // oglsm.myglDisable(GL_LINE_STIPPLE);
 
     if param.seldesc.MouseFrameInverse then
     begin
-    oglsm.myglLogicOp(GL_XOR);
-    oglsm.myglLineStipple(1, $F0F0);
-    oglsm.myglEnable(GL_LINE_STIPPLE);
+    dc.drawer.SetDrawMode(TDM_XOR);
+    {oglsm.myglLogicOp(GL_XOR);}
+    dc.drawer.SetPenStyle(TPS_Dash);
+    //oglsm.myglLineStipple(1, $F0F0);
+    //oglsm.myglEnable(GL_LINE_STIPPLE);
     end;
     if param.seldesc.MouseFrameInverse then
                                            dc.drawer.SetColor(0,40,0,10)
@@ -352,8 +360,9 @@ begin
     oglsm.myglVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame2.y);
     oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame2.y);
     oglsm.myglend;
-    if param.seldesc.MouseFrameInverse then oglsm.myglDisable(GL_LINE_STIPPLE);
-
+    if param.seldesc.MouseFrameInverse then
+                                           dc.drawer.SetPenStyle(TPS_Solid);
+                                           //oglsm.myglDisable(GL_LINE_STIPPLE);
   end;
 
 
@@ -365,7 +374,8 @@ begin
   if sysvar.DWG.DWG_PolarMode^ then
   if param.ontrackarray.total <> 0 then
   begin
-    oglsm.myglLogicOp(GL_XOR);
+    dc.drawer.SetDrawMode(TDM_XOR);
+    {oglsm.myglLogicOp(GL_XOR);}
     for i := a to param.ontrackarray.total - 1 do
     begin
      dc.drawer.SetColor(255,255, 0,255);
@@ -376,8 +386,9 @@ begin
                  getviewcontrol.clientheight - param.ontrackarray.otrackarray[i].dispcoord.y,param.ontrackarray.otrackarray[i].dispcoord.x - marksize,
                  getviewcontrol.clientheight - param.ontrackarray.otrackarray[i].dispcoord.y);
 
-      oglsm.myglLineStipple(1, $3333);
-      oglsm.myglEnable(GL_LINE_STIPPLE);
+      dc.drawer.SetPenStyle(TPS_Dot);
+      {oglsm.myglLineStipple(1, $3333);
+      oglsm.myglEnable(GL_LINE_STIPPLE);}
       //oglsm.myglbegin(GL_LINES);
       dc.drawer.SetColor(80,80, 80,255);
       if param.ontrackarray.otrackarray[i].arraydispaxis.Count <> 0 then
@@ -429,7 +440,8 @@ begin
       //oglsm.myglend;
       //oglsm.mytotalglend;
       //isOpenGLError;
-      oglsm.myglDisable(GL_LINE_STIPPLE);
+      dc.drawer.SetPenStyle(TPS_Solid);
+      //oglsm.myglDisable(GL_LINE_STIPPLE);
     end;
   end;
 
@@ -461,7 +473,8 @@ begin
   glLoadIdentity;
   oglsm.myglDisable(GL_LIGHTING);
 }
-  oglsm.myglDisable(GL_COLOR_LOGIC_OP);
+  dc.drawer.SetDrawMode(TDM_Normal);
+  {oglsm.myglDisable(GL_COLOR_LOGIC_OP);}
   CalcOptimalMatrix;
   if param.CSIcon.axislen<>0 then {переделать}
   begin

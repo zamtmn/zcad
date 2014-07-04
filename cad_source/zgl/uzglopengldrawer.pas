@@ -32,6 +32,8 @@ type
 TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         myscrbuf:tmyscrbuf;
                         public
+                        procedure SetPenStyle(const style:TZGLPenStyle);override;
+                        procedure SetDrawMode(const mode:TZGLDrawMode);override;
                         function startpaint(InPaintMessage:boolean;w,h:integer):boolean;override;
                         procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
                         procedure endrender;override;
@@ -78,6 +80,7 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         SavedDC:HDC;
                         hLinePen:HPEN;
                         linewidth:integer;
+                        penstyle:TZGLPenStyle;
                         constructor create;
 
                         procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
@@ -108,6 +111,8 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         procedure SwapBuffers;override;
                         procedure TranslateCoord2D(const tx,ty:single);override;
                         procedure ScaleCoord2D(const sx,sy:single);override;
+                        procedure SetPenStyle(const style:TZGLPenStyle);override;
+                        procedure SetDrawMode(const mode:TZGLDrawMode);override;
                    end;
 {$IFDEF WINDOWS}
 TZGLGDIPlusDrawer=class(TZGLCanvasDrawer)
@@ -483,7 +488,52 @@ begin
        end;
 
 end;
-
+procedure TZGLOpenGLDrawer.SetPenStyle(const style:TZGLPenStyle);
+begin
+     case style of
+         TPS_Solid:
+                   begin
+                        oglsm.myglDisable(GL_LINE_STIPPLE);
+                        oglsm.myglDisable(GL_POLYGON_STIPPLE);
+                   end;
+           TPS_Dot:
+                     begin
+                         oglsm.myglLineStipple(1, $3333);
+                         oglsm.myglEnable(GL_LINE_STIPPLE);
+                     end;
+          TPS_Dash:
+                    begin
+                         oglsm.myglLineStipple(1, $F0F0);
+                         oglsm.myglEnable(GL_LINE_STIPPLE);
+                    end;
+       TPS_Selected:
+                    begin
+                         oglsm.myglLineStipple(3, $AAAA);
+                         oglsm.myglEnable(GL_LINE_STIPPLE);
+                         oglsm.myglPolygonStipple(@ps);
+                         oglsm.myglEnable(GL_POLYGON_STIPPLE);
+                    end;
+     end;
+end;
+procedure TZGLOpenGLDrawer.SetDrawMode(const mode:TZGLDrawMode);
+begin
+     case mode of
+        TDM_Normal:
+                   begin
+                        oglsm.myglDisable(GL_COLOR_LOGIC_OP);
+                   end;
+            TDM_OR:
+                   begin
+                        oglsm.myglLogicOp(GL_OR);
+                        oglsm.myglEnable(GL_COLOR_LOGIC_OP);
+                   end;
+           TDM_XOR:
+                     begin
+                         oglsm.myglLogicOp(GL_XOR);
+                         oglsm.myglEnable(GL_COLOR_LOGIC_OP);
+                     end;
+     end;
+end;
 procedure TZGLOpenGLDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
 begin
      oglsm.myglbegin(GL_LINES);
@@ -498,6 +548,32 @@ begin
      tx:=0;
      ty:=400;
      SavedBitmap:=0;
+     penstyle:=TPS_Solid;
+end;
+procedure TZGLCanvasDrawer.SetPenStyle(const style:TZGLPenStyle);
+begin
+     if penstyle<>style then
+     begin
+          penstyle:=style;
+          Self._createPen;
+     end;
+end;
+procedure TZGLCanvasDrawer.SetDrawMode(const mode:TZGLDrawMode);
+begin
+     case mode of
+        TDM_Normal:
+                   begin
+                        SetROP2(OffScreedDC,R2_COPYPEN);
+                   end;
+            TDM_OR:
+                   begin
+                        SetROP2(OffScreedDC,R2_MERGEPEN);
+                   end;
+           TDM_XOR:
+                     begin
+                          SetROP2(OffScreedDC,R2_XORPEN);
+                     end;
+     end;
 end;
 procedure TZGLCanvasDrawer.startrender;
 var
@@ -686,10 +762,23 @@ begin
      ClearColor:=RGB(red,green,blue);
 end;
 procedure TZGLCanvasDrawer._createPen;
+var
+   ps:integer;
 begin
   deleteobject(hLinePen);
   isWindowsErrors;
-  hLinePen:=CreatePen({PS_DOT}PS_SOLID,linewidth,PenColor);
+  case penstyle of
+              TPS_Solid:
+                        ps:=PS_SOLID;
+              TPS_Dot:
+                      ps:=PS_DOT;
+              TPS_Dash:
+                       ps:=PS_DASH;
+          TPS_Selected:
+                       ps:=PS_DOT;
+  end;
+  SetBkColor(OffScreedDC,ClearColor);
+  hLinePen:=CreatePen(ps,linewidth,PenColor);
   isWindowsErrors;
   SelectObject(OffScreedDC, hLinePen);
   isWindowsErrors;

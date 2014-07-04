@@ -19,7 +19,7 @@
 unit GDBEntity;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
+uses uzglabstractdrawer,gdbdrawcontext,ugdbdrawingdef,GDBCamera,gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
      {UGDBPolyPoint2DArray,}varman,varmandef,
      GDBase,gdbobjectsconstdef,
      oglwindowdef,geometry,dxflow,sysutils,memman,OGLSpecFunc,UGDBOpenArrayOfByte,UGDBLayerArray,UGDBOpenArrayOfPObjects;
@@ -522,12 +522,8 @@ begin
                                                                          _selected:=dc.selected;
                                                                          dc.selected:=true;
                                                                          oglsm.myglStencilFunc(GL_ALWAYS,0,1);
-                                                                         oglsm.myglLineStipple(3, ls);
-                                                                         oglsm.myglEnable(GL_LINE_STIPPLE);
+                                                                         dc.drawer.SetPenStyle(TPS_Selected);
                                                                          sel := true;
-
-                                                                         oglsm.myglPolygonStipple(@ps);
-                                                                         oglsm.myglEnable(GL_POLYGON_STIPPLE);
                                                                     end;
   if (dc.subrender = 0)
       then
@@ -589,8 +585,7 @@ begin
   if sel then
              begin
                   //oglsm.mytotalglend;
-                  oglsm.myglDisable(GL_LINE_STIPPLE);
-                  oglsm.myglDisable(GL_POLYGON_STIPPLE);
+                  dc.drawer.SetPenStyle(TPS_Solid);
                   dc.selected:=_selected;
              end;
 end;

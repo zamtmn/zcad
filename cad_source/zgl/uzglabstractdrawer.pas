@@ -22,6 +22,8 @@ interface
 uses UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase;
 type
 TRenderMode=(TRM_ModelSpace,TRM_DisplaySpace,TRM_WindowSpace);
+TZGLPenStyle=(TPS_Solid,TPS_Dot,TPS_Dash,TPS_Selected);
+TZGLDrawMode=(TDM_OR,TDM_XOR,TDM_Normal);
 TZGLAbstractDrawer=class
                         public
                         PVertexBuffer:PGDBOpenArrayOfData;
@@ -52,7 +54,8 @@ TZGLAbstractDrawer=class
                         function CreateScrbuf(w,h:integer):boolean; virtual;abstract;
                         procedure delmyscrbuf; virtual;abstract;
                         procedure SwapBuffers; virtual;abstract;
-
+                        procedure SetPenStyle(const style:TZGLPenStyle);virtual;abstract;
+                        procedure SetDrawMode(const mode:TZGLDrawMode);virtual;abstract;
 
 
 
@@ -94,6 +97,8 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         function CreateScrbuf(w,h:integer):boolean; override;
                         procedure delmyscrbuf; override;
                         procedure SwapBuffers; override;
+                        procedure SetPenStyle(const style:TZGLPenStyle);override;
+                        procedure SetDrawMode(const mode:TZGLDrawMode);override;
                    end;
 var
   testrender:TZGLAbstractDrawer;
@@ -193,6 +198,12 @@ procedure TZGLGeneralDrawer.delmyscrbuf;
 begin
 end;
 procedure TZGLGeneralDrawer.SwapBuffers;
+begin
+end;
+procedure TZGLGeneralDrawer.SetPenStyle(const style:TZGLPenStyle);
+begin
+end;
+procedure TZGLGeneralDrawer.SetDrawMode(const mode:TZGLDrawMode);
 begin
 end;
 initialization

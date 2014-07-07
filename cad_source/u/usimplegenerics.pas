@@ -47,7 +47,7 @@ uses
     log;
 function TMyMap.MyGetValue(key:TKey):TValue;
 var
-   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
+   Iterator:{specialize TMap<TKey, TValue, TCompare>.}TIterator;
 begin
   Iterator:=Find(key);
   if  Iterator=nil then
@@ -60,7 +60,7 @@ begin
 end;
 procedure TMyMap.MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);
 var
-   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
+   Iterator:{specialize TMap<TKey, TValue, TCompare>.}TIterator;
 begin
   Iterator:=Find(key);
   if  Iterator=nil then
@@ -77,4 +77,4 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}LogOut('dxftypes.initialization');{$ENDIF}
-end.
+end.

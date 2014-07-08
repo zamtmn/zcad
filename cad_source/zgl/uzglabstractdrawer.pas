@@ -19,7 +19,7 @@
 unit uzglabstractdrawer;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase;
+uses UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase,gdbasetypes,GDBCamera;
 type
 TRenderMode=(TRM_ModelSpace,TRM_DisplaySpace,TRM_WindowSpace);
 TZGLPenStyle=(TPS_Solid,TPS_Dot,TPS_Dash,TPS_Selected);
@@ -61,8 +61,10 @@ TZGLAbstractDrawer=class
 
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);overload;virtual;abstract;
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);overload;virtual;abstract;
+                        procedure DrawQuad2DInDCS(const x1,y1,x2,y2:single);virtual;abstract;
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);overload;virtual;abstract;
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
+                        procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);virtual;abstract;
                    end;
 TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         public
@@ -99,9 +101,14 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure SwapBuffers; override;
                         procedure SetPenStyle(const style:TZGLPenStyle);override;
                         procedure SetDrawMode(const mode:TZGLDrawMode);override;
+                        procedure DrawQuad2DInDCS(const x1,y1,x2,y2:single);override;
+                        procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
                    end;
 var
   testrender:TZGLAbstractDrawer;
+  CurrentCamCSOffset:GDBvertex;
+  CurrentCamCSOffsetS:GDBvertex3S;
+  notuseLCS:GDBBOOLEAN;
 implementation
 uses log;
 procedure TZGLGeneralDrawer.DrawLine(const i1:TLLVertexIndex);
@@ -204,6 +211,12 @@ procedure TZGLGeneralDrawer.SetPenStyle(const style:TZGLPenStyle);
 begin
 end;
 procedure TZGLGeneralDrawer.SetDrawMode(const mode:TZGLDrawMode);
+begin
+end;
+procedure TZGLGeneralDrawer.DrawQuad2DInDCS(const x1,y1,x2,y2:single);
+begin
+end;
+procedure TZGLGeneralDrawer.SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);
 begin
 end;
 initialization

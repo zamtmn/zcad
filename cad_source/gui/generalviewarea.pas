@@ -21,15 +21,11 @@ unit generalviewarea;
 interface
 uses
      GDBHelpObj{нужно убрать},
-     {gdbase,gdbasetypes,
-     UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,UGDBPoint3DArray,
-     oglwindowdef,gdbdrawcontext,UGDBEntTree,ugdbabstractdrawing,
-     uinfoform,}
-     gdbase,gdbasetypes,UGDBSelectedObjArray,
+     geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,
-     uinfoform,oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,Varman,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,geometry,
+     uinfoform,oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,Varman,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
      gdbobjectsconstdef,shared,zcadstrconsts,UGDBTracePropArray,math,sysutils,commandlinedef,UGDBDrawingdef,strproc,GDBText,sltexteditor,
-     ExtCtrls,Controls,Classes,LCLType,Forms,UGDBOpenArrayOfPV,GDBGenericSubEntry,GDBCamera,OGLSpecFunc,UGDBVisibleOpenArray,uzglabstractdrawer,abstractviewarea;
+     ExtCtrls,Controls,Classes,LCLType,Forms,UGDBOpenArrayOfPV,GDBGenericSubEntry,GDBCamera,UGDBVisibleOpenArray,uzglabstractdrawer,abstractviewarea;
 const
   ontracdist=10;
   ontracignoredist=25;
@@ -216,8 +212,8 @@ begin
   dc.drawer.SetDrawMode(TDM_OR);
   if param.ShowDebugFrustum then
                           drawfrustustum(param.debugfrustum,dc);
-  if param.ShowDebugBoundingBbox then
-                              DrawAABB(param.DebugBoundingBbox);
+  {if param.ShowDebugBoundingBbox then
+                              DrawAABB(param.DebugBoundingBbox);}
 
   Tempplane:=param.mousefrustumLCS[5];
   tempplane[3]:=(tempplane[3]-param.mousefrustumLCS[4][3])/2;
@@ -354,12 +350,13 @@ begin
                                            dc.drawer.SetColor(0,40,0,10)
                                        else
                                            dc.drawer.SetColor(0,0,40,10);
-    oglsm.myglbegin(GL_QUADS);
+    dc.drawer.DrawQuad2DInDCS(param.seldesc.Frame1.x,param.seldesc.Frame1.y,param.seldesc.Frame2.x,param.seldesc.Frame2.y);
+    {oglsm.myglbegin(GL_QUADS);
     oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame1.y);
     oglsm.myglVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame1.y);
     oglsm.myglVertex2i(param.seldesc.Frame2.x, param.seldesc.Frame2.y);
     oglsm.myglVertex2i(param.seldesc.Frame1.x, param.seldesc.Frame2.y);
-    oglsm.myglend;
+    oglsm.myglend;}
     if param.seldesc.MouseFrameInverse then
                                            dc.drawer.SetPenStyle(TPS_Solid);
                                            //oglsm.myglDisable(GL_LINE_STIPPLE);
@@ -449,7 +446,7 @@ begin
 
  //{$ENDREGION}
  NotUseLCS:=_NotUseLCS;
-  oglsm.myglMatrixMode(GL_PROJECTION);
+  //oglsm.myglMatrixMode(GL_PROJECTION);
   //glLoadIdentity;
   //gdb.GetCurrentDWG.pcamera^.projMatrix:=onematrix;
   if PDWG<>nil then
@@ -481,49 +478,29 @@ begin
   td:=param.CSIcon.axislen;
   td2:=td/5;
   td22:=td2/3;
-  oglsm.myglbegin(GL_lines);
+
   dc.drawer.SetColor(255, 0, 0,255);
-
-  oglsm.myglVertex3d(param.CSIcon.CSIconCoord);
-  oglsm.myglVertex3d(param.CSIcon.CSIconX);
-
-  oglsm.myglVertex3d(param.CSIcon.CSIconX);
-  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y-td22 , param.CSIcon.CSIconCoord.z));
-
-  oglsm.myglVertex3d(param.CSIcon.CSIconX);
-  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y+td22 , param.CSIcon.CSIconCoord.z));
+  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconX,dc.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconX,createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y-td22 , param.CSIcon.CSIconCoord.z),dc.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconX,createvertex(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y+td22 , param.CSIcon.CSIconCoord.z),dc.matrixs);
 
   dc.drawer.SetColor(0, 255, 0,255);
-
-  oglsm.myglVertex3d(param.CSIcon.CSIconCoord);
-  oglsm.myglVertex3d(param.CSIcon.CSIconY);
-
-  oglsm.myglVertex3d(param.CSIcon.CSIconY);
-  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x-td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z));
-
-  oglsm.myglVertex3d(param.CSIcon.CSIconY);
-  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x+td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z));
+  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconY,dc.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconY,createvertex(param.CSIcon.CSIconCoord.x-td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z),dc.matrixs);
+  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconY,createvertex(param.CSIcon.CSIconCoord.x+td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z),dc.matrixs);
 
   dc.drawer.SetColor(0, 0, 255,255);
+  dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconZ,dc.matrixs);
 
-  oglsm.myglVertex3d(param.CSIcon.CSIconCoord);
-  oglsm.myglVertex3d(param.CSIcon.CSIconZ);
-
-  oglsm.myglend;
   if IsVectorNul(vectordot(pdwg.GetPcamera.prop.look,ZWCS)) then
   begin
-  oglsm.myglbegin(GL_lines);
-  dc.drawer.SetColor(255, 255, 255,255);
-  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y , param.CSIcon.CSIconCoord.z));
-  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z));
-  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z));
-  oglsm.myglVertex3d(createvertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z));
-  oglsm.myglend;
+      dc.drawer.SetColor(255, 255, 255,255);
+      dc.drawer.DrawLine3DInModelSpace(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y , param.CSIcon.CSIconCoord.z),createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.matrixs);
+      dc.drawer.DrawLine3DInModelSpace(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),createvertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.matrixs);
   end;
   end;
-  //oglsm.mytotalglend;
-  //isOpenGLError;
-  //oglsm.myglDisable(GL_COLOR_LOGIC_OP);
+  dc.drawer.ClearStatesMachine;
+  dc.drawer.SetDrawMode(TDM_Normal);
 end;
 end;
 
@@ -1265,6 +1242,8 @@ end;
 procedure TGeneralViewArea.WaResize(sender:tobject);
 begin
      drawer.WorkAreaResize(getviewcontrol.clientwidth,getviewcontrol.clientheight);
+     param.height := getviewcontrol.clientheight;
+     param.width := getviewcontrol.clientwidth;
 end;
 procedure TGeneralViewArea.WaMouseWheel(Sender:TObject;Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint;var handled:boolean);
 //procedure TOGLWnd.Pre_MouseWheel;
@@ -1568,7 +1547,7 @@ if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
                                                                 UpdateObjInspProc;
   SBTextOut(htext);
   //param.firstdraw:=true;
-  isOpenGLError;
+  //isOpenGLError;
   CorrectMouseAfterOS;
   draworinvalidate;
   //inc(sysvar.debug.int1);
@@ -2569,27 +2548,17 @@ begin
                                       end;
 
 }
-  oglsm.myglMatrixMode(GL_Projection);
-  oglsm.myglpushmatrix;
-  oglsm.myglLoadIdentity;
-  oglsm.mygluPickMatrix(param.md.glmouse.x, {gdb.GetCurrentDWG.pcamera^.viewport[3]-} param.md.glmouse.y, sysvar.DISP.DISP_CursorSize^ * 2, sysvar.DISP.DISP_CursorSize^ * 2, {PTViewPortArray}(@PDWG.Getpcamera^.viewport));
-  {if param.projtype = ProjParalel then
-                                      begin
-                                      gdb.GetCurrentDWG.pcamera^.projMatrix:=ortho(-clientwidth*param.zoom/2,clientwidth*param.zoom/2,
-                                                                                 -clientheight*param.zoom/2,clientheight*param.zoom/2,
-                                                                                 gdb.GetCurrentDWG.pcamera^.zmin, gdb.GetCurrentDWG.pcamera^.zmax,@onematrix);
-                                      end
-                                  else
-                                      BEGIN
-                                           if gdb.GetCurrentDWG.pcamera^.zmin<eps then gdb.GetCurrentDWG.pcamera^.zmin:=10;
-                                           gdb.GetCurrentDWG.pcamera^.projMatrix:=Perspective(gdb.GetCurrentDWG.pcamera^.fovy, Width / Height, gdb.GetCurrentDWG.pcamera^.zmin, gdb.GetCurrentDWG.pcamera^.zmax,@onematrix);
-                                        end;}
-  oglsm.myglGetDoublev(GL_PROJECTION_MATRIX, @tm);
+  //--oglsm.myglMatrixMode(GL_Projection);
+  //--oglsm.myglpushmatrix;
+  //--oglsm.myglLoadIdentity;
+  tm:=myPickMatrix(param.md.glmouse.x, param.md.glmouse.y, sysvar.DISP.DISP_CursorSize^ * 2, sysvar.DISP.DISP_CursorSize^ * 2, PDWG.Getpcamera^.viewport);
+  //--oglsm.mygluPickMatrix(param.md.glmouse.x, param.md.glmouse.y, sysvar.DISP.DISP_CursorSize^ * 2, sysvar.DISP.DISP_CursorSize^ * 2, (@PDWG.Getpcamera^.viewport));
+  //--oglsm.myglGetDoublev(GL_PROJECTION_MATRIX, @tm);
   param.mouseclipmatrix := MatrixMultiply(PDWG.Getpcamera^.projMatrix, tm);
   param.mouseclipmatrix := MatrixMultiply(PDWG.Getpcamera^.modelMatrix, param.mouseclipmatrix);
   param.mousefrustum := calcfrustum(@param.mouseclipmatrix);
-  oglsm.myglpopmatrix;
-  oglsm.myglMatrixMode(GL_MODELVIEW);
+  //--oglsm.myglpopmatrix;
+  //--oglsm.myglMatrixMode(GL_MODELVIEW);
 end;
 
 function ProjectPoint2(pntx,pnty,pntz:gdbdouble; var m:DMatrix4D; var ccsLBN,ccsRTF:GDBVertex):gdbvertex;
@@ -2897,33 +2866,33 @@ begin
                                            //OGLSpecFunc.CurrentCamCSOffset:=pdwg.pcamera^.CamCSOffset;
                                            if geometry.oneVertexlength(pcamera^.CamCSOffset)>1000000 then
                                            begin
-                                                OGLSpecFunc.CurrentCamCSOffset:=pcamera^.CamCSOffset;
-                                                OGLSpecFunc.CurrentCamCSOffsetS:=VertexD2S(OGLSpecFunc.CurrentCamCSOffset);
-                                                OGLSpecFunc.notuseLCS:=pcamera^.notuseLCS;
+                                                {OGLSpecFunc.}CurrentCamCSOffset:=pcamera^.CamCSOffset;
+                                                {OGLSpecFunc.}CurrentCamCSOffsetS:=VertexD2S({OGLSpecFunc.}CurrentCamCSOffset);
+                                                {OGLSpecFunc.}notuseLCS:=pcamera^.notuseLCS;
                                            end
-                                           else OGLSpecFunc.notuseLCS:=true;
+                                           else {OGLSpecFunc.}notuseLCS:=true;
                                       end
                                   else
                                       begin
-                                            OGLSpecFunc.notuseLCS:=true;
+                                            {OGLSpecFunc.}notuseLCS:=true;
                                       end;
-  if OGLSpecFunc.notuseLCS then
+  if {OGLSpecFunc.}notuseLCS then
   begin
         pcamera^.projMatrixLCS:=pcamera^.projMatrix;
         pcamera^.modelMatrixLCS:=pcamera^.modelMatrix;
         pcamera^.frustumLCS:=pcamera^.frustum;
         pcamera^.CamCSOffset:=NulVertex;
-        OGLSpecFunc.CurrentCamCSOffset:=nulvertex;
+        {OGLSpecFunc.}CurrentCamCSOffset:=nulvertex;
   end;
 
 
-  if {pdwg.pcamera^.notuseLCS}OGLSpecFunc.notuseLCS then
+  if {pdwg.pcamera^.notuseLCS}{OGLSpecFunc.}notuseLCS then
   begin
         pcamera^.projMatrixLCS:=pcamera^.projMatrix;
         pcamera^.modelMatrixLCS:=pcamera^.modelMatrix;
         pcamera^.frustumLCS:=pcamera^.frustum;
         pcamera^.CamCSOffset:=NulVertex;
-        OGLSpecFunc.CurrentCamCSOffset:=nulvertex;
+        {OGLSpecFunc.}CurrentCamCSOffset:=nulvertex;
   end;
   SetOGLMatrix;
   end;
@@ -2936,20 +2905,19 @@ var
 begin
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.SetOGLMatrix',0);{$ENDIF}
   pcam:=pdwg.GetPcamera;
-  oglsm.myglViewport(0, 0, getviewcontrol.clientWidth, getviewcontrol.clientHeight);
-  oglsm.myglGetIntegerv(GL_VIEWPORT, @pcam^.viewport);
   pcam^.viewport[0]:=0;
   pcam^.viewport[1]:=0;
   pcam^.viewport[2]:=getviewcontrol.clientWidth;
   pcam^.viewport[3]:=getviewcontrol.clientHeight;
+  drawer.SetOGLMatrix(pcam^,getviewcontrol.clientWidth, getviewcontrol.clientHeight);
 
-  oglsm.myglMatrixMode(GL_MODELVIEW);
+  {oglsm.myglMatrixMode(GL_MODELVIEW);
   oglsm.myglLoadMatrixD(@pcam^.modelMatrixLCS);
 
   oglsm.myglMatrixMode(GL_PROJECTION);
   oglsm.myglLoadMatrixD(@pcam^.projMatrixLCS);
 
-  oglsm.myglMatrixMode(GL_MODELVIEW);
+  oglsm.myglMatrixMode(GL_MODELVIEW);}
 
 
   pcam^.getfrustum(@pcam^.modelMatrix,   @pcam^.projMatrix,   pcam^.clip,   pdwg.GetPcamera^.frustum);

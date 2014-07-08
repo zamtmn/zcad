@@ -25,7 +25,7 @@ uses
     Gtk2Def,
     {$ENDIF}
     LCLIntf,LCLType,Classes,Controls,
-    geometry,uzglabstractdrawer,UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase;
+    geometry,uzglabstractdrawer,UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase,GDBCamera;
 const
   texturesize=256;
 type
@@ -57,6 +57,7 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         {в координатах окна}
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
+                        procedure DrawQuad2DInDCS(const x1,y1,x2,y2:single);override;
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);override;
                         {в координатах модели}
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
@@ -64,6 +65,7 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure RestoreBuffers(w,h:integer);override;
                         function CreateScrbuf(w,h:integer):boolean; override;
                         procedure delmyscrbuf; override;
+                        procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
                    end;
 TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         public
@@ -351,6 +353,15 @@ begin
               oglsm.myglVertex2f(x2,y2);
     oglsm.myglend;
 end;
+procedure TZGLOpenGLDrawer.DrawQuad2DInDCS(const x1,y1,x2,y2:single);
+begin
+  oglsm.myglbegin(GL_QUADS);
+  oglsm.myglVertex2f(x1,y1);
+  oglsm.myglVertex2f(x2,y1);
+  oglsm.myglVertex2f(x2,y2);
+  oglsm.myglVertex2f(x1,y2);
+  oglsm.myglend;
+end;
 procedure TZGLOpenGLDrawer.DrawClosedPolyLine2DInDCS(const coords:array of single);
 var
    i:integer;
@@ -487,6 +498,19 @@ begin
              myscrbuf[i]:=0;
        end;
 
+end;
+procedure TZGLOpenGLDrawer.SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);
+begin
+  oglsm.myglViewport(0, 0, w, h);
+  oglsm.myglGetIntegerv(GL_VIEWPORT, @cam.viewport);
+
+  oglsm.myglMatrixMode(GL_MODELVIEW);
+  oglsm.myglLoadMatrixD(@cam.modelMatrixLCS);
+
+  oglsm.myglMatrixMode(GL_PROJECTION);
+  oglsm.myglLoadMatrixD(@cam.projMatrixLCS);
+
+  oglsm.myglMatrixMode(GL_MODELVIEW);
 end;
 procedure TZGLOpenGLDrawer.SetPenStyle(const style:TZGLPenStyle);
 begin

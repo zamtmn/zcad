@@ -242,7 +242,7 @@ type
                            procedure myglGetDoublev(pname: GLenum; params: PGLdouble);inline;
                            function myglGetString(name: GLenum): PAnsiChar;inline;
                            function mygluGetString(name: GLenum): PAnsiChar;inline;
-                           procedure mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);inline;
+                           procedure mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);
 
                            function NewTess:TessObj;
                            procedure DeleteTess(ptessobj:TessObj);
@@ -266,9 +266,6 @@ type
     end;
 
 var
-   CurrentCamCSOffset:GDBvertex;
-   CurrentCamCSOffsetS:GDBvertex3S;
-   notuseLCS:GDBBOOLEAN;
    GLRasterizer:TOGLStateManager;
    OGLSM:PTOGLStateManager;
    wglSwapIntervalEXT: function(interval: GLint): BOOL;{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
@@ -294,7 +291,7 @@ var
    middlepoint:GDBVertex;
 implementation
 uses
-    {UGDBDescriptor,}geometry;
+    uzglabstractdrawer,geometry;
 procedure MywglCreateContext(var oglc:TOGLContextDesk);
 begin
      //oglc.hrc := wglCreateContext(oglc.DC);

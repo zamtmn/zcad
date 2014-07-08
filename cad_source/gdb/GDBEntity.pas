@@ -489,10 +489,11 @@ begin
   Drawg(lw,dc{visibleactualy,subrender});
   if lw > 1 then
   begin
-    oglsm.myglDisable(GL_LINE_SMOOTH);
+    dc.drawer.setlinewidth(1);
+    {oglsm.myglDisable(GL_LINE_SMOOTH);
     oglsm.mygllinewidth(1);
     oglsm.myglpointsize(1);
-    oglsm.myglDisable(gl_point_smooth);
+    oglsm.myglDisable(gl_point_smooth);}
   end;
 end;
 procedure GDBObjEntity.DrawWithAttrib;
@@ -577,10 +578,11 @@ begin
 
   if lw > 1 then
   begin
-    oglsm.myglDisable(GL_LINE_SMOOTH);
+    dc.drawer.setlinewidth(1);
+    {oglsm.myglDisable(GL_LINE_SMOOTH);
     oglsm.mygllinewidth(1);
     oglsm.myglpointsize(1);
-    oglsm.myglDisable(gl_point_smooth);
+    oglsm.myglDisable(gl_point_smooth);}
   end;
   if sel then
              begin

@@ -268,6 +268,7 @@ begin
 end;
 procedure TOpenGLViewArea.WaResize(sender:tobject);
 begin
+     inherited;
      OpenGLWindow.MakeCurrent(false);
      param.lastonmouseobject:=nil;
 
@@ -279,7 +280,7 @@ begin
 
      {переделать}//inherited size{(fwSizeType,nWidth,nHeight)};
 
-     drawer.WorkAreaResize(getviewcontrol.clientwidth,getviewcontrol.clientheight);
+     //drawer.WorkAreaResize(getviewcontrol.clientwidth,getviewcontrol.clientheight);
 
      {wa.param.md.glmouse.y := clientheight-wa.param.md.mouse.y;
      CalcOptimalMatrix;
@@ -290,8 +291,6 @@ begin
      GDBFreeMem(param.pglscreen);
      GDBGetMem({$IFDEF DEBUGBUILD}'ScreenBuf',{$ENDIF}param.pglscreen, getviewcontrol.clientwidth * getviewcontrol.clientheight * 4);
 
-     param.height := getviewcontrol.clientheight;
-     param.width := getviewcontrol.clientwidth;
      param.firstdraw := true;
      //draw;
      //paint;

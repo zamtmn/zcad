@@ -187,6 +187,7 @@ function CorrectAngleIfNotReadable(Angle:GDBDouble):GDBDouble;
 function GetCSDirFrom0x0y2D(const ox,oy:GDBVertex):TCSDir;
 
 function CalcDisplaySubFrustum(const x,y,w,h:gdbdouble;const mm,pm:DMatrix4D;const vp:IMatrix4):ClipArray;
+function myPickMatrix(const x,y,deltax,deltay:gdbdouble;const vp:IMatrix4): DMatrix4D;
 
 var WorldMatrix{,CurrentCS}:DMatrix4D;
     wx:PGDBVertex;

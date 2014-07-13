@@ -108,6 +108,7 @@ type
                            procedure draw;override;
                            procedure DrawOrInvalidate;override;
                            procedure showcursor(var DC:TDrawContext);override;
+                           procedure DrawCSAxis(var DC:TDrawContext);
                            procedure SwapBuffers(var DC:TDrawContext);override;
                            procedure DrawGrid(var DC:TDrawContext);override;
                            procedure LightOn(var DC:TDrawContext);override;
@@ -470,8 +471,15 @@ begin
   glLoadIdentity;
   oglsm.myglDisable(GL_LIGHTING);
 }
+  dc.drawer.ClearStatesMachine;
   dc.drawer.SetDrawMode(TDM_Normal);
-  {oglsm.myglDisable(GL_COLOR_LOGIC_OP);}
+end;
+end;
+procedure TGeneralViewArea.DrawCSAxis(var DC:TDrawContext);
+var
+  td,td2,td22:gdbdouble;
+begin
+  dc.drawer.SetDrawMode(TDM_Normal);
   CalcOptimalMatrix;
   if param.CSIcon.axislen<>0 then {переделать}
   begin
@@ -502,8 +510,6 @@ begin
   dc.drawer.ClearStatesMachine;
   dc.drawer.SetDrawMode(TDM_Normal);
 end;
-end;
-
 procedure TGeneralViewArea.DrawGrid(var DC:TDrawContext);
 begin
 end;
@@ -688,6 +694,8 @@ begin
     end;
     PDWG.GetCurrentROOT.DrawBB;
 
+    DrawCSAxis(dc);
+
     dc.drawer.ClearStatesMachine;
 
 
@@ -737,6 +745,8 @@ begin
     dc.drawer.SetLineWidth(1);
     dc.drawer.SetPointSize(1);
     showcursor(dc);
+    dc.drawer.startrender(TRM_WindowSpace,dc.matrixs);
+    dc.drawer.DrawDebugGeometry;
 
     dec(dc.subrender);
   end;

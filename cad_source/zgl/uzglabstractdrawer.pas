@@ -65,6 +65,7 @@ TZGLAbstractDrawer=class
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);overload;virtual;abstract;
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);virtual;abstract;
+                        procedure DrawDebugGeometry;virtual;abstract;
                    end;
 TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         public
@@ -103,6 +104,7 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure SetDrawMode(const mode:TZGLDrawMode);override;
                         procedure DrawQuad2DInDCS(const x1,y1,x2,y2:single);override;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
+                        procedure DrawDebugGeometry;override;
                    end;
 var
   testrender:TZGLAbstractDrawer;
@@ -217,6 +219,9 @@ procedure TZGLGeneralDrawer.DrawQuad2DInDCS(const x1,y1,x2,y2:single);
 begin
 end;
 procedure TZGLGeneralDrawer.SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);
+begin
+end;
+procedure TZGLGeneralDrawer.DrawDebugGeometry;
 begin
 end;
 initialization

@@ -67,6 +67,7 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure delmyscrbuf; override;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
                    end;
+TPaintState=(TPSBufferNotSaved,TPSBufferSaved);
 TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         public
                         canvas:tcanvas;
@@ -83,11 +84,15 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         hLinePen:HPEN;
                         linewidth:integer;
                         penstyle:TZGLPenStyle;
+                        PState:TPaintState;
+                        ScreenInvalidRect:Trect;
                         constructor create;
 
                         procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
 
                         function startpaint(InPaintMessage:boolean;w,h:integer):boolean;override;
+                        procedure createoffscreendc;
+                        procedure deleteoffscreendc;
                         procedure endpaint(InPaintMessage:boolean);override;
 
                         function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
@@ -115,6 +120,10 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         procedure ScaleCoord2D(const sx,sy:single);override;
                         procedure SetPenStyle(const style:TZGLPenStyle);override;
                         procedure SetDrawMode(const mode:TZGLDrawMode);override;
+                        procedure InitScreenInvalidrect(w,h:integer);
+                        procedure CorrectScreenInvalidrect(w,h:integer);
+                        procedure ProcessScreenInvalidrect(const x,y:integer);
+                        procedure DrawDebugGeometry;override;
                    end;
 {$IFDEF WINDOWS}
 TZGLGDIPlusDrawer=class(TZGLCanvasDrawer)
@@ -138,6 +147,7 @@ implementation
 uses log;
 procedure isWindowsErrors;
 begin
+
      {$IFDEF WINDOWS}
      code:=code;
      code:=0;
@@ -147,6 +157,7 @@ begin
      SetLastError(0);
      code:=0;
      {$ENDIF}
+
 end;
 
 {$IFDEF WINDOWS}
@@ -573,6 +584,7 @@ begin
      ty:=400;
      SavedBitmap:=0;
      penstyle:=TPS_Solid;
+     OffScreedDC:=0;
 end;
 procedure TZGLCanvasDrawer.SetPenStyle(const style:TZGLPenStyle);
 begin
@@ -628,6 +640,30 @@ begin
                  end;
      end;
 end;
+procedure TZGLCanvasDrawer.createoffscreendc;
+begin
+     if OffScreedDC=0 then
+     begin
+        OffScreedDC:=CreateCompatibleDC(CanvasDC);
+        OffscreenBitmap:=CreateCompatibleBitmap(CanvasDC,panel.Width,panel.Height);
+        SelectObject(OffScreedDC,OffscreenBitmap);
+        hLinePen:=CreatePen(PS_SOLID, 1, PenColor);
+        SelectObject(OffScreedDC, hLinePen);
+     end;
+end;
+procedure TZGLCanvasDrawer.deleteoffscreendc;
+begin
+     if OffScreedDC<>0 then
+     begin
+         DeleteObject(OffscreenBitmap);
+         OffscreenBitmap:=0;
+         DeleteObject(hLinePen);
+         hLinePen:=0;
+         DeleteDC(OffScreedDC);
+         OffScreedDC:=0;
+     end;
+end;
+
 function TZGLCanvasDrawer.startpaint;
 var
   mRect: TRect;
@@ -638,34 +674,15 @@ begin
                            CanvasDC:=(canvas.Handle)
                        else
                            CanvasDC:=GetDC(panel.Handle);
-     isWindowsErrors;
-     OffScreedDC:=CreateCompatibleDC(CanvasDC);
-     isWindowsErrors;
-     OffscreenBitmap:=CreateCompatibleBitmap(CanvasDC,panel.Width,panel.Height);
-     isWindowsErrors;
-     SelectObject(OffScreedDC,OffscreenBitmap);
-     isWindowsErrors;
-     hLinePen:=CreatePen(PS_SOLID, 1, PenColor);
-     isWindowsErrors;
-     SelectObject(OffScreedDC, hLinePen);
+     createoffscreendc;
      isWindowsErrors;
      result:=CreateScrbuf(canvas.Width,canvas.Height);
-     isWindowsErrors;
+     PState:=TPaintState.TPSBufferNotSaved;
 end;
 procedure TZGLCanvasDrawer.endpaint;
 begin
-     DeleteObject(OffscreenBitmap);
-     isWindowsErrors;
-     OffscreenBitmap:=0;
-     DeleteObject(hLinePen);
-     isWindowsErrors;
-     hLinePen:=0;
      if not InPaintMessage then
      ReleaseDC(panel.Handle,CanvasDC);
-     isWindowsErrors;
-     DeleteDC(OffScreedDC);
-     isWindowsErrors;
-     OffScreedDC:=0;
 end;
 function TZGLCanvasDrawer.CreateScrbuf(w,h:integer):boolean;
 begin
@@ -681,6 +698,7 @@ begin
           isWindowsErrors;
           result:=true;
      end;
+     createoffscreendc;
 end;
 procedure TZGLCanvasDrawer.delmyscrbuf;
 begin
@@ -693,6 +711,7 @@ begin
      SavedBitmap:=0;
      SavedDC:=0;
      end;
+     deleteoffscreendc;
 end;
 procedure TZGLCanvasDrawer.SaveBuffers(w,h:integer);
 begin
@@ -702,18 +721,26 @@ begin
          delmyscrbuf
      else
     {$ENDIF}
-         BitBlt(SavedDC,0,0,w,h,OffScreedDC,0,0,SRCCOPY);
+         {$IFDEF WINDOWS}windows.{$ENDIF}BitBlt(SavedDC,0,0,w,h,OffScreedDC,0,0,SRCCOPY);
      isWindowsErrors;
+     PState:=TPaintState.TPSBufferSaved;
+     InitScreenInvalidrect(w,h);
 end;
 procedure TZGLCanvasDrawer.RestoreBuffers(w,h:integer);
 begin
-     BitBlt(OffScreedDC,0,0,w,h,SavedDC,0,0,SRCCOPY);
-     isWindowsErrors;
+     //windows.BitBlt(OffScreedDC,0,0,100,100,SavedDC,0,0,SRCCOPY);
+    CorrectScreenInvalidrect(w,h);
+    //{$IFDEF WINDOWS}windows.{$ENDIF}BitBlt(OffScreedDC,0,0,w,h,SavedDC,0,0,SRCCOPY);
+    {$IFDEF WINDOWS}windows.{$ENDIF}BitBlt(OffScreedDC,ScreenInvalidRect.Left,ScreenInvalidRect.Top,ScreenInvalidRect.Right-ScreenInvalidRect.Left+1,ScreenInvalidRect.bottom-ScreenInvalidRect.top+1,SavedDC,ScreenInvalidRect.Left,ScreenInvalidRect.Top,SRCCOPY);
+    PState:=TPaintState.TPSBufferSaved;
+    InitScreenInvalidrect(w,h);
+     //isWindowsErrors;
 end;
 procedure TZGLCanvasDrawer.SwapBuffers;
 begin
-     isWindowsErrors;
-     BitBlt({canvas.Handle}CanvasDC,0,0,panel.Width,panel.Height,OffScreedDC,0,0,SRCCOPY);
+     //isWindowsErrors;
+     //windows.BitBlt({canvas.Handle}CanvasDC,0,0,100,100,OffScreedDC,0,0,SRCCOPY);
+     {$IFDEF WINDOWS}windows.{$ENDIF}BitBlt({canvas.Handle}CanvasDC,0,0,panel.Width,panel.Height,OffScreedDC,0,0,SRCCOPY);
      isWindowsErrors;
 end;
 function TZGLCanvasDrawer.TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
@@ -736,6 +763,7 @@ procedure TZGLCanvasDrawer.DrawLine(const i1:TLLVertexIndex);
 var
    pv1,pv2:PGDBVertex3S;
    p1,p2:GDBVertex3S;
+   x,y:integer;
 begin
     pv1:=PGDBVertex3S(PVertexBuffer.getelement(i1));
     pv2:=PGDBVertex3S(PVertexBuffer.getelement(i1+1));
@@ -744,10 +772,14 @@ begin
     //canvas.Line(round(p1.x),round(p1.y),round(p2.x),round(p2.y));
     //canvas.Pie(1,1,1,1,
     //              1,1,1,1);
-    MoveToEx(OffScreedDC, round(p1.x),round(p1.y), nil);
-    isWindowsErrors;
-    LineTo(OffScreedDC, round(p2.x),round(p2.y));
-    isWindowsErrors;
+    x:=round(p1.x);
+    y:=round(p1.y);
+    ProcessScreenInvalidrect(x,y);
+    MoveToEx(OffScreedDC,x,y, nil);
+    x:=round(p2.x);
+    y:=round(p2.y);
+    ProcessScreenInvalidrect(x,y);
+    LineTo(OffScreedDC,x,y);
 end;
 
 procedure TZGLCanvasDrawer.DrawPoint(const i:TLLVertexIndex);
@@ -763,6 +795,7 @@ procedure TZGLCanvasDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matr
 var
    pp1,pp2:GDBVertex;
    h:integer;
+   x,y:integer;
 begin
      //_myGluProject(const objx,objy,objz:GDBdouble;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out winx,winy,winz:GDBdouble):Integer;
     _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
@@ -775,12 +808,17 @@ begin
      pp2:=geometry.VectorTransform3D(pp2,matrixs.pmodelMatrix^);}
 
      //canvas.Line(round(pp1.x),h-round(pp1.y),round(pp2.x),h-round(pp2.y));
-     MoveToEx(OffScreedDC, round(pp1.x),h-round(pp1.y), nil);
-     isWindowsErrors;
-     LineTo(OffScreedDC, round(pp2.x),h-round(pp2.y));
-     isWindowsErrors;
-end;
 
+     x:=round(pp1.x);
+     y:=h-round(pp1.y);
+     ProcessScreenInvalidrect(x,y);
+     MoveToEx(OffScreedDC,x,y,nil);
+
+     x:=round(pp2.x);
+     y:=h-round(pp2.y);
+     ProcessScreenInvalidrect(x,y);
+     LineTo(OffScreedDC,x,y);
+end;
 procedure TZGLCanvasDrawer.SetClearColor(const red, green, blue, alpha: byte);
 begin
      ClearColor:=RGB(red,green,blue);
@@ -854,37 +892,88 @@ begin
      deleteobject(ClearBrush);
      isWindowsErrors;
 end;
-procedure TZGLCanvasDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:integer);
+procedure TZGLCanvasDrawer.InitScreenInvalidrect;
 begin
-     MoveToEx(OffScreedDC,round(x1*sx+tx),round(y1*sy+ty), nil);
-     isWindowsErrors;
-     LineTo(OffScreedDC,round(x2*sx+tx),round(y2*sy+ty));
-     //canvas.Line(round(x1*sx+tx),round(y1*sy+ty),round(x2*sx+tx),round(y2*sy+ty));
-     isWindowsErrors;
+     ScreenInvalidRect.Left:=w;
+     ScreenInvalidRect.Right:=0;
+     ScreenInvalidRect.Top:=h;
+     ScreenInvalidRect.Bottom:=0;
+end;
+procedure TZGLCanvasDrawer.CorrectScreenInvalidrect;
+begin
+     if ScreenInvalidRect.Left<0 then ScreenInvalidRect.Left:=0;
+     if ScreenInvalidRect.Right>w then ScreenInvalidRect.Right:=w;
+     if ScreenInvalidRect.Top<0 then ScreenInvalidRect.Top:=0;
+     if ScreenInvalidRect.Bottom>h then ScreenInvalidRect.Bottom:=h;
+end;
+
+procedure TZGLCanvasDrawer.ProcessScreenInvalidrect(const x,y:integer);
+begin
+     if PState=TPSBufferSaved then
+     begin
+         if ScreenInvalidRect.Left>x then ScreenInvalidRect.Left:=x;
+         if ScreenInvalidRect.Right<x then ScreenInvalidRect.Right:=x;
+         if ScreenInvalidRect.Top>y then ScreenInvalidRect.Top:=y;
+         if ScreenInvalidRect.Bottom<y then ScreenInvalidRect.Bottom:=y;
+     end;
+end;
+procedure TZGLCanvasDrawer.DrawDebugGeometry;
+begin
+     DrawLine2DInDCS(ScreenInvalidRect.Left,ScreenInvalidRect.top,ScreenInvalidRect.right,ScreenInvalidRect.bottom);
+     DrawLine2DInDCS(ScreenInvalidRect.right,ScreenInvalidRect.top,ScreenInvalidRect.left,ScreenInvalidRect.bottom);
+end;
+procedure TZGLCanvasDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:integer);
+var
+   x,y:integer;
+begin
+     x:=round(x1*sx+tx);
+     y:=round(y1*sy+ty);
+     ProcessScreenInvalidrect(x,y);
+
+     MoveToEx(OffScreedDC,x,y, nil);
+
+     x:=round(x2*sx+tx);
+     y:=round(y2*sy+ty);
+     ProcessScreenInvalidrect(x,y);
+
+     LineTo(OffScreedDC,x,y);
 end;
 procedure TZGLCanvasDrawer.DrawLine2DInDCS(const x1,y1,x2,y2:single);
+var
+   x,y:integer;
 begin
-     //canvas.Line(round(x1*sx+tx),round(y1*sy+ty),round(x2*sx+tx),round(y2*sy+ty));
-     MoveToEx(OffScreedDC,round(x1*sx+tx),round(y1*sy+ty), nil);
-     isWindowsErrors;
-     LineTo(OffScreedDC,round(x2*sx+tx),round(y2*sy+ty));
-     isWindowsErrors;
+     x:=round(x1*sx+tx);
+     y:=round(y1*sy+ty);
+     ProcessScreenInvalidrect(x,y);
+
+     MoveToEx(OffScreedDC,x,y, nil);
+
+     x:=round(x2*sx+tx);
+     y:=round(y2*sy+ty);
+     ProcessScreenInvalidrect(x,y);
+
+     LineTo(OffScreedDC,x,y);
 end;
 procedure TZGLCanvasDrawer.DrawClosedPolyLine2DInDCS(const coords:array of single);
 var
    i:integer;
+   x,y:integer;
 begin
-     MoveToEx(OffScreedDC,round(coords[0]*sx+tx),round(coords[1]*sy+ty), nil);
-     isWindowsErrors;
+     x:=round(coords[0]*sx+tx);
+     y:=round(coords[1]*sy+ty);
+     ProcessScreenInvalidrect(x,y);
+     MoveToEx(OffScreedDC,x,y, nil);
+
      i:=2;
      while i<length(coords) do
      begin
-     LineTo(OffScreedDC,round(coords[i]*sx+tx),round(coords[i+1]*sy+ty));
-     isWindowsErrors;
+     x:=round(coords[i]*sx+tx);
+     y:=round(coords[i+1]*sy+ty);
+     ProcessScreenInvalidrect(x,y);
+     LineTo(OffScreedDC,x,y);
      inc(i,2);
      end;
      LineTo(OffScreedDC,round(coords[0]*sx+tx),round(coords[1]*sy+ty));
-     isWindowsErrors;
 end;
 
 initialization

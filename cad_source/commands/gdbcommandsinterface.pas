@@ -246,7 +246,7 @@ begin
      end;
      wpowner.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
                                 //создания или загрузки
-     //redrawoglwnd;
+     redrawoglwnd;
      result:=cmd_ok;
      programlog.logoutstr('result:=cmd_ok;',0);
      //application.ProcessMessages;

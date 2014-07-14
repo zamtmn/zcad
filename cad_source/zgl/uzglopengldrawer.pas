@@ -919,6 +919,8 @@ begin
 end;
 procedure TZGLCanvasDrawer.DrawDebugGeometry;
 begin
+     exit;
+     CorrectScreenInvalidrect(panel.Width,panel.Height);
      DrawLine2DInDCS(ScreenInvalidRect.Left,ScreenInvalidRect.top,ScreenInvalidRect.right,ScreenInvalidRect.bottom);
      DrawLine2DInDCS(ScreenInvalidRect.right,ScreenInvalidRect.top,ScreenInvalidRect.left,ScreenInvalidRect.bottom);
 end;

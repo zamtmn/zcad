@@ -32,6 +32,7 @@ type
     TGDIPanel=class(TCustomControl)
                 protected
                 procedure WMPaint(var Message: TLMPaint); message LM_PAINT;
+                procedure EraseBackground(DC: HDC); override;
     end;
 
     TCADControl=class(TCustomControl)
@@ -128,6 +129,10 @@ var
 procedure copyospoint(out dest:os_record; source:os_record);
 function correcttogrid(point:GDBVertex):GDBVertex;
 implementation
+procedure TGDIPanel.EraseBackground(DC: HDC);
+begin
+     // everything is painted, so erasing the background is not needed
+end;
 procedure TGDIPanel.WMPaint(var Message: TLMPaint);
 begin
      Include(FControlState, csCustomPaint);

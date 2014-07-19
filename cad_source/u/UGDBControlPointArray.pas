@@ -19,7 +19,7 @@
 unit UGDBControlPointArray;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
+uses gdbdrawcontext,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase, geometry,
      memman;
 type
 {Export+}
@@ -29,7 +29,7 @@ GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                            constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 
                            destructor done;virtual;
-                           procedure draw;virtual;
+                           procedure draw(var DC:TDrawContext);virtual;
                            procedure getnearesttomouse(var td:tcontrolpointdist;mx,my:integer);virtual;
                            procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;
                            procedure freeelement(p:GDBPointer);virtual;
@@ -62,17 +62,17 @@ begin
        point:=parray;
        for i:=0 to count-1 do
        begin
-            if point^.selected then oglsm.glcolor3ub(255, 0, 0)
+            if point^.selected then dc.drawer.SetColor(255, 0, 0,0)
                                else
                                    begin
                                         if point^.pobject<>nil then
-                                                                   oglsm.glcolor3ub(0, 255, 50)
+                                                                   dc.drawer.SetColor(0, 255, 50,0)
                                                                else
-                                                                   oglsm.glcolor3ub(0, 0, 255)
+                                                                   dc.drawer.SetColor(0, 0, 255,0)
 
                                    end;
             //glvertex2iv(@point^.dispcoord);
-            oglsm.myglvertex3dv(@point^.worldcoord);
+            dc.drawer.DrawPoint3DInModelSpace(point^.worldcoord,dc.matrixs);
             inc(point);
        end;
   end;

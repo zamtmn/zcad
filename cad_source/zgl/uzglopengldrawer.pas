@@ -61,6 +61,7 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);override;
                         {в координатах модели}
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);override;
                         procedure SaveBuffers(w,h:integer);override;
                         procedure RestoreBuffers(w,h:integer);override;
                         function CreateScrbuf(w,h:integer):boolean; override;
@@ -82,10 +83,12 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         SavedBitmap:HBITMAP;
                         SavedDC:HDC;
                         hLinePen:HPEN;
+                        hBrush:HBRUSH;
                         linewidth:integer;
                         penstyle:TZGLPenStyle;
                         PState:TPaintState;
                         ScreenInvalidRect:Trect;
+                        PointSize:single;
                         constructor create;
 
                         procedure startrender(const mode:TRenderMode;var matrixs:tmatrixs);override;
@@ -100,6 +103,8 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         procedure DrawPoint(const i:TLLVertexIndex);override;
 
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure SetPointSize(const s:single);override;
 
                         procedure ClearScreen(stencil:boolean);override;
                         procedure SetClearColor(const red, green, blue, alpha: byte);overload;override;
@@ -576,6 +581,12 @@ begin
       oglsm.myglVertex3dv(@p2);
      oglsm.myglend;
 end;
+procedure TZGLOpenGLDrawer.DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);
+begin
+     oglsm.myglbegin(GL_Points);
+      oglsm.myglVertex3dv(@p);
+     oglsm.myglend;
+end;
 constructor TZGLCanvasDrawer.create;
 begin
      sx:=0.1;
@@ -819,6 +830,34 @@ begin
      ProcessScreenInvalidrect(x,y);
      LineTo(OffScreedDC,x,y);
 end;
+procedure TZGLCanvasDrawer.SetPointSize(const s:single);
+begin
+     PointSize:=s;
+end;
+
+procedure TZGLCanvasDrawer.DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);
+var
+   pp:GDBVertex;
+   h,ps:integer;
+   x,y:integer;
+begin
+    _myGluProject2(p,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp);
+    h:=panel.Height;
+     {pp1:=geometry.VectorTransform3D(p1,matrixs.pprojMatrix^);
+     pp1:=geometry.VectorTransform3D(pp1,matrixs.pmodelMatrix^);
+
+     pp2:=geometry.VectorTransform3D(p2,matrixs.pprojMatrix^);
+     pp2:=geometry.VectorTransform3D(pp2,matrixs.pmodelMatrix^);}
+
+     //canvas.Line(round(pp1.x),h-round(pp1.y),round(pp2.x),h-round(pp2.y));
+
+     ps:=round(PointSize/2);
+
+     x:=round(pp.x);
+     y:=h-round(pp.y);
+     ProcessScreenInvalidrect(x,y);
+     Rectangle(OffScreedDC, x-ps, y-ps, x+ps,y+ps);
+end;
 procedure TZGLCanvasDrawer.SetClearColor(const red, green, blue, alpha: byte);
 begin
      ClearColor:=RGB(red,green,blue);
@@ -828,7 +867,8 @@ var
    ps:integer;
 begin
   deleteobject(hLinePen);
-  isWindowsErrors;
+  deleteobject(hBrush);
+
   case penstyle of
               TPS_Solid:
                         ps:=PS_SOLID;
@@ -841,9 +881,12 @@ begin
   end;
   SetBkColor(OffScreedDC,ClearColor);
   hLinePen:=CreatePen(ps,linewidth,PenColor);
-  isWindowsErrors;
+
   SelectObject(OffScreedDC, hLinePen);
-  isWindowsErrors;
+
+
+  hBrush:=CreateSolidBrush(PenColor);
+  SelectObject(OffScreedDC, hBrush);
 end;
 
 procedure TZGLCanvasDrawer.SetColor(const red, green, blue, alpha: byte);

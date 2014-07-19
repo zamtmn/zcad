@@ -37,7 +37,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                           function addobject(objnum:PGDBObjEntity):pselectedobjdesc;virtual;
                           procedure clearallobjects;virtual;
                           procedure remappoints(pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;
-                          procedure drawpoint;virtual;
+                          procedure drawpoint(var DC:TDrawContext);virtual;
                           procedure drawobject(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;
                           function getnearesttomouse(mx,my:integer):tcontrolpointdist;virtual;
                           function getonlyoutbound:GDBBoundingBbox;
@@ -154,18 +154,16 @@ begin
   if count<>0 then
   begin
        tdesc:=parray;
-       oglsm.myglpointsize(10);
-       oglsm.myglbegin(gl_points);
+       dc.drawer.SetPointSize(10);
        for i:=0 to count-1 do
        begin
             if tdesc^.pcontrolpoint<>nil then
             begin
-                 tdesc^.pcontrolpoint^.draw;
+                 tdesc^.pcontrolpoint^.draw(dc);
             end;
             inc(tdesc);
        end;
-       oglsm.myglend;
-       oglsm.myglpointsize(1);
+       dc.drawer.SetPointSize(1);
   end;
 end;
 procedure GDBSelectedObjArray.RenderFeedBack;

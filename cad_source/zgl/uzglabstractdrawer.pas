@@ -64,6 +64,7 @@ TZGLAbstractDrawer=class
                         procedure DrawQuad2DInDCS(const x1,y1,x2,y2:single);virtual;abstract;
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);overload;virtual;abstract;
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
+                        procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);virtual;abstract;
                         procedure DrawDebugGeometry;virtual;abstract;
                    end;
@@ -94,6 +95,7 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);overload;override;
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);override;
                         procedure WorkAreaResize(w,h:integer);override;
                         procedure SaveBuffers(w,h:integer);override;
                         procedure RestoreBuffers(w,h:integer);override;
@@ -187,6 +189,9 @@ procedure TZGLGeneralDrawer.DrawClosedPolyLine2DInDCS(const coords:array of sing
 begin
 end;
 procedure TZGLGeneralDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
+begin
+end;
+procedure TZGLGeneralDrawer.DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);
 begin
 end;
 procedure TZGLGeneralDrawer.WorkAreaResize;

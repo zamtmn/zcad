@@ -206,7 +206,7 @@ begin
                           exit;
   CalcOptimalMatrix;
   dc.drawer.startrender(TRM_ModelSpace,dc.matrixs);
-  if PDWG.GetSelObjArray.Count<>0 then PDWG.GetSelObjArray.drawpoint;
+  if PDWG.GetSelObjArray.Count<>0 then PDWG.GetSelObjArray.drawpoint(dc);
   dc.drawer.SetColor(255, 255, 255,255);
   {oglsm.myglEnable(GL_COLOR_LOGIC_OP);
   oglsm.myglLogicOp(GL_OR);}

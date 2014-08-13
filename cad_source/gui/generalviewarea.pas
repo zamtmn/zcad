@@ -20,7 +20,7 @@ unit generalviewarea;
 {$INCLUDE def.inc}
 interface
 uses
-     GDBHelpObj{нужно убрать},
+     GDBHelpObj{нужно убрать},texteditor,
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
      UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,
      uinfoform,oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,Varman,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
@@ -138,12 +138,9 @@ type
                            function startpaint:boolean;override;
                            procedure endpaint;override;
                       end;
-var
-    InfoForm:TInfoForm=nil;
-procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
 implementation
 uses
-     commandline,mainwindow;
+     commandline;
 procedure TGeneralViewArea.mypaint;
 begin
      //param.firstdraw:=true;
@@ -1658,10 +1655,10 @@ begin
 
 
      //OpenGLWindow.wa:=self;
-     onCameraChanged:=MainFormN.correctscrollbars;
-     ShowCXMenu:=MainFormN.ShowCXMenu;
-     MainMouseMove:=MainFormN.MainMouseMove;
-     MainMouseDown:=MainFormN.MainMouseDown;
+     onCameraChanged:=nil;
+     ShowCXMenu:=nil;
+     MainMouseMove:=nil;
+     MainMouseDown:=nil;
 
      WorkArea.onmouseup:=WaMouseUp;
      WorkArea.onmousedown:=WaMouseDown;
@@ -1675,56 +1672,6 @@ function TGeneralViewArea.getviewcontrol:TCADControl;
 begin
      result:=WorkArea;
 end;
-procedure RunTextEditor(Pobj:GDBPointer;const drawing:TDrawingDef);
-var
-   modalresult:integer;
-   astring:ansistring;
-begin
-     astring:=ConvertFromDxfString(PGDBObjText(pobj)^.Template);
-
-
-     if PGDBObjText(pobj)^.vp.ID=GDBMTextID then
-     begin
-     if not assigned(InfoForm) then
-     begin
-     InfoForm:=TInfoForm.createnew(application.MainForm);
-     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND');
-     end;
-     //InfoForm.DialogPanel.ShowButtons:=[pbOK, pbCancel{, pbClose, pbHelp}];
-     InfoForm.caption:=(rsMTextEditor);
-
-     InfoForm.memo.text:=astring;
-     modalresult:=DOShowModal(InfoForm);
-     if modalresult=MrOk then
-                         begin
-                              PGDBObjText(pobj)^.Template:=ConvertToDxfString(InfoForm.memo.text);
-                              StoreBoundsToSavedUnit('TEdWND',InfoForm.BoundsRect);
-                         end;
-     end
-     else
-     begin
-     if not assigned(sltexteditor1) then
-     Application.CreateForm(Tsltexteditor1, sltexteditor1);
-     sltexteditor1.caption:=(rsTextEditor);
-
-     sltexteditor1.helptext.Caption:=rsTextEdCaption;
-     sltexteditor1.EditField.TEXT:=astring;
-
-     modalresult:=DOShowModal(sltexteditor1);
-
-     if modalresult=MrOk then
-                         begin
-                              PGDBObjText(pobj)^.Template:=ConvertToDxfString(sltexteditor1.EditField.text);
-                         end;
-     end;
-     if modalresult=MrOk then
-                         begin
-                              PGDBObjText(pobj)^.YouChanged(drawing);
-                              if assigned(redrawoglwndproc) then redrawoglwndproc;
-                         end;
-
-end;
-
 procedure TGeneralViewArea.WaMouseDown(Sender:TObject;Button: TMouseButton; Shift: TShiftState;X, Y: Integer);
 var key: GDBByte;
     NeedRedraw:boolean;

@@ -5,7 +5,7 @@ unit umainform;
 interface
 
 uses
-  zcadinterface,gdbentityfactory,UGDBLayerArray,ugdbabstractdrawing,LCLType, geometry, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
+  abstractviewarea,openglviewarea,zcadinterface,gdbentityfactory,UGDBLayerArray,ugdbabstractdrawing,LCLType, geometry, GDBase, GDBasetypes, ComCtrls, UGDBDescriptor,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Spin,
   {From ZCAD}
@@ -69,7 +69,7 @@ type
     procedure _StartLongProcess(a:integer;n:string);
     procedure _EndLongProcess;
   private
-    oglwnd:TOGLWND;
+    oglwnd:TCADControl;
     { private declarations }
   public
     { public declarations }
@@ -110,7 +110,7 @@ begin
   if Key=VK_ESCAPE then
   begin
        gdb.GetCurrentDWG^.SelObjArray.clearallobjects;
-       gdb.GetCurrentROOT^.ObjArray.DeSelect(gdb.GetCurrentDWG^.GetSelObjArray,gdb.GetCurrentDWG^.OGLwindow1.param.SelDesc.Selectedobjcount);
+       gdb.GetCurrentROOT^.ObjArray.DeSelect(gdb.GetCurrentDWG^.GetSelObjArray,gdb.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
        UGDBDescriptor.redrawoglwnd;
        Key:=0;
   end;
@@ -134,6 +134,7 @@ var
    i:integer;
    pobj:PGDBObjEntity;
    v1,v2:gdbvertex;
+   wpowner:TAbstractViewArea;
 begin
 
      Snap.Base.x:=1;
@@ -158,25 +159,18 @@ begin
           ptd^.LayerTable.addlayer(inttostr(i),random(255),0,true,false,true,'',TLOMerge);
      end;
 
-     oglwnd:=TOGLWnd.Create(PanelUp);
-     oglwnd.AuxBuffers:=0;
-     oglwnd.StencilBits:=8;
-     oglwnd.DepthBits:=24;
 
-     //rm:=WND_Texture;
-     //sysvar.RD.RD_Restore_Mode:=@rm;
-
-
-
-     gdb.GetCurrentDWG^.OGLwindow1:=oglwnd;
-     oglwnd.PDWG:=ptd;
-     oglwnd.align:=alClient;
-     oglwnd.Parent:=PanelUp;
-     oglwnd.init;
-     oglwnd.PDWG:=ptd;
-     oglwnd.GDBActivate;
-     oglwnd._onresize(nil);
-     oglwnd.Show;
+     wpowner:=TOpenGLViewArea.Create(PanelUp);
+     oglwnd:=wpowner.getviewcontrol;
+     gdb.GetCurrentDWG^.wa:=wpowner;
+     wpowner.PDWG:=ptd;
+     wpowner.getviewcontrol.align:=alClient;
+     wpowner.getviewcontrol.Parent:=PanelUp;
+     wpowner.getviewcontrol.Visible:=true;
+     wpowner.PDWG:=ptd;
+     wpowner.getareacaps;
+     wpowner.WaResize(nil);
+     oglwnd.show;
 
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
 
@@ -191,24 +185,19 @@ begin
           ptd^.LayerTable.addlayer(inttostr(i),random(255),0,true,false,true,'',TLOMerge);
      end;
 
-     oglwnd:=TOGLWnd.Create(Panel2);
-     oglwnd.AuxBuffers:=0;
-     oglwnd.StencilBits:=8;
-     oglwnd.DepthBits:=24;
 
-     //rm:=WND_Texture;
-     //sysvar.RD.RD_Restore_Mode:=@rm;
+     wpowner:=TCanvasViewArea.Create(Panel2);
+     oglwnd:=wpowner.getviewcontrol;
+     gdb.GetCurrentDWG^.wa:=wpowner;
+     wpowner.PDWG:=ptd;
+     wpowner.getviewcontrol.align:=alClient;
+     wpowner.getviewcontrol.Parent:=Panel2;
+     wpowner.getviewcontrol.Visible:=true;
+     wpowner.PDWG:=ptd;
+     wpowner.getareacaps;
+     wpowner.WaResize(nil);
+     oglwnd.show;
 
-
-
-     gdb.GetCurrentDWG^.OGLwindow1:=oglwnd;
-     oglwnd.PDWG:=ptd;
-     oglwnd.align:=alClient;
-     oglwnd.Parent:=Panel2;
-     oglwnd.init;
-     oglwnd.PDWG:=ptd;
-     oglwnd.GDBActivate;
-     oglwnd._onresize(nil);
 
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
 
@@ -475,7 +464,7 @@ var pv:pGDBObjEntity;
     count:integer;
     domethod,undomethod:tmethod;
 begin
-  if (gdb.GetCurrentROOT^.ObjArray.count = 0)or(GDB.GetCurrentDWG^.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
+  if (gdb.GetCurrentROOT^.ObjArray.count = 0)or(GDB.GetCurrentDWG^.wa.param.seldesc.Selectedobjcount=0) then exit;
   _StartLongProcess(0,'Erase entitys');
   pv:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pv<>nil then
@@ -487,10 +476,10 @@ begin
                         end;
   pv:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
   until pv=nil;
-  GDB.GetCurrentDWG^.OGLwindow1.param.seldesc.Selectedobjcount:=0;
-  GDB.GetCurrentDWG^.OGLwindow1.param.seldesc.OnMouseObject:=nil;
-  GDB.GetCurrentDWG^.OGLwindow1.param.seldesc.LastSelectedObject:=nil;
-  GDB.GetCurrentDWG^.OGLwindow1.param.lastonmouseobject:=nil;
+  GDB.GetCurrentDWG^.wa.param.seldesc.Selectedobjcount:=0;
+  GDB.GetCurrentDWG^.wa.param.seldesc.OnMouseObject:=nil;
+  GDB.GetCurrentDWG^.wa.param.seldesc.LastSelectedObject:=nil;
+  GDB.GetCurrentDWG^.wa.param.lastonmouseobject:=nil;
   gdb.GetCurrentDWG^.OnMouseObj.Clear;
   gdb.GetCurrentDWG^.SelObjArray.clearallobjects;
   _EndLongProcess;
@@ -565,7 +554,7 @@ var //i: GDBInteger;
     count:integer;
 begin
   if gdb.GetCurrentROOT^.ObjArray.Count = 0 then exit;
-  GDB.GetCurrentDWG^.OGLwindow1.param.SelDesc.Selectedobjcount:=0;
+  GDB.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount:=0;
 
   count:=0;
   _StartLongProcess(0,'Select all');
@@ -583,7 +572,7 @@ begin
         if count>10000 then
                            pv^.SelectQuik
                        else
-                           pv^.select(gdb.GetCurrentDWG^.GetSelObjArray,gdb.GetCurrentDWG^.OGLwindow1.param.SelDesc.Selectedobjcount);
+                           pv^.select(gdb.GetCurrentDWG^.GetSelObjArray,gdb.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
 
   pv:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
   until pv=nil;
@@ -596,12 +585,12 @@ end;
 procedure TForm1. OffEntLayerClick(Sender: TObject);
 begin
   begin
-       if GDB.GetCurrentDWG^.OGLwindow1.param.SelDesc.Selectedobjcount=1 then
+       if GDB.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount=1 then
        begin
-            if GDB.GetCurrentDWG^.OGLwindow1.param.SelDesc.LastSelectedObject<>nil then
+            if GDB.GetCurrentDWG^.wa.param.SelDesc.LastSelectedObject<>nil then
             begin
-                 pGDBObjEntity(GDB.GetCurrentDWG^.OGLwindow1.param.SelDesc.LastSelectedObject)^.vp.Layer^._on:=false;
-                 pGDBObjEntity(GDB.GetCurrentDWG^.OGLwindow1.param.SelDesc.LastSelectedObject)^.DeSelect(gdb.GetCurrentDWG^.GetSelObjArray,gdb.GetCurrentDWG^.OGLwindow1.param.SelDesc.Selectedobjcount);
+                 pGDBObjEntity(GDB.GetCurrentDWG^.wa.param.SelDesc.LastSelectedObject)^.vp.Layer^._on:=false;
+                 pGDBObjEntity(GDB.GetCurrentDWG^.wa.param.SelDesc.LastSelectedObject)^.DeSelect(gdb.GetCurrentDWG^.GetSelObjArray,gdb.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
             end;
             UGDBDescriptor.redrawoglwnd;
        end

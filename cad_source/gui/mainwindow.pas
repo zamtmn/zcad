@@ -40,7 +40,7 @@ uses
   {ZCAD COMMANDS}
        commandlinedef,commanddefinternal,commandline,
   {GUI}
-       objinspdecorations,oswnd,cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
+       texteditor,objinspdecorations,oswnd,cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
        colorwnd,imagesmanager,ltwnd,usuptstylecombo,usupportgui,usupdimstylecombo,
   {}
        gdbdrawcontext,uzglopengldrawer,uzglabstractdrawer,abstractviewarea;

@@ -58,7 +58,7 @@ type
                   end;
 
 implementation
-uses mainwindow;
+//uses mainwindow;
 procedure TOpenGLViewArea.GDBActivateGLContext;
 begin
                                       MyglMakeCurrent(OpenGLWindow.OGLContext);

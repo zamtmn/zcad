@@ -30,6 +30,8 @@ uses GDBDevice,GDBBlockDef,varman,UGDBDescriptor,UGDBLayerArray,UGDBTextStyleArr
 procedure startup;
      var potd:PObjectDescriptor;
 begin
+     if assigned(SysUnit) then
+     begin
      potd:=PObjectDescriptor(SysUnit^.TypeName2PTD('GDBBaseCamera'));
      potd^.RegisterObject(typeof(GDBBaseCamera),@GDBBaseCamera.initnul);
      potd^.AddMetod('','initnul','',@GDBBaseCamera.initnul,m_constructor);
@@ -132,6 +134,7 @@ begin
      potd^.RegisterObject(typeof(GDBObjEntityOpenArray),@GDBObjEntityOpenArray.initnul);
      //PObjectDescriptor(Types.TypeName2PTD('GDBObjEntityOpenArray'))^.RegisterVMT(typeof(GDBObjEntityOpenArray));
      //PObjectDescriptor(Types.TypeName2PTD('GDBObjEntityOpenArray'))^.RegisterDefaultConstructor(@GDBObjEntityOpenArray.initnul);
+     end;
 
 end;
 begin

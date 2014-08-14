@@ -245,11 +245,16 @@ var pobj:PGDBObjEntity;
     ta:TTestTreeArray;
     plusaabb,minusaabb:GDBBoundingBbox;
     tv:gdbvertex;
-    _InNodeCount:gdbinteger;
+     _InNodeCount:gdbinteger;
+    SpatialNodeCount,SpatialNodesDepth:integer;
 begin
      //_InNodeCount:=entitys.GetRealCount div {_NodeDepth + 1}(nodedepth+2);
      //if _InNodeCount<500 then _InNodeCount:=500;
-     _InNodeCount:=GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^);
+     if SysVar.RD.RD_SpatialNodeCount<>nil then
+                                               SpatialNodeCount:=SysVar.RD.RD_SpatialNodeCount^
+                                           else
+                                               SpatialNodeCount:=500;
+     _InNodeCount:=GetInNodeCount(SpatialNodeCount);
      inc(nodedepth);
      if PRootNode<>nil then
                            begin
@@ -266,7 +271,11 @@ begin
      result.minuscount:=0;
      result.Root:=_root;
      result.NodeDir:=dir;
-     if ((entitys.Count<=_InNodeCount){and(nodedepth>1)})or(nodedepth>=SysVar.RD.RD_SpatialNodesDepth^) then
+     if SysVar.RD.RD_SpatialNodesDepth<>nil then
+                                               SpatialNodesDepth:=SysVar.RD.RD_SpatialNodesDepth^
+                                           else
+                                               SpatialNodesDepth:=16;
+     if ((entitys.Count<=_InNodeCount){and(nodedepth>1)})or(nodedepth>=SpatialNodesDepth) then
                                                 begin
                                                      //result.selected:=false;
                                                      {if entitys.beginiterate(ir)<>nil then

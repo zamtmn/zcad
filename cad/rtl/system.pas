@@ -501,7 +501,7 @@ GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                            SelectedCount:GDBInteger;
                            constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
                            destructor done;virtual;abstract;
-                           procedure draw;virtual;abstract;
+                           procedure draw(var DC:TDrawContext);virtual;abstract;
                            procedure getnearesttomouse(var td:tcontrolpointdist;mx,my:integer);virtual;abstract;
                            procedure selectcurrentcontrolpoint(key:GDBByte;mx,my,h:integer);virtual;abstract;
                            procedure freeelement(p:GDBPointer);virtual;abstract;
@@ -578,7 +578,7 @@ GDBSelectedObjArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                           function addobject(objnum:PGDBObjEntity):pselectedobjdesc;virtual;abstract;
                           procedure clearallobjects;virtual;abstract;
                           procedure remappoints(pcount:TActulity;ScrollMode:GDBBoolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc);virtual;abstract;
-                          procedure drawpoint;virtual;abstract;
+                          procedure drawpoint(var DC:TDrawContext);virtual;abstract;
                           procedure drawobject(var DC:TDrawContext{infrustumactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                           function getnearesttomouse(mx,my:integer):tcontrolpointdist;virtual;abstract;
                           function getonlyoutbound:GDBBoundingBbox;

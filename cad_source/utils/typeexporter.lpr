@@ -237,8 +237,7 @@ begin
      writestring(registerhandle,'var');
      writestring(registerhandle,'pt:PObjectDescriptor;');
      writestring(registerhandle,'begin');
-
-
+     writestring(registerhandle,'if assigned(SysUnit) then begin');
 
      FileNames:=TStringList.create;
      FileNames.loadfromfile(ExtractFilePath(paramstr(0))+'filelist.txt');
@@ -255,7 +254,7 @@ begin
         processfileabstract(FileName^,outhandle,registerhandle,registerfnhandle);
         FileName:=FileNames.iterate(ir);
      until FileName=nil;}
-
+     writestring(registerhandle,'end;');
      writestring(outhandle,'implementation');
      writestring(outhandle,'begin');
      writestring(outhandle,'end.');

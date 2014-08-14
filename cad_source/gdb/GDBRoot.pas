@@ -21,7 +21,7 @@ unit GDBRoot;
 
 interface
 Uses
-   gdbdrawcontext,ugdbdrawingdef,GDBCamera,OGLSpecFunc,
+   Varman,gdbdrawcontext,ugdbdrawingdef,GDBCamera,OGLSpecFunc,
    UGDBEntTree,{UGDBVisibleTreeArray,UGDBOpenArrayOfPV,}
 devices,gdbase,gdbasetypes,gdbobjectsconstdef,varmandef,GDBEntity,GDBGenericSubEntry{,UGDBOpenArrayOfPV},GDBConnected,GDBSubordinated,geometry,uunitmanager{,shared};
 type
@@ -162,6 +162,8 @@ begin
      inherited done;
 end;
 constructor GDBObjRoot.initnul;
+var
+    prootonit:ptunit;
 begin
      inherited initnul(nil);
      bp.ListPos.owner:=nil;
@@ -169,7 +171,9 @@ begin
      //bp.PSelfInOwnerArray:=nil;
      bp.ListPos.SelfIndex:=-1;
      ObjToConnectedArray.init({$IFDEF DEBUGBUILD}'{0AD3CD18-E887-4038-BADA-7616D9F52963}',{$ENDIF}100);
-     ou.copyfrom(units.findunit('objroot'));
+     prootonit:=units.findunit('objroot');
+     if prootonit<>nil then
+                           ou.copyfrom(units.findunit('objroot'));
      //uunitmanager.units.loadunit(expandpath('*blocks\objroot.pas'),@ou);
 end;
 procedure GDBObjRoot.formatafteredit;

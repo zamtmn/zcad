@@ -9,8 +9,8 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Spin,
   {From ZCAD}
-  zcadsysvars,{zcadinterface,} iodxf,varmandef, oglwindow,  UUnitManager,urtl,
-  UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDB3DFace,GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,URegisterObjects,GDBEntity,GDBManager,gdbobjectsconstdef;
+  zcadsysvars,{zcadinterface,} iodxf,varmandef, oglwindow,  UUnitManager,{urtl,}
+  UGDBTextStyleArray,GDBCommandsDraw,UGDBEntTree,GDB3DFace,GDBLWPolyLine,GDBPolyLine,GDBText,GDBLine,GDBCircle,GDBArc,ugdbsimpledrawing,{URegisterObjects,}GDBEntity,GDBManager,gdbobjectsconstdef;
 
 type
 
@@ -81,6 +81,13 @@ var
   grid:GDBvertex2D;
   LPTime:Tdatetime;
   pname:string;
+  sgdraw:boolean;
+  spath,altfont,temppath:gdbstring;
+  bccolor:trgb;
+  maxrendertime,cursorsize:GDBInteger;
+  OSSize,CrosshairSize:GDBDouble;
+  OSMode:TGDBOSMode;
+  ZoomFactor:GDBDouble;
   //rm:trestoremode;
 
 implementation
@@ -146,7 +153,32 @@ begin
 
      sysvar.DWG.DWG_Snap:=@Snap;
      sysvar.DWG.DWG_GridSpacing:=@grid;
+     sysvar.DWG.DWG_SystmGeometryDraw:=@sgdraw;
      sysvar.DWG.DWG_SystmGeometryDraw^:=CheckBox1.Checked;
+
+     sysvar.RD.RD_BackGroundColor:=@bccolor;
+     sysvar.SYS.SYS_SystmGeometryColor:=@bccolor;
+     maxrendertime:=0;
+     sysvar.RD.RD_MaxRenderTime:=@maxrendertime;
+     OSSize:=10;
+     sysvar.DISP.DISP_OSSize:=@OSSize;
+     cursorsize:=10;
+     sysvar.DISP.DISP_CursorSize:=@cursorsize;
+     CrosshairSize:=0.05;
+     SysVar.DISP.DISP_CrosshairSize:=@CrosshairSize;
+     ZoomFactor:=1.624;
+     sysvar.DISP.DISP_ZoomFactor:=@ZoomFactor;
+
+     spath:='';
+     sysvar.PATH.Fonts_Path:=@spath;
+     sysvar.PATH.Support_Path:=@spath;
+     altfont:='blablabla';
+     sysvar.SYS.SYS_AlternateFont:=@altfont;
+     temppath:=GetTempDir;
+     sysvar.PATH.Temp_files:=@temppath;
+
+     sysvar.dwg.DWG_OSMode:=@OSMode;
+
 
      ugdbdescriptor.startup;
 
@@ -169,8 +201,11 @@ begin
      wpowner.getviewcontrol.Visible:=true;
      wpowner.PDWG:=ptd;
      wpowner.getareacaps;
-     wpowner.WaResize(nil);
+     //wpowner.WaResize(nil);
      oglwnd.show;
+     wpowner.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
+                                //создания или загрузки
+     wpowner.param.firstdraw:=true;
 
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
 
@@ -195,10 +230,10 @@ begin
      wpowner.getviewcontrol.Visible:=true;
      wpowner.PDWG:=ptd;
      wpowner.getareacaps;
-     wpowner.WaResize(nil);
-     oglwnd.show;
-
-
+     //oglwnd.show;
+     wpowner.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
+                                //создания или загрузки
+     UGDBDescriptor.redrawoglwnd;
      gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot^.ObjArray,gdb.GetCurrentDWG^.pObjRoot^.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot^.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
 
 

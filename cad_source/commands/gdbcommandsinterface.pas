@@ -158,7 +158,7 @@ var
    wpowner:{TOpenGLViewArea}{TGeneralViewArea}TAbstractViewArea;
    tn:GDBString;
 begin
-     ptd:=gdb.CreateDWG;
+     ptd:=gdb.CreateDWG('*rtl/dwg/DrawingDeviceBase.pas','*rtl/dwg/DrawingVars.pas');
 
      gdb.AddRef(ptd^);
 

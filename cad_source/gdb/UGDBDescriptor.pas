@@ -50,7 +50,7 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
            UndoStack:GDBObjOpenArrayOfUCommands;
            DWGUnits:TUnitManager;
 
-           constructor init(num:PTUnitManager);
+           constructor init(num:PTUnitManager;preloadedfile1,preloadedfile2:GDBString);
            destructor done;virtual;
            function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
 
@@ -90,7 +90,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     procedure freedwgvars;
                     procedure SetCurrentDWG(PDWG:PTAbstractDrawing);
 
-                    function CreateDWG:PTDrawing;
+                    function CreateDWG(preloadedfile1,preloadedfile2:GDBString):PTDrawing;
                     //function CreateSimpleDWG:PTSimpleDrawing;virtual;
                     procedure eraseobj(ObjAddr:PGDBaseObject);virtual;
 
@@ -481,19 +481,24 @@ var {tp:GDBTextStyleProp;}
     //ts:PTGDBTableStyle;
     //cs:TGDBTableCellStyle;
     pvd:pvardesk;
+    pcam:pointer;
+    pdwgwarsunit:ptunit;
 begin
   DWGUnits.init;
   DWGUnits.SetNextManager(num);
-  DWGUnits.loadunit(expandpath('*rtl/dwg/DrawingDeviceBase.pas'),nil);
+  if preloadedfile1<>'' then
+  DWGUnits.loadunit(expandpath({'*rtl/dwg/DrawingDeviceBase.pas')}preloadedfile1),nil);
+  if preloadedfile2<>'' then
+  DWGUnits.loadunit(expandpath({'*rtl/dwg/DrawingVars.pas'}preloadedfile2),nil);
   DWGDBUnit:=DWGUnits.findunit(DrawingDeviceBaseUnitName);
-  DWGUnits.loadunit(expandpath('*rtl/dwg/DrawingVars.pas'),nil);
-  //DWGUnits.findunit('DrawingVars').AssignToSymbol(pcamera,'camera');
 
-  pvd:=DWGUnits.findunit('DrawingVars').InterfaceVariables.findvardesc('camera');
+  pcam:=nil;
+  pdwgwarsunit:=DWGUnits.findunit('DrawingVars');
+  if assigned(pdwgwarsunit) then
+                                pvd:=pdwgwarsunit.InterfaceVariables.findvardesc('camera');
   if pvd<>nil then
-                 inherited init(pvd^.data.Instance)
-             else
-                 inherited init(nil);
+                  pcam:=pvd^.data.Instance;
+  inherited init(pcam);
 
 
   Pointer(FileName):=nil;
@@ -515,14 +520,14 @@ begin
                                         end;
 
 end;
-function GDBDescriptor.CreateDWG:PTDrawing;
+function GDBDescriptor.CreateDWG(preloadedfile1,preloadedfile2:GDBString):PTDrawing;
 var
    ptd:PTsimpleDrawing;
 begin
      gdBGetMem({$IFDEF DEBUGBUILD}'{2A28BFB9-661F-4331-955A-C6F18DE67A19}',{$ENDIF}GDBPointer(result),sizeof(TDrawing));
      ptd:=currentdwg;
      currentdwg:=result;
-     result^.init(@units);
+     result^.init(@units,preloadedfile1,preloadedfile2);
      //self.AddRef(result^);
      currentdwg:=ptd;
 end;
@@ -1011,9 +1016,9 @@ begin
   //pbasefont:=FontManager.getAddres('gothice.shx');
   gdb.init;
   SetCurrentDWGProc:=SetCurrentDWG;
-  BlockBaseDWG:=gdb.CreateDWG;
+  BlockBaseDWG:=gdb.CreateDWG('','');
   _GetUndoStack:=gdb.GetUndoStack;
-  ClipboardDWG:=gdb.CreateDWG;
+  ClipboardDWG:=gdb.CreateDWG('','');
   ClipboardDWG.DimStyleTable.AddItem('Standart',pds);
   pds.init('Standart');
   //gdb.currentdwg:=BlockBaseDWG;

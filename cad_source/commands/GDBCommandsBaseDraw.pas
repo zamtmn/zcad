@@ -39,7 +39,7 @@ uses
   GDBEntity,GDBCircle,GDBLine,GDBGenericSubEntry,GDBMText,
   shared,GDBSubordinated,GDBBlockInsert,GDBPolyLine,log,UGDBOpenArrayOfData,GDBTable,UGDBStringArray,printerspecfunc;
 implementation
-uses GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,Varman,projecttreewnd,oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
+uses GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,Varman,{projecttreewnd,}oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
 var
    c1,c2:integer;
    distlen:gdbdouble;
@@ -154,4 +154,4 @@ initialization
      startup;
 finalization
      finalize;
-end.
+end.

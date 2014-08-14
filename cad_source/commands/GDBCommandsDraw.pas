@@ -377,7 +377,7 @@ procedure Line_com_CommandEnd(_self:pointer);
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 implementation
-uses generalviewarea,GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,Varman,projecttreewnd,oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
+uses generalviewarea,GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,Varman,{projecttreewnd,}oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
 function GetBlockDefNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDBInteger;
 var pb:PGDBObjBlockdef;
     ir:itrec;
@@ -3553,8 +3553,7 @@ begin
   OnDrawingEd.CEndActionAttr:=0;
   copy.init('Copy',0,0);
   mirror.init('Mirror',0,0);
-  mirror.commanddata.Instance:=@MirrorParam;
-  mirror.commanddata.PTD:=SysUnit^.TypeName2PTD('TMirrorParam');
+  SetTypedDataVariable(mirror.commanddata,@MirrorParam,'TMirrorParam');
   move.init('Move',0,0);
   rotate.init('Rotate',0,0);
   rotate.NotUseCommandLine:=false;
@@ -3574,16 +3573,15 @@ begin
   TextInsertParams.runtexteditor:=false;
   TextInsertParams.Width:=100;
   TextInsertParams.LineSpace:=1;
-  TextInsert.commanddata.Instance:=@TextInsertParams;
-  TextInsert.commanddata.PTD:=SysUnit^.TypeName2PTD('TTextInsertParams');
+  SetTypedDataVariable(TextInsert.commanddata,@TextInsertParams,'TTextInsertParams');
 
   BlockReplace.init('BlockReplace',0,0);
   BlockReplaceParams.Find.Enums.init(10);
   BlockReplaceParams.Replace.Enums.init(10);
   BlockReplaceParams.Process:=BRM_Device;
   BlockReplaceParams.SaveVariables:=true;
-  BlockReplace.commanddata.Instance:=@BlockReplaceParams;
-  BlockReplace.commanddata.PTD:=SysUnit^.TypeName2PTD('TBlockReplaceParams');
+  SetTypedDataVariable(BlockReplace.commanddata,@BlockReplaceParams,'TBlockReplaceParams');
+
 
   CreateCommandFastObjectPlugin(@Erase_com,'Erase',CADWG,0);
   CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
@@ -3593,8 +3591,7 @@ begin
   pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);
   BEditParam.Blocks.Enums.init(100);
   BEditParam.CurrentEditBlock:=modelspacename;
-  pbeditcom^.commanddata.Instance:=@BEditParam;
-  pbeditcom^.commanddata.PTD:=SysUnit^.TypeName2PTD('TBEditParam');
+  SetTypedDataVariable(pbeditcom^.commanddata,@BEditParam,'TBEditParam');
 
   ATO.init('AddToOwner',CADWG,0);
   CFO.init('CopyFromOwner',CADWG,0);
@@ -3609,13 +3606,13 @@ begin
   NumberingParams.InverseY:=true;
   NumberingParams.SortMode:=TST_YX;
   NumberCom.init('NumDevices',CADWG,0);
-  NumberCom.commanddata.Instance:=@NumberingParams;
-  NumberCom.commanddata.PTD:=SysUnit^.TypeName2PTD('TNumberingParams');
+  SetTypedDataVariable(NumberCom.commanddata,@NumberingParams,'TNumberingParams');
+
 
   Print.init('Print',CADWG,0);
   PrintParam.Scale:=1;
-  Print.commanddata.Instance:=@PrintParam;
-  Print.commanddata.PTD:=SysUnit^.TypeName2PTD('TPrintParams');
+  SetTypedDataVariable(Print.commanddata,@PrintParam,'TPrintParams');
+
   SelSim.init('SelSim',CADWG or CASelEnts,0);
   SelSim.CEndActionAttr:=0;
   SelSimParams.General.SameEntType:=true;
@@ -3626,16 +3623,13 @@ begin
   SelSimParams.Texts.SameTemplate:=false;
   SelSimParams.Blocks.SameName:=true;
   SelSimParams.Blocks.DiffBlockDevice:=TD_Diff;
-  SelSim.commanddata.Instance:=@SelSimParams;
-  SelSim.commanddata.PTD:=SysUnit^.TypeName2PTD('TSelSimParams');
+  SetTypedDataVariable(SelSim.commanddata,@SelSimParams,'TSelSimParams');
 
   BlockScale.init('BlockScale',0,0);
   BlockScale.CEndActionAttr:=0;
   BlockScaleParams.Scale:=geometry.CreateVertex(1,1,1);
   BlockScaleParams.Absolytly:=true;
-   BlockScale.commanddata.Instance:=@BlockScaleParams;
-   BlockScale.commanddata.PTD:=SysUnit^.TypeName2PTD('TBlockScaleParams');
-
+  SetTypedDataVariable(BlockScale.commanddata,@BlockScaleParams,'TBlockScaleParams');
 
 
   InsertTestTable.init('InsertTestTable',0,0);

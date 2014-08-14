@@ -45,7 +45,7 @@ uses
   GDBEntity,
  shared,
  UGDBEntTree,
-  {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}{AboutWnd,HelpWnd,}memman,WindowsSpecific,{txteditwnd,}
+  {zmenus,}{projecttreewnd,}gdbasetypes,{optionswnd,}{AboutWnd,HelpWnd,}memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline,
  {AnchorDocking,}dialogs,uinfoform{,
    uPSCompiler,
@@ -685,6 +685,7 @@ begin
     begin
       GDB.GetCurrentDWG.wa.param.seldesc.MouseFrameON := false;
 
+         if assigned(sysvar.DSGN.DSGN_SelNew) then
          if sysvar.DSGN.DSGN_SelNew^ then
          begin
                GDB.GetCurrentROOT.ObjArray.DeSelect(GDB.GetCurrentDWG.GetSelObjArray,GDB.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
@@ -969,12 +970,6 @@ begin
   until pv=nil;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
-end;
-function ProjectTree_com(Operands:pansichar):GDBInteger;
-begin
-  if not assigned(ProjectTreeWindow) then
-                                  ProjectTreeWindow:=TProjectTreeWnd.mycreate(Application,@ProjectTreeWindow);
-  ProjectTreeWindow.Show;
 end;
 procedure createInfoFormVar;
 begin
@@ -1963,7 +1958,6 @@ begin
   CreateCommandFastObjectPlugin(@MergeBlocks_com,'MergeBlocks',0,0);
   CreateCommandFastObjectPlugin(@SaveAs_com,'SaveAs',CADWG,0);
   CreateCommandFastObjectPlugin(@Cam_reset_com,'Cam_Reset',CADWG,0);
-  CreateCommandFastObjectPlugin(@ProjectTree_com,'ProjectTree',CADWG,0);
   CreateCommandFastObjectPlugin(@ObjVarMan_com,'ObjVarMan',CADWG or CASelEnt,0);
   CreateCommandFastObjectPlugin(@MultiObjVarMan_com,'MultiObjVarMan',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@Regen_com,'Regen',CADWG,0);

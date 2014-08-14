@@ -23,7 +23,7 @@ uses
  UGDBStringArray,gdbobjectsconstdef,zcadstrconsts,ucxmenumgr,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, stdctrls, Controls, {Graphics, Dialogs,}ComCtrls,
  {ZTabControlsGeneric,zmenus,}{DeviceBase}devicebaseabstract,log,SysUtils,{UGDBTree,}gdbase,UGDBDescriptor{,math,commandline},varman,languade{,UGDBTracePropArray},
-  {ZEditsWithProcedure,zbasicvisible,}varmandef,shared,sysinfo{,ZTreeViewsGeneric},memman,gdbasetypes;
+  {ZEditsWithProcedure,zbasicvisible,}varmandef,shared,sysinfo{,ZTreeViewsGeneric},memman,gdbasetypes,commanddefinternal,commandlinedef;
 const
   uncat='UNCAT';
   uncat_='UNCAT_';
@@ -346,6 +346,12 @@ begin
   BuildTreeByEQ(ProjectEquipmentN,ptdrawing(gdb.GetCurrentDWG).DWGUnits.findunit(DrawingDeviceBaseUnitName),{ProjectDBContextMenuN}TmyPopupMenu(application.FindComponent(MenuNameModifier+'PROJECTDBCXMENU')));
 
 end;
+function ProjectTree_com(Operands:pansichar):GDBInteger;
+begin
+  if not assigned(ProjectTreeWindow) then
+                                  ProjectTreeWindow:=TProjectTreeWnd.mycreate(Application,@ProjectTreeWindow);
+  ProjectTreeWindow.Show;
+end;
 initialization
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('projecttreewnd.initialization');{$ENDIF}
@@ -354,6 +360,7 @@ begin
   EqCategory.init(100);
   BlockCategory.loadfromfile(expandpath('*rtl/BlockCategory.cat'));
   EqCategory.loadfromfile(expandpath('*rtl/EqCategory.cat'));
+  CreateCommandFastObjectPlugin(@ProjectTree_com,'ProjectTree',CADWG,0);
   (*
   ProgramDBContextMenuN:=TmyPopupMenu.create(nil);
   cxmenumgr.RegisterLCLMenu(ProgramDBContextMenuN);

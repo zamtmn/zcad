@@ -21,7 +21,7 @@ unit Varman;
 
 interface
 uses
-  {RegCnownTypes,}UGDBOpenArrayOfPointer,SysUtils,UBaseTypeDescriptor,
+  zcadstrconsts,UGDBOpenArrayOfPointer,SysUtils,UBaseTypeDescriptor,
   gdbasetypes, shared,gdbase,UGDBOpenArrayOfByte,UGDBStringArray,varmandef,sysinfo,
   log,memman,TypeDescriptors,URecordDescriptor,UObjectDescriptor,strproc{$IFNDEF DELPHI},intftranslations{$ENDIF},classes;
 type
@@ -217,10 +217,30 @@ function GetPVarMan: GDBPointer; export;
 function FindCategory(category:GDBString;var catname:GDBString):Pointer;
 function GetBoundsFromSavedUnit(name:string):Trect;
 procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
+procedure SetTypedDataVariable(out TypedTataVariable:TTypedData;pTypedTata:pointer;TypeName:string);
 //procedure startup;
 //procedure finalize;
 implementation
 uses {languade,}strmy{,GDBSubordinated};
+
+procedure SetTypedDataVariable(out TypedTataVariable:TTypedData;pTypedTata:pointer;TypeName:string);
+var
+  ptd:PUserTypeDescriptor;
+begin
+  ptd:=nil;
+  if assigned(SysUnit) then
+                           ptd:=SysUnit^.TypeName2PTD(TypeName);
+  if ptd<>nil then
+                  begin
+                       TypedTataVariable.Instance:=pTypedTata;
+                       TypedTataVariable.PTD:=ptd;
+                  end
+              else
+              begin
+                   TypedTataVariable.Instance:=pTypedTata;
+                    TypedTataVariable.PTD:=nil;
+              end
+end;
 
 function GetBoundsFromSavedUnit(name:string):Trect;
 var
@@ -645,7 +665,7 @@ begin
   vd.data.ptd:={SysUnit.}TypeName2PTD(typename);
 
   if vd.data.ptd=nil then
-                         shared.ShowError('Тип "'+typename+'" не определен в модуле '+self.Name);
+                         shared.ShowError(sysutils.format(rsTypeNotDefinedInModule,[typename,self.Name]));
   {tpe:=Types.exttype.beginiterate;
   if tpe<>nil then
   repeat

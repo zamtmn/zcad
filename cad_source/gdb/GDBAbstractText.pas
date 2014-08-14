@@ -561,14 +561,17 @@ begin
 end;
 
 procedure GDBObjAbstractText.DrawGeometry;
-//var
-   //_lod:integer;
-   //templod:gdbdouble;
+var
+   PanObjectDegradation:boolean;
 begin
   //exit;
   //oglsm.myglpointsize(1);
   dc.subrender := dc.subrender + 1;
-  if {true//}(((not {GDB.GetCurrentDWG.OGLwindow1.param.scrollmode}dc.scrollmode)or(not sysvar.RD.RD_PanObjectDegradation^)) {and (lod=0)})
+  if assigned(sysvar.RD.RD_PanObjectDegradation)then
+                                                    PanObjectDegradation:=sysvar.RD.RD_PanObjectDegradation^
+                                                else
+                                                    PanObjectDegradation:=false;
+  if {true//}(((not {GDB.GetCurrentDWG.OGLwindow1.param.scrollmode}dc.scrollmode)or(not PanObjectDegradation)) {and (lod=0)})
   then
       begin
            (*templod:=sqrt(objmatrix[0,0]*objmatrix[0,0]+objmatrix[1,1]*objmatrix[1,1]+objmatrix[2,2]*objmatrix[2,2]);

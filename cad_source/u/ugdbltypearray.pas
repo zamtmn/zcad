@@ -603,6 +603,7 @@ var
    p:PGDBLtypeProp;
 begin
      //Переделать используя ParseStrings или выкинуть нахуй
+     if fname='' then exit;
      strings:=TStringList.Create;
      strings.LoadFromFile(fname);
      WhatNeed:=TSeekInterface;

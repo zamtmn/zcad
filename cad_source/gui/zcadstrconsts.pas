@@ -119,6 +119,7 @@ resourcestring
   rsZCADStarted='ZCAD v%s started';
   rsGridTooDensity='Grid too density';
   rsLoadingFontFile='Loading font file "%S"';
+  rsTypeNotDefinedInModule='Type "%S" not defined in unit "%S"';
 
   {window names}
   rsOpenFile='Open file...';

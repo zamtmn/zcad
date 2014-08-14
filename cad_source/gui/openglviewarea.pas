@@ -71,29 +71,40 @@ var a:array [0..1] of GDBDouble;
 begin
   programlog.logoutstr('TOGLWnd.SetDeiceVariable',lp_IncPos);
   oglsm.myglGetDoublev(GL_LINE_WIDTH_RANGE,@a);
+  if assigned(sysvar.RD.RD_MaxLineWidth) then
   sysvar.RD.RD_MaxLineWidth^:=a[1];
   oglsm.myglGetDoublev(GL_point_size_RANGE,@a);
+  if assigned(sysvar.RD.RD_MaxPointSize) then
   sysvar.RD.RD_MaxPointSize^:=a[1];
   GDBPointer(p):=oglsm.myglGetString(GL_VENDOR);
   programlog.logoutstr('RD_Vendor:='+p,0);
+  if assigned(sysvar.RD.RD_Vendor) then
   sysvar.RD.RD_Vendor^:=p;
   GDBPointer(p):=oglsm.myglGetString(GL_RENDERER);
   programlog.logoutstr('RD_Renderer:='+p,0);
+  if assigned(sysvar.RD.RD_Renderer) then
   sysvar.RD.RD_Renderer^:=p;
   GDBPointer(p):=oglsm.myglGetString(GL_VERSION);
   programlog.logoutstr('RD_Version:='+p,0);
+  if assigned(sysvar.RD.RD_Version) then
   sysvar.RD.RD_Version^:=p;
   GDBPointer(p):=oglsm.mygluGetString(GLU_VERSION);
   programlog.logoutstr('RD_GLUVersion:='+p,0);
+  if assigned(sysvar.RD.RD_GLUVersion) then
   sysvar.RD.RD_GLUVersion^:=p;
   GDBPointer(p):=oglsm.mygluGetString(GLU_EXTENSIONS);
   programlog.logoutstr('RD_GLUExtensions:='+p,0);
+  if assigned(sysvar.RD.RD_GLUExtensions) then
   sysvar.RD.RD_GLUExtensions^:=p;
   GDBPointer(p):=oglsm.myglGetString(GL_EXTENSIONS);
   programlog.logoutstr('RD_Extensions:='+p,0);
+  if assigned(sysvar.RD.RD_Extensions) then
   sysvar.RD.RD_Extensions^:=p;
+  if assigned(sysvar.RD.RD_MaxWidth) and assigned(sysvar.RD.RD_MaxLineWidth) then
+  begin
   sysvar.RD.RD_MaxWidth^:=round(min(sysvar.RD.RD_MaxPointSize^,sysvar.RD.RD_MaxLineWidth^));
-  programlog.logoutstr('RD_MaxWidth:='+inttostr(sysvar.RD.RD_MaxWidth^),0);
+  programlog.logoutstr('RD_MaxWidth:='+inttostr(round(min(sysvar.RD.RD_MaxPointSize^,sysvar.RD.RD_MaxLineWidth^))),0);
+  end;
   programlog.logoutstr('end;',lp_DecPos);
 end;
 
@@ -119,6 +130,7 @@ begin
   setdeicevariable;
 
   {$IFDEF WINDOWS}
+  if assigned(SysVar.RD.RD_VSync) then
   if SysVar.RD.RD_VSync^<>TVSDefault then
   begin
        Pointer(@wglSwapIntervalEXT) := wglGetProcAddress('wglSwapIntervalEXT');
@@ -169,6 +181,8 @@ procedure TOpenGLViewArea.LightOn;
 var
    p:GDBvertex4F;
 begin
+    if assigned(SysVar.RD.RD_Light) then
+    begin
     if SysVar.RD.RD_Light^ then
     begin
     oglsm.myglEnable(GL_LIGHTING);
@@ -191,6 +205,7 @@ begin
   oglsm.myglEnable(GL_COLOR_MATERIAL);
     end
        else LightOff(dc);
+    end;
 end;
 procedure TOpenGLViewArea.LightOff;
 begin
@@ -254,7 +269,10 @@ procedure TOpenGLViewArea.SetupWorkArea;
 begin
      OpenGLWindow:=TOGLWnd(WorkArea);
      OpenGLWindow.wa:=self;
-     RemoveCursorIfNeed(OpenGLWindow,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^);
+     if assigned(sysvar.RD.RD_RemoveSystemCursorFromWorkArea) then
+                                                                  RemoveCursorIfNeed(OpenGLWindow,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^)
+                                                              else
+                                                                  RemoveCursorIfNeed(OpenGLWindow,true);
      OpenGLWindow.ShowHint:=true;
      //fillchar(myscrbuf,sizeof(tmyscrbuf),0);
 

@@ -236,6 +236,7 @@ begin
   PointOfLinePlaneIntersect(VertexAdd(param.md.mouseray.lbegin,PDWG.Getpcamera^.CamCSOffset),param.md.mouseray.dir,tempplane,mvertex);
   plx:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,PDWG.Getpcamera^.CamCSOffset),
                       vertexadd(VertexAdd(param.md.mouse3dcoord,xWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
+  if assigned(sysvar.DISP.DISP_ColorAxis)then
   if sysvar.DISP.DISP_ColorAxis^ then dc.drawer.SetColor(255, 0, 0,255);
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[0],plx,Tempplane);
   tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[1],plx,Tempplane);
@@ -247,7 +248,8 @@ begin
 
   ply:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,PDWG.Getpcamera^.CamCSOffset),
                       vertexadd(VertexAdd(param.md.mouse3dcoord,yWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
- if sysvar.DISP.DISP_ColorAxis^ then dc.drawer.SetColor(0, 255, 0,255);
+  if assigned(sysvar.DISP.DISP_ColorAxis)then
+  if sysvar.DISP.DISP_ColorAxis^ then dc.drawer.SetColor(0, 255, 0,255);
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[2],ply,Tempplane);
   tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[3],ply,Tempplane);
   dvertex:=geometry.VertexSub(tv2,tv1);
@@ -256,10 +258,12 @@ begin
   tv2:=VertexAdd(mvertex,dvertex);
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.matrixs);
 
+  if assigned(sysvar.DISP.DISP_DrawZAxis)then
   if sysvar.DISP.DISP_DrawZAxis^ then
   begin
   plz:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,PDWG.Getpcamera^.CamCSOffset),
                       vertexadd(VertexAdd(param.md.mouse3dcoord,zWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
+  if assigned(sysvar.DISP.DISP_ColorAxis)then
   if sysvar.DISP.DISP_ColorAxis^ then dc.drawer.SetColor(0, 0, 255,255);
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[0],plz,Tempplane);
   tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[1],plz,Tempplane);
@@ -611,10 +615,15 @@ begin
 end;
 procedure TGeneralViewArea.DrawOrInvalidate;
 begin
+     if sysvar.RD.RD_DrawInsidePaintMessage<>nil then
+     begin
      if sysvar.RD.RD_DrawInsidePaintMessage^then
                                                 getviewcontrol.Invalidate
                                             else
                                                 draw;
+     end
+     else
+         draw;
 end;
 
 procedure TGeneralViewArea.draw;
@@ -643,8 +652,8 @@ begin
   dc:=CreateRC;
   needredrawbydrawer:=startpaint;
   needredraw:=needredrawbydrawer or needredraw;
-  dc.drawer.SetLineSmooth(SysVar.RD.RD_LineSmooth^);
-
+  if assigned(SysVar.RD.RD_LineSmooth)then
+                                          dc.drawer.SetLineSmooth(SysVar.RD.RD_LineSmooth^);
   dc.drawer.SetZTest(true);
   if PDWG<>nil then
   begin
@@ -766,9 +775,15 @@ begin
   lptime:=now()-LPTime;
   tick:=round(lptime*10e7);
   if needredraw then
+                    begin
+                         if assigned(sysvar.RD.RD_LastRenderTime)then
                          sysvar.RD.RD_LastRenderTime^:=tick*msec
-                     else
+                    end
+                else
+                    begin
+                         if assigned(sysvar.RD.RD_LastUpdateTime)then
                          sysvar.RD.RD_LastUpdateTime^:=tick*msec;
+                    end;
   {$IFDEF PERFOMANCELOG}
                        if needredraw then
                                               log.programlog.LogOutStrFast('Draw time='+inttostr(sysvar.RD.RD_LastRenderTime^),0)
@@ -776,7 +791,8 @@ begin
                                               log.programlog.LogOutStrFast('ReDraw time='+inttostr(sysvar.RD.RD_LastUpdateTime^),0);
   {$ENDIF}
   if needredraw then
-  if   SysVar.RD.RD_ImageDegradation.RD_ID_Enabled^ then
+  if assigned(SysVar.RD.RD_ImageDegradation.RD_ID_Enabled)then
+  if SysVar.RD.RD_ImageDegradation.RD_ID_Enabled^ then
   begin
   dt:=sysvar.RD.RD_LastRenderTime^-SysVar.RD.RD_ImageDegradation.RD_ID_PrefferedRenderTime^;
   if dt<0 then
@@ -1116,6 +1132,7 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:GDBBoundingBbox);
     for i:=1 to steps do
     begin
     SetCameraPosZoom(vertexadd(camerapos,geometry.VertexMulOnSc(target,i/steps)),PDWG.Getpcamera^.prop.zoom+tzoom{*i}/steps,i=steps);
+    if assigned(sysvar.RD.RD_LastRenderTime)then
     if sysvar.RD.RD_LastRenderTime^<30 then
                                           sleep(30-sysvar.RD.RD_LastRenderTime^);
     end;
@@ -1541,11 +1558,23 @@ if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
                                                               then
                                                                   getviewcontrol.Cursor:=crNoDrop
                                                               else
-                                                                  RemoveCursorIfNeed(getviewcontrol,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^);
+                                                                  begin
+                                                                       if assigned(sysvar.RD.RD_RemoveSystemCursorFromWorkArea)
+                                                                       then
+                                                                           RemoveCursorIfNeed(getviewcontrol,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^)
+                                                                       else
+                                                                           RemoveCursorIfNeed(getviewcontrol,true)
+                                                                  end;
                                                        end
                                                    else
                                                        if not param.scrollmode then
-                                                                                   RemoveCursorIfNeed(getviewcontrol,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^);
+                                                                                   begin
+                                                                                        if assigned(sysvar.RD.RD_RemoveSystemCursorFromWorkArea)
+                                                                                        then
+                                                                                            RemoveCursorIfNeed(getviewcontrol,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^)
+                                                                                        else
+                                                                                            RemoveCursorIfNeed(getviewcontrol,true)
+                                                                                   end;
 
   //if assigned(GDBobjinsp)then
                                if assigned(GetCurrentObjProc) then
@@ -1741,6 +1770,7 @@ var key: GDBByte;
            if (key and MZW_SHIFT)=0
            then
                begin
+                    if assigned(sysvar.DSGN.DSGN_SelNew)then
                     if sysvar.DSGN.DSGN_SelNew^ then
                     begin
                           pdwg.GetCurrentROOT.ObjArray.DeSelect(pdwg.GetSelObjArray,param.SelDesc.Selectedobjcount);
@@ -1905,7 +1935,11 @@ begin
   inherited;
   if button = mbMiddle then
   begin
-    RemoveCursorIfNeed(WorkArea,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^);
+    if assigned(sysvar.RD.RD_RemoveSystemCursorFromWorkArea)
+    then
+        RemoveCursorIfNeed(WorkArea,sysvar.RD.RD_RemoveSystemCursorFromWorkArea^)
+    else
+        RemoveCursorIfNeed(WorkArea,true);
     param.scrollmode:=false;
     param.firstdraw:=true;
     WorkArea.invalidate;
@@ -2079,7 +2113,10 @@ begin
                                       result.DrawMode:=true;
   result.OwnerLineWeight:=-3;
   result.OwnerColor:=ClWhite;
-  result.MaxWidth:=sysvar.RD.RD_MaxWidth^;
+  if assigned(sysvar.RD.RD_MaxWidth)then
+                                        result.MaxWidth:=sysvar.RD.RD_MaxWidth^
+                                    else
+                                        result.MaxWidth:=20;
   result.ScrollMode:=param.scrollmode;
   result.Zoom:=PDWG.GetPcamera.prop.zoom;
   result.drawer:=drawer;
@@ -3023,6 +3060,7 @@ var
 begin
   PDWG.myGluProject2(param.ospoint.worldcoord,
              param.ospoint.dispcoord);
+  if not assigned(sysvar.dwg.DWG_PolarMode) then exit;
   if not sysvar.dwg.DWG_PolarMode^ then exit;
   //param.ontrackarray.otrackarray[0].arrayworldaxis.init({$IFDEF DEBUGBUILD}'{8BE71BAA-507B-4D6B-BE2C-63693022090C}',{$ENDIF}4);
   param.ontrackarray.otrackarray[0].arrayworldaxis.clear;
@@ -3130,6 +3168,7 @@ begin
       PDWG.myGluProject2(param.ontrackarray.otrackarray[j].worldcoord,
                  param.ontrackarray.otrackarray[j].dispcoord);
     end;
+    if not assigned(sysvar.dwg.DWG_PolarMode) then exit;
     if not sysvar.dwg.DWG_PolarMode^ then exit;
   for j := a to param.ontrackarray.total - 1 do
   begin
@@ -3645,6 +3684,7 @@ begin
     end
   else
   begin
+  if assigned(SysVar.DWG.DWG_SelectedObjToInsp)then
   if (param.SelDesc.LastSelectedObject <> nil)and SysVar.DWG.DWG_SelectedObjToInsp^ then
   begin
        tn:=PGDBObjEntity(param.SelDesc.LastSelectedObject)^.GetObjTypeName;

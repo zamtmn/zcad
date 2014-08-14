@@ -9,6 +9,7 @@ procedure RegTypes;
 var
 pt:PObjectDescriptor;
 begin
+if assigned(SysUnit) then begin
      pt:=SysUnit.ObjectTypeName2PTD('GDBObjCamera');
      pt^.RegisterVMT(TypeOf(GDBObjCamera));
      pt:=SysUnit.ObjectTypeName2PTD('DbBaseObject');
@@ -23,5 +24,6 @@ begin
      pt^.RegisterVMT(TypeOf(ElDeviceBaseObject));
      pt:=SysUnit.ObjectTypeName2PTD('CableDeviceBaseObject');
      pt^.RegisterVMT(TypeOf(CableDeviceBaseObject));
+end;
 end;
 end.

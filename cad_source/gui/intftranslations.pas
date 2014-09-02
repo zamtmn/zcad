@@ -27,7 +27,7 @@ type
                      function FindByIdentifier(const Identifier: String):TPOFileItem;
                      procedure SaveToFile(const AFilename: string);
                      procedure Add(const Identifier, OriginalValue, TranslatedValue,
-                                   Comments, Context, Flags, PreviousID: string);
+                                   Comments, Context, Flags, PreviousID: string; SetFuzzy: boolean = false);
                      function Translate(const Identifier, OriginalValue: String): String;
                      function exportcompileritems(sourcepo:TPOFile):integer;
                 end;
@@ -116,7 +116,7 @@ begin
     Result:=OriginalValue;
 end;
 procedure TmyPOFile.Add(const Identifier, OriginalValue, TranslatedValue,
-  Comments, Context, Flags, PreviousID: string);
+  Comments, Context, Flags, PreviousID: string; SetFuzzy: boolean = false);
 var
    t:boolean;
 begin
@@ -256,4 +256,4 @@ finalization
 if assigned(actualypo) then freeandnil(actualypo);
 if assigned(po) then freeandnil(po);
 if assigned(LRSTranslator) then freeandnil(LRSTranslator);
-end.
+end.

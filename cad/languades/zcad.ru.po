@@ -8,7 +8,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.7\n"
+"Language: ru\n"
+"X-Generator: Poedit 1.6.9\n"
 
 #: tcolorselectwnd.byblock.caption
 msgid "??ByBlock"
@@ -158,6 +159,14 @@ msgctxt "tltwindow.listview1.columns[3].caption"
 msgid "Description"
 msgstr "Описание"
 
+#: toswindow.caption
+msgid "OSWindow"
+msgstr ""
+
+#: toswindow.label1.caption
+msgid "Object Snap Editor: Not yet implemented"
+msgstr ""
+
 #: tsltexteditor1.caption
 msgctxt "tsltexteditor1.caption"
 msgid "Text editor"
@@ -205,6 +214,10 @@ msgstr "О программе"
 #: zcadexternal.acn_addtoowner~caption
 msgctxt "zcadexternal.acn_addtoowner~caption"
 msgid "Add to owner"
+msgstr ""
+
+#: zcadexternal.acn_arc~caption
+msgid "Draw arc"
 msgstr ""
 
 #: zcadexternal.acn_bedit~caption
@@ -300,10 +313,23 @@ msgctxt "zcadexternal.acn_cable~hint"
 msgid "Draw cable"
 msgstr "Чертить кабель"
 
+#: zcadexternal.acn_circle2p~caption
+msgid "2 points"
+msgstr ""
+
+#: zcadexternal.acn_circle3p~caption
+msgid "3 points"
+msgstr ""
+
+#: zcadexternal.acn_circlecd~caption
+msgid "Center; diameter"
+msgstr ""
+
 #: zcadexternal.acn_circle~caption
+#| msgid "Draw circle"
 msgctxt "zcadexternal.acn_circle~caption"
-msgid "Draw circle"
-msgstr "Чертить окружность"
+msgid "Center; radius"
+msgstr "Центр; радиус"
 
 #: zcadexternal.acn_close~caption
 msgctxt "zcadexternal.acn_close~caption"
@@ -312,11 +338,11 @@ msgstr "Закрыть чертеж"
 
 #: zcadexternal.acn_colors~caption
 msgid "Colors ..."
-msgstr ""
+msgstr "Цвет..."
 
 #: zcadexternal.acn_colors~hint
 msgid "Select current color"
-msgstr ""
+msgstr "Выбор текущего цвета"
 
 #: zcadexternal.acn_copyclipbase~caption
 #| msgid "Copy with base point"
@@ -426,9 +452,25 @@ msgstr "Нумерация устройств"
 msgid "D++"
 msgstr ""
 
+#: zcadexternal.acn_dimaligned~caption
+msgid "Draw aligned dimension"
+msgstr ""
+
+#: zcadexternal.acn_dimdiametric~caption
+msgid "Draw diametric dimension"
+msgstr ""
+
+#: zcadexternal.acn_dimlinear~caption
+msgid "Draw linear dimension"
+msgstr ""
+
+#: zcadexternal.acn_dimradial~caption
+msgid "Draw radial dimension"
+msgstr ""
+
 #: zcadexternal.acn_dist~caption
 msgid "Distance"
-msgstr ""
+msgstr "Расстояние"
 
 #: zcadexternal.acn_dockopt~caption
 msgid "Docking options"
@@ -436,6 +478,14 @@ msgstr "Параметры стыковки окон"
 
 #: zcadexternal.acn_dockopt~textimage
 msgid "DO"
+msgstr ""
+
+#: zcadexternal.acn_dstyles~caption
+msgid "Dimension styles ..."
+msgstr ""
+
+#: zcadexternal.acn_dstyles~hint
+msgid "Dimension styles properties manager"
 msgstr ""
 
 #: zcadexternal.acn_el_find~caption
@@ -554,10 +604,20 @@ msgstr "Открыть чертеж"
 
 #: zcadexternal.acn_ltypes~caption
 msgid "Line types ..."
-msgstr ""
+msgstr "Типы линий..."
 
 #: zcadexternal.acn_ltypes~hint
 msgid "Line types properties manager"
+msgstr "Менеджер типов линий"
+
+#: zcadexternal.acn_matchprop~caption
+msgctxt "zcadexternal.acn_matchprop~caption"
+msgid "Match properties"
+msgstr ""
+
+#: zcadexternal.acn_matchprop~hint
+msgctxt "zcadexternal.acn_matchprop~hint"
+msgid "Match properties"
 msgstr ""
 
 #: zcadexternal.acn_materiallegend~caption
@@ -679,11 +739,6 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
-#: zcadexternal.acn_processkz~textimage
-msgctxt "zcadexternal.acn_processkz~textimage"
-msgid "Process external KZ"
-msgstr "Обработать КЖ"
-
 #: zcadexternal.acn_projecttree~caption
 msgctxt "zcadexternal.acn_projecttree~caption"
 msgid "Project tree"
@@ -713,10 +768,6 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
-
-#: zcadexternal.acn_remautocables~textimage
-msgid "Remove auto cables"
-msgstr "Удалить сгенерированные кабели"
 
 #: zcadexternal.acn_rotate~caption
 msgctxt "zcadexternal.acn_rotate~caption"
@@ -865,11 +916,11 @@ msgstr "Чертить текст"
 
 #: zcadexternal.acn_tstyles~caption
 msgid "Text styles ..."
-msgstr ""
+msgstr "Стили текста..."
 
 #: zcadexternal.acn_tstyles~hint
 msgid "Text styles properties manager"
-msgstr ""
+msgstr "Менеджер стилей текста"
 
 #: zcadexternal.acn_undo~caption
 msgctxt "zcadexternal.acn_undo~caption"
@@ -1177,11 +1228,9 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#, fuzzy
-#| msgid "Rotate"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Block params"
-msgstr "Повернуть"
+msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjcircle~area
 msgctxt "zcadexternal.gdbobjcircle~area"
@@ -1282,6 +1331,11 @@ msgstr "Координаты в WCS"
 msgctxt "zcadexternal.gdbobjsubordinated~bp"
 msgid "Owner"
 msgstr "Владелец"
+
+#: zcadexternal.gdbobjtext~txtstyleindex
+msgctxt "zcadexternal.gdbobjtext~txtstyleindex"
+msgid "Style"
+msgstr "Стиль"
 
 #: zcadexternal.gdbobjvisualprop~boundingbox
 msgctxt "zcadexternal.gdbobjvisualprop~boundingbox"
@@ -1460,11 +1514,9 @@ msgid "Layer selection"
 msgstr "Выбор слоя"
 
 #: zcadexternal.hint_panel~linewcombobox
-#, fuzzy
-#| msgid "Text style selection"
 msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Line type selection"
-msgstr "Выбор веса линий"
+msgid "Dim style selection"
+msgstr "Выбор стиля размеров"
 
 #: zcadexternal.hint_panel~ops_sensor_mark
 msgctxt "zcadexternal.hint_panel~ops_sensor_mark"
@@ -1527,12 +1579,8 @@ msgstr "Создать ведомость оборудования"
 msgid "Find all intersections (lines only)"
 msgstr ""
 
-#: zcadexternal.menucommand~fuckoff1
-msgid "Dimensions styles (not impl)"
-msgstr "Стили размеров (не реализовано)"
-
-#: zcadexternal.menucommand~fuckoff2
-msgctxt "zcadexternal.menucommand~fuckoff2"
+#: zcadexternal.menucommand~fuckoff
+msgctxt "zcadexternal.menucommand~fuckoff"
 msgid "Layouts (not impl)"
 msgstr "Листы (не реализовано)"
 
@@ -1572,6 +1620,10 @@ msgstr ""
 #: zcadexternal.menucommand~setobjinsp(camera)
 msgid "Camera"
 msgstr "Камера"
+
+#: zcadexternal.menucommand~setobjinsp(dimstyles)
+msgid "Dim styles (objinsp)"
+msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(fonts)
 #| msgid "Fonts"
@@ -1627,6 +1679,10 @@ msgstr ""
 msgctxt "zcadexternal.menu~debug"
 msgid "Debug"
 msgstr "Отладка"
+
+#: zcadexternal.menu~dimension
+msgid "Dimension"
+msgstr ""
 
 #: zcadexternal.menu~draw
 msgctxt "zcadexternal.menu~draw"
@@ -1760,26 +1816,6 @@ msgstr "Белый"
 msgid "Yellow"
 msgstr "Желтый"
 
-#: zcadexternal.rgb~a
-msgctxt "zcadexternal.rgb~a"
-msgid "Alpha"
-msgstr "Прозрачность"
-
-#: zcadexternal.rgb~b
-msgctxt "zcadexternal.rgb~b"
-msgid "Blue"
-msgstr "Синий"
-
-#: zcadexternal.rgb~g
-msgctxt "zcadexternal.rgb~g"
-msgid "Green"
-msgstr "Зеленый"
-
-#: zcadexternal.rgb~r
-msgctxt "zcadexternal.rgb~r"
-msgid "Red"
-msgstr "Красный"
-
 #: zcadexternal.submenu~alarm system
 msgid "Alarm system"
 msgstr "ОПС"
@@ -1807,6 +1843,12 @@ msgstr "Схема"
 #: zcadexternal.submenu~connections diagram
 msgid "Connections diagram"
 msgstr "Схема соединений"
+
+#: zcadexternal.submenu~draw circle
+#| msgid "Draw circle"
+msgctxt "zcadexternal.submenu~draw circle"
+msgid "Draw circle"
+msgstr "Чертить окружность"
 
 #: zcadexternal.submenu~fire alarm
 msgid "Fire alarm"
@@ -2089,6 +2131,10 @@ msgstr "Дополнительные ручки"
 msgid "Current color"
 msgstr "Текущий цвет"
 
+#: zcadexternal.tdwg~dwg_cdimstyle
+msgid "Dim style"
+msgstr ""
+
 #: zcadexternal.tdwg~dwg_clayer
 msgctxt "zcadexternal.tdwg~dwg_clayer"
 msgid "Current layer"
@@ -2173,6 +2219,16 @@ msgstr "Шаг"
 #: zcadexternal.tdwg~dwg_systmgeometrydraw
 msgid "System geometry"
 msgstr "Системная геометрия"
+
+#: zcadexternal.tdxfcolor~name
+msgctxt "zcadexternal.tdxfcolor~name"
+msgid "Name"
+msgstr "Имя"
+
+#: zcadexternal.tdxfcolor~rgb
+msgctxt "zcadexternal.tdxfcolor~rgb"
+msgid "Color"
+msgstr "Цвет"
 
 #: zcadexternal.telcablecomparam~pcable
 msgid "Cabel"
@@ -2715,15 +2771,15 @@ msgstr "Цвет фона"
 
 #: zcadexternal.trd~rd_extensions
 msgid "Extensions"
-msgstr ""
+msgstr "Расширения"
 
 #: zcadexternal.trd~rd_gluextensions
 msgid "GLU Extensions"
-msgstr ""
+msgstr "Расширения GLU"
 
 #: zcadexternal.trd~rd_gluversion
 msgid "GLU Version"
-msgstr ""
+msgstr "Версия GLU"
 
 #: zcadexternal.trd~rd_imagedegradation
 msgid "Image degradation"
@@ -2847,6 +2903,26 @@ msgstr "Перерисовка"
 msgctxt "zcadexternal.trestoremode~wnd_texture"
 msgid "Texture"
 msgstr "Текстура"
+
+#: zcadexternal.trgb~a
+msgctxt "zcadexternal.trgb~a"
+msgid "Alpha"
+msgstr "Прозрачность"
+
+#: zcadexternal.trgb~b
+msgctxt "zcadexternal.trgb~b"
+msgid "Blue"
+msgstr "Синий"
+
+#: zcadexternal.trgb~g
+msgctxt "zcadexternal.trgb~g"
+msgid "Green"
+msgstr "Зеленый"
+
+#: zcadexternal.trgb~r
+msgctxt "zcadexternal.trgb~r"
+msgid "Red"
+msgstr "Красный"
 
 #: zcadexternal.tsave~save_auto_current_interval
 msgctxt "zcadexternal.tsave~save_auto_current_interval"
@@ -3177,7 +3253,7 @@ msgstr "О программе ZCAD"
 
 #: zcadstrconsts.rsalternatefontnotfoundin
 msgid "Alternate font \"%s\" is not found in \"%s\""
-msgstr ""
+msgstr "Альтернативный фонт \"%s\" не найден в  \"%s\""
 
 #: zcadstrconsts.rsauthor
 msgid "Writeln by Andrey M. Zubarev"
@@ -3548,12 +3624,12 @@ msgstr ""
 
 #: zcadstrconsts.rsreservefontnotfound
 msgid "Reserve font is not found in the resources"
-msgstr ""
+msgstr "Резервный фонт не найден в расурсах программы"
 
 #: zcadstrconsts.rsreservefontnotload
 msgctxt "zcadstrconsts.rsreservefontnotload"
 msgid "Can not load reserve font"
-msgstr ""
+msgstr "Невозможно загрузить резервный фонт"
 
 #: zcadstrconsts.rsrevstr
 msgctxt "zcadstrconsts.rsrevstr"
@@ -3609,9 +3685,17 @@ msgctxt "zcadstrconsts.rstoolbarnotfound"
 msgid "Toolbar \"%s\" is not found! Create a blank window"
 msgstr "Панель инструментов \"%s\" не найдена! Создано пусте окно"
 
+#: zcadstrconsts.rstypenotdefinedinmodule
+msgid "Type \"%S\" not defined in unit \"%S\""
+msgstr "Тип \"%S\" не задан в модуле \"%S\""
+
 #: zcadstrconsts.rsunabledelusedlayer
 msgid "Unable to delete, layer is used"
 msgstr "Нельзя удалить, слой используется"
+
+#: zcadstrconsts.rsunablerenamefiletobak
+msgid "Could not rename file \"%s\" into \"*.bak\""
+msgstr "Не могу переименовать файл \"%s\" в \"*.bak\""
 
 #: zcadstrconsts.rsunabletofindfile
 msgid "Unable to find file \"%s\""

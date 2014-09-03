@@ -5,21 +5,24 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-06-23 23:14+0400\n"
+"PO-Revision-Date: 2014-08-19 03:12+0400\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 
 #: lclstrconsts.hhshelpbrowsernotexecutable
-msgid "Browser %s%s%s not executable."
-msgstr "Браузер %s%s%s не является исполнимым файлом."
+#| msgid "Browser %s%s%s not executable."
+msgid "Browser \"%s\" not executable."
+msgstr "Браузер \"%s\" не является исполнимым файлом."
 
 #: lclstrconsts.hhshelpbrowsernotfound
-msgid "Browser %s%s%s not found."
-msgstr "Браузер %s%s%s не найден."
+#| msgid "Browser %s%s%s not found."
+msgid "Browser \"%s\" not found."
+msgstr "Браузер \"%s\" не найден."
 
 #: lclstrconsts.hhshelperrorwhileexecuting
-msgid "Error while executing %s%s%s:%s%s"
-msgstr "Ошибка при выполнении %s%s%s:%s%s"
+#| msgid "Error while executing %s%s%s:%s%s"
+msgid "Error while executing \"%s\":%s%s"
+msgstr "Ошибка при исполнении \"%s\":%s%s"
 
 #: lclstrconsts.hhshelpnohtmlbrowserfound
 msgid "Unable to find a HTML browser."
@@ -30,8 +33,9 @@ msgid "No HTML Browser found.%sPlease define one in Tools -> Options -> Help -> 
 msgstr "Браузер HTML не найден.%sЗадайте его в меню Сервис -> Параметры -> Параметры справки"
 
 #: lclstrconsts.hhshelpthehelpdatabasewasunabletofindfile
-msgid "The help database %s%s%s was unable to find file %s%s%s."
-msgstr "База данных справки %s%s%s не смогла найти файл %s%s%s."
+#| msgid "The help database %s%s%s was unable to find file %s%s%s."
+msgid "The help database \"%s\" was unable to find file \"%s\"."
+msgstr "База данных справки \"%s\" не смогла найти файл \"%s\"."
 
 #: lclstrconsts.hhshelpthemacrosinbrowserparamswillbereplacedbytheurl
 msgid "The macro %s in BrowserParams will be replaced by the URL."
@@ -439,10 +443,6 @@ msgstr "ОШИБКА в LCL:"
 msgid "Error occurred in %s at %sAddress %s%s Frame %s"
 msgstr "Произошла ошибка в %s по %s адресу %s%s фрейм %s"
 
-#: lclstrconsts.rserrorreadingproperty
-msgid "Error reading %s%s%s: %s"
-msgstr "Ошибка чтения %s%s%s: %s"
-
 #: lclstrconsts.rserrorwhilesavingbitmap
 msgid "Error while saving bitmap."
 msgstr "Ошибка при сохранении точечного рисунка (bitmap)."
@@ -529,12 +529,14 @@ msgid "First"
 msgstr "Первая"
 
 #: lclstrconsts.rsfixedcolstoobig
-msgid "FixedCols can't be >= ColCount"
-msgstr "FixedCols не может быть >= ColCount"
+#| msgid "FixedCols can't be >= ColCount"
+msgid "FixedCols can't be > ColCount"
+msgstr "Значение FixedCols не может превышать ColCount"
 
 #: lclstrconsts.rsfixedrowstoobig
-msgid "FixedRows can't be >= RowCount"
-msgstr "FixedRows не может быть >= RowCount"
+#| msgid "FixedRows can't be >= RowCount"
+msgid "FixedRows can't be > RowCount"
+msgstr "Значение FixedRows не может превышать RowCount"
 
 #: lclstrconsts.rsformcolorcaption
 msgid "Form"
@@ -677,36 +679,44 @@ msgid "Help context %s not found."
 msgstr "Контекст справки %s не найден."
 
 #: lclstrconsts.rshelphelpcontextnotfoundindatabase
-msgid "Help context %s not found in Database %s%s%s."
-msgstr "Контекст справки %s не найден в базе данных %s%s%s."
+#| msgid "Help context %s not found in Database %s%s%s."
+msgid "Help context %s not found in Database \"%s\"."
+msgstr "Контекст справки %s не найден в базе данных \"%s\"."
 
 #: lclstrconsts.rshelphelpdatabasedidnotfoundaviewerforahelppageoftype
-msgid "Help Database %s%s%s did not found a viewer for a help page of type %s"
-msgstr "База данных справки %s%s%s не нашла программу просмотра для страницы справки типа %s"
+#| msgid "Help Database %s%s%s did not found a viewer for a help page of type %s"
+msgid "Help Database \"%s\" did not found a viewer for a help page of type %s"
+msgstr "База данных справки \"%s\" не нашла программу просмотра для страницы справки типа %s"
 
 #: lclstrconsts.rshelphelpdatabasenotfound
-msgid "Help Database %s%s%s not found"
-msgstr "База данных справки %s%s%s не найдена"
+#| msgid "Help Database %s%s%s not found"
+msgid "Help Database \"%s\" not found"
+msgstr "База данных справки \"%s\" не найдена"
 
 #: lclstrconsts.rshelphelpfordirectivenotfound
-msgid "Help for directive %s%s%s not found."
-msgstr "Справка для директивы %s%s%s не найдена."
+#| msgid "Help for directive %s%s%s not found."
+msgid "Help for directive \"%s\" not found."
+msgstr "Справка для директивы \"%s\" не найдена."
 
 #: lclstrconsts.rshelphelpfordirectivenotfoundindatabase
-msgid "Help for directive %s%s%s not found in Database %s%s%s."
-msgstr "Справка для директивы %s%s%s в базе данных %s%s%s не найдена."
+#| msgid "Help for directive %s%s%s not found in Database %s%s%s."
+msgid "Help for directive \"%s\" not found in Database \"%s\"."
+msgstr "Справка для директивы \"%s\" в базе данных \"%s\" не найдена."
 
 #: lclstrconsts.rshelphelpkeywordnotfound
-msgid "Help keyword %s%s%s not found."
-msgstr "Ключевое слово справки %s%s%s не найдено."
+#| msgid "Help keyword %s%s%s not found."
+msgid "Help keyword \"%s\" not found."
+msgstr "Ключевое слово справки \"%s\" не найдено."
 
 #: lclstrconsts.rshelphelpkeywordnotfoundindatabase
-msgid "Help keyword %s%s%s not found in Database %s%s%s."
-msgstr "Ключевое слово справки %s%s%s не найдено в базе данных %s%s%s."
+#| msgid "Help keyword %s%s%s not found in Database %s%s%s."
+msgid "Help keyword \"%s\" not found in Database \"%s\"."
+msgstr "Ключевое слово справки \"%s\" не найдено в базе данных \"%s\"."
 
 #: lclstrconsts.rshelphelpnodehasnohelpdatabase
-msgid "Help node %s%s%s has no Help Database"
-msgstr "Элемент справки %s%s%s не имеет соответствующей базы данных"
+#| msgid "Help node %s%s%s has no Help Database"
+msgid "Help node \"%s\" has no Help Database"
+msgstr "Элемент справки \"%s\" не имеет соответствующей базы данных"
 
 #: lclstrconsts.rshelpnohelpfoundforsource
 msgid "No help found for line %d, column %d of %s."
@@ -731,8 +741,9 @@ msgid "Help Selector Error"
 msgstr "Ошибка переключателя справки"
 
 #: lclstrconsts.rshelpthereisnoviewerforhelptype
-msgid "There is no viewer for help type %s%s%s"
-msgstr "Отсутствует программа просмотра для типа справки %s%s%s"
+#| msgid "There is no viewer for help type %s%s%s"
+msgid "There is no viewer for help type \"%s\""
+msgstr "Отсутствует программа просмотра для типа справки \"%s\""
 
 #: lclstrconsts.rshelpviewererror
 msgid "Help Viewer Error"
@@ -1468,6 +1479,10 @@ msgstr "Отсутствует форма MDI."
 #: lclstrconsts.snotimers
 msgid "No timers available"
 msgstr "Таймеры недоступны"
+
+#: lclstrconsts.sparentrequired
+msgid "Control \"%s\" has no parent window."
+msgstr "Элемент управления \"%s\" не имеет родительского окна."
 
 #: lclstrconsts.sparexpected
 msgid "Wrong token type: %s expected"

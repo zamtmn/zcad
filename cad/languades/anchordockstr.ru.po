@@ -10,8 +10,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
-msgid "A free side of a splitter must not be anchored: Node=%s%s%s Type=%s Anchors[%s]=%s%s%s"
-msgstr "Свободная сторона разделителя не должна иметь привязки: Узел=%s%s%s Тип=%s Привязки[%s]=%s%s%s"
+#| msgid "A free side of a splitter must not be anchored: Node=%s%s%s Type=%s Anchors[%s]=%s%s%s"
+msgid "A free side of a splitter must not be anchored: Node=\"%s\" Type=%s Anchors[%s]=\"%s\""
+msgstr "Свободная сторона разделителя не должна иметь привязки: Узел=\"%s\" Тип=%s Anchors[%s]=\"%s\""
 
 #: anchordockstr.adrsallfiles
 msgid "All files"
@@ -26,20 +27,24 @@ msgid "Anchor Docking Layout"
 msgstr "Разбивка Anchor Docking"
 
 #: anchordockstr.adrsanchorisnotsplitternodeanchors
-msgid "Anchor is not splitter: Node=%s%s%s Anchors[%s]=%s%s%s"
-msgstr "Привязка не является разделителем: Узел=%s%s%s Привязки[%s]=%s%s%s"
+#| msgid "Anchor is not splitter: Node=%s%s%s Anchors[%s]=%s%s%s"
+msgid "Anchor is not splitter: Node=\"%s\" Anchors[%s]=\"%s\""
+msgstr "Привязка не является разделителем: Узел=\"%s\" Anchors[%s]=\"%s\""
 
 #: anchordockstr.adrsanchornotfoundnodeanchors
-msgid "Anchor not found: Node=%s%s%s Anchors[%s]=%s%s%s"
-msgstr "Привязка не найдена: Узел=%s%s%s Привязки[%s]=%s%s%s"
+#| msgid "Anchor not found: Node=%s%s%s Anchors[%s]=%s%s%s"
+msgid "Anchor not found: Node=\"%s\" Anchors[%s]=\"%s\""
+msgstr "Привязка не найдена: Узел=\"%s\" Anchors[%s]=\"%s\""
 
 #: anchordockstr.adrsanchortowrongsideofsplitternodeanchors
-msgid "Anchor to wrong side of splitter: Node=%s%s%s Anchors[%s]=%s%s%s"
-msgstr "Привязка к неверной стороне разделителя: Узел=%s%s%s Привязки[%s]=%s%s%s"
+#| msgid "Anchor to wrong side of splitter: Node=%s%s%s Anchors[%s]=%s%s%s"
+msgid "Anchor to wrong side of splitter: Node=\"%s\" Anchors[%s]=\"%s\""
+msgstr "Привязка к неверной стороне разделителя: Узел=\"%s\" Anchors[%s]=\"%s\""
 
 #: anchordockstr.adrsapagemustnotbeanchorednodeparentparenttypeanchors
-msgid "A page must not be anchored: Node=%s%s%s Parent=%s ParentType=%s Anchors[%s]=%s%s%s"
-msgstr "Страница не должна иметь привязок: Узел=%s%s%s Родитель=%s Тип родителя=%s Привязки[%s]=%s%s%s"
+#| msgid "A page must not be anchored: Node=%s%s%s Parent=%s ParentType=%s Anchors[%s]=%s%s%s"
+msgid "A page must not be anchored: Node=\"%s\" Parent=%s ParentType=%s Anchors[%s]=\"%s\""
+msgstr "Страница не должна иметь привязок: Узел=\"%s\" Родитель=%s Тип родителя=%s Anchors[%s]=\"%s\""
 
 #: anchordockstr.adrsautomatically
 msgid "Automatically"
@@ -58,8 +63,9 @@ msgid "control is already a docksite"
 msgstr "объект уже является областью стыковки"
 
 #: anchordockstr.adrscustomdocksitecanhaveonlyonesite
-msgid "Custom dock site %s%s%s can have only one site."
-msgstr "Пользовательская область стыковки %s%s%s может иметь только один стыковочный элемент."
+#| msgid "Custom dock site %s%s%s can have only one site."
+msgid "Custom dock site \"%s\" can have only one site."
+msgstr "Пользовательская область стыковки \"%s\" может иметь только один стыковочный элемент."
 
 #: anchordockstr.adrsdockinganchordocking
 msgid "Docking / Anchordocking"
@@ -209,8 +215,9 @@ msgid "No captions for floating sites"
 msgstr "Не показывать названия непристыкованных объектов"
 
 #: anchordockstr.adrsnochildrenallowedfornodetype
-msgid "No children allowed for Node=%s%s%s Type=%s"
-msgstr "Не разрешается иметь потомков для Узла=%s%s%s Тип=%s"
+#| msgid "No children allowed for Node=%s%s%s Type=%s"
+msgid "No children allowed for Node=\"%s\" Type=%s"
+msgstr "Не разрешается иметь потомков для Узла=\"%s\" Тип=%s"
 
 #: anchordockstr.adrsnotsupportedhasparent
 msgid "Not supported: %s has parent %s"

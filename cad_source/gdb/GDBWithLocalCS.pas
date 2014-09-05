@@ -20,7 +20,7 @@ unit GDBWithLocalCS;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,OGLSpecFunc,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,GDBWithMatrix,
+uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,gdbasetypes,gdbEntity,UGDBOutbound2DIArray,UGDBOpenArrayOfByte,varman,varmandef,GDBWithMatrix,
 ugdbltypearray,
 GDBase,{gDBDescriptor,gdbobjectsconstdef,oglwindowdef,}geometry,dxflow,sysutils,memman,GDBSubordinated,UGDBLayerArray{,GDBGenericSubEntry};
 type
@@ -54,7 +54,7 @@ GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
 
                procedure rtsave(refp:GDBPointer);virtual;
                procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-               procedure higlight;virtual;
+               procedure higlight(var DC:TDrawContext);virtual;
                procedure ReCalcFromObjMatrix;virtual;
                function IsHaveLCS:GDBBoolean;virtual;
                function CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
@@ -108,13 +108,16 @@ end;
 
 procedure GDBObjWithLocalCS.higlight;
 begin
-  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
-  oglsm.myglbegin(GL_lines);
+  //oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
+  dc.drawer.SetColor(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
+  {oglsm.myglbegin(GL_lines);
   oglsm.myglVertex2d(ProjP_insert.x-10,ProjP_insert.y);
   oglsm.myglVertex2d(ProjP_insert.x+10,ProjP_insert.y);
   oglsm.myglVertex2d(ProjP_insert.x,ProjP_insert.y-10);
   oglsm.myglVertex2d(ProjP_insert.x,ProjP_insert.y+10);
-  oglsm.myglend;
+  oglsm.myglend;}
+  dc.drawer.DrawLine2DInDCS(ProjP_insert.x-10,ProjP_insert.y,ProjP_insert.x+10,ProjP_insert.y);
+  dc.drawer.DrawLine2DInDCS(ProjP_insert.x,ProjP_insert.y-10,ProjP_insert.x,ProjP_insert.y+10);
   if PProjOutBound<>nil then PProjOutBound.DrawGeometry;
 
 end;

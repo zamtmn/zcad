@@ -22,7 +22,7 @@ unit GDBPoint;
 interface
 uses gdbdrawcontext,dxflow,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 ugdbltypearray,
-GDBase,gdbobjectsconstdef,oglwindowdef,geometry{,dxflow},memman,OGLSpecFunc;
+GDBase,gdbobjectsconstdef,oglwindowdef,geometry,memman;
 type
 {Export+}
 PGDBObjPoint=^GDBObjPoint;
@@ -149,9 +149,10 @@ end;
 
 procedure GDBObjPoint.DrawGeometry;
 begin
-  oglsm.myglbegin(GL_points);
-  oglsm.myglVertex3dV(@P_insertInWCS);
-  oglsm.myglend;
+  //oglsm.myglbegin(GL_points);
+  //oglsm.myglVertex3dV(@P_insertInWCS);
+  //oglsm.myglend;
+  dc.drawer.DrawPoint3DInModelSpace(P_insertInWCS,dc.matrixs);
   {oglsm.myglbegin(GL_LINES);
   oglsm.myglVertex(P_insertInWCS.x-0.5,P_insertInWCS.y-0.5,P_insertInWCS.z);
   oglsm.myglVertex(P_insertInWCS.x+0.5,P_insertInWCS.y+0.5,P_insertInWCS.z);

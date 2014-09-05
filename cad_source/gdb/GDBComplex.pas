@@ -167,7 +167,7 @@ begin
   //ConstObjArray.DrawWithattrib(dc{infrustumactualy,subrender)}{DrawGeometry(CalculateLineWeight});
   treerender(ConstObjArray.ObjTree,dc);
       if (sysvar.DWG.DWG_SystmGeometryDraw^) then
-                                               ConstObjArray.ObjTree.draw;
+                                               ConstObjArray.ObjTree.draw(dc);
   dec(dc.subrender);
   dc.OwnerLineWeight:=oldlw;
   inherited;

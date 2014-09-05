@@ -36,7 +36,7 @@ GDBControlPointArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                      end;
 {Export-}
 implementation
-uses {UGDBDescriptor,}OGLSpecFunc,log;
+uses log;
 procedure GDBControlPointArray.freeelement;
 begin
   pcontrolpointdesc(p):=pcontrolpointdesc(p);

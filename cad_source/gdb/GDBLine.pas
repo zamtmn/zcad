@@ -22,7 +22,7 @@ unit GDBLine;
 interface
 uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,uzglgeometry,{testing LineTypes...}UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,ugdbltypearray,ugdbfont,
      zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBSubordinated,UGDBSelectedObjArray,GDB3d,gdbEntity,UGDBOpenArrayOfByte,varman,varmandef,
-GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,shared,OGLSpecFunc;
+GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,shared;
 type
                  {l_1_4:GDBvertex;(*hidden_in_objinsp*)
                  l_1_3:GDBvertex;(*hidden_in_objinsp*)
@@ -433,10 +433,7 @@ begin
   templod:=(vp.LineType.h*vp.LineTypeScale*SysVar.dwg.DWG_LTScale^)/({GDB.GetCurrentDWG.pcamera.prop}dc.zoom);
   if templod<3 then
      begin
-  oglsm.myglbegin(GL_lines);
-  oglsm.myglVertex3dV(@CoordInWCS.lBegin);
-  oglsm.myglVertex3dV(@CoordInWCS.lEnd);
-  oglsm.myglend;
+     DC.Drawer.DrawLine3DInModelSpace(CoordInWCS.lBegin,CoordInWCS.lEnd,DC.matrixs);
      end;
   end;
   inherited;

@@ -20,7 +20,7 @@ unit GDBAbstractText;
 
 interface
 uses gdbdrawcontext,GDBEntity,GDBCamera,zcadsysvars,languade,UGDBOpenArrayOfPObjects,{GDBEntity,}strproc,sysutils,GDBPlainWithOX,gdbasetypes{,GDBWithLocalCS},UGDBSelectedObjArray{,gdbEntity,UGDBOutbound2DIArray,UGDBPolyPoint2DArray,UGDBOpenArrayOfByte},UGDBPolyPoint3DArray{,varman},varmandef,
-GDBase,gdbobjectsconstdef,{oglwindowdef,}geometry{,dxflow,strmy},math{,GDBPlain},OGLSpecFunc{,GDBGenericSubEntry};
+GDBase,gdbobjectsconstdef,{oglwindowdef,}geometry{,dxflow,strmy},math{,GDBPlain}{,GDBGenericSubEntry};
 type
 //jstm(*'TopCenter'*)=2,
 {EXPORT+}
@@ -604,16 +604,10 @@ begin
       end
   else
   begin
-       oglsm.myglbegin(gl_lines{_loop});
-       oglsm.myglvertex3dv(@outbound[0]);
-       oglsm.myglvertex3dv(@outbound[1]);
-       oglsm.myglvertex3dv(@outbound[1]);
-       oglsm.myglvertex3dv(@outbound[2]);
-       oglsm.myglvertex3dv(@outbound[2]);
-       oglsm.myglvertex3dv(@outbound[3]);
-       oglsm.myglvertex3dv(@outbound[3]);
-       oglsm.myglvertex3dv(@outbound[0]);
-       oglsm.myglend;
+       DC.Drawer.DrawLine3DInModelSpace(outbound[0],outbound[1],DC.matrixs);
+       DC.Drawer.DrawLine3DInModelSpace(outbound[1],outbound[2],DC.matrixs);
+       DC.Drawer.DrawLine3DInModelSpace(outbound[2],outbound[3],DC.matrixs);
+       DC.Drawer.DrawLine3DInModelSpace(outbound[3],outbound[0],DC.matrixs);
   end;
   dc.subrender := dc.subrender - 1;
   inherited;

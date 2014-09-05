@@ -21,7 +21,7 @@ unit GDBCommandsBaseDraw;
 
 interface
 uses
-  zcadstrconsts,GL,OGLSpecFunc,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  zcadstrconsts,GL,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,
@@ -86,6 +86,7 @@ function DrawRect(mclick:GDBInteger):GDBInteger;
 var
    vd:vardesk;
    p1,p2,p4:gdbvertex;
+   matrixs:tmatrixs;
 begin
      vd:=commandmanager.GetValue;
      p1:=pgdbvertex(vd.data.Instance)^;
@@ -93,16 +94,15 @@ begin
      p2:=createvertex(p1.x,point.y,p1.z);
      p4:=createvertex(point.x,p1.y,point.z);
 
-  oglsm.myglbegin(GL_lines);
-  oglsm.myglVertex3dV(@p1);
-  oglsm.myglVertex3dV(@p2);
-  oglsm.myglVertex3dV(@p2);
-  oglsm.myglVertex3dV(@point);
-  oglsm.myglVertex3dV(@point);
-  oglsm.myglVertex3dV(@p4);
-  oglsm.myglVertex3dV(@p4);
-  oglsm.myglVertex3dV(@p1);
-  oglsm.myglend;
+     matrixs.pmodelMatrix:=@gdb.GetCurrentDWG.GetPcamera.modelMatrix;
+     matrixs.pprojMatrix:=@gdb.GetCurrentDWG.GetPcamera.projMatrix;
+     matrixs.pviewport:=@gdb.GetCurrentDWG.GetPcamera.viewport;
+
+     gdb.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p1,p2,matrixs);
+     gdb.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p2,point,matrixs);
+     gdb.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(point,p4,matrixs);
+     gdb.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p4,p1,matrixs);
+
 end;
 
 function Dist_com_CommandStart(operands:pansichar):GDBInteger;

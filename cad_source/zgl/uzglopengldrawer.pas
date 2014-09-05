@@ -51,6 +51,7 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure SetPointSmooth(const smoth:boolean);override;
                         procedure ClearStatesMachine;override;
                         procedure SetFillStencilMode;override;
+                        procedure SetSelectedStencilMode;override;
                         procedure SetDrawWithStencilMode;override;
                         procedure DisableStencil;override;
                         procedure SetZTest(Z:boolean);override;
@@ -62,6 +63,10 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         {в координатах модели}
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
+
                         procedure SaveBuffers(w,h:integer);override;
                         procedure RestoreBuffers(w,h:integer);override;
                         function CreateScrbuf(w,h:integer):boolean; override;
@@ -104,6 +109,9 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
 
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
                         procedure SetPointSize(const s:single);override;
 
                         procedure ClearScreen(stencil:boolean);override;
@@ -251,6 +259,10 @@ end;
 procedure TZGLOpenGLDrawer.ClearStatesMachine;
 begin
      oglsm.mytotalglend;
+end;
+procedure TZGLOpenGLDrawer.SetSelectedStencilMode;
+begin
+     oglsm.myglStencilFunc(GL_ALWAYS,0,1);
 end;
 procedure TZGLOpenGLDrawer.SetFillStencilMode;
 begin
@@ -587,6 +599,34 @@ begin
       oglsm.myglVertex3dv(@p);
      oglsm.myglend;
 end;
+procedure TZGLOpenGLDrawer.DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);
+begin
+  oglsm.myglbegin(GL_TRIANGLES);
+  oglsm.myglNormal3dV(@normal);
+  oglsm.myglVertex3dV(@p1);
+  oglsm.myglVertex3dV(@p2);
+  oglsm.myglVertex3dV(@p3);
+  oglsm.myglend;
+end;
+procedure TZGLOpenGLDrawer.DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
+begin
+  oglsm.myglbegin(GL_QUADS);
+  oglsm.myglNormal3dV(@normal);
+  oglsm.myglVertex3dV(@p1);
+  oglsm.myglVertex3dV(@p2);
+  oglsm.myglVertex3dV(@p3);
+  oglsm.myglVertex3dV(@p4);
+  oglsm.myglend;
+end;
+procedure TZGLOpenGLDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
+begin
+  oglsm.myglbegin(GL_QUADS);
+  oglsm.myglVertex3dV(@p1);
+  oglsm.myglVertex3dV(@p2);
+  oglsm.myglVertex3dV(@p3);
+  oglsm.myglVertex3dV(@p4);
+  oglsm.myglend;
+end;
 constructor TZGLCanvasDrawer.create;
 begin
      sx:=0.1;
@@ -821,12 +861,12 @@ begin
      //canvas.Line(round(pp1.x),h-round(pp1.y),round(pp2.x),h-round(pp2.y));
 
      x:=round(pp1.x);
-     y:=h-round(pp1.y);
+     y:=round(h-pp1.y);
      ProcessScreenInvalidrect(x,y);
      MoveToEx(OffScreedDC,x,y,nil);
 
      x:=round(pp2.x);
-     y:=h-round(pp2.y);
+     y:=round(h-pp2.y);
      ProcessScreenInvalidrect(x,y);
      LineTo(OffScreedDC,x,y);
 end;
@@ -854,9 +894,67 @@ begin
      ps:=round(PointSize/2);
 
      x:=round(pp.x);
-     y:=h-round(pp.y);
+     y:=round(h-pp.y);
      ProcessScreenInvalidrect(x,y);
      Rectangle(OffScreedDC, x-ps, y-ps, x+ps,y+ps);
+end;
+procedure TZGLCanvasDrawer.DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);
+var
+   pp1,pp2,pp3:GDBVertex;
+   h,ps:integer;
+   sp:array [1..3]of TPoint;
+begin
+    _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
+    _myGluProject2(p2,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp2);
+    _myGluProject2(p3,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp3);
+    h:=panel.Height;
+
+     sp[1].x:=round(pp1.x);
+     sp[1].y:=round(h-pp1.y);
+     sp[2].x:=round(pp2.x);
+     sp[2].y:=round(h-pp2.y);
+     sp[3].x:=round(pp3.x);
+     sp[3].y:=round(h-pp3.y);
+
+     PolyGon(OffScreedDC,@sp[1],3,false);
+     ProcessScreenInvalidrect(sp[1].x,sp[1].y);
+     ProcessScreenInvalidrect(sp[2].x,sp[2].y);
+     ProcessScreenInvalidrect(sp[3].x,sp[3].y);
+end;
+procedure TZGLCanvasDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
+var
+   pp1,pp2,pp3,pp4:GDBVertex;
+   h,ps:integer;
+   sp:array [1..4]of TPoint;
+begin
+    _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
+    _myGluProject2(p2,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp2);
+    _myGluProject2(p3,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp3);
+    _myGluProject2(p4,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp4);
+    h:=panel.Height;
+
+     sp[1].x:=round(pp1.x);
+     sp[1].y:=round(h-pp1.y);
+     sp[2].x:=round(pp2.x);
+     sp[2].y:=round(h-pp2.y);
+     sp[3].x:=round(pp3.x);
+     sp[3].y:=round(h-pp3.y);
+     sp[4].x:=round(pp4.x);
+     sp[4].y:=round(h-pp4.y);
+
+     PolyGon(OffScreedDC,@sp[1],4,false);
+     ProcessScreenInvalidrect(sp[1].x,sp[1].y);
+     ProcessScreenInvalidrect(sp[2].x,sp[2].y);
+     ProcessScreenInvalidrect(sp[3].x,sp[3].y);
+     ProcessScreenInvalidrect(sp[4].x,sp[4].y);
+end;
+procedure TZGLCanvasDrawer.DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
+var
+   pp1,pp2,pp3,pp4:GDBVertex;
+   h,ps:integer;
+   sp:array [1..4]of TPoint;
+begin
+     DrawQuad3DInModelSpace(p1,p2,p3,p4,matrixs);
 end;
 procedure TZGLCanvasDrawer.SetClearColor(const red, green, blue, alpha: byte);
 begin

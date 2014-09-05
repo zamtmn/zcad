@@ -9,7 +9,7 @@ unit GDBCable;
 
 interface
 uses gdbdrawcontext,GDBGenericSubEntry,ugdbdrawingdef,zcadsysvars,UGDBOpenArrayOfByte,UGDBLayerArray{,UGDBObjBlockdefArray},UUnitManager,GDBCurve,geometry,math,UGDBOpenArrayOfData,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray,UGDBOpenArrayOfByte,varman},varmandef,
-GDBase{,GDBLINE},GDBHelpObj,{UGDBDescriptor,}gdbobjectsconstdef{,oglwindowdef},dxflow,sysutils,memman,OGLSpecFunc, GDBSubordinated,GDBDEvICE;
+GDBase{,GDBLINE},GDBHelpObj,{UGDBDescriptor,}gdbobjectsconstdef{,oglwindowdef},dxflow,sysutils,memman,GDBSubordinated,GDBDEvICE;
 type
 {Повторное описание типа в Cableы}
   PTCableType=^TCableType;
@@ -501,25 +501,22 @@ procedure GDBObjCable.DrawGeometry;
 var
    ptn1,ptn2:PTNodeProp;
    ir_inNodeArray:itrec;
-   //notfirst:boolean;
+   notfirst:boolean;
 begin
-  oglsm.myglbegin(GL_lines);
   ptn2:=NodePropArray.beginiterate(ir_inNodeArray);
   ptn1:=NodePropArray.iterate(ir_inNodeArray);
   if ptn1<>nil then
   begin
   repeat
-        oglsm.myglvertex3dv(@ptn2^.Nextp );
-        oglsm.myglvertex3dv(@ptn1^.PrevP );
+        DC.Drawer.DrawLine3DInModelSpace(ptn2^.Nextp,ptn1^.PrevP,DC.matrixs);
         ptn2:=ptn1;
         ptn1:=NodePropArray.iterate(ir_inNodeArray);
   until ptn1=nil;
   end;
-  oglsm.myglend;
-  {if SysVar.DWG.DWG_HelpGeometryDraw^ then
+  if SysVar.DWG.DWG_HelpGeometryDraw^ then
   if CanSimplyDrawInWCS(DC,SysVar.DSGN.DSGN_HelpScale^,1) then
   begin
-  notfirst:=false;
+  {notfirst:=false;
   ptn2:=NodePropArray.beginiterate(ir_inNodeArray);
   ptn1:=NodePropArray.iterate(ir_inNodeArray);
   if ptn1<>nil then
@@ -530,10 +527,9 @@ begin
         if ptn1<>nil then
         begin
         //oglsm.mytotalglend;
-
         oglsm.myglpushmatrix;
-        gltranslated(ptn2^.Nextp.x+gdb.GetCurrentDWG.pcamera^.CamCSOffset.x,ptn2^.Nextp.y+gdb.GetCurrentDWG.pcamera^.CamCSOffset.y,ptn2^.Nextp.z+gdb.GetCurrentDWG.pcamera^.CamCSOffset.z);
-        glscaled(SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^);
+        oglsm.mygltranslated(ptn2^.Nextp.x+dc.pcamera^.CamCSOffset.x,ptn2^.Nextp.y+dc.pcamera^.CamCSOffset.y,ptn2^.Nextp.z+dc.pcamera^.CamCSOffset.z);
+        oglsm.myglScalef(SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^);
         circlepointoflod[8].drawgeometry;
         //oglsm.mytotalglend;
         oglsm.myglpopmatrix;
@@ -542,8 +538,8 @@ begin
         begin
         //oglsm.mytotalglend;
         oglsm.myglpushmatrix;
-        gltranslated(ptn2^.Prevp.x+gdb.GetCurrentDWG.pcamera^.CamCSOffset.x,ptn2^.Prevp.y+gdb.GetCurrentDWG.pcamera^.CamCSOffset.y,ptn2^.Prevp.z+gdb.GetCurrentDWG.pcamera^.CamCSOffset.z);
-        glscaled(SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^);
+        oglsm.mygltranslated(ptn2^.Prevp.x+dc.pcamera^.CamCSOffset.x,ptn2^.Prevp.y+dc.pcamera^.CamCSOffset.y,ptn2^.Prevp.z+dc.pcamera^.CamCSOffset.z);
+        oglsm.myglScalef(SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^,SysVar.DSGN.DSGN_HelpScale^);
         circlepointoflod[8].drawgeometry;
         //oglsm.mytotalglend;
         oglsm.myglpopmatrix;
@@ -554,19 +550,15 @@ begin
         ptn2:=ptn1;
         ptn1:=NodePropArray.iterate(ir_inNodeArray);
   until ptn2=nil;
-  end;
+  end;}
   if vertexarrayInWCS.Count>1 then
   begin
-       oglsm.myglbegin(GL_lines);
-       oglsm.myglvertex3dv(@str21);
-       oglsm.myglvertex3dv(@str22);
-       oglsm.myglvertex3dv(@str22);
-       oglsm.myglvertex3dv(@str23);
-       oglsm.myglend;
+       dc.drawer.DrawLine3DInModelSpace(str21,str22,dc.matrixs);
+       dc.drawer.DrawLine3DInModelSpace(str22,str23,dc.matrixs);
   end;
-  end;}
+  end;
   //inherited;
-  drawbb;
+  drawbb(dc);
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('GDBCable.initialization');{$ENDIF}

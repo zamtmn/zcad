@@ -26,7 +26,7 @@ uses {gdbase,gdbasetypes,
      uzglabstractdrawer,GDBGenericSubEntry,gdbase,gdbasetypes,
      oglwindowdef,gdbdrawcontext,varmandef,Varman,UGDBPoint3DArray,UGDBEntTree,geometry,ugdbabstractdrawing,
      shared,sysutils,
-     ExtCtrls,Controls,Classes,LCLType,Forms,OGLSpecFunc,zcadsysvars,GDBEntity,LMessages;
+     ExtCtrls,Controls,Classes,LCLType,Forms,zcadsysvars,GDBEntity,LMessages;
 
 type
     TGDIPanel=class(TCustomControl)

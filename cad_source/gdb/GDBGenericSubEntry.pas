@@ -67,7 +67,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             procedure getoutbound;virtual;
                             procedure getonlyoutbound;virtual;
 
-                            procedure DrawBB;
+                            procedure DrawBB(var DC:TDrawContext);
 
                             procedure RemoveInArray(pobjinarray:GDBInteger);virtual;
                             procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;
@@ -95,7 +95,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                       end;
 {Export-}
 implementation
-uses OGLSpecFunc,log;
+uses log;
 {function GDBObjGenericSubEntry.SubMi;
 begin
      //pobj^.bp.PSelfInOwnerArray:=ObjArray.getelement(ObjArray.add(pobj));
@@ -358,8 +358,9 @@ begin
   inherited;
   if (sysvar.DWG.DWG_SystmGeometryDraw^){and(GDB.GetCurrentDWG.OGLwindow1.param.subrender=0)} then
   begin
-  oglsm.glcolor3ubv(palette[{sysvar.SYS.SYS_SystmGeometryColor^+2}4].RGB);
-  OGLSpecFunc.DrawAABB(VisibleOBJBoundingBox);
+
+  dc.drawer.SetColor(palette[{sysvar.SYS.SYS_SystmGeometryColor^+2}4].RGB);
+  dc.drawer.DrawAABB3DInModelSpace(VisibleOBJBoundingBox,dc.matrixs);
   {oglsm.myglbegin(GL_LINE_LOOP);
      oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
      oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
@@ -511,7 +512,7 @@ begin
   ObjArray.DrawGeometry(CalculateLineWeight(dc),dc{infrustumactualy,subrender});
      dc.selected:=_selected;
      dec(dc.subrender);
-  DrawBB;
+  DrawBB(dc);
 end;
 function GDBObjGenericSubEntry.CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;
 begin

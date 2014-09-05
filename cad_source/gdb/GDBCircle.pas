@@ -19,9 +19,9 @@
 unit GDBCircle;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,ugdbdrawingdef,OGLSpecFunc,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray,UGDBPoint3DArray{, UGDBPolyPoint3DArray,UGDBPolyPoint2DArray},UGDBOpenArrayOfByte,varman,varmandef,
+uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,GDBHelpObj,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray,UGDBPoint3DArray{, UGDBPolyPoint3DArray,UGDBPolyPoint2DArray},UGDBOpenArrayOfByte,varman,varmandef,
 ugdbltypearray,
-GDBase,GDBWithLocalCS,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman{,OGLSpecFunc};
+GDBase,GDBWithLocalCS,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman;
 type
 //PProjPoint:PGDBPolyPoint2DArray;
 //PProjPoint:{-}PGDBPolyPoint2DArray{/GDBPointer/};
@@ -418,16 +418,10 @@ begin
                                                                                   end
                                                          else
                                                              begin
-                                                                  oglsm.myglbegin(GL_lines);
-                                                                  oglsm.myglVertex3dV(@q0);
-                                                                  oglsm.myglVertex3dV(@q1);
-                                                                  oglsm.myglVertex3dV(@q1);
-                                                                  oglsm.myglVertex3dV(@q2);
-                                                                  oglsm.myglVertex3dV(@q2);
-                                                                  oglsm.myglVertex3dV(@q3);
-                                                                  oglsm.myglVertex3dV(@q3);
-                                                                  oglsm.myglVertex3dV(@q0);
-                                                                  oglsm.myglend;
+                                                                  DC.Drawer.DrawLine3DInModelSpace(q0,q1,DC.matrixs);
+                                                                  DC.Drawer.DrawLine3DInModelSpace(q1,q2,DC.matrixs);
+                                                                  DC.Drawer.DrawLine3DInModelSpace(q2,q3,DC.matrixs);
+                                                                  DC.Drawer.DrawLine3DInModelSpace(q3,q0,DC.matrixs);
                                                              end;
                               end;
   //Vertex3D_in_WCS_Array.DrawGeometry;

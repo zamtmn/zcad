@@ -21,7 +21,7 @@ unit UGDBEntTree;
 interface
 uses
     {math,}graphics,
-    gdbdrawcontext,zcadsysvars,geometry,UGDBVisibleOpenArray,GDBEntity,gdbase,gdbasetypes,log,memman,OGLSpecFunc;
+    gdbdrawcontext,zcadsysvars,geometry,UGDBVisibleOpenArray,GDBEntity,gdbase,gdbasetypes,log,memman;
 const
      IninialNodeDepth=-1;
 type
@@ -55,8 +55,8 @@ TTreeStatistik=record
                             nuldrawpos,minusdrawpos,plusdrawpos:TActulity;
                             constructor initnul;
                             destructor done;virtual;
-                            procedure draw;
-                            procedure drawonlyself;
+                            procedure draw(var DC:TDrawContext);
+                            procedure drawonlyself(var DC:TDrawContext);
                             procedure ClearSub;
                             procedure Clear;
                             procedure updateenttreeadress;
@@ -139,15 +139,16 @@ begin
 end;
 procedure TEntTreeNode.drawonlyself;
 begin
-     DrawAABB(BoundingBox);
+     dc.drawer.DrawAABB3DInModelSpace(BoundingBox,dc.matrixs);
+     //DrawAABB(BoundingBox);
 end;
 
 procedure TEntTreeNode.draw;
 begin
      if assigned(pplusnode) then
-                       pplusnode^.draw;
+                       pplusnode^.draw(dc);
      if assigned(pminusnode) then
-                       pminusnode^.draw;
+                       pminusnode^.draw(dc);
 
      {if selected then glColor3ub(255, 0, 0)
                  else glColor3ub(100, 100, 100);}
@@ -160,7 +161,7 @@ begin
      myglVertex3d(vertexadd(point,createvertex(0,0,-1000/nodedepth)));
      myglVertex3d(vertexadd(point,createvertex(0,0,1000/nodedepth)));
      myglend;}
-     {if selected then }drawonlyself;
+     {if selected then }drawonlyself(dc);
 end;
 
 constructor TEntTreeNode.initnul;

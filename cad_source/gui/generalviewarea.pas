@@ -291,7 +291,7 @@ begin
   oglsm.mygltranslated(0, -getviewcontrol.clientheight, 0);}
 
   if param.lastonmouseobject<>nil then
-                                      pGDBObjEntity(param.lastonmouseobject)^.higlight;
+                                      pGDBObjEntity(param.lastonmouseobject)^.higlight(dc);
 
   (*oglsm.myglpopmatrix;
   dc.drawer.SetColor(0, 100, 100,255);
@@ -691,14 +691,14 @@ begin
     if (sysvar.DWG.DWG_SystmGeometryDraw^) then
                                                begin
                                                dc.drawer.setcolor(palette[sysvar.SYS.SYS_SystmGeometryColor^+2].RGB);
-                                               PDWG.GetCurrentROOT^.ObjArray.ObjTree.draw;
+                                               PDWG.GetCurrentROOT^.ObjArray.ObjTree.draw(dc);
                                                end;
     begin
     dc.drawer.startrender(TRM_ModelSpace,dc.matrixs);
     PDWG.Getpcamera.DRAWNOTEND:=treerender(PDWG.GetCurrentROOT^.ObjArray.ObjTree,lptime,dc);
     dc.drawer.endrender;
     end;
-    PDWG.GetCurrentROOT.DrawBB;
+    PDWG.GetCurrentROOT.DrawBB(dc);
 
     DrawCSAxis(dc);
 
@@ -718,7 +718,7 @@ begin
 
 
     param.scrollmode:=scrollmode;
-    PDWG.GetConstructObjRoot.DrawBB;
+    PDWG.GetConstructObjRoot.DrawBB(dc);
 
 
     PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode,PDWG.GetPcamera^,PDWG^.myGluProject2);
@@ -743,7 +743,7 @@ begin
     param.scrollmode:=true;
     render(PDWG.GetConstructObjRoot^,dc);
     param.scrollmode:=scrollmode;
-    PDWG.GetConstructObjRoot.DrawBB;
+    PDWG.GetConstructObjRoot.DrawBB(dc);
 
     dc.drawer.DisableStencil;
     dc.MaxDetail:=true;
@@ -2123,6 +2123,7 @@ begin
   result.matrixs.pmodelMatrix:=@PDWG.GetPcamera.modelMatrix;
   result.matrixs.pprojMatrix:=@PDWG.GetPcamera.projMatrix;
   result.matrixs.pviewport:=@PDWG.GetPcamera.viewport;
+  result.pcamera:=PDWG.GetPcamera;
 end;
 procedure TGeneralViewArea.CorrectMouseAfterOS;
 var d,tv1,tv2:GDBVertex;
@@ -2857,36 +2858,35 @@ begin
                                       end;
   if param.projtype = ProjParalel then
                                       begin
-                                           //OGLSpecFunc.CurrentCamCSOffset:=pdwg.pcamera^.CamCSOffset;
                                            if geometry.oneVertexlength(pcamera^.CamCSOffset)>1000000 then
                                            begin
-                                                {OGLSpecFunc.}CurrentCamCSOffset:=pcamera^.CamCSOffset;
-                                                {OGLSpecFunc.}CurrentCamCSOffsetS:=VertexD2S({OGLSpecFunc.}CurrentCamCSOffset);
-                                                {OGLSpecFunc.}notuseLCS:=pcamera^.notuseLCS;
+                                                CurrentCamCSOffset:=pcamera^.CamCSOffset;
+                                                CurrentCamCSOffsetS:=VertexD2S(CurrentCamCSOffset);
+                                                notuseLCS:=pcamera^.notuseLCS;
                                            end
-                                           else {OGLSpecFunc.}notuseLCS:=true;
+                                           else notuseLCS:=true;
                                       end
                                   else
                                       begin
-                                            {OGLSpecFunc.}notuseLCS:=true;
+                                           notuseLCS:=true;
                                       end;
-  if {OGLSpecFunc.}notuseLCS then
+  if notuseLCS then
   begin
         pcamera^.projMatrixLCS:=pcamera^.projMatrix;
         pcamera^.modelMatrixLCS:=pcamera^.modelMatrix;
         pcamera^.frustumLCS:=pcamera^.frustum;
         pcamera^.CamCSOffset:=NulVertex;
-        {OGLSpecFunc.}CurrentCamCSOffset:=nulvertex;
+        CurrentCamCSOffset:=nulvertex;
   end;
 
 
-  if {pdwg.pcamera^.notuseLCS}{OGLSpecFunc.}notuseLCS then
+  if {pdwg.pcamera^.notuseLCS}notuseLCS then
   begin
         pcamera^.projMatrixLCS:=pcamera^.projMatrix;
         pcamera^.modelMatrixLCS:=pcamera^.modelMatrix;
         pcamera^.frustumLCS:=pcamera^.frustum;
         pcamera^.CamCSOffset:=NulVertex;
-        {OGLSpecFunc.}CurrentCamCSOffset:=nulvertex;
+        CurrentCamCSOffset:=nulvertex;
   end;
   SetOGLMatrix;
   end;

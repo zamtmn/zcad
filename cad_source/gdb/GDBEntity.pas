@@ -22,7 +22,7 @@ interface
 uses uzglabstractdrawer,gdbdrawcontext,ugdbdrawingdef,GDBCamera,gdbvisualprop,uzglgeometry,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},GDBSubordinated,
      {UGDBPolyPoint2DArray,}varman,varmandef,
      GDBase,gdbobjectsconstdef,
-     oglwindowdef,geometry,dxflow,sysutils,memman,OGLSpecFunc,UGDBOpenArrayOfByte,UGDBLayerArray,UGDBOpenArrayOfPObjects;
+     oglwindowdef,geometry,dxflow,sysutils,memman,UGDBOpenArrayOfByte,UGDBLayerArray,UGDBOpenArrayOfPObjects;
 type
 //Owner:{-}PGDBObjEntity{/GDBPointer/};(*'Владелец'*)
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
@@ -92,7 +92,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure correctbb;virtual;
                     function GetLTCorrectSize:GDBDouble;virtual;
                     procedure calcbb;virtual;
-                    procedure DrawBB;
+                    procedure DrawBB(var DC:TDrawContext);
                     function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;
 
                     function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;
@@ -103,7 +103,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
                     procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;
                     function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;
-                    procedure higlight;virtual;
+                    procedure higlight(var DC:TDrawContext);virtual;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                     function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;
                     function SelectQuik:GDBBoolean;virtual;
@@ -319,8 +319,9 @@ procedure GDBObjEntity.DrawBB;
 begin
   if (sysvar.DWG.DWG_SystmGeometryDraw^){and(GDB.GetCurrentDWG.OGLwindow1.param.subrender=0)} then
   begin
-  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
-  DrawAABB(vp.BoundingBox);
+  //oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
+  dc.drawer.SetColor(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
+  dc.drawer.DrawAABB3DInModelSpace(vp.BoundingBox,dc.matrixs);
   end;
 end;
 function GDBObjEntity.GetCenterPoint;
@@ -427,7 +428,7 @@ begin
 end;
 procedure GDBObjEntity.DrawGeometry;
 begin
-     drawbb;
+     drawbb(dc);
 end;
 procedure GDBObjEntity.DrawOnlyGeometry;
 begin
@@ -522,7 +523,8 @@ begin
                                                                     begin
                                                                          _selected:=dc.selected;
                                                                          dc.selected:=true;
-                                                                         oglsm.myglStencilFunc(GL_ALWAYS,0,1);
+                                                                         //oglsm.myglStencilFunc(GL_ALWAYS,0,1);
+                                                                         dc.drawer.SetSelectedStencilMode;
                                                                          dc.drawer.SetPenStyle(TPS_Selected);
                                                                          sel := true;
                                                                     end;

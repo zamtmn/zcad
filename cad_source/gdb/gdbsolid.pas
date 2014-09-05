@@ -21,7 +21,7 @@ unit GDBSolid;
 interface
 uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,GDBWithLocalCS,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 ugdbltypearray,
-GDBase,gdbobjectsconstdef{,oglwindowdef,dxflow},memman,OGLSpecFunc;
+GDBase,gdbobjectsconstdef{,oglwindowdef,dxflow},memman;
 type
 {Export+}
 PGDBObjSolid=^GDBObjSolid;
@@ -183,38 +183,40 @@ oglsm.myglEnable(GL_COLOR_MATERIAL);
 *)
   if triangle then
   begin
-       oglsm.myglbegin(GL_TRIANGLES);
-       oglsm.myglNormal3dV(@normal);
-       oglsm.myglVertex3dV(@PInwCS[0]);
-       oglsm.myglVertex3dV(@PInwCS[1]);
-       oglsm.myglVertex3dV(@PInwCS[2]);
-       oglsm.myglbegin(GL_LINES);
-       oglsm.myglNormal3dV(@normal);
-       oglsm.myglVertex3dV(@PInwCS[0]);
-       oglsm.myglVertex3dV(@PInwCS[1]);
-       oglsm.myglVertex3dV(@PInwCS[1]);
-       oglsm.myglVertex3dV(@PInwCS[2]);
-       oglsm.myglVertex3dV(@PInwCS[2]);
-       oglsm.myglVertex3dV(@PInwCS[0]);
-       oglsm.myglend;
+       //oglsm.myglbegin(GL_TRIANGLES);
+       //oglsm.myglNormal3dV(@normal);
+       //oglsm.myglVertex3dV(@PInwCS[0]);
+       //oglsm.myglVertex3dV(@PInwCS[1]);
+       //oglsm.myglVertex3dV(@PInwCS[2]);
+       dc.drawer.DrawTriangle3DInModelSpace(normal,PInwCS[0],PInwCS[1],PInwCS[2],dc.matrixs);
+       //oglsm.myglbegin(GL_LINES);
+       //oglsm.myglNormal3dV(@normal);
+       //oglsm.myglVertex3dV(@PInwCS[0]);
+       //oglsm.myglVertex3dV(@PInwCS[1]);
+       //oglsm.myglVertex3dV(@PInwCS[1]);
+       //oglsm.myglVertex3dV(@PInwCS[2]);
+       //oglsm.myglVertex3dV(@PInwCS[2]);
+       //oglsm.myglVertex3dV(@PInwCS[0]);
+       //oglsm.myglend;
        (*
        glNormal3fV(@n);
        {my}glVertex3fV(@p1);
        {my}glVertex3fV(@p2);
        {my}glVertex3fV(@p3);
         *)
-       oglsm.myglend;
+       //oglsm.myglend;
   end
      else
   begin
-  oglsm.myglbegin(GL_QUADS);
+  {oglsm.myglbegin(GL_QUADS);
   oglsm.myglNormal3dV(@normal);
   oglsm.myglVertex3dV(@PInwCS[0]);
   oglsm.myglVertex3dV(@PInwCS[1]);
   oglsm.myglVertex3dV(@PInwCS[3]);
   oglsm.myglVertex3dV(@PInwCS[2]);
-  oglsm.myglend;
-  oglsm.myglbegin(GL_LINES);
+  oglsm.myglend;}
+  dc.drawer.DrawQuad3DInModelSpace(normal,PInwCS[0],PInwCS[1],PInwCS[3],PInwCS[4],dc.matrixs);
+  {oglsm.myglbegin(GL_LINES);
   oglsm.myglNormal3dV(@normal);
   oglsm.myglVertex3dV(@PInwCS[0]);
   oglsm.myglVertex3dV(@PInwCS[1]);
@@ -224,7 +226,7 @@ oglsm.myglEnable(GL_COLOR_MATERIAL);
   oglsm.myglVertex3dV(@PInwCS[2]);
   oglsm.myglVertex3dV(@PInwCS[2]);
   oglsm.myglVertex3dV(@PInwCS[0]);
-  oglsm.myglend;
+  oglsm.myglend;}
   end;
 
   //oglsm.myglDisable(GL_LIGHTING);

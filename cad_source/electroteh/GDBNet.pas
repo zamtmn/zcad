@@ -8,8 +8,8 @@ unit GDBNet;
 {$INCLUDE def.inc}
 
 interface
-Uses gdbdrawcontext,UGDBLayerArray,GDBGenericSubEntry,ugdbdrawingdef,gdbvisualprop,zcadsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,{GDBGenericSubEntry,}UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
-memman,GDBSubordinated,OGLSpecFunc,uunitmanager,shared,sysutils,UGDBOpenArrayOfPObjects;
+Uses gdbdrawcontext,UGDBLayerArray,GDBGenericSubEntry,ugdbdrawingdef,gdbvisualprop,zcadsysvars,UGDBOpenArrayOfByte,gdbasetypes,GDBEntity,UGDBOpenArrayOfPV,GDBConnected,gdbobjectsconstdef,varmandef,geometry,gdbase,UGDBGraf,
+memman,GDBSubordinated,uunitmanager,shared,sysutils,UGDBOpenArrayOfPObjects;
 const
      UNNAMEDNET='NET';
 type
@@ -228,15 +228,17 @@ begin
      if graf.Count=0 then exit;
      tgf:=graf.PArray;
      i:=0;
-     oglsm.myglEnable(GL_POINT_SMOOTH);
-     oglsm.myglpointsize(10);
+     //oglsm.myglEnable(GL_POINT_SMOOTH);
+     //oglsm.myglpointsize(10);
+     dc.drawer.setpointsize(10);
      while i<graf.Count do
      begin
      if tgf^.linkcount>2 then
                              begin
-                             oglsm.myglbegin(GL_points);
-                             {glVertex3dV}oglsm.myglVertex3dV(@tgf^.point);
-                             oglsm.myglend;
+                             //oglsm.myglbegin(GL_points);
+                             //oglsm.myglVertex3dV(@tgf^.point);
+                             //oglsm.myglend;
+                             dc.drawer.DrawPoint3DInModelSpace(tgf^.point,dc.matrixs);
                              end;
     (*                         gdb.GetCurrentDWG.OGLwindow1.pushmatrix;
 
@@ -259,9 +261,10 @@ begin
      inc(tgf);
      inc(i);
      end;
-     oglsm.myglDisable(GL_POINT_SMOOTH);
-     oglsm.myglpointsize(1);
+     //oglsm.myglDisable(GL_POINT_SMOOTH);
+     //oglsm.myglpointsize(1);
      dec(dc.subrender);
+     dc.drawer.setpointsize(1);
      inherited DrawGeometry(lw,dc{infrustumactualy,subrender});
 end;
 function GDBObjNet.DeSelect;

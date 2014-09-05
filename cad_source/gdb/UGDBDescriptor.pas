@@ -123,7 +123,7 @@ function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
 function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log,OGLSpecFunc;
+ uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log;
  procedure GDBDescriptor.AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
  var
      domethod,undomethod:tmethod;
@@ -182,7 +182,7 @@ procedure redrawoglwnd;
 var
    pdwg:PTSimpleDrawing;
 begin
-  isOpenGLError;
+  //isOpenGLError;
   pdwg:=gdb.GetCurrentDWG;
   if pdwg<>nil then
   begin

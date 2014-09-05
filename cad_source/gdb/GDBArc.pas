@@ -18,9 +18,9 @@
 unit GDBArc;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,ugdbdrawingdef,math,OGLSpecFunc,GDBWithLocalCS,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
+uses gdbdrawcontext,ugdbdrawingdef,math,GDBWithLocalCS,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
 ugdbltypearray,
-GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain{,OGLSpecFunc};
+GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain;
 type
 {Export+}
 PGDBObjArc=^GDBObjARC;
@@ -545,12 +545,8 @@ begin
                                        end
                                                         else
                                                             begin
-                                                                 oglsm.myglbegin(GL_lines);
-                                                                 oglsm.myglVertex3dV(@q0);
-                                                                 oglsm.myglVertex3dV(@q1);
-                                                                 oglsm.myglVertex3dV(@q1);
-                                                                 oglsm.myglVertex3dV(@q2);
-                                                                 oglsm.myglend;
+                                                                 DC.Drawer.DrawLine3DInModelSpace(q0,q1,DC.matrixs);
+                                                                 DC.Drawer.DrawLine3DInModelSpace(q1,q2,DC.matrixs);
                                                             end;
                      end;
   //myglbegin(gl_points);

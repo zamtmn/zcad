@@ -21,7 +21,7 @@ unit GDB3DFace;
 interface
 uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,geometry,dxflow,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
 ugdbltypearray,
-GDBase,gdbobjectsconstdef{,oglwindowdef,dxflow},memman,OGLSpecFunc;
+GDBase,gdbobjectsconstdef{,oglwindowdef,dxflow},memman;
 type
 {Export+}
 PGDBObj3DFace=^GDBObj3DFace;
@@ -202,28 +202,24 @@ oglsm.myglEnable(GL_COLOR_MATERIAL);
 *)
   if triangle then
   begin
-       oglsm.myglbegin(GL_TRIANGLES);
+       dc.drawer.DrawTriangle3DInModelSpace(normal,PInwCS[0],PInwCS[1],PInwCS[2],dc.matrixs);
+       {oglsm.myglbegin(GL_TRIANGLES);
        oglsm.myglNormal3dV(@normal);
        oglsm.myglVertex3dV(@PInwCS[0]);
        oglsm.myglVertex3dV(@PInwCS[1]);
        oglsm.myglVertex3dV(@PInwCS[2]);
-       (*
-       glNormal3fV(@n);
-       {my}glVertex3fV(@p1);
-       {my}glVertex3fV(@p2);
-       {my}glVertex3fV(@p3);
-        *)
-       oglsm.myglend;
+       oglsm.myglend;}
   end
      else
   begin
-  oglsm.myglbegin(GL_QUADS);
+    dc.drawer.DrawQuad3DInModelSpace(normal,PInwCS[0],PInwCS[1],PInwCS[2],PInwCS[3],dc.matrixs);
+  {oglsm.myglbegin(GL_QUADS);
   oglsm.myglNormal3dV(@normal);
   oglsm.myglVertex3dV(@PInwCS[0]);
   oglsm.myglVertex3dV(@PInwCS[1]);
   oglsm.myglVertex3dV(@PInwCS[2]);
   oglsm.myglVertex3dV(@PInwCS[3]);
-  oglsm.myglend;
+  oglsm.myglend;}
   end;
 
   //oglsm.myglDisable(GL_LIGHTING);

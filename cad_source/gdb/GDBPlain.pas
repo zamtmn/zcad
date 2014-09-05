@@ -21,7 +21,7 @@ unit GDBPlain;
 
 interface
 uses
- {GDBEntity,}gdbdrawcontext,zcadsysvars,geometry,GDBWithLocalCS,gdbase,gdbasetypes,varmandef,OGLSpecFunc{,GDBEntity};
+ gdbdrawcontext,zcadsysvars,geometry,GDBWithLocalCS,gdbase,gdbasetypes,varmandef;
 type
 {EXPORT+}
 GDBObjPlain={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
@@ -50,23 +50,30 @@ begin
        oglsm.myglvertex3dv(@outbound[0]);
        oglsm.myglend;}
 
-       oglsm.myglbegin(GL_LINES);
-       oglsm.glcolor3ub(255,0,0);
+       //oglsm.myglbegin(GL_LINES);
+       //oglsm.glcolor3ub(255,0,0);
+       dc.drawer.SetColor(255,0,0,0);
+
        p:=geometry.VertexAdd(Local.P_insert,Local.Basis.ox);
-       oglsm.myglvertex3dv(@Local.P_insert);
-       oglsm.myglvertex3dv(@p);
+       //oglsm.myglvertex3dv(@Local.P_insert);
+       //oglsm.myglvertex3dv(@p);
+       dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.matrixs);
 
-       oglsm.glcolor3ub(0,255,0);
+       //oglsm.glcolor3ub(0,255,0);
+       dc.drawer.SetColor(0,255,0,0);
        p:=geometry.VertexAdd(Local.P_insert,Local.Basis.oy);
-       oglsm.myglvertex3dv(@Local.P_insert);
-       oglsm.myglvertex3dv(@p);
+       //oglsm.myglvertex3dv(@Local.P_insert);
+       //oglsm.myglvertex3dv(@p);
+       dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.matrixs);
 
-       oglsm.glcolor3ub(0,0,255);
+       //oglsm.glcolor3ub(0,0,255);
+       dc.drawer.SetColor(0,0,255,0);
        p:=geometry.VertexAdd(Local.P_insert,Local.Basis.oz);
-       oglsm.myglvertex3dv(@Local.P_insert);
-       oglsm.myglvertex3dv(@p);
+       //oglsm.myglvertex3dv(@Local.P_insert);
+       //oglsm.myglvertex3dv(@p);
+       dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.matrixs);
 
-       oglsm.myglend;
+       //oglsm.myglend;
   end;
   inherited;
 

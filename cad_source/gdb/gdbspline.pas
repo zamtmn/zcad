@@ -22,7 +22,7 @@ unit gdbspline;
 interface
 uses gdbdrawcontext,OGLSpecFunc,UGDBOpenArrayOfData,UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},GDBEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
 ugdbltypearray,
-GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman{,OGLSpecFunc};
+GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman;
 type
 {Export+}
 PGDBObjSpline=^GDBObjSpline;
@@ -303,7 +303,7 @@ begin
   vertexarrayInWCS.iterategl(@myglVertex3dv);
   oglsm.myglend;}
   //inherited;
-  drawbb;
+  drawbb(dc);
 end;
 function GDBObjSpline.Clone;
 var tpo: PGDBObjSpline;

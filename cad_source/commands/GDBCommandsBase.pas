@@ -23,7 +23,7 @@ interface
 uses
  gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}{layerwnd,}strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
-  plugins,OGLSpecFunc,
+  plugins,
   sysinfo,
   //commandline,
   commandlinedef,
@@ -368,12 +368,12 @@ begin
                                      //                      gdb.GetCurrentDWG.FileName:=s;
                                      if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
                                                                        begin
-                                                                       isOpenGLError;
+                                                                       //isOpenGLError;
                                                                        end;
                                      addfromdxf(s,@gdb.GetCurrentDWG^.pObjRoot^,loadmode,gdb.GetCurrentDWG^);
                                      if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
                                                                        begin
-                                                                       isOpenGLError;
+                                                                       //isOpenGLError;
                                                                        end;
                                      if FileExists(utf8tosys(s+'.dbpas')) then
                                      begin
@@ -408,7 +408,7 @@ begin
      if gdb.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
                                          begin
                                          gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree:=createtree(gdb.GetCurrentDWG^.pObjRoot.ObjArray,gdb.GetCurrentDWG^.pObjRoot.vp.BoundingBox,@gdb.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree,IninialNodeDepth,nil,TND_Root)^;
-                                         isOpenGLError;
+                                         //isOpenGLError;
                                          if assigned(redrawoglwndproc) then redrawoglwndproc;
                                          end;
      result:=cmd_ok;

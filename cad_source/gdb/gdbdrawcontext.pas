@@ -36,6 +36,7 @@ TDrawContext=packed record
                    Zoom:GDBDouble;
                    drawer:TZGLAbstractDrawer;
                    matrixs:tmatrixs;
+                   pcamera:PGDBBaseCamera;
              end;
 implementation
 begin

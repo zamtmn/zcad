@@ -21,7 +21,7 @@ unit GDBDevice;
 
 interface
 uses gdbdrawcontext,UGDBDrawingdef,GDBCamera,zcadsysvars,sysutils,devices,UGDBOpenArrayOfByte,UGDBOpenArrayOfPObjects,
-OGLSpecFunc,uunitmanager{,shared},
+uunitmanager{,shared},
 memman{,strmy,varman},geometry,gdbobjectsconstdef,GDBEntity,GDBSubordinated,varmandef,{UGDBOpenArrayOfPV,}gdbasetypes,GDBBlockInsert,GDBase,UGDBVisibleOpenArray,UGDBObjBlockdefArray{,UGDBDescriptor}{,UGDBLayerArray,oglwindowdef};
 
 type
@@ -335,16 +335,18 @@ begin
   VarObjArray.DrawOnlyGeometry(CalculateLineWeight(dc),dc{infrustumactualy,subrender});
   dc.subrender := dc.subrender - 1;
   p:=VarObjArray.beginiterate(ir);
-  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
+  //oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
+  dc.drawer.SetColor(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
   if sysvar.DWG.DWG_SystmGeometryDraw^ then
   begin
   if p<>nil then
   repeat
-        oglsm.myglbegin(GL_lines);
-        oglsm.myglVertex3dV(@self.P_insert_in_WCS);
         v:=p^.getcenterpoint;
+        {oglsm.myglbegin(GL_lines);
+        oglsm.myglVertex3dV(@self.P_insert_in_WCS);
         oglsm.myglVertex3dV(@v);
-        oglsm.myglend;
+        oglsm.myglend;}
+        dc.drawer.DrawLine3DInModelSpace(self.P_insert_in_WCS,v,dc.matrixs);
        p:=VarObjArray.iterate(ir);
   until p=nil;
   end;
@@ -363,16 +365,18 @@ begin
   VarObjArray.DrawWithattrib(dc{infrustumactualy,subrender}){DrawGeometry(CalculateLineWeight)};
   dc.subrender := dc.subrender - 1;
   p:=VarObjArray.beginiterate(ir);
-  oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
+  //oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
+  dc.drawer.SetColor(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
   if sysvar.DWG.DWG_SystmGeometryDraw^ then
   begin
   if p<>nil then
   repeat
-        oglsm.myglbegin(GL_lines);
-        oglsm.myglVertex3dV(@self.P_insert_in_WCS);
         v:=p^.getcenterpoint;
+        {oglsm.myglbegin(GL_lines);
+        oglsm.myglVertex3dV(@self.P_insert_in_WCS);
         oglsm.myglVertex3dV(@v);
-        oglsm.myglend;
+        oglsm.myglend;}
+        dc.drawer.DrawLine3DInModelSpace(self.P_insert_in_WCS,v,dc.matrixs);
        p:=VarObjArray.iterate(ir);
   until p=nil;
   end;

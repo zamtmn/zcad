@@ -22,7 +22,7 @@ unit GDBLWPolyLine;
 interface
 uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,oglwindowdef,GDBCurve,UGDBVectorSnapArray,geometry,UGDBLayerArray,GDBEntity,memman,gdbasetypes,UGDBPoint3DArray,UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,varman,varmandef,
 ugdbltypearray,
-GDBase,GDBWithLocalCS,gdbobjectsconstdef,math,dxflow,sysutils,UGDBLineWidthArray,OGLSpecFunc;
+GDBase,GDBWithLocalCS,gdbobjectsconstdef,math,dxflow,sysutils,UGDBLineWidthArray;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}
@@ -533,10 +533,11 @@ begin
     if Width3D_in_WCS_Array.parray<>nil then
            begin
                 q3d:=Width3D_in_WCS_Array.parray;
-                oglsm.myglbegin(GL_Lines);
+                dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.matrixs);
+                {oglsm.myglbegin(GL_Lines);
                 oglsm.myglVertex3dv(@q3d^[0]);
                 oglsm.myglVertex3dv(@q3d^[1]);
-                oglsm.myglend();
+                oglsm.myglend();}
                 exit;
            end;
 
@@ -551,40 +552,45 @@ begin
       begin
         if plw^.hw then
         begin
-        oglsm.myglbegin(GL_QUADS);
+        dc.drawer.DrawQuad3DInModelSpace(q3d^[0],q3d^[1],q3d^[2],q3d^[3],dc.matrixs);
+        {oglsm.myglbegin(GL_QUADS);
         oglsm.myglVertex3dv(@q3d^[0]);
         oglsm.myglVertex3dv(@q3d^[1]);
         oglsm.myglVertex3dv(@q3d^[2]);
         oglsm.myglVertex3dv(@q3d^[3]);
-        oglsm.myglend();
+        oglsm.myglend();}
         end;
         inc(plw);
         inc(q3d);
       end;
    end;
 
-    oglsm.myglbegin(GL_Lines);
+    //oglsm.myglbegin(GL_Lines);
     q3d:=Width3D_in_WCS_Array.parray;
     plw:=Width2D_in_OCS_Array.parray;
     for i := 0 to ie do
     begin
       begin
-        oglsm.myglVertex3dv(@q3d^[0]);
-        oglsm.myglVertex3dv(@q3d^[1]);
+        dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.matrixs);
+        //oglsm.myglVertex3dv(@q3d^[0]);
+        //oglsm.myglVertex3dv(@q3d^[1]);
         if plw^.hw then
         begin
-        oglsm.myglVertex3dv(@q3d^[1]);
-        oglsm.myglVertex3dv(@q3d^[2]);
-        oglsm.myglVertex3dv(@q3d^[2]);
-        oglsm.myglVertex3dv(@q3d^[3]);
-        oglsm.myglVertex3dv(@q3d^[3]);
-        oglsm.myglVertex3dv(@q3d^[0]);
+        dc.drawer.DrawLine3DInModelSpace(q3d^[1],q3d^[2],dc.matrixs);
+        //oglsm.myglVertex3dv(@q3d^[1]);
+        //oglsm.myglVertex3dv(@q3d^[2]);
+        dc.drawer.DrawLine3DInModelSpace(q3d^[2],q3d^[3],dc.matrixs);
+        //oglsm.myglVertex3dv(@q3d^[2]);
+        //oglsm.myglVertex3dv(@q3d^[3]);
+        dc.drawer.DrawLine3DInModelSpace(q3d^[3],q3d^[0],dc.matrixs);
+        //oglsm.myglVertex3dv(@q3d^[3]);
+        //oglsm.myglVertex3dv(@q3d^[0]);
         end;
         inc(plw);
         inc(q3d);
       end;
    end;
-   oglsm.myglend();
+   //oglsm.myglend();
    inherited;
 
 

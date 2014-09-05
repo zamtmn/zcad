@@ -30,7 +30,7 @@ type ptsyminfo=^tsyminfo;
      tsyminfo=packed record
                            number,size:word;
                      end;
-procedure readpalette;
+procedure readpalette(filename:string);
 //procedure loadblock(s:GDBString);
 function createnewfontfromshx(name:GDBString;var pf:PGDBfont):GDBBoolean;
 function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
@@ -885,19 +885,17 @@ else
 end;
 procedure readpalette;
 var
-  i,{poz,}code:GDBInteger;
-  //byt:GDBByte;
+  i,code:GDBInteger;
   line,sub:GDBString;
   f:GDBOpenArrayOfByte;
 begin
-  f.InitFromFile(sysparam.programpath+'components/palette.rgb');
+  f.InitFromFile(sysparam.programpath+filename);
   while f.notEOF do
     begin
       line:=f.readGDBString;
       if (line[1]<>';')and(line[1]<>'') then
         begin
           sub:=GetPredStr(line,'=');
-          //sub:=Copy(line,1,3);
           val(sub,i,code);
 
           sub:=GetPredStr(line,',');
@@ -985,7 +983,7 @@ begin
 end;}
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('io.initialization');{$ENDIF}
-  readpalette;
+  readpalette('components/palette.rgb');
   {fontdirect[ 0,0]:=cos(  0*pi/180);fontdirect[ 0,1]:=sin(  0*pi/180);
   fontdirect[ 1,0]:=cos( 30*pi/180);fontdirect[ 1,1]:=sin( 30*pi/180);
   fontdirect[ 2,0]:=cos( 45*pi/180);fontdirect[ 2,1]:=sin( 45*pi/180);

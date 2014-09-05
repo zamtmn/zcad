@@ -19,7 +19,7 @@
 unit uzglabstractdrawer;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase,gdbasetypes,GDBCamera;
+uses UGDBOpenArrayOfData,uzgprimitivessarray,Graphics,gdbase,gdbasetypes,GDBCamera,geometry;
 type
 TRenderMode=(TRM_ModelSpace,TRM_DisplaySpace,TRM_WindowSpace);
 TZGLPenStyle=(TPS_Solid,TPS_Dot,TPS_Dash,TPS_Selected);
@@ -45,6 +45,7 @@ TZGLAbstractDrawer=class
                         procedure SetPointSmooth(const smoth:boolean);virtual;abstract;
                         procedure ClearStatesMachine;virtual;abstract;
                         procedure SetFillStencilMode;virtual;abstract;
+                        procedure SetSelectedStencilMode;virtual;abstract;
                         procedure SetDrawWithStencilMode;virtual;abstract;
                         procedure DisableStencil;virtual;abstract;
                         procedure SetZTest(Z:boolean);virtual;abstract;
@@ -65,6 +66,10 @@ TZGLAbstractDrawer=class
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);overload;virtual;abstract;
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
                         procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
+                        procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
+                        procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);virtual;abstract;overload;
+                        procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);virtual;abstract;overload;
+                        procedure DrawAABB3DInModelSpace(const BoundingBox:GDBBoundingBbox;var matrixs:tmatrixs);virtual;abstract;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);virtual;abstract;
                         procedure DrawDebugGeometry;virtual;abstract;
                    end;
@@ -88,6 +93,7 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure SetPointSmooth(const smoth:boolean);override;
                         procedure ClearStatesMachine;override;
                         procedure SetFillStencilMode;override;
+                        procedure SetSelectedStencilMode;override;
                         procedure SetDrawWithStencilMode;override;
                         procedure DisableStencil;override;
                         procedure SetZTest(Z:boolean);override;
@@ -96,6 +102,10 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);overload;override;
                         procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure DrawAABB3DInModelSpace(const BoundingBox:GDBBoundingBbox;var matrixs:tmatrixs);override;
                         procedure WorkAreaResize(w,h:integer);override;
                         procedure SaveBuffers(w,h:integer);override;
                         procedure RestoreBuffers(w,h:integer);override;
@@ -170,6 +180,9 @@ end;
 procedure TZGLGeneralDrawer.SetFillStencilMode;
 begin
 end;
+procedure TZGLGeneralDrawer.SetSelectedStencilMode;
+begin
+end;
 procedure TZGLGeneralDrawer.SetDrawWithStencilMode;
 begin
 end;
@@ -193,6 +206,42 @@ begin
 end;
 procedure TZGLGeneralDrawer.DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);
 begin
+end;
+procedure TZGLGeneralDrawer.DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);
+begin
+end;
+procedure TZGLGeneralDrawer.DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
+begin
+end;
+procedure TZGLGeneralDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
+begin
+end;
+procedure TZGLGeneralDrawer.DrawAABB3DInModelSpace(const BoundingBox:GDBBoundingBbox;var matrixs:tmatrixs);
+begin
+        DrawLine3DInModelSpace(createvertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),
+                               createvertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),matrixs);
+        DrawLine3DInModelSpace(createvertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),
+                               createvertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),matrixs);
+        DrawLine3DInModelSpace(createvertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),
+                               createvertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),matrixs);
+        DrawLine3DInModelSpace(createvertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),
+                               createvertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),matrixs);
+        DrawLine3DInModelSpace(createvertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),
+                               createvertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),matrixs);
+        DrawLine3DInModelSpace(createvertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),
+                               createvertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
+        DrawLine3DInModelSpace(createvertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),
+                               createvertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
+        DrawLine3DInModelSpace(createvertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),
+                               createvertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),matrixs);
+        DrawLine3DInModelSpace(createvertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),
+                               createvertex(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),matrixs);
+        DrawLine3DInModelSpace(createvertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),
+                               createvertex(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),matrixs);
+        DrawLine3DInModelSpace(createvertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),
+                               createvertex(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
+        DrawLine3DInModelSpace(createvertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),
+                               createvertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
 end;
 procedure TZGLGeneralDrawer.WorkAreaResize;
 begin

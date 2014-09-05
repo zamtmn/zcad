@@ -101,7 +101,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 implementation
-uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, {GDBManager,}shared,{commandline,}log{,OGLSpecFunc};
+uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, {GDBManager,}shared,{commandline,}log;
 function TSimpleDrawing.GetChangeStampt:GDBBoolean;
 begin
      result:=false;

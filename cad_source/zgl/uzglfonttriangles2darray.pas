@@ -30,7 +30,7 @@ ZGLFontTriangle2DArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfData)
                        end;
 {Export-}
 implementation
-uses OGLSpecFunc,log;
+uses log;
 constructor ZGLFontTriangle2DArray.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof(GDBFontVertex2D));

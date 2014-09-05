@@ -23,7 +23,7 @@ interface
 uses
  backendmanager,abstractviewarea,uzglopengldrawer,uzglabstractdrawer,generalviewarea,colorwnd,dswnd,ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
-  plugins,OGLSpecFunc,
+  plugins,
   sysinfo,
   //commandline,
   commandlinedef,
@@ -210,28 +210,11 @@ begin
      programlog.logoutstr('oglwnd.PDWG:=ptd;',0);
      wpowner.getareacaps;
 
-     //TOGLWnd(oglwnd).GDBActivate;
-  wpowner.WaResize(nil);
-     programlog.logoutstr('oglwnd._onresize(nil);',0);
-     //oglwnd.MakeCurrent(false);
-     programlog.logoutstr('oglwnd.MakeCurrent(false);',0);
-     isOpenGLError;
-     programlog.logoutstr('isOpenGLError;',0);
-     //oglwnd.DoubleBuffered:=false;
+     wpowner.WaResize(nil);
+     programlog.logoutstr('wpowner.WaResize(nil);',0);
      oglwnd.show;
      programlog.logoutstr('oglwnd.show;',0);
-     isOpenGLError;
-     programlog.logoutstr('isOpenGLError;',0);
-     //oglwnd.Repaint;
-     //gdb.GetCurrentDWG.OGLwindow1.initxywh('oglwnd',tf,200,72,768,596,false);
 
-     //tf.size;
-
-     //gdb.GetCurrentDWG.OGLwindow1.Show;
-
-     //GDBGetMem({$IFDEF DEBUGBUILD}'{E197C531-C543-4FAF-AF4A-37B8F278E8A2}',{$ENDIF}GDBPointer(gdb.GetCurrentDWG),sizeof(UGDBDescriptor.TDrawing));
-     //gdb.GetCurrentDWG^.init(@gdb.ProjectUnits);
-     //addfromdxf(sysvar.path.Program_Run^+'blocks\el\general\_nok.dxf',@gdb.GetCurrentDWG.ObjRoot);
 
      MainFormN.PageControl.ActivePage:=myts;
      programlog.logoutstr('MainFormN.PageControl.ActivePage:=myts;',0);

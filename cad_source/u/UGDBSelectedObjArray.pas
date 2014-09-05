@@ -20,7 +20,7 @@ unit UGDBSelectedObjArray;
 {$INCLUDE def.inc}
 interface
 uses gdbdrawcontext,GDBCamera,{GDBWithLocalCS,}GDBWithMatrix,GDBEntity,UGDBControlPointArray,UGDBOpenArrayOfData{, oglwindowdef},sysutils,gdbase, geometry,
-     gdbasetypes{,varmandef,gdbobjectsconstdef},memman,OGLSpecFunc,ugdbdrawingdef;
+     gdbasetypes{,varmandef,gdbobjectsconstdef},memman,ugdbdrawingdef;
 type
 {Export+}
 PSelectedObjDesc=^SelectedObjDesc;

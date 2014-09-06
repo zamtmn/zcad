@@ -21,7 +21,7 @@ unit gdbcommandsinterface;
 
 interface
 uses
- backendmanager,abstractviewarea,uzglopengldrawer,uzglabstractdrawer,generalviewarea,colorwnd,dswnd,ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ backendmanager,abstractviewarea,uzglopengldrawer,uzglabstractdrawer,colorwnd,dswnd,ltwnd,tswnd,uinfoform,UGDBFontManager,ugdbsimpledrawing,GDBCommandsBase,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}layerwnd,{strutils,}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,{ SysUtils,} FileUtil,{ LResources,} Forms, {stdctrls,} Controls, {Graphics, Dialogs,}ComCtrls,Clipbrd,lclintf,
   plugins,
   sysinfo,
@@ -35,7 +35,7 @@ uses
   //oglwindowdef,
   //OGLtypes,
   UGDBOpenArrayOfByte,
-  iodxf,iodwg,
+  iodxf,
   //optionswnd,
   {objinsp,}
    zcadinterface,
@@ -44,7 +44,6 @@ uses
   //gdbobjectsconstdef,
   GDBEntity,
  shared,
- UGDBEntTree,
   {zmenus,}projecttreewnd,gdbasetypes,{optionswnd,}AboutWnd,HelpWnd,memman,WindowsSpecific,{txteditwnd,}
  {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline,
  AnchorDocking,dialogs,XMLPropStorage,xmlconf,openglviewarea{,
@@ -82,8 +81,8 @@ uses
    //function Regen_com(Operands:pansichar):GDBInteger;
 //var DWGPageCxMenu:pzpopupmenu;
 implementation
-uses GDBPolyLine,UGDBPolyLine2DArray,GDBLWPolyLine,mainwindow,UGDBSelectedObjArray,
-     oglwindow,geometry;
+uses mainwindow,
+     geometry;
 function CloseDWG_com(Operands:pansichar):GDBInteger;
 var
    //poglwnd:toglwnd;
@@ -482,8 +481,8 @@ begin
   DOShowModal(Helpwindow);
 end;
 function ClearFileHistory_com(Operands:pansichar):GDBInteger;
-var i,j,k:integer;
-    pstr,pstrnext:PGDBString;
+var i:integer;
+    pstr:PGDBString;
 begin
      for i:=0 to 9 do
      begin

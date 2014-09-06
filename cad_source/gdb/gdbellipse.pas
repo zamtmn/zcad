@@ -19,7 +19,6 @@ unit gdbellipse;
 {$INCLUDE def.inc}
 interface
 uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,zcadsysvars,GDBWithLocalCS,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,gdbEntity,UGDBOutbound2DIArray{,UGDBPolyPoint2DArray},UGDBPoint3DArray,UGDBOpenArrayOfByte,varman,varmandef,
-ugdbltypearray,
 GDBase{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBPlain;
 type
 {Export+}

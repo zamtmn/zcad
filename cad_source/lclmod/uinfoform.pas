@@ -21,7 +21,7 @@ unit uinfoform;
 interface
 
 uses
-  {zcadinterface,}commandlinedef,ExtCtrls,
+  {zcadinterface,}ExtCtrls,
   {$IFNDEF DELPHI}lclproc,{$ENDIF}
   Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,fileutil,ButtonPanel,{$ENDIF}Buttons,
   {strutils,}{$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;

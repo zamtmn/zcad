@@ -256,7 +256,6 @@ end;
 function DrawRotatedDim_com(operands:TCommandOperands):TCommandResult;
 var
     pd:PGDBObjRotatedDimension;
-    pline:PGDBObjLine;
     p1,p2,p3,vd,vn:gdbvertex;
 begin
     if GetInteractiveLine(rsSpecifyfirstPoint,rsSpecifySecondPoint,p1,p2) then
@@ -304,9 +303,8 @@ end;
 function DrawDiametricDim_com(operands:TCommandOperands):TCommandResult;
 var
     pd:PGDBObjDiametricDimension;
-    pline:PGDBObjLine;
     pcircle:PGDBObjCircle;
-    p1,p2,p3,vd,vn:gdbvertex;
+    p1,p2,p3:gdbvertex;
 
   procedure FinalCreateDDim;
   begin
@@ -367,9 +365,8 @@ end;
 function DrawRadialDim_com(operands:TCommandOperands):TCommandResult;
 var
     pd:PGDBObjRadialDimension;
-    pline:PGDBObjLine;
     pcircle:PGDBObjCircle;
-    p1,p2,p3,vd,vn:gdbvertex;
+    p1,p2,p3:gdbvertex;
 
   procedure FinalCreateRDim;
   begin

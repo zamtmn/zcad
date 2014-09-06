@@ -20,7 +20,7 @@ unit gdbobjectsconstdef;
 {$INCLUDE def.inc}
 
 interface
-uses gdbasetypes;
+//uses gdbasetypes;
 const {as_normal=0;
       as_point=1;
       as_line=2;}

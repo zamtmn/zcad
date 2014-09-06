@@ -21,7 +21,6 @@ unit GDBLWPolyLine;
 
 interface
 uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBOpenArrayOfPObjects,oglwindowdef,GDBCurve,UGDBVectorSnapArray,geometry,UGDBLayerArray,GDBEntity,memman,gdbasetypes,UGDBPoint3DArray,UGDBOpenArray,UGDBPolyLine2DArray,UGDBOpenArrayOfByte,varman,varmandef,
-ugdbltypearray,
 GDBase,GDBWithLocalCS,gdbobjectsconstdef,math,dxflow,sysutils,UGDBLineWidthArray;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)

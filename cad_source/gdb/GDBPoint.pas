@@ -21,7 +21,6 @@ unit GDBPoint;
 
 interface
 uses gdbdrawcontext,dxflow,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,UGDBLayerArray,gdbasetypes,UGDBSelectedObjArray,GDBSubordinated,GDB3d,gdbEntity,sysutils,UGDBOpenArrayOfByte,varman,varmandef,
-ugdbltypearray,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,memman;
 type
 {Export+}

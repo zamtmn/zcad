@@ -31,7 +31,6 @@ uses
   varman,
   UGDBOpenArrayOfByte,
   iodxf,
-  cmdline,
   gdbEntity,
   shared,
   gdbasetypes,strutils,forms,Controls,zcadinterface;

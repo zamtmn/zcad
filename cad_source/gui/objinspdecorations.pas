@@ -22,7 +22,11 @@ unit objinspdecorations;
 interface
 
 uses
-  Objinsp,uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,oswnd,gdbcommandsinterface,Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,varmandef,Varman,colorwnd,UGDBLayerArray,gdbase,lineweightwnd,gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
+  Objinsp,uinfoform,Forms,ugdbltypearray,sysutils,umytreenode,oswnd,gdbcommandsinterface,
+  Graphics,LCLType,Themes,types,gdbobjectsconstdef,UGDBNamedObjectsArray,UGDBStringArray,
+  varmandef,Varman,colorwnd,UGDBLayerArray,gdbase,lineweightwnd,gdbasetypes,usupportgui,
+  StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,strproc,zcadsysvars,commandline,
+  zcadinterface;
 type
     AsyncCommHelper=class
                          class procedure GetVertex(Pinstance:PtrInt);
@@ -90,9 +94,7 @@ end;
 function LineWeightDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 var
     cbedit:TComboBox;
-    ir:itrec;
     i,seli:integer;
-    number:integer;
     currLW:TGDBLineWeight;
 procedure addLWtoC(name:string;value:TGDBLineWeight);
 begin
@@ -214,16 +216,10 @@ begin
      ButtonDraw(canvas,r,state,'...');
 end;
 procedure ButtonCrossDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
-var
-  Details: TThemedElementDetails;
-  ComboElem:TThemedButton;
 begin
      ButtonDraw(canvas,r,state,'+');
 end;
 procedure ButtonHLineDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
-var
-  Details: TThemedElementDetails;
-  ComboElem:TThemedButton;
 begin
      ButtonDraw(canvas,r,state,'-');
 end;
@@ -339,9 +335,7 @@ end;
 function ColorDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PGDBGDBStringArray;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
 var
     cbedit:TComboBox;
-    ir:itrec;
     i,seli:integer;
-    number:integer;
     currColor:TGDBPaletteColor;
 procedure addColorToC(name:string;value:TGDBPaletteColor);
 begin
@@ -376,23 +370,19 @@ begin
 end;
 procedure drawLTProp(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
 var
-   //index:TGDBLineWeight;
    PLT:PGDBLtypeProp;
-   ll:integer;
    s:gdbstring;
 begin
      PLT:=ppointer(PInstance)^;
      if plt<>nil then
                         begin
                              s:=Tria_AnsiToUtf8(plt^.Name);
-                             ll:=30;
                         end
                     else
                         begin
                             s:=rsDifferent;
                             if gdb.GetCurrentDWG.LTypeStyleTable.Count=0 then
                                       exit;
-                            ll:=0;
                         end;
 
          ARect.Left:=ARect.Left+2;

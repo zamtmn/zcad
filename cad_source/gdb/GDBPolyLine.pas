@@ -21,7 +21,6 @@ unit GDBPolyLine;
 
 interface
 uses gdbdrawcontext,ugdbdrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},gdbEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
-ugdbltypearray,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman;
 type
 {Export+}
@@ -84,11 +83,6 @@ begin
      result:=GDBPoint3dArraygetsnap(VertexArrayInWCS,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,closed,param,ProjectProc);
 end;
 procedure GDBObjPolyline.FormatEntity(const drawing:TDrawingDef);
-var //i,j: GDBInteger;
-    ptv,ptvprev,ptvfisrt: pgdbvertex;
-    //tv:gdbvertex;
-    //vs:VectorSnap;
-        ir:itrec;
 begin
   FormatWithoutSnapArray;
   calcbb;

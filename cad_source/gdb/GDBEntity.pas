@@ -164,8 +164,6 @@ implementation
 uses {UGDBEntTree,}GDBGenericSubEntry,UGDBSelectedObjArray{,UGDBOpenArrayOfPV},UBaseTypeDescriptor,TypeDescriptors,URecordDescriptor,log;
 
 procedure GDBObjEntity.IterateCounter(PCounted:GDBPointer;var Counter:GDBInteger;proc:TProcCounter);
-var p:pGDBObjEntity;
-    ir:itrec;
 begin
     proc(@self,PCounted,Counter);
 end;
@@ -801,9 +799,6 @@ end;
 procedure GDBObjEntity.correctbb;
 var cv:gdbvertex;
     d:double;
-const minoffsetstart=0.5;
-      basedist=100;
-      onedivbasedist=1/basedist;
 begin
      {cv:=VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
      cv:=VertexMulOnSc(cv,onedivbasedist);

@@ -23,30 +23,22 @@ interface
 
 uses
 
-   uzglabstractdrawer,uzglopengldrawer,gdbdrawcontext,commandlinedef,uinfoform,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBLayerArray,zcadstrconsts,{ucxmenumgr,}
+   uzglabstractdrawer,uzglopengldrawer,zcadsysvars,UGDBLayerArray,
   {$IFDEF LCLGTK2}
   //x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
   {$ENDIF}
-  ugdbabstractdrawing,UGDBOpenArrayOfPV,ugdbfont,
   {$IFNDEF DELPHI}LCLType,InterfaceBase,FileUtil,{$ELSE}windows,{$ENDIF}
   {umytreenode,}menus,Classes,Forms,
   ExtCtrls,Controls,
-  GDBGenericSubEntry,gdbasetypes,sysutils,
+  gdbasetypes,sysutils,
   {$IFNDEF DELPHI}{GLext,gl,glu,}OpenGLContext,{$ELSE}dglOpenGL,UOpenGLControl,{$ENDIF}
-  Math,gdbase,varmandef,varman,UUnitManager,
-  oglwindowdef,UGDBSelectedObjArray,GDBEntity,
-
+  gdbase,varmandef,varman,UUnitManager,
+  oglwindowdef,
   GDBHelpObj,
-  commandline,
-
-  zglline3d,
-
   sysinfo,
-  UGDBVisibleOpenArray,
-  UGDBPoint3DArray,
   strproc,OGLSpecFunc,memman,
-  log,UGDBEntTree,sltexteditor,abstractviewarea;
+  log,abstractviewarea;
 
 type
   PTOGLWnd = ^TOGLWnd;
@@ -79,8 +71,8 @@ procedure finalize;}
 function docorrecttogrid(point:GDBVertex;need:GDBBoolean):GDBVertex;
 //function getsortedindex(cl:integer):integer;
 implementation
-uses {mainwindow,}UGDBTracePropArray,{GDBEntity,}{io,}geometry,gdbobjectsconstdef,{UGDBDescriptor,}zcadinterface,
-     shared,{cmdline,}GDBText;
+uses geometry,
+     shared;
 procedure TOGLWnd.EraseBackground(DC: HDC);
 begin
      dc:=0;

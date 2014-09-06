@@ -19,9 +19,9 @@ unit gdbradialdimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbdiametricdimension,UGDBTextStyleArray,UGDBXYZWStringArray,GDBAbstractText,gdbgenericdimension,gdbdimension,GDBPoint,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
-{UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
-GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
+uses gdbdiametricdimension,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,SysInfo,sysutils,
+gdbEntity,varmandef,
+GDBase,gdbobjectsconstdef,dxflow,memman,GDBSubordinated;
 (*
 
 Diametric dimension structure in DXF
@@ -73,7 +73,7 @@ begin
 end;
 function GDBObjRadialDimension.P10ChangeTo(tv:GDBVertex):GDBVertex;
 var
-  dirv,center:GDBVertex;
+  dirv:GDBVertex;
   d:double;
 begin
      //center:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
@@ -99,7 +99,7 @@ begin
 end;
 function GDBObjRadialDimension.P11ChangeTo(tv:GDBVertex):GDBVertex;
 var
-  dirv,center:GDBVertex;
+  dirv:GDBVertex;
   r:double;
 begin
      r:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
@@ -147,4 +147,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('gdbdiametricdimension.initialization');{$ENDIF}
-end.
+end.

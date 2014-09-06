@@ -19,7 +19,7 @@
 unit UGDBTextStyleArray;
 {$INCLUDE def.inc}
 interface
-uses UGDBFontManager,zcadsysvars,gdbasetypes,SysInfo,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
+uses UGDBFontManager,zcadsysvars,gdbasetypes,SysInfo,sysutils,gdbase, geometry,
      strproc,varmandef,shared,ugdbfont,zcadstrconsts,UGDBNamedObjectsArray,memman;
 type
   //ptextstyle = ^textstyle;
@@ -118,10 +118,8 @@ begin
     end;
 end;}
 function GDBTextStyleArray.setstyle(StyleName,FontFile:GDBString;tp:GDBTextStyleProp;USedInLT:GDBBoolean):PGDBTextStyle;
-var ts:GDBTextStyle;
-    //ff:gdbstring;
-    ps:PGDBTextStyle;
-    //p:GDBPointer;
+var
+   ps:PGDBTextStyle;
 begin
   ps:=(FindStyle(StyleName,USedInLT));
   ps.name:=stylename;
@@ -176,9 +174,6 @@ begin
   //pointer(ts.dxfname):=nil;
 end;
 function GDBTextStyleArray.FindStyle;
-var
-  pts:pGDBTextStyle;
-  i:GDBInteger;
 begin
 
   result:=getAddres(stylename);

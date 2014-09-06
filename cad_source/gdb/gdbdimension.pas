@@ -19,9 +19,9 @@ unit gdbdimension;
 {$INCLUDE def.inc}
 
 interface
-uses GDBAbstractText,UGDBTextStyleArray,UGDBXYZWStringArray,GDBPoint,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
-{UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
-GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
+uses GDBAbstractText,UGDBTextStyleArray,UGDBXYZWStringArray,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,strproc,UGDBOpenArrayOfByte,math,GDBText,geometry,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,
+gdbEntity,varmandef,
+GDBase,gdbobjectsconstdef,memman;
 type
 {EXPORT+}
 PTDXFDimData2D=^TDXFDimData2D;
@@ -92,7 +92,7 @@ GDBObjDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
 var
   WorkingFormatSettings:TFormatSettings;
 implementation
-uses GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
+uses GDBManager,log,UGDBOpenArrayOfPV,UGDBDescriptor,GDBBlockInsert;
 procedure GDBObjDimension.DrawDimensionLine(p1,p2:GDBVertex;supress1,supress2,drawlinetotext:GDBBoolean;const drawing:TDrawingDef);
 var
    l:GDBDouble;
@@ -213,7 +213,6 @@ begin
 end;
 procedure GDBObjDimension.CalcTextParam;
 var
-  ptext:PGDBObjMText;
   ip: Intercept3DProp;
 begin
   CalcTextAngle;
@@ -327,8 +326,6 @@ end;
 procedure GDBObjDimension.DrawDimensionText(p:GDBVertex;const drawing:TDrawingDef);
 var
   ptext:PGDBObjMText;
-  ip: Intercept3DProp;
-  txtlines:XYZWGDBGDBStringArray;
   dimtxtstyle:PGDBTextStyle;
   p2:GDBVertex;
 begin
@@ -390,7 +387,6 @@ begin
 end;
 
 procedure GDBObjDimension.transform;
-var tv:GDBVertex4D;
 begin
   DimData.P10InWCS:=VectorTransform3D(DimData.P10InWCS,t_matrix);
   DimData.P11InOCS:=VectorTransform3D(DimData.P11InOCS,t_matrix);
@@ -439,9 +435,6 @@ begin
      result:=tv;
 end;
 procedure GDBObjDimension.rtmodifyonepoint(const rtmod:TRTModifyData);
-var
-    tv,tv2:GDBVERTEX;
-    t:GDBDouble;
 begin
           case rtmod.point.pointtype of
                os_p10:begin

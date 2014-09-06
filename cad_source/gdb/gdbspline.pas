@@ -21,7 +21,6 @@ unit gdbspline;
 
 interface
 uses gdbdrawcontext,OGLSpecFunc,UGDBOpenArrayOfData,UGDBPoint3DArray,UGDBDrawingdef,GDBCamera,UGDBVectorSnapArray,UGDBOpenArrayOfPObjects,UGDBLayerArray,GDBSubordinated,GDBCurve,gdbasetypes{,GDBGenericSubEntry,UGDBVectorSnapArray,UGDBSelectedObjArray,GDB3d},GDBEntity{,UGDBPolyLine2DArray,UGDBPoint3DArray},UGDBOpenArrayOfByte,varman{,varmandef},
-ugdbltypearray,
 GDBase,gdbobjectsconstdef,oglwindowdef,geometry,dxflow,sysutils,memman;
 type
 {Export+}
@@ -125,7 +124,6 @@ end;
 procedure NurbsBeginCallBack(const v: GLenum);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 var
     tv: GLenum;
-    p:pchar;
 begin
      tv:=v;
 end;
@@ -133,14 +131,13 @@ end;
 procedure NurbsEndCallBack;{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 var
     tv: GLenum;
-    p:pchar;
 begin
      tv:=1;
 end;
 
 procedure GDBObjSpline.FormatEntity(const drawing:TDrawingDef);
 var //i,j: GDBInteger;
-    ptv,ptvprev,ptvfisrt: pgdbvertex;
+    ptv: pgdbvertex;
     //tv:gdbvertex;
     //vs:VectorSnap;
         ir:itrec;
@@ -148,9 +145,6 @@ var //i,j: GDBInteger;
     CP:GDBOpenArrayOfData;
     tfv:GDBvertex4D;
     tfvs:GDBvertex4S;
-    ptfv:PGDBvertex4S;
-    fl:PGDBFloat;
-    s:string;
     m:DMatrix4D;
 begin
 
@@ -307,8 +301,6 @@ begin
 end;
 function GDBObjSpline.Clone;
 var tpo: PGDBObjSpline;
-    p:pgdbvertex;
-    i:GDBInteger;
 begin
   GDBGetMem({$IFDEF DEBUGBUILD}'{8F88CAFB-14F3-4F33-96B5-F493DB8B28B7}',{$ENDIF}GDBPointer(tpo), sizeof(GDBObjSpline));
   tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight,closed);

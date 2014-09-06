@@ -552,10 +552,8 @@ begin
 end;
 procedure drawvalue(ppd:PPropertyDeskriptor;canvas:tcanvas;fulldraw:boolean);
 var
-   fer,r:trect;
+   r:trect;
    tempcolor:TColor;
-   FESize:TSize;
-   temp:integer;
 begin
      if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
      begin
@@ -599,12 +597,9 @@ procedure TGDBobjinsp.drawprop(PPA:PTPropertyDeskriptorArray; var y,sub:GDBInteg
 var
   s:GDBString;
   ppd:PPropertyDeskriptor;
-  fer,r:trect;
+  r:trect;
   tempcolor:TColor;
   ir:itrec;
-  temp:integer;
-  Size: TSize;
-  FESize:TSize;
 begin
   ppd:=ppa^.beginiterate(ir);
   if ppd<>nil then

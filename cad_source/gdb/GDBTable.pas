@@ -20,9 +20,9 @@ unit GDBTable;
 {$INCLUDE def.inc}
 
 interface
-uses GDBAbstractText,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,UGDBTableStyleArray,GDBLine{,math},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils,UGDBTable,UGDBStringArray,GDBMTEXT{,UGDBOpenArrayOfData},
-{UGDBOpenArrayOfPV,UGDBObjBlockdefArray,UGDBSelectedObjArray,UGDBVisibleOpenArray,}gdbEntity{,varman,varmandef},
-GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef{,oglwindowdef},geometry,dxflow,memman{,GDBSubordinated,UGDBOpenArrayOfByte};
+uses GDBAbstractText,ugdbtrash,ugdbdrawingdef,strproc,UGDBOpenArrayOfByte,UGDBTableStyleArray,GDBLine,gdbasetypes,GDBComplex,SysInfo,sysutils,UGDBTable,UGDBStringArray,GDBMTEXT,
+gdbEntity,
+GDBase,gdbobjectsconstdef,geometry,memman;
 //jcm(*'TopMiddle'*),
 type
 {TTableCellJustify=(jcl(*'TopLeft'*),

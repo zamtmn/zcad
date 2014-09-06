@@ -19,7 +19,7 @@
 unit uzglfonttriangles2darray;
 {$INCLUDE def.inc}
 interface
-uses uzglline3darray,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
+uses gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,memman,
 geometry;
 type
 {Export+}

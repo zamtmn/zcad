@@ -21,7 +21,7 @@ unit GDBBlockInsert;
 interface
 uses ugdbdrawingdef,UGDBLayerArray{,UGDBLayerArray},math,gdbasetypes,GDBComplex,{GDBGenericSubEntry,}SysInfo,sysutils,
 {UGDBOpenArrayOfPV,}UGDBObjBlockdefArray{,UGDBSelectedObjArray,UGDBVisibleOpenArray},gdbEntity,varman{,varmandef},
-UGDBEntTree,ugdbltypearray,GDBBlockDef,
+GDBBlockDef,
 GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,oglwindowdef,geometry,dxflow,memman,GDBSubordinated,UGDBOpenArrayOfByte;
 const zcadmetric='!!ZMODIFIER:';
 type

@@ -19,9 +19,9 @@ unit gdbgenericdimension;
 {$INCLUDE def.inc}
 
 interface
-uses GDBWithLocalCS,gdbdimension,GDBPoint,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
-{UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
-GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
+uses GDBWithLocalCS,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,strproc,UGDBOpenArrayOfByte,geometry,gdbasetypes,SysInfo,sysutils,
+gdbEntity,varmandef,
+GDBase,gdbobjectsconstdef,dxflow,memman,GDBSubordinated;
 type
 {EXPORT+}
 TDimType=(DTRotated,DTAligned,DTAngular,DTDiameter,DTRadius,DTAngular3P,DTOrdinate);
@@ -38,7 +38,7 @@ GDBObjGenericDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithLocalCS)
                    end;
 {EXPORT-}
 implementation
-uses gdbradialdimension,gdbdiametricdimension,gdbrotateddimension,gdbaligneddimension,GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
+uses gdbradialdimension,gdbdiametricdimension,gdbrotateddimension,gdbaligneddimension,GDBManager,log;
 var
   WorkingFormatSettings:TFormatSettings;
 function GDBObjGenericDimension.FromDXFPostProcessBeforeAdd(ptu:PTUnit;const drawing:TDrawingDef):PGDBObjSubordinated;

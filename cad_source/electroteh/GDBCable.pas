@@ -52,7 +52,7 @@ GDBObjCable={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjCurve)
            end;
 {Export-}
 implementation
-uses GDBBlockDef{,shared},log;
+uses log;
 function GDBObjCable.Clone;
 var tvo: PGDBObjCable;
     i:GDBInteger;
@@ -501,7 +501,6 @@ procedure GDBObjCable.DrawGeometry;
 var
    ptn1,ptn2:PTNodeProp;
    ir_inNodeArray:itrec;
-   notfirst:boolean;
 begin
   ptn2:=NodePropArray.beginiterate(ir_inNodeArray);
   ptn1:=NodePropArray.iterate(ir_inNodeArray);

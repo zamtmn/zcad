@@ -20,7 +20,7 @@ unit usimplegenerics;
 {$INCLUDE def.inc}
 
 interface
-uses gdbasetypes,gdbase,
+uses gdbase,
      sysutils,
      gutil,gmap;
 type
@@ -77,4 +77,4 @@ begin
 end;
 begin
      {$IFDEF DEBUGINITSECTION}LogOut('dxftypes.initialization');{$ENDIF}
-end.
+end.

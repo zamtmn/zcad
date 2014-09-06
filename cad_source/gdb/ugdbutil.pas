@@ -20,7 +20,7 @@ unit ugdbutil;
 {$INCLUDE def.inc}
 interface
 uses
-gdbase,GDBasetypes,GDBEntity,gdbobjectsconstdef,geometry;
+gdbase,GDBasetypes,GDBEntity,geometry;
 procedure LayerCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 procedure LTypeCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 implementation

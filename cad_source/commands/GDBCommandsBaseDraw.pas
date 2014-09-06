@@ -21,7 +21,7 @@ unit GDBCommandsBaseDraw;
 
 interface
 uses
-  zcadstrconsts,GL,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  zcadstrconsts,GL,printers,graphics,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,
   commandlinedef,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,
@@ -36,10 +36,9 @@ uses
   geometry,
   memman,
   gdbobjectsconstdef,
-  GDBEntity,GDBCircle,GDBLine,GDBGenericSubEntry,GDBMText,
-  shared,GDBSubordinated,GDBBlockInsert,GDBPolyLine,log,UGDBOpenArrayOfData,GDBTable,UGDBStringArray,printerspecfunc;
+  shared,log;
 implementation
-uses GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,Varman,{projecttreewnd,}oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
+uses UBaseTypeDescriptor,Varman,TypeDescriptors;
 var
    c1,c2:integer;
    distlen:gdbdouble;

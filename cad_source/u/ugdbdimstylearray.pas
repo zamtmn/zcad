@@ -19,8 +19,8 @@
 unit ugdbdimstylearray;
 {$INCLUDE def.inc}
 interface
-uses usimplegenerics,UGDBFontManager,zcadsysvars,gdbasetypes,SysInfo,UGDBOpenArrayOfData, {oglwindowdef,}sysutils,gdbase, geometry,
-     strproc,varmandef,shared,ugdbfont,zcadstrconsts,UGDBNamedObjectsArray,memman;
+uses usimplegenerics,zcadsysvars,gdbasetypes,SysInfo,sysutils,gdbase, geometry,
+     strproc,varmandef,shared,UGDBNamedObjectsArray,memman;
 type
 TDimArrowBlockParam=record
                      name:GDBString;

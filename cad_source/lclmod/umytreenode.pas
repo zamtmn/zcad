@@ -21,7 +21,7 @@ unit umytreenode;
 interface
 
 uses
-  Themes,uinfoform,zcadinterface,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,{StdCtrls,}Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,{ButtonPanel,}Buttons,
+  Themes,zcadinterface,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,{StdCtrls,}Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,{ButtonPanel,}Buttons,
   {strutils,}{$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
 type
     TmyAction=class(TAction)

@@ -50,6 +50,7 @@ begin
                      historyoutstr(rscmPoint)
                  else
                      historyout(operands);
+  result:=cmd_ok;
 end;
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 begin
@@ -66,6 +67,7 @@ begin
      c1:=commandmanager.GetValueHeap;
      c2:=-1;
      commandmanager.executecommandsilent('Get3DPoint(Первая точка:)',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+     result:=cmd_ok;
 end;
 procedure Rect_com_CommandCont;
 begin
@@ -101,7 +103,7 @@ begin
      gdb.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p2,point,matrixs);
      gdb.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(point,p4,matrixs);
      gdb.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p4,p1,matrixs);
-
+     result:=cmd_ok;
 end;
 
 function Dist_com_CommandStart(operands:pansichar):GDBInteger;
@@ -110,6 +112,7 @@ begin
      c2:=-1;
      commandmanager.executecommandsilent('Get3DPoint(Первая точка:)',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
      distlen:=0;
+     result:=cmd_ok;
 end;
 procedure Dist_com_CommandCont;
 var

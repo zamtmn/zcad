@@ -59,6 +59,7 @@ begin
      end
         else
             HistoryOutStr(rscmCommandOnlyCTXMenu);
+     result:=cmd_ok;
 end;
 function DBaseRename_com:GDBInteger;
 var //t:PUserTypeDescriptor;
@@ -91,6 +92,7 @@ begin
      end
         else
             HistoryOutStr(rscmCommandOnlyCTXMenu);
+     result:=cmd_ok;
 end;
 function DBaseLink_com:GDBInteger;
 var //t:PUserTypeDescriptor;
@@ -152,6 +154,7 @@ begin
      end
         else
             HistoryOut('Команда работает только из контекстного меню');  }
+    result:=cmd_ok;
 end;
 procedure startup;
 begin

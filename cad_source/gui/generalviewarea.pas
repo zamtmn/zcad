@@ -22,9 +22,9 @@ interface
 uses
      GDBHelpObj{нужно убрать},texteditor,
      geometry,gdbase,gdbasetypes,UGDBSelectedObjArray,
-     UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,
-     uinfoform,oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,Varman,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
-     gdbobjectsconstdef,shared,zcadstrconsts,UGDBTracePropArray,math,sysutils,commandlinedef,UGDBDrawingdef,strproc,GDBText,sltexteditor,
+     UGDBLayerArray,ugdbdimstylearray,
+     oglwindowdef,gdbdrawcontext,varmandef,zcadsysvars,GDBEntity,Varman,zcadinterface,ugdbabstractdrawing,UGDBPoint3DArray,UGDBEntTree,
+     gdbobjectsconstdef,shared,zcadstrconsts,UGDBTracePropArray,math,sysutils,commandlinedef,UGDBDrawingdef,strproc,
      ExtCtrls,Controls,Classes,LCLType,Forms,UGDBOpenArrayOfPV,GDBGenericSubEntry,GDBCamera,UGDBVisibleOpenArray,uzglabstractdrawer,abstractviewarea;
 const
   ontracdist=10;
@@ -196,7 +196,6 @@ var
   Tempplane,plx,ply,plz:DVector4D;
   a: GDBInteger;
   i2d,i2dresult:intercept2dprop;
-  td,td2,td22:gdbdouble;
   _NotUseLCS:boolean;
 begin
   if param.scrollmode then

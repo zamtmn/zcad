@@ -19,9 +19,11 @@ unit gdbrotateddimension;
 {$INCLUDE def.inc}
 
 interface
-uses gdbaligneddimension,gdbgenericdimension,gdbdimension,GDBPoint,ugdbdimstylearray,GDBMText,Varman,UGDBLayerArray,GDBGenericSubEntry,ugdbtrash,ugdbdrawingdef,GDBCamera,zcadsysvars,UGDBOpenArrayOfPObjects,strproc,UGDBOpenArrayOfByte,math,GDBText,GDBDevice,gdbcable,GDBTable,UGDBControlPointArray,geometry,GDBLine{,UGDBTableStyleArray},gdbasetypes{,GDBGenericSubEntry},GDBComplex,SysInfo,sysutils{,UGDBTable},UGDBStringArray{,GDBMTEXT,UGDBOpenArrayOfData},
-{UGDBOpenArrayOfPV,UGDBObjBlockdefArray,}UGDBSelectedObjArray{,UGDBVisibleOpenArray},gdbEntity{,varman},varmandef,
-GDBase{,UGDBDescriptor}{,GDBWithLocalCS},gdbobjectsconstdef,{oglwindowdef,}dxflow,memman,GDBSubordinated{,UGDBOpenArrayOfByte};
+uses gdbaligneddimension,gdbdimension,ugdbdimstylearray,Varman,UGDBLayerArray,ugdbtrash,ugdbdrawingdef,zcadsysvars,
+strproc,UGDBOpenArrayOfByte,geometry,
+gdbasetypes,SysInfo,sysutils,
+gdbEntity,varmandef,
+GDBase,gdbobjectsconstdef,dxflow,memman,GDBSubordinated;
 type
 {EXPORT+}
 PGDBObjRotatedDimension=^GDBObjRotatedDimension;
@@ -39,7 +41,7 @@ GDBObjRotatedDimension={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAlignedDimens
                    end;
 {EXPORT-}
 implementation
-uses GDBManager,UGDBTableStyleArray,GDBBlockDef{,shared},log,UGDBOpenArrayOfPV,GDBCurve,UGDBDescriptor,GDBBlockInsert;
+uses GDBManager,log;
 constructor GDBObjRotatedDimension.initnul;
 begin
   inherited initnul(owner);
@@ -71,7 +73,7 @@ begin
   dxfGDBStringout(outhandle,100,'AcDbRotatedDimension');
 end;
 procedure GDBObjRotatedDimension.transform;
-var tv:GDBVertex4D;
+var
     tm:DMatrix4D;
 begin
   tm:=t_matrix;
@@ -100,8 +102,7 @@ begin
 end;
 function GDBObjRotatedDimension.P14ChangeTo(tv:GDBVertex):GDBVertex;
 var
-    t,tl:GDBDouble;
-    temp:GDBVertex;
+    tl:GDBDouble;
 begin
      result:=tv;
      tl:=GetTFromDirNormalizedPoint(DimData.P10InWCS,tv,vectorN);
@@ -144,4 +145,4 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('gdbrotateddimension.initialization');{$ENDIF}
-end.
+end.

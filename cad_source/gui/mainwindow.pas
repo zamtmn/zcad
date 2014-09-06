@@ -27,9 +27,9 @@ uses
        Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,FileUtil,
        menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
   {FPC}
-       math,
+       //math,
   {ZCAD BASE}
-       UGDBStringArray,oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
+       oglwindowdef,gdbvisualprop,uzglgeometry,zcadinterface,plugins,UGDBOpenArrayOfByte,memman,gdbase,gdbasetypes,
        geometry,zcadsysvars,zcadstrconsts,strproc,UGDBNamedObjectsArray,log,
        varmandef, varman,UUnitManager,SysInfo,shared,strmy,UGDBTextStyleArray,ugdbdimstylearray,
   {ZCAD SIMPLE PASCAL SCRIPT}
@@ -40,8 +40,8 @@ uses
   {ZCAD COMMANDS}
        commandlinedef,commanddefinternal,commandline,
   {GUI}
-       texteditor,objinspdecorations,oswnd,cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
-       colorwnd,imagesmanager,ltwnd,usuptstylecombo,usupportgui,usupdimstylecombo,
+       texteditor,objinspdecorations,cmdline,umytreenode,lineweightwnd,layercombobox,ucxmenumgr,oglwindow,
+       colorwnd,imagesmanager,usuptstylecombo,usupportgui,usupdimstylecombo,
   {}
        gdbdrawcontext,uzglopengldrawer,uzglabstractdrawer,abstractviewarea;
   {}
@@ -234,7 +234,7 @@ const
   procedure DrawColor(Canvas:TCanvas; Index: Integer; ARect: TRect);
 
 implementation
-uses generalviewarea,gdbcommandsinterface;
+uses generalviewarea;
 
 {procedure TMyAnchorDockManager.ResetBounds(Force: Boolean);
 begin
@@ -863,8 +863,6 @@ end;
 function _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject):Integer;
 var
    viewcontrol:TCADControl;
-   wa:TGeneralViewArea;
-   //i:integer;
    s:string;
 begin
   if ClosedDWG<>nil then
@@ -3164,7 +3162,6 @@ procedure MainForm.ChangeLType(Sender:Tobject);
 var
    LTIndex,index:Integer;
    CLTSave,plt:PGDBLtypeProp;
-   mr:integer;
 begin
      index:=tcombobox(Sender).ItemIndex;
      plt:=PGDBLtypeProp(tcombobox(Sender).items.Objects[index]);
@@ -3409,12 +3406,6 @@ begin
     pname:='';
 end;
 procedure MainForm.ReloadLayer(plt: PGDBNamedObjectsArray);
-var
-  //i: GDBInteger;
-  ir:itrec;
-  plp:PGDBLayerProp;
-  s:ansistring{[ls]};
-  //ss:ansistring;
 begin
   (*
   {layerbox.ClearText;}

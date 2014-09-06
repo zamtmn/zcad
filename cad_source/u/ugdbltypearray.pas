@@ -19,8 +19,8 @@
 unit ugdbltypearray;
 {$INCLUDE def.inc}
 interface
-uses Classes,UGDBStringArray,UGDBOpenArrayOfData,zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
-     UGDBTextStyleArray,UGDBOpenArrayOfObjects,UGDBFontManager,
+uses Classes,UGDBOpenArrayOfData,zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
+     UGDBTextStyleArray,UGDBOpenArrayOfObjects,
      varmandef,{gdbobjectsconstdef,}UGDBNamedObjectsArray,StrProc,shared;
 const
      DefaultSHXHeight=1;
@@ -384,7 +384,6 @@ var //p:GDBPointer;
     sp:ShapeProp;
     ptp:PTextProp;
     tp:TextProp;
-    i:integer;
 begin
              result:=nil;
              if _source<>nil then
@@ -441,7 +440,6 @@ var
    line:GDBString;
    i:integer;
    WhatNeed:TSeek;
-   p:PGDBLtypeProp;
 begin
      LTName:='';
      LTDesk:='';
@@ -482,7 +480,6 @@ var
    dinfo:TDashInfo;
    SP:ShapeProp;
    TP:TextProp;
-   p:TTrianglesDataInfo;
 
    function GetStr(var s: GDBString; out dinfo:TDashInfo): String;
    var j:integer;

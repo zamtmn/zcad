@@ -3,8 +3,8 @@ unit linetypesloadwnd;
 interface
 
 uses
-  strproc,UGDBDescriptor,gdbase,zcadstrconsts,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ButtonPanel, StdCtrls, types, lclintf,lcltype, EditBtn, ComCtrls,ugdbsimpledrawing;
+  strproc,UGDBDescriptor,gdbase,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  ButtonPanel, lclintf,lcltype, EditBtn, ComCtrls,ugdbsimpledrawing;
 
 type
 
@@ -94,7 +94,6 @@ begin
 end;
 
 function TLineWeightSelectWindow.run(filename:string):integer;
-var i:integer;
 begin
      LoadFromFile(filename);
      FileNameEdit1.FileName:=filename;

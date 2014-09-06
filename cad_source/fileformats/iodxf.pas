@@ -19,7 +19,7 @@
 unit iodxf;
 {$INCLUDE def.inc}
 interface
-uses usimplegenerics,ugdbdimstylearray,gdbentityfactory,{$IFNDEF DELPHI}gmap,gutil,dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,{pdfvectorialreader,}GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,gdbellipse,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, {GDBManager,} {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
+uses usimplegenerics,ugdbdimstylearray,gdbentityfactory,{$IFNDEF DELPHI}dxfvectorialreader,svgvectorialreader,epsvectorialreader,fpvectorial,fileutil,{$ENDIF}UGDBNamedObjectsArray,ugdbltypearray,ugdbsimpledrawing,zcadsysvars,zcadinterface,{pdfvectorialreader,}GDBCircle,GDBArc,oglwindowdef,dxflow,zcadstrconsts,UGDBTextStyleArray,varman,geometry,GDBSubordinated,shared,gdbasetypes{,GDBRoot},log,GDBGenericSubEntry,SysInfo,gdbase, {GDBManager,} {OGLtypes,} sysutils{, strmy}, memman, {UGDBDescriptor,}gdbobjectsconstdef,
      UGDBObjBlockdefArray,UGDBOpenArrayOfTObjLinkRecord{,varmandef},UGDBOpenArrayOfByte,UGDBVisibleOpenArray,GDBEntity{,GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMtext,GDBLine,GDBPolyLine,GDBLWPolyLine},TypeDescriptors;
 type
    entnamindex=record
@@ -546,7 +546,7 @@ var
    BShapeProp:BasicSHXDashProp;
    txtstr:string;
    TempDouble:GDBDouble;
-   error,flags: GDBInteger;
+   flags: GDBInteger;
 begin
   dashinfo:=TDIDash;
   if GoToDXForENDTAB(f, 0, dxfName_LType) then
@@ -755,8 +755,8 @@ var
    ptstyle:PGDBTextStyle;
    DWGHandle:TDWGHandle;
    byt: GDBInteger;
-   error,flags: GDBInteger;
-   sname, lname, lcolor, llw,desk,ltn: String;
+   flags: GDBInteger;
+   lname: String;
    ti:PGDBTextStyle;
    pltypeprop:PGDBLtypeProp;
    ir,ir2:itrec;
@@ -884,7 +884,7 @@ procedure ReadVport(var s:string;var f:GDBOpenArrayOfByte; exitGDBString: GDBStr
 var
    byt: GDBInteger;
    active:boolean;
-   error,flags: GDBInteger;
+   flags: GDBInteger;
 begin
                                if GoToDXForENDTAB(f, 0, 'VPORT') then
                                begin
@@ -1421,7 +1421,6 @@ var
   temphandle,temphandle2,temphandle3,temphandle4,handle,lasthandle,vporttablehandle,plottablefansdle,dimtablehandle: TDWGHandle;
   i: integer;
   OldHandele2NewHandle:TMapHandleToHandle;
-  OldHandleIterator:TMapHandleToHandle.TIterator;
   //phandlea: pdxfhandlerecopenarray;
   inlayertable, inblocksec, inblocktable, inlttypetable, indimstyletable: GDBBoolean;
   handlepos:integer;
@@ -1440,7 +1439,6 @@ var
   p:pointer;
   {$IFNDEF DELPHI}
   Handle2pointer:TMapPointerToHandle;
-  HandleIterator:TMapPointerToHandle.TIterator;
   {$ENDIF}
   //DWGHandle:TDWGHandle;
   laststrokewrited:boolean;

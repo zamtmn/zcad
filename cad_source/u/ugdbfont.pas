@@ -19,7 +19,7 @@
 unit ugdbfont;
 {$INCLUDE def.inc}
 interface
-uses uzgltriangles3darray,ugdbshxfont,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,UGDBPoint3DArray,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses uzgltriangles3darray,ugdbshxfont,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
 type
 {EXPORT+}
 PGDBfont=^GDBfont;
@@ -259,8 +259,6 @@ begin
      result:=font.GetOrReplaceSymbolInfo(symbol,TrianglesDataInfo);
 end;
 function GDBfont.GetOrCreateSymbolInfo(symbol:GDBInteger):PGDBsymdolinfo;
-var
-   usi:GDBUNISymbolInfo;
 begin
      result:=font.GetOrCreateSymbolInfo(symbol);
 end;

@@ -378,8 +378,8 @@ begin
 end;
 
 procedure TOGLStateManager.TessVertex(tess:TessObj; location:PGDBFontVertex2D; data:pointer);
-type
-    PT3darray=^T3darray;
+{type
+    PT3darray=^T3darray;}
 var
    tv:gdbvertex;
 begin

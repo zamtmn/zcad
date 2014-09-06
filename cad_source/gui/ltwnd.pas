@@ -113,12 +113,6 @@ begin
 end;
 
 procedure TLTWindow._onCreate(Sender: TObject);
-var
-   pdwg:PTSimpleDrawing;
-   ir:itrec;
-   pltp:PGDBLtypeProp;
-   //s:ansistring;
-   li:TListItem;
 begin
      ListView1.SmallImages:=IconList;
      IconList.GetBitmap(II_Minus,DeleteLtBtn.Glyph);
@@ -211,9 +205,6 @@ procedure TLTWindow._LTSelect(Sender: TObject; Item: TListItem; Selected: Boolea
 var
    pltp:PGDBLtypeProp;
    pdwg:PTSimpleDrawing;
-   layername:string;
-   counter:integer;
-   li:TListItem;
    inent,inblock:integer;
 begin
      if selected then
@@ -233,7 +224,6 @@ procedure TLTWindow._CreateLT(Sender: TObject);
 var
    pltp:PGDBLtypeProp;
    pdwg:PTSimpleDrawing;
-   li:TListItem;
    ltd:tstrings;
    CurrentLine:integer;
    LTName,LTDesk,LTImpl:GDBString;

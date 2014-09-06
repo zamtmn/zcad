@@ -19,7 +19,7 @@
 unit ugdbshxfont;
 {$INCLUDE def.inc}
 interface
-uses math,OGLSpecFunc,uzglfonttriangles2darray,TTTypes,TTObjs,gvector,gmap,gutil,EasyLazFreeType,memman,UGDBPolyPoint3DArray,gdbobjectsconstdef,UGDBPoint3DArray,strproc,UGDBOpenArrayOfByte{,UGDBPoint3DArray},gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
+uses math,OGLSpecFunc,uzglfonttriangles2darray,TTTypes,TTObjs,gvector,gmap,gutil,EasyLazFreeType,memman,gdbobjectsconstdef,strproc,UGDBOpenArrayOfByte,gdbasetypes,UGDBOpenArrayOfData,sysutils,gdbase,{UGDBVisibleOpenArray,}geometry{,gdbEntity,UGDBOpenArrayOfPV};
 type
 PTTTFSymInfo=^TTTFSymInfo;
 TTTFSymInfo=packed record
@@ -201,7 +201,6 @@ begin
 end;
 procedure TessVertexCallBack(const v,v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 var
-   k:integer;
    pv:pgdbvertex;
    trp:GDBFontVertex2D;
 begin
@@ -250,8 +249,7 @@ begin
 end;
 procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont{;var pf:PGDBfont});
 var
-   i,j:integer;
-   fe:boolean;
+   j:integer;
    glyph:TFreeTypeGlyph;
    _glyph:PGlyph;
    //psyminfo,psubsyminfo:PGDBsymdolinfo;
@@ -261,14 +259,10 @@ var
    startcountur:boolean;
    startcounturindex:integer;
    k:gdbdouble;
-   Iterator:TMapChar.TIterator;
-   done:boolean;
    tesselator:TessObj;
-   tv:GDBFontVertex2D;
    lastv:GDBFontVertex2D;
    tparray:array[0..65535] of gdbvertex;
    tparrayindex,oldtparrayindex:integer;
-   trp:GDBFontVertex2D;
 procedure CompareAndTess(v:GDBFontVertex2D);
 begin
      if (abs(lastv.x-v.x)>eps)or(abs(lastv.y-v.y)>eps) then
@@ -639,7 +633,7 @@ begin
 end;
 procedure TBezierSolver2D.solve;
 var
-   size,i,j,rindex,n:integer;
+   size,j,n:integer;
    p,prevp:GDBvertex2D;
 begin
      BOrder:=FArray.Size;
@@ -817,9 +811,6 @@ begin
      SHXdata.init({$IFDEF DEBUGBUILD}'{700B6312-B792-4FFE-B514-2F2CD4B47CC2}',{$ENDIF}1024);
 end;
 destructor SHXFont.done;
-var i:integer;
-    pobj:PGDBUNISymbolInfo;
-    ir:itrec;
 begin
      inherited;
      SHXdata.done;

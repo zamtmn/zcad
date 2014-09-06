@@ -22,7 +22,7 @@ interface
 uses
       Graphics,classes,Themes,types,
       strproc,log,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
-      usupportgui,varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,UGDBOpenArrayOfPointer,math,
+      usupportgui,varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,math,
 
       StdCtrls,shared;
 type

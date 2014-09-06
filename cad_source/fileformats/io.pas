@@ -19,7 +19,7 @@
 unit io;
 {$INCLUDE def.inc}
 interface
-uses gmap,gvector,gutil,TTObjs,EasyLazFreeType,ugdbshxfont,geometry,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}GDBBlockDef,math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,{GDBManager,}iodxf,memman,{UGDBDescriptor,}gdbobjectsconstdef;
+uses EasyLazFreeType,ugdbshxfont,geometry,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}ugdbfont,strproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,log{,strutils},strmy,sysutils,UGDBOpenArrayOfByte,gdbasetypes,SysInfo,{UGDBObjBlockdefArray,}gdbase,{GDBManager,}iodxf,memman,{UGDBDescriptor,}gdbobjectsconstdef;
 const
   //IgnoreSHP='() '#13;
   //BreakSHP='*,'#10;
@@ -917,22 +917,13 @@ begin
 end;
 function createnewfontfromttf(name:GDBString;var pf:PGDBfont):GDBBoolean;
 var
-   i,j:integer;
-   fe:boolean;
-   glyph:TFreeTypeGlyph;
-   _glyph:PGlyph;
-   //psyminfo,psubsyminfo:PGDBsymdolinfo;
-
-   x,y,x1,y1,scx,scy:fontfloat;
-   cends,lastoncurve,chcode:integer;
-   startcountur:boolean;
+   i:integer;
+   chcode:integer;
    k:gdbdouble;
    pttf:PTTFFont;
    //BS:TBezierSolver2D;
    si:TTTFSymInfo;
-   PSI:PTTTFSymInfo;
    Iterator:TMapChar.TIterator;
-   done:boolean;
 begin
     initfont(pf,extractfilename(name));
     pf.ItFFT;

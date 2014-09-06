@@ -21,11 +21,11 @@ unit GDBManager;
 
 
 interface
-uses ugdbltypearray,gdbentityfactory,zcadsysvars,gdbellipse,GDB3DFace,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
+uses ugdbltypearray,zcadsysvars,UGDBLayerArray,sysutils,gdbasetypes,gdbase, {OGLtypes,}
      UGDBDescriptor,varmandef,gdbobjectsconstdef,
-     UGDBVisibleOpenArray,GDBGenericSubEntry,gdbEntity,GDBCable,GDBDevice,
-     GDBBlockInsert,GDBCircle,GDBArc,GDBPoint,GDBText,GDBMText,GDBLine,
-     GDBPolyLine,GDBLWPolyLine,memman,GDBSolid;
+     UGDBVisibleOpenArray,GDBGenericSubEntry,gdbEntity,
+     GDBBlockInsert,GDBCircle,GDBLine,
+     memman;
 type
     TSelObjDesk=record
                       PFirstObj:PGDBObjEntity;

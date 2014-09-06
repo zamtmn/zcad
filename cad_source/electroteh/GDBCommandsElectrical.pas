@@ -10,7 +10,7 @@ unit GDBCommandsElectrical;
 
 interface
 uses
-  GDBAbstractText,zcadstrconsts,UGDBSelectedObjArray,gdbentityfactory,zcadsysvars,csvdocument,
+  zcadstrconsts,UGDBSelectedObjArray,gdbentityfactory,zcadsysvars,csvdocument,
   UGDBOpenArrayOfPV,GDBBlockInsert,devices,UGDBTree,ugdbdescriptor,gdbasetypes,commandline,GDBCommandsDraw,GDBElLeader,
   plugins,
   commandlinedef,
@@ -119,7 +119,7 @@ var
 procedure finalize;}
 procedure Cable2CableMark(pcd:PTCableDesctiptor;pv:pGDBObjDevice);
 implementation
-uses GDBMText,GDBBlockDef,oglwindow,UGDBPoint3DArray,devicebaseabstract;
+uses GDBMText,GDBBlockDef,UGDBPoint3DArray,devicebaseabstract;
 function GetCableMaterial(pcd:PTCableDesctiptor):GDBString;
 var
    {pvn,}{pvm,}pvmc{,pvl}:pvardesk;
@@ -3072,11 +3072,6 @@ begin
 end;
 
 function _test_com(Operands:pansichar):GDBInteger;
-var i: GDBInteger;
-    //pv:pGDBObjEntity;
-    //ir:itrec;
-    //pvd{,pvn,pvm,pvmc,pvl}:pvardesk;
-    //mat:gdbstring;
 begin
      historyout('Тест производительности. запасаемя терпением');
      {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('тест производительности - getonmouseobject*10000',lp_IncPos);{$ENDIF}

@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  texteditor,gdbdrawcontext,usimplegenerics,gdbaligneddimension,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,
@@ -377,7 +377,7 @@ procedure Line_com_CommandEnd(_self:pointer);
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 implementation
-uses generalviewarea,GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,Varman,{projecttreewnd,}oglwindow,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
+uses GDBCurve,GDBLWPolyLine,UBaseTypeDescriptor,GDBBlockDef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray;
 function GetBlockDefNames(var BDefNames:GDBGDBStringArray;selname:GDBString):GDBInteger;
 var pb:PGDBObjBlockdef;
     ir:itrec;

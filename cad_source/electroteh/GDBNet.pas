@@ -48,7 +48,7 @@ GDBObjNet={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjConnected)
            end;
 {Export-}
 implementation
-uses GDBLine,{ugdbdescriptor,}{GDBManager,}dxflow,math,oglwindow,log;
+uses GDBLine,dxflow,math,log;
 function GDBObjNet.IsHaveGRIPS:GDBBoolean;
 begin
      result:=false;

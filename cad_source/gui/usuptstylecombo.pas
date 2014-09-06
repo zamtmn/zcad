@@ -22,7 +22,7 @@ unit usuptstylecombo;
 interface
 
 uses
-  gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
+  usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
 
 type
   TSupportTStyleCombo = class
@@ -56,8 +56,6 @@ begin
   tcombobox(Sender).ItemIndex:=-1;
 end;
 class procedure TSupportTStyleCombo.CloseUpTStyle(Sender:Tobject);
-var
-  i:integer;
 begin
      tcombobox(Sender).ItemIndex:=0;
 end;
@@ -100,7 +98,6 @@ class procedure TSupportTStyleCombo.ChangeLType(Sender:Tobject);
 var
    index:Integer;
    CLTSave,pts:PGDBTextStyle;
-   mr:integer;
 begin
      index:=tcombobox(Sender).ItemIndex;
      pts:=PGDBTextStyle(tcombobox(Sender).items.Objects[index]);
@@ -125,4 +122,4 @@ begin
 end;
 
 
-end.
+end.

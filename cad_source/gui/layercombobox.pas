@@ -224,10 +224,6 @@ end;
 //============================================================================//
 
 constructor TZCADLayerComboBox.Create(AOwner:TComponent);                       // Создание объекта класса
-  var
-    n:integer;
-    Details:TThemedElementDetails;
-    Size:TSize;
 begin
   inherited Create(AOwner);
   M1:=false;
@@ -249,7 +245,6 @@ end;
 
 procedure TZCADLayerComboBox.Paint;                                             // Отрисовка
   var
-    i:integer;
     lp:TLayerPropRecord;
     TxRect:TRect;
     MD,MIC:boolean;
@@ -558,4 +553,4 @@ end;
 
 //============================================================================//
 
-end.
+end.

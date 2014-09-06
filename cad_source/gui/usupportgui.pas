@@ -22,7 +22,7 @@ unit usupportgui;
 interface
 
 uses
-  zcadsysvars,StdCtrls,gdbasetypes,Controls,Classes,LCLType,ComCtrls,Graphics;
+  zcadsysvars,StdCtrls,Controls,Classes,LCLType,ComCtrls,Graphics;
 
 procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
 procedure ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);

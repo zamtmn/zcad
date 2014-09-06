@@ -19,10 +19,10 @@
 unit urtl;
 {$INCLUDE def.inc}
 interface
-uses UUnitManager,zcadsysvars,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,Varman,languade,UGDBOpenArrayOfObjects,{RegCnownTypes,URegisterObjects,}SysUtils,
-     UBaseTypeDescriptor,gdbasetypes, shared,gdbase,UGDBOpenArrayOfByte, strmy, varmandef,sysinfo,
-     UGDBOpenArrayOfData,UGDBStringArray,TypeDescriptors,UEnumDescriptor,UArrayDescriptor,UPointerDescriptor,
-     URecordDescriptor,UObjectDescriptor,USinonimDescriptor;
+uses UUnitManager,zcadsysvars,zcadstrconsts,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,Varman,languade,SysUtils,
+     UBaseTypeDescriptor,shared,gdbase,UGDBOpenArrayOfByte, strmy, varmandef,sysinfo,
+     TypeDescriptors,
+     URecordDescriptor;
 implementation
 uses
     log,memman;

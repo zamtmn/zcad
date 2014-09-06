@@ -20,8 +20,8 @@ unit UGDBDescriptor;
 {$INCLUDE def.inc}
 interface
 uses
-ugdbdimstylearray,UGDBDrawingdef,WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,GDBWithLocalCS,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,ugdbabstractdrawing,UGDBObjBlockdefArray,UGDBTableStyleArray,UUnitManager,
-UGDBNumerator, gdbase,varmandef,varman,
+ugdbdimstylearray,UGDBDrawingdef,WindowsSpecific,LResources,zcadsysvars,zcadinterface,zcadstrconsts,UGDBOpenArrayOfUCommands,strproc,GDBBlockDef,ugdbabstractdrawing,UGDBObjBlockdefArray,UUnitManager,
+gdbase,varmandef,varman,
 sysutils, memman, geometry, gdbobjectsconstdef,
 gdbasetypes,sysinfo,ugdbsimpledrawing,
 GDBGenericSubEntry,
@@ -31,10 +31,9 @@ UGDBSelectedObjArray,
 UGDBTextStyleArray,
 UGDBFontManager,
 ugdbltypearray,
-GDBCamera,
 UGDBOpenArrayOfPV,
 GDBRoot,ugdbfont,
-OGLWindow,UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,ugdbtrash,UGDBOpenArrayOfByte,oglwindowdef;
+UGDBOpenArrayOfPObjects,UGDBVisibleOpenArray,ugdbtrash,UGDBOpenArrayOfByte,oglwindowdef;
 type
 {EXPORT+}
 TDWGProps=packed record
@@ -123,7 +122,7 @@ function dwgSaveDXFDPAS(s:gdbstring;dwg:PTSimpleDrawing):GDBInteger;
 function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
- uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log;
+ uses GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log;
  procedure GDBDescriptor.AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
  var
      domethod,undomethod:tmethod;
@@ -154,8 +153,7 @@ implementation
                    result:=cmd_error;
  end;
  function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
- var s,s1:GDBString;
-     itautoseve:boolean;
+ var s1:GDBString;
  begin
       begin
            if dwg.GetFileName=rsUnnamedWindowTitle then

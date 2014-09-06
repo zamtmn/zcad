@@ -7,7 +7,7 @@ interface
 uses
   selectorwnd,ugdbltypearray,ugdbutil,log,lineweightwnd,colorwnd,ugdbsimpledrawing,zcadsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
-  Buttons, ExtCtrls, StdCtrls, Grids, ComCtrls,LCLIntf,lcltype,
+  Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype,
 
   gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
 
@@ -150,7 +150,6 @@ begin
 end;
 procedure TLayerWindow.Process(ListItem:TListItem;SubItem:Integer;DoubleClick:Boolean);
 var
-   pos,si: integer;
    mr:integer;
 begin
      {if SubItem>0 then
@@ -255,7 +254,6 @@ end;
 procedure TLayerWindow.createeditor(ListView:TListView;ListItem:TListItem;SubItem:Integer;P:PAnsiString);
 var
    pos,si: integer;
-   mr:integer;
    rect:trect;
 begin
   Pos := -GetScrollPos (ListView.Handle, SB_HORZ);
@@ -351,8 +349,6 @@ begin
 end;
 
 procedure TLayerWindow.MkCurrent(Sender: TObject);
-var
-   i:integer;
 begin
   if assigned(ListView1.Selected)then
                                      MaceItemCurrent(ListView1.Selected)
@@ -580,11 +576,8 @@ end;
 
 procedure TLayerWindow.ListView1SelectItem(Sender: TObject; Item: TListItem;Selected: Boolean);
 var
-   player,pcreatedlayer:PGDBLayerProp;
+   player:PGDBLayerProp;
    pdwg:PTSimpleDrawing;
-   layername:string;
-   counter:integer;
-   li:TListItem;
    inent,inblock:integer;
 begin
      if selected then
@@ -650,11 +643,9 @@ end;
 
 procedure TLayerWindow.LayerDelete(Sender: TObject); // Процедура удаления слоя
 var
-   player,pcreatedlayer:PGDBLayerProp;
+   player:PGDBLayerProp;
    pdwg:PTSimpleDrawing;
-   layername:string;
    e,b:GDBInteger;
-   li:TListItem;
    domethod,undomethod:tmethod;
 begin
   //ShowError(rsNotYetImplemented);

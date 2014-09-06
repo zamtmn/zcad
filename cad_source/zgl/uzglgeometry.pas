@@ -19,7 +19,7 @@
 unit uzglgeometry;
 {$INCLUDE def.inc}
 interface
-uses gdbdrawcontext,uzglabstractdrawer,uzgprimitivessarray,uzgvertex3sarray,UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzglpoint3darray,uzgltriangles3darray,ugdbltypearray,ugdbfont,sysutils,gdbase,memman,log,
+uses gdbdrawcontext,uzglabstractdrawer,uzgprimitivessarray,uzgvertex3sarray,UGDBOpenArrayOfData,UGDBPoint3DArray,zcadsysvars,geometry,gdbvisualprop,UGDBPolyPoint3DArray,uzglline3darray,uzgltriangles3darray,ugdbltypearray,ugdbfont,sysutils,gdbase,memman,log,
      gdbasetypes,strproc;
 type
 {Export+}
@@ -171,7 +171,6 @@ var
    segment:ZPolySegmentData;
    ptv,ptvprev,pfirstv: pgdbvertex;
    _ir:itrec;
-   cl:GDBDouble;
 begin
      if closed then
                    inherited init({$IFDEF DEBUGBUILD}'{A3EC2434-0A87-474E-BDA3-4E6C661C78AF}',{$ENDIF}points.Count,sizeof(ZPolySegmentData))
@@ -356,7 +355,6 @@ var
     PSP:PShapeProp;
     PTP:PTextProp;
     ir2,ir3,ir4,ir5:itrec;
-    addAllignVector:GDBVertex;
 begin
   begin
     TDI:=vp.dasharray.beginiterate(ir2);

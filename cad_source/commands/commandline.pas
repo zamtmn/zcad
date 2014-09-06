@@ -577,8 +577,6 @@ begin
 end;
 
 procedure GDBcommandmanager.executecommandtotalend;
-var
-   temp:PCommandRTEdObjectDef;
 begin
   ChangeModeAndEnd(TGPCancel);
 end;

@@ -19,10 +19,10 @@
 unit gdbvisualprop;
 {$INCLUDE def.inc}
 interface
-uses log,ugdbltypearray,zcadsysvars,gdbasetypes,UGDBControlPointArray{,UGDBOutbound2DIArray},{GDBSubordinated,}
-     {UGDBPolyPoint2DArray,}varman,varmandef,
-     GDBase,{gdbobjectsconstdef,}
-     {oglwindowdef,}geometry,dxflow,sysutils,memman,UGDBOpenArrayOfByte,UGDBLayerArray,UGDBOpenArrayOfPObjects;
+uses log,ugdbltypearray,zcadsysvars,gdbasetypes,
+     varman,varmandef,
+     GDBase,
+     geometry,sysutils,memman,UGDBOpenArrayOfByte,UGDBLayerArray;
 type
 {Export+}
 PGDBObjVisualProp=^GDBObjVisualProp;

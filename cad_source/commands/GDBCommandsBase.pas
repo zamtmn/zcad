@@ -21,7 +21,7 @@ unit GDBCommandsBase;
 
 interface
 uses
- gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,UGDBStringArray,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}{layerwnd,}strutils,strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
+ gdbdimension,ugdbdimstylearray,UGDBTextStyleArray,GDBText,ugdbltypearray,URecordDescriptor,ugdbfontmanager,ugdbdrawingdef,ugdbsimpledrawing,zcadsysvars,commandline,TypeDescriptors,GDBManager,zcadstrconsts,ucxmenumgr,{$IFNDEF DELPHI}intftranslations,{$ENDIF}strproc,umytreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  LCLProc,Classes,FileUtil,Forms,Controls,Clipbrd,lclintf,
   plugins,
   sysinfo,
@@ -46,7 +46,7 @@ uses
  shared,
  UGDBEntTree,
   {zmenus,}{projecttreewnd,}gdbasetypes,{optionswnd,}{AboutWnd,HelpWnd,}memman,WindowsSpecific,{txteditwnd,}
- {messages,}UUnitManager,{zguisct,}log,Varman,UGDBNumerator,cmdline,
+ {messages,}UUnitManager,{zguisct,}log,Varman,
  {AnchorDocking,}dialogs,uinfoform{,
    uPSCompiler,
   uPSRuntime,
@@ -103,7 +103,7 @@ const
 //var DWGPageCxMenu:pzpopupmenu;
 implementation
 uses GDBPolyLine,UGDBPolyLine2DArray,GDBLWPolyLine,{mainwindow,}UGDBSelectedObjArray,
-     oglwindow,geometry;
+     geometry;
 var
    CopyClipFile:GDBString;
 constructor  TMSEditor.init;
@@ -484,9 +484,6 @@ begin
      GDB.CurrentDWG:=pdwg;
 end;
 function SaveDXFDPAS(s:gdbstring):GDBInteger;
-var
-   mem:GDBOpenArrayOfByte;
-   pu:ptunit;
 begin
      result:=dwgSaveDXFDPAS(s, GDB.GetCurrentDWG);
      if assigned(ProcessFilehistoryProc) then
@@ -629,12 +626,6 @@ begin
   historyoutstr(rscmFirstPoint);
 end;
 function ShowWindow_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
-var //i: GDBInteger;
-  ti: GDBInteger;
-  x,y,w,h:gdbdouble;
-  pv:PGDBObjEntity;
-  ir:itrec;
-  r:TInRect;
 begin
   result:=mclick;
   GDB.GetCurrentDWG.wa.param.seldesc.Frame2 := mc;

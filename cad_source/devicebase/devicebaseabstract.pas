@@ -1,7 +1,7 @@
 ﻿unit devicebaseabstract;
 {$INCLUDE def.inc}
 interface
-uses zcadsysvars,{$IFNDEF DELPHI}fileutil,{$ENDIF}strproc,strmy,gdbasetypes,gdbase,UUnitManager,varman,{varmandef,}sysutils,typedescriptors,URecordDescriptor,UObjectDescriptor,shared;
+uses zcadsysvars,{$IFNDEF DELPHI}fileutil,{$ENDIF}strproc,strmy,gdbasetypes,gdbase,UUnitManager,varman,sysutils,typedescriptors,shared;
 type
 {REGISTEROBJECTTYPE DbBaseObject}
 {REGISTEROBJECTTYPE ElDeviceBaseObject}

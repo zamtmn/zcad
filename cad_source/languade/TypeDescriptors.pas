@@ -20,7 +20,7 @@ unit TypeDescriptors;
 
 interface
 uses zcadsysvars,log,gdbasetypes,varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,
-      UGDBOpenArrayOfPointer,UGDBOpenArrayOfObjects,strproc,sysutils;
+      UGDBOpenArrayOfPointer,strproc,sysutils;
 const
      m_procedure=1;
      m_function=2;

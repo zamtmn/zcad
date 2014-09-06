@@ -19,7 +19,7 @@
 unit UGDBNamedObjectsArray;
 {$INCLUDE def.inc}
 interface
-uses ugdbopenarrayofpidentobects,{,UGDBOpenArray}UGDBOpenArrayOfObjects{,oglwindowdef},sysutils,gdbase, geometry,
+uses ugdbopenarrayofpidentobects,sysutils,gdbase, geometry,
      {varmandef,gdbobjectsconstdef}gdbasetypes;
 type
 {EXPORT+}

@@ -1,19 +1,115 @@
 object TSWindow: TTSWindow
-  Left = 234
-  Height = 240
-  Top = 246
+  Left = 289
+  Height = 301
+  Top = 56
   Width = 320
-  Caption = 'TSWindow'
-  ClientHeight = 240
+  Caption = 'Text Style'
+  ClientHeight = 301
   ClientWidth = 320
+  OnShow = FormShow
   Position = poMainFormCenter
   LCLVersion = '1.3'
   object Label1: TLabel
-    Left = 136
+    Left = 104
     Height = 15
-    Top = 16
+    Top = 268
     Width = 104
     Caption = 'Not Implemed yet(('
     ParentColor = False
+  end
+  object grpStyleName: TGroupBox
+    Left = 7
+    Height = 57
+    Top = 8
+    Width = 304
+    Caption = 'Style Name'
+    ClientHeight = 39
+    ClientWidth = 300
+    TabOrder = 0
+    object cbStyles: TComboBox
+      Left = 6
+      Height = 23
+      Top = 8
+      Width = 100
+      ItemHeight = 15
+      TabOrder = 0
+      Text = 'cbStyles'
+    end
+    object btnNew: TButton
+      Left = 110
+      Height = 25
+      Top = 8
+      Width = 75
+      Caption = 'New'
+      OnClick = btnNewClick
+      TabOrder = 1
+    end
+    object btnDelete: TButton
+      Left = 190
+      Height = 25
+      Top = 8
+      Width = 75
+      Caption = 'Delete'
+      TabOrder = 2
+    end
+  end
+  object grpFont: TGroupBox
+    Left = 10
+    Height = 85
+    Top = 75
+    Width = 302
+    Caption = 'Font'
+    ClientHeight = 67
+    ClientWidth = 298
+    TabOrder = 1
+    object Label2: TLabel
+      Left = 19
+      Height = 15
+      Top = 10
+      Width = 47
+      Caption = 'TTF Font'
+      ParentColor = False
+    end
+    object cbFont: TComboBox
+      Left = 88
+      Height = 23
+      Top = 6
+      Width = 100
+      ItemHeight = 15
+      TabOrder = 0
+      Text = 'cbFont'
+    end
+    object lblTextHeight: TLabel
+      Left = 20
+      Height = 15
+      Top = 38
+      Width = 36
+      Caption = 'Height'
+      ParentColor = False
+    end
+    object txtTextHeight: TEdit
+      Left = 88
+      Height = 23
+      Top = 37
+      Width = 99
+      TabOrder = 1
+      Text = 'txtTextHeight'
+    end
+  end
+  object btnOk: TButton
+    Left = 16
+    Height = 25
+    Top = 269
+    Width = 75
+    Caption = 'OK'
+    TabOrder = 2
+  end
+  object btnCancel: TButton
+    Left = 236
+    Height = 25
+    Top = 268
+    Width = 75
+    Caption = 'Cancel'
+    TabOrder = 3
   end
 end

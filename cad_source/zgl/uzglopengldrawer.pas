@@ -25,7 +25,7 @@ uses
     Gtk2Def,
     {$ENDIF}
     LCLIntf,LCLType,Classes,Controls,
-    geometry,uzglabstractdrawer,UGDBOpenArrayOfData,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase,GDBCamera;
+    geometry,uzglabstractdrawer,uzgprimitivessarray,OGLSpecFunc,Graphics,gdbase,GDBCamera;
 const
   texturesize=256;
 type
@@ -716,8 +716,6 @@ begin
 end;
 
 function TZGLCanvasDrawer.startpaint;
-var
-  mRect: TRect;
 begin
      CanvasDC:=0;
      isWindowsErrors;
@@ -901,7 +899,7 @@ end;
 procedure TZGLCanvasDrawer.DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);
 var
    pp1,pp2,pp3:GDBVertex;
-   h,ps:integer;
+   h:integer;
    sp:array [1..3]of TPoint;
 begin
     _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
@@ -924,7 +922,7 @@ end;
 procedure TZGLCanvasDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
 var
    pp1,pp2,pp3,pp4:GDBVertex;
-   h,ps:integer;
+   h:integer;
    sp:array [1..4]of TPoint;
 begin
     _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
@@ -949,10 +947,6 @@ begin
      ProcessScreenInvalidrect(sp[4].x,sp[4].y);
 end;
 procedure TZGLCanvasDrawer.DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
-var
-   pp1,pp2,pp3,pp4:GDBVertex;
-   h,ps:integer;
-   sp:array [1..4]of TPoint;
 begin
      DrawQuad3DInModelSpace(p1,p2,p3,p4,matrixs);
 end;

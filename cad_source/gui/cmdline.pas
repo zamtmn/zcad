@@ -22,7 +22,7 @@ interface
 uses
  Themes,buttons,zcadsysvars,zcadstrconsts,strproc,lclproc,sysutils,gdbasetypes,
  StdCtrls,ExtCtrls,Controls,Classes,menus,Forms,fileutil,graphics,
- UDMenuWnd,gdbase, memman,UGDBDescriptor,math,commandline,varman,languade,
+ gdbase, memman,UGDBDescriptor,math,commandline,varman,languade,
  UGDBTracePropArray,varmandef,
  geometry,shared,UGDBStringArray,zcadinterface,umytreenode;
 

@@ -3,8 +3,8 @@ unit selectorwnd;
 interface
 
 uses
-  strproc,UGDBDescriptor,gdbase,zcadstrconsts,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ButtonPanel, StdCtrls, types, lclintf,lcltype, EditBtn, ComCtrls,ugdbsimpledrawing;
+  strproc,UGDBDescriptor,gdbase,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  ButtonPanel, types, lclintf,lcltype, ComCtrls;
 
 type
 
@@ -84,7 +84,6 @@ end;
 
 
 function TSelectorWindow.run():integer;
-var i:integer;
 begin
     result:=showmodal;
     if data=nil then
@@ -92,4 +91,4 @@ begin
 end;
 
 end.
-
+

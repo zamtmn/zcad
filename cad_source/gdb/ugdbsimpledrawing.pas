@@ -33,7 +33,7 @@ UGDBTextStyleArray,
 GDBCamera,
 UGDBOpenArrayOfPV,
 GDBRoot,ugdbfont,
-OGLWindow,UGDBOpenArrayOfPObjects,ugdbshxfont,abstractviewarea{,UGDBVisibleOpenArray};
+UGDBOpenArrayOfPObjects,ugdbshxfont,abstractviewarea{,UGDBVisibleOpenArray};
 type
 {EXPORT+}
 PTSimpleDrawing=^TSimpleDrawing;
@@ -101,7 +101,7 @@ TSimpleDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TAbstractDrawing)
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 implementation
-uses GDBTable,GDBText,GDBDevice,GDBBlockInsert,io,iodxf, {GDBManager,}shared,{commandline,}log;
+uses GDBTable,io,iodxf, {GDBManager,}shared,{commandline,}log;
 function TSimpleDrawing.GetChangeStampt:GDBBoolean;
 begin
      result:=false;
@@ -144,11 +144,7 @@ procedure TSimpleDrawing.AssignLTWithFonts(pltp:PGDBLtypeProp);
 var
    PSP:PShapeProp;
    PTP:PTextProp;
-   {ir,}ir2:itrec;
-   sh:double;
-   i:integer;
-   Psymbol:PGDBsymdolinfo;
-   TDInfo:TTrianglesDataInfo;
+   ir2:itrec;
    pts:pGDBTextStyle;
 procedure createstyle;
 var

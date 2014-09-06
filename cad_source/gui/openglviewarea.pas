@@ -26,10 +26,10 @@ uses
      {$IFDEF LCLQT}
      qtwidgets,qt4,
      {$ENDIF}
-     abstractviewarea,uzglopengldrawer,sysutils,UGDBEntTree,GDBGenericSubEntry,GDBHelpObj,memman,OGLSpecFunc,gdbase,gdbasetypes,
-     UGDBLayerArray,ugdbltypearray,UGDBTextStyleArray,ugdbdimstylearray,
-     uinfoform,oglwindow,oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,GDBEntity,Varman,zcadinterface,geometry,gdbobjectsconstdef,shared,zcadstrconsts,LCLType,
-     ExtCtrls,classes,Controls,Graphics,generalviewarea,UGDBTracePropArray,math,uzglabstractdrawer,log,backendmanager;
+     abstractviewarea,uzglopengldrawer,sysutils,GDBHelpObj,memman,OGLSpecFunc,gdbase,gdbasetypes,
+     UGDBLayerArray,ugdbdimstylearray,
+     oglwindow,oglwindowdef,gdbdrawcontext,varmandef,commandline,zcadsysvars,Varman,geometry,shared,LCLType,
+     ExtCtrls,classes,Controls,Graphics,generalviewarea,math,uzglabstractdrawer,log,backendmanager;
 type
     TOpenGLViewArea=class(TGeneralViewArea)
                       public

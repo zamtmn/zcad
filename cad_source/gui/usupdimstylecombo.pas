@@ -22,7 +22,7 @@ unit usupdimstylecombo;
 interface
 
 uses
-  gdbasetypes,usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,ugdbdimstylearray,strproc,zcadsysvars,commandline,zcadinterface;
+  usupportgui,StdCtrls,UGDBDescriptor,zcadstrconsts,Controls,Classes,ugdbdimstylearray,strproc,zcadsysvars,commandline,zcadinterface;
 
 type
   TSupportDimStyleCombo = class
@@ -56,8 +56,6 @@ begin
   tcombobox(Sender).ItemIndex:=-1;
 end;
 class procedure TSupportDimStyleCombo.CloseUpTStyle(Sender:Tobject);
-var
-  i:integer;
 begin
      tcombobox(Sender).ItemIndex:=0;
 end;
@@ -69,7 +67,6 @@ class procedure TSupportDimStyleCombo.DrawItemTStyle(Control: TWinControl; Index
                                                      State: TOwnerDrawState);
 var
   pts:PGDBDimStyle;
-   ll:integer;
    s:string;
 begin
     if gdb.GetCurrentDWG=nil then
@@ -85,12 +82,10 @@ begin
     if pts<>nil then
                    begin
                         s:=Tria_AnsiToUtf8(pts^.Name);
-                        ll:=0;
                    end
                else
                    begin
                        s:=rsDifferent;
-                       ll:=0;
                    end;
 
     ARect.Left:=ARect.Left+2;
@@ -100,7 +95,6 @@ class procedure TSupportDimStyleCombo.ChangeLType(Sender:Tobject);
 var
    index:Integer;
    CLTSave,pts:PGDBDimStyle;
-   mr:integer;
 begin
      index:=tcombobox(Sender).ItemIndex;
      pts:=PGDBDimStyle(tcombobox(Sender).items.Objects[index]);
@@ -125,4 +119,4 @@ begin
 end;
 
 
-end.
+end.

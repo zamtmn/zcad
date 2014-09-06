@@ -3699,6 +3699,7 @@ begin
 function DockingOptions_com(Operands:pansichar):GDBInteger;
 begin
      ShowAnchorDockOptions(DockMaster);
+     result:=cmd_ok;
 end;
 initialization
 begin

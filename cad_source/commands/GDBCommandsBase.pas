@@ -249,6 +249,7 @@ begin
                                 end
                             else
                                 commandmanager.executecommandend;
+     result:=cmd_ok;
 end;
 function GetOnMouseObjWAddr(var ContextMenu:TPopupMenu):GDBInteger;
 var
@@ -293,6 +294,7 @@ begin
                                                          FreeAndNil(MSelectCXMenu)
                                                      else
                                                          cxmenumgr.PopUpMenu(MSelectCXMenu);
+     result:=cmd_ok;
 end;
 function SelectObjectByAddres_com(Operands:pansichar):GDBInteger;
 var
@@ -307,6 +309,7 @@ begin
                                      end;
      if assigned(updatevisibleproc) then updatevisibleproc;
      gdb.CurrentDWG.wa.SetObjInsp;
+     result:=cmd_ok;
      //SetObjInsp;
      //commandmanager.executecommandsilent('MultiSelect2ObjIbsp');
 end;
@@ -1029,6 +1032,7 @@ else if length(Operands)>3 then
       end
   else
       historyoutstr(rscmSelOrSpecEntity);
+  result:=cmd_ok;
 end;
 function MultiObjVarMan_com(Operands:pansichar):GDBInteger;
 var
@@ -1079,7 +1083,8 @@ begin
            //InfoFormVar.Free;
            mem.done;
            historyoutstr(format(rscmNEntitiesProcessed,[inttostr(counter)]));
-      end
+      end;
+    result:=cmd_ok;
 end;
 
 function Regen_com(Operands:pansichar):GDBInteger;
@@ -1608,6 +1613,7 @@ begin
           end;
      end
         else showerror('Command line swith "UpdatePO" must be set. (or not the first time running this command)');
+     result:=cmd_ok;
 end;
 function Zoom_com(Operands:pansichar):GDBInteger;
 begin
@@ -1778,6 +1784,7 @@ function StoreFrustum_com(Operands:pansichar):GDBInteger;
 begin
    gdb.GetCurrentDWG.wa.param.debugfrustum:=gdb.GetCurrentDWG.pcamera.frustum;
    gdb.GetCurrentDWG.wa.param.ShowDebugFrustum:=true;
+   result:=cmd_ok;
 end;
 (*function ScriptOnUses(Sender: TPSPascalCompiler; const Name: string): Boolean;
 { the OnUses callback function is called for each "uses" in the script.
@@ -1853,6 +1860,7 @@ function TestScript_com(Operands:pansichar):GDBInteger;
   i:integer;
   CI: TPSRuntimeClassImporter; *)
 begin
+  result:=cmd_ok;
 (*старое чтото
 var f: TForm; i: Longint; begin f := TForm.CreateNew(f{, 0}); f.Show; while f.Visible do Application.ProcessMessages; F.free;  end.
 *)
@@ -1924,6 +1932,7 @@ begin
                                   {Objinsp.}currpd:=nil;
                              end;
    end;
+   result:=cmd_ok;
 end;
 procedure startup;
 //var

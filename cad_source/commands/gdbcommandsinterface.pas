@@ -91,6 +91,7 @@ begin
   application.ProcessMessages;
   CurrentDWG:=PTDrawing(gdb.GetCurrentDWG);
   _CloseDWGPage(CurrentDWG,mainformn.PageControl.ActivePage);
+  result:=cmd_ok;
   (*if CurrentDWG<>nil then
   begin
        if CurrentDWG.Changed then
@@ -134,6 +135,7 @@ begin
                                                   i:=0;
              MainFormN.PageControl.ActivePageIndex:=i;
      end;
+     result:=cmd_ok;
 end;
 function PrevDrawint_com(Operands:pansichar):GDBInteger;
 var
@@ -148,6 +150,7 @@ begin
                                                   i:=MainFormN.PageControl.PageCount-1;
              MainFormN.PageControl.ActivePageIndex:=i;
      end;
+     result:=cmd_ok;
 end;
 function newdwg_com(Operands:pansichar):GDBInteger;
 var
@@ -462,23 +465,27 @@ begin
                       end
                   else
                       shared.ShowError('Show command must have one operand!');
+  result:=cmd_ok;
 end;
 function quit_com(Operands:pansichar):GDBInteger;
 begin
      //Application.QueueAsyncCall(MainFormN.asynccloseapp, 0);
      CloseApp;
+     result:=cmd_ok;
 end;
 function About_com(Operands:pansichar):GDBInteger;
 begin
   if not assigned(Aboutwindow) then
                                   Aboutwindow:=TAboutWnd.mycreate(Application,@Aboutwindow);
   DOShowModal(Aboutwindow);
+  result:=cmd_ok;
 end;
 function Help_com(Operands:pansichar):GDBInteger;
 begin
   if not assigned(Helpwindow) then
                                   Helpwindow:=THelpWnd.mycreate(Application,@Helpwindow);
   DOShowModal(Helpwindow);
+  result:=cmd_ok;
 end;
 function ClearFileHistory_com(Operands:pansichar):GDBInteger;
 var i:integer;
@@ -496,6 +503,7 @@ begin
               MainFormN.FileHistory[i].Visible:=false;
           end;
      end;
+     result:=cmd_ok;
 end;
 function tw_com(Operands:pansichar):GDBInteger;
 begin
@@ -503,7 +511,7 @@ begin
                                  CWindow.Hide
                              else
                                  CWindow.Show;
-
+  result:=cmd_ok;
 end;
 function SetObjInsp_com(Operands:pansichar):GDBInteger;
 var
@@ -618,8 +626,8 @@ else if Operands='DIMSTYLES' then
                             end
                             ;
      If assigned(SetCurrentObjDefaultProc)then
-                                              SetCurrentObjDefaultProc
-     //GDBobjinsp.SetCurrentObjDefault;
+                                              SetCurrentObjDefaultProc;
+     result:=cmd_ok;
 end;
 
 function Options_com(Operands:pansichar):GDBInteger;
@@ -637,6 +645,7 @@ begin
            SysVarUnit^.SavePasToMem(mem);
            mem.SaveToFile(sysparam.programpath+'rtl/sysvar.pas');
            mem.done;
+           result:=cmd_ok;
 end;
 function CommandList_com(Operands:pansichar):GDBInteger;
 var
@@ -740,6 +749,7 @@ begin
   if assigned(mainformn)then
   if assigned(mainformn.PageControl)then
   mainformn.PageControl.ActivePageIndex:=strtoint(Operands);
+  result:=cmd_ok;
 end;
 procedure startup;
 begin

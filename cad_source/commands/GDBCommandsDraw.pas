@@ -486,6 +486,7 @@ function FloatInsertWithParams_com.MouseMoveCallback(wc: GDBvertex; mc: GDBverte
 begin
      if CMode=FIWPRun then
                           inherited MouseMoveCallback(wc,mc,button,osp);
+     result:=cmd_ok;
 end;
 procedure FloatInsert_com.Build(Operands:pansichar);
 begin
@@ -1559,6 +1560,7 @@ begin
    //commandend;
    if DoEnd(tv) then commandmanager.executecommandend;
   end;
+  result:=cmd_ok;
 end;
 procedure pasteclip_com.Command(Operands:pansichar);
 var //res:longbool;
@@ -1711,6 +1713,7 @@ begin
    commandend;
    commandmanager.executecommandend;
   end;
+  result:=cmd_ok;
 end;
 function Insert_com_CommandStart(operands:pansichar):GDBInteger;
 var pb:PGDBObjBlockdef;
@@ -1756,6 +1759,7 @@ begin
                  historyoutstr('Insert:'+rscmInDwgBlockDefNotDeffined);
                  commandmanager.executecommandend;
             end;
+  result:=cmd_ok;
 end;
 function Insert_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 var tb:PGDBObjSubordinated;
@@ -2119,11 +2123,13 @@ begin
       gdb.GetCurrentDWG^.SelObjArray.modifyobj(dist,wc,false,pobj,gdb.GetCurrentDWG^);
     end
   end;
+  result:=cmd_ok;
 end;
 function Circle_com_CommandStart(operands:pansichar):GDBInteger;
 begin
   GDB.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   historyoutstr(rscmCenterPointCircle);
+  result:=cmd_ok;
 end;
 
 procedure Circle_com_CommandEnd(_self:pointer);
@@ -2181,6 +2187,7 @@ begin
   pold:=nil;
   GDB.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   historyoutstr(rscmFirstPoint);
+  result:=cmd_ok;
 end;
 
 procedure Line_com_CommandEnd(_self:pointer);
@@ -2402,6 +2409,7 @@ begin
    comit;
    end;
    ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushEndMarker;
+   result:=cmd_ok;
 end;
 function Move_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 var //i:GDBInteger;
@@ -2424,6 +2432,7 @@ begin
 
    commandmanager.executecommandend;
   end;
+  result:=cmd_ok;
 end;
 function Copy_com.Copy(dispmatr:DMatrix4D;UndoMaker:GDBString): GDBInteger;
 var
@@ -2459,6 +2468,7 @@ begin
      comit;
      end;
      ptdrawing(GDB.GetCurrentDWG)^.UndoStack.PushEndMarker;
+     result:=cmd_ok;
 end;
 function Copy_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger;
 var
@@ -2471,6 +2481,7 @@ begin
            copy(dispmatr,self.CommandName);
            if assigned(redrawoglwndproc) then redrawoglwndproc;
       end;
+      result:=cmd_ok;
 end;
 function Mirror_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
 var
@@ -2504,6 +2515,7 @@ begin
       //redrawoglwnd;
       commandmanager.executecommandend;
    end;
+   result:=cmd_ok;
 end;
 procedure rotate_com.CommandContinue;
 var v1:vardesk;
@@ -2601,6 +2613,7 @@ begin
       rot(a,button);
 
       //dispmatr:=onematrix;
+      result:=cmd_ok;
 end;
 procedure scale_com.CommandContinue;
 var v1:vardesk;
@@ -2712,6 +2725,7 @@ begin
       //v:=geometry.VertexSub(t3dp,wc);
       a:=geometry.Vertexlength(t3dp,wc);
       scale(a,button);
+      result:=cmd_ok;
 end;
 function _3DPoly_com_CommandStart(operands:pansichar):GDBInteger;
 begin
@@ -2719,6 +2733,7 @@ begin
   GDB.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   historyoutstr(rscmFirstPoint);
   gdb.GetCurrentDWG^.wa.param.processObjConstruct:=true;
+  result:=cmd_ok;
 end;
 
 Procedure _3DPoly_com_CommandEnd(_self:GDBPointer);
@@ -2864,6 +2879,7 @@ begin
                         gdb.GetCurrentDWG^.SelObjArray.clearallobjects;
                         //historyout('Поехали:');
                    end;
+  result:=cmd_ok;
 end;
 
 
@@ -3534,6 +3550,7 @@ begin
      shared.HistoryOutStr('Line-AABB tests count: '+inttostr(lineAABBtests));
      shared.HistoryOutStr('Line-Line tests count: '+inttostr(linelinetests));
      shared.HistoryOutStr('Intersections count: '+inttostr(intersectcount));
+     result:=cmd_ok;
 end;
 
 procedure startup;

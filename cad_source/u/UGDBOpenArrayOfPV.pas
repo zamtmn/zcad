@@ -42,7 +42,7 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects
                       function calcvisbb(infrustumactualy:TActulity):GDBBoundingBbox;
                       function getoutbound:GDBBoundingBbox;
                       function getonlyoutbound:GDBBoundingBbox;
-                      procedure Format;virtual;abstract;
+                      //procedure Format;virtual;abstract;
                       procedure FormatEntity(const drawing:TDrawingDef);virtual;
                       procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;
                       //function InRect:TInRect;virtual;

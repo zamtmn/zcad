@@ -1294,6 +1294,7 @@ begin
     if mode= 2 then commandmanager.executecommandend
                else beforeclick(wc,mc,button,osp);
   end;
+  result:=cmd_ok;
 end;
 procedure cabcomformat;
 var
@@ -1369,6 +1370,7 @@ begin
 
 
   historyout('Первая точка:');
+  result:=cmd_ok;
 end;
 Procedure _Cable_com_CommandEnd(_self:GDBPointer);
 begin
@@ -1639,6 +1641,7 @@ end;
 function _Cable_com_Hd(mclick:GDBInteger):GDBInteger;
 begin
      //mclick:=mclick;//        asdf
+     result:=cmd_ok;
 end;
 //function _Cable_com_Legend(Operands:pansichar):GDBInteger;
 //var i: GDBInteger;
@@ -2530,6 +2533,7 @@ begin
   if assigned(SetGDBObjInspProc)then
   SetGDBObjInspProc(SysUnit.TypeName2PTD('TELLeaderComParam'),@ELLeaderComParam,gdb.GetCurrentDWG);
   historyout('Первая точка:');
+  result:=cmd_ok;
 end;
 function _Cable_com_Manager(Operands:pansichar):GDBInteger;
 //var i: GDBInteger;
@@ -2540,7 +2544,7 @@ begin
         CableManager.build;
         if assigned(SetGDBObjInspProc)then
         SetGDBObjInspProc(SysUnit.TypeName2PTD('TCableManager'),@CableManager,gdb.GetCurrentDWG);
-
+        result:=cmd_ok;
 
 end;
 function _Ren_n_to_0n_com(Operands:pansichar):GDBInteger;
@@ -2574,6 +2578,7 @@ begin
     end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
+  result:=cmd_ok;
 end;
 function _SelectMaterial_com(Operands:pansichar):GDBInteger;
 var //i,len: GDBInteger;
@@ -2601,6 +2606,7 @@ begin
     end;
   pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
   until pv=nil;
+  result:=cmd_ok;
   //commandmanager.executecommandend;
   //OGLwindow1.SetObjInsp;
       //updatevisible;
@@ -3069,6 +3075,7 @@ begin
   if assigned(ReturnToDefaultProc)then
   ReturnToDefaultProc;
   clearcp;
+  result:=cmd_ok;
 end;
 
 function _test_com(Operands:pansichar):GDBInteger;
@@ -3080,6 +3087,7 @@ begin
      {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('тест производительности',lp_DecPos);{$ENDIF}
      historyout('Конец теста. выходим, смотрим результаты в конце лога.');
      //quit_com('');
+     result:=cmd_ok;
 end;
 
 procedure startup;

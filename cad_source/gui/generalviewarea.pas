@@ -1582,12 +1582,13 @@ if PGDBObjEntity(param.SelDesc.OnMouseObject)<>nil then
                                                                                         else
                                                                                             RemoveCursorIfNeed(getviewcontrol,true)
                                                                                    end;
+  //Update objectinspector with mousemove
+  //if assigned(GetCurrentObjProc) then
+  //if GetCurrentObjProc=@sysvar then
+  //If assigned(UpdateObjInspProc)then
+  //                                 UpdateObjInspProc;
 
-  //if assigned(GDBobjinsp)then
-                               if assigned(GetCurrentObjProc) then
-                               if GetCurrentObjProc=@sysvar then
-                               If assigned(UpdateObjInspProc)then
-                                                                UpdateObjInspProc;
+
   SBTextOut(htext);
   //param.firstdraw:=true;
   //isOpenGLError;

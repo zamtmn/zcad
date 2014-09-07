@@ -92,6 +92,8 @@ begin
      ppd:=GetPPD(ppda,bmode);
      ppd^.Name:=name;
      ppd^.PTypeManager:=@self;
+     ppd^.Decorators:=Decorators;
+     ppd^.FastEditor:=FastEditor;
      ppd^.Attr:=ownerattrib;
      ppd^.Collapsed:=PCollapsed;
      ppd^.valueAddres:=addr;

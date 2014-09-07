@@ -196,6 +196,44 @@ begin
      Details:=ThemeServices.GetElementDetails(ComboElem);
      ThemeServices.DrawElement(Canvas.Handle,Details,r);
 end;
+procedure _3SBooleanDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
+var
+  Details: TThemedElementDetails;
+  ComboElem:TThemedButton;
+begin
+     case PTGDB3StateBool(PInstance)^ of
+          T3SB_True:
+                     begin
+                     if state=TFES_Hot then
+                                           ComboElem:=tbCheckBoxCheckedHot
+                                       else if state=TFES_Pressed then
+                                           ComboElem:=tbCheckBoxCheckedPressed
+                                       else
+                                           ComboElem:=tbCheckBoxCheckedNormal
+                     end;
+        T3SB_Fale:
+                     begin
+                     if state=TFES_Hot then
+                                           ComboElem:=tbCheckBoxUncheckedHot
+                                       else if state=TFES_Pressed then
+                                           ComboElem:=tbCheckBoxUncheckedPressed
+                                       else
+                                           ComboElem:=tbCheckBoxUncheckedNormal
+                     end;
+        T3SB_Default:
+                     begin
+                     if state=TFES_Hot then
+                                           ComboElem:=tbCheckBoxMixedHot
+                                       else if state=TFES_Pressed then
+                                           ComboElem:=tbCheckBoxMixedPressed
+                                       else
+                                           ComboElem:=tbCheckBoxMixedNormal
+                     end;
+     end;
+     Details:=ThemeServices.GetElementDetails(ComboElem);
+     ThemeServices.DrawElement(Canvas.Handle,Details,r);
+end;
+
 procedure ButtonDraw(canvas:TCanvas;r:trect;state:TFastEditorState;s:string);
 var
   Details: TThemedElementDetails;
@@ -258,6 +296,15 @@ procedure BooleanInverse(PInstance:GDBPointer);
 begin
      pboolean(PInstance)^:=not pboolean(PInstance)^;
 end;
+procedure _3SBooleanInverse(PInstance:GDBPointer);
+begin
+     case PTGDB3StateBool(PInstance)^ of
+         T3SB_Fale:PTGDB3StateBool(PInstance)^:=T3SB_True;
+         T3SB_True:PTGDB3StateBool(PInstance)^:=T3SB_Default;
+         T3SB_Default:PTGDB3StateBool(PInstance)^:=T3SB_Fale;
+     end;
+end;
+
 procedure runlayerswnd(PInstance:GDBPointer);
 begin
      layer_cmd;
@@ -494,15 +541,16 @@ begin
      DecorateType('PGDBTextStyleObjInsp',@NamedObjectsDecorator,@TextStyleDecoratorCreateEditor,nil);
      DecorateType('PGDBDimStyleObjInsp',@NamedObjectsDecorator,@DimStyleDecoratorCreateEditor,nil);
      DecorateType('TGDBPaletteColor',@PaletteColorDecorator,@ColorDecoratorCreateEditor,@drawIndexColorProp);
+     DecorateType('TGDBOSMode',nil,CreateEmptyEditor,nil);
+
      AddFastEditorToType('TGDBPaletteColor',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runcolorswnd);
      AddFastEditorToType('GDBBoolean',@BooleanGetPrefferedFastEditorSize,@BooleanDrawFastEditor,@BooleanInverse);
+     AddFastEditorToType('TGDB3StateBool',@BooleanGetPrefferedFastEditorSize,@_3SBooleanDrawFastEditor,@_3SBooleanInverse);
      AddFastEditorToType('PGDBLayerPropObjInsp',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runlayerswnd);
      AddFastEditorToType('GDBString',@ButtonGetPrefferedFastEditorSize,@ButtonTxtDrawFastEditor,@RunStringEditor);
      AddFastEditorToType('GDBAnsiString',@ButtonGetPrefferedFastEditorSize,@ButtonTxtDrawFastEditor,@RunAnsiStringEditor);
      AddFastEditorToType('GDBCoordinates3D',@ButtonGetPrefferedFastEditorSize,@ButtonCrossDrawFastEditor,@GetVertexFromDrawing,true);
      AddFastEditorToType('GDBLength',@ButtonGetPrefferedFastEditorSize,@ButtonHLineDrawFastEditor,@GetLengthFromDrawing,true);
-     DecorateType('TGDBOSMode',nil,CreateEmptyEditor,nil);
      AddFastEditorToType('TGDBOSMode',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runOSwnd);
-     //TGDBOSMode
 end;
 end.

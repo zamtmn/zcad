@@ -137,6 +137,7 @@ type
                            procedure doCameraChanged; override;
                            function startpaint:boolean;override;
                            procedure endpaint;override;
+                           function NeedDrawInsidePaintEvent:boolean; virtual;abstract;
                       end;
 implementation
 uses
@@ -613,16 +614,23 @@ begin
      SwapBuffers(rc);
 end;
 procedure TGeneralViewArea.DrawOrInvalidate;
+var
+   insidepaint:boolean;
 begin
      if sysvar.RD.RD_DrawInsidePaintMessage<>nil then
      begin
-     if sysvar.RD.RD_DrawInsidePaintMessage^then
-                                                getviewcontrol.Invalidate
-                                            else
-                                                draw;
+          case sysvar.RD.RD_DrawInsidePaintMessage^ of
+              T3SB_Fale:insidepaint:=false;
+              T3SB_True:insidepaint:=true;
+              T3SB_Default:insidepaint:=NeedDrawInsidePaintEvent;
+          end;
      end
      else
-         draw;
+         insidepaint:=NeedDrawInsidePaintEvent;
+     if insidepaint then
+                        getviewcontrol.Invalidate
+                    else
+                        draw;
 end;
 
 procedure TGeneralViewArea.draw;

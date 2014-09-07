@@ -34,8 +34,8 @@ GDBObjGenericWithSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject
                                     function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;
                                     function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;
                                     procedure DelSelectedSubitem(const drawing:TDrawingDef);virtual;
-                                    //function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;abstract;
-                                    //procedure RemoveInArray(pobjinarray:GDBInteger);virtual;abstract;
+                                    function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;abstract;
+                                    procedure RemoveInArray(pobjinarray:GDBInteger);virtual;abstract;
                                     function CreateOU:GDBInteger;virtual;
                                     procedure createfield;virtual;
                                     function FindVariable(varname:GDBString):pvardesk;virtual;

@@ -288,7 +288,7 @@ begin
         end;
 end;
 
-procedure addentitiesfromdxf(var f: GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;var drawing:TSimpleDrawing;h2p:TMapHandleToPointer);
+procedure addentitiesfromdxf(var f: GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjSubordinated;var drawing:TSimpleDrawing;h2p:TMapHandleToPointer);
 var
 //  byt,LayerColor: GDBInteger;
   s{, sname, sx1, sy1, sz1,scode,LayerName}: GDBString;
@@ -297,7 +297,7 @@ group:integer;
 objid: GDBInteger;
   pobj,postobj: PGDBObjEntity;
 //  tp: PGDBObjBlockdef;
-  newowner:{PGDBObjSubordinated}PGDBObjGenericSubEntry;
+  newowner:PGDBObjSubordinated;
   m4:DMatrix4D;
   trash:boolean;
   additionalunit:TUnit;
@@ -455,7 +455,7 @@ begin
   end;
   additionalunit.done;
 end;
-procedure addfromdxf12(var f:GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure addfromdxf12(var f:GDBOpenArrayOfByte;exitGDBString: GDBString;owner:PGDBObjSubordinated;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
   {byt,}LayerColor: GDBInteger;
   s, sname{, sx1, sy1, sz1},scode,LayerName: GDBString;

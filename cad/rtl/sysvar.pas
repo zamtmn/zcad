@@ -35,7 +35,7 @@ var
   DISP_DrawZAxis:GDBBoolean;
   DISP_ColorAxis:GDBBoolean;
   RD_UseStencil:GDBBoolean;
-  RD_DrawInsidePaintMessage:GDBBoolean;
+  RD_DrawInsidePaintMessage:TGDB3StateBool;
   RD_RemoveSystemCursorFromWorkArea:GDBBoolean;
   RD_PanObjectDegradation:GDBBoolean;
   RD_LineSmooth:GDBBoolean;
@@ -118,7 +118,7 @@ begin
   DISP_DrawZAxis:=False;
   DISP_ColorAxis:=False;
   RD_UseStencil:=True;
-  RD_DrawInsidePaintMessage:=false;
+  RD_DrawInsidePaintMessage:=T3SB_Default;
   RD_RemoveSystemCursorFromWorkArea:=true;
   RD_PanObjectDegradation:=False;
   RD_LineSmooth:=False;

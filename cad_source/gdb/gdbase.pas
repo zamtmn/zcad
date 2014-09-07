@@ -366,6 +366,8 @@ PTGDBLineWeight=^TGDBLineWeight;
 TGDBLineWeight=GDBSmallint;
 PTGDBOSMode=^TGDBOSMode;
 TGDBOSMode=GDBInteger;
+TGDB3StateBool=(T3SB_Fale,T3SB_True,T3SB_Default);
+PTGDB3StateBool=^TGDB3StateBool;
 {EXPORT-}
 TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 const

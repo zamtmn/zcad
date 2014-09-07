@@ -45,6 +45,7 @@ type
                       procedure DrawGrid(var DC:TDrawContext); override;
                       procedure getareacaps; override;
                       procedure GDBActivateGLContext; override;
+                      function NeedDrawInsidePaintEvent:boolean; override;
 
                   end;
     TCanvasViewArea=class(TGeneralViewArea)
@@ -55,6 +56,7 @@ type
                       procedure getareacaps; override;
                       procedure GDBActivateGLContext; override;
                       function startpaint:boolean;override;
+                      function NeedDrawInsidePaintEvent:boolean; override;
                   end;
 
 implementation
@@ -65,6 +67,11 @@ begin
                                       OpenGLWindow.MakeCurrent;
                                       isOpenGLError;
 end;
+function TOpenGLViewArea.NeedDrawInsidePaintEvent:boolean;
+begin
+     result:=false;
+end;
+
 procedure setdeicevariable;
 var a:array [0..1] of GDBDouble;
     p:pansichar;
@@ -256,7 +263,10 @@ begin
                                    TZGLCanvasDrawer(drawer).canvas:=WorkArea.canvas;
      result:=inherited;
 end;
-
+function TCanvasViewArea.NeedDrawInsidePaintEvent:boolean;
+begin
+     result:={$IFDEF LCLQT}True{$ELSE}False{$ENDIF};
+end;
 function TOpenGLViewArea.CreateWorkArea(TheOwner: TComponent):TCADControl;
 begin
      result:=TCADControl(TOGLWnd.Create(TheOwner));

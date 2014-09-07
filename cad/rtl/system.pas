@@ -372,6 +372,8 @@ PTGDBLineWeight=^TGDBLineWeight;
 TGDBLineWeight=GDBSmallint;
 PTGDBOSMode=^TGDBOSMode;
 TGDBOSMode=GDBInteger;
+TGDB3StateBool=(T3SB_Fale,T3SB_True,T3SB_Default);
+PTGDB3StateBool=^TGDB3StateBool;
 //Generate on E:\zcad\CAD_SOURCE\u\UOpenArray.pas
 POpenArray=^OpenArray;
 OpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -477,7 +479,7 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects
                       function calcvisbb(infrustumactualy:TActulity):GDBBoundingBbox;
                       function getoutbound:GDBBoundingBbox;
                       function getonlyoutbound:GDBBoundingBbox;
-                      procedure Format;virtual;abstract;
+                      //procedure Format;virtual;abstract;
                       procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
                       procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;abstract;
                       //function InRect:TInRect;virtual;abstract;
@@ -1066,7 +1068,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
             RD_LastUpdateTime:pGDBInteger;(*'Last update time'*)(*oi_readonly*)
             RD_LastCalcVisible:GDBInteger;(*'Last visible calculation time'*)(*oi_readonly*)
             RD_MaxRenderTime:pGDBInteger;(*'Maximum single pass time'*)
-            RD_DrawInsidePaintMessage:PGDBBoolean;(*'Draw inside paint message'*)
+            RD_DrawInsidePaintMessage:PTGDB3StateBool;(*'Draw inside paint message'*)
             RD_RemoveSystemCursorFromWorkArea:PGDBBoolean;(*'Remove system cursor from work area'*)
             RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
             RD_VSync:PTVSControl;(*'VSync'*)
@@ -1396,8 +1398,8 @@ GDBObjGenericWithSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject
                                     function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;abstract;
                                     function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;abstract;
                                     procedure DelSelectedSubitem(const drawing:TDrawingDef);virtual;abstract;
-                                    function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;abstract;
-                                    procedure RemoveInArray(pobjinarray:GDBInteger);virtual;abstract;
+                                    //function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;abstract;
+                                    //procedure RemoveInArray(pobjinarray:GDBInteger);virtual;abstract;
                                     function CreateOU:GDBInteger;virtual;abstract;
                                     procedure createfield;virtual;abstract;
                                     function FindVariable(varname:GDBString):pvardesk;virtual;abstract;
@@ -1479,7 +1481,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure DXFOut(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;abstract;
                     procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;abstract;
                     procedure SaveToDXFPostProcess(var handle:{GDBInteger}GDBOpenArrayOfByte);
-                    procedure Format;virtual;abstract;
+                    {procedure Format;virtual;abstract;}
                     procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
                     procedure FormatFast(const drawing:TDrawingDef);virtual;abstract;
                     procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;abstract;
@@ -1506,7 +1508,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure correctbb;virtual;abstract;
                     function GetLTCorrectSize:GDBDouble;virtual;abstract;
                     procedure calcbb;virtual;abstract;
-                    procedure DrawBB;
+                    procedure DrawBB(var DC:TDrawContext);
                     function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:GDBInteger; ProjectProc:GDBProjectProc;const zoom:GDBDouble):GDBBoolean;virtual;abstract;
                     function onmouse(var popa:GDBOpenArrayOfPObjects;const MF:ClipArray):GDBBoolean;virtual;abstract;
                     function onpoint(var objects:GDBOpenArrayOfPObjects;const point:GDBVertex):GDBBoolean;virtual;abstract;
@@ -1515,7 +1517,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     function getsnap(var osp:os_record; var pdata:GDBPointer; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;abstract;
                     procedure endsnap(out osp:os_record; var pdata:GDBPointer);virtual;abstract;
                     function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc):GDBBoolean;virtual;abstract;
-                    procedure higlight;virtual;abstract;
+                    procedure higlight(var DC:TDrawContext);virtual;abstract;
                     procedure addcontrolpoints(tdesc:GDBPointer);virtual;abstract;
                     function select(SelObjArray:GDBPointer;var SelectedObjCount:GDBInteger):GDBBoolean;virtual;abstract;
                     function SelectQuik:GDBBoolean;virtual;abstract;
@@ -1642,7 +1644,7 @@ GDBObjWithLocalCS={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                procedure createfield;virtual;abstract;
                procedure rtsave(refp:GDBPointer);virtual;abstract;
                procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;abstract;
-               procedure higlight;virtual;abstract;
+               procedure higlight(var DC:TDrawContext);virtual;abstract;
                procedure ReCalcFromObjMatrix;virtual;abstract;
                function IsHaveLCS:GDBBoolean;virtual;abstract;
                function CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:GDBDouble):GDBBoolean;inline;
@@ -1898,8 +1900,8 @@ GDBObjEllipse={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjPlain)
                             nuldrawpos,minusdrawpos,plusdrawpos:TActulity;
                             constructor initnul;
                             destructor done;virtual;abstract;
-                            procedure draw;
-                            procedure drawonlyself;
+                            procedure draw(var DC:TDrawContext);
+                            procedure drawonlyself(var DC:TDrawContext);
                             procedure ClearSub;
                             procedure Clear;
                             procedure updateenttreeadress;
@@ -1958,7 +1960,7 @@ GDBObjGenericSubEntry={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjWithMatrix)
                             destructor done;virtual;abstract;
                             procedure getoutbound;virtual;abstract;
                             procedure getonlyoutbound;virtual;abstract;
-                            procedure DrawBB;
+                            procedure DrawBB(var DC:TDrawContext);
                             procedure RemoveInArray(pobjinarray:GDBInteger);virtual;abstract;
                             procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:GDBInteger});virtual;abstract;
                             function CreatePreCalcData:PTDrawingPreCalcData;virtual;abstract;
@@ -3392,7 +3394,7 @@ TDrawing={$IFNDEF DELPHI}packed{$ENDIF} object(TSimpleDrawing)
            attrib:GDBLongword;
            UndoStack:GDBObjOpenArrayOfUCommands;
            DWGUnits:TUnitManager;
-           constructor init(num:PTUnitManager);
+           constructor init(num:PTUnitManager;preloadedfile1,preloadedfile2:GDBString);
            destructor done;virtual;abstract;
            function CreateBlockDef(name:GDBString):GDBPointer;virtual;abstract;
            procedure SetCurrentDWG;virtual;abstract;
@@ -3428,7 +3430,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     procedure asociatedwgvars;
                     procedure freedwgvars;
                     procedure SetCurrentDWG(PDWG:PTAbstractDrawing);
-                    function CreateDWG:PTDrawing;
+                    function CreateDWG(preloadedfile1,preloadedfile2:GDBString):PTDrawing;
                     //function CreateSimpleDWG:PTSimpleDrawing;virtual;abstract;
                     procedure eraseobj(ObjAddr:PGDBaseObject);virtual;abstract;
                     procedure CopyBlock(_from,_to:PTSimpleDrawing;_source:PGDBObjBlockdef);

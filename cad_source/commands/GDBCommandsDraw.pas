@@ -1393,7 +1393,7 @@ begin
              PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',FA_READONLY,0);
 
                 pt := GDBPointer(CreateObjFree(GDBTextID));
-                pt^.init(@GDB.GetCurrentDWG^.ConstructObjRoot,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,'',nulvertex,2.5,0,1,0,1);
+                pt^.init(@GDB.GetCurrentDWG^.ConstructObjRoot,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,'',nulvertex,2.5,0,1,0,jstl);
            end;
            TIM_MText:
            begin
@@ -1405,7 +1405,7 @@ begin
 
                 pt := GDBPointer(CreateObjFree(GDBMTextID));
                 pgdbobjmtext(pt)^.init(@GDB.GetCurrentDWG^.ConstructObjRoot,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,
-                                  '',nulvertex,2.5,0,1,0,1,10,1);
+                                  '',nulvertex,2.5,0,1,0,jstl,10,1);
            end;
 
      end;

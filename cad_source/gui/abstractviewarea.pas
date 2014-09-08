@@ -135,11 +135,12 @@ begin
 end;
 procedure TGDIPanel.WMPaint(var Message: TLMPaint);
 begin
-     Include(FControlState, csCustomPaint);
+     //Include(FControlState, csCustomPaint);
+     //inherited WMPaint(Message);
+     //if assigned(onpaint) then
+     //                         onpaint(nil);
      inherited WMPaint(Message);
-     if assigned(onpaint) then
-                              onpaint(nil);
-     Exclude(FControlState, csCustomPaint);
+     //Exclude(FControlState, csCustomPaint);
 end;
 
 function correcttogrid(point:GDBVertex):GDBVertex;

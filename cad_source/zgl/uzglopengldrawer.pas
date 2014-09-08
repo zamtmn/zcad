@@ -739,7 +739,7 @@ end;
 function TZGLCanvasDrawer.CreateScrbuf(w,h:integer):boolean;
 begin
      result:=false;
-     if (w>0)and(h>0) then
+     {$IFNDEF LCLGTK2}if (w>0)and(h>0) then{$ENDIF}
      if SavedBitmap=0 then
      if CanvasDC<>0 then
      begin
@@ -1124,4 +1124,4 @@ initialization
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
 end.
-
+

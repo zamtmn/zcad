@@ -246,7 +246,7 @@ end;
 procedure TZGLGeneralDrawer.WorkAreaResize;
 begin
      delmyscrbuf;
-     CreateScrbuf(w,h);
+     //CreateScrbuf(w,h);
 end;
 procedure TZGLGeneralDrawer.SaveBuffers;
 begin
@@ -281,4 +281,4 @@ end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglabstractdrawer.initialization');{$ENDIF}
 end.
-
+

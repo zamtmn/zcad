@@ -488,7 +488,9 @@ function TZGLOpenGLDrawer.CreateScrbuf(w,h:integer):boolean;
 var scrx,scry,texture{,e}:integer;
 begin
      //oglsm.mytotalglend;
-
+     result:=false;
+     if (w>0)and(h>0) then
+     begin
      oglsm.myglEnable(GL_TEXTURE_2D);
      scrx:=0;  { TODO : Сделать генер текстур пакетом }
      scry:=0;
@@ -514,7 +516,8 @@ begin
            scry:=scry+texturesize;
      until scry>h;
      oglsm.myglDisable(GL_TEXTURE_2D);
-     result:=false;
+     result:=true;
+     end;
 end;
 procedure TZGLOpenGLDrawer.delmyscrbuf;
 var i:integer;
@@ -736,6 +739,7 @@ end;
 function TZGLCanvasDrawer.CreateScrbuf(w,h:integer):boolean;
 begin
      result:=false;
+     if (w>0)and(h>0) then
      if SavedBitmap=0 then
      if CanvasDC<>0 then
      begin

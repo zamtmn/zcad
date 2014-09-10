@@ -728,7 +728,7 @@ begin
                            CanvasDC:=GetDC(panel.Handle);
      createoffscreendc;
      isWindowsErrors;
-     result:=CreateScrbuf(canvas.Width,canvas.Height);
+     result:=CreateScrbuf(panel.Width,panel.Height);
      PState:=TPaintState.TPSBufferNotSaved;
 end;
 procedure TZGLCanvasDrawer.endpaint;
@@ -750,8 +750,8 @@ begin
           SelectObject(SavedDC,SavedBitmap);
           isWindowsErrors;
           result:=true;
+          createoffscreendc;
      end;
-     createoffscreendc;
 end;
 procedure TZGLCanvasDrawer.delmyscrbuf;
 begin
@@ -778,6 +778,7 @@ begin
      isWindowsErrors;
      PState:=TPaintState.TPSBufferSaved;
      InitScreenInvalidrect(w,h);
+     isWindowsErrors;
 end;
 procedure TZGLCanvasDrawer.RestoreBuffers(w,h:integer);
 begin
@@ -787,7 +788,7 @@ begin
     {$IFDEF WINDOWS}windows.{$ENDIF}BitBlt(OffScreedDC,ScreenInvalidRect.Left,ScreenInvalidRect.Top,ScreenInvalidRect.Right-ScreenInvalidRect.Left+1,ScreenInvalidRect.bottom-ScreenInvalidRect.top+1,SavedDC,ScreenInvalidRect.Left,ScreenInvalidRect.Top,SRCCOPY);
     PState:=TPaintState.TPSBufferSaved;
     InitScreenInvalidrect(w,h);
-     //isWindowsErrors;
+     isWindowsErrors;
 end;
 procedure TZGLCanvasDrawer.SwapBuffers;
 begin
@@ -1124,4 +1125,4 @@ initialization
   {$IFDEF WINDOWS}GDIPlusDrawer:=TZGLGDIPlusDrawer.create;{$ENDIF}
 finalization
 end.
-
+

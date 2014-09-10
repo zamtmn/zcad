@@ -329,6 +329,7 @@ begin
           load_merge(@s[1],tloload);
           gdb.GetCurrentDWG.wa.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
                                                   //создания или загрузки
+          redrawoglwnd;
           programlog.logoutstr('load_merge(@s[1],tloload);',0);
           if assigned(ProcessFilehistoryProc) then
            ProcessFilehistoryProc(s);

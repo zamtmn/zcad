@@ -18,37 +18,58 @@ object Form1: TForm1
     Width = 824
     Align = alLeft
     BevelOuter = bvNone
-    Caption = 'Panel1'
     ClientHeight = 909
     ClientWidth = 824
     TabOrder = 0
-    object PanelUp: TPanel
-      Left = 0
-      Height = 336
-      Top = 0
-      Width = 824
-      Align = alTop
-      BevelOuter = bvNone
-      Caption = 'PanelUp'
-      TabOrder = 0
-    end
     object Splitter2: TSplitter
       Cursor = crVSplit
       Left = 0
       Height = 10
-      Top = 336
+      Top = 400
       Width = 824
       Align = alTop
       ResizeAnchor = akTop
     end
-    object Panel2: TPanel
+    object GroupBox1: TGroupBox
       Left = 0
-      Height = 563
-      Top = 346
+      Height = 400
+      Top = 0
+      Width = 824
+      Align = alTop
+      Caption = 'OpenGL:'
+      ClientHeight = 378
+      ClientWidth = 820
+      TabOrder = 1
+      object PanelUp: TPanel
+        Left = 0
+        Height = 378
+        Top = 0
+        Width = 820
+        Align = alClient
+        BevelOuter = bvNone
+        Caption = 'PanelUp'
+        TabOrder = 0
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 0
+      Height = 499
+      Top = 410
       Width = 824
       Align = alClient
-      Caption = 'PanelDown'
+      Caption = 'GDI:'
+      ClientHeight = 477
+      ClientWidth = 820
       TabOrder = 2
+      object Panel2: TPanel
+        Left = 0
+        Height = 477
+        Top = 0
+        Width = 820
+        Align = alClient
+        Caption = 'PanelDown'
+        TabOrder = 0
+      end
     end
   end
   object Splitter1: TSplitter
@@ -92,10 +113,10 @@ object Form1: TForm1
     AnchorSideTop.Side = asrCenter
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 922
+    Left = 919
     Height = 23
-    Top = 613
-    Width = 175
+    Top = 614
+    Width = 178
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Rebuild tree'
     OnClick = BtnRebuildClick
@@ -106,9 +127,9 @@ object Form1: TForm1
     AnchorSideLeft.Side = asrBottom
     AnchorSideRight.Side = asrBottom
     Left = 834
-    Height = 21
+    Height = 23
     Top = 614
-    Width = 88
+    Width = 85
     Caption = 'Show tree'
     OnChange = TreeChange
     TabOrder = 5
@@ -118,10 +139,10 @@ object Form1: TForm1
     AnchorSideLeft.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 995
-    Height = 23
+    Left = 992
+    Height = 27
     Top = 0
-    Width = 102
+    Width = 105
     Anchors = [akTop, akLeft, akRight]
     MaxValue = 1000000
     MinValue = 1
@@ -204,9 +225,9 @@ object Form1: TForm1
     AnchorSideTop.Control = SpinEdit1
     AnchorSideTop.Side = asrCenter
     Left = 834
-    Height = 15
+    Height = 19
     Top = 4
-    Width = 161
+    Width = 158
     Alignment = taCenter
     Caption = 'Number of entities to add'
     Layout = tlCenter
@@ -244,9 +265,9 @@ object Form1: TForm1
     AnchorSideLeft.Control = Splitter1
     AnchorSideLeft.Side = asrBottom
     Left = 834
-    Height = 21
+    Height = 23
     Top = 595
-    Width = 126
+    Width = 124
     Caption = '3D(ZCoord<>0)'
     TabOrder = 14
   end
@@ -302,8 +323,8 @@ object Form1: TForm1
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 834
-    Height = 273
-    Top = 636
+    Height = 272
+    Top = 637
     Width = 263
     Anchors = [akTop, akLeft, akRight, akBottom]
     TabOrder = 18
@@ -347,4 +368,4 @@ object Form1: TForm1
     left = 934
     top = 488
   end
-end
+end

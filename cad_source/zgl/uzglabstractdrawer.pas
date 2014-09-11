@@ -19,7 +19,7 @@
 unit uzglabstractdrawer;
 {$INCLUDE def.inc}
 interface
-uses UGDBOpenArrayOfData,uzgprimitivessarray,Graphics,gdbase,gdbasetypes,GDBCamera,geometry;
+uses types,Classes,UGDBOpenArrayOfData,uzgprimitivessarray,Graphics,gdbase,gdbasetypes,GDBCamera,geometry;
 type
 TRenderMode=(TRM_ModelSpace,TRM_DisplaySpace,TRM_WindowSpace);
 TZGLPenStyle=(TPS_Solid,TPS_Dot,TPS_Dash,TPS_Selected);
@@ -49,10 +49,10 @@ TZGLAbstractDrawer=class
                         procedure SetDrawWithStencilMode;virtual;abstract;
                         procedure DisableStencil;virtual;abstract;
                         procedure SetZTest(Z:boolean);virtual;abstract;
-                        procedure WorkAreaResize(w,h:integer);virtual;abstract;
-                        procedure SaveBuffers(w,h:integer);virtual;abstract;
-                        procedure RestoreBuffers(w,h:integer);virtual;abstract;
-                        function CreateScrbuf(w,h:integer):boolean; virtual;abstract;
+                        procedure WorkAreaResize(rect:trect);virtual;abstract;
+                        procedure SaveBuffers;virtual;abstract;
+                        procedure RestoreBuffers;virtual;abstract;
+                        function CreateScrbuf:boolean; virtual;abstract;
                         procedure delmyscrbuf; virtual;abstract;
                         procedure SwapBuffers; virtual;abstract;
                         procedure SetPenStyle(const style:TZGLPenStyle);virtual;abstract;
@@ -74,6 +74,8 @@ TZGLAbstractDrawer=class
                         procedure DrawDebugGeometry;virtual;abstract;
                    end;
 TZGLGeneralDrawer=class(TZGLAbstractDrawer)
+                        drawrect:trect;
+                        wh:tsize;
                         public
                         procedure DrawLine(const i1:TLLVertexIndex);override;
                         procedure DrawPoint(const i:TLLVertexIndex);override;
@@ -106,10 +108,10 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawAABB3DInModelSpace(const BoundingBox:GDBBoundingBbox;var matrixs:tmatrixs);override;
-                        procedure WorkAreaResize(w,h:integer);override;
-                        procedure SaveBuffers(w,h:integer);override;
-                        procedure RestoreBuffers(w,h:integer);override;
-                        function CreateScrbuf(w,h:integer):boolean; override;
+                        procedure WorkAreaResize(rect:trect);override;
+                        procedure SaveBuffers;override;
+                        procedure RestoreBuffers;override;
+                        function CreateScrbuf:boolean; override;
                         procedure delmyscrbuf; override;
                         procedure SwapBuffers; override;
                         procedure SetPenStyle(const style:TZGLPenStyle);override;
@@ -245,6 +247,9 @@ begin
 end;
 procedure TZGLGeneralDrawer.WorkAreaResize;
 begin
+     drawrect:=rect;
+     wh.cx:=rect.Right-rect.Left;
+     wh.cy:=rect.Bottom-rect.Top;
      delmyscrbuf;
      //CreateScrbuf(w,h);
 end;
@@ -254,7 +259,7 @@ end;
 procedure TZGLGeneralDrawer.RestoreBuffers;
 begin
 end;
-function TZGLGeneralDrawer.CreateScrbuf(w,h:integer):boolean;
+function TZGLGeneralDrawer.CreateScrbuf:boolean;
 begin
 end;
 procedure TZGLGeneralDrawer.delmyscrbuf;
@@ -281,4 +286,4 @@ end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('uzglabstractdrawer.initialization');{$ENDIF}
 end.
-
+

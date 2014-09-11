@@ -606,10 +606,10 @@ procedure TGeneralViewArea.finishdraw;
 begin
      //inc(sysvar.debug.int1);
      CalcOptimalMatrix;
-     drawer.RestoreBuffers(getviewcontrol.Width,getviewcontrol.Height);
+     drawer.RestoreBuffers;
      LPTime:=now();
      PDWG.Getpcamera.DRAWNOTEND:=treerender(PDWG.GetCurrentROOT^.ObjArray.ObjTree,lptime,rc);
-     drawer.SaveBuffers(getviewcontrol.Width,getviewcontrol.Height);
+     drawer.SaveBuffers;
      showcursor(rc);
      SwapBuffers(rc);
 end;
@@ -712,7 +712,7 @@ begin
     dc.drawer.ClearStatesMachine;
 
 
-    drawer.SaveBuffers(getviewcontrol.Width,getviewcontrol.Height);
+    drawer.SaveBuffers;
 
     dc.drawer.SetZTest(false);
     inc(dc.subrender);
@@ -739,7 +739,7 @@ begin
   else
   begin
     LightOff(dc);
-    drawer.RestoreBuffers(getviewcontrol.Width,getviewcontrol.Height);
+    drawer.RestoreBuffers;
     inc(dc.subrender);
     dc.drawer.startrender(TRM_ModelSpace,dc.matrixs);
     if PDWG.GetConstructObjRoot.ObjArray.Count>0 then
@@ -1271,11 +1271,14 @@ begin
      DrawOrInvalidate;
 end;
 procedure TGeneralViewArea.WaResize(sender:tobject);
+var
+   rect:trect;
 begin
-     drawer.WorkAreaResize(getviewcontrol.clientwidth,getviewcontrol.clientheight);
+     rect:=getviewcontrol.ClientRect;
+     drawer.WorkAreaResize(rect);
      getviewcontrol.invalidate;
-     param.height := getviewcontrol.clientheight;
-     param.width := getviewcontrol.clientwidth;
+     param.height := rect.right;
+     param.width := rect.top;
 end;
 procedure TGeneralViewArea.WaMouseWheel(Sender:TObject;Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint;var handled:boolean);
 //procedure TOGLWnd.Pre_MouseWheel;
@@ -3714,4 +3717,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('viewareadef.initialization');{$ENDIF}
-end.
+end.

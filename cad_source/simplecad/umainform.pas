@@ -34,6 +34,8 @@ type
     BtnProcessObjects: TButton;
     CheckBox1: TCheckBox;
     ChkBox3D: TCheckBox;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
     Label1: TLabel;
     Memo1: TMemo;
     OpenDialog1: TOpenDialog;

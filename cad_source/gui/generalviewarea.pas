@@ -1277,8 +1277,8 @@ begin
      rect:=getviewcontrol.ClientRect;
      drawer.WorkAreaResize(rect);
      getviewcontrol.invalidate;
-     param.height := rect.right;
-     param.width := rect.top;
+     param.height := rect.bottom;
+     param.width := rect.right;
 end;
 procedure TGeneralViewArea.WaMouseWheel(Sender:TObject;Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint;var handled:boolean);
 //procedure TOGLWnd.Pre_MouseWheel;

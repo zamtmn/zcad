@@ -67,9 +67,9 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
 
-                        procedure SaveBuffers(w,h:integer);override;
-                        procedure RestoreBuffers(w,h:integer);override;
-                        function CreateScrbuf(w,h:integer):boolean; override;
+                        procedure SaveBuffers;override;
+                        procedure RestoreBuffers;override;
+                        function CreateScrbuf:boolean; override;
                         procedure delmyscrbuf; override;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
                    end;
@@ -124,10 +124,10 @@ TZGLCanvasDrawer=class(TZGLGeneralDrawer)
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:single);override;
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of single);override;
 
-                        function CreateScrbuf(w,h:integer):boolean; override;
+                        function CreateScrbuf:boolean; override;
                         procedure delmyscrbuf; override;
-                        procedure SaveBuffers(w,h:integer);override;
-                        procedure RestoreBuffers(w,h:integer);override;
+                        procedure SaveBuffers;override;
+                        procedure RestoreBuffers;override;
                         procedure SwapBuffers;override;
                         procedure TranslateCoord2D(const tx,ty:single);override;
                         procedure ScaleCoord2D(const sx,sy:single);override;
@@ -318,7 +318,7 @@ begin
      if myscrbuf[0]=0 then
                           begin
                                result:=true;
-                               CreateScrbuf(w,h);
+                               CreateScrbuf;
                           end
                        else
                            result:=false;
@@ -422,10 +422,10 @@ begin
                //isOpenGLError;
                scrx:=scrx+texturesize;
                inc(texture);
-         until scrx>w;
+         until scrx>wh.cx;
    scrx:=0;
    scry:=scry+texturesize;
-   until scry>h;
+   until scry>wh.cy;
 
 
   oglsm.myglDisable(GL_TEXTURE_2D);
@@ -444,7 +444,7 @@ begin
        oglsm.myglMatrixMode(GL_PROJECTION);
        oglsm.myglPushMatrix;
        oglsm.myglLoadIdentity;
-       oglsm.myglOrtho(0.0, w, 0.0, h, -10.0, 10.0);
+       oglsm.myglOrtho(0.0, wh.cx, 0.0, wh.cy, -10.0, 10.0);
        oglsm.myglMatrixMode(GL_MODELVIEW);
        oglsm.myglPushMatrix;
        oglsm.myglLoadIdentity;
@@ -471,10 +471,10 @@ begin
          //isOpenGLError;
          scrx:=scrx+texturesize;
          inc(texture);
-   until scrx>w;
+   until scrx>wh.cx;
    scrx:=0;
    scry:=scry+texturesize;
-   until scry>h;
+   until scry>wh.cy;
   end;
   oglsm.myglDisable(GL_TEXTURE_2D);
        oglsm.myglPopMatrix;
@@ -484,12 +484,12 @@ begin
    NotUseLCS:=_NotUseLCS;
   {$IFDEF PERFOMANCELOG}log.programlog.LogOutStrFast('TOGLWnd.RestoreBuffers----{end}',lp_decPos);{$ENDIF}
 end;
-function TZGLOpenGLDrawer.CreateScrbuf(w,h:integer):boolean;
+function TZGLOpenGLDrawer.CreateScrbuf{(w,h:integer)}:boolean;
 var scrx,scry,texture{,e}:integer;
 begin
      //oglsm.mytotalglend;
      result:=false;
-     if (w>0)and(h>0) then
+     if (wh.cx>0)and(wh.cy>0) then
      begin
      oglsm.myglEnable(GL_TEXTURE_2D);
      scrx:=0;  { TODO : Сделать генер текстур пакетом }
@@ -511,10 +511,10 @@ begin
                  //isOpenGLError;
                  scrx:=scrx+texturesize;
                  inc(texture);
-           until scrx>w;
+           until scrx>wh.cx;
            scrx:=0;
            scry:=scry+texturesize;
-     until scry>h;
+     until scry>wh.cy;
      oglsm.myglDisable(GL_TEXTURE_2D);
      result:=true;
      end;
@@ -699,7 +699,7 @@ begin
      if OffScreedDC=0 then
      begin
         OffScreedDC:=CreateCompatibleDC(CanvasDC);
-        OffscreenBitmap:=CreateCompatibleBitmap(CanvasDC,panel.Width,panel.Height);
+        OffscreenBitmap:=CreateCompatibleBitmap(CanvasDC,wh.cx,wh.cy);
         SelectObject(OffScreedDC,OffscreenBitmap);
         hLinePen:=CreatePen(PS_SOLID, 1, PenColor);
         SelectObject(OffScreedDC, hLinePen);
@@ -728,7 +728,7 @@ begin
                            CanvasDC:=GetDC(panel.Handle);
      createoffscreendc;
      isWindowsErrors;
-     result:=CreateScrbuf(panel.Width,panel.Height);
+     result:=CreateScrbuf;
      PState:=TPaintState.TPSBufferNotSaved;
 end;
 procedure TZGLCanvasDrawer.endpaint;
@@ -736,16 +736,16 @@ begin
      if not InPaintMessage then
      ReleaseDC(panel.Handle,CanvasDC);
 end;
-function TZGLCanvasDrawer.CreateScrbuf(w,h:integer):boolean;
+function TZGLCanvasDrawer.CreateScrbuf:boolean;
 begin
      result:=false;
-     {$IFNDEF LCLGTK2}if (w>0)and(h>0) then{$ENDIF}
+     {$IFNDEF LCLGTK2}if (wh.cx>0)and(wh.cy>0) then{$ENDIF}
      if SavedBitmap=0 then
      if CanvasDC<>0 then
      begin
           SavedDC:=CreateCompatibleDC({CanvasDC}0);
           isWindowsErrors;
-          SavedBitmap:=CreateCompatibleBitmap({SavedDC}CanvasDC,w,h);
+          SavedBitmap:=CreateCompatibleBitmap({SavedDC}CanvasDC,wh.cx,wh.cy);
           isWindowsErrors;
           SelectObject(SavedDC,SavedBitmap);
           isWindowsErrors;
@@ -766,7 +766,7 @@ begin
      end;
      deleteoffscreendc;
 end;
-procedure TZGLCanvasDrawer.SaveBuffers(w,h:integer);
+procedure TZGLCanvasDrawer.SaveBuffers;
 begin
     {$IFDEF LCLGTK2}
      if TGtkDeviceContext(SavedDC).drawable=nil
@@ -774,27 +774,27 @@ begin
          delmyscrbuf
      else
     {$ENDIF}
-         {$IFDEF WINDOWS}windows.{$ENDIF}BitBlt(SavedDC,0,0,w,h,OffScreedDC,0,0,SRCCOPY);
+         {$IFDEF WINDOWS}windows.{$ENDIF}BitBlt(SavedDC,0,0,wh.cx,wh.cy,OffScreedDC,0,0,SRCCOPY);
      isWindowsErrors;
      PState:=TPaintState.TPSBufferSaved;
-     InitScreenInvalidrect(w,h);
+     InitScreenInvalidrect(wh.cx,wh.cy);
      isWindowsErrors;
 end;
-procedure TZGLCanvasDrawer.RestoreBuffers(w,h:integer);
+procedure TZGLCanvasDrawer.RestoreBuffers;
 begin
      //windows.BitBlt(OffScreedDC,0,0,100,100,SavedDC,0,0,SRCCOPY);
-    CorrectScreenInvalidrect(w,h);
+    CorrectScreenInvalidrect(wh.cx,wh.cy);
     //{$IFDEF WINDOWS}windows.{$ENDIF}BitBlt(OffScreedDC,0,0,w,h,SavedDC,0,0,SRCCOPY);
     {$IFDEF WINDOWS}windows.{$ENDIF}BitBlt(OffScreedDC,ScreenInvalidRect.Left,ScreenInvalidRect.Top,ScreenInvalidRect.Right-ScreenInvalidRect.Left+1,ScreenInvalidRect.bottom-ScreenInvalidRect.top+1,SavedDC,ScreenInvalidRect.Left,ScreenInvalidRect.Top,SRCCOPY);
     PState:=TPaintState.TPSBufferSaved;
-    InitScreenInvalidrect(w,h);
+    InitScreenInvalidrect(wh.cx,wh.cy);
      isWindowsErrors;
 end;
 procedure TZGLCanvasDrawer.SwapBuffers;
 begin
      //isWindowsErrors;
      //windows.BitBlt({canvas.Handle}CanvasDC,0,0,100,100,OffScreedDC,0,0,SRCCOPY);
-     {$IFDEF WINDOWS}windows.{$ENDIF}BitBlt({canvas.Handle}CanvasDC,0,0,panel.Width,panel.Height,OffScreedDC,0,0,SRCCOPY);
+     {$IFDEF WINDOWS}windows.{$ENDIF}BitBlt({canvas.Handle}CanvasDC,0,0,wh.cx,wh.cy,OffScreedDC,0,0,SRCCOPY);
      isWindowsErrors;
 end;
 function TZGLCanvasDrawer.TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
@@ -848,13 +848,11 @@ end;
 procedure TZGLCanvasDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
 var
    pp1,pp2:GDBVertex;
-   h:integer;
    x,y:integer;
 begin
      //_myGluProject(const objx,objy,objz:GDBdouble;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out winx,winy,winz:GDBdouble):Integer;
     _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
     _myGluProject2(p2,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp2);
-    h:=panel.Height;
      {pp1:=geometry.VectorTransform3D(p1,matrixs.pprojMatrix^);
      pp1:=geometry.VectorTransform3D(pp1,matrixs.pmodelMatrix^);
 
@@ -864,12 +862,12 @@ begin
      //canvas.Line(round(pp1.x),h-round(pp1.y),round(pp2.x),h-round(pp2.y));
 
      x:=round(pp1.x);
-     y:=round(h-pp1.y);
+     y:=round(wh.cy-pp1.y);
      ProcessScreenInvalidrect(x,y);
      MoveToEx(OffScreedDC,x,y,nil);
 
      x:=round(pp2.x);
-     y:=round(h-pp2.y);
+     y:=round(wh.cy-pp2.y);
      ProcessScreenInvalidrect(x,y);
      LineTo(OffScreedDC,x,y);
 end;
@@ -881,11 +879,10 @@ end;
 procedure TZGLCanvasDrawer.DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);
 var
    pp:GDBVertex;
-   h,ps:integer;
+   ps:integer;
    x,y:integer;
 begin
     _myGluProject2(p,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp);
-    h:=panel.Height;
      {pp1:=geometry.VectorTransform3D(p1,matrixs.pprojMatrix^);
      pp1:=geometry.VectorTransform3D(pp1,matrixs.pmodelMatrix^);
 
@@ -897,27 +894,25 @@ begin
      ps:=round(PointSize/2);
 
      x:=round(pp.x);
-     y:=round(h-pp.y);
+     y:=round(wh.cy-pp.y);
      ProcessScreenInvalidrect(x,y);
      Rectangle(OffScreedDC, x-ps, y-ps, x+ps,y+ps);
 end;
 procedure TZGLCanvasDrawer.DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);
 var
    pp1,pp2,pp3:GDBVertex;
-   h:integer;
    sp:array [1..3]of TPoint;
 begin
     _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
     _myGluProject2(p2,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp2);
     _myGluProject2(p3,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp3);
-    h:=panel.Height;
 
      sp[1].x:=round(pp1.x);
-     sp[1].y:=round(h-pp1.y);
+     sp[1].y:=round(wh.cy-pp1.y);
      sp[2].x:=round(pp2.x);
-     sp[2].y:=round(h-pp2.y);
+     sp[2].y:=round(wh.cy-pp2.y);
      sp[3].x:=round(pp3.x);
-     sp[3].y:=round(h-pp3.y);
+     sp[3].y:=round(wh.cy-pp3.y);
 
      PolyGon(OffScreedDC,@sp[1],3,false);
      ProcessScreenInvalidrect(sp[1].x,sp[1].y);
@@ -927,23 +922,21 @@ end;
 procedure TZGLCanvasDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
 var
    pp1,pp2,pp3,pp4:GDBVertex;
-   h:integer;
    sp:array [1..4]of TPoint;
 begin
     _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
     _myGluProject2(p2,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp2);
     _myGluProject2(p3,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp3);
     _myGluProject2(p4,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp4);
-    h:=panel.Height;
 
      sp[1].x:=round(pp1.x);
-     sp[1].y:=round(h-pp1.y);
+     sp[1].y:=round(wh.cy-pp1.y);
      sp[2].x:=round(pp2.x);
-     sp[2].y:=round(h-pp2.y);
+     sp[2].y:=round(wh.cy-pp2.y);
      sp[3].x:=round(pp3.x);
-     sp[3].y:=round(h-pp3.y);
+     sp[3].y:=round(wh.cy-pp3.y);
      sp[4].x:=round(pp4.x);
-     sp[4].y:=round(h-pp4.y);
+     sp[4].y:=round(wh.cy-pp4.y);
 
      PolyGon(OffScreedDC,@sp[1],4,false);
      ProcessScreenInvalidrect(sp[1].x,sp[1].y);
@@ -1018,7 +1011,7 @@ var
   ClearBrush: HBRUSH;
   LogBrush: TLogBrush;
 begin
-     mrect:=Rect(0,0,panel.Width,panel.Height);
+     mrect:=Rect(0,0,wh.cx,wh.cy);
      with LogBrush do
      begin
        lbStyle := {BS_HATCHED}BS_SOLID;
@@ -1060,7 +1053,7 @@ end;
 procedure TZGLCanvasDrawer.DrawDebugGeometry;
 begin
      exit;
-     CorrectScreenInvalidrect(panel.Width,panel.Height);
+     CorrectScreenInvalidrect(wh.cx,wh.cy);
      DrawLine2DInDCS(ScreenInvalidRect.Left,ScreenInvalidRect.top,ScreenInvalidRect.right,ScreenInvalidRect.bottom);
      DrawLine2DInDCS(ScreenInvalidRect.right,ScreenInvalidRect.top,ScreenInvalidRect.left,ScreenInvalidRect.bottom);
 end;

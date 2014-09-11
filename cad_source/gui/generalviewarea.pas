@@ -1273,6 +1273,7 @@ end;
 procedure TGeneralViewArea.WaResize(sender:tobject);
 begin
      drawer.WorkAreaResize(getviewcontrol.clientwidth,getviewcontrol.clientheight);
+     getviewcontrol.invalidate;
      param.height := getviewcontrol.clientheight;
      param.width := getviewcontrol.clientwidth;
 end;
@@ -3713,4 +3714,4 @@ end;
 
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('viewareadef.initialization');{$ENDIF}
-end.
+end.

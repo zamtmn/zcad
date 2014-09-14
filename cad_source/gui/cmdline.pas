@@ -478,6 +478,8 @@ begin
     gdb.GetCurrentDWG.wa.param.firstdraw := TRUE;
     gdb.GetCurrentDWG.wa.reprojectaxis;
     gdb.GetCurrentDWG.wa.{paint}draw;
+    gdb.GetCurrentDWG.wa.asyncupdatemouse(0);
+    //Application.QueueAsyncCall(gdb.GetCurrentDWG.wa.asyncupdatemouse,0);
     end;
     //redrawoglwnd;
     {poglwnd.loadmatrix;

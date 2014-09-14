@@ -101,6 +101,8 @@ var
    savemode:GDBByte;//variable to store the current mode of the editor
                      //переменная для сохранения текущего режима редактора
 begin
+  //PTSimpleDrawing(pcommandrunning.pdwg)^.wa.asyncupdatemouse(0);
+  Application.QueueAsyncCall(PTSimpleDrawing(pcommandrunning.pdwg)^.wa.asyncupdatemouse,0);
   savemode:=PTSimpleDrawing(pcommandrunning.pdwg)^.DefMouseEditorMode(MGet3DPoint or MGet3DPointWoOP,//set mode point of the mouse
                                                                                                      //устанавливаем режим указания точек мышью
                                                                       MGetControlpoint or MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode

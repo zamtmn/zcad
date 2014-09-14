@@ -123,6 +123,7 @@ type
                            function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):GDBBoolean; virtual;abstract;
                            function startpaint:boolean;virtual;abstract;
                            procedure endpaint;virtual;abstract;
+                           procedure asyncupdatemouse(Data: PtrInt);virtual;abstract;
                       end;
 var
    otracktimer: GDBInteger;

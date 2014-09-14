@@ -96,6 +96,7 @@ type
                            procedure sendmousecoord(key: GDBByte);override;
                            procedure asynczoomsel(Data: PtrInt);
                            procedure asynczoomall(Data: PtrInt);
+                           procedure asyncupdatemouse(Data: PtrInt);override;
                            procedure set3dmouse;override;
                            procedure SetCameraPosZoom(_pos:gdbvertex;_zoom:gdbdouble;finalcalk:gdbboolean);override;
                            procedure DISP_ZoomFactor(x: double{; MousePos: TPoint});
@@ -1610,6 +1611,10 @@ end;
 procedure TGeneralViewArea.asynczoomall(Data: PtrInt);
 begin
      ZoomAll();
+end;
+procedure TGeneralViewArea.asyncupdatemouse(Data: PtrInt);
+begin
+     WaMouseMove(nil,[],param.md.mouse.x,param.md.mouse.y);
 end;
 constructor TGeneralViewArea.Create(TheOwner: TComponent);
 var

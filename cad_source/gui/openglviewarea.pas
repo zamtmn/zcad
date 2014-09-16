@@ -24,7 +24,7 @@ uses
      gtk2,gdk2,
      {$ENDIF}
      {$IFDEF LCLQT}
-     qtwidgets,qt4,
+     qtwidgets,qt4,qtint,
      {$ENDIF}
      abstractviewarea,uzglopengldrawer,sysutils,GDBHelpObj,memman,OGLSpecFunc,gdbase,gdbasetypes,
      UGDBLayerArray,ugdbdimstylearray,
@@ -264,19 +264,21 @@ begin
 end;
 procedure TCanvasViewArea.setdeicevariable;
 begin
+     {$IFDEF LCLWIN32}
      GDIData.RD_Renderer:='Windows GDI';
      if Win32CSDVersion<>'' then
                                 GDIData.RD_Version:=inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+' build '+inttostr(Win32BuildNumber)+' '+Win32CSDVersion
                             else
                                 GDIData.RD_Version:=inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+' build '+inttostr(Win32BuildNumber);
-     //WindowsVersion
-     //Win32Platform : Longint;
-  //Win32MajorVersion,
-  //Win32MinorVersion,
-  //Win32BuildNumber   : dword;
-  //Win32CSDVersion
-     //gtk_minor_version
-     //if (Win32MajorVersion = 4) and (Win32MinorVersion = 0)
+     {$ENDIF}
+     {$IFDEF LCLQt}
+     GDIData.RD_Renderer:='Qt';
+     GDIData.RD_Version:=inttostr(QtVersionMajor)+'.'+inttostr(QtVersionMinor)+'.'+inttostr(QtVersionMicro);
+     {$ENDIF}
+     {$IFDEF LCLGTK2}
+     GDIData.RD_Renderer:='GTK+';
+     GDIData.RD_Version:=inttostr(gtk_major_version)+'.'+inttostr(gtk_minor_version)+'.'+inttostr(gtk_micro_version);
+     {$ENDIF}
 end;
 procedure TCanvasViewArea.getareacaps;
 begin

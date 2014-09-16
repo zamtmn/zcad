@@ -368,6 +368,11 @@ PTGDBOSMode=^TGDBOSMode;
 TGDBOSMode=GDBInteger;
 TGDB3StateBool=(T3SB_Fale(*'False'*),T3SB_True(*'True'*),T3SB_Default(*'Default'*));
 PTGDB3StateBool=^TGDB3StateBool;
+PTypedData=^TFaceTypedData;
+TFaceTypedData=packed record
+                 Instance: GDBPointer;
+                 PTD: GDBPointer;
+                end;
 {EXPORT-}
 TProcCounter=procedure(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
 const

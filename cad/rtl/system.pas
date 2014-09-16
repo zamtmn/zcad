@@ -374,6 +374,11 @@ PTGDBOSMode=^TGDBOSMode;
 TGDBOSMode=GDBInteger;
 TGDB3StateBool=(T3SB_Fale(*'False'*),T3SB_True(*'True'*),T3SB_Default(*'Default'*));
 PTGDB3StateBool=^TGDB3StateBool;
+PTypedData=^TFaceTypedData;
+TFaceTypedData=packed record
+                 Instance: GDBPointer;
+                 PTD: GDBPointer;
+                end;
 //Generate on E:\zcad\CAD_SOURCE\u\UOpenArray.pas
 POpenArray=^OpenArray;
 OpenArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject)
@@ -479,7 +484,7 @@ GDBObjOpenArrayOfPV={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects
                       function calcvisbb(infrustumactualy:TActulity):GDBBoundingBbox;
                       function getoutbound:GDBBoundingBbox;
                       function getonlyoutbound:GDBBoundingBbox;
-                      //procedure Format;virtual;abstract;
+                      procedure Format;virtual;abstract;
                       procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
                       procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;abstract;
                       //function InRect:TInRect;virtual;abstract;
@@ -1051,27 +1056,36 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
                           RD_ID_MaxDegradationFactor:PGDBDouble;(*'Max degradation factor'*)
                           RD_ID_PrefferedRenderTime:PGDBInteger;(*'Prefered rendertime'*)
                       end;
+  PTGDIData=^TGDIData;
+  TGDIData=packed record
+            RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
+            RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
+      end;
+  PTOpenglData=^TOpenglData;
+  TOpenglData=packed record
+            RD_Renderer:GDBString;(*'Device'*)(*oi_readonly*)
+            RD_Version:GDBString;(*'Version'*)(*oi_readonly*)
+            RD_Extensions:GDBString;(*'Extensions'*)(*oi_readonly*)
+            RD_Vendor:GDBString;(*'Vendor'*)(*oi_readonly*)
+            RD_Restore_Mode:trestoremode;(*'Restore mode'*)
+            RD_VSync:TVSControl;(*'VSync'*)
+      end;
   trd=packed record
             RD_RendererBackEnd:TEnumData;(*'Render backend'*)
-            RD_Renderer:PGDBString;(*'Device'*)(*oi_readonly*)
-            RD_Version:PGDBString;(*'Version'*)(*oi_readonly*)
-            RD_Extensions:PGDBString;(*'Extensions'*)(*oi_readonly*)
-            RD_Vendor:PGDBString;(*'Vendor'*)(*oi_readonly*)
+            RD_CurrentWAParam:TFaceTypedData;
             RD_GLUVersion:PGDBString;(*'GLU Version'*)(*oi_readonly*)
             RD_GLUExtensions:PGDBString;(*'GLU Extensions'*)(*oi_readonly*)
+            RD_BackGroundColor:PTRGB;(*'Background color'*)
+            RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
             RD_MaxWidth:pGDBInteger;(*'Max width'*)(*oi_readonly*)
             RD_MaxLineWidth:PGDBDouble;(*'Max line width'*)(*oi_readonly*)
             RD_MaxPointSize:PGDBDouble;(*'Max point size'*)(*oi_readonly*)
-            RD_BackGroundColor:PTRGB;(*'Background color'*)
-            RD_Restore_Mode:ptrestoremode;(*'Restore mode'*)
             RD_LastRenderTime:pGDBInteger;(*'Last render time'*)(*oi_readonly*)
             RD_LastUpdateTime:pGDBInteger;(*'Last update time'*)(*oi_readonly*)
             RD_LastCalcVisible:GDBInteger;(*'Last visible calculation time'*)(*oi_readonly*)
             RD_MaxRenderTime:pGDBInteger;(*'Maximum single pass time'*)
             RD_DrawInsidePaintMessage:PTGDB3StateBool;(*'Draw inside paint message'*)
             RD_RemoveSystemCursorFromWorkArea:PGDBBoolean;(*'Remove system cursor from work area'*)
-            RD_UseStencil:PGDBBoolean;(*'Use STENCIL buffer'*)
-            RD_VSync:PTVSControl;(*'VSync'*)
             RD_Light:PGDBBoolean;(*'Light'*)
             RD_LineSmooth:PGDBBoolean;(*'Line smoothing'*)
             RD_ImageDegradation:TImageDegradation;(*'Image degradation'*)
@@ -1398,8 +1412,8 @@ GDBObjGenericWithSubordinated={$IFNDEF DELPHI}packed{$ENDIF} object(GDBaseObject
                                     function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger;const drawing:TDrawingDef):GDBInteger;virtual;abstract;
                                     function ImSelected(pobj:PGDBObjSubordinated;pobjinarray:GDBInteger):GDBInteger;virtual;abstract;
                                     procedure DelSelectedSubitem(const drawing:TDrawingDef);virtual;abstract;
-                                    //function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;abstract;
-                                    //procedure RemoveInArray(pobjinarray:GDBInteger);virtual;abstract;
+                                    function AddMi(pobj:PGDBObjSubordinated):PGDBpointer;virtual;abstract;
+                                    procedure RemoveInArray(pobjinarray:GDBInteger);virtual;abstract;
                                     function CreateOU:GDBInteger;virtual;abstract;
                                     procedure createfield;virtual;abstract;
                                     function FindVariable(varname:GDBString):pvardesk;virtual;abstract;
@@ -1481,7 +1495,7 @@ GDBObjEntity={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjSubordinated)
                     procedure DXFOut(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;abstract;
                     procedure SaveToDXFfollow(var handle:TDWGHandle; var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;abstract;
                     procedure SaveToDXFPostProcess(var handle:{GDBInteger}GDBOpenArrayOfByte);
-                    {procedure Format;virtual;abstract;}
+                    procedure Format;virtual;abstract;
                     procedure FormatEntity(const drawing:TDrawingDef);virtual;abstract;
                     procedure FormatFast(const drawing:TDrawingDef);virtual;abstract;
                     procedure FormatAfterEdit(const drawing:TDrawingDef);virtual;abstract;
@@ -2424,7 +2438,7 @@ GDBObjText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjAbstractText)
                  obj_height:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
                  obj_width:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
                  obj_y:GDBDouble;(*oi_readonly*)(*hidden_in_objinsp*)
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte);
+                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;abstract;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;abstract;
@@ -2450,7 +2464,7 @@ GDBObjMText={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjText)
                  linespace:GDBDouble;(*saved_to_shd*)(*oi_readonly*)
                  linespacef:GDBDouble;(*saved_to_shd*)
                  text:XYZWGDBGDBStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:GDBByte;wi,l:GDBDouble);
+                 constructor init(own:GDBPointer;layeraddres:PGDBLayerProp;LW:GDBSmallint;c:GDBString;p:GDBvertex;s,o,w,a:GDBDouble;j:TTextJustify;wi,l:GDBDouble);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f: GDBOpenArrayOfByte;ptu:PTUnit;const drawing:TDrawingDef);virtual;abstract;
                  procedure SaveToDXF(var handle:TDWGHandle;var outhandle:{GDBInteger}GDBOpenArrayOfByte;const drawing:TDrawingDef);virtual;abstract;
@@ -3480,6 +3494,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                    TODPCT_by_Count(*'by number'*),
                    TODPCT_by_XY(*'by width/height'*)
                  );
+  PTOPSPlaceSmokeDetectorOrtoParam=^TOPSPlaceSmokeDetectorOrtoParam;
   TOPSPlaceSmokeDetectorOrtoParam=packed record
                                         InsertType:TInsertType;(*'Insert'*)
                                         Scale:GDBDouble;(*'Plan scale'*)
@@ -3497,6 +3512,7 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                                         oldsh:GDBInteger;(*hidden_in_objinsp*)
                                         olddt:TOPSDatType;(*hidden_in_objinsp*)
                                   end;
+  PTOrtoDevPlaceParam=^TOrtoDevPlaceParam;
   TOrtoDevPlaceParam=packed record
                                         Name:GDBString;(*'Block'*)(*oi_readonly*)
                                         ScaleBlock:GDBDouble;(*'Blocks scale'*)
@@ -3528,6 +3544,7 @@ TBasicFinter=packed record
                    ExcludeCable:GDBBoolean;(*'Exclude filter'*)
                    ExcludeCableMask:GDBString;(*'Exclude mask'*)
              end;
+  PTFindDeviceParam=^TFindDeviceParam;
   TFindDeviceParam=packed record
                         FindType:TFindType;(*'Find in'*)
                         FindMethod:GDBBoolean;(*'Use symbols *, ?'*)
@@ -3536,6 +3553,7 @@ TBasicFinter=packed record
      GDBLine=packed record
                   lBegin,lEnd:GDBvertex;
               end;
+  PTELCableComParam=^TELCableComParam;
   TELCableComParam=packed record
                         Traces:TEnumData;(*'Trace'*)
                         PCable:PGDBObjCable;(*'Cabel'*)

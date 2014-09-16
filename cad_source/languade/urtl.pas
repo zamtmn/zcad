@@ -102,10 +102,10 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ObjInspRowH,'INTF_ObjInspRowH');
 
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_PanObjectDegradation,'RD_PanObjectDegradation');
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_UseStencil,'RD_UseStencil');
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_UseStencil,'RD_UseStencil');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_DrawInsidePaintMessage,'RD_DrawInsidePaintMessage');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_RemoveSystemCursorFromWorkArea,'RD_RemoveSystemCursorFromWorkArea');
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_VSync,'RD_VSync');
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_VSync,'RD_VSync');
   {$IFNDEF WINDOWS}
   if SysVar.RD.RD_VSync<>nil then
                                  SysVar.RD.RD_VSync^:=TVSDefault;
@@ -115,25 +115,25 @@ initialization;
 
   {$ENDIF}
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_LineSmooth,'RD_LineSmooth');
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_Restore_Mode,'RD_Restore_Mode');
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxLineWidth,'RD_MaxLineWidth');
-  SysVar.RD.RD_MaxLineWidth^:=-1;
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxPointSize,'RD_MaxPointSize');
-  SysVar.RD.RD_MaxPointSize^:=-1;
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_Vendor,'RD_Vendor');
-  SysVar.RD.RD_Vendor^:=rsncOGLc;
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_Renderer,'RD_Renderer');
-  SysVar.RD.RD_Renderer^:=rsncOGLc;
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_Version,'RD_Version');
-  SysVar.RD.RD_Version^:=rsncOGLc;
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_Extensions,'RD_Extensions');
-  SysVar.RD.RD_Extensions^:=rsncOGLc;
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_Restore_Mode,'RD_Restore_Mode');
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxLineWidth,'RD_MaxLineWidth');
+  //SysVar.RD.RD_MaxLineWidth^:=-1;
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxPointSize,'RD_MaxPointSize');
+  //SysVar.RD.RD_MaxPointSize^:=-1;
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_Vendor,'RD_Vendor');
+  //SysVar.RD.RD_Vendor^:=rsncOGLc;
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_Renderer,'RD_Renderer');
+  //SysVar.RD.RD_Renderer^:=rsncOGLc;
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_Version,'RD_Version');
+  //SysVar.RD.RD_Version^:=rsncOGLc;
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_Extensions,'RD_Extensions');
+  //SysVar.RD.RD_Extensions^:=rsncOGLc;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_GLUVersion,'RD_GLUVersion');
   SysVar.RD.RD_GLUVersion^:=rsncOGLc;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_GLUExtensions,'RD_GLUExtensions');
   SysVar.RD.RD_GLUExtensions^:=rsncOGLc;
-  SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxWidth,'RD_MaxWidth');
-  SysVar.RD.RD_MaxWidth^:=-1;
+  //SysVarUnit.AssignToSymbol(SysVar.RD.RD_MaxWidth,'RD_MaxWidth');
+  //SysVar.RD.RD_MaxWidth^:=-1;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_BackGroundColor,'RD_BackGroundColor');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_LastRenderTime,'RD_LastRenderTime');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_LastUpdateTime,'RD_LastUpdateTime');

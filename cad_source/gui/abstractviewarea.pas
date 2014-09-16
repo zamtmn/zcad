@@ -124,6 +124,8 @@ type
                            function startpaint:boolean;virtual;abstract;
                            procedure endpaint;virtual;abstract;
                            procedure asyncupdatemouse(Data: PtrInt);virtual;abstract;
+                           function getParam:pointer;virtual;abstract;
+                           function getParamTypeName:GDBString;virtual;abstract;
                       end;
 var
    otracktimer: GDBInteger;

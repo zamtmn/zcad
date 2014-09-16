@@ -54,6 +54,7 @@ type
                    TODPCT_by_Count(*'by number'*),
                    TODPCT_by_XY(*'by width/height'*)
                  );
+  PTOPSPlaceSmokeDetectorOrtoParam=^TOPSPlaceSmokeDetectorOrtoParam;
   TOPSPlaceSmokeDetectorOrtoParam=packed record
                                         InsertType:TInsertType;(*'Insert'*)
                                         Scale:GDBDouble;(*'Plan scale'*)
@@ -72,6 +73,7 @@ type
                                         oldsh:GDBInteger;(*hidden_in_objinsp*)
                                         olddt:TOPSDatType;(*hidden_in_objinsp*)
                                   end;
+  PTOrtoDevPlaceParam=^TOrtoDevPlaceParam;
   TOrtoDevPlaceParam=packed record
                                         Name:GDBString;(*'Block'*)(*oi_readonly*)
                                         ScaleBlock:GDBDouble;(*'Blocks scale'*)
@@ -1188,7 +1190,7 @@ begin
   CreateCommandFastObjectPlugin(@OPS_Sensor_Mark_com,'OPS_Sensor_Mark',CADWG,0);
   pco:=CreateCommandRTEdObjectPlugin(@CommandStart,nil,nil,@commformat,@BeforeClick,@AfterClick,nil,nil,command1,0,0);
   pco^.commanddata.Instance:=@OPSPlaceSmokeDetectorOrtoParam;
-  pco^.commanddata.PTD:=SysUnit.TypeName2PTD('TOPSPlaceSmokeDetectorOrtoParam');
+  pco^.commanddata.PTD:=SysUnit.TypeName2PTD('PTOPSPlaceSmokeDetectorOrtoParam');
   OPSPlaceSmokeDetectorOrtoParam.InsertType:=TIT_Device;
   OPSPlaceSmokeDetectorOrtoParam.Height.Enums.init(10);
   OPSPlaceSmokeDetectorOrtoParam.DatType:=TOPSDT_Smoke;
@@ -1204,7 +1206,7 @@ begin
 
   pco2:=CreateCommandRTEdObjectPlugin(@PlCommandStart,nil,nil,@commformat2,@PlBeforeClick,@PlAfterClick,nil,nil,'OrtoDevPlace',0,0);
   pco2^.commanddata.Instance:=@OrtoDevPlaceParam;
-  pco2^.commanddata.PTD:=SysUnit.TypeName2PTD('TOrtoDevPlaceParam');
+  pco2^.commanddata.PTD:=SysUnit.TypeName2PTD('PTOrtoDevPlaceParam');
   OrtoDevPlaceParam.ScaleBlock:=1;
   OrtoDevPlaceParam.NX:=2;
   OrtoDevPlaceParam.NY:=2;

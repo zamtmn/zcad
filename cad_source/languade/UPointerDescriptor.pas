@@ -38,6 +38,8 @@ GDBPointerDescriptor=object(TUserTypeDescriptor)
                end;
 const PAssigned:gdbpointer=nil;
       PNIL:byte=255;
+var
+    defaultptypehandler:GDBPointerDescriptor;
 implementation
 uses varman,log;
 procedure GDBPointerDescriptor.SavePasToMem(var membuf:GDBOpenArrayOfByte;PInstance:GDBPointer;prefix:GDBString);
@@ -204,6 +206,7 @@ end;
 procedure GDBPointerDescriptor.format;
 begin
      //self.TypeOf:=Types.TypeName2TypeDesc(self.ReferType);
+     if punit<>nil then
      self.TypeOf:=ptunit(punit)^.TypeName2PTD(self.ReferType);
 end;
 function GDBPointerDescriptor.GetTypeAttributes;
@@ -212,4 +215,5 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('UPointDescriptor.initialization');{$ENDIF}
+  defaultptypehandler.init('','',nil);
 end.

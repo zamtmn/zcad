@@ -361,8 +361,6 @@ begin
 end;
 
 procedure GDBDescriptor.asociatedwgvars;
-//var
-//    DWGUnit:PTUnit;
 begin
    { TODO : переделать }
    if typeof(CurrentDWG^)=typeof(TDrawing) then
@@ -382,6 +380,8 @@ begin
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLTscale,'DWG_CLTScale');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CColor,'DWG_CColor');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CDimStyle,'DWG_CDimStyle');
+   sysvar.RD.RD_CurrentWAParam.Instance:=CurrentDWG.wa.getParam;
+   sysvar.RD.RD_CurrentWAParam.PTD:=sysunit.TypeName2PTD(CurrentDWG.wa.getParamTypeName);
    end;
 end;
 procedure GDBDescriptor.freedwgvars;

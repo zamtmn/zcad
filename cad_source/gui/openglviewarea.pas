@@ -34,6 +34,7 @@ type
     TOpenGLViewArea=class(TGeneralViewArea)
                       public
                       OpenGLWindow:TOGLWnd;
+                      OpenGLParam:TOpenglData;
                       function CreateWorkArea(TheOwner: TComponent):TCADControl; override;
                       procedure CreateDrawer; override;
                       procedure SetupWorkArea; override;
@@ -46,10 +47,14 @@ type
                       procedure getareacaps; override;
                       procedure GDBActivateGLContext; override;
                       function NeedDrawInsidePaintEvent:boolean; override;
+                      procedure setdeicevariable;
+                      function getParam:pointer; override;
+                      function getParamTypeName:GDBString; override;
 
                   end;
     TCanvasViewArea=class(TGeneralViewArea)
                       public
+                      GDIData:TGDIData;
                       function CreateWorkArea(TheOwner: TComponent):TCADControl; override;
                       procedure CreateDrawer; override;
                       procedure SetupWorkArea; override;
@@ -57,10 +62,22 @@ type
                       procedure GDBActivateGLContext; override;
                       function startpaint:boolean;override;
                       function NeedDrawInsidePaintEvent:boolean; override;
+                      function getParam:pointer; override;
+                      function getParamTypeName:GDBString; override;
+                      procedure setdeicevariable;
                   end;
 
 implementation
 //uses mainwindow;
+function TOpenGLViewArea.getParam;
+begin
+     result:=@OpenGLParam;
+end;
+
+function TOpenGLViewArea.getParamTypeName;
+begin
+     result:='PTOpenglData';
+end;
 procedure TOpenGLViewArea.GDBActivateGLContext;
 begin
                                       MyglMakeCurrent(OpenGLWindow.OGLContext);
@@ -72,7 +89,7 @@ begin
      result:=false;
 end;
 
-procedure setdeicevariable;
+procedure TOpenGLViewArea.setdeicevariable;
 var a:array [0..1] of GDBDouble;
     p:pansichar;
 begin
@@ -85,16 +102,16 @@ begin
   sysvar.RD.RD_MaxPointSize^:=a[1];
   GDBPointer(p):=oglsm.myglGetString(GL_VENDOR);
   programlog.logoutstr('RD_Vendor:='+p,0);
-  if assigned(sysvar.RD.RD_Vendor) then
-  sysvar.RD.RD_Vendor^:=p;
+  //if assigned(OpenglParam.RD_Vendor) then
+  OpenglParam.RD_Vendor:=p;
   GDBPointer(p):=oglsm.myglGetString(GL_RENDERER);
   programlog.logoutstr('RD_Renderer:='+p,0);
-  if assigned(sysvar.RD.RD_Renderer) then
-  sysvar.RD.RD_Renderer^:=p;
+  //if assigned(OpenglParam.RD_Renderer) then
+  OpenglParam.RD_Renderer:=p;
   GDBPointer(p):=oglsm.myglGetString(GL_VERSION);
   programlog.logoutstr('RD_Version:='+p,0);
-  if assigned(sysvar.RD.RD_Version) then
-  sysvar.RD.RD_Version^:=p;
+  //if assigned(OpenglParam.RD_Version) then
+  OpenglParam.RD_Version:=p;
   GDBPointer(p):=oglsm.mygluGetString(GLU_VERSION);
   programlog.logoutstr('RD_GLUVersion:='+p,0);
   if assigned(sysvar.RD.RD_GLUVersion) then
@@ -105,8 +122,8 @@ begin
   sysvar.RD.RD_GLUExtensions^:=p;
   GDBPointer(p):=oglsm.myglGetString(GL_EXTENSIONS);
   programlog.logoutstr('RD_Extensions:='+p,0);
-  if assigned(sysvar.RD.RD_Extensions) then
-  sysvar.RD.RD_Extensions^:=p;
+  //if assigned(OpenglParam.RD_Extensions) then
+  OpenglParam.RD_Extensions:=p;
   if assigned(sysvar.RD.RD_MaxWidth) and assigned(sysvar.RD.RD_MaxLineWidth) then
   begin
   sysvar.RD.RD_MaxWidth^:=round(min(sysvar.RD.RD_MaxPointSize^,sysvar.RD.RD_MaxLineWidth^));
@@ -137,13 +154,13 @@ begin
   setdeicevariable;
 
   {$IFDEF WINDOWS}
-  if assigned(SysVar.RD.RD_VSync) then
-  if SysVar.RD.RD_VSync^<>TVSDefault then
+  //if assigned(OpenglParam.RD_VSync) then
+  if OpenglParam.RD_VSync<>TVSDefault then
   begin
        Pointer(@wglSwapIntervalEXT) := wglGetProcAddress('wglSwapIntervalEXT');
        if @wglSwapIntervalEXT<>nil then
                                            begin
-                                                if SysVar.RD.RD_VSync^=TVSOn then
+                                                if OpenglParam.RD_VSync=TVSOn then
                                                                                  wglSwapIntervalEXT(1)
                                                                              else
                                                                                  wglSwapIntervalEXT(0);
@@ -245,6 +262,22 @@ begin
   //TGDIPanel(getviewcontrol).BevelWidth:=0;
   TCADControl(getviewcontrol).onpaint:=mypaint;
 end;
+procedure TCanvasViewArea.setdeicevariable;
+begin
+     GDIData.RD_Renderer:='Windows GDI';
+     if Win32CSDVersion<>'' then
+                                GDIData.RD_Version:=inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+' build '+inttostr(Win32BuildNumber)+' '+Win32CSDVersion
+                            else
+                                GDIData.RD_Version:=inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+' build '+inttostr(Win32BuildNumber);
+     //WindowsVersion
+     //Win32Platform : Longint;
+  //Win32MajorVersion,
+  //Win32MinorVersion,
+  //Win32BuildNumber   : dword;
+  //Win32CSDVersion
+     //gtk_minor_version
+     //if (Win32MajorVersion = 4) and (Win32MinorVersion = 0)
+end;
 procedure TCanvasViewArea.getareacaps;
 begin
   {$IFDEF LCLQT}
@@ -253,6 +286,7 @@ begin
   //TQtWidget(getviewcontrol.Handle).setAttribute(QtWA_OpaquePaintEvent);
   //TQtWidget(getviewcontrol.Handle).setAttribute(QtWA_NoSystemBackground);
   {$ENDIF}
+  setdeicevariable;
 end;
 procedure TCanvasViewArea.GDBActivateGLContext;
 begin
@@ -266,6 +300,14 @@ end;
 function TCanvasViewArea.NeedDrawInsidePaintEvent:boolean;
 begin
      result:={$IFDEF LCLQT}True{$ELSE}False{$ENDIF};
+end;
+function TCanvasViewArea.getParam:pointer;
+begin
+     result:=@GDIData;
+end;
+function TCanvasViewArea.getParamTypeName:GDBString;
+begin
+     result:='PTGDIData';
 end;
 function TOpenGLViewArea.CreateWorkArea(TheOwner: TComponent):TCADControl;
 begin

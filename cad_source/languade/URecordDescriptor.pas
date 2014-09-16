@@ -19,7 +19,7 @@
 unit URecordDescriptor;
 {$INCLUDE def.inc}
 interface
-uses strproc,log,UGDBOpenArrayOfByte,sysutils,UBaseTypeDescriptor,UGDBOpenArrayOfTObjLinkRecord,
+uses UPointerDescriptor,strproc,log,UGDBOpenArrayOfByte,sysutils,UBaseTypeDescriptor,UGDBOpenArrayOfTObjLinkRecord,
   TypeDescriptors{,UGDBOpenArrayOfPointer},UGDBOpenArrayOfData,gdbasetypes,varmandef,gdbase{,UGDBStringArray},memman;
 type
 PRecordDescriptor=^RecordDescriptor;
@@ -44,6 +44,8 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        function GetValueAsString(pinstance:GDBPointer):GDBString;virtual;
                    end;
 function typeformat(s:GDBString;PInstance,PTypeDescriptor:GDBPointer):GDBString;
+var
+    EmptyTypedData:GDBString;
 implementation
 uses varman;
 function typeformat(s:GDBString;PInstance,PTypeDescriptor:GDBPointer):GDBString;
@@ -529,11 +531,18 @@ begin
                                            end
                    else
                    begin
-                   if pfd^.base.PFT^.TypeName='TTypedData' then
+                   if (pfd^.base.PFT^.TypeName='TTypedData') or
+                      (pfd^.base.PFT^.TypeName='TFaceTypedData') then
                                                           Begin
-                                                               tb:=PTTypedData(addr)^.Instance;
+                                                               tb:={PTTypedData(addr)^.Instance}addr;
                                                                ta:=PTTypedData(addr)^.ptd;
-                                                               PTUserTypeDescriptor(ta)^.CreateProperties(PDM_Field,PPDA,{PTTypedData(addr)^.ptd^.TypeName}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,tb,'','');
+                                                               if ta<>nil then
+                                                               PTUserTypeDescriptor(ta)^.CreateProperties(PDM_Field,PPDA,{PTTypedData(addr)^.ptd^.TypeName}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib,bmode,tb,'','')
+                                                               else
+                                                               begin
+                                                                    //tb:=@EmptyTypedData;
+                                                                    defaultptypehandler.CreateProperties(PDM_Field,PPDA,{PTTypedData(addr)^.ptd^.TypeName}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes or ownerattrib or FA_READONLY,bmode,tb,'','');
+                                                               end;
                                                                inc(GDBPlatformint(addr),sizeof(TTypedData));
                                                           end
                                                        else
@@ -590,4 +599,5 @@ begin
 end;
 begin
   {$IFDEF DEBUGINITSECTION}LogOut('URecordDescriptor.initialization');{$ENDIF}
+  EmptyTypedData:='Empty';
 end.

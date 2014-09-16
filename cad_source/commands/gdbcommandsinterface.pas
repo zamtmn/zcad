@@ -164,8 +164,6 @@ begin
 
      gdb.AddRef(ptd^);
 
-     gdb.SetCurrentDWG(ptd);
-
      if length(operands)=0 then
                                operands:=@rsUnnamedWindowTitle[1];
 
@@ -203,7 +201,8 @@ begin
 
 
      //--------------------------------------------------------------oglwnd.BevelOuter:=bvnone;
-     gdb.GetCurrentDWG.wa:=wpowner;
+     ptd.wa:=wpowner;
+     gdb.SetCurrentDWG(ptd);
  wpowner.PDWG:=ptd;
      wpowner.getviewcontrol.align:=alClient;
      wpowner.getviewcontrol.Parent:=myts;

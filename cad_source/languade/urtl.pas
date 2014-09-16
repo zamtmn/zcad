@@ -107,11 +107,11 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_RemoveSystemCursorFromWorkArea,'RD_RemoveSystemCursorFromWorkArea');
   //SysVarUnit.AssignToSymbol(SysVar.RD.RD_VSync,'RD_VSync');
   {$IFNDEF WINDOWS}
-  if SysVar.RD.RD_VSync<>nil then
-                                 SysVar.RD.RD_VSync^:=TVSDefault;
-  ptd:=SysUnit.TypeName2PTD('trd');
-  if ptd<>nil then
-                  PRecordDescriptor(ptd).SetAttrib('RD_VSync',FA_READONLY,0);
+  //if SysVar.RD.RD_VSync<>nil then
+  //                               SysVar.RD.RD_VSync^:=TVSDefault;
+  //ptd:=SysUnit.TypeName2PTD('trd');
+  //if ptd<>nil then
+  //                PRecordDescriptor(ptd).SetAttrib('RD_VSync',FA_READONLY,0);
 
   {$ENDIF}
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_LineSmooth,'RD_LineSmooth');
@@ -224,4 +224,4 @@ initialization;
 
 finalization;
   //units.FreeAndDone;
-end.
+end.

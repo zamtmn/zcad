@@ -400,6 +400,8 @@ begin
    SysVar.dwg.DWG_CLTscale:=nil;
    SysVar.dwg.DWG_CColor:=nil;
    SysVar.dwg.DWG_CDimStyle:=nil;
+   sysvar.RD.RD_CurrentWAParam.Instance:=nil;
+   sysvar.RD.RD_CurrentWAParam.PTD:=nil;
 end;
 
 procedure GDBDescriptor.SetCurrentDWG(PDWG:PTAbstractDrawing);

@@ -1043,13 +1043,6 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
                 WND_NewDraw(*'Redraw'*),
                 WND_Texture(*'Texture'*)
                );
-  {°}
-  PTVSControl=^TVSControl;
-  TVSControl=(
-                TVSOn(*'On'*),
-                TVSOff(*'Off'*),
-                TVSDefault(*'Default'*)
-             );
   TImageDegradation=packed record
                           RD_ID_Enabled:PGDBBoolean;(*'Enabled'*)
                           RD_ID_CurrentDegradationFactor:GDBDouble;(*'Current degradation factor'*)(*oi_readonly*)
@@ -1068,7 +1061,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
             RD_Extensions:GDBString;(*'Extensions'*)(*oi_readonly*)
             RD_Vendor:GDBString;(*'Vendor'*)(*oi_readonly*)
             RD_Restore_Mode:trestoremode;(*'Restore mode'*)
-            RD_VSync:TVSControl;(*'VSync'*)
+            RD_VSync:TGDB3StateBool;(*'VSync'*)
       end;
   trd=packed record
             RD_RendererBackEnd:TEnumData;(*'Render backend'*)

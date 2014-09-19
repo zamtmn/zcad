@@ -155,12 +155,12 @@ begin
 
   {$IFDEF WINDOWS}
   //if assigned(OpenglParam.RD_VSync) then
-  if OpenglParam.RD_VSync<>TVSDefault then
+  if OpenglParam.RD_VSync<>T3SB_Default then
   begin
        Pointer(@wglSwapIntervalEXT) := wglGetProcAddress('wglSwapIntervalEXT');
        if @wglSwapIntervalEXT<>nil then
                                            begin
-                                                if OpenglParam.RD_VSync=TVSOn then
+                                                if OpenglParam.RD_VSync=T3SB_True then
                                                                                  wglSwapIntervalEXT(1)
                                                                              else
                                                                                  wglSwapIntervalEXT(0);

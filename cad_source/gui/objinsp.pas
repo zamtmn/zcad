@@ -920,7 +920,9 @@ begin
      self.VertScrollBar.Smooth:=true;
      if contentheigth<height  then
                                  begin
+                                      {$IFNDEF LCLQt}
                                       ScrollBy(0,-VertScrollBar.Position);
+                                      {$ENDIF}
                                       VertScrollBar.Position:=0;
                                       self.VertScrollBar.page:=height;
                                       self.VertScrollBar.Range:=height;

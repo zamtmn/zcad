@@ -600,6 +600,7 @@ var
   r:trect;
   tempcolor:TColor;
   ir:itrec;
+  visible:boolean;
 begin
   ppd:=ppa^.beginiterate(ir);
   if ppd<>nil then
@@ -610,11 +611,17 @@ begin
         r.Top:=y;
         r.Right:=namecol;
         r.Bottom:=y+rowh+1;
+         if self.VertScrollBar.Position<=r.Bottom then
+                                                 visible:=true
+                                             else
+                                                 visible:=false;
+        begin
         if ppd^.SubNode<>nil then
                                   begin
+                                     if visible then
+                                     begin
                                     s:=ppd^.Name;
                                     r.Right:=clientwidth-2;
-
                                     drawrect(canvas,clBtnFace,r);
                                     r.Left:=r.Left+3;
                                     r.Top:=r.Top+3;
@@ -632,6 +639,7 @@ begin
                                                                             drawheader(canvas,ppd,r,s);
                                                                           end;
                                     ppd.rect:=r;
+                                    end;
                                     inc(sub);
                                     y:=y+rowh;
                                     if not ppd^.Collapsed^ then
@@ -640,7 +648,8 @@ begin
                                   end
         else
         begin
-
+          if visible then
+          begin
           drawrect(canvas,clBtnFace,r);
 
           if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
@@ -669,11 +678,15 @@ begin
           begin
                 canvas.Font.Italic:=false;
           end;
+          end;
 
           y:=y++rowh;
         end;
       end;
+      end;
       ppd:=ppa^.iterate(ir);
+      if self.VertScrollBar.Position+self.ClientHeight<=(y) then
+                                                                       system.break;
     until ppd=nil;
 
     y:=y+rowh;

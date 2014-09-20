@@ -54,7 +54,7 @@ var
   RD_LastUpdateTime:GDBInteger;
   RD_MaxRenderTime:GDBInteger;
   RD_Light:GDBBoolean;
-  RD_VSync:TVSControl;
+  RD_VSync:TGDB3StateBool;
   RD_ID_Enabled:GDBBoolean;
   RD_ID_MaxDegradationFactor:GDBDouble;
   RD_ID_PrefferedRenderTime:GDBInteger;
@@ -137,7 +137,7 @@ begin
   RD_LastUpdateTime:=0;
   RD_MaxRenderTime:=0;
   RD_Light:=False;
-  RD_VSync:=TVSOff;
+  RD_VSync:=T3SB_False;
   RD_ID_Enabled:=True;
   RD_ID_MaxDegradationFactor:=15.0;
   RD_ID_PrefferedRenderTime:=20;

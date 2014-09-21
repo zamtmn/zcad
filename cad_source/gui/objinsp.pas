@@ -930,13 +930,14 @@ begin
                                       self.VertScrollBar.Smooth:=false;
                                       UpdateScrollbars;
                                  end;
-     {$IFNDEF LCLWIN32}
-     if ((VertScrollBar.Position>0) and (VertScrollBar.Position<contentheigth-height))or changed then
-     begin
-     VertScrollBar.Position:=VertScrollBar.Position-1;
-     VertScrollBar.Position:=VertScrollBar.Position+1;
-     end;
-     {$ENDIF}
+     //Нихуя не понял нахуя это сделано... пока уберу
+     //{$IFNDEF LCLWIN32}
+     //if ((VertScrollBar.Position>0) and (VertScrollBar.Position<contentheigth-height))or changed then
+     //begin
+     //VertScrollBar.Position:=VertScrollBar.Position-1;
+     //VertScrollBar.Position:=VertScrollBar.Position+1;
+     //end;
+     //{$ENDIF}
      UpdateScrollbars;
 end;
 function TGDBobjinsp.IsMouseOnSpliter(pp:PPropertyDeskriptor; X:Integer):GDBBoolean;

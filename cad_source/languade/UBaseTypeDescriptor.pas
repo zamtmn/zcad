@@ -305,6 +305,7 @@ begin
                                {$IFNDEF DELPHI}
                                cbedit.AutoSelect:=true;
                                {$ENDIF}
+                               cbedit.AutoComplete:=true;
                          end;
 end;
 procedure BaseTypeDescriptor.EditorChange(Sender:Tobject);

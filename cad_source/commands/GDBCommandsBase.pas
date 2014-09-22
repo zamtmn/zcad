@@ -128,6 +128,7 @@ begin
       repeat
             if pvd^.data.Instance=PFIELD then
             begin
+                 pvd.attrib:=pvd.attrib and (not vda_different);
                  pv:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
                  if pv<>nil then
                  repeat
@@ -141,8 +142,10 @@ begin
                                pvdmy.data.PTD.CopyInstanceTo(pvd.data.Instance,pvdmy.data.Instance);
 
                                pv^.Formatentity(gdb.GetCurrentDWG^);
-                          end;
 
+                               if pvd^.data.PTD.GetValueAsString(pvd^.data.Instance)<>pvdmy^.data.PTD.GetValueAsString(pvdmy^.data.Instance) then
+                               pvd.attrib:=pvd.attrib or vda_different;
+                          end;
                    end;
                    pv:=gdb.GetCurrentROOT.ObjArray.iterate(ir);
                  until pv=nil;
@@ -152,11 +155,9 @@ begin
             //pvdmy:=ou.InterfaceVariables.findvardesc(pvd^.name);
             pvd:=ou.InterfaceVariables.vardescarray.iterate(ir2)
       until pvd=nil;
-     createunit;
-     if assigned(ReBuildProc)then
-                                 ReBuildProc;
-     //GDBobjinsp.rebuild;
-     //GDBobjinsp.setptr(SysUnit.TypeName2PTD('TMSEditor'),@MSEditor);
+     //createunit;
+     //if assigned(ReBuildProc)then
+     //                            ReBuildProc;
 end;
 function TMSEditor.GetObjType:GDBWord;
 begin

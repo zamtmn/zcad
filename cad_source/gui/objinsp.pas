@@ -1097,8 +1097,8 @@ begin
                                             begin
                                                  peditor.geteditor.Visible:=true;
                                                  peditor.geteditor.setfocus;
-                                                 if  peditor.geteditor is  TComboBox then
-                                                 TComboBox(peditor.geteditor).DroppedDown:=true;
+                                                 //if  peditor.geteditor is  TComboBox then
+                                                 //TComboBox(peditor.geteditor).DroppedDown:=true;//автооткрытие комбика мещает вводу
                                                  exit;
                                             end;
      if (button=mbLeft) then
@@ -1258,7 +1258,7 @@ begin
                                                                                 editorcontrol.Parent:=self;
                                                                                 SetComboSize(editorcontrol as TCombobox);
                                                                                 //(editorcontrol as TCombobox).itemheight:=pp^.rect.Bottom-pp^.rect.Top-6;
-                                                                                (editorcontrol as TCombobox).droppeddown:=true;
+                                                                                //(editorcontrol as TCombobox).droppeddown:=true;//автооткрытие комбика мещает вводу
                                                                            end
                                                                        else
                                                                            editorcontrol.Parent:=self;

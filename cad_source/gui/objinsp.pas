@@ -1097,8 +1097,9 @@ begin
                                             begin
                                                  peditor.geteditor.Visible:=true;
                                                  peditor.geteditor.setfocus;
-                                                 //if  peditor.geteditor is  TComboBox then
-                                                 //TComboBox(peditor.geteditor).DroppedDown:=true;//автооткрытие комбика мещает вводу
+                                                 if  peditor.geteditor is  TComboBox then
+                                                 if  (peditor.geteditor as  TComboBox).ReadOnly then
+                                                 TComboBox(peditor.geteditor).DroppedDown:=true;//автооткрытие комбика мещает вводу, открываем только те что без возможности ввода значений
                                                  exit;
                                             end;
      if (button=mbLeft) then
@@ -1238,10 +1239,6 @@ begin
        if assigned(pp^.valueAddres) then
        begin
          tr:=pp^.rect;
-         {$IFDEF LCLQT}
-         tr.Top:=tr.Top-self.VertScrollBar.Position;
-         tr.Bottom:=tr.Bottom-self.VertScrollBar.Position;
-         {$ENDIF}
        if assigned(pp^.Decorators.OnCreateEditor) then
                                                       TED:=pp^.Decorators.OnCreateEditor(self,tr,pp^.valueAddres,@vsa,false,pp^.PTypeManager)
                                                   else

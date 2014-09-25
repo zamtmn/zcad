@@ -96,6 +96,7 @@ type
     procedure EraseBackground(DC: HDC); override;
 
     procedure freeeditor;
+    procedure ClearEDContext;
     procedure AsyncFreeEditorAndSelectNext(Data: PtrInt);
     procedure AsyncFreeEditor(Data: PtrInt);
     function IsMouseOnSpliter(pp:PPropertyDeskriptor; X:Integer):GDBBoolean;
@@ -792,11 +793,18 @@ begin
     curr := curr.next;
   until (curr = nil);}
 end;
-procedure TGDBobjinsp.freeeditor;
+procedure TGDBobjinsp.ClearEDContext;
 begin
      EDContext.ppropcurrentedit:=nil;
      EDContext.UndoCommand:=0;
      EDContext.UndoStack:=nil;
+end;
+
+procedure TGDBobjinsp.freeeditor;
+begin
+     if EDContext.UndoCommand<>nil then
+                                       EDContext.UndoStack.KillLastCommand;
+     ClearEDContext;
      freeandnil(peditor);
      if assigned(shared.cmdedit) then
      if shared.cmdedit.IsVisible then
@@ -833,19 +841,24 @@ begin
 
     if EDContext.UndoCommand<>nil then
                                       begin
-                                           EDContext.UndoCommand.ComitFromObj;
+                                           if peditor.changed then
+                                                                  EDContext.UndoCommand.ComitFromObj
+                                                              else
+                                                                  EDContext.UndoStack.KillLastCommand;
+                                           ClearEDContext;
                                       end;
 
     pld:=peditor.PInstance;
 
     if (Command=TMNC_RunFastEditor) then
                                         EDContext.ppropcurrentedit.FastEditor.OnRunFastEditor(pld);
-    UpdateObjectInInsp;
-   if (Command=TMNC_RunFastEditor) then
+    if peditor.changed then
+                           UpdateObjectInInsp;
+   if (Command=TMNC_RunFastEditor)or(Command=TMNC_EditingDoneLostFocus) then
                                       begin
                                            Application.QueueAsyncCall(AsyncFreeEditor,0);
                                       end;
-   if (Command=TMNC_EditingDone) then
+   if (Command=TMNC_EditingDoneEnterKey) then
                                       Application.QueueAsyncCall(AsyncFreeEditorAndSelectNext,0);
     //if assigned(redrawoglwndproc) then redrawoglwndproc;
     //self.updateinsp;
@@ -1242,7 +1255,7 @@ begin
        if assigned(pp^.Decorators.OnCreateEditor) then
                                                       TED:=pp^.Decorators.OnCreateEditor(self,tr,pp^.valueAddres,@vsa,false,pp^.PTypeManager)
                                                   else
-                                                      TED:=pp^.PTypeManager^.CreateEditor(self,tr,pp^.valueAddres,@vsa,false);
+                                                      TED:=pp^.PTypeManager^.CreateEditor(self,tr,pp^.valueAddres,@vsa,{false}true);
      case ted.Mode of
                      TEM_Integrate:begin
                                        editorcontrol:=TED.Editor.geteditor;

@@ -60,6 +60,7 @@ procedure CreateComboPropEditor(TheOwner:TPropEditorOwner;pinstance:pointer;Free
 begin
   propeditor:=TPropEditor.Create(theowner,PInstance,ptd,FreeOnLostFocus);
   propeditor.byObjects:=true;
+  propeditor.changed:=false;
   cbedit:=TComboBox.Create(propeditor);
   cbedit.Text:=PTD.GetValueAsString(pinstance);
   cbedit.OnChange:=propeditor.EditingProcess;

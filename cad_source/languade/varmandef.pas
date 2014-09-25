@@ -124,7 +124,7 @@ TOIProps=record
                ci,barpos:GDBInteger;
          end;
 pvardesk = ^vardesk;
-TMyNotifyCommand=(TMNC_EditingDone,TMNC_EditingProcess,TMNC_RunFastEditor);
+TMyNotifyCommand=(TMNC_EditingDoneEnterKey,TMNC_EditingDoneLostFocus,TMNC_EditingDoneESC,TMNC_EditingProcess,TMNC_RunFastEditor);
 TMyNotifyProc=procedure (Sender: TObject;Command:TMyNotifyCommand) of object;
 TPropEditor=class(TComponent)
                  public
@@ -135,6 +135,7 @@ TPropEditor=class(TComponent)
                  byObjects:boolean;
                  CanRunFastEditor:boolean;
                  RunFastEditorValue:tobject;
+                 changed:boolean;
                  constructor Create(AOwner:TComponent;_PInstance:GDBPointer;_PTD:PUserTypeDescriptor;FreeOnLostFocus:boolean);
                  procedure EditingDone(Sender: TObject);
                  procedure EditingProcess(Sender: TObject);
@@ -253,6 +254,7 @@ begin
      byObjects:=false;
      CanRunFastEditor:=false;
      RunFastEditorValue:=nil;
+     changed:=false;
 end;
 function TPropEditor.geteditor:TWinControl;
 begin
@@ -265,7 +267,7 @@ begin
                     if assigned(OwnerNotify) then
                                                  begin
                                                       ptd.SetValueFromString(PInstance,tedit(sender).text);
-                                                      OwnerNotify(self,TMNC_EditingDone);
+                                                      OwnerNotify(self,TMNC_EditingDoneEnterKey);
                                                  end;
 end;
 
@@ -274,6 +276,8 @@ var
   i:integer;
   p:pointer;
 begin
+     if changed then
+     begin
      if byobjects then
                       begin
                            i:=tcombobox(sender).ItemIndex;
@@ -282,9 +286,9 @@ begin
                       end
                   else
                       ptd.SetValueFromString(PInstance,tedit(sender).text);
-
+     end;
      if assigned(OwnerNotify) then
-                                  OwnerNotify(self,TMNC_EditingDone);
+                                  OwnerNotify(self,TMNC_EditingDoneLostFocus);
 end;
 procedure TPropEditor.EditingProcess(Sender: TObject);
 var
@@ -292,6 +296,9 @@ var
   p:pointer;
   rfs:boolean;
 begin
+     changed:=true;
+     if not fFreeOnLostFocus then
+     begin
      rfs:=false;
      if assigned(OwnerNotify) then
                                   begin
@@ -312,6 +319,7 @@ begin
                                                else
                                                    OwnerNotify(self,TMNC_EditingProcess);
                                   end;
+     end
 end;
 procedure TPropEditor.ExitEdit(Sender: TObject);
 var

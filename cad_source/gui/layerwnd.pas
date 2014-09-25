@@ -284,7 +284,7 @@ begin
   if sender=PEditor then
   begin
     //pld:=peditor.PInstance;
-    if Command=TMNC_EditingDone then
+    if (Command=TMNC_EditingDoneEnterKey)or(Command=TMNC_EditingDoneLostFocus) then
                                     begin
                                     Application.QueueAsyncCall(@asyncfreeeditor,0);
                                     end;

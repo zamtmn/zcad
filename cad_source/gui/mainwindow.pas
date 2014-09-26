@@ -751,6 +751,8 @@ begin
                                       until result<>cmd_error;
                                       result:=IDYES;
                                  end;
+       if assigned(ReturnToDefaultProc)then
+                                           ReturnToDefaultProc;
        commandmanager.ChangeModeAndEnd(TGPCloseDWG);
        viewcontrol:=ClosedDWG.wa.getviewcontrol;
        gdb.eraseobj(ClosedDWG);
@@ -770,8 +772,6 @@ begin
        else
            gdb.freedwgvars;
        shared.SBTextOut('Закрыто');
-       if assigned(ReturnToDefaultProc)then
-                                           ReturnToDefaultProc;
        if assigned(UpdateVisibleProc) then UpdateVisibleProc;
   end;
 end;

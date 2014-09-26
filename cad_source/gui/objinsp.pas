@@ -858,7 +858,7 @@ begin
                                            Application.QueueAsyncCall(AsyncFreeEditor,0);
                                       end;
    if (Command=TMNC_EditingDoneEnterKey) then
-                                      Application.QueueAsyncCall(AsyncFreeEditorAndSelectNext,LongInt(saveppropcurrentedit));
+                                      Application.QueueAsyncCall(AsyncFreeEditorAndSelectNext,ptruint(saveppropcurrentedit));
   end;
 end;
 procedure TGDBobjinsp.UpdateObjectInInsp;

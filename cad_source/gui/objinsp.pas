@@ -815,7 +815,7 @@ procedure TGDBobjinsp.AsyncFreeEditorAndSelectNext;
 var
       next:PPropertyDeskriptor;
 begin
-     next:=findnext(@pda,EDContext.ppropcurrentedit);
+     next:=findnext(@pda,pointer(Data));
      freeeditor;
      if next<>nil then
      createeditor(next);
@@ -828,12 +828,11 @@ end;
 procedure TGDBobjinsp.Notify;
 var
    pld:GDBPointer;
-   //pdwg:PTDrawing;
+   saveppropcurrentedit:PPropertyDeskriptor;
 begin
   if sender=peditor then
-  begin   //fghfgh
-
-    //pdwg:=ptdrawing(gdb.GetCurrentDWG);
+  begin
+    saveppropcurrentedit:=EDContext.ppropcurrentedit;
     if pcurcontext<>nil then
     begin
          PTDrawingDef(pcurcontext).ChangeStampt(true);
@@ -859,11 +858,7 @@ begin
                                            Application.QueueAsyncCall(AsyncFreeEditor,0);
                                       end;
    if (Command=TMNC_EditingDoneEnterKey) then
-                                      Application.QueueAsyncCall(AsyncFreeEditorAndSelectNext,0);
-    //if assigned(redrawoglwndproc) then redrawoglwndproc;
-    //self.updateinsp;
-    //if assigned(UpdateVisibleProc) then UpdateVisibleProc;
-    //MainForm.ReloadLayer(@gdb.GetCurrentDWG.LayerTable);
+                                      Application.QueueAsyncCall(AsyncFreeEditorAndSelectNext,LongInt(saveppropcurrentedit));
   end;
 end;
 procedure TGDBobjinsp.UpdateObjectInInsp;

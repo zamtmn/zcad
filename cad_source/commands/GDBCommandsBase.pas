@@ -588,6 +588,7 @@ begin
                                               begin
                                                    prevundo:=0;
                                                    overlay:=false;
+                                                   if assigned(ReturnToDefaultProc) then ReturnToDefaultProc;
                                               end;
   ptdrawing(gdb.GetCurrentDWG).UndoStack.undo(prevundo,overlay);
   if assigned(redrawoglwndproc) then redrawoglwndproc;

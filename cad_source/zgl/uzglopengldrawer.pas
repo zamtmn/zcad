@@ -613,7 +613,7 @@ begin
 end;
 procedure TZGLOpenGLDrawer.DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
 begin
-  oglsm.myglbegin(GL_QUADS);
+  oglsm.myglbegin(GL_TRIANGLE_STRIP);
   oglsm.myglNormal3dV(@normal);
   oglsm.myglVertex3dV(@p1);
   oglsm.myglVertex3dV(@p2);
@@ -938,7 +938,9 @@ begin
      sp[4].x:=round(pp4.x);
      sp[4].y:=round(wh.cy-pp4.y);
 
-     PolyGon(OffScreedDC,@sp[1],4,false);
+     //PolyGon(OffScreedDC,@sp[1],4,false);
+     PolyGon(OffScreedDC,@sp[1],3,false);
+     PolyGon(OffScreedDC,@sp[2],3,false);
      ProcessScreenInvalidrect(sp[1].x,sp[1].y);
      ProcessScreenInvalidrect(sp[2].x,sp[2].y);
      ProcessScreenInvalidrect(sp[3].x,sp[3].y);

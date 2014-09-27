@@ -214,7 +214,7 @@ oglsm.myglEnable(GL_COLOR_MATERIAL);
   oglsm.myglVertex3dV(@PInwCS[3]);
   oglsm.myglVertex3dV(@PInwCS[2]);
   oglsm.myglend;}
-  dc.drawer.DrawQuad3DInModelSpace(normal,PInwCS[0],PInwCS[1],PInwCS[3],PInwCS[4],dc.matrixs);
+  dc.drawer.DrawQuad3DInModelSpace(normal,PInwCS[0],PInwCS[1],PInwCS[2],PInwCS[3],dc.matrixs);
   {oglsm.myglbegin(GL_LINES);
   oglsm.myglNormal3dV(@normal);
   oglsm.myglVertex3dV(@PInwCS[0]);

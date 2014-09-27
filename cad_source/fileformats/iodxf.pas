@@ -1116,7 +1116,7 @@ procedure addfromdxf2000(var f:GDBOpenArrayOfByte; exitGDBString: GDBString;owne
 var
   byt: GDBInteger;
   error: GDBInteger;
-  s, sname: String;
+  s,US, sname: String;
   tp: PGDBObjBlockdef;
   blockload:boolean;
 
@@ -1216,8 +1216,9 @@ begin
           {$IFDEF TOTALYLOG}programlog.logoutstr('Found block table',lp_IncPos);{$ENDIF}
           sname := '';
           repeat
+            US:=uppercase(s);
             if (sname = '  2') or (sname = '2') then
-              if (pos('MODEL_SPACE',uppercase(s))<>0)or(pos('PAPER_SPACE',uppercase(s))<>0)then
+              if (pos('MODEL_SPACE',US)<>0)or(pos('PAPER_SPACE',US)<>0)or(pos('*A',US)=1)or(pos('*D',US)=1){or(pos('*U',US)=1)}then   //блоки *U игнорировать нестоит, что то связанное с параметризацией
               begin
                 //programlog.logoutstr('Ignored block '+s+';',lp_OldPos);
                 shared.HistoryOutStr(format(rsBlockIgnored,[s]));

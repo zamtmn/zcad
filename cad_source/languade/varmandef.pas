@@ -295,9 +295,14 @@ var
   i:integer;
   p:pointer;
   rfs:boolean;
+  selectableeditor:boolean;
 begin
      changed:=true;
-     if not fFreeOnLostFocus then
+     selectableeditor:=false;
+     if self.geteditor is TCombobox then
+     if TCombobox(self.geteditor).ReadOnly  then
+                                                selectableeditor:=true;
+     if (not fFreeOnLostFocus)or(selectableeditor) then
      begin
      rfs:=false;
      if assigned(OwnerNotify) then

@@ -69,6 +69,7 @@ type
 
     //TI: TOOLINFO;
     OLDPP:PPropertyDeskriptor;
+    OnMousePP:PPropertyDeskriptor;
 
     MResplit:boolean;
 
@@ -484,7 +485,7 @@ begin
            end;
      end;
 end;
-procedure drawheader(Canvas:tcanvas;ppd:PPropertyDeskriptor;r:trect;name:string);
+procedure drawheader(Canvas:tcanvas;ppd:PPropertyDeskriptor;r:trect;name:string;onm:boolean);
 function GetSizeTreeIcon(Minus: Boolean):TSize;
 const
   PlusMinusDetail: array[Boolean] of TThemedTreeview =
@@ -526,16 +527,31 @@ begin
   if assigned(ppd.FastEditor.OnGetPrefferedFastEditorSize) then
   drawfasteditor(ppd,canvas,r);
   canvas.Font.Italic:=true;
+  if onm then
+             canvas.Font.Bold:=true;
   canvas.TextRect(r,r.Left,r.Top,(name));
   canvas.Font.Italic:=false;
+  if onm then
+             canvas.Font.Bold:=false;
   dec(r.left,size.cx+1);
 end;
-procedure drawrect(cnvs:tcanvas;clr:TColor;r:trect);
+procedure drawrect(cnvs:tcanvas;clr:TColor;r:trect;active:boolean);
 begin
-  cnvs.Brush.Color := clBtnFace;
-  if assigned(sysvar.INTF.INTF_ShowLinesInObjInsp) then
-    if sysvar.INTF.INTF_ShowLinesInObjInsp^ then
-       cnvs.Rectangle(r);
+  if active then
+                begin
+                     cnvs.Brush.Color := clHighlight{clBtnHiLight};
+                     cnvs.Pen.Style:=psDot;
+                     inflaterect(r,0,-1);
+                     cnvs.Rectangle(r);
+                     cnvs.Pen.Style:=psSolid;
+                end
+            else
+                begin
+                     cnvs.Brush.Color := clBtnFace;
+                     if assigned(sysvar.INTF.INTF_ShowLinesInObjInsp) then
+                     if sysvar.INTF.INTF_ShowLinesInObjInsp^ then
+                     cnvs.Rectangle(r);
+                end;
 end;
 procedure drawstring(cnvs:tcanvas;r:trect;L,T:integer;s:string);
 const
@@ -562,7 +578,7 @@ begin
      end;
   r:=ppd.rect;
   if fulldraw then
-  drawrect(canvas,clWindow,r);
+  drawrect(canvas,clWindow,r,false);
   r.Top:=r.Top+3;
   r.Left:=r.Left+3;
   r.Right:=r.Right-1;
@@ -602,12 +618,14 @@ var
   tempcolor:TColor;
   ir:itrec;
   visible:boolean;
+  OnMouseProp:boolean;
 begin
   ppd:=ppa^.beginiterate(ir);
   if ppd<>nil then
     repeat
       if (ppd^.IsVisible) then
       begin
+        OnMouseProp:=(ppd=onmousepp);
         r.Left:=2+8*sub;
         r.Top:=y;
         r.Right:=namecol;
@@ -623,7 +641,7 @@ begin
                                      begin
                                     s:=ppd^.Name;
                                     r.Right:=clientwidth-2;
-                                    drawrect(canvas,clBtnFace,r);
+                                    drawrect(canvas,clBtnFace,r,false);
                                     r.Left:=r.Left+3;
                                     r.Top:=r.Top+3;
                                     if (ppd^.Attr and FA_READONLY)<>0 then
@@ -631,13 +649,13 @@ begin
                                                                             tempcolor:=canvas.Font.Color;
                                                                             canvas.Font.Color:=clGrayText;
 
-                                                                            drawheader(canvas,ppd,r,s);
+                                                                            drawheader(canvas,ppd,r,s,OnMouseProp);
 
                                                                             canvas.Font.Color:=tempcolor;
                                                                           end
                                                                       else
                                                                           begin
-                                                                            drawheader(canvas,ppd,r,s);
+                                                                            drawheader(canvas,ppd,r,s,OnMouseProp);
                                                                           end;
                                     ppd.rect:=r;
                                     end;
@@ -651,7 +669,7 @@ begin
         begin
           if visible then
           begin
-          drawrect(canvas,clBtnFace,r);
+          drawrect(canvas,clBtnFace,r,(ppd=EDContext.ppropcurrentedit));
 
           if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
           begin
@@ -667,7 +685,22 @@ begin
             canvas.Font.Color:=tempcolor;
           end
           else
-              canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
+              begin
+                   if OnMouseProp then
+                                      canvas.Font.bold:=true;
+                   if (ppd=EDContext.ppropcurrentedit) then
+                                      begin
+                                           tempcolor:=canvas.Font.Color;
+                                           canvas.Font.Color:=clHighlightText;
+                                      end;
+                   canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
+                   if OnMouseProp then
+                                      canvas.Font.bold:=false;
+                   if (ppd=EDContext.ppropcurrentedit) then
+                                      begin
+                                           canvas.Font.Color:=tempcolor;
+                                      end;
+              end;
           r.Top:=r.Top-3;
           r.Left:=r.Right-1;
           r.Right:=clientwidth-2;
@@ -806,6 +839,7 @@ begin
                                        EDContext.UndoStack.KillLastCommand;
      ClearEDContext;
      freeandnil(peditor);
+     invalidate;
      if assigned(shared.cmdedit) then
      if shared.cmdedit.IsVisible then
                                      shared.cmdedit.SetFocus;
@@ -984,7 +1018,11 @@ begin
   //application.HintShortPause:=10;
   my:=startdrawy;
   pp:=mousetoprop(@pda,x,y,my);
-
+  if OnMousePP<>pp then
+                       begin
+                            needredraw:=true;
+                            OnMousePP:=pp;
+                       end;
   if IsMouseOnSpliter(pp,X) then
                                 self.Cursor:=crHSplit
                             else
@@ -995,6 +1033,8 @@ begin
         self.Hint:='';
         self.ShowHint:=false;
        oldpp:=pp;
+       if needredraw then
+                    invalidate;
        exit;
   end;
 
@@ -1153,6 +1193,7 @@ begin
                                                                                            end;
                                                                                            UpdateObjectInInsp;
                                                                                            EDContext.ppropcurrentedit:=nil;
+                                                                                           invalidate;
                                                                                       end
                             end;
                             end;
@@ -1196,7 +1237,8 @@ begin
      begin
        if peditor<>nil then
                            begin
-                             freeandnil(peditor);
+                                freeeditor;
+                             //freeandnil(peditor);
                            //-----------------------------------------------------------------peditor^.done;
                            //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
                            end;

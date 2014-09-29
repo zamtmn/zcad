@@ -109,6 +109,7 @@ type
     {LCL}
   //procedure Pre_MouseMove(fwkeys:longint; x,y:GDBSmallInt; var r:HandledMsg); virtual;
     procedure MouseMove(Shift: TShiftState; X, Y: Integer);override;
+    procedure MouseLeave;override;
 
   //procedure Pre_MouseDown(fwkeys:longint; x,y:GDBInteger; var r:HandledMsg); virtual;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);override;
@@ -989,6 +990,12 @@ begin
   if (pp^.SubNode=nil) then
   if (abs(x-namecol)<2) then
                           result:=true;
+end;
+procedure TGDBobjinsp.MouseLeave;
+begin
+     OnMousePP:=nil;
+     invalidate;
+     inherited;
 end;
 
 procedure TGDBobjinsp.MouseMove(Shift: TShiftState; X, Y: Integer);

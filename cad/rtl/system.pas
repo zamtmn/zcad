@@ -2903,6 +2903,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                        TPEM_Nearest(*'Paste in nearest segment'*),
                        TPEM_Select(*'Choose a segment'*)
                        );
+         PTMirrorParam=^TMirrorParam;
          TMirrorParam=packed record
                             SourceEnts:TEntityProcess;(*'Source entities'*)
                       end;
@@ -2923,6 +2924,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                  TIM_Text(*'Text'*),
                  TIM_MText(*'MText'*)
                 );
+         PTTextInsertParams=^TTextInsertParams;
          TTextInsertParams=packed record
                             mode:TIMode;(*'Entity'*)
                             Style:TEnumData;(*'Style'*)
@@ -2940,6 +2942,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                  BRM_Device(*'Device'*),
                  BRM_BD(*'Block and Device'*)
                 );
+         PTBlockReplaceParams=^TBlockReplaceParams;
          TBlockReplaceParams=packed record
                             Process:BRMode;(*'Process'*)
                             CurrentFindBlock:GDBString;(*'**CurrentFind'*)(*oi_readonly*)(*hidden_in_objinsp*)
@@ -2966,11 +2969,13 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                                  SameTemplate:GDBBoolean;(*'Same template'*)
                                  DiffTextMText:TDiff;(*'Text and Mtext'*)
                            end;
+         PTSelSimParams=^TSelSimParams;
          TSelSimParams=packed record
                              General:TSelGeneralParams;(*'General'*)
                              Blocks:TSelBlockParams;(*'Blocks'*)
                              Texts:TSelTextParams;(*'Texts'*)
                       end;
+         PTBlockScaleParams=^TBlockScaleParams;
          TBlockScaleParams=packed record
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
@@ -2981,6 +2986,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
                            end;
+         PTPrintParams=^TPrintParams;
          TPrintParams=packed record
                             FitToPage:GDBBoolean;(*'Fit to page'*)
                             Center:GDBBoolean;(*'Center'*)
@@ -2991,6 +2997,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                  TST_XY(*'X-Y'*),
                  TST_UNSORTED(*'Unsorted'*)
                 );
+         PTNumberingParams=^TNumberingParams;
          TNumberingParams=packed record
                             SortMode:TST;(*''*)
                             InverseX:GDBBoolean;(*'Inverse X axis dir'*)
@@ -3002,6 +3009,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                             BaseName:GDBString;(*'Base name sorting devices'*)
                             NumberVar:GDBString;(*'Number variable'*)
                       end;
+  PTBEditParam=^TBEditParam;
   TBEditParam=packed record
                     CurrentEditBlock:GDBString;(*'Current block'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Select block'*)

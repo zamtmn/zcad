@@ -78,6 +78,7 @@ var pobj,pobj2:PGDBObjCable;
     itsok:boolean;
     pnp:PTNodeProp;
     sorted:boolean;
+    lastadddevice:PGDBObjDevice;
 begin
      pobj:=gdb.GetCurrentROOT.ObjArray.beginiterate(ir);
      if pobj<>nil then
@@ -131,7 +132,7 @@ begin
                 until pobj=nil;
                 until itsok;
            end;
-
+                lastadddevice:=nil;
                 pobj:=pcd^.Segments.beginiterate(ir);
                 pcd^.StartSegment:=pobj;
                       pnp:=pobj^.NodePropArray.beginiterate(ir3);
@@ -144,7 +145,11 @@ begin
                       repeat
                             if pnp^.DevLink<>nil then
                             begin
-                                 pcd^.Devices.AddRef(pnp^.DevLink^);
+                                 if pnp^.DevLink<>lastadddevice then
+                                 begin
+                                       pcd^.Devices.AddRef(pnp^.DevLink^);
+                                       lastadddevice:=pnp^.DevLink;
+                                 end;
                                  if pcd^.EndDevice<>nil then
                                  begin
                                       pvn :=pnp^.DevLink.FindVariable('RiserName');

@@ -62,6 +62,7 @@ type
                        TPEM_Nearest(*'Paste in nearest segment'*),
                        TPEM_Select(*'Choose a segment'*)
                        );
+         PTMirrorParam=^TMirrorParam;
          TMirrorParam=packed record
                             SourceEnts:TEntityProcess;(*'Source entities'*)
                       end;
@@ -83,6 +84,7 @@ type
                  TIM_Text(*'Text'*),
                  TIM_MText(*'MText'*)
                 );
+         PTTextInsertParams=^TTextInsertParams;
          TTextInsertParams=packed record
                             mode:TIMode;(*'Entity'*)
                             Style:TEnumData;(*'Style'*)
@@ -100,6 +102,7 @@ type
                  BRM_Device(*'Device'*),
                  BRM_BD(*'Block and Device'*)
                 );
+         PTBlockReplaceParams=^TBlockReplaceParams;
          TBlockReplaceParams=packed record
                             Process:BRMode;(*'Process'*)
                             CurrentFindBlock:GDBString;(*'**CurrentFind'*)(*oi_readonly*)(*hidden_in_objinsp*)
@@ -126,11 +129,13 @@ type
                                  SameTemplate:GDBBoolean;(*'Same template'*)
                                  DiffTextMText:TDiff;(*'Text and Mtext'*)
                            end;
+         PTSelSimParams=^TSelSimParams;
          TSelSimParams=packed record
                              General:TSelGeneralParams;(*'General'*)
                              Blocks:TSelBlockParams;(*'Blocks'*)
                              Texts:TSelTextParams;(*'Texts'*)
                       end;
+         PTBlockScaleParams=^TBlockScaleParams;
          TBlockScaleParams=packed record
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
@@ -141,6 +146,7 @@ type
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
                            end;
+         PTPrintParams=^TPrintParams;
          TPrintParams=packed record
                             FitToPage:GDBBoolean;(*'Fit to page'*)
                             Center:GDBBoolean;(*'Center'*)
@@ -151,6 +157,7 @@ type
                  TST_XY(*'X-Y'*),
                  TST_UNSORTED(*'Unsorted'*)
                 );
+         PTNumberingParams=^TNumberingParams;
          TNumberingParams=packed record
                             SortMode:TST;(*''*)
                             InverseX:GDBBoolean;(*'Inverse X axis dir'*)
@@ -162,6 +169,7 @@ type
                             BaseName:GDBString;(*'Base name sorting devices'*)
                             NumberVar:GDBString;(*'Number variable'*)
                       end;
+  PTBEditParam=^TBEditParam;
   TBEditParam=packed record
                     CurrentEditBlock:GDBString;(*'Current block'*)(*oi_readonly*)
                     Blocks:TEnumData;(*'Select block'*)
@@ -3570,7 +3578,7 @@ begin
   OnDrawingEd.CEndActionAttr:=0;
   copy.init('Copy',0,0);
   mirror.init('Mirror',0,0);
-  SetTypedDataVariable(mirror.commanddata,@MirrorParam,'TMirrorParam');
+  SetTypedDataVariable(mirror.commanddata,@MirrorParam,'PTMirrorParam');
   move.init('Move',0,0);
   rotate.init('Rotate',0,0);
   rotate.NotUseCommandLine:=false;
@@ -3590,14 +3598,14 @@ begin
   TextInsertParams.runtexteditor:=false;
   TextInsertParams.Width:=100;
   TextInsertParams.LineSpace:=1;
-  SetTypedDataVariable(TextInsert.commanddata,@TextInsertParams,'TTextInsertParams');
+  SetTypedDataVariable(TextInsert.commanddata,@TextInsertParams,'PTTextInsertParams');
 
   BlockReplace.init('BlockReplace',0,0);
   BlockReplaceParams.Find.Enums.init(10);
   BlockReplaceParams.Replace.Enums.init(10);
   BlockReplaceParams.Process:=BRM_Device;
   BlockReplaceParams.SaveVariables:=true;
-  SetTypedDataVariable(BlockReplace.commanddata,@BlockReplaceParams,'TBlockReplaceParams');
+  SetTypedDataVariable(BlockReplace.commanddata,@BlockReplaceParams,'PTBlockReplaceParams');
 
 
   CreateCommandFastObjectPlugin(@Erase_com,'Erase',CADWG,0);
@@ -3608,7 +3616,7 @@ begin
   pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);
   BEditParam.Blocks.Enums.init(100);
   BEditParam.CurrentEditBlock:=modelspacename;
-  SetTypedDataVariable(pbeditcom^.commanddata,@BEditParam,'TBEditParam');
+  SetTypedDataVariable(pbeditcom^.commanddata,@BEditParam,'PTBEditParam');
 
   ATO.init('AddToOwner',CADWG,0);
   CFO.init('CopyFromOwner',CADWG,0);
@@ -3623,12 +3631,12 @@ begin
   NumberingParams.InverseY:=true;
   NumberingParams.SortMode:=TST_YX;
   NumberCom.init('NumDevices',CADWG,0);
-  SetTypedDataVariable(NumberCom.commanddata,@NumberingParams,'TNumberingParams');
+  SetTypedDataVariable(NumberCom.commanddata,@NumberingParams,'PTNumberingParams');
 
 
   Print.init('Print',CADWG,0);
   PrintParam.Scale:=1;
-  SetTypedDataVariable(Print.commanddata,@PrintParam,'TPrintParams');
+  SetTypedDataVariable(Print.commanddata,@PrintParam,'PTPrintParams');
 
   SelSim.init('SelSim',CADWG or CASelEnts,0);
   SelSim.CEndActionAttr:=0;
@@ -3640,13 +3648,13 @@ begin
   SelSimParams.Texts.SameTemplate:=false;
   SelSimParams.Blocks.SameName:=true;
   SelSimParams.Blocks.DiffBlockDevice:=TD_Diff;
-  SetTypedDataVariable(SelSim.commanddata,@SelSimParams,'TSelSimParams');
+  SetTypedDataVariable(SelSim.commanddata,@SelSimParams,'PTSelSimParams');
 
   BlockScale.init('BlockScale',0,0);
   BlockScale.CEndActionAttr:=0;
   BlockScaleParams.Scale:=geometry.CreateVertex(1,1,1);
   BlockScaleParams.Absolytly:=true;
-  SetTypedDataVariable(BlockScale.commanddata,@BlockScaleParams,'TBlockScaleParams');
+  SetTypedDataVariable(BlockScale.commanddata,@BlockScaleParams,'PTBlockScaleParams');
 
 
   InsertTestTable.init('InsertTestTable',0,0);

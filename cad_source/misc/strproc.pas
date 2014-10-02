@@ -38,6 +38,7 @@ function uch2ach(uch:word):byte;
 function ach2uch(ach:byte):word;
 
 function CompareNUMSTR(str1,str2:GDBString):GDBBoolean;
+function AnsiNaturalCompare(const str1, str2: string; vCaseSensitive: boolean = False): integer;
 
 function GetPartOfPath(out part:GDBString;var path:GDBString; const separator:GDBString):GDBString;
 function FindInSupportPath(FileName:GDBString):GDBString;
@@ -258,6 +259,160 @@ begin
                                    end
                                    else
                                        result:=0;
+end;
+function AnsiNaturalCompare(const str1, str2: string; vCaseSensitive: boolean = False): integer;
+//v3.5
+//by engkin from here http://forum.lazarus.freepascal.org/index.php/topic,24450.0.html
+var
+  l1, l2, l: integer;       //Str length
+  n1, n2: QWord{int64};     //numrical part
+  nl: integer;
+  nl1, nl2: integer;        //length of numrical part
+  d: Smallint;//PtrInt;?
+  pc : PChar;               //temp var
+  pc1, pc2: PChar;
+  pb1: PByte absolute pc1;  //to get pc1^ as a byte
+  pb2: PByte absolute pc2;  //to get pc2^ as a byte
+  pe1, pe2: PChar;          //pointer to end of str
+  sign: integer;
+  sum1, sum2: DWord;      //sum of non-numbers. More caps gives a smaller sum
+
+  function lowcase(const c : char) : byte;
+  begin
+    if (c in ['A'..'Z']) then
+      lowcase := byte(c)+32
+    else
+      lowcase := byte(c);
+  end;
+
+  function CorrectedResult(vRes: integer): integer; inline;
+  begin
+    //to correct the result when we switch vars due for
+    //pc1, pe1 need to point at shorter string, always
+    Result := sign * vRes;
+  end;
+
+begin
+  l1 := Length(str1);
+  l2 := Length(str2);
+
+  //Any empty str?
+  if (l1 = 0) and (l2 = 0) then exit(0);
+  if (l1 = 0) then exit(-1);
+  if (l2 = 0) then exit(1);
+
+  //pc1, pe1 point at the shorter string, always
+  if l1<=l2 then
+  begin
+    pc1 := @str1[1];
+    pc2 := @str2[1];
+
+    sign := 1;
+  end
+  else
+  begin
+    pc1 := @str2[1];
+    pc2 := @str1[1];
+
+    l := l1;
+    l1 := l2;
+    l2 := l;
+
+    sign := -1;
+  end;
+
+  //end of strs
+  pe1 := pc1 + l1;
+  pe2 := pc2 + l2;
+
+  sum1 := 0;
+  sum2 := 0;
+
+  nl1 := 0;
+  nl2 := 0;
+
+  while (pc1 < pe1) do
+  begin
+    if not (pc1^ in ['0'..'9']) or not (pc2^ in ['0'..'9']) then
+    begin
+      //Compare non-numbers
+      if vCaseSensitive then
+        d := pb1^ - pb2^
+      else
+        d := lowcase(pc1^) - lowcase(pc2^);//}
+
+      if (d <> 0) then exit(CorrectedResult(d));
+      sum1 := sum1 + pb1^;
+      sum2 := sum2 + pb2^;
+    end
+    else
+    begin
+      //Convert a section of str1 to a number (correct for 16 digits)
+      n1 := 0; nl1 := 0;
+      repeat
+        n1 := (n1 shl 4) or (pb1^ - Ord('0'));
+        Inc(pb1); inc(nl1);
+      until (pc1 >= pe1) or not (pc1^ in ['0'..'9']);
+
+      //Convert a section of str2 to a number (correct for 16 digits)
+      n2 := 0; nl2 := 0;
+      repeat
+        n2 := (n2 shl 4) or (pb2^ - Ord('0'));
+        Inc(pb2); inc(nl2);
+      until (pc2 >= pe2) or not (pc2^ in ['0'..'9']);
+
+      //Compare numbers naturally
+{      d := n1 - n2;
+      if d <> 0 then
+         exit(CorrectedResult(d))//}
+      if n1>n2 then
+        exit(CorrectedResult(1))
+      else if n1<n2 then
+        exit(CorrectedResult(-1))
+      else
+      begin
+        //Switch to shortest string based of remaining characters
+        if (pe1 - pc1) > (pe2 - pc2) then
+        begin
+          pc := pc1;
+          pc1 := pc2;
+          pc2 := pc;
+
+          pc := pe1;
+          pe1 := pe2;
+          pe2 := pc;
+
+          nl := nl1;
+          nl1 := nl2;
+          nl2 := nl;
+
+          nl := sum1;
+          sum1 := sum2;
+          sum2 := nl;
+
+          sign := -sign;
+        end;
+        Continue;
+      end;
+    end;
+    Inc(pc1);
+    Inc(pc2);
+  end;
+  //str with longer remaining part is bigger (abc1z>abc1)
+  //Result := CorrectedResult((pe1 - pc1) - (pe2 - pc2));
+  Result := (pe1 - pc1) - (pe2 - pc2);
+  if Result=0 then
+  begin
+  //if strs are naturllay identical then:
+  //consider str with longer last numerical section to be bigger (a01bc0001>a001bc1)
+    Result := CorrectedResult(nl1-nl2);
+    if Result = 0 then
+    //if strs are naturllay identical and last numerical sections have same length then:
+    //consider str with more capital letters smaller (aBc001d>aBC001D)
+      Result := CorrectedResult(sum1-sum2);
+  end
+  else
+    Result := CorrectedResult(Result);
 end;
 function CompareNUMSTR(str1,str2:GDBString):GDBBoolean;
 var

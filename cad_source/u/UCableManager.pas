@@ -182,7 +182,7 @@ begin
      pcd:=iterate(ir2);
      if (prevpcd<>nil)and(pcd<>nil) then
      repeat
-           if CompareNUMSTR(prevpcd^.Name,pcd^.Name) then
+           if {CompareNUMSTR}AnsiNaturalCompare(prevpcd^.Name,pcd^.Name)>0 then
                                           begin
                                                tcd:=prevpcd^;
                                                prevpcd^:=pcd^;

@@ -3102,7 +3102,7 @@ begin
   commandmanager.CommandRegister(@Wire);
   pcabcom:=CreateCommandRTEdObjectPlugin(@_Cable_com_CommandStart, _Cable_com_CommandEnd,nil,@cabcomformat,@_Cable_com_BeforeClick,@_Cable_com_AfterClick,@_Cable_com_Hd,nil,'EL_Cable',0,0);
 
-  SetTypedDataVariable(pcabcom^.commanddata,@cabcomparam,'PTELCableComParam');
+  pcabcom^.SetCommandParam(@cabcomparam,'PTELCableComParam');
   cabcomparam.Traces.Enums.init(10);
   cabcomparam.PTrace:=nil;
 
@@ -3125,12 +3125,12 @@ begin
   EM_SEPBUILD.init('EM_SEPBUILD',CADWG,0);
   KIP_CDBuild.init('KIP_CDBuild',CADWG,0);
 
-  SetTypedDataVariable(EM_SEPBUILD.commanddata,@em_sepbuild_params,'PTBasicFinter');
+  EM_SEPBUILD.SetCommandParam(@em_sepbuild_params,'PTBasicFinter');
 
   CreateCommandRTEdObjectPlugin(@ElLeaser_com_CommandStart,@Line_com_CommandEnd,nil,nil,@Line_com_BeforeClick,@El_Leader_com_AfterClick,nil,nil,'El_Leader',0,0);
   pfindcom:=CreateCommandRTEdObjectPlugin(@Find_com,nil,nil,@commformat,nil,nil,nil,nil,'El_Find',0,0);
   pfindcom.CEndActionAttr:=0;
-  SetTypedDataVariable(pfindcom^.commanddata,@FindDeviceParam,'PTFindDeviceParam');
+  pfindcom^.SetCommandParam(@FindDeviceParam,'PTFindDeviceParam');
 
   FindDeviceParam.FindType:=tft_obozn;
   FindDeviceParam.FindString:='';

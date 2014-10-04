@@ -53,6 +53,7 @@ type
     procedure CommandInit; virtual;
     procedure Prompt(msg:GDBString);
     procedure Error(msg:GDBString);
+    procedure SetCommandParam(PTypedTata:pointer;TypeName:string);
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
     //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual; abstract;
     //function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual; abstract;
@@ -433,8 +434,12 @@ procedure CommandRTEdObject.Error(msg:GDBString);
 begin
      ShowError(self.CommandName+':'+msg);
 end;
+procedure CommandRTEdObject.SetCommandParam(PTypedTata:pointer;TypeName:string);
+begin
+     SetTypedDataVariable(commanddata,pTypedTata,TypeName);
+end;
 
 begin
      {$IFDEF DEBUGINITSECTION}LogOut('commanddefinternal.initialization');{$ENDIF}
 end.
-
+

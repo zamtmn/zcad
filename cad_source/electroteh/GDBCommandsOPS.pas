@@ -1189,7 +1189,7 @@ begin
 
   CreateCommandFastObjectPlugin(@OPS_Sensor_Mark_com,'OPS_Sensor_Mark',CADWG,0);
   pco:=CreateCommandRTEdObjectPlugin(@CommandStart,nil,nil,@commformat,@BeforeClick,@AfterClick,nil,nil,command1,0,0);
-  SetTypedDataVariable(pco^.commanddata,@OPSPlaceSmokeDetectorOrtoParam,'PTOPSPlaceSmokeDetectorOrtoParam');
+  pco^.SetCommandParam(@OPSPlaceSmokeDetectorOrtoParam,'PTOPSPlaceSmokeDetectorOrtoParam');
   OPSPlaceSmokeDetectorOrtoParam.InsertType:=TIT_Device;
   OPSPlaceSmokeDetectorOrtoParam.Height.Enums.init(10);
   OPSPlaceSmokeDetectorOrtoParam.DatType:=TOPSDT_Smoke;
@@ -1205,7 +1205,7 @@ begin
 
   pco2:=CreateCommandRTEdObjectPlugin(@PlCommandStart,nil,nil,@commformat2,@PlBeforeClick,@PlAfterClick,nil,nil,'OrtoDevPlace',0,0);
 
-  SetTypedDataVariable(pco2^.commanddata,@OrtoDevPlaceParam,'PTOrtoDevPlaceParam');
+  pco2^.SetCommandParam(@OrtoDevPlaceParam,'PTOrtoDevPlaceParam');
 
   OrtoDevPlaceParam.ScaleBlock:=1;
   OrtoDevPlaceParam.NX:=2;

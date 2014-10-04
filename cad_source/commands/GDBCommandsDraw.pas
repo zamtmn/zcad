@@ -3606,7 +3606,7 @@ begin
   OnDrawingEd.CEndActionAttr:=0;
   copy.init('Copy',0,0);
   mirror.init('Mirror',0,0);
-  SetTypedDataVariable(mirror.commanddata,@MirrorParam,'PTMirrorParam');
+  mirror.SetCommandParam(@MirrorParam,'PTMirrorParam');
   move.init('Move',0,0);
   rotate.init('Rotate',0,0);
   rotate.NotUseCommandLine:=false;
@@ -3626,14 +3626,14 @@ begin
   TextInsertParams.runtexteditor:=false;
   TextInsertParams.Width:=100;
   TextInsertParams.LineSpace:=1;
-  SetTypedDataVariable(TextInsert.commanddata,@TextInsertParams,'PTTextInsertParams');
+  TextInsert.SetCommandParam(@TextInsertParams,'PTTextInsertParams');
 
   BlockReplace.init('BlockReplace',0,0);
   BlockReplaceParams.Find.Enums.init(10);
   BlockReplaceParams.Replace.Enums.init(10);
   BlockReplaceParams.Process:=BRM_Device;
   BlockReplaceParams.SaveVariables:=true;
-  SetTypedDataVariable(BlockReplace.commanddata,@BlockReplaceParams,'PTBlockReplaceParams');
+  BlockReplace.SetCommandParam(@BlockReplaceParams,'PTBlockReplaceParams');
 
 
   CreateCommandFastObjectPlugin(@Erase_com,'Erase',CADWG,0);
@@ -3644,7 +3644,7 @@ begin
   pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);
   BEditParam.Blocks.Enums.init(100);
   BEditParam.CurrentEditBlock:=modelspacename;
-  SetTypedDataVariable(pbeditcom^.commanddata,@BEditParam,'PTBEditParam');
+  pbeditcom^.SetCommandParam(@BEditParam,'PTBEditParam');
 
   ATO.init('AddToOwner',CADWG,0);
   CFO.init('CopyFromOwner',CADWG,0);
@@ -3659,12 +3659,12 @@ begin
   NumberingParams.InverseY:=true;
   NumberingParams.SortMode:=TST_YX;
   NumberCom.init('NumDevices',CADWG,0);
-  SetTypedDataVariable(NumberCom.commanddata,@NumberingParams,'PTNumberingParams');
+  NumberCom.SetCommandParam(@NumberingParams,'PTNumberingParams');
 
 
   Print.init('Print',CADWG,0);
   PrintParam.Scale:=1;
-  SetTypedDataVariable(Print.commanddata,@PrintParam,'PTPrintParams');
+  Print.SetCommandParam(@PrintParam,'PTPrintParams');
 
   SelSim.init('SelSim',CADWG or CASelEnts,0);
   SelSim.CEndActionAttr:=0;
@@ -3678,13 +3678,13 @@ begin
   SelSimParams.Texts.SameTemplate:=false;
   SelSimParams.Blocks.SameName:=true;
   SelSimParams.Blocks.DiffBlockDevice:=TD_Diff;
-  SetTypedDataVariable(SelSim.commanddata,@SelSimParams,'PTSelSimParams');
+  SelSim.SetCommandParam(@SelSimParams,'PTSelSimParams');
 
   BlockScale.init('BlockScale',0,0);
   BlockScale.CEndActionAttr:=0;
   BlockScaleParams.Scale:=geometry.CreateVertex(1,1,1);
   BlockScaleParams.Absolytly:=true;
-  SetTypedDataVariable(BlockScale.commanddata,@BlockScaleParams,'PTBlockScaleParams');
+  BlockScale.SetCommandParam(@BlockScaleParams,'PTBlockScaleParams');
 
 
   InsertTestTable.init('InsertTestTable',0,0);

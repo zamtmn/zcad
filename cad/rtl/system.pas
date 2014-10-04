@@ -2954,6 +2954,8 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
          TSelGeneralParams=packed record
                                  SameLayer:GDBBoolean;(*'Same layer'*)
                                  SameLineWeight:GDBBoolean;(*'Same line weight'*)
+                                 SameLineType:GDBBoolean;(*'Same line type'*)
+                                 SameLineTypeScale:GDBBoolean;(*'Same line type scale'*)
                                  SameEntType:GDBBoolean;(*'Same entity type'*)
                            end;
          TDiff=(
@@ -3105,7 +3107,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
   SelSim_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          created:boolean;
                          bnames,textcontents,textremplates:GDBGDBStringArray;
-                         layers,weights,objtypes:GDBOpenArrayOfGDBPointer;
+                         layers,weights,objtypes,linetypes:GDBOpenArrayOfGDBPointer;
                          procedure CommandStart(Operands:pansichar); virtual;abstract;
                          procedure createbufs;
                          //procedure BuildDM(Operands:pansichar); virtual;abstract;

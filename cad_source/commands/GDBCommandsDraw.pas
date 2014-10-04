@@ -21,7 +21,7 @@ unit GDBCommandsDraw;
 
 interface
 uses
-  texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
+  ugdbopenarrayofgdbdouble,texteditor,gdbdrawcontext,usimplegenerics,UGDBPoint3DArray,GDBPoint,UGDBEntTree,gmap,gvector,garrayutils,gutil,UGDBSelectedObjArray,gdbentityfactory,ugdbsimpledrawing,zcadsysvars,zcadstrconsts,GDBCommandsBaseDraw,OGLSpecFunc,PrintersDlgs,printers,graphics,GDBDevice,GDBWithLocalCS,UGDBOpenArrayOfPointer,UGDBOpenArrayOfUCommands,fileutil,Clipbrd,LCLType,classes,GDBText,GDBAbstractText,UGDBTextStyleArray,
   commandlinedef,
   gdbasetypes,commandline,GDBCommandsBase,
   plugins,
@@ -114,6 +114,8 @@ type
          TSelGeneralParams=packed record
                                  SameLayer:GDBBoolean;(*'Same layer'*)
                                  SameLineWeight:GDBBoolean;(*'Same line weight'*)
+                                 SameLineType:GDBBoolean;(*'Same line type'*)
+                                 SameLineTypeScale:GDBBoolean;(*'Same line type scale'*)
                                  SameEntType:GDBBoolean;(*'Same entity type'*)
                            end;
          TDiff=(
@@ -268,7 +270,8 @@ type
   SelSim_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          created:boolean;
                          bnames,textcontents,textremplates:GDBGDBStringArray;
-                         layers,weights,objtypes:GDBOpenArrayOfGDBPointer;
+                         layers,weights,objtypes,linetypes:GDBOpenArrayOfGDBPointer;
+                         linetypescales:GDBOpenArrayOfGDBDouble;
                          procedure CommandStart(Operands:pansichar); virtual;
                          procedure createbufs;
                          //procedure BuildDM(Operands:pansichar); virtual;
@@ -1050,6 +1053,7 @@ var
    pobj: pGDBObjEntity;
    ir:itrec;
    tp:gdbpointer;
+   td:gdbdouble;
 begin
   if not created then
   begin
@@ -1059,6 +1063,8 @@ begin
   layers.init({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}100);
   weights.init({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}100);
   objtypes.init({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}100);
+  linetypes.init({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}100);
+  linetypescales.init({$IFDEF DEBUGBUILD}'{79828350-69E9-418A-A023-BB8B187639A1}',{$ENDIF}100);
 
   pobj:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pobj<>nil then
@@ -1067,6 +1073,12 @@ begin
     begin
          tp:=pobj^.vp.Layer;
          layers.addnodouble(@tp);
+
+         tp:=pobj^.vp.LineType;
+         linetypes.addnodouble(@tp);
+
+         td:=pobj^.vp.LineTypeScale;
+         linetypescales.addnodouble(td);
 
          tp:=pointer(pobj^.vp.LineWeight);
          weights.addnodouble(@tp);
@@ -1102,7 +1114,7 @@ var
    ir:itrec;
    tp:gdbpointer;
 
-   insel,islayer,isweght,isobjtype,select:boolean;
+   insel,islayer,isweght,isobjtype,select,islinetype,islinetypescale:boolean;
 
 begin
      insel:=not created;
@@ -1115,10 +1127,16 @@ begin
            islayer:=false;
            isweght:=false;
            isobjtype:=false;
+           islinetype:=false;
+           islinetypescale:=false;
            if pobj^.selected then
                                 pobj^.DeSelect(gdb.GetCurrentDWG^.GetSelObjArray,gdb.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount);
 
            islayer:=layers.IsObjExist(pobj^.vp.Layer);
+
+           islinetype:=linetypes.IsObjExist(pobj^.vp.LineType);
+
+           islinetypescale:=linetypescales.IsObjExist(pobj^.vp.LineTypeScale);
 
            tp:=pointer(pobj^.vp.LineWeight);
            isweght:=weights.IsObjExist(tp);
@@ -1145,6 +1163,14 @@ begin
            end;
 
            select:=true;
+           if SelSimParams.General.SameLineType then
+                                                 begin
+                                                      select:=select and islinetype;
+                                                 end;
+           if SelSimParams.General.SameLineTypeScale then
+                                                 begin
+                                                      select:=select and islinetypescale;
+                                                 end;
            if SelSimParams.General.SameLayer then
                                                  begin
                                                       select:=select and islayer;
@@ -1168,6 +1194,8 @@ begin
      layers.done;
      weights.done;
      objtypes.done;
+     linetypes.done;
+     linetypescales.done;
      textcontents.FreeAndDone;
      textremplates.FreeAndDone;
      bnames.FreeAndDone;
@@ -3643,6 +3671,8 @@ begin
   SelSimParams.General.SameEntType:=true;
   SelSimParams.General.SameLayer:=true;
   SelSimParams.General.SameLineWeight:=false;
+  SelSimParams.General.SameLineTypeScale:=false;
+  SelSimParams.General.SameLineType:=false;
   SelSimParams.Texts.SameContent:=false;
   SelSimParams.Texts.DiffTextMText:=TD_Diff;
   SelSimParams.Texts.SameTemplate:=false;

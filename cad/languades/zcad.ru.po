@@ -498,9 +498,17 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
+#: zcadexternal.acn_fakecopyclipbase~caption
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
+msgstr ""
+
+#: zcadexternal.acn_fakepaste~caption
+msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -739,6 +747,10 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
+#: zcadexternal.acn_processkz~caption
+msgid ""
+msgstr ""
+
 #: zcadexternal.acn_projecttree~caption
 msgctxt "zcadexternal.acn_projecttree~caption"
 msgid "Project tree"
@@ -768,6 +780,10 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
+
+#: zcadexternal.acn_remautocables~caption
+msgid ""
+msgstr ""
 
 #: zcadexternal.acn_rotate~caption
 msgctxt "zcadexternal.acn_rotate~caption"
@@ -1065,6 +1081,10 @@ msgctxt "zcadexternal.button_command~setobjinsp(current)"
 msgid "FIX"
 msgstr ""
 
+#: zcadexternal.button_variable~dsgn_selsamename
+msgid "SN"
+msgstr ""
+
 #: zcadexternal.button_variable~dwg_additionalgrips
 msgctxt "zcadexternal.button_variable~dwg_additionalgrips"
 msgid "+G"
@@ -1228,8 +1248,10 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
+#, fuzzy
+#| msgid "Block params"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+msgid "Rotate"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjcircle~area
@@ -1424,11 +1446,6 @@ msgstr "Черчение"
 msgid "Interface"
 msgstr "Интерфейс"
 
-#: zcadexternal.gdbsysvariable~misc
-msgctxt "zcadexternal.gdbsysvariable~misc"
-msgid "Miscellaneous"
-msgstr "Разное"
-
 #: zcadexternal.gdbsysvariable~path
 msgctxt "zcadexternal.gdbsysvariable~path"
 msgid "Paths"
@@ -1457,6 +1474,11 @@ msgstr "Вид"
 #: zcadexternal.hint_panel~dsgn_selnew
 msgctxt "zcadexternal.hint_panel~dsgn_selnew"
 msgid "New selection set"
+msgstr ""
+
+#: zcadexternal.hint_panel~dsgn_selsamename
+msgctxt "zcadexternal.hint_panel~dsgn_selsamename"
+msgid "Auto select devices with same name"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_additionalgrips
@@ -1514,6 +1536,8 @@ msgid "Layer selection"
 msgstr "Выбор слоя"
 
 #: zcadexternal.hint_panel~linewcombobox
+#, fuzzy
+#| msgid "Color selection"
 msgctxt "zcadexternal.hint_panel~linewcombobox"
 msgid "Dim style selection"
 msgstr "Выбор стиля размеров"
@@ -2053,10 +2077,11 @@ msgctxt "zcadexternal.tcompileinfo~sys_lclversion"
 msgid "LCL version"
 msgstr ""
 
-#: zcadexternal.tdebug~memi2
-msgctxt "zcadexternal.tdebug~memi2"
-msgid "MemMan::I2"
-msgstr ""
+#: zcadexternal.tdebug~showhiddenfieldinobjinsp
+#, fuzzy
+msgctxt "zcadexternal.tdebug~showhiddenfieldinobjinsp"
+msgid "Show hidden fields"
+msgstr "Показывать скрытые поля"
 
 #: zcadexternal.tdesigning~dsgn_helpscale
 msgctxt "zcadexternal.tdesigning~dsgn_helpscale"
@@ -2075,6 +2100,11 @@ msgstr "Ширина выносок по умолчанию"
 #: zcadexternal.tdesigning~dsgn_selnew
 msgctxt "zcadexternal.tdesigning~dsgn_selnew"
 msgid "New selection set"
+msgstr ""
+
+#: zcadexternal.tdesigning~dsgn_selsamename
+msgctxt "zcadexternal.tdesigning~dsgn_selsamename"
+msgid "Auto select devices with same name"
 msgstr ""
 
 #: zcadexternal.tdesigning~dsgn_traceautoinc
@@ -2318,7 +2348,9 @@ msgid "Max degradation factor"
 msgstr "Максимальное ухудшение чертежа"
 
 #: zcadexternal.timagedegradation~rd_id_prefferedrendertime
-msgid "Preffered rendertime"
+#, fuzzy
+#| msgid "Preffered rendertime"
+msgid "Prefered rendertime"
 msgstr "Порог времени рендера"
 
 #: zcadexternal.timode~tim_mtext
@@ -2345,6 +2377,10 @@ msgstr "Устройство"
 msgid "Drawing tabs position"
 msgstr "Позиция сакладок чертежей"
 
+#: zcadexternal.tinterface~intf_objinsprowh
+msgid "Object inspector row height"
+msgstr ""
+
 #: zcadexternal.tinterface~intf_showdwgtabcloseburron
 msgid "Show drawing tab close button"
 msgstr "Показывать кнопку закрытия на закладках чертежей"
@@ -2352,6 +2388,10 @@ msgstr "Показывать кнопку закрытия на закладка
 #: zcadexternal.tinterface~intf_showdwgtabs
 msgid "Show drawing tabs"
 msgstr "Показывать закладки чертежей"
+
+#: zcadexternal.tinterface~intf_showlinesinobjinsp
+msgid "Show lines in object inspector"
+msgstr ""
 
 #: zcadexternal.tinterface~intf_showscrollbars
 msgid "Show scroll bars"
@@ -2384,11 +2424,6 @@ msgstr "Слой"
 #: zcadexternal.tmirrorparam~sourceents
 msgid "Source entities"
 msgstr "Исходные примитивы"
-
-#: zcadexternal.tmisc~showhiddenfieldinobjinsp
-msgctxt "zcadexternal.tmisc~showhiddenfieldinobjinsp"
-msgid "Show hidden fields"
-msgstr "Показывать скрытые поля"
 
 #: zcadexternal.tmseditor~enttype
 msgid "Process primitives"
@@ -2444,6 +2479,10 @@ msgstr "Нумеруесая переменная"
 #: zcadexternal.tnumberingparams~savestart
 msgid "Save start number"
 msgstr "Сохранять старовое значение"
+
+#: zcadexternal.tnumberingparams~sortmode
+msgid ""
+msgstr ""
 
 #: zcadexternal.tnumberingparams~startnumber
 msgid "Start"
@@ -2769,6 +2808,10 @@ msgctxt "zcadexternal.trd~rd_backgroundcolor"
 msgid "Background color"
 msgstr "Цвет фона"
 
+#: zcadexternal.trd~rd_drawinsidepaintmessage
+msgid "Draw inside paint message"
+msgstr ""
+
 #: zcadexternal.trd~rd_extensions
 msgid "Extensions"
 msgstr "Расширения"
@@ -2808,8 +2851,10 @@ msgid "Light"
 msgstr "Освещение"
 
 #: zcadexternal.trd~rd_linesmooth
+#, fuzzy
+#| msgid "Line smoth"
 msgctxt "zcadexternal.trd~rd_linesmooth"
-msgid "Line smoth"
+msgid "Line smoothing"
 msgstr "Сглаживание линий"
 
 #: zcadexternal.trd~rd_maxlinewidth
@@ -2841,10 +2886,18 @@ msgctxt "zcadexternal.trd~rd_panobjectdegradation"
 msgid "Degradation while pan"
 msgstr "Деградация при перетаскивании"
 
+#: zcadexternal.trd~rd_removesystemcursorfromworkarea
+msgid "Remove system cursor from work area"
+msgstr ""
+
 #: zcadexternal.trd~rd_renderer
 msgctxt "zcadexternal.trd~rd_renderer"
 msgid "Device"
 msgstr "Устройство"
+
+#: zcadexternal.trd~rd_rendererbackend
+msgid "Render backend"
+msgstr ""
 
 #: zcadexternal.trd~rd_restore_mode
 msgctxt "zcadexternal.trd~rd_restore_mode"
@@ -3241,10 +3294,8 @@ msgid "On"
 msgstr "Включен"
 
 #: zcadstrconsts.fontnotfoundandreplace
-msgid ""
-"For text style \"%s\" not found font \"%s\", is replaced by an alternative"
-msgstr ""
-"Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
+msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+msgstr "Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
 
 #: zcadstrconsts.rsaboutwndcaption
 msgctxt "zcadstrconsts.rsaboutwndcaption"
@@ -3489,8 +3540,7 @@ msgid "Expression %s return %s"
 msgstr "Выражение  %s возвращает %s"
 
 #: zcadstrconsts.rsfardeffilenotfounf
-msgid ""
-"File definition of the variables can not be found for the device \"%s\";"
+msgid "File definition of the variables can not be found for the device \"%s\";"
 msgstr "Файл определения переменных не найден для устройства \"%s\";"
 
 #: zcadstrconsts.rsfileformat
@@ -3528,6 +3578,10 @@ msgid "Error loading layout from file"
 msgstr "Ошибка загрузки файла разбивки окон"
 
 #: zcadstrconsts.rslinetypedesk
+#, fuzzy
+#| msgid ""
+#| ";;Pattern length %f\n"
+#| "%s\n"
 msgid ""
 ";;Pattern length %f\n"
 "%s\n"
@@ -3607,20 +3661,15 @@ msgstr "Повторное создание %s!"
 msgid ""
 "-UNDO\\REDO - yet it is better not to use;\n"
 "\n"
-"-If you have problems with rendering or selecting entities, run \"Regen\" "
-"and \"RebuildTree\" in command line;\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
 "\n"
-"-To disable the display of this window comment out line \"About\" in the "
-"file \"components\\autorun.cmd\". Encoding of all configuration files - "
-"UTF8;\n"
+"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
 msgstr ""
 "-UNDO\\REDO - пока лучше не пользоваться;\n"
 "\n"
-"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" "
-"и \"RebuildTree\" в командной строке;\n"
+"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
 "\n"
-"-Для отключения показа этого окна закоментируйте строку \"About\" в файле "
-"\"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
+"-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
 
 #: zcadstrconsts.rsreservefontnotfound
 msgid "Reserve font is not found in the resources"
@@ -3746,3 +3795,4 @@ msgstr "Внимание!"
 #: zcadstrconsts.rszcadstarted
 msgid "ZCAD v%s started"
 msgstr "ZCAD v%s запущен"
+

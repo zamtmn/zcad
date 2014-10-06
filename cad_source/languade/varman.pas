@@ -245,13 +245,22 @@ end;
 function GetBoundsFromSavedUnit(name:string):Trect;
 var
    pint:PGDBInteger;
+function setfrominterval(value,vmin,vmax:integer):integer;
+begin
+     if (value<vmin)or(value>vmax)then
+                                      result:=vmin
+                                  else
+                                      result:=value;
+end;
 begin
      pint:=SavedUnit.FindValue(name+'_Left');
      if assigned(pint)then
                           result.Left:=pint^;
+     result.Left:=setfrominterval(result.Left,0,sysparam.screenx);
      pint:=SavedUnit.FindValue(name+'_Top');
      if assigned(pint)then
                           result.Top:=pint^;
+     result.Top:=setfrominterval(result.Top,0,sysparam.screeny);
      pint:=SavedUnit.FindValue(name+'_Width');
      if assigned(pint)then
                           result.Right:=result.Left+pint^;

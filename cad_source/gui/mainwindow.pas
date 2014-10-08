@@ -726,8 +726,8 @@ procedure MainForm.GetPreferredSize(var PreferredWidth, PreferredHeight: integer
                                WithThemeSpace: boolean = true);
 begin
      inherited GetPreferredSize(PreferredWidth, PreferredHeight,Raw,WithThemeSpace);
-     PreferredWidth:=0;
-     PreferredHeight:=0;
+     {PreferredWidth:=0;
+     PreferredHeight:=0;}
 end;
 function _CloseDWGPage(ClosedDWG:PTDrawing;lincedcontrol:TObject):Integer;
 var
@@ -772,9 +772,7 @@ begin
        else
            gdb.freedwgvars;
        if assigned(ReturnToDefaultProc)then
-                                           begin
-                                               ReturnToDefaultProc;
-                                           end;
+                                           ReturnToDefaultProc;
        shared.SBTextOut('Закрыто');
        if assigned(UpdateVisibleProc) then UpdateVisibleProc;
   end;
@@ -945,11 +943,14 @@ if DoDisableAlign then
 FToolBar.DisableAlign;
 FToolBar.CreateNew(Application);
 FToolBar.Caption:='';
-FToolBar.SetBounds(100,64,500,26);
+FToolBar.SetBounds(100,64,1000,26);
 
 TB:=TToolBar.Create(application);
 TB.ButtonHeight:=sysvar.INTF.INTF_ObjInspRowH^;
 TB.Align:=alclient;
+TB.Top:=0;
+TB.Left:=0;
+TB.AutoSize:=true;
 if aName<>'Status' then
 TB.EdgeBorders:=[];
 TB.ShowCaptions:=true;
@@ -1193,7 +1194,8 @@ begin
   end;
 
    ToolBarU:=TToolBar.Create(self);
-   ToolBarU.Align:={alTop}alClient;
+   ToolBarU.Align:=alTop{alClient};
+   ToolBarU.SetBounds(500,0,1000,26);
    ToolBarU.AutoSize:=true;
    ToolBarU.ButtonHeight:=sysvar.INTF.INTF_ObjInspRowH^;
    ToolBarU.ShowCaptions:=true;
@@ -1201,6 +1203,7 @@ begin
    ToolBarU.EdgeBorders:=[ebTop, ebBottom, ebLeft, ebRight];
    self.CreateToolbarFromDesk(ToolBarU, 'STANDART', self.findtoolbatdesk('STAND'
      +'ART'));
+   //ToolBarU.AdjustSize;
    action:=tmyaction(StandartActions.ActionByName('ACN_SHOW_STANDART'));
    if assigned(action) then
                            begin

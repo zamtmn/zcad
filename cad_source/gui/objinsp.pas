@@ -500,18 +500,20 @@ begin
   Details := ThemeServices.GetElementDetails(PlusMinusDetail[Minus]);
   result := ThemeServices.GetDetailSize(Details);
 end;
-procedure DrawTreeIcon({Canvas:tcanvas;}X, Y: Integer; Minus: Boolean);
+procedure DrawTreeIcon({Canvas:tcanvas;}X, Y: Integer; Minus, hot: Boolean);
 const
-  PlusMinusDetail: array[Boolean] of TThemedTreeview =
+  PlusMinusDetail: array[Boolean,Boolean] of TThemedTreeview =
   (
-    ttGlyphClosed,
-    ttGlyphOpened
+    (ttGlyphClosed,
+    ttHotGlyphClosed),
+    (ttGlyphOpened,
+    ttHotGlyphOpened)
   );
 var
   Details: TThemedElementDetails;
   Size: TSize;
 begin
-  Details := ThemeServices.GetElementDetails(PlusMinusDetail[Minus]);
+  Details := ThemeServices.GetElementDetails(PlusMinusDetail[Minus,hot]);
   Size := ThemeServices.GetDetailSize(Details);
   ThemeServices.DrawElement(Canvas.Handle, Details, Rect(X, Y, X + Size.cx, Y + Size.cy), nil);
 end;
@@ -523,17 +525,23 @@ begin
                              ppd^.Collapsed^:=ppd^.Collapsed^;
   size:=GetSizeTreeIcon(not ppd^.Collapsed^);
   temp:=(r.bottom-r.top-size.cy)div 3;
-  DrawTreeIcon({Canvas,}r.left,r.top+temp,not ppd^.Collapsed^);
+  DrawTreeIcon({Canvas,}r.left,r.top+temp,not ppd^.Collapsed^,onm);
   inc(r.left,size.cx+1);
   if assigned(ppd.FastEditor.OnGetPrefferedFastEditorSize) then
   drawfasteditor(ppd,canvas,r);
   canvas.Font.Italic:=true;
   if onm then
-             canvas.Font.Bold:=true;
+             begin
+             //canvas.Font.Bold:=true;
+             canvas.Font.Underline:=true;
+             end;
   canvas.TextRect(r,r.Left,r.Top,(name));
   canvas.Font.Italic:=false;
   if onm then
-             canvas.Font.Bold:=false;
+             begin
+             //canvas.Font.Bold:=false;
+             canvas.Font.Underline:=false;
+             end;
   dec(r.left,size.cx+1);
 end;
 procedure drawrect(cnvs:tcanvas;clr:TColor;r:trect;active:boolean);
@@ -688,7 +696,10 @@ begin
           else
               begin
                    if OnMouseProp then
-                                      canvas.Font.bold:=true;
+                                      begin
+                                      //canvas.Font.bold:=true;
+                                      canvas.Font.underline:=true;
+                                      end;
                    if (ppd=EDContext.ppropcurrentedit) then
                                       begin
                                            tempcolor:=canvas.Font.Color;
@@ -696,7 +707,10 @@ begin
                                       end;
                    canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
                    if OnMouseProp then
-                                      canvas.Font.bold:=false;
+                                      begin
+                                      //canvas.Font.bold:=false;
+                                      canvas.Font.underline:=false;
+                                      end;
                    if (ppd=EDContext.ppropcurrentedit) then
                                       begin
                                            canvas.Font.Color:=tempcolor;

@@ -38,6 +38,7 @@ const
   alligmentall=2;
   alligmentarrayofarray=64;
   fastEditorOffset={$IFDEF LCLQT}7{$ELSE}2{$ENDIF} ;
+  headerh=20;
 type
   arrindop=record
     currnum,currcount,num,count:GDBInteger;
@@ -328,7 +329,7 @@ begin
      currobjgdbtype:=nil;
      createpda;
   EDContext.ppropcurrentedit:=nil;
-  startdrawy:=0;
+  startdrawy:=headerh;
 
   MResplit:=false;
   namecol:=clientwidth div 2;
@@ -755,10 +756,23 @@ procedure TGDBobjinsp.draw;
 var
   y:GDBInteger;
   sub:GDBInteger;
-  arect:trect;
+  arect,hrect:trect;
+  Details: TThemedElementDetails;
 begin
 ARect := GetClientRect;
 InflateRect(ARect, -BorderWidth, -BorderWidth);
+
+hrect:=ARect;
+hrect.Bottom:=headerh;
+Details := ThemeServices.GetElementDetails(thHeaderItemLeftNormal);
+hrect.Bottom:=headerh;
+hrect.Right:=namecol;
+ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
+
+Details := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
+hrect.Left:=namecol+1;
+hrect.Right:=arect.Right;
+ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
 
 //canvas.Brush.Color := clBtnFace;
 //canvas.FillRect(ARect);
@@ -1537,7 +1551,7 @@ begin
   pcurrobj:=nil;
   peditor:=nil;
   EDContext.ppropcurrentedit:=nil;
-  startdrawy:=0;
+  startdrawy:=headerh;
 
   MResplit:=false;
   namecol:=50;

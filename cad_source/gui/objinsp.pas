@@ -770,9 +770,16 @@ hrect.Right:=namecol;
 ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
 
 Details := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
-hrect.Left:=namecol+1;
+hrect.Left:=namecol;
 hrect.Right:=arect.Right;
 ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
+
+{hrect:=ARect;
+hrect.Bottom:=headerh;
+Details := ThemeServices.GetElementDetails(thHeaderDontCare);
+hrect.Bottom:=headerh;
+ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);}
+
 
 //canvas.Brush.Color := clBtnFace;
 //canvas.FillRect(ARect);

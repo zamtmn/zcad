@@ -119,6 +119,8 @@ type
     private
     procedure setptr(exttype:PUserTypeDescriptor; addr,context:GDBPointer);
     procedure updateinsp;
+    protected
+    procedure ScrollbarHandler(ScrollKind: TScrollBarKind; OldPosition: Integer);override;
     public
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
     procedure GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
@@ -747,6 +749,20 @@ begin
   result:=0;
   calctreeh(@pda,result);
 end;
+procedure TGDBobjinsp.ScrollbarHandler(ScrollKind: TScrollBarKind; OldPosition: Integer);
+begin
+    if peditor<>nil then
+    begin
+       if (EDContext.ppropcurrentedit.rect.Top<headerh+VertScrollBar.ScrollPos-1)
+       or (EDContext.ppropcurrentedit.rect.Top>clientheight+VertScrollBar.ScrollPos-1)then
+       begin
+          Application.QueueAsyncCall(AsyncFreeEditor,0);
+          peditor.geteditor.Hide;
+       end;
+    end;
+     invalidate;
+     inherited;
+end;
 procedure TGDBobjinsp.mypaint;
 begin
      //inherited;
@@ -758,35 +774,41 @@ var
   sub:GDBInteger;
   arect,hrect:trect;
   Details: TThemedElementDetails;
+  ts:TTextStyle;
 begin
 ARect := GetClientRect;
+Details := ThemeServices.GetElementDetails(tlListViewRoot);
+ThemeServices.DrawElement(Canvas.Handle, Details, ARect, nil);
 InflateRect(ARect, -BorderWidth, -BorderWidth);
-
-hrect:=ARect;
-hrect.Bottom:=headerh;
-Details := ThemeServices.GetElementDetails(thHeaderItemLeftNormal);
-hrect.Bottom:=headerh;
-hrect.Right:=namecol;
-ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
-
-Details := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
-hrect.Left:=namecol;
-hrect.Right:=arect.Right;
-ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
-
-{hrect:=ARect;
-hrect.Bottom:=headerh;
-Details := ThemeServices.GetElementDetails(thHeaderDontCare);
-hrect.Bottom:=headerh;
-ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);}
-
-
-//canvas.Brush.Color := clBtnFace;
-//canvas.FillRect(ARect);
 
 y:=startdrawy;
 sub:=0;
-drawprop(@pda,y,sub);
+//drawprop(@pda,y,sub);
+
+ts:=canvas.TextStyle;
+ts.Alignment:=taCenter;
+
+hrect:=ARect;
+hrect.Top:=hrect.Top+self.VertScrollBar.ScrollPos;
+hrect.Bottom:=hrect.Top+headerh;
+Details := ThemeServices.GetElementDetails(thHeaderItemLeftNormal);
+hrect.Right:=namecol;
+ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
+hrect.Left:=hrect.Left+3;
+hrect.Right:=hrect.Right-1;
+canvas.TextRect(hrect,hrect.Left,hrect.Top,'Property',ts);
+
+Details := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
+hrect:=ARect;
+hrect.Top:=hrect.Top+self.VertScrollBar.Position;
+hrect.Bottom:=hrect.Top+headerh;
+hrect.Left:=namecol;
+hrect.Right:=arect.Right;
+ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
+hrect.Left:=hrect.Left+3;
+hrect.Right:=hrect.Right-1;
+canvas.TextRect(hrect,hrect.Left,hrect.Top,'Value'{,ts});
+
 end;
 
 {procedure TGDBobjinsp.formresize;

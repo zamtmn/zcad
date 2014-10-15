@@ -777,13 +777,13 @@ var
   ts:TTextStyle;
 begin
 ARect := GetClientRect;
-Details := ThemeServices.GetElementDetails(tlListViewRoot);
+Details := ThemeServices.GetElementDetails({tlListViewRoot}{ttbDropDownButtonHot}ttpane);
 ThemeServices.DrawElement(Canvas.Handle, Details, ARect, nil);
 InflateRect(ARect, -BorderWidth, -BorderWidth);
 
 y:=startdrawy;
 sub:=0;
-//drawprop(@pda,y,sub);
+drawprop(@pda,y,sub);
 
 ts:=canvas.TextStyle;
 ts.Alignment:=taCenter;

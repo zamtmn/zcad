@@ -38,7 +38,6 @@ const
   alligmentall=2;
   alligmentarrayofarray=64;
   fastEditorOffset={$IFDEF LCLQT}7{$ELSE}2{$ENDIF} ;
-  headerh=20;
 type
   arrindop=record
     currnum,currcount,num,count:GDBInteger;
@@ -77,7 +76,7 @@ type
     procedure draw; virtual;
     procedure mypaint(sender:tobject);
     function getstyle:DWord; virtual;
-    procedure drawprop(PPA:PTPropertyDeskriptorArray; var y,sub:GDBInteger);
+    procedure drawprop(PPA:PTPropertyDeskriptorArray; var y,sub,miny:GDBInteger;arect:trect);
     procedure calctreeh(PPA:PTPropertyDeskriptorArray; var y:GDBInteger);
     function gettreeh:GDBInteger; virtual;
     //procedure FormResize;
@@ -324,14 +323,14 @@ begin
      onpaint:=mypaint;
      self.DoubleBuffered:=true;
      self.BorderStyle:=bsnone;
-     self.BorderWidth:=1;
+     self.BorderWidth:=10;
 
      pcurrobj:=nil;
      peditor:=nil;
      currobjgdbtype:=nil;
      createpda;
   EDContext.ppropcurrentedit:=nil;
-  startdrawy:=headerh;
+  startdrawy:=rowh;
 
   MResplit:=false;
   namecol:=clientwidth div 2;
@@ -548,7 +547,11 @@ begin
   dec(r.left,size.cx+1);
 end;
 procedure drawrect(cnvs:tcanvas;clr:TColor;r:trect;active:boolean);
+var
+   Details: TThemedElementDetails;
 begin
+  if not ThemeServices.ThemesAvailable then
+  begin
   if active then
                 begin
                      cnvs.Brush.Color := clHighlight{clBtnHiLight};
@@ -564,6 +567,15 @@ begin
                      if sysvar.INTF.INTF_ShowLinesInObjInsp^ then
                      cnvs.Rectangle(r);
                 end;
+  end
+  else
+  begin
+       if active then
+                     Details := ThemeServices.GetElementDetails(ttItemSelected)
+                 else
+                     Details := ThemeServices.GetElementDetails(ttItemNormal);
+       ThemeServices.DrawElement(cnvs.Handle, Details, r, nil);
+  end;
 end;
 procedure drawstring(cnvs:tcanvas;r:trect;L,T:integer;s:string);
 const
@@ -622,7 +634,7 @@ end;
 
 end;
 
-procedure TGDBobjinsp.drawprop(PPA:PTPropertyDeskriptorArray; var y,sub:GDBInteger);
+procedure TGDBobjinsp.drawprop(PPA:PTPropertyDeskriptorArray; var y,sub,miny:GDBInteger;arect:TRect);
 var
   s:GDBString;
   ppd:PPropertyDeskriptor;
@@ -638,11 +650,11 @@ begin
       if (ppd^.IsVisible) then
       begin
         OnMouseProp:=(ppd=onmousepp);
-        r.Left:=2+8*sub;
+        r.Left:=arect.Left+2+8*sub;
         r.Top:=y;
         r.Right:=namecol;
         r.Bottom:=y+rowh+1;
-         if self.VertScrollBar.Position<=r.Bottom then
+         if miny<=r.Bottom then
                                                  visible:=true
                                              else
                                                  visible:=false;
@@ -652,7 +664,7 @@ begin
                                      if visible then
                                      begin
                                     s:=ppd^.Name;
-                                    r.Right:=clientwidth-2;
+                                    r.Right:=arect.Right;
                                     drawrect(canvas,clBtnFace,r,false);
                                     r.Left:=r.Left+3;
                                     r.Top:=r.Top+3;
@@ -674,7 +686,7 @@ begin
                                     inc(sub);
                                     y:=y+rowh;
                                     if not ppd^.Collapsed^ then
-                                      drawprop(GDBPointer(ppd.SubNode),y,sub);
+                                      drawprop(GDBPointer(ppd.SubNode),y,sub,miny,arect);
                                     dec(sub);
                                   end
         else
@@ -753,7 +765,7 @@ procedure TGDBobjinsp.ScrollbarHandler(ScrollKind: TScrollBarKind; OldPosition: 
 begin
     if peditor<>nil then
     begin
-       if (EDContext.ppropcurrentedit.rect.Top<headerh+VertScrollBar.ScrollPos-1)
+       if (EDContext.ppropcurrentedit.rect.Top<rowh+VertScrollBar.ScrollPos-1)
        or (EDContext.ppropcurrentedit.rect.Top>clientheight+VertScrollBar.ScrollPos-1)then
        begin
           Application.QueueAsyncCall(AsyncFreeEditor,0);
@@ -777,37 +789,39 @@ var
   ts:TTextStyle;
 begin
 ARect := GetClientRect;
-Details := ThemeServices.GetElementDetails({tlListViewRoot}{ttbDropDownButtonHot}ttpane);
-ThemeServices.DrawElement(Canvas.Handle, Details, ARect, nil);
 InflateRect(ARect, -BorderWidth, -BorderWidth);
-
-y:=startdrawy;
-sub:=0;
-drawprop(@pda,y,sub);
+ARect.Top:=ARect.Top+VertScrollBar.ScrollPos;
+ARect.Bottom:=ARect.Bottom+VertScrollBar.ScrollPos;
+Details := ThemeServices.GetElementDetails({$IFDEF WINDOWS}ttbThumbDisabled{$endif}
+                                          {tlListViewRoot}
+                                          {ttbDropDownButtonHot}
+                                          {ttpane});
+ThemeServices.DrawElement(Canvas.Handle, Details, ARect, nil);
 
 ts:=canvas.TextStyle;
 ts.Alignment:=taCenter;
+ts.Layout:=tlCenter;
 
 hrect:=ARect;
-hrect.Top:=hrect.Top+self.VertScrollBar.ScrollPos;
-hrect.Bottom:=hrect.Top+headerh;
-Details := ThemeServices.GetElementDetails(thHeaderItemLeftNormal);
+InflateRect(hrect, -1, -1);
+hrect.Bottom:=hrect.Top+rowh+1;
 hrect.Right:=namecol;
+
+y:=startdrawy+BorderWidth;
+sub:=0;
+drawprop(@pda,y,sub,hrect.Bottom,arect);
+
+Details := ThemeServices.GetElementDetails(thHeaderItemNormal);
 ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
-hrect.Left:=hrect.Left+3;
-hrect.Right:=hrect.Right-1;
 canvas.TextRect(hrect,hrect.Left,hrect.Top,'Property',ts);
 
 Details := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
-hrect:=ARect;
-hrect.Top:=hrect.Top+self.VertScrollBar.Position;
-hrect.Bottom:=hrect.Top+headerh;
-hrect.Left:=namecol;
-hrect.Right:=arect.Right;
+hrect.Left:=hrect.right;
+hrect.right:=ARect.Right-2;
 ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
 hrect.Left:=hrect.Left+3;
 hrect.Right:=hrect.Right-1;
-canvas.TextRect(hrect,hrect.Left,hrect.Top,'Value'{,ts});
+canvas.TextRect(hrect,hrect.Left,hrect.Top,'Value',ts);
 
 end;
 
@@ -1580,7 +1594,7 @@ begin
   pcurrobj:=nil;
   peditor:=nil;
   EDContext.ppropcurrentedit:=nil;
-  startdrawy:=headerh;
+  startdrawy:=rowh;
 
   MResplit:=false;
   namecol:=50;

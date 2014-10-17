@@ -76,7 +76,7 @@ type
     procedure draw; virtual;
     procedure mypaint(sender:tobject);
     function getstyle:DWord; virtual;
-    procedure drawprop(PPA:PTPropertyDeskriptorArray; var y,sub,miny:GDBInteger;arect:trect);
+    procedure drawprop(PPA:PTPropertyDeskriptorArray; var y,sub:GDBInteger;miny:GDBInteger;arect:trect);
     procedure calctreeh(PPA:PTPropertyDeskriptorArray; var y:GDBInteger);
     function gettreeh:GDBInteger; virtual;
     //procedure FormResize;
@@ -546,7 +546,7 @@ begin
              end;
   dec(r.left,size.cx+1);
 end;
-procedure drawrect(cnvs:tcanvas;clr:TColor;r:trect;active:boolean);
+procedure drawrect(cnvs:tcanvas;r:trect;active:boolean;onmouse:boolean);
 var
    Details: TThemedElementDetails;
 begin
@@ -571,10 +571,25 @@ begin
   else
   begin
        if active then
-                     Details := ThemeServices.GetElementDetails(ttItemSelected)
+                     begin
+                     Details := ThemeServices.GetElementDetails(ttItemSelected);
+                     ThemeServices.DrawElement(cnvs.Handle, Details, r, nil);
+                     end
                  else
+                     if onmouse then
+                     begin
+                     Details := ThemeServices.GetElementDetails(ttItemHot);
+                     ThemeServices.DrawElement(cnvs.Handle, Details, r, nil);
+                     end
+                     else
+                     begin
+                     if assigned(sysvar.INTF.INTF_ShowLinesInObjInsp) then
+                     if sysvar.INTF.INTF_ShowLinesInObjInsp^ then
+                     begin
                      Details := ThemeServices.GetElementDetails(ttItemNormal);
-       ThemeServices.DrawElement(cnvs.Handle, Details, r, nil);
+                     ThemeServices.DrawElement(cnvs.Handle, Details, r, nil);
+                     end;
+                     end;
   end;
 end;
 procedure drawstring(cnvs:tcanvas;r:trect;L,T:integer;s:string);
@@ -602,7 +617,7 @@ begin
      end;
   r:=ppd.rect;
   if fulldraw then
-  drawrect(canvas,clWindow,r,false);
+  drawrect(canvas,r,false,false);
   r.Top:=r.Top+3;
   r.Left:=r.Left+3;
   r.Right:=r.Right-1;
@@ -634,7 +649,7 @@ end;
 
 end;
 
-procedure TGDBobjinsp.drawprop(PPA:PTPropertyDeskriptorArray; var y,sub,miny:GDBInteger;arect:TRect);
+procedure TGDBobjinsp.drawprop(PPA:PTPropertyDeskriptorArray; var y,sub:GDBInteger;miny:GDBInteger;arect:TRect);
 var
   s:GDBString;
   ppd:PPropertyDeskriptor;
@@ -650,7 +665,7 @@ begin
       if (ppd^.IsVisible) then
       begin
         OnMouseProp:=(ppd=onmousepp);
-        r.Left:=arect.Left+2+8*sub;
+        r.Left:={arect.Left+2+8*sub}arect.Left;
         r.Top:=y;
         r.Right:=namecol;
         r.Bottom:=y+rowh+1;
@@ -665,8 +680,8 @@ begin
                                      begin
                                     s:=ppd^.Name;
                                     r.Right:=arect.Right;
-                                    drawrect(canvas,clBtnFace,r,false);
-                                    r.Left:=r.Left+3;
+                                    drawrect(canvas,r,false,OnMouseProp);
+                                    r.Left:={r.Left+3}arect.Left+5+8*sub;
                                     r.Top:=r.Top+3;
                                     if (ppd^.Attr and FA_READONLY)<>0 then
                                                                           begin
@@ -693,7 +708,7 @@ begin
         begin
           if visible then
           begin
-          drawrect(canvas,clBtnFace,r,(ppd=EDContext.ppropcurrentedit));
+          drawrect(canvas,r,(ppd=EDContext.ppropcurrentedit),OnMouseProp);
 
           if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
           begin
@@ -733,7 +748,7 @@ begin
               end;
           r.Top:=r.Top-3;
           r.Left:=r.Right-1;
-          r.Right:=clientwidth-2;
+          r.Right:={clientwidth-2}arect.Right;
 
           ppd.rect:=r;
           drawvalue(ppd,canvas,true);
@@ -792,7 +807,7 @@ ARect := GetClientRect;
 InflateRect(ARect, -BorderWidth, -BorderWidth);
 ARect.Top:=ARect.Top+VertScrollBar.ScrollPos;
 ARect.Bottom:=ARect.Bottom+VertScrollBar.ScrollPos;
-Details := ThemeServices.GetElementDetails({$IFDEF WINDOWS}ttbThumbDisabled{$endif}
+Details := ThemeServices.GetElementDetails({$IFDEF WINDOWS}{ttbThumbDisabled}tlListViewRoot{$endif}
                                           {tlListViewRoot}
                                           {ttbDropDownButtonHot}
                                           {ttpane});
@@ -804,12 +819,13 @@ ts.Layout:=tlCenter;
 
 hrect:=ARect;
 InflateRect(hrect, -1, -1);
-hrect.Bottom:=hrect.Top+rowh+1;
-hrect.Right:=namecol;
 
 y:=startdrawy+BorderWidth;
 sub:=0;
-drawprop(@pda,y,sub,hrect.Bottom,arect);
+drawprop(@pda,y,sub,hrect.Top+rowh+1,arect);
+
+hrect.Bottom:=hrect.Top+rowh+1;
+hrect.Right:=namecol;
 
 Details := ThemeServices.GetElementDetails(thHeaderItemNormal);
 ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
@@ -817,10 +833,8 @@ canvas.TextRect(hrect,hrect.Left,hrect.Top,'Property',ts);
 
 Details := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
 hrect.Left:=hrect.right;
-hrect.right:=ARect.Right-2;
+hrect.right:=ARect.Right-1;
 ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
-hrect.Left:=hrect.Left+3;
-hrect.Right:=hrect.Right-1;
 canvas.TextRect(hrect,hrect.Left,hrect.Top,'Value',ts);
 
 end;

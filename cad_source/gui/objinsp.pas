@@ -100,7 +100,7 @@ type
     procedure ClearEDContext;
     procedure AsyncFreeEditorAndSelectNext(Data: PtrInt);
     procedure AsyncFreeEditor(Data: PtrInt);
-    function IsMouseOnSpliter(pp:PPropertyDeskriptor; X:Integer):GDBBoolean;
+    function IsMouseOnSpliter(pp:PPropertyDeskriptor; X,Y:Integer):GDBBoolean;
 
     procedure createeditor(pp:PPropertyDeskriptor);
     function CurrObjIsEntity:boolean;
@@ -1068,11 +1068,11 @@ begin
      //{$ENDIF}
      UpdateScrollbars;
 end;
-function TGDBobjinsp.IsMouseOnSpliter(pp:PPropertyDeskriptor; X:Integer):GDBBoolean;
+function TGDBobjinsp.IsMouseOnSpliter(pp:PPropertyDeskriptor; X,Y:Integer):GDBBoolean;
 begin
   result:=false;
-  if (pp<>nil) then
-  if (pp^.SubNode=nil) then
+  if y-self.VertScrollBar.Position>0 then
+  if (y-self.VertScrollBar.Position)<(rowh) then
   if (abs(x-namecol)<2) then
                           result:=true;
 end;
@@ -1105,7 +1105,7 @@ begin
                        exit;
                   end;
 
-  y:=y+self.VertScrollBar.Position;
+  y:=y+self.VertScrollBar.Position-self.BorderWidth;
   //application.HintPause:=1;
   //application.HintShortPause:=10;
   my:=startdrawy;
@@ -1115,7 +1115,7 @@ begin
                             needredraw:=true;
                             OnMousePP:=pp;
                        end;
-  if IsMouseOnSpliter(pp,X) then
+  if IsMouseOnSpliter(pp,X,Y) then
                                 self.Cursor:=crHSplit
                             else
                                 self.Cursor:=crDefault;
@@ -1461,7 +1461,7 @@ begin
   pp:=mousetoprop(@pda,x,y,my);
 
   if (button=mbLeft)
-  and (IsMouseOnSpliter(pp,X)) then
+  and (IsMouseOnSpliter(pp,X,Y)) then
                                     begin
                                     mresplit:=true;
                                     exit;

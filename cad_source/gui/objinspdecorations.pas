@@ -248,7 +248,7 @@ begin
                            ComboElem:=tbPushButtonNormal;
      Details:=ThemeServices.GetElementDetails(ComboElem);
      ThemeServices.DrawElement(Canvas.Handle,Details,r);
-     ThemeServices.DrawText(Canvas.Handle,Details,s,r,DT_CENTER or DT_VCENTER,0);
+     ThemeServices.DrawText(Canvas,Details,s,r,DT_CENTER or DT_VCENTER,0);
 end;
 procedure ButtonDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
 begin
@@ -554,4 +554,4 @@ begin
      AddFastEditorToType('GDBLength',@ButtonGetPrefferedFastEditorSize,@ButtonHLineDrawFastEditor,@GetLengthFromDrawing,true);
      AddFastEditorToType('TGDBOSMode',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runOSwnd);
 end;
-end.
+end.

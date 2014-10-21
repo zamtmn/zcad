@@ -38,6 +38,7 @@ const
   alligmentall=2;
   alligmentarrayofarray=64;
   fastEditorOffset={$IFDEF LCLQT}7{$ELSE}2{$ENDIF} ;
+  spliterhalfwidth=4;
 type
   arrindop=record
     currnum,currcount,num,count:GDBInteger;
@@ -152,6 +153,7 @@ var
   //temp: GDBPointer;
   proptreeptr:propdeskptr;
   rowh:integer;
+  ty:integer;
 
 implementation
 
@@ -323,7 +325,7 @@ begin
      onpaint:=mypaint;
      self.DoubleBuffered:=true;
      self.BorderStyle:=bsnone;
-     self.BorderWidth:=10;
+     self.BorderWidth:=0;
 
      pcurrobj:=nil;
      peditor:=nil;
@@ -334,8 +336,6 @@ begin
 
   MResplit:=false;
   namecol:=clientwidth div 2;
-  //mmnamecol:=namecol;
-
 end;
 
 procedure TGDBobjinsp.SetCurrentObjDefault;
@@ -546,7 +546,7 @@ begin
              end;
   dec(r.left,size.cx+1);
 end;
-procedure drawrect(cnvs:tcanvas;r:trect;active:boolean;onmouse:boolean);
+procedure drawrect(cnvs:tcanvas;r:trect;active:boolean;onmouse:boolean;readonly:boolean);
 var
    Details: TThemedElementDetails;
 begin
@@ -576,6 +576,12 @@ begin
                      ThemeServices.DrawElement(cnvs.Handle, Details, r, nil);
                      end
                  else
+                     if readonly then
+                     begin
+                     //Details := ThemeServices.GetElementDetails(ttItemDisabled);
+                     //ThemeServices.DrawElement(cnvs.Handle, Details, r, nil);
+                     end
+                     else
                      if onmouse then
                      begin
                      Details := ThemeServices.GetElementDetails(ttItemHot);
@@ -586,8 +592,8 @@ begin
                      if assigned(sysvar.INTF.INTF_ShowLinesInObjInsp) then
                      if sysvar.INTF.INTF_ShowLinesInObjInsp^ then
                      begin
-                     Details := ThemeServices.GetElementDetails(ttItemNormal);
-                     ThemeServices.DrawElement(cnvs.Handle, Details, r, nil);
+                     //Details := ThemeServices.GetElementDetails(ttItemNormal);
+                     //ThemeServices.DrawElement(cnvs.Handle, Details, r, nil);
                      end;
                      end;
   end;
@@ -617,7 +623,7 @@ begin
      end;
   r:=ppd.rect;
   if fulldraw then
-  drawrect(canvas,r,false,false);
+  drawrect(canvas,r,false,false,false);
   r.Top:=r.Top+3;
   r.Left:=r.Left+3;
   r.Right:=r.Right-1;
@@ -667,7 +673,7 @@ begin
         OnMouseProp:=(ppd=onmousepp);
         r.Left:={arect.Left+2+8*sub}arect.Left;
         r.Top:=y;
-        r.Right:=namecol;
+        r.Right:=namecol-spliterhalfwidth;
         r.Bottom:=y+rowh+1;
          if miny<=r.Bottom then
                                                  visible:=true
@@ -680,7 +686,7 @@ begin
                                      begin
                                     s:=ppd^.Name;
                                     r.Right:=arect.Right;
-                                    drawrect(canvas,r,false,OnMouseProp);
+                                    drawrect(canvas,r,false,OnMouseProp,(ppd^.Attr and FA_READONLY)<>0);
                                     r.Left:={r.Left+3}arect.Left+5+8*sub;
                                     r.Top:=r.Top+3;
                                     if (ppd^.Attr and FA_READONLY)<>0 then
@@ -708,7 +714,7 @@ begin
         begin
           if visible then
           begin
-          drawrect(canvas,r,(ppd=EDContext.ppropcurrentedit),OnMouseProp);
+          drawrect(canvas,r,(ppd=EDContext.ppropcurrentedit),OnMouseProp,(ppd^.Attr and FA_READONLY)<>0);
 
           if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
           begin
@@ -747,8 +753,8 @@ begin
                                       end;
               end;
           r.Top:=r.Top-3;
-          r.Left:=r.Right-1;
-          r.Right:={clientwidth-2}arect.Right;
+          r.Left:=r.Right-1+spliterhalfwidth;
+          r.Right:=arect.Right;
 
           ppd.rect:=r;
           drawvalue(ppd,canvas,true);
@@ -787,8 +793,10 @@ begin
           peditor.geteditor.Hide;
        end;
     end;
+     ty:=OldPosition;
      invalidate;
      inherited;
+     ty:=VertScrollBar.ScrollPos;
 end;
 procedure TGDBobjinsp.mypaint;
 begin
@@ -808,9 +816,8 @@ InflateRect(ARect, -BorderWidth, -BorderWidth);
 ARect.Top:=ARect.Top+VertScrollBar.ScrollPos;
 ARect.Bottom:=ARect.Bottom+VertScrollBar.ScrollPos;
 Details := ThemeServices.GetElementDetails({$IFDEF WINDOWS}{ttbThumbDisabled}tlListViewRoot{$endif}
-                                          {tlListViewRoot}
-                                          {ttbDropDownButtonHot}
-                                          {ttpane});
+                                          {$IFDEF LCLGTK2}ttbDropDownButtonPressed{$endif}
+                                          {$IFDEF LCLQT}ttpane{$endif});
 ThemeServices.DrawElement(Canvas.Handle, Details, ARect, nil);
 
 ts:=canvas.TextStyle;
@@ -819,6 +826,7 @@ ts.Layout:=tlCenter;
 
 hrect:=ARect;
 InflateRect(hrect, -1, -1);
+InflateRect(ARect, -1, 0);
 
 y:=startdrawy+BorderWidth;
 sub:=0;
@@ -872,17 +880,19 @@ end;
 
 function mousetoprop(psubtree:PTPropertyDeskriptorArray; mx,my:GDBInteger; var y:GDBInteger):PPropertyDeskriptor;
 var
-  {rez,}curr:PPropertyDeskriptor;
-      ir:itrec;
+  curr:PPropertyDeskriptor;
+  dy:integer;
+  ir:itrec;
 begin
   result:=nil;
-  //rez:=nil;
+  if my<0 then exit;
   curr:=psubtree^.beginiterate(ir);
   if curr<>nil then
     repeat
       if curr^.IsVisible then
       begin
-        if (my-y)<rowh then
+        dy:=my-y;
+        if (dy<rowh)and(dy>0) then
         begin
           result:=curr;
           exit;
@@ -1073,13 +1083,17 @@ begin
   result:=false;
   if y-self.VertScrollBar.Position>0 then
   if (y-self.VertScrollBar.Position)<(rowh) then
-  if (abs(x-namecol)<2) then
+  if (abs(x-namecol)<spliterhalfwidth) then
                           result:=true;
 end;
 procedure TGDBobjinsp.MouseLeave;
 begin
-     OnMousePP:=nil;
-     invalidate;
+     if OnMousePP<>nil then
+                           begin
+                                OnMousePP.FastEditorState:=TFES_Default;
+                                OnMousePP:=nil;
+                                invalidate;
+                           end;
      inherited;
 end;
 
@@ -1104,8 +1118,7 @@ begin
                        updateeditorBounds;
                        exit;
                   end;
-
-  y:=y+self.VertScrollBar.Position-self.BorderWidth;
+  y:=y+VertScrollBar.scrollpos-self.BorderWidth;
   //application.HintPause:=1;
   //application.HintShortPause:=10;
   my:=startdrawy;
@@ -1113,6 +1126,8 @@ begin
   if OnMousePP<>pp then
                        begin
                             needredraw:=true;
+                            if OnMousePP<>nil then
+                                                  OnMousePP.FastEditorState:=TFES_Default;
                             OnMousePP:=pp;
                        end;
   if IsMouseOnSpliter(pp,X,Y) then
@@ -1244,7 +1259,7 @@ begin
                                             end;
      if (button=mbLeft) then
                             begin
-                                 y:=y+self.VertScrollBar.Position;
+                                 y:=y+VertScrollBar.scrollpos-self.BorderWidth;
                                  my:=startdrawy;
                                  pp:=mousetoprop(@pda,x,y,my);
                                  if pp=nil then
@@ -1455,7 +1470,7 @@ begin
        freeeditor;
        exit;
   end;
-  y:=y+VertScrollBar.scrollpos{Position};
+  y:=y+VertScrollBar.scrollpos-self.BorderWidth;
   //if proptreeptr=nil then exit;
   my:=startdrawy;
   pp:=mousetoprop(@pda,x,y,my);
@@ -1612,14 +1627,6 @@ begin
 
   MResplit:=false;
   namecol:=50;
-  //---------------TI.cbSize := SizeOf(TOOLINFO);
-  //---------------TI.uFlags := TTF_SUBCLASS;
-  //---------------TI.uId := 0;
-  //---------------TI.hwnd := Handle;
-  //---------------TI.lpszText := @'123123123'[1];
-  //---------------Windows.GetClientRect(Handle, TI.Rect);
-
-  //----------------SendMessage(MainFormN.hToolTip, TTM_ADDTOOL, 0, LPARAM(@ti));
 end;
 procedure TGDBobjinsp.updateeditorBounds;
 begin

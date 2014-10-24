@@ -124,7 +124,7 @@ TOIProps=record
                ci,barpos:GDBInteger;
          end;
 pvardesk = ^vardesk;
-TMyNotifyCommand=(TMNC_EditingDoneEnterKey,TMNC_EditingDoneLostFocus,TMNC_EditingDoneESC,TMNC_EditingProcess,TMNC_RunFastEditor);
+TMyNotifyCommand=(TMNC_EditingDoneEnterKey,TMNC_EditingDoneLostFocus,TMNC_EditingDoneESC,TMNC_EditingProcess,TMNC_RunFastEditor,TMNC_EditingDoneDoNothing);
 TMyNotifyProc=procedure (Sender: TObject;Command:TMyNotifyCommand) of object;
 TPropEditor=class(TComponent)
                  public
@@ -137,7 +137,9 @@ TPropEditor=class(TComponent)
                  RunFastEditorValue:tobject;
                  changed:boolean;
                  constructor Create(AOwner:TComponent;_PInstance:GDBPointer;_PTD:PUserTypeDescriptor;FreeOnLostFocus:boolean);
-                 procedure EditingDone(Sender: TObject);
+                 procedure EditingDone(Sender: TObject);//Better name ..LostFocus..
+                 procedure EditingDone2(Sender: TObject);
+                 procedure StoreData(Sender: TObject);
                  procedure EditingProcess(Sender: TObject);
                  procedure ExitEdit(Sender: TObject);
                  procedure keyPress(Sender: TObject; var Key: char);
@@ -270,8 +272,7 @@ begin
                                                       OwnerNotify(self,TMNC_EditingDoneEnterKey);
                                                  end;
 end;
-
-procedure TPropEditor.EditingDone(Sender: TObject);
+procedure TPropEditor.StoreData(Sender: TObject);
 var
   i:integer;
   p:pointer;
@@ -287,8 +288,18 @@ begin
                   else
                       ptd.SetValueFromString(PInstance,tedit(sender).text);
      end;
+end;
+procedure TPropEditor.EditingDone(Sender: TObject);
+begin
+      StoreData(sender);
      if assigned(OwnerNotify) then
                                   OwnerNotify(self,TMNC_EditingDoneLostFocus);
+end;
+procedure TPropEditor.EditingDone2(Sender: TObject);
+begin
+     StoreData(sender);
+     if assigned(OwnerNotify) then
+                                  OwnerNotify(self,TMNC_EditingDoneDoNothing);
 end;
 procedure TPropEditor.EditingProcess(Sender: TObject);
 var

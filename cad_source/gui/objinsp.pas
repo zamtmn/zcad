@@ -97,7 +97,8 @@ type
     procedure AfterConstruction; override;
     procedure EraseBackground(DC: HDC); override;
 
-    procedure freeeditor;
+    procedure FreeEditor;
+    procedure StoreAndFreeEditor;
     procedure ClearEDContext;
     procedure AsyncFreeEditorAndSelectNext(Data: PtrInt);
     procedure AsyncFreeEditor(Data: PtrInt);
@@ -844,7 +845,7 @@ canvas.TextRect(hrect,hrect.Left,hrect.Top,'Property',ts);
 
 Details := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
 hrect.Left:=hrect.right;
-hrect.right:=ARect.Right-1;
+hrect.right:=ARect.Right-2;
 ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
 canvas.TextRect(hrect,hrect.Left,hrect.Top,'Value',ts);
 
@@ -932,18 +933,31 @@ begin
      EDContext.UndoStack:=nil;
 end;
 
-procedure TGDBobjinsp.freeeditor;
+procedure TGDBobjinsp.FreeEditor;
 begin
      if EDContext.UndoCommand<>nil then
                                        EDContext.UndoStack.KillLastCommand;
      ClearEDContext;
+     if peditor<>nil then
+     begin
+           peditor.geteditor.Hide;
+           peditor.Destroy;
+           peditor:=nil;
+     end;
      freeandnil(peditor);
      invalidate;
      if assigned(shared.cmdedit) then
      if shared.cmdedit.IsVisible then
                                      shared.cmdedit.SetFocus;
 end;
-
+procedure TGDBobjinsp.StoreAndFreeEditor;
+begin
+    if peditor<>nil then
+                      begin
+                           peditor.EditingDone2(peditor.geteditor);
+                           freeeditor;
+                      end;
+end;
 procedure TGDBobjinsp.AsyncFreeEditorAndSelectNext;
 var
       next:PPropertyDeskriptor;
@@ -1345,14 +1359,7 @@ var
 begin
      if pp^.SubNode<>nil then
      begin
-       if peditor<>nil then
-                           begin
-                                freeeditor;
-                             //freeandnil(peditor);
-                           //-----------------------------------------------------------------peditor^.done;
-                           //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
-                           end;
-
+       StoreAndFreeEditor;
        if pGDBByte(pp^.Collapsed)^<>0 then pGDBByte(pp^.Collapsed)^:=1;
                                            pp^.Collapsed^:=not(pp^.Collapsed^);
        updateinsp;
@@ -1368,11 +1375,7 @@ begin
        begin
          tp:=pcurrobj;
          GDBobjinsp.buildproplist(currobjgdbtype,property_correct,tp);
-
-         freeandnil(peditor);
-         //-----------------------------------------------------------------peditor^.done;
-         //-----------------------------------------------------------------gdbfreemem(pointer(peditor));
-         //ppropcurrentedit:=pp;
+         StoreAndFreeEditor;
        end;
        vsa.init(50);
        if (pp^.valkey<>'')and(self.pcurcontext<>nil) then
@@ -1453,26 +1456,23 @@ procedure TGDBobjinsp.MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: I
 var
   my:GDBInteger;
   pp:PPropertyDeskriptor;
-  //pedipor:pzbasic;
-//  tb:GDBBoolean;
-//  pb:PGDBBoolean;
-  //tp:pointer;
-  //pobj:pGDBObjEntity;
-  //pv:pvardesk;
-  //vv:gdbstring;
-  //vsa:GDBGDBStringArray;
-  //ir:itrec;
-
   menu:TPopupMenu;
   fesize:tsize;
-
+  clickonheader:boolean;
 begin
   inherited;
   if (y<0)or(y>clientheight)or(x<0)or(x>clientwidth) then
   begin
-       freeeditor;
+       StoreAndFreeEditor;
        exit;
   end;
+  if (y<rowh) then
+  begin
+       StoreAndFreeEditor;
+       clickonheader:=true;
+  end
+  else
+      clickonheader:=false;
   y:=y+VertScrollBar.scrollpos-self.BorderWidth;
   //if proptreeptr=nil then exit;
   my:=startdrawy;
@@ -1484,10 +1484,12 @@ begin
                                     mresplit:=true;
                                     exit;
                                     end;
-  if pp=nil then
+  if (pp=nil)and(button=mbLeft) then
                 exit;
   if (button=mbLeft) then
                          begin
+                               if not clickonheader then
+                               begin
                               if assigned(pp.FastEditor.OnGetPrefferedFastEditorSize) then
                               begin
                               fesize:=pp.FastEditor.OnGetPrefferedFastEditorSize(pp.valueAddres);
@@ -1508,12 +1510,15 @@ begin
                               end
                                  else
                                      createeditor(pp)
+                               end;
                          end
                      else
                          begin
                               begin
                                    menu:=nil;
-                                   if pp^.valkey<>''then
+                                   if clickonheader then
+                                   menu:=TPopupMenu(application.FindComponent(MenuNameModifier+{'OBJINSPHEADERCXMENU'}'OBJINSPVARCXMENU'))
+                              else if pp^.valkey<>''then
                                    menu:=TPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPVARCXMENU'))
                               else if pp^.Value<>''then
                                    menu:=TPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPCXMENU'));

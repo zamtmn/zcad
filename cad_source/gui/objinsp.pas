@@ -815,7 +815,7 @@ ARect := GetClientRect;
 InflateRect(ARect, -BorderWidth, -BorderWidth);
 ARect.Top:=ARect.Top+VertScrollBar.ScrollPos;
 ARect.Bottom:=ARect.Bottom+VertScrollBar.ScrollPos;
-Details := ThemeServices.GetElementDetails({$IFDEF WINDOWS}{ttbThumbDisabled}tlListViewRoot{$endif}
+Details := ThemeServices.GetElementDetails({$IFDEF WINDOWS}tmPopupCheckBackgroundDisabled{trChevronVertHot}{ttbThumbDisabled}{tlListViewRoot}{$endif}
                                           {$IFDEF LCLGTK2}ttbDropDownButtonPressed{$endif}
                                           {$IFDEF LCLQT}{ttpane}thHeaderDontCare{$endif});
 ThemeServices.DrawElement(Canvas.Handle, Details, ARect, nil);
@@ -827,11 +827,11 @@ ts.Layout:=tlCenter;
 
 hrect:=ARect;
 InflateRect(hrect, -1, -1);
-InflateRect(ARect, -1, 0);
+
 
 y:=startdrawy+BorderWidth;
 sub:=0;
-drawprop(@pda,y,sub,hrect.Top+rowh+1,arect);
+drawprop(@pda,y,sub,hrect.Top+rowh+1,{arect}hrect);
 
 hrect.Bottom:=hrect.Top+rowh+1;
 hrect.Top:=hrect.Top+2;

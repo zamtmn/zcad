@@ -817,8 +817,9 @@ ARect.Top:=ARect.Top+VertScrollBar.ScrollPos;
 ARect.Bottom:=ARect.Bottom+VertScrollBar.ScrollPos;
 Details := ThemeServices.GetElementDetails({$IFDEF WINDOWS}{ttbThumbDisabled}tlListViewRoot{$endif}
                                           {$IFDEF LCLGTK2}ttbDropDownButtonPressed{$endif}
-                                          {$IFDEF LCLQT}ttpane{$endif});
+                                          {$IFDEF LCLQT}{ttpane}thHeaderDontCare{$endif});
 ThemeServices.DrawElement(Canvas.Handle, Details, ARect, nil);
+//self.Canvas.FrameRect(ARect);
 
 ts:=canvas.TextStyle;
 ts.Alignment:=taCenter;
@@ -833,6 +834,8 @@ sub:=0;
 drawprop(@pda,y,sub,hrect.Top+rowh+1,arect);
 
 hrect.Bottom:=hrect.Top+rowh+1;
+hrect.Top:=hrect.Top+2;
+hrect.Left:=hrect.Left+2;
 hrect.Right:=namecol;
 
 Details := ThemeServices.GetElementDetails(thHeaderItemNormal);

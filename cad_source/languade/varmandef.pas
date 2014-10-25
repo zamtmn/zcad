@@ -291,13 +291,14 @@ begin
 end;
 procedure TPropEditor.EditingDone(Sender: TObject);
 begin
-      StoreData(sender);
+     StoreData(sender);
      if assigned(OwnerNotify) then
                                   OwnerNotify(self,TMNC_EditingDoneLostFocus);
 end;
 procedure TPropEditor.EditingDone2(Sender: TObject);
 begin
      StoreData(sender);
+     tedit(sender).OnExit:=nil;
      if assigned(OwnerNotify) then
                                   OwnerNotify(self,TMNC_EditingDoneDoNothing);
 end;

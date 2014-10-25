@@ -849,6 +849,14 @@ hrect.right:=ARect.Right-2;
 ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
 canvas.TextRect(hrect,hrect.Left,hrect.Top,'Value',ts);
 
+Details := ThemeServices.GetElementDetails(ttbSeparatorNormal);
+hrect.Left:=namecol-2;
+hrect.right:=namecol+2;
+hrect.Top:= hrect.Bottom;
+hrect.Bottom:=ARect.Bottom;
+ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
+
+
 end;
 
 {procedure TGDBobjinsp.formresize;

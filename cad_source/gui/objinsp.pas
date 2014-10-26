@@ -853,7 +853,7 @@ Details := ThemeServices.GetElementDetails(ttbSeparatorNormal);
 hrect.Left:=namecol-2;
 hrect.right:=namecol+2;
 hrect.Top:= hrect.Bottom;
-hrect.Bottom:=ARect.Bottom;
+hrect.Bottom:={ARect.Bottom}+self.contentheigth+rowh;
 ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
 
 
@@ -948,6 +948,7 @@ begin
      ClearEDContext;
      if peditor<>nil then
      begin
+           peditor.geteditor.OnExit:=nil;
            peditor.geteditor.Hide;
            peditor.Destroy;
            peditor:=nil;

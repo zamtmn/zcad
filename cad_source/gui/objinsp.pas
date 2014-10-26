@@ -155,6 +155,7 @@ var
   proptreeptr:propdeskptr;
   rowh:integer;
   ty:integer;
+  DefaultDetails: TThemedElementDetails;
 
 implementation
 
@@ -489,7 +490,7 @@ begin
            end;
      end;
 end;
-procedure drawheader(Canvas:tcanvas;ppd:PPropertyDeskriptor;r:trect;name:string;onm:boolean);
+procedure drawheader(Canvas:tcanvas;ppd:PPropertyDeskriptor;r:trect;name:string;onm:boolean;TextDetails: TThemedElementDetails);
 function GetSizeTreeIcon(Minus: Boolean):TSize;
 const
   PlusMinusDetail: array[Boolean] of TThemedTreeview =
@@ -532,25 +533,25 @@ begin
   inc(r.left,size.cx+1);
   if assigned(ppd.FastEditor.OnGetPrefferedFastEditorSize) then
   drawfasteditor(ppd,canvas,r);
-  canvas.Font.Italic:=true;
+  {canvas.Font.Italic:=true;
   if onm then
              begin
              //canvas.Font.Bold:=true;
              canvas.Font.Underline:=true;
-             end;
-  canvas.TextRect(r,r.Left,r.Top,(name));
+             end;}
+  ThemeServices.DrawText(Canvas,TextDetails,name,r,0,0);
+  {//canvas.TextRect(r,r.Left,r.Top,(name));
   canvas.Font.Italic:=false;
   if onm then
              begin
              //canvas.Font.Bold:=false;
              canvas.Font.Underline:=false;
              end;
-  dec(r.left,size.cx+1);
+  dec(r.left,size.cx+1);}
 end;
-procedure drawrect(cnvs:tcanvas;r:trect;active:boolean;onmouse:boolean;readonly:boolean);
-var
-   Details: TThemedElementDetails;
+function drawrect(cnvs:tcanvas;r:trect;active:boolean;onmouse:boolean;readonly:boolean): TThemedElementDetails;
 begin
+  result:=defaultdetails;
   if not ThemeServices.ThemesAvailable then
   begin
   if active then
@@ -573,8 +574,8 @@ begin
   begin
        if active then
                      begin
-                     Details := ThemeServices.GetElementDetails(ttItemSelected);
-                     ThemeServices.DrawElement(cnvs.Handle, Details, r, nil);
+                     result := ThemeServices.GetElementDetails(ttItemSelected);
+                     ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
                      end
                  else
                      if readonly then
@@ -585,8 +586,8 @@ begin
                      else
                      if onmouse then
                      begin
-                     Details := ThemeServices.GetElementDetails(ttItemHot);
-                     ThemeServices.DrawElement(cnvs.Handle, Details, r, nil);
+                     result := ThemeServices.GetElementDetails(ttItemHot);
+                     ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
                      end
                      else
                      begin
@@ -599,21 +600,23 @@ begin
                      end;
   end;
 end;
-procedure drawstring(cnvs:tcanvas;r:trect;L,T:integer;s:string);
+procedure drawstring(cnvs:tcanvas;r:trect;L,T:integer;s:string;TextDetails: TThemedElementDetails);
 const
   maxsize=200;
 var
    s2:string;
 begin
      if length(s)<maxsize then
-                          cnvs.TextRect(r,L,T,s)
+                          //cnvs.TextRect(r,L,T,s)
+                          ThemeServices.DrawText(cnvs,TextDetails,s,r,0,0)
                       else
                           begin
                                s2:=copy(s,1,maxsize)+'...';
-                               cnvs.TextRect(r,L,T,s2);
+                               //cnvs.TextRect(r,L,T,s2);
+                               ThemeServices.DrawText(cnvs,TextDetails,s2,r,0,0);
                           end;
 end;
-procedure drawvalue(ppd:PPropertyDeskriptor;canvas:tcanvas;fulldraw:boolean);
+procedure drawvalue(ppd:PPropertyDeskriptor;canvas:tcanvas;fulldraw:boolean;TextDetails: TThemedElementDetails);
 var
    r:trect;
    tempcolor:TColor;
@@ -631,12 +634,12 @@ begin
   if (ppd^.Attr and FA_READONLY)<>0 then
   begin
     tempcolor:=canvas.Font.Color;
-    canvas.Font.Color:=clGrayText;
+    //canvas.Font.Color:=clGrayText;
     if fulldraw then
     if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)) then
                                        ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
                                    else
-                                       drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
+                                       drawstring(canvas,r,r.Left,r.Top,(ppd^.value),DefaultDetails);
     canvas.Font.Color:=tempcolor;
   end
   else
@@ -646,7 +649,7 @@ begin
     if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)) then
                                                    ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
                                                else
-                                                   drawstring(canvas,r,r.Left,r.Top,(ppd^.value));
+                                                   drawstring(canvas,r,r.Left,r.Top,(ppd^.value),DefaultDetails);
     end;
 
 if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
@@ -665,6 +668,8 @@ var
   ir:itrec;
   visible:boolean;
   OnMouseProp:boolean;
+  TextDetails: TThemedElementDetails;
+
 begin
   ppd:=ppa^.beginiterate(ir);
   if ppd<>nil then
@@ -672,7 +677,7 @@ begin
       if (ppd^.IsVisible) then
       begin
         OnMouseProp:=(ppd=onmousepp);
-        r.Left:={arect.Left+2+8*sub}arect.Left;
+        r.Left:=arect.Left+2+8*sub{arect.Left};
         r.Top:=y;
         r.Right:=namecol-spliterhalfwidth;
         r.Bottom:=y+rowh+1;
@@ -686,8 +691,8 @@ begin
                                      if visible then
                                      begin
                                     s:=ppd^.Name;
-                                    r.Right:=arect.Right;
-                                    drawrect(canvas,r,false,OnMouseProp,(ppd^.Attr and FA_READONLY)<>0);
+                                    //r.Right:=arect.Right;
+                                    TextDetails:=drawrect(canvas,r,false,OnMouseProp,(ppd^.Attr and FA_READONLY)<>0);
                                     r.Left:={r.Left+3}arect.Left+5+8*sub;
                                     r.Top:=r.Top+3;
                                     if (ppd^.Attr and FA_READONLY)<>0 then
@@ -695,13 +700,13 @@ begin
                                                                             tempcolor:=canvas.Font.Color;
                                                                             canvas.Font.Color:=clGrayText;
 
-                                                                            drawheader(canvas,ppd,r,s,OnMouseProp);
+                                                                            drawheader(canvas,ppd,r,s,OnMouseProp,TextDetails);
 
                                                                             canvas.Font.Color:=tempcolor;
                                                                           end
                                                                       else
                                                                           begin
-                                                                            drawheader(canvas,ppd,r,s,OnMouseProp);
+                                                                            drawheader(canvas,ppd,r,s,OnMouseProp,TextDetails);
                                                                           end;
                                     ppd.rect:=r;
                                     end;
@@ -715,7 +720,7 @@ begin
         begin
           if visible then
           begin
-          drawrect(canvas,r,(ppd=EDContext.ppropcurrentedit),OnMouseProp,(ppd^.Attr and FA_READONLY)<>0);
+          TextDetails:=drawrect(canvas,r,(ppd=EDContext.ppropcurrentedit),OnMouseProp,(ppd^.Attr and FA_READONLY)<>0);
 
           if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
           begin
@@ -732,7 +737,7 @@ begin
           end
           else
               begin
-                   if OnMouseProp then
+                   {if OnMouseProp then
                                       begin
                                       //canvas.Font.bold:=true;
                                       canvas.Font.underline:=true;
@@ -741,9 +746,10 @@ begin
                                       begin
                                            tempcolor:=canvas.Font.Color;
                                            canvas.Font.Color:=clHighlightText;
-                                      end;
-                   canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
-                   if OnMouseProp then
+                                      end;}
+                   //canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
+                   ThemeServices.DrawText(Canvas,TextDetails,ppd^.Name,r,0,0);
+                   {if OnMouseProp then
                                       begin
                                       //canvas.Font.bold:=false;
                                       canvas.Font.underline:=false;
@@ -751,19 +757,19 @@ begin
                    if (ppd=EDContext.ppropcurrentedit) then
                                       begin
                                            canvas.Font.Color:=tempcolor;
-                                      end;
+                                      end;}
               end;
           r.Top:=r.Top-3;
           r.Left:=r.Right-1+spliterhalfwidth;
           r.Right:=arect.Right;
 
           ppd.rect:=r;
-          drawvalue(ppd,canvas,true);
+          drawvalue(ppd,canvas,true,TextDetails);
 
-          if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
+          {if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
           begin
                 canvas.Font.Italic:=false;
-          end;
+          end;}
           end;
 
           y:=y++rowh;
@@ -809,17 +815,16 @@ var
   y:GDBInteger;
   sub:GDBInteger;
   arect,hrect:trect;
-  Details: TThemedElementDetails;
   ts:TTextStyle;
 begin
 ARect := GetClientRect;
 InflateRect(ARect, -BorderWidth, -BorderWidth);
 ARect.Top:=ARect.Top+VertScrollBar.ScrollPos;
 ARect.Bottom:=ARect.Bottom+VertScrollBar.ScrollPos;
-Details := ThemeServices.GetElementDetails({$IFDEF WINDOWS}tmPopupCheckBackgroundDisabled{trChevronVertHot}{ttbThumbDisabled}{tlListViewRoot}{$endif}
+DefaultDetails := ThemeServices.GetElementDetails({$IFDEF WINDOWS}tmPopupCheckBackgroundDisabled{trChevronVertHot}{ttbThumbDisabled}{tlListViewRoot}{$endif}
                                           {$IFDEF LCLGTK2}ttbDropDownButtonPressed{$endif}
                                           {$IFDEF LCLQT}{ttpane}thHeaderDontCare{$endif});
-ThemeServices.DrawElement(Canvas.Handle, Details, ARect, nil);
+ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, ARect, nil);
 //self.Canvas.FrameRect(ARect);
 
 ts:=canvas.TextStyle;
@@ -839,22 +844,22 @@ hrect.Top:=hrect.Top+2;
 hrect.Left:=hrect.Left+2;
 hrect.Right:=namecol;
 
-Details := ThemeServices.GetElementDetails(thHeaderItemNormal);
-ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
+DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemNormal);
+ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
 canvas.TextRect(hrect,hrect.Left,hrect.Top,'Property',ts);
 
-Details := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
+DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
 hrect.Left:=hrect.right;
 hrect.right:=ARect.Right-2;
-ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
+ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
 canvas.TextRect(hrect,hrect.Left,hrect.Top,'Value',ts);
 
-Details := ThemeServices.GetElementDetails(ttbSeparatorNormal);
+DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);
 hrect.Left:=namecol-2;
 hrect.right:=namecol+2;
 hrect.Top:= hrect.Bottom;
 hrect.Bottom:={ARect.Bottom}+self.contentheigth+rowh;
-ThemeServices.DrawElement(Canvas.Handle, Details, hrect, nil);
+ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
 
 
 end;

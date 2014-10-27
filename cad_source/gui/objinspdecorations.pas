@@ -171,7 +171,7 @@ begin
      else
          result:=types.size(0,0);
 end;
-procedure BooleanDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
+procedure BooleanDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
 var
   Details: TThemedElementDetails;
   ComboElem:TThemedButton;
@@ -195,9 +195,9 @@ begin
                                                        ComboElem:=tbCheckBoxUncheckedNormal
                                  end;
      Details:=ThemeServices.GetElementDetails(ComboElem);
-     ThemeServices.DrawElement(Canvas.Handle,Details,r);
+     ThemeServices.DrawElement(Canvas.Handle,Details,r,@boundr);
 end;
-procedure _3SBooleanDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
+procedure _3SBooleanDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
 var
   Details: TThemedElementDetails;
   ComboElem:TThemedButton;
@@ -232,13 +232,14 @@ begin
                      end;
      end;
      Details:=ThemeServices.GetElementDetails(ComboElem);
-     ThemeServices.DrawElement(Canvas.Handle,Details,r);
+     ThemeServices.DrawElement(Canvas.Handle,Details,r,@boundr);
 end;
 
-procedure ButtonDraw(canvas:TCanvas;r:trect;state:TFastEditorState;s:string);
+procedure ButtonDraw(canvas:TCanvas;r:trect;state:TFastEditorState;s:string;boundr:trect);
 var
   Details: TThemedElementDetails;
   ComboElem:TThemedButton;
+  //tr:trect;
 begin
      if state=TFES_Hot then
                            ComboElem:=tbPushButtonHot
@@ -247,24 +248,25 @@ begin
                        else
                            ComboElem:=tbPushButtonNormal;
      Details:=ThemeServices.GetElementDetails(ComboElem);
-     ThemeServices.DrawElement(Canvas.Handle,Details,r);
-     ThemeServices.DrawText(Canvas,Details,s,r,DT_CENTER or DT_VCENTER,0);
+     ThemeServices.DrawElement(Canvas.Handle,Details,r,@boundr);
+     if {not IntersectRect(tr,boundr,r))}(r.Right-r.Left)<(boundr.Right-boundr.Left) then
+                                           ThemeServices.DrawText(Canvas,Details,s,r,DT_CENTER or DT_VCENTER,0);
 end;
-procedure ButtonDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
+procedure ButtonDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
 begin
-     ButtonDraw(canvas,r,state,'...');
+     ButtonDraw(canvas,r,state,'...',boundr);
 end;
-procedure ButtonCrossDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
+procedure ButtonCrossDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
 begin
-     ButtonDraw(canvas,r,state,'+');
+     ButtonDraw(canvas,r,state,'+',boundr);
 end;
-procedure ButtonHLineDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
+procedure ButtonHLineDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
 begin
-     ButtonDraw(canvas,r,state,'-');
+     ButtonDraw(canvas,r,state,'-',boundr);
 end;
-procedure ButtonTxtDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
+procedure ButtonTxtDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
 begin
-     ButtonDraw(canvas,r,state,'T');
+     ButtonDraw(canvas,r,state,'T',boundr);
 end;
 function ButtonGetPrefferedFastEditorSize(PInstance:GDBPointer):TSize;
 var
@@ -554,4 +556,4 @@ begin
      AddFastEditorToType('GDBLength',@ButtonGetPrefferedFastEditorSize,@ButtonHLineDrawFastEditor,@GetLengthFromDrawing,true);
      AddFastEditorToType('TGDBOSMode',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runOSwnd);
 end;
-end.
+end.

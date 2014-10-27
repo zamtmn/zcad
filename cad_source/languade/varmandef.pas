@@ -68,7 +68,7 @@ TOnDrawProperty=procedure(canvas:TCanvas;ARect:TRect;PInstance:GDBPointer);
 TFastEditorState=(TFES_Default,TFES_Hot,TFES_Pressed);
 
 TGetPrefferedFastEditorSize=function (PInstance:GDBPointer):TSize;
-TDrawFastEditor=procedure (canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState);
+TDrawFastEditor=procedure (canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
 TRunFastEditor=procedure (PInstance:GDBPointer);
 
 TDecoratedProcs=packed record

@@ -39,6 +39,7 @@ const
   alligmentarrayofarray=64;
   fastEditorOffset={$IFDEF LCLQT}7{$ELSE}2{$ENDIF} ;
   spliterhalfwidth=4;
+  subtab=8;
 type
   arrindop=record
     currnum,currcount,num,count:GDBInteger;
@@ -485,8 +486,8 @@ begin
                 begin
                 fer.Top:=fer.Top-3;
                 end;
+                ppd.FastEditor.OnDrawFastEditor(canvas,fer,ppd^.valueAddres,ppd.FastEditorState,r);
                 r.Right:=fer.Left;
-                ppd.FastEditor.OnDrawFastEditor(canvas,fer,ppd^.valueAddres,ppd.FastEditorState);
            end;
      end;
 end;
@@ -519,7 +520,7 @@ var
 begin
   Details := ThemeServices.GetElementDetails(PlusMinusDetail[Minus,hot]);
   Size := ThemeServices.GetDetailSize(Details);
-  ThemeServices.DrawElement(Canvas.Handle, Details, Rect(X, Y, X + Size.cx, Y + Size.cy), nil);
+  ThemeServices.DrawElement(Canvas.Handle, Details, Rect(X, Y, X + Size.cx, Y + Size.cy), {nil}@r);
 end;
 var
    Size: TSize;
@@ -677,7 +678,7 @@ begin
       if (ppd^.IsVisible) then
       begin
         OnMouseProp:=(ppd=onmousepp);
-        r.Left:=arect.Left+2+8*sub{arect.Left};
+        r.Left:=arect.Left+2+subtab*sub{arect.Left};
         r.Top:=y;
         r.Right:=namecol-spliterhalfwidth;
         r.Bottom:=y+rowh+1;
@@ -693,7 +694,7 @@ begin
                                     s:=ppd^.Name;
                                     //r.Right:=arect.Right;
                                     TextDetails:=drawrect(canvas,r,false,OnMouseProp,(ppd^.Attr and FA_READONLY)<>0);
-                                    r.Left:={r.Left+3}arect.Left+5+8*sub;
+                                    r.Left:={r.Left+3}arect.Left+5+subtab*sub;
                                     r.Top:=r.Top+3;
                                     if (ppd^.Attr and FA_READONLY)<>0 then
                                                                           begin
@@ -1143,8 +1144,15 @@ begin
     needredraw:=false;
     if mresplit then
                   begin
-                       //mmnamecol:=x;
-                       namecol:=x;
+                       if namecol<subtab then
+                                             begin
+                                                  if x>namecol then namecol:=x;
+                                             end
+                  else if namecol>clientwidth-subtab then
+                                                         begin
+                                                              if x<namecol then namecol:=x;
+                                                         end
+                  else namecol:=x;
                        repaint;
                        updateeditorBounds;
                        exit;
@@ -1423,7 +1431,7 @@ begin
      case ted.Mode of
                      TEM_Integrate:begin
                                        editorcontrol:=TED.Editor.geteditor;
-                                       editorcontrol.SetBounds(tr.Left,tr.Top,tr.Right-tr.Left,tr.Bottom-tr.Top);
+                                       editorcontrol.SetBounds(tr.Left+2,tr.Top,tr.Right-tr.Left-2,tr.Bottom-tr.Top);
                                        if (editorcontrol is TCombobox) then
                                                                            begin
                                                                                 {$IFDEF LINUX}
@@ -1482,7 +1490,8 @@ begin
   end;
   if (y<rowh) then
   begin
-       StoreAndFreeEditor;
+       if button<>mbLeft then
+                             StoreAndFreeEditor;
        clickonheader:=true;
   end
   else
@@ -1653,12 +1662,16 @@ end;
 procedure TGDBobjinsp.updateeditorBounds;
 begin
   if peditor<>nil then
-  peditor.geteditor.SetBounds(namecol-1,EDContext.ppropcurrentedit.rect.Top,clientwidth-namecol-1,EDContext.ppropcurrentedit.rect.Bottom-EDContext.ppropcurrentedit.rect.Top+1);
+  peditor.geteditor.SetBounds(namecol+1,EDContext.ppropcurrentedit.rect.Top,clientwidth-namecol-2,EDContext.ppropcurrentedit.rect.Bottom-EDContext.ppropcurrentedit.rect.Top+1);
 end;
 procedure TGDBobjinsp._onresize(sender:tobject);
 //var x,xn:integer;
 {$IFDEF LCLGTK2}var Widget: PGtkWidget;{$ENDIF}
 begin
+     if namecol>clientwidth-subtab then
+                                       namecol:=clientwidth-subtab;
+     if namecol<subtab then
+                           namecol:=clientwidth div 2;
   {$IFDEF LCLGTK2}
   //Widget:=PGtkWidget(PtrUInt(Handle));
   //gtk_widget_add_events (Widget,GDK_POINTER_MOTION_HINT_MASK);

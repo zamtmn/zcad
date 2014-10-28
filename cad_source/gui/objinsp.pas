@@ -22,7 +22,7 @@ unit Objinsp;
 interface
 
 uses
-  usupportgui,GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
+  zcadstrconsts,usupportgui,GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
   Themes,
   {$IFDEF LCLGTK2}
   x,xlib,{x11,}{xutil,}
@@ -847,17 +847,17 @@ hrect.Right:=namecol;
 
 DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemNormal);
 ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-canvas.TextRect(hrect,hrect.Left,hrect.Top,'Property',ts);
+canvas.TextRect(hrect,hrect.Left,hrect.Top,rsProperty,ts);
 
 DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
 hrect.Left:=hrect.right;
 hrect.right:=ARect.Right-2;
 ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-canvas.TextRect(hrect,hrect.Left,hrect.Top,'Value',ts);
+canvas.TextRect(hrect,hrect.Left,hrect.Top,rsValue,ts);
 
-DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);
+DefaultDetails := ThemeServices.GetElementDetails({$IFNDEF WINDOWS}ttbSeparatorNormal{$ENDIF}{$IFDEF WINDOWS}tsPane{$ENDIF});
 hrect.Left:=namecol-2;
-hrect.right:=namecol+2;
+hrect.right:=namecol+{$IFNDEF WINDOWS}2{$ENDIF}{$IFDEF WINDOWS}1{$ENDIF};
 hrect.Top:= hrect.Bottom;
 hrect.Bottom:={ARect.Bottom}+self.contentheigth+rowh;
 ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);

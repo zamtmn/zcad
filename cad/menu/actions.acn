@@ -116,3 +116,5 @@ action ACN_COPYLINKTOVARTOCLIP,ObjInspCopyToClip(LVAR),#CLV,Copy link to var,,
 action ACN_COPYVALUETOCLIP,ObjInspCopyToClip(VALUE),#CVL,Copy value,,
 
 action ACN_DIST,Dist,dist.bmp,Distance,,
+
+action2variable ACN_OS_INSERT,DWG_OSMode|1,snaptoinsert.bmp,Snap to isert point,

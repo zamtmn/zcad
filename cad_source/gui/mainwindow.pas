@@ -1617,7 +1617,7 @@ var
     b:TToolButton;
     i:longint;
     w,code:GDBInteger;
-    action:tmyaction;
+    action:TZAction;
     baction:TmyButtonAction;
     shortcut:TShortCut;
 
@@ -1646,8 +1646,8 @@ begin
                      if uppercase(line)='ACTION' then
                      begin
                           line := f.readstring(';','');
-                          action:=tmyaction(self.StandartActions.ActionByName(line));
-                          b:=TmyCommandToolButton.Create(tb);
+                          action:=TZAction(self.StandartActions.ActionByName(line));
+                          b:={TmyCommand}TToolButton.Create(tb);
                           b.Action:=action;
                           b.ShowCaption:=false;
                           b.ShowHint:=true;
@@ -1920,6 +1920,7 @@ begin
 
 
            ppopupmenu:=TMenuItem.Create({pm}application);
+           ppopupmenu.ShowAlwaysCheckable:=true;
            ppopupmenu.Name:=MenuNameModifier+uppercase(line);
            line:=InterfaceTranslate('menu~'+line,line);
            ppopupmenu.Caption:=line;
@@ -2286,6 +2287,11 @@ begin
      TmyAction(AAction).Enabled:=not _disabled;
      end;
 
+     end
+else if AAction is TmyVariableAction then
+     begin
+          Handled:=true;
+          TmyVariableAction(AAction).AssignToVar(TmyVariableAction(AAction).FVariable,TmyVariableAction(AAction).FMask);
      end;
 end;
 

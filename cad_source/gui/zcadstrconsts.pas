@@ -44,6 +44,8 @@ resourcestring
   rsCommandNRInC='Command can not run';
   rsRunScript='Running script "%s";';
   rsUnassigned='Unassigned';
+  rsProperty='Property';
+  rsValue='Value';
 
   rsUnknownFileExt='Unknown file format "%s". Saving failed.';
 

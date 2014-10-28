@@ -24,14 +24,26 @@ uses
   Themes,zcadinterface,commandlinedef,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,{StdCtrls,}Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,{ButtonPanel,}Buttons,
   {strutils,}{$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
 type
-    TmyAction=class(TAction)
+    TZAction=class(TAction)
+                   public
+                   imgstr:string;
+              end;
+    TmyVariableAction=class(TZAction)
+                      public
+                        FVariable:String;
+                        FBufer:DWord;
+                        FMask:DWord;
+                        procedure AssignToVar(varname:string;mask:DWord);
+                        function Execute: Boolean; override;
+                      end;
+    TmyAction=class(TZAction)
                    public
                    command,options,imgstr:string;
                    pfoundcommand:PCommandObjectDef;
                    function Execute: Boolean; override;
                    procedure SetCommand(_Caption,_Command,_Options:TTranslateString);
               end;
-    TmyButtonAction=class(TAction)
+    TmyButtonAction=class(TZAction)
                    public
                    button:TToolButton;
                    function Execute: Boolean; override;
@@ -39,7 +51,7 @@ type
 
     TmyActionList=class(TActionList)
                        procedure LoadFromACNFile(fname:string);
-                       procedure SetImage(img,identifer:string;var action:TmyAction);
+                       procedure SetImage(img,identifer:string;var action:TZAction);
                        function LoadImage(imgfile:GDBString):Integer;
                        procedure AddMyAction(Action:TmyAction);
                        public
@@ -189,7 +201,125 @@ begin
            result:=true;
          end;
 end;
+function TmyVariableAction.Execute;
+var
+   pvd:pvardesk;
+   accum:byte;
+   pv,pm:pbyte;
+   i:integer;
+begin
+  result:=true;
+  pvd:=nil;
+  if DWGUnit<>nil then
+  pvd:=DWGUnit^.InterfaceVariables.findvardesc(FVariable);
+  if pvd=nil then
+  pvd:=SysVarUnit^.InterfaceVariables.findvardesc(FVariable);
+     if pvd<>nil then
+     begin
+          if pvd^.data.PTD=@GDBBooleanDescriptorOdj then
+                                                        begin
+                                                             PGDBBoolean(pvd^.data.Instance)^:=not PGDBBoolean(pvd^.data.Instance)^;
+                                                             Checked:=PGDBBoolean(pvd^.data.Instance)^;
+                                                        end
+          else if fmask<>0 then
+                               begin
+                                    pv:=pvd^.data.Instance;
+                                    pm:=@Fmask;
+                                    accum:=0;
+                                    for i:=1 to pvd^.data.PTD^.SizeInGDBBytes do
+                                     begin
+                                          pv^:=pv^ xor pm^;
+                                          accum:=accum or(pv^ and pm^);
+                                          inc(pv);
+                                          inc(pm);
+                                     end;
+                                    if accum<>0 then
+                                                    Checked:=true
+                                                else
+                                                    Checked:=false;
+                               end
+     else if sizeof(FBufer)>=pvd^.data.PTD^.SizeInGDBBytes then
+                                                               begin
+                                                                    if not Checked then
+                                                                    begin
+                                                                    fbufer:=0;
+                                                                    Move(pvd^.data.Instance^, FBufer,pvd^.data.PTD^.SizeInGDBBytes);
+                                                                    fillchar(pvd^.data.Instance^,pvd^.data.PTD^.SizeInGDBBytes,0);
+                                                                    if fbufer<>0 then
+                                                                                    Checked:=false;
+                                                                    end
+                                                                    else
+                                                                    begin
+                                                                      if fbufer=0 then
+                                                                                      fbufer:=1;
+                                                                      begin
+                                                                      Move( FBufer,pvd^.data.Instance^,pvd^.data.PTD^.SizeInGDBBytes);
+                                                                      fbufer:=0;
+                                                                      Move(pvd^.data.Instance^, FBufer,pvd^.data.PTD^.SizeInGDBBytes);
 
+                                                                      if fbufer<>0 then
+                                                                                      Checked:=true;
+                                                                      end;
+                                                                    end;
+                                                               end;
+     end;
+     if assigned(redrawoglwndproc) then redrawoglwndproc;
+     if assigned(UpdateVisibleProc) then UpdateVisibleProc;
+end;
+
+procedure TmyVariableAction.AssignToVar(varname:string;mask:DWord);
+var
+   pvd:pvardesk;
+   accum:byte;
+   pv,pm:pbyte;
+   i:integer;
+   tBufer:DWord;
+begin
+     if varname='DWG_DrawMode' then
+                                     varname:=varname;
+     FVariable:=varname;
+     Fmask:=mask;
+     pvd:=nil;
+     if DWGUnit<>nil then
+     pvd:=DWGUnit^.InterfaceVariables.findvardesc(FVariable);
+     if pvd=nil then
+     pvd:=SysVarUnit^.InterfaceVariables.findvardesc(FVariable);
+     if pvd<>nil then
+     begin
+          enabled:=true;
+          if pvd^.data.PTD=@GDBBooleanDescriptorOdj then
+                                                        begin
+                                                             Checked:=PGDBBoolean(pvd^.data.Instance)^;
+                                                        end
+          else if fmask<>0 then
+                               begin
+                                    pv:=pvd^.data.Instance;
+                                    pm:=@Fmask;
+                                    accum:=0;
+                                    for i:=1 to pvd^.data.PTD^.SizeInGDBBytes do
+                                     begin
+                                          accum:=accum or(pv^ and pm^);
+                                          inc(pv);
+                                          inc(pm);
+                                     end;
+                                    if accum<>0 then
+                                                    self.Checked:=true
+                                                else
+                                                    self.Checked:=false;
+                               end
+          else if sizeof(FBufer)>=pvd^.data.PTD^.SizeInGDBBytes then
+                                                                    begin
+                                                                         TBufer:=0;
+                                                                         Move(pvd^.data.Instance^, TBufer,pvd^.data.PTD^.SizeInGDBBytes);
+                                                                         if TBufer<>0 then
+                                                                                         self.Checked:=true
+                                                                                      else
+                                                                                          self.Checked:=false;
+                                                                    end;
+     end
+        else
+            enabled:=false;
+end;
 function TmyAction.Execute: Boolean;
 var
     s:string;
@@ -227,7 +357,7 @@ begin
       result:=-1;
 end;
 
-procedure TmyActionList.SetImage(img,identifer:string;var action:TmyAction);
+procedure TmyActionList.SetImage(img,identifer:string;var action:TZAction);
 //var
     //bmp:TBitmap;
 begin
@@ -272,16 +402,17 @@ end;
 procedure TmyActionList.LoadFromACNFile(fname:string);
 var
     f:GDBOpenArrayOfByte;
-    line{,ts,}{bn,}{bc}{,bh}:GDBString;
+    line,ucline:GDBString;
     actionname,actioncommand,actionpic,actioncaption,actionhint,actionshortcut:string;
-    //buttonpos:GDBInteger;
-    //ppanel:TToolBar;
-    //b:TToolButton;
-    //i:longint;
-    //y,xx,yy,w,code:GDBInteger;
-    //bmp:TBitmap;
+
+    ts,ts2,bc,masks:GDBString;
+    i:longint;
+    code:GDBInteger;
+    mask:DWord;
+    va:TmyVariableAction;
+
     action:TmyAction;
-//const bsize=24;
+
 begin
   f.InitFromFile(fname);
   while f.notEOF do
@@ -289,7 +420,8 @@ begin
     line := f.readstring(' ',#$D#$A);
     if (line <> '') and (line[1] <> ';') then
     begin
-      if uppercase(line) = 'ACTION' then
+      ucline:=uppercase(line);
+      if ucline = 'ACTION' then
            begin
                actionname:=UPPERCASE(f.readstring(',',''));
             actioncommand:=f.readstring(',','');
@@ -316,9 +448,69 @@ begin
                //action.command:=actioncommand;
                action.Hint:=actionhint;
                action.DisableIfNoHandler:=false;
-               SetImage(actionpic,actionname+'~textimage',action);
+               SetImage(actionpic,actionname+'~textimage',TZAction(action));
                self.AddAction(action);
                action.pfoundcommand:=commandmanager.FindCommand(uppercase(action.command));
+           end
+ else if ucline = 'ACTION2VARIABLE' then
+           begin
+                actionname:=UPPERCASE(f.readstring(',',''));
+                bc := f.readstring(',','');
+                masks:='';
+                i:=pos('|', bc);
+                if i>0 then
+                           begin
+                                masks:=system.copy(bc,i+1,length(bc)-i);
+                                bc:=system.copy(bc,1,i-1);
+                           end;
+                if masks<>''then
+                               begin
+                                    val(masks,mask,code);
+                                    if code<>0 then
+                                                   mask:=0;
+                               end
+                           else
+                               mask:=0;
+                line := f.readstring(';','');
+                ts:='???';
+                i:=pos(',',line);
+                if i>0 then
+                           begin
+                                ts:=system.copy(line,i+1,length(line)-i);
+                                line:=system.copy(line,1,i-1);
+                           end;
+                i:=pos(',',ts);
+                if i>0 then
+                           begin
+                                ts2:=system.copy(ts,i+1,length(ts)-i);
+                                ts:=system.copy(ts,1,i-1);
+                           end;
+                //--------------------------------------------------------------b:=TmyVariableToolButton.Create(tb);
+                va:=TmyVariableAction.create(self);
+                va.Name:=actionname;
+                //--------------------------------------------------------------b.Style:=tbsCheck;
+                va.AssignToVar(bc,mask);
+                if ts<>''then
+                begin
+                     ts:=InterfaceTranslate('hint_panel~'+bc,ts);
+                va.hint:=(ts);
+                //--------------------------------------------------------------va.ShowHint:=true;
+                end;
+                //SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
+                //--------------------------------------------------------------SetImage(tb,b,line,false,'button_variable~'+bc);
+                SetImage(line,actionname+'~textimage',TZAction(va));
+                //procedure SetImage(img,identifer:string;var action:TmyAction);
+                //--------------------------------------------------------------AddToBar(tb,b);
+                //--------------------------------------------------------------updatesbytton.Add(b);
+                if ts2<>'' then
+                begin
+                     va.ShortCut:=TextToShortCut(ts2);
+                     ts2:='';
+                end;
+                va.AutoCheck:=true;
+                va.Enabled:=true;
+                self.AddAction(va);
+
            end;
     end;
   end;

@@ -25,6 +25,7 @@ type tsysparam=record
                      programpath: GDBString;
                      temppath: GDBString;
                      screenx,screeny:GDBInteger;
+                     defaultheight:GDBInteger;
                      ver:TmyFileVersionInfo;
                      nosplash,noloadlayout,updatepo,standartinterface:GDBBoolean;
               end;

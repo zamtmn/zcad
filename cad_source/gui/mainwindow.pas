@@ -1259,12 +1259,8 @@ begin
 end;
 procedure MainForm.FormCreate(Sender: TObject);
 begin
-   With TComboBox.CreateParented(Handle) Do
-   try
-      sysvar.INTF.INTF_ObjInspRowH^:=Height;
-   finally
-      Free;
-   end;
+   sysvar.INTF.INTF_ObjInspRowH^:=sysparam.defaultheight;
+
   DecorateSysTypes;
   self.onclose:=self.FormClose;
   self.onkeydown:=self.mykeypress;

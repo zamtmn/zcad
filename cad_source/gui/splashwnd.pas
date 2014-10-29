@@ -77,8 +77,13 @@ begin
   txt.Parent := self;
 end;
 procedure createsplash;
+var
+   cb:TComboBox;
 begin
      SplashWindow:=TSplashWnd.CreateNew(nil);
+     cb:=TComboBox.CreateParented(SplashWindow.Handle);
+     sysparam.defaultheight:=cb.Height;
+     cb.free;
      if not sysparam.nosplash then
                                   SplashWindow.show;
      application.ProcessMessages;

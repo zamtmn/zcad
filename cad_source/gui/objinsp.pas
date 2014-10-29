@@ -323,6 +323,9 @@ end;
 procedure TGDBobjinsp.AfterConstruction;
 begin
      inherited;
+     rowh:=21;
+     if assigned(sysvar.INTF.INTF_ObjInspRowH) then
+                                                   rowh:=sysvar.INTF.INTF_ObjInspRowH^;
      onresize:=_onresize;
      onhide:=FormHide;
      onpaint:=mypaint;
@@ -1689,9 +1692,6 @@ end;
 initialization
   {$IFDEF DEBUGINITSECTION}LogOut('objinsp.initialization');{$ENDIF}
   proptreeptr:=nil;
-  rowh:=21;
-  if assigned(sysvar.INTF.INTF_ObjInspRowH) then
-                                                rowh:=sysvar.INTF.INTF_ObjInspRowH^;
   {Objinsp.}currpd:=nil;
   SetGDBObjInspProc:=TSetGDBObjInsp(SetGDBObjInsp);
   StoreAndSetGDBObjInspProc:=TStoreAndSetGDBObjInsp(StoreAndSetGDBObjInsp);

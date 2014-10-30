@@ -1922,7 +1922,6 @@ begin
 
 
            ppopupmenu:=TMenuItem.Create({pm}application);
-           ppopupmenu.ShowAlwaysCheckable:=true;
            ppopupmenu.Name:=MenuNameModifier+uppercase(line);
            line:=InterfaceTranslate('menu~'+line,line);
            ppopupmenu.Caption:=line;

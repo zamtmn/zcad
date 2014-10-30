@@ -115,7 +115,6 @@ Panel View;
   }
 Panel Quick;
   {
-    action ACN_OS_INSERT
     action ACN_LOADQS
     action ACN_SAVEQS
     action ACN_PROJECTTREE

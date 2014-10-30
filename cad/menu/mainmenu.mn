@@ -306,6 +306,7 @@ MainMenuItem Modify;
         Separator
         action ACN_BREPLACE
         action ACN_BSCALE
+        action ACN_BROTATE
       }
     Separator
     action ACN_COPY

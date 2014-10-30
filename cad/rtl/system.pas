@@ -2857,6 +2857,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
     procedure CommandInit; virtual;abstract;
     procedure Prompt(msg:GDBString);
     procedure Error(msg:GDBString);
+    procedure SetCommandParam(PTypedTata:pointer;TypeName:string);
     constructor init(cn:GDBString;SA,DA:TCStartAttr);
     //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual; abstract;
     //function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record): GDBInteger; virtual; abstract;
@@ -2982,6 +2983,11 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
                            end;
+         PTBlockRotateParams=^TBlockRotateParams;
+         TBlockRotateParams=packed record
+                             Rotate:GDBDouble;(*'Rotation angle'*)
+                             Absolytly:GDBBoolean;(*'Absolytly'*)
+                           end;
          TSetVarStyle=packed record
                             ent:TMSType;(*'Entity'*)
                             CurrentFindBlock:GDBString;(*'**CurrentFind'*)
@@ -3104,10 +3110,16 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
                          procedure BuildDM(Operands:pansichar); virtual;abstract;
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;abstract;
                    end;
+  BlockRotate_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
+                         procedure CommandStart(Operands:pansichar); virtual;abstract;
+                         procedure BuildDM(Operands:pansichar); virtual;abstract;
+                         procedure Run(pdata:{pointer}GDBPlatformint); virtual;abstract;
+                   end;
   SelSim_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          created:boolean;
                          bnames,textcontents,textremplates:GDBGDBStringArray;
                          layers,weights,objtypes,linetypes:GDBOpenArrayOfGDBPointer;
+                         linetypescales:GDBOpenArrayOfGDBDouble;
                          procedure CommandStart(Operands:pansichar); virtual;abstract;
                          procedure createbufs;
                          //procedure BuildDM(Operands:pansichar); virtual;abstract;

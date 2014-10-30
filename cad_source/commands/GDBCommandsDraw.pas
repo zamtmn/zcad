@@ -142,6 +142,11 @@ type
                              Scale:GDBVertex;(*'New scale'*)
                              Absolytly:GDBBoolean;(*'Absolytly'*)
                            end;
+         PTBlockRotateParams=^TBlockRotateParams;
+         TBlockRotateParams=packed record
+                             Rotate:GDBDouble;(*'Rotation angle'*)
+                             Absolytly:GDBBoolean;(*'Absolytly'*)
+                           end;
          TSetVarStyle=packed record
                             ent:TMSType;(*'Entity'*)
                             CurrentFindBlock:GDBString;(*'**CurrentFind'*)
@@ -267,6 +272,11 @@ type
                          procedure BuildDM(Operands:pansichar); virtual;
                          procedure Run(pdata:{pointer}GDBPlatformint); virtual;
                    end;
+  BlockRotate_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
+                         procedure CommandStart(Operands:pansichar); virtual;
+                         procedure BuildDM(Operands:pansichar); virtual;
+                         procedure Run(pdata:{pointer}GDBPlatformint); virtual;
+                   end;
   SelSim_com={$IFNDEF DELPHI}packed{$ENDIF} object(CommandRTEdObject)
                          created:boolean;
                          bnames,textcontents,textremplates:GDBGDBStringArray;
@@ -377,6 +387,8 @@ var
    SelSimParams:TSelSimParams;
    BlockScaleParams:TBlockScaleParams;
    BlockScale:BlockScale_com;
+   BlockRotateParams:TBlockRotateParams;
+   BlockRotate:BlockRotate_com;
    Print:Print_com;
 
    NumberingParams:TNumberingParams;
@@ -513,6 +525,74 @@ end;
                        procedure BuildDM(Operands:pansichar); virtual;
                        procedure Run(pdata:GDBPlatformint); virtual;
                  end;}
+procedure BlockRotate_com.CommandStart(Operands:pansichar);
+var //pb:PGDBObjBlockdef;
+    pobj:PGDBObjBlockInsert;
+    ir:itrec;
+    {i,}counter:integer;
+begin
+     counter:=0;
+     savemousemode := gdb.GetCurrentDWG^.wa.param.md.mode;
+     saveosmode := sysvar.dwg.DWG_OSMode^;
+
+  pobj:=gdb.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pobj<>nil then
+  repeat
+    if pobj^.selected then
+    if (pobj^.vp.ID=GDBDeviceID)or(pobj^.vp.ID=GDBBlockInsertID) then
+    inc(counter);
+  pobj:=gdb.GetCurrentROOT^.ObjArray.iterate(ir);
+  until pobj=nil;
+  if counter=0 then
+                      begin
+                            Prompt(rscmNoBlocksOrDevices);
+                            commandmanager.executecommandend;
+                            exit;
+                      end;
+   BuildDM(Operands);
+          inherited;
+end;
+procedure BlockRotate_com.BuildDM(Operands:pansichar);
+begin
+  commandmanager.DMAddMethod('Изменить','Изменить угол поворота выделенных блоков',@run);
+  commandmanager.DMShow;
+end;
+procedure BlockRotate_com.Run(pdata:{pointer}GDBPlatformint);
+var pb:PGDBObjBlockInsert;
+    ir:itrec;
+    {i,}result:gdbinteger;
+    poa:PGDBObjEntityTreeArray;
+    //selname,newname:GDBString;
+begin
+     begin
+          poa:=@gdb.GetCurrentROOT^.ObjArray;
+
+          result:=0;
+          //i:=0;
+          pb:=poa^.beginiterate(ir);
+          if pb<>nil then
+          repeat
+                if (pb^.Selected)and((pb^.vp.ID=GDBDeviceID)or(pb^.vp.ID=GDBBlockInsertID)) then
+                begin
+                case BlockRotateParams.Absolytly of
+                            true:begin
+                                      pb^.rotate:=BlockRotateParams.Rotate;
+                                 end;
+                            false:begin
+                                       pb^.rotate:=BlockRotateParams.Rotate+pb^.rotate;
+                                  end;
+                end;
+                inc(result);
+                end;
+                pb:=poa^.iterate(ir);
+          until pb=nil;
+          Prompt(sysutils.format(rscmNEntitiesProcessed,[inttostr(result)]));
+          Regen_com('');
+          commandmanager.executecommandend;
+     end;
+end;
+
+
 procedure BlockScale_com.CommandStart(Operands:pansichar);
 var //pb:PGDBObjBlockdef;
     pobj:PGDBObjBlockInsert;
@@ -3685,6 +3765,12 @@ begin
   BlockScaleParams.Scale:=geometry.CreateVertex(1,1,1);
   BlockScaleParams.Absolytly:=true;
   BlockScale.SetCommandParam(@BlockScaleParams,'PTBlockScaleParams');
+
+  BlockRotate.init('BlockRotate',0,0);
+  BlockRotate.CEndActionAttr:=0;
+  BlockRotateParams.Rotate:=0;
+  BlockRotateParams.Absolytly:=true;
+  BlockRotate.SetCommandParam(@BlockRotateParams,'PTBlockRotateParams');
 
 
   InsertTestTable.init('InsertTestTable',0,0);

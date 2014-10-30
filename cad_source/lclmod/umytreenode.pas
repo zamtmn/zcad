@@ -455,13 +455,13 @@ begin
  else if ucline = 'ACTION2VARIABLE' then
            begin
                 actionname:=UPPERCASE(f.readstring(',',''));
-                bc := f.readstring(',','');
+                actioncommand := f.readstring(',','');
                 masks:='';
-                i:=pos('|', bc);
+                i:=pos('|', actioncommand);
                 if i>0 then
                            begin
-                                masks:=system.copy(bc,i+1,length(bc)-i);
-                                bc:=system.copy(bc,1,i-1);
+                                masks:=system.copy(actioncommand,i+1,length(actioncommand)-i);
+                                actioncommand:=system.copy(actioncommand,1,i-1);
                            end;
                 if masks<>''then
                                begin
@@ -471,42 +471,23 @@ begin
                                end
                            else
                                mask:=0;
-                line := f.readstring(';','');
-                ts:='???';
-                i:=pos(',',line);
-                if i>0 then
-                           begin
-                                ts:=system.copy(line,i+1,length(line)-i);
-                                line:=system.copy(line,1,i-1);
-                           end;
-                i:=pos(',',ts);
-                if i>0 then
-                           begin
-                                ts2:=system.copy(ts,i+1,length(ts)-i);
-                                ts:=system.copy(ts,1,i-1);
-                           end;
-                //--------------------------------------------------------------b:=TmyVariableToolButton.Create(tb);
-                va:=TmyVariableAction.create(self);
+                actionpic:=f.readstring(',','');
+                actioncaption := f.readstring(',','');
+                actioncaption:=InterfaceTranslate(actionname+'~caption',actioncaption);
+                actionhint:=f.readstring(',','');
+                if actionhint<>'' then
+                                     actionhint:=InterfaceTranslate(actionname+'~hint',actionhint)
+                                 else
+                                     actionhint:=actioncaption;
+                actionshortcut:=f.readstring(#$A,#$D);
+                                va:=TmyVariableAction.create(self);
                 va.Name:=actionname;
-                //--------------------------------------------------------------b.Style:=tbsCheck;
-                va.AssignToVar(bc,mask);
-                if ts<>''then
-                begin
-                     ts:=InterfaceTranslate('hint_panel~'+bc,ts);
-                va.hint:=(ts);
-                //--------------------------------------------------------------va.ShowHint:=true;
-                end;
-                //SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
-                //--------------------------------------------------------------SetImage(tb,b,line,false,'button_variable~'+bc);
-                SetImage(line,actionname+'~textimage',TZAction(va));
-                //procedure SetImage(img,identifer:string;var action:TmyAction);
-                //--------------------------------------------------------------AddToBar(tb,b);
-                //--------------------------------------------------------------updatesbytton.Add(b);
-                if ts2<>'' then
-                begin
-                     va.ShortCut:=TextToShortCut(ts2);
-                     ts2:='';
-                end;
+                va.Caption:=actioncaption;
+                va.AssignToVar(actioncommand,mask);
+                va.hint:=(actionhint);
+                SetImage(actionpic,actionname+'~textimage',TZAction(va));
+                if actionshortcut<>'' then
+                                         action.ShortCut:=TextToShortCut(actionshortcut);
                 va.AutoCheck:=true;
                 va.Enabled:=true;
                 self.AddAction(va);

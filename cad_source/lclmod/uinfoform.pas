@@ -21,7 +21,7 @@ unit uinfoform;
 interface
 
 uses
-  {zcadinterface,}ExtCtrls,
+  zcadinterface,ExtCtrls,
   {$IFNDEF DELPHI}lclproc,{$ENDIF}
   Graphics,ActnList,ComCtrls,StdCtrls,Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,fileutil,ButtonPanel,{$ENDIF}Buttons,
   {strutils,}{$IFNDEF DELPHI}intftranslations,{$ENDIF}sysutils,strproc,varmandef,Varman,UBaseTypeDescriptor,gdbasetypes,shared,SysInfo,UGDBOpenArrayOfByte;
@@ -74,6 +74,8 @@ begin
 end;
 procedure TmyProcToolButton.Click;
 begin
+     if assigned(StoreAndFreeEditorProc)then
+                                            StoreAndFreeEditorProc;
      {$IFNDEF DELPHI}
      if assigned(FProc) then
                             FProc(PPata);

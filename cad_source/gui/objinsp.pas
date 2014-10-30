@@ -266,6 +266,14 @@ begin
                                else
                                    result:=nil;
 end;
+procedure StoreAndFreeEditor;
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       GDBobjinsp.StoreAndFreeEditor;
+                                  end
+end;
+
 procedure FreEditor;
 begin
        if assigned(GDBobjinsp)then
@@ -354,7 +362,9 @@ end;
 procedure TGDBobjinsp.ReturnToDefault;
 begin
   if assigned(peditor)then
-                          self.freeeditor;
+                          begin
+                          self.StoreAndFreeEditor;
+                          end;
   setptr(defaultobjgdbtype,pdefaultobj,pdefaultcontext);
 end;
 
@@ -1542,8 +1552,8 @@ begin
                          begin
                               begin
                                    menu:=nil;
-                                   if clickonheader then
-                                   menu:=TPopupMenu(application.FindComponent(MenuNameModifier+{'OBJINSPHEADERCXMENU'}'OBJINSPVARCXMENU'))
+                                   if (clickonheader)or(pp=nil) then
+                                   menu:=TPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPHEADERCXMENU'))
                               else if pp^.valkey<>''then
                                    menu:=TPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPVARCXMENU'))
                               else if pp^.Value<>''then
@@ -1707,5 +1717,6 @@ initialization
   CreateObjInspInstanceProc:=CreateObjInspInstance;
   GetPeditorProc:=GetPeditor;
   FreEditorProc:=FreEditor;
+  StoreAndFreeEditorProc:=StoreAndFreeEditor;
 end.
 

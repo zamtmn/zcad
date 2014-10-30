@@ -81,6 +81,7 @@ var
    CreateObjInspInstanceProc:TFunction__TForm;
    GetPeditorProc:TFunction__TComponent;
    FreEditorProc:TSimpleProcedure;
+   StoreAndFreeEditorProc:TSimpleProcedure;
 
    //mainwindow
    ShowAllCursorsProc,RestoreAllCursorsProc:TSimpleMethod;

@@ -872,7 +872,9 @@ DefaultDetails := ThemeServices.GetElementDetails({$IFNDEF WINDOWS}ttbSeparatorN
 hrect.Left:=namecol-2;
 hrect.right:=namecol+{$IFNDEF WINDOWS}2{$ENDIF}{$IFDEF WINDOWS}1{$ENDIF};
 hrect.Top:= hrect.Bottom;
-hrect.Bottom:={ARect.Bottom}+self.contentheigth+rowh;
+hrect.Bottom:=contentheigth+rowh;
+if hrect.Bottom>ARect.Bottom then
+                                 hrect.Bottom:=ARect.Bottom{height};
 ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
 
 

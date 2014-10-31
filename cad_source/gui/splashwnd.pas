@@ -82,6 +82,7 @@ var
 begin
      SplashWindow:=TSplashWnd.CreateNew(nil);
      cb:=TComboBox.CreateParented(SplashWindow.Handle);
+     cb.hide;
      sysparam.defaultheight:=cb.Height;
      cb.free;
      if not sysparam.nosplash then

@@ -559,10 +559,26 @@ PopUpMenu SELECTEDENTSCXMENU;
     {
      LASTCOMMANDS
     }
+    MenuItem Object snap;
+    {
+     action ACN_OS_INSERT
+     action ACN_OS_END
+     action ACN_OS_MIDDLE
+     action ACN_OS_THIRD
+     action ACN_OS_QUARTER
+     action ACN_OS_CENTER
+     action ACN_OS_QUADRANT
+     action ACN_OS_POINT
+     action ACN_OS_INTERSECTION
+     action ACN_OS_PERPENDICULAR
+     action ACN_OS_TANGENT
+     action ACN_OS_NEAREST
+     action ACN_OS_APARENTINTERSECTION
+     action ACN_OS_PARALEL
+    }
   }
 PopUpMenu NONSELECTEDENTSCXMENU;
   {
-    action ACN_OS_INSERT
     action ACN_PASTE
     Separator
     action ACN_SELECTALL
@@ -570,6 +586,23 @@ PopUpMenu NONSELECTEDENTSCXMENU;
     MenuItem Last commands;
     {
      LASTCOMMANDS
+    }
+    MenuItem Object snap;
+    {
+     action ACN_OS_INSERT
+     action ACN_OS_END
+     action ACN_OS_MIDDLE
+     action ACN_OS_THIRD
+     action ACN_OS_QUARTER
+     action ACN_OS_CENTER
+     action ACN_OS_QUADRANT
+     action ACN_OS_POINT
+     action ACN_OS_INTERSECTION
+     action ACN_OS_PERPENDICULAR
+     action ACN_OS_TANGENT
+     action ACN_OS_NEAREST
+     action ACN_OS_APARENTINTERSECTION
+     action ACN_OS_PARALEL
     }
   }
 PopUpMenu LASTCOMMANDSCXMENU;

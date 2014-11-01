@@ -41,6 +41,13 @@ const
   fastEditorOffset={$IFDEF LCLQT}7{$ELSE}2{$ENDIF} ;
   spliterhalfwidth=4;
   subtab=8;
+  PlusMinusDetailArray: array[Boolean,Boolean] of TThemedTreeview =
+  (
+    (ttGlyphClosed,
+    ttHotGlyphClosed),
+    (ttGlyphOpened,
+    ttHotGlyphOpened)
+  );
 type
   arrindop=record
     currnum,currcount,num,count:GDBInteger;
@@ -162,6 +169,15 @@ var
 implementation
 
 uses UObjectDescriptor,GDBEntity,UGDBStringArray,log;
+
+function PlusMinusDetail(Collapsed,hot:boolean):TThemedTreeview;
+begin
+    {$IFDEF WINDOWS}
+    if WindowsVersion < wvVista then
+                                    hot:=false;
+     {$endif}
+     result:=PlusMinusDetailArray[Collapsed,hot];
+end;
 procedure TGDBobjinsp.FormHide(Sender: TObject);
 begin
      proptreeptr:=proptreeptr;
@@ -506,33 +522,19 @@ begin
      end;
 end;
 procedure drawheader(Canvas:tcanvas;ppd:PPropertyDeskriptor;r:trect;name:string;onm:boolean;TextDetails: TThemedElementDetails);
-function GetSizeTreeIcon(Minus: Boolean):TSize;
-const
-  PlusMinusDetail: array[Boolean] of TThemedTreeview =
-  (
-    ttGlyphClosed,
-    ttGlyphOpened
-  );
+function GetSizeTreeIcon(Minus,hot: Boolean):TSize;
 var
   Details: TThemedElementDetails;
 begin
-  Details := ThemeServices.GetElementDetails(PlusMinusDetail[Minus]);
+  Details := ThemeServices.GetElementDetails(PlusMinusDetail(Minus,hot));
   result := ThemeServices.GetDetailSize(Details);
 end;
-procedure DrawTreeIcon({Canvas:tcanvas;}X, Y: Integer; Minus, hot: Boolean);
-const
-  PlusMinusDetail: array[Boolean,Boolean] of TThemedTreeview =
-  (
-    (ttGlyphClosed,
-    ttHotGlyphClosed),
-    (ttGlyphOpened,
-    ttHotGlyphOpened)
-  );
+procedure DrawTreeIcon(X, Y: Integer; Minus, hot: Boolean);
 var
   Details: TThemedElementDetails;
   Size: TSize;
 begin
-  Details := ThemeServices.GetElementDetails(PlusMinusDetail[Minus,hot]);
+  Details := ThemeServices.GetElementDetails(PlusMinusDetail(Minus,hot));
   Size := ThemeServices.GetDetailSize(Details);
   ThemeServices.DrawElement(Canvas.Handle, Details, Rect(X, Y, X + Size.cx, Y + Size.cy), {nil}@r);
 end;
@@ -542,7 +544,7 @@ var
 begin
   if not ppd^.Collapsed^ then
                              ppd^.Collapsed^:=ppd^.Collapsed^;
-  size:=GetSizeTreeIcon(not ppd^.Collapsed^);
+  size:=GetSizeTreeIcon(not ppd^.Collapsed^,onm);
   temp:=(r.bottom-r.top-size.cy)div 3;
   DrawTreeIcon({Canvas,}r.left,r.top+temp,not ppd^.Collapsed^,onm);
   inc(r.left,size.cx+1);

@@ -597,8 +597,9 @@ begin
                  else
                      if readonly then
                      begin
-                     //Details := ThemeServices.GetElementDetails(ttItemDisabled);
-                     //ThemeServices.DrawElement(cnvs.Handle, Details, r, nil);
+                     //result := ThemeServices.GetElementDetails(ttItemNormal);
+                     //ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
+                     result := ThemeServices.GetElementDetails(ttItemDisabled);
                      end
                      else
                      if onmouse then
@@ -608,12 +609,12 @@ begin
                      end
                      else
                      begin
-                     if assigned(sysvar.INTF.INTF_ShowLinesInObjInsp) then
+                     {if assigned(sysvar.INTF.INTF_ShowLinesInObjInsp) then
                      if sysvar.INTF.INTF_ShowLinesInObjInsp^ then
                      begin
-                     //Details := ThemeServices.GetElementDetails(ttItemNormal);
-                     //ThemeServices.DrawElement(cnvs.Handle, Details, r, nil);
-                     end;
+                     result := ThemeServices.GetElementDetails(ttItemNormal);
+                     ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
+                     end;}
                      end;
   end;
 end;
@@ -881,7 +882,7 @@ canvas.TextRect(hrect,hrect.Left,hrect.Top,rsValue,ts);
 if WindowsVersion < wvVista then
                                 DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal)
                             else
-                                ThemeServices.GetElementDetails(tsPane);
+                                DefaultDetails := ThemeServices.GetElementDetails(tsPane);
 {$ENDIF}
 hrect.Left:=namecol-2;
 hrect.right:=namecol+{$IFNDEF WINDOWS}2{$ENDIF}{$IFDEF WINDOWS}1{$ENDIF};

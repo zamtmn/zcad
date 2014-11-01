@@ -1524,6 +1524,7 @@ var
    s:string;
    textrect: TRect;
    y:integer;
+   SaveBrushColor:TColor;
 const
      cellsize=11;
      textoffset=cellsize+5;
@@ -1531,6 +1532,7 @@ begin
   s:=GetColorNameFromIndex(index);
   ARect.Left:=ARect.Left+2;
   textrect:=ARect;
+  SaveBrushColor:=canvas.Brush.Color;
   if index<ClSelColor then
    begin
         textrect.Left:=textrect.Left+textoffset;
@@ -1553,6 +1555,7 @@ begin
   begin
        canvas.TextRect(ARect,ARect.Left,(ARect.Top+ARect.Bottom-canvas.TextHeight(s)) div 2,s);
   end;
+  canvas.Brush.Color:=SaveBrushColor;
 end;
 procedure MainForm.ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: TOwnerDrawState);

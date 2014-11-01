@@ -28,6 +28,7 @@ uses
   x,xlib,{x11,}{xutil,}
   gtk2,gdk2,{gdk2x,}
   {$ENDIF}
+  {$IFDEF WINDOWS}win32proc,{$endif}
   strproc,{umytreenode,}types,graphics,
   {StdCtrls,}ExtCtrls,{ComCtrls,}Controls,Classes,menus,Forms,lcltype,fileutil,
 
@@ -835,9 +836,14 @@ ARect := GetClientRect;
 InflateRect(ARect, -BorderWidth, -BorderWidth);
 ARect.Top:=ARect.Top+VertScrollBar.ScrollPos;
 ARect.Bottom:=ARect.Bottom+VertScrollBar.ScrollPos;
-DefaultDetails := ThemeServices.GetElementDetails({$IFDEF WINDOWS}tmPopupCheckBackgroundDisabled{trChevronVertHot}{ttbThumbDisabled}{tlListViewRoot}{$endif}
-                                          {$IFDEF LCLGTK2}ttbDropDownButtonPressed{$endif}
-                                          {$IFDEF LCLQT}{ttpane}thHeaderDontCare{$endif});
+{$IFDEF WINDOWS}
+if WindowsVersion < wvVista then
+                                DefaultDetails := ThemeServices.GetElementDetails(tbPushButtonNormal)
+                            else
+                                DefaultDetails := ThemeServices.GetElementDetails(tmPopupCheckBackgroundDisabled){trChevronVertHot}{ttbThumbDisabled}{tlListViewRoot};
+{$endif}
+{$IFDEF LCLGTK2}DefaultDetails := ThemeServices.GetElementDetails(ttbDropDownButtonPressed){$endif}
+{$IFDEF LCLQT}DefaultDetails := ThemeServices.GetElementDetails({ttpane}thHeaderDontCare){$endif};
 ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, ARect, nil);
 //self.Canvas.FrameRect(ARect);
 

@@ -22,6 +22,7 @@ unit layercombobox;
 interface
 
 uses
+  {$IFDEF WINDOWS}win32proc,{$endif}
   Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes;
 const
   RightButtonWidth=20;// Ширина правой кнопки-стрелки при "темной" отрисовке
@@ -131,8 +132,12 @@ begin
          {$IFDEF LINUX}
          ComboElem := tcDropDownButtonDisabled
          {$ELSE}
-         ThemeServices.DrawElement(ACanvas.Handle, ThemeServices.GetElementDetails(ttbSplitButtonDropDownDisabled),ARect);
-         exit;
+         if WindowsVersion > wvVista then
+           begin
+                ThemeServices.DrawElement(ACanvas.Handle, ThemeServices.GetElementDetails(ttbSplitButtonDropDownDisabled),ARect);
+                exit;
+           end
+         else ComboElem := tcDropDownButtonDisabled
          {$ENDIF};
     end
   else
@@ -140,8 +145,12 @@ begin
       {$IFDEF LINUX}
       ComboElem := tcDropDownButtonNormal;
       {$ELSE}
+      if WindowsVersion > wvVista then
+      begin
       ThemeServices.DrawElement(ACanvas.Handle, ThemeServices.GetElementDetails(ttbSplitButtonDropDownNormal),ARect);
       exit;
+      end
+      else ComboElem := tcDropDownButtonNormal
       {$ENDIF};
     end;
   Details := ThemeServices.GetElementDetails(ComboElem);
@@ -562,4 +571,4 @@ end;
 
 //============================================================================//
 
-end.
+end.

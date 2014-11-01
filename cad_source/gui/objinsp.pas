@@ -875,7 +875,6 @@ hrect.Left:=hrect.right;
 hrect.right:=ARect.Right-2;
 ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
 canvas.TextRect(hrect,hrect.Left,hrect.Top,rsValue,ts);
-if WindowsVersion < wvVista then
 
 {$IFNDEF WINDOWS}DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);{$ENDIF}
 {$IFDEF WINDOWS}

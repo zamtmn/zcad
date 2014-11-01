@@ -121,7 +121,7 @@ var
   ComboElem: TThemedComboBox;
   Details: TThemedElementDetails;
 begin
-  inflaterect(ARect,-1,-1);
+  {$IFNDEF LINUX}inflaterect(ARect,-1,-1){$ENDIF};
   if ADown then
     ComboElem := tcDropDownButtonPressed
   else if AMouseInControl then
@@ -562,4 +562,4 @@ end;
 
 //============================================================================//
 
-end.
+end.

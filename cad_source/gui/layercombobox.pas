@@ -116,7 +116,7 @@ implementation
 uses
   StdCtrls,GraphType,types;
 
-procedure DrawComboBoxButton(ACanvas:TCanvas;ADown,AMouseInControl,ADisabled:Boolean;const ARect:TRect);
+procedure DrawComboBoxButton(ACanvas:TCanvas;ADown,AMouseInControl,ADisabled:Boolean; ARect:TRect);
 var
   ComboElem: TThemedComboBox;
   Details: TThemedElementDetails;
@@ -134,6 +134,7 @@ begin
 
    //ComboElem := tcDropDownButtonNormal;
 
+    inflaterect(ARect,-1,-1);
     Details := ThemeServices.GetElementDetails(ComboElem);
     ThemeServices.DrawElement(ACanvas.Handle, Details, ARect);
   end
@@ -149,7 +150,7 @@ begin
   begin
     if AMouseInControl then ComboElem:={$IFDEF LINUX}tbPushButtonHot{$ELSE}teEditTextHot{$ENDIF} else
     begin
-      if ADisabled then ComboElem:={$IFDEF LINUX}tbPushButtonDisabled{$ELSE}teEditTextReadOnly{$ENDIF} else ComboElem:={$IFDEF LINUX}tbPushButtonNormal{$ELSE}teEditTextNormal{$ENDIF};
+      if ADisabled then ComboElem:={$IFDEF LINUX}tbPushButtonDisabled{$ELSE}{teEditTextReadOnly}teEditTextDisabled{$ENDIF} else ComboElem:={$IFDEF LINUX}tbPushButtonNormal{$ELSE}teEditTextNormal{$ENDIF};
     end;
     //ComboElem := {$IFDEF LINUX}tbPushButtonNormal{$ELSE}teEditTextNormal{$ENDIF};
     Details:=ThemeServices.GetElementDetails(ComboElem);

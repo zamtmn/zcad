@@ -164,6 +164,7 @@ type
              DSGN_HelpScale:PGDBDouble;(*'Scale of auxiliary elements'*)
              DSGN_SelNew:PGDBBoolean;(*'New selection set'*)
              DSGN_SelSameName:PGDBBoolean;(*'Auto select devices with same name'*)
+             DSGN_OTrackTimerInterval:PGDBInteger;(*'Object track timer interval'*)
        end;
   tview=packed record
                VIEW_CommandLineVisible,

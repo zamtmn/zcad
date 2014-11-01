@@ -2465,13 +2465,22 @@ begin
   //timeKillEvent(uEventID);
 end;
 procedure TGeneralViewArea.SetOTrackTimer(Sender: TObject);
+var
+   interval:integer;
 begin
   if param.otracktimerwork = 1 then exit;
   inc(param.otracktimerwork);
   if param.otracktimerwork > 0 then
                                    begin
-                                        //uEventID := timeSetEvent(500, 250, @ProcTime, 0, 1)
-                                        OTTimer.Interval:=500;
+                                        if assigned(sysvar.DSGN.DSGN_OTrackTimerInterval) then
+                                        begin
+                                             if sysvar.DSGN.DSGN_OTrackTimerInterval^>0 then
+                                                                                            interval:=sysvar.DSGN.DSGN_OTrackTimerInterval^
+                                                                                        else
+                                                                                            interval:=0;
+                                        end
+                                        else interval:=500;
+                                        OTTimer.Interval:=interval;
                                         OTTimer.OnTimer:=ProcOTrackTimer;
                                         OTTimer.Enabled:=true;
 

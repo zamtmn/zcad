@@ -18,6 +18,7 @@ var
   DSGN_LCLeader:TLayerControl;
   DSGN_SelNew:GDBBoolean;
   DSGN_SelSameName:GDBBoolean;
+  DSGN_OTrackTimerInterval:GDBInteger;
   INTF_ShowScrollBars:GDBBoolean;
   INTF_ShowDwgTabs:GDBBoolean;
   INTF_DwgTabsPosition:TAlign;
@@ -101,6 +102,7 @@ begin
   DSGN_LCLeader.LayerName:='TEXT';
   DSGN_SelNew:=False;
   DSGN_SelSameName:=False;
+  DSGN_OTrackTimerInterval:=500;
   INTF_ShowScrollBars:=True;
   INTF_ShowDwgTabs:=True;
   INTF_DwgTabsPosition:=TATop;

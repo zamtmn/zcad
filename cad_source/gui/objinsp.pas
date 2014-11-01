@@ -172,8 +172,8 @@ uses UObjectDescriptor,GDBEntity,UGDBStringArray,log;
 
 function PlusMinusDetail(Collapsed,hot:boolean):TThemedTreeview;
 begin
-    {$IFDEF WINDOWS}
-    if WindowsVersion < wvVista then
+     {$IFDEF WINDOWS}
+     if WindowsVersion < wvVista then
                                     hot:=false;
      {$endif}
      result:=PlusMinusDetailArray[Collapsed,hot];
@@ -875,8 +875,15 @@ hrect.Left:=hrect.right;
 hrect.right:=ARect.Right-2;
 ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
 canvas.TextRect(hrect,hrect.Left,hrect.Top,rsValue,ts);
+if WindowsVersion < wvVista then
 
-DefaultDetails := ThemeServices.GetElementDetails({$IFNDEF WINDOWS}ttbSeparatorNormal{$ENDIF}{$IFDEF WINDOWS}tsPane{$ENDIF});
+{$IFNDEF WINDOWS}DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);{$ENDIF}
+{$IFDEF WINDOWS}
+if WindowsVersion < wvVista then
+                                DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal)
+                            else
+                                ThemeServices.GetElementDetails(tsPane);
+{$ENDIF}
 hrect.Left:=namecol-2;
 hrect.right:=namecol+{$IFNDEF WINDOWS}2{$ENDIF}{$IFDEF WINDOWS}1{$ENDIF};
 hrect.Top:= hrect.Bottom;

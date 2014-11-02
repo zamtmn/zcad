@@ -839,7 +839,7 @@ var
   y:GDBInteger;
   sub:GDBInteger;
   arect,hrect:trect;
-  ts:TTextStyle;
+  {ts:TTextStyle;}
 begin
 ARect := GetClientRect;
 InflateRect(ARect, -BorderWidth, -BorderWidth);
@@ -856,9 +856,9 @@ if WindowsVersion < wvVista then
 ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, ARect, nil);
 //self.Canvas.FrameRect(ARect);
 
-ts:=canvas.TextStyle;
+{ts:=canvas.TextStyle;
 ts.Alignment:=taCenter;
-ts.Layout:=tlCenter;
+ts.Layout:=tlCenter;}
 
 hrect:=ARect;
 InflateRect(hrect, -1, -1);
@@ -875,13 +875,15 @@ hrect.Right:=namecol;
 
 DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemNormal);
 ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-canvas.TextRect(hrect,hrect.Left,hrect.Top,rsProperty,ts);
+//canvas.TextRect(hrect,hrect.Left,hrect.Top,rsProperty,ts);
+ThemeServices.DrawText(Canvas,DefaultDetails,rsProperty,hrect,DT_END_ELLIPSIS or DT_CENTER,0);
 
 DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
 hrect.Left:=hrect.right;
 hrect.right:=ARect.Right-2;
 ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-canvas.TextRect(hrect,hrect.Left,hrect.Top,rsValue,ts);
+//canvas.TextRect(hrect,hrect.Left,hrect.Top,rsValue,ts);
+ThemeServices.DrawText(Canvas,DefaultDetails,rsValue,hrect,DT_END_ELLIPSIS or DT_CENTER,0);
 
 {$IFNDEF WINDOWS}DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);{$ENDIF}
 {$IFDEF WINDOWS}

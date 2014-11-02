@@ -22,7 +22,7 @@ unit Objinsp;
 interface
 
 uses
-  zcadstrconsts,usupportgui,GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
+  LCLIntf,zcadstrconsts,usupportgui,GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
   Themes,
   {$IFDEF LCLGTK2}
   x,xlib,{x11,}{xutil,}
@@ -556,7 +556,7 @@ begin
              //canvas.Font.Bold:=true;
              canvas.Font.Underline:=true;
              end;}
-  ThemeServices.DrawText(Canvas,TextDetails,name,r,0,0);
+  ThemeServices.DrawText(Canvas,TextDetails,name,r,DT_END_ELLIPSIS,0);
   {//canvas.TextRect(r,r.Left,r.Top,(name));
   canvas.Font.Italic:=false;
   if onm then
@@ -619,20 +619,21 @@ begin
   end;
 end;
 procedure drawstring(cnvs:tcanvas;r:trect;L,T:integer;s:string;TextDetails: TThemedElementDetails);
-const
+{const
   maxsize=200;
 var
-   s2:string;
+   s2:string;}
 begin
-     if length(s)<maxsize then
+     ThemeServices.DrawText(cnvs,TextDetails,s,r,DT_END_ELLIPSIS,0)
+     {if length(s)<maxsize then
                           //cnvs.TextRect(r,L,T,s)
-                          ThemeServices.DrawText(cnvs,TextDetails,s,r,0,0)
+                          ThemeServices.DrawText(cnvs,TextDetails,s,r,DT_END_ELLIPSIS,0)
                       else
                           begin
                                s2:=copy(s,1,maxsize)+'...';
                                //cnvs.TextRect(r,L,T,s2);
-                               ThemeServices.DrawText(cnvs,TextDetails,s2,r,0,0);
-                          end;
+                               ThemeServices.DrawText(cnvs,TextDetails,s2,r,DT_END_ELLIPSIS,0);
+                          end;}
 end;
 procedure drawvalue(ppd:PPropertyDeskriptor;canvas:tcanvas;fulldraw:boolean;TextDetails: TThemedElementDetails);
 var
@@ -687,6 +688,7 @@ var
   visible:boolean;
   OnMouseProp:boolean;
   TextDetails: TThemedElementDetails;
+  TextStyle: TTextStyle;
 
 begin
   ppd:=ppa^.beginiterate(ir);
@@ -749,8 +751,12 @@ begin
           if ((ppd^.Attr and FA_READONLY)<>0)or((ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0) then
           begin
             tempcolor:=canvas.Font.Color;
+            TextStyle:=canvas.TextStyle;
+            TextStyle.EndEllipsis:=true;
+            TextStyle.WordBreak:=false;
             canvas.Font.Color:=clGrayText;
-            canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
+            //DrawText(canvas.Handle, @ppd^.Name[1],length(ppd^.Name),R,DT_END_ELLIPSIS);
+            canvas.TextRect(r,r.Left,r.Top,ppd^.Name,TextStyle);
             canvas.Font.Color:=tempcolor;
           end
           else
@@ -766,7 +772,7 @@ begin
                                            canvas.Font.Color:=clHighlightText;
                                       end;}
                    //canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
-                   ThemeServices.DrawText(Canvas,TextDetails,ppd^.Name,r,0,0);
+                   ThemeServices.DrawText(Canvas,TextDetails,ppd^.Name,r,DT_END_ELLIPSIS,0);
                    {if OnMouseProp then
                                       begin
                                       //canvas.Font.bold:=false;

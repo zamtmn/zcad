@@ -132,7 +132,7 @@ begin
          {$IFDEF LINUX}
          ComboElem := tcDropDownButtonDisabled
          {$ELSE}
-         if WindowsVersion > wvVista then
+         if WindowsVersion >= wvVista then
            begin
                 ThemeServices.DrawElement(ACanvas.Handle, ThemeServices.GetElementDetails(ttbSplitButtonDropDownDisabled),ARect);
                 exit;
@@ -145,7 +145,7 @@ begin
       {$IFDEF LINUX}
       ComboElem := tcDropDownButtonNormal;
       {$ELSE}
-      if WindowsVersion > wvVista then
+      if WindowsVersion >= wvVista then
       begin
       ThemeServices.DrawElement(ACanvas.Handle, ThemeServices.GetElementDetails(ttbSplitButtonDropDownNormal),ARect);
       exit;

@@ -605,6 +605,9 @@ begin
                      if onmouse then
                      begin
                      result := ThemeServices.GetElementDetails(ttItemHot);
+                     {$IFDEF WINDOWS}
+                     if WindowsVersion >= wvVista then
+                     {$ENDIF}
                      ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
                      end
                      else

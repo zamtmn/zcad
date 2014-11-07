@@ -38,7 +38,7 @@ uses
 const
   alligmentall=2;
   alligmentarrayofarray=64;
-  fastEditorOffset={$IFDEF LCLQT}7{$ELSE}2{$ENDIF} ;
+  fastEditorOffset={$IFDEF LCLQT}2{$ELSE}2{$ENDIF} ;
   spliterhalfwidth=4;
   subtab=8;
   PlusMinusDetailArray: array[Boolean,Boolean] of TThemedTreeview =
@@ -200,6 +200,11 @@ begin
      //PreferredWidth:=0;
      //PreferredHeight:=1;
 end;
+function NeedDrawFasteditor(OnMouseProp:boolean):boolean;
+begin
+     result:=OnMouseProp;
+end;
+
 procedure TGDBobjinsp.SetBounds(ALeft, ATop, AWidth, AHeight: integer);
 begin
      if aheight=41 then
@@ -501,6 +506,7 @@ begin
      begin
            FESize:=ppd.FastEditor.OnGetPrefferedFastEditorSize(ppd^.valueAddres);
            if FESize.cX>0 then
+           if (r.Right-r.Left-1)>FESize.cX then
            begin
                 fer:=r;
                 fer.Left:=fer.Right-FESize.cX-fastEditorOffset;
@@ -518,6 +524,7 @@ begin
                 end;
                 ppd.FastEditor.OnDrawFastEditor(canvas,fer,ppd^.valueAddres,ppd.FastEditorState,r);
                 r.Right:=fer.Left;
+                ppd.FastEditorDrawed:=true;
            end;
      end;
 end;
@@ -546,8 +553,11 @@ begin
                              ppd^.Collapsed^:=ppd^.Collapsed^;
   size:=GetSizeTreeIcon(not ppd^.Collapsed^,onm);
   temp:=(r.bottom-r.top-size.cy)div 3;
+  if (r.Right-r.Left)>size.cx then
   DrawTreeIcon({Canvas,}r.left,r.top+temp,not ppd^.Collapsed^,onm);
   inc(r.left,size.cx+1);
+  ppd.FastEditorDrawed:=false;
+  if NeedDrawFasteditor(onm) then
   if assigned(ppd.FastEditor.OnGetPrefferedFastEditorSize) then
   drawfasteditor(ppd,canvas,r);
   {canvas.Font.Italic:=true;
@@ -556,6 +566,7 @@ begin
              //canvas.Font.Bold:=true;
              canvas.Font.Underline:=true;
              end;}
+  if (r.Right-r.Left)>1 then
   ThemeServices.DrawText(Canvas,TextDetails,name,r,DT_END_ELLIPSIS,0);
   {//canvas.TextRect(r,r.Left,r.Top,(name));
   canvas.Font.Italic:=false;
@@ -627,6 +638,7 @@ procedure drawstring(cnvs:tcanvas;r:trect;L,T:integer;s:string;TextDetails: TThe
 var
    s2:string;}
 begin
+     if (r.Right-r.Left)>1 then
      ThemeServices.DrawText(cnvs,TextDetails,s,r,DT_END_ELLIPSIS,0)
      {if length(s)<maxsize then
                           //cnvs.TextRect(r,L,T,s)
@@ -638,7 +650,7 @@ begin
                                ThemeServices.DrawText(cnvs,TextDetails,s2,r,DT_END_ELLIPSIS,0);
                           end;}
 end;
-procedure drawvalue(ppd:PPropertyDeskriptor;canvas:tcanvas;fulldraw:boolean;TextDetails: TThemedElementDetails);
+procedure drawvalue(ppd:PPropertyDeskriptor;canvas:tcanvas;fulldraw:boolean;TextDetails: TThemedElementDetails; onm:boolean);
 var
    r:trect;
    tempcolor:TColor;
@@ -666,6 +678,8 @@ begin
   end
   else
     begin
+         ppd.FastEditorDrawed:=false;
+         if NeedDrawFasteditor(onm) then
          drawfasteditor(ppd,canvas,r);
     if fulldraw then
     if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)) then
@@ -759,6 +773,7 @@ begin
             TextStyle.WordBreak:=false;
             canvas.Font.Color:=clGrayText;
             //DrawText(canvas.Handle, @ppd^.Name[1],length(ppd^.Name),R,DT_END_ELLIPSIS);
+            if (r.Right-r.Left)>1 then
             canvas.TextRect(r,r.Left,r.Top,ppd^.Name,TextStyle);
             canvas.Font.Color:=tempcolor;
           end
@@ -775,6 +790,7 @@ begin
                                            canvas.Font.Color:=clHighlightText;
                                       end;}
                    //canvas.TextRect(r,r.Left,r.Top,(ppd^.Name));
+                   if (r.Right-r.Left)>1 then
                    ThemeServices.DrawText(Canvas,TextDetails,ppd^.Name,r,DT_END_ELLIPSIS,0);
                    {if OnMouseProp then
                                       begin
@@ -791,7 +807,7 @@ begin
           r.Right:=arect.Right;
 
           ppd.rect:=r;
-          drawvalue(ppd,canvas,true,TextDetails);
+          drawvalue(ppd,canvas,true,TextDetails,onmouseprop);
 
           {if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
           begin
@@ -1554,7 +1570,7 @@ begin
                          begin
                                if not clickonheader then
                                begin
-                              if assigned(pp.FastEditor.OnGetPrefferedFastEditorSize) then
+                              if assigned(pp.FastEditor.OnGetPrefferedFastEditorSize)and(pp.FastEditorDrawed) then
                               begin
                               fesize:=pp.FastEditor.OnGetPrefferedFastEditorSize(pp.valueAddres);
                               if (fesize.cx>0)and((pp.rect.Right-x-fastEditorOffset-1)<=fesize.cx) then

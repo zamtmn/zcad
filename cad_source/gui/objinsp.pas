@@ -617,7 +617,7 @@ begin
                      begin
                      result := ThemeServices.GetElementDetails(ttItemHot);
                      {$IFDEF WINDOWS}
-                     if WindowsVersion >= wvVista then
+                     if (WindowsVersion >= wvVista)and ThemeServices.ThemesEnabled then
                      {$ENDIF}
                      ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
                      end

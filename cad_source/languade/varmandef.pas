@@ -104,6 +104,7 @@ TFastEditorProcs=packed record
     Decorators:TDecoratedProcs;
     FastEditor:TFastEditorProcs;
     FastEditorState:TFastEditorState;
+    FastEditorDrawed:GDBBoolean;
   end;
   propdeskptr = ^propdesk;
   propdesk = record

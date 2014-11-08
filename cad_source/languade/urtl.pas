@@ -102,6 +102,9 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ShowLinesInObjInsp,'INTF_ShowLinesInObjInsp');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ObjInspRowH,'INTF_ObjInspRowH');
 
+  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowFastEditors,'INTF_ObjInsp_ShowFastEditors');
+  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowOnlyHotFastEditors,'INTF_ObjInsp_ShowOnlyHotFastEditors');
+
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_PanObjectDegradation,'RD_PanObjectDegradation');
   //SysVarUnit.AssignToSymbol(SysVar.RD.RD_UseStencil,'RD_UseStencil');
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_DrawInsidePaintMessage,'RD_DrawInsidePaintMessage');

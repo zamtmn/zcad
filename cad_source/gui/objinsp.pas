@@ -202,7 +202,25 @@ begin
 end;
 function NeedDrawFasteditor(OnMouseProp:boolean):boolean;
 begin
-     result:=OnMouseProp;
+    if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowFastEditors) then
+    begin
+         if SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowFastEditors^ then
+         begin
+              if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowOnlyHotFastEditors) then
+              begin
+                   if SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowOnlyHotFastEditors^ then
+                   result:=OnMouseProp
+                   else
+                       result:=true;
+              end
+              else
+                  result:=true;
+         end
+         else
+             result:=false;
+    end
+    else
+        result:=true;
 end;
 
 procedure TGDBobjinsp.SetBounds(ALeft, ATop, AWidth, AHeight: integer);

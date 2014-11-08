@@ -1152,6 +1152,10 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
                VIEW_HistoryLineVisible,
                VIEW_ObjInspVisible:PGDBBoolean;
          end;
+  tobjinspinterface=packed record
+                INTF_ObjInsp_ShowFastEditors:PGDBBoolean;(*'Show fast editors'*)
+                INTF_ObjInsp_ShowOnlyHotFastEditors:PGDBBoolean;(*'Show only hot fast editors'*)
+               end;
   tinterface=packed record
               INTF_ShowScrollBars:PGDBBoolean;(*'Show scroll bars'*)
               INTF_ShowDwgTabs:PGDBBoolean;(*'Show drawing tabs'*)
@@ -1159,6 +1163,7 @@ GDBTableArray={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfObjects)(*Open
               INTF_ShowDwgTabCloseBurron:PGDBBoolean;(*'Show drawing tab close button'*)
               INTF_ShowLinesInObjInsp:PGDBBoolean;(*'Show lines in object inspector'*)
               INTF_ObjInspRowH:PGDBInteger;(*'Object inspector row height'*)
+              INTF_OBJINSP_Properties:tobjinspinterface;(*'Object inspector properties'*)
              end;
   tdisp=packed record
              DISP_ZoomFactor:PGDBDouble;(*'Mouse wheel scale factor'*)

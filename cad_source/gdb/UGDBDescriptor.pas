@@ -380,8 +380,16 @@ begin
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CLTscale,'DWG_CLTScale');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CColor,'DWG_CColor');
    DWGUnit.AssignToSymbol(SysVar.dwg.DWG_CDimStyle,'DWG_CDimStyle');
-   sysvar.RD.RD_CurrentWAParam.Instance:=CurrentDWG.wa.getParam;
-   sysvar.RD.RD_CurrentWAParam.PTD:=sysunit.TypeName2PTD(CurrentDWG.wa.getParamTypeName);
+   if assigned(CurrentDWG.wa)then
+   begin
+       sysvar.RD.RD_CurrentWAParam.Instance:=CurrentDWG.wa.getParam;
+       sysvar.RD.RD_CurrentWAParam.PTD:=sysunit.TypeName2PTD(CurrentDWG.wa.getParamTypeName);
+   end
+   else
+   begin
+       sysvar.RD.RD_CurrentWAParam.Instance:=nil;
+       sysvar.RD.RD_CurrentWAParam.PTD:=nil;
+   end;
    end;
 end;
 procedure GDBDescriptor.freedwgvars;
@@ -1018,7 +1026,7 @@ begin
   SetCurrentDWGProc:=SetCurrentDWG;
   BlockBaseDWG:=gdb.CreateDWG('','');
   _GetUndoStack:=gdb.GetUndoStack;
-  ClipboardDWG:=gdb.CreateDWG('','');
+  ClipboardDWG:=gdb.CreateDWG('*rtl/dwg/DrawingVars.pas','');
   ClipboardDWG.DimStyleTable.AddItem('Standart',pds);
   pds.init('Standart');
   //gdb.currentdwg:=BlockBaseDWG;

@@ -134,5 +134,6 @@ action2variable ACN_OS_APARENTINTERSECTION,DWG_OSMode|4096,snaptoapparentinterse
 action2variable ACN_OS_PARALEL,DWG_OSMode|8192,snaptoparalel.bmp,Snap to paralel,,
 
 action2variable ACN_SHOWHIDDENFIELDINOBJINSP,ShowHiddenFieldInObjInsp,#shf,Show hidden field in object inspector,,
+action2variable ACN_SHOWHEADERSINOBJINSP,INTF_ObjInsp_ShowHeaders,#sh,Show headers in object inspector,,
 action2variable ACN_SHOWFASTEDITORSINOBJINSP,INTF_ObjInsp_ShowFastEditors,#sfe,Show fast editors in object inspector,,
 action2variable ACN_SHOWONLYHOTFASTEDITORSINOBJINSP,INTF_ObjInsp_ShowOnlyHotFastEditors,#sohfe,Show only hot fast editors in object inspector,,

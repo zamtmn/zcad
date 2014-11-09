@@ -25,6 +25,7 @@ var
   INTF_ShowDwgTabCloseBurron:GDBBoolean;
   INTF_ShowLinesInObjInsp:GDBBoolean;
   INTF_ObjInspRowH:GDBInteger;
+  INTF_ObjInsp_ShowHeaders:GDBBoolean;
   INTF_ObjInsp_ShowFastEditors:GDBBoolean;
   INTF_ObjInsp_ShowOnlyHotFastEditors:GDBBoolean;
   VIEW_CommandLineVisible:GDBBoolean;
@@ -111,6 +112,7 @@ begin
   INTF_ShowDwgTabCloseBurron:=True;
   INTF_ShowLinesInObjInsp:=True;
   INTF_ObjInspRowH:=21;
+  INTF_ObjInsp_ShowHeaders:=true;
   INTF_ObjInsp_ShowFastEditors:=true;
   INTF_ObjInsp_ShowOnlyHotFastEditors:=true;
   VIEW_CommandLineVisible:=True;

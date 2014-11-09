@@ -102,6 +102,7 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ShowLinesInObjInsp,'INTF_ShowLinesInObjInsp');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ObjInspRowH,'INTF_ObjInspRowH');
 
+  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowHeaders,'INTF_ObjInsp_ShowHeaders');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowFastEditors,'INTF_ObjInsp_ShowFastEditors');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowOnlyHotFastEditors,'INTF_ObjInsp_ShowOnlyHotFastEditors');
 

@@ -75,7 +75,7 @@ type
     PEditor:TPropEditor;
     PDA:TPropertyDeskriptorArray;
     namecol{,mmnamecol}:GDBInteger;
-    contentheigth,startdrawy:GDBInteger;
+    contentheigth:GDBInteger;
 
     //TI: TOOLINFO;
     OLDPP:PPropertyDeskriptor;
@@ -116,6 +116,9 @@ type
     procedure createeditor(pp:PPropertyDeskriptor);
     function CurrObjIsEntity:boolean;
     function IsEntityInCurrentContext:boolean;
+
+    function IsHeadersEnabled:boolean;
+    function HeadersHeight:integer;
 
     {LCL}
   //procedure Pre_MouseMove(fwkeys:longint; x,y:GDBSmallInt; var r:HandledMsg); virtual;
@@ -199,6 +202,21 @@ begin
      //height
      //PreferredWidth:=0;
      //PreferredHeight:=1;
+end;
+function TGDBobjinsp.IsHeadersEnabled:boolean;
+begin
+    if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowHeaders)
+    then
+        result:=SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowHeaders^
+    else
+        result:=true;
+end;
+function TGDBobjinsp.HeadersHeight:integer;
+begin
+     if IsHeadersEnabled then
+                             result:=rowh
+                         else
+                             result:=0;
 end;
 function NeedDrawFasteditor(OnMouseProp:boolean):boolean;
 begin
@@ -386,7 +404,6 @@ begin
      currobjgdbtype:=nil;
      createpda;
   EDContext.ppropcurrentedit:=nil;
-  startdrawy:=rowh;
 
   MResplit:=false;
   namecol:=clientwidth div 2;
@@ -854,7 +871,7 @@ procedure TGDBobjinsp.ScrollbarHandler(ScrollKind: TScrollBarKind; OldPosition: 
 begin
     if peditor<>nil then
     begin
-       if (EDContext.ppropcurrentedit.rect.Top<rowh+VertScrollBar.ScrollPos-1)
+       if (EDContext.ppropcurrentedit.rect.Top<HeadersHeight+VertScrollBar.ScrollPos-1)
        or (EDContext.ppropcurrentedit.rect.Top>clientheight+VertScrollBar.ScrollPos-1)then
        begin
           Application.QueueAsyncCall(AsyncFreeEditor,0);
@@ -901,26 +918,29 @@ hrect:=ARect;
 InflateRect(hrect, -1, -1);
 
 
-y:=startdrawy+BorderWidth;
+y:=HeadersHeight+BorderWidth;
 sub:=0;
-drawprop(@pda,y,sub,hrect.Top+rowh+1,{arect}hrect);
+drawprop(@pda,y,sub,hrect.Top+HeadersHeight+1,{arect}hrect);
 
-hrect.Bottom:=hrect.Top+rowh+1;
+hrect.Bottom:=hrect.Top+HeadersHeight+1;
 hrect.Top:=hrect.Top+2;
-hrect.Left:=hrect.Left+2;
-hrect.Right:=namecol;
 
-DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemNormal);
-ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-//canvas.TextRect(hrect,hrect.Left,hrect.Top,rsProperty,ts);
-ThemeServices.DrawText(Canvas,DefaultDetails,rsProperty,hrect,DT_END_ELLIPSIS or DT_CENTER,0);
 
-DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
-hrect.Left:=hrect.right;
-hrect.right:=ARect.Right-2;
-ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-//canvas.TextRect(hrect,hrect.Left,hrect.Top,rsValue,ts);
-ThemeServices.DrawText(Canvas,DefaultDetails,rsValue,hrect,DT_END_ELLIPSIS or DT_CENTER,0);
+if IsHeadersEnabled then
+begin
+    hrect.Left:=hrect.Left+2;
+    hrect.Right:=namecol;
+
+    DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemNormal);
+    ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
+    ThemeServices.DrawText(Canvas,DefaultDetails,rsProperty,hrect,DT_END_ELLIPSIS or DT_CENTER,0);
+
+    DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
+    hrect.Left:=hrect.right;
+    hrect.right:=ARect.Right-2;
+    ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
+    ThemeServices.DrawText(Canvas,DefaultDetails,rsValue,hrect,DT_END_ELLIPSIS or DT_CENTER,0);
+end;
 
 {$IFNDEF WINDOWS}DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);{$ENDIF}
 {$IFDEF WINDOWS}
@@ -932,7 +952,7 @@ if WindowsVersion < wvVista then
 hrect.Left:=namecol-2;
 hrect.right:=namecol+{$IFNDEF WINDOWS}2{$ENDIF}{$IFDEF WINDOWS}1{$ENDIF};
 hrect.Top:= hrect.Bottom;
-hrect.Bottom:=contentheigth+rowh;
+hrect.Bottom:=contentheigth+HeadersHeight;
 if hrect.Bottom>ARect.Bottom then
                                  hrect.Bottom:=ARect.Bottom{height};
 ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
@@ -1186,12 +1206,25 @@ begin
      UpdateScrollbars;
 end;
 function TGDBobjinsp.IsMouseOnSpliter(pp:PPropertyDeskriptor; X,Y:Integer):GDBBoolean;
+var
+   my:integer;
+   canresplit:boolean;
 begin
   result:=false;
-  if y-self.VertScrollBar.Position>0 then
-  if (y-self.VertScrollBar.Position)<(rowh) then
+  my:=y-self.VertScrollBar.Position;
+  if IsHeadersEnabled then
+  begin
+  if (my>0)and(my<HeadersHeight) then
+                                     canresplit:=true
+                                 else
+                                     canresplit:=false;
+  end
+     else
+         canresplit:=true;
+
+  if canresplit then
   if (abs(x-namecol)<spliterhalfwidth) then
-                          result:=true;
+                                           result:=true;
 end;
 procedure TGDBobjinsp.MouseLeave;
 begin
@@ -1235,7 +1268,7 @@ begin
   y:=y+VertScrollBar.scrollpos-self.BorderWidth;
   //application.HintPause:=1;
   //application.HintShortPause:=10;
-  my:=startdrawy;
+  my:=HeadersHeight;
   pp:=mousetoprop(@pda,x,y,my);
   if OnMousePP<>pp then
                        begin
@@ -1374,7 +1407,7 @@ begin
      if (button=mbLeft) then
                             begin
                                  y:=y+VertScrollBar.scrollpos-self.BorderWidth;
-                                 my:=startdrawy;
+                                 my:=HeadersHeight;
                                  pp:=mousetoprop(@pda,x,y,my);
                                  if pp=nil then
                                                exit;
@@ -1563,7 +1596,7 @@ begin
        StoreAndFreeEditor;
        exit;
   end;
-  if (y<rowh) then
+  if (y<HeadersHeight) then
   begin
        if button<>mbLeft then
                              StoreAndFreeEditor;
@@ -1573,7 +1606,7 @@ begin
       clickonheader:=false;
   y:=y+VertScrollBar.scrollpos-self.BorderWidth;
   //if proptreeptr=nil then exit;
-  my:=startdrawy;
+  my:=HeadersHeight;
   pp:=mousetoprop(@pda,x,y,my);
 
   if (button=mbLeft)
@@ -1619,7 +1652,9 @@ begin
                               else if pp^.valkey<>''then
                                    menu:=TPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPVARCXMENU'))
                               else if pp^.Value<>''then
-                                   menu:=TPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPCXMENU'));
+                                   menu:=TPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPCXMENU'))
+                              else
+                                   menu:=TPopupMenu(application.FindComponent(MenuNameModifier+'OBJINSPHEADERCXMENU'));
                                    if menu<>nil then
                                    begin
                                    currpd:=pp;
@@ -1729,7 +1764,6 @@ begin
   pcurrobj:=nil;
   peditor:=nil;
   EDContext.ppropcurrentedit:=nil;
-  startdrawy:=rowh;
 
   MResplit:=false;
   namecol:=50;

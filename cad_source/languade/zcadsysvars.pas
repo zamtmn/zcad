@@ -172,6 +172,7 @@ type
                VIEW_ObjInspVisible:PGDBBoolean;
          end;
   tobjinspinterface=packed record
+                INTF_ObjInsp_ShowHeaders:PGDBBoolean;(*'Show headers'*)
                 INTF_ObjInsp_ShowFastEditors:PGDBBoolean;(*'Show fast editors'*)
                 INTF_ObjInsp_ShowOnlyHotFastEditors:PGDBBoolean;(*'Show only hot fast editors'*)
                end;

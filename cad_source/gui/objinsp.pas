@@ -1173,17 +1173,19 @@ end;
 procedure TGDBobjinsp.createscrollbars;
 var
    changed:boolean;
+   ch:integer;
 begin
      //ебаный скролинг работает везде по разному, или я туплю... переписывать надо эту хрень
-     if (VertScrollBar.Range=contentheigth)or(VertScrollBar.Position=0) then
+     ch:=contentheigth+HeadersHeight;
+     if (VertScrollBar.Range=ch)or(VertScrollBar.Position=0) then
                                               changed:=false
                                           else
                                               changed:=true;
-     self.VertScrollBar.Range:=contentheigth;
+     self.VertScrollBar.Range:=ch;
      self.VertScrollBar.page:=height;
      self.VertScrollBar.Tracking:=true;
      self.VertScrollBar.Smooth:=true;
-     if contentheigth<height  then
+     if ch<height  then
                                  begin
                                       {$IFNDEF LCLQt}
                                       ScrollBy(0,-VertScrollBar.Position);

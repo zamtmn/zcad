@@ -1818,7 +1818,7 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                outstream.TXTAddGDBStringEOL(dxfGroupCode(21));
                outstream.TXTAddGDBStringEOL('1.0');
 
-               if drawing.wa.getviewcontrol<>nil then
+               if assigned(drawing.wa)and(drawing.wa.getviewcontrol<>nil) then
                                                         begin
                                                              outstream.TXTAddGDBStringEOL(dxfGroupCode(12));
                                                              outstream.TXTAddGDBStringEOL(floattostr(drawing.wa.param.CPoint.x));
@@ -1857,12 +1857,12 @@ else if (groupi = 9) and (ucvalues = '$LWDISPLAY') then
                outstream.TXTAddGDBStringEOL(dxfGroupCode(37));
                outstream.TXTAddGDBStringEOL(floattostr(0));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(40));
-               if drawing.wa.getviewcontrol<>nil then
+               if assigned(drawing.wa)and(drawing.wa.getviewcontrol<>nil) then
                                                         outstream.TXTAddGDBStringEOL(floattostr(drawing.wa.param.ViewHeight))
                                                     else
                                                         outstream.TXTAddGDBStringEOL(inttostr(500));
                outstream.TXTAddGDBStringEOL(dxfGroupCode(41));
-               if drawing.wa.getviewcontrol<>nil then
+               if assigned(drawing.wa)and(drawing.wa.getviewcontrol<>nil) then
                                                         outstream.TXTAddGDBStringEOL(floattostr(drawing.wa.getviewcontrol.ClientWidth/drawing.wa.getviewcontrol.ClientHeight))
                                                     else
                                                         outstream.TXTAddGDBStringEOL(inttostr(1));

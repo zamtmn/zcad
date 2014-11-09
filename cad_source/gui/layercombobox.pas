@@ -22,7 +22,7 @@ unit layercombobox;
 interface
 
 uses
-  {$IFDEF WINDOWS}win32proc,{$endif}
+  {$IFDEF WINDOWS}win32proc,windows,{$endif}LCLIntf,LCLType,
   Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes;
 const
   RightButtonWidth=20;// Ширина правой кнопки-стрелки при "темной" отрисовке
@@ -45,13 +45,16 @@ type
   public
     property DefaultItemHeight;
   end;
-
+TZCADDropDownForm=class(TCustomForm)
+  protected
+    procedure CreateParams(var Params: TCreateParams); override;
+end;
   TZCADLayerComboBox=class(TCustomControl)                          // Компонент TZCADLayerComboBox
   private
     Index:integer;
     AktivItem:TLayerPropRecord;
     M1:boolean; // Маркер
-    PoleLista:TForm;
+    PoleLista:TZCADDropDownForm;
     sLV:TMyListView;
     sIL:TImageList;
     sListHeight:integer;
@@ -116,6 +119,13 @@ implementation
 
 uses
   StdCtrls,GraphType,types;
+
+procedure TZCADDropDownForm.CreateParams(var Params: TCreateParams);
+const
+  ClassStylesOff = CS_VREDRAW or CS_HREDRAW;
+begin
+  inherited CreateParams(Params);
+end;
 
 procedure DrawComboBoxButton(ACanvas:TCanvas;ADown,AMouseInControl,ADisabled:Boolean; ARect:TRect);
 var
@@ -362,7 +372,7 @@ procedure TZCADLayerComboBox.B1Klac(Sender:TObject);                            
 begin
   if (PoleLista=nil) and (M1=false) then
   begin
-    PoleLista:=TForm.Create(self);
+    PoleLista:=TZCADDropDownForm.Create(self);
     PoleLista.Width:=Width;
     a.X:=0;
     a.Y:=Height;
@@ -373,7 +383,12 @@ begin
     PoleLista.OnDeactivate:=@PLDeActivate;
     PoleLista.ShowInTaskBar:=stNever;
     sLV:=TmyListView.Create(PoleLista);
+    {$IFDEF WINDOWS}
+    sLV.BorderStyle:={bsSingle}bsNone;
+    {$endif}
+    {$IFNDEF WINDOWS}
     sLV.BorderStyle:=bsSingle;
+    {$endif}
     sLV.Parent:=PoleLista;
     sLV.Align:=alClient;
     sLV.ReadOnly:=true;
@@ -409,6 +424,11 @@ begin
                               PoleLista.ClientHeight:=h;
                          end;
 
+    {$IFDEF WINDOWS}
+    SetWindowLong(PoleLista.Handle,GWL_STYLE,GetWindowLong(PoleLista.Handle,GWL_STYLE) or ws_border);
+    SetClassLongPtr(PoleLista.Handle,GCL_STYLE,GetClassLongPtr(PoleLista.Handle,GCL_STYLE) or CS_DROPSHADOW);
+    SetWindowPos(PoleLista.Handle,0, 0, 0, 0, 0, SWP_NOMOVE or SWP_NOSIZE or SWP_NOZORDER or SWP_FRAMECHANGED);
+    {$endif}
     PoleLista.Show;
   end;
   if (PoleLista=nil) and (M1=true) then M1:=false;

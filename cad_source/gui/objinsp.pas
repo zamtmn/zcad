@@ -29,12 +29,12 @@ uses
   gtk2,gdk2,{gdk2x,}
   {$ENDIF}
   {$IFDEF WINDOWS}win32proc,{$endif}
-  strproc,{umytreenode,}types,graphics,
-  {StdCtrls,}ExtCtrls,{ComCtrls,}Controls,Classes,menus,Forms,lcltype,fileutil,
+  strproc,types,graphics,
+  ExtCtrls,Controls,Classes,menus,Forms,lcltype,fileutil,
 
   gdbasetypes,SysUtils,shared,zcadsysvars,
-  gdbase{OGLtypes,} {io}{,UGDBOpenArrayOfByte,varman},varmandef,{UGDBDescriptor}UGDBDrawingdef{,UGDBOpenArrayOfPV},
-  {zforms,ZComboBoxsWithProc,ZEditsWithProcedure,log,gdbcircle,}memman{,zbasicvisible,zguisct},TypeDescriptors{,commctrl};
+  gdbase,varmandef,UGDBDrawingdef,
+  memman,TypeDescriptors;
 const
   alligmentall=2;
   alligmentarrayofarray=64;
@@ -60,7 +60,7 @@ type
                        UndoCommand:PTTypedChangeCommand;
                  end;
 
-  TGDBobjinsp=class({TPanel}{TScrollBox}tform)
+  TGDBobjinsp=class({TPanel}tform)
     public
     GDBobj:GDBBoolean;
     EDContext:TEditorContext;
@@ -74,10 +74,8 @@ type
     pcurcontext,pdefaultcontext:GDBPointer;
     PEditor:TPropEditor;
     PDA:TPropertyDeskriptorArray;
-    namecol{,mmnamecol}:GDBInteger;
+    namecol:GDBInteger;
     contentheigth:GDBInteger;
-
-    //TI: TOOLINFO;
     OLDPP:PPropertyDeskriptor;
     OnMousePP:PPropertyDeskriptor;
 
@@ -85,15 +83,12 @@ type
 
     procedure draw; virtual;
     procedure mypaint(sender:tobject);
-    function getstyle:DWord; virtual;
     procedure drawprop(PPA:PTPropertyDeskriptorArray; var y,sub:GDBInteger;miny:GDBInteger;arect:trect);
     procedure calctreeh(PPA:PTPropertyDeskriptorArray; var y:GDBInteger);
     function gettreeh:GDBInteger; virtual;
-    //procedure FormResize;
     procedure BeforeInit; virtual;
     procedure _onresize(sender:tobject);virtual;
     procedure updateeditorBounds;virtual;
-    //procedure BuildPDA(ExtType:GDBWord; var addr:GDBPointer);
     procedure buildproplist(exttype:PUserTypeDescriptor; bmode:GDBInteger; var addr:GDBPointer);
     procedure SetCurrentObjDefault;
     procedure ReturnToDefault;
@@ -102,7 +97,6 @@ type
     procedure createpda;
     destructor Destroy; Override;
     procedure createscrollbars;virtual;
-    procedure scroll;virtual;
     procedure AfterConstruction; override;
     procedure EraseBackground(DC: HDC); override;
 
@@ -121,11 +115,9 @@ type
     function HeadersHeight:integer;
 
     {LCL}
-  //procedure Pre_MouseMove(fwkeys:longint; x,y:GDBSmallInt; var r:HandledMsg); virtual;
     procedure MouseMove(Shift: TShiftState; X, Y: Integer);override;
     procedure MouseLeave;override;
 
-  //procedure Pre_MouseDown(fwkeys:longint; x,y:GDBInteger; var r:HandledMsg); virtual;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;X, Y: Integer);override;
     procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);override;
     procedure UpdateObjectInInsp;
@@ -163,7 +155,6 @@ procedure FreEditor;
 var
   GDBobjinsp:TGDBobjinsp;
   typecount:GDBWord;
-  //temp: GDBPointer;
   proptreeptr:propdeskptr;
   rowh:integer;
   ty:integer;
@@ -458,48 +449,15 @@ begin
     result:=false;
 end;
 
-function TGDBobjinsp.getstyle;
-begin
-  result:=WS_CLIPCHILDREN
-                 //or WS_MAXIMIZEBOX
-                 //or WS_MINIMIZEBOX
-                 //or WS_OVERLAPPED
-  or WS_Border
-                 //or WS_VSCROLL
-  or WS_CHILD;
-end;
-
-procedure incaligment(var a:GDBPointer; size:GDBLongword);
-//var
-//  test:GDBLongword;
-begin
-  inc(pGDBByte(a),size);
-end;
-
-procedure aligment(var a:GDBPointer; al:GDBInteger);
-begin
-     //if (GDBLongword(a)and (al-1))<>0 then a:=GDBPointer((GDBLongword(a)and (not(al-1)))+al);
-     //while (GDBLongword(a)and 3)<>0 do inc(pGDBByte(a));
-end;
-
 procedure TGDBobjinsp.buildproplist;
-//var
-//  PEPD:PUserTypeDescriptor;
 begin
-    //PEPD:=PUserTypeDescriptor(Types.exttype.getelement(exttype)^);
-    //PTUserTypeDescriptor(PEPD)^.CreateProperties(@PDA,'root',field_no_attrib,0,bmode,addr);
-    //PD:=PUserTypeDescriptor(Types.exttype.getelement(exttype)^);
   if exttype<>nil then
   PTUserTypeDescriptor(exttype)^.CreateProperties(PDM_Field,@PDA,'root',field_no_attrib,0,bmode,addr,'','');
 end;
 
 procedure TGDBobjinsp.calctreeh;
 var
-//  curr:propdeskptr;
-//  s:GDBString;
   ppd:PPropertyDeskriptor;
-//  r,rr:trect;
-//  colorn,coloro:tCOLORREF;
       ir:itrec;
       last:boolean;
 begin
@@ -959,18 +917,12 @@ ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
 
 
 end;
-
-{procedure TGDBobjinsp.formresize;
-begin
-     halt(0);
-end;}
 function findnext(psubtree:PTPropertyDeskriptorArray;current:PPropertyDeskriptor):PPropertyDeskriptor;
 var
-  {rez,}curr:PPropertyDeskriptor;
+  curr:PPropertyDeskriptor;
       ir:itrec;
 begin
   result:=nil;
-  //rez:=nil;
   curr:=psubtree^.beginiterate(ir);
   if curr<>nil then
     repeat
@@ -1017,23 +969,6 @@ begin
       curr:=psubtree^.iterate(ir);
     until curr=nil;
     y:=y+rowh;
-  {curr := subtree;
-  repeat
-    if (((y + 1) * rowh) - my) > 0 then
-    begin
-      result := curr;
-      exit;
-    end;
-    y := y + 1;
-    if (curr^.sub <> nil)and curr^.drawsub then
-    begin
-      rez := mousetoprop(curr^.sub, mx, my, y);
-      result := rez;
-      if rez <> nil then
-        exit;
-    end;
-    curr := curr.next;
-  until (curr = nil);}
 end;
 procedure TGDBobjinsp.ClearEDContext;
 begin
@@ -1148,27 +1083,6 @@ begin
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   self.updateinsp;
   if assigned(UpdateVisibleProc) then UpdateVisibleProc;
-end;
-procedure TGDBobjinsp.scroll;
-//var si:scrollinfo;
-begin
-     {
-     si.cbSize:=sizeof(scrollinfo);
-     si.fMask:=SIF_ALL;
-     GetScrollInfo(handle,SB_VERT,si);
-     if peditor<>nil then
-                         begin
-                              peditor^.setxywh(peditor.wndx,peditor.wndy-(startdrawy+si.nTrackPos),peditor.wndw,peditor.wndh);
-                         end;
-     startdrawy:=-si.nTrackPos;
-     si.nPos:=si.nTrackPos;
-     si.fMask:=SIF_ALL;// сведения о полученных атрибутах
-     si.nMin:=0;// нижняя граница диапазона
-     si.nMax:=contentheigth;// верхняя граница диапазона
-     si.nPage:=clientheight;// размер страницы
-     draw;
-     SetScrollInfo(handle,SB_VERT,si,true);
-     }
 end;
 procedure TGDBobjinsp.createscrollbars;
 var

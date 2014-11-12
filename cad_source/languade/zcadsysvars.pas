@@ -177,6 +177,8 @@ type
                        end;
   tobjinspinterface=packed record
                 INTF_ObjInsp_ShowHeaders:PGDBBoolean;(*'Show headers'*)
+                INTF_ObjInsp_OldStyleDraw:PGDBBoolean;(*'Old style'*)
+                INTF_ObjInsp_ShowSeparator:PGDBBoolean;(*'Show separator'*)
                 INTF_ObjInsp_ShowFastEditors:PGDBBoolean;(*'Show fast editors'*)
                 INTF_ObjInsp_ShowOnlyHotFastEditors:PGDBBoolean;(*'Show only hot fast editors'*)
                 INTF_ObjInsp_RowHeight:TGDBIntegerOverrider;(*'Row height'*)
@@ -186,7 +188,6 @@ type
               INTF_ShowDwgTabs:PGDBBoolean;(*'Show drawing tabs'*)
               INTF_DwgTabsPosition:PTAlign;(*'Drawing tabs position'*)
               INTF_ShowDwgTabCloseBurron:PGDBBoolean;(*'Show drawing tab close button'*)
-              INTF_ShowLinesInObjInsp:PGDBBoolean;(*'Show lines in object inspector'*)
               INTF_DefaultControlHeight:PGDBInteger;(*'Default control height'*)(*oi_readonly*)
               INTF_OBJINSP_Properties:tobjinspinterface;(*'Object inspector properties'*)
              end;

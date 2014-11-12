@@ -210,6 +210,30 @@ begin
                          else
                              result:=0;
 end;
+function NeedShowSeparator:boolean;
+begin
+    if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowSeparator) then
+       begin
+            if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_OldStyleDraw) then
+               begin
+                 if SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_OldStyleDraw^ then
+                    result:=false
+                 else
+                    result:=SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowSeparator^
+               end
+            else
+               result:=SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowSeparator^
+       end
+    else
+       result:=false;
+end;
+function isOldStyleDraw:boolean;
+begin
+    if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_OldStyleDraw) then
+       result:=SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_OldStyleDraw^
+    else
+       result:=false;
+end;
 function NeedDrawFasteditor(OnMouseProp:boolean):boolean;
 begin
     if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowFastEditors) then
@@ -599,8 +623,7 @@ begin
             else
                 begin
                      cnvs.Brush.Color := clBtnFace;
-                     if assigned(sysvar.INTF.INTF_ShowLinesInObjInsp) then
-                     if sysvar.INTF.INTF_ShowLinesInObjInsp^ then
+                     if isOldStyleDraw then
                      cnvs.Rectangle(r);
                 end;
   end
@@ -614,8 +637,11 @@ begin
                  else
                      if readonly then
                      begin
-                     //result := ThemeServices.GetElementDetails(ttItemNormal);
-                     //ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
+                     if isOldStyleDraw then
+                     begin
+                       result := ThemeServices.GetElementDetails(ttItemNormal);
+                       ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
+                     end;
                      result := ThemeServices.GetElementDetails(ttItemDisabled);
                      end
                      else
@@ -630,11 +656,12 @@ begin
                      else
                      begin
                      {if assigned(sysvar.INTF.INTF_ShowLinesInObjInsp) then
-                     if sysvar.INTF.INTF_ShowLinesInObjInsp^ then
+                     if sysvar.INTF.INTF_ShowLinesInObjInsp^ then}
+                     if isOldStyleDraw then
                      begin
                      result := ThemeServices.GetElementDetails(ttItemNormal);
                      ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
-                     end;}
+                     end;
                      end;
   end;
 end;
@@ -722,7 +749,10 @@ begin
         OnMouseProp:=(ppd=onmousepp);
         r.Left:=arect.Left+2+subtab*sub{arect.Left};
         r.Top:=y;
-        r.Right:=namecol-spliterhalfwidth;
+        if NeedShowSeparator then
+                                 r.Right:=namecol-spliterhalfwidth
+                             else
+                                 r.Right:=namecol;
         r.Bottom:=y+rowh+1;
          if miny<=r.Bottom then
                                                  visible:=true
@@ -734,7 +764,8 @@ begin
                                      if visible then
                                      begin
                                     s:=ppd^.Name;
-                                    //r.Right:=arect.Right;
+                                    if not NeedShowSeparator then
+                                                             r.Right:=arect.Right;
                                     TextDetails:=drawrect(canvas,r,false,OnMouseProp,(ppd^.Attr and FA_READONLY)<>0);
                                     r.Left:={r.Left+3}arect.Left+5+subtab*sub;
                                     r.Top:=r.Top+3;
@@ -809,7 +840,10 @@ begin
                                       end;}
               end;
           r.Top:=r.Top-3;
-          r.Left:=r.Right-1+spliterhalfwidth;
+          if NeedShowSeparator then
+                                   r.Left:=r.Right-1+spliterhalfwidth
+                               else
+                                   r.Left:=r.Right-1;
           r.Right:=arect.Right;
 
           ppd.rect:=r;
@@ -895,8 +929,8 @@ sub:=0;
 drawprop(@pda,y,sub,hrect.Top+HeadersHeight+1,{arect}hrect);
 
 hrect.Bottom:=hrect.Top+HeadersHeight+1;
-hrect.Top:=hrect.Top+2;
-
+{$IFDEF WINDOWS}hrect.Top:=hrect.Top;{$ENDIF}
+{$IFNDEF WINDOWS}hrect.Top:=hrect.Top+2;{$ENDIF}
 
 if IsHeadersEnabled then
 begin
@@ -909,27 +943,28 @@ begin
 
     DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
     hrect.Left:=hrect.right;
-    hrect.right:=ARect.Right-2;
+    {$IFDEF WINDOWS}hrect.right:=ARect.Right-1;{$ENDIF}
+    {$IFNDEF WINDOWS}hrect.right:=ARect.Right-2;{$ENDIF}
     ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
     ThemeServices.DrawText(Canvas,DefaultDetails,rsValue,hrect,DT_END_ELLIPSIS or DT_CENTER,0);
 end;
-
-{$IFNDEF WINDOWS}DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);{$ENDIF}
-{$IFDEF WINDOWS}
-if WindowsVersion < wvVista then
-                                DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal)
-                            else
-                                DefaultDetails := ThemeServices.GetElementDetails(tsPane);
-{$ENDIF}
-hrect.Left:=namecol-2;
-hrect.right:=namecol+{$IFNDEF WINDOWS}2{$ENDIF}{$IFDEF WINDOWS}1{$ENDIF};
-hrect.Top:= hrect.Bottom;
-hrect.Bottom:=contentheigth+HeadersHeight;
-if hrect.Bottom>ARect.Bottom then
-                                 hrect.Bottom:=ARect.Bottom{height};
-ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-
-
+if NeedShowSeparator then
+begin
+    {$IFNDEF WINDOWS}DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);{$ENDIF}
+    {$IFDEF WINDOWS}
+    if WindowsVersion < wvVista then
+                                    DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal)
+                                else
+                                    DefaultDetails := ThemeServices.GetElementDetails(tsPane);
+    {$ENDIF}
+    hrect.Left:=namecol-2;
+    hrect.right:=namecol+{$IFNDEF WINDOWS}2{$ENDIF}{$IFDEF WINDOWS}1{$ENDIF};
+    hrect.Top:= hrect.Bottom;
+    hrect.Bottom:=contentheigth+HeadersHeight;
+    if hrect.Bottom>ARect.Bottom then
+                                     hrect.Bottom:=ARect.Bottom{height};
+    ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
+end;
 end;
 function findnext(psubtree:PTPropertyDeskriptorArray;current:PPropertyDeskriptor):PPropertyDeskriptor;
 var

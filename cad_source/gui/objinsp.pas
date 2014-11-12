@@ -649,9 +649,15 @@ begin
                      begin
                      result := ThemeServices.GetElementDetails(ttItemHot);
                      {$IFDEF WINDOWS}
-                     if ((WindowsVersion >= wvVista)and ThemeServices.ThemesEnabled)or isOldStyleDraw then
+                     if ((WindowsVersion >= wvVista)and ThemeServices.ThemesEnabled) then
+                                                                                         ThemeServices.DrawElement(cnvs.Handle, result, r, nil)
+                                                                                     else
+                                                                                         if isOldStyleDraw then
+                                                                                         ThemeServices.DrawElement(cnvs.Handle, ThemeServices.GetElementDetails(ttItemNormal), r, nil)
                      {$ENDIF}
+                     {$IFNDEF WINDOWS}
                      ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
+                     {$ENDIF}
                      end
                      else
                      begin
@@ -775,7 +781,7 @@ begin
                                      begin
                                     s:=ppd^.Name;
                                     if not NeedShowSeparator then
-                                                             r.Right:=arect.Right;
+                                                             r.Right:=arect.Right-1;
                                     TextDetails:=drawrect(canvas,r,false,OnMouseProp,(ppd^.Attr and FA_READONLY)<>0);
                                     r.Left:={r.Left+3}arect.Left+5+subtab*sub;
                                     r.Top:=r.Top+3;
@@ -854,7 +860,7 @@ begin
                                    r.Left:=r.Right-1+spliterhalfwidth
                                else
                                    r.Left:=r.Right-1;
-          r.Right:=arect.Right;
+          r.Right:=arect.Right-1;
 
           ppd.rect:=r;
           drawvalue(ppd,canvas,true,TextDetails,onmouseprop);

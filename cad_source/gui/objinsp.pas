@@ -195,6 +195,15 @@ begin
      //PreferredWidth:=0;
      //PreferredHeight:=1;
 end;
+function IsWgiteBackground:boolean;
+begin
+     if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_WhiteBackground)
+     then
+         result:=SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_WhiteBackground^
+     else
+         result:=false;
+end;
+
 function TGDBobjinsp.IsHeadersEnabled:boolean;
 begin
     if assigned(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowHeaders)
@@ -608,10 +617,15 @@ begin
   dec(r.left,size.cx+1);}
 end;
 function drawrect(cnvs:tcanvas;r:trect;active:boolean;onmouse:boolean;readonly:boolean): TThemedElementDetails;
+var
+   tc:tcolor;
 begin
   result:=defaultdetails;
-  if not ThemeServices.ThemesAvailable then
+  if (not ThemeServices.ThemesAvailable)or isOldStyleDraw then
   begin
+  if onmouse and ThemeServices.ThemesAvailable then
+                 result := ThemeServices.GetElementDetails(ttItemHot);
+  tc:=cnvs.Brush.Color;
   if active then
                 begin
                      cnvs.Brush.Color := clHighlight{clBtnHiLight};
@@ -622,10 +636,14 @@ begin
                 end
             else
                 begin
-                     cnvs.Brush.Color := clBtnFace;
+                     if IsWgiteBackground then
+                                              cnvs.Brush.Color := clWindow
+                                          else
+                                              cnvs.Brush.Color := clBtnFace;
                      if isOldStyleDraw then
                      cnvs.Rectangle(r);
                 end;
+  cnvs.Brush.Color:=tc;
   end
   else
   begin
@@ -914,6 +932,7 @@ var
   y:GDBInteger;
   sub:GDBInteger;
   arect,hrect:trect;
+  tc:tcolor;
   {ts:TTextStyle;}
 begin
 CalcRowHeight;
@@ -929,8 +948,10 @@ if WindowsVersion < wvVista then
 {$endif}
 {$IFDEF LCLGTK2}DefaultDetails := ThemeServices.GetElementDetails(ttbDropDownButtonPressed){$endif}
 {$IFDEF LCLQT}DefaultDetails := ThemeServices.GetElementDetails({ttpane}thHeaderDontCare){$endif};
-ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, ARect, nil);
-//self.Canvas.FrameRect(ARect);
+if IsWgiteBackground then
+                         Canvas.FillRect(ARect)
+                     else
+                         ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, ARect, nil);
 
 {ts:=canvas.TextStyle;
 ts.Alignment:=taCenter;
@@ -966,20 +987,31 @@ begin
 end;
 if NeedShowSeparator then
 begin
-    {$IFNDEF WINDOWS}DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);{$ENDIF}
-    {$IFDEF WINDOWS}
-    if WindowsVersion < wvVista then
-                                    DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal)
-                                else
-                                    DefaultDetails := ThemeServices.GetElementDetails(tsPane);
-    {$ENDIF}
-    hrect.Left:=namecol-2;
-    hrect.right:=namecol+{$IFNDEF WINDOWS}2{$ENDIF}{$IFDEF WINDOWS}1{$ENDIF};
-    hrect.Top:= hrect.Bottom;
-    hrect.Bottom:=contentheigth+HeadersHeight;
-    if hrect.Bottom>ARect.Bottom then
-                                     hrect.Bottom:=ARect.Bottom{height};
-    ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
+     hrect.Left:=namecol-2;
+     hrect.right:=namecol+{$IFNDEF WINDOWS}2{$ENDIF}{$IFDEF WINDOWS}1{$ENDIF};
+     hrect.Top:= hrect.Bottom;
+     hrect.Bottom:=contentheigth+HeadersHeight;
+     if hrect.Bottom>ARect.Bottom then
+                                      hrect.Bottom:=ARect.Bottom{height};
+     if ThemeServices.ThemesEnabled then
+     begin
+          {$IFNDEF WINDOWS}DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);{$ENDIF}
+          {$IFDEF WINDOWS}
+          if WindowsVersion < wvVista then
+                                          DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal)
+                                      else
+                                          DefaultDetails := ThemeServices.GetElementDetails(tsPane);
+          {$ENDIF}
+          ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
+     end
+     else
+     begin
+          hrect.Left:=(hrect.Left+hrect.Right)div 2;
+          tc:=Canvas.Pen.Color;
+          Canvas.Pen.Color:=cl3DDkShadow;
+          canvas.Line(hrect.Left,hrect.Top,hrect.Left,hrect.Bottom);
+          Canvas.Pen.Color:=tc;
+     end;
 end;
 end;
 function findnext(psubtree:PTPropertyDeskriptorArray;current:PPropertyDeskriptor):PPropertyDeskriptor;

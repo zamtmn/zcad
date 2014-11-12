@@ -26,6 +26,7 @@ var
   INTF_DefaultControlHeight:GDBInteger;
   INTF_ObjInsp_ShowHeaders:GDBBoolean;
   INTF_ObjInsp_OldStyleDraw:GDBBoolean;
+  INTF_ObjInsp_WhiteBackground:GDBBoolean;
   INTF_ObjInsp_ShowSeparator:GDBBoolean;
   INTF_ObjInsp_ShowFastEditors:GDBBoolean;
   INTF_ObjInsp_ShowOnlyHotFastEditors:GDBBoolean;
@@ -116,6 +117,7 @@ begin
   INTF_DefaultControlHeight:=27;
   INTF_ObjInsp_ShowHeaders:=True;
   INTF_ObjInsp_OldStyleDraw:=False;
+  INTF_ObjInsp_WhiteBackground:=False;
   INTF_ObjInsp_ShowSeparator:=True;
   INTF_ObjInsp_ShowFastEditors:=True;
   INTF_ObjInsp_ShowOnlyHotFastEditors:=True;

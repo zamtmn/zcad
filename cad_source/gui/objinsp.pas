@@ -951,13 +951,26 @@ if WindowsVersion < wvVista then
 if IsWgiteBackground then
                          Canvas.FillRect(ARect)
                      else
-                         ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, ARect, nil);
+                         begin
+                              if isOldStyleDraw then
+                              begin
+                                  tc:=Canvas.Brush.Color;
+                                  Canvas.Brush.Color:=clBtnFace;
+                                  Canvas.FillRect(ARect);
+                                  Canvas.Brush.Color:=tc;
+                              end
+                              else
+                                  ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, ARect, nil);
+                         end;
 
 {ts:=canvas.TextStyle;
 ts.Alignment:=taCenter;
 ts.Layout:=tlCenter;}
 
 hrect:=ARect;
+{$IFDEF WINDOWS}
+if WindowsVersion>=wvVista then
+{$endif}
 InflateRect(hrect, -1, -1);
 
 

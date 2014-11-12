@@ -639,7 +639,7 @@ begin
                      begin
                      if isOldStyleDraw then
                      begin
-                       result := ThemeServices.GetElementDetails(ttItemNormal);
+                       result := {ThemeServices.GetElementDetails(ttItemNormal)}DefaultDetails;
                        ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
                      end;
                      result := ThemeServices.GetElementDetails(ttItemDisabled);
@@ -665,7 +665,7 @@ begin
                      if sysvar.INTF.INTF_ShowLinesInObjInsp^ then}
                      if isOldStyleDraw then
                      begin
-                     result := ThemeServices.GetElementDetails(ttItemNormal);
+                     result := {ThemeServices.GetElementDetails(ttItemNormal)}DefaultDetails;
                      ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
                      end;
                      end;
@@ -944,7 +944,7 @@ y:=HeadersHeight+BorderWidth;
 sub:=0;
 drawprop(@pda,y,sub,hrect.Top+HeadersHeight+1,{arect}hrect);
 
-hrect.Bottom:=hrect.Top+HeadersHeight+1;
+hrect.Bottom:=hrect.Top+HeadersHeight-1{+1};
 {$IFDEF WINDOWS}hrect.Top:=hrect.Top;{$ENDIF}
 {$IFNDEF WINDOWS}hrect.Top:=hrect.Top+2;{$ENDIF}
 
@@ -955,14 +955,14 @@ begin
 
     DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemNormal);
     ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-    ThemeServices.DrawText(Canvas,DefaultDetails,rsProperty,hrect,DT_END_ELLIPSIS or DT_CENTER,0);
+    ThemeServices.DrawText(Canvas,DefaultDetails,rsProperty,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER,0);
 
     DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
     hrect.Left:=hrect.right;
     {$IFDEF WINDOWS}hrect.right:=ARect.Right-1;{$ENDIF}
     {$IFNDEF WINDOWS}hrect.right:=ARect.Right-2;{$ENDIF}
     ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-    ThemeServices.DrawText(Canvas,DefaultDetails,rsValue,hrect,DT_END_ELLIPSIS or DT_CENTER,0);
+    ThemeServices.DrawText(Canvas,DefaultDetails,rsValue,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER,0);
 end;
 if NeedShowSeparator then
 begin

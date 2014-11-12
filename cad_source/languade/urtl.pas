@@ -99,10 +99,11 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ShowDwgTabs,'INTF_ShowDwgTabs');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_DwgTabsPosition,'INTF_DwgTabsPosition');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ShowDwgTabCloseBurron,'INTF_ShowDwgTabCloseBurron');
-  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ShowLinesInObjInsp,'INTF_ShowLinesInObjInsp');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_DefaultControlHeight,'INTF_DefaultControlHeight');
 
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowHeaders,'INTF_ObjInsp_ShowHeaders');
+  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_OldStyleDraw,'INTF_ObjInsp_OldStyleDraw');
+  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowSeparator,'INTF_ObjInsp_ShowSeparator');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowFastEditors,'INTF_ObjInsp_ShowFastEditors');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowOnlyHotFastEditors,'INTF_ObjInsp_ShowOnlyHotFastEditors');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Enable,'INTF_ObjInsp_RowHeight_OverriderEnable');

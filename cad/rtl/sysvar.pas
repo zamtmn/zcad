@@ -23,9 +23,10 @@ var
   INTF_ShowDwgTabs:GDBBoolean;
   INTF_DwgTabsPosition:TAlign;
   INTF_ShowDwgTabCloseBurron:GDBBoolean;
-  INTF_ShowLinesInObjInsp:GDBBoolean;
   INTF_DefaultControlHeight:GDBInteger;
   INTF_ObjInsp_ShowHeaders:GDBBoolean;
+  INTF_ObjInsp_OldStyleDraw:GDBBoolean;
+  INTF_ObjInsp_ShowSeparator:GDBBoolean;
   INTF_ObjInsp_ShowFastEditors:GDBBoolean;
   INTF_ObjInsp_ShowOnlyHotFastEditors:GDBBoolean;
   INTF_ObjInsp_RowHeight_OverriderEnable:GDBBoolean;
@@ -112,9 +113,10 @@ begin
   INTF_ShowDwgTabs:=True;
   INTF_DwgTabsPosition:=TATop;
   INTF_ShowDwgTabCloseBurron:=True;
-  INTF_ShowLinesInObjInsp:=True;
   INTF_DefaultControlHeight:=27;
   INTF_ObjInsp_ShowHeaders:=True;
+  INTF_ObjInsp_OldStyleDraw:=False;
+  INTF_ObjInsp_ShowSeparator:=True;
   INTF_ObjInsp_ShowFastEditors:=True;
   INTF_ObjInsp_ShowOnlyHotFastEditors:=True;
   INTF_ObjInsp_RowHeight_OverriderEnable:=False;

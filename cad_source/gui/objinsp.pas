@@ -649,7 +649,7 @@ begin
                      begin
                      result := ThemeServices.GetElementDetails(ttItemHot);
                      {$IFDEF WINDOWS}
-                     if (WindowsVersion >= wvVista)and ThemeServices.ThemesEnabled then
+                     if ((WindowsVersion >= wvVista)and ThemeServices.ThemesEnabled)or isOldStyleDraw then
                      {$ENDIF}
                      ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
                      end
@@ -662,6 +662,16 @@ begin
                      result := ThemeServices.GetElementDetails(ttItemNormal);
                      ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
                      end;
+                     end;
+                     {$IFDEF WINDOWS}
+                     if (WindowsVersion < wvVista)or(not ThemeServices.ThemesEnabled) then
+                     {$ENDIF}
+                     if isOldStyleDraw then
+                     begin
+                        cnvs.Line(r.Left,r.Top,r.Right,r.Top);
+                        cnvs.Line(r.Right,r.Top,r.Right,r.Bottom);
+                        cnvs.Line(r.Right,r.Bottom,r.Left,r.Bottom);
+                        cnvs.Line(r.Left,r.Bottom,r.Left,r.Top);
                      end;
   end;
 end;

@@ -171,10 +171,15 @@ type
                VIEW_HistoryLineVisible,
                VIEW_ObjInspVisible:PGDBBoolean;
          end;
+  TGDBIntegerOverrider=packed record
+                        Enable:PGDBBoolean;(*'Enable'*)
+                        Value:PGDBInteger;(*'New value'*)
+                       end;
   tobjinspinterface=packed record
                 INTF_ObjInsp_ShowHeaders:PGDBBoolean;(*'Show headers'*)
                 INTF_ObjInsp_ShowFastEditors:PGDBBoolean;(*'Show fast editors'*)
                 INTF_ObjInsp_ShowOnlyHotFastEditors:PGDBBoolean;(*'Show only hot fast editors'*)
+                INTF_ObjInsp_RowHeight:TGDBIntegerOverrider;(*'Row height'*)
                end;
   tinterface=packed record
               INTF_ShowScrollBars:PGDBBoolean;(*'Show scroll bars'*)
@@ -182,7 +187,7 @@ type
               INTF_DwgTabsPosition:PTAlign;(*'Drawing tabs position'*)
               INTF_ShowDwgTabCloseBurron:PGDBBoolean;(*'Show drawing tab close button'*)
               INTF_ShowLinesInObjInsp:PGDBBoolean;(*'Show lines in object inspector'*)
-              INTF_ObjInspRowH:PGDBInteger;(*'Object inspector row height'*)
+              INTF_DefaultControlHeight:PGDBInteger;(*'Default control height'*)(*oi_readonly*)
               INTF_OBJINSP_Properties:tobjinspinterface;(*'Object inspector properties'*)
              end;
   tdisp=packed record

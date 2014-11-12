@@ -281,9 +281,9 @@ begin
      end
      else
          result:=types.size(0,0);
-     if assigned(sysvar.INTF.INTF_ObjInspRowH) then
+     if assigned(sysvar.INTF.INTF_DefaultControlHeight) then
                                                    begin
-                                                        result.cx:=sysvar.INTF.INTF_ObjInspRowH^-6;
+                                                        result.cx:=sysvar.INTF.INTF_DefaultControlHeight^-6;
                                                         if result.cx<15 then
                                                                             result.cx:=15;
                                                         result.cy:=result.cx;
@@ -318,7 +318,7 @@ var
 begin
      if not assigned(ColorSelectWND)then
      Application.CreateForm(TColorSelectWND, ColorSelectWND);
-     SetHeightControl(ColorSelectWND,sysvar.INTF.INTF_ObjInspRowH^);
+     SetHeightControl(ColorSelectWND,sysvar.INTF.INTF_DefaultControlHeight^);
      if assigned(ShowAllCursorsProc) then
                                          ShowAllCursorsProc;
      mr:=ColorSelectWND.run(PTGDBPaletteColor(PInstance)^,true){showmodal};
@@ -378,7 +378,7 @@ end;
 procedure runOSwnd(PInstance:GDBPointer);
 begin
   OSWindow:=TOSWindow.Create(nil);
-  SetHeightControl(OSWindow,sysvar.INTF.INTF_ObjInspRowH^);
+  SetHeightControl(OSWindow,sysvar.INTF.INTF_DefaultControlHeight^);
   DOShowModal(OSWindow);
   Freeandnil(OSWindow);
 end;

@@ -98,6 +98,7 @@ type
     destructor Destroy; Override;
     procedure createscrollbars;virtual;
     procedure AfterConstruction; override;
+    procedure CalcRowHeight;
     procedure EraseBackground(DC: HDC); override;
 
     procedure FreeEditor;
@@ -377,12 +378,24 @@ procedure TGDBobjinsp.EraseBackground(DC: HDC);
 begin
      inherited;
 end;
+procedure TGDBobjinsp.CalcRowHeight;
+begin
+  rowh:=21;
+  if assigned(sysvar.INTF.INTF_DefaultControlHeight) then
+                                                         rowh:=sysvar.INTF.INTF_DefaultControlHeight^;
+  if assigned(sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Enable) then
+  if sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Enable^ then
+  if assigned(sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Value) then
+  if sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Value^>0 then
+     rowh:=sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Value^
+end;
+
 procedure TGDBobjinsp.AfterConstruction;
 begin
      inherited;
      rowh:=21;
-     if assigned(sysvar.INTF.INTF_ObjInspRowH) then
-                                                   rowh:=sysvar.INTF.INTF_ObjInspRowH^;
+     CalcRowHeight;
+
      onresize:=_onresize;
      onhide:=FormHide;
      onpaint:=mypaint;
@@ -853,6 +866,7 @@ var
   arect,hrect:trect;
   {ts:TTextStyle;}
 begin
+CalcRowHeight;
 ARect := GetClientRect;
 InflateRect(ARect, -BorderWidth, -BorderWidth);
 ARect.Top:=ARect.Top+VertScrollBar.ScrollPos;

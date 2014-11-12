@@ -34,7 +34,7 @@ begin
      cb.AutoSize:=false;
      {$IFDEF LCLWIN32}
      cb.Style:=csOwnerDrawFixed;
-     cb.ItemHeight:=sysvar.INTF.INTF_ObjInspRowH^-6;
+     cb.ItemHeight:=sysvar.INTF.INTF_DefaultControlHeight^-6;
      {$ENDIF}
 end;
 

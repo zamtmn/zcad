@@ -946,7 +946,7 @@ FToolBar.Caption:='';
 FToolBar.SetBounds(100,64,1000,26);
 
 TB:=TToolBar.Create(application);
-TB.ButtonHeight:=sysvar.INTF.INTF_ObjInspRowH^;
+TB.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
 TB.Align:=alclient;
 TB.Top:=0;
 TB.Left:=0;
@@ -1197,7 +1197,7 @@ begin
    ToolBarU.Align:=alTop{alClient};
    ToolBarU.SetBounds(500,0,1000,26);
    ToolBarU.AutoSize:=true;
-   ToolBarU.ButtonHeight:=sysvar.INTF.INTF_ObjInspRowH^;
+   ToolBarU.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
    ToolBarU.ShowCaptions:=true;
    ToolBarU.Parent:=self;
    ToolBarU.EdgeBorders:=[ebTop, ebBottom, ebLeft, ebRight];
@@ -1259,7 +1259,7 @@ begin
 end;
 procedure MainForm.FormCreate(Sender: TObject);
 begin
-   sysvar.INTF.INTF_ObjInspRowH^:=sysparam.defaultheight;
+   sysvar.INTF.INTF_DefaultControlHeight^:=sysparam.defaultheight;
 
   DecorateSysTypes;
   self.onclose:=self.FormClose;

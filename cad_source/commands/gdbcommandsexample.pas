@@ -614,7 +614,6 @@ var
    vdpobj,vdpvertex:vardesk;
    pc:pointer;
 begin
-    //vdpobj:=commandmanager.GetValue;
     vdpobj:=commandmanager.PopValue;
     vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint('Select point:',p) then
@@ -626,7 +625,57 @@ begin
     end;
     result:=cmd_ok;
 end;
-
+function GetVertexX_com(operands:TCommandOperands):TCommandResult;
+var
+   p:GDBVertex;
+   vdpobj,vdpvertex:vardesk;
+   pc:pointer;
+begin
+    vdpobj:=commandmanager.PopValue;
+    vdpvertex:=commandmanager.PopValue;
+    if commandmanager.get3dpoint('Select X:',p) then
+    begin
+         pc:=PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(PGDBXCoordinate(ppointer(vdpvertex.data.Instance)^)^);
+         pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.x;
+         PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
+         PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
+    end;
+    result:=cmd_ok;
+end;
+function GetVertexY_com(operands:TCommandOperands):TCommandResult;
+var
+   p:GDBVertex;
+   vdpobj,vdpvertex:vardesk;
+   pc:pointer;
+begin
+    vdpobj:=commandmanager.PopValue;
+    vdpvertex:=commandmanager.PopValue;
+    if commandmanager.get3dpoint('Select Y:',p) then
+    begin
+         pc:=PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(PGDBYCoordinate(ppointer(vdpvertex.data.Instance)^)^);
+         pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.y;
+         PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
+         PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
+    end;
+    result:=cmd_ok;
+end;
+function GetVertexZ_com(operands:TCommandOperands):TCommandResult;
+var
+   p:GDBVertex;
+   vdpobj,vdpvertex:vardesk;
+   pc:pointer;
+begin
+    vdpobj:=commandmanager.PopValue;
+    vdpvertex:=commandmanager.PopValue;
+    if commandmanager.get3dpoint('Select Z:',p) then
+    begin
+         pc:=PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(PGDBZCoordinate(ppointer(vdpvertex.data.Instance)^)^);
+         pgdbdouble(ppointer(vdpvertex.data.Instance)^)^:=p.z;
+         PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
+         PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
+    end;
+    result:=cmd_ok;
+end;
 function GetLength_com(operands:TCommandOperands):TCommandResult;
 var
    p1,p2:GDBVertex;
@@ -671,6 +720,9 @@ initialization
 
      CreateCommandFastObjectPlugin(@test_com,'ts',CADWG,0);
      CreateCommandFastObjectPlugin(@GetPoint_com,'GetPoint',CADWG,0);
+     CreateCommandFastObjectPlugin(@GetVertexX_com,'GetVertexX',CADWG,0);
+     CreateCommandFastObjectPlugin(@GetVertexY_com,'GetVertexY',CADWG,0);
+     CreateCommandFastObjectPlugin(@GetVertexZ_com,'GetVertexZ',CADWG,0);
      CreateCommandFastObjectPlugin(@GetLength_com,'GetLength',CADWG,0);
 
 end.

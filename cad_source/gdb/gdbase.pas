@@ -94,11 +94,17 @@ DMatrix3D=packed array[0..2]of DVector3D;
 ClipArray=packed array[0..5]of DVector4D;
 FontFloat=GDBFloat;
 PFontFloat=^FontFloat;
+PGDBXCoordinate=^GDBXCoordinate;
+GDBXCoordinate=GDBDouble;
+PGDBYCoordinate=^GDBYCoordinate;
+GDBYCoordinate=GDBDouble;
+PGDBZCoordinate=^GDBZCoordinate;
+GDBZCoordinate=GDBDouble;
 PGDBvertex=^GDBvertex;
 GDBvertex=packed record
-                x:GDBDouble;(*saved_to_shd*)
-                y:GDBDouble;(*saved_to_shd*)
-                z:GDBDouble;(*saved_to_shd*)
+                x:GDBXCoordinate;(*saved_to_shd*)
+                y:GDBYCoordinate;(*saved_to_shd*)
+                z:GDBZCoordinate;(*saved_to_shd*)
           end;
 PGDBCoordinates3D=^GDBCoordinates3D;
 GDBCoordinates3D=GDBvertex;

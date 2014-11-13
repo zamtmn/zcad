@@ -373,8 +373,11 @@ begin
                                                      end;
                                   identtype:begin
                                                   typename:=parseresult^.getGDBString(0);
+                                                  if typename='GDBXCoordinate' then
+                                                                                  typename:=typename;
                                                   gdbgetmem({$IFDEF DEBUGBUILD}'{611C73B3-FC2B-4E77-A58F-061B3C7707C8}',{$ENDIF}GDBPointer(etd),sizeof(GDBSinonimDescriptor));
-                                                  PGDBSinonimDescriptor(etd)^.init(parseresult^.getGDBString(1),parseresult^.getGDBString(0),currentunit);
+                                                  PGDBSinonimDescriptor(etd)^.init(parseresult^.getGDBString(1),typename,currentunit);
+                                                  fieldoffset:=PGDBSinonimDescriptor(etd)^.SizeInGDBBytes;
                                              end;
                                       ptype:begin
                                                   typename:=parseresult^.getGDBString(0);
@@ -390,7 +393,7 @@ begin
                                                   typename:=parseresult^.getGDBString(0);
                                                   if typ<>packedrecordtype then
                                                                                ShowError('Record "'+typename+'" not packed');
-                                                  if (typename) = 'TRestoreMode'
+                                                  if (typename) = 'GDBvertex'
                                                   then
                                                        typename:=typename;
                                                   //GDBStringtypearray := chr(Trecord);
@@ -690,7 +693,7 @@ if addtype then
                                                         then
                                                             line:=line;
                                                         line:=copy(line,1,pos(';',line)-1);
-                                                        if line='RD_Restore_Mode:=WND_Texture'
+                                                        if line='camera.prop.point.x:=111.0'
                                                                  then
                                                                      line:=line;
                                                         vd:=evaluate(line,currentunit);

@@ -577,9 +577,10 @@ begin
     end
 end;
 
-function findbasicoperator(expr: GDBString; rez, hrez: {PUserTypeDescriptor}vardesk): GDBInteger;
+function findbasicoperator(expr: GDBString; rez, hrez: vardesk): GDBInteger;
 var
   i: GDBInteger;
+  rezptd,hrezptd:PUserTypeDescriptor;
 begin
   result := 0;
   if rez.data.PTD<>nil then
@@ -591,8 +592,22 @@ begin
                                 exit;
                            end;
   begin
+  if rez.data.ptd<>nil then
+  if rez.data.ptd.TypeName='GDBXCoordinate' then
+                                                rez.data.ptd:=rez.data.ptd;
+  if hrez.data.ptd<>nil then
+  if hrez.data.ptd.TypeName='GDBXCoordinate' then
+                                                  rez.data.ptd:=rez.data.ptd;
+  if rez.data.ptd<>nil then
+                           rezptd:=rez.data.ptd^.GetFactTypedef
+                       else
+                           rezptd:=nil;
+  if hrez.data.ptd<>nil then
+                            hrezptd:=hrez.data.ptd^.GetFactTypedef
+                        else
+                            hrezptd:=nil;
   for i := 1 to basicoperatorparamcount do
-    if (rez.data.ptd = basicoperatorparam[i].param) and (hrez.data.ptd = basicoperatorparam[i].hparam) and (expr = basicoperatorparam[i].name) then
+    if (rezptd = basicoperatorparam[i].param) and (hrezptd = basicoperatorparam[i].hparam) and (expr = basicoperatorparam[i].name) then
     begin
       result := i;
       exit;

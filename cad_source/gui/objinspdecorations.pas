@@ -31,6 +31,9 @@ type
     AsyncCommHelper=class
                          class procedure GetVertex(Pinstance:PtrInt);
                          class procedure GetLength(Pinstance:PtrInt);
+                         class procedure GetVertexX(Pinstance:PtrInt);
+                         class procedure GetVertexY(Pinstance:PtrInt);
+                         class procedure GetVertexZ(Pinstance:PtrInt);
     end;
 
 procedure DecorateSysTypes;
@@ -263,6 +266,18 @@ end;
 procedure ButtonHLineDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
 begin
      ButtonDraw(canvas,r,state,'-',boundr);
+end;
+procedure ButtonXDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
+begin
+     ButtonDraw(canvas,r,state,'x',boundr);
+end;
+procedure ButtonYDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
+begin
+     ButtonDraw(canvas,r,state,'y',boundr);
+end;
+procedure ButtonZDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
+begin
+     ButtonDraw(canvas,r,state,'z',boundr);
 end;
 procedure ButtonTxtDrawFastEditor(canvas:TCanvas;r:trect;PInstance:GDBPointer;state:TFastEditorState;boundr:trect);
 begin
@@ -530,11 +545,98 @@ begin
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
 end;
+class procedure AsyncCommHelper.GetVertexX(Pinstance:PtrInt);
+var
+   p:pointer;
+begin
+     if count>0 then
+                    begin
+                        dec(count);
+                        Application.QueueAsyncCall(GetVertexX,PtrInt(PInstance));
+                    end
+                else
+                    begin
+                         commandmanager.PushValue('','PGDBXCoordinate',@PInstance);
+                         if GDBobjinsp.GDBobj then
+                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.pcurrobj)
+                                              else
+                                                  begin
+                                                       p:=nil;
+                                                       commandmanager.PushValue('','PGDBObjEntity',@p)
+                                                  end;
+                         commandmanager.executecommand('GetVertexX',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                         GDBobjinsp.UpdateObjectInInsp;
+                    end;
+end;
+class procedure AsyncCommHelper.GetVertexY(Pinstance:PtrInt);
+var
+   p:pointer;
+begin
+     if count>0 then
+                    begin
+                        dec(count);
+                        Application.QueueAsyncCall(GetVertexY,PtrInt(PInstance));
+                    end
+                else
+                    begin
+                         commandmanager.PushValue('','PGDBYCoordinate',@PInstance);
+                         if GDBobjinsp.GDBobj then
+                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.pcurrobj)
+                                              else
+                                                  begin
+                                                       p:=nil;
+                                                       commandmanager.PushValue('','PGDBObjEntity',@p)
+                                                  end;
+                         commandmanager.executecommand('GetVertexY',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                         GDBobjinsp.UpdateObjectInInsp;
+                    end;
+end;
+class procedure AsyncCommHelper.GetVertexZ(Pinstance:PtrInt);
+var
+   p:pointer;
+begin
+     if count>0 then
+                    begin
+                        dec(count);
+                        Application.QueueAsyncCall(GetVertexZ,PtrInt(PInstance));
+                    end
+                else
+                    begin
+                         commandmanager.PushValue('','PGDBZCoordinate',@PInstance);
+                         if GDBobjinsp.GDBobj then
+                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.pcurrobj)
+                                              else
+                                                  begin
+                                                       p:=nil;
+                                                       commandmanager.PushValue('','PGDBObjEntity',@p)
+                                                  end;
+                         commandmanager.executecommand('GetVertexZ',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                         GDBobjinsp.UpdateObjectInInsp;
+                    end;
+end;
 procedure GetLengthFromDrawing(PInstance:PGDBVertex);
 begin
      commandmanager.executecommandtotalend;
      count:=1;
      Application.QueueAsyncCall(AsyncCommHelper.GetLength,PtrInt(PInstance));
+end;
+procedure GetXFromDrawing(PInstance:PGDBVertex);
+begin
+     commandmanager.executecommandtotalend;
+     count:=1;
+     Application.QueueAsyncCall(AsyncCommHelper.GetVertexX,PtrInt(PInstance));
+end;
+procedure GetYFromDrawing(PInstance:PGDBVertex);
+begin
+     commandmanager.executecommandtotalend;
+     count:=1;
+     Application.QueueAsyncCall(AsyncCommHelper.GetVertexY,PtrInt(PInstance));
+end;
+procedure GetZFromDrawing(PInstance:PGDBVertex);
+begin
+     commandmanager.executecommandtotalend;
+     count:=1;
+     Application.QueueAsyncCall(AsyncCommHelper.GetVertexZ,PtrInt(PInstance));
 end;
 procedure DecorateSysTypes;
 begin
@@ -554,6 +656,9 @@ begin
      AddFastEditorToType('GDBAnsiString',@ButtonGetPrefferedFastEditorSize,@ButtonTxtDrawFastEditor,@RunAnsiStringEditor);
      AddFastEditorToType('GDBCoordinates3D',@ButtonGetPrefferedFastEditorSize,@ButtonCrossDrawFastEditor,@GetVertexFromDrawing,true);
      AddFastEditorToType('GDBLength',@ButtonGetPrefferedFastEditorSize,@ButtonHLineDrawFastEditor,@GetLengthFromDrawing,true);
+     AddFastEditorToType('GDBXCoordinate',@ButtonGetPrefferedFastEditorSize,@ButtonXDrawFastEditor,@GetXFromDrawing,true);
+     AddFastEditorToType('GDBYCoordinate',@ButtonGetPrefferedFastEditorSize,@ButtonYDrawFastEditor,@GetYFromDrawing,true);
+     AddFastEditorToType('GDBZCoordinate',@ButtonGetPrefferedFastEditorSize,@ButtonZDrawFastEditor,@GetZFromDrawing,true);
      AddFastEditorToType('TGDBOSMode',@ButtonGetPrefferedFastEditorSize,@ButtonDrawFastEditor,@runOSwnd);
 end;
 end.

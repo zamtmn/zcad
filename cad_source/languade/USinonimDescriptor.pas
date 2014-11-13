@@ -31,6 +31,7 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      function Serialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:PGDBOpenArrayOfByte;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                      function DeSerialize(PInstance:GDBPointer;SaveFlag:GDBWord;var membuf:GDBOpenArrayOfByte;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                      destructor Done;virtual;
+                     function GetFactTypedef:PUserTypeDescriptor;virtual;
 
                end;
 implementation
@@ -39,6 +40,10 @@ destructor GDBSinonimDescriptor.done;
 begin
      SinonimName:='';
      inherited;
+end;
+function GDBSinonimDescriptor.GetFactTypedef:PUserTypeDescriptor;
+begin
+     result:=PSinonimOf^.GetFactTypedef;
 end;
 constructor GDBSinonimDescriptor.init;
 begin

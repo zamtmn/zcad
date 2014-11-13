@@ -544,6 +544,12 @@ begin
      if assigned(ppd.FastEditor.OnGetPrefferedFastEditorSize) then
      begin
            FESize:=ppd.FastEditor.OnGetPrefferedFastEditorSize(ppd^.valueAddres);
+           temp:=r.Bottom-r.Top-2;
+           if temp<2 then temp:=2;
+           if FESize.cy>temp then
+           begin
+                FESize.cy:=temp;
+           end;
            if FESize.cX>0 then
            if (r.Right-r.Left-1)>FESize.cX then
            begin

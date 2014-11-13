@@ -1452,7 +1452,7 @@ begin
                                                                                            pp.FastEditorState:=TFES_Default;
                                                                                            if assigned(pp.FastEditor.OnRunFastEditor)then
                                                                                            begin
-                                                                                           freeeditor;
+                                                                                           StoreAndFreeEditor;;
                                                                                            EDContext.ppropcurrentedit:=pp;
                                                                                            //pp.FastEditor.OnRunFastEditor(pp.valueAddres)
                                                                                            if pp.FastEditor.UndoInsideFastEditor then

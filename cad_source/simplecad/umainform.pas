@@ -145,17 +145,18 @@ var
    v1,v2:gdbvertex;
    wpowner:TAbstractViewArea;
 begin
-
-     Snap.Base.x:=1;
-     Snap.Base.y:=1;
-     Snap.Spacing.x:=1;
+     {Настройка глобальных переменных необходимых для работы}
+     {переменные не все, только минимально необходимые для работы}
+     Snap.Base.x:=0;//смещение начала координат сетки\привязки к сетке
+     Snap.Base.y:=0;
+     Snap.Spacing.x:=1;//шаг привязки к сетке
      Snap.Spacing.y:=1;
-     grid.x:=2;
+     grid.x:=2;//шаг сетки
      grid.y:=2;
 
-     sysvar.DWG.DWG_Snap:=@Snap;
-     sysvar.DWG.DWG_GridSpacing:=@grid;
-     sysvar.DWG.DWG_SystmGeometryDraw:=@sgdraw;
+     sysvar.DWG.DWG_Snap:=@Snap;//привязка настроек сетки/привязки к потрохам зкада через соответствующий указатель
+     sysvar.DWG.DWG_GridSpacing:=@grid;//привязка настроек сетки/привязки к потрохам зкада через соответствующий указатель
+     sysvar.DWG.DWG_SystmGeometryDraw:=@sgdraw;//привязка настроек сетки/привязки к потрохам зкада через соответствующий указатель
      sysvar.DWG.DWG_SystmGeometryDraw^:=CheckBox1.Checked;
 
      sysvar.RD.RD_BackGroundColor:=@bccolor;
@@ -182,7 +183,7 @@ begin
      sysvar.dwg.DWG_OSMode:=@OSMode;
 
 
-     ugdbdescriptor.startup;
+     ugdbdescriptor.startup('','');
 
      ptd:={gdb.}CreateSimpleDWG;
      //ptd:=gdb.CreateDWG;

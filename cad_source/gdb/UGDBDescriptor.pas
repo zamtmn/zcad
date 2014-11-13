@@ -112,7 +112,7 @@ var GDB: GDBDescriptor;
     LtypeManager:GDBLtypeArray;
 procedure CalcZ(z:GDBDouble);
 procedure RemapAll(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
-procedure startup;
+procedure startup(preloadedfile1,preloadedfile2:GDBString);
 procedure finalize;
 procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
 procedure clearotrack;
@@ -970,7 +970,7 @@ begin
      FontManager.addFonf(fn);
 end;
 
-procedure startup;
+procedure startup(preloadedfile1,preloadedfile2:GDBString);
 var
    r: TLResource;
    f:GDBOpenArrayOfByte;
@@ -1026,7 +1026,7 @@ begin
   SetCurrentDWGProc:=SetCurrentDWG;
   BlockBaseDWG:=gdb.CreateDWG('','');
   _GetUndoStack:=gdb.GetUndoStack;
-  ClipboardDWG:=gdb.CreateDWG('*rtl/dwg/DrawingVars.pas','');
+  ClipboardDWG:=gdb.CreateDWG(preloadedfile1,preloadedfile2);
   ClipboardDWG.DimStyleTable.AddItem('Standart',pds);
   pds.init('Standart');
   //gdb.currentdwg:=BlockBaseDWG;

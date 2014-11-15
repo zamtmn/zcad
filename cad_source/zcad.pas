@@ -111,7 +111,7 @@ begin
   //Application.Initialize;
 
   //инициализация GDB
-  ugdbdescriptor.startup;
+  ugdbdescriptor.startup('*rtl/dwg/DrawingVars.pas','');
 
   //создание окна программы
   Application.CreateForm(MainForm, MainFormN);

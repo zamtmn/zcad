@@ -3298,7 +3298,7 @@ begin
           s:=PGDBString(commandmanager.ContextCommandParams)^;
           commandmanager.executecommandend;
           s:='Insert('+s+')';
-          commandmanager.executecommand(@s[1],gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+          commandmanager.executecommand(s,gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
           result:=ZCMD_OK_NOEND;
      end;
      end

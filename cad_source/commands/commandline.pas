@@ -42,8 +42,8 @@ type
                           DMenu:TDMenuWnd;
                           OnCommandRun:TOnCommandRun;
                           constructor init(m:GDBInteger);
-                          function execute(const comm:pansichar;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;
-                          function executecommand(const comm:pansichar;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;
+                          function execute(const comm:string;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;
+                          function executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;
                           function executecommandsilent(const comm:pansichar;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;
                           procedure executecommandend;virtual;
                           procedure executecommandtotalend;virtual;
@@ -76,7 +76,7 @@ type
 var commandmanager:GDBcommandmanager;
 function getcommandmanager:GDBPointer;export;
 function GetCommandContext(pdrawing:PTDrawingDef;POGLWnd:POGLWndtype):TCStartAttr;
-procedure ParseCommand(comm:pansichar; out command,operands:GDBString);
+procedure ParseCommand(comm:string; out command,operands:GDBString);
 {procedure startup;
 procedure finalize;}
 implementation
@@ -275,11 +275,12 @@ begin
   if p<>nil then
   repeat
         if (uppercase(pGDBString(p)^)<>'ABOUT')then
-                                                    execute(pointer(pGDBString(p)^),false,pdrawing,POGLWndParam)
+                                                    execute(p^,false,pdrawing,POGLWndParam)
                                                 else
                                                     begin
                                                          if not sysparam.nosplash then
-                                                                                      execute(pointer(pGDBString(p)^),false,pdrawing,POGLWndParam)
+                                                         if sysparam.preloadedfile='' then
+                                                                                      execute(p^,false,pdrawing,POGLWndParam)
                                                     end;
         p:=sa.iterate(ir);
   until p=nil;
@@ -361,7 +362,7 @@ begin
                                                                          result:=result or CASelEnts;
                          end;
 end;
-procedure ParseCommand(comm:pansichar; out command,operands:GDBString);
+procedure ParseCommand(comm:string; out command,operands:GDBString);
 var
    {i,}p1,p2: GDBInteger;
 begin
@@ -432,7 +433,7 @@ begin
           pcommandrunning^.pdwg:=pd;
           pcommandrunning^.CommandStart(pansichar(operands));
 end;
-function GDBcommandmanager.execute(const comm:pansichar;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;
+function GDBcommandmanager.execute(const comm:string;silent:GDBBoolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;
 var //i,p1,p2: GDBInteger;
     command,operands:GDBString;
     cc:TCStartAttr;
@@ -440,7 +441,7 @@ var //i,p1,p2: GDBInteger;
     //p:pchar;
 begin
   if length(comm)>0 then
-  if comm[0]<>';' then
+  if comm[1]<>';' then
   begin
   ParseCommand(comm,command,operands);
 
@@ -485,7 +486,7 @@ begin
   command:='';
   operands:='';
 end;
-function GDBcommandmanager.executecommand(const comm:pansichar;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;
+function GDBcommandmanager.executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;
 begin
      if not busy then
                      result:=execute(comm,false,pdrawing,POGLWndParam)
@@ -584,7 +585,7 @@ begin
 end;
 function GDBcommandmanager.executelastcommad(pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;
 begin
-  result:=executecommand(@lastcommand[1],pdrawing,POGLWndParam);
+  result:=executecommand(lastcommand,pdrawing,POGLWndParam);
 end;
 constructor GDBcommandmanager.init;
 var

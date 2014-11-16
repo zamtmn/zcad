@@ -28,6 +28,7 @@ type tsysparam=record
                      defaultheight:GDBInteger;
                      ver:TmyFileVersionInfo;
                      nosplash,noloadlayout,updatepo,standartinterface:GDBBoolean;
+                     preloadedfile:GDBString;
               end;
 var
   sysparam: tsysparam;
@@ -40,20 +41,24 @@ uses WindowsSpecific,log;
 procedure ProcessParanstr;
 var
    i:integer;
-   param:GDBString;
+   param,paramUC:GDBString;
 begin
+     sysparam.preloadedfile:='';
      i:=paramcount;
      for i:=1 to paramcount do
        begin
-            param:=uppercase(paramstr(i));
+            param:=paramstr(i);
+            paramUC:=uppercase(param);
 
-            if (param='NOSPLASH')or(param='NS')then
+            if fileexists(param) then
+                                     sysparam.preloadedfile:=param;
+            if (paramUC='NOSPLASH')or(paramUC='NS')then
                                                    sysparam.nosplash:=true;
-            if (param='NOLOADLAYOUT')or(param='NLL')then
+            if (paramUC='NOLOADLAYOUT')or(paramUC='NLL')then
                                                                sysparam.noloadlayout:=true;
-            if (param='STANDARTINTERFACE')or(param='SI')then
+            if (paramUC='STANDARTINTERFACE')or(paramUC='SI')then
                                                                sysparam.standartinterface:=true;
-            if (param='UPDATEPO')then
+            if (paramUC='UPDATEPO')then
                                                                sysparam.updatepo:=true;
        end;
 end;

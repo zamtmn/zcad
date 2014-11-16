@@ -570,6 +570,18 @@ begin
                      result:=37;
                      exit;
                 end;
+            '0'..'9'
+                :begin
+                     while (s[i+l] in  ['0'..'9'])and(i+l<=length(s))and(l<5) do
+                     inc(l);
+                     ts:=copy(s,i+2,l-2);
+                     val(ts,result,code);
+                     if code=0 then
+                     begin
+                          //inc(l);
+                          exit;
+                     end;
+                 end;
 
           end;    ;
      end;

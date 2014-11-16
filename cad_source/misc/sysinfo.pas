@@ -27,7 +27,7 @@ type tsysparam=record
                      screenx,screeny:GDBInteger;
                      defaultheight:GDBInteger;
                      ver:TmyFileVersionInfo;
-                     nosplash,noloadlayout,updatepo,standartinterface:GDBBoolean;
+                     nosplash,noloadlayout,updatepo,standartinterface,otherinstancerun:GDBBoolean;
                      preloadedfile:GDBString;
               end;
 var
@@ -43,6 +43,7 @@ var
    i:integer;
    param,paramUC:GDBString;
 begin
+     sysparam.otherinstancerun:=false;
      sysparam.preloadedfile:='';
      i:=paramcount;
      for i:=1 to paramcount do

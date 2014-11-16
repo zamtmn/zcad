@@ -20,7 +20,7 @@ unit splashwnd;
 {$INCLUDE def.inc}
 interface
 uses
- zcadinterface,zcadstrconsts,strproc,Forms, stdctrls, Controls, Graphics,ExtCtrls,
+ uniqueinstanceraw,zcadinterface,zcadstrconsts,strproc,Forms, stdctrls, Controls, Graphics,ExtCtrls,
  gdbasetypes,SysInfo,fileutil,sysutils;
 type
   TSplashWnd = class(TForm)
@@ -80,11 +80,13 @@ procedure createsplash;
 var
    cb:TComboBox;
 begin
+     sysparam.otherinstancerun:=InstanceRunning('zcad unique instance',true,true);
      SplashWindow:=TSplashWnd.CreateNew(nil);
      cb:=TComboBox.CreateParented(SplashWindow.Handle);
      cb.hide;
      sysparam.defaultheight:=cb.Height;
      cb.free;
+     if not sysparam.otherinstancerun then
      if not sysparam.nosplash then
                                   SplashWindow.show;
      application.ProcessMessages;

@@ -26,6 +26,7 @@ uses
        ActnList,LCLType,LCLProc,intftranslations,toolwin,LMessages,LCLIntf,
        Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,FileUtil,
        menus,graphics,dialogs,XMLPropStorage,Buttons,Themes,
+       UniqueInstanceBase,simpleipc,{$ifdef windows}windows,{$endif}
   {FPC}
        //math,
   {ZCAD BASE}
@@ -83,13 +84,13 @@ type
     toolbars:tstringlist;
     updatesbytton,updatescontrols:tlist;
     procedure LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-                               State: TOwnerDrawState);
+                               State: StdCtrls.TOwnerDrawState);
     procedure ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-                                                   State: TOwnerDrawState);
+                                                   State: StdCtrls.TOwnerDrawState);
     procedure ColorDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-                                                   State: TOwnerDrawState);
+                                                   State: StdCtrls.TOwnerDrawState);
     procedure LTypeBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-                                                   State: TOwnerDrawState);
+                                                   State: StdCtrls.TOwnerDrawState);
     function findtoolbatdesk(tbn:string):string;
     procedure CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
     function CreateCBox(owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
@@ -184,6 +185,8 @@ type
     procedure ShowFMenu;
     procedure MainMouseMove;
     function MainMouseDown:GDBBoolean;
+    procedure IPCMessage(Sender: TObject);
+    procedure SetTop;
                end;
 procedure UpdateVisible;
 function getoglwndparam: GDBPointer; export;
@@ -225,6 +228,52 @@ begin
      lp.Name:=Tria_AnsiToUtf8(player.Name);
      lp.PLayer:=player;;
 end;
+procedure MainForm.SetTop;
+{$ifdef windows}
+var
+  hWnd, hCurWnd, dwThreadID, dwCurThreadID: THandle;
+  OldTimeOut: Cardinal;
+  AResult: Boolean;
+{$endif}
+begin
+  {$ifdef windows}
+  if GetActiveWindow=Application.MainForm.Handle then Exit;
+     Application.Restore;
+     hWnd := {Application.Handle}Application.MainForm.Handle;
+     SystemParametersInfo(SPI_GETFOREGROUNDLOCKTIMEOUT, 0, @OldTimeOut, 0);
+     SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, Pointer(0), 0);
+     SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE or SWP_NOSIZE);
+     hCurWnd := GetForegroundWindow;
+     AResult := False;
+     while not AResult do
+     begin
+        dwThreadID := GetCurrentThreadId;
+        dwCurThreadID := GetWindowThreadProcessId(hCurWnd,0);
+        AttachThreadInput(dwThreadID, dwCurThreadID, True);
+        AResult := SetForegroundWindow(hWnd);
+        AttachThreadInput(dwThreadID, dwCurThreadID, False);
+     end;
+     SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE or SWP_NOSIZE);
+     SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, Pointer(OldTimeOut), 0);
+   {$endif}
+end;
+procedure MainForm.IPCMessage(Sender: TObject);
+var
+   msgstring,ts:string;
+begin
+     msgstring:=TSimpleIPCServer(Sender).StringMessage;
+     repeat
+           GetPartOfPath(ts,msgstring,'|');
+           if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
+           begin
+                commandmanager.executecommandtotalend;
+                commandmanager.executecommand('Load('+ts+')',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+           end;
+     until msgstring='';
+     {$ifndef windows}application.BringToFront;{$endif}
+     {$ifdef windows}settop;{$endif}
+end;
+
 procedure MainForm.setvisualprop;
 const IntEmpty=-1000;
       IntDifferent=-10001;
@@ -800,7 +849,7 @@ procedure MainForm.PageControlMouseDown(Sender: TObject;
 var
    i: integer;
 begin
-  I:=(Sender as TPageControl).TabIndexAtClientPos(Point(X,Y));
+  I:=(Sender as TPageControl).TabIndexAtClientPos(classes.Point(X,Y));
   if i>-1 then
   if ssMiddle in Shift then
   if (Sender is TPageControl) then
@@ -1259,6 +1308,7 @@ begin
 end;
 procedure MainForm.FormCreate(Sender: TObject);
 begin
+  UniqueInstanceBase.FIPCServer.OnMessage:=IPCMessage;
    sysvar.INTF.INTF_DefaultControlHeight^:=sysparam.defaultheight;
 
   DecorateSysTypes;
@@ -1294,14 +1344,14 @@ begin
 end;
 procedure MainForm.SetImage(ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
 var
-    bmp:TBitmap;
+    bmp:Graphics.TBitmap;
 begin
      if length(img)>1 then
      begin
           if img[1]<>'#' then
                               begin
                               img:={SysToUTF8}(sysparam.programpath)+'menu/BMP/'+img;
-                              bmp:=TBitmap.create;
+                              bmp:=Graphics.TBitmap.create;
                               bmp.LoadFromFile(img);
                               bmp.Transparent:=true;
                               if not assigned(ppanel.Images) then
@@ -1458,7 +1508,7 @@ begin
 end;
 
 procedure MainForm.LTypeBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-                                               State: TOwnerDrawState);
+                                               State: StdCtrls.TOwnerDrawState);
 var
    plt:PGDBLtypeProp;
    ll:integer;
@@ -1498,7 +1548,7 @@ else if plt<>nil then
 end;
 
 procedure MainForm.LineWBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-  State: TOwnerDrawState);
+  State: StdCtrls.TOwnerDrawState);
 var
    ll:integer;
 begin
@@ -1548,7 +1598,7 @@ begin
         if index=7 then
                        begin
                             canvas.Brush.Color:=clBlack;
-                            canvas.Polygon([point(ARect.Left,y),point(ARect.Left+cellsize-1,y),point(ARect.Left+cellsize-1,y+cellsize-1)]);
+                            canvas.Polygon([classes.point(ARect.Left,y),classes.point(ARect.Left+cellsize-1,y),classes.point(ARect.Left+cellsize-1,y+cellsize-1)]);
                         end
    end
   else
@@ -1558,7 +1608,7 @@ begin
   canvas.Brush.Color:=SaveBrushColor;
 end;
 procedure MainForm.ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-  State: TOwnerDrawState);
+  State: StdCtrls.TOwnerDrawState);
 begin
     if (gdb.GetCurrentDWG=nil)or(sysvar.DWG.DWG_CColor=nil) then
     exit;
@@ -1574,7 +1624,7 @@ begin
     end;
 end;
 procedure MainForm.ColorDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
-  State: TOwnerDrawState);
+  State: StdCtrls.TOwnerDrawState);
 begin
     begin
     ComboBoxDrawItem(Control,ARect,State);

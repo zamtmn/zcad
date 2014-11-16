@@ -122,6 +122,11 @@ begin
   gdbplugins.loadplugins(sysparam.programpath+'PLUGINS\');
 
   SplashWindow.TXTOut('Выполнение *components\autorun.cmd',false);commandmanager.executefile('*components/autorun.cmd',gdb.GetCurrentDWG,nil);
+  if sysparam.preloadedfile<>'' then
+                                    begin
+                                         commandmanager.executecommand('Load('+sysparam.preloadedfile+')',gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                                         sysparam.preloadedfile:='';
+                                    end;
   //убираем срлэш
   removesplash;
 

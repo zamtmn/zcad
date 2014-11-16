@@ -631,6 +631,8 @@ begin
   begin
   if onmouse and ThemeServices.ThemesAvailable then
                  result := ThemeServices.GetElementDetails(ttItemHot);
+  if active and ThemeServices.ThemesAvailable then
+                 result := ThemeServices.GetElementDetails(ttItemSelected);
   tc:=cnvs.Brush.Color;
   if active then
                 begin

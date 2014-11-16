@@ -90,6 +90,7 @@ E:\zcad\CAD_SOURCE\DeviceBase\DeviceBase.pas
 E:\zcad\CAD_SOURCE\commands\commandlinedef.pas
 E:\zcad\CAD_SOURCE\commands\commanddefinternal.pas
 E:\zcad\CAD_SOURCE\commands\GDBCommandsDraw.pas
+E:\zcad\CAD_SOURCE\commands\gdbcommandsexample.pas
 E:\zcad\CAD_SOURCE\u\UGDBTracePropArray.pas
 E:\zcad\CAD_SOURCE\gui\oglwindowdef.pas
 E:\zcad\CAD_SOURCE\languade\UUnitManager.pas

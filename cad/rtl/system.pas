@@ -3176,6 +3176,15 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
   ITT_com = {$IFNDEF DELPHI}packed{$ENDIF} object(FloatInsert_com)
     procedure Command(Operands:pansichar); virtual;abstract;
   end;
+//Generate on E:\zcad\CAD_SOURCE\commands\gdbcommandsexample.pas
+    PTMatchPropParam=^TMatchPropParam;
+    TMatchPropParam=packed record
+                       ProcessLayer:GDBBoolean;(*'Process layer'*)
+                       ProcessLineveight:GDBBoolean;(*'Process line weight'*)
+                       ProcessLineType:GDBBoolean;(*'Process line type'*)
+                       ProcessLineTypeScale:GDBBoolean;(*'Process line type scale'*)
+                       ProcessColor:GDBBoolean;(*'Process color'*)
+                 end;
 //Generate on E:\zcad\CAD_SOURCE\u\UGDBTracePropArray.pas
 type
   ptraceprop=^traceprop;

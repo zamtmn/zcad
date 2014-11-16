@@ -56,6 +56,7 @@ uses
   GDBManager,         //different functions simplify the creation entities, while there are very few
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   varmandef,
+  Varman,
   UGDBOpenArrayOfUCommands,
   log;                //log system
                       //система логирования
@@ -64,6 +65,16 @@ const
      rsSpecifySecondPoint='Specify second point:';
      rsSpecifyThirdPoint='Specify third point:';
 type
+{EXPORT+}
+    PTMatchPropParam=^TMatchPropParam;
+    TMatchPropParam=packed record
+                       ProcessLayer:GDBBoolean;(*'Process layer'*)
+                       ProcessLineveight:GDBBoolean;(*'Process line weight'*)
+                       ProcessLineType:GDBBoolean;(*'Process line type'*)
+                       ProcessLineTypeScale:GDBBoolean;(*'Process line type scale'*)
+                       ProcessColor:GDBBoolean;(*'Process color'*)
+                 end;
+{EXPORT-}
     PT3PointPentity=^T3PointPentity;
     T3PointPentity=record
                          p1,p2,p3:gdbvertex;
@@ -80,6 +91,8 @@ type
 
 
 implementation
+var
+   MatchPropParam:TMatchPropParam;
 {Интерактивные процедуры используются совместно с Get3DPointInteractive, впоследствии будут вынесены в отдельный модуль}
 {Interactive procedures are used together with Get3DPointInteractive, later to be moved to a separate unit}
 
@@ -598,10 +611,19 @@ var
 begin
     if commandmanager.getentity('Select source enyity:',ps) then
     begin
+         SetGDBObjInspProc(SysUnit^.TypeName2PTD('TMatchPropParam'),@MatchPropParam,gdb.GetCurrentDWG);
          while commandmanager.getentity('Select destination enyity:',pd) do
          begin
-              GDBObjSetEntityProp(pd,ps^.vp.Layer,ps^.vp.LineType,ps^.vp.Color,ps^.vp.LineWeight);
-              pd^.vp.LineTypeScale:=ps^.vp.LineTypeScale;
+              if MatchPropParam.ProcessLayer then
+                 pd^.vp.Layer:=ps^.vp.Layer;
+              if MatchPropParam.ProcessLineType then
+                 pd^.vp.LineType:=ps^.vp.LineType;
+              if MatchPropParam.ProcessLineveight then
+                 pd^.vp.LineWeight:=ps^.vp.LineWeight;
+              if MatchPropParam.ProcessColor then
+                 pd^.vp.color:=ps^.vp.Color;
+              if MatchPropParam.ProcessLineTypeScale then
+                 pd^.vp.LineTypeScale:=ps^.vp.LineTypeScale;
               pd^.FormatEntity(gdb.GetCurrentDWG^);
               if assigned(redrawoglwndproc) then redrawoglwndproc;
          end;
@@ -713,6 +735,13 @@ initialization
      CreateCommandFastObjectPlugin(@DrawRotatedDim_com,'DimLinear',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawDiametricDim_com,'DimDiameter',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawRadialDim_com,'DimRadius',CADWG,0);
+
+     MatchPropParam.ProcessLayer:=true;
+     MatchPropParam.ProcessLineType:=true;
+     MatchPropParam.ProcessLineveight:=true;
+     MatchPropParam.ProcessColor:=true;
+     MatchPropParam.ProcessLineTypeScale:=true;
+
      CreateCommandFastObjectPlugin(@matchprop_com,'MatchProp',CADWG,0);
 
      CreateCommandFastObjectPlugin(@DrawArc_com,'Arc',CADWG,0);

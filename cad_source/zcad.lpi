@@ -28,7 +28,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="9"/>
       <RevisionNr Value="7"/>
-      <BuildNr Value="2311"/>
+      <BuildNr Value="2313"/>
       <CharSet Value="0000"/>
       <StringTable ProductVersion="0.0.0.8"/>
     </VersionInfo>
@@ -45,7 +45,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="u;../cad;$(ProjOutDir)"/>
-            <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;misc;fileformats;../cad"/>
+            <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;misc;fileformats;../cad;other/uniqueinstance"/>
             <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -85,7 +85,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="u;../cad;$(ProjOutDir)"/>
-            <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;misc;fileformats;../cad"/>
+            <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;misc;fileformats;../cad;other/uniqueinstance"/>
             <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -125,7 +125,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="u;../cad;$(ProjOutDir)"/>
-            <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;misc;fileformats;../cad"/>
+            <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;misc;fileformats;../cad;other/uniqueinstance"/>
             <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -400,12 +400,6 @@
         <UseAnsiStrings Value="False"/>
       </SyntaxOptions>
     </Parsing>
-    <Linking>
-      <Debugging>
-        <DebugInfoType Value="dsStabs"/>
-        <UseExternalDbgSyms Value="True"/>
-      </Debugging>
-    </Linking>
     <Other>
       <Verbosity>
         <ShowNotes Value="False"/>

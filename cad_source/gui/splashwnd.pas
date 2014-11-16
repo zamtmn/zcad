@@ -93,6 +93,7 @@ procedure removesplash;
 begin
      if assigned(SplashWindow) then
      begin
+          SplashWindow.hide;
           SplashWindow.Free;
           SplashWindow:=nil;
      end;

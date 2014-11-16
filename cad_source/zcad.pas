@@ -89,6 +89,8 @@ uses
 {$R *.res}
 
 begin
+     if sysparam.otherinstancerun then
+                                      exit;
 {$IFDEF REPORTMMEMORYLEAKS}printleakedblock:=true;{$ENDIF}
 {$IFDEF REPORTMMEMORYLEAKS}
        SetHeapTraceOutput('log/memory-heaptrace.txt');

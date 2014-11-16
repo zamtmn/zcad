@@ -14,6 +14,9 @@
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
+      <XPManifest>
+        <DpiAware Value="True"/>
+      </XPManifest>
       <Icon Value="0"/>
     </General>
     <i18n>
@@ -25,7 +28,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="9"/>
       <RevisionNr Value="7"/>
-      <BuildNr Value="2075"/>
+      <BuildNr Value="2311"/>
       <CharSet Value="0000"/>
       <StringTable ProductVersion="0.0.0.8"/>
     </VersionInfo>
@@ -69,10 +72,8 @@
               <StopAfterErrCount Value="5"/>
             </ConfigFile>
             <CompilerMessages>
-              <IgnoredMessages idx4055="True" idx5024="True" idx5062="True"/>
-              <UseMsgFile Value="True"/>
+              <IgnoredMessages idx5062="True" idx5024="True" idx4055="True"/>
             </CompilerMessages>
-            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -111,10 +112,8 @@
               <StopAfterErrCount Value="5"/>
             </ConfigFile>
             <CompilerMessages>
-              <IgnoredMessages idx4055="True" idx5024="True" idx5062="True"/>
-              <UseMsgFile Value="True"/>
+              <IgnoredMessages idx5062="True" idx5024="True" idx4055="True"/>
             </CompilerMessages>
-            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item3>
@@ -149,10 +148,8 @@
               <StopAfterErrCount Value="5"/>
             </ConfigFile>
             <CompilerMessages>
-              <IgnoredMessages idx4055="True" idx5024="True" idx5062="True"/>
-              <UseMsgFile Value="True"/>
+              <IgnoredMessages idx5062="True" idx5024="True" idx4055="True"/>
             </CompilerMessages>
-            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item4>
@@ -193,7 +190,7 @@
         <PackageName Value="LCL"/>
       </Item6>
     </RequiredPackages>
-    <Units Count="40">
+    <Units Count="41">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
@@ -207,92 +204,74 @@
       <Unit2>
         <Filename Value="geometry.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="geometry"/>
       </Unit2>
       <Unit3>
         <Filename Value="gdb/GDBAbstractText.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GDBAbstractText"/>
       </Unit3>
       <Unit4>
         <Filename Value="languade/UUnitManager.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="UUnitManager"/>
       </Unit4>
       <Unit5>
         <Filename Value="languade/varman.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="Varman"/>
       </Unit5>
       <Unit6>
         <Filename Value="languade/UBaseTypeDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="UBaseTypeDescriptor"/>
       </Unit6>
       <Unit7>
         <Filename Value="devicebase/DeviceBase.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="DeviceBase"/>
       </Unit7>
       <Unit8>
         <Filename Value="gui/oglwindow.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="oglwindow"/>
       </Unit8>
       <Unit9>
         <Filename Value="languade/URecordDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="URecordDescriptor"/>
       </Unit9>
       <Unit10>
         <Filename Value="languade/UObjectDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="UObjectDescriptor"/>
       </Unit10>
       <Unit11>
         <Filename Value="sysinfo.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="SysInfo"/>
       </Unit11>
       <Unit12>
         <Filename Value="gdb/gdbvisualprop.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gdbvisualprop"/>
       </Unit12>
       <Unit13>
         <Filename Value="gui/cmdline.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cmdline"/>
       </Unit13>
       <Unit14>
         <Filename Value="gui/aboutwnd.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="aboutwnd"/>
       </Unit14>
       <Unit15>
         <Filename Value="commands/commandline.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="commandline"/>
       </Unit15>
       <Unit16>
         <Filename Value="WindowsSpecific.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="WindowsSpecific"/>
       </Unit16>
       <Unit17>
         <Filename Value="shared.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="shared"/>
       </Unit17>
       <Unit18>
         <Filename Value="gdb/UGDBDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="UGDBDescriptor"/>
       </Unit18>
       <Unit19>
         <Filename Value="electroteh/GDBCommandsOPS.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GDBCommandsOPS"/>
       </Unit19>
       <Unit20>
         <Filename Value="gui/layerwnd.pas"/>
@@ -300,7 +279,6 @@
         <ComponentName Value="LayerWindow"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="layerwnd"/>
       </Unit20>
       <Unit21>
         <Filename Value="u/TGMultiObjectChangeCommandIMPL.inc"/>
@@ -316,12 +294,10 @@
         <ComponentName Value="sltexteditor1"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="sltexteditor"/>
       </Unit23>
       <Unit24>
         <Filename Value="zcadstrconsts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="zcadstrconsts"/>
       </Unit24>
       <Unit25>
         <Filename Value="gui/colorwnd.pas"/>
@@ -329,7 +305,6 @@
         <ComponentName Value="ColorSelectWND"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="colorwnd"/>
       </Unit25>
       <Unit26>
         <Filename Value="gui/linetypesloadtwnd.pas"/>
@@ -337,12 +312,10 @@
         <ComponentName Value="LineWeightSelectWND"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="linetypesloadtwnd"/>
       </Unit26>
       <Unit27>
         <Filename Value="u/ugdbltypearray.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="ugdbltypearray"/>
       </Unit27>
       <Unit28>
         <Filename Value="gui/ltwnd.pas"/>
@@ -350,7 +323,6 @@
         <ComponentName Value="LTWindow"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="ltwnd"/>
       </Unit28>
       <Unit29>
         <Filename Value="gui/lineweightwnd.pas"/>
@@ -358,58 +330,54 @@
         <ComponentName Value="LineWeightSelectWND"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="lineweightwnd"/>
       </Unit29>
       <Unit30>
         <Filename Value="u/UGDBOpenArray.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="UGDBOpenArray"/>
       </Unit30>
       <Unit31>
         <Filename Value="fileformats/iodxf.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="iodxf"/>
       </Unit31>
       <Unit32>
         <Filename Value="gdb/GDBEntity.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GDBEntity"/>
       </Unit32>
       <Unit33>
         <Filename Value="zgl/uzglgeometry.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="uzglgeometry"/>
       </Unit33>
       <Unit34>
         <Filename Value="fileformats/io.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="io"/>
       </Unit34>
       <Unit35>
         <Filename Value="gdb/GDBArc.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GDBArc"/>
       </Unit35>
       <Unit36>
         <Filename Value="gdb/gdbellipse.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gdbellipse"/>
       </Unit36>
       <Unit37>
         <Filename Value="gdb/GDBTable.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GDBTable"/>
       </Unit37>
       <Unit38>
         <Filename Value="languade/varmandef.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="varmandef"/>
       </Unit38>
       <Unit39>
         <Filename Value="u/UGDBControlPointArray.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="UGDBControlPointArray"/>
       </Unit39>
+      <Unit40>
+        <Filename Value="gui/oswnd.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="OSWindow"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit40>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -419,7 +387,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="u;../cad;$(ProjOutDir)"/>
-      <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;misc;fileformats;../cad"/>
+      <OtherUnitFiles Value="u;gdb;commands;gui;devicebase;languade;lclmod;electroteh;zgl;other;misc;fileformats;../cad;other/uniqueinstance"/>
       <UnitOutputDirectory Value="../lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>
@@ -448,10 +416,8 @@
         <StopAfterErrCount Value="5"/>
       </ConfigFile>
       <CompilerMessages>
-        <IgnoredMessages idx4055="True" idx5024="True" idx5062="True"/>
-        <UseMsgFile Value="True"/>
+        <IgnoredMessages idx5062="True" idx5024="True" idx4055="True"/>
       </CompilerMessages>
-      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>

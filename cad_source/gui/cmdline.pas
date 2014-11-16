@@ -361,7 +361,7 @@ begin
     if (length(CmdEdit.text) > 0) then
     begin
       expr:=CmdEdit.text;
-      ParseCommand(@expr[1],command,operands);
+      ParseCommand(expr,command,operands);
       //if IsParsed('_realnumber'#0,expr,parseresult)then
       // expr:=expr;
       val(CmdEdit.text, len, code);
@@ -406,7 +406,7 @@ begin
           begin
                //CmdEdit.text:=FindAlias(CmdEdit.text,';','=');
                CmdEdit.text:='';
-               commandmanager.executecommand(GDBPointer(Cmd),gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+               commandmanager.executecommand(Cmd,gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
           end
       else begin
            cmd:=CmdEdit.text;

@@ -331,7 +331,7 @@ begin
                                else}
                                    if assigned(zcadinterface.SetNormalFocus)then
                                                                                 zcadinterface.SetNormalFocus(nil);
-                                   commandmanager.executecommand(@s[1],gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                                   commandmanager.executecommand(s,gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
      result:=true;
 end;
 procedure TmyActionList.AddMyAction(Action:TmyAction);
@@ -444,7 +444,7 @@ begin
                                          action.ShortCut:=TextToShortCut(actionshortcut);
                action.Name:=uppercase(actionname);
                action.Caption:=actioncaption;
-               ParseCommand(@actioncommand[1],action.command,action.options);
+               ParseCommand(actioncommand,action.command,action.options);
                //action.command:=actioncommand;
                action.Hint:=actionhint;
                action.DisableIfNoHandler:=false;
@@ -711,7 +711,7 @@ end;
 procedure TmyCommandToolButton.click;
 begin
      if action=nil then
-                       commandmanager.executecommand(@Fcommand[1],gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                       commandmanager.executecommand(Fcommand,gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
      inherited;
 end;
 
@@ -720,7 +720,7 @@ begin
      if fsilent then
                     commandmanager.executecommandsilent(@Fcommand[1],gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam)
                 else
-                    commandmanager.executecommand(@Fcommand[1],gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
+                    commandmanager.executecommand(Fcommand,gdb.GetCurrentDWG,gdb.GetCurrentOGLWParam);
      inherited;
 end;
 procedure TmyMenuItem.SetCommand(_Caption,_Command:TTranslateString);

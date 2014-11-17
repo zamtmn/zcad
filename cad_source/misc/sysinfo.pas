@@ -19,7 +19,7 @@
 unit SysInfo;
 {$INCLUDE def.inc}
 interface
-uses gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF},zcadsysvars,sysutils;
+uses strproc,gdbasetypes,Forms,gdbase{$IFNDEF DELPHI},fileutil{$ENDIF},zcadsysvars,sysutils;
 {$INCLUDE revision.inc}
 type tsysparam=record
                      programpath: GDBString;
@@ -48,10 +48,11 @@ begin
      i:=paramcount;
      for i:=1 to paramcount do
        begin
-            param:=paramstr(i);
+            {$ifdef windows}param:=Tria_AnsiToUtf8{SysToUTF8}(paramstr(i));{$endif}
             paramUC:=uppercase(param);
+            log.LogOut('qqq'+param);
 
-            if fileexists(param) then
+            if fileexists(UTF8toSys(param)) then
                                      sysparam.preloadedfile:=param;
             if (paramUC='NOSPLASH')or(paramUC='NS')then
                                                    sysparam.nosplash:=true;

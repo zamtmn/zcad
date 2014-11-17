@@ -20,14 +20,20 @@ unit intftranslations;
 {$INCLUDE def.inc}
 
 interface
-uses strproc{$IFNDEF DELPHI},LCLProc,gettext,translations,fileutil,LResources{$ENDIF},sysinfo,sysutils,log,forms,Classes, typinfo;
+uses LCLVersion,strproc{$IFNDEF DELPHI},LCLProc,gettext,translations,fileutil,LResources{$ENDIF},sysinfo,sysutils,log,forms,Classes, typinfo;
 
 type
     TmyPOFile = class(TPOFile)
                      function FindByIdentifier(const Identifier: String):TPOFileItem;
                      procedure SaveToFile(const AFilename: string);
+                     {$IF LCL_FULLVERSION<1030000}
+                     procedure Add(const Identifier, OriginalValue, TranslatedValue, Comments,
+                                         Context, Flags, PreviousID: string);
+                     {$ENDIF}
+                     {$IF LCL_FULLVERSION>=1030000}
                      procedure Add(const Identifier, OriginalValue, TranslatedValue,
                                    Comments, Context, Flags, PreviousID: string; SetFuzzy: boolean = false; LineNr: Integer = -1);
+                     {$ENDIF}
                      function Translate(const Identifier, OriginalValue: String): String;
                      function exportcompileritems(sourcepo:TPOFile):integer;
                 end;
@@ -115,14 +121,20 @@ begin
   end else
     Result:=OriginalValue;
 end;
+{$IF LCL_FULLVERSION<1030000}
+procedure TmyPOFile.Add(const Identifier, OriginalValue, TranslatedValue, Comments,
+                    Context, Flags, PreviousID: string);
+{$ENDIF}
+{$IF LCL_FULLVERSION>=1030000}
 procedure TmyPOFile.Add(const Identifier, OriginalValue, TranslatedValue,
   Comments, Context, Flags, PreviousID: string; SetFuzzy: boolean = false; LineNr: Integer = -1);
+{$ENDIF}
 var
    t:boolean;
 begin
      t:=self.FAllEntries;
      self.FAllEntries:=true;
-     inherited;
+     inherited  Add(Identifier, OriginalValue, TranslatedValue, Comments,Context, Flags, PreviousID);
      self.FAllEntries:=t;
 end;
 

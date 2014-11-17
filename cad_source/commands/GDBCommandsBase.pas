@@ -93,11 +93,11 @@ type
 
        MSelectCXMenu:TPopupMenu=nil;
 
-   function SaveAs_com(Operands:pansichar):GDBInteger;
+   function SaveAs_com(operands:TCommandOperands):TCommandResult;
    procedure CopyToClipboard;
-   function Regen_com(Operands:pansichar):GDBInteger;
+   function Regen_com(operands:TCommandOperands):TCommandResult;
    function Load_Merge(Operands:pansichar;LoadMode:TLoadOpt):GDBInteger;
-   function Merge_com(Operands:pansichar):GDBInteger;
+   function Merge_com(operands:TCommandOperands):TCommandResult;
 const
      ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
 //var DWGPageCxMenu:pzpopupmenu;
@@ -231,7 +231,7 @@ begin
      psd:=gdb.GetCurrentDWG.SelObjArray.iterate(ir);
      until psd=nil;
 end;
-function MultiSelect2ObjIbsp_com(Operands:pansichar):GDBInteger;
+function MultiSelect2ObjIbsp_com(operands:TCommandOperands):TCommandResult;
 {$IFDEF TOTALYLOG}
 var
    membuf:GDBOpenArrayOfByte;
@@ -287,7 +287,7 @@ begin
                          until pp=nil;
                     end;
 end;
-function SelectOnMouseObjects_com(Operands:pansichar):GDBInteger;
+function SelectOnMouseObjects_com(operands:TCommandOperands):TCommandResult;
 begin
      cxmenumgr.closecurrentmenu;
      MSelectCXMenu:=TmyPopupMenu.create(nil);
@@ -297,7 +297,7 @@ begin
                                                          cxmenumgr.PopUpMenu(MSelectCXMenu);
      result:=cmd_ok;
 end;
-function SelectObjectByAddres_com(Operands:pansichar):GDBInteger;
+function SelectObjectByAddres_com(operands:TCommandOperands):TCommandResult;
 var
    pp:PGDBObjEntity;
    code:integer;
@@ -421,7 +421,7 @@ begin
         else
         shared.ShowError('MERGE:'+format(rsUnableToOpenFile,[s]));
 end;
-function Merge_com(Operands:pansichar):GDBInteger;
+function Merge_com(operands:TCommandOperands):TCommandResult;
 //var
    //s: GDBString;
    //fileext:GDBString;
@@ -431,14 +431,14 @@ function Merge_com(Operands:pansichar):GDBInteger;
 begin
      result:=Load_merge(operands,TLOMerge);
 end;
-function DeSelectAll_com(Operands:pansichar):GDBInteger;
+function DeSelectAll_com(operands:TCommandOperands):TCommandResult;
 begin
      //redrawoglwnd;
      if assigned(updatevisibleproc) then updatevisibleproc;
      result:=cmd_ok;
 end;
 
-function SelectAll_com(Operands:pansichar):GDBInteger;
+function SelectAll_com(operands:TCommandOperands):TCommandResult;
 var //i: GDBInteger;
     pv:pGDBObjEntity;
     ir:itrec;
@@ -472,7 +472,7 @@ begin
   if assigned(updatevisibleproc) then updatevisibleproc;
   result:=cmd_ok;
 end;
-function MergeBlocks_com(Operands:pansichar):GDBInteger;
+function MergeBlocks_com(operands:TCommandOperands):TCommandResult;
 var
    pdwg:PTSimpleDrawing;
    s:gdbstring;
@@ -493,7 +493,7 @@ begin
      if assigned(ProcessFilehistoryProc) then
                                              ProcessFilehistoryProc(s);
 end;
-function QSave_com(Operands:pansichar):GDBInteger;
+function QSave_com(operands:TCommandOperands):TCommandResult;
 var s,s1:GDBString;
     itautoseve:boolean;
 begin
@@ -519,7 +519,7 @@ begin
                            gdb.GetCurrentDWG.ChangeStampt(false);
      SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
 end;
-function SaveAs_com(Operands:pansichar):GDBInteger;
+function SaveAs_com(operands:TCommandOperands):TCommandResult;
 var
    s: GDBString;
    fileext:GDBString;
@@ -544,7 +544,7 @@ begin
      result:=cmd_ok;
      if assigned(RestoreAllCursorsProc) then RestoreAllCursorsProc;
 end;
-function Cam_reset_com(Operands:pansichar):GDBInteger;
+function Cam_reset_com(operands:TCommandOperands):TCommandResult;
 begin
   ptdrawing(gdb.GetCurrentDWG).UndoStack.PushStartMarker('Камера в начало');
   with ptdrawing(gdb.GetCurrentDWG).UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
@@ -573,7 +573,7 @@ begin
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
-function Undo_com(Operands:pansichar):GDBInteger;
+function Undo_com(operands:TCommandOperands):TCommandResult;
 var
    prevundo:integer;
    overlay:GDBBoolean;
@@ -594,7 +594,7 @@ begin
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
-function Redo_com(Operands:pansichar):GDBInteger;
+function Redo_com(operands:TCommandOperands):TCommandResult;
 begin
   gdb.GetCurrentROOT.ObjArray.DeSelect(gdb.GetCurrentDWG.GetSelObjArray,gdb.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount);
   ptdrawing(gdb.GetCurrentDWG).UndoStack.redo;
@@ -602,7 +602,7 @@ begin
   result:=cmd_ok;
 end;
 
-function ChangeProjType_com(Operands:pansichar):GDBInteger;
+function ChangeProjType_com(operands:TCommandOperands):TCommandResult;
 //var
 //   ta:TmyAction;
 begin
@@ -798,7 +798,7 @@ begin
     end
   end;
 end;
-function SelObjChangeLTypeToCurrent_com:GDBInteger;
+function SelObjChangeLTypeToCurrent_com(operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
     psv:PSelectedObjDesc;
     plt:PGDBLtypeProp;
@@ -833,7 +833,7 @@ begin
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
-function SelObjChangeTStyleToCurrent_com:GDBInteger;
+function SelObjChangeTStyleToCurrent_com(operands:TCommandOperands):TCommandResult;
 var pv:PGDBObjText;
     psv:PSelectedObjDesc;
     prs:PGDBTextStyle;
@@ -870,7 +870,7 @@ begin
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
-function SelObjChangeDimStyleToCurrent_com:GDBInteger;
+function SelObjChangeDimStyleToCurrent_com(operands:TCommandOperands):TCommandResult;
 var pv:PGDBObjDimension;
     psv:PSelectedObjDesc;
     prs:PGDBDimStyle;
@@ -907,7 +907,7 @@ begin
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
-function SelObjChangeLayerToCurrent_com:GDBInteger;
+function SelObjChangeLayerToCurrent_com(operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
     psv:PSelectedObjDesc;
     ir:itrec;
@@ -938,7 +938,7 @@ begin
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
-function SelObjChangeColorToCurrent_com:GDBInteger;
+function SelObjChangeColorToCurrent_com(operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
     ir:itrec;
 begin
@@ -953,7 +953,7 @@ begin
   result:=cmd_ok;
 end;
 
-function SelObjChangeLWToCurrent_com:GDBInteger;
+function SelObjChangeLWToCurrent_com(operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
     ir:itrec;
 begin
@@ -978,7 +978,7 @@ begin
   end;
 end;
 
-function ObjVarMan_com(Operands:pansichar):GDBInteger;
+function ObjVarMan_com(operands:TCommandOperands):TCommandResult;
 var
    mem:GDBOpenArrayOfByte;
    pobj:PGDBObjEntity;
@@ -1036,7 +1036,7 @@ else if length(Operands)>3 then
       historyoutstr(rscmSelOrSpecEntity);
   result:=cmd_ok;
 end;
-function MultiObjVarMan_com(Operands:pansichar):GDBInteger;
+function MultiObjVarMan_com(operands:TCommandOperands):TCommandResult;
 var
    mem:GDBOpenArrayOfByte;
    pobj:PGDBObjEntity;
@@ -1089,7 +1089,7 @@ begin
     result:=cmd_ok;
 end;
 
-function Regen_com(Operands:pansichar):GDBInteger;
+function Regen_com(operands:TCommandOperands):TCommandResult;
 var //i: GDBInteger;
     pv:pGDBObjEntity;
         ir:itrec;
@@ -1197,7 +1197,7 @@ begin
 
     //memsubstr.free;
 end;
-function CopyClip_com(Operands:pansichar):GDBInteger;
+function CopyClip_com(operands:TCommandOperands):TCommandResult;
 var //res:longbool;
     //uFormat:longword;
 
@@ -1273,7 +1273,7 @@ begin
                        GetTreeStat(pnode.pminusnode,depth+1,tr);
 end;
 
-function RebuildTree_com:GDBInteger;
+function RebuildTree_com(operands:TCommandOperands):TCommandResult;
 var i: GDBInteger;
     percent,apercent:string;
     cp,ap:single;
@@ -1588,13 +1588,13 @@ begin
      //DWGPageCxMenu^.done;
      //gdbfreemem(pointer(DWGPageCxMenu));
 end;
-function SnapProp_com(Operands:pansichar):GDBInteger;
+function SnapProp_com(operands:TCommandOperands):TCommandResult;
 begin
      if assigned(StoreAndSetGDBObjInspProc)then
       StoreAndSetGDBObjInspProc(dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,gdb.GetCurrentDWG);
       result:=cmd_ok;
 end;
-function UpdatePO_com(Operands:pansichar):GDBInteger;
+function UpdatePO_com(operands:TCommandOperands):TCommandResult;
 var
    cleaned:integer;
    s:string;
@@ -1617,7 +1617,7 @@ begin
         else showerror('Command line swith "UpdatePO" must be set. (or not the first time running this command)');
      result:=cmd_ok;
 end;
-function Zoom_com(Operands:pansichar):GDBInteger;
+function Zoom_com(operands:TCommandOperands):TCommandResult;
 begin
      if uppercase(operands)='ALL' then
                                       gdb.GetCurrentDWG.wa.ZoomAll
@@ -1637,7 +1637,7 @@ else if uppercase(operands)='OUT' then
                                      end;
      result:=cmd_ok;
 end;
-function view_com(Operands:pansichar):GDBInteger;
+function view_com(operands:TCommandOperands):TCommandResult;
 var
    s:string;
    ox,oy,oz:gdbvertex;
@@ -1753,7 +1753,7 @@ if recognized then
                    end;
      result:=cmd_ok;
 end;
-function Pan_com(Operands:pansichar):GDBInteger;
+function Pan_com(operands:TCommandOperands):TCommandResult;
 const
      pix=50;
 var x,y:integer;
@@ -1777,7 +1777,7 @@ else if uppercase(operands)='DOWN' then
      gdb.GetCurrentDWG.wa.RestoreMouse;
      result:=cmd_ok;
 end;
-function StoreFrustum_com(Operands:pansichar):GDBInteger;
+function StoreFrustum_com(operands:TCommandOperands):TCommandResult;
 //var
    //p:PCommandObjectDef;
    //ps:pgdbstring;
@@ -1849,7 +1849,7 @@ begin
                    Script:='GDBString;';
                    shared.ShowError(Script);
 end;
-function TestScript_com(Operands:pansichar):GDBInteger;
+function TestScript_com(operands:TCommandOperands):TCommandResult;
 (*var
   Compiler: TPSPascalCompiler;
   { TPSPascalCompiler is the compiler part of the scriptengine. This will
@@ -1917,7 +1917,7 @@ var f: TForm; i: Longint; begin f := TForm.CreateNew(f{, 0}); f.Show; while f.Vi
      Exec.RunScript; // Run the script.
      Exec.Free; // Free the executer. *)
 end;
-function ObjInspCopyToClip_com(Operands:pansichar):GDBInteger;
+function ObjInspCopyToClip_com(operands:TCommandOperands):TCommandResult;
 begin
    if assigned(GetCurrentObjProc)then
    begin

@@ -43,7 +43,7 @@ var
    c1,c2:integer;
    distlen:gdbdouble;
    oldpoint,point:gdbvertex;
-function Line_com_CommandStart(operands:pansichar):GDBInteger;
+function Line_com_CommandStart(operands:TCommandOperands):TCommandResult;
 begin
   GDB.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   if operands='' then
@@ -62,7 +62,7 @@ begin
        result:=1;
   end
 end;
-function Rect_com_CommandStart(operands:pansichar):GDBInteger;
+function Rect_com_CommandStart(operands:TCommandOperands):TCommandResult;
 begin
      c1:=commandmanager.GetValueHeap;
      c2:=-1;
@@ -106,7 +106,7 @@ begin
      result:=cmd_ok;
 end;
 
-function Dist_com_CommandStart(operands:pansichar):GDBInteger;
+function Dist_com_CommandStart(operands:TCommandOperands):TCommandResult;
 begin
      c1:=commandmanager.GetValueHeap;
      c2:=-1;

@@ -197,15 +197,15 @@ function IsASCII(const s: string): boolean; inline;
    end;
 begin
      (*РАботало на xp,lin, перестало на 7х64*)
-     //fn:={systoutf8}(systoutf8{Tria_AnsiToUtf8}(path)+systoutf8(s));
+     fn:={systoutf8}(systoutf8{Tria_AnsiToUtf8}(path)+systoutf8(s));
 
-     (*попытка закостылить*)
+     (*попытка закостылить*
      {$IFNDEF DELPHI}if NeedRTLAnsi and (not IsASCII(path)) then{$ENDIF}
         fn:=Tria_AnsiToUtf8(path){$IFNDEF DELPHI}+systoutf8(s){$ELSE};{$ENDIF}
      {$IFNDEF DELPHI}else
          fn:=path+systoutf8(s);{$ENDIF}
      //fn:=fn+systoutf8(s);
-     (*конец попытки*)
+     *конец попытки*)
 
      programlog.logoutstr('utf '+fn,0);
      programlog.logoutstr('sys '+path,0);

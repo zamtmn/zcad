@@ -19,7 +19,7 @@
 unit ugdbltypearray;
 {$INCLUDE def.inc}
 interface
-uses Classes,UGDBOpenArrayOfData,zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
+uses FileUtil,Classes,UGDBOpenArrayOfData,zcadsysvars,gdbasetypes{,UGDBOpenArray,UGDBOpenArrayOfObjects,oglwindowdef},sysutils,gdbase, geometry,
      UGDBTextStyleArray,UGDBOpenArrayOfObjects,
      varmandef,{gdbobjectsconstdef,}UGDBNamedObjectsArray,StrProc,shared;
 const
@@ -602,7 +602,7 @@ begin
      //Переделать используя ParseStrings или выкинуть нахуй
      if fname='' then exit;
      strings:=TStringList.Create;
-     strings.LoadFromFile(fname);
+     strings.LoadFromFile({$IFNDEF DELPHI}utf8tosys{$ENDIF}(fname));
      WhatNeed:=TSeekInterface;
      for i:=0 to strings.Count-1 do
      begin

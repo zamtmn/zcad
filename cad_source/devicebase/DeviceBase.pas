@@ -208,7 +208,7 @@ begin
                                pf:=pvd.data.Instance+pfd.Offset;
                                pf^:=TCSVDocument.Create;
                                TCSVDocument(pf^).Delimiter:=';';
-                               TCSVDocument(pf^).LoadFromFile(fn);
+                               TCSVDocument(pf^).LoadFromFile(utf8tosys(fn));
                                //TCSVDocument(pf^).SaveToFile('c:\1.csv');
                           end;
                      end

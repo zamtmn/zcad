@@ -144,8 +144,8 @@ begin
   RD_Renderer:='GeForce GTX 460/PCIe/SSE2';
   RD_Extensions:='';
   RD_Version:='4.3.0';
-  RD_GLUVersion:='Контекст OpenGL не создан';
-  RD_GLUExtensions:='Контекст OpenGL не создан';
+  RD_GLUVersion:='OpenGL context is not created';
+  RD_GLUExtensions:='OpenGL context is not created';
   RD_MaxWidth:=10;
   RD_BackGroundColor.r:=0;
   RD_BackGroundColor.g:=0;
@@ -164,10 +164,10 @@ begin
   RD_SpatialNodeCount:=-1;
   RD_MaxLTPatternsInEntity:=10000;
   SAVE_Auto_Interval:=300;
-  SAVE_Auto_Current_Interval:=300;
+  SAVE_Auto_Current_Interval:=299;
   SAVE_Auto_FileName:='*autosave/autosave.dxf';
   SAVE_Auto_On:=True;
-  SYS_RunTime:=16;
+  SYS_RunTime:=33;
   SYS_Version:='0.9.8 Revision SVN:Unknown';
   SYS_SystmGeometryColor:=250;
   SYS_IsHistoryLineCreated:=True;
@@ -178,7 +178,7 @@ begin
   PATH_Program_Run:='E:\zcad\cad\';
   PATH_Support_Path:='*rtl|*rtl/objdefunits|*rtl/objdefunits/include|*components|*blocks/el/general|*rtl/styles';
   PATH_Fonts:='*fonts/|C:/Program Files/AutoCAD 2010/Fonts/|C:/APPS/MY/acad/support/|C:\Program Files\Autodesk\AutoCAD 2012 - Russian\Fonts\|C:\Windows\Fonts\';
-  PATH_LayoutFile:='C:\zcad\cad\components/defaultlayout.xml';
+  PATH_LayoutFile:='E:\zcad\cad\components/defaultlayout2.xml';
   ShowHiddenFieldInObjInsp:=False;
   testGDBBoolean:=False;
   pi:=3.14159265359;

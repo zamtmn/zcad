@@ -220,6 +220,16 @@ msgid "Block replace"
 msgstr ""
 
 #: zcadexternal.acn_breplace~textimage
+msgctxt "zcadexternal.acn_breplace~textimage"
+msgid "BR"
+msgstr ""
+
+#: zcadexternal.acn_brotate~caption
+msgid "Block rotate"
+msgstr ""
+
+#: zcadexternal.acn_brotate~textimage
+msgctxt "zcadexternal.acn_brotate~textimage"
 msgid "BR"
 msgstr ""
 
@@ -631,6 +641,15 @@ msgstr ""
 msgid "Object variables manager"
 msgstr ""
 
+#: zcadexternal.acn_oldstyleinobjinsp~caption
+msgctxt "zcadexternal.acn_oldstyleinobjinsp~caption"
+msgid "Old style"
+msgstr ""
+
+#: zcadexternal.acn_oldstyleinobjinsp~textimage
+msgid "os"
+msgstr ""
+
 #: zcadexternal.acn_options~caption
 msgctxt "zcadexternal.acn_options~caption"
 msgid "Options"
@@ -644,6 +663,84 @@ msgstr ""
 #: zcadexternal.acn_ortodevplace~hint
 msgctxt "zcadexternal.acn_ortodevplace~hint"
 msgid "Device placement"
+msgstr ""
+
+#: zcadexternal.acn_os_aparentintersection~caption
+msgid "Snap to apparent intersection"
+msgstr ""
+
+#: zcadexternal.acn_os_center~caption
+msgid "Snap to center point"
+msgstr ""
+
+#: zcadexternal.acn_os_end~caption
+msgid "Snap to end point"
+msgstr ""
+
+#: zcadexternal.acn_os_insert~caption
+msgid "Snap to insert point"
+msgstr ""
+
+#: zcadexternal.acn_os_intersection~caption
+msgid "Snap to intersection"
+msgstr ""
+
+#: zcadexternal.acn_os_middle~caption
+msgid "Snap to middle point"
+msgstr ""
+
+#: zcadexternal.acn_os_nearest~caption
+msgid "Snap to nearest point"
+msgstr ""
+
+#: zcadexternal.acn_os_paralel~caption
+msgid "Snap to paralel"
+msgstr ""
+
+#: zcadexternal.acn_os_perpendicular~caption
+msgid "Snap to perpendicular"
+msgstr ""
+
+#: zcadexternal.acn_os_point~caption
+msgid "Snap to point"
+msgstr ""
+
+#: zcadexternal.acn_os_point~textimage
+msgid "P"
+msgstr ""
+
+#: zcadexternal.acn_os_quadrant~caption
+msgid "Snap to quadrant"
+msgstr ""
+
+#: zcadexternal.acn_os_quarter~caption
+msgid "Snap to 1/4 point"
+msgstr ""
+
+#: zcadexternal.acn_os_quarter~textimage
+msgctxt "zcadexternal.acn_os_quarter~textimage"
+msgid "1/4"
+msgstr ""
+
+#: zcadexternal.acn_os_tangent~caption
+msgid "Snap to tangent"
+msgstr ""
+
+#: zcadexternal.acn_os_third~caption
+msgid "Snap to 1/3 point"
+msgstr ""
+
+#: zcadexternal.acn_os_third~textimage
+msgctxt "zcadexternal.acn_os_third~textimage"
+msgid "1/3"
+msgstr ""
+
+#: zcadexternal.acn_overriderowheightinobjinsp~caption
+msgid "Override row height in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_overriderowheightinobjinsp~textimage
+msgid "orh"
 msgstr ""
 
 #: zcadexternal.acn_pandown~caption
@@ -821,6 +918,46 @@ msgctxt "zcadexternal.acn_sensormark~textimage"
 msgid "++"
 msgstr ""
 
+#: zcadexternal.acn_showfasteditorsinobjinsp~caption
+msgid "Show fast editors in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_showfasteditorsinobjinsp~textimage
+msgid "sfe"
+msgstr ""
+
+#: zcadexternal.acn_showheadersinobjinsp~caption
+msgid "Show headers in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_showheadersinobjinsp~textimage
+msgid "sh"
+msgstr ""
+
+#: zcadexternal.acn_showhiddenfieldinobjinsp~caption
+msgid "Show hidden field in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_showhiddenfieldinobjinsp~textimage
+msgid "shf"
+msgstr ""
+
+#: zcadexternal.acn_showonlyhotfasteditorsinobjinsp~caption
+msgid "Show only hot fast editors in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_showonlyhotfasteditorsinobjinsp~textimage
+msgid "sohfe"
+msgstr ""
+
+#: zcadexternal.acn_showspliterinobjinsp~caption
+msgid "Show spliter in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_showspliterinobjinsp~textimage
+msgid "ss"
+msgstr ""
+
 #: zcadexternal.acn_show_commandline~caption
 msgid "Command line and history"
 msgstr ""
@@ -937,6 +1074,14 @@ msgstr ""
 
 #: zcadexternal.acn_viewtop~caption
 msgid "View top"
+msgstr ""
+
+#: zcadexternal.acn_whitebackgrounfdinobjinsp~caption
+msgid "White background in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_whitebackgrounfdinobjinsp~textimage
+msgid "wb"
 msgstr ""
 
 #: zcadexternal.acn_wire~caption
@@ -1375,6 +1520,7 @@ msgid "New selection set"
 msgstr ""
 
 #: zcadexternal.hint_panel~dsgn_selsamename
+msgctxt "zcadexternal.hint_panel~dsgn_selsamename"
 msgid "Auto select devices with same name"
 msgstr ""
 
@@ -1429,19 +1575,7 @@ msgstr ""
 #: zcadexternal.hint_panel~linewcombobox
 #, fuzzy
 msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Color selection"
-msgstr ""
-
-#: zcadexternal.hint_panel~linewcombobox
-#, fuzzy
-msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Dim style selection"
-msgstr ""
-
-#: zcadexternal.hint_panel~linewcombobox
-#, fuzzy
-msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Text style selection"
+msgid "Line type selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~linewcombobox
@@ -1453,7 +1587,19 @@ msgstr ""
 #: zcadexternal.hint_panel~linewcombobox
 #, fuzzy
 msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Line type selection"
+msgid "Color selection"
+msgstr ""
+
+#: zcadexternal.hint_panel~linewcombobox
+#, fuzzy
+msgctxt "zcadexternal.hint_panel~linewcombobox"
+msgid "Text style selection"
+msgstr ""
+
+#: zcadexternal.hint_panel~linewcombobox
+#, fuzzy
+msgctxt "zcadexternal.hint_panel~linewcombobox"
+msgid "Dim style selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~ops_sensor_mark
@@ -1670,6 +1816,10 @@ msgstr ""
 msgid "OBJINSPCXMENU"
 msgstr ""
 
+#: zcadexternal.menu~objinspheadercxmenu
+msgid "OBJINSPHEADERCXMENU"
+msgstr ""
+
 #: zcadexternal.menu~objinspvarcxmenu
 msgid "OBJINSPVARCXMENU"
 msgstr ""
@@ -1815,6 +1965,16 @@ msgstr ""
 #: zcadexternal.submenu~miscellaneous
 msgctxt "zcadexternal.submenu~miscellaneous"
 msgid "Miscellaneous"
+msgstr ""
+
+#: zcadexternal.submenu~object snap
+msgctxt "zcadexternal.submenu~object snap"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.submenu~object snap
+msgctxt "zcadexternal.submenu~object snap"
+msgid "Object snap"
 msgstr ""
 
 #: zcadexternal.submenu~pan
@@ -1964,6 +2124,15 @@ msgstr ""
 msgid "Save Variables"
 msgstr ""
 
+#: zcadexternal.tblockrotateparams~absolytly
+msgctxt "zcadexternal.tblockrotateparams~absolytly"
+msgid "Absolytly"
+msgstr ""
+
+#: zcadexternal.tblockrotateparams~rotate
+msgid "Rotation angle"
+msgstr ""
+
 #: zcadexternal.tblockscaleparams~absolytly
 msgctxt "zcadexternal.tblockscaleparams~absolytly"
 msgid "Absolytly"
@@ -2030,12 +2199,17 @@ msgstr ""
 msgid "Default leader width"
 msgstr ""
 
+#: zcadexternal.tdesigning~dsgn_otracktimerinterval
+msgid "Object track timer interval"
+msgstr ""
+
 #: zcadexternal.tdesigning~dsgn_selnew
 msgctxt "zcadexternal.tdesigning~dsgn_selnew"
 msgid "New selection set"
 msgstr ""
 
 #: zcadexternal.tdesigning~dsgn_selsamename
+msgctxt "zcadexternal.tdesigning~dsgn_selsamename"
 msgid "Auto select devices with same name"
 msgstr ""
 
@@ -2248,6 +2422,37 @@ msgstr ""
 msgid "IsFounded"
 msgstr ""
 
+#: zcadexternal.tgdb3statebool~t3sb_default
+msgctxt "zcadexternal.tgdb3statebool~t3sb_default"
+msgid "Default"
+msgstr ""
+
+#: zcadexternal.tgdb3statebool~t3sb_fale
+msgid "False"
+msgstr ""
+
+#: zcadexternal.tgdb3statebool~t3sb_true
+msgid "True"
+msgstr ""
+
+#: zcadexternal.tgdbintegeroverrider~enable
+msgid "Enable"
+msgstr ""
+
+#: zcadexternal.tgdbintegeroverrider~value
+msgid "New value"
+msgstr ""
+
+#: zcadexternal.tgdidata~rd_renderer
+msgctxt "zcadexternal.tgdidata~rd_renderer"
+msgid "Device"
+msgstr ""
+
+#: zcadexternal.tgdidata~rd_version
+msgctxt "zcadexternal.tgdidata~rd_version"
+msgid "Version"
+msgstr ""
+
 #: zcadexternal.timagedegradation~rd_id_currentdegradationfactor
 msgid "Current degradation factor"
 msgstr ""
@@ -2285,12 +2490,16 @@ msgctxt "zcadexternal.tinserttype~tit_device"
 msgid "Device"
 msgstr ""
 
+#: zcadexternal.tinterface~intf_defaultcontrolheight
+msgid "Default control height"
+msgstr ""
+
 #: zcadexternal.tinterface~intf_dwgtabsposition
 msgid "Drawing tabs position"
 msgstr ""
 
-#: zcadexternal.tinterface~intf_objinsprowh
-msgid "Object inspector row height"
+#: zcadexternal.tinterface~intf_objinsp_properties
+msgid "Object inspector properties"
 msgstr ""
 
 #: zcadexternal.tinterface~intf_showdwgtabcloseburron
@@ -2299,10 +2508,6 @@ msgstr ""
 
 #: zcadexternal.tinterface~intf_showdwgtabs
 msgid "Show drawing tabs"
-msgstr ""
-
-#: zcadexternal.tinterface~intf_showlinesinobjinsp
-msgid "Show lines in object inspector"
 msgstr ""
 
 #: zcadexternal.tinterface~intf_showscrollbars
@@ -2401,6 +2606,35 @@ msgstr ""
 msgid "Start"
 msgstr ""
 
+#: zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw
+msgctxt "zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw"
+msgid "Old style"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_rowheight
+msgid "Row height"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_showfasteditors
+msgid "Show fast editors"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_showheaders
+msgid "Show headers"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_showonlyhotfasteditors
+msgid "Show only hot fast editors"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_showseparator
+msgid "Show separator"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_whitebackground
+msgid "White background"
+msgstr ""
+
 #: zcadexternal.tobjlinkrecordmode~obt
 msgid "ObjBeginToken"
 msgstr ""
@@ -2419,6 +2653,32 @@ msgstr ""
 
 #: zcadexternal.todpcounttype~todpct_by_xy
 msgid "by width/height"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_extensions
+msgid "Extensions"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_renderer
+msgctxt "zcadexternal.topengldata~rd_renderer"
+msgid "Device"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_restore_mode
+msgid "Restore mode"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_vendor
+msgid "Vendor"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_version
+msgctxt "zcadexternal.topengldata~rd_version"
+msgid "Version"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_vsync
+msgid "VSync"
 msgstr ""
 
 #: zcadexternal.topsdattype~topsdt_smoke
@@ -2552,10 +2812,12 @@ msgid "Trace"
 msgstr ""
 
 #: zcadexternal.tosmode~kosm_3
+msgctxt "zcadexternal.tosmode~kosm_3"
 msgid "1/3"
 msgstr ""
 
 #: zcadexternal.tosmode~kosm_4
+msgctxt "zcadexternal.tosmode~kosm_4"
 msgid "1/4"
 msgstr ""
 
@@ -2696,10 +2958,6 @@ msgstr ""
 msgid "Draw inside paint message"
 msgstr ""
 
-#: zcadexternal.trd~rd_extensions
-msgid "Extensions"
-msgstr ""
-
 #: zcadexternal.trd~rd_gluextensions
 msgid "GLU Extensions"
 msgstr ""
@@ -2763,17 +3021,8 @@ msgstr ""
 msgid "Remove system cursor from work area"
 msgstr ""
 
-#: zcadexternal.trd~rd_renderer
-msgctxt "zcadexternal.trd~rd_renderer"
-msgid "Device"
-msgstr ""
-
 #: zcadexternal.trd~rd_rendererbackend
 msgid "Render backend"
-msgstr ""
-
-#: zcadexternal.trd~rd_restore_mode
-msgid "Restore mode"
 msgstr ""
 
 #: zcadexternal.trd~rd_spatialnodecount
@@ -2786,18 +3035,6 @@ msgstr ""
 
 #: zcadexternal.trd~rd_usestencil
 msgid "Use STENCIL buffer"
-msgstr ""
-
-#: zcadexternal.trd~rd_vendor
-msgid "Vendor"
-msgstr ""
-
-#: zcadexternal.trd~rd_version
-msgid "Version"
-msgstr ""
-
-#: zcadexternal.trd~rd_vsync
-msgid "VSync"
 msgstr ""
 
 #: zcadexternal.trestoremode~wnd_accumbuffer
@@ -2871,6 +3108,14 @@ msgstr ""
 
 #: zcadexternal.tselgeneralparams~samelayer
 msgid "Same layer"
+msgstr ""
+
+#: zcadexternal.tselgeneralparams~samelinetype
+msgid "Same line type"
+msgstr ""
+
+#: zcadexternal.tselgeneralparams~samelinetypescale
+msgid "Same line type scale"
 msgstr ""
 
 #: zcadexternal.tselgeneralparams~samelineweight
@@ -3106,20 +3351,6 @@ msgstr ""
 #: zcadexternal.ttreeadress~selfindex
 msgctxt "zcadexternal.ttreeadress~selfindex"
 msgid "Position"
-msgstr ""
-
-#: zcadexternal.tvscontrol~tvsdefault
-msgctxt "zcadexternal.tvscontrol~tvsdefault"
-msgid "Default"
-msgstr ""
-
-#: zcadexternal.tvscontrol~tvsoff
-msgid "Off"
-msgstr ""
-
-#: zcadexternal.tvscontrol~tvson
-msgctxt "zcadexternal.tvscontrol~tvson"
-msgid "On"
 msgstr ""
 
 #: zcadstrconsts.fontnotfoundandreplace
@@ -3465,6 +3696,10 @@ msgstr ""
 msgid "Project Tree"
 msgstr ""
 
+#: zcadstrconsts.rsproperty
+msgid "Property"
+msgstr ""
+
 #: zcadstrconsts.rsquitcaption
 msgctxt "zcadstrconsts.rsquitcaption"
 msgid "Quit"
@@ -3599,6 +3834,10 @@ msgstr ""
 #: zcadstrconsts.rsunnamedwindowtitle
 msgctxt "zcadstrconsts.rsunnamedwindowtitle"
 msgid "unnamed"
+msgstr ""
+
+#: zcadstrconsts.rsvalue
+msgid "Value"
 msgstr ""
 
 #: zcadstrconsts.rsvinfotext

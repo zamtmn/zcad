@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CONFIG>
+  <MainConfig>
+    <Nodes ChildCount="1">
+      <Item1 Name="MainForm" Type="CustomSite" ChildCount="1">
+        <Bounds Top="-4" Left="-4" Width="1280" Height="975">
+          <WorkArea>
+            <Rect Right="1280" Bottom="994"/>
+          </WorkArea>
+        </Bounds>
+        <Item1 Name="AnchorDockSite10" Type="Layout" ChildCount="17">
+          <Bounds Top="50" Width="1280" Height="906" SplitterPos="46"/>
+          <Anchors Align="Bottom"/>
+          <Item1 Name="PageControl" Type="Control">
+            <Bounds Left="272" Width="1008" Height="815"/>
+            <Anchors Left="AnchorDockSplitter7" Bottom="AnchorDockSplitter2"/>
+          </Item1>
+          <Item2 Name="AnchorDockSplitter2" Type="SplitterHorizontal">
+            <Bounds Top="815" Left="244" Width="1036" Height="4"/>
+            <Anchors Left="AnchorDockSplitter3"/>
+          </Item2>
+          <Item3 Name="CommandLine" Type="Control">
+            <Bounds Top="819" Left="244" Width="1036" Height="59"/>
+            <Anchors Top="AnchorDockSplitter2" Left="AnchorDockSplitter3" Bottom="AnchorDockSplitter4"/>
+          </Item3>
+          <Item4 Name="AnchorDockSplitter3" Type="SplitterVertical">
+            <Bounds Left="240" Width="4" Height="878"/>
+            <Anchors Bottom="AnchorDockSplitter4"/>
+          </Item4>
+          <Item5 Name="ObjectInspector" Type="Control">
+            <Bounds Top="29" Width="240" Height="849"/>
+            <Anchors Top="AnchorDockSplitter5" Right="AnchorDockSplitter3" Bottom="AnchorDockSplitter4"/>
+          </Item5>
+          <Item6 Name="AnchorDockSplitter4" Type="SplitterHorizontal">
+            <Bounds Top="878" Width="1280" Height="4"/>
+          </Item6>
+          <Item7 Name="Status" Type="Control">
+            <Bounds Top="882" Width="1280" Height="24"/>
+            <Anchors Top="AnchorDockSplitter4"/>
+          </Item7>
+          <Item8 Name="Misc" Type="Control">
+            <Bounds Left="244" Width="24" Height="339"/>
+            <Anchors Left="AnchorDockSplitter3" Right="AnchorDockSplitter7" Bottom="AnchorDockSplitter8"/>
+          </Item8>
+          <Item9 Name="Draw" Type="Control">
+            <Bounds Left="108" Width="132" Height="25"/>
+            <Anchors Left="AnchorDockSplitter6" Right="AnchorDockSplitter3" Bottom="AnchorDockSplitter5"/>
+          </Item9>
+          <Item10 Name="Modify" Type="Control">
+            <Bounds Top="343" Left="244" Width="24" Height="202"/>
+            <Anchors Top="AnchorDockSplitter8" Left="AnchorDockSplitter3" Right="AnchorDockSplitter7" Bottom="AnchorDockSplitter9"/>
+          </Item10>
+          <Item11 Name="Quick" Type="Control">
+            <Bounds Width="104" Height="25"/>
+            <Anchors Right="AnchorDockSplitter6" Bottom="AnchorDockSplitter5"/>
+          </Item11>
+          <Item12 Name="OIButtons" Type="Control">
+            <Bounds Top="549" Left="244" Width="24" Height="266"/>
+            <Anchors Top="AnchorDockSplitter9" Left="AnchorDockSplitter3" Right="AnchorDockSplitter7" Bottom="AnchorDockSplitter2"/>
+          </Item12>
+          <Item13 Name="AnchorDockSplitter5" Type="SplitterHorizontal">
+            <Bounds Top="25" Width="240" Height="4"/>
+            <Anchors Right="AnchorDockSplitter3"/>
+          </Item13>
+          <Item14 Name="AnchorDockSplitter6" Type="SplitterVertical">
+            <Bounds Left="104" Width="4" Height="25"/>
+            <Anchors Bottom="AnchorDockSplitter5"/>
+          </Item14>
+          <Item15 Name="AnchorDockSplitter7" Type="SplitterVertical">
+            <Bounds Left="268" Width="4" Height="815"/>
+            <Anchors Bottom="AnchorDockSplitter2"/>
+          </Item15>
+          <Item16 Name="AnchorDockSplitter8" Type="SplitterHorizontal">
+            <Bounds Top="339" Left="244" Width="24" Height="4"/>
+            <Anchors Left="AnchorDockSplitter3" Right="AnchorDockSplitter7"/>
+          </Item16>
+          <Item17 Name="AnchorDockSplitter9" Type="SplitterHorizontal">
+            <Bounds Top="545" Left="244" Width="24" Height="4"/>
+            <Anchors Left="AnchorDockSplitter3" Right="AnchorDockSplitter7"/>
+          </Item17>
+        </Item1>
+      </Item1>
+    </Nodes>
+  </MainConfig>
+  <Settings HeaderStyle="Lines" HeaderFilled="False" AllowDragging="False"/>
+</CONFIG>

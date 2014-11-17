@@ -26,6 +26,9 @@ interface
 uses
   {uses units, the list will vary depending on the required entities and actions}
   {подключеные модули, список будет меняться в зависимости от требуемых примитивов и действий с ними}
+
+  blockinsertwnd,arrayinsertwnd,Forms,
+
   gdbaligneddimension,//unit describes aligned dimensional entity
                       //модуль описывающий выровненный размерный примитив
   gdbrotateddimension,
@@ -718,6 +721,26 @@ begin
     end;
     result:=cmd_ok;
 end;
+function TestInsert1_com(operands:TCommandOperands):TCommandResult;
+var
+   mr:integer;
+begin
+    if not assigned(BlockInsertFRM)then
+    Application.CreateForm(TBlockInsertFRM, BlockInsertFRM);
+    mr:=BlockInsertFRM.showmodal;
+    freeandnil(BlockInsertFRM);
+    result:=cmd_ok;
+end;
+function TestInsert2_com(operands:TCommandOperands):TCommandResult;
+var
+   mr:integer;
+begin
+    if not assigned(ArrayInsertFRM)then
+    Application.CreateForm(TArrayInsertFRM, ArrayInsertFRM);
+    mr:=ArrayInsertFRM.showmodal;
+    freeandnil(ArrayInsertFRM);
+    result:=cmd_ok;
+end;
 
 initialization
      {$IFDEF DEBUGINITSECTION}LogOut('gdbcommandsexample.initialization');{$ENDIF}//write to log for the control initialization sequence
@@ -753,5 +776,7 @@ initialization
      CreateCommandFastObjectPlugin(@GetVertexY_com,'GetVertexY',CADWG,0);
      CreateCommandFastObjectPlugin(@GetVertexZ_com,'GetVertexZ',CADWG,0);
      CreateCommandFastObjectPlugin(@GetLength_com,'GetLength',CADWG,0);
+     CreateCommandFastObjectPlugin(@TestInsert1_com,'TestInsert1',CADWG,0);
+     CreateCommandFastObjectPlugin(@TestInsert2_com,'TestInsert2',CADWG,0);
 
 end.

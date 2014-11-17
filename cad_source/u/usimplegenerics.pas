@@ -20,7 +20,7 @@ unit usimplegenerics;
 {$INCLUDE def.inc}
 
 interface
-uses LCLVersion,gdbase,
+uses gdbase,
      sysutils,
      gutil,gmap;
 type
@@ -47,8 +47,7 @@ uses
     log;
 function TMyMap.MyGetValue(key:TKey):TValue;
 var
-   {$if LCL_FULLVERSION>=1030000}Iterator:TIterator;{$ENDIF}
-   {$if LCL_FULLVERSION<1030000}Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;{$ENDIF}
+   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
 begin
   Iterator:=Find(key);
   if  Iterator=nil then
@@ -61,8 +60,7 @@ begin
 end;
 procedure TMyMap.MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);
 var
-   {$if LCL_FULLVERSION<1030000}Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;{$ENDIF}
-   {$if LCL_FULLVERSION>=1030000}Iterator:TIterator;{$ENDIF}
+   Iterator:specialize TMap<TKey, TValue, TCompare>.TIterator;
 begin
   Iterator:=Find(key);
   if  Iterator=nil then

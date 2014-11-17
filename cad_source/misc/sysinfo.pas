@@ -48,9 +48,8 @@ begin
      i:=paramcount;
      for i:=1 to paramcount do
        begin
-            {$ifdef windows}param:=Tria_AnsiToUtf8{SysToUTF8}(paramstr(i));{$endif}
+            {$ifdef windows}param:={Tria_AnsiToUtf8}SysToUTF8(paramstr(i));{$endif}
             paramUC:=uppercase(param);
-            log.LogOut('qqq'+param);
 
             if fileexists(UTF8toSys(param)) then
                                      sysparam.preloadedfile:=param;

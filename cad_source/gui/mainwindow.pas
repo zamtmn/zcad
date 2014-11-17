@@ -1096,10 +1096,10 @@ begin
                  else
                      begin
                      s:=Operands;
-                     filename:=utf8tosys(sysparam.programpath+'components/'+s);
+                     filename:={utf8tosys}(sysparam.programpath+'components/'+s);
                      end;
   if not fileexists(filename) then
-                              filename:=utf8tosys(sysparam.programpath+'components/defaultlayout.xml');
+                              filename:={utf8tosys}(sysparam.programpath+'components/defaultlayout.xml');
   LoadLayoutFromFile(Filename);
   exit;
   try

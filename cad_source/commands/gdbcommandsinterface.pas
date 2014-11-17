@@ -75,7 +75,7 @@ uses
 
    function SaveAs_com(Operands:pansichar):GDBInteger;
    procedure CopyToClipboard;}
-   function quit_com(Operands:pansichar):GDBInteger;
+   function quit_com(operands:TCommandOperands):TCommandResult;
    function layer_cmd:GDBInteger;
    function Colors_cmd:GDBInteger;
    //function Regen_com(Operands:pansichar):GDBInteger;
@@ -83,7 +83,7 @@ uses
 implementation
 uses mainwindow,
      geometry;
-function CloseDWG_com(Operands:pansichar):GDBInteger;
+function CloseDWG_com(operands:TCommandOperands):TCommandResult;
 var
    //poglwnd:toglwnd;
    CurrentDWG:PTDrawing;
@@ -122,7 +122,7 @@ begin
        sharedgdb.updatevisible;
   end;*)
 end;
-function NextDrawint_com(Operands:pansichar):GDBInteger;
+function NextDrawint_com(operands:TCommandOperands):TCommandResult;
 var
    i:integer;
 begin
@@ -137,7 +137,7 @@ begin
      end;
      result:=cmd_ok;
 end;
-function PrevDrawint_com(Operands:pansichar):GDBInteger;
+function PrevDrawint_com(operands:TCommandOperands):TCommandResult;
 var
    i:integer;
 begin
@@ -152,7 +152,7 @@ begin
      end;
      result:=cmd_ok;
 end;
-function newdwg_com(Operands:pansichar):GDBInteger;
+function newdwg_com(operands:TCommandOperands):TCommandResult;
 var
    ptd:PTDrawing;
    myts:TTabSheet;
@@ -246,7 +246,7 @@ begin
      //addblockinsert(gdb.GetCurrentROOT,@gdb.GetCurrentDWG.ConstructObjRoot.ObjArray, nulvertex, 1, 0, 'DEVICE_TEST');
      //gdb.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
 end;
-function Import_com(Operands:pansichar):GDBInteger;
+function Import_com(operands:TCommandOperands):TCommandResult;
 var
    s: GDBString;
    //fileext:GDBString;
@@ -282,7 +282,7 @@ begin
      shared.ShowError('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']));
      //shared.ShowError('GDBCommandsBase.LOAD: Не могу открыть файл: '+s+'('+Operands+')');
 end;
-function Load_com(Operands:pansichar):GDBInteger;
+function Load_com(operands:TCommandOperands):TCommandResult;
 var
    s: GDBString;
    //fileext:GDBString;
@@ -416,7 +416,7 @@ begin
     XMLConfig.Free;
   end;
 end;
-function SaveLayout_com:GDBInteger;
+function SaveLayout_com(operands:TCommandOperands):TCommandResult;
 var
   XMLConfig: TXMLConfigStorage;
   filename:string;
@@ -443,7 +443,7 @@ begin
   end;
   result:=cmd_ok;
 end;
-function Show_com(Operands:pansichar):GDBInteger;
+function Show_com(operands:TCommandOperands):TCommandResult;
 var
    ctrl:TControl;
 begin
@@ -467,27 +467,27 @@ begin
                       shared.ShowError('Show command must have one operand!');
   result:=cmd_ok;
 end;
-function quit_com(Operands:pansichar):GDBInteger;
+function quit_com(operands:TCommandOperands):TCommandResult;
 begin
      //Application.QueueAsyncCall(MainFormN.asynccloseapp, 0);
      CloseApp;
      result:=cmd_ok;
 end;
-function About_com(Operands:pansichar):GDBInteger;
+function About_com(operands:TCommandOperands):TCommandResult;
 begin
   if not assigned(Aboutwindow) then
                                   Aboutwindow:=TAboutWnd.mycreate(Application,@Aboutwindow);
   DOShowModal(Aboutwindow);
   result:=cmd_ok;
 end;
-function Help_com(Operands:pansichar):GDBInteger;
+function Help_com(operands:TCommandOperands):TCommandResult;
 begin
   if not assigned(Helpwindow) then
                                   Helpwindow:=THelpWnd.mycreate(Application,@Helpwindow);
   DOShowModal(Helpwindow);
   result:=cmd_ok;
 end;
-function ClearFileHistory_com(Operands:pansichar):GDBInteger;
+function ClearFileHistory_com(operands:TCommandOperands):TCommandResult;
 var i:integer;
     pstr:PGDBString;
 begin
@@ -505,7 +505,7 @@ begin
      end;
      result:=cmd_ok;
 end;
-function tw_com(Operands:pansichar):GDBInteger;
+function tw_com(operands:TCommandOperands):TCommandResult;
 begin
   if CWMemo.IsVisible then
                                  CWindow.Hide
@@ -513,7 +513,7 @@ begin
                                  CWindow.Show;
   result:=cmd_ok;
 end;
-function SetObjInsp_com(Operands:pansichar):GDBInteger;
+function SetObjInsp_com(operands:TCommandOperands):TCommandResult;
 var
    obj:gdbstring;
    objt:PUserTypeDescriptor;
@@ -630,14 +630,14 @@ else if Operands='DIMSTYLES' then
      result:=cmd_ok;
 end;
 
-function Options_com(Operands:pansichar):GDBInteger;
+function Options_com(operands:TCommandOperands):TCommandResult;
 begin
   if assigned(SetGDBObjInspProc)then
                                     SetGDBObjInspProc(SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,gdb.GetCurrentDWG);
   historyoutstr(rscmOptions2OI);
   result:=cmd_ok;
 end;
-function SaveOptions_com(Operands:pansichar):GDBInteger;
+function SaveOptions_com(operands:TCommandOperands):TCommandResult;
 var
    mem:GDBOpenArrayOfByte;
 begin
@@ -647,7 +647,7 @@ begin
            mem.done;
            result:=cmd_ok;
 end;
-function CommandList_com(Operands:pansichar):GDBInteger;
+function CommandList_com(operands:TCommandOperands):TCommandResult;
 var
    p:PCommandObjectDef;
    ir:itrec;
@@ -665,7 +665,7 @@ begin
    clist.done;
    result:=cmd_ok;
 end;
-function DebClip_com(Operands:pansichar):GDBInteger;
+function DebClip_com(operands:TCommandOperands):TCommandResult;
 var
    pbuf:pansichar;
    i:gdbinteger;
@@ -703,7 +703,7 @@ begin
 
      result:=cmd_ok;
 end;
-function MemSummary_com(Operands:pansichar):GDBInteger;
+function MemSummary_com(operands:TCommandOperands):TCommandResult;
 var
     memcount:GDBNumerator;
     pmemcounter:PGDBNumItem;
@@ -744,7 +744,7 @@ begin
      memcount.FreeAndDone;
     result:=cmd_ok;
 end;
-function ShowPage_com(Operands:pansichar):GDBInteger;
+function ShowPage_com(operands:TCommandOperands):TCommandResult;
 begin
   if assigned(mainformn)then
   if assigned(mainformn.PageControl)then

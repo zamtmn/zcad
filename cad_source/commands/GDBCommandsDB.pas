@@ -37,7 +37,7 @@ uses
 implementation
 uses sltexteditor,UObjectDescriptor,projecttreewnd,commandline,log,GDBSubordinated;
 
-function DBaseAdd_com:GDBInteger;
+function DBaseAdd_com(operands:TCommandOperands):TCommandResult;
 var //t:PUserTypeDescriptor;
     p:pointer;
     pu:ptunit;
@@ -61,7 +61,7 @@ begin
             HistoryOutStr(rscmCommandOnlyCTXMenu);
      result:=cmd_ok;
 end;
-function DBaseRename_com:GDBInteger;
+function DBaseRename_com(operands:TCommandOperands):TCommandResult;
 var //t:PUserTypeDescriptor;
     {pvd,}pdbv:pvardesk;
     //pu:ptunit;
@@ -94,7 +94,7 @@ begin
             HistoryOutStr(rscmCommandOnlyCTXMenu);
      result:=cmd_ok;
 end;
-function DBaseLink_com:GDBInteger;
+function DBaseLink_com(operands:TCommandOperands):TCommandResult;
 var //t:PUserTypeDescriptor;
     pvd,pdbv:pvardesk;
     //pu:ptunit;

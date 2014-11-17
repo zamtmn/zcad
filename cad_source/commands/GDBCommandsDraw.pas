@@ -395,7 +395,7 @@ var
 
 //procedure startup;
 //procedure Finalize;
-function Line_com_CommandStart(operands:pansichar):GDBInteger;
+function Line_com_CommandStart(operands:TCommandOperands):TCommandResult;
 procedure Line_com_CommandEnd(_self:pointer);
 function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
 function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: GDBByte;osp:pos_record;mclick:GDBInteger): GDBInteger;
@@ -1987,7 +1987,7 @@ begin
                          pb:=nil;
                     end;
 end;
-function Erase_com(operands:pansichar):GDBInteger;
+function Erase_com(operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
     ir:itrec;
     count:integer;
@@ -2039,7 +2039,7 @@ begin
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
-function InverseSelected_com(operands:pansichar):GDBInteger;
+function InverseSelected_com(operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
     ir:itrec;
     count:integer;
@@ -2241,7 +2241,7 @@ begin
   end;
   result:=cmd_ok;
 end;
-function Circle_com_CommandStart(operands:pansichar):GDBInteger;
+function Circle_com_CommandStart(operands:TCommandOperands):TCommandResult;
 begin
   GDB.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   historyoutstr(rscmCenterPointCircle);
@@ -2298,7 +2298,7 @@ end;
 
 
 
-function Line_com_CommandStart(operands:pansichar):GDBInteger;
+function Line_com_CommandStart(operands:TCommandOperands):TCommandResult;
 begin
   pold:=nil;
   GDB.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
@@ -2843,7 +2843,7 @@ begin
       scale(a,button);
       result:=cmd_ok;
 end;
-function _3DPoly_com_CommandStart(operands:pansichar):GDBInteger;
+function _3DPoly_com_CommandStart(operands:TCommandOperands):TCommandResult;
 begin
   p3dpl:=nil;
   GDB.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
@@ -2955,7 +2955,7 @@ begin
 end;
 
 
-function _3DPolyEd_com_CommandStart(operands:pansichar):GDBInteger;
+function _3DPolyEd_com_CommandStart(operands:TCommandOperands):TCommandResult;
 var
    pobj:pgdbobjentity;
    ir:itrec;
@@ -3287,7 +3287,7 @@ begin
     redrawoglwnd;
   end;
 end;}
-function Insert2_com(operands:pansichar):GDBInteger;
+function Insert2_com(operands:TCommandOperands):TCommandResult;
 var
     s:gdbstring;
 begin
@@ -3358,7 +3358,7 @@ begin
           if assigned(redrawoglwndproc) then redrawoglwndproc;
      end;
 end;
-function bedit_com(operands:pansichar):GDBInteger;
+function bedit_com(operands:TCommandOperands):TCommandResult;
 var
    i:integer;
    sd:TSelObjDesk;
@@ -3429,7 +3429,7 @@ else if (sd.PFirstObj^.vp.ID=GDBDeviceID) then
   result:=cmd_ok;
   if assigned(redrawoglwndproc) then redrawoglwndproc;
 end;
-function PlaceAllBlocks_com(operands:pansichar):GDBInteger;
+function PlaceAllBlocks_com(operands:TCommandOperands):TCommandResult;
 var pb:PGDBObjBlockdef;
     ir:itrec;
     xcoord:GDBDouble;
@@ -3621,7 +3621,7 @@ begin
     PCreatedGDBPoint^.P_insertInOCS:=point;
     PCreatedGDBPoint^.FormatEntity(gdb.GetCurrentDWG^);}
 end;
-function FindAllIntersections_com(operands:pansichar):GDBInteger;
+function FindAllIntersections_com(operands:TCommandOperands):TCommandResult;
 var
     lineAABBtests,linelinetests,intersectcount,lm,lc:integer;
     parray:GDBPoint3dArray;

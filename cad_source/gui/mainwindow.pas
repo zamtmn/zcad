@@ -2476,6 +2476,9 @@ var
    pdwg:PTSimpleDrawing;
    rc:TDrawContext;
 begin
+     {$IFDEF linux}
+     UniqueInstanceBase.FIPCServer.PeekMessage(0,true);
+     {$endif}
      done:=true;
      sysvar.debug.languadedeb.UpdatePO:=_UpdatePO;
      sysvar.debug.languadedeb.NotEnlishWord:=_NotEnlishWord;

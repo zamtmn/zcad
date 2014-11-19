@@ -286,6 +286,7 @@ end;
 procedure TColorSelectWND._onshow(Sender: TObject);
 begin
      testsetcolor(nil);
+     SpinEdit1.SetFocus;
 end;
 
 end.

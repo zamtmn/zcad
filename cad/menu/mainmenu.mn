@@ -486,6 +486,8 @@ MainMenuItem Debug;
     }
     MenuItem **Other Commands (current debug);
     {
+     Command TestInsert1,TestInsert1,none,none
+     Command TestInsert1,TestInsert1,none,none
      Command Find all intersections (lines only),FindAllIntersections,none,none
     }
     MenuItem **Utils;

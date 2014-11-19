@@ -2226,7 +2226,7 @@ GDBObjBlockInsert={$IFNDEF DELPHI}packed{$ENDIF} object(GDBObjComplex)
                      scale:GDBvertex;(*saved_to_shd*)
                      rotate:GDBDouble;(*saved_to_shd*)
                      index:GDBInteger;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
-                     Name:GDBString;(*saved_to_shd*)(*oi_readonly*)
+                     Name:GDBAnsiString;(*saved_to_shd*)(*oi_readonly*)
                      pattrib:GDBPointer;(*hidden_in_objinsp*)
                      BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
                      constructor initnul;
@@ -2847,7 +2847,7 @@ CableDeviceBaseObject={$IFNDEF DELPHI}packed{$ENDIF} object(DeviceDbBaseObject)
   GDBcommandmanagerDef={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                                   lastcommand:GDBString;
                                   pcommandrunning:PCommandRTEdObjectDef;
-                                  function executecommand(const comm:pansichar;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;abstract;
+                                  function executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;abstract;
                                   procedure executecommandend;virtual;abstract;
                                   function executelastcommad(pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype): GDBInteger;virtual;abstract;
                                   procedure sendpoint2command(p3d:gdbvertex; p2d:gdbvertex2di; mode:GDBByte;osp:pos_record;const drawing:TDrawingDef);virtual;abstract;

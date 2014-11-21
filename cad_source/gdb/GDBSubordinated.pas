@@ -123,6 +123,7 @@ procedure CreateDBLinkProcess(pEntity:PGDBObjGenericWithSubordinated;const drawi
 var
    pvn,pvnt,pdbv:pvardesk;
    pdbu:ptunit;
+   pum:PTUnitManager;
 begin
      pvn:=pEntity^.OU.FindVariable('DB_link');
      pvnt:=pEntity^.OU.FindVariable('DB_MatName');
@@ -130,13 +131,23 @@ begin
      pvnt^.attrib:=pvnt^.attrib or (vda_RO);
      if (pvn<>nil)and(pvnt<>nil) then
      begin
-          pdbu:={gdb.GetCurrentDWG}drawing.GetDWGUnits^.findunit(DrawingDeviceBaseUnitName);
-          pdbv:=pdbu^.FindVariable(pstring(pvn.data.Instance)^);
-          if pdbv<>nil then
-                           pstring(pvnt.data.Instance)^:=PDbBaseObject(pdbv.data.Instance)^.Name
-                       else
-                           pstring(pvnt.data.Instance)^:='Error!!!'
+          pum:=drawing.GetDWGUnits;
+          if pum<>nil then
+          begin
+            pdbu:=pum^.findunit(DrawingDeviceBaseUnitName);
+            if pdbu<>nil then
+            begin
+              pdbv:=pdbu^.FindVariable(pstring(pvn.data.Instance)^);
+              if pdbv<>nil then
+                               pstring(pvnt.data.Instance)^:=PDbBaseObject(pdbv.data.Instance)^.Name
+                           else
+                               pstring(pvnt.data.Instance)^:='Error!!!';
+              exit;
+            end;
+          end;
      end;
+     if pvnt<>nil then
+                      pstring(pvnt.data.Instance)^:='Error!!!'
 end;
 procedure CreateDeviceNameProcess(pEntity:PGDBObjGenericWithSubordinated;const drawing:TDrawingDef);
 var

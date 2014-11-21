@@ -22,7 +22,7 @@ unit Objinsp;
 interface
 
 uses
-  LCLIntf,zcadstrconsts,usupportgui,GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
+  math,LMessages,LCLIntf,zcadstrconsts,usupportgui,GDBRoot,UGDBOpenArrayOfUCommands,StdCtrls,strutils,ugdbsimpledrawing,zcadinterface,ucxmenumgr,//umytreenode,
   Themes,
   {$IFDEF LCLGTK2}
   x,xlib,{x11,}{xutil,}
@@ -127,6 +127,7 @@ type
     procedure updateinsp;
     protected
     procedure ScrollbarHandler(ScrollKind: TScrollBarKind; OldPosition: Integer);override;
+    procedure WMVScroll(var Message : TLMVScroll); message LM_VScroll;
     public
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
     procedure GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
@@ -914,6 +915,26 @@ begin
   result:=0;
   calctreeh(@pda,result);
 end;
+procedure TGDBobjinsp.WMVScroll(var Message : TLMVScroll);
+var
+  NewPos: Longint;
+begin
+  if VertScrollbar.IsScrollBarVisible then
+  case Message.ScrollCode of
+    SB_THUMBPOSITION:
+      begin
+        NewPos := VertScrollbar.Position;
+        NewPos := NewPos + sign(Message.Pos - NewPos) * VertScrollbar.page div 3;
+        if NewPos < 0 then
+          NewPos := 0;
+        if NewPos > VertScrollbar.Range then
+          NewPos := VertScrollbar.Range;
+        VertScrollbar.Position:= NewPos;
+        exit;
+      end;
+  end;
+  inherited;
+end;
 procedure TGDBobjinsp.ScrollbarHandler(ScrollKind: TScrollBarKind; OldPosition: Integer);
 begin
     if peditor<>nil then
@@ -1217,6 +1238,7 @@ begin
      self.VertScrollBar.page:=height;
      self.VertScrollBar.Tracking:=true;
      self.VertScrollBar.Smooth:=true;
+     self.VertScrollBar.Increment:=200;
      if ch<height  then
                                  begin
                                       {$IFNDEF LCLQt}
@@ -1227,6 +1249,7 @@ begin
                                       self.VertScrollBar.Range:=height;
                                       self.VertScrollBar.Tracking:=false;
                                       self.VertScrollBar.Smooth:=false;
+                                      self.VertScrollBar.Increment:=200;
                                       UpdateScrollbars;
                                  end;
      //Нихуя не понял нахуя это сделано... пока уберу

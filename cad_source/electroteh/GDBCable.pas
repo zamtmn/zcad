@@ -433,16 +433,15 @@ begin
                                              end;
 
 
-
-
-  //_XWCS:=XWCS;//gdb.GetCurrentDWG.pcamera.xdir;
-  _YWCS:=YWCS;//gdb.GetCurrentDWG.pcamera.ydir;
-  _ZWCS:=ZWCS;//gdb.GetCurrentDWG.pcamera.look;
   ptnlast:=NodePropArray.getelement(vertexarrayInWCS.Count-1);
   ptnlast2:=NodePropArray.getelement(vertexarrayInWCS.Count-2);
-  //ptnfirst:=NodePropArray.getelement(0);
-  //ptnfirst2:=NodePropArray.getelement(1);
+
   tp:=vertexsub(ptnlast^.PrevP,ptnlast2^.NextP);
+  if geometry.SqrOneVertexlength(tp)>sqreps then
+  begin
+  _YWCS:=YWCS;//gdb.GetCurrentDWG.pcamera.ydir;
+  _ZWCS:=ZWCS;//gdb.GetCurrentDWG.pcamera.look;
+
   if (abs (tp.x) < 1/64) and (abs (tp.y) < 1/64) then
                                                      tp2:=CrossVertex(_YWCS,tp)
                                                  else
@@ -464,9 +463,14 @@ begin
    m:=MatrixMultiply(rotmatr,m);
 
   str22:=ptnlast.PrevP;
-  //str22:=VectorTransform3D(geometry.CreateVertex(0,0,0),m);
   str21:=VectorTransform3D(geometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
   str23:=VectorTransform3D(geometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,-0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
+  end
+  else begin
+            str22:=ptnlast.PrevP;
+            str21:=ptnlast.PrevP;
+            str23:=ptnlast.PrevP;
+       end;
   end;
   NodePropArray.Shrink;
 end;

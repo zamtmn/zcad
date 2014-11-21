@@ -975,7 +975,7 @@ if WindowsVersion < wvVista then
                             else
                                 DefaultDetails := ThemeServices.GetElementDetails(tmPopupCheckBackgroundDisabled){trChevronVertHot}{ttbThumbDisabled}{tlListViewRoot};
 {$endif}
-{$IFDEF LCLGTK2}DefaultDetails := ThemeServices.GetElementDetails(ttbDropDownButtonPressed){$endif}
+{$IFDEF LCLGTK2}DefaultDetails := ThemeServices.GetElementDetails(ttbody){$endif}
 {$IFDEF LCLQT}DefaultDetails := ThemeServices.GetElementDetails({ttpane}thHeaderDontCare){$endif};
 if IsWgiteBackground then
                          Canvas.FillRect(ARect)

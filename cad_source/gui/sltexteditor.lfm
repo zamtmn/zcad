@@ -1,22 +1,23 @@
 object sltexteditor1: Tsltexteditor1
   Left = 384
-  Height = 53
+  Height = 40
   Top = 224
-  Width = 724
+  Width = 530
   AutoSize = True
-  BorderStyle = bsSizeToolWin
+  BorderIcons = [biSystemMenu]
   Caption = 'Text editor'
-  ClientHeight = 53
-  ClientWidth = 724
+  ClientHeight = 40
+  ClientWidth = 530
   KeyPreview = True
   OnKeyDown = KeyDown
   OnShow = shoftedform
-  LCLVersion = '1.3'
+  Position = poOwnerFormCenter
+  LCLVersion = '1.1'
   object EditField: TEdit
-    Left = 25
-    Height = 53
+    Left = 22
+    Height = 40
     Top = 0
-    Width = 655
+    Width = 405
     Align = alClient
     AutoSize = False
     Constraints.MinWidth = 300
@@ -24,24 +25,36 @@ object sltexteditor1: Tsltexteditor1
   end
   object helptext: TLabel
     Left = 0
-    Height = 53
+    Height = 40
     Top = 0
-    Width = 25
+    Width = 22
     Align = alLeft
     Caption = 'Text'
     Layout = tlCenter
     ParentColor = False
   end
   object OkButton: TButton
-    Left = 680
-    Height = 53
+    Left = 427
+    Height = 40
     Top = 0
-    Width = 44
+    Width = 41
     Align = alRight
     AutoSize = True
     Caption = 'Ok'
-    Default = True
     ModalResult = 1
     TabOrder = 1
+  end
+  object CancelButton: TButton
+    Left = 468
+    Height = 40
+    Top = 0
+    Width = 62
+    Align = alRight
+    AutoSize = True
+    Cancel = True
+    Caption = 'Cancel'
+    Default = True
+    ModalResult = 1
+    TabOrder = 2
   end
 end

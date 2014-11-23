@@ -16,32 +16,45 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode objfpc}
+
 unit gdbcommandsexample;
-{$INCLUDE def.inc}{file def.inc is necessary to include at the beginning of each module zcad}
-                  {it contains a centralized compilation parameters settings}
-                  {файл def.inc необходимо включать в начале каждого модуля zcad}
-                  {он содержит в себе централизованные настройки параметров компиляции}
+
+{ file def.inc is necessary to include at the beginning of each module zcad
+  it contains a centralized compilation parameters settings }
+
+{ файл def.inc необходимо включать в начале каждого модуля zcad
+  он содержит в себе централизованные настройки параметров компиляции  }
+  
+{$INCLUDE def.inc}
 
 interface
 uses
-  {uses units, the list will vary depending on the required entities and actions}
-  {подключеные модули, список будет меняться в зависимости от требуемых примитивов и действий с ними}
 
-  blockinsertwnd,arrayinsertwnd,Forms,
+  { uses units, the list will vary depending on the required entities
+    and actions }
+  { подключеные модули, список будет меняться в зависимости от требуемых
+    примитивов и действий с ними }
 
-  gdbaligneddimension,//unit describes aligned dimensional entity
-                      //модуль описывающий выровненный размерный примитив
-  gdbrotateddimension,
-  gdbdiametricdimension,
-  gdbradialdimension,
-  GDBLine,            //unit describes line entity
-                      //модуль описывающий примитив линия
-  GDBArc,
-  GDBCircle,
-  GDBEntity,
+  sysutils, math,
+
+  Forms, blockinsertwnd, arrayinsertwnd,
+
+  gdbLine,             //unit describes line entity
+                       //модуль описывающий примитив линия
+  gdbAlignedDimension, //unit describes aligned dimensional entity
+                       //модуль описывающий выровненный размерный примитив
+  gdbRotatedDimension,
+
+  gdbDiametricDimension,
+
+  gdbRadialDimension,
+  gdbArc,
+  gdbCircle,
+  gdbEntity,
+
   geometry,
-  math,
-  sysutils,
+
+
   shared,
   gdbentityfactory,   //unit describing a "factory" to create primitives
                       //модуль описывающий "фабрику" для создания примитивов
@@ -52,8 +65,10 @@ uses
                       //описания базовых типов
   gdbobjectsconstdef, //base constants
                       //описания базовых констант
-  commandline,commandlinedef,commanddefinternal,//Commands manager and related objects
-                                                //менеджер команд и объекты связанные с ним
+  commandline,
+  commandlinedef,
+  commanddefinternal, //Commands manager and related objects
+                      //менеджер команд и объекты связанные с ним
   UGDBDescriptor,     //Drawings manager, all open drawings are processed him
                       //"Менеджер" чертежей
   GDBManager,         //different functions simplify the creation entities, while there are very few
@@ -64,7 +79,7 @@ uses
   log;                //log system
                       //система логирования
 const
-     rsSpecifyfirstPoint='Specify first point:';
+     rsSpecifyFirstPoint='Specify first point:';
      rsSpecifySecondPoint='Specify second point:';
      rsSpecifyThirdPoint='Specify third point:';
 type
@@ -85,7 +100,7 @@ type
                    end;
     TCircleDrawMode=(TCDM_CR,TCDM_CD,TCDM_2P,TCDM_3P);
     PT3PointCircleModePentity=^T3PointCircleModePentity;
-    T3PointCircleModePentity=record
+    T3PointCircleModePEntity=record
                                    p1,p2,p3:gdbvertex;
                                    cdm:TCircleDrawMode;
                                    npoint:GDBInteger;
@@ -96,131 +111,202 @@ type
 implementation
 var
    MatchPropParam:TMatchPropParam;
-{Интерактивные процедуры используются совместно с Get3DPointInteractive, впоследствии будут вынесены в отдельный модуль}
-{Interactive procedures are used together with Get3DPointInteractive, later to be moved to a separate unit}
+{ Интерактивные процедуры используются совместно с Get3DPointInteractive,
+  впоследствии будут вынесены в отдельный модуль }
+{ Interactive procedures are used together with Get3DPointInteractive,
+  later to be moved to a separate unit }
 
 {Procedure interactive changes end of the line}
 {Процедура интерактивного изменения конца линии}
-procedure InteractiveLineEndManipulator(const PInteractiveData:GDBPointer{pointer to the line entity};Point:GDBVertex{new end coord};Click:GDBBoolean{true if lmb presseed});
+procedure InteractiveLineEndManipulator( const PInteractiveData : GDBPointer {pointer to the line entity};
+                                                          Point : GDBVertex  {new end coord};
+                                                          Click : GDBBoolean {true if lmb presseed});
+var
+  ln : PGDBObjLine;
 begin
-     GDBObjSetEntityCurrentProp(PGDBObjLine(PInteractiveData));//assign general properties from system variables to entity
-                                                               //присваиваем примитиву общие свойства из системных переменных
-     PGDBObjLine(PInteractiveData)^.CoordInOCS.lEnd:=Point;//set the new point to the end of the line
-                                                           //устанавливаем новую точку конца линии
-     PGDBObjLine(PInteractiveData)^.FormatEntity(gdb.GetCurrentDWG^);//format entity
-                                                                     //"форматируем" примитив в соответствии с заданными параметрами
+
+  ln := PGDBObjLine(PInteractiveData);
+
+  // assign general properties from system variables to entity
+  //присваиваем примитиву общие свойства из системных переменных
+  GDBObjSetEntityCurrentProp(ln);
+
+  // set the new point to the end of the line
+  // устанавливаем новую точку конца линии
+  ln^.CoordInOCS.lEnd:=Point;
+  //format entity
+  //"форматируем" примитив в соответствии с заданными параметрами
+  ln^.FormatEntity(gdb.GetCurrentDWG^);
+
 end;
 
 {Procedure interactive changes third point of aligned dimensions}
 {Процедура интерактивного изменения третьей точки выровненного размера}
-procedure InteractiveADimManipulator(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
+procedure InteractiveADimManipulator( const PInteractiveData : GDBPointer;
+                                                       Point : GDBVertex;
+                                                       Click : GDBBoolean );
+var
+  ad : PGDBObjAlignedDimension;
 begin
-    GDBObjSetEntityCurrentProp(PGDBObjAlignedDimension(PInteractiveData));//assign general properties from system variables to entity
-                                                                         //присваиваем примитиву общие свойства из системных переменных
 
-    PGDBObjAlignedDimension(PInteractiveData)^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;//specify the dimension style
-                                                                                    //указываем стиль размеров
+  ad := PGDBObjAlignedDimension(PInteractiveData);
+  
+  // assign general properties from system variables to entity
+  // присваиваем примитиву общие свойства из системных переменных
+  GDBObjSetEntityCurrentProp(ad);
 
-    PGDBObjAlignedDimension(PInteractiveData)^.DimData.P10InWCS:=Point;//assign the obtained point to the appropriate location primitive
-                                                                       //присваиваем полученые точки в соответствующие места примитиву
+  //specify the dimension style
+  //указываем стиль размеров
+  ad^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
 
-    PGDBObjAlignedDimension(PInteractiveData)^.CalcDNVectors;//calculate P10InWCS - she must lie on normal drawn from P14InWCS, use the built-in to primitive mechanism
-                                                             //рассчитываем P10InWCS - она должна лежать на нормали проведенной из P14InWCS, используем для этого встроенный в примитив механизм
-    PGDBObjAlignedDimension(PInteractiveData)^.DimData.P10InWCS:=PGDBObjAlignedDimension(PInteractiveData)^.P10ChangeTo(Point);//calculate P10InWCS - she must lie on normal drawn from P14InWCS, use the built-in to primitive mechanism
-                                                                                                                               //рассчитываем P10InWCS - она должна лежать на нормали проведенной из P14InWCS, используем для этого встроенный в примитив механизм
+  //assign the obtained point to the appropriate location primitive
+  //присваиваем полученые точки в соответствующие места примитиву
+  ad^.DimData.P10InWCS := Point;
 
-    PGDBObjAlignedDimension(PInteractiveData)^.FormatEntity(gdb.GetCurrentDWG^);//format entity
-                                                                                //"форматируем" примитив в соответствии с заданными параметрами
+ { calculate P10InWCS - she must lie on normal drawn from P14InWCS,
+   use the built-in to primitive mechanism }
+ { рассчитываем P10InWCS - она должна лежать на нормали проведенной из P14InWCS,
+   используем для этого встроенный в примитив механизм }
+  ad^.CalcDNVectors;
+
+  { calculate P10InWCS - she must lie on normal drawn from P14InWCS,
+    use the built-in to primitive mechanism}
+  { рассчитываем P10InWCS - она должна лежать на нормали проведенной из
+    P14InWCS, используем для этого встроенный в примитив механизм }
+  ad^.DimData.P10InWCS := ad^.P10ChangeTo(Point);
+
+  //format entity
+  //"форматируем" примитив в соответствии с заданными параметрами
+  ad^.FormatEntity(gdb.GetCurrentDWG^);
+
 end;
+
 function isRDIMHorisontal(p1,p2,p3,nevp3:gdbvertex):integer;
 var
    minx,maxx,miny,maxy:GDBDouble;
 begin
-     minx:=min(p1.x,p2.x);
-     maxx:=max(p1.x,p2.x);
-     miny:=min(p1.y,p2.y);
-     maxy:=max(p1.y,p2.y);
-     if (minx<=p3.x)and(p3.x<=maxx)and(miny<=p3.y)and(p3.y<=maxy)then
-                                                                 begin
-                                                                      if (minx<=nevp3.x)and(nevp3.x<=maxx)and(miny<=nevp3.y)and(nevp3.y<=maxy)
-                                                                      then
-                                                                          result:=0
-                                                                      else
-                                                                          begin
-                                                                               if (minx>nevp3.x)or(nevp3.x>maxx)then
-                                                                                                                    result:=2
-                                                                                                                else
-                                                                                                                    result:=1;
+  minx:=min(p1.x,p2.x);
+  maxx:=max(p1.x,p2.x);
+  miny:=min(p1.y,p2.y);
+  maxy:=max(p1.y,p2.y);
+  if (minx<=p3.x)and (p3.x<=maxx) and (miny<=p3.y)and (p3.y<=maxy) then
+    begin
+     if (minx<=nevp3.x)and(nevp3.x<=maxx)and(miny<=nevp3.y)and(nevp3.y<=maxy)
+     then
+         result:=0
+     else
+         begin
+              if (minx>nevp3.x)or(nevp3.x>maxx)then
+                  result:=2
+                else
+                  result:=1;
 
-                                                                          end;
-                                                                 end
-                                                              else
-                                                                 result:=0;
+         end;
+    end
+    else
+     result:=0;
 end;
 
-procedure InteractiveRDimManipulator(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
+procedure InteractiveRDimManipulator( const PInteractiveData : GDBPointer;
+                                                       Point : GDBVertex;
+                                                       Click : GDBBoolean );
+var
+  rd : PGDBObjRotatedDimension;
 begin
-    GDBObjSetEntityCurrentProp(PGDBObjRotatedDimension(PInteractiveData));
-    PGDBObjRotatedDimension(PInteractiveData)^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
 
-    case isRDIMHorisontal(PGDBObjRotatedDimension(PInteractiveData)^.DimData.P13InWCS,
-                        PGDBObjRotatedDimension(PInteractiveData)^.DimData.P14InWCS,
-                        PGDBObjRotatedDimension(PInteractiveData)^.DimData.P10InWCS,
-                        Point) of
-                                 1:begin
-                                      PGDBObjRotatedDimension(PInteractiveData)^.vectorD:=XWCS;
-                                      PGDBObjRotatedDimension(PInteractiveData)^.vectorN:=YWCS;
-                                   end;
-                                 2:begin
-                                      PGDBObjRotatedDimension(PInteractiveData)^.vectorD:=YWCS;
-                                      PGDBObjRotatedDimension(PInteractiveData)^.vectorN:=XWCS;
-                                   end;
+  rd := PGDBObjRotatedDimension(PInteractiveData);
+
+  GDBObjSetEntityCurrentProp(rd);
+  rd^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
+
+    case isRDIMHorisontal( rd^.DimData.P13InWCS,
+                           rd^.DimData.P14InWCS,
+                           rd^.DimData.P10InWCS,
+                           Point )
+    of
+      1:begin
+           rd^.vectorD := XWCS;
+           rd^.vectorN := YWCS;
+        end;
+      2:begin
+           rd^.vectorD := YWCS;
+           rd^.vectorN := XWCS;
+        end;
     end;
 
-    PGDBObjRotatedDimension(PInteractiveData)^.DimData.P10InWCS:=Point;
-    PGDBObjRotatedDimension(PInteractiveData)^.DimData.P10InWCS:=PGDBObjRotatedDimension(PInteractiveData)^.P10ChangeTo(Point);
+    rd^.DimData.P10InWCS :=Point;
+    rd^.DimData.P10InWCS := rd^.P10ChangeTo(Point);
 
-    PGDBObjRotatedDimension(PInteractiveData)^.FormatEntity(gdb.GetCurrentDWG^);
+    rd^.FormatEntity(gdb.GetCurrentDWG^);
 end;
 
-{"command" function, they must all have a description of the function name(operands:TCommandOperands):TCommandResult;}
-{after the registration, it will be available from the interface}
-{"командная" функция, все они должны иметь описание function name(operands:TCommandOperands):TCommandResult;}
-{после соответствующей регистрации она будет доступна из интерфейса программ}
-function DrawAlignedDim_com(operands:TCommandOperands):TCommandResult;//this example function prompts the user to specify the 3 points and builds on the basis of them aligned dimension
-                                                                      //данная примерная функция просит пользователя указать 3 точки и строит на основе них выровненный размер
+{ "command" function, they must all have a description of the
+    function name(operands:TCommandOperands):TCommandResult;
+  after the registration, it will be available from the interface }
+{ "командная" функция, все они должны иметь описание
+    function name(operands:TCommandOperands):TCommandResult;
+  после соответствующей регистрации она будет доступна из интерфейса программ }
+
+{ this example function prompts the user to specify the 3 points and builds on
+  the basis of them aligned dimension}
+{ данная примерная функция просит пользователя указать 3 точки и строит на
+  основе них выровненный размер }
+function DrawAlignedDim_com(operands:TCommandOperands):TCommandResult;
+                                                                      
 var
-    pd:PGDBObjAlignedDimension;//указатель на создаваемый размерный примитив
-                               //pointer to the created dimensional entity
-    pline:PGDBObjLine;//указатель на "временную" линию
-                      //pointer to temporary line
-    p1,p2,p3:gdbvertex;//3 points to be obtained from the user
-                       //3 точки которые будут получены от пользователя
+    pd:PGDBObjAlignedDimension;// указатель на создаваемый размерный примитив
+                               // pointer to the created dimensional entity
+    pline:PGDBObjLine;         // указатель на "временную" линию
+                               // pointer to temporary line
+    p1,p2,p3:gdbvertex;        // 3 points to be obtained from the user
+                               // 3 точки которые будут получены от пользователя
 begin
-    if commandmanager.get3dpoint('Specify first point:',p1) then  //try to get from the user first point
-                                                                  //пытаемся получить от пользователя первую точку
+  // try to get from the user first point
+  // пытаемся получить от пользователя первую точку
+  if commandmanager.get3dpoint('Specify first point:',p1) then
     begin
-         pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));//Create a "temporary" line in the constructing entities list
-                                                                                                                       //Создаем "временную" линию в списке конструируемых примитивов
-         pline^.CoordInOCS.lBegin:=p1;//set the beginning of the line
-                                      //устанавливаем начало линии
-         InteractiveLineEndManipulator(pline,p1,false);//use the interactive function for final configuration line
-                                                       //используем интерактивную функцию для окончательной настройки линии
-      if commandmanager.Get3DPointInteractive('Specify second point:',p2,@InteractiveLineEndManipulator,pline) then  //trying to get the user to the second point, use the interactive function to draw a line
-                                                                                                                     //пытаемся получить от пользователя вторую точку, используем интерактивную функцию для черчения линии
+      // Create a "temporary" line in the constructing entities list
+      // Создаем "временную" линию в списке конструируемых примитивов
+      pline := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,gdb.GetCurrentROOT));
+
+      // set the beginning of the line
+      // устанавливаем начало линии
+      pline^.CoordInOCS.lBegin:=p1;
+
+      // use the interactive function for final configuration line
+      // используем интерактивную функцию для окончательной настройки линии
+      InteractiveLineEndManipulator(pline,p1,false);
+ 
+      //try to get the second point from the user, using the interactive function to draw a line
+      //пытаемся получить от пользователя вторую точку, используем интерактивную функцию для черчения линии
+      if commandmanager.Get3DPointInteractive('Specify second point:',p2,@InteractiveLineEndManipulator,pline) then  
       begin
-           gdb.GetCurrentDWG^.FreeConstructionObjects;//clear the constructed objects list (temporary line will be removed)
-                                                     //очищаем список конструируемых объектов (временная линия будет удалена)
-           pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBAlignedDimensionID,gdb.GetCurrentROOT));//create dimensional entity in the list of constructing
-                                                                                                                                  //создаем размерный примитив в списке конструируемых
-           pd^.DimData.P13InWCS:=p1;//assign the obtained point to the appropriate location primitive
-                                    //присваиваем полученые точки в соответствующие места примитиву
-           pd^.DimData.P14InWCS:=p2;//assign the obtained point to the appropriate location primitive
-                                    //присваиваем полученые точки в соответствующие места примитиву
-           InteractiveADimManipulator(pd,p2,false);//use the interactive function for final configuration entity
-                                                   //используем интерактивную функцию для окончательной настройки примитива
-        if commandmanager.Get3DPointInteractive('Specify third point:',p3,@InteractiveADimManipulator,pd) then //try to get from the user the third point, use the interactive function for drawing dimensional primitive
-                                                                                                               //пытаемся получить от пользователя третью точку, используем интерактивную функцию для черчения размерного примитива
+        // clear the constructed objects list (temporary line will be removed)
+        // очищаем список конструируемых объектов (временная линия будет удалена)
+        gdb.GetCurrentDWG^.FreeConstructionObjects;
+
+        //create dimensional entity in the list of constructing
+        //создаем размерный примитив в списке конструируемых
+        pd := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBAlignedDimensionID,gdb.GetCurrentROOT));
+
+        //assign the obtained point to the appropriate location primitive
+        //присваиваем полученые точки в соответствующие места примитиву
+        pd^.DimData.P13InWCS:=p1;
+
+        // assign the obtained point to the appropriate location primitive
+        // присваиваем полученые точки в соответствующие места примитиву
+        pd^.DimData.P14InWCS:=p2;
+
+        // use the interactive function for final configuration entity
+        //  используем интерактивную функцию для окончательной настройки примитива
+        InteractiveADimManipulator(pd,p2,false);
+        if commandmanager.Get3DPointInteractive( 'Specify third point:',
+                                                  p3,
+                                                  @InteractiveADimManipulator,
+                                                  pd )
+        //try to get from the user the third point, use the interactive function for drawing dimensional primitive
+        //пытаемся получить от пользователя третью точку, используем интерактивную функцию для черчения размерного примитива
+        then 
           begin //if all 3 points were obtained - build primitive in the list of primitives
                 //если все 3 точки получены - строим примитив в списке примитивов
                pd := CreateObjFree(GDBAlignedDimensionID);//allocate memory for the primitive
@@ -251,6 +337,7 @@ begin
     result:=cmd_ok;//All Ok
                    //команда завершилась, говорим что всё заебись
 end;
+
 function GetInteractiveLine(prompt1,prompt2:GDBString;var p1,p2:GDBVertex):GDBBoolean;
 var
     pline:PGDBObjLine;
@@ -280,7 +367,11 @@ begin
          pd^.DimData.P13InWCS:=p1;
          pd^.DimData.P14InWCS:=p2;
          InteractiveRDimManipulator(pd,p2,false);
-         if commandmanager.Get3DPointInteractive(rsSpecifyThirdPoint,p3,@InteractiveRDimManipulator,pd) then
+         if commandmanager.Get3DPointInteractive( rsSpecifyThirdPoint,
+                                                  p3,
+                                                  @InteractiveRDimManipulator,
+                                                  pd)
+         then
          begin
               vd:=pd^.vectorD;
               vn:=pd^.vectorN;
@@ -305,15 +396,23 @@ begin
     result:=cmd_ok;
 end;
 
-procedure InteractiveDDimManipulator(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
+procedure InteractiveDDimManipulator( const PInteractiveData:GDBPointer;
+                                                       Point:GDBVertex;
+                                                       Click:GDBBoolean);
+var
+    dd : pgdbObjDiametricDimension;
 begin
-    GDBObjSetEntityCurrentProp(PGDBObjDiametricDimension(PInteractiveData));
-    PGDBObjDiametricDimension(PInteractiveData)^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
 
-    PGDBObjDiametricDimension(PInteractiveData)^.DimData.P11InOCS:=Point;
-    PGDBObjDiametricDimension(PInteractiveData)^.DimData.P11InOCS:=PGDBObjRotatedDimension(PInteractiveData)^.P11ChangeTo(Point);
+  dd := PGDBObjDiametricDimension(PInteractiveData);
 
-    PGDBObjDiametricDimension(PInteractiveData)^.FormatEntity(gdb.GetCurrentDWG^);
+  GDBObjSetEntityCurrentProp(dd);
+  dd^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
+
+  dd^.DimData.P11InOCS:=Point;
+  dd^.DimData.P11InOCS:=dd^.P11ChangeTo(Point);
+
+  dd^.FormatEntity(gdb.GetCurrentDWG^);
+
 end;
 
 function DrawDiametricDim_com(operands:TCommandOperands):TCommandResult;
@@ -439,9 +538,11 @@ begin
     result:=cmd_ok;
 end;
 
-procedure InteractiveArcManipulator(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
+procedure InteractiveArcManipulator( const PInteractiveData : GDBPointer;
+                                                      Point : GDBVertex;
+                                                      Click : GDBBoolean);
 var
-    PointData:tarcrtmodify;
+    PointData:TArcrtModify;
     ad:TArcData;
 begin
      PointData.p1.x:=PT3PointPentity(PInteractiveData)^.p1.x;
@@ -612,10 +713,12 @@ function matchprop_com(operands:TCommandOperands):TCommandResult;
 var
     ps,pd:PGDBObjCircle;
 begin
-    if commandmanager.getentity('Select source enyity:',ps) then
+    if commandmanager.getentity('Select source entity: ',ps) then
     begin
-         SetGDBObjInspProc(SysUnit^.TypeName2PTD('TMatchPropParam'),@MatchPropParam,gdb.GetCurrentDWG);
-         while commandmanager.getentity('Select destination enyity:',pd) do
+         SetGDBObjInspProc( SysUnit^.TypeName2PTD( 'TMatchPropParam'),
+                            @MatchPropParam,
+                            gdb.GetCurrentDWG );
+         while commandmanager.getentity('Select destination entity:',pd) do
          begin
               if MatchPropParam.ProcessLayer then
                  pd^.vp.Layer:=ps^.vp.Layer;
@@ -707,17 +810,17 @@ var
    vdpobj,vdpvertex:vardesk;
    pc:pointer;
 begin
-    vdpobj:=commandmanager.PopValue;
-    vdpvertex:=commandmanager.PopValue;
+  vdpobj:=commandmanager.PopValue;
+  vdpvertex:=commandmanager.PopValue;
     if commandmanager.get3dpoint('Select point:',p1) then
     begin
-         if commandmanager.get3dpoint('Select point:',p2) then
-          begin
-               pc:=PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(pgdbdouble(ppointer(vdpvertex.data.Instance)^)^);
-               pgdblength(ppointer(vdpvertex.data.Instance)^)^:=geometry.Vertexlength(p1,p2);
-               PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
-               PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
-          end;
+      if commandmanager.get3dpoint('Select point:',p2) then
+      begin
+        pc:=PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(pgdbdouble(ppointer(vdpvertex.data.Instance)^)^);
+        pgdblength(ppointer(vdpvertex.data.Instance)^)^:=geometry.Vertexlength(p1,p2);
+        PTGDBDoubleChangeCommand(pc)^.PEntity:=ppointer(vdpobj.data.Instance)^;
+        PTGDBDoubleChangeCommand(pc)^.ComitFromObj;
+      end;
     end;
     result:=cmd_ok;
 end;
@@ -743,21 +846,24 @@ begin
 end;
 
 initialization
-     {$IFDEF DEBUGINITSECTION}LogOut('gdbcommandsexample.initialization');{$ENDIF}//write to log for the control initialization sequence
-                                                                                  //пишем в лог для отслеживания последовательности инициализации модулей
-                                                                                  //раньше с последовательностью были проблемы, теперь их нет
-                                                                                  //и писать собственно не обязятельно, но я по привычке пишу
+{ write to log for the control initialization sequence }
+{ пишем в лог для отслеживания последовательности инициализации модулей
+  раньше с последовательностью были проблемы, теперь их нет и писать
+  собственно не обязятельно, но я по привычке пишу }
+{$IFDEF DEBUGINITSECTION}LogOut('gdbcommandsexample.initialization');{$ENDIF}
 
-     {тут регистрация функций в интерфейсе зкада}
-     CreateCommandFastObjectPlugin(@DrawAlignedDim_com,'DimAligned',CADWG,0);//function DrawAlignedDim_com will be available by the name of DimAligned,
-                                                                             //to run requires open drawing
-                                                                             //ie when typing in command line "DimAligned" executed DrawAlignedDim_com
-                                                                             //функция DrawAlignedDim_com будет доступна по имени DimAligned,
-                                                                             //для запуска требует наличия открытого чертежа
-                                                                             //т.е. при наборе в комстроке DimAligned выполнится DrawAlignedDim_com
-     CreateCommandFastObjectPlugin(@DrawRotatedDim_com,'DimLinear',CADWG,0);
+{ тут регистрация функций в интерфейсе зкада}
+
+{ function DrawAlignedDim_com will be available by the name of DimAligned,
+  to run requires open drawing  ie when typing in command line "DimAligned"
+  executed DrawAlignedDim_com  }
+{ функция DrawAlignedDim_com будет доступна по имени DimAligned,
+  для запуска требует наличия открытого чертежа
+  т.е. при наборе в комстроке DimAligned выполнится DrawAlignedDim_com }
+     CreateCommandFastObjectPlugin(@DrawRotatedDim_com,  'DimLinear',  CADWG,0);
+     CreateCommandFastObjectPlugin(@DrawAlignedDim_com,  'DimAligned', CADWG,0);
      CreateCommandFastObjectPlugin(@DrawDiametricDim_com,'DimDiameter',CADWG,0);
-     CreateCommandFastObjectPlugin(@DrawRadialDim_com,'DimRadius',CADWG,0);
+     CreateCommandFastObjectPlugin(@DrawRadialDim_com,   'DimRadius',  CADWG,0);
 
      MatchPropParam.ProcessLayer:=true;
      MatchPropParam.ProcessLineType:=true;
@@ -767,15 +873,16 @@ initialization
 
      CreateCommandFastObjectPlugin(@matchprop_com,'MatchProp',CADWG,0);
 
+
      CreateCommandFastObjectPlugin(@DrawArc_com,'Arc',CADWG,0);
      CreateCommandFastObjectPlugin(@DrawCircle_com,'Circle',CADWG,0);
 
-     CreateCommandFastObjectPlugin(@test_com,'ts',CADWG,0);
-     CreateCommandFastObjectPlugin(@GetPoint_com,'GetPoint',CADWG,0);
-     CreateCommandFastObjectPlugin(@GetVertexX_com,'GetVertexX',CADWG,0);
-     CreateCommandFastObjectPlugin(@GetVertexY_com,'GetVertexY',CADWG,0);
-     CreateCommandFastObjectPlugin(@GetVertexZ_com,'GetVertexZ',CADWG,0);
-     CreateCommandFastObjectPlugin(@GetLength_com,'GetLength',CADWG,0);
+     CreateCommandFastObjectPlugin(@test_com,       'ts',         CADWG,0);
+     CreateCommandFastObjectPlugin(@GetPoint_com,   'GetPoint',   CADWG,0);
+     CreateCommandFastObjectPlugin(@GetVertexX_com, 'GetVertexX', CADWG,0);
+     CreateCommandFastObjectPlugin(@GetVertexY_com, 'GetVertexY', CADWG,0);
+     CreateCommandFastObjectPlugin(@GetVertexZ_com, 'GetVertexZ', CADWG,0);
+     CreateCommandFastObjectPlugin(@GetLength_com,  'GetLength',  CADWG,0);
      CreateCommandFastObjectPlugin(@TestInsert1_com,'TestInsert1',CADWG,0);
      CreateCommandFastObjectPlugin(@TestInsert2_com,'TestInsert2',CADWG,0);
 

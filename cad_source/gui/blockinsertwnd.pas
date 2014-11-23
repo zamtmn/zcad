@@ -19,6 +19,7 @@ type
     CheckBox2: TCheckBox;
     ComboBox1: TComboBox;
     Edit1: TEdit;
+    Edit10: TEdit;
     Edit2: TEdit;
     Edit3: TEdit;
     Edit4: TEdit;
@@ -33,6 +34,7 @@ type
     GroupBox4: TGroupBox;
     Label1: TLabel;
     Label10: TLabel;
+    Label11: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;

@@ -122,10 +122,9 @@ procedure InteractiveLineEndManipulator( const PInteractiveData : GDBPointer {po
                                                           Point : GDBVertex  {new end coord};
                                                           Click : GDBBoolean {true if lmb presseed});
 var
-  ln : PGDBObjLine;
-begin
+  ln : PGDBObjLine absolute PInteractiveData;
 
-  ln := PGDBObjLine(PInteractiveData);
+begin
 
   // assign general properties from system variables to entity
   //присваиваем примитиву общие свойства из системных переменных
@@ -146,39 +145,39 @@ procedure InteractiveADimManipulator( const PInteractiveData : GDBPointer;
                                                        Point : GDBVertex;
                                                        Click : GDBBoolean );
 var
-  ad : PGDBObjAlignedDimension;
+  ad : PGDBObjAlignedDimension absolute PInteractiveData;
 begin
 
-  ad := PGDBObjAlignedDimension(PInteractiveData);
-  
   // assign general properties from system variables to entity
   // присваиваем примитиву общие свойства из системных переменных
   GDBObjSetEntityCurrentProp(ad);
+  with ad^ do
+   begin
+     //specify the dimension style
+     //указываем стиль размеров
+     PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
 
-  //specify the dimension style
-  //указываем стиль размеров
-  ad^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
+     //assign the obtained point to the appropriate location primitive
+     //присваиваем полученые точки в соответствующие места примитиву
+     DimData.P10InWCS := Point;
 
-  //assign the obtained point to the appropriate location primitive
-  //присваиваем полученые точки в соответствующие места примитиву
-  ad^.DimData.P10InWCS := Point;
+     { calculate P10InWCS - she must lie on normal drawn from P14InWCS,
+       use the built-in to primitive mechanism }
+     { рассчитываем P10InWCS - она должна лежать на нормали проведенной
+       из P14InWCS, используем для этого встроенный в примитив механизм }
+     CalcDNVectors;
 
- { calculate P10InWCS - she must lie on normal drawn from P14InWCS,
-   use the built-in to primitive mechanism }
- { рассчитываем P10InWCS - она должна лежать на нормали проведенной из P14InWCS,
-   используем для этого встроенный в примитив механизм }
-  ad^.CalcDNVectors;
+     { calculate P10InWCS - she must lie on normal drawn from P14InWCS,
+       use the built-in to primitive mechanism}
+     { рассчитываем P10InWCS - она должна лежать на нормали проведенной из
+       P14InWCS, используем для этого встроенный в примитив механизм }
+     DimData.P10InWCS := P10ChangeTo(Point);
 
-  { calculate P10InWCS - she must lie on normal drawn from P14InWCS,
-    use the built-in to primitive mechanism}
-  { рассчитываем P10InWCS - она должна лежать на нормали проведенной из
-    P14InWCS, используем для этого встроенный в примитив механизм }
-  ad^.DimData.P10InWCS := ad^.P10ChangeTo(Point);
+     //format entity
+     //"форматируем" примитив в соответствии с заданными параметрами
+     FormatEntity(gdb.GetCurrentDWG^);
 
-  //format entity
-  //"форматируем" примитив в соответствии с заданными параметрами
-  ad^.FormatEntity(gdb.GetCurrentDWG^);
-
+   end;
 end;
 
 function isRDIMHorisontal(p1,p2,p3,nevp3:gdbvertex):integer;
@@ -206,38 +205,36 @@ begin
     else
      result:=0;
 end;
-
+{Процедура}
 procedure InteractiveRDimManipulator( const PInteractiveData : GDBPointer;
                                                        Point : GDBVertex;
                                                        Click : GDBBoolean );
 var
-  rd : PGDBObjRotatedDimension;
+  rd : PGDBObjRotatedDimension absolute PInteractiveData;
 begin
 
-  rd := PGDBObjRotatedDimension(PInteractiveData);
-
   GDBObjSetEntityCurrentProp(rd);
-  rd^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
-
-    case isRDIMHorisontal( rd^.DimData.P13InWCS,
-                           rd^.DimData.P14InWCS,
-                           rd^.DimData.P10InWCS,
+  with rd^ do
+   begin
+    PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
+    case isRDIMHorisontal( DimData.P13InWCS,
+                           DimData.P14InWCS,
+                           DimData.P10InWCS,
                            Point )
     of
       1:begin
-           rd^.vectorD := XWCS;
-           rd^.vectorN := YWCS;
+           vectorD := XWCS;
+           vectorN := YWCS;
         end;
       2:begin
-           rd^.vectorD := YWCS;
-           rd^.vectorN := XWCS;
+           vectorD := YWCS;
+           vectorN := XWCS;
         end;
     end;
-
-    rd^.DimData.P10InWCS :=Point;
-    rd^.DimData.P10InWCS := rd^.P10ChangeTo(Point);
-
-    rd^.FormatEntity(gdb.GetCurrentDWG^);
+    DimData.P10InWCS :=Point;
+    DimData.P10InWCS := P10ChangeTo(Point);
+    FormatEntity(gdb.GetCurrentDWG^);
+   end;
 end;
 
 { "command" function, they must all have a description of the
@@ -400,19 +397,17 @@ procedure InteractiveDDimManipulator( const PInteractiveData:GDBPointer;
                                                        Point:GDBVertex;
                                                        Click:GDBBoolean);
 var
-    dd : pgdbObjDiametricDimension;
+    dd : pgdbObjDiametricDimension absolute PInteractiveData;
 begin
 
-  dd := PGDBObjDiametricDimension(PInteractiveData);
-
   GDBObjSetEntityCurrentProp(dd);
-  dd^.PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
-
-  dd^.DimData.P11InOCS:=Point;
-  dd^.DimData.P11InOCS:=dd^.P11ChangeTo(Point);
-
-  dd^.FormatEntity(gdb.GetCurrentDWG^);
-
+  with dd^ do
+   begin
+    PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
+    DimData.P11InOCS:=Point;
+    DimData.P11InOCS:=P11ChangeTo(Point);
+    FormatEntity(gdb.GetCurrentDWG^);
+   end;
 end;
 
 function DrawDiametricDim_com(operands:TCommandOperands):TCommandResult;
@@ -600,7 +595,10 @@ begin
     end;
     result:=cmd_ok;
 end;
-procedure InteractiveSmartCircleManipulator(const PInteractiveData:GDBPointer;Point:GDBVertex;Click:GDBBoolean);
+
+procedure InteractiveSmartCircleManipulator( const PInteractiveData:GDBPointer;
+                                             Point:GDBVertex;
+                                             Click:GDBBoolean );
 var
     PointData:tarcrtmodify;
     ad:TArcData;
@@ -671,7 +669,10 @@ begin
          inc(pe.npoint);
          pe.pentity := GDBPointer(gdb.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,gdb.GetCurrentROOT));
          InteractiveSmartCircleManipulator(@pe,pe.p1,false);
-      if commandmanager.Get3DPointInteractive('Specify second point:',pe.p2,@InteractiveSmartCircleManipulator,@pe) then
+      if commandmanager.Get3DPointInteractive( 'Specify second point:',
+                                               pe.p2,
+                                               @InteractiveSmartCircleManipulator,
+                                               @pe) then
       begin
            if pe.cdm=TCDM_3P then
            begin

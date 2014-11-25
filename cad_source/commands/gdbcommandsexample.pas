@@ -829,10 +829,15 @@ function TestInsert1_com(operands:TCommandOperands):TCommandResult;
 var
    mr:integer;
 begin
-    if not assigned(BlockInsertFRM)then
-    Application.CreateForm(TBlockInsertFRM, BlockInsertFRM);
-    mr:=BlockInsertFRM.showmodal;
-    freeandnil(BlockInsertFRM);
+    if not assigned(BlockInsertFRM)then                              //если форма несоздана -
+      Application.CreateForm(TBlockInsertFRM, BlockInsertFRM);       //создаем ее
+
+    mr:=BlockInsertFRM.run(@gdb.GetCurrentDWG^.BlockDefArray,'_dot');//вызов гуя с передачей адреса таблицы описаний
+                                                                     //блоков, и делаем вид что в предидущем сеансе команды
+                                                                     //мы вставляли блок _dot, гуй его болжен сам выбрать в
+                                                                     //комбобоксе, этот параметр нужно сохранять в чертеже
+
+    freeandnil(BlockInsertFRM);                                      //убиваем форму
     result:=cmd_ok;
 end;
 function TestInsert2_com(operands:TCommandOperands):TCommandResult;

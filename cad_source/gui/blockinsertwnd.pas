@@ -25,7 +25,7 @@ type
     CheckBox2: TCheckBox;
     ComboBox1: TComboBox;
     Edit1: TEdit;
-    Edit10: TEdit;
+    Edit10: TFileNameEdit;
     Edit2: TEdit;
     Edit3: TEdit;
     Edit4: TEdit;

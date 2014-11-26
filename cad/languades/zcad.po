@@ -1581,25 +1581,25 @@ msgstr ""
 #: zcadexternal.hint_panel~linewcombobox
 #, fuzzy
 msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Line weight selection"
-msgstr ""
-
-#: zcadexternal.hint_panel~linewcombobox
-#, fuzzy
-msgctxt "zcadexternal.hint_panel~linewcombobox"
 msgid "Color selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~linewcombobox
 #, fuzzy
 msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Text style selection"
+msgid "Dim style selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~linewcombobox
 #, fuzzy
 msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Dim style selection"
+msgid "Line weight selection"
+msgstr ""
+
+#: zcadexternal.hint_panel~linewcombobox
+#, fuzzy
+msgctxt "zcadexternal.hint_panel~linewcombobox"
+msgid "Text style selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~ops_sensor_mark
@@ -1748,6 +1748,16 @@ msgstr ""
 #: zcadexternal.menucommand~setobjinsp(vars)
 msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
 msgid "Options"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgctxt "zcadexternal.menucommand~testinsert1"
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgctxt "zcadexternal.menucommand~testinsert1"
+msgid "TestInsert1"
 msgstr ""
 
 #: zcadexternal.menucommand~varreport(nmo_name)
@@ -2536,6 +2546,26 @@ msgstr ""
 
 #: zcadexternal.tlayercontrol~layername
 msgid "Layer name"
+msgstr ""
+
+#: zcadexternal.tmatchpropparam~processcolor
+msgid "Process color"
+msgstr ""
+
+#: zcadexternal.tmatchpropparam~processlayer
+msgid "Process layer"
+msgstr ""
+
+#: zcadexternal.tmatchpropparam~processlinetype
+msgid "Process line type"
+msgstr ""
+
+#: zcadexternal.tmatchpropparam~processlinetypescale
+msgid "Process line type scale"
+msgstr ""
+
+#: zcadexternal.tmatchpropparam~processlineveight
+msgid "Process line weight"
 msgstr ""
 
 #: zcadexternal.tmirrorparam~sourceents

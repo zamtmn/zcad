@@ -218,7 +218,7 @@ msgstr ""
 
 #: zcadexternal.acn_arc~caption
 msgid "Draw arc"
-msgstr ""
+msgstr "Чертить дугу"
 
 #: zcadexternal.acn_bedit~caption
 msgctxt "zcadexternal.acn_bedit~caption"
@@ -507,17 +507,9 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
-#: zcadexternal.acn_fakecopyclipbase~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
-msgstr ""
-
-#: zcadexternal.acn_fakepaste~caption
-msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -843,10 +835,6 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
-#: zcadexternal.acn_processkz~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_projecttree~caption
 msgctxt "zcadexternal.acn_projecttree~caption"
 msgid "Project tree"
@@ -876,10 +864,6 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
-
-#: zcadexternal.acn_remautocables~caption
-msgid ""
-msgstr ""
 
 #: zcadexternal.acn_rotate~caption
 msgctxt "zcadexternal.acn_rotate~caption"
@@ -1392,8 +1376,6 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#, fuzzy
-#| msgid "Rotate"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Block params"
 msgstr "Параметры блока"
@@ -1623,7 +1605,7 @@ msgstr ""
 #: zcadexternal.hint_panel~dsgn_selsamename
 msgctxt "zcadexternal.hint_panel~dsgn_selsamename"
 msgid "Auto select devices with same name"
-msgstr ""
+msgstr "Авто выбор устройств с совпадающим именем"
 
 #: zcadexternal.hint_panel~dwg_additionalgrips
 msgctxt "zcadexternal.hint_panel~dwg_additionalgrips"
@@ -1680,11 +1662,9 @@ msgid "Layer selection"
 msgstr "Выбор слоя"
 
 #: zcadexternal.hint_panel~linewcombobox
-#, fuzzy
-#| msgid "Text style selection"
 msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Dim style selection"
-msgstr "Выбор стиля размеров"
+msgid "Text style selection"
+msgstr "Выбор стиля текста"
 
 #: zcadexternal.hint_panel~ops_sensor_mark
 msgctxt "zcadexternal.hint_panel~ops_sensor_mark"
@@ -1834,6 +1814,10 @@ msgstr "Стили (в инспекторе)"
 msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
 msgid "Options"
 msgstr "Параметры"
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
 
 #: zcadexternal.menucommand~varreport(nmo_name)
 msgid "Names of entities"
@@ -2328,7 +2312,7 @@ msgstr "Текущий цвет"
 
 #: zcadexternal.tdwg~dwg_cdimstyle
 msgid "Dim style"
-msgstr ""
+msgstr "Стиль размеров"
 
 #: zcadexternal.tdwg~dwg_clayer
 msgctxt "zcadexternal.tdwg~dwg_clayer"
@@ -2350,7 +2334,7 @@ msgstr "Масштаб типов линий чертежа"
 
 #: zcadexternal.tdwg~dwg_ctstyle
 msgid "Text style"
-msgstr ""
+msgstr "Стиль текста"
 
 #: zcadexternal.tdwg~dwg_drawgrid
 #| msgid "Show grid"
@@ -2577,7 +2561,7 @@ msgstr "Позиция сакладок чертежей"
 
 #: zcadexternal.tinterface~intf_objinsp_properties
 msgid "Object inspector properties"
-msgstr ""
+msgstr "Параметры инспектора объектов"
 
 #: zcadexternal.tinterface~intf_showdwgtabcloseburron
 msgid "Show drawing tab close button"
@@ -2614,6 +2598,26 @@ msgstr "Включено"
 #: zcadexternal.tlayercontrol~layername
 msgid "Layer name"
 msgstr "Слой"
+
+#: zcadexternal.tmatchpropparam~processcolor
+msgid "Process color"
+msgstr ""
+
+#: zcadexternal.tmatchpropparam~processlayer
+msgid "Process layer"
+msgstr ""
+
+#: zcadexternal.tmatchpropparam~processlinetype
+msgid "Process line type"
+msgstr ""
+
+#: zcadexternal.tmatchpropparam~processlinetypescale
+msgid "Process line type scale"
+msgstr ""
+
+#: zcadexternal.tmatchpropparam~processlineveight
+msgid "Process line weight"
+msgstr ""
 
 #: zcadexternal.tmirrorparam~sourceents
 msgid "Source entities"
@@ -2674,10 +2678,6 @@ msgstr "Нумеруесая переменная"
 msgid "Save start number"
 msgstr "Сохранять старовое значение"
 
-#: zcadexternal.tnumberingparams~sortmode
-msgid ""
-msgstr ""
-
 #: zcadexternal.tnumberingparams~startnumber
 msgid "Start"
 msgstr "Начальное значение"
@@ -2685,31 +2685,31 @@ msgstr "Начальное значение"
 #: zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw
 msgctxt "zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw"
 msgid "Old style"
-msgstr ""
+msgstr "Старый стиль отображения"
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_rowheight
 msgid "Row height"
-msgstr ""
+msgstr "Высота строки"
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_showfasteditors
 msgid "Show fast editors"
-msgstr ""
+msgstr "Показывать кнопки редакторов"
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_showheaders
 msgid "Show headers"
-msgstr ""
+msgstr "Показывать заголовки"
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_showonlyhotfasteditors
 msgid "Show only hot fast editors"
-msgstr ""
+msgstr "Показывать кнопки редакторов при наведении"
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_showseparator
 msgid "Show separator"
-msgstr ""
+msgstr "показывать разделитель"
 
 #: zcadexternal.tobjinspinterface~intf_objinsp_whitebackground
 msgid "White background"
-msgstr ""
+msgstr "Белый фон"
 
 #: zcadexternal.tobjlinkrecordmode~obt
 msgctxt "zcadexternal.tobjlinkrecordmode~obt"
@@ -3509,8 +3509,10 @@ msgid "Position"
 msgstr "Позиция"
 
 #: zcadstrconsts.fontnotfoundandreplace
-msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
-msgstr "Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
+msgid ""
+"For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+msgstr ""
+"Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
 
 #: zcadstrconsts.rsaboutwndcaption
 msgctxt "zcadstrconsts.rsaboutwndcaption"
@@ -3755,7 +3757,8 @@ msgid "Expression %s return %s"
 msgstr "Выражение  %s возвращает %s"
 
 #: zcadstrconsts.rsfardeffilenotfounf
-msgid "File definition of the variables can not be found for the device \"%s\";"
+msgid ""
+"File definition of the variables can not be found for the device \"%s\";"
 msgstr "Файл определения переменных не найден для устройства \"%s\";"
 
 #: zcadstrconsts.rsfileformat
@@ -3793,10 +3796,6 @@ msgid "Error loading layout from file"
 msgstr "Ошибка загрузки файла разбивки окон"
 
 #: zcadstrconsts.rslinetypedesk
-#, fuzzy
-#| msgid ""
-#| ";;Pattern length %f\n"
-#| "%s\n"
 msgid ""
 ";;Pattern length %f\n"
 "%s\n"
@@ -3860,7 +3859,7 @@ msgstr "Дерево проекта"
 
 #: zcadstrconsts.rsproperty
 msgid "Property"
-msgstr ""
+msgstr "Свойство"
 
 #: zcadstrconsts.rsquitcaption
 msgctxt "zcadstrconsts.rsquitcaption"
@@ -3880,15 +3879,20 @@ msgstr "Повторное создание %s!"
 msgid ""
 "-UNDO\\REDO - yet it is better not to use;\n"
 "\n"
-"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" "
+"and \"RebuildTree\" in command line;\n"
 "\n"
-"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
+"-To disable the display of this window comment out line \"About\" in the "
+"file \"components\\autorun.cmd\". Encoding of all configuration files - "
+"UTF8;\n"
 msgstr ""
 "-UNDO\\REDO - пока лучше не пользоваться;\n"
 "\n"
-"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
+"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" "
+"и \"RebuildTree\" в командной строке;\n"
 "\n"
-"-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
+"-Для отключения показа этого окна закоментируйте строку \"About\" в файле "
+"\"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
 
 #: zcadstrconsts.rsreservefontnotfound
 msgid "Reserve font is not found in the resources"
@@ -4005,7 +4009,7 @@ msgstr "Без имени"
 
 #: zcadstrconsts.rsvalue
 msgid "Value"
-msgstr ""
+msgstr "Значение"
 
 #: zcadstrconsts.rsvinfotext
 msgid "Unstable version"
@@ -4018,4 +4022,3 @@ msgstr "Внимание!"
 #: zcadstrconsts.rszcadstarted
 msgid "ZCAD v%s started"
 msgstr "ZCAD v%s запущен"
-

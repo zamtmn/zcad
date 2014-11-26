@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, EditBtn, ButtonPanel, FileCtrl,
+  StdCtrls, EditBtn, ButtonPanel,
 
   UGDBObjBlockdefArray, //описание таблицы блоков
   GDBBlockDef,          //описания блоков
@@ -19,10 +19,12 @@ type
   { TBlockInsertFRM }
 
   TBlockInsertFRM = class(TForm)
-    Button1: TButton;
     ButtonPanel1: TButtonPanel;
     CheckBox1: TCheckBox;
     CheckBox2: TCheckBox;
+    CheckBox3: TCheckBox;
+    CheckBox4: TCheckBox;
+    CheckBox5: TCheckBox;
     ComboBox1: TComboBox;
     Edit1: TEdit;
     Edit10: TFileNameEdit;
@@ -49,6 +51,11 @@ type
     Label7: TLabel;
     Label8: TLabel;
     Label9: TLabel;
+    procedure CheckBox2Change(Sender: TObject);
+    procedure CheckBox3Change(Sender: TObject);
+    procedure CheckBox4Change(Sender: TObject);
+    procedure CheckBox5Change(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { private declarations }
   public
@@ -62,6 +69,76 @@ var
 implementation
 {$R *.lfm}
 
+procedure TBlockInsertFRM.FormCreate(Sender: TObject);
+begin
+
+end;
+
+procedure TBlockInsertFRM.CheckBox4Change(Sender: TObject);
+begin
+  if Checkbox4.Checked = True then
+     begin
+   Edit1.Enabled := False;
+   Edit2.Enabled := False;
+   Edit3.Enabled := False;
+  end
+  else
+  begin
+   Edit1.Enabled := True;
+   Edit2.Enabled := True;
+   Edit3.Enabled := True;
+  end;
+
+end;
+
+procedure TBlockInsertFRM.CheckBox5Change(Sender: TObject);
+begin
+   if Checkbox3.Checked = False then
+     begin
+   Edit4.Enabled := True;
+   Edit5.Enabled := False;
+   Edit6.Enabled := False;
+   end;
+ end;
+
+procedure TBlockInsertFRM.CheckBox2Change(Sender: TObject);
+begin
+  if CheckBox2.Checked = True then
+    begin
+   Edit7.Enabled := False;
+  end
+  else
+  begin
+   Edit7.Enabled := True;
+  end;
+
+end;
+
+procedure TBlockInsertFRM.CheckBox3Change(Sender: TObject);
+begin
+  if Checkbox3.Checked = True then
+    begin
+      Edit4.Enabled := False;
+      Edit5.Enabled := False;
+      Edit6.Enabled := False;
+    end
+    else
+    if Checkbox5.Checked = True then
+     begin
+       Edit4.Enabled := True;
+       Edit5.Enabled := False;
+       Edit6.Enabled := False;
+       Edit5.Text:= Edit4.Text;
+       Edit6.Text:= Edit4.Text;
+    end
+    else
+    begin
+      Edit4.Enabled := True;
+      Edit5.Enabled := True;
+      Edit6.Enabled := True;
+  end;
+end;
+
 function TBlockInsertFRM.Run(
                              PBlockDefs:PGDBObjBlockdefArray; //указатель на таблицу описаний блоков
                              LastInsertedBlockName:GDBString  //имя последнего (например в предидущем сеансе команды) вставленного блока, чтобы его выбрать "по умолчанию"
@@ -72,13 +149,14 @@ var
   ir:itrec;                       //"счетчтк" для перебора в таблице
   LastInsertedBlockIndex:integer; //индекс выделенного элемента в комбике
 begin
+  //mess
   ComboBox1.Clear;//чистим на всякий пожарный
 
   LastInsertedBlockIndex:=-1;// заранее предполагаем что последнего вставленного блока мы ненайдем
   LastInsertedBlockName:=uppercase(LastInsertedBlockName); //искать будем case`независимо
 
   begin
-    p:=PBlockDefs^.beginiterate(ir);//начинаем перебирать описания в таблице
+    p:=PBlockDefs^.BeginIterate(ir);//начинаем перебирать описания в таблице
     if p<>nil then
     repeat
          ComboBox1.AddItem(Tria_AnsiToUtf8(p^.Name),tobject(p));//загоняем имя и адрес найденного описания в комбик
@@ -93,7 +171,7 @@ begin
                                                                 //к возможно найденному ранее вставленному блоку
   ComboBox1.Sorted:=true;                                       //сортируем
 
-  result:=showmodal;
+  result:=ShowModal;
 end;
 
 initialization

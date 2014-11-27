@@ -50,11 +50,65 @@ procedure GDBObjSetLineProp(var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;
 procedure GDBObjLineInit(own:PGDBObjGenericSubEntry;var pobjline: PGDBObjLine;layeraddres:PGDBLayerProp;LW: GDBSmallint; p1, p2: GDBvertex); export;
 procedure GDBObjCircleInit(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble); export;
 procedure GDBObjSetCircleProp(var pobjcircle: PGDBObjCircle;layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;color:GDBInteger;LW: GDBSmallint; p: GDBvertex; RR: GDBDouble); export;
+
+function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:GDBString;p_insert:GDBVertex;
+                        scale:GDBVertex;rotate:GDBDouble;needundo:GDBBoolean=false
+                        ):PGDBObjBlockInsert;
 var a: GDBObjLine;
   p: gdbvertex;
 implementation
 uses
     log;
+function GDBInsertBlock(own:PGDBObjGenericSubEntry;//владелец
+                        BlockName:GDBString;       //имя блока
+                        p_insert:GDBVertex;        //точка вставки
+                        scale:GDBVertex;           //масштаб
+                        rotate:GDBDouble;          //поворот
+                        needundo:GDBBoolean=false  //завернуть в ундо
+                        ):PGDBObjBlockInsert;
+var
+  tb:PGDBObjBlockInsert;
+  domethod,undomethod:tmethod;
+begin
+  result := GDBPointer(own.ObjArray.CreateObj(GDBBlockInsertID));
+  result.init(gdb.GetCurrentROOT,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer,0);
+  result^.Name:=BlockName;
+  result^.vp.ID:=GDBBlockInsertID;
+  result^.Local.p_insert:=p_insert;
+  result^.scale:=scale;
+  result^.CalcObjMatrix;
+  result^.setrot(rotate);
+  result^.rotate:=rotate;
+  tb:=pointer(result^.FromDXFPostProcessBeforeAdd(nil,gdb.GetCurrentDWG^));
+  if tb<>nil then begin
+                       tb^.bp:=result^.bp;
+                       result^.done;
+                       gdbfreemem(pointer(result));
+                       result:=pointer(tb);
+  end;
+  if needundo then
+  begin
+      SetObjCreateManipulator(domethod,undomethod);
+      with ptdrawing(gdb.GetCurrentDWG)^.UndoStack.PushMultiObjectCreateCommand(tmethod(domethod),tmethod(undomethod),1)^ do
+      begin
+           AddObject(result);
+           comit;
+      end;
+  end
+  else
+     own.ObjArray.add(addr(result));
+  result^.CalcObjMatrix;
+  result^.BuildGeometry(gdb.GetCurrentDWG^);
+  result^.BuildVarGeometry(gdb.GetCurrentDWG^);
+  result^.FormatEntity(gdb.GetCurrentDWG^);
+  if needundo then
+  begin
+  gdb.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeTreeBB(result);
+  result^.Visible:=0;
+  result^.RenderFeedback(gdb.GetCurrentDWG^.pcamera^.POSCOUNT,gdb.GetCurrentDWG^.pcamera^,gdb.GetCurrentDWG^.myGluProject2);
+  end;
+end;
+
 function GetSelOjbj:TSelObjDesk;
 var
     pv:pGDBObjEntity;

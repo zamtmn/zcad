@@ -39,6 +39,8 @@ uses
 
   Forms, blockinsertwnd, arrayinsertwnd,
 
+  GDBBlockInsert,      //unit describes blockinsert entity
+                       //модуль описывающий примитив вставка блока
   gdbLine,             //unit describes line entity
                        //модуль описывающий примитив линия
   gdbAlignedDimension, //unit describes aligned dimensional entity
@@ -82,6 +84,9 @@ const
      rsSpecifyFirstPoint='Specify first point:';
      rsSpecifySecondPoint='Specify second point:';
      rsSpecifyThirdPoint='Specify third point:';
+     rsSpecifyInsertPoint='Specify insert point:';
+     rsSpecifyScale='Specify scale:';
+     rsSpecifyRotate='Specify rotate:';
 type
 {EXPORT+}
     PTMatchPropParam=^TMatchPropParam;
@@ -106,7 +111,12 @@ type
                                    npoint:GDBInteger;
                                    pentity:PGDBObjEntity;
                              end;
-
+    PTEntityModifyData_Point_Scale_Rotation=^TEntityModifyData_Point_Scale_Rotation;
+    TEntityModifyData_Point_Scale_Rotation=record
+                                                 PInsert,Scale:GDBVertex;
+                                                 Rotate:GDBDouble;
+                                                 PEntity:PGDBObjEntity;
+                                           end;
 
 implementation
 var
@@ -406,6 +416,68 @@ begin
     PDimStyle:=sysvar.dwg.DWG_CDimStyle^;
     DimData.P11InOCS:=Point;
     DimData.P11InOCS:=P11ChangeTo(Point);
+    FormatEntity(gdb.GetCurrentDWG^);
+   end;
+end;
+
+procedure InteractiveBlockInsertManipulator( const PInteractiveData:GDBPointer;
+                                                   Point:GDBVertex;
+                                                   Click:GDBBoolean);
+var
+    PBlockInsert : PGDBObjBlockInsert absolute PInteractiveData;
+begin
+  GDBObjSetEntityCurrentProp(PBlockInsert);
+  with PBlockInsert^ do
+   begin
+    PBlockInsert^.Local.P_insert:=Point;
+    FormatEntity(gdb.GetCurrentDWG^);
+   end;
+end;
+
+procedure InteractiveBlockScaleManipulator( const PInteractiveData:GDBPointer;
+                                                  Point:GDBVertex;
+                                                  Click:GDBBoolean);
+var
+    PBlockInsert : PGDBObjBlockInsert;
+    PInsert,vscale : GDBVertex;
+    rscale:GDBDouble;
+begin
+  PBlockInsert:=pointer(PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.PEntity);
+  PInsert:=PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.PInsert;
+
+  vscale:=geometry.VertexSub(point,PInsert);
+  rscale:=oneVertexlength(vscale);
+  PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Scale.x:=rscale;
+  PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Scale.y:=rscale;
+  PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Scale.z:=rscale;
+
+  GDBObjSetEntityCurrentProp(PBlockInsert);
+  with PBlockInsert^ do
+   begin
+    PBlockInsert^.scale:=PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Scale;
+    FormatEntity(gdb.GetCurrentDWG^);
+   end;
+end;
+
+procedure InteractiveBlockRotateManipulator( const PInteractiveData:GDBPointer;
+                                                   Point:GDBVertex;
+                                                   Click:GDBBoolean);
+var
+    PBlockInsert : PGDBObjBlockInsert;
+    PInsert,AngleVector : GDBVertex;
+    rRotate:GDBDouble;
+begin
+  PBlockInsert:=pointer(PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.PEntity);
+  PInsert:=PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.PInsert;
+
+  AngleVector:=geometry.VertexSub(point,PInsert);
+  rRotate:=Vertexangle(CreateVertex2D(1,0),CreateVertex2D(AngleVector.x,AngleVector.y))*180/pi;
+  PTEntityModifyData_Point_Scale_Rotation(PInteractiveData)^.Rotate:=rRotate;
+
+  GDBObjSetEntityCurrentProp(PBlockInsert);
+  with PBlockInsert^ do
+   begin
+    PBlockInsert^.rotate:=rRotate;
     FormatEntity(gdb.GetCurrentDWG^);
    end;
 end;
@@ -828,17 +900,62 @@ end;
 function TestInsert1_com(operands:TCommandOperands):TCommandResult;
 var
    mr:integer;
+   CreatedData:TEntityModifyData_Point_Scale_Rotation;
+   vertex:gdbvertex;
 begin
-    if not assigned(BlockInsertFRM)then                              //если форма несоздана -
-      Application.CreateForm(TBlockInsertFRM, BlockInsertFRM);       //создаем ее
+  if not assigned(BlockInsertFRM)then                              //если форма несоздана -
+    Application.CreateForm(TBlockInsertFRM, BlockInsertFRM);       //создаем ее
 
-    mr:=BlockInsertFRM.run(@gdb.GetCurrentDWG^.BlockDefArray,'_dot');//вызов гуя с передачей адреса таблицы описаний
-                                                                     //блоков, и делаем вид что в предидущем сеансе команды
-                                                                     //мы вставляли блок _dot, гуй его болжен сам выбрать в
-                                                                     //комбобоксе, этот параметр нужно сохранять в чертеже
+  mr:=BlockInsertFRM.run(@gdb.GetCurrentDWG^.BlockDefArray,'_ArchTick');//вызов гуя с передачей адреса таблицы описаний
+                                                                        //блоков, и делаем вид что в предидущем сеансе команды
+                                                                        //мы вставляли блок _dot, гуй его болжен сам выбрать в
+                                                                        //комбобоксе, этот параметр нужно сохранять в чертеже
 
-    freeandnil(BlockInsertFRM);                                      //убиваем форму
-    result:=cmd_ok;
+
+  {создаем временный блок в области конструируемых объектов, без ундо}
+  CreatedData.PEntity:=GDBInsertBlock(@gdb.GetCurrentDWG^.ConstructObjRoot,//владелец создаваемого блока
+                                      '_ArchTick',                         //имя
+                                      createvertex(0,0,0),                 //точка вставки
+                                      createvertex(1,1,1),                 //масштаб
+                                      0                                    //поворот
+                                      //needundo не указан, поумолчанию - false
+                                      );
+  {запрашиваем точку вставки таская блок на мышке}
+  if commandmanager.Get3DPointInteractive(rsSpecifyInsertPoint,//текст запроса
+                                          CreatedData.PInsert, //сюда будут возвращены координаты указанные пользователем
+                                          @InteractiveBlockInsertManipulator,//"интерактивная" процедура таскающая блок за мышкой
+                                          CreatedData.PEntity)//параметр который будет передаваться "интерактивной" процедуре (указатель на временный блок)
+  then
+  begin
+    {точка была указана, еск пользователь не жал}
+    {запрашиваем масштаб, растягивая блок на точке}
+    {commandmanager.Get3DPointInteractive тут пока временно, будет организован commandmanager.GeScaleInteractive:GDBDouble возвращающая масштаб а не точку}
+    if commandmanager.Get3DPointInteractive(rsSpecifyScale,//текст запроса
+                                            vertex,//сюда будут возвращены координаты указанные пользователем, далее не используется
+                                            @InteractiveBlockScaleManipulator,//"интерактивная" процедура масштабирующая блок на точке
+                                            @CreatedData)//параметр который будет передаваться "интерактивной" процедуре (указатель на временный блок)
+    then
+    begin
+      {масштаб была указан, еск пользователь не жал}
+      {запрашиваем поворот, крутя блок на точке}
+      {commandmanager.Get3DPointInteractive тут пока временно, будет организован commandmanager.GeRotateInteractive:GDBDouble возвращающая угол а не точку}
+      if commandmanager.Get3DPointInteractive(rsSpecifyRotate,vertex,@InteractiveBlockRotateManipulator,@CreatedData) then
+      begin
+           {поворот была указан, еск пользователь не жал}
+           {создаем постоянный блок в в чертеже, с ундо}
+           GDBInsertBlock(gdb.GetCurrentDWG^.GetCurrentROOT,//владелец создаваемого блока - текущий владелец чертежа. может быть модель, а может быть какоенить определение блока, нужно предусмотреть запрет рекурсивной вставки
+                          '_ArchTick',                      //имя
+                          CreatedData.PInsert,              //точка вставки
+                          CreatedData.Scale,                //масштаб
+                          CreatedData.Rotate,               //поворот
+                          true                              //операция будет завернута в ундо
+                          );
+      end;
+    end;
+  end;
+
+  freeandnil(BlockInsertFRM);                                      //убиваем форму
+  result:=cmd_ok;
 end;
 function TestInsert2_com(operands:TCommandOperands):TCommandResult;
 var

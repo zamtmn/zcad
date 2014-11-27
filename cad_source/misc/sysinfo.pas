@@ -49,6 +49,7 @@ begin
      for i:=1 to paramcount do
        begin
             {$ifdef windows}param:={Tria_AnsiToUtf8}SysToUTF8(paramstr(i));{$endif}
+            {$ifndef windows}param:=paramstr(i);{$endif}
             paramUC:=uppercase(param);
 
             if fileexists(UTF8toSys(param)) then
@@ -90,4 +91,4 @@ begin
      ProcessParanstr;
      //sysparam.verstr:=Format('%d.%d.%d.%d SVN: %s',[sysparam.ver.major,sysparam.ver.minor,sysparam.ver.release,sysparam.ver.build,RevisionStr]);
 end;
-end.
+end.

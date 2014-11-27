@@ -1250,7 +1250,7 @@ begin
    ToolBarU.ButtonHeight:=sysvar.INTF.INTF_DefaultControlHeight^;
    ToolBarU.ShowCaptions:=true;
    ToolBarU.Parent:=self;
-   ToolBarU.EdgeBorders:=[ebTop, ebBottom, ebLeft, ebRight];
+   ToolBarU.EdgeBorders:=[{ebTop, ebBottom, ebLeft, ebRight}];
    self.CreateToolbarFromDesk(ToolBarU, 'STANDART', self.findtoolbatdesk('STAND'
      +'ART'));
    //ToolBarU.AdjustSize;

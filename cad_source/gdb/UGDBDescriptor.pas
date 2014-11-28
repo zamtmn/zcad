@@ -127,10 +127,28 @@ function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
 implementation
  uses GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log;
 function GDBDescriptor.GetDefaultDrawingName:GDBString;
+var
+    OldName:GDBString;
+    LoopCounter:Integer;
 begin
+  OldName:='';
+  LoopCounter:=0;
   repeat
     inc(FileNameCounter);
-    result:=sysutils.format(rsUnnamedWindowTitle,[3,3,FileNameCounter]);
+    inc(LoopCounter);
+  try
+       result:=sysutils.format(rsUnnamedWindowTitle,[FileNameCounter]);;
+  except
+       result:=rsHardUnnamed;
+  end;
+  if OldName=result then
+                        exit;
+  if LoopCounter=100 then
+                        begin
+                             result:=rsHardUnnamed;
+                             exit;
+                        end;
+  OldName:=result;
   until FindDrawingByName(result)=nil;
 end;
 function GDBDescriptor.FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;

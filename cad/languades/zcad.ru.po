@@ -1376,11 +1376,9 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#, fuzzy
-#| msgid "Block params"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Rotate"
-msgstr "Параметры блока"
+msgstr "Поворот"
 
 #: zcadexternal.gdbobjcircle~area
 msgctxt "zcadexternal.gdbobjcircle~area"
@@ -1664,11 +1662,9 @@ msgid "Layer selection"
 msgstr "Выбор слоя"
 
 #: zcadexternal.hint_panel~linewcombobox
-#, fuzzy
-#| msgid "Line type selection"
 msgctxt "zcadexternal.hint_panel~linewcombobox"
 msgid "Color selection"
-msgstr "Выбор стиля текста"
+msgstr "Выбор цвета"
 
 #: zcadexternal.hint_panel~ops_sensor_mark
 msgctxt "zcadexternal.hint_panel~ops_sensor_mark"
@@ -2256,7 +2252,6 @@ msgid "New selection set"
 msgstr ""
 
 #: zcadexternal.tdesigning~dsgn_selsamename
-#, fuzzy
 msgctxt "zcadexternal.tdesigning~dsgn_selsamename"
 msgid "Auto select devices with same name"
 msgstr "Авто выбор устройств с совпадающим именем"
@@ -3779,6 +3774,10 @@ msgstr "Инспектор объектов"
 msgid "Grid too density"
 msgstr "Сетка слишком мелкая"
 
+#: zcadstrconsts.rshardunnamed
+msgid "Unnamed"
+msgstr ""
+
 #: zcadstrconsts.rsinitialization
 msgid "Initialization:"
 msgstr "Инициализация:"
@@ -3801,14 +3800,6 @@ msgid "Error loading layout from file"
 msgstr "Ошибка загрузки файла разбивки окон"
 
 #: zcadstrconsts.rslinetypedesk
-#, fuzzy
-#| msgid ""
-#| ";;Pattern length %f\n"
-#| "%s\n"
-#| ";;Pattern length %f\n"
-#| "%s\n"
-#| ";;Pattern length %f\n"
-#| "%s\n"
 msgid ""
 ";;Pattern length %f\n"
 "%s\n"
@@ -4017,8 +4008,8 @@ msgstr "Неизвестный формат файла"
 
 #: zcadstrconsts.rsunnamedwindowtitle
 msgctxt "zcadstrconsts.rsunnamedwindowtitle"
-msgid "unnamed%-*.*d"
-msgstr "Без имени%-*.*d"
+msgid "Unnamed%-3.3d"
+msgstr "Без имени%-3.3d"
 
 #: zcadstrconsts.rsvalue
 msgid "Value"

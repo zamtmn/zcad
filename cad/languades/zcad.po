@@ -3645,6 +3645,10 @@ msgstr ""
 msgid "Grid too density"
 msgstr ""
 
+#: zcadstrconsts.rshardunnamed
+msgid "Unnamed"
+msgstr ""
+
 #: zcadstrconsts.rsinitialization
 msgid "Initialization:"
 msgstr ""
@@ -3863,7 +3867,7 @@ msgstr ""
 
 #: zcadstrconsts.rsunnamedwindowtitle
 msgctxt "zcadstrconsts.rsunnamedwindowtitle"
-msgid "unnamed%-*.*d"
+msgid "Unnamed%-3.3d"
 msgstr ""
 
 #: zcadstrconsts.rsvalue

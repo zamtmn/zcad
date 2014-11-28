@@ -29,7 +29,7 @@ const
     //CSVFileFilter: GDBString ='CSV files (*.csv)'#0'*.csv'#0'All files (*.*)'#0'*.*'#0#0;
     {$INCLUDE revision.inc}
 function OpenFileDialog(out FileName:GDBString;const DefExt, Filter, InitialDir, Title: string):Boolean;
-function SaveFileDialog(out FileName:GDBString;const DefExt, Filter, InitialDir, Title: string):Boolean;
+function SaveFileDialog(var FileName:GDBString;const DefExt, Filter, InitialDir, Title: string):Boolean;
 function GetVersion(_file:pchar):TmyFileVersionInfo;
 implementation
 uses log;
@@ -50,6 +50,7 @@ begin
      sd.Filter:=Filter;
      sd.DefaultExt :=DefExt;
      sd.FilterIndex := 1;
+     sd.FileName:=extractfilename(FileName);
      if sd.Execute
      then
          begin

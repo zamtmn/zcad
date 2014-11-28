@@ -159,13 +159,18 @@ var
    oglwnd:TCADControl;
    wpowner:{TOpenGLViewArea}{TGeneralViewArea}TAbstractViewArea;
    tn:GDBString;
+   dwgname:GDBString;
 begin
      ptd:=gdb.CreateDWG('*rtl/dwg/DrawingDeviceBase.pas','*rtl/dwg/DrawingVars.pas');
 
      gdb.AddRef(ptd^);
 
      if length(operands)=0 then
-                               operands:=@rsUnnamedWindowTitle[1];
+                               begin
+                                    dwgname:=gdb.GetDefaultDrawingName;
+                                    operands:=@dwgname[1];
+                                    ptd^.FileName:=dwgname;
+                               end;
 
      {tf:=mainform.PageControl.addpage(Operands);
      mainform.PageControl.selpage(mainform.PageControl.lastcreated);

@@ -1376,8 +1376,10 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
+#, fuzzy
+#| msgid "Block params"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+msgid "Rotate"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjcircle~area
@@ -1662,8 +1664,10 @@ msgid "Layer selection"
 msgstr "Выбор слоя"
 
 #: zcadexternal.hint_panel~linewcombobox
+#, fuzzy
+#| msgid "Line type selection"
 msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Text style selection"
+msgid "Color selection"
 msgstr "Выбор стиля текста"
 
 #: zcadexternal.hint_panel~ops_sensor_mark
@@ -2252,9 +2256,10 @@ msgid "New selection set"
 msgstr ""
 
 #: zcadexternal.tdesigning~dsgn_selsamename
+#, fuzzy
 msgctxt "zcadexternal.tdesigning~dsgn_selsamename"
 msgid "Auto select devices with same name"
-msgstr ""
+msgstr "Авто выбор устройств с совпадающим именем"
 
 #: zcadexternal.tdesigning~dsgn_traceautoinc
 msgctxt "zcadexternal.tdesigning~dsgn_traceautoinc"
@@ -3796,6 +3801,14 @@ msgid "Error loading layout from file"
 msgstr "Ошибка загрузки файла разбивки окон"
 
 #: zcadstrconsts.rslinetypedesk
+#, fuzzy
+#| msgid ""
+#| ";;Pattern length %f\n"
+#| "%s\n"
+#| ";;Pattern length %f\n"
+#| "%s\n"
+#| ";;Pattern length %f\n"
+#| "%s\n"
 msgid ""
 ";;Pattern length %f\n"
 "%s\n"
@@ -4004,8 +4017,8 @@ msgstr "Неизвестный формат файла"
 
 #: zcadstrconsts.rsunnamedwindowtitle
 msgctxt "zcadstrconsts.rsunnamedwindowtitle"
-msgid "unnamed"
-msgstr "Без имени"
+msgid "unnamed%-*.*d"
+msgstr "Без имени%-*.*d"
 
 #: zcadstrconsts.rsvalue
 msgid "Value"

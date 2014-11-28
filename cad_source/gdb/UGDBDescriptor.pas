@@ -75,6 +75,7 @@ PGDBDescriptor=^GDBDescriptor;
 GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     CurrentDWG:{PTDrawing}PTSimpleDrawing;
                     ProjectUnits:TUnitManager;
+                    FileNameCounter:integer;
                     constructor init;
                     constructor initnul;
                     destructor done;virtual;
@@ -103,6 +104,8 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     procedure FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:GDBOpenArrayOfPObjects);
                     procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
                     procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
+                    function GetDefaultDrawingName:GDBString;
+                    function FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
               end;
 {EXPORT-}
 var GDB: GDBDescriptor;
@@ -123,6 +126,28 @@ function dwgQSave_com(dwg:PTSimpleDrawing):GDBInteger;
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses GDBText,GDBDevice,GDBBlockInsert,io,iodxf, GDBManager,shared,commandline,log;
+function GDBDescriptor.GetDefaultDrawingName:GDBString;
+begin
+  repeat
+    inc(FileNameCounter);
+    result:=sysutils.format(rsUnnamedWindowTitle,[3,3,FileNameCounter]);
+  until FindDrawingByName(result)=nil;
+end;
+function GDBDescriptor.FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
+var
+  ir:itrec;
+begin
+  DWGName:=uppercase(DWGName);
+  result:=beginiterate(ir);
+  if result<>nil then
+  repeat
+       if DWGName=uppercase(ChangeFileExt(extractfilename(result^.GetFileName),'')) then
+       begin
+            exit;
+       end;
+       result:=iterate(ir);
+  until result=nil;
+end;
  procedure GDBDescriptor.AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
  var
      domethod,undomethod:tmethod;
@@ -556,16 +581,8 @@ constructor GDBDescriptor.init;
     //ts:PTGDBTableStyle;
     //cs:TGDBTableCellStyle;
 begin
-   inherited init({$IFDEF DEBUGBUILD}'{F5A454F1-CB6B-43AA-AD8D-AF3B9D781ED0}',{$ENDIF}100);
-  //LayerTable.addlayer('EL_WIRES',CGDBGreen,40,true,false,true);
-
-
-
-
-
-
-
-
+  inherited init({$IFDEF DEBUGBUILD}'{F5A454F1-CB6B-43AA-AD8D-AF3B9D781ED0}',{$ENDIF}100);
+  FileNameCounter:=0;
   ProjectUnits.init;
   ProjectUnits.SetNextManager(@units);
 
@@ -588,6 +605,7 @@ begin
   //Pointer(FileName):=nil;
   //Changed:=True;
   { TODO : переделать }
+  FileNameCounter:=0;
   if typeof(CurrentDWG^)=typeof(TDrawing) then
   begin
   PTDrawing(CurrentDWG).DWGUnits.init;

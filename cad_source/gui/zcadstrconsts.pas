@@ -52,7 +52,7 @@ resourcestring
   rsfardeffilenotfounf='File definition of the variables can not be found for the device "%s";';
   rsMenuNotFounf='Menu "%s" not found';
 
-  rsUnnamedWindowTitle='unnamed';
+  rsUnnamedWindowTitle='unnamed%-*.*d';
 
   {files}
   rsLoadingFile='Loading file "%s"';

@@ -507,7 +507,8 @@ begin
                           end
                       else
                           begin
-                               if gdb.GetCurrentDWG.GetFileName=rsUnnamedWindowTitle then
+                               //if gdb.GetCurrentDWG.GetFileName=rsUnnamedWindowTitle then
+                                 if extractfilepath(gdb.GetCurrentDWG.GetFileName)='' then
                                                                       begin
                                                                            SaveAs_com('');
                                                                            exit;
@@ -525,6 +526,7 @@ var
    fileext:GDBString;
 begin
      if assigned(ShowAllCursorsProc) then ShowAllCursorsProc;
+     s:=gdb.GetCurrentDWG.GetFileName;
      if SaveFileDialog(s,'dxf',ProjectFileFilter,'',rsSaveFile) then
      begin
           fileext:=uppercase(ExtractFileEXT(s));

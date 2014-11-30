@@ -249,7 +249,7 @@ end;
 procedure initialize;
     begin
       DisableTranslateCount:=0;
-      PODirectory := sysinfo.sysparam.programpath+'languades/';
+      PODirectory := sysinfo.sysparam.programpath+'languages/';
       GetLanguageIDs(Lang, FallbackLang); // определено в модуле gettext
       createpo;
       LRSTranslator:=TPoTranslator.Create;

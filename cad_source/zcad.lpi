@@ -21,14 +21,14 @@
     </General>
     <i18n>
       <EnableI18N Value="True"/>
-      <OutDir Value="../cad/languades"/>
+      <OutDir Value="../cad/languages"/>
     </i18n>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="9"/>
       <RevisionNr Value="7"/>
-      <BuildNr Value="2313"/>
+      <BuildNr Value="2351"/>
       <CharSet Value="0000"/>
       <StringTable ProductVersion="0.0.0.8"/>
     </VersionInfo>
@@ -199,7 +199,6 @@
       <Unit1>
         <Filename Value="gui/mainwindow.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="mainwindow"/>
       </Unit1>
       <Unit2>
         <Filename Value="geometry.pas"/>
@@ -268,6 +267,7 @@
       <Unit18>
         <Filename Value="gdb/UGDBDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="UGDBDescriptor"/>
       </Unit18>
       <Unit19>
         <Filename Value="electroteh/GDBCommandsOPS.pas"/>

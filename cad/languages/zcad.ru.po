@@ -507,17 +507,9 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
-#: zcadexternal.acn_fakecopyclipbase~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
-msgstr ""
-
-#: zcadexternal.acn_fakepaste~caption
-msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -843,10 +835,6 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
-#: zcadexternal.acn_processkz~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_projecttree~caption
 msgctxt "zcadexternal.acn_projecttree~caption"
 msgid "Project tree"
@@ -876,10 +864,6 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
-
-#: zcadexternal.acn_remautocables~caption
-msgid ""
-msgstr ""
 
 #: zcadexternal.acn_rotate~caption
 msgctxt "zcadexternal.acn_rotate~caption"
@@ -1244,6 +1228,28 @@ msgctxt "zcadexternal.button_variable~dwg_systmgeometrydraw"
 msgid "SG"
 msgstr ""
 
+#: zcadexternal.combo~colorcombobox
+msgctxt "zcadexternal.combo~colorcombobox"
+msgid "Color selection"
+msgstr "Выбор цвета"
+
+#: zcadexternal.combo~dimstylecombobox
+msgid "Dim style selection"
+msgstr ""
+
+#: zcadexternal.combo~linewcombobox
+msgctxt "zcadexternal.combo~linewcombobox"
+msgid "Line weight selection"
+msgstr "Выбор веса линии"
+
+#: zcadexternal.combo~ltypecombobox
+msgid "Line type selection"
+msgstr ""
+
+#: zcadexternal.combo~tstylecombobox
+msgid "Text style selection"
+msgstr ""
+
 #: zcadexternal.commandrtedobject~commanddata
 msgid "Command options"
 msgstr "Опции команды"
@@ -1392,11 +1398,14 @@ msgid "Block params"
 msgstr "Параметры блока"
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#, fuzzy
-#| msgid "Rotate"
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Block params"
-msgstr "Поворот"
+msgstr "Параметры блока"
+
+#: zcadexternal.gdbobjblockinsert~testrotate
+msgctxt "zcadexternal.gdbobjblockinsert~testrotate"
+msgid "Rotate"
+msgstr ""
 
 #: zcadexternal.gdbobjcircle~area
 msgctxt "zcadexternal.gdbobjcircle~area"
@@ -1678,13 +1687,6 @@ msgstr "Системная графика (габариты, связи и т.п
 msgctxt "zcadexternal.hint_panel~layercombobox"
 msgid "Layer selection"
 msgstr "Выбор слоя"
-
-#: zcadexternal.hint_panel~linewcombobox
-#, fuzzy
-#| msgid "Line weight selection"
-msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Text style selection"
-msgstr "Выбор цвета"
 
 #: zcadexternal.hint_panel~ops_sensor_mark
 msgctxt "zcadexternal.hint_panel~ops_sensor_mark"
@@ -2698,10 +2700,6 @@ msgstr "Нумеруесая переменная"
 msgid "Save start number"
 msgstr "Сохранять старовое значение"
 
-#: zcadexternal.tnumberingparams~sortmode
-msgid ""
-msgstr ""
-
 #: zcadexternal.tnumberingparams~startnumber
 msgid "Start"
 msgstr "Начальное значение"
@@ -3533,8 +3531,10 @@ msgid "Position"
 msgstr "Позиция"
 
 #: zcadstrconsts.fontnotfoundandreplace
-msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
-msgstr "Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
+msgid ""
+"For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+msgstr ""
+"Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
 
 #: zcadstrconsts.rsaboutwndcaption
 msgctxt "zcadstrconsts.rsaboutwndcaption"
@@ -3779,7 +3779,8 @@ msgid "Expression %s return %s"
 msgstr "Выражение  %s возвращает %s"
 
 #: zcadstrconsts.rsfardeffilenotfounf
-msgid "File definition of the variables can not be found for the device \"%s\";"
+msgid ""
+"File definition of the variables can not be found for the device \"%s\";"
 msgstr "Файл определения переменных не найден для устройства \"%s\";"
 
 #: zcadstrconsts.rsfileformat
@@ -3821,10 +3822,6 @@ msgid "Error loading layout from file"
 msgstr "Ошибка загрузки файла разбивки окон"
 
 #: zcadstrconsts.rslinetypedesk
-#, fuzzy
-#| msgid ""
-#| ";;Pattern length %f\n"
-#| "%s\n"
 msgid ""
 ";;Pattern length %f\n"
 "%s\n"
@@ -3908,15 +3905,20 @@ msgstr "Повторное создание %s!"
 msgid ""
 "-UNDO\\REDO - yet it is better not to use;\n"
 "\n"
-"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" "
+"and \"RebuildTree\" in command line;\n"
 "\n"
-"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
+"-To disable the display of this window comment out line \"About\" in the "
+"file \"components\\autorun.cmd\". Encoding of all configuration files - "
+"UTF8;\n"
 msgstr ""
 "-UNDO\\REDO - пока лучше не пользоваться;\n"
 "\n"
-"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
+"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" "
+"и \"RebuildTree\" в командной строке;\n"
 "\n"
-"-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
+"-Для отключения показа этого окна закоментируйте строку \"About\" в файле "
+"\"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
 
 #: zcadstrconsts.rsreservefontnotfound
 msgid "Reserve font is not found in the resources"
@@ -4046,4 +4048,3 @@ msgstr "Внимание!"
 #: zcadstrconsts.rszcadstarted
 msgid "ZCAD v%s started"
 msgstr "ZCAD v%s запущен"
-

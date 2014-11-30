@@ -1170,6 +1170,27 @@ msgstr ""
 msgid "SG"
 msgstr ""
 
+#: zcadexternal.combo~colorcombobox
+msgctxt "zcadexternal.combo~colorcombobox"
+msgid "Color selection"
+msgstr ""
+
+#: zcadexternal.combo~dimstylecombobox
+msgid "Dim style selection"
+msgstr ""
+
+#: zcadexternal.combo~linewcombobox
+msgid "Line weight selection"
+msgstr ""
+
+#: zcadexternal.combo~ltypecombobox
+msgid "Line type selection"
+msgstr ""
+
+#: zcadexternal.combo~tstylecombobox
+msgid "Text style selection"
+msgstr ""
+
 #: zcadexternal.commandrtedobject~commanddata
 msgid "Command options"
 msgstr ""
@@ -1312,13 +1333,12 @@ msgstr ""
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
+msgid "Block params"
 msgstr ""
 
-#: zcadexternal.gdbobjblockinsert~blockdesc
-#, fuzzy
-msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+#: zcadexternal.gdbobjblockinsert~testrotate
+msgctxt "zcadexternal.gdbobjblockinsert~testrotate"
+msgid "Rotate"
 msgstr ""
 
 #: zcadexternal.gdbobjcircle~area
@@ -1570,36 +1590,6 @@ msgstr ""
 #: zcadexternal.hint_panel~layercombobox
 msgctxt "zcadexternal.hint_panel~layercombobox"
 msgid "Layer selection"
-msgstr ""
-
-#: zcadexternal.hint_panel~linewcombobox
-#, fuzzy
-msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Line type selection"
-msgstr ""
-
-#: zcadexternal.hint_panel~linewcombobox
-#, fuzzy
-msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Color selection"
-msgstr ""
-
-#: zcadexternal.hint_panel~linewcombobox
-#, fuzzy
-msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Dim style selection"
-msgstr ""
-
-#: zcadexternal.hint_panel~linewcombobox
-#, fuzzy
-msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Line weight selection"
-msgstr ""
-
-#: zcadexternal.hint_panel~linewcombobox
-#, fuzzy
-msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Text style selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~ops_sensor_mark

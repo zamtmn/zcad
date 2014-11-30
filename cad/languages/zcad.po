@@ -1312,13 +1312,13 @@ msgstr ""
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Block params"
+msgid "Rotate"
 msgstr ""
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
 #, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
-msgid "Rotate"
+msgid "Block params"
 msgstr ""
 
 #: zcadexternal.gdbobjcircle~area
@@ -1575,13 +1575,13 @@ msgstr ""
 #: zcadexternal.hint_panel~linewcombobox
 #, fuzzy
 msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Line weight selection"
+msgid "Line type selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~linewcombobox
 #, fuzzy
 msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Text style selection"
+msgid "Color selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~linewcombobox
@@ -1593,13 +1593,13 @@ msgstr ""
 #: zcadexternal.hint_panel~linewcombobox
 #, fuzzy
 msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Line type selection"
+msgid "Line weight selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~linewcombobox
 #, fuzzy
 msgctxt "zcadexternal.hint_panel~linewcombobox"
-msgid "Color selection"
+msgid "Text style selection"
 msgstr ""
 
 #: zcadexternal.hint_panel~ops_sensor_mark

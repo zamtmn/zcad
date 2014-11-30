@@ -93,7 +93,7 @@ type
                                                    State: StdCtrls.TOwnerDrawState);
     function findtoolbatdesk(tbn:string):string;
     procedure CreateToolbarFromDesk(tb:TToolBar;tbname,tbdesk:string);
-    function CreateCBox(owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
+    function CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
     procedure CreateHTPB(tb:TToolBar);
 
     procedure FormCreate(Sender: TObject);
@@ -1633,7 +1633,7 @@ begin
     DrawColor(TComboBox(Control).canvas,Index,ARect);
     end;
 end;
-function MainForm.CreateCBox(owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
+function MainForm.CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDrawItemEvent;Change,DropDown,CloseUp:TNotifyEvent;Filler:TComboFiller;w:integer;ts:GDBString):TComboBox;
 begin
   result:=TComboBox.Create(owner);
   result.Style:=csOwnerDrawFixed;
@@ -1645,7 +1645,7 @@ begin
               result.Width:=w;
   if ts<>''then
   begin
-       ts:=InterfaceTranslate('hint_panel~LINEWCOMBOBOX',ts);
+       ts:=InterfaceTranslate('combo~'+CBName,ts);
        result.hint:=(ts);
        result.ShowHint:=true;
   end;
@@ -1823,27 +1823,27 @@ begin
                      if uppercase(line)='LINEWCOMBOBOX' then
                      begin
                           ReadComboSubParam(bc,ts,w);
-                          LineWBox:=CreateCBox(tb,LineWBoxDrawItem,ChangeCLineW,DropDownColor,DropUpColor,FillLWCombo,w,ts);
+                          LineWBox:=CreateCBox(line,tb,LineWBoxDrawItem,ChangeCLineW,DropDownColor,DropUpColor,FillLWCombo,w,ts);
                      end;
                      if uppercase(line)='COLORCOMBOBOX' then
                      begin
                           ReadComboSubParam(bc,ts,w);
-                          ColorBox:=CreateCBox(tb,ColorBoxDrawItem,ChangeCColor,DropDownColor,DropUpColor,FillColorCombo,w,ts);
+                          ColorBox:=CreateCBox(line,tb,ColorBoxDrawItem,ChangeCColor,DropDownColor,DropUpColor,FillColorCombo,w,ts);
                      end;
                      if uppercase(line)='LTYPECOMBOBOX' then
                      begin
                           ReadComboSubParam(bc,ts,w);
-                          LTypeBox:=CreateCBox(tb,LTypeBoxDrawItem,ChangeLType,DropDownLType,DropUpLType,FillLTCombo,w,ts);
+                          LTypeBox:=CreateCBox(line,tb,LTypeBoxDrawItem,ChangeLType,DropDownLType,DropUpLType,FillLTCombo,w,ts);
                      end;
                      if uppercase(line)='TSTYLECOMBOBOX' then
                      begin
                           ReadComboSubParam(bc,ts,w);
-                          TStyleBox:=CreateCBox(tb,TSupportTStyleCombo.DrawItemTStyle,TSupportTStyleCombo.ChangeLType,TSupportTStyleCombo.DropDownTStyle,TSupportTStyleCombo.CloseUpTStyle,TSupportTStyleCombo.FillLTStyle,w,ts);
+                          TStyleBox:=CreateCBox(line,tb,TSupportTStyleCombo.DrawItemTStyle,TSupportTStyleCombo.ChangeLType,TSupportTStyleCombo.DropDownTStyle,TSupportTStyleCombo.CloseUpTStyle,TSupportTStyleCombo.FillLTStyle,w,ts);
                      end;
                      if uppercase(line)='DIMSTYLECOMBOBOX' then
                      begin
                           ReadComboSubParam(bc,ts,w);
-                          DimStyleBox:=CreateCBox(tb,TSupportDimStyleCombo.DrawItemTStyle,TSupportDimStyleCombo.ChangeLType,TSupportDimStyleCombo.DropDownTStyle,TSupportDimStyleCombo.CloseUpTStyle,TSupportDimStyleCombo.FillLTStyle,w,ts);
+                          DimStyleBox:=CreateCBox(line,tb,TSupportDimStyleCombo.DrawItemTStyle,TSupportDimStyleCombo.ChangeLType,TSupportDimStyleCombo.DropDownTStyle,TSupportDimStyleCombo.CloseUpTStyle,TSupportDimStyleCombo.FillLTStyle,w,ts);
                      end;
                      if uppercase(line)='SEPARATOR' then
                                          begin

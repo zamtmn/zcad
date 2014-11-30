@@ -868,11 +868,11 @@ begin
            username:
                     begin
                       fieldtype:=parseresult^.getGDBString(0);
-                      pf:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1));
+                      //pf:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getelement(PRecordDescriptor(ptd)^.Fields.Count-1));
                       if fieldtype='Paths' then
                                           fieldtype:=fieldtype;
                       {$IFNDEF DELPHI}
-                      fieldtype:=InterfaceTranslate(ptd.TypeName+'~'+pf^.base.ProgramName,fieldtype);
+                      fieldtype:=InterfaceTranslate(ptd.TypeName+'~'+getlastfirld.ProgramName,fieldtype);
                       {$ENDIF}
                       getlastfirld.username:={parseresult^.getGDBString(0)}fieldtype;
                       //fieldtype:=parseresult^.getGDBString(0);

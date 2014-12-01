@@ -1760,7 +1760,7 @@ begin
                                           ts:=system.copy(line,i+1,length(line)-i);
                                           line:=system.copy(line,1,i-1);
                                      end;
-                          i:=pos(',',ts);
+                          i:=PosWithBracket(',',ts);
                           if i>0 then
                                      begin
                                           ts2:=system.copy(ts,i+1,length(ts)-i);

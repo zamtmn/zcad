@@ -51,6 +51,8 @@ function MakeHash(const s: GDBString): GDBLongword;
 procedure KillString(var str:GDBString);inline;
 procedure RemoveOneRefCount(str:GDBString);inline;
 
+Function PosWithBracket(c : AnsiChar; Const s : RawByteString) : SizeInt;
+
 type
   TCodePage=(CP_utf8,CP_win);
 
@@ -62,6 +64,29 @@ var
 implementation
 uses
     sysinfo,zcadsysvars,log;
+Function PosWithBracket(c : AnsiChar; Const s : RawByteString) : SizeInt;
+var
+  i: SizeInt;
+  pc : PAnsiChar;
+  bracketcounter:SizeInt;
+begin
+  bracketcounter:=0;
+  pc:=@s[1];
+  for i:=1 to length(s) do
+   begin
+     if pc^='(' then
+                   inc(bracketcounter)
+else if pc^=')' then
+                   dec(bracketcounter)
+else if bracketcounter=0 then
+     if pc^=c then
+      begin
+        exit(i);
+      end;
+     inc(pc);
+   end;
+  exit(0)
+end;
 procedure KillString(var str:GDBString);inline;
 begin
      GDBPointer(str):=nil;

@@ -316,7 +316,6 @@ msgid "Center; diameter"
 msgstr ""
 
 #: zcadexternal.acn_circle~caption
-#, fuzzy
 msgid "Center; radius"
 msgstr ""
 
@@ -333,25 +332,21 @@ msgid "Select current color"
 msgstr ""
 
 #: zcadexternal.acn_copyclipbase~caption
-#, fuzzy
 msgctxt "zcadexternal.acn_copyclipbase~caption"
 msgid "Copy to clipboard with base point"
 msgstr ""
 
 #: zcadexternal.acn_copyclipbase~hint
-#, fuzzy
 msgctxt "zcadexternal.acn_copyclipbase~hint"
 msgid "Copy to clipboard with base point"
 msgstr ""
 
 #: zcadexternal.acn_copyclip~caption
-#, fuzzy
 msgctxt "zcadexternal.acn_copyclip~caption"
 msgid "Copy to clipboard"
 msgstr ""
 
 #: zcadexternal.acn_copyclip~hint
-#, fuzzy
 msgctxt "zcadexternal.acn_copyclip~hint"
 msgid "Copy to clipboard"
 msgstr ""
@@ -878,7 +873,6 @@ msgid "QS"
 msgstr ""
 
 #: zcadexternal.acn_scale~caption
-#, fuzzy
 msgctxt "zcadexternal.acn_scale~caption"
 msgid "Scale"
 msgstr ""
@@ -1331,7 +1325,6 @@ msgid "Block params"
 msgstr ""
 
 #: zcadexternal.gdbobjblockinsert~blockdesc
-#, fuzzy
 msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
 msgid "Block params"
 msgstr ""
@@ -1549,7 +1542,6 @@ msgid "On/Off Additional grips"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_drawgrid
-#, fuzzy
 msgctxt "zcadexternal.hint_panel~dwg_drawgrid"
 msgid "Display grid"
 msgstr ""
@@ -1563,8 +1555,7 @@ msgid "On/Off Selecting parts of dynamic objects"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_helpgeometrydraw
-#, fuzzy
-msgid "Auxiliary graphics (connectivity"
+msgid "Auxiliary graphics (connectivity, direction, etc.)"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_osmode
@@ -1577,14 +1568,12 @@ msgid "Polar tracking"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_snapgrid
-#, fuzzy
 msgctxt "zcadexternal.hint_panel~dwg_snapgrid"
 msgid "Snap"
 msgstr ""
 
 #: zcadexternal.hint_panel~dwg_systmgeometrydraw
-#, fuzzy
-msgid "System graphics (size"
+msgid "System graphics (size, communication, etc. for debugging)"
 msgstr ""
 
 #: zcadexternal.hint_panel~layercombobox
@@ -1699,24 +1688,20 @@ msgid "Dim styles (objinsp)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(fonts)
-#, fuzzy
 msgctxt "zcadexternal.menucommand~setobjinsp(fonts)"
 msgid "Fonts (objinsp)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(layers)
-#, fuzzy
 msgctxt "zcadexternal.menucommand~setobjinsp(layers)"
 msgid "Layers (objinsp)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(linetypestyles)
-#, fuzzy
 msgid "Line type styles (objinsp)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(numerators)
-#, fuzzy
 msgid "Numerators (objinsp)"
 msgstr ""
 
@@ -1726,12 +1711,10 @@ msgid "Object snap"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(tablestyles)
-#, fuzzy
 msgid "Table styles (objinsp)"
 msgstr ""
 
 #: zcadexternal.menucommand~setobjinsp(tstyles)
-#, fuzzy
 msgid "Styles (objinsp)"
 msgstr ""
 
@@ -2103,7 +2086,6 @@ msgid "Rotation"
 msgstr ""
 
 #: zcadexternal.tblockinsert~scale
-#, fuzzy
 msgctxt "zcadexternal.tblockinsert~scale"
 msgid "Scale"
 msgstr ""
@@ -2282,13 +2264,11 @@ msgid "Text style"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_drawgrid
-#, fuzzy
 msgctxt "zcadexternal.tdwg~dwg_drawgrid"
 msgid "Display grid"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_drawmode
-#, fuzzy
 msgid "Display line weights"
 msgstr ""
 
@@ -2305,7 +2285,6 @@ msgid "Help geometry"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_ltscale
-#, fuzzy
 msgid "Global line type scale"
 msgstr ""
 
@@ -2322,7 +2301,6 @@ msgid "Rotate text in line type"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_selectedobjtoinsp
-#, fuzzy
 msgid "Selected object to inspector"
 msgstr ""
 
@@ -2331,7 +2309,6 @@ msgid "Snap settings"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_snapgrid
-#, fuzzy
 msgctxt "zcadexternal.tdwg~dwg_snapgrid"
 msgid "Snap"
 msgstr ""
@@ -2364,7 +2341,6 @@ msgid "Trace"
 msgstr ""
 
 #: zcadexternal.telleadercomparam~scale
-#, fuzzy
 msgctxt "zcadexternal.telleadercomparam~scale"
 msgid "Scale"
 msgstr ""
@@ -2467,7 +2443,6 @@ msgid "Max degradation factor"
 msgstr ""
 
 #: zcadexternal.timagedegradation~rd_id_prefferedrendertime
-#, fuzzy
 msgid "Prefered rendertime"
 msgstr ""
 
@@ -2515,7 +2490,6 @@ msgid "Show scroll bars"
 msgstr ""
 
 #: zcadexternal.tlayercontrols~dsgn_lc_cable
-#, fuzzy
 msgctxt "zcadexternal.tlayercontrols~dsgn_lc_cable"
 msgid "Cables"
 msgstr ""
@@ -2525,7 +2499,6 @@ msgid "Leaders"
 msgstr ""
 
 #: zcadexternal.tlayercontrols~dsgn_lc_net
-#, fuzzy
 msgid "Nets"
 msgstr ""
 
@@ -2580,7 +2553,6 @@ msgid "All entities"
 msgstr ""
 
 #: zcadexternal.tmstype~tmst_cables
-#, fuzzy
 msgctxt "zcadexternal.tmstype~tmst_cables"
 msgid "Cables"
 msgstr ""
@@ -2821,7 +2793,6 @@ msgid "Blocks scale"
 msgstr ""
 
 #: zcadexternal.tosmodeeditor~osm
-#, fuzzy
 msgctxt "zcadexternal.tosmodeeditor~osm"
 msgid "Snap"
 msgstr ""
@@ -2965,7 +2936,6 @@ msgid "Fit to page"
 msgstr ""
 
 #: zcadexternal.tprintparams~scale
-#, fuzzy
 msgctxt "zcadexternal.tprintparams~scale"
 msgid "Scale"
 msgstr ""
@@ -2991,7 +2961,6 @@ msgid "Image degradation"
 msgstr ""
 
 #: zcadexternal.trd~rd_lastcalcvisible
-#, fuzzy
 msgid "Last visible calculation time"
 msgstr ""
 
@@ -3000,7 +2969,6 @@ msgid "Last render time"
 msgstr ""
 
 #: zcadexternal.trd~rd_lastupdatetime
-#, fuzzy
 msgid "Last update time"
 msgstr ""
 
@@ -3009,7 +2977,6 @@ msgid "Light"
 msgstr ""
 
 #: zcadexternal.trd~rd_linesmooth
-#, fuzzy
 msgid "Line smoothing"
 msgstr ""
 

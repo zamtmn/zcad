@@ -3477,6 +3477,7 @@ PGDBDescriptor=^GDBDescriptor;
 GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     CurrentDWG:{PTDrawing}PTSimpleDrawing;
                     ProjectUnits:TUnitManager;
+                    FileNameCounter:integer;
                     constructor init;
                     constructor initnul;
                     destructor done;virtual;abstract;
@@ -3501,6 +3502,8 @@ GDBDescriptor={$IFNDEF DELPHI}packed{$ENDIF} object(GDBOpenArrayOfPObjects)
                     procedure FindMultiEntityByVar2(objID:GDBWord;vname:GDBString;var entarray:GDBOpenArrayOfPObjects);
                     procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
                     procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
+                    function GetDefaultDrawingName:GDBString;
+                    function FindDrawingByName(DWGName:GDBString):PTSimpleDrawing;
               end;
 //Generate on E:\zcad\CAD_SOURCE\commands\GDBCommandsBase.pas
   TMSType=(

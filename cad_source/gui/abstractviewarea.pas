@@ -37,6 +37,7 @@ type
 
     TCADControl=class(TCustomControl)
                 public
+                function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint): Boolean; overload;
                 property OnMouseUp;
                 property onmousedown;
                 property onmousemove;
@@ -132,6 +133,11 @@ var
 procedure copyospoint(out dest:os_record; source:os_record);
 function correcttogrid(point:GDBVertex):GDBVertex;
 implementation
+function TCADControl.DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint): Boolean;
+begin
+     inherited;
+end;
+
 procedure TGDIPanel.EraseBackground(DC: HDC);
 begin
      // everything is painted, so erasing the background is not needed

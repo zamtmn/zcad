@@ -1629,11 +1629,11 @@ else if uppercase(operands)='SEL' then
                                     end
 else if uppercase(operands)='IN' then
                                      begin
-                                          gdb.GetCurrentDWG.wa.getviewcontrol.DoMouseWheel([],1,point(0,0));
+                                          gdb.GetCurrentDWG.wa.ZoomIn;
                                      end
 else if uppercase(operands)='OUT' then
                                      begin
-                                          gdb.GetCurrentDWG.wa.getviewcontrol.DoMouseWheel([],-1,point(0,0));
+                                          gdb.GetCurrentDWG.wa.ZoomOut;
                                      end;
      result:=cmd_ok;
 end;

@@ -139,6 +139,8 @@ type
                            function startpaint:boolean;override;
                            procedure endpaint;override;
                            function NeedDrawInsidePaintEvent:boolean; virtual;abstract;
+                           procedure ZoomIn;override;
+                           procedure ZoomOut;override;
                       end;
 implementation
 uses
@@ -151,7 +153,14 @@ begin
      dec(InsidePaintMessage);
      inherited;
 end;
-
+procedure TGeneralViewArea.ZoomIn;
+begin
+     getviewcontrol.DoMouseWheel([],1,point(0,0));
+end;
+procedure TGeneralViewArea.ZoomOut;
+begin
+     getviewcontrol.DoMouseWheel([],-1,point(0,0));
+end;
 procedure TGeneralViewArea.GDBActivate;
 begin
     pdwg.SetCurrentDWG;

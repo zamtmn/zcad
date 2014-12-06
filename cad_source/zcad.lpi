@@ -25,10 +25,8 @@
     </i18n>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
-      <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="9"/>
       <RevisionNr Value="7"/>
-      <BuildNr Value="2351"/>
       <CharSet Value="0000"/>
       <StringTable ProductVersion="0.0.0.8"/>
     </VersionInfo>
@@ -170,31 +168,33 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="6">
+    <RequiredPackages Count="7">
       <Item1>
-        <PackageName Value="FCL"/>
+        <PackageName Value="zcadcontrols"/>
       </Item1>
       <Item2>
-        <PackageName Value="fpvectorialpkg"/>
+        <PackageName Value="FCL"/>
       </Item2>
       <Item3>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="fpvectorialpkg"/>
       </Item3>
       <Item4>
-        <PackageName Value="AnchorDocking"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item4>
       <Item5>
-        <PackageName Value="LazOpenGLContext"/>
+        <PackageName Value="AnchorDocking"/>
       </Item5>
       <Item6>
-        <PackageName Value="LCL"/>
+        <PackageName Value="LazOpenGLContext"/>
       </Item6>
+      <Item7>
+        <PackageName Value="LCL"/>
+      </Item7>
     </RequiredPackages>
     <Units Count="41">
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="zcad"/>
       </Unit0>
       <Unit1>
         <Filename Value="gui/mainwindow.pas"/>
@@ -255,6 +255,7 @@
       <Unit15>
         <Filename Value="commands/commandline.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="commandline"/>
       </Unit15>
       <Unit16>
         <Filename Value="WindowsSpecific.pas"/>
@@ -274,11 +275,12 @@
         <IsPartOfProject Value="True"/>
       </Unit19>
       <Unit20>
-        <Filename Value="gui/layerwnd.pas"/>
+        <Filename Value="gui/tswnd.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="LayerWindow"/>
+        <ComponentName Value="TextStylesWindow"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="tswnd"/>
       </Unit20>
       <Unit21>
         <Filename Value="u/TGMultiObjectChangeCommandIMPL.inc"/>
@@ -338,10 +340,12 @@
       <Unit31>
         <Filename Value="fileformats/iodxf.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="iodxf"/>
       </Unit31>
       <Unit32>
         <Filename Value="gdb/GDBEntity.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="GDBEntity"/>
       </Unit32>
       <Unit33>
         <Filename Value="zgl/uzglgeometry.pas"/>

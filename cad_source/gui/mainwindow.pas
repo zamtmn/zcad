@@ -1637,7 +1637,7 @@ function MainForm.CreateCBox(CBName:GDBString;owner:TToolBar;DrawItem:TDrawItemE
 begin
   result:=TComboBox.Create(owner);
   result.Style:=csOwnerDrawFixed;
-  SetComboSize(result);
+  SetComboSize(result,sysvar.INTF.INTF_DefaultControlHeight^-6);
   result.Clear;
   result.readonly:=true;
   result.DropDownCount:=50;

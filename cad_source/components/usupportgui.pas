@@ -17,24 +17,23 @@
 }
 
 unit usupportgui;
-{$INCLUDE def.inc}
 
 interface
 
 uses
-  zcadsysvars,StdCtrls,Controls,Classes,LCLType,ComCtrls,Graphics;
+  StdCtrls,Controls,Classes,LCLType,ComCtrls,Graphics;
 
 procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
 procedure ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);
 function ListViewDrawSubItem(State: TCustomDrawState;canvas:tcanvas;Item: TListItem;SubItem: Integer): TRect;
-procedure SetComboSize(cb:tcombobox);
+procedure SetComboSize(cb:tcombobox;ItemH:Integer);
 implementation
-procedure SetComboSize(cb:tcombobox);
+procedure SetComboSize(cb:tcombobox;ItemH:Integer);
 begin
      cb.AutoSize:=false;
      {$IFDEF LCLWIN32}
      cb.Style:=csOwnerDrawFixed;
-     cb.ItemHeight:=sysvar.INTF.INTF_DefaultControlHeight^-6;
+     cb.ItemHeight:=ItemH;
      {$ENDIF}
 end;
 

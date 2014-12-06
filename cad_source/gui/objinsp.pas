@@ -1603,7 +1603,7 @@ begin
                                                                                 editorcontrol.Visible:=false;
                                                                                 {$ENDIF}
                                                                                 editorcontrol.Parent:=self;
-                                                                                SetComboSize(editorcontrol as TCombobox);
+                                                                                SetComboSize(editorcontrol as TCombobox,sysvar.INTF.INTF_DefaultControlHeight^-6);
                                                                                 //(editorcontrol as TCombobox).itemheight:=pp^.rect.Bottom-pp^.rect.Top-6;
                                                                                 if editorcontrol is TCombobox then
                                                                                 if (editorcontrol as TCombobox).ReadOnly then

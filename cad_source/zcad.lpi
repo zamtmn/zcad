@@ -33,7 +33,7 @@
     <BuildModes Count="4">
       <Item1 Name="Default1" Default="True"/>
       <Item2 Name="WIN">
-        <MacroValues Count="1">
+        <MacroValues Count="2">
           <Macro1 Name="LCLWidgetType" Value="win32"/>
         </MacroValues>
         <CompilerOptions>
@@ -56,9 +56,6 @@
               <UseAnsiStrings Value="False"/>
             </SyntaxOptions>
           </Parsing>
-          <CodeGeneration>
-            <TargetOS Value="win32"/>
-          </CodeGeneration>
           <Other>
             <Verbosity>
               <ShowWarn Value="False"/>
@@ -76,6 +73,9 @@
         </CompilerOptions>
       </Item2>
       <Item3 Name="GTK2">
+        <MacroValues Count="1">
+          <Macro2 Name="LCLWidgetType" Value="gtk2"/>
+        </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
@@ -96,9 +96,6 @@
               <UseAnsiStrings Value="False"/>
             </SyntaxOptions>
           </Parsing>
-          <CodeGeneration>
-            <TargetOS Value="linux"/>
-          </CodeGeneration>
           <Other>
             <Verbosity>
               <ShowWarn Value="False"/>
@@ -116,6 +113,9 @@
         </CompilerOptions>
       </Item3>
       <Item4 Name="qt">
+        <MacroValues Count="1">
+          <Macro3 Name="LCLWidgetType" Value="qt"/>
+        </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
@@ -195,10 +195,12 @@
       <Unit0>
         <Filename Value="zcad.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="zcad"/>
       </Unit0>
       <Unit1>
         <Filename Value="gui/mainwindow.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="mainwindow"/>
       </Unit1>
       <Unit2>
         <Filename Value="geometry.pas"/>
@@ -219,6 +221,7 @@
       <Unit6>
         <Filename Value="languade/UBaseTypeDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="UBaseTypeDescriptor"/>
       </Unit6>
       <Unit7>
         <Filename Value="devicebase/DeviceBase.pas"/>
@@ -227,6 +230,7 @@
       <Unit8>
         <Filename Value="gui/oglwindow.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="oglwindow"/>
       </Unit8>
       <Unit9>
         <Filename Value="languade/URecordDescriptor.pas"/>
@@ -247,6 +251,7 @@
       <Unit13>
         <Filename Value="gui/cmdline.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cmdline"/>
       </Unit13>
       <Unit14>
         <Filename Value="gui/aboutwnd.pas"/>
@@ -255,7 +260,6 @@
       <Unit15>
         <Filename Value="commands/commandline.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="commandline"/>
       </Unit15>
       <Unit16>
         <Filename Value="WindowsSpecific.pas"/>
@@ -268,7 +272,6 @@
       <Unit18>
         <Filename Value="gdb/UGDBDescriptor.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="UGDBDescriptor"/>
       </Unit18>
       <Unit19>
         <Filename Value="electroteh/GDBCommandsOPS.pas"/>
@@ -280,7 +283,6 @@
         <ComponentName Value="TextStylesWindow"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="tswnd"/>
       </Unit20>
       <Unit21>
         <Filename Value="u/TGMultiObjectChangeCommandIMPL.inc"/>
@@ -345,7 +347,6 @@
       <Unit32>
         <Filename Value="gdb/GDBEntity.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GDBEntity"/>
       </Unit32>
       <Unit33>
         <Filename Value="zgl/uzglgeometry.pas"/>
@@ -370,6 +371,7 @@
       <Unit38>
         <Filename Value="languade/varmandef.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="varmandef"/>
       </Unit38>
       <Unit39>
         <Filename Value="u/UGDBControlPointArray.pas"/>
@@ -428,4 +430,4 @@
       </Item2>
     </Exceptions>
   </Debugging>
-</CONFIG>
+</CONFIG>

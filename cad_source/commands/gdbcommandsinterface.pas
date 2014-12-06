@@ -352,7 +352,7 @@ begin
 end;
 function TextStyles_cmd:GDBInteger;
 begin
-  TSWindow:=TTSWindow.Create(nil);
+  TSWindow:=TTextStylesWindow.Create(nil);
   SetHeightControl(TSWindow,sysvar.INTF.INTF_DefaultControlHeight^);
   DOShowModal(TSWindow);
   Freeandnil(TSWindow);

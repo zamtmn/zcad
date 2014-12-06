@@ -22,7 +22,7 @@ interface
 uses
       Graphics,classes,Themes,types,
       strproc,log,TypeDescriptors,UGDBOpenArrayOfTObjLinkRecord,sysutils,UGDBOpenArrayOfByte,gdbasetypes,
-      usupportgui,varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,math,
+      usupportgui,varmandef,gdbase,UGDBOpenArrayOfData,UGDBStringArray,memman,math,zcadsysvars,
 
       StdCtrls,shared;
 type
@@ -344,7 +344,7 @@ begin
      cbedit:=TComboBox.Create(propeditor);
      cbedit.Text:=GetValueAsString(pinstance);
      cbedit.OnChange:=propeditor.EditingProcess;
-     SetComboSize(cbedit);
+     SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
      {$IFNDEF DELPHI}
      cbedit.ReadOnly:=true;
      {$ENDIF}

@@ -1,6 +1,6 @@
-unit layerwnd;
+unit LayerWnd;
 {$INCLUDE def.inc}
-{$mode objfpc}
+{$mode objfpc}{$H+}
 
 interface
 
@@ -11,11 +11,25 @@ uses
 
   gdbobjectsconstdef,UGDBLayerArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
 
-  zcadinterface,zcadstrconsts,strproc,shared,UBaseTypeDescriptor,imagesmanager,usupportgui;
+  zcadinterface, zcadstrconsts, strproc, shared, UBaseTypeDescriptor,
+  imagesmanager, usupportgui, ZListView;
+
+const
+     NameColumn=0;
+     OnColumn=1;
+     FrezeColumn=2;
+     LockColumn=3;
+     ColorColumn=4;
+     LineTypeColumn=5;
+     LineWeightColumn=6;
+     PlotColumn=7;
+     DescColumn=8;
+
+     ColumnCount=8+1;
 
 type
 
-  { TLayerWindow }
+  { TTextStylesWindow }
 
   TLayerWindow = class(TForm)
     AddLayerBtn: TSpeedButton;
@@ -24,8 +38,7 @@ type
     ButtonApplyClose: TBitBtn;
     Button_Apply: TBitBtn;
     LayerDescLabel: TLabel;
-    ListView1: TListView;
-    CurrentLayer:TListItem;
+    ListView1: TZListView;
     MkCurrentBtn: TSpeedButton;
     procedure Aply(Sender: TObject);
     procedure AplyClose(Sender: TObject);
@@ -34,39 +47,52 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure ListView1Change(Sender: TObject; Item: TListItem;
-      Change: TItemChange);
     procedure ListView1SelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
-    procedure LWMouseUp(Sender: TObject; Button: TMouseButton;
-                          Shift: TShiftState; X, Y: Integer);
-    procedure LWMouseDown(Sender: TObject; Button: TMouseButton;
-                          Shift: TShiftState; X, Y: Integer);
     procedure MkCurrent(Sender: TObject);
-    procedure onCDItem(Sender: TCustomListView; Item: TListItem;
-      State: TCustomDrawState; var DefaultDraw: Boolean);
-    procedure onCDSubItem(Sender: TCustomListView; Item: TListItem;
-      SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
-    procedure ProcessClick(ListItem:TListItem;SubItem:Integer;DoubleClick:Boolean);
-    procedure Process(ListItem:TListItem;SubItem:Integer;DoubleClick:Boolean);
-    procedure createeditor(ListView:TListView;ListItem:TListItem;SubItem:Integer;P:PAnsiString);
     procedure MaceItemCurrent(ListItem:TListItem);
     procedure Notify(Sender: TObject;Command:TMyNotifyCommand); virtual;
     procedure asyncfreeeditor(Data: PtrInt);
     procedure freeeditor;
-    procedure UpdateItem(Item: TListItem);
     procedure countlayer(player:PGDBLayerProp;out e,b:GDBInteger);
   private
-    MouseDownItem:TListItem;
-    MouseDownSubItem: Integer;
-    DoubleClick:Boolean;
     changedstamp:boolean;
     PEditor:TPropEditor;
     EditedItem:TListItem;
     { private declarations }
   public
     { public declarations }
-  end; 
+    function createeditor(Item: TListItem;r: TRect;ps:PAnsiString):boolean;
+    {layer name handle procedures}
+    function createnameeditor(Item: TListItem;r: TRect):boolean;
+    function GetLayerName(Item: TListItem):string;
+    {layer lock handle procedures}
+    function IsLayerLock(Item: TListItem):boolean;
+    function LayerLockClick(Item: TListItem;r: TRect):boolean;
+    {layer on handle procedures}
+    function IsLayerOn(Item: TListItem):boolean;
+    function LayerOnClick(Item: TListItem;r: TRect):boolean;
+    {layer freze handle procedures}
+    function IsLayerFreze(Item: TListItem):boolean;
+    {layer plot handle procedures}
+    function IsLayerPlot(Item: TListItem):boolean;
+    function LayerPlotClick(Item: TListItem;r: TRect):boolean;
+    {layer color handle procedures}
+    procedure ColorSubitemDraw(aCanvas:TCanvas; Item: TListItem; SubItem:Integer; State: TCustomDrawState);
+    function GetColorName(Item: TListItem):string;
+    function LayerColorClick(Item: TListItem;r: TRect):boolean;
+    {layer LineType handle procedures}
+    procedure LtSubitemDraw(aCanvas:TCanvas; Item: TListItem; SubItem:Integer; State: TCustomDrawState);
+    function GetLineTypeName(Item: TListItem):string;
+    function LayerLTClick(Item: TListItem;r: TRect):boolean;
+    {layer LineWidth handle procedures}
+    procedure LWSubitemDraw(aCanvas:TCanvas; Item: TListItem; SubItem:Integer; State: TCustomDrawState);
+    function GetLineWeightName(Item: TListItem):string;
+    function LayerLWClick(Item: TListItem;r: TRect):boolean;
+    {layer description handle procedures}
+    function createdesceditor(Item: TListItem;r: TRect):boolean;
+    function GetDescName(Item: TListItem):string;
+  end;
 
 var
   LayerWindow: TLayerWindow;
@@ -74,58 +100,145 @@ implementation
 uses
     mainwindow;
 {$R *.lfm}
-
-{ TLayerWindow }
-
-procedure TLayerWindow.FormCreate(Sender: TObject); // Процедура выполняется при отрисовке окна
+function TLayerWindow.createeditor(Item: TListItem;r: TRect;ps:PAnsiString):boolean;
 begin
-// Отрисовываем картинки на кнопках
-IconList.GetBitmap(II_Plus, AddLayerBtn.Glyph);
-IconList.GetBitmap(II_Minus, DeleteLayerBtn.Glyph);
-IconList.GetBitmap(II_Ok, MkCurrentBtn.Glyph);
-ListView1.SmallImages:=IconList;
-MouseDownItem:=nil;
-MouseDownSubItem:=-1;
-changedstamp:=false;
+  if peditor<>nil then
+  begin
+       Application.RemoveAsyncCalls(self);
+       freeeditor;
+  end;
+  PEditor:=GDBAnsiStringDescriptorObj.CreateEditor(self.ListView1,r,ps,nil,true).Editor;
+  PEditor.geteditor.BoundsRect:=r;
+  PEditor.geteditor.Parent:=self.ListView1;
+  PEditor.geteditor.SetFocus;
+  PEditor.OwnerNotify:=@Notify;
+  EditedItem:=Item;
 end;
-function GetListItem(ListView1:TListView;x,y:integer;out ListItem:TListItem; out SubItem:Integer):boolean;
-var
-   pos: integer;
+{layer name handle procedures}
+function TLayerWindow.createnameeditor(Item: TListItem;r: TRect):boolean;
 begin
-     ListItem:=ListView1.GetItemAt(x,y);
-     if ListItem<>nil then
-     begin
+  createeditor(Item,r,@PGDBLayerProp(Item.Data)^.Name);
+  result:=false;
+end;
+function TLayerWindow.GetLayerName(Item: TListItem):string;
+begin
+  result:=Tria_AnsiToUtf8(PGDBLayerProp(Item.Data)^.Name);
+end;
+{layer lock handle procedures}
+function TLayerWindow.IsLayerLock(Item: TListItem):boolean;
+begin
+     result:=PGDBLayerProp(Item.Data)^._lock;
+end;
+function TLayerWindow.LayerLockClick(Item: TListItem;r: TRect):boolean;
+begin
      result:=true;
-     Pos := -GetScrollPos (ListView1.Handle, SB_HORZ);
-     SubItem := -1;
-     while Pos < {Pt.}X do
-     begin
-       Inc (SubItem);
-       Inc (Pos, ListView1.Columns.Items[SubItem].Width);
-     end;
-     if SubItem >= ListView1.Columns.Count then
-       SubItem := -1;
-     //showmessage (inttostr(col));
-     end
-     else
-         result:=false;
+     PGDBLayerProp(Item.Data)^._lock:=not PGDBLayerProp(Item.Data)^._lock;
 end;
-procedure TLayerWindow.MaceItemCurrent(ListItem:TListItem);
+{layer on handle procedures}
+function TLayerWindow.IsLayerOn(Item: TListItem):boolean;
 begin
-     if CurrentLayer<>ListItem then
-     begin
-     with PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(sysvar.dwg.DWG_CLayer^)^ do
-     begin
-          SysVar.dwg.DWG_CLayer^:={gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer}(ListItem.Data);
-          ComitFromObj;
-     end;
-     ListItem.ImageIndex:=II_Ok;
-     CurrentLayer.ImageIndex:=-1;
-     CurrentLayer:=ListItem;
-     if not PGDBLayerProp(ListItem.Data)^._on then
-                                                   MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
-     changedstamp:=true;
-     end;
+     result:=PGDBLayerProp(Item.Data)^._on;
+end;
+function TLayerWindow.LayerOnClick(Item: TListItem;r: TRect):boolean;
+begin
+     result:=true;
+     PGDBLayerProp(Item.Data)^._on:=not PGDBLayerProp(Item.Data)^._on;
+end;
+{layer freze handle procedures}
+function TLayerWindow.IsLayerFreze(Item: TListItem):boolean;
+begin
+     result:=false;
+end;
+{layer plot handle procedures}
+function TLayerWindow.IsLayerPlot(Item: TListItem):boolean;
+begin
+     result:=PGDBLayerProp(Item.Data)^._print;
+end;
+function TLayerWindow.LayerPlotClick(Item: TListItem;r: TRect):boolean;
+begin
+     result:=true;
+     PGDBLayerProp(Item.Data)^._print:=not PGDBLayerProp(Item.Data)^._print;
+end;
+{layer color handle procedures}
+procedure TLayerWindow.ColorSubitemDraw(aCanvas:TCanvas; Item: TListItem; SubItem:Integer; State: TCustomDrawState);
+var
+   colorindex:integer;
+   s:string;
+   y:integer;
+   textrect:TRect;
+   ARect: TRect;
+   ts:TTextStyle;
+const
+     cellsize=13;
+     textoffset=cellsize+5;
+begin
+  colorIndex:=PGDBLayerProp(Item.Data)^.color;
+  s:=GetColorNameFromIndex(colorindex);
+
+  ARect:=ListViewDrawSubItem(state,aCanvas,Item,SubItem);
+
+  textrect := Item.DisplayRectSubItem( SubItem,drLabel);
+  ts := aCanvas.TextStyle;
+  ts.Layout := tlCenter;
+  if colorindex in [1..255] then
+   begin
+        textrect.Left:=textrect.Left+textoffset;
+        aCanvas.TextRect(textrect,textrect.Left,0,s,ts);
+        if colorindex in [1..255] then
+         begin
+           aCanvas.Brush.Color:=RGBToColor(palette[colorindex].RGB.r,palette[colorindex].RGB.g,palette[colorindex].RGB.b);
+         end
+        else
+         aCanvas.Brush.Color:=clWhite;
+        y:=(ARect.Top+ARect.Bottom-cellsize)div 2;
+        aCanvas.Rectangle(ARect.Left,y,ARect.Left+cellsize,y+cellsize);
+        if colorindex=7 then
+         begin
+           aCanvas.Brush.Color:=clBlack;
+           aCanvas.Polygon([point(ARect.Left,y),point(ARect.Left+cellsize-1,y),point(ARect.Left+cellsize-1,y+cellsize-1)]);
+         end
+   end
+  else
+   DrawText(aCanvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_SINGLELINE or DT_VCENTER);
+end;
+function TLayerWindow.GetColorName(Item: TListItem):string;
+begin
+     result:=GetColorNameFromIndex(PGDBLayerProp(Item.Data)^.color);
+end;
+
+function TLayerWindow.LayerColorClick(Item: TListItem;r: TRect):boolean;
+var
+   mr:integer;
+begin
+  if not assigned(ColorSelectWND)then
+    Application.CreateForm(TColorSelectWND, ColorSelectWND);
+  if assigned(ShowAllCursorsProc) then
+    ShowAllCursorsProc;
+  mr:=ColorSelectWND.run(PGDBLayerProp(Item.Data)^.color,false);
+  if assigned(RestoreAllCursorsProc) then
+    RestoreAllCursorsProc;
+  if mr=mrOk then
+    begin
+     PGDBLayerProp(Item.Data)^.color:=ColorSelectWND.ColorInfex;
+     Item.SubItems[4]:=GetColorNameFromIndex(ColorSelectWND.ColorInfex);
+     result:=true;
+    end;
+  freeandnil(ColorSelectWND);
+end;
+{layer LineType handle procedures}
+procedure TLayerWindow.LtSubitemDraw(aCanvas:TCanvas; Item: TListItem; SubItem:Integer; State: TCustomDrawState);
+var
+   colorindex:integer;
+   s:string;
+   y:integer;
+   textrect:TRect;
+   ARect: TRect;
+   ts:TTextStyle;
+begin
+ARect:=ListViewDrawSubItem(state,aCanvas,Item,SubItem);
+ARect := Item.DisplayRectSubItem( SubItem,drLabel);
+s:=strproc.Tria_AnsiToUtf8(GetLTName(PGDBLayerProp(Item.Data)^.LT));
+drawLT(aCanvas,ARect,s,PGDBLayerProp(Item.Data)^.LT);
 end;
 procedure FillSelector(SelectorWindow: TSelectorWindow);
 var
@@ -148,134 +261,170 @@ begin
      end;
      SelectorWindow.EndAddItems;
 end;
-procedure TLayerWindow.Process(ListItem:TListItem;SubItem:Integer;DoubleClick:Boolean);
+function TLayerWindow.GetLineTypeName(Item: TListItem):string;
+begin
+     result:=strproc.Tria_AnsiToUtf8(GetLTName(PGDBLayerProp(Item.Data)^.LT));
+end;
+
+function TLayerWindow.LayerLTClick(Item: TListItem;r: TRect):boolean;
 var
    mr:integer;
 begin
-     {if SubItem>0 then
-                  ListItem.SubItemImages[SubItem-1]:=3
-              else
-                  ListItem.ImageIndex:=3;}
-     dec(subitem);
-     case subitem of
-          -1:
-             if DoubleClick then
-             MaceItemCurrent(ListItem);
-           0:
-             if DoubleClick then
-             createeditor(ListView1,ListItem,SubItem,@PGDBLayerProp(ListItem.Data)^.Name);
-           1:begin
-                   PGDBLayerProp(ListItem.Data)^._on:=not PGDBLayerProp(ListItem.Data)^._on;
-                   if PGDBLayerProp(ListItem.Data)^._on then
-                                    ListItem.SubItemImages[1]:=II_LayerOn
-                                else
-                                    begin
-                                    ListItem.SubItemImages[1]:=II_LayerOff;
-                                    if SysVar.dwg.DWG_CLayer^={gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer}(ListItem.Data) then
-                                                          MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
-                                    end;
-                    changedstamp:=true;
-             end;
-           3:begin
-                   PGDBLayerProp(ListItem.Data)^._lock:=not PGDBLayerProp(ListItem.Data)^._lock;
-                   if PGDBLayerProp(ListItem.Data)^._lock then
-                                    ListItem.SubItemImages[3]:=II_LayerLock
-                                else
-                                    ListItem.SubItemImages[3]:=II_LayerUnLock;
-                    changedstamp:=true;
-             end;
-           4:begin
-                if not assigned(ColorSelectWND)then
-                Application.CreateForm(TColorSelectWND, ColorSelectWND);
-                //mr:=DoShowModal(ColorSelectWND);
-                if assigned(ShowAllCursorsProc) then
-                                                    ShowAllCursorsProc;
-                mr:=ColorSelectWND.run(PGDBLayerProp(ListItem.Data)^.color,false);
-                if assigned(RestoreAllCursorsProc) then
-                                                    RestoreAllCursorsProc;
-                if mr=mrOk then
-                               begin
-                                    PGDBLayerProp(ListItem.Data)^.color:=ColorSelectWND.ColorInfex;
-                                    ListItem.SubItems[4]:=GetColorNameFromIndex(ColorSelectWND.ColorInfex);
-                               end;
-                freeandnil(ColorSelectWND);
-                changedstamp:=true;
-             end;
-           5:begin
-                if not assigned(SelectorWindow)then
-                Application.CreateForm(TSelectorWindow, SelectorWindow);
-                FillSelector(SelectorWindow);
-                if assigned(ShowAllCursorsProc) then
-                                                    ShowAllCursorsProc;
-                mr:=SelectorWindow.run;
-                if assigned(RestoreAllCursorsProc) then
-                                                    RestoreAllCursorsProc;
-                if mr=mrOk then
-                               begin
-                                    PGDBLayerProp(ListItem.Data)^.LT:=SelectorWindow.data;
-                               end;
-                freeandnil(SelectorWindow);
-                changedstamp:=true;
-             end;
-           6:begin
-                if not assigned(LineWeightSelectWND)then
-                Application.CreateForm(TLineWeightSelectWND, LineWeightSelectWND);
-                if assigned(ShowAllCursorsProc) then
-                                                    ShowAllCursorsProc;
-                mr:={DoShowModal}(LineWeightSelectWND.run(PGDBLayerProp(ListItem.Data)^.lineweight,false));
-                if assigned(RestoreAllCursorsProc) then
-                                                    RestoreAllCursorsProc;
-                if mr=mrOk then
-                               begin
-                                    PGDBLayerProp(ListItem.Data)^.lineweight:=LineWeightSelectWND.SelectedLW;
-                                    ListItem.SubItems[6]:=GetLWNameFromLW(LineWeightSelectWND.SelectedLW);
-                               end;
-                freeandnil(LineWeightSelectWND);
-                changedstamp:=true;
-             end;
-           7:begin
-                   PGDBLayerProp(ListItem.Data)^._print:=not PGDBLayerProp(ListItem.Data)^._print;
-                   if uppercase(PGDBLayerProp(ListItem.Data)^.Name)=LNSysDefpoints then
-                   begin
-                   if PGDBLayerProp(ListItem.Data)^._print then shared.ShowError(rsLayerDefpaontsCanNotBePrinted);
-                   PGDBLayerProp(ListItem.Data)^._print:=false;
-                   end;
-                   if PGDBLayerProp(ListItem.Data)^._print then
-                                    ListItem.SubItemImages[7]:=II_LayerPrint
-                                else
-                                    ListItem.SubItemImages[7]:=II_LayerUnPrint;
-                    changedstamp:=true;
-             end;
-           8:
-             if DoubleClick then
-             createeditor(ListView1,ListItem,SubItem,@PGDBLayerProp(ListItem.Data)^.desk);
-     end;
+  if not assigned(SelectorWindow)then
+  Application.CreateForm(TSelectorWindow, SelectorWindow);
+  FillSelector(SelectorWindow);
+  if assigned(ShowAllCursorsProc) then
+                                      ShowAllCursorsProc;
+  mr:=SelectorWindow.run;
+  if assigned(RestoreAllCursorsProc) then
+                                      RestoreAllCursorsProc;
+  if mr=mrOk then
+                 begin
+                      PGDBLayerProp(Item.Data)^.LT:=SelectorWindow.data;
+                      result:=true;
+                 end;
+  freeandnil(SelectorWindow);
 end;
-procedure TLayerWindow.createeditor(ListView:TListView;ListItem:TListItem;SubItem:Integer;P:PAnsiString);
+{layer LineWidth handle procedures}
+procedure TLayerWindow.LWSubitemDraw(aCanvas:TCanvas; Item: TListItem; SubItem:Integer; State: TCustomDrawState);
 var
-   pos,si: integer;
-   rect:trect;
+   colorindex,ll:integer;
+   s:string;
+   y:integer;
+   textrect:TRect;
+   ARect: TRect;
+   ts:TTextStyle;
 begin
-  Pos := -GetScrollPos (ListView.Handle, SB_HORZ);
-  si := -1;
-  while si < subitem do
-  begin
-    Inc (Si);
-    Inc (Pos, ListView.Columns.Items[si].Width);
-  end;
-  si:=ListItem.DisplayRect(drBounds).Bottom-ListItem.DisplayRect(drBounds).Top-1;
-  if peditor<>nil then
-  begin
-       Application.RemoveAsyncCalls(self);
-       freeeditor;
-  end;
-  rect:=Bounds(pos,ListItem.Top,ListView1.Columns.Items[SubItem+1].Width,si);
-  PEditor:=GDBAnsiStringDescriptorObj.CreateEditor(self.ListView1,rect,p,nil,true).Editor;
-  PEditor.geteditor.SetFocus;
-  PEditor.OwnerNotify:=@Notify;
-  EditedItem:=ListItem;
+  ARect:=ListViewDrawSubItem(state,aCanvas,Item,SubItem);
+  colorindex:=PGDBLayerProp(Item.Data)^.lineweight;
+  s:=GetLWNameFromLW(colorindex);
+  if colorindex<0 then
+             ll:=0
+         else
+             ll:=30;
+   drawLW(aCanvas,ARect,ll,(colorindex) div 10,s);
+end;
+function TLayerWindow.GetLineWeightName(Item: TListItem):string;
+begin
+     result:=GetLWNameFromLW(PGDBLayerProp(Item.Data)^.lineweight);
 end;
 
+function TLayerWindow.LayerLWClick(Item: TListItem;r: TRect):boolean;
+var
+   mr:integer;
+begin
+  if not assigned(LineWeightSelectWND)then
+  Application.CreateForm(TLineWeightSelectWND, LineWeightSelectWND);
+  if assigned(ShowAllCursorsProc) then
+                                      ShowAllCursorsProc;
+  mr:=LineWeightSelectWND.run(PGDBLayerProp(Item.Data)^.lineweight,false);
+  if assigned(RestoreAllCursorsProc) then
+                                      RestoreAllCursorsProc;
+  if mr=mrOk then
+                 begin
+                      PGDBLayerProp(Item.Data)^.lineweight:=LineWeightSelectWND.SelectedLW;
+                      Item.SubItems[6]:=GetLWNameFromLW(LineWeightSelectWND.SelectedLW);
+                      result:=true;
+                 end;
+  freeandnil(LineWeightSelectWND);
+end;
+{layer description handle procedures}
+function TLayerWindow.createdesceditor(Item: TListItem;r: TRect):boolean;
+begin
+  createeditor(Item,r,@PGDBLayerProp(Item.Data)^.desk);
+  result:=false;
+end;
+function TLayerWindow.GetDescName(Item: TListItem):string;
+begin
+     result:=PGDBLayerProp(Item.Data)^.desk;
+end;
+
+
+
+procedure TLayerWindow.FormCreate(Sender: TObject); // Процедура выполняется при отрисовке окна
+begin
+// Отрисовываем картинки на кнопках
+IconList.GetBitmap(II_Plus, AddLayerBtn.Glyph);
+IconList.GetBitmap(II_Minus, DeleteLayerBtn.Glyph);
+IconList.GetBitmap(II_Ok, MkCurrentBtn.Glyph);
+ListView1.SmallImages:=IconList;
+ListView1.DefaultItemIndex:=II_Ok;
+
+setlength(ListView1.SubItems,ColumnCount);
+
+with ListView1.SubItems[NameColumn] do
+begin
+     On2Click:=@createnameeditor;
+     OnGetName:=@GetLayerName;
+end;
+with ListView1.SubItems[LockColumn] do
+begin
+     OnImageIndex:=II_LayerLock;
+     OffImageIndex:=II_LayerUnLock;
+     OnClick:=@LayerLockClick;
+     IsOn:=@IsLayerLock;
+end;
+with ListView1.SubItems[FrezeColumn] do
+begin
+     OnImageIndex:=II_LayerFreze;
+     OffImageIndex:=II_LayerUnFreze;
+     IsOn:=@IsLayerFreze;
+end;
+with ListView1.SubItems[OnColumn] do
+begin
+     OnImageIndex:=II_LayerOn;
+     OffImageIndex:=II_LayerOff;
+     OnClick:=@LayerOnClick;
+     IsOn:=@IsLayerOn;
+end;
+with ListView1.SubItems[ColorColumn] do
+begin
+     OnDraw:=@ColorSubitemDraw;
+     OnClick:=@LayerColorClick;
+     OnGetName:=@GetColorName;
+end;
+with ListView1.SubItems[LineTypeColumn] do
+begin
+     OnDraw:=@LtSubitemDraw;
+     OnClick:=@LayerLTClick;
+     OnGetName:=@GetLineTypeName;
+end;
+with ListView1.SubItems[LineWeightColumn] do
+begin
+     OnDraw:=@LWSubitemDraw;
+     OnClick:=@LayerLWClick;
+     OnGetName:=@GetLineWeightName;
+end;
+with ListView1.SubItems[PlotColumn] do
+begin
+     OnImageIndex:=II_LayerPrint;
+     OffImageIndex:=II_LayerUnPrint;
+     IsOn:=@IsLayerPlot;
+     OnClick:=@LayerPlotClick;
+end;
+with ListView1.SubItems[DescColumn] do
+begin
+     On2Click:=@createdesceditor;
+     OnGetName:=@GetDescName;
+end;
+end;
+procedure TLayerWindow.MaceItemCurrent(ListItem:TListItem);
+begin
+     if ListView1.CurrentItem<>ListItem then
+     begin
+     with PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(sysvar.dwg.DWG_CLayer^)^ do
+     begin
+          SysVar.dwg.DWG_CLayer^:={gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer}(ListItem.Data);
+          ComitFromObj;
+     end;
+     ListItem.ImageIndex:=II_Ok;
+     ListView1.CurrentItem.ImageIndex:=-1;
+     ListView1.CurrentItem:=ListItem;
+     if not PGDBLayerProp(ListItem.Data)^._on then
+                                                   MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
+     invalidate;
+     end;
+end;
 procedure TLayerWindow.Notify(Sender: TObject;Command:TMyNotifyCommand);
 //var
    //pld:GDBPointer;
@@ -305,47 +454,10 @@ begin
        peditor:=nil;
        //freeandnil(peditor);
        ListView1.BeginUpdate;
-       UpdateItem(EditedItem);
+       ListView1.UpdateItem(EditedItem,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
        ListView1.EndUpdate;
        EditedItem:=nil;
   end;
-end;
-
-
-procedure TLayerWindow.ProcessClick(ListItem:TListItem;SubItem:Integer;DoubleClick:Boolean);
-var i:integer;
-begin
-     //ListView1.BeginUpdate;
-     process(ListItem,SubItem,DoubleClick);
-     for i:=0 to ListView1.Items.Count-1 do
-     begin
-          if ListView1.Items[i].Selected then
-          if ListView1.Items[i]<>ListItem then
-                                              process(ListView1.Items[i],SubItem,false);
-     end;
-     //ListView1.EndUpdate;
-end;
-
-procedure TLayerWindow.LWMouseDown(Sender: TObject; Button: TMouseButton;
-                          Shift: TShiftState; X, Y: Integer);
-begin
-     if Button=mbLeft then
-     begin
-     GetListItem(ListView1,x,y,MouseDownItem,MouseDownSubItem);
-     {if ListView1.SelCount>1 then
-     begin}
-     if ssDouble in Shift then
-                              doubleclick:=true
-                          else
-                              doubleclick:=false;
-     {end
-     else
-         begin
-         ProcessClick(MouseDownItem,MouseDownSubItem,false);
-         MouseDownItem:=nil;
-         MouseDownSubItem:=-1;
-         end;}
-     end;
 end;
 
 procedure TLayerWindow.MkCurrent(Sender: TObject);
@@ -355,187 +467,15 @@ begin
                                  else
                                      MessageBox(@rsLayerMustBeSelected[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
 end;
-
-procedure TLayerWindow.onCDItem(Sender: TCustomListView; Item: TListItem;
-  State: TCustomDrawState; var DefaultDraw: Boolean);
-begin
-  {if (state<>[cdsSelected,cdsFocused])and(state<>[]) then
-  begin
-  Sender.canvas.Brush.Color:=clHighlight;
-  Sender.canvas.Font.Color:=clHighlightText;
-  end;}
-end;
-procedure TLayerWindow.onCDSubItem(Sender: TCustomListView; Item: TListItem;
-  SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
-var
-   colorindex,ll:integer;
-   s:string;
-   canv:TCanvas;
-   //plp:PGDBLayerProp;
-   //Dest: PChar;
-   y{,i}:integer;
-   textrect:TRect;
-   ARect: TRect;
-   BrushColor,FontColor:TColor;
-   ts:TTextStyle;
-const
-     cellsize=13;
-     textoffset=cellsize+5;
-begin
-     BrushColor:=TCustomListView(sender).canvas.Brush.Color;
-     FontColor:=TCustomListView(sender).canvas.Font.Color;
-     DefaultDraw:=false;
-     case SubItem of
-     6:
-       begin
-            ARect:=ListViewDrawSubItem(state,sender.canvas,Item,SubItem);
-            {textrect}ARect := Item.DisplayRectSubItem( SubItem,drLabel);
-            s:=strproc.Tria_AnsiToUtf8(GetLTName(PGDBLayerProp(Item.Data)^.LT));
-            //s:=strproc.Tria_AnsiToUtf8(PGDBLtypeProp(PGDBLayerProp(Item.Data)^.LT)^.name);
-            canv:=Sender.canvas;
-            drawLT{superdrawdraw}(canv,ARect,s,PGDBLayerProp(Item.Data)^.LT);
-       end;
-     5:
-                      begin
-                           colorindex:=PGDBLayerProp(Item.Data)^.color;
-                           s:=GetColorNameFromIndex(colorindex);
-
-                           ARect:=ListViewDrawSubItem(state,sender.canvas,Item,SubItem);
-
-                           textrect := Item.DisplayRectSubItem( SubItem,drLabel);
-                           //ARect.Left:=ARect.Left+2;
-                           //textrect:=ARect;
-                           ts := TCustomListView(Sender).Canvas.TextStyle;
-                           ts.Layout := tlCenter;
-                           //ts.SystemFont := false;
-                           //ts.Alignment := taRightJustify;
-                           if colorindex in [1..255] then
-                            begin
-                                 textrect.Left:=textrect.Left+textoffset;
-                                 //DrawText(TCustomListView(sender).canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_SINGLELINE or DT_VCENTER);
-                                 TCustomListView(sender).canvas.TextRect(textrect,textrect.Left,0,s,ts);
-                                 //TCustomListView(Sender).Canvas.TextRect(Retang,Retang.Left,0,Item.SubItems[4],estilo);
-                                 if colorindex in [1..255] then
-                                                begin
-                                                     TCustomListView(sender).canvas.Brush.Color:=RGBToColor(palette[colorindex].RGB.r,palette[colorindex].RGB.g,palette[colorindex].RGB.b);
-                                                end
-                                            else
-                                                TCustomListView(sender).canvas.Brush.Color:=clWhite;
-                                 y:=(ARect.Top+ARect.Bottom-cellsize)div 2;
-                                 TCustomListView(sender).canvas.Rectangle(ARect.Left,y,ARect.Left+cellsize,y+cellsize);
-                                 if colorindex=7 then
-                                                begin
-                                                     TCustomListView(sender).canvas.Brush.Color:=clBlack;
-                                                     TCustomListView(sender).canvas.Polygon([point(ARect.Left,y),point(ARect.Left+cellsize-1,y),point(ARect.Left+cellsize-1,y+cellsize-1)]);
-                                                 end
-                            end
-                           else
-                           DrawText(sender.canvas.Handle,@s[1],length(s),textrect,DT_LEFT or DT_SINGLELINE or DT_VCENTER);
-                           //TCustomListView(sender).canvas.TextRect(textrect,textrect.Left,0,s,estilo);
-                           end;
-4,3,2,8:
-                      begin
-                           ARect:=ListViewDrawSubItem(state,TCustomListView(sender).canvas,Item,SubItem);
-                           TListView(Sender).SmallImages.Draw(Sender.Canvas,ARect.Left+(ARect.Right-ARect.Left)div 2-8,ARect.Top,Item.SubItemImages[SubItem-1],gdeNormal)
-                      end;
-7:
-                      begin
-                           ARect:=ListViewDrawSubItem(state,TCustomListView(sender).canvas,Item,SubItem);
-                           colorindex:=PGDBLayerProp(Item.Data)^.lineweight;
-                           s:=GetLWNameFromLW(colorindex);
-                           if colorindex<0 then
-                                      ll:=0
-                                  else
-                                      ll:=30;
-                            //ARect.Left:=ARect.Left+2;
-                            drawLW(TCustomListView(sender).canvas,ARect,ll,(colorindex) div 10,s);
-                       end;
-                  else
-                      DefaultDraw:=true;
-                  end;
-      TCustomListView(sender).canvas.Brush.Color:=BrushColor;
-      TCustomListView(sender).canvas.Font.Color:=FontColor;
-
-end;
-
-procedure TLayerWindow.LWMouseUp(Sender: TObject; Button: TMouseButton;
-                          Shift: TShiftState; X, Y: Integer);
-var
-   li:TListItem;
-   //ht:THitTests;
-   //
-   //pt: TPoint;
-   col: Integer;
-   //pos: integer;
-begin
-     if Button=mbLeft then
-     begin
-     if GetListItem(ListView1,x,y,li,col) then
-     begin
-     if li=MouseDownItem then
-     if col=MouseDownSubItem then
-                                 ProcessClick(li,col,DoubleClick);
-     end;
-     end;
-     MouseDownItem:=nil;
-     MouseDownSubItem:=-1;
-     DoubleClick:=false;
-end;
-procedure TLayerWindow.UpdateItem(Item: TListItem);
-var
-   pdwg:PTSimpleDrawing;
-   //ir:itrec;
-   plp:PGDBLayerProp;
-   //s:ansistring;
-begin
-     pdwg:=gdb.GetCurrentDWG;
-     plp:=Item.Data;
-     Item.SubItems.Clear;
-     if plp=pdwg^.LayerTable.GetCurrentLayer then
-                                                             begin
-                                                             Item.ImageIndex:=II_Ok;
-                                                             CurrentLayer:=Item;
-                                                             end;
-                 Item.SubItems.Add(strproc.Tria_AnsiToUtf8(plp^.GetName));
-                 Item.SubItems.Add('');
-                 Item.SubItems.Add('');
-                 Item.SubItems.Add('');
-                 Item.SubItems.Add(GetColorNameFromIndex(plp^.color));
-                 Item.SubItems.Add(GetLTName(plp^.LT));
-                 //Item.SubItems.Add({'Continuous'}strproc.Tria_AnsiToUtf8(PGDBLtypeProp(plp^.LT)^.name));
-                 Item.SubItems.Add(GetLWNameFromLW(plp^.lineweight));
-                 Item.SubItems.Add('');
-                 Item.SubItems.Add(strproc.Tria_AnsiToUtf8(plp^.desk));
-                 if plp^._on then
-                                 Item.SubItemImages[1]:=II_LayerOn
-                             else
-                                 Item.SubItemImages[1]:=II_LayerOff;
-
-                 Item.SubItemImages[2]:=10;
-
-                 if plp^._lock then
-                                 Item.SubItemImages[3]:=II_LayerLock
-                             else
-                                 Item.SubItemImages[3]:=II_LayerUnLock;
-                 if plp^._print then
-                                 Item.SubItemImages[7]:=II_LayerPrint
-                             else
-                                 Item.SubItemImages[7]:=II_LayerUnPrint;
-end;
-
 procedure TLayerWindow.FormShow(Sender: TObject);
 var
    pdwg:PTSimpleDrawing;
    ir:itrec;
    plp:PGDBLayerProp;
-   //s:ansistring;
    li:TListItem;
 begin
-     //ListView1.onconc
      ListView1.BeginUpdate;
      ListView1.Clear;
-     ListView1.OnMouseUp:=@LWMouseUp;
-     ListView1.OnMouseDown:=@LWMouseDown;
      pdwg:=gdb.GetCurrentDWG;
      if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
      begin
@@ -546,22 +486,14 @@ begin
 
             li.Data:=plp;
 
-            UpdateItem(li);
+            ListView1.UpdateItem(li,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
 
-            //s:=plp^.GetFullName;
-            //ListView1.Items.Add(li);
             plp:=pdwg^.LayerTable.iterate(ir);
        until plp=nil;
      end;
      ListView1.SortColumn:=1;
      ListView1.SetFocus;
      ListView1.EndUpdate;
-end;
-
-procedure TLayerWindow.ListView1Change(Sender: TObject; Item: TListItem;
-  Change: TItemChange);
-begin
-     Sender:=Sender;
 end;
 procedure TLayerWindow.countlayer(player:PGDBLayerProp;out e,b:GDBInteger);
 var
@@ -629,7 +561,7 @@ begin
      ListView1.BeginUpdate;
      li:=ListView1.Items.Add;
      li.Data:=pcreatedlayer;
-     UpdateItem(li);
+     ListView1.UpdateItem(li,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
      ListView1.SortColumn:=-1;
      ListView1.SortColumn:=1;
      if assigned(ListView1.Selected)then
@@ -682,7 +614,7 @@ begin
      close;
 end;
 
-procedure TLayerWindow.Aply(Sender: TObject);
+procedure TLayerWindow.Aply(Sender: TObject) ;
 begin
      if changedstamp then
      begin

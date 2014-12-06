@@ -1,115 +1,173 @@
-object TSWindow: TTSWindow
-  Left = 289
-  Height = 301
-  Top = 56
-  Width = 320
-  Caption = 'Text Style'
-  ClientHeight = 301
-  ClientWidth = 320
+object TextStylesWindow: TTextStylesWindow
+  Left = 380
+  Height = 590
+  Top = 198
+  Width = 938
+  Caption = 'Layers'
+  ClientHeight = 590
+  ClientWidth = 938
+  Constraints.MinHeight = 500
+  Constraints.MinWidth = 800
+  OnClose = FormClose
+  OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
   LCLVersion = '1.3'
-  object Label1: TLabel
-    Left = 104
-    Height = 15
-    Top = 268
-    Width = 104
-    Caption = 'Not Implemed yet(('
+  object Bevel1: TBevel
+    AnchorSideLeft.Control = MkCurrentBtn
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
+    Left = 82
+    Height = 25
+    Top = 1
+    Width = 855
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 2
+    BorderSpacing.Top = 1
+    BorderSpacing.Right = 1
+  end
+  object LayerDescLabel: TLabel
+    AnchorSideLeft.Control = Bevel1
+    AnchorSideTop.Control = Bevel1
+    AnchorSideRight.Control = Bevel1
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Bevel1
+    AnchorSideBottom.Side = asrBottom
+    Left = 83
+    Height = 23
+    Top = 2
+    Width = 853
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Around = 1
+    Layout = tlCenter
     ParentColor = False
   end
-  object grpStyleName: TGroupBox
-    Left = 7
-    Height = 57
-    Top = 8
-    Width = 304
-    Caption = 'Style Name'
-    ClientHeight = 39
-    ClientWidth = 300
+  object ButtonApplyClose: TBitBtn
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 783
+    Height = 30
+    Top = 559
+    Width = 154
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Right = 1
+    BorderSpacing.Bottom = 1
+    Caption = 'Apply and close'
+    OnClick = AplyClose
     TabOrder = 0
-    object cbStyles: TComboBox
-      Left = 6
-      Height = 23
-      Top = 8
-      Width = 100
-      ItemHeight = 15
-      TabOrder = 0
-      Text = 'cbStyles'
-    end
-    object btnNew: TButton
-      Left = 110
-      Height = 25
-      Top = 8
-      Width = 75
-      Caption = 'New'
-      OnClick = btnNewClick
-      TabOrder = 1
-    end
-    object btnDelete: TButton
-      Left = 190
-      Height = 25
-      Top = 8
-      Width = 75
-      Caption = 'Delete'
-      TabOrder = 2
-    end
   end
-  object grpFont: TGroupBox
-    Left = 10
-    Height = 85
-    Top = 75
-    Width = 302
-    Caption = 'Font'
-    ClientHeight = 67
-    ClientWidth = 298
+  object Button_Apply: TBitBtn
+    AnchorSideRight.Control = ButtonApplyClose
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 632
+    Height = 30
+    Top = 559
+    Width = 150
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Right = 1
+    BorderSpacing.Bottom = 1
+    Caption = 'Apply'
+    OnClick = Aply
+    ParentShowHint = False
     TabOrder = 1
-    object Label2: TLabel
-      Left = 19
-      Height = 15
-      Top = 10
-      Width = 47
-      Caption = 'TTF Font'
-      ParentColor = False
-    end
-    object cbFont: TComboBox
-      Left = 88
-      Height = 23
-      Top = 6
-      Width = 100
-      ItemHeight = 15
-      TabOrder = 0
-      Text = 'cbFont'
-    end
-    object lblTextHeight: TLabel
-      Left = 20
-      Height = 15
-      Top = 38
-      Width = 36
-      Caption = 'Height'
-      ParentColor = False
-    end
-    object txtTextHeight: TEdit
-      Left = 88
-      Height = 23
-      Top = 37
-      Width = 99
-      TabOrder = 1
-      Text = 'txtTextHeight'
-    end
   end
-  object btnOk: TButton
-    Left = 16
+  object MkCurrentBtn: TSpeedButton
+    AnchorSideLeft.Control = DeleteLayerBtn
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Bevel1
+    AnchorSideBottom.Control = Bevel1
+    AnchorSideBottom.Side = asrBottom
+    Left = 55
     Height = 25
-    Top = 269
-    Width = 75
-    Caption = 'OK'
+    Top = 1
+    Width = 25
+    Anchors = [akTop, akLeft, akBottom]
+    Flat = True
+    OnClick = MkCurrent
+  end
+  object DeleteLayerBtn: TSpeedButton
+    AnchorSideLeft.Control = AddLayerBtn
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Bevel1
+    AnchorSideBottom.Control = Bevel1
+    AnchorSideBottom.Side = asrBottom
+    Left = 28
+    Height = 25
+    Top = 1
+    Width = 27
+    Anchors = [akTop, akLeft, akBottom]
+    Flat = True
+    OnClick = LayerDelete
+  end
+  object AddLayerBtn: TSpeedButton
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Bevel1
+    AnchorSideBottom.Control = Bevel1
+    AnchorSideBottom.Side = asrBottom
+    Left = 1
+    Height = 25
+    Top = 1
+    Width = 27
+    Anchors = [akTop, akLeft, akBottom]
+    BorderSpacing.Left = 1
+    Flat = True
+    OnClick = LayerAdd
+  end
+  object ListView1: TZListView
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Bevel1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = ButtonApplyClose
+    Left = 1
+    Height = 529
+    Top = 28
+    Width = 936
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 1
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 1
+    BorderSpacing.Bottom = 2
+    Columns = <    
+      item
+        Caption = 'Status'
+        Width = 100
+      end    
+      item
+        Caption = 'Name'
+        Width = 250
+      end    
+      item
+        Caption = 'FontName'
+        Width = 100
+      end    
+      item
+        Caption = 'Height'
+        Width = 100
+      end    
+      item
+        Caption = 'Width factor'
+        Width = 100
+      end    
+      item
+        Caption = 'Oblique'
+        Width = 80
+      end>
+    MultiSelect = True
+    ReadOnly = True
+    RowSelect = True
+    ScrollBars = ssAutoBoth
+    SortType = stText
     TabOrder = 2
-  end
-  object btnCancel: TButton
-    Left = 236
-    Height = 25
-    Top = 268
-    Width = 75
-    Caption = 'Cancel'
-    TabOrder = 3
+    ViewStyle = vsReport
+    OnSelectItem = ListView1SelectItem
+    onMakeCurrent = MaceItemCurrent
   end
 end

@@ -77,7 +77,49 @@ object LayerWindow: TLayerWindow
     ParentShowHint = False
     TabOrder = 1
   end
-  object ListView1: TListView
+  object MkCurrentBtn: TSpeedButton
+    AnchorSideLeft.Control = DeleteLayerBtn
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Bevel1
+    AnchorSideBottom.Control = Bevel1
+    AnchorSideBottom.Side = asrBottom
+    Left = 55
+    Height = 25
+    Top = 1
+    Width = 25
+    Anchors = [akTop, akLeft, akBottom]
+    Flat = True
+    OnClick = MkCurrent
+  end
+  object DeleteLayerBtn: TSpeedButton
+    AnchorSideLeft.Control = AddLayerBtn
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Bevel1
+    AnchorSideBottom.Control = Bevel1
+    AnchorSideBottom.Side = asrBottom
+    Left = 28
+    Height = 25
+    Top = 1
+    Width = 27
+    Anchors = [akTop, akLeft, akBottom]
+    Flat = True
+    OnClick = LayerDelete
+  end
+  object AddLayerBtn: TSpeedButton
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Bevel1
+    AnchorSideBottom.Control = Bevel1
+    AnchorSideBottom.Side = asrBottom
+    Left = 1
+    Height = 25
+    Top = 1
+    Width = 27
+    Anchors = [akTop, akLeft, akBottom]
+    BorderSpacing.Left = 1
+    Flat = True
+    OnClick = LayerAdd
+  end
+  object ListView1: TZListView
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Bevel1
     AnchorSideTop.Side = asrBottom
@@ -132,7 +174,7 @@ object LayerWindow: TLayerWindow
       item
         AutoSize = True
         Caption = 'Description'
-        Width = 72
+        Width = 81
       end>
     MultiSelect = True
     ReadOnly = True
@@ -141,51 +183,7 @@ object LayerWindow: TLayerWindow
     SortType = stText
     TabOrder = 2
     ViewStyle = vsReport
-    OnChange = ListView1Change
-    OnCustomDrawItem = onCDItem
-    OnCustomDrawSubItem = onCDSubItem
     OnSelectItem = ListView1SelectItem
-  end
-  object MkCurrentBtn: TSpeedButton
-    AnchorSideLeft.Control = DeleteLayerBtn
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = Bevel1
-    AnchorSideBottom.Control = Bevel1
-    AnchorSideBottom.Side = asrBottom
-    Left = 55
-    Height = 25
-    Top = 1
-    Width = 25
-    Anchors = [akTop, akLeft, akBottom]
-    Flat = True
-    OnClick = MkCurrent
-  end
-  object DeleteLayerBtn: TSpeedButton
-    AnchorSideLeft.Control = AddLayerBtn
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = Bevel1
-    AnchorSideBottom.Control = Bevel1
-    AnchorSideBottom.Side = asrBottom
-    Left = 28
-    Height = 25
-    Top = 1
-    Width = 27
-    Anchors = [akTop, akLeft, akBottom]
-    Flat = True
-    OnClick = LayerDelete
-  end
-  object AddLayerBtn: TSpeedButton
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Bevel1
-    AnchorSideBottom.Control = Bevel1
-    AnchorSideBottom.Side = asrBottom
-    Left = 1
-    Height = 25
-    Top = 1
-    Width = 27
-    Anchors = [akTop, akLeft, akBottom]
-    BorderSpacing.Left = 1
-    Flat = True
-    OnClick = LayerAdd
+    onMakeCurrent = MaceItemCurrent
   end
 end

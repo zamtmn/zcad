@@ -3,7 +3,7 @@ object TextStylesWindow: TTextStylesWindow
   Height = 590
   Top = 198
   Width = 938
-  Caption = 'Layers'
+  Caption = 'Text styles'
   ClientHeight = 590
   ClientWidth = 938
   Constraints.MinHeight = 500

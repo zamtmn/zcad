@@ -29,6 +29,7 @@ msgid "Color index"
 msgstr ""
 
 #: tlayerwindow.buttonapplyclose.caption
+msgctxt "tlayerwindow.buttonapplyclose.caption"
 msgid "Apply and close"
 msgstr ""
 
@@ -58,6 +59,7 @@ msgid "On"
 msgstr ""
 
 #: tlayerwindow.listview1.columns[3].caption
+msgctxt "tlayerwindow.listview1.columns[3].caption"
 msgid "Freze"
 msgstr ""
 
@@ -82,6 +84,7 @@ msgid "Line weight"
 msgstr ""
 
 #: tlayerwindow.listview1.columns[8].caption
+msgctxt "tlayerwindow.listview1.columns[8].caption"
 msgid "Plot"
 msgstr ""
 
@@ -169,6 +172,51 @@ msgstr ""
 
 #: tsltexteditor1.okbutton.caption
 msgid "Ok"
+msgstr ""
+
+#: ttextstyleswindow.buttonapplyclose.caption
+msgctxt "TTEXTSTYLESWINDOW.BUTTONAPPLYCLOSE.CAPTION"
+msgid "Apply and close"
+msgstr ""
+
+#: ttextstyleswindow.button_apply.caption
+msgctxt "TTEXTSTYLESWINDOW.BUTTON_APPLY.CAPTION"
+msgid "Apply"
+msgstr ""
+
+#: ttextstyleswindow.caption
+msgctxt "TTEXTSTYLESWINDOW.CAPTION"
+msgid "Text styles"
+msgstr ""
+
+#: ttextstyleswindow.listview1.columns[0].caption
+msgctxt "TTEXTSTYLESWINDOW.LISTVIEW1.COLUMNS[0].CAPTION"
+msgid "Status"
+msgstr ""
+
+#: ttextstyleswindow.listview1.columns[1].caption
+msgctxt "TTEXTSTYLESWINDOW.LISTVIEW1.COLUMNS[1].CAPTION"
+msgid "Name"
+msgstr ""
+
+#: ttextstyleswindow.listview1.columns[2].caption
+msgctxt "TTEXTSTYLESWINDOW.LISTVIEW1.COLUMNS[2].CAPTION"
+msgid "FontName"
+msgstr ""
+
+#: ttextstyleswindow.listview1.columns[3].caption
+msgctxt "TTEXTSTYLESWINDOW.LISTVIEW1.COLUMNS[3].CAPTION"
+msgid "Height"
+msgstr ""
+
+#: ttextstyleswindow.listview1.columns[4].caption
+msgctxt "TTEXTSTYLESWINDOW.LISTVIEW1.COLUMNS[4].CAPTION"
+msgid "Width factor"
+msgstr ""
+
+#: ttextstyleswindow.listview1.columns[5].caption
+msgctxt "TTEXTSTYLESWINDOW.LISTVIEW1.COLUMNS[5].CAPTION"
+msgid "Oblique"
 msgstr ""
 
 #: ugdbdescriptor.unnamedwindowtitle
@@ -3232,6 +3280,7 @@ msgid "Entity"
 msgstr ""
 
 #: zcadexternal.ttextinsertparams~oblique
+msgctxt "zcadexternal.ttextinsertparams~oblique"
 msgid "Oblique"
 msgstr ""
 
@@ -3255,6 +3304,7 @@ msgid "Width"
 msgstr ""
 
 #: zcadexternal.ttextinsertparams~widthfactor
+msgctxt "zcadexternal.ttextinsertparams~widthfactor"
 msgid "Width factor"
 msgstr ""
 

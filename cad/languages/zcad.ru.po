@@ -39,10 +39,12 @@ msgid "Color index"
 msgstr "Индексная палитра"
 
 #: tlayerwindow.buttonapplyclose.caption
+msgctxt "tlayerwindow.buttonapplyclose.caption"
 msgid "Apply and close"
 msgstr "Применить и закрыть"
 
 #: tlayerwindow.button_apply.caption
+msgctxt "tlayerwindow.button_apply.caption"
 msgid "Apply"
 msgstr "Применить"
 
@@ -68,6 +70,7 @@ msgid "On"
 msgstr "Включен"
 
 #: tlayerwindow.listview1.columns[3].caption
+msgctxt "tlayerwindow.listview1.columns[3].caption"
 msgid "Freze"
 msgstr "Заморожен"
 
@@ -92,6 +95,7 @@ msgid "Line weight"
 msgstr "Вес линии"
 
 #: tlayerwindow.listview1.columns[8].caption
+msgctxt "tlayerwindow.listview1.columns[8].caption"
 msgid "Plot"
 msgstr "Печать"
 
@@ -180,6 +184,53 @@ msgstr "Текст"
 #: tsltexteditor1.okbutton.caption
 msgid "Ok"
 msgstr "Ок"
+
+#: ttextstyleswindow.buttonapplyclose.caption
+msgctxt "ttextstyleswindow.buttonapplyclose.caption"
+msgid "Apply and close"
+msgstr "Применить и закрыть"
+
+#: ttextstyleswindow.button_apply.caption
+msgctxt "ttextstyleswindow.button_apply.caption"
+msgid "Apply"
+msgstr "Применить"
+
+#: ttextstyleswindow.caption
+msgctxt "ttextstyleswindow.caption"
+msgid "Text styles"
+msgstr "Стили текста"
+
+#: ttextstyleswindow.listview1.columns[0].caption
+#, fuzzy
+msgctxt "ttextstyleswindow.listview1.columns[0].caption"
+msgid "Status"
+msgstr "Статус"
+
+#: ttextstyleswindow.listview1.columns[1].caption
+#, fuzzy
+msgctxt "ttextstyleswindow.listview1.columns[1].caption"
+msgid "Name"
+msgstr "Имя"
+
+#: ttextstyleswindow.listview1.columns[2].caption
+msgctxt "ttextstyleswindow.listview1.columns[2].caption"
+msgid "FontName"
+msgstr "Фонт"
+
+#: ttextstyleswindow.listview1.columns[3].caption
+msgctxt "ttextstyleswindow.listview1.columns[3].caption"
+msgid "Height"
+msgstr "Высота"
+
+#: ttextstyleswindow.listview1.columns[4].caption
+msgctxt "ttextstyleswindow.listview1.columns[4].caption"
+msgid "Width factor"
+msgstr "Коэфф. ширины"
+
+#: ttextstyleswindow.listview1.columns[5].caption
+msgctxt "ttextstyleswindow.listview1.columns[5].caption"
+msgid "Oblique"
+msgstr "Наклон"
 
 #: ugdbdescriptor.unnamedwindowtitle
 msgctxt "ugdbdescriptor.unnamedwindowtitle"
@@ -507,17 +558,9 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
-#: zcadexternal.acn_fakecopyclipbase~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_fakecopyclipbase~textimage
 msgctxt "zcadexternal.acn_fakecopyclipbase~textimage"
 msgid "CB"
-msgstr ""
-
-#: zcadexternal.acn_fakepaste~caption
-msgid ""
 msgstr ""
 
 #: zcadexternal.acn_fakepaste~textimage
@@ -843,10 +886,6 @@ msgctxt "zcadexternal.acn_print~hint"
 msgid "Print"
 msgstr "Печать"
 
-#: zcadexternal.acn_processkz~caption
-msgid ""
-msgstr ""
-
 #: zcadexternal.acn_projecttree~caption
 msgctxt "zcadexternal.acn_projecttree~caption"
 msgid "Project tree"
@@ -876,10 +915,6 @@ msgstr "Повторить"
 msgctxt "zcadexternal.acn_regen~caption"
 msgid "Regen all"
 msgstr "Регенерировать всё"
-
-#: zcadexternal.acn_remautocables~caption
-msgid ""
-msgstr ""
 
 #: zcadexternal.acn_rotate~caption
 msgctxt "zcadexternal.acn_rotate~caption"
@@ -2714,10 +2749,6 @@ msgstr "Нумеруесая переменная"
 msgid "Save start number"
 msgstr "Сохранять старовое значение"
 
-#: zcadexternal.tnumberingparams~sortmode
-msgid ""
-msgstr ""
-
 #: zcadexternal.tnumberingparams~startnumber
 msgid "Start"
 msgstr "Начальное значение"
@@ -3549,8 +3580,10 @@ msgid "Position"
 msgstr "Позиция"
 
 #: zcadstrconsts.fontnotfoundandreplace
-msgid "For text style \"%s\" not found font \"%s\", is replaced by an alternative"
-msgstr "Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
+msgid ""
+"For text style \"%s\" not found font \"%s\", is replaced by an alternative"
+msgstr ""
+"Для стиля текста \"%s\" не найден фонт \"%s\", заменен на альтернативный"
 
 #: zcadstrconsts.rsaboutwndcaption
 msgctxt "zcadstrconsts.rsaboutwndcaption"
@@ -3795,7 +3828,8 @@ msgid "Expression %s return %s"
 msgstr "Выражение  %s возвращает %s"
 
 #: zcadstrconsts.rsfardeffilenotfounf
-msgid "File definition of the variables can not be found for the device \"%s\";"
+msgid ""
+"File definition of the variables can not be found for the device \"%s\";"
 msgstr "Файл определения переменных не найден для устройства \"%s\";"
 
 #: zcadstrconsts.rsfileformat
@@ -3837,6 +3871,10 @@ msgid "Error loading layout from file"
 msgstr "Ошибка загрузки файла разбивки окон"
 
 #: zcadstrconsts.rslinetypedesk
+#, fuzzy
+#| msgid ""
+#| ";;Pattern length %f\n"
+#| "%s\n"
 msgid ""
 ";;Pattern length %f\n"
 "%s\n"
@@ -3920,15 +3958,20 @@ msgstr "Повторное создание %s!"
 msgid ""
 "-UNDO\\REDO - yet it is better not to use;\n"
 "\n"
-"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" "
+"and \"RebuildTree\" in command line;\n"
 "\n"
-"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
+"-To disable the display of this window comment out line \"About\" in the "
+"file \"components\\autorun.cmd\". Encoding of all configuration files - "
+"UTF8;\n"
 msgstr ""
 "-UNDO\\REDO - пока лучше не пользоваться;\n"
 "\n"
-"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
+"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" "
+"и \"RebuildTree\" в командной строке;\n"
 "\n"
-"-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
+"-Для отключения показа этого окна закоментируйте строку \"About\" в файле "
+"\"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
 
 #: zcadstrconsts.rsreservefontnotfound
 msgid "Reserve font is not found in the resources"
@@ -4058,4 +4101,3 @@ msgstr "Внимание!"
 #: zcadstrconsts.rszcadstarted
 msgid "ZCAD v%s started"
 msgstr "ZCAD v%s запущен"
-

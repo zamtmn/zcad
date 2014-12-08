@@ -33,7 +33,7 @@ procedure FatalError(errstr:GDBString);
 procedure LogError(errstr:GDBString); export;
 procedure ShowError(errstr:GDBString); export;
 procedure OldVersTextReplace(var vv:GDBString);
-procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIterator);
+procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIteratorObj);
 procedure DisableCmdLine;
 procedure EnableCmdLine;
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
@@ -182,7 +182,7 @@ begin
      if  assigned(CursorOff) then
                                 CursorOff;
 end;
-procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIterator);
+procedure FromDirIterator(const path,mask,firstloadfilename:GDBSTring;proc:TFromDirIterator;method:TFromDirIteratorObj);
 var sr: TSearchRec;
     s:gdbstring;
 procedure processfile(s:gdbstring);

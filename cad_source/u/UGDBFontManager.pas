@@ -20,7 +20,7 @@ unit UGDBFontManager;
 {$INCLUDE def.inc}
 interface
 uses zcadstrconsts,shared,zcadsysvars,strproc,ugdbfont,gdbasetypes,SysInfo,memman,sysutils,gdbase, geometry,
-     UGDBNamedObjectsArray;
+     UGDBNamedObjectsArray,classes;
 type
 {Export+}
   PGDBFontRecord=^GDBFontRecord;
@@ -30,9 +30,13 @@ type
   end;
 PGDBFontManager=^GDBFontManager;
 GDBFontManager={$IFNDEF DELPHI}packed{$ENDIF} object({GDBOpenArrayOfData}GDBNamedObjectsArray)(*OpenArrayOfData=GDBfont*)
+                    ttffontfiles:TStringList;
+                    shxfontfiles:TStringList;
                     constructor init({$IFDEF DEBUGBUILD}ErrGuid:pansichar;{$ENDIF}m:GDBInteger);
 
                     function addFonf(FontPathName:GDBString):PGDBfont;
+                    procedure EnumerateTTFFontFile(filename:GDBString);
+                    procedure EnumerateSHXFontFile(filename:GDBString);
                     //function FindFonf(FontName:GDBString):GDBPointer;
                     {procedure freeelement(p:GDBPointer);virtual;}
               end;
@@ -41,11 +45,23 @@ var
    FontManager:GDBFontManager;
 implementation
 uses io,log;
+procedure GDBFontManager.EnumerateTTFFontFile(filename:GDBString);
+begin
+     ttffontfiles.Add(filename);
+end;
+procedure GDBFontManager.EnumerateSHXFontFile(filename:GDBString);
+begin
+     shxfontfiles.Add(filename);
+end;
 constructor GDBFontManager.init;
 begin
-  //Size := sizeof(GDBFontManager);
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof({GDBFontRecord}GDBfont));
-  //addlayer('0',cgdbwhile,lwgdbdefault);
+  ttffontfiles:=TStringList.create;
+  ttffontfiles.Duplicates := dupIgnore;
+  FromDirsIterator(sysvar.PATH.Fonts_Path^,'*.ttf','',nil,EnumerateTTFFontFile);
+  shxfontfiles:=TStringList.create;
+  shxfontfiles.Duplicates := dupIgnore;
+  FromDirsIterator(sysvar.PATH.Fonts_Path^,'*.shx','',nil,EnumerateSHXFontFile);
 end;
 {procedure GDBFontManager.freeelement;
 begin

@@ -17,11 +17,12 @@ uses
 const
      NameColumn=0;
      FontNameColumn=1;
-     HeightColumn=2;
-     WidthFactorColumn=3;
-     ObliqueColumn=4;
+     FontPathColumn=2;
+     HeightColumn=3;
+     WidthFactorColumn=4;
+     ObliqueColumn=5;
 
-     ColumnCount=4+1;
+     ColumnCount=5+1;
 
 type
 
@@ -57,6 +58,8 @@ type
     function GetStyleName(Item: TListItem):string;
     {Font name handle procedures}
     function GetFontName(Item: TListItem):string;
+    {Font path handle procedures}
+    function GetFontPath(Item: TListItem):string;
     {Height handle procedures}
     function GetHeight(Item: TListItem):string;
     {Wfactor handle procedures}
@@ -81,7 +84,12 @@ end;
 {Font name handle procedures}
 function TTextStylesWindow.GetFontName(Item: TListItem):string;
 begin
-  result:=PGDBTextStyle(Item.Data)^.pfont^.fontfile;
+  result:=ExtractFileName(PGDBTextStyle(Item.Data)^.pfont^.fontfile);
+end;
+{Font path handle procedures}
+function TTextStylesWindow.GetFontPath(Item: TListItem):string;
+begin
+  result:=ExtractFilePath(PGDBTextStyle(Item.Data)^.pfont^.fontfile);
 end;
 {Height handle procedures}
 function TTextStylesWindow.GetHeight(Item: TListItem):string;
@@ -118,6 +126,10 @@ with ListView1.SubItems[FontNameColumn] do
 begin
      OnGetName:=@GetFontName;
 end;
+with ListView1.SubItems[FontPathColumn] do
+begin
+     OnGetName:=@GetFontPath;
+end;
 with ListView1.SubItems[HeightColumn] do
 begin
      OnGetName:=@GetHeight;
@@ -137,13 +149,9 @@ begin
      begin
      with PTDrawing(gdb.GetCurrentDWG)^.UndoStack.PushCreateTGChangeCommand(sysvar.dwg.DWG_CTStyle^)^ do
      begin
-          SysVar.dwg.DWG_CTStyle^:={gdb.GetCurrentDWG^.LayerTable.GetIndexByPointer}(ListItem.Data);
+          SysVar.dwg.DWG_CTStyle^:=ListItem.Data;
           ComitFromObj;
      end;
-     ListItem.ImageIndex:=II_Ok;
-     ListView1.CurrentItem.ImageIndex:=-1;
-     ListView1.CurrentItem:=ListItem;
-     invalidate;
      end;
 end;
 procedure TTextStylesWindow.MkCurrent(Sender: TObject);

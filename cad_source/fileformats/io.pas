@@ -926,6 +926,7 @@ var
    Iterator:TMapChar.TIterator;
 begin
     initfont(pf,extractfilename(name));
+    pf^.fontfile:=name;
     pf.ItFFT;
     pttf:=pointer(pf^.font);
     result:=true;

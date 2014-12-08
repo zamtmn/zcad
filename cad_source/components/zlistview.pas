@@ -52,6 +52,7 @@ type
     procedure Process(ListItem:TListItem;SubItem:Integer;DblClck:Boolean);
     function GetListItem(x,y:integer;out ListItem:TListItem; out SubItem:Integer):boolean;
     procedure UpdateItem(Item: TListItem;CurrentItemData:Pointer);
+    procedure MakeItemCorrent(Item: TListItem);
   published
     { Published declarations }
     property onMakeCurrent:TOnMakeCurrent read GetMakeCurrent write SetMakeCurrent;
@@ -161,7 +162,13 @@ procedure TZListView.SetMakeCurrent(mk:TOnMakeCurrent);
 begin
      FonMakeCurrent:=mk;
 end;
-
+procedure TZListView.MakeItemCorrent(Item: TListItem);
+begin
+  Item.ImageIndex:=DefaultItemIndex;
+  CurrentItem.ImageIndex:=-1;
+  CurrentItem:=Item;
+  invalidate;
+end;
 procedure TZListView.Process(ListItem:TListItem;SubItem:Integer;DblClck:Boolean);
 var
    PSubItemRec:PTSubItemRec;
@@ -181,8 +188,11 @@ begin
      if SubItem=0 then
      begin
           if DoubleClick then
+          begin
           if assigned(onMakeCurrent) then
             onMakeCurrent(ListItem);
+          MakeItemCorrent(ListItem);
+          end;
           exit;
      end;
      if length(SubItems)>0 then

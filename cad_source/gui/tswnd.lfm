@@ -138,7 +138,6 @@ object TextStylesWindow: TTextStylesWindow
     Columns = <    
       item
         Caption = 'Status'
-        Width = 100
       end    
       item
         Caption = 'Name'
@@ -146,19 +145,23 @@ object TextStylesWindow: TTextStylesWindow
       end    
       item
         Caption = 'FontName'
-        Width = 100
+        Width = 150
+      end    
+      item
+        Caption = 'FontPath'
+        Width = 150
       end    
       item
         Caption = 'Height'
-        Width = 100
+        Width = 70
       end    
       item
         Caption = 'Width factor'
-        Width = 100
+        Width = 70
       end    
       item
         Caption = 'Oblique'
-        Width = 80
+        Width = 70
       end>
     MultiSelect = True
     ReadOnly = True

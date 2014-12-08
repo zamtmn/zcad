@@ -12,7 +12,7 @@ uses
   gdbobjectsconstdef,UGDBTextStyleArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
 
   zcadinterface, zcadstrconsts, strproc, shared, UBaseTypeDescriptor,
-  imagesmanager, usupportgui, ZListView;
+  imagesmanager, usupportgui, ZListView,UGDBFontManager,varman,UGDBStringArray;
 
 const
      NameColumn=0;
@@ -48,24 +48,33 @@ type
       Selected: Boolean);
     procedure MkCurrent(Sender: TObject);
     procedure MaceItemCurrent(ListItem:TListItem);
+    procedure FillFontsSelector(currentitem:string);
   private
     changedstamp:boolean;
     PEditor:TPropEditor;
     EditedItem:TListItem;
+    FontsSelector:TEnumData;
     { private declarations }
+    procedure freeeditor;
   public
     { public declarations }
+    function createeditor(const Item: TListItem; const r: TRect; const variable; const vartype:GDBString):boolean;
+    {Style name handle procedures}
     function GetStyleName(Item: TListItem):string;
     {Font name handle procedures}
     function GetFontName(Item: TListItem):string;
+    function CreateFontNameEditor(Item: TListItem;r: TRect):boolean;
     {Font path handle procedures}
     function GetFontPath(Item: TListItem):string;
     {Height handle procedures}
     function GetHeight(Item: TListItem):string;
+    function CreateHeightEditor(Item: TListItem;r: TRect):boolean;
     {Wfactor handle procedures}
     function GetWidthFactor(Item: TListItem):string;
+    function CreateWidthFactorEditor(Item: TListItem;r: TRect):boolean;
     {Oblique handle procedures}
     function GetOblique(Item: TListItem):string;
+    function CreateObliqueEditor(Item: TListItem;r: TRect):boolean;
   end;
 
 var
@@ -74,7 +83,49 @@ implementation
 uses
     mainwindow;
 {$R *.lfm}
-
+procedure TTextStylesWindow.freeeditor;
+begin
+  //if peditor<>nil then
+  begin
+       peditor.Free;
+       peditor:=nil;
+       //freeandnil(peditor);
+       ListView1.BeginUpdate;
+       ListView1.UpdateItem(EditedItem,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
+       ListView1.EndUpdate;
+       EditedItem:=nil;
+  end;
+end;
+function TTextStylesWindow.createeditor(const Item: TListItem; const r: TRect; const variable; const vartype:GDBString):boolean;
+var
+  needdropdown:boolean;
+begin
+     needdropdown:=false;
+     if peditor<>nil then
+     begin
+          Application.RemoveAsyncCalls(self);
+          freeeditor;
+     end;
+     if uppercase(vartype)='TENUMDATA' then
+     begin
+      PEditor:=GDBEnumDataDescriptorObj.CreateEditor(self.ListView1,r,@variable,nil,true).Editor;
+      needdropdown:=true;
+     end
+     else
+     PEditor:=SysUnit^.TypeName2PTD(vartype)^.CreateEditor(self.ListView1,r,@variable,nil,true).Editor;
+     if PEditor.geteditor is TComboBox then
+                                           begin
+                                           SetComboSize(TComboBox(PEditor.geteditor),r.Bottom-r.Top-5);
+                                           TComboBox(PEditor.geteditor).DropDownCount:=30;
+                                           end;
+     PEditor.geteditor.BoundsRect:=r;
+     PEditor.geteditor.Parent:=self.ListView1;
+     PEditor.geteditor.SetFocus;
+     if needdropdown then
+      TComboBox(PEditor.geteditor).DroppedDown:=true;
+     //PEditor.OwnerNotify:=@Notify;
+     EditedItem:=Item;
+end;
 
 {Style name handle procedures}
 function TTextStylesWindow.GetStyleName(Item: TListItem):string;
@@ -86,6 +137,11 @@ function TTextStylesWindow.GetFontName(Item: TListItem):string;
 begin
   result:=ExtractFileName(PGDBTextStyle(Item.Data)^.pfont^.fontfile);
 end;
+function TTextStylesWindow.CreateFontNameEditor(Item: TListItem;r: TRect):boolean;
+begin
+  FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile);
+  result:=createeditor(Item,r,FontsSelector,'TEnumData')
+end;
 {Font path handle procedures}
 function TTextStylesWindow.GetFontPath(Item: TListItem):string;
 begin
@@ -96,17 +152,52 @@ function TTextStylesWindow.GetHeight(Item: TListItem):string;
 begin
   result:=floattostr(PGDBTextStyle(Item.Data)^.prop.size);
 end;
+function TTextStylesWindow.CreateHeightEditor(Item: TListItem;r: TRect):boolean;
+begin
+  result:=createeditor(Item,r,PGDBTextStyle(Item.Data)^.prop.size,'GDBDouble')
+end;
 {Wfactor handle procedures}
 function TTextStylesWindow.GetWidthFactor(Item: TListItem):string;
 begin
   result:=floattostr(PGDBTextStyle(Item.Data)^.prop.wfactor);
+end;
+function TTextStylesWindow.CreateWidthFactorEditor(Item: TListItem;r: TRect):boolean;
+begin
+  result:=createeditor(Item,r,PGDBTextStyle(Item.Data)^.prop.wfactor,'GDBDouble')
 end;
 {Oblique handle procedures}
 function TTextStylesWindow.GetOblique(Item: TListItem):string;
 begin
   result:=floattostr(PGDBTextStyle(Item.Data)^.prop.oblique);
 end;
-
+function TTextStylesWindow.CreateObliqueEditor(Item: TListItem;r: TRect):boolean;
+begin
+  result:=createeditor(Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'GDBDouble')
+end;
+procedure TTextStylesWindow.FillFontsSelector(currentitem:string);
+var i:integer;
+    s:string;
+begin
+     FontsSelector.Selected:=0;
+     FontsSelector.Enums.Free;
+     for i:=0 to FontManager.ttffontfiles.Count-1 do
+     begin
+          S:=FontManager.ttffontfiles[i];
+          if S=currentitem then
+           FontsSelector.Selected:=FontsSelector.Enums.Count;
+          S:=extractfilename(S);
+          FontsSelector.Enums.add(@S);
+     end;
+     for i:=0 to FontManager.shxfontfiles.Count-1 do
+     begin
+          S:=FontManager.shxfontfiles[i];
+          if S=currentitem then
+           FontsSelector.Selected:=FontsSelector.Enums.Count;
+          S:=extractfilename(S);
+          FontsSelector.Enums.add(@S);
+     end;
+     FontsSelector.Enums.SortAndSaveIndex(FontsSelector.Selected);
+end;
 
 procedure TTextStylesWindow.FormCreate(Sender: TObject); // Процедура выполняется при отрисовке окна
 begin
@@ -115,6 +206,8 @@ IconList.GetBitmap(II_Minus, DeleteLayerBtn.Glyph);
 IconList.GetBitmap(II_Ok, MkCurrentBtn.Glyph);
 ListView1.SmallImages:=IconList;
 ListView1.DefaultItemIndex:=II_Ok;
+
+FontsSelector.Enums.init(100);
 
 setlength(ListView1.SubItems,ColumnCount);
 
@@ -125,6 +218,7 @@ end;
 with ListView1.SubItems[FontNameColumn] do
 begin
      OnGetName:=@GetFontName;
+     On2Click:=@CreateFontNameEditor;
 end;
 with ListView1.SubItems[FontPathColumn] do
 begin
@@ -133,14 +227,17 @@ end;
 with ListView1.SubItems[HeightColumn] do
 begin
      OnGetName:=@GetHeight;
+     On2Click:=@CreateHeightEditor;
 end;
 with ListView1.SubItems[WidthFactorColumn] do
 begin
      OnGetName:=@GetWidthFactor;
+     On2Click:=@CreateWidthFactorEditor;
 end;
 with ListView1.SubItems[ObliqueColumn] do
 begin
      OnGetName:=@GetOblique;
+     On2Click:=@CreateObliqueEditor;
 end;
 end;
 procedure TTextStylesWindow.MaceItemCurrent(ListItem:TListItem);
@@ -313,6 +410,7 @@ procedure TTextStylesWindow.FormClose(Sender: TObject; var CloseAction: TCloseAc
   );
 begin
      Aply(nil);
+     FontsSelector.Enums.done;
 end;
 
 end.

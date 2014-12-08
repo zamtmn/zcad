@@ -29,6 +29,7 @@ type
                           procedure freeelement(p:GDBPointer);virtual;
                           function findstring(s:GDBString;ucase:gdbboolean):boolean;
                           procedure sort;virtual;
+                          procedure SortAndSaveIndex(var index:TArrayIndex);virtual;
                           function add(p:GDBPointer):TArrayIndex;virtual;
                           function addutoa(p:GDBPointer):TArrayIndex;
                           function addwithscroll(p:GDBPointer):GDBInteger;virtual;
@@ -91,6 +92,46 @@ begin
                                   isend:=false;
                              end;
           pspred:=ps;
+          ps:=iterate(ir);
+     until ps=nil;
+
+     until IsEnd;
+
+end;
+procedure GDBGDBStringArray.SortAndSaveIndex;
+var
+   isEnd:boolean;
+   ps,pspred:pgdbstring;
+   s:gdbstring;
+   ir:itrec;
+   IsIndex:boolean;
+begin
+     repeat
+     isend:=true;
+     pspred:=beginiterate(ir);
+     if ir.itc=index then
+      IsIndex:=true
+     else
+      isIndex:=false;
+     ps:=iterate(ir);
+     if (ps<>nil)and(pspred<>nil) then
+     repeat
+          if CompareNUMSTR(pspred^,ps^) then
+                             begin
+                                  s:=ps^;
+                                  ps^:=pspred^;
+                                  pspred^:=s;
+                                  isend:=false;
+                                  if isindex then
+                                                 inc(index)
+                             else if ir.itc=index then
+                                                       dec(index);
+                             end;
+          pspred:=ps;
+          if ir.itc=index then
+           IsIndex:=true
+          else
+           isIndex:=false;
           ps:=iterate(ir);
      until ps=nil;
 

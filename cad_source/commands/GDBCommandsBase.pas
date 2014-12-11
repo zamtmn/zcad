@@ -95,6 +95,7 @@ type
 
    function SaveAs_com(operands:TCommandOperands):TCommandResult;
    procedure CopyToClipboard;
+   function CopyClip_com(operands:TCommandOperands):TCommandResult;
    function Regen_com(operands:TCommandOperands):TCommandResult;
    function Load_Merge(Operands:pansichar;LoadMode:TLoadOpt):GDBInteger;
    function Merge_com(operands:TCommandOperands):TCommandResult;
@@ -1231,7 +1232,7 @@ begin
 
    copytoclipboard;
 
-    result:=cmd_ok;
+   result:=cmd_ok;
 end;
 procedure PrintTreeNode(pnode:PTEntTreeNode;var depth:integer);
 var

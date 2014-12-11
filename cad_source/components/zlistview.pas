@@ -52,6 +52,7 @@ type
     procedure Process(ListItem:TListItem;SubItem:Integer;DblClck:Boolean);
     function GetListItem(x,y:integer;out ListItem:TListItem; out SubItem:Integer):boolean;
     procedure UpdateItem(Item: TListItem;CurrentItemData:Pointer);
+    procedure UpdateItem2(Item:TObject);
     procedure MakeItemCorrent(Item: TListItem);
   published
     { Published declarations }
@@ -87,6 +88,11 @@ begin
      else
        result:=false;
 end;
+procedure TZListView.UpdateItem2(Item:TObject);
+begin
+     UpdateItem(TListItem(Item),CurrentItem);
+end;
+
 procedure TZListView.UpdateItem(Item: TListItem;CurrentItemData:Pointer);
 var
    i:integer;
@@ -114,23 +120,6 @@ begin
            end
      else Item.SubItems.Add('');
      end;
-     {pdwg:=gdb.GetCurrentDWG;
-     plp:=Item.Data;
-     Item.SubItems.Clear;
-     if plp=pdwg^.LayerTable.GetCurrentLayer then
-     begin
-      Item.ImageIndex:=II_Ok;
-      CurrentLayer:=Item;
-     end;
-     Item.SubItems.Add(strproc.Tria_AnsiToUtf8(plp^.GetName));
-     Item.SubItems.Add('');
-     Item.SubItems.Add('');
-     Item.SubItems.Add('');
-     Item.SubItems.Add(GetColorNameFromIndex(plp^.color));
-     Item.SubItems.Add(GetLTName(plp^.LT));
-     Item.SubItems.Add(GetLWNameFromLW(plp^.lineweight));
-     Item.SubItems.Add('');
-     Item.SubItems.Add(strproc.Tria_AnsiToUtf8(plp^.desk));}
 end;
 constructor TZListView.Create(AOwner: TComponent);
 begin

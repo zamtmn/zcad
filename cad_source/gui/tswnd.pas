@@ -179,6 +179,7 @@ ListView1.DefaultItemIndex:=II_Ok;
 
 FontsSelector.Enums.init(100);
 SupportTypedEditors:=TSupportTypedEditors.create;
+SupportTypedEditors.OnUpdateEditedControl:=@ListView1.UpdateItem2;
 
 setlength(ListView1.SubItems,ColumnCount);
 

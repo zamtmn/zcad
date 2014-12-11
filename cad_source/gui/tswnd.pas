@@ -55,8 +55,11 @@ type
     EditedItem:TListItem;
     FontsSelector:TEnumData;
     SupportTypedEditors:TSupportTypedEditors;
+    FontChange:boolean;
     { private declarations }
     procedure freeeditor;
+    procedure UpdateItem2(Item:TObject);
+
   public
     { public declarations }
 
@@ -84,6 +87,17 @@ implementation
 uses
     mainwindow;
 {$R *.lfm}
+procedure TTextStylesWindow.UpdateItem2(Item:TObject);
+begin
+     if FontChange then
+     begin
+          PGDBTextStyle(TListItem(Item).Data)^.pfont:=FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,pstring(FontsSelector.Enums.getelement(FontsSelector.Selected))^));
+          PGDBTextStyle(TListItem(Item).Data)^.dxfname:=PGDBTextStyle(TListItem(Item).Data)^.pfont^.Name;
+     end;
+     ListView1.UpdateItem2(TListItem(Item));
+     FontChange:=false;
+end;
+
 procedure TTextStylesWindow.freeeditor;
 begin
   //if peditor<>nil then
@@ -110,6 +124,7 @@ end;
 function TTextStylesWindow.CreateFontNameEditor(Item: TListItem;r: TRect):boolean;
 begin
   FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile);
+  FontChange:=true;
   result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData')
 end;
 {Font path handle procedures}
@@ -179,7 +194,8 @@ ListView1.DefaultItemIndex:=II_Ok;
 
 FontsSelector.Enums.init(100);
 SupportTypedEditors:=TSupportTypedEditors.create;
-SupportTypedEditors.OnUpdateEditedControl:=@ListView1.UpdateItem2;
+SupportTypedEditors.OnUpdateEditedControl:=@UpdateItem2;
+FontChange:=false;
 
 setlength(ListView1.SubItems,ColumnCount);
 

@@ -25,23 +25,44 @@ uses
   usupportgui,Varman,UBaseTypeDescriptor,varmandef,StdCtrls,sysutils,Forms,UGDBDescriptor,zcadstrconsts,Controls,Classes,UGDBTextStyleArray,strproc,zcadsysvars,commandline,zcadinterface;
 
 type
+  TOnUpdateControl=procedure (AEditedControl:TObject)of object;
   TSupportTypedEditors = class
     PEditor:TPropEditor;
     EditedControl:TObject;
+    OnUpdateEditedControl:TOnUpdateControl;
 
     procedure freeeditor;
     function createeditor(const TheOwner:TPropEditorOwner; const AEditedControl:TObject; const r: TRect; const variable; const vartype:String):boolean;
+    procedure Notify(Sender: TObject;Command:TMyNotifyCommand); virtual;
+    procedure asyncfreeeditor(Data: PtrInt);
   end;
 
 implementation
+procedure TSupportTypedEditors.Notify(Sender: TObject;Command:TMyNotifyCommand);
+begin
+  if sender=PEditor then
+  begin
+    if (Command=TMNC_EditingDoneEnterKey)or(Command=TMNC_EditingDoneLostFocus) then
+                                    begin
+                                    Application.QueueAsyncCall(asyncfreeeditor,0);
+                                    end;
+  end;
+end;
+procedure TSupportTypedEditors.asyncfreeeditor(Data: PtrInt);
+begin
+  if peditor<>nil then
+  begin
+       freeeditor;
+  end;
+end;
 procedure TSupportTypedEditors.freeeditor;
 begin
   if peditor<>nil then
   begin
        Application.RemoveAsyncCalls(self);
-       peditor.Free;
-       peditor:=nil;
-       //freeandnil(peditor);
+       freeandnil(peditor);
+       if assigned(OnUpdateEditedControl) then
+                                              OnUpdateEditedControl(EditedControl);
        EditedControl:=nil;
   end;
 end;
@@ -68,7 +89,7 @@ begin
      PEditor.geteditor.SetFocus;
      if needdropdown then
       TComboBox(PEditor.geteditor).DroppedDown:=true;
-     //PEditor.OwnerNotify:=@Notify;
+     PEditor.OwnerNotify:=Notify;
      EditedControl:=AEditedControl;
 end;
 

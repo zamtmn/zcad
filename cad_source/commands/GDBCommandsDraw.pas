@@ -2039,6 +2039,11 @@ begin
   if assigned(redrawoglwndproc) then redrawoglwndproc;
   result:=cmd_ok;
 end;
+function CutClip_com(operands:TCommandOperands):TCommandResult;
+begin
+   copyclip_com('');
+   Erase_com('');
+end;
 function InverseSelected_com(operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
     ir:itrec;
@@ -3717,6 +3722,7 @@ begin
 
 
   CreateCommandFastObjectPlugin(@Erase_com,'Erase',CADWG,0);
+  CreateCommandFastObjectPlugin(@CutClip_com,'CutClip',CADWG or CASelEnts,0);
   CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
   CreateCommandFastObjectPlugin(@PlaceAllBlocks_com,'PlaceAllBlocks',CADWG,0);
   CreateCommandFastObjectPlugin(@InverseSelected_com,'InverseSelected',CADWG or CASelEnts,0);

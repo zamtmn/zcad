@@ -11,6 +11,7 @@ action ACN_QUIT,Quit,exit.bmp,Quit,,CTRL+Q
 
 action ACN_UNDO,Undo,undo.bmp,Undo,,CTRL+Z
 action ACN_REDO,Redo,redo.bmp,Redo,,CTRL+SHIFT+Z
+action ACN_CUTCLIP,CutClip,cutclip.bmp,Cut to clipboard,Cut to clipboard,CTRL+X
 action ACN_COPYCLIP,CopyClip,copyclip.bmp,Copy to clipboard,Copy to clipboard,CTRL+C
 action ACN_COPYCLIPBASE,CopyBase,copyclipbase.bmp,Copy to clipboard with base point,Copy to clipboard with base point,CTRL+SHIFT+C
 action ACN_FAKECOPYCLIPBASE,CopyBase,#CB,,,CTRL+INS

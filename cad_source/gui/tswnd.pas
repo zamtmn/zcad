@@ -9,7 +9,7 @@ uses
   FileUtil, LResources, Forms, Controls, Graphics, Dialogs,GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype,
 
-  gdbobjectsconstdef,UGDBTextStyleArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,
+  gdbobjectsconstdef,UGDBTextStyleArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,usuptypededitors,
 
   zcadinterface, zcadstrconsts, strproc, shared, UBaseTypeDescriptor,
   imagesmanager, usupportgui, ZListView,UGDBFontManager,varman,UGDBStringArray;
@@ -54,11 +54,12 @@ type
     PEditor:TPropEditor;
     EditedItem:TListItem;
     FontsSelector:TEnumData;
+    SupportTypedEditors:TSupportTypedEditors;
     { private declarations }
     procedure freeeditor;
   public
     { public declarations }
-    function createeditor(const Item: TListItem; const r: TRect; const variable; const vartype:GDBString):boolean;
+
     {Style name handle procedures}
     function GetStyleName(Item: TListItem):string;
     {Font name handle procedures}
@@ -96,37 +97,6 @@ begin
        EditedItem:=nil;
   end;
 end;
-function TTextStylesWindow.createeditor(const Item: TListItem; const r: TRect; const variable; const vartype:GDBString):boolean;
-var
-  needdropdown:boolean;
-begin
-     needdropdown:=false;
-     if peditor<>nil then
-     begin
-          Application.RemoveAsyncCalls(self);
-          freeeditor;
-     end;
-     if uppercase(vartype)='TENUMDATA' then
-     begin
-      PEditor:=GDBEnumDataDescriptorObj.CreateEditor(self.ListView1,r,@variable,nil,true).Editor;
-      needdropdown:=true;
-     end
-     else
-     PEditor:=SysUnit^.TypeName2PTD(vartype)^.CreateEditor(self.ListView1,r,@variable,nil,true).Editor;
-     if PEditor.geteditor is TComboBox then
-                                           begin
-                                           SetComboSize(TComboBox(PEditor.geteditor),r.Bottom-r.Top-5);
-                                           TComboBox(PEditor.geteditor).DropDownCount:=30;
-                                           end;
-     PEditor.geteditor.BoundsRect:=r;
-     PEditor.geteditor.Parent:=self.ListView1;
-     PEditor.geteditor.SetFocus;
-     if needdropdown then
-      TComboBox(PEditor.geteditor).DroppedDown:=true;
-     //PEditor.OwnerNotify:=@Notify;
-     EditedItem:=Item;
-end;
-
 {Style name handle procedures}
 function TTextStylesWindow.GetStyleName(Item: TListItem):string;
 begin
@@ -140,7 +110,7 @@ end;
 function TTextStylesWindow.CreateFontNameEditor(Item: TListItem;r: TRect):boolean;
 begin
   FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile);
-  result:=createeditor(Item,r,FontsSelector,'TEnumData')
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData')
 end;
 {Font path handle procedures}
 function TTextStylesWindow.GetFontPath(Item: TListItem):string;
@@ -154,7 +124,7 @@ begin
 end;
 function TTextStylesWindow.CreateHeightEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=createeditor(Item,r,PGDBTextStyle(Item.Data)^.prop.size,'GDBDouble')
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.size,'GDBDouble')
 end;
 {Wfactor handle procedures}
 function TTextStylesWindow.GetWidthFactor(Item: TListItem):string;
@@ -163,7 +133,7 @@ begin
 end;
 function TTextStylesWindow.CreateWidthFactorEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=createeditor(Item,r,PGDBTextStyle(Item.Data)^.prop.wfactor,'GDBDouble')
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.wfactor,'GDBDouble')
 end;
 {Oblique handle procedures}
 function TTextStylesWindow.GetOblique(Item: TListItem):string;
@@ -172,7 +142,7 @@ begin
 end;
 function TTextStylesWindow.CreateObliqueEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=createeditor(Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'GDBDouble')
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'GDBDouble')
 end;
 procedure TTextStylesWindow.FillFontsSelector(currentitem:string);
 var i:integer;
@@ -208,6 +178,7 @@ ListView1.SmallImages:=IconList;
 ListView1.DefaultItemIndex:=II_Ok;
 
 FontsSelector.Enums.init(100);
+SupportTypedEditors:=TSupportTypedEditors.create;
 
 setlength(ListView1.SubItems,ColumnCount);
 
@@ -411,6 +382,7 @@ procedure TTextStylesWindow.FormClose(Sender: TObject; var CloseAction: TCloseAc
 begin
      Aply(nil);
      FontsSelector.Enums.done;
+     SupportTypedEditors.Free;
 end;
 
 end.

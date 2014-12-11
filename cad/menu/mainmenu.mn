@@ -180,6 +180,7 @@ MainMenuItem Edit;
     action ACN_UNDO
     action ACN_REDO
     Separator
+    action ACN_CUTCLIP
     action ACN_COPYCLIP
     action ACN_COPYCLIPBASE
     action ACN_PASTE

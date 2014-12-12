@@ -5,7 +5,7 @@ unit ZListView;
 interface
 
 uses
-  Classes, SysUtils, ComCtrls, Graphics, GraphType, Controls, LCLIntf, LCLType,
+  Classes, SysUtils, ComCtrls, Graphics, GraphType, Controls, LCLIntf, LCLType, ExtCtrls,
   usupportgui;
 
 type
@@ -35,13 +35,17 @@ type
   protected
     { Protected declarations }
     MouseDownItem:TListItem;
+    ClickSelectOnUnselectedItem:boolean;
     MouseDownSubItem:Integer;
     DoubleClick:Boolean;
+    ignoremousedown:boolean;
     function CustomDrawSubItem(AItem: TListItem; ASubItem: Integer; AState: TCustomDrawState; AStage: TCustomDrawStage): Boolean; override;
     procedure MouseDown(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;
     procedure MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer); override;
     procedure DummyOnCDSubItem(Sender: TCustomListView; Item: TListItem;
                                SubItem: Integer; State: TCustomDrawState; var DefaultDraw: Boolean);
+    procedure DoOnResize; override;
+    procedure DoSelectItem(AItem: TListItem; ASelected: Boolean); override;
   public
     { Public declarations }
     SubItems:TSubItemRecArray;
@@ -67,6 +71,26 @@ procedure TZListView.DummyOnCDSubItem(Sender: TCustomListView; Item: TListItem;
 begin
   DefaultDraw:=true;
 end;
+procedure TZListView.DoSelectItem(AItem: TListItem; ASelected: Boolean);
+begin
+  inherited;
+  if aselected then
+                   ignoremousedown:=true;
+end;
+
+procedure TZListView.DoOnResize;
+var
+   i,calcwidth:integer;
+begin
+  calcwidth:=0;
+  for i:=0 to columns.Count-1 do
+  begin
+     calcwidth:=columns[i].Width+calcwidth;
+  end;
+   columns[1].Width:=columns[1].Width+(width-calcwidth);
+  inherited;
+end;
+
 function TZListView.GetListItem(x,y:integer;out ListItem:TListItem; out SubItem:Integer):boolean;
 var
    pos: integer;
@@ -129,7 +153,6 @@ begin
   OnCustomDrawSubItem:=@DummyOnCDSubItem;
   inherited;
 end;
-
 procedure TZListView.ProcessClick(ListItem:TListItem;SubItem:Integer;DblClck:Boolean);
 var i:integer;
 begin
@@ -205,6 +228,8 @@ begin
 end;
 procedure TZListView.MouseDown(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);
 begin
+     if not ignoremousedown then
+     begin
      if Button=mbLeft then
       begin
        GetListItem(x,y,MouseDownItem,MouseDownSubItem);
@@ -213,6 +238,14 @@ begin
        else
          doubleclick:=false;
       end;
+     end
+     else
+     begin
+       MouseDownItem:=nil;
+       MouseDownSubItem:=-1;
+       DoubleClick:=false;
+       ignoremousedown:=false;
+     end;
 end;
 
 procedure TZListView.MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integer);
@@ -232,6 +265,7 @@ begin
      MouseDownItem:=nil;
      MouseDownSubItem:=-1;
      DoubleClick:=false;
+     ignoremousedown:=false;
 end;
 
 function TZListView.CustomDrawSubItem(AItem: TListItem; ASubItem: Integer; AState: TCustomDrawState; AStage: TCustomDrawStage): Boolean;

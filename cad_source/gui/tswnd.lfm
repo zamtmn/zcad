@@ -141,7 +141,7 @@ object TextStylesWindow: TTextStylesWindow
       end    
       item
         Caption = 'Name'
-        Width = 250
+        Width = 48
       end    
       item
         Caption = 'FontName'
@@ -163,13 +163,15 @@ object TextStylesWindow: TTextStylesWindow
         Caption = 'Oblique'
         Width = 70
       end>
-    MultiSelect = True
+    HideSelection = False
     ReadOnly = True
     RowSelect = True
     ScrollBars = ssAutoBoth
+    SortColumn = 1
     SortType = stText
     TabOrder = 2
     ViewStyle = vsReport
+    OnResize = onrsz
     OnSelectItem = ListView1SelectItem
     onMakeCurrent = MaceItemCurrent
   end

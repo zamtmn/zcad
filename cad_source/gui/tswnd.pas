@@ -12,7 +12,7 @@ uses
   gdbobjectsconstdef,UGDBTextStyleArray,UGDBDescriptor,gdbase,gdbasetypes,varmandef,usuptypededitors,
 
   zcadinterface, zcadstrconsts, strproc, shared, UBaseTypeDescriptor,
-  imagesmanager, usupportgui, ZListView,UGDBFontManager,varman,UGDBStringArray;
+  imagesmanager, usupportgui, ZListView,UGDBFontManager,varman,UGDBStringArray,GDBEntity,GDBText;
 
 const
      NameColumn=0;
@@ -49,6 +49,8 @@ type
     procedure MkCurrent(Sender: TObject);
     procedure MaceItemCurrent(ListItem:TListItem);
     procedure FillFontsSelector(currentitem:string);
+    procedure onrsz(Sender: TObject);
+    procedure countstyle(ptextstyle:PGDBTextStyle;out e,b:GDBInteger);
   private
     changedstamp:boolean;
     PEditor:TPropEditor;
@@ -184,6 +186,11 @@ begin
      FontsSelector.Enums.SortAndSaveIndex(FontsSelector.Selected);
 end;
 
+procedure TTextStylesWindow.onrsz(Sender: TObject);
+begin
+     Sender:=Sender;
+end;
+
 procedure TTextStylesWindow.FormCreate(Sender: TObject); // Процедура выполняется при отрисовке окна
 begin
 IconList.GetBitmap(II_Plus, AddLayerBtn.Glyph);
@@ -206,7 +213,7 @@ end;
 with ListView1.SubItems[FontNameColumn] do
 begin
      OnGetName:=@GetFontName;
-     On2Click:=@CreateFontNameEditor;
+     OnClick:=@CreateFontNameEditor;
 end;
 with ListView1.SubItems[FontPathColumn] do
 begin
@@ -215,17 +222,17 @@ end;
 with ListView1.SubItems[HeightColumn] do
 begin
      OnGetName:=@GetHeight;
-     On2Click:=@CreateHeightEditor;
+     OnClick:=@CreateHeightEditor;
 end;
 with ListView1.SubItems[WidthFactorColumn] do
 begin
      OnGetName:=@GetWidthFactor;
-     On2Click:=@CreateWidthFactorEditor;
+     OnClick:=@CreateWidthFactorEditor;
 end;
 with ListView1.SubItems[ObliqueColumn] do
 begin
      OnGetName:=@GetOblique;
-     On2Click:=@CreateObliqueEditor;
+     OnClick:=@CreateObliqueEditor;
 end;
 end;
 procedure TTextStylesWindow.MaceItemCurrent(ListItem:TListItem);
@@ -274,18 +281,34 @@ begin
      ListView1.SetFocus;
      ListView1.EndUpdate;
 end;
+procedure TextStyleCounter(const PInstance,PCounted:GDBPointer;var Counter:GDBInteger);
+begin
+     if (PGDBObjEntity(PInstance)^.vp.ID=GDBMTextID)or(PGDBObjEntity(PInstance)^.vp.ID=GDBTextID) then
+     if PCounted=PGDBObjText(PInstance)^.TXTStyleIndex then
+                                                           inc(Counter);
+end;
+procedure TTextStylesWindow.countstyle(ptextstyle:PGDBTextStyle;out e,b:GDBInteger);
+var
+   pdwg:PTSimpleDrawing;
+begin
+  pdwg:=gdb.GetCurrentDWG;
+  e:=0;
+  pdwg^.mainObjRoot.IterateCounter(ptextstyle,e,@TextStyleCounter);
+  b:=0;
+  pdwg^.BlockDefArray.IterateCounter(ptextstyle,b,@TextStyleCounter);
+end;
 procedure TTextStylesWindow.ListView1SelectItem(Sender: TObject; Item: TListItem;Selected: Boolean);
 var
-   player:PGDBTextStyle;
+   pstyle:PGDBTextStyle;
    pdwg:PTSimpleDrawing;
    inent,inblock:integer;
 begin
      if selected then
      begin
           pdwg:=gdb.GetCurrentDWG;
-          player:=(Item.Data);
-          //countlayer(player,inent,inblock);
-          LayerDescLabel.Caption:=Format(rsLayerUsedIn,[player^.Name,inent,inblock]);
+          pstyle:=(Item.Data);
+          countstyle(pstyle,inent,inblock);
+          LayerDescLabel.Caption:=Format(rsTextStyleUsedIn,[pstyle^.Name,inent,inblock]);
      end;
 end;
 

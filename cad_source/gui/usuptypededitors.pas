@@ -42,7 +42,7 @@ procedure TSupportTypedEditors.Notify(Sender: TObject;Command:TMyNotifyCommand);
 begin
   if sender=PEditor then
   begin
-    if (Command=TMNC_EditingDoneEnterKey)or(Command=TMNC_EditingDoneLostFocus) then
+    if (Command=TMNC_EditingDoneEnterKey)or(Command=TMNC_EditingDoneLostFocus)or(Command=TMNC_EditingDoneDoNothing) then
                                     begin
                                     Application.QueueAsyncCall(asyncfreeeditor,0);
                                     end;

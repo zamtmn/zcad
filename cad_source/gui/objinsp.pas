@@ -1184,7 +1184,7 @@ begin
                                         EDContext.ppropcurrentedit.FastEditor.OnRunFastEditor(pld);
     if peditor.changed then
                            UpdateObjectInInsp;
-   if (Command=TMNC_RunFastEditor)or(Command=TMNC_EditingDoneLostFocus) then
+   if (Command=TMNC_RunFastEditor)or(Command=TMNC_EditingDoneLostFocus)or(Command=TMNC_EditingDoneDoNothing) then
                                       begin
                                            Application.QueueAsyncCall(AsyncFreeEditor,0);
                                       end;

@@ -336,7 +336,12 @@ begin
                                         if rfs then
                                                    OwnerNotify(self,TMNC_RunFastEditor)
                                                else
-                                                   OwnerNotify(self,TMNC_EditingProcess);
+                                                   begin
+                                                     if selectableeditor then
+                                                      OwnerNotify(self,TMNC_EditingDoneDoNothing)
+                                                     else
+                                                      OwnerNotify(self,TMNC_EditingProcess);
+                                                   end;
                                   end;
      end
 end;

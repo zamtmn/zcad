@@ -757,6 +757,7 @@ begin
      cbedit:=TComboBox.Create(propeditor);
      cbedit.Text:=GetValueAsString(pinstance);
      cbedit.OnChange:=propeditor.EditingProcess;
+     cbedit.OnExit:=propeditor.ExitEdit;
      {$IFNDEF DELPHI}
      cbedit.ReadOnly:=true;
      {$ENDIF}

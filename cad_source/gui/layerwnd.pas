@@ -526,7 +526,6 @@ var
    player,pcreatedlayer:PGDBLayerProp;
    pdwg:PTSimpleDrawing;
    layername:string;
-   counter:integer;
    li:TListItem;
    domethod,undomethod:tmethod;
 begin
@@ -536,16 +535,14 @@ begin
                                     else
                                         player:=pdwg^.LayerTable.GetCurrentLayer;
 
-     counter:=0;
-     repeat
-          inc(counter);
-          layername:=inttostr(counter);
-          if length(layername)<2 then
-                                     layername:='0'+layername;
-          layername:='Layer'+layername;
-     until pdwg^.LayerTable.getIndex(layername)=-1;
+     layername:=pdwg^.LayerTable.GetFreeName(rsNewLayerNameFormat,1);
+     if layername='' then
+     begin
+       shared.ShowError(rsUnableSelectFreeLayerName);
+       exit;
+     end;
 
-     pdwg^.LayerTable.AddItem(name,pcreatedlayer);
+     pdwg^.LayerTable.AddItem(layername,pcreatedlayer);
      pcreatedlayer^:=player^;
      pcreatedlayer^.Name:=layername;
 
@@ -557,20 +554,7 @@ begin
           //comit;
      end;
 
-
-     ListView1.BeginUpdate;
-     li:=ListView1.Items.Add;
-     li.Data:=pcreatedlayer;
-     ListView1.UpdateItem(li,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
-     ListView1.SortColumn:=-1;
-     ListView1.SortColumn:=1;
-     if assigned(ListView1.Selected)then
-     begin
-         ListView1.Selected.Selected:=false;
-         ListView1.Selected:=nil;
-     end;
-     ListView1.Selected:=li;
-     ListView1.EndUpdate;
+     ListView1.AddCreatedItem(pcreatedlayer,gdb.GetCurrentDWG^.LayerTable.GetCurrentLayer);
 end;
 
 procedure TLayerWindow.LayerDelete(Sender: TObject); // Процедура удаления слоя

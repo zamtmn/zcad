@@ -142,7 +142,7 @@ object LayerWindow: TLayerWindow
       end    
       item
         Caption = 'Name'
-        Width = 250
+        Width = 125
       end    
       item
         Caption = 'On'

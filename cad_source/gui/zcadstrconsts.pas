@@ -55,6 +55,9 @@ resourcestring
   rsUnnamedWindowTitle='Unnamed%-3.3d';
   rsHardUnnamed='Unnamed';
 
+  rsNewLayerNameFormat='Layer%-3.3d';
+  rsNewTextStyleNameFormat='Style%-3.3d';
+
   {files}
   rsLoadingFile='Loading file "%s"';
   rsFileFormat='%s file format';
@@ -115,8 +118,13 @@ resourcestring
   rsQuitQuery='Do yo want to quit ZCAD?';
   rsCloseDWGQuery='Drawing "%s" not saved. Save?';
   rsCurrentLayerOff='The current layer is turned off';
+
   rsLayerMustBeSelected='Layer must be selected';
   rsUnableDelUsedLayer='Unable to delete, layer is used';
+
+  rsStyleMustBeSelected='Style must be selected';
+  rsUnableDelUsedStyle='Unable to delete, Style is used';
+
   rsSaveEmptyDWG='Drawing is empty. Sure?';
   rsBlockIgnored='Ignored block "%s"';
   rsDoubleBlockIgnored='Ignored double definition block "%s"';
@@ -124,6 +132,8 @@ resourcestring
   rsGridTooDensity='Grid too density';
   rsLoadingFontFile='Loading font file "%S"';
   rsTypeNotDefinedInModule='Type "%S" not defined in unit "%S"';
+  rsUnableSelectFreeLayerName='Unable select free layer name';
+  rsUnableSelectFreeTextStylerName='Unable select free text style name';
 
   {window names}
   rsOpenFile='Open file...';

@@ -56,12 +56,15 @@ end;
 constructor GDBFontManager.init;
 begin
   inherited init({$IFDEF DEBUGBUILD}ErrGuid,{$ENDIF}m,sizeof({GDBFontRecord}GDBfont));
-  ttffontfiles:=TStringList.create;
-  ttffontfiles.Duplicates := dupIgnore;
-  FromDirsIterator(sysvar.PATH.Fonts_Path^,'*.ttf','',nil,EnumerateTTFFontFile);
-  shxfontfiles:=TStringList.create;
-  shxfontfiles.Duplicates := dupIgnore;
-  FromDirsIterator(sysvar.PATH.Fonts_Path^,'*.shx','',nil,EnumerateSHXFontFile);
+  if assigned(sysvar.PATH.Fonts_Path)then
+  begin
+    ttffontfiles:=TStringList.create;
+    ttffontfiles.Duplicates := dupIgnore;
+    FromDirsIterator(sysvar.PATH.Fonts_Path^,'*.ttf','',nil,EnumerateTTFFontFile);
+    shxfontfiles:=TStringList.create;
+    shxfontfiles.Duplicates := dupIgnore;
+    FromDirsIterator(sysvar.PATH.Fonts_Path^,'*.shx','',nil,EnumerateSHXFontFile);
+  end;
 end;
 {procedure GDBFontManager.freeelement;
 begin
